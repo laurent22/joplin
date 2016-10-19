@@ -1,0 +1,81 @@
+<?php
+
+namespace AppBundle\Controller;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Controller\ApiController;
+use AppBundle\Model\Folder;
+
+class FoldersController extends ApiController {
+
+	/**
+	 * @Route("/folders")
+	 */
+	public function allAction(Request $request) {
+		if ($request->isMethod('POST')) {
+			$folder = new Folder();
+			$folder->fromPublicArray($request->request->all());
+			$folder->save();
+			return static::successResponse($folder);
+		}
+
+		return static::errorResponse('Invalid method');
+	}
+
+	/**
+	 * @Route("/folders/{id}")
+	 */
+	public function oneAction($id, Request $request) {
+		$folder = Folder::find(Folder::unhex($id));
+		if (!$folder && !$request->isMethod('PUT')) return static::errorResponse('Not found', 0, 404);
+
+		if ($request->isMethod('GET')) {
+			return static::successResponse($folder);
+		}
+
+		if ($request->isMethod('PUT')) {
+			// TODO: call fromPublicArray() - handles unhex conversion
+
+			$data = $this->putParameters();
+			$isNew = !$folder;
+			if ($isNew) $folder = new Folder();
+			foreach ($data as $n => $v) {
+				if ($n == 'parent_id') $v = Folder::unhex($v);
+				$folder->{$n} = $v;
+			}
+			$folder->owner_id = $this->user()->id;
+			$folder->id = Folder::unhex($id);
+			$folder->setIsNew($isNew);
+			$folder->save();
+			return static::successResponse($folder);
+		}
+
+		return static::successResponse($folder);
+	}
+
+	/**
+	 * @Route("/folders/{id}/notes")
+	 */
+	public function linkAction($id, Request $request) {
+		$folder = Folder::find(Folder::unhex($id));
+		if (!$folder) return static::errorResponse('Not found', 0, 404);
+
+		if ($request->isMethod('GET')) {
+			return static::successResponse($folder->notes());
+		}
+
+		if ($request->isMethod('POST')) {
+			$ids = $this->multipleValues($request->request->get('id'));
+			if (!count($ids)) static::errorResponse('id parameter is missing');
+			$ids = Folder::unhex($ids);
+			$folder->add($ids);
+
+			return static::successResponse();
+		}
+
+		return static::errorResponse('Invalid method');
+	}
+
+}
