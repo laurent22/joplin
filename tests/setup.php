@@ -16,7 +16,7 @@ $capsule = new \Illuminate\Database\Capsule\Manager();
 $capsule->addConnection([
 	'driver'    => 'mysql',
 	'host'      => 'localhost',
-	'database'  => 'notes_test',
+	'database'  => $dbName,
 	'username'  => 'root',
 	'password'  => 'pass',
 	'charset'   => 'utf8',

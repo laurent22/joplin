@@ -128,5 +128,44 @@ class ChangeTest extends BaseTestCase {
 		$d = $n->toPublicArray();
 		$this->assertEquals(2, $d['rev_id']);
 	}
+
+	public function testListChanges() {
+		$n1 = new Note();
+		$n1->fromPublicArray(array('body' => 'test'));
+		$n1->owner_id = $this->userId();
+		$n1->save();
+
+		$n1->fromPublicArray(array('body' => 'test change'));
+		$n1->save();
+
+		$r = Change::changesDoneAfterId($this->userId(), $this->clientId(1), 0);
+
+		$this->assertCount(2, $r);
+		$this->assertFalse($r['has_more']);
+		$this->assertCount(0, $r['items']); // Since client 1 is the one that made the changes, no sync data needs to be returned
+
+		$r = Change::changesDoneAfterId($this->userId(), $this->clientId(2), 0);
+
+		$this->assertCount(1, $r['items']);
+
+		$n2 = new Note();
+		$n2->fromPublicArray(array('body' => 'second note'));
+		$n2->owner_id = $this->userId();
+		$n2->save();
+
+		$r = Change::changesDoneAfterId($this->userId(), $this->clientId(2), 0);
+
+		$this->assertCount(2, $r['items']);
+
+		$r = Change::changesDoneAfterId($this->userId(), $this->clientId(2), $r['items'][0]['id']);
+
+		$this->assertCount(1, $r['items']);
+
+		$n1->delete();
+
+		$r = Change::changesDoneAfterId($this->userId(), $this->clientId(2), 0);
+		
+		$this->assertCount(1, $r['items']);
+	}
 	
 }

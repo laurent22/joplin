@@ -26,8 +26,12 @@ class BaseTestCase extends TestCase {
 		return $this->createModelId('client', $num);
 	}
 
+	protected function userId($num = 1) {
+		return $this->createModelId('user', $num);
+	}
+
 	protected function user($num = 1) {
-		$id = $this->createModelId('user', $num);
+		$id = $this->userId($num);
 		$user = User::find($id);
 		if ($user) return $user;
 
