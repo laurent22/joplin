@@ -16,3 +16,5 @@
 /web/bundles/
 *.sublime-workspace
 database.sqlite
+QtClient/build-*-Debug/
+*.pro.user
