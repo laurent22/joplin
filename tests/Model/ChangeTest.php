@@ -16,10 +16,6 @@ class ChangeTest extends BaseTestCase {
 		Note::truncate();
 	}
 
-	public function tearDown() {
-
-	}
-
 	public function testDiff() {
 		$text1 = 'abcd efgh ijkl';
 
@@ -166,6 +162,52 @@ class ChangeTest extends BaseTestCase {
 		$r = Change::changesDoneAfterId($this->userId(), $this->clientId(2), 0);
 		
 		$this->assertCount(1, $r['items']);
+	}
+
+	public function testMultiClients() {
+		// Simulates synchronization with multiple clients:
+		// - One client creates two notes.
+		// - Another client (but same user) creates three notes.
+		// - Check that sets of notes is the same for both clients.
+		
+		$clientNotes = array(1 => array(), 2 => array());
+
+		for ($clientId = 1; $clientId <= 2; $clientId++) {
+			BaseModel::setClientId($this->clientId($clientId));
+
+			$noteCount = $clientId == 1 ? 2 : 3;
+			for ($i = 1; $i <= $noteCount; $i++) {
+				$n = new Note();
+				$n->fromPublicArray(array('body' => 'note C' . $clientId . ' - ' . $i));
+				$n->owner_id = $this->userId();
+				$n->save();
+
+				$clientNotes[$clientId][] = $n->toPublicArray();
+			}
+		}
+
+		for ($clientId = 1; $clientId <= 2; $clientId++) {
+			$r = Change::changesDoneAfterId($this->userId(), $this->clientId($clientId), 0);
+			$this->assertCount($clientId == 1 ? 3 : 2, $r['items']);
+
+			foreach ($r['items'] as $item) {
+				$item = $item->toPublicArray();
+				$this->assertEquals('create', $item['type']);
+				
+				$n = Note::find(BaseModel::unhex($item['item_id']));
+				$clientNotes[$clientId][] = $n->toPublicArray();
+			}
+		}
+
+		$this->assertEquals(count($clientNotes[1]), count($clientNotes[2]));
+
+		foreach ($clientNotes[1] as $n1) {
+			$foundCount = 0;
+			foreach ($clientNotes[2] as $n2) {
+				if ($n1['body'] === $n2['body']) $foundCount++;
+			}
+			$this->assertEquals(1, $foundCount);
+		}
 	}
 	
 }
