@@ -1,9 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>Page1.qml</file>
-        <file>Page1Form.ui.qml</file>
-        <file>FolderListView.qml</file>
-        <file>TestUnQuatre.qml</file>
+        <file>FolderList.qml</file>
+        <file>NoteList.qml</file>
     </qresource>
 </RCC>

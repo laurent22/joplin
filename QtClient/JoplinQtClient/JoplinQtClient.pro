@@ -9,7 +9,11 @@ SOURCES += \
     database.cpp \
     uuid.cpp \
     services/folderservice.cpp \
-    models/foldermodel.cpp
+    models/foldermodel.cpp \
+    models/notemodel.cpp \
+    models/note.cpp \
+    services/noteservice.cpp \
+    application.cpp
 
 RESOURCES += qml.qrc
 
@@ -28,7 +32,11 @@ HEADERS += \
     database.h \
     uuid.h \
     services/folderservice.h \
-    models/foldermodel.h
+    models/foldermodel.h \
+    models/notemodel.h \
+    models/note.h \
+    services/noteservice.h \
+    application.h
 
 DISTFILES +=
 

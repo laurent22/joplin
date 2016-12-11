@@ -5,7 +5,7 @@ using namespace jop;
 Database::Database(const QString &path) {
 	version_ = -1;
 
-	QFile::remove(path);
+	//QFile::remove(path);
 
 	db_ = QSqlDatabase::addDatabase("QSQLITE");
 	db_.setDatabaseName(path);
@@ -16,7 +16,7 @@ Database::Database(const QString &path) {
 		qDebug() << "Database: connection ok";
 	}
 
-	upgrade();
+	//upgrade();
 }
 
 Database::Database() {}
@@ -80,11 +80,11 @@ void Database::upgrade() {
 
 				db_.exec("CREATE TABLE folders (id TEXT PRIMARY KEY, title TEXT, created_time INT)");
 
-				for (int i = 1; i < 100; i++) {
-					QUuid uuid = QUuid::createUuid();
-					QString title = QString::number(i);
-					db_.exec(QString("INSERT INTO folders (id, title, created_time) VALUES (\"%1\", \"%2\", 1481235571)").arg(uuid.toString(), title.repeated(10)));
-				}
+//				for (int i = 1; i < 100; i++) {
+//					QUuid uuid = QUuid::createUuid();
+//					QString title = QString::number(i);
+//					db_.exec(QString("INSERT INTO folders (id, title, created_time) VALUES (\"%1\", \"%2\", 1481235571)").arg(uuid.toString(), title.repeated(10)));
+//				}
 
 				//db_.exec("INSERT INTO folders (id, title, created_time) VALUES (\"ed735d55415bee976b771989be8f7005\", \"bbbb\", 1481235571)");
 				//db_.exec("INSERT INTO folders (id, title, created_time) VALUES (\"5d41402abc4b2a76b9719d911017c592\", \"cccc\", 1481235571)");

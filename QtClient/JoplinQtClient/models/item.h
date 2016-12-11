@@ -11,12 +11,11 @@ public:
 
 	Item();
 
-	QUuid id() const;
+	QString id() const;
 	QString title() const;
 	int createdTime() const;
 	bool isPartial() const;
 
-	void setId(const QUuid& v);
 	void setId(const QString& v);
 	void setTitle(const QString& v);
 	void setCreatedTime(int v);
@@ -26,7 +25,7 @@ public:
 
 private:
 
-	QUuid id_;
+	QString id_;
 	QString title_;
 	int createdTime_;
 	bool isPartial_;

@@ -6,7 +6,7 @@
 namespace jop {
 namespace uuid {
 
-QUuid fromString(const QString& s);
+//QUuid fromString(const QString& s);
 
 }
 }

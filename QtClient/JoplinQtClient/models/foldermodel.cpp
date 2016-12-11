@@ -2,9 +2,9 @@
 
 using namespace jop;
 
-//FolderModel::FolderModel() : QAbstractListModel() {}
+FolderModel::FolderModel() : QAbstractListModel() {}
 
-FolderModel::FolderModel(FolderService &folderService) : QAbstractListModel() {
+void FolderModel::setService(FolderService &folderService) {
 	folderService_ = folderService;
 }
 
@@ -33,13 +33,18 @@ QVariant FolderModel::data(const QModelIndex & index, int role) const {
 		return QVariant(folder.title());
 	}
 
+	if (role == IdRole) {
+		return QVariant(folder.id());
+	}
+
 	return QVariant();
 }
 
 QHash<int, QByteArray> FolderModel::roleNames() const {
 	QHash<int, QByteArray> roles = QAbstractItemModel::roleNames();
 	roles[TitleRole] = "title";
-	roles[UuidRole] = "uuid";
+	roles[IdRole] = "uuid";
+	roles[RawRole] = "raw";
 	return roles;
 }
 

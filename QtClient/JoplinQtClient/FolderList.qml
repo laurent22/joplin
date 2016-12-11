@@ -5,7 +5,7 @@ Item {
 	id: root
 	property alias model: listView.model
 	property alias currentIndex: listView.currentIndex
-	signal currentItemChanged()
+	property alias currentItem: listView.currentItem
 
 	Rectangle {
 		color: "#eeeeff"
@@ -37,8 +37,5 @@ Item {
 		ScrollBar.vertical: ScrollBar {  }
 		highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
 		focus: true
-		onCurrentItemChanged: {
-			root.currentItemChanged()
-		}
 	}
 }

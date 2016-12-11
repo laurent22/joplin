@@ -14,12 +14,14 @@ class FolderModel : public QAbstractListModel {
 public:
 
 	enum FolderRoles {
-		UuidRole = Qt::UserRole + 1,
-		TitleRole
+		IdRole = Qt::UserRole + 1,
+		TitleRole,
+		RawRole
 	};
 
-	//FolderModel();
-	FolderModel(FolderService& folderService);
+	FolderModel();
+
+	void setService(FolderService& folderService);
 
 	void addFolder(Folder* folder);
 
