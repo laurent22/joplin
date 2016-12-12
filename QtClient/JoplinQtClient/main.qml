@@ -32,6 +32,7 @@ Item {
 
 		NoteList {
 			id: noteList
+			model: noteListModel
 			Layout.fillWidth: true
 			Layout.fillHeight: true
 			Layout.minimumWidth: 100

@@ -13,9 +13,10 @@ public:
 
 	NoteService();
 	NoteService(Database& database);
-	int count(int parentFolderId) const;
+	int count(const QString& parentFolderId) const;
 	Note byId(const QString& id) const;
-	const QList<Note> overviewList(const QString& orderBy, int from, int to) const;
+	const QList<Note> overviewList(const QString &folderId, int from, int to, const QString& orderBy) const;
+	std::pair<const Note&, bool> overviewAt(const QString& folderId, int index, const QString& orderBy) const;
 
 private:
 

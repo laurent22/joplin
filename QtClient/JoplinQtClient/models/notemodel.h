@@ -4,6 +4,7 @@
 #include <stable.h>
 
 #include "services/noteservice.h"
+#include "models/notecollection.h"
 
 namespace jop {
 
@@ -13,9 +14,12 @@ class NoteModel : public QAbstractListModel {
 
 public:
 
-	NoteModel(NoteService &noteService);
+	NoteModel();
 	int rowCount(const QModelIndex & parent = QModelIndex()) const;
 	QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+	void setFolderId(const QString& v);
+	void setService(NoteService& v);
+	void setCollection(NoteCollection& noteCollection);
 
 protected:
 
@@ -25,6 +29,8 @@ private:
 
 	QList<Note> notes_;
 	NoteService noteService_;
+	QString folderId_;
+	NoteCollection collection_;
 
 };
 

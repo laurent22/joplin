@@ -16,7 +16,7 @@ int FolderService::count() const {
 	return q.value(0).toInt();
 }
 
-Folder FolderService::byId(const QString &id) const {
+Folder FolderService::byId(int id) const {
 	QSqlQuery q = database_.query("SELECT title, created_time FROM folders WHERE id = :id");
 	q.bindValue(":id", id);
 	q.exec();
@@ -37,7 +37,7 @@ const QList<Folder> FolderService::overviewList() const {
 	q.exec();
 	while (q.next()) {
 		Folder f;
-		f.setId(q.value(0).toString());
+		f.setId(q.value(0).toInt());
 		f.setTitle(q.value(1).toString());
 		f.setIsPartial(true);
 		output << f;

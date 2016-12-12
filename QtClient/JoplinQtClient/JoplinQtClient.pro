@@ -13,7 +13,9 @@ SOURCES += \
     models/notemodel.cpp \
     models/note.cpp \
     services/noteservice.cpp \
-    application.cpp
+    application.cpp \
+    models/notecollection.cpp \
+    services/notecache.cpp
 
 RESOURCES += qml.qrc
 
@@ -36,7 +38,9 @@ HEADERS += \
     models/notemodel.h \
     models/note.h \
     services/noteservice.h \
-    application.h
+    application.h \
+    models/notecollection.h \
+    services/notecache.h
 
 DISTFILES +=
 
