@@ -5,7 +5,7 @@ Item {
 	id: root
 	property alias model: listView.model
 	property alias currentIndex: listView.currentIndex
-	signal currentItemChanged()
+	property alias currentItem: listView.currentItem
 
 	Rectangle {
 		color: "#ffeeee"

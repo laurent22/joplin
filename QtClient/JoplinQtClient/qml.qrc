@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>FolderList.qml</file>
         <file>NoteList.qml</file>
+        <file>NoteEditor.qml</file>
     </qresource>
 </RCC>

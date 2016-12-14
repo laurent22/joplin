@@ -19,12 +19,14 @@ Application::Application(int &argc, char **argv) : QGuiApplication(argc, argv) {
 	QQmlContext *ctxt = view_.rootContext();
 	ctxt->setContextProperty("folderListModel", &folderModel_);
 	ctxt->setContextProperty("noteListModel", &noteModel_);
+	ctxt->setContextProperty("noteModel", &selectedQmlNote_);
 
 	view_.setSource(QUrl("qrc:/main.qml"));
 
 	QObject* rootObject = (QObject*)view_.rootObject();
 
 	connect(rootObject, SIGNAL(currentFolderChanged()), this, SLOT(view_currentFolderChanged()));
+	connect(rootObject, SIGNAL(currentNoteChanged()), this, SLOT(view_currentNoteChanged()));
 
 	view_.show();
 }
@@ -37,8 +39,28 @@ int Application::selectedFolderId() const {
 	return folderModel_.data(modelIndex, FolderModel::IdRole).toInt();
 }
 
+int Application::selectedNoteId() const {
+	QObject* rootObject = (QObject*)view_.rootObject();
+
+	int index = rootObject->property("currentNoteIndex").toInt();
+	QModelIndex modelIndex = noteModel_.index(index);
+	return noteModel_.data(modelIndex, NoteModel::IdRole).toInt();
+}
+
 void Application::view_currentFolderChanged() {
 	int folderId = selectedFolderId();
-	noteCollection_ = NoteCollection(db_, noteCache_, folderId, "title ASC");
+	noteCollection_ = NoteCollection(db_, folderId, "title ASC");
 	noteModel_.setCollection(noteCollection_);
+}
+
+void Application::view_currentNoteChanged() {
+	int noteId = selectedNoteId();
+	Note note = noteCollection_.byId(noteId);
+	selectedQmlNote_.setNote(note);
+
+	// TODO: get note by id
+	//Note note = noteCollection_.by
+	//selectedQmlNote_ = QmlNote(noteId);
+	//noteCollection_ = NoteCollection(db_, folderId, "title ASC");
+	//noteModel_.setCollection(noteCollection_);
 }

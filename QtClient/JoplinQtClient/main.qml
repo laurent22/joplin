@@ -8,7 +8,9 @@ Item {
 	width: 800
 	height: 600
 	signal currentFolderChanged()
+	signal currentNoteChanged()
 	property alias currentFolderIndex: folderList.currentIndex
+	property alias currentNoteIndex: noteList.currentIndex
 
 	RowLayout {
 		id: layout
@@ -22,7 +24,7 @@ Item {
 			Layout.fillHeight: true
 			Layout.minimumWidth: 50
 			Layout.preferredWidth: 100
-			Layout.maximumWidth: 300
+			Layout.maximumWidth: 200
 			Layout.minimumHeight: 150
 
 			onCurrentItemChanged: {
@@ -36,7 +38,21 @@ Item {
 			Layout.fillWidth: true
 			Layout.fillHeight: true
 			Layout.minimumWidth: 100
+			Layout.maximumWidth: 200
 			Layout.preferredWidth: 200
+			Layout.preferredHeight: 100
+
+			onCurrentItemChanged: {
+				root.currentNoteChanged()
+			}
+		}
+
+		NoteEditor {
+			id: noteEditor
+			model: noteModel
+			Layout.fillWidth: true
+			Layout.fillHeight: true
+			Layout.minimumWidth: 100
 			Layout.preferredHeight: 100
 		}
 

@@ -14,6 +14,11 @@ class NoteModel : public QAbstractListModel {
 
 public:
 
+	enum NoteRoles {
+		IdRole = Qt::UserRole + 1,
+		TitleRole
+	};
+
 	NoteModel();
 	int rowCount(const QModelIndex & parent = QModelIndex()) const;
 	QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;

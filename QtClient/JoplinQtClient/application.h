@@ -10,6 +10,7 @@
 #include "models/notecollection.h"
 #include "services/notecache.h"
 #include "models/notemodel.h"
+#include "models/qmlnote.h"
 
 namespace jop {
 
@@ -31,11 +32,14 @@ private:
 	FolderModel folderModel_;
 	NoteModel noteModel_;
 	int selectedFolderId() const;
+	int selectedNoteId() const;
 	NoteCache noteCache_;
+	QmlNote selectedQmlNote_;
 
 public slots:
 
 	void view_currentFolderChanged();
+	void view_currentNoteChanged();
 
 };
 

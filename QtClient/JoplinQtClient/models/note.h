@@ -11,10 +11,12 @@ class Note : public Item {
 public:
 
 	Note();
+	QString body() const;
+	void setBody(const QString& v);
 
 private:
 
-
+	QString body_;
 
 };
 

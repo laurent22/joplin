@@ -4,77 +4,46 @@ using namespace jop;
 
 NoteCollection::NoteCollection() {}
 
-NoteCollection::NoteCollection(Database& db, NoteCache cache, int parentId, const QString& orderBy) {
+NoteCollection::NoteCollection(Database& db, int parentId, const QString& orderBy) {
 	db_ = db;
 	parentId_ = parentId;
 	orderBy_ = orderBy;
-	cache_ = cache;
-	cacheMinIndex_ = 0;
-	cacheMaxIndex_ = -1;
 }
 
-
-int NoteCollection::cacheMinIndex() const {
-	return cacheMinIndex_;
-}
-
-int NoteCollection::cacheMaxIndex() const {
-	return cacheMaxIndex_;
-}
-
-Note NoteCollection::itemAt(int index) const {
+Note NoteCollection::at(int index) const {
 	if (!parentId_) return Note();
 
-	qDebug() << "Note at" << index << "Min" << cacheMinIndex() << "Max" << cacheMaxIndex() << "Count" << count();
+	if (cache_.isset(index)) return cache_.get(index);
 
-	if (index >= cacheMinIndex() && index < cacheMaxIndex()) {
-		return notes_[index];
+	std::vector<int> indexes = cache_.availableBufferAround(index, 32);
+	if (!indexes.size()) {
+		qWarning() << "Couldn't acquire buffer"; // "Cannot happen"
+		return Note();
 	}
 
-	int buff = 16;
+	int from = indexes[0];
+	int to = indexes[indexes.size() - 1];
 
-	int from = index - buff;
-	int to = from + (buff - 1);
+	qDebug() << "Getting from" << from << "to" << to;
 
-	if (notes_.size()) {
-		if (from <= cacheMaxIndex()) {
-			from = cacheMaxIndex() + 1;
-			to = from + (buff - 1);
-			cacheMaxIndex_ = to;
-		} else if (to >= cacheMinIndex()) {
-			to = cacheMinIndex() - 1;
-			from = to - (buff - 1);
-			cacheMinIndex_ = from;
-		}
-	} else {
-		from = std::max(0, index - buff);
-		to = from + (buff - 1);
-	}
-
-	if (from < 0) from = 0;
-	if (to >= count()) to = count() - 1;
-
-	qDebug() << "Loading from" << from << "to" << to;
-
-	QSqlQuery q = db_.query("SELECT id, title FROM notes WHERE parent_id = :parent_id ORDER BY " + orderBy_ + " LIMIT " + QString::number(to - from + 1) + " OFFSET " + QString::number(from));
+	QSqlQuery q = db_.query("SELECT id, title, body FROM notes WHERE parent_id = :parent_id ORDER BY " + orderBy_ + " LIMIT " + QString::number(to - from + 1) + " OFFSET " + QString::number(from));
 	q.bindValue(":parent_id", parentId_);
 	q.exec();
 
 	int noteIndex = from;
 	while (q.next()) {
-		Note f;
-		f.setId(q.value(0).toInt());
-		f.setTitle(q.value(1).toString());
-		f.setIsPartial(true);
+		Note note;
+		note.setId(q.value(0).toInt());
+		note.setTitle(q.value(1).toString());
+		note.setBody(q.value(2).toString());
+		note.setIsPartial(true);
 
-		qDebug() << "Adding" << noteIndex;
-		notes_[noteIndex] = f;
+		cache_.set(noteIndex, note);
 
 		noteIndex++;
 	}
 
-	qDebug() << notes_.contains(index);
-	return notes_[index];
+	return cache_.get(index);
 }
 
 // TODO: cache result
@@ -86,4 +55,28 @@ int NoteCollection::count() const {
 	q.exec();
 	q.next();
 	return q.value(0).toInt();
+}
+
+Note NoteCollection::byId(int id) const {
+	std::vector<int> indexes = cache_.indexes();
+	for (int i = 0; i < indexes.size(); i++) {
+		Note note = cache_.get(indexes[i]);
+		if (note.id() == id) return note;
+	}
+
+	QSqlQuery q = db_.query("SELECT id, title, body FROM notes WHERE id = :id");
+	q.bindValue(":id", id);
+	q.exec();
+	q.next();
+	if (!q.isValid()) {
+		qWarning() << "Invalid note ID:" << id;
+		return Note();
+	}
+
+	// TODO: refactor creation of note from SQL query object
+	Note note;
+	note.setId(q.value(0).toInt());
+	note.setTitle(q.value(1).toString());
+	note.setBody(q.value(2).toString());
+	return note;
 }
