@@ -11,10 +11,10 @@ class Eloquent {
 
 		$this->capsule_->addConnection([
 			'driver'    => 'mysql',
-			'host'      => 'localhost',
+			'host'      => '127.0.0.1',
 			'database'  => 'notes',
 			'username'  => 'root',
-			'password'  => 'pass',
+			'password'  => '',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

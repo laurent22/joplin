@@ -18,4 +18,4 @@
 database.sqlite
 QtClient/build-*-Debug/
 *.pro.user
-notes.sqlite
+notes*.sqlite

@@ -19,6 +19,7 @@
 #include <QQuickView>
 #include <QQmlContext>
 #include <QQmlProperty>
+#include <QSqlError>
 
 #endif // __cplusplus
 

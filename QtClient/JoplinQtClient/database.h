@@ -20,6 +20,7 @@ private:
 	void upgrade();
 	int version() const;
 	mutable int version_;
+	QStringList sqlStringToLines(const QString& sql);
 
 };
 
