@@ -5,7 +5,11 @@
 #include <QDateTime>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QDir>
+#include <QSqlError>
 #include <QSqlRecord>
+
+#include "xmltomd.h"
 
 struct Resource {
 	QString id;
@@ -239,18 +243,76 @@ std::vector<Note> parseXmlFile(const QString& filePath) {
 int main(int argc, char *argv[]) {
 	QCoreApplication a(argc, argv);
 
-//	QString dbPath = "D:/Web/www/joplin/QtClient/evernote-import/notes.sqlite";
+	QString dbPath = "D:/Web/www/joplin/notes.sqlite";
 
-//	QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-//	db.setDatabaseName(path);
+	QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+	db.setDatabaseName(dbPath);
 
-//	if  (!db_.open()) {
-//		qDebug() << "Error: connection with database fail";
-//	} else {
-//		qDebug() << "Database: connection ok";
-//	}
+	if  (!db.open()) {
+		qWarning() << "Error: connection with database fail";
+		return 1;
+	} else {
+		qDebug() << "Database: connection ok";
+	}
 
+	// TODO: REMOVE REMOVE REMOVE
+	db.exec("DELETE FROM folders");
+	db.exec("DELETE FROM notes");
+	// TODO: REMOVE REMOVE REMOVE
 
-	//std::vector<Note> notes = parseXmlFile("/home/laurent/Downloads/Notes/Laurent.enex");
-	std::vector<Note> notes = parseXmlFile("/home/laurent/Downloads/Notes/a_faire.enex");
+	QDir dir("S:/Docs/Textes/Calendrier/EvernoteBackup/Enex20161219");
+	dir.setFilter(QDir::Files | QDir::Hidden | QDir::NoSymLinks);
+	QFileInfoList fileList = dir.entryInfoList();
+	qDebug() << fileList.size();
+	for (int i = 0; i < fileList.size(); ++i) {
+		QFileInfo fileInfo = fileList.at(i);
+
+		db.exec("BEGIN TRANSACTION");
+
+		QSqlQuery query(db);
+		query.prepare("INSERT INTO folders (title, created_time, updated_time) VALUES (?, ?, ?)");
+		query.addBindValue(fileInfo.baseName());
+		query.addBindValue(fileInfo.created().toTime_t());
+		query.addBindValue(fileInfo.created().toTime_t());
+		query.exec();
+
+		std::vector<Note> notes = parseXmlFile(fileInfo.absoluteFilePath());
+
+		for (int noteIndex = 0; noteIndex < notes.size(); noteIndex++) {
+			Note n = notes[noteIndex];
+
+			time_t reminderOrder = dateStringToTimestamp(n.reminderOrder);
+
+			QString markdown = xmltomd::evernoteXmlToMd(n.content);
+
+			QSqlQuery query(db);
+			query.prepare("INSERT INTO notes (title, body, created_time, updated_time, longitude, latitude, altitude, source, author, source_url, is_todo, todo_due, todo_completed, source_application, application_data, `order`) VALUES (:title,:body,:created_time,:updated_time,:longitude,:latitude,:altitude,:source,:author,:source_url,:is_todo,:todo_due,:todo_completed,:source_application,:application_data,:order)");
+			query.bindValue(":title", n.title);
+			query.bindValue(":body", markdown);
+			query.bindValue(":created_time", n.created);
+			query.bindValue(":updated_time", n.updated);
+			query.bindValue(":longitude", n.longitude);
+			query.bindValue(":latitude", n.latitude);
+			query.bindValue(":altitude", n.altitude);
+			query.bindValue(":source", n.source);
+			query.bindValue(":author", n.author);
+			query.bindValue(":source_url", n.sourceUrl);
+			query.bindValue(":is_todo", reminderOrder ? 1 : 0);
+			query.bindValue(":todo_due", dateStringToTimestamp(n.reminderTime));
+			query.bindValue(":todo_completed", dateStringToTimestamp(n.reminderDoneTime));
+			query.bindValue(":source_application", n.sourceApplication);
+			query.bindValue(":application_data", n.applicationData);
+			query.bindValue(":order", reminderOrder);
+			query.exec();
+
+			QSqlError error = query.lastError();
+			if (error.isValid()) {
+				qWarning() << "SQL error:" << error;
+				db.exec("ROLLBACK");
+				break;
+			}
+		}
+
+		db.exec("COMMIT");
+	}
 }

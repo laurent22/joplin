@@ -13,7 +13,39 @@ CREATE TABLE notes (
 	parent_id INT,
 	created_time INT,
 	updated_time INT,
-	remote_id TEXT
+	latitude NUMERIC,
+	longitude NUMERIC,
+	altitude NUMERIC,
+	remote_id TEXT,
+	source TEXT,
+	author TEXT,
+	source_url TEXT,
+	is_todo BOOLEAN,
+	todo_due INT,
+	todo_completed INT,
+	source_application TEXT,
+	application_data TEXT,
+	`order` INT
+);
+
+CREATE TABLE tags (
+    id INTEGER PRIMARY KEY,
+	title TEXT
+);
+
+CREATE TABLE resources (
+    id INTEGER PRIMARY KEY,
+	title TEXT,
+	mime TEXT,
+	filename TEXT,
+	created_time INT,
+	updated_time INT
+);
+
+CREATE TABLE note_resources (
+    id INTEGER PRIMARY KEY,
+	note_id INT,
+	resource_id INT
 );
 
 CREATE TABLE version (
