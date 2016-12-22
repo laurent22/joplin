@@ -8,7 +8,7 @@
 using namespace jop;
 
 Application::Application(int &argc, char **argv) : QGuiApplication(argc, argv) {
-	db_ = Database("D:/Web/www/joplin/notes.sqlite");
+	db_ = Database("D:/Web/www/joplin/QtClient/data/notes.sqlite");
 	folderService_ = FolderService(db_);
 	folderModel_.setService(folderService_);
 

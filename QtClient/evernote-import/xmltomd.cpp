@@ -1,10 +1,12 @@
 #include <QDebug>
+#include <QTextCodec>
 
 #include "xmltomd.h"
 
 namespace xmltomd {
 
 QMap<QString, QString> htmlEntities;
+QStringList imageMimeTypes;
 
 QString htmlEntityDecode(const QString& htmlEntity) {
 	if (!htmlEntities.size()) {
@@ -318,24 +320,53 @@ QMap<QString, QString> attributes(QXmlStreamReader& reader) {
 	return output;
 }
 
-// TODO: remove inner whitespaces (double/triple spaces, etc.)
-QString collapseWhiteSpace(QString text) {
-	if (text.trimmed().length() == 0) return QString();
+bool isWhiteSpace(const QChar& c) {
+	return c == '\n' || c == '\r' || c == '\v' || c == '\f' || c == '\t' || c == ' ';
+}
 
-	// Remove all \n and \r from the left and right of the text
-	while (text.length() && (text[0] == '\n' || text[0] == '\r')) text = text.right(text.length() - 1);
-	while (text.length() && (text[text.length() - 1] == '\n' || text[text.length() - 1] == '\r')) text = text.left(text.length() - 1);
+// Like QString::simpified(), except that it preserves non-breaking spaces (which
+// Evernote uses for identation, etc.)
+QString simplifyString(const QString& s) {
+	QString output;
+	bool previousWhite = false;
+	for (int i = 0; i < s.length(); i++) {
+		QChar c = s[i];
+		bool isWhite = isWhiteSpace(c);
+		if (previousWhite && isWhite) {
+			// skip
+		} else {
+			output += c;
+		}
+		previousWhite = isWhite;
+	}
 
-	// Collapse all white spaces to just one. If there are spaces to the left and right of the string
-	// also collapse them to just one space.
-	bool spaceLeft = text.length() && text[0] == ' ';
-	bool spaceRight = text.length() && text[text.size() - 1] == ' ';
-	text = text.simplified();
+	while (output.length() && isWhiteSpace(output[0])) output = output.right(output.length() - 1);
+	while (output.length() && isWhiteSpace(output[output.length() - 1])) output = output.left(output.length() - 1);
 
-	if (spaceLeft) text = " " + text;
-	if (spaceRight) text = text + " ";
+	return output;
+}
 
-	return text;
+void collapseWhiteSpaceAndAppend(QStringList& lines, ParsingState& state, QString text) {
+	if (state.inCode) {
+		text = "\t" + text;
+		lines.append(text);
+	} else {
+		// Remove all \n and \r from the left and right of the text
+		while (text.length() && (text[0] == '\n' || text[0] == '\r')) text = text.right(text.length() - 1);
+		while (text.length() && (text[text.length() - 1] == '\n' || text[text.length() - 1] == '\r')) text = text.left(text.length() - 1);
+
+		// Collapse all white spaces to just one. If there are spaces to the left and right of the string
+		// also collapse them to just one space.
+		bool spaceLeft = text.length() && text[0] == ' ';
+		bool spaceRight = text.length() && text[text.size() - 1] == ' ';
+		text = simplifyString(text);
+
+		if (!spaceLeft && !spaceRight && text == "") return;
+
+		if (spaceLeft) lines.append(SPACE);
+		lines.append(text);
+		if (spaceRight) lines.append(SPACE);
+	}
 }
 
 bool isNewLineBlock(const QString& s) {
@@ -393,6 +424,23 @@ QString processMdArrayNewLines(QStringList md) {
 	md = temp;
 
 
+
+	// NEW!!!
+	temp.clear();
+	last = "";
+	foreach (QString v, md) {
+		if (last == NEWLINE && (v == NEWLINE_MERGED || v == BLOCK_OPEN)) {
+			// Skip it
+		} else {
+			temp.push_back(v);
+		}
+		last = v;
+	}
+	md = temp;
+
+
+
+
 	if (md.size() > 2) {
 		if (md[md.size() - 2] == NEWLINE_MERGED && md[md.size() - 1] == NEWLINE) {
 			md.pop_back();
@@ -400,12 +448,24 @@ QString processMdArrayNewLines(QStringList md) {
 	}
 
 	QString output;
+	QString previous;
+	bool start = true;
 	foreach (QString v, md) {
+		QString add;
 		if (v == BLOCK_CLOSE || v == BLOCK_OPEN || v == NEWLINE || v == NEWLINE_MERGED) {
-			output += "\n";
+			add = "\n";
+		} else if (v == SPACE) {
+			if (previous == SPACE || previous == "\n" || start) {
+				continue; // skip
+			} else {
+				add = " ";
+			}
 		} else {
-			output += v;
+			add = v;
 		}
+		start = false;
+		output += add;
+		previous = add;
 	}
 
 	if (!output.trimmed().length()) return QString();
@@ -413,8 +473,31 @@ QString processMdArrayNewLines(QStringList md) {
 	return output;
 }
 
+bool isImageMimeType(const QString& m) {
+	if (!imageMimeTypes.size()) {
+		imageMimeTypes << "image/cgm" << "image/fits" << "image/g3fax" << "image/gif" << "image/ief" << "image/jp2" << "image/jpeg" << "image/jpm" << "image/jpx" << "image/naplps" << "image/png" << "image/prs.btif" << "image/prs.pti" << "image/t38" << "image/tiff" << "image/tiff-fx" << "image/vnd.adobe.photoshop" << "image/vnd.cns.inf2" << "image/vnd.djvu" << "image/vnd.dwg" << "image/vnd.dxf" << "image/vnd.fastbidsheet" << "image/vnd.fpx" << "image/vnd.fst" << "image/vnd.fujixerox.edmics-mmr" << "image/vnd.fujixerox.edmics-rlc" << "image/vnd.globalgraphics.pgb" << "image/vnd.microsoft.icon" << "image/vnd.mix" << "image/vnd.ms-modi" << "image/vnd.net-fpx" << "image/vnd.sealed.png" << "image/vnd.sealedmedia.softseal.gif" << "image/vnd.sealedmedia.softseal.jpg" << "image/vnd.svf" << "image/vnd.wap.wbmp" << "image/vnd.xiff";
+	}
+	return imageMimeTypes.contains(m, Qt::CaseInsensitive);
+}
+
+void addResourceTag(QStringList& lines, Resource& resource, const QString& alt = "") {
+	QString tagAlt = alt == "" ? resource.alt : alt;
+	if (isImageMimeType(resource.mime)) {
+		lines.append("![");
+		lines.append(tagAlt);
+		lines.append(QString("](:/%1)").arg(resource.id));
+	} else {
+		lines.append("[");
+		lines.append(tagAlt);
+		lines.append(QString("](:/%1)").arg(resource.id));
+	}
+}
+
 void evernoteXmlToMdArray(QXmlStreamReader& reader, QStringList& lines, ParsingState& state) {
+	// Attributes are rarely used in Evernote XML code, so they are only loaded as needed
+	// by the tag using `attrs = attributes(reader);`
 	QMap<QString, QString> attrs;
+	std::vector<QMap<QString, QString>> attributesLIFO;
 
 	while (!reader.atEnd()) {
 		reader.readNext();
@@ -422,18 +505,19 @@ void evernoteXmlToMdArray(QXmlStreamReader& reader, QStringList& lines, ParsingS
 		QStringRef n = reader.name();
 
 		if (reader.isStartElement()) {
-			attrs.clear();
+			attributesLIFO.push_back(attributes(reader));
+
 			if (isBlockTag(n)) {
 				lines.append(BLOCK_OPEN);
 				evernoteXmlToMdArray(reader, lines, state);
 			} else if (isStrongTag(n)) {
 				lines.append("**");
 			} else if (isAnchor(n)) {
-				attrs = attributes(reader);
 				lines.append("[");
 			} else if (isEmTag(n)) {
 				lines.append("*");
 			} else if (n == "en-todo") {
+				attrs = attributesLIFO.back();
 				QString checked = attrs["checked"] == "true" ? "X" : " ";
 				lines.append(QString("- [%1] ").arg(checked));
 			} else if (isListTag(n)) {
@@ -470,7 +554,26 @@ void evernoteXmlToMdArray(QXmlStreamReader& reader, QStringList& lines, ParsingS
 			} else if (n == "br") {
 				lines.append(NEWLINE);
 			} else if (n == "en-media") {
-				// TODO
+				attrs = attributesLIFO.back();
+				QString hash = attrs["hash"];
+				Resource resource;
+				for (int i = 0; i < state.resources.size(); i++) {
+					Resource r = state.resources[i];
+					if (r.id == hash) {
+						resource = r;
+						state.resources.erase(state.resources.begin() + i);
+						break;
+					}
+				}
+
+				// select * from notes where body like "%](:/%";
+
+				// If the resource does not appear among the note's resources, it
+				// means it's an attachement. It will be appended along with the
+				// other remaining resources at the bottom of the markdown text.
+				if (resource.id != "") {
+					addResourceTag(lines, resource, attrs["alt"]);
+				}
 			} else if (n == "span" || n == "font") {
 				// Ignore
 			} else {
@@ -487,23 +590,22 @@ void evernoteXmlToMdArray(QXmlStreamReader& reader, QStringList& lines, ParsingS
 				state.inCode = false;
 				lines.append(BLOCK_CLOSE);
 			} else if (isAnchor(n)) {
+				attrs = attributesLIFO.back();
 				QString href = attrs.contains("href") ? attrs["href"] : "";
 				lines.append(QString("](%1)").arg(href));
 			} else if (isListTag(n)) {
 				lines.append(BLOCK_CLOSE);
 				state.lists.pop_back();
 			} else if (n == "en-media") {
-				// TODO
-				lines.append("[EN-MEDIA TODO]");
+				// Skip
 			} else if (isIgnoredEndTag(n)) {
 				// Skip
 			} else {
 				qWarning() << "Unsupported end tag:" << n;
 			}
+			if (attributesLIFO.size()) attributesLIFO.pop_back();
 		} else if (reader.isCharacters()) {
-			QString text = state.inCode ? reader.text().toString() : collapseWhiteSpace(reader.text().toString());
-			if (state.inCode) text = "\t" + text;
-			if (text != "") lines.append(text);
+			collapseWhiteSpaceAndAppend(lines, state, reader.text().toString());
 		} else if (reader.isEndDocument()) {
 			// Ignore
 		} else if (reader.isEntityReference()) {
@@ -514,14 +616,24 @@ void evernoteXmlToMdArray(QXmlStreamReader& reader, QStringList& lines, ParsingS
 	}
 }
 
-QString evernoteXmlToMd(const QString& content) {
+QString evernoteXmlToMd(const QString& content, std::vector<Resource> resources) {
 	QXmlStreamReader reader(content.toUtf8());
 
 	if (reader.readNextStartElement()) {
 		QStringList mdLines;
 		ParsingState parsingState;
 		parsingState.inCode = false;
+		parsingState.resources = resources;
 		evernoteXmlToMdArray(reader, mdLines, parsingState);
+
+		bool firstAttachment = true;
+		foreach (Resource r, parsingState.resources) {
+			if (firstAttachment) mdLines.push_back(NEWLINE);
+			mdLines.push_back(NEWLINE);
+			addResourceTag(mdLines, r, r.filename);
+			firstAttachment = false;
+		}
+
 		return processMdArrayNewLines(mdLines);
 	} else {
 		qWarning() << "Cannot parse XML:" << content;

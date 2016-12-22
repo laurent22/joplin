@@ -21,3 +21,6 @@ QtClient/build-*-Debug/
 notes*.sqlite
 Makefile
 Makefile.*
+TODO.md
+tests/generated
+QtClient/JoplinQtClient/make.bat

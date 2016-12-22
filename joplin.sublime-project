@@ -7,5 +7,12 @@
 				"var"
 			]
 		}
-	]
+	],
+    "build_systems":
+    [
+        {
+            "name": "Build evernote-import",
+            "shell_cmd": "D:\\Programmes\\cygwin\\bin\\bash.exe --login D:\\Web\\www\\joplin\\QtClient\\evernote-import\\build.sh"
+        }
+    ]
 }
