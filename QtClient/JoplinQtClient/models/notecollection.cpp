@@ -4,14 +4,14 @@ using namespace jop;
 
 NoteCollection::NoteCollection() {}
 
-NoteCollection::NoteCollection(Database& db, int parentId, const QString& orderBy) {
+NoteCollection::NoteCollection(Database& db, const QString& parentId, const QString& orderBy) {
 	db_ = db;
 	parentId_ = parentId;
 	orderBy_ = orderBy;
 }
 
 Note NoteCollection::at(int index) const {
-	if (!parentId_) return Note();
+	if (parentId_ == "") return Note();
 
 	if (cache_.isset(index)) return cache_.get(index);
 
@@ -33,7 +33,7 @@ Note NoteCollection::at(int index) const {
 	int noteIndex = from;
 	while (q.next()) {
 		Note note;
-		note.setId(q.value(0).toInt());
+		note.setId(q.value(0).toString());
 		note.setTitle(q.value(1).toString());
 		note.setBody(q.value(2).toString());
 		note.setIsPartial(true);
@@ -48,7 +48,7 @@ Note NoteCollection::at(int index) const {
 
 // TODO: cache result
 int NoteCollection::count() const {
-	if (!parentId_) return 0;
+	if (parentId_ == "") return 0;
 
 	QSqlQuery q = db_.query("SELECT count(*) as row_count FROM notes WHERE parent_id = :parent_id");
 	q.bindValue(":parent_id", parentId_);
@@ -57,7 +57,7 @@ int NoteCollection::count() const {
 	return q.value(0).toInt();
 }
 
-Note NoteCollection::byId(int id) const {
+Note NoteCollection::byId(const QString& id) const {
 	std::vector<int> indexes = cache_.indexes();
 	for (int i = 0; i < indexes.size(); i++) {
 		Note note = cache_.get(indexes[i]);
@@ -75,7 +75,7 @@ Note NoteCollection::byId(int id) const {
 
 	// TODO: refactor creation of note from SQL query object
 	Note note;
-	note.setId(q.value(0).toInt());
+	note.setId(q.value(0).toString());
 	note.setTitle(q.value(1).toString());
 	note.setBody(q.value(2).toString());
 	return note;

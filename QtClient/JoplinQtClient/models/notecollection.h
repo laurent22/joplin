@@ -15,14 +15,14 @@ class NoteCollection {
 public:
 
 	NoteCollection();
-	NoteCollection(Database& db, int parentId, const QString& orderBy);
+	NoteCollection(Database& db, const QString &parentId, const QString& orderBy);
 	Note at(int index) const;
 	int count() const;
-	Note byId(int id) const;
+	Note byId(const QString &id) const;
 
 private:
 
-	int parentId_;
+	QString parentId_;
 	QString orderBy_;
 	Database db_;
 	mutable SparseVector<Note> cache_;

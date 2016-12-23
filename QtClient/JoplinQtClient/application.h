@@ -31,8 +31,8 @@ private:
 	NoteService noteService_;
 	FolderModel folderModel_;
 	NoteModel noteModel_;
-	int selectedFolderId() const;
-	int selectedNoteId() const;
+	QString selectedFolderId() const;
+	QString selectedNoteId() const;
 	NoteCache noteCache_;
 	QmlNote selectedQmlNote_;
 

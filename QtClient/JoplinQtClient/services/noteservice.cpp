@@ -29,7 +29,7 @@ const QList<Note> NoteService::overviewList(const QString& folderId, int from, i
 
 	while (q.next()) {
 		Note f;
-		f.setId(q.value(0).toInt());
+		f.setId(q.value(0).toString());
 		f.setTitle(q.value(1).toString());
 		f.setIsPartial(true);
 		output << f;
@@ -46,7 +46,7 @@ std::pair<const Note &, bool> NoteService::overviewAt(const QString &folderId, i
 	if (!q.isValid()) return std::make_pair(Note(), false);
 
 	Note f;
-	f.setId(q.value(0).toInt());
+	f.setId(q.value(0).toString());
 	f.setTitle(q.value(1).toString());
 	f.setIsPartial(true);
 

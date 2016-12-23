@@ -165,18 +165,12 @@ xmltomd::Resource parseResource(QXmlStreamReader& reader) {
 				return xmltomd::Resource();
 			}
 
-
-			//qApp->exit(0);
-
 			QByteArray ba;
-//			qDebug() << reader.text();
-//			qApp->exit(0);
 			QString s = reader.readElementText();
 			s = s.replace("\n", "");
 			ba.append(s);
 			output.data = QByteArray::fromBase64(ba);
-//			qDebug() << output.data.toBase64();
-//			exit(0);
+
 		} else if (reader.name() == "mime") {
 			output.mime = reader.readElementText();
 		} else if (reader.name() == "resource-attributes") {
@@ -190,10 +184,6 @@ xmltomd::Resource parseResource(QXmlStreamReader& reader) {
 			qWarning() << "Unsupported <resource> element:" << reader.name();
 			reader.skipCurrentElement();
 		}
-	}
-
-	if (!output.id.length()) {
-		//output.id = createUuid(QString("%1%2%3%4").arg(output.filename).arg(output.timestamp).arg(QDateTime::currentMSecsSinceEpoch()).arg((int)qrand()));
 	}
 
 	return output;
@@ -396,9 +386,11 @@ int main(int argc, char *argv[]) {
 
 		db.exec("BEGIN TRANSACTION");
 
+		QString folderId = createUuid(QString("%1%2%3%4").arg(fileInfo.baseName()).arg(fileInfo.created().toTime_t()).arg((int)qrand()).arg(QDateTime::currentMSecsSinceEpoch()));
+
 		QSqlQuery query(db);
 		query.prepare("INSERT INTO folders (id, title, created_time, updated_time) VALUES (?, ?, ?, ?)");
-		query.addBindValue(createUuid(QString("%1%2%3%4").arg(fileInfo.baseName()).arg(fileInfo.created().toTime_t()).arg((int)qrand()).arg(QDateTime::currentMSecsSinceEpoch())));
+		query.addBindValue(folderId);
 		query.addBindValue(fileInfo.baseName());
 		query.addBindValue(fileInfo.created().toTime_t());
 		query.addBindValue(fileInfo.created().toTime_t());
@@ -446,21 +438,22 @@ int main(int argc, char *argv[]) {
 
 			QString markdown = xmltomd::evernoteXmlToMd(n.content, n.resources);
 
-			QString html(n.content);
-			html.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
-			html.replace("<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">", "");
-			html = html.trimmed();
+			// QString html(n.content);
+			// html.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
+			// html.replace("<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">", "");
+			// html = html.trimmed();
 
-			html = "<style>* { margin: 0; padding:0; }</style><div style=\"width: 100%\"><div style=\"float: left; width: 45%; font-family:monospace;\">" + html + "</div><div style=\"float: left; width: 45%;\"><pre style=\"white-space: pre-wrap;\">" + markdown + "</pre></div></div>";
+			// html = "<style>* { margin: 0; padding:0; }</style><div style=\"width: 100%\"><div style=\"float: left; width: 45%; font-family:monospace;\">" + html + "</div><div style=\"float: left; width: 45%;\"><pre style=\"white-space: pre-wrap;\">" + markdown + "</pre></div></div>";
 
-			QString generatedPath = "D:/Web/www/joplin/tests/generated";
-			filePutContents(QString("%1/%2_%3.html").arg(generatedPath).arg(i).arg(noteIndex), html);
+			// QString generatedPath = "D:/Web/www/joplin/tests/generated";
+			// filePutContents(QString("%1/%2_%3.html").arg(generatedPath).arg(i).arg(noteIndex), html);
 
 			QSqlQuery query(db);
-			query.prepare("INSERT INTO notes (id, title, body, created_time, updated_time, longitude, latitude, altitude, source, author, source_url, is_todo, todo_due, todo_completed, source_application, application_data, `order`) VALUES (:id, :title,:body,:created_time,:updated_time,:longitude,:latitude,:altitude,:source,:author,:source_url,:is_todo,:todo_due,:todo_completed,:source_application,:application_data,:order)");
+			query.prepare("INSERT INTO notes (id, title, body, parent_id, created_time, updated_time, longitude, latitude, altitude, source, author, source_url, is_todo, todo_due, todo_completed, source_application, application_data, `order`) VALUES (:id, :title,:body, :parent_id, :created_time,:updated_time,:longitude,:latitude,:altitude,:source,:author,:source_url,:is_todo,:todo_due,:todo_completed,:source_application,:application_data,:order)");
 			query.bindValue(":id", n.id);
 			query.bindValue(":title", n.title);
 			query.bindValue(":body", markdown);
+			query.bindValue(":parent_id", folderId);
 			query.bindValue(":created_time", n.created);
 			query.bindValue(":updated_time", n.updated);
 			query.bindValue(":longitude", n.longitude);

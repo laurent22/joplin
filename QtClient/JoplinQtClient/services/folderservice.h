@@ -14,7 +14,7 @@ public:
 	FolderService();
 	FolderService(Database& database);
 	int count() const;
-	Folder byId(int id) const;
+	Folder byId(const QString &id) const;
 	//Folder partialAt(int index) const;
 	const QList<Folder> overviewList() const;
 

@@ -12,12 +12,12 @@ void Item::fromSqlQuery(const QSqlQuery &q) {
 	int i_title = q.record().indexOf("title");
 	int i_created_time = q.record().indexOf("created_time");
 
-	id_ = q.value(i_id).toInt();
+	id_ = q.value(i_id).toString();
 	title_ = q.value(i_title).toString();
 	createdTime_ = q.value(i_created_time).toInt();
 }
 
-int Item::id() const {
+QString Item::id() const {
 	return id_;
 }
 
@@ -29,7 +29,7 @@ int Item::createdTime() const {
 	return createdTime_;
 }
 
-void Item::setId(int v) {
+void Item::setId(const QString& v) {
 	id_ = v;
 }
 

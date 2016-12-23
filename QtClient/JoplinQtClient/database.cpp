@@ -5,7 +5,7 @@ using namespace jop;
 Database::Database(const QString &path) {
 	version_ = -1;
 
-	QFile::remove(path);
+	// QFile::remove(path);
 
 	db_ = QSqlDatabase::addDatabase("QSQLITE");
 	db_.setDatabaseName(path);

@@ -8,7 +8,7 @@ NoteCache::NoteCache() {
 
 void NoteCache::add(QList<Note> notes) {
 	foreach (Note note, notes) {
-		cache_[note.id()] = note;
+		//cache_[note.id()] = note;
 	}
 }
 
