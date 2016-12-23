@@ -103,6 +103,11 @@ abstract class ApiController extends Controller {
 		return $this->user;
 	}
 
+	protected function userId() {
+		$u = $this->user();
+		return $u ? $u->id : 0;
+	}
+
 	protected function aclCheck($resource) {
 		if (!is_array($resource)) $resource = array($resource);
 		$user = $this->user();

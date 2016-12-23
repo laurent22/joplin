@@ -7,11 +7,15 @@ services:
 
     app.eloquent:
         class: AppBundle\Eloquent
-        arguments: []
-
-    # app.fine_diff:
-    #     class: AppBundle\FineDiff
-    #     arguments: []
+        arguments: ['@app.mime_types', '@app.paths']
 
     twig.exception_listener:
-      class: stdObject
+        class: stdObject
+
+    app.paths:
+        class: AppBundle\Paths
+        arguments: [%kernel.root_dir%]
+
+    app.mime_types:
+        class: AppBundle\MimeTypes
+        arguments: ['@app.paths']

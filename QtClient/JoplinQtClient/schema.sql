@@ -58,4 +58,15 @@ CREATE TABLE version (
 	version INT
 );
 
+--CREATE TABLE mimetypes (
+--    id INT,
+--	mime TEXT
+--);
+
+--CREATE TABLE mimetype_extensions (
+--    id INTEGER PRIMARY KEY,
+--	mimetype_id,
+--	extension TEXT
+--);
+
 INSERT INTO version (version) VALUES (1);

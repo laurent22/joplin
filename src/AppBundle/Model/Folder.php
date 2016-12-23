@@ -2,7 +2,7 @@
 
 namespace AppBundle\Model;
 
-class Folder extends FolderItem {
+class Folder extends BaseItem {
 
 	protected $versionedFields = array('title');
 

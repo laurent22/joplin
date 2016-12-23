@@ -9,7 +9,7 @@ use AppBundle\Controller\ApiController;
 use AppBundle\Model\User;
 use AppBundle\Model\Session;
 use AppBundle\Model\Change;
-use AppBundle\Model\FolderItem;
+use AppBundle\Model\BaseItem;
 use AppBundle\Exception\ValidationException;
 
 
@@ -127,45 +127,45 @@ class UsersController extends ApiController {
 		// var_dump($diff2);
 
 		// $change = new Change();
-		// $change->user_id = FolderItem::unhex('204705F2E2E698036034FDC709840B80');
-		// $change->client_id = FolderItem::unhex('11111111111111111111111111111111');
-		// $change->item_type = FolderItem::enumId('type', 'note');
-		// $change->item_field = FolderItem::enumId('field', 'title');
-		// $change->item_id = FolderItem::unhex('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD');
+		// $change->user_id = BaseItem::unhex('204705F2E2E698036034FDC709840B80');
+		// $change->client_id = BaseItem::unhex('11111111111111111111111111111111');
+		// $change->item_type = BaseItem::enumId('type', 'note');
+		// $change->item_field = BaseItem::enumId('field', 'title');
+		// $change->item_id = BaseItem::unhex('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD');
 		// $change->delta = 'salut ca va';
 		// $change->save();
 
 
 		// $change = new Change();
-		// $change->user_id = FolderItem::unhex('204705F2E2E698036034FDC709840B80');
-		// $change->client_id = FolderItem::unhex('11111111111111111111111111111111');
-		// $change->item_type = FolderItem::enumId('type', 'note');
-		// $change->item_field = FolderItem::enumId('field', 'title');
-		// $change->item_id = FolderItem::unhex('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD');
+		// $change->user_id = BaseItem::unhex('204705F2E2E698036034FDC709840B80');
+		// $change->client_id = BaseItem::unhex('11111111111111111111111111111111');
+		// $change->item_type = BaseItem::enumId('type', 'note');
+		// $change->item_field = BaseItem::enumId('field', 'title');
+		// $change->item_id = BaseItem::unhex('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD');
 		// $change->createDelta('salut, ça va ? oui très bien');
 		// $change->save();
 
 		// $change = new Change();
-		// $change->user_id = FolderItem::unhex('204705F2E2E698036034FDC709840B80');
-		// $change->client_id = FolderItem::unhex('11111111111111111111111111111111');
-		// $change->item_type = FolderItem::enumId('type', 'note');
-		// $change->item_field = FolderItem::enumId('field', 'title');
-		// $change->item_id = FolderItem::unhex('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD');
+		// $change->user_id = BaseItem::unhex('204705F2E2E698036034FDC709840B80');
+		// $change->client_id = BaseItem::unhex('11111111111111111111111111111111');
+		// $change->item_type = BaseItem::enumId('type', 'note');
+		// $change->item_field = BaseItem::enumId('field', 'title');
+		// $change->item_id = BaseItem::unhex('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD');
 		// $change->createDelta('salut - oui très bien');
 		// $change->save();
 
 		// $change = new Change();
-		// $change->user_id = FolderItem::unhex('204705F2E2E698036034FDC709840B80');
-		// $change->client_id = FolderItem::unhex('11111111111111111111111111111111');
-		// $change->item_type = FolderItem::enumId('type', 'note');
-		// $change->item_field = FolderItem::enumId('field', 'title');
-		// $change->item_id = FolderItem::unhex('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD');
+		// $change->user_id = BaseItem::unhex('204705F2E2E698036034FDC709840B80');
+		// $change->client_id = BaseItem::unhex('11111111111111111111111111111111');
+		// $change->item_type = BaseItem::enumId('type', 'note');
+		// $change->item_field = BaseItem::enumId('field', 'title');
+		// $change->item_id = BaseItem::unhex('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD');
 		// $change->createDelta('salut, ça va ? oui bien');
 		// $change->save();
 
 
 
-		$d = Change::fullFieldText(FolderItem::unhex('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD'), FolderItem::enumId('field', 'title'));
+		$d = Change::fullFieldText(BaseItem::unhex('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD'), BaseItem::enumId('field', 'title'));
 		var_dump($d);die();
 
 

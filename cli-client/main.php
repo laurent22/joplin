@@ -140,7 +140,7 @@ class Config {
 
 }
 
-class FolderItem {
+class BaseItem {
 
 	private $title = '';
 	private $body = '';
@@ -183,17 +183,17 @@ class FolderItem {
 
 }
 
-class FolderItems {
+class BaseItems {
 
 	private $items = array();
 
-	private function getFolderItems($dir, $parentId, &$output) {
+	private function getBaseItems($dir, $parentId, &$output) {
 		$paths = glob($dir . '/*');
 		foreach ($paths as $path) {
 			$isFolder = is_dir($path);
 			$modTime = filemtime($path);
 
-			$o = new FolderItem();
+			$o = new BaseItem();
 			$o->setTitle(basename($path));
 			$o->setId(Api::createId($parentId . '_' . $o->title()));
 			$o->setParentId($parentId);
@@ -202,13 +202,13 @@ class FolderItems {
 
 			if (!$isFolder) $o->setBody(file_get_contents($path));
 			$output[] = $o;
-			if ($isFolder) $this->getFolderItems($path, $o->id(), $output);
+			if ($isFolder) $this->getBaseItems($path, $o->id(), $output);
 		}
 	}
 
 	public function fromPath($path) {
 		$this->items = array();
-		$this->getFolderItems($path, null, $this->items);
+		$this->getBaseItems($path, null, $this->items);
 	}
 
 	public function all() {
@@ -272,8 +272,8 @@ $api->setSessionId($session['id']);
 if (array_key_exists('sync', $flags)) {
 	$syncStartTime = time();
 	$lastSyncTime = $config->get('last_sync_time');
-	$folderItems = new FolderItems();
-	$folderItems->fromPath($dataPath);
+	$BaseItems = new BaseItems();
+	$BaseItems->fromPath($dataPath);
 
 	// ------------------------------------------------------------------------------------------
 	// Get latest changes from API
@@ -287,7 +287,7 @@ if (array_key_exists('sync', $flags)) {
 	$notes = array();
 	$maxId = null;
 	foreach ($response['items'] as $item) {
-		$folderItem = new FolderItem();
+		$BaseItem = new BaseItem();
 
 		switch ($item['type']) {
 
@@ -295,7 +295,7 @@ if (array_key_exists('sync', $flags)) {
 			case 'update':
 
 				$resource = $api->exec('GET', $item['item_type'] . 's/' . $item['item_id']);
-				$folderItem->fromApiArray($item['item_type'], $resource);
+				$BaseItem->fromApiArray($item['item_type'], $resource);
 				break;
 
 			default:
@@ -304,13 +304,13 @@ if (array_key_exists('sync', $flags)) {
 
 		}
 
-		$folderItems->setById($folderItem->id(), $folderItem);
+		$BaseItems->setById($BaseItem->id(), $BaseItem);
 
 		$maxId = max($item['id'], $maxId);
 	}
 
-	foreach ($folderItems->all() as $item) {
-		$relativePath = $folderItems->itemFullPath($item);
+	foreach ($BaseItems->all() as $item) {
+		$relativePath = $BaseItems->itemFullPath($item);
 		$path = $dataPath . '/' . $relativePath;
 
 		foreach (array('folder', 'note') as $itemType) {
@@ -333,7 +333,7 @@ if (array_key_exists('sync', $flags)) {
 	// Send changed notes and folders to API
 	// ------------------------------------------------------------------------------------------
 
-	foreach ($folderItems->all() as $item) {
+	foreach ($BaseItems->all() as $item) {
 		if ($item->modTime() < $lastSyncTime) continue;
 
 		if ($item->isFolder()) {

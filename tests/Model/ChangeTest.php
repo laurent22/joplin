@@ -3,7 +3,7 @@
 require_once dirname(dirname(__FILE__)) . '/setup.php';
 
 use AppBundle\Model\BaseModel;
-use AppBundle\Model\FolderItem;
+use AppBundle\Model\BaseItem;
 use AppBundle\Model\Note;
 use AppBundle\Model\Change;
 
@@ -24,7 +24,7 @@ class ChangeTest extends BaseTestCase {
 		$change = new Change();
 		$change->user_id = $this->user()->id;
 		$change->client_id = $this->clientId();
-		$change->item_type = FolderItem::enumId('type', 'note');
+		$change->item_type = BaseItem::enumId('type', 'note');
 		$change->item_field = BaseModel::enumId('field', 'body');
 		$change->type = Change::enumId('type', 'create');
 		$change->item_id = $itemId;
@@ -36,7 +36,7 @@ class ChangeTest extends BaseTestCase {
 		$change = new Change();
 		$change->user_id = $this->user()->id;
 		$change->client_id = $this->clientId();
-		$change->item_type = FolderItem::enumId('type', 'note');
+		$change->item_type = BaseItem::enumId('type', 'note');
 		$change->item_field = BaseModel::enumId('field', 'body');
 		$change->type = Change::enumId('type', 'update');
 		$change->item_id = $itemId;
@@ -62,7 +62,7 @@ class ChangeTest extends BaseTestCase {
 		$change = new Change();
 		$change->user_id = $this->user()->id;
 		$change->client_id = $this->clientId(1);
-		$change->item_type = FolderItem::enumId('type', 'note');
+		$change->item_type = BaseItem::enumId('type', 'note');
 		$change->item_field = BaseModel::enumId('field', 'body');
 		$change->type = Change::enumId('type', 'create');
 		$change->item_id = $itemId;
@@ -76,7 +76,7 @@ class ChangeTest extends BaseTestCase {
 		$change = new Change();
 		$change->user_id = $this->user()->id;
 		$change->client_id = $this->clientId(2);
-		$change->item_type = FolderItem::enumId('type', 'note');
+		$change->item_type = BaseItem::enumId('type', 'note');
 		$change->item_field = BaseModel::enumId('field', 'body');
 		$change->type = Change::enumId('type', 'update');
 		$change->item_id = $itemId;
@@ -91,7 +91,7 @@ class ChangeTest extends BaseTestCase {
 		$change = new Change();
 		$change->user_id = $this->user()->id;
 		$change->client_id = $this->clientId(1);
-		$change->item_type = FolderItem::enumId('type', 'note');
+		$change->item_type = BaseItem::enumId('type', 'note');
 		$change->item_field = BaseModel::enumId('field', 'body');
 		$change->type = Change::enumId('type', 'update');
 		$change->item_id = $itemId;

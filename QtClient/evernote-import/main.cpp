@@ -10,6 +10,7 @@
 #include <QSqlRecord>
 #include <QCryptographicHash>
 #include <QTextCodec>
+#include <QDataStream>
 
 #include "xmltomd.h"
 
@@ -164,7 +165,18 @@ xmltomd::Resource parseResource(QXmlStreamReader& reader) {
 				return xmltomd::Resource();
 			}
 
-			output.data = QByteArray::fromBase64(reader.readElementText().toUtf8());
+
+			//qApp->exit(0);
+
+			QByteArray ba;
+//			qDebug() << reader.text();
+//			qApp->exit(0);
+			QString s = reader.readElementText();
+			s = s.replace("\n", "");
+			ba.append(s);
+			output.data = QByteArray::fromBase64(ba);
+//			qDebug() << output.data.toBase64();
+//			exit(0);
 		} else if (reader.name() == "mime") {
 			output.mime = reader.readElementText();
 		} else if (reader.name() == "resource-attributes") {
@@ -282,7 +294,7 @@ Note parseNote(QXmlStreamReader& reader) {
 	//		</en-export>
 
 	int mediaHashIndex = 0;
-	for (int i = 0; i < note.resources.size(); i++) {
+	for (size_t i = 0; i < note.resources.size(); i++) {
 		xmltomd::Resource& r = note.resources[i];
 		if (r.id == "") {
 			if (note.enMediaElements.size() <= mediaHashIndex) {
@@ -339,6 +351,13 @@ void filePutContents(const QString& filePath, const QString& content) {
 	}
 }
 
+QString extensionFromMimeType(const QString& mimeType) {
+	if (mimeType == "image/jpg" || mimeType == "image/jpeg") return ".jpg";
+	if (mimeType == "image/png") return ".png";
+	if (mimeType == "image/gif") return ".gif";
+	return "";
+}
+
 int main(int argc, char *argv[]) {
 	QCoreApplication a(argc, argv);
 
@@ -387,9 +406,9 @@ int main(int argc, char *argv[]) {
 
 		std::vector<Note> notes = parseXmlFile(fileInfo.absoluteFilePath());
 
-		for (int noteIndex = 0; noteIndex < notes.size(); noteIndex++) {
+		for (size_t noteIndex = 0; noteIndex < notes.size(); noteIndex++) {
 			Note n = notes[noteIndex];
-			for (int resourceIndex = 0; resourceIndex < n.resources.size(); resourceIndex++) {
+			for (size_t resourceIndex = 0; resourceIndex < n.resources.size(); resourceIndex++) {
 				xmltomd::Resource resource = n.resources[resourceIndex];
 				QSqlQuery query(db);
 				query.prepare("INSERT INTO resources (id, title, mime, filename, created_time, updated_time) VALUES (?,?,?,?,?,?)");
@@ -406,10 +425,19 @@ int main(int argc, char *argv[]) {
 				query.addBindValue(resource.id);
 				query.addBindValue(n.id);
 				query.exec();
+
+				QString resourceFilePath = resourceDir + "/" + resource.id;  //+ extensionFromMimeType(resource.mime);
+				QFile resourceFile(resourceFilePath);
+				if (resourceFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+					QDataStream stream(&resourceFile);
+					stream << resource.data;
+				} else {
+					qWarning() << "Cannot write to" << resourceFilePath;
+				}
 			}
 		}
 
-		for (int noteIndex = 0; noteIndex < notes.size(); noteIndex++) {
+		for (size_t noteIndex = 0; noteIndex < notes.size(); noteIndex++) {
 			Note n = notes[noteIndex];
 
 			// if (i != 8 || noteIndex != 3090) continue;
