@@ -1,4 +1,4 @@
-QT += qml quick sql quickcontrols2
+QT += qml quick sql quickcontrols2 network
 
 CONFIG += c++11
 
@@ -16,7 +16,10 @@ SOURCES += \
     application.cpp \
     models/notecollection.cpp \
     services/notecache.cpp \
-    models/qmlnote.cpp
+    models/qmlnote.cpp \
+    webapi.cpp \
+    synchronizer.cpp \
+    settings.cpp
 
 RESOURCES += qml.qrc \
     database.qrc
@@ -44,7 +47,10 @@ HEADERS += \
     models/notecollection.h \
     services/notecache.h \
     sparsevector.hpp \
-    models/qmlnote.h
+    models/qmlnote.h \
+    webapi.h \
+    synchronizer.h \
+    settings.h
 
 DISTFILES +=
 

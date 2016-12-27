@@ -66,7 +66,11 @@ abstract class ApiController extends Controller {
 	protected function session() {
 		if ($this->useTestUserAndSession) {
 			$session = Session::find(Session::unhex('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'));
-			if ($session) $session->delete();
+			if ($session) return $session;
+			// if ($session) {
+			// 	$ok = $session->delete();
+			// 	if (!$ok) throw new \Exception("Cannot delete session");
+			// }
 			$session = new Session();
 			$session->id = Session::unhex('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB');
 			$session->owner_id = Session::unhex('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
@@ -74,7 +78,6 @@ abstract class ApiController extends Controller {
 			$session->save();
 			return $session;
 		}
-
 
 		if ($this->session) return $this->session;
 		$request = $this->container->get('request_stack')->getCurrentRequest();
@@ -142,37 +145,49 @@ abstract class ApiController extends Controller {
 	protected function patchParameters() {
 		$output = array();
 		$input = file_get_contents('php://input');
-		preg_match('/boundary=(.*)$/', $_SERVER['CONTENT_TYPE'], $matches);
-		$boundary = $matches[1];
-		$blocks = preg_split("/-+$boundary/", $input);
-		array_pop($blocks);
-		foreach ($blocks as $id => $block) {
-			if (empty($block)) continue;
 
-			// you'll have to var_dump $block to understand this and maybe replace \n or \r with a visibile char
+		// Two content types are supported:
+		//
+		// multipart/form-data; boundary=------------------------68670b1a1565e787
+		// application/x-www-form-urlencoded
 
-			// parse uploaded files
-			if (strpos($block, 'application/octet-stream') !== FALSE) {
-				// match "name", then everything after "stream" (optional) except for prepending newlines 
-				preg_match("/name=\"([^\"]*)\".*stream[\n|\r]+([^\n\r].*)?$/s", $block, $matches);
-			} else {
-				// match "name" and optional value in between newline sequences
-				preg_match('/name=\"([^\"]*)\"[\n|\r]+([^\n\r].*)?\r$/s', $block, $matches);
-			}
-			if (!isset($matches[2])) {
-				// Regex above will not find anything if the parameter has not value. For example
-				// "parent_id" below:
+		if (!isset($_SERVER['CONTENT_TYPE']) || $_SERVER['CONTENT_TYPE'] == 'application/x-www-form-urlencoded') {
+			parse_str($input, $output);
+		} else {
+			if (!isset($_SERVER['CONTENT_TYPE'])) throw new \Exception("Cannot decode input data");
+			preg_match('/boundary=(.*)$/', $_SERVER['CONTENT_TYPE'], $matches);
+			if (!isset($matches[1])) throw new \Exception("Cannot decode input data");
+			$boundary = $matches[1];
+			$blocks = preg_split("/-+$boundary/", $input);
+			array_pop($blocks);
+			foreach ($blocks as $id => $block) {
+				if (empty($block)) continue;
 
-				// Content-Disposition: form-data; name="parent_id"
-				//
-				//
-				// Content-Disposition: form-data; name="id"
-				//
-				// 54ad197be333c98778c7d6f49506efcb
+				// you'll have to var_dump $block to understand this and maybe replace \n or \r with a visibile char
 
-				$output[$matches[1]] = '';
-			} else {
-				$output[$matches[1]] = $matches[2];
+				// parse uploaded files
+				if (strpos($block, 'application/octet-stream') !== FALSE) {
+					// match "name", then everything after "stream" (optional) except for prepending newlines 
+					preg_match("/name=\"([^\"]*)\".*stream[\n|\r]+([^\n\r].*)?$/s", $block, $matches);
+				} else {
+					// match "name" and optional value in between newline sequences
+					preg_match('/name=\"([^\"]*)\"[\n|\r]+([^\n\r].*)?\r$/s', $block, $matches);
+				}
+				if (!isset($matches[2])) {
+					// Regex above will not find anything if the parameter has no value. For example
+					// "parent_id" below:
+
+					// Content-Disposition: form-data; name="parent_id"
+					//
+					//
+					// Content-Disposition: form-data; name="id"
+					//
+					// 54ad197be333c98778c7d6f49506efcb
+
+					$output[$matches[1]] = '';
+				} else {
+					$output[$matches[1]] = $matches[2];
+				}
 			}
 		}
 

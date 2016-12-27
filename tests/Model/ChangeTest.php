@@ -48,6 +48,27 @@ class ChangeTest extends BaseTestCase {
 		$this->assertEquals($r, $text2);
 	}
 
+	public function testSame() {
+		$note = new Note();
+		$note->fromPublicArray(array('body' => 'test'));
+		$note->owner_id = $this->userId();
+		$note->save();
+
+		$noteId = $note->id;
+
+		$note = Note::find($noteId);
+
+		$this->assertEquals('test', $note->versionedFieldValue('body'));
+
+		$note->fromPublicArray(array('body' => 'test'));
+		$note->owner_id = $this->userId();
+		$note->save();
+
+		$note = Note::find($noteId);
+
+		$this->assertEquals('test', $note->versionedFieldValue('body'));
+	}
+
 	public function testDiff3Ways() {
 		// Scenario where two different clients change the same note at the same time.
 		//

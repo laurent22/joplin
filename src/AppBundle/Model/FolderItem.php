@@ -8,7 +8,7 @@ class FolderItem extends BaseModel {
 	public $incrementing = false;
 
 	static protected $enums = array(
-		'type' => array('folder', 'note', 'todo'),
+		'type' => array('folder', 'note'),
 	);
 
 }

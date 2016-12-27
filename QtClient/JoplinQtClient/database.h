@@ -12,7 +12,6 @@ public:
 	Database(const QString& path);
 	Database();
 	QSqlQuery query(const QString& sql) const;
-	//QSqlQuery exec(const QString& sql, const QMap<QString, QVariant> &parameters);
 
 private:
 

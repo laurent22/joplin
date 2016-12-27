@@ -80,12 +80,14 @@ class Change extends BaseModel {
 		$revId = 0;
 		for ($i = 0; $i < count($changes); $i++) {
 			$change = $changes[$i];
-			$result = Diff::patch($output, $change->delta);
-			if (!count($result[1])) throw new \Exception('Unexpected result format for patch operation: ' . json_encode($result));
-			if (!$result[1][0]) {
-				// Could not patch the string. TODO: handle conflict
+			if (!empty($change->delta)) {
+				$result = Diff::patch($output, $change->delta);
+				if (!count($result[1])) throw new \Exception('Unexpected result format for patch operation: ' . json_encode($result));
+				if (!$result[1][0]) {
+					// Could not patch the string. TODO: handle conflict
+				}
+				$output = $result[0];
 			}
-			$output = $result[0];
 
 			$revId = $change->id;
 		}

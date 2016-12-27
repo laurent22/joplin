@@ -36,18 +36,10 @@ class FoldersController extends ApiController {
 		}
 
 		if ($request->isMethod('PUT')) {
-			// TODO: call fromPublicArray() - handles unhex conversion
-
-			$data = $this->putParameters();
-			$isNew = !$folder;
-			if ($isNew) $folder = new Folder();
-			foreach ($data as $n => $v) {
-				if ($n == 'parent_id') $v = Folder::unhex($v);
-				$folder->{$n} = $v;
-			}
-			$folder->owner_id = $this->user()->id;
+			if (!$folder) $folder = new Folder();
+			$folder->fromPublicArray($this->putParameters());
 			$folder->id = Folder::unhex($id);
-			$folder->setIsNew($isNew);
+			$folder->owner_id = $this->user()->id;
 			$folder->save();
 			return static::successResponse($folder);
 		}

@@ -8,7 +8,7 @@ class BaseItem extends BaseModel {
 	public $incrementing = false;
 
 	static protected $enums = array(
-		'type' => array('folder', 'note', 'todo', 'tag'),
+		'type' => array('folder', 'note', 'tag'),
 	);
 
 	public function itemTypeId() {

@@ -20,7 +20,7 @@ class SessionsController extends ApiController {
 	 * @Route("/sessions")
 	 */
 	public function allAction(Request $request) {
-		if ($request->isMethod('POST')) {
+		if ($request->isMethod('POST')) {			
 			$data = $request->request->all();
 			// Note: the login method will throw an exception in case of failure
 			$session = Session::login($data['email'], $data['password'], Session::unhex($data['client_id']));

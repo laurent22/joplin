@@ -14,7 +14,9 @@ public:
 	QString id() const;
 	QString title() const;
 	int createdTime() const;
+	int updatedTime() const;
 	bool isPartial() const;
+	static QStringList dbFields();
 
 	void setId(const QString &v);
 	void setTitle(const QString& v);
@@ -27,8 +29,11 @@ private:
 
 	QString id_;
 	QString title_;
-	int createdTime_;
-	bool isPartial_;
+	time_t createdTime_;
+	time_t updatedTime_;
+	bool synced_;
+
+	bool isPartial_;	
 
 };
 

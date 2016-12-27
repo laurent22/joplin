@@ -11,6 +11,8 @@
 #include "services/notecache.h"
 #include "models/notemodel.h"
 #include "models/qmlnote.h"
+#include "webapi.h"
+#include "synchronizer.h"
 
 namespace jop {
 
@@ -35,11 +37,16 @@ private:
 	QString selectedNoteId() const;
 	NoteCache noteCache_;
 	QmlNote selectedQmlNote_;
+	WebApi api_;
+	Synchronizer synchronizer_;
+
+	void afterSessionInitialization();
 
 public slots:
 
 	void view_currentFolderChanged();
 	void view_currentNoteChanged();
+	void api_requestDone(const QJsonObject& response, const QString& tag);
 
 };
 

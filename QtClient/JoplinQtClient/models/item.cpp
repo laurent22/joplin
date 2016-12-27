@@ -5,16 +5,7 @@ using namespace jop;
 
 Item::Item() {
 	isPartial_ = true;
-}
-
-void Item::fromSqlQuery(const QSqlQuery &q) {
-	int i_id = q.record().indexOf("id");
-	int i_title = q.record().indexOf("title");
-	int i_created_time = q.record().indexOf("created_time");
-
-	id_ = q.value(i_id).toString();
-	title_ = q.value(i_title).toString();
-	createdTime_ = q.value(i_created_time).toInt();
+	synced_ = false;
 }
 
 QString Item::id() const {
@@ -27,6 +18,10 @@ QString Item::title() const {
 
 int Item::createdTime() const {
 	return createdTime_;
+}
+
+int Item::updatedTime() const {
+	return updatedTime_;
 }
 
 void Item::setId(const QString& v) {
@@ -47,4 +42,18 @@ void Item::setIsPartial(bool v) {
 
 bool Item::isPartial() const {
 	return isPartial_;
+}
+
+QStringList Item::dbFields() {
+	QStringList output;
+	output << "id" << "title" << "created_time" << "updated_time" << "synced";
+	return output;
+}
+
+void Item::fromSqlQuery(const QSqlQuery &q) {
+	id_ = q.value(0).toString();
+	title_ = q.value(1).toString();
+	createdTime_ = q.value(2).toInt();
+	updatedTime_ = q.value(3).toInt();
+	synced_ = q.value(4).toBool();
 }

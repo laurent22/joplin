@@ -29,7 +29,7 @@ class User extends BaseModel {
 		return $output;
 	}
 
-	public function byEmail($email) {
+	static public function byEmail($email) {
 		return self::where('email', '=', $email)->first();
 	}
 

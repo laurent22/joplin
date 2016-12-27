@@ -10,8 +10,6 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlRecord>
-//#include <QUuid>
-//#include <vector>
 #include <QList>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -20,6 +18,13 @@
 #include <QQmlContext>
 #include <QQmlProperty>
 #include <QSqlError>
+#include <QNetworkAccessManager>
+#include <QUrlQuery>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QSettings>
+#include <QJsonObject>
+#include <QJsonParseError>
 
 #endif // __cplusplus
 

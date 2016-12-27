@@ -25,3 +25,4 @@ QtClient/data/
 app/data/uploads/
 !app/data/uploads/.gitkeep
 sparse_test.php
+INFO.md
