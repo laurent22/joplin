@@ -96,7 +96,7 @@ public:
 
 	// Returns a vector containing the indexes that are not currently set around
 	// the given index, up to bufferSize indexes.
-	std::vector<int> availableBufferAround(int index, int bufferSize) const {
+	std::vector<int> availableBufferAround(int index, size_t bufferSize) const {
 		std::vector<int> temp;
 
 		// Doesn't make sense to search for an empty buffer around

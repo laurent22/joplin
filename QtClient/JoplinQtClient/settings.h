@@ -9,9 +9,6 @@ class Settings : public QSettings {
 
 	Q_OBJECT
 
-//public:
-//	Settings();
-
 };
 
 }

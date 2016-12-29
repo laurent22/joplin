@@ -12,7 +12,6 @@ SOURCES += \
     models/note.cpp \
     application.cpp \
     models/notecollection.cpp \
-    services/notecache.cpp \
     models/qmlnote.cpp \
     webapi.cpp \
     synchronizer.cpp \
@@ -40,7 +39,6 @@ HEADERS += \
     models/note.h \
     application.h \
     models/notecollection.h \
-    services/notecache.h \
     sparsevector.hpp \
     models/qmlnote.h \
     webapi.h \

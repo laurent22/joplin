@@ -93,7 +93,7 @@ void WebApi::request_finished(QNetworkReply *reply) {
 		response = doc.object();
 	}
 
-	for (size_t i = 0; i < inProgressRequests_.size(); i++) {
+	for (int i = 0; i < inProgressRequests_.size(); i++) {
 		QueuedRequest r = inProgressRequests_[i];
 		if (r.reply == reply) {
 			inProgressRequests_.erase(inProgressRequests_.begin() + i);

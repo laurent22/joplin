@@ -44,7 +44,7 @@ void Synchronizer::start() {
 		api_.put("folders/" + folder.id(), QUrlQuery(), data, "putFolder:" + folder.id());
 	}
 
-	for (size_t i = 0; i < notes.size(); i++) {
+	for (int i = 0; i < notes.size(); i++) {
 		Note note = notes[i];
 		QUrlQuery data;
 		data.addQueryItem("id", note.id());

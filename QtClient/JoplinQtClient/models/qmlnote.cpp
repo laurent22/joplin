@@ -15,6 +15,4 @@ QString QmlNote::body() const {
 void QmlNote::setNote(const Note &note) {
 	note_ = note;
 	emit changed();
-	//emit titleChanged();
-	//emit bodyChanged();
 }

@@ -7,7 +7,6 @@
 #include "models/foldermodel.h"
 #include "models/notecollection.h"
 #include "models/foldercollection.h"
-#include "services/notecache.h"
 #include "models/notemodel.h"
 #include "models/qmlnote.h"
 #include "webapi.h"
@@ -32,7 +31,6 @@ private:
 	NoteModel noteModel_;
 	QString selectedFolderId() const;
 	QString selectedNoteId() const;
-	NoteCache noteCache_;
 	QmlNote selectedQmlNote_;
 	WebApi api_;
 	Synchronizer synchronizer_;

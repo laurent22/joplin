@@ -10,9 +10,6 @@ class QmlNote : public QObject {
 
 	Q_OBJECT
 
-	Q_PROPERTY(QString title READ title NOTIFY titleChanged)
-	Q_PROPERTY(QString body READ body NOTIFY bodyChanged)
-
 public:
 
 	QmlNote();
@@ -22,8 +19,6 @@ public:
 
 signals:
 
-	void titleChanged();
-	void bodyChanged();
 	void changed();
 
 private:

@@ -6,6 +6,7 @@ jop::NoteModel::NoteModel()
 }
 
 int jop::NoteModel::rowCount(const QModelIndex &parent) const {
+	Q_UNUSED(parent);
 	return collection_.count();
 }
 

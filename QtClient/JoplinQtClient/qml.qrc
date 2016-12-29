@@ -5,8 +5,6 @@
         <file>NoteList.qml</file>
         <file>NoteEditor.qml</file>
         <file>AddButton.qml</file>
-        <file>Test.qml</file>
-        <file>TestForm.ui.qml</file>
         <file>EditableListItem.qml</file>
     </qresource>
 </RCC>

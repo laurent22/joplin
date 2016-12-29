@@ -59,7 +59,7 @@ int NoteCollection::count() const {
 
 Note NoteCollection::byId(const QString& id) const {
 	std::vector<int> indexes = cache_.indexes();
-	for (int i = 0; i < indexes.size(); i++) {
+	for (size_t i = 0; i < indexes.size(); i++) {
 		Note note = cache_.get(indexes[i]);
 		if (note.id() == id) return note;
 	}
