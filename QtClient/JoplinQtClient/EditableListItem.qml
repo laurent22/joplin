@@ -5,10 +5,12 @@ Item {
 	id: root
 	width: parent.width
 	height: 25
+
 	Text {
 		id: label
 		text: display
 		anchors.fill: parent
+		verticalAlignment: Text.AlignVCenter
 		MouseArea {
 			anchors.fill: parent
 			onClicked: {
@@ -18,10 +20,12 @@ Item {
 				label.visible = false
 				textField.visible = true
 				textField.focus = true
-				console.info("Editing ", index)
+				textField.selectAll()
+				textField.text = display
 			}
 		}
 	}
+
 	TextField {
 		id: textField
 		text: display
@@ -29,11 +33,7 @@ Item {
 		width: parent.width
 		height: parent.height
 		onAccepted: {
-			console.info(root.ListView.view.model);
-			console.info("Done ", index)
 			root.ListView.view.model.setData(index, text)
-			//root.ListView.view.model.setDataInt(index, "trest")
-			//root.ListView.view.currentItem = "test"
 		}
 		onEditingFinished: {
 			label.visible = true
