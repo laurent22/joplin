@@ -19,7 +19,9 @@ SOURCES += \
     models/qmlnote.cpp \
     webapi.cpp \
     synchronizer.cpp \
-    settings.cpp
+    settings.cpp \
+    models/foldercollection.cpp \
+    databaseutils.cpp
 
 RESOURCES += qml.qrc \
     database.qrc
@@ -50,7 +52,10 @@ HEADERS += \
     models/qmlnote.h \
     webapi.h \
     synchronizer.h \
-    settings.h
+    settings.h \
+    models/foldercollection.h \
+    databaseutils.h \
+    simpletypes.h
 
 DISTFILES +=
 

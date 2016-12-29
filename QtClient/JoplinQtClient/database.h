@@ -12,6 +12,7 @@ public:
 	Database(const QString& path);
 	Database();
 	QSqlQuery query(const QString& sql) const;
+	QSqlDatabase& database();
 
 private:
 

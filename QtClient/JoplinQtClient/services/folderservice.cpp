@@ -47,3 +47,7 @@ const QList<Folder> FolderService::overviewList() const {
 
 	return cache_;
 }
+
+void FolderService::clearCache() {
+	cache_.clear();
+}

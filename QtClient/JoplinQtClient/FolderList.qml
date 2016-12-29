@@ -13,23 +13,6 @@ Item {
 		anchors.fill: parent
 	}
 
-	Component {
-		id: folderDelegate
-		Item {
-			width: parent.width
-			height: 25
-			Text {
-				text: display
-			}
-			MouseArea {
-				anchors.fill: parent
-				onClicked: {
-					listView.currentIndex = index
-				}
-			}
-		}
-	}
-
 	ListView {
 		id: listView
 		anchors.fill: parent
@@ -37,5 +20,16 @@ Item {
 		ScrollBar.vertical: ScrollBar {  }
 		highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
 		focus: true
+//		onModelChanged: {
+////			listView.model.onDataChanged = function() {
+////				console.info("testaaaaaaaaaaaaaaaaaaa")
+////			}
+//			console.info("MODEL CHANGAID")
+//		}
+	}
+
+	Component {
+		id: folderDelegate
+		EditableListItem {}
 	}
 }

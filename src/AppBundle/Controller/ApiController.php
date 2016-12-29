@@ -40,16 +40,7 @@ abstract class ApiController extends Controller {
 				echo "\n";
 			}
 		});
-
-		// 1. client 1 : bla bla bla
-		// 2. client 2 : bla bla bla fromclient2
-		// 3. client 1 : client1bla bla bla
-
-		// RESULT: client1bla bla bla
-
-		// Because diff for 3 is done between 2 and 3
-		// Need to introduce revID so that Change class knows between which versions the diff should be made
-
+		
 		// HACK: get connection once here so that it's initialized and can 
 		// be accessed from models.
 		$this->db = $this->get('app.eloquent')->connection();

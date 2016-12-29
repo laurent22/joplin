@@ -8,6 +8,7 @@
 #include "services/noteservice.h"
 #include "models/foldermodel.h"
 #include "models/notecollection.h"
+#include "models/foldercollection.h"
 #include "services/notecache.h"
 #include "models/notemodel.h"
 #include "models/qmlnote.h"
@@ -30,6 +31,7 @@ private:
 	Database db_;
 	FolderService folderService_;
 	NoteCollection noteCollection_;
+	FolderCollection folderCollection_;
 	NoteService noteService_;
 	FolderModel folderModel_;
 	NoteModel noteModel_;
@@ -46,6 +48,8 @@ public slots:
 
 	void view_currentFolderChanged();
 	void view_currentNoteChanged();
+	void view_addNoteButtonClicked();
+	void view_addFolderButtonClicked();
 	void api_requestDone(const QJsonObject& response, const QString& tag);
 
 };

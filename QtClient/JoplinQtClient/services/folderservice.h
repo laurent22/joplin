@@ -17,6 +17,7 @@ public:
 	Folder byId(const QString &id) const;
 	//Folder partialAt(int index) const;
 	const QList<Folder> overviewList() const;
+	void clearCache();
 
 private:
 

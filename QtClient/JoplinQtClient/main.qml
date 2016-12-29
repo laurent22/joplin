@@ -9,6 +9,8 @@ Item {
 	height: 600
 	signal currentFolderChanged()
 	signal currentNoteChanged()
+	signal addNoteButtonClicked()
+	signal addFolderButtonClicked()
 	property alias currentFolderIndex: folderList.currentIndex
 	property alias currentNoteIndex: noteList.currentIndex
 
@@ -56,6 +58,14 @@ Item {
 			Layout.preferredHeight: 100
 		}
 
+	}
+
+	AddButton {
+		id: addButton
+		anchors.right: parent.right
+		anchors.bottom: parent.bottom
+		onAddFolderButtonClicked: root.addFolderButtonClicked()
+		onAddNoteButtonClicked: root.addNoteButtonClicked()
 	}
 
 }

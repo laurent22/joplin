@@ -5,7 +5,6 @@
 
 #include "database.h"
 #include "models/note.h"
-#include "services/notecache.h"
 #include "sparsevector.hpp"
 
 namespace jop {

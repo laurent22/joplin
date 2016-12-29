@@ -8,7 +8,16 @@
 
 using namespace jop;
 
-Application::Application(int &argc, char **argv) : QGuiApplication(argc, argv), db_("D:/Web/www/joplin/QtClient/data/notes.sqlite"), api_("http://joplin.local"), synchronizer_(api_, db_) {
+Application::Application(int &argc, char **argv) :
+    QGuiApplication(argc, argv),
+    db_("D:/Web/www/joplin/QtClient/data/notes.sqlite"),
+    api_("http://joplin.local"),
+    synchronizer_(api_, db_),
+    folderCollection_(db_, 0, "title ASC"),
+    folderModel_(db_)
+
+    {
+
 	// This is linked to where the QSettings will be saved. In other words,
 	// if these values are changed, the settings will be reset and saved
 	// somewhere else.
@@ -18,8 +27,11 @@ Application::Application(int &argc, char **argv) : QGuiApplication(argc, argv), 
 
 	Settings settings;
 
+	//folderCollection_ = FolderCollection(db_, 0, "title ASC");
+
 	folderService_ = FolderService(db_);
-	folderModel_.setService(folderService_);
+	//folderModel_.setService(folderService_);
+	//folderModel_.setCollection(folderCollection_);
 
 	noteService_ = NoteService(db_);
 	noteModel_.setService(noteService_);
@@ -89,7 +101,7 @@ void Application::afterSessionInitialization() {
 	QString sessionId = settings.value("sessionId").toString();
 	qDebug() << "Session:" << sessionId;
 	api_.setSessionId(sessionId);
-	synchronizer_.start();
+	//synchronizer_.start();
 }
 
 void Application::view_currentFolderChanged() {
@@ -102,4 +114,12 @@ void Application::view_currentNoteChanged() {
 	QString noteId = selectedNoteId();
 	Note note = noteCollection_.byId(noteId);
 	selectedQmlNote_.setNote(note);
+}
+
+void Application::view_addNoteButtonClicked() {
+	qDebug() << "ici";
+}
+
+void Application::view_addFolderButtonClicked() {
+
 }

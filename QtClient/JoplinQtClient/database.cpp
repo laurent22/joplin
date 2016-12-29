@@ -27,6 +27,10 @@ QSqlQuery Database::query(const QString &sql) const	{
 	return output;
 }
 
+QSqlDatabase &Database::database() {
+	return db_;
+}
+
 //QSqlQuery Database::exec(const QString &sql, const QMap<QString, QVariant> &parameters) {
 //	QSqlQuery query;
 //	query.prepare(sql);
