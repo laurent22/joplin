@@ -4,8 +4,6 @@
 #include <stable.h>
 
 #include "database.h"
-#include "services/folderservice.h"
-#include "services/noteservice.h"
 #include "models/foldermodel.h"
 #include "models/notecollection.h"
 #include "models/foldercollection.h"
@@ -29,10 +27,7 @@ private:
 
 	QQuickView view_;
 	Database db_;
-	FolderService folderService_;
 	NoteCollection noteCollection_;
-	FolderCollection folderCollection_;
-	NoteService noteService_;
 	FolderModel folderModel_;
 	NoteModel noteModel_;
 	QString selectedFolderId() const;

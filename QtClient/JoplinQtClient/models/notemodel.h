@@ -3,7 +3,6 @@
 
 #include <stable.h>
 
-#include "services/noteservice.h"
 #include "models/notecollection.h"
 
 namespace jop {
@@ -23,7 +22,6 @@ public:
 	int rowCount(const QModelIndex & parent = QModelIndex()) const;
 	QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
 	void setFolderId(const QString& v);
-	void setService(NoteService& v);
 	void setCollection(NoteCollection& noteCollection);
 
 protected:
@@ -33,7 +31,6 @@ protected:
 private:
 
 	QList<Note> notes_;
-	NoteService noteService_;
 	QString folderId_;
 	NoteCollection collection_;
 

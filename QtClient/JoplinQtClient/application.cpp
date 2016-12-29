@@ -13,7 +13,6 @@ Application::Application(int &argc, char **argv) :
     db_("D:/Web/www/joplin/QtClient/data/notes.sqlite"),
     api_("http://joplin.local"),
     synchronizer_(api_, db_),
-    folderCollection_(db_, 0, "title ASC"),
     folderModel_(db_)
 
     {
@@ -26,15 +25,6 @@ Application::Application(int &argc, char **argv) :
 	QCoreApplication::setApplicationName("Joplin");
 
 	Settings settings;
-
-	//folderCollection_ = FolderCollection(db_, 0, "title ASC");
-
-	folderService_ = FolderService(db_);
-	//folderModel_.setService(folderService_);
-	//folderModel_.setCollection(folderCollection_);
-
-	noteService_ = NoteService(db_);
-	noteModel_.setService(noteService_);
 
 	view_.setResizeMode(QQuickView::SizeRootObjectToView);
 	QQmlContext *ctxt = view_.rootContext();

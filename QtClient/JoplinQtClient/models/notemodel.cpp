@@ -25,10 +25,6 @@ void jop::NoteModel::setFolderId(const QString &v) {
 	folderId_ = v;
 }
 
-void jop::NoteModel::setService(jop::NoteService &v) {
-	noteService_ = v;
-}
-
 void jop::NoteModel::setCollection(jop::NoteCollection &noteCollection) {
 	beginResetModel();
 	collection_ = noteCollection;

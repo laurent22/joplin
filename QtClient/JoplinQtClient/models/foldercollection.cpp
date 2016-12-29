@@ -3,8 +3,6 @@
 
 using namespace jop;
 
-//FolderCollection::FolderCollection() {}
-
 // Note: although parentId is supplied, it is currently not being used.
 FolderCollection::FolderCollection(Database& db, const QString& parentId, const QString& orderBy) {
 	db_ = db;
@@ -50,7 +48,7 @@ Folder FolderCollection::byId(const QString& id) const {
 }
 
 void FolderCollection::update(const QString &id, const QStringList &fields, const VariantVector &values) {
-	QSqlQuery q = dbUtils::buildSqlQuery(&db_.database(), "update", "folders", fields, values, "id = \"" + id + "\"");
+	QSqlQuery q = db_.buildSqlQuery(Database::Update, "folders", fields, values, "id = \"" + id + "\"");
 	q.exec();
 	cache_.clear();
 	emit changed(0, count() - 1, fields);

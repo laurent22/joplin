@@ -4,7 +4,6 @@
 #include <stable.h>
 
 #include "database.h"
-#include "services/folderservice.h"
 #include "models/foldercollection.h"
 
 namespace jop {
@@ -23,9 +22,6 @@ public:
 
 	FolderModel(Database& database);
 
-	//void setService(FolderService& folderService);
-	//void setCollection(FolderCollection& folderCollection);
-
 	void addFolder(Folder* folder);
 
 	int rowCount(const QModelIndex & parent = QModelIndex()) const;
@@ -41,14 +37,12 @@ protected:
 private:
 
 	QList<Folder> folders_;
-	FolderService folderService_;
 	FolderCollection folderCollection_;
 
 public slots:
 
 	bool setData(int index, const QVariant &value, int role = Qt::EditRole);
 	void folderCollection_changed(int from, int to, const QStringList &fields);
-	//bool setDataInt(int index, const QVariant &value, int role = Qt::EditRole);
 
 };
 

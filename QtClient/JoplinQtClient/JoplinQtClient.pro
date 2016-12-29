@@ -7,12 +7,9 @@ SOURCES += \
     models/item.cpp \
     models/folder.cpp \
     database.cpp \
-    uuid.cpp \
-    services/folderservice.cpp \
     models/foldermodel.cpp \
     models/notemodel.cpp \
     models/note.cpp \
-    services/noteservice.cpp \
     application.cpp \
     models/notecollection.cpp \
     services/notecache.cpp \
@@ -20,8 +17,7 @@ SOURCES += \
     webapi.cpp \
     synchronizer.cpp \
     settings.cpp \
-    models/foldercollection.cpp \
-    databaseutils.cpp
+    models/foldercollection.cpp
 
 RESOURCES += qml.qrc \
     database.qrc
@@ -39,12 +35,9 @@ HEADERS += \
     models/folder.h \
     models/item.h \
     database.h \
-    uuid.h \
-    services/folderservice.h \
     models/foldermodel.h \
     models/notemodel.h \
     models/note.h \
-    services/noteservice.h \
     application.h \
     models/notecollection.h \
     services/notecache.h \
@@ -54,7 +47,6 @@ HEADERS += \
     synchronizer.h \
     settings.h \
     models/foldercollection.h \
-    databaseutils.h \
     simpletypes.h
 
 DISTFILES +=
