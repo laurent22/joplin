@@ -32,6 +32,24 @@ Item {
 			onCurrentItemChanged: {
 				root.currentFolderChanged()
 			}
+
+			onEditingAccepted: function(index, text) {
+				if (folderList.model.virtualItemShown()) {
+					folderList.model.addData(text)
+				} else {
+					folderList.model.setData(index, text)
+				}
+			}
+
+			onStoppedEditing: {
+				if (folderList.model.virtualItemShown()) {
+					folderList.model.hideVirtualItem();
+				}
+			}
+
+			onDeleteButtonClicked: {
+				folderList.model.deleteData(index)
+			}
 		}
 
 		NoteList {
@@ -64,7 +82,10 @@ Item {
 		id: addButton
 		anchors.right: parent.right
 		anchors.bottom: parent.bottom
-		onAddFolderButtonClicked: root.addFolderButtonClicked()
+		onAddFolderButtonClicked: {
+			folderList.model.showVirtualItem();
+			folderList.startEditing(folderList.model.rowCount() - 1);
+		}
 		onAddNoteButtonClicked: root.addNoteButtonClicked()
 	}
 

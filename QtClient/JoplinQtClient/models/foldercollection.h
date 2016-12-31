@@ -22,7 +22,11 @@ public:
 	Folder at(int index) const;
 	int count() const;
 	Folder byId(const QString &id) const;
-	void update(const QString& id, const QStringList& fields, const VariantVector& values);
+	int idToIndex(const QString& id) const;
+	QString indexToId(int index) const;
+	void update(const QString& id, QStringList fields, VariantVector values);
+	void add(QStringList fields, VariantVector values);
+	void remove(const QString &id);
 
 private:
 
@@ -34,6 +38,10 @@ private:
 signals:
 
 	void changed(int from, int to, const QStringList& fields);
+
+public slots:
+
+	void dispatcher_folderCreated(const QString& id);
 
 };
 

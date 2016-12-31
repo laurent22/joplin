@@ -16,7 +16,9 @@ SOURCES += \
     webapi.cpp \
     synchronizer.cpp \
     settings.cpp \
-    models/foldercollection.cpp
+    models/foldercollection.cpp \
+    uuid.cpp \
+    dispatcher.cpp
 
 RESOURCES += qml.qrc \
     database.qrc
@@ -45,7 +47,9 @@ HEADERS += \
     synchronizer.h \
     settings.h \
     models/foldercollection.h \
-    simpletypes.h
+    simpletypes.h \
+    uuid.h \
+    dispatcher.h
 
 DISTFILES +=
 

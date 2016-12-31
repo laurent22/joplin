@@ -64,6 +64,13 @@ CREATE TABLE version (
 	version INT
 );
 
+CREATE TABLE changes (
+    id INTEGER PRIMARY KEY,
+	item_id TEXT,
+	item_type INT,
+	item_property TEXT
+);
+
 --CREATE TABLE mimetypes (
 --    id INT,
 --	mime TEXT

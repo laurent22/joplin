@@ -4,7 +4,6 @@
 using namespace jop;
 
 Item::Item() {
-	isPartial_ = true;
 	synced_ = false;
 }
 
@@ -24,6 +23,10 @@ int Item::updatedTime() const {
 	return updatedTime_;
 }
 
+bool Item::synced() const {
+	return synced_;
+}
+
 void Item::setId(const QString& v) {
 	id_ = v;
 }
@@ -36,12 +39,8 @@ void Item::setCreatedTime(int v) {
 	createdTime_ = v;
 }
 
-void Item::setIsPartial(bool v) {
-	isPartial_ = v;
-}
-
-bool Item::isPartial() const {
-	return isPartial_;
+void Item::setSynced(bool v) {
+	synced_ = v;
 }
 
 QStringList Item::dbFields() {

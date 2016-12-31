@@ -40,6 +40,13 @@ void WebApi::processQueue() {
 	QueuedRequest& r = queuedRequests_.takeFirst();
 
 	QString url = baseUrl_ + "/" + r.path;
+	QUrlQuery query = r.query;
+
+	if (sessionId_ != "") {
+		query.addQueryItem("session", sessionId_);
+	}
+
+	url += "?" + query.toString(QUrl::FullyEncoded);
 
 	QNetworkRequest* request = new QNetworkRequest(url);
 	request->setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
@@ -72,11 +79,12 @@ void WebApi::processQueue() {
 	cmd << "curl";
 	if (r.method == QNetworkAccessManager::PutOperation) {
 		cmd << "-X" << "PUT";
-		cmd << "--data" << "'" + r.data.toString(QUrl::FullyEncoded) + "'";
-		cmd << url;
 	}
 
-	//qDebug().noquote() << cmd.join(" ");
+	cmd << "--data" << "'" + r.data.toString(QUrl::FullyEncoded) + "'";
+	cmd << url;
+
+	qDebug().noquote() << cmd.join(" ");
 
 	inProgressRequests_.push_back(r);
 }

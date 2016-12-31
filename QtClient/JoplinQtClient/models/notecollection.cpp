@@ -24,8 +24,6 @@ Note NoteCollection::at(int index) const {
 	int from = indexes[0];
 	int to = indexes[indexes.size() - 1];
 
-	qDebug() << "Getting from" << from << "to" << to;
-
 	QSqlQuery q = db_.query("SELECT id, title, body FROM notes WHERE parent_id = :parent_id ORDER BY " + orderBy_ + " LIMIT " + QString::number(to - from + 1) + " OFFSET " + QString::number(from));
 	q.bindValue(":parent_id", parentId_);
 	q.exec();
@@ -36,7 +34,6 @@ Note NoteCollection::at(int index) const {
 		note.setId(q.value(0).toString());
 		note.setTitle(q.value(1).toString());
 		note.setBody(q.value(2).toString());
-		note.setIsPartial(true);
 
 		cache_.set(noteIndex, note);
 

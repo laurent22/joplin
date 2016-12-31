@@ -4,19 +4,11 @@
 namespace jop {
 namespace uuid {
 
-//QUuid fromString(const QString& s) {
-//	// {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}
-//	QString mod = s;
-//	mod.insert(8, '-');
-//	mod.insert(13, '-');
-//	mod.insert(18, '-');
-//	mod.insert(23, '-');
-//	mod = "{" + mod + "}";
-
-//	//qDebug() << mod;
-
-//	return QUuid(mod);
-//}
+QString createUuid(QString s) {
+	if (s == "") s = QString("%1%2").arg(qrand()).arg(QDateTime::currentMSecsSinceEpoch());
+	QString hash = QString(QCryptographicHash::hash(s.toUtf8(), QCryptographicHash::Sha256).toHex());
+	return hash.left(32);
+}
 
 }
 }

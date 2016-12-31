@@ -20,7 +20,7 @@ abstract class ApiController extends Controller {
 	protected $session = null;
 	protected $user = null;
 
-	private $useTestUserAndSession = true;
+	private $useTestUserAndSession = false;
 	private $testClientNum = 1;
 
 	public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
@@ -40,16 +40,21 @@ abstract class ApiController extends Controller {
 				echo "\n";
 			}
 		});
-		
+
 		// HACK: get connection once here so that it's initialized and can 
 		// be accessed from models.
 		$this->db = $this->get('app.eloquent')->connection();
 
 		$s = $this->session();
 
+		// TODO: find less hacky way to get request path
+		$requestPath = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+		$requestPath = ltrim($requestPath, '/');
+		$requestPath = rtrim($requestPath, '?');
+
 		// TODO: to keep it simple, only respond to logged in users, but in theory some data
 		// could be public.
-		if (!$s || !$this->user()) throw new UnauthorizedException('A session and user are required');
+		if ($requestPath != 'sessions' && (!$s || !$this->user())) throw new UnauthorizedException('A session and user are required');
 
 		BaseModel::setClientId($s ? $s->client_id : 0);
 	}

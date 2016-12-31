@@ -5,6 +5,8 @@
 #include "models/foldermodel.h"
 #include "services/folderservice.h"
 #include "settings.h"
+#include "uuid.h"
+#include "dispatcher.h"
 
 using namespace jop;
 
@@ -38,21 +40,27 @@ Application::Application(int &argc, char **argv) :
 
 	connect(rootObject, SIGNAL(currentFolderChanged()), this, SLOT(view_currentFolderChanged()));
 	connect(rootObject, SIGNAL(currentNoteChanged()), this, SLOT(view_currentNoteChanged()));
+	connect(rootObject, SIGNAL(addFolderButtonClicked()), this, SLOT(view_addFolderButtonClicked()));
 
 	view_.show();
 
 	connect(&api_, SIGNAL(requestDone(const QJsonObject&, const QString&)), this, SLOT(api_requestDone(const QJsonObject&, const QString&)));
 
 	QString sessionId = settings.value("sessionId").toString();
-	if (sessionId == "") {
+	//if (sessionId == "") {
 		QUrlQuery postData;
 		postData.addQueryItem("email", "laurent@cozic.net");
 		postData.addQueryItem("password", "12345678");
 		postData.addQueryItem("client_id", "B6E12222B6E12222");
 		api_.post("sessions", QUrlQuery(), postData, "getSession");
-	} else {
-		afterSessionInitialization();
-	}
+//	} else {
+//		afterSessionInitialization();
+//	}
+
+
+
+	//emit jop::dispatcher().folderCreated("test");
+	//.folderCreated("tes");
 }
 
 void Application::api_requestDone(const QJsonObject& response, const QString& tag) {
@@ -91,7 +99,7 @@ void Application::afterSessionInitialization() {
 	QString sessionId = settings.value("sessionId").toString();
 	qDebug() << "Session:" << sessionId;
 	api_.setSessionId(sessionId);
-	//synchronizer_.start();
+	synchronizer_.start();
 }
 
 void Application::view_currentFolderChanged() {
@@ -107,9 +115,18 @@ void Application::view_currentNoteChanged() {
 }
 
 void Application::view_addNoteButtonClicked() {
-	qDebug() << "ici";
+
 }
 
 void Application::view_addFolderButtonClicked() {
+//	QStringList fields;
+//	fields << "id";
+//	VariantVector values;
+//	values << uuid::createUuid();
+//	QSqlQuery q = db_.buildSqlQuery(Database::Insert, "folders", fields, values);
+//	q.exec();
 
+//	emit jop::dispatcher().folderCreated("test");
+
+	//qDebug() << "Added" << q.lastInsertId().toString();
 }

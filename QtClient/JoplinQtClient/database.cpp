@@ -5,7 +5,7 @@ using namespace jop;
 Database::Database(const QString &path) {
 	version_ = -1;
 
-	//QFile::remove(path);
+	// QFile::remove(path);
 
 	db_ = QSqlDatabase::addDatabase("QSQLITE");
 	db_.setDatabaseName(path);
@@ -84,13 +84,13 @@ QSqlQuery Database::buildSqlQuery(Database::QueryType type, const QString &table
 		}
 	}
 
-	qDebug() <<"SQL:"<<sql;
+//	qDebug() <<"SQL:"<<sql;
 
-	QMapIterator<QString, QVariant> i(query.boundValues());
-	while (i.hasNext()) {
-		i.next();
-		qDebug() << i.key() << ":" << i.value().toString();
-	}
+//	QMapIterator<QString, QVariant> i(query.boundValues());
+//	while (i.hasNext()) {
+//		i.next();
+//		qDebug() << i.key() << ":" << i.value().toString();
+//	}
 
 	return query;
 }

@@ -44,6 +44,8 @@ void Synchronizer::start() {
 		api_.put("folders/" + folder.id(), QUrlQuery(), data, "putFolder:" + folder.id());
 	}
 
+	return;
+
 	for (int i = 0; i < notes.size(); i++) {
 		Note note = notes[i];
 		QUrlQuery data;
@@ -68,10 +70,10 @@ void Synchronizer::api_requestDone(const QJsonObject& response, const QString& t
 	}
 
 	if (action == "putFolder") {
-		// qDebug() << "Done folder" << id;
-//		query = db_.query("UPDATE folders SET synced = 1 WHERE id = ?");
-//		query.addBindValue(id);
-//		query.exec();
+		qDebug() << "Synced folder" << id;
+		query = db_.query("UPDATE folders SET synced = 1 WHERE id = ?");
+		query.addBindValue(id);
+		query.exec();
 	}
 
 	if (action == "putNote") {
