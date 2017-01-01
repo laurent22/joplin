@@ -101,7 +101,7 @@ void Application::afterSessionInitialization() {
 	QString sessionId = settings.value("sessionId").toString();
 	qDebug() << "Session:" << sessionId;
 	api_.setSessionId(sessionId);
-	synchronizer_.start();
+	//synchronizer_.start();
 }
 
 void Application::view_currentFolderChanged() {

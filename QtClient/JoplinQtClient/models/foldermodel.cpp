@@ -8,11 +8,7 @@ FolderModel::FolderModel(Database &database) : QAbstractListModel(), db_(databas
 }
 
 int FolderModel::rowCount(const QModelIndex & parent) const {
-	Q_UNUSED(parent);
-	QSqlQuery q = db_.query("SELECT count(*) as row_count FROM folders");
-	q.exec();
-	q.next();
-	return q.value(0).toInt() + (virtualItemShown_ ? 1 : 0);
+	return Folder::count() + (virtualItemShown_ ? 1 : 0);
 }
 
 // NOTE: to lazy load - send back "Loading..." if item not currently loaded
@@ -42,17 +38,8 @@ bool FolderModel::setData(const QModelIndex &index, const QVariant &value, int r
 	Folder folder = atIndex(index.row());
 
 	if (role == Qt::EditRole) {
-		emit dataChanging();
-
-		QStringList fields;
-		VariantVector values;
-		fields << "title" << "synced";
-		values << value << QVariant(0);
-
-		QSqlQuery q = db_.buildSqlQuery(Database::Update, "folders", fields, values, "id = \"" + folder.id() + "\"");
-		q.exec();
-		if (!db_.errorCheck(q)) return false;
-
+		folder.setTitle(value.toString());
+		if (!folder.save()) return false;
 		cache_.clear();
 
 		QVector<int> roles;
@@ -77,14 +64,7 @@ Folder FolderModel::atIndex(int index) const {
 
 	cache_.clear();
 
-	QSqlQuery q = db_.query("SELECT " + Folder::dbFields().join(",") + " FROM folders ORDER BY " + orderBy_);
-	q.exec();
-
-	while (q.next()) {
-		Folder folder;
-		folder.fromSqlQuery(q);
-		cache_.push_back(folder);
-	}
+	cache_ = Folder::all(orderBy_);
 
 	if (!cache_.size()) {
 		qWarning() << "Invalid folder index:" << index;
@@ -144,19 +124,13 @@ QHash<int, QByteArray> FolderModel::roleNames() const {
 }
 
 void FolderModel::addData(const QString &title) {
-	QStringList fields;
-	VariantVector values;
-	QString folderId = uuid::createUuid();
-	fields << "id" << "title" << "synced";
-	values << folderId << QVariant(title) << QVariant(0);
-
-	QSqlQuery q = db_.buildSqlQuery(Database::Insert, "folders", fields, values);
-	q.exec();
-	if (!db_.errorCheck(q)) return;
+	Folder folder;
+	folder.setTitle(title);
+	if (!folder.save()) return;
 
 	cache_.clear();
 
-	lastInsertId_ = folderId;
+	lastInsertId_ = folder.id();
 
 	QVector<int> roles;
 	roles << Qt::DisplayRole;
@@ -173,13 +147,8 @@ void FolderModel::addData(const QString &title) {
 }
 
 void FolderModel::deleteData(const int index) {
-	QString folderId = idAtIndex(index);
-
-	QSqlQuery q(db_.database());
-	q.prepare("DELETE FROM folders WHERE id = :id");
-	q.bindValue(":id", folderId);
-	q.exec();
-	if (!db_.errorCheck(q)) return;
+	Folder folder = atIndex(index);
+	if (!folder.dispose()) return;
 
 	cache_.clear();
 
