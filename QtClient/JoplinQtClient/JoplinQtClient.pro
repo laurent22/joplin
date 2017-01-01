@@ -17,7 +17,8 @@ SOURCES += \
     synchronizer.cpp \
     settings.cpp \
     uuid.cpp \
-    dispatcher.cpp
+    dispatcher.cpp \
+    models/change.cpp
 
 RESOURCES += qml.qrc \
     database.qrc
@@ -47,7 +48,8 @@ HEADERS += \
     settings.h \
     simpletypes.h \
     uuid.h \
-    dispatcher.h
+    dispatcher.h \
+    models/change.h
 
 DISTFILES +=
 

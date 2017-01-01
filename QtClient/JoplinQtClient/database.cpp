@@ -108,6 +108,10 @@ bool Database::errorCheck(const QSqlQuery& query) {
 	return true;
 }
 
+//Change Database::newChange() const {
+//	return Change(*this);
+//}
+
 
 int Database::version() const {
 	if (version_ >= 0) return version_;

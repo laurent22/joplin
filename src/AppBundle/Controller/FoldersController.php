@@ -14,6 +14,10 @@ class FoldersController extends ApiController {
 	 * @Route("/folders")
 	 */
 	public function allAction(Request $request) {
+		if ($request->isMethod('GET')) {
+			return static::successResponse(Folder::all());
+		}
+
 		if ($request->isMethod('POST')) {
 			$folder = new Folder();
 			$folder->fromPublicArray($request->request->all());

@@ -19,6 +19,8 @@ public:
 	QSqlQuery buildSqlQuery(Database::QueryType type, const QString& tableName, const QStringList& fields, const VariantVector& values, const QString& whereCondition = "");
 	bool errorCheck(const QSqlQuery& query);
 
+	//Change newChange() const;
+
 private:
 
 	QSqlDatabase db_;
