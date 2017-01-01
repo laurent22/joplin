@@ -16,7 +16,6 @@ SOURCES += \
     webapi.cpp \
     synchronizer.cpp \
     settings.cpp \
-    models/foldercollection.cpp \
     uuid.cpp \
     dispatcher.cpp
 
@@ -46,7 +45,6 @@ HEADERS += \
     webapi.h \
     synchronizer.h \
     settings.h \
-    models/foldercollection.h \
     simpletypes.h \
     uuid.h \
     dispatcher.h

@@ -16,7 +16,7 @@ FolderCollection::FolderCollection(Database& db, const QString& parentId, const 
 
 Folder FolderCollection::at(int index) const {
 	if (cache_.size()) {
-		if (index < 0 || index >= count()) {
+		if (index < 0 || index >= cache_.size()) {
 			qWarning() << "Invalid folder index:" << index;
 			return Folder();
 		}

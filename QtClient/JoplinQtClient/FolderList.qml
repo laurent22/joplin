@@ -21,6 +21,13 @@ Item {
 		currentItem.stopEditing();
 	}
 
+	function selectItemById(id) {
+		currentItemId = id
+		var newIndex = listView.model.idToIndex(currentItemId);
+		currentIndex = newIndex
+		if (newIndex < 0) currentItemId = "";
+	}
+
 	Rectangle {
 		color: "#eeeeff"
 		border.color: "#ff0000"
@@ -33,9 +40,7 @@ Item {
 			target: model
 			onDataChanged: {
 				if (currentItemId !== "") {
-					var newIndex = model.idToIndex(currentItemId);
-					currentIndex = newIndex
-					if (newIndex < 0) currentItemId = "";
+					selectItemById(currentItemId);
 				}
 			}
 		}

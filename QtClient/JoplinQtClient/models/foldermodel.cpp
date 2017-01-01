@@ -1,15 +1,18 @@
 #include "foldermodel.h"
+#include "uuid.h"
 
 using namespace jop;
 
-FolderModel::FolderModel(Database &database) : QAbstractListModel(), folderCollection_(database, 0, "title"), db_(database), orderBy_("title") {
+FolderModel::FolderModel(Database &database) : QAbstractListModel(), db_(database), orderBy_("title") {
 	virtualItemShown_ = false;
-	connect(&folderCollection_, SIGNAL(changed(int,int,const QStringList&)), this, SLOT(folderCollection_changed(int,int,const QStringList&)));
 }
 
 int FolderModel::rowCount(const QModelIndex & parent) const {
 	Q_UNUSED(parent);
-	return folderCollection_.count() + (virtualItemShown_ ? 1 : 0);
+	QSqlQuery q = db_.query("SELECT count(*) as row_count FROM folders");
+	q.exec();
+	q.next();
+	return q.value(0).toInt() + (virtualItemShown_ ? 1 : 0);
 }
 
 // NOTE: to lazy load - send back "Loading..." if item not currently loaded
@@ -21,7 +24,7 @@ QVariant FolderModel::data(const QModelIndex & index, int role) const {
 	if (virtualItemShown_ && index.row() == rowCount() - 1) {
 		folder.setTitle("Untitled");
 	} else {
-		folder = folderCollection_.at(index.row());
+		folder = atIndex(index.row());
 	}
 
 	if (role == Qt::DisplayRole) {
@@ -36,21 +39,63 @@ QVariant FolderModel::data(const QModelIndex & index, int role) const {
 }
 
 bool FolderModel::setData(const QModelIndex &index, const QVariant &value, int role) {
-	Folder folder = folderCollection_.at(index.row());
+	Folder folder = atIndex(index.row());
 
 	if (role == Qt::EditRole) {
 		emit dataChanging();
 
 		QStringList fields;
-		fields << "title";
 		VariantVector values;
-		values << value;
-		folderCollection_.update(folder.id(), fields, values);
+		fields << "title" << "synced";
+		values << value << QVariant(0);
+
+		QSqlQuery q = db_.buildSqlQuery(Database::Update, "folders", fields, values, "id = \"" + folder.id() + "\"");
+		q.exec();
+		if (!db_.errorCheck(q)) return false;
+
+		cache_.clear();
+
+		QVector<int> roles;
+		roles << Qt::DisplayRole;
+		emit dataChanged(this->index(0), this->index(rowCount() - 1), roles);
 		return true;
 	}
 
 	qWarning() << "Unsupported role" << role;
 	return false;
+}
+
+Folder FolderModel::atIndex(int index) const {
+	if (cache_.size()) {
+		if (index < 0 || index >= cache_.size()) {
+			qWarning() << "Invalid folder index:" << index;
+			return Folder();
+		}
+
+		return cache_[index];
+	}
+
+	cache_.clear();
+
+	QSqlQuery q = db_.query("SELECT " + Folder::dbFields().join(",") + " FROM folders ORDER BY " + orderBy_);
+	q.exec();
+
+	while (q.next()) {
+		Folder folder;
+		folder.fromSqlQuery(q);
+		cache_.push_back(folder);
+	}
+
+	if (!cache_.size()) {
+		qWarning() << "Invalid folder index:" << index;
+		return Folder();
+	} else {
+		return atIndex(index);
+	}
+}
+
+Folder FolderModel::atIndex(const QModelIndex &index) const {
+	return atIndex(index.row());
 }
 
 void FolderModel::showVirtualItem() {
@@ -70,7 +115,16 @@ QString FolderModel::idAtIndex(int index) const {
 }
 
 int FolderModel::idToIndex(const QString &id) const {
-	return folderCollection_.idToIndex(id);
+	int count = this->rowCount();
+	for (int i = 0; i < count; i++) {
+		Folder folder = atIndex(i);
+		if (folder.id() == id) return i;
+	}
+	return -1;
+}
+
+QString FolderModel::lastInsertId() const {
+	return lastInsertId_;
 }
 
 bool FolderModel::virtualItemShown() const {
@@ -90,25 +144,49 @@ QHash<int, QByteArray> FolderModel::roleNames() const {
 }
 
 void FolderModel::addData(const QString &title) {
-	emit dataChanging();
-
 	QStringList fields;
-	fields << "title";
 	VariantVector values;
-	values << QVariant(title);
-	folderCollection_.add(fields, values);
+	QString folderId = uuid::createUuid();
+	fields << "id" << "title" << "synced";
+	values << folderId << QVariant(title) << QVariant(0);
+
+	QSqlQuery q = db_.buildSqlQuery(Database::Insert, "folders", fields, values);
+	q.exec();
+	if (!db_.errorCheck(q)) return;
+
+	cache_.clear();
+
+	lastInsertId_ = folderId;
+
+	QVector<int> roles;
+	roles << Qt::DisplayRole;
+
+	int from = 0;
+	int to = rowCount() - 1;
+
+	// Necessary to make sure a new item is added to the view, even
+	// though it might not be positioned there due to sorting
+	beginInsertRows(QModelIndex(), to, to);
+	endInsertRows();
+
+	emit dataChanged(this->index(from), this->index(to), roles);
 }
 
 void FolderModel::deleteData(const int index) {
-	QString id = folderCollection_.indexToId(index);
-	folderCollection_.remove(id);
-}
+	QString folderId = idAtIndex(index);
 
-void FolderModel::folderCollection_changed(int from, int to, const QStringList& fields) {
-	beginRemoveRows(QModelIndex(), from, to);
+	QSqlQuery q(db_.database());
+	q.prepare("DELETE FROM folders WHERE id = :id");
+	q.bindValue(":id", folderId);
+	q.exec();
+	if (!db_.errorCheck(q)) return;
+
+	cache_.clear();
+
+	beginRemoveRows(QModelIndex(), index, index);
+	endRemoveRows();
+
 	QVector<int> roles;
 	roles << Qt::DisplayRole;
-	qDebug() << "update" << from << to;
-	emit dataChanged(this->index(from), this->index(to), roles);
-	endRemoveRows();
+	emit dataChanged(this->index(0), this->index(rowCount() - 1), roles);
 }

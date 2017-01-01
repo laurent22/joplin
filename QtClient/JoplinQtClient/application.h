@@ -6,7 +6,6 @@
 #include "database.h"
 #include "models/foldermodel.h"
 #include "models/notecollection.h"
-#include "models/foldercollection.h"
 #include "models/notemodel.h"
 #include "models/qmlnote.h"
 #include "webapi.h"

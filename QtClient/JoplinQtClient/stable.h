@@ -26,6 +26,10 @@
 #include <QJsonObject>
 #include <QJsonParseError>
 
+
+
+#include <QTimer>
+
 #endif // __cplusplus
 
 #endif // STABLE_H

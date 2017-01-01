@@ -35,7 +35,9 @@ Item {
 
 			onEditingAccepted: function(index, text) {
 				if (folderList.model.virtualItemShown()) {
+					folderList.model.hideVirtualItem();
 					folderList.model.addData(text)
+					folderList.selectItemById(folderList.model.lastInsertId());
 				} else {
 					folderList.model.setData(index, text)
 				}

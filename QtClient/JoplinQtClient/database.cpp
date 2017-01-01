@@ -95,6 +95,20 @@ QSqlQuery Database::buildSqlQuery(Database::QueryType type, const QString &table
 	return query;
 }
 
+bool Database::errorCheck(const QSqlQuery& query) {
+	if (query.lastError().isValid()) {
+		qCritical().noquote() << "SQL query error: " << query.lastError().text().trimmed() << ". Query was: " << query.lastQuery();
+		QMapIterator<QString, QVariant> i(query.boundValues());
+		while (i.hasNext()) {
+			i.next();
+			qCritical() << i.key() << "=" << i.value().toString();
+		}
+		return false;
+	}
+	return true;
+}
+
+
 int Database::version() const {
 	if (version_ >= 0) return version_;
 
