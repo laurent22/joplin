@@ -24,7 +24,7 @@ public:
 private:
 
 	QQuickView view_;
-	Database db_;
+	Database& db_;
 	NoteCollection noteCollection_;
 	FolderModel folderModel_;
 	NoteModel noteModel_;

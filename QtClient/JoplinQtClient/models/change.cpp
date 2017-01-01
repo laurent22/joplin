@@ -2,6 +2,6 @@
 
 using namespace jop;
 
-Change::Change(Database &database) {
+Change::Change(Database &database) : database_(database) {
 
 }

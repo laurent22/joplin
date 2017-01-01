@@ -12,12 +12,14 @@ using namespace jop;
 
 Application::Application(int &argc, char **argv) :
     QGuiApplication(argc, argv),
-    db_("D:/Web/www/joplin/QtClient/data/notes.sqlite"),
+    db_(jop::db()),
     api_("http://joplin.local"),
     synchronizer_(api_, db_),
     folderModel_(db_)
 
     {
+
+	jop::db().initialize("D:/Web/www/joplin/QtClient/data/notes.sqlite");
 
 	// This is linked to where the QSettings will be saved. In other words,
 	// if these values are changed, the settings will be reset and saved

@@ -3,6 +3,25 @@
 using namespace jop;
 
 Database::Database(const QString &path) {
+//	version_ = -1;
+
+//	// QFile::remove(path);
+
+//	db_ = QSqlDatabase::addDatabase("QSQLITE");
+//	db_.setDatabaseName(path);
+
+//	if  (!db_.open()) {
+//		qDebug() << "Error: connection with database fail";
+//	} else {
+//		qDebug() << "Database: connection ok";
+//	}
+
+//	upgrade();
+}
+
+Database::Database() {}
+
+void Database::initialize(const QString &path) {
 	version_ = -1;
 
 	// QFile::remove(path);
@@ -18,8 +37,6 @@ Database::Database(const QString &path) {
 
 	upgrade();
 }
-
-Database::Database() {}
 
 QSqlQuery Database::query(const QString &sql) const	{
 	QSqlQuery output(db_);
@@ -189,4 +206,10 @@ void Database::upgrade() {
 
 		versionIndex++;
 	}
+}
+
+Database databaseInstance_;
+
+Database& jop::db() {
+	return databaseInstance_;
 }

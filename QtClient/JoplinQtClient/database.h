@@ -14,6 +14,7 @@ public:
 
 	Database(const QString& path);
 	Database();
+	void initialize(const QString& path);
 	QSqlQuery query(const QString& sql) const;
 	QSqlDatabase& database();
 	QSqlQuery buildSqlQuery(Database::QueryType type, const QString& tableName, const QStringList& fields, const VariantVector& values, const QString& whereCondition = "");
@@ -30,6 +31,9 @@ private:
 	QStringList sqlStringToLines(const QString& sql);
 
 };
+
+
+Database& db();
 
 }
 
