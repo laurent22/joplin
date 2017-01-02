@@ -15,17 +15,15 @@ public:
 
 	Database();
 	void initialize(const QString& path);
-	QSqlQuery query(const QString& sql) const;
 	QSqlDatabase& database();
 	QSqlQuery buildSqlQuery(Database::QueryType type, const QString& tableName, const QStringList& fields, const VariantVector& values, const QString& whereCondition = "");
 	QSqlQuery buildSqlQuery(Database::QueryType type, const QString& tableName, const QMap<QString, QVariant>& values, const QString& whereCondition = "");
 	bool errorCheck(const QSqlQuery& query);
 	bool transaction();
 	bool commit();
+	bool execQuery(QSqlQuery &query);
 
 private:
-
-	void log(const QString& sql, const QSqlQuery& query = QSqlQuery()) const;
 
 	QSqlDatabase db_;
 	void upgrade();

@@ -22,12 +22,12 @@ void Database::initialize(const QString &path) {
 	upgrade();
 }
 
-QSqlQuery Database::query(const QString &sql) const	{
-	QSqlQuery output(db_);
-	output.prepare(sql);
-	log(sql);
-	return output;
-}
+//QSqlQuery Database::query(const QString &sql) const	{
+//	QSqlQuery output(db_);
+//	output.prepare(sql);
+//	//log(sql);
+//	return output;
+//}
 
 QSqlDatabase &Database::database() {
 	return db_;
@@ -86,7 +86,7 @@ QSqlQuery Database::buildSqlQuery(Database::QueryType type, const QString &table
 		}
 	}
 
-	log(sql, query);
+	//log(sql, query);
 
 //	qDebug() <<"SQL:"<<sql;
 
@@ -144,14 +144,16 @@ bool Database::commit() {
 	return true;
 }
 
-void Database::log(const QString &sql, const QSqlQuery &query) const {
-	qDebug() <<"SQL:"<<sql;
+bool Database::execQuery(QSqlQuery &query) {
+	qDebug().noquote() << "SQL:" << query.lastQuery();
 
 	QMapIterator<QString, QVariant> i(query.boundValues());
 	while (i.hasNext()) {
 		i.next();
-		qDebug() << i.key() << ":" << i.value().toString();
+		qDebug().noquote() << "SQL:" << i.key() << "=" << i.value().toString();
 	}
+
+	return query.exec();
 }
 
 int Database::version() const {

@@ -25,8 +25,8 @@ int BaseModel::count(Table table) {
 	QVariant r = BaseModel::cacheGet(k);
 	if (r.isValid()) return r.toInt();
 
-	QSqlQuery q = jop::db().query("SELECT count(*) AS row_count FROM " + t);
-	q.exec();
+	QSqlQuery q("SELECT count(*) AS row_count FROM " + t);
+	jop::db().execQuery(q);
 	q.next();
 	int output = q.value(0).toInt();
 	BaseModel::cacheSet(k, QVariant(output));
@@ -82,12 +82,12 @@ bool BaseModel::save() {
 
 	if (isNew) {
 		QSqlQuery q = jop::db().buildSqlQuery(Database::Insert, tableName, values);
-		q.exec();
+		jop::db().execQuery(q);
 		output = jop::db().errorCheck(q);
 		if (output) setValue("id", values["id"]);
 	} else {
 		QSqlQuery q = jop::db().buildSqlQuery(Database::Update, tableName, values, QString("%1 = '%2'").arg(primaryKey()).arg(value("id").toString()));
-		q.exec();
+		jop::db().execQuery(q);
 		output = jop::db().errorCheck(q);
 	}
 
@@ -120,7 +120,7 @@ bool BaseModel::dispose() {
 	QSqlQuery q(jop::db().database());
 	q.prepare("DELETE FROM " + tableName + " WHERE " + primaryKey() + " = :id");
 	q.bindValue(":id", id().toString());
-	q.exec();
+	jop::db().execQuery(q);
 
 	bool output = jop::db().errorCheck(q);
 
@@ -313,7 +313,7 @@ BaseModel::Value::Value(const QVariant &v) {
 	} else if (type_ == QMetaType::Int) {
 		intValue_ = v.toInt();
 	} else {
-		// Creates an invalid Value
+		// Creates an invalid Value, which is what we want
 	}
 }
 

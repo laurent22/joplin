@@ -46,13 +46,14 @@ Note NoteCollection::at(int index) const {
 
 // TODO: cache result
 int NoteCollection::count() const {
-	if (parentId_ == "") return 0;
+	return 0;
+//	if (parentId_ == "") return 0;
 
-	QSqlQuery q = db_.query("SELECT count(*) as row_count FROM notes WHERE parent_id = :parent_id");
-	q.bindValue(":parent_id", parentId_);
-	q.exec();
-	q.next();
-	return q.value(0).toInt();
+//	QSqlQuery q = db_.query("SELECT count(*) as row_count FROM notes WHERE parent_id = :parent_id");
+//	q.bindValue(":parent_id", parentId_);
+//	q.exec();
+//	q.next();
+//	return q.value(0).toInt();
 }
 
 Note NoteCollection::byId(const QString& id) const {

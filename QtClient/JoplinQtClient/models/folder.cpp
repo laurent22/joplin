@@ -24,8 +24,8 @@ int Folder::count() {
 }
 
 QVector<Folder> Folder::all(const QString &orderBy) {
-	QSqlQuery q = jop::db().query("SELECT " + BaseModel::tableFieldNames(jop::FoldersTable).join(",") + " FROM folders ORDER BY " + orderBy);
-	q.exec();
+	QSqlQuery q("SELECT " + BaseModel::tableFieldNames(jop::FoldersTable).join(",") + " FROM folders ORDER BY " + orderBy);
+	jop::db().execQuery(q);
 
 	QVector<Folder> output;
 
