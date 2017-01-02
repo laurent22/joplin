@@ -5,9 +5,7 @@
 
 namespace jop {
 
-enum ColType { UndefinedType, TextColType, IntColType };
-
-enum Table { UndefinedTable, FoldersTable, NotesTable };
+enum Table { UndefinedTable, FoldersTable, NotesTable, ChangesTable };
 
 }
 

@@ -6,10 +6,9 @@ Database::Database() {}
 
 void Database::initialize(const QString &path) {
 	version_ = -1;
+	transactionCount_ = 0;
 
-	// QFile::remove(path);
-
-	//qDebug() << Select << Text;
+	//QFile::remove(path);
 
 	db_ = QSqlDatabase::addDatabase("QSQLITE");
 	db_.setDatabaseName(path);
@@ -120,6 +119,28 @@ bool Database::errorCheck(const QSqlQuery& query) {
 		}
 		return false;
 	}
+	return true;
+}
+
+bool Database::transaction() {
+	transactionCount_++;
+	if (transactionCount_ > 1) return true;
+	return db_.transaction();
+}
+
+bool Database::commit() {
+	transactionCount_--;
+
+	if (transactionCount_ < 0) {
+		transactionCount_ = 0;
+		qCritical() << "Attempting commit on a database that is not in transaction mode";
+		return false;
+	}
+
+	if (transactionCount_ <= 0) {
+		return db_.commit();
+	}
+
 	return true;
 }
 

@@ -2,6 +2,8 @@
 
 using namespace jop;
 
-Change::Change(Database &database) : database_(database) {
+Change::Change() {}
 
+Table Change::table() const {
+	return jop::ChangesTable;
 }

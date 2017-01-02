@@ -66,9 +66,10 @@ CREATE TABLE version (
 
 CREATE TABLE changes (
     id INTEGER PRIMARY KEY,
+	`type` INT,
 	item_id TEXT,
 	item_type INT,
-	item_property TEXT
+	item_field TEXT
 );
 
 --CREATE TABLE mimetypes (

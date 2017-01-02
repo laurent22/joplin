@@ -17,6 +17,7 @@ public:
 
 	Table table() const;
 	bool primaryKeyIsUuid() const;
+	bool trackChanges() const;
 
 private:
 

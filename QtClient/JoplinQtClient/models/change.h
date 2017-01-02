@@ -3,19 +3,18 @@
 
 #include <stable.h>
 
-#include "database.h"
+#include "models/basemodel.h"
 
 namespace jop {
 
-class Change {
+class Change : public BaseModel {
 
 public:
 
-	Change(Database& database);
+	enum Type { Undefined, Create, Update, Delete };
 
-private:
-
-	Database& database_;
+	Change();
+	Table table() const;
 
 };
 

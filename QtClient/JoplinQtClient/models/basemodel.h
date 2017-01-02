@@ -3,7 +3,6 @@
 
 #include <stable.h>
 
-#include "database.h"
 #include "enum.h"
 
 namespace jop {
@@ -49,10 +48,12 @@ public:
 	virtual Table table() const;
 	virtual QString primaryKey() const;
 	virtual bool primaryKeyIsUuid() const;
+	virtual bool trackChanges() const;
 
 	bool isNew() const;
 
 	static QVector<BaseModel::Field> tableFields(Table table);
+	static bool hasField(jop::Table table, const QString& name);
 	static QStringList tableFieldNames(Table table);
 	static bool isValidFieldName(Table table, const QString& name);
 

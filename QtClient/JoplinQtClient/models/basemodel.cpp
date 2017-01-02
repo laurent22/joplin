@@ -1,5 +1,6 @@
 #include "basemodel.h"
 
+#include "models/change.h"
 #include "database.h"
 #include "uuid.h"
 
@@ -8,9 +9,7 @@ using namespace jop;
 QMap<int, QVector<BaseModel::Field>> BaseModel::tableFields_;
 QHash<QString, QVariant> BaseModel::cache_;
 
-BaseModel::BaseModel() {
-
-}
+BaseModel::BaseModel() {}
 
 QStringList BaseModel::changedFields() const {
 	QStringList output;
@@ -26,7 +25,7 @@ int BaseModel::count(Table table) {
 	QVariant r = BaseModel::cacheGet(k);
 	if (r.isValid()) return r.toInt();
 
-	QSqlQuery q = jop::db().query("SELECT count(*) as row_count FROM " + t);
+	QSqlQuery q = jop::db().query("SELECT count(*) AS row_count FROM " + t);
 	q.exec();
 	q.next();
 	int output = q.value(0).toInt();
@@ -47,8 +46,26 @@ bool BaseModel::save() {
 		values[field] = value(field).toQVariant();
 	}
 
+	// If it's a new entry and the ID is a UUID, we need to create this
+	// ID now. If the ID is an INT, it will be automatically set by
+	// SQLite.
 	if (isNew && primaryKeyIsUuid()) {
 		values[primaryKey()] = uuid::createUuid();
+	}
+
+	// Update created_time and updated_time if needed. If updated_time
+	// has already been updated (maybe manually by the user), don't
+	// automatically update it.
+	if (isNew) {
+		if (BaseModel::hasField(table(), "created_time")) {
+			values["created_time"] = (int)(QDateTime::currentMSecsSinceEpoch() / 1000);
+		}
+	} else {
+		if (!values.contains("updated_time")) {
+			if (BaseModel::hasField(table(), "updated_time")) {
+				values["updated_time"] = (int)(QDateTime::currentMSecsSinceEpoch() / 1000);
+			}
+		}
 	}
 
 	changedFields_.clear();
@@ -59,17 +76,43 @@ bool BaseModel::save() {
 		cacheDelete(QString("%1:count").arg(tableName));
 	}
 
+	bool output = false;
+
+	jop::db().transaction();
+
 	if (isNew) {
 		QSqlQuery q = jop::db().buildSqlQuery(Database::Insert, tableName, values);
 		q.exec();
-		return jop::db().errorCheck(q);
+		output = jop::db().errorCheck(q);
+		if (output) setValue("id", values["id"]);
 	} else {
 		QSqlQuery q = jop::db().buildSqlQuery(Database::Update, tableName, values, QString("%1 = '%2'").arg(primaryKey()).arg(value("id").toString()));
 		q.exec();
-		return jop::db().errorCheck(q);
+		output = jop::db().errorCheck(q);
 	}
 
-	return false; // Unreachable
+	if (output && trackChanges()) {
+		if (isNew) {
+			Change change;
+			change.setValue("item_id", id());
+			change.setValue("item_type", table());
+			change.setValue("type", Change::Create);
+			change.save();
+		} else {
+			for (QMap<QString, QVariant>::const_iterator it = values.begin(); it != values.end(); ++it) {
+				Change change;
+				change.setValue("item_id", id());
+				change.setValue("item_type", table());
+				change.setValue("type", Change::Update);
+				change.setValue("item_field", it.key());
+				change.save();
+			}
+		}
+	}
+
+	jop::db().commit();
+
+	return output;
 }
 
 bool BaseModel::dispose() {
@@ -78,8 +121,20 @@ bool BaseModel::dispose() {
 	q.prepare("DELETE FROM " + tableName + " WHERE " + primaryKey() + " = :id");
 	q.bindValue(":id", id().toString());
 	q.exec();
-	cacheDelete(QString("%1:count").arg(tableName));
-	return jop::db().errorCheck(q);
+
+	bool output = jop::db().errorCheck(q);
+
+	if (output) cacheDelete(QString("%1:count").arg(tableName));
+
+	if (output && trackChanges()) {
+		Change change;
+		change.setValue("item_id", id());
+		change.setValue("item_type", table());
+		change.setValue("type", Change::Delete);
+		change.save();
+	}
+
+	return output;
 }
 
 Table BaseModel::table() const {
@@ -92,6 +147,10 @@ QString BaseModel::primaryKey() const {
 }
 
 bool BaseModel::primaryKeyIsUuid() const {
+	return false;
+}
+
+bool BaseModel::trackChanges() const {
 	return false;
 }
 
@@ -119,6 +178,14 @@ QVector<BaseModel::Field> BaseModel::tableFields(jop::Table table) {
 
 	BaseModel::tableFields_[table] = output;
 	return output;
+}
+
+bool BaseModel::hasField(jop::Table table, const QString &name) {
+	QVector<BaseModel::Field> fields = tableFields(table);
+	foreach (Field field, fields) {
+		if (field.name == name) return true;
+	}
+	return false;
 }
 
 QStringList BaseModel::tableFieldNames(Table table) {
@@ -202,6 +269,7 @@ BaseModel::Value BaseModel::id() const {
 QString BaseModel::tableName(Table t) {
 	if (t == jop::FoldersTable) return "folders";
 	if (t == jop::NotesTable) return "notes";
+	if (t == jop::ChangesTable) return "changes";
 	return "UNDEFINED";
 }
 
