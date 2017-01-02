@@ -50,13 +50,9 @@ public slots:
 	void showVirtualItem();
 	bool virtualItemShown() const;
 	void hideVirtualItem();
-	QString idAtIndex(int index) const;
+	QString indexToId(int index) const;
 	int idToIndex(const QString& id) const;
 	QString lastInsertId() const;
-
-signals:
-
-	void dataChanging();
 
 };
 

@@ -2,29 +2,14 @@
 
 using namespace jop;
 
-Database::Database(const QString &path) {
-//	version_ = -1;
-
-//	// QFile::remove(path);
-
-//	db_ = QSqlDatabase::addDatabase("QSQLITE");
-//	db_.setDatabaseName(path);
-
-//	if  (!db_.open()) {
-//		qDebug() << "Error: connection with database fail";
-//	} else {
-//		qDebug() << "Database: connection ok";
-//	}
-
-//	upgrade();
-}
-
 Database::Database() {}
 
 void Database::initialize(const QString &path) {
 	version_ = -1;
 
 	// QFile::remove(path);
+
+	//qDebug() << Select << Text;
 
 	db_ = QSqlDatabase::addDatabase("QSQLITE");
 	db_.setDatabaseName(path);
@@ -41,6 +26,7 @@ void Database::initialize(const QString &path) {
 QSqlQuery Database::query(const QString &sql) const	{
 	QSqlQuery output(db_);
 	output.prepare(sql);
+	log(sql);
 	return output;
 }
 
@@ -101,6 +87,8 @@ QSqlQuery Database::buildSqlQuery(Database::QueryType type, const QString &table
 		}
 	}
 
+	log(sql, query);
+
 //	qDebug() <<"SQL:"<<sql;
 
 //	QMapIterator<QString, QVariant> i(query.boundValues());
@@ -110,6 +98,16 @@ QSqlQuery Database::buildSqlQuery(Database::QueryType type, const QString &table
 //	}
 
 	return query;
+}
+
+QSqlQuery Database::buildSqlQuery(Database::QueryType type, const QString &tableName, const QMap<QString, QVariant> &values, const QString &whereCondition) {
+	QStringList fields;
+	VariantVector fieldValues;
+	for (QMap<QString, QVariant>::const_iterator it = values.begin(); it != values.end(); ++it) {
+		fields.push_back(it.key());
+		fieldValues.push_back(it.value());
+	}
+	return buildSqlQuery(type, tableName, fields, fieldValues, whereCondition);
 }
 
 bool Database::errorCheck(const QSqlQuery& query) {
@@ -125,10 +123,15 @@ bool Database::errorCheck(const QSqlQuery& query) {
 	return true;
 }
 
-//Change Database::newChange() const {
-//	return Change(*this);
-//}
+void Database::log(const QString &sql, const QSqlQuery &query) const {
+	qDebug() <<"SQL:"<<sql;
 
+	QMapIterator<QString, QVariant> i(query.boundValues());
+	while (i.hasNext()) {
+		i.next();
+		qDebug() << i.key() << ":" << i.value().toString();
+	}
+}
 
 int Database::version() const {
 	if (version_ >= 0) return version_;

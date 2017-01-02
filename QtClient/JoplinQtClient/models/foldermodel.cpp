@@ -7,7 +7,7 @@ FolderModel::FolderModel(Database &database) : QAbstractListModel(), db_(databas
 	virtualItemShown_ = false;
 }
 
-int FolderModel::rowCount(const QModelIndex & parent) const {
+int FolderModel::rowCount(const QModelIndex & parent) const { Q_UNUSED(parent);
 	return Folder::count() + (virtualItemShown_ ? 1 : 0);
 }
 
@@ -18,17 +18,17 @@ QVariant FolderModel::data(const QModelIndex & index, int role) const {
 	Folder folder;
 
 	if (virtualItemShown_ && index.row() == rowCount() - 1) {
-		folder.setTitle("Untitled");
+		folder.setValue("title", BaseModel::Value(QString("Untitled")));
 	} else {
 		folder = atIndex(index.row());
 	}
 
 	if (role == Qt::DisplayRole) {
-		return QVariant(folder.title());
+		return folder.value("title").toQVariant();
 	}
 
 	if (role == IdRole) {
-		return QVariant(folder.id());
+		return folder.id().toQVariant();
 	}
 
 	return QVariant();
@@ -38,7 +38,7 @@ bool FolderModel::setData(const QModelIndex &index, const QVariant &value, int r
 	Folder folder = atIndex(index.row());
 
 	if (role == Qt::EditRole) {
-		folder.setTitle(value.toString());
+		folder.setValue("title", value);
 		if (!folder.save()) return false;
 		cache_.clear();
 
@@ -90,7 +90,7 @@ void FolderModel::hideVirtualItem() {
 	endRemoveRows();
 }
 
-QString FolderModel::idAtIndex(int index) const {
+QString FolderModel::indexToId(int index) const {
 	return data(this->index(index), IdRole).toString();
 }
 
@@ -98,7 +98,7 @@ int FolderModel::idToIndex(const QString &id) const {
 	int count = this->rowCount();
 	for (int i = 0; i < count; i++) {
 		Folder folder = atIndex(i);
-		if (folder.id() == id) return i;
+		if (folder.value("id").toString() == id) return i;
 	}
 	return -1;
 }
@@ -125,12 +125,12 @@ QHash<int, QByteArray> FolderModel::roleNames() const {
 
 void FolderModel::addData(const QString &title) {
 	Folder folder;
-	folder.setTitle(title);
+	folder.setValue("title", title);
 	if (!folder.save()) return;
 
 	cache_.clear();
 
-	lastInsertId_ = folder.id();
+	lastInsertId_ = folder.id().toString();
 
 	QVector<int> roles;
 	roles << Qt::DisplayRole;

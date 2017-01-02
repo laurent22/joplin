@@ -105,15 +105,15 @@ void Application::afterSessionInitialization() {
 }
 
 void Application::view_currentFolderChanged() {
-	QString folderId = selectedFolderId();
-	noteCollection_ = NoteCollection(db_, folderId, "title ASC");
-	noteModel_.setCollection(noteCollection_);
+//	QString folderId = selectedFolderId();
+//	noteCollection_ = NoteCollection(db_, folderId, "title ASC");
+//	noteModel_.setCollection(noteCollection_);
 }
 
 void Application::view_currentNoteChanged() {
-	QString noteId = selectedNoteId();
-	Note note = noteCollection_.byId(noteId);
-	selectedQmlNote_.setNote(note);
+//	QString noteId = selectedNoteId();
+//	Note note = noteCollection_.byId(noteId);
+//	selectedQmlNote_.setNote(note);
 }
 
 void Application::view_addNoteButtonClicked() {

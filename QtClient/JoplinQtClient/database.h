@@ -2,6 +2,7 @@
 #define DATABASE_H
 
 #include <stable.h>
+#include "enum.h"
 #include "simpletypes.h"
 
 namespace jop {
@@ -12,17 +13,17 @@ public:
 
 	enum QueryType { Select, Insert, Update, Delete };
 
-	Database(const QString& path);
 	Database();
 	void initialize(const QString& path);
 	QSqlQuery query(const QString& sql) const;
 	QSqlDatabase& database();
 	QSqlQuery buildSqlQuery(Database::QueryType type, const QString& tableName, const QStringList& fields, const VariantVector& values, const QString& whereCondition = "");
+	QSqlQuery buildSqlQuery(Database::QueryType type, const QString& tableName, const QMap<QString, QVariant>& values, const QString& whereCondition = "");
 	bool errorCheck(const QSqlQuery& query);
 
-	//Change newChange() const;
-
 private:
+
+	void log(const QString& sql, const QSqlQuery& query = QSqlQuery()) const;
 
 	QSqlDatabase db_;
 	void upgrade();

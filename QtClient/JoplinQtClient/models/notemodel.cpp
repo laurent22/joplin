@@ -13,13 +13,13 @@ int jop::NoteModel::rowCount(const QModelIndex &parent) const {
 QVariant jop::NoteModel::data(const QModelIndex &index, int role) const {
 	if (index.row() < 0 || index.row() >= rowCount()) return QVariant();
 
-	Note note = collection_.at(index.row());
+//	Note note = collection_.at(index.row());
 
-	if (role == IdRole) {
-		return QVariant(note.id());
-	}
+//	if (role == IdRole) {
+//		return QVariant(note.id());
+//	}
 
-	return QVariant(note.title());
+//	return QVariant(note.title());
 }
 
 void jop::NoteModel::setFolderId(const QString &v) {

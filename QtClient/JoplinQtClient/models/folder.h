@@ -11,12 +11,12 @@ class Folder : public Item {
 public:
 
 	Folder();
-	bool isNew() const;
-	bool save();
-	bool dispose();
 
 	static int count();
 	static QVector<Folder> all(const QString& orderBy);
+
+	Table table() const;
+	bool primaryKeyIsUuid() const;
 
 private:
 

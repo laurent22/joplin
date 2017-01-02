@@ -5,11 +5,11 @@ using namespace jop;
 QmlNote::QmlNote() {}
 
 QString QmlNote::title() const {
-	return note_.title();
+	return note_.value("title").toString();
 }
 
 QString QmlNote::body() const {
-	return note_.body();
+	return note_.value("body").toString();
 }
 
 void QmlNote::setNote(const Note &note) {

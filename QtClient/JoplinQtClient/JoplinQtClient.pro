@@ -18,7 +18,8 @@ SOURCES += \
     settings.cpp \
     uuid.cpp \
     dispatcher.cpp \
-    models/change.cpp
+    models/change.cpp \
+    models/basemodel.cpp
 
 RESOURCES += qml.qrc \
     database.qrc
@@ -49,7 +50,9 @@ HEADERS += \
     simpletypes.h \
     uuid.h \
     dispatcher.h \
-    models/change.h
+    models/change.h \
+    models/basemodel.h \
+    enum.h
 
 DISTFILES +=
 

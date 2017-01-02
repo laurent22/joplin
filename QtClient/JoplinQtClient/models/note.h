@@ -11,14 +11,14 @@ class Note : public Item {
 public:
 
 	Note();
-	QString body() const;
-	void setBody(const QString& v);
-	static QStringList dbFields();
-	void fromSqlQuery(const QSqlQuery &q);
+//	QString body() const;
+//	void setBody(const QString& v);
+//	static QStringList dbFields();
+//	void fromSqlQuery(const QSqlQuery &q);
 
-private:
+//private:
 
-	QString body_;
+//	QString body_;
 
 };
 

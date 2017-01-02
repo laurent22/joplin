@@ -46,7 +46,7 @@ Item {
 		}
 
 		onCurrentItemChanged: {
-			currentItemId = model.idAtIndex(currentIndex);
+			currentItemId = model.indexToId(currentIndex);
 		}
 
 		id: listView
