@@ -1,6 +1,7 @@
 #include "synchronizer.h"
 #include "models/folder.h"
 #include "models/note.h"
+#include "models/change.h"
 
 using namespace jop;
 
@@ -12,7 +13,12 @@ Synchronizer::Synchronizer(WebApi& api, Database &database) : api_(api), db_(dat
 void Synchronizer::start() {
 	qDebug() << "Starting synchronizer...";
 
-	QSqlQuery query;
+	QVector<Change> changes = Change::all();
+	foreach (Change& change, changes) {
+
+	}
+
+//	QSqlQuery query;
 
 //	std::vector<Folder> folders;
 //	query = db_.query("SELECT " + Folder::dbFields().join(',') + " FROM folders WHERE synced = 0");

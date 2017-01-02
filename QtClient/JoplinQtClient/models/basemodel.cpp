@@ -11,6 +11,10 @@ QHash<QString, QVariant> BaseModel::cache_;
 
 BaseModel::BaseModel() {}
 
+BaseModel::BaseModel(const QSqlQuery &query) {
+	loadSqlQuery(query);
+}
+
 QStringList BaseModel::changedFields() const {
 	QStringList output;
 	for (QHash<QString, bool>::const_iterator it = changedFields_.begin(); it != changedFields_.end(); ++it) {
@@ -169,11 +173,18 @@ QVector<BaseModel::Field> BaseModel::tableFields(jop::Table table) {
 	if (BaseModel::tableFields_.contains(table)) return BaseModel::tableFields_[table];
 
 	QVector<BaseModel::Field> output;
+
 	if (table == jop::FoldersTable) {
 		output.push_back(createField("id", QMetaType::QString ));
 		output.push_back(createField("title", QMetaType::QString ));
 		output.push_back(createField("created_time", QMetaType::Int ));
 		output.push_back(createField("updated_time", QMetaType::Int ));
+	} else if (table == jop::ChangesTable) {
+		output.push_back(createField("id", QMetaType::Int ));
+		output.push_back(createField("type", QMetaType::Int ));
+		output.push_back(createField("item_id", QMetaType::QString ));
+		output.push_back(createField("item_type", QMetaType::Int ));
+		output.push_back(createField("item_field", QMetaType::QString ));
 	}
 
 	BaseModel::tableFields_[table] = output;

@@ -14,20 +14,13 @@ void Database::initialize(const QString &path) {
 	db_.setDatabaseName(path);
 
 	if  (!db_.open()) {
-		qDebug() << "Error: connection with database fail";
+		qFatal("Error: connection with database fail");
 	} else {
 		qDebug() << "Database: connection ok";
 	}
 
 	upgrade();
 }
-
-//QSqlQuery Database::query(const QString &sql) const	{
-//	QSqlQuery output(db_);
-//	output.prepare(sql);
-//	//log(sql);
-//	return output;
-//}
 
 QSqlDatabase &Database::database() {
 	return db_;
@@ -85,16 +78,6 @@ QSqlQuery Database::buildSqlQuery(Database::QueryType type, const QString &table
 			qWarning() << Q_FUNC_INFO << "Unsupported variant type:" << v.type();
 		}
 	}
-
-	//log(sql, query);
-
-//	qDebug() <<"SQL:"<<sql;
-
-//	QMapIterator<QString, QVariant> i(query.boundValues());
-//	while (i.hasNext()) {
-//		i.next();
-//		qDebug() << i.key() << ":" << i.value().toString();
-//	}
 
 	return query;
 }

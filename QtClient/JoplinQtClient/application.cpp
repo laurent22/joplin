@@ -3,6 +3,7 @@
 #include "models/folder.h"
 #include "database.h"
 #include "models/foldermodel.h"
+#include "models/change.h"
 #include "services/folderservice.h"
 #include "settings.h"
 #include "uuid.h"
@@ -20,6 +21,18 @@ Application::Application(int &argc, char **argv) :
     {
 
 	jop::db().initialize("D:/Web/www/joplin/QtClient/data/notes.sqlite");
+
+//	QVector<Change> changes = Change::all();
+//	foreach (Change change, changes) {
+//		qDebug() << change.value("item_id").toString() << change.value("type").toInt() << change.mergedFields();
+//	}
+
+//	qDebug() << "=====================================";
+
+//	changes = Change::mergedChanges(changes);
+//	foreach (Change change, changes) {
+//		qDebug() << change.value("item_id").toString() << change.value("type").toInt() << change.mergedFields();
+//	}
 
 	// This is linked to where the QSettings will be saved. In other words,
 	// if these values are changed, the settings will be reset and saved
@@ -101,7 +114,7 @@ void Application::afterSessionInitialization() {
 	QString sessionId = settings.value("sessionId").toString();
 	qDebug() << "Session:" << sessionId;
 	api_.setSessionId(sessionId);
-	//synchronizer_.start();
+	synchronizer_.start();
 }
 
 void Application::view_currentFolderChanged() {
