@@ -14,22 +14,24 @@ QString WebApi::baseUrl() const {
 	return baseUrl_;
 }
 
-void WebApi::execRequest(QNetworkAccessManager::Operation method, const QString &path, const QUrlQuery &query, const QUrlQuery &data, const QString& tag) {
+void WebApi::execRequest(HttpMethod method, const QString &path, const QUrlQuery &query, const QUrlQuery &data, const QString& tag) {
 	QueuedRequest r;
 	r.method = method;
 	r.path = path;
 	r.query = query;
 	r.data = data;
 	r.tag = tag;
+	r.buffer = NULL;
 	queuedRequests_ << r;
 
 	processQueue();
 }
 
-void WebApi::post(const QString& path,const QUrlQuery& query, const QUrlQuery& data, const QString& tag) { execRequest(QNetworkAccessManager::PostOperation, path, query, data, tag); }
-void WebApi::get(const QString& path,const QUrlQuery& query, const QUrlQuery& data, const QString& tag) { execRequest(QNetworkAccessManager::GetOperation, path, query, data, tag); }
-void WebApi::put(const QString& path,const QUrlQuery& query, const QUrlQuery& data, const QString& tag) { execRequest(QNetworkAccessManager::PutOperation, path, query, data, tag); }
-//void patch(const QString& path,const QUrlQuery& query = QUrlQuery(), const QUrlQuery& data = QUrlQuery(), const QString& tag = "") { execRequest(QNetworkAccessManager::PatchOperation, query, data, tag); }
+void WebApi::post(const QString& path,const QUrlQuery& query, const QUrlQuery& data, const QString& tag) { execRequest(HttpMethod::POST, path, query, data, tag); }
+void WebApi::get(const QString& path,const QUrlQuery& query, const QUrlQuery& data, const QString& tag) { execRequest(HttpMethod::GET, path, query, data, tag); }
+void WebApi::put(const QString& path,const QUrlQuery& query, const QUrlQuery& data, const QString& tag) { execRequest(HttpMethod::PUT, path, query, data, tag); }
+void WebApi::del(const QString &path, const QUrlQuery &query, const QUrlQuery &data, const QString &tag) { execRequest(HttpMethod::DEL, path, query, data, tag); }
+void WebApi::patch(const QString &path, const QUrlQuery &query, const QUrlQuery &data, const QString &tag) { execRequest(HttpMethod::PATCH, path, query, data, tag); }
 
 void WebApi::setSessionId(const QString &v) {
 	sessionId_ = v;
@@ -53,17 +55,30 @@ void WebApi::processQueue() {
 
 	QNetworkReply* reply = NULL;
 
-	if (r.method == QNetworkAccessManager::GetOperation) {
-	   // TODO
-	   //manager->get(QNetworkRequest(QUrl("http://qt-project.org")));
+	if (r.method == jop::PATCH) {
+		// TODO: Delete buffer when done
+		QBuffer* buffer = new QBuffer();
+		buffer->open(QBuffer::ReadWrite);
+		buffer->write(r.data.toString(QUrl::FullyEncoded).toUtf8());
+		buffer->seek(0);
+		r.buffer = buffer;
+		reply = manager_.sendCustomRequest(*request, "PATCH", buffer);
 	}
 
-	if (r.method == QNetworkAccessManager::PostOperation) {
+	if (r.method == jop::GET) {
+	   reply = manager_.get(*request);
+	}
+
+	if (r.method == jop::POST) {
 		reply = manager_.post(*request, r.data.toString(QUrl::FullyEncoded).toUtf8());
 	}
 
-	if (r.method == QNetworkAccessManager::PutOperation) {
+	if (r.method == jop::PUT) {
 		reply = manager_.put(*request, r.data.toString(QUrl::FullyEncoded).toUtf8());
+	}
+
+	if (r.method == jop::DEL) {
+		reply = manager_.deleteResource(*request);
 	}
 
 	if (!reply) {
@@ -77,11 +92,13 @@ void WebApi::processQueue() {
 
 	QStringList cmd;
 	cmd << "curl";
-	if (r.method == QNetworkAccessManager::PutOperation) {
-		cmd << "-X" << "PUT";
-	}
+	if (r.method == jop::PUT) cmd << "-X" << "PUT";
+	if (r.method == jop::PATCH) cmd << "-X" << "PATCH";
+	if (r.method == jop::DEL) cmd << "-X" << "DELETE";
 
-	cmd << "--data" << "'" + r.data.toString(QUrl::FullyEncoded) + "'";
+	if (r.method != jop::GET && r.method != jop::DEL) {
+		cmd << "--data" << "'" + r.data.toString(QUrl::FullyEncoded) + "'";
+	}
 	cmd << url;
 
 	qDebug().noquote() << cmd.join(" ");
@@ -99,6 +116,9 @@ void WebApi::request_finished(QNetworkReply *reply) {
 		qWarning().noquote() << QString(responseBodyBA);
 	} else {
 		response = doc.object();
+		if (!response["error"].isNull()) {
+			qWarning().noquote() << "API error:" << QString(responseBodyBA);
+		}
 	}
 
 	for (int i = 0; i < inProgressRequests_.size(); i++) {

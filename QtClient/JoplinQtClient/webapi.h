@@ -2,6 +2,7 @@
 #define WEBAPI_H
 
 #include <stable.h>
+#include "enum.h"
 
 namespace jop {
 
@@ -12,22 +13,24 @@ class WebApi : public QObject {
 public:
 
 	struct QueuedRequest {
-		QNetworkAccessManager::Operation method;
+		HttpMethod method;
 		QString path;
 		QUrlQuery query;
 		QUrlQuery data;
 		QNetworkReply* reply;
 		QNetworkRequest* request;
 		QString tag;
+		QBuffer* buffer;
 	};
 
 	WebApi(const QString& baseUrl);
 	QString baseUrl() const;
-	void execRequest(QNetworkAccessManager::Operation method, const QString& path,const QUrlQuery& query = QUrlQuery(), const QUrlQuery& data = QUrlQuery(), const QString& tag = "");
+	void execRequest(HttpMethod method, const QString& path,const QUrlQuery& query = QUrlQuery(), const QUrlQuery& data = QUrlQuery(), const QString& tag = "");
 	void post(const QString& path,const QUrlQuery& query = QUrlQuery(), const QUrlQuery& data = QUrlQuery(), const QString& tag = "");
 	void get(const QString& path,const QUrlQuery& query = QUrlQuery(), const QUrlQuery& data = QUrlQuery(), const QString& tag = "");
 	void put(const QString& path,const QUrlQuery& query = QUrlQuery(), const QUrlQuery& data = QUrlQuery(), const QString& tag = "");
-	//void patch(const QString& path,const QUrlQuery& query = QUrlQuery(), const QUrlQuery& data = QUrlQuery(), const QString& tag = "");
+	void del(const QString& path,const QUrlQuery& query = QUrlQuery(), const QUrlQuery& data = QUrlQuery(), const QString& tag = "");
+	void patch(const QString& path,const QUrlQuery& query = QUrlQuery(), const QUrlQuery& data = QUrlQuery(), const QString& tag = "");
 	void setSessionId(const QString& v);
 
 private:

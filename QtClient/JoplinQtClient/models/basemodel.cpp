@@ -37,6 +37,18 @@ int BaseModel::count(Table table) {
 	return output;
 }
 
+bool BaseModel::load(const QString &id) {
+	QSqlQuery q(jop::db().database());
+	q.prepare("SELECT " + BaseModel::tableFieldNames(table()).join(",") + " FROM " + BaseModel::tableName(table()) + " WHERE id = :id");
+	q.bindValue(":id", id);
+	jop::db().execQuery(q);
+	q.next();
+	if (!jop::db().errorCheck(q)) return false;
+	if (!q.isValid()) return false;
+
+	loadSqlQuery(q);
+}
+
 bool BaseModel::save() {
 	bool isNew = this->isNew();
 
@@ -333,7 +345,10 @@ int BaseModel::Value::toInt() const {
 }
 
 QString BaseModel::Value::toString() const {
-	return stringValue_;
+	if (type_ == QMetaType::QString) return stringValue_;
+	if (type_ == QMetaType::Int) return QString::number(intValue_);
+	qCritical("Unreachable");
+	return QString("");
 }
 
 QVariant BaseModel::Value::toQVariant() const {

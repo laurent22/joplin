@@ -48,7 +48,19 @@ class FoldersController extends ApiController {
 			return static::successResponse($folder);
 		}
 
-		return static::successResponse($folder);
+		if ($request->isMethod('PATCH')) {
+			$data = $this->patchParameters();
+			$folder->fromPublicArray($this->patchParameters());
+			$folder->save();
+			return static::successResponse($folder);
+		}
+
+		if ($request->isMethod('DELETE')) {
+			$folder->delete();
+			return static::successResponse(array('id' => $id));
+		}
+
+		return static::errorResponse('Invalid method');
 	}
 
 	/**

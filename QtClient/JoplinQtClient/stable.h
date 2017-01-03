@@ -25,6 +25,7 @@
 #include <QSettings>
 #include <QJsonObject>
 #include <QJsonParseError>
+#include <QBuffer>
 
 
 

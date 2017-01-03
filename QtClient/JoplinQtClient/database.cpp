@@ -139,6 +139,12 @@ bool Database::execQuery(QSqlQuery &query) {
 	return query.exec();
 }
 
+QSqlQuery Database::prepare(const QString &sql) {
+	QSqlQuery query(db_);
+	query.prepare(sql);
+	return query;
+}
+
 int Database::version() const {
 	if (version_ >= 0) return version_;
 

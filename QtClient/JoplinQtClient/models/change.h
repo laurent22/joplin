@@ -19,6 +19,7 @@ public:
 
 	static QVector<Change> all(int limit = 100);
 	static QVector<Change> mergedChanges(const QVector<Change> &changes);
+	static void disposeByItemId(const QString& itemId);
 
 	void addMergedField(const QString& name);
 	QStringList mergedFields() const;

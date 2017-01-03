@@ -1,7 +1,6 @@
 #include "synchronizer.h"
 #include "models/folder.h"
 #include "models/note.h"
-#include "models/change.h"
 
 using namespace jop;
 
@@ -14,58 +13,54 @@ void Synchronizer::start() {
 	qDebug() << "Starting synchronizer...";
 
 	QVector<Change> changes = Change::all();
-	foreach (Change& change, changes) {
+	changes = Change::mergedChanges(changes);
+	foreach (Change change, changes) {
+		jop::Table itemType = (jop::Table)change.value("item_type").toInt();
+		QString itemId = change.value("item_id").toString();
+		Change::Type type = (Change::Type)change.value("type").toInt();
 
+		qDebug() << itemId << itemType << type;
+
+		if (itemType == jop::FoldersTable) {
+
+			if (type == Change::Create) {
+
+				Folder folder;
+				folder.load(itemId);
+				QUrlQuery data = valuesToUrlQuery(folder.values());
+				api_.put("folders/" + folder.id().toString(), QUrlQuery(), data, "putFolder:" + folder.id().toString());
+
+			} else if (type == Change::Update) {
+
+				Folder folder;
+				folder.load(itemId);
+				QStringList mergedFields = change.mergedFields();
+				QUrlQuery data;
+				foreach (QString field, mergedFields) {
+					data.addQueryItem(field, folder.value(field).toString());
+				}
+				api_.patch("folders/" + folder.id().toString(), QUrlQuery(), data, "patchFolder:" + folder.id().toString());
+
+			} else if (type == Change::Delete) {
+
+				api_.del("folders/" + itemId, QUrlQuery(), QUrlQuery(), "deleteFolder:" + itemId);
+
+			}
+		}
 	}
+}
 
-//	QSqlQuery query;
-
-//	std::vector<Folder> folders;
-//	query = db_.query("SELECT " + Folder::dbFields().join(',') + " FROM folders WHERE synced = 0");
-//	query.exec();
-
-//	while (query.next()) {
-//		Folder folder;
-//		folder.fromSqlQuery(query);
-//		folders.push_back(folder);
-//	}
-
-//	QList<Note> notes;
-//	query = db_.query("SELECT " + Note::dbFields().join(',') + " FROM notes WHERE synced = 0");
-//	query.exec();
-
-//	while (query.next()) {
-//		Note note;
-//		note.fromSqlQuery(query);
-//		notes << note;
-//	}
-
-//	for (size_t i = 0; i < folders.size(); i++) {
-//		Folder folder = folders[i];
-//		QUrlQuery data;
-//		data.addQueryItem("id", folder.id());
-//		data.addQueryItem("title", folder.title());
-//		data.addQueryItem("created_time", QString::number(folder.createdTime()));
-//		data.addQueryItem("updated_time", QString::number(folder.updatedTime()));
-//		api_.put("folders/" + folder.id(), QUrlQuery(), data, "putFolder:" + folder.id());
-//	}
-
-//	return;
-
-//	for (int i = 0; i < notes.size(); i++) {
-//		Note note = notes[i];
-//		QUrlQuery data;
-//		data.addQueryItem("id", note.id());
-//		data.addQueryItem("title", note.title());
-//		data.addQueryItem("body", note.body());
-//		data.addQueryItem("created_time", QString::number(note.createdTime()));
-//		data.addQueryItem("updated_time", QString::number(note.updatedTime()));
-//		api_.put("notes/" + note.id(), QUrlQuery(), data, "putNote:" + note.id());
-//	}
+QUrlQuery Synchronizer::valuesToUrlQuery(const QHash<QString, Change::Value>& values) const {
+	QUrlQuery query;
+	for (QHash<QString, Change::Value>::const_iterator it = values.begin(); it != values.end(); ++it) {
+		query.addQueryItem(it.key(), it.value().toString());
+	}
+	return query;
 }
 
 void Synchronizer::api_requestDone(const QJsonObject& response, const QString& tag) {
-	QSqlQuery query;
+	qDebug() << "WebApi: done" << tag;
+
 	QStringList parts = tag.split(':');
 	QString action = tag;
 	QString id = "";
@@ -75,17 +70,19 @@ void Synchronizer::api_requestDone(const QJsonObject& response, const QString& t
 		id = parts[1];
 	}
 
+	// TODO: check for error
+
+	qDebug() << "Synced folder" << id;
+
 	if (action == "putFolder") {
-//		qDebug() << "Synced folder" << id;
-//		query = db_.query("UPDATE folders SET synced = 1 WHERE id = ?");
-//		query.addBindValue(id);
-//		query.exec();
+		Change::disposeByItemId(id);
 	}
 
-	if (action == "putNote") {
-		// qDebug() << "Done note" << id;
-//		query = db_.query("UPDATE notes SET synced = 1 WHERE id = ?");
-//		query.addBindValue(id);
-//		query.exec();
+	if (action == "patchFolder") {
+		Change::disposeByItemId(id);
+	}
+
+	if (action == "deleteFolder") {
+		Change::disposeByItemId(id);
 	}
 }

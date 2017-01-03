@@ -94,3 +94,10 @@ QStringList Change::mergedFields() const {
 	}
 	return output;
 }
+
+void Change::disposeByItemId(const QString &itemId) {
+	QString sql = QString("DELETE FROM %1 WHERE item_id = :item_id").arg(BaseModel::tableName(jop::ChangesTable));
+	QSqlQuery q = jop::db().prepare(sql);
+	q.bindValue(":item_id", itemId);
+	jop::db().execQuery(q);
+}

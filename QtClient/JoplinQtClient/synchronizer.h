@@ -4,6 +4,7 @@
 #include <stable.h>
 #include "webapi.h"
 #include "database.h"
+#include "models/change.h"
 
 namespace jop {
 
@@ -18,6 +19,7 @@ public:
 
 private:
 
+	QUrlQuery valuesToUrlQuery(const QHash<QString, BaseModel::Value> &values) const;
 	WebApi& api_;
 	Database& db_;
 
