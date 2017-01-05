@@ -66,6 +66,12 @@ CREATE TABLE changes (
 	item_field TEXT
 );
 
+CREATE TABLE settings (
+    `key` TEXT PRIMARY KEY,
+	`value` TEXT,
+	`type` INT
+);
+
 --CREATE TABLE mimetypes (
 --    id INT,
 --	mime TEXT

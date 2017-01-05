@@ -139,6 +139,11 @@ bool Database::execQuery(QSqlQuery &query) {
 	return query.exec();
 }
 
+bool Database::execQuery(const QString &sql) {
+	QSqlQuery query(sql, db_);
+	return execQuery(query);
+}
+
 QSqlQuery Database::prepare(const QString &sql) {
 	QSqlQuery query(db_);
 	query.prepare(sql);

@@ -43,7 +43,7 @@ public:
 	QStringList changedFields() const;
 	static int count(jop::Table table);
 	bool load(const QString& id);
-	virtual bool save();
+	virtual bool save(bool trackChanges = true);
 	virtual bool dispose();
 
 	virtual Table table() const;

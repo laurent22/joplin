@@ -57,12 +57,26 @@ class Change extends BaseModel {
 				$change->type = Change::enumId('type', 'create');
 			}
 
-			$output[] = $change;
+			$output[] = $change->toSyncItem();
 		}
+
+		usort($output, function($a, $b) {
+			return strnatcmp($a['id'], $b['id']);
+		});
 
 		return array(
 			'has_more' => $hasMore,
 			'items' => $output,
+		);
+	}
+
+	public function toSyncItem() {
+		return array(
+			'id' => (string)$this->id,
+			'type' => self::enumName('type', $this->type),
+			'item_id' => self::hex($this->item_id),
+			'item_type' => FolderItem::enumName('type', $this->item_type),
+			'item_field' => BaseModel::enumName('field', $this->item_field),
 		);
 	}
 

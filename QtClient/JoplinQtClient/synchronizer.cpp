@@ -1,6 +1,7 @@
 #include "synchronizer.h"
 #include "models/folder.h"
 #include "models/note.h"
+#include "settings.h"
 
 using namespace jop;
 
@@ -80,40 +81,44 @@ QUrlQuery Synchronizer::valuesToUrlQuery(const QHash<QString, Change::Value>& va
 }
 
 void Synchronizer::downloadChanges() {
+	Settings settings;
+	QString lastRevId = settings.value("lastRevId", "0").toString();
+
 	state_ = DownloadingChanges;
-	//QUrlQuery data = valuesToUrlQuery(folder.values());
-	api_.get("synchronizer", QUrlQuery(), QUrlQuery(), "download:getSynchronizer");
+	QUrlQuery query;
+	query.addQueryItem("last_id", lastRevId);
+	api_.get("synchronizer", query, QUrlQuery(), "download:getSynchronizer");
 }
 
 void Synchronizer::api_requestDone(const QJsonObject& response, const QString& tag) {
 	QStringList parts = tag.split(':');
 	QString category = parts[0];
 	QString action = parts[1];
-	QString id = "";
+	QString arg1 = "";
+	QString arg2 = "";
 
-	if (parts.size() == 3) {
-		id = parts[2];
-	}
+	if (parts.size() == 3) arg1 = parts[2];
+	if (parts.size() == 4) arg2 = parts[3];
 
-	qDebug() << "WebApi: done" << category << action << id;
+	qDebug() << "WebApi: done" << category << action << arg1 << arg2;
 
 	// TODO: check for error
 
 	if (category == "upload") {
 		uploadsRemaining_--;
 
-		qDebug() << "Synced folder" << id;
+		qDebug() << "Synced folder" << arg1;
 
 		if (action == "putFolder") {
-			Change::disposeByItemId(id);
+			Change::disposeByItemId(arg1);
 		}
 
 		if (action == "patchFolder") {
-			Change::disposeByItemId(id);
+			Change::disposeByItemId(arg1);
 		}
 
 		if (action == "deleteFolder") {
-			Change::disposeByItemId(id);
+			Change::disposeByItemId(arg1);
 		}
 
 		if (uploadsRemaining_ < 0) {
@@ -132,11 +137,12 @@ void Synchronizer::api_requestDone(const QJsonObject& response, const QString& t
 				QString itemId = obj["item_id"].toString();
 				QString itemType = obj["item_type"].toString();
 				QString operationType = obj["type"].toString();
+				QString revId = QString::number(obj["id"].toInt());
 
-				QString path = itemType + "s"; // That should remain true
+				QString path = itemType + "s";
 
 				if (operationType == "create") {
-					api_.get(path + "/" + itemId, QUrlQuery(), QUrlQuery(), "download:getFolder:" + itemId);
+					api_.get(path + "/" + itemId, QUrlQuery(), QUrlQuery(), "download:getFolder:" + itemId + ":" + revId);
 				}
 
 				downloadsRemaining_++;
@@ -144,12 +150,14 @@ void Synchronizer::api_requestDone(const QJsonObject& response, const QString& t
 		} else {
 			downloadsRemaining_--;
 
+			Settings settings;
+
 			if (action == "getFolder") {
 				Folder folder;
 				folder.loadJsonObject(response);
-				folder.save();
+				folder.save(false);
 
-				// TODO: save last rev ID
+				settings.setValue("lastRevId", arg2);
 			}
 
 			if (downloadsRemaining_ < 0) {

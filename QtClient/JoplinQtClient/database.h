@@ -22,6 +22,7 @@ public:
 	bool transaction();
 	bool commit();
 	bool execQuery(QSqlQuery &query);
+	bool execQuery(const QString &query);
 	QSqlQuery prepare(const QString& sql);
 
 private:

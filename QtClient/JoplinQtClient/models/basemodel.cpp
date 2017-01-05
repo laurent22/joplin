@@ -48,7 +48,7 @@ bool BaseModel::load(const QString &id) {
 	loadSqlQuery(q);
 }
 
-bool BaseModel::save() {
+bool BaseModel::save(bool trackChanges) {
 	bool isNew = this->isNew();
 
 	if (!changedFields_.size() && !isNew) return true;
@@ -106,7 +106,7 @@ bool BaseModel::save() {
 		isSaved = jop::db().errorCheck(q);
 	}
 
-	if (isSaved && trackChanges()) {
+	if (isSaved && this->trackChanges() && trackChanges) {
 		if (isNew) {
 			Change change;
 			change.setValue("item_id", id());

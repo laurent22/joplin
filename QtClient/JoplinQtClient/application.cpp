@@ -29,6 +29,8 @@ Application::Application(int &argc, char **argv) :
 	QCoreApplication::setOrganizationDomain("cozic.net");
 	QCoreApplication::setApplicationName("Joplin");
 
+	Settings::initialize();
+
 	Settings settings;
 
 	view_.setResizeMode(QQuickView::SizeRootObjectToView);
