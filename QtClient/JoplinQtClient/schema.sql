@@ -2,8 +2,7 @@ CREATE TABLE folders (
 	id TEXT PRIMARY KEY,
 	title TEXT,
 	created_time INT,
-	updated_time INT,
-	synced BOOLEAN DEFAULT 0
+	updated_time INT
 );
 
 CREATE TABLE notes (
@@ -24,23 +23,20 @@ CREATE TABLE notes (
 	todo_completed INT,
 	source_application TEXT,
 	application_data TEXT,
-	`order` INT,
-	synced BOOLEAN DEFAULT 0
+	`order` INT
 );
 
 CREATE TABLE tags (
 	id TEXT PRIMARY KEY,
 	title TEXT,
 	created_time INT,
-	updated_time INT,
-	synced BOOLEAN DEFAULT 0
+	updated_time INT
 );
 
 CREATE TABLE note_tags (
 	id INTEGER PRIMARY KEY,
 	note_id TEXT,
-	tag_id TEXT,
-	synced BOOLEAN DEFAULT 0
+	tag_id TEXT
 );
 
 CREATE TABLE resources (
@@ -49,15 +45,13 @@ CREATE TABLE resources (
 	mime TEXT,
 	filename TEXT,
 	created_time INT,
-	updated_time INT,
-	synced BOOLEAN DEFAULT 0
+	updated_time INT
 );
 
 CREATE TABLE note_resources (
 	id INTEGER PRIMARY KEY,
 	note_id TEXT,
-	resource_id TEXT,
-	synced BOOLEAN DEFAULT 0
+	resource_id TEXT
 );
 
 CREATE TABLE version (
