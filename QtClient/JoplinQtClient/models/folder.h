@@ -19,6 +19,9 @@ public:
 	bool primaryKeyIsUuid() const;
 	bool trackChanges() const;
 
+//	bool save();
+//	bool dispose();
+
 private:
 
 };

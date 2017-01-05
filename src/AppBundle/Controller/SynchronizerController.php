@@ -6,7 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\ApiController;
-use AppBundle\Model\Action;
+use AppBundle\Model\Change;
 use AppBundle\Exception\UnauthorizedException;
 
 /*
@@ -103,11 +103,13 @@ class SynchronizerController extends ApiController {
 	 * @Route("/synchronizer")
 	 */
 	public function allAction(Request $request) {
-		$id = (int)$request->query->get('last_id');
+		$lastChangeId = (int)$request->query->get('last_id');
 
 		if (!$this->user() || !$this->session()) throw new UnauthorizedException();
 
-		$actions = Action::actionsDoneAfterId($this->user()->id, $this->session()->client_id, $id);
+		$actions = Change::changesDoneAfterId($this->user()->id, $this->session()->client_id, $lastChangeId);
+		// $actions['user_id'] = Change::hex($this->user()->id);
+		// $actions['client_id'] = Change::hex($this->session()->client_id);
 		return static::successResponse($actions);
 	}
 

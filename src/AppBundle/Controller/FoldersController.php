@@ -21,6 +21,7 @@ class FoldersController extends ApiController {
 		if ($request->isMethod('POST')) {
 			$folder = new Folder();
 			$folder->fromPublicArray($request->request->all());
+			$folder->owner_id = $this->user()->id;
 			$folder->save();
 			return static::successResponse($folder);
 		}

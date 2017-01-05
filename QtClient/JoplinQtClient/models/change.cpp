@@ -3,12 +3,6 @@
 
 using namespace jop;
 
-Change::Change() {}
-
-Change::Change(const QSqlQuery &query) {
-	loadSqlQuery(query);
-}
-
 Table Change::table() const {
 	return jop::ChangesTable;
 }
@@ -25,7 +19,8 @@ QVector<Change> Change::all(int limit) {
 	QVector<Change> output;
 
 	while (q.next()) {
-		Change change(q);
+		Change change;
+		change.loadSqlQuery(q);
 		output.push_back(change);
 	}
 

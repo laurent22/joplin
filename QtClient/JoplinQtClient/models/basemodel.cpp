@@ -1,5 +1,6 @@
 #include "basemodel.h"
 
+#include "dispatcher.h"
 #include "models/change.h"
 #include "database.h"
 #include "uuid.h"
@@ -9,10 +10,8 @@ using namespace jop;
 QMap<int, QVector<BaseModel::Field>> BaseModel::tableFields_;
 QHash<QString, QVariant> BaseModel::cache_;
 
-BaseModel::BaseModel() {}
-
-BaseModel::BaseModel(const QSqlQuery &query) {
-	loadSqlQuery(query);
+BaseModel::BaseModel() {
+	isNew_ = -1;
 }
 
 QStringList BaseModel::changedFields() const {
@@ -92,22 +91,22 @@ bool BaseModel::save() {
 		cacheDelete(QString("%1:count").arg(tableName));
 	}
 
-	bool output = false;
+	bool isSaved = false;
 
 	jop::db().transaction();
 
 	if (isNew) {
 		QSqlQuery q = jop::db().buildSqlQuery(Database::Insert, tableName, values);
 		jop::db().execQuery(q);
-		output = jop::db().errorCheck(q);
-		if (output) setValue("id", values["id"]);
+		isSaved = jop::db().errorCheck(q);
+		if (isSaved) setValue("id", values["id"]);
 	} else {
 		QSqlQuery q = jop::db().buildSqlQuery(Database::Update, tableName, values, QString("%1 = '%2'").arg(primaryKey()).arg(value("id").toString()));
 		jop::db().execQuery(q);
-		output = jop::db().errorCheck(q);
+		isSaved = jop::db().errorCheck(q);
 	}
 
-	if (output && trackChanges()) {
+	if (isSaved && trackChanges()) {
 		if (isNew) {
 			Change change;
 			change.setValue("item_id", id());
@@ -128,7 +127,17 @@ bool BaseModel::save() {
 
 	jop::db().commit();
 
-	return output;
+	if (isSaved && table() == jop::FoldersTable) {
+		if (isNew) {
+			dispatcher().emitFolderCreated(id().toString());
+		} else {
+			dispatcher().emitFolderUpdated(id().toString());
+		}
+	}
+
+	isNew_ = -1;
+
+	return isSaved;
 }
 
 bool BaseModel::dispose() {
@@ -138,11 +147,11 @@ bool BaseModel::dispose() {
 	q.bindValue(":id", id().toString());
 	jop::db().execQuery(q);
 
-	bool output = jop::db().errorCheck(q);
+	bool isDeleted = jop::db().errorCheck(q);
 
-	if (output) cacheDelete(QString("%1:count").arg(tableName));
+	if (isDeleted) cacheDelete(QString("%1:count").arg(tableName));
 
-	if (output && trackChanges()) {
+	if (isDeleted && trackChanges()) {
 		Change change;
 		change.setValue("item_id", id());
 		change.setValue("item_type", table());
@@ -150,7 +159,11 @@ bool BaseModel::dispose() {
 		change.save();
 	}
 
-	return output;
+	if (isDeleted && table() == jop::FoldersTable) {
+		dispatcher().emitFolderDeleted(id().toString());
+	}
+
+	return isDeleted;
 }
 
 Table BaseModel::table() const {
@@ -171,6 +184,8 @@ bool BaseModel::trackChanges() const {
 }
 
 bool BaseModel::isNew() const {
+	if (isNew_ == 0) return false;
+	if (isNew_ == 1) return true;
 	return !valueIsSet(primaryKey());
 }
 
@@ -228,6 +243,9 @@ bool BaseModel::isValidFieldName(Table table, const QString &name) {
 	return false;
 }
 
+// When loading a QSqlQuery, all the values are cleared and replaced by those
+// from the QSqlQuery. All the fields are marked as NOT changed as it's assumed
+// the object is already in the database (since loaded from there).
 void BaseModel::loadSqlQuery(const QSqlQuery &query) {
 	values_.clear();
 	QSqlRecord record = query.record();
@@ -241,15 +259,43 @@ void BaseModel::loadSqlQuery(const QSqlQuery &query) {
 		}
 
 		if (field.type == QMetaType::QString) {
-			values_.insert(field.name, Value(query.value(idx).toString()));
+			//values_.insert(field.name, Value(query.value(idx).toString()));
+			setValue(field.name, query.value(idx).toString());
 		} else if (field.type == QMetaType::Int) {
-			values_.insert(field.name, Value(query.value(idx).toInt()));
+			//values_.insert(field.name, Value(query.value(idx).toInt()));
+			setValue(field.name, query.value(idx).toInt());
 		} else {
 			qCritical() << "Unsupported value type" << field.name;
 		}
 	}
 
+	isNew_ = -1;
+
 	changedFields_.clear();
+}
+
+// When loading a QJsonObject, all the values are cleared and replaced by those
+// from the QJsonObject. All the fields are marked as changed since it's
+// assumed that the object comes from the web service.
+void BaseModel::loadJsonObject(const QJsonObject &jsonObject) {
+	values_.clear();
+	changedFields_.clear();
+
+	QVector<BaseModel::Field> fields = BaseModel::tableFields(table());
+
+	foreach (BaseModel::Field field, fields) {
+		if (field.type == QMetaType::QString) {
+			//values_.insert(field.name, Value(jsonObject[field.name].toString()));
+			setValue(field.name, jsonObject[field.name].toString());
+		} else if (field.type == QMetaType::Int) {
+			//values_.insert(field.name, Value(jsonObject[field.name].toInt()));
+			setValue(field.name, jsonObject[field.name].toInt());
+		} else {
+			qCritical() << "Unsupported value type" << field.name;
+		}
+	}
+
+	isNew_ = 1;
 }
 
 QHash<QString, BaseModel::Value> BaseModel::values() const {

@@ -15,24 +15,12 @@ Application::Application(int &argc, char **argv) :
     QGuiApplication(argc, argv),
     db_(jop::db()),
     api_("http://joplin.local"),
-    synchronizer_(api_, db_),
+    synchronizer_(api_.baseUrl(), db_),
     folderModel_(db_)
 
     {
 
 	jop::db().initialize("D:/Web/www/joplin/QtClient/data/notes.sqlite");
-
-//	QVector<Change> changes = Change::all();
-//	foreach (Change change, changes) {
-//		qDebug() << change.value("item_id").toString() << change.value("type").toInt() << change.mergedFields();
-//	}
-
-//	qDebug() << "=====================================";
-
-//	changes = Change::mergedChanges(changes);
-//	foreach (Change change, changes) {
-//		qDebug() << change.value("item_id").toString() << change.value("type").toInt() << change.mergedFields();
-//	}
 
 	// This is linked to where the QSettings will be saved. In other words,
 	// if these values are changed, the settings will be reset and saved
@@ -57,25 +45,25 @@ Application::Application(int &argc, char **argv) :
 	connect(rootObject, SIGNAL(currentNoteChanged()), this, SLOT(view_currentNoteChanged()));
 	connect(rootObject, SIGNAL(addFolderButtonClicked()), this, SLOT(view_addFolderButtonClicked()));
 
+	connect(&dispatcher(), SIGNAL(folderCreated(QString)), this, SLOT(dispatcher_folderCreated(QString)));
+	connect(&dispatcher(), SIGNAL(folderUpdated(QString)), this, SLOT(dispatcher_folderUpdated(QString)));
+	connect(&dispatcher(), SIGNAL(folderDeleted(QString)), this, SLOT(dispatcher_folderDeleted(QString)));
+
 	view_.show();
+
+	synchronizerTimer_.setInterval(1000 * 60);
+	synchronizerTimer_.start();
+
+	connect(&synchronizerTimer_, SIGNAL(timeout()), this, SLOT(synchronizerTimer_timeout()));
 
 	connect(&api_, SIGNAL(requestDone(const QJsonObject&, const QString&)), this, SLOT(api_requestDone(const QJsonObject&, const QString&)));
 
 	QString sessionId = settings.value("sessionId").toString();
-	//if (sessionId == "") {
-		QUrlQuery postData;
-		postData.addQueryItem("email", "laurent@cozic.net");
-		postData.addQueryItem("password", "12345678");
-		postData.addQueryItem("client_id", "B6E12222B6E12222");
-		api_.post("sessions", QUrlQuery(), postData, "getSession");
-//	} else {
-//		afterSessionInitialization();
-//	}
-
-
-
-	//emit jop::dispatcher().folderCreated("test");
-	//.folderCreated("tes");
+	QUrlQuery postData;
+	postData.addQueryItem("email", "laurent@cozic.net");
+	postData.addQueryItem("password", "12345678");
+	postData.addQueryItem("client_id", "B6E12222B6E12222");
+	api_.post("sessions", QUrlQuery(), postData, "getSession");
 }
 
 void Application::api_requestDone(const QJsonObject& response, const QString& tag) {
@@ -88,6 +76,26 @@ void Application::api_requestDone(const QJsonObject& response, const QString& ta
 		afterSessionInitialization();
 		return;
 	}
+}
+
+void Application::dispatcher_folderCreated(const QString &folderId) {
+	qDebug() << "Folder created" << folderId;
+	synchronizerTimer_.start(1000 * 3);
+}
+
+void Application::dispatcher_folderUpdated(const QString &folderId) {
+	qDebug() << "Folder udpated" << folderId;
+	synchronizerTimer_.start(1000 * 3);
+}
+
+void Application::dispatcher_folderDeleted(const QString &folderId) {
+	qDebug() << "Folder deleted" << folderId;
+	synchronizerTimer_.start(1000 * 3);
+}
+
+void Application::synchronizerTimer_timeout() {
+	synchronizerTimer_.start(1000 * 60);
+	synchronizer_.start();
 }
 
 QString Application::selectedFolderId() const {
@@ -114,6 +122,7 @@ void Application::afterSessionInitialization() {
 	QString sessionId = settings.value("sessionId").toString();
 	qDebug() << "Session:" << sessionId;
 	api_.setSessionId(sessionId);
+	synchronizer_.setSessionId(sessionId);
 	synchronizer_.start();
 }
 

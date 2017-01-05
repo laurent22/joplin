@@ -1,5 +1,6 @@
 #include "models/folder.h"
 
+#include "dispatcher.h"
 #include "database.h"
 #include "uuid.h"
 

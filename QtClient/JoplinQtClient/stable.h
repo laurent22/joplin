@@ -26,9 +26,7 @@
 #include <QJsonObject>
 #include <QJsonParseError>
 #include <QBuffer>
-
-
-
+#include <QJsonArray>
 #include <QTimer>
 
 #endif // __cplusplus

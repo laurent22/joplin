@@ -33,6 +33,7 @@ private:
 	QmlNote selectedQmlNote_;
 	WebApi api_;
 	Synchronizer synchronizer_;
+	QTimer synchronizerTimer_;
 
 	void afterSessionInitialization();
 
@@ -43,6 +44,12 @@ public slots:
 	void view_addNoteButtonClicked();
 	void view_addFolderButtonClicked();
 	void api_requestDone(const QJsonObject& response, const QString& tag);
+
+	void dispatcher_folderCreated(const QString& folderId);
+	void dispatcher_folderUpdated(const QString& folderId);
+	void dispatcher_folderDeleted(const QString& folderId);
+
+	void synchronizerTimer_timeout();
 
 };
 

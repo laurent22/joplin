@@ -40,12 +40,11 @@ public:
 	};
 
 	BaseModel();
-	BaseModel(const QSqlQuery& query);
 	QStringList changedFields() const;
 	static int count(jop::Table table);
 	bool load(const QString& id);
-	bool save();
-	bool dispose();
+	virtual bool save();
+	virtual bool dispose();
 
 	virtual Table table() const;
 	virtual QString primaryKey() const;
@@ -60,6 +59,7 @@ public:
 	static bool isValidFieldName(Table table, const QString& name);
 
 	void loadSqlQuery(const QSqlQuery& query);
+	void loadJsonObject(const QJsonObject& jsonObject);
 	QHash<QString, Value> values() const;
 	Value value(const QString& name) const;
 	bool valueIsSet(const QString& name) const;
@@ -83,6 +83,8 @@ protected:
 
 	static QMap<int, QVector<BaseModel::Field>> tableFields_;
 	static QHash<QString, QVariant> cache_;
+
+	int isNew_;
 
 };
 

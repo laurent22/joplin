@@ -13,8 +13,6 @@ public:
 
 	enum Type { Undefined, Create, Update, Delete };
 
-	Change();
-	Change(const QSqlQuery& query);
 	Table table() const;
 
 	static QVector<Change> all(int limit = 100);

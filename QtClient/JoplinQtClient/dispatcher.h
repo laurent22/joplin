@@ -1,6 +1,8 @@
 #ifndef DISPATCHER_H
 #define DISPATCHER_H
 
+#include <stable.h>
+
 namespace jop {
 
 class Dispatcher : public QObject {
@@ -10,15 +12,15 @@ class Dispatcher : public QObject {
 public:
 
 	Dispatcher();
-	//static Dispatcher& instance();
+	void emitFolderCreated(const QString& folderId);
+	void emitFolderUpdated(const QString& folderId);
+	void emitFolderDeleted(const QString& folderId);
 
 signals:
 
-	void folderCreated(const QString& id);
-
-private:
-
-	//static Dispatcher& instance_;
+	void folderCreated(const QString& folderId);
+	void folderUpdated(const QString& folderId);
+	void folderDeleted(const QString& folderId);
 
 };
 

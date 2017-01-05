@@ -2,16 +2,22 @@
 
 using namespace jop;
 
-Dispatcher::Dispatcher() {
+Dispatcher::Dispatcher() {}
 
+void Dispatcher::emitFolderCreated(const QString &folderId) {
+	emit folderCreated(folderId);
 }
 
-Dispatcher instance_;
+void Dispatcher::emitFolderUpdated(const QString &folderId) {
+	emit folderUpdated(folderId);
+}
+
+void Dispatcher::emitFolderDeleted(const QString &folderId) {
+	emit folderDeleted(folderId);
+}
+
+Dispatcher dispatcherInstance_;
 
 Dispatcher& jop::dispatcher() {
-	return instance_;
+	return dispatcherInstance_;
 }
-
-//Dispatcher &Dispatcher::instance() {
-//	return instance_;
-//}

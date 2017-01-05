@@ -99,7 +99,7 @@ void WebApi::processQueue() {
 	if (r.method != jop::GET && r.method != jop::DEL) {
 		cmd << "--data" << "'" + r.data.toString(QUrl::FullyEncoded) + "'";
 	}
-	cmd << url;
+	cmd << "'" + url + "'";
 
 	qDebug().noquote() << cmd.join(" ");
 
@@ -116,7 +116,7 @@ void WebApi::request_finished(QNetworkReply *reply) {
 		qWarning().noquote() << QString(responseBodyBA);
 	} else {
 		response = doc.object();
-		if (!response["error"].isNull()) {
+		if (response.contains("error") && !response["error"].isNull()) {
 			qWarning().noquote() << "API error:" << QString(responseBodyBA);
 		}
 	}
