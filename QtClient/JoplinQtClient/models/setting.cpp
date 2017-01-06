@@ -23,8 +23,15 @@ QSettings::SettingsMap Setting::settings() {
 	jop::db().execQuery(query);
 	while (query.next()) {
 		QString key = query.value(0).toString();
+		QVariant val = query.value(1);
 		QMetaType::Type type = (QMetaType::Type)query.value(2).toInt();
-		qDebug() << key << type;
+		if (type == QMetaType::Int) {
+			output[key] = QVariant(val.toInt());
+		} else if (type == QMetaType::QString) {
+			output[key] = QVariant(val.toString());
+		} else {
+			qCritical() << "Unsupported setting type" << key << val << type;
+		}
 	}
 	return output;
 }

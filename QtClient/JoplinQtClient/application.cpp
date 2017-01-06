@@ -20,7 +20,8 @@ Application::Application(int &argc, char **argv) :
 
     {
 
-	jop::db().initialize("D:/Web/www/joplin/QtClient/data/notes.sqlite");
+	QString dbPath = "D:/Web/www/joplin/QtClient/data/notes.sqlite";
+	jop::db().initialize(dbPath);
 
 	// This is linked to where the QSettings will be saved. In other words,
 	// if these values are changed, the settings will be reset and saved
@@ -60,16 +61,24 @@ Application::Application(int &argc, char **argv) :
 
 	connect(&api_, SIGNAL(requestDone(const QJsonObject&, const QString&)), this, SLOT(api_requestDone(const QJsonObject&, const QString&)));
 
-	QString sessionId = settings.value("sessionId").toString();
+
+	// Don't store password, store session ID
+	QString clientId = "B6E12222B6E12222";
+	if (!settings.contains("user.email")) {
+		settings.setValue("user.email", "laurent@cozic.net");
+		settings.setValue("user.password", "12345678");
+	}
+
 	QUrlQuery postData;
-	postData.addQueryItem("email", "laurent@cozic.net");
-	postData.addQueryItem("password", "12345678");
-	postData.addQueryItem("client_id", "B6E12222B6E12222");
+	postData.addQueryItem("email", settings.value("user.email").toString());
+	postData.addQueryItem("password", settings.value("user.password").toString());
+	postData.addQueryItem("client_id", clientId);
 	api_.post("sessions", QUrlQuery(), postData, "getSession");
 }
 
 void Application::api_requestDone(const QJsonObject& response, const QString& tag) {
 	// TODO: handle errors
+	// Handle expired sessions
 
 	if (tag == "getSession") {
 		QString sessionId = response.value("id").toString();

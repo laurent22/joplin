@@ -3,32 +3,25 @@
 
 using namespace jop;
 
-Settings::Settings() : QSettings() {
-
-}
+Settings::Settings() : QSettings() {}
 
 bool readSqlite(QIODevice &device, QSettings::SettingsMap &map) {
-	//qDebug() << "XXXXXXXXXXXX";
-   // map = Setting::settings();
-	qDebug() << "Calling readSqlite";
+	map = Setting::settings();
 	return true;
 }
 
 bool writeSqlite(QIODevice &device, const QSettings::SettingsMap &map) {
-	//Setting::setSettings(map);
-	qDebug() << "Calling writeSqlite";
+	// HACK: QSettings requires a readable/writable file to be present
+	// for the custom handler to work. However, we don't need such a
+	// file since we write to the db. So to simulate it, we write once
+	// to that file. Without this, readSqlite in particular will never
+	// get called.
+	device.write("X", 1);
+	Setting::setSettings(map);
 	return true;
 }
 
 void Settings::initialize() {
-//	const QSettings::Format SqliteFormat = QSettings::registerFormat("sqlite", &readSqlite, &writeSqlite);
-//	QSettings::setDefaultFormat(SqliteFormat);
-
-//	QSettings settings;
-//	//qDebug() << settings.value("test");
-//	settings.setValue("test", 123456);
-
-//	QSettings s(SqliteFormat, QSettings::UserScope, "MySoft",
-//	            "Star Runner");
-//	qDebug() << "IN" << s.value("test") << "test";
+	const QSettings::Format SqliteFormat = QSettings::registerFormat("sqlite", &readSqlite, &writeSqlite);
+	QSettings::setDefaultFormat(SqliteFormat);
 }
