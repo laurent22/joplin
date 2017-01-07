@@ -4,7 +4,7 @@ namespace AppBundle\Model;
 
 class Folder extends BaseItem {
 
-	protected $versionedFields = array('title');
+	protected $diffableFields = array('title');
 	protected $isVersioned = true;
 
 	public function add($ids) {

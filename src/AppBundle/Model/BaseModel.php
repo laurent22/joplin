@@ -11,15 +11,13 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 	public $timestamps = false;
 	public $useUuid = false;
 	protected $changedVersionedFieldValues = array();
-	protected $versionedFields = array();
+	protected $diffableFields = array();
 	protected $isVersioned = false;
 	private $isNew = null;
 	private $revId = 0;
 
 	static private $clientId = null;
-	static protected $enums = array(
-		'field' => array('title', 'body', 'completed'),
-	);
+	static protected $enums = array();
 	static protected $defaultValidationRules = array();
 	static protected $defaultValidationMessages = array(
 		'required' => '{key} is required',
@@ -133,7 +131,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		foreach ($array as $k => $v) {
 			if ($k == 'rev_id') {
 				$this->revId = $v;
-			} else if (in_array($k, $this->versionedFields)) {
+			} else if (in_array($k, $this->diffableFields)) {
 				$this->changedVersionedFieldValues[$k] = $v;
 			} else {
 				$this->{$k} = $v;
@@ -164,7 +162,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		}
 
 		$maxRevId = 0;
-		foreach ($this->versionedFields as $field) {
+		foreach ($this->diffableFields as $field) {
 			$r = $this->versionedFieldValue($field, true);
 			$output[$field] = $r['text'];
 			$maxRevId = max($maxRevId, $r['revId']);
@@ -343,7 +341,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 	public function delete() {
 		$output = parent::delete();
 
-		if (count($this->versionedFields)) {
+		if (count($this->isVersioned)) {
 			$this->recordChanges('delete');
 		}
 
@@ -361,11 +359,11 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 			//
 			// When recording an "update" event, all the modified fields are recorded.
 			foreach ($changedFields as $field => $value) {
-				if ($type == 'create' && !in_array($field, $this->versionedFields)) continue;
+				if ($type == 'create' && !in_array($field, $this->diffableFields)) continue;
 
 				$change = $this->newChange($type);
 				$change->item_field = $field;
-				if (in_array($field, $this->versionedFields)) $change->createDelta($changedFields[$field]);
+				if (in_array($field, $this->diffableFields)) $change->createDelta($changedFields[$field]);
 				$change->save();
 			}
 		} else {
