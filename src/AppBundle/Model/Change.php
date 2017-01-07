@@ -60,6 +60,9 @@ class Change extends BaseModel {
 			$output[] = $change->toSyncItem();
 		}
 
+		// This is important so that the client knows that the last item in the list
+		// is really the last change that was made; and so they can keep this ID
+		// as reference for the next synchronization.
 		usort($output, function($a, $b) {
 			return strnatcmp($a['id'], $b['id']);
 		});

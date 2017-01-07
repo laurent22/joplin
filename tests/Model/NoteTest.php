@@ -12,14 +12,14 @@ class NoteTest extends BaseTestCase {
 
 	public function testCanSaveAndLoad() {
 		$note = new Note();
-		$note->setVersionedFieldValue('title', 'the title');
-		$note->setVersionedFieldValue('body', 'the body');
+		$note->setDiffableField('title', 'the title');
+		$note->setDiffableField('body', 'the body');
 		$note->save();
 
 		$note = $note->find($note->id);
 		$this->assertNotNull($note);
-		$this->assertEquals('the title', $note->versionedFieldValue('title'));
-		$this->assertEquals('the body', $note->versionedFieldValue('body'));
+		$this->assertEquals('the title', $note->diffableField('title'));
+		$this->assertEquals('the body', $note->diffableField('body'));
 	}
 
 	public function testFromToPublicArray() {
