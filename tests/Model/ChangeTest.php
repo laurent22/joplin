@@ -25,7 +25,7 @@ class ChangeTest extends BaseTestCase {
 		$change->user_id = $this->user()->id;
 		$change->client_id = $this->clientId();
 		$change->item_type = BaseItem::enumId('type', 'note');
-		$change->item_field = BaseModel::enumId('field', 'body');
+		$change->item_field = 'body';
 		$change->type = Change::enumId('type', 'create');
 		$change->item_id = $itemId;
 		$change->createDelta($text1);
@@ -37,13 +37,13 @@ class ChangeTest extends BaseTestCase {
 		$change->user_id = $this->user()->id;
 		$change->client_id = $this->clientId();
 		$change->item_type = BaseItem::enumId('type', 'note');
-		$change->item_field = BaseModel::enumId('field', 'body');
+		$change->item_field = 'body';
 		$change->type = Change::enumId('type', 'update');
 		$change->item_id = $itemId;
 		$change->createDelta($text2);
 		$change->save();
 
-		$r = Change::fullFieldText($itemId, BaseModel::enumId('field', 'body'));
+		$r = Change::fullFieldText($itemId, 'body');
 
 		$this->assertEquals($r, $text2);
 	}
@@ -84,7 +84,7 @@ class ChangeTest extends BaseTestCase {
 		$change->user_id = $this->user()->id;
 		$change->client_id = $this->clientId(1);
 		$change->item_type = BaseItem::enumId('type', 'note');
-		$change->item_field = BaseModel::enumId('field', 'body');
+		$change->item_field = 'body';
 		$change->type = Change::enumId('type', 'create');
 		$change->item_id = $itemId;
 		$change->createDelta($text1);
@@ -98,7 +98,7 @@ class ChangeTest extends BaseTestCase {
 		$change->user_id = $this->user()->id;
 		$change->client_id = $this->clientId(2);
 		$change->item_type = BaseItem::enumId('type', 'note');
-		$change->item_field = BaseModel::enumId('field', 'body');
+		$change->item_field = 'body';
 		$change->type = Change::enumId('type', 'update');
 		$change->item_id = $itemId;
 		$change->previous_id = $changeId1;
@@ -113,7 +113,7 @@ class ChangeTest extends BaseTestCase {
 		$change->user_id = $this->user()->id;
 		$change->client_id = $this->clientId(1);
 		$change->item_type = BaseItem::enumId('type', 'note');
-		$change->item_field = BaseModel::enumId('field', 'body');
+		$change->item_field = 'body';
 		$change->type = Change::enumId('type', 'update');
 		$change->item_id = $itemId;
 		$change->previous_id = $changeId1;
@@ -122,7 +122,7 @@ class ChangeTest extends BaseTestCase {
 
 		$changeId3 = $change->id;
 
-		$r = Change::fullFieldText($itemId, BaseModel::enumId('field', 'body'));
+		$r = Change::fullFieldText($itemId, 'body');
 
 		$this->assertEquals($r, 'cd CLIENT1 efgh ijkl FROMCLIENT2');
 	}

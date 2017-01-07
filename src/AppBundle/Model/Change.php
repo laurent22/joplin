@@ -76,7 +76,7 @@ class Change extends BaseModel {
 			'type' => self::enumName('type', $this->type),
 			'item_id' => self::hex($this->item_id),
 			'item_type' => FolderItem::enumName('type', $this->item_type),
-			'item_field' => BaseModel::enumName('field', $this->item_field),
+			'item_field' => $this->item_field,
 		);
 	}
 

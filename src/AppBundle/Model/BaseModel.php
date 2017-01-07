@@ -12,6 +12,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 	public $useUuid = false;
 	protected $changedVersionedFieldValues = array();
 	protected $versionedFields = array();
+	protected $isVersioned = false;
 	private $isNew = null;
 	private $revId = 0;
 
@@ -162,10 +163,6 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 			$output['item_type'] = BaseItem::enumName('type', $output['item_type'], true);
 		}
 
-		if (isset($output['item_field'])) {
-			$output['item_field'] = BaseModel::enumName('field', $output['item_field'], true);
-		}
-
 		$maxRevId = 0;
 		foreach ($this->versionedFields as $field) {
 			$r = $this->versionedFieldValue($field, true);
@@ -179,7 +176,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 	}
 
 	public function versionedFieldValue($fieldName, $returnRevId = false) {
-		return Change::fullFieldText($this->id, BaseModel::enumId('field', $fieldName), null, $returnRevId);
+		return Change::fullFieldText($this->id, $fieldName, null, $returnRevId);
 	}
 
 	public function setVersionedFieldValue($fieldName, $fieldValue) {
@@ -324,14 +321,21 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		$this->updated_time = time(); // TODO: maybe only update if one of the fields, or if some of versioned data has changed
 		if ($isNew) $this->created_time = time();
 
+		if ($this->isVersioned) {
+			$changedFields = array_merge($this->getDirty(), $this->changedVersionedFieldValues);
+			unset($changedFields['updated_time']);
+		}
+
 		$output = parent::save($options);
 
 		$this->isNew = null;
 
-		if (count($this->versionedFields)) {
-			$this->recordChanges($isNew ? 'create' : 'update', $this->changedVersionedFieldValues);
+		if ($this->isVersioned) {
+			if (count($changedFields)) {
+				$this->recordChanges($isNew ? 'create' : 'update', $changedFields);
+			}
+			$this->changedVersionedFieldValues = array();
 		}
-		$this->changedVersionedFieldValues = array();
 
 		return $output;
 	}
@@ -346,17 +350,22 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		return $output;
 	}
 
-	protected function recordChanges($type, $versionedData = array()) {
+	protected function recordChanges($type, $changedFields = array()) {
 		if ($type == 'delete') {
 			$change = $this->newChange($type);
 			$change->save();
 		} else if ($type == 'create' || $type == 'update') {
-			foreach ($this->versionedFields as $field) {
-				if (!isset($versionedData[$field])) continue;
+			// When recording a "create" event, we only record the versioned fields because the complete history
+			// is required to build their value. There's no need to record the other fields since they are
+			// simply new.
+			//
+			// When recording an "update" event, all the modified fields are recorded.
+			foreach ($changedFields as $field => $value) {
+				if ($type == 'create' && !in_array($field, $this->versionedFields)) continue;
 
 				$change = $this->newChange($type);
-				$change->item_field = BaseModel::enumId('field', $field);
-				$change->createDelta($versionedData[$field]);
+				$change->item_field = $field;
+				if (in_array($field, $this->versionedFields)) $change->createDelta($changedFields[$field]);
 				$change->save();
 			}
 		} else {

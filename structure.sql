@@ -80,7 +80,7 @@ CREATE TABLE `changes` (
 	`type` int(11) NOT NULL default '0',
 	`item_id` binary(16),
 	`item_type` int(11) NOT NULL default '0',
-	`item_field` int(11) NOT NULL default '0',
+	`item_field` varchar(32) NOT NULL default '',
 	`delta` MEDIUMTEXT,
 	`previous_id` int(11) NOT NULL default '0',
 	PRIMARY KEY (`id`)

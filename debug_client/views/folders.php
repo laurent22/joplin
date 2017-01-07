@@ -1,9 +1,12 @@
 <table>
-	<tr><th>Title</th><th></th><th></th></tr>
+	<tr><th>ID</th><th>Title</th><th></th><th></th></tr>
 	<?php foreach ($folders as $folder): ?>
 		<tr>
 			<td>
-				<a href="/?action=folder&folder_id=<?php echo $folder['id']; ?>"><?php echo htmlentities($folder['title']); ?></a>
+				<a href="/?action=folder&folder_id=<?php echo $folder['id']; ?>"><?php echo htmlentities($folder['id']); ?></a>
+			</td>
+			<td>
+				<?php echo htmlentities($folder['title']); ?>
 			</td>
 			<td>
 				<a href="/?action=notes&folder_id=<?php echo $folder['id']; ?>">View notes</a>
