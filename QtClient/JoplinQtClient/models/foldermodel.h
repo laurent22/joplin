@@ -54,6 +54,10 @@ public slots:
 	int idToIndex(const QString& id) const;
 	QString lastInsertId() const;
 
+	void dispatcher_folderCreated(const QString& folderId);
+	void dispatcher_folderUpdated(const QString& folderId);
+	void dispatcher_folderDeleted(const QString& folderId);
+
 };
 
 }

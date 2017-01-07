@@ -1,10 +1,15 @@
 #include "foldermodel.h"
 #include "uuid.h"
+#include "dispatcher.h"
 
 using namespace jop;
 
 FolderModel::FolderModel(Database &database) : QAbstractListModel(), db_(database), orderBy_("title") {
 	virtualItemShown_ = false;
+
+	connect(&dispatcher(), SIGNAL(folderCreated(QString)), this, SLOT(dispatcher_folderCreated(QString)));
+	connect(&dispatcher(), SIGNAL(folderUpdated(QString)), this, SLOT(dispatcher_folderUpdated(QString)));
+	connect(&dispatcher(), SIGNAL(folderDeleted(QString)), this, SLOT(dispatcher_folderDeleted(QString)));
 }
 
 int FolderModel::rowCount(const QModelIndex & parent) const { Q_UNUSED(parent);
@@ -128,22 +133,22 @@ void FolderModel::addData(const QString &title) {
 	folder.setValue("title", title);
 	if (!folder.save()) return;
 
-	cache_.clear();
+	//cache_.clear();
 
 	lastInsertId_ = folder.id().toString();
 
-	QVector<int> roles;
-	roles << Qt::DisplayRole;
+//	QVector<int> roles;
+//	roles << Qt::DisplayRole;
 
-	int from = 0;
-	int to = rowCount() - 1;
+//	int from = 0;
+//	int to = rowCount() - 1;
 
-	// Necessary to make sure a new item is added to the view, even
-	// though it might not be positioned there due to sorting
-	beginInsertRows(QModelIndex(), to, to);
-	endInsertRows();
+//	// Necessary to make sure a new item is added to the view, even
+//	// though it might not be positioned there due to sorting
+//	beginInsertRows(QModelIndex(), to, to);
+//	endInsertRows();
 
-	emit dataChanged(this->index(from), this->index(to), roles);
+//	emit dataChanged(this->index(from), this->index(to), roles);
 }
 
 void FolderModel::deleteData(const int index) {
@@ -158,4 +163,36 @@ void FolderModel::deleteData(const int index) {
 	QVector<int> roles;
 	roles << Qt::DisplayRole;
 	emit dataChanged(this->index(0), this->index(rowCount() - 1), roles);
+}
+
+void FolderModel::dispatcher_folderCreated(const QString &folderId) {
+	qDebug() << "FolderModel Folder created" << folderId;
+
+	cache_.clear();
+
+//	int index = idToIndex(folderId);
+//	Folder folder = atIndex(index);
+
+	int from = 0;
+	int to = rowCount() - 1;
+
+	QVector<int> roles;
+	roles << Qt::DisplayRole;
+
+	// Necessary to make sure a new item is added to the view, even
+	// though it might not be positioned there due to sorting
+	beginInsertRows(QModelIndex(), to, to);
+	endInsertRows();
+
+	emit dataChanged(this->index(from), this->index(to), roles);
+}
+
+void FolderModel::dispatcher_folderUpdated(const QString &folderId) {
+	qDebug() << "FolderModel Folder udpated" << folderId;
+	//synchronizerTimer_.start(1000 * 3);
+}
+
+void FolderModel::dispatcher_folderDeleted(const QString &folderId) {
+	qDebug() << "FolderModel Folder deleted" << folderId;
+	//synchronizerTimer_.start(1000 * 3);
 }

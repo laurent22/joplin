@@ -131,28 +131,34 @@ void Synchronizer::api_requestDone(const QJsonObject& response, const QString& t
 		}
 	} else if (category == "download") {
 		if (action == "getSynchronizer") {
+			downloadsRemaining_ = 0;
 			QJsonArray items = response["items"].toArray();
 			foreach (QJsonValue item, items) {
 				QJsonObject obj = item.toObject();
 				QString itemId = obj["item_id"].toString();
 				QString itemType = obj["item_type"].toString();
 				QString operationType = obj["type"].toString();
-				QString revId = QString::number(obj["id"].toInt());
+				QString revId = obj["id"].toString();
 
 				QString path = itemType + "s";
 
 				if (operationType == "create") {
-					api_.get(path + "/" + itemId, QUrlQuery(), QUrlQuery(), "download:getFolder:" + itemId + ":" + revId);
+					api_.get(path + "/" + itemId, QUrlQuery(), QUrlQuery(), "download:createFolder:" + itemId + ":" + revId);
 				}
 
 				downloadsRemaining_++;
+			}
+
+			if (!downloadsRemaining_) {
+				qDebug() << "All download operations complete";
+				state_ = Idle;
 			}
 		} else {
 			downloadsRemaining_--;
 
 			Settings settings;
 
-			if (action == "getFolder") {
+			if (action == "createFolder") {
 				Folder folder;
 				folder.loadJsonObject(response);
 				folder.save(false);

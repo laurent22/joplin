@@ -54,13 +54,12 @@ Application::Application(int &argc, char **argv) :
 
 	view_.show();
 
-	synchronizerTimer_.setInterval(1000 * 60);
+	synchronizerTimer_.setInterval(1000 * 10);
 	synchronizerTimer_.start();
 
 	connect(&synchronizerTimer_, SIGNAL(timeout()), this, SLOT(synchronizerTimer_timeout()));
 
 	connect(&api_, SIGNAL(requestDone(const QJsonObject&, const QString&)), this, SLOT(api_requestDone(const QJsonObject&, const QString&)));
-
 
 	// Don't store password, store session ID
 	QString clientId = "B6E12222B6E12222";
@@ -91,21 +90,21 @@ void Application::api_requestDone(const QJsonObject& response, const QString& ta
 
 void Application::dispatcher_folderCreated(const QString &folderId) {
 	qDebug() << "Folder created" << folderId;
-	synchronizerTimer_.start(1000 * 3);
+	//synchronizerTimer_.start(1000 * 3);
 }
 
 void Application::dispatcher_folderUpdated(const QString &folderId) {
 	qDebug() << "Folder udpated" << folderId;
-	synchronizerTimer_.start(1000 * 3);
+	//synchronizerTimer_.start(1000 * 3);
 }
 
 void Application::dispatcher_folderDeleted(const QString &folderId) {
 	qDebug() << "Folder deleted" << folderId;
-	synchronizerTimer_.start(1000 * 3);
+	//synchronizerTimer_.start(1000 * 3);
 }
 
 void Application::synchronizerTimer_timeout() {
-	synchronizerTimer_.start(1000 * 60);
+	//synchronizerTimer_.start(1000 * 10);
 	synchronizer_.start();
 }
 
