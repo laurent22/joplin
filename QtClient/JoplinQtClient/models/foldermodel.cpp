@@ -155,14 +155,14 @@ void FolderModel::deleteData(const int index) {
 	Folder folder = atIndex(index);
 	if (!folder.dispose()) return;
 
-	cache_.clear();
+//	cache_.clear();
 
-	beginRemoveRows(QModelIndex(), index, index);
-	endRemoveRows();
+//	beginRemoveRows(QModelIndex(), index, index);
+//	endRemoveRows();
 
-	QVector<int> roles;
-	roles << Qt::DisplayRole;
-	emit dataChanged(this->index(0), this->index(rowCount() - 1), roles);
+//	QVector<int> roles;
+//	roles << Qt::DisplayRole;
+//	emit dataChanged(this->index(0), this->index(rowCount() - 1), roles);
 }
 
 // TODO: instead of clearing the whole cache every time, the individual items
@@ -172,9 +172,6 @@ void FolderModel::dispatcher_folderCreated(const QString &folderId) {
 	qDebug() << "FolderModel Folder created" << folderId;
 
 	cache_.clear();
-
-//	int index = idToIndex(folderId);
-//	Folder folder = atIndex(index);
 
 	int from = 0;
 	int to = rowCount() - 1;
@@ -198,11 +195,16 @@ void FolderModel::dispatcher_folderUpdated(const QString &folderId) {
 	QVector<int> roles;
 	roles << Qt::DisplayRole;
 	emit dataChanged(this->index(0), this->index(rowCount() - 1), roles);
-
-	//synchronizerTimer_.start(1000 * 3);
 }
 
 void FolderModel::dispatcher_folderDeleted(const QString &folderId) {
 	qDebug() << "FolderModel Folder deleted" << folderId;
-	//synchronizerTimer_.start(1000 * 3);
+
+	int index = idToIndex(folderId);
+	if (index < 0) return;
+
+	cache_.clear();
+
+	beginRemoveRows(QModelIndex(), index, index);
+	endRemoveRows();
 }

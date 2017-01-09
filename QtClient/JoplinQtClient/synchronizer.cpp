@@ -225,6 +225,12 @@ void Synchronizer::api_requestDone(const QJsonObject& response, const QString& t
 						folder.patchJsonObject(item);
 						folder.save(false);
 					}
+
+					if (operationType == "delete") {
+						Folder folder;
+						folder.load(itemId);
+						folder.dispose();
+					}
 				}
 
 				if (revId > maxRevId) maxRevId = revId;
