@@ -30,6 +30,7 @@ class Change extends BaseModel {
 		if ($hasMore) array_pop($changes);
 
 		$itemIdToChange = array();
+		$itemIdToChangedFields = array();
 		$createdItems = array();
 		$deletedItems = array();
 		foreach ($changes as $change) {
@@ -37,6 +38,9 @@ class Change extends BaseModel {
 				$createdItems[] = $change->item_id;
 			} else if ($change->type == Change::enumId('type', 'delete')) {
 				$deletedItems[] = $change->item_id;
+			} else { // Update
+				if (!isset($itemIdToChangedFields[$change->item_id])) $itemIdToChangedFields[$change->item_id] = array();
+				$itemIdToChangedFields[$change->item_id][] = $change->item_field;
 			}
 
 			$itemIdToChange[$change->item_id] = $change;
@@ -49,15 +53,19 @@ class Change extends BaseModel {
 				continue;
 			}
 
+			$syncItem = $change->toSyncItem();
+
 			if (in_array($itemId, $deletedItems)) {
 				// Item was deleted at some point - just return one 'delete' event
 				$change->type = Change::enumId('type', 'delete');
 			} else if (in_array($itemId, $createdItems)) {
 				// Item was created then updated - just return one 'create' event with the latest changes
 				$change->type = Change::enumId('type', 'create');
+			} else {
+				$syncItem['item_fields'] = $itemIdToChangedFields[$change->item_id];
 			}
 
-			$output[] = $change->toSyncItem();
+			$output[] = $syncItem;
 		}
 
 		// This is important so that the client knows that the last item in the list
@@ -73,13 +81,13 @@ class Change extends BaseModel {
 		);
 	}
 
-	public function toSyncItem() {
+	private function toSyncItem() {
 		return array(
 			'id' => (string)$this->id,
 			'type' => self::enumName('type', $this->type),
 			'item_id' => self::hex($this->item_id),
 			'item_type' => FolderItem::enumName('type', $this->item_type),
-			'item_field' => $this->item_field,
+			'item_fields' => array(), // This is populated by changesDoneAfterId()
 		);
 	}
 

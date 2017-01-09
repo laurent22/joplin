@@ -229,5 +229,27 @@ class ChangeTest extends BaseTestCase {
 			$this->assertEquals(1, $foundCount);
 		}
 	}
+
+	public function testChangedFields() {
+		$n1 = new Note();
+		$n1->fromPublicArray(array('body' => 'test'));
+		$n1->owner_id = $this->userId();
+		$n1->save();
+
+		$r = Change::changesDoneAfterId($this->userId(), $this->clientId(2), 0);
+		$lastId = $r['items'][0]['id'];
+
+		$n1->latitude = 1;
+		$n1->save();
+
+		$n1->longitude = 1;
+		$n1->save();
+
+		$r = Change::changesDoneAfterId($this->userId(), $this->clientId(2), $lastId);
+		$change = $r['items'][0];
+		$this->assertEquals(2, count($change['item_fields']));
+		$this->assertContains('latitude', $change['item_fields']);
+		$this->assertContains('longitude', $change['item_fields']);
+	}
 	
 }
