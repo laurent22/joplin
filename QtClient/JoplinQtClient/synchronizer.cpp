@@ -9,7 +9,7 @@ Synchronizer::Synchronizer(const QString &apiUrl, Database &database) : api_(api
 	qDebug() << api_.baseUrl();
 	state_ = Idle;
 	uploadsRemaining_ = 0;
-	downloadsRemaining_ = 0;
+	//downloadsRemaining_ = 0;
 	connect(&api_, SIGNAL(requestDone(QJsonObject,QString)), this, SLOT(api_requestDone(QJsonObject,QString)));
 }
 
@@ -52,12 +52,14 @@ void Synchronizer::checkNextState() {
 
 	    case DownloadingChanges:
 
-		    if (downloadsRemaining_ < 0) qCritical() << "Mismatch on download operations done" << downloadsRemaining_;
+		    switchState(Idle);
 
-			if (downloadsRemaining_ <= 0) {
-				downloadsRemaining_ = 0;
-				switchState(Idle);
-			}
+//		    if (downloadsRemaining_ < 0) qCritical() << "Mismatch on download operations done" << downloadsRemaining_;
+
+//			if (downloadsRemaining_ <= 0) {
+//				downloadsRemaining_ = 0;
+//				switchState(Idle);
+//			}
 		    break;
 
 	    case Idle:
@@ -200,48 +202,41 @@ void Synchronizer::api_requestDone(const QJsonObject& response, const QString& t
 
 	} else if (category == "download") {
 		if (action == "getSynchronizer") {
-			downloadsRemaining_ = 0;
 			QJsonArray items = response["items"].toArray();
-			foreach (QJsonValue item, items) {
-				QJsonObject obj = item.toObject();
+			QString maxRevId = "";
+			foreach (QJsonValue it, items) {
+				QJsonObject obj = it.toObject();
 				QString itemId = obj["item_id"].toString();
 				QString itemType = obj["item_type"].toString();
 				QString operationType = obj["type"].toString();
 				QString revId = obj["id"].toString();
+				QJsonObject item = obj["item"].toObject();
 
-				QString path = itemType + "s";
+				if (itemType == "folder") {
+					if (operationType == "create") {
+						Folder folder;
+						folder.loadJsonObject(item);
+						folder.save(false);
+					}
 
-				if (operationType == "create") {
-					api_.get(path + "/" + itemId, QUrlQuery(), QUrlQuery(), "download:createFolder:" + itemId + ":" + revId);
+					if (operationType == "update") {
+						Folder folder;
+						folder.load(itemId);
+						folder.patchJsonObject(item);
+						folder.save(false);
+					}
 				}
 
-				if (operationType == "update") {
-					//QUrlQuery data;
+				if (revId > maxRevId) maxRevId = revId;
+			}
 
-					api_.patch(path + "/" + itemId, QUrlQuery(), QUrlQuery(), "download:createFolder:" + itemId + ":" + revId);
-				}
-
-				// TODO: update, delete
-
-				downloadsRemaining_++;
+			if (maxRevId != "") {
+				Settings settings;
+				settings.setValue("lastRevId", maxRevId);
 			}
 
 			checkNextState();
 
-		} else {
-			downloadsRemaining_--;
-
-			Settings settings;
-
-			if (action == "createFolder") {
-				Folder folder;
-				folder.loadJsonObject(response);
-				folder.save(false);
-
-				//settings.setValue("lastRevId", arg2);
-			}
-
-			checkNextState();
 		}
 	} else {
 		qCritical() << "Invalid category" << category;

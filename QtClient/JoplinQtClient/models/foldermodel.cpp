@@ -47,9 +47,9 @@ bool FolderModel::setData(const QModelIndex &index, const QVariant &value, int r
 		if (!folder.save()) return false;
 		cache_.clear();
 
-		QVector<int> roles;
-		roles << Qt::DisplayRole;
-		emit dataChanged(this->index(0), this->index(rowCount() - 1), roles);
+//		QVector<int> roles;
+//		roles << Qt::DisplayRole;
+//		emit dataChanged(this->index(0), this->index(rowCount() - 1), roles);
 		return true;
 	}
 
@@ -165,6 +165,9 @@ void FolderModel::deleteData(const int index) {
 	emit dataChanged(this->index(0), this->index(rowCount() - 1), roles);
 }
 
+// TODO: instead of clearing the whole cache every time, the individual items
+// could be created/updated/deleted
+
 void FolderModel::dispatcher_folderCreated(const QString &folderId) {
 	qDebug() << "FolderModel Folder created" << folderId;
 
@@ -189,6 +192,13 @@ void FolderModel::dispatcher_folderCreated(const QString &folderId) {
 
 void FolderModel::dispatcher_folderUpdated(const QString &folderId) {
 	qDebug() << "FolderModel Folder udpated" << folderId;
+
+	cache_.clear();
+
+	QVector<int> roles;
+	roles << Qt::DisplayRole;
+	emit dataChanged(this->index(0), this->index(rowCount() - 1), roles);
+
 	//synchronizerTimer_.start(1000 * 3);
 }
 

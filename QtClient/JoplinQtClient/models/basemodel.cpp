@@ -51,6 +51,8 @@ bool BaseModel::load(const QString &id) {
 bool BaseModel::save(bool trackChanges) {
 	bool isNew = this->isNew();
 
+	qDebug() << "SAVING" << valuesToString();
+
 	if (!changedFields_.size() && !isNew) return true;
 
 	QStringList fields = changedFields();
@@ -64,7 +66,7 @@ bool BaseModel::save(bool trackChanges) {
 	// If it's a new entry and the ID is a UUID, we need to create this
 	// ID now. If the ID is an INT, it will be automatically set by
 	// SQLite.
-	if (isNew && primaryKeyIsUuid()) {
+	if (isNew && primaryKeyIsUuid() && !valueIsSet(primaryKey())) {
 		values[primaryKey()] = uuid::createUuid();
 	}
 
@@ -184,6 +186,7 @@ bool BaseModel::trackChanges() const {
 }
 
 bool BaseModel::isNew() const {
+	qDebug() << "EEEEEEEEEEEEEEEEEEEEEE" << isNew_ << primaryKey() << valueIsSet(primaryKey()) << values_["id"].toString();
 	if (isNew_ == 0) return false;
 	if (isNew_ == 1) return true;
 	return !valueIsSet(primaryKey());
@@ -259,10 +262,8 @@ void BaseModel::loadSqlQuery(const QSqlQuery &query) {
 		}
 
 		if (field.type == QMetaType::QString) {
-			//values_.insert(field.name, Value(query.value(idx).toString()));
 			setValue(field.name, query.value(idx).toString());
 		} else if (field.type == QMetaType::Int) {
-			//values_.insert(field.name, Value(query.value(idx).toInt()));
 			setValue(field.name, query.value(idx).toInt());
 		} else {
 			qCritical() << "Unsupported value type" << field.name;
@@ -284,18 +285,19 @@ void BaseModel::loadJsonObject(const QJsonObject &jsonObject) {
 	QVector<BaseModel::Field> fields = BaseModel::tableFields(table());
 
 	foreach (BaseModel::Field field, fields) {
-		if (field.type == QMetaType::QString) {
-			//values_.insert(field.name, Value(jsonObject[field.name].toString()));
-			setValue(field.name, jsonObject[field.name].toString());
-		} else if (field.type == QMetaType::Int) {
-			//values_.insert(field.name, Value(jsonObject[field.name].toInt()));
-			setValue(field.name, jsonObject[field.name].toInt());
-		} else {
-			qCritical() << "Unsupported value type" << field.name;
-		}
+		setValue(field.name, jsonObject[field.name], field.type);
 	}
 
 	isNew_ = 1;
+}
+
+void BaseModel::patchJsonObject(const QJsonObject &jsonObject) {
+	QVector<BaseModel::Field> fields = BaseModel::tableFields(table());
+
+	foreach (BaseModel::Field field, fields) {
+		if (!jsonObject.contains(field.name)) continue;
+		setValue(field.name, jsonObject[field.name], field.type);
+	}
 }
 
 QHash<QString, BaseModel::Value> BaseModel::values() const {
@@ -330,9 +332,28 @@ void BaseModel::setValue(const QString &name, int value) {
 	setValue(name, Value(value));
 }
 
+void BaseModel::setValue(const QString &name, const QJsonValue &value, QMetaType::Type type) {
+	if (type == QMetaType::QString) {
+		setValue(name, value.toString());
+	} else if (type == QMetaType::Int) {
+		setValue(name, value.toInt());
+	} else {
+		qCritical() << "Unsupported value type" << name << type;
+	}
+}
+
 BaseModel::Value BaseModel::id() const {
 	if (!valueIsSet(primaryKey())) return QVariant();
 	return value(primaryKey());
+}
+
+QString BaseModel::valuesToString() const {
+	QString s;
+	for (QHash<QString, Value>::const_iterator it = values_.begin(); it != values_.end(); ++it) {
+		if (s != "") s += "\n";
+		s += it.key() + " = " + it.value().toString();
+	}
+	return s;
 }
 
 QString BaseModel::tableName(Table t) {

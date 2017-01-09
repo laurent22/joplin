@@ -60,6 +60,7 @@ public:
 
 	void loadSqlQuery(const QSqlQuery& query);
 	void loadJsonObject(const QJsonObject& jsonObject);
+	void patchJsonObject(const QJsonObject& jsonObject);
 	QHash<QString, Value> values() const;
 	Value value(const QString& name) const;
 	bool valueIsSet(const QString& name) const;
@@ -67,7 +68,9 @@ public:
 	void setValue(const QString& name, const QVariant& value);
 	void setValue(const QString& name, const QString& value);
 	void setValue(const QString& name, int value);
+	void setValue(const QString& name, const QJsonValue& value, QMetaType::Type type);
 	Value id() const;
+	QString valuesToString() const;
 
 	static QString tableName(Table t);
 
