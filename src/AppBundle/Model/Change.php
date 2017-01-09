@@ -53,16 +53,23 @@ class Change extends BaseModel {
 				continue;
 			}
 
-			$syncItem = $change->toSyncItem();
+			$syncItem = array(
+				'id' => (string)$change->id,
+				'type' => self::enumName('type', $change->type),
+				'item_id' => self::hex($change->item_id),
+				'item_type' => FolderItem::enumName('type', $change->item_type),
+			);
 
 			if (in_array($itemId, $deletedItems)) {
 				// Item was deleted at some point - just return one 'delete' event
-				$change->type = Change::enumId('type', 'delete');
+				$syncItem['type'] = 'delete';
 			} else if (in_array($itemId, $createdItems)) {
 				// Item was created then updated - just return one 'create' event with the latest changes
-				$change->type = Change::enumId('type', 'create');
+				$syncItem['type'] = 'create';
+				$syncItem['item'] = self::requireItemById($change->item_type, $change->item_id);
 			} else {
 				$syncItem['item_fields'] = $itemIdToChangedFields[$change->item_id];
+				$syncItem['item'] = self::requireItemById($change->item_type, $change->item_id);
 			}
 
 			$output[] = $syncItem;
@@ -75,20 +82,31 @@ class Change extends BaseModel {
 			return strnatcmp($a['id'], $b['id']);
 		});
 
+		foreach ($output as $k => $syncItem) {
+			if ($syncItem['item']) {
+				$item = $syncItem['item']->toPublicArray();
+				if ($syncItem['type'] == 'update') {
+					foreach ($item as $field => $value) {
+						if (in_array($field, $syncItem['item_fields'])) continue;
+						unset($item[$field]);
+					}
+					unset($syncItem['item_fields']);
+				}
+				$syncItem['item'] = $item;
+				$output[$k] = $syncItem;
+			}
+		}
+
 		return array(
 			'has_more' => $hasMore,
 			'items' => $output,
 		);
 	}
 
-	private function toSyncItem() {
-		return array(
-			'id' => (string)$this->id,
-			'type' => self::enumName('type', $this->type),
-			'item_id' => self::hex($this->item_id),
-			'item_type' => FolderItem::enumName('type', $this->item_type),
-			'item_fields' => array(), // This is populated by changesDoneAfterId()
-		);
+	static private function requireItemById($itemTypeId, $itemId) {
+		$item = BaseItem::byId($itemTypeId, $itemId);
+		if (!$item) throw new \Exception('No such item: ' . $itemTypeId . ' ' . $itemId);
+		return $item;
 	}
 
 	static public function itemFieldHistory($itemId, $itemField, $toId = null) {

@@ -230,6 +230,7 @@ class ChangeTest extends BaseTestCase {
 		}
 	}
 
+	// Checks that when changing the fields of an object, the synchronizer returns the right fields.
 	public function testChangedFields() {
 		$n1 = new Note();
 		$n1->fromPublicArray(array('body' => 'test'));
@@ -247,9 +248,9 @@ class ChangeTest extends BaseTestCase {
 
 		$r = Change::changesDoneAfterId($this->userId(), $this->clientId(2), $lastId);
 		$change = $r['items'][0];
-		$this->assertEquals(2, count($change['item_fields']));
-		$this->assertContains('latitude', $change['item_fields']);
-		$this->assertContains('longitude', $change['item_fields']);
+		$this->assertEquals(2, count($change['item']));
+		$this->assertEquals(1, $change['item']['latitude']);
+		$this->assertEquals(1, $change['item']['longitude']);
 	}
 	
 }
