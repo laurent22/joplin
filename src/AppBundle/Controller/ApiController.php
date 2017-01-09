@@ -47,14 +47,19 @@ abstract class ApiController extends Controller {
 
 		$s = $this->session();
 
-		// TODO: find less hacky way to get request path
+		// TODO: find less hacky way to get request path and method
 		$requestPath = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
 		$requestPath = ltrim($requestPath, '/');
 		$requestPath = rtrim($requestPath, '?');
+		$method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
+
+		$sessionRequired = true;
+		if ($method == 'POST' && $requestPath == 'sessions') $sessionRequired = false;
+		if ($method == 'POST' && $requestPath == 'users') $sessionRequired = false;
 
 		// TODO: to keep it simple, only respond to logged in users, but in theory some data
 		// could be public.
-		if ($requestPath != 'sessions' && (!$s || !$this->user())) throw new UnauthorizedException('A session and user are required');
+		if ($sessionRequired && (!$s || !$this->user())) throw new UnauthorizedException('A session and user are required');
 
 		BaseModel::setClientId($s ? $s->client_id : 0);
 	}

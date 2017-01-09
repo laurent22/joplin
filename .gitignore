@@ -1,4 +1,6 @@
 /app/config/parameters.yml
+/app/config/parameters_dev.yml
+/app/config/parameters_prod.yml
 /build/
 /phpunit.xml
 /var/*
@@ -26,3 +28,5 @@ app/data/uploads/
 !app/data/uploads/.gitkeep
 sparse_test.php
 INFO.md
+/web/env.php
+sync_staging.sh

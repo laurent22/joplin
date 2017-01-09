@@ -83,7 +83,7 @@ class Change extends BaseModel {
 		});
 
 		foreach ($output as $k => $syncItem) {
-			if ($syncItem['item']) {
+			if (isset($syncItem['item'])) {
 				$item = $syncItem['item']->toPublicArray();
 				if ($syncItem['type'] == 'update') {
 					foreach ($item as $field => $value) {
