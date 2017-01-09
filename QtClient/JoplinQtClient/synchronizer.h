@@ -28,7 +28,8 @@ private:
 	SynchronizationState state_;
 	int uploadsRemaining_;
 	int downloadsRemaining_;
-	void downloadChanges();
+	void checkNextState();
+	void switchState(SynchronizationState state);
 
 public slots:
 

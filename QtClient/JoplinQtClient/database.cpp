@@ -19,6 +19,9 @@ void Database::initialize(const QString &path) {
 		qDebug() << "Database: connection ok";
 	}
 
+//	execQuery("DELETE FROM folders");
+//	execQuery("DELETE FROM settings");
+
 	upgrade();
 }
 
