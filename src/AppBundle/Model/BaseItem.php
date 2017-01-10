@@ -30,13 +30,13 @@ class BaseItem extends BaseModel {
 		return self::enumId('type', $typeName);
 	}
 
-	static public function byId($itemTypeId, $itemId) {
+	static public function byTypeAndId($itemTypeId, $itemId) {
 		if ($itemTypeId == BaseItem::enumId('type', 'folder')) {
-			return Folder::where('id', '=', $itemId)->first();
+			return Folder::find($itemId);
 		} else if ($itemTypeId == BaseItem::enumId('type', 'note')) {
-			return Note::where('id', '=', $itemId)->first();
+			return Note::find($itemId);
 		} else if ($itemTypeId == BaseItem::enumId('type', 'tag')) {
-			return Tag::where('id', '=', $itemId)->first();
+			return Tag::find($itemId);
 		}
 		
 		throw new \Exception('Unsupported item type: ' . $itemTypeId);

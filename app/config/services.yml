@@ -7,8 +7,7 @@ services:
 
     app.eloquent:
         class: AppBundle\Eloquent
-        # arguments: [%kernel.environment%, '@app.mime_types', '@app.paths']
-        arguments: [%database%, '@app.mime_types', '@app.paths']
+        arguments: [%database%, '@app.mime_types', '@app.paths', '@app.cache']
 
     twig.exception_listener:
         class: stdObject
@@ -20,3 +19,7 @@ services:
     app.mime_types:
         class: AppBundle\MimeTypes
         arguments: ['@app.paths']
+
+    app.cache:
+        class: AppBundle\Cache
+        arguments: [%kernel.cache_dir%]

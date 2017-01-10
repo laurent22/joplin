@@ -36,7 +36,6 @@ class NoteTest extends BaseTestCase {
 
 		$this->assertEquals('the title', $b['title']);
 		$this->assertEquals('the body', $b['body']);
-		$this->assertArrayHasKey('rev_id', $b);
 	}
 	
 }

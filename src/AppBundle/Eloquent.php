@@ -6,7 +6,7 @@ class Eloquent {
 
 	private $capsule_ = null;
 
-	public function __construct($dbParams, $mimeTypes, $paths) {
+	public function __construct($dbParams, $mimeTypes, $paths, $cache) {
 		$this->capsule_ = new \Illuminate\Database\Capsule\Manager();
 
 		$dbParamsDefaults = array(
@@ -23,8 +23,9 @@ class Eloquent {
 
 		// In order to keep things lightweight, the models aren't part of Symfony dependency
 		// injection framework, so any service required by a model needs to be injected here. 
-		Model\File::$mimeTypes = $mimeTypes;
-		Model\File::$paths = $paths;
+		Model\File::$mimeTypes_ = $mimeTypes;
+		Model\File::$paths_ = $paths;
+		Model\BaseModel::$cache_ = $cache;
 	}
 
 	public function connection() {

@@ -20,11 +20,11 @@ class Change extends BaseModel {
 
 		$limit = 100;
 		$changes = self::where('id', '>', $fromChangeId)
-		             ->where('user_id', '=', $userId)
-		             ->where('client_id', '!=', $clientId)
-		             ->orderBy('id')
-		             ->limit($limit + 1)
-		             ->get();
+		               ->where('user_id', '=', $userId)
+		               ->where('client_id', '!=', $clientId)
+		               ->orderBy('id')
+		               ->limit($limit + 1)
+		               ->get();
 
 		$hasMore = $limit < count($changes);
 		if ($hasMore) array_pop($changes);
@@ -104,7 +104,7 @@ class Change extends BaseModel {
 	}
 
 	static private function requireItemById($itemTypeId, $itemId) {
-		$item = BaseItem::byId($itemTypeId, $itemId);
+		$item = BaseItem::byTypeAndId($itemTypeId, $itemId);
 		if (!$item) throw new \Exception('No such item: ' . $itemTypeId . ' ' . $itemId);
 		return $item;
 	}
@@ -117,10 +117,9 @@ class Change extends BaseModel {
 		return $query->get();
 	}
 
-	static public function fullFieldText($itemId, $itemField, $toId = null, $returnRevId = false) {
+	static public function fullFieldText($itemId, $itemField, $toId = null) {
 		$output = '';
 		$changes = self::itemFieldHistory($itemId, $itemField, $toId);
-		$revId = 0;
 		for ($i = 0; $i < count($changes); $i++) {
 			$change = $changes[$i];
 			if (!empty($change->delta)) {
@@ -131,11 +130,9 @@ class Change extends BaseModel {
 				}
 				$output = $result[0];
 			}
-
-			$revId = $change->id;
 		}
 
-		return $returnRevId ? array('text' => $output, 'revId' => $revId) : $output;
+		return $output;
 	}
 
 	public function createDelta($newText) {

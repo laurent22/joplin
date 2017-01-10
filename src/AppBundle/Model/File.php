@@ -4,8 +4,8 @@ namespace AppBundle\Model;
 
 class File extends BaseModel {
 
-	static public $mimeTypes = null;
-	static public $paths = null;
+	static public $mimeTypes_ = null;
+	static public $paths_ = null;
 
 	public $useUuid = true;
 	public $incrementing = false;

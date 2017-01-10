@@ -8,6 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\ApiController;
 use AppBundle\Model\Folder;
 
+
+
+use AppBundle\Model\BaseItem;
+
 class FoldersController extends ApiController {
 
 	/**
@@ -33,7 +37,7 @@ class FoldersController extends ApiController {
 	 * @Route("/folders/{id}")
 	 */
 	public function oneAction($id, Request $request) {
-		$folder = Folder::find(Folder::unhex($id));
+		$folder = Folder::byId(Folder::unhex($id));
 		if (!$folder && !$request->isMethod('PUT')) return static::errorResponse('Not found', 0, 404);
 
 		if ($request->isMethod('GET')) {
@@ -68,7 +72,7 @@ class FoldersController extends ApiController {
 	 * @Route("/folders/{id}/notes")
 	 */
 	public function linkAction($id, Request $request) {
-		$folder = Folder::find(Folder::unhex($id));
+		$folder = Folder::byId(Folder::unhex($id));
 		if (!$folder) return static::errorResponse('Not found', 0, 404);
 
 		if ($request->isMethod('GET')) {

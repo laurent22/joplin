@@ -69,7 +69,7 @@ class Tag extends BaseItem {
 		$output = array();
 		$taggedItems = Tagged_item::where('tag_id', '=', $this->id)->get();
 		foreach ($taggedItems as $taggedItem) {
-			$item = BaseItem::byId($taggedItem->item_type, $taggedItem->item_id);
+			$item = BaseItem::byTypeAndId($taggedItem->item_type, $taggedItem->item_id);
 			$output[] = $item;
 		}
 		return $output;

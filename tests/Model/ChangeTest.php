@@ -127,25 +127,6 @@ class ChangeTest extends BaseTestCase {
 		$this->assertEquals($r, 'cd CLIENT1 efgh ijkl FROMCLIENT2');
 	}
 
-	public function testRevId() {
-		$n = new Note();
-		$n->setDiffableField('body', 'abcd efgh');
-		$n->save();
-
-		$noteId = $n->id;
-
-		$n = Note::find($noteId);
-		$d = $n->toPublicArray();
-		$this->assertEquals(1, $d['rev_id']);
-
-		$n->setDiffableField('body', '123456');
-		$n->save();
-
-		$n = Note::find($noteId);
-		$d = $n->toPublicArray();
-		$this->assertEquals(2, $d['rev_id']);
-	}
-
 	public function testListChanges() {
 		$n1 = new Note();
 		$n1->fromPublicArray(array('body' => 'test'));
