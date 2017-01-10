@@ -23,7 +23,8 @@ public:
 		QBuffer* buffer;
 	};
 
-	WebApi(const QString& baseUrl);
+	WebApi();
+	void setBaseUrl(const QString& v);
 	QString baseUrl() const;
 	void execRequest(HttpMethod method, const QString& path,const QUrlQuery& query = QUrlQuery(), const QUrlQuery& data = QUrlQuery(), const QString& tag = "");
 	void post(const QString& path,const QUrlQuery& query = QUrlQuery(), const QUrlQuery& data = QUrlQuery(), const QString& tag = "");

@@ -16,7 +16,7 @@ public:
 
 	enum SynchronizationState { Idle, UploadingChanges, DownloadingChanges };
 
-	Synchronizer(const QString& apiUrl, Database& database);
+	Synchronizer(Database& database);
 	void start();
 	void setSessionId(const QString& v);
 

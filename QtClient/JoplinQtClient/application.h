@@ -10,6 +10,7 @@
 #include "models/qmlnote.h"
 #include "webapi.h"
 #include "synchronizer.h"
+#include "window.h"
 
 namespace jop {
 
@@ -20,10 +21,12 @@ class Application : public QGuiApplication {
 public:
 
 	Application(int &argc, char **argv);
+	void login(const QString& email, const QString& password);
+	QString clientId() const;
 
 private:
 
-	QQuickView view_;
+	Window view_;
 	Database& db_;
 	NoteCollection noteCollection_;
 	FolderModel folderModel_;
@@ -50,6 +53,7 @@ public slots:
 	void dispatcher_folderCreated(const QString& folderId);
 	void dispatcher_folderUpdated(const QString& folderId);
 	void dispatcher_folderDeleted(const QString& folderId);
+	void dispatcher_loginClicked(const QString &domain, const QString &email, const QString &password);
 
 	void synchronizerTimer_timeout();
 

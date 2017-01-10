@@ -21,7 +21,8 @@ SOURCES += \
     models/change.cpp \
     models/basemodel.cpp \
     models/setting.cpp \
-    paths.cpp
+    paths.cpp \
+    window.cpp
 
 RESOURCES += qml.qrc \
     database.qrc
@@ -57,7 +58,8 @@ HEADERS += \
     enum.h \
     models/setting.h \
     paths.h \
-    constants.h
+    constants.h \
+    window.h
 
 DISTFILES += \
     AndroidManifest.xml

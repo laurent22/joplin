@@ -5,8 +5,7 @@
 
 using namespace jop;
 
-Synchronizer::Synchronizer(const QString &apiUrl, Database &database) : api_(apiUrl), db_(database) {
-	qDebug() << api_.baseUrl();
+Synchronizer::Synchronizer(Database &database) : db_(database) {
 	state_ = Idle;
 	uploadsRemaining_ = 0;
 	connect(&api_, SIGNAL(requestDone(QJsonObject,QString)), this, SLOT(api_requestDone(QJsonObject,QString)));

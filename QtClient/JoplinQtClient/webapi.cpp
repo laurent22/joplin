@@ -4,8 +4,8 @@
 
 using namespace jop;
 
-WebApi::WebApi(const QString &baseUrl) {
-	baseUrl_ = baseUrl;
+WebApi::WebApi() {
+	baseUrl_ = "";
 	sessionId_ = "";
 	connect(&manager_, SIGNAL(finished(QNetworkReply*)), this, SLOT(request_finished(QNetworkReply*)));
 }
@@ -15,6 +15,14 @@ QString WebApi::baseUrl() const {
 }
 
 void WebApi::execRequest(HttpMethod method, const QString &path, const QUrlQuery &query, const QUrlQuery &data, const QString& tag) {
+	if (baseUrl() == "") {
+		qCritical() << "Trying to execute request before base URL has been set";
+		QJsonObject obj;
+		obj["error"] = "Trying to execute request before base URL has been set";
+		emit requestDone(obj, tag);
+		return;
+	}
+
 	QueuedRequest r;
 	r.method = method;
 	r.path = path;
@@ -135,4 +143,8 @@ void WebApi::request_finished(QNetworkReply *reply) {
 
 void WebApi::request_error(QNetworkReply::NetworkError e) {
 	qDebug() << "Network error" << e;
+}
+
+void jop::WebApi::setBaseUrl(const QString &v) {
+	baseUrl_ = v;
 }

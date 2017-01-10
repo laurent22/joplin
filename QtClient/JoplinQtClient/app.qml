@@ -12,17 +12,49 @@ Item {
 	signal addNoteButtonClicked()
 	signal addFolderButtonClicked()
 	signal syncButtonClicked()
+	signal loginButtonClicked()
 	property alias currentFolderIndex: mainPage.currentFolderIndex
 	property alias currentNoteIndex: mainPage.currentNoteIndex
+
+	property var pages : ({})
+
+	function pageByName(pageName) {
+		if (root.pages[pageName]) return root.pages[pageName];
+
+		var page = null;
+		if (pageName === "main") {
+			page = mainPage
+		} else if (pageName === "login") {
+			var s = '
+                LoginPage {
+                    id: loginPage
+                    anchors.fill: parent
+                    visible: false
+                    appRoot: root
+                }';
+			page = Qt.createQmlObject(s, root);
+		}
+
+		root.pages[pageName] = page;
+
+		return page;
+	}
+
+	function showPage(pageName) {
+		for (var n in root.pages) {
+			root.pages[n].visible = false;
+		}
+
+		print("Switching to page: " + pageName);
+		var page = pageByName(pageName);
+		page.visible = true;
+	}
 
 	MainPage {
 		id: mainPage
 		anchors.fill: parent
 		appRoot: root
-	}
-
-	LoginPage {
-
+		visible: false
 	}
 
 }

@@ -3,8 +3,19 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 
 Item {
+	id: root
 	width: 400
 	height: 400
+	signal loginButtonClicked()
+	property alias apiBaseUrl: apiBaseUrlTF.text
+	property alias email: emailTF.text
+	property alias password: passwordTF.text
+
+	Rectangle {
+		id: rectangle2
+		color: "#ffffff"
+		anchors.fill: parent
+	}
 
 	GridLayout {
 		id: gridLayout1
@@ -15,11 +26,12 @@ Item {
 
 		Label {
 			id: label1
-			text: qsTr("Domain")
+			text: qsTr("API base URL")
 		}
 
 		TextField {
-			id: textField1
+			id: apiBaseUrlTF
+			text: "http://joplin.local"
 			Layout.fillWidth: true
 		}
 
@@ -29,7 +41,8 @@ Item {
 		}
 
 		TextField {
-			id: textField2
+			id: emailTF
+			text: "laurent@cozic.net"
 			Layout.fillWidth: true
 		}
 
@@ -39,12 +52,13 @@ Item {
 		}
 
 		TextField {
-			id: textField3
+			id: passwordTF
+			text: "12345678"
 			Layout.fillWidth: true
 		}
 
 		Button {
-			id: button1
+			id: loginButton
 			text: qsTr("Login")
 			Layout.fillWidth: true
 			Layout.columnSpan: 2
@@ -65,4 +79,10 @@ Item {
 
 
 	}
+
+ Connections {
+	 target: loginButton
+	 onClicked: root.loginButtonClicked()
+ }
+
 }

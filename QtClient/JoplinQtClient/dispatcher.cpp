@@ -16,6 +16,22 @@ void Dispatcher::emitFolderDeleted(const QString &folderId) {
 	emit folderDeleted(folderId);
 }
 
+void Dispatcher::emitLoginClicked(const QString &apiBaseUrl, const QString &email, const QString &password) {
+	emit loginClicked(apiBaseUrl, email, password);
+}
+
+void Dispatcher::emitLoginStarted() {
+	emit loginStarted();
+}
+
+void Dispatcher::emitLoginFailed() {
+	emit loginFailed();
+}
+
+void Dispatcher::emitLoginSuccess() {
+	emit loginSuccess();
+}
+
 Dispatcher dispatcherInstance_;
 
 Dispatcher& jop::dispatcher() {
