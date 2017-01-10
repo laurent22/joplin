@@ -11,6 +11,7 @@ Item {
 	signal currentNoteChanged()
 	signal addNoteButtonClicked()
 	signal addFolderButtonClicked()
+	signal syncButtonClicked()
 	property alias currentFolderIndex: folderList.currentIndex
 	property alias currentNoteIndex: noteList.currentIndex
 
@@ -89,6 +90,14 @@ Item {
 			folderList.startEditing(folderList.model.rowCount() - 1);
 		}
 		onAddNoteButtonClicked: root.addNoteButtonClicked()
+	}
+
+	Button {
+		id: syncButton
+		text: "Sync"
+		anchors.right: parent.right
+		anchors.top: parent.top
+		onClicked: root.syncButtonClicked()
 	}
 
 }

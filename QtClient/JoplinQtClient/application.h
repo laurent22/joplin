@@ -43,6 +43,8 @@ public slots:
 	void view_currentNoteChanged();
 	void view_addNoteButtonClicked();
 	void view_addFolderButtonClicked();
+	void view_syncButtonClicked();
+
 	void api_requestDone(const QJsonObject& response, const QString& tag);
 
 	void dispatcher_folderCreated(const QString& folderId);

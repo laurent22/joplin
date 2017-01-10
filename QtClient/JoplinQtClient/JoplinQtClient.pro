@@ -56,7 +56,8 @@ HEADERS += \
     models/basemodel.h \
     enum.h \
     models/setting.h \
-    paths.h
+    paths.h \
+    constants.h
 
 DISTFILES += \
     AndroidManifest.xml

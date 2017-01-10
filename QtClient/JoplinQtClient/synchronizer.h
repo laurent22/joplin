@@ -27,7 +27,6 @@ private:
 	Database& db_;
 	SynchronizationState state_;
 	int uploadsRemaining_;
-	int downloadsRemaining_;
 	void checkNextState();
 	void switchState(SynchronizationState state);
 

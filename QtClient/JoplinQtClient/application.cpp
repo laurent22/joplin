@@ -9,13 +9,14 @@
 #include "uuid.h"
 #include "dispatcher.h"
 #include "paths.h"
+#include "constants.h"
 
 using namespace jop;
 
 Application::Application(int &argc, char **argv) :
     QGuiApplication(argc, argv),
     db_(jop::db()),
-    api_("http://joplin.local"),
+    api_(jop::API_BASE_URL),
     //api_("https://joplin.cozic.net"),
     synchronizer_(api_.baseUrl(), db_),
     folderModel_(db_)
@@ -25,9 +26,9 @@ Application::Application(int &argc, char **argv) :
 	// This is linked to where the QSettings will be saved. In other words,
 	// if these values are changed, the settings will be reset and saved
 	// somewhere else.
-	QCoreApplication::setOrganizationName("Cozic");
-	QCoreApplication::setOrganizationDomain("cozic.net");
-	QCoreApplication::setApplicationName("Joplin");
+	QCoreApplication::setOrganizationName(jop::ORG_NAME);
+	QCoreApplication::setOrganizationDomain(jop::ORG_DOMAIN);
+	QCoreApplication::setApplicationName(jop::APP_NAME);
 
 	qDebug() << "Config dir:" << paths::configDir();
 	qDebug() << "Database file:" << paths::databaseFile();
@@ -51,6 +52,7 @@ Application::Application(int &argc, char **argv) :
 	connect(rootObject, SIGNAL(currentFolderChanged()), this, SLOT(view_currentFolderChanged()));
 	connect(rootObject, SIGNAL(currentNoteChanged()), this, SLOT(view_currentNoteChanged()));
 	connect(rootObject, SIGNAL(addFolderButtonClicked()), this, SLOT(view_addFolderButtonClicked()));
+	connect(rootObject, SIGNAL(syncButtonClicked()), this, SLOT(view_syncButtonClicked()));
 
 	connect(&dispatcher(), SIGNAL(folderCreated(QString)), this, SLOT(dispatcher_folderCreated(QString)));
 	connect(&dispatcher(), SIGNAL(folderUpdated(QString)), this, SLOT(dispatcher_folderUpdated(QString)));
@@ -58,7 +60,7 @@ Application::Application(int &argc, char **argv) :
 
 	view_.show();
 
-	synchronizerTimer_.setInterval(1000 * 10);
+	synchronizerTimer_.setInterval(1000 * 120);
 	synchronizerTimer_.start();
 
 	connect(&synchronizerTimer_, SIGNAL(timeout()), this, SLOT(synchronizerTimer_timeout()));
@@ -167,4 +169,8 @@ void Application::view_addFolderButtonClicked() {
 //	emit jop::dispatcher().folderCreated("test");
 
 	//qDebug() << "Added" << q.lastInsertId().toString();
+}
+
+void Application::view_syncButtonClicked() {
+	synchronizer_.start();
 }

@@ -9,7 +9,6 @@ Synchronizer::Synchronizer(const QString &apiUrl, Database &database) : api_(api
 	qDebug() << api_.baseUrl();
 	state_ = Idle;
 	uploadsRemaining_ = 0;
-	//downloadsRemaining_ = 0;
 	connect(&api_, SIGNAL(requestDone(QJsonObject,QString)), this, SLOT(api_requestDone(QJsonObject,QString)));
 }
 
@@ -53,13 +52,6 @@ void Synchronizer::checkNextState() {
 	    case DownloadingChanges:
 
 		    switchState(Idle);
-
-//		    if (downloadsRemaining_ < 0) qCritical() << "Mismatch on download operations done" << downloadsRemaining_;
-
-//			if (downloadsRemaining_ <= 0) {
-//				downloadsRemaining_ = 0;
-//				switchState(Idle);
-//			}
 		    break;
 
 	    case Idle:
