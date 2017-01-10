@@ -37,6 +37,11 @@ Application::Application(int &argc, char **argv) :
 
 	Settings settings;
 
+	if (!settings.contains("clientId")) {
+		// Client ID should be unique per instance of a program
+		settings.setValue("clientId", uuid::createUuid());
+	}
+
 	view_.setResizeMode(QQuickView::SizeRootObjectToView);
 	QQmlContext *ctxt = view_.rootContext();
 	ctxt->setContextProperty("folderListModel", &folderModel_);
@@ -88,15 +93,12 @@ Application::Application(int &argc, char **argv) :
 }
 
 void Application::login(const QString &email, const QString &password) {
+	Settings settings;
 	QUrlQuery postData;
 	postData.addQueryItem("email", email);
 	postData.addQueryItem("password", password);
-	postData.addQueryItem("client_id", clientId());
+	postData.addQueryItem("client_id", settings.value("clientId").toString());
 	api_.post("sessions", QUrlQuery(), postData, "getSession");
-}
-
-QString Application::clientId() const {
-	return "2222222222222222";
 }
 
 void Application::api_requestDone(const QJsonObject& response, const QString& tag) {

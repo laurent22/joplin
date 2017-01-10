@@ -22,7 +22,6 @@ public:
 
 	Application(int &argc, char **argv);
 	void login(const QString& email, const QString& password);
-	QString clientId() const;
 
 private:
 
