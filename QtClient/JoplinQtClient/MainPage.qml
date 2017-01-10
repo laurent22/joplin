@@ -4,14 +4,8 @@ import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.0
 
 Item {
-	id: root
-	width: 800
-	height: 600
-	signal currentFolderChanged()
-	signal currentNoteChanged()
-	signal addNoteButtonClicked()
-	signal addFolderButtonClicked()
-	signal syncButtonClicked()
+
+	property Item appRoot
 	property alias currentFolderIndex: folderList.currentIndex
 	property alias currentNoteIndex: noteList.currentIndex
 
@@ -31,7 +25,7 @@ Item {
 			Layout.minimumHeight: 150
 
 			onCurrentItemChanged: {
-				root.currentFolderChanged()
+				appRoot.currentFolderChanged()
 			}
 
 			onEditingAccepted: function(index, text) {
@@ -66,7 +60,7 @@ Item {
 			Layout.preferredHeight: 100
 
 			onCurrentItemChanged: {
-				root.currentNoteChanged()
+				appRoot.currentNoteChanged()
 			}
 		}
 
@@ -89,7 +83,7 @@ Item {
 			folderList.model.showVirtualItem();
 			folderList.startEditing(folderList.model.rowCount() - 1);
 		}
-		onAddNoteButtonClicked: root.addNoteButtonClicked()
+		onAddNoteButtonClicked: appRoot.addNoteButtonClicked()
 	}
 
 	Button {
@@ -97,7 +91,7 @@ Item {
 		text: "Sync"
 		anchors.right: parent.right
 		anchors.top: parent.top
-		onClicked: root.syncButtonClicked()
+		onClicked: appRoot.syncButtonClicked()
 	}
 
 }

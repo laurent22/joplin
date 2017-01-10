@@ -17,7 +17,6 @@ Application::Application(int &argc, char **argv) :
     QGuiApplication(argc, argv),
     db_(jop::db()),
     api_(jop::API_BASE_URL),
-    //api_("https://joplin.cozic.net"),
     synchronizer_(api_.baseUrl(), db_),
     folderModel_(db_)
 
@@ -45,7 +44,7 @@ Application::Application(int &argc, char **argv) :
 	ctxt->setContextProperty("noteListModel", &noteModel_);
 	ctxt->setContextProperty("noteModel", &selectedQmlNote_);
 
-	view_.setSource(QUrl("qrc:/main.qml"));
+	view_.setSource(QUrl("qrc:/app.qml"));
 
 	QObject* rootObject = (QObject*)view_.rootObject();
 
@@ -68,17 +67,17 @@ Application::Application(int &argc, char **argv) :
 	connect(&api_, SIGNAL(requestDone(const QJsonObject&, const QString&)), this, SLOT(api_requestDone(const QJsonObject&, const QString&)));
 
 	// Don't store password, store session ID
-	QString clientId = "B6E12222B6E12222";
-	if (!settings.contains("user.email")) {
-		settings.setValue("user.email", "laurent@cozic.net");
-		settings.setValue("user.password", "12345678");
-	}
+//	QString clientId = "B6E12222B6E12222";
+//	if (!settings.contains("user.email")) {
+//		settings.setValue("user.email", "laurent@cozic.net");
+//		settings.setValue("user.password", "12345678");
+//	}
 
-	QUrlQuery postData;
-	postData.addQueryItem("email", settings.value("user.email").toString());
-	postData.addQueryItem("password", settings.value("user.password").toString());
-	postData.addQueryItem("client_id", clientId);
-	api_.post("sessions", QUrlQuery(), postData, "getSession");
+//	QUrlQuery postData;
+//	postData.addQueryItem("email", settings.value("user.email").toString());
+//	postData.addQueryItem("password", settings.value("user.password").toString());
+//	postData.addQueryItem("client_id", clientId);
+//	api_.post("sessions", QUrlQuery(), postData, "getSession");
 }
 
 void Application::api_requestDone(const QJsonObject& response, const QString& tag) {

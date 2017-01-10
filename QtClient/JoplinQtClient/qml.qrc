@@ -1,10 +1,13 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
+        <file>app.qml</file>
         <file>FolderList.qml</file>
         <file>NoteList.qml</file>
         <file>NoteEditor.qml</file>
         <file>AddButton.qml</file>
         <file>EditableListItem.qml</file>
+        <file>LoginPage.qml</file>
+        <file>LoginPageForm.ui.qml</file>
+        <file>MainPage.qml</file>
     </qresource>
 </RCC>
