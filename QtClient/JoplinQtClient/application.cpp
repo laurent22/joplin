@@ -8,6 +8,7 @@
 #include "settings.h"
 #include "uuid.h"
 #include "dispatcher.h"
+#include "paths.h"
 
 using namespace jop;
 
@@ -15,13 +16,11 @@ Application::Application(int &argc, char **argv) :
     QGuiApplication(argc, argv),
     db_(jop::db()),
     api_("http://joplin.local"),
+    //api_("https://joplin.cozic.net"),
     synchronizer_(api_.baseUrl(), db_),
     folderModel_(db_)
 
     {
-
-	QString dbPath = "D:/Web/www/joplin/QtClient/data/notes.sqlite";
-	jop::db().initialize(dbPath);
 
 	// This is linked to where the QSettings will be saved. In other words,
 	// if these values are changed, the settings will be reset and saved
@@ -29,6 +28,11 @@ Application::Application(int &argc, char **argv) :
 	QCoreApplication::setOrganizationName("Cozic");
 	QCoreApplication::setOrganizationDomain("cozic.net");
 	QCoreApplication::setApplicationName("Joplin");
+
+	qDebug() << "Config dir:" << paths::configDir();
+	qDebug() << "Database file:" << paths::databaseFile();
+
+	jop::db().initialize(paths::databaseFile());
 
 	Settings::initialize();
 

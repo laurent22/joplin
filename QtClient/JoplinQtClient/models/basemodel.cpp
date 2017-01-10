@@ -46,6 +46,7 @@ bool BaseModel::load(const QString &id) {
 	if (!q.isValid()) return false;
 
 	loadSqlQuery(q);
+	return true;
 }
 
 bool BaseModel::save(bool trackChanges) {

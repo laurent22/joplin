@@ -28,6 +28,8 @@
 #include <QBuffer>
 #include <QJsonArray>
 #include <QTimer>
+#include <QStandardPaths>
+#include <QDir>
 
 #endif // __cplusplus
 

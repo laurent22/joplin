@@ -39,7 +39,7 @@ void WebApi::setSessionId(const QString &v) {
 
 void WebApi::processQueue() {
 	if (!queuedRequests_.size() || inProgressRequests_.size() >= 50) return;
-	QueuedRequest& r = queuedRequests_.takeFirst();
+	QueuedRequest r = queuedRequests_.takeFirst();
 
 	QString url = baseUrl_ + "/" + r.path;
 	QUrlQuery query = r.query;

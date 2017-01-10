@@ -6,6 +6,7 @@ using namespace jop;
 Settings::Settings() : QSettings() {}
 
 bool readSqlite(QIODevice &device, QSettings::SettingsMap &map) {
+	Q_UNUSED(device);
 	map = Setting::settings();
 	return true;
 }

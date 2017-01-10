@@ -20,7 +20,8 @@ SOURCES += \
     dispatcher.cpp \
     models/change.cpp \
     models/basemodel.cpp \
-    models/setting.cpp
+    models/setting.cpp \
+    paths.cpp
 
 RESOURCES += qml.qrc \
     database.qrc
@@ -54,9 +55,11 @@ HEADERS += \
     models/change.h \
     models/basemodel.h \
     enum.h \
-    models/setting.h
+    models/setting.h \
+    paths.h
 
-DISTFILES +=
+DISTFILES += \
+    AndroidManifest.xml
 
 PRECOMPILED_HEADER = stable.h
 
