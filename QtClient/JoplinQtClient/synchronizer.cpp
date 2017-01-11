@@ -12,6 +12,11 @@ Synchronizer::Synchronizer(Database &database) : db_(database) {
 }
 
 void Synchronizer::start() {
+	if (state_ == Frozen) {
+		qWarning() << "Cannot start synchronizer while frozen";
+		return;
+	}
+
 	if (state_ != Idle) {
 		qWarning() << "Cannot start synchronizer because synchronization already in progress. State: " << state_;
 		return;
@@ -24,6 +29,22 @@ void Synchronizer::start() {
 
 void Synchronizer::setSessionId(const QString &v) {
 	api_.setSessionId(v);
+}
+
+void Synchronizer::abort() {
+	switchState(Aborting);
+}
+
+void Synchronizer::freeze() {
+	switchState(Frozen);
+}
+
+void Synchronizer::unfreeze() {
+	switchState(Idle);
+}
+
+WebApi &Synchronizer::api() {
+	return api_;
 }
 
 QUrlQuery Synchronizer::valuesToUrlQuery(const QHash<QString, Change::Value>& values) const {
@@ -54,6 +75,15 @@ void Synchronizer::checkNextState() {
 		    break;
 
 	    case Idle:
+
+		    break;
+
+	    case Aborting:
+
+		    switchState(Idle);
+		    break;
+
+	    case Frozen:
 
 		    break;
 
@@ -142,11 +172,32 @@ void Synchronizer::switchState(Synchronizer::SynchronizationState state) {
 		query.addQueryItem("last_id", lastRevId);
 		api_.get("synchronizer", query, QUrlQuery(), "download:getSynchronizer");
 
+	} else if (state == Aborting) {
+
+		// =============================================================================================
+		// ABORTING STATE
+		// =============================================================================================
+
+		uploadsRemaining_ = 0;
+		api_.abortAll();
+		checkNextState();
+
+	} else if (state == Frozen) {
+
+		// =============================================================================================
+		// FROZEN STATE
+		// =============================================================================================
+
 	}
 
 }
 
 void Synchronizer::api_requestDone(const QJsonObject& response, const QString& tag) {
+	if (state_ == Frozen) {
+		qWarning() << "Receiving response while synchronizer is frozen";
+		return;
+	}
+
 	QStringList parts = tag.split(':');
 	QString category = parts[0];
 	QString action = parts[1];
@@ -164,7 +215,7 @@ void Synchronizer::api_requestDone(const QJsonObject& response, const QString& t
 	// HANDLE UPLOAD RESPONSE
 	// =============================================================================================
 
-	if (category == "upload") {
+	if (state_ == UploadingChanges) {
 		uploadsRemaining_--;
 
 		qDebug() << "Synced folder" << arg1;
@@ -191,7 +242,7 @@ void Synchronizer::api_requestDone(const QJsonObject& response, const QString& t
 	// HANDLE DOWNLOAD RESPONSE
 	// =============================================================================================
 
-	} else if (category == "download") {
+	} else if (state_ == DownloadingChanges) {
 		if (action == "getSynchronizer") {
 			QJsonArray items = response["items"].toArray();
 			QString maxRevId = "";

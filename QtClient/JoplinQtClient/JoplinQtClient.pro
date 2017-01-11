@@ -22,7 +22,8 @@ SOURCES += \
     models/basemodel.cpp \
     models/setting.cpp \
     paths.cpp \
-    window.cpp
+    window.cpp \
+    filters.cpp
 
 RESOURCES += qml.qrc \
     database.qrc
@@ -59,7 +60,8 @@ HEADERS += \
     models/setting.h \
     paths.h \
     constants.h \
-    window.h
+    window.h \
+    filters.h
 
 DISTFILES += \
     AndroidManifest.xml

@@ -20,6 +20,10 @@ void Dispatcher::emitLoginClicked(const QString &apiBaseUrl, const QString &emai
 	emit loginClicked(apiBaseUrl, email, password);
 }
 
+void Dispatcher::emitLogoutClicked() {
+	emit logoutClicked();
+}
+
 void Dispatcher::emitLoginStarted() {
 	emit loginStarted();
 }

@@ -14,11 +14,15 @@ class Synchronizer : public QObject {
 
 public:
 
-	enum SynchronizationState { Idle, UploadingChanges, DownloadingChanges };
+	enum SynchronizationState { Idle, UploadingChanges, DownloadingChanges, Aborting, Frozen };
 
 	Synchronizer(Database& database);
 	void start();
 	void setSessionId(const QString& v);
+	void abort();
+	void freeze();
+	void unfreeze();
+	WebApi& api();
 
 private:
 

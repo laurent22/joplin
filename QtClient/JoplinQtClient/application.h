@@ -53,6 +53,7 @@ public slots:
 	void dispatcher_folderUpdated(const QString& folderId);
 	void dispatcher_folderDeleted(const QString& folderId);
 	void dispatcher_loginClicked(const QString &domain, const QString &email, const QString &password);
+	void dispatcher_logoutClicked();
 
 	void synchronizerTimer_timeout();
 

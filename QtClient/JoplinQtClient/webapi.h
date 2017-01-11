@@ -33,6 +33,7 @@ public:
 	void del(const QString& path,const QUrlQuery& query = QUrlQuery(), const QUrlQuery& data = QUrlQuery(), const QString& tag = "");
 	void patch(const QString& path,const QUrlQuery& query = QUrlQuery(), const QUrlQuery& data = QUrlQuery(), const QString& tag = "");
 	void setSessionId(const QString& v);
+	void abortAll();
 
 private:
 

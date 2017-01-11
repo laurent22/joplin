@@ -187,7 +187,6 @@ bool BaseModel::trackChanges() const {
 }
 
 bool BaseModel::isNew() const {
-	qDebug() << "EEEEEEEEEEEEEEEEEEEEEE" << isNew_ << primaryKey() << valueIsSet(primaryKey()) << values_["id"].toString();
 	if (isNew_ == 0) return false;
 	if (isNew_ == 1) return true;
 	return !valueIsSet(primaryKey());
@@ -415,7 +414,6 @@ int BaseModel::Value::toInt() const {
 QString BaseModel::Value::toString() const {
 	if (type_ == QMetaType::QString) return stringValue_;
 	if (type_ == QMetaType::Int) return QString::number(intValue_);
-	qCritical("Unreachable");
 	return QString("");
 }
 

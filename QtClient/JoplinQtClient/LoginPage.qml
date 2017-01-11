@@ -6,6 +6,12 @@ LoginPageForm {
 
 	id: root
 
+	function onShown() {
+		root.apiBaseUrl = settings.valueString("api.baseUrl");
+		root.email = settings.valueString("user.email");
+		root.password = "";
+	}
+
 	Connections {
 		target: root
 		onLoginButtonClicked: {

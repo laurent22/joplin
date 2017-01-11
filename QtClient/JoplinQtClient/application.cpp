@@ -10,6 +10,7 @@
 #include "dispatcher.h"
 #include "paths.h"
 #include "constants.h"
+#include "filters.h"
 
 using namespace jop;
 
@@ -42,12 +43,15 @@ Application::Application(int &argc, char **argv) :
 		settings.setValue("clientId", uuid::createUuid());
 	}
 
+	Settings* qmlSettings = new Settings();
+
 	view_.setResizeMode(QQuickView::SizeRootObjectToView);
 	QQmlContext *ctxt = view_.rootContext();
 	ctxt->setContextProperty("folderListModel", &folderModel_);
 	ctxt->setContextProperty("noteListModel", &noteModel_);
 	ctxt->setContextProperty("noteModel", &selectedQmlNote_);
 	ctxt->setContextProperty("dispatcher", &dispatcher());
+	ctxt->setContextProperty("settings", qmlSettings);
 
 	view_.setSource(QUrl("qrc:/app.qml"));
 
@@ -62,6 +66,7 @@ Application::Application(int &argc, char **argv) :
 	connect(&dispatcher(), SIGNAL(folderUpdated(QString)), this, SLOT(dispatcher_folderUpdated(QString)));
 	connect(&dispatcher(), SIGNAL(folderDeleted(QString)), this, SLOT(dispatcher_folderDeleted(QString)));
 	connect(&dispatcher(), SIGNAL(loginClicked(QString,QString,QString)), this, SLOT(dispatcher_loginClicked(QString,QString,QString)));
+	connect(&dispatcher(), SIGNAL(logoutClicked()), this, SLOT(dispatcher_logoutClicked()));
 
 	view_.show();
 
@@ -75,6 +80,11 @@ Application::Application(int &argc, char **argv) :
 	if (!settings.contains("user.email") || !settings.contains("session.id") || !settings.contains("api.baseUrl")) {
 		view_.showPage("login");
 	} else {
+		afterSessionInitialization();
+		//QString apiBaseUrl = settings.value("api.baseUrl").toString();
+		//api_.setBaseUrl(apiBaseUrl);
+		//synchronizer_.api().setBaseUrl(apiBaseUrl);
+		//synchronizer_.setSessionId(settings.value("session.id").toString());
 		view_.showPage("main");
 	}
 
@@ -107,8 +117,9 @@ void Application::api_requestDone(const QJsonObject& response, const QString& ta
 
 	if (tag == "getSession") {
 		if (response.contains("error")) {
-			qCritical() << "Could not get session:" << response.value("error").toString();
+			qWarning() << "Could not get session:" << response.value("error").toString();
 			dispatcher().emitLoginFailed();
+			view_.showPage("login");
 		} else {
 			QString sessionId = response.value("id").toString();
 			qDebug() << "Got session" << sessionId;
@@ -116,8 +127,8 @@ void Application::api_requestDone(const QJsonObject& response, const QString& ta
 			settings.setValue("session.id", sessionId);
 			afterSessionInitialization();
 			dispatcher().emitLoginSuccess();
+			view_.showPage("main");
 		}
-		view_.showPage("main");
 		return;
 	}
 }
@@ -142,12 +153,22 @@ void Application::dispatcher_loginClicked(const QString &apiBaseUrl, const QStri
 	dispatcher().emitLoginStarted();
 
 	Settings settings;
-	settings.setValue("user.email", email);
-	settings.setValue("api.baseUrl", apiBaseUrl);
+	settings.setValue("user.email", filters::email(email));
+	settings.setValue("api.baseUrl", filters::apiBaseUrl(apiBaseUrl));
 
 	api_.setBaseUrl(apiBaseUrl);
 
 	login(email, password);
+}
+
+void Application::dispatcher_logoutClicked() {
+	api_.abortAll();
+	synchronizer_.abort();
+	synchronizer_.freeze();
+
+	Settings settings;
+	settings.setValue("session.id", "");
+	view_.showPage("login");
 }
 
 void Application::synchronizerTimer_timeout() {
@@ -178,8 +199,11 @@ void Application::afterSessionInitialization() {
 	Settings settings;
 	QString sessionId = settings.value("session.id").toString();
 	qDebug() << "Session:" << sessionId;
+	api_.setBaseUrl(settings.value("api.baseUrl").toString());
 	api_.setSessionId(sessionId);
+	synchronizer_.api().setBaseUrl(settings.value("api.baseUrl").toString());
 	synchronizer_.setSessionId(sessionId);
+	synchronizer_.unfreeze();
 	synchronizer_.start();
 }
 

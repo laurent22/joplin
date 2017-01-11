@@ -30,6 +30,7 @@ void WebApi::execRequest(HttpMethod method, const QString &path, const QUrlQuery
 	r.data = data;
 	r.tag = tag;
 	r.buffer = NULL;
+	r.reply = NULL;
 	queuedRequests_ << r;
 
 	processQueue();
@@ -43,6 +44,25 @@ void WebApi::patch(const QString &path, const QUrlQuery &query, const QUrlQuery 
 
 void WebApi::setSessionId(const QString &v) {
 	sessionId_ = v;
+}
+
+void WebApi::abortAll() {
+	for (int i = 0; i < inProgressRequests_.size(); i++) {
+		QueuedRequest r = inProgressRequests_[i];
+		if (r.reply) {
+			r.reply->abort();
+			// TODO: Delete r.reply?
+		}
+	}
+
+	for (int i = 0; i < queuedRequests_.size(); i++) {
+		QueuedRequest r = queuedRequests_[i];
+		if (r.reply) {
+			r.reply->abort();
+			// TODO: Delete r.reply?
+		}
+	}
+	queuedRequests_.size();
 }
 
 void WebApi::processQueue() {

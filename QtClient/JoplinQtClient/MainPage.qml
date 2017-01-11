@@ -9,6 +9,10 @@ Item {
 	property alias currentFolderIndex: folderList.currentIndex
 	property alias currentNoteIndex: noteList.currentIndex
 
+	function onShown() {
+
+	}
+
 	RowLayout {
 		id: layout
 		anchors.fill: parent
@@ -92,6 +96,14 @@ Item {
 		anchors.right: parent.right
 		anchors.top: parent.top
 		onClicked: appRoot.syncButtonClicked()
+	}
+
+	Button {
+		id: logoutButton
+		text: "Logout"
+		anchors.right: syncButton.left
+		anchors.top: parent.top
+		onClicked: dispatcher.logoutClicked()
 	}
 
 }

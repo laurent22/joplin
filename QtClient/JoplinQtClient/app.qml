@@ -48,6 +48,8 @@ Item {
 		print("Switching to page: " + pageName);
 		var page = pageByName(pageName);
 		page.visible = true;
+
+		page.onShown();
 	}
 
 	MainPage {

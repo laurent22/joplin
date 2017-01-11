@@ -16,6 +16,11 @@ public:
 
 	static void initialize();
 
+public slots:
+
+	QString valueString(const QString& name, const QString& defaultValue = "");
+	int valueInt(const QString& name, int defaultValue = 0);
+
 };
 
 }

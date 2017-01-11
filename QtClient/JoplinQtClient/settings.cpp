@@ -26,3 +26,11 @@ void Settings::initialize() {
 	const QSettings::Format SqliteFormat = QSettings::registerFormat("sqlite", &readSqlite, &writeSqlite);
 	QSettings::setDefaultFormat(SqliteFormat);
 }
+
+QString Settings::valueString(const QString &name, const QString &defaultValue) {
+	return value(name, defaultValue).toString();
+}
+
+int Settings::valueInt(const QString &name, int defaultValue) {
+	return value(name, defaultValue).toInt();
+}
