@@ -73,3 +73,8 @@ td {
 	width: 300px;
 	display: inline-block;
 }
+
+.debug {
+	color: #777;
+	font-family: monospace;
+}

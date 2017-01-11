@@ -11,8 +11,11 @@ function initialize() {
 }
 
 function config($name) {
+	$host = $_SERVER['HTTP_HOST'];
+
 	$config = array(
-		'baseUrl' => 'http://joplin.local',
+		'host' => $host,
+		'baseUrl' => $host == 'joplinclient.local' ? 'http://joplin.local' : 'https://joplin.cozic.net',
 		'clientId' => 'E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3',
 	);
 	if (isset($config[$name])) return $config[$name];
@@ -53,6 +56,7 @@ function execRequest($method, $path, $query = array(), $data = null) {
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	if ($data) curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 	if ($method != 'GET' && $method != 'POST') {
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
@@ -131,6 +135,7 @@ if (isset($_POST['update_folder'])) $action = 'update_folder';
 $pageParams = array(
 	'title' => ucfirst($action),
 	'contentHtml' => '',
+	'baseUrl' => config('baseUrl'),
 );
 
 switch ($action) {
@@ -180,12 +185,6 @@ switch ($action) {
 
 }
 
-echo renderView('page', $pageParams);
+$pageParams['curlCommands'] = isset($_SESSION['curlCommands']) ? $_SESSION['curlCommands'] : array();
 
-echo '<pre style="color: #777; font-family: monospace;">';
-$curlCommands = isset($_SESSION['curlCommands']) ? $_SESSION['curlCommands'] : array();
-for ($i = count($curlCommands) - 1; $i >= 0; $i--) {
-	$cmd = $curlCommands[$i];
-	echo $cmd . "\n";
-}
-echo '</pre>';
+echo renderView('page', $pageParams);
