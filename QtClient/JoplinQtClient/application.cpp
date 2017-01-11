@@ -31,6 +31,7 @@ Application::Application(int &argc, char **argv) :
 
 	qDebug() << "Config dir:" << paths::configDir();
 	qDebug() << "Database file:" << paths::databaseFile();
+	qDebug() << "SSL:" << QSslSocket::sslLibraryBuildVersionString() << QSslSocket::sslLibraryVersionNumber();
 
 	jop::db().initialize(paths::databaseFile());
 
@@ -152,9 +153,21 @@ void Application::dispatcher_loginClicked(const QString &apiBaseUrl, const QStri
 	qDebug() << apiBaseUrl << email << password;
 	dispatcher().emitLoginStarted();
 
+	QString newBaseUrl = filters::apiBaseUrl(apiBaseUrl);
+
 	Settings settings;
+
+	if (newBaseUrl != settings.value("api.baseUrl").toString()) {
+		// TODO: add confirmation dialog
+		qDebug() << "Base URL has changed from" << settings.value("api.baseUrl").toString() << "to" << newBaseUrl;
+		BaseModel::deleteAll(jop::FoldersTable);
+		BaseModel::deleteAll(jop::ChangesTable);
+		settings.remove("lastRevId");
+		settings.setValue("clientId", uuid::createUuid());
+	}
+
 	settings.setValue("user.email", filters::email(email));
-	settings.setValue("api.baseUrl", filters::apiBaseUrl(apiBaseUrl));
+	settings.setValue("api.baseUrl", newBaseUrl);
 
 	api_.setBaseUrl(apiBaseUrl);
 
@@ -168,6 +181,9 @@ void Application::dispatcher_logoutClicked() {
 
 	Settings settings;
 	settings.setValue("session.id", "");
+	api_.setSessionId("");
+	synchronizer_.setSessionId("");
+
 	view_.showPage("login");
 }
 

@@ -16,6 +16,10 @@ void Dispatcher::emitFolderDeleted(const QString &folderId) {
 	emit folderDeleted(folderId);
 }
 
+void Dispatcher::emitAllFoldersDeleted() {
+	emit allFoldersDeleted();
+}
+
 void Dispatcher::emitLoginClicked(const QString &apiBaseUrl, const QString &email, const QString &password) {
 	emit loginClicked(apiBaseUrl, email, password);
 }

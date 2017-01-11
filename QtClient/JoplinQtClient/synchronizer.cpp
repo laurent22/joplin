@@ -209,7 +209,13 @@ void Synchronizer::api_requestDone(const QJsonObject& response, const QString& t
 
 	qDebug() << "WebApi: done" << category << action << arg1 << arg2;
 
-	// TODO: check for error
+	QString error = "";
+
+	if (response.contains("error")) {
+		error = response.value("error").toString();
+		qCritical().noquote() << "Sync error:" << error;
+		// Each action might handle errors differently so let it proceed below
+	}
 
 	// =============================================================================================
 	// HANDLE UPLOAD RESPONSE
@@ -218,22 +224,24 @@ void Synchronizer::api_requestDone(const QJsonObject& response, const QString& t
 	if (state_ == UploadingChanges) {
 		uploadsRemaining_--;
 
-		qDebug() << "Synced folder" << arg1;
+		if (error == "") {
+			qDebug() << "Synced folder" << arg1;
 
-		if (action == "putFolder") {
-			Change::disposeByItemId(arg1);
-		}
+			if (action == "putFolder") {
+				Change::disposeByItemId(arg1);
+			}
 
-		if (action == "patchFolder") {
-			Change::disposeByItemId(arg1);
-		}
+			if (action == "patchFolder") {
+				Change::disposeByItemId(arg1);
+			}
 
-		if (action == "deleteFolder") {
-			Change::disposeByItemId(arg1);
-		}
+			if (action == "deleteFolder") {
+				Change::disposeByItemId(arg1);
+			}
 
-		if (uploadsRemaining_ < 0) {
-			qWarning() << "Mismatch on operations done:" << uploadsRemaining_;
+			if (uploadsRemaining_ < 0) {
+				qWarning() << "Mismatch on operations done:" << uploadsRemaining_;
+			}
 		}
 
 		checkNextState();
@@ -243,48 +251,51 @@ void Synchronizer::api_requestDone(const QJsonObject& response, const QString& t
 	// =============================================================================================
 
 	} else if (state_ == DownloadingChanges) {
-		if (action == "getSynchronizer") {
-			QJsonArray items = response["items"].toArray();
-			QString maxRevId = "";
-			foreach (QJsonValue it, items) {
-				QJsonObject obj = it.toObject();
-				QString itemId = obj["item_id"].toString();
-				QString itemType = obj["item_type"].toString();
-				QString operationType = obj["type"].toString();
-				QString revId = obj["id"].toString();
-				QJsonObject item = obj["item"].toObject();
+		if (error != "") {
+			checkNextState();
+		} else {
+			if (action == "getSynchronizer") {
+				QJsonArray items = response["items"].toArray();
+				QString maxRevId = "";
+				foreach (QJsonValue it, items) {
+					QJsonObject obj = it.toObject();
+					QString itemId = obj["item_id"].toString();
+					QString itemType = obj["item_type"].toString();
+					QString operationType = obj["type"].toString();
+					QString revId = obj["id"].toString();
+					QJsonObject item = obj["item"].toObject();
 
-				if (itemType == "folder") {
-					if (operationType == "create") {
-						Folder folder;
-						folder.loadJsonObject(item);
-						folder.save(false);
+					if (itemType == "folder") {
+						if (operationType == "create") {
+							Folder folder;
+							folder.loadJsonObject(item);
+							folder.save(false);
+						}
+
+						if (operationType == "update") {
+							Folder folder;
+							folder.load(itemId);
+							folder.patchJsonObject(item);
+							folder.save(false);
+						}
+
+						if (operationType == "delete") {
+							Folder folder;
+							folder.load(itemId);
+							folder.dispose();
+						}
 					}
 
-					if (operationType == "update") {
-						Folder folder;
-						folder.load(itemId);
-						folder.patchJsonObject(item);
-						folder.save(false);
-					}
-
-					if (operationType == "delete") {
-						Folder folder;
-						folder.load(itemId);
-						folder.dispose();
-					}
+					if (revId > maxRevId) maxRevId = revId;
 				}
 
-				if (revId > maxRevId) maxRevId = revId;
+				if (maxRevId != "") {
+					Settings settings;
+					settings.setValue("lastRevId", maxRevId);
+				}
+
+				checkNextState();
 			}
-
-			if (maxRevId != "") {
-				Settings settings;
-				settings.setValue("lastRevId", maxRevId);
-			}
-
-			checkNextState();
-
 		}
 	} else {
 		qCritical() << "Invalid category" << category;

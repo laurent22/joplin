@@ -57,6 +57,7 @@ public slots:
 	void dispatcher_folderCreated(const QString& folderId);
 	void dispatcher_folderUpdated(const QString& folderId);
 	void dispatcher_folderDeleted(const QString& folderId);
+	void dispatcher_allFoldersDeleted();
 
 };
 

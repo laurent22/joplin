@@ -48,7 +48,7 @@ function saveCurlCmd($cmd) {
 
 function execRequest($method, $path, $query = array(), $data = null) {
 	$url = config('baseUrl') . '/' . $path;
-	if (!empty($_SESSION['sessionId'])) {
+	if (!empty($_SESSION['sessionId']) && !isset($query['session'])) {
 		$query['session'] = $_SESSION['sessionId'];
 	}
 	if (count($query)) $url .= '?' . http_build_query($query);
@@ -133,7 +133,8 @@ if (isset($_POST['delete_folder'])) $action = 'delete_folder';
 if (isset($_POST['update_folder'])) $action = 'update_folder';
 
 $pageParams = array(
-	'title' => ucfirst($action),
+	'pageTitle' => parse_url(config('baseUrl'), PHP_URL_HOST) . ' - ' . ucfirst($action),
+	'headerTitle' => ucfirst($action),
 	'contentHtml' => '',
 	'baseUrl' => config('baseUrl'),
 );
@@ -151,6 +152,17 @@ switch ($action) {
 
 		$folder = execRequest('GET', 'folders/' . $_GET['folder_id']);
 		$pageParams['contentHtml'] = renderView('folder', array('folder' => $folder));
+		break;
+
+	case 'changes':
+
+		$session = execRequest('POST', 'sessions', null, array(
+			'email' => 'laurent@cozic.net',
+			'password' => '12345678',
+			'client_id' => 'ABCDABCDABCDABCDABCDABCDABCDABCD',
+		));
+		$changes = execRequest('GET', 'synchronizer', array('session' => $session['id']));
+		$pageParams['contentHtml'] = renderView('changes', array('changes' => $changes));
 		break;
 
 	case 'notes':

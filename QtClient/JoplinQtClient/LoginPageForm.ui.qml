@@ -85,4 +85,19 @@ Item {
 	 onClicked: root.loginButtonClicked()
  }
 
+ Connections {
+	 target: apiBaseUrlTF
+	 onAccepted: root.loginButtonClicked()
+ }
+
+ Connections {
+	 target: emailTF
+	 onAccepted: root.loginButtonClicked()
+ }
+
+ Connections {
+	 target: passwordTF
+	 onAccepted: root.loginButtonClicked()
+ }
+
 }

@@ -10,6 +10,7 @@ FolderModel::FolderModel(Database &database) : QAbstractListModel(), db_(databas
 	connect(&dispatcher(), SIGNAL(folderCreated(QString)), this, SLOT(dispatcher_folderCreated(QString)));
 	connect(&dispatcher(), SIGNAL(folderUpdated(QString)), this, SLOT(dispatcher_folderUpdated(QString)));
 	connect(&dispatcher(), SIGNAL(folderDeleted(QString)), this, SLOT(dispatcher_folderDeleted(QString)));
+	connect(&dispatcher(), SIGNAL(allFoldersDeleted()), this, SLOT(dispatcher_allFoldersDeleted()));
 }
 
 int FolderModel::rowCount(const QModelIndex & parent) const { Q_UNUSED(parent);
@@ -207,4 +208,11 @@ void FolderModel::dispatcher_folderDeleted(const QString &folderId) {
 
 	beginRemoveRows(QModelIndex(), index, index);
 	endRemoveRows();
+}
+
+void FolderModel::dispatcher_allFoldersDeleted() {
+	qDebug() << "FolderModel All folders deleted";
+	cache_.clear();
+	beginResetModel();
+	endResetModel();
 }

@@ -57,6 +57,7 @@ public:
 	static bool hasField(jop::Table table, const QString& name);
 	static QStringList tableFieldNames(Table table);
 	static bool isValidFieldName(Table table, const QString& name);
+	static void deleteAll(Table table);
 
 	void loadSqlQuery(const QSqlQuery& query);
 	void loadJsonObject(const QJsonObject& jsonObject);

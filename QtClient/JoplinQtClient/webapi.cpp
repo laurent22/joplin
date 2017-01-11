@@ -140,8 +140,9 @@ void WebApi::request_finished(QNetworkReply *reply) {
 	QJsonParseError err;
 	QJsonDocument doc = QJsonDocument::fromJson(responseBodyBA, &err);
 	if (err.error != QJsonParseError::NoError) {
-		qWarning() << "Could not parse JSON:" << err.errorString();
-		qWarning().noquote() << QString(responseBodyBA);
+		QString errorMessage = "Could not parse JSON: " + err.errorString() + "\n" + QString(responseBodyBA);
+		qWarning().noquote() << errorMessage;
+		response["error"] = errorMessage;
 	} else {
 		response = doc.object();
 		if (response.contains("error") && !response["error"].isNull()) {

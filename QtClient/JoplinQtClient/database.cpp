@@ -131,13 +131,13 @@ bool Database::commit() {
 }
 
 bool Database::execQuery(QSqlQuery &query) {
-	qDebug().noquote() << "SQL:" << query.lastQuery();
+//	qDebug().noquote() << "SQL:" << query.lastQuery();
 
-	QMapIterator<QString, QVariant> i(query.boundValues());
-	while (i.hasNext()) {
-		i.next();
-		qDebug().noquote() << "SQL:" << i.key() << "=" << i.value().toString();
-	}
+//	QMapIterator<QString, QVariant> i(query.boundValues());
+//	while (i.hasNext()) {
+//		i.next();
+//		qDebug().noquote() << "SQL:" << i.key() << "=" << i.value().toString();
+//	}
 
 	return query.exec();
 }

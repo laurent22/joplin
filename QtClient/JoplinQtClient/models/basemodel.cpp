@@ -246,6 +246,16 @@ bool BaseModel::isValidFieldName(Table table, const QString &name) {
 	return false;
 }
 
+void BaseModel::deleteAll(Table table) {
+	QString tableName = BaseModel::tableName(table);
+	jop::db().execQuery("DELETE FROM " + tableName);
+	BaseModel::cache_.clear();
+
+	if (table == jop::FoldersTable) {
+		dispatcher().emitAllFoldersDeleted();
+	}
+}
+
 // When loading a QSqlQuery, all the values are cleared and replaced by those
 // from the QSqlQuery. All the fields are marked as NOT changed as it's assumed
 // the object is already in the database (since loaded from there).
