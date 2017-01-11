@@ -15,12 +15,12 @@ LoginPageForm {
 	Connections {
 		target: root
 		onLoginButtonClicked: {
-			dispatcher.emitLoginClicked(root.apiBaseUrl, root.email, root.password);
+			appRoot.emitLoginClicked(root.apiBaseUrl, root.email, root.password);
 		}
 	}
 
 	Connections {
-		target: dispatcher
+		target: appRoot
 		onLoginStarted: {
 			root.enabled = false;
 		}
@@ -31,5 +31,15 @@ LoginPageForm {
 			root.enabled = true;
 		}
 	}
+
+//	Connections {
+//		target: dispatcher
+//		onLoginFailed: {
+//			root.enabled = true;
+//		}
+//		onLoginSuccess: {
+//			root.enabled = true;
+//		}
+//	}
 
 }

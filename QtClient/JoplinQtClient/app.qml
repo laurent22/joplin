@@ -13,6 +13,11 @@ Item {
 	signal addFolderButtonClicked()
 	signal syncButtonClicked()
 	signal loginButtonClicked()
+	signal loginClicked(string apiBaseUrl, string email, string password)
+	signal loginStarted()
+	signal loginFailed()
+	signal loginSuccess()
+	signal logoutClicked()
 	property alias currentFolderIndex: mainPage.currentFolderIndex
 	property alias currentNoteIndex: mainPage.currentNoteIndex
 
@@ -50,6 +55,28 @@ Item {
 		page.visible = true;
 
 		page.onShown();
+	}
+
+	function emitLoginStarted() {
+		print("CALLING emitLoginStarted");
+		root.loginStarted();
+	}
+
+	function emitLoginFailed() {
+		print("CALLING emitLoginFailed");
+		root.loginFailed();
+	}
+
+	function emitLoginSuccess() {
+		root.loginSuccess();
+	}
+
+	function emitLoginClicked(apiBaseUrl, email, password) {
+		root.loginClicked(apiBaseUrl, email, password);
+	}
+
+	function emitLogoutClicked() {
+		root.logoutClicked();
 	}
 
 	MainPage {

@@ -62,12 +62,14 @@ Application::Application(int &argc, char **argv) :
 	connect(rootObject, SIGNAL(currentNoteChanged()), this, SLOT(view_currentNoteChanged()));
 	connect(rootObject, SIGNAL(addFolderButtonClicked()), this, SLOT(view_addFolderButtonClicked()));
 	connect(rootObject, SIGNAL(syncButtonClicked()), this, SLOT(view_syncButtonClicked()));
+	connect(rootObject, SIGNAL(loginClicked(QString,QString,QString)), this, SLOT(dispatcher_loginClicked(QString,QString,QString)));
+	connect(rootObject, SIGNAL(logoutClicked()), this, SLOT(dispatcher_logoutClicked()));
 
 	connect(&dispatcher(), SIGNAL(folderCreated(QString)), this, SLOT(dispatcher_folderCreated(QString)));
 	connect(&dispatcher(), SIGNAL(folderUpdated(QString)), this, SLOT(dispatcher_folderUpdated(QString)));
 	connect(&dispatcher(), SIGNAL(folderDeleted(QString)), this, SLOT(dispatcher_folderDeleted(QString)));
-	connect(&dispatcher(), SIGNAL(loginClicked(QString,QString,QString)), this, SLOT(dispatcher_loginClicked(QString,QString,QString)));
-	connect(&dispatcher(), SIGNAL(logoutClicked()), this, SLOT(dispatcher_logoutClicked()));
+	//connect(&dispatcher(), SIGNAL(loginClicked(QString,QString,QString)), this, SLOT(dispatcher_loginClicked(QString,QString,QString)));
+	//connect(&dispatcher(), SIGNAL(logoutClicked()), this, SLOT(dispatcher_logoutClicked()));
 
 	view_.show();
 
@@ -119,7 +121,9 @@ void Application::api_requestDone(const QJsonObject& response, const QString& ta
 	if (tag == "getSession") {
 		if (response.contains("error")) {
 			qWarning() << "Could not get session:" << response.value("error").toString();
-			dispatcher().emitLoginFailed();
+			//dispatcher().emitLoginFailed();
+			view_.emitSignal("loginFailed");
+			//qDebug() << "FAILEDFAILEDFAILEDFAILEDFAILEDFAILEDFAILEDFAILEDFAILEDFAILEDFAILEDFAILED";
 			view_.showPage("login");
 		} else {
 			QString sessionId = response.value("id").toString();
@@ -127,7 +131,8 @@ void Application::api_requestDone(const QJsonObject& response, const QString& ta
 			Settings settings;
 			settings.setValue("session.id", sessionId);
 			afterSessionInitialization();
-			dispatcher().emitLoginSuccess();
+			//dispatcher().emitLoginSuccess();
+			view_.emitSignal("loginSuccess");
 			view_.showPage("main");
 		}
 		return;
@@ -151,7 +156,10 @@ void Application::dispatcher_folderDeleted(const QString &folderId) {
 
 void Application::dispatcher_loginClicked(const QString &apiBaseUrl, const QString &email, const QString &password) {
 	qDebug() << apiBaseUrl << email << password;
-	dispatcher().emitLoginStarted();
+
+	view_.emitSignal("loginStarted");
+
+	//dispatcher().emitLoginStarted();
 
 	QString newBaseUrl = filters::apiBaseUrl(apiBaseUrl);
 

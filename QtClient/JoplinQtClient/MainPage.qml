@@ -103,7 +103,7 @@ Item {
 		text: "Logout"
 		anchors.right: syncButton.left
 		anchors.top: parent.top
-		onClicked: dispatcher.logoutClicked()
+		onClicked: appRoot.logoutClicked()  //dispatcher.logoutClicked()
 	}
 
 }
