@@ -53,14 +53,14 @@ Item {
 		highlightMoveVelocity: -1
 		highlightMoveDuration: 100
 		anchors.fill: parent
-		delegate: folderDelegate
+		delegate: itemListDelegate
 		ScrollBar.vertical: ScrollBar {  }
 		highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
 		focus: true
 	}
 
 	Component {
-		id: folderDelegate
+		id: itemListDelegate
 		EditableListItem {
 			contextMenu:
 				Menu {
