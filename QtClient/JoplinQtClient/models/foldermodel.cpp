@@ -4,23 +4,17 @@
 
 using namespace jop;
 
-FolderModel::FolderModel() : QAbstractListModel(), orderBy_("title") {
-	virtualItemShown_ = false;
-
+FolderModel::FolderModel() : AbstractListModel(), orderBy_("title") {
 	connect(&dispatcher(), SIGNAL(folderCreated(QString)), this, SLOT(dispatcher_folderCreated(QString)));
 	connect(&dispatcher(), SIGNAL(folderUpdated(QString)), this, SLOT(dispatcher_folderUpdated(QString)));
 	connect(&dispatcher(), SIGNAL(folderDeleted(QString)), this, SLOT(dispatcher_folderDeleted(QString)));
 	connect(&dispatcher(), SIGNAL(allFoldersDeleted()), this, SLOT(dispatcher_allFoldersDeleted()));
 }
 
-int FolderModel::rowCount(const QModelIndex & parent) const { Q_UNUSED(parent);
-	return Folder::count() + (virtualItemShown_ ? 1 : 0);
-}
-
 QVariant FolderModel::data(const QModelIndex & index, int role) const {
 	Folder folder;
 
-	if (virtualItemShown_ && index.row() == rowCount() - 1) {
+	if (virtualItemShown() && index.row() == rowCount() - 1) {
 		folder.setValue("title", BaseModel::Value(QString("Untitled")));
 	} else {
 		folder = atIndex(index.row());
@@ -77,16 +71,12 @@ Folder FolderModel::atIndex(const QModelIndex &index) const {
 	return atIndex(index.row());
 }
 
-void FolderModel::showVirtualItem() {
-	virtualItemShown_ = true;
-	beginInsertRows(QModelIndex(), this->rowCount() - 1, this->rowCount() - 1);
-	endInsertRows();
+BaseModel FolderModel::baseModel() const {
+	return Folder();
 }
 
-void FolderModel::hideVirtualItem() {
-	beginRemoveRows(QModelIndex(), this->rowCount() - 1, this->rowCount() - 1);
-	virtualItemShown_ = false;
-	endRemoveRows();
+int FolderModel::baseModelCount() const {
+	return Folder::count();
 }
 
 QString FolderModel::indexToId(int index) const {
@@ -106,20 +96,8 @@ QString FolderModel::lastInsertId() const {
 	return lastInsertId_;
 }
 
-bool FolderModel::virtualItemShown() const {
-	return virtualItemShown_;
-}
-
 bool FolderModel::setData(int index, const QVariant &value, int role) {
 	return setData(this->index(index), value, role);
-}
-
-QHash<int, QByteArray> FolderModel::roleNames() const {
-	QHash<int, QByteArray> roles = QAbstractItemModel::roleNames();
-	roles[TitleRole] = "title";
-	roles[IdRole] = "uuid";
-	roles[RawRole] = "raw";
-	return roles;
 }
 
 void FolderModel::addData(const QString &title) {
