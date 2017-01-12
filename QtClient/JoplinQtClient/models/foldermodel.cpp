@@ -12,6 +12,26 @@ FolderModel::FolderModel() : AbstractListModel(), orderBy_("title") {
 }
 
 QVariant FolderModel::data(const QModelIndex & index, int role) const {
+
+	//QVector<std::unique_ptr<Folder>> folders;
+//	std::unique_ptr<Folder> f(new Folder());
+//	f->setValue("title", QString("ancd"));
+//	BaseModel* b = static_cast<BaseModel*>(f.get());
+//	qDebug() << b->value("title").toString();
+//	Folder* f2 = static_cast<Folder*>(b);
+//	qDebug() << "*" << f2->value("title").toString();
+
+
+//	std::unique_ptr<BaseModel> baseModel(f.release());
+//	qDebug() << "££££££££££££££££££££££££££££££££" << baseModel->value("title").toString();
+//	std::unique_ptr<Folder> f2(baseModel.release());
+//	qDebug() << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << f2->value("title").toString();
+
+
+	//f->setValue("title", "abcd");
+
+
+
 	Folder folder;
 
 	if (virtualItemShown() && index.row() == rowCount() - 1) {
@@ -71,12 +91,29 @@ Folder FolderModel::atIndex(const QModelIndex &index) const {
 	return atIndex(index.row());
 }
 
-BaseModel FolderModel::baseModel() const {
+BaseModel FolderModel::newBaseModel() const {
 	return Folder();
 }
 
 int FolderModel::baseModelCount() const {
 	return Folder::count();
+}
+
+BaseModel FolderModel::cacheGet(int index) const {
+	return cache_[index];
+}
+
+void FolderModel::cacheSet(int index, const BaseModel &baseModel) {
+//	Folder f(baseModel);
+//	cache_[index] = f;
+}
+
+bool FolderModel::cacheIsset(int index) const {
+	return index > 0 && cache_.size() > index;
+}
+
+void FolderModel::cacheClear() {
+	cache_.clear();
 }
 
 QString FolderModel::indexToId(int index) const {

@@ -40,6 +40,7 @@ public:
 	};
 
 	BaseModel();
+	//BaseModel(const BaseModel& baseModel);
 	QStringList changedFields() const;
 	static int count(jop::Table table);
 	bool load(const QString& id);

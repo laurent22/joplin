@@ -26,8 +26,13 @@ public:
 
 protected:
 
-	virtual BaseModel baseModel() const;
+	virtual BaseModel newBaseModel() const;
 	virtual int baseModelCount() const;
+
+	virtual BaseModel cacheGet(int index) const;
+	virtual void cacheSet(int index, const BaseModel& baseModel);
+	virtual bool cacheIsset(int index) const;
+	virtual void cacheClear();
 
 private:
 

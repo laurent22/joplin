@@ -56,7 +56,7 @@ int AbstractListModel::rowCount(const QModelIndex & parent) const { Q_UNUSED(par
 //	return atIndex(index.row());
 //}
 
-BaseModel AbstractListModel::baseModel() const {
+BaseModel AbstractListModel::newBaseModel() const {
 	qFatal("AbstractListModel::baseModel() not implemented");
 	return BaseModel();
 }
@@ -64,6 +64,24 @@ BaseModel AbstractListModel::baseModel() const {
 int AbstractListModel::baseModelCount() const {
 	qFatal("AbstractListModel::baseModelCount() not implemented");
 	return 0;
+}
+
+BaseModel AbstractListModel::cacheGet(int index) const {
+	qFatal("AbstractListModel::cacheGet() not implemented");
+	return BaseModel();
+}
+
+void AbstractListModel::cacheSet(int index, const BaseModel &baseModel) {
+	qFatal("AbstractListModel::cacheSet() not implemented");
+}
+
+bool AbstractListModel::cacheIsset(int index) const {
+	qFatal("AbstractListModel::cacheIsset() not implemented");
+	return false;
+}
+
+void AbstractListModel::cacheClear() {
+	qFatal("AbstractListModel::cacheClear() not implemented");
 }
 
 void AbstractListModel::showVirtualItem() {

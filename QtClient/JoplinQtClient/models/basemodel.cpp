@@ -14,6 +14,10 @@ BaseModel::BaseModel() {
 	isNew_ = -1;
 }
 
+//BaseModel::BaseModel(const BaseModel &baseModel) : BaseModel() {
+
+//}
+
 QStringList BaseModel::changedFields() const {
 	QStringList output;
 	for (QHash<QString, bool>::const_iterator it = changedFields_.begin(); it != changedFields_.end(); ++it) {

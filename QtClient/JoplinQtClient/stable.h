@@ -3,6 +3,8 @@
 
 #if defined __cplusplus
 
+#include <memory>
+
 #include <QAbstractListModel>
 #include <QGuiApplication>
 #include <QDebug>
