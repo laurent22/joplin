@@ -26,6 +26,11 @@ public:
 	void setFolderId(const QString& v);
 	Folder folder() const;
 
+public slots:
+
+	QString indexToId(int index) const;
+	int idToIndex(const QString& id) const;
+
 protected:
 
 	QHash<int, QByteArray> roleNames() const;

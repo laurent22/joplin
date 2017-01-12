@@ -72,6 +72,7 @@ public:
 	void setValue(const QString& name, int value);
 	void setValue(const QString& name, const QJsonValue& value, QMetaType::Type type);
 	Value id() const;
+	QString idString() const;
 	QString valuesToString() const;
 
 	static QString tableName(Table t);

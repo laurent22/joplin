@@ -21,11 +21,7 @@ public:
 	bool trackChanges() const;
 	int noteCount() const;
 	QVector<Note> notes(const QString& orderBy, int limit, int offset) const;
-
-//	bool save();
-//	bool dispose();
-
-private:
+	int noteIndexById(const QString& orderBy, const QString &id) const;
 
 };
 

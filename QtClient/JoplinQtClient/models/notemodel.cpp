@@ -62,6 +62,16 @@ jop::Folder jop::NoteModel::folder() const {
 	return folder;
 }
 
+QString jop::NoteModel::indexToId(int index) const {
+	Note note = atIndex(index);
+	return note.idString();
+}
+
+int jop::NoteModel::idToIndex(const QString &id) const {
+	Folder f = this->folder();
+	return f.noteIndexById(orderBy_, id);
+}
+
 QHash<int, QByteArray> jop::NoteModel::roleNames() const {
 	QHash<int, QByteArray> roles = QAbstractItemModel::roleNames();
 //	roles[TitleRole] = "title";

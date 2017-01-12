@@ -31,8 +31,9 @@ int Folder::noteCount() const {
 QVector<Note> Folder::notes(const QString &orderBy, int limit, int offset) const {
 	QVector<Note> output;
 
-	QSqlQuery q = jop::db().prepare(QString("SELECT %1 FROM notes WHERE parent_id = :parent_id ORDER BY %2 LIMIT %3 OFFSET %4")
+	QSqlQuery q = jop::db().prepare(QString("SELECT %1 FROM %2 WHERE parent_id = :parent_id ORDER BY %3 LIMIT %4 OFFSET %5")
 	                        .arg(BaseModel::sqlTableFields(jop::NotesTable))
+	                        .arg(BaseModel::tableName(jop::NotesTable))
 	                        .arg(orderBy)
 	                        .arg(limit)
 	                        .arg(offset));
@@ -47,6 +48,24 @@ QVector<Note> Folder::notes(const QString &orderBy, int limit, int offset) const
 	}
 
 	return output;
+}
+
+int Folder::noteIndexById(const QString &orderBy, const QString& id) const {
+	QSqlQuery q = jop::db().prepare(QString("SELECT id FROM %1 WHERE parent_id = :parent_id ORDER BY %2")
+	                        .arg(BaseModel::tableName(jop::NotesTable))
+	                        .arg(orderBy));
+	q.bindValue(":parent_id", idString());
+	jop::db().execQuery(q);
+	if (!jop::db().errorCheck(q)) return -1;
+
+	int index = 0;
+	while (q.next()) {
+		QString qId = q.value(0).toString();
+		if (qId == id) return index;
+		index++;
+	}
+
+	return -1;
 }
 
 int Folder::count() {

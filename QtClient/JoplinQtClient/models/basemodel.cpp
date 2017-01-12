@@ -202,13 +202,15 @@ QVector<BaseModel::Field> BaseModel::tableFields(jop::Table table) {
 
 	QVector<BaseModel::Field> output;
 
+	// TODO: ideally that should be auto-generated based on schema.sql
+
 	if (table == jop::FoldersTable) {
 		output.push_back(createField("id", QMetaType::QString ));
 		output.push_back(createField("title", QMetaType::QString ));
 		output.push_back(createField("created_time", QMetaType::Int ));
 		output.push_back(createField("updated_time", QMetaType::Int ));
 	} else if (table == jop::NotesTable) {
-		output.push_back(createField("id", QMetaType::Int ));
+		output.push_back(createField("id", QMetaType::QString ));
 		output.push_back(createField("title", QMetaType::QString ));
 		output.push_back(createField("body", QMetaType::QString ));
 		output.push_back(createField("parent_id", QMetaType::QString ));
@@ -384,6 +386,10 @@ void BaseModel::setValue(const QString &name, const QJsonValue &value, QMetaType
 BaseModel::Value BaseModel::id() const {
 	if (!valueIsSet(primaryKey())) return QVariant();
 	return value(primaryKey());
+}
+
+QString BaseModel::idString() const {
+	return id().toString();
 }
 
 QString BaseModel::valuesToString() const {
