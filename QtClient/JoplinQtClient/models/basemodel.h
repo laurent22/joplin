@@ -56,6 +56,7 @@ public:
 	static QVector<BaseModel::Field> tableFields(Table table);
 	static bool hasField(jop::Table table, const QString& name);
 	static QStringList tableFieldNames(Table table);
+	static QString sqlTableFields(Table table);
 	static bool isValidFieldName(Table table, const QString& name);
 	static void deleteAll(Table table);
 

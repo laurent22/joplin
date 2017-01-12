@@ -33,6 +33,7 @@ private:
 	mutable int version_;
 	QStringList sqlStringToLines(const QString& sql);
 	int transactionCount_;
+	bool logQueries_;
 
 };
 

@@ -3,7 +3,8 @@
 
 #include <stable.h>
 
-#include "models/notecollection.h"
+#include "models/folder.h"
+#include "sparsevector.hpp"
 
 namespace jop {
 
@@ -21,8 +22,9 @@ public:
 	NoteModel();
 	int rowCount(const QModelIndex & parent = QModelIndex()) const;
 	QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+	Note atIndex(int index) const;
 	void setFolderId(const QString& v);
-	void setCollection(NoteCollection& noteCollection);
+	Folder folder() const;
 
 protected:
 
@@ -32,7 +34,8 @@ private:
 
 	QList<Note> notes_;
 	QString folderId_;
-	NoteCollection collection_;
+	QString orderBy_;
+	mutable SparseVector<Note> cache_;
 
 };
 

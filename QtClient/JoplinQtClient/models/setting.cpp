@@ -6,7 +6,8 @@ using namespace jop;
 
 void Setting::setSettings(const QSettings::SettingsMap &map) {
 	jop::db().transaction();
-	QString sql = "INSERT OR REPLACE INTO settings (`key`, `value`, `type`) VALUES (:key, :value, :type)";
+	jop::db().execQuery("DELETE FROM settings");
+	QString sql = "INSERT INTO settings (`key`, `value`, `type`) VALUES (:key, :value, :type)";
 	QSqlQuery query = jop::db().prepare(sql);
 	for (QSettings::SettingsMap::const_iterator it = map.begin(); it != map.end(); ++it) {
 		query.bindValue(":key", it.key());

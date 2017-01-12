@@ -9,7 +9,7 @@ CREATE TABLE notes (
 	id TEXT PRIMARY KEY,
 	title TEXT,
 	body TEXT,
-	parent_id INT,
+	parent_id TEXT,
 	created_time INT,
 	updated_time INT,
 	latitude NUMERIC,

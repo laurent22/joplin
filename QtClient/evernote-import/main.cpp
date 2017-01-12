@@ -355,8 +355,10 @@ int main(int argc, char *argv[]) {
 
 	qsrand(QTime::currentTime().msec());
 
-	QString dbPath = "D:/Web/www/joplin/QtClient/data/notes.sqlite";
-	QString resourceDir = "D:/Web/www/joplin/QtClient/data/resources";
+	QString dbPath = "C:/Users/Laurent/AppData/Local/Joplin/Joplin.sqlite";
+	QString resourceDir = "C:/Users/Laurent/AppData/Local/Joplin/resources";
+
+	QDir(resourceDir).mkpath(".");
 
 	QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
 	db.setDatabaseName(dbPath);
@@ -371,9 +373,11 @@ int main(int argc, char *argv[]) {
 	// TODO: REMOVE REMOVE REMOVE
 	db.exec("DELETE FROM folders");
 	db.exec("DELETE FROM notes");
+	db.exec("DELETE FROM changes");
 	db.exec("DELETE FROM resources");
 	db.exec("DELETE FROM note_resources");
 	db.exec("DELETE FROM tags");
+	db.exec("DELETE FROM settings WHERE key = 'lastRevId'");
 	// TODO: REMOVE REMOVE REMOVE
 
 	QDir dir("S:/Docs/Textes/Calendrier/EvernoteBackup/Enex20161219");
@@ -388,13 +392,24 @@ int main(int argc, char *argv[]) {
 
 		QString folderId = createUuid(QString("%1%2%3%4").arg(fileInfo.baseName()).arg(fileInfo.created().toTime_t()).arg((int)qrand()).arg(QDateTime::currentMSecsSinceEpoch()));
 
-		QSqlQuery query(db);
-		query.prepare("INSERT INTO folders (id, title, created_time, updated_time) VALUES (?, ?, ?, ?)");
-		query.addBindValue(folderId);
-		query.addBindValue(fileInfo.baseName());
-		query.addBindValue(fileInfo.created().toTime_t());
-		query.addBindValue(fileInfo.created().toTime_t());
-		query.exec();
+		{
+			QSqlQuery query(db);
+			query.prepare("INSERT INTO folders (id, title, created_time, updated_time) VALUES (?, ?, ?, ?)");
+			query.addBindValue(folderId);
+			query.addBindValue(fileInfo.baseName());
+			query.addBindValue(fileInfo.created().toTime_t());
+			query.addBindValue(fileInfo.created().toTime_t());
+			query.exec();
+		}
+
+		{
+			QSqlQuery query(db);
+			query.prepare("INSERT INTO changes (type, item_id, item_type) VALUES (?, ?, ?)");
+			query.addBindValue(1);
+			query.addBindValue(folderId);
+			query.addBindValue(1);
+			query.exec();
+		}
 
 		std::vector<Note> notes = parseXmlFile(fileInfo.absoluteFilePath());
 

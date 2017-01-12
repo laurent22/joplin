@@ -17,8 +17,7 @@ using namespace jop;
 Application::Application(int &argc, char **argv) :
     QGuiApplication(argc, argv),
     db_(jop::db()),
-    synchronizer_(db_),
-    folderModel_(db_)
+    synchronizer_(db_)
 
     {
 
@@ -51,7 +50,6 @@ Application::Application(int &argc, char **argv) :
 	ctxt->setContextProperty("folderListModel", &folderModel_);
 	ctxt->setContextProperty("noteListModel", &noteModel_);
 	ctxt->setContextProperty("noteModel", &selectedQmlNote_);
-	ctxt->setContextProperty("dispatcher", &dispatcher());
 	ctxt->setContextProperty("settings", qmlSettings);
 
 	view_.setSource(QUrl("qrc:/app.qml"));
@@ -65,12 +63,6 @@ Application::Application(int &argc, char **argv) :
 	connect(rootObject, SIGNAL(loginClicked(QString,QString,QString)), this, SLOT(dispatcher_loginClicked(QString,QString,QString)));
 	connect(rootObject, SIGNAL(logoutClicked()), this, SLOT(dispatcher_logoutClicked()));
 
-	connect(&dispatcher(), SIGNAL(folderCreated(QString)), this, SLOT(dispatcher_folderCreated(QString)));
-	connect(&dispatcher(), SIGNAL(folderUpdated(QString)), this, SLOT(dispatcher_folderUpdated(QString)));
-	connect(&dispatcher(), SIGNAL(folderDeleted(QString)), this, SLOT(dispatcher_folderDeleted(QString)));
-	//connect(&dispatcher(), SIGNAL(loginClicked(QString,QString,QString)), this, SLOT(dispatcher_loginClicked(QString,QString,QString)));
-	//connect(&dispatcher(), SIGNAL(logoutClicked()), this, SLOT(dispatcher_logoutClicked()));
-
 	view_.show();
 
 	synchronizerTimer_.setInterval(1000 * 120);
@@ -81,6 +73,7 @@ Application::Application(int &argc, char **argv) :
 	connect(&api_, SIGNAL(requestDone(const QJsonObject&, const QString&)), this, SLOT(api_requestDone(const QJsonObject&, const QString&)));
 
 	if (!settings.contains("user.email") || !settings.contains("session.id") || !settings.contains("api.baseUrl")) {
+		synchronizer_.freeze();
 		view_.showPage("login");
 	} else {
 		afterSessionInitialization();
@@ -121,9 +114,7 @@ void Application::api_requestDone(const QJsonObject& response, const QString& ta
 	if (tag == "getSession") {
 		if (response.contains("error")) {
 			qWarning() << "Could not get session:" << response.value("error").toString();
-			//dispatcher().emitLoginFailed();
 			view_.emitSignal("loginFailed");
-			//qDebug() << "FAILEDFAILEDFAILEDFAILEDFAILEDFAILEDFAILEDFAILEDFAILEDFAILEDFAILEDFAILED";
 			view_.showPage("login");
 		} else {
 			QString sessionId = response.value("id").toString();
@@ -131,27 +122,11 @@ void Application::api_requestDone(const QJsonObject& response, const QString& ta
 			Settings settings;
 			settings.setValue("session.id", sessionId);
 			afterSessionInitialization();
-			//dispatcher().emitLoginSuccess();
 			view_.emitSignal("loginSuccess");
 			view_.showPage("main");
 		}
 		return;
 	}
-}
-
-void Application::dispatcher_folderCreated(const QString &folderId) {
-	qDebug() << "Folder created" << folderId;
-	//synchronizerTimer_.start(1000 * 3);
-}
-
-void Application::dispatcher_folderUpdated(const QString &folderId) {
-	qDebug() << "Folder udpated" << folderId;
-	//synchronizerTimer_.start(1000 * 3);
-}
-
-void Application::dispatcher_folderDeleted(const QString &folderId) {
-	qDebug() << "Folder deleted" << folderId;
-	//synchronizerTimer_.start(1000 * 3);
 }
 
 void Application::dispatcher_loginClicked(const QString &apiBaseUrl, const QString &email, const QString &password) {
@@ -188,7 +163,7 @@ void Application::dispatcher_logoutClicked() {
 	synchronizer_.freeze();
 
 	Settings settings;
-	settings.setValue("session.id", "");
+	settings.remove("session.id");
 	api_.setSessionId("");
 	synchronizer_.setSessionId("");
 
@@ -232,9 +207,8 @@ void Application::afterSessionInitialization() {
 }
 
 void Application::view_currentFolderChanged() {
-//	QString folderId = selectedFolderId();
-//	noteCollection_ = NoteCollection(db_, folderId, "title ASC");
-//	noteModel_.setCollection(noteCollection_);
+	QString folderId = selectedFolderId();
+	noteModel_.setFolderId(folderId);
 }
 
 void Application::view_currentNoteChanged() {

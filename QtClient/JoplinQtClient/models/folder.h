@@ -3,6 +3,7 @@
 
 #include <stable.h>
 #include "models/item.h"
+#include "models/note.h"
 
 namespace jop {
 
@@ -18,6 +19,8 @@ public:
 	Table table() const;
 	bool primaryKeyIsUuid() const;
 	bool trackChanges() const;
+	int noteCount() const;
+	QVector<Note> notes(const QString& orderBy, int limit, int offset) const;
 
 //	bool save();
 //	bool dispose();

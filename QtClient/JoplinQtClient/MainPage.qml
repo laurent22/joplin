@@ -1,6 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
-import QtQuick.Controls 1.4
+//import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.0
 
 Item {
@@ -103,7 +103,7 @@ Item {
 		text: "Logout"
 		anchors.right: syncButton.left
 		anchors.top: parent.top
-		onClicked: appRoot.logoutClicked()  //dispatcher.logoutClicked()
+		onClicked: appRoot.logoutClicked()
 	}
 
 }

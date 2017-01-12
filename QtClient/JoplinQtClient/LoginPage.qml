@@ -32,14 +32,4 @@ LoginPageForm {
 		}
 	}
 
-//	Connections {
-//		target: dispatcher
-//		onLoginFailed: {
-//			root.enabled = true;
-//		}
-//		onLoginSuccess: {
-//			root.enabled = true;
-//		}
-//	}
-
 }

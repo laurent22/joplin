@@ -7,6 +7,7 @@ Database::Database() {}
 void Database::initialize(const QString &path) {
 	version_ = -1;
 	transactionCount_ = 0;
+	logQueries_ = false;
 
 	//QFile::remove(path);
 
@@ -18,9 +19,6 @@ void Database::initialize(const QString &path) {
 	} else {
 		qDebug() << "Database: connection ok";
 	}
-
-//	execQuery("DELETE FROM folders");
-//	execQuery("DELETE FROM settings");
 
 	upgrade();
 }
@@ -131,13 +129,15 @@ bool Database::commit() {
 }
 
 bool Database::execQuery(QSqlQuery &query) {
-//	qDebug().noquote() << "SQL:" << query.lastQuery();
+	if (logQueries_) {
+		qDebug().noquote() << "SQL:" << query.lastQuery();
 
-//	QMapIterator<QString, QVariant> i(query.boundValues());
-//	while (i.hasNext()) {
-//		i.next();
-//		qDebug().noquote() << "SQL:" << i.key() << "=" << i.value().toString();
-//	}
+		QMapIterator<QString, QVariant> i(query.boundValues());
+		while (i.hasNext()) {
+			i.next();
+			qDebug().noquote() << "SQL:" << i.key() << "=" << i.value().toString();
+		}
+	}
 
 	return query.exec();
 }

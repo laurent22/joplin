@@ -58,12 +58,10 @@ Item {
 	}
 
 	function emitLoginStarted() {
-		print("CALLING emitLoginStarted");
 		root.loginStarted();
 	}
 
 	function emitLoginFailed() {
-		print("CALLING emitLoginFailed");
 		root.loginFailed();
 	}
 

@@ -78,5 +78,6 @@ Note NoteCollection::byId(const QString& id) const {
 //	note.setId(q.value(0).toString());
 //	note.setTitle(q.value(1).toString());
 //	note.setBody(q.value(2).toString());
-//	return note;
+	//	return note;
 }
+

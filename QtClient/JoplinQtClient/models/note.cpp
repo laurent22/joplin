@@ -2,27 +2,16 @@
 
 using namespace jop;
 
-Note::Note()
-{
+Note::Note() : Item() {}
 
+Table Note::table() const {
+	return jop::NotesTable;
 }
 
-//QString Note::body() const {
-//	return body_;
-//}
+bool Note::primaryKeyIsUuid() const {
+	return true;
+}
 
-//void Note::setBody(const QString &v) {
-//	body_ = v;
-//}
-
-//QStringList Note::dbFields() {
-//	QStringList output = Item::dbFields();
-//	output << "body";
-//	return output;
-//}
-
-//void Note::fromSqlQuery(const QSqlQuery &q) {
-//	Item::fromSqlQuery(q);
-//	int idx = Item::dbFields().size();
-//	body_ = q.value(idx).toString();
-//}
+bool Note::trackChanges() const {
+	return true;
+}

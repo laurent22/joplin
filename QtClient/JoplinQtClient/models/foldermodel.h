@@ -20,7 +20,7 @@ public:
 		RawRole
 	};
 
-	FolderModel(Database& database);
+	FolderModel();
 
 	void addFolder(Folder* folder);
 	int rowCount(const QModelIndex & parent = QModelIndex()) const;
@@ -38,7 +38,6 @@ private:
 	QList<Folder> folders_;
 	bool virtualItemShown_;
 	QString orderBy_;
-	Database& db_;
 	mutable QVector<Folder> cache_;
 	QString lastInsertId_;
 

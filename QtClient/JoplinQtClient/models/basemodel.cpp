@@ -52,8 +52,6 @@ bool BaseModel::load(const QString &id) {
 bool BaseModel::save(bool trackChanges) {
 	bool isNew = this->isNew();
 
-	qDebug() << "SAVING" << valuesToString();
-
 	if (!changedFields_.size() && !isNew) return true;
 
 	QStringList fields = changedFields();
@@ -170,7 +168,7 @@ bool BaseModel::dispose() {
 }
 
 Table BaseModel::table() const {
-	qCritical() << "BaseModel::table() must be overriden";
+	qFatal("BaseModel::table() must be overriden");
 	return jop::UndefinedTable;
 }
 
@@ -209,12 +207,33 @@ QVector<BaseModel::Field> BaseModel::tableFields(jop::Table table) {
 		output.push_back(createField("title", QMetaType::QString ));
 		output.push_back(createField("created_time", QMetaType::Int ));
 		output.push_back(createField("updated_time", QMetaType::Int ));
+	} else if (table == jop::NotesTable) {
+		output.push_back(createField("id", QMetaType::Int ));
+		output.push_back(createField("title", QMetaType::QString ));
+		output.push_back(createField("body", QMetaType::QString ));
+		output.push_back(createField("parent_id", QMetaType::QString ));
+		output.push_back(createField("created_time", QMetaType::Int ));
+		output.push_back(createField("updated_time", QMetaType::Int ));
+		output.push_back(createField("latitude", QMetaType::QString ));
+		output.push_back(createField("longitude", QMetaType::QString ));
+		output.push_back(createField("altitude", QMetaType::QString ));
+		output.push_back(createField("source", QMetaType::QString ));
+		output.push_back(createField("author", QMetaType::QString ));
+		output.push_back(createField("source_url", QMetaType::QString ));
+		output.push_back(createField("is_todo", QMetaType::Int ));
+		output.push_back(createField("todo_due", QMetaType::Int ));
+		output.push_back(createField("todo_completed", QMetaType::Int ));
+		output.push_back(createField("source_application", QMetaType::QString ));
+		output.push_back(createField("application_data", QMetaType::QString ));
+		output.push_back(createField("order", QMetaType::Int ));
 	} else if (table == jop::ChangesTable) {
 		output.push_back(createField("id", QMetaType::Int ));
 		output.push_back(createField("type", QMetaType::Int ));
 		output.push_back(createField("item_id", QMetaType::QString ));
 		output.push_back(createField("item_type", QMetaType::Int ));
 		output.push_back(createField("item_field", QMetaType::QString ));
+	} else {
+		qFatal("Field not defined for table %d", table);
 	}
 
 	BaseModel::tableFields_[table] = output;
@@ -234,6 +253,16 @@ QStringList BaseModel::tableFieldNames(Table table) {
 	QStringList output;
 	foreach (BaseModel::Field field, fields) {
 		output.push_back(field.name);
+	}
+	return output;
+}
+
+QString BaseModel::sqlTableFields(Table table) {
+	QString output = "";
+	QStringList fields = BaseModel::tableFieldNames(table);
+	for (int i = 0; i < fields.size(); i++) {
+		if (output != "") output += ",";
+		output += QString("`%1`").arg(fields[i]);
 	}
 	return output;
 }
@@ -348,7 +377,7 @@ void BaseModel::setValue(const QString &name, const QJsonValue &value, QMetaType
 	} else if (type == QMetaType::Int) {
 		setValue(name, value.toInt());
 	} else {
-		qCritical() << "Unsupported value type" << name << type;
+		qFatal("Unsupported value type %s %d", name.toStdString(), type);
 	}
 }
 
@@ -370,7 +399,7 @@ QString BaseModel::tableName(Table t) {
 	if (t == jop::FoldersTable) return "folders";
 	if (t == jop::NotesTable) return "notes";
 	if (t == jop::ChangesTable) return "changes";
-	return "UNDEFINED";
+	qFatal("Unknown table %d", t);
 }
 
 QVariant BaseModel::cacheGet(const QString &key) {

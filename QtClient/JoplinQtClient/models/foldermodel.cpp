@@ -4,7 +4,7 @@
 
 using namespace jop;
 
-FolderModel::FolderModel(Database &database) : QAbstractListModel(), db_(database), orderBy_("title") {
+FolderModel::FolderModel() : QAbstractListModel(), orderBy_("title") {
 	virtualItemShown_ = false;
 
 	connect(&dispatcher(), SIGNAL(folderCreated(QString)), this, SLOT(dispatcher_folderCreated(QString)));
@@ -17,9 +17,6 @@ int FolderModel::rowCount(const QModelIndex & parent) const { Q_UNUSED(parent);
 	return Folder::count() + (virtualItemShown_ ? 1 : 0);
 }
 
-// NOTE: to lazy load - send back "Loading..." if item not currently loaded
-// queue the item for loading.
-// Then batch load them a bit later.
 QVariant FolderModel::data(const QModelIndex & index, int role) const {
 	Folder folder;
 
@@ -47,10 +44,6 @@ bool FolderModel::setData(const QModelIndex &index, const QVariant &value, int r
 		folder.setValue("title", value);
 		if (!folder.save()) return false;
 		cache_.clear();
-
-//		QVector<int> roles;
-//		roles << Qt::DisplayRole;
-//		emit dataChanged(this->index(0), this->index(rowCount() - 1), roles);
 		return true;
 	}
 
@@ -134,36 +127,12 @@ void FolderModel::addData(const QString &title) {
 	folder.setValue("title", title);
 	if (!folder.save()) return;
 
-	//cache_.clear();
-
 	lastInsertId_ = folder.id().toString();
-
-//	QVector<int> roles;
-//	roles << Qt::DisplayRole;
-
-//	int from = 0;
-//	int to = rowCount() - 1;
-
-//	// Necessary to make sure a new item is added to the view, even
-//	// though it might not be positioned there due to sorting
-//	beginInsertRows(QModelIndex(), to, to);
-//	endInsertRows();
-
-//	emit dataChanged(this->index(from), this->index(to), roles);
 }
 
 void FolderModel::deleteData(const int index) {
 	Folder folder = atIndex(index);
 	if (!folder.dispose()) return;
-
-//	cache_.clear();
-
-//	beginRemoveRows(QModelIndex(), index, index);
-//	endRemoveRows();
-
-//	QVector<int> roles;
-//	roles << Qt::DisplayRole;
-//	emit dataChanged(this->index(0), this->index(rowCount() - 1), roles);
 }
 
 // TODO: instead of clearing the whole cache every time, the individual items
