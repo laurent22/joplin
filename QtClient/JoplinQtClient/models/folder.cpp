@@ -1,10 +1,7 @@
 #include "models/folder.h"
-
-#include "dispatcher.h"
 #include "database.h"
-#include "uuid.h"
 
-using namespace jop;
+namespace jop {
 
 Folder::Folder() : Item() {}
 
@@ -72,17 +69,19 @@ int Folder::count() {
 	return BaseModel::count(jop::FoldersTable);
 }
 
-QVector<Folder> Folder::all(const QString &orderBy) {
+std::vector<std::unique_ptr<Folder>> Folder::all(const QString &orderBy) {
 	QSqlQuery q("SELECT " + BaseModel::tableFieldNames(jop::FoldersTable).join(",") + " FROM " + BaseModel::tableName(jop::FoldersTable) + " ORDER BY " + orderBy);
 	jop::db().execQuery(q);
 
-	QVector<Folder> output;
+	std::vector<std::unique_ptr<Folder>> output;
 
 	while (q.next()) {
-		Folder folder;
-		folder.loadSqlQuery(q);
-		output.push_back(folder);
+		std::unique_ptr<Folder> folder(new Folder());
+		folder->loadSqlQuery(q);
+		output.push_back(std::move(folder));
 	}
 
 	return output;
+}
+
 }

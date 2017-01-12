@@ -14,7 +14,7 @@ public:
 	Folder();
 
 	static int count();
-	static QVector<Folder> all(const QString& orderBy);
+	static std::vector<std::unique_ptr<Folder>> all(const QString& orderBy);
 
 	Table table() const;
 	bool primaryKeyIsUuid() const;
