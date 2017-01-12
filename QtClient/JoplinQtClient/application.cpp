@@ -157,6 +157,10 @@ void Application::synchronizerTimer_timeout() {
 
 QString Application::selectedFolderId() const {
 	QObject* rootObject = (QObject*)view_.rootObject();
+	if (!rootObject) {
+		qCritical() << "Calling selectedFolderId() when root is null";
+		return "";
+	}
 
 	int index = rootObject->property("currentFolderIndex").toInt();
 	QModelIndex modelIndex = folderModel_.index(index);

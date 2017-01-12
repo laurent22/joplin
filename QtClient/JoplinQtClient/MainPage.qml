@@ -10,6 +10,28 @@ Item {
 
 	function onShown() {}
 
+	function handleItemListEditingAccepted(list, index, text) {
+		if (list.model.virtualItemShown()) {
+			list.model.hideVirtualItem();
+			list.model.addData(text)
+			list.selectItemById(list.model.lastInsertId());
+		} else {
+			list.model.setData(index, text)
+		}
+	}
+
+	function handleItemListStoppedEditing(list) {
+		if (folderList.model.virtualItemShown()) {
+			folderList.model.hideVirtualItem();
+		}
+	}
+
+	function handleItemListAction(list, action) {
+		if (action === "delete") {
+			list.model.deleteData(list.index)
+		}
+	}
+
 	RowLayout {
 		id: layout
 		anchors.fill: parent
@@ -30,23 +52,15 @@ Item {
 			}
 
 			onEditingAccepted: function(index, text) {
-				if (folderList.model.virtualItemShown()) {
-					folderList.model.hideVirtualItem();
-					folderList.model.addData(text)
-					folderList.selectItemById(folderList.model.lastInsertId());
-				} else {
-					folderList.model.setData(index, text)
-				}
+				handleItemListEditingAccepted(folderList, index, text);
 			}
 
 			onStoppedEditing: {
-				if (folderList.model.virtualItemShown()) {
-					folderList.model.hideVirtualItem();
-				}
+				handleItemListStoppedEditing(folderList);
 			}
 
 			onDeleteButtonClicked: {
-				folderList.model.deleteData(index)
+				handleItemListAction(folderList, "delete");
 			}
 		}
 
@@ -62,6 +76,18 @@ Item {
 
 			onCurrentItemChanged: {
 				appRoot.currentNoteChanged()
+			}
+
+			onEditingAccepted: function(index, text) {
+				handleItemListEditingAccepted(noteList, index, text);
+			}
+
+			onStoppedEditing: {
+				handleItemListStoppedEditing(noteList);
+			}
+
+			onDeleteButtonClicked: {
+				handleItemListAction(noteList, "delete");
 			}
 		}
 
