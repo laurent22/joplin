@@ -77,25 +77,9 @@ Application::Application(int &argc, char **argv) :
 		view_.showPage("login");
 	} else {
 		afterSessionInitialization();
-		//QString apiBaseUrl = settings.value("api.baseUrl").toString();
-		//api_.setBaseUrl(apiBaseUrl);
-		//synchronizer_.api().setBaseUrl(apiBaseUrl);
-		//synchronizer_.setSessionId(settings.value("session.id").toString());
 		view_.showPage("main");
+		view_currentFolderChanged(); // Make sure the note list shows the right notes
 	}
-
-	// Don't store password, store session ID
-//	QString clientId = "B6E12222B6E12222";
-//	if (!settings.contains("user.email")) {
-//		settings.setValue("user.email", "laurent@cozic.net");
-//		settings.setValue("user.password", "12345678");
-//	}
-
-//	QUrlQuery postData;
-//	postData.addQueryItem("email", settings.value("user.email").toString());
-//	postData.addQueryItem("password", settings.value("user.password").toString());
-//	postData.addQueryItem("client_id", clientId);
-	//	api_.post("sessions", QUrlQuery(), postData, "getSession");
 }
 
 void Application::login(const QString &email, const QString &password) {
@@ -188,9 +172,6 @@ QString Application::selectedNoteId() const {
 }
 
 void Application::afterSessionInitialization() {
-	// TODO: rather than saving the session id, save the username/password and
-	// request a new session everytime on startup.
-
 	Settings settings;
 	QString sessionId = settings.value("session.id").toString();
 	api_.setBaseUrl(settings.value("api.baseUrl").toString());

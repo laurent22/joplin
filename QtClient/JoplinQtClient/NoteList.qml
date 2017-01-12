@@ -34,6 +34,8 @@ Item {
 		id: listView
 		anchors.fill: parent
 		delegate: noteDelegate
+		highlightMoveVelocity: -1
+		highlightMoveDuration: 100
 		ScrollBar.vertical: ScrollBar {  }
 		highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
 		focus: true

@@ -9,9 +9,7 @@ Item {
 	property alias currentFolderIndex: folderList.currentIndex
 	property alias currentNoteIndex: noteList.currentIndex
 
-	function onShown() {
-
-	}
+	function onShown() {}
 
 	RowLayout {
 		id: layout
