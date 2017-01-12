@@ -50,7 +50,7 @@ Item {
 			}
 		}
 
-		NoteList {
+		ItemList {
 			id: noteList
 			model: noteListModel
 			Layout.fillWidth: true

@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>app.qml</file>
         <file>ItemList.qml</file>
-        <file>NoteList.qml</file>
         <file>NoteEditor.qml</file>
         <file>AddButton.qml</file>
         <file>EditableListItem.qml</file>
