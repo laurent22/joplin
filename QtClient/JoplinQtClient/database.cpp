@@ -17,7 +17,7 @@ void Database::initialize(const QString &path) {
 	if  (!db_.open()) {
 		qFatal("Error: connection with database fail");
 	} else {
-		qDebug() << "Database: connection ok";
+		qInfo() << "Database: connection ok";
 	}
 
 	upgrade();

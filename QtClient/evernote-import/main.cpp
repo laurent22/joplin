@@ -367,7 +367,7 @@ int main(int argc, char *argv[]) {
 		qWarning() << "Error: connection with database fail";
 		return 1;
 	} else {
-		qDebug() << "Database: connection ok";
+		qInfo() << "Database: connection ok";
 	}
 
 	// TODO: REMOVE REMOVE REMOVE

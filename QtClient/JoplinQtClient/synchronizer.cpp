@@ -22,7 +22,7 @@ void Synchronizer::start() {
 		return;
 	}
 
-	qDebug() << "Starting synchronizer...";
+	qInfo() << "Starting synchronizer...";
 
 	switchState(UploadingChanges);
 }
@@ -103,7 +103,7 @@ void Synchronizer::switchState(Synchronizer::SynchronizationState state) {
 
 	state_ = state;
 
-	qDebug() << "Switching synchronizer state to" << state;
+	qInfo() << "Switching synchronizer state to" << state;
 
 	if (state == Idle) {
 
@@ -126,8 +126,6 @@ void Synchronizer::switchState(Synchronizer::SynchronizationState state) {
 			jop::Table itemType = (jop::Table)change.value("item_type").toInt();
 			QString itemId = change.value("item_id").toString();
 			Change::Type type = (Change::Type)change.value("type").toInt();
-
-			qDebug() << itemId << itemType << type;
 
 			if (itemType == jop::FoldersTable) {
 
@@ -207,7 +205,7 @@ void Synchronizer::api_requestDone(const QJsonObject& response, const QString& t
 	if (parts.size() == 3) arg1 = parts[2];
 	if (parts.size() == 4) arg2 = parts[3];
 
-	qDebug() << "WebApi: done" << category << action << arg1 << arg2;
+	qInfo() << "WebApi: done" << category << action << arg1 << arg2;
 
 	QString error = "";
 
@@ -225,7 +223,7 @@ void Synchronizer::api_requestDone(const QJsonObject& response, const QString& t
 		uploadsRemaining_--;
 
 		if (error == "") {
-			qDebug() << "Synced folder" << arg1;
+			qInfo() << "Synced folder" << arg1;
 
 			if (action == "putFolder") {
 				Change::disposeByItemId(arg1);

@@ -28,9 +28,9 @@ Application::Application(int &argc, char **argv) :
 	QCoreApplication::setOrganizationDomain(jop::ORG_DOMAIN);
 	QCoreApplication::setApplicationName(jop::APP_NAME);
 
-	qDebug() << "Config dir:" << paths::configDir();
-	qDebug() << "Database file:" << paths::databaseFile();
-	qDebug() << "SSL:" << QSslSocket::sslLibraryBuildVersionString() << QSslSocket::sslLibraryVersionNumber();
+	qInfo() << "Config dir:" << paths::configDir();
+	qInfo() << "Database file:" << paths::databaseFile();
+	qInfo() << "SSL:" << QSslSocket::sslLibraryBuildVersionString() << QSslSocket::sslLibraryVersionNumber();
 
 	jop::db().initialize(paths::databaseFile());
 
@@ -118,7 +118,7 @@ void Application::api_requestDone(const QJsonObject& response, const QString& ta
 			view_.showPage("login");
 		} else {
 			QString sessionId = response.value("id").toString();
-			qDebug() << "Got session" << sessionId;
+			qInfo() << "Got session" << sessionId;
 			Settings settings;
 			settings.setValue("session.id", sessionId);
 			afterSessionInitialization();
@@ -130,11 +130,7 @@ void Application::api_requestDone(const QJsonObject& response, const QString& ta
 }
 
 void Application::dispatcher_loginClicked(const QString &apiBaseUrl, const QString &email, const QString &password) {
-	qDebug() << apiBaseUrl << email << password;
-
 	view_.emitSignal("loginStarted");
-
-	//dispatcher().emitLoginStarted();
 
 	QString newBaseUrl = filters::apiBaseUrl(apiBaseUrl);
 
@@ -197,7 +193,6 @@ void Application::afterSessionInitialization() {
 
 	Settings settings;
 	QString sessionId = settings.value("session.id").toString();
-	qDebug() << "Session:" << sessionId;
 	api_.setBaseUrl(settings.value("api.baseUrl").toString());
 	api_.setSessionId(sessionId);
 	synchronizer_.api().setBaseUrl(settings.value("api.baseUrl").toString());
@@ -230,8 +225,6 @@ void Application::view_addFolderButtonClicked() {
 //	q.exec();
 
 //	emit jop::dispatcher().folderCreated("test");
-
-	//qDebug() << "Added" << q.lastInsertId().toString();
 }
 
 void Application::view_syncButtonClicked() {

@@ -163,7 +163,7 @@ void WebApi::request_finished(QNetworkReply *reply) {
 }
 
 void WebApi::request_error(QNetworkReply::NetworkError e) {
-	qDebug() << "Network error" << e;
+	qWarning() << "Network error" << e;
 }
 
 void jop::WebApi::setBaseUrl(const QString &v) {
