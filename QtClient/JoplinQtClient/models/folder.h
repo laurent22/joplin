@@ -20,7 +20,7 @@ public:
 	bool primaryKeyIsUuid() const;
 	bool trackChanges() const;
 	int noteCount() const;
-	QVector<Note> notes(const QString& orderBy, int limit, int offset) const;
+	std::vector<std::unique_ptr<Note> > notes(const QString& orderBy, int limit, int offset) const;
 	int noteIndexById(const QString& orderBy, const QString &id) const;
 
 };

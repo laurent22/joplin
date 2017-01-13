@@ -1,6 +1,6 @@
 #include "notemodel.h"
 
-jop::NoteModel::NoteModel() {
+jop::NoteModel::NoteModel() : QAbstractListModel() {
 	folderId_ = "";
 	orderBy_ = "title";
 }
@@ -11,25 +11,26 @@ int jop::NoteModel::rowCount(const QModelIndex &parent) const {
 }
 
 QVariant jop::NoteModel::data(const QModelIndex &index, int role) const {
-	Note note = atIndex(index.row());
+	Note* note = atIndex(index.row());
+
+	if (!note) return "";
 
 	if (role == IdRole) {
-		return QVariant(note.id().toString());
+		return QVariant(note->idString());
 	}
 
-	return QVariant(note.value("title").toString());
+	return QVariant(note->value("title").toString());
 }
 
-jop::Note jop::NoteModel::atIndex(int index) const {
-	if (folderId_ == "") return Note();
-	if (index < 0 || index >= rowCount()) return Note();
-
+jop::Note *jop::NoteModel::atIndex(int index) const {
+	if (folderId_ == "") return NULL;
+	if (index < 0 || index >= rowCount()) return NULL;
 	if (cache_.isset(index)) return cache_.get(index);
 
 	std::vector<int> indexes = cache_.availableBufferAround(index, 32);
 	if (!indexes.size()) {
-		qWarning() << "Couldn't acquire buffer"; // "Cannot happen"
-		return Note();
+		qCritical() << "Couldn't acquire buffer"; // "Cannot happen"
+		return NULL;
 	}
 
 	int from = indexes[0];
@@ -37,10 +38,10 @@ jop::Note jop::NoteModel::atIndex(int index) const {
 
 	Folder folder = this->folder();
 
-	QVector<Note> notes = folder.notes(orderBy_, to - from + 1, from);
+	std::vector<std::unique_ptr<Note>> notes = folder.notes(orderBy_, to - from + 1, from);
 	int noteIndex = from;
 	for (int i = 0; i < notes.size(); i++) {
-		cache_.set(noteIndex, notes[i]);
+		cache_.set(noteIndex, notes[i].release());
 		noteIndex++;
 	}
 
@@ -63,8 +64,8 @@ jop::Folder jop::NoteModel::folder() const {
 }
 
 QString jop::NoteModel::indexToId(int index) const {
-	Note note = atIndex(index);
-	return note.idString();
+	Note* note = atIndex(index);
+	return note->idString();
 }
 
 int jop::NoteModel::idToIndex(const QString &id) const {
@@ -79,3 +80,7 @@ QHash<int, QByteArray> jop::NoteModel::roleNames() const {
 	return roles;
 
 }
+
+//int jop::NoteModel::baseModelCount() const {
+
+//}

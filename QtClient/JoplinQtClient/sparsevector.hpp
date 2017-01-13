@@ -2,6 +2,7 @@
 #define SPARSEARRAY_HPP
 
 #include <algorithm>
+#include <memory>
 #include <iostream>
 #include <map>
 #include <vector>
@@ -16,21 +17,22 @@ public:
 		count_ = -1;
 	}
 
-	ClassType get(int index) const {
-		if (index > count()) return ClassType();
-		if (!isset(index)) return ClassType();
+	ClassType* get(int index) const {
+		if (index > count()) return NULL;
+		if (!isset(index)) return NULL;
 
 		typename IndexMap::const_iterator pos = indexes_.find(index);
 		int valueIndex = pos->second.valueIndex;
 
-		typename std::map<int, ClassType>::const_iterator pos2 = values_.find(valueIndex);
-		return pos2->second;
+		typename std::map<int, std::unique_ptr<ClassType>>::const_iterator pos2 = values_.find(valueIndex);
+		return pos2->second.get();
 	}
 
-	void set(int index, ClassType value) {
+	void set(int index, ClassType* value) {
 		unset(index);
 		int valueIndex = ++counter_;
-		values_[valueIndex] = value;
+		std::unique_ptr<ClassType> ptr(value);
+		values_[valueIndex] = std::move(ptr);
 		IndexRecord r;
 		r.valueIndex = valueIndex;
 		r.time = 0; // Disabled / not needed
@@ -39,7 +41,7 @@ public:
 		count_ = -1;
 	}
 
-	void push(ClassType value) {
+	void push(const ClassType& value) {
 		set(count(), value);
 	}
 
@@ -63,10 +65,10 @@ public:
 		indexes_.erase(index);
 	}
 
-	void insert(int index, ClassType value) {
+	void insert(int index, const ClassType& value) {
 		IndexMap newIndexes;
 		for (typename IndexMap::const_iterator it = indexes_.begin(); it != indexes_.end(); ++it) {
-			ClassType key = it->first;
+			int key = it->first;
 			if (key > index) key++;
 			newIndexes[key] = it->second;
 		}
@@ -85,7 +87,7 @@ public:
 
 		IndexMap newIndexes;
 		for (typename IndexMap::const_iterator it = indexes_.begin(); it != indexes_.end(); ++it) {
-			ClassType key = it->first;
+			int key = it->first;
 			if (key == index) continue;
 			if (key > index) key--;
 			newIndexes[key] = it->second;
@@ -201,7 +203,7 @@ private:
 
 	int counter_;
 	IndexMap indexes_;
-	std::map<int, ClassType> values_;
+	std::map<int, std::unique_ptr<ClassType>> values_;
 
 	// This is used to cache the result of ::count().
 	// Don't forget to set it to -1 whenever the list

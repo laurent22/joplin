@@ -25,8 +25,8 @@ int Folder::noteCount() const {
 	return q.value(0).toInt();
 }
 
-QVector<Note> Folder::notes(const QString &orderBy, int limit, int offset) const {
-	QVector<Note> output;
+std::vector<std::unique_ptr<Note>> Folder::notes(const QString &orderBy, int limit, int offset) const {
+	std::vector<std::unique_ptr<Note>> output;
 
 	QSqlQuery q = jop::db().prepare(QString("SELECT %1 FROM %2 WHERE parent_id = :parent_id ORDER BY %3 LIMIT %4 OFFSET %5")
 	                        .arg(BaseModel::sqlTableFields(jop::NotesTable))
@@ -39,9 +39,9 @@ QVector<Note> Folder::notes(const QString &orderBy, int limit, int offset) const
 	if (!jop::db().errorCheck(q)) return output;
 
 	while (q.next()) {
-		Note note;
-		note.loadSqlQuery(q);
-		output.push_back(note);
+		std::unique_ptr<Note> note(new Note());
+		note->loadSqlQuery(q);
+		output.push_back(std::move(note));
 	}
 
 	return output;

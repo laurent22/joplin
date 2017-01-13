@@ -5,6 +5,7 @@
 
 #include "models/folder.h"
 #include "sparsevector.hpp"
+#include "models/abstractlistmodel.h"
 
 namespace jop {
 
@@ -14,15 +15,16 @@ class NoteModel : public QAbstractListModel {
 
 public:
 
-	enum NoteRoles {
+	enum ModelRoles {
 		IdRole = Qt::UserRole + 1,
-		TitleRole
+		TitleRole,
+		RawRole
 	};
 
 	NoteModel();
 	int rowCount(const QModelIndex & parent = QModelIndex()) const;
 	QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
-	Note atIndex(int index) const;
+	Note* atIndex(int index) const;
 	void setFolderId(const QString& v);
 	Folder folder() const;
 
@@ -34,6 +36,7 @@ public slots:
 protected:
 
 	QHash<int, QByteArray> roleNames() const;
+	int baseModelCount() const;
 
 private:
 
