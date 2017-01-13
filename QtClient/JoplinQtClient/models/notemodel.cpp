@@ -7,23 +7,6 @@ NoteModel::NoteModel() : AbstractListModel() {
 	orderBy_ = "title";
 }
 
-//int NoteModel::rowCount(const QModelIndex &parent) const {
-//	Q_UNUSED(parent);
-//	return folder().noteCount();
-//}
-
-//QVariant NoteModel::data(const QModelIndex &index, int role) const {
-//	Note* note = atIndex(index.row());
-
-//	if (!note) return "";
-
-//	if (role == IdRole) {
-//		return QVariant(note->idString());
-//	}
-
-//	return QVariant(note->value("title").toString());
-//}
-
 Note *NoteModel::atIndex(int index) const {
 	if (folderId_ == "") return NULL;
 	if (index < 0 || index >= rowCount()) return NULL;
@@ -65,11 +48,6 @@ Folder NoteModel::folder() const {
 	return folder;
 }
 
-//QString NoteModel::indexToId(int index) const {
-//	Note* note = atIndex(index);
-//	return note->idString();
-//}
-
 int NoteModel::idToIndex(const QString &id) const {
 	Folder f = this->folder();
 	return f.noteIndexById(orderBy_, id);
@@ -80,11 +58,11 @@ int NoteModel::baseModelCount() const {
 }
 
 BaseModel* NoteModel::cacheGet(int index) const {
-	return (BaseModel*)cache_.get(index);
+	return static_cast<BaseModel*>(cache_.get(index));
 }
 
 void NoteModel::cacheSet(int index, BaseModel *baseModel) const {
-	cache_.set(index, (Note*)baseModel);
+	cache_.set(index, static_cast<Note*>(baseModel));
 }
 
 bool NoteModel::cacheIsset(int index) const {
