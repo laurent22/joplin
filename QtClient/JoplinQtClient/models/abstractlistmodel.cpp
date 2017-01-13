@@ -98,7 +98,6 @@ QHash<int, QByteArray> AbstractListModel::roleNames() const {
 	QHash<int, QByteArray> roles = QAbstractItemModel::roleNames();
 	roles[TitleRole] = "title";
 	roles[IdRole] = "id";
-	//roles[RawRole] = "raw";
 	return roles;
 }
 

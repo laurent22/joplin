@@ -15,12 +15,6 @@ class NoteModel : public AbstractListModel {
 
 public:
 
-	enum ModelRoles {
-		IdRole = Qt::UserRole + 1,
-		TitleRole,
-		RawRole
-	};
-
 	NoteModel();
 	Note* atIndex(int index) const;
 	void setFolderId(const QString& v);

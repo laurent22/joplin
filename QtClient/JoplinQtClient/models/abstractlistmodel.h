@@ -14,8 +14,7 @@ public:
 
 	enum ModelRoles {
 		IdRole = Qt::UserRole + 1,
-		TitleRole,
-		RawRole
+		TitleRole
 	};
 
 	AbstractListModel();

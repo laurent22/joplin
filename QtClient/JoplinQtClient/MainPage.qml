@@ -10,6 +10,11 @@ Item {
 
 	function onShown() {}
 
+	function handleAddItem(list) {
+		list.model.showVirtualItem();
+		list.startEditing(list.model.rowCount() - 1);
+	}
+
 	function handleItemListEditingAccepted(list, index, text) {
 		if (list.model.virtualItemShown()) {
 			list.model.hideVirtualItem();
@@ -106,11 +111,8 @@ Item {
 		id: addButton
 		anchors.right: parent.right
 		anchors.bottom: parent.bottom
-		onAddFolderButtonClicked: {
-			folderList.model.showVirtualItem();
-			folderList.startEditing(folderList.model.rowCount() - 1);
-		}
-		onAddNoteButtonClicked: appRoot.addNoteButtonClicked()
+		onAddFolderButtonClicked: handleAddItem(folderList)
+		onAddNoteButtonClicked: handleAddItem(noteList)
 	}
 
 	Button {

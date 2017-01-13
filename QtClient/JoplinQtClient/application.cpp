@@ -59,6 +59,7 @@ Application::Application(int &argc, char **argv) :
 	connect(rootObject, SIGNAL(currentFolderChanged()), this, SLOT(view_currentFolderChanged()));
 	connect(rootObject, SIGNAL(currentNoteChanged()), this, SLOT(view_currentNoteChanged()));
 	connect(rootObject, SIGNAL(addFolderButtonClicked()), this, SLOT(view_addFolderButtonClicked()));
+	connect(rootObject, SIGNAL(addNoteButtonClicked()), this, SLOT(view_addNoteButtonClicked()));
 	connect(rootObject, SIGNAL(syncButtonClicked()), this, SLOT(view_syncButtonClicked()));
 	connect(rootObject, SIGNAL(loginClicked(QString,QString,QString)), this, SLOT(dispatcher_loginClicked(QString,QString,QString)));
 	connect(rootObject, SIGNAL(logoutClicked()), this, SLOT(dispatcher_logoutClicked()));
@@ -198,7 +199,7 @@ void Application::view_currentNoteChanged() {
 }
 
 void Application::view_addNoteButtonClicked() {
-
+	qDebug() <<"ADDNOTE";
 }
 
 void Application::view_addFolderButtonClicked() {
