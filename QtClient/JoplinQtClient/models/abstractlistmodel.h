@@ -26,13 +26,16 @@ public:
 
 protected:
 
-	virtual BaseModel newBaseModel() const;
 	virtual int baseModelCount() const;
 
-	virtual BaseModel cacheGet(int index) const;
-	virtual void cacheSet(int index, const BaseModel& baseModel);
+	// All these methods are const because we want to be able to clear the
+	// cache or set values from any method including const ones.
+	// http://stackoverflow.com/a/4248661/561309
+	virtual BaseModel* cacheGet(int index) const;
+	virtual void cacheSet(int index, BaseModel* baseModel) const;
 	virtual bool cacheIsset(int index) const;
-	virtual void cacheClear();
+	virtual void cacheClear() const;
+	virtual int cacheSize() const;
 
 private:
 

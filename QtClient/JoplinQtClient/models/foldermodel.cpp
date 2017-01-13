@@ -12,26 +12,6 @@ FolderModel::FolderModel() : AbstractListModel(), orderBy_("title") {
 }
 
 QVariant FolderModel::data(const QModelIndex & index, int role) const {
-
-	//QVector<std::unique_ptr<Folder>> folders;
-//	std::unique_ptr<Folder> f(new Folder());
-//	f->setValue("title", QString("ancd"));
-//	BaseModel* b = static_cast<BaseModel*>(f.get());
-//	qDebug() << b->value("title").toString();
-//	Folder* f2 = static_cast<Folder*>(b);
-//	qDebug() << "*" << f2->value("title").toString();
-
-
-//	std::unique_ptr<BaseModel> baseModel(f.release());
-//	qDebug() << "££££££££££££££££££££££££££££££££" << baseModel->value("title").toString();
-//	std::unique_ptr<Folder> f2(baseModel.release());
-//	qDebug() << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << f2->value("title").toString();
-
-
-	//f->setValue("title", "abcd");
-
-
-
 	Folder* folder = NULL;
 
 	if (virtualItemShown() && index.row() == rowCount() - 1) {
@@ -60,7 +40,7 @@ bool FolderModel::setData(const QModelIndex &index, const QVariant &value, int r
 	if (role == Qt::EditRole) {
 		folder->setValue("title", value);
 		if (!folder->save()) return false;
-		cache_.clear();
+		cacheClear();
 		return true;
 	}
 
@@ -69,20 +49,20 @@ bool FolderModel::setData(const QModelIndex &index, const QVariant &value, int r
 }
 
 Folder* FolderModel::atIndex(int index) const {
-	if (cache_.size()) {
-		if (index < 0 || index >= cache_.size()) {
+	if (cacheSize()) {
+		if (index < 0 || index >= cacheSize()) {
 			qWarning() << "Invalid folder index:" << index;
 			return NULL;
 		}
 
-		return cache_[index].get();
+		return (Folder*)cacheGet(index);
 	}
 
-	cache_.clear();
+	cacheClear();
 
 	cache_ = Folder::all(orderBy_);
 
-	if (!cache_.size()) {
+	if (!cacheSize()) {
 		qWarning() << "Invalid folder index:" << index;
 		return NULL;
 	} else {
@@ -94,30 +74,30 @@ Folder* FolderModel::atIndex(const QModelIndex &index) const {
 	return atIndex(index.row());
 }
 
-BaseModel FolderModel::newBaseModel() const {
-	return Folder();
-}
-
 int FolderModel::baseModelCount() const {
 	return Folder::count();
 }
 
-//BaseModel FolderModel::cacheGet(int index) const {
-//	return cache_[index];
-//}
+BaseModel *FolderModel::cacheGet(int index) const {
+	return cache_[index].get();
+}
 
-//void FolderModel::cacheSet(int index, const BaseModel &baseModel) {
-////	Folder f(baseModel);
-////	cache_[index] = f;
-//}
+void FolderModel::cacheSet(int index, BaseModel* baseModel) const {
+	Folder* folder = static_cast<Folder*>(baseModel);
+	cache_[index] = std::unique_ptr<Folder>(folder);
+}
 
-//bool FolderModel::cacheIsset(int index) const {
-//	return index > 0 && cache_.size() > index;
-//}
+bool FolderModel::cacheIsset(int index) const {
+	return index > 0 && cache_.size() > index;
+}
 
-//void FolderModel::cacheClear() {
-//	cache_.clear();
-//}
+void FolderModel::cacheClear() const {
+	cache_.clear();
+}
+
+int FolderModel::cacheSize() const {
+	return cache_.size();
+}
 
 QString FolderModel::indexToId(int index) const {
 	return data(this->index(index), IdRole).toString();
@@ -160,7 +140,7 @@ void FolderModel::deleteData(const int index) {
 void FolderModel::dispatcher_folderCreated(const QString &folderId) {
 	qDebug() << "FolderModel Folder created" << folderId;
 
-	cache_.clear();
+	cacheClear();
 
 	int from = 0;
 	int to = rowCount() - 1;
@@ -179,7 +159,7 @@ void FolderModel::dispatcher_folderCreated(const QString &folderId) {
 void FolderModel::dispatcher_folderUpdated(const QString &folderId) {
 	qDebug() << "FolderModel Folder udpated" << folderId;
 
-	cache_.clear();
+	cacheClear();
 
 	QVector<int> roles;
 	roles << Qt::DisplayRole;
@@ -192,7 +172,7 @@ void FolderModel::dispatcher_folderDeleted(const QString &folderId) {
 	int index = idToIndex(folderId);
 	if (index < 0) return;
 
-	cache_.clear();
+	cacheClear();
 
 	beginRemoveRows(QModelIndex(), index, index);
 	endRemoveRows();
@@ -200,7 +180,7 @@ void FolderModel::dispatcher_folderDeleted(const QString &folderId) {
 
 void FolderModel::dispatcher_allFoldersDeleted() {
 	qDebug() << "FolderModel All folders deleted";
-	cache_.clear();
+	cacheClear();
 	beginResetModel();
 	endResetModel();
 }

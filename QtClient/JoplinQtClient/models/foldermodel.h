@@ -25,18 +25,18 @@ public:
 
 protected:
 
-	BaseModel newBaseModel() const;
+	//BaseModel newBaseModel() const;
 	int baseModelCount() const;
-//	virtual BaseModel cacheGet(int index) const;
-//	virtual void cacheSet(int index, const BaseModel& baseModel);
-//	virtual bool cacheIsset(int index) const;
-//	virtual void cacheClear();
+	BaseModel* cacheGet(int index) const;
+	void cacheSet(int index, BaseModel *baseModel) const;
+	bool cacheIsset(int index) const;
+	void cacheClear() const;
+	int cacheSize() const;
 
 private:
 
 	QList<Folder> folders_;
 	QString orderBy_;
-	//mutable QVector<Folder> cache_;
 	mutable std::vector<std::unique_ptr<Folder>> cache_;
 
 	QString lastInsertId_;
