@@ -48,9 +48,11 @@ public slots:
 	bool virtualItemShown() const;
 	void hideVirtualItem();
 	QHash<int, QByteArray> roleNames() const;
+	int roleNameToId(const QString& name) const;
 	QString indexToId(int index) const;
 	virtual int idToIndex(const QString& id) const;
 	QString lastInsertId() const;
+	bool setData(int index, const QVariant &value, const QString& role = "edit");
 
 };
 

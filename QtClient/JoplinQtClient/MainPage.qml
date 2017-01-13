@@ -21,7 +21,7 @@ Item {
 			list.model.addData(text)
 			list.selectItemById(list.model.lastInsertId());
 		} else {
-			list.model.setTitle(index, text)
+			list.model.setData(index, text, "title")
 		}
 	}
 

@@ -20,6 +20,18 @@ void Dispatcher::emitAllFoldersDeleted() {
 	emit allFoldersDeleted();
 }
 
+void Dispatcher::emitNoteCreated(const QString &noteId) {
+	emit noteCreated(noteId);
+}
+
+void Dispatcher::emitNoteUpdated(const QString &noteId) {
+	emit noteUpdated(noteId);
+}
+
+void Dispatcher::emitNoteDeleted(const QString &noteId) {
+	emit noteDeleted(noteId);
+}
+
 void Dispatcher::emitLoginClicked(const QString &apiBaseUrl, const QString &email, const QString &password) {
 	emit loginClicked(apiBaseUrl, email, password);
 }

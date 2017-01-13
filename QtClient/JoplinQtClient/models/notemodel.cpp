@@ -1,10 +1,15 @@
 #include "notemodel.h"
+#include "dispatcher.h"
 
 namespace jop {
 
 NoteModel::NoteModel() : AbstractListModel() {
 	folderId_ = "";
 	orderBy_ = "title";
+
+	connect(&dispatcher(), SIGNAL(noteCreated(QString)), this, SLOT(dispatcher_noteCreated(QString)), Qt::QueuedConnection);
+	connect(&dispatcher(), SIGNAL(noteUpdated(QString)), this, SLOT(dispatcher_noteUpdated(QString)), Qt::QueuedConnection);
+	connect(&dispatcher(), SIGNAL(noteDeleted(QString)), this, SLOT(dispatcher_noteDeleted(QString)), Qt::QueuedConnection);
 }
 
 Note *NoteModel::atIndex(int index) const {
@@ -53,6 +58,15 @@ int NoteModel::idToIndex(const QString &id) const {
 	return f.noteIndexById(orderBy_, id);
 }
 
+void NoteModel::addData(const QString &title) {
+	Note note;
+	note.setValue("title", title);
+	note.setValue("parent_id", folderId_);
+	if (!note.save()) return;
+
+	lastInsertId_ = note.idString();
+}
+
 int NoteModel::baseModelCount() const {
 	return folder().noteCount();
 }
@@ -71,6 +85,47 @@ bool NoteModel::cacheIsset(int index) const {
 
 void NoteModel::cacheClear() const {
 	cache_.clear();
+}
+
+void NoteModel::dispatcher_noteCreated(const QString &noteId) {
+	qDebug() << "NoteModel Folder created" << noteId;
+
+	cacheClear();
+
+	int from = 0;
+	int to = rowCount() - 1;
+
+	QVector<int> roles;
+	roles << Qt::DisplayRole;
+
+	// Necessary to make sure a new item is added to the view, even
+	// though it might not be positioned there due to sorting
+	beginInsertRows(QModelIndex(), to, to);
+	endInsertRows();
+
+	emit dataChanged(this->index(from), this->index(to), roles);
+}
+
+void NoteModel::dispatcher_noteUpdated(const QString &noteId) {
+	qDebug() << "NoteModel Folder udpated" << noteId;
+
+	cacheClear();
+
+	QVector<int> roles;
+	roles << Qt::DisplayRole;
+	emit dataChanged(this->index(0), this->index(rowCount() - 1), roles);
+}
+
+void NoteModel::dispatcher_noteDeleted(const QString &noteId) {
+	qDebug() << "NoteModel Folder deleted" << noteId;
+
+	int index = idToIndex(noteId);
+	if (index < 0) return;
+
+	cacheClear();
+
+	beginRemoveRows(QModelIndex(), index, index);
+	endRemoveRows();
 }
 
 }

@@ -19,6 +19,9 @@ public slots:
 	void emitFolderUpdated(const QString& folderId);
 	void emitFolderDeleted(const QString& folderId);
 	void emitAllFoldersDeleted();
+	void emitNoteCreated(const QString& noteId);
+	void emitNoteUpdated(const QString& noteId);
+	void emitNoteDeleted(const QString& noteId);
 	void emitLoginClicked(const QString& domain, const QString& email, const QString &password);
 	void emitLogoutClicked();
 	void emitLoginStarted();
@@ -31,6 +34,9 @@ signals:
 	void folderUpdated(const QString& folderId);
 	void folderDeleted(const QString& folderId);
 	void allFoldersDeleted();
+	void noteCreated(const QString& noteId);
+	void noteUpdated(const QString& noteId);
+	void noteDeleted(const QString& noteId);
 	void loginClicked(const QString& domain, const QString& email, const QString& password);
 	void logoutClicked();
 	void loginStarted();

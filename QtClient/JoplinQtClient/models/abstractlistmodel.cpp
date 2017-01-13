@@ -44,8 +44,8 @@ bool AbstractListModel::setData(const QModelIndex &index, const QVariant &value,
 	BaseModel* model = atIndex(index.row());
 	if (!model) return false;
 
-	if (role == Qt::EditRole) {
-		model->setValue("title", value);
+	if (role == TitleRole) {
+		model->setValue("title", value.toString());
 		if (!model->save()) return false;
 		cacheClear();
 		return true;
@@ -53,6 +53,10 @@ bool AbstractListModel::setData(const QModelIndex &index, const QVariant &value,
 
 	qWarning() << "Unsupported role" << role;
 	return false;
+}
+
+bool AbstractListModel::setData(int index, const QVariant &value, const QString& role) {
+	return setData(this->index(index), value, roleNameToId(role));
 }
 
 int AbstractListModel::baseModelCount() const {
@@ -99,6 +103,15 @@ QHash<int, QByteArray> AbstractListModel::roleNames() const {
 	roles[TitleRole] = "title";
 	roles[IdRole] = "id";
 	return roles;
+}
+
+int AbstractListModel::roleNameToId(const QString &name) const {
+	QHash<int, QByteArray> roles = roleNames();
+	for (QHash<int, QByteArray>::const_iterator it = roles.begin(); it != roles.end(); ++it) {
+		if (it.value() == name) return it.key();
+	}
+	qCritical() << "Unknown role" << name;
+	return 0;
 }
 
 QString AbstractListModel::indexToId(int index) const {

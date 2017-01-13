@@ -5,10 +5,19 @@
 using namespace jop;
 
 FolderModel::FolderModel() : AbstractListModel(), orderBy_("title") {
-	connect(&dispatcher(), SIGNAL(folderCreated(QString)), this, SLOT(dispatcher_folderCreated(QString)));
-	connect(&dispatcher(), SIGNAL(folderUpdated(QString)), this, SLOT(dispatcher_folderUpdated(QString)));
-	connect(&dispatcher(), SIGNAL(folderDeleted(QString)), this, SLOT(dispatcher_folderDeleted(QString)));
-	connect(&dispatcher(), SIGNAL(allFoldersDeleted()), this, SLOT(dispatcher_allFoldersDeleted()));
+	// Qt::QueuedConnection needs to be used here because in the dispatcher_XXX slots
+	// the object that is being worked on might get deleted via cacheClear(). For example:
+	// 1. setData() requests a model from the cache
+	// 2. it updates it and call model->save()
+	// 3. save() emits "folderUpdated"
+	// 4. in dispatcher_folderUpdated() (which, without QueuedConnection is called immediately) the cache is cleared, including the model
+	// 5. the model is now an invalid pointer and the rest of the code in save() crashes
+	// This is solved using QueuedConnection, as it means the cache will be cleared only once model is no longer in use.
+
+	connect(&dispatcher(), SIGNAL(folderCreated(QString)), this, SLOT(dispatcher_folderCreated(QString)), Qt::QueuedConnection);
+	connect(&dispatcher(), SIGNAL(folderUpdated(QString)), this, SLOT(dispatcher_folderUpdated(QString)), Qt::QueuedConnection);
+	connect(&dispatcher(), SIGNAL(folderDeleted(QString)), this, SLOT(dispatcher_folderDeleted(QString)), Qt::QueuedConnection);
+	connect(&dispatcher(), SIGNAL(allFoldersDeleted()), this, SLOT(dispatcher_allFoldersDeleted()), Qt::QueuedConnection);
 }
 
 BaseModel* FolderModel::atIndex(int index) const {
@@ -33,10 +42,6 @@ BaseModel* FolderModel::atIndex(int index) const {
 	}
 }
 
-//QString FolderModel::indexToId(int index) const {
-//	return data(this->index(index), IdRole).toString();
-//}
-
 int FolderModel::idToIndex(const QString &id) const {
 	int count = this->rowCount();
 	for (int i = 0; i < count; i++) {
@@ -46,14 +51,13 @@ int FolderModel::idToIndex(const QString &id) const {
 	return -1;
 }
 
-//QString FolderModel::lastInsertId() const {
-//	return lastInsertId_;
+//bool FolderModel::setTitle(int index, const QVariant &value, int role) {
+//	return setData(this->index(index), value, role);
 //}
 
-
-bool FolderModel::setTitle(int index, const QVariant &value, int role) {
-	return setData(this->index(index), value, role);
-}
+//bool FolderModel::setData(int index, const QVariant &value, int role) {
+//	return BaseModel::setData(this->index(index), value, role);
+//}
 
 void FolderModel::addData(const QString &title) {
 	Folder folder;

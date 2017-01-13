@@ -38,7 +38,8 @@ public slots:
 
 	void addData(const QString& title);
 	void deleteData(const int index);
-	bool setTitle(int index, const QVariant &value, int role = Qt::EditRole);
+	//bool setTitle(int index, const QVariant &value, int role = Qt::EditRole);
+	//bool setData(int index, const QVariant &value, int role = Qt::EditRole);
 	int idToIndex(const QString& id) const;
 
 	void dispatcher_folderCreated(const QString& folderId);

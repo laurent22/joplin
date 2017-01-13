@@ -14,10 +14,6 @@ BaseModel::BaseModel() {
 	isNew_ = -1;
 }
 
-//BaseModel::BaseModel(const BaseModel &baseModel) : BaseModel() {
-
-//}
-
 QStringList BaseModel::changedFields() const {
 	QStringList output;
 	for (QHash<QString, bool>::const_iterator it = changedFields_.begin(); it != changedFields_.end(); ++it) {
@@ -132,11 +128,20 @@ bool BaseModel::save(bool trackChanges) {
 
 	jop::db().commit();
 
-	if (isSaved && table() == jop::FoldersTable) {
-		if (isNew) {
-			dispatcher().emitFolderCreated(id().toString());
-		} else {
-			dispatcher().emitFolderUpdated(id().toString());
+	if (isSaved) {
+		if (table() == jop::FoldersTable) {
+			if (isNew) {
+				dispatcher().emitFolderCreated(idString());
+			} else {
+				dispatcher().emitFolderUpdated(idString());
+			}
+		}
+		if (table() == jop::NotesTable) {
+			if (isNew) {
+				dispatcher().emitNoteCreated(idString());
+			} else {
+				dispatcher().emitNoteUpdated(idString());
+			}
 		}
 	}
 
@@ -164,8 +169,9 @@ bool BaseModel::dispose() {
 		change.save();
 	}
 
-	if (isDeleted && table() == jop::FoldersTable) {
-		dispatcher().emitFolderDeleted(id().toString());
+	if (isDeleted) {
+		if (table() == jop::FoldersTable) dispatcher().emitFolderDeleted(idString());
+		if (table() == jop::NotesTable) dispatcher().emitNoteDeleted(idString());
 	}
 
 	return isDeleted;

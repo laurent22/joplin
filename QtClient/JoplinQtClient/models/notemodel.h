@@ -23,6 +23,10 @@ public:
 public slots:
 
 	int idToIndex(const QString& id) const;
+	void addData(const QString& title);
+	void dispatcher_noteCreated(const QString& noteId);
+	void dispatcher_noteUpdated(const QString& noteId);
+	void dispatcher_noteDeleted(const QString& noteId);
 
 protected:
 
