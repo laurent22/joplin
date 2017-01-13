@@ -9,7 +9,7 @@
 
 namespace jop {
 
-class NoteModel : public QAbstractListModel {
+class NoteModel : public AbstractListModel {
 
 	Q_OBJECT
 
@@ -22,20 +22,19 @@ public:
 	};
 
 	NoteModel();
-	int rowCount(const QModelIndex & parent = QModelIndex()) const;
-	QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+	//int rowCount(const QModelIndex & parent = QModelIndex()) const;
+	//QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
 	Note* atIndex(int index) const;
 	void setFolderId(const QString& v);
 	Folder folder() const;
 
 public slots:
 
-	QString indexToId(int index) const;
+	//QString indexToId(int index) const;
 	int idToIndex(const QString& id) const;
 
 protected:
 
-	QHash<int, QByteArray> roleNames() const;
 	int baseModelCount() const;
 	BaseModel* cacheGet(int index) const;
 	void cacheSet(int index, BaseModel *baseModel) const;
