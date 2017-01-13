@@ -27,6 +27,8 @@ public:
 
 protected:
 
+	QString lastInsertId_;
+
 	virtual int baseModelCount() const;
 
 	// All these methods are const because we want to be able to clear the
@@ -48,6 +50,9 @@ public slots:
 	bool virtualItemShown() const;
 	void hideVirtualItem();
 	QHash<int, QByteArray> roleNames() const;
+	virtual QString indexToId(int index) const;
+	virtual int idToIndex(const QString& id) const;
+	QString lastInsertId() const;
 
 };
 

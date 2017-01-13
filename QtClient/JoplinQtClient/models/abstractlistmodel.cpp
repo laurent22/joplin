@@ -106,3 +106,16 @@ QHash<int, QByteArray> AbstractListModel::roleNames() const {
 	//roles[RawRole] = "raw";
 	return roles;
 }
+
+QString AbstractListModel::indexToId(int index) const {
+	return data(this->index(index), IdRole).toString();
+}
+
+int AbstractListModel::idToIndex(const QString &id) const {
+	qFatal("AbstractListModel::idToIndex() not implemented");
+	return -1;
+}
+
+QString AbstractListModel::lastInsertId() const {
+	return lastInsertId_;
+}

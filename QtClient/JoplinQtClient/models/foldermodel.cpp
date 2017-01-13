@@ -33,9 +33,9 @@ BaseModel* FolderModel::atIndex(int index) const {
 	}
 }
 
-QString FolderModel::indexToId(int index) const {
-	return data(this->index(index), IdRole).toString();
-}
+//QString FolderModel::indexToId(int index) const {
+//	return data(this->index(index), IdRole).toString();
+//}
 
 int FolderModel::idToIndex(const QString &id) const {
 	int count = this->rowCount();
@@ -46,9 +46,10 @@ int FolderModel::idToIndex(const QString &id) const {
 	return -1;
 }
 
-QString FolderModel::lastInsertId() const {
-	return lastInsertId_;
-}
+//QString FolderModel::lastInsertId() const {
+//	return lastInsertId_;
+//}
+
 
 bool FolderModel::setTitle(int index, const QVariant &value, int role) {
 	return setData(this->index(index), value, role);
