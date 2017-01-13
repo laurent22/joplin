@@ -12,8 +12,8 @@ FolderModel::FolderModel() : AbstractListModel(), orderBy_("title") {
 }
 
 BaseModel* FolderModel::atIndex(int index) const {
-	if (cacheSize()) {
-		if (index < 0 || index >= cacheSize()) {
+	if (cache_.size()) {
+		if (index < 0 || index >= cache_.size()) {
 			qWarning() << "Invalid folder index:" << index;
 			return NULL;
 		}
@@ -25,7 +25,7 @@ BaseModel* FolderModel::atIndex(int index) const {
 
 	cache_ = Folder::all(orderBy_);
 
-	if (!cacheSize()) {
+	if (!cache_.size()) {
 		qWarning() << "Invalid folder index:" << index;
 		return NULL;
 	} else {
@@ -88,10 +88,6 @@ bool FolderModel::cacheIsset(int index) const {
 
 void FolderModel::cacheClear() const {
 	cache_.clear();
-}
-
-int FolderModel::cacheSize() const {
-	return cache_.size();
 }
 
 // TODO: instead of clearing the whole cache every time, the individual items

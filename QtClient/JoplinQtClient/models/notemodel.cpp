@@ -1,16 +1,18 @@
 #include "notemodel.h"
 
-jop::NoteModel::NoteModel() : QAbstractListModel() {
+namespace jop {
+
+NoteModel::NoteModel() : QAbstractListModel() {
 	folderId_ = "";
 	orderBy_ = "title";
 }
 
-int jop::NoteModel::rowCount(const QModelIndex &parent) const {
+int NoteModel::rowCount(const QModelIndex &parent) const {
 	Q_UNUSED(parent);
 	return folder().noteCount();
 }
 
-QVariant jop::NoteModel::data(const QModelIndex &index, int role) const {
+QVariant NoteModel::data(const QModelIndex &index, int role) const {
 	Note* note = atIndex(index.row());
 
 	if (!note) return "";
@@ -22,7 +24,7 @@ QVariant jop::NoteModel::data(const QModelIndex &index, int role) const {
 	return QVariant(note->value("title").toString());
 }
 
-jop::Note *jop::NoteModel::atIndex(int index) const {
+Note *NoteModel::atIndex(int index) const {
 	if (folderId_ == "") return NULL;
 	if (index < 0 || index >= rowCount()) return NULL;
 	if (cache_.isset(index)) return cache_.get(index);
@@ -48,7 +50,7 @@ jop::Note *jop::NoteModel::atIndex(int index) const {
 	return cache_.get(index);
 }
 
-void jop::NoteModel::setFolderId(const QString &v) {
+void NoteModel::setFolderId(const QString &v) {
 	if (v == folderId_) return;
 	beginResetModel();
 	cache_.clear();
@@ -56,24 +58,24 @@ void jop::NoteModel::setFolderId(const QString &v) {
 	endResetModel();
 }
 
-jop::Folder jop::NoteModel::folder() const {
+Folder NoteModel::folder() const {
 	Folder folder;
 	if (folderId_ == "") return folder;
 	folder.load(folderId_);
 	return folder;
 }
 
-QString jop::NoteModel::indexToId(int index) const {
+QString NoteModel::indexToId(int index) const {
 	Note* note = atIndex(index);
 	return note->idString();
 }
 
-int jop::NoteModel::idToIndex(const QString &id) const {
+int NoteModel::idToIndex(const QString &id) const {
 	Folder f = this->folder();
 	return f.noteIndexById(orderBy_, id);
 }
 
-QHash<int, QByteArray> jop::NoteModel::roleNames() const {
+QHash<int, QByteArray> NoteModel::roleNames() const {
 	QHash<int, QByteArray> roles = QAbstractItemModel::roleNames();
 //	roles[TitleRole] = "title";
 //	roles[UuidRole] = "uuid";
@@ -81,6 +83,20 @@ QHash<int, QByteArray> jop::NoteModel::roleNames() const {
 
 }
 
-//int jop::NoteModel::baseModelCount() const {
+BaseModel* NoteModel::cacheGet(int index) const {
+	return (BaseModel*)cache_.get(index);
+}
 
-//}
+void NoteModel::cacheSet(int index, BaseModel *baseModel) const {
+	cache_.set(index, baseModel);
+}
+
+bool NoteModel::cacheIsset(int index) const {
+	return cache_.isset(index);
+}
+
+void NoteModel::cacheClear() const {
+	cache_.clear();
+}
+
+}

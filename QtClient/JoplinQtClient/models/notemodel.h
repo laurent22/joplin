@@ -37,6 +37,10 @@ protected:
 
 	QHash<int, QByteArray> roleNames() const;
 	int baseModelCount() const;
+	BaseModel* cacheGet(int index) const;
+	void cacheSet(int index, BaseModel *baseModel) const;
+	bool cacheIsset(int index) const;
+	void cacheClear() const;
 
 private:
 

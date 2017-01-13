@@ -78,11 +78,6 @@ void AbstractListModel::cacheClear() const {
 	qFatal("AbstractListModel::cacheClear() not implemented");
 }
 
-int AbstractListModel::cacheSize() const {
-	qFatal("AbstractListModel::cacheSize() not implemented");
-	return -1;
-}
-
 void AbstractListModel::showVirtualItem() {
 	virtualItemShown_ = true;
 	beginInsertRows(QModelIndex(), this->rowCount() - 1, this->rowCount() - 1);

@@ -38,7 +38,6 @@ protected:
 	virtual void cacheSet(int index, BaseModel* baseModel) const;
 	virtual bool cacheIsset(int index) const;
 	virtual void cacheClear() const;
-	virtual int cacheSize() const;
 
 private:
 
