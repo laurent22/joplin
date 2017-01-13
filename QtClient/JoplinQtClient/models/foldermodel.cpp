@@ -11,51 +11,14 @@ FolderModel::FolderModel() : AbstractListModel(), orderBy_("title") {
 	connect(&dispatcher(), SIGNAL(allFoldersDeleted()), this, SLOT(dispatcher_allFoldersDeleted()));
 }
 
-QVariant FolderModel::data(const QModelIndex & index, int role) const {
-	Folder* folder = NULL;
-
-	if (virtualItemShown() && index.row() == rowCount() - 1) {
-		if (role == Qt::DisplayRole) return "Untitled";
-		return "";
-		//folder->setValue("title", BaseModel::Value(QString("Untitled")));
-	} else {
-		folder = atIndex(index.row());
-	}
-
-	if (role == Qt::DisplayRole) {
-		return folder->value("title").toQVariant();
-	}
-
-	if (role == IdRole) {
-		return folder->id().toQVariant();
-	}
-
-	return QVariant();
-}
-
-bool FolderModel::setData(const QModelIndex &index, const QVariant &value, int role) {
-	Folder* folder = atIndex(index.row());
-	if (!folder) return false;
-
-	if (role == Qt::EditRole) {
-		folder->setValue("title", value);
-		if (!folder->save()) return false;
-		cacheClear();
-		return true;
-	}
-
-	qWarning() << "Unsupported role" << role;
-	return false;
-}
-
-Folder* FolderModel::atIndex(int index) const {
+BaseModel* FolderModel::atIndex(int index) const {
 	if (cacheSize()) {
 		if (index < 0 || index >= cacheSize()) {
 			qWarning() << "Invalid folder index:" << index;
 			return NULL;
 		}
 
-		return (Folder*)cacheGet(index);
+		return cacheGet(index);
 	}
 
 	cacheClear();
@@ -70,8 +33,39 @@ Folder* FolderModel::atIndex(int index) const {
 	}
 }
 
-Folder* FolderModel::atIndex(const QModelIndex &index) const {
-	return atIndex(index.row());
+QString FolderModel::indexToId(int index) const {
+	return data(this->index(index), IdRole).toString();
+}
+
+int FolderModel::idToIndex(const QString &id) const {
+	int count = this->rowCount();
+	for (int i = 0; i < count; i++) {
+		Folder* folder = (Folder*)atIndex(i);
+		if (folder->idString() == id) return i;
+	}
+	return -1;
+}
+
+QString FolderModel::lastInsertId() const {
+	return lastInsertId_;
+}
+
+bool FolderModel::setTitle(int index, const QVariant &value, int role) {
+	return setData(this->index(index), value, role);
+}
+
+void FolderModel::addData(const QString &title) {
+	Folder folder;
+	folder.setValue("title", title);
+	if (!folder.save()) return;
+
+	lastInsertId_ = folder.id().toString();
+}
+
+void FolderModel::deleteData(const int index) {
+	Folder* folder = (Folder*)atIndex(index);
+	if (!folder) return;
+	folder->dispose();
 }
 
 int FolderModel::baseModelCount() const {
@@ -97,41 +91,6 @@ void FolderModel::cacheClear() const {
 
 int FolderModel::cacheSize() const {
 	return cache_.size();
-}
-
-QString FolderModel::indexToId(int index) const {
-	return data(this->index(index), IdRole).toString();
-}
-
-int FolderModel::idToIndex(const QString &id) const {
-	int count = this->rowCount();
-	for (int i = 0; i < count; i++) {
-		Folder* folder = atIndex(i);
-		if (folder->idString() == id) return i;
-	}
-	return -1;
-}
-
-QString FolderModel::lastInsertId() const {
-	return lastInsertId_;
-}
-
-bool FolderModel::setData(int index, const QVariant &value, int role) {
-	return setData(this->index(index), value, role);
-}
-
-void FolderModel::addData(const QString &title) {
-	Folder folder;
-	folder.setValue("title", title);
-	if (!folder.save()) return;
-
-	lastInsertId_ = folder.id().toString();
-}
-
-void FolderModel::deleteData(const int index) {
-	Folder* folder = atIndex(index);
-	if (!folder) return;
-	folder->dispose();
 }
 
 // TODO: instead of clearing the whole cache every time, the individual items

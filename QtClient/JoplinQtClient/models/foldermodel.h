@@ -18,14 +18,10 @@ public:
 	FolderModel();
 
 	void addFolder(Folder* folder);
-	QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
-	bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-	Folder* atIndex(int index) const;
-	Folder* atIndex(const QModelIndex &index) const;
+	BaseModel* atIndex(int index) const;
 
 protected:
 
-	//BaseModel newBaseModel() const;
 	int baseModelCount() const;
 	BaseModel* cacheGet(int index) const;
 	void cacheSet(int index, BaseModel *baseModel) const;
@@ -45,7 +41,7 @@ public slots:
 
 	void addData(const QString& title);
 	void deleteData(const int index);
-	bool setData(int index, const QVariant &value, int role = Qt::EditRole);	
+	bool setTitle(int index, const QVariant &value, int role = Qt::EditRole);
 	QString indexToId(int index) const;
 	int idToIndex(const QString& id) const;
 	QString lastInsertId() const;

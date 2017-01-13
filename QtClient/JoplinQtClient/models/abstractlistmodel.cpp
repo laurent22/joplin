@@ -10,51 +10,50 @@ int AbstractListModel::rowCount(const QModelIndex & parent) const { Q_UNUSED(par
 	return baseModelCount() + (virtualItemShown() ? 1 : 0);
 }
 
-//QVariant AbstractListModel::data(const QModelIndex & index, int role) const {
-//	BaseModel model = baseModel();
+QVariant AbstractListModel::data(const QModelIndex & index, int role) const {
+	BaseModel* model = NULL;
 
-//	if (virtualItemShown() && index.row() == rowCount() - 1) {
-//		model.setValue("title", BaseModel::Value(QString("Untitled")));
-//	} else {
-//		model = atIndex(index.row());
-//	}
+	if (virtualItemShown() && index.row() == rowCount() - 1) {
+		if (role == Qt::DisplayRole) return "Untitled";
+		return "";
+	} else {
+		model = atIndex(index.row());
+	}
 
-//	if (role == Qt::DisplayRole) {
-//		return model.value("title").toQVariant();
-//	}
+	if (role == Qt::DisplayRole) {
+		return model->value("title").toQVariant();
+	}
 
-//	if (role == IdRole) {
-//		return model.id().toQVariant();
-//	}
+	if (role == IdRole) {
+		return model->id().toQVariant();
+	}
 
-//	return QVariant();
-//}
+	return QVariant();
+}
 
-//BaseModel AbstractListModel::atIndex(int index) const {
-//	if (cache_.size()) {
-//		if (index < 0 || index >= cache_.size()) {
-//			qWarning() << "Invalid folder index:" << index;
-//			return Folder();
-//		}
+BaseModel* AbstractListModel::atIndex(int index) const {
+	qFatal("AbstractListModel::atIndex() not implemented");
+	return NULL;
+}
 
-//		return cache_[index];
-//	}
+BaseModel* AbstractListModel::atIndex(const QModelIndex &index) const {
+	return atIndex(index.row());
+}
 
-//	cache_.clear();
+bool AbstractListModel::setData(const QModelIndex &index, const QVariant &value, int role) {
+	BaseModel* model = atIndex(index.row());
+	if (!model) return false;
 
-//	cache_ = Folder::all(orderBy_);
+	if (role == Qt::EditRole) {
+		model->setValue("title", value);
+		if (!model->save()) return false;
+		cacheClear();
+		return true;
+	}
 
-//	if (!cache_.size()) {
-//		qWarning() << "Invalid folder index:" << index;
-//		return Folder();
-//	} else {
-//		return atIndex(index);
-//	}
-//}
-
-//BaseModel AbstractListModel::atIndex(const QModelIndex &index) const {
-//	return atIndex(index.row());
-//}
+	qWarning() << "Unsupported role" << role;
+	return false;
+}
 
 int AbstractListModel::baseModelCount() const {
 	qFatal("AbstractListModel::baseModelCount() not implemented");
