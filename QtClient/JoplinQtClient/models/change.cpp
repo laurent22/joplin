@@ -3,8 +3,12 @@
 
 using namespace jop;
 
-Table Change::table() const {
-	return jop::ChangesTable;
+//Table Change::table() const {
+//	return jop::ChangesTable;
+//}
+
+Change::Change() : BaseModel() {
+	table_ = jop::ChangesTable;
 }
 
 QVector<Change> Change::all(int limit) {

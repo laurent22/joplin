@@ -11,7 +11,7 @@ int AbstractListModel::rowCount(const QModelIndex & parent) const { Q_UNUSED(par
 }
 
 QVariant AbstractListModel::data(const QModelIndex & index, int role) const {
-	BaseModel* model = NULL;
+	const BaseModel* model = NULL;
 
 	if (virtualItemShown() && index.row() == rowCount() - 1) {
 		if (role == Qt::DisplayRole) return "Untitled";
@@ -31,25 +31,27 @@ QVariant AbstractListModel::data(const QModelIndex & index, int role) const {
 	return QVariant();
 }
 
-BaseModel* AbstractListModel::atIndex(int index) const {
+const BaseModel *AbstractListModel::atIndex(int index) const {
 	qFatal("AbstractListModel::atIndex() not implemented");
 	return NULL;
 }
 
-BaseModel* AbstractListModel::atIndex(const QModelIndex &index) const {
+const BaseModel* AbstractListModel::atIndex(const QModelIndex &index) const {
 	return atIndex(index.row());
 }
 
 bool AbstractListModel::setData(const QModelIndex &index, const QVariant &value, int role) {
-	BaseModel* model = atIndex(index.row());
+	const BaseModel* model = atIndex(index.row());
 	if (!model) return false;
 
 	if (role == TitleRole) {
 		BaseModel temp;
 		temp.clone(*model);
-		qDebug() << model->value("title").toString();
-
+		temp.setValue("title", value.toString());
+		if (!temp.save()) return false;
+		cacheClear();
 		return true;
+
 //		model->setValue("title", value.toString());
 //		if (!model->save()) return false;
 //		cacheClear();
@@ -69,7 +71,7 @@ int AbstractListModel::baseModelCount() const {
 	return 0;
 }
 
-BaseModel* AbstractListModel::cacheGet(int index) const {
+const BaseModel *AbstractListModel::cacheGet(int index) const {
 	qFatal("AbstractListModel::cacheGet() not implemented");
 	return NULL;
 }

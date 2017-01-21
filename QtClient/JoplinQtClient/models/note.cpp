@@ -2,11 +2,13 @@
 
 using namespace jop;
 
-Note::Note() : Item() {}
-
-Table Note::table() const {
-	return jop::NotesTable;
+Note::Note() : Item() {
+	table_ = jop::NotesTable;
 }
+
+//Table Note::table() const {
+//	return jop::NotesTable;
+//}
 
 bool Note::primaryKeyIsUuid() const {
 	return true;

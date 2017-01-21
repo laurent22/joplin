@@ -46,7 +46,7 @@ public:
 	virtual bool save(bool trackChanges = true);
 	virtual bool dispose();
 
-	virtual Table table() const;
+	Table table() const;
 	virtual QString primaryKey() const;
 	virtual bool primaryKeyIsUuid() const;
 	virtual bool trackChanges() const;
@@ -84,6 +84,7 @@ protected:
 	QHash<QString, bool> changedFields_;
 	QHash<QString, Value> values_;
 	int isNew_;
+	jop::Table table_;
 
 	static QVariant cacheGet(const QString& key);
 	static void cacheSet(const QString& key, const QVariant& value);

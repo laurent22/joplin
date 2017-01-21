@@ -3,11 +3,13 @@
 
 namespace jop {
 
-Folder::Folder() : Item() {}
-
-Table Folder::table() const {
-	return jop::FoldersTable;
+Folder::Folder() : Item() {
+	table_ = jop::FoldersTable;
 }
+
+//Table Folder::table() const {
+//	return jop::FoldersTable;
+//}
 
 bool Folder::primaryKeyIsUuid() const {
 	return true;

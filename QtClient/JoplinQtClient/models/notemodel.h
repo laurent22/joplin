@@ -16,7 +16,7 @@ class NoteModel : public AbstractListModel {
 public:
 
 	NoteModel();
-	Note* atIndex(int index) const;
+	const Note* atIndex(int index) const;
 	void setFolderId(const QString& v);
 	Folder folder() const;
 
@@ -32,7 +32,7 @@ public slots:
 protected:
 
 	int baseModelCount() const;
-	BaseModel* cacheGet(int index) const;
+	const BaseModel* cacheGet(int index) const;
 	void cacheSet(int index, BaseModel *baseModel) const;
 	bool cacheIsset(int index) const;
 	void cacheClear() const;

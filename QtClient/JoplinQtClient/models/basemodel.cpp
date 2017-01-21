@@ -10,9 +10,7 @@ using namespace jop;
 QMap<int, QVector<BaseModel::Field>> BaseModel::tableFields_;
 QHash<QString, QVariant> BaseModel::cache_;
 
-BaseModel::BaseModel() {
-	isNew_ = -1;
-}
+BaseModel::BaseModel() : table_(jop::UndefinedTable), isNew_(-1) {}
 
 QStringList BaseModel::changedFields() const {
 	QStringList output;
@@ -178,8 +176,7 @@ bool BaseModel::dispose() {
 }
 
 Table BaseModel::table() const {
-	qFatal("BaseModel::table() must be overriden");
-	return jop::UndefinedTable;
+	return table_;
 }
 
 QString BaseModel::primaryKey() const {
@@ -419,6 +416,7 @@ void BaseModel::clone(const BaseModel &baseModel) {
 	values_ = baseModel.values_;
 	changedFields_.clear();
 	isNew_ = false;
+	table_ = baseModel.table_;
 }
 
 QString BaseModel::tableName(Table t) {

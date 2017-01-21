@@ -17,12 +17,12 @@ public:
 
 	FolderModel();
 	void addFolder(Folder* folder);
-	BaseModel* atIndex(int index) const;
+	const BaseModel* atIndex(int index) const;
 
 protected:
 
 	int baseModelCount() const;
-	BaseModel* cacheGet(int index) const;
+	const BaseModel *cacheGet(int index) const;
 	void cacheSet(int index, BaseModel *baseModel) const;
 	bool cacheIsset(int index) const;
 	void cacheClear() const;

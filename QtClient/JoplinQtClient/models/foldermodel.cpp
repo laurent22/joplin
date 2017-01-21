@@ -20,7 +20,7 @@ FolderModel::FolderModel() : AbstractListModel(), orderBy_("title") {
 	connect(&dispatcher(), SIGNAL(allFoldersDeleted()), this, SLOT(dispatcher_allFoldersDeleted()), Qt::QueuedConnection);
 }
 
-BaseModel* FolderModel::atIndex(int index) const {
+const BaseModel *FolderModel::atIndex(int index) const {
 	if (cache_.size()) {
 		if (index < 0 || index >= cache_.size()) {
 			qWarning() << "Invalid folder index:" << index;
@@ -78,7 +78,7 @@ int FolderModel::baseModelCount() const {
 	return Folder::count();
 }
 
-BaseModel *FolderModel::cacheGet(int index) const {
+const BaseModel *FolderModel::cacheGet(int index) const {
 	return cache_[index].get();
 }
 

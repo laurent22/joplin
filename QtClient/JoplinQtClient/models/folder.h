@@ -16,7 +16,7 @@ public:
 	static int count();
 	static std::vector<std::unique_ptr<Folder>> all(const QString& orderBy);
 
-	Table table() const;
+	//Table table() const;
 	bool primaryKeyIsUuid() const;
 	bool trackChanges() const;
 	int noteCount() const;

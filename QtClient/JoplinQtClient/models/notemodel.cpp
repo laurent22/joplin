@@ -12,7 +12,7 @@ NoteModel::NoteModel() : AbstractListModel() {
 	connect(&dispatcher(), SIGNAL(noteDeleted(QString)), this, SLOT(dispatcher_noteDeleted(QString)), Qt::QueuedConnection);
 }
 
-Note *NoteModel::atIndex(int index) const {
+const Note *NoteModel::atIndex(int index) const {
 	if (folderId_ == "") return NULL;
 	if (index < 0 || index >= rowCount()) return NULL;
 	if (cache_.isset(index)) return cache_.get(index);
@@ -83,7 +83,7 @@ int NoteModel::baseModelCount() const {
 	return folder().noteCount();
 }
 
-BaseModel* NoteModel::cacheGet(int index) const {
+const BaseModel *NoteModel::cacheGet(int index) const {
 	return static_cast<BaseModel*>(cache_.get(index));
 }
 
