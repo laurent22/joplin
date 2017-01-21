@@ -19,6 +19,7 @@ Item {
 		if (list.model.virtualItemShown()) {
 			list.model.hideVirtualItem();
 			list.model.addData(text)
+			print("handleItemListEditingAccepted");
 			list.selectItemById(list.model.lastInsertId());
 		} else {
 			list.model.setData(index, text, "title")

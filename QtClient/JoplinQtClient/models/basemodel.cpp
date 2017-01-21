@@ -393,6 +393,10 @@ void BaseModel::setValue(const QString &name, const QJsonValue &value, QMetaType
 	}
 }
 
+//void BaseModel::setValues(const QHash<QString, BaseModel::Value> values) {
+//	values_ = values;
+//}
+
 BaseModel::Value BaseModel::id() const {
 	if (!valueIsSet(primaryKey())) return QVariant();
 	return value(primaryKey());
@@ -409,6 +413,12 @@ QString BaseModel::valuesToString() const {
 		s += it.key() + " = " + it.value().toString();
 	}
 	return s;
+}
+
+void BaseModel::clone(const BaseModel &baseModel) {
+	values_ = baseModel.values_;
+	changedFields_.clear();
+	isNew_ = false;
 }
 
 QString BaseModel::tableName(Table t) {

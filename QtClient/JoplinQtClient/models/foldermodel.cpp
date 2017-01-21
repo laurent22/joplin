@@ -46,6 +46,7 @@ int FolderModel::idToIndex(const QString &id) const {
 	int count = this->rowCount();
 	for (int i = 0; i < count; i++) {
 		Folder* folder = (Folder*)atIndex(i);
+		if (!folder) return -1;
 		if (folder->idString() == id) return i;
 	}
 	return -1;

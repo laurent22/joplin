@@ -40,6 +40,7 @@ Item {
 			target: model
 			onDataChanged: {
 				if (currentItemId !== "") {
+					print("Connection.onDataChanged");
 					selectItemById(currentItemId);
 				}
 			}

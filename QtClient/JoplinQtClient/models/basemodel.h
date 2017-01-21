@@ -71,26 +71,25 @@ public:
 	void setValue(const QString& name, const QString& value);
 	void setValue(const QString& name, int value);
 	void setValue(const QString& name, const QJsonValue& value, QMetaType::Type type);
+	//void setValues(const QHash<QString, Value> values);
 	Value id() const;
 	QString idString() const;
 	QString valuesToString() const;
+	void clone(const BaseModel& baseModel);
 
 	static QString tableName(Table t);
 
 protected:
 
 	QHash<QString, bool> changedFields_;
-	Table table_;
 	QHash<QString, Value> values_;
+	int isNew_;
 
 	static QVariant cacheGet(const QString& key);
 	static void cacheSet(const QString& key, const QVariant& value);
 	static void cacheDelete(const QString& key);
-
 	static QMap<int, QVector<BaseModel::Field>> tableFields_;
 	static QHash<QString, QVariant> cache_;
-
-	int isNew_;
 
 };
 

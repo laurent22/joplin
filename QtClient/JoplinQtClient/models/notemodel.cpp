@@ -54,6 +54,12 @@ Folder NoteModel::folder() const {
 }
 
 int NoteModel::idToIndex(const QString &id) const {
+	std::vector<int> indexes = cache_.indexes();
+	for (int i = 0; i < indexes.size(); i++) {
+		Note* note = cache_.get(indexes[i]);
+		if (note->idString() == id) return indexes[i];
+	}
+
 	Folder f = this->folder();
 	return f.noteIndexById(orderBy_, id);
 }
@@ -65,6 +71,12 @@ void NoteModel::addData(const QString &title) {
 	if (!note.save()) return;
 
 	lastInsertId_ = note.idString();
+}
+
+void NoteModel::deleteData(int index) {
+	Note* note = (Note*)atIndex(index);
+	if (!note) return;
+	note->dispose();
 }
 
 int NoteModel::baseModelCount() const {
@@ -107,7 +119,7 @@ void NoteModel::dispatcher_noteCreated(const QString &noteId) {
 }
 
 void NoteModel::dispatcher_noteUpdated(const QString &noteId) {
-	qDebug() << "NoteModel Folder udpated" << noteId;
+	qDebug() << "NoteModel note udpated" << noteId;
 
 	cacheClear();
 
@@ -117,9 +129,10 @@ void NoteModel::dispatcher_noteUpdated(const QString &noteId) {
 }
 
 void NoteModel::dispatcher_noteDeleted(const QString &noteId) {
-	qDebug() << "NoteModel Folder deleted" << noteId;
+	qDebug() << "NoteModel note deleted" << noteId;
 
 	int index = idToIndex(noteId);
+	qDebug() << "index" << index;
 	if (index < 0) return;
 
 	cacheClear();

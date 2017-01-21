@@ -45,10 +45,15 @@ bool AbstractListModel::setData(const QModelIndex &index, const QVariant &value,
 	if (!model) return false;
 
 	if (role == TitleRole) {
-		model->setValue("title", value.toString());
-		if (!model->save()) return false;
-		cacheClear();
+		BaseModel temp;
+		temp.clone(*model);
+		qDebug() << model->value("title").toString();
+
 		return true;
+//		model->setValue("title", value.toString());
+//		if (!model->save()) return false;
+//		cacheClear();
+//		return true;
 	}
 
 	qWarning() << "Unsupported role" << role;
