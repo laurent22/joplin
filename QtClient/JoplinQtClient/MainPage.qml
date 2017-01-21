@@ -34,7 +34,8 @@ Item {
 
 	function handleItemListAction(list, action) {
 		if (action === "delete") {
-			list.model.deleteData(list.index)
+			if (list.currentIndex === undefined) return;
+			list.model.deleteData(list.currentIndex)
 		}
 	}
 

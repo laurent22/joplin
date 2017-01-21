@@ -14,10 +14,10 @@ FolderModel::FolderModel() : AbstractListModel(), orderBy_("title") {
 	// 5. the model is now an invalid pointer and the rest of the code in save() crashes
 	// This is solved using QueuedConnection, as it means the cache will be cleared only once model is no longer in use.
 
-	connect(&dispatcher(), SIGNAL(folderCreated(QString)), this, SLOT(dispatcher_folderCreated(QString)), Qt::QueuedConnection);
-	connect(&dispatcher(), SIGNAL(folderUpdated(QString)), this, SLOT(dispatcher_folderUpdated(QString)), Qt::QueuedConnection);
-	connect(&dispatcher(), SIGNAL(folderDeleted(QString)), this, SLOT(dispatcher_folderDeleted(QString)), Qt::QueuedConnection);
-	connect(&dispatcher(), SIGNAL(allFoldersDeleted()), this, SLOT(dispatcher_allFoldersDeleted()), Qt::QueuedConnection);
+	connect(&dispatcher(), SIGNAL(folderCreated(QString)), this, SLOT(dispatcher_folderCreated(QString)));
+	connect(&dispatcher(), SIGNAL(folderUpdated(QString)), this, SLOT(dispatcher_folderUpdated(QString)));
+	connect(&dispatcher(), SIGNAL(folderDeleted(QString)), this, SLOT(dispatcher_folderDeleted(QString)));
+	connect(&dispatcher(), SIGNAL(allFoldersDeleted()), this, SLOT(dispatcher_allFoldersDeleted()));
 }
 
 const BaseModel *FolderModel::atIndex(int index) const {
