@@ -21,6 +21,9 @@ class Eloquent {
 		$this->capsule_->addConnection($dbParams);
 		$this->capsule_->bootEloquent();
 
+		// Fix as described in https://github.com/laravel/framework/issues/6322
+		$this->capsule_->getContainer()->bind('Illuminate\Contracts\Debug\ExceptionHandler', 'AppBundle\Exception\ExceptionHandler');
+
 		// In order to keep things lightweight, the models aren't part of Symfony dependency
 		// injection framework, so any service required by a model needs to be injected here. 
 		Model\File::$mimeTypes_ = $mimeTypes;
