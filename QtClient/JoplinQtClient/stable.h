@@ -6,6 +6,7 @@
 #include <memory>
 
 #include <QAbstractListModel>
+#include <QCoreApplication>
 #include <QGuiApplication>
 #include <QDebug>
 #include <QFileInfo>

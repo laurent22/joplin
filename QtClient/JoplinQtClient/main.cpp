@@ -1,6 +1,11 @@
 #include <stable.h>
 
+#if defined(JOP_FRONT_END_CLI)
+#include "cliapplication.h"
+#elif defined(JOP_FRONT_END_GUI)
 #include "application.h"
+#endif
+
 #include "models/folder.h"
 #include "database.h"
 #include "models/foldermodel.h"
@@ -26,7 +31,7 @@ int main(int argc, char *argv[]) {
 #endif
 
 #ifdef JOP_FRONT_END_CLI
-    QCoreApplication app(argc, argv);
+	CliApplication app(argc, argv);
 #endif
 
     return app.exec();
