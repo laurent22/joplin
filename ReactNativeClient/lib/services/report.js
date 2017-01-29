@@ -118,8 +118,12 @@ class ReportService {
 
 			for (let i = 0; i < disabledItems.length; i++) {
 				const row = disabledItems[i];
-				section.body.push(_('"%s": "%s"', row.item.title, row.syncInfo.sync_disabled_reason));
+				section.body.push(_('%s (%s): %s', row.item.title, row.item.id, row.syncInfo.sync_disabled_reason));
 			}
+
+			section.body.push('');
+			section.body.push(_('These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).'));
+
 			sections.push(section);
 		}
 

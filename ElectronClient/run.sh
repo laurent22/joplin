@@ -4,3 +4,5 @@ cd "$ROOT_DIR"
 ./build.sh || exit 1
 cd "$ROOT_DIR/app"
 ./node_modules/.bin/electron . --env dev --log-level debug --open-dev-tools "$@"
+
+#./node_modules/.bin/electron . --profile c:\\Users\\Laurent\\.config\\joplin-desktop --log-level debug --open-dev-tools "$@"

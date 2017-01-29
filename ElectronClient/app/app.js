@@ -19,6 +19,7 @@ const { defaultState } = require('lib/reducer.js');
 const packageInfo = require('./packageInfo.js');
 const AlarmService = require('lib/services/AlarmService.js');
 const AlarmServiceDriverNode = require('lib/services/AlarmServiceDriverNode');
+const DecryptionWorker = require('lib/services/DecryptionWorker');
 
 const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;

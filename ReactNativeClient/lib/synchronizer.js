@@ -191,7 +191,7 @@ class Synchronizer {
 		let synchronizationId = time.unixMs().toString();
 
 		let outputContext = Object.assign({}, lastContext);
-		
+
 		this.dispatch({ type: 'SYNC_STARTED' });
 
 		this.logSyncOperation('starting', null, null, 'Starting synchronisation to target ' + syncTargetId + '... [' + synchronizationId + ']');

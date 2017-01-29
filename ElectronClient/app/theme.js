@@ -65,6 +65,7 @@ globalStyle.textStyle = {
 	color: globalStyle.color,
 	fontFamily: globalStyle.fontFamily,
 	fontSize: globalStyle.fontSize,
+	lineHeight: '1.6em',
 };
 
 globalStyle.textStyle2 = Object.assign({}, globalStyle.textStyle, {

@@ -70,7 +70,9 @@ class StatusScreenComponent extends React.Component {
 
 			for (let n in section.body) {
 				if (!section.body.hasOwnProperty(n)) continue;
-				itemsHtml.push(<div style={theme.textStyle} key={'item_' + n}>{section.body[n]}</div>);
+				let text = section.body[n];
+				if (!text) text = '\xa0';
+				itemsHtml.push(<div style={theme.textStyle} key={'item_' + n}>{text}</div>);
 			}
 
 			return (
