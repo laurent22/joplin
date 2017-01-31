@@ -43,6 +43,7 @@ public:
 	QStringList changedFields() const;
 	static int count(jop::Table table);
 	bool load(const QString& id);
+	bool loadByField(const QString& parentId, const QString& field, const QString& fieldValue);
 	virtual bool save(bool trackChanges = true);
 	virtual bool dispose();
 

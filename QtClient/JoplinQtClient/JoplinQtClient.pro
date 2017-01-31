@@ -45,7 +45,8 @@ SOURCES += \
     window.cpp \
     filters.cpp \
     models/abstractlistmodel.cpp \
-    cliapplication.cpp
+    cliapplication.cpp \
+    command.cpp
 
 RESOURCES += qml.qrc \
     database.qrc
@@ -83,7 +84,8 @@ HEADERS += \
     window.h \
     filters.h \
     models/abstractlistmodel.h \
-    cliapplication.h
+    cliapplication.h \
+    command.h
 
 defined(JOP_FRONT_END_GUI, var) {
     SOURCES += application.cpp

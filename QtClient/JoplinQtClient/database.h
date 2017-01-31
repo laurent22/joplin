@@ -14,6 +14,7 @@ public:
 	enum QueryType { Select, Insert, Update, Delete };
 
 	Database();
+	~Database();
 	void initialize(const QString& path);
 	QSqlDatabase& database();
 	QSqlQuery buildSqlQuery(Database::QueryType type, const QString& tableName, const QStringList& fields, const VariantVector& values, const QString& whereCondition = "");

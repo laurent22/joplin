@@ -4,6 +4,12 @@ using namespace jop;
 
 Database::Database() {}
 
+Database::~Database() {
+	if (db_.open()) {
+		db_.close();
+	}
+}
+
 void Database::initialize(const QString &path) {
 	version_ = -1;
 	transactionCount_ = 0;

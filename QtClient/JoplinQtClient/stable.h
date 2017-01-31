@@ -33,6 +33,8 @@
 #include <QTimer>
 #include <QStandardPaths>
 #include <QDir>
+#include <QCommandLineParser>
+#include <QProcess>
 
 #endif // __cplusplus
 

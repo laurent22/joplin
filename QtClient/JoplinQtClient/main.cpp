@@ -11,9 +11,7 @@
 #include "models/foldermodel.h"
 #include "services/folderservice.h"
 
-using namespace jop;
-
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {	
 
 #if (!defined(JOP_FRONT_END_GUI) && !defined(JOP_FRONT_END_CLI))
     qFatal("Either JOP_FRONT_END_GUI or JOP_FRONT_END_CLI must be defined!");
@@ -26,12 +24,14 @@ int main(int argc, char *argv[]) {
 #endif
 
 #ifdef JOP_FRONT_END_GUI
+	qDebug() << "Front end: GUI";
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-	Application app(argc, argv);
+	jop::Application app(argc, argv);
 #endif
 
 #ifdef JOP_FRONT_END_CLI
-	CliApplication app(argc, argv);
+	qDebug() << "Front end: CLI";
+	jop::CliApplication app(argc, argv);
 #endif
 
     return app.exec();
