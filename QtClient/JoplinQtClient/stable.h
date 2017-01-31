@@ -6,6 +6,7 @@
 #include <memory>
 
 #include <QAbstractListModel>
+#include <QCoreApplication>
 #include <QGuiApplication>
 #include <QDebug>
 #include <QFileInfo>
@@ -32,6 +33,8 @@
 #include <QTimer>
 #include <QStandardPaths>
 #include <QDir>
+#include <QCommandLineParser>
+#include <QProcess>
 
 #endif // __cplusplus
 

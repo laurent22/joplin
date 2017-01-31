@@ -1,29 +1,30 @@
 CREATE TABLE folders (
 	id TEXT PRIMARY KEY,
-	title TEXT,
-	created_time INT,
-	updated_time INT
+	parent_id TEXT NOT NULL DEFAULT "",
+	title TEXT NOT NULL DEFAULT "",
+	created_time INT NOT NULL DEFAULT 0,
+	updated_time INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE notes (
 	id TEXT PRIMARY KEY,
-	title TEXT,
-	body TEXT,
-	parent_id TEXT,
-	created_time INT,
-	updated_time INT,
-	latitude NUMERIC,
-	longitude NUMERIC,
-	altitude NUMERIC,
-	source TEXT,
-	author TEXT,
-	source_url TEXT,
-	is_todo BOOLEAN,
-	todo_due INT,
-	todo_completed INT,
-	source_application TEXT,
-	application_data TEXT,
-	`order` INT
+	parent_id TEXT NOT NULL DEFAULT "",
+	title TEXT NOT NULL DEFAULT "",
+	body TEXT NOT NULL DEFAULT "",
+	created_time INT NOT NULL DEFAULT 0,
+	updated_time INT NOT NULL DEFAULT 0,
+	latitude NUMERIC NOT NULL DEFAULT 0,
+	longitude NUMERIC NOT NULL DEFAULT 0,
+	altitude NUMERIC NOT NULL DEFAULT 0,
+	source TEXT NOT NULL DEFAULT "",
+	author TEXT NOT NULL DEFAULT "",
+	source_url TEXT NOT NULL DEFAULT "",
+	is_todo BOOLEAN NOT NULL DEFAULT 0,
+	todo_due INT NOT NULL DEFAULT 0,
+	todo_completed INT NOT NULL DEFAULT 0,
+	source_application TEXT NOT NULL DEFAULT "",
+	application_data TEXT NOT NULL DEFAULT "",
+	`order` INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE tags (

@@ -13,6 +13,10 @@
         {
             "name": "Build evernote-import",
             "shell_cmd": "D:\\Programmes\\cygwin\\bin\\bash.exe --login D:\\Web\\www\\joplin\\QtClient\\evernote-import\\build.sh"
+        },
+        {
+        	"name": "Build QtClient CLI - Linux",
+        	"shell_cmd": "/home/laurent/src/notes/QtClient/JoplinQtClient/build.sh"
         }
     ]
 }

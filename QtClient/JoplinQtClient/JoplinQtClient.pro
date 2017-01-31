@@ -1,6 +1,28 @@
+# To enable CLI or GUI, add either of these:
+# "JOP_FRONT_END_CLI=1"
+# "JOP_FRONT_END_GUI=1"
+# to the qmake command. So that it looks like this:
+# qmake JoplinQtClient.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug "JOP_FRONT_END_CLI=1" && /usr/bin/make qmake_all
+
 QT += qml quick sql quickcontrols2 network
 
 CONFIG += c++11
+
+defined(JOP_FRONT_END_CLI, var) {
+    message(Building CLI client)
+    DEFINES += "JOP_FRONT_END_CLI=$$JOP_FRONT_END_CLI"
+}
+
+defined(JOP_FRONT_END_GUI, var) {
+    message(Building GUI client)
+    DEFINES += "JOP_FRONT_END_GUI=$$JOP_FRONT_END_GUI"
+}
+
+defined(JOP_FRONT_END_CLI, var) {
+    QT -= gui
+    CONFIG += console
+    CONFIG -= app_bundle
+}
 
 SOURCES += \
     main.cpp \
@@ -10,7 +32,6 @@ SOURCES += \
     models/foldermodel.cpp \
     models/notemodel.cpp \
     models/note.cpp \
-    application.cpp \
     models/qmlnote.cpp \
     webapi.cpp \
     synchronizer.cpp \
@@ -23,7 +44,9 @@ SOURCES += \
     paths.cpp \
     window.cpp \
     filters.cpp \
-    models/abstractlistmodel.cpp
+    models/abstractlistmodel.cpp \
+    cliapplication.cpp \
+    command.cpp
 
 RESOURCES += qml.qrc \
     database.qrc
@@ -44,7 +67,6 @@ HEADERS += \
     models/foldermodel.h \
     models/notemodel.h \
     models/note.h \
-    application.h \
     sparsevector.hpp \
     models/qmlnote.h \
     webapi.h \
@@ -61,7 +83,14 @@ HEADERS += \
     constants.h \
     window.h \
     filters.h \
-    models/abstractlistmodel.h
+    models/abstractlistmodel.h \
+    cliapplication.h \
+    command.h
+
+defined(JOP_FRONT_END_GUI, var) {
+    SOURCES += application.cpp
+    HEADERS += application.h
+}
 
 DISTFILES += \
     AndroidManifest.xml

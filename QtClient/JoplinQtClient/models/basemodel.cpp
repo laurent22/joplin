@@ -47,6 +47,24 @@ bool BaseModel::load(const QString &id) {
 	return true;
 }
 
+bool BaseModel::loadByField(const QString& parentId, const QString& field, const QString& fieldValue) {
+	QSqlQuery q(jop::db().database());
+	QString sql = QString("SELECT %1 FROM %2 WHERE %3 = :field_value AND parent_id = :parent_id LIMIT 1")
+	                     .arg(BaseModel::tableFieldNames(table()).join(","))
+	                     .arg(BaseModel::tableName(table()))
+	                     .arg(field);
+	q.prepare(sql);
+	q.bindValue(":parent_id", parentId);
+	q.bindValue(":field_value", fieldValue);
+	jop::db().execQuery(q);
+	q.next();
+	if (!jop::db().errorCheck(q)) return false;
+	if (!q.isValid()) return false;
+
+	loadSqlQuery(q);
+	return true;
+}
+
 bool BaseModel::save(bool trackChanges) {
 	bool isNew = this->isNew();
 
