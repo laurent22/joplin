@@ -8,24 +8,37 @@ Item {
 	property alias currentItem: listView.currentItem
 	property string currentItemId
 
+	signal startedEditing;
 	signal stoppedEditing;
 	signal editingAccepted(int index, string text);
 	signal deleteButtonClicked(int index);
 
+	// While an item is being edited, this property hold the item ID.
+	// It is then used, once the model is updated, to restore the selection.
+	property string editedItemId;
+
 	function startEditing(index) {
+		root.editedItemId = listView.model.indexToId(index);
 		currentIndex = model.rowCount() - 1;
 		currentItem.startEditing();
+		print("Start editing", root.editedItemId);
 	}
 
 	function stopEditing() {
 		currentItem.stopEditing();
+		print("Stop editing", root.editedItemId);
+		//print(root.editedItemId, listView.model.idToIndex(root.editedItemId));
+		//currentIndex = listView.model.idToIndex(root.editedItemId);
 	}
 
 	function selectItemById(id) {
+		print("selectItemBy()", id);
 		currentItemId = id
 		var newIndex = listView.model.idToIndex(currentItemId);
+		print("newIndex", newIndex);
 		currentIndex = newIndex
 		if (newIndex < 0) currentItemId = "";
+		print("currentItemId", currentItemId);
 	}
 
 	Rectangle {
@@ -39,16 +52,19 @@ Item {
 		Connections {
 			target: model
 			onDataChanged: {
-				if (currentItemId !== "") {
-					print("Connection.onDataChanged");
-					selectItemById(currentItemId);
+				print("Connection.onDataChanged", root.editedItemId);
+				if (root.editedItemId !== "") {
+					selectItemById(root.editedItemId);
+					root.editedItemId = "";
 				}
 			}
 		}
 
-		onCurrentItemChanged: {
-			currentItemId = model.indexToId(currentIndex);
-		}
+//		onCurrentItemChanged: {
+//			print("onCurrentItemChanged avant", currentItemId);
+//			currentItemId = model.indexToId(currentIndex);
+//			print("onCurrentItemChanged apres", currentItemId);
+//		}
 
 		id: listView
 		highlightMoveVelocity: -1
@@ -70,10 +86,17 @@ Item {
 						onTriggered: deleteButtonClicked(currentIndex);
 					}
 			    }
+			onStartedEditing: {
+				print("onStartedEditing()");
+				root.editedItemId = listView.model.indexToId(index);
+				root.startedEditing();
+			}
 			onStoppedEditing: {
+				print("onStoppedEditing()");
 				root.stoppedEditing();
 			}
 			onEditingAccepted: function(index, text) {
+				print("onEditingAccepted()");
 				root.editingAccepted(index, text);
 			}
 		}

@@ -7,7 +7,7 @@ Database::Database() {}
 void Database::initialize(const QString &path) {
 	version_ = -1;
 	transactionCount_ = 0;
-	logQueries_ = false;
+	logQueries_ = !false;
 
 	//QFile::remove(path);
 
@@ -130,12 +130,15 @@ bool Database::commit() {
 
 bool Database::execQuery(QSqlQuery &query) {
 	if (logQueries_) {
-		qDebug().noquote() << "SQL:" << query.lastQuery();
+		QString sql = query.lastQuery();
+		if (sql.startsWith("insert", Qt::CaseInsensitive)) {
+			qDebug().noquote() << "SQL:" << sql;
 
-		QMapIterator<QString, QVariant> i(query.boundValues());
-		while (i.hasNext()) {
-			i.next();
-			qDebug().noquote() << "SQL:" << i.key() << "=" << i.value().toString();
+			QMapIterator<QString, QVariant> i(query.boundValues());
+			while (i.hasNext()) {
+				i.next();
+				qDebug().noquote() << "SQL:" << i.key() << "=" << i.value().toString();
+			}
 		}
 	}
 

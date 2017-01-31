@@ -50,7 +50,9 @@ std::vector<std::unique_ptr<Note>> Folder::notes(const QString &orderBy, int lim
 }
 
 int Folder::noteIndexById(const QString &orderBy, const QString& id) const {
-	QSqlQuery q = jop::db().prepare(QString("SELECT id FROM %1 WHERE parent_id = :parent_id ORDER BY %2")
+	qDebug() << "Folder::noteIndexById" << orderBy << id;
+
+	QSqlQuery q = jop::db().prepare(QString("SELECT id, %2 FROM %1 WHERE parent_id = :parent_id ORDER BY %2")
 	                        .arg(BaseModel::tableName(jop::NotesTable))
 	                        .arg(orderBy));
 	q.bindValue(":parent_id", idString());
@@ -60,6 +62,8 @@ int Folder::noteIndexById(const QString &orderBy, const QString& id) const {
 	int index = 0;
 	while (q.next()) {
 		QString qId = q.value(0).toString();
+		QString qTitle = q.value(1).toString();
+		qDebug() << "CURRENT" << qId << qTitle;
 		if (qId == id) return index;
 		index++;
 	}

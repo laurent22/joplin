@@ -28,6 +28,7 @@ const Note *NoteModel::atIndex(int index) const {
 
 	Folder folder = this->folder();
 
+	qDebug() << "NoteModel: cache recreated";
 	std::vector<std::unique_ptr<Note>> notes = folder.notes(orderBy_, to - from + 1, from);
 	int noteIndex = from;
 	for (int i = 0; i < notes.size(); i++) {
@@ -96,11 +97,12 @@ bool NoteModel::cacheIsset(int index) const {
 }
 
 void NoteModel::cacheClear() const {
+	qDebug() << "NoteModel::cacheClear()";
 	cache_.clear();
 }
 
 void NoteModel::dispatcher_noteCreated(const QString &noteId) {
-	qDebug() << "NoteModel Folder created" << noteId;
+	qDebug() << "NoteModel note created" << noteId;
 
 	cacheClear();
 

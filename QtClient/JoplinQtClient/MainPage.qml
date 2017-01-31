@@ -27,8 +27,8 @@ Item {
 	}
 
 	function handleItemListStoppedEditing(list) {
-		if (folderList.model.virtualItemShown()) {
-			folderList.model.hideVirtualItem();
+		if (list.model.virtualItemShown()) {
+			list.model.hideVirtualItem();
 		}
 	}
 

@@ -13,6 +13,7 @@ public:
 
 	Window();
 	void showPage(const QString& pageName);
+	QVariant callQml(const QString& name, const QVariantList& args = QVariantList());
 	void emitSignal(const QString& name, const QVariantList& args = QVariantList());
 
 };

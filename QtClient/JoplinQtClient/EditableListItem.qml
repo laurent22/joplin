@@ -8,6 +8,7 @@ Item {
 	property int mouseAreaDefaultWidth
 	property Menu contextMenu
 
+	signal startedEditing;
 	signal stoppedEditing;
 	signal editingAccepted(int index, string text);
 
@@ -24,6 +25,7 @@ Item {
 			textField.text = display
 			root.ListView.view.focus = true;
 			textField.selectAll()
+			root.startedEditing();
 		} else {
 			mouseArea.anchors.rightMargin = 0;
 			label.visible = true

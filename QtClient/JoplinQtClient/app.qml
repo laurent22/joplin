@@ -57,6 +57,14 @@ Item {
 		page.onShown();
 	}
 
+	function selectFolderbyId(id) {
+		mainPage.folderList.selectItemById(id);
+	}
+
+	function selectNoteById(id) {
+		mainPage.noteList.selectItemById(id);
+	}
+
 	function emitLoginStarted() {
 		root.loginStarted();
 	}
