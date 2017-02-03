@@ -132,15 +132,18 @@ int CliApplication::exec() {
 	}
 
 	if (command == "touch") {
-		// QString path = args.size() ? args[0] : QString();
-		// if (path == "") {
-		// 	std::vector<std::unique_ptr<Folder>> folders = Folder::all();
-		// 	for (size_t i = 0; i < folders.size(); i++) {
-		// 		qDebug().noquote() << folders[i].get()->value("title").toString();
-		// 	}
-		// } else {
-		// 	// TODO: Get folder by name
-		// }
+		QString path = args.size() ? args[0] : QString();
+		if (path == "") {
+			// std::vector<std::unique_ptr<Folder>> folders = Folder::all();
+			// for (size_t i = 0; i < folders.size(); i++) {
+			// 	qDebug().noquote() << folders[i].get()->value("title").toString();
+			// }
+		} else {
+			std::vector<std::unique_ptr<Folder>> folders = Folder::pathToFolders(path, true);
+			for (size_t i = 0; i < folders.size(); i++) {
+				qDebug() << folders[i]->value("title").toString();
+			}
+		}
 	}
 
 	qDebug() << "===========================================";

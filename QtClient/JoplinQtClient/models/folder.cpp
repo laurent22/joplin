@@ -49,6 +49,19 @@ std::vector<std::unique_ptr<Note>> Folder::notes(const QString &orderBy, int lim
 	return output;
 }
 
+std::vector<std::unique_ptr<Folder>> Folder::pathToFolders(const QString& path, bool isNotePath) {
+	std::vector<std::unique_ptr<Folder>> output;
+	QStringList parts = path.split('/');
+	QString parentId = "";
+	for (int i = 0; i < parts.size(); i++) {
+		std::unique_ptr<Folder> folder(new Folder());
+		bool ok = folder->loadByField(parentId, "title", parts[i]);
+		qWarning() << "Folder does not exist" << parts[i];
+		output.push_back(std::move(folder));
+	}
+	return output;
+}
+
 int Folder::noteIndexById(const QString &orderBy, const QString& id) const {
 	qDebug() << "Folder::noteIndexById" << orderBy << id;
 
