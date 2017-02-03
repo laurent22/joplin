@@ -4,8 +4,16 @@
 		{
 			"path": ".",
 			"folder_exclude_patterns": [
-				"var"
-			]
+				"var",
+                "vendor",
+                "QtClient/build-JoplinQtClient-Visual_C_32_bits-Debug",
+                "QtClient/data/resources",
+                "app/data/uploads"
+			],
+            "file_exclude_patterns": [
+                "*.pro.user",
+                "*.pro.user.*"
+            ]
 		}
 	],
     "build_systems":
