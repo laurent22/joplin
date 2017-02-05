@@ -8,5 +8,6 @@
         <file>LoginPage.qml</file>
         <file>LoginPageForm.ui.qml</file>
         <file>MainPage.qml</file>
+        <file>ItemList2.qml</file>
     </qresource>
 </RCC>

@@ -35,6 +35,7 @@
 #include <QDir>
 #include <QCommandLineParser>
 #include <QProcess>
+#include <QQmlProperty>
 
 #endif // __cplusplus
 
