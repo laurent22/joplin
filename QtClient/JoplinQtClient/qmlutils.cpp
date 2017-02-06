@@ -5,7 +5,7 @@ namespace qmlUtils {
 
 QVariant callQml(QObject* o, const QString &name, const QVariantList &args) {
 	QVariant returnedValue;
-	qDebug() << "Going to call QML:" << name << args;
+	//qDebug() << "Going to call QML:" << name << args;
 	if (args.size() == 0) {
 		QMetaObject::invokeMethod(o, name.toStdString().c_str(), Q_RETURN_ARG(QVariant, returnedValue));
 	} else if (args.size() == 1) {

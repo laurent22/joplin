@@ -47,8 +47,9 @@ SOURCES += \
     models/abstractlistmodel.cpp \
     cliapplication.cpp \
     command.cpp \
-    itemlistcontroller.cpp \
-    qmlutils.cpp
+    qmlutils.cpp \
+    baseitemlistcontroller.cpp \
+    folderlistcontroller.cpp
 
 RESOURCES += qml.qrc \
     database.qrc
@@ -88,8 +89,9 @@ HEADERS += \
     models/abstractlistmodel.h \
     cliapplication.h \
     command.h \
-    itemlistcontroller.h \
-    qmlutils.h
+    qmlutils.h \
+    baseitemlistcontroller.h \
+    folderlistcontroller.h
 
 defined(JOP_FRONT_END_GUI, var) {
     SOURCES += application.cpp

@@ -13,6 +13,6 @@ QString QmlNote::body() const {
 }
 
 void QmlNote::setNote(const Note &note) {
-	note_ = note;
+//	note_ = note;
 	emit changed();
 }

@@ -122,38 +122,40 @@ void Synchronizer::switchState(Synchronizer::SynchronizationState state) {
 
 		uploadsRemaining_ = changes.size();
 
-		foreach (Change change, changes) {
-			jop::Table itemType = (jop::Table)change.value("item_type").toInt();
-			QString itemId = change.value("item_id").toString();
-			Change::Type type = (Change::Type)change.value("type").toInt();
+		qWarning() << "TODO: fix change iteration";
 
-			if (itemType == jop::FoldersTable) {
+//		foreach (Change change, changes) {
+//			jop::Table itemType = (jop::Table)change.value("item_type").toInt();
+//			QString itemId = change.value("item_id").toString();
+//			Change::Type type = (Change::Type)change.value("type").toInt();
 
-				if (type == Change::Create) {
+//			if (itemType == jop::FoldersTable) {
 
-					Folder folder;
-					folder.load(itemId);
-					QUrlQuery data = valuesToUrlQuery(folder.values());
-					api_.put("folders/" + folder.id().toString(), QUrlQuery(), data, "upload:putFolder:" + folder.id().toString());
+//				if (type == Change::Create) {
 
-				} else if (type == Change::Update) {
+//					Folder folder;
+//					folder.load(itemId);
+//					QUrlQuery data = valuesToUrlQuery(folder.values());
+//					api_.put("folders/" + folder.id().toString(), QUrlQuery(), data, "upload:putFolder:" + folder.id().toString());
 
-					Folder folder;
-					folder.load(itemId);
-					QStringList mergedFields = change.mergedFields();
-					QUrlQuery data;
-					foreach (QString field, mergedFields) {
-						data.addQueryItem(field, folder.value(field).toString());
-					}
-					api_.patch("folders/" + folder.id().toString(), QUrlQuery(), data, "upload:patchFolder:" + folder.id().toString());
+//				} else if (type == Change::Update) {
 
-				} else if (type == Change::Delete) {
+//					Folder folder;
+//					folder.load(itemId);
+//					QStringList mergedFields = change.mergedFields();
+//					QUrlQuery data;
+//					foreach (QString field, mergedFields) {
+//						data.addQueryItem(field, folder.value(field).toString());
+//					}
+//					api_.patch("folders/" + folder.id().toString(), QUrlQuery(), data, "upload:patchFolder:" + folder.id().toString());
 
-					api_.del("folders/" + itemId, QUrlQuery(), QUrlQuery(), "upload:deleteFolder:" + itemId);
+//				} else if (type == Change::Delete) {
 
-				}
-			}
-		}
+//					api_.del("folders/" + itemId, QUrlQuery(), QUrlQuery(), "upload:deleteFolder:" + itemId);
+
+//				}
+//			}
+//		}
 
 		checkNextState();
 

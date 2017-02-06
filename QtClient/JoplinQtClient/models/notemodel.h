@@ -18,7 +18,7 @@ public:
 	NoteModel();
 	const Note* atIndex(int index) const;
 	void setFolderId(const QString& v);
-	Folder folder() const;
+	//Folder folder() const;
 
 public slots:
 

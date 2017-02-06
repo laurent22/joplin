@@ -5,14 +5,23 @@ Item {
 	id: root
 	signal rowsRequested(int fromRowIndex, int toRowIndex)
 
-	property int blabla: 123456;
-
 	property variant items: [];
-	property int itemCount: 0;
-	property int itemHeight: 0;
+	property int itemCount_: 0;
+	property int itemHeight_: 0;
+	property bool needToRequestRows_: false;
 
-	function testing() {
-		console.info("WXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+	function itemHeight() {
+		if (root.itemHeight_) return root.itemHeight_;
+		var item = itemComponent.createObject(root)
+		item.content = { title: "dummy", id: "" };
+		item.updateDisplay();
+		item.visible = false;
+		root.itemHeight_ = item.height;
+		return root.itemHeight_;
+	}
+
+	function itemCount() {
+		return itemCount_;
 	}
 
 	function setItem(index, itemContent) {
@@ -21,18 +30,18 @@ Item {
 			return;
 		}
 
-		var item = itemComponent.createObject(scrollArea.contentItem)
-		item.title = itemContent.title;
-		item.invalidateDisplay();
+		var contentTitle = itemContent.title;
 
-		if (!itemHeight) {
-			item.updateDisplay();
-			itemHeight = item.height;
-		}
+		var item = itemComponent.createObject(scrollArea.contentItem)
+		item.content = {
+			id: itemContent.id,
+			title: itemContent.title
+		};
+		item.invalidateDisplay();
 
 		items[index] = item;
 
-		this.invalidateDisplay();
+		root.invalidateDisplay();
 	}
 
 	function setItems(fromIndex, itemContents) {
@@ -49,46 +58,61 @@ Item {
 		items.push(item);
 		if (!itemHeight) itemHeight = item.height;
 
-		this.invalidateDisplay();
+		root.invalidateDisplay();
 	}
 
 	function setItemCount(count) {
-		this.itemCount = count;
-		this.invalidateDisplay();
+		if (count === root.itemCount_) return;
+		root.itemCount_ = count;
+		root.needToRequestRows_ = true;
+		root.invalidateDisplay();
 	}
 
 	function invalidateDisplay() {
-		updateDisplay();
+		root.updateDisplay();
 	}
 
 	function updateDisplay() {
 		var itemY = 0;
 		for (var i = 0; i < items.length; i++) {
 			var item = items[i];
-			if (item) {
-				item.y = itemY;
-			}
-			itemY += itemHeight
+			if (item) item.y = itemY;
+			itemY += itemHeight()
 		}
 
-		scrollArea.contentHeight = itemCount * itemHeight;
+		scrollArea.contentHeight = itemCount() * itemHeight();
 
-		// console.info("itemCount itemHeight", this.itemCount, this.itemHeight);
-		// console.info("scrollArea.contentHeight", scrollArea.contentHeight);
+		if (root.needToRequestRows_) {
+			root.needToRequestRows_ = false;
+			var indexes = itemIndexesInView();
+			root.rowsRequested(indexes[0], indexes[1]);
+		}
+	}
+
+	function itemIndexesInView() {
+		var maxVisibleItems = Math.ceil(scrollArea.height / itemHeight());
+
+		var fromIndex = Math.max(0, Math.floor(scrollArea.contentY / itemHeight()));
+		var toIndex = fromIndex + maxVisibleItems;
+		var maxIndex = itemCount() - 1;
+
+		return [Math.min(fromIndex, maxIndex), Math.min(toIndex, maxIndex)];
 	}
 
 	Component {
 		id: itemComponent
 		Item {
-
-			property alias title: label.text
+			id: container
+			//property alias title: label.text
+			property variant content;
 
 			function invalidateDisplay() {
-				this.updateDisplay();
+				container.updateDisplay();
 			}
 
 			function updateDisplay() {
-				this.height = label.height
+				label.text = content.title;
+				container.height = label.height
 			}
 
 			Text {

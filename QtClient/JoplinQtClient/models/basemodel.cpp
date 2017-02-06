@@ -20,15 +20,17 @@ QStringList BaseModel::changedFields() const {
 	return output;
 }
 
-int BaseModel::count(Table table) {
+int BaseModel::count(Table table, const QString &parentId) {
 	QString t = BaseModel::tableName(table);
 	QString k = QString("%1:count").arg(t);
 	QVariant r = BaseModel::cacheGet(k);
 	if (r.isValid()) return r.toInt();
 
-	QSqlQuery q("SELECT count(*) AS row_count FROM " + t);
+	QSqlQuery q = jop::db().prepare("SELECT count(*) AS row_count FROM " + t + " WHERE parent_id = :parent_id");
+	q.bindValue(":parent_id", parentId);
 	jop::db().execQuery(q);
 	q.next();
+	if (!jop::db().errorCheck(q)) return 0;
 	int output = q.value(0).toInt();
 	BaseModel::cacheSet(k, QVariant(output));
 	return output;
@@ -455,6 +457,10 @@ void BaseModel::cacheSet(const QString &key, const QVariant &value) {
 
 void BaseModel::cacheDelete(const QString &key) {
 	BaseModel::cache_.remove(key);
+}
+
+QString BaseModel::title() const {
+	return value("title").toString();
 }
 
 void BaseModel::setValue(const QString &name, const QString &value) {

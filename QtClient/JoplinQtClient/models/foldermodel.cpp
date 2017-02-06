@@ -66,7 +66,7 @@ void FolderModel::deleteData(const int index) {
 }
 
 int FolderModel::baseModelCount() const {
-	return Folder::count();
+	return Folder::count("");
 }
 
 const BaseModel *FolderModel::cacheGet(int index) const {

@@ -9,12 +9,14 @@ namespace jop {
 
 class Folder : public Item {
 
+	Q_OBJECT
+
 public:
 
 	Folder();
 
-	static int count();
-	static std::vector<std::unique_ptr<Folder>> all(const QString& orderBy = "title");
+	static int count(const QString& parentId);
+	static std::vector<std::unique_ptr<Folder>> all(const QString& parentId, const QString& orderBy = "title");
 	static std::vector<std::unique_ptr<Folder>> pathToFolders(const QString& path, bool isNotePath);
 
 	//Table table() const;

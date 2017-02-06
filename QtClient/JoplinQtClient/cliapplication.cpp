@@ -116,7 +116,7 @@ int CliApplication::exec() {
 	if (command == "ls") {
 		QString path = args.size() ? args[0] : QString();
 		if (path == "") {
-			std::vector<std::unique_ptr<Folder>> folders = Folder::all();
+			std::vector<std::unique_ptr<Folder>> folders = Folder::all(QString(""));
 			for (size_t i = 0; i < folders.size(); i++) {
 				qDebug().noquote() << folders[i].get()->value("title").toString();
 			}

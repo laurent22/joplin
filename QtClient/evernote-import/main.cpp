@@ -348,6 +348,16 @@ QString extensionFromMimeType(const QString& mimeType) {
 	return "";
 }
 
+QString enforceNotNull(const QString& s) {
+	if (s.isEmpty() || s.isNull()) return QString("");
+	return s;
+}
+
+QString enforceZero(const QString& f) {
+	if (f.isEmpty() || f.isNull()) return QString("0");
+	return f;
+}
+
 int main(int argc, char *argv[]) {
 	QCoreApplication a(argc, argv);
 
@@ -466,22 +476,22 @@ int main(int argc, char *argv[]) {
 			QSqlQuery query(db);
 			query.prepare("INSERT INTO notes (id, title, body, parent_id, created_time, updated_time, longitude, latitude, altitude, source, author, source_url, is_todo, todo_due, todo_completed, source_application, application_data, `order`) VALUES (:id, :title,:body, :parent_id, :created_time,:updated_time,:longitude,:latitude,:altitude,:source,:author,:source_url,:is_todo,:todo_due,:todo_completed,:source_application,:application_data,:order)");
 			query.bindValue(":id", n.id);
-			query.bindValue(":title", n.title);
-			query.bindValue(":body", markdown);
-			query.bindValue(":parent_id", folderId);
+			query.bindValue(":title", enforceNotNull(n.title));
+			query.bindValue(":body", enforceNotNull(markdown));
+			query.bindValue(":parent_id", enforceNotNull(folderId));
 			query.bindValue(":created_time", n.created);
 			query.bindValue(":updated_time", n.updated);
-			query.bindValue(":longitude", n.longitude);
-			query.bindValue(":latitude", n.latitude);
-			query.bindValue(":altitude", n.altitude);
-			query.bindValue(":source", n.source);
-			query.bindValue(":author", n.author);
-			query.bindValue(":source_url", n.sourceUrl);
+			query.bindValue(":longitude", enforceZero(n.longitude));
+			query.bindValue(":latitude", enforceZero(n.latitude));
+			query.bindValue(":altitude", enforceZero(n.altitude));
+			query.bindValue(":source", enforceNotNull(n.source));
+			query.bindValue(":author", enforceNotNull(n.author));
+			query.bindValue(":source_url", enforceNotNull(n.sourceUrl));
 			query.bindValue(":is_todo", reminderOrder ? 1 : 0);
 			query.bindValue(":todo_due", dateStringToTimestamp(n.reminderTime));
 			query.bindValue(":todo_completed", dateStringToTimestamp(n.reminderDoneTime));
-			query.bindValue(":source_application", n.sourceApplication);
-			query.bindValue(":application_data", n.applicationData);
+			query.bindValue(":source_application", enforceNotNull(n.sourceApplication));
+			query.bindValue(":application_data", enforceNotNull(n.applicationData));
 			query.bindValue(":order", reminderOrder);
 			query.exec();
 

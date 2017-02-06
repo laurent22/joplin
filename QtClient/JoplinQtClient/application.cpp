@@ -62,8 +62,13 @@ Application::Application(int &argc, char **argv) :
 
 	QObject* itemList = qmlUtils::childFromProperty(rootObject, "itemList");
 
+	itemListController_.setItemList(itemList);
+	itemListController_.setParentId(QString(""));
 
-	qmlUtils::callQml(itemList, "testing");
+
+	//qmlUtils::callQml(itemList, "testing");
+
+
 
 	//qDebug() << itemList;
 

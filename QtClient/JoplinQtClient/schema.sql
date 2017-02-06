@@ -20,8 +20,8 @@ CREATE TABLE notes (
 	author TEXT NOT NULL DEFAULT "",
 	source_url TEXT NOT NULL DEFAULT "",
 	is_todo BOOLEAN NOT NULL DEFAULT 0,
-	todo_due INT NOT NULL DEFAULT 0,
-	todo_completed INT NOT NULL DEFAULT 0,
+	todo_due INT NOT NULL DEFAULT "",
+	todo_completed INT NOT NULL DEFAULT "",
 	source_application TEXT NOT NULL DEFAULT "",
 	application_data TEXT NOT NULL DEFAULT "",
 	`order` INT NOT NULL DEFAULT 0

@@ -22,11 +22,13 @@ QVector<Change> Change::all(int limit) {
 
 	QVector<Change> output;
 
-	while (q.next()) {
-		Change change;
-		change.loadSqlQuery(q);
-		output.push_back(change);
-	}
+	qWarning() << "TODO: fix change iteration";
+
+//	while (q.next()) {
+//		Change change;
+//		change.loadSqlQuery(q);
+//		output.push_back(change);
+//	}
 
 	return output;
 }
@@ -36,46 +38,48 @@ QVector<Change> Change::mergedChanges(const QVector<Change>& changes) {
 	QStringList deletedItems;
 	QHash<QString, Change> itemChanges;
 
-	foreach (Change change, changes) {
-		QString itemId = change.value("item_id").toString();
-		Change::Type type = (Change::Type)change.value("type").toInt();
+	qWarning() << "TODO: fix change iteration";
 
-		if (type == Change::Create) {
-			createdItems.push_back(itemId);
-		} else if (type == Change::Delete) {
-			deletedItems.push_back(itemId);
-		}
+//	foreach (Change change, changes) {
+//		QString itemId = change.value("item_id").toString();
+//		Change::Type type = (Change::Type)change.value("type").toInt();
 
-		if (itemChanges.contains(itemId) && type == Change::Update) {
-			// Merge all the "Update" event into one.
-			Change& existingChange = itemChanges[itemId];
-			existingChange.addMergedField(change.value("item_field").toString());
-		} else {
-			itemChanges[itemId] = change;
-		}
-	}
+//		if (type == Change::Create) {
+//			createdItems.push_back(itemId);
+//		} else if (type == Change::Delete) {
+//			deletedItems.push_back(itemId);
+//		}
+
+//		if (itemChanges.contains(itemId) && type == Change::Update) {
+//			// Merge all the "Update" event into one.
+//			Change& existingChange = itemChanges[itemId];
+//			existingChange.addMergedField(change.value("item_field").toString());
+//		} else {
+//			itemChanges[itemId] = change;
+//		}
+//	}
 
 	QVector<Change> output;
 
-	for (QHash<QString, Change>::iterator it = itemChanges.begin(); it != itemChanges.end(); ++it) {
-		QString itemId = it.key();
-		Change& change = it.value();
+//	for (QHash<QString, Change>::iterator it = itemChanges.begin(); it != itemChanges.end(); ++it) {
+//		QString itemId = it.key();
+//		Change& change = it.value();
 
-		if (createdItems.contains(itemId) && deletedItems.contains(itemId)) {
-			// Item both created then deleted - skip
-			continue;
-		}
+//		if (createdItems.contains(itemId) && deletedItems.contains(itemId)) {
+//			// Item both created then deleted - skip
+//			continue;
+//		}
 
-		if (deletedItems.contains(itemId)) {
-			// Item was deleted at some point - just return one 'delete' event
-			change.setValue("type", Change::Delete);
-		} else if (createdItems.contains(itemId)) {
-			// Item was created then updated - just return one 'create' event with the latest changes
-			change.setValue("type", Change::Create);
-		}
+//		if (deletedItems.contains(itemId)) {
+//			// Item was deleted at some point - just return one 'delete' event
+//			change.setValue("type", Change::Delete);
+//		} else if (createdItems.contains(itemId)) {
+//			// Item was created then updated - just return one 'create' event with the latest changes
+//			change.setValue("type", Change::Create);
+//		}
 
-		output.push_back(change);
-	}
+//		output.push_back(change);
+//	}
 
 	return output;
 }
