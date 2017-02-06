@@ -211,6 +211,10 @@ bool BaseModel::trackChanges() const {
 	return false;
 }
 
+QString BaseModel::displayTitle() const {
+	return value("title").toString();
+}
+
 bool BaseModel::isNew() const {
 	if (isNew_ == 0) return false;
 	if (isNew_ == 1) return true;
