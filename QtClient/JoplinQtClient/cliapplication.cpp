@@ -106,47 +106,74 @@ int CliApplication::exec() {
 
 	args = parser.positionalArguments();
 
+	int errorCode = 0;
+
 	if (command == "mkdir") {
-		QString title = args.size() ? args[0] : QString();
+		QString path = args.size() ? args[0] : QString();
+
+		if (path.isEmpty()) {
+			qStdout() << "Please provide a path or name for the folder.";
+			return 1;
+		}
+
+		std::vector<std::unique_ptr<Folder>> folders = Folder::pathToFolders(path, false, errorCode);
+		if (errorCode) {
+			qStdout() << "Invalid path: " << path << endl;
+			return 1;
+		}
+
 		Folder folder;
-		folder.setValue("title", title);
+		folder.setValue("parent_id", folders.size() ? folders[folders.size() - 1]->idString() : "");
+		folder.setValue("title", Folder::pathBaseName(path));
 		folder.save();
 	}
 
 	if (command == "ls") {
 		QString path = args.size() ? args[0] : QString();
-		if (path == "") {
-			std::vector<std::unique_ptr<Folder>> folders = Folder::all();
-			for (size_t i = 0; i < folders.size(); i++) {
-				qDebug().noquote() << folders[i].get()->value("title").toString();
-			}
+		std::vector<std::unique_ptr<Folder>> folders = Folder::pathToFolders(path, true, errorCode);
+
+		if (errorCode) {
+			qStdout() << "Invalid path: " << path << endl;
+			return 1;
+		}
+
+		std::vector<std::unique_ptr<BaseModel>> children;
+		if (folders.size()) {
+			children = folders[folders.size() - 1]->children();
 		} else {
-			Folder folder;
-			bool found = folder.loadByField("", "title", path);
-			if (found) {
-				qStdout() << "Found" << path << endl;
-			} else {
-				qWarning() << "Not found:" << path;
-			}
+			std::unique_ptr<Folder> root = Folder::root();
+			children = root->children();
+		}
+
+		qStdout() << QString("Total: %1 items").arg(children.size()) << endl;
+		for (int i = 0; i < children.size(); i++) {
+			qStdout() << children[i]->displayTitle() << endl;
 		}
 	}
 
 	if (command == "touch") {
 		QString path = args.size() ? args[0] : QString();
-		if (path == "") {
-			// std::vector<std::unique_ptr<Folder>> folders = Folder::all();
-			// for (size_t i = 0; i < folders.size(); i++) {
-			// 	qDebug().noquote() << folders[i].get()->value("title").toString();
-			// }
+
+		if (path.isEmpty()) {
+			qStdout() << "Please provide a path or name for the note.";
+			return 1;
+		}
+
+		std::vector<std::unique_ptr<Folder>> folders = Folder::pathToFolders(path, false, errorCode);
+
+		if (errorCode) {
+			qStdout() << "Invalid path: " << path << endl;
 		} else {
-			std::vector<std::unique_ptr<Folder>> folders = Folder::pathToFolders(path, true);
-			for (size_t i = 0; i < folders.size(); i++) {
-				qDebug() << folders[i]->value("title").toString();
-			}
+			QString noteTitle = Folder::pathBaseName(path);
+
+			Note note;
+			note.setValue("parent_id", folders.size() ? folders[folders.size() - 1]->idString() : "");
+			note.setValue("title", noteTitle);
+			note.save();
 		}
 	}
 
-	qDebug() << "===========================================";
+	qDebug() << "=========================================== END";
 
 	return 0;
 }

@@ -27,6 +27,49 @@ int Folder::noteCount() const {
 	return q.value(0).toInt();
 }
 
+std::unique_ptr<Folder> Folder::root() {
+	std::unique_ptr<Folder> folder(new Folder());
+	return std::move(folder);
+}
+
+std::vector<std::unique_ptr<BaseModel>> Folder::children(const QString &orderBy, int limit, int offset) const {
+	std::vector<std::unique_ptr<BaseModel>> output;
+
+	std::vector<jop::Table> tables;
+	tables.push_back(jop::FoldersTable);
+	tables.push_back(jop::NotesTable);
+	for (int tableIndex = 0; tableIndex < tables.size(); tableIndex++) {
+		jop::Table table = tables[tableIndex];
+
+		QString sql = QString("SELECT %1 FROM %2 WHERE parent_id = :parent_id ORDER BY %3 %4 %5")
+                            .arg(BaseModel::sqlTableFields(table))
+	                        .arg(BaseModel::tableName(table))
+	                        .arg(orderBy)
+	                        .arg(limit ? QString("LIMIT %1").arg(limit) : "")
+	                        .arg(limit && offset ? QString("OFFSET %1").arg(offset) : "");
+
+		QSqlQuery q = jop::db().prepare(sql);
+
+		q.bindValue(":parent_id", idString());
+		jop::db().execQuery(q);
+		if (!jop::db().errorCheck(q)) return output;
+
+		while (q.next()) {
+			if (table == jop::FoldersTable) {
+				std::unique_ptr<BaseModel> folder(new Folder());
+				folder->loadSqlQuery(q);
+				output.push_back(std::move(folder));
+			} else if (table == jop::NotesTable) {
+				std::unique_ptr<BaseModel> note(new Note());
+				note->loadSqlQuery(q);
+				output.push_back(std::move(note));
+			}
+		}
+	}
+
+	return output;
+}
+
 std::vector<std::unique_ptr<Note>> Folder::notes(const QString &orderBy, int limit, int offset) const {
 	std::vector<std::unique_ptr<Note>> output;
 
@@ -49,17 +92,29 @@ std::vector<std::unique_ptr<Note>> Folder::notes(const QString &orderBy, int lim
 	return output;
 }
 
-std::vector<std::unique_ptr<Folder>> Folder::pathToFolders(const QString& path, bool isNotePath) {
+std::vector<std::unique_ptr<Folder>> Folder::pathToFolders(const QString& path, bool returnLast, int& errorCode) {
 	std::vector<std::unique_ptr<Folder>> output;
+	if (!path.length()) return output;
+
 	QStringList parts = path.split('/');
-	QString parentId = "";
-	for (int i = 0; i < parts.size(); i++) {
+	QString parentId("");
+	int toIndex = returnLast ? parts.size() : parts.size() - 1;
+	for (int i = 0; i < toIndex; i++) {
 		std::unique_ptr<Folder> folder(new Folder());
 		bool ok = folder->loadByField(parentId, "title", parts[i]);
-		qWarning() << "Folder does not exist" << parts[i];
+		if (!ok) {
+			// qWarning() << "Folder does not exist" << parts[i];
+			errorCode = 1;
+			return output;
+		}
 		output.push_back(std::move(folder));
 	}
 	return output;
+}
+
+QString Folder::pathBaseName(const QString& path) {
+	QStringList parts = path.split('/');
+	return parts[parts.size() - 1];
 }
 
 int Folder::noteIndexById(const QString &orderBy, const QString& id) const {
@@ -101,6 +156,10 @@ std::vector<std::unique_ptr<Folder>> Folder::all(const QString &orderBy) {
 	}
 
 	return output;
+}
+
+QString Folder::displayTitle() const {
+	return QString("%1/").arg(value("title").toString());
 }
 
 }

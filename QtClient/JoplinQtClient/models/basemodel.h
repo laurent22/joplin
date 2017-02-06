@@ -51,6 +51,7 @@ public:
 	virtual QString primaryKey() const;
 	virtual bool primaryKeyIsUuid() const;
 	virtual bool trackChanges() const;
+	virtual QString displayTitle() const;
 
 	bool isNew() const;
 

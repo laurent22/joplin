@@ -4,6 +4,7 @@
 #if defined __cplusplus
 
 #include <memory>
+#include <limits>
 
 #include <QAbstractListModel>
 #include <QCoreApplication>
