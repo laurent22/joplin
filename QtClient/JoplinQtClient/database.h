@@ -16,7 +16,9 @@ public:
 	Database();
 	~Database();
 	void initialize(const QString& path);
-	QSqlDatabase& database();
+	void close();
+	bool isClosed() const;
+	QSqlDatabase* database() const;
 	QSqlQuery buildSqlQuery(Database::QueryType type, const QString& tableName, const QStringList& fields, const VariantVector& values, const QString& whereCondition = "");
 	QSqlQuery buildSqlQuery(Database::QueryType type, const QString& tableName, const QMap<QString, QVariant>& values, const QString& whereCondition = "");
 	bool errorCheck(const QSqlQuery& query);
@@ -28,13 +30,14 @@ public:
 
 private:
 
-	QSqlDatabase db_;
+	QSqlDatabase* db_;
 	void upgrade();
 	int version() const;
 	mutable int version_;
 	QStringList sqlStringToLines(const QString& sql);
 	int transactionCount_;
 	bool logQueries_;
+	bool isClosed_;
 
 };
 

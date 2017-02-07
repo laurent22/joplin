@@ -2,12 +2,10 @@
 
 using namespace jop;
 
-Database::Database() {}
+Database::Database() : db_(NULL), isClosed_(true) {}
 
 Database::~Database() {
-	if (db_.open()) {
-		db_.close();
-	}
+	if (!isClosed()) qWarning() << "Database::close() should be called explicitely";
 }
 
 void Database::initialize(const QString &path) {
@@ -17,19 +15,35 @@ void Database::initialize(const QString &path) {
 
 	// QFile::remove(path);
 
-	db_ = QSqlDatabase::addDatabase("QSQLITE");
-	db_.setDatabaseName(path);
+	db_ = new QSqlDatabase(QSqlDatabase::addDatabase("QSQLITE"));
+	db_->setDatabaseName(path);
 
-	if  (!db_.open()) {
+	if  (!db_->open()) {
 		qFatal("Error: connection with database fail");
 	} else {
 		qInfo() << "Database: connection ok";
+		isClosed_ = false;
 	}
 
 	upgrade();
 }
 
-QSqlDatabase &Database::database() {
+// See https://bugreports.qt.io/browse/QTBUG-35977 for the reason why it's necessary
+// to manually destroy the QSqlDatabase instance (i.e. it cannot be done in the
+// Database::~Database).
+void Database::close() {
+	if (db_ && db_->open()) db_->close();
+	delete db_;
+	db_ = NULL;
+	isClosed_ = true;
+}
+
+bool Database::isClosed() const {
+	return isClosed_;
+}
+
+QSqlDatabase* Database::database() const {
+	if (isClosed_) qFatal("Database::database: Database is closed");
 	return db_;
 }
 
@@ -60,7 +74,7 @@ QSqlQuery Database::buildSqlQuery(Database::QueryType type, const QString &table
 		if (whereCondition != "") sql += " WHERE " + whereCondition;
 	}
 
-	QSqlQuery query(db_);
+	QSqlQuery query(*db_);
 	query.prepare(sql);
 	for (int i = 0; i < values.size(); i++) {
 		QVariant v = values[i];
@@ -115,7 +129,7 @@ bool Database::errorCheck(const QSqlQuery& query) {
 bool Database::transaction() {
 	transactionCount_++;
 	if (transactionCount_ > 1) return true;
-	return db_.transaction();
+	return db_->transaction();
 }
 
 bool Database::commit() {
@@ -128,7 +142,7 @@ bool Database::commit() {
 	}
 
 	if (transactionCount_ <= 0) {
-		return db_.commit();
+		return db_->commit();
 	}
 
 	return true;
@@ -150,12 +164,12 @@ bool Database::execQuery(QSqlQuery &query) {
 }
 
 bool Database::execQuery(const QString &sql) {
-	QSqlQuery query(sql, db_);
+	QSqlQuery query(sql, *db_);
 	return execQuery(query);
 }
 
 QSqlQuery Database::prepare(const QString &sql) {
-	QSqlQuery query(db_);
+	QSqlQuery query(*db_);
 	query.prepare(sql);
 	return query;
 }
@@ -163,7 +177,7 @@ QSqlQuery Database::prepare(const QString &sql) {
 int Database::version() const {
 	if (version_ >= 0) return version_;
 
-	QSqlQuery query = db_.exec("SELECT * FROM version");
+	QSqlQuery query = db_->exec("SELECT * FROM version");
 	bool result = query.next();
 	if (!result) return 0;
 
@@ -208,7 +222,7 @@ void Database::upgrade() {
 
 		qDebug() << "Upgrading database to version " << targetVersion;
 
-		db_.transaction();
+		db_->transaction();
 
 		switch (targetVersion) {
 
@@ -224,15 +238,15 @@ void Database::upgrade() {
 
 				QStringList lines = sqlStringToLines(schemaSql);
 				foreach (const QString& line, lines) {
-					db_.exec(line);
+					db_->exec(line);
 				}
 
 			break;
 
 		}
 
-		db_.exec(QString("UPDATE version SET version = %1").arg(targetVersion));
-		db_.commit();
+		db_->exec(QString("UPDATE version SET version = %1").arg(targetVersion));
+		db_->commit();
 
 		versionIndex++;
 	}

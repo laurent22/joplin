@@ -107,6 +107,10 @@ Application::Application(int &argc, char **argv) :
 	}
 }
 
+Application::~Application() {
+	jop::db().close();
+}
+
 void Application::login(const QString &email, const QString &password) {
 	Settings settings;
 	QUrlQuery postData;

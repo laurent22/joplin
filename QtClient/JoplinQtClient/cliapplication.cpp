@@ -48,6 +48,10 @@ CliApplication::CliApplication(int &argc, char **argv) : QCoreApplication(argc, 
 	}
 }
 
+CliApplication::~CliApplication() {
+	jop::db().close();
+}
+
 // void CliApplication::processCommand(const Command& command) {
 // 	qDebug() << "Command" << command.name();
 // 	qDebug() << "Flags" << command.flags();

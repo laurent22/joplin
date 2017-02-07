@@ -37,7 +37,7 @@ int BaseModel::count(Table table, const QString &parentId) {
 }
 
 bool BaseModel::load(const QString &id) {
-	QSqlQuery q(jop::db().database());
+	QSqlQuery q(*jop::db().database());
 	q.prepare("SELECT " + BaseModel::tableFieldNames(table()).join(",") + " FROM " + BaseModel::tableName(table()) + " WHERE id = :id");
 	q.bindValue(":id", id);
 	jop::db().execQuery(q);
@@ -50,7 +50,7 @@ bool BaseModel::load(const QString &id) {
 }
 
 bool BaseModel::loadByField(const QString& parentId, const QString& field, const QString& fieldValue) {
-	QSqlQuery q(jop::db().database());
+	QSqlQuery q(*jop::db().database());
 	QString sql = QString("SELECT %1 FROM %2 WHERE `%3` = :field_value AND parent_id = :parent_id LIMIT 1")
 	                     .arg(BaseModel::tableFieldNames(table()).join(","))
 	                     .arg(BaseModel::tableName(table()))
@@ -170,7 +170,7 @@ bool BaseModel::save(bool trackChanges) {
 
 bool BaseModel::dispose() {
 	const QString& tableName = BaseModel::tableName(table());
-	QSqlQuery q(jop::db().database());
+	QSqlQuery q(*jop::db().database());
 	q.prepare("DELETE FROM " + tableName + " WHERE " + primaryKey() + " = :id");
 	q.bindValue(":id", id().toString());
 	jop::db().execQuery(q);

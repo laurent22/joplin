@@ -20,6 +20,7 @@ class Application : public QGuiApplication {
 public:
 
 	Application(int &argc, char **argv);
+	~Application();
 	void login(const QString& email, const QString& password);
 
 private:

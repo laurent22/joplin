@@ -25,6 +25,7 @@ class CliApplication : public QCoreApplication {
 public:
 
 	CliApplication(int &argc, char **argv);
+	~CliApplication();
 	void processCommand(const Command &command);
 	int exec();
 
