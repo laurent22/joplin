@@ -32,6 +32,7 @@ QVariant AbstractListModel::data(const QModelIndex & index, int role) const {
 }
 
 const BaseModel *AbstractListModel::atIndex(int index) const {
+	Q_UNUSED(index);
 	qFatal("AbstractListModel::atIndex() not implemented");
 	return NULL;
 }
@@ -72,15 +73,18 @@ int AbstractListModel::baseModelCount() const {
 }
 
 const BaseModel *AbstractListModel::cacheGet(int index) const {
+	Q_UNUSED(index);
 	qFatal("AbstractListModel::cacheGet() not implemented");
 	return NULL;
 }
 
 void AbstractListModel::cacheSet(int index, BaseModel* baseModel) const {
+	Q_UNUSED(index); Q_UNUSED(baseModel);
 	qFatal("AbstractListModel::cacheSet() not implemented");
 }
 
 bool AbstractListModel::cacheIsset(int index) const {
+	Q_UNUSED(index);
 	qFatal("AbstractListModel::cacheIsset() not implemented");
 	return false;
 }
@@ -126,6 +130,7 @@ QString AbstractListModel::indexToId(int index) const {
 }
 
 int AbstractListModel::idToIndex(const QString &id) const {
+	Q_UNUSED(id);
 	qFatal("AbstractListModel::idToIndex() not implemented");
 	return -1;
 }

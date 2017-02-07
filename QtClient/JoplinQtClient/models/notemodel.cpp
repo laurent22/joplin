@@ -56,7 +56,7 @@ void NoteModel::setFolderId(const QString &v) {
 
 int NoteModel::idToIndex(const QString &id) const {
 	std::vector<int> indexes = cache_.indexes();
-	for (int i = 0; i < indexes.size(); i++) {
+	for (size_t i = 0; i < indexes.size(); i++) {
 		Note* note = cache_.get(indexes[i]);
 		if (note->idString() == id) return indexes[i];
 	}

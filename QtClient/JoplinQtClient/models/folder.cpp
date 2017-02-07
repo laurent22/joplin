@@ -38,7 +38,7 @@ std::vector<std::unique_ptr<BaseModel>> Folder::children(const QString &orderBy,
 	std::vector<jop::Table> tables;
 	tables.push_back(jop::FoldersTable);
 	tables.push_back(jop::NotesTable);
-	for (int tableIndex = 0; tableIndex < tables.size(); tableIndex++) {
+	for (size_t tableIndex = 0; tableIndex < tables.size(); tableIndex++) {
 		jop::Table table = tables[tableIndex];
 
 		QString sql = QString("SELECT %1 FROM %2 WHERE parent_id = :parent_id ORDER BY %3 %4 %5")
@@ -143,26 +143,26 @@ int Folder::count(const QString &parentId) {
 	return BaseModel::count(jop::FoldersTable, parentId);
 }
 
-std::vector<std::unique_ptr<Folder>> Folder::all(const QString& parentId, const QString &orderBy) {
-	QSqlQuery q = jop::db().prepare(QString("SELECT %1 FROM %2 WHERE parent_id = :parent_id ORDER BY %3")
-	        .arg(BaseModel::tableFieldNames(jop::FoldersTable).join(","))
-	        .arg(BaseModel::tableName(jop::FoldersTable))
-	        .arg(orderBy));
-	q.bindValue(":parent_id", parentId);
-	jop::db().execQuery(q);
+// std::vector<std::unique_ptr<Folder>> Folder::all(const QString& parentId, const QString &orderBy) {
+// 	QSqlQuery q = jop::db().prepare(QString("SELECT %1 FROM %2 WHERE parent_id = :parent_id ORDER BY %3")
+// 	        .arg(BaseModel::tableFieldNames(jop::FoldersTable).join(","))
+// 	        .arg(BaseModel::tableName(jop::FoldersTable))
+// 	        .arg(orderBy));
+// 	q.bindValue(":parent_id", parentId);
+// 	jop::db().execQuery(q);
 
-	std::vector<std::unique_ptr<Folder>> output;
+// 	std::vector<std::unique_ptr<Folder>> output;
 
-	//if (!jop::db().errorCheck(q)) return output;
+// 	//if (!jop::db().errorCheck(q)) return output;
 
-	while (q.next()) {
-		std::unique_ptr<Folder> folder(new Folder());
-		folder->loadSqlQuery(q);
-		output.push_back(std::move(folder));
-	}
+// 	while (q.next()) {
+// 		std::unique_ptr<Folder> folder(new Folder());
+// 		folder->loadSqlQuery(q);
+// 		output.push_back(std::move(folder));
+// 	}
 
-	return output;
-}
+// 	return output;
+// }
 
 QString Folder::displayTitle() const {
 	return QString("%1/").arg(value("title").toString());

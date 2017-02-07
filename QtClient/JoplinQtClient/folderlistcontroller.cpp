@@ -22,7 +22,7 @@ void FolderListController::cacheSet(int index, BaseModel *baseModel) const {
 }
 
 bool FolderListController::cacheIsset(int index) const {
-	return index > 0 && cache_.size() > index;
+	return index > 0 && cache_.size() > (size_t)index;
 }
 
 void FolderListController::cacheClear() const {
@@ -31,12 +31,13 @@ void FolderListController::cacheClear() const {
 
 void FolderListController::itemList_rowsRequested(int fromIndex, int toIndex) {
 	if (!cache_.size()) {
-		cache_ = Folder::all(parentId(), orderBy());
+		qFatal("TODO: replace with root::children()");
+		//cache_ = Folder::all(parentId(), orderBy());
 	}
 
 	//qDebug() << cache_.size();
 
-	if (fromIndex < 0 || toIndex >= cache_.size() || !cache_.size()) {
+	if (fromIndex < 0 || (size_t)toIndex >= cache_.size() || !cache_.size()) {
 		qWarning() << "Invalid folder indexes" << fromIndex << toIndex;
 		return;
 	}

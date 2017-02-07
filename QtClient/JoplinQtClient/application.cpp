@@ -53,7 +53,7 @@ Application::Application(int &argc, char **argv) :
 	QQmlContext *ctxt = view_.rootContext();
 	ctxt->setContextProperty("folderListModel", &folderModel_);
 	ctxt->setContextProperty("noteListModel", &noteModel_);
-	ctxt->setContextProperty("noteModel", &selectedQmlNote_);
+	//ctxt->setContextProperty("noteModel", &selectedQmlNote_);
 	ctxt->setContextProperty("settings", qmlSettings);
 
 	view_.setSource(QUrl("qrc:/app.qml"));

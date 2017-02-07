@@ -45,19 +45,23 @@ void BaseItemListController::updateItemCount() {
 }
 
 void BaseItemListController::itemList_rowsRequested(int fromIndex, int toIndex) {
+	Q_UNUSED(fromIndex); Q_UNUSED(toIndex);
 	qFatal("BaseItemListController::itemList_rowsRequested() must be implemented by child class");
 }
 
 const BaseModel *BaseItemListController::cacheGet(int index) const {
+	Q_UNUSED(index);
 	qFatal("BaseItemListController::cacheGet() not implemented");
 	return NULL;
 }
 
 void BaseItemListController::cacheSet(int index, BaseModel* baseModel) const {
+	Q_UNUSED(index); Q_UNUSED(baseModel);
 	qFatal("BaseItemListController::cacheSet() not implemented");
 }
 
 bool BaseItemListController::cacheIsset(int index) const {
+	Q_UNUSED(index);
 	qFatal("BaseItemListController::cacheIsset() not implemented");
 	return false;
 }

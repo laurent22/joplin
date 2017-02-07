@@ -10,7 +10,7 @@ using namespace jop;
 QMap<int, QVector<BaseModel::Field>> BaseModel::tableFields_;
 QHash<QString, QVariant> BaseModel::cache_;
 
-BaseModel::BaseModel() : table_(jop::UndefinedTable), isNew_(-1) {}
+BaseModel::BaseModel() : isNew_(-1), table_(jop::UndefinedTable) {}
 
 QStringList BaseModel::changedFields() const {
 	QStringList output;
@@ -410,7 +410,7 @@ void BaseModel::setValue(const QString &name, const QJsonValue &value, QMetaType
 	} else if (type == QMetaType::Int) {
 		setValue(name, value.toInt());
 	} else {
-		qFatal("Unsupported value type %s %d", name.toStdString(), type);
+		qFatal("Unsupported value type %s %d", name.toStdString().c_str(), type);
 	}
 }
 

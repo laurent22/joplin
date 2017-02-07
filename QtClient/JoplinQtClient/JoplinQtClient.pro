@@ -32,7 +32,6 @@ SOURCES += \
     models/foldermodel.cpp \
     models/notemodel.cpp \
     models/note.cpp \
-    models/qmlnote.cpp \
     webapi.cpp \
     synchronizer.cpp \
     settings.cpp \
@@ -71,7 +70,6 @@ HEADERS += \
     models/notemodel.h \
     models/note.h \
     sparsevector.hpp \
-    models/qmlnote.h \
     webapi.h \
     synchronizer.h \
     settings.h \

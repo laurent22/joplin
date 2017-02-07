@@ -146,7 +146,7 @@ int CliApplication::exec() {
 		}
 
 		qStdout() << QString("Total: %1 items").arg(children.size()) << endl;
-		for (int i = 0; i < children.size(); i++) {
+		for (size_t i = 0; i < children.size(); i++) {
 			qStdout() << children[i]->displayTitle() << endl;
 		}
 	}

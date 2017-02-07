@@ -13,7 +13,7 @@ FolderModel::FolderModel() : AbstractListModel(), orderBy_("title") {
 
 const BaseModel *FolderModel::atIndex(int index) const {
 	if (cache_.size()) {
-		if (index < 0 || index >= cache_.size()) {
+		if (index < 0 || index >= (int)cache_.size()) {
 			qWarning() << "Invalid folder index:" << index;
 			return NULL;
 		}
@@ -23,7 +23,8 @@ const BaseModel *FolderModel::atIndex(int index) const {
 
 	cacheClear();
 
-	cache_ = Folder::all(orderBy_);
+	qFatal("TODO: replace with root::children()");
+	//cache_ = Folder::all(orderBy_);
 
 	if (!cache_.size()) {
 		qWarning() << "Invalid folder index:" << index;
@@ -79,7 +80,7 @@ void FolderModel::cacheSet(int index, BaseModel* baseModel) const {
 }
 
 bool FolderModel::cacheIsset(int index) const {
-	return index > 0 && cache_.size() > index;
+	return index > 0 && (int)cache_.size() > index;
 }
 
 void FolderModel::cacheClear() const {

@@ -22,8 +22,8 @@ public:
 
 private:
 
-	QObject* itemList_;
 	QString parentId_;
+	QObject* itemList_;
 	QString orderBy_;
 
 protected:

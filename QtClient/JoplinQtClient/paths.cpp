@@ -11,7 +11,7 @@ QString paths::configDir() {
 	QDir d(configDir_);
 	if (!d.exists()) {
 		bool dirCreated = d.mkpath(".");
-		if (!dirCreated) qFatal(QString("Cannot create config directory: " + configDir_).toLatin1());
+		if (!dirCreated) qFatal("Cannot create config directory: %s", configDir_.toStdString().c_str());
 	}
 	return configDir_;
 }
