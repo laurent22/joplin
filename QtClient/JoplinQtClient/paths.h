@@ -8,6 +8,7 @@ namespace paths {
 
 QString configDir();
 QString databaseFile();
+QString noteDraftsDir();
 
 }
 }

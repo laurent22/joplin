@@ -19,3 +19,13 @@ QString paths::configDir() {
 QString paths::databaseFile() {
 	return QString("%1/%2.sqlite").arg(configDir()).arg(QCoreApplication::applicationName());
 }
+
+QString paths::noteDraftsDir() {
+	QString output = QString("%1/note_drafts").arg(paths::configDir());
+	QDir d(output);
+	if (!d.exists()) {
+		bool dirCreated = d.mkpath(".");
+		if (!dirCreated) qFatal("Cannot create note draft directory: %s", output.toStdString().c_str());
+	}
+	return output;
+}

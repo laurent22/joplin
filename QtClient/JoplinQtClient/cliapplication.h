@@ -29,6 +29,11 @@ public:
 	void processCommand(const Command &command);
 	int exec();
 
+private:
+
+	bool filePutContents(const QString& filePath, const QString& content) const;
+	QString fileGetContents(const QString& filePath) const;
+
 };
 
 }

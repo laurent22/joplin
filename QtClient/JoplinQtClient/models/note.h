@@ -11,7 +11,6 @@ class Note : public Item {
 public:
 
 	Note();
-	//Table table() const;
 	bool primaryKeyIsUuid() const;
 	bool trackChanges() const;
 

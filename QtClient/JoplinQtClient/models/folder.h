@@ -16,12 +16,10 @@ public:
 	Folder();
 
 	static int count(const QString& parentId);
-	// static std::vector<std::unique_ptr<Folder>> all(const QString& parentId = QString(""), const QString &orderBy = QString("title"));
 	static std::vector<std::unique_ptr<Folder>> pathToFolders(const QString& path, bool returnLast, int& errorCode);
 	static QString pathBaseName(const QString& path);
 	static std::unique_ptr<Folder> root();
 
-	//Table table() const;
 	bool primaryKeyIsUuid() const;
 	bool trackChanges() const;
 	int noteCount() const;

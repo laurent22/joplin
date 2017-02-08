@@ -1,64 +1,63 @@
 #include "models/item.h"
-#include "uuid.h"
+#include "constants.h"
 
-using namespace jop;
+namespace jop {
 
 Item::Item() {}
 
-//Item::Item() {
-//	synced_ = false;
-//}
+QString Item::toFriendlyString() const {
+	QStringList shownKeys;
+	shownKeys << "author" << "longitude" << "latitude" << "is_todo" << "todo_due" << "todo_completed";
 
-////QString Item::id() const {
-////	return id_;
-////}
+	QStringList output;
+	output << value("title").toString();
+	output << "";
+	output << value("body").toString();
+	output << "================================================================================";
+	QHash<QString, Value> values = this->values();
+	for (int i = 0; i < shownKeys.size(); i++) {
+		QString key = shownKeys[i];
+		if (!values.contains(key)) continue;
+		output << QString("%1: %2").arg(key).arg(values[key].toString());
+	}
+	return output.join(NEW_LINE);
+}
 
-//QString Item::title() const {
-//	return title_;
-//}
+void Item::patchFriendlyString(const QString& patch) {
+	QHash<QString, QString> values;
+	QStringList lines = patch.split(jop::NEW_LINE);
 
-//int Item::createdTime() const {
-//	return createdTime_;
-//}
+	QString title("");
+	if (lines.size() >= 1) {
+		title = lines[0];
+	}
 
-//int Item::updatedTime() const {
-//	return updatedTime_;
-//}
+	bool foundDelimiter = false;
+	QString description("");
+	for (int i = 2; i < lines.size(); i++) {
+		QString line = lines[i];
 
-//bool Item::synced() const {
-//	return synced_;
-//}
+		if (line.indexOf("========================================") == 0) {
+			foundDelimiter = true;
+			continue;
+		}
 
-//void Item::setId(const QString& v) {
-////	if (id_ == v) return;
-//	id_ = v;
-////	changedFields_.push_back("id");
-//}
+		if (!foundDelimiter) {
+			if (!description.isEmpty()) description += "\n";
+			description += line;
+		} else {
+			int colonIndex = line.indexOf(':');
+			QString propName = line.left(colonIndex).trimmed();
+			QString propValue = line.right(line.length() - colonIndex - 1).trimmed();
 
-//void Item::setTitle(const QString &v) {
-////	if (title_ == v) return;
-//	title_ = v;
-////	changedFields_.push_back("title");
-//}
+			qDebug() << propName << propValue;
+		}
+	}
 
-//void Item::setCreatedTime(int v) {
-//	createdTime_ = v;
-//}
+	// for (int i = lines.size() - 1; i >= 0; i--) {
+	// 	QString line = lines[i];
 
-//void Item::setSynced(bool v) {
-//	synced_ = v;
-//}
+	// }
+}
 
-//QStringList Item::dbFields() {
-//	QStringList output;
-//	output << "id" << "title" << "created_time" << "updated_time" << "synced";
-//	return output;
-//}
-
-//void Item::fromSqlQuery(const QSqlQuery &q) {
-//	id_ = q.value(0).toString();
-//	title_ = q.value(1).toString();
-//	createdTime_ = q.value(2).toInt();
-//	updatedTime_ = q.value(3).toInt();
-//	synced_ = q.value(4).toBool();
-//}
+}

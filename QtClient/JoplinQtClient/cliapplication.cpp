@@ -65,18 +65,26 @@ CliApplication::~CliApplication() {
 // //	}
 // }
 
+bool CliApplication::filePutContents(const QString& filePath, const QString& content) const {
+	QFile file(filePath);
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) return false;
+
+	QTextStream out(&file);
+	out << content;
+	out.flush();
+	return true;
+}
+
+QString CliApplication::fileGetContents(const QString& filePath) const {
+	QFile file(filePath);
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return QString("");
+
+	QTextStream in(&file);
+	return in.readAll();
+}
+
 int CliApplication::exec() {
 	qDebug() << "===========================================";
-
-
-	
-
-	// QProcess* process = new QProcess();
-	// qint64* processId = new qint64();
-	// process->startDetached("/usr/bin/vim", QStringList(), QString(), processId);
-	// while (kill(*processId, 0) == 0) {}
-	// delete processId;
-
 
 	QString command = "help";
 	QStringList args = arguments();
@@ -94,12 +102,15 @@ int CliApplication::exec() {
 	// ls
 	// ls new_folder
 	// touch new_folder/new_note
+	// edit new_folder/new_note
 
 	if (command == "mkdir") {
 		parser.addPositionalArgument("path", "Folder path.");
 	} else if (command == "ls") {
 		parser.addPositionalArgument("path", "Folder path.");
 	} else if (command == "touch") {
+		parser.addPositionalArgument("path", "Note path.");
+	} else if (command == "edit") {
 		parser.addPositionalArgument("path", "Note path.");
 	} else {
 		qDebug().noquote() << parser.helpText();
@@ -174,6 +185,53 @@ int CliApplication::exec() {
 			note.setValue("parent_id", folders.size() ? folders[folders.size() - 1]->idString() : "");
 			note.setValue("title", noteTitle);
 			note.save();
+		}
+	}
+
+	if (command == "edit") {
+		QString path = args.size() ? args[0] : QString();
+
+		if (path.isEmpty()) {
+			qStdout() << "Please provide a path or name for the note.";
+			return 1;
+		}
+
+		std::vector<std::unique_ptr<Folder>> folders = Folder::pathToFolders(path, false, errorCode);
+
+		if (errorCode) {
+			qStdout() << "Invalid path: " << path << endl;
+		} else {
+			// TODO: handle case where note doesn't exist
+			QString parentId = folders.size() ? folders[folders.size() - 1]->idString() : QString("");
+			QString noteTitle = Folder::pathBaseName(path);
+			Note note;
+			note.loadByField(parentId, QString("title"), noteTitle);
+			//QString noteText = note.
+
+			QString notePath = QString("%1/%2.txt").arg(paths::noteDraftsDir()).arg(note.idString());
+
+			bool ok = filePutContents(notePath, note.toFriendlyString());
+			if (!ok) {
+				qStdout() << QString("Cannot open %1 for writing").arg(notePath) << endl;
+				return 1;
+			}
+
+			qStdout() << QString("Editing note \"%1\" (Press Ctrl+C when done)").arg(path) << endl;
+			QProcess* process = new QProcess();
+			qint64* processId = new qint64();
+			process->startDetached("/usr/bin/vim", QStringList() << notePath, QString(), processId);
+			while (kill(*processId, 0) == 0) {
+				QThread::sleep(1);
+			}
+			delete processId;
+
+			QString content = fileGetContents(notePath);
+			if (content.isEmpty()) {
+				qStdout() << QString("Cannot open %1 for reading, or file is empty.").arg(notePath) << endl;
+				return 1;
+			}
+
+			note.patchFriendlyString(content);
 		}
 	}
 

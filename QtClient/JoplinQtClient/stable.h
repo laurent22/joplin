@@ -37,6 +37,7 @@
 #include <QCommandLineParser>
 #include <QProcess>
 #include <QQmlProperty>
+#include <QThread>
 
 #endif // __cplusplus
 
