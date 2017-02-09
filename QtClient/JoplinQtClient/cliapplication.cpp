@@ -206,32 +206,38 @@ int CliApplication::exec() {
 			QString noteTitle = Folder::pathBaseName(path);
 			Note note;
 			note.loadByField(parentId, QString("title"), noteTitle);
-			//QString noteText = note.
 
-			QString notePath = QString("%1/%2.txt").arg(paths::noteDraftsDir()).arg(note.idString());
+			QString noteFilePath = QString("%1/%2.txt").arg(paths::noteDraftsDir()).arg(note.idString());
 
-			bool ok = filePutContents(notePath, note.toFriendlyString());
+			bool ok = filePutContents(noteFilePath, note.toFriendlyString());
 			if (!ok) {
-				qStdout() << QString("Cannot open %1 for writing").arg(notePath) << endl;
+				qStdout() << QString("Cannot open %1 for writing").arg(noteFilePath) << endl;
 				return 1;
 			}
+
+			QFileInfo fileInfo(noteFilePath);
+			QDateTime originalLastModified = fileInfo.lastModified();
 
 			qStdout() << QString("Editing note \"%1\" (Press Ctrl+C when done)").arg(path) << endl;
 			QProcess* process = new QProcess();
 			qint64* processId = new qint64();
-			process->startDetached("/usr/bin/vim", QStringList() << notePath, QString(), processId);
+			process->startDetached("/usr/bin/vim", QStringList() << noteFilePath, QString(), processId);
 			while (kill(*processId, 0) == 0) {
 				QThread::sleep(1);
 			}
 			delete processId;
 
-			QString content = fileGetContents(notePath);
+			QString content = fileGetContents(noteFilePath);
 			if (content.isEmpty()) {
-				qStdout() << QString("Cannot open %1 for reading, or file is empty.").arg(notePath) << endl;
+				qStdout() << QString("Cannot open %1 for reading, or file is empty.").arg(noteFilePath) << endl;
 				return 1;
 			}
 
-			note.patchFriendlyString(content);
+			fileInfo.refresh();
+			qDebug() << originalLastModified.toString("hh:mm:ss.zzz") << fileInfo.lastModified().toString("hh:mm:ss.zzz");
+
+			//note.patchFriendlyString(content);
+			//note.save();
 		}
 	}
 

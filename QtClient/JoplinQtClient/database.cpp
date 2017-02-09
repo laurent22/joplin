@@ -57,25 +57,30 @@ QSqlQuery Database::buildSqlQuery(Database::QueryType type, const QString &table
 			QString f = fields[i];
 			if (fieldString != "") fieldString += ", ";
 			if (valueString != "") valueString += ", ";
-			fieldString += f;
+			fieldString += QString("`%1`").arg(f);
 			valueString += ":" + f;
 		}
 
-		sql = QString("INSERT INTO %1 (%2) VALUES (%3)").arg(tableName).arg(fieldString).arg(valueString);
+		sql = QString("INSERT INTO `%1` (%2) VALUES (%3)").arg(tableName).arg(fieldString).arg(valueString);
 	} else if (type == Update) {
 		QString fieldString = "";
 		for (int i = 0; i < fields.length(); i++) {
 			QString f = fields[i];
 			if (fieldString != "") fieldString += ", ";
-			fieldString += f + " = :" + f;
+			fieldString += QString("`%1`=:%1").arg(f);
 		}
 
-		sql = QString("UPDATE %1 SET %2").arg(tableName).arg(fieldString);
+		sql = QString("UPDATE `%1` SET %2").arg(tableName).arg(fieldString);
 		if (whereCondition != "") sql += " WHERE " + whereCondition;
 	}
 
 	QSqlQuery query(*db_);
-	query.prepare(sql);
+	bool ok = query.prepare(sql);
+	if (!ok) {
+		printError(query);
+		return query;
+	}
+
 	for (int i = 0; i < values.size(); i++) {
 		QVariant v = values[i];
 		QString fieldName = ":" + fields[i];
@@ -113,14 +118,20 @@ QSqlQuery Database::buildSqlQuery(Database::QueryType type, const QString &table
 	return buildSqlQuery(type, tableName, fields, fieldValues, whereCondition);
 }
 
-bool Database::errorCheck(const QSqlQuery& query) {
+void Database::printError(const QSqlQuery& query) const {
 	if (query.lastError().isValid()) {
-		qCritical().noquote() << "SQL query error: " << query.lastError().text().trimmed() << ". Query was: " << query.lastQuery();
+		qCritical().noquote() << "SQL error: " << query.lastError().text().trimmed() << ". Query was: " << query.lastQuery();
 		QMapIterator<QString, QVariant> i(query.boundValues());
 		while (i.hasNext()) {
 			i.next();
 			qCritical() << i.key() << "=" << i.value().toString();
 		}
+	}
+}
+
+bool Database::errorCheck(const QSqlQuery& query) {
+	if (query.lastError().isValid()) {
+		printError(query);
 		return false;
 	}
 	return true;

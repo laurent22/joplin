@@ -35,6 +35,7 @@ private:
 	int version() const;
 	mutable int version_;
 	QStringList sqlStringToLines(const QString& sql);
+	void printError(const QSqlQuery& query) const;
 	int transactionCount_;
 	bool logQueries_;
 	bool isClosed_;

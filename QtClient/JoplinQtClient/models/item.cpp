@@ -33,18 +33,20 @@ void Item::patchFriendlyString(const QString& patch) {
 	}
 
 	bool foundDelimiter = false;
-	QString description("");
-	for (int i = 2; i < lines.size(); i++) {
+	QString body("");
+	for (int i = 1; i < lines.size(); i++) {
 		QString line = lines[i];
 
-		if (line.indexOf("========================================") == 0) {
+		if (line.indexOf("================================================================================") == 0) {
 			foundDelimiter = true;
 			continue;
 		}
 
+		if (!foundDelimiter && line.trimmed() == "" && i == 1) continue; // Skip the first \n
+
 		if (!foundDelimiter) {
-			if (!description.isEmpty()) description += "\n";
-			description += line;
+			if (!body.isEmpty()) body += "\n";
+			body += line;
 		} else {
 			int colonIndex = line.indexOf(':');
 			QString propName = line.left(colonIndex).trimmed();
@@ -54,10 +56,12 @@ void Item::patchFriendlyString(const QString& patch) {
 		}
 	}
 
-	// for (int i = lines.size() - 1; i >= 0; i--) {
-	// 	QString line = lines[i];
+	setValue("title", title);
+	setValue("body", body);
 
-	// }
+	for (QHash<QString, QString>::const_iterator it = values.begin(); it != values.end(); ++it) {
+		setValue(it.key(), it.value());
+	}
 }
 
 }
