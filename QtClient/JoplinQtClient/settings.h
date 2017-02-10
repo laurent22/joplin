@@ -15,6 +15,7 @@ public:
 	Settings();
 
 	static void initialize();
+	QString keyValueToFriendlyString(const QString& key) const;
 
 public slots:
 

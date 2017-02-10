@@ -26,13 +26,18 @@ int main(int argc, char *argv[]) {
 #ifdef JOP_FRONT_END_GUI
 	qDebug() << "Front end: GUI";
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-	jop::Application app(argc, argv);
+	jop::Application* app = new jop::Application(argc, argv);
 #endif
 
 #ifdef JOP_FRONT_END_CLI
 	qDebug() << "Front end: CLI";
-	jop::CliApplication app(argc, argv);
+	jop::CliApplication* app = new jop::CliApplication(argc, argv);
 #endif
 
-    return app.exec();
+    int errorCode = app->exec();
+
+    delete app;
+    app = NULL;
+    
+    return errorCode;
 }

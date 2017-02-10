@@ -49,6 +49,7 @@ public:
 	static int count(jop::Table table, const QString &parentId);
 	bool load(const QString& id);
 	bool loadByField(const QString& parentId, const QString& field, const QString& fieldValue);
+	bool reload();
 	virtual bool save(bool trackChanges = true);
 	virtual bool dispose();
 

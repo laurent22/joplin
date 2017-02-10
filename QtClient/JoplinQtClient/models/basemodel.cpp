@@ -38,7 +38,7 @@ int BaseModel::count(Table table, const QString &parentId) {
 
 bool BaseModel::load(const QString &id) {
 	QSqlQuery q(*jop::db().database());
-	q.prepare("SELECT " + BaseModel::tableFieldNames(table()).join(",") + " FROM " + BaseModel::tableName(table()) + " WHERE id = :id");
+	q.prepare("SELECT " + BaseModel::sqlTableFields(table()) + " FROM " + BaseModel::tableName(table()) + " WHERE id = :id");
 	q.bindValue(":id", id);
 	jop::db().execQuery(q);
 	q.next();
@@ -47,6 +47,10 @@ bool BaseModel::load(const QString &id) {
 
 	loadSqlQuery(q);
 	return true;
+}
+
+bool BaseModel::reload() {
+	return load(idString());
 }
 
 bool BaseModel::loadByField(const QString& parentId, const QString& field, const QString& fieldValue) {

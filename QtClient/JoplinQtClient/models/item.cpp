@@ -24,7 +24,6 @@ QString Item::toFriendlyString() const {
 }
 
 void Item::patchFriendlyString(const QString& patch) {
-	QHash<QString, QString> values;
 	QStringList lines = patch.split(jop::NEW_LINE);
 
 	QString title("");
@@ -51,17 +50,12 @@ void Item::patchFriendlyString(const QString& patch) {
 			int colonIndex = line.indexOf(':');
 			QString propName = line.left(colonIndex).trimmed();
 			QString propValue = line.right(line.length() - colonIndex - 1).trimmed();
-
-			qDebug() << propName << propValue;
+			setValue(propName, propValue);
 		}
 	}
 
 	setValue("title", title);
 	setValue("body", body);
-
-	for (QHash<QString, QString>::const_iterator it = values.begin(); it != values.end(); ++it) {
-		setValue(it.key(), it.value());
-	}
 }
 
 }
