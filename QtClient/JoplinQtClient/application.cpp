@@ -19,9 +19,7 @@
 using namespace jop;
 
 Application::Application(int &argc, char **argv) :
-    QGuiApplication(argc, argv),
-    db_(jop::db()),
-    synchronizer_(db_)
+    QGuiApplication(argc, argv)
 
     {
 

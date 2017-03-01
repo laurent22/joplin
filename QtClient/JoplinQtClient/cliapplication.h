@@ -5,6 +5,8 @@
 
 #include "command.h"
 #include "models/note.h"
+#include "webapi.h"
+#include "synchronizer.h"
 
 namespace jop {
 
@@ -36,6 +38,8 @@ inline StderrHandler& qStderr() {
 
 class CliApplication : public QCoreApplication {
 
+	Q_OBJECT
+
 public:
 
 	CliApplication(int &argc, char **argv);
@@ -43,13 +47,26 @@ public:
 	void processCommand(const Command &command);
 	int exec();
 
+public slots:
+
+	void api_requestDone(const QJsonObject& response, const QString& tag);
+	void synchronizer_started();
+	void synchronizer_finished();
+
+signals:
+
+	void synchronizationDone();
+
 private:
 
 	bool filePutContents(const QString& filePath, const QString& content) const;
+	void startSynchronization();
 	QString fileGetContents(const QString& filePath) const;
 	void saveNoteIfFileChanged(Note& note, const QDateTime& originalLastModified, const QString& noteFilePath);
 	QStringList parseCommandLinePath(const QString& commandLine) const;
 	QString commandLineArgsToString(const QStringList& args) const;
+	WebApi api_;
+	Synchronizer synchronizer_;
 
 };
 

@@ -26,7 +26,6 @@ public:
 private:
 
 	Window view_;
-	Database& db_;
 	FolderModel folderModel_;
 	NoteModel noteModel_;
 	QString selectedFolderId() const;

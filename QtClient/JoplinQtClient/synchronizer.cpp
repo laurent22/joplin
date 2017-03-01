@@ -5,7 +5,7 @@
 
 using namespace jop;
 
-Synchronizer::Synchronizer(Database &database) : db_(database) {
+Synchronizer::Synchronizer() {
 	state_ = Idle;
 	uploadsRemaining_ = 0;
 	connect(&api_, SIGNAL(requestDone(QJsonObject,QString)), this, SLOT(api_requestDone(QJsonObject,QString)));
@@ -21,6 +21,8 @@ void Synchronizer::start() {
 		qWarning() << "Cannot start synchronizer because synchronization already in progress. State: " << state_;
 		return;
 	}
+
+	emit started();
 
 	qInfo() << "Starting synchronizer...";
 
@@ -50,47 +52,52 @@ WebApi &Synchronizer::api() {
 QUrlQuery Synchronizer::valuesToUrlQuery(const QHash<QString, Change::Value>& values) const {
 	QUrlQuery query;
 	for (QHash<QString, Change::Value>::const_iterator it = values.begin(); it != values.end(); ++it) {
+		if (it.key() == "id") continue;
 		query.addQueryItem(it.key(), it.value().toString());
 	}
 	return query;
 }
 
 void Synchronizer::checkNextState() {
+	qDebug() << "Synchronizer::checkNextState from state" << state_;
+
 	switch (state_) {
 
-	    case UploadingChanges:
+		case UploadingChanges:
 
-		    if (uploadsRemaining_ < 0) qCritical() << "Mismatch on upload operations done" << uploadsRemaining_;
+			if (uploadsRemaining_ < 0) qCritical() << "Mismatch on upload operations done" << uploadsRemaining_;
 
 			if (uploadsRemaining_ <= 0) {
 				uploadsRemaining_ = 0;
 				switchState(DownloadingChanges);
 			}
 
-		    break;
+			break;
 
-	    case DownloadingChanges:
+		case DownloadingChanges:
 
-		    switchState(Idle);
-		    break;
+			switchState(Idle);
+			emit finished();
+			break;
 
-	    case Idle:
+		case Idle:
 
-		    break;
+			break;
 
-	    case Aborting:
+		case Aborting:
 
-		    switchState(Idle);
-		    break;
+			switchState(Idle);
+			emit finished();
+			break;
 
-	    case Frozen:
+		case Frozen:
 
-		    break;
+			break;
 
-	    default:
+		default:
 
-		    qCritical() << "Synchronizer has invalid state" << state_;
-		    break;
+			qCritical() << "Synchronizer has invalid state" << state_;
+			break;
 
 	}
 }
@@ -117,45 +124,56 @@ void Synchronizer::switchState(Synchronizer::SynchronizationState state) {
 		// UPLOADING STATE
 		// =============================================================================================
 
-		QVector<Change> changes = Change::all();
-		changes = Change::mergedChanges(changes);
+		std::vector<Change*> changes = Change::all();
+		Change::mergedChanges(changes);
 
 		uploadsRemaining_ = changes.size();
 
-		qWarning() << "TODO: fix change iteration";
+		for (size_t i = 0; i < changes.size(); i++) {
+			Change* change = changes[i];
 
-//		foreach (Change change, changes) {
-//			jop::Table itemType = (jop::Table)change.value("item_type").toInt();
-//			QString itemId = change.value("item_id").toString();
-//			Change::Type type = (Change::Type)change.value("type").toInt();
+			jop::Table itemType = (jop::Table)change->value("item_type").toInt();
+			QString itemId = change->value("item_id").toString();
+			Change::Type type = (Change::Type)change->value("type").toInt();
 
-//			if (itemType == jop::FoldersTable) {
+			qDebug() << "Change" << change->idString() << itemId << itemType;
 
-//				if (type == Change::Create) {
+			if (itemType == jop::FoldersTable) {
 
-//					Folder folder;
-//					folder.load(itemId);
-//					QUrlQuery data = valuesToUrlQuery(folder.values());
-//					api_.put("folders/" + folder.id().toString(), QUrlQuery(), data, "upload:putFolder:" + folder.id().toString());
+				if (type == Change::Create) {
 
-//				} else if (type == Change::Update) {
+					Folder folder;
+					folder.load(itemId);
+					QUrlQuery data = valuesToUrlQuery(folder.values());
+					api_.put("folders/" + folder.idString(), QUrlQuery(), data, "upload:putFolder:" + folder.idString());
 
-//					Folder folder;
-//					folder.load(itemId);
-//					QStringList mergedFields = change.mergedFields();
-//					QUrlQuery data;
-//					foreach (QString field, mergedFields) {
-//						data.addQueryItem(field, folder.value(field).toString());
-//					}
-//					api_.patch("folders/" + folder.id().toString(), QUrlQuery(), data, "upload:patchFolder:" + folder.id().toString());
+				} else if (type == Change::Update) {
 
-//				} else if (type == Change::Delete) {
+					Folder folder;
+					folder.load(itemId);
+					QStringList mergedFields = change->mergedFields();
+					QUrlQuery data;
+					foreach (QString field, mergedFields) {
+						data.addQueryItem(field, folder.value(field).toString());
+					}
+					api_.patch("folders/" + folder.idString(), QUrlQuery(), data, "upload:patchFolder:" + folder.idString());
 
-//					api_.del("folders/" + itemId, QUrlQuery(), QUrlQuery(), "upload:deleteFolder:" + itemId);
+				} else if (type == Change::Delete) {
 
-//				}
-//			}
-//		}
+					api_.del("folders/" + itemId, QUrlQuery(), QUrlQuery(), "upload:deleteFolder:" + itemId);
+
+				}
+			} else {
+
+				qFatal("Unsupported item type: %d", itemType);
+
+			}
+		}
+
+		for (size_t i = 0; i < changes.size(); i++) {
+			delete changes[i];
+		}
+		changes.clear();
 
 		checkNextState();
 

@@ -16,7 +16,7 @@ public:
 
 	enum SynchronizationState { Idle, UploadingChanges, DownloadingChanges, Aborting, Frozen };
 
-	Synchronizer(Database& database);
+	Synchronizer();
 	void start();
 	void setSessionId(const QString& v);
 	void abort();
@@ -28,7 +28,6 @@ private:
 
 	QUrlQuery valuesToUrlQuery(const QHash<QString, BaseModel::Value> &values) const;
 	WebApi api_;
-	Database& db_;
 	SynchronizationState state_;
 	int uploadsRemaining_;
 	void checkNextState();
@@ -37,6 +36,11 @@ private:
 public slots:
 
 	void api_requestDone(const QJsonObject& response, const QString& tag);
+
+signals:
+
+	void started();
+	void finished();
 
 };
 

@@ -47,24 +47,50 @@ CliApplication::CliApplication(int &argc, char **argv) : QCoreApplication(argc, 
 		// Client ID should be unique per instance of a program
 		settings.setValue("clientId", uuid::createUuid());
 	}
+
+	connect(&api_, SIGNAL(requestDone(const QJsonObject&, const QString&)), this, SLOT(api_requestDone(const QJsonObject&, const QString&)));
+	connect(&synchronizer_, SIGNAL(started()), this, SLOT(synchronizer_started()));
+	connect(&synchronizer_, SIGNAL(finished()), this, SLOT(synchronizer_finished()));
 }
 
 CliApplication::~CliApplication() {
 	jop::db().close();
 }
 
-// void CliApplication::processCommand(const Command& command) {
-// 	qDebug() << "Command" << command.name();
-// 	qDebug() << "Flags" << command.flags();
-// 	qDebug() << "Args" << command.args();
+void CliApplication::api_requestDone(const QJsonObject& response, const QString& tag) {
+	// TODO: handle errors
+	// Handle expired sessions
 
-// //	if (command == "mkdir") {
+	if (tag == "getSession") {
+		if (response.contains("error")) {
+			qStderr() << "Could not login: " << response.value("error").toString() << endl;
+			emit synchronizationDone();
+		} else {
+			QString sessionId = response.value("id").toString();
+			Settings settings;
+			settings.setValue("session.id", sessionId);
+			startSynchronization();
+		}
+	}
+}
 
-// //		//Folder folder;
-// //		//folder.setValue("title", args[
+// Call this only once the API base URL has been defined and the session has been set.
+void CliApplication::startSynchronization() {
+	Settings settings;
+	synchronizer_.api().setBaseUrl(api_.baseUrl());
+	synchronizer_.setSessionId(settings.value("session.id").toString());
+	synchronizer_.unfreeze();
+	synchronizer_.start();
+}
 
-// //	}
-// }
+void CliApplication::synchronizer_started() {
+	qDebug() << "Synchronization started...";
+}
+
+void CliApplication::synchronizer_finished() {
+	qDebug() << "Synchronization finished...";
+	emit synchronizationDone();
+}
 
 bool CliApplication::filePutContents(const QString& filePath, const QString& content) const {
 	QFile file(filePath);
@@ -199,13 +225,19 @@ int CliApplication::exec() {
 	parser.addVersionOption();
 
 	// mkdir "new_folder"
+	// rm "new_folder"
 	// ls
 	// ls new_folder
 	// touch new_folder/new_note
 	// edit new_folder/new_note
 	// config editor "subl -w %1"
+	// sync
+
+	// TODO: implement mv "new_folder"
 
 	if (command == "mkdir") {
+		parser.addPositionalArgument("path", "Folder path.");
+	} else if (command == "rm") {
 		parser.addPositionalArgument("path", "Folder path.");
 	} else if (command == "ls") {
 		parser.addPositionalArgument("path", "Folder path.");
@@ -217,6 +249,8 @@ int CliApplication::exec() {
 		parser.addPositionalArgument("key", "Key of the config property.");
 		parser.addPositionalArgument("value", "Value of the config property.");
 		parser.addOption(QCommandLineOption(QStringList() << "unset", "Unset the given <key>.", "key"));
+	} else if (command == "sync") {
+
 	} else if (command == "help") {
 
 	} else {
@@ -253,6 +287,23 @@ int CliApplication::exec() {
 		folder.setValue("parent_id", folders.size() ? folders[folders.size() - 1]->idString() : "");
 		folder.setValue("title", Folder::pathBaseName(path));
 		folder.save();
+	}
+
+	if (command == "rm") {
+		QString path = args.size() ? args[0] : QString();
+
+		if (path.isEmpty()) {
+			qStderr() << "Please provide a path or name for the folder.";
+			return 1;
+		}
+
+		std::vector<std::unique_ptr<Folder>> folders = Folder::pathToFolders(path, true, errorCode);
+		if (errorCode || !folders.size()) {
+			qStderr() << "Invalid path: " << path << endl;
+			return 1;
+		}
+
+		folders[folders.size() - 1]->dispose();
 	}
 
 	if (command == "ls") {
@@ -344,25 +395,27 @@ int CliApplication::exec() {
 			QDateTime originalLastModified = fileInfo.lastModified();
 
 			qStdout() << QString("Editing note \"%1\" (Either close the editor or press Ctrl+C when done)").arg(path) << endl;
+			qDebug() << "File:" << noteFilePath;
 			QProcess* process = new QProcess();
-			qint64* processId = new qint64();
+			qint64 processId = 0;
 
 			QString editorCommandPath = editorCommand.takeFirst();
 			editorCommand << noteFilePath;
-			if (!process->startDetached(editorCommandPath, editorCommand, QString(), processId)) {
+			if (!process->startDetached(editorCommandPath, editorCommand, QString(), &processId)) {
 				qStderr() << QString("Could not start command: %1").arg(editorCommandPath + " " + commandLineArgsToString(editorCommand)) << endl;
 				return 1;
 			}
 
-			while (kill(*processId, 0) == 0) {
+			while (kill(processId, 0) == 0) { // While the process still exist
 				QThread::sleep(2);
 				saveNoteIfFileChanged(note, originalLastModified, noteFilePath);
 			}
-			delete processId; processId = NULL;
 
 			saveNoteIfFileChanged(note, originalLastModified, noteFilePath);
 
-			// TODO: delete note file
+			delete process; process = NULL;
+
+			QFile::remove(noteFilePath);
 		}
 	}
 
@@ -389,6 +442,40 @@ int CliApplication::exec() {
 		}
 
 		settings.setValue(propKey, propValue);
+	}
+
+	if (command == "sync") {
+		QString sessionId = settings.value("session.id").toString();
+		qDebug() << "Session ID:" << sessionId;
+
+		// TODO: ask user
+		api_.setBaseUrl("http://127.0.0.1:8000");
+
+		QEventLoop loop;
+		connect(this, SIGNAL(synchronizationDone()), &loop, SLOT(quit()));
+
+		if (sessionId == "") {
+			QTextStream qtin(stdin); 
+			qStdout() << "Enter email:" << endl;
+			QString email = qtin.readLine();
+			qStdout() << "Enter password:" << endl;
+			QString password = qtin.readLine();
+
+			qDebug() << email << password;
+
+			Settings settings;
+			QUrlQuery postData;
+			postData.addQueryItem("email", email);
+			postData.addQueryItem("password", password);
+			postData.addQueryItem("client_id", settings.value("clientId").toString());
+			api_.post("sessions", QUrlQuery(), postData, "getSession");
+		} else {
+			startSynchronization();
+		}
+
+		loop.exec();
+
+		qDebug() << "Synchronization done";
 	}
 
 	qDebug() << "=========================================== END";

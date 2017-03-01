@@ -13,11 +13,9 @@ public:
 
 	enum Type { Undefined, Create, Update, Delete };
 
-	//Table table() const;
-
 	Change();
-	static QVector<Change> all(int limit = 100);
-	static QVector<Change> mergedChanges(const QVector<Change> &changes);
+	static std::vector<Change*> all(int limit = 100);
+	static void mergedChanges(std::vector<Change*> &changes);
 	static void disposeByItemId(const QString& itemId);
 
 	void addMergedField(const QString& name);

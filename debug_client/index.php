@@ -13,10 +13,20 @@ function initialize() {
 function config($name) {
 	$host = $_SERVER['HTTP_HOST'];
 
+	$baseUrl = 'https://joplin.cozic.net';
+	if ($host == 'joplinclient.local') {
+		$baseUrl = 'http://joplin.local';
+	}
+	if ($host == 'note_debug.local') {
+		$baseUrl = 'http://127.0.0.1:8000';
+	}
+
 	$config = array(
 		'host' => $host,
-		'baseUrl' => $host == 'joplinclient.local' ? 'http://joplin.local' : 'https://joplin.cozic.net',
+		'baseUrl' => $baseUrl,
 		'clientId' => 'E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3',
+		'email' => 'laurent@cozic.net',
+		'password' => '123456789',
 	);
 	if (isset($config[$name])) return $config[$name];
 	throw new Exception('Unknown config: ' . $name);
@@ -119,10 +129,12 @@ function redirect($path) {
 initialize();
 
 $session = execRequest('POST', 'sessions', null, array(
-	'email' => 'laurent@cozic.net',
-	'password' => '12345678',
+	'email' => config('email'),
+	'password' => config('password'),
 	'client_id' => config('clientId'),
 ));
+
+if (isset($session['error'])) throw new Exception('Could not login. Please check credentials. ' . json_encode($session));
 
 $_SESSION['sessionId'] = $session['id'];
 
@@ -159,10 +171,11 @@ switch ($action) {
 		// Hack so that all the changes are returned, as if the client requesting them
 		// was completely new.
 		$session = execRequest('POST', 'sessions', null, array(
-			'email' => 'laurent@cozic.net',
-			'password' => '12345678',
+			'email' => config('email'),
+			'password' => config('password'),
 			'client_id' => 'ABCDABCDABCDABCDABCDABCDABCDABCD',
 		));
+		if (isset($session['error'])) throw new Exception('Could not login. Please check credentials. ' . json_encode($session));
 		$changes = execRequest('GET', 'synchronizer', array('session' => $session['id']));
 		$pageParams['contentHtml'] = renderView('changes', array('changes' => $changes));
 		break;
