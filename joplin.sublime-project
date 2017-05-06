@@ -8,7 +8,10 @@
                 "vendor",
                 "QtClient/build-JoplinQtClient-Visual_C_32_bits-Debug",
                 "QtClient/data/resources",
-                "app/data/uploads"
+                "app/data/uploads",
+                "ReactNativeClient/node_modules",
+                "ReactNativeClient/android",
+                "ReactNativeClient/ios",
 			],
             "file_exclude_patterns": [
                 "*.pro.user",

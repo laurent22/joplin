@@ -4,6 +4,6 @@ namespace AppBundle\Exception;
 
 class AuthException extends BaseException {
 
-	protected $message = 'invalid authentication';
+	protected $message = 'authentication error';
 
 }
