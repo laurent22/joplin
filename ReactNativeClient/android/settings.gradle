@@ -1,3 +1,6 @@
 rootProject.name = 'AwesomeProject'
 
 include ':app'
+
+include ':react-native-sqlite-storage'
+project(':react-native-sqlite-storage').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-sqlite-storage/src/android')

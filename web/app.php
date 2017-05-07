@@ -21,7 +21,21 @@ try {
 	$response->send();
 	$kernel->terminate($request, $response);
 } catch(\Exception $e) {
-	header('HTTP/1.1 500 Internal Server Error');
-	echo $e->getMessage() . "\n";
-	echo $e->getTraceAsString();
+	// Separate exception handling for anything that could not be caught in ApiController, for
+	// example if the route doesn't exist.
+	$class = get_class($e);
+	$errorType = explode("\\", $class);
+	$errorType = $errorType[count($errorType) - 1];
+	$response = array(
+		'error' => $e->getMessage(),
+		'code' => $e->getCode(),
+		'type' => $errorType,
+	);
+	if ($errorType == 'NotFoundHttpException') {
+		header('HTTP/1.1 404 Not found');
+	} else {
+		header('HTTP/1.1 500 Internal Server Error');
+	}
+
+	die(json_encode($response) . "\n");
 }

@@ -32,12 +32,24 @@ abstract class ApiController extends Controller {
 				$r->send();
 				echo "\n";
 			} else {
-				$msg = array();
-				$msg[] = 'Exception: ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine();
-				$msg[] = '';
-				$msg[] = $e->getTraceAsString();
-				echo implode("\n", $msg);
+				$r = array(
+					'error' => $e->getMessage(),
+					'code' => 0,
+					'type' => 'Exception',
+					//'trace' => $e->getTraceAsString(),
+				);
+				$response = new JsonResponse($r);
+				$response->setStatusCode(500);
+				$response->send();
 				echo "\n";
+
+
+				// $msg = array();
+				// $msg[] = 'Exception: ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine();
+				// $msg[] = '';
+				// $msg[] = $e->getTraceAsString();
+				// echo implode("\n", $msg);
+				// echo "\n";
 			}
 		});
 

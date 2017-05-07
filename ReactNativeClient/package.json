@@ -17,7 +17,8 @@
 		"react-test-renderer": "16.0.0-alpha.6",
 		"redux": "3.6.0",
 		"react-redux": "4.4.8",
-		"query-string": "4.3.4"
+		"query-string": "4.3.4",
+		"react-native-sqlite-storage": "3.3.*"
 	},
 	"jest": {
 		"preset": "react-native"
