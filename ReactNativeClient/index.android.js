@@ -7,24 +7,21 @@ import { Provider } from 'react-redux'
 
 import { WebApi } from 'src/web-api.js'
 import { Database } from 'src/database.js'
+//import { Session } from 'src/model/session.js';
+
+import { SessionService } from 'src/service/session-service.js';
 
 import { Log } from 'src/log.js'
 
+
 let debugMode = true;
+let clientId = 'A7D301DA7D301DA7D301DA7D301DA7D3';
 
 let db = new Database();
 db.setDebugEnabled(debugMode);
 db.open();
 
 
-// let test = {
-// 	'abcd' : 123,
-// 	'efgh' : 456,
-// }
-
-// for (let [key, value] of test) {
-// 	console.info(key, value);
-// }
 
 let defaultState = {
 	'myButtonLabel': 'clicko123456',
@@ -129,16 +126,12 @@ class App extends Component {
 
 }
 
-// let api = new WebApi('http://192.168.1.2', 'A7D301DA7D301DA7D301DA7D301DA7D3');
-// api.exec('POST', 'sessions', null, {
-// 	'email': 'laurent@cozic.net',
-// 	'password': '12345678',
-// })
-// .then(function(data) {
+// let api = new WebApi('http://192.168.1.2');
+// let sessionService = new SessionService(api);
+// sessionService.login('laurent@cozic.net', '12345678', clientId).then((session) => {
 // 	console.info('GOT DATA:');
-// 	console.info(data);
-// })
-// .catch(function(error) {
+// 	console.info(session);
+// }).catch(function(error) {
 // 	console.warn('GOT ERROR:');
 // 	console.warn(error);
 // })

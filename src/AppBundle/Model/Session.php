@@ -29,8 +29,6 @@ class Session extends BaseModel {
 		$ok = self::verifyPassword($password, $user->password);
 		if (!$ok) throw new AuthException();
 
-		if (!$clientId) throw new \Exception('clientId is required');
-
 		$session = new Session();
 		$session->owner_id = $user->id;
 		$session->client_id = $clientId;

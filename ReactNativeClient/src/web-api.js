@@ -2,9 +2,8 @@ const queryString = require('query-string');
 
 class WebApi {
 
-	constructor(baseUrl, clientId) {
+	constructor(baseUrl) {
 		this.baseUrl_ = baseUrl;
-		this.clientId_ = clientId;
 	}
 
 	makeRequest(method, path, query, data) {
@@ -36,11 +35,15 @@ class WebApi {
 			fetch(r.url, r.options).then(function(response) {
 				let responseClone = response.clone();
 				return response.json().then(function(data) {
-					resolve(data);
+					if (data && data.error) {
+						reject(data);
+					} else {
+						resolve(data);
+					}
 				})
 				.catch(function(error) {
 					responseClone.text().then(function(text) {
-						reject('Cannot parse JSON: ' + text);
+						reject(new Error('Cannot parse JSON: ' + text));
 					});
 				});
 			})

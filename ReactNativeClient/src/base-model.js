@@ -1,0 +1,5 @@
+class BaseModel {
+
+}
+
+export { BaseModel };
