@@ -9,9 +9,11 @@ import { WebApi } from 'src/web-api.js'
 import { Database } from 'src/database.js'
 //import { Session } from 'src/model/session.js';
 
-import { SessionService } from 'src/service/session-service.js';
+import { SessionService } from 'src/services/session-service.js';
 
 import { Log } from 'src/log.js'
+
+import { LoginButton } from 'src/components/login-button.js';
 
 
 let debugMode = true;
@@ -24,7 +26,7 @@ db.open();
 
 
 let defaultState = {
-	'myButtonLabel': 'clicko123456',
+	'myButtonLabel': 'click',
 	'counter': 0,
 }
 
@@ -54,16 +56,6 @@ function reducer(state, action) {
 	return state;
 }
 
-class MyButton extends Component {
-
-	render() {
-		var label = this.props.label;
-		if (label === undefined) label = '';
-		return <Button onPress={this.props.onPress} title={label} />
-	}
-
-}
-
 class MyInput extends Component {
 
 	render() {
@@ -71,25 +63,6 @@ class MyInput extends Component {
 	}
 
 }
-
-const mapStateToButtonProps = function(state) {
-	return { label: state.myButtonLabel };
-}
-
-const mapDispatchToButtonProps = function(dispatch) {
-	return {
-		onPress: function() {
-			dispatch({
-				type: 'INC_COUNTER'
-			});
-		}
-	}
-}
-
-const MyConnectedButton = connect(
-	mapStateToButtonProps,
-	mapDispatchToButtonProps
-)(MyButton)
 
 const mapStateToInputProps = function(state) {
 	return {}
@@ -117,8 +90,8 @@ class App extends Component {
 		return (
 			<Provider store={store}>
 				<View>
-					<MyConnectedButton />
 					<MyConnectionInput />
+					<LoginButton />
 				</View>
 			</Provider>
 		)
