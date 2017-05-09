@@ -3,28 +3,27 @@ import { connect } from 'react-redux'
 import { Button } from 'react-native';
 import { _ } from 'src/locale.js';
 
-class LoginButtonComponent extends Component {
+class OfflineButtonComponent extends Component {
 
 	render() {
-		return <Button onPress={this.props.onPress} title={_("Login")} />
+		return <Button onPress={this.props.onPress} title={_(this.props.label)} />
 	}
 
 }
 
-const LoginButton = connect(
+const OfflineButton = connect(
 	(state) => {
-		return {};
 		//return { label: state.myButtonLabel };
 	},
 	(dispatch) => {
 		return {
 			onPress: function() {
 				dispatch({
-					type: 'INC_COUNTER'
+					type: 'WORK_OFFLINE'
 				});
 			}
 		}
 	}
-)(LoginButtonComponent)
+)(OfflineButtonComponent)
 
-export { LoginButton };
+export { OfflineButton };
