@@ -24,6 +24,8 @@ let defaultState = {
 const reducer = (state = defaultState, action) => {
 	Log.info('Reducer action', action);
 
+	Log.info('DB LA', Note.db());
+
 	let newState = state;
 
 	switch (action.type) {
@@ -86,24 +88,61 @@ const NotesScreen = connect(
 )(NotesScreenComponent)
 
 class NoteScreenComponent extends React.Component {
+	
 	static navigationOptions = {
 		title: 'Note',
 	};
+
+	constructor() {
+		super();
+		this.state = { note: Note.newNote() }
+	}
+
+	componentWillMount() {
+		this.setState({ note: this.props.note });
+	}
+
+	noteComponent_onChange = (propName, propValue) => {
+		this.setState((prevState, props) => {
+			let note = Object.assign({}, prevState.note);
+			note[propName] = propValue;
+			return { note: note }
+		});
+	}
+
+	title_onChangeText = (text) => {
+		this.noteComponent_onChange('title', text);
+	}
+
+	body_onChangeText = (text) => {
+		this.noteComponent_onChange('body', text);
+	}
+
 	render() {
-		let note = this.props.note;
-		// <Button title="Save note" />
+
+		let onSaveButtonPress = () => {
+			return this.props.onSaveButtonPress(this.state.note);
+		}
+
 		return (
 			<View style={{flex: 1}}>
-				<TextInput style={{flex: 1, textAlignVertical: 'top'}} multiline={true} value={note ? note.body : ''} />
+				<TextInput value={this.state.note.title} onChangeText={this.title_onChangeText} />
+				<TextInput style={{flex: 1, textAlignVertical: 'top'}} multiline={true} value={this.state.note.body} onChangeText={this.body_onChangeText} />
+				<Button title="Save note" onPress={onSaveButtonPress} />
 			</View>
 		);
 	}
+
 }
 
 const NoteScreen = connect(
 	(state) => {
-		let selectedNote = state.selectedNoteId ? Note.noteById(state.notes, state.selectedNoteId) : null;
-		return { note: selectedNote };
+		return {
+			note: state.selectedNoteId ? Note.noteById(state.notes, state.selectedNoteId) : Note.newNote(),
+			onSaveButtonPress: (note) => {
+				Log.info(note);
+			}
+		};
 	},
 	(dispatch) => {
 		return {};

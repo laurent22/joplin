@@ -1,34 +1,6 @@
-import React, { Component } from 'react';
-import { AppRegistry, View, Button, TextInput } from 'react-native';
+import { main } from 'src/main.js';
 
-import { connect } from 'react-redux'
-import { Provider } from 'react-redux'
-import { createStore } from 'redux';
-import { combineReducers } from 'redux';
-
-import { WebApi } from 'src/web-api.js'
-import { Database } from 'src/database.js'
-
-import { SessionService } from 'src/services/session-service.js';
-
-import { Log } from 'src/log.js'
-
-import { LoginButton } from 'src/components/login-button.js';
-
-import { Root } from 'src/root.js';
-
-
-//AppRegistry.registerComponent('AwesomeProject', () => AppNavigator);
-AppRegistry.registerComponent('AwesomeProject', () => Root);
-
-
-// let debugMode = true;
-// let clientId = 'A7D301DA7D301DA7D301DA7D301DA7D3';
-
-// let db = new Database();
-// db.setDebugEnabled(debugMode);
-// db.open();
-
+main();
 
 
 // let defaultState = {
