@@ -86,28 +86,9 @@ class NoteScreen extends React.Component {
 	}
 }
 
-
-class ProfileScreen extends React.Component {
-	static navigationOptions = {
-		title: 'Profile',
-	};
-	render() {
-		const { navigate } = this.props.navigation;
-		return (
-			<Button
-				title="Go to main"
-				onPress={() =>
-					navigate('Notes')
-				}
-			/>
-		);
-	}
-}
-
 const AppNavigator = StackNavigator({
 	Notes: {screen: NotesScreen},
 	Note: {screen: NoteScreen},
-	Profile: {screen: ProfileScreen},
 });
 
 class AppComponent extends React.Component {
