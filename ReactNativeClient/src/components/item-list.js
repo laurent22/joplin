@@ -49,8 +49,9 @@ const ItemList = connect(
 		return {
 			onItemClick: (noteId) => {
 				dispatch({
-					type: 'VIEW_NOTE',
-					id: noteId,
+					type: 'Navigation/NAVIGATE',
+					routeName: 'Note',
+					noteId: noteId,
 				});
 			}
 		}

@@ -7,6 +7,7 @@ import { combineReducers } from 'redux';
 import { StackNavigator } from 'react-navigation';
 import { addNavigationHelpers } from 'react-navigation';
 import { Log } from 'src/log.js'
+import { Note } from 'src/models/note.js'
 import { ItemList } from 'src/components/item-list.js'
 
 let defaultState = {
@@ -23,30 +24,39 @@ let defaultState = {
 const reducer = (state = defaultState, action) => {
 	Log.info('Reducer action', action);
 
+	let newState = state;
+
 	switch (action.type) {
 
 		case 'Navigation/NAVIGATE':
 		case 'Navigation/BACK':
 
-			const nextStateNav = AppNavigator.router.getStateForAction(action, state.nav);
-			if (!nextStateNav) return state;
-			let newState = Object.assign({}, state);
-			newState.nav = nextStateNav;
-			return newState;
+			const nextStateNav = AppNavigator.router.getStateForAction(action, state.nav);			
+			newState = Object.assign({}, state);
+			if (nextStateNav) {
+				newState.nav = nextStateNav;
+			}
+
+			if (action.noteId) {
+				newState.selectedNoteId = action.noteId;				
+			}
+
+			break;
 
 		case 'VIEW_NOTE':
 
-			// TODO
-		 	return state;
+			newState = Object.assign({}, state);
+
+		 	break;
 
 	}
 
-	return state;
+	return newState;
 }
 
 let store = createStore(reducer);
 
-class NotesScreen extends React.Component {
+class NotesScreenComponent extends React.Component {
 	static navigationOptions = {
 		title: 'Notes',
 	};
@@ -66,25 +76,39 @@ class NotesScreen extends React.Component {
 	}
 }
 
-class NoteScreen extends React.Component {
+const NotesScreen = connect(
+	(state) => {
+		return {};
+	},
+	(dispatch) => {
+		return {};
+	}
+)(NotesScreenComponent)
+
+class NoteScreenComponent extends React.Component {
 	static navigationOptions = {
 		title: 'Note',
 	};
 	render() {
-		const { navigate } = this.props.navigation;
+		let note = this.props.note;
+		// <Button title="Save note" />
 		return (
 			<View style={{flex: 1}}>
-				<TextInput style={{flex: 1, textAlignVertical: 'top'}} multiline={true} />
-				<Button
-					title="Save note"
-					onPress={() =>
-						navigate('Notes')
-					}
-				/>
+				<TextInput style={{flex: 1, textAlignVertical: 'top'}} multiline={true} value={note ? note.body : ''} />
 			</View>
 		);
 	}
 }
+
+const NoteScreen = connect(
+	(state) => {
+		let selectedNote = state.selectedNoteId ? Note.noteById(state.notes, state.selectedNoteId) : null;
+		return { note: selectedNote };
+	},
+	(dispatch) => {
+		return {};
+	}
+)(NoteScreenComponent)
 
 const AppNavigator = StackNavigator({
 	Notes: {screen: NotesScreen},
