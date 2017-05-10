@@ -25,67 +25,26 @@ const reducer = (state = defaultState, action) => {
 
 	switch (action.type) {
 
-		 case 'SET_BUTTON_NAME':
+		case 'Navigation/NAVIGATE':
+		case 'Navigation/BACK':
 
-			var state = shallowcopy(state);
-			state.myButtonLabel = action.name;
-			return state;
+			const nextStateNav = AppNavigator.router.getStateForAction(action, state.nav);
+			if (!nextStateNav) return state;
+			let newState = Object.assign({}, state);
+			newState.nav = nextStateNav;
+			return newState;
 
-		 case 'INC_COUNTER':
+		case 'VIEW_NOTE':
 
-			var state = shallowcopy(state);
-			state.counter++;
-			return state;
-
-		 case 'VIEW_NOTE':
-
-		 	// let state = Object.assign({}, state);
-		 	// state.selectedNoteId = action.id;
+			// TODO
 		 	return state;
-
-			// 
-			// state.counter++;
-			// return state;
 
 	}
 
 	return state;
 }
 
-// const appReducer = combineReducers({
-// 	reducer: reducer,
-// });
-
 let store = createStore(reducer);
-
-class MyInput extends Component {
-
-	render() {
-		return <TextInput value={this.props.text} onChangeText={this.props.onChangeText} />
-	}
-
-}
-
-const mapStateToInputProps = function(state) {
- return { text: state.defaultText }
-}
-
-const mapDispatchToInputProps = function(dispatch) {
- return {
-	 onChangeText(text) {
-		 dispatch({
-			 type: 'SET_BUTTON_NAME',
-			 name: text
-		 });
-	 }
- }
-}
-
-const MyConnectionInput = connect(
-	mapStateToInputProps,
-	mapDispatchToInputProps
-)(MyInput)
-
 
 class NotesScreen extends React.Component {
 	static navigationOptions = {
@@ -102,7 +61,6 @@ class NotesScreen extends React.Component {
 						navigate('Note')
 					}
 				/>
-				<MyConnectionInput/>
 			</View>
 		);
 	}
@@ -123,7 +81,6 @@ class NoteScreen extends React.Component {
 						navigate('Notes')
 					}
 				/>
-				<MyConnectionInput/>
 			</View>
 		);
 	}
@@ -147,69 +104,41 @@ class ProfileScreen extends React.Component {
 	}
 }
 
-
 const AppNavigator = StackNavigator({
 	Notes: {screen: NotesScreen},
 	Note: {screen: NoteScreen},
 	Profile: {screen: ProfileScreen},
 });
 
+class AppComponent extends React.Component {
+  render() {
+    return (
+      <AppNavigator navigation={addNavigationHelpers({
+        dispatch: this.props.dispatch,
+        state: this.props.nav,
+      })} />
+    );
+  }
+}
+
+defaultState.nav = AppNavigator.router.getStateForAction(AppNavigator.router.getActionForPathAndParams('Notes'));
+
+const mapStateToProps = (state) => {
+	return {
+  		nav: state.nav
+  	};
+};
+
+const App = connect(mapStateToProps)(AppComponent);
+
 class Root extends React.Component {
 	render() {
 		return (
 			<Provider store={store}>
-				<AppNavigator />
+				<App />
 			</Provider>
 		);
 	}
 }
-
-
-
-
-// const AppNavigator = StackNavigator({
-// 	Main: {screen: MainScreen},
-// 	Profile: {screen: ProfileScreen},
-// });
-
-// class AppComponent extends React.Component {
-//   render() {
-//     return (
-//       <AppNavigator navigation={addNavigationHelpers({
-//         dispatch: this.props.dispatch,
-//         state: this.props.nav,
-//       })} />
-//     );
-//   }
-// }
-
-// const navInitialState = AppNavigator.router.getStateForAction(AppNavigator.router.getActionForPathAndParams('Main'));
-
-// const navReducer = (state = navInitialState, action) => {
-// 	const nextState = AppNavigator.router.getStateForAction(action, state);
-// 	return nextState || state;
-// };
-
-// const appReducer = combineReducers({
-// 	nav: navReducer,
-// });
-
-// const mapStateToProps = (state) => ({
-//   nav: state.nav
-// });
-
-// const App = connect(mapStateToProps)(AppComponent);
-
-// const store = createStore(appReducer);
-
-// class Root extends React.Component {
-//   render() {
-//     return (
-//       <Provider store={store}>
-//         <App />
-//       </Provider>
-//     );
-//   }
-// }
 
 export { Root };
