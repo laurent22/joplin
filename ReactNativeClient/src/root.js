@@ -43,15 +43,32 @@ const reducer = (state = defaultState, action) => {
 
 			break;
 
-		case 'NOTES_LOADED':
+		// Replace all the notes with the provided array
+		case 'NOTES_UPDATE_ALL':
 
 			newState = Object.assign({}, state);
 			newState.notes = action.notes;
 			break;
 
-		case 'SAVE_NOTE':
+		// Insert the note into the note list if it's new, or
+		// update it if it already exists.
+		case 'NOTES_UPDATE_ONE':
 
+			let newNotes = state.notes.splice(0);
+			let found = false;
+			for (let i = 0; i < newNotes.length; i++) {
+				let n = newNotes[i];
+				if (n.id == action.note.id) {
+					newNotes[i] = action.note;
+					found = true;
+					break;
+				}
+			}
 
+			if (!found) newNotes.push(action.note);
+
+			newState = Object.assign({}, state);
+			newState.notes = newNotes;
 			break;
 
 	}
@@ -124,20 +141,14 @@ class NoteScreenComponent extends React.Component {
 	saveNoteButton_press = () => {
 		// TODO: if state changes are asynchronous, how to be sure that, when
 		// the button is presssed, this.state.note contains the actual note?
-		// - Save to database
-		// - Dispatch "noteSaved" when done
-		// -* Move i^p on state
-
-		Note.save(this.state.note).then(() => {
-			Log.info('NOTE INSERTED');
+		Note.save(this.state.note).then((note) => {
+			this.props.dispatch({
+				type: 'NOTES_UPDATE_ONE',
+				note: note,
+			});
 		}).catch((error) => {
-			Log.warn('CANONT INSERT NOTE', error);
+			Log.warn('Cannot save note', error);
 		});
-
-		// this.props.dispatch({
-		// 	type: 'SAVE_NOTE',
-		// 	note: this.state.note,
-		// });
 	}
 
 	render() {
@@ -170,7 +181,7 @@ class AppComponent extends React.Component {
 	componentDidMount() {
 		Note.previews().then((notes) => {
 			this.props.dispatch({
-				type: 'NOTES_LOADED',
+				type: 'NOTES_UPDATE_ALL',
 				notes: notes,
 			});
 		}).catch((error) => {

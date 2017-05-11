@@ -13,7 +13,9 @@ class BaseModel {
 		if (isNew) o.id = createUuid();
 		if (isNew) {
 			let q = Database.insertQuery(this.tableName(), o);
-			return this.db().insert(q.sql, q.params);
+			return this.db().insert(q.sql, q.params).then(() => {
+				return o;
+			});
 		} else {
 			Log.error('NOT EIMPLEMETNED');
 			// TODO: update
