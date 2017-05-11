@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { ListView, Text, TouchableHighlight } from 'react-native';
+import { Log } from 'src/log.js';
 import { _ } from 'src/locale.js';
 
 class ItemListComponent extends Component {
@@ -17,11 +18,12 @@ class ItemListComponent extends Component {
 	}
 
 	componentWillReceiveProps(newProps) {
-		// TODO: use this to update:
 		// https://stackoverflow.com/questions/38186114/react-native-redux-and-listview
+		this.setState({ dataSource: this.state.dataSource.cloneWithRows(newProps.notes) });
 	}
 
 	render() {
+		Log.info('RENDER');
 		let renderRow = (rowData) => {
 			let onPress = () => {
 				this.props.onItemClick(rowData.id)

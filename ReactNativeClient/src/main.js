@@ -7,14 +7,14 @@ import { BaseModel } from 'src/base-model.js';
 function main() {
 	let debugMode = true;
 	let clientId = 'A7D301DA7D301DA7D301DA7D301DA7D3';
-	
+
+	AppRegistry.registerComponent('AwesomeProject', () => Root);
+
 	let db = new Database();
 	db.setDebugEnabled(debugMode);
 	db.open();
 
-	BaseModel.setDb(db);
-
-	AppRegistry.registerComponent('AwesomeProject', () => Root);
+	BaseModel.setDb(db);	
 }
 
 export { main }

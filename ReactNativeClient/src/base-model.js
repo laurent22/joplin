@@ -1,5 +1,6 @@
 import { Log } from 'src/log.js';
 import { Database } from 'src/database.js';
+import createUuid from 'uuid/v4';
 
 class BaseModel {
 
@@ -7,9 +8,16 @@ class BaseModel {
 		throw new Error('Must be overriden');
 	}
 
-	static save(object) {
-		let sql = Database.insertSql(this.tableName(), object);
-		Log.info(sql);
+	static save(o) {
+		let isNew = !o.id;
+		if (isNew) o.id = createUuid();
+		if (isNew) {
+			let q = Database.insertQuery(this.tableName(), o);
+			return this.db().insert(q.sql, q.params);
+		} else {
+			Log.error('NOT EIMPLEMETNED');
+			// TODO: update
+		}
 	}
 
 	static setDb(database) {

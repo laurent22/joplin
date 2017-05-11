@@ -82,14 +82,21 @@ INSERT INTO version (version) VALUES (1);
 
 class Database {
 
-	constructor() {}
+	constructor() {
+		this.debugMode_ = false;
+	}
 
 	setDebugEnabled(v) {
 		SQLite.DEBUG(v);
+		this.debugMode_ = v;
+	}
+
+	debugMode() {
+		return this.debugMode_;
 	}
 
 	open() {
-		this.db_ = SQLite.openDatabase({ name: 'joplin.sqlite', location: 'Documents' }, (db) => {
+		this.db_ = SQLite.openDatabase({ name: '/storage/emulated/0/Download/joplin.sqlite' }, (db) => {
 			Log.info('Database was open successfully');
 		}, (error) => {
 			Log.error('Cannot open database: ', error);
@@ -115,7 +122,14 @@ class Database {
 		return output;
 	}
 
+	logQuery(sql, params = null) {
+		if (!this.debugMode()) return;
+		Log.debug('DB: ' + sql, params);
+	}
+
 	selectOne(sql, params = null) {
+		this.logQuery(sql, params);
+
 		return new Promise((resolve, reject) => {
 			this.db_.executeSql(sql, params, (r) => {
 				resolve(r.rows.length ? r.rows.item(0) : null);
@@ -125,24 +139,65 @@ class Database {
 		});
 	}
 
-	static insertSql(tableName, data) {
-		let output = '';
+	selectAll(sql, params = null) {
+		this.logQuery(sql, params);
+
+		return new Promise((resolve, reject) => {
+			this.db_.executeSql(sql, params, (r) => {
+				resolve(r);
+			}, (error) => {
+				reject(error);
+			});
+		});
+	}
+
+	insert(sql, params = null) {
+		this.logQuery(sql, params);
+
+		return new Promise((resolve, reject) => {
+			this.db_.executeSql(sql, params, (r) => {
+				resolve();
+			}, (error) => {
+				reject(error);
+			});
+		});
+	}
+
+	del(sql, params = null) {
+		this.logQuery(sql, params);
+
+		return new Promise((resolve, reject) => {
+			this.db_.executeSql(sql, params, (r) => {
+				resolve();
+			}, (error) => {
+				reject(error);
+			});
+		});
+	}
+
+	static insertQuery(tableName, data) {
 		let keySql= '';
 		let valueSql = '';
+		let params = [];
 		for (let key in data) {
-			if (data.hasOwnProperty(key)) continue;
+			if (!data.hasOwnProperty(key)) continue;
 			if (keySql != '') keySql += ', ';
 			if (valueSql != '') valueSql += ', ';
-			keySql += key;
+			keySql += '`' + key + '`';
 			valueSql += '?';
+			params.push(data[key]);
 		}
-		return 'INSERT INTO ' + tableName + ' (' + keySql + ') VALUES (' + valueSql + ')';
+		return {
+			sql: 'INSERT INTO `' + tableName + '` (' + keySql + ') VALUES (' + valueSql + ')',
+			params: params,
+		};
 	}
 
 	updateSchema() {
 		Log.info('Checking for database schema update...');
 
 		this.selectOne('SELECT * FROM version LIMIT 1').then((row) => {
+			Log.info('Current database version', row);
 			// TODO: version update logic
 		}).catch((error) => {
 			// Assume that error was:

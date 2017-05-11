@@ -24,8 +24,6 @@ let defaultState = {
 const reducer = (state = defaultState, action) => {
 	Log.info('Reducer action', action);
 
-	Log.info('DB LA', Note.db());
-
 	let newState = state;
 
 	switch (action.type) {
@@ -45,11 +43,16 @@ const reducer = (state = defaultState, action) => {
 
 			break;
 
-		case 'VIEW_NOTE':
+		case 'NOTES_LOADED':
 
 			newState = Object.assign({}, state);
+			newState.notes = action.notes;
+			break;
 
-		 	break;
+		case 'SAVE_NOTE':
+
+
+			break;
 
 	}
 
@@ -102,7 +105,7 @@ class NoteScreenComponent extends React.Component {
 		this.setState({ note: this.props.note });
 	}
 
-	noteComponent_onChange = (propName, propValue) => {
+	noteComponent_change = (propName, propValue) => {
 		this.setState((prevState, props) => {
 			let note = Object.assign({}, prevState.note);
 			note[propName] = propValue;
@@ -110,25 +113,39 @@ class NoteScreenComponent extends React.Component {
 		});
 	}
 
-	title_onChangeText = (text) => {
-		this.noteComponent_onChange('title', text);
+	title_changeText = (text) => {
+		this.noteComponent_change('title', text);
 	}
 
-	body_onChangeText = (text) => {
-		this.noteComponent_onChange('body', text);
+	body_changeText = (text) => {
+		this.noteComponent_change('body', text);
+	}
+
+	saveNoteButton_press = () => {
+		// TODO: if state changes are asynchronous, how to be sure that, when
+		// the button is presssed, this.state.note contains the actual note?
+		// - Save to database
+		// - Dispatch "noteSaved" when done
+		// -* Move i^p on state
+
+		Note.save(this.state.note).then(() => {
+			Log.info('NOTE INSERTED');
+		}).catch((error) => {
+			Log.warn('CANONT INSERT NOTE', error);
+		});
+
+		// this.props.dispatch({
+		// 	type: 'SAVE_NOTE',
+		// 	note: this.state.note,
+		// });
 	}
 
 	render() {
-
-		let onSaveButtonPress = () => {
-			return this.props.onSaveButtonPress(this.state.note);
-		}
-
 		return (
 			<View style={{flex: 1}}>
-				<TextInput value={this.state.note.title} onChangeText={this.title_onChangeText} />
-				<TextInput style={{flex: 1, textAlignVertical: 'top'}} multiline={true} value={this.state.note.body} onChangeText={this.body_onChangeText} />
-				<Button title="Save note" onPress={onSaveButtonPress} />
+				<TextInput value={this.state.note.title} onChangeText={this.title_changeText} />
+				<TextInput style={{flex: 1, textAlignVertical: 'top'}} multiline={true} value={this.state.note.body} onChangeText={this.body_changeText} />
+				<Button title="Save note" onPress={this.saveNoteButton_press} />
 			</View>
 		);
 	}
@@ -139,13 +156,7 @@ const NoteScreen = connect(
 	(state) => {
 		return {
 			note: state.selectedNoteId ? Note.noteById(state.notes, state.selectedNoteId) : Note.newNote(),
-			onSaveButtonPress: (note) => {
-				Log.info(note);
-			}
 		};
-	},
-	(dispatch) => {
-		return {};
 	}
 )(NoteScreenComponent)
 
@@ -155,14 +166,26 @@ const AppNavigator = StackNavigator({
 });
 
 class AppComponent extends React.Component {
-  render() {
-    return (
-      <AppNavigator navigation={addNavigationHelpers({
-        dispatch: this.props.dispatch,
-        state: this.props.nav,
-      })} />
-    );
-  }
+
+	componentDidMount() {
+		Note.previews().then((notes) => {
+			this.props.dispatch({
+				type: 'NOTES_LOADED',
+				notes: notes,
+			});
+		}).catch((error) => {
+			Log.warn('Cannot load notes', error);
+		});
+	}
+
+	render() {
+		return (
+			<AppNavigator navigation={addNavigationHelpers({
+				dispatch: this.props.dispatch,
+				state: this.props.nav,
+			})} />
+		);
+	}
 }
 
 defaultState.nav = AppNavigator.router.getStateForAction(AppNavigator.router.getActionForPathAndParams('Notes'));
