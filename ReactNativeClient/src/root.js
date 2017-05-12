@@ -11,6 +11,8 @@ import { Note } from 'src/models/note.js'
 import { Database } from 'src/database.js'
 import { Registry } from 'src/registry.js'
 import { ItemList } from 'src/components/item-list.js'
+import { NotesScreen } from 'src/components/screens/notes.js'
+import { NoteScreen } from 'src/components/screens/note.js'
 import { Setting } from 'src/models/setting.js'
 
 let defaultState = {
@@ -82,110 +84,6 @@ const reducer = (state = defaultState, action) => {
 }
 
 let store = createStore(reducer);
-
-class NotesScreenComponent extends React.Component {
-	
-	static navigationOptions = {
-		title: 'Notes',
-	};
-
-	createNoteButton_press = () => {
-		this.props.dispatch({
-			type: 'Navigation/NAVIGATE',
-			routeName: 'Note',
-		});
-	}
-
-	loginButton_press = () => {
-
-	}
-
-	syncButton_press = () => {
-		Log.info('SYNC');
-	}
-
-	render() {
-		const { navigate } = this.props.navigation;
-		return (
-			<View style={{flex: 1}}>
-				<ItemList style={{flex: 1}}/>
-				<View style={{flexDirection: 'row'}}>
-					<Button title="Create note" onPress={this.createNoteButton_press} />
-					<Button title="Login" onPress={this.loginButton_press} />
-					<Button title="Sync" onPress={this.syncButton_press} />
-				</View>
-			</View>
-		);
-	}
-}
-
-const NotesScreen = connect(
-	(state) => {
-		return {};
-	}
-)(NotesScreenComponent)
-
-class NoteScreenComponent extends React.Component {
-	
-	static navigationOptions = {
-		title: 'Note',
-	};
-
-	constructor() {
-		super();
-		this.state = { note: Note.newNote() }
-	}
-
-	componentWillMount() {
-		this.setState({ note: this.props.note });
-	}
-
-	noteComponent_change = (propName, propValue) => {
-		this.setState((prevState, props) => {
-			let note = Object.assign({}, prevState.note);
-			note[propName] = propValue;
-			return { note: note }
-		});
-	}
-
-	title_changeText = (text) => {
-		this.noteComponent_change('title', text);
-	}
-
-	body_changeText = (text) => {
-		this.noteComponent_change('body', text);
-	}
-
-	saveNoteButton_press = () => {
-		Note.save(this.state.note).then((note) => {
-			this.props.dispatch({
-				type: 'NOTES_UPDATE_ONE',
-				note: note,
-			});
-		}).catch((error) => {
-			Log.warn('Cannot save note', error);
-		});
-	}
-
-	render() {
-		return (
-			<View style={{flex: 1}}>
-				<TextInput value={this.state.note.title} onChangeText={this.title_changeText} />
-				<TextInput style={{flex: 1, textAlignVertical: 'top'}} multiline={true} value={this.state.note.body} onChangeText={this.body_changeText} />
-				<Button title="Save note" onPress={this.saveNoteButton_press} />
-			</View>
-		);
-	}
-
-}
-
-const NoteScreen = connect(
-	(state) => {
-		return {
-			note: state.selectedNoteId ? Note.noteById(state.notes, state.selectedNoteId) : Note.newNote(),
-		};
-	}
-)(NoteScreenComponent)
 
 const AppNavigator = StackNavigator({
 	Notes: {screen: NotesScreen},
