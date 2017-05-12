@@ -8,18 +8,25 @@ class BaseModel {
 		throw new Error('Must be overriden');
 	}
 
+	static useUuid() {
+		return false;
+	}
+
 	static save(o) {
 		let isNew = !o.id;
-		if (isNew) o.id = createUuid();
+		let query = '';
+
 		if (isNew) {
-			let q = Database.insertQuery(this.tableName(), o);
-			return this.db().insert(q.sql, q.params).then(() => {
-				return o;
-			});
+			if (this.useUuid()) o.id = createUuid();
+			query = Database.insertQuery(this.tableName(), o);
 		} else {
-			Log.error('NOT EIMPLEMETNED');
-			// TODO: update
+			let where = { id: o.id };
+			let temp = Object.assign({}, o);
+			delete temp.id;
+			query = Database.updateQuery(this.tableName(), temp, where);
 		}
+
+		return this.db().exec(query.sql, query.params).then(() => { return o; });
 	}
 
 	static setDb(database) {

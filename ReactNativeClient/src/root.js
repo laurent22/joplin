@@ -12,12 +12,7 @@ import { ItemList } from 'src/components/item-list.js'
 
 let defaultState = {
 	defaultText: 'bla',
-	notes: [
-		{ id: 1, title: "hello", body: "just testing\nmultiple\nlines" },
-		{ id: 2, title: "hello2", body: "2 just testing\nmultiple\nlines" },
-		{ id: 3, title: "hello3", body: "3 just testing\nmultiple\nlines" },
-		{ id: 4, title: "hello4", body: "4 just testing\nmultiple\nlines" },
-	],
+	notes: [],
 	selectedNoteId: null,
 };
 
@@ -31,7 +26,14 @@ const reducer = (state = defaultState, action) => {
 		case 'Navigation/NAVIGATE':
 		case 'Navigation/BACK':
 
+			// If the current screen is already the requested screen, don't do anything
+			const r = state.nav.routes;
+			if (r.length && r[r.length - 1].routeName == action.routeName) {
+				return state
+			}
+
 			const nextStateNav = AppNavigator.router.getStateForAction(action, state.nav);			
+			Log.info('NEXT', nextStateNav);
 			newState = Object.assign({}, state);
 			if (nextStateNav) {
 				newState.nav = nextStateNav;
@@ -51,7 +53,7 @@ const reducer = (state = defaultState, action) => {
 			break;
 
 		// Insert the note into the note list if it's new, or
-		// update it if it already exists.
+		// update it within the note array if it already exists.
 		case 'NOTES_UPDATE_ONE':
 
 			let newNotes = state.notes.splice(0);
@@ -79,20 +81,24 @@ const reducer = (state = defaultState, action) => {
 let store = createStore(reducer);
 
 class NotesScreenComponent extends React.Component {
+	
 	static navigationOptions = {
 		title: 'Notes',
 	};
+
+	createNoteButton_press = () => {
+		this.props.dispatch({
+			type: 'Navigation/NAVIGATE',
+			routeName: 'Note',
+		});
+	}
+
 	render() {
 		const { navigate } = this.props.navigation;
 		return (
 			<View style={{flex: 1}}>
 				<ItemList style={{flex: 1}}/>
-				<Button
-					title="Create note"
-					onPress={() =>
-						navigate('Note')
-					}
-				/>
+				<Button title="Create note" onPress={this.createNoteButton_press} />
 			</View>
 		);
 	}
@@ -100,9 +106,6 @@ class NotesScreenComponent extends React.Component {
 
 const NotesScreen = connect(
 	(state) => {
-		return {};
-	},
-	(dispatch) => {
 		return {};
 	}
 )(NotesScreenComponent)
@@ -139,8 +142,6 @@ class NoteScreenComponent extends React.Component {
 	}
 
 	saveNoteButton_press = () => {
-		// TODO: if state changes are asynchronous, how to be sure that, when
-		// the button is presssed, this.state.note contains the actual note?
 		Note.save(this.state.note).then((note) => {
 			this.props.dispatch({
 				type: 'NOTES_UPDATE_ONE',

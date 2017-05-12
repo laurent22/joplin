@@ -23,7 +23,6 @@ class ItemListComponent extends Component {
 	}
 
 	render() {
-		Log.info('RENDER');
 		let renderRow = (rowData) => {
 			let onPress = () => {
 				this.props.onItemClick(rowData.id)
@@ -34,10 +33,13 @@ class ItemListComponent extends Component {
 				</TouchableHighlight>
 			);
 		}
+
+		// `enableEmptySections` is to fix this warning: https://github.com/FaridSafi/react-native-gifted-listview/issues/39
 		return (
 			<ListView
 				dataSource={this.state.dataSource}
 				renderRow={renderRow}
+				enableEmptySections={true}
 			/>
 		);
 	}
