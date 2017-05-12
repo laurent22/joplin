@@ -1,5 +1,6 @@
 import SQLite from 'react-native-sqlite-storage';
 import { Log } from 'src/log.js';
+import createUuid from 'uuid/v4';
 
 const structureSql = `
 CREATE TABLE folders (
@@ -84,6 +85,7 @@ class Database {
 
 	constructor() {
 		this.debugMode_ = false;
+		this.initialized_ = false;
 	}
 
 	setDebugEnabled(v) {
@@ -95,14 +97,26 @@ class Database {
 		return this.debugMode_;
 	}
 
+	initialized() {
+		return this.initialized_;
+	}
+
 	open() {
-		this.db_ = SQLite.openDatabase({ name: '/storage/emulated/0/Download/joplin.sqlite' }, (db) => {
+		this.db_ = SQLite.openDatabase({ name: '/storage/emulated/0/Download/joplin-4.sqlite' }, (db) => {
 			Log.info('Database was open successfully');
 		}, (error) => {
 			Log.error('Cannot open database: ', error);
 		});
 
-		this.updateSchema();
+		return this.updateSchema();
+	}
+
+	static enumToId(type, s) {
+		if (type == 'settings') {
+			if (s == 'int') return 1;
+			if (s == 'string') return 2;
+		}
+		throw new Error('Unknown enum type or value: ' + type + ', ' + s);
 	}
 
 	sqlStringToLines(sql) {
@@ -202,28 +216,41 @@ class Database {
 		};
 	}
 
+	transaction(readyCallack, errorCallback, successCallback) {
+		return this.db_.transaction(readyCallack, errorCallback, successCallback);
+	}
+
 	updateSchema() {
 		Log.info('Checking for database schema update...');
 
-		this.selectOne('SELECT * FROM version LIMIT 1').then((row) => {
-			Log.info('Current database version', row);
-			// TODO: version update logic
-		}).catch((error) => {
-			// Assume that error was:
-			// { message: 'no such table: version (code 1): , while compiling: SELECT * FROM version', code: 0 }
-			// which means the database is empty and the tables need to be created.
+		return new Promise((resolve, reject) => {
+			this.selectOne('SELECT * FROM version LIMIT 1').then((row) => {
+				Log.info('Current database version', row);
+				resolve();
+				// TODO: version update logic
+			}).catch((error) => {
+				// Assume that error was:
+				// { message: 'no such table: version (code 1): , while compiling: SELECT * FROM version', code: 0 }
+				// which means the database is empty and the tables need to be created.
 
-			Log.info('Database is new - creating the schema...');
+				Log.info('Database is new - creating the schema...');
 
-			let statements = this.sqlStringToLines(structureSql)
-			this.db_.transaction((tx) => {
-				for (let i = 0; i < statements.length; i++) {
-					tx.executeSql(statements[i]);
-				}
-			}, (error) => {
-				Log.error('Could not create database schema:', error);
-			}, () => {
-				Log.info('Database schema created successfully');
+				let statements = this.sqlStringToLines(structureSql)
+				//this.db_.transaction((tx) => {
+				this.transaction((tx) => {
+					try {
+						for (let i = 0; i < statements.length; i++) {
+							tx.executeSql(statements[i]);
+						}
+						tx.executeSql('INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' + createUuid() + '", "' + Database.enumToId('settings', 'string') + '")');
+					} catch (error) {
+						reject(error);
+					}
+				}, (error) => {
+					reject(error);
+				}, () => {
+					resolve('Database schema created successfully');
+				});
 			});
 		});
 	}

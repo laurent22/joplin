@@ -1,5 +1,6 @@
 import { Log } from 'src/log.js';
 import { Database } from 'src/database.js';
+import { Registry } from 'src/registry.js';
 import createUuid from 'uuid/v4';
 
 class BaseModel {
@@ -29,12 +30,8 @@ class BaseModel {
 		return this.db().exec(query.sql, query.params).then(() => { return o; });
 	}
 
-	static setDb(database) {
-		this.db_ = database;		
-	}
-
 	static db() {
-		return this.db_;
+		return Registry.db();
 	}
 
 }

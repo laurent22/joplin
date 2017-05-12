@@ -1,20 +1,14 @@
 import { AppRegistry } from 'react-native';
-import { Database } from 'src/database.js'
 import { Log } from 'src/log.js'
 import { Root } from 'src/root.js';
-import { BaseModel } from 'src/base-model.js';
+import { Registry } from 'src/registry.js';
+import { Database } from 'src/database.js';
 
 function main() {
-	let debugMode = true;
-	let clientId = 'A7D301DA7D301DA7D301DA7D301DA7D3';
-
+	Registry.setDebugMode(true);
 	AppRegistry.registerComponent('AwesomeProject', () => Root);
-
-	let db = new Database();
-	db.setDebugEnabled(debugMode);
-	db.open();
-
-	BaseModel.setDb(db);	
+	// Note: The final part of the initialization process is in
+	// AppComponent.componentDidMount(), when the application is ready.
 }
 
 export { main }

@@ -8,7 +8,10 @@ import { StackNavigator } from 'react-navigation';
 import { addNavigationHelpers } from 'react-navigation';
 import { Log } from 'src/log.js'
 import { Note } from 'src/models/note.js'
+import { Database } from 'src/database.js'
+import { Registry } from 'src/registry.js'
 import { ItemList } from 'src/components/item-list.js'
+import { Setting } from 'src/models/setting.js'
 
 let defaultState = {
 	defaultText: 'bla',
@@ -93,12 +96,24 @@ class NotesScreenComponent extends React.Component {
 		});
 	}
 
+	loginButton_press = () => {
+
+	}
+
+	syncButton_press = () => {
+		Log.info('SYNC');
+	}
+
 	render() {
 		const { navigate } = this.props.navigation;
 		return (
 			<View style={{flex: 1}}>
 				<ItemList style={{flex: 1}}/>
-				<Button title="Create note" onPress={this.createNoteButton_press} />
+				<View style={{flexDirection: 'row'}}>
+					<Button title="Create note" onPress={this.createNoteButton_press} />
+					<Button title="Login" onPress={this.loginButton_press} />
+					<Button title="Sync" onPress={this.syncButton_press} />
+				</View>
 			</View>
 		);
 	}
@@ -180,13 +195,27 @@ const AppNavigator = StackNavigator({
 class AppComponent extends React.Component {
 
 	componentDidMount() {
-		Note.previews().then((notes) => {
-			this.props.dispatch({
-				type: 'NOTES_UPDATE_ALL',
-				notes: notes,
+		let db = new Database();
+		db.setDebugEnabled(Registry.debugMode());
+
+		db.open().then(() => {
+			Log.info('Database is ready.');
+			Registry.setDb(db);
+		}).then(() => {
+			Log.info('Loading settings...');
+			return Setting.load();
+		}).then(() => {
+			Log.info('Loading notes...');
+			Note.previews().then((notes) => {
+				this.props.dispatch({
+					type: 'NOTES_UPDATE_ALL',
+					notes: notes,
+				});
+			}).catch((error) => {
+				Log.warn('Cannot load notes', error);
 			});
 		}).catch((error) => {
-			Log.warn('Cannot load notes', error);
+			Log.error('Cannot initialize database:', error);
 		});
 	}
 
