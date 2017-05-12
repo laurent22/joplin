@@ -13,6 +13,7 @@ import { Registry } from 'src/registry.js'
 import { ItemList } from 'src/components/item-list.js'
 import { NotesScreen } from 'src/components/screens/notes.js'
 import { NoteScreen } from 'src/components/screens/note.js'
+import { LoginScreen } from 'src/components/screens/login.js'
 import { Setting } from 'src/models/setting.js'
 
 let defaultState = {
@@ -38,7 +39,6 @@ const reducer = (state = defaultState, action) => {
 			}
 
 			const nextStateNav = AppNavigator.router.getStateForAction(action, state.nav);			
-			Log.info('NEXT', nextStateNav);
 			newState = Object.assign({}, state);
 			if (nextStateNav) {
 				newState.nav = nextStateNav;
@@ -88,6 +88,7 @@ let store = createStore(reducer);
 const AppNavigator = StackNavigator({
 	Notes: {screen: NotesScreen},
 	Note: {screen: NoteScreen},
+	Login: {screen: LoginScreen},
 });
 
 class AppComponent extends React.Component {

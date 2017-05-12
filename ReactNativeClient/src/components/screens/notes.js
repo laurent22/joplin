@@ -18,7 +18,10 @@ class NotesScreenComponent extends React.Component {
 	}
 
 	loginButton_press = () => {
-
+		this.props.dispatch({
+			type: 'Navigation/NAVIGATE',
+			routeName: 'Login',
+		});
 	}
 
 	syncButton_press = () => {
