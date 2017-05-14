@@ -24,10 +24,10 @@ class Session extends BaseModel {
 
 	static public function login($email, $password, $clientId) {
 		$user = User::byEmail($email);
-		if (!$user) throw new NotFoundException("User not found");
+		if (!$user) throw new AuthException("User not found");
 
 		$ok = self::verifyPassword($password, $user->password);
-		if (!$ok) throw new AuthException();
+		if (!$ok) throw new AuthException('Invalid password');
 
 		$session = new Session();
 		$session->owner_id = $user->id;

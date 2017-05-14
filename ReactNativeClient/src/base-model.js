@@ -1,7 +1,7 @@
 import { Log } from 'src/log.js';
 import { Database } from 'src/database.js';
 import { Registry } from 'src/registry.js';
-import createUuid from 'uuid/v4';
+import { uuid } from 'src/uuid.js';
 
 class BaseModel {
 
@@ -18,7 +18,7 @@ class BaseModel {
 		let query = '';
 
 		if (isNew) {
-			if (this.useUuid()) o.id = createUuid();
+			if (this.useUuid()) o.id = uuid.create();
 			query = Database.insertQuery(this.tableName(), o);
 		} else {
 			let where = { id: o.id };

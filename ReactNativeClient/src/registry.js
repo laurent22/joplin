@@ -5,6 +5,7 @@
 // dependency injection later on (eg. `BaseModel.db()`, `Synchroniser.api()`)
 
 import { Database } from 'src/database.js'
+import { WebApi } from 'src/web-api.js'
 
 class Registry {
 
@@ -17,8 +18,10 @@ class Registry {
 		return this.debugMode_;
 	}
 
-	static setApi(v) {
-		this.api_ = v;
+	static api() {
+		if (this.api_) return this.api_;
+		this.api_ = new WebApi('http://192.168.1.2');
+		return this.api_;
 	}
 
 	static setDb(v) {
@@ -27,17 +30,7 @@ class Registry {
 
 	static db() {
 		if (!this.db_) throw new Error('Accessing database before it has been initialised');
-		// if (!this.db_) {
-		// 	this.db_ = new Database();
-		// 	this.db_.setDebugEnabled(this.debugMode());
-		// 	this.db_.open();
-		// }
 		return this.db_;
-	}
-
-	static api() {
-		if (!this.api_) throw new Error('Accessing web API before it has been initialised');
-		return this.api_;
 	}
 
 }

@@ -1,6 +1,6 @@
 import SQLite from 'react-native-sqlite-storage';
 import { Log } from 'src/log.js';
-import createUuid from 'uuid/v4';
+import { uuid } from 'src/uuid.js';
 
 const structureSql = `
 CREATE TABLE folders (
@@ -102,7 +102,7 @@ class Database {
 	}
 
 	open() {
-		this.db_ = SQLite.openDatabase({ name: '/storage/emulated/0/Download/joplin-4.sqlite' }, (db) => {
+		this.db_ = SQLite.openDatabase({ name: '/storage/emulated/0/Download/joplin-5.sqlite' }, (db) => {
 			Log.info('Database was open successfully');
 		}, (error) => {
 			Log.error('Cannot open database: ', error);
@@ -156,13 +156,7 @@ class Database {
 	selectAll(sql, params = null) {
 		this.logQuery(sql, params);
 
-		return new Promise((resolve, reject) => {
-			this.db_.executeSql(sql, params, (r) => {
-				resolve(r);
-			}, (error) => {
-				reject(error);
-			});
-		});
+		return this.exec(sql, params);
 	}
 
 	exec(sql, params = null) {
@@ -170,7 +164,7 @@ class Database {
 
 		return new Promise((resolve, reject) => {
 			this.db_.executeSql(sql, params, (r) => {
-				resolve();
+				resolve(r);
 			}, (error) => {
 				reject(error);
 			});
@@ -236,13 +230,12 @@ class Database {
 				Log.info('Database is new - creating the schema...');
 
 				let statements = this.sqlStringToLines(structureSql)
-				//this.db_.transaction((tx) => {
 				this.transaction((tx) => {
 					try {
 						for (let i = 0; i < statements.length; i++) {
 							tx.executeSql(statements[i]);
 						}
-						tx.executeSql('INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' + createUuid() + '", "' + Database.enumToId('settings', 'string') + '")');
+						tx.executeSql('INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' + uuid.create() + '", "' + Database.enumToId('settings', 'string') + '")');
 					} catch (error) {
 						reject(error);
 					}

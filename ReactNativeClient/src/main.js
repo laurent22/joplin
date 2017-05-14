@@ -14,6 +14,7 @@ import { Registry } from 'src/registry.js';
 function main() {
 	Registry.setDebugMode(true);
 	AppRegistry.registerComponent('AwesomeProject', () => Root);
+	Log.setLevel(Registry.debugMode() ? Log.LEVEL_DEBUG : Log.LEVEL_WARN);
 	// Note: The final part of the initialization process is in
 	// AppComponent.componentDidMount(), when the application is ready.
 }

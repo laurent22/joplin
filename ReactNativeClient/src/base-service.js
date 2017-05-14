@@ -1,7 +1,11 @@
+import { Registry } from 'src/registry.js';
+
 class BaseService {
 
-	constructor(webApi) {
-		this.api_ = webApi;
+	constructor() {}
+
+	api() {
+		return Registry.api();
 	}
 
 }
