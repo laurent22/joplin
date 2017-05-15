@@ -22,10 +22,15 @@ class ItemListComponent extends Component {
 		this.setState({ dataSource: this.state.dataSource.cloneWithRows(newProps.items) });
 	}
 
+	listView_itemClick = (itemId) => {
+
+	}
+
 	render() {
 		let renderRow = (rowData) => {
 			let onPress = () => {
-				this.props.onItemClick(rowData.id)
+				this.listView_itemClick(rowData.id);
+				//this.props.onItemClick(rowData.id)
 			}
 			return (
 				<TouchableHighlight onPress={onPress}>

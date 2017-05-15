@@ -8,12 +8,14 @@ import { StackNavigator } from 'react-navigation';
 import { addNavigationHelpers } from 'react-navigation';
 import { Log } from 'src/log.js'
 import { Note } from 'src/models/note.js'
+import { Folder } from 'src/models/folder.js'
 import { Database } from 'src/database.js'
 import { Registry } from 'src/registry.js'
 import { ItemList } from 'src/components/item-list.js'
 import { NotesScreen } from 'src/components/screens/notes.js'
 import { NoteScreen } from 'src/components/screens/note.js'
 import { FolderScreen } from 'src/components/screens/folder.js'
+import { FoldersScreen } from 'src/components/screens/folders.js'
 import { LoginScreen } from 'src/components/screens/login.js'
 import { Setting } from 'src/models/setting.js'
 
@@ -21,10 +23,10 @@ let defaultState = {
 	defaultText: 'bla',
 	notes: [],
 	folders: [
-		{ id: 'abcdabcdabcdabcdabcdabcdabcdab01', title: "un" },
-		{ id: 'abcdabcdabcdabcdabcdabcdabcdab02', title: "deux" },
-		{ id: 'abcdabcdabcdabcdabcdabcdabcdab03', title: "trois" },
-		{ id: 'abcdabcdabcdabcdabcdabcdabcdab04', title: "quatre" },
+		// { id: 'abcdabcdabcdabcdabcdabcdabcdab01', title: "un" },
+		// { id: 'abcdabcdabcdabcdabcdabcdabcdab02', title: "deux" },
+		// { id: 'abcdabcdabcdabcdabcdabcdabcdab03', title: "trois" },
+		// { id: 'abcdabcdabcdabcdabcdabcdabcdab04', title: "quatre" },
 	],
 	selectedNoteId: null,
 	selectedFolderId: null,
@@ -53,7 +55,11 @@ const reducer = (state = defaultState, action) => {
 			}
 
 			if (action.noteId) {
-				newState.selectedNoteId = action.noteId;				
+				newState.selectedNoteId = action.noteId;
+			}
+
+			if (action.folderId) {
+				newState.selectedFolderId = action.folderId;
 			}
 
 			break;
@@ -86,6 +92,12 @@ const reducer = (state = defaultState, action) => {
 			newState.notes = newNotes;
 			break;
 
+		case 'FOLDERS_UPDATE_ALL':
+
+			newState = Object.assign({}, state);
+			newState.folders = action.folders;
+			break;
+
 		case 'FOLDERS_UPDATE_ONE':
 
 			let newFolders = state.folders.splice(0);
@@ -116,6 +128,7 @@ const AppNavigator = StackNavigator({
 	Notes: {screen: NotesScreen},
 	Note: {screen: NoteScreen},
 	Folder: {screen: FolderScreen},
+	Folders: {screen: FoldersScreen},
 	Login: {screen: LoginScreen},
 });
 
@@ -133,15 +146,26 @@ class AppComponent extends React.Component {
 			return Setting.load();
 		}).then(() => {
 			Log.info('Client ID', Setting.value('clientId'));
-			Log.info('Loading notes...');
-			Note.previews().then((notes) => {
+			Log.info('Loading folders...');
+
+			Folder.all().then((folders) => {
 				this.props.dispatch({
-					type: 'NOTES_UPDATE_ALL',
-					notes: notes,
+					type: 'FOLDERS_UPDATE_ALL',
+					folders: folders,
 				});
 			}).catch((error) => {
-				Log.warn('Cannot load notes', error);
+				Log.warn('Cannot load folders', error);
 			});
+		// }).then(() => {
+		// 	Log.info('Loading notes...');
+		// 	Note.previews().then((notes) => {
+		// 		this.props.dispatch({
+		// 			type: 'NOTES_UPDATE_ALL',
+		// 			notes: notes,
+		// 		});
+		// 	}).catch((error) => {
+		// 		Log.warn('Cannot load notes', error);
+		// 	});
 		}).catch((error) => {
 			Log.error('Cannot initialize database:', error);
 		});
@@ -157,7 +181,7 @@ class AppComponent extends React.Component {
 	}
 }
 
-defaultState.nav = AppNavigator.router.getStateForAction(AppNavigator.router.getActionForPathAndParams('Notes'));
+defaultState.nav = AppNavigator.router.getStateForAction(AppNavigator.router.getActionForPathAndParams('Folders'));
 
 const mapStateToProps = (state) => {
 	return {
