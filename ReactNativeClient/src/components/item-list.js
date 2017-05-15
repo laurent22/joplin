@@ -8,33 +8,63 @@ class ItemListComponent extends Component {
 
 	constructor() {
 		super();
-		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-		this.state = { dataSource: ds };
-	}
-
-	componentWillMount() {
-		const newDataSource = this.state.dataSource.cloneWithRows(this.props.items);
-		this.state = { dataSource: newDataSource };
+		this.previousListMode = 'view';
+		const ds = new ListView.DataSource({
+			rowHasChanged: (r1, r2) => { return r1 !== r2; }
+		});
+		this.state = {
+			dataSource: ds,
+			items: [],
+			selectedItemIds: [],
+		};
 	}
 
 	componentWillReceiveProps(newProps) {
+		// When the items have changed, we just pass this to the data source. However, 
+		// when the list mode change, we need to clone the items to make sure the whole
+		// list is updated (so that the checkbox can be added or removed).
+
+		let items = newProps.items;
+
+		if (newProps.listMode != this.previousListMode) {
+			items = newProps.items.slice();
+			for (let i = 0; i < items.length; i++) {
+				items[i] = Object.assign({}, items[i]);
+			}
+			this.previousListMode = newProps.listMode;
+		}
+
 		// https://stackoverflow.com/questions/38186114/react-native-redux-and-listview
-		this.setState({ dataSource: this.state.dataSource.cloneWithRows(newProps.items) });
+		this.setState({
+			dataSource: this.state.dataSource.cloneWithRows(items),
+		});
 	}
 
-	listView_itemClick = (itemId) => {
+	setListMode = (mode) => {
+		this.props.dispatch({
+			type: 'SET_LIST_MODE',
+			listMode: mode,
+		});
+	}
 
+	listView_itemPress = (itemId) => {}
+
+	listView_itemLongPress = (itemId) => {
+		this.setListMode('edit');
 	}
 
 	render() {
-		let renderRow = (rowData) => {
+		let renderRow = (item) => {
 			let onPress = () => {
-				this.listView_itemClick(rowData.id);
-				//this.props.onItemClick(rowData.id)
+				this.listView_itemPress(item.id);
 			}
+			let onLongPress = () => {
+				this.listView_itemLongPress(item.id);
+			}
+			let editable = this.props.listMode == 'edit' ? ' [X] ' : '';
 			return (
-				<TouchableHighlight onPress={onPress}>
-					<Text>{rowData.title}</Text>
+				<TouchableHighlight onPress={onPress} onLongPress={onLongPress}>
+					<Text>{item.title}<Text>{editable}</Text></Text>
 				</TouchableHighlight>
 			);
 		}

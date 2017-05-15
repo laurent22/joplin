@@ -8,8 +8,7 @@ import { _ } from 'src/locale.js';
 
 class FolderListComponent extends ItemListComponent {
 
-	listView_itemClick = (folderId) => {
-
+	listView_itemPress = (folderId) => {
 		Note.previews(folderId).then((notes) => {
 			this.props.dispatch({
 				type: 'NOTES_UPDATE_ALL',
@@ -30,7 +29,10 @@ class FolderListComponent extends ItemListComponent {
 
 const FolderList = connect(
 	(state) => {
-		return { items: state.folders };
+		return {
+			items: state.folders,
+			listMode: state.listMode,
+		};
 	}
 )(FolderListComponent)
 

@@ -20,16 +20,11 @@ import { LoginScreen } from 'src/components/screens/login.js'
 import { Setting } from 'src/models/setting.js'
 
 let defaultState = {
-	defaultText: 'bla',
 	notes: [],
-	folders: [
-		// { id: 'abcdabcdabcdabcdabcdabcdabcdab01', title: "un" },
-		// { id: 'abcdabcdabcdabcdabcdabcdabcdab02', title: "deux" },
-		// { id: 'abcdabcdabcdabcdabcdabcdabcdab03', title: "trois" },
-		// { id: 'abcdabcdabcdabcdabcdabcdabcdab04', title: "quatre" },
-	],
+	folders: [],
 	selectedNoteId: null,
 	selectedFolderId: null,
+	listMode: 'view',
 };
 
 const reducer = (state = defaultState, action) => {
@@ -48,17 +43,20 @@ const reducer = (state = defaultState, action) => {
 				return state
 			}
 
+			action.params = { listMode: 'view' };
+
 			const nextStateNav = AppNavigator.router.getStateForAction(action, state.nav);			
+			//Log.info('nextStateNavnextStateNavnextStateNavnextStateNavnextStateNav', nextStateNav);
 			newState = Object.assign({}, state);
 			if (nextStateNav) {
 				newState.nav = nextStateNav;
 			}
 
-			if (action.noteId) {
+			if ('noteId' in action) {
 				newState.selectedNoteId = action.noteId;
 			}
 
-			if (action.folderId) {
+			if ('folderId' in action) {
 				newState.selectedFolderId = action.folderId;
 			}
 
@@ -117,6 +115,14 @@ const reducer = (state = defaultState, action) => {
 			newState.folders = newFolders;
 			break;
 
+		case 'SET_LIST_MODE':
+
+			newState = Object.assign({}, state);
+			newState.listMode = action.listMode;
+			newState.nav = Object.assign({}, state.nav);
+			//newState.nav
+			break;
+
 	}
 
 	return newState;
@@ -156,16 +162,6 @@ class AppComponent extends React.Component {
 			}).catch((error) => {
 				Log.warn('Cannot load folders', error);
 			});
-		// }).then(() => {
-		// 	Log.info('Loading notes...');
-		// 	Note.previews().then((notes) => {
-		// 		this.props.dispatch({
-		// 			type: 'NOTES_UPDATE_ALL',
-		// 			notes: notes,
-		// 		});
-		// 	}).catch((error) => {
-		// 		Log.warn('Cannot load notes', error);
-		// 	});
 		}).catch((error) => {
 			Log.error('Cannot initialize database:', error);
 		});
@@ -181,7 +177,11 @@ class AppComponent extends React.Component {
 	}
 }
 
-defaultState.nav = AppNavigator.router.getStateForAction(AppNavigator.router.getActionForPathAndParams('Folders'));
+defaultState.nav = AppNavigator.router.getStateForAction({
+	type: 'Navigation/NAVIGATE',
+	routeName: 'Folders',
+	params: {listMode: 'view'}
+});
 
 const mapStateToProps = (state) => {
 	return {
@@ -193,6 +193,8 @@ const App = connect(mapStateToProps)(AppComponent);
 
 class Root extends React.Component {
 	render() {
+		Log.info('TTTTTTTTTTTTTTTTTTT', defaultState.nav);
+
 		return (
 			<Provider store={store}>
 				<App />
