@@ -13,13 +13,21 @@ import { Registry } from 'src/registry.js'
 import { ItemList } from 'src/components/item-list.js'
 import { NotesScreen } from 'src/components/screens/notes.js'
 import { NoteScreen } from 'src/components/screens/note.js'
+import { FolderScreen } from 'src/components/screens/folder.js'
 import { LoginScreen } from 'src/components/screens/login.js'
 import { Setting } from 'src/models/setting.js'
 
 let defaultState = {
 	defaultText: 'bla',
 	notes: [],
+	folders: [
+		{ id: 'abcdabcdabcdabcdabcdabcdabcdab01', title: "un" },
+		{ id: 'abcdabcdabcdabcdabcdabcdabcdab02', title: "deux" },
+		{ id: 'abcdabcdabcdabcdabcdabcdabcdab03', title: "trois" },
+		{ id: 'abcdabcdabcdabcdabcdabcdabcdab04', title: "quatre" },
+	],
 	selectedNoteId: null,
+	selectedFolderId: null,
 };
 
 const reducer = (state = defaultState, action) => {
@@ -62,7 +70,7 @@ const reducer = (state = defaultState, action) => {
 		case 'NOTES_UPDATE_ONE':
 
 			let newNotes = state.notes.splice(0);
-			let found = false;
+			var found = false;
 			for (let i = 0; i < newNotes.length; i++) {
 				let n = newNotes[i];
 				if (n.id == action.note.id) {
@@ -78,6 +86,25 @@ const reducer = (state = defaultState, action) => {
 			newState.notes = newNotes;
 			break;
 
+		case 'FOLDERS_UPDATE_ONE':
+
+			let newFolders = state.folders.splice(0);
+			var found = false;
+			for (let i = 0; i < newFolders.length; i++) {
+				let n = newFolders[i];
+				if (n.id == action.folder.id) {
+					newFolders[i] = action.folder;
+					found = true;
+					break;
+				}
+			}
+
+			if (!found) newFolders.push(action.folder);
+
+			newState = Object.assign({}, state);
+			newState.folders = newFolders;
+			break;
+
 	}
 
 	return newState;
@@ -88,6 +115,7 @@ let store = createStore(reducer);
 const AppNavigator = StackNavigator({
 	Notes: {screen: NotesScreen},
 	Note: {screen: NoteScreen},
+	Folder: {screen: FolderScreen},
 	Login: {screen: LoginScreen},
 });
 

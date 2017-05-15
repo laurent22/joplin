@@ -13,6 +13,13 @@ class BaseModel {
 		return false;
 	}
 
+	static byId(items, id) {
+		for (let i = 0; i < items.length; i++) {
+			if (items[i].id == id) return items[i];
+		}
+		return null;
+	}
+
 	static save(o) {
 		let isNew = !o.id;
 		let query = '';

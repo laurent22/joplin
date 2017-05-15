@@ -53,13 +53,11 @@ class WebApi {
 				let responseClone = response.clone();
 				return response.json().then(function(data) {
 					if (data && data.error) {
-						let e = new Error(data.error);
-						reject(e);
+						reject(new Error(data.error));
 					} else {
 						resolve(data);
 					}
-				})
-				.catch(function(error) {
+				}).catch(function(error) {
 					responseClone.text().then(function(text) {
 						reject(new Error('Cannot parse JSON: ' + text));
 					});

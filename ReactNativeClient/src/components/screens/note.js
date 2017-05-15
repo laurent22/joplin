@@ -61,7 +61,7 @@ class NoteScreenComponent extends React.Component {
 const NoteScreen = connect(
 	(state) => {
 		return {
-			note: state.selectedNoteId ? Note.noteById(state.notes, state.selectedNoteId) : Note.newNote(),
+			note: state.selectedNoteId ? Note.byId(state.notes, state.selectedNoteId) : Note.newNote(),
 		};
 	}
 )(NoteScreenComponent)

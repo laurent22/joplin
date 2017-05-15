@@ -13,13 +13,13 @@ class ItemListComponent extends Component {
 	}
 
 	componentWillMount() {
-		const newDataSource = this.state.dataSource.cloneWithRows(this.props.notes);
+		const newDataSource = this.state.dataSource.cloneWithRows(this.props.items);
 		this.state = { dataSource: newDataSource };
 	}
 
 	componentWillReceiveProps(newProps) {
 		// https://stackoverflow.com/questions/38186114/react-native-redux-and-listview
-		this.setState({ dataSource: this.state.dataSource.cloneWithRows(newProps.notes) });
+		this.setState({ dataSource: this.state.dataSource.cloneWithRows(newProps.items) });
 	}
 
 	render() {
@@ -45,21 +45,4 @@ class ItemListComponent extends Component {
 	}
 }
 
-const ItemList = connect(
-	(state) => {
-		return { notes: state.notes };
-	},
-	(dispatch) => {
-		return {
-			onItemClick: (noteId) => {
-				dispatch({
-					type: 'Navigation/NAVIGATE',
-					routeName: 'Note',
-					noteId: noteId,
-				});
-			}
-		}
-	}
-)(ItemListComponent)
-
-export { ItemList };
+export { ItemListComponent };

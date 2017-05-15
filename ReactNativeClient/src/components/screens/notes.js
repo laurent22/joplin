@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View, Button } from 'react-native';
+import { View, Button, Picker } from 'react-native';
 import { connect } from 'react-redux'
 import { Log } from 'src/log.js'
-import { ItemList } from 'src/components/item-list.js'
+import { NoteList } from 'src/components/note-list.js'
 
 class NotesScreenComponent extends React.Component {
 	
@@ -14,6 +14,13 @@ class NotesScreenComponent extends React.Component {
 		this.props.dispatch({
 			type: 'Navigation/NAVIGATE',
 			routeName: 'Note',
+		});
+	}
+
+	createFolderButton_press = () => {
+		this.props.dispatch({
+			type: 'Navigation/NAVIGATE',
+			routeName: 'Folder',
 		});
 	}
 
@@ -32,9 +39,10 @@ class NotesScreenComponent extends React.Component {
 		const { navigate } = this.props.navigation;
 		return (
 			<View style={{flex: 1}}>
-				<ItemList style={{flex: 1}}/>
+				<NoteList style={{flex: 1}}/>
 				<View style={{flexDirection: 'row'}}>
 					<Button title="Create note" onPress={this.createNoteButton_press} />
+					<Button title="Create folder" onPress={this.createFolderButton_press} />
 					<Button title="Login" onPress={this.loginButton_press} />
 					<Button title="Sync" onPress={this.syncButton_press} />
 				</View>
@@ -45,7 +53,9 @@ class NotesScreenComponent extends React.Component {
 
 const NotesScreen = connect(
 	(state) => {
-		return {};
+		return {
+			folders: state.folders
+		};
 	}
 )(NotesScreenComponent)
 
