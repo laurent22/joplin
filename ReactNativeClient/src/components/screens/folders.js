@@ -3,15 +3,14 @@ import { View, Button, Picker, Text } from 'react-native';
 import { connect } from 'react-redux'
 import { Log } from 'src/log.js'
 import { FolderList } from 'src/components/folder-list.js'
+import { BaseScreenComponent } from 'src/components/base-screen.js'
+import { ScreenHeader } from 'src/components/screen-header.js';
+import { _ } from 'src/locale.js';
 
 class FoldersScreenComponent extends React.Component {
-	
+
 	static navigationOptions = (options) => {
-		return { title: 'Folders' };
-		// const nav = options.navigation;
-		// Log.info('ici', nav);
-		// //return { title: "Folders: " + nav.state.params.listMode };
-		// return { title: <Text>Folders: {nav.state.params.listMode}</Text> };
+		return { header: null };
 	}
 
 	createFolderButton_press = () => {
@@ -25,6 +24,7 @@ class FoldersScreenComponent extends React.Component {
 	render() {
 		return (
 			<View style={{flex: 1}}>
+				<ScreenHeader navState={this.props.navigation.state} />
 				<FolderList style={{flex: 1}}/>
 				<Button title="Create folder" onPress={this.createFolderButton_press} />
 			</View>

@@ -46,7 +46,6 @@ const reducer = (state = defaultState, action) => {
 			action.params = { listMode: 'view' };
 
 			const nextStateNav = AppNavigator.router.getStateForAction(action, state.nav);			
-			//Log.info('nextStateNavnextStateNavnextStateNavnextStateNavnextStateNav', nextStateNav);
 			newState = Object.assign({}, state);
 			if (nextStateNav) {
 				newState.nav = nextStateNav;
@@ -120,7 +119,6 @@ const reducer = (state = defaultState, action) => {
 			newState = Object.assign({}, state);
 			newState.listMode = action.listMode;
 			newState.nav = Object.assign({}, state.nav);
-			//newState.nav
 			break;
 
 	}
@@ -169,10 +167,10 @@ class AppComponent extends React.Component {
 
 	render() {
 		return (
-			<AppNavigator navigation={addNavigationHelpers({
-				dispatch: this.props.dispatch,
-				state: this.props.nav,
-			})} />
+				<AppNavigator navigation={addNavigationHelpers({
+					dispatch: this.props.dispatch,
+					state: this.props.nav,
+				})} />
 		);
 	}
 }
@@ -193,8 +191,6 @@ const App = connect(mapStateToProps)(AppComponent);
 
 class Root extends React.Component {
 	render() {
-		Log.info('TTTTTTTTTTTTTTTTTTT', defaultState.nav);
-
 		return (
 			<Provider store={store}>
 				<App />

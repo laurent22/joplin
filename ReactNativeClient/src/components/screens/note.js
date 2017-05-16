@@ -3,12 +3,13 @@ import { View, Button, TextInput } from 'react-native';
 import { connect } from 'react-redux'
 import { Log } from 'src/log.js'
 import { Note } from 'src/models/note.js'
+import { ScreenHeader } from 'src/components/screen-header.js';
 
 class NoteScreenComponent extends React.Component {
 	
-	static navigationOptions = {
-		title: 'Note',
-	};
+	static navigationOptions = (options) => {
+		return { header: null };
+	}
 
 	constructor() {
 		super();
@@ -49,6 +50,7 @@ class NoteScreenComponent extends React.Component {
 	render() {
 		return (
 			<View style={{flex: 1}}>
+				<ScreenHeader navState={this.props.navigation.state} />
 				<TextInput value={this.state.note.parent_id} />
 				<TextInput value={this.state.note.title} onChangeText={this.title_changeText} />
 				<TextInput style={{flex: 1, textAlignVertical: 'top'}} multiline={true} value={this.state.note.body} onChangeText={this.body_changeText} />

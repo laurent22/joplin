@@ -3,12 +3,14 @@ import { View, Button, Picker } from 'react-native';
 import { connect } from 'react-redux'
 import { Log } from 'src/log.js'
 import { NoteList } from 'src/components/note-list.js'
+import { ScreenHeader } from 'src/components/screen-header.js';
+import { _ } from 'src/locale.js';
 
 class NotesScreenComponent extends React.Component {
 	
-	static navigationOptions = {
-		title: 'Notes',
-	};
+	static navigationOptions = (options) => {
+		return { header: null };
+	}
 
 	createNoteButton_press = () => {
 		this.props.dispatch({
@@ -39,6 +41,7 @@ class NotesScreenComponent extends React.Component {
 		const { navigate } = this.props.navigation;
 		return (
 			<View style={{flex: 1}}>
+				<ScreenHeader navState={this.props.navigation.state} />
 				<NoteList style={{flex: 1}}/>
 				<View style={{flexDirection: 'row'}}>
 					<Button title="Create note" onPress={this.createNoteButton_press} />

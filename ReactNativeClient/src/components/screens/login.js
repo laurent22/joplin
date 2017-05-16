@@ -4,13 +4,14 @@ import { connect } from 'react-redux'
 import { Log } from 'src/log.js'
 import { Registry } from 'src/registry.js';
 import { Setting } from 'src/models/setting.js';
+import { ScreenHeader } from 'src/components/screen-header.js';
 import { _ } from 'src/locale.js';
 
 class LoginScreenComponent extends React.Component {
 	
-	static navigationOptions = {
-		title: 'Login',
-	};
+	static navigationOptions = (options) => {
+		return { header: null };
+	}
 
 	constructor() {
 		super();
@@ -47,6 +48,7 @@ class LoginScreenComponent extends React.Component {
 	render() {
 		return (
 			<View style={{flex: 1}}>
+				<ScreenHeader navState={this.props.navigation.state} />
 				<TextInput value={this.state.email} onChangeText={this.email_changeText} keyboardType="email-address" />
 				<TextInput value={this.state.password} onChangeText={this.password_changeText} secureTextEntry={true} />
 				{ this.state.errorMessage && <Text style={{color:'#ff0000'}}>{this.state.errorMessage}</Text> }

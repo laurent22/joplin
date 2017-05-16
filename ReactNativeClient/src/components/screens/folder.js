@@ -3,12 +3,13 @@ import { View, Button, TextInput } from 'react-native';
 import { connect } from 'react-redux'
 import { Log } from 'src/log.js'
 import { Folder } from 'src/models/folder.js'
+import { ScreenHeader } from 'src/components/screen-header.js';
 
 class FolderScreenComponent extends React.Component {
 	
-	static navigationOptions = {
-		title: 'Folder',
-	};
+	static navigationOptions = (options) => {
+		return { header: null };
+	}
 
 	constructor() {
 		super();
@@ -45,6 +46,7 @@ class FolderScreenComponent extends React.Component {
 	render() {
 		return (
 			<View style={{flex: 1}}>
+				<ScreenHeader navState={this.props.navigation.state} />
 				<TextInput value={this.state.folder.title} onChangeText={this.title_changeText} />
 				<Button title="Save folder" onPress={this.saveFolderButton_press} />
 			</View>
