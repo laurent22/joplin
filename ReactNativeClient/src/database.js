@@ -102,7 +102,7 @@ class Database {
 	}
 
 	open() {
-		this.db_ = SQLite.openDatabase({ name: '/storage/emulated/0/Download/joplin-6.sqlite' }, (db) => {
+		this.db_ = SQLite.openDatabase({ name: '/storage/emulated/0/Download/joplin-7.sqlite' }, (db) => {
 			Log.info('Database was open successfully');
 		}, (error) => {
 			Log.error('Cannot open database: ', error);
@@ -210,8 +210,14 @@ class Database {
 		};
 	}
 
-	transaction(readyCallack, errorCallback, successCallback) {
-		return this.db_.transaction(readyCallack, errorCallback, successCallback);
+	transaction(readyCallack) {
+		return new Promise((resolve, reject) => {
+			this.db_.transaction(
+				readyCallack,
+				(error) => { reject(error); },
+				() => { resolve(); }
+			);
+		});
 	}
 
 	updateSchema() {
@@ -231,18 +237,14 @@ class Database {
 
 				let statements = this.sqlStringToLines(structureSql)
 				this.transaction((tx) => {
-					try {
-						for (let i = 0; i < statements.length; i++) {
-							tx.executeSql(statements[i]);
-						}
-						tx.executeSql('INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' + uuid.create() + '", "' + Database.enumToId('settings', 'string') + '")');
-					} catch (error) {
-						reject(error);
+					for (let i = 0; i < statements.length; i++) {
+						tx.executeSql(statements[i]);
 					}
-				}, (error) => {
-					reject(error);
-				}, () => {
+					tx.executeSql('INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' + uuid.create() + '", "' + Database.enumToId('settings', 'string') + '")');
+				}).then(() => {
 					resolve('Database schema created successfully');
+				}).catch((error) => {
+					reject(error);
 				});
 			});
 		});

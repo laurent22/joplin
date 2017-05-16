@@ -51,7 +51,6 @@ class NoteScreenComponent extends React.Component {
 		return (
 			<View style={{flex: 1}}>
 				<ScreenHeader navState={this.props.navigation.state} />
-				<TextInput value={this.state.note.parent_id} />
 				<TextInput value={this.state.note.title} onChangeText={this.title_changeText} />
 				<TextInput style={{flex: 1, textAlignVertical: 'top'}} multiline={true} value={this.state.note.body} onChangeText={this.body_changeText} />
 				<Button title="Save note" onPress={this.saveNoteButton_press} />

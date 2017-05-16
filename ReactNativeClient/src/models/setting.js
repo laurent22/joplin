@@ -69,10 +69,10 @@ class Setting extends BaseModel {
 					let q = Database.insertQuery(this.tableName(), this.cache_[i]);
 					tx.executeSql(q.sql, q.params);
 				}
-			}, (error) => {
-				Log.warn('Could not update settings:', error);
-			}, () => {
+			}).then(() => {
 				Log.info('Settings have been saved.');
+			}).catch((error) => {
+				Log.warn('Could not update settings:', error);
 			});
 		}, 500);
 	}

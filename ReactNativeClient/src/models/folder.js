@@ -18,6 +18,13 @@ class Folder extends BaseModel {
 		}
 	}
 
+	static delete(id) {
+		return this.db().transactionPromise((tx) => {
+			tx.executeSql('DELETE FROM notes WHERE parent_id = ?', [id]);
+			tx.executeSql('DELETE FROM folders WHERE id = ?', [id]);
+		});
+	}
+
 	static all() {
 		return this.db().selectAll('SELECT * FROM folders').then((r) => {
 			let output = [];
