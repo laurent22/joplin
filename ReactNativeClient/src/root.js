@@ -19,6 +19,14 @@ import { FoldersScreen } from 'src/components/screens/folders.js'
 import { LoginScreen } from 'src/components/screens/login.js'
 import { Setting } from 'src/models/setting.js'
 
+
+
+
+import { MenuContext } from 'react-native-popup-menu';
+
+
+
+
 let defaultState = {
 	notes: [],
 	folders: [],
@@ -97,7 +105,7 @@ const reducer = (state = defaultState, action) => {
 
 		case 'FOLDERS_UPDATE_ONE':
 
-			let newFolders = state.folders.splice(0);
+			var newFolders = state.folders.splice(0);
 			var found = false;
 			for (let i = 0; i < newFolders.length; i++) {
 				let n = newFolders[i];
@@ -109,6 +117,19 @@ const reducer = (state = defaultState, action) => {
 			}
 
 			if (!found) newFolders.push(action.folder);
+
+			newState = Object.assign({}, state);
+			newState.folders = newFolders;
+			break;
+
+		case 'FOLDER_DELETE':
+
+			var newFolders = [];
+			for (let i = 0; i < state.folders.length; i++) {
+				let f = state.folders[i];
+				if (f.id == action.folderId) continue;
+				newFolders.push(f);
+			}
 
 			newState = Object.assign({}, state);
 			newState.folders = newFolders;
@@ -167,10 +188,12 @@ class AppComponent extends React.Component {
 
 	render() {
 		return (
+			<MenuContext style={{ flex: 1 }}>
 				<AppNavigator navigation={addNavigationHelpers({
 					dispatch: this.props.dispatch,
 					state: this.props.nav,
 				})} />
+			</MenuContext>
 		);
 	}
 }
