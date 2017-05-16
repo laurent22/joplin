@@ -9,6 +9,7 @@
   "dependencies": {
     "react": "16.0.0-alpha.6",
     "react-native": "0.44.0",
+    "react-native-action-button": "^2.6.9",
     "react-native-checkbox": "^1.1.0",
     "react-native-popup-menu": "^0.7.4",
     "react-native-vector-icons": "^2.0.3",

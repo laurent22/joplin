@@ -7,6 +7,7 @@ import { Folder } from 'src/models/folder.js'
 import { ScreenHeader } from 'src/components/screen-header.js';
 import { MenuOption, Text } from 'react-native-popup-menu';
 import { _ } from 'src/locale.js';
+import { ActionButton } from 'src/components/action-button.js';
 
 class NotesScreenComponent extends React.Component {
 	
@@ -77,11 +78,10 @@ class NotesScreenComponent extends React.Component {
 				<ScreenHeader title={title} navState={this.props.navigation.state} menuOptions={this.menuOptions()} />
 				<NoteList style={{flex: 1}}/>
 				<View style={{flexDirection: 'row'}}>
-					<Button title="Create note" onPress={this.createNoteButton_press} />
-					<Button title="Create folder" onPress={this.createFolderButton_press} />
 					<Button title="Login" onPress={this.loginButton_press} />
 					<Button title="Sync" onPress={this.syncButton_press} />
 				</View>
+				<ActionButton parentFolderId={this.props.selectedFolderId}></ActionButton>
 			</View>
 		);
 	}

@@ -48,6 +48,8 @@ class NoteScreenComponent extends React.Component {
 	}
 
 	render() {
+		Log.info(this.state.note);
+
 		return (
 			<View style={{flex: 1}}>
 				<ScreenHeader navState={this.props.navigation.state} />

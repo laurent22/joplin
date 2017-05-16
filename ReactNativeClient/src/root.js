@@ -18,14 +18,7 @@ import { FolderScreen } from 'src/components/screens/folder.js'
 import { FoldersScreen } from 'src/components/screens/folders.js'
 import { LoginScreen } from 'src/components/screens/login.js'
 import { Setting } from 'src/models/setting.js'
-
-
-
-
 import { MenuContext } from 'react-native-popup-menu';
-
-
-
 
 let defaultState = {
 	notes: [],
