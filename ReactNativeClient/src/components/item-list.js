@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { ListView, Text, TouchableHighlight } from 'react-native';
+import { ListView, Text, TouchableHighlight, Switch, View } from 'react-native';
 import { Log } from 'src/log.js';
+import Checkbox from 'react-native-checkbox';
 import { _ } from 'src/locale.js';
 
 class ItemListComponent extends Component {
@@ -17,6 +18,11 @@ class ItemListComponent extends Component {
 			items: [],
 			selectedItemIds: [],
 		};
+	}
+
+	componentWillMount() {
+		const newDataSource = this.state.dataSource.cloneWithRows(this.props.items);
+		this.state = { dataSource: newDataSource };
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -61,10 +67,13 @@ class ItemListComponent extends Component {
 			let onLongPress = () => {
 				this.listView_itemLongPress(item.id);
 			}
-			let editable = this.props.listMode == 'edit' ? ' [X] ' : '';
+			let isEditable = this.props.listMode == 'edit';
 			return (
 				<TouchableHighlight onPress={onPress} onLongPress={onLongPress}>
-					<Text>{item.title}<Text>{editable}</Text></Text>
+					<View>
+						{ isEditable  && <Checkbox label={item.title} ></Checkbox> }
+						{ !isEditable && <Text>{item.title}</Text> }
+					</View>
 				</TouchableHighlight>
 			);
 		}
