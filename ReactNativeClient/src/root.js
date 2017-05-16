@@ -26,6 +26,7 @@ let defaultState = {
 	selectedNoteId: null,
 	selectedFolderId: null,
 	listMode: 'view',
+	user: { email: 'laurent@cozic.net', session: null },
 };
 
 const reducer = (state = defaultState, action) => {
@@ -128,6 +129,12 @@ const reducer = (state = defaultState, action) => {
 			newState.folders = newFolders;
 			break;
 
+		case 'USER_SET':
+
+			newState = Object.assign({}, state);
+			newState.user = action.user;
+			break;
+
 		case 'SET_LIST_MODE':
 
 			newState = Object.assign({}, state);
@@ -163,7 +170,15 @@ class AppComponent extends React.Component {
 			Log.info('Loading settings...');
 			return Setting.load();
 		}).then(() => {
+			let user = Setting.object('user');
 			Log.info('Client ID', Setting.value('clientId'));
+			Log.info('User', user);
+
+			this.props.dispatch({
+				type: 'USER_SET',
+				user: user,
+			});
+
 			Log.info('Loading folders...');
 
 			Folder.all().then((folders) => {

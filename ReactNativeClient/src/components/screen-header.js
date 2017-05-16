@@ -4,6 +4,7 @@ import { View, Text, Button, StyleSheet } from 'react-native';
 import { Log } from 'src/log.js';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import { _ } from 'src/locale.js';
+import { Setting } from 'src/models/setting.js';
 
 const styles = StyleSheet.create({
 	divider: {
@@ -37,20 +38,53 @@ class ScreenHeaderComponent extends Component {
 		}
 	}
 
+	menu_login = () => {
+		this.props.dispatch({
+			type: 'Navigation/NAVIGATE',
+			routeName: 'Login',
+		});
+	}
+
+	menu_logout = () => {
+		let user = { email: null, session: null };
+		Setting.setObject('user', user);
+		this.props.dispatch({
+			type: 'USER_SET',
+			user: user,
+		});
+	}
+
 	render() {
+		let key = 0;
 		let menuOptionComponents = [];
 		for (let i = 0; i < this.props.menuOptions.length; i++) {
 			let o = this.props.menuOptions[i];
-			let key = 'menuOption_' + i;
 			menuOptionComponents.push(
-				<MenuOption value={o.onPress} key={key}>
+				<MenuOption value={o.onPress} key={'menuOption_' + key++}>
 					<Text>{o.title}</Text>
-				</MenuOption>
-			);
-			if (i == this.props.menuOptions.length - 1) {
-				menuOptionComponents.push(<View key={'menuDivider_' + i} style={styles.divider}/>);
-			}
+				</MenuOption>);
 		}
+
+		if (menuOptionComponents.length) {
+			menuOptionComponents.push(<View key={'menuOption_' + key++} style={styles.divider}/>);
+		}
+
+		if (this.props.user && this.props.user.session) {
+			menuOptionComponents.push(
+				<MenuOption value={this.menu_logout} key={'menuOption_' + key++}>
+					<Text>{_('Logout')}</Text>
+				</MenuOption>);
+		} else {
+			menuOptionComponents.push(
+				<MenuOption value={this.menu_login} key={'menuOption_' + key++}>
+					<Text>{_('Login')}</Text>
+				</MenuOption>);
+		}
+
+		menuOptionComponents.push(
+			<MenuOption value={1} key={'menuOption_' + key++}>
+				<Text>{_('Configuration')}</Text>
+			</MenuOption>);
 
 		let title = 'title' in this.props && this.props.title !== null ? this.props.title : _(this.props.navState.routeName);
 
@@ -64,9 +98,6 @@ class ScreenHeaderComponent extends Component {
 					</MenuTrigger>
 					<MenuOptions>
 						{ menuOptionComponents }
-						<MenuOption value={1}>
-							<Text>{_('Configuration')}</Text>
-						</MenuOption>
 					</MenuOptions>
 				</Menu>
 			</View>
@@ -77,7 +108,7 @@ class ScreenHeaderComponent extends Component {
 
 const ScreenHeader = connect(
 	(state) => {
-		return {};
+		return { user: state.user };
 	}
 )(ScreenHeaderComponent)
 

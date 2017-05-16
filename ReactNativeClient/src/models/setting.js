@@ -4,23 +4,33 @@ import { Database } from 'src/database.js';
 
 class Setting extends BaseModel {
 
+	static defaults_ = {
+		'clientId': { value: '', type: 'string' },
+		'sessionId': { value: '', type: 'string' },
+		'lastUpdateTime': { value: '', type: 'int' },
+		'user.email': { value: '', type: 'string' },
+		'user.session': { value: '', type: 'string' },
+	};
+
 	static tableName() {
 		return 'settings';
 	}
 
 	static defaultSetting(key) {
-		if (!this.defaults_) {
-			this.defaults_ = {
-				'clientId': { value: '', type: 'string' },
-				'sessionId': { value: '', type: 'string' },
-				'lastUpdateTime': { value: '', type: 'int' },
-			}
-		}		
 		if (!(key in this.defaults_)) throw new Error('Unknown key: ' + key);
-
 		let output = Object.assign({}, this.defaults_[key]);
 		output.key = key;
 		return output;
+	}
+
+	static keys() {
+		if (this.keys_) return this.keys_;
+		this.keys_ = [];
+		for (let n in this.defaults_) {
+			if (!this.defaults_.hasOwnProperty(n)) continue;
+			this.keys_.push(n);
+		}
+		return this.keys_;
 	}
 
 	static load() {
@@ -33,7 +43,12 @@ class Setting extends BaseModel {
 	}
 
 	static setValue(key, value) {
+		// if (value !== null && typeof value === 'object') {
+		// 	return this.setObject(key, value);
+		// }
+
 		this.scheduleUpdate();
+
 		for (let i = 0; i < this.cache_.length; i++) {
 			if (this.cache_[i].key == key) {
 				this.cache_[i].value = value;
@@ -46,6 +61,17 @@ class Setting extends BaseModel {
 		this.cache_.push(s);
 	}
 
+	// static del(key) {
+	// 	this.scheduleUpdate();
+
+	// 	for (let i = 0; i < this.cache_.length; i++) {
+	// 		if (this.cache_[i].key == key) {
+	// 			this.cache_[i].value = value;
+	// 			return;
+	// 		}
+	// 	}
+	// }
+
 	static value(key) {
 		for (let i = 0; i < this.cache_.length; i++) {
 			if (this.cache_[i].key == key) {
@@ -55,6 +81,27 @@ class Setting extends BaseModel {
 
 		let s = this.defaultSetting(key);
 		return s.value;
+	}
+
+	// Currently only supports objects with properties one level deep
+	static object(key) {
+		let output = {};
+		let keys = this.keys();
+		for (let i = 0; i < keys.length; i++) {
+			let k = keys[i].split('.');
+			if (k[0] == key) {
+				output[k[1]] = this.value(keys[i]);
+			}
+		}
+		return output;
+	}
+
+	// Currently only supports objects with properties one level deep
+	static setObject(key, object) {
+		for (let n in object) {
+			if (!object.hasOwnProperty(n)) continue;
+			this.setValue(key + '.' + n, object[n]);
+		}
 	}
 
 	static scheduleUpdate() {

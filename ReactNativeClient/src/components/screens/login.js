@@ -22,6 +22,10 @@ class LoginScreenComponent extends React.Component {
 		};
 	}
 
+	componentWillMount() {
+		this.setState({ email: this.props.user.email });
+	}
+
 	email_changeText = (text) => {
 		this.setState({ email: text });
 	}
@@ -38,8 +42,22 @@ class LoginScreenComponent extends React.Component {
 			'password': this.state.password,
 			'client_id': Setting.value('clientId'),
 		}).then((session) => {
-			Log.info('GOT DATA:');
-			Log.info(session);
+			Log.info('Got session', session);
+
+			let user = {
+				email: this.state.email,
+				session: session.id,
+			};
+			Setting.setObject('user', user);
+
+			this.props.dispatch({
+				type: 'USER_SET',
+				user: user,
+			});
+
+			this.props.dispatch({
+				type: 'Navigation/BACK',
+			});
 		}).catch((error) => {
 			this.setState({ errorMessage: _('Could not login: %s)', error.message) });
 		});
@@ -61,7 +79,9 @@ class LoginScreenComponent extends React.Component {
 
 const LoginScreen = connect(
 	(state) => {
-		return {};
+		return {
+			user: state.user,
+		};
 	}
 )(LoginScreenComponent)
 
