@@ -187,6 +187,10 @@ class AppComponent extends React.Component {
 
 			Log.info('Loading folders...');
 
+			// Folder.noteIds('80a90393377b440bbf6edfe849bb87c5').then((ids) => {
+			// 	Log.info(ids);
+			// });
+
 			Folder.all().then((folders) => {
 				this.props.dispatch({
 					type: 'FOLDERS_UPDATE_ALL',
@@ -196,8 +200,8 @@ class AppComponent extends React.Component {
 				Log.warn('Cannot load folders', error);
 			});
 		}).then(() => {
-			let synchronizer = new Synchronizer();
-			synchronizer.start();
+			// let synchronizer = new Synchronizer();
+			// synchronizer.start();
 		}).catch((error) => {
 			Log.error('Initialization error:', error);
 		});

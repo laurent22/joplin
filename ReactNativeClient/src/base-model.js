@@ -47,8 +47,19 @@ class BaseModel {
 		return output;
 	}
 
+	static modOptions(options) {
+		if (!options) {
+			options = {};
+		} else {
+			options = Object.assign({}, options);
+		}
+		if (!('trackChanges' in options)) options.trackChanges = true;
+		if (!('isNew' in options)) options.isNew = 'auto';
+		return options;
+	}
+
 	static saveQuery(o, isNew = 'auto') {
-		if (isNew == 'auto') isNew = !o.id;		
+		if (isNew == 'auto') isNew = !o.id;
 		let query = '';
 		let itemId = o.id;
 
@@ -71,14 +82,16 @@ class BaseModel {
 		return query;
 	}
 
-	static save(o, trackChanges = true, isNew = 'auto') {
-		if (isNew == 'auto') isNew = !o.id;
+	static save(o, options = null) {
+		options = this.modOptions(options);
+
+		let isNew = options.isNew == 'auto' ? !o.id : options.isNew;
 		let query = this.saveQuery(o, isNew);
 
 		return this.db().transaction((tx) => {
 			tx.executeSql(query.sql, query.params);
 
-			if (trackChanges && this.trackChanges()) {
+			if (options.trackChanges && this.trackChanges()) {
 				// Cannot import this class the normal way due to cyclical dependencies between Change and BaseModel
 				// which are not handled by React Native.
 				const { Change } = require('src/models/change.js');
@@ -96,23 +109,30 @@ class BaseModel {
 		}).then(() => {
 			o = Object.assign({}, o);
 			o.id = query.id;
-
-			this.dispatch({
-				type: 'FOLDERS_UPDATE_ONE',
-				folder: o,
-			});
-
 			return o;
 		});
 	}
 
-	static delete(id) {
+	static delete(id, options = null) {
+		options = this.modOptions(options);
+
 		if (!id) {
 			Log.warn('Cannot delete object without an ID');
 			return;
 		}
 
-		return this.db().exec('DELETE FROM ' + this.tableName() + ' WHERE id = ?', [id]);
+		return this.db().exec('DELETE FROM ' + this.tableName() + ' WHERE id = ?', [id]).then(() => {
+			// if (options.trackChanges && this.trackChanges()) {
+			// 	const { Change } = require('src/models/change.js');
+
+			// 	let change = Change.newChange();
+			// 	change.type = Change.TYPE_DELETE;
+			// 	change.item_id = id;
+			// 	change.item_type = this.itemType();
+
+			// 	return Change.save(change);
+			// }
+		});
 	}
 
 	static db() {

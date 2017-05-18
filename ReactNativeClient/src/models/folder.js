@@ -1,5 +1,7 @@
 import { BaseModel } from 'src/base-model.js';
 import { Log } from 'src/log.js';
+import { promiseChain } from 'src/promise-chain.js';
+import { Note } from 'src/models/note.js';
 
 class Folder extends BaseModel {
 
@@ -26,10 +28,34 @@ class Folder extends BaseModel {
 		}
 	}
 
-	static delete(id) {
-		return this.db().transactionPromise((tx) => {
-			tx.executeSql('DELETE FROM notes WHERE parent_id = ?', [id]);
-			tx.executeSql('DELETE FROM folders WHERE id = ?', [id]);
+	static noteIds(id) {
+		return this.db().exec('SELECT id FROM notes WHERE parent_id = ?', [id]).then((r) => {
+			let output = [];
+			for (let i = 0; i < r.rows.length; i++) {
+				let row = r.rows.item(i);
+				output.push(row.id);
+			}
+			return output;
+		});
+	}
+
+	static delete(folderId, options = null) {
+		return this.noteIds(folderId).then((ids) => {
+			let chain = [];
+			for (let i = 0; i < ids.length; i++) {
+				chain.push(() => {
+					return Note.delete(ids[i]);
+				});
+			}
+
+			return promiseChain(chain);
+		}).then(() => {
+			return super.delete(folderId, options);
+		}).then(() => {
+			this.dispatch({
+				type: 'FOLDER_DELETE',
+				folderId: folderId,
+			});
 		});
 	}
 
@@ -40,6 +66,16 @@ class Folder extends BaseModel {
 				output.push(r.rows.item(i));
 			}
 			return output;
+		});
+	}
+
+	static save(o, options = null) {
+		return super.save(o, options).then((folder) => {
+			this.dispatch({
+				type: 'FOLDERS_UPDATE_ONE',
+				folder: folder,
+			});
+			return folder;
 		});
 	}
 

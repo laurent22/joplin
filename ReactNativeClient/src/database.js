@@ -1,7 +1,7 @@
 import SQLite from 'react-native-sqlite-storage';
 import { Log } from 'src/log.js';
 import { uuid } from 'src/uuid.js';
-import { PromiseChain } from 'src/promise-chain.js';
+import { promiseChain } from 'src/promise-chain.js';
 
 const structureSql = `
 CREATE TABLE folders (
@@ -110,7 +110,7 @@ class Database {
 	}
 
 	open() {
-		this.db_ = SQLite.openDatabase({ name: '/storage/emulated/0/Download/joplin-10.sqlite' }, (db) => {
+		this.db_ = SQLite.openDatabase({ name: '/storage/emulated/0/Download/joplin-11.sqlite' }, (db) => {
 			Log.info('Database was open successfully');
 		}, (error) => {
 			Log.error('Cannot open database: ', error);
@@ -183,6 +183,10 @@ class Database {
 				reject(error);
 			});
 		});
+	}
+
+	executeSql(sql, params = null) {
+		return this.exec(sql, params);
 	}
 
 	static insertQuery(tableName, data) {
@@ -258,13 +262,13 @@ class Database {
 				});
 			}
 
-			return PromiseChain.exec(chain).then((queries) => {
-				return this.transaction((tx) => {
-					tx.executeSql('DELETE FROM table_fields');
-					for (let i = 0; i < queries.length; i++) {
-						tx.executeSql(queries[i].sql, queries[i].params);
-					}
-				});
+			return promiseChain(chain);
+		}).then((queries) => {
+			return this.transaction((tx) => {
+				tx.executeSql('DELETE FROM table_fields');
+				for (let i = 0; i < queries.length; i++) {
+					tx.executeSql(queries[i].sql, queries[i].params);
+				}
 			});
 		});
 	}
@@ -308,45 +312,6 @@ class Database {
 				return this.initialize();
 			})
 		});
-
-		// return new Promise((resolve, reject) => {
-		// 	this.selectOne('SELECT * FROM version LIMIT 1').then((row) => {
-		// 		Log.info('Current database version', row);
-		// 		// TODO: version update logic
-		// 		// TODO: only do this if db has been updated
-		// 		return this.refreshTableFields();
-		// 	}).then(() => {
-		// 		return this.exec('SELECT * FROM table_fields').then((r) => {
-		// 			this.tableFields_ = {};
-		// 			for (let i = 0; i < r.rows.length; i++) {
-		// 				let row = r.rows.item(i);
-		// 				if (!this.tableFields_[row.table_name]) this.tableFields_[row.table_name] = [];
-		// 				this.tableFields_[row.table_name].push(row.field_name);
-		// 			}
-		// 		});
-		// 	}).catch((error) => {
-		// 		// Assume that error was:
-		// 		// { message: 'no such table: version (code 1): , while compiling: SELECT * FROM version', code: 0 }
-		// 		// which means the database is empty and the tables need to be created.
-
-		// 		Log.info('Database is new - creating the schema...');
-
-		// 		let statements = this.sqlStringToLines(structureSql)
-		// 		this.transaction((tx) => {
-		// 			for (let i = 0; i < statements.length; i++) {
-		// 				tx.executeSql(statements[i]);
-		// 			}
-		// 			tx.executeSql('INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' + uuid.create() + '", "' + Database.enumToId('settings', 'string') + '")');
-		// 		}).then(() => {
-		// 			Log.info('Database schema created successfully');
-		// 			// Calling initialize() now that the db has been created will make it go through
-		// 			// the normal db update process (applying any additional patch).
-		// 			return this.initialize();
-		// 		}).catch((error) => {
-		// 			reject(error);
-		// 		});
-		// 	});
-		// });
 	}
 
 }

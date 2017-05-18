@@ -32,10 +32,6 @@ class NotesScreenComponent extends React.Component {
 	deleteFolder_onPress = (folderId) => {
 		Folder.delete(folderId).then(() => {
 			this.props.dispatch({
-				type: 'FOLDER_DELETE',
-				folderId: folderId,
-			});
-			this.props.dispatch({
 				type: 'Navigation/NAVIGATE',
 				routeName: 'Folders',
 			});
