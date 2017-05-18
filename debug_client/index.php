@@ -26,7 +26,7 @@ function config($name) {
 		'baseUrl' => $baseUrl,
 		'clientId' => 'E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3',
 		'email' => 'laurent@cozic.net',
-		'password' => '123456789',
+		'password' => '12345678',
 	);
 	if (isset($config[$name])) return $config[$name];
 	throw new Exception('Unknown config: ' . $name);

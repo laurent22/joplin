@@ -7,9 +7,9 @@ class Setting extends BaseModel {
 	static defaults_ = {
 		'clientId': { value: '', type: 'string' },
 		'sessionId': { value: '', type: 'string' },
-		'lastUpdateTime': { value: '', type: 'int' },
 		'user.email': { value: '', type: 'string' },
 		'user.session': { value: '', type: 'string' },
+		'sync.lastRevId': { value: 0, type: 'int' },
 	};
 
 	static tableName() {

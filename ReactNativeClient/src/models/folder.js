@@ -11,6 +11,14 @@ class Folder extends BaseModel {
 		return true;
 	}
 
+	static itemType() {
+		return BaseModel.ITEM_TYPE_FOLDER;
+	}
+
+	static trackChanges() {
+		return true;
+	}
+
 	static newFolder() {
 		return {
 			id: null,

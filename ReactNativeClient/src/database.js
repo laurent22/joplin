@@ -1,6 +1,7 @@
 import SQLite from 'react-native-sqlite-storage';
 import { Log } from 'src/log.js';
 import { uuid } from 'src/uuid.js';
+import { PromiseChain } from 'src/promise-chain.js';
 
 const structureSql = `
 CREATE TABLE folders (
@@ -65,7 +66,7 @@ CREATE TABLE version (
 );
 
 CREATE TABLE changes (
-    id INTEGER PRIMARY KEY,
+	id INTEGER PRIMARY KEY,
 	\`type\` INT,
 	item_id TEXT,
 	item_type INT,
@@ -73,9 +74,15 @@ CREATE TABLE changes (
 );
 
 CREATE TABLE settings (
-    \`key\` TEXT PRIMARY KEY,
+	\`key\` TEXT PRIMARY KEY,
 	\`value\` TEXT,
 	\`type\` INT
+);
+
+CREATE TABLE table_fields (
+	id INTEGER PRIMARY KEY,
+	table_name TEXT,
+	field_name TEXT
 );
 
 INSERT INTO version (version) VALUES (1);
@@ -86,6 +93,7 @@ class Database {
 	constructor() {
 		this.debugMode_ = false;
 		this.initialized_ = false;
+		this.tableFields_ = null;
 	}
 
 	setDebugEnabled(v) {
@@ -102,13 +110,13 @@ class Database {
 	}
 
 	open() {
-		this.db_ = SQLite.openDatabase({ name: '/storage/emulated/0/Download/joplin-7.sqlite' }, (db) => {
+		this.db_ = SQLite.openDatabase({ name: '/storage/emulated/0/Download/joplin-10.sqlite' }, (db) => {
 			Log.info('Database was open successfully');
 		}, (error) => {
 			Log.error('Cannot open database: ', error);
 		});
 
-		return this.updateSchema();
+		return this.initialize();
 	}
 
 	static enumToId(type, s) {
@@ -117,6 +125,12 @@ class Database {
 			if (s == 'string') return 2;
 		}
 		throw new Error('Unknown enum type or value: ' + type + ', ' + s);
+	}
+
+	tableFieldNames(tableName) {
+		if (!this.tableFields_) throw new Error('Fields have not been loaded yet');
+		if (!this.tableFields_[tableName]) throw new Error('Unknown table: ' + tableName);
+		return this.tableFields_[tableName];
 	}
 
 	sqlStringToLines(sql) {
@@ -138,7 +152,7 @@ class Database {
 
 	logQuery(sql, params = null) {
 		if (!this.debugMode()) return;
-		Log.debug('DB: ' + sql, params);
+		//Log.debug('DB: ' + sql, params);
 	}
 
 	selectOne(sql, params = null) {
@@ -220,34 +234,119 @@ class Database {
 		});
 	}
 
-	updateSchema() {
-		Log.info('Checking for database schema update...');
+	refreshTableFields() {
+		return this.exec('SELECT name FROM sqlite_master WHERE type="table"').then((tableResults) => {
+			let chain = [];
+			for (let i = 0; i < tableResults.rows.length; i++) {
+				let row = tableResults.rows.item(i);
+				let tableName = row.name;
+				if (tableName == 'android_metadata') continue;
+				if (tableName == 'table_fields') continue;
 
-		return new Promise((resolve, reject) => {
-			this.selectOne('SELECT * FROM version LIMIT 1').then((row) => {
-				Log.info('Current database version', row);
-				resolve();
-				// TODO: version update logic
-			}).catch((error) => {
-				// Assume that error was:
-				// { message: 'no such table: version (code 1): , while compiling: SELECT * FROM version', code: 0 }
-				// which means the database is empty and the tables need to be created.
+				chain.push((queries) => {
+					if (!queries) queries = [];
+					return this.exec('PRAGMA table_info("' + tableName + '")').then((pragmaResult) => {
+						for (let i = 0; i < pragmaResult.rows.length; i++) {
+							let q = Database.insertQuery('table_fields', {
+								table_name: tableName,
+								field_name: pragmaResult.rows.item(i).name,
+							});
+							queries.push(q);
+						}
+						return queries;
+					});
+				});
+			}
 
-				Log.info('Database is new - creating the schema...');
-
-				let statements = this.sqlStringToLines(structureSql)
-				this.transaction((tx) => {
-					for (let i = 0; i < statements.length; i++) {
-						tx.executeSql(statements[i]);
+			return PromiseChain.exec(chain).then((queries) => {
+				return this.transaction((tx) => {
+					tx.executeSql('DELETE FROM table_fields');
+					for (let i = 0; i < queries.length; i++) {
+						tx.executeSql(queries[i].sql, queries[i].params);
 					}
-					tx.executeSql('INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' + uuid.create() + '", "' + Database.enumToId('settings', 'string') + '")');
-				}).then(() => {
-					resolve('Database schema created successfully');
-				}).catch((error) => {
-					reject(error);
 				});
 			});
 		});
+	}
+
+	initialize() {
+		Log.info('Checking for database schema update...');
+
+		return this.selectOne('SELECT * FROM version LIMIT 1').then((row) => {
+			Log.info('Current database version', row);
+			// TODO: version update logic
+
+			// TODO: only do this if db has been updated:
+			return this.refreshTableFields();
+		}).then(() => {
+			return this.exec('SELECT * FROM table_fields').then((r) => {
+				this.tableFields_ = {};
+				for (let i = 0; i < r.rows.length; i++) {
+					let row = r.rows.item(i);
+					if (!this.tableFields_[row.table_name]) this.tableFields_[row.table_name] = [];
+					this.tableFields_[row.table_name].push(row.field_name);
+				}
+			});
+		}).catch((error) => {
+			// Assume that error was:
+			// { message: 'no such table: version (code 1): , while compiling: SELECT * FROM version', code: 0 }
+			// which means the database is empty and the tables need to be created.
+			// If it's any other error there's nothing we can do anyway.
+
+			Log.info('Database is new - creating the schema...');
+
+			let statements = this.sqlStringToLines(structureSql)
+			return this.transaction((tx) => {
+				for (let i = 0; i < statements.length; i++) {
+					tx.executeSql(statements[i]);
+				}
+				tx.executeSql('INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' + uuid.create() + '", "' + Database.enumToId('settings', 'string') + '")');
+			}).then(() => {
+				Log.info('Database schema created successfully');
+				// Calling initialize() now that the db has been created will make it go through
+				// the normal db update process (applying any additional patch).
+				return this.initialize();
+			})
+		});
+
+		// return new Promise((resolve, reject) => {
+		// 	this.selectOne('SELECT * FROM version LIMIT 1').then((row) => {
+		// 		Log.info('Current database version', row);
+		// 		// TODO: version update logic
+		// 		// TODO: only do this if db has been updated
+		// 		return this.refreshTableFields();
+		// 	}).then(() => {
+		// 		return this.exec('SELECT * FROM table_fields').then((r) => {
+		// 			this.tableFields_ = {};
+		// 			for (let i = 0; i < r.rows.length; i++) {
+		// 				let row = r.rows.item(i);
+		// 				if (!this.tableFields_[row.table_name]) this.tableFields_[row.table_name] = [];
+		// 				this.tableFields_[row.table_name].push(row.field_name);
+		// 			}
+		// 		});
+		// 	}).catch((error) => {
+		// 		// Assume that error was:
+		// 		// { message: 'no such table: version (code 1): , while compiling: SELECT * FROM version', code: 0 }
+		// 		// which means the database is empty and the tables need to be created.
+
+		// 		Log.info('Database is new - creating the schema...');
+
+		// 		let statements = this.sqlStringToLines(structureSql)
+		// 		this.transaction((tx) => {
+		// 			for (let i = 0; i < statements.length; i++) {
+		// 				tx.executeSql(statements[i]);
+		// 			}
+		// 			tx.executeSql('INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' + uuid.create() + '", "' + Database.enumToId('settings', 'string') + '")');
+		// 		}).then(() => {
+		// 			Log.info('Database schema created successfully');
+		// 			// Calling initialize() now that the db has been created will make it go through
+		// 			// the normal db update process (applying any additional patch).
+		// 			return this.initialize();
+		// 		}).catch((error) => {
+		// 			reject(error);
+		// 		});
+		// 	});
+		// });
 	}
 
 }

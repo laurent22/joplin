@@ -9,6 +9,7 @@ import { addNavigationHelpers } from 'react-navigation';
 import { Log } from 'src/log.js'
 import { Note } from 'src/models/note.js'
 import { Folder } from 'src/models/folder.js'
+import { BaseModel } from 'src/base-model.js'
 import { Database } from 'src/database.js'
 import { Registry } from 'src/registry.js'
 import { ItemList } from 'src/components/item-list.js'
@@ -18,6 +19,7 @@ import { FolderScreen } from 'src/components/screens/folder.js'
 import { FoldersScreen } from 'src/components/screens/folders.js'
 import { LoginScreen } from 'src/components/screens/login.js'
 import { Setting } from 'src/models/setting.js'
+import { Synchronizer } from 'src/synchronizer.js'
 import { MenuContext } from 'react-native-popup-menu';
 
 let defaultState = {
@@ -163,6 +165,8 @@ class AppComponent extends React.Component {
 		let db = new Database();
 		db.setDebugEnabled(Registry.debugMode());
 
+		BaseModel.dispatch = this.props.dispatch;
+
 		db.open().then(() => {
 			Log.info('Database is ready.');
 			Registry.setDb(db);
@@ -173,6 +177,8 @@ class AppComponent extends React.Component {
 			let user = Setting.object('user');
 			Log.info('Client ID', Setting.value('clientId'));
 			Log.info('User', user);
+
+			Registry.api().setSession(user.session);
 
 			this.props.dispatch({
 				type: 'USER_SET',
@@ -189,8 +195,11 @@ class AppComponent extends React.Component {
 			}).catch((error) => {
 				Log.warn('Cannot load folders', error);
 			});
+		}).then(() => {
+			let synchronizer = new Synchronizer();
+			synchronizer.start();
 		}).catch((error) => {
-			Log.error('Cannot initialize database:', error);
+			Log.error('Initialization error:', error);
 		});
 	}
 

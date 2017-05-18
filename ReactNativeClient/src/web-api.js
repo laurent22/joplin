@@ -5,6 +5,15 @@ class WebApi {
 
 	constructor(baseUrl) {
 		this.baseUrl_ = baseUrl;
+		this.session_ = null;
+	}
+
+	setSession(v) {
+		this.session_ = v;
+	}
+
+	session() {
+		return this.session_;
 	}
 
 	makeRequest(method, path, query, data) {
@@ -38,14 +47,18 @@ class WebApi {
 		if (o.method != 'GET' && o.method != 'DELETE') {
 			cmd.push("--data '" + stringify(data) + "'");
 		}
-		cmd.push(r.url);
+		cmd.push("'" + r.url + "'");
 		return cmd.join(' ');
 	}
 
 	exec(method, path, query, data) {
-		let that = this;
-		return new Promise(function(resolve, reject) {
-			let r = that.makeRequest(method, path, query, data);
+		return new Promise((resolve, reject) => {
+			if (this.session_) {
+				query = query ? Object.assign({}, query) : {};
+				if (!query.session) query.session = this.session_;
+			}
+
+			let r = this.makeRequest(method, path, query, data);
 
 			Log.debug(WebApi.toCurl(r, data));
 
