@@ -165,7 +165,9 @@ class AppComponent extends React.Component {
 		let db = new Database();
 		//db.setDebugEnabled(Registry.debugMode());
 		db.setDebugEnabled(false);
+
 		BaseModel.dispatch = this.props.dispatch;
+		BaseModel.db_ = db;
 
 		db.open().then(() => {
 			Log.info('Database is ready.');
@@ -186,10 +188,6 @@ class AppComponent extends React.Component {
 			});
 
 			Log.info('Loading folders...');
-
-			// Folder.noteIds('80a90393377b440bbf6edfe849bb87c5').then((ids) => {
-			// 	Log.info(ids);
-			// });
 
 			Folder.all().then((folders) => {
 				this.props.dispatch({

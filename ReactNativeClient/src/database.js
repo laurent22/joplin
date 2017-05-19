@@ -26,8 +26,8 @@ CREATE TABLE notes (
 	author TEXT NOT NULL DEFAULT "",
 	source_url TEXT NOT NULL DEFAULT "",
 	is_todo BOOLEAN NOT NULL DEFAULT 0,
-	todo_due INT NOT NULL DEFAULT "",
-	todo_completed INT NOT NULL DEFAULT "",
+	todo_due INT NOT NULL DEFAULT 0,
+	todo_completed BOOLEAN NOT NULL DEFAULT 0,
 	source_application TEXT NOT NULL DEFAULT "",
 	application_data TEXT NOT NULL DEFAULT "",
 	\`order\` INT NOT NULL DEFAULT 0
@@ -82,13 +82,20 @@ CREATE TABLE settings (
 CREATE TABLE table_fields (
 	id INTEGER PRIMARY KEY,
 	table_name TEXT,
-	field_name TEXT
+	field_name TEXT,
+	field_type INT,
+	field_default TEXT
 );
 
 INSERT INTO version (version) VALUES (1);
 `;
 
 class Database {
+
+	static TYPE_INT = 1;
+	static TYPE_TEXT = 2;
+	static TYPE_BOOLEAN = 3;
+	static TYPE_NUMERIC = 4;
 
 	constructor() {
 		this.debugMode_ = false;
@@ -110,7 +117,7 @@ class Database {
 	}
 
 	open() {
-		this.db_ = SQLite.openDatabase({ name: '/storage/emulated/0/Download/joplin-15.sqlite' }, (db) => {
+		this.db_ = SQLite.openDatabase({ name: '/storage/emulated/0/Download/joplin-21.sqlite' }, (db) => {
 			Log.info('Database was open successfully');
 		}, (error) => {
 			Log.error('Cannot open database: ', error);
@@ -119,18 +126,39 @@ class Database {
 		return this.initialize();
 	}
 
-	static enumToId(type, s) {
+	static enumId(type, s) {
 		if (type == 'settings') {
 			if (s == 'int') return 1;
 			if (s == 'string') return 2;
+		}
+		if (type == 'fieldType') {
+			return this['TYPE_' + s];
 		}
 		throw new Error('Unknown enum type or value: ' + type + ', ' + s);
 	}
 
 	tableFieldNames(tableName) {
+		let tf = this.tableFields(tableName);
+		let output = [];
+		for (let i = 0; i < tf.length; i++) {
+			output.push(tf[i].name);
+		}
+		return output;
+	}
+
+	tableFields(tableName) {
 		if (!this.tableFields_) throw new Error('Fields have not been loaded yet');
 		if (!this.tableFields_[tableName]) throw new Error('Unknown table: ' + tableName);
 		return this.tableFields_[tableName];
+	}
+
+	static formatValue(type, value) {
+		if (value === null || value === undefined) return null;
+		if (type == this.TYPE_INT) return Number(value);
+		if (type == this.TYPE_TEXT) return value;
+		if (type == this.TYPE_BOOLEAN) return !!Number(value);
+		if (type == this.TYPE_NUMERIC) return Number(value);
+		throw new Error('Unknown type: ' + type);
 	}
 
 	sqlStringToLines(sql) {
@@ -213,7 +241,7 @@ class Database {
 		for (let key in data) {
 			if (!data.hasOwnProperty(key)) continue;
 			if (sql != '') sql += ', ';
-			sql += key + '=?';
+			sql += '`' + key + '`=?';
 			params.push(data[key]);
 		}
 
@@ -251,9 +279,17 @@ class Database {
 					if (!queries) queries = [];
 					return this.exec('PRAGMA table_info("' + tableName + '")').then((pragmaResult) => {
 						for (let i = 0; i < pragmaResult.rows.length; i++) {
+							let item = pragmaResult.rows.item(i);
+							// In SQLite, if the default value is a string it has double quotes around it, so remove them here
+							let defaultValue = item.dflt_value;
+							if (typeof defaultValue == 'string' && defaultValue.length >= 2 && defaultValue[0] == '"' && defaultValue[defaultValue.length - 1] == '"') {
+								defaultValue = defaultValue.substr(1, defaultValue.length - 2);
+							}
 							let q = Database.insertQuery('table_fields', {
 								table_name: tableName,
-								field_name: pragmaResult.rows.item(i).name,
+								field_name: item.name,
+								field_type: Database.enumId('fieldType', item.type),
+								field_default: defaultValue,
 							});
 							queries.push(q);
 						}
@@ -288,10 +324,21 @@ class Database {
 				for (let i = 0; i < r.rows.length; i++) {
 					let row = r.rows.item(i);
 					if (!this.tableFields_[row.table_name]) this.tableFields_[row.table_name] = [];
-					this.tableFields_[row.table_name].push(row.field_name);
+					this.tableFields_[row.table_name].push({
+						name: row.field_name,
+						type: row.field_type,
+						default: Database.formatValue(row.field_type, row.field_default),
+					});
 				}
+
+				Log.info(this.tableFields_);
 			});
 		}).catch((error) => {
+			if (error && error.code != 0) {
+				Log.error(error);
+				return;
+			}
+	
 			// Assume that error was:
 			// { message: 'no such table: version (code 1): , while compiling: SELECT * FROM version', code: 0 }
 			// which means the database is empty and the tables need to be created.
@@ -304,7 +351,7 @@ class Database {
 				for (let i = 0; i < statements.length; i++) {
 					tx.executeSql(statements[i]);
 				}
-				tx.executeSql('INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' + uuid.create() + '", "' + Database.enumToId('settings', 'string') + '")');
+				tx.executeSql('INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' + uuid.create() + '", "' + Database.enumId('settings', 'string') + '")');
 			}).then(() => {
 				Log.info('Database schema created successfully');
 				// Calling initialize() now that the db has been created will make it go through

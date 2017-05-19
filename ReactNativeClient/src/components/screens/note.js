@@ -13,7 +13,7 @@ class NoteScreenComponent extends React.Component {
 
 	constructor() {
 		super();
-		this.state = { note: Note.newNote() }
+		this.state = { note: Note.new() }
 	}
 
 	componentWillMount() {
@@ -48,8 +48,6 @@ class NoteScreenComponent extends React.Component {
 	}
 
 	render() {
-		Log.info(this.state.note);
-
 		return (
 			<View style={{flex: 1}}>
 				<ScreenHeader navState={this.props.navigation.state} />
@@ -65,7 +63,7 @@ class NoteScreenComponent extends React.Component {
 const NoteScreen = connect(
 	(state) => {
 		return {
-			note: state.selectedNoteId ? Note.byId(state.notes, state.selectedNoteId) : Note.newNote(state.selectedFolderId),
+			note: state.selectedNoteId ? Note.byId(state.notes, state.selectedNoteId) : Note.new(state.selectedFolderId),
 		};
 	}
 )(NoteScreenComponent)

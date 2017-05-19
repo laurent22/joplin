@@ -3,6 +3,8 @@ import { Log } from 'src/log.js';
 import { Setting } from 'src/models/setting.js';
 import { Change } from 'src/models/change.js';
 import { Folder } from 'src/models/folder.js';
+import { Note } from 'src/models/note.js';
+import { BaseModel } from 'src/base-model.js';
 import { promiseChain } from 'src/promise-chain.js';
 
 class Synchronizer {
@@ -35,31 +37,36 @@ class Synchronizer {
 				for (let i = 0; i < syncOperations.items.length; i++) {
 					let syncOp = syncOperations.items[i];
 					if (syncOp.id > maxRevId) maxRevId = syncOp.id;
+
+					let ItemClass = null;					
 					if (syncOp.item_type == 'folder') {
+						ItemClass = Folder;
+					} else if (syncOp.item_type == 'note') {
+						ItemClass = Note;
+					}
 
-						if (syncOp.type == 'create') {
-							chain.push(() => {
-								let folder = Folder.fromApiResult(syncOp.item);
-								// TODO: automatically handle NULL fields by checking type and default value of field
-								if (!folder.parent_id) folder.parent_id = '';
-								return Folder.save(folder, { isNew: true, trackChanges: false });
-							});
-						}
+					if (syncOp.type == 'create') {
+						chain.push(() => {
+							let item = ItemClass.fromApiResult(syncOp.item);
+							// TODO: automatically handle NULL fields by checking type and default value of field
+							if ('parent_id' in item && !item.parent_id) item.parent_id = '';
+							return ItemClass.save(item, { isNew: true, trackChanges: false });
+						});
+					}
 
-						if (syncOp.type == 'update') {
-							chain.push(() => {
-								return Folder.load(syncOp.item_id).then((folder) => {
-									folder = Folder.applyPatch(folder, syncOp.item);
-									return Folder.save(folder, { trackChanges: false });
-								});
+					if (syncOp.type == 'update') {
+						chain.push(() => {
+							return ItemClass.load(syncOp.item_id).then((item) => {
+								item = ItemClass.applyPatch(item, syncOp.item);
+								return ItemClass.save(item, { trackChanges: false });
 							});
-						}
+						});
+					}
 
-						if (syncOp.type == 'delete') {
-							chain.push(() => {
-								return Folder.delete(syncOp.item_id, { trackChanges: false });
-							});
-						}
+					if (syncOp.type == 'delete') {
+						chain.push(() => {
+							return ItemClass.delete(syncOp.item_id, { trackChanges: false });
+						});
 					}
 				}
 				return promiseChain(chain);
@@ -84,18 +91,28 @@ class Synchronizer {
 					chain.push(() => {
 						let p = null;
 
+						let ItemClass = null;					
+						let path = null;
+						if (c.item_type == BaseModel.ITEM_TYPE_FOLDER) {
+							ItemClass = Folder;
+							path = 'folders';
+						} else if (c.item_type == BaseModel.ITEM_TYPE_NOTE) {
+							ItemClass = Note;
+							path = 'notes';
+						}
+
 						if (c.type == Change.TYPE_NOOP) {
 							p = Promise.resolve();
 						} else if (c.type == Change.TYPE_CREATE) {
-							p = Folder.load(c.item_id).then((folder) => {
-								return this.api().put('folders/' + folder.id, null, folder);
+							p = ItemClass.load(c.item_id).then((item) => {
+								return this.api().put(path + '/' + item.id, null, item);
 							});
 						} else if (c.type == Change.TYPE_UPDATE) {
-							p = Folder.load(c.item_id).then((folder) => {
-								return this.api().patch('folders/' + folder.id, null, folder);
+							p = ItemClass.load(c.item_id).then((item) => {
+								return this.api().patch(path + '/' + item.id, null, item);
 							});
 						} else if (c.type == Change.TYPE_DELETE) {
-							return this.api().delete('folders/' + c.item_id);
+							return this.api().delete(path + '/' + c.item_id);
 						}
 
 						return p.then(() => {

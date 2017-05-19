@@ -1,6 +1,5 @@
 import { Log } from 'src/log.js';
 import { Database } from 'src/database.js';
-import { Registry } from 'src/registry.js';
 import { uuid } from 'src/uuid.js';
 
 class BaseModel {
@@ -9,6 +8,7 @@ class BaseModel {
 	static ITEM_TYPE_FOLDER = 2;
 	static tableInfo_ = null;
 	static tableKeys_ = null;
+	static db_ = null;
 
 	static tableName() {
 		throw new Error('Must be overriden');
@@ -40,6 +40,20 @@ class BaseModel {
 
 	static fieldNames() {
 		return this.db().tableFieldNames(this.tableName());
+	}
+
+	static fields() {
+		return this.db().tableFields(this.tableName());
+	}
+
+	static new() {
+		let fields = this.fields();
+		let output = {};
+		for (let i = 0; i < fields.length; i++) {
+			let f = fields[i];
+			output[f.name] = f.default;
+		}
+		return output;
 	}
 
 	static fromApiResult(apiResult) {
@@ -78,6 +92,15 @@ class BaseModel {
 
 	static saveQuery(o, isNew = 'auto') {
 		if (isNew == 'auto') isNew = !o.id;
+
+		let temp = {}
+		let fieldNames = this.fieldNames();
+		for (let i = 0; i < fieldNames.length; i++) {
+			let n = fieldNames[i];
+			if (n in o) temp[n] = o[n];
+		}
+		o = temp;
+
 		let query = '';
 		let itemId = o.id;
 
@@ -105,6 +128,8 @@ class BaseModel {
 		}
 
 		query.id = itemId;
+
+		Log.info('Saving', o);
 
 		return query;
 	}
@@ -176,7 +201,8 @@ class BaseModel {
 	}
 
 	static db() {
-		return Registry.db();
+		if (!this.db_) throw new Error('Accessing database before it has been initialised');
+		return this.db_;		
 	}
 
 }

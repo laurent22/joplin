@@ -26,6 +26,11 @@ CREATE TABLE `notes` (
 	`is_todo` tinyint(1) NOT NULL default '0',
 	`todo_due` int(11) NOT NULL default '0',
 	`todo_completed` int(11) NOT NULL default '0',
+	`application_data` varchar(1024) NOT NULL DEFAULT "",
+	`author` varchar(512) NOT NULL DEFAULT "",
+	`source` varchar(512) NOT NULL DEFAULT "",
+	`source_application` varchar(512) NOT NULL DEFAULT "",
+	`source_url` varchar(1024) NOT NULL DEFAULT "",
 	PRIMARY KEY (`id`)
 ) CHARACTER SET=utf8;
 
