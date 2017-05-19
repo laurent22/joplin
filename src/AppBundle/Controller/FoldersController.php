@@ -56,6 +56,7 @@ class FoldersController extends ApiController {
 		if ($request->isMethod('PATCH')) {
 			$data = $this->patchParameters();
 			$folder->fromPublicArray($this->patchParameters());
+			$folder->id = Folder::unhex($id);
 			$folder->save();
 			return static::successResponse($folder);
 		}

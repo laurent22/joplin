@@ -32,7 +32,7 @@ let defaultState = {
 };
 
 const reducer = (state = defaultState, action) => {
-	Log.info('Reducer action', action);
+	Log.info('Reducer action', action.type);
 
 	let newState = state;
 
@@ -163,8 +163,8 @@ class AppComponent extends React.Component {
 
 	componentDidMount() {
 		let db = new Database();
-		db.setDebugEnabled(Registry.debugMode());
-
+		//db.setDebugEnabled(Registry.debugMode());
+		db.setDebugEnabled(false);
 		BaseModel.dispatch = this.props.dispatch;
 
 		db.open().then(() => {
@@ -200,8 +200,8 @@ class AppComponent extends React.Component {
 				Log.warn('Cannot load folders', error);
 			});
 		}).then(() => {
-			// let synchronizer = new Synchronizer();
-			// synchronizer.start();
+			let synchronizer = new Synchronizer(db, Registry.api());
+			synchronizer.start();
 		}).catch((error) => {
 			Log.error('Initialization error:', error);
 		});

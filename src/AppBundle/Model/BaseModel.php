@@ -373,7 +373,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 			unset($changedFields['updated_time']);
 		}
 
-		$output = parent::save($options);
+			$output = parent::save($options);
 
 		//$this->cacheClear();
 

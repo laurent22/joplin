@@ -23,11 +23,18 @@ class WebApi {
 		let options = {};
 		options.method = method.toUpperCase();
 		if (data) {
-			var formData = new FormData();
-			for (var key in data) {
-				if (!data.hasOwnProperty(key)) continue;
-				formData.append(key, data[key]);
+			let formData = null;
+			if (method == 'POST') {
+				formData = new FormData();
+				for (var key in data) {
+					if (!data.hasOwnProperty(key)) continue;
+					formData.append(key, data[key]);
+				}
+			} else {
+				options.headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+				formData = stringify(data);
 			}
+
 			options.body = formData;
 		}
 
@@ -89,6 +96,14 @@ class WebApi {
 
 	post(path, query, data) {
 		return this.exec('POST', path, query, data);
+	}
+
+	put(path, query, data) {
+		return this.exec('PUT', path, query, data);
+	}
+
+	patch(path, query, data) {
+		return this.exec('PATCH', path, query, data);
 	}
 
 	delete(path, query) {
