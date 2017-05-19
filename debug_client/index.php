@@ -67,9 +67,14 @@ function execRequest($method, $path, $query = array(), $data = null) {
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-	if ($data) curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 	if ($method != 'GET' && $method != 'POST') {
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+	}
+	if ($method == 'PUT' || $method == 'PATCH') {
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+	}
+	if ($data) {
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $method == 'POST' ? $data : http_build_query($data));
 	}
 	$response = curl_exec($ch);
 	curl_close($ch);

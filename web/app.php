@@ -37,5 +37,7 @@ try {
 		header('HTTP/1.1 500 Internal Server Error');
 	}
 
-	die(json_encode($response) . "\n");
+	$r = json_encode($response);
+	if ($r === false) $r = serialize($response);
+	die($r . "\n");
 }

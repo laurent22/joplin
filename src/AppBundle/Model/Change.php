@@ -26,6 +26,8 @@ class Change extends BaseModel {
 		               ->limit($limit + 1)
 		               ->get();
 
+		$changes = $changes->all();
+
 		$hasMore = $limit < count($changes);
 		if ($hasMore) array_pop($changes);
 

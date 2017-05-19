@@ -33,6 +33,11 @@ class BaseModel {
 		return null;
 	}
 
+	static hasField(name) {
+		let fields = this.fieldNames();
+		return fields.indexOf(name) >= 0;
+	}
+
 	static fieldNames() {
 		return this.db().tableFieldNames(this.tableName());
 	}
@@ -62,10 +67,23 @@ class BaseModel {
 		return this.db().selectOne('SELECT * FROM ' + this.tableName() + ' WHERE id = ?', [id]);
 	}
 
+	static applyPatch(model, patch) {
+		model = Object.assign({}, model);
+		for (let n in patch) {
+			if (!patch.hasOwnProperty(n)) continue;
+			model[n] = patch[n];
+		}
+		return model;
+	}
+
 	static saveQuery(o, isNew = 'auto') {
 		if (isNew == 'auto') isNew = !o.id;
 		let query = '';
 		let itemId = o.id;
+
+		if (!o.updated_time && this.hasField('updated_time')) {
+			o.updated_time = Math.round((new Date()).getTime() / 1000);
+		}
 
 		if (isNew) {
 			if (this.useUuid() && !o.id) {
@@ -73,6 +91,11 @@ class BaseModel {
 				itemId = uuid.create();
 				o.id = itemId;
 			}
+
+			if (!o.created_time && this.hasField('created_time')) {
+				o.created_time = Math.round((new Date()).getTime() / 1000);
+			}
+
 			query = Database.insertQuery(this.tableName(), o);
 		} else {
 			let where = { id: o.id };

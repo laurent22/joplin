@@ -147,6 +147,8 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		foreach ($array as $k => $v) {
 			if ($k == 'rev_id') {
 				$this->revId = $v;
+			} else if (in_array($k, array('parent_id', 'client_id', 'item_id', 'user_id', 'owner_id'))) {
+				$this->{$k} = self::unhex($v);
 			} else if (in_array($k, $this->diffableFields)) {
 				$this->changedDiffableFields[$k] = $v;
 			} else {
@@ -160,7 +162,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		if ($this->useUuid) {
 			$output['id'] = self::hex($output['id']);
 		}
-		
+
 		if (!empty($output['parent_id'])) $output['parent_id'] = self::hex($output['parent_id']);
 		if (!empty($output['owner_id'])) $output['owner_id'] = self::hex($output['owner_id']);
 		if (!empty($output['client_id'])) $output['client_id'] = self::hex($output['client_id']);
@@ -246,7 +248,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 
 	static public function unhex($s) {
 		if (!strlen($s)) return null;
-		
+
 		if (is_array($s)) {
 			foreach ($s as $k => $v) {
 				$s[$k] = self::unhex($v);
@@ -373,9 +375,9 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 			unset($changedFields['updated_time']);
 		}
 
-			$output = parent::save($options);
+		//if ($this->parent_id
 
-		//$this->cacheClear();
+		$output = parent::save($options);
 
 		$this->isNew = null;
 
