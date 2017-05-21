@@ -45,10 +45,12 @@ class FoldersController extends ApiController {
 		}
 
 		if ($request->isMethod('PUT')) {
-			if (!$folder) $folder = new Folder();
+			$isNew = !$folder;
+			if ($isNew) $folder = new Folder();
 			$folder->fromPublicArray($this->putParameters());
 			$folder->id = Folder::unhex($id);
 			$folder->owner_id = $this->user()->id;
+			$folder->setIsNew($isNew);
 			$folder->save();
 			return static::successResponse($folder);
 		}

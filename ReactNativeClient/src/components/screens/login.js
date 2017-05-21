@@ -58,6 +58,10 @@ class LoginScreenComponent extends React.Component {
 			this.props.dispatch({
 				type: 'Navigation/BACK',
 			});
+
+			Registry.api().setSession(session.id);
+
+			Registry.synchronizer().start();
 		}).catch((error) => {
 			this.setState({ errorMessage: _('Could not login: %s)', error.message) });
 		});

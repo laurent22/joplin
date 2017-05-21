@@ -37,10 +37,12 @@ class NotesController extends ApiController {
 		}
 
 		if ($request->isMethod('PUT')) {
-			if (!$note) $note = new Note();
+			$isNew = !$note;
+			if ($isNew) $note = new Note();
 			$note->fromPublicArray($this->putParameters());
 			$note->id = Note::unhex($id);
 			$note->owner_id = $this->user()->id;
+			$note->setIsNew($isNew);
 			$note->save();
 			return static::successResponse($note);
 		}

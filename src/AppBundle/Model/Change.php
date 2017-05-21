@@ -18,6 +18,7 @@ class Change extends BaseModel {
 		// - If update, update, delete, update => return 'delete' only
 		// - If update, update, update => return last
 
+		// $limit = 10000;
 		$limit = 100;
 		$changes = self::where('id', '>', $fromChangeId)
 		               ->where('user_id', '=', $userId)
@@ -46,7 +47,11 @@ class Change extends BaseModel {
 			}
 
 			$itemIdToChange[$change->item_id] = $change;
+
+			// echo BaseModel::hex($change->item_id) . ' ' . $change->id . ' ' . Change::enumName('type', $change->type) . "\n";
 		}
+
+		// die();
 
 
 		$output = array();
@@ -68,11 +73,23 @@ class Change extends BaseModel {
 				$syncItem['type'] = 'delete';
 			} else if (in_array($itemId, $createdItems)) {
 				// Item was created then updated - just return one 'create' event with the latest changes
-				$syncItem['type'] = 'create';
-				$syncItem['item'] = self::requireItemById($change->item_type, $change->item_id);
+
+				// If $item is null it can mean two things:
+				// - The item has been deleted by the client requesting the sync items (which means the "delete" event is not included in the batch)
+				// - The item has been deleted in the next batch - for example, if we're requesting sync items 0 to 100, the "delete" event is in range 101 to 200.
+				// In the both cases we don't need to do anything. In the first case, the client already knows that the item has been deleted.
+				// In the second case, the "delete" event will be sent later on.
+				$item = BaseItem::byTypeAndId($change->item_type, $change->item_id);
+				if ($item) {
+					$syncItem['type'] = 'create';
+					$syncItem['item'] = $item;
+				}
 			} else {
-				$syncItem['item_fields'] = $itemIdToChangedFields[$change->item_id];
-				$syncItem['item'] = self::requireItemById($change->item_type, $change->item_id);
+				$item = BaseItem::byTypeAndId($change->item_type, $change->item_id);
+				if ($item) {
+					$syncItem['item_fields'] = $itemIdToChangedFields[$change->item_id];
+					$syncItem['item'] = $item;
+				}
 			}
 
 			$output[] = $syncItem;
@@ -108,7 +125,7 @@ class Change extends BaseModel {
 
 	static private function requireItemById($itemTypeId, $itemId) {
 		$item = BaseItem::byTypeAndId($itemTypeId, $itemId);
-		if (!$item) throw new \Exception('No such item: ' . $itemTypeId . ' ' . $itemId);
+		if (!$item) throw new \Exception('No such item: ' . $itemTypeId . ' ' . BaseModel::hex($itemId));
 		return $item;
 	}
 

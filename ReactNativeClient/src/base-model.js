@@ -171,10 +171,12 @@ class BaseModel {
 					}
 				}
 			}
-		}).then(() => {
+		}).then((r) => {
 			o = Object.assign({}, o);
 			o.id = query.id;
 			return o;
+		}).catch((error) => {
+			Log.error('Cannot save model', error);
 		});
 	}
 

@@ -33,6 +33,15 @@ class Registry {
 		return this.db_;
 	}
 
+	static setSynchronizer(s) {
+		this.synchronizer_ = s;
+	}
+
+	static synchronizer() {
+		if (!this.synchronizer_) throw new Error('Accessing synchronizer before it has been initialised');
+		return this.synchronizer_;
+	}
+
 }
 
 export { Registry };

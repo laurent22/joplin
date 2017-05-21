@@ -164,7 +164,7 @@ class AppComponent extends React.Component {
 	componentDidMount() {
 		let db = new Database();
 		//db.setDebugEnabled(Registry.debugMode());
-		db.setDebugEnabled(false);
+		db.setDebugEnabled(true);
 
 		BaseModel.dispatch = this.props.dispatch;
 		BaseModel.db_ = db;
@@ -199,6 +199,7 @@ class AppComponent extends React.Component {
 			});
 		}).then(() => {
 			let synchronizer = new Synchronizer(db, Registry.api());
+			Registry.setSynchronizer(synchronizer);
 			synchronizer.start();
 		}).catch((error) => {
 			Log.error('Initialization error:', error);

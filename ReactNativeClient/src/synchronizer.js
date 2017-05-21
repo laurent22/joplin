@@ -27,12 +27,20 @@ class Synchronizer {
 		return this.api_;
 	}
 
-	switchState(state) {
-		Log.info('Sync: switching state to: ' + state);
+	processState(state) {
+		// if (this.state() == state) {
+		// 	Log.info('Sync: cannot switch to same state: ' + state);
+		// 	return;
+		// }
+
+		Log.info('Sync: processing: ' + state);
+		this.state_ = state;
 
 		if (state == 'downloadChanges') {
 			let maxRevId = null;
+			let hasMore = false;
 			this.api().get('synchronizer', { last_id: Setting.value('sync.lastRevId') }).then((syncOperations) => {
+				hasMore = syncOperations.has_more;
 				let chain = [];
 				for (let i = 0; i < syncOperations.items.length; i++) {
 					let syncOp = syncOperations.items[i];
@@ -57,6 +65,7 @@ class Synchronizer {
 					if (syncOp.type == 'update') {
 						chain.push(() => {
 							return ItemClass.load(syncOp.item_id).then((item) => {
+								if (!item) return;
 								item = ItemClass.applyPatch(item, syncOp.item);
 								return ItemClass.save(item, { trackChanges: false });
 							});
@@ -71,13 +80,17 @@ class Synchronizer {
 				}
 				return promiseChain(chain);
 			}).then(() => {
-				Log.info('All items synced.');
+				Log.info('All items synced. has_more = ', hasMore);
 				if (maxRevId) {
 					Setting.setValue('sync.lastRevId', maxRevId);
 					return Setting.saveAll();
 				}
 			}).then(() => {
-				this.switchState('uploadingChanges');
+				if (hasMore) {
+					this.processState('downloadChanges');
+				} else {
+					this.processState('uploadingChanges');
+				}
 			}).catch((error) => {
 				Log.warn('Sync error', error);
 			});
@@ -112,11 +125,13 @@ class Synchronizer {
 								return this.api().patch(path + '/' + item.id, null, item);
 							});
 						} else if (c.type == Change.TYPE_DELETE) {
-							return this.api().delete(path + '/' + c.item_id);
+							p = this.api().delete(path + '/' + c.item_id);
 						}
 
 						return p.then(() => {
 							processedChangeIds = processedChangeIds.concat(c.ids);
+						}).catch((error) => {
+							Log.warn('Failed applying changes', c.ids);
 						});
 					});
 				}
@@ -142,7 +157,7 @@ class Synchronizer {
 			return;
 		}
 
-		this.switchState('downloadChanges');
+		this.processState('downloadChanges');
 	}
 
 }
