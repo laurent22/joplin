@@ -117,7 +117,7 @@ class Database {
 	}
 
 	open() {
-		this.db_ = SQLite.openDatabase({ name: '/storage/emulated/0/Download/joplin-26.sqlite' }, (db) => {
+		this.db_ = SQLite.openDatabase({ name: '/storage/emulated/0/Download/joplin-27.sqlite' }, (db) => {
 			Log.info('Database was open successfully');
 		}, (error) => {
 			Log.error('Cannot open database: ', error);

@@ -49,9 +49,8 @@ class NotesController extends ApiController {
 
 		if ($request->isMethod('PATCH')) {
 			$data = $this->patchParameters();
-			foreach ($data as $n => $v) {
-				$note->{$n} = $v;
-			}
+			$note->fromPublicArray($this->patchParameters());
+			$note->id = Note::unhex($id);
 			$note->save();
 			return static::successResponse($note);
 		}

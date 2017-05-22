@@ -246,7 +246,14 @@ switch ($action) {
 		if (count($diff)) {
 			execRequest('PATCH', $path . '/' . $_POST['item_id'], null, $diff);
 		}
-		redirect('/');
+
+		$query = array(
+			'action' => 'item',
+			'type' => $_POST['type'],
+			'item_id' => $_POST['item_id'],
+		);
+
+		redirect('/?' . http_build_query($query));
 		break;
 
 }

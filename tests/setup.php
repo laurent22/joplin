@@ -5,7 +5,7 @@ require_once dirname(__FILE__) . '/BaseTestCase.php';
 $dbConfig = array(
 	'dbName' => 'notes_test',
 	'user' => 'root',
-	'password' => '',
+	'password' => 'pass',
 	'host' => '127.0.0.1',
 );
 
