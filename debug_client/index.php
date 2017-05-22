@@ -84,8 +84,11 @@ function execRequest($method, $path, $query = array(), $data = null) {
 
 	$output = json_decode($response, true);
 	if ($output === null) {
-		$msg = 'Cannot decode JSON: ' . $response . "\n\n" . $curlCmd;
-		die($msg);
+		throw new Exception('Cannot decode JSON: ' . $response . "\n" . $curlCmd);
+	}
+
+	if (isset($output['error'])) {
+		throw new Exception('API error: ' . $response . "\n" . $curlCmd);
 	}
 
 	return $output;
@@ -133,21 +136,31 @@ function redirect($path) {
 
 initialize();
 
-$session = execRequest('POST', 'sessions', null, array(
-	'email' => config('email'),
-	'password' => config('password'),
-	'client_id' => config('clientId'),
-));
-
-if (isset($session['error'])) throw new Exception('Could not login. Please check credentials. ' . json_encode($session));
+try {
+	$session = execRequest('POST', 'sessions', null, array(
+		'email' => config('email'),
+		'password' => config('password'),
+		'client_id' => config('clientId'),
+	));
+} catch (Exception $e) {
+	die('Could not login. Please check credentials. ' . $e->getMessage());
+}
 
 $_SESSION['sessionId'] = $session['id'];
 
-$action = isset($_GET['action']) ? $_GET['action'] : 'folders';
+if (!isset($_GET['action'])) {
+	$action = 'items';
+	$_GET['type'] = 'folder';
+} else {
+	$action = $_GET['action'];
+}
 
-if (isset($_POST['create_folder'])) $action = 'create_folder';
+if (isset($_POST['create_item'])) $action = 'create_item';
 if (isset($_POST['delete_folder'])) $action = 'delete_folder';
+if (isset($_POST['delete_item'])) $action = 'delete_item';
 if (isset($_POST['update_folder'])) $action = 'update_folder';
+if (isset($_POST['update_note'])) $action = 'update_note';
+if (isset($_POST['update_item'])) $action = 'update_item';
 
 $pageParams = array(
 	'pageTitle' => parse_url(config('baseUrl'), PHP_URL_HOST) . ' - ' . ucfirst($action),
@@ -158,17 +171,30 @@ $pageParams = array(
 
 switch ($action) {
 
-	case 'folders':
+	case 'items':
 
-		$folders = execRequest('GET', 'folders');
-		usort($folders, function($a, $b) { return strnatcmp($a['title'], $b['title']); });
-		$pageParams['contentHtml'] = renderView('folders', array('folders' => $folders));
+		$type = $_GET['type'];
+		$parentId = isset($_GET['parent_id']) ? $_GET['parent_id'] : null;
+
+		if ($type == 'folder') {
+			$path = 'folders';
+			$pageParams['headerTitle'] = 'Folders';
+		} else if ($type == 'note') {
+			$path = 'folders/' . $_GET['parent_id'] . '/notes';
+			$folder = execRequest('GET', 'folders/' . $parentId);
+			$pageParams['headerTitle'] = 'Notes in ' . $folder['title'];
+		}
+
+		$items = execRequest('GET', $path);
+		usort($items, function($a, $b) { return strnatcmp($a['title'], $b['title']); });
+		$pageParams['contentHtml'] = renderView('items', array('items' => $items, 'type' => $type, 'parentId' => $parentId));
 		break;
 
-	case 'folder':
+	case 'item':
 
-		$folder = execRequest('GET', 'folders/' . $_GET['folder_id']);
-		$pageParams['contentHtml'] = renderView('folder', array('folder' => $folder));
+		$path = $_GET['type'] . 's';
+		$item = execRequest('GET', $path . '/' . $_GET['item_id']);
+		$pageParams['contentHtml'] = renderView('item', array('item' => $item, 'type' => $_GET['type']));
 		break;
 
 	case 'changes':
@@ -185,32 +211,40 @@ switch ($action) {
 		$pageParams['contentHtml'] = renderView('changes', array('changes' => $changes));
 		break;
 
-	case 'notes':
+	case 'create_item':
 
-		$notes = execRequest('GET', 'folders/' . $_GET['folder_id'] . '/notes');
-		$pageParams['contentHtml'] = renderView('notes', array('notes' => $notes));
+		$parentId = !empty($_POST['parent_id']) ? $_POST['parent_id'] : null;
+		$path = $_POST['type'] . 's';
+		$data = array(
+			'title' => $_POST['item_title']
+		);
+		if ($parentId) $data['parent_id'] = $parentId;
+		$item = execRequest('POST', $path, null, $data);
+
+		$query = array(
+			'action' => 'items',
+			'type' => $_POST['type'],
+			'parent_id' => $parentId,
+		);
+
+		redirect('/?' . http_build_query($query));
 		break;
 
-	case 'create_folder':
+	case 'delete_item':
 
-		$data = array('title' => $_POST['folder_title']);
-		$folder = execRequest('POST', 'folders', null, $data);
+		$path = $_POST['type'] . 's';
+		$item = execRequest('DELETE', $path . '/' . $_POST['item_id']);
 		redirect('/');
 		break;
 
-	case 'delete_folder':
+	case 'update_item':
 
-		$folder = execRequest('DELETE', 'folders/' . $_POST['folder_id']);
-		redirect('/');
-		break;
-
-	case 'update_folder':
-
-		$oldFolder = json_decode($_POST['original_folder'], true);
-		$newFolder = removePrefix($_POST, 'folder_');
-		$diff = differentProperties($oldFolder, $newFolder);
+		$oldItem = json_decode($_POST['original_item'], true);
+		$newItem = removePrefix($_POST, 'item_');
+		$diff = differentProperties($oldItem, $newItem);
+		$path = $_POST['type'] . 's';
 		if (count($diff)) {
-			execRequest('PATCH', 'folders/' . $_POST['folder_id'], null, $diff);
+			execRequest('PATCH', $path . '/' . $_POST['item_id'], null, $diff);
 		}
 		redirect('/');
 		break;
