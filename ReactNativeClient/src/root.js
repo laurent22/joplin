@@ -164,7 +164,7 @@ class AppComponent extends React.Component {
 	componentDidMount() {
 		let db = new Database();
 		//db.setDebugEnabled(Registry.debugMode());
-		db.setDebugEnabled(true);
+		db.setDebugEnabled(false);
 
 		BaseModel.dispatch = this.props.dispatch;
 		BaseModel.db_ = db;

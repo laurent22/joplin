@@ -17,7 +17,13 @@ class NoteScreenComponent extends React.Component {
 	}
 
 	componentWillMount() {
-		this.setState({ note: this.props.note });
+		if (!this.props.noteId) {
+			this.setState({ note: Note.new(this.props.folderId) });
+		} else {
+			Note.load(this.props.noteId).then((note) => {
+				this.setState({ note: note });
+			});
+		}
 	}
 
 	noteComponent_change = (propName, propValue) => {
@@ -37,14 +43,7 @@ class NoteScreenComponent extends React.Component {
 	}
 
 	saveNoteButton_press = () => {
-		Note.save(this.state.note).then((note) => {
-			this.props.dispatch({
-				type: 'NOTES_UPDATE_ONE',
-				note: note,
-			});
-		}).catch((error) => {
-			Log.warn('Cannot save note', error);
-		});
+		Note.save(this.state.note);
 	}
 
 	render() {
@@ -63,7 +62,8 @@ class NoteScreenComponent extends React.Component {
 const NoteScreen = connect(
 	(state) => {
 		return {
-			note: state.selectedNoteId ? Note.byId(state.notes, state.selectedNoteId) : Note.new(state.selectedFolderId),
+			noteId: state.selectedNoteId,
+			folderId: state.selectedFolderId,
 		};
 	}
 )(NoteScreenComponent)

@@ -330,8 +330,6 @@ class Database {
 						default: Database.formatValue(row.field_type, row.field_default),
 					});
 				}
-
-				Log.info(this.tableFields_);
 			});
 
 
