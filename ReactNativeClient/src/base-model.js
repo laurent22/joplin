@@ -90,6 +90,17 @@ class BaseModel {
 		return model;
 	}
 
+	static diffObjects(oldModel, newModel) {
+		let output = {};
+		for (let n in newModel) {
+			if (!newModel.hasOwnProperty(n)) continue;
+			if (!(n in oldModel) || newModel[n] !== oldModel[n]) {
+				output[n] = newModel[n];
+			}
+		}
+		return output;
+	}
+
 	static saveQuery(o, isNew = 'auto') {
 		if (isNew == 'auto') isNew = !o.id;
 

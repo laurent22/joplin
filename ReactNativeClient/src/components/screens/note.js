@@ -5,6 +5,7 @@ import { Log } from 'src/log.js'
 import { Note } from 'src/models/note.js'
 import { Registry } from 'src/registry.js'
 import { ScreenHeader } from 'src/components/screen-header.js';
+import { NoteFolderService } from 'src/services/note-folder-service.js';
 
 class NoteScreenComponent extends React.Component {
 	
@@ -15,6 +16,7 @@ class NoteScreenComponent extends React.Component {
 	constructor() {
 		super();
 		this.state = { note: Note.new() }
+		this.originalNote = null;
 	}
 
 	componentWillMount() {
@@ -22,6 +24,7 @@ class NoteScreenComponent extends React.Component {
 			this.setState({ note: Note.new(this.props.folderId) });
 		} else {
 			Note.load(this.props.noteId).then((note) => {
+				this.originalNote = Object.assign({}, note);
 				this.setState({ note: note });
 			});
 		}
@@ -44,11 +47,9 @@ class NoteScreenComponent extends React.Component {
 	}
 
 	saveNoteButton_press = () => {
-		let isNew = !this.state.note.id;
-		Note.save(this.state.note).then((note) => {
-			if (isNew) return Note.updateGeolocation(note.id);
-		}).then(() => {
-			Registry.synchronizer().start();
+		NoteFolderService.save('note', this.state.note, this.originalNote).then((note) => {
+			this.originalNote = Object.assign({}, note);
+			this.setState({ note: note });
 		});
 	}
 
