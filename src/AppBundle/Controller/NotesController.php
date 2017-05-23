@@ -39,7 +39,8 @@ class NotesController extends ApiController {
 		if ($request->isMethod('PUT')) {
 			$isNew = !$note;
 			if ($isNew) $note = new Note();
-			$note->fromPublicArray($this->putParameters());
+			$data = Note::filter($this->putParameters());
+			$note->fromPublicArray($data);
 			$note->id = Note::unhex($id);
 			$note->owner_id = $this->user()->id;
 			$note->setIsNew($isNew);
@@ -48,8 +49,8 @@ class NotesController extends ApiController {
 		}
 
 		if ($request->isMethod('PATCH')) {
-			$data = $this->patchParameters();
-			$note->fromPublicArray($this->patchParameters());
+			$data = Note::filter($this->patchParameters());
+			$note->fromPublicArray($data);
 			$note->id = Note::unhex($id);
 			$note->save();
 			return static::successResponse($note);

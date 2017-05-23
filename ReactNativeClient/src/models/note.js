@@ -45,7 +45,7 @@ class Note extends BaseModel {
 			geoData = data;
 			return Note.load(noteId);
 		}).then((note) => {
-			if (!note) return; // Race condition note - has been deleted in the meantime
+			if (!note) return; // Race condition - note has been deleted in the meantime
 			note.longitude = geoData.coords.longitude;
 			note.latitude = geoData.coords.latitude;
 			note.altitude = geoData.coords.altitude;

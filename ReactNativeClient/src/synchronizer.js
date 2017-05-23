@@ -136,10 +136,12 @@ class Synchronizer {
 					});
 				}
 
-				promiseChain(chain).then(() => {
+				return promiseChain(chain).then(() => {
 					Log.info('IDs to delete: ', processedChangeIds);
 					Change.deleteMultiple(processedChangeIds);
 				});
+			}).then(() => {
+				this.processState('idle');
 			});
 		}
 	}

@@ -3,6 +3,7 @@ import { View, Button, TextInput } from 'react-native';
 import { connect } from 'react-redux'
 import { Log } from 'src/log.js'
 import { Note } from 'src/models/note.js'
+import { Registry } from 'src/registry.js'
 import { ScreenHeader } from 'src/components/screen-header.js';
 
 class NoteScreenComponent extends React.Component {
@@ -45,8 +46,9 @@ class NoteScreenComponent extends React.Component {
 	saveNoteButton_press = () => {
 		let isNew = !this.state.note.id;
 		Note.save(this.state.note).then((note) => {
-			Log.info('NOTE', note);
-			if (isNew) Note.updateGeolocation(note.id);
+			if (isNew) return Note.updateGeolocation(note.id);
+		}).then(() => {
+			Registry.synchronizer().start();
 		});
 	}
 

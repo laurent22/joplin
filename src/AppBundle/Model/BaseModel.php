@@ -149,8 +149,8 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 				$this->revId = $v;
 			} else if (in_array($k, array('parent_id', 'client_id', 'item_id', 'user_id', 'owner_id'))) {
 				$this->{$k} = self::unhex($v);
-			} else if (in_array($k, $this->diffableFields)) {
-				$this->changedDiffableFields[$k] = $v;
+			} else if ($this->isDiffableField($k)) {
+				$this->setDiffableField($k, $v);
 			} else {
 				$this->{$k} = $v;
 			}
@@ -190,45 +190,16 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		return $this->useUuid ? self::hex($this->id) : (string)$this->id;
 	}
 
-	// private function cachePrefix() {
-	// 	return 'Model.' . $this->classItemTypeName() . '.' . $this->idString();
-	// }
-
-	// public function cacheSet($key, $value) {
-	// 	return self::cache()->set($this->cachePrefix() . '.' . $key, $value);
-	// }
-
-	// public function cacheGet($key) {
-	// 	return self::cache()->get($this->cachePrefix() . '.' . $key);
-	// }
-
-	// public function cacheDelete($key) {
-	// 	self::cache()->delete($this->cachePrefix() . '.' . $key);
-	// }
-
-	// public function cacheGetOrSet($key, $func, $expiryTime = null) {	
-	// 	return self::cache()->getOrSet($this->cachePrefix() . '.' . $key, $func, $expiryTime);
-	// }
-
-	// public function cacheClear() {
-	// 	$p = $this->cachePrefix();
-	// 	$this->cacheDelete('diffableField.title');
-	// 	$this->cacheDelete('diffableField.body');
-	// }
-
 	public function diffableField($fieldName) {
 		return Change::fullFieldText($this->id, $fieldName);
+	}
 
-		// $r = $this->cacheGet('diffableField.' . $fieldName);
-		// if ($r !== null) return $r . '*';
-
-		// $r = Change::fullFieldText($this->id, $fieldName);
-		// $this->cacheSet('diffableField.' . $fieldName, $r);
-		// return $r;
+	public function isDiffableField($fieldName) {
+		return in_array($fieldName, $this->diffableFields);
 	}
 
 	public function setDiffableField($fieldName, $fieldValue) {
-		//$this->cacheDelete('diffableField.' . $fieldName);
+		if ($this->diffableField($fieldName) == $fieldValue) return;
 		$this->changedDiffableFields[$fieldName] = $fieldValue;
 	}
 
@@ -263,6 +234,20 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 	public function owner() {
 		if (!isset($this->owner_id)) return null;
 		return User::find($this->owner_id);
+	}
+
+	static public function isValidField($f) {
+		return array_key_exists($f, static::$fields);
+	}
+
+	static public function filter($data, $keepId = false) {
+		$output = array();
+		foreach ($data as $k => $v) {
+			if (!static::isValidField($k)) continue;
+			$output[$k] = $v;
+		}
+		if (!$keepId) unset($output['id']);
+		return $output;
 	}
 
 	static public function validate($data, $rules = null) {
@@ -375,8 +360,6 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 			unset($changedFields['updated_time']);
 		}
 
-		//if ($this->parent_id
-
 		$output = parent::save($options);
 
 		$this->isNew = null;
@@ -392,8 +375,6 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 	}
 
 	public function delete() {
-		//$this->cacheClear();
-
 		$output = parent::delete();
 
 		if (count($this->isVersioned)) {
