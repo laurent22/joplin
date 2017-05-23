@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Log } from 'src/log.js'
 import { Folder } from 'src/models/folder.js'
 import { ScreenHeader } from 'src/components/screen-header.js';
+import { NoteFolderService } from 'src/services/note-folder-service.js';
 
 class FolderScreenComponent extends React.Component {
 	
@@ -13,11 +14,19 @@ class FolderScreenComponent extends React.Component {
 
 	constructor() {
 		super();
-		this.state = { folder: Folder.newFolder() }
+		this.state = { folder: Folder.new() };
+		this.originalFolder = null;
 	}
 
 	componentWillMount() {
-		this.setState({ folder: this.props.folder });
+		if (!this.props.folderId) {
+			this.setState({ folder: Folder.new() });
+		} else {
+			Folder.load(this.props.folderId).then((folder) => {
+				this.originalFolder = Object.assign({}, folder);
+				this.setState({ folder: folder });
+			});
+		}
 	}
 
 	folderComponent_change = (propName, propValue) => {
@@ -33,13 +42,9 @@ class FolderScreenComponent extends React.Component {
 	}
 
 	saveFolderButton_press = () => {
-		Folder.save(this.state.folder).then((folder) => {
-			this.props.dispatch({
-				type: 'FOLDERS_UPDATE_ONE',
-				folder: folder,
-			});
-		}).catch((error) => {
-			Log.warn('Cannot save folder', error);
+		NoteFolderService.save('folder', this.state.folder, this.originalFolder).then((folder) => {
+			this.originalFolder = Object.assign({}, folder);
+			this.setState({ folder: folder });
 		});
 	}
 
@@ -58,7 +63,8 @@ class FolderScreenComponent extends React.Component {
 const FolderScreen = connect(
 	(state) => {
 		return {
-			folder: state.selectedFolderId ? Folder.byId(state.folders, state.selectedFolderId) : Folder.newFolder(),
+			folderId: state.selectedFolderId,
+			//folder: state.selectedFolderId ? Folder.byId(state.folders, state.selectedFolderId) : Folder.newFolder(),
 		};
 	}
 )(FolderScreenComponent)
