@@ -18,12 +18,13 @@ import { NoteScreen } from 'src/components/screens/note.js'
 import { FolderScreen } from 'src/components/screens/folder.js'
 import { FoldersScreen } from 'src/components/screens/folders.js'
 import { LoginScreen } from 'src/components/screens/login.js'
+import { LoadingScreen } from 'src/components/screens/loading.js'
 import { Setting } from 'src/models/setting.js'
 import { Synchronizer } from 'src/synchronizer.js'
 import { MenuContext } from 'react-native-popup-menu';
-//import SideMenu from 'react-native-side-menu';
 import { SideMenu } from 'src/components/side-menu.js';
 import { SideMenuContent } from 'src/components/side-menu-content.js';
+import { NoteFolderService } from 'src/services/note-folder-service.js';
 
 let defaultState = {
 	notes: [],
@@ -45,19 +46,14 @@ const reducer = (state = defaultState, action) => {
 		case 'Navigation/NAVIGATE':
 		case 'Navigation/BACK':
 
-			// If the current screen is already the requested screen, don't do anything
 			const r = state.nav.routes;
-			if (r.length && r[r.length - 1].routeName == action.routeName) {
-				return state
-			}
+			const currentRoute = r.length ? r[r.length - 1] : null;
+			const currentRouteName = currentRoute ? currentRoute.routeName : '';
 
-			action.params = { listMode: 'view' };
+			Log.info('Current route name', currentRouteName);
+			Log.info('New route name', action.routeName);
 
-			const nextStateNav = AppNavigator.router.getStateForAction(action, state.nav);			
 			newState = Object.assign({}, state);
-			if (nextStateNav) {
-				newState.nav = nextStateNav;
-			}
 
 			if ('noteId' in action) {
 				newState.selectedNoteId = action.noteId;
@@ -65,6 +61,17 @@ const reducer = (state = defaultState, action) => {
 
 			if ('folderId' in action) {
 				newState.selectedFolderId = action.folderId;
+			}
+
+			if (currentRouteName == action.routeName) {
+				// If the current screen is already the requested screen, don't do anything
+			} else {
+				action.params = { listMode: 'view' };
+
+				const nextStateNav = AppNavigator.router.getStateForAction(action, currentRouteName != 'Loading' ? state.nav : null);
+				if (nextStateNav) {
+					newState.nav = nextStateNav;
+				}
 			}
 
 			break;
@@ -168,17 +175,20 @@ const reducer = (state = defaultState, action) => {
 
 	}
 
+	// Log.info('newState.selectedFolderId', newState.selectedFolderId);
+
 	return newState;
 }
 
 let store = createStore(reducer);
 
 const AppNavigator = StackNavigator({
-	Notes: {screen: NotesScreen},
-	Note: {screen: NoteScreen},
-	Folder: {screen: FolderScreen},
-	Folders: {screen: FoldersScreen},
-	Login: {screen: LoginScreen},
+	Notes: { screen: NotesScreen },
+	Note: { screen: NoteScreen },
+	Folder: { screen: FolderScreen },
+	Folders: { screen: FoldersScreen },
+	Login: { screen: LoginScreen },
+	Loading: { screen: LoadingScreen },
 });
 
 class AppComponent extends React.Component {
@@ -190,6 +200,7 @@ class AppComponent extends React.Component {
 
 		BaseModel.dispatch = this.props.dispatch;
 		BaseModel.db_ = db;
+		NoteFolderService.dispatch = this.props.dispatch;
 
 		db.open().then(() => {
 			Log.info('Database is ready.');
@@ -211,14 +222,27 @@ class AppComponent extends React.Component {
 
 			Log.info('Loading folders...');
 
-			Folder.all().then((folders) => {
+			return Folder.all().then((folders) => {
 				this.props.dispatch({
 					type: 'FOLDERS_UPDATE_ALL',
 					folders: folders,
 				});
+				return folders;
 			}).catch((error) => {
 				Log.warn('Cannot load folders', error);
 			});
+		}).then((folders) => {
+			let folder = folders[0];
+
+			if (!folder) throw new Error('No default folder is defined');
+
+			return NoteFolderService.openNoteList(folder.id);
+
+			// this.props.dispatch({
+			// 	type: 'Navigation/NAVIGATE',
+			// 	routeName: 'Notes',
+			// 	folderId: folder.id,
+			// });
 		}).then(() => {
 			let synchronizer = new Synchronizer(db, Registry.api());
 			Registry.setSynchronizer(synchronizer);
@@ -254,7 +278,7 @@ class AppComponent extends React.Component {
 
 defaultState.nav = AppNavigator.router.getStateForAction({
 	type: 'Navigation/NAVIGATE',
-	routeName: 'Folders',
+	routeName: 'Loading',
 	params: {listMode: 'view'}
 });
 

@@ -36,6 +36,23 @@ class NoteFolderService extends BaseService {
 		});
 	}
 
+	static openNoteList(folderId) {
+		return Note.previews(folderId).then((notes) => {
+			this.dispatch({
+				type: 'NOTES_UPDATE_ALL',
+				notes: notes,
+			});
+
+			this.dispatch({
+				type: 'Navigation/NAVIGATE',
+				routeName: 'Notes',
+				folderId: folderId,
+			});
+		}).catch((error) => {
+			Log.warn('Cannot load notes', error);
+		});
+	}
+
 }
 
 export { NoteFolderService };

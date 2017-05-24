@@ -1,6 +1,8 @@
 import { connect } from 'react-redux'
 import { Button } from 'react-native';
 import { Log } from 'src/log.js';
+import { Note } from 'src/models/note.js';
+import { NoteFolderService } from 'src/services/note-folder-service.js';
 
 const React = require('react');
 const {
@@ -41,14 +43,10 @@ class SideMenuContentComponent extends Component {
 
 	folder_press(folder) {
 		this.props.dispatch({
-			type: 'Navigation/NAVIGATE',
-			routeName: 'Notes',
-			folderId: folder.id,
-		});
-
-		this.props.dispatch({
 			type: 'SIDE_MENU_CLOSE',
 		});
+
+		NoteFolderService.openNoteList(folder.id);
 	}
 
 	render() {

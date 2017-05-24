@@ -6,28 +6,12 @@ import { ItemListComponent } from 'src/components/item-list.js';
 import { Note } from 'src/models/note.js';
 import { Folder } from 'src/models/folder.js';
 import { _ } from 'src/locale.js';
+import { NoteFolderService } from 'src/services/note-folder-service.js';
 
 class FolderListComponent extends ItemListComponent {
 
 	listView_itemPress = (folderId) => {
-		Folder.load(folderId).then((folder) => {
-			Log.info('Current folder', folder);
-
-			Note.previews(folderId).then((notes) => {
-				this.props.dispatch({
-					type: 'NOTES_UPDATE_ALL',
-					notes: notes,
-				});
-
-				this.props.dispatch({
-					type: 'Navigation/NAVIGATE',
-					routeName: 'Notes',
-					folderId: folderId,
-				});
-			}).catch((error) => {
-				Log.warn('Cannot load notes', error);
-			});
-		});
+		NoteFolderService.openNoteList(folderId);
 	}
 
 }

@@ -25,7 +25,7 @@ class ScreenHeaderComponent extends Component {
 		// Note: this is hardcoded for now because navigation.state doesn't tell whether
 		// it's possible to go back or not. Maybe it's possible to get this information
 		// from somewhere else.
-		return this.props.navState.routeName != 'Folders';
+		return this.props.navState.routeName != 'Notes';
 	}
 
 	sideMenuButton_press = () => {
