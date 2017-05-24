@@ -26,8 +26,14 @@ class Note extends BaseModel {
 		return output;
 	}
 
+	static newTodo(parentId = '') {
+		let output = this.new(parentId);
+		output.is_todo = true;
+		return output;
+	}
+
 	static previews(parentId) {
-		return this.db().selectAll('SELECT id, title, body, parent_id, updated_time FROM notes WHERE parent_id = ?', [parentId]).then((r) => {
+		return this.db().selectAll('SELECT id, title, body, is_todo, todo_completed, parent_id, updated_time FROM notes WHERE parent_id = ?', [parentId]).then((r) => {
 			let output = [];
 			for (let i = 0; i < r.rows.length; i++) {
 				output.push(r.rows.item(i));

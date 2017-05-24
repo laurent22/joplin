@@ -30,6 +30,7 @@ let defaultState = {
 	notes: [],
 	folders: [],
 	selectedNoteId: null,
+	selectedItemType: 'note',
 	selectedFolderId: null,
 	user: { email: 'laurent@cozic.net', session: null },
 	showSideMenu: false,
@@ -62,6 +63,10 @@ const reducer = (state = defaultState, action) => {
 				newState.selectedFolderId = action.folderId;
 			}
 
+			if ('itemType' in action) {
+				newState.selectedItemType = action.itemType;
+			}
+
 			if (currentRouteName == action.routeName) {
 				// If the current screen is already the requested screen, don't do anything
 			} else {
@@ -83,6 +88,8 @@ const reducer = (state = defaultState, action) => {
 		// Insert the note into the note list if it's new, or
 		// update it within the note array if it already exists.
 		case 'NOTES_UPDATE_ONE':
+
+			Log.info('NOITTEOJTNEONTOE', action.note);
 
 			let newNotes = state.notes.splice(0);
 			var found = false;

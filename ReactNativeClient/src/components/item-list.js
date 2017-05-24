@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { ListView, Text, TouchableHighlight, Switch, View } from 'react-native';
 import { Log } from 'src/log.js';
-import Checkbox from 'react-native-checkbox';
 import { _ } from 'src/locale.js';
+import { Checkbox } from 'src/components/checkbox.js';
+import { NoteFolderService } from 'src/services/note-folder-service.js';
+import { Note } from 'src/models/note.js';
 
 class ItemListComponent extends Component {
 
@@ -31,6 +33,14 @@ class ItemListComponent extends Component {
 		});
 	}
 
+	todoCheckbox_change(itemId, checked) {
+		Note.load(itemId).then((oldNote) => {
+			let newNote = Object.assign({}, oldNote);
+			newNote.todo_completed = checked;
+			return NoteFolderService.save('note', newNote, oldNote);
+		});
+	}
+
 	listView_itemPress = (itemId) => {}
 
 	render() {
@@ -41,10 +51,11 @@ class ItemListComponent extends Component {
 			let onLongPress = () => {
 				this.listView_itemLongPress(item.id);
 			}
+
 			return (
 				<TouchableHighlight onPress={onPress} onLongPress={onLongPress}>
-					<View>
-						<Text>{item.title} [{item.id}]</Text>
+					<View style={{flexDirection: 'row'}}>
+						{ !!Number(item.is_todo) && <Checkbox checked={!!Number(item.todo_completed)} onChange={(checked) => { this.todoCheckbox_change(item.id, checked) }}/> }<Text>{item.title} [{item.id}]</Text>
 					</View>
 				</TouchableHighlight>
 			);

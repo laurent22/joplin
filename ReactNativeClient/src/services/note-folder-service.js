@@ -36,6 +36,17 @@ class NoteFolderService extends BaseService {
 		});
 	}
 
+	// static setField(type, itemId, fieldName, fieldValue, oldValue = undefined) {
+	// 	// TODO: not really consistent as the promise will return 'null' while
+	// 	// this.save will return the note or folder. Currently not used, and maybe not needed.
+	// 	if (oldValue !== undefined && fieldValue === oldValue) return Promise.resolve();
+
+	// 	let item = { id: itemId };
+	// 	item[fieldName] = fieldValue;
+	// 	let oldItem = { id: itemId };
+	// 	return this.save(type, item, oldItem);
+	// }
+
 	static openNoteList(folderId) {
 		return Note.previews(folderId).then((notes) => {
 			this.dispatch({

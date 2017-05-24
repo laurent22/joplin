@@ -15,12 +15,23 @@ const styles = StyleSheet.create({
 
 class ActionButtonComponent extends React.Component {
 
+	newTodo_press() {
+		this.props.dispatch({
+			type: 'Navigation/NAVIGATE',
+			routeName: 'Note',
+			noteId: null,
+			folderId: this.props.parentFolderId,
+			itemType: 'todo',
+		});
+	}
+
 	newNote_press() {
 		this.props.dispatch({
 			type: 'Navigation/NAVIGATE',
 			routeName: 'Note',
 			noteId: null,
 			folderId: this.props.parentFolderId,
+			itemType: 'note',
 		});
 	}
 
@@ -35,12 +46,19 @@ class ActionButtonComponent extends React.Component {
 	render() {
 		return (
 			<ReactNativeActionButton buttonColor="rgba(231,76,60,1)">
+
+				<ReactNativeActionButton.Item buttonColor='#9b59b6' title="New todo" onPress={() => { this.newTodo_press() }}>
+					<Icon name="md-checkbox-outline" style={styles.actionButtonIcon} />
+				</ReactNativeActionButton.Item>
+
 				<ReactNativeActionButton.Item buttonColor='#9b59b6' title="New note" onPress={() => { this.newNote_press() }}>
 					<Icon name="md-document" style={styles.actionButtonIcon} />
 				</ReactNativeActionButton.Item>
+
 				<ReactNativeActionButton.Item buttonColor='#3498db' title="New folder" onPress={() => { this.newFolder_press() }}>
 					<Icon name="md-folder" style={styles.actionButtonIcon} />
 				</ReactNativeActionButton.Item>
+
 			</ReactNativeActionButton>
 		);
 	}
