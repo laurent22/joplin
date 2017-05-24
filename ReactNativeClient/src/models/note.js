@@ -32,14 +32,22 @@ class Note extends BaseModel {
 		return output;
 	}
 
+	static previewFieldsSql() {
+		return '`id`, `title`, `body`, `is_todo`, `todo_completed`, `parent_id`, `updated_time`'
+	}
+
 	static previews(parentId) {
-		return this.db().selectAll('SELECT id, title, body, is_todo, todo_completed, parent_id, updated_time FROM notes WHERE parent_id = ?', [parentId]).then((r) => {
+		return this.db().selectAll('SELECT ' + this.previewFieldsSql() + ' FROM notes WHERE parent_id = ?', [parentId]).then((r) => {
 			let output = [];
 			for (let i = 0; i < r.rows.length; i++) {
 				output.push(r.rows.item(i));
 			}
 			return output;
 		});
+	}
+
+	static preview(noteId) {
+		return this.db().selectOne('SELECT ' + this.previewFieldsSql() + ' FROM notes WHERE id = ?', [noteId]);
 	}
 
 	static updateGeolocation(noteId) {
@@ -62,7 +70,11 @@ class Note extends BaseModel {
 	}
 
 	static save(o, options = null) {
-		return super.save(o, options).then((note) => {
+		return super.save(o, options).then((result) => {
+			// 'result' could be a partial one at this point (if, for example, only one property of it was saved)
+			// so call this.preview() so that the right fields are populated.
+			return this.preview(result.id);
+		}).then((note) => {
 			this.dispatch({
 				type: 'NOTES_UPDATE_ONE',
 				note: note,

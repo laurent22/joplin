@@ -170,6 +170,7 @@ class BaseModel {
 				} else {
 					for (let n in o) {
 						if (!o.hasOwnProperty(n)) continue;
+						if (n == 'id') continue;
 
 						let change = Change.newChange();
 						change.type = Change.TYPE_UPDATE;

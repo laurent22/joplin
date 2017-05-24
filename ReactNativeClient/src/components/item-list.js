@@ -33,12 +33,14 @@ class ItemListComponent extends Component {
 		});
 	}
 
-	todoCheckbox_change(itemId, checked) {
-		Note.load(itemId).then((oldNote) => {
-			let newNote = Object.assign({}, oldNote);
-			newNote.todo_completed = checked;
-			return NoteFolderService.save('note', newNote, oldNote);
-		});
+	todoCheckbox_change(itemId, checked) {	
+		NoteFolderService.setField('note', itemId, 'todo_completed', checked);
+		
+		// Note.load(itemId).then((oldNote) => {
+		// 	let newNote = Object.assign({}, oldNote);
+		// 	newNote.todo_completed = checked;
+		// 	return NoteFolderService.save('note', newNote, oldNote);
+		// });
 	}
 
 	listView_itemPress = (itemId) => {}
