@@ -159,6 +159,11 @@ const AppNavigator = StackNavigator({
 	Login: {screen: LoginScreen},
 });
 
+const SideMenu = require('react-native-side-menu');
+
+import Menu from 'src/menu.js';
+
+
 class AppComponent extends React.Component {
 
 	componentDidMount() {
@@ -207,13 +212,17 @@ class AppComponent extends React.Component {
 	}
 
 	render() {
+		const menu = <Menu/>;
+
 		return (
-			<MenuContext style={{ flex: 1 }}>
-				<AppNavigator navigation={addNavigationHelpers({
-					dispatch: this.props.dispatch,
-					state: this.props.nav,
-				})} />
-			</MenuContext>
+			<SideMenu menu={menu}>
+				<MenuContext style={{ flex: 1 }}>
+					<AppNavigator navigation={addNavigationHelpers({
+						dispatch: this.props.dispatch,
+						state: this.props.nav,
+					})} />
+				</MenuContext>
+			</SideMenu>
 		);
 	}
 }

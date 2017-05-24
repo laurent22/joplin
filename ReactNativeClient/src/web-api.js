@@ -1,6 +1,21 @@
 import { Log } from 'src/log.js';
 import { stringify } from 'query-string';
 
+class WebApiError extends Error {
+
+	constructor(msg) {
+		let type = 'WebApiError';
+		// Create a regular JS Error object from a web api error response { error: "something", type: "NotFoundException" }
+		if (typeof msg === 'object' && msg !== null) {
+			if (msg.type) type = msg.type;
+			msg = msg.error ? msg.error : 'error';
+		}
+		super(msg);
+		this.type = type;
+	}
+
+}
+
 class WebApi {
 
 	constructor(baseUrl) {
@@ -73,7 +88,7 @@ class WebApi {
 				let responseClone = response.clone();
 				return response.json().then(function(data) {
 					if (data && data.error) {
-						reject(new Error(data.error));
+						reject(new WebApiError(data));
 					} else {
 						resolve(data);
 					}

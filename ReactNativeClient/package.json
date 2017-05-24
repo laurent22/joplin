@@ -12,6 +12,7 @@
     "react-native-action-button": "^2.6.9",
     "react-native-checkbox": "^1.1.0",
     "react-native-popup-menu": "^0.7.4",
+    "react-native-side-menu": "^0.20.1",
     "react-native-vector-icons": "^2.0.3",
     "react-navigation": "^1.0.0-beta.9",
     "uuid": "^3.0.1"

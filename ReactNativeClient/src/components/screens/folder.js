@@ -64,7 +64,6 @@ const FolderScreen = connect(
 	(state) => {
 		return {
 			folderId: state.selectedFolderId,
-			//folder: state.selectedFolderId ? Folder.byId(state.folders, state.selectedFolderId) : Folder.newFolder(),
 		};
 	}
 )(FolderScreenComponent)

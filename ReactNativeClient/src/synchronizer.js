@@ -131,12 +131,20 @@ class Synchronizer {
 						return p.then(() => {
 							processedChangeIds = processedChangeIds.concat(c.ids);
 						}).catch((error) => {
-							Log.warn('Failed applying changes', c.ids);
+							Log.warn('Failed applying changes', c.ids, error.message, error.type);
+							// This is fine - trying to apply changes to an object that has been deleted
+							if (error.type == 'NotFoundException') {
+								processedChangeIds = processedChangeIds.concat(c.ids);
+							} else {
+								throw error;
+							}
 						});
 					});
 				}
 
-				return promiseChain(chain).then(() => {
+				return promiseChain(chain).catch((error) => {
+					Log.warn('Synchronization was interrupted due to an error:', error);
+				}).then(() => {
 					Log.info('IDs to delete: ', processedChangeIds);
 					Change.deleteMultiple(processedChangeIds);
 				});

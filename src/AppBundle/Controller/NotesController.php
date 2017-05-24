@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\ApiController;
 use AppBundle\Model\Note;
+use AppBundle\Exception\NotFoundException;
 
 class NotesController extends ApiController {
 
@@ -30,7 +31,7 @@ class NotesController extends ApiController {
 	 */
 	public function oneAction($id, Request $request) {
 		$note = Note::find(Note::unhex($id));
-		if (!$note && !$request->isMethod('PUT')) return static::errorResponse('Not found', 0, 404);	
+		if (!$note && !$request->isMethod('PUT')) throw new NotFoundException();	
 
 		if ($request->isMethod('GET')) {
 			return static::successResponse($note);
