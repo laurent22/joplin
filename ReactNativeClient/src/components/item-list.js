@@ -9,7 +9,6 @@ class ItemListComponent extends Component {
 
 	constructor() {
 		super();
-		this.previousListMode = 'view';
 		const ds = new ListView.DataSource({
 			rowHasChanged: (r1, r2) => { return r1 !== r2; }
 		});
@@ -26,38 +25,13 @@ class ItemListComponent extends Component {
 	}
 
 	componentWillReceiveProps(newProps) {
-		// When the items have changed, we just pass this to the data source. However, 
-		// when the list mode change, we need to clone the items to make sure the whole
-		// list is updated (so that the checkbox can be added or removed).
-
-		let items = newProps.items;
-
-		if (newProps.listMode != this.previousListMode) {
-			items = newProps.items.slice();
-			for (let i = 0; i < items.length; i++) {
-				items[i] = Object.assign({}, items[i]);
-			}
-			this.previousListMode = newProps.listMode;
-		}
-
 		// https://stackoverflow.com/questions/38186114/react-native-redux-and-listview
 		this.setState({
-			dataSource: this.state.dataSource.cloneWithRows(items),
-		});
-	}
-
-	setListMode = (mode) => {
-		this.props.dispatch({
-			type: 'SET_LIST_MODE',
-			listMode: mode,
+			dataSource: this.state.dataSource.cloneWithRows(newProps.items),
 		});
 	}
 
 	listView_itemPress = (itemId) => {}
-
-	listView_itemLongPress = (itemId) => {
-		this.setListMode('edit');
-	}
 
 	render() {
 		let renderRow = (item) => {
@@ -67,12 +41,10 @@ class ItemListComponent extends Component {
 			let onLongPress = () => {
 				this.listView_itemLongPress(item.id);
 			}
-			let isEditable = this.props.listMode == 'edit';
 			return (
 				<TouchableHighlight onPress={onPress} onLongPress={onLongPress}>
 					<View>
-						{ isEditable  && <Checkbox label={item.title} ></Checkbox> }
-						{ !isEditable && <Text>{item.title} [{item.id}]</Text> }
+						<Text>{item.title} [{item.id}]</Text>
 					</View>
 				</TouchableHighlight>
 			);

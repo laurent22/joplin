@@ -20,7 +20,6 @@ const FolderList = connect(
 	(state) => {
 		return {
 			items: state.folders,
-			listMode: state.listMode,
 		};
 	}
 )(FolderListComponent)

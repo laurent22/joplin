@@ -31,7 +31,6 @@ let defaultState = {
 	folders: [],
 	selectedNoteId: null,
 	selectedFolderId: null,
-	listMode: 'view',
 	user: { email: 'laurent@cozic.net', session: null },
 	showSideMenu: false,
 };
@@ -66,8 +65,6 @@ const reducer = (state = defaultState, action) => {
 			if (currentRouteName == action.routeName) {
 				// If the current screen is already the requested screen, don't do anything
 			} else {
-				action.params = { listMode: 'view' };
-
 				const nextStateNav = AppNavigator.router.getStateForAction(action, currentRouteName != 'Loading' ? state.nav : null);
 				if (nextStateNav) {
 					newState.nav = nextStateNav;
@@ -146,13 +143,6 @@ const reducer = (state = defaultState, action) => {
 
 			newState = Object.assign({}, state);
 			newState.user = action.user;
-			break;
-
-		case 'SET_LIST_MODE':
-
-			newState = Object.assign({}, state);
-			newState.listMode = action.listMode;
-			newState.nav = Object.assign({}, state.nav);
 			break;
 
 		case 'SIDE_MENU_TOGGLE':
@@ -279,7 +269,7 @@ class AppComponent extends React.Component {
 defaultState.nav = AppNavigator.router.getStateForAction({
 	type: 'Navigation/NAVIGATE',
 	routeName: 'Loading',
-	params: {listMode: 'view'}
+	params: {}
 });
 
 const mapStateToProps = (state) => {
