@@ -21,6 +21,9 @@ import { LoginScreen } from 'src/components/screens/login.js'
 import { Setting } from 'src/models/setting.js'
 import { Synchronizer } from 'src/synchronizer.js'
 import { MenuContext } from 'react-native-popup-menu';
+//import SideMenu from 'react-native-side-menu';
+import { SideMenu } from 'src/components/side-menu.js';
+import { SideMenuContent } from 'src/components/side-menu-content.js';
 
 let defaultState = {
 	notes: [],
@@ -29,6 +32,7 @@ let defaultState = {
 	selectedFolderId: null,
 	listMode: 'view',
 	user: { email: 'laurent@cozic.net', session: null },
+	showSideMenu: false,
 };
 
 const reducer = (state = defaultState, action) => {
@@ -144,6 +148,24 @@ const reducer = (state = defaultState, action) => {
 			newState.nav = Object.assign({}, state.nav);
 			break;
 
+		case 'SIDE_MENU_TOGGLE':
+
+			newState = Object.assign({}, state);
+			newState.showSideMenu = !newState.showSideMenu
+			break;
+
+		case 'SIDE_MENU_OPEN':
+
+			newState = Object.assign({}, state);
+			newState.showSideMenu = true
+			break;
+
+		case 'SIDE_MENU_CLOSE':
+
+			newState = Object.assign({}, state);
+			newState.showSideMenu = false
+			break;
+
 	}
 
 	return newState;
@@ -158,11 +180,6 @@ const AppNavigator = StackNavigator({
 	Folders: {screen: FoldersScreen},
 	Login: {screen: LoginScreen},
 });
-
-const SideMenu = require('react-native-side-menu');
-
-import Menu from 'src/menu.js';
-
 
 class AppComponent extends React.Component {
 
@@ -211,11 +228,19 @@ class AppComponent extends React.Component {
 		});
 	}
 
+	sideMenu_change = (isOpen) => {
+		// Make sure showSideMenu property of state is updated
+		// when the menu is open/closed.
+		this.props.dispatch({
+			type: isOpen ? 'SIDE_MENU_OPEN' : 'SIDE_MENU_CLOSE',
+		});
+	}
+
 	render() {
-		const menu = <Menu/>;
+		const sideMenuContent = <SideMenuContent/>;
 
 		return (
-			<SideMenu menu={menu}>
+			<SideMenu menu={sideMenuContent} onChange={this.sideMenu_change}>
 				<MenuContext style={{ flex: 1 }}>
 					<AppNavigator navigation={addNavigationHelpers({
 						dispatch: this.props.dispatch,

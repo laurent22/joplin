@@ -28,6 +28,10 @@ class ScreenHeaderComponent extends Component {
 		return this.props.navState.routeName != 'Folders';
 	}
 
+	sideMenuButton_press = () => {
+		this.props.dispatch({ type: 'SIDE_MENU_TOGGLE' });
+	}
+
 	backButton_press = () => {
 		this.props.dispatch({ type: 'Navigation/BACK' });
 	}
@@ -90,6 +94,7 @@ class ScreenHeaderComponent extends Component {
 
 		return (
 			<View style={{ flexDirection: 'row', padding: 10, backgroundColor: '#ffffff', alignItems: 'center' }} >
+				<Button title="☰" onPress={this.sideMenuButton_press} />
 				<Button disabled={!this.showBackButton()} title="<" onPress={this.backButton_press}></Button>
 				<Text style={{ flex:1, marginLeft: 10 }} >{title}</Text>
 			    <Menu onSelect={this.menu_select}>
