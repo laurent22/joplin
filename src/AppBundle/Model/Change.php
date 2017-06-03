@@ -47,12 +47,7 @@ class Change extends BaseModel {
 			}
 
 			$itemIdToChange[$change->item_id] = $change;
-
-			// echo BaseModel::hex($change->item_id) . ' ' . $change->id . ' ' . Change::enumName('type', $change->type) . "\n";
 		}
-
-		// die();
-
 
 		$output = array();
 		foreach ($itemIdToChange as $itemId => $change) {

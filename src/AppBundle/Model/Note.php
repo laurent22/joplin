@@ -30,7 +30,7 @@ class Note extends BaseItem {
 		'source_url' => null,
 	);
 
-	static public function filter($data) {
+	static public function filter($data, $keepId = false) {
 		$output = parent::filter($data);
 		if (array_key_exists('longitude', $output)) $output['longitude'] = (string)number_format($output['longitude'], 8);
 		if (array_key_exists('latitude', $output)) $output['latitude'] = (string)number_format($output['latitude'], 8);

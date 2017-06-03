@@ -48,6 +48,66 @@ class ChangeTest extends BaseTestCase {
 		$this->assertEquals($r, $text2);
 	}
 
+	public function testConflict() {
+		// Scenario where two different clients change the same note at the same time.
+		//
+		// Client 1: 'abcd efgh ijkl' => 'XXXX'
+		// Client 2: 'abcd efgh ijkl' => 'YYYY'
+		// Expected: 'cd CLIENT1 efgh ijkl FROMCLIENT2'
+
+		$text1 = 'abcd efgh ijkl';
+
+		$itemId = $this->createModelId('note');
+
+		$change = new Change();
+		$change->user_id = $this->user()->id;
+		$change->client_id = $this->clientId(1);
+		$change->item_type = BaseItem::enumId('type', 'note');
+		$change->item_field = 'body';
+		$change->type = Change::enumId('type', 'create');
+		$change->item_id = $itemId;
+		$change->createDelta($text1);
+		$change->save();
+
+		$changeId1 = $change->id;
+		
+		$text2 = 'XXXX';
+
+		$change = new Change();
+		$change->user_id = $this->user()->id;
+		$change->client_id = $this->clientId(2);
+		$change->item_type = BaseItem::enumId('type', 'note');
+		$change->item_field = 'body';
+		$change->type = Change::enumId('type', 'update');
+		$change->item_id = $itemId;
+		$change->previous_id = $changeId1;
+		$change->createDelta($text2);
+		$change->save();
+
+		$changeId2 = $change->id;
+
+		$text3 = 'YYYY';
+
+		$change = new Change();
+		$change->user_id = $this->user()->id;
+		$change->client_id = $this->clientId(1);
+		$change->item_type = BaseItem::enumId('type', 'note');
+		$change->item_field = 'body';
+		$change->type = Change::enumId('type', 'update');
+		$change->item_id = $itemId;
+		$change->previous_id = $changeId1;
+		$change->createDelta($text3);
+		$change->save();
+
+		$changeId3 = $change->id;
+
+		$r = Change::fullFieldText($itemId, 'body');
+
+		var_dump($r);die();
+
+		$this->assertEquals($r, 'cd CLIENT1 efgh ijkl FROMCLIENT2');		
+	}
+
 	public function testSame() {
 		$note = new Note();
 		$note->fromPublicArray(array('body' => 'test'));
