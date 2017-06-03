@@ -95,8 +95,8 @@ class SynchronizerControllerTest extends BaseControllerTestCase  {
 		$this->loadSession(1, 2);	
 		$syncResult2 = $this->request('GET', '/synchronizer', array('rev_id' => $client2_revId));
 
-		// In case of conflict, the string should be set to the last PATCH operation
-		$this->assertEquals('YYYYYYYYYY', $syncResult1['items'][0]['item']['title']);
+		// In case of conflict, the last non-conflicted version is returned
+		$this->assertEquals('XXXXXXXXXX', $syncResult1['items'][0]['item']['title']);
 
 		// TODO: handle conflict
 	}

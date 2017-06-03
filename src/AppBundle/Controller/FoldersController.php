@@ -42,6 +42,9 @@ class FoldersController extends ApiController {
 			return static::successResponse($folder);
 		}
 
+		$query = $request->query->all();
+		if ($folder) $folder->revId = $query['rev_id'];
+
 		if ($request->isMethod('PUT')) {
 			$isNew = !$folder;
 			if ($isNew) $folder = new Folder();

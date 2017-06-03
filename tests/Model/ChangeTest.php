@@ -196,7 +196,7 @@ class ChangeTest extends BaseTestCase {
 
 		$r = Change::changesDoneAfterId($this->userId(), $this->clientId(1), 0);
 
-		$this->assertCount(2, $r);
+		$this->assertCount(3, $r);
 		$this->assertFalse($r['has_more']);
 		$this->assertCount(0, $r['items']); // Since client 1 is the one that made the changes, no sync data needs to be returned
 
