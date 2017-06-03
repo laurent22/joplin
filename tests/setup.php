@@ -1,6 +1,8 @@
 <?php
 
+
 require_once dirname(__FILE__) . '/BaseTestCase.php';
+require_once dirname(__FILE__) . '/BaseControllerTestCase.php';
 
 $dbConfig = array(
 	'dbName' => 'notes_test',

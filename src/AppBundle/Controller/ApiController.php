@@ -66,11 +66,10 @@ abstract class ApiController extends Controller {
 
 		$s = $this->session();
 
-		// TODO: find less hacky way to get request path and method
-		$requestPath = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+		$request = $this->container->get('request_stack')->getCurrentRequest();
+		$requestPath = $request->getPathInfo();
 		$requestPath = ltrim($requestPath, '/');
-		$requestPath = rtrim($requestPath, '?');
-		$method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
+		$method = $request->getMethod();
 
 		$sessionRequired = true;
 		if ($method == 'POST' && $requestPath == 'sessions') $sessionRequired = false;

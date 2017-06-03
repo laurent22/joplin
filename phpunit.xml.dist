@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.1/phpunit.xsd"
+		 backupGlobals="false"
+		 colors="true"
+		 bootstrap="vendor/autoload.php"
+		 failOnRisky="true"
+		 failOnWarning="true"
+>
+	<php>
+		<ini name="error_reporting" value="-1" />
+		<ini name="intl.default_locale" value="en" />
+		<ini name="intl.error_level" value="0" />
+		<ini name="memory_limit" value="-1" />
+		<env name="DUMP_LIGHT_ARRAY" value="" />
+		<env name="DUMP_STRING_LENGTH" value="" />
+		<env name="LDAP_HOST" value="127.0.0.1" />
+		<env name="LDAP_PORT" value="3389" />
+		<env name="REDIS_HOST" value="localhost" />
+		<env name="MEMCACHED_HOST" value="localhost" />
+		<server name="KERNEL_DIR" value="app/" />
+	</php>
+
+	<testsuites>
+		<testsuite name="Symfony Test Suite">
+			<directory>./src/Symfony/Bridge/*/Tests/</directory>
+			<directory>./src/Symfony/Component/*/Tests/</directory>
+			<directory>./src/Symfony/Component/*/*/Tests/</directory>
+			<directory>./src/Symfony/Bundle/*/Tests/</directory>
+		</testsuite>
+	</testsuites>
+
+	<groups>
+		<exclude>
+			<group>benchmark</group>
+			<group>intl-data</group>
+		</exclude>
+	</groups>
+
+	<filter>
+		<whitelist>
+			<directory>./src/Symfony/</directory>
+			<exclude>
+				<directory>./src/Symfony/Bridge/*/Tests</directory>
+				<directory>./src/Symfony/Component/*/Tests</directory>
+				<directory>./src/Symfony/Component/*/*/Tests</directory>
+				<directory>./src/Symfony/Bundle/*/Tests</directory>
+				<directory>./src/Symfony/Bundle/*/Resources</directory>
+				<directory>./src/Symfony/Component/*/Resources</directory>
+				<directory>./src/Symfony/Component/*/*/Resources</directory>
+				<directory>./src/Symfony/Bridge/*/vendor</directory>
+				<directory>./src/Symfony/Bundle/*/vendor</directory>
+				<directory>./src/Symfony/Component/*/vendor</directory>
+				<directory>./src/Symfony/Component/*/*/vendor</directory>
+			</exclude>
+		</whitelist>
+	</filter>
+
+	<listeners>
+		<listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener">
+			<arguments>
+				<array>
+					<element key="time-sensitive">
+						<array>
+							<element><string>Cache\IntegrationTests</string></element>
+							<element><string>Doctrine\Common\Cache</string></element>
+							<element><string>Symfony\Component\Cache</string></element>
+							<element><string>Symfony\Component\Cache\Traits</string></element>
+							<element><string>Symfony\Component\Console</string></element>
+							<element><string>Symfony\Component\HttpFoundation</string></element>
+						</array>
+					</element>
+				</array>
+			</arguments>
+		</listener>
+	</listeners>
+</phpunit>
