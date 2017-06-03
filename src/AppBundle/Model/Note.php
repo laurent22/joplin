@@ -4,9 +4,10 @@ namespace AppBundle\Model;
 
 class Note extends BaseItem {
 
-	protected $diffableFields = array('title', 'body');
 	protected $isVersioned = true;
 
+	static protected $diffableFields = array('title', 'body');
+	
 	static protected $fields = array(
 		'id' => null,
 		'completed' => null,

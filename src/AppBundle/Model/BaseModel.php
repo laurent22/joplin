@@ -12,6 +12,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 
 	public $timestamps = false;
 	public $useUuid = false;
+	public $revId = 0;
 
 	// Diffable fields are those for which a diff is recorded on each change
 	// (such as the title or body of a note). The value of these fields is
@@ -22,11 +23,10 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 	// These special fields need to be get and set via diffableField() and 
 	// setDiffableField()
 	protected $changedDiffableFields = array();
-	protected $diffableFields = array();
+	static protected $diffableFields = array();
 
 	protected $isVersioned = false;
 	private $isNew = null;
-	private $revId = 0;
 
 	static private $clientId = null;
 	static protected $enums = array();
@@ -145,11 +145,9 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 	// in the array must not be reset.
 	public function fromPublicArray($array) {
 		foreach ($array as $k => $v) {
-			if ($k == 'rev_id') {
-				$this->revId = $v;
-			} else if (in_array($k, array('parent_id', 'client_id', 'item_id', 'user_id', 'owner_id'))) {
+			if (in_array($k, array('parent_id', 'client_id', 'item_id', 'user_id', 'owner_id'))) {
 				$this->{$k} = self::unhex($v);
-			} else if ($this->isDiffableField($k)) {
+			} else if (static::isDiffableField($k)) {
 				$this->setDiffableField($k, $v);
 			} else {
 				$this->{$k} = $v;
@@ -179,7 +177,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 			$output['item_type'] = BaseItem::enumName('type', $output['item_type'], true);
 		}
 
-		foreach ($this->diffableFields as $field) {
+		foreach (static::$diffableFields as $field) {
 			$output[$field] = $this->diffableField($field);
 		}
 
@@ -194,8 +192,8 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		return Change::fullFieldText($this->id, $fieldName);
 	}
 
-	public function isDiffableField($fieldName) {
-		return in_array($fieldName, $this->diffableFields);
+	static public function isDiffableField($fieldName) {
+		return in_array($fieldName, static::$diffableFields);
 	}
 
 	public function setDiffableField($fieldName, $fieldValue) {
@@ -237,7 +235,9 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 	}
 
 	static public function isValidField($f) {
-		return array_key_exists($f, static::$fields);
+		if (array_key_exists($f, static::$fields)) return true;
+		if (static::isDiffableField($f)) return true;
+		return false;
 	}
 
 	static public function filter($data, $keepId = false) {
@@ -395,11 +395,12 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 			//
 			// When recording an "update" event, all the modified fields, diffable or not, are recorded.
 			foreach ($changedFields as $field => $value) {
-				if ($type == 'create' && !in_array($field, $this->diffableFields)) continue;
+				if ($type == 'create' && !in_array($field, static::$diffableFields)) continue;
 
 				$change = $this->newChange($type);
 				$change->item_field = $field;
-				if (in_array($field, $this->diffableFields)) $change->createDelta($changedFields[$field]);
+				$change->previous_id = $this->revId;
+				if (in_array($field, static::$diffableFields)) $change->createDelta($changedFields[$field]);
 				$change->save();
 			}
 		} else {

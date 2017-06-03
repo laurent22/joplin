@@ -4,8 +4,9 @@ namespace AppBundle\Model;
 
 class Folder extends BaseItem {
 
-	protected $diffableFields = array('title');
 	protected $isVersioned = true;
+
+	static protected $diffableFields = array('title');
 
 	static protected $fields = array(
 		'id' => null,

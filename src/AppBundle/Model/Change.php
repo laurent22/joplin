@@ -97,7 +97,11 @@ class Change extends BaseModel {
 			return strnatcmp($a['id'], $b['id']);
 		});
 
+		$maxRevId = 0;
+
 		foreach ($output as $k => $syncItem) {
+			if ($syncItem['id'] > $maxRevId) $maxRevId = $syncItem['id'];
+
 			if (isset($syncItem['item'])) {
 				$item = $syncItem['item']->toPublicArray();
 				if ($syncItem['type'] == 'update') {
@@ -114,6 +118,7 @@ class Change extends BaseModel {
 
 		return array(
 			'has_more' => $hasMore,
+			'rev_id' => $maxRevId,
 			'items' => $output,
 		);
 	}

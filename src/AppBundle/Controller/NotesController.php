@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\ApiController;
 use AppBundle\Model\Note;
 use AppBundle\Exception\NotFoundException;
+use AppBundle\Exception\MethodNotAllowedException;
 
 class NotesController extends ApiController {
 
@@ -23,7 +24,7 @@ class NotesController extends ApiController {
 			return static::successResponse($note->toPublicArray());
 		}
 
-		return static::errorResponse('Invalid method');
+		throw new MethodNotAllowedException();
 	}
 
 	/**
@@ -50,9 +51,11 @@ class NotesController extends ApiController {
 		}
 
 		if ($request->isMethod('PATCH')) {
-			$data = Note::filter($this->patchParameters());
-			$note->fromPublicArray($data);
+			$query = $request->query->all();
+
 			$note->id = Note::unhex($id);
+			$note->revId = $query['rev_id'];
+			$note->fromPublicArray($this->patchParameters());
 			$note->save();
 			return static::successResponse($note);
 		}
@@ -62,7 +65,7 @@ class NotesController extends ApiController {
 			return static::successResponse();
 		}
 
-		return static::errorResponse('Invalid method');
+		throw new MethodNotAllowedException();
 	}
 
 }

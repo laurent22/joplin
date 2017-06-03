@@ -88,7 +88,7 @@ class Synchronizer {
 	processState_downloadChanges() {
 		let maxRevId = null;
 		let hasMore = false;
-		this.api().get('synchronizer', { last_id: Setting.value('sync.lastRevId') }).then((syncOperations) => {
+		this.api().get('synchronizer', { rev_id: Setting.value('sync.lastRevId') }).then((syncOperations) => {
 			hasMore = syncOperations.has_more;
 			let chain = [];
 			for (let i = 0; i < syncOperations.items.length; i++) {

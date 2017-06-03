@@ -66,7 +66,7 @@ Find rev 1 and do three way merge with 2 and 3 - means there's a need to store h
 
 API CALL
 
-/synchronizer/?last_id=<last_id_that_caller_synched_to>
+/synchronizer/?rev_id=<rev_id_that_caller_synched_to>
 
 SIMPLE IMPLEMENTATION:
 
@@ -103,7 +103,7 @@ class SynchronizerController extends ApiController {
 	 * @Route("/synchronizer")
 	 */
 	public function allAction(Request $request) {
-		$lastChangeId = (int)$request->query->get('last_id');
+		$lastChangeId = (int)$request->query->get('rev_id');
 
 		if (!$this->user() || !$this->session()) throw new UnauthorizedException();
 

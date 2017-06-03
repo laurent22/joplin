@@ -187,7 +187,7 @@ void Synchronizer::switchState(Synchronizer::SynchronizationState state) {
 		QString lastRevId = settings.value("lastRevId", "0").toString();
 
 		QUrlQuery query;
-		query.addQueryItem("last_id", lastRevId);
+		query.addQueryItem("rev_id", lastRevId);
 		api_.get("synchronizer", query, QUrlQuery(), "download:getSynchronizer");
 
 	} else if (state == Aborting) {
