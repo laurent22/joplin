@@ -7,6 +7,11 @@ class Eloquent {
 	private $capsule_ = null;
 
 	public function __construct($dbParams, $mimeTypes, $paths, $cache) {
+		// TODO: find better way to pass around test db config
+		if (isset($_SERVER['JOPLIN_TESTING']) && $_SERVER['JOPLIN_TESTING']) {
+			$dbParams = $_SERVER['JOPLIN_TESTING_DB_CONFIG'];
+		}
+
 		$this->capsule_ = new \Illuminate\Database\Capsule\Manager();
 
 		$dbParamsDefaults = array(

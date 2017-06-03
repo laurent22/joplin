@@ -17,7 +17,7 @@ class BaseControllerTestCase extends WebTestCase {
 			} else {
 				$client->request($method, $path);
 			}
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			if (method_exists($e, 'toErrorArray')) return $e->toErrorArray();
 			return array(
 			 	'error' => $e->getMessage(),
