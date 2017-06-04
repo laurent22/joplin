@@ -12,7 +12,7 @@ class FolderTest extends BaseTestCase {
 		Folder::truncate();
 	}
 
-	public function testDefault() {
+	public function testNewFolderBecomesDefault() {
 		$f1 = new Folder();
 		$f1->is_default = true;
 		$f1->owner_id = TestUtils::userId();
@@ -28,19 +28,6 @@ class FolderTest extends BaseTestCase {
 
 		$this->assertTrue(!$f1->is_default);
 		$this->assertTrue(!!$f2->is_default);
-	}
-
-	public function testDefaultException() {
-		$this->expectException(Exception::class);
-
-		$f1 = new Folder();
-		$f1->is_default = true;
-		$f1->owner_id = TestUtils::userId();
-		$f1->save();
-
-		$f1 = Folder::find($f1->id);
-		$f1->is_default = false;
-		$f1->save();
 	}
 	
 }

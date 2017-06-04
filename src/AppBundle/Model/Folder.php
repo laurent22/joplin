@@ -51,22 +51,10 @@ class Folder extends BaseItem {
 
 	public function save(Array $options = array()) {
 		$dirty = $this->getDirty();
-
-		// Handling of default folder is done in several steps:
-		// - If changing is_default to false and this is the only default folder - throw an exception.
-		// - Then save the folder
-		// - Then, if the folder was set to be the new default, set all the other folders to non-default.
-
-		if (isset($dirty['is_default'])) {
-			$defaultFolders = self::where('owner_id', '=', $this->owner_id)->where('is_default', '=', 1);
-
-			if (!$dirty['is_default'] && $defaultFolders->count() == 1 && self::defaultFolder($this->owner_id)->id == $this->id) {
-				throw new \Exception(sprintf('Cannot make folder %s non-default - there should be at least one default folder', BaseModel::hex($this->id)));
-			}
-		}
-
+		
 		$output = parent::save($options);
 
+		// If the folder was set to be the new default, set all the other folders to non-default.
 		if ($output && isset($dirty['is_default'])) {
 			if (!!$dirty['is_default']) {
 				self::where('owner_id', '=', $this->owner_id)->where('id', '!=', $this->id)->update(array('is_default' => 0));
