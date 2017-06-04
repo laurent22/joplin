@@ -25,7 +25,7 @@ class FoldersController extends ApiController {
 			$folder->fromPublicArray($request->request->all());
 			$folder->owner_id = $this->user()->id;
 			$folder->save();
-			return static::successResponse($folder);
+			return static::successResponse(Folder::find($folder->id));
 		}
 
 		throw new MethodNotAllowedException();
