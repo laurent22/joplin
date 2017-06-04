@@ -17,9 +17,12 @@ class TagsController extends ApiController {
 	 */
 	public function allAction(Request $request) {
 		if ($request->isMethod('POST')) {
+			$data = $request->request->all();
+
 			$tag = new Tag();
-			$tag->fromPublicArray($request->request->all());
+			$tag->fromPublicArray($data);
 			$tag->owner_id = $this->user()->id;
+			$tag->validate();
 			$tag->save();
 			return static::successResponse($tag->toPublicArray());
 		}
@@ -54,7 +57,9 @@ class TagsController extends ApiController {
 		}
 
 		if ($request->isMethod('PATCH')) {
-			$tag->fromPublicArray($this->patchParameters());
+			$data = $this->patchParameters();
+			$tag->fromPublicArray($data);
+			$tag->validate();
 			$tag->save();
 			return static::successResponse($tag);
 		}

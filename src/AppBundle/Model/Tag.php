@@ -14,6 +14,13 @@ class Tag extends BaseItem {
 		'updated_time' => null,
 	);
 
+	static protected $defaultValidationRules = array(
+		'title' => array(
+			array('type' => 'notEmpty'),
+			array('type' => 'function', 'args' => array(array('AppBundle\Model\Tag', 'validateUniqueTitle')), 'message' => 'title "{value}" is already in use'),
+		),
+	);
+
 	public function add($item) {
 		if ($this->includes($item->id)) return;
 
@@ -39,6 +46,18 @@ class Tag extends BaseItem {
 	public function items() {
 		$output = array();
 		return Tagged_item::where('tag_id', '=', $this->id)->get();
+	}
+
+	static public function byTitle($ownerId, $title) {
+		return Tag::where('owner_id', '=', $ownerId)->where('title', '=', $title)->first();
+	}
+
+	static public function validateUniqueTitle($key, $rule, $object) {
+		$existingTag = Tag::where('owner_id', '=', $object->owner_id)
+		                  ->where('title', '=', $object->title)
+		                  ->first();
+		if ($existingTag && $existingTag->id == $object->id) return true;
+		return !$existingTag;
 	}
 
 }

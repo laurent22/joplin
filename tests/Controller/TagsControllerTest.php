@@ -51,4 +51,28 @@ class TagsControllerTest extends BaseControllerTestCase  {
 		$this->assertEquals('folder', $items[0]['item_type']);
 	}
 
+	public function testValidation() {
+
+		$this->loadSession(1, 1);
+
+		$tag1 = $this->request('POST', '/tags', null, array('title' => 'my tag'));
+		$tag2 = $this->request('POST', '/tags', null, array('title' => 'my tag'));
+
+		$this->assertEquals('Validation', $tag2['type']);
+
+		$empty = $this->request('POST', '/tags', null, array('title' => ''));
+
+		$this->assertEquals('Validation', $empty['type']);
+
+		$tag2 = $this->request('POST', '/tags', null, array('title' => 'my tag 2'));
+
+		$duplicate = $this->request('PATCH', '/tags/' . $tag2['id'], null, array('title' => 'my tag'));
+
+		$this->assertEquals('Validation', $duplicate['type']);
+
+		$modOwnTitle = $this->request('PATCH', '/tags/' . $tag2['id'], null, array('title' => 'my tag 2'));
+
+		$this->assertEquals($tag2['id'], $modOwnTitle['id']);
+	}
+
 }

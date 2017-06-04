@@ -9,6 +9,16 @@ class User extends BaseModel {
 	public $useUuid = true;
 	public $incrementing = false;
 
+	static protected $fields = array(
+		'id' => array('public' => 'string'),
+		'email' => array('public' => 'string'),
+		'password' => array('public' => 'string'),
+		'validated' => array('public' => 'bool'),
+		'owner_id' => array('public' => 'string'),
+		'created_time' => array('public' => 'int'),
+		'updated_time' => array('public' => 'int'),
+	);
+
 	public function __construct($attributes = array()) {
 		parent::__construct($attributes);
 

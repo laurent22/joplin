@@ -27,13 +27,9 @@ class UsersController extends ApiController {
 	public function allAction(Request $request) {
 		if ($request->isMethod('POST')) {
 			$user = new User();
-			$data = $request->request->all();
-
-			$errors = User::validate($data);
-			if (count($errors)) throw ValidationException::fromErrors($errors);
-
-			$data['password'] = Session::hashPassword($data['password']);
-			$user->fromPublicArray($data);
+			$user->fromPublicArray($request->request->all());
+			$user->validate();
+			$user->password = Session::hashPassword($user->password); // Password is only hashed now so that validation can check its length
 			$user->save();
 			return static::successResponse($user->toPublicArray());
 		}

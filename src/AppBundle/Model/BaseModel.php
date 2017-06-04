@@ -5,6 +5,7 @@ namespace AppBundle\Model;
 use \Illuminate\Database\Eloquent\Model;
 use \Illuminate\Support\Facades\DB;
 use \Illuminate\Database\Eloquent\Collection;
+use AppBundle\Exception\ValidationException;
 
 class BaseModel extends \Illuminate\Database\Eloquent\Model {
 
@@ -271,9 +272,8 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		return $output;
 	}
 
-	static public function validate($data, $rules = null) {
-		if (!$rules) $rules = static::$defaultValidationRules;
-
+	public function validate() {
+		$rules = static::$defaultValidationRules;
 		$errors = array();
 		
 		foreach ($rules as $key => $keyRules) {
@@ -281,29 +281,36 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 				$ok = true;
 				switch ($rule['type']) {
 
+					// Note: Cannot use property_exists() since all the key are retrieved via the magic
+					// method __get() so `isset()` must be used instead. However it means that this:
+					//    $user = new User();
+					//    $user->email = null;
+					//    isset($user->email)
+					// returns false
+
 					case 'required':
 
-						if (!array_key_exists($key, $data)) $ok = false;
+						if (!isset($this->{$key})) $ok = false;
 						break;
 
 					case 'notEmpty':
 
-						if (array_key_exists($key, $data) && !strlen((string)$data[$key])) $ok = false;
+						if (isset($this->{$key}) && !strlen((string)$this->{$key})) $ok = false;
 						break;
 
 					case 'minLength':
 
-						if (array_key_exists($key, $data) && strlen((string)$data[$key]) < $rule['args'][0]) $ok = false;
+						if (isset($this->{$key}) && strlen((string)$this->{$key}) < $rule['args'][0]) $ok = false;
 						break;
 
 					case 'maxLength':
 
-						if (array_key_exists($key, $data) && strlen((string)$data[$key]) > $rule['args'][0]) $ok = false;
+						if (isset($this->{$key}) && strlen((string)$this->{$key}) > $rule['args'][0]) $ok = false;
 						break;
 
 					case 'function':
 
-						$ok = call_user_func_array($rule['args'][0], array($key, $rule, $data));
+						$ok = call_user_func_array($rule['args'][0], array($key, $rule, $this));
 						break;
 
 					default:
@@ -316,20 +323,20 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 					$errors[] = array(
 						'key' => $key,
 						'type' => $rule['type'] == 'function' ? 'other' : $rule['type'],
-						'message' => static::validationMessage($key, $rule, $data),
+						'message' => static::validationMessage($key, $rule, $this),
 					);
 				}
 			}
 		}
 
-		return $errors;
+		if (count($errors)) throw ValidationException::fromErrors($errors);
 	}
 
-	static public function validationMessage($key, $rule, $data) {
+	static public function validationMessage($key, $rule, $object) {
 		$msg = static::$defaultValidationMessages[$rule['type']];
 		if (isset($rule['message'])) $msg = $rule['message'];
 		$msg = str_replace('{key}', $key, $msg);
-		$msg = str_replace('{value}', isset($data[$key]) ? $data[$key] : '', $msg);
+		$msg = str_replace('{value}', isset($object->{$key}) ? $object->{$key} : '', $msg);
 		$args = isset($rule['args']) ? $rule['args'] : array();
 		for ($i = 0; $i < count($args); $i++) {
 			$v = $args[$i];
