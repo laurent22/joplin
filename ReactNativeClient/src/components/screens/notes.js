@@ -35,6 +35,8 @@ class NotesScreenComponent extends React.Component {
 				type: 'Navigation/NAVIGATE',
 				routeName: 'Folders',
 			});
+		}).catch((error) => {
+			alert(error.message);
 		});
 	}
 

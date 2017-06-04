@@ -20,7 +20,7 @@ class Registry {
 
 	static api() {
 		if (this.api_) return this.api_;
-		this.api_ = new WebApi('http://192.168.1.2');
+		this.api_ = new WebApi('http://192.168.1.3');
 		return this.api_;
 	}
 

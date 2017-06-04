@@ -10,6 +10,14 @@ class Session extends BaseModel {
 	public $useUuid = true;
 	public $incrementing = false;
 
+	static protected $fields = array(
+		'id' => array('public' => 'string'),
+		'created_time' => array('public' => 'int'),
+		'updated_time' => array('public' => 'int'),
+		'owner_id' => array('public' => 'string'),
+		'client_id' => array('public' => 'string'),
+	);
+
 	static public function hashPassword($password) {
 		return password_hash($password, PASSWORD_DEFAULT);
 	}

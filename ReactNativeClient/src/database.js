@@ -2,6 +2,7 @@ import SQLite from 'react-native-sqlite-storage';
 import { Log } from 'src/log.js';
 import { uuid } from 'src/uuid.js';
 import { promiseChain } from 'src/promise-chain.js';
+import { _ } from 'src/locale.js'
 
 const structureSql = `
 CREATE TABLE folders (
@@ -9,7 +10,8 @@ CREATE TABLE folders (
 	parent_id TEXT NOT NULL DEFAULT "",
 	title TEXT NOT NULL DEFAULT "",
 	created_time INT NOT NULL DEFAULT 0,
-	updated_time INT NOT NULL DEFAULT 0
+	updated_time INT NOT NULL DEFAULT 0,
+	is_default BOOLEAN NOT NULL DEFAULT 0
 );
 
 CREATE TABLE notes (
@@ -117,7 +119,7 @@ class Database {
 	}
 
 	open() {
-		this.db_ = SQLite.openDatabase({ name: '/storage/emulated/0/Download/joplin-27.sqlite' }, (db) => {
+		this.db_ = SQLite.openDatabase({ name: '/storage/emulated/0/Download/joplin-32.sqlite' }, (db) => {
 			Log.info('Database was open successfully');
 		}, (error) => {
 			Log.error('Cannot open database: ', error);
@@ -373,6 +375,7 @@ class Database {
 					tx.executeSql(statements[i]);
 				}
 				tx.executeSql('INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' + uuid.create() + '", "' + Database.enumId('settings', 'string') + '")');
+				tx.executeSql('INSERT INTO folders (`id`, `title`, `is_default`, `created_time`) VALUES ("' + uuid.create() + '", "' + _('Default list') + '", 1, ' + Math.round((new Date()).getTime() / 1000) + ')');
 			}).then(() => {
 				Log.info('Database schema created successfully');
 				// Calling initialize() now that the db has been created will make it go through
