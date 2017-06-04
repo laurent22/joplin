@@ -2,48 +2,22 @@
 
 namespace AppBundle\Model;
 
+use AppBundle\Exception\ForbiddenException;
+
 class Tag extends BaseItem {
 
-	// A star has the exact same behaviour as a tag, except
-	// it might be diplayed differently.
-	static private $starTag_ = null;
-
-	static public function starTag($ownerId) {
-		if (self::$starTag_) return self::$starTag_;
-		$t = Tag::where('internal', '=', 1)
-		        ->where('title', '=', 'star')
-		        ->first();
-
-		if (!$t) {
-			$t = new Tag();
-			$t->title = 'star';
-			$t->internal = 1;
-			$t->owner_id = $ownerId;
-			$t->save();
-		}
-
-		self::$starTag_ = $t;
-		return self::$starTag_;
-	}
-
-	static public function star($item) {
-		self::starTag($item->owner_id)->add($item);
-	}
-
-	static public function unstar($item) {
-		self::starTag($item->owner_id)->remove($item);
-	}
-
-	static public function isStarred($item) {
-		return self::starTag($item->owner_id)->includes($item);
-	}
-
-	static public function starredItems($ownerId) {
-		return self::starTag($ownerId)->items();
-	}
+	static protected $fields = array(
+		'id' => null,
+		'title' => null,
+		'owner_id' => null,
+		'created_time' => null,
+		'updated_time' => null,
+	);
 
 	public function add($item) {
-		if ($this->includes($item)) return;
+		if ($this->includes($item->id)) return;
+
+		if ($item->owner_id != $this->owner_id) throw new ForbiddenException();
 
 		$t = new Tagged_item();
 		$t->tag_id = $this->id;
@@ -52,27 +26,19 @@ class Tag extends BaseItem {
 		$t->save();
 	}
 
-	public function includes($item) {
-		return !!Tagged_item::where('item_type', '=', $item->itemTypeId())
-		                    ->where('item_id', '=', $item->id)
+	public function includes($itemId) {
+		return !!Tagged_item::where('item_id', '=', $itemId)
+		                    ->where('tag_id', '=', $this->id)
 		                    ->first();
 	}
 
-	public function remove($item) {
-		Tagged_item::where('item_type', '=', $item->itemTypeId())
-		           ->where('item_id', '=', $item->id)
-		           ->delete();
+	public function remove($itemId) {
+		return Tagged_item::where('tag_id', '=', $this->id)->where('item_id', '=', $itemId)->delete();
 	}
 
-	// TODO: retrieve items in one SQL query
 	public function items() {
 		$output = array();
-		$taggedItems = Tagged_item::where('tag_id', '=', $this->id)->get();
-		foreach ($taggedItems as $taggedItem) {
-			$item = BaseItem::byTypeAndId($taggedItem->item_type, $taggedItem->item_id);
-			$output[] = $item;
-		}
-		return $output;
+		return Tagged_item::where('tag_id', '=', $this->id)->get();
 	}
 
 }

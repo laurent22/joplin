@@ -185,6 +185,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		if (!empty($output['client_id'])) $output['client_id'] = self::hex($output['client_id']);
 		if (!empty($output['item_id'])) $output['item_id'] = self::hex($output['item_id']);
 		if (!empty($output['user_id'])) $output['user_id'] = self::hex($output['user_id']);
+		if (!empty($output['tag_id'])) $output['tag_id'] = self::hex($output['tag_id']);
 
 		foreach ($output as $k => $v) {
 			if (isset(static::$enums[$k])) {

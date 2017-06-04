@@ -41,5 +41,12 @@ class BaseItem extends BaseModel {
 		
 		throw new \Exception('Unsupported item type: ' . $itemTypeId);
 	}
+
+	// Use only if type of item is unknown
+	static public function anyById($itemId) {
+		$folder = Folder::find($itemId);
+		if ($folder) return $folder;
+		return Note::find($itemId);
+	}
 	
 }

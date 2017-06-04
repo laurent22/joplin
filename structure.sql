@@ -38,11 +38,8 @@ CREATE TABLE `tags` (
 	`id` binary(16) NOT NULL,
 	`title` varchar(1024) NOT NULL default '',
 	`owner_id` binary(16) NOT NULL,
-	`internal` tinyint(1) NOT NULL default '0',
 	`created_time` int(11) NOT NULL default '0',
 	`updated_time` int(11) NOT NULL default '0',
-	`is_encrypted` tinyint(1) NOT NULL default '0',
-	`encryption_method` int(11) NOT NULL default '0',
 	PRIMARY KEY (`id`)
 ) CHARACTER SET=utf8;
 
