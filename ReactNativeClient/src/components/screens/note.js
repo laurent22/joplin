@@ -7,6 +7,7 @@ import { Registry } from 'src/registry.js'
 import { ScreenHeader } from 'src/components/screen-header.js';
 import { Checkbox } from 'src/components/checkbox.js'
 import { NoteFolderService } from 'src/services/note-folder-service.js';
+import { _ } from 'src/locale.js';
 
 class NoteScreenComponent extends React.Component {
 	
@@ -56,6 +57,20 @@ class NoteScreenComponent extends React.Component {
 		});
 	}
 
+	deleteNote_onPress = (noteId) => {
+		Log.info('DELETE', noteId);
+	}
+
+	attachFile_onPress = (noteId) => {
+	}
+
+	menuOptions = () => {
+		return [
+			{ title: _('Attach file'), onPress: () => { this.attachFile_onPress(this.state.note.id); } },
+			{ title: _('Delete note'), onPress: () => { this.deleteNote_onPress(this.state.note.id); } },
+		];
+	}
+
 	render() {
 		const note = this.state.note;
 		const isTodo = !!Number(note.is_todo);
@@ -71,7 +86,7 @@ class NoteScreenComponent extends React.Component {
 
 		return (
 			<View style={{flex: 1}}>
-				<ScreenHeader navState={this.props.navigation.state} />
+				<ScreenHeader navState={this.props.navigation.state} menuOptions={this.menuOptions()} />
 				<View style={{ flexDirection: 'row' }}>
 					{ isTodo && <Checkbox checked={!!Number(note.todo_completed)} /> }<TextInput style={{flex:1}} value={note.title} onChangeText={this.title_changeText} />
 				</View>
