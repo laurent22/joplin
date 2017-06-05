@@ -1,0 +1,24 @@
+{
+	"name": "CliClient",
+	"version": "0.0.1",
+	"private": true,
+	"dependencies": {
+		"app-module-path": "^2.2.0",
+		"form-data": "^2.1.4",
+		"node-fetch": "^1.7.1",
+		"react": "16.0.0-alpha.6",
+		"uuid": "^3.0.1"
+	},
+	"devDependencies": {
+		"babel-changed": "^7.0.0",
+		"babel-cli": "^6.24.1",
+		"babel-preset-env": "^1.5.1",
+		"babel-preset-react": "^6.24.1",
+		"query-string": "4.3.4",
+		"react-native-sqlite-storage": "3.3.*"
+	},
+	"scripts": {
+		"build": "babel-changed app -d build",
+		"clean": "babel-changed --reset"
+	}
+}
