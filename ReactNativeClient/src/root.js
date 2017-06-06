@@ -249,7 +249,7 @@ class AppComponent extends React.Component {
 		});
 	}
 
-	sideMenu_change = (isOpen) => {
+	sideMenu_change(isOpen) {
 		// Make sure showSideMenu property of state is updated
 		// when the menu is open/closed.
 		this.props.dispatch({
@@ -261,7 +261,7 @@ class AppComponent extends React.Component {
 		const sideMenuContent = <SideMenuContent/>;
 
 		return (
-			<SideMenu menu={sideMenuContent} onChange={this.sideMenu_change}>
+			<SideMenu menu={sideMenuContent} onChange={(isOpen) => this.sideMenu_change(isOpen)}>
 				<MenuContext style={{ flex: 1 }}>
 					<AppNavigator navigation={addNavigationHelpers({
 						dispatch: this.props.dispatch,

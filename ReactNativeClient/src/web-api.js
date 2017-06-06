@@ -1,5 +1,13 @@
 import { Log } from 'src/log.js';
+import { isNode } from 'src/env.js';
 import { stringify } from 'query-string';
+
+if (isNode()) {
+	// Needs to be in a variable otherwise ReactNative will try to load this module (and fails due to
+	// missing node modules), even if isNode() is false.
+	let modulePath = 'src/shim.js';
+	var { fetch, FormData } = require(modulePath);
+}
 
 class WebApiError extends Error {
 

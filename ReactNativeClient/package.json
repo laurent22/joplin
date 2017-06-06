@@ -7,6 +7,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "form-data": "^2.1.4",
+    "node-fetch": "^1.7.1",
     "react": "16.0.0-alpha.6",
     "react-native": "0.44.0",
     "react-native-action-button": "^2.6.9",
