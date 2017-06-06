@@ -11,7 +11,7 @@ import { _ } from 'src/locale.js';
 
 class NoteScreenComponent extends React.Component {
 	
-	static navigationOptions = (options) => {
+	static navigationOptions(options) {
 		return { header: null };
 	}
 
@@ -34,7 +34,7 @@ class NoteScreenComponent extends React.Component {
 		}
 	}
 
-	noteComponent_change = (propName, propValue) => {
+	noteComponent_change(propName, propValue) {
 		this.setState((prevState, props) => {
 			let note = Object.assign({}, prevState.note);
 			note[propName] = propValue;
@@ -42,29 +42,29 @@ class NoteScreenComponent extends React.Component {
 		});
 	}
 
-	title_changeText = (text) => {
+	title_changeText(text) {
 		this.noteComponent_change('title', text);
 	}
 
-	body_changeText = (text) => {
+	body_changeText(text) {
 		this.noteComponent_change('body', text);
 	}
 
-	saveNoteButton_press = () => {
+	saveNoteButton_press() {
 		NoteFolderService.save('note', this.state.note, this.originalNote).then((note) => {
 			this.originalNote = Object.assign({}, note);
 			this.setState({ note: note });
 		});
 	}
 
-	deleteNote_onPress = (noteId) => {
+	deleteNote_onPress(noteId) {
 		Log.info('DELETE', noteId);
 	}
 
-	attachFile_onPress = (noteId) => {
+	attachFile_onPress(noteId) {
 	}
 
-	menuOptions = () => {
+	menuOptions() {
 		return [
 			{ title: _('Attach file'), onPress: () => { this.attachFile_onPress(this.state.note.id); } },
 			{ title: _('Delete note'), onPress: () => { this.deleteNote_onPress(this.state.note.id); } },
@@ -88,11 +88,11 @@ class NoteScreenComponent extends React.Component {
 			<View style={{flex: 1}}>
 				<ScreenHeader navState={this.props.navigation.state} menuOptions={this.menuOptions()} />
 				<View style={{ flexDirection: 'row' }}>
-					{ isTodo && <Checkbox checked={!!Number(note.todo_completed)} /> }<TextInput style={{flex:1}} value={note.title} onChangeText={this.title_changeText} />
+					{ isTodo && <Checkbox checked={!!Number(note.todo_completed)} /> }<TextInput style={{flex:1}} value={note.title} onChangeText={(text) => this.title_changeText(text)} />
 				</View>
-				<TextInput style={{flex: 1, textAlignVertical: 'top'}} multiline={true} value={note.body} onChangeText={this.body_changeText} />
+				<TextInput style={{flex: 1, textAlignVertical: 'top'}} multiline={true} value={note.body} onChangeText={(text) => this.body_changeText(text)} />
 				{ todoComponents }
-				<Button title="Save note" onPress={this.saveNoteButton_press} />
+				<Button title="Save note" onPress={() => this.saveNoteButton_press()} />
 			</View>
 		);
 	}

@@ -7,7 +7,7 @@ import { _ } from 'src/locale.js';
 
 class NoteListComponent extends ItemListComponent {
 
-	listView_itemPress = (noteId) => {
+	listView_itemPress(noteId) {
 		this.props.dispatch({
 			type: 'Navigation/NAVIGATE',
 			routeName: 'Note',

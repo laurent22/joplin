@@ -8,7 +8,7 @@ import { NoteFolderService } from 'src/services/note-folder-service.js';
 
 class LoadingScreenComponent extends React.Component {
 	
-	static navigationOptions = (options) => {
+	static navigationOptions(options) {
 		return { header: null };
 	}
 

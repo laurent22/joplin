@@ -9,7 +9,7 @@ import { _ } from 'src/locale.js';
 
 class LoginScreenComponent extends React.Component {
 	
-	static navigationOptions = (options) => {
+	static navigationOptions(options) {
 		return { header: null };
 	}
 
@@ -26,15 +26,15 @@ class LoginScreenComponent extends React.Component {
 		this.setState({ email: this.props.user.email });
 	}
 
-	email_changeText = (text) => {
+	email_changeText(text) {
 		this.setState({ email: text });
 	}
 
-	password_changeText = (text) => {
+	password_changeText(text) {
 		this.setState({ password: text });
 	}
 
-	loginButton_press = () => {
+	loginButton_press() {
 		this.setState({ errorMessage: null });
 
 		return Registry.api().post('sessions', null, {
@@ -71,10 +71,10 @@ class LoginScreenComponent extends React.Component {
 		return (
 			<View style={{flex: 1}}>
 				<ScreenHeader navState={this.props.navigation.state} />
-				<TextInput value={this.state.email} onChangeText={this.email_changeText} keyboardType="email-address" />
-				<TextInput value={this.state.password} onChangeText={this.password_changeText} secureTextEntry={true} />
+				<TextInput value={this.state.email} onChangeText={(text) => this.email_changeText(text)} keyboardType="email-address" />
+				<TextInput value={this.state.password} onChangeText={(text) => this.password_changeText(text)} secureTextEntry={true} />
 				{ this.state.errorMessage && <Text style={{color:'#ff0000'}}>{this.state.errorMessage}</Text> }
-				<Button title="Login" onPress={this.loginButton_press} />
+				<Button title="Login" onPress={() => this.loginButton_press()} />
 			</View>
 		);
 	}

@@ -43,7 +43,7 @@ class ItemListComponent extends Component {
 		// });
 	}
 
-	listView_itemPress = (itemId) => {}
+	listView_itemPress(itemId) {}
 
 	render() {
 		let renderRow = (item) => {

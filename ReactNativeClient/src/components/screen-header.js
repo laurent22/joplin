@@ -28,28 +28,28 @@ class ScreenHeaderComponent extends Component {
 		return this.props.navState.routeName != 'Notes';
 	}
 
-	sideMenuButton_press = () => {
+	sideMenuButton_press() {
 		this.props.dispatch({ type: 'SIDE_MENU_TOGGLE' });
 	}
 
-	backButton_press = () => {
+	backButton_press() {
 		this.props.dispatch({ type: 'Navigation/BACK' });
 	}
 
-	menu_select = (value) => {
+	menu_select(value) {
 		if (typeof(value) == 'function') {
 			value();
 		}
 	}
 
-	menu_login = () => {
+	menu_login() {
 		this.props.dispatch({
 			type: 'Navigation/NAVIGATE',
 			routeName: 'Login',
 		});
 	}
 
-	menu_logout = () => {
+	menu_logout() {
 		let user = { email: null, session: null };
 		Setting.setObject('user', user);
 		this.props.dispatch({
@@ -75,12 +75,12 @@ class ScreenHeaderComponent extends Component {
 
 		if (this.props.user && this.props.user.session) {
 			menuOptionComponents.push(
-				<MenuOption value={this.menu_logout} key={'menuOption_' + key++}>
+				<MenuOption value={() => this.menu_logout()} key={'menuOption_' + key++}>
 					<Text>{_('Logout')}</Text>
 				</MenuOption>);
 		} else {
 			menuOptionComponents.push(
-				<MenuOption value={this.menu_login} key={'menuOption_' + key++}>
+				<MenuOption value={() => this.menu_login()} key={'menuOption_' + key++}>
 					<Text>{_('Login')}</Text>
 				</MenuOption>);
 		}
@@ -94,10 +94,10 @@ class ScreenHeaderComponent extends Component {
 
 		return (
 			<View style={{ flexDirection: 'row', padding: 10, backgroundColor: '#ffffff', alignItems: 'center' }} >
-				<Button title="☰" onPress={this.sideMenuButton_press} />
-				<Button disabled={!this.showBackButton()} title="<" onPress={this.backButton_press}></Button>
+				<Button title="☰" onPress={() => this.sideMenuButton_press()} />
+				<Button disabled={!this.showBackButton()} title="<" onPress={() => this.backButton_press()}></Button>
 				<Text style={{ flex:1, marginLeft: 10 }} >{title}</Text>
-			    <Menu onSelect={this.menu_select}>
+			    <Menu onSelect={(value) => this.menu_select(value)}>
 					<MenuTrigger>
 						<Text style={{ fontSize: 20 }}>   &#8942; </Text>
 					</MenuTrigger>

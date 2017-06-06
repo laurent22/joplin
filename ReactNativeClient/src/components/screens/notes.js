@@ -11,25 +11,11 @@ import { ActionButton } from 'src/components/action-button.js';
 
 class NotesScreenComponent extends React.Component {
 	
-	static navigationOptions = (options) => {
+	static navigationOptions(options) {
 		return { header: null };
 	}
 
-	createNoteButton_press = () => {
-		this.props.dispatch({
-			type: 'Navigation/NAVIGATE',
-			routeName: 'Note',
-		});
-	}
-
-	createFolderButton_press = () => {
-		this.props.dispatch({
-			type: 'Navigation/NAVIGATE',
-			routeName: 'Folder',
-		});
-	}
-
-	deleteFolder_onPress = (folderId) => {
+	deleteFolder_onPress(folderId) {
 		Folder.delete(folderId).then(() => {
 			this.props.dispatch({
 				type: 'Navigation/NAVIGATE',
@@ -40,7 +26,7 @@ class NotesScreenComponent extends React.Component {
 		});
 	}
 
-	editFolder_onPress = (folderId) => {
+	editFolder_onPress(folderId) {
 		this.props.dispatch({
 			type: 'Navigation/NAVIGATE',
 			routeName: 'Folder',
@@ -48,7 +34,7 @@ class NotesScreenComponent extends React.Component {
 		});
 	}
 
-	menuOptions = () => {
+	menuOptions() {
 		return [
 			{ title: _('Delete folder'), onPress: () => { this.deleteFolder_onPress(this.props.selectedFolderId); } },
 			{ title: _('Edit folder'), onPress: () => { this.editFolder_onPress(this.props.selectedFolderId); } },

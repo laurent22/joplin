@@ -4,12 +4,6 @@ import { uuid } from 'src/uuid.js';
 
 class BaseModel {
 
-	static ITEM_TYPE_NOTE = 1;
-	static ITEM_TYPE_FOLDER = 2;
-	static tableInfo_ = null;
-	static tableKeys_ = null;
-	static db_ = null;
-
 	static tableName() {
 		throw new Error('Must be overriden');
 	}
@@ -220,5 +214,11 @@ class BaseModel {
 	}
 
 }
+
+BaseModel.ITEM_TYPE_NOTE = 1;
+BaseModel.ITEM_TYPE_FOLDER = 2;
+BaseModel.tableInfo_ = null;
+BaseModel.tableKeys_ = null;
+BaseModel.db_ = null;
 
 export { BaseModel };

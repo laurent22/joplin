@@ -8,7 +8,7 @@ import { NoteFolderService } from 'src/services/note-folder-service.js';
 
 class FolderScreenComponent extends React.Component {
 	
-	static navigationOptions = (options) => {
+	static navigationOptions(options) {
 		return { header: null };
 	}
 
@@ -29,7 +29,7 @@ class FolderScreenComponent extends React.Component {
 		}
 	}
 
-	folderComponent_change = (propName, propValue) => {
+	folderComponent_change(propName, propValue) {
 		this.setState((prevState, props) => {
 			let folder = Object.assign({}, prevState.folder);
 			folder[propName] = propValue;
@@ -37,11 +37,11 @@ class FolderScreenComponent extends React.Component {
 		});
 	}
 
-	title_changeText = (text) => {
+	title_changeText(text) {
 		this.folderComponent_change('title', text);
 	}
 
-	saveFolderButton_press = () => {
+	saveFolderButton_press() {
 		NoteFolderService.save('folder', this.state.folder, this.originalFolder).then((folder) => {
 			this.originalFolder = Object.assign({}, folder);
 			this.setState({ folder: folder });
@@ -52,8 +52,8 @@ class FolderScreenComponent extends React.Component {
 		return (
 			<View style={{flex: 1}}>
 				<ScreenHeader navState={this.props.navigation.state} />
-				<TextInput value={this.state.folder.title} onChangeText={this.title_changeText} />
-				<Button title="Save folder" onPress={this.saveFolderButton_press} />
+				<TextInput value={this.state.folder.title} onChangeText={(text) => this.title_changeText(text)} />
+				<Button title="Save folder" onPress={() => this.saveFolderButton_press()} />
 			</View>
 		);
 	}

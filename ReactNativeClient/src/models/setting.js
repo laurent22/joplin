@@ -4,14 +4,6 @@ import { Database } from 'src/database.js';
 
 class Setting extends BaseModel {
 
-	static defaults_ = {
-		'clientId': { value: '', type: 'string' },
-		'sessionId': { value: '', type: 'string' },
-		'user.email': { value: '', type: 'string' },
-		'user.session': { value: '', type: 'string' },
-		'sync.lastRevId': { value: 0, type: 'int' },
-	};
-
 	static tableName() {
 		return 'settings';
 	}
@@ -120,5 +112,13 @@ class Setting extends BaseModel {
 	}
 
 }
+
+Setting.defaults_ = {
+	'clientId': { value: '', type: 'string' },
+	'sessionId': { value: '', type: 'string' },
+	'user.email': { value: '', type: 'string' },
+	'user.session': { value: '', type: 'string' },
+	'sync.lastRevId': { value: 0, type: 'int' },
+};
 
 export { Setting };

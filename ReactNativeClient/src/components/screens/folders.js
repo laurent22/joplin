@@ -9,7 +9,7 @@ import { ActionButton } from 'src/components/action-button.js';
 
 class FoldersScreenComponent extends React.Component {
 
-	static navigationOptions = (options) => {
+	static navigationOptions(options) {
 		return { header: null };
 	}
 

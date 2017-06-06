@@ -10,7 +10,7 @@ import { NoteFolderService } from 'src/services/note-folder-service.js';
 
 class FolderListComponent extends ItemListComponent {
 
-	listView_itemPress = (folderId) => {
+	listView_itemPress(folderId) {
 		NoteFolderService.openNoteList(folderId);
 	}
 
