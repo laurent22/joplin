@@ -5,6 +5,7 @@
   "dependencies": {
     "app-module-path": "^2.2.0",
     "form-data": "^2.1.4",
+    "moment": "^2.18.1",
     "node-fetch": "^1.7.1",
     "promise": "^7.1.1",
     "react": "16.0.0-alpha.6",
