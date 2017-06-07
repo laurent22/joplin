@@ -23,7 +23,8 @@
 			"file_exclude_patterns": [
 				"*.pro.user",
 				"*.pro.user.*",
-				"*.iml"
+				"*.iml",
+				"CliClient/app/src",
 			]
 		}
 	],
