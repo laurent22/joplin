@@ -263,25 +263,27 @@ Note parseNote(QXmlStreamReader& reader) {
 	//			<title>Commande Asda</title>
 	//			<content>
 	//				<![CDATA[
-	//				<?xml version="1.0" encoding="UTF-8"?>
-	//				<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">
-	//				<en-note>
-	//					<en-media alt="your QR code" hash="216a16a1bbe007fba4ccf60b118b4ccc" type="image/png"></en-media></en-note>]]>
-	//				</content>
-	//				<created>20160921T203424Z</created>
-	//				<updated>20160921T203438Z</updated>
-	//				<note-attributes>
-	//					<reminder-order>20160902T140445Z</reminder-order>
-	//					<reminder-done-time>20160924T101120Z</reminder-done-time>
-	//				</note-attributes>
-	//				<resource>
-	//					<data encoding="base64">........</data>
-	//					<mime>image/png</mime>
-	//					<width>150</width>
-	//					<height>150</height>
-	//				</resource>
-	//			</note>
-	//		</en-export>
+	//					<?xml version="1.0" encoding="UTF-8"?>
+	//					<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">
+	//					<en-note>
+	//						<en-media alt="your QR code" hash="216a16a1bbe007fba4ccf60b118b4ccc" type="image/png"></en-media>
+	//					</en-note>
+	//				]]>
+	//			</content>
+	//			<created>20160921T203424Z</created>
+	//			<updated>20160921T203438Z</updated>
+	//			<note-attributes>
+	//				<reminder-order>20160902T140445Z</reminder-order>
+	//				<reminder-done-time>20160924T101120Z</reminder-done-time>
+	//			</note-attributes>
+	//			<resource>
+	//				<data encoding="base64">........</data>
+	//				<mime>image/png</mime>
+	//				<width>150</width>
+	//				<height>150</height>
+	//			</resource>
+	//		</note>
+	//	</en-export>
 
 	int mediaHashIndex = 0;
 	for (size_t i = 0; i < note.resources.size(); i++) {

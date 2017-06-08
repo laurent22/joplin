@@ -33,9 +33,9 @@ class Note extends BaseItem {
 
 	static public function filter($data, $keepId = false) {
 		$output = parent::filter($data);
-		if (array_key_exists('longitude', $output)) $output['longitude'] = (string)number_format($output['longitude'], 8);
-		if (array_key_exists('latitude', $output)) $output['latitude'] = (string)number_format($output['latitude'], 8);
-		if (array_key_exists('altitude', $output)) $output['altitude'] = (string)number_format($output['altitude'], 4);
+		if (array_key_exists('longitude', $output)) $output['longitude'] = (string)number_format((float)$output['longitude'], 8);
+		if (array_key_exists('latitude', $output)) $output['latitude'] = (string)number_format((float)$output['latitude'], 8);
+		if (array_key_exists('altitude', $output)) $output['altitude'] = (string)number_format((float)$output['altitude'], 4);
 		return $output;
 	}
 

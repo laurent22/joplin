@@ -17,13 +17,13 @@ class FoldersController extends ApiController {
 	 */
 	public function allAction(Request $request) {
 		if ($request->isMethod('GET')) {
-			return static::successResponse(Folder::all());
+			return static::successResponse(Folder::allByOwnerId($this->userId()));
 		}
 
 		if ($request->isMethod('POST')) {
 			$folder = new Folder();
 			$folder->fromPublicArray($request->request->all());
-			$folder->owner_id = $this->user()->id;
+			$folder->owner_id = $this->userId();
 			$folder->validate();
 			$folder->save();
 			return static::successResponse(Folder::find($folder->id));

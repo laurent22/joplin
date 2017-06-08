@@ -67,11 +67,17 @@ td {
 .form-group label {
 	width: 200px;
 	display: inline-block;
+	vertical-align: top;
 }
 
 .form-group input {
-	width: 300px;
+	width: 600px;
 	display: inline-block;
+}
+
+.form-group textarea {
+	width: 600px;
+	height: 400px;
 }
 
 .debug {

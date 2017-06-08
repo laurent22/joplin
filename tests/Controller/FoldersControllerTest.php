@@ -43,4 +43,18 @@ class FoldersControllerTest extends BaseControllerTestCase  {
 		$this->assertEquals($f1['id'], $f2['id']);
 	}
 
+	// public function testEmoticonText() {
+	// 	$this->loadSession(1, 1);
+
+	// 	var_dump(mb_check_encoding('Voiture 🚘', 'UTF-8'));die();
+	// 	$text1 = iconv('UTF-8', 'UCS-2LE', 'Voiture 🚘');
+	// 	var_dump($text1);
+	// 	die();
+
+	// 	$f1 = $this->request('POST', '/folders', null, array('title' => 'Voiture 🚘'));
+
+	// 	var_dump($f1);
+	// 	die();
+	// }
+
 }

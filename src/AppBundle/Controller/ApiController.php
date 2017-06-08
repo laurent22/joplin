@@ -175,7 +175,7 @@ abstract class ApiController extends Controller {
 		if (!isset($_SERVER['CONTENT_TYPE']) || strpos($_SERVER['CONTENT_TYPE'], 'application/x-www-form-urlencoded') === 0) {
 			parse_str($input, $output);
 		} else {
-			throw new \Exception('Only application/x-www-form-urlencoded Content-Type is supported');
+			throw new \Exception('Only application/x-www-form-urlencoded Content-Type is supported. Not supported: ' . $_SERVER['CONTENT_TYPE']);
 		}
 
 		return $output;

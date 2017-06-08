@@ -2,12 +2,16 @@ require('app-module-path').addPath(__dirname);
 
 import { uuid } from 'src/uuid.js';
 import moment from 'moment';
+import { promiseChain } from 'src/promise-chain.js';
+import { WebApi } from 'src/web-api.js'
+import jsSHA from "jssha";
 
+let webApi = new WebApi('http://joplin.local');
 
 const Promise = require('promise');
 const fs = require('fs');
-const xml2js = require("xml2js");
-
+const stringToStream = require('string-to-stream')
+ 
 const BLOCK_OPEN = "<div>";
 const BLOCK_CLOSE = "</div>";
 const NEWLINE = "<br/>";
@@ -143,7 +147,6 @@ function simplifyString(s) {
 function collapseWhiteSpaceAndAppend(lines, state, text) {
 	if (state.inCode) {
 		text = "\t" + text;
-		if (text === undefined) console.info('AAAAAAAAAA');
 		lines.push(text);
 	} else {
 		// Remove all \n and \r from the left and right of the text
@@ -159,7 +162,6 @@ function collapseWhiteSpaceAndAppend(lines, state, text) {
 		if (!spaceLeft && !spaceRight && text == "") return lines;
 
 		if (spaceLeft) lines.push(SPACE);
-		if (text === undefined) console.info('BBBBBBB');
 		lines.push(text);
 		if (spaceRight) lines.push(SPACE);
 	}
@@ -175,6 +177,7 @@ function isImageMimeType(m) {
 
 function addResourceTag(lines, resource, alt = "") {
 	let tagAlt = alt == "" ? resource.alt : alt;
+	if (!tagAlt) tagAlt = '';
 	if (isImageMimeType(resource.mime)) {
 		lines.push("![");
 		lines.push(tagAlt);
@@ -189,9 +192,12 @@ function addResourceTag(lines, resource, alt = "") {
 }
 
 
-function enexXmlToMd(stream) {
+function enexXmlToMd(stream, resources) {
+	resources = resources.slice();
+
 	return new Promise((resolve, reject) => {
 		let output = [];
+
 		let state = {
 			inCode: false,
 			lists: [],
@@ -235,14 +241,18 @@ function enexXmlToMd(stream) {
 				}
 			} else if (isStrongTag(n)) {
 				output.push("**");
+			} else if (n == 's') {
+				// Not supported
 			} else if (isAnchor(n)) {
 				state.anchorAttributes.push(node.attributes);
 				output.push('[');
 			} else if (isEmTag(n)) {
 				output.push("*");
 			} else if (n == "en-todo") {
-				let x = node.attributes && node.attributes.checked.toLowerCase() == 'true' ? 'X' : ' ';
+				let x = node.attributes && node.attributes.checked && node.attributes.checked.toLowerCase() == 'true' ? 'X' : ' ';
 				output.push('- [' + x + '] ');
+			} else if (n == "hr") {
+				output.push('------------------------------------------------------------------------------');
 			} else if (n == "h1") {
 				output.push(BLOCK_OPEN); output.push("# ");
 			} else if (n == "h2") {
@@ -261,29 +271,80 @@ function enexXmlToMd(stream) {
 			} else if (n == "br") {
 				output.push(NEWLINE);
 			} else if (n == "en-media") {
-				console.warn('TODO: en-media');
-				// attrs = attributesLIFO.back();
-				// QString hash = attrs["hash"];
-				// Resource resource;
-				// for (int i = 0; i < state.resources.size(); i++) {
-				// 	Resource r = state.resources[i];
-				// 	if (r.id == hash) {
-				// 		resource = r;
-				// 		state.resources.erase(state.resources.begin() + i);
-				// 		break;
-				// 	}
-				// }
+				const hash = node.attributes.hash;
 
-				// // If the resource does not appear among the note's resources, it
-				// // means it's an attachement. It will be appended along with the
-				// // other remaining resources at the bottom of the markdown text.
-				// if (resource.id != "") {
-				// 	addResourceTag(lines, resource, attrs["alt"]);
-				// }
+				let resource = null;
+				for (let i = 0; i < resources.length; i++) {
+					let r = resources[i];
+					if (r.id == hash) {
+						resource = r;
+						resources.splice(i, 1);
+						break;
+					}
+				}
+
+				if (!resource) {
+					// This is a bit of a hack. Notes sometime have resources attached to it, but those <resource> tags don't contain
+					// an "objID" tag, making it impossible to reference the resource. However, in this case the content of the note
+					// will contain a corresponding <en-media/> tag, which has the ID in the "hash" attribute. All this information
+					// has been collected above so we now set the resource ID to the hash attribute of the en-media tags. Here's an
+					// example of note that shows this problem:
+
+					//	<?xml version="1.0" encoding="UTF-8"?>
+					//	<!DOCTYPE en-export SYSTEM "http://xml.evernote.com/pub/evernote-export2.dtd">
+					//	<en-export export-date="20161221T203133Z" application="Evernote/Windows" version="6.x">
+					//		<note>
+					//			<title>Commande</title>
+					//			<content>
+					//				<![CDATA[
+					//					<?xml version="1.0" encoding="UTF-8"?>
+					//					<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">
+					//					<en-note>
+					//						<en-media alt="your QR code" hash="216a16a1bbe007fba4ccf60b118b4ccc" type="image/png"></en-media>
+					//					</en-note>
+					//				]]>
+					//			</content>
+					//			<created>20160921T203424Z</created>
+					//			<updated>20160921T203438Z</updated>
+					//			<note-attributes>
+					//				<reminder-order>20160902T140445Z</reminder-order>
+					//				<reminder-done-time>20160924T101120Z</reminder-done-time>
+					//			</note-attributes>
+					//			<resource>
+					//				<data encoding="base64">........</data>
+					//				<mime>image/png</mime>
+					//				<width>150</width>
+					//				<height>150</height>
+					//			</resource>
+					//		</note>
+					//	</en-export>
+
+					let found = false;
+					for (let i = 0; i < resources.length; i++) {
+						let r = resources[i];
+						if (!r.id) {
+							r.id = hash;
+							resources[i] = r;
+							found = true;
+							break;
+						}
+					}
+
+					if (!found) {
+						console.warn('Hash with no associated resource: ' + hash);
+					}
+				} else {
+					// If the resource does not appear among the note's resources, it
+					// means it's an attachement. It will be appended along with the
+					// other remaining resources at the bottom of the markdown text.
+					if (!!resource.id) {
+						output = addResourceTag(output, resource, node.attributes.alt);
+					}
+				}
 			} else if (n == "span" || n == "font") {
 				// Ignore
 			} else {
-				reject("Unsupported start tag:" + n); // TODO: should be a warning
+				console.warn("Unsupported start tag: " + n);
 			}
 		})
 
@@ -316,7 +377,7 @@ function enexXmlToMd(stream) {
 			} else if (isIgnoredEndTag(n)) {
 				// Skip
 			} else {
-				reject("Unsupported end tag:" + n); // TODO: should be a warning
+				console.warn("Unsupported end tag: " + n);
 			}
 
 		})
@@ -326,7 +387,10 @@ function enexXmlToMd(stream) {
 		})
 
 		saxStream.on('end', function() {
-			resolve(output);
+			resolve({
+				lines: output,
+				resources: resources,
+			});
 		})
 
 		stream.pipe(saxStream);
@@ -335,84 +399,58 @@ function enexXmlToMd(stream) {
 
 
 
-const path = require('path');
+// const path = require('path');
 
-var walk = function (dir, done) {
-	fs.readdir(dir, function (error, list) {
-		if (error) return done(error);
-		var i = 0;
-		(function next () {
-			var file = list[i++];
+// var walk = function (dir, done) {
+// 	fs.readdir(dir, function (error, list) {
+// 		if (error) return done(error);
+// 		var i = 0;
+// 		(function next () {
+// 			var file = list[i++];
 
-			if (!file) return done(null);            
-			file = dir + '/' + file;
+// 			if (!file) return done(null);            
+// 			file = dir + '/' + file;
 			
-			fs.stat(file, function (error, stat) {
-				if (stat && stat.isDirectory()) {
-					walk(file, function (error) {
-						next();
-					});
-				} else {
-					if (path.basename(file) != 'sample4.xml') {
-						next();
-						return;
-					}
+// 			fs.stat(file, function (error, stat) {
+// 				if (stat && stat.isDirectory()) {
+// 					walk(file, function (error) {
+// 						next();
+// 					});
+// 				} else {
+// 					if (path.basename(file) != 'sample4.xml') {
+// 						next();
+// 						return;
+// 					}
 
-					if (path.extname(file) == '.xml') {
-						console.info('Processing: ' + file);
-						let stream = fs.createReadStream(file);
-						enexXmlToMd(stream).then((md) => {
-							console.info(md);
-							console.info(processMdArrayNewLines(md));
-							next();
-						}).catch((error) => {
-							console.error(error);
-							return done(error);
-						});
-					} else {
-						next();
-					}
-				}
-			});
-		})();
-	});
-};
+// 					if (path.extname(file) == '.xml') {
+// 						console.info('Processing: ' + file);
+// 						let stream = fs.createReadStream(file);
+// 						enexXmlToMd(stream).then((md) => {
+// 							console.info(md);
+// 							console.info(processMdArrayNewLines(md));
+// 							next();
+// 						}).catch((error) => {
+// 							console.error(error);
+// 							return done(error);
+// 						});
+// 					} else {
+// 						next();
+// 					}
+// 				}
+// 			});
+// 		})();
+// 	});
+// };
 
-walk('/home/laurent/Dropbox/Samples/', function(error) {
-	if (error) {
-		throw error;
-	} else {
-		console.log('-------------------------------------------------------------');
-		console.log('finished.');
-		console.log('-------------------------------------------------------------');
-	}
-});
-
-
-
-function parseXml(xml) {
-	return new Promise((resolve, reject) => {
-		xml2js.parseString(xml, (err, result) => {
-			if (err) {
-				reject(err);
-			} else {
-				resolve(result);
-			}
-		});
-	});
-}
-
-function readFile(path, options = null) {
-	return new Promise((resolve, reject) => {
-		fs.readFile(path, options, (err, result) => {
-			if (err) {
-				reject(err);
-			} else {
-				resolve(result);
-			}
-		});
-	});
-}
+// walk('/home/laurent/Dropbox/Samples/', function(error) {
+// 	if (error) {
+// 		throw error;
+// 	} else {
+// 		console.log('-------------------------------------------------------------');
+// 		console.log('finished.');
+// 		console.log('-------------------------------------------------------------');
+// 	}
+// });
 
 function isBlockTag(n) {
 	return n=="div" || n=="p" || n=="dl" || n=="dd" || n=="center" || n=="table" || n=="tr" || n=="td" || n=="th" || n=="tbody";
@@ -431,7 +469,7 @@ function isAnchor(n) {
 }
 
 function isIgnoredEndTag(n) {
-	return n=="en-note" || n=="en-todo" || n=="span" || n=="body" || n=="html" || n=="font" || n=="br";
+	return n=="en-note" || n=="en-todo" || n=="span" || n=="body" || n=="html" || n=="font" || n=="br" || n=='hr' || n=='s';
 }
 
 function isListTag(n) {
@@ -470,63 +508,252 @@ function evernoteXmlToMdArray(xml) {
 	});
 }
 
-function toApiNote(xml) {
-	let o = {};
-
-	o.id = uuid.create();
-	o.title = xmlNodeText(xml.title);
-
-	// o.body = '';
-	// if (xml.content && xml.content.length) {
-	// 	o.body = xmlToMd(xml.content[0]);
-	// }
-
-	o.created_time = dateToTimestamp(xml.created);
-	o.updated_time = dateToTimestamp(xml.updated);
-
-	if (xml['note-attributes'] && xml['note-attributes'].length) {
-		let attributes = xml['note-attributes'][0];
-		o.latitude = xmlNodeText(attributes.latitude);
-		o.longitude = xmlNodeText(attributes.longitude);
-		o.altitude = xmlNodeText(attributes.altitude);
-		o.author = xmlNodeText(attributes.author);
-	}
-
-	o.tags = [];
-	if (xml.tag && xml.tag.length) o.tags = xml.tag;
-
-	return o;
+function extractRecognitionObjId(recognitionXml) {
+	const r = recognitionXml.match(/objID="(.*?)"/);
+	return r && r.length >= 2 ? r[1] : null;
 }
 
+function saveNoteToWebApi(note) {
+	let data = Object.assign({}, note);
+	delete data.resources;
+	delete data.tags;
 
+	webApi.post('notes', null, data).then((r) => {
+		console.info(r);
+	}).catch((error) => {
+		console.error("Error for note: " + note.title);
+		console.error(error);
+	});
+}
 
+function createNoteId(note) {
+	let shaObj = new jsSHA("SHA-256", "TEXT");
+	shaObj.update(note.title + '_' + note.body + "_" + note.created_time + "_" + note.updated_time + "_");
+	let hash = shaObj.getHash("HEX");
+	return hash.substr(0, 32);
+}
 
-// readFile('sample.enex', 'utf8').then((content) => {
-// 	return parseXml(content);
-// }).then((doc) => {
-// 	let notes = doc['en-export']['note'];
-// 	for (let i = 0; i < notes.length; i++) {
-// 		let note = notes[i];
-// 		let apiNote = toApiNote(note);
-// 	}
-// }).catch((error) => {
-// 	console.error('Error reading XML file', error);
-// });
+function importEnex(parentId, stream) {
+	return new Promise((resolve, reject) => {
+		let options = {};
+		let strict = true;
+		let saxStream = require('sax').createStream(strict, options);
 
+		let nodes = []; // LIFO list of nodes so that we know in which node we are in the onText event
+		let note = null;
+		let noteAttributes = null;
+		let noteResource = null;
+		let noteResourceAttributes = null;
+		let noteResourceRecognition = null;
+		let notes = [];
 
+		function currentNodeName() {
+			if (!nodes.length) return null;
+			return nodes[nodes.length - 1].name;
+		}
 
+		function currentNodeAttributes() {
+			if (!nodes.length) return {};
+			return nodes[nodes.length - 1].attributes;
+		}
 
+		function processNotes() {
+			let chain = [];
+			while (notes.length) {
+				let note = notes.shift();
+				const contentStream = stringToStream(note.bodyXml);
+				chain.push(() => {
+					return enexXmlToMd(contentStream, note.resources).then((result) => {
+						delete note.bodyXml;
 
+						let mdLines = result.lines;
+						let firstAttachment = true;
+						for (let i = 0; i < result.resources.length; i++) {
+							let r = result.resources[i];
+							if (firstAttachment) mdLines.push(NEWLINE);
+							mdLines.push(NEWLINE);
+							mdLines = addResourceTag(mdLines, r, r.filename);
+							firstAttachment = false;
+						}
 
+						note.parent_id = parentId;
+						note.body = processMdArrayNewLines(result.lines);
 
+						saveNoteToWebApi(note);
 
-// import { WebApi } from 'src/web-api.js'
+						// console.info('======== NOTE ============================================================================');
+						// let c = note.content;
+						// delete note.content
+						// console.info(note);
+						// console.info('------------------------------------------------------------------------------------------');
+						// console.info(c);
 
-// let api = new WebApi('http://joplin.local');
+						// if (note.resources.length) {
+						// 	console.info('=========================================================');
+						// 	console.info(note.content);
+						// }
+					});
+				});
+			}
 
-// api.post('sessions', null, {
-// 	email: 'laurent@cozic.net',
-// 	password: '12345678',
-// }).then((session) => {
-// 	console.info(session);
-// });
+			return promiseChain(chain);
+		}
+
+		saxStream.on('error', function(e) {
+			reject(e);
+		})
+
+		saxStream.on('text', function(text) {
+			let n = currentNodeName();
+
+			if (noteAttributes) {
+				noteAttributes[n] = text;
+			} else if (noteResourceAttributes) {
+				noteResourceAttributes[n] = text;				
+			} else if (noteResource) {
+				if (n == 'data') {
+					let attr = currentNodeAttributes();
+					noteResource.dataEncoding = attr.encoding;
+				}
+				noteResource[n] = text;
+			} else if (note) {
+				if (n == 'title') {
+					note.title = text;
+				} else if (n == 'created') {
+					note.created_time = dateToTimestamp(text);
+				} else if (n == 'updated') {
+					note.updated_time = dateToTimestamp(text);
+				} else if (n == 'tag') {
+					note.tags.push(text);
+				}
+			}
+		})
+
+		saxStream.on('opentag', function(node) {
+			let n = node.name.toLowerCase();
+			nodes.push(node);
+
+			if (n == 'note') {
+				note = {
+					resources: [],
+					tags: [],
+				};
+			} else if (n == 'resource-attributes') {
+				noteResourceAttributes = {};
+			} else if (n == 'recognition') {
+				if (noteResource) noteResourceRecognition = {};
+			} else if (n == 'note-attributes') {
+				noteAttributes = {};
+			} else if (n == 'resource') {
+				noteResource = {};
+			}
+		});
+
+		saxStream.on('cdata', function(data) {
+			let n = currentNodeName();
+
+			if (noteResourceRecognition) {
+				noteResourceRecognition.objID = extractRecognitionObjId(data);
+			} else if (note) {
+				if (n == 'content') {
+					note.bodyXml = data;
+				}
+			}
+		});
+
+		saxStream.on('closetag', function(n) {
+			nodes.pop();
+
+			if (n == 'note') {
+				notes.push(note);
+				if (notes.length >= 10) {
+					stream.pause();
+					processNotes().then(() => {
+						//stream.resume();
+					}).catch((error) => {
+						console.info('Error processing note', error);
+					});
+				}
+				note = null;
+			} else if (n == 'recognition' && noteResource) {
+				noteResource.id = noteResourceRecognition.objID;
+				noteResourceRecognition = null;
+			} else if (n == 'resource-attributes') {
+				noteResource.filename = noteResourceAttributes['file-name'];
+				noteResourceAttributes = null;
+			} else if (n == 'note-attributes') {
+				note.latitude = noteAttributes.latitude;
+				note.longitude = noteAttributes.longitude;
+				note.altitude = noteAttributes.altitude;
+				note.author = noteAttributes.author;
+				noteAttributes = null;
+			} else if (n == 'resource') {
+				let decodedData = null;
+				if (noteResource.dataEncoding == 'base64') {
+					decodedData = Buffer.from(noteResource.data, 'base64');
+				} else {
+					reject('Cannot decode resource with encoding: ' + noteResource.dataEncoding);
+					return;
+				}
+
+				let r = {
+					id: noteResource.id,
+					data: decodedData,
+					mime_type: noteResource.mime,
+					title: noteResource.filename,
+					filename: noteResource.filename,
+				};
+
+				r.data = noteResource.data.substr(0, 20); // TODO: REMOVE REMOVE REMOVE REMOVE REMOVE REMOVE 
+
+				note.resources.push(r);
+				noteResource = null;
+			}
+		});
+
+		saxStream.on('end', function() {
+			processNotes().then(() => { resolve(); });
+		});
+
+		stream.pipe(saxStream);
+	});
+}
+
+// TODO: make it persistent and random
+const clientId = 'AB78AB78AB78AB78AB78AB78AB78AB78';
+
+//const folderTitle = 'Laurent';
+const folderTitle = 'Voiture';
+
+webApi.post('sessions', null, {
+	email: 'laurent@cozic.net',
+	password: '12345678',
+	client_id: clientId,
+}).then((session) => {
+	webApi.setSession(session.id);
+	console.info('Got session: ' + session.id);
+	return webApi.get('folders');
+}).then((folders) => {
+	
+	let folder = null;
+
+	for (let i = 0; i < folders.length; i++) {
+		if (folders[i].title = folderTitle) {
+			folder = folders[i];
+			break;
+		}
+	}
+
+	return folder ? Promise.resolve(folder) : webApi.post('folders', null, { title: folderTitle });
+}).then((folder) => {
+	let fileStream = fs.createReadStream('/mnt/c/Users/Laurent/Desktop/' + folderTitle + '.enex');
+	//let fileStream = fs.createReadStream('/mnt/c/Users/Laurent/Desktop/afaire.enex');
+	//let fileStream = fs.createReadStream('/mnt/c/Users/Laurent/Desktop/testtags.enex');
+	importEnex(folder.id, fileStream).then(() => {
+		//console.info('DONE IMPORTING');
+	}).catch((error) => {
+		console.error('Cannot import', error);
+	});
+}).catch((error) => {
+	console.error(error);
+});
