@@ -39,6 +39,13 @@ class WebApi {
 		return this.session_;
 	}
 
+	// "form-data" node library doesn't like undefined or null values
+	// so make sure we only either return an empty string or a string
+	formatFormDataValue(v) {
+		if (v === undefined || v === null) return '';
+		return v.toString();
+	}
+
 	makeRequest(method, path, query, data) {
 		let url = this.baseUrl_;
 		if (path) url += '/' + path;
@@ -51,7 +58,7 @@ class WebApi {
 				formData = new FormData();
 				for (var key in data) {
 					if (!data.hasOwnProperty(key)) continue;
-					formData.append(key, data[key]);
+					formData.append(key, this.formatFormDataValue(data[key]));
 				}
 			} else {
 				options.headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
@@ -94,6 +101,13 @@ class WebApi {
 
 			fetch(r.url, r.options).then(function(response) {
 				let responseClone = response.clone();
+
+				if (!response.ok) {
+					return responseClone.text().then(function(text) {
+						reject(new WebApiError('HTTP ' + response.status + ': ' + response.statusText + ': ' + text));
+					});
+				}
+
 				return response.json().then(function(data) {
 					if (data && data.error) {
 						reject(new WebApiError(data));
@@ -102,7 +116,7 @@ class WebApi {
 					}
 				}).catch(function(error) {
 					responseClone.text().then(function(text) {
-						reject(new Error('Cannot parse JSON: ' + text));
+						reject(new WebApiError('Cannot parse JSON: ' + text));
 					});
 				});
 			}).then(function(data) {
