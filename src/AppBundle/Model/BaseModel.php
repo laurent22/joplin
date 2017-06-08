@@ -211,6 +211,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 	}
 
 	public function diffableField($fieldName) {
+		if (array_key_exists($fieldName, $this->changedDiffableFields)) return $this->changedDiffableFields[$fieldName];
 		return Change::fullFieldText($this->id, $fieldName);
 	}
 
@@ -279,6 +280,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		foreach ($rules as $key => $keyRules) {
 			foreach ($keyRules as $rule) {
 				$ok = true;
+				$message = null;
 				switch ($rule['type']) {
 
 					// Note: Cannot use property_exists() since all the key are retrieved via the magic
@@ -311,6 +313,10 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 					case 'function':
 
 						$ok = call_user_func_array($rule['args'][0], array($key, $rule, $this));
+						if (is_array($ok)) {
+							$message = $ok['message'];
+							$ok = $ok['valid'];
+						}
 						break;
 
 					default:
@@ -323,7 +329,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 					$errors[] = array(
 						'key' => $key,
 						'type' => $rule['type'] == 'function' ? 'other' : $rule['type'],
-						'message' => static::validationMessage($key, $rule, $this),
+						'message' => $message ? $message : static::validationMessage($key, $rule, $this),
 					);
 				}
 			}

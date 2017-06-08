@@ -39,7 +39,7 @@ class NotesController extends ApiController {
 		}
 
 		$query = $request->query->all();
-		if ($note) $note->revId = $query['rev_id'];
+		if ($note && isset($query['rev_id'])) $note->revId = $query['rev_id'];
 
 		if ($request->isMethod('PUT')) {
 			$isNew = !$note;

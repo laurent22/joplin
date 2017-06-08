@@ -19,6 +19,13 @@ class Folder extends BaseItem {
 		'is_default' => array('public' => 'bool'),
 	);
 
+	static protected $defaultValidationRules = array(
+		'title' => array(
+			array('type' => 'notEmpty'),
+			array('type' => 'function', 'args' => array(array('AppBundle\Model\Folder', 'validateUniqueTitle'))),
+		),
+	);
+
 	public function add($ids) {
 		$notes = Note::find($ids);
 		foreach ($notes as $note) {
@@ -62,6 +69,28 @@ class Folder extends BaseItem {
 		}
 
 		return $output;
+	}
+
+	static public function allByOwnerId($ownerId) {
+		return Folder::where('owner_id', '=', $ownerId)->get();
+	}
+
+	static public function byTitle($ownerId, $title) {
+		$folders = static::allByOwnerId($ownerId);
+		foreach ($folders as $folder) {
+			if ($folder->diffableField('title') == $title) return $folder;
+		}
+		return null;
+	}
+
+	static public function validateUniqueTitle($key, $rule, $object) {
+		$title = $object->diffableField('title');
+		$folder = self::byTitle($object->owner_id, $title);
+		if ($folder && $folder->id == $object->id) return true;
+		return array(
+			'valid' => !$folder,
+			'message' => sprintf('title "%s" is already in use', $title),
+		);
 	}
 
 }

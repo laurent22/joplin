@@ -6,6 +6,7 @@
 echo '============================================================================================='
 echo 'Testing controllers....'
 echo '============================================================================================='
+#php5.6 phpunit-5.7.20.phar --filter testDuplicateTitle tests/Controller/FoldersControllerTest.php --bootstrap vendor/autoload.php tests/Controller/
 php5.6 phpunit-5.7.20.phar --bootstrap vendor/autoload.php tests/Controller/
 
 # echo ""

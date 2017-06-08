@@ -24,6 +24,7 @@ class FoldersController extends ApiController {
 			$folder = new Folder();
 			$folder->fromPublicArray($request->request->all());
 			$folder->owner_id = $this->user()->id;
+			$folder->validate();
 			$folder->save();
 			return static::successResponse(Folder::find($folder->id));
 		}
@@ -43,7 +44,7 @@ class FoldersController extends ApiController {
 		}
 
 		$query = $request->query->all();
-		if ($folder) $folder->revId = $query['rev_id'];
+		if ($folder && isset($query['rev_id'])) $folder->revId = $query['rev_id'];
 
 		if ($request->isMethod('PUT')) {
 			$isNew = !$folder;
@@ -52,6 +53,7 @@ class FoldersController extends ApiController {
 			$folder->id = Folder::unhex($id);
 			$folder->owner_id = $this->user()->id;
 			$folder->setIsNew($isNew);
+			$folder->validate();
 			$folder->save();
 			return static::successResponse($folder);
 		}
@@ -60,6 +62,7 @@ class FoldersController extends ApiController {
 			$data = $this->patchParameters();
 			$folder->fromPublicArray(Folder::filter($this->patchParameters()));
 			$folder->id = Folder::unhex($id);
+			$folder->validate();
 			$folder->save();
 			return static::successResponse($folder);
 		}

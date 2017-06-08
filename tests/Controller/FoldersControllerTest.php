@@ -12,25 +12,35 @@ class FoldersControllerTest extends BaseControllerTestCase  {
 		Folder::truncate();
 	}
 
-	public function testDefault() {
-		// $this->loadSession(1, 1);
+	public function testDuplicateTitle() {
+		$this->loadSession(1, 1);
 
-		// $f1 = $this->request('POST', '/folders', null, array(
-		// 	'title' => 'first folder',
-		// 	'is_default' => true,
-		// ));
+		$f1 = $this->request('POST', '/folders', null, array('title' => 'one'));
 
-		// $this->assertArrayHasKey('is_default', $f1);
-		// $this->assertTrue($f1['is_default']);
+		$r = $this->request('POST', '/folders', null, array('title' => 'one'));
 
-		// $f2 = $this->request('POST', '/folders', null, array(
-		// 	'title' => 'first folder',
-		// 	'is_default' => true,
-		// ));
+		$this->assertArrayHasKey('error', $r);
+		$this->assertEquals('Validation', $r['type']);
 
-		// $f1 = $this->request('GET', '/folders/' . $f1['id']);
+		$r = $this->request('PUT', '/folders/' . Folder::createId(), null, array('title' => 'one'));
+		$this->assertEquals('Validation', $r['type']);
 
-		// $this->assertFalse($f1['is_default']);
+		$f2 = $this->request('POST', '/folders', null, array('title' => 'two'));
+		$r = $this->request('PATCH', '/folders/' . $f2['id'], null, array('title' => 'one'));
+		$this->assertEquals('Validation', $r['type']);
+	}
+
+	public function testNotDuplicateTitle() {
+		$this->loadSession(1, 1);
+
+		$f1 = $this->request('POST', '/folders', null, array('title' => 'one'));
+		$f2 = $this->request('PUT', '/folders/' . $f1['id'], null, array('title' => 'one'));
+
+		$this->assertEquals($f1['id'], $f2['id']);
+
+		$f2 = $this->request('PATCH', '/folders/' . $f1['id'], null, array('title' => 'one'));
+
+		$this->assertEquals($f1['id'], $f2['id']);
 	}
 
 }
