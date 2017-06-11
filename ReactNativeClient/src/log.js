@@ -7,12 +7,12 @@ class Log {
 	}
 
 	static level() {
-		return this.level_ === undefined ? Log.LEVEL_ERROR : this.level_;
+		return this.level_ === undefined ? Log.LEVEL_DEBUG : this.level_;
 	}
 
 	static debug(...o) {
 		if (Log.level() > Log.LEVEL_DEBUG) return;
-		console.debug(...o);
+		console.info(...o);
 	}
 
 	static info(...o) {

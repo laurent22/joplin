@@ -30,3 +30,4 @@ sparse_test.php
 INFO.md
 /web/env.php
 sync_staging.sh
+*.swp

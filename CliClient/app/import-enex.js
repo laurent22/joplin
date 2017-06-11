@@ -4,6 +4,7 @@ import { uuid } from 'src/uuid.js';
 import moment from 'moment';
 import { promiseChain } from 'src/promise-chain.js';
 import { WebApi } from 'src/web-api.js'
+import { folderItemFilename } from 'src/string-utils.js'
 import jsSHA from "jssha";
 
 let webApi = new WebApi('http://joplin.local');
@@ -519,11 +520,122 @@ function saveNoteToWebApi(note) {
 	delete data.tags;
 
 	webApi.post('notes', null, data).then((r) => {
-		console.info(r);
+		//console.info(r);
 	}).catch((error) => {
 		console.error("Error for note: " + note.title);
 		console.error(error);
 	});
+}
+
+function noteToFriendlyString_format(propName, propValue) {
+	if (['created_time', 'updated_time'].indexOf(propName) >= 0) {
+		if (!propValue) return '';
+		propValue = moment.unix(propValue).format('YYYY-MM-DD hh:mm:ss');
+	} else if (propValue === null || propValue === undefined) {
+		propValue = '';
+	}
+
+	return propValue;
+}
+
+function noteToFriendlyString(note) {
+	let shownKeys = ["author", "longitude", "latitude", "is_todo", "todo_due", "todo_completed", 'created_time', 'updated_time'];
+	let output = [];
+
+	output.push(note.title);
+	output.push("");
+	output.push(note.body);
+	output.push('');
+	for (let i = 0; i < shownKeys.length; i++) {
+		let v = note[shownKeys[i]];
+		v = noteToFriendlyString_format(shownKeys[i], v);
+		output.push(shownKeys[i] + ': ' + v);
+	}
+
+	return output.join("\n");
+}
+
+// function folderItemFilename(item) {
+// 	let output = escapeFilename(item.title).trim();
+// 	if (!output.length) output = '_';
+// 	return output + '.' + item.id.substr(0, 7);
+// }
+
+function noteFilename(note) {
+	return folderItemFilename(note) + '.md';
+}
+
+function folderFilename(folder) {
+	return folderItemFilename(folder);
+}
+
+function filePutContents(filePath, content) {
+	return new Promise((resolve, reject) => {
+		fs.writeFile(filePath, content, function(error) {
+			if (error) {
+				reject(error);
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+
+function setModifiedTime(filePath, time) {
+	return new Promise((resolve, reject) => {
+		fs.utimes(filePath, time, time, (error) => {
+			if (error) {
+				reject(error);
+				return;
+			}
+			resolve();
+		})
+	});
+}
+
+function createDirectory(path) {
+	return new Promise((resolve, reject) => {
+		fs.exists(path, (exists) => {
+			if (exists) {
+				resolve();
+				return;
+			}
+
+			const mkdirp = require('mkdirp');
+		
+			mkdirp(path, (error) => {
+				if (error) {
+					reject(error);
+				} else {
+					resolve();
+				}
+			});
+		});
+	});
+}
+
+const baseNoteDir = '/home/laurent/Temp/TestImport';
+
+// createDirectory('/home/laurent/Temp/TestImport').then(() => {
+// 	console.info('OK');
+// }).catch((error) => {
+// 	console.error(error);
+// });
+
+function saveNoteToDisk(folder, note) {
+	const noteContent = noteToFriendlyString(note);
+	const notePath = baseNoteDir + '/' + folderFilename(folder) + '/' + noteFilename(note);
+
+	// console.info('===================================================');
+	// console.info(note);//noteContent);
+	return filePutContents(notePath, noteContent).then(() => {
+		return setModifiedTime(notePath, note.updated_time ? note.updated_time : note.created_time);
+	});
+}
+
+function saveFolderToDisk(folder) {
+	let path = baseNoteDir + '/' + folderFilename(folder);
+	return createDirectory(path);
 }
 
 function createNoteId(note) {
@@ -533,7 +645,7 @@ function createNoteId(note) {
 	return hash.substr(0, 32);
 }
 
-function importEnex(parentId, stream) {
+function importEnex(parentFolder, stream) {
 	return new Promise((resolve, reject) => {
 		let options = {};
 		let strict = true;
@@ -576,10 +688,16 @@ function importEnex(parentId, stream) {
 							firstAttachment = false;
 						}
 
-						note.parent_id = parentId;
+						note.parent_id = parentFolder.id;
 						note.body = processMdArrayNewLines(result.lines);
+						note.id = uuid.create();
 
-						saveNoteToWebApi(note);
+						saveNoteToDisk(parentFolder, note);
+
+						// console.info(noteToFriendlyString(note));
+						// console.info('=========================================================================================================================');
+
+						//saveNoteToWebApi(note);
 
 						// console.info('======== NOTE ============================================================================');
 						// let c = note.content;
@@ -669,7 +787,7 @@ function importEnex(parentId, stream) {
 				if (notes.length >= 10) {
 					stream.pause();
 					processNotes().then(() => {
-						//stream.resume();
+						stream.resume();
 					}).catch((error) => {
 						console.info('Error processing note', error);
 					});
@@ -722,8 +840,8 @@ function importEnex(parentId, stream) {
 // TODO: make it persistent and random
 const clientId = 'AB78AB78AB78AB78AB78AB78AB78AB78';
 
-//const folderTitle = 'Laurent';
-const folderTitle = 'Voiture';
+const folderTitle = 'Laurent';
+//const folderTitle = 'Voiture';
 
 webApi.post('sessions', null, {
 	email: 'laurent@cozic.net',
@@ -746,10 +864,14 @@ webApi.post('sessions', null, {
 
 	return folder ? Promise.resolve(folder) : webApi.post('folders', null, { title: folderTitle });
 }).then((folder) => {
+	return saveFolderToDisk(folder).then(() => {
+		return folder;
+	});
+}).then((folder) => {
 	let fileStream = fs.createReadStream('/mnt/c/Users/Laurent/Desktop/' + folderTitle + '.enex');
 	//let fileStream = fs.createReadStream('/mnt/c/Users/Laurent/Desktop/afaire.enex');
 	//let fileStream = fs.createReadStream('/mnt/c/Users/Laurent/Desktop/testtags.enex');
-	importEnex(folder.id, fileStream).then(() => {
+	importEnex(folder, fileStream).then(() => {
 		//console.info('DONE IMPORTING');
 	}).catch((error) => {
 		console.error('Cannot import', error);

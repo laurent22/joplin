@@ -6,6 +6,19 @@ require_once dirname(__FILE__) . '/TestUtils.php';
 require_once dirname(__FILE__) . '/BaseTestCase.php';
 require_once dirname(__FILE__) . '/BaseControllerTestCase.php';
 
+
+
+// use DiffMatchPatch\DiffMatchPatch;
+// $dmp = new DiffMatchPatch();
+// $diff = $dmp->patch_make('car', 'car 🚘');
+// var_dump($dmp->patch_toText($diff));
+// var_dump($dmp->patch_apply($diff, 'car'));
+
+// //$dmp->patch_toText($dmp->patch_make($from, $to));
+// die();
+
+
+
 $dbConfig = array(
 	'dbName' => 'notes_test',
 	'user' => 'root',

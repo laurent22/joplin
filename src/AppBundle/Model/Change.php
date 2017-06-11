@@ -10,7 +10,7 @@ class Change extends BaseModel {
 		'type' => array('create', 'update', 'delete'),
 	);
 
-	static public function changesDoneAfterId($userId, $clientId, $fromChangeId) {
+	static public function changesDoneAfterId($userId, $clientId, $fromChangeId, $limit = null) {
 		// Simplification:
 		//
 		// - If create, update, delete => return nothing
@@ -19,7 +19,8 @@ class Change extends BaseModel {
 		// - If update, update, update => return last
 
 		// $limit = 10000;
-		$limit = 100;
+		if ((int)$limit <= 0) $limit = 100;
+		if ($limit > 1000) $limit = 1000;
 		$changes = self::where('id', '>', $fromChangeId)
 		               ->where('user_id', '=', $userId)
 		               ->where('client_id', '!=', $clientId)

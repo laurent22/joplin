@@ -18,24 +18,20 @@ class Change extends BaseModel {
 	}
 
 	static all() {
-		return this.db().selectAll('SELECT * FROM changes').then((r) => {
-			let output = [];
-			for (let i = 0; i < r.rows.length; i++) {
-				output.push(r.rows.item(i));
-			}
-			return output;
-		});
+		return this.db().selectAll('SELECT * FROM changes');
 	}
 
 	static deleteMultiple(ids) {
 		if (ids.length == 0) return Promise.resolve();
 
-		return this.db().transaction((tx) => {
-			let sql = '';
-			for (let i = 0; i < ids.length; i++) {
-				tx.executeSql('DELETE FROM changes WHERE id = ?', [ids[i]]);
-			}			
-		});
+		console.warn('TODO: deleteMultiple: CHECK THAT IT WORKS');
+
+		let queries = [];
+		for (let i = 0; i < ids.length; i++) {
+			queries.push(['DELETE FROM changes WHERE id = ?', [ids[i]]]);
+		}
+
+		return this.db().transactionExecBatch(queries);
 	}
 
 	static mergeChanges(changes) {
@@ -45,6 +41,7 @@ class Change extends BaseModel {
 
 		for (let i = 0; i < changes.length; i++) {
 			let change = changes[i];
+			let mergedChange = null;
 
 			if (itemChanges[change.item_id]) {
 				mergedChange = itemChanges[change.item_id];

@@ -1,11 +1,50 @@
 import { BaseModel } from 'src/base-model.js';
 import { Log } from 'src/log.js';
+import { Folder } from 'src/models/folder.js';
 import { Geolocation } from 'src/geolocation.js';
+import { folderItemFilename } from 'src/string-utils.js'
+import moment from 'moment';
 
 class Note extends BaseModel {
 
 	static tableName() {
 		return 'notes';
+	}
+
+	static toFriendlyString_format(propName, propValue) {
+		if (['created_time', 'updated_time'].indexOf(propName) >= 0) {
+			if (!propValue) return '';
+			propValue = moment.unix(propValue).format('YYYY-MM-DD hh:mm:ss');
+		} else if (propValue === null || propValue === undefined) {
+			propValue = '';
+		}
+
+		return propValue;
+	}
+
+	static toFriendlyString(note) {
+		let shownKeys = ["author", "longitude", "latitude", "is_todo", "todo_due", "todo_completed", 'created_time', 'updated_time'];
+		let output = [];
+
+		output.push(note.title);
+		output.push("");
+		output.push(note.body);
+		output.push('');
+		for (let i = 0; i < shownKeys.length; i++) {
+			let v = note[shownKeys[i]];
+			v = this.toFriendlyString_format(shownKeys[i], v);
+			output.push(shownKeys[i] + ': ' + v);
+		}
+
+		return output.join("\n");
+	}
+
+	static filename(note) {
+		return folderItemFilename(note) + '.md';
+	}
+
+	static systemPath(parentFolder, note) {
+		return Folder.systemPath(null, parentFolder) + '/' + this.filename(note);
 	}
 
 	static useUuid() {
@@ -37,13 +76,7 @@ class Note extends BaseModel {
 	}
 
 	static previews(parentId) {
-		return this.db().selectAll('SELECT ' + this.previewFieldsSql() + ' FROM notes WHERE parent_id = ?', [parentId]).then((r) => {
-			let output = [];
-			for (let i = 0; i < r.rows.length; i++) {
-				output.push(r.rows.item(i));
-			}
-			return output;
-		});
+		return this.db().selectAll('SELECT ' + this.previewFieldsSql() + ' FROM notes WHERE parent_id = ?', [parentId]);
 	}
 
 	static preview(noteId) {

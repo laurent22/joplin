@@ -7,12 +7,15 @@
     "test": "jest"
   },
   "dependencies": {
+    "dropbox": "^2.5.4",
     "form-data": "^2.1.4",
+    "moment": "^2.18.1",
     "node-fetch": "^1.7.1",
     "react": "16.0.0-alpha.6",
     "react-native": "0.44.0",
     "react-native-action-button": "^2.6.9",
     "react-native-checkbox": "^1.1.0",
+    "react-native-fs": "^2.3.3",
     "react-native-popup-menu": "^0.7.4",
     "react-native-side-menu": "^0.20.1",
     "react-native-vector-icons": "^2.0.3",

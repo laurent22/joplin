@@ -17,10 +17,6 @@ const styles = StyleSheet.create({
 
 class ScreenHeaderComponent extends Component {
 
-	static defaultProps = {
-		menuOptions: [],
-	};
-
 	showBackButton() {
 		// Note: this is hardcoded for now because navigation.state doesn't tell whether
 		// it's possible to go back or not. Maybe it's possible to get this information
@@ -110,6 +106,10 @@ class ScreenHeaderComponent extends Component {
 	}
 
 }
+
+ScreenHeaderComponent.defaultProps = {
+	menuOptions: [],
+};
 
 const ScreenHeader = connect(
 	(state) => {

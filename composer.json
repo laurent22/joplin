@@ -28,7 +28,6 @@
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "^2.0",
-
         "illuminate/database": "*",
         "yetanotherape/diff-match-patch": "*"
     },

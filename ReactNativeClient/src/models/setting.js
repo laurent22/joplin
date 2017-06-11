@@ -27,10 +27,8 @@ class Setting extends BaseModel {
 
 	static load() {
 		this.cache_ = [];
-		return this.db().selectAll('SELECT * FROM settings').then((r) => {
-			for (let i = 0; i < r.rows.length; i++) {
-				this.cache_.push(r.rows.item(i));
-			}
+		return this.db().selectAll('SELECT * FROM settings').then((rows) => {
+			this.cache_ = rows;
 		});
 	}
 
@@ -89,13 +87,13 @@ class Setting extends BaseModel {
 		clearTimeout(this.updateTimeoutId_);
 		this.updateTimeoutId_ = null;
 
-		return BaseModel.db().transaction((tx) => {
-			tx.executeSql('DELETE FROM settings');
-			for (let i = 0; i < this.cache_.length; i++) {
-				let q = Database.insertQuery(this.tableName(), this.cache_[i]);
-				tx.executeSql(q.sql, q.params);
-			}
-		}).then(() => {
+		let queries = [];
+		queries.push('DELETE FROM settings');
+		for (let i = 0; i < this.cache_.length; i++) {
+			queries.push(Database.insertQuery(this.tableName(), this.cache_[i]));			
+		}
+
+		return BaseModel.db().transactionExecBatch(queries).then(() => {
 			Log.info('Settings have been saved.');
 		}).catch((error) => {
 			Log.warn('Could not save settings', error);

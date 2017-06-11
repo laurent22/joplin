@@ -1,4 +1,3 @@
-import SQLite from 'react-native-sqlite-storage';
 import { Log } from 'src/log.js';
 import { uuid } from 'src/uuid.js';
 import { promiseChain } from 'src/promise-chain.js';
@@ -94,14 +93,15 @@ INSERT INTO version (version) VALUES (1);
 
 class Database {
 
-	constructor() {
+	constructor(driver) {
 		this.debugMode_ = false;
 		this.initialized_ = false;
 		this.tableFields_ = null;
+		this.driver_ = driver;
 	}
 
 	setDebugEnabled(v) {
-		SQLite.DEBUG(v);
+		this.driver_.setDebugEnabled(v);
 		this.debugMode_ = v;
 	}
 
@@ -113,14 +113,43 @@ class Database {
 		return this.initialized_;
 	}
 
-	open() {
-		this.db_ = SQLite.openDatabase({ name: '/storage/emulated/0/Download/joplin-32.sqlite' }, (db) => {
+	driver() {
+		return this.driver_;
+	}
+
+	open(options) {
+		return this.driver().open(options).then((db) => {
 			Log.info('Database was open successfully');
-		}, (error) => {
+			return this.initialize();
+		}).catch((error) => {
 			Log.error('Cannot open database: ', error);
 		});
+	}
 
-		return this.initialize();
+	selectOne(sql, params = null) {
+		this.logQuery(sql, params);
+		return this.driver().selectOne(sql, params);
+	}
+
+	selectAll(sql, params = null) {
+		this.logQuery(sql, params);
+		return this.driver().selectAll(sql, params);
+	}
+
+	exec(sql, params = null) {
+		this.logQuery(sql, params);
+		return this.driver().exec(sql, params);
+	}
+
+	transactionExecBatch(queries) {
+		let chain = [];
+		for (let i = 0; i < queries.length; i++) {
+			let query = this.wrapQuery(queries[i]);
+			chain.push(() => {
+				return this.exec(query.sql, query.params);
+			});
+		}
+		return promiseChain(chain);
 	}
 
 	static enumId(type, s) {
@@ -177,41 +206,7 @@ class Database {
 
 	logQuery(sql, params = null) {
 		if (!this.debugMode()) return;
-		//Log.debug('DB: ' + sql, params);
-	}
-
-	selectOne(sql, params = null) {
-		this.logQuery(sql, params);
-
-		return new Promise((resolve, reject) => {
-			this.db_.executeSql(sql, params, (r) => {
-				resolve(r.rows.length ? r.rows.item(0) : null);
-			}, (error) => {
-				reject(error);
-			});
-		});
-	}
-
-	selectAll(sql, params = null) {
-		this.logQuery(sql, params);
-
-		return this.exec(sql, params);
-	}
-
-	exec(sql, params = null) {
-		this.logQuery(sql, params);
-
-		return new Promise((resolve, reject) => {
-			this.db_.executeSql(sql, params, (r) => {
-				resolve(r);
-			}, (error) => {
-				reject(error);
-			});
-		});
-	}
-
-	executeSql(sql, params = null) {
-		return this.exec(sql, params);
+		Log.debug('DB: ' + sql, params);
 	}
 
 	static insertQuery(tableName, data) {
@@ -254,29 +249,53 @@ class Database {
 	}
 
 	transaction(readyCallack) {
-		return new Promise((resolve, reject) => {
-			this.db_.transaction(
-				readyCallack,
-				(error) => { reject(error); },
-				() => { resolve(); }
-			);
-		});
+		throw new Error('transaction() DEPRECATED');
+		// return new Promise((resolve, reject) => {
+		// 	this.db_.transaction(
+		// 		readyCallack,
+		// 		(error) => { reject(error); },
+		// 		() => { resolve(); }
+		// 	);
+		// });
+	}
+
+	wrapQueries(queries) {
+		let output = [];
+		for (let i = 0; i < queries.length; i++) {
+			output.push(this.wrapQuery(queries[i]));
+		}
+		return output;
+	}
+
+	wrapQuery(sql, params = null) {
+		if (!sql) throw new Error('Cannot wrap empty string: ' + sql);
+
+		if (sql.constructor === Array) {
+			let output = {};
+			output.sql = sql[0];
+			output.params = sql.length >= 2 ? sql[1] : null;
+			return output;
+		} else if (typeof sql === 'string') {
+			return { sql: sql, params: params };
+		} else {
+			return sql; // Already wrapped
+		}
 	}
 
 	refreshTableFields() {
-		return this.exec('SELECT name FROM sqlite_master WHERE type="table"').then((tableResults) => {
+		let queries = [];
+		queries.push(this.wrapQuery('DELETE FROM table_fields'));
+
+		return this.selectAll('SELECT name FROM sqlite_master WHERE type="table"').then((tableRows) => {
 			let chain = [];
-			for (let i = 0; i < tableResults.rows.length; i++) {
-				let row = tableResults.rows.item(i);
-				let tableName = row.name;
+			for (let i = 0; i < tableRows.length; i++) {
+				let tableName = tableRows[i].name;
 				if (tableName == 'android_metadata') continue;
 				if (tableName == 'table_fields') continue;
-
-				chain.push((queries) => {
-					if (!queries) queries = [];
-					return this.exec('PRAGMA table_info("' + tableName + '")').then((pragmaResult) => {
-						for (let i = 0; i < pragmaResult.rows.length; i++) {
-							let item = pragmaResult.rows.item(i);
+				chain.push(() => {
+					return this.selectAll('PRAGMA table_info("' + tableName + '")').then((pragmas) => {
+						for (let i = 0; i < pragmas.length; i++) {
+							let item = pragmas[i];
 							// In SQLite, if the default value is a string it has double quotes around it, so remove them here
 							let defaultValue = item.dflt_value;
 							if (typeof defaultValue == 'string' && defaultValue.length >= 2 && defaultValue[0] == '"' && defaultValue[defaultValue.length - 1] == '"') {
@@ -290,19 +309,13 @@ class Database {
 							});
 							queries.push(q);
 						}
-						return queries;
 					});
 				});
 			}
 
 			return promiseChain(chain);
-		}).then((queries) => {
-			return this.transaction((tx) => {
-				tx.executeSql('DELETE FROM table_fields');
-				for (let i = 0; i < queries.length; i++) {
-					tx.executeSql(queries[i].sql, queries[i].params);
-				}
-			});
+		}).then(() => {
+			return this.transactionExecBatch(queries);
 		});
 	}
 
@@ -314,12 +327,13 @@ class Database {
 			// TODO: version update logic
 
 			// TODO: only do this if db has been updated:
-			return this.refreshTableFields();
+			// return this.refreshTableFields();
 		}).then(() => {
-			return this.exec('SELECT * FROM table_fields').then((r) => {
-				this.tableFields_ = {};
-				for (let i = 0; i < r.rows.length; i++) {
-					let row = r.rows.item(i);
+			this.tableFields_ = {};
+
+			return this.selectAll('SELECT * FROM table_fields').then((rows) => {
+				for (let i = 0; i < rows.length; i++) {
+					let row = rows[i];
 					if (!this.tableFields_[row.table_name]) this.tableFields_[row.table_name] = [];
 					this.tableFields_[row.table_name].push({
 						name: row.field_name,
@@ -328,7 +342,6 @@ class Database {
 					});
 				}
 			});
-
 
 			
 		// }).then(() => {
@@ -348,11 +361,9 @@ class Database {
 
 		// 	return p;
 
-
-
-
 		}).catch((error) => {
-			if (error && error.code != 0) {
+			//console.info(error.code);
+			if (error && error.code != 0 && error.code != 'SQLITE_ERROR') {
 				Log.error(error);
 				return;
 			}
@@ -364,19 +375,18 @@ class Database {
 
 			Log.info('Database is new - creating the schema...');
 
-			let statements = this.sqlStringToLines(structureSql)
-			return this.transaction((tx) => {
-				for (let i = 0; i < statements.length; i++) {
-					tx.executeSql(statements[i]);
-				}
-				tx.executeSql('INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' + uuid.create() + '", "' + Database.enumId('settings', 'string') + '")');
-				tx.executeSql('INSERT INTO folders (`id`, `title`, `is_default`, `created_time`) VALUES ("' + uuid.create() + '", "' + _('Default list') + '", 1, ' + Math.round((new Date()).getTime() / 1000) + ')');
-			}).then(() => {
+			let queries = this.wrapQueries(this.sqlStringToLines(structureSql));
+			queries.push(this.wrapQuery('INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' + uuid.create() + '", "' + Database.enumId('settings', 'string') + '")'));
+			queries.push(this.wrapQuery('INSERT INTO folders (`id`, `title`, `is_default`, `created_time`) VALUES ("' + uuid.create() + '", "' + _('Default list') + '", 1, ' + Math.round((new Date()).getTime() / 1000) + ')'));
+
+			return this.transactionExecBatch(queries).then(() => {
 				Log.info('Database schema created successfully');
 				// Calling initialize() now that the db has been created will make it go through
 				// the normal db update process (applying any additional patch).
+				return this.refreshTableFields();
+			}).then(() => {
 				return this.initialize();
-			})
+			});
 		});
 	}
 

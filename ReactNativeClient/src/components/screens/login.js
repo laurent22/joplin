@@ -61,7 +61,7 @@ class LoginScreenComponent extends React.Component {
 
 			Registry.api().setSession(session.id);
 
-			Registry.synchronizer().start();
+			//Registry.synchronizer().start();
 		}).catch((error) => {
 			this.setState({ errorMessage: _('Could not login: %s)', error.message) });
 		});

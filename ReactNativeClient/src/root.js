@@ -25,6 +25,7 @@ import { MenuContext } from 'react-native-popup-menu';
 import { SideMenu } from 'src/components/side-menu.js';
 import { SideMenuContent } from 'src/components/side-menu-content.js';
 import { NoteFolderService } from 'src/services/note-folder-service.js';
+import { DatabaseDriverReactNative } from 'src/database-driver-react-native';
 
 let defaultState = {
 	notes: [],
@@ -88,8 +89,6 @@ const reducer = (state = defaultState, action) => {
 		// Insert the note into the note list if it's new, or
 		// update it within the note array if it already exists.
 		case 'NOTES_UPDATE_ONE':
-
-			Log.info('NOITTEOJTNEONTOE', action.note);
 
 			let newNotes = state.notes.splice(0);
 			var found = false;
@@ -191,7 +190,7 @@ const AppNavigator = StackNavigator({
 class AppComponent extends React.Component {
 
 	componentDidMount() {
-		let db = new Database();
+		let db = new Database(new DatabaseDriverReactNative());
 		//db.setDebugEnabled(Registry.debugMode());
 		db.setDebugEnabled(false);
 
@@ -199,7 +198,7 @@ class AppComponent extends React.Component {
 		BaseModel.db_ = db;
 		NoteFolderService.dispatch = this.props.dispatch;
 
-		db.open().then(() => {
+		db.open({ name: '/storage/emulated/0/Download/joplin-42.sqlite' }).then(() => {
 			Log.info('Database is ready.');
 			Registry.setDb(db);
 		}).then(() => {
@@ -207,6 +206,21 @@ class AppComponent extends React.Component {
 			return Setting.load();
 		}).then(() => {
 			let user = Setting.object('user');
+
+			if (!user || !user.session) {
+				user = {
+					email: 'laurent@cozic.net',
+					session: "02d0e9ca42cbbc2d35efb1bc790b9eec",
+				}
+				Setting.setObject('user', user);
+				this.props.dispatch({
+					type: 'USER_SET',
+					user: user,
+				});
+			}
+
+			Setting.setValue('sync.lastRevId', '123456');
+
 			Log.info('Client ID', Setting.value('clientId'));
 			Log.info('User', user);
 
@@ -241,9 +255,25 @@ class AppComponent extends React.Component {
 			// 	folderId: folder.id,
 			// });
 		}).then(() => {
-			let synchronizer = new Synchronizer(db, Registry.api());
-			Registry.setSynchronizer(synchronizer);
-			synchronizer.start();
+
+			var Dropbox = require('dropbox');
+			var dropboxApi = new Dropbox({ accessToken: '' });
+			// dbx.filesListFolder({path: '/Joplin/Laurent.4e847cc'})
+			// .then(function(response) {
+			// //console.log('DROPBOX RESPONSE', response);
+			// console.log('DROPBOX RESPONSE', response.entries.length, response.has_more);
+			// })
+			// .catch(function(error) {
+			// console.log('DROPBOX ERROR', error);
+			// });
+
+			// return this.api_;
+
+
+			// let synchronizer = new Synchronizer(db, Registry.api());
+			// let synchronizer = new Synchronizer(db, dropboxApi);
+			// Registry.setSynchronizer(synchronizer);
+			// synchronizer.start();
 		}).catch((error) => {
 			Log.error('Initialization error:', error);
 		});

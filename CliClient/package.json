@@ -5,14 +5,19 @@
   "dependencies": {
     "app-module-path": "^2.2.0",
     "form-data": "^2.1.4",
+    "fs-extra": "^3.0.1",
     "jssha": "^2.3.0",
+    "mkdirp": "^0.5.1",
     "moment": "^2.18.1",
     "node-fetch": "^1.7.1",
     "promise": "^7.1.1",
     "react": "16.0.0-alpha.6",
     "sax": "^1.2.2",
+    "sprintf-js": "^1.1.1",
+    "sqlite3": "^3.1.8",
     "string-to-stream": "^1.1.0",
-    "uuid": "^3.0.1"
+    "uuid": "^3.0.1",
+    "vorpal": "^1.12.0"
   },
   "devDependencies": {
     "babel-changed": "^7.0.0",
@@ -22,7 +27,8 @@
     "query-string": "4.3.4"
   },
   "scripts": {
-    "build": "babel-changed app -d build",
+    "babelbuild": "babel app -d build",
+    "build": "babel-changed app -d build && babel-changed app/src/models -d build/src/models && babel-changed app/src/services -d build/src/services",
     "clean": "babel-changed --reset"
   }
 }
