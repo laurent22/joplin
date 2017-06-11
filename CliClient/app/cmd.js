@@ -11,10 +11,40 @@ import { sprintf } from 'sprintf-js';
 import { _ } from 'src/locale.js';
 import { NoteFolderService } from 'src/services/note-folder-service.js';
 
+
+// name: 'f42b0e23f06948ee9dda3fcf1b1c4205/.folder.md',
+// createdTime: 1497216952,
+// updatedTime: 1497216952,
+// createdTimeOrig: 2017-06-11T21:35:52.362Z,
+// updatedTimeOrig: 2017-06-11T21:35:52.362Z,
+// isDir: false
+
+// Sun, 11 Jun 2017 21:35:52 GMT
+
+
+// import moment from 'moment';
+
+// let m = moment('2017-06-11T21:35:52.362Z');
+// console.info(Math.round(m.toDate().getTime() / 1000));
+
+// //let m = moment(time, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
+
+// // if (!m.isValid()) {
+// // 	throw new Error('Invalid date: ' + time);
+// // }
+// // return Math.round(m.toDate().getTime() / 1000);
+
+
+
 const vorpal = require('vorpal')();
 
 let db = new Database(new DatabaseDriverNode());
 db.setDebugEnabled(false);
+
+let fileDriver = new FileApiDriverLocal();
+let fileApi = new FileApi('/home/laurent/Temp/TestImport', fileDriver);
+let synchronizer = new Synchronizer(db, fileApi);
+
 db.open({ name: '/home/laurent/Temp/test.sqlite3' }).then(() => {
 	BaseModel.db_ = db;
 
@@ -138,6 +168,39 @@ db.open({ name: '/home/laurent/Temp/test.sqlite3' }).then(() => {
 	});
 
 	commands.push({
+		usage: 'cat <item-title>',
+		description: 'Displays the given item data.',
+		action: function (args, end) {
+			let title = args['item-title'];
+
+			let promise = null;
+			if (!currentFolder) {
+				promise = Folder.loadByField('title', title);
+			} else {
+				promise = Folder.loadNoteByField(currentFolder.id, 'title', title);
+			}
+
+			promise.then((item) => {
+				if (!item) {
+					this.log(_('No item with title "%s" found.', title));
+					end();
+					return;
+				}
+
+				if (!currentFolder) {
+					this.log(Folder.toFriendlyString(item));
+				} else {
+					this.log(Note.toFriendlyString(item));
+				}
+			}).catch((error) => {
+				this.log(error);
+			}).then(() => {
+				end();
+			});
+		},
+	});
+
+	commands.push({
 		usage: 'ls [list-title]',
 		description: 'Lists items in [list-title].',
 		action: function (args, end) {
@@ -178,13 +241,17 @@ db.open({ name: '/home/laurent/Temp/test.sqlite3' }).then(() => {
 		},
 	});
 
-	// commands.push({
-	// 	usage: 'sync',
-	// 	description: 'Synchronizes with remote storage.',
-	// 	action: function (args, end) {
-
-	// 	},
-	// });
+	commands.push({
+		usage: 'sync',
+		description: 'Synchronizes with remote storage.',
+		action: function (args, end) {
+			synchronizer.start().catch((error) => {
+				console.error(error);
+			}).then(() => {
+				end();
+			});
+		},
+	});
 
 	for (let i = 0; i < commands.length; i++) {
 		let c = commands[i];
@@ -192,20 +259,5 @@ db.open({ name: '/home/laurent/Temp/test.sqlite3' }).then(() => {
 		o.action(c.action);
 	}
 
-
-	let driver = new FileApiDriverLocal();
-	let api = new FileApi('/home/laurent/Temp/TestImport', driver);
-	//let api = new FileApi('/home/laurent/Temp/backup_test_dest', driver);
-
-	// api.list('', true).then((files) => {
-	// 	console.info(files);
-	// }).catch((error) => {
-	// 	console.error(error);
-	// });
-	let synchronizer = new Synchronizer(db, api);
-	synchronizer.start().catch((error) => {
-		console.error(error);
-	});
-
-	//vorpal.delimiter(promptString()).show();
+	vorpal.delimiter(promptString()).show();
 });
