@@ -68,9 +68,51 @@ db.open({ name: '/home/laurent/Temp/test.sqlite3' }).then(() => {
 		vorpal.delimiter(promptString());
 	}
 
+	// For now, to go around this issue: https://github.com/dthree/vorpal/issues/114
+	function quotePromptArg(s) {
+		if (s.indexOf(' ') >= 0) {
+			return '"' + s + '"';
+		}
+		return s;
+	}
+
+	function autocompleteFolders() {
+		return Folder.all().then((folders) => {
+			let output = [];
+			for (let i = 0; i < folders.length; i++) {
+				output.push(quotePromptArg(folders[i].title));
+			}
+			output.push('..');
+			output.push('.');
+			return output;
+		});
+	}
+
+	function autocompleteItems() {
+		let promise = null;
+		if (!currentFolder) {
+			promise = Folder.all();
+		} else {
+			promise = Note.previews(currentFolder.id);
+		}
+
+		return promise.then((items) => {
+			let output = [];
+			for (let i = 0; i < items.length; i++) {
+				output.push(quotePromptArg(items[i].title));
+			}
+			return output;			
+		});
+	}
+
 	process.stdin.on('keypress', (_, key) => {
 		if (key && key.name === 'return') {
 			updatePrompt();
+		}
+
+		if (key.name === 'tab') {
+			vorpal.ui.imprint();
+			vorpal.log(vorpal.ui.input());
 		}
 	});
 
@@ -96,10 +138,12 @@ db.open({ name: '/home/laurent/Temp/test.sqlite3' }).then(() => {
 				end();
 			});
 		},
+		autocomplete: autocompleteFolders,
 	});
 
 	commands.push({
 		usage: 'mklist <list-title>',
+		alias: 'mkdir',
 		description: 'Creates a new list',
 		action: function (args, end) {
 			NoteFolderService.save('folder', { title: args['list-title'] }).catch((error) => {
@@ -113,6 +157,7 @@ db.open({ name: '/home/laurent/Temp/test.sqlite3' }).then(() => {
 
 	commands.push({
 		usage: 'mknote <note-title>',
+		alias: 'touch',
 		description: 'Creates a new note',
 		action: function (args, end) {
 			if (!currentFolder) {
@@ -134,13 +179,14 @@ db.open({ name: '/home/laurent/Temp/test.sqlite3' }).then(() => {
 	});
 
 	commands.push({
-		usage: 'edit <item-title> <prop-name> [prop-value]',
+		usage: 'set <item-title> <prop-name> [prop-value]',
 		description: 'Sets the given <prop-name> of the given item.',
 		action: function (args, end) {
 			let promise = null;
 			let title = args['item-title'];
 			let propName = args['prop-name'];
 			let propValue = args['prop-value'];
+			if (!propValue) propValue = '';
 
 			if (!currentFolder) {
 				promise = Folder.loadByField('title', title);
@@ -165,6 +211,7 @@ db.open({ name: '/home/laurent/Temp/test.sqlite3' }).then(() => {
 				end();
 			});
 		},
+		autocomplete: autocompleteItems,
 	});
 
 	commands.push({
@@ -198,6 +245,42 @@ db.open({ name: '/home/laurent/Temp/test.sqlite3' }).then(() => {
 				end();
 			});
 		},
+		autocomplete: autocompleteItems,
+	});
+
+	commands.push({
+		usage: 'rm <item-title>',
+		description: 'Deletes the given item. For a list, all the notes within that list will be deleted.',
+		action: function (args, end) {
+			let title = args['item-title'];
+
+			let promise = null;
+			let itemType = currentFolder ? 'note' : 'folder';
+			if (itemType == 'folder') {
+				promise = Folder.loadByField('title', title);
+			} else {
+				promise = Folder.loadNoteByField(currentFolder.id, 'title', title);
+			}
+
+			promise.then((item) => {
+				if (!item) {
+					this.log(_('No item with title "%s" found.', title));
+					end();
+					return;
+				}
+
+				if (itemType == 'folder') {
+					return Folder.delete(item.id);
+				} else {
+					return Note.delete(item.id);
+				}
+			}).catch((error) => {
+				this.log(error);
+			}).then(() => {
+				end();
+			});
+		},
+		autocomplete: autocompleteItems,
 	});
 
 	commands.push({
@@ -208,7 +291,9 @@ db.open({ name: '/home/laurent/Temp/test.sqlite3' }).then(() => {
 
 			let promise = null;
 
-			if (folderTitle) {
+			if (folderTitle == '..') {
+				promise = Promise.resolve('root');
+			} else if (folderTitle && folderTitle != '.') {
 				promise = Folder.loadByField('title', folderTitle);
 			} else if (currentFolder) {
 				promise = Promise.resolve(currentFolder);
@@ -239,6 +324,7 @@ db.open({ name: '/home/laurent/Temp/test.sqlite3' }).then(() => {
 				end();
 			});
 		},
+		autocomplete: autocompleteFolders,
 	});
 
 	commands.push({
@@ -256,6 +342,14 @@ db.open({ name: '/home/laurent/Temp/test.sqlite3' }).then(() => {
 	for (let i = 0; i < commands.length; i++) {
 		let c = commands[i];
 		let o = vorpal.command(c.usage, c.description);
+		if (c.alias) {
+			o.alias(c.alias);
+		}
+		if (c.autocomplete) {
+			o.autocomplete({
+				data: c.autocomplete,
+			});
+		}
 		o.action(c.action);
 	}
 
