@@ -25,13 +25,27 @@ class FileApiDriverLocal {
 		return Math.round(m.toDate().getTime() / 1000);
 	}
 
-	metadataFromStats_(name, stats) {
+	metadataFromStats_(path, stats) {
 		return {
-			name: name,
+			path: path,
 			createdTime: this.statTimeToUnixTimestamp_(stats.birthtime),
 			updatedTime: this.statTimeToUnixTimestamp_(stats.mtime),
+			createdTimeOrig: stats.birthtime,
+			updatedTimeOrig: stats.mtime,
 			isDir: stats.isDirectory(),
 		};
+	}
+
+	setFileTimestamp(path, timestamp) {
+		return new Promise((resolve, reject) => {
+			fs.utimes(path, timestamp, timestamp, (error) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+				resolve();
+			});
+		});
 	}
 
 	list(path) {

@@ -1,3 +1,5 @@
+require('source-map-support').install();
+
 import { FileApi } from 'src/file-api.js';
 import { FileApiDriverLocal } from 'src/file-api-driver-local.js';
 import { Database } from 'src/database.js';
@@ -5,6 +7,7 @@ import { DatabaseDriverNode } from 'src/database-driver-node.js';
 import { BaseModel } from 'src/base-model.js';
 import { Folder } from 'src/models/folder.js';
 import { Note } from 'src/models/note.js';
+import { Setting } from 'src/models/setting.js';
 import { Synchronizer } from 'src/synchronizer.js';
 import { uuid } from 'src/uuid.js';
 import { sprintf } from 'sprintf-js';
@@ -53,7 +56,9 @@ let synchronizer = new Synchronizer(db, fileApi);
 
 db.open({ name: '/home/laurent/Temp/test.sqlite3' }).then(() => {
 	BaseModel.db_ = db;
-
+}).then(() => {
+	return Setting.load();
+}).then(() => {
 	let commands = [];
 	let currentFolder = null;
 
@@ -291,6 +296,7 @@ db.open({ name: '/home/laurent/Temp/test.sqlite3' }).then(() => {
 
 	commands.push({
 		usage: 'ls [list-title]',
+		alias: 'll',
 		description: 'Lists items in [list-title].',
 		action: function (args, end) {
 			let folderTitle = args['list-title'];

@@ -14,6 +14,7 @@
     "promise": "^7.1.1",
     "react": "16.0.0-alpha.6",
     "sax": "^1.2.2",
+    "source-map-support": "^0.4.15",
     "sprintf-js": "^1.1.1",
     "sqlite3": "^3.1.8",
     "string-to-stream": "^1.1.0",
@@ -29,7 +30,7 @@
   },
   "scripts": {
     "babelbuild": "babel app -d build",
-    "build": "babel-changed app -d build && babel-changed app/src/models -d build/src/models && babel-changed app/src/services -d build/src/services",
+    "build": "babel-changed app -d build --source-maps && babel-changed app/src/models -d build/src/models --source-maps && babel-changed app/src/services -d build/src/services --source-maps",
     "clean": "babel-changed --reset"
   }
 }

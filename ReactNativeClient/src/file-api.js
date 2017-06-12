@@ -35,6 +35,10 @@ class FileApi {
 		});
 	}
 
+	setFileTimestamp(path, timestamp) {
+		return this.driver_.setFileTimestamp(this.baseDir_ + '/' + path, timestamp);
+	}
+
 	mkdir(path) {
 		return this.driver_.mkdir(this.baseDir_ + '/' + path);
 	}

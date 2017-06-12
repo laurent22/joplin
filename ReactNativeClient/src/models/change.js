@@ -24,8 +24,6 @@ class Change extends BaseModel {
 	static deleteMultiple(ids) {
 		if (ids.length == 0) return Promise.resolve();
 
-		console.warn('TODO: deleteMultiple: CHECK THAT IT WORKS');
-
 		let queries = [];
 		for (let i = 0; i < ids.length; i++) {
 			queries.push(['DELETE FROM changes WHERE id = ?', [ids[i]]]);

@@ -10,8 +10,9 @@ import { Registry } from 'src/registry.js';
 class NoteFolderService extends BaseService {
 
 	static save(type, item, oldItem) {
+		let diff = null;
 		if (oldItem) {
-			let diff = BaseModel.diffObjects(oldItem, item);
+			diff = BaseModel.diffObjects(oldItem, item);
 			if (!Object.getOwnPropertyNames(diff).length) {
 				Log.info('Item not changed - not saved');
 				return Promise.resolve(item);
@@ -27,9 +28,16 @@ class NoteFolderService extends BaseService {
 
 		let isNew = !item.id;
 		let output = null;
-		return ItemClass.save(item).then((item) => {
-			output = item;
-			if (isNew && type == 'note') return Note.updateGeolocation(item.id);
+
+		let toSave = item;
+		if (diff !== null) {
+			toSave = diff;
+			toSave.id = item.id;
+		}
+
+		return ItemClass.save(toSave).then((savedItem) => {
+			output = Object.assign(item, savedItem);
+			if (isNew && type == 'note') return Note.updateGeolocation(output.id);
 		}).then(() => {
 //			Registry.synchronizer().start();
 			return output;

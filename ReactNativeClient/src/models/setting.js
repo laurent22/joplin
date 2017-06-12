@@ -116,7 +116,8 @@ Setting.defaults_ = {
 	'sessionId': { value: '', type: 'string' },
 	'user.email': { value: '', type: 'string' },
 	'user.session': { value: '', type: 'string' },
-	'sync.lastRevId': { value: 0, type: 'int' },
+	'sync.lastRevId': { value: 0, type: 'int' }, // DEPRECATED
+	'sync.lastUpdateTime': { value: 0, type: 'int' },
 };
 
 export { Setting };
