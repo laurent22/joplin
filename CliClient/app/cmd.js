@@ -45,6 +45,12 @@ let fileDriver = new FileApiDriverLocal();
 let fileApi = new FileApi('/home/laurent/Temp/TestImport', fileDriver);
 let synchronizer = new Synchronizer(db, fileApi);
 
+
+
+// import moment from 'moment-timezone';
+
+// console.info(moment.tz.guess());
+
 db.open({ name: '/home/laurent/Temp/test.sqlite3' }).then(() => {
 	BaseModel.db_ = db;
 

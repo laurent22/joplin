@@ -39,6 +39,22 @@ class Note extends BaseModel {
 		return output.join("\n");
 	}
 
+	// static fromFriendlyString(item) {
+	// 	let lines = [];
+	// 	// mynote
+
+	// 	// abcdefg\nsecond line\n\nline after two newline
+
+	// 	// author: 
+	// 	// longitude: -3.4596633911132812
+	// 	// latitude: 48.73219093634444
+	// 	// is_todo: 0
+	// 	// todo_due: 0
+	// 	// todo_completed: 0
+	// 	// created_time: 2017-06-12 05:02:38
+	// 	// updated_time: 2017-06-12 05:02:38
+	// }
+
 	static filename(note) {
 		return folderItemFilename(note) + '.md';
 	}
