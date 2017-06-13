@@ -33,6 +33,6 @@
     "babelbuild": "babel app -d build",
     "build": "babel-changed app -d build --source-maps && babel-changed app/src/models -d build/src/models --source-maps && babel-changed app/src/services -d build/src/services --source-maps",
     "clean": "babel-changed --reset",
-    "test": "babel-changed spec -d spec-build --source-maps && jasmine"
+    "test": "babel-changed tests -d tests-build --source-maps && jasmine"
   }
 }

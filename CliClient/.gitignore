@@ -1,4 +1,5 @@
 build/
 node_modules/
 app/src
-spec-build/
+tests-build/
+tests/src

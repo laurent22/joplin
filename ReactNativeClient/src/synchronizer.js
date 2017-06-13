@@ -96,35 +96,103 @@ class Synchronizer {
 		};
 	}
 
+	itemIsSameDate(item, date) {
+		return Math.abs(item.updatedTime - date) <= 1;
+	}
+
 	itemIsNewerThan(item, date) {
+		if (this.itemIsSameDate(item, date)) return false;
 		return item.updatedTime > date;
 	}
 
 	itemIsOlderThan(item, date) {
-		return !this.itemIsNewerThan(item, date);
+		if (this.itemIsSameDate(item, date)) return false;
+		return item.updatedTime < date;
 	}
 
-	syncActions(localItems, remoteItems, lastSyncTime) {
+	// Assumption: it's not possible to, for example, have a directory one the dest
+	// and a file with the same name on the source. It's not possible because the
+	// file and directory names are UUID so should be unique.
+	syncActions(localItems, remoteItems, deletedLocalPaths) {
 		let output = [];
+		let donePaths = [];
 
 		for (let i = 0; i < localItems.length; i++) {
-			let item = localItems[i];
-			let remoteItem = this.itemByPath(remoteItems, item.path);
+			let local = localItems[i];
+			let remote = this.itemByPath(remoteItems, local.path);
+
 			let action = {
-				localItem: item,
-				remoteItem: remoteItem,
+				local: local,
+				remote: remote,
 			};
-			if (!remoteItem) {
-				action.type = 'create';
-				action.where = 'there';
-			} else {
-				if (this.itemIsOlderThan(remoteItem, lastSyncTime)) {
-					action.type = 'update';
-					action.where = 'there';
+
+			if (!remote) {
+				if (local.lastSyncTime) {
+					// The item has been synced previously and now is no longer in the dest
+					// which means it has been deleted.
+					action.type = 'delete';
+					action.dest = 'local';
 				} else {
-					action.type = 'conflict'; // Move local to /Conflict; Copy remote here
-					action.where = 'here';
+					// The item has never been synced and is not present in the dest
+					// which means it is new
+					action.type = 'create';
+					action.dest = 'remote';
 				}
+			} else {
+				if (this.itemIsOlderThan(local, local.lastSyncTime)) continue;
+
+				if (this.itemIsOlderThan(remote, local.lastSyncTime)) {
+					action.type = 'update';
+					action.dest = 'remote';
+				} else {
+					action.type = 'conflict';
+					if (local.isDir) {
+						// For folders, currently we don't completely handle conflicts, we just
+						// we just update the local dir (.folder metadata file) with the remote
+						// version. It means the local version is lost but shouldn't be a big deal
+						// and should be rare (at worst, the folder name needs to renamed).
+						action.solution = [
+							{ type: 'update', dest: 'local' },
+						];
+					} else {
+						action.solution = [
+							{ type: 'copy-to-remote-conflict-dir', dest: 'local' },
+							{ type: 'copy-to-local-conflict-dir', dest: 'local' },
+							{ type: 'update', dest: 'local' },
+						];
+					}
+				}
+			}
+
+			donePaths.push(local.path);
+
+			output.push(action);
+		}
+
+		for (let i = 0; i < remoteItems.length; i++) {
+			let remote = remoteItems[i];
+			if (donePaths.indexOf(remote.path) >= 0) continue; // Already handled in the previous loop
+			let local = this.itemByPath(localItems, remote.path);
+
+			let action = {
+				local: local,
+				remote: remote,
+			};
+
+			if (!local) {
+				if (deletedLocalPaths.indexOf(remote.path) >= 0) {
+					action.type = 'delete';
+					action.dest = 'remote';
+				} else {
+					action.type = 'create';
+					action.dest = 'local';
+				}
+			} else {
+				if (this.itemIsOlderThan(remote, local.lastSyncTime)) continue; // Already have this version
+				// Note: no conflict is possible here since if the local item has been
+				// modified since the last sync, it's been processed in the previous loop.
+				action.type = 'update';
+				action.dest = 'local';
 			}
 
 			output.push(action);
