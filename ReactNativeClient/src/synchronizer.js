@@ -77,6 +77,62 @@ class Synchronizer {
 		});
 	}
 
+	// isNewerThan(date1, date2) {
+	// 	return date1 > date2;
+	// }
+
+	itemByPath(items, path) {
+		for (let i = 0; i < items.length; i++) {
+			if (items[i].path == path) return items[i];
+		}
+		return null;
+	}
+
+	syncAction(actionType, where, item, isConflict) {
+		return {
+			type: actionType,
+			where: where,
+			item: item,
+		};
+	}
+
+	itemIsNewerThan(item, date) {
+		return item.updatedTime > date;
+	}
+
+	itemIsOlderThan(item, date) {
+		return !this.itemIsNewerThan(item, date);
+	}
+
+	syncActions(localItems, remoteItems, lastSyncTime) {
+		let output = [];
+
+		for (let i = 0; i < localItems.length; i++) {
+			let item = localItems[i];
+			let remoteItem = this.itemByPath(remoteItems, item.path);
+			let action = {
+				localItem: item,
+				remoteItem: remoteItem,
+			};
+			if (!remoteItem) {
+				action.type = 'create';
+				action.where = 'there';
+			} else {
+				if (this.itemIsOlderThan(remoteItem, lastSyncTime)) {
+					action.type = 'update';
+					action.where = 'there';
+				} else {
+					action.type = 'conflict'; // Move local to /Conflict; Copy remote here
+					action.where = 'here';
+				}
+			}
+
+			output.push(action);
+		}
+
+		return output;
+	}
+
 	processState_uploadChanges() {
 		let remoteFiles = [];
 		let processedChangeIds = [];

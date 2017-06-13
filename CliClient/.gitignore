@@ -1,3 +1,4 @@
 build/
 node_modules/
 app/src
+spec-build/

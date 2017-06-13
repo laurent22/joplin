@@ -152,6 +152,10 @@ class FileApiDriverLocal {
 		});
 	}
 
+	format() {
+		throw new Error('Not supported');
+	}
+
 }
 
 export { FileApiDriverLocal };

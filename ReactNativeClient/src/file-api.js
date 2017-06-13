@@ -66,6 +66,10 @@ class FileApi {
 		return this.driver_.move(this.fullPath_(oldPath), this.fullPath_(newPath));
 	}
 
+	format() {
+		return this.driver_.format();
+	}
+
 }
 
 export { FileApi };

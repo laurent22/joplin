@@ -26,11 +26,13 @@
     "babel-cli": "^6.24.1",
     "babel-preset-env": "^1.5.1",
     "babel-preset-react": "^6.24.1",
+    "jasmine": "^2.6.0",
     "query-string": "4.3.4"
   },
   "scripts": {
     "babelbuild": "babel app -d build",
     "build": "babel-changed app -d build --source-maps && babel-changed app/src/models -d build/src/models --source-maps && babel-changed app/src/services -d build/src/services --source-maps",
-    "clean": "babel-changed --reset"
+    "clean": "babel-changed --reset",
+    "test": "babel-changed spec -d spec-build --source-maps && jasmine"
   }
 }

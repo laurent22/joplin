@@ -104,6 +104,11 @@ class FileApiDriverMemory {
 		return Promise.resolve();
 	}
 
+	format() {
+		this.items_ = [];
+		return Promise.resolve();
+	}
+
 }
 
 export { FileApiDriverMemory };
