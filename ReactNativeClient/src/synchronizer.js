@@ -122,11 +122,11 @@ class Synchronizer {
 									return this.api().mkdir(path).then(() => {
 										return this.api().put(Folder.systemMetadataPath(parent, item), Folder.toFriendlyString(item));
 									}).then(() => {
-										return this.api().setFileTimestamp(Folder.systemMetadataPath(parent, item), item.updated_time);
+										return this.api().setTimestamp(Folder.systemMetadataPath(parent, item), item.updated_time);
 									});
 								} else {
 									return this.api().put(path, Note.toFriendlyString(item)).then(() => {
-										return this.api().setFileTimestamp(path, item.updated_time);
+										return this.api().setTimestamp(path, item.updated_time);
 									});
 								}
 							});

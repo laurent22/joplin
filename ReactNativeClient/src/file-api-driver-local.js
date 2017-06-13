@@ -36,7 +36,7 @@ class FileApiDriverLocal {
 		};
 	}
 
-	setFileTimestamp(path, timestamp) {
+	setTimestamp(path, timestamp) {
 		return new Promise((resolve, reject) => {
 			fs.utimes(path, timestamp, timestamp, (error) => {
 				if (error) {
