@@ -122,7 +122,7 @@ class Note extends BaseModel {
 		return super.save(o, options).then((result) => {
 			// 'result' could be a partial one at this point (if, for example, only one property of it was saved)
 			// so call this.preview() so that the right fields are populated.
-			return this.preview(result.id);
+			return this.load(result.id);
 		}).then((note) => {
 			this.dispatch({
 				type: 'NOTES_UPDATE_ONE',

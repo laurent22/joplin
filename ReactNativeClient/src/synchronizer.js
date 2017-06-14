@@ -201,6 +201,12 @@ class Synchronizer {
 		return output;
 	}
 
+	processSyncActions(syncActions) {
+		for (let i = 0; i < syncActions.length; i++) {
+			
+		}
+	}
+
 	processState_uploadChanges() {
 		let remoteFiles = [];
 		let processedChangeIds = [];
@@ -550,12 +556,16 @@ class Synchronizer {
 			return;
 		}
 
+		this.state_ = 'started';
+
+		
+
 		// if (!this.api().session()) {
 		// 	Log.info("Sync: cannot start synchronizer because user is not logged in.");
 		// 	return;
 		// }
 
-		return this.processState('uploadChanges');
+		//return this.processState('uploadChanges');
 	}
 
 }

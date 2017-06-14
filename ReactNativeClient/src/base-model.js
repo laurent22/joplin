@@ -138,7 +138,7 @@ class BaseModel {
 
 		query.id = itemId;
 
-		Log.info('Saving', JSON.stringify(o));
+		// Log.info('Saving', JSON.stringify(o));
 
 		return query;
 	}

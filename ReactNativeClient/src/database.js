@@ -10,6 +10,7 @@ CREATE TABLE folders (
 	title TEXT NOT NULL DEFAULT "",
 	created_time INT NOT NULL DEFAULT 0,
 	updated_time INT NOT NULL DEFAULT 0,
+	sync_time INT NOT NULL DEFAULT 0,
 	is_default BOOLEAN NOT NULL DEFAULT 0
 );
 
@@ -20,6 +21,7 @@ CREATE TABLE notes (
 	body TEXT NOT NULL DEFAULT "",
 	created_time INT NOT NULL DEFAULT 0,
 	updated_time INT NOT NULL DEFAULT 0,
+	sync_time INT NOT NULL DEFAULT 0,
 	latitude NUMERIC NOT NULL DEFAULT 0,
 	longitude NUMERIC NOT NULL DEFAULT 0,
 	altitude NUMERIC NOT NULL DEFAULT 0,
@@ -88,6 +90,12 @@ CREATE TABLE table_fields (
 	field_default TEXT
 );
 
+CREATE TABLE item_sync_times (
+	id INTEGER PRIMARY KEY,
+	item_id TEXT,
+	\`time\` INT
+);
+
 INSERT INTO version (version) VALUES (1);
 `;
 
@@ -142,6 +150,9 @@ class Database {
 	}
 
 	transactionExecBatch(queries) {
+		queries.splice(0, 0, 'BEGIN TRANSACTION');
+		queries.push('COMMIT'); // Note: ROLLBACK is currently not supported
+
 		let chain = [];
 		for (let i = 0; i < queries.length; i++) {
 			let query = this.wrapQuery(queries[i]);
@@ -149,6 +160,7 @@ class Database {
 				return this.exec(query.sql, query.params);
 			});
 		}
+
 		return promiseChain(chain);
 	}
 
@@ -247,18 +259,7 @@ class Database {
 			params: params,
 		};
 	}
-
-	transaction(readyCallack) {
-		throw new Error('transaction() DEPRECATED');
-		// return new Promise((resolve, reject) => {
-		// 	this.db_.transaction(
-		// 		readyCallack,
-		// 		(error) => { reject(error); },
-		// 		() => { resolve(); }
-		// 	);
-		// });
-	}
-
+	
 	wrapQueries(queries) {
 		let output = [];
 		for (let i = 0; i < queries.length; i++) {

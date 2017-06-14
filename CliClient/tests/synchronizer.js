@@ -155,4 +155,8 @@ describe('Synchronizer syncActions', function() {
 		});
 	});
 
+	it('should sync items', function(done) {
+		
+	});
+
 });

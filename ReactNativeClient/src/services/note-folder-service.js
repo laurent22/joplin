@@ -5,6 +5,7 @@ import { BaseModel } from 'src/base-model.js';
 import { Note } from 'src/models/note.js';
 import { Folder } from 'src/models/folder.js';
 import { Log } from 'src/log.js';
+import { time } from 'src/time-utils.js';
 import { Registry } from 'src/registry.js';
 
 class NoteFolderService extends BaseService {
@@ -70,6 +71,38 @@ class NoteFolderService extends BaseService {
 		}).catch((error) => {
 			Log.warn('Cannot load notes', error);
 		});
+	}
+
+	static itemsThatNeedSync(context = null, limit = 100) {
+		let now = time.unix();
+
+		if (!context) {
+			context = {
+				hasMoreNotes: true,
+				hasMoreFolders: true,
+				noteOffset: 0,
+				folderOffset: 0,
+				hasMore: true,
+				items: [],
+			};
+		}
+
+		if (context.hasMoreNotes) {
+			return BaseModel.db().selectAll('SELECT * FROM notes WHERE sync_time < ? LIMIT ' + limit + ' OFFSET ' + context.noteOffset, [now]).then((items) => {
+				context.items = items;
+				context.hasMoreNotes = items.length >= limit;
+				context.noteOffset += items.length;
+				return context;
+			});
+		} else {
+			return BaseModel.db().selectAll('SELECT * FROM folders WHERE sync_time < ? LIMIT ' + limit + ' OFFSET ' + context.folderOffset, [now]).then((items) => {
+				context.items = items;
+				context.hasMoreFolders = items.length >= limit;
+				context.hasMore = context.hasMoreFolders;
+				context.folderOffset += items.length;
+				return context;
+			});
+		}
 	}
 
 }
