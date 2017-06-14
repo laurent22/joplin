@@ -1,6 +1,6 @@
 import { BaseModel } from 'src/base-model.js';
 import { Log } from 'src/log.js';
-import { promiseChain } from 'src/promise-chain.js';
+import { promiseChain } from 'src/promise-utils.js';
 import { Note } from 'src/models/note.js';
 import { folderItemFilename } from 'src/string-utils.js'
 import { _ } from 'src/locale.js';

@@ -1,6 +1,6 @@
 import fs from 'fs';
 import fse from 'fs-extra';
-import { promiseChain } from 'src/promise-chain.js';
+import { promiseChain } from 'src/promise-utils.js';
 import moment from 'moment';
 
 class FileApiDriverLocal {
@@ -9,10 +9,14 @@ class FileApiDriverLocal {
 		return new Promise((resolve, reject) => {
 			fs.stat(path, (error, s) => {
 				if (error) {
-					reject(error);
+					if (error.code == 'ENOENT') {
+						resolve(null);
+					} else {
+						reject(error);
+					}
 					return;
 				}
-				resolve(s);
+				resolve(this.metadataFromStats_(path, s));
 			});			
 		});
 	}
@@ -61,8 +65,7 @@ class FileApiDriverLocal {
 					chain.push((output) => {
 						if (!output) output = [];
 						return this.stat(path + '/' + items[i]).then((stat) => {
-							let md = this.metadataFromStats_(items[i], stat);
-							output.push(md);
+							output.push(stat);
 							return output;							
 						});
 					});
@@ -82,7 +85,13 @@ class FileApiDriverLocal {
 		return new Promise((resolve, reject) => {
 			fs.readFile(path, 'utf8', (error, content) => {
 				if (error) {
-					reject(error);
+					if (error.code == 'ENOENT') {
+						// Return null in this case so that it's possible to get a file
+						// without checking if it exists first.
+						resolve(null);
+					} else {
+						reject(error);
+					}
 					return;
 				}
 				return resolve(content);

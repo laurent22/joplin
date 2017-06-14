@@ -1,4 +1,4 @@
-import { promiseChain } from 'src/promise-chain.js';
+import { promiseChain } from 'src/promise-utils.js';
 
 class FileApi {
 
@@ -13,9 +13,19 @@ class FileApi {
 		return output;
 	}
 
-	list(path = '', recursive = false) {
+	listDirectories() {
+		return this.driver_.list(this.fullPath_('')).then((items) => {
+			let output = [];
+			for (let i = 0; i < items.length; i++) {
+				if (items[i].isDir) output.push(items[i]);
+			}
+			return output;
+		});
+	}
+
+	list(path = '', recursive = false, context = null) {
 		let fullPath = this.fullPath_(path);
-		return this.driver_.list(fullPath, recursive).then((items) => {
+		return this.driver_.list(fullPath).then((items) => {
 			if (recursive) {
 				let chain = [];
 				for (let i = 0; i < items.length; i++) {
@@ -47,14 +57,26 @@ class FileApi {
 	}
 
 	mkdir(path) {
+		console.info('mkdir ' + path);
 		return this.driver_.mkdir(this.fullPath_(path));
 	}
 
+	stat(path) {
+		console.info('stat ' + path);
+		return this.driver_.stat(this.fullPath_(path)).then((output) => {
+			if (!output) return output;
+			output.path = path;
+			return output;
+		});
+	}
+
 	get(path) {
+		console.info('get ' + path);
 		return this.driver_.get(this.fullPath_(path));
 	}
 
 	put(path, content) {
+		console.info('put ' + path);
 		return this.driver_.put(this.fullPath_(path), content);
 	}
 

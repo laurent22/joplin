@@ -2,7 +2,7 @@ require('app-module-path').addPath(__dirname);
 
 import { uuid } from 'src/uuid.js';
 import moment from 'moment';
-import { promiseChain } from 'src/promise-chain.js';
+import { promiseChain } from 'src/promise-utils.js';
 import { WebApi } from 'src/web-api.js'
 import { folderItemFilename } from 'src/string-utils.js'
 import jsSHA from "jssha";

@@ -4,7 +4,7 @@ import { Change } from 'src/models/change.js';
 import { Folder } from 'src/models/folder.js';
 import { Note } from 'src/models/note.js';
 import { BaseModel } from 'src/base-model.js';
-import { promiseChain } from 'src/promise-chain.js';
+import { promiseChain } from 'src/promise-utils.js';
 
 class Synchronizer {
 

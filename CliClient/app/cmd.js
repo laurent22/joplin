@@ -15,6 +15,195 @@ import { sprintf } from 'sprintf-js';
 import { _ } from 'src/locale.js';
 import { NoteFolderService } from 'src/services/note-folder-service.js';
 
+
+let db = new Database(new DatabaseDriverNode());
+db.setDebugEnabled(false);
+
+// function whilePromise(callback) {
+// 	let isDone = false;
+
+// 	function done() {
+// 		isDone = true;
+// 	}
+
+// 	let iterationDone = false;
+// 	let p = callback(done).then(() => {
+// 		iterationDone = true;
+// 	});
+
+// 	let iid = setInterval(() => {
+// 		if (iterationDone) {
+// 			if (isDone) {
+// 				clearInterval(iid);
+// 				return;
+// 			}
+
+// 			iterationDone = false;
+// 			callback(done).then(() => {
+// 				iterationDone = true;
+// 			});
+// 		}
+// 	}, 100);
+// }
+
+// function myPromise() {
+// 	return new Promise((resolve, reject) => {
+// 		setTimeout(() => {
+// 			resolve();
+// 		}, 500);
+// 	});
+// }
+
+// let counter = 0;
+// whilePromise((done) => {
+// 	return myPromise().then(() => {
+// 		counter++;
+// 		console.info(counter);
+// 		if (counter == 5) {
+// 			done();
+// 		}
+// 	});
+// });
+
+
+
+
+let fileDriver = new FileApiDriverLocal();
+let fileApi = new FileApi('/home/laurent/Temp/TestImport', fileDriver);
+let synchronizer = new Synchronizer(db, fileApi);
+
+function clearDatabase() {
+	let queries = [
+		'DELETE FROM changes',
+		'DELETE FROM notes',
+		'DELETE FROM folders',
+		'DELETE FROM item_sync_times',
+	];
+
+	return db.transactionExecBatch(queries);
+}
+
+function createRemoteItems() {
+	let a = fileApi;
+	return Promise.all([a.mkdir('test1'), a.mkdir('test2'), a.mkdir('test3')]).then(() => {
+		return Promise.all([
+			a.put('test1/un', 'test1_un'),
+			a.put('test1/deux', 'test1_deux'),
+			a.put('test2/trois', 'test2_trois'),
+			a.put('test3/quatre', 'test3_quatre'),
+			a.put('test3/cinq', 'test3_cinq'),
+			a.put('test3/six', 'test3_six'),
+		]);
+	});
+}
+
+function createLocalItems() {
+	return Folder.save({ title: "folder1" }).then((f) => {
+		return Promise.all([
+			Note.save({ title: "un", parent_id: f.id }),
+			Note.save({ title: "deux", parent_id: f.id }),
+			Note.save({ title: "trois", parent_id: f.id }),
+			Note.save({ title: "quatre", parent_id: f.id }),
+		]);
+	}).then(() => {
+		return Folder.save({ title: "folder2" })
+	}).then((f) => {
+		return Promise.all([
+			Note.save({ title: "cinq", parent_id: f.id }),
+		]);
+	}).then(() => {
+		return Folder.save({ title: "folder3" })
+	}).then(() => {
+		return Folder.save({ title: "folder4" })
+	}).then((f) => {
+		return Promise.all([
+			Note.save({ title: "six", parent_id: f.id }),
+			Note.save({ title: "sept", parent_id: f.id }),
+			Note.save({ title: "huit", parent_id: f.id }),
+		]);
+	});
+}
+
+db.open({ name: '/home/laurent/Temp/test-sync.sqlite3' }).then(() => {
+ 	BaseModel.db_ = db;
+ 	return clearDatabase().then(createLocalItems);
+}).then(() => {
+	return synchronizer.start();
+}).catch((error) => {
+	console.error(error);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// let fileDriver = new FileApiDriverMemory();
+// let fileApi = new FileApi('/root', fileDriver);
+// let synchronizer = new Synchronizer(db, fileApi);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // import { ItemSyncTime } from 'src/models/item-sync-time.js';
 
 // const vorpal = require('vorpal')();

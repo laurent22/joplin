@@ -6,4 +6,4 @@ mkdir -p "$CLIENT_DIR/tests-build/data"
 ln -s "$CLIENT_DIR/build/src" "$CLIENT_DIR/tests-build"
 
 npm run build && NODE_PATH="$CLIENT_DIR/tests-build/" npm test tests-build/synchronizer.js
-# npm run build && NODE_PATH="$CLIENT_DIR/tests-build/" npm test tests-build/services/note-folder-service.js
+#npm run build && NODE_PATH="$CLIENT_DIR/tests-build/" npm test tests-build/services/note-folder-service.js

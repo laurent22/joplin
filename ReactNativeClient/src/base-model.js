@@ -40,6 +40,12 @@ class BaseModel {
 		return this.db().tableFields(this.tableName());
 	}
 
+	static identifyItemType(item) {
+		if ('body' in item || ('parent_id' in item && !!item.parent_id)) return BaseModel.ITEM_TYPE_NOTE;
+		if ('sync_time' in item) return BaseModel.ITEM_TYPE_FOLDER;
+		throw new Error('Cannot identify item: ' + JSON.stringify(item));
+	}
+
 	static new() {
 		let fields = this.fields();
 		let output = {};
@@ -154,7 +160,8 @@ class BaseModel {
 
 		queries.push(saveQuery);
 
-		if (options.trackChanges && this.trackChanges()) {
+		// TODO: DISABLED DISABLED DISABLED DISABLED DISABLED DISABLED DISABLED DISABLED DISABLED DISABLED 
+		if (0&& ptions.trackChanges && this.trackChanges()) {
 			// Cannot import this class the normal way due to cyclical dependencies between Change and BaseModel
 			// which are not handled by React Native.
 			const { Change } = require('src/models/change.js');

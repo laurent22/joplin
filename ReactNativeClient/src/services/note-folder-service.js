@@ -74,33 +74,35 @@ class NoteFolderService extends BaseService {
 	}
 
 	static itemsThatNeedSync(context = null, limit = 100) {
-		let now = time.unix();
-
 		if (!context) {
 			context = {
-				hasMoreNotes: true,
 				hasMoreFolders: true,
+				hasMoreNotes: true,
 				noteOffset: 0,
 				folderOffset: 0,
 				hasMore: true,
-				items: [],
 			};
 		}
 
-		if (context.hasMoreNotes) {
-			return BaseModel.db().selectAll('SELECT * FROM notes WHERE sync_time < ? LIMIT ' + limit + ' OFFSET ' + context.noteOffset, [now]).then((items) => {
-				context.items = items;
-				context.hasMoreNotes = items.length >= limit;
-				context.noteOffset += items.length;
-				return context;
+		context.folderOffset = 0;
+		context.noteOffset = 0;
+
+		// Process folder first, then notes so that folders are created before
+		// adding notes to them. However, it will be the opposite when deleting
+		// folders (TODO).
+
+		if (context.hasMoreFolders) {
+			return BaseModel.db().selectAll('SELECT * FROM folders WHERE sync_time < updated_time LIMIT ' + limit + ' OFFSET ' + context.folderOffset).then((items) => {
+				context.hasMoreFolders = items.length >= limit;
+				context.folderOffset += items.length;
+				return { context: context, items: items };
 			});
 		} else {
-			return BaseModel.db().selectAll('SELECT * FROM folders WHERE sync_time < ? LIMIT ' + limit + ' OFFSET ' + context.folderOffset, [now]).then((items) => {
-				context.items = items;
-				context.hasMoreFolders = items.length >= limit;
-				context.hasMore = context.hasMoreFolders;
-				context.folderOffset += items.length;
-				return context;
+			return BaseModel.db().selectAll('SELECT * FROM notes WHERE sync_time < updated_time LIMIT ' + limit + ' OFFSET ' + context.noteOffset).then((items) => {
+				context.hasMoreNotes = items.length >= limit;
+				context.noteOffset += items.length;
+				context.hasMore = context.hasMoreNotes;
+				return { context: context, items: items };
 			});
 		}
 	}

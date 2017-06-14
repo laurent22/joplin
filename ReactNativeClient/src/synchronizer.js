@@ -4,7 +4,10 @@ import { Change } from 'src/models/change.js';
 import { Folder } from 'src/models/folder.js';
 import { Note } from 'src/models/note.js';
 import { BaseModel } from 'src/base-model.js';
-import { promiseChain } from 'src/promise-chain.js';
+import { promiseChain } from 'src/promise-utils.js';
+import { NoteFolderService } from 'src/services/note-folder-service.js';
+import { time } from 'src/time-utils.js';
+//import { promiseWhile } from 'src/promise-utils.js';
 import moment from 'moment';
 
 const fs = require('fs');
@@ -88,14 +91,6 @@ class Synchronizer {
 		return null;
 	}
 
-	syncAction(actionType, where, item, isConflict) {
-		return {
-			type: actionType,
-			where: where,
-			item: item,
-		};
-	}
-
 	itemIsSameDate(item, date) {
 		return Math.abs(item.updatedTime - date) <= 1;
 	}
@@ -110,9 +105,45 @@ class Synchronizer {
 		return item.updatedTime < date;
 	}
 
+	dbItemToSyncItem(dbItem) {
+		let p = Promise.resolve(null);
+		let itemType = BaseModel.identifyItemType(dbItem);
+		let ItemClass = null;
+
+		if (itemType == BaseModel.ITEM_TYPE_NOTE) {
+			ItemClass = Note;
+			p = Folder.load(dbItem.parent_id);
+		} else {
+			ItemClass = Folder;
+		}
+
+		return p.then((dbParent) => {
+			let path = ItemClass.systemPath(dbParent, dbItem);
+			return {
+				isDir: itemType == BaseModel.ITEM_TYPE_FOLDER,
+				path: path,
+				syncTime: dbItem.sync_time,
+				updatedTime: dbItem.updated_time,
+				dbParent: dbParent,
+				dbItem: dbItem,
+			};
+		});
+	}
+
+	syncAction(localItem, remoteItem, deletedLocalPaths) {
+		let output = this.syncActions(localItem ? [localItem] : [], remoteItem ? [remoteItem] : [], deletedLocalPaths);
+		if (output.length !== 1) throw new Error('Invalid number of actions returned');
+		return output[0];
+	}
+
 	// Assumption: it's not possible to, for example, have a directory one the dest
 	// and a file with the same name on the source. It's not possible because the
 	// file and directory names are UUID so should be unique.
+	// Each item must have these properties:
+	// - path
+	// - isDir
+	// - syncTime
+	// - updatedTime
 	syncActions(localItems, remoteItems, deletedLocalPaths) {
 		let output = [];
 		let donePaths = [];
@@ -127,7 +158,7 @@ class Synchronizer {
 			};
 
 			if (!remote) {
-				if (local.lastSyncTime) {
+				if (local.syncTime) {
 					// The item has been synced previously and now is no longer in the dest
 					// which means it has been deleted.
 					action.type = 'delete';
@@ -139,9 +170,9 @@ class Synchronizer {
 					action.dest = 'remote';
 				}
 			} else {
-				if (this.itemIsOlderThan(local, local.lastSyncTime)) continue;
+				if (this.itemIsOlderThan(local, local.syncTime)) continue;
 
-				if (this.itemIsOlderThan(remote, local.lastSyncTime)) {
+				if (this.itemIsOlderThan(remote, local.syncTime)) {
 					action.type = 'update';
 					action.dest = 'remote';
 				} else {
@@ -188,7 +219,7 @@ class Synchronizer {
 					action.dest = 'local';
 				}
 			} else {
-				if (this.itemIsOlderThan(remote, local.lastSyncTime)) continue; // Already have this version
+				if (this.itemIsOlderThan(remote, local.syncTime)) continue; // Already have this version
 				// Note: no conflict is possible here since if the local item has been
 				// modified since the last sync, it's been processed in the previous loop.
 				action.type = 'update';
@@ -199,12 +230,6 @@ class Synchronizer {
 		}
 
 		return output;
-	}
-
-	processSyncActions(syncActions) {
-		for (let i = 0; i < syncActions.length; i++) {
-			
-		}
 	}
 
 	processState_uploadChanges() {
@@ -548,15 +573,110 @@ class Synchronizer {
 		}
 	}
 
+	processSyncAction(action) {
+		// console.info(action);
+
+		if (action.type == 'conflict') {
+
+		} else {
+			let item = action[action.dest == 'local' ? 'remote' : 'local'];
+			let ItemClass = null;
+			if (item.isDir) {
+				ItemClass = Folder;
+			} else {
+				ItemClass = Note;
+			}
+			let path = ItemClass.systemPath(item.dbParent, item.dbItem);
+
+			if (action.type == 'create') {
+				if (action.dest == 'remote') {
+					if (item.isDir) {
+						return this.api().mkdir(path);
+					} else {
+						return this.api().put(path, Note.toFriendlyString(item.dbItem));
+					}
+				}
+			}
+		}
+
+		return Promise.resolve(); // TODO
+	}
+
+	processLocalItem(dbItem) {
+		//console.info(dbItem);
+		let localItem = null;
+		return this.dbItemToSyncItem(dbItem).then((r) => {
+			localItem = r;
+			return this.api().stat(localItem.path);
+		}).then((remoteItem) => {
+			let action = this.syncAction(localItem, remoteItem, []);
+			//console.info(action);
+			return this.processSyncAction(action);
+		}).then(() => {
+			dbItem.sync_time = time.unix();
+			if (localItem.isDir) {
+				return Folder.save(dbItem);
+			} else {
+				return Note.save(dbItem);
+			}
+		});
+	}
+
 	start() {
 		Log.info('Sync: start');
 
 		if (this.state() != 'idle') {
-			Log.info("Sync: cannot start synchronizer because synchronization already in progress. State: " + this.state());
-			return;
+			return Promise.reject('Cannot start synchronizer because synchronization already in progress. State: ' + this.state());
 		}
 
 		this.state_ = 'started';
+
+		return this.api().listDirectories().then((items) => {
+			var context = null;
+			let limit = 2;
+			let finishedReading = false;
+			let isReading = false;
+			
+			let readItems = () => {
+				isReading = true;
+				return NoteFolderService.itemsThatNeedSync(context, limit).then((result) => {
+					context = result.context;
+
+					let chain = [];
+					for (let i = 0; i < result.items.length; i++) {
+						let item = result.items[i];
+						console.info(JSON.stringify(item));
+						chain.push(() => {
+							//return Promise.resolve();
+							return this.processLocalItem(item);
+						});
+					}
+
+					return promiseChain(chain).then(() => {
+						console.info('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+						if (!context.hasMore) finishedReading = true;
+						isReading = false;
+					});
+				}).catch((error) => {
+					console.error(error);
+					throw error;
+				});
+			}
+
+			let iid = setInterval(() => {
+				if (isReading) return;
+				if (finishedReading) {
+					clearInterval(iid);
+					return;
+				}
+				readItems();
+			}, 100);
+
+		}).then(() => {
+			this.state_ = 'idle';
+		});
+
+		//return NoteFolderService.itemsThatNeedSync
 
 		
 
@@ -567,6 +687,8 @@ class Synchronizer {
 
 		//return this.processState('uploadChanges');
 	}
+
+	
 
 }
 
