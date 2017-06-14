@@ -15,42 +15,54 @@ import { sprintf } from 'sprintf-js';
 import { _ } from 'src/locale.js';
 import { NoteFolderService } from 'src/services/note-folder-service.js';
 
-const vorpal = require('vorpal')();
+// import { ItemSyncTime } from 'src/models/item-sync-time.js';
 
-let db = new Database(new DatabaseDriverNode());
-db.setDebugEnabled(false);
+// const vorpal = require('vorpal')();
 
-// let fileDriver = new FileApiDriverLocal();
-// let fileApi = new FileApi('/home/laurent/Temp/TestImport', fileDriver);
+// let db = new Database(new DatabaseDriverNode());
+// db.setDebugEnabled(false);
+// db.open({ name: '/home/laurent/Temp/test.sqlite3' }).then(() => {
+// 	BaseModel.db_ = db;
+
+// 	return ItemSyncTime.setTime(123, 789);
+
+// }).then((r) => {
+// 	console.info(r);
+// }).catch((error) => {
+// 	console.error(error);
+// });
+
+// // let fileDriver = new FileApiDriverLocal();
+// // let fileApi = new FileApi('/home/laurent/Temp/TestImport', fileDriver);
+// // let synchronizer = new Synchronizer(db, fileApi);
+
+
+// let fileDriver = new FileApiDriverMemory();
+// let fileApi = new FileApi('/root', fileDriver);
 // let synchronizer = new Synchronizer(db, fileApi);
 
 
-let fileDriver = new FileApiDriverMemory();
-let fileApi = new FileApi('/root', fileDriver);
-let synchronizer = new Synchronizer(db, fileApi);
-
-
-fileApi.mkdir('test').then(() => {
-	return fileApi.mkdir('test2');
-}).then(() => {
-	return fileApi.put('test/un', 'abcd1111').then(fileApi.put('test/deux', 'abcd2222'));
-}).then(() => {
-	return fileApi.list();
-}).then((items) => {
-	//console.info(items);
-}).then(() => {
-	return fileApi.delete('test/un');
-}).then(() => {
-	return fileApi.get('test/deux').then((content) => { console.info(content); });
-}).then(() => {
-	return fileApi.list('test', true);
-}).then((items) => {
-	console.info(items);
-}).catch((error) => {
-	console.error(error);
-}).then(() => {
-	process.exit();
-});
+// fileApi.mkdir('test').then(() => {
+// 	return fileApi.mkdir('test2');
+// }).then(() => {
+// 	return fileApi.put('test/un', 'abcd1111').then(fileApi.put('test/deux', 'abcd2222'));
+// }).then(() => {
+// 	return fileApi.list();
+// }).then((items) => {
+// 	//console.info(items);
+// }).then(() => {
+// 	return fileApi.delete('test/un');
+// }).then(() => {
+// 	return fileApi.get('test/deux').then((content) => { console.info(content); });
+// }).then(() => {
+// 	return fileApi.list('test', true);
+// }).then((items) => {
+// 	console.info(items);
+// }).catch((error) => {
+// 	console.error(error);
+// }).then(() => {
+// 	process.exit();
+// });
 
 
 
