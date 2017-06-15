@@ -1,3 +1,5 @@
+require('babel-plugin-transform-runtime');
+
 import { Log } from 'src/log.js';
 import { Setting } from 'src/models/setting.js';
 import { Change } from 'src/models/change.js';
@@ -258,7 +260,7 @@ class Synchronizer {
 	}
 
 	processSyncAction(action) {
-		console.info('Sync action: ', action);
+		//console.info('Sync action: ', action);
 		//console.info('Sync action: ' + JSON.stringify(action));
 
 		if (!action) return Promise.resolve();
@@ -324,89 +326,52 @@ class Synchronizer {
 		return Promise.resolve(); // TODO
 	}
 
-	processLocalItem(dbItem) {
+	async processLocalItem(dbItem) {
 		let localItem = this.dbItemToSyncItem(dbItem);
 		
-		return this.api().stat(localItem.path).then((remoteItem) => {
-			let action = this.syncAction(localItem, remoteItem, []);
-			return this.processSyncAction(action);
-		}).then(() => {
-			dbItem.sync_time = time.unix();
-			if (localItem.type == 'folder') {
-				return Folder.save(dbItem);
-			} else {
-				return Note.save(dbItem);
-			}
-		});
+		let remoteItem = await this.api().stat(localItem.path);
+		let action = this.syncAction(localItem, remoteItem, []);
+		await this.processSyncAction(action);
+
+		dbItem.sync_time = time.unix();
+		if (localItem.type == 'folder') {
+			return Folder.save(dbItem);
+		} else {
+			return Note.save(dbItem);
+		}
 	}
 
-	processRemoteItem(remoteItem) {
-		let remoteSyncItem = null;
-		return this.api().get(remoteItem.path).then((content) => {
-			remoteItem.content = Note.fromFriendlyString(content);
-			remoteSyncItem = this.remoteItemToSyncItem(remoteItem);
-			return BaseItem.loadItemByPath(remoteItem.path);
-		}).then((dbItem) => {
-			let localSyncItem = this.dbItemToSyncItem(dbItem);
-			let action = this.syncAction(localSyncItem, remoteSyncItem, []);
-			return this.processSyncAction(action);
-		});
+	async processRemoteItem(remoteItem) {
+		let content = await this.api().get(remoteItem.path);
+		remoteItem.content = Note.fromFriendlyString(content);
+		let remoteSyncItem = this.remoteItemToSyncItem(remoteItem);
+
+		let dbItem = await BaseItem.loadItemByPath(remoteItem.path);
+		let localSyncItem = this.dbItemToSyncItem(dbItem);
+
+		let action = this.syncAction(localSyncItem, remoteSyncItem, []);
+		return this.processSyncAction(action);
 	}
 
-	processState_uploadChanges() {
-		return new Promise((resolve, reject) => {
-			var context = null;
-			let limit = 2;
-			let finishedReading = false;
-			let isReading = false;
-			
-			let readItems = () => {
-				isReading = true;
-				return NoteFolderService.itemsThatNeedSync(context, limit).then((result) => {
-					context = result.context;
-
-					let chain = [];
-					for (let i = 0; i < result.items.length; i++) {
-						let item = result.items[i];
-						chain.push(() => {
-							return this.processLocalItem(item);
-						});
-					}
-
-					return promiseChain(chain).then(() => {
-						if (!context.hasMore) finishedReading = true;
-						isReading = false;
-					});
-				}).catch((error) => {
-					rejec(error);
-				});
+	async processState_uploadChanges() {
+		while (true) {
+			let result = await NoteFolderService.itemsThatNeedSync(50);
+			for (let i = 0; i < result.items.length; i++) {
+				let item = result.items[i];
+				await this.processLocalItem(item);
 			}
 
-			let iid = setInterval(() => {
-				if (isReading) return;
-				if (finishedReading) {
-					clearInterval(iid);
-					resolve();
-					return;
-				}
-				readItems();
-			}, 100);
-		}).then(() => {
-			//console.info('DOWNLOAD DISABLED');
-			return this.processState('downloadChanges');
-		});
+			if (!result.hasMore) break;
+		}
+
+		return this.processState('downloadChanges');
 	}
 
-	processState_downloadChanges() {
-		return this.api().list().then((items) => {
-			let chain = [];
-			for (let i = 0; i < items.length; i++) {
-				chain.push(() => {
-					return this.processRemoteItem(items[i]);
-				});
-			}
-			return promiseChain(chain);
-		});
+	async processState_downloadChanges() {
+		let items = await this.api().list();
+		for (let i = 0; i < items.length; i++) {
+			await this.processRemoteItem(items[i]);
+		}
 	}
 
 	start() {

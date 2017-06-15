@@ -20,12 +20,6 @@ class NoteFolderService extends BaseService {
 			}
 		}
 
-		// console.info(item);
-		// console.info(oldItem);
-		// console.info('DIFF', diff);
-		// return Promise.resolve();
-
-
 		let ItemClass = null;
 		if (type == 'note') {
 			ItemClass = Note;
@@ -79,38 +73,25 @@ class NoteFolderService extends BaseService {
 		});
 	}
 
-	static itemsThatNeedSync(context = null, limit = 100) {
-		if (!context) {
-			context = {
-				hasMoreFolders: true,
-				hasMoreNotes: true,
-				noteOffset: 0,
-				folderOffset: 0,
-				hasMore: true,
-			};
-		}
-
-		context.folderOffset = 0;
-		context.noteOffset = 0;
-
+	static itemsThatNeedSync(limit = 100) {
 		// Process folder first, then notes so that folders are created before
 		// adding notes to them. However, it will be the opposite when deleting
 		// folders (TODO).
 
-		if (context.hasMoreFolders) {
-			return BaseModel.db().selectAll('SELECT * FROM folders WHERE sync_time < updated_time LIMIT ' + limit + ' OFFSET ' + context.folderOffset).then((items) => {
-				context.hasMoreFolders = items.length >= limit;
-				context.folderOffset += items.length;
-				return { context: context, items: items };
-			});
-		} else {
-			return BaseModel.db().selectAll('SELECT * FROM notes WHERE sync_time < updated_time LIMIT ' + limit + ' OFFSET ' + context.noteOffset).then((items) => {
-				context.hasMoreNotes = items.length >= limit;
-				context.noteOffset += items.length;
-				context.hasMore = context.hasMoreNotes;
-				return { context: context, items: items };
-			});
+		function getFolders(limit) {
+			return BaseModel.db().selectAll('SELECT * FROM folders WHERE sync_time < updated_time LIMIT ' + limit);
 		}
+
+		function getNotes(limit) {
+			return BaseModel.db().selectAll('SELECT * FROM notes WHERE sync_time < updated_time LIMIT ' + limit);
+		}
+
+		return getFolders(limit).then((items) => {
+			if (items.length) return { hasMore: true, items: items };
+			return getNotes(limit).then((items) => {
+				return { hasMore: items.length >= limit, items: items };
+			});
+		});
 	}
 
 }
