@@ -30,7 +30,6 @@ class Synchronizer {
 		if (change.item_type == BaseModel.ITEM_TYPE_NOTE) {
 			return Note.load(change.item_id).then((note) => {
 				return Folder.load(note.parent_id).then((folder) => {
-					console.info('xxxxxxxxx',note);
 					return Promise.resolve({ parent: folder, item: note });
 				});
 			});

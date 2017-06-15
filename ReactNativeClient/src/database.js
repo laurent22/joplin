@@ -11,7 +11,7 @@ CREATE TABLE folders (
 	created_time INT NOT NULL DEFAULT 0,
 	updated_time INT NOT NULL DEFAULT 0,
 	sync_time INT NOT NULL DEFAULT 0,
-	is_default BOOLEAN NOT NULL DEFAULT 0
+	is_default INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE notes (
@@ -28,9 +28,9 @@ CREATE TABLE notes (
 	source TEXT NOT NULL DEFAULT "",
 	author TEXT NOT NULL DEFAULT "",
 	source_url TEXT NOT NULL DEFAULT "",
-	is_todo BOOLEAN NOT NULL DEFAULT 0,
+	is_todo INT NOT NULL DEFAULT 0,
 	todo_due INT NOT NULL DEFAULT 0,
-	todo_completed BOOLEAN NOT NULL DEFAULT 0,
+	todo_completed INT NOT NULL DEFAULT 0,
 	source_application TEXT NOT NULL DEFAULT "",
 	application_data TEXT NOT NULL DEFAULT "",
 	\`order\` INT NOT NULL DEFAULT 0
@@ -162,9 +162,7 @@ class Database {
 		if (this.inTransaction_) {
 			return new Promise((resolve, reject) => {
 				let iid = setInterval(() => {
-					console.info('Waiting...');
 					if (!this.inTransaction_) {
-						console.info('OKKKKKKKKKKK');
 						clearInterval(iid);
 						this.transactionExecBatch(queries).then(() => {
 							resolve();
@@ -224,7 +222,6 @@ class Database {
 		if (value === null || value === undefined) return null;
 		if (type == this.TYPE_INT) return Number(value);
 		if (type == this.TYPE_TEXT) return value;
-		if (type == this.TYPE_BOOLEAN) return !!Number(value);
 		if (type == this.TYPE_NUMERIC) return Number(value);
 		throw new Error('Unknown type: ' + type);
 	}
@@ -249,7 +246,7 @@ class Database {
 	logQuery(sql, params = null) {
 		if (!this.debugMode()) return;
 		if (params !== null) {
-			Log.debug('DB: ' + sql, params);
+			Log.debug('DB: ' + sql, JSON.stringify(params));
 		} else {
 			Log.debug('DB: ' + sql);
 		}
@@ -430,7 +427,6 @@ class Database {
 
 Database.TYPE_INT = 1;
 Database.TYPE_TEXT = 2;
-Database.TYPE_BOOLEAN = 3;
-Database.TYPE_NUMERIC = 4;
+Database.TYPE_NUMERIC = 3;
 
 export { Database };

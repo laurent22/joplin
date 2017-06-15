@@ -5,57 +5,16 @@ import { Note } from 'src/models/note.js';
 import { folderItemFilename } from 'src/string-utils.js'
 import { _ } from 'src/locale.js';
 import moment from 'moment';
+import { BaseItem } from 'src/models/base-item.js';
 
-class Folder extends BaseModel {
+class Folder extends BaseItem {
 
 	static tableName() {
 		return 'folders';
 	}
 
-	static filename(folder) {
-		return folderItemFilename(folder);
-	}
-
-	static systemPath(parent, folder) {
-		return this.filename(folder);
-	}
-
-	static systemMetadataPath(parent, folder) {
-		return this.systemPath(parent, folder) + '/.folder.md';
-	}
-
-	// TODO: share with Note class
-	static toFriendlyString_format(propName, propValue) {
-		if (['created_time', 'updated_time'].indexOf(propName) >= 0) {
-			if (!propValue) return '';
-			propValue = moment.unix(propValue).format('YYYY-MM-DD hh:mm:ss');
-		} else if (propValue === null || propValue === undefined) {
-			propValue = '';
-		}
-
-		return propValue;
-	}
-
-	// TODO: share with Note class
 	static toFriendlyString(folder) {
-		let shownKeys = ['created_time', 'updated_time'];
-		let output = [];
-
-		output.push(folder.title);
-		output.push('');
-		output.push(''); // For consistency with the notes, leave an empty line where the body should be
-		output.push('');
-		for (let i = 0; i < shownKeys.length; i++) {
-			let v = folder[shownKeys[i]];
-			v = this.toFriendlyString_format(shownKeys[i], v);
-			output.push(shownKeys[i] + ': ' + v);
-		}
-
-		return output.join("\n");
-	}
-
-	static useUuid() {
-		return true;
+		return super.toFriendlyString(folder, 'folder', ['id', 'created_time', 'updated_time']);
 	}
 
 	static itemType() {

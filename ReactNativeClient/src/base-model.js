@@ -36,11 +36,20 @@ class BaseModel {
 		return this.db().tableFieldNames(this.tableName());
 	}
 
+	static fieldType(name) {
+		let fields = this.fields();
+		for (let i = 0; i < fields.length; i++) {
+			if (fields[i].name == name) return fields[i].type;
+		}
+		throw new Error('Unknown field: ' + name);
+	}
+
 	static fields() {
 		return this.db().tableFields(this.tableName());
 	}
 
 	static identifyItemType(item) {
+		if (!item) throw new Error('Cannot identify undefined item');
 		if ('body' in item || ('parent_id' in item && !!item.parent_id)) return BaseModel.ITEM_TYPE_NOTE;
 		if ('sync_time' in item) return BaseModel.ITEM_TYPE_FOLDER;
 		throw new Error('Cannot identify item: ' + JSON.stringify(item));
@@ -161,7 +170,7 @@ class BaseModel {
 		queries.push(saveQuery);
 
 		// TODO: DISABLED DISABLED DISABLED DISABLED DISABLED DISABLED DISABLED DISABLED DISABLED DISABLED 
-		if (0&& ptions.trackChanges && this.trackChanges()) {
+		if (0&& options.trackChanges && this.trackChanges()) {
 			// Cannot import this class the normal way due to cyclical dependencies between Change and BaseModel
 			// which are not handled by React Native.
 			const { Change } = require('src/models/change.js');

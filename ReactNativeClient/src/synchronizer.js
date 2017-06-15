@@ -3,6 +3,7 @@ import { Setting } from 'src/models/setting.js';
 import { Change } from 'src/models/change.js';
 import { Folder } from 'src/models/folder.js';
 import { Note } from 'src/models/note.js';
+import { BaseItem } from 'src/models/base-item.js';
 import { BaseModel } from 'src/base-model.js';
 import { promiseChain } from 'src/promise-utils.js';
 import { NoteFolderService } from 'src/services/note-folder-service.js';
@@ -69,11 +70,11 @@ class Synchronizer {
 
 	moveConflict(item) {
 		// No need to handle folder conflicts
-		if (item.isDir) return Promise.resolve();
+		if (item.type == 'folder') return Promise.resolve();
 
 		return this.conflictDir().then((conflictDirPath) => {
 			let p = path.basename(item.path).split('.');
-			let pos = item.isDir ? p.length - 1 : p.length - 2;
+			let pos = item.type == 'folder' ? p.length - 1 : p.length - 2;
 			p.splice(pos, 0, moment().format('YYYYMMDDThhmmss'));
 			let newPath = p.join('.');
 			return this.api().move(item.path, conflictDirPath + '/' + newPath);
@@ -106,34 +107,35 @@ class Synchronizer {
 	}
 
 	dbItemToSyncItem(dbItem) {
-		let p = Promise.resolve(null);
+		if (!dbItem) return null;
+
 		let itemType = BaseModel.identifyItemType(dbItem);
-		let ItemClass = null;
 
-		if (itemType == BaseModel.ITEM_TYPE_NOTE) {
-			ItemClass = Note;
-			p = Folder.load(dbItem.parent_id);
-		} else {
-			ItemClass = Folder;
-		}
+		return {
+			type: itemType == BaseModel.ITEM_TYPE_FOLDER ? 'folder' : 'note',
+			path: Folder.systemPath(dbItem),
+			syncTime: dbItem.sync_time,
+			updatedTime: dbItem.updated_time,
+			dbItem: dbItem,
+		};
+	}
 
-		return p.then((dbParent) => {
-			let path = ItemClass.systemPath(dbParent, dbItem);
-			return {
-				isDir: itemType == BaseModel.ITEM_TYPE_FOLDER,
-				path: path,
-				syncTime: dbItem.sync_time,
-				updatedTime: dbItem.updated_time,
-				dbParent: dbParent,
-				dbItem: dbItem,
-			};
-		});
+	remoteItemToSyncItem(remoteItem) {
+		if (!remoteItem) return null;
+
+		return {
+			type: remoteItem.content.type,
+			path: remoteItem.path,
+			syncTime: 0,
+			updatedTime: remoteItem.updatedTime,
+			remoteItem: remoteItem,
+		};
 	}
 
 	syncAction(localItem, remoteItem, deletedLocalPaths) {
 		let output = this.syncActions(localItem ? [localItem] : [], remoteItem ? [remoteItem] : [], deletedLocalPaths);
-		if (output.length !== 1) throw new Error('Invalid number of actions returned');
-		return output[0];
+		if (output.length > 1) throw new Error('Invalid number of actions returned');
+		return output.length ? output[0] : null;
 	}
 
 	// Assumption: it's not possible to, for example, have a directory one the dest
@@ -141,12 +143,15 @@ class Synchronizer {
 	// file and directory names are UUID so should be unique.
 	// Each item must have these properties:
 	// - path
-	// - isDir
+	// - type
 	// - syncTime
 	// - updatedTime
 	syncActions(localItems, remoteItems, deletedLocalPaths) {
 		let output = [];
 		let donePaths = [];
+
+		// console.info('==================================================');
+		// console.info(localItems, remoteItems);
 
 		for (let i = 0; i < localItems.length; i++) {
 			let local = localItems[i];
@@ -177,7 +182,7 @@ class Synchronizer {
 					action.dest = 'remote';
 				} else {
 					action.type = 'conflict';
-					if (local.isDir) {
+					if (local.type == 'folder') {
 						// For folders, currently we don't completely handle conflicts, we just
 						// we just update the local dir (.folder metadata file) with the remote
 						// version. It means the local version is lost but shouldn't be a big deal
@@ -229,332 +234,10 @@ class Synchronizer {
 			output.push(action);
 		}
 
+		// console.info('-----------------------------------------');
+		// console.info(output);
+
 		return output;
-	}
-
-	processState_uploadChanges() {
-		let remoteFiles = [];
-		let processedChangeIds = [];
-		return this.api().list('', true).then((items) => {
-			remoteFiles = items;
-			return Change.all();
-		}).then((changes) => {
-			let mergedChanges = Change.mergeChanges(changes);
-			let chain = [];
-			const lastSyncTime = Setting.value('sync.lastUpdateTime');
-			for (let i = 0; i < mergedChanges.length; i++) {
-				let c = mergedChanges[i];
-				chain.push(() => {
-					let p = null;
-
-					let ItemClass = null;					
-					if (c.item_type == BaseModel.ITEM_TYPE_FOLDER) {
-						ItemClass = Folder;
-					} else if (c.item_type == BaseModel.ITEM_TYPE_NOTE) {
-						ItemClass = Note;
-					}
-
-					if (c.type == Change.TYPE_NOOP) {
-						p = Promise.resolve();
-					} else if (c.type == Change.TYPE_CREATE) {
-						p = this.loadParentAndItem(c).then((result) => {
-							let item = result.item;
-							let parent = result.parent;
-							if (!item) return; // Change refers to an object that doesn't exist (has probably been deleted directly in the database)
-
-							let path = ItemClass.systemPath(parent, item);
-
-							let remoteFile = this.remoteFileByPath(remoteFiles, path);
-							let p = null;
-							if (remoteFile) {
-								p = this.moveConflict(remoteFile);
-							} else {
-								p = Promise.resolve();
-							}
-
-							return p.then(() => {
-								if (c.item_type == BaseModel.ITEM_TYPE_FOLDER) {
-									return this.api().mkdir(path).then(() => {
-										return this.api().put(Folder.systemMetadataPath(parent, item), Folder.toFriendlyString(item));
-									}).then(() => {
-										return this.api().setTimestamp(Folder.systemMetadataPath(parent, item), item.updated_time);
-									});
-								} else {
-									return this.api().put(path, Note.toFriendlyString(item)).then(() => {
-										return this.api().setTimestamp(path, item.updated_time);
-									});
-								}
-							});
-						});
-					} else if (c.type == Change.TYPE_UPDATE) {
-						p = this.loadParentAndItem(c).then((result) => {
-							if (!result.item) return; // Change refers to an object that doesn't exist (has probably been deleted directly in the database)
-
-							let path = ItemClass.systemPath(result.parent, result.item);
-
-							let remoteFile = this.remoteFileByPath(remoteFiles, path);
-							let p = null;
-							if (remoteFile && remoteFile.updatedTime > lastSyncTime) {
-								console.info('CONFLICT:', lastSyncTime, remoteFile);
-								//console.info(moment.unix(remoteFile.updatedTime), moment.unix(result.item.updated_time));
-								p = this.moveConflict(remoteFile);
-							} else {
-								p = Promise.resolve();
-							}
-
-							console.info('Uploading change:', JSON.stringify(result.item));
-
-							return p.then(() => {
-								if (c.item_type == BaseModel.ITEM_TYPE_FOLDER) {
-									return this.api().put(Folder.systemMetadataPath(result.parent, result.item), Folder.toFriendlyString(result.item));
-								} else {
-									return this.api().put(path, Note.toFriendlyString(result.item));
-								}
-							});
-						});
-					}
-
-					// TODO: handle DELETE
-
-					return p.then(() => {
-						processedChangeIds = processedChangeIds.concat(c.ids);
-					}).catch((error) => {
-						Log.warn('Failed applying changes', c.ids, error);
-						// This is fine - trying to apply changes to an object that has been deleted
-						// if (error.type == 'NotFoundException') {
-						// 	processedChangeIds = processedChangeIds.concat(c.ids);
-						// } else {
-						// 	throw error;
-						// }
-					});
-				});
-			}
-
-			return promiseChain(chain);
-		// }).then(() => {
-		// 	console.info(remoteFiles);
-		// 	for (let i = 0; i < remoteFiles.length; i++) {
-		// 		const remoteFile = remoteFiles[i];
-				
-		// 	}
-		}).catch((error) => {
-			Log.error('Synchronization was interrupted due to an error:', error);
-		}).then(() => {
-			//Log.info('IDs to delete: ', processedChangeIds);
-			//return Change.deleteMultiple(processedChangeIds);
-		}).then(() => {
-			this.processState('downloadChanges');
-		});
-
-
-		// }).then(() => {
-		// 	return Change.all();
-		// }).then((changes) => {
-		// 	let mergedChanges = Change.mergeChanges(changes);
-		// 	let chain = [];
-		// 	let processedChangeIds = [];
-		// 	for (let i = 0; i < mergedChanges.length; i++) {
-		// 		let c = mergedChanges[i];
-		// 		chain.push(() => {
-		// 			let p = null;
-
-		// 			let ItemClass = null;					
-		// 			let path = null;
-		// 			if (c.item_type == BaseModel.ITEM_TYPE_FOLDER) {
-		// 				ItemClass = Folder;
-		// 				path = 'folders';
-		// 			} else if (c.item_type == BaseModel.ITEM_TYPE_NOTE) {
-		// 				ItemClass = Note;
-		// 				path = 'notes';
-		// 			}
-
-		// 			if (c.type == Change.TYPE_NOOP) {
-		// 				p = Promise.resolve();
-		// 			} else if (c.type == Change.TYPE_CREATE) {
-		// 				p = this.loadParentAndItem(c).then((result) => {
-		// 					// let options = {
-		// 					// 	contents: Note.toFriendlyString(result.item),
-		// 					// 	path: Note.systemPath(result.parent, result.item),
-		// 					// 	mode: 'overwrite',
-		// 					// 	// client_modified: 
-		// 					// };						
-
-		// 					// return this.api().filesUpload(options).then((result) => {
-		// 					// 	console.info('DROPBOX', result);
-		// 					// });
-		// 				});
-		// 				// p = ItemClass.load(c.item_id).then((item) => {
-
-		// 				// 	console.info(item);
-		// 				// 	let options = {
-		// 				// 		contents: Note.toFriendlyString(item),
-		// 				// 		path: Note.systemPath(item),
-		// 				// 		mode: 'overwrite',
-		// 				// 		// client_modified: 
-		// 				// 	};
-
-		// 				// 	// console.info(options);
-
-		// 				// 	//let content = Note.toFriendlyString(item);
-		// 				// 	//console.info(content);
-
-		// 				// 	//console.info('SYNC', item);
-		// 				// 	//return this.api().put(path + '/' + item.id, null, item);
-		// 				// });
-		// 			} else if (c.type == Change.TYPE_UPDATE) {
-		// 				p = ItemClass.load(c.item_id).then((item) => {
-		// 					//return this.api().patch(path + '/' + item.id, null, item);
-		// 				});
-		// 			} else if (c.type == Change.TYPE_DELETE) {
-		// 				p = this.api().delete(path + '/' + c.item_id);
-		// 			}
-
-		// 			return p.then(() => {
-		// 				processedChangeIds = processedChangeIds.concat(c.ids);
-		// 			}).catch((error) => {
-		// 				// Log.warn('Failed applying changes', c.ids, error.message, error.type);
-		// 				// This is fine - trying to apply changes to an object that has been deleted
-		// 				if (error.type == 'NotFoundException') {
-		// 					processedChangeIds = processedChangeIds.concat(c.ids);
-		// 				} else {
-		// 					throw error;
-		// 				}
-		// 			});
-		// 		});
-		// 	}
-
-		// 	return promiseChain(chain).catch((error) => {
-		// 		Log.warn('Synchronization was interrupted due to an error:', error);
-		// 	}).then(() => {
-		// 		// Log.info('IDs to delete: ', processedChangeIds);
-		// 		// Change.deleteMultiple(processedChangeIds);
-		// 	}).then(() => {
-		// 		this.processState('downloadChanges');
-		// 	});
-		// });
-	}
-
-	processState_downloadChanges() {
-		// return this.api().list('', true).then((items) => {
-		// 	remoteFiles = items;
-		// 	return Change.all();
-
-
-		// let maxRevId = null;
-		// let hasMore = false;
-		// this.api().get('synchronizer', { rev_id: Setting.value('sync.lastRevId') }).then((syncOperations) => {
-		// 	hasMore = syncOperations.has_more;
-		// 	let chain = [];
-		// 	for (let i = 0; i < syncOperations.items.length; i++) {
-		// 		let syncOp = syncOperations.items[i];
-		// 		if (syncOp.id > maxRevId) maxRevId = syncOp.id;
-
-		// 		let ItemClass = null;					
-		// 		if (syncOp.item_type == 'folder') {
-		// 			ItemClass = Folder;
-		// 		} else if (syncOp.item_type == 'note') {
-		// 			ItemClass = Note;
-		// 		}
-
-		// 		if (syncOp.type == 'create') {
-		// 			chain.push(() => {
-		// 				let item = ItemClass.fromApiResult(syncOp.item);
-		// 				// TODO: automatically handle NULL fields by checking type and default value of field
-		// 				if ('parent_id' in item && !item.parent_id) item.parent_id = '';
-		// 				return ItemClass.save(item, { isNew: true, trackChanges: false });
-		// 			});
-		// 		}
-
-		// 		if (syncOp.type == 'update') {
-		// 			chain.push(() => {
-		// 				return ItemClass.load(syncOp.item_id).then((item) => {
-		// 					if (!item) return;
-		// 					item = ItemClass.applyPatch(item, syncOp.item);
-		// 					return ItemClass.save(item, { trackChanges: false });
-		// 				});
-		// 			});
-		// 		}
-
-		// 		if (syncOp.type == 'delete') {
-		// 			chain.push(() => {
-		// 				return ItemClass.delete(syncOp.item_id, { trackChanges: false });
-		// 			});
-		// 		}
-		// 	}
-		// 	return promiseChain(chain);
-		// }).then(() => {
-		// 	Log.info('All items synced. has_more = ', hasMore);
-		// 	if (maxRevId) {
-		// 		Setting.setValue('sync.lastRevId', maxRevId);
-		// 		return Setting.saveAll();
-		// 	}
-		// }).then(() => {
-		// 	if (hasMore) {
-		// 		this.processState('downloadChanges');
-		// 	} else {
-		// 		this.processState('idle');
-		// 	}
-		// }).catch((error) => {
-		// 	Log.warn('Sync error', error);
-		// });
-
-		// let maxRevId = null;
-		// let hasMore = false;
-		// this.api().get('synchronizer', { rev_id: Setting.value('sync.lastRevId') }).then((syncOperations) => {
-		// 	hasMore = syncOperations.has_more;
-		// 	let chain = [];
-		// 	for (let i = 0; i < syncOperations.items.length; i++) {
-		// 		let syncOp = syncOperations.items[i];
-		// 		if (syncOp.id > maxRevId) maxRevId = syncOp.id;
-
-		// 		let ItemClass = null;					
-		// 		if (syncOp.item_type == 'folder') {
-		// 			ItemClass = Folder;
-		// 		} else if (syncOp.item_type == 'note') {
-		// 			ItemClass = Note;
-		// 		}
-
-		// 		if (syncOp.type == 'create') {
-		// 			chain.push(() => {
-		// 				let item = ItemClass.fromApiResult(syncOp.item);
-		// 				// TODO: automatically handle NULL fields by checking type and default value of field
-		// 				if ('parent_id' in item && !item.parent_id) item.parent_id = '';
-		// 				return ItemClass.save(item, { isNew: true, trackChanges: false });
-		// 			});
-		// 		}
-
-		// 		if (syncOp.type == 'update') {
-		// 			chain.push(() => {
-		// 				return ItemClass.load(syncOp.item_id).then((item) => {
-		// 					if (!item) return;
-		// 					item = ItemClass.applyPatch(item, syncOp.item);
-		// 					return ItemClass.save(item, { trackChanges: false });
-		// 				});
-		// 			});
-		// 		}
-
-		// 		if (syncOp.type == 'delete') {
-		// 			chain.push(() => {
-		// 				return ItemClass.delete(syncOp.item_id, { trackChanges: false });
-		// 			});
-		// 		}
-		// 	}
-		// 	return promiseChain(chain);
-		// }).then(() => {
-		// 	Log.info('All items synced. has_more = ', hasMore);
-		// 	if (maxRevId) {
-		// 		Setting.setValue('sync.lastRevId', maxRevId);
-		// 		return Setting.saveAll();
-		// 	}
-		// }).then(() => {
-		// 	if (hasMore) {
-		// 		this.processState('downloadChanges');
-		// 	} else {
-		// 		this.processState('idle');
-		// 	}
-		// }).catch((error) => {
-		// 	Log.warn('Sync error', error);
-		// });
 	}
 
 	processState(state) {
@@ -564,37 +247,76 @@ class Synchronizer {
 		if (state == 'uploadChanges') {
 			return this.processState_uploadChanges();
 		} else if (state == 'downloadChanges') {
-			return this.processState('idle');
-			//this.processState_downloadChanges();
+			//return this.processState('idle');
+			return this.processState_downloadChanges();
 		} else if (state == 'idle') {
 			// Nothing
+			return Promise.resolve();
 		} else {
 			throw new Error('Invalid state: ' . state);
 		}
 	}
 
 	processSyncAction(action) {
-		// console.info(action);
+		console.info('Sync action: ', action);
+		//console.info('Sync action: ' + JSON.stringify(action));
+
+		if (!action) return Promise.resolve();
 
 		if (action.type == 'conflict') {
 
 		} else {
-			let item = action[action.dest == 'local' ? 'remote' : 'local'];
-			let ItemClass = null;
-			if (item.isDir) {
-				ItemClass = Folder;
-			} else {
-				ItemClass = Note;
-			}
-			let path = ItemClass.systemPath(item.dbParent, item.dbItem);
+			let syncItem = action[action.dest == 'local' ? 'remote' : 'local'];
+			let path = syncItem.path;
 
 			if (action.type == 'create') {
 				if (action.dest == 'remote') {
-					if (item.isDir) {
-						return this.api().mkdir(path);
+					let content = null;
+
+					if (syncItem.type == 'folder') {
+						content = Folder.toFriendlyString(syncItem.dbItem);
 					} else {
-						return this.api().put(path, Note.toFriendlyString(item.dbItem));
+						content = Note.toFriendlyString(syncItem.dbItem);
 					}
+
+					return this.api().put(path, content).then(() => {
+						return this.api().setTimestamp(path, syncItem.updatedTime);
+					});
+				} else {
+					let dbItem = syncItem.remoteItem.content;
+					dbItem.sync_time = time.unix();
+					if (syncItem.type == 'folder') {
+						return Folder.save(dbItem, { isNew: true });
+					} else {
+						return Note.save(dbItem, { isNew: true });
+					}
+				}
+			}
+
+			if (action.type == 'update') {
+				if (action.dest == 'remote') {
+					// let content = null;
+
+					// if (syncItem.type == 'folder') {
+					// 	content = Folder.toFriendlyString(syncItem.dbItem);
+					// } else {
+					// 	content = Note.toFriendlyString(syncItem.dbItem);
+					// }
+
+					// return this.api().put(path, content).then(() => {
+					// 	return this.api().setTimestamp(path, syncItem.updatedTime);
+					// });
+				} else {
+					let dbItem = syncItem.remoteItem.content;
+					dbItem.sync_time = time.unix();
+					return NoteFolderService.save(syncItem.type, dbItem, action.local.dbItem);
+					// let dbItem = syncItem.remoteItem.content;
+					// dbItem.sync_time = time.unix();
+					// if (syncItem.type == 'folder') {
+					// 	return Folder.save(dbItem, { isNew: true });
+					// } else {
+					// 	return Note.save(dbItem, { isNew: true });
+					// }
 				}
 			}
 		}
@@ -603,18 +325,14 @@ class Synchronizer {
 	}
 
 	processLocalItem(dbItem) {
-		//console.info(dbItem);
-		let localItem = null;
-		return this.dbItemToSyncItem(dbItem).then((r) => {
-			localItem = r;
-			return this.api().stat(localItem.path);
-		}).then((remoteItem) => {
+		let localItem = this.dbItemToSyncItem(dbItem);
+		
+		return this.api().stat(localItem.path).then((remoteItem) => {
 			let action = this.syncAction(localItem, remoteItem, []);
-			//console.info(action);
 			return this.processSyncAction(action);
 		}).then(() => {
 			dbItem.sync_time = time.unix();
-			if (localItem.isDir) {
+			if (localItem.type == 'folder') {
 				return Folder.save(dbItem);
 			} else {
 				return Note.save(dbItem);
@@ -622,16 +340,21 @@ class Synchronizer {
 		});
 	}
 
-	start() {
-		Log.info('Sync: start');
+	processRemoteItem(remoteItem) {
+		let remoteSyncItem = null;
+		return this.api().get(remoteItem.path).then((content) => {
+			remoteItem.content = Note.fromFriendlyString(content);
+			remoteSyncItem = this.remoteItemToSyncItem(remoteItem);
+			return BaseItem.loadItemByPath(remoteItem.path);
+		}).then((dbItem) => {
+			let localSyncItem = this.dbItemToSyncItem(dbItem);
+			let action = this.syncAction(localSyncItem, remoteSyncItem, []);
+			return this.processSyncAction(action);
+		});
+	}
 
-		if (this.state() != 'idle') {
-			return Promise.reject('Cannot start synchronizer because synchronization already in progress. State: ' + this.state());
-		}
-
-		this.state_ = 'started';
-
-		return this.api().listDirectories().then((items) => {
+	processState_uploadChanges() {
+		return new Promise((resolve, reject) => {
 			var context = null;
 			let limit = 2;
 			let finishedReading = false;
@@ -645,21 +368,17 @@ class Synchronizer {
 					let chain = [];
 					for (let i = 0; i < result.items.length; i++) {
 						let item = result.items[i];
-						console.info(JSON.stringify(item));
 						chain.push(() => {
-							//return Promise.resolve();
 							return this.processLocalItem(item);
 						});
 					}
 
 					return promiseChain(chain).then(() => {
-						console.info('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
 						if (!context.hasMore) finishedReading = true;
 						isReading = false;
 					});
 				}).catch((error) => {
-					console.error(error);
-					throw error;
+					rejec(error);
 				});
 			}
 
@@ -667,25 +386,44 @@ class Synchronizer {
 				if (isReading) return;
 				if (finishedReading) {
 					clearInterval(iid);
+					resolve();
 					return;
 				}
 				readItems();
 			}, 100);
-
 		}).then(() => {
-			this.state_ = 'idle';
+			//console.info('DOWNLOAD DISABLED');
+			return this.processState('downloadChanges');
 		});
+	}
 
-		//return NoteFolderService.itemsThatNeedSync
+	processState_downloadChanges() {
+		return this.api().list().then((items) => {
+			let chain = [];
+			for (let i = 0; i < items.length; i++) {
+				chain.push(() => {
+					return this.processRemoteItem(items[i]);
+				});
+			}
+			return promiseChain(chain);
+		});
+	}
 
-		
+	start() {
+		Log.info('Sync: start');
+
+		if (this.state() != 'idle') {
+			return Promise.reject('Cannot start synchronizer because synchronization already in progress. State: ' + this.state());
+		}
+
+		this.state_ = 'started';
 
 		// if (!this.api().session()) {
 		// 	Log.info("Sync: cannot start synchronizer because user is not logged in.");
 		// 	return;
 		// }
 
-		//return this.processState('uploadChanges');
+		return this.processState('uploadChanges');
 	}
 
 	

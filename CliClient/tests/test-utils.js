@@ -28,7 +28,6 @@ function setupDatabase(done) {
 	return fs.unlink(filePath).catch(() => {
 		// Don't care if the file doesn't exist
 	}).then(() => {
-		//console.info('Opening database ' + filePath);
 		database_ = new Database(new DatabaseDriverNode());
 		database_.setDebugEnabled(false);
 		return database_.open({ name: filePath }).then(() => {
