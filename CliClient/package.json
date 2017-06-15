@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "app-module-path": "^2.2.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.1.4",
     "form-data": "^2.1.4",
     "fs-extra": "^3.0.1",
     "jssha": "^2.3.0",
@@ -12,6 +14,7 @@
     "moment-timezone": "^0.5.13",
     "node-fetch": "^1.7.1",
     "promise": "^7.1.1",
+    "query-string": "4.3.4",
     "react": "16.0.0-alpha.6",
     "sax": "^1.2.2",
     "source-map-support": "^0.4.15",
@@ -26,8 +29,10 @@
     "babel-cli": "^6.24.1",
     "babel-preset-env": "^1.5.1",
     "babel-preset-react": "^6.24.1",
-    "jasmine": "^2.6.0",
-    "query-string": "4.3.4"
+    "babel-plugin-syntax-async-functions": "^6.1.4",
+    "babel-plugin-transform-regenerator": "^6.1.4",
+    "babel-preset-es2015": "^6.1.4",
+    "jasmine": "^2.6.0"
   },
   "scripts": {
     "babelbuild": "babel app -d build",

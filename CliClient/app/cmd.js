@@ -1,4 +1,6 @@
 require('source-map-support').install();
+//require("babel-polyfill");
+require('babel-plugin-transform-runtime');
 
 import { FileApi } from 'src/file-api.js';
 import { FileApiDriverLocal } from 'src/file-api-driver-local.js';
@@ -46,34 +48,32 @@ function createRemoteItems() {
 	});
 }
 
-function createLocalItems() {
-	return Folder.save({ title: "folder1" }).then((f) => {
-		return Promise.all([
-			Note.save({ title: "un", parent_id: f.id }),
-			Note.save({ title: "deux", parent_id: f.id }),
-			Note.save({ title: "trois", parent_id: f.id }),
-			Note.save({ title: "quatre", parent_id: f.id }),
-		]);
-	}).then(() => {
-		return Folder.save({ title: "folder2" })
-	}).then((f) => {
-		return Promise.all([
-			Note.save({ title: "cinq", parent_id: f.id }),
-		]);
-	}).then(() => {
-		return Folder.save({ title: "folder3" })
-	}).then(() => {
-		return Folder.save({ title: "folder4" })
-	}).then((f) => {
-		return Promise.all([
-			Note.save({ title: "six", parent_id: f.id }),
-			Note.save({ title: "sept", parent_id: f.id }),
-			Note.save({ title: "huit", parent_id: f.id }),
-		]);
-	});
+async function createLocalItems() {
+	let folder = await Folder.save({ title: "folder1" });
+	await Note.save({ title: "un", parent_id: folder.id });
+	await Note.save({ title: "deux", parent_id: folder.id });
+
+	folder = await Folder.save({ title: "folder2" });
+	await Note.save({ title: "trois", parent_id: folder.id });
+
+	// let folder = await Folder.save({ title: "folder1" });
+	// await Note.save({ title: "un", parent_id: folder.id });
+	// await Note.save({ title: "deux", parent_id: folder.id });
+	// await Note.save({ title: "trois", parent_id: folder.id });
+	// await Note.save({ title: "quatre", parent_id: folder.id });
+
+	// folder = await Folder.save({ title: "folder2" });
+	// await Note.save({ title: "cinq", parent_id: folder.id });
+
+	// folder = await Folder.save({ title: "folder3" });
+
+	// folder = await Folder.save({ title: "folder4" });
+	// await Note.save({ title: "six", parent_id: folder.id });
+	// await Note.save({ title: "sept", parent_id: folder.id });
+	// await Note.save({ title: "huit", parent_id: folder.id });
 }
 
-db.setDebugEnabled(true);
+db.setDebugEnabled(!true);
 db.open({ name: '/home/laurent/Temp/test-sync.sqlite3' }).then(() => {
  	BaseModel.db_ = db;
  	//return clearDatabase();
@@ -86,6 +86,21 @@ db.open({ name: '/home/laurent/Temp/test-sync.sqlite3' }).then(() => {
 
 
 
+
+// function testingProm() {
+// 	return new Promise((resolve, reject) => {
+// 		setTimeout(() => {
+// 			resolve('mavaler');
+// 		}, 2000);
+// 	});
+// }
+
+// async function doSomething() {
+// 	let val = await testingProm();
+// 	console.info(val);
+// }
+
+// doSomething();
 
 
 

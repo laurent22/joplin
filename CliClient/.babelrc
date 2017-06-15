@@ -1,3 +1,4 @@
 {
-	"presets": ["env", "react"]
+	"presets": ["env", "react"],
+	"plugins": ["syntax-async-functions","transform-runtime"]
 }
