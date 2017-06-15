@@ -10,6 +10,7 @@ import { BaseModel } from 'src/base-model.js';
 import { promiseChain } from 'src/promise-utils.js';
 import { NoteFolderService } from 'src/services/note-folder-service.js';
 import { time } from 'src/time-utils.js';
+import { sprintf } from 'sprintf-js';
 //import { promiseWhile } from 'src/promise-utils.js';
 import moment from 'moment';
 
@@ -83,10 +84,6 @@ class Synchronizer {
 		});
 	}
 
-	// isNewerThan(date1, date2) {
-	// 	return date1 > date2;
-	// }
-
 	itemByPath(items, path) {
 		for (let i = 0; i < items.length; i++) {
 			if (items[i].path == path) return items[i];
@@ -95,16 +92,14 @@ class Synchronizer {
 	}
 
 	itemIsSameDate(item, date) {
-		return Math.abs(item.updatedTime - date) <= 1;
+		return item.updatedTime === date;
 	}
 
-	itemIsNewerThan(item, date) {
-		if (this.itemIsSameDate(item, date)) return false;
+	itemIsStrictlyNewerThan(item, date) {
 		return item.updatedTime > date;
 	}
 
-	itemIsOlderThan(item, date) {
-		if (this.itemIsSameDate(item, date)) return false;
+	itemIsStrictlyOlderThan(item, date) {
 		return item.updatedTime < date;
 	}
 
@@ -177,13 +172,19 @@ class Synchronizer {
 					action.dest = 'remote';
 				}
 			} else {
-				if (this.itemIsOlderThan(local, local.syncTime)) continue;
+				if (this.itemIsStrictlyOlderThan(local, local.syncTime)) continue;
 
-				if (this.itemIsOlderThan(remote, local.syncTime)) {
+				if (this.itemIsStrictlyOlderThan(remote, local.syncTime)) {
 					action.type = 'update';
 					action.dest = 'remote';
-				} else {
+				} else if (this.itemIsStrictlyNewerThan(remote, local.syncTime)) {
 					action.type = 'conflict';
+					action.reason = sprintf('Both remote (%s) and local items (%s) were modified after the last sync (%s).',
+						moment.unix(remote.updatedTime).toISOString(),
+						moment.unix(local.updatedTime).toISOString(),
+						moment.unix(local.syncTime).toISOString()
+					);
+
 					if (local.type == 'folder') {
 						// For folders, currently we don't completely handle conflicts, we just
 						// we just update the local dir (.folder metadata file) with the remote
@@ -199,6 +200,8 @@ class Synchronizer {
 							{ type: 'update', dest: 'local' },
 						];
 					}
+				} else {
+					continue; // Neither local nor remote item have been changed recently
 				}
 			}
 
@@ -226,7 +229,7 @@ class Synchronizer {
 					action.dest = 'local';
 				}
 			} else {
-				if (this.itemIsOlderThan(remote, local.syncTime)) continue; // Already have this version
+				if (this.itemIsStrictlyOlderThan(remote, local.syncTime)) continue; // Already have this version
 				// Note: no conflict is possible here since if the local item has been
 				// modified since the last sync, it's been processed in the previous loop.
 				action.type = 'update';
@@ -265,7 +268,10 @@ class Synchronizer {
 
 		if (!action) return Promise.resolve();
 
+		console.info('Sync action: ' + action.type + ' ' + action.dest);
+
 		if (action.type == 'conflict') {
+			console.info(action);
 
 		} else {
 			let syncItem = action[action.dest == 'local' ? 'remote' : 'local'];
@@ -372,6 +378,8 @@ class Synchronizer {
 		for (let i = 0; i < items.length; i++) {
 			await this.processRemoteItem(items[i]);
 		}
+
+		return this.processState('idle');
 	}
 
 	start() {

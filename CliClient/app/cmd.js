@@ -23,6 +23,14 @@ let fileDriver = new FileApiDriverLocal();
 let fileApi = new FileApi('/home/laurent/Temp/TestImport', fileDriver);
 let synchronizer = new Synchronizer(db, fileApi);
 
+function sleep(n) {
+	return new Promise((resolve, reject) => {
+		setTimeout(() => {
+			resolve();
+		}, n * 1000);
+	});
+}
+
 function clearDatabase() {
 	let queries = [
 		'DELETE FROM changes',
@@ -33,6 +41,35 @@ function clearDatabase() {
 
 	return db.transactionExecBatch(queries);
 }
+
+async function runTest() {
+	db.setDebugEnabled(!true);
+	await db.open({ name: '/home/laurent/Temp/test-sync.sqlite3' });
+
+	BaseModel.db_ = db;
+	 	
+	await clearDatabase();
+
+	let folder = await Folder.save({ title: "folder1" });
+	let note1 = await Note.save({ title: "un", parent_id: folder.id });
+	await Note.save({ title: "deux", parent_id: folder.id });
+	folder = await Folder.save({ title: "folder2" });
+	await Note.save({ title: "trois", parent_id: folder.id });
+
+	await synchronizer.start();
+
+	note1 = await Note.load(note1.id);
+	note1.title = 'un update';
+	await Note.save(note1);
+
+	await synchronizer.start();
+}
+
+runTest();
+
+
+
+
 
 function createRemoteItems() {
 	let a = fileApi;
@@ -56,6 +93,7 @@ async function createLocalItems() {
 	folder = await Folder.save({ title: "folder2" });
 	await Note.save({ title: "trois", parent_id: folder.id });
 
+
 	// let folder = await Folder.save({ title: "folder1" });
 	// await Note.save({ title: "un", parent_id: folder.id });
 	// await Note.save({ title: "deux", parent_id: folder.id });
@@ -73,16 +111,19 @@ async function createLocalItems() {
 	// await Note.save({ title: "huit", parent_id: folder.id });
 }
 
-db.setDebugEnabled(!true);
-db.open({ name: '/home/laurent/Temp/test-sync.sqlite3' }).then(() => {
- 	BaseModel.db_ = db;
- 	//return clearDatabase();
- 	return clearDatabase().then(createLocalItems);
-}).then(() => {
-	return synchronizer.start();
-}).catch((error) => {
-	console.error(error);
-});
+
+
+
+// db.setDebugEnabled(!true);
+// db.open({ name: '/home/laurent/Temp/test-sync.sqlite3' }).then(() => {
+//  	BaseModel.db_ = db;
+//  	//return clearDatabase();
+//  	return clearDatabase().then(createLocalItems);
+// }).then(() => {
+// 	return synchronizer.start();
+// }).catch((error) => {
+// 	console.error(error);
+// });
 
 
 
