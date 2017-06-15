@@ -77,7 +77,7 @@ db.setDebugEnabled(!true);
 db.open({ name: '/home/laurent/Temp/test-sync.sqlite3' }).then(() => {
  	BaseModel.db_ = db;
  	//return clearDatabase();
- 	//return clearDatabase().then(createLocalItems);
+ 	return clearDatabase().then(createLocalItems);
 }).then(() => {
 	return synchronizer.start();
 }).catch((error) => {
