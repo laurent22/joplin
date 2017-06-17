@@ -37,15 +37,14 @@ function setupDatabase(done) {
 	});
 }
 
-function setupDatabaseAndSynchronizer(done) {
-	return setupDatabase().then(() => {
-		if (!synchronizer_) {
-			let fileDriver = new FileApiDriverMemory();
-			fileApi_ = new FileApi('/root', fileDriver);
-			synchronizer_ = new Synchronizer(db(), fileApi);
-		}
-		done();
-	});
+async function setupDatabaseAndSynchronizer() {
+	await setupDatabase();
+
+	if (!synchronizer_) {
+		let fileDriver = new FileApiDriverMemory();
+		fileApi_ = new FileApi('/root', fileDriver);
+		synchronizer_ = new Synchronizer(db(), fileApi_);
+	}
 }
 
 function db() {

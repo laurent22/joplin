@@ -1,3 +1,5 @@
+import { time } from 'src/time-utils.js';
+
 class FileApiDriverMemory {
 
 	constructor(baseDir) {
@@ -21,23 +23,23 @@ class FileApiDriverMemory {
 	}
 
 	newItem(path, isDir = false) {
+		let now = time.unix();
 		return {
 			path: path,
 			isDir: isDir,
-			updatedTime: this.currentTimestamp(),
-			createdTime: this.currentTimestamp(),
+			updatedTime: now,
+			createdTime: now,
 			content: '',
 		};
 	}
 
 	stat(path) {
-		let item = this.itemIndexByPath(path);
-		if (!item) return Promise.reject(new Error('File not found: ' + path));
-		return Promise.resolve(item);
+		let item = this.itemByPath(path);
+		return Promise.resolve(item ? Object.assign({}, item) : null);
 	}
 
 	setTimestamp(path, timestamp) {
-		let item = this.itemIndexByPath(path);
+		let item = this.itemByPath(path);
 		if (!item) return Promise.reject(new Error('File not found: ' + path));
 		item.updatedTime = timestamp;
 		return Promise.resolve();
@@ -53,7 +55,6 @@ class FileApiDriverMemory {
 				let s = item.path.substr(path.length + 1);
 				if (s.split('/').length === 1) {
 					let it = Object.assign({}, item);
-					it.path = it.path.substr(path.length + 1);
 					output.push(it);
 				}
 			}
@@ -64,7 +65,7 @@ class FileApiDriverMemory {
 
 	get(path) {
 		let item = this.itemByPath(path);
-		if (!item) return Promise.reject(new Error('File not found: ' + path));
+		if (!item) return Promise.resolve(null);
 		if (item.isDir) return Promise.reject(new Error(path + ' is a directory, not a file'));
 		return Promise.resolve(item.content);
 	}
@@ -84,6 +85,7 @@ class FileApiDriverMemory {
 			this.items_.push(item);
 		} else {
 			this.items_[index].content = content;
+			this.items_[index].updatedTime = time.unix();
 		}
 		return Promise.resolve();
 	}

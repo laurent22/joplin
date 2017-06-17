@@ -1,6 +1,7 @@
 import { Log } from 'src/log.js';
 import { Database } from 'src/database.js';
 import { uuid } from 'src/uuid.js';
+import { time } from 'src/time-utils.js';
 
 class BaseModel {
 
@@ -99,6 +100,7 @@ class BaseModel {
 		}
 		if (!('trackChanges' in options)) options.trackChanges = true;
 		if (!('isNew' in options)) options.isNew = 'auto';
+		if (!('autoTimestamp' in options)) options.autoTimestamp = true;
 		return options;
 	}
 
@@ -137,6 +139,7 @@ class BaseModel {
 	static diffObjects(oldModel, newModel) {
 		let output = {};
 		for (let n in newModel) {
+			if (n == 'type_') continue;
 			if (!newModel.hasOwnProperty(n)) continue;
 			if (!(n in oldModel) || newModel[n] !== oldModel[n]) {
 				output[n] = newModel[n];
@@ -145,9 +148,7 @@ class BaseModel {
 		return output;
 	}
 
-	static saveQuery(o, isNew = 'auto') {
-		if (isNew == 'auto') isNew = !o.id;
-
+	static saveQuery(o, options) {
 		let temp = {}
 		let fieldNames = this.fieldNames();
 		for (let i = 0; i < fieldNames.length; i++) {
@@ -156,22 +157,21 @@ class BaseModel {
 		}
 		o = temp;
 
-		let query = '';
+		let query = {};
 		let itemId = o.id;
 
-		if (!o.updated_time && this.hasField('updated_time')) {
-			o.updated_time = Math.round((new Date()).getTime() / 1000);
+		if (options.autoTimestamp && this.hasField('updated_time')) {
+			o.updated_time = time.unix();
 		}
 
-		if (isNew) {
+		if (options.isNew) {
 			if (this.useUuid() && !o.id) {
-				//o = Object.assign({}, o);
 				itemId = uuid.create();
 				o.id = itemId;
 			}
 
 			if (!o.created_time && this.hasField('created_time')) {
-				o.created_time = Math.round((new Date()).getTime() / 1000);
+				o.created_time = time.unix();
 			}
 
 			query = Database.insertQuery(this.tableName(), o);
@@ -192,10 +192,10 @@ class BaseModel {
 	static save(o, options = null) {
 		options = this.modOptions(options);
 
-		let isNew = options.isNew == 'auto' ? !o.id : options.isNew;
+		options.isNew = options.isNew == 'auto' ? !o.id : options.isNew;
 
 		let queries = [];
-		let saveQuery = this.saveQuery(o, isNew);
+		let saveQuery = this.saveQuery(o, options);
 		let itemId = saveQuery.id;
 
 		queries.push(saveQuery);

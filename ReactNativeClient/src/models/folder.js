@@ -74,9 +74,20 @@ class Folder extends BaseItem {
 		//return this.db().selectOne('SELECT * FROM notes WHERE `parent_id` = ? AND `' + field + '` = ?', [folderId, value]);
 	}
 
-	static all() {
-		return this.modelSelectAll('SELECT * FROM folders');
-		// return this.db().selectAll('SELECT * FROM folders');
+	static async all(includeNotes = false) {
+		let folders = await this.modelSelectAll('SELECT * FROM folders');
+		if (!includeNotes) return folders;
+
+		let output = [];
+		for (let i = 0; i < folders.length; i++) {
+			let folder = folders[i];
+			let notes = await Note.all(folder.id);
+			output.push(folder);
+			output = output.concat(notes);
+		}
+
+		return output;
+
 	}
 
 	static save(o, options = null) {

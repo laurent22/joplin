@@ -37,34 +37,38 @@ class FileApi {
 		});
 	}
 
-	list(path = '', recursive = false, context = null) {
-		let fullPath = this.fullPath_(path);
-		return this.driver_.list(fullPath).then((items) => {
-			items = this.scopeItemsToBaseDir_(items);
-			if (recursive) {
-				let chain = [];
-				for (let i = 0; i < items.length; i++) {
-					let item = items[i];
-					if (!item.isDir) continue;
-
-					chain.push(() => {
-						return this.list(item.path, true).then((children) => {
-							for (let j = 0; j < children.length; j++) {
-								let md = children[j];
-								md.path = item.path + '/' + md.path; 
-								items.push(md);
-							}
-						});
-					});
-				}
-
-				return promiseChain(chain).then(() => {
-					return items;
-				});
-			} else {
-				return items;
-			}
+	list() {
+		return this.driver_.list(this.baseDir_).then((items) => {
+			return this.scopeItemsToBaseDir_(items);
 		});
+		// let fullPath = this.fullPath_(path);
+		// return this.driver_.list(fullPath).then((items) => {
+		// 	return items;
+		// 	// items = this.scopeItemsToBaseDir_(items);
+		// 	// if (recursive) {
+		// 	// 	let chain = [];
+		// 	// 	for (let i = 0; i < items.length; i++) {
+		// 	// 		let item = items[i];
+		// 	// 		if (!item.isDir) continue;
+
+		// 	// 		chain.push(() => {
+		// 	// 			return this.list(item.path, true).then((children) => {
+		// 	// 				for (let j = 0; j < children.length; j++) {
+		// 	// 					let md = children[j];
+		// 	// 					md.path = item.path + '/' + md.path; 
+		// 	// 					items.push(md);
+		// 	// 				}
+		// 	// 			});
+		// 	// 		});
+		// 	// 	}
+
+		// 	// 	return promiseChain(chain).then(() => {
+		// 	// 		return items;
+		// 	// 	});
+		// 	// } else {
+		// 	// 	return items;
+		// 	// }
+		// });
 	}
 
 	setTimestamp(path, timestamp) {
@@ -77,7 +81,7 @@ class FileApi {
 	}
 
 	stat(path) {
-		console.info('stat ' + path);
+		//console.info('stat ' + path);
 		return this.driver_.stat(this.fullPath_(path)).then((output) => {
 			if (!output) return output;
 			output.path = path;
@@ -86,12 +90,12 @@ class FileApi {
 	}
 
 	get(path) {
-		console.info('get ' + path);
+		//console.info('get ' + path);
 		return this.driver_.get(this.fullPath_(path));
 	}
 
 	put(path, content) {
-		console.info('put ' + path);
+		//console.info('put ' + path);
 		return this.driver_.put(this.fullPath_(path), content);
 	}
 

@@ -59,12 +59,13 @@ async function runTest() {
 
 	await synchronizer.start();
 
-	note1 = await Note.load(note1.id);
-	//console.info(note1);
-	note1.title = 'un update';
-	await Note.save(note1);
+	// note1 = await Note.load(note1.id);
+	// note1.title = 'un update';
+	// //console.info('AVANT', note1);
+	// note1 = await Note.save(note1);
+	// //console.info('APRES', note1);
 
-	return await synchronizer.start();
+	// return await synchronizer.start();
 }
 
 runTest().catch((error) => {

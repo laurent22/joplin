@@ -69,6 +69,10 @@ class Note extends BaseItem {
 		});
 	}
 
+	static all(parentId) {
+		return this.modelSelectAll('SELECT * FROM notes WHERE parent_id = ?', [parentId]);
+	}
+
 	static save(o, options = null) {
 		return super.save(o, options).then((result) => {
 			// 'result' could be a partial one at this point (if, for example, only one property of it was saved)
