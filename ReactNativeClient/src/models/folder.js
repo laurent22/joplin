@@ -70,11 +70,13 @@ class Folder extends BaseItem {
 	}
 
 	static loadNoteByField(folderId, field, value) {
-		return this.db().selectOne('SELECT * FROM notes WHERE `parent_id` = ? AND `' + field + '` = ?', [folderId, value]);
+		return this.modelSelectAll('SELECT * FROM notes WHERE `parent_id` = ? AND `' + field + '` = ?', [folderId, value]);
+		//return this.db().selectOne('SELECT * FROM notes WHERE `parent_id` = ? AND `' + field + '` = ?', [folderId, value]);
 	}
 
 	static all() {
-		return this.db().selectAll('SELECT * FROM folders');
+		return this.modelSelectAll('SELECT * FROM folders');
+		// return this.db().selectAll('SELECT * FROM folders');
 	}
 
 	static save(o, options = null) {

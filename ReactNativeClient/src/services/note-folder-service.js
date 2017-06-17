@@ -79,11 +79,13 @@ class NoteFolderService extends BaseService {
 		// folders (TODO).
 
 		function getFolders(limit) {
-			return BaseModel.db().selectAll('SELECT * FROM folders WHERE sync_time < updated_time LIMIT ' + limit);
+			return Folder.modelSelectAll('SELECT * FROM folders WHERE sync_time < updated_time LIMIT ' + limit);
+			//return BaseModel.db().selectAll('SELECT * FROM folders WHERE sync_time < updated_time LIMIT ' + limit);
 		}
 
 		function getNotes(limit) {
-			return BaseModel.db().selectAll('SELECT * FROM notes WHERE sync_time < updated_time LIMIT ' + limit);
+			return Note.modelSelectAll('SELECT * FROM notes WHERE sync_time < updated_time LIMIT ' + limit);
+			//return BaseModel.db().selectAll('SELECT * FROM notes WHERE sync_time < updated_time LIMIT ' + limit);
 		}
 
 		return getFolders(limit).then((items) => {

@@ -41,11 +41,13 @@ class Note extends BaseItem {
 	}
 
 	static previews(parentId) {
-		return this.db().selectAll('SELECT ' + this.previewFieldsSql() + ' FROM notes WHERE parent_id = ?', [parentId]);
+		return this.modelSelectAll('SELECT ' + this.previewFieldsSql() + ' FROM notes WHERE parent_id = ?', [parentId]);
+		//return this.db().selectAll('SELECT ' + this.previewFieldsSql() + ' FROM notes WHERE parent_id = ?', [parentId]);
 	}
 
 	static preview(noteId) {
-		return this.db().selectOne('SELECT ' + this.previewFieldsSql() + ' FROM notes WHERE id = ?', [noteId]);
+		return this.modelSelectOne('SELECT ' + this.previewFieldsSql() + ' FROM notes WHERE id = ?', [noteId]);
+		//return this.db().selectOne('SELECT ' + this.previewFieldsSql() + ' FROM notes WHERE id = ?', [noteId]);
 	}
 
 	static updateGeolocation(noteId) {

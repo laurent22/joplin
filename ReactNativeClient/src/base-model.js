@@ -90,8 +90,19 @@ class BaseModel {
 		return this.loadByField('id', id);
 	}
 
+	static modelSelectOne(sql, params = null) {
+		if (params === null) params = [];
+		return this.db().selectOne(sql, params);
+	}
+
+	static modelSelectAll(sql, params = null) {
+		if (params === null) params = [];
+		return this.db().selectAll(sql, params);
+	}
+
 	static loadByField(fieldName, fieldValue) {	
-		return this.db().selectOne('SELECT * FROM ' + this.tableName() + ' WHERE `' + fieldName + '` = ?', [fieldValue]);
+		return this.modelSelectOne('SELECT * FROM ' + this.tableName() + ' WHERE `' + fieldName + '` = ?', [fieldValue]);
+		//return this.db().selectOne('SELECT * FROM ' + this.tableName() + ' WHERE `' + fieldName + '` = ?', [fieldValue]);
 	}
 
 	static applyPatch(model, patch) {
@@ -170,33 +181,33 @@ class BaseModel {
 		queries.push(saveQuery);
 
 		// TODO: DISABLED DISABLED DISABLED DISABLED DISABLED DISABLED DISABLED DISABLED DISABLED DISABLED 
-		if (0&& options.trackChanges && this.trackChanges()) {
-			// Cannot import this class the normal way due to cyclical dependencies between Change and BaseModel
-			// which are not handled by React Native.
-			const { Change } = require('src/models/change.js');
+		// if (options.trackChanges && this.trackChanges()) {
+		// 	// Cannot import this class the normal way due to cyclical dependencies between Change and BaseModel
+		// 	// which are not handled by React Native.
+		// 	const { Change } = require('src/models/change.js');
 
-			if (isNew) {
-				let change = Change.newChange();
-				change.type = Change.TYPE_CREATE;
-				change.item_id = itemId;
-				change.item_type = this.itemType();
+		// 	if (isNew) {
+		// 		let change = Change.newChange();
+		// 		change.type = Change.TYPE_CREATE;
+		// 		change.item_id = itemId;
+		// 		change.item_type = this.itemType();
 
-				queries.push(Change.saveQuery(change));
-			} else {
-				for (let n in o) {
-					if (!o.hasOwnProperty(n)) continue;
-					if (n == 'id') continue;
+		// 		queries.push(Change.saveQuery(change));
+		// 	} else {
+		// 		for (let n in o) {
+		// 			if (!o.hasOwnProperty(n)) continue;
+		// 			if (n == 'id') continue;
 
-					let change = Change.newChange();
-					change.type = Change.TYPE_UPDATE;
-					change.item_id = itemId;
-					change.item_type = this.itemType();
-					change.item_field = n;
+		// 			let change = Change.newChange();
+		// 			change.type = Change.TYPE_UPDATE;
+		// 			change.item_id = itemId;
+		// 			change.item_type = this.itemType();
+		// 			change.item_field = n;
 
-					queries.push(Change.saveQuery(change));
-				}
-			}
-		}
+		// 			queries.push(Change.saveQuery(change));
+		// 		}
+		// 	}
+		// }
 
 		return this.db().transactionExecBatch(queries).then(() => {
 			o = Object.assign({}, o);
@@ -216,16 +227,16 @@ class BaseModel {
 		}
 
 		return this.db().exec('DELETE FROM ' + this.tableName() + ' WHERE id = ?', [id]).then(() => {
-			if (options.trackChanges && this.trackChanges()) {
-				const { Change } = require('src/models/change.js');
+			// if (options.trackChanges && this.trackChanges()) {
+			// 	const { Change } = require('src/models/change.js');
 
-				let change = Change.newChange();
-				change.type = Change.TYPE_DELETE;
-				change.item_id = id;
-				change.item_type = this.itemType();
+			// 	let change = Change.newChange();
+			// 	change.type = Change.TYPE_DELETE;
+			// 	change.item_id = id;
+			// 	change.item_type = this.itemType();
 
-				return Change.save(change);
-			}
+			// 	return Change.save(change);
+			// }
 		});
 	}
 
