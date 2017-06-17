@@ -14,7 +14,7 @@ class Folder extends BaseItem {
 	}
 
 	static toFriendlyString(folder) {
-		return super.toFriendlyString(folder, 'folder', ['id', 'created_time', 'updated_time']);
+		return super.toFriendlyString(folder, 'folder', ['id', 'created_time', 'updated_time', 'type_']);
 	}
 
 	static itemType() {

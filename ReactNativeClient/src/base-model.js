@@ -4,6 +4,22 @@ import { uuid } from 'src/uuid.js';
 
 class BaseModel {
 
+	static addModelMd(model) {
+		if (!model) return model;
+		
+		if (Array.isArray(model)) {
+			let output = [];
+			for (let i = 0; i < model.length; i++) {
+				output.push(this.addModelMd(model[i]));
+			}
+			return output;
+		} else {
+			model = Object.assign({}, model);
+			model.type_ = this.itemType();
+			return model;
+		}
+	}
+
 	static tableName() {
 		throw new Error('Must be overriden');
 	}
@@ -92,12 +108,16 @@ class BaseModel {
 
 	static modelSelectOne(sql, params = null) {
 		if (params === null) params = [];
-		return this.db().selectOne(sql, params);
+		return this.db().selectOne(sql, params).then((model) => {
+			return this.addModelMd(model);
+		});
 	}
 
 	static modelSelectAll(sql, params = null) {
 		if (params === null) params = [];
-		return this.db().selectAll(sql, params);
+		return this.db().selectAll(sql, params).then((models) => {
+			return this.addModelMd(models);
+		});
 	}
 
 	static loadByField(fieldName, fieldValue) {	
@@ -145,7 +165,7 @@ class BaseModel {
 
 		if (isNew) {
 			if (this.useUuid() && !o.id) {
-				o = Object.assign({}, o);
+				//o = Object.assign({}, o);
 				itemId = uuid.create();
 				o.id = itemId;
 			}
@@ -212,6 +232,7 @@ class BaseModel {
 		return this.db().transactionExecBatch(queries).then(() => {
 			o = Object.assign({}, o);
 			o.id = itemId;
+			o = this.addModelMd(o);
 			return o;
 		}).catch((error) => {
 			Log.error('Cannot save model', error);

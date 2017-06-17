@@ -15,6 +15,12 @@ class BaseItem extends BaseModel {
 		return folderItemFilename(item) + '.md';
 	}
 
+	static itemClass(item) {
+		if (!item) throw new Error('Item cannot be null');
+		if (!('type_' in item)) throw new Error('Item does not have a type_ property');
+		return item.type_ == BaseModel.ITEM_TYPE_NOTE ? Note : Folder;
+	}
+
 	static pathToId(path) {
 		let s = path.split('.');
 		return s[0];
@@ -40,7 +46,7 @@ class BaseItem extends BaseModel {
 	}
 
 	static fromFriendlyString_format(propName, propValue) {
-		if (propName == 'type') return propValue;
+		if (propName == 'type_') return propValue;
 
 		if (['created_time', 'updated_time'].indexOf(propName) >= 0) {
 			if (!propValue) return 0;
@@ -64,8 +70,6 @@ class BaseItem extends BaseModel {
 			v = this.toFriendlyString_format(shownKeys[i], v);
 			output.push(shownKeys[i] + ': ' + v);
 		}
-
-		output.push('type: ' + type);
 
 		return output.join("\n");
 	}
@@ -100,7 +104,7 @@ class BaseItem extends BaseModel {
 
 		let title = body.splice(0, 2);
 		output.title = title[0];
-		if (output.type == 'note') output.body = body.join("\n");
+		if (output.type_ == BaseModel.ITEM_TYPE_NOTE) output.body = body.join("\n");
 
 		return output;
 	}

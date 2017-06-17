@@ -13,7 +13,7 @@ class Note extends BaseItem {
 	}
 
 	static toFriendlyString(note, type = null, shownKeys = null) {
-		return super.toFriendlyString(note, 'note', ["author", "longitude", "latitude", "is_todo", "todo_due", "todo_completed", 'created_time', 'updated_time', 'id', 'parent_id']);
+		return super.toFriendlyString(note, 'note', ["author", "longitude", "latitude", "is_todo", "todo_due", "todo_completed", 'created_time', 'updated_time', 'id', 'parent_id', 'type_']);
 	}
 
 	static itemType() {

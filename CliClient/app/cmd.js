@@ -51,6 +51,7 @@ async function runTest() {
 	await clearDatabase();
 
 	let folder = await Folder.save({ title: "folder1" });
+	//console.info(folder);
 	let note1 = await Note.save({ title: "un", parent_id: folder.id });
 	await Note.save({ title: "deux", parent_id: folder.id });
 	folder = await Folder.save({ title: "folder2" });
@@ -59,13 +60,16 @@ async function runTest() {
 	await synchronizer.start();
 
 	note1 = await Note.load(note1.id);
+	//console.info(note1);
 	note1.title = 'un update';
 	await Note.save(note1);
 
-	await synchronizer.start();
+	return await synchronizer.start();
 }
 
-runTest();
+runTest().catch((error) => {
+	console.error(error);
+});
 
 
 
