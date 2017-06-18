@@ -13,8 +13,8 @@ class Folder extends BaseItem {
 		return 'folders';
 	}
 
-	static toFriendlyString(folder) {
-		return super.toFriendlyString(folder, 'folder', ['id', 'created_time', 'updated_time', 'type_']);
+	static serialize(folder) {
+		return super.serialize(folder, 'folder', ['id', 'created_time', 'updated_time', 'type_']);
 	}
 
 	static itemType() {

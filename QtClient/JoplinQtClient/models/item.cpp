@@ -5,7 +5,7 @@ namespace jop {
 
 Item::Item() {}
 
-QString Item::toFriendlyString() const {
+QString Item::serialize() const {
 	QStringList shownKeys;
 	shownKeys << "author" << "longitude" << "latitude" << "is_todo" << "todo_due" << "todo_completed";
 

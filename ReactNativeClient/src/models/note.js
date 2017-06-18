@@ -12,8 +12,8 @@ class Note extends BaseItem {
 		return 'notes';
 	}
 
-	static toFriendlyString(note, type = null, shownKeys = null) {
-		return super.toFriendlyString(note, 'note', ["author", "longitude", "latitude", "is_todo", "todo_due", "todo_completed", 'created_time', 'updated_time', 'id', 'parent_id', 'type_']);
+	static serialize(note, type = null, shownKeys = null) {
+		return super.serialize(note, 'note', ["author", "longitude", "latitude", "is_todo", "todo_due", "todo_completed", 'created_time', 'updated_time', 'id', 'parent_id', 'type_']);
 	}
 
 	static itemType() {

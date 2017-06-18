@@ -135,13 +135,13 @@ void CliApplication::saveNoteIfFileChanged(Note& note, const QDateTime& original
 // 	if (propKey.isEmpty()) {
 // 		QStringList propKeys = settings.allKeys();
 // 		for (int i = 0; i < propKeys.size(); i++) {
-// 			qStdout() << settings.keyValueToFriendlyString(propKeys[i]) << endl;
+// 			qStdout() << settings.keyValueserialize(propKeys[i]) << endl;
 // 		}
 // 		return 0;
 // 	}
 
 // 	if (propValue.isEmpty()) {
-// 		qStdout() << settings.keyValueToFriendlyString(propKey) << endl;
+// 		qStdout() << settings.keyValueserialize(propKey) << endl;
 // 		return 0;
 // 	}
 
@@ -386,7 +386,7 @@ int CliApplication::exec() {
 
 			QString noteFilePath = QString("%1/%2.txt").arg(paths::noteDraftsDir()).arg(note.idString());
 
-			if (!filePutContents(noteFilePath, note.toFriendlyString())) {
+			if (!filePutContents(noteFilePath, note.serialize())) {
 				qStderr() << QString("Cannot open %1 for writing").arg(noteFilePath) << endl;
 				return 1;
 			}
@@ -431,13 +431,13 @@ int CliApplication::exec() {
 		if (propKey.isEmpty()) {
 			QStringList propKeys = settings.allKeys();
 			for (int i = 0; i < propKeys.size(); i++) {
-				qStdout() << settings.keyValueToFriendlyString(propKeys[i]) << endl;
+				qStdout() << settings.keyValueserialize(propKeys[i]) << endl;
 			}
 			return 0;
 		}
 
 		if (propValue.isEmpty()) {
-			qStdout() << settings.keyValueToFriendlyString(propKey) << endl;
+			qStdout() << settings.keyValueserialize(propKey) << endl;
 			return 0;
 		}
 

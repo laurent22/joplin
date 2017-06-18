@@ -32,10 +32,10 @@ class FileApiDriverLocal {
 	metadataFromStats_(path, stats) {
 		return {
 			path: path,
-			createdTime: this.statTimeToUnixTimestamp_(stats.birthtime),
-			updatedTime: this.statTimeToUnixTimestamp_(stats.mtime),
-			createdTimeOrig: stats.birthtime,
-			updatedTimeOrig: stats.mtime,
+			created_time: this.statTimeToUnixTimestamp_(stats.birthtime),
+			updated_time: this.statTimeToUnixTimestamp_(stats.mtime),
+			created_time_orig: stats.birthtime,
+			updated_time_orig: stats.mtime,
 			isDir: stats.isDirectory(),
 		};
 	}

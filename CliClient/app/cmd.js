@@ -463,9 +463,9 @@ async function createLocalItems() {
 // 				}
 
 // 				if (!currentFolder) {
-// 					this.log(Folder.toFriendlyString(item));
+// 					this.log(Folder.serialize(item));
 // 				} else {
-// 					this.log(Note.toFriendlyString(item));
+// 					this.log(Note.serialize(item));
 // 				}
 // 			}).catch((error) => {
 // 				this.log(error);

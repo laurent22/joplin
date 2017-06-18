@@ -35,6 +35,6 @@ int Settings::valueInt(const QString &name, int defaultValue) {
 	return value(name, defaultValue).toInt();
 }
 
-QString Settings::keyValueToFriendlyString(const QString& key) const {
+QString Settings::keyValueserialize(const QString& key) const {
 	return QString("%1 = %2").arg(key).arg(value(key).toString());
 }

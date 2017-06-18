@@ -14,7 +14,7 @@ class Item : public BaseModel {
 public:
 
 	Item();
-	QString toFriendlyString() const;
+	QString serialize() const;
 	void patchFriendlyString(const QString& patch);
 
 };

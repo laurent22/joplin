@@ -3,6 +3,7 @@ import { Note } from 'src/models/note.js';
 import { Folder } from 'src/models/folder.js';
 import { folderItemFilename } from 'src/string-utils.js'
 import { Database } from 'src/database.js';
+import { time } from 'src/time-utils.js';
 import moment from 'moment';
 
 class BaseItem extends BaseModel {
@@ -17,8 +18,15 @@ class BaseItem extends BaseModel {
 
 	static itemClass(item) {
 		if (!item) throw new Error('Item cannot be null');
-		if (!('type_' in item)) throw new Error('Item does not have a type_ property');
-		return item.type_ == BaseModel.ITEM_TYPE_NOTE ? Note : Folder;
+
+		if (typeof item === 'object') {
+			if (!('type_' in item)) throw new Error('Item does not have a type_ property');
+			return item.type_ == BaseModel.ITEM_TYPE_NOTE ? Note : Folder;
+		} else {
+			if (Number(item) === BaseModel.ITEM_TYPE_NOTE) return Note;
+			if (Number(item) === BaseModel.ITEM_TYPE_FOLDER) return Folder;
+			throw new Error('Unknown type: ' + item);
+		}
 	}
 
 	static pathToId(path) {
@@ -34,10 +42,10 @@ class BaseItem extends BaseModel {
 		});
 	}
 
-	static toFriendlyString_format(propName, propValue) {
+	static serialize_format(propName, propValue) {
 		if (['created_time', 'updated_time'].indexOf(propName) >= 0) {
 			if (!propValue) return '';
-			propValue = moment.unix(propValue).utc().format('YYYY-MM-DD HH:mm:ss') + 'Z';
+			propValue = moment.unix(propValue / 1000).utc().format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z';
 		} else if (propValue === null || propValue === undefined) {
 			propValue = '';
 		}
@@ -45,20 +53,22 @@ class BaseItem extends BaseModel {
 		return propValue;
 	}
 
-	static fromFriendlyString_format(propName, propValue) {
+	static unserialize_format(type, propName, propValue) {
 		if (propName == 'type_') return propValue;
+
+		let ItemClass = this.itemClass(type);
 
 		if (['created_time', 'updated_time'].indexOf(propName) >= 0) {
 			if (!propValue) return 0;
-			propValue = moment(propValue, 'YYYY-MM-DD HH:mm:ssZ').unix();
+			propValue = moment(propValue, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x');
 		} else {
-			propValue = Database.formatValue(this.fieldType(propName), propValue);
+			propValue = Database.formatValue(ItemClass.fieldType(propName), propValue);
 		}
 
 		return propValue;
 	}
 
-	static toFriendlyString(item, type = null, shownKeys = null) {
+	static serialize(item, type = null, shownKeys = null) {
 		let output = [];
 
 		output.push(item.title);
@@ -67,14 +77,14 @@ class BaseItem extends BaseModel {
 		output.push('');
 		for (let i = 0; i < shownKeys.length; i++) {
 			let v = item[shownKeys[i]];
-			v = this.toFriendlyString_format(shownKeys[i], v);
+			v = this.serialize_format(shownKeys[i], v);
 			output.push(shownKeys[i] + ': ' + v);
 		}
 
 		return output.join("\n");
 	}
 
-	static fromFriendlyString(content) {
+	static unserialize(content) {
 		let lines = content.split("\n");
 		let output = {};
 		let state = 'readingProps';
@@ -94,7 +104,7 @@ class BaseItem extends BaseModel {
 				if (p < 0) throw new Error('Invalid property format: ' + line + ": " + content);
 				let key = line.substr(0, p).trim();
 				let value = line.substr(p + 1).trim();
-				output[key] = this.fromFriendlyString_format(key, value);
+				output[key] = value;
 			} else if (state == 'readingBody') {
 				body.splice(0, 0, line);
 			}
@@ -104,9 +114,27 @@ class BaseItem extends BaseModel {
 
 		let title = body.splice(0, 2);
 		output.title = title[0];
+
+		if (!output.type_) throw new Error('Missing required property: type_: ' + content);
+		output.type_ = Number(output.type_);
+
 		if (output.type_ == BaseModel.ITEM_TYPE_NOTE) output.body = body.join("\n");
 
+		for (let n in output) {
+			if (!output.hasOwnProperty(n)) continue;
+			output[n] = this.unserialize_format(output.type_, n, output[n]);
+		}
+
 		return output;
+	}
+
+	static itemsThatNeedSync(limit = 100) {
+		return Folder.modelSelectAll('SELECT * FROM folders WHERE sync_time < updated_time LIMIT ' + limit).then((items) => {
+			if (items.length) return { hasMore: true, items: items };
+			return Note.modelSelectAll('SELECT * FROM notes WHERE sync_time < updated_time LIMIT ' + limit).then((items) => {
+				return { hasMore: items.length >= limit, items: items };
+			});
+		});
 	}
 
 }

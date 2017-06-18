@@ -527,7 +527,7 @@ function saveNoteToWebApi(note) {
 	});
 }
 
-function noteToFriendlyString_format(propName, propValue) {
+function noteserialize_format(propName, propValue) {
 	if (['created_time', 'updated_time'].indexOf(propName) >= 0) {
 		if (!propValue) return '';
 		propValue = moment.unix(propValue).format('YYYY-MM-DD hh:mm:ss');
@@ -538,7 +538,7 @@ function noteToFriendlyString_format(propName, propValue) {
 	return propValue;
 }
 
-function noteToFriendlyString(note) {
+function noteserialize(note) {
 	let shownKeys = ["author", "longitude", "latitude", "is_todo", "todo_due", "todo_completed", 'created_time', 'updated_time'];
 	let output = [];
 
@@ -548,7 +548,7 @@ function noteToFriendlyString(note) {
 	output.push('');
 	for (let i = 0; i < shownKeys.length; i++) {
 		let v = note[shownKeys[i]];
-		v = noteToFriendlyString_format(shownKeys[i], v);
+		v = noteserialize_format(shownKeys[i], v);
 		output.push(shownKeys[i] + ': ' + v);
 	}
 
@@ -623,7 +623,7 @@ const baseNoteDir = '/home/laurent/Temp/TestImport';
 // });
 
 function saveNoteToDisk(folder, note) {
-	const noteContent = noteToFriendlyString(note);
+	const noteContent = noteserialize(note);
 	const notePath = baseNoteDir + '/' + folderFilename(folder) + '/' + noteFilename(note);
 
 	// console.info('===================================================');
@@ -694,7 +694,7 @@ function importEnex(parentFolder, stream) {
 
 						saveNoteToDisk(parentFolder, note);
 
-						// console.info(noteToFriendlyString(note));
+						// console.info(noteserialize(note));
 						// console.info('=========================================================================================================================');
 
 						//saveNoteToWebApi(note);
