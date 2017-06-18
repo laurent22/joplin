@@ -106,10 +106,8 @@ class Synchronizer {
 	dbItemToSyncItem(dbItem) {
 		if (!dbItem) return null;
 
-		let itemType = BaseModel.identifyItemType(dbItem);
-
 		return {
-			type: itemType == BaseModel.ITEM_TYPE_FOLDER ? 'folder' : 'note',
+			type: dbItem.type_ == BaseModel.ITEM_TYPE_FOLDER ? 'folder' : 'note',
 			path: Folder.systemPath(dbItem),
 			syncTime: dbItem.sync_time,
 			updatedTime: dbItem.updated_time,
@@ -121,7 +119,7 @@ class Synchronizer {
 		if (!remoteItem) return null;
 
 		return {
-			type: remoteItem.content.type,
+			type: remoteItem.content.type_ == BaseModel.ITEM_TYPE_FOLDER ? 'folder' : 'note',
 			path: remoteItem.path,
 			syncTime: 0,
 			updatedTime: remoteItem.updatedTime,
@@ -175,8 +173,8 @@ class Synchronizer {
 				if (this.itemIsStrictlyOlderThan(remote, local.updatedTime)) {
 					action.type = 'update';
 					action.dest = 'remote';
-					action.reason = sprintf('Remote (%s) was modified after last sync of local (%s).', moment.unix(remote.updatedTime).toISOString(), moment.unix(local.syncTime).toISOString(),);
-				} else if (this.itemIsStrictlyNewerThan(remote, local.syncTime)) {
+					action.reason = sprintf('Remote (%s) was modified before updated time of local (%s).', moment.unix(remote.updatedTime).toISOString(), moment.unix(local.syncTime).toISOString(),);
+				} else if (this.itemIsStrictlyNewerThan(remote, local.syncTime) && this.itemIsStrictlyNewerThan(local, local.syncTime)) {
 					action.type = 'conflict';
 					action.reason = sprintf('Both remote (%s) and local (%s) were modified after the last sync (%s).',
 						moment.unix(remote.updatedTime).toISOString(),
@@ -195,6 +193,10 @@ class Synchronizer {
 							{ type: 'update', dest: 'local' },
 						];
 					}
+				} else if (this.itemIsStrictlyNewerThan(remote, local.syncTime) && local.updatedTime <= local.syncTime) {
+					action.type = 'update';
+					action.dest = 'local';
+					action.reason = sprintf('Remote (%s) was modified after update time of local (%s). And sync time (%s) is the same or more recent than local update time', moment.unix(remote.updatedTime).toISOString(), moment.unix(local.updatedTime).toISOString(), moment.unix(local.syncTime).toISOString());
 				} else {
 					continue; // Neither local nor remote item have been changed recently
 				}
@@ -230,8 +232,11 @@ class Synchronizer {
 				// modified since the last sync, it's been processed in the previous loop.
 				// So throw an exception is this normally impossible condition happens anyway.
 				// It's handled at condition this.itemIsStrictlyNewerThan(remote, local.syncTime) in above loop
-				if (this.itemIsStrictlyNewerThan(remote, local.syncTime)) throw new Error('Remote cannot be newer than last sync time.');
-
+				if (this.itemIsStrictlyNewerThan(remote, local.syncTime)) {
+					console.error('Remote cannot be newer than last sync time', remote, local);
+					throw new Error('Remote cannot be newer than last sync time');
+				}
+				
 				if (this.itemIsStrictlyNewerThan(remote, local.updatedTime)) {
 					action.type = 'update';
 					action.dest = 'local';
@@ -285,53 +290,49 @@ class Synchronizer {
 			if (action.type == 'create') {
 				if (action.dest == 'remote') {
 					let content = null;
+					let dbItem = syncItem.dbItem;
 
 					if (syncItem.type == 'folder') {
-						content = Folder.toFriendlyString(syncItem.dbItem);
+						content = Folder.toFriendlyString(dbItem);
 					} else {
-						content = Note.toFriendlyString(syncItem.dbItem);
+						content = Note.toFriendlyString(dbItem);
 					}
 
 					return this.api().put(path, content).then(() => {
-						return this.api().setTimestamp(path, syncItem.updatedTime);
+						return this.api().setTimestamp(path, dbItem.updated_time);
 					});
+
+					// TODO: save sync_time
 				} else {
 					let dbItem = syncItem.remoteItem.content;
 					dbItem.sync_time = time.unix();
-					dbItem.updated_time = dbItem.sync_time;
+					dbItem.updated_time = action.remote.updatedTime;
 					if (syncItem.type == 'folder') {
 						return Folder.save(dbItem, { isNew: true, autoTimestamp: false });
 					} else {
 						return Note.save(dbItem, { isNew: true, autoTimestamp: false });
 					}
+
+					// TODO: save sync_time
 				}
 			}
 
 			if (action.type == 'update') {
 				if (action.dest == 'remote') {
-					// let content = null;
-
-					// if (syncItem.type == 'folder') {
-					// 	content = Folder.toFriendlyString(syncItem.dbItem);
-					// } else {
-					// 	content = Note.toFriendlyString(syncItem.dbItem);
-					// }
-
-					// return this.api().put(path, content).then(() => {
-					// 	return this.api().setTimestamp(path, syncItem.updatedTime);
-					// });
+					let dbItem = syncItem.dbItem;
+					let ItemClass = BaseItem.itemClass(dbItem);
+					let content = ItemClass.toFriendlyString(dbItem);
+					//console.info('PUT', content);
+					return this.api().put(path, content).then(() => {
+						return this.api().setTimestamp(path, dbItem.updated_time);
+					}).then(() => {
+						let toSave = { id: dbItem.id, sync_time: time.unix() };
+						return NoteFolderService.save(syncItem.type, dbItem, null, { autoTimestamp: false });
+					});
 				} else {
-					let dbItem = syncItem.remoteItem.content;
+					let dbItem = Object.assign({}, syncItem.remoteItem.content);
 					dbItem.sync_time = time.unix();
-					dbItem.updated_time = dbItem.sync_time;
 					return NoteFolderService.save(syncItem.type, dbItem, action.local.dbItem, { autoTimestamp: false });
-					// let dbItem = syncItem.remoteItem.content;
-					// dbItem.sync_time = time.unix();
-					// if (syncItem.type == 'folder') {
-					// 	return Folder.save(dbItem, { isNew: true });
-					// } else {
-					// 	return Note.save(dbItem, { isNew: true });
-					// }
 				}
 			}
 		}
@@ -346,12 +347,9 @@ class Synchronizer {
 		let action = this.syncAction(localItem, remoteItem, []);
 		await this.processSyncAction(action);
 
-		dbItem.sync_time = time.unix();
-		if (localItem.type == 'folder') {
-			return Folder.save(dbItem);
-		} else {
-			return Note.save(dbItem);
-		}
+		let toSave = Object.assign({}, dbItem);
+		toSave.sync_time = time.unix();
+		return NoteFolderService.save(localItem.type, toSave, dbItem, { autoTimestamp: false });
 	}
 
 	async processRemoteItem(remoteItem) {

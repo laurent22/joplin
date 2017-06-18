@@ -32,8 +32,6 @@ class NoteFolderService extends BaseService {
 			toSave.id = item.id;
 		}
 
-		console.info(toSave);
-
 		return ItemClass.save(toSave, options).then((savedItem) => {
 			output = Object.assign(item, savedItem);
 			if (isNew && type == 'note') return Note.updateGeolocation(output.id);

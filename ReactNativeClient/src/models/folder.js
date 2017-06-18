@@ -75,18 +75,11 @@ class Folder extends BaseItem {
 	}
 
 	static async all(includeNotes = false) {
-		let folders = await this.modelSelectAll('SELECT * FROM folders');
+		let folders = await Folder.modelSelectAll('SELECT * FROM folders');
 		if (!includeNotes) return folders;
 
-		let output = [];
-		for (let i = 0; i < folders.length; i++) {
-			let folder = folders[i];
-			let notes = await Note.all(folder.id);
-			output.push(folder);
-			output = output.concat(notes);
-		}
-
-		return output;
+		let notes = await Note.modelSelectAll('SELECT * FROM notes');
+		return folders.concat(notes);
 
 	}
 

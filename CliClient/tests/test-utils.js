@@ -2,61 +2,95 @@ import fs from 'fs-extra';
 import { Database } from 'src/database.js';
 import { DatabaseDriverNode } from 'src/database-driver-node.js';
 import { BaseModel } from 'src/base-model.js';
+import { Folder } from 'src/models/folder.js';
+import { Note } from 'src/models/note.js';
+import { BaseItem } from 'src/models/base-item.js';
 import { Synchronizer } from 'src/synchronizer.js';
 import { FileApi } from 'src/file-api.js';
 import { FileApiDriverMemory } from 'src/file-api-driver-memory.js';
 
-let database_ = null;
-let synchronizer_ = null;
+let databases_ = [];
+let synchronizers_ = [];
 let fileApi_ = null;
+let currentClient_ = 1;
 
-function setupDatabase(done) {
-	if (database_) {
-		let queries = [
-			'DELETE FROM changes',
-			'DELETE FROM notes',
-			'DELETE FROM folders',
-			'DELETE FROM item_sync_times',
-		];
+function sleep(n) {
+	return new Promise((resolve, reject) => {
+		setTimeout(() => {
+			resolve();
+		}, n * 1000);
+	});
+}
 
-		return database_.transactionExecBatch(queries).then(() => {
-			if (done) done();
-		});
+function switchClient(id) {
+	currentClient_ = id;
+	BaseModel.db_ = databases_[id];
+	Folder.db_ = databases_[id];
+	Note.db_ = databases_[id];
+	BaseItem.db_ = databases_[id];
+}
+
+function clearDatabase(id = null) {
+	if (id === null) id = currentClient_;
+
+	let queries = [
+		'DELETE FROM changes',
+		'DELETE FROM notes',
+		'DELETE FROM folders',
+		'DELETE FROM item_sync_times',
+	];
+
+	return databases_[id].transactionExecBatch(queries);
+}
+
+function setupDatabase(id = null) {
+	if (id === null) id = currentClient_;
+
+	if (databases_[id]) {
+		return clearDatabase(id);
 	}
 
-	const filePath = __dirname + '/data/test.sqlite';
+	const filePath = __dirname + '/data/test-' + id + '.sqlite';
 	return fs.unlink(filePath).catch(() => {
 		// Don't care if the file doesn't exist
 	}).then(() => {
-		database_ = new Database(new DatabaseDriverNode());
-		database_.setDebugEnabled(false);
-		return database_.open({ name: filePath }).then(() => {
-			BaseModel.db_ = database_;
-			return setupDatabase(done);
+		databases_[id] = new Database(new DatabaseDriverNode());
+		databases_[id].setDebugEnabled(false);
+		return databases_[id].open({ name: filePath }).then(() => {
+			BaseModel.db_ = databases_[id];
+			return setupDatabase(id);
 		});
 	});
 }
 
-async function setupDatabaseAndSynchronizer() {
-	await setupDatabase();
+async function setupDatabaseAndSynchronizer(id = null) {
+	if (id === null) id = currentClient_;
 
-	if (!synchronizer_) {
-		let fileDriver = new FileApiDriverMemory();
-		fileApi_ = new FileApi('/root', fileDriver);
-		synchronizer_ = new Synchronizer(db(), fileApi_);
+	await setupDatabase(id);
+
+	if (!synchronizers_[id]) {
+		synchronizers_[id] = new Synchronizer(db(id), fileApi());
 	}
+
+	await fileApi().format();
 }
 
-function db() {
-	return database_;
+function db(id = null) {
+	if (id === null) id = currentClient_;
+	return databases_[id];
 }
 
-function synchronizer() {
-	return synchronizer_;
+function synchronizer(id = null) {
+	if (id === null) id = currentClient_;
+	console.info('SYNC', id);
+	return synchronizers_[id];
 }
 
 function fileApi() {
+	if (fileApi_) return fileApi_;
+
+	fileApi_ = new FileApi('/root', new FileApiDriverMemory());
 	return fileApi_;
 }
 
-export { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi };
+export { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient };
