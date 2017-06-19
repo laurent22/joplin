@@ -1,6 +1,8 @@
 require('babel-plugin-transform-runtime');
 
 import { BaseItem } from 'src/models/base-item.js';
+import { Folder } from 'src/models/folder.js';
+import { Note } from 'src/models/note.js';
 import { BaseModel } from 'src/base-model.js';
 import { sprintf } from 'sprintf-js';
 import { time } from 'src/time-utils.js';
@@ -48,16 +50,25 @@ class Synchronizer {
 				if (!remote) {
 					action = 'createRemote';
 				} else {
-					if (remote.updated_time > local.updated_time && local.type_ == BaseModel.ITEM_TYPE_NOTE) {
-						action = 'noteConflict';
+					if (remote.updated_time > local.sync_time) {
+						// Since, in this loop, we are only dealing with notes that require sync, if the
+						// remote has been modified after the sync time, it means both notes have been
+						// modified and so there's a conflict.
+						action = local.type_ == BaseModel.ITEM_TYPE_NOTE ? 'noteConflict' : 'folderConflict';
 					} else {
 						action = 'updateRemote';
 					}
 				}
 
+				console.info('Sync action (1): ' + action);
+
 				if (action == 'createRemote' || action == 'updateRemote') {
 					await this.api().put(path, content);
 					await this.api().setTimestamp(path, local.updated_time);
+				} else if (action == 'folderConflict') {
+					let remoteContent = await this.api().get(path);
+					local = BaseItem.unserialize(remoteContent);
+					updateSyncTimeOnly = false;
 				} else if (action == 'noteConflict') {
 					// - Create a duplicate of local note into Conflicts folder (to preserve the user's changes)
 					// - Overwrite local note with remote note
@@ -65,7 +76,7 @@ class Synchronizer {
 					let conflictedNote = Object.assign({}, local);
 					delete conflictedNote.id;
 					conflictedNote.parent_id = conflictFolder.id;
-					await Note.save(conflictedNote);
+					await Note.save(conflictedNote, { autoTimestamp: false });
 
 					let remoteContent = await this.api().get(path);
 					local = BaseItem.unserialize(remoteContent);
@@ -113,6 +124,8 @@ class Synchronizer {
 			}
 
 			if (!action) continue;
+
+			console.info('Sync action (2): ' + action);
 
 			if (action == 'createLocal' || action == 'updateLocal') {
 				let content = await this.api().get(path);
