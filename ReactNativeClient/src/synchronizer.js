@@ -54,7 +54,7 @@ class Synchronizer {
 						// Since, in this loop, we are only dealing with notes that require sync, if the
 						// remote has been modified after the sync time, it means both notes have been
 						// modified and so there's a conflict.
-						action = local.type_ == BaseModel.ITEM_TYPE_NOTE ? 'noteConflict' : 'folderConflict';
+						action = local.type_ == BaseModel.MODEL_TYPE_NOTE ? 'noteConflict' : 'folderConflict';
 					} else {
 						action = 'updateRemote';
 					}

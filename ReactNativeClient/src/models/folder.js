@@ -19,7 +19,7 @@ class Folder extends BaseItem {
 	}
 
 	static itemType() {
-		return BaseModel.ITEM_TYPE_FOLDER;
+		return BaseModel.MODEL_TYPE_FOLDER;
 	}
 
 	static trackChanges() {

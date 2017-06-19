@@ -67,8 +67,8 @@ class BaseModel {
 
 	static identifyItemType(item) {
 		if (!item) throw new Error('Cannot identify undefined item');
-		if ('body' in item || ('parent_id' in item && !!item.parent_id)) return BaseModel.ITEM_TYPE_NOTE;
-		if ('sync_time' in item) return BaseModel.ITEM_TYPE_FOLDER;
+		if ('body' in item || ('parent_id' in item && !!item.parent_id)) return BaseModel.MODEL_TYPE_NOTE;
+		if ('sync_time' in item) return BaseModel.MODEL_TYPE_FOLDER;
 		throw new Error('Cannot identify item: ' + JSON.stringify(item));
 	}
 
@@ -268,8 +268,9 @@ class BaseModel {
 
 }
 
-BaseModel.ITEM_TYPE_NOTE = 1;
-BaseModel.ITEM_TYPE_FOLDER = 2;
+BaseModel.MODEL_TYPE_NOTE = 1;
+BaseModel.MODEL_TYPE_FOLDER = 2;
+BaseModel.MODEL_TYPE_SETTING = 3;
 BaseModel.tableInfo_ = null;
 BaseModel.tableKeys_ = null;
 BaseModel.db_ = null;

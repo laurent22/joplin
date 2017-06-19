@@ -27,7 +27,7 @@ class Synchronizer {
 	}
 
 	loadParentAndItem(change) {
-		if (change.item_type == BaseModel.ITEM_TYPE_NOTE) {
+		if (change.item_type == BaseModel.MODEL_TYPE_NOTE) {
 			return Note.load(change.item_id).then((note) => {
 				return Folder.load(note.parent_id).then((folder) => {
 					return Promise.resolve({ parent: folder, item: note });
@@ -52,10 +52,10 @@ class Synchronizer {
 
 					let ItemClass = null;					
 					let path = null;
-					if (c.item_type == BaseModel.ITEM_TYPE_FOLDER) {
+					if (c.item_type == BaseModel.MODEL_TYPE_FOLDER) {
 						ItemClass = Folder;
 						path = 'folders';
-					} else if (c.item_type == BaseModel.ITEM_TYPE_NOTE) {
+					} else if (c.item_type == BaseModel.MODEL_TYPE_NOTE) {
 						ItemClass = Note;
 						path = 'notes';
 					}

@@ -17,7 +17,7 @@ class Note extends BaseItem {
 	}
 
 	static itemType() {
-		return BaseModel.ITEM_TYPE_NOTE;
+		return BaseModel.MODEL_TYPE_NOTE;
 	}
 
 	static trackChanges() {

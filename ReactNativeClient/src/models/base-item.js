@@ -22,10 +22,10 @@ class BaseItem extends BaseModel {
 
 		if (typeof item === 'object') {
 			if (!('type_' in item)) throw new Error('Item does not have a type_ property');
-			return item.type_ == BaseModel.ITEM_TYPE_NOTE ? Note : Folder;
+			return item.type_ == BaseModel.MODEL_TYPE_NOTE ? Note : Folder;
 		} else {
-			if (Number(item) === BaseModel.ITEM_TYPE_NOTE) return Note;
-			if (Number(item) === BaseModel.ITEM_TYPE_FOLDER) return Folder;
+			if (Number(item) === BaseModel.MODEL_TYPE_NOTE) return Note;
+			if (Number(item) === BaseModel.MODEL_TYPE_FOLDER) return Folder;
 			throw new Error('Unknown type: ' + item);
 		}
 	}
@@ -119,7 +119,7 @@ class BaseItem extends BaseModel {
 		if (!output.type_) throw new Error('Missing required property: type_: ' + content);
 		output.type_ = Number(output.type_);
 
-		if (output.type_ == BaseModel.ITEM_TYPE_NOTE) output.body = body.join("\n");
+		if (output.type_ == BaseModel.MODEL_TYPE_NOTE) output.body = body.join("\n");
 
 		for (let n in output) {
 			if (!output.hasOwnProperty(n)) continue;
