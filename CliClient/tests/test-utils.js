@@ -4,6 +4,7 @@ import { DatabaseDriverNode } from 'src/database-driver-node.js';
 import { BaseModel } from 'src/base-model.js';
 import { Folder } from 'src/models/folder.js';
 import { Note } from 'src/models/note.js';
+import { Setting } from 'src/models/setting.js';
 import { BaseItem } from 'src/models/base-item.js';
 import { Synchronizer } from 'src/synchronizer.js';
 import { FileApi } from 'src/file-api.js';
@@ -47,7 +48,9 @@ function setupDatabase(id = null) {
 	if (id === null) id = currentClient_;
 
 	if (databases_[id]) {
-		return clearDatabase(id);
+		return clearDatabase(id).then(() => {
+			return Setting.load();
+		});
 	}
 
 	const filePath = __dirname + '/data/test-' + id + '.sqlite';

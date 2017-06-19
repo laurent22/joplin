@@ -2,6 +2,7 @@ import { BaseModel } from 'src/base-model.js';
 import { Log } from 'src/log.js';
 import { promiseChain } from 'src/promise-utils.js';
 import { Note } from 'src/models/note.js';
+import { Setting } from 'src/models/setting.js';
 import { folderItemFilename } from 'src/string-utils.js'
 import { _ } from 'src/locale.js';
 import moment from 'moment';
@@ -80,7 +81,18 @@ class Folder extends BaseItem {
 
 		let notes = await Note.modelSelectAll('SELECT * FROM notes');
 		return folders.concat(notes);
+	}
 
+	static conflictFolder() {
+		let folderId = Setting.value('sync.conflictFolderId');
+		if (!folderId) {
+			return Folder.save({ title: _('Conflicts') }).then((folder) => {
+				Setting.setValue('sync.conflictFolderId', folder.id);
+				return folder;
+			});
+		}
+
+		return Folder.load(folderId);
 	}
 
 	static save(o, options = null) {

@@ -33,6 +33,8 @@ class Setting extends BaseModel {
 	}
 
 	static setValue(key, value) {
+		if (!this.cache_) throw new Error('Settings have not been initialized!');
+		
 		for (let i = 0; i < this.cache_.length; i++) {
 			if (this.cache_[i].key == key) {
 				if (this.cache_[i].value === value) return;
@@ -49,6 +51,8 @@ class Setting extends BaseModel {
 	}
 
 	static value(key) {
+		if (!this.cache_) throw new Error('Settings have not been initialized!');
+
 		for (let i = 0; i < this.cache_.length; i++) {
 			if (this.cache_[i].key == key) {
 				return this.cache_[i].value;
@@ -118,6 +122,7 @@ Setting.defaults_ = {
 	'user.session': { value: '', type: 'string' },
 	'sync.lastRevId': { value: 0, type: 'int' }, // DEPRECATED
 	'sync.lastUpdateTime': { value: 0, type: 'int' },
+	'sync.conflictFolderId': { value: '', type: 'string' },
 };
 
 export { Setting };

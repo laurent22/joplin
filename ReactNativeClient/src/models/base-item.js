@@ -1,6 +1,7 @@
 import { BaseModel } from 'src/base-model.js';
 import { Note } from 'src/models/note.js';
 import { Folder } from 'src/models/folder.js';
+import { Setting } from 'src/models/setting.js';
 import { folderItemFilename } from 'src/string-utils.js'
 import { Database } from 'src/database.js';
 import { time } from 'src/time-utils.js';
@@ -129,9 +130,10 @@ class BaseItem extends BaseModel {
 	}
 
 	static itemsThatNeedSync(limit = 100) {
-		return Folder.modelSelectAll('SELECT * FROM folders WHERE sync_time < updated_time LIMIT ' + limit).then((items) => {
+		let conflictFolderId = Setting.value('sync.conflictFolderId');
+		return Folder.modelSelectAll('SELECT * FROM folders WHERE sync_time < updated_time AND id != ? LIMIT ' + limit, [conflictFolderId]).then((items) => {
 			if (items.length) return { hasMore: true, items: items };
-			return Note.modelSelectAll('SELECT * FROM notes WHERE sync_time < updated_time LIMIT ' + limit).then((items) => {
+			return Note.modelSelectAll('SELECT * FROM notes WHERE sync_time < updated_time AND parent_id != ? LIMIT ' + limit, [conflictFolderId]).then((items) => {
 				return { hasMore: items.length >= limit, items: items };
 			});
 		});

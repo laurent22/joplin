@@ -3,6 +3,7 @@ import { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi,
 import { createFoldersAndNotes } from 'test-data.js';
 import { Folder } from 'src/models/folder.js';
 import { Note } from 'src/models/note.js';
+import { Setting } from 'src/models/setting.js';
 import { BaseItem } from 'src/models/base-item.js';
 import { BaseModel } from 'src/base-model.js';
 
@@ -125,5 +126,5 @@ describe('Synchronizer', function() {
 
 		done();
 	});
-
+	
 });

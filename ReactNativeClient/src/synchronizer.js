@@ -1,6 +1,7 @@
 require('babel-plugin-transform-runtime');
 
 import { BaseItem } from 'src/models/base-item.js';
+import { BaseModel } from 'src/base-model.js';
 import { sprintf } from 'sprintf-js';
 import { time } from 'src/time-utils.js';
 import { Log } from 'src/log.js'
@@ -42,12 +43,13 @@ class Synchronizer {
 				let remote = await this.api().stat(path);
 				let content = ItemClass.serialize(local);
 				let action = null;
+				let updateSyncTimeOnly = true;
 
 				if (!remote) {
 					action = 'createRemote';
 				} else {
-					if (remote.updated_time > local.updated_time) {
-						action = 'conflict';
+					if (remote.updated_time > local.updated_time && local.type_ == BaseModel.ITEM_TYPE_NOTE) {
+						action = 'noteConflict';
 					} else {
 						action = 'updateRemote';
 					}
@@ -56,11 +58,28 @@ class Synchronizer {
 				if (action == 'createRemote' || action == 'updateRemote') {
 					await this.api().put(path, content);
 					await this.api().setTimestamp(path, local.updated_time);
-				} else if (action == 'conflict') {
-					console.warn('FOUND CONFLICT', local, remote);
+				} else if (action == 'noteConflict') {
+					// - Create a duplicate of local note into Conflicts folder (to preserve the user's changes)
+					// - Overwrite local note with remote note
+					let conflictFolder = await Folder.conflictFolder();
+					let conflictedNote = Object.assign({}, local);
+					delete conflictedNote.id;
+					conflictedNote.parent_id = conflictFolder.id;
+					await Note.save(conflictedNote);
+
+					let remoteContent = await this.api().get(path);
+					local = BaseItem.unserialize(remoteContent);
+					updateSyncTimeOnly = false;
 				}
 
-				let newLocal = { id: local.id, sync_time: time.unixMs(), type_: local.type_ };
+				let newLocal = null;
+				if (updateSyncTimeOnly) {
+					newLocal = { id: local.id, sync_time: time.unixMs(), type_: local.type_ };
+				} else {
+					newLocal = local;
+					newLocal.sync_time = time.unixMs();
+				}
+
 				await ItemClass.save(newLocal, { autoTimestamp: false });
 
 				donePaths.push(path);
