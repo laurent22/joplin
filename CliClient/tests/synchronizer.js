@@ -9,7 +9,6 @@ import { BaseModel } from 'src/base-model.js';
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-	// application specific logging, throwing an error, or other logic here
 });
 
 async function localItemsSameAsRemote(locals, expect) {
@@ -21,11 +20,6 @@ async function localItemsSameAsRemote(locals, expect) {
 			let dbItem = locals[i];
 			let path = BaseItem.systemPath(dbItem);
 			let remote = await fileApi().stat(path);
-
-			// console.info('=======================');
-			// console.info(remote);
-			// console.info(dbItem);
-			// console.info('=======================');
 
 			expect(!!remote).toBe(true);
 			expect(remote.updated_time).toBe(dbItem.updated_time);
@@ -217,5 +211,82 @@ describe('Synchronizer', function() {
 		done();
 	});
 
+
+
+
+
+
+
+
+
+
+	// it('should delete local items', async (done) => {
+	// 	let folder1 = await Folder.save({ title: "folder1" });
+	// 	let note1 = await Note.save({ title: "un", parent_id: folder1.id });
+	// 	await synchronizer().start();
+
+	// 	switchClient(2);
+
+	// 	await synchronizer().start();
+
+	// 	await sleep(0.1);
+
+	// 	await Note.delete(note1.id);
+
+	// 	await synchronizer().start();
+
+	// 	switchClient(1);
+
+	// 	let files = await fileApi().list();
+	// 	console.info(files);
+
+	// 	// await synchronizer().start();
+
+	// 	// note1 = await Note.load(note1.id);
+
+	// 	// expect(!note1).toBe(true);
+
+	// 	done();
+	// });
+
+
+
+
+
+
+
+
+
+
+
+
+	// it('should delete remote items', async (done) => {
+	// 	let folder1 = await Folder.save({ title: "folder1" });
+	// 	let note1 = await Note.save({ title: "un", parent_id: folder1.id });
+	// 	await synchronizer().start();
+
+	// 	switchClient(2);
+
+	// 	await synchronizer().start();
+
+	// 	await sleep(0.1);
+
+	// 	await Note.delete(note1.id);
+
+	// 	await synchronizer().start();
+
+	// 	switchClient(1);
+
+	// 	let files = await fileApi().list();
+	// 	console.info(files);
+
+	// 	await synchronizer().start();
+
+	// 	note1 = await Note.load(note1.id);
+
+	// 	expect(!note1).toBe(true);
+
+	// 	done();
+	// });
 
 });

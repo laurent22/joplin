@@ -1,5 +1,10 @@
 // A service that handle notes and folders in a uniform way
 
+
+// TODO: remote this service
+// - Move setting of geo-location to GUI side (only for note explicitely created on client
+// - Don't do diffing - make caller explicitely set model properties that need to be saved
+
 import { BaseService } from 'src/base-service.js';
 import { BaseModel } from 'src/base-model.js';
 import { BaseItem } from 'src/models/base-item.js';

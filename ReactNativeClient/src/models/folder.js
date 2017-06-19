@@ -25,6 +25,10 @@ class Folder extends BaseItem {
 	static trackChanges() {
 		return true;
 	}
+
+	static trackDeleted() {
+		return true;
+	}
 	
 	static newFolder() {
 		return {
@@ -33,8 +37,18 @@ class Folder extends BaseItem {
 		}
 	}
 
-	static noteIds(id) {
-		return this.db().selectAll('SELECT id FROM notes WHERE parent_id = ?', [id]).then((rows) => {			
+	static syncedNoteIds() {
+		return this.db().selectAll('SELECT id FROM notes WHERE sync_time > 0').then((rows) => {			
+			let output = [];
+			for (let i = 0; i < rows.length; i++) {
+				output.push(rows[i].id);
+			}
+			return output;
+		});
+	}
+
+	static noteIds(parentId) {
+		return this.db().selectAll('SELECT id FROM notes WHERE parent_id = ?', [parentId]).then((rows) => {			
 			let output = [];
 			for (let i = 0; i < rows.length; i++) {
 				let row = rows[i];
@@ -46,6 +60,8 @@ class Folder extends BaseItem {
 
 	static delete(folderId, options = null) {
 		return this.load(folderId).then((folder) => {
+			if (!folder) throw new Error('Trying to delete non-existing folder: ' + folderId);
+
 			if (!!folder.is_default) {
 				throw new Error(_('Cannot delete the default list'));
 			}
@@ -72,7 +88,6 @@ class Folder extends BaseItem {
 
 	static loadNoteByField(folderId, field, value) {
 		return this.modelSelectAll('SELECT * FROM notes WHERE `parent_id` = ? AND `' + field + '` = ?', [folderId, value]);
-		//return this.db().selectOne('SELECT * FROM notes WHERE `parent_id` = ? AND `' + field + '` = ?', [folderId, value]);
 	}
 
 	static async all(includeNotes = false) {

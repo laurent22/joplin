@@ -36,6 +36,13 @@ CREATE TABLE notes (
 	\`order\` INT NOT NULL DEFAULT 0
 );
 
+CREATE TABLE deleted_items (
+	id TEXT PRIMARY KEY,
+	item_type INT NOT NULL,
+	item_id TEXT NOT NULL,
+	deleted_time INT NOT NULL
+);
+
 CREATE TABLE tags (
 	id TEXT PRIMARY KEY,
 	title TEXT,

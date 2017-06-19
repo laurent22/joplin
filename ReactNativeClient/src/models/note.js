@@ -24,6 +24,10 @@ class Note extends BaseItem {
 		return true;
 	}
 
+	static trackDeleted() {
+		return true;
+	}
+
 	static new(parentId = '') {
 		let output = super.new();
 		output.parent_id = parentId;

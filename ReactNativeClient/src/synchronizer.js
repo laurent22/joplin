@@ -48,7 +48,13 @@ class Synchronizer {
 				let updateSyncTimeOnly = true;
 
 				if (!remote) {
-					action = 'createRemote';
+					if (!local.sync_time) {
+						action = 'createRemote';
+					} else {
+						// Note or folder was modified after having been deleted remotely
+						action = local.type_ == BaseModel.MODEL_TYPE_NOTE ? 'noteConflict' : 'folderConflict';
+						// TODO: handle conflict
+					}
 				} else {
 					if (remote.updated_time > local.sync_time) {
 						// Since, in this loop, we are only dealing with notes that require sync, if the
@@ -107,10 +113,12 @@ class Synchronizer {
 		// At this point all the local items that have changed have been pushed to remote
 		// or handled as conflicts, so no conflict is possible after this.
 
+		let remoteIds = [];
 		let remotes = await this.api().list();
 		for (let i = 0; i < remotes.length; i++) {
 			let remote = remotes[i];
 			let path = remote.path;
+			remoteIds.push(BaseItem.pathToId(path));
 			if (donePaths.indexOf(path) > 0) continue;
 
 			let action = null;
@@ -143,6 +151,18 @@ class Synchronizer {
 			}
 		}
 
+		// ------------------------------------------------------------------------
+		// Search, among the local IDs, those that don't exist remotely, which
+		// means the item has been deleted.
+		// ------------------------------------------------------------------------
+
+		// let noteIds = Folder.syncedNoteIds();
+		// for (let i = 0; i < noteIds.length; i++) {
+		// 	if (remoteIds.indexOf(noteIds[i]) < 0) {
+		// 		console.info('Sync action (3): Delete ' + noteIds[i]);
+		// 		await Note.delete(noteIds[i]);
+		// 	}
+		// }
 
 		return Promise.resolve();
 	}

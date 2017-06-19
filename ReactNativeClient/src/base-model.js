@@ -37,6 +37,10 @@ class BaseModel {
 		return false;
 	}
 
+	static trackDeleted() {
+		return false;
+	}
+
 	static byId(items, id) {
 		for (let i = 0; i < items.length; i++) {
 			if (items[i].id == id) return items[i];
@@ -239,6 +243,10 @@ class BaseModel {
 		});
 	}
 
+	static deletedItems() {
+		return this.db().selectAll('SELECT * FROM deleted_items');
+	}
+
 	static delete(id, options = null) {
 		options = this.modOptions(options);
 
@@ -248,6 +256,10 @@ class BaseModel {
 		}
 
 		return this.db().exec('DELETE FROM ' + this.tableName() + ' WHERE id = ?', [id]).then(() => {
+			if (this.trackDeleted()) {
+				return this.db().exec('INSERT INTO deleted_items (item_type, item_id, deleted_time) VALUES (?, ?, ?)', [this.itemType(), id, time.unixMs()]);
+			}
+
 			// if (options.trackChanges && this.trackChanges()) {
 			// 	const { Change } = require('src/models/change.js');
 
