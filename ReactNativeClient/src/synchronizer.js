@@ -53,7 +53,6 @@ class Synchronizer {
 					} else {
 						// Note or folder was modified after having been deleted remotely
 						action = local.type_ == BaseModel.MODEL_TYPE_NOTE ? 'noteConflict' : 'folderConflict';
-						// TODO: handle conflict
 					}
 				} else {
 					if (remote.updated_time > local.sync_time) {
@@ -77,6 +76,8 @@ class Synchronizer {
 
 				} else if (action == 'folderConflict') {
 
+					// TODO: if remote has been deleted, delete local too
+
 					let remoteContent = await this.api().get(path);
 					local = BaseItem.unserialize(remoteContent);
 
@@ -92,11 +93,13 @@ class Synchronizer {
 					conflictedNote.is_conflict = 1;
 					await Note.save(conflictedNote, { autoTimestamp: false });
 
-					let remoteContent = await this.api().get(path);
-					local = BaseItem.unserialize(remoteContent);
+					if (remote) {
+						let remoteContent = await this.api().get(path);
+						local = BaseItem.unserialize(remoteContent);
 
-					local.sync_time = time.unixMs();
-					await ItemClass.save(local, { autoTimestamp: false });
+						local.sync_time = time.unixMs();
+						await ItemClass.save(local, { autoTimestamp: false });
+					}
 
 				}
 

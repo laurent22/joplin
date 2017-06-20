@@ -51,7 +51,7 @@ class Note extends BaseItem {
 		return this.modelSelectOne('SELECT ' + this.previewFieldsSql() + ' FROM is_conflict = 0 AND notes WHERE id = ?', [noteId]);
 	}
 
-	static conflicedNotes() {
+	static conflictedNotes() {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 1');
 	}
 
