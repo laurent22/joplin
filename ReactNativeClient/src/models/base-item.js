@@ -2,7 +2,6 @@ import { BaseModel } from 'src/base-model.js';
 import { Note } from 'src/models/note.js';
 import { Folder } from 'src/models/folder.js';
 import { Setting } from 'src/models/setting.js';
-import { folderItemFilename } from 'src/string-utils.js'
 import { Database } from 'src/database.js';
 import { time } from 'src/time-utils.js';
 import moment from 'moment';
@@ -13,8 +12,9 @@ class BaseItem extends BaseModel {
 		return true;
 	}
 
-	static systemPath(item) {
-		return folderItemFilename(item) + '.md';
+	static systemPath(itemOrId) {
+		if (typeof itemOrId === 'string') return itemOrId + '.md';
+		return itemOrId.id + '.md';
 	}
 
 	static itemClass(item) {

@@ -38,7 +38,7 @@ describe('Synchronizer', function() {
 	beforeEach( async (done) => {
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(2);
-		switchClient(1);
+		await switchClient(1);
 		done();
 	});
 
@@ -77,7 +77,7 @@ describe('Synchronizer', function() {
 		await Note.save({ title: "un", parent_id: folder.id });
 		await synchronizer().start();
 
-		switchClient(2);
+		await switchClient(2);
 
 		await synchronizer().start();
 
@@ -92,7 +92,7 @@ describe('Synchronizer', function() {
 		let note1 = await Note.save({ title: "un", parent_id: folder1.id });
 		await synchronizer().start();
 
-		switchClient(2);
+		await switchClient(2);
 
 		await synchronizer().start();
 
@@ -108,7 +108,7 @@ describe('Synchronizer', function() {
 
 		let files = await fileApi().list();
 
-		switchClient(1);
+		await switchClient(1);
 
 		await synchronizer().start();
 
@@ -126,7 +126,7 @@ describe('Synchronizer', function() {
 		let note1 = await Note.save({ title: "un", parent_id: folder1.id });
 		await synchronizer().start();
 
-		switchClient(2);
+		await switchClient(2);
 
 		await synchronizer().start();
 
@@ -139,7 +139,7 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 
-		switchClient(1);
+		await switchClient(1);
 
 		await sleep(0.1);
 
@@ -150,19 +150,17 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 
-		let conflictFolder = await Folder.conflictFolder();
-		let conflictedNotes = await Note.all(conflictFolder.id);
+		let conflictedNotes = await Note.conflicedNotes();
 
 		expect(conflictedNotes.length).toBe(1);
 
-		// Other than the id (since the conflicted note is a duplicate), parent_id (which is now the Conflicts folder) and sync_time,
-		// the note must be the same in every way, to make sure no data has been lost.
+		// Other than the id (since the conflicted note is a duplicate), and the is_conflict property
+		// the conflicted and original note must be the same in every way, to make sure no data has been lost.
 		let conflictedNote = conflictedNotes[0];
 		expect(conflictedNote.id == note2conf.id).toBe(false);
-		expect(conflictedNote.parent_id == note2conf.parent_id).toBe(false);
 		for (let n in conflictedNote) {
 			if (!conflictedNote.hasOwnProperty(n)) continue;
-			if (n == 'id' || n == 'parent_id') continue;
+			if (n == 'id' || n == 'is_conflict') continue;
 			expect(conflictedNote[n]).toBe(note2conf[n], 'Property: ' + n);
 		}
 
@@ -181,7 +179,7 @@ describe('Synchronizer', function() {
 		let note1 = await Note.save({ title: "un", parent_id: folder1.id });
 		await synchronizer().start();
 
-		switchClient(2); // ----------------------------------
+		await switchClient(2); // ----------------------------------
 
 		await synchronizer().start();
 
@@ -194,7 +192,7 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 
-		switchClient(1); // ----------------------------------
+		await switchClient(1); // ----------------------------------
 
 		await sleep(0.1);
 
@@ -211,21 +209,68 @@ describe('Synchronizer', function() {
 		done();
 	});
 
+	it('should delete remote items', async (done) => {
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: "un", parent_id: folder1.id });
+		await synchronizer().start();
 
+		await switchClient(2);
 
+		await synchronizer().start();
 
+		await sleep(0.1);
 
+		await Note.delete(note1.id);
 
+		await synchronizer().start();
 
+		let files = await fileApi().list();
 
+		expect(files.length).toBe(1);
+		expect(files[0].path).toBe(Folder.systemPath(folder1));
 
+		let deletedItems = await BaseModel.deletedItems();
+		expect(deletedItems.length).toBe(0);
 
-	// it('should delete local items', async (done) => {
+		done();
+	});
+
+	it('should delete local items', async (done) => {
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: "un", parent_id: folder1.id });
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+
+		await sleep(0.1);
+
+		await Note.delete(note1.id);
+
+		await synchronizer().start();
+
+		await switchClient(1);
+
+		await synchronizer().start();
+
+		let items = await Folder.all(true);
+
+		expect(items.length).toBe(1);
+
+		let deletedItems = await BaseModel.deletedItems();
+
+		expect(deletedItems.length).toBe(0);
+		
+		done();
+	});
+
+	// it('should handle conflict when remote note is deleted then local note is modified', async (done) => {
 	// 	let folder1 = await Folder.save({ title: "folder1" });
 	// 	let note1 = await Note.save({ title: "un", parent_id: folder1.id });
 	// 	await synchronizer().start();
 
-	// 	switchClient(2);
+	// 	await switchClient(2);
 
 	// 	await synchronizer().start();
 
@@ -235,57 +280,20 @@ describe('Synchronizer', function() {
 
 	// 	await synchronizer().start();
 
-	// 	switchClient(1);
+	// 	await switchClient(1);
 
-	// 	let files = await fileApi().list();
-	// 	console.info(files);
-
-	// 	// await synchronizer().start();
-
-	// 	// note1 = await Note.load(note1.id);
-
-	// 	// expect(!note1).toBe(true);
-
-	// 	done();
-	// });
-
-
-
-
-
-
-
-
-
-
-
-
-	// it('should delete remote items', async (done) => {
-	// 	let folder1 = await Folder.save({ title: "folder1" });
-	// 	let note1 = await Note.save({ title: "un", parent_id: folder1.id });
-	// 	await synchronizer().start();
-
-	// 	switchClient(2);
+	// 	await Note.save({ id: note1.id, title: 'Modified after having been deleted' });
 
 	// 	await synchronizer().start();
 
-	// 	await sleep(0.1);
+	// 	// let items = await Folder.all(true);
 
-	// 	await Note.delete(note1.id);
+	// 	// expect(items.length).toBe(1);
 
-	// 	await synchronizer().start();
+	// 	// let deletedItems = await BaseModel.deletedItems();
 
-	// 	switchClient(1);
-
-	// 	let files = await fileApi().list();
-	// 	console.info(files);
-
-	// 	await synchronizer().start();
-
-	// 	note1 = await Note.load(note1.id);
-
-	// 	expect(!note1).toBe(true);
-
+	// 	// expect(deletedItems.length).toBe(0);
+		
 	// 	done();
 	// });
 

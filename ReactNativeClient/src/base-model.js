@@ -103,6 +103,7 @@ class BaseModel {
 			options = Object.assign({}, options);
 		}
 		if (!('trackChanges' in options)) options.trackChanges = true;
+		if (!('trackDeleted' in options)) options.trackDeleted = null;
 		if (!('isNew' in options)) options.isNew = 'auto';
 		if (!('autoTimestamp' in options)) options.autoTimestamp = true;
 		return options;
@@ -247,6 +248,10 @@ class BaseModel {
 		return this.db().selectAll('SELECT * FROM deleted_items');
 	}
 
+	static remoteDeletedItem(itemId) {
+		return this.db().exec('DELETE FROM deleted_items WHERE item_id = ?', [itemId]);
+	}
+
 	static delete(id, options = null) {
 		options = this.modOptions(options);
 
@@ -256,7 +261,9 @@ class BaseModel {
 		}
 
 		return this.db().exec('DELETE FROM ' + this.tableName() + ' WHERE id = ?', [id]).then(() => {
-			if (this.trackDeleted()) {
+			let trackDeleted = this.trackDeleted();
+			if (options.trackDeleted !== null) trackDeleted = options.trackDeleted;
+			if (trackDeleted) {
 				return this.db().exec('INSERT INTO deleted_items (item_type, item_id, deleted_time) VALUES (?, ?, ?)', [this.itemType(), id, time.unixMs()]);
 			}
 

@@ -69,35 +69,36 @@ class Synchronizer {
 				console.info('Sync action (1): ' + action);
 
 				if (action == 'createRemote' || action == 'updateRemote') {
+
 					await this.api().put(path, content);
 					await this.api().setTimestamp(path, local.updated_time);
+
+					await ItemClass.save({ id: local.id, sync_time: time.unixMs(), type_: local.type_ }, { autoTimestamp: false });
+
 				} else if (action == 'folderConflict') {
+
 					let remoteContent = await this.api().get(path);
 					local = BaseItem.unserialize(remoteContent);
-					updateSyncTimeOnly = false;
+
+					local.sync_time = time.unixMs();
+					await ItemClass.save(local, { autoTimestamp: false });
+
 				} else if (action == 'noteConflict') {
+
 					// - Create a duplicate of local note into Conflicts folder (to preserve the user's changes)
 					// - Overwrite local note with remote note
-					let conflictFolder = await Folder.conflictFolder();
 					let conflictedNote = Object.assign({}, local);
 					delete conflictedNote.id;
-					conflictedNote.parent_id = conflictFolder.id;
+					conflictedNote.is_conflict = 1;
 					await Note.save(conflictedNote, { autoTimestamp: false });
 
 					let remoteContent = await this.api().get(path);
 					local = BaseItem.unserialize(remoteContent);
-					updateSyncTimeOnly = false;
-				}
 
-				let newLocal = null;
-				if (updateSyncTimeOnly) {
-					newLocal = { id: local.id, sync_time: time.unixMs(), type_: local.type_ };
-				} else {
-					newLocal = local;
-					newLocal.sync_time = time.unixMs();
-				}
+					local.sync_time = time.unixMs();
+					await ItemClass.save(local, { autoTimestamp: false });
 
-				await ItemClass.save(newLocal, { autoTimestamp: false });
+				}
 
 				donePaths.push(path);
 			}
@@ -106,7 +107,20 @@ class Synchronizer {
 		}
 
 		// ------------------------------------------------------------------------
-		// Then, loop through all the remote items, find those that
+		// Delete the remote items that have been deleted locally.
+		// ------------------------------------------------------------------------
+
+		let deletedItems = await BaseModel.deletedItems();
+		for (let i = 0; i < deletedItems.length; i++) {
+			let item = deletedItems[i];
+			let path = BaseItem.systemPath(item.item_id)
+			console.info('Sync action (2): deleteRemote');
+			await this.api().delete(path);
+			await BaseModel.remoteDeletedItem(item.item_id);
+		}
+
+		// ------------------------------------------------------------------------
+		// Loop through all the remote items, find those that
 		// have been updated, and apply the changes to local.
 		// ------------------------------------------------------------------------
 
@@ -133,7 +147,7 @@ class Synchronizer {
 
 			if (!action) continue;
 
-			console.info('Sync action (2): ' + action);
+			console.info('Sync action (3): ' + action);
 
 			if (action == 'createLocal' || action == 'updateLocal') {
 				let content = await this.api().get(path);
@@ -156,13 +170,13 @@ class Synchronizer {
 		// means the item has been deleted.
 		// ------------------------------------------------------------------------
 
-		// let noteIds = Folder.syncedNoteIds();
-		// for (let i = 0; i < noteIds.length; i++) {
-		// 	if (remoteIds.indexOf(noteIds[i]) < 0) {
-		// 		console.info('Sync action (3): Delete ' + noteIds[i]);
-		// 		await Note.delete(noteIds[i]);
-		// 	}
-		// }
+		let noteIds = await Folder.syncedNoteIds();
+		for (let i = 0; i < noteIds.length; i++) {
+			if (remoteIds.indexOf(noteIds[i]) < 0) {
+				console.info('Sync action (4): deleteLocal: ' + noteIds[i]);
+				await Note.delete(noteIds[i], { trackDeleted: false });
+			}
+		}
 
 		return Promise.resolve();
 	}

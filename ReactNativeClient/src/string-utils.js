@@ -113,11 +113,4 @@ function escapeFilename(s, maxLength = 32) {
 	return output.substr(0, maxLength);
 }
 
-function folderItemFilename(item) {
-	return item.id;
-	// let output = escapeFilename(item.title).trim();
-	// if (!output.length) output = '_';
-	// return output + '.' + item.id.substr(0, 7);
-}
-
-export { removeDiacritics, escapeFilename, folderItemFilename };
+export { removeDiacritics, escapeFilename };

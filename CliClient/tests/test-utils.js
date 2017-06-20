@@ -24,11 +24,16 @@ function sleep(n) {
 }
 
 function switchClient(id) {
+	Setting.saveAll();
+
 	currentClient_ = id;
 	BaseModel.db_ = databases_[id];
 	Folder.db_ = databases_[id];
 	Note.db_ = databases_[id];
 	BaseItem.db_ = databases_[id];
+	Setting.db_ = databases_[id];
+
+	return Setting.load();
 }
 
 function clearDatabase(id = null) {
