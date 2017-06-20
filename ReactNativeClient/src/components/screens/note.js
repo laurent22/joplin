@@ -51,10 +51,22 @@ class NoteScreenComponent extends React.Component {
 	}
 
 	saveNoteButton_press() {
-		NoteFolderService.save('note', this.state.note, this.originalNote).then((note) => {
+
+		console.warn('CHANGE NOT TESTED');
+
+		let isNew = !this.state.note.id;
+		let toSave = BaseModel.diffObjects(this.originalNote, this.state.note);
+		toSave.id = this.state.note.id;
+		Note.save(toSave).then((note) => {
 			this.originalNote = Object.assign({}, note);
 			this.setState({ note: note });
+			if (isNew) return Note.updateGeolocation(note.id);
 		});
+		
+		// NoteFolderService.save('note', this.state.note, this.originalNote).then((note) => {
+		// 	this.originalNote = Object.assign({}, note);
+		// 	this.setState({ note: note });
+		// });
 	}
 
 	deleteNote_onPress(noteId) {

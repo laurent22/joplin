@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "@microsoft/microsoft-graph-client": "^1.0.0",
     "app-module-path": "^2.2.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.1.4",

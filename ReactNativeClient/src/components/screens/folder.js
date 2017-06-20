@@ -42,10 +42,17 @@ class FolderScreenComponent extends React.Component {
 	}
 
 	saveFolderButton_press() {
-		NoteFolderService.save('folder', this.state.folder, this.originalFolder).then((folder) => {
+		console.warn('CHANGE NOT TESTED');
+		let toSave = BaseModel.diffObjects(this.originalFolder, this.state.folder);
+		toSave.id = this.state.folder.id;
+		Folder.save(toSave).then((folder) => {
 			this.originalFolder = Object.assign({}, folder);
 			this.setState({ folder: folder });
 		});
+		// NoteFolderService.save('folder', this.state.folder, this.originalFolder).then((folder) => {
+		// 	this.originalFolder = Object.assign({}, folder);
+		// 	this.setState({ folder: folder });
+		// });
 	}
 
 	render() {

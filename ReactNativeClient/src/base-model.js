@@ -143,13 +143,18 @@ class BaseModel {
 
 	static diffObjects(oldModel, newModel) {
 		let output = {};
+		let type = null;
 		for (let n in newModel) {
-			if (n == 'type_') continue;
+			if (n == 'type_') {
+				type = n;
+				continue;
+			}
 			if (!newModel.hasOwnProperty(n)) continue;
 			if (!(n in oldModel) || newModel[n] !== oldModel[n]) {
 				output[n] = newModel[n];
 			}
 		}
+		if (type !== null) output.type_ = type;
 		return output;
 	}
 

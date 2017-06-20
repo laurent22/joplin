@@ -76,13 +76,15 @@ class Synchronizer {
 
 				} else if (action == 'folderConflict') {
 
-					// TODO: if remote has been deleted, delete local too
+					if (remote) {
+						let remoteContent = await this.api().get(path);
+						local = BaseItem.unserialize(remoteContent);
 
-					let remoteContent = await this.api().get(path);
-					local = BaseItem.unserialize(remoteContent);
-
-					local.sync_time = time.unixMs();
-					await ItemClass.save(local, { autoTimestamp: false });
+						local.sync_time = time.unixMs();
+						await ItemClass.save(local, { autoTimestamp: false });
+					} else {
+						await ItemClass.delete(local.id);
+					}
 
 				} else if (action == 'noteConflict') {
 

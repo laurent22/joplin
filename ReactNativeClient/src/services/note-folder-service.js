@@ -46,17 +46,6 @@ class NoteFolderService extends BaseService {
 		});
 	}
 
-	// static setField(type, itemId, fieldName, fieldValue, oldValue = undefined) {
-	// 	// TODO: not really consistent as the promise will return 'null' while
-	// 	// this.save will return the note or folder. Currently not used, and maybe not needed.
-	// 	if (oldValue !== undefined && fieldValue === oldValue) return Promise.resolve();
-
-	// 	let item = { id: itemId };
-	// 	item[fieldName] = fieldValue;
-	// 	let oldItem = { id: itemId };
-	// 	return this.save(type, item, oldItem);
-	// }
-
 	static openNoteList(folderId) {
 		return Note.previews(folderId).then((notes) => {
 			this.dispatch({
@@ -71,29 +60,6 @@ class NoteFolderService extends BaseService {
 			});
 		}).catch((error) => {
 			Log.warn('Cannot load notes', error);
-		});
-	}
-
-	static itemsThatNeedSync(limit = 100) {
-		// Process folder first, then notes so that folders are created before
-		// adding notes to them. However, it will be the opposite when deleting
-		// folders (TODO).
-
-		function getFolders(limit) {
-			return Folder.modelSelectAll('SELECT * FROM folders WHERE sync_time < updated_time LIMIT ' + limit);
-			//return BaseModel.db().selectAll('SELECT * FROM folders WHERE sync_time < updated_time LIMIT ' + limit);
-		}
-
-		function getNotes(limit) {
-			return Note.modelSelectAll('SELECT * FROM notes WHERE sync_time < updated_time LIMIT ' + limit);
-			//return BaseModel.db().selectAll('SELECT * FROM notes WHERE sync_time < updated_time LIMIT ' + limit);
-		}
-
-		return getFolders(limit).then((items) => {
-			if (items.length) return { hasMore: true, items: items };
-			return getNotes(limit).then((items) => {
-				return { hasMore: items.length >= limit, items: items };
-			});
 		});
 	}
 
