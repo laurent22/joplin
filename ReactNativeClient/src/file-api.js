@@ -7,6 +7,10 @@ class FileApi {
 		this.driver_ = driver;
 	}
 
+	dlog(s) {
+		console.info('FileApi: ' + s);
+	}
+
 	fullPath_(path) {
 		let output = this.baseDir_;
 		if (path != '') output += '/' + path;
@@ -31,32 +35,35 @@ class FileApi {
 		return output;
 	}
 
-	listDirectories() {
-		return this.driver_.list(this.fullPath_('')).then((items) => {
-			let output = [];
-			for (let i = 0; i < items.length; i++) {
-				if (items[i].isDir) output.push(this.scopeItemToBaseDir_(items[i]));
-			}
-			return output;
-		});
-	}
+	// listDirectories() {
+	// 	return this.driver_.list(this.fullPath_('')).then((items) => {
+	// 		let output = [];
+	// 		for (let i = 0; i < items.length; i++) {
+	// 			if (items[i].isDir) output.push(this.scopeItemToBaseDir_(items[i]));
+	// 		}
+	// 		return output;
+	// 	});
+	// }
 
 	list() {
+		this.dlog('list');
 		return this.driver_.list(this.baseDir_).then((items) => {
 			return this.scopeItemsToBaseDir_(items);
 		});
 	}
 
 	setTimestamp(path, timestamp) {
+		this.dlog('setTimestamp ' + path);
 		return this.driver_.setTimestamp(this.fullPath_(path), timestamp);
 	}
 
-	mkdir(path) {
-		console.info('mkdir ' + path);
-		return this.driver_.mkdir(this.fullPath_(path));
-	}
+	// mkdir(path) {
+	// 	this.dlog('delete ' + path);
+	// 	return this.driver_.mkdir(this.fullPath_(path));
+	// }
 
 	stat(path) {
+		this.dlog('stat ' + path);
 		return this.driver_.stat(this.fullPath_(path)).then((output) => {
 			if (!output) return output;
 			output.path = path;
@@ -65,20 +72,24 @@ class FileApi {
 	}
 
 	get(path) {
+		this.dlog('get ' + path);
 		return this.driver_.get(this.fullPath_(path));
 	}
 
 	put(path, content) {
+		this.dlog('put ' + path);
 		return this.driver_.put(this.fullPath_(path), content);
 	}
 
 	delete(path) {
+		this.dlog('delete ' + path);
 		return this.driver_.delete(this.fullPath_(path));
 	}
 
-	move(oldPath, newPath) {
-		return this.driver_.move(this.fullPath_(oldPath), this.fullPath_(newPath));
-	}
+	// move(oldPath, newPath) {
+	// 	this.dlog('move ' + path);
+	// 	return this.driver_.move(this.fullPath_(oldPath), this.fullPath_(newPath));
+	// }
 
 	format() {
 		return this.driver_.format();

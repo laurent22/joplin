@@ -1,4 +1,9 @@
 const fetch = require('node-fetch');
+const tcpPortUsed = require('tcp-port-used');
+const http = require("http");
+const urlParser = require("url");
+const FormData = require('form-data');
+const enableServerDestroy = require('server-destroy');
 import { stringify } from 'query-string';
 
 class OneDriveApi {
@@ -6,10 +11,19 @@ class OneDriveApi {
 	constructor(clientId, clientSecret) {
 		this.clientId_ = clientId;
 		this.clientSecret_ = clientSecret;
+		this.auth_ = null;
 	}
 
-	setToken(token) {
-		this.token_ = token;
+	tokenBaseUrl() {
+		return 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
+	}
+
+	setAuth(auth) {
+		this.auth_ = auth;
+	}
+
+	token() {
+		return this.auth_ ? this.auth_.access_token : null;
 	}
 
 	clientId() {
@@ -20,8 +34,13 @@ class OneDriveApi {
 		return this.clientSecret_;
 	}
 
-	possibleOAuthFlowPorts() {
+	possibleOAuthDancePorts() {
 		return [1917, 9917, 8917];
+	}
+
+	async appDirectory() {
+		let r = await this.execJson('GET', '/drive/special/approot');
+		return r.parentReference.path + '/' + r.name;
 	}
 
 	authCodeUrl(redirectUri) {
@@ -39,10 +58,6 @@ class OneDriveApi {
 
 		if (!options) options = {};
 		if (!options.headers) options.headers = {};
-
-		if (this.token_) {
-			options.headers['Authorization'] = 'bearer ' + this.token_;
-		}
 
 		if (method != 'GET') {
 			options.method = method;
@@ -62,13 +77,23 @@ class OneDriveApi {
 		console.info(method + ' ' + url);
 		console.info(data);
 
-		let response = await fetch(url, options);
-		if (!response.ok) {
-			let error = await response.json();
-			throw error;
-		}
+		while (true) {
+			options.headers['Authorization'] = 'bearer ' + this.token();
 
-		return response;
+			let response = await fetch(url, options);
+			if (!response.ok) {
+				let error = await response.json();
+
+				if (error && error.error && error.error.code == 'InvalidAuthenticationToken') {
+					await this.refreshAccessToken();
+					continue;
+				} else {
+					throw error;
+				}
+			}
+
+			return response;
+		}
 	}
 
 	async execJson(method, path, query, data) {
@@ -81,6 +106,114 @@ class OneDriveApi {
 		let response = await this.exec(method, path, query, data);
 		let output = await response.text();
 		return output;
+	}
+
+	async refreshAccessToken() {
+		if (!this.auth_) throw new Error('Cannot refresh token: authentication data is missing');
+
+		let body = new FormData();
+		body.append('client_id', this.clientId());
+		body.append('client_secret', this.clientSecret());
+		body.append('refresh_token', this.auth_.refresh_token);
+		body.append('redirect_uri', 'http://localhost:1917');
+		body.append('grant_type', 'refresh_token');
+
+		let options = {
+			method: 'POST',
+			body: body,
+		};
+
+		this.auth_ = null;
+
+		let response = await fetch(this.tokenBaseUrl(), options);
+		if (!response.ok) {
+			let msg = await response.text();
+			throw new Error(msg);
+		}
+
+		this.auth_ = await response.json();
+
+		// POST https://login.microsoftonline.com/common/oauth2/v2.0/token
+		// Content-Type: application/x-www-form-urlencoded
+
+		// client_id={client_id}&redirect_uri={redirect_uri}&client_secret={client_secret}
+		// &refresh_token={refresh_token}&grant_type=refresh_token
+	}
+
+	async oauthDance() {
+		this.auth_ = null;
+
+		let ports = this.possibleOAuthDancePorts();
+		let port = null;
+		for (let i = 0; i < ports.length; i++) {
+			let inUse = await tcpPortUsed.check(ports[i]);
+			if (!inUse) {
+				port = ports[i];
+				break;
+			}
+		}
+
+		if (!port) throw new Error('All potential ports are in use - please report the issue at https://github.com/laurent22/joplin');
+
+		let authCodeUrl = this.authCodeUrl('http://localhost:' + port);
+
+		return new Promise((resolve, reject) => {			
+			let server = http.createServer();
+			let errorMessage = null;
+
+			server.on('request', (request, response) => {
+				const query = urlParser.parse(request.url, true).query;
+
+				function writeResponse(code, message) {
+					response.writeHead(code, {"Content-Type": "text/html"});
+					response.write(message);
+					response.end();
+				}
+
+				if (!query.code) return writeResponse(400, '"code" query parameter is missing');
+
+				let body = new FormData();
+				body.append('client_id', this.clientId());
+				body.append('client_secret', this.clientSecret());
+				body.append('code', query.code ? query.code : '');
+				body.append('redirect_uri', 'http://localhost:' + port.toString());
+				body.append('grant_type', 'authorization_code');
+
+				let options = {
+					method: 'POST',
+					body: body,
+				};
+
+				fetch(this.tokenBaseUrl(), options).then((r) => {
+					if (!r.ok) {
+						errorMessage = 'Could not retrieve auth code: ' + r.status + ': ' + r.statusText;
+						writeResponse(400, errorMessage);
+						server.destroy();
+						return;
+					}
+
+					return r.json().then((json) => {
+						this.auth_ = json;
+						writeResponse(200, 'The application has been authorised - you may now close this browser tab.');
+						server.destroy();
+					});
+				});
+			});
+
+			server.on('close', () => {
+				if (errorMessage) {
+					reject(new Error(errorMessage));
+				} else {
+					resolve(this.auth_);
+				}
+			});
+
+			server.listen(port);
+
+			enableServerDestroy(server);
+
+			console.info('Please open this URL in your browser to authentify the application: ' + authCodeUrl);
+		});
 	}
 
 }

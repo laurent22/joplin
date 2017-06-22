@@ -1,5 +1,6 @@
 require('source-map-support').install();
 require('babel-plugin-transform-runtime');
+
 import { OneDriveApi } from 'src/onedrive-api.js';
 
 const fetch = require('node-fetch');

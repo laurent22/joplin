@@ -18,6 +18,7 @@
     "query-string": "4.3.4",
     "react": "16.0.0-alpha.6",
     "sax": "^1.2.2",
+    "server-destroy": "^1.0.1",
     "source-map-support": "^0.4.15",
     "sprintf-js": "^1.1.1",
     "sqlite3": "^3.1.8",

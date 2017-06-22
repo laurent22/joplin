@@ -4,9 +4,12 @@ import { OneDriveApi } from 'src/onedrive-api.js';
 
 class FileApiDriverOneDrive {
 
-	constructor(token) {
-		this.api_ = new OneDriveApi('e09fc0de-c958-424f-83a2-e56a721d331b');
-		this.api_.setToken(token);
+	constructor(clientId, clientSecret) {
+		this.api_ = new OneDriveApi(clientId, clientSecret);
+	}
+
+	api() {
+		return this.api_;
 	}
 
 	listReturnsFullPath() {
@@ -20,7 +23,7 @@ class FileApiDriverOneDrive {
 	}
 
 	makePath_(path) {
-		return '/drive/root:' + path;
+		return path;
 	}
 
 	makeItems_(odItems) {
@@ -41,7 +44,12 @@ class FileApiDriverOneDrive {
 	}
 
 	async stat(path) {
-		let item = await this.api_.execJson('GET', this.makePath_(path), this.itemFilter_());
+		try {
+			let item = await this.api_.execJson('GET', this.makePath_(path), this.itemFilter_());
+		} catch (error) {
+			if (error.error.code == 'itemNotFound') return null;
+			throw error;
+		}
 		return this.makeItem_(item);
 	}
 
@@ -59,8 +67,14 @@ class FileApiDriverOneDrive {
 		return this.makeItems_(items.value);
 	}
 
-	get(path) {
-		return this.api_.execText('GET', this.makePath_(path) + ':/content');
+	async get(path) {
+		try {
+			let content = await this.api_.execText('GET', this.makePath_(path) + ':/content');
+		} catch (error) {
+			if (error.error.code == 'itemNotFound') return null;
+			throw error;
+		}
+		return content;
 	}
 
 	mkdir(path) {

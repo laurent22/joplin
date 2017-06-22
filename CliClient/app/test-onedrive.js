@@ -50,10 +50,19 @@ async function main() {
 
 
 
-	let driver = new FileApiDriverOneDrive(config.oneDriveToken);
+	let driver = new FileApiDriverOneDrive('e09fc0de-c958-424f-83a2-e56a721d331b', 'JA3cwsqSGHFtjMwd5XoF5L5');
+	driver.api().setToken(config.oneDriveToken);
+
+	//config.oneDriveToken);
 	let api = new FileApi('/joplin', driver);
 
-	await api.delete('eraseme.txt');
+	let appDir = await driver.api().execJson('GET', '/drive/special/approot');
+
+	console.info(appDir);
+
+	// /drive/special/approot
+
+	// await api.delete('eraseme.txt');
 
 	// let result = await api.list();
 	// console.info(result);
@@ -63,8 +72,8 @@ async function main() {
 
 
 
-	let content = await api.get('aaaaaaaaaaaaaaaaa.txt');
-	console.info(content);
+	// let content = await api.get('aaaaaaaaaaaaaaaaa.txt');
+	// console.info(content);
 
 
 
