@@ -14,12 +14,16 @@ class FileApi {
 	}
 
 	scopeItemToBaseDir_(item) {
+		if (!this.driver_.listReturnsFullPath()) return item;
+
 		let output = Object.assign({}, item);
 		output.path = item.path.substr(this.baseDir_.length + 1);
 		return output;
 	}
 
 	scopeItemsToBaseDir_(items) {
+		if (!this.driver_.listReturnsFullPath()) return items;
+
 		let output = [];
 		for (let i = 0; i < items.length; i++) {
 			output.push(this.scopeItemToBaseDir_(items[i]));

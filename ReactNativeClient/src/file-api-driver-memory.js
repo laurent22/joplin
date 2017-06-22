@@ -6,8 +6,8 @@ class FileApiDriverMemory {
 		this.items_ = [];
 	}
 
-	currentTimestamp() {
-		return Math.round((new Date()).getTime() / 1000);
+	listReturnsFullPath() {
+		return true;
 	}
 
 	itemIndexByPath(path) {
