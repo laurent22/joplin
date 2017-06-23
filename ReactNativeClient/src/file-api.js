@@ -1,14 +1,20 @@
 import { isHidden } from 'src/path-utils.js';
+import { Logger } from 'src/logger.js';
 
 class FileApi {
 
 	constructor(baseDir, driver) {
 		this.baseDir_ = baseDir;
 		this.driver_ = driver;
+		this.logger_ = new Logger();
 	}
 
-	dlog(s) {
-		console.info('FileApi: ' + s);
+	setLogger(l) {
+		this.logger_ = l;
+	}
+
+	logger() {
+		return this.logger_;
 	}
 
 	fullPath_(path) {
@@ -21,7 +27,7 @@ class FileApi {
 		if (!options) options = {};
 		if (!('includeHidden' in options)) options.includeHidden = false;
 
-		this.dlog('list');
+		this.logger().debug('list');
 		return this.driver_.list(this.baseDir_).then((items) => {
 			if (!options.includeHidden) {
 				let temp = [];
@@ -35,17 +41,17 @@ class FileApi {
 	}
 
 	setTimestamp(path, timestamp) {
-		this.dlog('setTimestamp ' + path);
+		this.logger().debug('setTimestamp ' + path);
 		return this.driver_.setTimestamp(this.fullPath_(path), timestamp);
 	}
 
 	mkdir(path) {
-		this.dlog('delete ' + path);
+		this.logger().debug('mkdir ' + path);
 		return this.driver_.mkdir(this.fullPath_(path));
 	}
 
 	stat(path) {
-		this.dlog('stat ' + path);
+		this.logger().debug('stat ' + path);
 		return this.driver_.stat(this.fullPath_(path)).then((output) => {
 			if (!output) return output;
 			output.path = path;
@@ -54,22 +60,22 @@ class FileApi {
 	}
 
 	get(path) {
-		this.dlog('get ' + path);
+		this.logger().debug('get ' + path);
 		return this.driver_.get(this.fullPath_(path));
 	}
 
 	put(path, content) {
-		this.dlog('put ' + path);
+		this.logger().debug('put ' + path);
 		return this.driver_.put(this.fullPath_(path), content);
 	}
 
 	delete(path) {
-		this.dlog('delete ' + path);
+		this.logger().debug('delete ' + path);
 		return this.driver_.delete(this.fullPath_(path));
 	}
 
 	move(oldPath, newPath) {
-		this.dlog('move ' + oldPath + ' => ' + newPath);
+		this.logger().debug('move ' + oldPath + ' => ' + newPath);
 		return this.driver_.move(this.fullPath_(oldPath), this.fullPath_(newPath));
 	}
 

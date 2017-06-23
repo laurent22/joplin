@@ -1,6 +1,6 @@
-import { Log } from 'src/log.js';
 import { uuid } from 'src/uuid.js';
 import { promiseChain } from 'src/promise-utils.js';
+import { Logger } from 'src/logger.js'
 import { _ } from 'src/locale.js'
 
 const structureSql = `
@@ -115,6 +115,30 @@ class Database {
 		this.tableFields_ = null;
 		this.driver_ = driver;
 		this.inTransaction_ = false;
+
+		this.logger_ = new Logger();
+		this.logger_.addTarget('console');
+		this.logger_.setLevel(Logger.LEVEL_DEBUG);
+	}
+
+	// Converts the SQLite error to a regular JS error
+	// so that it prints a stacktrace when passed to
+	// console.error()
+	sqliteErrorToJsError(error, sql, params = null) {
+		let msg = sql;
+		if (params) msg += ': ' + JSON.stringify(params);
+		msg += ': ' + error.toString();
+		let output = new Error(msg);
+		if (error.code) output.code = error.code;
+		return output;
+	}
+
+	setLogger(l) {
+		this.logger_ = l;
+	}
+
+	logger() {
+		return this.logger_;
 	}
 
 	setDebugEnabled(v) {
@@ -136,26 +160,32 @@ class Database {
 
 	open(options) {
 		return this.driver().open(options).then((db) => {
-			Log.info('Database was open successfully');
+			this.logger().info('Database was open successfully');
 			return this.initialize();
 		}).catch((error) => {
-			Log.error('Cannot open database: ', error);
+			this.logger().error('Cannot open database: ', error);
 		});
 	}
 
 	selectOne(sql, params = null) {
 		this.logQuery(sql, params);
-		return this.driver().selectOne(sql, params);
+		return this.driver().selectOne(sql, params).catch((error) => {
+			throw this.sqliteErrorToJsError(error, sql, params);
+		});
 	}
 
 	selectAll(sql, params = null) {
 		this.logQuery(sql, params);
-		return this.driver().selectAll(sql, params);
+		return this.driver().selectAll(sql, params).catch((error) => {
+			throw this.sqliteErrorToJsError(error, sql, params);
+		});
 	}
 
 	exec(sql, params = null) {
 		this.logQuery(sql, params);
-		return this.driver().exec(sql, params);
+		return this.driver().exec(sql, params).catch((error) => {
+			throw this.sqliteErrorToJsError(error, sql, params);
+		});
 	}
 
 	transactionExecBatch(queries) {
@@ -254,9 +284,9 @@ class Database {
 	logQuery(sql, params = null) {
 		if (!this.debugMode()) return;
 		if (params !== null) {
-			Log.debug('DB: ' + sql, JSON.stringify(params));
+			this.logger().debug('DB: ' + sql, JSON.stringify(params));
 		} else {
-			Log.debug('DB: ' + sql);
+			this.logger().debug('DB: ' + sql);
 		}
 	}
 
@@ -329,7 +359,7 @@ class Database {
 	}
 
 	refreshTableFields() {
-		Log.info('Initializing tables...');
+		this.logger().info('Initializing tables...');
 		let queries = [];
 		queries.push(this.wrapQuery('DELETE FROM table_fields'));
 
@@ -367,10 +397,10 @@ class Database {
 	}
 
 	initialize() {
-		Log.info('Checking for database schema update...');
+		this.logger().info('Checking for database schema update...');
 
 		return this.selectOne('SELECT * FROM version LIMIT 1').then((row) => {
-			Log.info('Current database version', row);
+			this.logger().info('Current database version', row);
 			// TODO: version update logic
 
 			// TODO: only do this if db has been updated:
@@ -409,9 +439,8 @@ class Database {
 		// 	return p;
 
 		}).catch((error) => {
-			//console.info(error.code);
 			if (error && error.code != 0 && error.code != 'SQLITE_ERROR') {
-				Log.error(error);
+				this.logger().error(error);
 				return;
 			}
 	
@@ -420,14 +449,14 @@ class Database {
 			// which means the database is empty and the tables need to be created.
 			// If it's any other error there's nothing we can do anyway.
 
-			Log.info('Database is new - creating the schema...');
+			this.logger().info('Database is new - creating the schema...');
 
 			let queries = this.wrapQueries(this.sqlStringToLines(structureSql));
 			queries.push(this.wrapQuery('INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' + uuid.create() + '", "' + Database.enumId('settings', 'string') + '")'));
 			queries.push(this.wrapQuery('INSERT INTO folders (`id`, `title`, `is_default`, `created_time`) VALUES ("' + uuid.create() + '", "' + _('Default list') + '", 1, ' + Math.round((new Date()).getTime() / 1000) + ')'));
 
 			return this.transactionExecBatch(queries).then(() => {
-				Log.info('Database schema created successfully');
+				this.logger().info('Database schema created successfully');
 				// Calling initialize() now that the db has been created will make it go through
 				// the normal db update process (applying any additional patch).
 				return this.refreshTableFields();

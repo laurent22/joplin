@@ -129,7 +129,6 @@ class BaseModel {
 
 	static loadByField(fieldName, fieldValue) {	
 		return this.modelSelectOne('SELECT * FROM ' + this.tableName() + ' WHERE `' + fieldName + '` = ?', [fieldValue]);
-		//return this.db().selectOne('SELECT * FROM ' + this.tableName() + ' WHERE `' + fieldName + '` = ?', [fieldValue]);
 	}
 
 	static applyPatch(model, patch) {

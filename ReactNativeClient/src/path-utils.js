@@ -1,3 +1,10 @@
+function dirname(path) {
+	if (!path) throw new Error('Path is empty');
+	let s = path.split('/');
+	s.pop();
+	return s.join('/');
+}
+
 function basename(path) {
 	if (!path) throw new Error('Path is empty');
 	let s = path.split('/');
@@ -10,4 +17,4 @@ function isHidden(path) {
 	return b[0] === '.';
 }
 
-export { basename, isHidden };
+export { basename, dirname, isHidden };

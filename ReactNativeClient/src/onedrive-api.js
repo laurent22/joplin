@@ -77,7 +77,7 @@ class OneDriveApi {
 			options.method = method;
 		}
 
-		if (method == 'PATCH') {
+		if (method == 'PATCH' || method == 'POST') {
 			options.headers['Content-Type'] = 'application/json';
 			if (data) data = JSON.stringify(data);
 		}
@@ -88,8 +88,8 @@ class OneDriveApi {
 
 		if (data) options.body = data;
 
-		console.info(method + ' ' + url);
-		console.info(data);
+		// console.info(method + ' ' + url);
+		// console.info(data);
 
 		for (let i = 0; i < 5; i++) {
 			options.headers['Authorization'] = 'bearer ' + this.token();
@@ -97,8 +97,6 @@ class OneDriveApi {
 			let response = await fetch(url, options);
 			if (!response.ok) {
 				let error = await response.json();
-
-				console.info(error);
 
 				if (error && error.error && error.error.code == 'InvalidAuthenticationToken') {
 					await this.refreshAccessToken();

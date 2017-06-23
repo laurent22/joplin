@@ -6,7 +6,8 @@ import { Note } from 'src/models/note.js';
 import { BaseModel } from 'src/base-model.js';
 import { sprintf } from 'sprintf-js';
 import { time } from 'src/time-utils.js';
-import { Log } from 'src/log.js'
+import { Logger } from 'src/logger.js'
+import moment from 'moment';
 
 class Synchronizer {
 
@@ -14,6 +15,7 @@ class Synchronizer {
 		this.db_ = db;
 		this.api_ = api;
 		this.syncDirName_ = '.sync';
+		this.logger_ = new Logger();
 	}
 
 	db() {
@@ -22,6 +24,14 @@ class Synchronizer {
 
 	api() {
 		return this.api_;
+	}
+
+	setLogger(l) {
+		this.logger_ = l;
+	}
+
+	logger() {
+		return this.logger_;
 	}
 
 	async createWorkDir() {
@@ -35,6 +45,8 @@ class Synchronizer {
 		// First, find all the items that have been changed since the
 		// last sync and apply the changes to remote.
 		// ------------------------------------------------------------------------
+
+		this.logger().info('Starting synchronization...');
 
 		await this.createWorkDir();
 
@@ -74,7 +86,7 @@ class Synchronizer {
 					}
 				}
 
-				console.info('Sync action (1): ' + action);
+				this.logger().debug('Sync action (1): ' + action);
 
 				if (action == 'createRemote' || action == 'updateRemote') {
 
@@ -132,7 +144,7 @@ class Synchronizer {
 		for (let i = 0; i < deletedItems.length; i++) {
 			let item = deletedItems[i];
 			let path = BaseItem.systemPath(item.item_id)
-			console.info('Sync action (2): deleteRemote');
+			this.logger().debug('Sync action (2): deleteRemote');
 			await this.api().delete(path);
 			await BaseModel.remoteDeletedItem(item.item_id);
 		}
@@ -155,23 +167,27 @@ class Synchronizer {
 			if (donePaths.indexOf(path) > 0) continue;
 
 			let action = null;
+			let reason = '';
 			let local = await BaseItem.loadItemByPath(path);
 			if (!local) {
 				action = 'createLocal';
+				reason = 'Local exists but remote does not';
 			} else {
 				if (remote.updated_time > local.updated_time) {
 					action = 'updateLocal';
+					reason = sprintf('Remote (%s) is more recent than local (%s)', time.unixMsToIso(remote.updated_time), time.unixMsToIso(local.updated_time));
 				}
 			}
 
 			if (!action) continue;
 
-			console.info('Sync action (3): ' + action);
+			this.logger().debug('Sync action (3): ' + action);
+			this.logger().debug('Reason: ' + reason);
 
 			if (action == 'createLocal' || action == 'updateLocal') {
 				let content = await this.api().get(path);
 				if (!content) {
-					Log.warn('Remote item has been deleted between now and the list() call? In that case it will handled during the next sync: ' + path);
+					this.logger().warn('Remote item has been deleted between now and the list() call? In that case it will handled during the next sync: ' + path);
 					continue;
 				}
 				content = BaseItem.unserialize(content);
@@ -192,10 +208,13 @@ class Synchronizer {
 		let noteIds = await Folder.syncedNoteIds();
 		for (let i = 0; i < noteIds.length; i++) {
 			if (remoteIds.indexOf(noteIds[i]) < 0) {
-				console.info('Sync action (4): deleteLocal: ' + noteIds[i]);
+				this.logger().debug('Sync action (4): deleteLocal: ' + noteIds[i]);
 				await Note.delete(noteIds[i], { trackDeleted: false });
 			}
 		}
+
+		// Number of sync items (Created, updated, deleted Local/Remote)
+		// Total number of items
 
 		return Promise.resolve();
 	}

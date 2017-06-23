@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { time } from 'src/time-utils.js';
+import { dirname, basename } from 'src/path-utils.js';
 import { OneDriveApi } from 'src/onedrive-api.js';
 
 class FileApiDriverOneDrive {
@@ -40,8 +41,9 @@ class FileApiDriverOneDrive {
 	}
 
 	async stat(path) {
+		let item = null;
 		try {
-			let item = await this.api_.execJson('GET', this.makePath_(path), this.itemFilter_());
+			item = await this.api_.execJson('GET', this.makePath_(path), this.itemFilter_());
 		} catch (error) {
 			if (error.error.code == 'itemNotFound') return null;
 			throw error;
@@ -64,8 +66,9 @@ class FileApiDriverOneDrive {
 	}
 
 	async get(path) {
+		let content = null;
 		try {
-			let content = await this.api_.execText('GET', this.makePath_(path) + ':/content');
+			content = await this.api_.execText('GET', this.makePath_(path) + ':/content');
 		} catch (error) {
 			if (error.error.code == 'itemNotFound') return null;
 			throw error;
@@ -73,8 +76,17 @@ class FileApiDriverOneDrive {
 		return content;
 	}
 
-	mkdir(path) {
-		throw new Error('Not implemented');
+	async mkdir(path) {
+		let item = await this.stat(path);
+		if (item) return item;
+
+		let parentPath = dirname(path);
+		item = await this.api_.execJson('POST', this.makePath_(parentPath) + ':/children', this.itemFilter_(), {
+			name: basename(path),
+			folder: {},
+		});
+
+		return this.makeItem_(item);
 	}
 
 	put(path, content) {
@@ -88,8 +100,16 @@ class FileApiDriverOneDrive {
 		return this.api_.exec('DELETE', this.makePath_(path));
 	}
 
-	move(oldPath, newPath) {
-		throw new Error('Not implemented');
+	async move(oldPath, newPath) {
+		let newDir = dirname(newPath);
+		let newName = basename(newPath);
+
+		let item = await this.api_.execJson('PATCH', this.makePath_(oldPath), this.itemFilter_(), {
+			name: newName,
+			parentReference: { path: newDir },
+		});
+
+		return this.makeItem_(item);
 	}
 
 	format() {

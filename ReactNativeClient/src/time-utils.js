@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 let time = {
 
 	unix() {
@@ -10,7 +12,11 @@ let time = {
 
 	unixMsToS(ms) {
 		return Math.floor(ms / 1000);
-	}
+	},
+
+	unixMsToIso(ms) {
+		return moment.unix(ms / 1000).utc().format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z';
+	},
 
 }
 

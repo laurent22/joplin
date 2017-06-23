@@ -44,11 +44,11 @@ class Note extends BaseItem {
 	}
 
 	static previews(parentId) {
-		return this.modelSelectAll('SELECT ' + this.previewFieldsSql() + ' FROM is_conflict = 0 AND notes WHERE parent_id = ?', [parentId]);
+		return this.modelSelectAll('SELECT ' + this.previewFieldsSql() + ' FROM notes WHERE is_conflict = 0 AND parent_id = ?', [parentId]);
 	}
 
 	static preview(noteId) {
-		return this.modelSelectOne('SELECT ' + this.previewFieldsSql() + ' FROM is_conflict = 0 AND notes WHERE id = ?', [noteId]);
+		return this.modelSelectOne('SELECT ' + this.previewFieldsSql() + ' FROM notes WHERE is_conflict = 0 AND id = ?', [noteId]);
 	}
 
 	static conflictedNotes() {
