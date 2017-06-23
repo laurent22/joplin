@@ -12,6 +12,20 @@ class OneDriveApi {
 		this.clientId_ = clientId;
 		this.clientSecret_ = clientSecret;
 		this.auth_ = null;
+		this.listeners_ = {
+			'authRefreshed': [],
+		};
+	}
+
+	dispatch(eventName, param) {
+		let ls = this.listeners_[eventName];
+		for (let i = 0; i < ls.length; i++) {
+			ls[i](param);
+		}
+	}
+
+	on(eventName, callback) {
+		this.listeners_[eventName].push(callback);
 	}
 
 	tokenBaseUrl() {
@@ -77,12 +91,14 @@ class OneDriveApi {
 		console.info(method + ' ' + url);
 		console.info(data);
 
-		while (true) {
+		for (let i = 0; i < 5; i++) {
 			options.headers['Authorization'] = 'bearer ' + this.token();
 
 			let response = await fetch(url, options);
 			if (!response.ok) {
 				let error = await response.json();
+
+				console.info(error);
 
 				if (error && error.error && error.error.code == 'InvalidAuthenticationToken') {
 					await this.refreshAccessToken();
@@ -94,6 +110,8 @@ class OneDriveApi {
 
 			return response;
 		}
+
+		throw new Error('Could not execute request after multiple attempts: ' + method + ' ' + url);
 	}
 
 	async execJson(method, path, query, data) {
@@ -133,11 +151,7 @@ class OneDriveApi {
 
 		this.auth_ = await response.json();
 
-		// POST https://login.microsoftonline.com/common/oauth2/v2.0/token
-		// Content-Type: application/x-www-form-urlencoded
-
-		// client_id={client_id}&redirect_uri={redirect_uri}&client_secret={client_secret}
-		// &refresh_token={refresh_token}&grant_type=refresh_token
+		this.dispatch('authRefreshed', this.auth_);
 	}
 
 	async oauthDance() {

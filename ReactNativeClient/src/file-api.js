@@ -1,4 +1,4 @@
-import { promiseChain } from 'src/promise-utils.js';
+import { isHidden } from 'src/path-utils.js';
 
 class FileApi {
 
@@ -35,20 +35,21 @@ class FileApi {
 		return output;
 	}
 
-	// listDirectories() {
-	// 	return this.driver_.list(this.fullPath_('')).then((items) => {
-	// 		let output = [];
-	// 		for (let i = 0; i < items.length; i++) {
-	// 			if (items[i].isDir) output.push(this.scopeItemToBaseDir_(items[i]));
-	// 		}
-	// 		return output;
-	// 	});
-	// }
+	list(path = '', options = null) {
+		if (!options) options = {};
+		if (!('includeHidden' in options)) options.includeHidden = false;
 
-	list() {
 		this.dlog('list');
 		return this.driver_.list(this.baseDir_).then((items) => {
-			return this.scopeItemsToBaseDir_(items);
+			items = this.scopeItemsToBaseDir_(items);
+			if (!options.includeHidden) {
+				let temp = [];
+				for (let i = 0; i < items.length; i++) {
+					if (!isHidden(items[i].path)) temp.push(items[i]);
+				}
+				items = temp;
+			}
+			return items;
 		});
 	}
 
@@ -57,10 +58,10 @@ class FileApi {
 		return this.driver_.setTimestamp(this.fullPath_(path), timestamp);
 	}
 
-	// mkdir(path) {
-	// 	this.dlog('delete ' + path);
-	// 	return this.driver_.mkdir(this.fullPath_(path));
-	// }
+	mkdir(path) {
+		this.dlog('delete ' + path);
+		return this.driver_.mkdir(this.fullPath_(path));
+	}
 
 	stat(path) {
 		this.dlog('stat ' + path);
@@ -86,10 +87,10 @@ class FileApi {
 		return this.driver_.delete(this.fullPath_(path));
 	}
 
-	// move(oldPath, newPath) {
-	// 	this.dlog('move ' + path);
-	// 	return this.driver_.move(this.fullPath_(oldPath), this.fullPath_(newPath));
-	// }
+	move(oldPath, newPath) {
+		this.dlog('move ' + oldPath + ' => ' + newPath);
+		return this.driver_.move(this.fullPath_(oldPath), this.fullPath_(newPath));
+	}
 
 	format() {
 		return this.driver_.format();

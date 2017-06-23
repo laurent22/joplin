@@ -13,6 +13,7 @@ class Synchronizer {
 	constructor(db, api) {
 		this.db_ = db;
 		this.api_ = api;
+		this.syncDirName_ = '.sync';
 	}
 
 	db() {
@@ -23,11 +24,19 @@ class Synchronizer {
 		return this.api_;
 	}
 
+	async createWorkDir() {
+		if (this.syncWorkDir_) return this.syncWorkDir_;
+		let dir = await this.api().mkdir(this.syncDirName_);
+		return this.syncDirName_;
+	}
+
 	async start() {
 		// ------------------------------------------------------------------------
 		// First, find all the items that have been changed since the
 		// last sync and apply the changes to remote.
 		// ------------------------------------------------------------------------
+
+		await this.createWorkDir();
 
 		let donePaths = [];
 		while (true) {
@@ -69,8 +78,12 @@ class Synchronizer {
 
 				if (action == 'createRemote' || action == 'updateRemote') {
 
-					await this.api().put(path, content);
-					await this.api().setTimestamp(path, local.updated_time);
+					// Make the operation atomic by doing the work on a copy of the file
+					// and then copying it back to the original location.
+					let tempPath = this.syncDirName_ + '/' + path;
+					await this.api().put(tempPath, content);
+					await this.api().setTimestamp(tempPath, local.updated_time);
+					await this.api().move(tempPath, path);
 
 					await ItemClass.save({ id: local.id, sync_time: time.unixMs(), type_: local.type_ }, { autoTimestamp: false });
 
@@ -137,6 +150,7 @@ class Synchronizer {
 		for (let i = 0; i < remotes.length; i++) {
 			let remote = remotes[i];
 			let path = remote.path;
+
 			remoteIds.push(BaseItem.pathToId(path));
 			if (donePaths.indexOf(path) > 0) continue;
 

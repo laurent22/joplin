@@ -53,20 +53,21 @@ async function main() {
 			}
 
 			driver.api().setAuth(auth);
+			driver.api().on('authRefreshed', (a) => {
+				Setting.setValue('sync.onedrive.auth', JSON.stringify(a));
+			});
 
 			let appDir = await driver.api().appDirectory();
+			console.info('App dir: ' + appDir);
 			fileApi = new FileApi(appDir, driver);
 		} else {
-			throw new Error('Unknown backend: ' . remoteBackend);
+			throw new Error('Unknown backend: ' + remoteBackend);
 		}
 
 		synchronizer_ = new Synchronizer(db, fileApi);
 
 		return synchronizer_;
 	}
-
-	let s = await synchronizer();
-	return;
 
 	function switchCurrentFolder(folder) {
 		currentFolder = folder;
