@@ -52,8 +52,20 @@ class Logger {
 					console[fn](line + object);
 				}
 			} else if (t.type == 'file') {
-				if (typeof object === 'object') object = JSON.stringify(object);
-				fs.appendFile(t.path, line + object + "\n", (error) => {
+				let serializedObject = '';
+
+				if (typeof object === 'object') {
+					if (object instanceof Error) {
+						serializedObject = object.toString();
+						if (object.stack) serializedObject += "\n" + object.stack;
+					} else {
+						serializedObject = JSON.stringify(object);
+					}
+				} else {
+					serializedObject = object;
+				}
+				
+				fs.appendFile(t.path, line + serializedObject + "\n", (error) => {
 					if (error) throw error;
 				});
 			}

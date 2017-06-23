@@ -93,10 +93,11 @@ class Synchronizer {
 					// Make the operation atomic by doing the work on a copy of the file
 					// and then copying it back to the original location.
 					let tempPath = this.syncDirName_ + '/' + path;
+					
 					await this.api().put(tempPath, content);
 					await this.api().setTimestamp(tempPath, local.updated_time);
 					await this.api().move(tempPath, path);
-
+					
 					await ItemClass.save({ id: local.id, sync_time: time.unixMs(), type_: local.type_ }, { autoTimestamp: false });
 
 				} else if (action == 'folderConflict') {

@@ -40,7 +40,7 @@ class FileApiDriverOneDrive {
 		};
 	}
 
-	async stat(path) {
+	async statRaw_(path) {
 		let item = null;
 		try {
 			item = await this.api_.execJson('GET', this.makePath_(path), this.itemFilter_());
@@ -48,6 +48,12 @@ class FileApiDriverOneDrive {
 			if (error.error.code == 'itemNotFound') return null;
 			throw error;
 		}
+		return item;
+	}
+
+	async stat(path) {
+		let item = await this.statRaw_(path);
+		if (!item) return null;
 		return this.makeItem_(item);
 	}
 
@@ -57,7 +63,8 @@ class FileApiDriverOneDrive {
 				lastModifiedDateTime: moment.unix(timestamp / 1000).utc().format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z',
 			}
 		};
-		await this.api_.exec('PATCH', this.makePath_(path), null, body);
+		let item = await this.api_.execJson('PATCH', this.makePath_(path), null, body);
+		return this.makeItem_(item);
 	}
 
 	async list(path) {
@@ -101,12 +108,20 @@ class FileApiDriverOneDrive {
 	}
 
 	async move(oldPath, newPath) {
+		let previousItem = await this.statRaw_(oldPath);
+
 		let newDir = dirname(newPath);
 		let newName = basename(newPath);
+
+		// We don't want the modification date to change when we move the file so retrieve it
+		// now set it in the PATCH operation.		
 
 		let item = await this.api_.execJson('PATCH', this.makePath_(oldPath), this.itemFilter_(), {
 			name: newName,
 			parentReference: { path: newDir },
+			fileSystemInfo: {
+				lastModifiedDateTime: previousItem.fileSystemInfo.lastModifiedDateTime,
+			},
 		});
 
 		return this.makeItem_(item);

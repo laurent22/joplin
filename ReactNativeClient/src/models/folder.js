@@ -86,7 +86,7 @@ class Folder extends BaseItem {
 	}
 
 	static loadNoteByField(folderId, field, value) {
-		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0 AND `parent_id` = ? AND `' + field + '` = ?', [folderId, value]);
+		return this.modelSelectOne('SELECT * FROM notes WHERE is_conflict = 0 AND `parent_id` = ? AND `' + field + '` = ?', [folderId, value]);
 	}
 
 	static async all(includeNotes = false) {
