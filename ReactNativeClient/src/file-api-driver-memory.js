@@ -6,10 +6,6 @@ class FileApiDriverMemory {
 		this.items_ = [];
 	}
 
-	listReturnsFullPath() {
-		return true;
-	}
-
 	itemIndexByPath(path) {
 		for (let i = 0; i < this.items_.length; i++) {
 			if (this.items_[i].path == path) return i;
@@ -55,6 +51,7 @@ class FileApiDriverMemory {
 				let s = item.path.substr(path.length + 1);
 				if (s.split('/').length === 1) {
 					let it = Object.assign({}, item);
+					it.path = it.path.substr(path.length + 1);
 					output.push(it);
 				}
 			}

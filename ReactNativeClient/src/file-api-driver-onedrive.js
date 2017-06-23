@@ -12,10 +12,6 @@ class FileApiDriverOneDrive {
 		return this.api_;
 	}
 
-	listReturnsFullPath() {
-		return false;
-	}
-
 	itemFilter_() {
 		return {
 			select: 'name,file,folder,fileSystemInfo',

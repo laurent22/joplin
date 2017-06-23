@@ -17,31 +17,12 @@ class FileApi {
 		return output;
 	}
 
-	scopeItemToBaseDir_(item) {
-		if (!this.driver_.listReturnsFullPath()) return item;
-
-		let output = Object.assign({}, item);
-		output.path = item.path.substr(this.baseDir_.length + 1);
-		return output;
-	}
-
-	scopeItemsToBaseDir_(items) {
-		if (!this.driver_.listReturnsFullPath()) return items;
-
-		let output = [];
-		for (let i = 0; i < items.length; i++) {
-			output.push(this.scopeItemToBaseDir_(items[i]));
-		}
-		return output;
-	}
-
 	list(path = '', options = null) {
 		if (!options) options = {};
 		if (!('includeHidden' in options)) options.includeHidden = false;
 
 		this.dlog('list');
 		return this.driver_.list(this.baseDir_).then((items) => {
-			items = this.scopeItemsToBaseDir_(items);
 			if (!options.includeHidden) {
 				let temp = [];
 				for (let i = 0; i < items.length; i++) {
