@@ -18,9 +18,11 @@ import { _ } from 'lib/locale.js';
 import os from 'os';
 import fs from 'fs-extra';
 
-const APPNAME = 'joplin';
-const dataDir = os.homedir() + '/.local/share/' + APPNAME;
+const dataDir = os.homedir() + '/.local/share/' + Setting.value('appName');
 const resourceDir = dataDir + '/resources';
+
+Setting.setConstant('dataDir', dataDir);
+Setting.setConstant('resourceDir', resourceDir);
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -56,19 +58,21 @@ async function main() {
 
 
 
-	// console.info('DELETING ALL DATA');
-	// await db.exec('DELETE FROM notes');
-	// await db.exec('DELETE FROM changes');
-	// await db.exec('DELETE FROM folders');
-	// await db.exec('DELETE FROM resources');
-	// await db.exec('DELETE FROM deleted_items');
-	// await db.exec('DELETE FROM tags');
-	// await db.exec('DELETE FROM note_tags');
+	console.info('DELETING ALL DATA');
+	await db.exec('DELETE FROM notes');
+	await db.exec('DELETE FROM changes');
+	await db.exec('DELETE FROM folders');
+	await db.exec('DELETE FROM resources');
+	await db.exec('DELETE FROM deleted_items');
+	await db.exec('DELETE FROM tags');
+	await db.exec('DELETE FROM note_tags');
+	let folder = await Folder.save({ title: 'test' });
 
-	// // let folder = await Folder.save({ title: 'test' });
-	// let folder = await Folder.loadByField('title', 'test');
-	// await importEnex(db, folder.id, resourceDir, '/mnt/c/Users/Laurent/Desktop/Laurent.enex'); //'/mnt/c/Users/Laurent/Desktop/Laurent.enex');
-	// return;
+
+
+	//let folder = await Folder.loadByField('title', 'test');
+	await importEnex(folder.id, '/mnt/c/Users/Laurent/Desktop/Laurent.enex'); //'/mnt/c/Users/Laurent/Desktop/Laurent.enex');
+	return;
 
 
 
