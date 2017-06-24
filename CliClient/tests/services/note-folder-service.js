@@ -1,5 +1,5 @@
-import { promiseChain } from 'src/promise-utils.js';
-import { NoteFolderService } from 'src/services/note-folder-service.js';
+import { promiseChain } from 'lib/promise-utils.js';
+import { NoteFolderService } from 'lib/services/note-folder-service.js';
 import { setupDatabaseAndSynchronizer } from 'test-utils.js';
 import { createFoldersAndNotes } from 'test-data.js';
 

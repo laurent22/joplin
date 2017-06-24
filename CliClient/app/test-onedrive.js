@@ -1,14 +1,14 @@
 require('source-map-support').install();
 require('babel-plugin-transform-runtime');
 
-import { OneDriveApi } from 'src/onedrive-api.js';
+import { OneDriveApi } from 'lib/onedrive-api.js';
 
 const MicrosoftGraph = require("@microsoft/microsoft-graph-client");
 const fs = require('fs-extra');
 const path = require('path');
 
-import { FileApiDriverOneDrive } from 'src/file-api-driver-onedrive.js';
-import { FileApi } from 'src/file-api.js';
+import { FileApiDriverOneDrive } from 'lib/file-api-driver-onedrive.js';
+import { FileApi } from 'lib/file-api.js';
 
 function configContent() {
 	const configFilePath = path.dirname(__dirname) + '/config.json';

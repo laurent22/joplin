@@ -6,26 +6,26 @@ import { createStore } from 'redux';
 import { combineReducers } from 'redux';
 import { StackNavigator } from 'react-navigation';
 import { addNavigationHelpers } from 'react-navigation';
-import { Log } from 'src/log.js'
-import { Note } from 'src/models/note.js'
-import { Folder } from 'src/models/folder.js'
-import { BaseModel } from 'src/base-model.js'
-import { Database } from 'src/database.js'
-import { Registry } from 'src/registry.js'
-import { ItemList } from 'src/components/item-list.js'
-import { NotesScreen } from 'src/components/screens/notes.js'
-import { NoteScreen } from 'src/components/screens/note.js'
-import { FolderScreen } from 'src/components/screens/folder.js'
-import { FoldersScreen } from 'src/components/screens/folders.js'
-import { LoginScreen } from 'src/components/screens/login.js'
-import { LoadingScreen } from 'src/components/screens/loading.js'
-import { Setting } from 'src/models/setting.js'
-import { Synchronizer } from 'src/synchronizer.js'
+import { Log } from 'lib/log.js'
+import { Note } from 'lib/models/note.js'
+import { Folder } from 'lib/models/folder.js'
+import { BaseModel } from 'lib/base-model.js'
+import { Database } from 'lib/database.js'
+import { Registry } from 'lib/registry.js'
+import { ItemList } from 'lib/components/item-list.js'
+import { NotesScreen } from 'lib/components/screens/notes.js'
+import { NoteScreen } from 'lib/components/screens/note.js'
+import { FolderScreen } from 'lib/components/screens/folder.js'
+import { FoldersScreen } from 'lib/components/screens/folders.js'
+import { LoginScreen } from 'lib/components/screens/login.js'
+import { LoadingScreen } from 'lib/components/screens/loading.js'
+import { Setting } from 'lib/models/setting.js'
+import { Synchronizer } from 'lib/synchronizer.js'
 import { MenuContext } from 'react-native-popup-menu';
-import { SideMenu } from 'src/components/side-menu.js';
-import { SideMenuContent } from 'src/components/side-menu-content.js';
-import { NoteFolderService } from 'src/services/note-folder-service.js';
-import { DatabaseDriverReactNative } from 'src/database-driver-react-native';
+import { SideMenu } from 'lib/components/side-menu.js';
+import { SideMenuContent } from 'lib/components/side-menu-content.js';
+import { NoteFolderService } from 'lib/services/note-folder-service.js';
+import { DatabaseDriverReactNative } from 'lib/database-driver-react-native';
 
 let defaultState = {
 	notes: [],

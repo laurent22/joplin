@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { View, Button, TextInput, Text } from 'react-native';
 import { connect } from 'react-redux'
-import { Log } from 'src/log.js'
-import { Registry } from 'src/registry.js';
-import { Setting } from 'src/models/setting.js';
-import { ScreenHeader } from 'src/components/screen-header.js';
-import { _ } from 'src/locale.js';
+import { Log } from 'lib/log.js'
+import { Registry } from 'lib/registry.js';
+import { Setting } from 'lib/models/setting.js';
+import { ScreenHeader } from 'lib/components/screen-header.js';
+import { _ } from 'lib/locale.js';
 
 class LoginScreenComponent extends React.Component {
 	

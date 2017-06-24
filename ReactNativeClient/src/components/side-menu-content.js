@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
 import { Button } from 'react-native';
-import { Log } from 'src/log.js';
-import { Note } from 'src/models/note.js';
-import { NoteFolderService } from 'src/services/note-folder-service.js';
+import { Log } from 'lib/log.js';
+import { Note } from 'lib/models/note.js';
+import { NoteFolderService } from 'lib/services/note-folder-service.js';
 
 const React = require('react');
 const {

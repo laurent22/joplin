@@ -1,6 +1,6 @@
-import { Note } from 'src/models/note.js';
-import { Folder } from 'src/models/folder.js';
-import { promiseChain } from 'src/promise-utils.js';
+import { Note } from 'lib/models/note.js';
+import { Folder } from 'lib/models/folder.js';
+import { promiseChain } from 'lib/promise-utils.js';
 
 function createNotes(id = 1, parentId) {
 	let notes = [];

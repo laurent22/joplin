@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { View, Text, Button, StyleSheet } from 'react-native';
-import { Log } from 'src/log.js';
+import { Log } from 'lib/log.js';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
-import { _ } from 'src/locale.js';
-import { Setting } from 'src/models/setting.js';
+import { _ } from 'lib/locale.js';
+import { Setting } from 'lib/models/setting.js';
 
 const styles = StyleSheet.create({
 	divider: {

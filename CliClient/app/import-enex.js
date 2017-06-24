@@ -1,12 +1,12 @@
 require('app-module-path').addPath(__dirname);
 
-import { uuid } from 'src/uuid.js';
+import { uuid } from 'lib/uuid.js';
 import moment from 'moment';
-import { promiseChain } from 'src/promise-utils.js';
-import { folderItemFilename } from 'src/string-utils.js'
-import { BaseModel } from 'src/base-model.js';
-import { Note } from 'src/models/note.js';
-import { Folder } from 'src/models/folder.js';
+import { promiseChain } from 'lib/promise-utils.js';
+import { folderItemFilename } from 'lib/string-utils.js'
+import { BaseModel } from 'lib/base-model.js';
+import { Note } from 'lib/models/note.js';
+import { Folder } from 'lib/models/folder.js';
 import jsSHA from "jssha";
 
 const Promise = require('promise');

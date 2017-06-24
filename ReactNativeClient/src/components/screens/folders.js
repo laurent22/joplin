@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { View, Button, Picker, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux'
-import { Log } from 'src/log.js'
-import { FolderList } from 'src/components/folder-list.js'
-import { ScreenHeader } from 'src/components/screen-header.js';
-import { _ } from 'src/locale.js';
-import { ActionButton } from 'src/components/action-button.js';
+import { Log } from 'lib/log.js'
+import { FolderList } from 'lib/components/folder-list.js'
+import { ScreenHeader } from 'lib/components/screen-header.js';
+import { _ } from 'lib/locale.js';
+import { ActionButton } from 'lib/components/action-button.js';
 
 class FoldersScreenComponent extends React.Component {
 

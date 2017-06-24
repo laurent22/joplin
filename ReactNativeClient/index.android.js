@@ -1,3 +1,3 @@
-import { main } from 'src/main.js';
+import { main } from 'lib/main.js';
 
 main();

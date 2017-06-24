@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { View, Button, Picker } from 'react-native';
 import { connect } from 'react-redux'
-import { Log } from 'src/log.js'
-import { NoteList } from 'src/components/note-list.js'
-import { Folder } from 'src/models/folder.js'
-import { ScreenHeader } from 'src/components/screen-header.js';
+import { Log } from 'lib/log.js'
+import { NoteList } from 'lib/components/note-list.js'
+import { Folder } from 'lib/models/folder.js'
+import { ScreenHeader } from 'lib/components/screen-header.js';
 import { MenuOption, Text } from 'react-native-popup-menu';
-import { _ } from 'src/locale.js';
-import { ActionButton } from 'src/components/action-button.js';
+import { _ } from 'lib/locale.js';
+import { ActionButton } from 'lib/components/action-button.js';
 
 class NotesScreenComponent extends React.Component {
 	

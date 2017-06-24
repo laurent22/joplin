@@ -1,8 +1,8 @@
-import { FileApi } from 'src/file-api.js';
-import { FileApiDriverLocal } from 'src/file-api-driver-local.js';
-import { Database } from 'src/database.js';
-import { DatabaseDriverNode } from 'src/database-driver-node.js';
-import { Log } from 'src/log.js';
+import { FileApi } from 'lib/file-api.js';
+import { FileApiDriverLocal } from 'lib/file-api-driver-local.js';
+import { Database } from 'lib/database.js';
+import { DatabaseDriverNode } from 'lib/database-driver-node.js';
+import { Log } from 'lib/log.js';
 
 const fs = require('fs');
 

@@ -29,6 +29,7 @@
 				"*.iml",
 				"*.map",
 				"CliClient/app/src",
+				"CliClient/app/lib",
 				"*.jar",
 			]
 		}

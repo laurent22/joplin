@@ -1,4 +1,4 @@
-import { BaseService } from 'src/base-service.js';
+import { BaseService } from 'lib/base-service.js';
 
 class SessionService extends BaseService {
 

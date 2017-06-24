@@ -39,7 +39,7 @@
   },
   "scripts": {
     "babelbuild": "babel app -d build",
-    "build": "babel-changed app -d build --source-maps && babel-changed app/src/models -d build/src/models --source-maps && babel-changed app/src/services -d build/src/services --source-maps",
+    "build": "babel-changed app -d build --source-maps && babel-changed app/lib/models -d build/lib/models --source-maps && babel-changed app/lib/services -d build/lib/services --source-maps",
     "clean": "babel-changed --reset",
     "test": "babel-changed tests -d tests-build --source-maps && jasmine"
   }

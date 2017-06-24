@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ReactNativeActionButton from 'react-native-action-button';
 import { connect } from 'react-redux'
-import { Log } from 'src/log.js'
+import { Log } from 'lib/log.js'
 
 const styles = StyleSheet.create({
 	actionButtonIcon: {

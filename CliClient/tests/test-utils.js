@@ -1,14 +1,14 @@
 import fs from 'fs-extra';
-import { Database } from 'src/database.js';
-import { DatabaseDriverNode } from 'src/database-driver-node.js';
-import { BaseModel } from 'src/base-model.js';
-import { Folder } from 'src/models/folder.js';
-import { Note } from 'src/models/note.js';
-import { Setting } from 'src/models/setting.js';
-import { BaseItem } from 'src/models/base-item.js';
-import { Synchronizer } from 'src/synchronizer.js';
-import { FileApi } from 'src/file-api.js';
-import { FileApiDriverMemory } from 'src/file-api-driver-memory.js';
+import { Database } from 'lib/database.js';
+import { DatabaseDriverNode } from 'lib/database-driver-node.js';
+import { BaseModel } from 'lib/base-model.js';
+import { Folder } from 'lib/models/folder.js';
+import { Note } from 'lib/models/note.js';
+import { Setting } from 'lib/models/setting.js';
+import { BaseItem } from 'lib/models/base-item.js';
+import { Synchronizer } from 'lib/synchronizer.js';
+import { FileApi } from 'lib/file-api.js';
+import { FileApiDriverMemory } from 'lib/file-api-driver-memory.js';
 
 let databases_ = [];
 let synchronizers_ = [];

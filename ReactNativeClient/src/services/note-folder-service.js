@@ -5,14 +5,14 @@
 // - Move setting of geo-location to GUI side (only for note explicitely created on client
 // - Don't do diffing - make caller explicitely set model properties that need to be saved
 
-import { BaseService } from 'src/base-service.js';
-import { BaseModel } from 'src/base-model.js';
-import { BaseItem } from 'src/models/base-item.js';
-import { Note } from 'src/models/note.js';
-import { Folder } from 'src/models/folder.js';
-import { Log } from 'src/log.js';
-import { time } from 'src/time-utils.js';
-import { Registry } from 'src/registry.js';
+import { BaseService } from 'lib/base-service.js';
+import { BaseModel } from 'lib/base-model.js';
+import { BaseItem } from 'lib/models/base-item.js';
+import { Note } from 'lib/models/note.js';
+import { Folder } from 'lib/models/folder.js';
+import { Log } from 'lib/log.js';
+import { time } from 'lib/time-utils.js';
+import { Registry } from 'lib/registry.js';
 
 class NoteFolderService extends BaseService {
 

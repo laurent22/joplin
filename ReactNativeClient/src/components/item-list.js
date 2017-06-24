@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { ListView, Text, TouchableHighlight, Switch, View } from 'react-native';
-import { Log } from 'src/log.js';
-import { _ } from 'src/locale.js';
-import { Checkbox } from 'src/components/checkbox.js';
-import { NoteFolderService } from 'src/services/note-folder-service.js';
-import { Note } from 'src/models/note.js';
+import { Log } from 'lib/log.js';
+import { _ } from 'lib/locale.js';
+import { Checkbox } from 'lib/components/checkbox.js';
+import { NoteFolderService } from 'lib/services/note-folder-service.js';
+import { Note } from 'lib/models/note.js';
 
 class ItemListComponent extends Component {
 

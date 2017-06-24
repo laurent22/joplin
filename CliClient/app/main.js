@@ -1,20 +1,20 @@
 require('source-map-support').install();
 require('babel-plugin-transform-runtime');
 
-import { FileApi } from 'src/file-api.js';
-import { FileApiDriverOneDrive } from 'src/file-api-driver-onedrive.js';
-import { Database } from 'src/database.js';
-import { DatabaseDriverNode } from 'src/database-driver-node.js';
-import { BaseModel } from 'src/base-model.js';
-import { Folder } from 'src/models/folder.js';
-import { Note } from 'src/models/note.js';
-import { Setting } from 'src/models/setting.js';
-import { Synchronizer } from 'src/synchronizer.js';
-import { Logger } from 'src/logger.js';
-import { uuid } from 'src/uuid.js';
+import { FileApi } from 'lib/file-api.js';
+import { FileApiDriverOneDrive } from 'lib/file-api-driver-onedrive.js';
+import { Database } from 'lib/database.js';
+import { DatabaseDriverNode } from 'lib/database-driver-node.js';
+import { BaseModel } from 'lib/base-model.js';
+import { Folder } from 'lib/models/folder.js';
+import { Note } from 'lib/models/note.js';
+import { Setting } from 'lib/models/setting.js';
+import { Synchronizer } from 'lib/synchronizer.js';
+import { Logger } from 'lib/logger.js';
+import { uuid } from 'lib/uuid.js';
 import { sprintf } from 'sprintf-js';
 import { importEnex } from 'import-enex';
-import { _ } from 'src/locale.js';
+import { _ } from 'lib/locale.js';
 import os from 'os';
 import fs from 'fs-extra';
 

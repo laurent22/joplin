@@ -1,7 +1,7 @@
 require('source-map-support').install();
 require('babel-plugin-transform-runtime');
 
-import { OneDriveApi } from 'src/onedrive-api.js';
+import { OneDriveApi } from 'lib/onedrive-api.js';
 
 const fetch = require('node-fetch');
 const tcpPortUsed = require('tcp-port-used');

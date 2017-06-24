@@ -7,9 +7,9 @@
 // So there's basically still a one way flux: React => SQLite => Redux => React
 
 import { AppRegistry } from 'react-native';
-import { Log } from 'src/log.js'
-import { Root } from 'src/root.js';
-import { Registry } from 'src/registry.js';
+import { Log } from 'lib/log.js'
+import { Root } from 'lib/root.js';
+import { Registry } from 'lib/registry.js';
 
 function main() {
 	Registry.setDebugMode(true);
