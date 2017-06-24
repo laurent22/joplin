@@ -62,7 +62,7 @@ async function main() {
 	console.info('DELETING ALL DATA');
 	await db.exec('DELETE FROM notes');
 	await db.exec('DELETE FROM changes');
-	await db.exec('DELETE FROM folders');
+	await db.exec('DELETE FROM folders WHERE is_default != 1');
 	await db.exec('DELETE FROM resources');
 	await db.exec('DELETE FROM deleted_items');
 	await db.exec('DELETE FROM tags');
@@ -72,7 +72,7 @@ async function main() {
 
 
 	//let folder = await Folder.loadByField('title', 'test');
-	await importEnex(folder.id, '/mnt/c/Users/Laurent/Desktop/Laurent.enex'); //'/mnt/c/Users/Laurent/Desktop/Laurent.enex');
+	await importEnex(folder.id, '/mnt/c/Users/Laurent/Desktop/afaire.enex');
 	return;
 
 
