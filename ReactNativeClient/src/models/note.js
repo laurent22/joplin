@@ -74,6 +74,16 @@ class Note extends BaseItem {
 		});
 	}
 
+	static filter(note) {
+		if (!note) return note;
+
+		let output = Object.assign({}, note);
+		if ('longitude' in output) output.longitude = Number(!output.longitude ? 0 : output.longitude).toFixed(8);
+		if ('latitude' in output) output.latitude = Number(!output.latitude ? 0 : output.latitude).toFixed(8);
+		if ('altitude' in output) output.altitude = Number(!output.altitude ? 0 : output.altitude).toFixed(4);
+		return output;
+	}
+
 	static all(parentId) {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0 AND parent_id = ?', [parentId]);
 	}

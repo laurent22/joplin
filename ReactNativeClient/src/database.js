@@ -141,8 +141,8 @@ class Database {
 		return this.logger_;
 	}
 
-	setDebugEnabled(v) {
-		this.driver_.setDebugEnabled(v);
+	setDebugMode(v) {
+		//this.driver_.setDebugMode(v);
 		this.debugMode_ = v;
 	}
 
@@ -283,6 +283,7 @@ class Database {
 
 	logQuery(sql, params = null) {
 		if (!this.debugMode()) return;
+
 		if (params !== null) {
 			this.logger().debug('DB: ' + sql, JSON.stringify(params));
 		} else {

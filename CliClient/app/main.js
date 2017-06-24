@@ -13,12 +13,14 @@ import { Synchronizer } from 'src/synchronizer.js';
 import { Logger } from 'src/logger.js';
 import { uuid } from 'src/uuid.js';
 import { sprintf } from 'sprintf-js';
+import { importEnex } from 'import-enex';
 import { _ } from 'src/locale.js';
 import os from 'os';
 import fs from 'fs-extra';
 
 const APPNAME = 'joplin';
 const dataDir = os.homedir() + '/.local/share/' + APPNAME;
+const resourceDir = dataDir + '/resources';
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -28,21 +30,49 @@ const logger = new Logger();
 logger.addTarget('file', { path: dataDir + '/log.txt' });
 logger.setLevel(Logger.LEVEL_DEBUG);
 
+const dbLogger = new Logger();
+dbLogger.addTarget('file', { path: dataDir + '/log-database.txt' });
+dbLogger.setLevel(Logger.LEVEL_DEBUG);
+
 const syncLogger = new Logger();
 syncLogger.addTarget('file', { path: dataDir + '/log-sync.txt' });
 syncLogger.setLevel(Logger.LEVEL_DEBUG);
 
 let db = new Database(new DatabaseDriverNode());
-db.setLogger(logger);
+db.setDebugMode(true);
+db.setLogger(dbLogger);
+
 let synchronizer_ = null;
 const vorpal = require('vorpal')();
 
 async function main() {
 	await fs.mkdirp(dataDir, 0o755);
+	await fs.mkdirp(resourceDir, 0o755);
 
-	await db.open({ name: dataDir + '/database.sqlite' });
+	await db.open({ name: dataDir + '/database2.sqlite' });
 	BaseModel.db_ = db;
 	await Setting.load();
+
+
+
+
+	// console.info('DELETING ALL DATA');
+	// await db.exec('DELETE FROM notes');
+	// await db.exec('DELETE FROM changes');
+	// await db.exec('DELETE FROM folders');
+	// await db.exec('DELETE FROM resources');
+	// await db.exec('DELETE FROM deleted_items');
+	// await db.exec('DELETE FROM tags');
+	// await db.exec('DELETE FROM note_tags');
+
+	// // let folder = await Folder.save({ title: 'test' });
+	// let folder = await Folder.loadByField('title', 'test');
+	// await importEnex(db, folder.id, resourceDir, '/mnt/c/Users/Laurent/Desktop/Laurent.enex'); //'/mnt/c/Users/Laurent/Desktop/Laurent.enex');
+	// return;
+
+
+
+
 
 	let commands = [];
 	let currentFolder = null;
@@ -380,6 +410,15 @@ async function main() {
 			}).then(() => {
 				end();
 			});
+		},
+	});
+
+	commands.push({
+		usage: 'import-enex',
+		description: _('Imports a .enex file (Evernote export file).'),
+		action: function (args, end) {
+			
+			end();
 		},
 	});
 

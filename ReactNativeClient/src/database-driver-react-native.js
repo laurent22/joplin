@@ -13,8 +13,8 @@ class DatabaseDriverReactNative {
 		});
 	}
 
-	setDebugEnabled(v) {
-		SQLite.DEBUG(v);
+	setDebugMode(v) {
+		//SQLite.DEBUG(v);
 	}
 
 	selectOne(sql, params = null) {

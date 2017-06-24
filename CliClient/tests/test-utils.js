@@ -63,7 +63,7 @@ function setupDatabase(id = null) {
 		// Don't care if the file doesn't exist
 	}).then(() => {
 		databases_[id] = new Database(new DatabaseDriverNode());
-		databases_[id].setDebugEnabled(false);
+		databases_[id].setDebugMode(false);
 		return databases_[id].open({ name: filePath }).then(() => {
 			BaseModel.db_ = databases_[id];
 			return setupDatabase(id);

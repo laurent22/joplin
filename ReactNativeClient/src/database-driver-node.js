@@ -15,7 +15,7 @@ class DatabaseDriverNode {
 		});
 	}
 
-	setDebugEnabled(v) {
+	setDebugMode(v) {
 		// ??
 	}
 

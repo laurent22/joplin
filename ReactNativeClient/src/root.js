@@ -192,7 +192,7 @@ class AppComponent extends React.Component {
 	componentDidMount() {
 		let db = new Database(new DatabaseDriverReactNative());
 		//db.setDebugEnabled(Registry.debugMode());
-		db.setDebugEnabled(false);
+		db.setDebugMode(false);
 
 		BaseModel.dispatch = this.props.dispatch;
 		BaseModel.db_ = db;

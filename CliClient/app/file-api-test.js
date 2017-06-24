@@ -28,7 +28,7 @@ const fs = require('fs');
 Log.setLevel(Log.LEVEL_DEBUG);
 
 let db = new Database(new DatabaseDriverNode());
-db.setDebugEnabled(true);
+db.setDebugMode(true);
 db.open({ name: '/home/laurent/Temp/test.sqlite3' }).then(() => {
 	return db.selectAll('SELECT * FROM table_fields');
 }).then((rows) => {
