@@ -20,7 +20,8 @@
 				"ReactNativeClient/android/.idea",
 				"ReactNativeClient/android/.gradle",
 				"ReactNativeClient/android/local.properties",
-				"ReactNativeClient/ios"
+				"ReactNativeClient/ios",
+				"_vieux",
 			],
 			"file_exclude_patterns": [
 				"*.pro.user",
@@ -28,6 +29,7 @@
 				"*.iml",
 				"*.map",
 				"CliClient/app/src",
+				"*.jar",
 			]
 		}
 	],
