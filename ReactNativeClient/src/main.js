@@ -9,12 +9,9 @@
 import { AppRegistry } from 'react-native';
 import { Log } from 'lib/log.js'
 import { Root } from 'lib/root.js';
-import { Registry } from 'lib/registry.js';
 
 function main() {
-	Registry.setDebugMode(true);
 	AppRegistry.registerComponent('AwesomeProject', () => Root);
-	Log.setLevel(Registry.debugMode() ? Log.LEVEL_DEBUG : Log.LEVEL_WARN);
 	console.ignoredYellowBox = ['Remote debugger'];
 	Log.info('START ======================================================================================================');
 	// Note: The final part of the initialization process is in

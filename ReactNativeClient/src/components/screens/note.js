@@ -3,7 +3,6 @@ import { View, Button, TextInput } from 'react-native';
 import { connect } from 'react-redux'
 import { Log } from 'lib/log.js'
 import { Note } from 'lib/models/note.js'
-import { Registry } from 'lib/registry.js'
 import { ScreenHeader } from 'lib/components/screen-header.js';
 import { Checkbox } from 'lib/components/checkbox.js'
 import { NoteFolderService } from 'lib/services/note-folder-service.js';

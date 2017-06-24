@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, Button, TextInput, Text } from 'react-native';
 import { connect } from 'react-redux'
 import { Log } from 'lib/log.js'
-import { Registry } from 'lib/registry.js';
 import { Setting } from 'lib/models/setting.js';
 import { ScreenHeader } from 'lib/components/screen-header.js';
 import { _ } from 'lib/locale.js';
@@ -37,34 +36,34 @@ class LoginScreenComponent extends React.Component {
 	loginButton_press() {
 		this.setState({ errorMessage: null });
 
-		return Registry.api().post('sessions', null, {
-			'email': this.state.email,
-			'password': this.state.password,
-			'client_id': Setting.value('clientId'),
-		}).then((session) => {
-			Log.info('Got session', session);
+		// return Registry.api().post('sessions', null, {
+		// 	'email': this.state.email,
+		// 	'password': this.state.password,
+		// 	'client_id': Setting.value('clientId'),
+		// }).then((session) => {
+		// 	Log.info('Got session', session);
 
-			let user = {
-				email: this.state.email,
-				session: session.id,
-			};
-			Setting.setObject('user', user);
+		// 	let user = {
+		// 		email: this.state.email,
+		// 		session: session.id,
+		// 	};
+		// 	Setting.setObject('user', user);
 
-			this.props.dispatch({
-				type: 'USER_SET',
-				user: user,
-			});
+		// 	this.props.dispatch({
+		// 		type: 'USER_SET',
+		// 		user: user,
+		// 	});
 
-			this.props.dispatch({
-				type: 'Navigation/BACK',
-			});
+		// 	this.props.dispatch({
+		// 		type: 'Navigation/BACK',
+		// 	});
 
-			Registry.api().setSession(session.id);
+		// 	Registry.api().setSession(session.id);
 
-			//Registry.synchronizer().start();
-		}).catch((error) => {
-			this.setState({ errorMessage: _('Could not login: %s)', error.message) });
-		});
+		// 	//Registry.synchronizer().start();
+		// }).catch((error) => {
+		// 	this.setState({ errorMessage: _('Could not login: %s)', error.message) });
+		// });
 	}
 
 	render() {

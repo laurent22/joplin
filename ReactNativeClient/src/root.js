@@ -11,7 +11,6 @@ import { Note } from 'lib/models/note.js'
 import { Folder } from 'lib/models/folder.js'
 import { BaseModel } from 'lib/base-model.js'
 import { Database } from 'lib/database.js'
-import { Registry } from 'lib/registry.js'
 import { ItemList } from 'lib/components/item-list.js'
 import { NotesScreen } from 'lib/components/screens/notes.js'
 import { NoteScreen } from 'lib/components/screens/note.js'
@@ -191,7 +190,6 @@ class AppComponent extends React.Component {
 
 	componentDidMount() {
 		let db = new Database(new DatabaseDriverReactNative());
-		//db.setDebugEnabled(Registry.debugMode());
 		db.setDebugMode(false);
 
 		BaseModel.dispatch = this.props.dispatch;
@@ -200,7 +198,6 @@ class AppComponent extends React.Component {
 
 		db.open({ name: '/storage/emulated/0/Download/joplin-42.sqlite' }).then(() => {
 			Log.info('Database is ready.');
-			Registry.setDb(db);
 		}).then(() => {
 			Log.info('Loading settings...');
 			return Setting.load();
@@ -224,12 +221,10 @@ class AppComponent extends React.Component {
 			Log.info('Client ID', Setting.value('clientId'));
 			Log.info('User', user);
 
-			Registry.api().setSession(user.session);
-
-			this.props.dispatch({
-				type: 'USER_SET',
-				user: user,
-			});
+			// this.props.dispatch({
+			// 	type: 'USER_SET',
+			// 	user: user,
+			// });
 
 			Log.info('Loading folders...');
 
@@ -270,10 +265,6 @@ class AppComponent extends React.Component {
 			// return this.api_;
 
 
-			// let synchronizer = new Synchronizer(db, Registry.api());
-			// let synchronizer = new Synchronizer(db, dropboxApi);
-			// Registry.setSynchronizer(synchronizer);
-			// synchronizer.start();
 		}).catch((error) => {
 			Log.error('Initialization error:', error);
 		});
