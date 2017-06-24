@@ -18,7 +18,8 @@ import { _ } from 'lib/locale.js';
 import os from 'os';
 import fs from 'fs-extra';
 
-const dataDir = os.homedir() + '/.local/share/' + Setting.value('appName');
+//const dataDir = os.homedir() + '/.local/share/' + Setting.value('appName');
+const dataDir = os.homedir() + '/Temp/TestJoplin';
 const resourceDir = dataDir + '/resources';
 
 Setting.setConstant('dataDir', dataDir);
