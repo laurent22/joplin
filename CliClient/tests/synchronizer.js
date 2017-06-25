@@ -11,6 +11,12 @@ process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
+async function allItems() {
+	let folders = await Folder.all();
+	let notes = await Note.all();
+	return folders.concat(notes);
+}
+
 async function localItemsSameAsRemote(locals, expect) {
 	try {
 		let files = await fileApi().list();
@@ -46,7 +52,7 @@ describe('Synchronizer', function() {
 		let folder = await Folder.save({ title: "folder1" });
 		await Note.save({ title: "un", parent_id: folder.id });
 
-		let all = await Folder.all({ includeNotes: true });
+		let all = await allItems();
 
 		await synchronizer().start();
 
@@ -64,7 +70,7 @@ describe('Synchronizer', function() {
 
 		await Note.save({ title: "un UPDATE", id: note.id });
 
-		let all = await Folder.all({ includeNotes: true });
+		let all = await allItems();
 		await synchronizer().start();
 
 		await localItemsSameAsRemote(all, expect);
@@ -81,7 +87,7 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 
-		let all = await Folder.all({ includeNotes: true });
+		let all = await allItems();
 		await localItemsSameAsRemote(all, expect);
 
 		done();
@@ -109,7 +115,7 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 
-		let all = await Folder.all({ includeNotes: true });
+		let all = await allItems();
 		let files = await fileApi().list();
 
 		await localItemsSameAsRemote(all, expect);
@@ -250,7 +256,7 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 
-		let items = await Folder.all({ includeNotes: true });
+		let items = await allItems();
 
 		expect(items.length).toBe(1);
 
@@ -287,16 +293,13 @@ describe('Synchronizer', function() {
 
 		expect(conflictedNotes.length).toBe(1);
 		expect(conflictedNotes[0].title).toBe(newTitle);
-
-		let items = await Folder.all({ includeNotes: true });
-
-		expect(items.length).toBe(1);
 		
 		done();
 	});
 
 	it('should handle conflict when remote folder is deleted then local folder is renamed', async (done) => {
 		let folder1 = await Folder.save({ title: "folder1" });
+		let folder2 = await Folder.save({ title: "folder2" });
 		let note1 = await Note.save({ title: "un", parent_id: folder1.id });
 		await synchronizer().start();
 
@@ -319,9 +322,9 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 
-		let items = await Folder.all({ includeNotes: true });
+		let items = await allItems();
 
-		expect(items.length).toBe(0);
+		expect(items.length).toBe(1);
 		
 		done();
 	});

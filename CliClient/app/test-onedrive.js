@@ -3,7 +3,6 @@ require('babel-plugin-transform-runtime');
 
 import { OneDriveApi } from 'lib/onedrive-api.js';
 
-const MicrosoftGraph = require("@microsoft/microsoft-graph-client");
 const fs = require('fs-extra');
 const path = require('path');
 

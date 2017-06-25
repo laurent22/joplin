@@ -44,7 +44,7 @@ syncLogger.addTarget('file', { path: dataDir + '/log-sync.txt' });
 syncLogger.setLevel(Logger.LEVEL_DEBUG);
 
 let db = new Database(new DatabaseDriverNode());
-db.setDebugMode(true);
+//db.setDebugMode(true);
 db.setLogger(dbLogger);
 
 let synchronizer_ = null;

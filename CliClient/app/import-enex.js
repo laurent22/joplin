@@ -1,5 +1,3 @@
-require('app-module-path').addPath(__dirname);
-
 import { uuid } from 'lib/uuid.js';
 import moment from 'moment';
 import { promiseChain } from 'lib/promise-utils.js';

@@ -20,19 +20,20 @@ describe('BaseItem', function() {
 	});
 
 	it('should create a deleted_items record', async (done) => {
-		let folder = await Folder.save({ title: 'folder1' });
+		let folder1 = await Folder.save({ title: 'folder1' });
+		let folder2 = await Folder.save({ title: 'folder2' });
 
-		await Folder.delete(folder.id);
+		await Folder.delete(folder1.id);
 
 		let items = await BaseModel.deletedItems();
 
 		expect(items.length).toBe(1);
-		expect(items[0].item_id).toBe(folder.id);
-		expect(items[0].item_type).toBe(folder.type_);
+		expect(items[0].item_id).toBe(folder1.id);
+		expect(items[0].item_type).toBe(folder1.type_);
 
 		let folders = await Folder.all();
 
-		expect(folders.length).toBe(0);
+		expect(folders.length).toBe(1);
 
 		done();
 	});

@@ -4,6 +4,7 @@ import { DatabaseDriverNode } from 'lib/database-driver-node.js';
 import { BaseModel } from 'lib/base-model.js';
 import { Folder } from 'lib/models/folder.js';
 import { Note } from 'lib/models/note.js';
+import { Logger } from 'lib/logger.js';
 import { Setting } from 'lib/models/setting.js';
 import { BaseItem } from 'lib/models/base-item.js';
 import { Synchronizer } from 'lib/synchronizer.js';
@@ -14,6 +15,10 @@ let databases_ = [];
 let synchronizers_ = [];
 let fileApi_ = null;
 let currentClient_ = 1;
+
+const logger = new Logger();
+logger.addTarget('file', { path: __dirname + '/data/log-test.txt' });
+logger.setLevel(Logger.LEVEL_DEBUG);
 
 function sleep(n) {
 	return new Promise((resolve, reject) => {
@@ -63,7 +68,7 @@ function setupDatabase(id = null) {
 		// Don't care if the file doesn't exist
 	}).then(() => {
 		databases_[id] = new Database(new DatabaseDriverNode());
-		databases_[id].setDebugMode(false);
+		databases_[id].setLogger(logger);
 		return databases_[id].open({ name: filePath }).then(() => {
 			BaseModel.db_ = databases_[id];
 			return setupDatabase(id);
@@ -78,6 +83,7 @@ async function setupDatabaseAndSynchronizer(id = null) {
 
 	if (!synchronizers_[id]) {
 		synchronizers_[id] = new Synchronizer(db(id), fileApi());
+		synchronizers_[id].setLogger(logger);
 	}
 
 	await fileApi().format();
@@ -90,7 +96,6 @@ function db(id = null) {
 
 function synchronizer(id = null) {
 	if (id === null) id = currentClient_;
-	//console.info('SYNC', id);
 	return synchronizers_[id];
 }
 
@@ -98,6 +103,7 @@ function fileApi() {
 	if (fileApi_) return fileApi_;
 
 	fileApi_ = new FileApi('/root', new FileApiDriverMemory());
+	fileApi_.setLogger(logger);
 	return fileApi_;
 }
 
