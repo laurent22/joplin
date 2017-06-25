@@ -75,6 +75,13 @@ async function main() {
 	// return;
 
 
+	// let testglob = await Note.glob('title', 'La *', {
+	// 	fields: ['title', 'updated_time'],
+	// });
+	// console.info(testglob);
+
+
+
 
 
 
@@ -340,26 +347,37 @@ async function main() {
 	});
 
 	commands.push({
-		usage: 'rm <item-title>',
+		usage: 'rm <pattern>',
 		description: 'Deletes the given item. For a notebook, all the notes within that notebook will be deleted. Use `rm ../<notebook-name>` to delete a notebook.',
 		action: async function(args, end) {
-			let title = args['item-title'];
+			let pattern = args['pattern'];
 			let itemType = null;
 
-			if (title.substr(0, 3) == '../') {
-				itemType = BaseModel.MODEL_TYPE_FOLDER;
-				title = title.substr(3);
-			} else {
-				itemType = BaseModel.MODEL_TYPE_NOTE;
-			}
+			if (pattern.indexOf('*') < 0) { // Handle it as a simple title
+				if (pattern.substr(0, 3) == '../') {
+					itemType = BaseModel.MODEL_TYPE_FOLDER;
+					pattern = pattern.substr(3);
+				} else {
+					itemType = BaseModel.MODEL_TYPE_NOTE;
+				}
 
-			let item = await BaseItem.loadItemByField(itemType, 'title', title);
-			if (!item) return cmdError(this, _('No item with title "%s" found.', title), end);
-			await BaseItem.deleteItem(itemType, item.id);
+				let item = await BaseItem.loadItemByField(itemType, 'title', pattern);
+				if (!item) return cmdError(this, _('No item with title "%s" found.', pattern), end);
+				await BaseItem.deleteItem(itemType, item.id);
 
-			if (currentFolder && currentFolder.id == item.id) {
-				let f = await Folder.defaultFolder();
-				switchCurrentFolder(f);
+				if (currentFolder && currentFolder.id == item.id) {
+					let f = await Folder.defaultFolder();
+					switchCurrentFolder(f);
+				}
+			} else { // Handle it as a glob pattern
+				let notes = await Note.previews(currentFolder.id, { titlePattern: pattern });
+				if (!notes.length) return cmdError(this, _('No note matches this pattern: "%s"', pattern), end);
+				let ok = await cmdPromptConfirm(this, _('%d notes match this pattern. Delete them?', notes.length));
+				if (ok) {
+					for (let i = 0; i < notes.length; i++) {
+						await Note.delete(notes[i].id);
+					}
+				}
 			}
 
 			end();
@@ -368,7 +386,7 @@ async function main() {
 	});
 
 	commands.push({
-		usage: 'ls [notebook-title]',
+		usage: 'ls [pattern]',
 		description: 'Displays the notes in [notebook-title]. Use `ls ..` to display the list of notebooks.',
 		options: [
 			['-n, --lines <num>', 'Displays only the first top <num> lines.'],
@@ -377,7 +395,7 @@ async function main() {
 			['-t, --type <type>', 'Displays only the items of the specific type(s). Can be `n` for notes, `t` for todos, or `nt` for notes and todos (eg. `-tt` would display only the todos, while `-ttd` would display notes and todos.'],
 		],
 		action: async function(args, end) {
-			let folderTitle = args['notebook-title'];
+			let pattern = args['pattern'];
 			let suffix = '';
 			let items = [];
 			let options = args.options;
@@ -395,22 +413,13 @@ async function main() {
 				if (options.type.indexOf('n') >= 0) queryOptions.itemTypes.push('note');
 				if (options.type.indexOf('t') >= 0) queryOptions.itemTypes.push('todo');
 			}
+			if (pattern) queryOptions.titlePattern = pattern;
 
-			if (folderTitle == '..') {
+			if (pattern == '..') {
 				items = await Folder.all(queryOptions);
 				suffix = '/';
 			} else {
-				let folder = null;
-				
-				if (folderTitle) {
-					folder = await Folder.loadByField('title', folderTitle);
-				} else if (currentFolder) {
-					folder = currentFolder;
-				}
-				
-				if (!folder) return cmdError(this, _('Unknown notebook: "%s"', folderTitle), end);
-
-				items = await Note.previews(folder.id, queryOptions);
+				items = await Note.previews(currentFolder.id, queryOptions);
 			}
 
 			for (let i = 0; i < items.length; i++) {
