@@ -7,6 +7,7 @@ import { Database } from 'lib/database.js';
 import { DatabaseDriverNode } from 'lib/database-driver-node.js';
 import { BaseModel } from 'lib/base-model.js';
 import { Folder } from 'lib/models/folder.js';
+import { BaseItem } from 'lib/models/base-item.js';
 import { Note } from 'lib/models/note.js';
 import { Setting } from 'lib/models/setting.js';
 import { Synchronizer } from 'lib/synchronizer.js';
@@ -59,21 +60,18 @@ async function main() {
 
 
 
-	console.info('DELETING ALL DATA');
-	await db.exec('DELETE FROM notes');
-	await db.exec('DELETE FROM changes');
-	await db.exec('DELETE FROM folders WHERE is_default != 1');
-	await db.exec('DELETE FROM resources');
-	await db.exec('DELETE FROM deleted_items');
-	await db.exec('DELETE FROM tags');
-	await db.exec('DELETE FROM note_tags');
-	let folder = await Folder.save({ title: 'test' });
-
-
-
-	//let folder = await Folder.loadByField('title', 'test');
-	await importEnex(folder.id, '/mnt/c/Users/Laurent/Desktop/afaire.enex');
-	return;
+	// console.info('DELETING ALL DATA');
+	// await db.exec('DELETE FROM notes');
+	// await db.exec('DELETE FROM changes');
+	// await db.exec('DELETE FROM folders WHERE is_default != 1');
+	// await db.exec('DELETE FROM resources');
+	// await db.exec('DELETE FROM deleted_items');
+	// await db.exec('DELETE FROM tags');
+	// await db.exec('DELETE FROM note_tags');
+	// let folder1 = await Folder.save({ title: 'test1', is_default: 1 });
+	// let folder2 = await Folder.save({ title: 'test2' });
+	// await importEnex(folder1.id, '/mnt/c/Users/Laurent/Desktop/Laurent.enex');
+	// return;
 
 
 
@@ -178,6 +176,11 @@ async function main() {
 		});
 	}
 
+	function commandError(commandInstance, msg, end) {
+		commandInstance.log(msg);
+		end();
+	}
+
 	process.stdin.on('keypress', (_, key) => {
 		if (key && key.name === 'return') {
 			updatePrompt();
@@ -190,18 +193,13 @@ async function main() {
 	});
 
 	commands.push({
-		usage: 'cd <list-title>',
-		description: 'Moved to [list-title] - all further operations will happen within this list. Use `cd ..` to go back one level.',
-		action: function (args, end) {
-			let folderTitle = args['list-title'];
+		usage: 'use <notebook-title>',
+		aliases: ['cd'],
+		description: 'Switches to [notebook-title] - all further operations will happen within this notebook.',
+		action: function(args, end) {
+			let folderTitle = args['notebook-title'];
 
-			if (folderTitle == '..') {
-				switchCurrentFolder(null);
-				end();
-				return;
-			}
-
-			if (folderTitle == '.') {
+			if (folderTitle == '.' || folderTitle == '..') {
 				end();
 				return;
 			}
@@ -215,11 +213,11 @@ async function main() {
 	});
 
 	commands.push({
-		usage: 'mklist <list-title>',
-		alias: 'mkdir',
-		description: 'Creates a new list',
-		action: function (args, end) {
-			Folder.save({ title: args['list-title'] }).catch((error) => {
+		usage: 'mkbook <notebook-title>',
+		aliases: ['mkdir'],
+		description: 'Creates a new notebook',
+		action: function(args, end) {
+			Folder.save({ title: args['notebook-title'] }).catch((error) => {
 				this.log(error);
 			}).then((folder) => {
 				switchCurrentFolder(folder);
@@ -230,11 +228,11 @@ async function main() {
 
 	commands.push({
 		usage: 'mknote <note-title>',
-		alias: 'touch',
+		aliases: ['touch'],
 		description: 'Creates a new note',
-		action: function (args, end) {
+		action: function(args, end) {
 			if (!currentFolder) {
-				this.log('Notes can only be created within a list.');
+				this.log('Notes can only be created within a notebook.');
 				end();
 				return;
 			}
@@ -254,7 +252,7 @@ async function main() {
 	commands.push({
 		usage: 'set <item-title> <prop-name> [prop-value]',
 		description: 'Sets the given <prop-name> of the given item.',
-		action: function (args, end) {
+		action: function(args, end) {
 			let promise = null;
 			let title = args['item-title'];
 			let propName = args['prop-name'];
@@ -293,7 +291,7 @@ async function main() {
 	commands.push({
 		usage: 'cat <item-title>',
 		description: 'Displays the given item data.',
-		action: function (args, end) {
+		action: function(args, end) {
 			let title = args['item-title'];
 
 			let promise = null;
@@ -326,80 +324,52 @@ async function main() {
 
 	commands.push({
 		usage: 'rm <item-title>',
-		description: 'Deletes the given item. For a list, all the notes within that list will be deleted.',
-		action: function (args, end) {
+		description: 'Deletes the given item. For a notebook, all the notes within that notebook will be deleted.',
+		action: async function(args, end) {
 			let title = args['item-title'];
-
-			let promise = null;
-			let itemType = currentFolder ? 'note' : 'folder';
-			if (itemType == 'folder') {
-				promise = Folder.loadByField('title', title);
-			} else {
-				promise = Folder.loadNoteByField(currentFolder.id, 'title', title);
-			}
-
-			promise.then((item) => {
-				if (!item) {
-					this.log(_('No item with title "%s" found.', title));
-					end();
-					return;
-				}
-
-				if (itemType == 'folder') {
-					return Folder.delete(item.id);
-				} else {
-					return Note.delete(item.id);
-				}
-			}).catch((error) => {
-				this.log(error);
-			}).then(() => {
-				end();
-			});
+			let itemType = currentFolder ? BaseModel.MODEL_TYPE_NOTE : BaseModel.MODEL_TYPE_FOLDER;
+			let item = await BaseItem.loadItemByField(itemType, 'title', title);
+			if (!item) return commandError(this, _('No item with title "%s" found.', title), end);
+			await BaseItem.deleteItem(itemType, item.id);
+			end();
 		},
 		autocomplete: autocompleteItems,
 	});
 
 	commands.push({
-		usage: 'ls [list-title]',
-		alias: 'll',
-		description: 'Lists items in [list-title].',
-		action: function (args, end) {
-			let folderTitle = args['list-title'];
-
-			let promise = null;
+		usage: 'ls [notebook-title]',
+		description: 'Displays the notes in [notebook-title]. Use `ls ..` to display the list of notebooks.',
+		options: [
+			['-n, --lines <num>', 'Displays only the first top <num> lines.'],
+		],
+		action: async function(args, end) {
+			let folderTitle = args['notebook-title'];
+			let suffix = '';
+			let items = [];
 
 			if (folderTitle == '..') {
-				promise = Promise.resolve('root');
-			} else if (folderTitle && folderTitle != '.') {
-				promise = Folder.loadByField('title', folderTitle);
-			} else if (currentFolder) {
-				promise = Promise.resolve(currentFolder);
+				items = await Folder.all();
+				suffix = '/';
 			} else {
-				promise = Promise.resolve('root');
+				let folder = null;
+				
+				if (folderTitle) {
+					folder = await Folder.loadByField('title', folderTitle);
+				} else if (currentFolder) {
+					folder = currentFolder;
+				}
+				
+				if (!folder) return commandError(this, _('Unknown notebook: "%s"', folderTitle), end);
+
+				items = await Note.previews(folder.id);
+			}
+		
+			for (let i = 0; i < items.length; i++) {
+				let item = items[i];
+				this.log(item.title + suffix);
 			}
 
-			promise.then((folder) => {
-				let p = null
-				let postfix = '';
-				if (folder === 'root') {
-					p = Folder.all();
-					postfix = '/';
-				} else if (!folder) {
-					throw new Error(_('Unknown list: "%s"', folderTitle));
-				} else {
-					p = Note.previews(folder.id);
-				}
-
-				return p.then((previews) => {
-					for (let i = 0; i < previews.length; i++) {
-						this.log(previews[i].title + postfix);
-					}
-				});
-			}).catch((error) => {
-				this.log(error);
-			}).then(() => {
-				end();
-			});
+			end();
 		},
 		autocomplete: autocompleteFolders,
 	});
@@ -407,7 +377,7 @@ async function main() {
 	commands.push({
 		usage: 'sync',
 		description: 'Synchronizes with remote storage.',
-		action: function (args, end) {
+		action: function(args, end) {
 			synchronizer('onedrive').then((s) => {
 				return s.start();
 			}).catch((error) => {
@@ -421,17 +391,50 @@ async function main() {
 	commands.push({
 		usage: 'import-enex',
 		description: _('Imports a .enex file (Evernote export file).'),
-		action: function (args, end) {
+		action: function(args, end) {
 			
 			end();
 		},
 	});
 
-	for (let i = 0; i < commands.length; i++) {
-		let c = commands[i];
+	function commandByName(name) {
+		for (let i = 0; i < commands.length; i++) {
+			let c = commands[i];
+			let n = c.usage.split(' ');
+			n = n[0];
+			if (n == name) return c;
+			if (c.aliases && c.aliases.indexOf(name) >= 0) return c;
+		}
+		return null;
+	}
+
+	function execCommand(name, args) {
+		return new Promise((resolve, reject) => {
+			let cmd = commandByName(name);
+			if (!cmd) {
+				reject(new Error('Unknown command: ' + name));
+			} else {
+				cmd.action(args, function() {
+					resolve();
+				});
+			}
+		});
+	}
+
+	for (let commandIndex = 0; commandIndex < commands.length; commandIndex++) {
+		let c = commands[commandIndex];
 		let o = vorpal.command(c.usage, c.description);
-		if (c.alias) {
-			o.alias(c.alias);
+		if (c.options) {
+			for (let i = 0; i < c.options.length; i++) {
+				let options = c.options[i];
+				if (options.length == 2) o.option(options[0], options[1]);
+				if (options.length == 3) o.option(options[0], options[1], options[2]);
+			}
+		}
+		if (c.aliases) {
+			for (let i = 0; i < c.aliases.length; i++) {
+				o.alias(c.aliases[i]);
+			}
 		}
 		if (c.autocomplete) {
 			o.autocomplete({
@@ -441,7 +444,20 @@ async function main() {
 		o.action(c.action);
 	}
 
+	vorpal.history('net.cozic.joplin'); // Enables persistent history
+
+	let defaultFolder = await Folder.defaultFolder();
+	if (defaultFolder) await execCommand('cd', { 'notebook-title': defaultFolder.title }); // Use execCommand() so that no history entry is created
+
 	vorpal.delimiter(promptString()).show();
+
+	vorpal.on('client_prompt_submit', function(cmd) {
+		// Called when command is started
+	});
+
+	vorpal.on('client_command_executed', function(cmd) {
+		// Called when command is finished
+	});
 }
 
 main().catch((error) => {
