@@ -123,7 +123,10 @@ async function main() {
 	// return;
 
 	function switchCurrentFolder(folder) {
+		if (!folder) throw new Error(_('No active folder is defined.'));
+
 		currentFolder = folder;
+		Setting.setValue('activeFolderId', folder.id);
 		updatePrompt();
 	}
 
@@ -193,21 +196,6 @@ async function main() {
 	});
 
 	commands.push({
-		usage: 'use <notebook-title>',
-		aliases: ['cd'],
-		description: 'Switches to [notebook-title] - all further operations will happen within this notebook.',
-		action: async function(args, end) {
-			let folderTitle = args['notebook-title'];
-
-			let folder = await Folder.loadByField('title', folderTitle);
-			if (!folder) return commandError(this, _('Invalid folder title: %s', folderTitle), end);
-			switchCurrentFolder(folder);
-			end();
-		},
-		autocomplete: autocompleteFolders,
-	});
-
-	commands.push({
 		usage: 'mkbook <notebook-title>',
 		aliases: ['mkdir'],
 		description: 'Creates a new notebook',
@@ -242,6 +230,21 @@ async function main() {
 				end();
 			});
 		},
+	});
+
+	commands.push({
+		usage: 'use <notebook-title>',
+		aliases: ['cd'],
+		description: 'Switches to [notebook-title] - all further operations will happen within this notebook.',
+		action: async function(args, end) {
+			let folderTitle = args['notebook-title'];
+
+			let folder = await Folder.loadByField('title', folderTitle);
+			if (!folder) return commandError(this, _('Invalid folder title: %s', folderTitle), end);
+			switchCurrentFolder(folder);
+			end();
+		},
+		autocomplete: autocompleteFolders,
 	});
 
 	commands.push({
@@ -422,7 +425,7 @@ async function main() {
 
 	commands.push({
 		usage: 'import-enex',
-		description: _('Imports a .enex file (Evernote export file).'),
+		description: _('Imports a .enex file (Evernote notebook file).'),
 		action: function(args, end) {
 			
 			end();
@@ -478,8 +481,11 @@ async function main() {
 
 	vorpal.history('net.cozic.joplin'); // Enables persistent history
 
-	let defaultFolder = await Folder.defaultFolder();
-	if (defaultFolder) await execCommand('cd', { 'notebook-title': defaultFolder.title }); // Use execCommand() so that no history entry is created
+	let activeFolderId = Setting.value('activeFolderId');
+	let activeFolder = null;
+	if (activeFolderId) activeFolder = await Folder.load(activeFolderId);
+	if (!activeFolder) activeFolder = await Folder.defaultFolder();
+	if (activeFolder) await execCommand('cd', { 'notebook-title': activeFolder.title }); // Use execCommand() so that no history entry is created
 
 	vorpal.delimiter(promptString()).show();
 
