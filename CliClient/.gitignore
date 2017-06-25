@@ -4,3 +4,4 @@ app/src
 tests-build/
 tests/src
 config.json
+app/lib
