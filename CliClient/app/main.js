@@ -222,11 +222,11 @@ async function main() {
 	});
 
 	commands.push({
-		usage: 'mkbook <notebook-title>',
+		usage: 'mkbook <notebook>',
 		aliases: ['mkdir'],
 		description: 'Creates a new notebook',
 		action: function(args, end) {
-			Folder.save({ title: args['notebook-title'] }).catch((error) => {
+			Folder.save({ title: args['notebook'] }).catch((error) => {
 				this.log(error);
 			}).then((folder) => {
 				switchCurrentFolder(folder);
@@ -259,11 +259,11 @@ async function main() {
 	});
 
 	commands.push({
-		usage: 'use <notebook-title>',
+		usage: 'use <notebook>',
 		aliases: ['cd'],
-		description: 'Switches to [notebook-title] - all further operations will happen within this notebook.',
+		description: 'Switches to [notebook] - all further operations will happen within this notebook.',
 		action: async function(args, end) {
-			let folderTitle = args['notebook-title'];
+			let folderTitle = args['notebook'];
 
 			let folder = await Folder.loadByField('title', folderTitle);
 			if (!folder) return cmdError(this, _('Invalid folder title: %s', folderTitle), end);
@@ -348,7 +348,7 @@ async function main() {
 
 	commands.push({
 		usage: 'rm <pattern>',
-		description: 'Deletes the given item. For a notebook, all the notes within that notebook will be deleted. Use `rm ../<notebook-name>` to delete a notebook.',
+		description: 'Deletes the given item. For a notebook, all the notes within that notebook will be deleted. Use `rm ../<notebook>` to delete a notebook.',
 		action: async function(args, end) {
 			let pattern = args['pattern'];
 			let itemType = null;
@@ -386,8 +386,28 @@ async function main() {
 	});
 
 	commands.push({
+		usage: 'mv <pattern> <notebook>',
+		description: 'Moves the notes matching <pattern> to <notebook>.',
+		action: async function(args, end) {
+			let pattern = args['pattern'];
+
+			let folder = await Folder.loadByField('title', args['notebook']);
+			if (!folder) return cmdError(this, _('No folder with title "%s"', args['notebook']), end);
+			let notes = await Note.previews(currentFolder.id, { titlePattern: pattern });
+			if (!notes.length) return cmdError(this, _('No note matches this pattern: "%s"', pattern), end);
+
+			for (let i = 0; i < notes.length; i++) {
+				await Note.save({ id: notes[i].id, parent_id: folder.id });
+			}
+
+			end();
+		},
+		autocomplete: autocompleteItems,
+	});
+
+	commands.push({
 		usage: 'ls [pattern]',
-		description: 'Displays the notes in [notebook-title]. Use `ls ..` to display the list of notebooks.',
+		description: 'Displays the notes in [notebook]. Use `ls ..` to display the list of notebooks.',
 		options: [
 			['-n, --lines <num>', 'Displays only the first top <num> lines.'],
 			['-s, --sort <field>', 'Sorts the item by <field> (eg. title, updated_time, created_time).'],
@@ -452,7 +472,7 @@ async function main() {
 	});
 
 	commands.push({
-		usage: 'import-enex <file> [notebook-title]',
+		usage: 'import-enex <file> [notebook]',
 		description: _('Imports en Evernote notebook file (.enex file).'),
 		options: [
 			['--fuzzy-matching', 'For debugging purposes. Do not use.'],
@@ -460,7 +480,7 @@ async function main() {
 		action: async function(args, end) {
 			let filePath = args.file;
 			let folder = null;
-			let folderTitle = args['notebook-title'];
+			let folderTitle = args['notebook'];
 
 			if (folderTitle) {
 				folder = await Folder.loadByField('title', folderTitle);
@@ -553,7 +573,7 @@ async function main() {
 	let activeFolder = null;
 	if (activeFolderId) activeFolder = await Folder.load(activeFolderId);
 	if (!activeFolder) activeFolder = await Folder.defaultFolder();
-	if (activeFolder) await execCommand('cd', { 'notebook-title': activeFolder.title }); // Use execCommand() so that no history entry is created
+	if (activeFolder) await execCommand('cd', { 'notebook': activeFolder.title }); // Use execCommand() so that no history entry is created
 
 	vorpal.delimiter(promptString()).show();
 
