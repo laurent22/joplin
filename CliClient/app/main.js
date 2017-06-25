@@ -15,6 +15,7 @@ import { Logger } from 'lib/logger.js';
 import { uuid } from 'lib/uuid.js';
 import { sprintf } from 'sprintf-js';
 import { importEnex } from 'import-enex';
+import { filename, basename } from 'lib/path-utils.js';
 import { _ } from 'lib/locale.js';
 import os from 'os';
 import fs from 'fs-extra';
@@ -179,9 +180,27 @@ async function main() {
 		});
 	}
 
-	function commandError(commandInstance, msg, end) {
+	function cmdError(commandInstance, msg, end) {
 		commandInstance.log(msg);
 		end();
+	}
+
+	function cmdPromptConfirm(commandInstance, message) {
+		return new Promise((resolve, reject) => {
+			let options = {
+				type: 'confirm',
+				name: 'ok',
+				default: false, // This needs to be false so that, when pressing Ctrl+C, the prompt returns false
+				message: message,
+			};
+			commandInstance.prompt(options, (result) => {
+				if (result.ok) {
+					resolve(true);
+				} else {
+					resolve(false);
+				}
+			});
+		});
 	}
 
 	process.stdin.on('keypress', (_, key) => {
@@ -240,7 +259,7 @@ async function main() {
 			let folderTitle = args['notebook-title'];
 
 			let folder = await Folder.loadByField('title', folderTitle);
-			if (!folder) return commandError(this, _('Invalid folder title: %s', folderTitle), end);
+			if (!folder) return cmdError(this, _('Invalid folder title: %s', folderTitle), end);
 			switchCurrentFolder(folder);
 			end();
 		},
@@ -335,7 +354,7 @@ async function main() {
 			}
 
 			let item = await BaseItem.loadItemByField(itemType, 'title', title);
-			if (!item) return commandError(this, _('No item with title "%s" found.', title), end);
+			if (!item) return cmdError(this, _('No item with title "%s" found.', title), end);
 			await BaseItem.deleteItem(itemType, item.id);
 
 			if (currentFolder && currentFolder.id == item.id) {
@@ -389,7 +408,7 @@ async function main() {
 					folder = currentFolder;
 				}
 				
-				if (!folder) return commandError(this, _('Unknown notebook: "%s"', folderTitle), end);
+				if (!folder) return cmdError(this, _('Unknown notebook: "%s"', folderTitle), end);
 
 				items = await Note.previews(folder.id, queryOptions);
 			}
@@ -424,11 +443,51 @@ async function main() {
 	});
 
 	commands.push({
-		usage: 'import-enex',
-		description: _('Imports a .enex file (Evernote notebook file).'),
-		action: function(args, end) {
-			
-			end();
+		usage: 'import-enex <file> [notebook-title]',
+		description: _('Imports en Evernote notebook file (.enex file).'),
+		options: [
+			['--fuzzy-matching', 'For debugging purposes. Do not use.'],
+		],
+		action: async function(args, end) {
+			let filePath = args.file;
+			let folder = null;
+			let folderTitle = args['notebook-title'];
+
+			if (folderTitle) {
+				folder = await Folder.loadByField('title', folderTitle);
+				if (!folder) return cmdError(this, _('Folder does not exists: "%s"', folderTitle), end);
+			} else {
+				folderTitle = filename(filePath);
+				folderTitle = _('Imported - %s', folderTitle);
+				let inc = 0;
+				while (true) {
+					let t = folderTitle + (inc ? ' (' + inc + ')' : '');
+					let f = await Folder.loadByField('title', t);
+					if (!f) {
+						folderTitle = t;
+						break;
+					}
+					inc++;
+				}
+			}
+
+			let ok = await cmdPromptConfirm(this, _('File "%s" will be imported into notebook "%s". Continue?', basename(filePath), folderTitle))
+
+			if (!ok) {
+				end();
+				return;
+			}
+
+			let options = {
+				fuzzyMatching: args.options['fuzzy-matching'] === true,
+			}
+
+			folder = !folder ? await Folder.save({ title: folderTitle }) : folder;
+			this.log(_('Importing notes...'));
+			await importEnex(folder.id, filePath, options);
+			this.log(_('The notes have been imported into "%s"', folderTitle));
+
+			end();			
 		},
 	});
 
