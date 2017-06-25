@@ -196,18 +196,13 @@ async function main() {
 		usage: 'use <notebook-title>',
 		aliases: ['cd'],
 		description: 'Switches to [notebook-title] - all further operations will happen within this notebook.',
-		action: function(args, end) {
+		action: async function(args, end) {
 			let folderTitle = args['notebook-title'];
 
-			if (folderTitle == '.' || folderTitle == '..') {
-				end();
-				return;
-			}
-
-			Folder.loadByField('title', folderTitle).then((folder) => {
-				switchCurrentFolder(folder);
-				end();
-			});
+			let folder = await Folder.loadByField('title', folderTitle);
+			if (!folder) return commandError(this, _('Invalid folder title: %s', folderTitle), end);
+			switchCurrentFolder(folder);
+			end();
 		},
 		autocomplete: autocompleteFolders,
 	});
@@ -355,14 +350,32 @@ async function main() {
 		description: 'Displays the notes in [notebook-title]. Use `ls ..` to display the list of notebooks.',
 		options: [
 			['-n, --lines <num>', 'Displays only the first top <num> lines.'],
+			['-s, --sort <field>', 'Sorts the item by <field> (eg. title, updated_time, created_time).'],
+			['-r, --reverse', 'Reverses the sorting order.'],
+			['-t, --type <type>', 'Displays only the items of the specific type(s). Can be `n` for notes, `t` for todos, or `nt` for notes and todos (eg. `-tt` would display only the todos, while `-ttd` would display notes and todos.'],
 		],
 		action: async function(args, end) {
 			let folderTitle = args['notebook-title'];
 			let suffix = '';
 			let items = [];
+			let options = args.options;
+
+			let queryOptions = {};
+			if (options.lines) queryOptions.limit = options.lines;
+			if (options.sort) {
+				queryOptions.orderBy = options.sort;
+				queryOptions.orderByDir = 'ASC';
+			}
+			if (options.reverse === true) queryOptions.orderByDir = queryOptions.orderByDir == 'ASC' ? 'DESC' : 'ASC';
+			queryOptions.caseInsensitive = true;
+			if (options.type) {
+				queryOptions.itemTypes = [];
+				if (options.type.indexOf('n') >= 0) queryOptions.itemTypes.push('note');
+				if (options.type.indexOf('t') >= 0) queryOptions.itemTypes.push('todo');
+			}
 
 			if (folderTitle == '..') {
-				items = await Folder.all();
+				items = await Folder.all(queryOptions);
 				suffix = '/';
 			} else {
 				let folder = null;
@@ -375,12 +388,17 @@ async function main() {
 				
 				if (!folder) return commandError(this, _('Unknown notebook: "%s"', folderTitle), end);
 
-				items = await Note.previews(folder.id);
+				items = await Note.previews(folder.id, queryOptions);
 			}
-		
+
 			for (let i = 0; i < items.length; i++) {
 				let item = items[i];
-				this.log(item.title + suffix);
+				let line = '';
+				if (!!item.is_todo) {
+					line += sprintf('[%s] ', !!item.todo_completed ? 'X' : ' ');
+				}
+				line += item.title + suffix;
+				this.log(line);
 			}
 
 			end();

@@ -46,7 +46,7 @@ describe('Synchronizer', function() {
 		let folder = await Folder.save({ title: "folder1" });
 		await Note.save({ title: "un", parent_id: folder.id });
 
-		let all = await Folder.all(true);
+		let all = await Folder.all({ includeNotes: true });
 
 		await synchronizer().start();
 
@@ -64,7 +64,7 @@ describe('Synchronizer', function() {
 
 		await Note.save({ title: "un UPDATE", id: note.id });
 
-		let all = await Folder.all(true);
+		let all = await Folder.all({ includeNotes: true });
 		await synchronizer().start();
 
 		await localItemsSameAsRemote(all, expect);
@@ -81,7 +81,7 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 
-		let all = await Folder.all(true);
+		let all = await Folder.all({ includeNotes: true });
 		await localItemsSameAsRemote(all, expect);
 
 		done();
@@ -109,7 +109,7 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 
-		let all = await Folder.all(true);
+		let all = await Folder.all({ includeNotes: true });
 		let files = await fileApi().list();
 
 		await localItemsSameAsRemote(all, expect);
@@ -250,7 +250,7 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 
-		let items = await Folder.all(true);
+		let items = await Folder.all({ includeNotes: true });
 
 		expect(items.length).toBe(1);
 
@@ -288,7 +288,7 @@ describe('Synchronizer', function() {
 		expect(conflictedNotes.length).toBe(1);
 		expect(conflictedNotes[0].title).toBe(newTitle);
 
-		let items = await Folder.all(true);
+		let items = await Folder.all({ includeNotes: true });
 
 		expect(items.length).toBe(1);
 		
@@ -319,7 +319,7 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 
-		let items = await Folder.all(true);
+		let items = await Folder.all({ includeNotes: true });
 
 		expect(items.length).toBe(0);
 		
