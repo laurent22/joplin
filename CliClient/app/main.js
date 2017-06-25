@@ -63,12 +63,12 @@ async function main() {
 	// console.info('DELETING ALL DATA');
 	// await db.exec('DELETE FROM notes');
 	// await db.exec('DELETE FROM changes');
-	// await db.exec('DELETE FROM folders WHERE is_default != 1');
+	// await db.exec('DELETE FROM folders');
 	// await db.exec('DELETE FROM resources');
 	// await db.exec('DELETE FROM deleted_items');
 	// await db.exec('DELETE FROM tags');
 	// await db.exec('DELETE FROM note_tags');
-	// let folder1 = await Folder.save({ title: 'test1', is_default: 1 });
+	// let folder1 = await Folder.save({ title: 'test1' });
 	// let folder2 = await Folder.save({ title: 'test2' });
 	// await importEnex(folder1.id, '/mnt/c/Users/Laurent/Desktop/Laurent.enex');
 	// return;
@@ -324,13 +324,27 @@ async function main() {
 
 	commands.push({
 		usage: 'rm <item-title>',
-		description: 'Deletes the given item. For a notebook, all the notes within that notebook will be deleted.',
+		description: 'Deletes the given item. For a notebook, all the notes within that notebook will be deleted. Use `rm ../<notebook-name>` to delete a notebook.',
 		action: async function(args, end) {
 			let title = args['item-title'];
-			let itemType = currentFolder ? BaseModel.MODEL_TYPE_NOTE : BaseModel.MODEL_TYPE_FOLDER;
+			let itemType = null;
+
+			if (title.substr(0, 3) == '../') {
+				itemType = BaseModel.MODEL_TYPE_FOLDER;
+				title = title.substr(3);
+			} else {
+				itemType = BaseModel.MODEL_TYPE_NOTE;
+			}
+
 			let item = await BaseItem.loadItemByField(itemType, 'title', title);
 			if (!item) return commandError(this, _('No item with title "%s" found.', title), end);
 			await BaseItem.deleteItem(itemType, item.id);
+
+			if (currentFolder && currentFolder.id == item.id) {
+				let f = await Folder.defaultFolder();
+				switchCurrentFolder(f);
+			}
+
 			end();
 		},
 		autocomplete: autocompleteItems,
