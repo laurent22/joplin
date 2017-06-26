@@ -348,9 +348,13 @@ commands.push({
 		let options = {
 			fuzzyMatching: args.options['fuzzy-matching'] === true,
 			onProgress: (progressState) => {
-				let line = sprintf(_('Found: %d. Imported: %d.', progressState.loaded, progressState.imported));
+				let line = [];
+				line.push(_('Found: %d.', progressState.loaded));
+				line.push(_('Created: %d.', progressState.created));
+				if (progressState.updated) line.push(_('Updated: %d.', progressState.updated));
+				if (progressState.resourcesCreated) line.push(_('Resources: %d.', progressState.resourcesCreated));
 				redrawnCalled = true;
-				vorpal.ui.redraw(line);
+				vorpal.ui.redraw(line.join(' '));
 			},
 			onError: (error) => {
 				let s = error.trace ? error.trace : error.toString();
