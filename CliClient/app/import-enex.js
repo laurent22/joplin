@@ -12,25 +12,6 @@ import jsSHA from "jssha";
 const Promise = require('promise');
 const fs = require('fs-extra');
 const stringToStream = require('string-to-stream')
- 
-let existingTimestamps = [];
-
-function uniqueCreatedTimestamp(timestamp) {
-	if (existingTimestamps.indexOf(timestamp) < 0) {
-		existingTimestamps.push(timestamp);
-		return timestamp;
-	}
-
-	for (let i = 1; i <= 999; i++) {
-		let t = timestamp + i;
-		if (existingTimestamps.indexOf(t) < 0) {
-			existingTimestamps.push(t);
-			return t;
-		}
-	}
-
-	return timestamp;
-}
 
 function dateToTimestamp(s, zeroIfInvalid = false) {
 	let m = moment(s, 'YYYYMMDDTHHmmssZ');
@@ -69,7 +50,7 @@ function createNoteId(note) {
 }
 
 async function fuzzyMatch(note) {
-	let notes = await Note.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0 AND created_time = ?', note.created_time);
+	let notes = await Note.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0 AND created_time = ?', [note.created_time]);
 	if (!notes.length) return null;
 	if (notes.length === 1) return notes[0];
 
@@ -92,6 +73,7 @@ async function saveNoteToStorage(note, fuzzyMatching = false) {
 	let result = {
 		noteCreated: false,
 		noteUpdated: false,
+		noteSkipped: false,
 		resourcesCreated: 0,
 	};
 
@@ -103,14 +85,16 @@ async function saveNoteToStorage(note, fuzzyMatching = false) {
 
 		// TODO: also save resources
 
-		if (!Object.getOwnPropertyNames(diff).length) return;
+		if (!Object.getOwnPropertyNames(diff).length) {
+			result.noteSkipped = true;
+			// TODO: also save resources
+			return result;
+		}
 
 		diff.id = existingNote.id;
 		diff.type_ = existingNote.type_;
-		return Note.save(diff, { autoTimestamp: false }).then(() => {
-			result.noteUpdated = true;
-			return result;
-		});
+		await Note.save(diff, { autoTimestamp: false })
+		result.noteUpdated = true;
 	} else {
 		for (let i = 0; i < note.resources.length; i++) {
 			let resource = note.resources[i];
@@ -128,14 +112,14 @@ async function saveNoteToStorage(note, fuzzyMatching = false) {
 			result.resourcesCreated++;
 		}
 
-		return Note.save(note, {
+		await Note.save(note, {
 			isNew: true,
 			autoTimestamp: false,
-		}).then(() => {
-			result.noteCreated = true;
-			return result;
 		});
+		result.noteCreated = true;
 	}
+
+	return result;
 }
 
 function importEnex(parentFolderId, filePath, importOptions = null) {
@@ -144,11 +128,35 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 	if (!('onProgress' in importOptions)) importOptions.onProgress = function(state) {};
 	if (!('onError' in importOptions)) importOptions.onError = function(error) {};
 
+	// Some notes were created with the exact same timestamp, for example when they were
+	// batch imported. In order to make fuzzy matching easier, this function ensures
+	// that each timestamp is unique.
+	let existingTimestamps = [];
+	function uniqueCreatedTimestamp(timestamp) {
+		return timestamp;
+
+		if (existingTimestamps.indexOf(timestamp) < 0) {
+			existingTimestamps.push(timestamp);
+			return timestamp;
+		}
+
+		for (let i = 1; i <= 999; i++) {
+			let t = timestamp + i;
+			if (existingTimestamps.indexOf(t) < 0) {
+				existingTimestamps.push(t);
+				return t;
+			}
+		}
+
+		return timestamp;
+	}
+
 	return new Promise((resolve, reject) => {
 		let progressState = {
 			loaded: 0,
 			created: 0,
 			updated: 0,
+			skipped: 0,
 			resourcesCreated: 0,
 		};
 
@@ -182,7 +190,8 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 		}
 
 		async function processNotes() {
-			if (processingNotes) return;
+			if (processingNotes) return false;
+
 			processingNotes = true;
 			stream.pause();
 
@@ -204,6 +213,8 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 							progressState.updated++;
 						} else if (result.noteCreated) {
 							progressState.created++;
+						} else if (result.noteSkipped) {
+							progressState.skipped++;
 						}
 						progressState.resourcesCreated += result.resourcesCreated;
 						importOptions.onProgress(progressState);
@@ -214,6 +225,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			return promiseChain(chain).then(() => {
 				stream.resume();
 				processingNotes = false;
+				return true;
 			});
 		}
 
@@ -354,12 +366,12 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 		saxStream.on('end', function() {
 			// Wait till there is no more notes to process.
 			let iid = setInterval(() => {
-				if (notes.length) {
-					processNotes();
-				} else {
-					clearInterval(iid);
-					resolve();
-				}
+				processNotes().then((allDone) => {
+					if (allDone) {
+						clearTimeout(iid);
+						resolve();
+					}
+				});
 			}, 500);
 		});
 

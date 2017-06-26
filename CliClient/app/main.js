@@ -63,10 +63,11 @@ commands.push({
 	aliases: ['mkdir'],
 	description: 'Creates a new notebook',
 	action: function(args, end) {
-		Folder.save({ title: args['notebook'] }).catch((error) => {
-			this.log(error);
-		}).then((folder) => {
+		Folder.save({ title: args['notebook'] }).then((folder) => {
 			switchCurrentFolder(folder);
+		}).catch((error) => {
+			this.log(error);
+		}).then(() => {
 			end();
 		});
 	},
@@ -187,34 +188,38 @@ commands.push({
 	usage: 'rm <pattern>',
 	description: 'Deletes the given item. For a notebook, all the notes within that notebook will be deleted. Use `rm ../<notebook>` to delete a notebook.',
 	action: async function(args, end) {
-		let pattern = args['pattern'];
-		let itemType = null;
+		try {
+			let pattern = args['pattern'];
+			let itemType = null;
 
-		if (pattern.indexOf('*') < 0) { // Handle it as a simple title
-			if (pattern.substr(0, 3) == '../') {
-				itemType = BaseModel.MODEL_TYPE_FOLDER;
-				pattern = pattern.substr(3);
-			} else {
-				itemType = BaseModel.MODEL_TYPE_NOTE;
-			}
+			if (pattern.indexOf('*') < 0) { // Handle it as a simple title
+				if (pattern.substr(0, 3) == '../') {
+					itemType = BaseModel.MODEL_TYPE_FOLDER;
+					pattern = pattern.substr(3);
+				} else {
+					itemType = BaseModel.MODEL_TYPE_NOTE;
+				}
 
-			let item = await BaseItem.loadItemByField(itemType, 'title', pattern);
-			if (!item) return cmdError(this, _('No item with title "%s" found.', pattern), end);
-			await BaseItem.deleteItem(itemType, item.id);
+				let item = await BaseItem.loadItemByField(itemType, 'title', pattern);
+				if (!item) throw new Error(_('No item with title "%s" found.', pattern));
+				await BaseItem.deleteItem(itemType, item.id);
 
-			if (currentFolder && currentFolder.id == item.id) {
-				let f = await Folder.defaultFolder();
-				switchCurrentFolder(f);
-			}
-		} else { // Handle it as a glob pattern
-			let notes = await Note.previews(currentFolder.id, { titlePattern: pattern });
-			if (!notes.length) return cmdError(this, _('No note matches this pattern: "%s"', pattern), end);
-			let ok = await cmdPromptConfirm(this, _('%d notes match this pattern. Delete them?', notes.length));
-			if (ok) {
-				for (let i = 0; i < notes.length; i++) {
-					await Note.delete(notes[i].id);
+				if (currentFolder && currentFolder.id == item.id) {
+					let f = await Folder.defaultFolder();
+					switchCurrentFolder(f);
+				}
+			} else { // Handle it as a glob pattern
+				let notes = await Note.previews(currentFolder.id, { titlePattern: pattern });
+				if (!notes.length) throw new Error(_('No note matches this pattern: "%s"', pattern));
+				let ok = await cmdPromptConfirm(this, _('%d notes match this pattern. Delete them?', notes.length));
+				if (ok) {
+					for (let i = 0; i < notes.length; i++) {
+						await Note.delete(notes[i].id);
+					}
 				}
 			}
+		} catch (error) {
+			this.log(error);
 		}
 
 		end();
@@ -226,15 +231,19 @@ commands.push({
 	usage: 'mv <pattern> <notebook>',
 	description: 'Moves the notes matching <pattern> to <notebook>.',
 	action: async function(args, end) {
-		let pattern = args['pattern'];
+		try {
+			let pattern = args['pattern'];
 
-		let folder = await Folder.loadByField('title', args['notebook']);
-		if (!folder) return cmdError(this, _('No folder with title "%s"', args['notebook']), end);
-		let notes = await Note.previews(currentFolder.id, { titlePattern: pattern });
-		if (!notes.length) return cmdError(this, _('No note matches this pattern: "%s"', pattern), end);
+			let folder = await Folder.loadByField('title', args['notebook']);
+			if (!folder) throw new Error(_('No folder with title "%s"', args['notebook']));
+			let notes = await Note.previews(currentFolder.id, { titlePattern: pattern });
+			if (!notes.length) throw new Error(_('No note matches this pattern: "%s"', pattern));
 
-		for (let i = 0; i < notes.length; i++) {
-			await Note.save({ id: notes[i].id, parent_id: folder.id });
+			for (let i = 0; i < notes.length; i++) {
+				await Note.save({ id: notes[i].id, parent_id: folder.id });
+			}
+		} catch (error) {
+			this.log(error);
 		}
 
 		end();
@@ -252,41 +261,45 @@ commands.push({
 		['-t, --type <type>', 'Displays only the items of the specific type(s). Can be `n` for notes, `t` for todos, or `nt` for notes and todos (eg. `-tt` would display only the todos, while `-ttd` would display notes and todos.'],
 	],
 	action: async function(args, end) {
-		let pattern = args['pattern'];
-		let suffix = '';
-		let items = [];
-		let options = args.options;
+		try {
+			let pattern = args['pattern'];
+			let suffix = '';
+			let items = [];
+			let options = args.options;
 
-		let queryOptions = {};
-		if (options.lines) queryOptions.limit = options.lines;
-		if (options.sort) {
-			queryOptions.orderBy = options.sort;
-			queryOptions.orderByDir = 'ASC';
-		}
-		if (options.reverse === true) queryOptions.orderByDir = queryOptions.orderByDir == 'ASC' ? 'DESC' : 'ASC';
-		queryOptions.caseInsensitive = true;
-		if (options.type) {
-			queryOptions.itemTypes = [];
-			if (options.type.indexOf('n') >= 0) queryOptions.itemTypes.push('note');
-			if (options.type.indexOf('t') >= 0) queryOptions.itemTypes.push('todo');
-		}
-		if (pattern) queryOptions.titlePattern = pattern;
-
-		if (pattern == '..') {
-			items = await Folder.all(queryOptions);
-			suffix = '/';
-		} else {
-			items = await Note.previews(currentFolder.id, queryOptions);
-		}
-
-		for (let i = 0; i < items.length; i++) {
-			let item = items[i];
-			let line = '';
-			if (!!item.is_todo) {
-				line += sprintf('[%s] ', !!item.todo_completed ? 'X' : ' ');
+			let queryOptions = {};
+			if (options.lines) queryOptions.limit = options.lines;
+			if (options.sort) {
+				queryOptions.orderBy = options.sort;
+				queryOptions.orderByDir = 'ASC';
 			}
-			line += item.title + suffix;
-			this.log(line);
+			if (options.reverse === true) queryOptions.orderByDir = queryOptions.orderByDir == 'ASC' ? 'DESC' : 'ASC';
+			queryOptions.caseInsensitive = true;
+			if (options.type) {
+				queryOptions.itemTypes = [];
+				if (options.type.indexOf('n') >= 0) queryOptions.itemTypes.push('note');
+				if (options.type.indexOf('t') >= 0) queryOptions.itemTypes.push('todo');
+			}
+			if (pattern) queryOptions.titlePattern = pattern;
+
+			if (pattern == '..') {
+				items = await Folder.all(queryOptions);
+				suffix = '/';
+			} else {
+				items = await Note.previews(currentFolder.id, queryOptions);
+			}
+
+			for (let i = 0; i < items.length; i++) {
+				let item = items[i];
+				let line = '';
+				if (!!item.is_todo) {
+					line += sprintf('[%s] ', !!item.todo_completed ? 'X' : ' ');
+				}
+				line += item.title + suffix;
+				this.log(line);
+			}
+		} catch (Error) {
+			this.log(error);
 		}
 
 		end();
@@ -315,58 +328,63 @@ commands.push({
 		['--fuzzy-matching', 'For debugging purposes. Do not use.'],
 	],
 	action: async function(args, end) {
-		let filePath = args.file;
-		let folder = null;
-		let folderTitle = args['notebook'];
+		try {
+			let filePath = args.file;
+			let folder = null;
+			let folderTitle = args['notebook'];
 
-		if (folderTitle) {
-			folder = await Folder.loadByField('title', folderTitle);
-			if (!folder) return cmdError(this, _('Folder does not exists: "%s"', folderTitle), end);
-		} else {
-			folderTitle = filename(filePath);
-			folderTitle = _('Imported - %s', folderTitle);
-			let inc = 0;
-			while (true) {
-				let t = folderTitle + (inc ? ' (' + inc + ')' : '');
-				let f = await Folder.loadByField('title', t);
-				if (!f) {
-					folderTitle = t;
-					break;
+			if (folderTitle) {
+				folder = await Folder.loadByField('title', folderTitle);
+				if (!folder) return cmdError(this, _('Folder does not exists: "%s"', folderTitle), end);
+			} else {
+				folderTitle = filename(filePath);
+				folderTitle = _('Imported - %s', folderTitle);
+				let inc = 0;
+				while (true) {
+					let t = folderTitle + (inc ? ' (' + inc + ')' : '');
+					let f = await Folder.loadByField('title', t);
+					if (!f) {
+						folderTitle = t;
+						break;
+					}
+					inc++;
 				}
-				inc++;
 			}
+
+			let ok = await cmdPromptConfirm(this, _('File "%s" will be imported into notebook "%s". Continue?', basename(filePath), folderTitle))
+
+			if (!ok) {
+				end();
+				return;
+			}
+
+			let redrawnCalled = false;
+			let options = {
+				fuzzyMatching: args.options['fuzzy-matching'] === true,
+				onProgress: (progressState) => {
+					let line = [];
+					line.push(_('Found: %d.', progressState.loaded));
+					line.push(_('Created: %d.', progressState.created));
+					if (progressState.updated) line.push(_('Updated: %d.', progressState.updated));
+					if (progressState.skipped) line.push(_('Skipped: %d.', progressState.skipped));
+					if (progressState.resourcesCreated) line.push(_('Resources: %d.', progressState.resourcesCreated));
+					redrawnCalled = true;
+					vorpal.ui.redraw(line.join(' '));
+				},
+				onError: (error) => {
+					let s = error.trace ? error.trace : error.toString();
+					this.log(s);
+				},
+			}
+
+			folder = !folder ? await Folder.save({ title: folderTitle }) : folder;
+			this.log(_('Importing notes...'));
+			await importEnex(folder.id, filePath, options);
+			if (redrawnCalled) vorpal.ui.redraw.done();
+			this.log(_('Done.'));
+		} catch (error) {
+			this.log(error);
 		}
-
-		let ok = await cmdPromptConfirm(this, _('File "%s" will be imported into notebook "%s". Continue?', basename(filePath), folderTitle))
-
-		if (!ok) {
-			end();
-			return;
-		}
-
-		let redrawnCalled = false;
-		let options = {
-			fuzzyMatching: args.options['fuzzy-matching'] === true,
-			onProgress: (progressState) => {
-				let line = [];
-				line.push(_('Found: %d.', progressState.loaded));
-				line.push(_('Created: %d.', progressState.created));
-				if (progressState.updated) line.push(_('Updated: %d.', progressState.updated));
-				if (progressState.resourcesCreated) line.push(_('Resources: %d.', progressState.resourcesCreated));
-				redrawnCalled = true;
-				vorpal.ui.redraw(line.join(' '));
-			},
-			onError: (error) => {
-				let s = error.trace ? error.trace : error.toString();
-				this.log(s);
-			},
-		}
-
-		folder = !folder ? await Folder.save({ title: folderTitle }) : folder;
-		this.log(_('Importing notes...'));
-		await importEnex(folder.id, filePath, options);
-		if (redrawnCalled) vorpal.ui.redraw.done();
-		this.log(_('Done.'));
 
 		end();			
 	},
