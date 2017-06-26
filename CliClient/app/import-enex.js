@@ -132,10 +132,17 @@ async function saveNoteToStorage(note, fuzzyMatching = false) {
 function importEnex(parentFolderId, filePath, importOptions = null) {
 	if (!importOptions) importOptions = {};
 	if (!('fuzzyMatching' in importOptions)) importOptions.fuzzyMatching = false;
-
-	let stream = fs.createReadStream(filePath);
+	if (!('onProgress' in importOptions)) importOptions.onProgress = function(state) {};
+	if (!('onError' in importOptions)) importOptions.onError = function(error) {};
 
 	return new Promise((resolve, reject) => {
+		let progressState = {
+			loaded: 0,
+			imported: 0,
+		};
+
+		let stream = fs.createReadStream(filePath);
+
 		let options = {};
 		let strict = true;
 		let saxStream = require('sax').createStream(strict, options);
@@ -147,9 +154,10 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 		let noteResourceAttributes = null;
 		let noteResourceRecognition = null;
 		let notes = [];
+		let processingNotes = false;
 
 		stream.on('error', (error) => {
-			reject(new Error(error.toString()));
+			importOptions.onError(error);
 		});
 
 		function currentNodeName() {
@@ -162,7 +170,11 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			return nodes[nodes.length - 1].attributes;
 		}
 
-		function processNotes() {
+		async function processNotes() {
+			if (processingNotes) return;
+			processingNotes = true;
+			stream.pause();
+
 			let chain = [];
 			while (notes.length) {
 				let note = notes.shift();
@@ -176,16 +188,22 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 						note.body = body;
 
 						return saveNoteToStorage(note, importOptions.fuzzyMatching);
+					}).then(() => {
+						progressState.imported++;
+						importOptions.onProgress(progressState);
 					});
 				});
 			}
 
-			return promiseChain(chain);
+			return promiseChain(chain).then(() => {
+				stream.resume();
+				processingNotes = false;
+			});
 		}
 
-		saxStream.on('error', function(e) {
-			reject(new Error(e.toString()));
-		})
+		saxStream.on('error', (error) => {
+			importOptions.onError(error);
+		});
 
 		saxStream.on('text', function(text) {
 			let n = currentNodeName();
@@ -253,13 +271,14 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			if (n == 'note') {
 				note = removeUndefinedProperties(note);
 
+				progressState.loaded++;
+				importOptions.onProgress(progressState);
+
 				notes.push(note);
+
 				if (notes.length >= 10) {
-					stream.pause();
-					processNotes().then(() => {
-						stream.resume();
-					}).catch((error) => {
-						console.error('Error processing note', error);
+					processNotes().catch((error) => {
+						importOptions.onError(error);
 					});
 				}
 				note = null;
@@ -293,10 +312,14 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			} else if (n == 'resource') {
 				let decodedData = null;
 				if (noteResource.dataEncoding == 'base64') {
-					decodedData = Buffer.from(noteResource.data, 'base64');
+					try {
+						decodedData = Buffer.from(noteResource.data, 'base64');
+					} catch (error) {
+						importOptions.onError(error);
+					}
 				} else {
-					reject('Cannot decode resource with encoding: ' + noteResource.dataEncoding);
-					return;
+					importOptions.onError(new Error('Cannot decode resource with encoding: ' + noteResource.dataEncoding));
+					decodedData = noteResource.data; // Just put the encoded data directly in the file so it can, potentially, be manually decoded later
 				}
 
 				let r = {
@@ -313,7 +336,15 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 		});
 
 		saxStream.on('end', function() {
-			processNotes().then(() => { resolve(); });
+			// Wait till there is no more notes to process.
+			let iid = setInterval(() => {
+				if (notes.length) {
+					processNotes();
+				} else {
+					clearInterval(iid);
+					resolve();
+				}
+			}, 500);
 		});
 
 		stream.pipe(saxStream);

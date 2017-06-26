@@ -2,4 +2,4 @@
 set -e
 CLIENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 bash $CLIENT_DIR/build.sh
-NODE_PATH="$CLIENT_DIR/build/" node build/main.js --profile ~/Temp/TestJoplin
+NODE_PATH="$CLIENT_DIR/build/" node build/main.js --profile ~/Temp/TestNotes

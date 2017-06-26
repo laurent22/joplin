@@ -344,14 +344,25 @@ commands.push({
 			return;
 		}
 
+		let redrawnCalled = false;
 		let options = {
 			fuzzyMatching: args.options['fuzzy-matching'] === true,
+			onProgress: (progressState) => {
+				let line = sprintf(_('Found: %d. Imported: %d.', progressState.loaded, progressState.imported));
+				redrawnCalled = true;
+				vorpal.ui.redraw(line);
+			},
+			onError: (error) => {
+				let s = error.trace ? error.trace : error.toString();
+				this.log(s);
+			},
 		}
 
 		folder = !folder ? await Folder.save({ title: folderTitle }) : folder;
 		this.log(_('Importing notes...'));
 		await importEnex(folder.id, filePath, options);
-		this.log(_('The notes have been imported into "%s"', folderTitle));
+		if (redrawnCalled) vorpal.ui.redraw.done();
+		this.log(_('Done.'));
 
 		end();			
 	},
