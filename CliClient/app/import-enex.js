@@ -65,6 +65,26 @@ async function fuzzyMatch(note) {
 	return null;
 }
 
+async function saveNoteResources(note) {
+	let resourcesCreated = 0;
+	for (let i = 0; i < note.resources.length; i++) {
+		let resource = note.resources[i];
+		let toSave = Object.assign({}, resource);
+		delete toSave.data;
+
+		// The same resource sometimes appear twice in the same enex (exact same ID and file).
+		// In that case, just skip it - it means two different notes might be linked to the
+		// same resource.
+		let existingResource = await Resource.load(toSave.id);
+		if (existingResource) continue;
+
+		await Resource.save(toSave, { isNew: true });
+		await filePutContents(Resource.fullPath(toSave), resource.data)
+		resourcesCreated++;
+	}
+	return resourcesCreated;
+}
+
 async function saveNoteToStorage(note, fuzzyMatching = false) {
 	note = Note.filter(note);
 
@@ -77,17 +97,17 @@ async function saveNoteToStorage(note, fuzzyMatching = false) {
 		resourcesCreated: 0,
 	};
 
+	let resourcesCreated = await saveNoteResources(note);
+	result.resourcesCreated += resourcesCreated;
+
 	if (existingNote) {
 		let diff = BaseModel.diffObjects(existingNote, note);
 		delete diff.tags;
 		delete diff.resources;
 		delete diff.id;
 
-		// TODO: also save resources
-
 		if (!Object.getOwnPropertyNames(diff).length) {
 			result.noteSkipped = true;
-			// TODO: also save resources
 			return result;
 		}
 
@@ -96,22 +116,6 @@ async function saveNoteToStorage(note, fuzzyMatching = false) {
 		await Note.save(diff, { autoTimestamp: false })
 		result.noteUpdated = true;
 	} else {
-		for (let i = 0; i < note.resources.length; i++) {
-			let resource = note.resources[i];
-			let toSave = Object.assign({}, resource);
-			delete toSave.data;
-
-			// The same resource sometimes appear twice in the same enex (exact same ID and file).
-			// In that case, just skip it - it means two different notes might be linked to the
-			// same resource.
-			let existingResource = await Resource.load(toSave.id);
-			if (existingResource) continue;
-
-			await Resource.save(toSave, { isNew: true });
-			await filePutContents(Resource.fullPath(toSave), resource.data)
-			result.resourcesCreated++;
-		}
-
 		await Note.save(note, {
 			isNew: true,
 			autoTimestamp: false,
