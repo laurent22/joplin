@@ -128,29 +128,6 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 	if (!('onProgress' in importOptions)) importOptions.onProgress = function(state) {};
 	if (!('onError' in importOptions)) importOptions.onError = function(error) {};
 
-	// Some notes were created with the exact same timestamp, for example when they were
-	// batch imported. In order to make fuzzy matching easier, this function ensures
-	// that each timestamp is unique.
-	let existingTimestamps = [];
-	function uniqueCreatedTimestamp(timestamp) {
-		return timestamp;
-
-		if (existingTimestamps.indexOf(timestamp) < 0) {
-			existingTimestamps.push(timestamp);
-			return timestamp;
-		}
-
-		for (let i = 1; i <= 999; i++) {
-			let t = timestamp + i;
-			if (existingTimestamps.indexOf(t) < 0) {
-				existingTimestamps.push(t);
-				return t;
-			}
-		}
-
-		return timestamp;
-	}
-
 	return new Promise((resolve, reject) => {
 		let progressState = {
 			loaded: 0,
@@ -207,6 +184,11 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 						note.parent_id = parentFolderId;
 						note.body = body;
 
+						// Notes in enex files always have a created timestamp but not always an
+						// updated timestamp (it the note has never been modified). For sync
+						// we require an updated_time property, so set it to create_time in that case
+						if (!note.updated_time) note.updated_time = note.created_time;
+
 						return saveNoteToStorage(note, importOptions.fuzzyMatching);
 					}).then((result) => {
 						if (result.noteUpdated) {
@@ -250,7 +232,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				if (n == 'title') {
 					note.title = text;
 				} else if (n == 'created') {
-					note.created_time = uniqueCreatedTimestamp(dateToTimestamp(text));
+					note.created_time = dateToTimestamp(text);
 				} else if (n == 'updated') {
 					note.updated_time = dateToTimestamp(text);
 				} else if (n == 'tag') {
