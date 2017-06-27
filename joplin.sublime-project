@@ -13,6 +13,7 @@
 				"CliClient/build",
 				"CliClient/tests-build",
 				"CliClient/app/src",
+				"CliClient/app/lib",
 				"CliClient/tests/src",
 				"ReactNativeClient/node_modules",
 				"ReactNativeClient/android/app/build",
