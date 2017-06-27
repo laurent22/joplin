@@ -137,7 +137,7 @@ commands.push({
 		if (!currentFolder) {
 			promise = Folder.loadByField('title', title);
 		} else {
-			promise = Folder.loadNoteByField(currentFolder.id, 'title', title);
+			promise = Note.loadFolderNoteByField(currentFolder.id, 'title', title);
 		}
 
 		promise.then((item) => {
@@ -152,7 +152,7 @@ commands.push({
 				type_: item.type_,
 			};
 			newItem[propName] = propValue;
-			let ItemClass = BaseItem.itemClass();
+			let ItemClass = BaseItem.itemClass(newItem);
 			return ItemClass.save(newItem);
 		}).catch((error) => {
 			this.log(error);
@@ -173,7 +173,7 @@ commands.push({
 		if (!currentFolder) {
 			promise = Folder.loadByField('title', title);
 		} else {
-			promise = Folder.loadNoteByField(currentFolder.id, 'title', title);
+			promise = Note.loadFolderNoteByField(currentFolder.id, 'title', title);
 		}
 
 		promise.then((item) => {
