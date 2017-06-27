@@ -42,19 +42,20 @@ let logger = new Logger();
 let dbLogger = new Logger();
 let syncLogger = new Logger();
 
-commands.push({
-	usage: 'root',
-	options: [
-		['--profile <filePath>', 'Sets the profile path directory.'],
-	],
-	action: function(args, end) {
-		if (args.profile) {
-			initArgs.profileDir = args.profile;
-		}
+// commands.push({
+// 	usage: 'root',
+// 	options: [
+// 		['--profile <filePath>', 'Sets the profile path directory.'],
+// 	],
+// 	action: function(args, end) {
+// 		if (args.profile) {
+// 			initArgs.profileDir = args.profile;
+// 			args.splice(0, 2);
+// 		}
 
-		end();
-	},
-});
+// 		end(args);
+// 	},
+// });
 
 commands.push({
 	usage: 'version',
@@ -583,14 +584,48 @@ function cmdPromptConfirm(commandInstance, message) {
 // route them to the "root" command.
 function handleStartArgs(argv) {
 	return new Promise((resolve, reject) => {
-		if (argv && argv.length >= 3 && argv[2][0] == '-') {
-			const startParams = vorpal.parse(argv, { use: 'minimist' });
-			const cmd = commandByName('root');
-			cmd.action(startParams, () => { resolve(); });
-		} else {
-			// TODO
-			resolve();
+		while (true) {
+			argv.splice(0, 2);
+
+			if (argv[0] == '--profile') {
+				argv.splice(0, 1);
+				if (!argv.length) throw new Error(_('Profile path is missing'));
+				initArgs.profileDir = argv[0];
+				argv.splice(0, 1);
+			} else if (argv[0][0] === '-') {
+				throw new Error(_('Unknown flag: "%s"', argv[0]));
+			}
+
+			if (!argv.length || argv[0][0] != '-') {
+				resolve(argv);
+			}
+			
+			return;
+
+			// if (argv && argv.length >= 3 && argv[2][0] == '-') {
+			// 	const startParams = vorpal.parse(argv, { use: 'minimist' });
+			// 	const cmd = commandByName('root');
+			// 	cmd.action(startParams, (newArgs) => {
+			// 		console.info(newArgs);
+			// 		resolve();
+			// 	});
+			// } else {
+			// 	console.info(argv);
+			// 	resolve();
+			// }
+
 		}
+		// if (argv && argv.length >= 3 && argv[2][0] == '-') {
+		// 	const startParams = vorpal.parse(argv, { use: 'minimist' });
+		// 	const cmd = commandByName('root');
+		// 	cmd.action(startParams, (newArgs) => {
+		// 		console.info(newArgs);
+		// 		resolve();
+		// 	});
+		// } else {
+		// 	console.info(argv);
+		// 	resolve();
+		// }
 	});
 }
 
