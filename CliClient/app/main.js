@@ -32,7 +32,6 @@ const packageJson = require('./package.json');
 
 let initArgs = {
 	profileDir: null,
-	syncTarget: null,
 }
 
 let currentFolder = null;
@@ -47,15 +46,10 @@ commands.push({
 	usage: 'root',
 	options: [
 		['--profile <filePath>', 'Sets the profile path directory.'],
-		['--sync-target <target>', 'Sets the sync target.'],
 	],
 	action: function(args, end) {
 		if (args.profile) {
 			initArgs.profileDir = args.profile;
-		}
-
-		if (args['sync-target']) {
-			initArgs.syncTarget = args['sync-target'];
 		}
 
 		end();
@@ -318,6 +312,28 @@ commands.push({
 		end();
 	},
 	autocomplete: autocompleteFolders,
+});
+
+commands.push({
+	usage: 'config [name] [value]',
+	description: 'Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.',
+	action: function(args, end) {
+		try {
+			if (!args.name && !args.value) {
+				let keys = Setting.publicKeys();
+				for (let i = 0; i < keys.length; i++) {
+					this.log(keys[i] + ' = ' + Setting.value(keys[i]));
+				}
+			} else if (args.name && !args.value) {
+				this.log(args.name + ' = ' + Setting.value(args.name));
+			} else {
+				Setting.setValue(args.name, args.value);
+			}
+		} catch(error) {
+			this.log(error);
+		}
+		end();
+	},
 });
 
 commands.push({
@@ -638,8 +654,6 @@ async function main() {
 	await database_.open({ name: profileDir + '/database.sqlite' });
 	BaseModel.db_ = database_;
 	await Setting.load();
-
-	if (initArgs.syncTarget) Setting.setValue('sync.target', initArgs.syncTarget);
 
 	let activeFolderId = Setting.value('activeFolderId');
 	let activeFolder = null;
