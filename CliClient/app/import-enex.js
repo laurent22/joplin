@@ -50,19 +50,8 @@ function createNoteId(note) {
 }
 
 async function fuzzyMatch(note) {
-	let notes = await Note.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0 AND created_time = ?', [note.created_time]);
-	if (!notes.length) return null;
-	if (notes.length === 1) return notes[0];
-
-	for (let i = 0; i < notes.length; i++) {
-		if (notes[i].title == note.title && note.title.trim() != '') return notes[i];
-	}
-
-	for (let i = 0; i < notes.length; i++) {
-		if (notes[i].body == note.body && note.body.trim() != '') return notes[i];
-	}
-
-	return null;
+	let notes = await Note.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0 AND created_time = ? AND title = ?', [note.created_time, note.title]);
+	return notes.length !== 1 ? null : notes[0];
 }
 
 async function saveNoteResources(note) {

@@ -20,6 +20,7 @@ async function allItems() {
 async function localItemsSameAsRemote(locals, expect) {
 	try {
 		let files = await fileApi().list();
+		files = files.items;
 		expect(locals.length).toBe(files.length);
 
 		for (let i = 0; i < locals.length; i++) {
@@ -116,7 +117,6 @@ describe('Synchronizer', function() {
 		await synchronizer().start();
 
 		let all = await allItems();
-		let files = await fileApi().list();
 
 		await localItemsSameAsRemote(all, expect);
 
@@ -227,6 +227,7 @@ describe('Synchronizer', function() {
 		await synchronizer().start();
 
 		let files = await fileApi().list();
+		files = files.items;
 
 		expect(files.length).toBe(1);
 		expect(files[0].path).toBe(Folder.systemPath(folder1));

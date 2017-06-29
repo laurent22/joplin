@@ -42,21 +42,6 @@ let logger = new Logger();
 let dbLogger = new Logger();
 let syncLogger = new Logger();
 
-// commands.push({
-// 	usage: 'root',
-// 	options: [
-// 		['--profile <filePath>', 'Sets the profile path directory.'],
-// 	],
-// 	action: function(args, end) {
-// 		if (args.profile) {
-// 			initArgs.profileDir = args.profile;
-// 			args.splice(0, 2);
-// 		}
-
-// 		end(args);
-// 	},
-// });
-
 commands.push({
 	usage: 'version',
 	description: 'Displays version information',
@@ -433,7 +418,7 @@ function commandByName(name) {
 	for (let i = 0; i < commands.length; i++) {
 		let c = commands[i];
 		let n = c.usage.split(' ');
-		n = n[0];
+		n = n[0].trim();
 		if (n == name) return c;
 		if (c.aliases && c.aliases.indexOf(name) >= 0) return c;
 	}
@@ -452,6 +437,58 @@ function execCommand(name, args) {
 		}
 	});
 }
+
+// async function execCommand(args) {
+// 	var parseArgs = require('minimist');
+
+// 	let results = parseArgs(args);
+// 	//var results = vorpal.parse(args, { use: 'minimist' });
+// 	if (!results['_'].length) throw new Error(_('Invalid command: %s', args));
+
+// 	console.info(results);
+
+// 	let commandName = results['_'].splice(0, 1);
+// 	let cmd = commandByName(commandName);
+// 	if (!cmd) throw new Error(_('Unknown command: %s', args));
+
+
+// 	let usage = cmd.usage.split(' ');
+// 	let commandArgs = [];
+// 	usage.splice(0, 1);
+// 	for (let i = 0; i < usage.length; i++) {
+// 		let u = usage[i].trim();
+// 		if (u == '') continue;
+
+// 		let required = false;
+
+// 		if (u.length >= 3 && u[0] == '<' && u[u.length - 1] == '>') {
+// 			required = true;
+// 			u = u.substr(1, u.length - 2);
+// 		}
+
+// 		if (u.length >= 3 && u[0] == '[' && u[u.length - 1] == ']') {
+// 			u = u.substr(1, u.length - 2);
+// 		}
+
+// 		if (required && !results['_'].length) throw new Error(_('Missing argument: %s', args));
+
+// 		if (!results['_'].length) break;
+
+// 		console.info(u);
+
+// 		commandArgs[u] = results['_'].splice(0, 1);
+// 	}
+
+// 	console.info(commandArgs);
+
+
+// 	// usage: 'import-enex <file> [notebook]',
+// 	// description: _('Imports en Evernote notebook file (.enex file).'),
+// 	// options: [
+// 	// 	['--fuzzy-matching', 'For debugging purposes. Do not use.'],
+// 	// ],
+
+// }
 
 async function synchronizer(syncTarget) {
 	if (synchronizers_[syncTarget]) return synchronizers_[syncTarget];
@@ -580,53 +617,49 @@ function cmdPromptConfirm(commandInstance, message) {
 	});
 }
 
-// Handles the initial arguments passed to main script and
-// route them to the "root" command.
-function handleStartArgs(argv) {
-	return new Promise((resolve, reject) => {
-		while (true) {
+// Handles the initial flags passed to main script and
+// returns the remaining args.
+async function handleStartFlags(argv) {
+	argv = argv.slice(0);
+	argv.splice(0, 2); // First arguments are the node executable, and the node JS file
+
+	while (argv.length) {
+		let arg = argv[0];
+		let nextArg = argv.length >= 2 ? argv[1] : null;
+		
+		if (arg == '--profile') {
+			if (!nextArg) {
+				throw new Error(_('Usage: --profile <dir-path>'));
+			}
+			initArgs.profileDir = nextArg;
 			argv.splice(0, 2);
-
-			if (argv[0] == '--profile') {
-				argv.splice(0, 1);
-				if (!argv.length) throw new Error(_('Profile path is missing'));
-				initArgs.profileDir = argv[0];
-				argv.splice(0, 1);
-			} else if (argv[0][0] === '-') {
-				throw new Error(_('Unknown flag: "%s"', argv[0]));
-			}
-
-			if (!argv.length || argv[0][0] != '-') {
-				resolve(argv);
-			}
-			
-			return;
-
-			// if (argv && argv.length >= 3 && argv[2][0] == '-') {
-			// 	const startParams = vorpal.parse(argv, { use: 'minimist' });
-			// 	const cmd = commandByName('root');
-			// 	cmd.action(startParams, (newArgs) => {
-			// 		console.info(newArgs);
-			// 		resolve();
-			// 	});
-			// } else {
-			// 	console.info(argv);
-			// 	resolve();
-			// }
-
+			continue;
 		}
-		// if (argv && argv.length >= 3 && argv[2][0] == '-') {
-		// 	const startParams = vorpal.parse(argv, { use: 'minimist' });
-		// 	const cmd = commandByName('root');
-		// 	cmd.action(startParams, (newArgs) => {
-		// 		console.info(newArgs);
-		// 		resolve();
-		// 	});
-		// } else {
-		// 	console.info(argv);
-		// 	resolve();
-		// }
-	});
+
+		if (arg.length && arg[0] == '-') {
+			throw new Error(_('Unknown flag: %s', arg));
+		} else {
+			break;
+		}
+	}
+
+	return argv;
+}
+
+function escapeShellArg(arg) {
+	if (arg.indexOf('"') >= 0 && arg.indexOf("'") >= 0) throw new Error(_('Command line argument "%s" contains both quotes and double-quotes - aborting.', arg)); // Hopeless case
+	let quote = '"';
+	if (arg.indexOf('"') >= 0) quote = "'";
+	if (arg.indexOf(' ') >= 0 || arg.indexOf("\t") >= 0) return quote + arg + quote;
+	return arg;
+}
+
+function shellArgsToString(args) {
+	let output = [];
+	for (let i = 0; i < args.length; i++) {
+		output.push(escapeShellArg(args[i]));
+	}
+	return output.join(' ');
 }
 
 process.stdin.on('keypress', (_, key) => {
@@ -645,7 +678,6 @@ const vorpal = require('vorpal')();
 async function main() {
 	for (let commandIndex = 0; commandIndex < commands.length; commandIndex++) {
 		let c = commands[commandIndex];
-		if (c.usage == 'root') continue;
 		let o = vorpal.command(c.usage, c.description);
 		if (c.options) {
 			for (let i = 0; i < c.options.length; i++) {
@@ -669,7 +701,8 @@ async function main() {
 
 	vorpal.history('net.cozic.joplin'); // Enables persistent history
 
-	await handleStartArgs(process.argv);
+	let argv = process.argv;
+	argv = await handleStartFlags(argv);
 
 	const profileDir = initArgs.profileDir ? initArgs.profileDir : os.homedir() + '/.config/' + Setting.value('appName');
 	const resourceDir = profileDir + '/resources';
@@ -704,10 +737,19 @@ async function main() {
 	if (!activeFolder) activeFolder = await Folder.defaultFolder();
 	if (!activeFolder) activeFolder = await Folder.createDefaultFolder();
 	if (!activeFolder) throw new Error(_('No default notebook is defined and could not create a new one. The database might be corrupted, please delete it and try again.'));
+	Setting.setValue('activeFolderId', activeFolder.id);
 
-	if (activeFolder) await execCommand('cd', { 'notebook': activeFolder.title }); // Use execCommand() so that no history entry is created
-
+	await execCommand('cd', { 'notebook': activeFolder.title }); // Use execCommand() so that no history entry is created
 	vorpal.delimiter(promptString()).show();
+
+	// If we still have arguments, pass it to Vorpal and exit
+	if (argv.length) {
+		let cmd = shellArgsToString(argv);
+		vorpal.log(_('Executing: %s', cmd));
+		await vorpal.exec(cmd);
+		await vorpal.exec('exit');
+		return;
+	}
 }
 
 main().catch((error) => {
