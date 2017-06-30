@@ -15,4 +15,4 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 done
 CLIENT_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-NODE_PATH="$CLIENT_DIR:$NODE_PATH" node "$CLIENT_DIR/main.js"
+NODE_PATH="$CLIENT_DIR:$NODE_PATH" node "$CLIENT_DIR/main.js" "$@"

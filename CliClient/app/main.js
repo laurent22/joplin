@@ -305,7 +305,7 @@ commands.push({
 commands.push({
 	usage: 'config [name] [value]',
 	description: 'Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.',
-	action: function(args, end) {
+	action: async function(args, end) {
 		try {
 			if (!args.name && !args.value) {
 				let keys = Setting.publicKeys();
@@ -316,6 +316,7 @@ commands.push({
 				this.log(args.name + ' = ' + Setting.value(args.name));
 			} else {
 				Setting.setValue(args.name, args.value);
+				await Setting.saveAll();
 			}
 		} catch(error) {
 			this.log(error);
@@ -548,8 +549,9 @@ async function synchronizer(syncTarget) {
 		fileApi = new FileApi('joplin', new FileApiDriverMemory());
 		fileApi.setLogger(logger);
 	} else if (syncTarget == 'local') {
-		let syncDir = Setting.value('profileDir') + '/sync';
-		vorpal.log(syncDir);
+		let syncDir = Setting.value('sync.local.path');
+		if (!syncDir) syncDir = Setting.value('profileDir') + '/sync';
+		vorpal.log(_('Synchronizing with directory "%s"', syncDir));
 		await fs.mkdirp(syncDir, 0o755);
 		fileApi = new FileApi(syncDir, new FileApiDriverLocal());
 		fileApi.setLogger(logger);
@@ -766,15 +768,15 @@ async function main() {
 	Setting.setValue('activeFolderId', activeFolder.id);
 
 	await execCommand('cd', { 'notebook': activeFolder.title }); // Use execCommand() so that no history entry is created
-	vorpal.delimiter(promptString()).show();
 
 	// If we still have arguments, pass it to Vorpal and exit
 	if (argv.length) {
 		let cmd = shellArgsToString(argv);
-		vorpal.log(_('Executing: %s', cmd));
 		await vorpal.exec(cmd);
 		await vorpal.exec('exit');
 		return;
+	} else {
+		vorpal.delimiter(promptString()).show();
 	}
 }
 

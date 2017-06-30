@@ -1,0 +1,257 @@
+2017-06-30 16:29:29: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:29: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:32: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:32: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:33: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:33: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:33: mkdir /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync
+2017-06-30 16:29:33: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/c22fc598ac014dafa599c8d2121a5c0a.md
+2017-06-30 16:29:33: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/c22fc598ac014dafa599c8d2121a5c0a.md_1498836573687
+2017-06-30 16:29:33: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/c22fc598ac014dafa599c8d2121a5c0a.md
+2017-06-30 16:29:33: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/c22fc598ac014dafa599c8d2121a5c0a.md_1498836573687
+2017-06-30 16:29:33: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/c22fc598ac014dafa599c8d2121a5c0a.md_1498836573687
+2017-06-30 16:29:33: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/c22fc598ac014dafa599c8d2121a5c0a.md_1498836573687 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/c22fc598ac014dafa599c8d2121a5c0a.md
+2017-06-30 16:29:33: list /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync
+2017-06-30 16:29:35: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:35: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:36: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:36: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:37: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:37: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:38: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:38: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:40: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:40: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:41: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:41: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:41: mkdir /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync
+2017-06-30 16:29:41: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/4b3a0eb941bb49afa2736d49e436d85c.md
+2017-06-30 16:29:41: mkdir /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync
+2017-06-30 16:29:41: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/4b3a0eb941bb49afa2736d49e436d85c.md
+2017-06-30 16:29:41: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/4b3a0eb941bb49afa2736d49e436d85c.md_1498836581545
+2017-06-30 16:29:41: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/4b3a0eb941bb49afa2736d49e436d85c.md_1498836581545
+2017-06-30 16:29:41: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/4b3a0eb941bb49afa2736d49e436d85c.md_1498836581545
+2017-06-30 16:29:41: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/4b3a0eb941bb49afa2736d49e436d85c.md_1498836581545
+2017-06-30 16:29:41: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/4b3a0eb941bb49afa2736d49e436d85c.md_1498836581545 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/4b3a0eb941bb49afa2736d49e436d85c.md
+2017-06-30 16:29:41: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/36623aba9d8c45aa874e4fbbbe35e5c2.md
+2017-06-30 16:29:41: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/36623aba9d8c45aa874e4fbbbe35e5c2.md
+2017-06-30 16:29:41: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/36623aba9d8c45aa874e4fbbbe35e5c2.md_1498836581760
+2017-06-30 16:29:41: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/36623aba9d8c45aa874e4fbbbe35e5c2.md_1498836581760
+2017-06-30 16:29:41: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/36623aba9d8c45aa874e4fbbbe35e5c2.md
+2017-06-30 16:29:41: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/36623aba9d8c45aa874e4fbbbe35e5c2.md_1498836581760
+2017-06-30 16:29:41: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/36623aba9d8c45aa874e4fbbbe35e5c2.md_1498836581760
+2017-06-30 16:29:41: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/36623aba9d8c45aa874e4fbbbe35e5c2.md_1498836581760
+2017-06-30 16:29:41: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/36623aba9d8c45aa874e4fbbbe35e5c2.md_1498836581760 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/36623aba9d8c45aa874e4fbbbe35e5c2.md
+2017-06-30 16:29:41: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/5542fde1fd7f42cd8bd39bf2fd00010f.md
+2017-06-30 16:29:41: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/5542fde1fd7f42cd8bd39bf2fd00010f.md
+2017-06-30 16:29:41: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/5542fde1fd7f42cd8bd39bf2fd00010f.md_1498836581973
+2017-06-30 16:29:41: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/5542fde1fd7f42cd8bd39bf2fd00010f.md
+2017-06-30 16:29:41: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/5542fde1fd7f42cd8bd39bf2fd00010f.md_1498836581973
+2017-06-30 16:29:41: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/5542fde1fd7f42cd8bd39bf2fd00010f.md_1498836581973
+2017-06-30 16:29:41: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/5542fde1fd7f42cd8bd39bf2fd00010f.md_1498836581973
+2017-06-30 16:29:41: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/5542fde1fd7f42cd8bd39bf2fd00010f.md_1498836581973
+2017-06-30 16:29:42: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/5542fde1fd7f42cd8bd39bf2fd00010f.md_1498836581973 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/5542fde1fd7f42cd8bd39bf2fd00010f.md
+2017-06-30 16:29:42: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/40f5141cf87a41c2b36463000098e433.md
+2017-06-30 16:29:42: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/40f5141cf87a41c2b36463000098e433.md
+2017-06-30 16:29:42: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/40f5141cf87a41c2b36463000098e433.md_1498836582196
+2017-06-30 16:29:42: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/40f5141cf87a41c2b36463000098e433.md_1498836582196
+2017-06-30 16:29:42: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/40f5141cf87a41c2b36463000098e433.md_1498836582196
+2017-06-30 16:29:42: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/40f5141cf87a41c2b36463000098e433.md_1498836582196
+2017-06-30 16:29:42: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/40f5141cf87a41c2b36463000098e433.md_1498836582196 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/40f5141cf87a41c2b36463000098e433.md
+2017-06-30 16:29:42: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/72fa06d2fb2f4d98abc732a2e968aa28.md
+2017-06-30 16:29:42: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/72fa06d2fb2f4d98abc732a2e968aa28.md_1498836582461
+2017-06-30 16:29:42: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/72fa06d2fb2f4d98abc732a2e968aa28.md
+2017-06-30 16:29:42: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/72fa06d2fb2f4d98abc732a2e968aa28.md_1498836582461
+2017-06-30 16:29:42: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/72fa06d2fb2f4d98abc732a2e968aa28.md_1498836582461
+2017-06-30 16:29:42: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/72fa06d2fb2f4d98abc732a2e968aa28.md_1498836582461
+2017-06-30 16:29:42: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/72fa06d2fb2f4d98abc732a2e968aa28.md_1498836582461 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/72fa06d2fb2f4d98abc732a2e968aa28.md
+2017-06-30 16:29:42: list /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync
+2017-06-30 16:29:43: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:43: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:44: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:44: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:46: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:46: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:47: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:47: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:48: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:48: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:50: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:50: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:51: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:51: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:52: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:52: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:53: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:53: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:54: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:54: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:54: mkdir /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync
+2017-06-30 16:29:54: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/9d939322414b4c1680052a1e0dda92a2.md
+2017-06-30 16:29:54: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/9d939322414b4c1680052a1e0dda92a2.md_1498836594965
+2017-06-30 16:29:54: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/9d939322414b4c1680052a1e0dda92a2.md_1498836594965
+2017-06-30 16:29:54: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/9d939322414b4c1680052a1e0dda92a2.md
+2017-06-30 16:29:54: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/9d939322414b4c1680052a1e0dda92a2.md_1498836594965
+2017-06-30 16:29:54: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/9d939322414b4c1680052a1e0dda92a2.md_1498836594965
+2017-06-30 16:29:54: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/9d939322414b4c1680052a1e0dda92a2.md_1498836594965 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/9d939322414b4c1680052a1e0dda92a2.md
+2017-06-30 16:29:55: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/a95fb1806fe84132915271c5bef8d429.md
+2017-06-30 16:29:55: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/a95fb1806fe84132915271c5bef8d429.md_1498836595159
+2017-06-30 16:29:55: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/a95fb1806fe84132915271c5bef8d429.md_1498836595159
+2017-06-30 16:29:55: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/a95fb1806fe84132915271c5bef8d429.md_1498836595159 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/a95fb1806fe84132915271c5bef8d429.md
+2017-06-30 16:29:55: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/dc8f02a962544a5485451aad3048ce49.md
+2017-06-30 16:29:55: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/dc8f02a962544a5485451aad3048ce49.md_1498836595259
+2017-06-30 16:29:55: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/dc8f02a962544a5485451aad3048ce49.md_1498836595259
+2017-06-30 16:29:55: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/dc8f02a962544a5485451aad3048ce49.md_1498836595259 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/dc8f02a962544a5485451aad3048ce49.md
+2017-06-30 16:29:55: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/03f97bf7f1a24f38a828742e090dfd69.md
+2017-06-30 16:29:55: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/03f97bf7f1a24f38a828742e090dfd69.md_1498836595400
+2017-06-30 16:29:55: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/03f97bf7f1a24f38a828742e090dfd69.md_1498836595400
+2017-06-30 16:29:55: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/03f97bf7f1a24f38a828742e090dfd69.md_1498836595400 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/03f97bf7f1a24f38a828742e090dfd69.md
+2017-06-30 16:29:55: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/885e8c7802a547298c96ab5644965002.md
+2017-06-30 16:29:55: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/885e8c7802a547298c96ab5644965002.md_1498836595509
+2017-06-30 16:29:55: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/885e8c7802a547298c96ab5644965002.md_1498836595509
+2017-06-30 16:29:55: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/885e8c7802a547298c96ab5644965002.md_1498836595509 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/885e8c7802a547298c96ab5644965002.md
+2017-06-30 16:29:55: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/6d139ba334f34b039b289dc167ab0db7.md
+2017-06-30 16:29:55: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/6d139ba334f34b039b289dc167ab0db7.md_1498836595600
+2017-06-30 16:29:55: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/6d139ba334f34b039b289dc167ab0db7.md_1498836595600
+2017-06-30 16:29:55: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/6d139ba334f34b039b289dc167ab0db7.md_1498836595600 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/6d139ba334f34b039b289dc167ab0db7.md
+2017-06-30 16:29:55: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/ee796676943744129cf01cdd7103d380.md
+2017-06-30 16:29:55: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/ee796676943744129cf01cdd7103d380.md_1498836595693
+2017-06-30 16:29:55: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/ee796676943744129cf01cdd7103d380.md_1498836595693
+2017-06-30 16:29:55: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/ee796676943744129cf01cdd7103d380.md_1498836595693 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/ee796676943744129cf01cdd7103d380.md
+2017-06-30 16:29:55: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/917625fe9474484c948df79d4c3391dd.md
+2017-06-30 16:29:55: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/917625fe9474484c948df79d4c3391dd.md_1498836595798
+2017-06-30 16:29:55: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/917625fe9474484c948df79d4c3391dd.md_1498836595798
+2017-06-30 16:29:55: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/917625fe9474484c948df79d4c3391dd.md_1498836595798 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/917625fe9474484c948df79d4c3391dd.md
+2017-06-30 16:29:55: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/2a2fa1e5410844bd8bdaad016b7ab9f9.md
+2017-06-30 16:29:55: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/2a2fa1e5410844bd8bdaad016b7ab9f9.md_1498836595963
+2017-06-30 16:29:55: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/2a2fa1e5410844bd8bdaad016b7ab9f9.md_1498836595963
+2017-06-30 16:29:55: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/2a2fa1e5410844bd8bdaad016b7ab9f9.md_1498836595963 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/2a2fa1e5410844bd8bdaad016b7ab9f9.md
+2017-06-30 16:29:56: list /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync
+2017-06-30 16:29:57: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:57: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:58: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:58: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:29:59: Starting joplin-cli 0.8.21...
+2017-06-30 16:29:59: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:30:00: Starting joplin-cli 0.8.21...
+2017-06-30 16:30:00: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:30:02: Starting joplin-cli 0.8.21...
+2017-06-30 16:30:02: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:30:03: Starting joplin-cli 0.8.21...
+2017-06-30 16:30:03: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:30:04: Starting joplin-cli 0.8.21...
+2017-06-30 16:30:04: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:30:06: Starting joplin-cli 0.8.21...
+2017-06-30 16:30:06: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:30:07: Starting joplin-cli 0.8.21...
+2017-06-30 16:30:07: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:30:08: Starting joplin-cli 0.8.21...
+2017-06-30 16:30:08: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:30:10: Starting joplin-cli 0.8.21...
+2017-06-30 16:30:10: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:30:11: Starting joplin-cli 0.8.21...
+2017-06-30 16:30:11: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:30:12: Starting joplin-cli 0.8.21...
+2017-06-30 16:30:12: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:30:13: Starting joplin-cli 0.8.21...
+2017-06-30 16:30:13: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:30:15: Starting joplin-cli 0.8.21...
+2017-06-30 16:30:15: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:30:16: Starting joplin-cli 0.8.21...
+2017-06-30 16:30:16: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:30:17: Starting joplin-cli 0.8.21...
+2017-06-30 16:30:17: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:30:18: Starting joplin-cli 0.8.21...
+2017-06-30 16:30:18: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:30:18: mkdir /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync
+2017-06-30 16:30:18: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/5363788a894c439a8d5d763948d04982.md
+2017-06-30 16:30:18: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/5363788a894c439a8d5d763948d04982.md_1498836618857
+2017-06-30 16:30:18: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/5363788a894c439a8d5d763948d04982.md
+2017-06-30 16:30:18: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/5363788a894c439a8d5d763948d04982.md_1498836618857
+2017-06-30 16:30:18: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/5363788a894c439a8d5d763948d04982.md_1498836618857
+2017-06-30 16:30:18: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/5363788a894c439a8d5d763948d04982.md_1498836618857 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/5363788a894c439a8d5d763948d04982.md
+2017-06-30 16:30:19: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/a9a1ba06692043faa2d70feb7c7406fa.md
+2017-06-30 16:30:19: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/a9a1ba06692043faa2d70feb7c7406fa.md_1498836619010
+2017-06-30 16:30:19: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/a9a1ba06692043faa2d70feb7c7406fa.md_1498836619010
+2017-06-30 16:30:19: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/a9a1ba06692043faa2d70feb7c7406fa.md_1498836619010 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/a9a1ba06692043faa2d70feb7c7406fa.md
+2017-06-30 16:30:19: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/cf565b9f674343758a3403cbabd0ecce.md
+2017-06-30 16:30:19: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/cf565b9f674343758a3403cbabd0ecce.md_1498836619184
+2017-06-30 16:30:19: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/cf565b9f674343758a3403cbabd0ecce.md_1498836619184
+2017-06-30 16:30:19: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/cf565b9f674343758a3403cbabd0ecce.md_1498836619184 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/cf565b9f674343758a3403cbabd0ecce.md
+2017-06-30 16:30:19: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/304b2f16e7d948b6a44f56760bb5dd89.md
+2017-06-30 16:30:19: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/304b2f16e7d948b6a44f56760bb5dd89.md_1498836619368
+2017-06-30 16:30:19: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/304b2f16e7d948b6a44f56760bb5dd89.md_1498836619368
+2017-06-30 16:30:19: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/304b2f16e7d948b6a44f56760bb5dd89.md_1498836619368 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/304b2f16e7d948b6a44f56760bb5dd89.md
+2017-06-30 16:30:19: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/91db86c3994b42b0bea71847d0913ebc.md
+2017-06-30 16:30:19: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/91db86c3994b42b0bea71847d0913ebc.md_1498836619561
+2017-06-30 16:30:19: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/91db86c3994b42b0bea71847d0913ebc.md_1498836619561
+2017-06-30 16:30:19: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/91db86c3994b42b0bea71847d0913ebc.md_1498836619561 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/91db86c3994b42b0bea71847d0913ebc.md
+2017-06-30 16:30:19: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/c16d59d404264ccb80bd38514b12f3d2.md
+2017-06-30 16:30:19: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/c16d59d404264ccb80bd38514b12f3d2.md_1498836619732
+2017-06-30 16:30:19: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/c16d59d404264ccb80bd38514b12f3d2.md_1498836619732
+2017-06-30 16:30:19: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/c16d59d404264ccb80bd38514b12f3d2.md_1498836619732 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/c16d59d404264ccb80bd38514b12f3d2.md
+2017-06-30 16:30:19: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/b6786307dd1f47a59771a69c7f1ebf0e.md
+2017-06-30 16:30:19: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/b6786307dd1f47a59771a69c7f1ebf0e.md_1498836619853
+2017-06-30 16:30:19: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/b6786307dd1f47a59771a69c7f1ebf0e.md_1498836619853
+2017-06-30 16:30:19: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/b6786307dd1f47a59771a69c7f1ebf0e.md_1498836619853 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/b6786307dd1f47a59771a69c7f1ebf0e.md
+2017-06-30 16:30:19: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/9ff544edf00e40a8bcb181a60afda286.md
+2017-06-30 16:30:19: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/9ff544edf00e40a8bcb181a60afda286.md_1498836619943
+2017-06-30 16:30:19: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/9ff544edf00e40a8bcb181a60afda286.md_1498836619943
+2017-06-30 16:30:19: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/9ff544edf00e40a8bcb181a60afda286.md_1498836619943 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/9ff544edf00e40a8bcb181a60afda286.md
+2017-06-30 16:30:20: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/a4f0ccf2604144faae301805150ff131.md
+2017-06-30 16:30:20: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/a4f0ccf2604144faae301805150ff131.md_1498836620027
+2017-06-30 16:30:20: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/a4f0ccf2604144faae301805150ff131.md_1498836620027
+2017-06-30 16:30:20: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/a4f0ccf2604144faae301805150ff131.md_1498836620027 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/a4f0ccf2604144faae301805150ff131.md
+2017-06-30 16:30:20: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/f01c90c2048e475292d5a44389508c3a.md
+2017-06-30 16:30:20: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/f01c90c2048e475292d5a44389508c3a.md_1498836620127
+2017-06-30 16:30:20: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/f01c90c2048e475292d5a44389508c3a.md_1498836620127
+2017-06-30 16:30:20: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/f01c90c2048e475292d5a44389508c3a.md_1498836620127 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/f01c90c2048e475292d5a44389508c3a.md
+2017-06-30 16:30:20: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/51d1dca0dcad43cf8458a558d299e92a.md
+2017-06-30 16:30:20: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/51d1dca0dcad43cf8458a558d299e92a.md_1498836620244
+2017-06-30 16:30:20: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/51d1dca0dcad43cf8458a558d299e92a.md_1498836620244
+2017-06-30 16:30:20: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/51d1dca0dcad43cf8458a558d299e92a.md_1498836620244 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/51d1dca0dcad43cf8458a558d299e92a.md
+2017-06-30 16:30:20: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/a45831c40ad0478b80d9b7b3ca285b04.md
+2017-06-30 16:30:20: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/a45831c40ad0478b80d9b7b3ca285b04.md_1498836620393
+2017-06-30 16:30:20: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/a45831c40ad0478b80d9b7b3ca285b04.md_1498836620393
+2017-06-30 16:30:20: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/a45831c40ad0478b80d9b7b3ca285b04.md_1498836620393 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/a45831c40ad0478b80d9b7b3ca285b04.md
+2017-06-30 16:30:20: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/3f552f96688e4ac9bf6b93dd162e03de.md
+2017-06-30 16:30:20: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/3f552f96688e4ac9bf6b93dd162e03de.md_1498836620585
+2017-06-30 16:30:20: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/3f552f96688e4ac9bf6b93dd162e03de.md_1498836620585
+2017-06-30 16:30:20: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/3f552f96688e4ac9bf6b93dd162e03de.md_1498836620585 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/3f552f96688e4ac9bf6b93dd162e03de.md
+2017-06-30 16:30:20: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/023afa2bb4f54a6383984334db8abc00.md
+2017-06-30 16:30:20: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/023afa2bb4f54a6383984334db8abc00.md_1498836620696
+2017-06-30 16:30:20: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/023afa2bb4f54a6383984334db8abc00.md_1498836620696
+2017-06-30 16:30:20: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/023afa2bb4f54a6383984334db8abc00.md_1498836620696 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/023afa2bb4f54a6383984334db8abc00.md
+2017-06-30 16:30:20: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/c970a6390bf744289970b39008aec35f.md
+2017-06-30 16:30:20: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/c970a6390bf744289970b39008aec35f.md_1498836620820
+2017-06-30 16:30:20: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/c970a6390bf744289970b39008aec35f.md_1498836620820
+2017-06-30 16:30:20: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/c970a6390bf744289970b39008aec35f.md_1498836620820 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/c970a6390bf744289970b39008aec35f.md
+2017-06-30 16:30:20: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/9e40e0dc97824a34a7babdb2ac09510d.md
+2017-06-30 16:30:20: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/9e40e0dc97824a34a7babdb2ac09510d.md_1498836620918
+2017-06-30 16:30:20: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/9e40e0dc97824a34a7babdb2ac09510d.md_1498836620918
+2017-06-30 16:30:20: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/9e40e0dc97824a34a7babdb2ac09510d.md_1498836620918 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/9e40e0dc97824a34a7babdb2ac09510d.md
+2017-06-30 16:30:21: stat /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/920450e8d37e4a17b512f324aa713b06.md
+2017-06-30 16:30:21: put /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/920450e8d37e4a17b512f324aa713b06.md_1498836621070
+2017-06-30 16:30:21: setTimestamp /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/920450e8d37e4a17b512f324aa713b06.md_1498836621070
+2017-06-30 16:30:21: move /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/.sync/920450e8d37e4a17b512f324aa713b06.md_1498836621070 => /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/920450e8d37e4a17b512f324aa713b06.md
+2017-06-30 16:30:21: list /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync
+2017-06-30 16:30:21: get /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/012318ecb4704d759c717d0d7ebb1a74.md
+2017-06-30 16:30:21: get /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/3b9a42af068d43e8aa8d6664d5dda0b3.md
+2017-06-30 16:30:21: get /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/4ad29f49f0a7470db86b7a40d2e2643b.md
+2017-06-30 16:30:21: get /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/5fc3f7617b55458288714b4c104801c1.md
+2017-06-30 16:30:22: get /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/79429b5f11ab4396b472a91877f4351d.md
+2017-06-30 16:30:22: get /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/b576982b2d80495aa19bee8f962b6385.md
+2017-06-30 16:30:22: get /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/b658acdc78c34dc1a058ecef66701745.md
+2017-06-30 16:30:22: get /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/c6e06b7776374010a5e9620fad7a67b3.md
+2017-06-30 16:30:22: get /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/cde0337afd8844388fc3b820a473315e.md
+2017-06-30 16:30:22: get /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync/e7a95492e77f44e6a8b6a4ed3087416e.md
+2017-06-30 16:30:23: Starting joplin-cli 0.8.21...
+2017-06-30 16:30:23: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:30:24: Starting joplin-cli 0.8.21...
+2017-06-30 16:30:24: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:30:26: Starting joplin-cli 0.8.21...
+2017-06-30 16:30:26: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:30:27: Starting joplin-cli 0.8.21...
+2017-06-30 16:30:27: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1
+2017-06-30 16:30:28: Starting joplin-cli 0.8.21...
+2017-06-30 16:30:28: Profile directory: /mnt/d/Web/www/joplin/CliClient/tests/fuzzing/client1

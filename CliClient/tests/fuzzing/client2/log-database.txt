@@ -1,0 +1,1665 @@
+2017-06-30 16:29:49: Database was open successfully
+2017-06-30 16:29:49: Checking for database schema update...
+2017-06-30 16:29:49: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:49: Database was open successfully
+2017-06-30 16:29:49: Checking for database schema update...
+2017-06-30 16:29:49: Database is new - creating the schema...
+2017-06-30 16:29:49: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:49: BEGIN TRANSACTION
+2017-06-30 16:29:49: Database is new - creating the schema...
+2017-06-30 16:29:49: Database was open successfully
+2017-06-30 16:29:49: BEGIN TRANSACTION
+2017-06-30 16:29:49: Checking for database schema update...
+2017-06-30 16:29:49: CREATE TABLE folders (	id TEXT PRIMARY KEY,	parent_id TEXT NOT NULL DEFAULT "",	title TEXT NOT NULL DEFAULT "",	created_time INT NOT NULL DEFAULT 0,	updated_time INT NOT NULL DEFAULT 0,	sync_time INT NOT NULL DEFAULT 0);
+2017-06-30 16:29:49: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:49: CREATE TABLE folders (	id TEXT PRIMARY KEY,	parent_id TEXT NOT NULL DEFAULT "",	title TEXT NOT NULL DEFAULT "",	created_time INT NOT NULL DEFAULT 0,	updated_time INT NOT NULL DEFAULT 0,	sync_time INT NOT NULL DEFAULT 0);
+2017-06-30 16:29:49: Database is new - creating the schema...
+2017-06-30 16:29:49: CREATE INDEX folders_title ON folders (title);
+2017-06-30 16:29:49: CREATE INDEX folders_title ON folders (title);
+2017-06-30 16:29:49: BEGIN TRANSACTION
+2017-06-30 16:29:49: CREATE INDEX folders_updated_time ON folders (updated_time);
+2017-06-30 16:29:49: CREATE INDEX notes_sync_time ON notes (sync_time);
+2017-06-30 16:29:49: CREATE TABLE folders (	id TEXT PRIMARY KEY,	parent_id TEXT NOT NULL DEFAULT "",	title TEXT NOT NULL DEFAULT "",	created_time INT NOT NULL DEFAULT 0,	updated_time INT NOT NULL DEFAULT 0,	sync_time INT NOT NULL DEFAULT 0);
+2017-06-30 16:29:49: CREATE INDEX folders_sync_time ON folders (sync_time);
+2017-06-30 16:29:49: CREATE INDEX notes_is_conflict ON notes (is_conflict);
+2017-06-30 16:29:49: CREATE INDEX folders_title ON folders (title);
+2017-06-30 16:29:49: CREATE TABLE notes (	id TEXT PRIMARY KEY,	parent_id TEXT NOT NULL DEFAULT "",	title TEXT NOT NULL DEFAULT "",	body TEXT NOT NULL DEFAULT "",	created_time INT NOT NULL DEFAULT 0,	updated_time INT NOT NULL DEFAULT 0,	sync_time INT NOT NULL DEFAULT 0,	is_conflict INT NOT NULL DEFAULT 0,	latitude NUMERIC NOT NULL DEFAULT 0,	longitude NUMERIC NOT NULL DEFAULT 0,	altitude NUMERIC NOT NULL DEFAULT 0,	author TEXT NOT NULL DEFAULT "",	source_url TEXT NOT NULL DEFAULT "",	is_todo INT NOT NULL DEFAULT 0,	todo_due INT NOT NULL DEFAULT 0,	todo_completed INT NOT NULL DEFAULT 0,	source TEXT NOT NULL DEFAULT "",	source_application TEXT NOT NULL DEFAULT "",	application_data TEXT NOT NULL DEFAULT "",	`order` INT NOT NULL DEFAULT 0);
+2017-06-30 16:29:49: CREATE INDEX notes_sync_time ON notes (sync_time);
+2017-06-30 16:29:49: CREATE INDEX notes_is_todo ON notes (is_todo);
+2017-06-30 16:29:49: CREATE INDEX folders_updated_time ON folders (updated_time);
+2017-06-30 16:29:49: CREATE INDEX notes_title ON notes (title);
+2017-06-30 16:29:49: CREATE INDEX notes_order ON notes (`order`);
+2017-06-30 16:29:49: CREATE INDEX notes_is_conflict ON notes (is_conflict);
+2017-06-30 16:29:49: CREATE INDEX folders_sync_time ON folders (sync_time);
+2017-06-30 16:29:49: CREATE INDEX notes_sync_time ON notes (sync_time);
+2017-06-30 16:29:49: CREATE INDEX notes_updated_time ON notes (updated_time);
+2017-06-30 16:29:49: CREATE TABLE deleted_items (	id INTEGER PRIMARY KEY,	item_type INT NOT NULL,	item_id TEXT NOT NULL,	deleted_time INT NOT NULL);
+2017-06-30 16:29:49: CREATE INDEX notes_is_todo ON notes (is_todo);
+2017-06-30 16:29:49: CREATE TABLE notes (	id TEXT PRIMARY KEY,	parent_id TEXT NOT NULL DEFAULT "",	title TEXT NOT NULL DEFAULT "",	body TEXT NOT NULL DEFAULT "",	created_time INT NOT NULL DEFAULT 0,	updated_time INT NOT NULL DEFAULT 0,	sync_time INT NOT NULL DEFAULT 0,	is_conflict INT NOT NULL DEFAULT 0,	latitude NUMERIC NOT NULL DEFAULT 0,	longitude NUMERIC NOT NULL DEFAULT 0,	altitude NUMERIC NOT NULL DEFAULT 0,	author TEXT NOT NULL DEFAULT "",	source_url TEXT NOT NULL DEFAULT "",	is_todo INT NOT NULL DEFAULT 0,	todo_due INT NOT NULL DEFAULT 0,	todo_completed INT NOT NULL DEFAULT 0,	source TEXT NOT NULL DEFAULT "",	source_application TEXT NOT NULL DEFAULT "",	application_data TEXT NOT NULL DEFAULT "",	`order` INT NOT NULL DEFAULT 0);
+2017-06-30 16:29:49: CREATE INDEX notes_is_conflict ON notes (is_conflict);
+2017-06-30 16:29:49: CREATE INDEX notes_sync_time ON notes (sync_time);
+2017-06-30 16:29:49: CREATE TABLE tags (	id TEXT PRIMARY KEY,	title TEXT,	created_time INT,	updated_time INT);
+2017-06-30 16:29:49: CREATE INDEX notes_order ON notes (`order`);
+2017-06-30 16:29:49: CREATE INDEX notes_title ON notes (title);
+2017-06-30 16:29:49: CREATE INDEX notes_is_todo ON notes (is_todo);
+2017-06-30 16:29:49: CREATE INDEX notes_is_conflict ON notes (is_conflict);
+2017-06-30 16:29:49: CREATE TABLE note_tags (	id INTEGER PRIMARY KEY,	note_id TEXT,	tag_id TEXT);
+2017-06-30 16:29:49: CREATE TABLE deleted_items (	id INTEGER PRIMARY KEY,	item_type INT NOT NULL,	item_id TEXT NOT NULL,	deleted_time INT NOT NULL);
+2017-06-30 16:29:49: CREATE INDEX notes_updated_time ON notes (updated_time);
+2017-06-30 16:29:49: CREATE INDEX notes_order ON notes (`order`);
+2017-06-30 16:29:49: CREATE INDEX notes_is_todo ON notes (is_todo);
+2017-06-30 16:29:49: CREATE TABLE resources (	id TEXT PRIMARY KEY,	title TEXT,	mime TEXT,	filename TEXT,	created_time INT,	updated_time INT);
+2017-06-30 16:29:49: CREATE TABLE tags (	id TEXT PRIMARY KEY,	title TEXT,	created_time INT,	updated_time INT);
+2017-06-30 16:29:49: CREATE INDEX notes_sync_time ON notes (sync_time);
+2017-06-30 16:29:49: CREATE TABLE deleted_items (	id INTEGER PRIMARY KEY,	item_type INT NOT NULL,	item_id TEXT NOT NULL,	deleted_time INT NOT NULL);
+2017-06-30 16:29:49: CREATE INDEX notes_order ON notes (`order`);
+2017-06-30 16:29:49: CREATE TABLE note_resources (	id INTEGER PRIMARY KEY,	note_id TEXT,	resource_id TEXT);
+2017-06-30 16:29:49: CREATE TABLE tags (	id TEXT PRIMARY KEY,	title TEXT,	created_time INT,	updated_time INT);
+2017-06-30 16:29:49: CREATE TABLE note_tags (	id INTEGER PRIMARY KEY,	note_id TEXT,	tag_id TEXT);
+2017-06-30 16:29:49: CREATE TABLE deleted_items (	id INTEGER PRIMARY KEY,	item_type INT NOT NULL,	item_id TEXT NOT NULL,	deleted_time INT NOT NULL);
+2017-06-30 16:29:49: CREATE TABLE version (	version INT);
+2017-06-30 16:29:49: CREATE TABLE note_tags (	id INTEGER PRIMARY KEY,	note_id TEXT,	tag_id TEXT);
+2017-06-30 16:29:49: CREATE TABLE tags (	id TEXT PRIMARY KEY,	title TEXT,	created_time INT,	updated_time INT);
+2017-06-30 16:29:49: CREATE TABLE resources (	id TEXT PRIMARY KEY,	title TEXT,	mime TEXT,	filename TEXT,	created_time INT,	updated_time INT);
+2017-06-30 16:29:49: CREATE TABLE changes (	id INTEGER PRIMARY KEY,	`type` INT,	item_id TEXT,	item_type INT,	item_field TEXT);
+2017-06-30 16:29:49: CREATE TABLE resources (	id TEXT PRIMARY KEY,	title TEXT,	mime TEXT,	filename TEXT,	created_time INT,	updated_time INT);
+2017-06-30 16:29:49: CREATE TABLE note_resources (	id INTEGER PRIMARY KEY,	note_id TEXT,	resource_id TEXT);
+2017-06-30 16:29:49: CREATE TABLE note_tags (	id INTEGER PRIMARY KEY,	note_id TEXT,	tag_id TEXT);
+2017-06-30 16:29:49: CREATE TABLE note_resources (	id INTEGER PRIMARY KEY,	note_id TEXT,	resource_id TEXT);
+2017-06-30 16:29:49: CREATE TABLE version (	version INT);
+2017-06-30 16:29:49: CREATE TABLE version (	version INT);
+2017-06-30 16:29:49: CREATE TABLE changes (	id INTEGER PRIMARY KEY,	`type` INT,	item_id TEXT,	item_type INT,	item_field TEXT);
+2017-06-30 16:29:49: CREATE TABLE changes (	id INTEGER PRIMARY KEY,	`type` INT,	item_id TEXT,	item_type INT,	item_field TEXT);
+2017-06-30 16:29:49: CREATE TABLE settings (	`key` TEXT PRIMARY KEY,	`value` TEXT,	`type` INT);
+2017-06-30 16:29:49: CREATE TABLE settings (	`key` TEXT PRIMARY KEY,	`value` TEXT,	`type` INT);
+2017-06-30 16:29:49: CREATE TABLE table_fields (	id INTEGER PRIMARY KEY,	table_name TEXT,	field_name TEXT,	field_type INT,	field_default TEXT);
+2017-06-30 16:29:49: CREATE TABLE table_fields (	id INTEGER PRIMARY KEY,	table_name TEXT,	field_name TEXT,	field_type INT,	field_default TEXT);
+2017-06-30 16:29:49: CREATE TABLE item_sync_times (	id INTEGER PRIMARY KEY,	item_id TEXT,	`time` INT);
+2017-06-30 16:29:49: CREATE TABLE item_sync_times (	id INTEGER PRIMARY KEY,	item_id TEXT,	`time` INT);
+2017-06-30 16:29:49: INSERT INTO version (version) VALUES (1);
+2017-06-30 16:29:49: INSERT INTO version (version) VALUES (1);
+2017-06-30 16:29:49: INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "1d8ed9378f064fb6869b7bab5ac8e0bb", "2")
+2017-06-30 16:29:49: INSERT INTO `folders` (`id`, `title`, `created_time`, `updated_time`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["f9ce22e174ca4e7daf98f9efdd79116c","Notebook",1498836589444,1498836589444]
+2017-06-30 16:29:49: COMMIT
+2017-06-30 16:29:49: Database schema created successfully
+2017-06-30 16:29:49: Initializing tables...
+2017-06-30 16:29:49: SELECT name FROM sqlite_master WHERE type="table"
+2017-06-30 16:29:49: Database schema created successfully
+2017-06-30 16:29:49: PRAGMA table_info("folders")
+2017-06-30 16:29:49: Initializing tables...
+2017-06-30 16:29:49: PRAGMA table_info("notes")
+2017-06-30 16:29:49: SELECT name FROM sqlite_master WHERE type="table"
+2017-06-30 16:29:49: Database schema created successfully
+2017-06-30 16:29:49: PRAGMA table_info("deleted_items")
+2017-06-30 16:29:49: PRAGMA table_info("folders")
+2017-06-30 16:29:49: PRAGMA table_info("tags")
+2017-06-30 16:29:49: Initializing tables...
+2017-06-30 16:29:49: PRAGMA table_info("notes")
+2017-06-30 16:29:49: Database schema created successfully
+2017-06-30 16:29:49: PRAGMA table_info("note_tags")
+2017-06-30 16:29:49: SELECT name FROM sqlite_master WHERE type="table"
+2017-06-30 16:29:49: PRAGMA table_info("deleted_items")
+2017-06-30 16:29:49: Initializing tables...
+2017-06-30 16:29:49: PRAGMA table_info("resources")
+2017-06-30 16:29:49: Database schema created successfully
+2017-06-30 16:29:49: PRAGMA table_info("folders")
+2017-06-30 16:29:49: PRAGMA table_info("tags")
+2017-06-30 16:29:49: SELECT name FROM sqlite_master WHERE type="table"
+2017-06-30 16:29:49: PRAGMA table_info("note_resources")
+2017-06-30 16:29:49: Initializing tables...
+2017-06-30 16:29:49: PRAGMA table_info("notes")
+2017-06-30 16:29:49: PRAGMA table_info("note_tags")
+2017-06-30 16:29:49: PRAGMA table_info("folders")
+2017-06-30 16:29:49: Database schema created successfully
+2017-06-30 16:29:49: PRAGMA table_info("version")
+2017-06-30 16:29:49: SELECT name FROM sqlite_master WHERE type="table"
+2017-06-30 16:29:49: PRAGMA table_info("deleted_items")
+2017-06-30 16:29:49: PRAGMA table_info("resources")
+2017-06-30 16:29:49: PRAGMA table_info("notes")
+2017-06-30 16:29:49: Initializing tables...
+2017-06-30 16:29:49: Database schema created successfully
+2017-06-30 16:29:49: PRAGMA table_info("folders")
+2017-06-30 16:29:49: PRAGMA table_info("changes")
+2017-06-30 16:29:49: PRAGMA table_info("tags")
+2017-06-30 16:29:49: PRAGMA table_info("note_resources")
+2017-06-30 16:29:49: SELECT name FROM sqlite_master WHERE type="table"
+2017-06-30 16:29:49: PRAGMA table_info("deleted_items")
+2017-06-30 16:29:49: Initializing tables...
+2017-06-30 16:29:49: PRAGMA table_info("settings")
+2017-06-30 16:29:49: PRAGMA table_info("notes")
+2017-06-30 16:29:49: PRAGMA table_info("note_tags")
+2017-06-30 16:29:49: PRAGMA table_info("version")
+2017-06-30 16:29:49: Database schema created successfully
+2017-06-30 16:29:49: SELECT name FROM sqlite_master WHERE type="table"
+2017-06-30 16:29:49: PRAGMA table_info("folders")
+2017-06-30 16:29:49: PRAGMA table_info("tags")
+2017-06-30 16:29:49: Database schema created successfully
+2017-06-30 16:29:49: PRAGMA table_info("item_sync_times")
+2017-06-30 16:29:49: PRAGMA table_info("resources")
+2017-06-30 16:29:49: Initializing tables...
+2017-06-30 16:29:49: PRAGMA table_info("changes")
+2017-06-30 16:29:49: PRAGMA table_info("deleted_items")
+2017-06-30 16:29:49: PRAGMA table_info("notes")
+2017-06-30 16:29:49: PRAGMA table_info("folders")
+2017-06-30 16:29:49: Initializing tables...
+2017-06-30 16:29:49: PRAGMA table_info("note_tags")
+2017-06-30 16:29:49: BEGIN TRANSACTION
+2017-06-30 16:29:49: PRAGMA table_info("note_resources")
+2017-06-30 16:29:49: SELECT name FROM sqlite_master WHERE type="table"
+2017-06-30 16:29:49: PRAGMA table_info("settings")
+2017-06-30 16:29:49: Database schema created successfully
+2017-06-30 16:29:49: PRAGMA table_info("tags")
+2017-06-30 16:29:49: PRAGMA table_info("deleted_items")
+2017-06-30 16:29:49: PRAGMA table_info("notes")
+2017-06-30 16:29:49: SELECT name FROM sqlite_master WHERE type="table"
+2017-06-30 16:29:49: PRAGMA table_info("resources")
+2017-06-30 16:29:49: DELETE FROM table_fields
+2017-06-30 16:29:49: Database schema created successfully
+2017-06-30 16:29:49: PRAGMA table_info("version")
+2017-06-30 16:29:49: PRAGMA table_info("item_sync_times")
+2017-06-30 16:29:49: PRAGMA table_info("folders")
+2017-06-30 16:29:49: PRAGMA table_info("note_tags")
+2017-06-30 16:29:49: Initializing tables...
+2017-06-30 16:29:49: PRAGMA table_info("tags")
+2017-06-30 16:29:49: PRAGMA table_info("folders")
+2017-06-30 16:29:49: PRAGMA table_info("note_resources")
+2017-06-30 16:29:49: PRAGMA table_info("deleted_items")
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: Database schema created successfully
+2017-06-30 16:29:49: Initializing tables...
+2017-06-30 16:29:49: BEGIN TRANSACTION
+2017-06-30 16:29:49: PRAGMA table_info("notes")
+2017-06-30 16:29:49: PRAGMA table_info("changes")
+2017-06-30 16:29:49: SELECT name FROM sqlite_master WHERE type="table"
+2017-06-30 16:29:49: PRAGMA table_info("resources")
+2017-06-30 16:29:49: PRAGMA table_info("note_tags")
+2017-06-30 16:29:49: PRAGMA table_info("notes")
+2017-06-30 16:29:49: PRAGMA table_info("tags")
+2017-06-30 16:29:49: PRAGMA table_info("version")
+2017-06-30 16:29:49: ["folders","id",2,null]
+2017-06-30 16:29:49: Initializing tables...
+2017-06-30 16:29:49: Database schema created successfully
+2017-06-30 16:29:49: SELECT name FROM sqlite_master WHERE type="table"
+2017-06-30 16:29:49: PRAGMA table_info("deleted_items")
+2017-06-30 16:29:49: DELETE FROM table_fields
+2017-06-30 16:29:49: PRAGMA table_info("folders")
+2017-06-30 16:29:49: PRAGMA table_info("note_resources")
+2017-06-30 16:29:49: PRAGMA table_info("settings")
+2017-06-30 16:29:49: PRAGMA table_info("resources")
+2017-06-30 16:29:49: PRAGMA table_info("deleted_items")
+2017-06-30 16:29:49: PRAGMA table_info("note_tags")
+2017-06-30 16:29:49: PRAGMA table_info("folders")
+2017-06-30 16:29:49: SELECT name FROM sqlite_master WHERE type="table"
+2017-06-30 16:29:49: Initializing tables...
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: PRAGMA table_info("tags")
+2017-06-30 16:29:49: PRAGMA table_info("changes")
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: PRAGMA table_info("notes")
+2017-06-30 16:29:49: PRAGMA table_info("item_sync_times")
+2017-06-30 16:29:49: PRAGMA table_info("version")
+2017-06-30 16:29:49: PRAGMA table_info("note_resources")
+2017-06-30 16:29:49: PRAGMA table_info("tags")
+2017-06-30 16:29:49: PRAGMA table_info("notes")
+2017-06-30 16:29:49: PRAGMA table_info("resources")
+2017-06-30 16:29:49: PRAGMA table_info("folders")
+2017-06-30 16:29:49: PRAGMA table_info("note_tags")
+2017-06-30 16:29:49: SELECT name FROM sqlite_master WHERE type="table"
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: PRAGMA table_info("settings")
+2017-06-30 16:29:49: PRAGMA table_info("deleted_items")
+2017-06-30 16:29:49: ["folders","id",2,null]
+2017-06-30 16:29:49: BEGIN TRANSACTION
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: PRAGMA table_info("note_tags")
+2017-06-30 16:29:49: PRAGMA table_info("changes")
+2017-06-30 16:29:49: PRAGMA table_info("deleted_items")
+2017-06-30 16:29:49: PRAGMA table_info("note_resources")
+2017-06-30 16:29:49: PRAGMA table_info("version")
+2017-06-30 16:29:49: PRAGMA table_info("resources")
+2017-06-30 16:29:49: PRAGMA table_info("notes")
+2017-06-30 16:29:49: PRAGMA table_info("folders")
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: PRAGMA table_info("item_sync_times")
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: DELETE FROM table_fields
+2017-06-30 16:29:49: PRAGMA table_info("tags")
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: PRAGMA table_info("resources")
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: PRAGMA table_info("settings")
+2017-06-30 16:29:49: PRAGMA table_info("tags")
+2017-06-30 16:29:49: PRAGMA table_info("version")
+2017-06-30 16:29:49: PRAGMA table_info("deleted_items")
+2017-06-30 16:29:49: PRAGMA table_info("changes")
+2017-06-30 16:29:49: PRAGMA table_info("note_resources")
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: PRAGMA table_info("notes")
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: BEGIN TRANSACTION
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: PRAGMA table_info("note_tags")
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: PRAGMA table_info("note_resources")
+2017-06-30 16:29:49: PRAGMA table_info("item_sync_times")
+2017-06-30 16:29:49: PRAGMA table_info("note_tags")
+2017-06-30 16:29:49: PRAGMA table_info("changes")
+2017-06-30 16:29:49: PRAGMA table_info("version")
+2017-06-30 16:29:49: PRAGMA table_info("settings")
+2017-06-30 16:29:49: PRAGMA table_info("deleted_items")
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: PRAGMA table_info("tags")
+2017-06-30 16:29:49: DELETE FROM table_fields
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: PRAGMA table_info("resources")
+2017-06-30 16:29:49: BEGIN TRANSACTION
+2017-06-30 16:29:49: PRAGMA table_info("version")
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: PRAGMA table_info("settings")
+2017-06-30 16:29:49: PRAGMA table_info("resources")
+2017-06-30 16:29:49: PRAGMA table_info("changes")
+2017-06-30 16:29:49: PRAGMA table_info("item_sync_times")
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: PRAGMA table_info("note_tags")
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: PRAGMA table_info("tags")
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: DELETE FROM table_fields
+2017-06-30 16:29:49: PRAGMA table_info("note_resources")
+2017-06-30 16:29:49: PRAGMA table_info("changes")
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: PRAGMA table_info("note_resources")
+2017-06-30 16:29:49: PRAGMA table_info("item_sync_times")
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: PRAGMA table_info("settings")
+2017-06-30 16:29:49: BEGIN TRANSACTION
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: PRAGMA table_info("resources")
+2017-06-30 16:29:49: PRAGMA table_info("note_tags")
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: ["folders","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: PRAGMA table_info("version")
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: BEGIN TRANSACTION
+2017-06-30 16:29:49: PRAGMA table_info("version")
+2017-06-30 16:29:49: PRAGMA table_info("settings")
+2017-06-30 16:29:49: PRAGMA table_info("item_sync_times")
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: DELETE FROM table_fields
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: PRAGMA table_info("note_resources")
+2017-06-30 16:29:49: PRAGMA table_info("resources")
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: PRAGMA table_info("changes")
+2017-06-30 16:29:49: ["folders","id",2,null]
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: DELETE FROM table_fields
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: PRAGMA table_info("changes")
+2017-06-30 16:29:49: PRAGMA table_info("item_sync_times")
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: BEGIN TRANSACTION
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: PRAGMA table_info("version")
+2017-06-30 16:29:49: PRAGMA table_info("note_resources")
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: PRAGMA table_info("settings")
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: PRAGMA table_info("settings")
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: DELETE FROM table_fields
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: BEGIN TRANSACTION
+2017-06-30 16:29:49: ["folders","id",2,null]
+2017-06-30 16:29:49: PRAGMA table_info("changes")
+2017-06-30 16:29:49: PRAGMA table_info("version")
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: PRAGMA table_info("item_sync_times")
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","id",2,null]
+2017-06-30 16:29:49: PRAGMA table_info("item_sync_times")
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: PRAGMA table_info("settings")
+2017-06-30 16:29:49: DELETE FROM table_fields
+2017-06-30 16:29:49: PRAGMA table_info("changes")
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: BEGIN TRANSACTION
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: BEGIN TRANSACTION
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: ["folders","id",2,null]
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: PRAGMA table_info("item_sync_times")
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: PRAGMA table_info("settings")
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: DELETE FROM table_fields
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: DELETE FROM table_fields
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","id",2,null]
+2017-06-30 16:29:49: BEGIN TRANSACTION
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: PRAGMA table_info("item_sync_times")
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: DELETE FROM table_fields
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: BEGIN TRANSACTION
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: ["folders","id",2,null]
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: ["folders","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: DELETE FROM table_fields
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: ["folders","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","title",2,""]
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: ["notes","title",2,""]
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","id",2,null]
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","altitude",3,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: ["notes","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","altitude",3,"0"]
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","title",2,""]
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","body",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","body",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","altitude",3,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","parent_id",2,""]
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: ["notes","author",2,""]
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: ["notes","altitude",3,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: ["notes","body",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: ["notes","title",2,""]
+2017-06-30 16:29:49: ["notes","author",2,""]
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","body",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","altitude",3,"0"]
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: ["notes","created_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: ["notes","created_time",1,"0"]
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","body",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","author",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","title",2,""]
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","source_url",2,""]
+2017-06-30 16:29:49: ["notes","title",2,""]
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","altitude",3,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","author",2,""]
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: ["notes","created_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","altitude",3,"0"]
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: ["notes","source_url",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","body",2,""]
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","created_time",1,"0"]
+2017-06-30 16:29:49: ["notes","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","author",2,""]
+2017-06-30 16:29:49: ["notes","altitude",3,"0"]
+2017-06-30 16:29:49: ["notes","updated_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: ["notes","updated_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: ["notes","created_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","source_url",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","altitude",3,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","created_time",1,"0"]
+2017-06-30 16:29:49: ["notes","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","body",2,""]
+2017-06-30 16:29:49: ["notes","is_todo",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: ["notes","author",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","body",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","body",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","altitude",3,"0"]
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","source_url",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","updated_time",1,"0"]
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: ["notes","author",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: ["notes","is_todo",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","created_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","updated_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","body",2,""]
+2017-06-30 16:29:49: ["notes","source_url",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","altitude",3,"0"]
+2017-06-30 16:29:49: ["notes","sync_time",1,"0"]
+2017-06-30 16:29:49: ["notes","author",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: ["notes","sync_time",1,"0"]
+2017-06-30 16:29:49: ["folders","sync_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","body",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","title",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","updated_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","is_todo",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","author",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","id",2,null]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","body",2,""]
+2017-06-30 16:29:49: ["folders","updated_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","created_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","todo_due",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","source_url",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","created_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","created_time",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","author",2,""]
+2017-06-30 16:29:49: ["notes","title",2,""]
+2017-06-30 16:29:49: ["notes","is_todo",1,"0"]
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: INSERT INTO `table_fields` (`table_name`, `field_name`, `field_type`, `field_default`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:49: ["notes","parent_id",2,""]
+2017-06-30 16:29:52: Database was open successfully
+2017-06-30 16:29:52: Checking for database schema update...
+2017-06-30 16:29:52: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:52: Current database version
+2017-06-30 16:29:52: Database was open successfully
+2017-06-30 16:29:52: SELECT * FROM table_fields
+2017-06-30 16:29:52: Checking for database schema update...
+2017-06-30 16:29:52: SELECT * FROM settings
+2017-06-30 16:29:52: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:52: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:29:52: Current database version
+2017-06-30 16:29:52: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:29:52: SELECT * FROM table_fields
+2017-06-30 16:29:52: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:29:52: SELECT * FROM settings
+2017-06-30 16:29:52: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:29:52: ["Notebook"]
+2017-06-30 16:29:52: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:29:52: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:29:52: Saving settings...
+2017-06-30 16:29:52: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:29:52: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:29:52: BEGIN TRANSACTION
+2017-06-30 16:29:52: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:29:52: ["Notebook"]
+2017-06-30 16:29:52: DELETE FROM settings
+2017-06-30 16:29:52: ["Notebook"]
+2017-06-30 16:29:52: Saving settings...
+2017-06-30 16:29:52: BEGIN TRANSACTION
+2017-06-30 16:29:52: DELETE FROM settings
+2017-06-30 16:29:52: INSERT INTO `settings` (`key`, `value`, `type`) VALUES (?, ?, ?)
+2017-06-30 16:29:52: ["clientId","1d8ed9378f064fb6869b7bab5ac8e0bb",2]
+2017-06-30 16:29:52: INSERT INTO `settings` (`key`, `value`, `type`) VALUES (?, ?, ?)
+2017-06-30 16:29:52: ["activeFolderId","f9ce22e174ca4e7daf98f9efdd79116c","string"]
+2017-06-30 16:29:52: INSERT INTO `settings` (`key`, `value`, `type`) VALUES (?, ?, ?)
+2017-06-30 16:29:52: ["sync.target","local","string"]
+2017-06-30 16:29:52: INSERT INTO `settings` (`value`, `type`, `key`) VALUES (?, ?, ?)
+2017-06-30 16:29:52: ["/mnt/d/Web/www/joplin/CliClient/tests/fuzzing/sync","string","sync.local.path"]
+2017-06-30 16:29:52: COMMIT
+2017-06-30 16:29:53: Database was open successfully
+2017-06-30 16:29:53: Checking for database schema update...
+2017-06-30 16:29:53: Database was open successfully
+2017-06-30 16:29:53: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:53: Checking for database schema update...
+2017-06-30 16:29:53: Current database version
+2017-06-30 16:29:53: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:53: Database was open successfully
+2017-06-30 16:29:53: SELECT * FROM table_fields
+2017-06-30 16:29:53: Current database version
+2017-06-30 16:29:53: Checking for database schema update...
+2017-06-30 16:29:53: SELECT * FROM table_fields
+2017-06-30 16:29:53: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:53: SELECT * FROM settings
+2017-06-30 16:29:53: Current database version
+2017-06-30 16:29:53: SELECT * FROM table_fields
+2017-06-30 16:29:53: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:29:53: SELECT * FROM settings
+2017-06-30 16:29:53: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:29:53: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:29:53: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:29:53: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:29:53: ["Notebook"]
+2017-06-30 16:29:53: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:29:53: ["f9ce22e174ca4e7daf98f9efdd79116c","capricious","joplin","net.cozic.joplin-cli",1498836593317,"c6e06b7776374010a5e9620fad7a67b3",1498836593317]
+2017-06-30 16:29:54: Database was open successfully
+2017-06-30 16:29:54: Checking for database schema update...
+2017-06-30 16:29:54: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:54: Database was open successfully
+2017-06-30 16:29:54: Current database version
+2017-06-30 16:29:54: Checking for database schema update...
+2017-06-30 16:29:54: SELECT * FROM table_fields
+2017-06-30 16:29:54: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:54: Database was open successfully
+2017-06-30 16:29:54: Current database version
+2017-06-30 16:29:54: Checking for database schema update...
+2017-06-30 16:29:54: SELECT * FROM table_fields
+2017-06-30 16:29:54: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:54: SELECT * FROM settings
+2017-06-30 16:29:54: Current database version
+2017-06-30 16:29:54: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:29:54: SELECT * FROM table_fields
+2017-06-30 16:29:54: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:29:54: SELECT * FROM settings
+2017-06-30 16:29:54: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:29:54: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:29:54: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:29:54: ["Notebook"]
+2017-06-30 16:29:54: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:29:54: ["f9ce22e174ca4e7daf98f9efdd79116c","tranquil","joplin","net.cozic.joplin-cli",1498836594542,"79429b5f11ab4396b472a91877f4351d",1498836594542]
+2017-06-30 16:29:55: Database was open successfully
+2017-06-30 16:29:55: Checking for database schema update...
+2017-06-30 16:29:55: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:55: Current database version
+2017-06-30 16:29:55: Database was open successfully
+2017-06-30 16:29:55: SELECT * FROM table_fields
+2017-06-30 16:29:55: Checking for database schema update...
+2017-06-30 16:29:55: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:55: Current database version
+2017-06-30 16:29:55: SELECT * FROM settings
+2017-06-30 16:29:55: SELECT * FROM table_fields
+2017-06-30 16:29:55: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:29:55: SELECT * FROM settings
+2017-06-30 16:29:55: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:29:55: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:29:55: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:29:55: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:29:55: ["Notebook"]
+2017-06-30 16:29:55: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:29:55: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:29:55: ["Notebook"]
+2017-06-30 16:29:55: ["f9ce22e174ca4e7daf98f9efdd79116c","flower","joplin","net.cozic.joplin-cli",1498836595737,"012318ecb4704d759c717d0d7ebb1a74",1498836595737]
+2017-06-30 16:29:56: Database was open successfully
+2017-06-30 16:29:56: Checking for database schema update...
+2017-06-30 16:29:56: Database was open successfully
+2017-06-30 16:29:56: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:56: Checking for database schema update...
+2017-06-30 16:29:56: Current database version
+2017-06-30 16:29:56: Database was open successfully
+2017-06-30 16:29:56: SELECT * FROM table_fields
+2017-06-30 16:29:56: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:56: Checking for database schema update...
+2017-06-30 16:29:56: Current database version
+2017-06-30 16:29:56: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:56: SELECT * FROM table_fields
+2017-06-30 16:29:56: Current database version
+2017-06-30 16:29:56: SELECT * FROM settings
+2017-06-30 16:29:56: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:29:56: SELECT * FROM table_fields
+2017-06-30 16:29:56: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:29:56: SELECT * FROM settings
+2017-06-30 16:29:56: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:29:56: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:29:56: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:29:56: ["Notebook"]
+2017-06-30 16:29:57: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:29:57: ["f9ce22e174ca4e7daf98f9efdd79116c","sand","joplin","net.cozic.joplin-cli",1498836597004,"b576982b2d80495aa19bee8f962b6385",1498836597004]
+2017-06-30 16:29:58: Database was open successfully
+2017-06-30 16:29:58: Checking for database schema update...
+2017-06-30 16:29:58: Database was open successfully
+2017-06-30 16:29:58: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:58: Checking for database schema update...
+2017-06-30 16:29:58: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:58: Current database version
+2017-06-30 16:29:58: Current database version
+2017-06-30 16:29:58: SELECT * FROM table_fields
+2017-06-30 16:29:58: SELECT * FROM table_fields
+2017-06-30 16:29:58: SELECT * FROM settings
+2017-06-30 16:29:58: SELECT * FROM settings
+2017-06-30 16:29:58: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:29:58: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:29:58: ["Notebook"]
+2017-06-30 16:29:58: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:29:58: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:29:58: ["Notebook"]
+2017-06-30 16:29:58: ["marvelous"]
+2017-06-30 16:29:58: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:29:58: INSERT INTO `folders` (`title`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?)
+2017-06-30 16:29:58: ["marvelous"]
+2017-06-30 16:29:58: ["marvelous",1498836598190,"e7a95492e77f44e6a8b6a4ed3087416e",1498836598190]
+2017-06-30 16:29:59: Database was open successfully
+2017-06-30 16:29:59: Checking for database schema update...
+2017-06-30 16:29:59: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:59: Current database version
+2017-06-30 16:29:59: Database was open successfully
+2017-06-30 16:29:59: Checking for database schema update...
+2017-06-30 16:29:59: SELECT * FROM table_fields
+2017-06-30 16:29:59: Database was open successfully
+2017-06-30 16:29:59: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:59: Checking for database schema update...
+2017-06-30 16:29:59: Current database version
+2017-06-30 16:29:59: SELECT * FROM version LIMIT 1
+2017-06-30 16:29:59: SELECT * FROM table_fields
+2017-06-30 16:29:59: Current database version
+2017-06-30 16:29:59: SELECT * FROM settings
+2017-06-30 16:29:59: SELECT * FROM table_fields
+2017-06-30 16:29:59: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:29:59: SELECT * FROM settings
+2017-06-30 16:29:59: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:29:59: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:29:59: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:29:59: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:29:59: ["Notebook"]
+2017-06-30 16:29:59: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:29:59: ["f9ce22e174ca4e7daf98f9efdd79116c","blot","joplin","net.cozic.joplin-cli",1498836599407,"b658acdc78c34dc1a058ecef66701745",1498836599407]
+2017-06-30 16:30:00: Database was open successfully
+2017-06-30 16:30:00: Checking for database schema update...
+2017-06-30 16:30:00: Database was open successfully
+2017-06-30 16:30:00: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:00: Checking for database schema update...
+2017-06-30 16:30:00: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:00: Current database version
+2017-06-30 16:30:00: Current database version
+2017-06-30 16:30:00: SELECT * FROM table_fields
+2017-06-30 16:30:00: SELECT * FROM table_fields
+2017-06-30 16:30:00: SELECT * FROM settings
+2017-06-30 16:30:00: SELECT * FROM settings
+2017-06-30 16:30:00: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:00: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:00: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:00: ["Notebook"]
+2017-06-30 16:30:00: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:00: ["f9ce22e174ca4e7daf98f9efdd79116c","duck","joplin","net.cozic.joplin-cli",1498836600602,"4ad29f49f0a7470db86b7a40d2e2643b",1498836600602]
+2017-06-30 16:30:01: Database was open successfully
+2017-06-30 16:30:01: Checking for database schema update...
+2017-06-30 16:30:01: Database was open successfully
+2017-06-30 16:30:01: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:01: Checking for database schema update...
+2017-06-30 16:30:01: Current database version
+2017-06-30 16:30:01: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:01: Database was open successfully
+2017-06-30 16:30:01: SELECT * FROM table_fields
+2017-06-30 16:30:01: Current database version
+2017-06-30 16:30:01: Checking for database schema update...
+2017-06-30 16:30:01: SELECT * FROM table_fields
+2017-06-30 16:30:01: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:01: SELECT * FROM settings
+2017-06-30 16:30:01: Current database version
+2017-06-30 16:30:01: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:01: SELECT * FROM table_fields
+2017-06-30 16:30:01: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:01: SELECT * FROM settings
+2017-06-30 16:30:01: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:01: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:01: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:01: ["Notebook"]
+2017-06-30 16:30:01: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:01: ["f9ce22e174ca4e7daf98f9efdd79116c","old-fashioned","joplin","net.cozic.joplin-cli",1498836601957,"cde0337afd8844388fc3b820a473315e",1498836601958]
+2017-06-30 16:30:03: Database was open successfully
+2017-06-30 16:30:03: Checking for database schema update...
+2017-06-30 16:30:03: Database was open successfully
+2017-06-30 16:30:03: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:03: Checking for database schema update...
+2017-06-30 16:30:03: Current database version
+2017-06-30 16:30:03: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:03: SELECT * FROM table_fields
+2017-06-30 16:30:03: Database was open successfully
+2017-06-30 16:30:03: Current database version
+2017-06-30 16:30:03: Checking for database schema update...
+2017-06-30 16:30:03: SELECT * FROM table_fields
+2017-06-30 16:30:03: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:03: SELECT * FROM settings
+2017-06-30 16:30:03: SELECT * FROM settings
+2017-06-30 16:30:03: Current database version
+2017-06-30 16:30:03: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:03: SELECT * FROM table_fields
+2017-06-30 16:30:03: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:03: SELECT * FROM settings
+2017-06-30 16:30:03: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:03: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:03: ["Notebook"]
+2017-06-30 16:30:03: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:03: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:03: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:03: ["f9ce22e174ca4e7daf98f9efdd79116c","time","joplin","net.cozic.joplin-cli",1498836603283,"5fc3f7617b55458288714b4c104801c1",1498836603284]
+2017-06-30 16:30:03: ["Notebook"]
+2017-06-30 16:30:04: Database was open successfully
+2017-06-30 16:30:04: Checking for database schema update...
+2017-06-30 16:30:04: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:04: Database was open successfully
+2017-06-30 16:30:04: Current database version
+2017-06-30 16:30:04: Checking for database schema update...
+2017-06-30 16:30:04: Database was open successfully
+2017-06-30 16:30:04: SELECT * FROM table_fields
+2017-06-30 16:30:04: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:04: Checking for database schema update...
+2017-06-30 16:30:04: Current database version
+2017-06-30 16:30:04: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:04: SELECT * FROM settings
+2017-06-30 16:30:04: SELECT * FROM table_fields
+2017-06-30 16:30:04: Current database version
+2017-06-30 16:30:04: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:04: SELECT * FROM table_fields
+2017-06-30 16:30:04: SELECT * FROM settings
+2017-06-30 16:30:04: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:04: SELECT * FROM settings
+2017-06-30 16:30:04: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:04: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:04: ["Notebook"]
+2017-06-30 16:30:04: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:04: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:04: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:04: ["f9ce22e174ca4e7daf98f9efdd79116c","marry","joplin","net.cozic.joplin-cli",1498836604779,"3b9a42af068d43e8aa8d6664d5dda0b3",1498836604779]
+2017-06-30 16:30:04: ["Notebook"]
+2017-06-30 16:30:06: Database was open successfully
+2017-06-30 16:30:06: Checking for database schema update...
+2017-06-30 16:30:06: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:06: Database was open successfully
+2017-06-30 16:30:06: Current database version
+2017-06-30 16:30:06: Checking for database schema update...
+2017-06-30 16:30:06: Database was open successfully
+2017-06-30 16:30:06: SELECT * FROM table_fields
+2017-06-30 16:30:06: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:06: Checking for database schema update...
+2017-06-30 16:30:06: Current database version
+2017-06-30 16:30:06: SELECT * FROM settings
+2017-06-30 16:30:06: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:06: SELECT * FROM table_fields
+2017-06-30 16:30:06: Current database version
+2017-06-30 16:30:06: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:06: SELECT * FROM settings
+2017-06-30 16:30:06: SELECT * FROM table_fields
+2017-06-30 16:30:06: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:06: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:06: SELECT * FROM settings
+2017-06-30 16:30:06: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:06: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:06: SELECT * FROM settings
+2017-06-30 16:30:06: ["Notebook"]
+2017-06-30 16:30:06: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:06: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:06: SELECT * FROM folders WHERE sync_time < updated_time LIMIT 100
+2017-06-30 16:30:06: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:06: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:06: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:06: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:06: ["Notebook"]
+2017-06-30 16:30:06: ["Notebook"]
+2017-06-30 16:30:06: SELECT * FROM folders WHERE sync_time < updated_time LIMIT 100
+2017-06-30 16:30:06: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:06: [null]
+2017-06-30 16:30:06: UPDATE `folders` SET `sync_time`=? WHERE id=?
+2017-06-30 16:30:06: [1498836606167,"f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:06: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:06: [null]
+2017-06-30 16:30:06: UPDATE `folders` SET `sync_time`=? WHERE id=?
+2017-06-30 16:30:06: [1498836606303,"e7a95492e77f44e6a8b6a4ed3087416e"]
+2017-06-30 16:30:06: SELECT * FROM folders WHERE sync_time < updated_time LIMIT 100
+2017-06-30 16:30:06: SELECT * FROM notes WHERE sync_time < updated_time AND is_conflict = 0 LIMIT 100
+2017-06-30 16:30:06: UPDATE `notes` SET `sync_time`=? WHERE id=?
+2017-06-30 16:30:06: [1498836606536,"c6e06b7776374010a5e9620fad7a67b3"]
+2017-06-30 16:30:06: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:06: ["c6e06b7776374010a5e9620fad7a67b3"]
+2017-06-30 16:30:06: UPDATE `notes` SET `sync_time`=? WHERE id=?
+2017-06-30 16:30:06: [1498836606685,"79429b5f11ab4396b472a91877f4351d"]
+2017-06-30 16:30:06: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:06: ["79429b5f11ab4396b472a91877f4351d"]
+2017-06-30 16:30:06: UPDATE `notes` SET `sync_time`=? WHERE id=?
+2017-06-30 16:30:06: [1498836606800,"012318ecb4704d759c717d0d7ebb1a74"]
+2017-06-30 16:30:06: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:06: ["012318ecb4704d759c717d0d7ebb1a74"]
+2017-06-30 16:30:06: UPDATE `notes` SET `sync_time`=? WHERE id=?
+2017-06-30 16:30:06: [1498836606950,"b576982b2d80495aa19bee8f962b6385"]
+2017-06-30 16:30:07: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:07: ["b576982b2d80495aa19bee8f962b6385"]
+2017-06-30 16:30:07: UPDATE `notes` SET `sync_time`=? WHERE id=?
+2017-06-30 16:30:07: [1498836607050,"b658acdc78c34dc1a058ecef66701745"]
+2017-06-30 16:30:07: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:07: ["b658acdc78c34dc1a058ecef66701745"]
+2017-06-30 16:30:07: UPDATE `notes` SET `sync_time`=? WHERE id=?
+2017-06-30 16:30:07: [1498836607158,"4ad29f49f0a7470db86b7a40d2e2643b"]
+2017-06-30 16:30:07: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:07: ["4ad29f49f0a7470db86b7a40d2e2643b"]
+2017-06-30 16:30:07: UPDATE `notes` SET `sync_time`=? WHERE id=?
+2017-06-30 16:30:07: [1498836607267,"cde0337afd8844388fc3b820a473315e"]
+2017-06-30 16:30:07: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:07: ["cde0337afd8844388fc3b820a473315e"]
+2017-06-30 16:30:07: UPDATE `notes` SET `sync_time`=? WHERE id=?
+2017-06-30 16:30:07: [1498836607367,"5fc3f7617b55458288714b4c104801c1"]
+2017-06-30 16:30:07: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:07: ["5fc3f7617b55458288714b4c104801c1"]
+2017-06-30 16:30:07: UPDATE `notes` SET `sync_time`=? WHERE id=?
+2017-06-30 16:30:07: [1498836607476,"3b9a42af068d43e8aa8d6664d5dda0b3"]
+2017-06-30 16:30:07: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:07: ["3b9a42af068d43e8aa8d6664d5dda0b3"]
+2017-06-30 16:30:07: SELECT * FROM deleted_items
+2017-06-30 16:30:07: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:07: ["03f97bf7f1a24f38a828742e090dfd69"]
+2017-06-30 16:30:07: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:07: ["03f97bf7f1a24f38a828742e090dfd69"]
+2017-06-30 16:30:07: INSERT INTO `notes` (`id`, `parent_id`, `title`, `body`, `created_time`, `updated_time`, `sync_time`, `latitude`, `longitude`, `altitude`, `author`, `source_url`, `is_todo`, `todo_due`, `todo_completed`, `source`, `source_application`, `application_data`, `order`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:07: ["03f97bf7f1a24f38a828742e090dfd69","c22fc598ac014dafa599c8d2121a5c0a","sail","","1498836587651","1498836587650",1498836607661,"0.00000000","0.00000000","0.0000","","",0,0,0,"joplin","net.cozic.joplin-cli","",0]
+2017-06-30 16:30:07: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:07: ["03f97bf7f1a24f38a828742e090dfd69"]
+2017-06-30 16:30:07: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:07: ["2a2fa1e5410844bd8bdaad016b7ab9f9"]
+2017-06-30 16:30:07: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:07: ["2a2fa1e5410844bd8bdaad016b7ab9f9"]
+2017-06-30 16:30:07: INSERT INTO `notes` (`id`, `parent_id`, `title`, `body`, `created_time`, `updated_time`, `sync_time`, `latitude`, `longitude`, `altitude`, `author`, `source_url`, `is_todo`, `todo_due`, `todo_completed`, `source`, `source_application`, `application_data`, `order`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:07: ["2a2fa1e5410844bd8bdaad016b7ab9f9","c22fc598ac014dafa599c8d2121a5c0a","lively","","1498836593725","1498836593725",1498836607798,"0.00000000","0.00000000","0.0000","","",0,0,0,"joplin","net.cozic.joplin-cli","",0]
+2017-06-30 16:30:07: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:07: ["2a2fa1e5410844bd8bdaad016b7ab9f9"]
+2017-06-30 16:30:07: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:07: ["36623aba9d8c45aa874e4fbbbe35e5c2"]
+2017-06-30 16:30:07: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:07: ["36623aba9d8c45aa874e4fbbbe35e5c2"]
+2017-06-30 16:30:07: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:07: ["cuddly"]
+2017-06-30 16:30:07: INSERT INTO `folders` (`id`, `title`, `created_time`, `updated_time`, `sync_time`) VALUES (?, ?, ?, ?, ?)
+2017-06-30 16:30:07: ["36623aba9d8c45aa874e4fbbbe35e5c2","cuddly","1498836580316","1498836580316",1498836607905]
+2017-06-30 16:30:08: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:08: ["40f5141cf87a41c2b36463000098e433"]
+2017-06-30 16:30:08: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:08: ["40f5141cf87a41c2b36463000098e433"]
+2017-06-30 16:30:08: INSERT INTO `notes` (`id`, `parent_id`, `title`, `body`, `created_time`, `updated_time`, `sync_time`, `latitude`, `longitude`, `altitude`, `author`, `source_url`, `is_todo`, `todo_due`, `todo_completed`, `source`, `source_application`, `application_data`, `order`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:08: ["40f5141cf87a41c2b36463000098e433","c22fc598ac014dafa599c8d2121a5c0a","lazy","","1498836577709","1498836577709",1498836608062,"0.00000000","0.00000000","0.0000","","",0,0,0,"joplin","net.cozic.joplin-cli","",0]
+2017-06-30 16:30:08: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:08: ["40f5141cf87a41c2b36463000098e433"]
+2017-06-30 16:30:08: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:08: ["4b3a0eb941bb49afa2736d49e436d85c"]
+2017-06-30 16:30:08: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:08: ["4b3a0eb941bb49afa2736d49e436d85c"]
+2017-06-30 16:30:08: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:08: ["lumber"]
+2017-06-30 16:30:08: INSERT INTO `folders` (`id`, `title`, `created_time`, `updated_time`, `sync_time`) VALUES (?, ?, ?, ?, ?)
+2017-06-30 16:30:08: ["4b3a0eb941bb49afa2736d49e436d85c","lumber","1498836575092","1498836575091",1498836608173]
+2017-06-30 16:30:08: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:08: ["5542fde1fd7f42cd8bd39bf2fd00010f"]
+2017-06-30 16:30:08: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:08: ["5542fde1fd7f42cd8bd39bf2fd00010f"]
+2017-06-30 16:30:08: INSERT INTO `notes` (`id`, `parent_id`, `title`, `body`, `created_time`, `updated_time`, `sync_time`, `latitude`, `longitude`, `altitude`, `author`, `source_url`, `is_todo`, `todo_due`, `todo_completed`, `source`, `source_application`, `application_data`, `order`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:08: ["5542fde1fd7f42cd8bd39bf2fd00010f","c22fc598ac014dafa599c8d2121a5c0a","mountain","","1498836576400","1498836576400",1498836608297,"0.00000000","0.00000000","0.0000","","",0,0,0,"joplin","net.cozic.joplin-cli","",0]
+2017-06-30 16:30:08: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:08: ["5542fde1fd7f42cd8bd39bf2fd00010f"]
+2017-06-30 16:30:08: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:08: ["6d139ba334f34b039b289dc167ab0db7"]
+2017-06-30 16:30:08: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:08: ["6d139ba334f34b039b289dc167ab0db7"]
+2017-06-30 16:30:08: INSERT INTO `notes` (`id`, `parent_id`, `title`, `body`, `created_time`, `updated_time`, `sync_time`, `latitude`, `longitude`, `altitude`, `author`, `source_url`, `is_todo`, `todo_due`, `todo_completed`, `source`, `source_application`, `application_data`, `order`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:08: ["6d139ba334f34b039b289dc167ab0db7","c22fc598ac014dafa599c8d2121a5c0a","conscious","","1498836590115","1498836590115",1498836608408,"0.00000000","0.00000000","0.0000","","",0,0,0,"joplin","net.cozic.joplin-cli","",0]
+2017-06-30 16:30:08: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:08: ["6d139ba334f34b039b289dc167ab0db7"]
+2017-06-30 16:30:08: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:08: ["72fa06d2fb2f4d98abc732a2e968aa28"]
+2017-06-30 16:30:08: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:08: ["72fa06d2fb2f4d98abc732a2e968aa28"]
+2017-06-30 16:30:08: INSERT INTO `notes` (`id`, `parent_id`, `title`, `body`, `created_time`, `updated_time`, `sync_time`, `latitude`, `longitude`, `altitude`, `author`, `source_url`, `is_todo`, `todo_due`, `todo_completed`, `source`, `source_application`, `application_data`, `order`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:08: ["72fa06d2fb2f4d98abc732a2e968aa28","c22fc598ac014dafa599c8d2121a5c0a","save","","1498836579015","1498836579015",1498836608513,"0.00000000","0.00000000","0.0000","","",0,0,0,"joplin","net.cozic.joplin-cli","",0]
+2017-06-30 16:30:08: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:08: ["72fa06d2fb2f4d98abc732a2e968aa28"]
+2017-06-30 16:30:08: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:08: ["885e8c7802a547298c96ab5644965002"]
+2017-06-30 16:30:08: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:08: ["885e8c7802a547298c96ab5644965002"]
+2017-06-30 16:30:08: INSERT INTO `notes` (`id`, `parent_id`, `title`, `body`, `created_time`, `updated_time`, `sync_time`, `latitude`, `longitude`, `altitude`, `author`, `source_url`, `is_todo`, `todo_due`, `todo_completed`, `source`, `source_application`, `application_data`, `order`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:08: ["885e8c7802a547298c96ab5644965002","c22fc598ac014dafa599c8d2121a5c0a","roll","","1498836588862","1498836588862",1498836608612,"0.00000000","0.00000000","0.0000","","",0,0,0,"joplin","net.cozic.joplin-cli","",0]
+2017-06-30 16:30:08: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:08: ["885e8c7802a547298c96ab5644965002"]
+2017-06-30 16:30:08: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:08: ["917625fe9474484c948df79d4c3391dd"]
+2017-06-30 16:30:08: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:08: ["917625fe9474484c948df79d4c3391dd"]
+2017-06-30 16:30:08: INSERT INTO `notes` (`id`, `parent_id`, `title`, `body`, `created_time`, `updated_time`, `sync_time`, `latitude`, `longitude`, `altitude`, `author`, `source_url`, `is_todo`, `todo_due`, `todo_completed`, `source`, `source_application`, `application_data`, `order`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:08: ["917625fe9474484c948df79d4c3391dd","c22fc598ac014dafa599c8d2121a5c0a","wine","","1498836592558","1498836592558",1498836608731,"0.00000000","0.00000000","0.0000","","",0,0,0,"joplin","net.cozic.joplin-cli","",0]
+2017-06-30 16:30:08: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:08: ["917625fe9474484c948df79d4c3391dd"]
+2017-06-30 16:30:08: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:08: ["9d939322414b4c1680052a1e0dda92a2"]
+2017-06-30 16:30:08: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:08: ["9d939322414b4c1680052a1e0dda92a2"]
+2017-06-30 16:30:08: INSERT INTO `notes` (`id`, `parent_id`, `title`, `body`, `created_time`, `updated_time`, `sync_time`, `latitude`, `longitude`, `altitude`, `author`, `source_url`, `is_todo`, `todo_due`, `todo_completed`, `source`, `source_application`, `application_data`, `order`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:08: ["9d939322414b4c1680052a1e0dda92a2","c22fc598ac014dafa599c8d2121a5c0a","share","","1498836583833","1498836583833",1498836608907,"0.00000000","0.00000000","0.0000","","",0,0,0,"joplin","net.cozic.joplin-cli","",0]
+2017-06-30 16:30:09: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:09: ["9d939322414b4c1680052a1e0dda92a2"]
+2017-06-30 16:30:09: SELECT * FROM `notes` WHERE `id` = ?
+2017-06-30 16:30:09: ["a95fb1806fe84132915271c5bef8d429"]
+2017-06-30 16:30:09: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:09: ["a95fb1806fe84132915271c5bef8d429"]
+2017-06-30 16:30:09: INSERT INTO `notes` (`id`, `parent_id`, `title`, `body`, `created_time`, `updated_time`, `sync_time`, `latitude`, `longitude`, `altitude`, `author`, `source_url`, `is_todo`, `todo_due`, `todo_completed`, `source`, `source_application`, `application_data`, `order`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:09: ["a95fb1806fe84132915271c5bef8d429","c22fc598ac014dafa599c8d2121a5c0a","remind","","1498836585044","1498836585044",1498836609130,"0.00000000","0.00000000","0.0000","","",0,0,0,"joplin","net.cozic.joplin-cli","",0]
+2017-06-30 16:30:10: Database was open successfully
+2017-06-30 16:30:10: Checking for database schema update...
+2017-06-30 16:30:10: Database was open successfully
+2017-06-30 16:30:10: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:10: Checking for database schema update...
+2017-06-30 16:30:10: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:10: Current database version
+2017-06-30 16:30:10: Current database version
+2017-06-30 16:30:10: SELECT * FROM table_fields
+2017-06-30 16:30:10: SELECT * FROM table_fields
+2017-06-30 16:30:10: SELECT * FROM settings
+2017-06-30 16:30:10: SELECT * FROM settings
+2017-06-30 16:30:10: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:10: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:10: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:10: ["Notebook"]
+2017-06-30 16:30:10: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:10: ["f9ce22e174ca4e7daf98f9efdd79116c","few","joplin","net.cozic.joplin-cli",1498836610343,"39f1341bb61f4c8cae23b8dfd1f37841",1498836610344]
+2017-06-30 16:30:11: Database was open successfully
+2017-06-30 16:30:11: Checking for database schema update...
+2017-06-30 16:30:11: Database was open successfully
+2017-06-30 16:30:11: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:11: Checking for database schema update...
+2017-06-30 16:30:11: Current database version
+2017-06-30 16:30:11: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:11: Database was open successfully
+2017-06-30 16:30:11: SELECT * FROM table_fields
+2017-06-30 16:30:11: Current database version
+2017-06-30 16:30:11: Checking for database schema update...
+2017-06-30 16:30:11: SELECT * FROM table_fields
+2017-06-30 16:30:11: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:11: Current database version
+2017-06-30 16:30:11: SELECT * FROM settings
+2017-06-30 16:30:11: SELECT * FROM table_fields
+2017-06-30 16:30:11: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:11: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:11: SELECT * FROM settings
+2017-06-30 16:30:11: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:11: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:11: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:11: ["Notebook"]
+2017-06-30 16:30:11: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:11: ["f9ce22e174ca4e7daf98f9efdd79116c","sulky","joplin","net.cozic.joplin-cli",1498836611543,"24f184173f454d8c809ef686dd35465c",1498836611543]
+2017-06-30 16:30:12: Database was open successfully
+2017-06-30 16:30:12: Checking for database schema update...
+2017-06-30 16:30:12: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:12: Current database version
+2017-06-30 16:30:12: Database was open successfully
+2017-06-30 16:30:12: SELECT * FROM table_fields
+2017-06-30 16:30:12: Checking for database schema update...
+2017-06-30 16:30:12: Database was open successfully
+2017-06-30 16:30:12: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:12: Checking for database schema update...
+2017-06-30 16:30:12: Current database version
+2017-06-30 16:30:12: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:12: SELECT * FROM table_fields
+2017-06-30 16:30:12: Current database version
+2017-06-30 16:30:12: SELECT * FROM settings
+2017-06-30 16:30:12: SELECT * FROM table_fields
+2017-06-30 16:30:12: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:12: SELECT * FROM settings
+2017-06-30 16:30:12: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:12: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:12: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:12: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:12: ["Notebook"]
+2017-06-30 16:30:12: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:12: ["f9ce22e174ca4e7daf98f9efdd79116c","red","joplin","net.cozic.joplin-cli",1498836612745,"0298977fd846429fa988a2d4c05928ce",1498836612745]
+2017-06-30 16:30:13: Database was open successfully
+2017-06-30 16:30:13: Checking for database schema update...
+2017-06-30 16:30:13: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:13: Current database version
+2017-06-30 16:30:13: SELECT * FROM table_fields
+2017-06-30 16:30:13: Database was open successfully
+2017-06-30 16:30:13: Checking for database schema update...
+2017-06-30 16:30:13: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:13: Current database version
+2017-06-30 16:30:13: SELECT * FROM settings
+2017-06-30 16:30:13: SELECT * FROM table_fields
+2017-06-30 16:30:13: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:13: SELECT * FROM settings
+2017-06-30 16:30:13: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:13: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:13: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:13: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:13: ["Notebook"]
+2017-06-30 16:30:13: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:14: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:13: ["Notebook"]
+2017-06-30 16:30:14: ["f9ce22e174ca4e7daf98f9efdd79116c","cut","joplin","net.cozic.joplin-cli",1498836614006,"54564472eb8345f1818173b2b939738e",1498836614006]
+2017-06-30 16:30:15: Database was open successfully
+2017-06-30 16:30:15: Checking for database schema update...
+2017-06-30 16:30:15: Database was open successfully
+2017-06-30 16:30:15: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:15: Checking for database schema update...
+2017-06-30 16:30:15: Current database version
+2017-06-30 16:30:15: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:15: Database was open successfully
+2017-06-30 16:30:15: SELECT * FROM table_fields
+2017-06-30 16:30:15: Current database version
+2017-06-30 16:30:15: Checking for database schema update...
+2017-06-30 16:30:15: SELECT * FROM table_fields
+2017-06-30 16:30:15: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:15: SELECT * FROM settings
+2017-06-30 16:30:15: Current database version
+2017-06-30 16:30:15: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:15: SELECT * FROM table_fields
+2017-06-30 16:30:15: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:15: SELECT * FROM settings
+2017-06-30 16:30:15: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:15: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:15: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:15: ["Notebook"]
+2017-06-30 16:30:15: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:15: ["f9ce22e174ca4e7daf98f9efdd79116c","elated","joplin","net.cozic.joplin-cli",1498836615261,"5e19dbcf847c445abe81d8a65274bc1f",1498836615261]
+2017-06-30 16:30:16: Database was open successfully
+2017-06-30 16:30:16: Checking for database schema update...
+2017-06-30 16:30:16: Database was open successfully
+2017-06-30 16:30:16: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:16: Checking for database schema update...
+2017-06-30 16:30:16: Current database version
+2017-06-30 16:30:16: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:16: SELECT * FROM table_fields
+2017-06-30 16:30:16: Database was open successfully
+2017-06-30 16:30:16: Current database version
+2017-06-30 16:30:16: Checking for database schema update...
+2017-06-30 16:30:16: SELECT * FROM table_fields
+2017-06-30 16:30:16: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:16: SELECT * FROM settings
+2017-06-30 16:30:16: Current database version
+2017-06-30 16:30:16: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:16: SELECT * FROM table_fields
+2017-06-30 16:30:16: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:16: SELECT * FROM settings
+2017-06-30 16:30:16: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:16: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:16: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:16: ["Notebook"]
+2017-06-30 16:30:16: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:16: ["f9ce22e174ca4e7daf98f9efdd79116c","fallacious","joplin","net.cozic.joplin-cli",1498836616494,"7ac4582d71674c8aa203a3e8f10c89e2",1498836616494]
+2017-06-30 16:30:17: Database was open successfully
+2017-06-30 16:30:17: Checking for database schema update...
+2017-06-30 16:30:17: Database was open successfully
+2017-06-30 16:30:17: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:17: Checking for database schema update...
+2017-06-30 16:30:17: Current database version
+2017-06-30 16:30:17: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:17: SELECT * FROM table_fields
+2017-06-30 16:30:17: Database was open successfully
+2017-06-30 16:30:17: Checking for database schema update...
+2017-06-30 16:30:17: Current database version
+2017-06-30 16:30:17: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:17: SELECT * FROM table_fields
+2017-06-30 16:30:17: Current database version
+2017-06-30 16:30:17: SELECT * FROM settings
+2017-06-30 16:30:17: SELECT * FROM table_fields
+2017-06-30 16:30:17: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:17: SELECT * FROM settings
+2017-06-30 16:30:17: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:17: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:17: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:17: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:17: ["Notebook"]
+2017-06-30 16:30:17: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:17: ["f9ce22e174ca4e7daf98f9efdd79116c","questionable","joplin","net.cozic.joplin-cli",1498836617761,"ad03237fc90c45218bfb9aec003e62f3",1498836617761]
+2017-06-30 16:30:18: Database was open successfully
+2017-06-30 16:30:18: Checking for database schema update...
+2017-06-30 16:30:18: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:18: Database was open successfully
+2017-06-30 16:30:18: Current database version
+2017-06-30 16:30:18: Checking for database schema update...
+2017-06-30 16:30:18: Database was open successfully
+2017-06-30 16:30:18: SELECT * FROM table_fields
+2017-06-30 16:30:18: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:18: Checking for database schema update...
+2017-06-30 16:30:18: Current database version
+2017-06-30 16:30:18: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:18: SELECT * FROM table_fields
+2017-06-30 16:30:18: Current database version
+2017-06-30 16:30:18: SELECT * FROM settings
+2017-06-30 16:30:18: SELECT * FROM table_fields
+2017-06-30 16:30:18: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:18: SELECT * FROM settings
+2017-06-30 16:30:19: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:18: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:19: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:19: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:19: ["Notebook"]
+2017-06-30 16:30:19: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:19: ["f9ce22e174ca4e7daf98f9efdd79116c","mature","joplin","net.cozic.joplin-cli",1498836619022,"4c9028d484724f3cae88070864aa8459",1498836619023]
+2017-06-30 16:30:20: Database was open successfully
+2017-06-30 16:30:20: Checking for database schema update...
+2017-06-30 16:30:20: Database was open successfully
+2017-06-30 16:30:20: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:20: Checking for database schema update...
+2017-06-30 16:30:20: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:20: Current database version
+2017-06-30 16:30:20: Current database version
+2017-06-30 16:30:20: SELECT * FROM table_fields
+2017-06-30 16:30:20: SELECT * FROM table_fields
+2017-06-30 16:30:20: SELECT * FROM settings
+2017-06-30 16:30:20: SELECT * FROM settings
+2017-06-30 16:30:20: Current database version
+2017-06-30 16:30:20: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:20: SELECT * FROM table_fields
+2017-06-30 16:30:20: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:20: SELECT * FROM settings
+2017-06-30 16:30:20: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:20: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:20: ["Notebook"]
+2017-06-30 16:30:20: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:20: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:20: ["Notebook"]
+2017-06-30 16:30:20: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:20: ["f9ce22e174ca4e7daf98f9efdd79116c","conscious","joplin","net.cozic.joplin-cli",1498836620362,"2eb4e7813a254554b59ab520ad8d5a05",1498836620363]
+2017-06-30 16:30:21: Database was open successfully
+2017-06-30 16:30:21: Checking for database schema update...
+2017-06-30 16:30:21: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:21: Current database version
+2017-06-30 16:30:21: Database was open successfully
+2017-06-30 16:30:21: Checking for database schema update...
+2017-06-30 16:30:21: SELECT * FROM table_fields
+2017-06-30 16:30:21: SELECT * FROM settings
+2017-06-30 16:30:21: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:21: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:21: Current database version
+2017-06-30 16:30:21: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:21: SELECT * FROM table_fields
+2017-06-30 16:30:21: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:21: SELECT * FROM settings
+2017-06-30 16:30:21: ["Notebook"]
+2017-06-30 16:30:21: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:21: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:21: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:21: ["f9ce22e174ca4e7daf98f9efdd79116c","annoy","joplin","net.cozic.joplin-cli",1498836621642,"ee95c2e7f2084cbca9a764f3674ff028",1498836621643]
+2017-06-30 16:30:21: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:21: ["Notebook"]
+2017-06-30 16:30:22: Database was open successfully
+2017-06-30 16:30:22: Checking for database schema update...
+2017-06-30 16:30:22: Database was open successfully
+2017-06-30 16:30:22: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:22: Checking for database schema update...
+2017-06-30 16:30:22: Current database version
+2017-06-30 16:30:22: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:22: Database was open successfully
+2017-06-30 16:30:22: SELECT * FROM table_fields
+2017-06-30 16:30:22: Current database version
+2017-06-30 16:30:22: Checking for database schema update...
+2017-06-30 16:30:22: SELECT * FROM table_fields
+2017-06-30 16:30:22: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:22: SELECT * FROM settings
+2017-06-30 16:30:22: Current database version
+2017-06-30 16:30:22: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:22: SELECT * FROM table_fields
+2017-06-30 16:30:22: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:22: SELECT * FROM settings
+2017-06-30 16:30:22: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:22: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:22: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:22: ["Notebook"]
+2017-06-30 16:30:22: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:22: ["f9ce22e174ca4e7daf98f9efdd79116c","protest","joplin","net.cozic.joplin-cli",1498836622926,"faa990337b524f39afe84ae7bdc24dda",1498836622927]
+2017-06-30 16:30:24: Database was open successfully
+2017-06-30 16:30:24: Database was open successfully
+2017-06-30 16:30:24: Checking for database schema update...
+2017-06-30 16:30:24: Checking for database schema update...
+2017-06-30 16:30:24: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:24: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:24: Current database version
+2017-06-30 16:30:24: Current database version
+2017-06-30 16:30:24: SELECT * FROM table_fields
+2017-06-30 16:30:24: Current database version
+2017-06-30 16:30:24: SELECT * FROM table_fields
+2017-06-30 16:30:24: SELECT * FROM settings
+2017-06-30 16:30:24: SELECT * FROM table_fields
+2017-06-30 16:30:24: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:24: SELECT * FROM settings
+2017-06-30 16:30:24: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:24: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:24: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:24: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:24: ["Notebook"]
+2017-06-30 16:30:24: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:24: ["f9ce22e174ca4e7daf98f9efdd79116c","abortive","joplin","net.cozic.joplin-cli",1498836624106,"98964649903b42c5bc513efe0c1a4eda",1498836624106]
+2017-06-30 16:30:25: Database was open successfully
+2017-06-30 16:30:25: Checking for database schema update...
+2017-06-30 16:30:25: Database was open successfully
+2017-06-30 16:30:25: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:25: Checking for database schema update...
+2017-06-30 16:30:25: Current database version
+2017-06-30 16:30:25: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:25: Database was open successfully
+2017-06-30 16:30:25: SELECT * FROM table_fields
+2017-06-30 16:30:25: Current database version
+2017-06-30 16:30:25: Checking for database schema update...
+2017-06-30 16:30:25: SELECT * FROM table_fields
+2017-06-30 16:30:25: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:25: SELECT * FROM settings
+2017-06-30 16:30:25: Current database version
+2017-06-30 16:30:25: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:25: SELECT * FROM table_fields
+2017-06-30 16:30:25: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:25: SELECT * FROM settings
+2017-06-30 16:30:25: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:25: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:25: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:25: ["Notebook"]
+2017-06-30 16:30:25: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:25: ["f9ce22e174ca4e7daf98f9efdd79116c","itch","joplin","net.cozic.joplin-cli",1498836625274,"13e11cb6229b4cf0ba0326c834b3ca94",1498836625275]
+2017-06-30 16:30:26: Database was open successfully
+2017-06-30 16:30:26: Checking for database schema update...
+2017-06-30 16:30:26: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:26: Database was open successfully
+2017-06-30 16:30:26: Current database version
+2017-06-30 16:30:26: Checking for database schema update...
+2017-06-30 16:30:26: Database was open successfully
+2017-06-30 16:30:26: SELECT * FROM table_fields
+2017-06-30 16:30:26: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:26: Checking for database schema update...
+2017-06-30 16:30:26: Current database version
+2017-06-30 16:30:26: SELECT * FROM version LIMIT 1
+2017-06-30 16:30:26: SELECT * FROM table_fields
+2017-06-30 16:30:26: Current database version
+2017-06-30 16:30:26: SELECT * FROM settings
+2017-06-30 16:30:26: SELECT * FROM table_fields
+2017-06-30 16:30:26: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:26: SELECT * FROM settings
+2017-06-30 16:30:26: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:26: SELECT * FROM `folders` WHERE `id` = ?
+2017-06-30 16:30:26: ["f9ce22e174ca4e7daf98f9efdd79116c"]
+2017-06-30 16:30:26: SELECT * FROM `folders` WHERE `title` = ?
+2017-06-30 16:30:26: ["Notebook"]
+2017-06-30 16:30:26: INSERT INTO `notes` (`parent_id`, `title`, `source`, `source_application`, `updated_time`, `id`, `created_time`) VALUES (?, ?, ?, ?, ?, ?, ?)
+2017-06-30 16:30:26: ["f9ce22e174ca4e7daf98f9efdd79116c","order","joplin","net.cozic.joplin-cli",1498836626503,"b81c4f212e4f4c57afdd88e8aefca75f",1498836626504]

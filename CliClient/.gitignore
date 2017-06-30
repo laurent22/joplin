@@ -5,3 +5,6 @@ tests-build/
 tests/src
 config.json
 app/lib
+tests/client1
+tests/client2
+tests/sync
