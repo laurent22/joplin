@@ -328,12 +328,34 @@ commands.push({
 	usage: 'sync',
 	description: 'Synchronizes with remote storage.',
 	action: function(args, end) {
+
+		let redrawnCalled = false;
+
+		let options = {
+			onProgress: (report) => {
+				let line = [];
+				if (report.remotesToUpdate) line.push(_('Items to upload: %d/%d.', report.createRemote + report.updateRemote, report.remotesToUpdate));
+				if (report.remotesToDelete) line.push(_('Remote items to delete: %d/%d.', report.deleteRemote, report.remotesToDelete));
+				if (report.localsToUdpate) line.push(_('Items to download: %d/%d.', report.createLocal + report.updateLocal, report.localsToUdpate));
+				if (report.localsToDelete) line.push(_('Local items to delete: %d/%d.', report.deleteLocal, report.localsToDelete));
+				redrawnCalled = true;
+				vorpal.ui.redraw(line.join(' '));				
+			},
+			onMessage: (msg) => {
+				if (redrawnCalled) vorpal.ui.redraw.done();
+				this.log(msg);
+			},
+		};
+
 		this.log(_('Synchronization target: %s', Setting.value('sync.target')));
 		synchronizer(Setting.value('sync.target')).then((s) => {
-			return s.start();
+			this.log(_('Starting synchronization...'));
+			return s.start(options);
 		}).catch((error) => {
 			this.log(error);
 		}).then(() => {
+			if (redrawnCalled) vorpal.ui.redraw.done();
+			this.log(_('Done.'));
 			end();
 		});
 	},
