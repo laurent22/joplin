@@ -332,4 +332,40 @@ describe('Synchronizer', function() {
 		done();
 	});
 
+	it('should allow duplicate folder title and rename the new one', async (done) => {
+		let localF1 = await Folder.save({ title: "folder" });
+
+		await switchClient(2);
+
+		let remoteF2 = await Folder.save({ title: "folder" });
+		await synchronizer().start();
+
+		await switchClient(1);
+
+		await sleep(0.1);
+
+		await synchronizer().start();
+
+		let localF2 = await Folder.load(remoteF2.id);
+
+		expect(localF2.title == remoteF2.title).toBe(false);
+
+		// Then that folder that has been renamed locally should be set in such a way
+		// that synchronizing it applies the title change remotely, and that new title
+		// should be retrieved by client 2.
+
+		await synchronizer().start();
+
+		await switchClient(2);
+		await sleep(0.1);
+
+		await synchronizer().start();
+
+		remoteF2 = await Folder.load(remoteF2.id);
+
+		expect(remoteF2.title == localF2.title).toBe(true);
+
+		done();
+	});
+
 });
