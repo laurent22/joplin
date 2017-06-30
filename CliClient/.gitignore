@@ -5,6 +5,7 @@ tests-build/
 tests/src
 config.json
 app/lib
+tests/fuzzing/client0
 tests/fuzzing/client1
 tests/fuzzing/client2
 tests/fuzzing/sync

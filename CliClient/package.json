@@ -7,7 +7,7 @@
     "url": "https://github.com/laurent22/joplin"
   },
   "url": "git://github.com/laurent22/joplin.git",
-  "version": "0.8.21",
+  "version": "0.8.27",
   "bin": {
     "joplin": "./main.sh"
   },

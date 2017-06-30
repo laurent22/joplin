@@ -7,5 +7,5 @@ ln -s "$CLIENT_DIR/build/lib" "$CLIENT_DIR/tests-build"
 
 npm run build && NODE_PATH="$CLIENT_DIR/tests-build/" npm test tests-build/synchronizer.js tests-build/base-model.js
 
+#npm run build && NODE_PATH="$CLIENT_DIR/tests-build/" npm test tests-build/synchronizer.js
 #npm run build && NODE_PATH="$CLIENT_DIR/tests-build/" npm test tests-build/base-model.js
-#npm run build && NODE_PATH="$CLIENT_DIR/tests-build/" npm test tests-build/models/folder.js
