@@ -1,0 +1,86 @@
+2017-07-01 13:09:40: Starting synchronization... [1498910980547]
+2017-07-01 13:09:40: Sync: createRemote: remote does not exist, and local is new and has never been synced: (Local 7711fd1e399e4219ba8f5f9e9eeefb16, "Notebook")
+2017-07-01 13:09:40: Sync: createLocal: remote exists but local does not: (Remote 68cba53569c84bfbad79eee85402160b, "Notebook")
+2017-07-01 13:09:41: Synchronization complete [1498910980547]:
+2017-07-01 13:09:41: remotesToUpdate: 1
+2017-07-01 13:09:41: remotesToDelete: -
+2017-07-01 13:09:41: localsToUdpate: 1
+2017-07-01 13:09:41: localsToDelete: -
+2017-07-01 13:09:41: createLocal: 1
+2017-07-01 13:09:41: updateLocal: -
+2017-07-01 13:09:41: deleteLocal: -
+2017-07-01 13:09:41: createRemote: 1
+2017-07-01 13:09:41: updateRemote: -
+2017-07-01 13:09:41: deleteRemote: -
+2017-07-01 13:09:41: folderConflict: -
+2017-07-01 13:09:41: noteConflict: -
+2017-07-01 13:09:41: Total folders: 2
+2017-07-01 13:09:41: Total notes: 0
+2017-07-01 13:09:44: Starting synchronization... [1498910984088]
+2017-07-01 13:09:44: Sync: updateRemote: local has changes: (Local 68cba53569c84bfbad79eee85402160b, "Notebook-1498910969401-461"): (Remote )
+2017-07-01 13:09:44: Synchronization complete [1498910984088]:
+2017-07-01 13:09:44: remotesToUpdate: 1
+2017-07-01 13:09:44: remotesToDelete: -
+2017-07-01 13:09:44: localsToUdpate: -
+2017-07-01 13:09:44: localsToDelete: -
+2017-07-01 13:09:44: createLocal: -
+2017-07-01 13:09:44: updateLocal: -
+2017-07-01 13:09:44: deleteLocal: -
+2017-07-01 13:09:44: createRemote: -
+2017-07-01 13:09:44: updateRemote: 1
+2017-07-01 13:09:44: deleteRemote: -
+2017-07-01 13:09:44: folderConflict: -
+2017-07-01 13:09:44: noteConflict: -
+2017-07-01 13:09:44: Total folders: 2
+2017-07-01 13:09:44: Total notes: 0
+2017-07-01 13:09:48: Starting synchronization... [1498910988979]
+2017-07-01 13:09:49: Sync: updateLocal: remote is more recent than local: (Local 7711fd1e399e4219ba8f5f9e9eeefb16, "Notebook"): (Remote 7711fd1e399e4219ba8f5f9e9eeefb16, "Notebook-1498910969408-979")
+2017-07-01 13:09:49: Synchronization complete [1498910988979]:
+2017-07-01 13:09:49: remotesToUpdate: -
+2017-07-01 13:09:49: remotesToDelete: -
+2017-07-01 13:09:49: localsToUdpate: 1
+2017-07-01 13:09:49: localsToDelete: -
+2017-07-01 13:09:49: createLocal: -
+2017-07-01 13:09:49: updateLocal: 1
+2017-07-01 13:09:49: deleteLocal: -
+2017-07-01 13:09:49: createRemote: -
+2017-07-01 13:09:49: updateRemote: -
+2017-07-01 13:09:49: deleteRemote: -
+2017-07-01 13:09:49: folderConflict: -
+2017-07-01 13:09:49: noteConflict: -
+2017-07-01 13:09:49: Total folders: 2
+2017-07-01 13:09:49: Total notes: 0
+2017-07-01 13:09:57: Starting synchronization... [1498910997207]
+2017-07-01 13:09:57: Sync: deleteRemote: local has been deleted: (Remote 7711fd1e399e4219ba8f5f9e9eeefb16)
+2017-07-01 13:09:57: Sync: deleteLocal: remote has been deleted: (Local 68cba53569c84bfbad79eee85402160b)
+2017-07-01 13:09:57: Error: Cannot delete the last notebook
+Error: Cannot delete the last notebook
+    at Function._callee$ (/mnt/d/Web/www/joplin/CliClient/app/lib/models/folder.js:59:25)
+    at tryCatch (/mnt/d/Web/www/joplin/CliClient/node_modules/regenerator-runtime/runtime.js:65:40)
+    at GeneratorFunctionPrototype.invoke [as _invoke] (/mnt/d/Web/www/joplin/CliClient/node_modules/regenerator-runtime/runtime.js:303:22)
+    at GeneratorFunctionPrototype.prototype.(anonymous function) [as next] (/mnt/d/Web/www/joplin/CliClient/node_modules/regenerator-runtime/runtime.js:117:21)
+    at step (/mnt/d/Web/www/joplin/CliClient/node_modules/babel-runtime/helpers/asyncToGenerator.js:17:30)
+    at /mnt/d/Web/www/joplin/CliClient/node_modules/babel-runtime/helpers/asyncToGenerator.js:28:13
+    at process._tickCallback (internal/process/next_tick.js:109:7)
+2017-07-01 13:10:00: Starting synchronization... [1498911000231]
+2017-07-01 13:10:00: Sync: deleteLocal: remote has been deleted: (Local 68cba53569c84bfbad79eee85402160b)
+2017-07-01 13:10:00: Error: Cannot delete the last notebook
+Error: Cannot delete the last notebook
+    at Function._callee$ (/mnt/d/Web/www/joplin/CliClient/app/lib/models/folder.js:59:25)
+    at tryCatch (/mnt/d/Web/www/joplin/CliClient/node_modules/regenerator-runtime/runtime.js:65:40)
+    at GeneratorFunctionPrototype.invoke [as _invoke] (/mnt/d/Web/www/joplin/CliClient/node_modules/regenerator-runtime/runtime.js:303:22)
+    at GeneratorFunctionPrototype.prototype.(anonymous function) [as next] (/mnt/d/Web/www/joplin/CliClient/node_modules/regenerator-runtime/runtime.js:117:21)
+    at step (/mnt/d/Web/www/joplin/CliClient/node_modules/babel-runtime/helpers/asyncToGenerator.js:17:30)
+    at /mnt/d/Web/www/joplin/CliClient/node_modules/babel-runtime/helpers/asyncToGenerator.js:28:13
+    at process._tickCallback (internal/process/next_tick.js:109:7)
+2017-07-01 13:10:04: Starting synchronization... [1498911004265]
+2017-07-01 13:10:04: Sync: deleteLocal: remote has been deleted: (Local 68cba53569c84bfbad79eee85402160b)
+2017-07-01 13:10:04: Error: Cannot delete the last notebook
+Error: Cannot delete the last notebook
+    at Function._callee$ (/mnt/d/Web/www/joplin/CliClient/app/lib/models/folder.js:59:25)
+    at tryCatch (/mnt/d/Web/www/joplin/CliClient/node_modules/regenerator-runtime/runtime.js:65:40)
+    at GeneratorFunctionPrototype.invoke [as _invoke] (/mnt/d/Web/www/joplin/CliClient/node_modules/regenerator-runtime/runtime.js:303:22)
+    at GeneratorFunctionPrototype.prototype.(anonymous function) [as next] (/mnt/d/Web/www/joplin/CliClient/node_modules/regenerator-runtime/runtime.js:117:21)
+    at step (/mnt/d/Web/www/joplin/CliClient/node_modules/babel-runtime/helpers/asyncToGenerator.js:17:30)
+    at /mnt/d/Web/www/joplin/CliClient/node_modules/babel-runtime/helpers/asyncToGenerator.js:28:13
+    at process._tickCallback (internal/process/next_tick.js:109:7)

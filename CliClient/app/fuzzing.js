@@ -11,10 +11,15 @@ const fs = require('fs-extra');
 const baseDir = '/var/www/joplin/CliClient/tests/fuzzing';
 const syncDir = baseDir + '/sync';
 const joplinAppPath = __dirname + '/main.js';
+let syncDurations = [];
 
 const logger = new Logger();
 logger.addTarget('console');
 logger.setLevel(Logger.LEVEL_DEBUG);
+
+process.on('unhandledRejection', (reason, p) => {
+	console.error('Unhandled promise rejection', p, 'reason:', reason);
+});
 
 function createClient(id) {
 	return {
@@ -48,14 +53,17 @@ function randomWord() {
 	return randomElement(words);
 }
 
-function execCommand(client, command) {
+function execCommand(client, command, options = {}) {
 	let exePath = 'node ' + joplinAppPath;
 	let cmd = exePath + ' --profile ' + client.profileDir + ' ' + command;
-	//logger.info(cmd.substr(exePath.length + 1));
 	logger.info(cmd);
 
+	if (options.killAfter) {
+		logger.info('Kill after: ' + options.killAfter);
+	}
+
 	return new Promise((resolve, reject) => {
-		exec(cmd, (error, stdout, stderr) => {
+		let childProcess = exec(cmd, (error, stdout, stderr) => {
 			if (error) {
 				logger.error(stderr);
 				reject(error);
@@ -63,6 +71,14 @@ function execCommand(client, command) {
 				resolve(stdout);
 			}
 		});
+
+		if (options.killAfter) {
+			setTimeout(() => {
+				if (!childProcess.connected) return;
+				logger.info('Sending kill signal...');
+				childProcess.kill();
+			}, options.killAfter);
+		}
 	});
 }
 
@@ -77,14 +93,23 @@ async function execRandomCommand(client) {
 			if (!item) return;
 
 			if (item.type_ == 1) {
-				await execCommand(client, 'rm -f ' + item.title);
+				return execCommand(client, 'rm -f ' + item.title);
 			} else if (item.type_ == 2) {
-				await execCommand(client, 'rm -f ' + '../' + item.title);
+				return execCommand(client, 'rm -f ' + '../' + item.title);
 			} else {
 				throw new Error('Unknown type: ' + item.type_);
 			}
-		}, 40],
-		['sync', 10],
+		}, 80],
+		[async () => {
+			let avgSyncDuration = averageSyncDuration();
+			let options = {};
+			if (!isNaN(avgSyncDuration)) {
+				if (Math.random() >= 0.5) {
+					options.killAfter = avgSyncDuration * Math.random();
+				}
+			}
+			return execCommand(client, 'sync', options);
+		}, 10],
 	];
 
 	let cmd = null;
@@ -104,10 +129,62 @@ async function execRandomCommand(client) {
 	}
 }
 
+function averageSyncDuration() {
+	return lodash.mean(syncDurations);
+}
+
 function randomNextCheckTime() {
-	let output = time.unixMs() + 1000 + Math.random() * 1000 * 10;
+	let output = time.unixMs() + 1000 + Math.random() * 1000 * 2;
 	logger.info('Next sync check: ' + time.unixMsToIso(output) + ' (' + (Math.round((output - time.unixMs()) / 1000)) + ' sec.)');
 	return output;
+}
+
+function findItem(items, itemId) {
+	for (let i = 0; i  < items.length; i++) {
+		if (items[i].id == itemId) return items[i];
+	}
+	return null;
+}
+
+function compareItems(item1, item2) {
+	let output = [];
+	for (let n in item1) {
+		if (!item1.hasOwnProperty(n)) continue;
+		if (n == 'sync_time') continue;
+		let p1 = item1[n];
+		let p2 = item2[n];
+		if (p1 !== p2) output.push(n);
+	}
+	return output;
+}
+
+function findMissingItems_(items1, items2) {
+	let output = [];
+
+	for (let i = 0; i < items1.length; i++) {
+		let item1 = items1[i];
+		let found = false;
+		for (let j = 0; j < items2.length; j++) {
+			let item2 = items2[j];
+			if (item1.id == item2.id) {
+				found = true;
+				break;
+			}
+		}
+
+		if (!found) {
+			output.push(item1);
+		}
+	}
+
+	return output;
+}
+
+function findMissingItems(items1, items2) {
+	return [
+		findMissingItems_(items1, items2),
+		findMissingItems_(items2, items1),
+	];
 }
 
 async function compareClientItems(clientItems) {
@@ -117,19 +194,52 @@ async function compareClientItems(clientItems) {
 		itemCounts.push(items.length);
 	}
 	logger.info('Item count: ' + itemCounts.join(', '));
-
-	let r = lodash.uniq(itemCounts);
-	if (r.length > 1) {
+	
+	let missingItems = findMissingItems(clientItems[0], clientItems[1]);
+	if (missingItems[0].length || missingItems[1].length) {
 		logger.error('Item count is different');
+		logger.error(missingItems);
+		process.exit(1);
+	}
 
-		await time.sleep(2); // Let the logger finish writing
+	// let r = lodash.uniq(itemCounts);
+	// if (r.length > 1) {
+	// 	logger.error('Item count is different');
+	// 	process.exit(1);
+	// }
+
+	let differences = [];
+	let items = clientItems[0];
+	for (let i = 0; i < items.length; i++) {
+		let item1 = items[i];
+		for (let clientId = 1; clientId < clientItems.length; clientId++) {
+			let item2 = findItem(clientItems[clientId], item1.id);
+			if (!item2) {
+				logger.error('Item not found on client ' + clientId + ':');
+				logger.error(item1);
+				process.exit(1);
+			}
+
+			let diff = compareItems(item1, item2);
+			if (diff.length) {
+				differences.push({
+					item1: item1,
+					item2: item2,
+				});
+			}
+		}
+	}
+
+	if (differences.length) {
+		logger.error('Found differences between items:');
+		logger.error(differences);
 		process.exit(1);
 	}
 }
 
 async function main(argv) {
 	await fs.remove(syncDir);
-
+	
 	let clients = await createClients();
 	let activeCommandCounts = [];
 	let clientId = 0;
@@ -164,12 +274,18 @@ async function main(argv) {
 		if (state == 'syncCheck') {
 			state = 'waitForSyncCheck';
 			let clientItems = [];
-			// In order for all the clients to send their items and get those from the other
-			// clients, they need to perform 2 sync.
-			for (let loopCount = 0; loopCount < 2; loopCount++) {
+			// Up to 3 sync operations must be performed by each clients in order for them
+			// to be perfectly in sync - in order for each items to send their changes
+			// and get those from the other clients, and to also get changes that are
+			// made as a result of a sync operation (eg. renaming a folder that conflicts
+			// with another one).
+			for (let loopCount = 0; loopCount < 3; loopCount++) {
 				for (let i = 0; i < clients.length; i++) {
+					let beforeTime = time.unixMs();
 					await execCommand(clients[i], 'sync');
-					if (loopCount === 1) {
+					syncDurations.push(time.unixMs() - beforeTime);
+					if (syncDurations.length > 20) syncDurations.splice(0, 1);
+					if (loopCount === 2) {
 						let dump = await execCommand(clients[i], 'dump');
 						clientItems[i] = JSON.parse(dump);
 					}
@@ -205,4 +321,6 @@ async function main(argv) {
 	}, 100);
 }
 
-main(process.argv);
+main(process.argv).catch((error) => {
+	logger.error(error);
+});

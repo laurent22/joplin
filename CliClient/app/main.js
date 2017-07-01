@@ -264,7 +264,6 @@ commands.push({
 				let folder = folders[i];
 				let notes = await Note.previews(folder.id);
 				items.push(folder);
-				console.info(folder.title);
 				items = items.concat(notes);
 			}
 			
@@ -811,7 +810,6 @@ async function main() {
 		let cmd = shellArgsToString(argv);
 		await vorpal.exec(cmd);
 		await vorpal.exec('exit');
-		await time.sleep(1); // Let loggers finish writing
 		return;
 	} else {
 		vorpal.delimiter(promptString()).show();

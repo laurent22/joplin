@@ -1,0 +1,51 @@
+2017-07-01 13:09:29: Starting joplin-cli 0.8.27...
+2017-07-01 13:09:29: Profile directory: /var/www/joplin/CliClient/tests/fuzzing/client1
+2017-07-01 13:09:32: Starting joplin-cli 0.8.27...
+2017-07-01 13:09:32: Profile directory: /var/www/joplin/CliClient/tests/fuzzing/client1
+2017-07-01 13:09:33: Starting joplin-cli 0.8.27...
+2017-07-01 13:09:33: Profile directory: /var/www/joplin/CliClient/tests/fuzzing/client1
+2017-07-01 13:09:35: Starting joplin-cli 0.8.27...
+2017-07-01 13:09:35: Profile directory: /var/www/joplin/CliClient/tests/fuzzing/client1
+2017-07-01 13:09:40: Starting joplin-cli 0.8.27...
+2017-07-01 13:09:40: Profile directory: /var/www/joplin/CliClient/tests/fuzzing/client1
+2017-07-01 13:09:40: mkdir /var/www/joplin/CliClient/tests/fuzzing/sync/.sync
+2017-07-01 13:09:40: stat /var/www/joplin/CliClient/tests/fuzzing/sync/7711fd1e399e4219ba8f5f9e9eeefb16.md
+2017-07-01 13:09:40: put /var/www/joplin/CliClient/tests/fuzzing/sync/.sync/7711fd1e399e4219ba8f5f9e9eeefb16.md_1498910980567
+2017-07-01 13:09:40: setTimestamp /var/www/joplin/CliClient/tests/fuzzing/sync/.sync/7711fd1e399e4219ba8f5f9e9eeefb16.md_1498910980567
+2017-07-01 13:09:40: move /var/www/joplin/CliClient/tests/fuzzing/sync/.sync/7711fd1e399e4219ba8f5f9e9eeefb16.md_1498910980567 => /var/www/joplin/CliClient/tests/fuzzing/sync/7711fd1e399e4219ba8f5f9e9eeefb16.md
+2017-07-01 13:09:40: list /var/www/joplin/CliClient/tests/fuzzing/sync
+2017-07-01 13:09:40: get /var/www/joplin/CliClient/tests/fuzzing/sync/68cba53569c84bfbad79eee85402160b.md
+2017-07-01 13:09:43: Starting joplin-cli 0.8.27...
+2017-07-01 13:09:43: Profile directory: /var/www/joplin/CliClient/tests/fuzzing/client1
+2017-07-01 13:09:44: mkdir /var/www/joplin/CliClient/tests/fuzzing/sync/.sync
+2017-07-01 13:09:44: stat /var/www/joplin/CliClient/tests/fuzzing/sync/68cba53569c84bfbad79eee85402160b.md
+2017-07-01 13:09:44: put /var/www/joplin/CliClient/tests/fuzzing/sync/.sync/68cba53569c84bfbad79eee85402160b.md_1498910984114
+2017-07-01 13:09:44: setTimestamp /var/www/joplin/CliClient/tests/fuzzing/sync/.sync/68cba53569c84bfbad79eee85402160b.md_1498910984114
+2017-07-01 13:09:44: move /var/www/joplin/CliClient/tests/fuzzing/sync/.sync/68cba53569c84bfbad79eee85402160b.md_1498910984114 => /var/www/joplin/CliClient/tests/fuzzing/sync/68cba53569c84bfbad79eee85402160b.md
+2017-07-01 13:09:44: list /var/www/joplin/CliClient/tests/fuzzing/sync
+2017-07-01 13:09:48: Starting joplin-cli 0.8.27...
+2017-07-01 13:09:48: Profile directory: /var/www/joplin/CliClient/tests/fuzzing/client1
+2017-07-01 13:09:48: mkdir /var/www/joplin/CliClient/tests/fuzzing/sync/.sync
+2017-07-01 13:09:49: list /var/www/joplin/CliClient/tests/fuzzing/sync
+2017-07-01 13:09:49: get /var/www/joplin/CliClient/tests/fuzzing/sync/7711fd1e399e4219ba8f5f9e9eeefb16.md
+2017-07-01 13:09:50: Starting joplin-cli 0.8.27...
+2017-07-01 13:09:50: Profile directory: /var/www/joplin/CliClient/tests/fuzzing/client1
+2017-07-01 13:09:52: Starting joplin-cli 0.8.27...
+2017-07-01 13:09:52: Profile directory: /var/www/joplin/CliClient/tests/fuzzing/client1
+2017-07-01 13:09:53: Starting joplin-cli 0.8.27...
+2017-07-01 13:09:53: Profile directory: /var/www/joplin/CliClient/tests/fuzzing/client1
+2017-07-01 13:09:57: Starting joplin-cli 0.8.27...
+2017-07-01 13:09:57: Profile directory: /var/www/joplin/CliClient/tests/fuzzing/client1
+2017-07-01 13:09:57: mkdir /var/www/joplin/CliClient/tests/fuzzing/sync/.sync
+2017-07-01 13:09:57: delete /var/www/joplin/CliClient/tests/fuzzing/sync/7711fd1e399e4219ba8f5f9e9eeefb16.md
+2017-07-01 13:09:57: list /var/www/joplin/CliClient/tests/fuzzing/sync
+2017-07-01 13:10:00: Starting joplin-cli 0.8.27...
+2017-07-01 13:10:00: Profile directory: /var/www/joplin/CliClient/tests/fuzzing/client1
+2017-07-01 13:10:00: mkdir /var/www/joplin/CliClient/tests/fuzzing/sync/.sync
+2017-07-01 13:10:00: list /var/www/joplin/CliClient/tests/fuzzing/sync
+2017-07-01 13:10:04: Starting joplin-cli 0.8.27...
+2017-07-01 13:10:04: Profile directory: /var/www/joplin/CliClient/tests/fuzzing/client1
+2017-07-01 13:10:04: mkdir /var/www/joplin/CliClient/tests/fuzzing/sync/.sync
+2017-07-01 13:10:04: list /var/www/joplin/CliClient/tests/fuzzing/sync
+2017-07-01 13:10:05: Starting joplin-cli 0.8.27...
+2017-07-01 13:10:05: Profile directory: /var/www/joplin/CliClient/tests/fuzzing/client1
