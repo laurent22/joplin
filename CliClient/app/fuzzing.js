@@ -197,7 +197,7 @@ async function compareClientItems(clientItems) {
 	
 	let missingItems = findMissingItems(clientItems[0], clientItems[1]);
 	if (missingItems[0].length || missingItems[1].length) {
-		logger.error('Item count is different');
+		logger.error('Items are different');
 		logger.error(missingItems);
 		process.exit(1);
 	}
