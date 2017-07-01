@@ -319,6 +319,46 @@ describe('Synchronizer', function() {
 		done();
 	});
 
+	it('should cross delete all folders', async (done) => {
+		// If client1 and 2 have two folders, client 1 deletes item 1 and client
+		// 2 deletes item 2, they should both end up with no items after sync.
+
+		let folder1 = await Folder.save({ title: "folder1" });
+		let folder2 = await Folder.save({ title: "folder2" });
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+
+		await sleep(0.1);
+
+		await Folder.delete(folder1.id);
+
+		await switchClient(1);
+
+		await Folder.delete(folder2.id);
+
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+
+		let items2 = await allItems();
+
+		await switchClient(1);
+
+		await synchronizer().start();
+
+		let items1 = await allItems();
+
+		expect(items1.length).toBe(0);
+		expect(items1.length).toBe(items2.length);
+		
+		done();
+	});
+
 	it('should handle conflict when remote note is deleted then local note is modified', async (done) => {
 		let folder1 = await Folder.save({ title: "folder1" });
 		let note1 = await Note.save({ title: "un", parent_id: folder1.id });
