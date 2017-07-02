@@ -11,6 +11,7 @@ import { Database } from 'lib/database.js';
 import { DatabaseDriverNode } from 'lib/database-driver-node.js';
 import { BaseModel } from 'lib/base-model.js';
 import { Folder } from 'lib/models/folder.js';
+import { Resource } from 'lib/models/resource.js';
 import { BaseItem } from 'lib/models/base-item.js';
 import { Note } from 'lib/models/note.js';
 import { Setting } from 'lib/models/setting.js';
