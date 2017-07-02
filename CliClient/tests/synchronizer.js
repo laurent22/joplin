@@ -385,6 +385,10 @@ describe('Synchronizer', function() {
 
 		expect(conflictedNotes.length).toBe(1);
 		expect(conflictedNotes[0].title).toBe(newTitle);
+
+		let unconflictedNotes = await Note.unconflictedNotes();
+
+		expect(unconflictedNotes.length).toBe(0);
 		
 		done();
 	});
