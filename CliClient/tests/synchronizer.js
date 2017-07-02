@@ -37,7 +37,7 @@ async function localItemsSameAsRemote(locals, expect) {
 			expect(remote.updated_time).toBe(dbItem.updated_time);
 
 			let remoteContent = await fileApi().get(path);
-			remoteContent = dbItem.type_ == BaseModel.MODEL_TYPE_NOTE ? Note.unserialize(remoteContent) : Folder.unserialize(remoteContent);
+			remoteContent = dbItem.type_ == BaseModel.MODEL_TYPE_NOTE ? await Note.unserialize(remoteContent) : await Folder.unserialize(remoteContent);
 			expect(remoteContent.title).toBe(dbItem.title);
 		}
 	} catch (error) {

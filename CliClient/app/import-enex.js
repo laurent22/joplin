@@ -4,6 +4,7 @@ import { promiseChain } from 'lib/promise-utils.js';
 import { folderItemFilename } from 'lib/string-utils.js'
 import { BaseModel } from 'lib/base-model.js';
 import { Note } from 'lib/models/note.js';
+import { Tag } from 'lib/models/tag.js';
 import { Resource } from 'lib/models/resource.js';
 import { Folder } from 'lib/models/folder.js';
 import { enexXmlToMd } from './import-enex-md-gen.js';
@@ -74,6 +75,21 @@ async function saveNoteResources(note) {
 	return resourcesCreated;
 }
 
+async function saveNoteTags(note) {
+	let noteTagged = 0;
+	for (let i = 0; i < note.tags.length; i++) {
+		let tagTitle = note.tags[i];
+
+		let tag = await Tag.loadByTitle(tagTitle);
+		if (!tag) tag = await Tag.save({ title: tagTitle });
+
+		await Tag.addNote(tag.id, note.id);
+
+		noteTagged++;
+	}
+	return noteTagged;
+}
+
 async function saveNoteToStorage(note, fuzzyMatching = false) {
 	note = Note.filter(note);
 
@@ -84,10 +100,14 @@ async function saveNoteToStorage(note, fuzzyMatching = false) {
 		noteUpdated: false,
 		noteSkipped: false,
 		resourcesCreated: 0,
+		noteTagged: 0,
 	};
 
 	let resourcesCreated = await saveNoteResources(note);
 	result.resourcesCreated += resourcesCreated;
+
+	let noteTagged = await saveNoteTags(note);
+	result.noteTagged += noteTagged;
 
 	if (existingNote) {
 		let diff = BaseModel.diffObjects(existingNote, note);
@@ -128,6 +148,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			updated: 0,
 			skipped: 0,
 			resourcesCreated: 0,
+			noteTagged: 0,
 		};
 
 		let stream = fs.createReadStream(filePath);
@@ -192,6 +213,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 							progressState.skipped++;
 						}
 						progressState.resourcesCreated += result.resourcesCreated;
+						progressState.noteTagged += result.noteTagged;
 						importOptions.onProgress(progressState);
 					});
 				});

@@ -153,33 +153,36 @@ commands.push({
 commands.push({
 	usage: 'cat <title>',
 	description: 'Displays the given item data.',
-	action: function(args, end) {
-		let title = args['title'];
+	action: async function(args, end) {
+		try {
+			let title = args['title'];
 
-		let promise = null;
-		if (!currentFolder) {
-			promise = Folder.loadByField('title', title);
-		} else {
-			promise = Note.loadFolderNoteByField(currentFolder.id, 'title', title);
-		}
+			let item = null;
+			if (!currentFolder) {
+				item = await Folder.loadByField('title', title);
+			} else {
+				item = await Note.loadFolderNoteByField(currentFolder.id, 'title', title);
+			}
 
-		promise.then((item) => {
 			if (!item) {
 				this.log(_('No item with title "%s" found.', title));
 				end();
 				return;
 			}
 
+			let content = null;
 			if (!currentFolder) {
-				this.log(Folder.serialize(item));
+				content = await Folder.serialize(item);
 			} else {
-				this.log(Note.serialize(item));
+				content = await Note.serialize(item);
 			}
-		}).catch((error) => {
+
+			this.log(content);
+		} catch(error) {
 			this.log(error);
-		}).then(() => {
-			end();
-		});
+		}
+
+		end();
 	},
 	autocomplete: autocompleteItems,
 });
@@ -467,6 +470,7 @@ commands.push({
 					if (progressState.updated) line.push(_('Updated: %d.', progressState.updated));
 					if (progressState.skipped) line.push(_('Skipped: %d.', progressState.skipped));
 					if (progressState.resourcesCreated) line.push(_('Resources: %d.', progressState.resourcesCreated));
+					if (progressState.notesTagged) line.push(_('Tagged: %d.', progressState.notesTagged));
 					redrawnCalled = true;
 					vorpal.ui.redraw(line.join(' '));
 				},
