@@ -9,3 +9,4 @@ tests/fuzzing/client0
 tests/fuzzing/client1
 tests/fuzzing/client2
 tests/fuzzing/sync
+tests/fuzzing.*
