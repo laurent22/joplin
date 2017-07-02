@@ -45,7 +45,6 @@ function clearDatabase(id = null) {
 	if (id === null) id = currentClient_;
 
 	let queries = [
-		'DELETE FROM changes',
 		'DELETE FROM notes',
 		'DELETE FROM folders',
 		'DELETE FROM resources',

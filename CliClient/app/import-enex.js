@@ -76,7 +76,7 @@ async function saveNoteResources(note) {
 }
 
 async function saveNoteTags(note) {
-	let noteTagged = 0;
+	let notesTagged = 0;
 	for (let i = 0; i < note.tags.length; i++) {
 		let tagTitle = note.tags[i];
 
@@ -85,9 +85,9 @@ async function saveNoteTags(note) {
 
 		await Tag.addNote(tag.id, note.id);
 
-		noteTagged++;
+		notesTagged++;
 	}
-	return noteTagged;
+	return notesTagged;
 }
 
 async function saveNoteToStorage(note, fuzzyMatching = false) {
@@ -100,14 +100,14 @@ async function saveNoteToStorage(note, fuzzyMatching = false) {
 		noteUpdated: false,
 		noteSkipped: false,
 		resourcesCreated: 0,
-		noteTagged: 0,
+		notesTagged: 0,
 	};
 
 	let resourcesCreated = await saveNoteResources(note);
 	result.resourcesCreated += resourcesCreated;
 
-	let noteTagged = await saveNoteTags(note);
-	result.noteTagged += noteTagged;
+	let notesTagged = await saveNoteTags(note);
+	result.notesTagged += notesTagged;
 
 	if (existingNote) {
 		let diff = BaseModel.diffObjects(existingNote, note);
@@ -148,7 +148,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			updated: 0,
 			skipped: 0,
 			resourcesCreated: 0,
-			noteTagged: 0,
+			notesTagged: 0,
 		};
 
 		let stream = fs.createReadStream(filePath);
@@ -213,7 +213,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 							progressState.skipped++;
 						}
 						progressState.resourcesCreated += result.resourcesCreated;
-						progressState.noteTagged += result.noteTagged;
+						progressState.notesTagged += result.notesTagged;
 						importOptions.onProgress(progressState);
 					});
 				});

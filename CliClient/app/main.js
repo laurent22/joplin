@@ -391,8 +391,8 @@ commands.push({
 				if (report.remotesToDelete) line.push(_('Remote items to delete: %d/%d.', report.deleteRemote, report.remotesToDelete));
 				if (report.localsToUdpate) line.push(_('Items to download: %d/%d.', report.createLocal + report.updateLocal, report.localsToUdpate));
 				if (report.localsToDelete) line.push(_('Local items to delete: %d/%d.', report.deleteLocal, report.localsToDelete));
-				//redrawnCalled = true;
-				//vorpal.ui.redraw(line.join(' '));				
+				// redrawnCalled = true;
+				// vorpal.ui.redraw(line.join(' '));
 			},
 			onMessage: (msg) => {
 				if (redrawnCalled) vorpal.ui.redraw.done();
