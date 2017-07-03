@@ -1,3 +1,5 @@
+"use strict"
+
 require('source-map-support').install();
 require('babel-plugin-transform-runtime');
 
@@ -94,12 +96,32 @@ async function clientItems(client) {
 	}
 }
 
+function randomTag(items) {
+	let tags = [];
+	for (let i = 0; i < items.length; i++) {
+		if (items[i].type_ != 5) continue;
+		tags.push(items[i]);
+	}
+
+	return randomElement(tags);
+}
+
+function randomNote(items) {
+	let notes = [];
+	for (let i = 0; i < items.length; i++) {
+		if (items[i].type_ != 1) continue;
+		notes.push(items[i]);
+	}
+
+	return randomElement(notes);
+}
+
 async function execRandomCommand(client) {
 	let possibleCommands = [
 		['mkbook {word}', 40], // CREATE FOLDER
 		['mknote {word}', 70], // CREATE NOTE
 		[async () => { // DELETE RANDOM ITEM
-			let items = clientItems(client);
+			let items = await clientItems(client);
 			let item = randomElement(items);
 			if (!item) return;
 
@@ -107,6 +129,8 @@ async function execRandomCommand(client) {
 				return execCommand(client, 'rm -f ' + item.title);
 			} else if (item.type_ == 2) {
 				return execCommand(client, 'rm -f ' + '../' + item.title);
+			} else if (item.type_ == 5) {
+				// tag
 			} else {
 				throw new Error('Unknown type: ' + item.type_);
 			}
@@ -122,11 +146,21 @@ async function execRandomCommand(client) {
 			return execCommand(client, 'sync --random-failures', options);
 		}, 30],
 		[async () => { // UPDATE RANDOM ITEM
-			let items = clientItems(client);
+			let items = await clientItems(client);
 			let item = randomElement(items);
 			if (!item) return;
 
 			return execCommand(client, 'set ' + item.id + ' title "' + randomWord() + '"');
+		}, 50],
+		[async () => { // ADD TAG
+			let items = await clientItems(client);
+			let note = randomNote(items);
+			if (!note) return;
+
+			let tag = randomTag(items);
+			let tagTitle = !tag || Math.random() >= 0.9 ? 'tag-' + randomWord() : tag.title;
+			
+			return execCommand(client, 'tag add ' + tagTitle + ' "' + note.title + '"');
 		}, 50],
 	];
 
@@ -171,7 +205,16 @@ function compareItems(item1, item2) {
 		if (n == 'sync_time') continue;
 		let p1 = item1[n];
 		let p2 = item2[n];
-		if (p1 !== p2) output.push(n);
+
+		if (n == 'notes_') {
+			p1.sort();
+			p2.sort();
+			if (JSON.stringify(p1) !== JSON.stringify(p2)) {
+				output.push(n);
+			}
+		} else {
+			if (p1 !== p2) output.push(n);
+		}
 	}
 	return output;
 }
@@ -235,8 +278,8 @@ async function compareClientItems(clientItems) {
 			let diff = compareItems(item1, item2);
 			if (diff.length) {
 				differences.push({
-					item1: item1,
-					item2: item2,
+					item1: JSON.stringify(item1),
+					item2: JSON.stringify(item2),
 				});
 			}
 		}

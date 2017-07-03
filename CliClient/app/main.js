@@ -14,6 +14,7 @@ import { Folder } from 'lib/models/folder.js';
 import { Resource } from 'lib/models/resource.js';
 import { BaseItem } from 'lib/models/base-item.js';
 import { Note } from 'lib/models/note.js';
+import { Tag } from 'lib/models/tag.js';
 import { Setting } from 'lib/models/setting.js';
 import { Synchronizer } from 'lib/synchronizer.js';
 import { Logger } from 'lib/logger.js';
@@ -59,7 +60,7 @@ commands.push({
 	aliases: ['mkdir'],
 	description: 'Creates a new notebook',
 	action: function(args, end) {
-		Folder.save({ title: args['notebook'] }).then((folder) => {
+		Folder.save({ title: args['notebook'] }, { duplicateCheck: true }).then((folder) => {
 			switchCurrentFolder(folder);
 		}).catch((error) => {
 			this.log(error);
@@ -70,7 +71,7 @@ commands.push({
 });
 
 commands.push({
-	usage: 'mknote <note-title>',
+	usage: 'mknote <note>',
 	aliases: ['touch'],
 	description: 'Creates a new note',
 	action: function(args, end) {
@@ -81,7 +82,7 @@ commands.push({
 		}
 
 		let note = {
-			title: args['note-title'],
+			title: args['note'],
 			parent_id: currentFolder.id,
 		};
 		Note.save(note).catch((error) => {
@@ -266,6 +267,45 @@ commands.push({
 });
 
 commands.push({
+	usage: 'tag <command> [tag] [note]',
+	description: '<command> can be "add", "remove" or "list" to assign or remove [tag] from [note], or to list the notes associated with [tag]. The command `tag list` can be used to list all the tags.',
+	action: async function(args, end) {
+		try {
+			let tag = null;
+			if (args.tag) tag = await loadItem(BaseModel.MODEL_TYPE_TAG, args.tag);
+			let note = null;
+			if (args.note) note = await loadItem(BaseModel.MODEL_TYPE_NOTE, args.note);
+
+			if (args.command == 'remove' && !tag) throw new Error(_('Tag does not exist: "%s"', args.tag));
+
+			if (args.command == 'add') {
+				if (!note) throw new Error(_('Note does not exist: "%s"', args.note));
+				if (!tag) tag = await Tag.save({ title: args.tag });
+				await Tag.addNote(tag.id, note.id);
+			} else if (args.command == 'remove') {
+				if (!tag) throw new Error(_('Tag does not exist: "%s"', args.tag));
+				if (!note) throw new Error(_('Note does not exist: "%s"', args.note));
+				await Tag.removeNote(tag.id, note.id);
+			} else if (args.command == 'list') {
+				if (tag) {
+					let notes = await Tag.notes(tag.id);
+					notes.map((note) => { this.log(note.title); });
+				} else {
+					let tags = await Tag.all();
+					tags.map((tag) => { this.log(tag.title); });
+				}
+			} else {
+				throw new Error(_('Invalid command: "%s"', args.command));
+			}
+		} catch (error) {
+			this.log(error);
+		}
+
+		end();
+	}
+});
+
+commands.push({
 	usage: 'dump',
 	description: 'Dumps the complete database as JSON.',
 	action: async function(args, end) {
@@ -278,6 +318,13 @@ commands.push({
 				items.push(folder);
 				items = items.concat(notes);
 			}
+
+			let tags = await Tag.all();
+			for (let i = 0; i < tags.length; i++) {
+				tags[i].notes_ = await Tag.tagNoteIds(tags[i].id);
+			}
+
+			items = items.concat(tags);
 			
 			this.log(JSON.stringify(items));
 		} catch (error) {
@@ -285,8 +332,7 @@ commands.push({
 		}
 
 		end();
-	},
-	autocomplete: autocompleteFolders,
+	}
 });
 
 commands.push({
@@ -495,6 +541,19 @@ commands.push({
 	},
 });
 
+async function loadItem(type, pattern) {
+	let output = await loadItems(type, pattern);
+	return output.length ? output[0] : null;
+}
+
+async function loadItems(type, pattern) {
+	let ItemClass = BaseItem.itemClass(type);
+	let item = await ItemClass.loadByTitle(pattern);
+	if (item) return [item];
+	item = await ItemClass.load(pattern);
+	return [item];
+}
+
 function commandByName(name) {
 	for (let i = 0; i < commands.length; i++) {
 		let c = commands[i];
@@ -518,58 +577,6 @@ function execCommand(name, args) {
 		}
 	});
 }
-
-// async function execCommand(args) {
-// 	var parseArgs = require('minimist');
-
-// 	let results = parseArgs(args);
-// 	//var results = vorpal.parse(args, { use: 'minimist' });
-// 	if (!results['_'].length) throw new Error(_('Invalid command: %s', args));
-
-// 	console.info(results);
-
-// 	let commandName = results['_'].splice(0, 1);
-// 	let cmd = commandByName(commandName);
-// 	if (!cmd) throw new Error(_('Unknown command: %s', args));
-
-
-// 	let usage = cmd.usage.split(' ');
-// 	let commandArgs = [];
-// 	usage.splice(0, 1);
-// 	for (let i = 0; i < usage.length; i++) {
-// 		let u = usage[i].trim();
-// 		if (u == '') continue;
-
-// 		let required = false;
-
-// 		if (u.length >= 3 && u[0] == '<' && u[u.length - 1] == '>') {
-// 			required = true;
-// 			u = u.substr(1, u.length - 2);
-// 		}
-
-// 		if (u.length >= 3 && u[0] == '[' && u[u.length - 1] == ']') {
-// 			u = u.substr(1, u.length - 2);
-// 		}
-
-// 		if (required && !results['_'].length) throw new Error(_('Missing argument: %s', args));
-
-// 		if (!results['_'].length) break;
-
-// 		console.info(u);
-
-// 		commandArgs[u] = results['_'].splice(0, 1);
-// 	}
-
-// 	console.info(commandArgs);
-
-
-// 	// usage: 'import-enex <file> [notebook]',
-// 	// description: _('Imports en Evernote notebook file (.enex file).'),
-// 	// options: [
-// 	// 	['--fuzzy-matching', 'For debugging purposes. Do not use.'],
-// 	// ],
-
-// }
 
 async function synchronizer(syncTarget) {
 	if (synchronizers_[syncTarget]) return synchronizers_[syncTarget];
