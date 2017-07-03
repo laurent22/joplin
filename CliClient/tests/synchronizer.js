@@ -3,6 +3,7 @@ import { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi,
 import { createFoldersAndNotes } from 'test-data.js';
 import { Folder } from 'lib/models/folder.js';
 import { Note } from 'lib/models/note.js';
+import { Tag } from 'lib/models/tag.js';
 import { Setting } from 'lib/models/setting.js';
 import { BaseItem } from 'lib/models/base-item.js';
 import { BaseModel } from 'lib/base-model.js';
@@ -457,6 +458,45 @@ describe('Synchronizer', function() {
 		remoteF2 = await Folder.load(remoteF2.id);
 
 		expect(remoteF2.title == localF2.title).toBe(true);
+
+		done();
+	});
+
+	it('should sync tags', async (done) => {
+		let f1 = await Folder.save({ title: "folder" });
+		let n1 = await Note.save({ title: "mynote" });
+		let n2 = await Note.save({ title: "mynote2" });
+		let tag = await Tag.save({ title: 'mytag' });
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		let remoteTag = await Tag.loadByTitle(tag.title);
+		expect(!!remoteTag).toBe(true);
+		expect(remoteTag.id).toBe(tag.id);
+		await Tag.addNote(remoteTag.id, n1.id);
+		await Tag.addNote(remoteTag.id, n2.id);
+		let noteIds = await Tag.tagNoteIds(tag.id);
+		expect(noteIds.length).toBe(2);
+		await synchronizer().start();
+
+		await switchClient(1);
+
+		await synchronizer().start();
+		let remoteNoteIds = await Tag.tagNoteIds(tag.id);
+		expect(remoteNoteIds.length).toBe(2);
+		Tag.removeNote(tag.id, n1.id);
+		remoteNoteIds = await Tag.tagNoteIds(tag.id);
+		expect(remoteNoteIds.length).toBe(1);
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		noteIds = await Tag.tagNoteIds(tag.id);
+		expect(noteIds.length).toBe(1);
+		expect(remoteNoteIds[0]).toBe(noteIds[0]);
 
 		done();
 	});

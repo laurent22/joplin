@@ -10,6 +10,7 @@ import { BaseItem } from 'lib/models/base-item.js';
 import { Synchronizer } from 'lib/synchronizer.js';
 import { FileApi } from 'lib/file-api.js';
 import { FileApiDriverMemory } from 'lib/file-api-driver-memory.js';
+import { time } from 'lib/time-utils.js';
 
 let databases_ = [];
 let synchronizers_ = [];
@@ -29,8 +30,9 @@ function sleep(n) {
 	});
 }
 
-function switchClient(id) {
-	Setting.saveAll();
+async function switchClient(id) {
+	await time.msleep(200);
+	await Setting.saveAll();
 
 	currentClient_ = id;
 	BaseModel.db_ = databases_[id];
