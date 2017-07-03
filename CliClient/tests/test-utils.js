@@ -18,7 +18,7 @@ let fileApi_ = null;
 let currentClient_ = 1;
 
 const logger = new Logger();
-logger.addTarget('file', { path: __dirname + '/data/log-test.txt' });
+logger.addTarget('file', { path: __dirname + '/../tests/logs/log.txt' });
 //logger.addTarget('console');
 logger.setLevel(Logger.LEVEL_DEBUG);
 

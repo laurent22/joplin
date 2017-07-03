@@ -16,6 +16,7 @@
 				"CliClient/app/lib",
 				"CliClient/tests/src",
 				"CliClient/tests/fuzzing",
+				"CliClient/tests/fuzzing -*",
 				"ReactNativeClient/node_modules",
 				"ReactNativeClient/android/app/build",
 				"ReactNativeClient/android/build",

@@ -486,7 +486,7 @@ describe('Synchronizer', function() {
 		await synchronizer().start();
 		let remoteNoteIds = await Tag.tagNoteIds(tag.id);
 		expect(remoteNoteIds.length).toBe(2);
-		Tag.removeNote(tag.id, n1.id);
+		await Tag.removeNote(tag.id, n1.id);
 		remoteNoteIds = await Tag.tagNoteIds(tag.id);
 		expect(remoteNoteIds.length).toBe(1);
 		await synchronizer().start();
