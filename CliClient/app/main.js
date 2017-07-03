@@ -202,10 +202,10 @@ commands.push({
 
 			if (pattern.indexOf('*') < 0) { // Handle it as a simple title
 				if (pattern.substr(0, 3) == '../') {
-					itemType = BaseModel.MODEL_TYPE_FOLDER;
+					itemType = BaseModel.TYPE_FOLDER;
 					pattern = pattern.substr(3);
 				} else {
-					itemType = BaseModel.MODEL_TYPE_NOTE;
+					itemType = BaseModel.TYPE_NOTE;
 				}
 
 				let item = await BaseItem.loadItemByField(itemType, 'title', pattern);
@@ -272,9 +272,9 @@ commands.push({
 	action: async function(args, end) {
 		try {
 			let tag = null;
-			if (args.tag) tag = await loadItem(BaseModel.MODEL_TYPE_TAG, args.tag);
+			if (args.tag) tag = await loadItem(BaseModel.TYPE_TAG, args.tag);
 			let note = null;
-			if (args.note) note = await loadItem(BaseModel.MODEL_TYPE_NOTE, args.note);
+			if (args.note) note = await loadItem(BaseModel.TYPE_NOTE, args.note);
 
 			if (args.command == 'remove' && !tag) throw new Error(_('Tag does not exist: "%s"', args.tag));
 

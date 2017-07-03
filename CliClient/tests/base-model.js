@@ -25,7 +25,7 @@ describe('BaseItem', function() {
 
 		await Folder.delete(folder1.id);
 
-		let items = await BaseModel.deletedItems();
+		let items = await BaseItem.deletedItems();
 
 		expect(items.length).toBe(1);
 		expect(items[0].item_id).toBe(folder1.id);

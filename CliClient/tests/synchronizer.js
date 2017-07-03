@@ -38,7 +38,7 @@ async function localItemsSameAsRemote(locals, expect) {
 			expect(remote.updated_time).toBe(dbItem.updated_time);
 
 			let remoteContent = await fileApi().get(path);
-			remoteContent = dbItem.type_ == BaseModel.MODEL_TYPE_NOTE ? await Note.unserialize(remoteContent) : await Folder.unserialize(remoteContent);
+			remoteContent = dbItem.type_ == BaseModel.TYPE_NOTE ? await Note.unserialize(remoteContent) : await Folder.unserialize(remoteContent);
 			expect(remoteContent.title).toBe(dbItem.title);
 		}
 	} catch (error) {
@@ -238,7 +238,7 @@ describe('Synchronizer', function() {
 		expect(files.length).toBe(1);
 		expect(files[0].path).toBe(Folder.systemPath(folder1));
 
-		let deletedItems = await BaseModel.deletedItems();
+		let deletedItems = await BaseItem.deletedItems();
 		expect(deletedItems.length).toBe(0);
 
 		done();
@@ -267,7 +267,7 @@ describe('Synchronizer', function() {
 
 		expect(items.length).toBe(1);
 
-		let deletedItems = await BaseModel.deletedItems();
+		let deletedItems = await BaseItem.deletedItems();
 
 		expect(deletedItems.length).toBe(0);
 		
