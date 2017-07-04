@@ -31,6 +31,7 @@
     "sqlite3": "^3.1.8",
     "string-to-stream": "^1.1.0",
     "tcp-port-used": "^0.1.2",
+    "temp": "^0.8.3",
     "uuid": "^3.0.1",
     "vorpal": "^1.12.0"
   },

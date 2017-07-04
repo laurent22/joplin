@@ -21,6 +21,7 @@ import { Logger } from 'lib/logger.js';
 import { uuid } from 'lib/uuid.js';
 import { sprintf } from 'sprintf-js';
 import { importEnex } from 'import-enex';
+import { vorpalUtils } from 'vorpal-utils.js';
 import { filename, basename } from 'lib/path-utils.js';
 import { _ } from 'lib/locale.js';
 import os from 'os';
@@ -45,6 +46,8 @@ let synchronizers_ = {};
 let logger = new Logger();
 let dbLogger = new Logger();
 let syncLogger = new Logger();
+let showPromptString = true;
+let logLevel = Logger.LEVEL_INFO;
 
 commands.push({
 	usage: 'version',
@@ -63,7 +66,7 @@ commands.push({
 		Folder.save({ title: args['notebook'] }, { duplicateCheck: true }).then((folder) => {
 			switchCurrentFolder(folder);
 		}).catch((error) => {
-			this.log(error);
+			vorpalUtils.log(this, error);
 		}).then(() => {
 			end();
 		});
@@ -74,22 +77,27 @@ commands.push({
 	usage: 'mknote <note>',
 	aliases: ['touch'],
 	description: 'Creates a new note',
-	action: function(args, end) {
+	action: async function(args, end) {
 		if (!currentFolder) {
 			this.log('Notes can only be created within a notebook.');
 			end();
 			return;
 		}
 
+		let path = await parseNotePattern(args['note']);
+
 		let note = {
-			title: args['note'],
-			parent_id: currentFolder.id,
+			title: path.title,
+			parent_id: path.parent ? path.parent.id : currentFolder.id,
 		};
-		Note.save(note).catch((error) => {
+
+		try {
+			await Note.save(note);
+		} catch (error) {
 			this.log(error);
-		}).then((note) => {
-			end();
-		});
+		}
+
+		end();
 	},
 });
 
@@ -109,12 +117,12 @@ commands.push({
 });
 
 commands.push({
-	usage: 'set <title> <name> [value]',
-	description: 'Sets the property <name> of the given item to the given [value].',
+	usage: 'set <item> <name> [value]',
+	description: 'Sets the property <name> of the given <item> to the given [value].',
 	action: async function(args, end) {
 		try {
 			let promise = null;
-			let title = args['title'];
+			let title = args['item'];
 			let propName = args['name'];
 			let propValue = args['value'];
 			if (!propValue) propValue = '';
@@ -184,6 +192,63 @@ commands.push({
 		}
 
 		end();
+	},
+	autocomplete: autocompleteItems,
+});
+
+commands.push({
+	usage: 'edit <title>',
+	description: 'Edit note.',
+	action: async function(args, end) {
+		try {
+			let title = args['title'];
+
+			if (!currentFolder) throw new Error(_('No active notebook.'));
+			let note = await Note.loadFolderNoteByField(currentFolder.id, 'title', title);
+
+			if (!note) throw new Error(_('No note with title "%s" found.', title));
+
+			let editorPath = getTextEditorPath();
+			let editorArgs = editorPath.split(' ');
+			editorPath = editorArgs[0];
+			editorArgs = [editorArgs[1]];
+
+			let content = await Note.serializeForEdit(note);
+
+			const temp = require('temp');
+			const spawn	= require('child_process').spawn;
+
+			this.log(_('Starting to edit note...'));
+
+			vorpal.hide();
+
+			temp.track();
+
+			temp.open(Setting.value('appName'), async (error, info) => {
+				if (error) throw error;
+
+				await fs.writeFile(info.path, content);
+
+				fs.watch(info.path, (eventType, filename) => {
+					console.info('cHANGE...');
+				});
+
+				// https://github.com/dthree/vorpal/issues/190
+
+				editorArgs.push(info.path);
+
+				const childProcess = spawn(editorPath, editorArgs, { stdio: 'inherit' });
+
+				childProcess.on('exit', (error, code) => {
+					this.log(_('Done editing note.'));
+					vorpal.show();
+					end();
+				});
+			});
+		} catch(error) {
+			this.log(error);
+			end();
+		}
 	},
 	autocomplete: autocompleteItems,
 });
@@ -428,8 +493,6 @@ commands.push({
 	],
 	action: function(args, end) {
 
-		let redrawnCalled = false;
-
 		let options = {
 			onProgress: (report) => {
 				let line = [];
@@ -437,11 +500,10 @@ commands.push({
 				if (report.remotesToDelete) line.push(_('Remote items to delete: %d/%d.', report.deleteRemote, report.remotesToDelete));
 				if (report.localsToUdpate) line.push(_('Items to download: %d/%d.', report.createLocal + report.updateLocal, report.localsToUdpate));
 				if (report.localsToDelete) line.push(_('Local items to delete: %d/%d.', report.deleteLocal, report.localsToDelete));
-				// redrawnCalled = true;
-				// vorpal.ui.redraw(line.join(' '));
+				vorpalUtils.redraw(line.join(' '));
 			},
 			onMessage: (msg) => {
-				if (redrawnCalled) vorpal.ui.redraw.done();
+				vorpalUtils.redrawDone();
 				this.log(msg);
 			},
 			randomFailures: args.options['random-failures'] === true,
@@ -454,7 +516,7 @@ commands.push({
 		}).catch((error) => {
 			this.log(error);
 		}).then(() => {
-			if (redrawnCalled) vorpal.ui.redraw.done();
+			vorpalUtils.redrawDone();
 			this.log(_('Done.'));
 			end();
 		});
@@ -468,7 +530,6 @@ commands.push({
 		['--fuzzy-matching', 'For debugging purposes. Do not use.'],
 	],
 	action: async function(args, end) {
-		let redrawnCalled = false;
 		try {
 			let filePath = args.file;
 			let folder = null;
@@ -517,11 +578,10 @@ commands.push({
 					if (progressState.skipped) line.push(_('Skipped: %d.', progressState.skipped));
 					if (progressState.resourcesCreated) line.push(_('Resources: %d.', progressState.resourcesCreated));
 					if (progressState.notesTagged) line.push(_('Tagged: %d.', progressState.notesTagged));
-					redrawnCalled = true;
-					vorpal.ui.redraw(line.join(' '));
+					vorpalUtils.redraw(line.join(' '));
 				},
 				onError: (error) => {
-					if (redrawnCalled) vorpal.ui.redraw.done();
+					vorpalUtils.redrawDone();
 					let s = error.trace ? error.trace : error.toString();
 					this.log(s);
 				},
@@ -530,16 +590,33 @@ commands.push({
 			folder = !folder ? await Folder.save({ title: folderTitle }) : folder;
 			this.log(_('Importing notes...'));
 			await importEnex(folder.id, filePath, options);
-			this.log(_('Done.'));
 		} catch (error) {
 			this.log(error);
 		}
 
-		if (redrawnCalled) vorpal.ui.redraw.done();
+		vorpalUtils.redrawDone();
 
 		end();			
 	},
 });
+
+async function parseNotePattern(pattern) {
+	if (pattern.indexOf('..') === 0) {
+		let pieces = pattern.split('/');
+		if (pieces.length != 3) throw new Error(_('Invalid pattern: %s', pattern));
+		let parent = await loadItem(BaseModel.TYPE_FOLDER, pieces[1]);		
+		if (!parent) throw new Error(_('Notebook not found: %s', pieces[1]));
+		return {
+			parent: parent,
+			title: pieces[2],
+		};
+	} else {
+		return {
+			parent: null,
+			title: pattern,
+		};
+	}
+}
 
 async function loadItem(type, pattern) {
 	let output = await loadItems(type, pattern);
@@ -633,11 +710,13 @@ function switchCurrentFolder(folder) {
 }
 
 function promptString() {
+	if (!showPromptString) return '';
+
 	let path = '~';
 	if (currentFolder) {
 		path += '/' + currentFolder.title;
 	}
-	return 'joplin:' + path + '$ ';
+	return Setting.value('appName') + ':' + path + '$ ';
 }
 
 function updatePrompt() {
@@ -694,6 +773,7 @@ function cmdPromptConfirm(commandInstance, message) {
 			default: false, // This needs to be false so that, when pressing Ctrl+C, the prompt returns false
 			message: message,
 		};
+
 		commandInstance.prompt(options, (result) => {
 			if (result.ok) {
 				resolve(true);
@@ -715,10 +795,27 @@ async function handleStartFlags(argv) {
 		let nextArg = argv.length >= 2 ? argv[1] : null;
 		
 		if (arg == '--profile') {
-			if (!nextArg) {
-				throw new Error(_('Usage: --profile <dir-path>'));
-			}
+			if (!nextArg) throw new Error(_('Usage: --profile <dir-path>'));
 			initArgs.profileDir = nextArg;
+			argv.splice(0, 2);
+			continue;
+		}
+
+		if (arg == '--redraw-disabled') {
+			vorpalUtils.setRedrawEnabled(false);
+			argv.splice(0, 1);
+			continue;
+		}
+
+		if (arg == '--stack-trace-enabled') {
+			vorpalUtils.setStackTraceEnabled(true);
+			argv.splice(0, 1);
+			continue;
+		}
+
+		if (arg == '--log-level') {
+			if (!nextArg) throw new Error(_('Usage: --log-level <none|error|warn|info|debug>'));
+			logLevel = Logger.levelStringToId(nextArg);
 			argv.splice(0, 2);
 			continue;
 		}
@@ -749,7 +846,15 @@ function shellArgsToString(args) {
 	return output.join(' ');
 }
 
+function getTextEditorPath() {
+	if (Setting.value('editor')) return Setting.value('editor');
+	if (process.env.EDITOR) return process.env.EDITOR;
+	throw new Error(_('No text editor is defined. Please set it using `config editor <editor-path>`'));
+}
+
 process.stdin.on('keypress', (_, key) => {
+	console.info(_, key);
+
 	if (key && key.name === 'return') {
 		updatePrompt();
 	}
@@ -761,6 +866,8 @@ process.stdin.on('keypress', (_, key) => {
 });
 
 const vorpal = require('vorpal')();
+
+vorpalUtils.initialize(vorpal);
 
 async function main() {
 	for (let commandIndex = 0; commandIndex < commands.length; commandIndex++) {
@@ -789,6 +896,8 @@ async function main() {
 	let argv = process.argv;
 	argv = await handleStartFlags(argv);
 
+	if (argv.length) showPromptString = false;
+
 	const profileDir = initArgs.profileDir ? initArgs.profileDir : os.homedir() + '/.config/' + Setting.value('appName');
 	const resourceDir = profileDir + '/resources';
 
@@ -799,13 +908,13 @@ async function main() {
 	await fs.mkdirp(resourceDir, 0o755);
 
 	logger.addTarget('file', { path: profileDir + '/log.txt' });
-	logger.setLevel(Logger.LEVEL_DEBUG);
+	logger.setLevel(logLevel);
 
 	dbLogger.addTarget('file', { path: profileDir + '/log-database.txt' });
-	dbLogger.setLevel(Logger.LEVEL_DEBUG);
+	dbLogger.setLevel(logLevel);
 
 	syncLogger.addTarget('file', { path: profileDir + '/log-sync.txt' });
-	syncLogger.setLevel(Logger.LEVEL_DEBUG);
+	syncLogger.setLevel(logLevel);
 
 	logger.info(sprintf('Starting %s %s...', packageJson.name, packageJson.version));
 	logger.info('Profile directory: ' + profileDir);
@@ -826,13 +935,15 @@ async function main() {
 
 	// If we still have arguments, pass it to Vorpal and exit
 	if (argv.length) {
+		vorpal.show();
 		let cmd = shellArgsToString(argv);
 		await vorpal.exec(cmd);
 		await vorpal.exec('exit');
 		return;
 	} else {
+		vorpal.delimiter(promptString());
+		vorpal.show();
 		vorpal.history(Setting.value('appId')); // Enables persistent history
-		vorpal.delimiter(promptString()).show();
 		if (!activeFolder) {
 			vorpal.log(_('No notebook is defined. Create one with `mkbook <notebook>`.'));
 		}
