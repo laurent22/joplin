@@ -15,6 +15,11 @@ class Resource extends BaseItem {
 		return BaseModel.TYPE_RESOURCE;
 	}
 
+	static fsDriver() {
+		if (!Resource.fsDriver_) Resource.fsDriver_ = new FsDriverDummy();
+		return Resource.fsDriver_;
+	}
+
 	static async serialize(item, type = null, shownKeys = null) {
 		let fieldNames = this.fieldNames();
 		fieldNames.push('type_');
@@ -32,15 +37,15 @@ class Resource extends BaseItem {
 		return filename(path);
 	}
 
-	// RNFIX: Temporary disabled for React Native
-
 	static content(resource) {
+		return this.fsDriver().readFile(this.fullPath(resource));
 		// // TODO: node-only, and should probably be done with streams
 		// const fs = require('fs-extra');
 		// return fs.readFile(this.fullPath(resource));
 	}
 
 	static setContent(resource, content) {
+		return this.fsDriver().writeBinaryFile(this.fullPath(resource), content);
 		// // TODO: node-only, and should probably be done with streams
 		// const fs = require('fs-extra');
 		// let buffer = new Buffer(content);

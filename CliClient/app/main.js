@@ -22,6 +22,7 @@ import { uuid } from 'lib/uuid.js';
 import { sprintf } from 'sprintf-js';
 import { importEnex } from 'import-enex';
 import { vorpalUtils } from 'vorpal-utils.js';
+import { FsDriverNode } from './fs-driver-node.js';
 import { filename, basename } from 'lib/path-utils.js';
 import { _ } from 'lib/locale.js';
 import os from 'os';
@@ -36,6 +37,10 @@ const packageJson = require('./package.json');
 let initArgs = {
 	profileDir: null,
 }
+
+const fsDriver = new FsDriverNode();
+Logger.fsDriver_ = fsDriver;
+Resource.fsDriver_ = fsDriver;
 
 Setting.setConstant('appId', 'net.cozic.joplin-cli');
 
