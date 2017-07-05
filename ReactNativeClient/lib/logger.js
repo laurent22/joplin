@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { _ } from 'lib/locale.js';
-import FsDriverDummy from 'lib/fs-driver-dummy.js';
+import { FsDriverDummy } from 'lib/fs-driver-dummy.js';
 
 class Logger {
 

@@ -39,17 +39,10 @@ class Resource extends BaseItem {
 
 	static content(resource) {
 		return this.fsDriver().readFile(this.fullPath(resource));
-		// // TODO: node-only, and should probably be done with streams
-		// const fs = require('fs-extra');
-		// return fs.readFile(this.fullPath(resource));
 	}
 
 	static setContent(resource, content) {
 		return this.fsDriver().writeBinaryFile(this.fullPath(resource), content);
-		// // TODO: node-only, and should probably be done with streams
-		// const fs = require('fs-extra');
-		// let buffer = new Buffer(content);
-		// return fs.writeFile(this.fullPath(resource), buffer);
 	}
 
 }
