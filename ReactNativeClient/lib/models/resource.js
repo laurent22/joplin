@@ -32,17 +32,19 @@ class Resource extends BaseItem {
 		return filename(path);
 	}
 
+	// RNFIX: Temporary disabled for React Native
+
 	static content(resource) {
-		// TODO: node-only, and should probably be done with streams
-		const fs = require('fs-extra');
-		return fs.readFile(this.fullPath(resource));
+		// // TODO: node-only, and should probably be done with streams
+		// const fs = require('fs-extra');
+		// return fs.readFile(this.fullPath(resource));
 	}
 
 	static setContent(resource, content) {
-		// TODO: node-only, and should probably be done with streams
-		const fs = require('fs-extra');
-		let buffer = new Buffer(content);
-		return fs.writeFile(this.fullPath(resource), buffer);
+		// // TODO: node-only, and should probably be done with streams
+		// const fs = require('fs-extra');
+		// let buffer = new Buffer(content);
+		// return fs.writeFile(this.fullPath(resource), buffer);
 	}
 
 }

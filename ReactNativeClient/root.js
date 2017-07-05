@@ -13,6 +13,7 @@ import { BaseModel } from 'lib/base-model.js'
 import { Database } from 'lib/database.js'
 import { ItemList } from 'lib/components/item-list.js'
 import { NotesScreen } from 'lib/components/screens/notes.js'
+import { NotesScreenUtils } from 'lib/components/screens/notes-utils.js'
 import { NoteScreen } from 'lib/components/screens/note.js'
 import { FolderScreen } from 'lib/components/screens/folder.js'
 import { FoldersScreen } from 'lib/components/screens/folders.js'
@@ -23,7 +24,6 @@ import { Synchronizer } from 'lib/synchronizer.js'
 import { MenuContext } from 'react-native-popup-menu';
 import { SideMenu } from 'lib/components/side-menu.js';
 import { SideMenuContent } from 'lib/components/side-menu-content.js';
-//import { NoteFolderService } from 'lib/services/note-folder-service.js';
 import { DatabaseDriverReactNative } from 'lib/database-driver-react-native';
 
 let defaultState = {
@@ -193,38 +193,16 @@ class AppComponent extends React.Component {
 		//db.setDebugMode(false);
 
 		BaseModel.dispatch = this.props.dispatch;
+		NotesScreenUtils.dispatch = this.props.dispatch;
 		BaseModel.db_ = db;
-		//NoteFolderService.dispatch = this.props.dispatch;
 
-		db.open({ name: '/storage/emulated/0/Download/joplin-42.sqlite' }).then(() => {
+		db.open({ name: '/storage/emulated/0/Download/joplin-43.sqlite' }).then(() => {
 			Log.info('Database is ready.');
 		}).then(() => {
 			Log.info('Loading settings...');
 			return Setting.load();
 		}).then(() => {
-			let user = Setting.object('user');
-
-			if (!user || !user.session) {
-				user = {
-					email: 'laurent@cozic.net',
-					session: "02d0e9ca42cbbc2d35efb1bc790b9eec",
-				}
-				Setting.setObject('user', user);
-				this.props.dispatch({
-					type: 'USER_SET',
-					user: user,
-				});
-			}
-
-			Setting.setValue('sync.lastRevId', '123456');
-
-			Log.info('Client ID', Setting.value('clientId'));
-			Log.info('User', user);
-
-			// this.props.dispatch({
-			// 	type: 'USER_SET',
-			// 	user: user,
-			// });
+			Setting.setConstant('appId', 'net.cozic.joplin-android');
 
 			Log.info('Loading folders...');
 
@@ -238,33 +216,10 @@ class AppComponent extends React.Component {
 				Log.warn('Cannot load folders', error);
 			});
 		}).then((folders) => {
-			let folder = folders[0];
-
-			if (!folder) throw new Error('No default folder is defined');
-
-			//return NoteFolderService.openNoteList(folder.id);
-
-			// this.props.dispatch({
-			// 	type: 'Navigation/NAVIGATE',
-			// 	routeName: 'Notes',
-			// 	folderId: folder.id,
-			// });
-		}).then(() => {
-
-			var Dropbox = require('dropbox');
-			var dropboxApi = new Dropbox({ accessToken: '' });
-			// dbx.filesListFolder({path: '/Joplin/Laurent.4e847cc'})
-			// .then(function(response) {
-			// //console.log('DROPBOX RESPONSE', response);
-			// console.log('DROPBOX RESPONSE', response.entries.length, response.has_more);
-			// })
-			// .catch(function(error) {
-			// console.log('DROPBOX ERROR', error);
-			// });
-
-			// return this.api_;
-
-
+			this.props.dispatch({
+				type: 'Navigation/NAVIGATE',
+				routeName: 'Folders',
+			});
 		}).catch((error) => {
 			Log.error('Initialization error:', error);
 		});

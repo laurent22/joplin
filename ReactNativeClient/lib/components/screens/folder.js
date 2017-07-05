@@ -3,8 +3,8 @@ import { View, Button, TextInput } from 'react-native';
 import { connect } from 'react-redux'
 import { Log } from 'lib/log.js'
 import { Folder } from 'lib/models/folder.js'
+import { BaseModel } from 'lib/base-model.js'
 import { ScreenHeader } from 'lib/components/screen-header.js';
-import { NoteFolderService } from 'lib/services/note-folder-service.js';
 
 class FolderScreenComponent extends React.Component {
 	
@@ -41,18 +41,15 @@ class FolderScreenComponent extends React.Component {
 		this.folderComponent_change('title', text);
 	}
 
-	saveFolderButton_press() {
-		console.warn('CHANGE NOT TESTED');
-		let toSave = BaseModel.diffObjects(this.originalFolder, this.state.folder);
-		toSave.id = this.state.folder.id;
-		Folder.save(toSave).then((folder) => {
-			this.originalFolder = Object.assign({}, folder);
-			this.setState({ folder: folder });
-		});
-		// NoteFolderService.save('folder', this.state.folder, this.originalFolder).then((folder) => {
-		// 	this.originalFolder = Object.assign({}, folder);
-		// 	this.setState({ folder: folder });
-		// });
+	async saveFolderButton_press() {
+		let toSave = {
+			title: this.state.folder.title,
+		};
+
+		if (this.originalFolder) toSave.id = this.originalFolder.id;
+
+		this.originalFolder = await Folder.save(toSave);
+		this.setState({ folder: this.originalFolder });
 	}
 
 	render() {

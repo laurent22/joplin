@@ -1,5 +1,5 @@
 import moment from 'moment';
-import fs from 'fs-extra';
+// import fs from 'fs-extra';
 import { _ } from 'lib/locale.js';
 
 class Logger {
@@ -67,7 +67,8 @@ class Logger {
 					serializedObject = object;
 				}
 
-				fs.appendFileSync(t.path, line + serializedObject + "\n");
+				// RNFIX: Temporary disabled for React Native
+				// fs.appendFileSync(t.path, line + serializedObject + "\n");
 
 				// this.fileAppendQueue_.push({
 				// 	path: t.path,

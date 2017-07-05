@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import { Button } from 'react-native';
 import { Log } from 'lib/log.js';
 import { Note } from 'lib/models/note.js';
-import { NoteFolderService } from 'lib/services/note-folder-service.js';
+import { NotesScreenUtils } from 'lib/components/screens/notes-utils.js'
 
 const React = require('react');
 const {
@@ -46,7 +46,7 @@ class SideMenuContentComponent extends Component {
 			type: 'SIDE_MENU_CLOSE',
 		});
 
-		NoteFolderService.openNoteList(folder.id);
+		NotesScreenUtils.openNoteList(folder.id);
 	}
 
 	render() {

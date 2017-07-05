@@ -3,6 +3,7 @@ import SQLite from 'react-native-sqlite-storage';
 class DatabaseDriverReactNative {
 
 	open(options) {
+		//SQLite.DEBUG(true);
 		return new Promise((resolve, reject) => {
 			SQLite.openDatabase({ name: options.name }, (db) => {
 				this.db_ = db;
@@ -11,6 +12,10 @@ class DatabaseDriverReactNative {
 				reject(error);
 			});
 		});
+	}
+
+	sqliteErrorToJsError(error, sql = null, params = null) {
+		return error;
 	}
 
 	setDebugMode(v) {

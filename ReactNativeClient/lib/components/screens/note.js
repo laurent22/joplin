@@ -5,7 +5,6 @@ import { Log } from 'lib/log.js'
 import { Note } from 'lib/models/note.js'
 import { ScreenHeader } from 'lib/components/screen-header.js';
 import { Checkbox } from 'lib/components/checkbox.js'
-import { NoteFolderService } from 'lib/services/note-folder-service.js';
 import { _ } from 'lib/locale.js';
 
 class NoteScreenComponent extends React.Component {
@@ -17,17 +16,14 @@ class NoteScreenComponent extends React.Component {
 	constructor() {
 		super();
 		this.state = { note: Note.new() }
-		this.originalNote = null;
 	}
 
 	componentWillMount() {
 		if (!this.props.noteId) {
 			let note = this.props.itemType == 'todo' ? Note.newTodo(this.props.folderId) : Note.new(this.props.folderId);
-			Log.info(note);
 			this.setState({ note: note });
 		} else {
 			Note.load(this.props.noteId).then((note) => {
-				this.originalNote = Object.assign({}, note);
 				this.setState({ note: note });
 			});
 		}
@@ -49,23 +45,11 @@ class NoteScreenComponent extends React.Component {
 		this.noteComponent_change('body', text);
 	}
 
-	saveNoteButton_press() {
-
-		console.warn('CHANGE NOT TESTED');
-
+	async saveNoteButton_press() {
 		let isNew = !this.state.note.id;
-		let toSave = BaseModel.diffObjects(this.originalNote, this.state.note);
-		toSave.id = this.state.note.id;
-		Note.save(toSave).then((note) => {
-			this.originalNote = Object.assign({}, note);
-			this.setState({ note: note });
-			if (isNew) return Note.updateGeolocation(note.id);
-		});
-		
-		// NoteFolderService.save('note', this.state.note, this.originalNote).then((note) => {
-		// 	this.originalNote = Object.assign({}, note);
-		// 	this.setState({ note: note });
-		// });
+		let note = await Note.save(this.state.note);
+		this.setState({ note: note });
+		if (isNew) Note.updateGeolocation(note.id);
 	}
 
 	deleteNote_onPress(noteId) {
