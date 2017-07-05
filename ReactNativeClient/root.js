@@ -11,18 +11,18 @@ import { Note } from 'lib/models/note.js'
 import { Folder } from 'lib/models/folder.js'
 import { BaseModel } from 'lib/base-model.js'
 import { Database } from 'lib/database.js'
-import { ItemList } from 'app/components/item-list.js'
-import { NotesScreen } from 'app/components/screens/notes.js'
-import { NoteScreen } from 'app/components/screens/note.js'
-import { FolderScreen } from 'app/components/screens/folder.js'
-import { FoldersScreen } from 'app/components/screens/folders.js'
-import { LoginScreen } from 'app/components/screens/login.js'
-import { LoadingScreen } from 'app/components/screens/loading.js'
+import { ItemList } from 'lib/components/item-list.js'
+import { NotesScreen } from 'lib/components/screens/notes.js'
+import { NoteScreen } from 'lib/components/screens/note.js'
+import { FolderScreen } from 'lib/components/screens/folder.js'
+import { FoldersScreen } from 'lib/components/screens/folders.js'
+import { LoginScreen } from 'lib/components/screens/login.js'
+import { LoadingScreen } from 'lib/components/screens/loading.js'
 import { Setting } from 'lib/models/setting.js'
 import { Synchronizer } from 'lib/synchronizer.js'
 import { MenuContext } from 'react-native-popup-menu';
-import { SideMenu } from 'app/components/side-menu.js';
-import { SideMenuContent } from 'app/components/side-menu-content.js';
+import { SideMenu } from 'lib/components/side-menu.js';
+import { SideMenuContent } from 'lib/components/side-menu-content.js';
 //import { NoteFolderService } from 'lib/services/note-folder-service.js';
 import { DatabaseDriverReactNative } from 'lib/database-driver-react-native';
 

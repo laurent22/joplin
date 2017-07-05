@@ -8,7 +8,7 @@
 
 import { AppRegistry } from 'react-native';
 import { Log } from 'lib/log.js'
-import { Root } from 'app/root.js';
+import { Root } from './root.js';
 
 function main() {
 	AppRegistry.registerComponent('AwesomeProject', () => Root);

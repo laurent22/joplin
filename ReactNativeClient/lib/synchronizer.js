@@ -1,5 +1,3 @@
-require('babel-plugin-transform-runtime');
-
 import { BaseItem } from 'lib/models/base-item.js';
 import { Folder } from 'lib/models/folder.js';
 import { Note } from 'lib/models/note.js';
