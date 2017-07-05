@@ -1,3 +1,6 @@
+require('source-map-support').install();
+require('babel-plugin-transform-runtime');
+
 import { time } from 'lib/time-utils.js';
 import { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient } from 'test-utils.js';
 import { Folder } from 'lib/models/folder.js';

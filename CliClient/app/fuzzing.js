@@ -5,7 +5,9 @@ require('babel-plugin-transform-runtime');
 
 import { time } from 'lib/time-utils.js';
 import { Logger } from 'lib/logger.js';
+import { Resource } from 'lib/models/resource.js';
 import { dirname } from 'lib/path-utils.js';
+import { FsDriverNode } from './fs-driver-node.js';
 import lodash from 'lodash';
 const exec = require('child_process').exec
 const fs = require('fs-extra');
@@ -14,6 +16,10 @@ const baseDir = dirname(__dirname) + '/tests/fuzzing';
 const syncDir = baseDir + '/sync';
 const joplinAppPath = __dirname + '/main.js';
 let syncDurations = [];
+
+const fsDriver = new FsDriverNode();
+Logger.fsDriver_ = fsDriver;
+Resource.fsDriver_ = fsDriver;
 
 const logger = new Logger();
 logger.addTarget('console');

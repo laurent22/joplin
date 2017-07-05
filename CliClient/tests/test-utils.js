@@ -4,18 +4,24 @@ import { DatabaseDriverNode } from 'lib/database-driver-node.js';
 import { BaseModel } from 'lib/base-model.js';
 import { Folder } from 'lib/models/folder.js';
 import { Note } from 'lib/models/note.js';
+import { Resource } from 'lib/models/resource.js';
 import { Logger } from 'lib/logger.js';
 import { Setting } from 'lib/models/setting.js';
 import { BaseItem } from 'lib/models/base-item.js';
 import { Synchronizer } from 'lib/synchronizer.js';
 import { FileApi } from 'lib/file-api.js';
 import { FileApiDriverMemory } from 'lib/file-api-driver-memory.js';
+import { FsDriverNode } from '../app/fs-driver-node.js';
 import { time } from 'lib/time-utils.js';
 
 let databases_ = [];
 let synchronizers_ = [];
 let fileApi_ = null;
 let currentClient_ = 1;
+
+const fsDriver = new FsDriverNode();
+Logger.fsDriver_ = fsDriver;
+Resource.fsDriver_ = fsDriver;
 
 const logger = new Logger();
 logger.addTarget('file', { path: __dirname + '/../tests/logs/log.txt' });

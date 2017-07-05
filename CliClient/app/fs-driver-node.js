@@ -1,4 +1,4 @@
-import fs from 'fs-extra';
+const fs = require('fs-extra');
 
 class FsDriverNode {
 
@@ -17,4 +17,4 @@ class FsDriverNode {
 
 }
 
-export { FsDriverNode }
+module.exports.FsDriverNode = FsDriverNode;
