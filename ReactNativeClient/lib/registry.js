@@ -20,24 +20,29 @@ reg.oneDriveApi = () => {
 
 	const CLIENT_ID = 'e09fc0de-c958-424f-83a2-e56a721d331b';
 	const CLIENT_SECRET = 'JA3cwsqSGHFtjMwd5XoF5L5';
-	reg.oneDriveApi_ = new OneDriveApi(CLIENT_ID, CLIENT_SECRET);
+	const isPublic = Setting.value('appType') != 'cli';
 
-	let auth = Setting.value('sync.onedrive.auth');
-	if (auth) {
-		auth = JSON.parse(auth);
-		reg.oneDriveApi_.setAuth(auth);
-	}
+	reg.oneDriveApi_ = new OneDriveApi(CLIENT_ID, CLIENT_SECRET, isPublic);
 
 	reg.oneDriveApi_.on('authRefreshed', (a) => {
 		reg.logger().info('Saving updated OneDrive auth.');
-		Setting.setValue('sync.onedrive.auth', JSON.stringify(a));
+		Setting.setValue('sync.onedrive.auth', a ? JSON.stringify(a) : null);
 	});
+
+	let auth = Setting.value('sync.onedrive.auth');
+	if (auth) {
+		try {
+			auth = JSON.parse(auth);
+		} catch (error) {
+			reg.logger().warn('Could not parse OneDrive auth token');
+			reg.logger().warn(error);
+			auth = null;
+		}
+
+		reg.oneDriveApi_.setAuth(auth);
+	}
 	
 	return reg.oneDriveApi_;
-}
-
-reg.setFileApi = (v) => {
-	reg.fileApi_ = v;
 }
 
 reg.fileApi = async () => {
@@ -58,7 +63,7 @@ reg.synchronizer = async () => {
 	if (!reg.db()) throw new Error('Cannot initialize synchronizer: db not initialized');
 
 	let fileApi = await reg.fileApi();
-	reg.synchronizer_ = new Synchronizer(reg.db(), fileApi);
+	reg.synchronizer_ = new Synchronizer(reg.db(), fileApi, Setting.value('appType'));
 	reg.synchronizer_.setLogger(reg.logger());
 	return reg.synchronizer_;
 }

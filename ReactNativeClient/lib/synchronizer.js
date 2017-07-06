@@ -10,13 +10,14 @@ import moment from 'moment';
 
 class Synchronizer {
 
-	constructor(db, api) {
+	constructor(db, api, appType) {
 		this.state_ = 'idle';
 		this.db_ = db;
 		this.api_ = api;
 		this.syncDirName_ = '.sync';
 		this.resourceDirName_ = '.resource';
 		this.logger_ = new Logger();
+		this.appType_ = appType;
 	}
 
 	state() {
@@ -313,17 +314,17 @@ class Synchronizer {
 						};
 						if (action == 'createLocal') options.isNew = true;
 
-						// if (newContent.type_ == BaseModel.TYPE_RESOURCE && action == 'createLocal') {
-						// 	let localResourceContentPath = Resource.fullPath(newContent);
-						// 	let remoteResourceContentPath = this.resourceDirName_ + '/' + newContent.id;
-						// 	let remoteResourceContent = await this.api().get(remoteResourceContentPath, { encoding: 'binary' });
-						// 	await Resource.setContent(newContent, remoteResourceContent);
-						// }
-
 						if (newContent.type_ == BaseModel.TYPE_RESOURCE && action == 'createLocal') {
 							let localResourceContentPath = Resource.fullPath(newContent);
 							let remoteResourceContentPath = this.resourceDirName_ + '/' + newContent.id;
-							await this.api().get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' });
+							if (this.appType_ == 'cli') {								
+								let remoteResourceContent = await this.api().get(remoteResourceContentPath, { encoding: 'binary' });
+								await Resource.setContent(newContent, remoteResourceContent);
+							} else if (this.appType_ == 'mobile') {
+								await this.api().get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' });
+							} else {
+								throw new Error('Unknown appType: ' + this.appType_);
+							}
 						}
 
 						await ItemClass.save(newContent, options);

@@ -53,39 +53,6 @@ class OneDriveApiNodeUtils {
 
 				if (!query.code) return writeResponse(400, '"code" query parameter is missing');
 
-				// let body = new FormData();
-				// body.append('client_id', this.api().clientId());
-				// body.append('client_secret', this.api().clientSecret());
-				// body.append('code', query.code ? query.code : '');
-				// body.append('redirect_uri', 'http://localhost:' + port.toString());
-				// body.append('grant_type', 'authorization_code');
-
-				// let options = {
-				// 	method: 'POST',
-				// 	body: body,
-				// };
-
-				// fetch(this.api().tokenBaseUrl(), options).then((r) => {
-
-				// this.api().execTokenRequest(query.code, 'http://localhost:' + port.toString()).then((r) => {
-				// 	if (!r.ok) {
-				// 		errorMessage = 'Could not retrieve auth code: ' + r.status + ': ' + r.statusText;
-				// 		writeResponse(400, errorMessage);
-				// 		targetConsole.log('');
-				// 		targetConsole.log(errorMessage);
-				// 		server.destroy();
-				// 		return;
-				// 	}
-
-				// 	return r.json().then((json) => {
-				// 		this.api().setAuth(json);
-				// 		writeResponse(200, 'The application has been authorised - you may now close this browser tab.');
-				// 		targetConsole.log('');
-				// 		targetConsole.log('The application has been successfully authorised.');
-				// 		server.destroy();
-				// 	});
-				// });
-
 				this.api().execTokenRequest(query.code, 'http://localhost:' + port.toString()).then(() => {
 					writeResponse(200, 'The application has been authorised - you may now close this browser tab.');
 					targetConsole.log('');

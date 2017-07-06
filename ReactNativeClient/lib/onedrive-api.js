@@ -4,13 +4,22 @@ import { time } from 'lib/time-utils.js';
 
 class OneDriveApi {
 
-	constructor(clientId, clientSecret) {
+	// `isPublic` is to tell OneDrive whether the application is a "public" one (Mobile and desktop
+	// apps are considered "public"), in which case the secret should not be sent to the API.
+	// In practice the React Native app is public, and the Node one is not because we
+	// use a local server for the OAuth dance.
+	constructor(clientId, clientSecret, isPublic) {
 		this.clientId_ = clientId;
 		this.clientSecret_ = clientSecret;
 		this.auth_ = null;
+		this.isPublic_ = isPublic;
 		this.listeners_ = {
 			'authRefreshed': [],
 		};
+	}
+
+	isPublic() {
+		return this.isPublic_;
 	}
 
 	dispatch(eventName, param) {
@@ -34,6 +43,7 @@ class OneDriveApi {
 
 	setAuth(auth) {
 		this.auth_ = auth;
+		this.dispatch('authRefreshed', this.auth());
 	}
 
 	token() {
@@ -63,10 +73,10 @@ class OneDriveApi {
 		return 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?' + stringify(query);
 	}
 
-	async execTokenRequest(code, redirectUri, isPublic = false) {
+	async execTokenRequest(code, redirectUri) {
 		let body = new shim.FormData();
 		body.append('client_id', this.clientId());
-		if (!isPublic) body.append('client_secret', this.clientSecret());
+		if (!this.isPublic()) body.append('client_secret', this.clientSecret());
 		body.append('code', code);
 		body.append('redirect_uri', redirectUri);
 		body.append('grant_type', 'authorization_code');
@@ -84,8 +94,8 @@ class OneDriveApi {
 		try {
 			const json = await r.json();
 			this.setAuth(json);
-			this.dispatch('authRefreshed', this.auth());
 		} catch (error) {
+			this.setAuth(null);
 			const text = await r.text();
 			error.message += ': ' + text;
 			throw error;
@@ -202,7 +212,7 @@ class OneDriveApi {
 
 		let body = new shim.FormData();
 		body.append('client_id', this.clientId());
-		// body.append('client_secret', this.clientSecret()); // TODO: NEEDED FOR NODE
+		if (!this.isPublic()) body.append('client_secret', this.clientSecret());
 		body.append('refresh_token', this.auth_.refresh_token);
 		body.append('redirect_uri', 'http://localhost:1917');
 		body.append('grant_type', 'refresh_token');
@@ -212,17 +222,15 @@ class OneDriveApi {
 			body: body,
 		};
 
-		this.auth_ = null;
-
 		let response = await shim.fetch(this.tokenBaseUrl(), options);
 		if (!response.ok) {
+			this.setAuth(null);
 			let msg = await response.text();
 			throw new Error(msg);
 		}
 
-		this.auth_ = await response.json();
-
-		this.dispatch('authRefreshed', this.auth_);
+		let auth = await response.json();
+		this.setAuth(auth);
 	}
 
 }
