@@ -26,6 +26,7 @@ import { MenuContext } from 'react-native-popup-menu';
 import { SideMenu } from 'lib/components/side-menu.js';
 import { SideMenuContent } from 'lib/components/side-menu-content.js';
 import { DatabaseDriverReactNative } from 'lib/database-driver-react-native';
+import { reg } from 'lib/registry.js';
 
 let defaultState = {
 	notes: [],
@@ -192,7 +193,7 @@ class AppComponent extends React.Component {
 
 	componentDidMount() {
 		let db = new Database(new DatabaseDriverReactNative());
-		//db.setDebugMode(false);
+		reg.setDb(db);
 
 		BaseModel.dispatch = this.props.dispatch;
 		NotesScreenUtils.dispatch = this.props.dispatch;

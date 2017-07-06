@@ -7,6 +7,7 @@ import { _ } from 'lib/locale.js';
 import { Setting } from 'lib/models/setting.js';
 import { FileApi } from 'lib/file-api.js';
 import { FileApiDriverOneDrive } from 'lib/file-api-driver-onedrive.js';
+import { reg } from 'lib/registry.js'
 
 const styles = StyleSheet.create({
 	divider: {
@@ -40,25 +41,20 @@ class ScreenHeaderComponent extends Component {
 		}
 	}
 
-	menu_synchronize() {
-		this.props.dispatch({
-			type: 'Navigation/NAVIGATE',
-			routeName: 'OneDriveLogin',
-		});
-
-		// const CLIENT_ID = 'e09fc0de-c958-424f-83a2-e56a721d331b';
-		// const CLIENT_SECRET = 'JA3cwsqSGHFtjMwd5XoF5L5';
-
-		// let driver = new FileApiDriverOneDrive(CLIENT_ID, CLIENT_SECRET);
-		// let auth = Setting.value('sync.onedrive.auth');
-		
-		// if (auth) {
-		// 	auth = JSON.parse(auth);
-		// } else {
-		// 	driver.api().oauthDance(vorpal);
-		// 	//auth = driver.api().oauthDance(vorpal);
-		// 	//Setting.setValue('sync.onedrive.auth', JSON.stringify(auth));
-		// }
+	async menu_synchronize() {
+		if (reg.oneDriveApi().auth()) {
+			const sync = await reg.synchronizer();
+			try {
+				sync.start();
+			} catch (error) {
+				Log.error(error);
+			}
+		} else {
+			this.props.dispatch({
+				type: 'Navigation/NAVIGATE',
+				routeName: 'OneDriveLogin',
+			});
+		}
 	}
 
 	render() {
