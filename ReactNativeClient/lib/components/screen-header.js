@@ -41,6 +41,11 @@ class ScreenHeaderComponent extends Component {
 	}
 
 	menu_synchronize() {
+		this.props.dispatch({
+			type: 'Navigation/NAVIGATE',
+			routeName: 'OneDriveLogin',
+		});
+
 		// const CLIENT_ID = 'e09fc0de-c958-424f-83a2-e56a721d331b';
 		// const CLIENT_SECRET = 'JA3cwsqSGHFtjMwd5XoF5L5';
 

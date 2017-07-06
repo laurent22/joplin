@@ -5,8 +5,10 @@ import { OneDriveApi } from 'lib/onedrive-api.js';
 
 class FileApiDriverOneDrive {
 
-	constructor(clientId, clientSecret) {
-		this.api_ = new OneDriveApi(clientId, clientSecret);
+	//constructor(clientId, clientSecret) {
+	constructor(api) {
+		this.api_ = api;
+		//this.api_ = new OneDriveApi(clientId, clientSecret);
 	}
 
 	api() {

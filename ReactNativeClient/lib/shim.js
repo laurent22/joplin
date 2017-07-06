@@ -1,6 +1,7 @@
 let shim = {};
 
 shim.fetch = typeof fetch !== 'undefined' ? fetch : null;
+shim.FormData = typeof FormData !== 'undefined' ? FormData : null;
 
 if (!shim.fetch) {
 	let moduleName = 'node-fetch';

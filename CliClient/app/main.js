@@ -677,27 +677,28 @@ async function synchronizer(syncTarget) {
 	let fileApi = null;
 
 	if (syncTarget == 'onedrive') {
-		const CLIENT_ID = 'e09fc0de-c958-424f-83a2-e56a721d331b';
-		const CLIENT_SECRET = 'JA3cwsqSGHFtjMwd5XoF5L5';
+		let oneDriveApi = oneDriveApi.instance();
+		// const CLIENT_ID = 'e09fc0de-c958-424f-83a2-e56a721d331b';
+		// const CLIENT_SECRET = 'JA3cwsqSGHFtjMwd5XoF5L5';
 
-		let driver = new FileApiDriverOneDrive(CLIENT_ID, CLIENT_SECRET);
+		//let driver = new FileApiDriverOneDrive(CLIENT_ID, CLIENT_SECRET);
+		let driver = new FileApiDriverOneDrive(oneDriveApi);
 		let auth = Setting.value('sync.onedrive.auth');
 		
 		if (auth) {
 			auth = JSON.parse(auth);
 		} else {
-			//auth = await driver.api().oauthDance(vorpal);
-			const oneDriveApiUtils = new OneDriveApiNodeUtils(driver.api());
+			const oneDriveApiUtils = new OneDriveApiNodeUtils(oneDriveApi);
 			auth = await oneDriveApiUtils.oauthDance(vorpal);
 			Setting.setValue('sync.onedrive.auth', JSON.stringify(auth));
 		}
 
-		driver.api().setAuth(auth);
-		driver.api().on('authRefreshed', (a) => {
+		//oneDriveApi.setAuth(auth);
+		oneDriveApi.on('authRefreshed', (a) => {
 			Setting.setValue('sync.onedrive.auth', JSON.stringify(a));
 		});
 
-		let appDir = await driver.api().appDirectory();
+		let appDir = await oneDriveApi.appDirectory();
 		logger.info('App dir: ' + appDir);
 		fileApi = new FileApi(appDir, driver);
 		fileApi.setLogger(logger);

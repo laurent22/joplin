@@ -19,6 +19,7 @@ import { FolderScreen } from 'lib/components/screens/folder.js'
 import { FoldersScreen } from 'lib/components/screens/folders.js'
 import { LoginScreen } from 'lib/components/screens/login.js'
 import { LoadingScreen } from 'lib/components/screens/loading.js'
+import { OneDriveLoginScreen } from 'lib/components/screens/onedrive-login.js'
 import { Setting } from 'lib/models/setting.js'
 import { Synchronizer } from 'lib/synchronizer.js'
 import { MenuContext } from 'react-native-popup-menu';
@@ -184,6 +185,7 @@ const AppNavigator = StackNavigator({
 	Folders: { screen: FoldersScreen },
 	Login: { screen: LoginScreen },
 	Loading: { screen: LoadingScreen },
+	OneDriveLogin: { screen: OneDriveLoginScreen },
 });
 
 class AppComponent extends React.Component {
