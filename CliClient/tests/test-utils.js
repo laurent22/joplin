@@ -5,6 +5,8 @@ import { BaseModel } from 'lib/base-model.js';
 import { Folder } from 'lib/models/folder.js';
 import { Note } from 'lib/models/note.js';
 import { Resource } from 'lib/models/resource.js';
+import { Tag } from 'lib/models/tag.js';
+import { NoteTag } from 'lib/models/note-tag.js';
 import { Logger } from 'lib/logger.js';
 import { Setting } from 'lib/models/setting.js';
 import { BaseItem } from 'lib/models/base-item.js';
@@ -25,8 +27,13 @@ Resource.fsDriver_ = fsDriver;
 
 const logger = new Logger();
 logger.addTarget('file', { path: __dirname + '/../tests/logs/log.txt' });
-//logger.addTarget('console');
 logger.setLevel(Logger.LEVEL_DEBUG);
+
+BaseItem.loadClass('Note', Note);
+BaseItem.loadClass('Folder', Folder);
+BaseItem.loadClass('Resource', Resource);
+BaseItem.loadClass('Tag', Tag);
+BaseItem.loadClass('NoteTag', NoteTag);
 
 function sleep(n) {
 	return new Promise((resolve, reject) => {

@@ -9,6 +9,10 @@ import { addNavigationHelpers } from 'react-navigation';
 import { Log } from 'lib/log.js'
 import { Note } from 'lib/models/note.js'
 import { Folder } from 'lib/models/folder.js'
+import { Resource } from 'lib/models/resource.js'
+import { Tag } from 'lib/models/tag.js'
+import { NoteTag } from 'lib/models/note-tag.js'
+import { BaseItem } from 'lib/models/base-item.js'
 import { BaseModel } from 'lib/base-model.js'
 import { Database } from 'lib/database.js'
 import { ItemList } from 'lib/components/item-list.js'
@@ -199,7 +203,13 @@ class AppComponent extends React.Component {
 		NotesScreenUtils.dispatch = this.props.dispatch;
 		BaseModel.db_ = db;
 
-		db.open({ name: '/storage/emulated/0/Download/joplin-43.sqlite' }).then(() => {
+		BaseItem.loadClass('Note', Note);
+		BaseItem.loadClass('Folder', Folder);
+		BaseItem.loadClass('Resource', Resource);
+		BaseItem.loadClass('Tag', Tag);
+		BaseItem.loadClass('NoteTag', NoteTag);
+
+		db.open({ name: '/storage/emulated/0/Download/joplin-44.sqlite' }).then(() => {
 			Log.info('Database is ready.');
 		}).then(() => {
 			Log.info('Loading settings...');

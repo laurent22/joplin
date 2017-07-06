@@ -313,12 +313,12 @@ class Synchronizer {
 						};
 						if (action == 'createLocal') options.isNew = true;
 
-						if (newContent.type_ == BaseModel.TYPE_RESOURCE && action == 'createLocal') {
-							let localResourceContentPath = Resource.fullPath(newContent);
-							let remoteResourceContentPath = this.resourceDirName_ + '/' + newContent.id;
-							let remoteResourceContent = await this.api().get(remoteResourceContentPath, { encoding: 'binary' });
-							await Resource.setContent(newContent, remoteResourceContent);
-						}
+						// if (newContent.type_ == BaseModel.TYPE_RESOURCE && action == 'createLocal') {
+						// 	let localResourceContentPath = Resource.fullPath(newContent);
+						// 	let remoteResourceContentPath = this.resourceDirName_ + '/' + newContent.id;
+						// 	let remoteResourceContent = await this.api().get(remoteResourceContentPath, { encoding: 'binary' });
+						// 	await Resource.setContent(newContent, remoteResourceContent);
+						// }
 
 						await ItemClass.save(newContent, options);
 

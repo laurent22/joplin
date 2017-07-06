@@ -9,14 +9,33 @@ class BaseItem extends BaseModel {
 		return true;
 	}
 
+	static loadClass(className, classRef) {
+		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
+			if (BaseItem.syncItemDefinitions_[i].className == className) {
+				BaseItem.syncItemDefinitions_[i].classRef = classRef;
+				return;
+			}
+		}
+
+		throw new Error('Invalid class name: ' + className);
+	}
+
 	// Need to dynamically load the classes like this to avoid circular dependencies
 	static getClass(name) {
-		if (!this.classes_) this.classes_ = {};
-		if (this.classes_[name]) return this.classes_[name];
-		let filename = name.toLowerCase();
-		if (name == 'NoteTag') filename = 'note-tag';
-		this.classes_[name] = require('lib/models/' + filename + '.js')[name];
-		return this.classes_[name];
+		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
+			if (BaseItem.syncItemDefinitions_[i].className == name) {
+				return BaseItem.syncItemDefinitions_[i].classRef;
+			}
+		}
+
+		throw new Error('Invalid class name: ' + name);
+
+		// if (!this.classes_) this.classes_ = {};
+		// if (this.classes_[name]) return this.classes_[name];
+		// let filename = name.toLowerCase();
+		// if (name == 'NoteTag') filename = 'note-tag';
+		// this.classes_[name] = require('lib/models/' + filename + '.js')[name];
+		// return this.classes_[name];
 	}
 
 	static systemPath(itemOrId) {
@@ -228,6 +247,12 @@ class BaseItem extends BaseModel {
 	}
 
 }
+
+// import { Note } from 'lib/models/note.js';
+// import { Folder } from 'lib/models/folder.js';
+// import { Resource } from 'lib/models/resource.js';
+// import { Tag } from 'lib/models/tag.js';
+// import { NoteTag } from 'lib/models/note-tag.js';
 
 // Also update:
 // - itemsThatNeedSync()

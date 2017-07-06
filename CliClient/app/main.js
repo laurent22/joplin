@@ -16,6 +16,7 @@ import { Resource } from 'lib/models/resource.js';
 import { BaseItem } from 'lib/models/base-item.js';
 import { Note } from 'lib/models/note.js';
 import { Tag } from 'lib/models/tag.js';
+import { NoteTag } from 'lib/models/note-tag.js';
 import { Setting } from 'lib/models/setting.js';
 import { Synchronizer } from 'lib/synchronizer.js';
 import { Logger } from 'lib/logger.js';
@@ -23,6 +24,7 @@ import { uuid } from 'lib/uuid.js';
 import { sprintf } from 'sprintf-js';
 import { importEnex } from 'import-enex';
 import { vorpalUtils } from 'vorpal-utils.js';
+import { reg } from 'lib/registry.js';
 import { FsDriverNode } from './fs-driver-node.js';
 import { filename, basename } from 'lib/path-utils.js';
 import { _ } from 'lib/locale.js';
@@ -677,11 +679,7 @@ async function synchronizer(syncTarget) {
 	let fileApi = null;
 
 	if (syncTarget == 'onedrive') {
-		let oneDriveApi = oneDriveApi.instance();
-		// const CLIENT_ID = 'e09fc0de-c958-424f-83a2-e56a721d331b';
-		// const CLIENT_SECRET = 'JA3cwsqSGHFtjMwd5XoF5L5';
-
-		//let driver = new FileApiDriverOneDrive(CLIENT_ID, CLIENT_SECRET);
+		const oneDriveApi = reg.oneDriveApi();
 		let driver = new FileApiDriverOneDrive(oneDriveApi);
 		let auth = Setting.value('sync.onedrive.auth');
 		
@@ -692,11 +690,6 @@ async function synchronizer(syncTarget) {
 			auth = await oneDriveApiUtils.oauthDance(vorpal);
 			Setting.setValue('sync.onedrive.auth', JSON.stringify(auth));
 		}
-
-		//oneDriveApi.setAuth(auth);
-		oneDriveApi.on('authRefreshed', (a) => {
-			Setting.setValue('sync.onedrive.auth', JSON.stringify(a));
-		});
 
 		let appDir = await oneDriveApi.appDirectory();
 		logger.info('App dir: ' + appDir);
@@ -938,6 +931,14 @@ async function main() {
 
 	logger.info(sprintf('Starting %s %s...', packageJson.name, packageJson.version));
 	logger.info('Profile directory: ' + profileDir);
+
+	// That's not good, but it's to avoid circular dependency issues
+	// in the BaseItem class.
+	BaseItem.loadClass('Note', Note);
+	BaseItem.loadClass('Folder', Folder);
+	BaseItem.loadClass('Resource', Resource);
+	BaseItem.loadClass('Tag', Tag);
+	BaseItem.loadClass('NoteTag', NoteTag);
 
 	database_ = new Database(new DatabaseDriverNode());
 	database_.setLogger(dbLogger);

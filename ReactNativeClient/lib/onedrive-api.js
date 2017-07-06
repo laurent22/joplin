@@ -1,5 +1,6 @@
 import { shim } from 'lib/shim.js';
 import { stringify } from 'query-string';
+import { time } from 'lib/time-utils.js';
 
 class OneDriveApi {
 
@@ -133,15 +134,6 @@ class OneDriveApi {
 
 		if (data) options.body = data;
 
-		// Rare error (one Google hit) - maybe repeat the request when it happens?
-
-		// { error:
-		//    { code: 'generalException',
-		//      message: 'An error occurred in the data store.',
-		//      innerError:
-		//       { 'request-id': 'b4310552-c18a-45b1-bde1-68e2c2345eef',
-		//         date: '2017-06-29T00:15:50' } } }
-
 		for (let i = 0; i < 5; i++) {
 			options.headers['Authorization'] = 'bearer ' + this.token();
 
@@ -152,6 +144,26 @@ class OneDriveApi {
 
 				if (error.code == 'InvalidAuthenticationToken') {
 					await this.refreshAccessToken();
+					continue;
+				} else if (error && ((error.error && error.error.code == 'generalException') || (error.code == 'generalException'))) {
+					// Rare error (one Google hit) - I guess the request can be repeated
+					
+					// { error:
+					//    { code: 'generalException',
+					//      message: 'An error occurred in the data store.',
+					//      innerError:
+					//       { 'request-id': 'b4310552-c18a-45b1-bde1-68e2c2345eef',
+					//         date: '2017-06-29T00:15:50' } } }
+					await time.msleep(1000 * i);
+					continue;
+				} else if (error.code == 'EAGAIN') {
+					// { FetchError: request to https://graph.microsoft.com/v1.0/drive/root:/Apps/Joplin/.sync/7ee5dc04afcb414aa7c684bfc1edba8b.md_1499352102856 failed, reason: connect EAGAIN 65.52.64.250:443 - Local (0.0.0.0:54374)
+					//   name: 'FetchError',
+					//   message: 'request to https://graph.microsoft.com/v1.0/drive/root:/Apps/Joplin/.sync/7ee5dc04afcb414aa7c684bfc1edba8b.md_1499352102856 failed, reason: connect EAGAIN 65.52.64.250:443 - Local (0.0.0.0:54374)',
+					//   type: 'system',
+					//   errno: 'EAGAIN',
+					//   code: 'EAGAIN' }
+					await time.msleep(1000 * i);
 					continue;
 				} else {
 					error.request = method + ' ' + url + ' ' + JSON.stringify(query) + ' ' + JSON.stringify(data) + ' ' + JSON.stringify(options);
