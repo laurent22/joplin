@@ -37,6 +37,7 @@ class ItemListComponent extends Component {
 		await Note.save({ id: note.id, todo_completed: checked });
 	}
 
+	listView_itemLongPress(itemId) {}
 	listView_itemPress(itemId) {}
 
 	render() {
@@ -50,8 +51,8 @@ class ItemListComponent extends Component {
 
 			return (
 				<TouchableHighlight onPress={onPress} onLongPress={onLongPress}>
-					<View style={{flexDirection: 'row'}}>
-						{ !!Number(item.is_todo) && <Checkbox checked={!!Number(item.todo_completed)} onChange={(checked) => { this.todoCheckbox_change(item.id, checked) }}/> }<Text>{item.title} [{item.id}]</Text>
+					<View style={{flexDirection: 'row', paddingLeft: 10, paddingTop:5, paddingBottom:5 }}>
+						{ !!Number(item.is_todo) && <Checkbox checked={!!Number(item.todo_completed)} onChange={(checked) => { this.todoCheckbox_change(item.id, checked) }}/> }<Text>{item.title}</Text>
 					</View>
 				</TouchableHighlight>
 			);

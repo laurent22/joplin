@@ -1,5 +1,4 @@
 import { BaseModel } from 'lib/base-model.js';
-import { Database } from 'lib/database.js';
 import { BaseItem } from 'lib/models/base-item.js';
 import { NoteTag } from 'lib/models/note-tag.js';
 import { Note } from 'lib/models/note.js';

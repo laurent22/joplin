@@ -85,7 +85,7 @@ class NoteScreenComponent extends React.Component {
 				<View style={{ flexDirection: 'row' }}>
 					{ isTodo && <Checkbox checked={!!Number(note.todo_completed)} /> }<TextInput style={{flex:1}} value={note.title} onChangeText={(text) => this.title_changeText(text)} />
 				</View>
-				<TextInput style={{flex: 1, textAlignVertical: 'top'}} multiline={true} value={note.body} onChangeText={(text) => this.body_changeText(text)} />
+				<TextInput style={{flex: 1, textAlignVertical: 'top', fontFamily: 'monospace'}} multiline={true} value={note.body} onChangeText={(text) => this.body_changeText(text)} />
 				{ todoComponents }
 				<Button title="Save note" onPress={() => this.saveNoteButton_press()} />
 			</View>

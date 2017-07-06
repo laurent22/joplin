@@ -41,22 +41,6 @@ class ScreenHeaderComponent extends Component {
 		}
 	}
 
-	async menu_synchronize() {
-		if (reg.oneDriveApi().auth()) {
-			const sync = await reg.synchronizer();
-			try {
-				sync.start();
-			} catch (error) {
-				Log.error(error);
-			}
-		} else {
-			this.props.dispatch({
-				type: 'Navigation/NAVIGATE',
-				routeName: 'OneDriveLogin',
-			});
-		}
-	}
-
 	render() {
 		let key = 0;
 		let menuOptionComponents = [];
@@ -72,15 +56,10 @@ class ScreenHeaderComponent extends Component {
 			menuOptionComponents.push(<View key={'menuOption_' + key++} style={styles.divider}/>);
 		}
 
-		menuOptionComponents.push(
-			<MenuOption value={() => this.menu_synchronize()} key={'menuOption_' + key++}>
-				<Text>{_('Synchronize')}</Text>
-			</MenuOption>);
-
-		menuOptionComponents.push(
-			<MenuOption value={1} key={'menuOption_' + key++}>
-				<Text>{_('Configuration')}</Text>
-			</MenuOption>);
+		// menuOptionComponents.push(
+		// 	<MenuOption value={1} key={'menuOption_' + key++}>
+		// 		<Text>{_('Configuration')}</Text>
+		// 	</MenuOption>);
 
 		let title = 'title' in this.props && this.props.title !== null ? this.props.title : _(this.props.navState.routeName);
 

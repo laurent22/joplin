@@ -15,7 +15,7 @@ import { Tag } from 'lib/models/tag.js'
 import { NoteTag } from 'lib/models/note-tag.js'
 import { BaseItem } from 'lib/models/base-item.js'
 import { BaseModel } from 'lib/base-model.js'
-import { Database } from 'lib/database.js'
+import { JoplinDatabase } from 'lib/joplin-database.js'
 import { ItemList } from 'lib/components/item-list.js'
 import { NotesScreen } from 'lib/components/screens/notes.js'
 import { NotesScreenUtils } from 'lib/components/screens/notes-utils.js'
@@ -32,6 +32,7 @@ import { SideMenu } from 'lib/components/side-menu.js';
 import { SideMenuContent } from 'lib/components/side-menu-content.js';
 import { DatabaseDriverReactNative } from 'lib/database-driver-react-native';
 import { reg } from 'lib/registry.js';
+import RNFetchBlob from 'react-native-fetch-blob';
 
 let defaultState = {
 	notes: [],
@@ -194,9 +195,6 @@ const AppNavigator = StackNavigator({
 	OneDriveLogin: { screen: OneDriveLoginScreen },
 });
 
-import RNFetchBlob from 'react-native-fetch-blob'
-
-
 class AppComponent extends React.Component {
 
 	async componentDidMount() {
@@ -235,7 +233,7 @@ class AppComponent extends React.Component {
 			}
 		}
 
-		let db = new Database(new DatabaseDriverReactNative());
+		let db = new JoplinDatabase(new DatabaseDriverReactNative());
 		reg.setDb(db);
 
 		BaseModel.dispatch = this.props.dispatch;
@@ -249,7 +247,7 @@ class AppComponent extends React.Component {
 		BaseItem.loadClass('NoteTag', NoteTag);
 
 		try {
-			await db.open({ name: '/storage/emulated/0/Download/joplin-44.sqlite' })
+			await db.open({ name: '/storage/emulated/0/Download/joplin-48.sqlite' })
 			Log.info('Database is ready.');
 
 			//await db.exec('DELETE FROM notes');

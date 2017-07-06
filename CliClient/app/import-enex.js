@@ -350,8 +350,8 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					id: noteResource.id,
 					data: decodedData,
 					mime: noteResource.mime,
-					title: noteResource.filename,
-					filename: noteResource.filename,
+					title: noteResource.filename ? noteResource.filename : '',
+					filename: noteResource.filename ? noteResource.filename : '',
 				};
 
 				note.resources.push(r);

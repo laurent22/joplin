@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import { Database } from 'lib/database.js';
+import { JoplinDatabase } from 'lib/joplin-database.js';
 import { DatabaseDriverNode } from 'lib/database-driver-node.js';
 import { BaseModel } from 'lib/base-model.js';
 import { Folder } from 'lib/models/folder.js';
@@ -25,8 +25,11 @@ const fsDriver = new FsDriverNode();
 Logger.fsDriver_ = fsDriver;
 Resource.fsDriver_ = fsDriver;
 
+const logDir = __dirname + '/../tests/logs';
+fs.mkdirpSync(logDir, 0o755);
+
 const logger = new Logger();
-logger.addTarget('file', { path: __dirname + '/../tests/logs/log.txt' });
+logger.addTarget('file', { path: logDir + '/log.txt' });
 logger.setLevel(Logger.LEVEL_DEBUG);
 
 BaseItem.loadClass('Note', Note);
@@ -87,7 +90,7 @@ function setupDatabase(id = null) {
 	return fs.unlink(filePath).catch(() => {
 		// Don't care if the file doesn't exist
 	}).then(() => {
-		databases_[id] = new Database(new DatabaseDriverNode());
+		databases_[id] = new JoplinDatabase(new DatabaseDriverNode());
 		databases_[id].setLogger(logger);
 		return databases_[id].open({ name: filePath }).then(() => {
 			BaseModel.db_ = databases_[id];

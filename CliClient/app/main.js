@@ -8,6 +8,7 @@ import { FileApiDriverOneDrive } from 'lib/file-api-driver-onedrive.js';
 import { FileApiDriverMemory } from 'lib/file-api-driver-memory.js';
 import { FileApiDriverLocal } from 'lib/file-api-driver-local.js';
 import { OneDriveApiNodeUtils } from './onedrive-api-node-utils.js';
+import { JoplinDatabase } from 'lib/joplin-database.js';
 import { Database } from 'lib/database.js';
 import { DatabaseDriverNode } from 'lib/database-driver-node.js';
 import { BaseModel } from 'lib/base-model.js';
@@ -927,7 +928,12 @@ async function main() {
 	await fs.mkdirp(resourceDir, 0o755);
 	await fs.mkdirp(tempDir, 0o755);
 
+	// let logDatabase = new Database(new DatabaseDriverNode());
+	// await logDatabase.open({ name: profileDir + '/database-log.sqlite' });
+	// await logDatabase.exec(Logger.databaseCreateTableSql());
+
 	logger.addTarget('file', { path: profileDir + '/log.txt' });
+	// logger.addTarget('database', { database: logDatabase, source: 'main' });
 	logger.setLevel(logLevel);
 
 	dbLogger.addTarget('file', { path: profileDir + '/log-database.txt' });
@@ -947,7 +953,7 @@ async function main() {
 	BaseItem.loadClass('Tag', Tag);
 	BaseItem.loadClass('NoteTag', NoteTag);
 
-	database_ = new Database(new DatabaseDriverNode());
+	database_ = new JoplinDatabase(new DatabaseDriverNode());
 	database_.setLogger(dbLogger);
 	await database_.open({ name: profileDir + '/database.sqlite' });
 	BaseModel.db_ = database_;

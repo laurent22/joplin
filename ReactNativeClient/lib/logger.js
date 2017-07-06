@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { _ } from 'lib/locale.js';
+import { time } from 'lib/time-utils.js';
 import { FsDriverDummy } from 'lib/fs-driver-dummy.js';
 
 class Logger {
@@ -37,6 +38,36 @@ class Logger {
 		this.targets_.push(target);
 	}
 
+	objectToString(object) {
+		let output = '';
+
+		if (typeof object === 'object') {
+			if (object instanceof Error) {
+				output = object.toString();
+				if (object.stack) output += "\n" + object.stack;
+			} else {
+				output = JSON.stringify(object);
+			}
+		} else {
+			output = object;
+		}
+
+		return output;
+	}
+
+	static databaseCreateTableSql() {
+		let output = `
+		CREATE TABLE logs (
+			id INTEGER PRIMARY KEY,
+			source TEXT,
+			level INT NOT NULL,
+			message TEXT NOT NULL,
+			\`timestamp\` INT NOT NULL
+		);
+		`;
+		return output.split("\n").join(' ');
+	}
+
 	log(level, object) {
 		if (this.level() < level || !this.targets_.length) return;
 
@@ -47,8 +78,8 @@ class Logger {
 		let line = moment().format('YYYY-MM-DD HH:mm:ss') + ': ' + levelString;
 
 		for (let i = 0; i < this.targets_.length; i++) {
-			let t = this.targets_[i];
-			if (t.type == 'console') {
+			let target = this.targets_[i];
+			if (target.type == 'console') {
 				let fn = 'debug';
 				if (level = Logger.LEVEL_ERROR) fn = 'error';
 				if (level = Logger.LEVEL_WARN) fn = 'warn';
@@ -58,48 +89,17 @@ class Logger {
 				} else {
 					console[fn](line + object);
 				}
-			} else if (t.type == 'file') {
-				let serializedObject = '';
-
-				if (typeof object === 'object') {
-					if (object instanceof Error) {
-						serializedObject = object.toString();
-						if (object.stack) serializedObject += "\n" + object.stack;
-					} else {
-						serializedObject = JSON.stringify(object);
-					}
-				} else {
-					serializedObject = object;
-				}
-
-				Logger.fsDriver().appendFileSync(t.path, line + serializedObject + "\n");
-
-				// this.fileAppendQueue_.push({
-				// 	path: t.path,
-				// 	line: line + serializedObject + "\n",
-				// });
-
-				// this.scheduleFileAppendQueueProcessing_();
-			} else if (t.type == 'vorpal') {
-				t.vorpal.log(object);
+			} else if (target.type == 'file') {
+				let serializedObject = this.objectToString(object);
+				Logger.fsDriver().appendFileSync(target.path, line + serializedObject + "\n");
+			} else if (target.type == 'vorpal') {
+				target.vorpal.log(object);
+			} else if (target.type == 'database') {
+				let msg = this.objectToString(object);
+				target.database.exec('INSERT INTO logs (`source`, `level`, `message`, `timestamp`) VALUES (?, ?, ?, ?)', [target.source, level, msg, time.unixMs()]);
 			}
 		}
 	}
-
-	// scheduleFileAppendQueueProcessing_() {
-	// 	if (this.fileAppendQueueTID_) return;
-
-	// 	this.fileAppendQueueTID_ = setTimeout(async () => {
-	// 		this.fileAppendQueueTID_ = null;
-
-	// 		let queue = this.fileAppendQueue_.slice(0);
-	// 		for (let i = 0; i < queue.length; i++) {
-	// 			let t = queue[i];
-	// 			await fs.appendFile(t.path, t.line);
-	// 		}
-	// 		this.fileAppendQueue_.splice(0, queue.length);
-	// 	}, 1);
-	// }
 
 	error(object) { return this.log(Logger.LEVEL_ERROR, object); }
 	warn(object)  { return this.log(Logger.LEVEL_WARN, object); }

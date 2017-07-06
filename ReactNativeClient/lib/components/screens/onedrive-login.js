@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { WebView, Button } from 'react-native';
+import { WebView, Button, Text } from 'react-native';
 import { connect } from 'react-redux'
 import { Log } from 'lib/log.js'
 import { Setting } from 'lib/models/setting.js'
@@ -22,8 +22,12 @@ class OneDriveLoginScreenComponent extends React.Component {
 
 	componentWillMount() {
 		this.setState({
-			webviewUrl: reg.oneDriveApi().authCodeUrl(this.redirectUrl()),
+			webviewUrl: this.startUrl(),
 		});
+	}
+
+	startUrl() {
+		return reg.oneDriveApi().authCodeUrl(this.redirectUrl());
 	}
 
 	redirectUrl() {
@@ -37,7 +41,7 @@ class OneDriveLoginScreenComponent extends React.Component {
 		const url = noIdeaWhatThisIs.url;
 
 		if (!this.authCode_ && url.indexOf(this.redirectUrl() + '?code=') === 0) {
-			console.info('URL: ' + url);
+			Log.info('URL: ' + url);
 
 			let code = url.split('?code=');
 			this.authCode_ = code[1];
@@ -46,6 +50,28 @@ class OneDriveLoginScreenComponent extends React.Component {
 
 			this.authCode_ = null;
 		}
+	}
+
+	async webview_error(error) {
+		Log.error(error);
+	}
+
+	retryButton_click() {
+		// It seems the only way it would reload the page is by loading an unrelated
+		// URL, waiting a bit, and then loading the actual URL. There's probably
+		// a better way to do this.
+
+		this.setState({
+			webviewUrl: 'https://microsoft.com',
+		});
+		this.forceUpdate();
+
+		setTimeout(() => {
+			this.setState({
+				webviewUrl: this.startUrl(),
+			});
+			this.forceUpdate();
+		}, 1000);
 	}
 
 	render() {
@@ -60,7 +86,10 @@ class OneDriveLoginScreenComponent extends React.Component {
 					source={source}
 					style={{marginTop: 20}}
 					onNavigationStateChange={(o) => { this.webview_load(o); }}
+					onError={(error) => { this.webview_error(error); }}
 				/>
+
+				<Button title="Retry" onPress={() => { this.retryButton_click(); }}></Button>
 			</View>
 		);
 	}

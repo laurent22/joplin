@@ -4,11 +4,6 @@
 		{
 			"path": ".",
 			"folder_exclude_patterns": [
-				"var",
-				"vendor",
-				"QtClient/build-JoplinQtClient-Visual_C_32_bits-Debug",
-				"QtClient/data/resources",
-				"app/data/uploads",
 				"CliClient/node_modules",
 				"CliClient/build",
 				"CliClient/tests-build",
@@ -27,29 +22,11 @@
 				"_vieux",
 			],
 			"file_exclude_patterns": [
-				"*.pro.user",
-				"*.pro.user.*",
-				"*.iml",
 				"*.map",
 				"CliClient/app/src",
 				"CliClient/app/lib",
 				"*.jar",
 			]
-		}
-	],
-	"build_systems":
-	[
-		{
-			"name": "Build evernote-import",
-			"shell_cmd": "D:\\Programmes\\cygwin\\bin\\bash.exe --login D:\\Web\\www\\joplin\\QtClient\\evernote-import\\build.sh"
-		},
-		{
-			"name": "Qt Creator - Build and run",
-			"shell_cmd": "D:\\NonPortableApps\\AutoHotkey\\AutoHotkey.exe D:\\Docs\\PROGS\\AutoHotKey\\QtRun\\QtRun.ahk"
-		},
-		{
-			"name": "Build QtClient CLI - Linux",
-			"shell_cmd": "/home/laurent/src/notes/QtClient/JoplinQtClient/build.sh"
 		}
 	]
 }
