@@ -7,6 +7,7 @@ import { FileApi } from 'lib/file-api.js';
 import { FileApiDriverOneDrive } from 'lib/file-api-driver-onedrive.js';
 import { FileApiDriverMemory } from 'lib/file-api-driver-memory.js';
 import { FileApiDriverLocal } from 'lib/file-api-driver-local.js';
+import { OneDriveApiNodeUtils } from './onedrive-api-node-utils.js';
 import { Database } from 'lib/database.js';
 import { DatabaseDriverNode } from 'lib/database-driver-node.js';
 import { BaseModel } from 'lib/base-model.js';
@@ -685,7 +686,9 @@ async function synchronizer(syncTarget) {
 		if (auth) {
 			auth = JSON.parse(auth);
 		} else {
-			auth = await driver.api().oauthDance(vorpal);
+			//auth = await driver.api().oauthDance(vorpal);
+			const oneDriveApiUtils = new OneDriveApiNodeUtils(driver.api());
+			auth = await oneDriveApiUtils.oauthDance(vorpal);
 			Setting.setValue('sync.onedrive.auth', JSON.stringify(auth));
 		}
 

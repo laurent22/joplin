@@ -5,6 +5,8 @@ import { Log } from 'lib/log.js';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import { _ } from 'lib/locale.js';
 import { Setting } from 'lib/models/setting.js';
+import { FileApi } from 'lib/file-api.js';
+import { FileApiDriverOneDrive } from 'lib/file-api-driver-onedrive.js';
 
 const styles = StyleSheet.create({
 	divider: {
@@ -38,20 +40,20 @@ class ScreenHeaderComponent extends Component {
 		}
 	}
 
-	menu_login() {
-		this.props.dispatch({
-			type: 'Navigation/NAVIGATE',
-			routeName: 'Login',
-		});
-	}
+	menu_synchronize() {
+		// const CLIENT_ID = 'e09fc0de-c958-424f-83a2-e56a721d331b';
+		// const CLIENT_SECRET = 'JA3cwsqSGHFtjMwd5XoF5L5';
 
-	menu_logout() {
-		let user = { email: null, session: null };
-		Setting.setObject('user', user);
-		this.props.dispatch({
-			type: 'USER_SET',
-			user: user,
-		});
+		// let driver = new FileApiDriverOneDrive(CLIENT_ID, CLIENT_SECRET);
+		// let auth = Setting.value('sync.onedrive.auth');
+		
+		// if (auth) {
+		// 	auth = JSON.parse(auth);
+		// } else {
+		// 	driver.api().oauthDance(vorpal);
+		// 	//auth = driver.api().oauthDance(vorpal);
+		// 	//Setting.setValue('sync.onedrive.auth', JSON.stringify(auth));
+		// }
 	}
 
 	render() {
@@ -69,17 +71,10 @@ class ScreenHeaderComponent extends Component {
 			menuOptionComponents.push(<View key={'menuOption_' + key++} style={styles.divider}/>);
 		}
 
-		if (this.props.user && this.props.user.session) {
-			menuOptionComponents.push(
-				<MenuOption value={() => this.menu_logout()} key={'menuOption_' + key++}>
-					<Text>{_('Logout')}</Text>
-				</MenuOption>);
-		} else {
-			menuOptionComponents.push(
-				<MenuOption value={() => this.menu_login()} key={'menuOption_' + key++}>
-					<Text>{_('Login')}</Text>
-				</MenuOption>);
-		}
+		menuOptionComponents.push(
+			<MenuOption value={() => this.menu_synchronize()} key={'menuOption_' + key++}>
+				<Text>{_('Synchronize')}</Text>
+			</MenuOption>);
 
 		menuOptionComponents.push(
 			<MenuOption value={1} key={'menuOption_' + key++}>
