@@ -46,6 +46,7 @@ class Setting extends BaseModel {
 	}
 
 	static setConstant(key, value) {
+		if (!(key in this.constants_)) throw new Error('Unknown constant key: ' + key);
 		this.constants_[key] = value;
 	}
 
@@ -152,6 +153,9 @@ Setting.defaults_ = {
 Setting.constants_ = {
 	'appName': 'joplin',
 	'appId': 'SET_ME', // Each app should set this identifier
+	'resourceDir': '',
+	'profileDir': '',
+	'tempDir': '',
 }
 
 export { Setting };

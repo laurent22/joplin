@@ -9,36 +9,38 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import org.pgsqlite.SQLitePluginPackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
 
-  private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
-    @Override
-    public boolean getUseDeveloperSupport() {
-      return BuildConfig.DEBUG;
-    }
+	private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+		@Override
+		public boolean getUseDeveloperSupport() {
+			return BuildConfig.DEBUG;
+		}
 
-    @Override
-    protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
-          new SQLitePluginPackage(),
-          new MainReactPackage(),
-            new RNFSPackage()
-      );
-    }
-  };
+		@Override
+		protected List<ReactPackage> getPackages() {
+			return Arrays.<ReactPackage>asList(
+				new SQLitePluginPackage(),
+				new MainReactPackage(),
+				new RNFSPackage(),
+				new RNFetchBlobPackage()
+			);
+		}
+	};
 
-  @Override
-  public ReactNativeHost getReactNativeHost() {
-    return mReactNativeHost;
-  }
+	@Override
+	public ReactNativeHost getReactNativeHost() {
+		return mReactNativeHost;
+	}
 
-  @Override
-  public void onCreate() {
-    super.onCreate();
-    SoLoader.init(this, /* native exopackage */ false);
-  }
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		SoLoader.init(this, /* native exopackage */ false);
+	}
 }

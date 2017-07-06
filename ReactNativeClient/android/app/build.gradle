@@ -131,6 +131,7 @@ dependencies {
     compile "com.android.support:appcompat-v7:23.0.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
     compile project(':react-native-sqlite-storage')
+    compile project(':react-native-fetch-blob')
 }
 
 // Run this once to be able to run the application with BUCK

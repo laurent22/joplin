@@ -84,6 +84,7 @@ class OneDriveApi {
 		try {
 			const json = await r.json();
 			this.setAuth(json);
+			this.dispatch('authRefreshed', this.auth());
 		} catch (error) {
 			const text = await r.text();
 			error.message += ': ' + text;
@@ -110,6 +111,7 @@ class OneDriveApi {
 
 		if (!options) options = {};
 		if (!options.headers) options.headers = {};
+		if (!options.target) options.target = 'string';
 
 		if (method != 'GET') {
 			options.method = method;
@@ -137,7 +139,13 @@ class OneDriveApi {
 		for (let i = 0; i < 5; i++) {
 			options.headers['Authorization'] = 'bearer ' + this.token();
 
-			let response = await shim.fetch(url, options);
+			let response = null;
+			if (options.target == 'string') {
+				response = await shim.fetch(url, options);
+			} else { // file
+				response = await shim.fetchBlob(url, options);
+			}
+
 			if (!response.ok) {
 				let errorResponse = await response.json();
 				let error = this.oneDriveErrorResponseToError(errorResponse);
@@ -194,7 +202,7 @@ class OneDriveApi {
 
 		let body = new shim.FormData();
 		body.append('client_id', this.clientId());
-		body.append('client_secret', this.clientSecret());
+		// body.append('client_secret', this.clientSecret()); // TODO: NEEDED FOR NODE
 		body.append('refresh_token', this.auth_.refresh_token);
 		body.append('redirect_uri', 'http://localhost:1917');
 		body.append('grant_type', 'refresh_token');

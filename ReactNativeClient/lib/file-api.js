@@ -62,7 +62,8 @@ class FileApi {
 		});
 	}
 
-	get(path, options = {}) {
+	get(path, options = null) {
+		if (!options) options = {};
 		if (!options.encoding) options.encoding = 'utf8';
 		this.logger().debug('get ' + this.fullPath_(path));
 		return this.driver_.get(this.fullPath_(path), options);

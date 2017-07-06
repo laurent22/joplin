@@ -320,6 +320,12 @@ class Synchronizer {
 						// 	await Resource.setContent(newContent, remoteResourceContent);
 						// }
 
+						if (newContent.type_ == BaseModel.TYPE_RESOURCE && action == 'createLocal') {
+							let localResourceContentPath = Resource.fullPath(newContent);
+							let remoteResourceContentPath = this.resourceDirName_ + '/' + newContent.id;
+							await this.api().get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' });
+						}
+
 						await ItemClass.save(newContent, options);
 
 						this.logSyncOperation(action, local, content, reason);

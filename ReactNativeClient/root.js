@@ -6,6 +6,7 @@ import { createStore } from 'redux';
 import { combineReducers } from 'redux';
 import { StackNavigator } from 'react-navigation';
 import { addNavigationHelpers } from 'react-navigation';
+import { shim } from 'lib/shim.js';
 import { Log } from 'lib/log.js'
 import { Note } from 'lib/models/note.js'
 import { Folder } from 'lib/models/folder.js'
@@ -193,9 +194,47 @@ const AppNavigator = StackNavigator({
 	OneDriveLogin: { screen: OneDriveLoginScreen },
 });
 
+import RNFetchBlob from 'react-native-fetch-blob'
+
+
 class AppComponent extends React.Component {
 
-	componentDidMount() {
+	async componentDidMount() {
+
+		shim.fetchBlob = async function(url, options) {
+			if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
+			if (!options.method) options.method = 'GET';
+
+			let headers = options.headers ? options.headers : {};
+			let method = options.method ? options.method : 'GET';
+
+			let dirs = RNFetchBlob.fs.dirs;
+			let localFilePath = options.path;
+			if (localFilePath.indexOf('/') !== 0) localFilePath = dirs.DocumentDir + '/' + localFilePath;
+
+			delete options.path;
+
+			try {
+				let response = await RNFetchBlob.config({
+					path: localFilePath
+				}).fetch(method, url, headers);
+
+				// Returns an object that roughtly compatible with a standard Response object
+				let output = {
+					ok: response.respInfo.status < 400,
+					path: response.data,
+					text: response.text,
+					json: response.json,
+					status: response.respInfo.status,
+					headers: response.respInfo.headers,
+				};
+
+				return output;
+			} catch (error) {
+				throw new Error('fetchBlob: ' + method + ' ' + url + ': ' + error.toString());
+			}
+		}
+
 		let db = new Database(new DatabaseDriverReactNative());
 		reg.setDb(db);
 
@@ -209,33 +248,39 @@ class AppComponent extends React.Component {
 		BaseItem.loadClass('Tag', Tag);
 		BaseItem.loadClass('NoteTag', NoteTag);
 
-		db.open({ name: '/storage/emulated/0/Download/joplin-44.sqlite' }).then(() => {
+		try {
+			await db.open({ name: '/storage/emulated/0/Download/joplin-44.sqlite' })
 			Log.info('Database is ready.');
-		}).then(() => {
+
+			//await db.exec('DELETE FROM notes');
+			//await db.exec('DELETE FROM folders');
+			//await db.exec('DELETE FROM tags');
+			//await db.exec('DELETE FROM note_tags');
+			//await db.exec('DELETE FROM resources');
+			//await db.exec('DELETE FROM deleted_items');
+
 			Log.info('Loading settings...');
-			return Setting.load();
-		}).then(() => {
+			await Setting.load();
+			
 			Setting.setConstant('appId', 'net.cozic.joplin-android');
+			Setting.setConstant('resourceDir', RNFetchBlob.fs.dirs.DocumentDir);
 
 			Log.info('Loading folders...');
 
-			return Folder.all().then((folders) => {
-				this.props.dispatch({
-					type: 'FOLDERS_UPDATE_ALL',
-					folders: folders,
-				});
-				return folders;
-			}).catch((error) => {
-				Log.warn('Cannot load folders', error);
+			let folders = await Folder.all();
+
+			this.props.dispatch({
+				type: 'FOLDERS_UPDATE_ALL',
+				folders: folders,
 			});
-		}).then((folders) => {
+
 			this.props.dispatch({
 				type: 'Navigation/NAVIGATE',
 				routeName: 'Folders',
 			});
-		}).catch((error) => {
+		} catch (error) {
 			Log.error('Initialization error:', error);
-		});
+		}
 	}
 
 	sideMenu_change(isOpen) {

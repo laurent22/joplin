@@ -29,6 +29,7 @@ reg.oneDriveApi = () => {
 	}
 
 	reg.oneDriveApi_.on('authRefreshed', (a) => {
+		reg.logger().info('Saving updated OneDrive auth.');
 		Setting.setValue('sync.onedrive.auth', JSON.stringify(a));
 	});
 	
@@ -58,6 +59,7 @@ reg.synchronizer = async () => {
 
 	let fileApi = await reg.fileApi();
 	reg.synchronizer_ = new Synchronizer(reg.db(), fileApi);
+	reg.synchronizer_.setLogger(reg.logger());
 	return reg.synchronizer_;
 }
 

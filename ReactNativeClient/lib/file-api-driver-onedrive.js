@@ -85,15 +85,21 @@ class FileApiDriverOneDrive {
 		}
 	}
 
-	async get(path) {
-		let content = null;
+	async get(path, options = null) {
+		if (!options) options = {};
+
 		try {
-			content = await this.api_.execText('GET', this.makePath_(path) + ':/content');
+			if (options.target == 'file') {
+				let response = await this.api_.exec('GET', this.makePath_(path) + ':/content', null, null, options);
+				return response;
+			} else {
+				let content = await this.api_.execText('GET', this.makePath_(path) + ':/content');
+				return content;
+			}
 		} catch (error) {
 			if (error.code == 'itemNotFound') return null;
 			throw error;
 		}
-		return content;
 	}
 
 	async mkdir(path) {
