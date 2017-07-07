@@ -144,7 +144,6 @@ class Setting extends BaseModel {
 }
 
 Setting.defaults_ = {
-	'clientId': { value: '', type: 'string', public: false },
 	'activeFolderId': { value: '', type: 'string', public: false },
 	'sync.onedrive.auth': { value: '', type: 'string', public: false },
 	'sync.local.path': { value: '', type: 'string', public: true },	
@@ -155,12 +154,12 @@ Setting.defaults_ = {
 // Contains constants that are set by the application and
 // cannot be modified by the user:
 Setting.constants_ = {
+	'env': 'SET_ME',
 	'appName': 'joplin',
 	'appId': 'SET_ME', // Each app should set this identifier
 	'appType': 'SET_ME', // 'cli' or 'mobile'
 	'resourceDir': '',
 	'profileDir': '',
-	'tempDir': '',
 }
 
 export { Setting };

@@ -48,9 +48,7 @@ class SideMenuContentComponent extends Component {
 	}
 
 	folder_press(folder) {
-		this.props.dispatch({
-			type: 'SIDE_MENU_CLOSE',
-		});
+		this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 
 		NotesScreenUtils.openNoteList(folder.id);
 	}
@@ -64,6 +62,7 @@ class SideMenuContentComponent extends Component {
 					line.push(_('Remote items to delete: %d/%d.', report.deleteRemote, report.remotesToDelete));
 					line.push(_('Items to download: %d/%d.', report.createLocal + report.updateLocal, report.localsToUdpate));
 					line.push(_('Local items to delete: %d/%d.', report.deleteLocal, report.localsToDelete));
+					line.push(_('Sync state: %s.', report.state));
 					this.setState({	syncReportText: line.join("\n") });
 				},
 			};
@@ -75,6 +74,8 @@ class SideMenuContentComponent extends Component {
 				Log.error(error);
 			}
 		} else {
+			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+			
 			this.props.dispatch({
 				type: 'Navigation/NAVIGATE',
 				routeName: 'OneDriveLogin',

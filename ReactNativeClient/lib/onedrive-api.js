@@ -160,7 +160,7 @@ class OneDriveApi {
 				let errorResponse = await response.json();
 				let error = this.oneDriveErrorResponseToError(errorResponse);
 
-				if (error.code == 'InvalidAuthenticationToken') {
+				if (error.code == 'InvalidAuthenticationToken' || error.code == 'unauthenticated') {
 					await this.refreshAccessToken();
 					continue;
 				} else if (error && ((error.error && error.error.code == 'generalException') || (error.code == 'generalException'))) {

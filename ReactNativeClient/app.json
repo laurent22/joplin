@@ -1,10 +1,10 @@
 {
-  "name": "AwesomeProject",
-  "displayName": "AwesomeProject",
+  "name": "Joplin",
+  "displayName": "Joplin",
   "expo": {
-    "name": "AwesomeProject",
-    "description": "No description",
-    "slug": "AwesomeProject",
+    "name": "Joplin",
+    "description": "Joplin for Android",
+    "slug": "Joplin",
     "privacy": "public",
     "sdkVersion": "18.0.0",
     "version": "1.0.0",

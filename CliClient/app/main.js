@@ -40,6 +40,7 @@ const packageJson = require('./package.json');
 
 let initArgs = {
 	profileDir: null,
+	env: 'prod',
 }
 
 const fsDriver = new FsDriverNode();
@@ -821,6 +822,13 @@ async function handleStartFlags(argv) {
 			continue;
 		}
 
+		if (arg == '--env') {
+			if (!nextArg) throw new Error(_('Usage: --env <dev|prod>'));
+			initArgs.env = nextArg;
+			argv.splice(0, 2);
+			continue;
+		}
+
 		if (arg == '--redraw-disabled') {
 			vorpalUtils.setRedrawEnabled(false);
 			argv.splice(0, 1);
@@ -913,27 +921,19 @@ async function main() {
 
 	let argv = process.argv;
 	argv = await handleStartFlags(argv);
-
 	if (argv.length) showPromptString = false;
 
 	const profileDir = initArgs.profileDir ? initArgs.profileDir : os.homedir() + '/.config/' + Setting.value('appName');
 	const resourceDir = profileDir + '/resources';
-	const tempDir = profileDir + '/tmp';
 
+	Setting.setConstant('env', initArgs.env);
 	Setting.setConstant('profileDir', profileDir);
 	Setting.setConstant('resourceDir', resourceDir);
-	Setting.setConstant('tempDir', tempDir);
 
 	await fs.mkdirp(profileDir, 0o755);
 	await fs.mkdirp(resourceDir, 0o755);
-	await fs.mkdirp(tempDir, 0o755);
-
-	// let logDatabase = new Database(new DatabaseDriverNode());
-	// await logDatabase.open({ name: profileDir + '/database-log.sqlite' });
-	// await logDatabase.exec(Logger.databaseCreateTableSql());
 
 	logger.addTarget('file', { path: profileDir + '/log.txt' });
-	// logger.addTarget('database', { database: logDatabase, source: 'main' });
 	logger.setLevel(logLevel);
 
 	dbLogger.addTarget('file', { path: profileDir + '/log-database.txt' });
@@ -943,6 +943,7 @@ async function main() {
 	syncLogger.setLevel(logLevel);
 
 	logger.info(sprintf('Starting %s %s...', packageJson.name, packageJson.version));
+	logger.info('Environment: ' + Setting.value('env'));
 	logger.info('Profile directory: ' + profileDir);
 
 	// That's not good, but it's to avoid circular dependency issues
@@ -969,7 +970,9 @@ async function main() {
 
 	// If we still have arguments, pass it to Vorpal and exit
 	if (argv.length) {
-		vorpal.show();
+		//vorpal.delimiter(' AAAAAAAAAAAAAAAAAAAAA');
+		//console.info(vorpal.ui.inquirer);
+		//vorpal.show();
 		let cmd = shellArgsToString(argv);
 		await vorpal.exec(cmd);
 		await vorpal.exec('exit');

@@ -121,6 +121,8 @@ class Synchronizer {
 			deleteRemote: 0,
 			itemConflict: 0,
 			noteConflict: 0,
+
+			state: this.state(),
 		};
 
 		try {
@@ -369,12 +371,13 @@ class Synchronizer {
 			throw error;
 		}
 
-		options.onProgress(report);
-
 		this.logger().info('Synchronization complete [' + synchronizationId + ']:');
 		await this.logSyncSummary(report);
 
 		this.state_ = 'idle';
+
+		report.state = this.state();
+		options.onProgress(report);
 	}
 
 }

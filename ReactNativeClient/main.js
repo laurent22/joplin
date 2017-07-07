@@ -11,7 +11,7 @@ import { Log } from 'lib/log.js'
 import { Root } from './root.js';
 
 function main() {
-	AppRegistry.registerComponent('AwesomeProject', () => Root);
+	AppRegistry.registerComponent('Joplin', () => Root);
 	console.ignoredYellowBox = ['Remote debugger'];
 	Log.info('START ======================================================================================================');
 	// Note: The final part of the initialization process is in

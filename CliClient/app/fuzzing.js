@@ -63,7 +63,7 @@ function randomWord() {
 
 function execCommand(client, command, options = {}) {
 	let exePath = 'node ' + joplinAppPath;
-	let cmd = exePath + ' --profile ' + client.profileDir + ' ' + command;
+	let cmd = exePath + ' --env dev --profile ' + client.profileDir + ' ' + command;
 	logger.info(client.id + ': ' + command);
 
 	if (options.killAfter) {
@@ -80,7 +80,7 @@ function execCommand(client, command, options = {}) {
 					reject(error);
 				}
 			} else {
-				resolve(stdout);
+				resolve(stdout.trim());
 			}
 		});
 

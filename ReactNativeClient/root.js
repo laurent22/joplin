@@ -24,7 +24,6 @@ import { NotesScreenUtils } from 'lib/components/screens/notes-utils.js'
 import { NoteScreen } from 'lib/components/screens/note.js'
 import { FolderScreen } from 'lib/components/screens/folder.js'
 import { FoldersScreen } from 'lib/components/screens/folders.js'
-import { LoginScreen } from 'lib/components/screens/login.js'
 import { LogScreen } from 'lib/components/screens/log.js'
 import { LoadingScreen } from 'lib/components/screens/loading.js'
 import { OneDriveLoginScreen } from 'lib/components/screens/onedrive-login.js'
@@ -43,7 +42,6 @@ let defaultState = {
 	selectedNoteId: null,
 	selectedItemType: 'note',
 	selectedFolderId: null,
-	user: { email: 'laurent@cozic.net', session: null },
 	showSideMenu: false,
 };
 
@@ -100,6 +98,8 @@ const reducer = (state = defaultState, action) => {
 		// update it within the note array if it already exists.
 		case 'NOTES_UPDATE_ONE':
 
+			if (action.note.parent_id != state.selectedFolderId) break;
+
 			let newNotes = state.notes.splice(0);
 			var found = false;
 			for (let i = 0; i < newNotes.length; i++) {
@@ -155,12 +155,6 @@ const reducer = (state = defaultState, action) => {
 			newState.folders = newFolders;
 			break;
 
-		case 'USER_SET':
-
-			newState = Object.assign({}, state);
-			newState.user = action.user;
-			break;
-
 		case 'SIDE_MENU_TOGGLE':
 
 			newState = Object.assign({}, state);
@@ -193,7 +187,6 @@ const AppNavigator = StackNavigator({
 	Note: { screen: NoteScreen },
 	Folder: { screen: FolderScreen },
 	Folders: { screen: FoldersScreen },
-	Login: { screen: LoginScreen },
 	Loading: { screen: LoadingScreen },
 	OneDriveLogin: { screen: OneDriveLoginScreen },
 	Log: { screen: LogScreen },
@@ -237,15 +230,17 @@ class AppComponent extends React.Component {
 			}
 		}
 
-		Setting.setConstant('appId', 'net.cozic.joplin-android');
+		Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
+		Setting.setConstant('appId', 'net.cozic.joplin');
 		Setting.setConstant('appType', 'mobile');
+		Setting.setConstant('resourceDir', RNFetchBlob.fs.dirs.DocumentDir);
 
 		const logDatabase = new Database(new DatabaseDriverReactNative());
 		await logDatabase.open({ name: 'log.sqlite' });
 		await logDatabase.exec(Logger.databaseCreateTableSql());
 		reg.logger().addTarget('database', { database: logDatabase, source: 'm' });
 
-		reg.logger().info('Starting application' + Setting.value('appId'));
+		reg.logger().info('Starting application ' + Setting.value('appId') + ' (' + Setting.value('env') + ')');
 
 		let db = new JoplinDatabase(new DatabaseDriverReactNative());
 		reg.setDb(db);
@@ -261,23 +256,24 @@ class AppComponent extends React.Component {
 		BaseItem.loadClass('NoteTag', NoteTag);
 
 		try {
-			await db.open({ name: 'joplin-50.sqlite' })
+			if (Setting.value('env') == 'prod') {
+				await db.open({ name: 'joplin.sqlite' })
+			} else {
+				await db.open({ name: 'joplin-51.sqlite' })
+
+				// await db.exec('DELETE FROM notes');
+				// await db.exec('DELETE FROM folders');
+				// await db.exec('DELETE FROM tags');
+				// await db.exec('DELETE FROM note_tags');
+				// await db.exec('DELETE FROM resources');
+				// await db.exec('DELETE FROM deleted_items');
+			}
+
 			reg.logger().info('Database is ready.');
-
-			//await db.exec('DELETE FROM notes');
-			//await db.exec('DELETE FROM folders');
-			//await db.exec('DELETE FROM tags');
-			//await db.exec('DELETE FROM note_tags');
-			//await db.exec('DELETE FROM resources');
-			//await db.exec('DELETE FROM deleted_items');
-
 			reg.logger().info('Loading settings...');
 			await Setting.load();
-			
-			Setting.setConstant('resourceDir', RNFetchBlob.fs.dirs.DocumentDir);
 
 			reg.logger().info('Loading folders...');
-
 			let folders = await Folder.all();
 
 			this.props.dispatch({

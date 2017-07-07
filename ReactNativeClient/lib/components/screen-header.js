@@ -94,9 +94,7 @@ ScreenHeaderComponent.defaultProps = {
 };
 
 const ScreenHeader = connect(
-	(state) => {
-		return { user: state.user };
-	}
+	//(state) => {}
 )(ScreenHeaderComponent)
 
 export { ScreenHeader };

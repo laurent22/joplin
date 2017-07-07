@@ -1,6 +1,7 @@
 import { Logger } from 'lib/logger.js';
 import { Setting } from 'lib/models/setting.js';
 import { OneDriveApi } from 'lib/onedrive-api.js';
+import { parameters } from 'lib/parameters.js';
 import { FileApi } from 'lib/file-api.js';
 import { Synchronizer } from 'lib/synchronizer.js';
 import { FileApiDriverOneDrive } from 'lib/file-api-driver-onedrive.js';
@@ -18,11 +19,9 @@ reg.logger = () => {
 reg.oneDriveApi = () => {
 	if (reg.oneDriveApi_) return reg.oneDriveApi_;
 
-	const CLIENT_ID = 'e09fc0de-c958-424f-83a2-e56a721d331b';
-	const CLIENT_SECRET = 'JA3cwsqSGHFtjMwd5XoF5L5';
 	const isPublic = Setting.value('appType') != 'cli';
 
-	reg.oneDriveApi_ = new OneDriveApi(CLIENT_ID, CLIENT_SECRET, isPublic);
+	reg.oneDriveApi_ = new OneDriveApi(parameters().oneDrive.id, parameters().oneDrive.secret, isPublic);
 
 	reg.oneDriveApi_.on('authRefreshed', (a) => {
 		reg.logger().info('Saving updated OneDrive auth.');

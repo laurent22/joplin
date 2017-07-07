@@ -1,4 +1,4 @@
-rootProject.name = 'AwesomeProject'
+rootProject.name = 'Joplin'
 include ':react-native-fs'
 project(':react-native-fs').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fs/android')
 

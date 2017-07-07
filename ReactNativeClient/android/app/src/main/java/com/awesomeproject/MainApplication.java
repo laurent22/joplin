@@ -1,4 +1,4 @@
-package com.awesomeproject;
+package net.cozic.joplin;
 
 import android.app.Application;
 
