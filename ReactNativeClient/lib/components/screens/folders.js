@@ -17,7 +17,7 @@ class FoldersScreenComponent extends React.Component {
 		return (
 			<View style={{flex: 1}}>
 				<ScreenHeader navState={this.props.navigation.state} />
-				<FolderList style={{flex: 1}}/>
+				<FolderList noItemMessage={_('There is currently no notebook. Create one by clicking on the (+) button.')} style={{flex: 1}}/>
 				<ActionButton></ActionButton>
 			</View>
 		);

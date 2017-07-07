@@ -59,13 +59,19 @@ class ItemListComponent extends Component {
 		}
 
 		// `enableEmptySections` is to fix this warning: https://github.com/FaridSafi/react-native-gifted-listview/issues/39
-		return (
-			<ListView
-				dataSource={this.state.dataSource}
-				renderRow={renderRow}
-				enableEmptySections={true}
-			/>
-		);
+
+		if (this.state.dataSource.getRowCount()) {
+			return (
+				<ListView
+					dataSource={this.state.dataSource}
+					renderRow={renderRow}
+					enableEmptySections={true}
+				/>
+			);
+		} else {
+			const noItemMessage = this.props.noItemMessage ? this.props.noItemMessage : '';
+			return <Text>{noItemMessage}</Text>;
+		}
 	}
 }
 

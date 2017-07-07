@@ -46,7 +46,12 @@ class OneDriveLoginScreenComponent extends React.Component {
 			let code = url.split('?code=');
 			this.authCode_ = code[1];
 
-			await reg.oneDriveApi().execTokenRequest(this.authCode_, this.redirectUrl(), true);
+			try {
+				await reg.oneDriveApi().execTokenRequest(this.authCode_, this.redirectUrl(), true);
+				this.props.dispatch({ type: 'Navigation/BACK' });
+			} catch (error) {
+				alert(error.message);
+			}
 
 			this.authCode_ = null;
 		}

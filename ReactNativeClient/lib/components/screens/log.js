@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ListView, View, Text } from 'react-native';
+import { ListView, View, Text, Button } from 'react-native';
 import { connect } from 'react-redux'
 import { Log } from 'lib/log.js'
 import { reg } from 'lib/registry.js'
@@ -23,6 +23,10 @@ class LogScreenComponent extends React.Component {
 	}
 
 	componentWillMount() {
+		this.resfreshLogEntries();
+	}
+
+	resfreshLogEntries() {
 		reg.logger().lastEntries(1000).then((entries) => {
 			const newDataSource = this.state.dataSource.cloneWithRows(entries);
 			this.setState({ dataSource: newDataSource });
@@ -47,6 +51,7 @@ class LogScreenComponent extends React.Component {
 					renderRow={renderRow}
 					enableEmptySections={true}
 				/>
+				<Button title="Refresh" onPress={() => { this.resfreshLogEntries(); }}/>
 			</View>
 		);
 	}

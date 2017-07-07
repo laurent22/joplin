@@ -259,14 +259,14 @@ class AppComponent extends React.Component {
 			if (Setting.value('env') == 'prod') {
 				await db.open({ name: 'joplin.sqlite' })
 			} else {
-				await db.open({ name: 'joplin-51.sqlite' })
+				await db.open({ name: 'joplin-52.sqlite' })
 
-				// await db.exec('DELETE FROM notes');
-				// await db.exec('DELETE FROM folders');
-				// await db.exec('DELETE FROM tags');
-				// await db.exec('DELETE FROM note_tags');
-				// await db.exec('DELETE FROM resources');
-				// await db.exec('DELETE FROM deleted_items');
+				await db.exec('DELETE FROM notes');
+				await db.exec('DELETE FROM folders');
+				await db.exec('DELETE FROM tags');
+				await db.exec('DELETE FROM note_tags');
+				await db.exec('DELETE FROM resources');
+				await db.exec('DELETE FROM deleted_items');
 			}
 
 			reg.logger().info('Database is ready.');
