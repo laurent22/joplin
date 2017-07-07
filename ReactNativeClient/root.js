@@ -8,6 +8,7 @@ import { StackNavigator } from 'react-navigation';
 import { addNavigationHelpers } from 'react-navigation';
 import { shim } from 'lib/shim.js';
 import { Log } from 'lib/log.js'
+import { Logger } from 'lib/logger.js'
 import { Note } from 'lib/models/note.js'
 import { Folder } from 'lib/models/folder.js'
 import { Resource } from 'lib/models/resource.js'
@@ -16,6 +17,7 @@ import { NoteTag } from 'lib/models/note-tag.js'
 import { BaseItem } from 'lib/models/base-item.js'
 import { BaseModel } from 'lib/base-model.js'
 import { JoplinDatabase } from 'lib/joplin-database.js'
+import { Database } from 'lib/database.js'
 import { ItemList } from 'lib/components/item-list.js'
 import { NotesScreen } from 'lib/components/screens/notes.js'
 import { NotesScreenUtils } from 'lib/components/screens/notes-utils.js'
@@ -23,6 +25,7 @@ import { NoteScreen } from 'lib/components/screens/note.js'
 import { FolderScreen } from 'lib/components/screens/folder.js'
 import { FoldersScreen } from 'lib/components/screens/folders.js'
 import { LoginScreen } from 'lib/components/screens/login.js'
+import { LogScreen } from 'lib/components/screens/log.js'
 import { LoadingScreen } from 'lib/components/screens/loading.js'
 import { OneDriveLoginScreen } from 'lib/components/screens/onedrive-login.js'
 import { Setting } from 'lib/models/setting.js'
@@ -45,7 +48,7 @@ let defaultState = {
 };
 
 const reducer = (state = defaultState, action) => {
-	Log.info('Reducer action', action.type);
+	reg.logger().info('Reducer action', action.type);
 
 	let newState = state;
 
@@ -58,8 +61,8 @@ const reducer = (state = defaultState, action) => {
 			const currentRoute = r.length ? r[r.length - 1] : null;
 			const currentRouteName = currentRoute ? currentRoute.routeName : '';
 
-			Log.info('Current route name', currentRouteName);
-			Log.info('New route name', action.routeName);
+			reg.logger().info('Current route name', currentRouteName);
+			reg.logger().info('New route name', action.routeName);
 
 			newState = Object.assign({}, state);
 
@@ -178,7 +181,7 @@ const reducer = (state = defaultState, action) => {
 
 	}
 
-	// Log.info('newState.selectedFolderId', newState.selectedFolderId);
+	// reg.logger().info('newState.selectedFolderId', newState.selectedFolderId);
 
 	return newState;
 }
@@ -193,6 +196,7 @@ const AppNavigator = StackNavigator({
 	Login: { screen: LoginScreen },
 	Loading: { screen: LoadingScreen },
 	OneDriveLogin: { screen: OneDriveLoginScreen },
+	Log: { screen: LogScreen },
 });
 
 class AppComponent extends React.Component {
@@ -233,6 +237,16 @@ class AppComponent extends React.Component {
 			}
 		}
 
+		Setting.setConstant('appId', 'net.cozic.joplin-android');
+		Setting.setConstant('appType', 'mobile');
+
+		const logDatabase = new Database(new DatabaseDriverReactNative());
+		await logDatabase.open({ name: 'log.sqlite' });
+		await logDatabase.exec(Logger.databaseCreateTableSql());
+		reg.logger().addTarget('database', { database: logDatabase, source: 'm' });
+
+		reg.logger().info('Starting application' + Setting.value('appId'));
+
 		let db = new JoplinDatabase(new DatabaseDriverReactNative());
 		reg.setDb(db);
 
@@ -247,8 +261,8 @@ class AppComponent extends React.Component {
 		BaseItem.loadClass('NoteTag', NoteTag);
 
 		try {
-			await db.open({ name: '/storage/emulated/0/Download/joplin-48.sqlite' })
-			Log.info('Database is ready.');
+			await db.open({ name: 'joplin-50.sqlite' })
+			reg.logger().info('Database is ready.');
 
 			//await db.exec('DELETE FROM notes');
 			//await db.exec('DELETE FROM folders');
@@ -257,14 +271,12 @@ class AppComponent extends React.Component {
 			//await db.exec('DELETE FROM resources');
 			//await db.exec('DELETE FROM deleted_items');
 
-			Log.info('Loading settings...');
+			reg.logger().info('Loading settings...');
 			await Setting.load();
 			
-			Setting.setConstant('appId', 'net.cozic.joplin-android');
-			Setting.setConstant('appType', 'mobile');
 			Setting.setConstant('resourceDir', RNFetchBlob.fs.dirs.DocumentDir);
 
-			Log.info('Loading folders...');
+			reg.logger().info('Loading folders...');
 
 			let folders = await Folder.all();
 

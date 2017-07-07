@@ -41,6 +41,13 @@ class ScreenHeaderComponent extends Component {
 		}
 	}
 
+	log_press() {
+		this.props.dispatch({
+			type: 'Navigation/NAVIGATE',
+			routeName: 'Log',
+		});	
+	}
+
 	render() {
 		let key = 0;
 		let menuOptionComponents = [];
@@ -56,10 +63,10 @@ class ScreenHeaderComponent extends Component {
 			menuOptionComponents.push(<View key={'menuOption_' + key++} style={styles.divider}/>);
 		}
 
-		// menuOptionComponents.push(
-		// 	<MenuOption value={1} key={'menuOption_' + key++}>
-		// 		<Text>{_('Configuration')}</Text>
-		// 	</MenuOption>);
+		menuOptionComponents.push(
+			<MenuOption value={() => this.log_press()} key={'menuOption_' + key++}>
+				<Text>{_('Log')}</Text>
+			</MenuOption>);
 
 		let title = 'title' in this.props && this.props.title !== null ? this.props.title : _(this.props.navState.routeName);
 

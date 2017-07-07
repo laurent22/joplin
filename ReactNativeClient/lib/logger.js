@@ -52,12 +52,20 @@ class Logger {
 			output = object;
 		}
 
-		return output;
+		return output;		
+	}
+
+	objectsToString(...object) {
+		let output = [];
+		for (let i = 0; i < object.length; i++) {
+			output.push('"' + this.objectToString(object[i]) + '"');
+		}
+		return output.join(', ');
 	}
 
 	static databaseCreateTableSql() {
 		let output = `
-		CREATE TABLE logs (
+		CREATE TABLE IF NOT EXISTS logs (
 			id INTEGER PRIMARY KEY,
 			source TEXT,
 			level INT NOT NULL,
@@ -68,14 +76,25 @@ class Logger {
 		return output.split("\n").join(' ');
 	}
 
-	log(level, object) {
+	// Only for database at the moment
+	async lastEntries(limit = 100) {
+		for (let i = 0; i < this.targets_.length; i++) {
+			const target = this.targets_[i];
+			if (target.type == 'database') {
+				return await target.database.selectAll('SELECT * FROM logs ORDER BY timestamp DESC LIMIT ' + limit);
+			}
+		}
+		return [];
+	}
+
+	log(level, ...object) {
 		if (this.level() < level || !this.targets_.length) return;
 
 		let levelString = '';
-		if (this.level() == Logger.LEVEL_INFO) levelString = '[info] ';
-		if (this.level() == Logger.LEVEL_WARN) levelString = '[warn] ';
-		if (this.level() == Logger.LEVEL_ERROR) levelString = '[error] ';
-		let line = moment().format('YYYY-MM-DD HH:mm:ss') + ': ' + levelString;
+		let line = moment().format('YYYY-MM-DD HH:mm:ss') + ': ';
+
+		if (level == Logger.LEVEL_WARN) levelString += '[warn] ';
+		if (level == Logger.LEVEL_ERROR) levelString += '[error] ';
 
 		for (let i = 0; i < this.targets_.length; i++) {
 			let target = this.targets_[i];
@@ -84,27 +103,23 @@ class Logger {
 				if (level = Logger.LEVEL_ERROR) fn = 'error';
 				if (level = Logger.LEVEL_WARN) fn = 'warn';
 				if (level = Logger.LEVEL_INFO) fn = 'info';
-				if (typeof object === 'object') {
-					console[fn](line, object);
-				} else {
-					console[fn](line + object);
-				}
+				console[fn](line + this.objectsToString(...object));
 			} else if (target.type == 'file') {
-				let serializedObject = this.objectToString(object);
+				let serializedObject = this.objectsToString(...object);
 				Logger.fsDriver().appendFileSync(target.path, line + serializedObject + "\n");
 			} else if (target.type == 'vorpal') {
-				target.vorpal.log(object);
+				target.vorpal.log(...object);
 			} else if (target.type == 'database') {
-				let msg = this.objectToString(object);
+				let msg = this.objectsToString(...object);
 				target.database.exec('INSERT INTO logs (`source`, `level`, `message`, `timestamp`) VALUES (?, ?, ?, ?)', [target.source, level, msg, time.unixMs()]);
 			}
 		}
 	}
 
-	error(object) { return this.log(Logger.LEVEL_ERROR, object); }
-	warn(object)  { return this.log(Logger.LEVEL_WARN, object); }
-	info(object)  { return this.log(Logger.LEVEL_INFO, object); }
-	debug(object) { return this.log(Logger.LEVEL_DEBUG, object); }
+	error(...object) { return this.log(Logger.LEVEL_ERROR, ...object); }
+	warn(...object)  { return this.log(Logger.LEVEL_WARN, ...object); }
+	info(...object)  { return this.log(Logger.LEVEL_INFO, ...object); }
+	debug(...object) { return this.log(Logger.LEVEL_DEBUG, ...object); }
 
 	static levelStringToId(s) {
 		if (s == 'none') return Logger.LEVEL_NONE;
