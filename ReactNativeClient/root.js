@@ -59,10 +59,13 @@ const reducer = (state = defaultState, action) => {
 
 		case 'Navigation/BACK':
 
-			if (!navHistory.length) break;
+			if (navHistory.length < 2) break;
+
 			action = navHistory.pop(); // Current page
-			if (!navHistory.length) break;
 			action = navHistory.pop(); // Previous page
+
+			// newState = Object.assign({}, state);
+			// newState.historyCanGoBack = false;
 
 			// Fall throught
 
@@ -98,13 +101,16 @@ const reducer = (state = defaultState, action) => {
 			if (currentRouteName == action.routeName) {
 				// If the current screen is already the requested screen, don't do anything
 			} else {
-				//const nextStateNav = AppNavigator.router.getStateForAction(action, currentRouteName != 'Loading' ? state.nav : null);
 				const nextStateNav = AppNavigator.router.getStateForAction(action, state.nav);
 				if (nextStateNav) {
 					newState.nav = nextStateNav;
 					navHistory.push(action);
 				}
 			}
+
+			newState.historyCanGoBack = navHistory.length >= 2;
+
+			console.info(navHistory.length, newState.historyCanGoBack);
 
 			break;
 
@@ -201,10 +207,6 @@ const reducer = (state = defaultState, action) => {
 			newState.showSideMenu = false
 			break;
 
-	}
-
-	if (action.type == 'Navigation/NAVIGATE' || action.type == 'Navigation/BACK') {
-		newState.historyCanGoBack = !!navHistory.length;
 	}
 
 	return newState;

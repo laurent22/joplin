@@ -20,14 +20,6 @@ const styles = StyleSheet.create({
 
 class ScreenHeaderComponent extends Component {
 
-	showBackButton() {
-		// Note: this is hardcoded for now because navigation.state doesn't tell whether
-		// it's possible to go back or not. Maybe it's possible to get this information
-		// from somewhere else.
-		return true;
-		return this.props.navState.routeName != 'Notes';
-	}
-
 	sideMenuButton_press() {
 		this.props.dispatch({ type: 'SIDE_MENU_TOGGLE' });
 	}
@@ -71,10 +63,12 @@ class ScreenHeaderComponent extends Component {
 
 		let title = 'title' in this.props && this.props.title !== null ? this.props.title : _(this.props.navState.routeName);
 
+		console.info('CAN', this.props.historyCanGoBack);
+
 		return (
 			<View style={{ flexDirection: 'row', padding: 10, backgroundColor: '#ffffff', alignItems: 'center' }} >
 				<Button title="☰" onPress={() => this.sideMenuButton_press()} />
-				<Button disabled={!this.showBackButton()} title="<" onPress={() => this.backButton_press()}></Button>
+				<Button disabled={!this.props.historyCanGoBack} title="<" onPress={() => this.backButton_press()}></Button>
 				<Text style={{ flex:1, marginLeft: 10 }} >{title}</Text>
 			    <Menu onSelect={(value) => this.menu_select(value)}>
 					<MenuTrigger>
@@ -95,7 +89,12 @@ ScreenHeaderComponent.defaultProps = {
 };
 
 const ScreenHeader = connect(
-	//(state) => {}
+	(state) => {
+		console.info('CONNECT', state.historyCanGoBack);	
+		return {
+			historyCanGoBack: state.historyCanGoBack,
+		};
+	}
 )(ScreenHeaderComponent)
 
 export { ScreenHeader };
