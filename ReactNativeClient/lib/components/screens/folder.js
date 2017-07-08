@@ -50,6 +50,12 @@ class FolderScreenComponent extends React.Component {
 
 		this.originalFolder = await Folder.save(toSave);
 		this.setState({ folder: this.originalFolder });
+
+		this.props.dispatch({
+			type: 'Navigation/NAVIGATE',
+			routeName: 'Notes',
+			params: toSave.id,
+		});
 	}
 
 	render() {

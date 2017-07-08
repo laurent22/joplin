@@ -43,6 +43,8 @@ let defaultState = {
 	selectedItemType: 'note',
 	selectedFolderId: null,
 	showSideMenu: false,
+	screens: {},
+	loading: true,
 };
 
 const reducer = (state = defaultState, action) => {
@@ -76,15 +78,30 @@ const reducer = (state = defaultState, action) => {
 				newState.selectedItemType = action.itemType;
 			}
 
+			if ('screens' in action) {
+				for (let n in action.screens) {
+					if (!action.screens.hasOwnProperty(n)) continue;
+					newState.screens[n] = action.screens[n];
+				}
+			}
+
 			if (currentRouteName == action.routeName) {
 				// If the current screen is already the requested screen, don't do anything
 			} else {
-				const nextStateNav = AppNavigator.router.getStateForAction(action, currentRouteName != 'Loading' ? state.nav : null);
+				//const nextStateNav = AppNavigator.router.getStateForAction(action, currentRouteName != 'Loading' ? state.nav : null);
+				const nextStateNav = AppNavigator.router.getStateForAction(action, state.nav);
 				if (nextStateNav) {
 					newState.nav = nextStateNav;
 				}
 			}
 
+			break;
+
+		// Replace all the notes with the provided array
+		case 'APPLICATION_LOADING_DONE':
+
+			newState = Object.assign({}, state);
+			newState.loading = false;
 			break;
 
 		// Replace all the notes with the provided array
@@ -186,7 +203,7 @@ const AppNavigator = StackNavigator({
 	Notes: { screen: NotesScreen },
 	Note: { screen: NoteScreen },
 	Folder: { screen: FolderScreen },
-	Folders: { screen: FoldersScreen },
+	//Folders: { screen: FoldersScreen },
 	Loading: { screen: LoadingScreen },
 	OneDriveLogin: { screen: OneDriveLoginScreen },
 	Log: { screen: LogScreen },
@@ -259,7 +276,7 @@ class AppComponent extends React.Component {
 			if (Setting.value('env') == 'prod') {
 				await db.open({ name: 'joplin.sqlite' })
 			} else {
-				await db.open({ name: 'joplin-52.sqlite' })
+				await db.open({ name: 'joplin-53.sqlite' })
 
 				await db.exec('DELETE FROM notes');
 				await db.exec('DELETE FROM folders');
@@ -274,17 +291,27 @@ class AppComponent extends React.Component {
 			await Setting.load();
 
 			reg.logger().info('Loading folders...');
-			let folders = await Folder.all();
+			let initialFolders = await Folder.all();
 
 			this.props.dispatch({
 				type: 'FOLDERS_UPDATE_ALL',
-				folders: folders,
+				folders: initialFolders,
 			});
 
 			this.props.dispatch({
-				type: 'Navigation/NAVIGATE',
-				routeName: 'Folders',
+				type: 'APPLICATION_LOADING_DONE',
 			});
+
+			// console.info(initialFolders);
+
+			// if (initialFolders.length) {
+			// 	// const selectedFolder = await Folder.defaultFolder();
+			// 	// this.props.dispatch({
+			// 	// 	type: 'Navigation/NAVIGATE',
+			// 	// 	routeName: 'Notes',
+			// 	// 	params: selectedFolder.id,
+			// 	// });
+			// }				
 		} catch (error) {
 			Log.error('Initialization error:', error);
 		}
