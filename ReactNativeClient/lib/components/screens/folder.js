@@ -54,7 +54,7 @@ class FolderScreenComponent extends React.Component {
 		this.props.dispatch({
 			type: 'Navigation/NAVIGATE',
 			routeName: 'Notes',
-			params: toSave.id,
+			folderId: toSave.id,
 		});
 	}
 

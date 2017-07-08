@@ -45,7 +45,10 @@ let defaultState = {
 	showSideMenu: false,
 	screens: {},
 	loading: true,
+	historyCanGoBack: false,
 };
+
+let navHistory = [];
 
 const reducer = (state = defaultState, action) => {
 	reg.logger().info('Reducer action', action.type);
@@ -54,15 +57,22 @@ const reducer = (state = defaultState, action) => {
 
 	switch (action.type) {
 
-		case 'Navigation/NAVIGATE':
 		case 'Navigation/BACK':
+
+			if (!navHistory.length) break;
+			action = navHistory.pop(); // Current page
+			if (!navHistory.length) break;
+			action = navHistory.pop(); // Previous page
+
+			// Fall throught
+
+		case 'Navigation/NAVIGATE':
 
 			const r = state.nav.routes;
 			const currentRoute = r.length ? r[r.length - 1] : null;
 			const currentRouteName = currentRoute ? currentRoute.routeName : '';
 
-			reg.logger().info('Current route name', currentRouteName);
-			reg.logger().info('New route name', action.routeName);
+			reg.logger().info('Route: ' + currentRouteName + ' => ' + action.routeName);
 
 			newState = Object.assign({}, state);
 
@@ -92,6 +102,7 @@ const reducer = (state = defaultState, action) => {
 				const nextStateNav = AppNavigator.router.getStateForAction(action, state.nav);
 				if (nextStateNav) {
 					newState.nav = nextStateNav;
+					navHistory.push(action);
 				}
 			}
 
@@ -192,7 +203,9 @@ const reducer = (state = defaultState, action) => {
 
 	}
 
-	// reg.logger().info('newState.selectedFolderId', newState.selectedFolderId);
+	if (action.type == 'Navigation/NAVIGATE' || action.type == 'Navigation/BACK') {
+		newState.historyCanGoBack = !!navHistory.length;
+	}
 
 	return newState;
 }
@@ -278,12 +291,12 @@ class AppComponent extends React.Component {
 			} else {
 				await db.open({ name: 'joplin-53.sqlite' })
 
-				await db.exec('DELETE FROM notes');
-				await db.exec('DELETE FROM folders');
-				await db.exec('DELETE FROM tags');
-				await db.exec('DELETE FROM note_tags');
-				await db.exec('DELETE FROM resources');
-				await db.exec('DELETE FROM deleted_items');
+				// await db.exec('DELETE FROM notes');
+				// await db.exec('DELETE FROM folders');
+				// await db.exec('DELETE FROM tags');
+				// await db.exec('DELETE FROM note_tags');
+				// await db.exec('DELETE FROM resources');
+				// await db.exec('DELETE FROM deleted_items');
 			}
 
 			reg.logger().info('Database is ready.');
@@ -302,16 +315,10 @@ class AppComponent extends React.Component {
 				type: 'APPLICATION_LOADING_DONE',
 			});
 
-			// console.info(initialFolders);
-
-			// if (initialFolders.length) {
-			// 	// const selectedFolder = await Folder.defaultFolder();
-			// 	// this.props.dispatch({
-			// 	// 	type: 'Navigation/NAVIGATE',
-			// 	// 	routeName: 'Notes',
-			// 	// 	params: selectedFolder.id,
-			// 	// });
-			// }				
+			if (initialFolders.length) {
+				const selectedFolder = await Folder.defaultFolder();
+				if (selectedFolder) NotesScreenUtils.openNoteList(selectedFolder.id);
+			}
 		} catch (error) {
 			Log.error('Initialization error:', error);
 		}
