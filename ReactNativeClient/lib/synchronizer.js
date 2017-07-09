@@ -18,6 +18,7 @@ class Synchronizer {
 		this.resourceDirName_ = '.resource';
 		this.logger_ = new Logger();
 		this.appType_ = appType;
+		this.cancelling_ = false;
 	}
 
 	state() {
@@ -86,6 +87,17 @@ class Synchronizer {
 		return false;
 	}
 
+	cancel() {
+		if (this.cancelling_) return;
+		
+		this.logger().info('Cancelling synchronization...');
+		this.cancelling_ = true;
+	}
+
+	cancelling() {
+		return this.cancelling_;
+	}
+
 	async start(options = null) {
 		if (!options) options = {};
 		if (!options.onProgress) options.onProgress = function(o) {};
@@ -96,6 +108,7 @@ class Synchronizer {
 		}	
 
 		this.randomFailureChoice_ = Math.floor(Math.random() * 5);
+		this.cancelling_ = false;
 
 		// ------------------------------------------------------------------------
 		// First, find all the items that have been changed since the
@@ -131,6 +144,8 @@ class Synchronizer {
 
 			let donePaths = [];
 			while (true) {
+				if (this.cancelling()) break;
+
 				let result = await BaseItem.itemsThatNeedSync();
 				let locals = result.items;
 
@@ -138,6 +153,8 @@ class Synchronizer {
 				options.onProgress(report);
 
 				for (let i = 0; i < locals.length; i++) {
+					if (this.cancelling()) break;
+
 					let local = locals[i];
 					let ItemClass = BaseItem.itemClass(local);
 					let path = BaseItem.systemPath(local);
@@ -249,6 +266,8 @@ class Synchronizer {
 			report.remotesToDelete = deletedItems.length;
 			options.onProgress(report);
 			for (let i = 0; i < deletedItems.length; i++) {
+				if (this.cancelling()) break;
+
 				let item = deletedItems[i];
 				let path = BaseItem.systemPath(item.item_id)
 				this.logSyncOperation('deleteRemote', null, { id: item.item_id }, 'local has been deleted');
@@ -272,9 +291,13 @@ class Synchronizer {
 			let context = null;
 
 			while (true) {
+				if (this.cancelling()) break;
+
 				let listResult = await this.api().list('', { context: context });
 				let remotes = listResult.items;
 				for (let i = 0; i < remotes.length; i++) {
+					if (this.cancelling()) break;
+
 					let remote = remotes[i];
 					let path = remote.path;
 
@@ -319,14 +342,17 @@ class Synchronizer {
 						if (newContent.type_ == BaseModel.TYPE_RESOURCE && action == 'createLocal') {
 							let localResourceContentPath = Resource.fullPath(newContent);
 							let remoteResourceContentPath = this.resourceDirName_ + '/' + newContent.id;
-							if (this.appType_ == 'cli') {								
-								let remoteResourceContent = await this.api().get(remoteResourceContentPath, { encoding: 'binary' });
-								await Resource.setContent(newContent, remoteResourceContent);
-							} else if (this.appType_ == 'mobile') {
-								await this.api().get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' });
-							} else {
-								throw new Error('Unknown appType: ' + this.appType_);
-							}
+
+							await this.api().get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' });
+							
+							// if (this.appType_ == 'cli') {								
+							// 	let remoteResourceContent = await this.api().get(remoteResourceContentPath, { encoding: 'binary' });
+							// 	await Resource.setContent(newContent, remoteResourceContent);
+							// } else if (this.appType_ == 'mobile') {
+							// 	await this.api().get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' });
+							// } else {
+							// 	throw new Error('Unknown appType: ' + this.appType_);
+							// }
 						}
 
 						await ItemClass.save(newContent, options);
@@ -352,23 +378,32 @@ class Synchronizer {
 
 			if (this.randomFailure(options, 4)) return;
 
-			let items = await BaseItem.syncedItems();
-			for (let i = 0; i < items.length; i++) {
-				let item = items[i];
-				if (remoteIds.indexOf(item.id) < 0) {
-					report.localsToDelete++;
-					options.onProgress(report);
-					this.logSyncOperation('deleteLocal', { id: item.id }, null, 'remote has been deleted');
+			if (!this.cancelling()) {
+				let items = await BaseItem.syncedItems();
+				for (let i = 0; i < items.length; i++) {
+					if (this.cancelling()) break;
 
-					let ItemClass = BaseItem.itemClass(item);
-					await ItemClass.delete(item.id, { trackDeleted: false });
-					report['deleteLocal']++;
-					options.onProgress(report);
+					let item = items[i];
+					if (remoteIds.indexOf(item.id) < 0) {
+						report.localsToDelete++;
+						options.onProgress(report);
+						this.logSyncOperation('deleteLocal', { id: item.id }, null, 'remote has been deleted');
+
+						let ItemClass = BaseItem.itemClass(item);
+						await ItemClass.delete(item.id, { trackDeleted: false });
+						report['deleteLocal']++;
+						options.onProgress(report);
+					}
 				}
 			}
 		} catch (error) {
 			this.logger().error(error);
 			throw error;
+		}
+
+		if (this.cancelling()) {
+			this.logger().info('Synchronization was cancelled.');
+			this.cancelling_ = false;
 		}
 
 		this.logger().info('Synchronization complete [' + synchronizationId + ']:');

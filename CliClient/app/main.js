@@ -28,6 +28,7 @@ import { vorpalUtils } from 'vorpal-utils.js';
 import { reg } from 'lib/registry.js';
 import { FsDriverNode } from './fs-driver-node.js';
 import { filename, basename } from 'lib/path-utils.js';
+import { shim } from 'lib/shim.js';
 import { _ } from 'lib/locale.js';
 import os from 'os';
 import fs from 'fs-extra';
@@ -521,7 +522,7 @@ commands.push({
 				if (report.remotesToDelete) line.push(_('Remote items to delete: %d/%d.', report.deleteRemote, report.remotesToDelete));
 				if (report.localsToUdpate) line.push(_('Items to download: %d/%d.', report.createLocal + report.updateLocal, report.localsToUdpate));
 				if (report.localsToDelete) line.push(_('Local items to delete: %d/%d.', report.deleteLocal, report.localsToDelete));
-				vorpalUtils.redraw(line.join(' '));
+				if (line.length) vorpalUtils.redraw(line.join(' '));
 			},
 			onMessage: (msg) => {
 				vorpalUtils.redrawDone();
@@ -548,6 +549,12 @@ commands.push({
 		vorpalUtils.redrawDone();
 		this.log(_('Done.'));
 		end();
+	},
+	cancel: async function() {
+		vorpalUtils.redrawDone();
+		this.log(_('Cancelling...'));
+		let sync = await synchronizer(Setting.value('sync.target'));
+		sync.cancel();
 	},
 });
 
@@ -896,9 +903,74 @@ const vorpal = require('vorpal')();
 vorpalUtils.initialize(vorpal);
 
 async function main() {
+
+	shim.fetchBlob = async function(url, options) {
+		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
+		if (!options.method) options.method = 'GET';
+
+		const urlParse = require('url').parse;
+
+		url = urlParse(url.trim());
+		const http = url.protocol.toLowerCase() == 'http:' ? require('follow-redirects').http : require('follow-redirects').https;
+		const headers = options.headers ? options.headers : {};
+		const method = options.method ? options.method : 'GET';
+		if (method != 'GET') throw new Error('Only GET is supported');
+		const filePath = options.path;
+
+		function makeResponse(response) {
+			const output = {
+				ok: response.statusCode < 400,
+				path: filePath,
+				text: () => { return response.statusMessage; },
+				json: () => { return ''; },
+				status: response.statusCode,
+				headers: response.headers,
+			}
+			console.info(output);
+			return output;
+		}
+
+		const requestOptions = {
+			protocol: url.protocol,
+			host: url.host,
+			port: url.port,
+			method: method,
+			path: url.path + (url.query ? '?' + url.query : ''),
+			headers: headers,
+		};
+
+		return new Promise((resolve, reject) => {
+			try {
+				// Note: relative paths aren't supported
+				const file = fs.createWriteStream(filePath);
+
+				const request = http.get(requestOptions, function(response) {
+					response.pipe(file);
+
+					file.on('finish', function() {
+						console.info('FINISH');
+						file.close(() => {
+							console.info('FINISH CLOSE');
+							resolve(makeResponse(response));
+						});
+					});
+				})
+
+				request.on('error', function(error) {
+					fs.unlink(filePath);
+					reject(error);
+				});
+			} catch(error) {
+				fs.unlink(filePath);
+				reject(error);
+			}
+		});
+	}
+
 	for (let commandIndex = 0; commandIndex < commands.length; commandIndex++) {
 		let c = commands[commandIndex];
 		let o = vorpal.command(c.usage, c.description);
+
 		if (c.options) {
 			for (let i = 0; i < c.options.length; i++) {
 				let options = c.options[i];
@@ -906,16 +978,23 @@ async function main() {
 				if (options.length == 3) o.option(options[0], options[1], options[2]);
 			}
 		}
+
 		if (c.aliases) {
 			for (let i = 0; i < c.aliases.length; i++) {
 				o.alias(c.aliases[i]);
 			}
 		}
+
 		if (c.autocomplete) {
 			o.autocomplete({
 				data: c.autocomplete,
 			});
 		}
+
+		if (c.cancel) {
+			o.cancel(c.cancel);
+		}
+
 		o.action(c.action);
 	}
 
@@ -936,14 +1015,15 @@ async function main() {
 	logger.addTarget('file', { path: profileDir + '/log.txt' });
 	logger.setLevel(logLevel);
 
+	reg.setLogger(logger);
+
 	dbLogger.addTarget('file', { path: profileDir + '/log-database.txt' });
 	dbLogger.setLevel(logLevel);
 
 	syncLogger.addTarget('file', { path: profileDir + '/log-sync.txt' });
 	syncLogger.setLevel(logLevel);
 
-	logger.info(sprintf('Starting %s %s...', packageJson.name, packageJson.version));
-	logger.info('Environment: ' + Setting.value('env'));
+	logger.info(sprintf('Starting %s %s (%s)...', packageJson.name, packageJson.version, Setting.value('env')));
 	logger.info('Profile directory: ' + profileDir);
 
 	// That's not good, but it's to avoid circular dependency issues

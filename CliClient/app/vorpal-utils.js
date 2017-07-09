@@ -13,6 +13,15 @@ function initialize(vorpal) {
 	vorpal_ = vorpal;
 }
 
+function redrawEnabled() {
+	// Always disabled for now - doesn't play well with command.cancel()
+	// function (it makes the whole app quit instead of just the 
+	// current command).
+	return false;
+
+	return redrawEnabled_;
+}
+
 function setRedrawEnabled(v) {
 	redrawEnabled_ = v;
 }
@@ -22,7 +31,7 @@ function setStackTraceEnabled(v) {
 }
 
 function redraw(s) {
-	if (!redrawEnabled_) {
+	if (!redrawEnabled()) {
 		const now = time.unixMs();
 		if (now - redrawLastUpdateTime_ > 1000) {
 			if (vorpal_.activeCommand) {
@@ -45,7 +54,7 @@ function redraw(s) {
 function redrawDone() {
 	if (!redrawStarted_) return;
 
-	if (!redrawEnabled_) {
+	if (!redrawEnabled()) {
 		if (redrawLastLog_) {
 			if (vorpal_.activeCommand) {
 				vorpal_.activeCommand.log(redrawLastLog_);

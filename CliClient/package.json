@@ -7,13 +7,14 @@
     "url": "https://github.com/laurent22/joplin"
   },
   "url": "git://github.com/laurent22/joplin.git",
-  "version": "0.8.27",
+  "version": "0.8.29",
   "bin": {
-    "joplin": "./main.sh"
+    "joplin": "./main_launcher.js"
   },
   "dependencies": {
     "app-module-path": "^2.2.0",
     "babel-plugin-transform-runtime": "^6.23.0",
+    "follow-redirects": "^1.2.4",
     "form-data": "^2.1.4",
     "fs-extra": "^3.0.1",
     "jssha": "^2.3.0",
