@@ -5,6 +5,7 @@ import { Log } from 'lib/log.js'
 import { reg } from 'lib/registry.js'
 import { ScreenHeader } from 'lib/components/screen-header.js';
 import { time } from 'lib/time-utils'
+import { Logger } from 'lib/logger.js';
 
 class LogScreenComponent extends React.Component {
 	
@@ -35,9 +36,18 @@ class LogScreenComponent extends React.Component {
 
 	render() {
 		let renderRow = (item) => {
+			let color = 'black';
+			if (item.level == Logger.LEVEL_WARN) color = '#9A5B00';
+			if (item.level == Logger.LEVEL_ERROR) color = 'red';
+
+			let style = {
+				fontFamily: 'monospace',
+				fontSize: 10,
+				color: color,
+			};
 			return (
 				<View style={{flexDirection: 'row', paddingLeft: 1, paddingRight: 1, paddingTop:0, paddingBottom:0 }}>
-					<Text style={{fontFamily: 'monospace', fontSize: 10}}>{time.unixMsToIsoSec(item.timestamp) + ': ' + item.message}</Text>
+					<Text style={style}>{time.unixMsToIsoSec(item.timestamp) + ': ' + item.message}</Text>
 				</View>
 			);
 		}

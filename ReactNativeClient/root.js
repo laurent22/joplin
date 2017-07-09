@@ -245,7 +245,7 @@ async function initialize(dispatch) {
 				path: localFilePath
 			}).fetch(method, url, headers);
 
-			// Returns an object that roughtly compatible with a standard Response object
+			// Returns an object that's roughtly compatible with a standard Response object
 			let output = {
 				ok: response.respInfo.status < 400,
 				path: response.data,
@@ -293,12 +293,12 @@ async function initialize(dispatch) {
 		} else {
 			await db.open({ name: 'joplin-53.sqlite' })
 
-			// await db.exec('DELETE FROM notes');
-			// await db.exec('DELETE FROM folders');
-			// await db.exec('DELETE FROM tags');
-			// await db.exec('DELETE FROM note_tags');
-			// await db.exec('DELETE FROM resources');
-			// await db.exec('DELETE FROM deleted_items');
+			await db.exec('DELETE FROM notes');
+			await db.exec('DELETE FROM folders');
+			await db.exec('DELETE FROM tags');
+			await db.exec('DELETE FROM note_tags');
+			await db.exec('DELETE FROM resources');
+			await db.exec('DELETE FROM deleted_items');
 		}
 
 		reg.logger().info('Database is ready.');

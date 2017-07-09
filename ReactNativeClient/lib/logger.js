@@ -100,9 +100,9 @@ class Logger {
 			let target = this.targets_[i];
 			if (target.type == 'console') {
 				let fn = 'debug';
-				if (level = Logger.LEVEL_ERROR) fn = 'error';
-				if (level = Logger.LEVEL_WARN) fn = 'warn';
-				if (level = Logger.LEVEL_INFO) fn = 'info';
+				if (level == Logger.LEVEL_ERROR) fn = 'error';
+				if (level == Logger.LEVEL_WARN) fn = 'warn';
+				if (level == Logger.LEVEL_INFO) fn = 'info';
 				console[fn](line + this.objectsToString(...object));
 			} else if (target.type == 'file') {
 				let serializedObject = this.objectsToString(...object);

@@ -1,4 +1,3 @@
-const fetch = require('node-fetch');
 const tcpPortUsed = require('tcp-port-used');
 const http = require("http");
 const urlParser = require("url");
