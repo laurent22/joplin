@@ -88,7 +88,6 @@ ScreenHeaderComponent.defaultProps = {
 
 const ScreenHeader = connect(
 	(state) => {
-		console.info('CONNECT', state.historyCanGoBack);	
 		return {
 			historyCanGoBack: state.historyCanGoBack,
 		};

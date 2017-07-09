@@ -13,7 +13,6 @@ import { Root } from './root.js';
 function main() {
 	AppRegistry.registerComponent('Joplin', () => Root);
 	console.ignoredYellowBox = ['Remote debugger'];
-	Log.info('START ======================================================================================================');
 	// Note: The final part of the initialization process is in
 	// AppComponent.componentDidMount(), when the application is ready.
 }

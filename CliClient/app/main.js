@@ -918,16 +918,14 @@ async function main() {
 		const filePath = options.path;
 
 		function makeResponse(response) {
-			const output = {
+			return {
 				ok: response.statusCode < 400,
 				path: filePath,
 				text: () => { return response.statusMessage; },
-				json: () => { return ''; },
+				json: () => { return { message: response.statusCode + ': ' + response.statusMessage }; },
 				status: response.statusCode,
 				headers: response.headers,
-			}
-			console.info(output);
-			return output;
+			};
 		}
 
 		const requestOptions = {
@@ -948,9 +946,7 @@ async function main() {
 					response.pipe(file);
 
 					file.on('finish', function() {
-						console.info('FINISH');
 						file.close(() => {
-							console.info('FINISH CLOSE');
 							resolve(makeResponse(response));
 						});
 					});

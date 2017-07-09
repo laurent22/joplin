@@ -109,9 +109,6 @@ const reducer = (state = defaultState, action) => {
 			}
 
 			newState.historyCanGoBack = navHistory.length >= 2;
-
-			console.info(navHistory.length, newState.historyCanGoBack);
-
 			break;
 
 		// Replace all the notes with the provided array
@@ -218,112 +215,125 @@ const AppNavigator = StackNavigator({
 	Notes: { screen: NotesScreen },
 	Note: { screen: NoteScreen },
 	Folder: { screen: FolderScreen },
-	//Folders: { screen: FoldersScreen },
 	Loading: { screen: LoadingScreen },
 	OneDriveLogin: { screen: OneDriveLoginScreen },
 	Log: { screen: LogScreen },
 });
 
+let initializationState_ = 'waiting';
+
+async function initialize(dispatch) {
+	if (initializationState_ != 'waiting') return;
+
+	initializationState_ = 'in_progress';
+
+	shim.fetchBlob = async function(url, options) {
+		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
+		if (!options.method) options.method = 'GET';
+
+		let headers = options.headers ? options.headers : {};
+		let method = options.method ? options.method : 'GET';
+
+		let dirs = RNFetchBlob.fs.dirs;
+		let localFilePath = options.path;
+		if (localFilePath.indexOf('/') !== 0) localFilePath = dirs.DocumentDir + '/' + localFilePath;
+
+		delete options.path;
+
+		try {
+			let response = await RNFetchBlob.config({
+				path: localFilePath
+			}).fetch(method, url, headers);
+
+			// Returns an object that roughtly compatible with a standard Response object
+			let output = {
+				ok: response.respInfo.status < 400,
+				path: response.data,
+				text: response.text,
+				json: response.json,
+				status: response.respInfo.status,
+				headers: response.respInfo.headers,
+			};
+
+			return output;
+		} catch (error) {
+			throw new Error('fetchBlob: ' + method + ' ' + url + ': ' + error.toString());
+		}
+	}
+
+	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
+	Setting.setConstant('appId', 'net.cozic.joplin');
+	Setting.setConstant('appType', 'mobile');
+	Setting.setConstant('resourceDir', RNFetchBlob.fs.dirs.DocumentDir);
+
+	const logDatabase = new Database(new DatabaseDriverReactNative());
+	await logDatabase.open({ name: 'log.sqlite' });
+	await logDatabase.exec(Logger.databaseCreateTableSql());
+	reg.logger().addTarget('database', { database: logDatabase, source: 'm' });
+
+	reg.logger().info('====================================');
+	reg.logger().info('Starting application ' + Setting.value('appId') + ' (' + Setting.value('env') + ')');
+
+	let db = new JoplinDatabase(new DatabaseDriverReactNative());
+	reg.setDb(db);
+
+	BaseModel.dispatch = dispatch;
+	NotesScreenUtils.dispatch = dispatch;
+	BaseModel.db_ = db;
+
+	BaseItem.loadClass('Note', Note);
+	BaseItem.loadClass('Folder', Folder);
+	BaseItem.loadClass('Resource', Resource);
+	BaseItem.loadClass('Tag', Tag);
+	BaseItem.loadClass('NoteTag', NoteTag);
+
+	try {
+		if (Setting.value('env') == 'prod') {
+			await db.open({ name: 'joplin.sqlite' })
+		} else {
+			await db.open({ name: 'joplin-53.sqlite' })
+
+			// await db.exec('DELETE FROM notes');
+			// await db.exec('DELETE FROM folders');
+			// await db.exec('DELETE FROM tags');
+			// await db.exec('DELETE FROM note_tags');
+			// await db.exec('DELETE FROM resources');
+			// await db.exec('DELETE FROM deleted_items');
+		}
+
+		reg.logger().info('Database is ready.');
+		reg.logger().info('Loading settings...');
+		await Setting.load();
+
+		reg.logger().info('Loading folders...');
+		let initialFolders = await Folder.all();
+
+		dispatch({
+			type: 'FOLDERS_UPDATE_ALL',
+			folders: initialFolders,
+		});
+
+		dispatch({
+			type: 'APPLICATION_LOADING_DONE',
+		});
+
+		if (initialFolders.length) {
+			const selectedFolder = await Folder.defaultFolder();
+			if (selectedFolder) NotesScreenUtils.openNoteList(selectedFolder.id);
+		}
+	} catch (error) {
+		reg.logger().error('Initialization error:', error);
+	}
+
+	initializationState_ = 'done';
+
+	reg.logger().info('Application initialized');
+}
+
 class AppComponent extends React.Component {
 
 	async componentDidMount() {
-
-		shim.fetchBlob = async function(url, options) {
-			if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
-			if (!options.method) options.method = 'GET';
-
-			let headers = options.headers ? options.headers : {};
-			let method = options.method ? options.method : 'GET';
-
-			let dirs = RNFetchBlob.fs.dirs;
-			let localFilePath = options.path;
-			if (localFilePath.indexOf('/') !== 0) localFilePath = dirs.DocumentDir + '/' + localFilePath;
-
-			delete options.path;
-
-			try {
-				let response = await RNFetchBlob.config({
-					path: localFilePath
-				}).fetch(method, url, headers);
-
-				// Returns an object that roughtly compatible with a standard Response object
-				let output = {
-					ok: response.respInfo.status < 400,
-					path: response.data,
-					text: response.text,
-					json: response.json,
-					status: response.respInfo.status,
-					headers: response.respInfo.headers,
-				};
-
-				return output;
-			} catch (error) {
-				throw new Error('fetchBlob: ' + method + ' ' + url + ': ' + error.toString());
-			}
-		}
-
-		Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
-		Setting.setConstant('appId', 'net.cozic.joplin');
-		Setting.setConstant('appType', 'mobile');
-		Setting.setConstant('resourceDir', RNFetchBlob.fs.dirs.DocumentDir);
-
-		const logDatabase = new Database(new DatabaseDriverReactNative());
-		await logDatabase.open({ name: 'log.sqlite' });
-		await logDatabase.exec(Logger.databaseCreateTableSql());
-		reg.logger().addTarget('database', { database: logDatabase, source: 'm' });
-
-		reg.logger().info('Starting application ' + Setting.value('appId') + ' (' + Setting.value('env') + ')');
-
-		let db = new JoplinDatabase(new DatabaseDriverReactNative());
-		reg.setDb(db);
-
-		BaseModel.dispatch = this.props.dispatch;
-		NotesScreenUtils.dispatch = this.props.dispatch;
-		BaseModel.db_ = db;
-
-		BaseItem.loadClass('Note', Note);
-		BaseItem.loadClass('Folder', Folder);
-		BaseItem.loadClass('Resource', Resource);
-		BaseItem.loadClass('Tag', Tag);
-		BaseItem.loadClass('NoteTag', NoteTag);
-
-		try {
-			if (Setting.value('env') == 'prod') {
-				await db.open({ name: 'joplin.sqlite' })
-			} else {
-				await db.open({ name: 'joplin-53.sqlite' })
-
-				// await db.exec('DELETE FROM notes');
-				// await db.exec('DELETE FROM folders');
-				// await db.exec('DELETE FROM tags');
-				// await db.exec('DELETE FROM note_tags');
-				// await db.exec('DELETE FROM resources');
-				// await db.exec('DELETE FROM deleted_items');
-			}
-
-			reg.logger().info('Database is ready.');
-			reg.logger().info('Loading settings...');
-			await Setting.load();
-
-			reg.logger().info('Loading folders...');
-			let initialFolders = await Folder.all();
-
-			this.props.dispatch({
-				type: 'FOLDERS_UPDATE_ALL',
-				folders: initialFolders,
-			});
-
-			this.props.dispatch({
-				type: 'APPLICATION_LOADING_DONE',
-			});
-
-			if (initialFolders.length) {
-				const selectedFolder = await Folder.defaultFolder();
-				if (selectedFolder) NotesScreenUtils.openNoteList(selectedFolder.id);
-			}
-		} catch (error) {
-			Log.error('Initialization error:', error);
-		}
+		await initialize(this.props.dispatch);
 	}
 
 	sideMenu_change(isOpen) {
