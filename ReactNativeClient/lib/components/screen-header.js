@@ -63,8 +63,6 @@ class ScreenHeaderComponent extends Component {
 
 		let title = 'title' in this.props && this.props.title !== null ? this.props.title : _(this.props.navState.routeName);
 
-		console.info('CAN', this.props.historyCanGoBack);
-
 		return (
 			<View style={{ flexDirection: 'row', padding: 10, backgroundColor: '#ffffff', alignItems: 'center' }} >
 				<Button title="☰" onPress={() => this.sideMenuButton_press()} />
