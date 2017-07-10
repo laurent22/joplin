@@ -21,10 +21,18 @@ function filename(path) {
 	return output.join('.');
 }
 
+function fileExtension(path) {
+	if (!path) throw new Error('Path is empty');
+
+	let output = path.split('.');
+	if (output.length <= 1) return '';
+	return output[output.length - 1];
+}
+
 function isHidden(path) {
 	let b = basename(path);
 	if (!b.length) throw new Error('Path empty or not a valid path: ' + path);
 	return b[0] === '.';
 }
 
-export { basename, dirname, filename, isHidden };
+export { basename, dirname, filename, isHidden, fileExtension };

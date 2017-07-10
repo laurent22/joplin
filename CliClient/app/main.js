@@ -27,7 +27,7 @@ import { importEnex } from 'import-enex';
 import { vorpalUtils } from 'vorpal-utils.js';
 import { reg } from 'lib/registry.js';
 import { FsDriverNode } from './fs-driver-node.js';
-import { filename, basename } from 'lib/path-utils.js';
+import { filename, basename, fileExtension } from 'lib/path-utils.js';
 import { shim } from 'lib/shim.js';
 import { shimInit } from 'lib/shim-init-node.js';
 import { _ } from 'lib/locale.js';
@@ -62,14 +62,21 @@ let syncLogger = new Logger();
 let showPromptString = true;
 let logLevel = Logger.LEVEL_INFO;
 
-commands.push({
-	usage: 'version',
-	description: 'Displays version information',
-	action: function(args, end) {
-		this.log(packageJson.name + ' ' + packageJson.version);
-		end();
-	},
-});
+function commandFiles() {
+    var results = [];
+    const dir = __dirname;
+
+    fs.readdirSync(dir).forEach(function(file) {
+    	if (file.indexOf('command-') !== 0) return;
+		const ext = fileExtension(file)
+		if (ext != 'js') return;
+      	file = dir+'/'+file;
+    });
+};
+
+//commandFiles();
+
+commands.push(require('./command-version.js'));
 
 commands.push({
 	usage: 'mkbook <notebook>',
