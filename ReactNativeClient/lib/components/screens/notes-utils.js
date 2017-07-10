@@ -1,4 +1,5 @@
 import { Note } from 'lib/models/note.js'
+import { Log } from 'lib/log.js'
 
 class NotesScreenUtils {
 

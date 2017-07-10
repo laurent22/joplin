@@ -65,9 +65,6 @@ const reducer = (state = defaultState, action) => {
 			action = navHistory.pop(); // Current page
 			action = navHistory.pop(); // Previous page
 
-			// newState = Object.assign({}, state);
-			// newState.historyCanGoBack = false;
-
 			// Fall throught
 
 		case 'Navigation/NAVIGATE':
@@ -263,12 +260,12 @@ async function initialize(dispatch) {
 		} else {
 			await db.open({ name: 'joplin-53.sqlite' })
 
-			await db.exec('DELETE FROM notes');
-			await db.exec('DELETE FROM folders');
-			await db.exec('DELETE FROM tags');
-			await db.exec('DELETE FROM note_tags');
-			await db.exec('DELETE FROM resources');
-			await db.exec('DELETE FROM deleted_items');
+			// await db.exec('DELETE FROM notes');
+			// await db.exec('DELETE FROM folders');
+			// await db.exec('DELETE FROM tags');
+			// await db.exec('DELETE FROM note_tags');
+			// await db.exec('DELETE FROM resources');
+			// await db.exec('DELETE FROM deleted_items');
 		}
 
 		reg.logger().info('Database is ready.');
