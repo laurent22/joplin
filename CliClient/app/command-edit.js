@@ -5,6 +5,7 @@ import { _ } from 'lib/locale.js';
 import { Folder } from 'lib/models/folder.js';
 import { Note } from 'lib/models/note.js';
 import { Setting } from 'lib/models/setting.js';
+import { BaseModel } from 'lib/base-model.js';
 import { autocompleteItems } from './autocomplete.js';
 
 class Command extends BaseCommand {
@@ -40,7 +41,7 @@ class Command extends BaseCommand {
 			let title = args['title'];
 
 			if (!app().currentFolder()) throw new Error(_('No active notebook.'));
-			let note = await Note.loadFolderNoteByField(app().currentFolder().id, 'title', title);
+			let note = await app().loadItem(BaseModel.TYPE_NOTE, title);
 
 			if (!note) throw new Error(_('No note with title "%s" found.', title));
 

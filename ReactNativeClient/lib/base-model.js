@@ -96,6 +96,11 @@ class BaseModel {
 		return this.loadByField('id', id);
 	}
 
+
+	static loadByPartialId(partialId) {
+		return this.modelSelectOne('SELECT * FROM `' + this.tableName() + '` WHERE `id` LIKE ?', [partialId + '%']);
+	}
+
 	static applySqlOptions(options, sql, params = null) {
 		if (!options) options = {};
 

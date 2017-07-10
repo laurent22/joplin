@@ -82,10 +82,22 @@ class Application {
 
 	async loadItems(type, pattern) {
 		let ItemClass = BaseItem.itemClass(type);
-		let item = await ItemClass.loadByTitle(pattern);
+		let item = null;
+		if (type == BaseModel.TYPE_NOTE) {
+			if (!app().currentFolder()) throw new Error(_('No notebook has been created.'));
+			item = await ItemClass.loadFolderNoteByField(app().currentFolder().id, 'title', pattern);
+		} else {
+			item = await ItemClass.loadByTitle(pattern);
+		}
 		if (item) return [item];
-		item = await ItemClass.load(pattern);
-		return [item];
+
+		item = await ItemClass.load(pattern); // Load by id
+		if (item) return [item];
+
+		item = await ItemClass.loadByPartialId(pattern);
+		if (item) return [item];
+
+		return [];
 	}
 
 	// Handles the initial flags passed to main script and

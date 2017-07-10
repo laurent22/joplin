@@ -4,6 +4,7 @@ import { _ } from 'lib/locale.js';
 import { Folder } from 'lib/models/folder.js';
 import { Note } from 'lib/models/note.js';
 import { autocompleteFolders } from './autocomplete.js';
+import { sprintf } from 'sprintf-js';
 
 class Command extends BaseCommand {
 
@@ -17,7 +18,7 @@ class Command extends BaseCommand {
 	
 	options() {
 		return [
-			['-n, --lines <num>', 'Displays only the first top <num> lines.'],
+			['-n, --limit <num>', 'Displays only the first top <num> notes.'],
 			['-s, --sort <field>', 'Sorts the item by <field> (eg. title, updated_time, created_time).'],
 			['-r, --reverse', 'Reverses the sorting order.'],
 			['-t, --type <type>', 'Displays only the items of the specific type(s). Can be `n` for notes, `t` for todos, or `nt` for notes and todos (eg. `-tt` would display only the todos, while `-ttd` would display notes and todos.'],
@@ -36,7 +37,7 @@ class Command extends BaseCommand {
 		let options = args.options;
 
 		let queryOptions = {};
-		if (options.lines) queryOptions.limit = options.lines;
+		if (options.limit) queryOptions.limit = options.limit;
 		if (options.sort) {
 			queryOptions.orderBy = options.sort;
 			queryOptions.orderByDir = 'ASC';
@@ -61,6 +62,7 @@ class Command extends BaseCommand {
 		if (options.format && options.format == 'json') {
 			this.log(JSON.stringify(items));
 		} else {
+			let seenTitles = [];
 			for (let i = 0; i < items.length; i++) {
 				let item = items[i];
 				let line = '';
@@ -68,6 +70,13 @@ class Command extends BaseCommand {
 					line += sprintf('[%s] ', !!item.todo_completed ? 'X' : ' ');
 				}
 				line += item.title + suffix;
+
+				if (seenTitles.indexOf(item.title) >= 0) {
+					line += ' (' + item.id.substr(0,4) + ')';
+				} else {
+					seenTitles.push(item.title);
+				}
+
 				this.log(line);
 			}
 		}
