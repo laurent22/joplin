@@ -80,6 +80,7 @@ class Command extends BaseCommand {
 				this.log(line);
 			}
 		}
+
 	}
 
 }

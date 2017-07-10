@@ -131,6 +131,12 @@ class Application {
 				continue;
 			}
 
+			if (arg == '--update-geolocation-disabled') {
+				Note.updateGeolocationEnabled_ = false;
+				argv.splice(0, 1);
+				continue;
+			}
+
 			if (arg == '--stack-trace-enabled') {
 				vorpalUtils.setStackTraceEnabled(true);
 				argv.splice(0, 1);
@@ -319,8 +325,6 @@ class Application {
 		if (argv.length) {
 			let cmd = this.shellArgsToString(argv);
 			await this.vorpal().exec(cmd);
-			await this.vorpal().exec('exit');
-			return;
 		} else {
 			this.updatePrompt();
 			this.vorpal().show();
