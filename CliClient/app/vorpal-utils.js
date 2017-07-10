@@ -66,6 +66,7 @@ function redrawDone() {
 		vorpal_.ui.redraw.done();
 	}
 
+	redrawLastLog_ = null;
 	redrawStarted_ = false;
 }
 
@@ -81,11 +82,31 @@ function log(commandInstance, o) {
 	}
 }
 
+function cmdPromptConfirm(commandInstance, message) {
+	return new Promise((resolve, reject) => {
+		let options = {
+			type: 'confirm',
+			name: 'ok',
+			default: false, // This needs to be false so that, when pressing Ctrl+C, the prompt returns false
+			message: message,
+		};
+
+		commandInstance.prompt(options, (result) => {
+			if (result.ok) {
+				resolve(true);
+			} else {
+				resolve(false);
+			}
+		});
+	});
+}
+
 vorpalUtils.initialize = initialize;
 vorpalUtils.redraw = redraw;
 vorpalUtils.redrawDone = redrawDone;
 vorpalUtils.setRedrawEnabled = setRedrawEnabled;
 vorpalUtils.setStackTraceEnabled = setStackTraceEnabled;
 vorpalUtils.log = log;
+vorpalUtils.cmdPromptConfirm = cmdPromptConfirm;
 
 export { vorpalUtils };

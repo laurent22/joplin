@@ -160,6 +160,7 @@ Setting.constants_ = {
 	'appType': 'SET_ME', // 'cli' or 'mobile'
 	'resourceDir': '',
 	'profileDir': '',
+	'tempDir': '',
 }
 
 export { Setting };
