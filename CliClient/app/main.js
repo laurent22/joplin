@@ -29,6 +29,7 @@ import { reg } from 'lib/registry.js';
 import { FsDriverNode } from './fs-driver-node.js';
 import { filename, basename } from 'lib/path-utils.js';
 import { shim } from 'lib/shim.js';
+import { shimInit } from 'lib/shim-init-node.js';
 import { _ } from 'lib/locale.js';
 import os from 'os';
 import fs from 'fs-extra';
@@ -104,7 +105,8 @@ commands.push({
 		};
 
 		try {
-			await Note.save(note);
+			note = await Note.save(note);
+			Note.updateGeolocation(note.id);
 		} catch (error) {
 			this.log(error);
 		}
@@ -512,42 +514,54 @@ commands.push({
 	description: 'Synchronizes with remote storage.',
 	options: [
 		['--random-failures', 'For debugging purposes. Do not use.'],
+		['--stats', 'Displays stats about synchronization.'],
 	],
 	action: async function(args, end) {
 
-		let options = {
-			onProgress: (report) => {
-				let line = [];
-				if (report.remotesToUpdate) line.push(_('Items to upload: %d/%d.', report.createRemote + report.updateRemote, report.remotesToUpdate));
-				if (report.remotesToDelete) line.push(_('Remote items to delete: %d/%d.', report.deleteRemote, report.remotesToDelete));
-				if (report.localsToUdpate) line.push(_('Items to download: %d/%d.', report.createLocal + report.updateLocal, report.localsToUdpate));
-				if (report.localsToDelete) line.push(_('Local items to delete: %d/%d.', report.deleteLocal, report.localsToDelete));
-				if (line.length) vorpalUtils.redraw(line.join(' '));
-			},
-			onMessage: (msg) => {
-				vorpalUtils.redrawDone();
-				this.log(msg);
-			},
-			randomFailures: args.options['random-failures'] === true,
-		};
+		if (args.options.stats) {
+			const report = await BaseItem.stats();
+			for (let n in report.items) {
+				if (!report.items.hasOwnProperty(n)) continue;
+				const r = report.items[n];
+				this.log(_('%s: %d/%d', n, r.synced, r.total))
+			}
+			this.log(_('Total: %d/%d', report.total.synced, report.total.total));
+		} else {
+			let options = {
+				onProgress: (report) => {
+					let line = [];
+					if (report.remotesToUpdate) line.push(_('Items to upload: %d/%d.', report.createRemote + report.updateRemote, report.remotesToUpdate));
+					if (report.remotesToDelete) line.push(_('Remote items to delete: %d/%d.', report.deleteRemote, report.remotesToDelete));
+					if (report.localsToUdpate) line.push(_('Items to download: %d/%d.', report.createLocal + report.updateLocal, report.localsToUdpate));
+					if (report.localsToDelete) line.push(_('Local items to delete: %d/%d.', report.deleteLocal, report.localsToDelete));
+					if (line.length) vorpalUtils.redraw(line.join(' '));
+				},
+				onMessage: (msg) => {
+					vorpalUtils.redrawDone();
+					this.log(msg);
+				},
+				randomFailures: args.options['random-failures'] === true,
+			};
 
-		this.log(_('Synchronization target: %s', Setting.value('sync.target')));
+			this.log(_('Synchronization target: %s', Setting.value('sync.target')));
 
-		let sync = await synchronizer(Setting.value('sync.target'));
-		if (!sync) {
-			end();
-			return;
+			let sync = await synchronizer(Setting.value('sync.target'));
+			if (!sync) {
+				end();
+				return;
+			}
+
+			try {
+				this.log(_('Starting synchronization...'));
+				await sync.start(options);
+			} catch (error) {
+				this.log(error);
+			}
+
+			vorpalUtils.redrawDone();
+			this.log(_('Done.'));
 		}
 
-		try {
-			this.log(_('Starting synchronization...'));
-			await sync.start(options);
-		} catch (error) {
-			this.log(error);
-		}
-
-		vorpalUtils.redrawDone();
-		this.log(_('Done.'));
 		end();
 	},
 	cancel: async function() {
@@ -904,64 +918,7 @@ vorpalUtils.initialize(vorpal);
 
 async function main() {
 
-	shim.fetchBlob = async function(url, options) {
-		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
-		if (!options.method) options.method = 'GET';
-
-		const urlParse = require('url').parse;
-
-		url = urlParse(url.trim());
-		const http = url.protocol.toLowerCase() == 'http:' ? require('follow-redirects').http : require('follow-redirects').https;
-		const headers = options.headers ? options.headers : {};
-		const method = options.method ? options.method : 'GET';
-		if (method != 'GET') throw new Error('Only GET is supported');
-		const filePath = options.path;
-
-		function makeResponse(response) {
-			return {
-				ok: response.statusCode < 400,
-				path: filePath,
-				text: () => { return response.statusMessage; },
-				json: () => { return { message: response.statusCode + ': ' + response.statusMessage }; },
-				status: response.statusCode,
-				headers: response.headers,
-			};
-		}
-
-		const requestOptions = {
-			protocol: url.protocol,
-			host: url.host,
-			port: url.port,
-			method: method,
-			path: url.path + (url.query ? '?' + url.query : ''),
-			headers: headers,
-		};
-
-		return new Promise((resolve, reject) => {
-			try {
-				// Note: relative paths aren't supported
-				const file = fs.createWriteStream(filePath);
-
-				const request = http.get(requestOptions, function(response) {
-					response.pipe(file);
-
-					file.on('finish', function() {
-						file.close(() => {
-							resolve(makeResponse(response));
-						});
-					});
-				})
-
-				request.on('error', function(error) {
-					fs.unlink(filePath);
-					reject(error);
-				});
-			} catch(error) {
-				fs.unlink(filePath);
-				reject(error);
-			}
-		});
-	}
+	shimInit();
 
 	for (let commandIndex = 0; commandIndex < commands.length; commandIndex++) {
 		let c = commands[commandIndex];
@@ -1046,9 +1003,6 @@ async function main() {
 
 	// If we still have arguments, pass it to Vorpal and exit
 	if (argv.length) {
-		//vorpal.delimiter(' AAAAAAAAAAAAAAAAAAAAA');
-		//console.info(vorpal.ui.inquirer);
-		//vorpal.show();
 		let cmd = shellArgsToString(argv);
 		await vorpal.exec(cmd);
 		await vorpal.exec('exit');

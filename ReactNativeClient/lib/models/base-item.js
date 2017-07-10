@@ -29,13 +29,40 @@ class BaseItem extends BaseModel {
 		}
 
 		throw new Error('Invalid class name: ' + name);
+	}
 
-		// if (!this.classes_) this.classes_ = {};
-		// if (this.classes_[name]) return this.classes_[name];
-		// let filename = name.toLowerCase();
-		// if (name == 'NoteTag') filename = 'note-tag';
-		// this.classes_[name] = require('lib/models/' + filename + '.js')[name];
-		// return this.classes_[name];
+	static async stats() {
+		let output = {
+			items: {},
+			total: {},
+		};
+
+		let itemCount = 0;
+		let syncedCount = 0;
+		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
+			let d = BaseItem.syncItemDefinitions_[i];
+			let ItemClass = this.getClass(d.className);
+			let o = {
+				total: await ItemClass.count(),
+				synced: await ItemClass.syncedCount(),
+			};
+			output.items[d.className] = o;
+			itemCount += o.total;
+			syncedCount += o.synced;
+		}
+
+		output.total = {
+			total: itemCount,
+			synced: syncedCount,
+		};
+
+		return output;
+	}
+
+	static async syncedCount() {
+		const ItemClass = this.itemClass(this.modelType());
+		const r = await this.db().selectOne('SELECT count(*) as total FROM `' + ItemClass.tableName() + '` WHERE updated_time > sync_time');
+		return r.total;
 	}
 
 	static systemPath(itemOrId) {
@@ -247,12 +274,6 @@ class BaseItem extends BaseModel {
 	}
 
 }
-
-// import { Note } from 'lib/models/note.js';
-// import { Folder } from 'lib/models/folder.js';
-// import { Resource } from 'lib/models/resource.js';
-// import { Tag } from 'lib/models/tag.js';
-// import { NoteTag } from 'lib/models/note-tag.js';
 
 // Also update:
 // - itemsThatNeedSync()

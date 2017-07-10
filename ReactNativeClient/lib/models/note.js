@@ -1,9 +1,9 @@
 import { BaseModel } from 'lib/base-model.js';
 import { Log } from 'lib/log.js';
 import { Folder } from 'lib/models/folder.js';
-import { GeolocationReact } from 'lib/geolocation-react.js';
 import { BaseItem } from 'lib/models/base-item.js';
 import { Setting } from 'lib/models/setting.js';
+import { shim } from 'lib/shim.js';
 import moment from 'moment';
 import lodash  from 'lodash';
 
@@ -96,11 +96,11 @@ class Note extends BaseItem {
 	}
 
 	static updateGeolocation(noteId) {
-		Log.info('Updating lat/long of note ' + noteId);
+		this.logger().info('Updating lat/long of note ' + noteId);
 
 		let geoData = null;
-		return GeolocationReact.currentPosition().then((data) => {
-			Log.info('Got lat/long');
+		return shim.Geolocation.currentPosition().then((data) => {
+			this.logger().info('Got lat/long');
 			geoData = data;
 			return Note.load(noteId);
 		}).then((note) => {
@@ -110,7 +110,7 @@ class Note extends BaseItem {
 			note.altitude = geoData.coords.altitude;
 			return Note.save(note);
 		}).catch((error) => {
-			Log.info('Cannot get location:', error);
+			this.logger().warn('Cannot get location:', error);
 		});
 	}
 

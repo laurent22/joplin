@@ -6,7 +6,7 @@ import { createStore } from 'redux';
 import { combineReducers } from 'redux';
 import { StackNavigator } from 'react-navigation';
 import { addNavigationHelpers } from 'react-navigation';
-import { shim } from 'lib/shim.js';
+import { shimInit } from 'lib/shim-init-react.js';
 import { Log } from 'lib/log.js'
 import { Logger } from 'lib/logger.js'
 import { Note } from 'lib/models/note.js'
@@ -225,41 +225,9 @@ let initializationState_ = 'waiting';
 async function initialize(dispatch) {
 	if (initializationState_ != 'waiting') return;
 
+	shimInit();
+
 	initializationState_ = 'in_progress';
-
-	shim.fetchBlob = async function(url, options) {
-		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
-		if (!options.method) options.method = 'GET';
-
-		let headers = options.headers ? options.headers : {};
-		let method = options.method ? options.method : 'GET';
-
-		let dirs = RNFetchBlob.fs.dirs;
-		let localFilePath = options.path;
-		if (localFilePath.indexOf('/') !== 0) localFilePath = dirs.DocumentDir + '/' + localFilePath;
-
-		delete options.path;
-
-		try {
-			let response = await RNFetchBlob.config({
-				path: localFilePath
-			}).fetch(method, url, headers);
-
-			// Returns an object that's roughtly compatible with a standard Response object
-			let output = {
-				ok: response.respInfo.status < 400,
-				path: response.data,
-				text: response.text,
-				json: response.json,
-				status: response.respInfo.status,
-				headers: response.respInfo.headers,
-			};
-
-			return output;
-		} catch (error) {
-			throw new Error('fetchBlob: ' + method + ' ' + url + ': ' + error.toString());
-		}
-	}
 
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
 	Setting.setConstant('appId', 'net.cozic.joplin');
