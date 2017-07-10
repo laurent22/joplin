@@ -25,6 +25,7 @@ import { NoteScreen } from 'lib/components/screens/note.js'
 import { FolderScreen } from 'lib/components/screens/folder.js'
 import { FoldersScreen } from 'lib/components/screens/folders.js'
 import { LogScreen } from 'lib/components/screens/log.js'
+import { StatusScreen } from 'lib/components/screens/status.js'
 import { LoadingScreen } from 'lib/components/screens/loading.js'
 import { OneDriveLoginScreen } from 'lib/components/screens/onedrive-login.js'
 import { Setting } from 'lib/models/setting.js'
@@ -218,6 +219,7 @@ const AppNavigator = StackNavigator({
 	Loading: { screen: LoadingScreen },
 	OneDriveLogin: { screen: OneDriveLoginScreen },
 	Log: { screen: LogScreen },
+	Status: { screen: StatusScreen },
 });
 
 let initializationState_ = 'waiting';

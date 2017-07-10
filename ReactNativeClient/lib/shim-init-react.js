@@ -1,5 +1,6 @@
 import { shim } from 'lib/shim.js';
 import { GeolocationReact } from 'lib/geolocation-react.js';
+import RNFetchBlob from 'react-native-fetch-blob';
 
 function shimInit() {
 	shim.Geolocation = GeolocationReact;

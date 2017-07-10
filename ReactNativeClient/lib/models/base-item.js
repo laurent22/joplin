@@ -56,12 +56,16 @@ class BaseItem extends BaseModel {
 			synced: syncedCount,
 		};
 
+		output.toDelete = {
+			total: await this.deletedItemCount(),
+		};
+
 		return output;
 	}
 
 	static async syncedCount() {
 		const ItemClass = this.itemClass(this.modelType());
-		const r = await this.db().selectOne('SELECT count(*) as total FROM `' + ItemClass.tableName() + '` WHERE updated_time > sync_time');
+		const r = await this.db().selectOne('SELECT count(*) as total FROM `' + ItemClass.tableName() + '` WHERE updated_time <= sync_time');
 		return r.total;
 	}
 
@@ -141,6 +145,11 @@ class BaseItem extends BaseModel {
 
 	static deletedItems() {
 		return this.db().selectAll('SELECT * FROM deleted_items');
+	}
+
+	static async deletedItemCount() {
+		let r = await this.db().selectOne('SELECT count(*) as total FROM deleted_items');
+		return r['total'];
 	}
 
 	static remoteDeletedItem(itemId) {
