@@ -89,11 +89,9 @@ class OneDriveLoginScreenComponent extends React.Component {
 				<ScreenHeader navState={this.props.navigation.state} />
 				<WebView
 					source={source}
-					style={{marginTop: 20}}
 					onNavigationStateChange={(o) => { this.webview_load(o); }}
 					onError={(error) => { this.webview_error(error); }}
 				/>
-
 				<Button title="Retry" onPress={() => { this.retryButton_click(); }}></Button>
 			</View>
 		);

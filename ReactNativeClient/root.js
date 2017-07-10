@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BackHandler } from 'react-native';
+import { BackHandler, Keyboard } from 'react-native';
 import { connect, Provider } from 'react-redux'
 import { createStore } from 'redux';
 import { StackNavigator, addNavigationHelpers } from 'react-navigation';
@@ -104,6 +104,8 @@ const reducer = (state = defaultState, action) => {
 			}
 
 			newState.historyCanGoBack = navHistory.length >= 2;
+
+			Keyboard.dismiss(); // TODO: should probably be in some middleware
 			break;
 
 		// Replace all the notes with the provided array
