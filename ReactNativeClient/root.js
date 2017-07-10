@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import { View, Button, TextInput } from 'react-native';
-import { connect } from 'react-redux'
-import { Provider } from 'react-redux'
+import { BackHandler } from 'react-native';
+import { connect, Provider } from 'react-redux'
 import { createStore } from 'redux';
-import { combineReducers } from 'redux';
-import { StackNavigator } from 'react-navigation';
-import { addNavigationHelpers } from 'react-navigation';
+import { StackNavigator, addNavigationHelpers } from 'react-navigation';
 import { shimInit } from 'lib/shim-init-react.js';
 import { Log } from 'lib/log.js'
 import { Logger } from 'lib/logger.js'
@@ -221,7 +218,7 @@ const AppNavigator = StackNavigator({
 
 let initializationState_ = 'waiting';
 
-async function initialize(dispatch) {
+async function initialize(dispatch, backButtonHandler) {
 	if (initializationState_ != 'waiting') return;
 
 	shimInit();
@@ -292,6 +289,10 @@ async function initialize(dispatch) {
 		reg.logger().error('Initialization error:', error);
 	}
 
+	BackHandler.addEventListener('hardwareBackPress', () => {
+		return backButtonHandler();
+	});
+
 	initializationState_ = 'done';
 
 	reg.logger().info('Application initialized');
@@ -300,7 +301,21 @@ async function initialize(dispatch) {
 class AppComponent extends React.Component {
 
 	async componentDidMount() {
-		await initialize(this.props.dispatch);
+		await initialize(this.props.dispatch, this.backButtonHandler.bind(this));
+	}
+
+	backButtonHandler() {
+		if (this.props.showSideMenu) {
+			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+			return true;
+		}
+
+		if (this.props.historyCanGoBack) {
+			this.props.dispatch({ type: 'Navigation/BACK' });
+			return true;
+		}
+
+		return false;
 	}
 
 	sideMenu_change(isOpen) {
@@ -335,7 +350,9 @@ defaultState.nav = AppNavigator.router.getStateForAction({
 
 const mapStateToProps = (state) => {
 	return {
-  		nav: state.nav
+  		nav: state.nav,
+  		historyCanGoBack: state.historyCanGoBack,
+  		showSideMenu: state.showSideMenu,
   	};
 };
 
