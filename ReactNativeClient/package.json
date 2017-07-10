@@ -11,6 +11,7 @@
   "dependencies": {
     "form-data": "^2.1.4",
     "moment": "^2.18.1",
+    "query-string": "4.3.4",
     "react": "16.0.0-alpha.12",
     "react-native": "0.46.0",
     "react-native-action-button": "^2.6.9",
@@ -18,13 +19,12 @@
     "react-native-fs": "^2.3.3",
     "react-native-popup-menu": "^0.7.4",
     "react-native-side-menu": "^0.20.1",
+    "react-native-sqlite-storage": "3.3.*",
     "react-native-vector-icons": "^2.0.3",
     "react-navigation": "^1.0.0-beta.9",
-    "uuid": "^3.0.1",
-    "redux": "3.6.0",
     "react-redux": "4.4.8",
-    "query-string": "4.3.4",
-    "react-native-sqlite-storage": "3.3.*"
+    "redux": "3.6.0",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
     "babel-jest": "19.0.0",
