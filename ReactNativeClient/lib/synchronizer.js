@@ -66,6 +66,7 @@ class Synchronizer {
 	async logSyncSummary(report) {
 		for (let n in report) {
 			if (!report.hasOwnProperty(n)) continue;
+			if (n == 'errors') continue;
 			this.logger().info(n + ': ' + (report[n] ? report[n] : '-'));
 		}
 		let folderCount = await Folder.count();
@@ -79,8 +80,8 @@ class Synchronizer {
 			this.logger().warn('There was some errors:');
 			for (let i = 0; i < report.errors.length; i++) {
 				let e = report.errors[i];
-				let msg = e && e.message ? e.message : JSON.stringify(e);
-				this.logger().warn(msg);
+				//let msg = JSON.stringify(e); //e && e.message ? e.message : JSON.stringify(e);
+				this.logger().warn(e);
 			}
 		}
 	}

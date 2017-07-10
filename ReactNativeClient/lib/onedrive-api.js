@@ -193,6 +193,9 @@ class OneDriveApi {
 					this.logger().info(error);
 					await time.msleep(1000 * i);
 					continue;
+				} else if (error.code == 'itemNotFound' && method == 'DELETE') {
+					// Deleting a non-existing item is ok - noop
+					return;
 				} else {
 					error.request = method + ' ' + url + ' ' + JSON.stringify(query) + ' ' + JSON.stringify(data) + ' ' + JSON.stringify(options);
 					throw error;

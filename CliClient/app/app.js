@@ -158,6 +158,7 @@ class Application {
 		}
 
 		if (!matched.logLevel) matched.logLevel = Logger.LEVEL_INFO;
+		if (!matched.env) matched.env = 'prod';
 
 		return {
 			matched: matched,
