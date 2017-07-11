@@ -16,6 +16,12 @@ class Command extends BaseCommand {
 		return 'Displays the given item data.';
 	}
 
+	options() {
+		return [
+			['-v, --verbose', 'Shows complete information about note.'],
+		];
+	}
+
 	autocomplete() {
 		return { data: autocompleteItems };
 	}
@@ -26,7 +32,7 @@ class Command extends BaseCommand {
 		let item = await app().loadItem(BaseModel.TYPE_NOTE, title);
 		if (!item) throw new Error(_('No item "%s" found.', title));
 
-		const content = await Note.serialize(item);
+		const content = args.options.verbose ? await Note.serialize(item) : await Note.serializeForEdit(item);
 		this.log(content);
 	}
 

@@ -55,6 +55,7 @@ class Note extends BaseItem {
 	}
 
 	static loadFolderNoteByField(folderId, field, value) {
+		if (!folderId) throw new Error('folderId is undefined');
 		return this.modelSelectOne('SELECT * FROM notes WHERE is_conflict = 0 AND `parent_id` = ? AND `' + field + '` = ?', [folderId, value]);
 	}
 
@@ -124,7 +125,7 @@ class Note extends BaseItem {
 
 		this.logger().info('Updating lat/long of note ' + noteId);
 
-		let note = Note.load(noteId);
+		let note = await Note.load(noteId);
 		if (!note) return; // Race condition - note has been deleted in the meantime
 
 		note.longitude = geoData.coords.longitude;

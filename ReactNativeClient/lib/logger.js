@@ -99,7 +99,7 @@ class Logger {
 		for (let i = 0; i < this.targets_.length; i++) {
 			let target = this.targets_[i];
 			if (target.type == 'console') {
-				let fn = 'debug';
+				let fn = 'log';
 				if (level == Logger.LEVEL_ERROR) fn = 'error';
 				if (level == Logger.LEVEL_WARN) fn = 'warn';
 				if (level == Logger.LEVEL_INFO) fn = 'info';
