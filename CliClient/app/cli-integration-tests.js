@@ -150,6 +150,78 @@ testUnits.testCat = async () => {
 	assertTrue(r.indexOf(note.id) >= 0);
 }
 
+testUnits.testConfig = async () => {
+	await execCommand(client, 'config editor vim');
+	await Setting.load();
+	assertEquals('vim', Setting.value('editor'));
+
+	await execCommand(client, 'config editor subl');
+	await Setting.load();
+	assertEquals('subl', Setting.value('editor'));
+
+	let r = await execCommand(client, 'config');
+	assertTrue(r.indexOf('editor') >= 0);
+	assertTrue(r.indexOf('subl') >= 0);
+}
+
+testUnits.testCp = async () => {
+	await execCommand(client, 'mkbook nb2');
+	await execCommand(client, 'mkbook nb1');
+	await execCommand(client, 'mknote n1');
+
+	await execCommand(client, 'cp n1');
+
+	let f1 = await Folder.loadByTitle('nb1');
+	let f2 = await Folder.loadByTitle('nb2');
+	let notes = await Note.previews(f1.id);
+
+	assertEquals(2, notes.length);
+
+	await execCommand(client, 'cp n1 nb2');
+	let notesF1 = await Note.previews(f1.id);
+	assertEquals(2, notesF1.length);
+	notes = await Note.previews(f2.id);
+	assertEquals(1, notes.length);
+	assertEquals(notesF1[0].title, notes[0].title);
+}
+
+testUnits.testLs = async () => {
+	await execCommand(client, 'mkbook nb1');
+	await execCommand(client, 'mknote note1');
+	await execCommand(client, 'mknote note2');
+	let r = await execCommand(client, 'ls');
+
+	assertTrue(r.indexOf('note1') >= 0);
+	assertTrue(r.indexOf('note2') >= 0);
+}
+
+testUnits.testMv = async () => {
+	await execCommand(client, 'mkbook nb2');
+	await execCommand(client, 'mkbook nb1');
+	await execCommand(client, 'mknote n1');
+	await execCommand(client, 'mv n1 nb2');
+
+	let f1 = await Folder.loadByTitle('nb1');
+	let f2 = await Folder.loadByTitle('nb2');
+	let notes1 = await Note.previews(f1.id);
+	let notes2 = await Note.previews(f2.id);
+
+	assertEquals(0, notes1.length);
+	assertEquals(1, notes2.length);
+
+	await execCommand(client, 'mknote note1');
+	await execCommand(client, 'mknote note2');
+	await execCommand(client, 'mknote note3');
+	await execCommand(client, 'mknote blabla');
+	await execCommand(client, "mv 'note*' nb2");
+
+	notes1 = await Note.previews(f1.id);
+	notes2 = await Note.previews(f2.id);
+
+	assertEquals(1, notes1.length);
+	assertEquals(4, notes2.length);
+}
+
 async function main(argv) {
 	await fs.remove(baseDir);
 
@@ -159,7 +231,7 @@ async function main(argv) {
 	BaseModel.db_ = db;
 	await Setting.load();
 
-	let onlyThisTest = 'testCat';
+	let onlyThisTest = 'testMv';
 	onlyThisTest = '';
 
 	for (let n in testUnits) {
@@ -167,7 +239,8 @@ async function main(argv) {
 		if (onlyThisTest && n != onlyThisTest) continue;
 
 		await clearDatabase();
-		process.stdout.write(n + ': ');
+		let testName = n.substr(4).toLowerCase();
+		process.stdout.write(testName + ': ');
 		await testUnits[n]();
 		console.info('');
 	}
