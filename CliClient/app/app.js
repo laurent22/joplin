@@ -42,7 +42,7 @@ class Application {
 	updatePrompt() {
 		if (!this.showPromptString_) return '';
 
-		let path = '~';
+		let path = '';
 		if (this.currentFolder()) {
 			path += '/' + this.currentFolder().title;
 		}
@@ -57,45 +57,38 @@ class Application {
 		this.updatePrompt();
 	}
 
-	async parseNotePattern(pattern) {
-		if (pattern.indexOf('..') === 0) {
-			let pieces = pattern.split('/');
-			if (pieces.length != 3) throw new Error(_('Invalid pattern: %s', pattern));
-			let parent = await this.loadItem(BaseModel.TYPE_FOLDER, pieces[1]);		
-			if (!parent) throw new Error(_('Notebook not found: %s', pieces[1]));
-			return {
-				parent: parent,
-				title: pieces[2],
-			};
-		} else {
-			return {
-				parent: null,
-				title: pattern,
-			};
-		}
-	}
-
 	async loadItem(type, pattern) {
 		let output = await this.loadItems(type, pattern);
 		return output.length ? output[0] : null;
 	}
 
-	async loadItems(type, pattern) {
-		let ItemClass = BaseItem.itemClass(type);
-		let item = null;
-		if (type == BaseModel.TYPE_NOTE) {
-			if (!app().currentFolder()) throw new Error(_('No notebook has been created.'));
-			item = await ItemClass.loadFolderNoteByField(app().currentFolder().id, 'title', pattern);
-		} else {
-			item = await ItemClass.loadByTitle(pattern);
+	async loadItems(type, pattern, options = null) {
+		if (!options) options = {};
+		
+		const parent = options.parent ? options.parent : app().currentFolder();
+		const ItemClass = BaseItem.itemClass(type);
+
+		if (type == BaseModel.TYPE_NOTE && pattern.indexOf('*') >= 0) { // Handle it as pattern
+			if (!parent) throw new Error(_('No notebook selected.'));
+			return await Note.previews(parent.id, { titlePattern: pattern });
+		} else { // Single item
+			let item = null;
+			if (type == BaseModel.TYPE_NOTE) {
+				if (!parent) throw new Error(_('No notebook has been specified.'));
+				item = await ItemClass.loadFolderNoteByField(parent.id, 'title', pattern);
+			} else {
+				item = await ItemClass.loadByTitle(pattern);
+			}
+			if (item) return [item];
+
+			item = await ItemClass.load(pattern); // Load by id
+			if (item) return [item];
+
+			if (pattern.length >= 4) {
+				item = await ItemClass.loadByPartialId(pattern);
+				if (item) return [item];
+			}
 		}
-		if (item) return [item];
-
-		item = await ItemClass.load(pattern); // Load by id
-		if (item) return [item];
-
-		item = await ItemClass.loadByPartialId(pattern);
-		if (item) return [item];
 
 		return [];
 	}

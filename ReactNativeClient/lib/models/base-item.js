@@ -133,13 +133,33 @@ class BaseItem extends BaseModel {
 	}
 
 	static async delete(id, options = null) {
+		return this.batchDelete([id], options);
+		// let trackDeleted = true;
+		// if (options && options.trackDeleted !== null && options.trackDeleted !== undefined) trackDeleted = options.trackDeleted;
+
+		// await super.delete(id, options);
+
+		// if (trackDeleted) {
+		// 	await this.db().exec('INSERT INTO deleted_items (item_type, item_id, deleted_time) VALUES (?, ?, ?)', [this.modelType(), id, time.unixMs()]);
+		// }
+	}
+
+	static async batchDelete(ids, options = null) {
 		let trackDeleted = true;
 		if (options && options.trackDeleted !== null && options.trackDeleted !== undefined) trackDeleted = options.trackDeleted;
 
-		await super.delete(id, options);
+		await super.batchDelete(ids, options);
 
 		if (trackDeleted) {
-			await this.db().exec('INSERT INTO deleted_items (item_type, item_id, deleted_time) VALUES (?, ?, ?)', [this.modelType(), id, time.unixMs()]);
+			let queries = [];
+			let now = time.unixMs();
+			for (let i = 0; i < ids.length; i++) {
+				queries.push({
+					sql: 'INSERT INTO deleted_items (item_type, item_id, deleted_time) VALUES (?, ?, ?)',
+					params: [this.modelType(), ids[i], now],
+				});
+			}
+			await this.db().transactionExecBatch(queries);
 		}
 	}
 

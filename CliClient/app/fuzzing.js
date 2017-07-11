@@ -134,7 +134,7 @@ async function execRandomCommand(client) {
 			if (item.type_ == 1) {
 				return execCommand(client, 'rm -f ' + item.id);
 			} else if (item.type_ == 2) {
-				return execCommand(client, 'rm -f ' + '../' + item.id);
+				return execCommand(client, 'rm -r -f ' + item.id);
 			} else if (item.type_ == 5) {
 				// tag
 			} else {
@@ -153,7 +153,7 @@ async function execRandomCommand(client) {
 		}, 30],
 		[async () => { // UPDATE RANDOM ITEM
 			let items = await clientItems(client);
-			let item = randomElement(items);
+			let item = randomNote(items);
 			if (!item) return;
 
 			return execCommand(client, 'set ' + item.id + ' title "' + randomWord() + '"');

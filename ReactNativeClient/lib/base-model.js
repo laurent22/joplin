@@ -277,6 +277,12 @@ class BaseModel {
 		return this.db().exec('DELETE FROM ' + this.tableName() + ' WHERE id = ?', [id]);
 	}
 
+	static batchDelete(ids, options = null) {
+		options = this.modOptions(options);
+		if (!ids.length) throw new Error('Cannot delete object without an ID');
+		return this.db().exec('DELETE FROM ' + this.tableName() + ' WHERE id IN ("' + ids.join('","') + '")');
+	}	
+
 	static db() {
 		if (!this.db_) throw new Error('Accessing database before it has been initialised');
 		return this.db_;		

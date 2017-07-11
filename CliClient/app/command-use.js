@@ -1,6 +1,7 @@
 import { BaseCommand } from './base-command.js';
 import { app } from './app.js';
 import { _ } from 'lib/locale.js';
+import { BaseModel } from 'lib/base-model.js';
 import { Folder } from 'lib/models/folder.js';
 import { autocompleteFolders } from './autocomplete.js';
 
@@ -23,10 +24,8 @@ class Command extends BaseCommand {
 	}
 
 	async action(args) {
-		let title = args['notebook'];
-
-		let folder = await Folder.loadByField('title', title);
-		if (!folder) throw new Error(_('Invalid folder title: %s', title));
+		let folder = await app().loadItem(BaseModel.TYPE_FOLDER, args['notebook']);
+		if (!folder) throw new Error(_('No folder "%s"', title));
 		app().switchCurrentFolder(folder);
 	}
 

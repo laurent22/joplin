@@ -4,6 +4,7 @@ import { Folder } from 'lib/models/folder.js';
 import { BaseItem } from 'lib/models/base-item.js';
 import { Setting } from 'lib/models/setting.js';
 import { shim } from 'lib/shim.js';
+import { time } from 'lib/time-utils.js';
 import moment from 'moment';
 import lodash  from 'lodash';
 
@@ -95,25 +96,41 @@ class Note extends BaseItem {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0');
 	}
 
-	static updateGeolocation(noteId) {
+	static async updateGeolocation(noteId) {
 		if (!Note.updateGeolocationEnabled_) return;
+
+		let startWait = time.unixMs();
+		while (true) {
+			if (!this.geolocationUpdating_) break;
+			this.logger().info('Waiting for geolocation update...');
+			await time.sleep(1);
+			if (startWait + 1000 * 20 < time.unixMs()) {
+				this.logger().warn('Failed to update geolocation for: timeout: ' + noteId);
+				return;
+			}
+		}
+
+		let geoData = null;
+		if (this.geolocationCache_ && this.geolocationCache_.timestamp + 1000 * 60 * 10 > time.unixMs()) {
+			geoData = Object.assign({}, this.geolocationCache_);
+		} else {
+			this.geolocationUpdating_ = true;
+			this.logger().info('Fetching geolocation...');
+			geoData = await shim.Geolocation.currentPosition();
+			this.logger().info('Got lat/long');
+			this.geolocationCache_ = geoData;
+			this.geolocationUpdating_ = false;
+		}
 
 		this.logger().info('Updating lat/long of note ' + noteId);
 
-		let geoData = null;
-		return shim.Geolocation.currentPosition().then((data) => {
-			this.logger().info('Got lat/long');
-			geoData = data;
-			return Note.load(noteId);
-		}).then((note) => {
-			if (!note) return; // Race condition - note has been deleted in the meantime
-			note.longitude = geoData.coords.longitude;
-			note.latitude = geoData.coords.latitude;
-			note.altitude = geoData.coords.altitude;
-			return Note.save(note);
-		}).catch((error) => {
-			this.logger().warn('Cannot get location:', error);
-		});
+		let note = Note.load(noteId);
+		if (!note) return; // Race condition - note has been deleted in the meantime
+
+		note.longitude = geoData.coords.longitude;
+		note.latitude = geoData.coords.latitude;
+		note.altitude = geoData.coords.altitude;
+		return Note.save(note);
 	}
 
 	static filter(note) {
@@ -124,6 +141,24 @@ class Note extends BaseItem {
 		if ('latitude' in output) output.latitude = Number(!output.latitude ? 0 : output.latitude).toFixed(8);
 		if ('altitude' in output) output.altitude = Number(!output.altitude ? 0 : output.altitude).toFixed(4);
 		return output;
+	}
+
+	static async duplicate(noteId, options = null) {
+		const changes = options && options.changes;
+
+		const originalNote = await Note.load(noteId);
+		if (!originalNote) throw new Error('Unknown note: ' + noteId);
+
+		let newNote = Object.assign({}, originalNote);
+		delete newNote.id;
+		newNote.sync_time = 0;
+
+		for (let n in changes) {
+			if (!changes.hasOwnProperty(n)) continue;
+			newNote[n] = changes[n];
+		}
+
+		return this.save(newNote);
 	}
 
 	static save(o, options = null) {
@@ -147,5 +182,6 @@ class Note extends BaseItem {
 }
 
 Note.updateGeolocationEnabled_ = true;
+Note.geolocationUpdating_ = false;
 
 export { Note };

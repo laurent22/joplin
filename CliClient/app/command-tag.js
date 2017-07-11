@@ -17,19 +17,25 @@ class Command extends BaseCommand {
 	async action(args) {
 		let tag = null;
 		if (args.tag) tag = await app().loadItem(BaseModel.TYPE_TAG, args.tag);
-		let note = null;
-		if (args.note) note = await app().loadItem(BaseModel.TYPE_NOTE, args.note);
+		let notes = [];
+		if (args.note) {
+			notes = await app().loadItems(BaseModel.TYPE_NOTE, args.note);
+		}
 
 		if (args.command == 'remove' && !tag) throw new Error(_('Tag does not exist: "%s"', args.tag));
 
 		if (args.command == 'add') {
-			if (!note) throw new Error(_('Note does not exist: "%s"', args.note));
+			if (!notes.length) throw new Error(_('Note does not exist: "%s"', args.note));
 			if (!tag) tag = await Tag.save({ title: args.tag });
-			await Tag.addNote(tag.id, note.id);
+			for (let i = 0; i < notes.length; i++) {
+				await Tag.addNote(tag.id, notes[i].id);
+			}
 		} else if (args.command == 'remove') {
 			if (!tag) throw new Error(_('Tag does not exist: "%s"', args.tag));
-			if (!note) throw new Error(_('Note does not exist: "%s"', args.note));
-			await Tag.removeNote(tag.id, note.id);
+			if (!notes.length) throw new Error(_('Note does not exist: "%s"', args.note));
+			for (let i = 0; i < notes.length; i++) {
+				await Tag.removeNote(tag.id, notes[i].id);
+			}
 		} else if (args.command == 'list') {
 			if (tag) {
 				let notes = await Tag.notes(tag.id);

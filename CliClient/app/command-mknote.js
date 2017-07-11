@@ -20,11 +20,9 @@ class Command extends BaseCommand {
 	async action(args) {
 		if (!app().currentFolder()) throw new Error(_('Notes can only be created within a notebook.'));
 
-		let path = await app().parseNotePattern(args['note']);
-
 		let note = {
-			title: path.title,
-			parent_id: path.parent ? path.parent.id : app().currentFolder().id,
+			title: args.note,
+			parent_id: app().currentFolder().id,
 		};
 
 		note = await Note.save(note);

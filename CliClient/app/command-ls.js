@@ -13,7 +13,7 @@ class Command extends BaseCommand {
 	}
 
 	description() {
-		return 'Displays the notes in [notebook]. Use `ls ..` to display the list of notebooks.';
+		return 'Displays the notes in [notebook]. Use `ls /` to display the list of notebooks.';
 	}
 	
 	options() {
@@ -51,7 +51,7 @@ class Command extends BaseCommand {
 		}
 		if (pattern) queryOptions.titlePattern = pattern;
 
-		if (pattern == '..' || !app().currentFolder()) {
+		if (pattern == '/' || !app().currentFolder()) {
 			items = await Folder.all(queryOptions);
 			suffix = '/';
 		} else {

@@ -15,7 +15,7 @@ class Command extends BaseCommand {
 	}
 
 	description() {
-		return 'Deletes the given item. For a notebook, all the notes within that notebook will be deleted. Use `rm ../<notebook>` to delete a notebook.';
+		return 'Deletes the items matching <pattern>.';
 	}
 
 	autocomplete() {
@@ -25,44 +25,28 @@ class Command extends BaseCommand {
 	options() {
 		return [
 			['-f, --force', 'Deletes the items without asking for confirmation.'],
+			['-r, --recursive', 'Deletes a notebook.'],
 		];
 	}
 
 	async action(args) {
-		let pattern = args['pattern'].toString();
-		let itemType = null;
-		let force = args.options && args.options.force === true;
+		const pattern = args['pattern'].toString();
+		const recursive = args.options && args.options.recursive === true;
+		const force = args.options && args.options.force === true;
 
-		if (pattern.indexOf('*') < 0) { // Handle it as a simple title
-			if (pattern.substr(0, 3) == '../') {
-				itemType = BaseModel.TYPE_FOLDER;
-				pattern = pattern.substr(3);
-			} else {
-				itemType = BaseModel.TYPE_NOTE;
-			}
-
-			let item = item = await app().loadItem(itemType, pattern); // await BaseItem.loadItemByField(itemType, 'title', pattern);
-			if (!item) throw new Error(_('No item "%s" found.', pattern));
-
-			let ok = force ? true : await vorpalUtils.cmdPromptConfirm(this, _('Delete "%s"?', item.title));
-			if (ok) {
-				await BaseItem.deleteItem(itemType, item.id);
-				if (app().currentFolder() && app().currentFolder().id == item.id) {
-					let f = await Folder.defaultFolder();
-					app().switchCurrentFolder(f);
-				}
-			}
-		} else { // Handle it as a glob pattern
-			if (app().currentFolder()) {
-				let notes = await Note.previews(app().currentFolder().id, { titlePattern: pattern });
-				if (!notes.length) throw new Error(_('No note matches this pattern: "%s"', pattern));
-				let ok = force ? true : await vorpalUtils.cmdPromptConfirm(this, _('%d notes match this pattern. Delete them?', notes.length));
-				if (ok) {
-					for (let i = 0; i < notes.length; i++) {
-						await Note.delete(notes[i].id);
-					}
-				}
-			}
+		if (recursive) {
+			const folder = await app().loadItem(BaseModel.TYPE_FOLDER, pattern);
+			if (!folder) throw new Error(_('No notebook matchin pattern "%s"', pattern));
+			const ok = force ? true : await vorpalUtils.cmdPromptConfirm(this, _('Delete notebook "%s"?', folder.title));
+			if (!ok) return;
+			await Folder.delete(folder.id);
+		} else {
+			const notes = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
+			if (!notes.length) throw new Error(_('No note matchin pattern "%s"', pattern));
+			const ok = force ? true : await vorpalUtils.cmdPromptConfirm(this, _('%d notes match this pattern. Delete them?', notes.length));
+			if (!ok) return;
+			let ids = notes.map((n) => n.id);
+			await Note.batchDelete(ids);
 		}
 	}
 

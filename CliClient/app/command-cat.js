@@ -23,22 +23,10 @@ class Command extends BaseCommand {
 	async action(args) {
 		let title = args['title'];
 
-		let item = null;
-		if (!app().currentFolder()) {
-			item = await Folder.loadByField('title', title);
-		} else {
-			item = await app().loadItem(BaseModel.TYPE_NOTE, title);
-		}
+		let item = await app().loadItem(BaseModel.TYPE_NOTE, title);
+		if (!item) throw new Error(_('No item "%s" found.', title));
 
-		if (!item) throw new Error(_('No item with title "%s" found.', title));
-
-		let content = null;
-		if (!app().currentFolder()) {
-			content = await Folder.serialize(item);
-		} else {
-			content = await Note.serialize(item);
-		}
-
+		const content = await Note.serialize(item);
 		this.log(content);
 	}
 
