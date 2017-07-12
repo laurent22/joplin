@@ -43,6 +43,11 @@ class Folder extends BaseItem {
 		});
 	}
 
+	static async noteCount(parentId) {
+		let r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 0 AND parent_id = ?', [parentId]);
+		return r ? r.total : 0;
+	}
+
 	static async delete(folderId, options = null) {
 		let folder = await Folder.load(folderId);
 		if (!folder) throw new Error('Trying to delete non-existing notebook: ' + folderId);

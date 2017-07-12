@@ -5,6 +5,8 @@ import { Folder } from 'lib/models/folder.js';
 import { Note } from 'lib/models/note.js';
 import { autocompleteFolders } from './autocomplete.js';
 import { sprintf } from 'sprintf-js';
+import { time } from 'lib/time-utils.js';
+import { vorpalUtils } from './vorpal-utils.js';
 
 class Command extends BaseCommand {
 
@@ -23,6 +25,7 @@ class Command extends BaseCommand {
 			['-r, --reverse', 'Reverses the sorting order.'],
 			['-t, --type <type>', 'Displays only the items of the specific type(s). Can be `n` for notes, `t` for todos, or `nt` for notes and todos (eg. `-tt` would display only the todos, while `-ttd` would display notes and todos.'],
 			['-f, --format <format>', 'Either "text" or "json"'],
+			['-l, --long', 'Use long list format. Format is NOTE_COUNT (for notebook), DATE, NEED_SYNC, TODO_CHECKED (for todos), TITLE'],
 		];
 	}
 
@@ -51,34 +54,65 @@ class Command extends BaseCommand {
 		}
 		if (pattern) queryOptions.titlePattern = pattern;
 
+		let modelType = null;
 		if (pattern == '/' || !app().currentFolder()) {
 			items = await Folder.all(queryOptions);
 			suffix = '/';
+			modelType = Folder.modelType();
 		} else {
 			if (!app().currentFolder()) throw new Error(_('Please select a notebook first.'));
 			items = await Note.previews(app().currentFolder().id, queryOptions);
+			modelType = Note.modelType();
 		}
 
 		if (options.format && options.format == 'json') {
 			this.log(JSON.stringify(items));
 		} else {
-			let seenTitles = [];
+			let hasTodos = false;
 			for (let i = 0; i < items.length; i++) {
 				let item = items[i];
-				let line = '';
-				if (!!item.is_todo) {
-					line += sprintf('[%s] ', !!item.todo_completed ? 'X' : ' ');
+				if (item.is_todo) {
+					hasTodos = true;
+					break;
 				}
-				line += item.title + suffix;
+			}
 
+			let seenTitles = [];
+			let rows = [];
+			for (let i = 0; i < items.length; i++) {
+				let item = items[i];
+				let row = [];
+
+				if (options.long) {
+					if (modelType == Folder.modelType()) {
+						row.push(await Folder.noteCount(item.id));
+					}
+
+					row.push(time.unixMsToLocalDateTime(item.updated_time));
+					row.push(item.updated_time > item.sync_time ? '*' : ' ');
+				}
+
+				let title = item.title + suffix;
 				if (seenTitles.indexOf(item.title) >= 0) {
-					line += ' (' + item.id.substr(0,4) + ')';
+					title += ' (' + item.id.substr(0,4) + ')';
 				} else {
 					seenTitles.push(item.title);
 				}
 
-				this.log(line);
+				if (hasTodos) {
+					if (item.is_todo) {
+						row.push(sprintf('[%s]', !!item.todo_completed ? 'X' : ' '));
+					} else {
+						row.push('   ');
+					}
+				}
+
+				row.push(title);
+
+				rows.push(row);
 			}
+
+			vorpalUtils.printArray(this, rows);
 		}
 
 	}
