@@ -69,8 +69,8 @@ class OneDriveApi {
 	}
 
 	async appDirectory() {
-		let r = await this.execJson('GET', '/drive/special/approot');
-		return r.parentReference.path + '/' + r.name;
+			let r = await this.execJson('GET', '/drive/special/approot');
+			return r.parentReference.path + '/' + r.name;
 	}
 
 	authCodeUrl(redirectUri) {
@@ -160,10 +160,16 @@ class OneDriveApi {
 			options.headers['Authorization'] = 'bearer ' + this.token();
 
 			let response = null;
-			if (options.target == 'string') {
-				response = await shim.fetch(url, options);
-			} else { // file
-				response = await shim.fetchBlob(url, options);
+			try {
+				if (options.target == 'string') {
+					response = await shim.fetch(url, options);
+				} else { // file
+					response = await shim.fetchBlob(url, options);
+				}
+			} catch (error) {
+				// TEMPORARY: To try to find where uncaught error comes from
+				let error = new Error('OneDrive API caught: ' + error.message);
+				throw error;
 			}
 
 			if (!response.ok) {

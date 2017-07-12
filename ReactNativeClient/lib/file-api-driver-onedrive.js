@@ -127,6 +127,14 @@ class FileApiDriverOneDrive {
 	}
 
 	async move(oldPath, newPath) {
+		// Cannot work in an atomic way because if newPath already exist, the OneDrive API throw an error
+		// "An item with the same name already exists under the parent". Some posts suggest to use
+		// @name.conflictBehavior [0]but that doesn't seem to work. So until Microsoft fixes this
+		// it's not possible to do an atomic move.
+		//
+		// [0] https://stackoverflow.com/questions/29191091/onedrive-api-overwrite-on-move
+		throw new Error('NOT WORKING');
+
 		let previousItem = await this.statRaw_(oldPath);
 
 		let newDir = dirname(newPath);

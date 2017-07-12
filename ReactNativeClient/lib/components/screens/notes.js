@@ -8,6 +8,7 @@ import { ScreenHeader } from 'lib/components/screen-header.js';
 import { MenuOption, Text } from 'react-native-popup-menu';
 import { _ } from 'lib/locale.js';
 import { ActionButton } from 'lib/components/action-button.js';
+import DialogBox from 'react-native-dialogbox';
 
 class NotesScreenComponent extends React.Component {
 	
@@ -16,6 +17,9 @@ class NotesScreenComponent extends React.Component {
 	}
 
 	deleteFolder_onPress(folderId) {
+		let ok = confirm(_('Delete notebook?'));
+		if (!ok) return;
+
 		Folder.delete(folderId).then(() => {
 			this.props.dispatch({
 				type: 'Navigation/NAVIGATE',

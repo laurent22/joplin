@@ -15,6 +15,7 @@
     "react": "16.0.0-alpha.12",
     "react-native": "0.46.0",
     "react-native-action-button": "^2.6.9",
+    "react-native-dialogbox": "^0.6.6",
     "react-native-fetch-blob": "^0.10.6",
     "react-native-fs": "^2.3.3",
     "react-native-popup-menu": "^0.7.4",
