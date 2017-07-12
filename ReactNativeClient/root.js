@@ -283,10 +283,7 @@ async function initialize(dispatch, backButtonHandler) {
 			type: 'APPLICATION_LOADING_DONE',
 		});
 
-		if (initialFolders.length) {
-			const selectedFolder = await Folder.defaultFolder();
-			if (selectedFolder) NotesScreenUtils.openNoteList(selectedFolder.id);
-		}
+		await NotesScreenUtils.openDefaultNoteList();
 	} catch (error) {
 		reg.logger().error('Initialization error:', error);
 	}

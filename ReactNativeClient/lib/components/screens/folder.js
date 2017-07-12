@@ -5,6 +5,7 @@ import { Log } from 'lib/log.js'
 import { Folder } from 'lib/models/folder.js'
 import { BaseModel } from 'lib/base-model.js'
 import { ScreenHeader } from 'lib/components/screen-header.js';
+import { NotesScreenUtils } from 'lib/components/screens/notes-utils.js'
 
 class FolderScreenComponent extends React.Component {
 	
@@ -51,11 +52,7 @@ class FolderScreenComponent extends React.Component {
 		this.originalFolder = await Folder.save(toSave);
 		this.setState({ folder: this.originalFolder });
 
-		this.props.dispatch({
-			type: 'Navigation/NAVIGATE',
-			routeName: 'Notes',
-			folderId: toSave.id,
-		});
+		await NotesScreenUtils.openDefaultNoteList();
 	}
 
 	render() {
