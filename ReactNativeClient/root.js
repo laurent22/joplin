@@ -46,7 +46,14 @@ let defaultState = {
 	historyCanGoBack: false,
 };
 
+const initialRoute = {
+	type: 'Navigation/NAVIGATE',
+	routeName: 'Welcome',
+	params: {}
+};
+
 let navHistory = [];
+navHistory.push(initialRoute);
 
 const reducer = (state = defaultState, action) => {
 	reg.logger().info('Reducer action', action.type);
@@ -104,6 +111,8 @@ const reducer = (state = defaultState, action) => {
 			}
 
 			newState.historyCanGoBack = navHistory.length >= 2;
+
+			console.info(navHistory);
 
 			Keyboard.dismiss(); // TODO: should probably be in some middleware
 			break;
@@ -341,11 +350,7 @@ class AppComponent extends React.Component {
 	}
 }
 
-defaultState.nav = AppNavigator.router.getStateForAction({
-	type: 'Navigation/NAVIGATE',
-	routeName: 'Welcome',
-	params: {}
-});
+defaultState.nav = AppNavigator.router.getStateForAction(initialRoute);
 
 const mapStateToProps = (state) => {
 	return {

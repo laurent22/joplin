@@ -3,6 +3,7 @@ import { View, Button, TextInput, WebView, Text } from 'react-native';
 import { connect } from 'react-redux'
 import { Log } from 'lib/log.js'
 import { Note } from 'lib/models/note.js'
+import { Folder } from 'lib/models/folder.js'
 import { ScreenHeader } from 'lib/components/screen-header.js';
 import { Checkbox } from 'lib/components/checkbox.js'
 import { _ } from 'lib/locale.js';
@@ -21,6 +22,7 @@ class NoteScreenComponent extends React.Component {
 			mode: 'view',
 			noteMetadata: '',
 			showNoteMetadata: false,
+			folder: null,
 		}
 	}
 
@@ -35,6 +37,23 @@ class NoteScreenComponent extends React.Component {
 				this.refreshNoteMetadata();
 			});
 		}
+
+		this.refreshFolder();
+	}
+
+	async currentFolder() {
+		let folderId = this.props.folderId;
+		if (!folderId) {
+			if (this.state.note && this.state.note.parent_id) folderId = this.state.note.parent_id;
+		}
+
+		if (!folderId) return Folder.defaultFolder();
+
+		return Folder.load(folderId);
+	}
+
+	async refreshFolder() {
+		this.setState({ folder: await this.currentFolder() });
 	}
 
 	noteComponent_change(propName, propValue) {
@@ -61,8 +80,19 @@ class NoteScreenComponent extends React.Component {
 	}
 
 	async saveNoteButton_press() {
-		let isNew = !this.state.note.id;
-		let note = await Note.save(this.state.note);
+		let note = Object.assign({}, this.state.note);
+
+		if (!this.state.note.parent_id) {
+			let folder = await Folder.defaultFolder();
+			if (!folder) {
+				Log.warn('Cannot save note without a notebook');
+				return;
+			}
+			note.parent_id = folder.id;
+		}
+
+		let isNew = !note.id;
+		note = await Note.save(note);
 		this.setState({ note: note });
 		if (isNew) Note.updateGeolocation(note.id);
 		this.refreshNoteMetadata();
@@ -92,6 +122,7 @@ class NoteScreenComponent extends React.Component {
 	render() {
 		const note = this.state.note;
 		const isTodo = !!Number(note.is_todo);
+		const folder = this.state.folder;
 		let todoComponents = null;
 
 		if (note.is_todo) {
@@ -118,11 +149,17 @@ class NoteScreenComponent extends React.Component {
 			bodyComponent = <TextInput style={{flex: 1, textAlignVertical: 'top', fontFamily: 'monospace'}} multiline={true} value={note.body} onChangeText={(text) => this.body_changeText(text)} />
 		}
 
-		console.info(this.state.noteMetadata);
+		let title = null;
+		let noteHeaderTitle = note && note.title ? note.title : _('New note');
+		if (folder) {
+			title = folder.title + ' > ' + noteHeaderTitle;
+		} else {
+			title = noteHeaderTitle;
+		}
 
 		return (
 			<View style={{flex: 1}}>
-				<ScreenHeader navState={this.props.navigation.state} menuOptions={this.menuOptions()} />
+				<ScreenHeader navState={this.props.navigation.state} menuOptions={this.menuOptions()} title={title} />
 				<View style={{ flexDirection: 'row' }}>
 					{ isTodo && <Checkbox checked={!!Number(note.todo_completed)} /> }<TextInput style={{flex:1}} value={note.title} onChangeText={(text) => this.title_changeText(text)} />
 				</View>
