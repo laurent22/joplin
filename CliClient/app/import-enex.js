@@ -223,6 +223,10 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					return enexXmlToMd(contentStream, note.resources).then((body) => {
 						delete note.bodyXml;
 
+						//console.info('-----------------------------------------------------------');
+						//console.info(body);
+						//console.info('-----------------------------------------------------------');
+
 						note.id = uuid.create();
 						note.parent_id = parentFolderId;
 						note.body = body;

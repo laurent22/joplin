@@ -244,6 +244,30 @@ function enexXmlToMdArray(stream, resources) {
 			output = collapseWhiteSpaceAndAppend(output, state, text);
 		})
 
+		// Section: {
+		// 	type: "block/table/tr/td",
+		// 	lines: []
+		// }
+
+
+		// [
+		// 	{
+		// 		type: "text",
+		// 		lines: [],
+		// 	},
+		// 	{
+		// 		type: "table",
+		// 		trs: [
+		// 			{
+		// 				tds: [
+		// 					{
+		// 						lines: [],
+		// 					}
+		// 				],
+		// 			}
+		// 		],
+		// ]
+
 		saxStream.on('opentag', function(node) {
 			let n = node.name.toLowerCase();
 			if (n == 'en-note') {
@@ -396,7 +420,24 @@ function enexXmlToMdArray(stream, resources) {
 			} else if (isAnchor(n)) {
 				let attributes = state.anchorAttributes.pop();
 				let url = attributes && attributes.href ? attributes.href : '';
-				output.push('](' + url + ')');
+
+				if (output.length < 1) throw new Error('Invalid anchor tag closing'); // Sanity check, but normally not possible
+
+				// When closing the anchor tag, check if there's is any text content. If not
+				// put the URL as is (don't wrap it in [](url)). The markdown parser, using
+				// GitHub flavour, will turn this URL into a link. This is to generate slightly
+				// cleaner markdown.
+				let previous = output[output.length - 1];
+				if (previous == '[') {
+					output.pop();
+					output.push(url);
+				} else if (!previous || previous == url) {
+					output.pop();
+					output.pop();
+					output.push(url);
+				} else {
+					output.push('](' + url + ')');
+				}
 			} else if (isListTag(n)) {
 				output.push(BLOCK_CLOSE);
 				state.lists.pop();
@@ -427,6 +468,7 @@ function enexXmlToMdArray(stream, resources) {
 
 async function enexXmlToMd(stream, resources) {
 	let result = await enexXmlToMdArray(stream, resources);
+
 	let mdLines = result.lines;
 	let firstAttachment = true;
 	for (let i = 0; i < result.resources.length; i++) {
@@ -436,6 +478,8 @@ async function enexXmlToMd(stream, resources) {
 		mdLines = addResourceTag(mdLines, r, r.filename);
 		firstAttachment = false;
 	}
+
+	//console.info(mdLines);
 
 	return processMdArrayNewLines(mdLines);
 }

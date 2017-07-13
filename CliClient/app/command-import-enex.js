@@ -18,6 +18,7 @@ class Command extends BaseCommand {
 
 	options() {
 		return [
+			['-f, --force', 'Do not ask for confirmation.'],
 			['--fuzzy-matching', 'For debugging purposes. Do not use.'],
 		];
 	}
@@ -26,11 +27,12 @@ class Command extends BaseCommand {
 		let filePath = args.file;
 		let folder = null;
 		let folderTitle = args['notebook'];
+		let force = args.options.force === true;
 
 		if (folderTitle) {
 			folder = await Folder.loadByField('title', folderTitle);
 			if (!folder) {
-				let ok = await vorpalUtils.cmdPromptConfirm(this, _('Folder does not exists: "%s". Create it?', folderTitle))
+				let ok = force ? true : await vorpalUtils.cmdPromptConfirm(this, _('Folder does not exists: "%s". Create it?', folderTitle))
 				if (!ok) return;
 
 				folder = await Folder.save({ title: folderTitle });
@@ -50,7 +52,7 @@ class Command extends BaseCommand {
 			}
 		}
 
-		let ok = await vorpalUtils.cmdPromptConfirm(this, _('File "%s" will be imported into notebook "%s". Continue?', basename(filePath), folderTitle))
+		let ok = force ? true : await vorpalUtils.cmdPromptConfirm(this, _('File "%s" will be imported into notebook "%s". Continue?', basename(filePath), folderTitle))
 		if (!ok) return;
 
 		let options = {
