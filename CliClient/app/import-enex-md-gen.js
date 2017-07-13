@@ -179,7 +179,7 @@ function addResourceTag(lines, resource, alt = "") {
 
 
 function isBlockTag(n) {
-	return n=="div" || n=="p" || n=="dl" || n=="dd" || n=="center" || n=="table" || n=="tr" || n=="td" || n=="th" || n=="tbody";
+	return n=="div" || n=="p" || n=="dl" || n=="dd" || n=="center";
 }
 
 function isStrongTag(n) {
@@ -195,7 +195,7 @@ function isAnchor(n) {
 }
 
 function isIgnoredEndTag(n) {
-	return n=="en-note" || n=="en-todo" || n=="span" || n=="body" || n=="html" || n=="font" || n=="br" || n=='hr' || n=='s';
+	return n=="en-note" || n=="en-todo" || n=="span" || n=="body" || n=="html" || n=="font" || n=="br" || n=='hr' || n=='s' || n == 'tbody';
 }
 
 function isListTag(n) {
@@ -204,7 +204,7 @@ function isListTag(n) {
 
 // Elements that don't require any special treatment beside adding a newline character
 function isNewLineOnlyEndTag(n) {
-	return n=="div" || n=="p" || n=="li" || n=="h1" || n=="h2" || n=="h3" || n=="h4" || n=="h5" || n=="dl" || n=="dd" || n=="center" || n=="table" || n=="tr" || n=="td" || n=="th" || n=="tbody";
+	return n=="div" || n=="p" || n=="li" || n=="h1" || n=="h2" || n=="h3" || n=="h4" || n=="h5" || n=="dl" || n=="dd" || n=="center";
 }
 
 function isCodeTag(n) {
@@ -224,8 +224,6 @@ function enexXmlToMdArray(stream, resources) {
 	resources = resources.slice();
 
 	return new Promise((resolve, reject) => {
-		let output = [];
-
 		let state = {
 			inCode: false,
 			lists: [],
@@ -236,12 +234,18 @@ function enexXmlToMdArray(stream, resources) {
 		let strict = true;
 		var saxStream = require('sax').createStream(strict, options)
 
+		let section = {
+			type: 'text',
+			lines: [],
+			parent: null,
+		};
+
 		saxStream.on('error', function(e) {
 		  reject(e);
 		})
 
 		saxStream.on('text', function(text) {
-			output = collapseWhiteSpaceAndAppend(output, state, text);
+			section.lines = collapseWhiteSpaceAndAppend(section.lines, state, text);
 		})
 
 		// Section: {
@@ -250,35 +254,71 @@ function enexXmlToMdArray(stream, resources) {
 		// }
 
 
-		// [
-		// 	{
-		// 		type: "text",
-		// 		lines: [],
-		// 	},
-		// 	{
-		// 		type: "table",
-		// 		trs: [
-		// 			{
-		// 				tds: [
-		// 					{
-		// 						lines: [],
-		// 					}
-		// 				],
-		// 			}
-		// 		],
-		// ]
+		// {
+		// 	type: 'text',
+		// 	lines: [
+		// 		'this is a line',
+		// 		'<br>',
+		// 		{
+		// 			type: 'table',
+		// 			trs: [
+		// 				{
+		// 					tds: [
+		// 						{
+		// 							lines: [],
+		// 						}
+		// 					],
+		// 				}
+		// 			],
+		// 		}
+		// 	]
+		// }
+
+		//output.push(section);
 
 		saxStream.on('opentag', function(node) {
 			let n = node.name.toLowerCase();
 			if (n == 'en-note') {
 				// Start of note
 			} else if (isBlockTag(n)) {
-				output.push(BLOCK_OPEN);
+				section.lines.push(BLOCK_OPEN);
+			} else if (n == 'table') {
+				let newSection = {
+					type: 'table',
+					lines: [],
+					parent: section,
+				};
+				section.lines.push(newSection);
+				section = newSection;
+			} else if (n == 'tbody') {
+				// Ignore it
+			} else if (n == 'tr') {
+				if (section.type != 'table') throw new Error('Found a <tr> tag outside of a table');
+
+				let newSection = {
+					type: 'tr',
+					lines: [],
+					parent: section,
+				}
+
+				section.lines.push(newSection);
+				section = newSection;
+			} else if (n == 'td' || n == 'th') {
+				if (section.type != 'tr') throw new Error('Found a <td> tag outside of a <tr>');
+
+				let newSection = {
+					type: 'td',
+					lines: [],
+					parent: section,
+				};
+
+				section.lines.push(newSection);
+				section = newSection;
 			} else if (isListTag(n)) {
-				output.push(BLOCK_OPEN);
+				section.lines.push(BLOCK_OPEN);
 				state.lists.push({ tag: n, counter: 1 });
 			} else if (n == 'li') {
-				output.push(BLOCK_OPEN);
+				section.lines.push(BLOCK_OPEN);
 				if (!state.lists.length) {
 					reject("Found <li> tag without being inside a list"); // TODO: could be a warning, but nothing to handle warnings at the moment
 					return;
@@ -286,42 +326,42 @@ function enexXmlToMdArray(stream, resources) {
 
 				let container = state.lists[state.lists.length - 1];
 				if (container.tag == "ul") {
-					output.push("- ");
+					section.lines.push("- ");
 				} else {
-					output.push(container.counter + '. ');
+					section.lines.push(container.counter + '. ');
 					container.counter++;
 				}
 			} else if (isStrongTag(n)) {
-				output.push("**");
+				section.lines.push("**");
 			} else if (n == 's') {
 				// Not supported
 			} else if (isAnchor(n)) {
 				state.anchorAttributes.push(node.attributes);
-				output.push('[');
+				section.lines.push('[');
 			} else if (isEmTag(n)) {
-				output.push("*");
+				section.lines.push("*");
 			} else if (n == "en-todo") {
 				let x = node.attributes && node.attributes.checked && node.attributes.checked.toLowerCase() == 'true' ? 'X' : ' ';
-				output.push('- [' + x + '] ');
+				section.lines.push('- [' + x + '] ');
 			} else if (n == "hr") {
-				output.push('------------------------------------------------------------------------------');
+				section.lines.push('------------------------------------------------------------------------------');
 			} else if (n == "h1") {
-				output.push(BLOCK_OPEN); output.push("# ");
+				section.lines.push(BLOCK_OPEN); section.lines.push("# ");
 			} else if (n == "h2") {
-				output.push(BLOCK_OPEN); output.push("## ");
+				section.lines.push(BLOCK_OPEN); section.lines.push("## ");
 			} else if (n == "h3") {
-				output.push(BLOCK_OPEN); output.push("### ");
+				section.lines.push(BLOCK_OPEN); section.lines.push("### ");
 			} else if (n == "h4") {
-				output.push(BLOCK_OPEN); output.push("#### ");
+				section.lines.push(BLOCK_OPEN); section.lines.push("#### ");
 			} else if (n == "h5") {
-				output.push(BLOCK_OPEN); output.push("##### ");
+				section.lines.push(BLOCK_OPEN); section.lines.push("##### ");
 			} else if (n == "h6") {
-				output.push(BLOCK_OPEN); output.push("###### ");
+				section.lines.push(BLOCK_OPEN); section.lines.push("###### ");
 			} else if (isCodeTag(n)) {
-				output.push(BLOCK_OPEN);
+				section.lines.push(BLOCK_OPEN);
 				state.inCode = true;
 			} else if (n == "br") {
-				output.push(NEWLINE);
+				section.lines.push(NEWLINE);
 			} else if (n == "en-media") {
 				const hash = node.attributes.hash;
 
@@ -390,7 +430,7 @@ function enexXmlToMdArray(stream, resources) {
 					// means it's an attachement. It will be appended along with the
 					// other remaining resources at the bottom of the markdown text.
 					if (!!resource.id) {
-						output = addResourceTag(output, resource, node.attributes.alt);
+						section.lines = addResourceTag(section.lines, resource, node.attributes.alt);
 					}
 				}
 			} else if (n == "span" || n == "font") {
@@ -404,42 +444,48 @@ function enexXmlToMdArray(stream, resources) {
 			if (n == 'en-note') {
 				// End of note
 			} else if (isNewLineOnlyEndTag(n)) {
-				output.push(BLOCK_CLOSE);
+				section.lines.push(BLOCK_CLOSE);
+			} else if (n == 'td' || n == 'th') {
+				section = section.parent;
+			} else if (n == 'tr') {
+				section = section.parent;
+			} else if (n == 'table') {
+				section = section.parent;
 			} else if (isIgnoredEndTag(n)) {
 				// Skip
 			} else if (isListTag(n)) {
-				output.push(BLOCK_CLOSE);
+				section.lines.push(BLOCK_CLOSE);
 				state.lists.pop();
 			} else if (isStrongTag(n)) {
-				output.push("**");
+				section.lines.push("**");
 			} else if (isEmTag(n)) {
-				output.push("*");
+				section.lines.push("*");
 			} else if (isCodeTag(n)) {
 				state.inCode = false;
-				output.push(BLOCK_CLOSE);
+				section.lines.push(BLOCK_CLOSE);
 			} else if (isAnchor(n)) {
 				let attributes = state.anchorAttributes.pop();
 				let url = attributes && attributes.href ? attributes.href : '';
 
-				if (output.length < 1) throw new Error('Invalid anchor tag closing'); // Sanity check, but normally not possible
+				if (section.lines.length < 1) throw new Error('Invalid anchor tag closing'); // Sanity check, but normally not possible
 
 				// When closing the anchor tag, check if there's is any text content. If not
 				// put the URL as is (don't wrap it in [](url)). The markdown parser, using
 				// GitHub flavour, will turn this URL into a link. This is to generate slightly
 				// cleaner markdown.
-				let previous = output[output.length - 1];
+				let previous = section.lines[section.lines.length - 1];
 				if (previous == '[') {
-					output.pop();
-					output.push(url);
+					section.lines.pop();
+					section.lines.push(url);
 				} else if (!previous || previous == url) {
-					output.pop();
-					output.pop();
-					output.push(url);
+					section.lines.pop();
+					section.lines.pop();
+					section.lines.push(url);
 				} else {
-					output.push('](' + url + ')');
+					section.lines.push('](' + url + ')');
 				}
 			} else if (isListTag(n)) {
-				output.push(BLOCK_CLOSE);
+				section.lines.push(BLOCK_CLOSE);
 				state.lists.pop();
 			} else if (n == "en-media") {
 				// Skip
@@ -457,7 +503,7 @@ function enexXmlToMdArray(stream, resources) {
 
 		saxStream.on('end', function() {
 			resolve({
-				lines: output,
+				content: section,
 				resources: resources,
 			});
 		})
@@ -466,10 +512,69 @@ function enexXmlToMdArray(stream, resources) {
 	});
 }
 
+async function processMdArrayTables(mdArray) {
+	let output = [];
+
+	for (let i = 0; i < mdArray.length; i++) {
+		let item = mdArray[i];
+
+		if (typeof item == 'string') {
+			output.push(item);
+		} else if (item.type == 'table') {
+			output.push('[[TABLE]]');
+			output = output.concat(await processMdArrayTables(item.lines));
+		} else if (item.type == 'tr') {
+			output.push('[[TR]]');
+			output = output.concat(await processMdArrayTables(item.lines));
+		} else if (item.type == 'td') {
+			output.push('[[TD]]');
+			output = output.concat(await processMdArrayTables(item.lines));
+		}
+	}
+
+	return output;
+}
+
+function addTableDimensions(mdArray) {
+	let currentTable = null;
+
+	for (let i = 0; i < mdArray.length; i++) {
+		let item = mdArray[i];
+
+		if (typeof item == 'string') {
+			
+		} else if (item.type == 'table') {
+			let colWidths = [];
+			for (let trIndex = 0; trIndex < item.lines.length; trIndex++) {
+				let tdLines = item.lines[trIndex].lines;
+				for (let tdIndex = 0; tdIndex < tdLines.length; tdIndex++) {
+					let tdItem = tdLines[tdIndex];
+					let tdWidth = 0;
+					for (let j = 0; j < tdItem.lines.length; j++) {
+						let s = tdItem.lines[j];
+						if (s.length > tdWidth) tdWidth = s.length;
+					}
+					if (tdWidth > colWidths[tdIndex] || typeof colWidths[tdIndex] === 'undefined') colWidths[tdIndex] = tdWidth;
+				}
+			}
+			item.colWidths = colWidths;
+		}
+	}
+
+	return mdArray;
+}
+
 async function enexXmlToMd(stream, resources) {
 	let result = await enexXmlToMdArray(stream, resources);
 
-	let mdLines = result.lines;
+	// let bla = addTableDimensions(result.content.lines);
+	// const util = require('util')
+	// console.log(util.inspect(bla, false, null));
+	// return '';
+
+	let mdLines = result.content.lines; //await processMdArrayTables(result.content.lines);
+
+	//let mdLines = result.lines;
 	let firstAttachment = true;
 	for (let i = 0; i < result.resources.length; i++) {
 		let r = result.resources[i];
