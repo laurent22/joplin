@@ -27,7 +27,10 @@ class Note extends BaseItem {
 
 	static async unserializeForEdit(content) {
 		content += "\n\ntype_: " + BaseModel.TYPE_NOTE;
-		return super.unserialize(content);
+		let output = await super.unserialize(content);
+		if (!output.title) output.title = '';
+		if (!output.body) output.body = '';
+		return output;
 	}
 
 	static async serializeAllProps(note) {

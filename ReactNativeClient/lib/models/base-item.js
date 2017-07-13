@@ -205,17 +205,17 @@ class BaseItem extends BaseModel {
 	static async serialize(item, type = null, shownKeys = null) {
 		item = this.filter(item);
 
-		let output = [];
+		let output = {};
 
 		if ('title' in item && shownKeys.indexOf('title') >= 0) {
-			output.push(item.title);
-			output.push('');
+			output.title = item.title;
 		}
 
 		if ('body' in item && shownKeys.indexOf('body') >= 0) {
-			output.push(item.body);
-			if (shownKeys.length) output.push('');
+			output.body = item.body;
 		}
+
+		output.props = [];
 
 		for (let i = 0; i < shownKeys.length; i++) {
 			let key = shownKeys[i];
@@ -230,10 +230,16 @@ class BaseItem extends BaseModel {
 				value = this.serialize_format(key, item[key]);
 			}
 
-			output.push(key + ': ' + value);
+			output.props.push(key + ': ' + value);
 		}
 
-		return output.join("\n");
+		let temp = [];
+
+		if (output.title) temp.push(output.title);
+		if (output.body) temp.push(output.body);
+		if (output.props.length) temp.push(output.props.join("\n"));
+
+		return temp.join("\n\n");
 	}
 
 	static async unserialize(content) {

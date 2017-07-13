@@ -64,7 +64,7 @@ class Application {
 
 	async loadItems(type, pattern, options = null) {
 		if (!options) options = {};
-		
+
 		const parent = options.parent ? options.parent : app().currentFolder();
 		const ItemClass = BaseItem.itemClass(type);
 
@@ -184,6 +184,9 @@ class Application {
 			let CommandClass = require('./' + path);
 			let cmd = new CommandClass();
 			let vorpalCmd = this.vorpal().command(cmd.usage(), cmd.description());
+
+			// TODO: maybe remove if the PR is not merged
+			if ('disableTypeCasting' in vorpalCmd) vorpalCmd.disableTypeCasting();
 
 			for (let i = 0; i < cmd.aliases().length; i++) {
 				vorpalCmd.alias(cmd.aliases()[i]);

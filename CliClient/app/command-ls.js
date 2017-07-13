@@ -93,7 +93,7 @@ class Command extends BaseCommand {
 				}
 
 				let title = item.title + suffix;
-				if (seenTitles.indexOf(item.title) >= 0) {
+				if (seenTitles.indexOf(item.title) >= 0 || !item.title) {
 					title += ' (' + item.id.substr(0,4) + ')';
 				} else {
 					seenTitles.push(item.title);
