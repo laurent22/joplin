@@ -23,7 +23,7 @@ import { FolderScreen } from 'lib/components/screens/folder.js'
 import { FoldersScreen } from 'lib/components/screens/folders.js'
 import { LogScreen } from 'lib/components/screens/log.js'
 import { StatusScreen } from 'lib/components/screens/status.js'
-import { LoadingScreen } from 'lib/components/screens/loading.js'
+import { WelcomeScreen } from 'lib/components/screens/welcome.js'
 import { OneDriveLoginScreen } from 'lib/components/screens/onedrive-login.js'
 import { Setting } from 'lib/models/setting.js'
 import { Synchronizer } from 'lib/synchronizer.js'
@@ -212,7 +212,7 @@ const AppNavigator = StackNavigator({
 	Notes: { screen: NotesScreen },
 	Note: { screen: NoteScreen },
 	Folder: { screen: FolderScreen },
-	Loading: { screen: LoadingScreen },
+	Welcome: { screen: WelcomeScreen },
 	OneDriveLogin: { screen: OneDriveLoginScreen },
 	Log: { screen: LogScreen },
 	Status: { screen: StatusScreen },
@@ -343,7 +343,7 @@ class AppComponent extends React.Component {
 
 defaultState.nav = AppNavigator.router.getStateForAction({
 	type: 'Navigation/NAVIGATE',
-	routeName: 'Loading',
+	routeName: 'Welcome',
 	params: {}
 });
 

@@ -3,6 +3,7 @@ import { Log } from 'lib/log.js';
 import { promiseChain } from 'lib/promise-utils.js';
 import { Note } from 'lib/models/note.js';
 import { Setting } from 'lib/models/setting.js';
+import { Database } from 'lib/database.js';
 import { _ } from 'lib/locale.js';
 import moment from 'moment';
 import { BaseItem } from 'lib/models/base-item.js';
@@ -48,13 +49,23 @@ class Folder extends BaseItem {
 		return r ? r.total : 0;
 	}
 
+	static markNotesAsConflict(parentId) {
+		let query = Database.updateQuery('notes', { is_conflict: 1 }, { parent_id: parentId });
+		return this.db().exec(query);
+	}
+
 	static async delete(folderId, options = null) {
+		if (!options) options = {};
+		if (!('deleteChildren' in options)) options.deleteChildren = true;
+
 		let folder = await Folder.load(folderId);
-		if (!folder) throw new Error('Trying to delete non-existing notebook: ' + folderId);
-		
-		let noteIds = await Folder.noteIds(folderId);
-		for (let i = 0; i < noteIds.length; i++) {
-			await Note.delete(noteIds[i]);
+		if (!folder) return; // noop
+
+		if (options.deleteChildren) {		
+			let noteIds = await Folder.noteIds(folderId);
+			for (let i = 0; i < noteIds.length; i++) {
+				await Note.delete(noteIds[i]);
+			}
 		}
 
 		await super.delete(folderId, options);

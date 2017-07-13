@@ -177,7 +177,7 @@ class BaseItem extends BaseModel {
 	}
 
 	static serialize_format(propName, propValue) {
-		if (['created_time', 'updated_time'].indexOf(propName) >= 0) {
+		if (['created_time', 'updated_time', 'sync_time'].indexOf(propName) >= 0) {
 			if (!propValue) return '';
 			propValue = moment.unix(propValue / 1000).utc().format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z';
 		} else if (propValue === null || propValue === undefined) {
@@ -207,18 +207,20 @@ class BaseItem extends BaseModel {
 
 		let output = [];
 
-		if ('title' in item) {
+		if ('title' in item && shownKeys.indexOf('title') >= 0) {
 			output.push(item.title);
 			output.push('');
 		}
 
-		if ('body' in item) {
+		if ('body' in item && shownKeys.indexOf('body') >= 0) {
 			output.push(item.body);
 			if (shownKeys.length) output.push('');
 		}
 
 		for (let i = 0; i < shownKeys.length; i++) {
 			let key = shownKeys[i];
+			if (key == 'title' || key == 'body') continue;
+
 			let value = null;
 			if (typeof key === 'function') {
 				let r = await key();

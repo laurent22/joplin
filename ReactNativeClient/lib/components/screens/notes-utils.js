@@ -28,7 +28,7 @@ class NotesScreenUtils {
 		} else {
 			this.dispatch({
 				type: 'Navigation/NAVIGATE',
-				routeName: 'Loading',
+				routeName: 'Welcome',
 			});
 		}
 	}

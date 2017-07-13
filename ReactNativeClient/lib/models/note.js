@@ -17,17 +17,24 @@ class Note extends BaseItem {
 	static async serialize(note, type = null, shownKeys = null) {
 		let fieldNames = this.fieldNames();
 		fieldNames.push('type_');
-		lodash.pull(fieldNames, 'is_conflict', 'sync_time', 'body'); // Exclude 'body' since it's going to be added separately at the top of the note
+		lodash.pull(fieldNames, 'is_conflict', 'sync_time');
 		return super.serialize(note, 'note', fieldNames);
 	}
 
 	static async serializeForEdit(note) {
-		return super.serialize(note, 'note', []);
+		return super.serialize(note, 'note', ['title', 'body']);
 	}
 
 	static async unserializeForEdit(content) {
 		content += "\n\ntype_: " + BaseModel.TYPE_NOTE;
 		return super.unserialize(content);
+	}
+
+	static async serializeAllProps(note) {
+		let fieldNames = this.fieldNames();
+		fieldNames.push('type_');
+		lodash.pull(fieldNames, 'title', 'body');
+		return super.serialize(note, 'note', fieldNames);
 	}
 
 	static modelType() {

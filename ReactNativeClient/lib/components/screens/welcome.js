@@ -5,7 +5,7 @@ import { Log } from 'lib/log.js'
 import { ScreenHeader } from 'lib/components/screen-header.js';
 import { ActionButton } from 'lib/components/action-button.js';
 
-class LoadingScreenComponent extends React.Component {
+class WelcomeScreenComponent extends React.Component {
 	
 	static navigationOptions(options) {
 		return { header: null };
@@ -31,12 +31,12 @@ class LoadingScreenComponent extends React.Component {
 
 }
 
-const LoadingScreen = connect(
+const WelcomeScreen = connect(
 	(state) => {
 		return {
 			loading: state.loading,
 		};
 	}
-)(LoadingScreenComponent)
+)(WelcomeScreenComponent)
 
-export { LoadingScreen };
+export { WelcomeScreen };

@@ -224,9 +224,12 @@ class Synchronizer {
 						// await this.api().move(tempPath, path);
 
 						await this.api().put(path, content);
-						await this.api().setTimestamp(path, local.updated_time);
 
 						if (this.randomFailure(options, 0)) return;
+
+						await this.api().setTimestamp(path, local.updated_time);
+
+						if (this.randomFailure(options, 1)) return;
 						
 						await ItemClass.save({ id: local.id, sync_time: time.unixMs(), type_: local.type_ }, { autoTimestamp: false });
 
@@ -251,7 +254,7 @@ class Synchronizer {
 						conflictedNote.is_conflict = 1;
 						await Note.save(conflictedNote, { autoTimestamp: false });
 
-						if (this.randomFailure(options, 1)) return;
+						if (this.randomFailure(options, 2)) return;
 
 						if (remote) {
 							let remoteContent = await this.api().get(path);
@@ -289,7 +292,7 @@ class Synchronizer {
 				let path = BaseItem.systemPath(item.item_id)
 				this.logSyncOperation('deleteRemote', null, { id: item.item_id }, 'local has been deleted');
 				await this.api().delete(path);
-				if (this.randomFailure(options, 2)) return;
+				if (this.randomFailure(options, 3)) return;
 				await BaseItem.remoteDeletedItem(item.item_id);
 
 				report['deleteRemote']++;
@@ -395,6 +398,8 @@ class Synchronizer {
 
 			if (this.randomFailure(options, 4)) return;
 
+			let localFoldersToDelete = [];
+
 			if (!this.cancelling()) {
 				let items = await BaseItem.syncedItems();
 				for (let i = 0; i < items.length; i++) {
@@ -402,6 +407,11 @@ class Synchronizer {
 
 					let item = items[i];
 					if (remoteIds.indexOf(item.id) < 0) {
+						if (item.type_ == Folder.modelType()) {
+							localFoldersToDelete.push(item);
+							continue;
+						}
+
 						report.localsToDelete++;
 						options.onProgress(report);
 						this.logSyncOperation('deleteLocal', { id: item.id }, null, 'remote has been deleted');
@@ -410,6 +420,19 @@ class Synchronizer {
 						await ItemClass.delete(item.id, { trackDeleted: false });
 						report['deleteLocal']++;
 						options.onProgress(report);
+					}
+				}
+			}
+
+			if (!this.cancelling()) {
+				for (let i = 0; i < localFoldersToDelete.length; i++) {
+					const folder = localFoldersToDelete[i];
+					const noteIds = await Folder.noteIds(folder.id);
+					if (noteIds.length) { // CONFLICT
+						await Folder.markNotesAsConflict(folder.id);
+						await Folder.delete(folder.id, { deleteChildren: false });
+					} else {
+						await Folder.delete(folder.id);
 					}
 				}
 			}

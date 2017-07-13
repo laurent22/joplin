@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Button, TextInput, WebView } from 'react-native';
+import { View, Button, TextInput, WebView, Text } from 'react-native';
 import { connect } from 'react-redux'
 import { Log } from 'lib/log.js'
 import { Note } from 'lib/models/note.js'
@@ -19,6 +19,8 @@ class NoteScreenComponent extends React.Component {
 		this.state = {
 			note: Note.new(),
 			mode: 'view',
+			noteMetadata: '',
+			showNoteMetadata: false,
 		}
 	}
 
@@ -26,9 +28,11 @@ class NoteScreenComponent extends React.Component {
 		if (!this.props.noteId) {
 			let note = this.props.itemType == 'todo' ? Note.newTodo(this.props.folderId) : Note.new(this.props.folderId);
 			this.setState({ note: note });
+			this.refreshNoteMetadata();
 		} else {
 			Note.load(this.props.noteId).then((note) => {
 				this.setState({ note: note });
+				this.refreshNoteMetadata();
 			});
 		}
 	}
@@ -39,6 +43,13 @@ class NoteScreenComponent extends React.Component {
 			note[propName] = propValue;
 			return { note: note }
 		});
+	}
+
+	async refreshNoteMetadata(force = null) {
+		if (force !== true && !this.state.showNoteMetadata) return;
+
+		let noteMetadata = await Note.serializeAllProps(this.state.note);
+		this.setState({ noteMetadata: noteMetadata });
 	}
 
 	title_changeText(text) {
@@ -54,6 +65,7 @@ class NoteScreenComponent extends React.Component {
 		let note = await Note.save(this.state.note);
 		this.setState({ note: note });
 		if (isNew) Note.updateGeolocation(note.id);
+		this.refreshNoteMetadata();
 	}
 
 	deleteNote_onPress(noteId) {
@@ -61,12 +73,19 @@ class NoteScreenComponent extends React.Component {
 	}
 
 	attachFile_onPress(noteId) {
+
+	}
+
+	showMetadata_onPress() {
+		this.setState({ showNoteMetadata: !this.state.showNoteMetadata });
+		this.refreshNoteMetadata(true);
 	}
 
 	menuOptions() {
 		return [
 			{ title: _('Attach file'), onPress: () => { this.attachFile_onPress(this.state.note.id); } },
 			{ title: _('Delete note'), onPress: () => { this.deleteNote_onPress(this.state.note.id); } },
+			{ title: _('Toggle metadata'), onPress: () => { this.showMetadata_onPress(); } },
 		];
 	}
 
@@ -99,15 +118,18 @@ class NoteScreenComponent extends React.Component {
 			bodyComponent = <TextInput style={{flex: 1, textAlignVertical: 'top', fontFamily: 'monospace'}} multiline={true} value={note.body} onChangeText={(text) => this.body_changeText(text)} />
 		}
 
+		console.info(this.state.noteMetadata);
+
 		return (
 			<View style={{flex: 1}}>
 				<ScreenHeader navState={this.props.navigation.state} menuOptions={this.menuOptions()} />
 				<View style={{ flexDirection: 'row' }}>
 					{ isTodo && <Checkbox checked={!!Number(note.todo_completed)} /> }<TextInput style={{flex:1}} value={note.title} onChangeText={(text) => this.title_changeText(text)} />
 				</View>
-				{ bodyComponent }		
+				{ bodyComponent }
 				{ todoComponents }
 				<Button title="Save note" onPress={() => this.saveNoteButton_press()} />
+				{ this.state.showNoteMetadata && <Text>{this.state.noteMetadata}</Text> }
 			</View>
 		);
 	}

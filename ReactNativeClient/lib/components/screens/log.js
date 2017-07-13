@@ -47,7 +47,7 @@ class LogScreenComponent extends React.Component {
 			};
 			return (
 				<View style={{flexDirection: 'row', paddingLeft: 1, paddingRight: 1, paddingTop:0, paddingBottom:0 }}>
-					<Text style={style}>{time.unixMsToIsoSec(item.timestamp) + ': ' + item.message}</Text>
+					<Text style={style}>{time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm') + ': ' + item.message}</Text>
 				</View>
 			);
 		}

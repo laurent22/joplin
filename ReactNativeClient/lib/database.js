@@ -213,8 +213,15 @@ class Database {
 		}
 
 		if (typeof where != 'string') {
-			params.push(where.id);
-			where = 'id=?';
+			let s = [];
+			for (let n in where) {
+				if (!where.hasOwnProperty(n)) continue;
+				params.push(where[n]);
+				s.push('`' + n + '`=?');
+			}
+			where = s.join(' AND ');
+			// params.push(where.id);
+			// where = 'id=?';
 		}
 
 		return {
