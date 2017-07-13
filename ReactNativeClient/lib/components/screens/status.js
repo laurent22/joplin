@@ -8,6 +8,7 @@ import { time } from 'lib/time-utils'
 import { Logger } from 'lib/logger.js';
 import { BaseItem } from 'lib/models/base-item.js';
 import { Folder } from 'lib/models/folder.js';
+import { ReportService } from 'lib/services/report.js';
 import { _ } from 'lib/locale.js';
 
 class StatusScreenComponent extends React.Component {
@@ -19,7 +20,7 @@ class StatusScreenComponent extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			reportLines: [],
+			report: [],
 		};
 	}
 
@@ -28,39 +29,47 @@ class StatusScreenComponent extends React.Component {
 	}
 
 	async resfreshScreen() {
-		let r = await BaseItem.stats();
-		let reportLines = [];
-
-		reportLines.push(_('Sync status (sync items / total items):'));
-
-		for (let n in r.items) {
-			if (!r.items.hasOwnProperty(n)) continue;
-			reportLines.push(_('%s: %d/%d', n, r.items[n].synced, r.items[n].total));
-		}
-
-		if (r.total) reportLines.push(_('Total: %d/%d', r.total.synced, r.total.total));
-		if (r.toDelete) reportLines.push(_('To delete: %d', r.toDelete.total));
-
-		reportLines.push('');
-
-		reportLines.push(_('Folders:'));
-
-		let folders = await Folder.all();
-		for (let i = 0; i < folders.length; i++) {
-			let folder = folders[i];
-			reportLines.push(_('%s: %d notes', folders[i].title, await Folder.noteCount(folders[i].id)));
-		}
-
-		this.setState({ reportLines: reportLines });
+		let service = new ReportService();
+		let report = await service.status();
+		this.setState({ report: report });
 	}
 
 	render() {
-		let report = this.state.reportLines ? this.state.reportLines.join("\n") : '';
+		function renderBody(report) {
+			let output = [];
+			let baseStyle = {
+				paddingLeft: 6,
+				paddingRight: 6,
+				paddingTop: 0,
+				paddingBottom: 0,
+				flex: 0,
+			};
+			for (let i = 0; i < report.length; i++) {
+				let section = report[i];
+
+				let style = Object.assign({}, baseStyle);
+				style.fontWeight = 'bold';
+				if (i > 0) style.paddingTop = 20;
+				output.push(<Text key={'sectiontitle_' + i} style={style}>{section.title}</Text>);
+
+				for (let n in section.body) {
+					if (!section.body.hasOwnProperty(n)) continue;
+					style = Object.assign({}, baseStyle);
+					output.push(<Text key={'line_' + i + '_' + n} style={style}>{section.body[n]}</Text>);
+				}
+			}
+
+			return output;
+		}
+
+		let body = renderBody(this.state.report);
 
 		return (
 			<View style={{flex: 1}}>
 				<ScreenHeader navState={this.props.navigation.state} />
-				<Text style={{padding: 6, flex: 1, textAlignVertical: 'top'}} multiline={true}>{report}</Text>
+				<View style={{flex: 1}}>
+					{ body }
+				</View>
 				<Button title="Refresh" onPress={() => this.resfreshScreen()}/>
 			</View>
 		);

@@ -50,8 +50,6 @@ class NotesScreenComponent extends React.Component {
 		let folder = Folder.byId(this.props.folders, this.props.selectedFolderId);
 		let title = folder ? folder.title : null;
 
-		console.info('FOLDER', folder);
-
 		const { navigate } = this.props.navigation;
 		return (
 			<View style={{flex: 1}}>
