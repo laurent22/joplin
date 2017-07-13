@@ -24,9 +24,9 @@ class WelcomeScreenComponent extends React.Component {
 
 			return (
 				<View style={{flex: 1}}>
-					<ScreenHeader navState={this.props.navigation.state} />
+					<ScreenHeader navState={this.props.navigation.state}/>
 					<Text>{message}</Text>
-					<ActionButton></ActionButton>
+					<ActionButton addFolderNoteButtons={true}/>
 				</View>
 			);			
 		}

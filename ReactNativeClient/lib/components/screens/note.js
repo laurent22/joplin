@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import { Log } from 'lib/log.js'
 import { Note } from 'lib/models/note.js'
 import { Folder } from 'lib/models/folder.js'
+import { ActionButton } from 'lib/components/action-button.js';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { ScreenHeader } from 'lib/components/screen-header.js';
 import { Checkbox } from 'lib/components/checkbox.js'
 import { _ } from 'lib/locale.js';
@@ -189,11 +191,10 @@ class NoteScreenComponent extends React.Component {
 			bodyComponent = (
 				<View style={{flex:1}}>
 					<WebView source={source}/>
-					<Button title="Edit note" onPress={() => { this.setState({ mode: 'edit' }); }}/>
 				</View>
 			);
 		} else {
-			bodyComponent = <TextInput style={{flex: 1, textAlignVertical: 'top', fontFamily: 'monospace'}} multiline={true} value={note.body} onChangeText={(text) => this.body_changeText(text)} />
+			bodyComponent = <TextInput autoFocus={true} style={{flex: 1, textAlignVertical: 'top', fontFamily: 'monospace'}} multiline={true} value={note.body} onChangeText={(text) => this.body_changeText(text)} />
 		}
 
 		let title = null;
@@ -204,6 +205,31 @@ class NoteScreenComponent extends React.Component {
 			title = noteHeaderTitle;
 		}
 
+		const renderActionButton = () => {
+			let buttons = [];
+
+			buttons.push({
+				title: _('Edit'),
+				icon: 'md-create',
+				onPress: () => {
+					this.setState({ mode: 'edit' });
+				},
+			});
+
+			buttons.push({
+				title: _('Save'),
+				icon: 'md-checkmark',
+				onPress: () => {
+					this.saveNoteButton_press();
+					return false;
+				},
+			});
+
+			return <ActionButton isToggle={true} buttons={buttons}/>
+		}
+
+		const actionButtonComp = renderActionButton();
+
 		return (
 			<View style={{flex: 1}}>
 				<ScreenHeader navState={this.props.navigation.state} menuOptions={this.menuOptions()} title={title} />
@@ -212,7 +238,7 @@ class NoteScreenComponent extends React.Component {
 				</View>
 				{ bodyComponent }
 				{ todoComponents }
-				<Button title="Save note" onPress={() => this.saveNoteButton_press()} />
+				{ actionButtonComp }
 				{ this.state.showNoteMetadata && <Text>{this.state.noteMetadata}</Text> }
 			</View>
 		);

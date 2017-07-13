@@ -55,8 +55,7 @@ class NotesScreenComponent extends React.Component {
 			<View style={{flex: 1}}>
 				<ScreenHeader title={title} navState={this.props.navigation.state} menuOptions={this.menuOptions()} />
 				<NoteList noItemMessage={_('There are currently no notes. Create one by clicking on the (+) button.')} style={{flex: 1}}/>
-				<ActionButton parentFolderId={this.props.selectedFolderId}></ActionButton>
-
+				<ActionButton addFolderNoteButtons={true} parentFolderId={this.props.selectedFolderId}></ActionButton>
 				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
 			</View>
 		);
