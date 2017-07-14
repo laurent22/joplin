@@ -9,10 +9,11 @@ import { FileApiDriverOneDrive } from 'lib/file-api-driver-onedrive.js';
 const reg = {};
 
 reg.logger = () => {
-	if (reg.logger_) return reg.logger_;
-	reg.logger_ = new Logger();
-	reg.logger_.addTarget('console');
-	reg.logger_.setLevel(Logger.LEVEL_DEBUG);
+	if (!reg.logger_) {
+		console.warn('Calling logger before it is initialized');
+		return new Logger();
+	}
+
 	return reg.logger_;
 }
 

@@ -26,7 +26,6 @@ import { StatusScreen } from 'lib/components/screens/status.js'
 import { WelcomeScreen } from 'lib/components/screens/welcome.js'
 import { OneDriveLoginScreen } from 'lib/components/screens/onedrive-login.js'
 import { Setting } from 'lib/models/setting.js'
-import { Synchronizer } from 'lib/synchronizer.js'
 import { MenuContext } from 'react-native-popup-menu';
 import { SideMenu } from 'lib/components/side-menu.js';
 import { SideMenuContent } from 'lib/components/side-menu-content.js';
@@ -62,143 +61,165 @@ const reducer = (state = defaultState, action) => {
 
 	let newState = state;
 
-	switch (action.type) {
+	try {
+		switch (action.type) {
 
-		case 'Navigation/BACK':
+			case 'Navigation/BACK':
 
-			if (navHistory.length < 2) break;
+				if (navHistory.length < 2) break;
 
-			action = navHistory.pop(); // Current page
-			action = navHistory.pop(); // Previous page
+				action = navHistory.pop(); // Current page
+				action = navHistory.pop(); // Previous page
 
-			// Fall throught
+				// Fall throught
 
-		case 'Navigation/NAVIGATE':
+			case 'Navigation/NAVIGATE':
 
-			const currentRoute = state.route;
-			const currentRouteName = currentRoute ? currentRoute.routeName : '';
+				const currentRoute = state.route;
+				const currentRouteName = currentRoute ? currentRoute.routeName : '';
 
-			reg.logger().info('Route: ' + currentRouteName + ' => ' + action.routeName);
+				reg.logger().info('Route: ' + currentRouteName + ' => ' + action.routeName);
 
-			newState = Object.assign({}, state);
+				newState = Object.assign({}, state);
 
-			if ('noteId' in action) {
-				newState.selectedNoteId = action.noteId;
-			}
-
-			if ('folderId' in action) {
-				newState.selectedFolderId = action.folderId;
-			}
-
-			if ('itemType' in action) {
-				newState.selectedItemType = action.itemType;
-			}
-
-			if (currentRouteName == action.routeName) {
-				// If the current screen is already the requested screen, don't do anything
-			} else {
-				newState.route = action;
-				navHistory.push(action);
-			}
-
-			newState.historyCanGoBack = navHistory.length >= 2;
-
-			Keyboard.dismiss(); // TODO: should probably be in some middleware
-			break;
-
-		// Replace all the notes with the provided array
-		case 'APPLICATION_LOADING_DONE':
-
-			newState = Object.assign({}, state);
-			newState.loading = false;
-			break;
-
-		// Replace all the notes with the provided array
-		case 'NOTES_UPDATE_ALL':
-
-			newState = Object.assign({}, state);
-			newState.notes = action.notes;
-			break;
-
-		// Insert the note into the note list if it's new, or
-		// update it within the note array if it already exists.
-		case 'NOTES_UPDATE_ONE':
-
-			if (action.note.parent_id != state.selectedFolderId) break;
-
-			let newNotes = state.notes.splice(0);
-			var found = false;
-			for (let i = 0; i < newNotes.length; i++) {
-				let n = newNotes[i];
-				if (n.id == action.note.id) {
-					newNotes[i] = action.note;
-					found = true;
-					break;
+				if ('noteId' in action) {
+					newState.selectedNoteId = action.noteId;
 				}
-			}
 
-			if (!found) newNotes.push(action.note);
-
-			newState = Object.assign({}, state);
-			newState.notes = newNotes;
-			break;
-
-		case 'FOLDERS_UPDATE_ALL':
-
-			newState = Object.assign({}, state);
-			newState.folders = action.folders;
-			break;
-
-		case 'FOLDERS_UPDATE_ONE':
-
-			var newFolders = state.folders.splice(0);
-			var found = false;
-			for (let i = 0; i < newFolders.length; i++) {
-				let n = newFolders[i];
-				if (n.id == action.folder.id) {
-					newFolders[i] = action.folder;
-					found = true;
-					break;
+				if ('folderId' in action) {
+					newState.selectedFolderId = action.folderId;
 				}
-			}
 
-			if (!found) newFolders.push(action.folder);
+				if ('itemType' in action) {
+					newState.selectedItemType = action.itemType;
+				}
 
-			newState = Object.assign({}, state);
-			newState.folders = newFolders;
-			break;
+				if (currentRouteName == action.routeName) {
+					// If the current screen is already the requested screen, don't do anything
+				} else {
+					newState.route = action;
+					navHistory.push(action);
+				}
 
-		case 'FOLDER_DELETE':
+				newState.historyCanGoBack = navHistory.length >= 2;
 
-			var newFolders = [];
-			for (let i = 0; i < state.folders.length; i++) {
-				let f = state.folders[i];
-				if (f.id == action.folderId) continue;
-				newFolders.push(f);
-			}
+				if (newState.route.routeName == 'Notes') {
+					Setting.setValue('activeFolderId', newState.selectedFolderId);
+				}
 
-			newState = Object.assign({}, state);
-			newState.folders = newFolders;
-			break;
+				Keyboard.dismiss(); // TODO: should probably be in some middleware
+				break;
 
-		case 'SIDE_MENU_TOGGLE':
+			// Replace all the notes with the provided array
+			case 'APPLICATION_LOADING_DONE':
 
-			newState = Object.assign({}, state);
-			newState.showSideMenu = !newState.showSideMenu
-			break;
+				newState = Object.assign({}, state);
+				newState.loading = false;
+				break;
 
-		case 'SIDE_MENU_OPEN':
+			// Replace all the notes with the provided array
+			case 'NOTES_UPDATE_ALL':
 
-			newState = Object.assign({}, state);
-			newState.showSideMenu = true
-			break;
+				newState = Object.assign({}, state);
+				newState.notes = action.notes;
+				break;
 
-		case 'SIDE_MENU_CLOSE':
+			// Insert the note into the note list if it's new, or
+			// update it within the note array if it already exists.
+			case 'NOTES_UPDATE_ONE':
 
-			newState = Object.assign({}, state);
-			newState.showSideMenu = false
-			break;
+				if (action.note.parent_id != state.selectedFolderId) break;
 
+				let newNotes = state.notes.splice(0);
+				var found = false;
+				for (let i = 0; i < newNotes.length; i++) {
+					let n = newNotes[i];
+					if (n.id == action.note.id) {
+						newNotes[i] = action.note;
+						found = true;
+						break;
+					}
+				}
+
+				if (!found) newNotes.push(action.note);
+
+				newState = Object.assign({}, state);
+				newState.notes = newNotes;
+				break;
+
+			case 'NOTES_DELETE':
+
+				var newNotes = [];
+				for (let i = 0; i < state.notes.length; i++) {
+					let f = state.notes[i];
+					if (f.id == action.noteId) continue;
+					newNotes.push(f);
+				}
+
+				newState = Object.assign({}, state);
+				newState.notes = newNotes;
+				break;
+
+			case 'FOLDERS_UPDATE_ALL':
+
+				newState = Object.assign({}, state);
+				newState.folders = action.folders;
+				break;
+
+			case 'FOLDERS_UPDATE_ONE':
+
+				var newFolders = state.folders.splice(0);
+				var found = false;
+				for (let i = 0; i < newFolders.length; i++) {
+					let n = newFolders[i];
+					if (n.id == action.folder.id) {
+						newFolders[i] = action.folder;
+						found = true;
+						break;
+					}
+				}
+
+				if (!found) newFolders.push(action.folder);
+
+				newState = Object.assign({}, state);
+				newState.folders = newFolders;
+				break;
+
+			case 'FOLDER_DELETE':
+
+				var newFolders = [];
+				for (let i = 0; i < state.folders.length; i++) {
+					let f = state.folders[i];
+					if (f.id == action.folderId) continue;
+					newFolders.push(f);
+				}
+
+				newState = Object.assign({}, state);
+				newState.folders = newFolders;
+				break;
+
+			case 'SIDE_MENU_TOGGLE':
+
+				newState = Object.assign({}, state);
+				newState.showSideMenu = !newState.showSideMenu
+				break;
+
+			case 'SIDE_MENU_OPEN':
+
+				newState = Object.assign({}, state);
+				newState.showSideMenu = true
+				break;
+
+			case 'SIDE_MENU_CLOSE':
+
+				newState = Object.assign({}, state);
+				newState.showSideMenu = false
+				break;
+
+		}
+	} catch (error) {
+		error.message = 'In reducer: ' + error.message;
+		throw error;
 	}
 
 	return newState;
@@ -223,12 +244,25 @@ async function initialize(dispatch, backButtonHandler) {
 	const logDatabase = new Database(new DatabaseDriverReactNative());
 	await logDatabase.open({ name: 'log.sqlite' });
 	await logDatabase.exec(Logger.databaseCreateTableSql());
-	reg.logger().addTarget('database', { database: logDatabase, source: 'm' });
+
+	const mainLogger = new Logger();
+	mainLogger.addTarget('database', { database: logDatabase, source: 'm' });
+	mainLogger.addTarget('console');
+	mainLogger.setLevel(Logger.LEVEL_DEBUG);
+	mainLogger.addTarget('database', { database: logDatabase, source: 'm' });
+
+	reg.setLogger(mainLogger);
 
 	reg.logger().info('====================================');
 	reg.logger().info('Starting application ' + Setting.value('appId') + ' (' + Setting.value('env') + ')');
 
+	const dbLogger = new Logger();
+	dbLogger.addTarget('database', { database: logDatabase, source: 'm' });
+	dbLogger.addTarget('console');
+	dbLogger.setLevel(Logger.LEVEL_INFO);
+
 	let db = new JoplinDatabase(new DatabaseDriverReactNative());
+	db.setLogger(dbLogger);
 	reg.setDb(db);
 
 	BaseModel.dispatch = dispatch;
@@ -271,7 +305,14 @@ async function initialize(dispatch, backButtonHandler) {
 			type: 'APPLICATION_LOADING_DONE',
 		});
 
-		await NotesScreenUtils.openDefaultNoteList();
+		let folderId = Setting.value('activeFolderId');
+		let folder = await Folder.load(folderId);
+
+		if (folder) {
+			await NotesScreenUtils.openNoteList(folderId);
+		} else {
+			await NotesScreenUtils.openDefaultNoteList();
+		}
 	} catch (error) {
 		reg.logger().error('Initialization error:', error);
 	}

@@ -190,6 +190,15 @@ class Note extends BaseItem {
 		});
 	}
 
+	static async delete(id, options = null) {
+		let r = await super.delete(id, options);
+
+		this.dispatch({
+			type: 'NOTES_DELETE',
+			noteId: id,
+		});
+	}
+
 }
 
 Note.updateGeolocationEnabled_ = true;

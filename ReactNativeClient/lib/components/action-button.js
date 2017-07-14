@@ -23,6 +23,12 @@ class ActionButtonComponent extends React.Component {
 		};
 	}
 
+	componentWillReceiveProps(newProps) {
+		if ('toggled' in newProps) {
+			this.setState({ toggled: newProps.toggled });
+		}
+	}
+
 	newTodo_press() {
 		this.props.dispatch({
 			type: 'Navigation/NAVIGATE',
