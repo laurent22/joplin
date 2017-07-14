@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { BackHandler, Keyboard } from 'react-native';
 import { connect, Provider } from 'react-redux'
 import { createStore } from 'redux';
-import { StackNavigator, addNavigationHelpers } from 'react-navigation';
 import { shimInit } from 'lib/shim-init-react.js';
 import { Log } from 'lib/log.js'
+import { AppNav } from 'lib/components/app-nav.js'
 import { Logger } from 'lib/logger.js'
 import { Note } from 'lib/models/note.js'
 import { Folder } from 'lib/models/folder.js'
@@ -52,6 +52,8 @@ const initialRoute = {
 	params: {}
 };
 
+defaultState.route = initialRoute;
+
 let navHistory = [];
 navHistory.push(initialRoute);
 
@@ -73,8 +75,7 @@ const reducer = (state = defaultState, action) => {
 
 		case 'Navigation/NAVIGATE':
 
-			const r = state.nav.routes;
-			const currentRoute = r.length ? r[r.length - 1] : null;
+			const currentRoute = state.route;
 			const currentRouteName = currentRoute ? currentRoute.routeName : '';
 
 			reg.logger().info('Route: ' + currentRouteName + ' => ' + action.routeName);
@@ -93,26 +94,14 @@ const reducer = (state = defaultState, action) => {
 				newState.selectedItemType = action.itemType;
 			}
 
-			if ('screens' in action) {
-				for (let n in action.screens) {
-					if (!action.screens.hasOwnProperty(n)) continue;
-					newState.screens[n] = action.screens[n];
-				}
-			}
-
 			if (currentRouteName == action.routeName) {
 				// If the current screen is already the requested screen, don't do anything
 			} else {
-				const nextStateNav = AppNavigator.router.getStateForAction(action, state.nav);
-				if (nextStateNav) {
-					newState.nav = nextStateNav;
-					navHistory.push(action);
-				}
+				newState.route = action;
+				navHistory.push(action);
 			}
 
 			newState.historyCanGoBack = navHistory.length >= 2;
-
-			console.info(navHistory);
 
 			Keyboard.dismiss(); // TODO: should probably be in some middleware
 			break;
@@ -216,16 +205,6 @@ const reducer = (state = defaultState, action) => {
 }
 
 let store = createStore(reducer);
-
-const AppNavigator = StackNavigator({
-	Notes: { screen: NotesScreen },
-	Note: { screen: NoteScreen },
-	Folder: { screen: FolderScreen },
-	Welcome: { screen: WelcomeScreen },
-	OneDriveLogin: { screen: OneDriveLoginScreen },
-	Log: { screen: LogScreen },
-	Status: { screen: StatusScreen },
-});
 
 let initializationState_ = 'waiting';
 
@@ -337,24 +316,28 @@ class AppComponent extends React.Component {
 	render() {
 		const sideMenuContent = <SideMenuContent/>;
 
+		const appNavInit = {
+			Welcome: { screen: WelcomeScreen },
+			Notes: { screen: NotesScreen },
+			Note: { screen: NoteScreen },
+			Folder: { screen: FolderScreen },
+			OneDriveLogin: { screen: OneDriveLoginScreen },
+			Log: { screen: LogScreen },
+			Status: { screen: StatusScreen },
+		};
+
 		return (
 			<SideMenu menu={sideMenuContent} onChange={(isOpen) => this.sideMenu_change(isOpen)}>
 				<MenuContext style={{ flex: 1 }}>
-					<AppNavigator navigation={addNavigationHelpers({
-						dispatch: this.props.dispatch,
-						state: this.props.nav,
-					})} />
+					<AppNav screens={appNavInit} />
 				</MenuContext>
 			</SideMenu>
 		);
 	}
 }
 
-defaultState.nav = AppNavigator.router.getStateForAction(initialRoute);
-
 const mapStateToProps = (state) => {
 	return {
-  		nav: state.nav,
   		historyCanGoBack: state.historyCanGoBack,
   		showSideMenu: state.showSideMenu,
   	};
@@ -366,7 +349,7 @@ class Root extends React.Component {
 	render() {
 		return (
 			<Provider store={store}>
-				<App />
+				<App/>
 			</Provider>
 		);
 	}

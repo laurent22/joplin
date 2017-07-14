@@ -10,6 +10,7 @@ import { ScreenHeader } from 'lib/components/screen-header.js';
 import { Checkbox } from 'lib/components/checkbox.js'
 import { _ } from 'lib/locale.js';
 import marked from 'lib/marked.js';
+import { BaseScreenComponent } from 'lib/components/base-screen.js';
 
 const styles = StyleSheet.create({
 	webView: {
@@ -17,7 +18,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-class NoteScreenComponent extends React.Component {
+class NoteScreenComponent extends BaseScreenComponent {
 	
 	static navigationOptions(options) {
 		return { header: null };
@@ -231,7 +232,7 @@ class NoteScreenComponent extends React.Component {
 		const actionButtonComp = renderActionButton();
 
 		return (
-			<View style={{flex: 1}}>
+			<View style={this.styles().screen}>
 				<ScreenHeader navState={this.props.navigation.state} menuOptions={this.menuOptions()} title={title} />
 				<View style={{ flexDirection: 'row' }}>
 					{ isTodo && <Checkbox checked={!!Number(note.todo_completed)} /> }<TextInput style={{flex:1}} value={note.title} onChangeText={(text) => this.title_changeText(text)} />

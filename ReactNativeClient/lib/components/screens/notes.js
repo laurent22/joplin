@@ -11,8 +11,9 @@ import { ActionButton } from 'lib/components/action-button.js';
 import { dialogs } from 'lib/dialogs.js';
 import { NotesScreenUtils } from 'lib/components/screens/notes-utils.js'
 import DialogBox from 'react-native-dialogbox';
+import { BaseScreenComponent } from 'lib/components/base-screen.js';
 
-class NotesScreenComponent extends React.Component {
+class NotesScreenComponent extends BaseScreenComponent {
 	
 	static navigationOptions(options) {
 		return { header: null };
@@ -52,7 +53,7 @@ class NotesScreenComponent extends React.Component {
 
 		const { navigate } = this.props.navigation;
 		return (
-			<View style={{flex: 1}}>
+			<View style={this.styles().screen}>
 				<ScreenHeader title={title} navState={this.props.navigation.state} menuOptions={this.menuOptions()} />
 				<NoteList noItemMessage={_('There are currently no notes. Create one by clicking on the (+) button.')} style={{flex: 1}}/>
 				<ActionButton addFolderNoteButtons={true} parentFolderId={this.props.selectedFolderId}></ActionButton>

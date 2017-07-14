@@ -16,8 +16,6 @@ const {
 } = require('react-native');
 const { Component } = React;
 
-const window = Dimensions.get('window');
-
 const styles = StyleSheet.create({
 	menu: {
 		flex: 1,

@@ -6,8 +6,9 @@ import { Folder } from 'lib/models/folder.js'
 import { BaseModel } from 'lib/base-model.js'
 import { ScreenHeader } from 'lib/components/screen-header.js';
 import { NotesScreenUtils } from 'lib/components/screens/notes-utils.js'
+import { BaseScreenComponent } from 'lib/components/base-screen.js';
 
-class FolderScreenComponent extends React.Component {
+class FolderScreenComponent extends BaseScreenComponent {
 	
 	static navigationOptions(options) {
 		return { header: null };
@@ -57,7 +58,7 @@ class FolderScreenComponent extends React.Component {
 
 	render() {
 		return (
-			<View style={{flex: 1}}>
+			<View style={this.styles().screen}>
 				<ScreenHeader navState={this.props.navigation.state} />
 				<TextInput value={this.state.folder.title} onChangeText={(text) => this.title_changeText(text)} />
 				<Button title="Save folder" onPress={() => this.saveFolderButton_press()} />

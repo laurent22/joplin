@@ -4,9 +4,10 @@ import { connect } from 'react-redux'
 import { Log } from 'lib/log.js'
 import { ScreenHeader } from 'lib/components/screen-header.js';
 import { ActionButton } from 'lib/components/action-button.js';
+import { BaseScreenComponent } from 'lib/components/base-screen.js';
 import { _ } from 'lib/locale.js';
 
-class WelcomeScreenComponent extends React.Component {
+class WelcomeScreenComponent extends BaseScreenComponent {
 	
 	static navigationOptions(options) {
 		return { header: null };
@@ -23,7 +24,7 @@ class WelcomeScreenComponent extends React.Component {
 			let message = this.props.folders.length ? _('Click on the (+) button to create a new note or notebook. Click on the side menu to access your existing notebooks.') : _('You currently have no notebook. Create one by clicking on (+) button.');
 
 			return (
-				<View style={{flex: 1}}>
+				<View style={this.styles().screen} >
 					<ScreenHeader navState={this.props.navigation.state}/>
 					<Text>{message}</Text>
 					<ActionButton addFolderNoteButtons={true}/>

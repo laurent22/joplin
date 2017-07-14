@@ -10,8 +10,9 @@ import { BaseItem } from 'lib/models/base-item.js';
 import { Folder } from 'lib/models/folder.js';
 import { ReportService } from 'lib/services/report.js';
 import { _ } from 'lib/locale.js';
+import { BaseScreenComponent } from 'lib/components/base-screen.js';
 
-class StatusScreenComponent extends React.Component {
+class StatusScreenComponent extends BaseScreenComponent {
 	
 	static navigationOptions(options) {
 		return { header: null };
@@ -65,7 +66,7 @@ class StatusScreenComponent extends React.Component {
 		let body = renderBody(this.state.report);
 
 		return (
-			<View style={{flex: 1}}>
+			<View style={this.styles().screen}>
 				<ScreenHeader navState={this.props.navigation.state} />
 				<View style={{flex: 1}}>
 					{ body }
