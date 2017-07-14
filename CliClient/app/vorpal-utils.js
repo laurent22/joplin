@@ -5,7 +5,7 @@ const vorpalUtils = {};
 
 let vorpal_ = null;
 let redrawStarted_ = false;
-let redrawLastUpdateTime_ = time.unixMs();
+let redrawLastUpdateTime_ = 0;
 let redrawLastLog_ = null;
 let redrawEnabled_ = true;
 let errorStackTraceEnabled_ = false;

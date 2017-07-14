@@ -53,20 +53,16 @@ class SideMenuContentComponent extends Component {
 
 	async synchronize_press() {
 		if (reg.oneDriveApi().auth()) {
+			const sync = await reg.synchronizer()
+
 			let options = {
 				onProgress: (report) => {
-					let line = [];
-					line.push(_('Items to upload: %d/%d.', report.createRemote + report.updateRemote, report.remotesToUpdate));
-					line.push(_('Remote items to delete: %d/%d.', report.deleteRemote, report.remotesToDelete));
-					line.push(_('Items to download: %d/%d.', report.createLocal + report.updateLocal, report.localsToUdpate));
-					line.push(_('Local items to delete: %d/%d.', report.deleteLocal, report.localsToDelete));
-					line.push(_('Sync state: %s.', report.state));
-					this.setState({	syncReportText: line.join("\n") });
+					let lines = sync.reportToLines(report);
+					this.setState({ syncReportText: lines.join("\n") });
 				},
 			};
 
 			try {
-				const sync = await reg.synchronizer()
 				sync.start(options);
 			} catch (error) {
 				Log.error(error);

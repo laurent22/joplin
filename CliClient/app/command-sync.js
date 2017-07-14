@@ -22,14 +22,12 @@ class Command extends BaseCommand {
 	}
 
 	async action(args) {
+		let sync = await app().synchronizer(Setting.value('sync.target'));
+
 		let options = {
 			onProgress: (report) => {
-				let line = [];
-				if (report.remotesToUpdate) line.push(_('Items to upload: %d/%d.', report.createRemote + report.updateRemote, report.remotesToUpdate));
-				if (report.remotesToDelete) line.push(_('Remote items to delete: %d/%d.', report.deleteRemote, report.remotesToDelete));
-				if (report.localsToUdpate) line.push(_('Items to download: %d/%d.', report.createLocal + report.updateLocal, report.localsToUdpate));
-				if (report.localsToDelete) line.push(_('Local items to delete: %d/%d.', report.deleteLocal, report.localsToDelete));
-				if (line.length) vorpalUtils.redraw(line.join(' '));
+				let lines = sync.reportToLines(report);
+				if (lines.length) vorpalUtils.redraw(lines.join(' '));
 			},
 			onMessage: (msg) => {
 				vorpalUtils.redrawDone();
@@ -40,7 +38,6 @@ class Command extends BaseCommand {
 
 		this.log(_('Synchronization target: %s', Setting.value('sync.target')));
 
-		let sync = await app().synchronizer(Setting.value('sync.target'));
 		if (!sync) throw new Error(_('Cannot initialize synchronizer.'));
 
 		this.log(_('Starting synchronization...'));
