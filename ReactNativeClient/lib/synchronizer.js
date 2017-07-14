@@ -46,6 +46,11 @@ class Synchronizer {
 		line.push(action);
 		line.push(reason);
 
+		let type = local && local.type_ ? local.type_ : null;
+		if (!type) type = remote && remote.type_ ? remote.type_ : null;
+
+		if (type) line.push(BaseItem.modelTypeToClassName(type));
+
 		if (local) {
 			let s = [];
 			s.push(local.id);

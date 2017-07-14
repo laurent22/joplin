@@ -1,3 +1,4 @@
+import fs from 'fs-extra';
 import { shim } from 'lib/shim.js';
 import { GeolocationNode } from 'lib/geolocation-node.js';
 
