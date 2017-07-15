@@ -56,6 +56,7 @@ class Command extends BaseCommand {
 
 		let modelType = null;
 		if (pattern == '/' || !app().currentFolder()) {
+			queryOptions.includeConflictFolder = true;
 			items = await Folder.all(queryOptions);
 			suffix = '/';
 			modelType = Folder.modelType();

@@ -17,8 +17,12 @@ class Command extends BaseCommand {
 		return ['mkdir'];
 	}
 
-	async action(args, end) {
-		let folder = await Folder.save({ title: args['notebook'] }, { duplicateCheck: true });
+	async action(args) {
+		let folder = await Folder.save({ title: args['notebook'] }, {
+			duplicateCheck: true,
+			reservedTitleCheck: true,
+		});
+		
 		app().switchCurrentFolder(folder);
 	}
 

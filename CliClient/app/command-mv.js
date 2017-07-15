@@ -30,7 +30,7 @@ class Command extends BaseCommand {
 		if (!notes.length) throw new Error(_('No note matches this pattern: "%s"', pattern));
 
 		for (let i = 0; i < notes.length; i++) {
-			await Note.save({ id: notes[i].id, parent_id: folder.id });
+			await Note.moveToFolder(notes[i].id, folder.id);
 		}
 	}
 

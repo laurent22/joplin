@@ -1,6 +1,7 @@
 import { BaseModel } from 'lib/base-model.js';
 import { Log } from 'lib/log.js';
 import { promiseChain } from 'lib/promise-utils.js';
+import { time } from 'lib/time-utils.js';
 import { Note } from 'lib/models/note.js';
 import { Setting } from 'lib/models/setting.js';
 import { Database } from 'lib/database.js';
@@ -76,26 +77,53 @@ class Folder extends BaseItem {
 		});
 	}
 
+	static conflictFolderTitle() {
+		return _('Conflicts');
+	}
+
+	static conflictFolderId() {
+		return 'c04f1c7c04f1c7c04f1c7c04f1c7c04f';
+	}
+
+	static conflictFolder() {
+		return {
+			type_: this.TYPE_FOLDER,
+			id: this.conflictFolderId(),
+			title: this.conflictFolderTitle(),
+			updated_time: time.unixMs(),
+		};
+	}
+
 	static async all(options = null) {
-		if (!options) options = {};
+		let output = await super.all(options);
+		if (options && options.includeConflictFolder) {
+			let conflictCount = await Note.conflictedCount();
+			if (conflictCount) output.push(this.conflictFolder());
+		}
+		return output;
+	}
 
-		let folders = await super.all(options);
-		if (!options.includeNotes) return folders;
-
-		if (options.limit) options.limit -= folders.length;
-
-		let notes = await Note.all(options);
-		return folders.concat(notes);
+	static load(id) {
+		if (id == this.conflictFolderId()) return this.conflictFolder();
+		return super.load(id);
 	}
 
 	static defaultFolder() {
 		return this.modelSelectOne('SELECT * FROM folders ORDER BY created_time DESC LIMIT 1');
 	}
 
+	// These "duplicateCheck" and "reservedTitleCheck" should only be done when a user is
+	// manually creating a folder. They shouldn't be done for example when the folders
+	// are being synced to avoid any strange side-effect. Technically it's possible to 
+	// have folders and notes with duplicate titles (or no title), or with reserved words,
 	static async save(o, options = null) {
 		if (options && options.duplicateCheck === true && o.title) {
 			let existingFolder = await Folder.loadByTitle(o.title);
 			if (existingFolder) throw new Error(_('A notebook with this title already exists: "%s"', o.title));
+		}
+
+		if (options && options.reservedTitleCheck === true && o.title) {
+			if (o.title == Folder.conflictFolderTitle()) throw new Error(_('Notebooks cannot be named "%s", which is a reserved title.', o.title));
 		}
 
 		return super.save(o, options).then((folder) => {

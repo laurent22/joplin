@@ -5,6 +5,7 @@ import { BaseItem } from 'lib/models/base-item.js';
 import { Setting } from 'lib/models/setting.js';
 import { shim } from 'lib/shim.js';
 import { time } from 'lib/time-utils.js';
+import { _ } from 'lib/locale.js';
 import moment from 'moment';
 import lodash  from 'lodash';
 
@@ -17,7 +18,8 @@ class Note extends BaseItem {
 	static async serialize(note, type = null, shownKeys = null) {
 		let fieldNames = this.fieldNames();
 		fieldNames.push('type_');
-		lodash.pull(fieldNames, 'is_conflict', 'sync_time');
+		//lodash.pull(fieldNames, 'is_conflict', 'sync_time');
+		lodash.pull(fieldNames, 'sync_time');
 		return super.serialize(note, 'note', fieldNames);
 	}
 
@@ -64,9 +66,19 @@ class Note extends BaseItem {
 		return this.db().escapeFields(this.previewFields()).join(',');
 	}
 
-	static loadFolderNoteByField(folderId, field, value) {
+	static async loadFolderNoteByField(folderId, field, value) {
 		if (!folderId) throw new Error('folderId is undefined');
-		return this.modelSelectOne('SELECT * FROM notes WHERE is_conflict = 0 AND `parent_id` = ? AND `' + field + '` = ?', [folderId, value]);
+
+		let options = {
+			conditions: ['`' + field + '` = ?'],
+			conditionsParams: [value],
+			fields: '*',
+		}
+
+		// TODO: add support for limits on .search()
+
+		let results = await this.previews(folderId, options);
+		return results.length ? results[0] : null;
 	}
 
 	static previews(parentId, options = null) {
@@ -77,10 +89,13 @@ class Note extends BaseItem {
 		if (!options.conditionsParams) options.conditionsParams = [];
 		if (!options.fields) options.fields = this.previewFields();
 
-		options.conditions.push('is_conflict = 0');
-		
-		options.conditions.push('parent_id = ?');
-		options.conditionsParams.push(parentId);
+		if (parentId == Folder.conflictFolderId()) {
+			options.conditions.push('is_conflict = 1');
+		} else {
+			options.conditions.push('is_conflict = 0');
+			options.conditions.push('parent_id = ?');
+			options.conditionsParams.push(parentId);
+		}		
 
 		if (options.itemTypes && options.itemTypes.length) {
 			if (options.itemTypes.indexOf('note') >= 0 && options.itemTypes.indexOf('todo') >= 0) {
@@ -101,6 +116,11 @@ class Note extends BaseItem {
 
 	static conflictedNotes() {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 1');
+	}
+
+	static async conflictedCount() {
+		let r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 1');
+		return r && r.total ? r.total : 0;
 	}
 
 	static unconflictedNotes() {
@@ -152,6 +172,27 @@ class Note extends BaseItem {
 		if ('latitude' in output) output.latitude = Number(!output.latitude ? 0 : output.latitude).toFixed(8);
 		if ('altitude' in output) output.altitude = Number(!output.altitude ? 0 : output.altitude).toFixed(4);
 		return output;
+	}
+
+	static async copyToFolder(noteId, folderId) {
+		if (folderId == Folder.conflictFolderId()) throw new Error(_('Cannot copy note to "%s" notebook', Folder.conflictFolderIdTitle()));
+
+		return Note.duplicate(noteId, {
+			changes: {
+				parent_id: folderId,
+				is_conflict: 0, // Also reset the conflict flag in case we're moving the note out of the conflict folder
+			},
+		});
+	}
+
+	static async moveToFolder(noteId, folderId) {
+		if (folderId == Folder.conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', Folder.conflictFolderIdTitle()));
+
+		return Note.save({
+			id: noteId,
+			parent_id: folderId,
+			is_conflict: 0,
+		});
 	}
 
 	static async duplicate(noteId, options = null) {

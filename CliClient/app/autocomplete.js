@@ -11,13 +11,11 @@ function quotePromptArg(s) {
 }
 
 function autocompleteFolders() {
-	return Folder.all().then((folders) => {
+	return Folder.all({ includeConflictFolder: true }).then((folders) => {
 		let output = [];
 		for (let i = 0; i < folders.length; i++) {
 			output.push(quotePromptArg(folders[i].title));
 		}
-		output.push('..');
-		output.push('.');
 		return output;
 	});
 }

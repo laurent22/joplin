@@ -34,11 +34,7 @@ class Command extends BaseCommand {
 		if (!notes.length) throw new Error(_('No note matches this pattern: "%s"', args['pattern']));
 
 		for (let i = 0; i < notes.length; i++) {
-			const newNote = await Note.duplicate(notes[i].id, {
-				changes: {
-					parent_id: folder.id
-				},
-			});
+			const newNote = await Note.copyToFolder(notes[i].id, folder.id);
 			Note.updateGeolocation(newNote.id);
 		}
 	}

@@ -57,12 +57,14 @@ class Application {
 		this.updatePrompt();
 	}
 
-	async loadItem(type, pattern) {
-		let output = await this.loadItems(type, pattern);
+	async loadItem(type, pattern, options = null) {
+		let output = await this.loadItems(type, pattern, options);
 		return output.length ? output[0] : null;
 	}
 
 	async loadItems(type, pattern, options = null) {
+		if (type == BaseModel.TYPE_FOLDER && (pattern == Folder.conflictFolderTitle() || pattern == Folder.conflictFolderId())) return [Folder.conflictFolder()];
+
 		if (!options) options = {};
 
 		const parent = options.parent ? options.parent : app().currentFolder();
