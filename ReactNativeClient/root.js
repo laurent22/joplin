@@ -158,7 +158,7 @@ const reducer = (state = defaultState, action) => {
 				for (let i = 0; i < newNotes.length; i++) {
 					let n = newNotes[i];
 					if (n.id == action.note.id) {
-						newNotes[i] = action.note;
+						newNotes[i] = Object.assign(newNotes[i], action.note);
 						found = true;
 						break;
 					}

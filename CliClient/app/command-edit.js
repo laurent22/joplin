@@ -25,15 +25,11 @@ class Command extends BaseCommand {
 	async action(args) {
 		let watcher = null;
 		let newNote = null;
-		let hasSaved = false;
 
 		const onFinishedEditing = async () => {
 			if (watcher) watcher.close();
 			app().vorpal().show();
-			if (!hasSaved && newNote) {
-				await Note.delete(newNote.id);
-				newNote = null;
-			}
+			newNote = null;
 			this.log(_('Done editing.'));
 		}
 
@@ -50,8 +46,8 @@ class Command extends BaseCommand {
 			let note = await app().loadItem(BaseModel.TYPE_NOTE, title);
 
 			if (!note) {
-				newNote = await Note.save({ parent_id: app().currentFolder().id });
-				note = newNote;
+				newNote = await Note.save({ title: title, parent_id: app().currentFolder().id });
+				note = await Note.load(newNote.id);
 			}
 
 			let editorPath = textEditorPath();
@@ -80,7 +76,6 @@ class Command extends BaseCommand {
 				if (watchTimeout) return;
 
 				watchTimeout = setTimeout(async () => {
-					hasSaved = true;
 					let updatedNote = await fs.readFile(tempFilePath, 'utf8');
 					updatedNote = await Note.unserializeForEdit(updatedNote);
 					updatedNote.id = note.id;
