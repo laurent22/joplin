@@ -46,7 +46,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 			}
 
 			if (this.state.mode == 'edit') {
-				this.setState({ mode: 'view' });
+				this.setState({
+					note: Object.assign({}, this.state.lastSavedNote),
+					mode: 'view',
+				});
 				return true;
 			}
 
@@ -298,9 +301,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			if (this.state.mode == 'edit' && !this.isModified()) return <ActionButton style={{display:'none'}}/>;
 
-			let toggled = this.state.mode == 'edit';
+			let buttonIndex = this.state.mode == 'view' ? 0 : 1;
 
-			return <ActionButton isToggle={true} buttons={buttons} toggled={toggled} />
+			return <ActionButton multiStates={true} buttons={buttons} buttonIndex={buttonIndex} />
 		}
 
 		const actionButtonComp = renderActionButton();

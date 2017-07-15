@@ -19,13 +19,13 @@ class ActionButtonComponent extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			toggled: false,
+			buttonIndex: 0,
 		};
 	}
 
 	componentWillReceiveProps(newProps) {
-		if ('toggled' in newProps) {
-			this.setState({ toggled: newProps.toggled });
+		if ('buttonIndex' in newProps) {
+			this.setState({ buttonIndex: newProps.buttonIndex });
 		}
 	}
 
@@ -104,18 +104,16 @@ class ActionButtonComponent extends React.Component {
 		let mainButton = this.props.mainButton ? this.props.mainButton : {};
 		let mainIcon = mainButton.icon ? <Icon name={mainButton.icon} style={styles.actionButtonIcon} /> : <Text style={{fontSize: 20, color:"#ffffff"}}>+</Text>;
 
-		if (this.props.isToggle) {
-			if (!this.props.buttons || this.props.buttons.length != 2) throw new Error('Toggle state requires two buttons');
-			let button = this.props.buttons[this.state.toggled ? 1 : 0];
+		if (this.props.multiStates) {
+			if (!this.props.buttons || !this.props.buttons.length) throw new Error('Multi-state button requires at least one state');
+			if (this.state.buttonIndex < 0 || this.state.buttonIndex >= this.props.buttons.length) throw new Error('Button index out of bounds');
+			let button = this.props.buttons[this.state.buttonIndex];
 			let mainIcon = <Icon name={button.icon} style={styles.actionButtonIcon} />
 			return (
 				<ReactNativeActionButton
 					icon={mainIcon}
 					buttonColor="rgba(231,76,60,1)"
-					onPress={() => {
-						let doToggle = button.onPress(this.state.toggled);
-						if (doToggle !== false) this.setState({ toggled: !this.state.toggled });
-					}}
+					onPress={() => { button.onPress() }}
 				/>
 			);
 		} else {
