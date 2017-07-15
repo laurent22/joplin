@@ -252,7 +252,7 @@ class OneDriveApi {
 		if (!response.ok) {
 			this.setAuth(null);
 			let msg = await response.text();
-			throw new Error(msg);
+			throw new Error(msg + ': TOKEN: ' + this.auth_);
 		}
 
 		let auth = await response.json();
