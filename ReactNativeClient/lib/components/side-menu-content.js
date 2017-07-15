@@ -63,7 +63,13 @@ class SideMenuContentComponent extends Component {
 			};
 
 			try {
-				sync.start(options);
+				sync.start(options).then(async () => {
+					let initialFolders = await Folder.all({ includeConflictFolder: true });
+					dispatch({
+						type: 'FOLDERS_UPDATE_ALL',
+						folders: initialFolders,
+					});
+				});
 			} catch (error) {
 				Log.error(error);
 			}

@@ -41,22 +41,25 @@ class NotesScreenComponent extends BaseScreenComponent {
 	}
 
 	menuOptions() {
+		if (this.props.selectedFolderId == Folder.conflictFolderId()) return [];
+		
 		return [
-			{ title: _('Delete folder'), onPress: () => { this.deleteFolder_onPress(this.props.selectedFolderId); } },
-			{ title: _('Edit folder'), onPress: () => { this.editFolder_onPress(this.props.selectedFolderId); } },
+			{ title: _('Delete notebook'), onPress: () => { this.deleteFolder_onPress(this.props.selectedFolderId); } },
+			{ title: _('Edit notebook'), onPress: () => { this.editFolder_onPress(this.props.selectedFolderId); } },
 		];
 	}
 
 	render() {
 		let folder = Folder.byId(this.props.folders, this.props.selectedFolderId);
 		let title = folder ? folder.title : null;
+		const addFolderNoteButtons = folder.id != Folder.conflictFolderId();
 
 		const { navigate } = this.props.navigation;
 		return (
 			<View style={this.styles().screen}>
 				<ScreenHeader title={title} navState={this.props.navigation.state} menuOptions={this.menuOptions()} />
 				<NoteList noItemMessage={_('There are currently no notes. Create one by clicking on the (+) button.')} style={{flex: 1}}/>
-				<ActionButton addFolderNoteButtons={true} parentFolderId={this.props.selectedFolderId}></ActionButton>
+				<ActionButton addFolderNoteButtons={addFolderNoteButtons} parentFolderId={this.props.selectedFolderId}></ActionButton>
 				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
 			</View>
 		);
