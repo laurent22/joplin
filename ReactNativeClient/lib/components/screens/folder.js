@@ -106,7 +106,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 		return (
 			<View style={this.styles().screen}>
 				<ScreenHeader navState={this.props.navigation.state} />
-				<TextInput value={this.state.folder.title} onChangeText={(text) => this.title_changeText(text)} />
+				<TextInput autoFocus={true} value={this.state.folder.title} onChangeText={(text) => this.title_changeText(text)} />
 				{ actionButtonComp }
 				<dialogs.DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
 			</View>
