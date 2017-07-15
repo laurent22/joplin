@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Button, TextInput } from 'react-native';
 import { connect } from 'react-redux'
 import { Log } from 'lib/log.js'
+import { ActionButton } from 'lib/components/action-button.js';
 import { Folder } from 'lib/models/folder.js'
 import { BaseModel } from 'lib/base-model.js'
 import { ScreenHeader } from 'lib/components/screen-header.js';
@@ -18,19 +19,34 @@ class FolderScreenComponent extends BaseScreenComponent {
 
 	constructor() {
 		super();
-		this.state = { folder: Folder.new() };
-		this.originalFolder = null;
+		this.state = {
+			folder: Folder.new(),
+			lastSavedFolder: null,
+		};
 	}
 
 	componentWillMount() {
 		if (!this.props.folderId) {
-			this.setState({ folder: Folder.new() });
+			const folder = Folder.new();
+			this.setState({
+				folder: folder,
+				lastSavedFolder: Object.assign({}, folder),
+			});
 		} else {
 			Folder.load(this.props.folderId).then((folder) => {
-				this.originalFolder = Object.assign({}, folder);
-				this.setState({ folder: folder });
+				this.setState({
+					folder: folder,
+					lastSavedFolder: Object.assign({}, folder),
+				});
 			});
 		}
+	}
+
+	isModified() {
+		if (!this.state.folder || !this.state.lastSavedFolder) return false;
+		let diff = BaseModel.diffObjects(this.state.folder, this.state.lastSavedFolder);
+		delete diff.type_;
+		return !!Object.getOwnPropertyNames(diff).length;
 	}
 
 	folderComponent_change(propName, propValue) {
@@ -46,53 +62,52 @@ class FolderScreenComponent extends BaseScreenComponent {
 	}
 
 	async saveFolderButton_press() {
-		let toSave = {
-			title: this.state.folder.title,
-		};
-
-		if (this.originalFolder) toSave.id = this.originalFolder.id;
+		let folder = Object.assign({}, this.state.folder);
 
 		try {
-			let f = await Folder.save(toSave, {
+			folder = await Folder.save(folder, {
 				duplicateCheck: true,
 				reservedTitleCheck: true,
 			});
-			this.originalFolder = f;
 		} catch (error) {
 			dialogs.error(this, _('The folder could not be saved: %s', error.message));
 			return;
 		}
 
-		this.setState({ folder: this.originalFolder });
+		this.setState({
+			lastSavedFolder: Object.assign({}, folder),
+			folder: folder,
+		});
 
-		await NotesScreenUtils.openDefaultNoteList();
+		await NotesScreenUtils.openNoteList(folder.id);
 	}
 
 	render() {
-		// const renderActionButton = () => {
-		// 	let buttons = [];
+		const renderActionButton = () => {
+			let buttons = [];
 
-		// 	buttons.push({
-		// 		title: _('Save'),
-		// 		icon: 'md-checkmark',
-		// 		onPress: () => {
-		// 			this.saveFolderButton_press();
-		// 			return false;
-		// 		},
-		// 	});
+			buttons.push({
+				title: _('Save'),
+				icon: 'md-checkmark',
+				onPress: () => {
+					this.saveFolderButton_press()
+				},
+			});
 
-		// 	if (this.state.mode == 'edit' && !this.isModified()) return <ActionButton style={{display:'none'}}/>;
+			if (!this.isModified()) return <ActionButton style={{display:'none'}}/>;
 
-		// 	let toggled = this.state.mode == 'edit';
+			let buttonIndex = this.state.mode == 'view' ? 0 : 1;
 
-		// 	return <ActionButton isToggle={true} buttons={buttons} toggled={toggled} />
-		// }
+			return <ActionButton multiStates={true} buttons={buttons} buttonIndex={0} />
+		}
+
+		const actionButtonComp = renderActionButton();
 
 		return (
 			<View style={this.styles().screen}>
 				<ScreenHeader navState={this.props.navigation.state} />
 				<TextInput value={this.state.folder.title} onChangeText={(text) => this.title_changeText(text)} />
-				<Button title="Save folder" onPress={() => this.saveFolderButton_press()} />
+				{ actionButtonComp }
 				<dialogs.DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
 			</View>
 		);

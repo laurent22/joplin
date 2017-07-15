@@ -38,8 +38,12 @@ class Checkbox extends Component {
 	render() {
 		const iconName = this.state.checked ? 'md-checkbox-outline' : 'md-square-outline';
 
+		let style = this.props.style ? Object.assign({}, this.props.style) : {};
+		style.justifyContent = 'center';
+		style.alignItems = 'center';
+
 		return (
-			<TouchableHighlight onPress={() => this.onPress()} style={{justifyContent: 'center', alignItems: 'center'}}>
+			<TouchableHighlight onPress={() => this.onPress()} style={style}>
 				<Icon name={iconName} style={styles.checkboxIcon}/>
 			</TouchableHighlight>
 		);

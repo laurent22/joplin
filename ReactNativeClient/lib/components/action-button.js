@@ -106,7 +106,7 @@ class ActionButtonComponent extends React.Component {
 
 		if (this.props.multiStates) {
 			if (!this.props.buttons || !this.props.buttons.length) throw new Error('Multi-state button requires at least one state');
-			if (this.state.buttonIndex < 0 || this.state.buttonIndex >= this.props.buttons.length) throw new Error('Button index out of bounds');
+			if (this.state.buttonIndex < 0 || this.state.buttonIndex >= this.props.buttons.length) throw new Error('Button index out of bounds: ' + this.state.buttonIndex + '/' + this.props.buttons.length);
 			let button = this.props.buttons[this.state.buttonIndex];
 			let mainIcon = <Icon name={button.icon} style={styles.actionButtonIcon} />
 			return (
