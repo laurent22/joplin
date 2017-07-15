@@ -119,7 +119,7 @@ class Folder extends BaseItem {
 	static async save(o, options = null) {
 		if (options && options.duplicateCheck === true && o.title) {
 			let existingFolder = await Folder.loadByTitle(o.title);
-			if (existingFolder) throw new Error(_('A notebook with this title already exists: "%s"', o.title));
+			if (existingFolder && existingFolder.id != o.id) throw new Error(_('A notebook with this title already exists: "%s"', o.title));
 		}
 
 		if (options && options.reservedTitleCheck === true && o.title) {
