@@ -5,6 +5,7 @@ import { Log } from 'lib/log.js';
 import { _ } from 'lib/locale.js';
 import { Checkbox } from 'lib/components/checkbox.js';
 import { Note } from 'lib/models/note.js';
+import { time } from 'lib/time-utils.js';
 
 class ItemListComponent extends Component {
 
@@ -34,7 +35,7 @@ class ItemListComponent extends Component {
 
 	async todoCheckbox_change(itemId, checked) {	
 		let note = await Note.load(itemId);
-		await Note.save({ id: note.id, todo_completed: checked });
+		await Note.save({ id: note.id, todo_completed: checked ? time.unixMs() : 0 });
 	}
 
 	listView_itemLongPress(itemId) {}
@@ -49,10 +50,15 @@ class ItemListComponent extends Component {
 				this.listView_itemLongPress(item.id);
 			}
 
+			const checkboxStyle = {};
+			if (!Number(item.is_todo)) checkboxStyle.display = 'none';
+
+			const checkboxChecked = !!Number(item.todo_completed);
+
 			return (
 				<TouchableHighlight onPress={onPress} onLongPress={onLongPress}>
 					<View style={{flexDirection: 'row', paddingLeft: 10, paddingTop:5, paddingBottom:5 }}>
-						{ !!Number(item.is_todo) && <Checkbox checked={!!Number(item.todo_completed)} onChange={(checked) => { this.todoCheckbox_change(item.id, checked) }}/> }<Text>{item.title}</Text>
+						<Checkbox style={checkboxStyle} checked={checkboxChecked} onChange={(checked) => { this.todoCheckbox_change(item.id, checked) }}/><Text>{item.title}</Text>
 					</View>
 				</TouchableHighlight>
 			);

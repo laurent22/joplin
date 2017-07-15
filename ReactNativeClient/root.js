@@ -44,6 +44,10 @@ let defaultState = {
 	screens: {},
 	loading: true,
 	historyCanGoBack: false,
+	notesOrder: {
+		orderBy: 'updated_time',
+		orderByDir: 'DESC',
+	},
 };
 
 const initialRoute = {
@@ -161,6 +165,7 @@ const reducer = (state = defaultState, action) => {
 
 				if (!found) newNotes.push(action.note);
 
+				newNotes = Note.sortNotes(newNotes, state.notesOrder);
 				newState = Object.assign({}, state);
 				newState.notes = newNotes;
 				break;
@@ -288,6 +293,7 @@ async function initialize(dispatch, backButtonHandler) {
 
 	BaseModel.dispatch = dispatch;
 	NotesScreenUtils.dispatch = dispatch;
+	NotesScreenUtils.store = store;
 	FoldersScreenUtils.dispatch = dispatch;
 	BaseModel.db_ = db;
 

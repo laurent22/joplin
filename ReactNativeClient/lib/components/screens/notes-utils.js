@@ -5,7 +5,14 @@ import { Log } from 'lib/log.js'
 class NotesScreenUtils {
 
 	static openNoteList(folderId) {
-		return Note.previews(folderId).then((notes) => {
+		const state = this.store.getState();
+
+		let options = {
+			orderBy: state.notesOrder.orderBy,
+			orderByDir: state.notesOrder.orderByDir,
+		};
+
+		return Note.previews(folderId, options).then((notes) => {
 			this.dispatch({
 				type: 'NOTES_UPDATE_ALL',
 				notes: notes,

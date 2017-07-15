@@ -58,6 +58,15 @@ class Note extends BaseItem {
 		return output;
 	}
 
+	static sortNotes(notes, order) {
+		return notes.sort((a, b) => {
+			let r = -1;
+			if (a[order.orderBy] < b[order.orderBy]) r = +1;
+			if (order.orderByDir == 'ASC') r = -r;
+			return r;
+		});
+	}
+
 	static previewFields() {
 		return ['id', 'title', 'body', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'sync_time'];
 	}

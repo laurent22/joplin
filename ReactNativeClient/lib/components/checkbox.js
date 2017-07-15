@@ -23,6 +23,12 @@ class Checkbox extends Component {
 		this.state = { checked: this.props.checked };
 	}
 
+	componentWillReceiveProps(newProps) {
+		if ('checked' in newProps) {
+			this.setState({ checked: newProps.checked });
+		}
+	}
+
 	onPress() {
 		let newChecked = !this.state.checked;
 		this.setState({ checked: newChecked });

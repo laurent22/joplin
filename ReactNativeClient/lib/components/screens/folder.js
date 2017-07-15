@@ -69,6 +69,25 @@ class FolderScreenComponent extends BaseScreenComponent {
 	}
 
 	render() {
+		// const renderActionButton = () => {
+		// 	let buttons = [];
+
+		// 	buttons.push({
+		// 		title: _('Save'),
+		// 		icon: 'md-checkmark',
+		// 		onPress: () => {
+		// 			this.saveFolderButton_press();
+		// 			return false;
+		// 		},
+		// 	});
+
+		// 	if (this.state.mode == 'edit' && !this.isModified()) return <ActionButton style={{display:'none'}}/>;
+
+		// 	let toggled = this.state.mode == 'edit';
+
+		// 	return <ActionButton isToggle={true} buttons={buttons} toggled={toggled} />
+		// }
+
 		return (
 			<View style={this.styles().screen}>
 				<ScreenHeader navState={this.props.navigation.state} />
