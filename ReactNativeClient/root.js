@@ -197,7 +197,7 @@ const reducer = (state = defaultState, action) => {
 				for (let i = 0; i < newFolders.length; i++) {
 					let n = newFolders[i];
 					if (n.id == action.folder.id) {
-						newFolders[i] = action.folder;
+						newFolders[i] = Object.assign(newFolders[i], action.folder);
 						found = true;
 						break;
 					}
