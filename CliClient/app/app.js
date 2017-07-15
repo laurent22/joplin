@@ -39,6 +39,15 @@ class Application {
 		return this.currentFolder_;
 	}
 
+	async refreshCurrentFolder() {
+		let newFolder = null;
+		
+		if (this.currentFolder_) newFolder = await Folder.load(this.currentFolder_.id);
+		if (!newFolder) newFolder = await Folder.defaultFolder();
+
+		this.switchCurrentFolder(newFolder);
+	}
+
 	updatePrompt() {
 		if (!this.showPromptString_) return '';
 

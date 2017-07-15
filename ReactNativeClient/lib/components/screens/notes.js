@@ -23,7 +23,6 @@ class NotesScreenComponent extends BaseScreenComponent {
 		dialogs.confirm(this, _('Delete notebook?')).then((ok) => {
 			if (!ok) return;
 
-
 			Folder.delete(folderId).then(() => {
 				return NotesScreenUtils.openDefaultNoteList();
 			}).catch((error) => {
@@ -51,6 +50,12 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 	render() {
 		let folder = Folder.byId(this.props.folders, this.props.selectedFolderId);
+
+		if (!folder) {
+			NotesScreenUtils.openDefaultNoteList();
+			return null;
+		}
+
 		let title = folder ? folder.title : null;
 		const addFolderNoteButtons = folder.id != Folder.conflictFolderId();
 

@@ -120,6 +120,7 @@ const reducer = (state = defaultState, action) => {
 					// If the current screen is already the requested screen, don't do anything
 				} else {
 					newState.route = action;
+					if (action.routeName == 'Welcome') navHistory = [];
 					navHistory.push(action);
 				}
 

@@ -170,8 +170,8 @@ class OneDriveApi {
 				if (error.message == 'Network request failed') {
 					// Unfortunately the error 'Network request failed' doesn't have a type
 					// or error code, so hopefully that message won't change and is not localized
-					this.logger().info('Got error below - retrying...');
-					this.logger().info(error);
+					this.logger().warn('Got error below - retrying...');
+					this.logger().warn(error);
 					await time.sleep((i + 1) * 3);
 					continue;
 				} else {
@@ -202,8 +202,8 @@ class OneDriveApi {
 					//   type: 'system',
 					//   errno: 'EAGAIN',
 					//   code: 'EAGAIN' }
-					this.logger().info('Got error below - retrying...');
-					this.logger().info(error);
+					this.logger().warn('Got error below - retrying...');
+					this.logger().warn(error);
 					await time.sleep((i + 1) * 3);
 					continue;
 				} else if (error.code == 'itemNotFound' && method == 'DELETE') {

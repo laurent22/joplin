@@ -65,7 +65,9 @@ class BaseItem extends BaseModel {
 
 	static async syncedCount() {
 		const ItemClass = this.itemClass(this.modelType());
-		const r = await this.db().selectOne('SELECT count(*) as total FROM `' + ItemClass.tableName() + '` WHERE updated_time <= sync_time');
+		let sql = 'SELECT count(*) as total FROM `' + ItemClass.tableName() + '` WHERE updated_time <= sync_time';
+		if (this.modelType() == BaseModel.TYPE_NOTE) sql += ' AND is_conflict = 0';
+		const r = await this.db().selectOne(sql);
 		return r.total;
 	}
 

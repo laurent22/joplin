@@ -30,6 +30,7 @@ class NotesScreenUtils {
 
 	static async openDefaultNoteList() {
 		const selectedFolder = await Folder.defaultFolder();
+		
 		if (selectedFolder) {
 			this.openNoteList(selectedFolder.id);
 		} else {

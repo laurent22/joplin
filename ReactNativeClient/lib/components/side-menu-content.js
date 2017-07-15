@@ -108,7 +108,7 @@ class SideMenuContentComponent extends Component {
 			);
 		}
 
-		items.push(<View style={{ height: 50, flex: -1 }} key='divider_1'></View>); // DIVIDER
+		if (items.length) items.push(<View style={{ height: 50, flex: -1 }} key='divider_1'></View>); // DIVIDER
 
 		items.push(<Button title="Synchronize" onPress={() => { this.synchronize_press() }} key='synchronize' />);
 

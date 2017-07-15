@@ -26,8 +26,10 @@ class ReportService {
 			syncedCount += o.synced;
 		}
 
+		let conflictedCount = await Note.conflictedCount();
+
 		output.total = {
-			total: itemCount,
+			total: itemCount - conflictedCount,
 			synced: syncedCount,
 		};
 
