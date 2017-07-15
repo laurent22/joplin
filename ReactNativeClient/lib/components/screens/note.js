@@ -8,6 +8,7 @@ import { BaseModel } from 'lib/base-model.js'
 import { ActionButton } from 'lib/components/action-button.js';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { ScreenHeader } from 'lib/components/screen-header.js';
+import { time } from 'lib/time-utils.js';
 import { Checkbox } from 'lib/components/checkbox.js'
 import { _ } from 'lib/locale.js';
 import marked from 'lib/marked.js';
@@ -179,7 +180,22 @@ class NoteScreenComponent extends BaseScreenComponent {
 		];
 	}
 
-	todoCheckbox_change(checked) {
+	async todoCheckbox_change(checked) {
+		let note = Object.assign({}, this.state.note);
+
+		const todoCompleted = checked ? time.unixMs() : 0;
+
+		if (note.id) {
+			note = await Note.save({ id: note.id, todo_completed: todoCompleted });
+
+			this.setState({
+				lastSavedNote: Object.assign({}, note),
+				note: note,
+			});
+		} else {
+			note.todo_completed = todoCompleted;
+			this.setState({	note: note });
+		}
 
 	}
 
@@ -187,15 +203,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const note = this.state.note;
 		const isTodo = !!Number(note.is_todo);
 		const folder = this.state.folder;
-		let todoComponents = null;
-
-		if (note.is_todo) {
-			todoComponents = (
-				<View>
-					<Button title="test" onPress={this.saveNoteButton_press} />
-				</View>
-			);
-		}
 
 		let bodyComponent = null;
 		if (this.state.mode == 'view') {
@@ -305,7 +312,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 					{ isTodo && <Checkbox checked={!!Number(note.todo_completed)} onChange={(checked) => { this.todoCheckbox_change(checked) }} /> }<TextInput style={{flex:1}} value={note.title} onChangeText={(text) => this.title_changeText(text)} />
 				</View>
 				{ bodyComponent }
-				{ todoComponents }
 				{ actionButtonComp }
 				{ this.state.showNoteMetadata && <Text>{this.state.noteMetadata}</Text> }
 				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>

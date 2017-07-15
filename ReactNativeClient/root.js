@@ -57,6 +57,13 @@ defaultState.route = initialRoute;
 let navHistory = [];
 navHistory.push(initialRoute);
 
+function historyCanGoBackTo(route) {
+	if (route.routeName == 'Note' && !route.noteId) return false;
+	if (route.routeName == 'Folder' && !route.folderId) return false;
+
+	return true;
+}
+
 const reducer = (state = defaultState, action) => {
 	reg.logger().info('Reducer action', action.type);
 
@@ -71,6 +78,16 @@ const reducer = (state = defaultState, action) => {
 
 				action = navHistory.pop(); // Current page
 				action = navHistory.pop(); // Previous page
+
+				while (!historyCanGoBackTo(action)) {
+					if (!navHistory.length) {
+						action = null;
+						break;
+					}
+					action = navHistory.pop();
+				}
+
+				if (!action) action = Object.assign({}, initialRoute);
 
 				// Fall throught
 
@@ -248,7 +265,7 @@ async function initialize(dispatch, backButtonHandler) {
 
 	const mainLogger = new Logger();
 	mainLogger.addTarget('database', { database: logDatabase, source: 'm' });
-	if (Setting.value('env') == 'env') mainLogger.addTarget('console');
+	if (Setting.value('env') == 'dev') mainLogger.addTarget('console');
 	mainLogger.setLevel(Logger.LEVEL_DEBUG);
 
 	reg.setLogger(mainLogger);
@@ -258,8 +275,12 @@ async function initialize(dispatch, backButtonHandler) {
 
 	const dbLogger = new Logger();
 	dbLogger.addTarget('database', { database: logDatabase, source: 'm' });
-	if (Setting.value('env') == 'env') dbLogger.addTarget('console');
-	dbLogger.setLevel(Logger.LEVEL_INFO);
+	if (Setting.value('env') == 'dev') dbLogger.addTarget('console');
+	if (Setting.value('env') == 'dev') {
+		dbLogger.setLevel(Logger.LEVEL_DEBUG); // Set to LEVEL_DEBUG for full SQL queries
+	} else {
+		dbLogger.setLevel(Logger.LEVEL_INFO);
+	}
 
 	let db = new JoplinDatabase(new DatabaseDriverReactNative());
 	db.setLogger(dbLogger);
