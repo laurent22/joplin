@@ -270,6 +270,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		} else {
 			bodyComponent = (
 				<TextInput
+					autoCapitalize="sentences"
 					autoFocus={true}
 					style={{flex: 1, textAlignVertical: 'top', fontFamily: 'monospace'}}
 					multiline={true}
@@ -336,7 +337,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					onSaveButtonPress={() => this.saveNoteButton_press()}
 				/>
 				<View style={{ flexDirection: 'row' }}>
-					{ isTodo && <Checkbox checked={!!Number(note.todo_completed)} onChange={(checked) => { this.todoCheckbox_change(checked) }} /> }<TextInput style={{flex:1}} value={note.title} onChangeText={(text) => this.title_changeText(text)} />
+					{ isTodo && <Checkbox checked={!!Number(note.todo_completed)} onChange={(checked) => { this.todoCheckbox_change(checked) }} /> }<TextInput autoCapitalize="sentences" style={{flex:1}} value={note.title} onChangeText={(text) => this.title_changeText(text)} />
 				</View>
 				{ bodyComponent }
 				{ actionButtonComp }
