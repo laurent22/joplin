@@ -16,11 +16,6 @@ class GeolocationReact {
 	}
 
 	static currentPosition(options = null) {
-		if (typeof navigator === 'undefined') {
-			// TODO
-			return Promise.resolve(this.currentPosition_testResponse());
-		}
-
 		if (!options) options = {};
 		if (!('enableHighAccuracy' in options)) options.enableHighAccuracy = true;
 		if (!('timeout' in options)) options.timeout = 10000;

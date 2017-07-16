@@ -50,7 +50,7 @@ class Synchronizer {
 		if (report.createLocal) lines.push(_('Created local items: %d.', report.createLocal));
 		if (report.updateLocal) lines.push(_('Updated local items: %d.', report.updateLocal));
 		if (report.createRemote) lines.push(_('Created remote items: %d.', report.createRemote));
-		if (report.updatedRemote) lines.push(_('Updated remote items: %d.', report.updatedRemote));
+		if (report.updateRemote) lines.push(_('Updated remote items: %d.', report.updateRemote));
 		if (report.deleteLocal) lines.push(_('Deleted local items: %d.', report.deleteLocal));
 		if (report.deleteRemote) lines.push(_('Deleted remote items: %d.', report.deleteRemote));
 		if (report.state) lines.push(_('State: %s.', report.state.replace(/_/g, ' ')));
@@ -76,7 +76,7 @@ class Synchronizer {
 
 		if (remote) {
 			let s = [];
-			s.push(remote.id);
+			s.push(remote.id ? remote.id : remote.path);
 			if ('title' in remote) s.push('"' + remote.title + '"');
 			line.push('(Remote ' + s.join(', ') + ')');
 		}

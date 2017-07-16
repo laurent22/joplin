@@ -271,13 +271,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			);
 		}
 
-		let title = null;
-		let noteHeaderTitle = note && note.title ? note.title : _('New note');
-		if (folder) {
-			title = folder.title + ' > ' + noteHeaderTitle;
-		} else {
-			title = noteHeaderTitle;
-		}
+		let headerTitle = ''
+		if (folder) headerTitle = folder.title;
 
 		const renderActionButton = () => {
 			let buttons = [];
@@ -290,27 +285,26 @@ class NoteScreenComponent extends BaseScreenComponent {
 				},
 			});
 
-			buttons.push({
-				title: _('Save'),
-				icon: 'md-checkmark',
-				onPress: () => {
-					this.saveNoteButton_press();
-					return false;
-				},
-			});
+			if (this.state.mode == 'edit') return <ActionButton style={{display:'none'}}/>;
 
-			if (this.state.mode == 'edit' && !this.isModified()) return <ActionButton style={{display:'none'}}/>;
-
-			let buttonIndex = this.state.mode == 'view' ? 0 : 1;
-
-			return <ActionButton multiStates={true} buttons={buttons} buttonIndex={buttonIndex} />
+			return <ActionButton multiStates={true} buttons={buttons} buttonIndex={0} />
 		}
 
 		const actionButtonComp = renderActionButton();
 
+		let showSaveButton = this.state.mode == 'edit';
+		let saveButtonDisabled = !this.isModified();
+
 		return (
 			<View style={this.styles().screen}>
-				<ScreenHeader navState={this.props.navigation.state} menuOptions={this.menuOptions()} title={title} />
+				<ScreenHeader
+					title={headerTitle}
+					navState={this.props.navigation.state}
+					menuOptions={this.menuOptions()}
+					showSaveButton={showSaveButton}
+					saveButtonDisabled={saveButtonDisabled}
+					onSaveButtonPress={() => this.saveNoteButton_press()}
+				/>
 				<View style={{ flexDirection: 'row' }}>
 					{ isTodo && <Checkbox checked={!!Number(note.todo_completed)} onChange={(checked) => { this.todoCheckbox_change(checked) }} /> }<TextInput style={{flex:1}} value={note.title} onChangeText={(text) => this.title_changeText(text)} />
 				</View>

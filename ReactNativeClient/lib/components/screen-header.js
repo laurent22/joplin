@@ -42,9 +42,23 @@ let styleObject = {
 		fontWeight: 'bold',
 		flex: 1,
 	},
+	saveButton: {
+		flex: 1,
+		backgroundColor: "#0482E3",
+		paddingLeft: 15,
+		paddingRight: 15,
+		marginRight: 10,
+	},
+	saveButtonText: {
+		textAlignVertical: 'center',
+		color: "#ffffff",
+		fontWeight: 'bold',
+		flex: 1,
+	},
 };
 
 styleObject.backButtonDisabled = Object.assign({}, styleObject.backButton, { backgroundColor: "#c6c6c6" });
+styleObject.saveButtonDisabled = Object.assign({}, styleObject.saveButton, { backgroundColor: "#c6c6c6" });
 
 const styles = StyleSheet.create(styleObject);
 
@@ -100,6 +114,18 @@ class ScreenHeaderComponent extends Component {
 			);
 		}
 
+		function saveButton(styles, onPress, disabled, show) {
+			if (!show) return null;
+
+			return (
+				<TouchableOpacity onPress={onPress} disabled={disabled}>
+					<View style={disabled ? styles.saveButtonDisabled : styles.saveButton}>
+						<Text style={styles.saveButtonText}>Save</Text>
+					</View>
+				</TouchableOpacity>
+			);
+		}
+
 		let key = 0;
 		let menuOptionComponents = [];
 		for (let i = 0; i < this.props.menuOptions.length; i++) {
@@ -130,6 +156,7 @@ class ScreenHeaderComponent extends Component {
 			<View style={{ flexDirection: 'row', paddingLeft: 10, paddingTop: 10, paddingBottom: 10, paddingRight: 0, backgroundColor: '#ffffff', alignItems: 'center' }} >
 				{ sideMenuButton(styles, () => this.sideMenuButton_press()) }
 				{ backButton(styles, () => this.backButton_press(), !this.props.historyCanGoBack) }
+				{ saveButton(styles, () => { if (this.props.onSaveButtonPress) this.props.onSaveButtonPress() }, this.props.saveButtonDisabled === true, this.props.showSaveButton === true) }
 				<Text style={{ flex:1, marginLeft: 10 }} >{title}</Text>
 			    <Menu onSelect={(value) => this.menu_select(value)}>
 					<MenuTrigger>

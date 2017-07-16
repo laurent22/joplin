@@ -83,31 +83,17 @@ class FolderScreenComponent extends BaseScreenComponent {
 	}
 
 	render() {
-		const renderActionButton = () => {
-			let buttons = [];
-
-			buttons.push({
-				title: _('Save'),
-				icon: 'md-checkmark',
-				onPress: () => {
-					this.saveFolderButton_press()
-				},
-			});
-
-			if (!this.isModified()) return <ActionButton style={{display:'none'}}/>;
-
-			let buttonIndex = this.state.mode == 'view' ? 0 : 1;
-
-			return <ActionButton multiStates={true} buttons={buttons} buttonIndex={0} />
-		}
-
-		const actionButtonComp = renderActionButton();
+		let saveButtonDisabled = !this.isModified();
 
 		return (
 			<View style={this.styles().screen}>
-				<ScreenHeader navState={this.props.navigation.state} />
+				<ScreenHeader
+					navState={this.props.navigation.state}
+					showSaveButton={true}
+					saveButtonDisabled={saveButtonDisabled}
+					onSaveButtonPress={() => this.saveFolderButton_press()}
+				/>
 				<TextInput autoFocus={true} value={this.state.folder.title} onChangeText={(text) => this.title_changeText(text)} />
-				{ actionButtonComp }
 				<dialogs.DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
 			</View>
 		);
