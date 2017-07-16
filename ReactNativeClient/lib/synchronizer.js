@@ -7,6 +7,7 @@ import { sprintf } from 'sprintf-js';
 import { time } from 'lib/time-utils.js';
 import { Logger } from 'lib/logger.js'
 import { _ } from 'lib/locale.js';
+import { EventDispatcher } from 'lib/event-dispatcher.js';
 import moment from 'moment';
 
 class Synchronizer {
@@ -23,6 +24,16 @@ class Synchronizer {
 
 		this.onProgress_ = function(s) {};
 		this.progressReport_ = {};
+
+		this.dispatcher_ = new EventDispatcher();
+	}
+
+	on(eventName, callback) {
+		return this.dispatcher_.on(eventName, callback);
+	}
+
+	off(eventName, callback) {
+		return this.dispatcher_.off(eventName, callback);
 	}
 
 	state() {
@@ -55,6 +66,7 @@ class Synchronizer {
 		if (report.deleteRemote) lines.push(_('Deleted remote items: %d.', report.deleteRemote));
 		if (report.state) lines.push(_('State: %s.', report.state.replace(/_/g, ' ')));
 		if (report.errors && report.errors.length) lines.push(_('Last error: %s (stacktrace in log).', report.errors[report.errors.length-1].message));
+		if (report.completedTime) lines.push(_('Completed: %s', time.unixMsToLocalDateTime(report.completedTime)));
 		return lines;
 	}
 
@@ -88,6 +100,8 @@ class Synchronizer {
 		this.progressReport_[action]++;
 		this.progressReport_.state = this.state();
 		this.onProgress_(this.progressReport_);
+
+		this.dispatcher_.dispatch('progress', this.progressReport_);
 	}
 
 	async logSyncSummary(report) {
@@ -143,7 +157,7 @@ class Synchronizer {
 		const syncTargetId = this.api().driver().syncTargetId();
 
 		if (this.state() != 'idle') {
-			this.logger().warn('Synchronization is already in progress. State: ' + this.state());
+			this.logger().info('Synchronization is already in progress. State: ' + this.state());
 			return;
 		}	
 
@@ -430,10 +444,14 @@ class Synchronizer {
 
 		this.logSyncOperation('finished', null, null, 'Synchronization finished [' + synchronizationId + ']');
 
+		this.progressReport_.completedTime = time.unixMs();
+
 		await this.logSyncSummary(this.progressReport_);
 
 		this.onProgress_ = function(s) {};
 		this.progressReport_ = {};
+
+		this.dispatcher_.dispatch('complete');
 	}
 
 }

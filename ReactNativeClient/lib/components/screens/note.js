@@ -12,6 +12,7 @@ import { time } from 'lib/time-utils.js';
 import { Checkbox } from 'lib/components/checkbox.js'
 import { _ } from 'lib/locale.js';
 import marked from 'lib/marked.js';
+import { reg } from 'lib/registry.js';
 import { BaseScreenComponent } from 'lib/components/base-screen.js';
 import { dialogs } from 'lib/dialogs.js';
 import { NotesScreenUtils } from 'lib/components/screens/notes-utils.js'
@@ -38,7 +39,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 			showNoteMetadata: false,
 			folder: null,
 			lastSavedNote: null,
-		}
+		};
+
+		this.saveButtonHasBeenShown_ = false;
 
 		this.backHandler = () => {
 			if (!this.state.note.id) {
@@ -112,11 +115,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	noteComponent_change(propName, propValue) {
-		this.setState((prevState, props) => {
-			let note = Object.assign({}, prevState.note);
-			note[propName] = propValue;
-			return { note: note }
-		});
+		let note = Object.assign({}, this.state.note);
+		note[propName] = propValue;
+		this.setState({ note: note });
 	}
 
 	async refreshNoteMetadata(force = null) {
@@ -155,6 +156,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 		if (isNew) Note.updateGeolocation(note.id);
 		this.refreshNoteMetadata();
+
+		reg.scheduleSync();
 	}
 
 	async deleteNote_onPress() {
@@ -168,6 +171,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		await Note.delete(note.id);
 		await NotesScreenUtils.openNoteList(folderId);
+
+		reg.scheduleSync();
 	}
 
 	attachFile_onPress() {
@@ -200,6 +205,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 				lastSavedNote: Object.assign({}, note),
 				note: note,
 			});
+
+			reg.scheduleSync();
 		} else {
 			note[name] = value;
 			this.setState({	note: note });
@@ -207,7 +214,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	async todoCheckbox_change(checked) {
-		return this.saveOneProperty('todo_completed', checked ? time.unixMs() : 0);
+		await this.saveOneProperty('todo_completed', checked ? time.unixMs() : 0);
+		reg.scheduleSync();
 	}
 
 	render() {
@@ -307,8 +315,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const actionButtonComp = renderActionButton();
 
-		let showSaveButton = this.state.mode == 'edit';
+		let showSaveButton = this.state.mode == 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
 		let saveButtonDisabled = !this.isModified();
+
+		if (showSaveButton) this.saveButtonHasBeenShown_ = true;
 
 		return (
 			<View style={this.styles().screen}>
@@ -328,6 +338,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 								note: note,
 								folder: folder,
 							});
+
+							reg.scheduleSync();
 						}
 					}}
 					navState={this.props.navigation.state}

@@ -4,6 +4,7 @@ import { ListView, Text, TouchableHighlight, Switch, View } from 'react-native';
 import { Log } from 'lib/log.js';
 import { _ } from 'lib/locale.js';
 import { Checkbox } from 'lib/components/checkbox.js';
+import { reg } from 'lib/registry.js';
 import { Note } from 'lib/models/note.js';
 import { time } from 'lib/time-utils.js';
 
@@ -36,6 +37,8 @@ class ItemListComponent extends Component {
 	async todoCheckbox_change(itemId, checked) {	
 		let note = await Note.load(itemId);
 		await Note.save({ id: note.id, todo_completed: checked ? time.unixMs() : 0 });
+		reg.scheduleSync();
+
 	}
 
 	listView_itemLongPress(itemId) {}

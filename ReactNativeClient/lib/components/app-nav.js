@@ -5,11 +5,6 @@ import { _ } from 'lib/locale.js';
 
 class AppNavComponent extends Component {
 
-	constructor() {
-		super();
-		this.screenCache_ = [];
-	}
-
 	render() {
 		if (!this.props.route) throw new Error('Route must not be null');
 

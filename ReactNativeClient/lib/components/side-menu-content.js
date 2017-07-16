@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
 		paddingRight: 20,
 		paddingTop: 14,
 		paddingBottom: 14,
-		marginBottom: 5	,
+		marginBottom: 5,
 	},
 	folderButtonText: {
 		color: "#ffffff",
@@ -65,24 +65,30 @@ class SideMenuContentComponent extends Component {
 		NotesScreenUtils.openNoteList(folder.id);
 	}
 
+	async synchronizer_progress(report) {
+		const sync = await reg.synchronizer();
+		let lines = sync.reportToLines(report);
+		this.setState({ syncReportText: lines.join("\n") });
+	}
+
+	synchronizer_complete() {
+		FoldersScreenUtils.refreshFolders();
+	}
+
+	async componentWillMount() {
+		reg.dispatcher().on('synchronizer_progress', this.synchronizer_progress.bind(this));
+		reg.dispatcher().on('synchronizer_complete', this.synchronizer_complete.bind(this));
+	}
+
+	componentWillUnmount() {
+		reg.dispatcher().off('synchronizer_progress', this.synchronizer_progress.bind(this));
+		reg.dispatcher().off('synchronizer_complete', this.synchronizer_complete.bind(this));
+	}
+
 	async synchronize_press() {
 		if (reg.oneDriveApi().auth()) {
 			const sync = await reg.synchronizer()
-
-			let options = {
-				onProgress: (report) => {
-					let lines = sync.reportToLines(report);
-					this.setState({ syncReportText: lines.join("\n") });
-				},
-			};
-
-			try {
-				sync.start(options).then(async () => {
-					await FoldersScreenUtils.refreshFolders();
-				});
-			} catch (error) {
-				Log.error(error);
-			}
+			sync.start();
 		} else {
 			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 			
@@ -102,7 +108,7 @@ class SideMenuContentComponent extends Component {
 			items.push(
 				<TouchableOpacity key={f.id} onPress={() => { this.folder_press(f) }}>
 					<View style={styles.folderButton}>
-						<Text style={styles.folderButtonText}>{title}</Text>
+						<Text numberOfLines={1} style={styles.folderButtonText}>{title}</Text>
 					</View>
 				</TouchableOpacity>
 			);
