@@ -177,7 +177,6 @@ describe('Synchronizer', function() {
 		let noteUpdatedFromRemote = await Note.load(note1.id);
 		for (let n in noteUpdatedFromRemote) {
 			if (!noteUpdatedFromRemote.hasOwnProperty(n)) continue;
-			if (n == 'sync_time') continue;
 			expect(noteUpdatedFromRemote[n]).toBe(note2[n], 'Property: ' + n);
 		}
 

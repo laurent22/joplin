@@ -49,8 +49,14 @@ class BaseModel {
 		return fields.indexOf(name) >= 0;
 	}
 
-	static fieldNames() {
-		return this.db().tableFieldNames(this.tableName());
+	static fieldNames(withPrefix = false) {
+		let output = this.db().tableFieldNames(this.tableName());
+		if (!withPrefix) return output;
+		let temp = [];
+		for (let i = 0; i < output.length; i++) {
+			temp.push(this.tableName() + '.' + output[i]);
+		}
+		return temp;
 	}
 
 	static fieldType(name) {
@@ -227,6 +233,10 @@ class BaseModel {
 		let modelId = saveQuery.id;
 
 		queries.push(saveQuery);
+
+		if (options.nextQueries && options.nextQueries.length) {
+			queries = queries.concat(options.nextQueries);
+		}
 
 		return this.db().transactionExecBatch(queries).then(() => {
 			o = Object.assign({}, o);

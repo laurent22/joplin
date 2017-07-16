@@ -19,7 +19,8 @@ class ReportService {
 			let ItemClass = BaseItem.getClass(d.className);
 			let o = {
 				total: await ItemClass.count(),
-				synced: await ItemClass.syncedCount(),
+				// synced: await ItemClass.syncedCount(), // TODO
+				synced: 0,
 			};
 			output.items[d.className] = o;
 			itemCount += o.total;

@@ -9,6 +9,10 @@ class FileApi {
 		this.logger_ = new Logger();
 	}
 
+	driver() {
+		return this.driver_;
+	}
+
 	setLogger(l) {
 		this.logger_ = l;
 	}

@@ -40,7 +40,11 @@ class Database {
 
 	escapeField(field) {
 		if (field == '*') return '*';
-		return '`' + field + '`';
+		let p = field.split('.');
+		if (p.length == 1) return '`' + field + '`';
+		if (p.length == 2) return p[0] + '.`' + p[1] + '`';
+		
+		throw new Error('Invalid field format: ' + field);
 	}
 
 	escapeFields(fields) {
@@ -145,7 +149,21 @@ class Database {
 			if (s == 'INTEGER') s = 'INT';
 			return this['TYPE_' + s];
 		}
+		if (type == 'syncTarget') {
+			if (s == 'memory') return 1;
+			if (s == 'file') return 2;
+			if (s == 'onedrive') return 3;
+		}
 		throw new Error('Unknown enum type or value: ' + type + ', ' + s);
+	}
+
+	static enumName(type, id) {
+		if (type == 'syncTarget') {
+			if (id === 1) return 'memory';
+			if (id === 2) return 'file';
+			if (id === 3) return 'onedrive';
+		}
+		throw new Error('Unknown enum type or id: ' + type + ', ' + id);
 	}
 
 	static formatValue(type, value) {

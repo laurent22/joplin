@@ -54,6 +54,7 @@ class Synchronizer {
 		if (report.deleteLocal) lines.push(_('Deleted local items: %d.', report.deleteLocal));
 		if (report.deleteRemote) lines.push(_('Deleted remote items: %d.', report.deleteRemote));
 		if (report.state) lines.push(_('State: %s.', report.state.replace(/_/g, ' ')));
+		if (report.errors && report.errors.length) lines.push(_('Last error: %s (stacktrace in log).', report.errors[report.errors.length-1].message));
 		return lines;
 	}
 
@@ -139,6 +140,8 @@ class Synchronizer {
 		this.onProgress_ = options.onProgress ? options.onProgress : function(o) {};
 		this.progressReport_ = { errors: [] };
 
+		const syncTargetId = this.api().driver().syncTargetId();
+
 		if (this.state() != 'idle') {
 			this.logger().warn('Synchronization is already in progress. State: ' + this.state());
 			return;
@@ -156,7 +159,7 @@ class Synchronizer {
 
 		this.state_ = 'in_progress';
 
-		this.logSyncOperation('starting', null, null, 'Starting synchronization... [' + synchronizationId + ']');
+		this.logSyncOperation('starting', null, null, 'Starting synchronization to ' + this.api().driver().syncTargetName() + ' (' + syncTargetId + ')... [' + synchronizationId + ']');
 
 		try {
 			await this.api().mkdir(this.syncDirName_);
@@ -166,7 +169,7 @@ class Synchronizer {
 			while (true) {
 				if (this.cancelling()) break;
 
-				let result = await BaseItem.itemsThatNeedSync();
+				let result = await BaseItem.itemsThatNeedSync(syncTargetId);
 				let locals = result.items;
 
 				for (let i = 0; i < locals.length; i++) {
@@ -209,7 +212,6 @@ class Synchronizer {
 
 					this.logSyncOperation(action, local, remote, reason);
 
-
 					if (local.type_ == BaseModel.TYPE_RESOURCE && (action == 'createRemote' || (action == 'itemConflict' && remote))) {
 						let remoteContentPath = this.resourceDirName_ + '/' + local.id;
 						let resourceContent = await Resource.content(local);
@@ -236,8 +238,8 @@ class Synchronizer {
 						await this.api().setTimestamp(path, local.updated_time);
 
 						if (this.randomFailure(options, 1)) return;
-						
-						await ItemClass.save({ id: local.id, sync_time: time.unixMs(), type_: local.type_ }, { autoTimestamp: false });
+
+						await ItemClass.saveSyncTime(syncTargetId, local, time.unixMs());
 
 					} else if (action == 'itemConflict') {
 
@@ -245,8 +247,8 @@ class Synchronizer {
 							let remoteContent = await this.api().get(path);
 							local = await BaseItem.unserialize(remoteContent);
 
-							local.sync_time = time.unixMs();
-							await ItemClass.save(local, { autoTimestamp: false });
+							const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
+							await ItemClass.save(local, { autoTimestamp: false, nextQueries: syncTimeQueries });
 						} else {
 							await ItemClass.delete(local.id);
 						}
@@ -266,8 +268,8 @@ class Synchronizer {
 							let remoteContent = await this.api().get(path);
 							local = await BaseItem.unserialize(remoteContent);
 
-							local.sync_time = time.unixMs();
-							await ItemClass.save(local, { autoTimestamp: false });
+							const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
+							await ItemClass.save(local, { autoTimestamp: false, nextQueries: syncTimeQueries });
 						} else {
 							await ItemClass.delete(local.id);
 						}
@@ -346,10 +348,10 @@ class Synchronizer {
 						let ItemClass = BaseItem.itemClass(content);
 
 						let newContent = Object.assign({}, content);
-						newContent.sync_time = time.unixMs();
 						let options = {
 							autoTimestamp: false,
 							applyMetadataChanges: true,
+							nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, newContent, time.unixMs()),
 						};
 						if (action == 'createLocal') options.isNew = true;
 
@@ -381,36 +383,38 @@ class Synchronizer {
 			let localFoldersToDelete = [];
 
 			if (!this.cancelling()) {
-				let items = await BaseItem.syncedItems();
-				for (let i = 0; i < items.length; i++) {
+				let syncItems = await BaseItem.syncedItems(syncTargetId);
+				for (let i = 0; i < syncItems.length; i++) {
 					if (this.cancelling()) break;
 
-					let item = items[i];
-					if (remoteIds.indexOf(item.id) < 0) {
-						if (item.type_ == Folder.modelType()) {
-							localFoldersToDelete.push(item);
+					let syncItem = syncItems[i];
+					if (remoteIds.indexOf(syncItem.item_id) < 0) {
+						if (syncItem.item_type == Folder.modelType()) {
+							localFoldersToDelete.push(syncItem);
 							continue;
 						}
 
-						this.logSyncOperation('deleteLocal', { id: item.id }, null, 'remote has been deleted');
+						this.logSyncOperation('deleteLocal', { id: syncItem.item_id }, null, 'remote has been deleted');
 
-						let ItemClass = BaseItem.itemClass(item);
-						await ItemClass.delete(item.id, { trackDeleted: false });
+						let ItemClass = BaseItem.itemClass(syncItem.item_type);
+						await ItemClass.delete(syncItem.item_id, { trackDeleted: false });
 					}
 				}
 			}
 
 			if (!this.cancelling()) {
 				for (let i = 0; i < localFoldersToDelete.length; i++) {
-					const folder = localFoldersToDelete[i];
-					const noteIds = await Folder.noteIds(folder.id);
+					const syncItem = localFoldersToDelete[i];
+					const noteIds = await Folder.noteIds(syncItem.item_id);
 					if (noteIds.length) { // CONFLICT
-						await Folder.markNotesAsConflict(folder.id);
-						await Folder.delete(folder.id, { deleteChildren: false });
-					} else {
-						await Folder.delete(folder.id);
+						await Folder.markNotesAsConflict(syncItem.item_id);
 					}
+					await Folder.delete(syncItem.item_id, { deleteChildren: false });
 				}
+			}
+
+			if (!this.cancelling()) {
+				await BaseItem.deleteOrphanSyncItems();
 			}
 		} catch (error) {
 			this.logger().error(error);

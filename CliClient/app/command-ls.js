@@ -25,7 +25,7 @@ class Command extends BaseCommand {
 			['-r, --reverse', 'Reverses the sorting order.'],
 			['-t, --type <type>', 'Displays only the items of the specific type(s). Can be `n` for notes, `t` for todos, or `nt` for notes and todos (eg. `-tt` would display only the todos, while `-ttd` would display notes and todos.'],
 			['-f, --format <format>', 'Either "text" or "json"'],
-			['-l, --long', 'Use long list format. Format is NOTE_COUNT (for notebook), DATE, NEED_SYNC, TODO_CHECKED (for todos), TITLE'],
+			['-l, --long', 'Use long list format. Format is NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for todos), TITLE'],
 		];
 	}
 
@@ -90,7 +90,6 @@ class Command extends BaseCommand {
 					}
 
 					row.push(time.unixMsToLocalDateTime(item.updated_time));
-					row.push(item.updated_time > item.sync_time ? '*' : ' ');
 				}
 
 				let title = item.title + suffix;

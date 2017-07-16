@@ -208,7 +208,6 @@ function compareItems(item1, item2) {
 	let output = [];
 	for (let n in item1) {
 		if (!item1.hasOwnProperty(n)) continue;
-		if (n == 'sync_time') continue;
 		let p1 = item1[n];
 		let p2 = item2[n];
 

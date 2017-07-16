@@ -20,6 +20,7 @@
 				"ReactNativeClient/android/local.properties",
 				"ReactNativeClient/ios",
 				"_vieux",
+				"tests/logs"
 			],
 			"file_exclude_patterns": [
 				"*.map",

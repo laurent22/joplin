@@ -6,16 +6,13 @@ import { Database } from 'lib/database.js'
 const structureSql = `
 CREATE TABLE folders (
 	id TEXT PRIMARY KEY,
-	parent_id TEXT NOT NULL DEFAULT "",
 	title TEXT NOT NULL DEFAULT "",
 	created_time INT NOT NULL,
-	updated_time INT NOT NULL,
-	sync_time INT NOT NULL DEFAULT 0
+	updated_time INT NOT NULL
 );
 
 CREATE INDEX folders_title ON folders (title);
 CREATE INDEX folders_updated_time ON folders (updated_time);
-CREATE INDEX folders_sync_time ON folders (sync_time);
 
 CREATE TABLE notes (
 	id TEXT PRIMARY KEY,
@@ -24,7 +21,6 @@ CREATE TABLE notes (
 	body TEXT NOT NULL DEFAULT "",
 	created_time INT NOT NULL,
 	updated_time INT NOT NULL,
-	sync_time INT NOT NULL DEFAULT 0,
 	is_conflict INT NOT NULL DEFAULT 0,
 	latitude NUMERIC NOT NULL DEFAULT 0,
 	longitude NUMERIC NOT NULL DEFAULT 0,
@@ -42,7 +38,6 @@ CREATE TABLE notes (
 
 CREATE INDEX notes_title ON notes (title);
 CREATE INDEX notes_updated_time ON notes (updated_time);
-CREATE INDEX notes_sync_time ON notes (sync_time);
 CREATE INDEX notes_is_conflict ON notes (is_conflict);
 CREATE INDEX notes_is_todo ON notes (is_todo);
 CREATE INDEX notes_order ON notes (\`order\`);
@@ -58,27 +53,23 @@ CREATE TABLE tags (
 	id TEXT PRIMARY KEY,
 	title TEXT NOT NULL DEFAULT "",
 	created_time INT NOT NULL,
-	updated_time INT NOT NULL,
-	sync_time INT NOT NULL DEFAULT 0
+	updated_time INT NOT NULL
 );
 
 CREATE INDEX tags_title ON tags (title);
 CREATE INDEX tags_updated_time ON tags (updated_time);
-CREATE INDEX tags_sync_time ON tags (sync_time);
 
 CREATE TABLE note_tags (
 	id TEXT PRIMARY KEY,
 	note_id TEXT NOT NULL,
 	tag_id TEXT NOT NULL,
 	created_time INT NOT NULL,
-	updated_time INT NOT NULL,
-	sync_time INT NOT NULL DEFAULT 0
+	updated_time INT NOT NULL
 );
 
 CREATE INDEX note_tags_note_id ON note_tags (note_id);
 CREATE INDEX note_tags_tag_id ON note_tags (tag_id);
 CREATE INDEX note_tags_updated_time ON note_tags (updated_time);
-CREATE INDEX note_tags_sync_time ON note_tags (sync_time);
 
 CREATE TABLE resources (
 	id TEXT PRIMARY KEY,
@@ -86,13 +77,11 @@ CREATE TABLE resources (
 	mime TEXT NOT NULL,
 	filename TEXT NOT NULL DEFAULT "",
 	created_time INT NOT NULL,
-	updated_time INT NOT NULL,
-	sync_time INT NOT NULL DEFAULT 0
+	updated_time INT NOT NULL
 );
 
 CREATE INDEX resources_title ON resources (title);
 CREATE INDEX resources_updated_time ON resources (updated_time);
-CREATE INDEX resources_sync_time ON resources (sync_time);
 
 CREATE TABLE settings (
 	\`key\` TEXT PRIMARY KEY,
@@ -111,6 +100,19 @@ CREATE TABLE table_fields (
 CREATE TABLE version (
 	version INT NOT NULL
 );
+
+CREATE TABLE sync_items (
+	id INTEGER PRIMARY KEY,
+	sync_target INT NOT NULL,
+	sync_time INT NOT NULL DEFAULT 0,
+	item_type INT NOT NULL,
+	item_id TEXT NOT NULL
+);
+
+CREATE INDEX sync_items_sync_time ON sync_items (sync_time);
+CREATE INDEX sync_items_sync_target ON sync_items (sync_target);
+CREATE INDEX sync_items_item_type ON sync_items (item_type);
+CREATE INDEX sync_items_item_id ON sync_items (item_id);
 
 INSERT INTO version (version) VALUES (1);
 `;

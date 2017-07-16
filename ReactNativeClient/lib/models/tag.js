@@ -18,7 +18,6 @@ class Tag extends BaseItem {
 	static async serialize(item, type = null, shownKeys = null) {
 		let fieldNames = this.fieldNames();
 		fieldNames.push('type_');
-		lodash.pull(fieldNames, 'sync_time');
 		return super.serialize(item, 'tag', fieldNames);
 	}
 

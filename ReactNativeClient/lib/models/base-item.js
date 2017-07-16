@@ -1,6 +1,7 @@
 import { BaseModel } from 'lib/base-model.js';
 import { Database } from 'lib/database.js';
 import { time } from 'lib/time-utils.js';
+import { sprintf } from 'sprintf-js';
 import moment from 'moment';
 
 class BaseItem extends BaseModel {
@@ -31,44 +32,14 @@ class BaseItem extends BaseModel {
 		throw new Error('Invalid class name: ' + name);
 	}
 
-	static async stats() {
-		let output = {
-			items: {},
-			total: {},
-		};
-
-		let itemCount = 0;
-		let syncedCount = 0;
-		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
-			let d = BaseItem.syncItemDefinitions_[i];
-			let ItemClass = this.getClass(d.className);
-			let o = {
-				total: await ItemClass.count(),
-				synced: await ItemClass.syncedCount(),
-			};
-			output.items[d.className] = o;
-			itemCount += o.total;
-			syncedCount += o.synced;
-		}
-
-		output.total = {
-			total: itemCount,
-			synced: syncedCount,
-		};
-
-		output.toDelete = {
-			total: await this.deletedItemCount(),
-		};
-
-		return output;
-	}
-
 	static async syncedCount() {
-		const ItemClass = this.itemClass(this.modelType());
-		let sql = 'SELECT count(*) as total FROM `' + ItemClass.tableName() + '` WHERE updated_time <= sync_time';
-		if (this.modelType() == BaseModel.TYPE_NOTE) sql += ' AND is_conflict = 0';
-		const r = await this.db().selectOne(sql);
-		return r.total;
+		// TODO
+		return 0;
+		// const ItemClass = this.itemClass(this.modelType());
+		// let sql = 'SELECT count(*) as total FROM `' + ItemClass.tableName() + '` WHERE updated_time <= sync_time';
+		// if (this.modelType() == BaseModel.TYPE_NOTE) sql += ' AND is_conflict = 0';
+		// const r = await this.db().selectOne(sql);
+		// return r.total;
 	}
 
 	static systemPath(itemOrId) {
@@ -92,13 +63,9 @@ class BaseItem extends BaseModel {
 	}
 
 	// Returns the IDs of the items that have been synced at least once
-	static async syncedItems() {
-		let folders =  await this.getClass('Folder').modelSelectAll('SELECT id FROM folders WHERE sync_time > 0');
-		let notes = await this.getClass('Note').modelSelectAll('SELECT id FROM notes WHERE is_conflict = 0 AND sync_time > 0');
-		let resources = await this.getClass('Resource').modelSelectAll('SELECT id FROM resources WHERE sync_time > 0');
-		let tags = await this.getClass('Tag').modelSelectAll('SELECT id FROM tags WHERE sync_time > 0');
-		let noteTags = await this.getClass('NoteTag').modelSelectAll('SELECT id FROM note_tags WHERE sync_time > 0');
-		return folders.concat(notes).concat(resources).concat(tags).concat(noteTags);
+	static async syncedItems(syncTarget) {
+		if (!syncTarget) throw new Error('No syncTarget specified');
+		return await this.db().selectAll('SELECT item_id, item_type FROM sync_items WHERE sync_time > 0 AND sync_target = ?', [syncTarget]);
 	}
 
 	static pathToId(path) {
@@ -136,14 +103,6 @@ class BaseItem extends BaseModel {
 
 	static async delete(id, options = null) {
 		return this.batchDelete([id], options);
-		// let trackDeleted = true;
-		// if (options && options.trackDeleted !== null && options.trackDeleted !== undefined) trackDeleted = options.trackDeleted;
-
-		// await super.delete(id, options);
-
-		// if (trackDeleted) {
-		// 	await this.db().exec('INSERT INTO deleted_items (item_type, item_id, deleted_time) VALUES (?, ?, ?)', [this.modelType(), id, time.unixMs()]);
-		// }
 	}
 
 	static async batchDelete(ids, options = null) {
@@ -289,21 +248,54 @@ class BaseItem extends BaseModel {
 		return output;
 	}
 
-	static async itemsThatNeedSync(limit = 100) {
-		let items = await this.getClass('Folder').modelSelectAll('SELECT * FROM folders WHERE sync_time < updated_time LIMIT ' + limit);
-		if (items.length) return { hasMore: true, items: items };
+	static async itemsThatNeedSync(syncTarget, limit = 100) {
+		const classNames = this.syncItemClassNames();
 
-		items = await this.getClass('Resource').modelSelectAll('SELECT * FROM resources WHERE sync_time < updated_time LIMIT ' + limit);
-		if (items.length) return { hasMore: true, items: items };
+		for (let i = 0; i < classNames.length; i++) {
+			const className = classNames[i];
+			const ItemClass = this.getClass(className);
+			const fieldNames = ItemClass.fieldNames(true);
+			fieldNames.push('sync_time');
 
-		items = await this.getClass('Note').modelSelectAll('SELECT * FROM notes WHERE sync_time < updated_time AND is_conflict = 0 LIMIT ' + limit);
-		if (items.length) return { hasMore: true, items: items };
+			let sql = sprintf(`
+				SELECT %s FROM %s
+				LEFT JOIN sync_items t ON t.item_id = %s.id
+				WHERE t.id IS NULL OR t.sync_time < %s.updated_time
+				LIMIT %d
+			`,
+			this.db().escapeFields(fieldNames),
+			this.db().escapeField(ItemClass.tableName()),
+			this.db().escapeField(ItemClass.tableName()),
+			this.db().escapeField(ItemClass.tableName()),
+			limit);
 
-		items = await this.getClass('Tag').modelSelectAll('SELECT * FROM tags WHERE sync_time < updated_time LIMIT ' + limit);
-		if (items.length) return { hasMore: true, items: items };
+			const items = await ItemClass.modelSelectAll(sql);
 
-		items = await this.getClass('NoteTag').modelSelectAll('SELECT * FROM note_tags WHERE sync_time < updated_time LIMIT ' + limit);
-		return { hasMore: items.length >= limit, items: items };
+			if (i >= classNames.length - 1) {
+				return { hasMore: items.length >= limit, items: items };
+			} else {
+				if (items.length) return { hasMore: true, items: items };
+			}
+		}
+
+		throw new Error('Unreachable');
+
+		//return this.modelSelectAll('SELECT * FROM folders WHERE sync_time < updated_time LIMIT ' + limit);
+
+		// let items = await this.getClass('Folder').modelSelectAll('SELECT * FROM folders WHERE sync_time < updated_time LIMIT ' + limit);
+		// if (items.length) return { hasMore: true, items: items };
+
+		// items = await this.getClass('Resource').modelSelectAll('SELECT * FROM resources WHERE sync_time < updated_time LIMIT ' + limit);
+		// if (items.length) return { hasMore: true, items: items };
+
+		// items = await this.getClass('Note').modelSelectAll('SELECT * FROM notes WHERE sync_time < updated_time AND is_conflict = 0 LIMIT ' + limit);
+		// if (items.length) return { hasMore: true, items: items };
+
+		// items = await this.getClass('Tag').modelSelectAll('SELECT * FROM tags WHERE sync_time < updated_time LIMIT ' + limit);
+		// if (items.length) return { hasMore: true, items: items };
+
+		// items = await this.getClass('NoteTag').modelSelectAll('SELECT * FROM note_tags WHERE sync_time < updated_time LIMIT ' + limit);
+		// return { hasMore: items.length >= limit, items: items };
 	}
 
 	static syncItemClassNames() {
@@ -317,6 +309,42 @@ class BaseItem extends BaseModel {
 			if (BaseItem.syncItemDefinitions_[i].type == type) return BaseItem.syncItemDefinitions_[i].className;
 		}
 		throw new Error('Invalid type: ' + type);
+	}
+
+	static updateSyncTimeQueries(syncTarget, item, syncTime) {
+		const itemType = item.type_;
+		const itemId = item.id;
+		if (!itemType || !itemId || syncTime === undefined) throw new Error('Invalid parameters in updateSyncTimeQueries()');
+
+		return [
+			{
+				sql: 'DELETE FROM sync_items WHERE sync_target = ? AND item_type = ? AND item_id = ?',
+				params: [syncTarget, itemType, itemId],
+			},
+			{
+				sql: 'INSERT INTO sync_items (sync_target, item_type, item_id, sync_time) VALUES (?, ?, ?, ?)',
+				params: [syncTarget, itemType, itemId, syncTime],
+			}
+		];
+	}
+
+	static async saveSyncTime(syncTarget, item, syncTime) {
+		const queries = this.updateSyncTimeQueries(syncTarget, item, syncTime);
+		return this.db().transactionExecBatch(queries);
+	}
+
+	static async deleteOrphanSyncItems() {
+		const classNames = this.syncItemClassNames();
+
+		let queries = [];
+		for (let i = 0; i < classNames.length; i++) {
+			const className = classNames[i];
+			const ItemClass = this.getClass(className);
+
+			queries.push('DELETE FROM sync_items WHERE item_type = ' + ItemClass.modelType() + ' AND item_id NOT IN (SELECT id FROM ' + ItemClass.tableName() + ')');
+		}
+
+		await this.db().transactionExecBatch(queries);
 	}
 
 }
