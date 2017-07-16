@@ -42,7 +42,7 @@ async function createClients() {
 	for (let clientId = 0; clientId < 2; clientId++) {
 		let client = createClient(clientId);
 		promises.push(fs.remove(client.profileDir));
-		promises.push(execCommand(client, 'config sync.target local').then(() => { return execCommand(client, 'config sync.local.path ' + syncDir); }));
+		promises.push(execCommand(client, 'config sync.target filesystem').then(() => { return execCommand(client, 'config sync.filesystem.path ' + syncDir); }));
 		output.push(client);
 	}
 

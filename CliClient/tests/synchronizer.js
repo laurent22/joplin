@@ -75,8 +75,6 @@ describe('Synchronizer', function() {
 		let note = await Note.save({ title: "un", parent_id: folder.id });
 		await synchronizer().start();
 
-		await sleep(0.1);
-
 		await Note.save({ title: "un UPDATE", id: note.id });
 
 		let all = await allItems();

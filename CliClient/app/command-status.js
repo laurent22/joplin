@@ -1,4 +1,6 @@
 import { BaseCommand } from './base-command.js';
+import { Database } from 'lib/database.js';
+import { Setting } from 'lib/models/setting.js';
 import { _ } from 'lib/locale.js';
 import { ReportService } from 'lib/services/report.js';
 
@@ -14,7 +16,7 @@ class Command extends BaseCommand {
 
 	async action(args) {
 		let service = new ReportService();
-		let report = await service.status();
+		let report = await service.status(Database.enumId('syncTarget', Setting.value('sync.target')));
 
 		for (let i = 0; i < report.length; i++) {
 			let section = report[i];

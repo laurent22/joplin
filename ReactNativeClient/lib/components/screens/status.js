@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { ListView, View, Text, Button } from 'react-native';
+import { Setting } from 'lib/models/setting.js';
 import { connect } from 'react-redux'
 import { Log } from 'lib/log.js'
 import { reg } from 'lib/registry.js'
@@ -7,6 +8,7 @@ import { ScreenHeader } from 'lib/components/screen-header.js';
 import { time } from 'lib/time-utils'
 import { Logger } from 'lib/logger.js';
 import { BaseItem } from 'lib/models/base-item.js';
+import { Database } from 'lib/database.js';
 import { Folder } from 'lib/models/folder.js';
 import { ReportService } from 'lib/services/report.js';
 import { _ } from 'lib/locale.js';
@@ -31,7 +33,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 
 	async resfreshScreen() {
 		let service = new ReportService();
-		let report = await service.status();
+		let report = await service.status(Database.enumId('syncTarget', Setting.value('sync.target')));
 		this.setState({ report: report });
 	}
 

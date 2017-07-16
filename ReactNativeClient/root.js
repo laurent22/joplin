@@ -68,6 +68,17 @@ function historyCanGoBackTo(route) {
 	return true;
 }
 
+function reducerActionsAreSame(a1, a2) {
+	if (Object.getOwnPropertyNames(a1).length !== Object.getOwnPropertyNames(a2).length) return false;
+
+	for (let n in a1) {
+		if (!a1.hasOwnProperty(n)) continue;
+		if (a1[n] !== a2[n]) return false;
+	}
+
+	return true;
+}
+
 const reducer = (state = defaultState, action) => {
 	reg.logger().info('Reducer action', action.type);
 
@@ -116,10 +127,16 @@ const reducer = (state = defaultState, action) => {
 					newState.selectedItemType = action.itemType;
 				}
 
+				newState.route = action;
+
+				// If the route *name* is the same (even if the other parameters are different), we
+				// overwrite the last route in the history with the current one. If the route name
+				// is different, we push a new history entry.
+
 				if (currentRouteName == action.routeName) {
+					if (navHistory.length) navHistory[navHistory.length - 1] = action;
 					// If the current screen is already the requested screen, don't do anything
 				} else {
-					newState.route = action;
 					if (action.routeName == 'Welcome') navHistory = [];
 					navHistory.push(action);
 				}
@@ -151,20 +168,27 @@ const reducer = (state = defaultState, action) => {
 			// update it within the note array if it already exists.
 			case 'NOTES_UPDATE_ONE':
 
-				if (action.note.parent_id != state.selectedFolderId) break;
+				const modNote = action.note;
 
 				let newNotes = state.notes.splice(0);
 				var found = false;
 				for (let i = 0; i < newNotes.length; i++) {
 					let n = newNotes[i];
-					if (n.id == action.note.id) {
-						newNotes[i] = Object.assign(newNotes[i], action.note);
+					if (n.id == modNote.id) {
+
+						if (!('parent_id' in modNote) || modNote.parent_id == n.parent_id) {
+							// Merge the properties that have changed (in modNote) into
+							// the object we already have.
+							newNotes[i] = Object.assign(newNotes[i], action.note);
+						} else {
+							newNotes.splice(i, 1);
+						}
 						found = true;
 						break;
 					}
 				}
 
-				if (!found) newNotes.push(action.note);
+				if (!found && ('parent_id' in modNote) && modNote.parent_id == state.selectedFolderId) newNotes.push(modNote);
 
 				newNotes = Note.sortNotes(newNotes, state.notesOrder);
 				newState = Object.assign({}, state);

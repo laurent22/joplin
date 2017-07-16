@@ -6,7 +6,7 @@ import { _ } from 'lib/locale.js';
 
 class ReportService {
 
-	async syncStatus() {
+	async syncStatus(syncTarget) {
 		let output = {
 			items: {},
 			total: {},
@@ -19,8 +19,7 @@ class ReportService {
 			let ItemClass = BaseItem.getClass(d.className);
 			let o = {
 				total: await ItemClass.count(),
-				// synced: await ItemClass.syncedCount(), // TODO
-				synced: 0,
+				synced: await ItemClass.syncedCount(syncTarget),
 			};
 			output.items[d.className] = o;
 			itemCount += o.total;
@@ -47,8 +46,8 @@ class ReportService {
 		return output;
 	}
 
-	async status() {
-		let r = await this.syncStatus();
+	async status(syncTarget) {
+		let r = await this.syncStatus(syncTarget);
 		let sections = [];
 		let section = {};
 

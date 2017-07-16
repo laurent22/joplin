@@ -146,7 +146,7 @@ class Setting extends BaseModel {
 Setting.defaults_ = {
 	'activeFolderId': { value: '', type: 'string', public: false },
 	'sync.onedrive.auth': { value: '', type: 'string', public: false },
-	'sync.local.path': { value: '', type: 'string', public: true },	
+	'sync.filesystem.path': { value: '', type: 'string', public: true },	
 	'sync.target': { value: 'onedrive', type: 'string', public: true },
 	'editor': { value: '', type: 'string', public: true },
 };

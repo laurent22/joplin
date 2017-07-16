@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Button, StyleSheet, TouchableOpacity, Picker } from 'react-native';
 import { Log } from 'lib/log.js';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import { _ } from 'lib/locale.js';
@@ -150,14 +150,33 @@ class ScreenHeaderComponent extends Component {
 				<Text>{_('Status')}</Text>
 			</MenuOption>);
 
-		let title = 'title' in this.props && this.props.title !== null ? this.props.title : _(this.props.navState.routeName);
+		const createTitleComponent = () => {
+			const p = this.props.titlePicker;
+			if (p) {
+				let items = [];
+				for (let i = 0; i < p.items.length; i++) {
+					let item = p.items[i];
+					items.push(<Picker.Item label={item.label} value={item.value} key={item.value} />);
+				}
+				return (
+					<Picker style={{height: 30, flex:1}} selectedValue={p.selectedValue} onValueChange={(itemValue, itemIndex) => { if (p.onValueChange) p.onValueChange(itemValue, itemIndex); }}>
+						{ items }
+					</Picker>
+				);
+			} else {
+				let title = 'title' in this.props && this.props.title !== null ? this.props.title : _(this.props.navState.routeName);
+				return <Text style={{ flex:1, marginLeft: 10 }}>{title}</Text>
+			}
+		}
+
+		const titleComp = createTitleComponent();
 
 		return (
 			<View style={{ flexDirection: 'row', paddingLeft: 10, paddingTop: 10, paddingBottom: 10, paddingRight: 0, backgroundColor: '#ffffff', alignItems: 'center' }} >
 				{ sideMenuButton(styles, () => this.sideMenuButton_press()) }
 				{ backButton(styles, () => this.backButton_press(), !this.props.historyCanGoBack) }
 				{ saveButton(styles, () => { if (this.props.onSaveButtonPress) this.props.onSaveButtonPress() }, this.props.saveButtonDisabled === true, this.props.showSaveButton === true) }
-				<Text style={{ flex:1, marginLeft: 10 }} >{title}</Text>
+				{ titleComp }				
 			    <Menu onSelect={(value) => this.menu_select(value)}>
 					<MenuTrigger>
 						<Text style={{ fontSize: 25 }}>      &#8942;  </Text>

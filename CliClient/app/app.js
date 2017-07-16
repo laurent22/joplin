@@ -260,8 +260,8 @@ class Application {
 		} else if (syncTarget == 'memory') {
 			fileApi = new FileApi('joplin', new FileApiDriverMemory());
 			fileApi.setLogger(this.logger_);
-		} else if (syncTarget == 'file') {
-			let syncDir = Setting.value('sync.local.path');
+		} else if (syncTarget == 'filesystem') {
+			let syncDir = Setting.value('sync.filesystem.path');
 			if (!syncDir) syncDir = Setting.value('profileDir') + '/sync';
 			this.vorpal().log(_('Synchronizing with directory "%s"', syncDir));
 			await fs.mkdirp(syncDir, 0o755);

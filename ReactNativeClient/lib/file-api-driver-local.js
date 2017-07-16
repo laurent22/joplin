@@ -10,7 +10,7 @@ class FileApiDriverLocal {
 	}
 
 	syncTargetName() {
-		return 'file';
+		return 'filesystem';
 	}
 
 	fsErrorToJsError_(error) {

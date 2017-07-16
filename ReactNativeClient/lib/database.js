@@ -151,7 +151,7 @@ class Database {
 		}
 		if (type == 'syncTarget') {
 			if (s == 'memory') return 1;
-			if (s == 'file') return 2;
+			if (s == 'filesystem') return 2;
 			if (s == 'onedrive') return 3;
 		}
 		throw new Error('Unknown enum type or value: ' + type + ', ' + s);
@@ -160,7 +160,7 @@ class Database {
 	static enumName(type, id) {
 		if (type == 'syncTarget') {
 			if (id === 1) return 'memory';
-			if (id === 2) return 'file';
+			if (id === 2) return 'filesystem';
 			if (id === 3) return 'onedrive';
 		}
 		throw new Error('Unknown enum type or id: ' + type + ', ' + id);

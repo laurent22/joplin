@@ -218,6 +218,7 @@ class BaseModel {
 		}
 
 		query.id = modelId;
+		query.modObject = o;
 
 		return query;
 	}
@@ -241,6 +242,8 @@ class BaseModel {
 		return this.db().transactionExecBatch(queries).then(() => {
 			o = Object.assign({}, o);
 			o.id = modelId;
+			if ('updated_time' in saveQuery.modObject) o.updated_time = saveQuery.modObject.updated_time;
+			if ('created_time' in saveQuery.modObject) o.created_time = saveQuery.modObject.created_time;
 			o = this.addModelMd(o);
 			return this.filter(o);
 		}).catch((error) => {
