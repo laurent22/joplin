@@ -9,6 +9,7 @@ class Logger {
 		this.targets_ = [];
 		this.level_ = Logger.LEVEL_ERROR;
 		this.fileAppendQueue_ = []
+		this.lastDbCleanup_ = time.unixMs();
 	}
 
 	static fsDriver() {
@@ -111,7 +112,23 @@ class Logger {
 				target.vorpal.log(...object);
 			} else if (target.type == 'database') {
 				let msg = this.objectsToString(...object);
-				target.database.exec('INSERT INTO logs (`source`, `level`, `message`, `timestamp`) VALUES (?, ?, ?, ?)', [target.source, level, msg, time.unixMs()]);
+
+				let queries = [{
+					sql: 'INSERT INTO logs (`source`, `level`, `message`, `timestamp`) VALUES (?, ?, ?, ?)',
+					params: [target.source, level, msg, time.unixMs()],
+				}];
+
+				const now = time.unixMs();
+				if (now - this.lastDbCleanup_ > 1000 * 60 * 60) {
+					this.lastDbCleanup_ = now;
+					const dayKeep = 14;
+					queries.push({
+						sql: 'DELETE FROM logs WHERE `timestamp` < ?',
+						params: [now - 1000 * 60 * 60 * 24 * dayKeep],
+					});
+				}
+
+				target.database.transactionExecBatch(queries);
 			}
 		}
 	}

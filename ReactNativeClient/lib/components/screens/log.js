@@ -48,7 +48,7 @@ class LogScreenComponent extends BaseScreenComponent {
 			};
 			return (
 				<View style={{flexDirection: 'row', paddingLeft: 1, paddingRight: 1, paddingTop:0, paddingBottom:0 }}>
-					<Text style={style}>{time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm') + ': ' + item.message}</Text>
+					<Text style={style}>{time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm:ss') + ': ' + item.message}</Text>
 				</View>
 			);
 		}
