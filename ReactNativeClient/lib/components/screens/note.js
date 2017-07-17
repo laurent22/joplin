@@ -239,54 +239,100 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		let bodyComponent = null;
 		if (this.state.mode == 'view') {
+			function toggleTickAt(body, index) {
+				let counter = -1;
+				while (body.indexOf('- [ ]') >= 0 || body.indexOf('- [X]') >= 0) {
+					counter++;
 
-			// https://necolas.github.io/normalize.css/
-			const normalizeCss = `
-				html{line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}
-				article,aside,footer,header,nav,section{display:block}h1{font-size:2em;margin:.67em 0}hr{box-sizing:content-box;height:0;overflow:visible}
-				pre{font-family:monospace,monospace;font-size:1em}a{background-color:transparent;-webkit-text-decoration-skip:objects}
-				b,strong{font-weight:bolder}small{font-size:80%}img{border-style:none}
-			`;
-			const css = `
-				body {
-					font-size: 14px;
-					margin: 1em;
+					body = body.replace(/- \[(X| )\]/, function(v, p1) {
+						let s = p1 == ' ' ? 'NOTICK' : 'TICK';
+						if (index == counter) {
+							s = s == 'NOTICK' ? 'TICK' : 'NOTICK';
+						}
+						return '°°JOP°CHECKBOX°' + s + '°°';
+					});
 				}
-				h1 {
-					font-size: 1.2em;
-					font-weight: bold;
-				}
-				h2 {
-					font-size: 1em;
-					font-weight: bold;
-				}
-				li {
-					
-				}
-				ul {
-					padding-left: 1em;
-				}
-				.checkbox {
-					font-size: 1.4em;
-					position: relative;
-					top: 0.1em;
-				}
-			`;
 
-			let body = note.body;
-			body = body.replace(/- \[ \]/g, '☐');
-			body = body.replace(/- \[X\]/g, '☑');
+				body = body.replace(/°°JOP°CHECKBOX°NOTICK°°/g, '- [ ]'); 
+				body = body.replace(/°°JOP°CHECKBOX°TICK°°/g, '- [X]'); 
 
-			const source = {
-				html: note ? '<style>' + normalizeCss + "\n" + css + '</style>' + marked(body, { gfm: true, breaks: true }) : '',
-			};
+				return body;
+			}
 
-			source.html = source.html.replace(/☐/g, '<span class="checkbox">☐</span>')
-			source.html = source.html.replace(/☑/g, '<span class="checkbox">☑</span>')
+			function markdownToHtml(body) {
+				// https://necolas.github.io/normalize.css/
+				const normalizeCss = `
+					html{line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}
+					article,aside,footer,header,nav,section{display:block}h1{font-size:2em;margin:.67em 0}hr{box-sizing:content-box;height:0;overflow:visible}
+					pre{font-family:monospace,monospace;font-size:1em}a{background-color:transparent;-webkit-text-decoration-skip:objects}
+					b,strong{font-weight:bolder}small{font-size:80%}img{border-style:none}
+				`;
+				const css = `
+					body {
+						font-size: 16px;
+						margin: 1em;
+					}
+					h1 {
+						font-size: 1.2em;
+						font-weight: bold;
+					}
+					h2 {
+						font-size: 1em;
+						font-weight: bold;
+					}
+					li {
+						
+					}
+					ul {
+						padding-left: 1em;
+					}
+					a.checkbox {
+						font-size: 1.4em;
+						position: relative;
+						top: 0.1em;
+						text-decoration: none;
+						color: black;
+					}
+				`;
+
+				let counter = -1;
+				while (body.indexOf('- [ ]') >= 0 || body.indexOf('- [X]') >= 0) {
+					body = body.replace(/- \[(X| )\]/, function(v, p1) {
+						let s = p1 == ' ' ? 'NOTICK' : 'TICK';
+						counter++;
+						return '°°JOP°CHECKBOX°' + s + '°' + counter + '°°';
+					});
+				}
+
+				let html = note ? '<style>' + normalizeCss + "\n" + css + '</style>' + marked(body, { gfm: true, breaks: true }) : '';
+
+				let elementId = 1;
+				while (html.indexOf('°°JOP°') >= 0) {
+					html = html.replace(/°°JOP°CHECKBOX°([A-Z]+)°(\d+)°°/, function(v, type, index) {
+						const js = "postMessage('checkboxclick_" + type + '_' + index + "'); this.textContent = this.textContent == '☐' ? '☑' : '☐';";
+						return '<a href="#" onclick="' + js + '" class="checkbox">' + (type == 'NOTICK' ? '☐' : '☑') + '</a>';
+					});
+				}
+
+				return html;
+			}
 
 			bodyComponent = (
 				<View style={{flex:1}}>
-					<WebView source={source}/>
+					<WebView
+						source={{ html: markdownToHtml(note.body) }}
+						onMessage={(event) => {
+							// 'checkboxclick_NOTICK_0'
+							let msg = event.nativeEvent.data;
+							if (msg.indexOf('checkboxclick_') === 0) {
+								msg = msg.split('_');
+								let index = Number(msg[msg.length - 1]);
+								let currentState = msg[msg.length - 2]; // Not really needed but keep it anyway
+								const newBody = toggleTickAt(note.body, index);
+								this.saveOneProperty('body', newBody);
+							}
+						}}
+					/>
 				</View>
 			);
 		} else {
