@@ -4,12 +4,15 @@ import { _ } from 'lib/locale.js';
 import { Setting } from 'lib/models/setting.js';
 import { BaseItem } from 'lib/models/base-item.js';
 import { vorpalUtils } from './vorpal-utils.js';
+const locker = require('proper-lockfile');
+const fs = require('fs-extra');
 
 class Command extends BaseCommand {
 
 	constructor() {
 		super();
 		this.syncTarget_ = null;
+		this.releaseLockFn_ = null;
 	}
 
 	usage() {
@@ -27,36 +30,80 @@ class Command extends BaseCommand {
 		];
 	}
 
+	static lockFile(filePath) {
+		return new Promise((resolve, reject) => {
+			locker.lock(filePath, (error, release) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+
+				resolve(release);
+			});
+		});
+	}
+
+	static isLocked(filePath) {
+		return new Promise((resolve, reject) => {
+			locker.check(filePath, (error, isLocked) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+
+				resolve(isLocked);
+			});
+		});
+	}
+
 	async action(args) {
-		this.syncTarget_ = Setting.value('sync.target');
-		if (args.options.target) this.syncTarget_ = args.options.target;
+		this.releaseLockFn_ = null;
 
-		let sync = await app().synchronizer(this.syncTarget_);
+		const lockFilePath = Setting.value('tempDir') + '/synclock';
+		if (!await fs.pathExists(lockFilePath)) await fs.writeFile(lockFilePath, 'synclock');
 
-		let options = {
-			onProgress: (report) => {
-				let lines = sync.reportToLines(report);
-				if (lines.length) vorpalUtils.redraw(lines.join(' '));
-			},
-			onMessage: (msg) => {
-				vorpalUtils.redrawDone();
-				this.log(msg);
-			},
-			randomFailures: args.options['random-failures'] === true,
-		};
+		if (await Command.isLocked(lockFilePath)) throw new Error(_('Synchronisation is already in progress.'));
 
-		this.log(_('Synchronization target: %s', this.syncTarget_));
+		this.releaseLockFn_ = await Command.lockFile(lockFilePath);
 
-		if (!sync) throw new Error(_('Cannot initialize synchronizer.'));
+		try {
+			this.syncTarget_ = Setting.value('sync.target');
+			if (args.options.target) this.syncTarget_ = args.options.target;
 
-		this.log(_('Starting synchronization...'));
+			let sync = await app().synchronizer(this.syncTarget_);
 
-		await sync.start(options);
-		vorpalUtils.redrawDone();
+			let options = {
+				onProgress: (report) => {
+					let lines = sync.reportToLines(report);
+					if (lines.length) vorpalUtils.redraw(lines.join(' '));
+				},
+				onMessage: (msg) => {
+					vorpalUtils.redrawDone();
+					this.log(msg);
+				},
+				randomFailures: args.options['random-failures'] === true,
+			};
 
-		await app().refreshCurrentFolder();
+			this.log(_('Synchronization target: %s', this.syncTarget_));
 
-		this.log(_('Done.'));
+			if (!sync) throw new Error(_('Cannot initialize synchronizer.'));
+
+			this.log(_('Starting synchronization...'));
+
+			await sync.start(options);
+			vorpalUtils.redrawDone();
+
+			await app().refreshCurrentFolder();
+
+			this.log(_('Done.'));
+		} catch (error) {
+			this.releaseLockFn_();
+			this.releaseLockFn_ = null;
+			throw error;
+		}
+
+		this.releaseLockFn_();
+		this.releaseLockFn_ = null;
 	}
 
 	async cancel() {

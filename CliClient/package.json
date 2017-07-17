@@ -25,6 +25,7 @@
     "moment-timezone": "^0.5.13",
     "node-fetch": "^1.7.1",
     "promise": "^7.1.1",
+    "proper-lockfile": "^2.0.1",
     "query-string": "4.3.4",
     "sax": "^1.2.2",
     "server-destroy": "^1.0.1",
