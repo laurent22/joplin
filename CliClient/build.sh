@@ -8,4 +8,5 @@ cp "$CLIENT_DIR/package.json" "$CLIENT_DIR/build"
 
 # Always keep this as the last line so that the exit
 # code of build.sh is the same as the build command:
-npm run build
+#npm run build
+yarn run build

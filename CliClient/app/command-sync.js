@@ -7,6 +7,11 @@ import { vorpalUtils } from './vorpal-utils.js';
 
 class Command extends BaseCommand {
 
+	constructor() {
+		super();
+		this.syncTarget_ = null;
+	}
+
 	usage() {
 		return 'sync';
 	}
@@ -17,12 +22,16 @@ class Command extends BaseCommand {
 
 	options() {
 		return [
+			['--target <target>', 'Sync to provided target (defaults to sync.target config value)'],
 			['--random-failures', 'For debugging purposes. Do not use.'],
 		];
 	}
 
 	async action(args) {
-		let sync = await app().synchronizer(Setting.value('sync.target'));
+		this.syncTarget_ = Setting.value('sync.target');
+		if (args.options.target) this.syncTarget_ = args.options.target;
+
+		let sync = await app().synchronizer(this.syncTarget_);
 
 		let options = {
 			onProgress: (report) => {
@@ -36,7 +45,7 @@ class Command extends BaseCommand {
 			randomFailures: args.options['random-failures'] === true,
 		};
 
-		this.log(_('Synchronization target: %s', Setting.value('sync.target')));
+		this.log(_('Synchronization target: %s', this.syncTarget_));
 
 		if (!sync) throw new Error(_('Cannot initialize synchronizer.'));
 
@@ -51,10 +60,14 @@ class Command extends BaseCommand {
 	}
 
 	async cancel() {
+		const target = this.syncTarget_ ? this.syncTarget_ : Setting.value('sync.target');
+
 		vorpalUtils.redrawDone();
 		this.log(_('Cancelling...'));
-		let sync = await app().synchronizer(Setting.value('sync.target'));
+		let sync = await app().synchronizer(target);
 		sync.cancel();
+
+		this.syncTarget_ = null;
 	}
 
 }

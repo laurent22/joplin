@@ -40,6 +40,7 @@ class Command extends BaseCommand {
 			const ok = force ? true : await vorpalUtils.cmdPromptConfirm(this, _('Delete notebook "%s"?', folder.title));
 			if (!ok) return;
 			await Folder.delete(folder.id);
+			await app().refreshCurrentFolder();
 		} else {
 			const notes = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
 			if (!notes.length) throw new Error(_('No note matchin pattern "%s"', pattern));

@@ -20,21 +20,20 @@ function autocompleteFolders() {
 	});
 }
 
-function autocompleteItems() {
-	let promise = null;
+async function autocompleteItems() {
+	let items = [];
 	if (!app().currentFolder()) {
-		promise = Folder.all();
+		items = await Folder.all();
 	} else {
-		promise = Note.previews(app().currentFolder().id);
+		items = await Note.previews(app().currentFolder().id);
 	}
 
-	return promise.then((items) => {
-		let output = [];
-		for (let i = 0; i < items.length; i++) {
-			output.push(quotePromptArg(items[i].title));
-		}
-		return output;			
-	});
+	let output = [];
+	for (let i = 0; i < items.length; i++) {
+		output.push(quotePromptArg(items[i].title));
+	}
+	
+	return output;
 }
 
 export { autocompleteFolders, autocompleteItems };

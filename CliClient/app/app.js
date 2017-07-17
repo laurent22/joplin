@@ -329,7 +329,7 @@ class Application {
 		if (!this.currentFolder_) this.currentFolder_ = await Folder.defaultFolder();
 		Setting.setValue('activeFolderId', this.currentFolder_ ? this.currentFolder_.id : '');
 
-		if (this.currentFolder_) await this.vorpal().exec('use ' + this.currentFolder_.title);
+		if (this.currentFolder_) await this.vorpal().exec('use ' + this.escapeShellArg(this.currentFolder_.title));
 
 		// If we still have arguments, pass it to Vorpal and exit
 		if (argv.length) {

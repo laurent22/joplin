@@ -102,6 +102,10 @@ class BaseModel {
 		return this.loadByField('id', id);
 	}
 
+	static shortId(id) {
+		return id.substr(0, 4);
+	}
+
 	static loadByPartialId(partialId) {
 		return this.modelSelectOne('SELECT * FROM `' + this.tableName() + '` WHERE `id` LIKE ?', [partialId + '%']);
 	}

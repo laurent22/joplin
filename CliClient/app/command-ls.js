@@ -1,6 +1,7 @@
 import { BaseCommand } from './base-command.js';
 import { app } from './app.js';
 import { _ } from 'lib/locale.js';
+import { BaseModel } from 'lib/base-model.js';
 import { Folder } from 'lib/models/folder.js';
 import { Note } from 'lib/models/note.js';
 import { autocompleteFolders } from './autocomplete.js';
@@ -25,7 +26,7 @@ class Command extends BaseCommand {
 			['-r, --reverse', 'Reverses the sorting order.'],
 			['-t, --type <type>', 'Displays only the items of the specific type(s). Can be `n` for notes, `t` for todos, or `nt` for notes and todos (eg. `-tt` would display only the todos, while `-ttd` would display notes and todos.'],
 			['-f, --format <format>', 'Either "text" or "json"'],
-			['-l, --long', 'Use long list format. Format is NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for todos), TITLE'],
+			['-l, --long', 'Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for todos), TITLE'],
 		];
 	}
 
@@ -80,11 +81,15 @@ class Command extends BaseCommand {
 
 			let seenTitles = [];
 			let rows = [];
+			let shortIdShown = false;
 			for (let i = 0; i < items.length; i++) {
 				let item = items[i];
 				let row = [];
 
 				if (options.long) {
+					row.push(BaseModel.shortId(item.id));
+					shortIdShown = true;
+
 					if (modelType == Folder.modelType()) {
 						row.push(await Folder.noteCount(item.id));
 					}
@@ -93,8 +98,8 @@ class Command extends BaseCommand {
 				}
 
 				let title = item.title + suffix;
-				if (seenTitles.indexOf(item.title) >= 0 || !item.title) {
-					title += ' (' + item.id.substr(0,4) + ')';
+				if (!shortIdShown && (seenTitles.indexOf(item.title) >= 0 || !item.title)) {
+					title += ' (' + BaseModel.shortId(item.id) + ')';
 				} else {
 					seenTitles.push(item.title);
 				}
