@@ -1,8 +1,10 @@
-const BLOCK_OPEN = "<div>";
-const BLOCK_CLOSE = "</div>";
-const NEWLINE = "<br/>";
-const NEWLINE_MERGED = "<merged/>";
-const SPACE = "<space/>";
+import stringPadding from 'string-padding';
+
+const BLOCK_OPEN = "[[BLOCK_OPEN]]";
+const BLOCK_CLOSE = "[[BLOCK_CLOSE]]";
+const NEWLINE = "[[NEWLINE]]";
+const NEWLINE_MERGED = "[[MERGED]]";
+const SPACE = "[[SPACE]]";
 
 function processMdArrayNewLines(md) {
 	while (md.length && md[0] == BLOCK_OPEN) {
@@ -248,34 +250,6 @@ function enexXmlToMdArray(stream, resources) {
 			section.lines = collapseWhiteSpaceAndAppend(section.lines, state, text);
 		})
 
-		// Section: {
-		// 	type: "block/table/tr/td",
-		// 	lines: []
-		// }
-
-
-		// {
-		// 	type: 'text',
-		// 	lines: [
-		// 		'this is a line',
-		// 		'<br>',
-		// 		{
-		// 			type: 'table',
-		// 			trs: [
-		// 				{
-		// 					tds: [
-		// 						{
-		// 							lines: [],
-		// 						}
-		// 					],
-		// 				}
-		// 			],
-		// 		}
-		// 	]
-		// }
-
-		//output.push(section);
-
 		saxStream.on('opentag', function(node) {
 			let n = node.name.toLowerCase();
 			if (n == 'en-note') {
@@ -299,12 +273,15 @@ function enexXmlToMdArray(stream, resources) {
 					type: 'tr',
 					lines: [],
 					parent: section,
+					isHeader: false,
 				}
 
 				section.lines.push(newSection);
 				section = newSection;
 			} else if (n == 'td' || n == 'th') {
 				if (section.type != 'tr') throw new Error('Found a <td> tag outside of a <tr>');
+
+				if (n == 'th') section.isHeader = true;
 
 				let newSection = {
 					type: 'td',
@@ -516,69 +493,138 @@ function enexXmlToMdArray(stream, resources) {
 	});
 }
 
-async function processMdArrayTables(mdArray) {
-	let output = [];
+function setTableCellContent(table) {
+	if (!table.type == 'table') throw new Error('Only for tables');
 
-	for (let i = 0; i < mdArray.length; i++) {
-		let item = mdArray[i];
-
-		if (typeof item == 'string') {
-			output.push(item);
-		} else if (item.type == 'table') {
-			output.push('[[TABLE]]');
-			output = output.concat(await processMdArrayTables(item.lines));
-		} else if (item.type == 'tr') {
-			output.push('[[TR]]');
-			output = output.concat(await processMdArrayTables(item.lines));
-		} else if (item.type == 'td') {
-			output.push('[[TD]]');
-			output = output.concat(await processMdArrayTables(item.lines));
+	for (let trIndex = 0; trIndex < table.lines.length; trIndex++) {
+		const tr = table.lines[trIndex];
+		for (let tdIndex = 0; tdIndex < tr.lines.length; tdIndex++) {
+			const td = tr.lines[tdIndex];
+			td.content = processMdArrayNewLines(td.lines);
+			td.content = td.content.replace(/\n\n\n\n\n/g, ' ');
+			td.content = td.content.replace(/\n\n\n\n/g, ' ');
+			td.content = td.content.replace(/\n\n\n/g, ' ');
+			td.content = td.content.replace(/\n\n/g, ' ');
+			td.content = td.content.replace(/\n/g, ' ');
 		}
 	}
 
+	return table;
+}
+
+function cellWidth(cellText) {
+	const lines = cellText.split("\n");
+	let maxWidth = 0;
+	for (let i = 0; i < lines.length; i++) {
+		const line = lines[i];
+		if (line.length > maxWidth) maxWidth = line.length;
+	}
+	return maxWidth;
+}
+
+function colWidths(table) {
+	let output = [];
+	for (let trIndex = 0; trIndex < table.lines.length; trIndex++) {
+		const tr = table.lines[trIndex];
+		for (let tdIndex = 0; tdIndex < tr.lines.length; tdIndex++) {
+			const td = tr.lines[tdIndex];
+			const w = cellWidth(td.content);			
+			if (output.length <= tdIndex) output.push(0);
+			if (w > output[tdIndex]) output[tdIndex] = w;
+		}
+	}
 	return output;
 }
 
-function addTableDimensions(mdArray) {
-	let currentTable = null;
+// function wrapLine(line, maxWidth) {
+// 	if (line.length <= maxWidth) return line;
 
-	for (let i = 0; i < mdArray.length; i++) {
-		let item = mdArray[i];
+// 	let output = [];
+// 	while (line.length) {
+// 		const l = line.substr(0, maxWidth);
+// 		line = line.substr(maxWidth);
+// 		output.push(l);
+// 	}
 
-		if (typeof item == 'string') {
-			
-		} else if (item.type == 'table') {
-			let colWidths = [];
-			for (let trIndex = 0; trIndex < item.lines.length; trIndex++) {
-				let tdLines = item.lines[trIndex].lines;
-				for (let tdIndex = 0; tdIndex < tdLines.length; tdIndex++) {
-					let tdItem = tdLines[tdIndex];
-					let tdWidth = 0;
-					for (let j = 0; j < tdItem.lines.length; j++) {
-						let s = tdItem.lines[j];
-						if (s.length > tdWidth) tdWidth = s.length;
-					}
-					if (tdWidth > colWidths[tdIndex] || typeof colWidths[tdIndex] === 'undefined') colWidths[tdIndex] = tdWidth;
+// 	return output.join("\n");
+// }
+
+// function wrapCellLines(cellText, maxWidth) {
+// 	const lines = cellText.split("\n");
+// 	let output = [];
+// 	for (let i = 0; i < lines.length; i++) {
+// 		let line = wrapLine(lines[i], maxWidth);
+// 		output.push(line);
+// 	}
+// 	return output.join("\n");
+// }
+
+function drawTable(table, colWidths) {	
+	// | First Header  | Second Header |
+	// | ------------- | ------------- |
+	// | Content Cell  | Content Cell  |
+	// | Content Cell  | Content Cell  |
+
+	let lines = [];
+	let headerDone = false;
+	for (let trIndex = 0; trIndex < table.lines.length; trIndex++) {
+		const tr = table.lines[trIndex];
+		const isHeader = tr.isHeader;
+		let line = [];
+		let headerLine = [];
+		let emptyHeader = null;
+		for (let tdIndex = 0; tdIndex < colWidths.length; tdIndex++) {
+			const width = colWidths[tdIndex];
+			const cell = tr.lines[tdIndex].content;
+			line.push(stringPadding(cell, width, ' ', stringPadding.RIGHT));
+
+			if (!headerDone) {
+				if (!isHeader) {
+					if (!emptyHeader) emptyHeader = [];
+					let h = stringPadding(' ', width, ' ', stringPadding.RIGHT);
+					if (!width) h = '';
+					emptyHeader.push(h);
 				}
+				headerLine.push('-'.repeat(width));
 			}
-			item.colWidths = colWidths;
+		}
+
+		if (emptyHeader) {
+			lines.push('| ' + emptyHeader.join(' | ') + ' |');
+			lines.push('| ' + headerLine.join(' | ') + ' |');
+			headerDone = true;
+		}
+
+		lines.push('| ' + line.join(' | ') + ' |');
+
+		if (!headerDone) {
+			lines.push('| ' + headerLine.join(' | ') + ' |');
+			headerDone = true;
 		}
 	}
 
-	return mdArray;
+	return lines.join('<<<<:D>>>>' + NEWLINE + '<<<<:D>>>>').split('<<<<:D>>>>');
 }
 
 async function enexXmlToMd(stream, resources) {
 	let result = await enexXmlToMdArray(stream, resources);
 
-	// let bla = addTableDimensions(result.content.lines);
-	// const util = require('util')
-	// console.log(util.inspect(bla, false, null));
-	// return '';
+	let mdLines = [];
 
-	let mdLines = result.content.lines; //await processMdArrayTables(result.content.lines);
+	for (let i = 0; i < result.content.lines.length; i++) {
+		let line = result.content.lines[i];
+		if (typeof line === 'object') { // A table
+			let table = setTableCellContent(line);
+			const cw = colWidths(table);
+			const tableLines = drawTable(table, cw);
+			mdLines.push(BLOCK_OPEN);
+			mdLines = mdLines.concat(tableLines);
+			mdLines.push(BLOCK_CLOSE);
+		} else { // an actual line
+			mdLines.push(line);
+		}
+	}
 
-	//let mdLines = result.lines;
 	let firstAttachment = true;
 	for (let i = 0; i < result.resources.length; i++) {
 		let r = result.resources[i];
@@ -587,8 +633,6 @@ async function enexXmlToMd(stream, resources) {
 		mdLines = addResourceTag(mdLines, r, r.filename);
 		firstAttachment = false;
 	}
-
-	//console.info(mdLines);
 
 	return processMdArrayNewLines(mdLines);
 }
