@@ -5,15 +5,8 @@ import { parameters } from 'lib/parameters.js';
 import { FileApi } from 'lib/file-api.js';
 import { Synchronizer } from 'lib/synchronizer.js';
 import { FileApiDriverOneDrive } from 'lib/file-api-driver-onedrive.js';
-import { EventDispatcher } from 'lib/event-dispatcher.js';
 
 const reg = {};
-
-reg.dispatcher = () => {
-	if (this.dispatcher_) return this.dispatcher_;
-	this.dispatcher_ = new EventDispatcher();
-	return this.dispatcher_;
-}
 
 reg.logger = () => {
 	if (!reg.logger_) {
@@ -77,15 +70,7 @@ reg.synchronizer = async () => {
 	let fileApi = await reg.fileApi();
 	reg.synchronizer_ = new Synchronizer(reg.db(), fileApi, Setting.value('appType'));
 	reg.synchronizer_.setLogger(reg.logger());
-
-	reg.synchronizer_.on('progress', (report) => {
-		reg.dispatcher().dispatch('synchronizer_progress', report);
-	});	
-
-	reg.synchronizer_.on('complete', () => {
-		reg.dispatcher().dispatch('synchronizer_complete');
-	});
-
+	reg.synchronizer_.dispatch = reg.dispatch;
 	return reg.synchronizer_;
 }
 

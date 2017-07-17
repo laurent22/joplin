@@ -4,6 +4,7 @@ import { _ } from 'lib/locale.js';
 import { Setting } from 'lib/models/setting.js';
 import { BaseItem } from 'lib/models/base-item.js';
 import { vorpalUtils } from './vorpal-utils.js';
+import { Synchronizer } from 'lib/synchronizer.js';
 const locker = require('proper-lockfile');
 const fs = require('fs-extra');
 
@@ -74,7 +75,7 @@ class Command extends BaseCommand {
 
 			let options = {
 				onProgress: (report) => {
-					let lines = sync.reportToLines(report);
+					let lines = Synchronizer.reportToLines(report);
 					if (lines.length) vorpalUtils.redraw(lines.join(' '));
 				},
 				onMessage: (msg) => {

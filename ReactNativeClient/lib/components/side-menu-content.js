@@ -4,6 +4,7 @@ import { Log } from 'lib/log.js';
 import { Note } from 'lib/models/note.js';
 import { FoldersScreenUtils } from 'lib/components/screens/folders-utils.js'
 import { NotesScreenUtils } from 'lib/components/screens/notes-utils.js'
+import { Synchronizer } from 'lib/synchronizer.js';
 import { reg } from 'lib/registry.js';
 import { _ } from 'lib/locale.js';
 
@@ -65,37 +66,22 @@ class SideMenuContentComponent extends Component {
 		NotesScreenUtils.openNoteList(folder.id);
 	}
 
-	async synchronizer_progress(report) {
-		const sync = await reg.synchronizer();
-		let lines = sync.reportToLines(report);
-		this.setState({ syncReportText: lines.join("\n") });
-	}
-
-	synchronizer_complete() {
-		FoldersScreenUtils.refreshFolders();
-	}
-
-	async componentWillMount() {
-		reg.dispatcher().on('synchronizer_progress', this.synchronizer_progress.bind(this));
-		reg.dispatcher().on('synchronizer_complete', this.synchronizer_complete.bind(this));
-	}
-
-	componentWillUnmount() {
-		reg.dispatcher().off('synchronizer_progress', this.synchronizer_progress.bind(this));
-		reg.dispatcher().off('synchronizer_complete', this.synchronizer_complete.bind(this));
-	}
-
 	async synchronize_press() {
-		if (reg.oneDriveApi().auth()) {
-			const sync = await reg.synchronizer()
-			sync.start();
+		const sync = await reg.synchronizer()
+
+		if (this.props.syncStarted) {
+			sync.cancel();
 		} else {
-			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-			
-			this.props.dispatch({
-				type: 'Navigation/NAVIGATE',
-				routeName: 'OneDriveLogin',
-			});
+			if (reg.oneDriveApi().auth()) {		
+				sync.start();
+			} else {
+				this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+				
+				this.props.dispatch({
+					type: 'Navigation/NAVIGATE',
+					routeName: 'OneDriveLogin',
+				});
+			}
 		}
 	}
 
@@ -116,9 +102,14 @@ class SideMenuContentComponent extends Component {
 
 		if (items.length) items.push(<View style={{ height: 50, flex: -1 }} key='divider_1'></View>); // DIVIDER
 
-		items.push(<Button title="Synchronize" onPress={() => { this.synchronize_press() }} key='synchronize' />);
+		const syncTitle = this.props.syncStarted ? 'Cancel sync' : 'Synchronize';
 
-		items.push(<Text key='sync_report'>{this.state.syncReportText}</Text>);
+		let lines = Synchronizer.reportToLines(this.props.syncReport);
+		const syncReportText = lines.join("\n");
+
+		items.push(<Button title={syncTitle} onPress={() => { this.synchronize_press() }} key='synchronize' />);
+
+		items.push(<Text key='sync_report'>{syncReportText}</Text>);
 
 		return (
 			<ScrollView scrollsToTop={false} style={styles.menu}>
@@ -132,6 +123,8 @@ const SideMenuContent = connect(
 	(state) => {
 		return {
 			folders: state.folders,
+			syncStarted: state.syncStarted,
+			syncReport: state.syncReport,
 		};
 	}
 )(SideMenuContentComponent)

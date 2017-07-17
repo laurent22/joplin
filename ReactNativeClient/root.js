@@ -48,6 +48,8 @@ let defaultState = {
 		orderBy: 'updated_time',
 		orderByDir: 'DESC',
 	},
+	syncStarted: false,
+	syncReport: {},
 };
 
 const initialRoute = {
@@ -264,6 +266,24 @@ const reducer = (state = defaultState, action) => {
 				newState.showSideMenu = false
 				break;
 
+			case 'SYNC_STARTED':
+
+				newState = Object.assign({}, state);
+				newState.syncStarted = true;
+				break;
+
+			case 'SYNC_COMPLETED':
+
+				newState = Object.assign({}, state);
+				newState.syncStarted = false;
+				break;
+
+			case 'SYNC_REPORT_UPDATE':
+
+				newState = Object.assign({}, state);
+				newState.syncReport = action.report;
+				break;
+
 		}
 	} catch (error) {
 		error.message = 'In reducer: ' + error.message;
@@ -307,7 +327,7 @@ async function initialize(dispatch, backButtonHandler) {
 	dbLogger.addTarget('database', { database: logDatabase, source: 'm' }); 
 	if (Setting.value('env') == 'dev') {
 		dbLogger.addTarget('console');
-		dbLogger.setLevel(Logger.LEVEL_DEBUG); // Set to LEVEL_DEBUG for full SQL queries
+		dbLogger.setLevel(Logger.LEVEL_INFO); // Set to LEVEL_DEBUG for full SQL queries
 	} else {
 		dbLogger.setLevel(Logger.LEVEL_INFO);
 	}
@@ -316,6 +336,7 @@ async function initialize(dispatch, backButtonHandler) {
 	db.setLogger(dbLogger);
 	reg.setDb(db);
 
+	reg.dispatch = dispatch;
 	BaseModel.dispatch = dispatch;
 	NotesScreenUtils.dispatch = dispatch;
 	NotesScreenUtils.store = store;
@@ -332,7 +353,8 @@ async function initialize(dispatch, backButtonHandler) {
 		if (Setting.value('env') == 'prod') {
 			await db.open({ name: 'joplin.sqlite' })
 		} else {
-			await db.open({ name: 'joplin-55.sqlite' })
+			//await db.open({ name: 'joplin-56.sqlite' })
+			await db.open({ name: 'joplin-56.sqlite' })
 
 			// await db.exec('DELETE FROM notes');
 			// await db.exec('DELETE FROM folders');
@@ -379,6 +401,11 @@ async function initialize(dispatch, backButtonHandler) {
 
 class AppComponent extends React.Component {
 
+	constructor() {
+		super();
+		this.lastSyncStarted_ = defaultState.syncStarted;
+	}
+
 	async componentDidMount() {
 		await initialize(this.props.dispatch, this.backButtonHandler.bind(this));
 		reg.scheduleSync();
@@ -396,6 +423,13 @@ class AppComponent extends React.Component {
 		}
 
 		return false;
+	}
+
+	componentWillReceiveProps(newProps) {
+		if (newProps.syncStarted != this.lastSyncStarted_) {
+			if (!newProps.syncStarted) FoldersScreenUtils.refreshFolders();
+			this.lastSyncStarted_ = newProps.syncStarted;
+		}
 	}
 
 	sideMenu_change(isOpen) {
@@ -433,6 +467,7 @@ const mapStateToProps = (state) => {
 	return {
   		historyCanGoBack: state.historyCanGoBack,
   		showSideMenu: state.showSideMenu,
+  		syncStarted: state.syncStarted,
   	};
 };
 
