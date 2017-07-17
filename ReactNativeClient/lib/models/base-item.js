@@ -257,16 +257,21 @@ class BaseItem extends BaseModel {
 			const fieldNames = ItemClass.fieldNames(true);
 			fieldNames.push('sync_time');
 
+			let extraWhere = className == 'Note' ? 'AND is_conflict = 0' : '';
+
 			let sql = sprintf(`
 				SELECT %s FROM %s
 				LEFT JOIN sync_items t ON t.item_id = %s.id
-				WHERE t.id IS NULL OR t.sync_time < %s.updated_time
+				WHERE 
+					(t.id IS NULL OR t.sync_time < %s.updated_time)
+					%s
 				LIMIT %d
 			`,
 			this.db().escapeFields(fieldNames),
 			this.db().escapeField(ItemClass.tableName()),
 			this.db().escapeField(ItemClass.tableName()),
 			this.db().escapeField(ItemClass.tableName()),
+			extraWhere,
 			limit);
 
 			const items = await ItemClass.modelSelectAll(sql);

@@ -546,5 +546,21 @@ describe('Synchronizer', function() {
 
 		done();
 	});
+
+	it('should not sync notes with conflicts', async (done) => {
+		let f1 = await Folder.save({ title: "folder" });
+		let n1 = await Note.save({ title: "mynote", parent_id: f1.id, is_conflict: 1 });
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		let notes = await Note.all();
+		let folders = await Folder.all()
+		expect(notes.length).toBe(0);
+		expect(folders.length).toBe(1);
+
+		done();
+	});
 	
 });
