@@ -66,10 +66,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 		let folder = Object.assign({}, this.state.folder);
 
 		try {
-			folder = await Folder.save(folder, {
-				duplicateCheck: true,
-				reservedTitleCheck: true,
-			});
+			folder = await Folder.save(folder, { userSideValidation: true });
 
 			reg.scheduleSync();
 		} catch (error) {

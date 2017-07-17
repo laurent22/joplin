@@ -66,6 +66,15 @@ class Application {
 		this.updatePrompt();
 	}
 
+	async guessTypeAndLoadItem(pattern, options = null) {
+		let type = BaseModel.TYPE_NOTE;
+		if (pattern.indexOf('/') === 0) {
+			type = BaseModel.TYPE_FOLDER;
+			pattern = pattern.substr(1);
+		}
+		return this.loadItem(type, pattern, options);
+	}
+
 	async loadItem(type, pattern, options = null) {
 		let output = await this.loadItems(type, pattern, options);
 		return output.length ? output[0] : null;

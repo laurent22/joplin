@@ -114,15 +114,29 @@ class Folder extends BaseItem {
 
 	// These "duplicateCheck" and "reservedTitleCheck" should only be done when a user is
 	// manually creating a folder. They shouldn't be done for example when the folders
-	// are being synced to avoid any strange side-effect. Technically it's possible to 
-	// have folders and notes with duplicate titles (or no title), or with reserved words,
+	// are being synced to avoid any strange side-effects. Technically it's possible to 
+	// have folders and notes with duplicate titles (or no title), or with reserved words.
 	static async save(o, options = null) {
-		if (options && options.duplicateCheck === true && o.title) {
+		if (!options) options = {};
+
+		if (options.userSideValidation === true) {
+			if (!('duplicateCheck' in options)) options.duplicateCheck = true;
+			if (!('reservedTitleCheck' in options)) options.reservedTitleCheck = true;
+			if (!('stripLeftSlashes' in options)) options.stripLeftSlashes = true;			
+		}
+
+		if (options.stripLeftSlashes === true && o.title) {
+			while (o.title.length && (o.title[0] == '/' || o.title[0] == "\\")) {
+				o.title = o.title.substr(1);
+			}
+		}
+
+		if (options.duplicateCheck === true && o.title) {
 			let existingFolder = await Folder.loadByTitle(o.title);
 			if (existingFolder && existingFolder.id != o.id) throw new Error(_('A notebook with this title already exists: "%s"', o.title));
 		}
 
-		if (options && options.reservedTitleCheck === true && o.title) {
+		if (options.reservedTitleCheck === true && o.title) {
 			if (o.title == Folder.conflictFolderTitle()) throw new Error(_('Notebooks cannot be named "%s", which is a reserved title.', o.title));
 		}
 
