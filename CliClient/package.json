@@ -47,6 +47,7 @@
     "babel-preset-env": "^1.5.1",
     "babel-preset-es2015": "^6.1.4",
     "babel-preset-react": "^6.24.1",
+    "gettext-parser": "^1.2.2",
     "jasmine": "^2.6.0"
   },
   "scripts": {

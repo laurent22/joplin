@@ -6,4 +6,8 @@ function _(s, ...args) {
 	return sprintf(s, ...args);
 }
 
+function loadLocale(locale) {
+	
+}
+
 export { _ };

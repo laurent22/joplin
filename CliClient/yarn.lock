@@ -909,7 +909,7 @@ electron-to-chromium@^1.3.14:
   version "1.3.15"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.15.tgz#08397934891cbcfaebbd18b82a95b5a481138369"
 
-encoding@^0.1.11:
+encoding@0.1.12, encoding@^0.1.11:
   version "0.1.12"
   resolved "https://registry.yarnpkg.com/encoding/-/encoding-0.1.12.tgz#538b66f3ee62cd1ab51ec323829d1f9480c74beb"
   dependencies:
@@ -1102,6 +1102,12 @@ getpass@^0.1.1:
   resolved "https://registry.yarnpkg.com/getpass/-/getpass-0.1.7.tgz#5eff8e3e684d569ae4cb2b1282604e8ba62149fa"
   dependencies:
     assert-plus "^1.0.0"
+
+gettext-parser@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/gettext-parser/-/gettext-parser-1.2.2.tgz#1ef0da75c1e759ae3089c73efa4d19e40298748e"
+  dependencies:
+    encoding "0.1.12"
 
 glob-base@^0.3.0:
   version "0.3.0"

@@ -1,0 +1,238 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Laurent Cozic
+# This file is distributed under the same license as the Joplin-CLI package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Joplin-CLI 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-07-17 17:01+0100\n"
+"PO-Revision-Date: 2017-07-17 17:02+0100\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: fr_FR\n"
+
+#: app/app.js:92
+msgid "No notebook selected."
+msgstr "Aucun carnet n'est sélectionné."
+
+#: app/app.js:97
+msgid "No notebook has been specified."
+msgstr ""
+
+#: app/app.js:128
+msgid "Usage: --profile <dir-path>"
+msgstr ""
+
+#: app/app.js:135
+msgid "Usage: --env <dev|prod>"
+msgstr ""
+
+#: app/app.js:160
+msgid "Usage: --log-level <none|error|warn|info|debug>"
+msgstr ""
+
+#: app/app.js:167
+#, javascript-format
+msgid "Unknown flag: %s"
+msgstr ""
+
+#: app/app.js:183
+#, javascript-format
+msgid ""
+"Command line argument \"%s\" contains both quotes and double-quotes - "
+"aborting."
+msgstr ""
+
+#: app/app.js:275
+#, javascript-format
+msgid "Synchronizing with directory \"%s\""
+msgstr ""
+
+#: app/app.js:352
+msgid "No notebook is defined. Create one with `mkbook <notebook>`."
+msgstr ""
+
+#: app/command-cat.js:33
+#, javascript-format
+msgid "No item \"%s\" found."
+msgstr ""
+
+#: app/command-cp.js:31 app/command-mv.js:36
+#, javascript-format
+msgid "No notebook \"%s\""
+msgstr ""
+
+#: app/command-cp.js:34 app/command-mv.js:39
+#, javascript-format
+msgid "No note matches this pattern: \"%s\""
+msgstr ""
+
+#: app/command-edit.js:33
+msgid "Done editing."
+msgstr ""
+
+#: app/command-edit.js:39
+msgid ""
+"No text editor is defined. Please set it using `config editor <editor-path>`"
+msgstr ""
+
+#: app/command-edit.js:45
+msgid "No active notebook."
+msgstr ""
+
+#: app/command-edit.js:66
+msgid "Starting to edit note. Close the editor to get back to the prompt."
+msgstr ""
+
+#: app/command-import-enex.js:16
+msgid "Imports an Evernote notebook file (.enex file)."
+msgstr ""
+
+#: app/command-import-enex.js:35
+#, javascript-format
+msgid "Folder does not exists: \"%s\". Create it?"
+msgstr ""
+
+#: app/command-import-enex.js:42
+#, javascript-format
+msgid "Imported - %s"
+msgstr ""
+
+#: app/command-import-enex.js:55
+#, javascript-format
+msgid "File \"%s\" will be imported into notebook \"%s\". Continue?"
+msgstr ""
+
+#: app/command-import-enex.js:62
+#, javascript-format
+msgid "Found: %d."
+msgstr ""
+
+#: app/command-import-enex.js:63
+#, javascript-format
+msgid "Created: %d."
+msgstr ""
+
+#: app/command-import-enex.js:64
+#, javascript-format
+msgid "Updated: %d."
+msgstr ""
+
+#: app/command-import-enex.js:65
+#, javascript-format
+msgid "Skipped: %d."
+msgstr ""
+
+#: app/command-import-enex.js:66
+#, javascript-format
+msgid "Resources: %d."
+msgstr ""
+
+#: app/command-import-enex.js:67
+#, javascript-format
+msgid "Tagged: %d."
+msgstr ""
+
+#: app/command-import-enex.js:78
+msgid "Importing notes..."
+msgstr ""
+
+#: app/command-ls.js:65
+msgid "Please select a notebook first."
+msgstr ""
+
+#: app/command-mknote.js:17
+msgid "Notes can only be created within a notebook."
+msgstr ""
+
+#: app/command-mv.js:29
+#, javascript-format
+msgid "No item matches pattern \"%s\""
+msgstr ""
+
+#: app/command-rm.js:39
+#, javascript-format
+msgid "No notebook matchin pattern \"%s\""
+msgstr ""
+
+#: app/command-rm.js:40
+#, javascript-format
+msgid "Delete notebook \"%s\"?"
+msgstr ""
+
+#: app/command-rm.js:46
+#, javascript-format
+msgid "No note matchin pattern \"%s\""
+msgstr ""
+
+#: app/command-rm.js:47
+#, javascript-format
+msgid "%d notes match this pattern. Delete them?"
+msgstr ""
+
+#: app/command-search.js:29
+#, javascript-format
+msgid "Notebook not found: \"%s\""
+msgstr ""
+
+#: app/command-set.js:31
+#, javascript-format
+msgid "No note \"%s\" found."
+msgstr ""
+
+#: app/command-sync.js:65
+msgid "Synchronisation is already in progress."
+msgstr ""
+
+#: app/command-sync.js:87
+#, javascript-format
+msgid "Synchronization target: %s"
+msgstr ""
+
+#: app/command-sync.js:89
+msgid "Cannot initialize synchronizer."
+msgstr ""
+
+#: app/command-sync.js:91
+msgid "Starting synchronization..."
+msgstr ""
+
+#: app/command-sync.js:98
+msgid "Done."
+msgstr ""
+
+#: app/command-sync.js:113
+msgid "Cancelling..."
+msgstr ""
+
+#: app/command-tag.js:25 app/command-tag.js:34
+#, javascript-format
+msgid "Tag does not exist: \"%s\""
+msgstr ""
+
+#: app/command-tag.js:28 app/command-tag.js:35
+#, javascript-format
+msgid "Note does not exist: \"%s\""
+msgstr ""
+
+#: app/command-tag.js:48
+#, javascript-format
+msgid "Invalid command: \"%s\""
+msgstr ""
+
+#: app/command-use.js:28
+#, javascript-format
+msgid "No folder \"%s\""
+msgstr ""
+
+#: app/command-version.js:17
+#, javascript-format
+msgid "%s %s (%s)"
+msgstr ""
