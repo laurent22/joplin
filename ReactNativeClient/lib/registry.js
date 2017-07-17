@@ -90,7 +90,10 @@ reg.synchronizer = async () => {
 }
 
 reg.scheduleSync = async () => {
-	if (reg.scheduleSyncId_) return;
+	if (reg.scheduleSyncId_) {
+		clearTimeout(reg.scheduleSyncId_);
+		reg.scheduleSyncId_ = null;
+	}
 
 	reg.logger().info('Scheduling sync operation...');
 

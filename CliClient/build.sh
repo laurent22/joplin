@@ -1,6 +1,7 @@
 #!/bin/bash
 CLIENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+yarn install
 mkdir -p "$CLIENT_DIR/build"
 rm -f "$CLIENT_DIR/app/lib"
 ln -s "$CLIENT_DIR/../ReactNativeClient/lib" "$CLIENT_DIR/app"

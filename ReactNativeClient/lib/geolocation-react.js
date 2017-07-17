@@ -1,3 +1,5 @@
+import { Setting } from 'lib/models/setting.js';
+
 class GeolocationReact {
 
 	static currentPosition_testResponse() {
@@ -16,6 +18,8 @@ class GeolocationReact {
 	}
 
 	static currentPosition(options = null) {
+		if (Setting.value('env') == 'dev') return this.currentPosition_testResponse();
+
 		if (!options) options = {};
 		if (!('enableHighAccuracy' in options)) options.enableHighAccuracy = true;
 		if (!('timeout' in options)) options.timeout = 10000;

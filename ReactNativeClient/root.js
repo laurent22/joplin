@@ -304,10 +304,10 @@ async function initialize(dispatch, backButtonHandler) {
 	reg.logger().info('Starting application ' + Setting.value('appId') + ' (' + Setting.value('env') + ')');
 
 	const dbLogger = new Logger();
-	dbLogger.addTarget('database', { database: logDatabase, source: 'm' });
-	if (Setting.value('env') == 'dev') dbLogger.addTarget('console');
+	dbLogger.addTarget('database', { database: logDatabase, source: 'm' }); 
 	if (Setting.value('env') == 'dev') {
-		dbLogger.setLevel(Logger.LEVEL_INFO); // Set to LEVEL_DEBUG for full SQL queries
+		dbLogger.addTarget('console');
+		dbLogger.setLevel(Logger.LEVEL_DEBUG); // Set to LEVEL_DEBUG for full SQL queries
 	} else {
 		dbLogger.setLevel(Logger.LEVEL_INFO);
 	}
@@ -381,6 +381,7 @@ class AppComponent extends React.Component {
 
 	async componentDidMount() {
 		await initialize(this.props.dispatch, this.backButtonHandler.bind(this));
+		reg.scheduleSync();
 	}
 
 	backButtonHandler() {

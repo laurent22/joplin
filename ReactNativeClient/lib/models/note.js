@@ -211,6 +211,17 @@ class Note extends BaseItem {
 		});
 	}
 
+	static async toggleIsTodo(noteId) {
+		let note = await Note.load(noteId);
+		const isTodo = !note.is_todo ? 1 : 0;
+		note.is_todo = isTodo;
+		if (!note.is_todo) {
+			note.todo_due = 0;
+			note.todo_completed = 0;
+		}
+		return note;
+	}
+
 	static async duplicate(noteId, options = null) {
 		const changes = options && options.changes;
 
