@@ -79,7 +79,7 @@ class OneDriveApiNodeUtils {
 
 			enableServerDestroy(server);
 
-			targetConsole.log(_('Please open this URL in your browser to authentify the application:'));
+			targetConsole.log(_('Please open this URL in your browser to authenticate the application:'));
 			targetConsole.log('');
 			targetConsole.log(authCodeUrl);
 		});

@@ -147,7 +147,7 @@ class Synchronizer {
 		this.onProgress_ = options.onProgress ? options.onProgress : function(o) {};
 		this.progressReport_ = { errors: [] };
 
-		let lastContext = options.context;
+		const lastContext = options.context ? options.context : {};
 
 		const syncTargetId = this.api().driver().syncTargetId();
 
@@ -319,77 +319,96 @@ class Synchronizer {
 			// At this point all the local items that have changed have been pushed to remote
 			// or handled as conflicts, so no conflict is possible after this.
 
-			let deltaOptions = {};
-			if (lastContext.delta) deltaOptions.context = lastContext.delta;
-			let listResult = await this.api().delta('', deltaOptions);
-			outputContext.delta = listResult.context;
+			let context = null;
+			let newDeltaContext = null;
+			let localFoldersToDelete = [];
+			if (lastContext.delta) context = lastContext.delta;
 
-			// let remoteIds = [];
-			// let context = null;
+			while (true) {
+				if (this.cancelling()) break;
 
-			// while (true) {
-			// 	if (this.cancelling()) break;
+				let listResult = await this.api().delta('', { context: context });
+				let remotes = listResult.items;
+				for (let i = 0; i < remotes.length; i++) {
+					if (this.cancelling()) break;
 
-			// 	let listResult = await this.api().list('', { context: context });
-			// 	let remotes = listResult.items;
-			// 	for (let i = 0; i < remotes.length; i++) {
-			// 		if (this.cancelling()) break;
+					let remote = remotes[i];
+					if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
 
-			// 		let remote = remotes[i];
-			// 		let path = remote.path;
+					//console.info(remote);
 
-			// 		remoteIds.push(BaseItem.pathToId(path));
-			// 		if (donePaths.indexOf(path) > 0) continue;
+					let path = remote.path;
+					let action = null;
+					let reason = '';
+					let local = await BaseItem.loadItemByPath(path);
+					if (!local) {
+						if (!remote.isDeleted) {
+							action = 'createLocal';
+							reason = 'remote exists but local does not';
+						}
+					} else {
+						if (remote.isDeleted) {
+							action = 'deleteLocal';
+							reason = 'remote has been deleted';
+						} else {
+							if (remote.updated_time > local.updated_time) {
+								action = 'updateLocal';
+								reason = 'remote is more recent than local';
+							}
+						}
+					}
 
-			// 		let action = null;
-			// 		let reason = '';
-			// 		let local = await BaseItem.loadItemByPath(path);
-			// 		if (!local) {
-			// 			action = 'createLocal';
-			// 			reason = 'remote exists but local does not';
-			// 		} else {
-			// 			if (remote.updated_time > local.updated_time) {
-			// 				action = 'updateLocal';
-			// 				reason = sprintf('remote is more recent than local');
-			// 			}
-			// 		}
+					if (!action) continue;
 
-			// 		if (!action) continue;
+					this.logSyncOperation(action, local, remote, reason);
 
-			// 		if (action == 'createLocal' || action == 'updateLocal') {
-			// 			let content = await this.api().get(path);
-			// 			if (content === null) {
-			// 				this.logger().warn('Remote has been deleted between now and the list() call? In that case it will be handled during the next sync: ' + path);
-			// 				continue;
-			// 			}
-			// 			content = await BaseItem.unserialize(content);
-			// 			let ItemClass = BaseItem.itemClass(content);
+					if (action == 'createLocal' || action == 'updateLocal') {
 
-			// 			let newContent = Object.assign({}, content);
-			// 			let options = {
-			// 				autoTimestamp: false,
-			// 				applyMetadataChanges: true,
-			// 				nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, newContent, time.unixMs()),
-			// 			};
-			// 			if (action == 'createLocal') options.isNew = true;
+						let content = await this.api().get(path);
+						if (content === null) {
+							this.logger().warn('Remote has been deleted between now and the list() call? In that case it will be handled during the next sync: ' + path);
+							continue;
+						}
+						content = await BaseItem.unserialize(content);
+						let ItemClass = BaseItem.itemClass(content);
 
-			// 			if (newContent.type_ == BaseModel.TYPE_RESOURCE && action == 'createLocal') {
-			// 				let localResourceContentPath = Resource.fullPath(newContent);
-			// 				let remoteResourceContentPath = this.resourceDirName_ + '/' + newContent.id;
-			// 				await this.api().get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' });
-			// 			}
+						let newContent = Object.assign({}, content);
+						let options = {
+							autoTimestamp: false,
+							applyMetadataChanges: true,
+							nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, newContent, time.unixMs()),
+						};
+						if (action == 'createLocal') options.isNew = true;
 
-			// 			await ItemClass.save(newContent, options);
+						if (newContent.type_ == BaseModel.TYPE_RESOURCE && action == 'createLocal') {
+							let localResourceContentPath = Resource.fullPath(newContent);
+							let remoteResourceContentPath = this.resourceDirName_ + '/' + newContent.id;
+							await this.api().get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' });
+						}
 
-			// 			this.logSyncOperation(action, local, content, reason);
-			// 		} else {
-			// 			this.logSyncOperation(action, local, remote, reason);
-			// 		}
-			// 	}
+						await ItemClass.save(newContent, options);
 
-			// 	if (!listResult.hasMore) break;
-			// 	context = listResult.context;
-			// }
+					} else if (action == 'deleteLocal') {
+
+						if (local.type_ == BaseModel.TYPE_FOLDER) {
+							localFoldersToDelete.push(local);
+							continue;
+						}
+
+						let ItemClass = BaseItem.itemClass(local.type_);
+						await ItemClass.delete(local.id, { trackDeleted: false });
+
+					}
+				}
+
+				if (!listResult.hasMore) {
+					newDeltaContext = listResult.context;
+					break;
+				}
+				context = listResult.context;
+			}
+
+			outputContext.delta = newDeltaContext ? newDeltaContext : lastContext.delta;
 
 			// // ------------------------------------------------------------------------
 			// // Search, among the local IDs, those that don't exist remotely, which
@@ -420,20 +439,20 @@ class Synchronizer {
 			// 	}
 			// }
 
-			// if (!this.cancelling()) {
-			// 	for (let i = 0; i < localFoldersToDelete.length; i++) {
-			// 		const syncItem = localFoldersToDelete[i];
-			// 		const noteIds = await Folder.noteIds(syncItem.item_id);
-			// 		if (noteIds.length) { // CONFLICT
-			// 			await Folder.markNotesAsConflict(syncItem.item_id);
-			// 		}
-			// 		await Folder.delete(syncItem.item_id, { deleteChildren: false });
-			// 	}
-			// }
+			if (!this.cancelling()) {
+				for (let i = 0; i < localFoldersToDelete.length; i++) {
+					const item = localFoldersToDelete[i];
+					const noteIds = await Folder.noteIds(item.id);
+					if (noteIds.length) { // CONFLICT
+						await Folder.markNotesAsConflict(item.id);
+					}
+					await Folder.delete(item.id, { deleteChildren: false });
+				}
+			}
 
-			// if (!this.cancelling()) {
-			// 	await BaseItem.deleteOrphanSyncItems();
-			// }
+			if (!this.cancelling()) {
+				await BaseItem.deleteOrphanSyncItems();
+			}
 		} catch (error) {
 			this.logger().error(error);
 			this.progressReport_.errors.push(error);

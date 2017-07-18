@@ -12,6 +12,7 @@ class FileApiDriverMemory {
 
 	constructor() {
 		this.items_ = [];
+		this.deletedItems_ = [];
 	}
 
 	itemIndexByPath(path) {
@@ -102,6 +103,10 @@ class FileApiDriverMemory {
 	delete(path) {
 		let index = this.itemIndexByPath(path);
 		if (index >= 0) {
+			let item = Object.assign({}, this.items_[index]);
+			item.isDeleted = true;
+			item.updated_time = time.unixMs();
+			this.deletedItems_.push(item);
 			this.items_.splice(index, 1);
 		}
 		return Promise.resolve();
@@ -118,6 +123,52 @@ class FileApiDriverMemory {
 	format() {
 		this.items_ = [];
 		return Promise.resolve();
+	}
+
+	async delta(path, options = null) {
+		let limit = 3;
+
+		let output = {
+			hasMore: false,
+			context: {},
+			items: [],
+		};
+
+		let context = options ? options.context : null;
+		let fromTime = 0;
+
+		if (context) fromTime = context.fromTime;
+
+		let sortedItems = this.items_.slice().concat(this.deletedItems_);
+		sortedItems.sort((a, b) => {
+			if (a.updated_time < b.updated_time) return -1;
+			if (a.updated_time > b.updated_time) return +1;
+			return 0;
+		});
+
+		let hasMore = false;
+		let items = [];
+		let maxTime = 0;
+		for (let i = 0; i < sortedItems.length; i++) {
+			let item = sortedItems[i];
+			if (item.updated_time >= fromTime) {
+				item = Object.assign({}, item);
+				item.path = item.path.substr(path.length + 1);
+				items.push(item);
+				if (item.updated_time > maxTime) maxTime = item.updated_time;
+			}
+
+			if (items.length >= limit) {
+				hasMore = true;
+				break;
+			}
+		}
+
+		output.items = items;
+		output.hasMore = hasMore;
+		output.context = { fromTime: maxTime };
+
+		return output;
 	}
 
 }

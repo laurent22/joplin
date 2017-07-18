@@ -40,12 +40,19 @@ class FileApiDriverOneDrive {
 	}
 
 	makeItem_(odItem) {
-		return {
+		let output = {
 			path: odItem.name,
 			isDir: ('folder' in odItem),
-			created_time: moment(odItem.fileSystemInfo.createdDateTime, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x'),
-			updated_time: moment(odItem.fileSystemInfo.lastModifiedDateTime, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x'),
 		};
+
+		if ('deleted' in odItem) {
+			output.isDeleted = true;
+		} else {
+			output.created_time = moment(odItem.fileSystemInfo.createdDateTime, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x');
+			output.updated_time = moment(odItem.fileSystemInfo.lastModifiedDateTime, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x');
+		}
+
+		return output;
 	}
 
 	async statRaw_(path) {
@@ -168,6 +175,7 @@ class FileApiDriverOneDrive {
 
 	async delta(path, options = null) {
 		let output = {
+			hasMore: false,
 			context: {},
 			items: [],
 		};
@@ -177,27 +185,28 @@ class FileApiDriverOneDrive {
 		let url = null;
 		let query = null;
 		if (context) {
-			url = context;
+			url = context.nextLink;
 		} else {
 			url = this.makePath_(path) + ':/delta';
 			query = this.itemFilter_();
+			query.select += ',deleted';
 		}
 
-		while (true) {
-			let response = await this.api_.execJson('GET', url, query);
-			let items = this.makeItems_(response.value);
-			output.items = output.items.concat(items);
+		let response = await this.api_.execJson('GET', url, query);
+		let items = this.makeItems_(response.value);
+		output.items = output.items.concat(items);
 
-			if (response['@odata.nextLink']) {
-				url = response['@odata.nextLink'];
-			} else {
-				if (!response['@odata.deltaLink']) {
-					throw new Error('Delta link missing: ' + JSON.stringify(response));
-				}
-				output.context = response['@odata.deltaLink'];
-				break;
-			}
+		let nextLink = null;
+
+		if (response['@odata.nextLink']) {
+			nextLink = response['@odata.nextLink'];
+			output.hasMore = true;
+		} else {
+			if (!response['@odata.deltaLink']) throw new Error('Delta link missing: ' + JSON.stringify(response));
+			nextLink = response['@odata.deltaLink'];
 		}
+
+		output.context = { nextLink: nextLink };
 
 		// https://dev.onedrive.com/items/view_delta.htm
 		// The same item may appear more than once in a delta feed, for various reasons. You should use the last occurrence you see.

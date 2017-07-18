@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-18 17:30+0100\n"
+"POT-Creation-Date: 2017-07-18 20:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,465 +17,465 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: /media/veracrypt22/src/notes/CliClient/app/app.js:92
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:92
 msgid "No notebook selected."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/app.js:97
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:97
 msgid "No notebook has been specified."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/app.js:128
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:128
 msgid "Usage: --profile <dir-path>"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/app.js:135
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:135
 msgid "Usage: --env <dev|prod>"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/app.js:160
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:160
 msgid "Usage: --log-level <none|error|warn|info|debug>"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/app.js:167
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:167
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/app.js:183
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:183
 #, javascript-format
 msgid ""
 "Command line argument \"%s\" contains both quotes and double-quotes - "
 "aborting."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/app.js:203
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:203
 msgid "Provides help for a given command."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/app.js:205
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:205
 msgid "Exits the application."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/app.js:294
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:294
 msgid "Invalid command. Showing help:"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/app.js:329
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:329
 #, javascript-format
 msgid "Synchronizing with directory \"%s\""
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/app.js:408
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:408
 msgid "No notebook is defined. Create one with `mkbook <notebook>`."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-alias.js:13
+#: /mnt/d/Web/www/joplin/CliClient/app/command-alias.js:13
 msgid ""
 "Creates a new command alias which can then be used as a regular command (eg. "
 "`alias ll \"ls -l\"`)."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-cat.js:16
+#: /mnt/d/Web/www/joplin/CliClient/app/command-cat.js:16
 msgid "Displays the given note."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-cat.js:21
+#: /mnt/d/Web/www/joplin/CliClient/app/command-cat.js:21
 msgid "Displays the complete information about note."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-cat.js:33
-#: /media/veracrypt22/src/notes/CliClient/app/command-cp.js:31
-#: /media/veracrypt22/src/notes/CliClient/app/command-cp.js:34
-#: /media/veracrypt22/src/notes/CliClient/app/command-geoloc.js:27
-#: /media/veracrypt22/src/notes/CliClient/app/command-mv.js:29
-#: /media/veracrypt22/src/notes/CliClient/app/command-mv.js:36
-#: /media/veracrypt22/src/notes/CliClient/app/command-mv.js:39
-#: /media/veracrypt22/src/notes/CliClient/app/command-rm.js:39
-#: /media/veracrypt22/src/notes/CliClient/app/command-rm.js:46
-#: /media/veracrypt22/src/notes/CliClient/app/command-search.js:29
-#: /media/veracrypt22/src/notes/CliClient/app/command-set.js:31
-#: /media/veracrypt22/src/notes/CliClient/app/command-tag.js:25
-#: /media/veracrypt22/src/notes/CliClient/app/command-tag.js:28
-#: /media/veracrypt22/src/notes/CliClient/app/command-tag.js:34
-#: /media/veracrypt22/src/notes/CliClient/app/command-tag.js:35
-#: /media/veracrypt22/src/notes/CliClient/app/command-use.js:28
+#: /mnt/d/Web/www/joplin/CliClient/app/command-cat.js:33
+#: /mnt/d/Web/www/joplin/CliClient/app/command-cp.js:31
+#: /mnt/d/Web/www/joplin/CliClient/app/command-cp.js:34
+#: /mnt/d/Web/www/joplin/CliClient/app/command-geoloc.js:27
+#: /mnt/d/Web/www/joplin/CliClient/app/command-mv.js:29
+#: /mnt/d/Web/www/joplin/CliClient/app/command-mv.js:36
+#: /mnt/d/Web/www/joplin/CliClient/app/command-mv.js:39
+#: /mnt/d/Web/www/joplin/CliClient/app/command-rm.js:39
+#: /mnt/d/Web/www/joplin/CliClient/app/command-rm.js:46
+#: /mnt/d/Web/www/joplin/CliClient/app/command-search.js:29
+#: /mnt/d/Web/www/joplin/CliClient/app/command-set.js:31
+#: /mnt/d/Web/www/joplin/CliClient/app/command-tag.js:25
+#: /mnt/d/Web/www/joplin/CliClient/app/command-tag.js:28
+#: /mnt/d/Web/www/joplin/CliClient/app/command-tag.js:34
+#: /mnt/d/Web/www/joplin/CliClient/app/command-tag.js:35
+#: /mnt/d/Web/www/joplin/CliClient/app/command-use.js:28
 #, javascript-format
 msgid "Cannot find \"%s\"."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-config.js:13
+#: /mnt/d/Web/www/joplin/CliClient/app/command-config.js:13
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-cp.js:16
+#: /mnt/d/Web/www/joplin/CliClient/app/command-cp.js:16
 msgid ""
 "Duplicates the notes matching <pattern> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-edit.js:18
+#: /mnt/d/Web/www/joplin/CliClient/app/command-edit.js:18
 msgid "Edit note."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-edit.js:33
+#: /mnt/d/Web/www/joplin/CliClient/app/command-edit.js:33
 msgid "Done editing."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-edit.js:39
+#: /mnt/d/Web/www/joplin/CliClient/app/command-edit.js:39
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-edit.js:45
+#: /mnt/d/Web/www/joplin/CliClient/app/command-edit.js:45
 msgid "No active notebook."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-edit.js:66
+#: /mnt/d/Web/www/joplin/CliClient/app/command-edit.js:66
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-geoloc.js:16
+#: /mnt/d/Web/www/joplin/CliClient/app/command-geoloc.js:16
 msgid "Displays a geolocation URL for the note."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:16
+#: /mnt/d/Web/www/joplin/CliClient/app/command-import-enex.js:16
 msgid "Imports an Evernote notebook file (.enex file)."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:21
+#: /mnt/d/Web/www/joplin/CliClient/app/command-import-enex.js:21
 msgid "Do not ask for confirmation."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:35
+#: /mnt/d/Web/www/joplin/CliClient/app/command-import-enex.js:35
 #, javascript-format
 msgid "Folder does not exists: \"%s\". Create it?"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:42
+#: /mnt/d/Web/www/joplin/CliClient/app/command-import-enex.js:42
 #, javascript-format
 msgid "Imported - %s"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:55
+#: /mnt/d/Web/www/joplin/CliClient/app/command-import-enex.js:55
 #, javascript-format
 msgid "File \"%s\" will be imported into notebook \"%s\". Continue?"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:62
+#: /mnt/d/Web/www/joplin/CliClient/app/command-import-enex.js:62
 #, javascript-format
 msgid "Found: %d."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:63
+#: /mnt/d/Web/www/joplin/CliClient/app/command-import-enex.js:63
 #, javascript-format
 msgid "Created: %d."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:64
+#: /mnt/d/Web/www/joplin/CliClient/app/command-import-enex.js:64
 #, javascript-format
 msgid "Updated: %d."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:65
+#: /mnt/d/Web/www/joplin/CliClient/app/command-import-enex.js:65
 #, javascript-format
 msgid "Skipped: %d."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:66
+#: /mnt/d/Web/www/joplin/CliClient/app/command-import-enex.js:66
 #, javascript-format
 msgid "Resources: %d."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:67
+#: /mnt/d/Web/www/joplin/CliClient/app/command-import-enex.js:67
 #, javascript-format
 msgid "Tagged: %d."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:78
+#: /mnt/d/Web/www/joplin/CliClient/app/command-import-enex.js:78
 msgid "Importing notes..."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-ls.js:19
+#: /mnt/d/Web/www/joplin/CliClient/app/command-ls.js:19
 msgid ""
 "Displays the notes in [notebook]. Use `ls /` to display the list of "
 "notebooks."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-ls.js:24
+#: /mnt/d/Web/www/joplin/CliClient/app/command-ls.js:24
 msgid "Displays only the first top <num> notes."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-ls.js:25
+#: /mnt/d/Web/www/joplin/CliClient/app/command-ls.js:25
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-ls.js:26
+#: /mnt/d/Web/www/joplin/CliClient/app/command-ls.js:26
 msgid "Reverses the sorting order."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-ls.js:27
+#: /mnt/d/Web/www/joplin/CliClient/app/command-ls.js:27
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for todos, or `nt` for notes and todos (eg. `-tt` would display only the "
 "todos, while `-ttd` would display notes and todos."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-ls.js:28
+#: /mnt/d/Web/www/joplin/CliClient/app/command-ls.js:28
 msgid "Either \"text\" or \"json\""
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-ls.js:29
+#: /mnt/d/Web/www/joplin/CliClient/app/command-ls.js:29
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for todos), TITLE"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-ls.js:65
+#: /mnt/d/Web/www/joplin/CliClient/app/command-ls.js:65
 msgid "Please select a notebook first."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-mkbook.js:13
+#: /mnt/d/Web/www/joplin/CliClient/app/command-mkbook.js:13
 msgid "Creates a new notebook."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-mknote.js:13
+#: /mnt/d/Web/www/joplin/CliClient/app/command-mknote.js:13
 msgid "Creates a new note."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-mknote.js:17
+#: /mnt/d/Web/www/joplin/CliClient/app/command-mknote.js:17
 msgid "Notes can only be created within a notebook."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-mv.js:16
+#: /mnt/d/Web/www/joplin/CliClient/app/command-mv.js:16
 msgid ""
 "Moves the notes matching <pattern> to <destination>. If <pattern> is a note, "
 "it will be moved to the notebook <destination>. If <pattern> is a notebook, "
 "it will be renamed to <destination>."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-rm.js:18
+#: /mnt/d/Web/www/joplin/CliClient/app/command-rm.js:18
 msgid "Deletes the items matching <pattern>."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-rm.js:27
+#: /mnt/d/Web/www/joplin/CliClient/app/command-rm.js:27
 msgid "Deletes the items without asking for confirmation."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-rm.js:28
+#: /mnt/d/Web/www/joplin/CliClient/app/command-rm.js:28
 msgid "Deletes a notebook."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-rm.js:40
+#: /mnt/d/Web/www/joplin/CliClient/app/command-rm.js:40
 #, javascript-format
 msgid "Delete notebook \"%s\"?"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-rm.js:47
+#: /mnt/d/Web/www/joplin/CliClient/app/command-rm.js:47
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-search.js:19
+#: /mnt/d/Web/www/joplin/CliClient/app/command-search.js:19
 msgid "Searches for the given <pattern> in all the notes."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-set.js:17
+#: /mnt/d/Web/www/joplin/CliClient/app/command-set.js:17
 msgid "Sets the property <name> of the given <note> to the given [value]."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-status.js:14
+#: /mnt/d/Web/www/joplin/CliClient/app/command-status.js:14
 msgid "Displays summary about the notes and notebooks."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-sync.js:24
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:24
 msgid "Synchronizes with remote storage."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-sync.js:29
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:29
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-sync.js:66
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:66
 msgid "Synchronisation is already in progress."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-sync.js:88
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:88
 #, javascript-format
 msgid "Synchronization target: %s"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-sync.js:90
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:90
 msgid "Cannot initialize synchronizer."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-sync.js:92
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:92
 msgid "Starting synchronization..."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-sync.js:103
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:103
 msgid "Done."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-sync.js:118
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:60
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:118
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/synchronizer.js:60
 msgid "Cancelling..."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-tag.js:14
+#: /mnt/d/Web/www/joplin/CliClient/app/command-tag.js:14
 msgid ""
 "<command> can be \"add\", \"remove\" or \"list\" to assign or remove [tag] "
 "from [note], or to list the notes associated with [tag]. The command `tag "
 "list` can be used to list all the tags."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-tag.js:48
+#: /mnt/d/Web/www/joplin/CliClient/app/command-tag.js:48
 #, javascript-format
 msgid "Invalid command: \"%s\""
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-use.js:15
+#: /mnt/d/Web/www/joplin/CliClient/app/command-use.js:15
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-version.js:12
+#: /mnt/d/Web/www/joplin/CliClient/app/command-version.js:12
 msgid "Displays version information"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-version.js:17
+#: /mnt/d/Web/www/joplin/CliClient/app/command-version.js:17
 #, javascript-format
 msgid "%s %s (%s)"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/main.js:53
+#: /mnt/d/Web/www/joplin/CliClient/app/main.js:53
 msgid "Fatal error:"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/onedrive-api-node-utils.js:38
+#: /mnt/d/Web/www/joplin/CliClient/app/onedrive-api-node-utils.js:38
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/onedrive-api-node-utils.js:58
+#: /mnt/d/Web/www/joplin/CliClient/app/onedrive-api-node-utils.js:58
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/onedrive-api-node-utils.js:60
+#: /mnt/d/Web/www/joplin/CliClient/app/onedrive-api-node-utils.js:60
 msgid "The application has been successfully authorised."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/onedrive-api-node-utils.js:82
-msgid "Please open this URL in your browser to authentify the application:"
+#: /mnt/d/Web/www/joplin/CliClient/app/onedrive-api-node-utils.js:82
+msgid "Please open this URL in your browser to authenticate the application:"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:52
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/synchronizer.js:52
 #, javascript-format
 msgid "Created local items: %d."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:53
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/synchronizer.js:53
 #, javascript-format
 msgid "Updated local items: %d."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:54
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/synchronizer.js:54
 #, javascript-format
 msgid "Created remote items: %d."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:55
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/synchronizer.js:55
 #, javascript-format
 msgid "Updated remote items: %d."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:56
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/synchronizer.js:56
 #, javascript-format
 msgid "Deleted local items: %d."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:57
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/synchronizer.js:57
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:58
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/synchronizer.js:58
 #, javascript-format
 msgid "State: %s."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:59
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/synchronizer.js:59
 #, javascript-format
 msgid "Last error: %s (stacktrace in log)."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:61
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/synchronizer.js:61
 #, javascript-format
 msgid "Completed: %s"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/folder.js:81
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/models/folder.js:81
 msgid "Conflicts"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/folder.js:136
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/models/folder.js:136
 #, javascript-format
 msgid "A notebook with this title already exists: \"%s\""
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/folder.js:140
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/models/folder.js:140
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/note.js:46
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/models/note.js:46
 msgid "This note does not have geolocation information."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/note.js:201
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/models/note.js:201
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/note.js:212
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/models/note.js:212
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/services/report.js:54
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/services/report.js:54
 msgid "Sync status (synced items / total items)"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/services/report.js:59
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/services/report.js:59
 #, javascript-format
 msgid "%s: %d/%d"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/services/report.js:62
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/services/report.js:62
 #, javascript-format
 msgid "Total: %d/%d"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/services/report.js:64
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/services/report.js:64
 #, javascript-format
 msgid "Conflicted: %d"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/services/report.js:65
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/services/report.js:65
 #, javascript-format
 msgid "To delete: %d"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/services/report.js:70
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/services/report.js:70
 msgid "Folders"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/services/report.js:80
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/services/report.js:80
 #, javascript-format
 msgid "%s: %d notes"
 msgstr ""

@@ -47,6 +47,16 @@ class BaseItem extends BaseModel {
 		return itemOrId.id + '.md';
 	}
 
+	static isSystemPath(path) {
+		// 1b175bb38bba47baac22b0b47f778113.md
+		if (!path || !path.length) return false;
+		let p = path.split('/');
+		p = p[p.length - 1];
+		p = p.split('.');
+		if (p.length != 2) return false;
+		return p[0].length == 32 && p[1] == 'md';
+	}
+
 	static itemClass(item) {
 		if (!item) throw new Error('Item cannot be null');
 

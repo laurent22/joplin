@@ -251,23 +251,15 @@ describe('Synchronizer', function() {
 		await switchClient(2);
 
 		await synchronizer().start();
-
-		await sleep(0.1);
-
 		await Note.delete(note1.id);
-
 		await synchronizer().start();
 
 		await switchClient(1);
 
 		await synchronizer().start();
-
 		let items = await allItems();
-
 		expect(items.length).toBe(1);
-
 		let deletedItems = await BaseItem.deletedItems();
-
 		expect(deletedItems.length).toBe(0);
 		
 		done();
