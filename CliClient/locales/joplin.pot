@@ -1,0 +1,349 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Laurent Cozic
+# This file is distributed under the same license as the Joplin-CLI package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Joplin-CLI 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-07-18 11:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: /media/veracrypt22/src/notes/CliClient/app/app.js:92
+msgid "No notebook selected."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/app.js:97
+msgid "No notebook has been specified."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/app.js:128
+msgid "Usage: --profile <dir-path>"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/app.js:135
+msgid "Usage: --env <dev|prod>"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/app.js:160
+msgid "Usage: --log-level <none|error|warn|info|debug>"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/app.js:167
+#, javascript-format
+msgid "Unknown flag: %s"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/app.js:183
+#, javascript-format
+msgid ""
+"Command line argument \"%s\" contains both quotes and double-quotes - "
+"aborting."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/app.js:277
+#, javascript-format
+msgid "Synchronizing with directory \"%s\""
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/app.js:356
+msgid "No notebook is defined. Create one with `mkbook <notebook>`."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-cat.js:33
+#, javascript-format
+msgid "No item \"%s\" found."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-cp.js:31
+#: /media/veracrypt22/src/notes/CliClient/app/command-mv.js:36
+#, javascript-format
+msgid "No notebook \"%s\""
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-cp.js:34
+#: /media/veracrypt22/src/notes/CliClient/app/command-mv.js:39
+#, javascript-format
+msgid "No note matches this pattern: \"%s\""
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-edit.js:33
+msgid "Done editing."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-edit.js:39
+msgid ""
+"No text editor is defined. Please set it using `config editor <editor-path>`"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-edit.js:45
+msgid "No active notebook."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-edit.js:66
+msgid "Starting to edit note. Close the editor to get back to the prompt."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:16
+msgid "Imports an Evernote notebook file (.enex file)."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:35
+#, javascript-format
+msgid "Folder does not exists: \"%s\". Create it?"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:42
+#, javascript-format
+msgid "Imported - %s"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:55
+#, javascript-format
+msgid "File \"%s\" will be imported into notebook \"%s\". Continue?"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:62
+#, javascript-format
+msgid "Found: %d."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:63
+#, javascript-format
+msgid "Created: %d."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:64
+#, javascript-format
+msgid "Updated: %d."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:65
+#, javascript-format
+msgid "Skipped: %d."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:66
+#, javascript-format
+msgid "Resources: %d."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:67
+#, javascript-format
+msgid "Tagged: %d."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:78
+msgid "Importing notes..."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-ls.js:65
+msgid "Please select a notebook first."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-mknote.js:17
+msgid "Notes can only be created within a notebook."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-mv.js:29
+#, javascript-format
+msgid "No item matches pattern \"%s\""
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-rm.js:39
+#, javascript-format
+msgid "No notebook matchin pattern \"%s\""
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-rm.js:40
+#, javascript-format
+msgid "Delete notebook \"%s\"?"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-rm.js:46
+#, javascript-format
+msgid "No note matchin pattern \"%s\""
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-rm.js:47
+#, javascript-format
+msgid "%d notes match this pattern. Delete them?"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-search.js:29
+#, javascript-format
+msgid "Notebook not found: \"%s\""
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-set.js:31
+#, javascript-format
+msgid "No note \"%s\" found."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-sync.js:66
+msgid "Synchronisation is already in progress."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-sync.js:88
+#, javascript-format
+msgid "Synchronization target: %s"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-sync.js:90
+msgid "Cannot initialize synchronizer."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-sync.js:92
+msgid "Starting synchronization..."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-sync.js:99
+msgid "Done."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-sync.js:114
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:60
+msgid "Cancelling..."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-tag.js:25
+#: /media/veracrypt22/src/notes/CliClient/app/command-tag.js:34
+#, javascript-format
+msgid "Tag does not exist: \"%s\""
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-tag.js:28
+#: /media/veracrypt22/src/notes/CliClient/app/command-tag.js:35
+#, javascript-format
+msgid "Note does not exist: \"%s\""
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-tag.js:48
+#, javascript-format
+msgid "Invalid command: \"%s\""
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-use.js:28
+#, javascript-format
+msgid "No folder \"%s\""
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-version.js:17
+#, javascript-format
+msgid "%s %s (%s)"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/logger.js:147
+#, javascript-format
+msgid "Unknown log level: %s"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:52
+#, javascript-format
+msgid "Created local items: %d."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:53
+#, javascript-format
+msgid "Updated local items: %d."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:54
+#, javascript-format
+msgid "Created remote items: %d."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:55
+#, javascript-format
+msgid "Updated remote items: %d."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:56
+#, javascript-format
+msgid "Deleted local items: %d."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:57
+#, javascript-format
+msgid "Deleted remote items: %d."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:58
+#, javascript-format
+msgid "State: %s."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:59
+#, javascript-format
+msgid "Last error: %s (stacktrace in log)."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:61
+#, javascript-format
+msgid "Completed: %s"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/folder.js:81
+msgid "Conflicts"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/folder.js:136
+#, javascript-format
+msgid "A notebook with this title already exists: \"%s\""
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/folder.js:140
+#, javascript-format
+msgid "Notebooks cannot be named \"%s\", which is a reserved title."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/note.js:194
+#, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/note.js:205
+#, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/services/report.js:54
+msgid "Sync status (synced items / total items)"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/services/report.js:59
+#, javascript-format
+msgid "%s: %d/%d"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/services/report.js:62
+#, javascript-format
+msgid "Total: %d/%d"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/services/report.js:64
+#, javascript-format
+msgid "Conflicted: %d"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/services/report.js:65
+#, javascript-format
+msgid "To delete: %d"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/services/report.js:70
+msgid "Folders"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/services/report.js:80
+#, javascript-format
+msgid "%s: %d notes"
+msgstr ""

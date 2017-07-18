@@ -17,7 +17,7 @@ import { sprintf } from 'sprintf-js';
 import { vorpalUtils } from 'vorpal-utils.js';
 import { reg } from 'lib/registry.js';
 import { fileExtension } from 'lib/path-utils.js';
-import { _ } from 'lib/locale.js';
+import { _, setLocale } from 'lib/locale.js';
 import os from 'os';
 import fs from 'fs-extra';
 
@@ -222,6 +222,8 @@ class Application {
 			if (cmd.autocomplete()) vorpalCmd.autocomplete(cmd.autocomplete());
 
 			let actionFn = async function(args, end) {
+				setLocale(Setting.value('locale'));
+
 				try {
 					const fn = cmd.action.bind(this);
 					await fn(args);
@@ -331,6 +333,8 @@ class Application {
 		await this.database_.open({ name: profileDir + '/database.sqlite' });
 		BaseModel.db_ = this.database_;
 		await Setting.load();
+
+		setLocale(Setting.value('locale'));
 
 		let currentFolderId = Setting.value('activeFolderId');
 		this.currentFolder_ = null;
