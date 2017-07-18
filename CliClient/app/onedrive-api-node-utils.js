@@ -35,7 +35,7 @@ class OneDriveApiNodeUtils {
 			}
 		}
 
-		if (!port) throw new Error(_('All potential ports are in use - please report the issue at https://github.com/laurent22/joplin'));
+		if (!port) throw new Error(_('All potential ports are in use - please report the issue at %s', 'https://github.com/laurent22/joplin'));
 
 		let authCodeUrl = this.api().authCodeUrl('http://localhost:' + port);
 

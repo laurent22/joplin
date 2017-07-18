@@ -195,7 +195,23 @@ class Application {
 		return output.join(' ');
 	}
 
+	onLocaleChanged() {
+		let currentCommands = this.vorpal().commands;
+		for (let i = 0; i < currentCommands.length; i++) {
+			let cmd = currentCommands[i];
+			if (cmd._name == 'help') {
+				cmd.description(_('Provides help for a given command.'));
+			} else if (cmd._name == 'exit') {
+				cmd.description(_('Exits the application.'));
+			} else if (cmd.__commandObject) {
+				cmd.description(cmd.__commandObject.description());
+			}
+		}
+	}
+
 	loadCommands_() {
+		this.onLocaleChanged(); // Ensures that help and exit commands are translated
+
 		fs.readdirSync(__dirname).forEach((path) => {
 			if (path.indexOf('command-') !== 0) return;
 			const ext = fileExtension(path)
@@ -204,6 +220,7 @@ class Application {
 			let CommandClass = require('./' + path);
 			let cmd = new CommandClass();
 			let vorpalCmd = this.vorpal().command(cmd.usage(), cmd.description());
+			vorpalCmd.__commandObject = cmd;
 
 			// TODO: maybe remove if the PR is not merged
 			if ('disableTypeCasting' in vorpalCmd) vorpalCmd.disableTypeCasting();
@@ -222,8 +239,6 @@ class Application {
 			if (cmd.autocomplete()) vorpalCmd.autocomplete(cmd.autocomplete());
 
 			let actionFn = async function(args, end) {
-				setLocale(Setting.value('locale'));
-
 				try {
 					const fn = cmd.action.bind(this);
 					await fn(args);
@@ -294,8 +309,6 @@ class Application {
 		this.vorpal_ = require('vorpal')();
 		vorpalUtils.initialize(this.vorpal());
 
-		this.loadCommands_();
-
 		let argv = process.argv;
 		let startFlags = await this.handleStartFlags_(argv);
 		argv = startFlags.argv;
@@ -337,6 +350,8 @@ class Application {
 		await Setting.load();
 
 		setLocale(Setting.value('locale'));
+
+		this.loadCommands_();
 
 		let currentFolderId = Setting.value('activeFolderId');
 		this.currentFolder_ = null;

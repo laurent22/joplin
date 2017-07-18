@@ -10,7 +10,7 @@ import { autocompleteItems } from './autocomplete.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return _('set <note> <name> [value]');
+		return 'set <note> <name> [value]';
 	}
 
 	description() {

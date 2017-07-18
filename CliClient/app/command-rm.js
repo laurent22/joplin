@@ -11,7 +11,7 @@ import { vorpalUtils } from './vorpal-utils.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return _('rm <pattern>');
+		return 'rm <pattern>';
 	}
 
 	description() {

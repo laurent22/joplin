@@ -6,7 +6,7 @@ import { Folder } from 'lib/models/folder.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return _('mkbook <notebook>');
+		return 'mkbook <notebook>';
 	}
 
 	description() {

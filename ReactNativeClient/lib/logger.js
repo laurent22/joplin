@@ -144,7 +144,7 @@ class Logger {
 		if (s == 'warn') return Logger.LEVEL_WARN;
 		if (s == 'info') return Logger.LEVEL_INFO;
 		if (s == 'debug') return Logger.LEVEL_DEBUG;
-		throw new Error(_('Unknown log level: %s', s));
+		throw new Error('Unknown log level: %s', s);
 	}
 
 }

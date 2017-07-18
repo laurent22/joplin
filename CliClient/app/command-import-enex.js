@@ -9,7 +9,7 @@ import { filename, basename } from 'lib/path-utils.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return _('import-enex <file> [notebook]');
+		return 'import-enex <file> [notebook]';
 	}
 
 	description() {
@@ -19,7 +19,7 @@ class Command extends BaseCommand {
 	options() {
 		return [
 			['-f, --force', _('Do not ask for confirmation.')],
-			['--fuzzy-matching', _('For debugging purposes. Do not use.')],
+			['--fuzzy-matching', 'For debugging purposes. Do not use.'],
 		];
 	}
 

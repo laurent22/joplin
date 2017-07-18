@@ -1,11 +1,12 @@
 import { BaseCommand } from './base-command.js';
-import { _ } from 'lib/locale.js';
+import { _, setLocale } from 'lib/locale.js';
+import { app } from './app.js';
 import { Setting } from 'lib/models/setting.js';
 
 class Command extends BaseCommand {
 
 	usage() {
-		return _('config [name] [value]');
+		return 'config [name] [value]';
 	}
 
 	description() {
@@ -27,6 +28,12 @@ class Command extends BaseCommand {
 		}
 
 		Setting.setValue(args.name, args.value);
+
+		if (args.name == 'locale') {
+			setLocale(Setting.value('locale'));
+			app().onLocaleChanged();
+		}
+
 		await Setting.saveAll();
 	}
 

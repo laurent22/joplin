@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-18 12:21+0100\n"
+"POT-Creation-Date: 2017-07-18 13:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,17 +49,21 @@ msgid ""
 "aborting."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/app.js:279
+#: /media/veracrypt22/src/notes/CliClient/app/app.js:203
+msgid "Provides help for a given command."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/app.js:205
+msgid "Exits the application."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/app.js:294
 #, javascript-format
 msgid "Synchronizing with directory \"%s\""
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/app.js:358
+#: /media/veracrypt22/src/notes/CliClient/app/app.js:373
 msgid "No notebook is defined. Create one with `mkbook <notebook>`."
-msgstr ""
-
-#: /media/veracrypt22/src/notes/CliClient/app/command-cat.js:12
-msgid "cat <title>"
 msgstr ""
 
 #: /media/veracrypt22/src/notes/CliClient/app/command-cat.js:16
@@ -89,29 +93,17 @@ msgstr ""
 msgid "Cannot find \"%s\"."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-config.js:8
-msgid "config [name] [value]"
-msgstr ""
-
-#: /media/veracrypt22/src/notes/CliClient/app/command-config.js:12
+#: /media/veracrypt22/src/notes/CliClient/app/command-config.js:13
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-cp.js:12
-msgid "cp <pattern> [notebook]"
-msgstr ""
-
 #: /media/veracrypt22/src/notes/CliClient/app/command-cp.js:16
 msgid ""
 "Duplicates the notes matching <pattern> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
-msgstr ""
-
-#: /media/veracrypt22/src/notes/CliClient/app/command-edit.js:14
-msgid "edit <title>"
 msgstr ""
 
 #: /media/veracrypt22/src/notes/CliClient/app/command-edit.js:18
@@ -135,21 +127,12 @@ msgstr ""
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:12
-msgid "import-enex <file> [notebook]"
-msgstr ""
-
 #: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:16
 msgid "Imports an Evernote notebook file (.enex file)."
 msgstr ""
 
 #: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:21
 msgid "Do not ask for confirmation."
-msgstr ""
-
-#: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:22
-#: /media/veracrypt22/src/notes/CliClient/app/command-sync.js:30
-msgid "For debugging purposes. Do not use."
 msgstr ""
 
 #: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:35
@@ -201,10 +184,6 @@ msgstr ""
 msgid "Importing notes..."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-ls.js:15
-msgid "ls [pattern]"
-msgstr ""
-
 #: /media/veracrypt22/src/notes/CliClient/app/command-ls.js:19
 msgid ""
 "Displays the notes in [notebook]. Use `ls /` to display the list of "
@@ -244,16 +223,8 @@ msgstr ""
 msgid "Please select a notebook first."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-mkbook.js:9
-msgid "mkbook <notebook>"
-msgstr ""
-
 #: /media/veracrypt22/src/notes/CliClient/app/command-mkbook.js:13
 msgid "Creates a new notebook."
-msgstr ""
-
-#: /media/veracrypt22/src/notes/CliClient/app/command-mknote.js:9
-msgid "mknote <note>"
 msgstr ""
 
 #: /media/veracrypt22/src/notes/CliClient/app/command-mknote.js:13
@@ -264,19 +235,11 @@ msgstr ""
 msgid "Notes can only be created within a notebook."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-mv.js:12
-msgid "mv <pattern> <destination>"
-msgstr ""
-
 #: /media/veracrypt22/src/notes/CliClient/app/command-mv.js:16
 msgid ""
 "Moves the notes matching <pattern> to <destination>. If <pattern> is a note, "
 "it will be moved to the notebook <destination>. If <pattern> is a notebook, "
 "it will be renamed to <destination>."
-msgstr ""
-
-#: /media/veracrypt22/src/notes/CliClient/app/command-rm.js:14
-msgid "rm <pattern>"
 msgstr ""
 
 #: /media/veracrypt22/src/notes/CliClient/app/command-rm.js:18
@@ -301,16 +264,8 @@ msgstr ""
 msgid "%d notes match this pattern. Delete them?"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-search.js:15
-msgid "search <pattern> [notebook]"
-msgstr ""
-
 #: /media/veracrypt22/src/notes/CliClient/app/command-search.js:19
 msgid "Searches for the given <pattern> in all the notes."
-msgstr ""
-
-#: /media/veracrypt22/src/notes/CliClient/app/command-set.js:13
-msgid "set <note> <name> [value]"
 msgstr ""
 
 #: /media/veracrypt22/src/notes/CliClient/app/command-set.js:17
@@ -355,10 +310,6 @@ msgstr ""
 msgid "Cancelling..."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-tag.js:10
-msgid "tag <command> [tag] [note]"
-msgstr ""
-
 #: /media/veracrypt22/src/notes/CliClient/app/command-tag.js:14
 msgid ""
 "<command> can be \"add\", \"remove\" or \"list\" to assign or remove [tag] "
@@ -369,10 +320,6 @@ msgstr ""
 #: /media/veracrypt22/src/notes/CliClient/app/command-tag.js:48
 #, javascript-format
 msgid "Invalid command: \"%s\""
-msgstr ""
-
-#: /media/veracrypt22/src/notes/CliClient/app/command-use.js:11
-msgid "use <notebook>"
 msgstr ""
 
 #: /media/veracrypt22/src/notes/CliClient/app/command-use.js:15
@@ -395,9 +342,8 @@ msgid "Fatal error:"
 msgstr ""
 
 #: /media/veracrypt22/src/notes/CliClient/app/onedrive-api-node-utils.js:38
-msgid ""
-"All potential ports are in use - please report the issue at https://github."
-"com/laurent22/joplin"
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
 msgstr ""
 
 #: /media/veracrypt22/src/notes/CliClient/app/onedrive-api-node-utils.js:58
@@ -411,11 +357,6 @@ msgstr ""
 
 #: /media/veracrypt22/src/notes/CliClient/app/onedrive-api-node-utils.js:82
 msgid "Please open this URL in your browser to authentify the application:"
-msgstr ""
-
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/logger.js:147
-#, javascript-format
-msgid "Unknown log level: %s"
 msgstr ""
 
 #: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:52
