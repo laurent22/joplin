@@ -1,5 +1,6 @@
 import { BaseModel } from 'lib/base-model.js';
 import { Log } from 'lib/log.js';
+import { sprintf } from 'sprintf-js';
 import { Folder } from 'lib/models/folder.js';
 import { BaseItem } from 'lib/models/base-item.js';
 import { Setting } from 'lib/models/setting.js';
@@ -38,6 +39,12 @@ class Note extends BaseItem {
 		fieldNames.push('type_');
 		lodash.pull(fieldNames, 'title', 'body');
 		return super.serialize(note, 'note', fieldNames);
+	}
+
+	static geolocationUrl(note) {
+		if (!('latitude' in note) || !('longitude' in note)) throw new Error('Latitude or longitude missing');
+		if (!note.latitude && !note.longitude) throw new Error(_('This note does not have geolocation information.'));
+		return sprintf('https://www.openstreetmap.org/?lat=%s&lon=%s&zoom=20', note.latitude, note.longitude)
 	}
 
 	static modelType() {

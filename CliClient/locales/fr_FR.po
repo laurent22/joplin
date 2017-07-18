@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-18 13:36+0100\n"
+"POT-Creation-Date: 2017-07-18 16:32+0100\n"
 "PO-Revision-Date: 2017-07-18 13:27+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -60,13 +60,24 @@ msgid "Exits the application."
 msgstr "Quitter le logiciel."
 
 #: /media/veracrypt22/src/notes/CliClient/app/app.js:294
+#, fuzzy
+msgid "Invalid command. Showing help:"
+msgstr "Commande invalie : \"%s\""
+
+#: /media/veracrypt22/src/notes/CliClient/app/app.js:329
 #, javascript-format
 msgid "Synchronizing with directory \"%s\""
 msgstr "Synchronisation avec dossier \"%s\""
 
-#: /media/veracrypt22/src/notes/CliClient/app/app.js:373
+#: /media/veracrypt22/src/notes/CliClient/app/app.js:408
 msgid "No notebook is defined. Create one with `mkbook <notebook>`."
 msgstr "Aucun carnet n'est défini. Créez-en un avec `mkbook <carnet>`."
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-alias.js:13
+msgid ""
+"Creates a new command alias which can then be used as a regular command (eg. "
+"`alias ll \"ls -l\"`)."
+msgstr ""
 
 #: /media/veracrypt22/src/notes/CliClient/app/command-cat.js:16
 msgid "Displays the given note."
@@ -79,6 +90,7 @@ msgstr "Affiche tous les détails de la note."
 #: /media/veracrypt22/src/notes/CliClient/app/command-cat.js:33
 #: /media/veracrypt22/src/notes/CliClient/app/command-cp.js:31
 #: /media/veracrypt22/src/notes/CliClient/app/command-cp.js:34
+#: /media/veracrypt22/src/notes/CliClient/app/command-geoloc.js:27
 #: /media/veracrypt22/src/notes/CliClient/app/command-mv.js:29
 #: /media/veracrypt22/src/notes/CliClient/app/command-mv.js:36
 #: /media/veracrypt22/src/notes/CliClient/app/command-mv.js:39
@@ -137,6 +149,11 @@ msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
 "Edition de la note en cours. Fermez l'éditeur de texte pour retourner à "
 "l'invite de commande."
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-geoloc.js:16
+#, fuzzy
+msgid "Displays a geolocation URL for the note."
+msgstr "Affiche tous les détails de la note."
 
 #: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:16
 msgid "Imports an Evernote notebook file (.enex file)."
@@ -451,12 +468,16 @@ msgstr "Un carnet avec ce titre existe déjà : \"%s\""
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Les carnets ne peuvent être nommés \"%s\" car c'est un nom réservé."
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/note.js:194
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/note.js:46
+msgid "This note does not have geolocation information."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/note.js:201
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Impossible de copier la note dans le carnet \"%s\""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/note.js:205
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/note.js:212
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Impossible de déplacer la note vers le carnet \"%s\""

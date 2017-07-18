@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-18 13:36+0100\n"
+"POT-Creation-Date: 2017-07-18 16:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,12 +58,22 @@ msgid "Exits the application."
 msgstr ""
 
 #: /media/veracrypt22/src/notes/CliClient/app/app.js:294
+msgid "Invalid command. Showing help:"
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/app.js:329
 #, javascript-format
 msgid "Synchronizing with directory \"%s\""
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/app.js:373
+#: /media/veracrypt22/src/notes/CliClient/app/app.js:408
 msgid "No notebook is defined. Create one with `mkbook <notebook>`."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-alias.js:13
+msgid ""
+"Creates a new command alias which can then be used as a regular command (eg. "
+"`alias ll \"ls -l\"`)."
 msgstr ""
 
 #: /media/veracrypt22/src/notes/CliClient/app/command-cat.js:16
@@ -77,6 +87,7 @@ msgstr ""
 #: /media/veracrypt22/src/notes/CliClient/app/command-cat.js:33
 #: /media/veracrypt22/src/notes/CliClient/app/command-cp.js:31
 #: /media/veracrypt22/src/notes/CliClient/app/command-cp.js:34
+#: /media/veracrypt22/src/notes/CliClient/app/command-geoloc.js:27
 #: /media/veracrypt22/src/notes/CliClient/app/command-mv.js:29
 #: /media/veracrypt22/src/notes/CliClient/app/command-mv.js:36
 #: /media/veracrypt22/src/notes/CliClient/app/command-mv.js:39
@@ -125,6 +136,10 @@ msgstr ""
 
 #: /media/veracrypt22/src/notes/CliClient/app/command-edit.js:66
 msgid "Starting to edit note. Close the editor to get back to the prompt."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/CliClient/app/command-geoloc.js:16
+msgid "Displays a geolocation URL for the note."
 msgstr ""
 
 #: /media/veracrypt22/src/notes/CliClient/app/command-import-enex.js:16
@@ -418,12 +433,16 @@ msgstr ""
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/note.js:194
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/note.js:46
+msgid "This note does not have geolocation information."
+msgstr ""
+
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/note.js:201
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr ""
 
-#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/note.js:205
+#: /media/veracrypt22/src/notes/ReactNativeClient/lib/models/note.js:212
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr ""

@@ -109,12 +109,22 @@ class BaseItem extends BaseModel {
 		let trackDeleted = true;
 		if (options && options.trackDeleted !== null && options.trackDeleted !== undefined) trackDeleted = options.trackDeleted;
 
+		// Don't create a deleted_items entry when conflicted notes are deleted
+		// since no other client have (or should have) them.
+		let conflictNoteIds = [];
+		if (this.modelType() == BaseModel.TYPE_NOTE) {
+			const conflictNotes = await this.db().selectAll('SELECT id FROM notes WHERE id IN ("' + ids.join('","') + '") AND is_conflict = 1');
+			conflictNoteIds = conflictNotes.map((n) => { return n.id });
+		}
+
 		await super.batchDelete(ids, options);
 
 		if (trackDeleted) {
 			let queries = [];
 			let now = time.unixMs();
 			for (let i = 0; i < ids.length; i++) {
+				if (conflictNoteIds.indexOf(ids[i]) >= 0) continue;
+
 				queries.push({
 					sql: 'INSERT INTO deleted_items (item_type, item_id, deleted_time) VALUES (?, ?, ?)',
 					params: [this.modelType(), ids[i], now],

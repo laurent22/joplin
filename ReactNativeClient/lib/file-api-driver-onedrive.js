@@ -166,6 +166,11 @@ class FileApiDriverOneDrive {
 		throw new Error('Not implemented');
 	}
 
+	// delta(path) {
+	// 	let response = await this.api_.exec('GET', this.makePath_(path) + ':/delta');
+	// 	console.info(response);		
+	// }
+
 }
 
 export { FileApiDriverOneDrive };

@@ -150,6 +150,7 @@ Setting.defaults_ = {
 	'sync.target': { value: 'onedrive', type: 'string', public: true },
 	'editor': { value: '', type: 'string', public: true },
 	'locale': { value: 'en_GB', type: 'string', public: true },
+	'aliases': { value: '', type: 'string', public: true },
 };
 
 // Contains constants that are set by the application and
