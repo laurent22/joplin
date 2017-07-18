@@ -148,6 +148,7 @@ Setting.defaults_ = {
 	'sync.onedrive.auth': { value: '', type: 'string', public: false },
 	'sync.filesystem.path': { value: '', type: 'string', public: true },	
 	'sync.target': { value: 'onedrive', type: 'string', public: true },
+	'sync.context': { value: '', type: 'string', public: false },
 	'editor': { value: '', type: 'string', public: true },
 	'locale': { value: 'en_GB', type: 'string', public: true },
 	'aliases': { value: '', type: 'string', public: true },

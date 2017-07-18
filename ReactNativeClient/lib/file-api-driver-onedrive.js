@@ -166,10 +166,55 @@ class FileApiDriverOneDrive {
 		throw new Error('Not implemented');
 	}
 
-	// delta(path) {
-	// 	let response = await this.api_.exec('GET', this.makePath_(path) + ':/delta');
-	// 	console.info(response);		
-	// }
+	async delta(path, options = null) {
+		let output = {
+			context: {},
+			items: [],
+		};
+
+		let context = options ? options.context : null;
+
+		let url = null;
+		let query = null;
+		if (context) {
+			url = context;
+		} else {
+			url = this.makePath_(path) + ':/delta';
+			query = this.itemFilter_();
+		}
+
+		while (true) {
+			let response = await this.api_.execJson('GET', url, query);
+			let items = this.makeItems_(response.value);
+			output.items = output.items.concat(items);
+
+			if (response['@odata.nextLink']) {
+				url = response['@odata.nextLink'];
+			} else {
+				if (!response['@odata.deltaLink']) {
+					throw new Error('Delta link missing: ' + JSON.stringify(response));
+				}
+				output.context = response['@odata.deltaLink'];
+				break;
+			}
+		}
+
+		// https://dev.onedrive.com/items/view_delta.htm
+		// The same item may appear more than once in a delta feed, for various reasons. You should use the last occurrence you see.
+		// So remove any duplicate item from the array.
+		let temp = [];
+		let seenPaths = [];
+		for (let i = output.items.length - 1; i >= 0; i--) {
+			let item = output.items[i];
+			if (seenPaths.indexOf(item.path) >= 0) continue;
+			temp.splice(0, 0, item);
+			seenPaths.push(item.path);
+		}
+
+		output.items = temp;
+
+		return output;
+	}
 
 }
 

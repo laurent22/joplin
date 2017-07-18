@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-18 16:33+0100\n"
+"POT-Creation-Date: 2017-07-18 17:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -316,11 +316,11 @@ msgstr ""
 msgid "Starting synchronization..."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-sync.js:99
+#: /media/veracrypt22/src/notes/CliClient/app/command-sync.js:103
 msgid "Done."
 msgstr ""
 
-#: /media/veracrypt22/src/notes/CliClient/app/command-sync.js:114
+#: /media/veracrypt22/src/notes/CliClient/app/command-sync.js:118
 #: /media/veracrypt22/src/notes/ReactNativeClient/lib/synchronizer.js:60
 msgid "Cancelling..."
 msgstr ""

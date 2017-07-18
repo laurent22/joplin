@@ -92,6 +92,11 @@ class FileApi {
 		return this.driver_.format();
 	}
 
+	delta(path, options = null) {
+		this.logger().debug('delta ' + this.fullPath_(path));
+		return this.driver_.delta(this.fullPath_(path), options);
+	}
+
 }
 
 export { FileApi };
