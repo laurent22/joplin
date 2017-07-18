@@ -6,11 +6,11 @@ import { Note } from 'lib/models/note.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return 'mknote <note>';
+		return _('mknote <note>');
 	}
 
 	description() {
-		return 'Creates a new note.';
+		return _('Creates a new note.');
 	}
 
 	async action(args) {

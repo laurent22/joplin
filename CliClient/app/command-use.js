@@ -8,11 +8,11 @@ import { autocompleteFolders } from './autocomplete.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return 'use <notebook>';
+		return _('use <notebook>');
 	}
 
 	description() {
-		return 'Switches to [notebook] - all further operations will happen within this notebook.';
+		return _('Switches to [notebook] - all further operations will happen within this notebook.');
 	}
 
 	aliases() {
@@ -25,7 +25,7 @@ class Command extends BaseCommand {
 
 	async action(args) {
 		let folder = await app().loadItem(BaseModel.TYPE_FOLDER, args['notebook']);
-		if (!folder) throw new Error(_('No folder "%s"', args['notebook']));
+		if (!folder) throw new Error(_('Cannot find "%s".', args['notebook']));
 		app().switchCurrentFolder(folder);
 	}
 

@@ -6,11 +6,11 @@ import { Folder } from 'lib/models/folder.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return 'mkbook <notebook>';
+		return _('mkbook <notebook>');
 	}
 
 	description() {
-		return 'Creates a new notebook.';
+		return _('Creates a new notebook.');
 	}
 
 	aliases() {

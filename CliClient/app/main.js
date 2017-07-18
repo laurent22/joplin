@@ -50,6 +50,6 @@ process.stdin.on('keypress', (_, key) => {
 shimInit();
 
 app().start().catch((error) => {
-	console.error('Fatal error:');
+	console.error(_('Fatal error:'));
 	console.error(error);
 });

@@ -9,16 +9,16 @@ import { autocompleteItems } from './autocomplete.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return 'cat <title>';
+		return _('cat <title>');
 	}
 
 	description() {
-		return 'Displays the given item data.';
+		return _('Displays the given note.');
 	}
 
 	options() {
 		return [
-			['-v, --verbose', 'Shows complete information about note.'],
+			['-v, --verbose', _('Displays the complete information about note.')],
 		];
 	}
 
@@ -30,7 +30,7 @@ class Command extends BaseCommand {
 		let title = args['title'];
 
 		let item = await app().loadItem(BaseModel.TYPE_NOTE, title, { parent: app().currentFolder() });
-		if (!item) throw new Error(_('No item "%s" found.', title));
+		if (!item) throw new Error(_('Cannot find "%s".', title));
 
 		const content = args.options.verbose ? await Note.serialize(item) : await Note.serializeForEdit(item);
 		this.log(content);

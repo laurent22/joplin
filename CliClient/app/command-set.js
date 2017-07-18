@@ -10,11 +10,11 @@ import { autocompleteItems } from './autocomplete.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return 'set <note> <name> [value]';
+		return _('set <note> <name> [value]');
 	}
 
 	description() {
-		return 'Sets the property <name> of the given <note> to the given [value].';
+		return _('Sets the property <name> of the given <note> to the given [value].');
 	}
 
 	autocomplete() {
@@ -28,7 +28,7 @@ class Command extends BaseCommand {
 		if (!propValue) propValue = '';
 
 		let notes = await app().loadItems(BaseModel.TYPE_NOTE, title);
-		if (!notes.length) throw new Error(_('No note "%s" found.', title));
+		if (!notes.length) throw new Error(_('Cannot find "%s".', title));
 
 		for (let i = 0; i < notes.length; i++) {
 			let newNote = {

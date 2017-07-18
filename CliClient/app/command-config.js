@@ -5,11 +5,11 @@ import { Setting } from 'lib/models/setting.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return 'config [name] [value]';
+		return _('config [name] [value]');
 	}
 
 	description() {
-		return 'Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.';
+		return _('Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.');
 	}
 
 	async action(args) {

@@ -1,3 +1,5 @@
+import { _ } from 'lib/locale.js'
+
 const tcpPortUsed = require('tcp-port-used');
 const http = require("http");
 const urlParser = require("url");
@@ -33,7 +35,7 @@ class OneDriveApiNodeUtils {
 			}
 		}
 
-		if (!port) throw new Error('All potential ports are in use - please report the issue at https://github.com/laurent22/joplin');
+		if (!port) throw new Error(_('All potential ports are in use - please report the issue at https://github.com/laurent22/joplin'));
 
 		let authCodeUrl = this.api().authCodeUrl('http://localhost:' + port);
 
@@ -53,9 +55,9 @@ class OneDriveApiNodeUtils {
 				if (!query.code) return writeResponse(400, '"code" query parameter is missing');
 
 				this.api().execTokenRequest(query.code, 'http://localhost:' + port.toString()).then(() => {
-					writeResponse(200, 'The application has been authorised - you may now close this browser tab.');
+					writeResponse(200, _('The application has been authorised - you may now close this browser tab.'));
 					targetConsole.log('');
-					targetConsole.log('The application has been successfully authorised.');
+					targetConsole.log(_('The application has been successfully authorised.'));
 					server.destroy();
 				}).catch((error) => {
 					writeResponse(400, error.message);
@@ -77,7 +79,7 @@ class OneDriveApiNodeUtils {
 
 			enableServerDestroy(server);
 
-			targetConsole.log('Please open this URL in your browser to authentify the application:');
+			targetConsole.log(_('Please open this URL in your browser to authentify the application:'));
 			targetConsole.log('');
 			targetConsole.log(authCodeUrl);
 		});

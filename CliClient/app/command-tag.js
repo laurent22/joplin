@@ -7,11 +7,11 @@ import { BaseModel } from 'lib/base-model.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return 'tag <command> [tag] [note]';
+		return _('tag <command> [tag] [note]');
 	}
 
 	description() {
-		return '<command> can be "add", "remove" or "list" to assign or remove [tag] from [note], or to list the notes associated with [tag]. The command `tag list` can be used to list all the tags.';
+		return _('<command> can be "add", "remove" or "list" to assign or remove [tag] from [note], or to list the notes associated with [tag]. The command `tag list` can be used to list all the tags.');
 	}
 	
 	async action(args) {
@@ -22,17 +22,17 @@ class Command extends BaseCommand {
 			notes = await app().loadItems(BaseModel.TYPE_NOTE, args.note);
 		}
 
-		if (args.command == 'remove' && !tag) throw new Error(_('Tag does not exist: "%s"', args.tag));
+		if (args.command == 'remove' && !tag) throw new Error(_('Cannot find "%s".', args.tag));
 
 		if (args.command == 'add') {
-			if (!notes.length) throw new Error(_('Note does not exist: "%s"', args.note));
+			if (!notes.length) throw new Error(_('Cannot find "%s".', args.note));
 			if (!tag) tag = await Tag.save({ title: args.tag });
 			for (let i = 0; i < notes.length; i++) {
 				await Tag.addNote(tag.id, notes[i].id);
 			}
 		} else if (args.command == 'remove') {
-			if (!tag) throw new Error(_('Tag does not exist: "%s"', args.tag));
-			if (!notes.length) throw new Error(_('Note does not exist: "%s"', args.note));
+			if (!tag) throw new Error(_('Cannot find "%s".', args.tag));
+			if (!notes.length) throw new Error(_('Cannot find "%s".', args.note));
 			for (let i = 0; i < notes.length; i++) {
 				await Tag.removeNote(tag.id, notes[i].id);
 			}

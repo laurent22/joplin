@@ -9,11 +9,11 @@ import { autocompleteItems } from './autocomplete.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return 'cp <pattern> [notebook]';
+		return _('cp <pattern> [notebook]');
 	}
 
 	description() {
-		return 'Duplicates the notes matching <pattern> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.';
+		return _('Duplicates the notes matching <pattern> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.');
 	}
 
 	autocomplete() {
@@ -28,10 +28,10 @@ class Command extends BaseCommand {
 			folder = app().currentFolder();
 		}
 
-		if (!folder) throw new Error(_('No notebook "%s"', args['notebook']));
+		if (!folder) throw new Error(_('Cannot find "%s".', args['notebook']));
 
 		const notes = await app().loadItems(BaseModel.TYPE_NOTE, args['pattern']);
-		if (!notes.length) throw new Error(_('No note matches this pattern: "%s"', args['pattern']));
+		if (!notes.length) throw new Error(_('Cannot find "%s".', args['pattern']));
 
 		for (let i = 0; i < notes.length; i++) {
 			const newNote = await Note.copyToFolder(notes[i].id, folder.id);

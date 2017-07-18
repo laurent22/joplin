@@ -11,7 +11,7 @@ class Command extends BaseCommand {
 	}
 
 	description() {
-		return 'Displays summary about the notes and notebooks.';
+		return _('Displays summary about the notes and notebooks.');
 	}
 
 	async action(args) {

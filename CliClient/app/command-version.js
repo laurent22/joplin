@@ -9,7 +9,7 @@ class Command extends BaseCommand {
 	}
 
 	description() {
-		return 'Displays version information';
+		return _('Displays version information');
 	}
 
 	async action(args) {

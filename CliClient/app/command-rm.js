@@ -11,11 +11,11 @@ import { vorpalUtils } from './vorpal-utils.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return 'rm <pattern>';
+		return _('rm <pattern>');
 	}
 
 	description() {
-		return 'Deletes the items matching <pattern>.';
+		return _('Deletes the items matching <pattern>.');
 	}
 
 	autocomplete() {
@@ -24,8 +24,8 @@ class Command extends BaseCommand {
 
 	options() {
 		return [
-			['-f, --force', 'Deletes the items without asking for confirmation.'],
-			['-r, --recursive', 'Deletes a notebook.'],
+			['-f, --force', _('Deletes the items without asking for confirmation.')],
+			['-r, --recursive', _('Deletes a notebook.')],
 		];
 	}
 
@@ -36,14 +36,14 @@ class Command extends BaseCommand {
 
 		if (recursive) {
 			const folder = await app().loadItem(BaseModel.TYPE_FOLDER, pattern);
-			if (!folder) throw new Error(_('No notebook matchin pattern "%s"', pattern));
+			if (!folder) throw new Error(_('Cannot find "%s".', pattern));
 			const ok = force ? true : await vorpalUtils.cmdPromptConfirm(this, _('Delete notebook "%s"?', folder.title));
 			if (!ok) return;
 			await Folder.delete(folder.id);
 			await app().refreshCurrentFolder();
 		} else {
 			const notes = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
-			if (!notes.length) throw new Error(_('No note matchin pattern "%s"', pattern));
+			if (!notes.length) throw new Error(_('Cannot find "%s".', pattern));
 			const ok = force ? true : await vorpalUtils.cmdPromptConfirm(this, _('%d notes match this pattern. Delete them?', notes.length));
 			if (!ok) return;
 			let ids = notes.map((n) => n.id);

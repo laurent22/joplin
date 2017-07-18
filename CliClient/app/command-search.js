@@ -12,11 +12,11 @@ import { vorpalUtils } from './vorpal-utils.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return 'search <pattern> [notebook]';
+		return _('search <pattern> [notebook]');
 	}
 
 	description() {
-		return 'Searches for the given <pattern> in all the notes.';
+		return _('Searches for the given <pattern> in all the notes.');
 	}
 
 	async action(args) {
@@ -26,7 +26,7 @@ class Command extends BaseCommand {
 		let folder = null;
 		if (folderTitle) {
 			folder = await Folder.loadByTitle(folderTitle);
-			if (!folder) throw new Error(_('Notebook not found: "%s"', folderTitle));
+			if (!folder) throw new Error(_('Cannot find "%s".', folderTitle));
 		}
 
 		let fields = Note.previewFields();

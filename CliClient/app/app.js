@@ -242,6 +242,8 @@ class Application {
 			};
 
 			vorpalCmd.cancel(cancelFn);
+
+			if (cmd.hidden()) vorpalCmd.hidden();
 		});
 	}
 
