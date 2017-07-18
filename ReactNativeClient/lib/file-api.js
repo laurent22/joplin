@@ -13,6 +13,10 @@ class FileApi {
 		return this.driver_;
 	}
 
+	supportsDelta() {
+		return this.driver_.supportsDelta();
+	}
+
 	setLogger(l) {
 		this.logger_ = l;
 	}

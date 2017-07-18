@@ -219,6 +219,8 @@ class Application {
 
 			let CommandClass = require('./' + path);
 			let cmd = new CommandClass();
+			if (!cmd.enabled()) return;
+
 			let vorpalCmd = this.vorpal().command(cmd.usage(), cmd.description());
 			vorpalCmd.__commandObject = cmd;
 
@@ -261,43 +263,44 @@ class Application {
 			if (cmd.hidden()) vorpalCmd.hidden();
 		});
 
-		this.vorpal().catch('[args...]', 'Catches undefined commands').action(function(args, end) {
-			args = args.args;
+		// this.vorpal().catch('[args...]', 'Catches undefined commands').action(function(args, end) {
+		// 	args = args.args;
 
-			function delayExec(command) {
-				setTimeout(() => {
-					app().vorpal().exec(command);
-				}, 100);
-			}
+		// 	function delayExec(command) {
+		// 		setTimeout(() => {
+		// 			app().vorpal().exec(command);
+		// 		}, 100);
+		// 	}
 
-			if (!args.length) {
-				end();
-				delayExec('help');
-				return;
-			}
+		// 	if (!args.length) {
+		// 		end();
+		// 		delayExec('help');
+		// 		return;
+		// 	}
 
-			let commandName = args.splice(0, 1);
+		// 	let commandName = args.splice(0, 1);
 
-			let aliases = Setting.value('aliases').trim();
-			aliases = aliases.length ? JSON.parse(aliases) : [];
+		// 	let aliases = Setting.value('aliases').trim();
+		// 	aliases = aliases.length ? JSON.parse(aliases) : [];
 
-			for (let i = 0; i < aliases.length; i++) {
-				const alias = aliases[i];
-				if (alias.name == commandName) {
-					let command = alias.command + ' ' + app().shellArgsToString(args);
-					end();
-					delayExec(command);
-					return;
-				}
-			}
+		// 	for (let i = 0; i < aliases.length; i++) {
+		// 		const alias = aliases[i];
+		// 		if (alias.name == commandName) {
+		// 			let command = alias.command + ' ' + app().shellArgsToString(args);
+		// 			end();
+		// 			delayExec(command);
+		// 			return;
+		// 		}
+		// 	}
 
-			this.log(_("Invalid command. Showing help:"));
-			end();			
-			delayExec('help');
-		});
+		// 	this.log(_("Invalid command. Showing help:"));
+		// 	end();			
+		// 	delayExec('help');
+		// });
 	}
 
-	async synchronizer(syncTarget) {
+	async synchronizer(syncTarget, options = null) {
+		if (!options) options = {};
 		if (this.synchronizers_[syncTarget]) return this.synchronizers_[syncTarget];
 
 		let fileApi = null;
@@ -305,6 +308,7 @@ class Application {
 		// TODO: create file api based on syncTarget
 
 		if (syncTarget == 'onedrive') {
+
 			const oneDriveApi = reg.oneDriveApi();
 			let driver = new FileApiDriverOneDrive(oneDriveApi);
 			let auth = Setting.value('sync.onedrive.auth');
@@ -320,18 +324,25 @@ class Application {
 			this.logger_.info('App dir: ' + appDir);
 			fileApi = new FileApi(appDir, driver);
 			fileApi.setLogger(this.logger_);
+
 		} else if (syncTarget == 'memory') {
+
 			fileApi = new FileApi('joplin', new FileApiDriverMemory());
 			fileApi.setLogger(this.logger_);
+
 		} else if (syncTarget == 'filesystem') {
-			let syncDir = Setting.value('sync.filesystem.path');
+
+			let syncDir = options['sync.filesystem.path'] ? options['sync.filesystem.path'] : Setting.value('sync.filesystem.path');
 			if (!syncDir) syncDir = Setting.value('profileDir') + '/sync';
 			this.vorpal().log(_('Synchronizing with directory "%s"', syncDir));
 			await fs.mkdirp(syncDir, 0o755);
 			fileApi = new FileApi(syncDir, new FileApiDriverLocal());
 			fileApi.setLogger(this.logger_);
+
 		} else {
+
 			throw new Error('Unknown backend: ' + syncTarget);
+			
 		}
 
 		this.synchronizers_[syncTarget] = new Synchronizer(this.database_, fileApi, Setting.value('appType'));

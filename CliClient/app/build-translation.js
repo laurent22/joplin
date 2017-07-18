@@ -47,7 +47,12 @@ function serializeTranslation(translation) {
 	for (let n in translations) {
 		if (!translations.hasOwnProperty(n)) continue;
 		if (n == '') continue;
-		output[n] = translations[n]['msgstr'][0];
+		const t = translations[n];
+		if (t.comments && t.comments.flag && t.comments.flag.indexOf('fuzzy') >= 0) {
+			output[n] = t['msgid'];
+		} else {		
+			output[n] = t['msgstr'][0];
+		}
 	}
 	return JSON.stringify(output);
 }

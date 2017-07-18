@@ -102,6 +102,9 @@ class Synchronizer {
 		for (let n in report) {
 			if (!report.hasOwnProperty(n)) continue;
 			if (n == 'errors') continue;
+			if (n == 'starting') continue;
+			if (n == 'finished') continue;
+			if (n == 'state') continue;
 			this.logger().info(n + ': ' + (report[n] ? report[n] : '-'));
 		}
 		let folderCount = await Folder.count();
@@ -327,15 +330,21 @@ class Synchronizer {
 			while (true) {
 				if (this.cancelling()) break;
 
-				let listResult = await this.api().delta('', { context: context });
+				let allIds = null;
+				if (!this.api().supportsDelta()) {
+					allIds = await BaseItem.syncedItems(syncTargetId);
+				}
+
+				let listResult = await this.api().delta('', {
+					context: context,
+					itemIds: allIds,
+				});
 				let remotes = listResult.items;
 				for (let i = 0; i < remotes.length; i++) {
 					if (this.cancelling()) break;
 
 					let remote = remotes[i];
 					if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
-
-					//console.info(remote);
 
 					let path = remote.path;
 					let action = null;
@@ -410,34 +419,13 @@ class Synchronizer {
 
 			outputContext.delta = newDeltaContext ? newDeltaContext : lastContext.delta;
 
-			// // ------------------------------------------------------------------------
-			// // Search, among the local IDs, those that don't exist remotely, which
-			// // means the item has been deleted.
-			// // ------------------------------------------------------------------------
-
-			// if (this.randomFailure(options, 4)) return;
-
-			// let localFoldersToDelete = [];
-
-			// if (!this.cancelling()) {
-			// 	let syncItems = await BaseItem.syncedItems(syncTargetId);
-			// 	for (let i = 0; i < syncItems.length; i++) {
-			// 		if (this.cancelling()) break;
-
-			// 		let syncItem = syncItems[i];
-			// 		if (remoteIds.indexOf(syncItem.item_id) < 0) {
-			// 			if (syncItem.item_type == Folder.modelType()) {
-			// 				localFoldersToDelete.push(syncItem);
-			// 				continue;
-			// 			}
-
-			// 			this.logSyncOperation('deleteLocal', { id: syncItem.item_id }, null, 'remote has been deleted');
-
-			// 			let ItemClass = BaseItem.itemClass(syncItem.item_type);
-			// 			await ItemClass.delete(syncItem.item_id, { trackDeleted: false });
-			// 		}
-			// 	}
-			// }
+			// ------------------------------------------------------------------------
+			// Delete the folders that have been collected in the loop above.
+			// Folders are always deleted last, and only if they are empty.
+			// If they are not empty it's considered a conflict since whatever deleted
+			// them should have deleted their content too. In that case, all its notes
+			// are marked as "is_conflict".
+			// ------------------------------------------------------------------------
 
 			if (!this.cancelling()) {
 				for (let i = 0; i < localFoldersToDelete.length; i++) {

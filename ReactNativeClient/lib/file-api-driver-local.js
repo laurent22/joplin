@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import { promiseChain } from 'lib/promise-utils.js';
 import moment from 'moment';
+import { BaseItem } from 'lib/models/base-item.js';
 import { time } from 'lib/time-utils.js';
 
 class FileApiDriverLocal {
@@ -18,6 +19,10 @@ class FileApiDriverLocal {
 		let output = new Error(msg);
 		if (error.code) output.code = error.code;
 		return output;
+	}
+
+	supportsDelta() {
+		return false;
 	}
 
 	stat(path) {
@@ -66,6 +71,49 @@ class FileApiDriverLocal {
 				resolve();
 			});
 		});
+	}
+
+	async delta(path, options) {
+		try {
+			let items = await fs.readdir(path);
+			let output = [];
+			for (let i = 0; i < items.length; i++) {
+				let stat = await this.stat(path + '/' + items[i]);
+				if (!stat) continue; // Has been deleted between the readdir() call and now
+				stat.path = items[i];
+				output.push(stat);
+			}
+
+			if (!Array.isArray(options.itemIds)) throw new Error('Delta API not supported - local IDs must be provided');
+
+			let deletedItems = [];
+			for (let i = 0; i < options.itemIds.length; i++) {
+				const itemId = options.itemIds[i];
+				let found = false;
+				for (let j = 0; j < output.length; j++) {
+					const item = output[j];
+					if (BaseItem.pathToId(item.path) == itemId) {
+						found = true;
+						break;
+					}
+				}
+
+				if (!found) {
+					deletedItems.push({
+						path: BaseItem.systemPath(itemId),
+						isDeleted: true,
+					});
+				}
+			}
+
+			return {
+				hasMore: false,
+				context: null,
+				items: output,
+			};
+		} catch(error) {
+			throw this.fsErrorToJsError_(error);
+		}
 	}
 
 	async list(path, options) {

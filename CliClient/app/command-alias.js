@@ -23,6 +23,10 @@ class Command extends BaseCommand {
 		Setting.setValue('aliases', JSON.stringify(aliases));
 	}
 
+	enabled() {
+		return false; // Doesn't work properly at the moment
+	}
+
 }
 
 module.exports = Command;
