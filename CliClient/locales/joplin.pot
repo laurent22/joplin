@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-18 23:12+0100\n"
+"POT-Creation-Date: 2017-07-18 23:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,7 +62,7 @@ msgstr ""
 msgid "Synchronizing with directory \"%s\""
 msgstr ""
 
-#: /mnt/d/Web/www/joplin/CliClient/app/app.js:419
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:420
 msgid "No notebook is defined. Create one with `mkbook <notebook>`."
 msgstr ""
 

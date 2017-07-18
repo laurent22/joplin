@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-18 23:12+0100\n"
+"POT-Creation-Date: 2017-07-18 23:18+0100\n"
 "PO-Revision-Date: 2017-07-18 13:27+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -64,7 +64,7 @@ msgstr "Quitter le logiciel."
 msgid "Synchronizing with directory \"%s\""
 msgstr "Synchronisation avec dossier \"%s\""
 
-#: /mnt/d/Web/www/joplin/CliClient/app/app.js:419
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:420
 msgid "No notebook is defined. Create one with `mkbook <notebook>`."
 msgstr "Aucun carnet n'est défini. Créez-en un avec `mkbook <carnet>`."
 

@@ -499,7 +499,7 @@ function setTableCellContent(table) {
 	for (let trIndex = 0; trIndex < table.lines.length; trIndex++) {
 		const tr = table.lines[trIndex];
 		for (let tdIndex = 0; tdIndex < tr.lines.length; tdIndex++) {
-			const td = tr.lines[tdIndex];
+			let td = tr.lines[tdIndex];
 			td.content = processMdArrayNewLines(td.lines);
 			td.content = td.content.replace(/\n\n\n\n\n/g, ' ');
 			td.content = td.content.replace(/\n\n\n\n/g, ' ');
@@ -536,29 +536,6 @@ function colWidths(table) {
 	return output;
 }
 
-// function wrapLine(line, maxWidth) {
-// 	if (line.length <= maxWidth) return line;
-
-// 	let output = [];
-// 	while (line.length) {
-// 		const l = line.substr(0, maxWidth);
-// 		line = line.substr(maxWidth);
-// 		output.push(l);
-// 	}
-
-// 	return output.join("\n");
-// }
-
-// function wrapCellLines(cellText, maxWidth) {
-// 	const lines = cellText.split("\n");
-// 	let output = [];
-// 	for (let i = 0; i < lines.length; i++) {
-// 		let line = wrapLine(lines[i], maxWidth);
-// 		output.push(line);
-// 	}
-// 	return output.join("\n");
-// }
-
 function drawTable(table, colWidths) {	
 	// | First Header  | Second Header |
 	// | ------------- | ------------- |
@@ -575,7 +552,7 @@ function drawTable(table, colWidths) {
 		let emptyHeader = null;
 		for (let tdIndex = 0; tdIndex < colWidths.length; tdIndex++) {
 			const width = colWidths[tdIndex];
-			const cell = tr.lines[tdIndex].content;
+			const cell = tr.lines[tdIndex] ? tr.lines[tdIndex].content : '';
 			line.push(stringPadding(cell, width, ' ', stringPadding.RIGHT));
 
 			if (!headerDone) {
@@ -615,6 +592,7 @@ async function enexXmlToMd(stream, resources) {
 		let line = result.content.lines[i];
 		if (typeof line === 'object') { // A table
 			let table = setTableCellContent(line);
+			//console.log(require('util').inspect(table, false, null))
 			const cw = colWidths(table);
 			const tableLines = drawTable(table, cw);
 			mdLines.push(BLOCK_OPEN);
