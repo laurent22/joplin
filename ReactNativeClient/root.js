@@ -32,6 +32,7 @@ import { SideMenu } from 'lib/components/side-menu.js';
 import { SideMenuContent } from 'lib/components/side-menu-content.js';
 import { DatabaseDriverReactNative } from 'lib/database-driver-react-native';
 import { reg } from 'lib/registry.js';
+import { _, setLocale } from 'lib/locale.js';
 import RNFetchBlob from 'react-native-fetch-blob';
 
 let defaultState = {
@@ -369,6 +370,9 @@ async function initialize(dispatch, backButtonHandler) {
 		reg.logger().info('Database is ready.');
 		reg.logger().info('Loading settings...');
 		await Setting.load();
+
+		// Setting.setValue('locale', 'fr_FR');
+		// setLocale(Setting.value('locale'));
 
 		reg.logger().info('Loading folders...');
 

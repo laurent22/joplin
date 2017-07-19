@@ -181,9 +181,14 @@ let loadedLocales_ = {};
 let currentLocale_ = 'en_GB';
 
 function supportedLocales() {
-	if (supportedLocales_) return supportedLocales_;
-	supportedLocales_ = require('../locales/index.json');
-	return supportedLocales_;
+	if (!supportedLocales_) supportedLocales_ = require('../locales/index.js').locales;
+
+	let output = [];
+	for (let n in supportedLocales_) {
+		if (!supportedLocales_.hasOwnProperty(n)) continue;
+		output.push(n);
+	}
+	return output;
 }
 
 function closestSupportedLocale(canonicalName, defaultToEnglish = true) {
@@ -257,7 +262,7 @@ function localeStrings(canonicalName) {
 	
 	if (loadedLocales_[locale]) return loadedLocales_[locale];
 
-	loadedLocales_[locale] = require('../locales/' + locale + '.json');
+	loadedLocales_[locale] = Object.assign({}, supportedLocales_[locale]); 
 
 	return loadedLocales_[locale];
 }
@@ -269,9 +274,7 @@ function setLocale(canonicalName) {
 
 function _(s, ...args) {
 	let strings = localeStrings(currentLocale_);
-
 	let result = strings[s];
-
 	if (result === '' || result === undefined) result = s;
 	return sprintf(result, ...args);
 }

@@ -513,6 +513,100 @@ msgstr "Carnets"
 msgid "%s: %d notes"
 msgstr "%s : %d notes"
 
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/action-button.js:66
+msgid "New todo"
+msgstr ""
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/action-button.js:73
+msgid "New note"
+msgstr ""
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/action-button.js:81
+msgid "New folder"
+msgstr ""
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screen-header.js:145
+msgid "Log"
+msgstr ""
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screen-header.js:150
+#, fuzzy
+msgid "Status"
+msgstr "Etat : %s."
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/folder.js:73
+#, javascript-format
+msgid "The folder could not be saved: %s"
+msgstr ""
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/folders.js:21
+msgid ""
+"There is currently no notebook. Create one by clicking on the (+) button."
+msgstr ""
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:153
+msgid "Untitled"
+msgstr ""
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:169
+#, fuzzy
+msgid "Delete note?"
+msgstr "Supprimer le carnet \"%s\" ?"
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:200
+msgid "Attach file"
+msgstr ""
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:201
+#, fuzzy
+msgid "Delete note"
+msgstr "Supprime le carnet."
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:202
+msgid "Convert to regular note"
+msgstr ""
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:202
+msgid "Convert to todo"
+msgstr ""
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:203
+msgid "Toggle metadata"
+msgstr ""
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:362
+msgid "Edit"
+msgstr ""
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/notes.js:23
+#, fuzzy
+msgid "Delete notebook?"
+msgstr "Supprimer le carnet \"%s\" ?"
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/notes.js:46
+#, fuzzy
+msgid "Delete notebook"
+msgstr "Supprime le carnet."
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/notes.js:47
+#, fuzzy
+msgid "Edit notebook"
+msgstr "Editer la note."
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/notes.js:66
+msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgstr ""
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/welcome.js:24
+msgid ""
+"Click on the (+) button to create a new note or notebook. Click on the side "
+"menu to access your existing notebooks."
+msgstr ""
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/welcome.js:24
+msgid "You currently have no notebook. Create one by clicking on (+) button."
+msgstr ""
+
 #, fuzzy
 #~ msgid "Invalid command. Showing help:"
 #~ msgstr "Commande invalie : \"%s\""
