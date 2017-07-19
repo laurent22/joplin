@@ -72,6 +72,9 @@ function clearDatabase(id = null) {
 		'DELETE FROM resources',
 		'DELETE FROM tags',
 		'DELETE FROM note_tags',
+		
+		'DELETE FROM deleted_items',
+		'DELETE FROM sync_items',
 	];
 
 	return databases_[id].transactionExecBatch(queries);

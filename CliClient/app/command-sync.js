@@ -7,6 +7,7 @@ import { vorpalUtils } from './vorpal-utils.js';
 import { Synchronizer } from 'lib/synchronizer.js';
 const locker = require('proper-lockfile');
 const fs = require('fs-extra');
+const osTmpdir = require('os-tmpdir');
 
 class Command extends BaseCommand {
 
@@ -34,7 +35,7 @@ class Command extends BaseCommand {
 
 	static lockFile(filePath) {
 		return new Promise((resolve, reject) => {
-			locker.lock(filePath, (error, release) => {
+			locker.lock(filePath, { stale: 1000 * 60 * 5 }, (error, release) => {
 				if (error) {
 					reject(error);
 					return;
@@ -61,7 +62,7 @@ class Command extends BaseCommand {
 	async action(args) {
 		this.releaseLockFn_ = null;
 
-		const lockFilePath = Setting.value('tempDir') + '/synclock';
+		const lockFilePath = osTmpdir() + '/synclock';
 		if (!await fs.pathExists(lockFilePath)) await fs.writeFile(lockFilePath, 'synclock');
 
 		if (await Command.isLocked(lockFilePath)) throw new Error(_('Synchronisation is already in progress.'));
@@ -71,7 +72,7 @@ class Command extends BaseCommand {
 		try {
 			this.syncTarget_ = Setting.value('sync.target');
 			if (args.options.target) this.syncTarget_ = args.options.target;
-
+			
 			let syncInitOptions = {};
 			if (args.options['filesystem-path']) syncInitOptions['sync.filesystem.path'] = args.options['filesystem-path'];
 
@@ -100,6 +101,7 @@ class Command extends BaseCommand {
 			options.context = context;
 			let newContext = await sync.start(options);
 			Setting.setValue('sync.context', JSON.stringify(newContext));
+			
 			vorpalUtils.redrawDone();
 
 			await app().refreshCurrentFolder();

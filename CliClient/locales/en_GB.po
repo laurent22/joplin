@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-18 23:34+0100\n"
+"POT-Creation-Date: 2017-07-19 20:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -287,40 +287,40 @@ msgstr ""
 msgid "Displays summary about the notes and notebooks."
 msgstr ""
 
-#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:24
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:26
 msgid "Synchronizes with remote storage."
 msgstr ""
 
-#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:29
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:31
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
 
-#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:30
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:32
 msgid "For \"filesystem\" target only: Path to sync to."
 msgstr ""
 
-#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:67
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:69
 msgid "Synchronisation is already in progress."
 msgstr ""
 
-#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:92
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:96
 #, javascript-format
 msgid "Synchronization target: %s"
 msgstr ""
 
-#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:94
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:98
 msgid "Cannot initialize synchronizer."
 msgstr ""
 
-#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:96
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:100
 msgid "Starting synchronization..."
 msgstr ""
 
-#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:107
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:112
 msgid "Done."
 msgstr ""
 
-#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:122
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:127
 #: /mnt/d/Web/www/joplin/ReactNativeClient/lib/synchronizer.js:60
 msgid "Cancelling..."
 msgstr ""

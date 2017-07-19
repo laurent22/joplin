@@ -202,7 +202,7 @@ class Synchronizer {
 					let content = await ItemClass.serialize(local);
 					let action = null;
 					let updateSyncTimeOnly = true;
-					let reason = '';
+					let reason = '';					
 
 					if (!remote) {
 						if (!local.sync_time) {
@@ -230,7 +230,14 @@ class Synchronizer {
 
 					if (local.type_ == BaseModel.TYPE_RESOURCE && (action == 'createRemote' || (action == 'itemConflict' && remote))) {
 						let remoteContentPath = this.resourceDirName_ + '/' + local.id;
-						let resourceContent = await Resource.content(local);
+						let resourceContent = '';
+						try {
+							resourceContent = await Resource.content(local);
+						} catch (error) {
+							error.message = 'Cannot read resource content: ' + local.id + ': ' + error.message;
+							this.logger().error(error);
+							this.progressReport_.errors.push(error);
+						}
 						await this.api().put(remoteContentPath, resourceContent);
 					}
 
@@ -302,7 +309,7 @@ class Synchronizer {
 			// Delete the remote items that have been deleted locally.
 			// ------------------------------------------------------------------------
 
-			let deletedItems = await BaseItem.deletedItems();
+			let deletedItems = await BaseItem.deletedItems(syncTargetId);
 			for (let i = 0; i < deletedItems.length; i++) {
 				if (this.cancelling()) break;
 
@@ -311,7 +318,7 @@ class Synchronizer {
 				this.logSyncOperation('deleteRemote', null, { id: item.item_id }, 'local has been deleted');
 				await this.api().delete(path);
 				if (this.randomFailure(options, 3)) return;
-				await BaseItem.remoteDeletedItem(item.item_id);
+				await BaseItem.remoteDeletedItem(syncTargetId, item.item_id);
 			}
 
 			// ------------------------------------------------------------------------

@@ -52,10 +52,13 @@ class BaseModel {
 	static fieldNames(withPrefix = false) {
 		let output = this.db().tableFieldNames(this.tableName());
 		if (!withPrefix) return output;
+
+		let p = withPrefix === true ? this.tableName() : withPrefix;
 		let temp = [];
 		for (let i = 0; i < output.length; i++) {
-			temp.push(this.tableName() + '.' + output[i]);
+			temp.push(p + '.' + output[i]);
 		}
+
 		return temp;
 	}
 

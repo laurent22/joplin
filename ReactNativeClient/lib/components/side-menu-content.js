@@ -73,7 +73,7 @@ class SideMenuContentComponent extends Component {
 			sync.cancel();
 		} else {
 			if (reg.oneDriveApi().auth()) {		
-				sync.start();
+				reg.scheduleSync(1);
 			} else {
 				this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 				

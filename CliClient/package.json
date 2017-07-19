@@ -7,7 +7,7 @@
     "url": "https://github.com/laurent22/joplin"
   },
   "url": "git://github.com/laurent22/joplin.git",
-  "version": "0.8.58",
+  "version": "0.8.62",
   "bin": {
     "joplin": "./main_launcher.js"
   },
@@ -24,6 +24,7 @@
     "moment": "^2.18.1",
     "moment-timezone": "^0.5.13",
     "node-fetch": "^1.7.1",
+    "os-tmpdir": "^1.0.2",
     "promise": "^7.1.1",
     "proper-lockfile": "^2.0.1",
     "query-string": "4.3.4",

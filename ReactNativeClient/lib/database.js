@@ -166,6 +166,11 @@ class Database {
 		throw new Error('Unknown enum type or id: ' + type + ', ' + id);
 	}
 
+	static enumIds(type) {
+		if (type == 'syncTarget') return [1,2,3];
+		throw new Error('Unknown enum type: ' + type);
+	}
+
 	static formatValue(type, value) {
 		if (value === null || value === undefined) return null;
 		if (type == this.TYPE_INT) return Number(value);
@@ -182,7 +187,8 @@ class Database {
 			var line = lines[i];
 			if (line == '') continue;
 			if (line.substr(0, 2) == "--") continue;
-			statement += line;
+			statement += line.trim();
+			if (line[line.length - 1] == ',') statement += ' ';
 			if (line[line.length - 1] == ';') {
 				output.push(statement);
 				statement = '';

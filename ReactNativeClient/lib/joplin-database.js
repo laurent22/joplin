@@ -42,13 +42,6 @@ CREATE INDEX notes_is_conflict ON notes (is_conflict);
 CREATE INDEX notes_is_todo ON notes (is_todo);
 CREATE INDEX notes_order ON notes (\`order\`);
 
-CREATE TABLE deleted_items (
-	id INTEGER PRIMARY KEY,
-	item_type INT NOT NULL,
-	item_id TEXT NOT NULL,
-	deleted_time INT NOT NULL
-);
-
 CREATE TABLE tags (
 	id TEXT PRIMARY KEY,
 	title TEXT NOT NULL DEFAULT "",
@@ -97,10 +90,6 @@ CREATE TABLE table_fields (
 	field_default TEXT
 );
 
-CREATE TABLE version (
-	version INT NOT NULL
-);
-
 CREATE TABLE sync_items (
 	id INTEGER PRIMARY KEY,
 	sync_target INT NOT NULL,
@@ -113,6 +102,17 @@ CREATE INDEX sync_items_sync_time ON sync_items (sync_time);
 CREATE INDEX sync_items_sync_target ON sync_items (sync_target);
 CREATE INDEX sync_items_item_type ON sync_items (item_type);
 CREATE INDEX sync_items_item_id ON sync_items (item_id);
+
+CREATE TABLE deleted_items (
+	id INTEGER PRIMARY KEY,
+	item_type INT NOT NULL,
+	item_id TEXT NOT NULL,
+	deleted_time INT NOT NULL
+);
+
+CREATE TABLE version (
+	version INT NOT NULL
+);
 
 INSERT INTO version (version) VALUES (1);
 `;
@@ -187,28 +187,59 @@ class JoplinDatabase extends Database {
 		});
 	}
 
+	async upgradeDatabase(fromVersion) {
+		// INSTRUCTIONS TO UPGRADE THE DATABASE:
+		//
+		// 1. Add the new version number to the existingDatabaseVersions array
+		// 2. Add the upgrade logic to the "switch (targetVersion)" statement below
+
+		const existingDatabaseVersions = [1, 2];
+
+		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
+		if (currentVersionIndex == existingDatabaseVersions.length - 1) return false;
+		
+		while (currentVersionIndex < existingDatabaseVersions.length - 1) {
+			const targetVersion = existingDatabaseVersions[currentVersionIndex + 1];
+			this.logger().info("Converting database to version " + targetVersion);
+
+			let queries = [];
+			
+			if (targetVersion == 2) {
+				const newTableSql = `
+					CREATE TABLE deleted_items (
+						id INTEGER PRIMARY KEY,
+						item_type INT NOT NULL,
+						item_id TEXT NOT NULL,
+						deleted_time INT NOT NULL,
+						sync_target INT NOT NULL
+					);
+				`;
+
+				queries.push({ sql: 'DROP TABLE deleted_items' });
+				queries.push({ sql: this.sqlStringToLines(newTableSql)[0] });
+				queries.push({ sql: "CREATE INDEX deleted_items_sync_target ON deleted_items (sync_target)" });
+			}
+
+			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });
+			await this.transactionExecBatch(queries);
+
+			currentVersionIndex++;
+		}
+
+		return true;
+	}
+
 	async initialize() {
 		this.logger().info('Checking for database schema update...');
 
 		for (let initLoopCount = 1; initLoopCount <= 2; initLoopCount++) {
 			try {
-				// await this.exec('DROP TABLE folders');
-				// await this.exec('DROP TABLE notes');
-				// await this.exec('DROP TABLE deleted_items');
-				// await this.exec('DROP TABLE tags');
-				// await this.exec('DROP TABLE note_tags');
-				// await this.exec('DROP TABLE resources');
-				// await this.exec('DROP TABLE settings');
-				// await this.exec('DROP TABLE table_fields');
-				// await this.exec('DROP TABLE version');
-				// await this.exec('DROP TABLE sync_items');
-
 				let row = await this.selectOne('SELECT * FROM version LIMIT 1');
-				this.logger().info('Current database version', row);
+				let currentVersion = row.version;
+				this.logger().info('Current database version', currentVersion);
 
-				// TODO: version update logic
-				// TODO: only do this if db has been updated:
-				// return this.refreshTableFields();
+				const upgraded = await this.upgradeDatabase(currentVersion);
+				if (upgraded) await this.refreshTableFields();
 			} catch (error) {
 				if (error && error.code != 0 && error.code != 'SQLITE_ERROR') throw this.sqliteErrorToJsError(error);
 		

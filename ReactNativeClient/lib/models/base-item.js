@@ -131,31 +131,36 @@ class BaseItem extends BaseModel {
 		await super.batchDelete(ids, options);
 
 		if (trackDeleted) {
+			const syncTargetIds = Database.enumIds('syncTarget');
 			let queries = [];
 			let now = time.unixMs();
 			for (let i = 0; i < ids.length; i++) {
 				if (conflictNoteIds.indexOf(ids[i]) >= 0) continue;
 
-				queries.push({
-					sql: 'INSERT INTO deleted_items (item_type, item_id, deleted_time) VALUES (?, ?, ?)',
-					params: [this.modelType(), ids[i], now],
-				});
+				// For each deleted item, for each sync target, we need to add an entry in deleted_items.
+				// That way, each target can later delete the remote item.
+				for (let j = 0; j < syncTargetIds.length; j++) {
+					queries.push({
+						sql: 'INSERT INTO deleted_items (item_type, item_id, deleted_time, sync_target) VALUES (?, ?, ?, ?)',
+						params: [this.modelType(), ids[i], now, syncTargetIds[j]],
+					});
+				}
 			}
 			await this.db().transactionExecBatch(queries);
 		}
 	}
 
-	static deletedItems() {
-		return this.db().selectAll('SELECT * FROM deleted_items');
+	static deletedItems(syncTarget) {
+		return this.db().selectAll('SELECT * FROM deleted_items WHERE sync_target = ?', [syncTarget]);
 	}
 
-	static async deletedItemCount() {
-		let r = await this.db().selectOne('SELECT count(*) as total FROM deleted_items');
+	static async deletedItemCount(syncTarget) {
+		let r = await this.db().selectOne('SELECT count(*) as total FROM deleted_items WHERE sync_target = ?', [syncTarget]);
 		return r['total'];
 	}
 
-	static remoteDeletedItem(itemId) {
-		return this.db().exec('DELETE FROM deleted_items WHERE item_id = ?', [itemId]);
+	static remoteDeletedItem(syncTarget, itemId) {
+		return this.db().exec('DELETE FROM deleted_items WHERE item_id = ? AND sync_target = ?', [itemId, syncTarget]);
 	}
 
 	static serialize_format(propName, propValue) {
@@ -275,33 +280,131 @@ class BaseItem extends BaseModel {
 		for (let i = 0; i < classNames.length; i++) {
 			const className = classNames[i];
 			const ItemClass = this.getClass(className);
-			const fieldNames = ItemClass.fieldNames(true);
-			fieldNames.push('sync_time');
+			let fieldNames = ItemClass.fieldNames('items');			
+
+			// // NEVER SYNCED:
+			// 'SELECT * FROM [ITEMS] WHERE id NOT INT (SELECT item_id FROM sync_items WHERE sync_target = ?)'
+
+			// // CHANGED:
+			// 'SELECT * FROM [ITEMS] items JOIN sync_items s ON s.item_id = items.id WHERE sync_target = ? AND'
 
 			let extraWhere = className == 'Note' ? 'AND is_conflict = 0' : '';
 
+			// First get all the items that have never been synced under this sync target
+
 			let sql = sprintf(`
-				SELECT %s FROM %s
-				LEFT JOIN sync_items t ON t.item_id = %s.id
-				WHERE 
-					(t.id IS NULL OR t.sync_time < %s.updated_time)
-					%s
+				SELECT %s
+				FROM %s items
+				WHERE id NOT IN (
+					SELECT item_id FROM sync_items WHERE sync_target = %d
+				)
+				%s
 				LIMIT %d
 			`,
 			this.db().escapeFields(fieldNames),
 			this.db().escapeField(ItemClass.tableName()),
-			this.db().escapeField(ItemClass.tableName()),
-			this.db().escapeField(ItemClass.tableName()),
+			Number(syncTarget),
 			extraWhere,
 			limit);
 
-			const items = await ItemClass.modelSelectAll(sql);
+			let neverSyncedItem = await ItemClass.modelSelectAll(sql);
+			//for (let i = 0; i < neverSyncedItem.length; i++) neverSyncedItem[i].sync_time = 0;
+
+			// console.info(sql);
+			// console.info('NEVER', neverSyncedItem);
+
+			// Secondly get the items that have been synced under this sync target but that have been changed since then
+
+			const newLimit = limit - neverSyncedItem.length;
+
+			let changedItems = [];
+
+			if (newLimit > 0) {
+				fieldNames.push('sync_time');
+
+				let sql = sprintf(`
+					SELECT %s FROM %s items
+					JOIN sync_items s ON s.item_id = items.id
+					WHERE sync_target = %d
+					AND s.sync_time < items.updated_time
+					%s
+					LIMIT %d
+				`,
+				this.db().escapeFields(fieldNames),
+				this.db().escapeField(ItemClass.tableName()),
+				Number(syncTarget),
+				extraWhere,
+				newLimit);
+
+				changedItems = await ItemClass.modelSelectAll(sql);
+			}
+
+			// console.info('CHANGED', changedItems);
+
+			const items = neverSyncedItem.concat(changedItems);
 
 			if (i >= classNames.length - 1) {
 				return { hasMore: items.length >= limit, items: items };
 			} else {
 				if (items.length) return { hasMore: true, items: items };
 			}
+
+
+
+
+			//let extraWhere = className == 'Note' ? 'AND is_conflict = 0' : '';
+
+			// First get all the items that have never been synced under this sync target
+
+			// let sql = sprintf(`
+			// 	SELECT %s FROM %s items
+			// 	LEFT JOIN sync_items t ON t.item_id = items.id
+			// 	WHERE (t.id IS NULL OR t.sync_target != %d) %s
+			// 	LIMIT %d
+			// `,
+			// this.db().escapeFields(fieldNames),
+			// this.db().escapeField(ItemClass.tableName()),
+			// Number(syncTarget),
+			// extraWhere,
+			// limit);
+
+			// let neverSyncedItem = await ItemClass.modelSelectAll(sql);
+			// for (let i = 0; i < neverSyncedItem.length; i++) neverSyncedItem[i].sync_time = 0;
+
+			// console.info(sql);
+			// console.info('NEVER', neverSyncedItem);
+
+			// // Secondly get the items that have been synced under this sync target but that have been changed since then
+
+			// const newLimit = limit - neverSyncedItem.length;
+
+			// let changedItems = [];
+
+			// if (newLimit > 0) {
+			// 	let sql = sprintf(`
+			// 		SELECT %s FROM %s items
+			// 		LEFT JOIN sync_items t ON t.item_id = items.id
+			// 		WHERE (t.sync_time < items.updated_time AND t.sync_target = %d) %s
+			// 		LIMIT %d
+			// 	`,
+			// 	this.db().escapeFields(fieldNames),
+			// 	this.db().escapeField(ItemClass.tableName()),
+			// 	Number(syncTarget),
+			// 	extraWhere,
+			// 	newLimit);
+
+			// 	changedItems = await ItemClass.modelSelectAll(sql);
+			// }
+
+			// console.info('CHANGED', changedItems);
+
+			// const items = neverSyncedItem.concat(changedItems);
+
+			// if (i >= classNames.length - 1) {
+			// 	return { hasMore: items.length >= limit, items: items };
+			// } else {
+			// 	if (items.length) return { hasMore: true, items: items };
+			// }
 		}
 
 		throw new Error('Unreachable');

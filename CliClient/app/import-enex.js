@@ -97,8 +97,8 @@ async function saveNoteResources(note) {
 		let existingResource = await Resource.load(toSave.id);
 		if (existingResource) continue;
 
-		await Resource.save(toSave, { isNew: true });
 		await filePutContents(Resource.fullPath(toSave), resource.data)
+		await Resource.save(toSave, { isNew: true });
 		resourcesCreated++;
 	}
 	return resourcesCreated;
