@@ -7,8 +7,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-19 19:53+0100\n"
-"PO-Revision-Date: 2017-07-18 13:27+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr_FR\n"
@@ -310,42 +308,42 @@ msgstr "Assigner la valeur [value] à la propriété <name> de la <note> donnée
 msgid "Displays summary about the notes and notebooks."
 msgstr "Afficher un résumé des notes et carnets."
 
-#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:26
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:25
 msgid "Synchronizes with remote storage."
 msgstr "Synchroniser les notes et carnets."
 
-#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:31
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:30
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
 "Synchroniser avec la cible donnée (par défaut, la valeur de configuration "
 "`sync.target`)."
 
-#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:32
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:31
 msgid "For \"filesystem\" target only: Path to sync to."
 msgstr ""
 
-#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:69
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:68
 msgid "Synchronisation is already in progress."
 msgstr "Synchronisation est déjà en cours."
 
-#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:96
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:93
 #, javascript-format
 msgid "Synchronization target: %s"
 msgstr "Cible de la synchronisation : %s"
 
-#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:98
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:95
 msgid "Cannot initialize synchronizer."
 msgstr "Impossible d'initialiser le synchroniseur."
 
-#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:100
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:97
 msgid "Starting synchronization..."
 msgstr "Commencement de la synchronisation..."
 
-#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:112
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:109
 msgid "Done."
 msgstr "Terminé."
 
-#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:127
+#: /mnt/d/Web/www/joplin/CliClient/app/command-sync.js:124
 #: /mnt/d/Web/www/joplin/ReactNativeClient/lib/synchronizer.js:60
 msgid "Cancelling..."
 msgstr "Annulation..."
