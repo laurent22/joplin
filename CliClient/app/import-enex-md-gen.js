@@ -542,6 +542,9 @@ function drawTable(table, colWidths) {
 	// | Content Cell  | Content Cell  |
 	// | Content Cell  | Content Cell  |
 
+	// There must be at least 3 dashes separating each header cell.
+	// https://gist.github.com/IanWang/28965e13cdafdef4e11dc91f578d160d#tables
+	const minColWidth = 3;
 	let lines = [];
 	let headerDone = false;
 	for (let trIndex = 0; trIndex < table.lines.length; trIndex++) {
@@ -551,7 +554,7 @@ function drawTable(table, colWidths) {
 		let headerLine = [];
 		let emptyHeader = null;
 		for (let tdIndex = 0; tdIndex < colWidths.length; tdIndex++) {
-			const width = colWidths[tdIndex];
+			const width = Math.max(minColWidth, colWidths[tdIndex]);
 			const cell = tr.lines[tdIndex] ? tr.lines[tdIndex].content : '';
 			line.push(stringPadding(cell, width, ' ', stringPadding.RIGHT));
 
