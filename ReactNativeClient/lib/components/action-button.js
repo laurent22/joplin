@@ -78,7 +78,7 @@ class ActionButtonComponent extends React.Component {
 			}
 
 			buttons.push({
-				title: _('New folder'),
+				title: _('New notebook'),
 				onPress: () => { this.newFolder_press() },
 				color: '#3498db',
 				icon: 'md-folder',

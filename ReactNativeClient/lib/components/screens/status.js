@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ListView, View, Text, Button } from 'react-native';
+import { ListView, StyleSheet, View, Text, Button } from 'react-native';
 import { Setting } from 'lib/models/setting.js';
 import { connect } from 'react-redux'
 import { Log } from 'lib/log.js'
@@ -13,6 +13,14 @@ import { Folder } from 'lib/models/folder.js';
 import { ReportService } from 'lib/services/report.js';
 import { _ } from 'lib/locale.js';
 import { BaseScreenComponent } from 'lib/components/base-screen.js';
+import { globalStyle } from 'lib/components/global-style.js';
+
+const styles = StyleSheet.create({
+	body: {
+		flex: 1,
+		margin: globalStyle.margin,
+	},
+});
 
 class StatusScreenComponent extends BaseScreenComponent {
 	
@@ -70,7 +78,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 		return (
 			<View style={this.styles().screen}>
 				<ScreenHeader navState={this.props.navigation.state} />
-				<View style={{flex: 1}}>
+				<View style={styles.body}>
 					{ body }
 				</View>
 				<Button title="Refresh" onPress={() => this.resfreshScreen()}/>
