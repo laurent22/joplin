@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { StyleSheet } from 'react-native';
+import { globalStyle } from 'lib/components/global-style.js';
 
 const styles_ = StyleSheet.create({
 	screen: {
 		flex: 1,
-		backgroundColor: "#E9E9E9",
+		backgroundColor: globalStyle.backgroundColor,
 	},
 });
 

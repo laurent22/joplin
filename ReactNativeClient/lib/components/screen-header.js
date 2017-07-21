@@ -8,13 +8,30 @@ import { Setting } from 'lib/models/setting.js';
 import { FileApi } from 'lib/file-api.js';
 import { FileApiDriverOneDrive } from 'lib/file-api-driver-onedrive.js';
 import { reg } from 'lib/registry.js'
+import { globalStyle } from 'lib/components/global-style.js';
 
 let styleObject = {
+	container: {
+		flexDirection: 'row',
+		paddingLeft: globalStyle.marginLeft,
+		paddingTop: 10,
+		paddingBottom: 10,
+		paddingRight: 0,
+		backgroundColor: globalStyle.backgroundColor,
+		alignItems: 'center',
+		shadowColor: '#000000',
+		elevation: 5,
+	},
+	folderPicker: {
+		height: 30,
+		flex:1,
+		color: globalStyle.color,
+		backgroundColor: globalStyle.backgroundColor,
+	},
 	divider: {
-		marginVertical: 5,
-		marginHorizontal: 2,
 		borderBottomWidth: 1,
-		borderColor: '#ccc'
+		borderColor: globalStyle.dividerColor,
+		backgroundColor: "#0000ff"
 	},
 	sideMenuButton: {
 		flex: 1,
@@ -55,6 +72,31 @@ let styleObject = {
 		fontWeight: 'bold',
 		flex: 1,
 	},
+	contextMenuTrigger: {
+		fontSize: 25,
+		paddingRight: globalStyle.marginRight,
+		color: globalStyle.color,
+	},
+	contextMenu: {
+		backgroundColor: globalStyle.backgroundColor,
+	},
+	contextMenuItem: {
+		backgroundColor: globalStyle.backgroundColor,
+	},
+	contextMenuItemText: {
+		flex: 1,
+		height: 40,
+		textAlignVertical: 'center',
+		paddingLeft: globalStyle.marginLeft,
+		paddingRight: globalStyle.marginRight,
+		color: globalStyle.color,
+		backgroundColor: globalStyle.backgroundColor,
+	},
+	titleText: {
+		flex: 1,
+		marginLeft: 10,
+		color: globalStyle.color,
+	}
 };
 
 styleObject.backButtonDisabled = Object.assign({}, styleObject.backButton, { backgroundColor: "#c6c6c6" });
@@ -131,8 +173,8 @@ class ScreenHeaderComponent extends Component {
 		for (let i = 0; i < this.props.menuOptions.length; i++) {
 			let o = this.props.menuOptions[i];
 			menuOptionComponents.push(
-				<MenuOption value={o.onPress} key={'menuOption_' + key++}>
-					<Text>{o.title}</Text>
+				<MenuOption value={o.onPress} key={'menuOption_' + key++} style={styles.contextMenuItem}>
+					<Text style={styles.contextMenuItemText}>{o.title}</Text>
 				</MenuOption>);
 		}
 
@@ -141,13 +183,13 @@ class ScreenHeaderComponent extends Component {
 		}
 
 		menuOptionComponents.push(
-			<MenuOption value={() => this.log_press()} key={'menuOption_' + key++}>
-				<Text>{_('Log')}</Text>
+			<MenuOption value={() => this.log_press()} key={'menuOption_' + key++} style={styles.contextMenuItem}>
+				<Text style={styles.contextMenuItemText}>{_('Log')}</Text>
 			</MenuOption>);
 
 		menuOptionComponents.push(
-			<MenuOption value={() => this.status_press()} key={'menuOption_' + key++}>
-				<Text>{_('Status')}</Text>
+			<MenuOption value={() => this.status_press()} key={'menuOption_' + key++} style={styles.contextMenuItem}>
+				<Text style={styles.contextMenuItemText}>{_('Status')}</Text>
 			</MenuOption>);
 
 		const createTitleComponent = () => {
@@ -156,30 +198,30 @@ class ScreenHeaderComponent extends Component {
 				let items = [];
 				for (let i = 0; i < p.items.length; i++) {
 					let item = p.items[i];
-					items.push(<Picker.Item label={item.label} value={item.value} key={item.value} />);
+					items.push(<Picker.Item label={item.label} value={item.value} key={item.value}/>);
 				}
 				return (
-					<Picker style={{height: 30, flex:1}} selectedValue={p.selectedValue} onValueChange={(itemValue, itemIndex) => { if (p.onValueChange) p.onValueChange(itemValue, itemIndex); }}>
+					<Picker style={styles.folderPicker} selectedValue={p.selectedValue} onValueChange={(itemValue, itemIndex) => { if (p.onValueChange) p.onValueChange(itemValue, itemIndex); }}>
 						{ items }
 					</Picker>
 				);
 			} else {
 				let title = 'title' in this.props && this.props.title !== null ? this.props.title : _(this.props.navState.routeName);
-				return <Text style={{ flex:1, marginLeft: 10 }}>{title}</Text>
+				return <Text style={styles.titleText}>{title}</Text>
 			}
 		}
 
 		const titleComp = createTitleComponent();
 
 		return (
-			<View style={{ flexDirection: 'row', paddingLeft: 10, paddingTop: 10, paddingBottom: 10, paddingRight: 0, backgroundColor: '#ffffff', alignItems: 'center' }} >
+			<View style={styles.container} >
 				{ sideMenuButton(styles, () => this.sideMenuButton_press()) }
 				{ backButton(styles, () => this.backButton_press(), !this.props.historyCanGoBack) }
 				{ saveButton(styles, () => { if (this.props.onSaveButtonPress) this.props.onSaveButtonPress() }, this.props.saveButtonDisabled === true, this.props.showSaveButton === true) }
 				{ titleComp }				
-			    <Menu onSelect={(value) => this.menu_select(value)}>
+			    <Menu onSelect={(value) => this.menu_select(value)} style={styles.contextMenu}>
 					<MenuTrigger>
-						<Text style={{ fontSize: 25 }}>      &#8942;  </Text>
+						<Text style={styles.contextMenuTrigger}>      &#8942;</Text>
 					</MenuTrigger>
 					<MenuOptions>
 						{ menuOptionComponents }

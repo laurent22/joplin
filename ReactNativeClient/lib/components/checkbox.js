@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { StyleSheet, TouchableHighlight } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const styles = StyleSheet.create({
+const styles = {
 	checkboxIcon: {
 		fontSize: 20,
 		height: 22,
 		marginRight: 10,
 	},
-});
+};
 
 class Checkbox extends Component {
 
@@ -42,9 +42,19 @@ class Checkbox extends Component {
 		style.justifyContent = 'center';
 		style.alignItems = 'center';
 
+		const checkboxIconStyle = Object.assign({}, styles.checkboxIcon);
+		if (style.color) checkboxIconStyle.color = style.color;
+
+		const thStyle = {
+			justifyContent: 'center',
+			alignItems: 'center',
+		};
+
+		if (style.display) thStyle.display = style.display;
+
 		return (
-			<TouchableHighlight onPress={() => this.onPress()} style={style}>
-				<Icon name={iconName} style={styles.checkboxIcon}/>
+			<TouchableHighlight onPress={() => this.onPress()} style={thStyle}>
+				<Icon name={iconName} style={checkboxIconStyle}/>
 			</TouchableHighlight>
 		);
 	}

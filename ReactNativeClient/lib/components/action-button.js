@@ -102,7 +102,7 @@ class ActionButtonComponent extends React.Component {
 		}
 
 		let mainButton = this.props.mainButton ? this.props.mainButton : {};
-		let mainIcon = mainButton.icon ? <Icon name={mainButton.icon} style={styles.actionButtonIcon} /> : <Text style={{fontSize: 20, color:"#ffffff"}}>+</Text>;
+		let mainIcon = mainButton.icon ? <Icon name={mainButton.icon} style={styles.actionButtonIcon} /> : <Icon name="md-add" style={styles.actionButtonIcon} />
 
 		if (this.props.multiStates) {
 			if (!this.props.buttons || !this.props.buttons.length) throw new Error('Multi-state button requires at least one state');

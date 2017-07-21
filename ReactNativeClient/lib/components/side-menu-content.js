@@ -7,6 +7,7 @@ import { NotesScreenUtils } from 'lib/components/screens/notes-utils.js'
 import { Synchronizer } from 'lib/synchronizer.js';
 import { reg } from 'lib/registry.js';
 import { _ } from 'lib/locale.js';
+import { globalStyle } from 'lib/components/global-style.js';
 
 const React = require('react');
 const {
@@ -21,7 +22,7 @@ const { Component } = React;
 const styles = StyleSheet.create({
 	menu: {
 		flex: 1,
-		backgroundColor: 'white',
+		backgroundColor: globalStyle.backgroundColor,
 		padding: 20,
 	},
 	name: {
@@ -37,15 +38,15 @@ const styles = StyleSheet.create({
 	folderButton: {
 		flex: 1,
 		backgroundColor: "#0482E3",
-		paddingLeft: 20,
-		paddingRight: 20,
-		paddingTop: 14,
-		paddingBottom: 14,
+		height: 36,
 		marginBottom: 5,
 	},
 	folderButtonText: {
 		color: "#ffffff",
 		fontWeight: 'bold',
+		textAlign: 'center',
+		textAlignVertical: 'center',
+		flex: 1,
 	},
 	button: {
 		flex: 1,
