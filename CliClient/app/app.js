@@ -81,6 +81,8 @@ class Application {
 	}
 
 	async loadItems(type, pattern, options = null) {
+		pattern = pattern ? pattern.toString() : '';
+
 		if (type == BaseModel.TYPE_FOLDER && (pattern == Folder.conflictFolderTitle() || pattern == Folder.conflictFolderId())) return [Folder.conflictFolder()];
 
 		if (!options) options = {};

@@ -15,32 +15,32 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.7.1\n"
 
-#: /mnt/d/Web/www/joplin/CliClient/app/app.js:92
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:94
 msgid "No notebook selected."
 msgstr "Aucun carnet n'est sélectionné."
 
-#: /mnt/d/Web/www/joplin/CliClient/app/app.js:97
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:99
 msgid "No notebook has been specified."
 msgstr "Aucun carnet n'est spécifié."
 
-#: /mnt/d/Web/www/joplin/CliClient/app/app.js:128
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:130
 msgid "Usage: --profile <dir-path>"
 msgstr "Utilisation: --profile <chemin>"
 
-#: /mnt/d/Web/www/joplin/CliClient/app/app.js:135
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:137
 msgid "Usage: --env <dev|prod>"
 msgstr "Utilisation : --env <dev|prod>"
 
-#: /mnt/d/Web/www/joplin/CliClient/app/app.js:160
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:162
 msgid "Usage: --log-level <none|error|warn|info|debug>"
 msgstr "Utilisation: --log-level <none|error|warn|info|debug>"
 
-#: /mnt/d/Web/www/joplin/CliClient/app/app.js:167
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:169
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Paramètre inconnu : %s"
 
-#: /mnt/d/Web/www/joplin/CliClient/app/app.js:183
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:185
 #, javascript-format
 msgid ""
 "Command line argument \"%s\" contains both quotes and double-quotes - "
@@ -49,20 +49,20 @@ msgstr ""
 "Paramètre de ligne de command \"%s\" contient à la fois des guillemets "
 "simples et doubles - impossible de continuer."
 
-#: /mnt/d/Web/www/joplin/CliClient/app/app.js:203
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:205
 msgid "Provides help for a given command."
 msgstr "Affiche l'aide pour la commande donnée."
 
-#: /mnt/d/Web/www/joplin/CliClient/app/app.js:205
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:207
 msgid "Exits the application."
 msgstr "Quitter le logiciel."
 
-#: /mnt/d/Web/www/joplin/CliClient/app/app.js:337
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:339
 #, javascript-format
 msgid "Synchronizing with directory \"%s\""
 msgstr "Synchronisation avec dossier \"%s\""
 
-#: /mnt/d/Web/www/joplin/CliClient/app/app.js:420
+#: /mnt/d/Web/www/joplin/CliClient/app/app.js:422
 msgid "No notebook is defined. Create one with `mkbook <notebook>`."
 msgstr "Aucun carnet n'est défini. Créez-en un avec `mkbook <carnet>`."
 
@@ -593,7 +593,7 @@ msgstr ""
 msgid "Show metadata"
 msgstr ""
 
-#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:395
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:409
 msgid "Edit"
 msgstr ""
 
