@@ -16,10 +16,6 @@ const styleObject = {
 		flex: 1,
 		backgroundColor: globalStyle.backgroundColor,
 	},
-	icon: {
-		fontSize: 20,
-		color: globalStyle.color,
-	},
 	name: {
 		position: 'absolute',
 		left: 70,
@@ -51,6 +47,8 @@ const styleObject = {
 
 styleObject.folderButton = Object.assign({}, styleObject.button);
 styleObject.folderButtonText = Object.assign({}, styleObject.buttonText);
+styleObject.folderIcon = Object.assign({}, globalStyle.icon);
+styleObject.folderIcon.color = '#026CB6';
 styleObject.syncButton = Object.assign({}, styleObject.button);
 styleObject.syncButtonText = Object.assign({}, styleObject.buttonText);
 styleObject.folderButtonSelected = Object.assign({}, styleObject.folderButton);
@@ -91,7 +89,7 @@ class SideMenuContentComponent extends Component {
 	}
 
 	folderItem(folder, selected) {
-		const iconComp = selected ? <Icon name='md-folder-open' style={styles.icon} /> : <Icon name='md-folder' style={styles.icon} />;
+		const iconComp = selected ? <Icon name='md-folder-open' style={styles.folderIcon} /> : <Icon name='md-folder' style={styles.folderIcon} />;
 		const folderButtonStyle = selected ? styles.folderButtonSelected : styles.folderButton;
 
 		return (
@@ -106,7 +104,7 @@ class SideMenuContentComponent extends Component {
 
 	synchronizeButton(state) {
 		const title = state == 'sync' ? _('Synchronize') : _('Cancel synchronization');
-		const iconComp = state == 'sync' ? <Icon name='md-sync' style={styles.icon} /> : <Icon name='md-close' style={styles.icon} />;
+		const iconComp = state == 'sync' ? <Icon name='md-sync' style={globalStyle.icon} /> : <Icon name='md-close' style={globalStyle.icon} />;
 
 		return (
 			<TouchableOpacity key={'synchronize_button'} onPress={() => { this.synchronize_press() }}>

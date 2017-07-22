@@ -6,6 +6,7 @@ const globalStyle = {
 	fontSize: 10,
 	dividerColor: "#dddddd",
 	selectedColor: '#eeeeee',
+	disabledOpacity: 0.3,
 
 	// For WebView - must correspond to the properties above
 	htmlFontSize: '14px',
@@ -17,5 +18,10 @@ globalStyle.marginLeft = globalStyle.margin;
 globalStyle.marginTop = globalStyle.margin;
 globalStyle.marginBottom = globalStyle.margin;
 globalStyle.htmlMarginLeft = ((globalStyle.marginLeft / 10) * 0.6).toFixed(2) + 'em';
+
+globalStyle.icon = {
+	color: globalStyle.color,
+	fontSize: 30,
+};
 
 export { globalStyle }
