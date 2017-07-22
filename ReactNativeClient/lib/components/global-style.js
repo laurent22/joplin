@@ -1,9 +1,11 @@
 const globalStyle = {
 	margin: 15, // No text and no interactive component should be within this margin
 	backgroundColor: "#ffffff",
-	color: "#555555",
+	color: "#555555", // For regular text
+	colorFaded: "#777777", // For less important text
 	fontSize: 10,
 	dividerColor: "#dddddd",
+	selectedColor: '#eeeeee',
 
 	// For WebView - must correspond to the properties above
 	htmlFontSize: '14px',
@@ -12,6 +14,8 @@ const globalStyle = {
 
 globalStyle.marginRight = globalStyle.margin;
 globalStyle.marginLeft = globalStyle.margin;
+globalStyle.marginTop = globalStyle.margin;
+globalStyle.marginBottom = globalStyle.margin;
 globalStyle.htmlMarginLeft = ((globalStyle.marginLeft / 10) * 0.6).toFixed(2) + 'em';
 
 export { globalStyle }

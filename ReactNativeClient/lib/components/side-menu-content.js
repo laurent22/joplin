@@ -1,5 +1,7 @@
+import React, { Component } from 'react';
+import { TouchableOpacity , Button, Text, Image, StyleSheet, ScrollView, View } from 'react-native';
 import { connect } from 'react-redux'
-import { TouchableOpacity , Button, Text } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { Log } from 'lib/log.js';
 import { Note } from 'lib/models/note.js';
 import { FoldersScreenUtils } from 'lib/components/screens/folders-utils.js'
@@ -9,21 +11,14 @@ import { reg } from 'lib/registry.js';
 import { _ } from 'lib/locale.js';
 import { globalStyle } from 'lib/components/global-style.js';
 
-const React = require('react');
-const {
-	Dimensions,
-	StyleSheet,
-	ScrollView,
-	View,
-	Image,
-} = require('react-native');
-const { Component } = React;
-
-const styles = StyleSheet.create({
+const styleObject = {
 	menu: {
 		flex: 1,
 		backgroundColor: globalStyle.backgroundColor,
-		padding: 20,
+	},
+	icon: {
+		fontSize: 20,
+		color: globalStyle.color,
 	},
 	name: {
 		position: 'absolute',
@@ -33,26 +28,35 @@ const styles = StyleSheet.create({
 	item: {
 		fontSize: 14,
 		fontWeight: '300',
-		paddingTop: 5,
-	},
-	folderButton: {
-		flex: 1,
-		backgroundColor: "#0482E3",
-		height: 36,
-		marginBottom: 5,
-	},
-	folderButtonText: {
-		color: "#ffffff",
-		fontWeight: 'bold',
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		flex: 1,
 	},
 	button: {
 		flex: 1,
-		textAlign: 'left',
-	}
-});
+		flexDirection: 'row',
+		height: 36,
+		alignItems: 'center',
+		paddingLeft: globalStyle.marginLeft,
+		paddingRight: globalStyle.marginRight,
+	},
+	buttonText: {
+		flex: 1,
+		color: globalStyle.color,
+		paddingLeft: 10,
+	},
+	syncStatus: {
+		paddingLeft: globalStyle.marginLeft,
+		paddingRight: globalStyle.marginRight,
+		color: globalStyle.colorFaded,
+	},
+};
+
+styleObject.folderButton = Object.assign({}, styleObject.button);
+styleObject.folderButtonText = Object.assign({}, styleObject.buttonText);
+styleObject.syncButton = Object.assign({}, styleObject.button);
+styleObject.syncButtonText = Object.assign({}, styleObject.buttonText);
+styleObject.folderButtonSelected = Object.assign({}, styleObject.folderButton);
+styleObject.folderButtonSelected.backgroundColor = globalStyle.selectedColor;
+
+const styles = StyleSheet.create(styleObject);
 
 class SideMenuContentComponent extends Component {
 
@@ -86,36 +90,68 @@ class SideMenuContentComponent extends Component {
 		}
 	}
 
+	folderItem(folder, selected) {
+		const iconComp = selected ? <Icon name='md-folder-open' style={styles.icon} /> : <Icon name='md-folder' style={styles.icon} />;
+		const folderButtonStyle = selected ? styles.folderButtonSelected : styles.folderButton;
+
+		return (
+			<TouchableOpacity key={folder.id} onPress={() => { this.folder_press(folder) }}>
+				<View style={folderButtonStyle}>
+					{ iconComp }
+					<Text numberOfLines={1} style={styles.folderButtonText}>{folder.title}</Text>
+				</View>
+			</TouchableOpacity>
+		);
+	}
+
+	synchronizeButton(state) {
+		const title = state == 'sync' ? _('Synchronize') : _('Cancel synchronization');
+		const iconComp = state == 'sync' ? <Icon name='md-sync' style={styles.icon} /> : <Icon name='md-close' style={styles.icon} />;
+
+		return (
+			<TouchableOpacity key={'synchronize_button'} onPress={() => { this.synchronize_press() }}>
+				<View style={styles.syncButton}>
+					{ iconComp }
+					<Text style={styles.syncButtonText}>{title}</Text>
+				</View>
+			</TouchableOpacity>
+		);
+	}
+
 	render() {
 		let items = [];
-		for (let i = 0; i < this.props.folders.length; i++) {
-			let f = this.props.folders[i];
-			let title = f.title ? f.title : '';
 
-			items.push(
-				<TouchableOpacity key={f.id} onPress={() => { this.folder_press(f) }}>
-					<View style={styles.folderButton}>
-						<Text numberOfLines={1} style={styles.folderButtonText}>{title}</Text>
-					</View>
-				</TouchableOpacity>
-			);
+		// HACK: inner height of ScrollView doesn't appear to be calculated correctly when
+		// using padding. So instead creating blank elements for padding bottom and top.
+		items.push(<View style={{ height: globalStyle.marginTop }} key='bottom_top_hack'/>);
+
+		for (let i = 0; i < this.props.folders.length; i++) {
+			let folder = this.props.folders[i];
+			items.push(this.folderItem(folder, this.props.selectedFolderId == folder.id));
 		}
 
-		if (items.length) items.push(<View style={{ height: 50, flex: -1 }} key='divider_1'></View>); // DIVIDER
+		if (items.length) items.push(<View style={{ height: 30, flex: -1 }} key='divider_1'></View>); // DIVIDER
 
 		const syncTitle = this.props.syncStarted ? _('Cancel sync') : _('Synchronize');
 
 		let lines = Synchronizer.reportToLines(this.props.syncReport);
 		const syncReportText = lines.join("\n");
 
-		items.push(<Button title={syncTitle} onPress={() => { this.synchronize_press() }} key='synchronize' />);
+		items.push(this.synchronizeButton(this.props.syncStarted ? 'cancel' : 'sync'));
 
-		items.push(<Text key='sync_report'>{syncReportText}</Text>);
+		items.push(<Text key='sync_report' style={styles.syncStatus}>{syncReportText}</Text>);
+
+		items.push(<View style={{ height: globalStyle.marginBottom }} key='bottom_padding_hack'/>);
 
 		return (
-			<ScrollView scrollsToTop={false} style={styles.menu}>
-				{ items }
-			</ScrollView>
+			<View style={{flex:1}}>
+				<View style={{flexDirection:'row'}}>
+					<Image style={{flex:1, height: 150}} source={require('../images/SideMenuHeader.png')} />
+				</View>
+				<ScrollView scrollsToTop={false} style={styles.menu}>
+					{ items }
+				</ScrollView>
+			</View>
 		);
 	}
 };
@@ -126,6 +162,7 @@ const SideMenuContent = connect(
 			folders: state.folders,
 			syncStarted: state.syncStarted,
 			syncReport: state.syncReport,
+			selectedFolderId: state.selectedFolderId,
 		};
 	}
 )(SideMenuContentComponent)
