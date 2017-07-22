@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BackHandler, View, Button, TextInput, WebView, Text, StyleSheet } from 'react-native';
+import { BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking } from 'react-native';
 import { connect } from 'react-redux'
 import { Log } from 'lib/log.js'
 import { Note } from 'lib/models/note.js'
@@ -303,7 +303,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 				const css = `
 					body {
 						font-size: ` + style.htmlFontSize + `;
-						/* margin: ` + style.htmlMarginLeft + `; */
 						color: ` + style.htmlColor + `;
 					}
 					h1 {
@@ -334,6 +333,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 						border: 1px solid silver;
 						padding: .5em 1em .5em 1em;
 					}
+					hr {
+						border: 1px solid ` + style.htmlDividerColor + `;
+					}
 				`;
 
 				let counter = -1;
@@ -345,7 +347,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 					});
 				}
 
-				let html = note ? '<style>' + normalizeCss + "\n" + css + '</style>' + marked(body, { gfm: true, breaks: true }) : '';
+				const renderer = new marked.Renderer();
+				renderer.link = function (href, title, text) {
+					const js = "postMessage(" + JSON.stringify(href) + "); return false;";
+					let output = "<a href='#' onclick='" + js + "'>" + text + '</a>';
+					return output;
+				}
+
+				let html = note ? '<style>' + normalizeCss + "\n" + css + '</style>' + marked(body, { gfm: true, breaks: true, renderer: renderer }) : '';
 
 				let elementId = 1;
 				while (html.indexOf('°°JOP°') >= 0) {
@@ -364,12 +373,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 						source={{ html: markdownToHtml(note.body, globalStyle) }}
 						onMessage={(event) => {
 							let msg = event.nativeEvent.data;
+
+							reg.logger().info('postMessage received: ' + msg);
+
 							if (msg.indexOf('checkboxclick_') === 0) {
 								msg = msg.split('_');
 								let index = Number(msg[msg.length - 1]);
 								let currentState = msg[msg.length - 2]; // Not really needed but keep it anyway
 								const newBody = toggleTickAt(note.body, index);
 								this.saveOneProperty('body', newBody);
+							} else {
+								Linking.openURL(msg);
 							}
 						}}
 					/>

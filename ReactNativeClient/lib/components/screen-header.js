@@ -25,7 +25,7 @@ let styleObject = {
 		height: 30,
 		flex:1,
 		color: globalStyle.color,
-		backgroundColor: globalStyle.backgroundColor,
+		// Note: cannot set backgroundStyle as that would remove the arrow in the component
 	},
 	divider: {
 		borderBottomWidth: 1,

@@ -19,6 +19,12 @@ const styles = StyleSheet.create({
 		paddingLeft: globalStyle.marginLeft,
 		backgroundColor: globalStyle.backgroundColor,
 	},
+	noItemMessage: {
+		paddingLeft: globalStyle.marginLeft,
+		paddingRight: globalStyle.marginRight,
+		paddingTop: globalStyle.marginTop,
+		paddingBottom: globalStyle.marginBottom
+	},
 });
 
 class ItemListComponent extends Component {
@@ -93,7 +99,7 @@ class ItemListComponent extends Component {
 			);
 		} else {
 			const noItemMessage = this.props.noItemMessage ? this.props.noItemMessage : '';
-			return <Text>{noItemMessage}</Text>;
+			return <Text style={styles.noItemMessage} >{noItemMessage}</Text>;
 		}
 	}
 }

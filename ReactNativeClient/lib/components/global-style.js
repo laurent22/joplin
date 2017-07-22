@@ -11,6 +11,7 @@ const globalStyle = {
 	// For WebView - must correspond to the properties above
 	htmlFontSize: '14px',
 	htmlColor: 'black', // Note: CSS in WebView component only seem to work if the colour is written in full letters (so no hexadecimal)
+	htmlDividerColor: 'Gainsboro',
 };
 
 globalStyle.marginRight = globalStyle.margin;

@@ -522,17 +522,32 @@ msgid "New note"
 msgstr ""
 
 #: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/action-button.js:81
-msgid "New folder"
-msgstr ""
+#, fuzzy
+msgid "New notebook"
+msgstr "Supprime le carnet."
 
-#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screen-header.js:145
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screen-header.js:189
 msgid "Log"
 msgstr ""
 
-#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screen-header.js:150
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screen-header.js:194
 #, fuzzy
 msgid "Status"
 msgstr "Etat : %s."
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/side-menu-content.js:106
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/side-menu-content.js:133
+msgid "Synchronize"
+msgstr ""
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/side-menu-content.js:106
+#, fuzzy
+msgid "Cancel synchronization"
+msgstr "Commencement de la synchronisation..."
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/side-menu-content.js:133
+msgid "Cancel sync"
+msgstr ""
 
 #: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/folder.js:73
 #, javascript-format
@@ -544,37 +559,41 @@ msgid ""
 "There is currently no notebook. Create one by clicking on the (+) button."
 msgstr ""
 
-#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:153
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:185
 msgid "Untitled"
-msgstr ""
-
-#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:169
-#, fuzzy
-msgid "Delete note?"
-msgstr "Supprimer le carnet \"%s\" ?"
-
-#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:200
-msgid "Attach file"
 msgstr ""
 
 #: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:201
 #, fuzzy
+msgid "Delete note?"
+msgstr "Supprimer le carnet \"%s\" ?"
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:232
+msgid "Attach file"
+msgstr ""
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:233
+#, fuzzy
 msgid "Delete note"
 msgstr "Supprime le carnet."
 
-#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:202
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:234
 msgid "Convert to regular note"
 msgstr ""
 
-#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:202
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:234
 msgid "Convert to todo"
 msgstr ""
 
-#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:203
-msgid "Toggle metadata"
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:235
+msgid "Hide metadata"
 msgstr ""
 
-#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:362
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:235
+msgid "Show metadata"
+msgstr ""
+
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/note.js:395
 msgid "Edit"
 msgstr ""
 
@@ -597,13 +616,13 @@ msgstr "Editer la note."
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 
-#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/welcome.js:24
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/welcome.js:31
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
 msgstr ""
 
-#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/welcome.js:24
+#: /mnt/d/Web/www/joplin/ReactNativeClient/lib/components/screens/welcome.js:31
 msgid "You currently have no notebook. Create one by clicking on (+) button."
 msgstr ""
 
