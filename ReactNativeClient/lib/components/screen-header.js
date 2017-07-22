@@ -40,12 +40,11 @@ let styleObject = {
 		paddingRight: 5,
 		marginRight: 2,
 	},
-	backButton: {
+	iconButton: {
 		flex: 1,
 		backgroundColor: globalStyle.backgroundColor,
 		paddingLeft: 15,
 		paddingRight: 15,
-		marginRight: 1,
 	},
 	saveButton: {
 		flex: 1,
@@ -100,6 +99,9 @@ styleObject.topIcon = Object.assign({}, globalStyle.icon);
 styleObject.topIcon.flex = 1;
 styleObject.topIcon.textAlignVertical = 'center';
 
+styleObject.backButton = Object.assign({}, styleObject.iconButton);
+styleObject.backButton.marginRight = 1;
+
 styleObject.backButtonDisabled = Object.assign({}, styleObject.backButton, { opacity: globalStyle.disabledOpacity });
 styleObject.saveButtonDisabled = Object.assign({}, styleObject.saveButton, { opacity: globalStyle.disabledOpacity });
 
@@ -113,6 +115,13 @@ class ScreenHeaderComponent extends Component {
 
 	backButton_press() {
 		this.props.dispatch({ type: 'Navigation/BACK' });
+	}
+
+	searchButton_press() {
+		this.props.dispatch({
+			type: 'Navigation/NAVIGATE',
+			routeName: 'Search',
+		});	
 	}
 
 	menu_select(value) {
@@ -170,6 +179,16 @@ class ScreenHeaderComponent extends Component {
 			);
 		}
 
+		function searchButton(styles, onPress) {
+			return (
+				<TouchableOpacity onPress={onPress}>
+					<View style={styles.iconButton}>
+						<Icon name='md-search' style={styles.topIcon} />
+					</View>
+				</TouchableOpacity>
+			);
+		}
+
 		let key = 0;
 		let menuOptionComponents = [];
 		for (let i = 0; i < this.props.menuOptions.length; i++) {
@@ -220,10 +239,11 @@ class ScreenHeaderComponent extends Component {
 				{ sideMenuButton(styles, () => this.sideMenuButton_press()) }
 				{ backButton(styles, () => this.backButton_press(), !this.props.historyCanGoBack) }
 				{ saveButton(styles, () => { if (this.props.onSaveButtonPress) this.props.onSaveButtonPress() }, this.props.saveButtonDisabled === true, this.props.showSaveButton === true) }
-				{ titleComp }				
+				{ titleComp }
+				{ searchButton(styles, () => this.searchButton_press()) }
 			    <Menu onSelect={(value) => this.menu_select(value)} style={styles.contextMenu}>
 					<MenuTrigger>
-						<Text style={styles.contextMenuTrigger}>      &#8942;</Text>
+						<Text style={styles.contextMenuTrigger}>  &#8942;</Text>
 					</MenuTrigger>
 					<MenuOptions>
 						{ menuOptionComponents }

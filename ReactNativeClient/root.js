@@ -25,6 +25,7 @@ import { FoldersScreen } from 'lib/components/screens/folders.js'
 import { LogScreen } from 'lib/components/screens/log.js'
 import { StatusScreen } from 'lib/components/screens/status.js'
 import { WelcomeScreen } from 'lib/components/screens/welcome.js'
+import { SearchScreen } from 'lib/components/screens/search.js'
 import { OneDriveLoginScreen } from 'lib/components/screens/onedrive-login.js'
 import { Setting } from 'lib/models/setting.js'
 import { MenuContext } from 'react-native-popup-menu';
@@ -52,6 +53,7 @@ let defaultState = {
 	},
 	syncStarted: false,
 	syncReport: {},
+	searchQuery: '',
 };
 
 const initialRoute = {
@@ -298,6 +300,11 @@ const reducer = (state = defaultState, action) => {
 				newState.syncReport = action.report;
 				break;
 
+			case 'SEARCH_QUERY':
+
+				newState = Object.assign({}, state);
+				newState.searchQuery = action.query.trim();
+
 		}
 	} catch (error) {
 		error.message = 'In reducer: ' + error.message;
@@ -420,6 +427,12 @@ async function initialize(dispatch, backButtonHandler) {
 		reg.scheduleSync(1);
 	}, 1000 * 60 * 5);
 
+	if (Setting.value('env') == 'dev') {
+
+	} else {
+		reg.scheduleSync();
+	}
+
 	initializationState_ = 'done';
 
 	reg.logger().info('Application initialized');
@@ -434,11 +447,6 @@ class AppComponent extends React.Component {
 
 	async componentDidMount() {
 		await initialize(this.props.dispatch, this.backButtonHandler.bind(this));
-		if (Setting.value('env') == 'dev') {
-
-		} else {
-			reg.scheduleSync();
-		}
 	}
 
 	backButtonHandler() {
@@ -481,6 +489,7 @@ class AppComponent extends React.Component {
 			OneDriveLogin: { screen: OneDriveLoginScreen },
 			Log: { screen: LogScreen },
 			Status: { screen: StatusScreen },
+			Search: { screen: SearchScreen },
 		};
 
 		return (

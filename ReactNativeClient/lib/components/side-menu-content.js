@@ -130,8 +130,6 @@ class SideMenuContentComponent extends Component {
 
 		if (items.length) items.push(<View style={{ height: 30, flex: -1 }} key='divider_1'></View>); // DIVIDER
 
-		const syncTitle = this.props.syncStarted ? _('Cancel sync') : _('Synchronize');
-
 		let lines = Synchronizer.reportToLines(this.props.syncReport);
 		const syncReportText = lines.join("\n");
 

@@ -25,4 +25,9 @@ globalStyle.icon = {
 	fontSize: 30,
 };
 
+globalStyle.lineInput = {
+	color: globalStyle.color,
+	backgroundColor: globalStyle.backgroundColor,
+};
+
 export { globalStyle }
