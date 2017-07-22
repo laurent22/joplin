@@ -34,6 +34,7 @@ import { DatabaseDriverReactNative } from 'lib/database-driver-react-native';
 import { reg } from 'lib/registry.js';
 import { _, setLocale } from 'lib/locale.js';
 import RNFetchBlob from 'react-native-fetch-blob';
+import { PoorManIntervals } from 'lib/poor-man-intervals.js';
 
 let defaultState = {
 	notes: [],
@@ -303,6 +304,10 @@ const reducer = (state = defaultState, action) => {
 		throw error;
 	}
 
+	// Check the registered intervals here since we know this function
+	// will be called regularly.
+	PoorManIntervals.update();
+
 	return newState;
 }
 
@@ -409,6 +414,11 @@ async function initialize(dispatch, backButtonHandler) {
 	BackHandler.addEventListener('hardwareBackPress', () => {
 		return backButtonHandler();
 	});
+
+	PoorManIntervals.setInterval(() => {
+		reg.logger().info('Running background sync on timer...');
+		reg.scheduleSync(1);
+	}, 1000 * 60 * 5);
 
 	initializationState_ = 'done';
 
