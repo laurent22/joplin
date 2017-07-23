@@ -106,6 +106,8 @@ class FileApiDriverLocal {
 				}
 			}
 
+			output = output.concat(deletedItems);
+
 			return {
 				hasMore: false,
 				context: null,

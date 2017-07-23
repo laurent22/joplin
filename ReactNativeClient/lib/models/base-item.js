@@ -73,9 +73,14 @@ class BaseItem extends BaseModel {
 	}
 
 	// Returns the IDs of the items that have been synced at least once
-	static async syncedItems(syncTarget) {
+	static async syncedItemIds(syncTarget) {
 		if (!syncTarget) throw new Error('No syncTarget specified');
-		return await this.db().selectAll('SELECT item_id, item_type FROM sync_items WHERE sync_time > 0 AND sync_target = ?', [syncTarget]);
+		let temp = await this.db().selectAll('SELECT item_id FROM sync_items WHERE sync_time > 0 AND sync_target = ?', [syncTarget]);
+		let output = [];
+		for (let i = 0; i < temp.length; i++) {
+			output.push(temp[i].item_id);
+		}
+		return output;
 	}
 
 	static pathToId(path) {

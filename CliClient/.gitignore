@@ -15,3 +15,4 @@ tests/logs/*
 tests/cli-integration/
 *.mo
 *.*~
+tests/sync

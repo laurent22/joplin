@@ -63,7 +63,7 @@ function randomWord() {
 
 function execCommand(client, command, options = {}) {
 	let exePath = 'node ' + joplinAppPath;
-	let cmd = exePath + ' --update-geolocation-disabled --env dev --profile ' + client.profileDir + ' ' + command;
+	let cmd = exePath + ' --update-geolocation-disabled --env dev --log-level debug --profile ' + client.profileDir + ' ' + command;
 	logger.info(client.id + ': ' + command);
 
 	if (options.killAfter) {

@@ -105,6 +105,7 @@ class Synchronizer {
 			if (n == 'starting') continue;
 			if (n == 'finished') continue;
 			if (n == 'state') continue;
+			if (n == 'completedTime') continue;
 			this.logger().info(n + ': ' + (report[n] ? report[n] : '-'));
 		}
 		let folderCount = await Folder.count();
@@ -339,13 +340,14 @@ class Synchronizer {
 
 				let allIds = null;
 				if (!this.api().supportsDelta()) {
-					allIds = await BaseItem.syncedItems(syncTargetId);
+					allIds = await BaseItem.syncedItemIds(syncTargetId);
 				}
 
 				let listResult = await this.api().delta('', {
 					context: context,
 					itemIds: allIds,
 				});
+
 				let remotes = listResult.items;
 				for (let i = 0; i < remotes.length; i++) {
 					if (this.cancelling()) break;

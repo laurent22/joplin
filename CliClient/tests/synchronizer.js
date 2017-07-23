@@ -2,7 +2,7 @@ require('source-map-support').install();
 require('babel-plugin-transform-runtime');
 
 import { time } from 'lib/time-utils.js';
-import { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient } from 'test-utils.js';
+import { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId } from 'test-utils.js';
 import { Folder } from 'lib/models/folder.js';
 import { Note } from 'lib/models/note.js';
 import { Tag } from 'lib/models/tag.js';
@@ -40,7 +40,11 @@ async function localItemsSameAsRemote(locals, expect) {
 			expect(!!remote).toBe(true);
 			if (!remote) continue;
 
-			expect(remote.updated_time).toBe(dbItem.updated_time);
+			if (syncTargetId() == Database.enumId('syncTarget', 'filesystem')) {
+				expect(remote.updated_time).toBe(Math.floor(dbItem.updated_time / 1000) * 1000);
+			} else {
+				expect(remote.updated_time).toBe(dbItem.updated_time);
+			}
 
 			let remoteContent = await fileApi().get(path);
 			remoteContent = dbItem.type_ == BaseModel.TYPE_NOTE ? await Note.unserialize(remoteContent) : await Folder.unserialize(remoteContent);
@@ -240,7 +244,7 @@ describe('Synchronizer', function() {
 		expect(files.length).toBe(1);
 		expect(files[0].path).toBe(Folder.systemPath(folder1));
 
-		let deletedItems = await BaseItem.deletedItems(syncTargetId);
+		let deletedItems = await BaseItem.deletedItems(syncTargetId());
 		expect(deletedItems.length).toBe(0);
 
 		done();
@@ -262,7 +266,7 @@ describe('Synchronizer', function() {
 		await synchronizer().start();
 		let items = await allItems();
 		expect(items.length).toBe(1);
-		let deletedItems = await BaseItem.deletedItems(syncTargetId);
+		let deletedItems = await BaseItem.deletedItems(syncTargetId());
 		expect(deletedItems.length).toBe(0);
 		
 		done();
@@ -568,7 +572,7 @@ describe('Synchronizer', function() {
 		await synchronizer().start();
 		await Note.save({ id: n1.id, is_conflict: 1 });
 		await Note.delete(n1.id);
-		const deletedItems = await BaseItem.deletedItems(syncTargetId);
+		const deletedItems = await BaseItem.deletedItems(syncTargetId());
 
 		expect(deletedItems.length).toBe(0);
 

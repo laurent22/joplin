@@ -13,6 +13,7 @@ import { BaseItem } from 'lib/models/base-item.js';
 import { Synchronizer } from 'lib/synchronizer.js';
 import { FileApi } from 'lib/file-api.js';
 import { FileApiDriverMemory } from 'lib/file-api-driver-memory.js';
+import { FileApiDriverLocal } from 'lib/file-api-driver-local.js';
 import { FsDriverNode } from '../app/fs-driver-node.js';
 import { time } from 'lib/time-utils.js';
 
@@ -28,6 +29,9 @@ Resource.fsDriver_ = fsDriver;
 const logDir = __dirname + '/../tests/logs';
 fs.mkdirpSync(logDir, 0o755);
 
+const syncTarget = 'filesystem';
+const syncDir = __dirname + '/../tests/sync';
+
 const logger = new Logger();
 logger.addTarget('file', { path: logDir + '/log.txt' });
 logger.setLevel(Logger.LEVEL_DEBUG);
@@ -40,6 +44,11 @@ BaseItem.loadClass('NoteTag', NoteTag);
 
 Setting.setConstant('appId', 'net.cozic.joplin-cli');
 Setting.setConstant('appType', 'cli');
+
+function syncTargetId() {
+	return JoplinDatabase.enumId('syncTarget', 'filesystem');
+	//return JoplinDatabase.enumId('syncTarget', 'memory');
+}
 
 function sleep(n) {
 	return new Promise((resolve, reject) => {
@@ -111,7 +120,12 @@ async function setupDatabaseAndSynchronizer(id = null) {
 		synchronizers_[id].setLogger(logger);
 	}
 
-	await fileApi().format();
+	if (syncTarget == 'filesystem') {
+		fs.removeSync(syncDir)
+		fs.mkdirpSync(syncDir, 0o755);
+	} else {
+		await fileApi().format();
+	}
 }
 
 function db(id = null) {
@@ -127,9 +141,17 @@ function synchronizer(id = null) {
 function fileApi() {
 	if (fileApi_) return fileApi_;
 
-	fileApi_ = new FileApi('/root', new FileApiDriverMemory());
-	fileApi_.setLogger(logger);
-	return fileApi_;
+	if (syncTarget == 'filesystem') {
+		fs.removeSync(syncDir)
+		fs.mkdirpSync(syncDir, 0o755);
+		fileApi_ = new FileApi(syncDir, new FileApiDriverLocal());
+		fileApi_.setLogger(logger);
+		return fileApi_;
+	} else {
+		fileApi_ = new FileApi('/root', new FileApiDriverMemory());
+		fileApi_.setLogger(logger);
+		return fileApi_;
+	}		
 }
 
-export { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient };
+export { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId };
