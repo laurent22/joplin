@@ -1,5 +1,6 @@
 import { BaseModel } from 'lib/base-model.js';
 import { Database } from 'lib/database.js';
+import { _ } from 'lib/locale.js';
 
 class Setting extends BaseModel {
 
@@ -120,6 +121,9 @@ class Setting extends BaseModel {
 		for (let i = 0; i < this.cache_.length; i++) {
 			let s = Object.assign({}, this.cache_[i]);
 			delete s.public;
+			delete s.appTypes;
+			delete s.label;
+			delete s.options;
 			queries.push(Database.insertQuery(this.tableName(), s));
 		}
 
@@ -141,17 +145,37 @@ class Setting extends BaseModel {
 		this.updateTimeoutId_ = null;
 	}
 
+	static publicSettings(appType) {
+		if (!appType) throw new Error('appType is required');
+
+		let output = {};
+		for (let key in Setting.defaults_) {
+			if (!Setting.defaults_.hasOwnProperty(key)) continue;
+			let s = Object.assign({}, Setting.defaults_[key]);
+			if (!s.public) continue;
+			if (s.appTypes && s.appTypes.indexOf(appType) < 0) continue;
+			s.value = this.value(key);
+			output[key] = s;
+		}
+		return output;
+	}
+
 }
 
 Setting.defaults_ = {
 	'activeFolderId': { value: '', type: 'string', public: false },
 	'sync.onedrive.auth': { value: '', type: 'string', public: false },
-	'sync.filesystem.path': { value: '', type: 'string', public: true },	
-	'sync.target': { value: 'onedrive', type: 'string', public: true },
+	'sync.filesystem.path': { value: '', type: 'string', public: true, appTypes: ['cli'] },
+	'sync.target': { value: 'onedrive', type: 'string', public: true, label: () => _('Synchronisation target') },
 	'sync.context': { value: '', type: 'string', public: false },
-	'editor': { value: '', type: 'string', public: true },
+	'editor': { value: '', type: 'string', public: true, appTypes: ['cli'] },
 	'locale': { value: 'en_GB', type: 'string', public: true },
-	'aliases': { value: '', type: 'string', public: true },
+	//'aliases': { value: '', type: 'string', public: true },
+	'todoFilter': { value: 'all', type: 'enum', public: true, appTypes: ['mobile'], label: () => _('Todo filter'), options: () => ({
+		all: _('Show all'),
+		recent: _('Non-completed and recently completed ones'),
+		nonCompleted: _('Non-completed ones only'),
+	})},
 };
 
 // Contains constants that are set by the application and

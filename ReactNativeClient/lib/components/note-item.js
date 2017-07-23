@@ -9,7 +9,7 @@ import { Note } from 'lib/models/note.js';
 import { time } from 'lib/time-utils.js';
 import { globalStyle } from 'lib/components/global-style.js';
 
-const styleObject = {
+let styles = {
 	listItem: {
 		flexDirection: 'row',
 		height: 40,
@@ -24,7 +24,10 @@ const styleObject = {
 	},
 };
 
-const styles = StyleSheet.create(styleObject);
+styles.listItemFadded = Object.assign({}, styles.listItem);
+styles.listItemFadded.opacity = 0.4;
+
+styles = StyleSheet.create(styles);
 
 class NoteItemComponent extends Component {
 
@@ -45,9 +48,11 @@ class NoteItemComponent extends Component {
 		const checkboxStyle = !Number(note.is_todo) ? { display: 'none' } : { color: globalStyle.color };
 		const checkboxChecked = !!Number(note.todo_completed);
 
+		const listItemStyle = !!Number(note.is_todo) && checkboxChecked ? styles.listItemFadded : styles.listItem;
+
 		return (
 			<TouchableHighlight onPress={() => onPress ? onPress(note) : this.noteItem_press(note.id)} onLongPress={() => onLongPress(note)} underlayColor="#0066FF">
-				<View style={ styles.listItem }>
+				<View style={ listItemStyle }>
 					<Checkbox style={checkboxStyle} checked={checkboxChecked} onChange={(checked) => { onCheckboxChange(note, checked) }}/><Text style={styles.listItemText}>{note.title}</Text>
 				</View>
 			</TouchableHighlight>

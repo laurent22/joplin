@@ -7,6 +7,7 @@ import { Checkbox } from 'lib/components/checkbox.js';
 import { NoteItem } from 'lib/components/note-item.js';
 import { reg } from 'lib/registry.js';
 import { Note } from 'lib/models/note.js';
+import { Setting } from 'lib/models/setting.js';
 import { time } from 'lib/time-utils.js';
 import { globalStyle } from 'lib/components/global-style.js';
 
@@ -33,15 +34,35 @@ class ItemListComponent extends Component {
 		};
 	}
 
+	filterNotes(notes) {
+		const todoFilter = Setting.value('todoFilter');
+		if (todoFilter == 'all') return notes;
+
+		const now = time.unixMs();
+		const maxInterval = 1000 * 60 * 60 * 24 * 2;
+		const notRecentTime = now - maxInterval;
+
+		let output = [];
+		for (let i = 0; i < notes.length; i++) {
+			const note = notes[i];
+			if (note.is_todo) {
+				if (todoFilter == 'recent' && note.updated_time < notRecentTime) continue;
+				if (todoFilter == 'nonCompleted' && !!note.todo_completed) continue;
+			}
+			output.push(note);
+		}
+		return output;
+	}
+
 	componentWillMount() {
-		const newDataSource = this.state.dataSource.cloneWithRows(this.props.items);
+		const newDataSource = this.state.dataSource.cloneWithRows(this.filterNotes(this.props.items));
 		this.state = { dataSource: newDataSource };
 	}
 
 	componentWillReceiveProps(newProps) {
 		// https://stackoverflow.com/questions/38186114/react-native-redux-and-listview
 		this.setState({
-			dataSource: this.state.dataSource.cloneWithRows(newProps.items),
+			dataSource: this.state.dataSource.cloneWithRows(this.filterNotes(newProps.items)),
 		});
 	}
 
@@ -49,7 +70,6 @@ class ItemListComponent extends Component {
 		let note = await Note.load(itemId);
 		await Note.save({ id: note.id, todo_completed: checked ? time.unixMs() : 0 });
 		reg.scheduleSync();
-
 	}
 
 	listView_itemLongPress(itemId) {}

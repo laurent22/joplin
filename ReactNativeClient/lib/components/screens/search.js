@@ -90,8 +90,16 @@ class SearchScreenComponent extends BaseScreenComponent {
 		let notes = []
 
 		if (query) {
+			let p = query.split(' ');
+			let temp = [];
+			for (let i = 0; i < p.length; i++) {
+				let t = p[i].trim();
+				if (!t) continue;
+				temp.push(t);
+			}
+
 			notes = await Note.previews(null, {
-				anywherePattern: '*' + query + '*',
+				anywherePattern: '*' + temp.join('*') + '*',
 			});
 		}
 
@@ -112,6 +120,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 					<View style={styles.searchContainer}>
 						<TextInput
 							style={styles.searchTextInput}
+							autoFocus={true}
 							underlineColorAndroid="#ffffff00" 
 							onSubmitEditing={() => { this.searchTextInput_submit() }}
 							onChangeText={(text) => this.searchTextInput_changeText(text) }
