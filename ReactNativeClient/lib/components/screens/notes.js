@@ -62,7 +62,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 		const { navigate } = this.props.navigation;
 		return (
 			<View style={this.styles().screen}>
-				<ScreenHeader title={title} navState={this.props.navigation.state} menuOptions={this.menuOptions()} />
+				<ScreenHeader title={title} menuOptions={this.menuOptions()} />
 				<NoteList noItemMessage={_('There are currently no notes. Create one by clicking on the (+) button.')} style={{flex: 1}}/>
 				<ActionButton addFolderNoteButtons={addFolderNoteButtons} parentFolderId={this.props.selectedFolderId}></ActionButton>
 				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>

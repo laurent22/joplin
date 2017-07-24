@@ -275,7 +275,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (this.state.isLoading) {
 			return (
 				<View style={this.styles().screen}>
-					<ScreenHeader navState={this.props.navigation.state}/>
+					<ScreenHeader/>
 				</View>
 			);
 		}
@@ -483,7 +483,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 							reg.scheduleSync();
 						}
 					}}
-					navState={this.props.navigation.state}
 					menuOptions={this.menuOptions()}
 					showSaveButton={showSaveButton}
 					saveButtonDisabled={saveButtonDisabled}

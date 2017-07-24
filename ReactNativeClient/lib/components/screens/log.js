@@ -7,6 +7,7 @@ import { ScreenHeader } from 'lib/components/screen-header.js';
 import { time } from 'lib/time-utils'
 import { Logger } from 'lib/logger.js';
 import { BaseScreenComponent } from 'lib/components/base-screen.js';
+import { _ } from 'lib/locale.js';
 
 class LogScreenComponent extends BaseScreenComponent {
 	
@@ -56,7 +57,7 @@ class LogScreenComponent extends BaseScreenComponent {
 		// `enableEmptySections` is to fix this warning: https://github.com/FaridSafi/react-native-gifted-listview/issues/39
 		return (
 			<View style={this.styles().screen}>
-				<ScreenHeader navState={this.props.navigation.state} />
+				<ScreenHeader title={_('Log')}/>
 				<ListView
 					dataSource={this.state.dataSource}
 					renderRow={renderRow}

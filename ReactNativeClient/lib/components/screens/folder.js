@@ -88,7 +88,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 		return (
 			<View style={this.styles().screen}>
 				<ScreenHeader
-					navState={this.props.navigation.state}
+					title={_('Edit notebook')}
 					showSaveButton={true}
 					saveButtonDisabled={saveButtonDisabled}
 					onSaveButtonPress={() => this.saveFolderButton_press()}

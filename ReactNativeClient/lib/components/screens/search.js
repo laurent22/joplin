@@ -115,7 +115,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 	render() {
 		return (
 			<View style={this.styles().screen}>
-				<ScreenHeader navState={this.props.navigation.state} />
+				<ScreenHeader title={_('Search')}/>
 				<View style={styles.body}>
 					<View style={styles.searchContainer}>
 						<TextInput

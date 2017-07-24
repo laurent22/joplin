@@ -77,7 +77,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 
 		return (
 			<View style={this.styles().screen}>
-				<ScreenHeader navState={this.props.navigation.state} />
+				<ScreenHeader title={_('Status')}/>
 				<View style={styles.body}>
 					{ body }
 				</View>

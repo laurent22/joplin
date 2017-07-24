@@ -32,7 +32,7 @@ class WelcomeScreenComponent extends BaseScreenComponent {
 
 			return (
 				<View style={this.styles().screen} >
-					<ScreenHeader navState={this.props.navigation.state}/>
+					<ScreenHeader title={_('Welcome')}/>
 					<Text style={styles.message}>{message}</Text>
 					<ActionButton addFolderNoteButtons={true}/>
 				</View>
