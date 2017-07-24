@@ -258,6 +258,20 @@ class Application {
 		});
 	}
 
+	baseModelListener(action) {
+		switch (action.type) {
+
+			case 'NOTES_UPDATE_ONE':
+			case 'NOTES_DELETE':
+			case 'FOLDERS_UPDATE_ONE':
+			case 'FOLDER_DELETE':
+
+				reg.scheduleSync();
+				break;
+
+		}
+	}
+
 	async start() {
 		this.vorpal_ = require('vorpal')();
 		vorpalUtils.initialize(this.vorpal());
@@ -285,7 +299,7 @@ class Application {
 		this.logger_.setLevel(initArgs.logLevel);
 
 		reg.setLogger(this.logger_);
-		reg.dispatch = (o) => {}
+		reg.dispatch = (o) => {};
 
 		this.dbLogger_.addTarget('file', { path: profileDir + '/log-database.txt' });
 		this.dbLogger_.setLevel(initArgs.logLevel);
@@ -300,6 +314,7 @@ class Application {
 
 		reg.setDb(this.database_);
 		BaseModel.db_ = this.database_;
+		BaseModel.dispatch = (action) => { this.baseModelListener(action) }
 
 		await Setting.load();
 
@@ -322,8 +337,8 @@ class Application {
 		} else {
 
 			setInterval(() => {
-				reg.scheduleSync(1);
-			}, 1000 * 5);//60 * 5);
+				reg.scheduleSync(0);
+			}, 1000 * 60 * 5);
 
 			this.updatePrompt();
 			this.vorpal().show();

@@ -43,6 +43,13 @@ class Setting extends BaseModel {
 		this.cache_ = [];
 		return this.modelSelectAll('SELECT * FROM settings').then((rows) => {
 			this.cache_ = rows;
+
+			// TEMPORARY TO CONVERT ALL CLIENT SETTINGS
+			for (let i = 0; i < this.cache_.length; i++) {
+				if (this.cache_[i].key == 'sync.target' && this.cache_[i].value == 'onedrive') {
+					this.cache_[i].value = 3;
+				}
+			}
 		});
 	}
 
@@ -223,7 +230,7 @@ Setting.metadata_ = {
 	'activeFolderId': { value: '', type: 'string', public: false },
 	'sync.2.path': { value: '', type: 'string', public: true, appTypes: ['cli'] },
 	'sync.3.auth': { value: '', type: 'string', public: false },
-	'sync.target': { value: 'onedrive', type: 'enum', public: true, label: () => _('Synchronisation target'), options: () => {
+	'sync.target': { value: Setting.SYNC_TARGET_ONEDRIVE, type: 'enum', public: true, label: () => _('Synchronisation target'), options: () => {
 		let output = {};
 		output[Setting.SYNC_TARGET_MEMORY] = 'Memory';
 		output[Setting.SYNC_TARGET_FILESYSTEM] = _('File system');
