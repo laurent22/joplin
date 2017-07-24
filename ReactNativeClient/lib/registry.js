@@ -3,8 +3,11 @@ import { Setting } from 'lib/models/setting.js';
 import { OneDriveApi } from 'lib/onedrive-api.js';
 import { parameters } from 'lib/parameters.js';
 import { FileApi } from 'lib/file-api.js';
+import { Database } from 'lib/database.js';
 import { Synchronizer } from 'lib/synchronizer.js';
 import { FileApiDriverOneDrive } from 'lib/file-api-driver-onedrive.js';
+import { shim } from 'lib/shim.js';
+import { FileApiDriverMemory } from 'lib/file-api-driver-memory.js';
 
 const reg = {};
 
@@ -50,28 +53,46 @@ reg.oneDriveApi = () => {
 	return reg.oneDriveApi_;
 }
 
-reg.fileApi = async () => {
-	if (reg.fileApi_) return reg.fileApi_;
-
-	let driver = new FileApiDriverOneDrive(reg.oneDriveApi());
-	let appDir = await reg.oneDriveApi().appDirectory();
-
-	reg.fileApi_ = new FileApi(appDir, driver);
-	reg.fileApi_.setLogger(reg.logger());
-
-	return reg.fileApi_;
-}
-
-reg.synchronizer = async () => {
-	if (reg.synchronizer_) return reg.synchronizer_;
+reg.synchronizer = async (syncTargetId) => {
+	if (!reg.synchronizers_) reg.synchronizers_ = [];
+	if (reg.synchronizers_[syncTargetId]) return reg.synchronizers_[syncTargetId];
 
 	if (!reg.db()) throw new Error('Cannot initialize synchronizer: db not initialized');
 
-	let fileApi = await reg.fileApi();
-	reg.synchronizer_ = new Synchronizer(reg.db(), fileApi, Setting.value('appType'));
-	reg.synchronizer_.setLogger(reg.logger());
-	reg.synchronizer_.dispatch = reg.dispatch;
-	return reg.synchronizer_;
+	let fileApi = null;
+
+	if (syncTargetId == 'onedrive') {
+
+		if (!reg.oneDriveApi().auth()) throw new Error('User is not authentified');
+		let appDir = await reg.oneDriveApi().appDirectory();
+		fileApi = new FileApi(appDir, new FileApiDriverOneDrive(reg.oneDriveApi()));
+
+	} else if (syncTargetId == 'memory') {
+
+		fileApi = new FileApi('joplin', new FileApiDriverMemory());
+
+	} else if (syncTargetId == 'filesystem') {
+
+		let syncDir = Setting.value('sync.filesystem.path');
+		if (!syncDir) throw new Error(_('Please set the "sync.filesystem.path" config value to the desired synchronisation destination.'));
+		await shim.fs.mkdirp(syncDir, 0o755);
+		fileApi = new FileApi(syncDir, new shim.FileApiDriverLocal());
+
+	} else {
+
+		throw new Error('Unknown sync target: ' + syncTargetId);
+
+	}
+
+	fileApi.setLogger(reg.logger());
+
+	let sync = new Synchronizer(reg.db(), fileApi, Setting.value('appType'));
+	sync.setLogger(reg.logger());
+	sync.dispatch = reg.dispatch;
+
+	reg.synchronizers_[syncTargetId] = sync;
+
+	return sync;
 }
 
 reg.scheduleSync = async (delay = null) => {

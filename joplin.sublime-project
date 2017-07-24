@@ -27,6 +27,9 @@
 				"CliClient/app/src",
 				"CliClient/app/lib",
 				"*.jar",
+				"*.po",
+				"*.pot",
+				"locales/*.json",
 			]
 		}
 	]

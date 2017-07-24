@@ -40,11 +40,6 @@ process.stdin.on('keypress', (_, key) => {
 	if (key && key.name === 'return') {
 		app().updatePrompt();
 	}
-
-	// if (key.name === 'tab') {
-	// 	app().vorpal().ui.imprint();
-	// 	app().vorpal().log(app().vorpal().ui.input());
-	// }
 });
 
 shimInit();

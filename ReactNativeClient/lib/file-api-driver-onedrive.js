@@ -185,12 +185,10 @@ class FileApiDriverOneDrive {
 		};
 
 		let context = options ? options.context : null;
-
-		let url = null;
+		let url = context ? context.nextLink : null;
 		let query = null;
-		if (context) {
-			url = context.nextLink;
-		} else {
+
+		if (!url) {
 			url = this.makePath_(path) + ':/delta';
 			query = this.itemFilter_();
 			query.select += ',deleted';

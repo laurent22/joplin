@@ -11,7 +11,6 @@ import { Folder } from 'lib/models/folder.js';
 import { BaseItem } from 'lib/models/base-item.js';
 import { Note } from 'lib/models/note.js';
 import { Setting } from 'lib/models/setting.js';
-import { Synchronizer } from 'lib/synchronizer.js';
 import { Logger } from 'lib/logger.js';
 import { sprintf } from 'sprintf-js';
 import { vorpalUtils } from 'vorpal-utils.js';
@@ -27,8 +26,6 @@ class Application {
 		this.showPromptString_ = true;
 		this.logger_ = new Logger();
 		this.dbLogger_ = new Logger();
-		this.syncLogger_ = new Logger();
-		this.synchronizers_ = {};
 	}
 
 	vorpal() {
@@ -264,93 +261,6 @@ class Application {
 
 			if (cmd.hidden()) vorpalCmd.hidden();
 		});
-
-		// this.vorpal().catch('[args...]', 'Catches undefined commands').action(function(args, end) {
-		// 	args = args.args;
-
-		// 	function delayExec(command) {
-		// 		setTimeout(() => {
-		// 			app().vorpal().exec(command);
-		// 		}, 100);
-		// 	}
-
-		// 	if (!args.length) {
-		// 		end();
-		// 		delayExec('help');
-		// 		return;
-		// 	}
-
-		// 	let commandName = args.splice(0, 1);
-
-		// 	let aliases = Setting.value('aliases').trim();
-		// 	aliases = aliases.length ? JSON.parse(aliases) : [];
-
-		// 	for (let i = 0; i < aliases.length; i++) {
-		// 		const alias = aliases[i];
-		// 		if (alias.name == commandName) {
-		// 			let command = alias.command + ' ' + app().shellArgsToString(args);
-		// 			end();
-		// 			delayExec(command);
-		// 			return;
-		// 		}
-		// 	}
-
-		// 	this.log(_("Invalid command. Showing help:"));
-		// 	end();			
-		// 	delayExec('help');
-		// });
-	}
-
-	async synchronizer(syncTarget, options = null) {
-		if (!options) options = {};
-		if (this.synchronizers_[syncTarget]) return this.synchronizers_[syncTarget];
-
-		let fileApi = null;
-
-		// TODO: create file api based on syncTarget
-
-		if (syncTarget == 'onedrive') {
-
-			const oneDriveApi = reg.oneDriveApi();
-			let driver = new FileApiDriverOneDrive(oneDriveApi);
-			let auth = Setting.value('sync.onedrive.auth');
-
-			if (!oneDriveApi.auth()) {
-				const oneDriveApiUtils = new OneDriveApiNodeUtils(oneDriveApi);
-				auth = await oneDriveApiUtils.oauthDance(this.vorpal());
-				Setting.setValue('sync.onedrive.auth', auth ? JSON.stringify(auth) : auth);
-				if (!auth) return;
-			}
-
-			let appDir = await oneDriveApi.appDirectory();
-			this.logger_.info('App dir: ' + appDir);
-			fileApi = new FileApi(appDir, driver);
-			fileApi.setLogger(this.logger_);
-
-		} else if (syncTarget == 'memory') {
-
-			fileApi = new FileApi('joplin', new FileApiDriverMemory());
-			fileApi.setLogger(this.logger_);
-
-		} else if (syncTarget == 'filesystem') {
-
-			let syncDir = options['sync.filesystem.path'] ? options['sync.filesystem.path'] : Setting.value('sync.filesystem.path');
-			if (!syncDir) syncDir = Setting.value('profileDir') + '/sync';
-			this.vorpal().log(_('Synchronizing with directory "%s"', syncDir));
-			await fs.mkdirp(syncDir, 0o755);
-			fileApi = new FileApi(syncDir, new FileApiDriverLocal());
-			fileApi.setLogger(this.logger_);
-
-		} else {
-
-			throw new Error('Unknown backend: ' + syncTarget);
-			
-		}
-
-		this.synchronizers_[syncTarget] = new Synchronizer(this.database_, fileApi, Setting.value('appType'));
-		this.synchronizers_[syncTarget].setLogger(this.syncLogger_);
-
-		return this.synchronizers_[syncTarget];
 	}
 
 	async start() {
@@ -380,12 +290,10 @@ class Application {
 		this.logger_.setLevel(initArgs.logLevel);
 
 		reg.setLogger(this.logger_);
+		reg.dispatch = (o) => {}
 
 		this.dbLogger_.addTarget('file', { path: profileDir + '/log-database.txt' });
 		this.dbLogger_.setLevel(initArgs.logLevel);
-
-		this.syncLogger_.addTarget('file', { path: profileDir + '/log-sync.txt' });
-		this.syncLogger_.setLevel(initArgs.logLevel);
 
 		const packageJson = require('./package.json');
 		this.logger_.info(sprintf('Starting %s %s (%s)...', packageJson.name, packageJson.version, Setting.value('env')));
@@ -394,7 +302,10 @@ class Application {
 		this.database_ = new JoplinDatabase(new DatabaseDriverNode());
 		this.database_.setLogger(this.dbLogger_);
 		await this.database_.open({ name: profileDir + '/database.sqlite' });
+
+		reg.setDb(this.database_);
 		BaseModel.db_ = this.database_;
+
 		await Setting.load();
 
 		setLocale(Setting.value('locale'));

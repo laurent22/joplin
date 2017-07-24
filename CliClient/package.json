@@ -20,6 +20,7 @@
     "jssha": "^2.3.0",
     "levenshtein": "^1.0.5",
     "lodash": "^4.17.4",
+    "md5": "^2.2.1",
     "mkdirp": "^0.5.1",
     "moment": "^2.18.1",
     "moment-timezone": "^0.5.13",

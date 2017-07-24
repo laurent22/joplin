@@ -17,8 +17,6 @@ process.on('unhandledRejection', (reason, p) => {
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 9000; // The first test is slow because the database needs to be built
 
-const syncTargetId = Database.enumId('syncTarget', 'memory');
-
 async function allItems() {
 	let folders = await Folder.all();
 	let notes = await Note.all();

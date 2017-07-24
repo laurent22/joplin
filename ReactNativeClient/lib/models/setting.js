@@ -166,7 +166,11 @@ Setting.defaults_ = {
 	'activeFolderId': { value: '', type: 'string', public: false },
 	'sync.onedrive.auth': { value: '', type: 'string', public: false },
 	'sync.filesystem.path': { value: '', type: 'string', public: true, appTypes: ['cli'] },
-	'sync.target': { value: 'onedrive', type: 'string', public: true, label: () => _('Synchronisation target') },
+	'sync.target': { value: 'onedrive', type: 'enum', public: true, label: () => _('Synchronisation target'), options: () => ({
+		1: 'Memory',
+		2: _('File system'),
+		3: _('OneDrive'),
+	})},
 	'sync.context': { value: '', type: 'string', public: false },
 	'editor': { value: '', type: 'string', public: true, appTypes: ['cli'] },
 	'locale': { value: 'en_GB', type: 'string', public: true },
