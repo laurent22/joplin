@@ -46,7 +46,7 @@ class ItemListComponent extends Component {
 		for (let i = 0; i < notes.length; i++) {
 			const note = notes[i];
 			if (note.is_todo) {
-				if (todoFilter == 'recent' && note.updated_time < notRecentTime) continue;
+				if (todoFilter == 'recent' && note.updated_time < notRecentTime && !!note.todo_completed) continue;
 				if (todoFilter == 'nonCompleted' && !!note.todo_completed) continue;
 			}
 			output.push(note);
