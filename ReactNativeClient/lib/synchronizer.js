@@ -148,17 +148,21 @@ class Synchronizer {
 
 	async start(options = null) {
 		if (!options) options = {};
+
+		if (this.state() != 'idle') {
+			let error = new Error(_('Synchronization is already in progress. State: %s', this.state()));
+			error.code = 'alreadyStarted';
+			throw error;
+			//this.logger().info('Synchronization is already in progress. State: ' + this.state());
+			return;
+		}	
+
 		this.onProgress_ = options.onProgress ? options.onProgress : function(o) {};
 		this.progressReport_ = { errors: [] };
 
 		const lastContext = options.context ? options.context : {};
 
 		const syncTargetId = this.api().syncTargetId();
-
-		if (this.state() != 'idle') {
-			this.logger().info('Synchronization is already in progress. State: ' + this.state());
-			return;
-		}	
 
 		this.randomFailureChoice_ = Math.floor(Math.random() * 5);
 		this.cancelling_ = false;

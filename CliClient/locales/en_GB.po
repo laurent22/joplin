@@ -70,6 +70,9 @@ msgid ""
 "current configuration."
 msgstr ""
 
+msgid "Also displays hidden config variables."
+msgstr ""
+
 #, javascript-format
 msgid "%s = %s (%s)"
 msgstr ""
@@ -322,6 +325,10 @@ msgstr ""
 
 #, javascript-format
 msgid "Completed: %s"
+msgstr ""
+
+#, javascript-format
+msgid "Synchronization is already in progress. State: %s"
 msgstr ""
 
 msgid "Conflicts"

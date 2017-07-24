@@ -13,6 +13,12 @@ class Command extends BaseCommand {
 		return _("Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.");
 	}
 
+	options() {
+		return [
+			['-v, --verbose', _('Also displays hidden config variables.')],
+		];
+	}
+
 	async action(args) {
 
 		const renderKeyValue = (name) => {
@@ -25,7 +31,7 @@ class Command extends BaseCommand {
 		}
 
 		if (!args.name && !args.value) {
-			let keys = Setting.publicKeys();
+			let keys = args.options.verbose ? Setting.keys() : Setting.publicKeys();
 			for (let i = 0; i < keys.length; i++) {
 				this.log(renderKeyValue(keys[i]));
 			}

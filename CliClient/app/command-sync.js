@@ -1,6 +1,7 @@
 import { BaseCommand } from './base-command.js';
 import { app } from './app.js';
 import { _ } from 'lib/locale.js';
+import { OneDriveApiNodeUtils } from './onedrive-api-node-utils.js';
 import { Setting } from 'lib/models/setting.js';
 import { BaseItem } from 'lib/models/base-item.js';
 import { vorpalUtils } from './vorpal-utils.js';
@@ -74,6 +75,13 @@ class Command extends BaseCommand {
 		try {
 			this.syncTarget_ = Setting.value('sync.target');
 			if (args.options.target) this.syncTarget_ = args.options.target;
+
+			if (this.syncTarget_ == Setting.SYNC_TARGET_ONEDRIVE && !reg.oneDriveApi().auth()) {
+				const oneDriveApiUtils = new OneDriveApiNodeUtils(reg.oneDriveApi());
+				const auth = await oneDriveApiUtils.oauthDance(this);
+				Setting.setValue('sync.3.auth', auth ? JSON.stringify(auth) : null);
+				if (!auth) return;
+			}
 			
 			let sync = await reg.synchronizer(this.syncTarget_);
 
@@ -98,8 +106,17 @@ class Command extends BaseCommand {
 			let context = Setting.value('sync.context');
 			context = context ? JSON.parse(context) : {};
 			options.context = context;
-			let newContext = await sync.start(options);
-			Setting.setValue('sync.context', JSON.stringify(newContext));
+
+			try {
+				let newContext = await sync.start(options);
+				Setting.setValue('sync.context', JSON.stringify(newContext));
+			} catch (error) {
+				if (error.code == 'alreadyStarted') {
+					this.log(error.message);
+				} else {
+					throw error;
+				}
+			}
 			
 			vorpalUtils.redrawDone();
 

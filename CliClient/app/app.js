@@ -1,8 +1,3 @@
-import { FileApi } from 'lib/file-api.js';
-import { FileApiDriverOneDrive } from 'lib/file-api-driver-onedrive.js';
-import { FileApiDriverMemory } from 'lib/file-api-driver-memory.js';
-import { FileApiDriverLocal } from 'lib/file-api-driver-local.js';
-import { OneDriveApiNodeUtils } from './onedrive-api-node-utils.js';
 import { JoplinDatabase } from 'lib/joplin-database.js';
 import { Database } from 'lib/database.js';
 import { DatabaseDriverNode } from 'lib/database-driver-node.js';
@@ -325,6 +320,11 @@ class Application {
 			let cmd = this.shellArgsToString(argv);
 			await this.vorpal().exec(cmd);
 		} else {
+
+			setInterval(() => {
+				reg.scheduleSync(1);
+			}, 1000 * 5);//60 * 5);
+
 			this.updatePrompt();
 			this.vorpal().show();
 			this.vorpal().history(Setting.value('appId')); // Enables persistent history

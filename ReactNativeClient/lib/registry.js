@@ -115,12 +115,20 @@ reg.scheduleSync = async (delay = null) => {
 			return;
 		}
 
-		const sync = await reg.synchronizer();
+		const sync = await reg.synchronizer(Setting.value('sync.target'));
 
 		let context = Setting.value('sync.context');
 		context = context ? JSON.parse(context) : {};
-		let newContext = await sync.start({ context: context });
-		Setting.setValue('sync.context', JSON.stringify(newContext));
+		try {
+			let newContext = await sync.start({ context: context });
+			Setting.setValue('sync.context', JSON.stringify(newContext));
+		} catch (error) {
+			if (error.code == 'alreadyStarted') {
+				reg.logger.info(error.message);
+			} else {
+				throw error;
+			}
+		}
 	}, delay);
 }
 

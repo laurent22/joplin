@@ -76,6 +76,9 @@ msgstr ""
 "fournie, la valeur de [nom] est affichée. Si ni le [nom] ni la [valeur] ne "
 "sont fournies, la configuration complète est affichée."
 
+msgid "Also displays hidden config variables."
+msgstr ""
+
 #, fuzzy, javascript-format
 msgid "%s = %s (%s)"
 msgstr "%s %s (%s)"
@@ -359,6 +362,10 @@ msgstr "Dernière erreur : %s (Plus d'information dans le journal d'erreurs)"
 #, javascript-format
 msgid "Completed: %s"
 msgstr "Terminé : %s"
+
+#, fuzzy, javascript-format
+msgid "Synchronization is already in progress. State: %s"
+msgstr "Synchronisation est déjà en cours."
 
 msgid "Conflicts"
 msgstr "Conflits"
