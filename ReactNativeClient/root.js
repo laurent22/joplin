@@ -409,16 +409,16 @@ async function initialize(dispatch, backButtonHandler) {
 		let folderId = Setting.value('activeFolderId');
 		let folder = await Folder.load(folderId);
 
-		dispatch({
-			type: 'Navigation/NAVIGATE',
-			routeName: 'Config',
-		});
+		// dispatch({
+		// 	type: 'Navigation/NAVIGATE',
+		// 	routeName: 'Config',
+		// });
 
-		// if (folder) {
-		// 	await NotesScreenUtils.openNoteList(folderId);
-		// } else {
-		// 	await NotesScreenUtils.openDefaultNoteList();
-		// }
+		if (folder) {
+			await NotesScreenUtils.openNoteList(folderId);
+		} else {
+			await NotesScreenUtils.openDefaultNoteList();
+		}
 	} catch (error) {
 		reg.logger().error('Initialization error:', error);
 	}
@@ -429,7 +429,7 @@ async function initialize(dispatch, backButtonHandler) {
 
 	PoorManIntervals.setInterval(() => {
 		reg.logger().info('Running background sync on timer...');
-		reg.scheduleSync(1);
+		reg.scheduleSync(0);
 	}, 1000 * 60 * 5);
 
 	if (Setting.value('env') == 'dev') {

@@ -50,6 +50,7 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 			try {
 				await reg.oneDriveApi().execTokenRequest(this.authCode_, this.redirectUrl(), true);
 				this.props.dispatch({ type: 'Navigation/BACK' });
+				reg.scheduleSync(0);
 			} catch (error) {
 				alert(error.message);
 			}

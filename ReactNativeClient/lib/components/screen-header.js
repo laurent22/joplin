@@ -243,7 +243,7 @@ class ScreenHeaderComponent extends Component {
 					</Picker>
 				);
 			} else {
-				let title = 'title' in this.props && this.props.title !== null ? this.props.title : _(this.props.navState.routeName);
+				let title = 'title' in this.props && this.props.title !== null ? this.props.title : '';
 				return <Text style={styles.titleText}>{title}</Text>
 			}
 		}

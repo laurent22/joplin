@@ -71,6 +71,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			showNoteMetadata: false,
 			folder: null,
 			lastSavedNote: null,
+			isLoading: true,
 		};
 
 		this.saveButtonHasBeenShown_ = false;
@@ -116,6 +117,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			note: note,
 			mode: mode,
 			folder: await Folder.load(note.parent_id),
+			isLoading: false,
 		});
 
 		this.refreshNoteMetadata();
@@ -270,9 +272,18 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	render() {
+		if (this.state.isLoading) {
+			return (
+				<View style={this.styles().screen}>
+					<ScreenHeader navState={this.props.navigation.state}/>
+				</View>
+			);
+		}
+
 		const note = this.state.note;
 		const isTodo = !!Number(note.is_todo);
 		const folder = this.state.folder;
+		const isNew = !note.id;
 
 		let bodyComponent = null;
 		if (this.state.mode == 'view') {
@@ -395,10 +406,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 				</View>
 			);
 		} else {
+			const focusBody = !isNew && !!note.title;
 			bodyComponent = (
 				<TextInput
 					autoCapitalize="sentences"
-					autoFocus={true}
+					autoFocus={focusBody}
 					style={styles.bodyTextInput}
 					multiline={true}
 					value={note.body}
@@ -478,7 +490,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					onSaveButtonPress={() => this.saveNoteButton_press()}
 				/>
 				<View style={titleContainerStyle}>
-					{ isTodo && <Checkbox checked={!!Number(note.todo_completed)} onChange={(checked) => { this.todoCheckbox_change(checked) }} /> }<TextInput underlineColorAndroid="#ffffff00" autoCapitalize="sentences" style={styles.titleTextInput} value={note.title} onChangeText={(text) => this.title_changeText(text)} />
+					{ isTodo && <Checkbox checked={!!Number(note.todo_completed)} onChange={(checked) => { this.todoCheckbox_change(checked) }} /> }<TextInput autoFocus={isNew} underlineColorAndroid="#ffffff00" autoCapitalize="sentences" style={styles.titleTextInput} value={note.title} onChangeText={(text) => this.title_changeText(text)} />
 				</View>
 				{ bodyComponent }
 				{ actionButtonComp }
