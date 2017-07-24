@@ -70,7 +70,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 
 			reg.scheduleSync();
 		} catch (error) {
-			dialogs.error(this, _('The folder could not be saved: %s', error.message));
+			dialogs.error(this, _('The notebook could not be saved: %s', error.message));
 			return;
 		}
 

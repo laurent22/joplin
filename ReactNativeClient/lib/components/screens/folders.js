@@ -18,7 +18,7 @@ class FoldersScreenComponent extends BaseScreenComponent {
 		return (
 			<View style={this.styles().screen}>
 				<ScreenHeader navState={this.props.navigation.state} />
-				<FolderList noItemMessage={_('There is currently no notebook. Create one by clicking on the (+) button.')} style={{flex: 1}}/>
+				<FolderList noItemMessage={'There is currently no notebook. Create one by clicking on the (+) button.'} style={{flex: 1}}/>
 				<ActionButton addFolderNoteButtons={true}></ActionButton>
 			</View>
 		);

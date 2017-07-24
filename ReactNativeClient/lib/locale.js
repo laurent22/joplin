@@ -178,7 +178,13 @@ let supportedLocales_ = null;
 
 let loadedLocales_ = {};
 
-let currentLocale_ = 'en_GB';
+const defaultLocale_ = 'en_GB';
+
+let currentLocale_ = defaultLocale_;
+
+function defaultLocale() {
+	return defaultLocale_;
+}
 
 function supportedLocales() {
 	if (!supportedLocales_) supportedLocales_ = require('../locales/index.js').locales;
@@ -187,6 +193,16 @@ function supportedLocales() {
 	for (let n in supportedLocales_) {
 		if (!supportedLocales_.hasOwnProperty(n)) continue;
 		output.push(n);
+	}
+	return output;
+}
+
+function supportedLocalesToLanguages() {
+	const locales = supportedLocales();
+	let output = {};
+	for (let i = 0; i < locales.length; i++) {
+		const locale = locales[i];
+		output[locale] = countryDisplayName(locale);
 	}
 	return output;
 }
@@ -210,18 +226,15 @@ function countryName(countryCode) {
 	return codeToCountry_[countryCode] ? codeToCountry_[countryCode] : '';
 }
 
-
 function languageNameInEnglish(languageCode) {
 	return codeToLanguageE_[languageCode] ? codeToLanguageE_[languageCode] : '';
 }
-
 
 function languageName(languageCode, defaultToEnglish = true) {
 	if (codeToLanguage_[languageCode]) return codeToLanguage_[languageCode];
 	if (defaultToEnglish) return languageNameInEnglish(languageCode)
 	return '';
 }
-
 
 function languageCodeOnly(canonicalName) {
 	if (canonicalName.length < 2) return canonicalName;
@@ -279,4 +292,4 @@ function _(s, ...args) {
 	return sprintf(result, ...args);
 }
 
-export { _, supportedLocales, localeStrings, setLocale };
+export { _, supportedLocales, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale };

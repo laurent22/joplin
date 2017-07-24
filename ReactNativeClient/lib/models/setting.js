@@ -1,6 +1,6 @@
 import { BaseModel } from 'lib/base-model.js';
 import { Database } from 'lib/database.js';
-import { _ } from 'lib/locale.js';
+import { _, supportedLocalesToLanguages, defaultLocale } from 'lib/locale.js';
 
 class Setting extends BaseModel {
 
@@ -239,7 +239,9 @@ Setting.metadata_ = {
 	}},
 	'sync.context': { value: '', type: 'string', public: false },
 	'editor': { value: '', type: 'string', public: true, appTypes: ['cli'] },
-	'locale': { value: 'en_GB', type: 'string', public: true },
+	'locale': { value: defaultLocale(), type: 'enum', public: true, label: () => _('Language'), options: () => {
+		return supportedLocalesToLanguages();
+	}},
 	'todoFilter': { value: 'all', type: 'enum', public: true, appTypes: ['mobile'], label: () => _('Todo filter'), options: () => ({
 		all: _('Show all'),
 		recent: _('Non-completed and recently completed ones'),

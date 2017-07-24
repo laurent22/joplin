@@ -49,11 +49,6 @@ msgstr ""
 msgid "No notebook is defined. Create one with `mkbook <notebook>`."
 msgstr ""
 
-msgid ""
-"Creates a new command alias which can then be used as a regular command (eg. "
-"`alias ll \"ls -l\"`)."
-msgstr ""
-
 msgid "Displays the given note."
 msgstr ""
 
@@ -370,6 +365,9 @@ msgstr ""
 msgid "OneDrive"
 msgstr ""
 
+msgid "Language"
+msgstr ""
+
 msgid "Todo filter"
 msgstr ""
 
@@ -432,15 +430,8 @@ msgstr ""
 msgid "Cancel synchronization"
 msgstr ""
 
-msgid "Save"
-msgstr ""
-
 #, javascript-format
-msgid "The folder could not be saved: %s"
-msgstr ""
-
-msgid ""
-"There is currently no notebook. Create one by clicking on the (+) button."
+msgid "The notebook could not be saved: %s"
 msgstr ""
 
 msgid "Untitled"

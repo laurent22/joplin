@@ -30,6 +30,7 @@
 				"*.po",
 				"*.pot",
 				"locales/*.json",
+				"ReactNativeClient/locales/*",
 			]
 		}
 	]

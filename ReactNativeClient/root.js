@@ -395,9 +395,8 @@ async function initialize(dispatch, backButtonHandler) {
 		reg.logger().info('Database is ready.');
 		reg.logger().info('Loading settings...');
 		await Setting.load();
-
-		// Setting.setValue('locale', 'fr_FR');
-		// setLocale(Setting.value('locale'));
+		
+		setLocale(Setting.value('locale'));
 
 		reg.logger().info('Loading folders...');
 
@@ -410,16 +409,16 @@ async function initialize(dispatch, backButtonHandler) {
 		let folderId = Setting.value('activeFolderId');
 		let folder = await Folder.load(folderId);
 
-		// dispatch({
-		// 	type: 'Navigation/NAVIGATE',
-		// 	routeName: 'Config',
-		// });
+		dispatch({
+			type: 'Navigation/NAVIGATE',
+			routeName: 'Config',
+		});
 
-		if (folder) {
-			await NotesScreenUtils.openNoteList(folderId);
-		} else {
-			await NotesScreenUtils.openDefaultNoteList();
-		}
+		// if (folder) {
+		// 	await NotesScreenUtils.openNoteList(folderId);
+		// } else {
+		// 	await NotesScreenUtils.openDefaultNoteList();
+		// }
 	} catch (error) {
 		reg.logger().error('Initialization error:', error);
 	}

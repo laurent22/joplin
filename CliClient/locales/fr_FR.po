@@ -13,7 +13,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.0.3\n"
 
 msgid "No notebook selected."
 msgstr "Aucun carnet n'est sélectionné."
@@ -51,11 +51,6 @@ msgstr "Quitter le logiciel."
 msgid "No notebook is defined. Create one with `mkbook <notebook>`."
 msgstr "Aucun carnet n'est défini. Créez-en un avec `mkbook <carnet>`."
 
-msgid ""
-"Creates a new command alias which can then be used as a regular command (eg. "
-"`alias ll \"ls -l\"`)."
-msgstr ""
-
 msgid "Displays the given note."
 msgstr "Affiche la note."
 
@@ -66,7 +61,6 @@ msgstr "Affiche tous les détails de la note."
 msgid "Cannot find \"%s\"."
 msgstr "Impossible de trouver \"%s\"."
 
-#, fuzzy
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
@@ -77,15 +71,15 @@ msgstr ""
 "sont fournies, la configuration complète est affichée."
 
 msgid "Also displays hidden config variables."
-msgstr ""
+msgstr "Afficher également les variables cachées."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s = %s (%s)"
-msgstr "%s %s (%s)"
+msgstr "%s = %s (%s)"
 
 #, javascript-format
 msgid "%s = %s"
-msgstr ""
+msgstr "%s = %s"
 
 msgid ""
 "Duplicates the notes matching <pattern> to [notebook]. If no notebook is "
@@ -114,9 +108,8 @@ msgstr ""
 "Edition de la note en cours. Fermez l'éditeur de texte pour retourner à "
 "l'invite de commande."
 
-#, fuzzy
 msgid "Displays a geolocation URL for the note."
-msgstr "Affiche tous les détails de la note."
+msgstr "Afficher l'URL de l'emplacement de la note."
 
 msgid "Imports an Evernote notebook file (.enex file)."
 msgstr "Importer un carnet Evernote (fichier .enex)."
@@ -294,7 +287,7 @@ msgstr ""
 "Changer de carnet - toutes les opérations à venir se feront dans ce carnet."
 
 msgid "Displays version information"
-msgstr "Affiche les informations de version."
+msgstr "Affiche les informations de version"
 
 #, javascript-format
 msgid "%s %s (%s)"
@@ -316,16 +309,17 @@ msgstr "Le logiciel a été autorisé. Vous pouvez maintenant fermer cet onglet.
 msgid "The application has been successfully authorised."
 msgstr "Le logiciel a été autorisé."
 
-#, fuzzy
 msgid "Please open this URL in your browser to authenticate the application:"
 msgstr ""
-"Veuillez ouvrir cette URL dans votre navigateur internet pour autentifier le "
-"logiciel :"
+"Veuillez ouvrir cette URL dans votre navigateur internet pour authentifier "
+"le logiciel :"
 
 msgid ""
 "Please set the \"sync.2.path\" config value to the desired synchronisation "
 "destination."
 msgstr ""
+"Veuillez attribuer une valeur au paramètre de configuration \"sync.2.path\" "
+"pour indiquer le dossier où devra se faire la synchronisation."
 
 #, javascript-format
 msgid "Created local items: %d."
@@ -363,9 +357,9 @@ msgstr "Dernière erreur : %s (Plus d'information dans le journal d'erreurs)"
 msgid "Completed: %s"
 msgstr "Terminé : %s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Synchronization is already in progress. State: %s"
-msgstr "Synchronisation est déjà en cours."
+msgstr "Synchronisation est déjà en cours. Etat : %s"
 
 msgid "Conflicts"
 msgstr "Conflits"
@@ -379,7 +373,7 @@ msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Les carnets ne peuvent être nommés \"%s\" car c'est un nom réservé."
 
 msgid "This note does not have geolocation information."
-msgstr ""
+msgstr "Cette note n'a pas d'information d'emplacement."
 
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
@@ -391,33 +385,35 @@ msgstr "Impossible de déplacer la note vers le carnet \"%s\""
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr ""
+msgstr "Option invalide: \"%s\". Les valeurs possibles sont : %s."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s (%s)"
-msgstr "%s %s (%s)"
+msgstr "%s (%s)"
 
-#, fuzzy
 msgid "Synchronisation target"
-msgstr "Cible de la synchronisation : %s"
+msgstr "Cible de la synchronisation"
 
 msgid "File system"
-msgstr ""
+msgstr "Système de fichier"
 
 msgid "OneDrive"
-msgstr ""
+msgstr "OneDrive"
+
+msgid "Language"
+msgstr "Langue"
 
 msgid "Todo filter"
-msgstr ""
+msgstr "Filtre des tâches"
 
 msgid "Show all"
-msgstr ""
+msgstr "Afficher tous"
 
 msgid "Non-completed and recently completed ones"
-msgstr ""
+msgstr "Tâches non-complétées et récentes"
 
 msgid "Non-completed ones only"
-msgstr ""
+msgstr "Tâche complétée seulement"
 
 msgid "Sync status (synced items / total items)"
 msgstr "Status de la synchronisation (objets synchro. / total)"
@@ -446,97 +442,94 @@ msgid "%s: %d notes"
 msgstr "%s : %d notes"
 
 msgid "New todo"
-msgstr ""
+msgstr "Nouvelle tâche"
 
 msgid "New note"
-msgstr ""
+msgstr "Nouvelle note"
 
-#, fuzzy
 msgid "New notebook"
-msgstr "Supprime le carnet."
+msgstr "Nouveau carnet"
 
 msgid "Log"
-msgstr ""
+msgstr "Journal"
 
-#, fuzzy
 msgid "Status"
-msgstr "Etat : %s."
+msgstr "Etat"
 
 msgid "Configuration"
-msgstr ""
+msgstr "Configuration"
 
 msgid "Synchronize"
-msgstr ""
+msgstr "Synchroniser"
 
-#, fuzzy
 msgid "Cancel synchronization"
-msgstr "Commencement de la synchronisation..."
+msgstr "Annuler synchronisation"
 
-msgid "Save"
-msgstr ""
-
-#, javascript-format
-msgid "The folder could not be saved: %s"
-msgstr ""
-
-msgid ""
-"There is currently no notebook. Create one by clicking on the (+) button."
-msgstr ""
+#, fuzzy, javascript-format
+msgid "The notebook could not be saved: %s"
+msgstr "Ce carnet n'a pas pu être sauvegardé : %s"
 
 msgid "Untitled"
-msgstr ""
+msgstr "Sans titre"
 
-#, fuzzy
 msgid "Delete note?"
-msgstr "Supprimer le carnet \"%s\" ?"
+msgstr "Supprimer la note ?"
 
 msgid "Attach file"
-msgstr ""
+msgstr "Attacher un fichier"
 
-#, fuzzy
 msgid "Delete note"
-msgstr "Supprime le carnet."
+msgstr "Supprimer la note"
 
 msgid "Convert to regular note"
-msgstr ""
+msgstr "Convertir en note"
 
 msgid "Convert to todo"
-msgstr ""
+msgstr "Convertir en tâche"
 
 msgid "Hide metadata"
-msgstr ""
+msgstr "Cacher les métadonnées"
 
 msgid "Show metadata"
-msgstr ""
+msgstr "Afficher les métadonnées"
 
 msgid "View location on map"
-msgstr ""
+msgstr "Voir l'emplacement sur une carte"
 
 msgid "Edit"
-msgstr ""
+msgstr "Editer"
 
-#, fuzzy
 msgid "Delete notebook?"
-msgstr "Supprimer le carnet \"%s\" ?"
+msgstr "Supprimer le carnet ?"
 
-#, fuzzy
 msgid "Delete notebook"
-msgstr "Supprime le carnet."
+msgstr "Supprimer le carnet"
 
-#, fuzzy
 msgid "Edit notebook"
-msgstr "Editer la note."
+msgstr "Editer le carnet"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
+"Ce carnet ne contient aucune note. Créez-en une en cliquant sur le bouton "
+"(+)."
 
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
 msgstr ""
+"Cliquez sur le bouton (+) pour une nouvelle note ou carnet. Ouvrez le menu "
+"latéral pour accéder à vos carnets."
 
 msgid "You currently have no notebook. Create one by clicking on (+) button."
 msgstr ""
+"Vous n'avez pour l'instant pas de carnets. Créez-en un en pressant le bouton "
+"(+)."
+
+#~ msgid ""
+#~ "There is currently no notebook. Create one by clicking on the (+) button."
+#~ msgstr ""
+#~ "Il n'y a pour l'instant aucun carnet. Créez-en un en cliquant sur le "
+#~ "bouton (+)"
 
 #~ msgid "Synchronizing with directory \"%s\""
 #~ msgstr "Synchronisation avec dossier \"%s\""
