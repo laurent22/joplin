@@ -227,7 +227,7 @@ msgid "Synchronisation is already in progress."
 msgstr ""
 
 #, javascript-format
-msgid "Synchronization target: %s"
+msgid "Synchronization target: %s (%s)"
 msgstr ""
 
 msgid "Cannot initialize synchronizer."

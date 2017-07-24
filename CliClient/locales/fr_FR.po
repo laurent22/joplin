@@ -250,8 +250,8 @@ msgstr ""
 msgid "Synchronisation is already in progress."
 msgstr "Synchronisation est déjà en cours."
 
-#, javascript-format
-msgid "Synchronization target: %s"
+#, fuzzy, javascript-format
+msgid "Synchronization target: %s (%s)"
 msgstr "Cible de la synchronisation : %s"
 
 msgid "Cannot initialize synchronizer."

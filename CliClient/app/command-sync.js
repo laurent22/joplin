@@ -97,7 +97,7 @@ class Command extends BaseCommand {
 				randomFailures: args.options['random-failures'] === true,
 			};
 
-			this.log(_('Synchronization target: %s', this.syncTarget_));
+			this.log(_('Synchronization target: %s (%s)', Setting.enumOptionLabel('sync.target', this.syncTarget_), this.syncTarget_));
 
 			if (!sync) throw new Error(_('Cannot initialize synchronizer.'));
 
