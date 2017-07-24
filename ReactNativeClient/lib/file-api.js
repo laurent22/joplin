@@ -7,10 +7,20 @@ class FileApi {
 		this.baseDir_ = baseDir;
 		this.driver_ = driver;
 		this.logger_ = new Logger();
+		this.syncTargetId_ = null;
 	}
 
 	driver() {
 		return this.driver_;
+	}
+
+	setSyncTargetId(v) {
+		this.syncTargetId_ = v;
+	}
+
+	syncTargetId() {
+		if (this.syncTargetId_ === null) throw new Error('syncTargetId has not been set!!');
+		return this.syncTargetId_;
 	}
 
 	supportsDelta() {

@@ -9,14 +9,6 @@ class FileApiDriverOneDrive {
 		this.api_ = api;
 	}
 
-	syncTargetId() {
-		return 3;
-	}
-
-	syncTargetName() {
-		return 'onedrive';
-	}
-
 	api() {
 		return this.api_;
 	}

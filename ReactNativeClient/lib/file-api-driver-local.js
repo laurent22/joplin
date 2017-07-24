@@ -4,15 +4,20 @@ import moment from 'moment';
 import { BaseItem } from 'lib/models/base-item.js';
 import { time } from 'lib/time-utils.js';
 
+// NOTE: when synchronising with the file system the time resolution is the second (unlike milliseconds for OneDrive for instance).
+// What it means is that if, for example, client 1 changes a note at time t, and client 2 changes the same note within the same second,
+// both clients will not know about each others updates during the next sync. They will simply both sync their note and whoever
+// comes last will overwrite (on the remote storage) the note of the other client. Both client will then have a different note at
+// that point and that will only be resolved if one of them changes the note and sync (if they don't change it, it will never get resolved).
+// 
+// This is compound with the fact that we can't have a reliable delta API on the file system so we need to check all the timestamps
+// every time and rely on this exclusively to know about changes.
+//
+// This explains occasional failures of the fuzzing program (it finds that the clients end up with two different notes after sync). To
+// check that it is indeed the problem, check log-database.txt of both clients, search for the note ID, and most likely both notes
+// will have been modified at the same exact second at some point. If not, it's another bug that needs to be investigated.
+
 class FileApiDriverLocal {
-
-	syncTargetId() {
-		return 2;
-	}
-
-	syncTargetName() {
-		return 'filesystem';
-	}
 
 	fsErrorToJsError_(error) {
 		let msg = error.toString();

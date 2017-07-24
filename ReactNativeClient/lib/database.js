@@ -157,20 +157,6 @@ class Database {
 		throw new Error('Unknown enum type or value: ' + type + ', ' + s);
 	}
 
-	static enumName(type, id) {
-		if (type == 'syncTarget') {
-			if (id === 1) return 'memory';
-			if (id === 2) return 'filesystem';
-			if (id === 3) return 'onedrive';
-		}
-		throw new Error('Unknown enum type or id: ' + type + ', ' + id);
-	}
-
-	static enumIds(type) {
-		if (type == 'syncTarget') return [1,2,3];
-		throw new Error('Unknown enum type: ' + type);
-	}
-
 	static formatValue(type, value) {
 		if (value === null || value === undefined) return null;
 		if (type == this.TYPE_INT) return Number(value);

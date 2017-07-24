@@ -70,6 +70,14 @@ msgid ""
 "current configuration."
 msgstr ""
 
+#, javascript-format
+msgid "%s = %s (%s)"
+msgstr ""
+
+#, javascript-format
+msgid "%s = %s"
+msgstr ""
+
 msgid ""
 "Duplicates the notes matching <pattern> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
@@ -276,8 +284,8 @@ msgid "Please open this URL in your browser to authenticate the application:"
 msgstr ""
 
 msgid ""
-"Please set the \"sync.filesystem.path\" config value to the desired "
-"synchronisation destination."
+"Please set the \"sync.2.path\" config value to the desired synchronisation "
+"destination."
 msgstr ""
 
 #, javascript-format
@@ -336,6 +344,14 @@ msgstr ""
 
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
+msgstr ""
+
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr ""
+
+#, javascript-format
+msgid "%s (%s)"
 msgstr ""
 
 msgid "Synchronisation target"

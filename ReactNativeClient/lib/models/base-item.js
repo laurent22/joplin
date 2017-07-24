@@ -1,5 +1,6 @@
 import { BaseModel } from 'lib/base-model.js';
 import { Database } from 'lib/database.js';
+import { Setting } from 'lib/models/setting.js';
 import { time } from 'lib/time-utils.js';
 import { sprintf } from 'sprintf-js';
 import moment from 'moment';
@@ -136,7 +137,7 @@ class BaseItem extends BaseModel {
 		await super.batchDelete(ids, options);
 
 		if (trackDeleted) {
-			const syncTargetIds = Database.enumIds('syncTarget');
+			const syncTargetIds = Setting.enumOptionValues('sync.target');
 			let queries = [];
 			let now = time.unixMs();
 			for (let i = 0; i < ids.length; i++) {
@@ -313,10 +314,6 @@ class BaseItem extends BaseModel {
 			limit);
 
 			let neverSyncedItem = await ItemClass.modelSelectAll(sql);
-			//for (let i = 0; i < neverSyncedItem.length; i++) neverSyncedItem[i].sync_time = 0;
-
-			// console.info(sql);
-			// console.info('NEVER', neverSyncedItem);
 
 			// Secondly get the items that have been synced under this sync target but that have been changed since then
 
@@ -344,8 +341,6 @@ class BaseItem extends BaseModel {
 				changedItems = await ItemClass.modelSelectAll(sql);
 			}
 
-			// console.info('CHANGED', changedItems);
-
 			const items = neverSyncedItem.concat(changedItems);
 
 			if (i >= classNames.length - 1) {
@@ -353,63 +348,6 @@ class BaseItem extends BaseModel {
 			} else {
 				if (items.length) return { hasMore: true, items: items };
 			}
-
-
-
-
-			//let extraWhere = className == 'Note' ? 'AND is_conflict = 0' : '';
-
-			// First get all the items that have never been synced under this sync target
-
-			// let sql = sprintf(`
-			// 	SELECT %s FROM %s items
-			// 	LEFT JOIN sync_items t ON t.item_id = items.id
-			// 	WHERE (t.id IS NULL OR t.sync_target != %d) %s
-			// 	LIMIT %d
-			// `,
-			// this.db().escapeFields(fieldNames),
-			// this.db().escapeField(ItemClass.tableName()),
-			// Number(syncTarget),
-			// extraWhere,
-			// limit);
-
-			// let neverSyncedItem = await ItemClass.modelSelectAll(sql);
-			// for (let i = 0; i < neverSyncedItem.length; i++) neverSyncedItem[i].sync_time = 0;
-
-			// console.info(sql);
-			// console.info('NEVER', neverSyncedItem);
-
-			// // Secondly get the items that have been synced under this sync target but that have been changed since then
-
-			// const newLimit = limit - neverSyncedItem.length;
-
-			// let changedItems = [];
-
-			// if (newLimit > 0) {
-			// 	let sql = sprintf(`
-			// 		SELECT %s FROM %s items
-			// 		LEFT JOIN sync_items t ON t.item_id = items.id
-			// 		WHERE (t.sync_time < items.updated_time AND t.sync_target = %d) %s
-			// 		LIMIT %d
-			// 	`,
-			// 	this.db().escapeFields(fieldNames),
-			// 	this.db().escapeField(ItemClass.tableName()),
-			// 	Number(syncTarget),
-			// 	extraWhere,
-			// 	newLimit);
-
-			// 	changedItems = await ItemClass.modelSelectAll(sql);
-			// }
-
-			// console.info('CHANGED', changedItems);
-
-			// const items = neverSyncedItem.concat(changedItems);
-
-			// if (i >= classNames.length - 1) {
-			// 	return { hasMore: items.length >= limit, items: items };
-			// } else {
-			// 	if (items.length) return { hasMore: true, items: items };
-			// }
 		}
 
 		throw new Error('Unreachable');

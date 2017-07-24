@@ -66,6 +66,7 @@ msgstr "Affiche tous les détails de la note."
 msgid "Cannot find \"%s\"."
 msgstr "Impossible de trouver \"%s\"."
 
+#, fuzzy
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
@@ -74,6 +75,14 @@ msgstr ""
 "Obtient ou modifie une valeur de configuration. Si la [valeur] n'est pas "
 "fournie, la valeur de [nom] est affichée. Si ni le [nom] ni la [valeur] ne "
 "sont fournies, la configuration complète est affichée."
+
+#, fuzzy, javascript-format
+msgid "%s = %s (%s)"
+msgstr "%s %s (%s)"
+
+#, javascript-format
+msgid "%s = %s"
+msgstr ""
 
 msgid ""
 "Duplicates the notes matching <pattern> to [notebook]. If no notebook is "
@@ -311,8 +320,8 @@ msgstr ""
 "logiciel :"
 
 msgid ""
-"Please set the \"sync.filesystem.path\" config value to the desired "
-"synchronisation destination."
+"Please set the \"sync.2.path\" config value to the desired synchronisation "
+"destination."
 msgstr ""
 
 #, javascript-format
@@ -372,6 +381,14 @@ msgstr "Impossible de copier la note dans le carnet \"%s\""
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Impossible de déplacer la note vers le carnet \"%s\""
+
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s (%s)"
+msgstr "%s %s (%s)"
 
 #, fuzzy
 msgid "Synchronisation target"

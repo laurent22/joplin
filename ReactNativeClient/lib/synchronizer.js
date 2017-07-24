@@ -153,7 +153,7 @@ class Synchronizer {
 
 		const lastContext = options.context ? options.context : {};
 
-		const syncTargetId = this.api().driver().syncTargetId();
+		const syncTargetId = this.api().syncTargetId();
 
 		if (this.state() != 'idle') {
 			this.logger().info('Synchronization is already in progress. State: ' + this.state());
@@ -176,7 +176,7 @@ class Synchronizer {
 
 		this.dispatch({ type: 'SYNC_STARTED' });
 
-		this.logSyncOperation('starting', null, null, 'Starting synchronization to ' + this.api().driver().syncTargetName() + ' (' + syncTargetId + ')... [' + synchronizationId + ']');
+		this.logSyncOperation('starting', null, null, 'Starting synchronization to target ' + syncTargetId + '... [' + synchronizationId + ']');
 
 		try {
 			await this.api().mkdir(this.syncDirName_);

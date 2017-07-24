@@ -16,7 +16,7 @@ class Command extends BaseCommand {
 
 	async action(args) {
 		let service = new ReportService();
-		let report = await service.status(Database.enumId('syncTarget', Setting.value('sync.target')));
+		let report = await service.status(Setting.value('sync.target'));
 
 		for (let i = 0; i < report.length; i++) {
 			let section = report[i];

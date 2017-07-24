@@ -34,10 +34,10 @@ reg.oneDriveApi = () => {
 
 	reg.oneDriveApi_.on('authRefreshed', (a) => {
 		reg.logger().info('Saving updated OneDrive auth.');
-		Setting.setValue('sync.onedrive.auth', a ? JSON.stringify(a) : null);
+		Setting.setValue('sync.3.auth', a ? JSON.stringify(a) : null);
 	});
 
-	let auth = Setting.value('sync.onedrive.auth');
+	let auth = Setting.value('sync.3.auth');
 	if (auth) {
 		try {
 			auth = JSON.parse(auth);
@@ -61,20 +61,20 @@ reg.synchronizer = async (syncTargetId) => {
 
 	let fileApi = null;
 
-	if (syncTargetId == 'onedrive') {
+	if (syncTargetId == Setting.SYNC_TARGET_ONEDRIVE) {
 
 		if (!reg.oneDriveApi().auth()) throw new Error('User is not authentified');
 		let appDir = await reg.oneDriveApi().appDirectory();
 		fileApi = new FileApi(appDir, new FileApiDriverOneDrive(reg.oneDriveApi()));
 
-	} else if (syncTargetId == 'memory') {
+	} else if (syncTargetId == Setting.SYNC_TARGET_MEMORY) {
 
 		fileApi = new FileApi('joplin', new FileApiDriverMemory());
 
-	} else if (syncTargetId == 'filesystem') {
+	} else if (syncTargetId == Setting.SYNC_TARGET_FILESYSTEM) {
 
-		let syncDir = Setting.value('sync.filesystem.path');
-		if (!syncDir) throw new Error(_('Please set the "sync.filesystem.path" config value to the desired synchronisation destination.'));
+		let syncDir = Setting.value('sync.2.path');
+		if (!syncDir) throw new Error(_('Please set the "sync.2.path" config value to the desired synchronisation destination.'));
 		await shim.fs.mkdirp(syncDir, 0o755);
 		fileApi = new FileApi(syncDir, new shim.FileApiDriverLocal());
 
@@ -84,6 +84,7 @@ reg.synchronizer = async (syncTargetId) => {
 
 	}
 
+	fileApi.setSyncTargetId(syncTargetId);
 	fileApi.setLogger(reg.logger());
 
 	let sync = new Synchronizer(reg.db(), fileApi, Setting.value('appType'));
