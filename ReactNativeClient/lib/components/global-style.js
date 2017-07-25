@@ -5,7 +5,7 @@ const globalStyle = {
 	colorFaded: "#777777", // For less important text
 	fontSize: 10,
 	dividerColor: "#dddddd",
-	selectedColor: '#eeeeee',
+	selectedColor: '#e5e5e5',
 	disabledOpacity: 0.3,
 
 	// For WebView - must correspond to the properties above

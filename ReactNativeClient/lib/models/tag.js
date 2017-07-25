@@ -21,7 +21,7 @@ class Tag extends BaseItem {
 		return super.serialize(item, 'tag', fieldNames);
 	}
 
-	static async tagNoteIds(tagId) {
+	static async noteIds(tagId) {
 		let rows = await this.db().selectAll('SELECT note_id FROM note_tags WHERE tag_id = ?', [tagId]);
 		let output = [];
 		for (let i = 0; i < rows.length; i++) {
@@ -31,7 +31,7 @@ class Tag extends BaseItem {
 	}
 
 	static async notes(tagId) {
-		let noteIds = await this.tagNoteIds(tagId);
+		let noteIds = await this.noteIds(tagId);
 		if (!noteIds.length) return [];
 
 		return Note.search({

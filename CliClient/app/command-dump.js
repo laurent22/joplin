@@ -31,7 +31,7 @@ class Command extends BaseCommand {
 
 		let tags = await Tag.all();
 		for (let i = 0; i < tags.length; i++) {
-			tags[i].notes_ = await Tag.tagNoteIds(tags[i].id);
+			tags[i].notes_ = await Tag.noteIds(tags[i].id);
 		}
 
 		items = items.concat(tags);

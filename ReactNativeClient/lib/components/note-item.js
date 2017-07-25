@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { ListView, Text, TouchableHighlight, Switch, View, StyleSheet } from 'react-native';
+import { ListView, Text, TouchableHighlight, View, StyleSheet } from 'react-native';
 import { Log } from 'lib/log.js';
 import { _ } from 'lib/locale.js';
 import { Checkbox } from 'lib/components/checkbox.js';
@@ -39,10 +39,29 @@ class NoteItemComponent extends Component {
 		});
 	}
 
+	async todoCheckbox_change(checked) {	
+		if (!this.props.note) return;
+
+		const newNote = {
+			id: this.props.note.id,
+			todo_completed: checked ? time.unixMs() : 0,
+		}
+		await Note.save(newNote);
+	}
+
+	onPress() {
+		if (!this.props.note) return;
+
+		this.props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Note',
+			noteId: this.props.note.id,
+		});
+	}
+
 	render() {
 		const note = this.props.note ? this.props.note : {};
 		const onPress = this.props.onPress;
-		const onLongPress = this.props.onLongPress;
 		const onCheckboxChange = this.props.onCheckboxChange;
 
 		const checkboxStyle = !Number(note.is_todo) ? { display: 'none' } : { color: globalStyle.color };
@@ -51,9 +70,14 @@ class NoteItemComponent extends Component {
 		const listItemStyle = !!Number(note.is_todo) && checkboxChecked ? styles.listItemFadded : styles.listItem;
 
 		return (
-			<TouchableHighlight onPress={() => onPress ? onPress(note) : this.noteItem_press(note.id)} onLongPress={() => onLongPress(note)} underlayColor="#0066FF">
+			<TouchableHighlight onPress={() => this.onPress()} underlayColor="#0066FF">
 				<View style={ listItemStyle }>
-					<Checkbox style={checkboxStyle} checked={checkboxChecked} onChange={(checked) => { onCheckboxChange(note, checked) }}/><Text style={styles.listItemText}>{note.title}</Text>
+					<Checkbox
+						style={checkboxStyle}
+						checked={checkboxChecked}
+						onChange={(checked) => this.todoCheckbox_change(checked)}
+					/>
+					<Text style={styles.listItemText}>{note.title}</Text>
 				</View>
 			</TouchableHighlight>
 		);

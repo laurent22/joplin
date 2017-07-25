@@ -5,6 +5,7 @@ import { reg } from 'lib/registry.js';
 import { Log } from 'lib/log.js'
 import { NoteList } from 'lib/components/note-list.js'
 import { Folder } from 'lib/models/folder.js'
+import { Tag } from 'lib/models/tag.js'
 import { Note } from 'lib/models/note.js'
 import { ScreenHeader } from 'lib/components/screen-header.js';
 import { MenuOption, Text } from 'react-native-popup-menu';
@@ -27,7 +28,9 @@ class NotesScreenComponent extends BaseScreenComponent {
 	async componentWillReceiveProps(newProps) {
 		if (newProps.notesOrder.orderBy != this.props.notesOrder.orderBy ||
 		    newProps.notesOrder.orderByDir != this.props.notesOrder.orderByDir ||
-		    newProps.selectedFolderId != this.props.selectedFolderId) {
+		    newProps.selectedFolderId != this.props.selectedFolderId ||
+		    newProps.selectedTagId != this.props.selectedTagId ||
+		    newProps.notesParentType != this.props.notesParentType) {
 			await this.refreshNotes(newProps);
 		}
 	}
@@ -40,16 +43,26 @@ class NotesScreenComponent extends BaseScreenComponent {
 			orderByDir: props.notesOrder.orderByDir,
 		};
 
+		const parent = this.parentItem(props);
+
 		const source = JSON.stringify({
 			options: options,
-			selectedFolderId: props.selectedFolderId,
+			parentId: parent.id,
 		});
 
-		let folder = Folder.byId(props.folders, props.selectedFolderId);
+		if (source == props.notesSource) {
+			console.info('NO SOURCE CHAGNE');
+			console.info(source);
+			console.info(props.notesSource);
+			return;
+		}
 
-		if (source == props.notesSource) return;
-
-		const notes = await Note.previews(props.selectedFolderId, options);
+		let notes = [];
+		if (props.notesParentType == 'Folder') {
+			notes = await Note.previews(props.selectedFolderId, options);
+		} else {
+			notes = await Tag.notes(props.selectedTagId); // TODO: should also return previews
+		}
 
 		this.props.dispatch({
 			type: 'NOTES_UPDATE_ALL',
@@ -82,18 +95,36 @@ class NotesScreenComponent extends BaseScreenComponent {
 	}
 
 	menuOptions() {
-		if (this.props.selectedFolderId == Folder.conflictFolderId()) return [];
-		
-		return [
-			{ title: _('Delete notebook'), onPress: () => { this.deleteFolder_onPress(this.props.selectedFolderId); } },
-			{ title: _('Edit notebook'), onPress: () => { this.editFolder_onPress(this.props.selectedFolderId); } },
-		];
+		if (this.props.notesParentType == 'Folder') {
+			if (this.props.selectedFolderId == Folder.conflictFolderId()) return [];
+
+			return [
+				{ title: _('Delete notebook'), onPress: () => { this.deleteFolder_onPress(this.props.selectedFolderId); } },
+				{ title: _('Edit notebook'), onPress: () => { this.editFolder_onPress(this.props.selectedFolderId); } },
+			];
+		} else {
+			return []; // TODO
+		}
+	}
+
+	parentItem(props = null) {
+		if (!props) props = this.props;
+
+		let output = null;
+		if (props.notesParentType == 'Folder') {
+			output = Folder.byId(props.folders, props.selectedFolderId);
+		} else if (props.notesParentType == 'Tag') {
+			output = Tag.byId(props.tags, props.selectedTagId);
+		} else {
+			throw new Error('Invalid parent type: ' + props.notesParentType);
+		}
+		return output;
 	}
 
 	render() {
-		let folder = Folder.byId(this.props.folders, this.props.selectedFolderId);
+		const parent = this.parentItem();
 
-		if (!folder) {
+		if (!parent) {
 			return (
 				<View style={this.styles().screen}>
 					<ScreenHeader title={title} menuOptions={this.menuOptions()} />
@@ -101,8 +132,8 @@ class NotesScreenComponent extends BaseScreenComponent {
 			)
 		}
 
-		let title = folder ? folder.title : null;
-		const addFolderNoteButtons = folder.id != Folder.conflictFolderId();
+		let title = parent ? parent.title : null;
+		const addFolderNoteButtons = this.props.selectedFolderId && this.props.selectedFolderId != Folder.conflictFolderId();
 
 		const { navigate } = this.props.navigation;
 		return (
@@ -120,7 +151,10 @@ const NotesScreen = connect(
 	(state) => {
 		return {
 			folders: state.folders,
+			tags: state.tags,
 			selectedFolderId: state.selectedFolderId,
+			selectedTagId: state.selectedTagId,
+			notesParentType: state.notesParentType,
 			notes: state.notes,
 			notesOrder: state.notesOrder,
 			notesSource: state.notesSource,

@@ -3,6 +3,7 @@ import { TouchableOpacity , Button, Text, Image, StyleSheet, ScrollView, View } 
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Log } from 'lib/log.js';
+import { Tag } from 'lib/models/tag.js';
 import { Note } from 'lib/models/note.js';
 import { Setting } from 'lib/models/setting.js';
 import { FoldersScreenUtils } from 'lib/components/screens/folders-utils.js'
@@ -11,7 +12,7 @@ import { reg } from 'lib/registry.js';
 import { _ } from 'lib/locale.js';
 import { globalStyle } from 'lib/components/global-style.js';
 
-const styleObject = {
+let styles = {
 	menu: {
 		flex: 1,
 		backgroundColor: globalStyle.backgroundColor,
@@ -43,24 +44,39 @@ const styleObject = {
 		paddingRight: globalStyle.marginRight,
 		color: globalStyle.colorFaded,
 	},
+	tagItemList: {
+		flex: 1,
+		flexDirection: 'row',
+		flexWrap: 'wrap'
+	},
 };
 
-styleObject.folderButton = Object.assign({}, styleObject.button);
-styleObject.folderButtonText = Object.assign({}, styleObject.buttonText);
-styleObject.folderIcon = Object.assign({}, globalStyle.icon);
-styleObject.folderIcon.color = '#0072d5';
-styleObject.syncButton = Object.assign({}, styleObject.button);
-styleObject.syncButtonText = Object.assign({}, styleObject.buttonText);
-styleObject.folderButtonSelected = Object.assign({}, styleObject.folderButton);
-styleObject.folderButtonSelected.backgroundColor = globalStyle.selectedColor;
+styles.folderButton = Object.assign({}, styles.button);
+styles.folderButtonText = Object.assign({}, styles.buttonText);
+styles.folderButtonSelected = Object.assign({}, styles.folderButton);
+styles.folderButtonSelected.backgroundColor = globalStyle.selectedColor;
+styles.folderIcon = Object.assign({}, globalStyle.icon);
+styles.folderIcon.color = '#0072d5';
 
-const styles = StyleSheet.create(styleObject);
+styles.tagButton = Object.assign({}, styles.button);
+styles.tagButtonSelected = Object.assign({}, styles.tagButton);
+styles.tagButtonSelected.backgroundColor = globalStyle.selectedColor;
+styles.tagButtonSelected.borderRadius = 1000;
+styles.tagButtonText = Object.assign({}, styles.buttonText);
+styles.tagButtonText.flex = 0;
+
+styles.syncButton = Object.assign({}, styles.button);
+styles.syncButtonText = Object.assign({}, styles.buttonText);
+
+styles = StyleSheet.create(styles);
 
 class SideMenuContentComponent extends Component {
 
 	constructor() {
 		super();
-		this.state = { syncReportText: '' };
+		this.state = { syncReportText: '',
+			//width: 0,
+		};
 	}
 
 	folder_press(folder) {
@@ -70,6 +86,16 @@ class SideMenuContentComponent extends Component {
 			type: 'NAV_GO',
 			routeName: 'Notes',
 			folderId: folder.id,
+		});
+	}
+
+	tag_press(tag) {
+		this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+
+		this.props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Notes',
+			tagId: tag.id,
 		});
 	}
 
@@ -107,6 +133,20 @@ class SideMenuContentComponent extends Component {
 		);
 	}
 
+	tagItem(tag, selected) {
+		const iconComp = <Icon name='md-pricetag' style={styles.folderIcon} />
+		const tagButtonStyle = selected ? styles.tagButtonSelected : styles.tagButton;
+
+		return (
+			<TouchableOpacity key={tag.id} onPress={() => { this.tag_press(tag) }}>
+				<View style={tagButtonStyle}>
+					{ iconComp }
+					<Text numberOfLines={1} style={styles.tagButtonText}>{tag.title}</Text>
+				</View>
+			</TouchableOpacity>
+		);
+	}
+
 	synchronizeButton(state) {
 		const title = state == 'sync' ? _('Synchronize') : _('Cancel synchronization');
 		const iconComp = state == 'sync' ? <Icon name='md-sync' style={globalStyle.icon} /> : <Icon name='md-close' style={globalStyle.icon} />;
@@ -121,6 +161,16 @@ class SideMenuContentComponent extends Component {
 		);
 	}
 
+	makeDivider(key) {
+		return <View style={{ marginTop: 15, marginBottom: 15, flex: -1, borderBottomWidth: 1, borderBottomColor: globalStyle.dividerColor }} key={key}></View>
+	}
+
+	// onLayout(event) {
+	// 	const newWidth = event.nativeEvent.layout.width;
+	// 	if (this.state.width == newWidth) return;
+	// 	this.setState({ width: newWidth });
+	// }
+
 	render() {
 		let items = [];
 
@@ -130,10 +180,24 @@ class SideMenuContentComponent extends Component {
 
 		for (let i = 0; i < this.props.folders.length; i++) {
 			let folder = this.props.folders[i];
-			items.push(this.folderItem(folder, this.props.selectedFolderId == folder.id));
+			items.push(this.folderItem(folder, this.props.selectedFolderId == folder.id && this.props.notesParentType == 'Folder'));
 		}
 
-		if (items.length) items.push(<View style={{ height: 30, flex: -1 }} key='divider_1'></View>); // DIVIDER
+		if (items.length) items.push(this.makeDivider('divider_1'));
+
+		let tagItems = [];
+		for (let i = 0; i < this.props.tags.length; i++) {
+			const tag = this.props.tags[i];
+			tagItems.push(this.tagItem(tag, this.props.selectedTagId == tag.id && this.props.notesParentType == 'Tag'));
+		}
+
+		items.push(
+			<View style={styles.tagItemList} key="tag_items">
+				{tagItems}
+			</View>
+		);
+
+		if (items.length) items.push(this.makeDivider('divider_2'));
 
 		let lines = Synchronizer.reportToLines(this.props.syncReport);
 		const syncReportText = lines.join("\n");
@@ -143,6 +207,8 @@ class SideMenuContentComponent extends Component {
 		items.push(<Text key='sync_report' style={styles.syncStatus}>{syncReportText}</Text>);
 
 		items.push(<View style={{ height: globalStyle.marginBottom }} key='bottom_padding_hack'/>);
+
+		// onLayout={(event) => this.onLayout(event)}
 
 		return (
 			<View style={{flex:1}}>
@@ -161,9 +227,12 @@ const SideMenuContent = connect(
 	(state) => {
 		return {
 			folders: state.folders,
+			tags: state.tags,
 			syncStarted: state.syncStarted,
 			syncReport: state.syncReport,
 			selectedFolderId: state.selectedFolderId,
+			selectedTagId: state.selectedTagId,
+			notesParentType: state.notesParentType,
 		};
 	}
 )(SideMenuContentComponent)

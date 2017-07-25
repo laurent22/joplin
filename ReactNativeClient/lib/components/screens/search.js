@@ -134,9 +134,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 					<FlatList
 						data={this.state.notes}
 						keyExtractor={(item, index) => item.id}
-						renderItem={(event) => <NoteItem
-							note={event.item}
-						/>}
+						renderItem={(event) => <NoteItem note={event.item}/>}
 					/>
 				</View>
 			</View>

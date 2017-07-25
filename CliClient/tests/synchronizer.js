@@ -511,24 +511,24 @@ describe('Synchronizer', function() {
 		expect(remoteTag.id).toBe(tag.id);
 		await Tag.addNote(remoteTag.id, n1.id);
 		await Tag.addNote(remoteTag.id, n2.id);
-		let noteIds = await Tag.tagNoteIds(tag.id);
+		let noteIds = await Tag.noteIds(tag.id);
 		expect(noteIds.length).toBe(2);
 		await synchronizer().start();
 
 		await switchClient(1);
 
 		await synchronizer().start();
-		let remoteNoteIds = await Tag.tagNoteIds(tag.id);
+		let remoteNoteIds = await Tag.noteIds(tag.id);
 		expect(remoteNoteIds.length).toBe(2);
 		await Tag.removeNote(tag.id, n1.id);
-		remoteNoteIds = await Tag.tagNoteIds(tag.id);
+		remoteNoteIds = await Tag.noteIds(tag.id);
 		expect(remoteNoteIds.length).toBe(1);
 		await synchronizer().start();
 
 		await switchClient(2);
 
 		await synchronizer().start();
-		noteIds = await Tag.tagNoteIds(tag.id);
+		noteIds = await Tag.noteIds(tag.id);
 		expect(noteIds.length).toBe(1);
 		expect(remoteNoteIds[0]).toBe(noteIds[0]);
 

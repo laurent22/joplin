@@ -38,10 +38,13 @@ import { PoorManIntervals } from 'lib/poor-man-intervals.js';
 let defaultState = {
 	notes: [],
 	notesSource: '',
+	notesParentType: null,
 	folders: [],
+	tags: [],
 	selectedNoteId: null,
-	selectedItemType: 'note',
 	selectedFolderId: null,
+	selectedTagId: null,
+	selectedItemType: 'note',
 	showSideMenu: false,
 	screens: {},
 	loading: true,
@@ -148,6 +151,12 @@ const reducer = (state = defaultState, action) => {
 
 				if ('folderId' in action) {
 					newState.selectedFolderId = action.folderId;
+					newState.notesParentType = 'Folder';
+				}
+
+				if ('tagId' in action) {
+					newState.selectedTagId = action.tagId;
+					newState.notesParentType = 'Tag';
 				}
 
 				if ('itemType' in action) {
@@ -228,6 +237,12 @@ const reducer = (state = defaultState, action) => {
 				newState = Object.assign({}, state);
 				newState.folders = action.folders;
 				break;
+
+			case 'TAGS_UPDATE_ALL':
+
+				newState = Object.assign({}, state);
+				newState.tags = action.tags;
+				break;				
 
 			case 'FOLDERS_UPDATE_ONE':
 
@@ -413,6 +428,13 @@ async function initialize(dispatch, backButtonHandler) {
 		reg.logger().info('Loading folders...');
 
 		await FoldersScreenUtils.refreshFolders();
+
+		const tags = await Tag.all();
+
+		dispatch({
+			type: 'TAGS_UPDATE_ALL',
+			tags: tags,
+		});
 
 		dispatch({
 			type: 'APPLICATION_LOADING_DONE',
