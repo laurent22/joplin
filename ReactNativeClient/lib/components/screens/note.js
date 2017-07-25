@@ -15,7 +15,6 @@ import marked from 'lib/marked.js';
 import { reg } from 'lib/registry.js';
 import { BaseScreenComponent } from 'lib/components/base-screen.js';
 import { dialogs } from 'lib/dialogs.js';
-import { NotesScreenUtils } from 'lib/components/screens/notes-utils.js'
 import { globalStyle } from 'lib/components/global-style.js';
 import DialogBox from 'react-native-dialogbox';
 
@@ -223,8 +222,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let folderId = note.parent_id;
 
 		await Note.delete(note.id);
-		await NotesScreenUtils.openNoteList(folderId);
 
+		this.props.dispatch({
+			type: 'Navigation/NAVIGATE',
+			routeName: 'Notes',
+			folderId: folderId,
+		});
+		
 		reg.scheduleSync();
 	}
 

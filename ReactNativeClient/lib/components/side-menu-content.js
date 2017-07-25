@@ -6,7 +6,6 @@ import { Log } from 'lib/log.js';
 import { Note } from 'lib/models/note.js';
 import { Setting } from 'lib/models/setting.js';
 import { FoldersScreenUtils } from 'lib/components/screens/folders-utils.js'
-import { NotesScreenUtils } from 'lib/components/screens/notes-utils.js'
 import { Synchronizer } from 'lib/synchronizer.js';
 import { reg } from 'lib/registry.js';
 import { _ } from 'lib/locale.js';
@@ -67,7 +66,11 @@ class SideMenuContentComponent extends Component {
 	folder_press(folder) {
 		this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 
-		NotesScreenUtils.openNoteList(folder.id);
+		this.props.dispatch({
+			type: 'Navigation/NAVIGATE',
+			routeName: 'Notes',
+			folderId: folder.id,
+		});
 	}
 
 	async synchronize_press() {
