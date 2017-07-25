@@ -450,6 +450,11 @@ msgstr "Nouvelle note"
 msgid "New notebook"
 msgstr "Nouveau carnet"
 
+msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgstr ""
+"Ce carnet ne contient aucune note. Créez-en une en cliquant sur le bouton "
+"(+)."
+
 msgid "Log"
 msgstr "Journal"
 
@@ -468,6 +473,9 @@ msgstr "Annuler synchronisation"
 #, fuzzy, javascript-format
 msgid "The notebook could not be saved: %s"
 msgstr "Ce carnet n'a pas pu être sauvegardé : %s"
+
+msgid "Edit notebook"
+msgstr "Editer le carnet"
 
 msgid "Untitled"
 msgstr "Sans titre"
@@ -505,13 +513,11 @@ msgstr "Supprimer le carnet ?"
 msgid "Delete notebook"
 msgstr "Supprimer le carnet"
 
-msgid "Edit notebook"
-msgstr "Editer le carnet"
-
-msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgid "Login with OneDrive"
 msgstr ""
-"Ce carnet ne contient aucune note. Créez-en une en cliquant sur le bouton "
-"(+)."
+
+msgid "Search"
+msgstr ""
 
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
@@ -524,6 +530,9 @@ msgid "You currently have no notebook. Create one by clicking on (+) button."
 msgstr ""
 "Vous n'avez pour l'instant pas de carnets. Créez-en un en pressant le bouton "
 "(+)."
+
+msgid "Welcome"
+msgstr ""
 
 #~ msgid ""
 #~ "There is currently no notebook. Create one by clicking on the (+) button."

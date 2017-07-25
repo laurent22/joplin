@@ -292,4 +292,4 @@ function _(s, ...args) {
 	return sprintf(result, ...args);
 }
 
-export { _, supportedLocales, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale };
+export { _, supportedLocales, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale };

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BackHandler, Keyboard } from 'react-native';
+import { BackHandler, Keyboard, NativeModules } from 'react-native';
 import { connect, Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux';
 import { shimInit } from 'lib/shim-init-react.js';
@@ -31,7 +31,7 @@ import { SideMenu } from 'lib/components/side-menu.js';
 import { SideMenuContent } from 'lib/components/side-menu-content.js';
 import { DatabaseDriverReactNative } from 'lib/database-driver-react-native';
 import { reg } from 'lib/registry.js';
-import { _, setLocale } from 'lib/locale.js';
+import { _, setLocale, closestSupportedLocale, defaultLocale } from 'lib/locale.js';
 import RNFetchBlob from 'react-native-fetch-blob';
 import { PoorManIntervals } from 'lib/poor-man-intervals.js';
 
@@ -400,7 +400,14 @@ async function initialize(dispatch, backButtonHandler) {
 		reg.logger().info('Database is ready.');
 		reg.logger().info('Loading settings...');
 		await Setting.load();
-		
+
+		if (Setting.value('firstStart')) {
+			const locale = NativeModules.I18nManager.localeIdentifier
+			if (!locale) locale = defaultLocale();
+			Setting.setValue('locale', closestSupportedLocale(locale));
+			Setting.setValue('firstStart', 0)
+		}
+
 		setLocale(Setting.value('locale'));
 
 		reg.logger().info('Loading folders...');

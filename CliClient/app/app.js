@@ -11,7 +11,7 @@ import { sprintf } from 'sprintf-js';
 import { vorpalUtils } from 'vorpal-utils.js';
 import { reg } from 'lib/registry.js';
 import { fileExtension } from 'lib/path-utils.js';
-import { _, setLocale } from 'lib/locale.js';
+import { _, setLocale, defaultLocale, closestSupportedLocale } from 'lib/locale.js';
 import os from 'os';
 import fs from 'fs-extra';
 
@@ -317,6 +317,16 @@ class Application {
 		BaseModel.dispatch = (action) => { this.baseModelListener(action) }
 
 		await Setting.load();
+
+		if (Setting.value('firstStart')) {
+			let locale = process.env.LANG;
+			if (!locale) locale = defaultLocale();
+			locale = locale.split('.');
+			locale = locale[0];
+			reg.logger().info('First start: detected locale as ' + locale);
+			Setting.setValue('locale', closestSupportedLocale(locale));
+			Setting.setValue('firstStart', 0)
+		}
 
 		setLocale(Setting.value('locale'));
 
