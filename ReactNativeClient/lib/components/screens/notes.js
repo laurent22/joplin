@@ -64,11 +64,9 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 			Folder.delete(folderId).then(() => {
 				this.props.dispatch({
-					type: 'Navigation/NAVIGATE',
+					type: 'NAV_GO',
 					routeName: 'Welcome',
 				});
-
-				reg.scheduleSync();
 			}).catch((error) => {
 				alert(error.message);
 			});
@@ -77,7 +75,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 	editFolder_onPress(folderId) {
 		this.props.dispatch({
-			type: 'Navigation/NAVIGATE',
+			type: 'NAV_GO',
 			routeName: 'Folder',
 			folderId: folderId,
 		});

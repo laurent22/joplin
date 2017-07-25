@@ -67,7 +67,7 @@ class SideMenuContentComponent extends Component {
 		this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 
 		this.props.dispatch({
-			type: 'Navigation/NAVIGATE',
+			type: 'NAV_GO',
 			routeName: 'Notes',
 			folderId: folder.id,
 		});
@@ -78,7 +78,7 @@ class SideMenuContentComponent extends Component {
 			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 			
 			this.props.dispatch({
-				type: 'Navigation/NAVIGATE',
+				type: 'NAV_GO',
 				routeName: 'OneDriveLogin',
 			});
 			return;

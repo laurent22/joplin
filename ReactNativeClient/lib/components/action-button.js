@@ -31,7 +31,7 @@ class ActionButtonComponent extends React.Component {
 
 	newTodo_press() {
 		this.props.dispatch({
-			type: 'Navigation/NAVIGATE',
+			type: 'NAV_GO',
 			routeName: 'Note',
 			noteId: null,
 			folderId: this.props.parentFolderId,
@@ -41,7 +41,7 @@ class ActionButtonComponent extends React.Component {
 
 	newNote_press() {
 		this.props.dispatch({
-			type: 'Navigation/NAVIGATE',
+			type: 'NAV_GO',
 			routeName: 'Note',
 			noteId: null,
 			folderId: this.props.parentFolderId,
@@ -51,7 +51,7 @@ class ActionButtonComponent extends React.Component {
 
 	newFolder_press() {
 		this.props.dispatch({
-			type: 'Navigation/NAVIGATE',
+			type: 'NAV_GO',
 			routeName: 'Folder',
 			folderId: null,
 		});

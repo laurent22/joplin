@@ -69,12 +69,11 @@ class NoteListComponent extends Component {
 	async todoCheckbox_change(itemId, checked) {	
 		let note = await Note.load(itemId);
 		await Note.save({ id: note.id, todo_completed: checked ? time.unixMs() : 0 });
-		reg.scheduleSync();
 	}
 
 	listView_itemPress(noteId) {
 		this.props.dispatch({
-			type: 'Navigation/NAVIGATE',
+			type: 'NAV_GO',
 			routeName: 'Note',
 			noteId: noteId,
 		});

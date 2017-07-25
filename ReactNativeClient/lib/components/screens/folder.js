@@ -66,8 +66,6 @@ class FolderScreenComponent extends BaseScreenComponent {
 
 		try {
 			folder = await Folder.save(folder, { userSideValidation: true });
-
-			reg.scheduleSync();
 		} catch (error) {
 			dialogs.error(this, _('The notebook could not be saved: %s', error.message));
 			return;
@@ -79,7 +77,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 		});
 
 		this.props.dispatch({
-			type: 'Navigation/NAVIGATE',
+			type: 'NAV_GO',
 			routeName: 'Notes',
 			folderId: folder.id,
 		});

@@ -33,7 +33,7 @@ class NoteItemComponent extends Component {
 
 	noteItem_press(noteId) {
 		this.props.dispatch({
-			type: 'Navigation/NAVIGATE',
+			type: 'NAV_GO',
 			routeName: 'Note',
 			noteId: noteId,
 		});

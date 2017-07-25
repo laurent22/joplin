@@ -114,12 +114,12 @@ class ScreenHeaderComponent extends Component {
 	}
 
 	backButton_press() {
-		this.props.dispatch({ type: 'Navigation/BACK' });
+		this.props.dispatch({ type: 'NAV_BACK' });
 	}
 
 	searchButton_press() {
 		this.props.dispatch({
-			type: 'Navigation/NAVIGATE',
+			type: 'NAV_GO',
 			routeName: 'Search',
 		});	
 	}
@@ -132,21 +132,21 @@ class ScreenHeaderComponent extends Component {
 
 	log_press() {
 		this.props.dispatch({
-			type: 'Navigation/NAVIGATE',
+			type: 'NAV_GO',
 			routeName: 'Log',
 		});	
 	}
 
 	status_press() {
 		this.props.dispatch({
-			type: 'Navigation/NAVIGATE',
+			type: 'NAV_GO',
 			routeName: 'Status',
 		});	
 	}
 
 	config_press() {
 		this.props.dispatch({
-			type: 'Navigation/NAVIGATE',
+			type: 'NAV_GO',
 			routeName: 'Config',
 		});	
 	}

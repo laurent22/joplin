@@ -32,6 +32,9 @@ class PoorManIntervals {
 	}
 
 	static update() {
+		// Don't update more than once a second
+		if (PoorManIntervals.lastUpdateTime_ + 1000 > time.unixMs()) return;
+
 		for (let i = 0; i < PoorManIntervals.intervals_.length; i++) {
 			let interval = PoorManIntervals.intervals_[i];
 			const now = time.unixMs();
@@ -40,10 +43,13 @@ class PoorManIntervals {
 				interval.callback();
 			}
 		}
+
+		PoorManIntervals.lastUpdateTime_ = time.unixMs();
 	}
 
 }
 
+PoorManIntervals.lastUpdateTime_ = 0;
 PoorManIntervals.intervalId_ = 0;
 PoorManIntervals.intervals_ = [];
 

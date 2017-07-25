@@ -181,8 +181,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 		if (isNew) Note.updateGeolocation(note.id);
 		this.refreshNoteMetadata();
-
-		reg.scheduleSync();
 	}
 
 	async saveOneProperty(name, value) {
@@ -204,8 +202,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 				lastSavedNote: Object.assign({}, note),
 				note: note,
 			});
-
-			reg.scheduleSync();
 		} else {
 			note[name] = value;
 			this.setState({	note: note });
@@ -224,12 +220,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 		await Note.delete(note.id);
 
 		this.props.dispatch({
-			type: 'Navigation/NAVIGATE',
+			type: 'NAV_GO',
 			routeName: 'Notes',
 			folderId: folderId,
 		});
-		
-		reg.scheduleSync();
 	}
 
 	attachFile_onPress() {
@@ -274,7 +268,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	async todoCheckbox_change(checked) {
 		await this.saveOneProperty('todo_completed', checked ? time.unixMs() : 0);
-		reg.scheduleSync();
 	}
 
 	render() {
@@ -485,8 +478,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 								note: note,
 								folder: folder,
 							});
-
-							reg.scheduleSync();
 						}
 					}}
 					menuOptions={this.menuOptions()}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BackHandler, Keyboard } from 'react-native';
 import { connect, Provider } from 'react-redux'
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { shimInit } from 'lib/shim-init-react.js';
 import { Log } from 'lib/log.js'
 import { AppNav } from 'lib/components/app-nav.js'
@@ -56,7 +56,7 @@ let defaultState = {
 };
 
 const initialRoute = {
-	type: 'Navigation/NAVIGATE',
+	type: 'NAV_GO',
 	routeName: 'Welcome',
 	params: {}
 };
@@ -84,8 +84,6 @@ function reducerActionsAreSame(a1, a2) {
 }
 
 const reducer = (state = defaultState, action) => {
-	reg.logger().info('Reducer action', action.type);
-
 	let newState = state;
 	let historyGoingBack = false;
 
@@ -93,7 +91,7 @@ const reducer = (state = defaultState, action) => {
 		switch (action.type) {
 
 
-			case 'Navigation/BACK':
+			case 'NAV_BACK':
 
 				if (!navHistory.length) break;
 
@@ -109,7 +107,7 @@ const reducer = (state = defaultState, action) => {
 
 				// Fall throught
 
-			case 'Navigation/NAVIGATE':
+			case 'NAV_GO':
 
 				const currentRoute = state.route;
 				const currentRouteName = currentRoute ? currentRoute.routeName : '';
@@ -164,7 +162,6 @@ const reducer = (state = defaultState, action) => {
 					Setting.setValue('activeFolderId', newState.selectedFolderId);
 				}
 
-				Keyboard.dismiss(); // TODO: should probably be in some middleware
 				break;
 
 			// Replace all the notes with the provided array
@@ -311,14 +308,25 @@ const reducer = (state = defaultState, action) => {
 		throw error;
 	}
 
-	// Check the registered intervals here since we know this function
-	// will be called regularly.
-	PoorManIntervals.update();
-
 	return newState;
 }
 
-let store = createStore(reducer);
+const generalMiddleware = store => next => action => {
+	reg.logger().info('Reducer action', action.type);
+	PoorManIntervals.update(); // This function needs to be called regularly so put it here
+
+	const result = next(action);
+
+	if (action.type == 'NAV_GO') Keyboard.dismiss();
+
+	if (['NOTES_UPDATE_ONE', 'NOTES_DELETE', 'FOLDERS_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
+		reg.scheduleSync();
+	}
+
+  	return result;
+}
+
+let store = createStore(reducer, applyMiddleware(generalMiddleware));
 
 let initializationState_ = 'waiting';
 
@@ -410,12 +418,12 @@ async function initialize(dispatch, backButtonHandler) {
 
 		if (!folder) {
 			dispatch({
-				type: 'Navigation/NAVIGATE',
+				type: 'NAV_GO',
 				routeName: 'Welcome',
 			});
 		} else {
 			dispatch({
-				type: 'Navigation/NAVIGATE',
+				type: 'NAV_GO',
 				routeName: 'Notes',
 				folderId: folder.id,
 			});
@@ -462,7 +470,7 @@ class AppComponent extends React.Component {
 		}
 
 		if (this.props.historyCanGoBack) {
-			this.props.dispatch({ type: 'Navigation/BACK' });
+			this.props.dispatch({ type: 'NAV_BACK' });
 			return true;
 		}
 
