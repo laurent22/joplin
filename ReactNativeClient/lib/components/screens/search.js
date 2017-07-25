@@ -113,6 +113,8 @@ class SearchScreenComponent extends BaseScreenComponent {
 	}
 
 	render() {
+		if (!this.isMounted_) return null;
+
 		return (
 			<View style={this.styles().screen}>
 				<ScreenHeader title={_('Search')}/>

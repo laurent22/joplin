@@ -50,12 +50,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 			parentId: parent.id,
 		});
 
-		if (source == props.notesSource) {
-			console.info('NO SOURCE CHAGNE');
-			console.info(source);
-			console.info(props.notesSource);
-			return;
-		}
+		if (source == props.notesSource) return;
 
 		let notes = [];
 		if (props.notesParentType == 'Folder') {
@@ -103,7 +98,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 				{ title: _('Edit notebook'), onPress: () => { this.editFolder_onPress(this.props.selectedFolderId); } },
 			];
 		} else {
-			return []; // TODO
+			return []; // For tags - TODO
 		}
 	}
 

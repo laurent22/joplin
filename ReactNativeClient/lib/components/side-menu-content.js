@@ -208,10 +208,8 @@ class SideMenuContentComponent extends Component {
 
 		items.push(<View style={{ height: globalStyle.marginBottom }} key='bottom_padding_hack'/>);
 
-		// onLayout={(event) => this.onLayout(event)}
-
 		return (
-			<View style={{flex:1}}>
+			<View style={{flex:1, borderRightWidth: 1, borderRightColor: globalStyle.dividerColor }}>
 				<View style={{flexDirection:'row'}}>
 					<Image style={{flex:1, height: 150}} source={require('../images/SideMenuHeader.png')} />
 				</View>
