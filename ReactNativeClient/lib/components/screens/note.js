@@ -112,11 +112,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 			note = await Note.load(this.props.noteId);
 		}
 
+		const folder = Folder.byId(this.props.folders, note.parent_id);
+
 		this.setState({
 			lastSavedNote: Object.assign({}, note),
 			note: note,
 			mode: mode,
-			folder: await Folder.load(note.parent_id),
+			folder: folder,
 			isLoading: false,
 		});
 
@@ -439,7 +441,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			let output = [];
 			for (let i = 0; i < this.props.folders.length; i++) {
 				let f = this.props.folders[i];
-				output.push({ label: f.title + ' ' + f.id, value: f.id });
+				output.push({ label: f.title, value: f.id });
 			}
 			return output;
 		}
