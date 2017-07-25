@@ -193,7 +193,7 @@ class JoplinDatabase extends Database {
 		// 1. Add the new version number to the existingDatabaseVersions array
 		// 2. Add the upgrade logic to the "switch (targetVersion)" statement below
 
-		const existingDatabaseVersions = [1, 2];
+		const existingDatabaseVersions = [1, 2, 3];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 		if (currentVersionIndex == existingDatabaseVersions.length - 1) return false;
@@ -218,6 +218,10 @@ class JoplinDatabase extends Database {
 				queries.push({ sql: 'DROP TABLE deleted_items' });
 				queries.push({ sql: this.sqlStringToLines(newTableSql)[0] });
 				queries.push({ sql: "CREATE INDEX deleted_items_sync_target ON deleted_items (sync_target)" });
+			}
+
+			if (targetVersion == 3) {
+				queries = this.alterColumnQueries('settings', ['key', 'value']);
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });
@@ -251,7 +255,6 @@ class JoplinDatabase extends Database {
 				this.logger().info('Database is new - creating the schema...');
 
 				let queries = this.wrapQueries(this.sqlStringToLines(structureSql));
-				queries.push(this.wrapQuery('INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' + uuid.create() + '", "' + Database.enumId('settings', 'string') + '")'));
 
 				try {
 					await this.transactionExecBatch(queries);

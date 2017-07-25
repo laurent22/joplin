@@ -44,11 +44,15 @@ class Setting extends BaseModel {
 		return this.modelSelectAll('SELECT * FROM settings').then((rows) => {
 			this.cache_ = rows;
 
-			// TEMPORARY TO CONVERT ALL CLIENT SETTINGS
 			for (let i = 0; i < this.cache_.length; i++) {
-				if (this.cache_[i].key == 'sync.target' && this.cache_[i].value == 'onedrive') {
-					this.cache_[i].value = 3;
-				}
+				let c = this.cache_[i];
+
+				if (c.key == 'clientId') continue; // For older clients
+				if (c.key == 'sync.onedrive.auth') continue; // For older clients
+
+				c.value = this.formatValue(c.key, c.value);
+
+				this.cache_[i] = c;
 			}
 		});
 	}
@@ -66,27 +70,34 @@ class Setting extends BaseModel {
 			if (c.key == key) {
 				const md = this.settingMetadata(key);
 
-				if (md.type == 'enum') {
+				if (md.isEnum === true) {
 					if (!this.isAllowedEnumOption(key, value)) {
 						throw new Error(_('Invalid option value: "%s". Possible values are: %s.', value, this.enumOptionsDoc(key)));
 					}
 				}
 
 				if (c.value === value) return;
-				c.value = value;
+
+				this.logger().info('Setting: ' + key + ' = ' + value);
+
+				c.value = this.formatValue(key, value);
 				this.scheduleUpdate();
 				return;
 			}
 		}
 
-		let s = this.settingMetadata(key);
-		s.value = value;
-		this.cache_.push(s);
+		this.cache_.push({
+			key: key,
+			value: this.formatValue(key, value),
+		});
+
 		this.scheduleUpdate();
 	}
 
-	static formatValue(type, value) {
-		if (type == 'int') return Math.floor(Number(value));
+	static formatValue(key, value) {
+		const md = this.settingMetadata(key);
+		if (md.type == Setting.TYPE_INT) return Math.floor(Number(value));
+		if (md.type == Setting.TYPE_BOOL) return !!value;
 		return value;
 	}
 
@@ -99,20 +110,19 @@ class Setting extends BaseModel {
 
 		if (!this.cache_) throw new Error('Settings have not been initialized!');
 
-		const md = this.settingMetadata(key);
-
 		for (let i = 0; i < this.cache_.length; i++) {
 			if (this.cache_[i].key == key) {
-				return this.formatValue(md.type, this.cache_[i].value);
+				return this.cache_[i].value;
 			}
 		}
 
-		return this.formatValue(md.type, md.value);
+		const md = this.settingMetadata(key);
+		return md.value;
 	}
 
 	static isEnum(key) {
 		const md = this.settingMetadata(key);
-		return md.type == 'enum';
+		return md.isEnum === true;
 	}
 
 	static enumOptionValues(key) {
@@ -185,13 +195,7 @@ class Setting extends BaseModel {
 		let queries = [];
 		queries.push('DELETE FROM settings');
 		for (let i = 0; i < this.cache_.length; i++) {
-			let s = Object.assign({}, this.cache_[i]);
-			delete s.public;
-			delete s.appTypes;
-			delete s.label;
-			delete s.options;
-			s.value = this.formatValue(s.type, s.value);
-			queries.push(Database.insertQuery(this.tableName(), s));
+			queries.push(Database.insertQuery(this.tableName(), this.cache_[i]));
 		}
 
 		return BaseModel.db().transactionExecBatch(queries).then(() => {
@@ -233,28 +237,33 @@ Setting.SYNC_TARGET_MEMORY = 1;
 Setting.SYNC_TARGET_FILESYSTEM = 2;
 Setting.SYNC_TARGET_ONEDRIVE = 3;
 
+Setting.TYPE_INT = 1;
+Setting.TYPE_STRING = 2;
+Setting.TYPE_BOOL = 3;
+
 Setting.metadata_ = {
-	'activeFolderId': { value: '', type: 'string', public: false },
-	'firstStart': { value: 1, type: 'int', public: false },
-	'sync.2.path': { value: '', type: 'string', public: true, appTypes: ['cli'] },
-	'sync.3.auth': { value: '', type: 'string', public: false },
-	'sync.target': { value: Setting.SYNC_TARGET_ONEDRIVE, type: 'enum', public: true, label: () => _('Synchronisation target'), options: () => {
+	'activeFolderId': { value: '', type: Setting.TYPE_STRING, public: false },
+	'firstStart': { value: true, type: Setting.TYPE_BOOL, public: false },
+	'sync.2.path': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'] },
+	'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
+	'sync.target': { value: Setting.SYNC_TARGET_ONEDRIVE, type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation target'), options: () => {
 		let output = {};
 		output[Setting.SYNC_TARGET_MEMORY] = 'Memory';
 		output[Setting.SYNC_TARGET_FILESYSTEM] = _('File system');
 		output[Setting.SYNC_TARGET_ONEDRIVE] = _('OneDrive');
 		return output;
 	}},
-	'sync.context': { value: '', type: 'string', public: false },
-	'editor': { value: '', type: 'string', public: true, appTypes: ['cli'] },
-	'locale': { value: defaultLocale(), type: 'enum', public: true, label: () => _('Language'), options: () => {
+	'sync.context': { value: '', type: Setting.TYPE_STRING, public: false },
+	'editor': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'] },
+	'locale': { value: defaultLocale(), type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Language'), options: () => {
 		return supportedLocalesToLanguages();
 	}},
-	'todoFilter': { value: 'all', type: 'enum', public: true, appTypes: ['mobile'], label: () => _('Todo filter'), options: () => ({
+	'todoFilter': { value: 'all', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['mobile'], label: () => _('Todo filter'), options: () => ({
 		all: _('Show all'),
 		recent: _('Non-completed and recently completed ones'),
 		nonCompleted: _('Non-completed ones only'),
 	})},
+	'trackLocation': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Save location with notes') },
 };
 
 // Contains constants that are set by the application and

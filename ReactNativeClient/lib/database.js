@@ -230,14 +230,29 @@ class Database {
 				s.push('`' + n + '`=?');
 			}
 			where = s.join(' AND ');
-			// params.push(where.id);
-			// where = 'id=?';
 		}
 
 		return {
 			sql: 'UPDATE `' + tableName + '` SET ' + sql + ' WHERE ' + where,
 			params: params,
 		};
+	}
+
+	alterColumnQueries(tableName, fieldsAfter) {
+		let sql = `
+			CREATE TEMPORARY TABLE _BACKUP_TABLE_NAME_(_FIELDS_AFTER_);
+			INSERT INTO _BACKUP_TABLE_NAME_ SELECT _FIELDS_AFTER_ FROM _TABLE_NAME_;
+			DROP TABLE _TABLE_NAME_;
+			CREATE TABLE _TABLE_NAME_(_FIELDS_AFTER_);
+			INSERT INTO _TABLE_NAME_ SELECT _FIELDS_AFTER_ FROM _BACKUP_TABLE_NAME_;
+			DROP TABLE _BACKUP_TABLE_NAME_;
+		`;
+
+		sql = sql.replace(/_BACKUP_TABLE_NAME_/g, this.escapeField(tableName + '_backup'));
+		sql = sql.replace(/_TABLE_NAME_/g, this.escapeField(tableName));
+		sql = sql.replace(/_FIELDS_AFTER_/g, this.escapeFields(fieldsAfter).join(','));
+
+		return sql.trim().split("\n");
 	}
 	
 	wrapQueries(queries) {
