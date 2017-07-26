@@ -56,6 +56,7 @@ let defaultState = {
 	syncStarted: false,
 	syncReport: {},
 	searchQuery: '',
+	settings: {},
 };
 
 const initialRoute = {
@@ -164,13 +165,7 @@ const reducer = (state = defaultState, action) => {
 				}
 
 				newState.route = action;
-
 				newState.historyCanGoBack = !!navHistory.length;
-
-				if (newState.route.routeName == 'Notes') {
-					Setting.setValue('activeFolderId', newState.selectedFolderId);
-				}
-
 				break;
 
 			// Replace all the notes with the provided array
@@ -178,6 +173,20 @@ const reducer = (state = defaultState, action) => {
 
 				newState = Object.assign({}, state);
 				newState.loading = false;
+				break;
+
+			case 'SETTINGS_UPDATE_ALL':
+
+				newState = Object.assign({}, state);
+				newState.settings = action.settings;
+				break;
+
+			case 'SETTINGS_UPDATE_ONE':
+
+				newState = Object.assign({}, state);
+				let newSettings = Object.assign({}, state.settings);
+				newSettings[action.key] = action.value;
+				newState.settings = newSettings;
 				break;
 
 			// Replace all the notes with the provided array
@@ -319,23 +328,32 @@ const reducer = (state = defaultState, action) => {
 
 		}
 	} catch (error) {
-		error.message = 'In reducer: ' + error.message;
+		error.message = 'In reducer: ' + error.message + ' Action: ' + JSON.stringify(action);
 		throw error;
 	}
 
 	return newState;
 }
 
-const generalMiddleware = store => next => action => {
+const generalMiddleware = store => next => async (action) => {
 	reg.logger().info('Reducer action', action.type);
 	PoorManIntervals.update(); // This function needs to be called regularly so put it here
 
 	const result = next(action);
+	const newState = store.getState();
 
 	if (action.type == 'NAV_GO') Keyboard.dismiss();
 
 	if (['NOTES_UPDATE_ONE', 'NOTES_DELETE', 'FOLDERS_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-		reg.scheduleSync();
+		if (!await reg.syncStarted()) reg.scheduleSync();
+	}
+
+	if (action.type == 'SETTINGS_UPDATE_ONE' && action.key == 'sync.interval' || action.type == 'SETTINGS_UPDATE_ALL') {
+		reg.setupRecurrentSync();
+	}
+
+	if (action.type == 'NAV_GO' && action.routeName == 'Notes') {
+		Setting.setValue('activeFolderId', newState.selectedFolderId);
 	}
 
   	return result;
@@ -399,8 +417,7 @@ async function initialize(dispatch, backButtonHandler) {
 		if (Setting.value('env') == 'prod') {
 			await db.open({ name: 'joplin.sqlite' })
 		} else {
-			//await db.open({ name: 'joplin-56.sqlite' })
-			await db.open({ name: 'joplin-56.sqlite' })
+			await db.open({ name: 'joplin-66.sqlite' })
 
 			// await db.exec('DELETE FROM notes');
 			// await db.exec('DELETE FROM folders');
@@ -465,10 +482,7 @@ async function initialize(dispatch, backButtonHandler) {
 		return backButtonHandler();
 	});
 
-	PoorManIntervals.setInterval(() => {
-		reg.logger().info('Running background sync on timer...');
-		reg.scheduleSync(0);
-	}, 1000 * 60 * 5);
+	reg.setupRecurrentSync();
 
 	if (Setting.value('env') == 'dev') {
 

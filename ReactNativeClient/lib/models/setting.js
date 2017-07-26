@@ -39,7 +39,7 @@ class Setting extends BaseModel {
 	}
 
 	static load() {
-		this.cancelScheduleUpdate();
+		this.cancelScheduleSave();
 		this.cache_ = [];
 		return this.modelSelectAll('SELECT * FROM settings').then((rows) => {
 			this.cache_ = rows;
@@ -49,11 +49,25 @@ class Setting extends BaseModel {
 
 				if (c.key == 'clientId') continue; // For older clients
 				if (c.key == 'sync.onedrive.auth') continue; // For older clients
+				if (c.key == 'syncInterval') continue; // For older clients
+
+				// console.info(c.key + ' = ' + c.value);
 
 				c.value = this.formatValue(c.key, c.value);
 
 				this.cache_[i] = c;
 			}
+
+			const keys = this.keys();
+			let keyToValues = {};
+			for (let i = 0; i < keys.length; i++) {
+				keyToValues[keys[i]] = this.value(keys[i]);
+			}
+
+			this.dispatch({
+				type: 'SETTINGS_UPDATE_ALL',
+				settings: keyToValues,
+			});
 		});
 	}
 
@@ -81,7 +95,14 @@ class Setting extends BaseModel {
 				this.logger().info('Setting: ' + key + ' = ' + value);
 
 				c.value = this.formatValue(key, value);
-				this.scheduleUpdate();
+
+				this.dispatch({
+					type: 'SETTINGS_UPDATE_ONE',
+					key: key,
+					value: c.value,
+				});
+
+				this.scheduleSave();
 				return;
 			}
 		}
@@ -91,13 +112,30 @@ class Setting extends BaseModel {
 			value: this.formatValue(key, value),
 		});
 
-		this.scheduleUpdate();
+		this.dispatch({
+			type: 'SETTINGS_UPDATE_ONE',
+			key: key,
+			value: this.formatValue(key, value),
+		});
+
+		this.scheduleSave();
+	}
+
+	static valueToString(key, value) {
+		const md = this.settingMetadata(key);
+		value = this.formatValue(key, value);
+		if (md.type == Setting.TYPE_INT) return value.toFixed(0);
+		if (md.type == Setting.TYPE_BOOL) return value ? '1' : '0';
+		return value;
 	}
 
 	static formatValue(key, value) {
 		const md = this.settingMetadata(key);
 		if (md.type == Setting.TYPE_INT) return Math.floor(Number(value));
-		if (md.type == Setting.TYPE_BOOL) return !!value;
+		if (md.type == Setting.TYPE_BOOL) {
+			if (typeof value === 'string') value = Number(value);
+			return !!value;
+		}
 		return value;
 	}
 
@@ -186,16 +224,18 @@ class Setting extends BaseModel {
 	}
 
 	static saveAll() {
-		if (!this.updateTimeoutId_) return Promise.resolve();
+		if (!this.saveTimeoutId_) return Promise.resolve();
 
 		this.logger().info('Saving settings...');
-		clearTimeout(this.updateTimeoutId_);
-		this.updateTimeoutId_ = null;
+		clearTimeout(this.saveTimeoutId_);
+		this.saveTimeoutId_ = null;
 
 		let queries = [];
 		queries.push('DELETE FROM settings');
 		for (let i = 0; i < this.cache_.length; i++) {
-			queries.push(Database.insertQuery(this.tableName(), this.cache_[i]));
+			let s = Object.assign({}, this.cache_[i]);
+			s.value = this.valueToString(s.key, s.value);
+			queries.push(Database.insertQuery(this.tableName(), s));
 		}
 
 		return BaseModel.db().transactionExecBatch(queries).then(() => {
@@ -203,17 +243,17 @@ class Setting extends BaseModel {
 		});
 	}
 
-	static scheduleUpdate() {
-		if (this.updateTimeoutId_) clearTimeout(this.updateTimeoutId_);
+	static scheduleSave() {
+		if (this.saveTimeoutId_) clearTimeout(this.saveTimeoutId_);
 
-		this.updateTimeoutId_ = setTimeout(() => {
+		this.saveTimeoutId_ = setTimeout(() => {
 			this.saveAll();
 		}, 500);
 	}
 
-	static cancelScheduleUpdate() {
-		if (this.updateTimeoutId_) clearTimeout(this.updateTimeoutId_);
-		this.updateTimeoutId_ = null;
+	static cancelScheduleSave() {
+		if (this.saveTimeoutId_) clearTimeout(this.saveTimeoutId_);
+		this.saveTimeoutId_ = null;
 	}
 
 	static publicSettings(appType) {
@@ -264,6 +304,16 @@ Setting.metadata_ = {
 		nonCompleted: _('Non-completed ones only'),
 	})},
 	'trackLocation': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Save location with notes') },
+	'sync.interval': { value: 300, type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation interval'), options: () => {
+		return {
+			300: _('%d minutes', 5),
+			600: _('%d minutes', 10),
+			1800: _('%d minutes', 30),
+			3600: _('%d hour', 1),
+			43200: _('%d hour', 12),
+			86400: _('%d hours', 24),
+		};
+	}},
 };
 
 // Contains constants that are set by the application and

@@ -279,6 +279,7 @@ const ScreenHeader = connect(
 	(state) => {
 		return {
 			historyCanGoBack: state.historyCanGoBack,
+			locale: state.settings.locale,
 		};
 	}
 )(ScreenHeaderComponent)

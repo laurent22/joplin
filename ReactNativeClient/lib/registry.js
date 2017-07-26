@@ -8,6 +8,7 @@ import { Synchronizer } from 'lib/synchronizer.js';
 import { FileApiDriverOneDrive } from 'lib/file-api-driver-onedrive.js';
 import { shim } from 'lib/shim.js';
 import { FileApiDriverMemory } from 'lib/file-api-driver-memory.js';
+import { PoorManIntervals } from 'lib/poor-man-intervals.js';
 
 const reg = {};
 
@@ -96,6 +97,14 @@ reg.synchronizer = async (syncTargetId) => {
 	return sync;
 }
 
+reg.syncHasAuth = async (syncTargetId) => {
+	if (syncTargetId == Setting.SYNC_TARGET_ONEDRIVE && !reg.oneDriveApi().auth()) {
+		return false;
+	}
+
+	return true;
+}
+
 reg.scheduleSync = async (delay = null) => {
 	if (delay === null) delay = 1000 * 10;
 
@@ -110,12 +119,14 @@ reg.scheduleSync = async (delay = null) => {
 		reg.scheduleSyncId_ = null;
 		reg.logger().info('Doing scheduled sync');
 
-		if (!reg.oneDriveApi().auth()) {
+		const syncTargetId = Setting.value('sync.target');
+
+		if (!reg.syncHasAuth()) {
 			reg.logger().info('Synchronizer is missing credentials - manual sync required to authenticate.');
 			return;
 		}
 
-		const sync = await reg.synchronizer(Setting.value('sync.target'));
+		const sync = await reg.synchronizer(syncTargetId);
 
 		let context = Setting.value('sync.context');
 		context = context ? JSON.parse(context) : {};
@@ -129,6 +140,8 @@ reg.scheduleSync = async (delay = null) => {
 				throw error;
 			}
 		}
+
+		reg.setupRecurrentSync();
 	};
 
 	if (delay === 0) {
@@ -136,6 +149,26 @@ reg.scheduleSync = async (delay = null) => {
 	} else {
 		reg.scheduleSyncId_ = setTimeout(timeoutCallback, delay);
 	}
+}
+
+reg.syncStarted = async () => {
+	if (!reg.syncHasAuth()) return false;
+	const sync = await reg.synchronizer(Setting.value('sync.target'));
+	return sync.state() != 'idle';
+}
+
+reg.setupRecurrentSync = () => {
+	if (this.recurrentSyncId_) {
+		PoorManIntervals.clearInterval(this.recurrentSyncId_);
+		this.recurrentSyncId_ = null;
+	}
+
+	console.info('Setting up recurrent sync with interval ' + Setting.value('sync.interval'));
+
+	this.recurrentSyncId_ = PoorManIntervals.setInterval(() => {
+		reg.logger().info('Running background sync on timer...');
+		reg.scheduleSync(0);
+	}, 1000 * Setting.value('sync.interval'));
 }
 
 reg.setDb = (v) => {

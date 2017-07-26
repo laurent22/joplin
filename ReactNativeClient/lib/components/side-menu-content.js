@@ -231,6 +231,7 @@ const SideMenuContent = connect(
 			selectedFolderId: state.selectedFolderId,
 			selectedTagId: state.selectedTagId,
 			notesParentType: state.notesParentType,
+			locale: state.settings.locale,
 		};
 	}
 )(SideMenuContentComponent)

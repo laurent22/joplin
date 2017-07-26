@@ -147,6 +147,7 @@ class Database {
 		}
 		if (type == 'fieldType') {
 			if (s == 'INTEGER') s = 'INT';
+			if (!(('TYPE_' + s) in this)) throw new Error('Unkonwn fieldType: ' + s);
 			return this['TYPE_' + s];
 		}
 		if (type == 'syncTarget') {
@@ -238,19 +239,32 @@ class Database {
 		};
 	}
 
-	alterColumnQueries(tableName, fieldsAfter) {
+	alterColumnQueries(tableName, fields) {
+		let fieldsNoType = [];
+		for (let n in fields) {
+			if (!fields.hasOwnProperty(n)) continue;
+			fieldsNoType.push(n);
+		}
+
+		let fieldsWithType = [];
+		for (let n in fields) {
+			if (!fields.hasOwnProperty(n)) continue;
+			fieldsWithType.push(this.escapeField(n) + ' ' + fields[n]);
+		}		
+
 		let sql = `
-			CREATE TEMPORARY TABLE _BACKUP_TABLE_NAME_(_FIELDS_AFTER_);
-			INSERT INTO _BACKUP_TABLE_NAME_ SELECT _FIELDS_AFTER_ FROM _TABLE_NAME_;
+			CREATE TEMPORARY TABLE _BACKUP_TABLE_NAME_(_FIELDS_TYPE_);
+			INSERT INTO _BACKUP_TABLE_NAME_ SELECT _FIELDS_NO_TYPE_ FROM _TABLE_NAME_;
 			DROP TABLE _TABLE_NAME_;
-			CREATE TABLE _TABLE_NAME_(_FIELDS_AFTER_);
-			INSERT INTO _TABLE_NAME_ SELECT _FIELDS_AFTER_ FROM _BACKUP_TABLE_NAME_;
+			CREATE TABLE _TABLE_NAME_(_FIELDS_TYPE_);
+			INSERT INTO _TABLE_NAME_ SELECT _FIELDS_NO_TYPE_ FROM _BACKUP_TABLE_NAME_;
 			DROP TABLE _BACKUP_TABLE_NAME_;
 		`;
 
 		sql = sql.replace(/_BACKUP_TABLE_NAME_/g, this.escapeField(tableName + '_backup'));
 		sql = sql.replace(/_TABLE_NAME_/g, this.escapeField(tableName));
-		sql = sql.replace(/_FIELDS_AFTER_/g, this.escapeFields(fieldsAfter).join(','));
+		sql = sql.replace(/_FIELDS_NO_TYPE_/g, this.escapeFields(fieldsNoType).join(','));
+		sql = sql.replace(/_FIELDS_TYPE_/g, fieldsWithType.join(','));
 
 		return sql.trim().split("\n");
 	}
