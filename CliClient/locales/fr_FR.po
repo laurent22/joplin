@@ -415,6 +415,28 @@ msgstr "Tâches non-complétées et récentes"
 msgid "Non-completed ones only"
 msgstr "Tâche complétée seulement"
 
+msgid "Show uncompleted todos on top of the lists"
+msgstr ""
+
+msgid "Save location with notes"
+msgstr ""
+
+#, fuzzy
+msgid "Synchronisation interval"
+msgstr "Cible de la synchronisation"
+
+#, javascript-format
+msgid "%d minutes"
+msgstr ""
+
+#, javascript-format
+msgid "%d hour"
+msgstr ""
+
+#, javascript-format
+msgid "%d hours"
+msgstr ""
+
 msgid "Sync status (synced items / total items)"
 msgstr "Status de la synchronisation (objets synchro. / total)"
 

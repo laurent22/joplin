@@ -136,7 +136,7 @@ class Synchronizer {
 	}
 
 	cancel() {
-		if (this.cancelling_) return;
+		if (this.cancelling_ || this.state() == 'idle') return;
 		
 		this.logSyncOperation('cancelling', null, null, '');
 		this.cancelling_ = true;

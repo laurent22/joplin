@@ -380,6 +380,27 @@ msgstr ""
 msgid "Non-completed ones only"
 msgstr ""
 
+msgid "Show uncompleted todos on top of the lists"
+msgstr ""
+
+msgid "Save location with notes"
+msgstr ""
+
+msgid "Synchronisation interval"
+msgstr ""
+
+#, javascript-format
+msgid "%d minutes"
+msgstr ""
+
+#, javascript-format
+msgid "%d hour"
+msgstr ""
+
+#, javascript-format
+msgid "%d hours"
+msgstr ""
+
 msgid "Sync status (synced items / total items)"
 msgstr ""
 
