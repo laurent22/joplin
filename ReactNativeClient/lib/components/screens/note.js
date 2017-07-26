@@ -19,6 +19,8 @@ import { BaseScreenComponent } from 'lib/components/base-screen.js';
 import { dialogs } from 'lib/dialogs.js';
 import { globalStyle } from 'lib/components/global-style.js';
 import DialogBox from 'react-native-dialogbox';
+const Entities = require('html-entities').AllHtmlEntities;
+const htmlentities = (new Entities()).encode;
 
 const styleObject = {
 	titleTextInput: {
@@ -383,10 +385,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 				renderer.link = function (href, title, text) {
 					if (Resource.isResourceUrl(href)) {
-						return '[Resource not yet supported: ' + href + ']'; // TODO: add title
+						return '[Resource not yet supported: ' + htmlentities(text) + ']';
 					} else {
 						const js = "postMessage(" + JSON.stringify(href) + "); return false;";
-						let output = "<a title='" + title + "' href='#' onclick='" + js + "'>" + text + '</a>';
+						let output = "<a title='" + htmlentities(title) + "' href='#' onclick='" + js + "'>" + htmlentities(text) + '</a>';
 						return output;
 					}
 				}
@@ -401,11 +403,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 					const r = this.state.resources[resourceId];
 					if (r.mime == 'image/png' || r.mime == 'image/jpg' || r.mime == 'image/gif') {
 						const src = 'data:' + r.mime + ';base64,' + r.base64;
-						let output = '<img src="' + src + '"/>';
+						let output = '<img title="' + htmlentities(title) + '" src="' + src + '"/>';
 						return output;
 					}
 					
-					return '[Image: ' + r.title + '(' + r.mime + ')]';
+					return '[Image: ' + htmlentities(r.title) + '(' + htmlentities(r.mime) + ')]';
 				}
 
 				let html = note ? '<style>' + normalizeCss + "\n" + css + '</style>' + marked(body, { gfm: true, breaks: true, renderer: renderer }) : '';
@@ -421,6 +423,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 				let scriptHtml = '<script>document.body.scrollTop = ' + this.bodyScrollTop_ + ';</script>';
 
 				html = '<body onscroll="postMessage(\'bodyscroll:\' + document.body.scrollTop);">' + html + scriptHtml + '</body>';
+
+				console.info(html);
 
 				return html;
 			}

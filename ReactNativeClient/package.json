@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "form-data": "^2.1.4",
+    "html-entities": "^1.2.1",
     "moment": "^2.18.1",
     "query-string": "4.3.4",
     "react": "16.0.0-alpha.12",
