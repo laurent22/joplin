@@ -38,6 +38,10 @@ function shimInit() {
 			throw new Error('fetchBlob: ' + method + ' ' + url + ': ' + error.toString());
 		}
 	}
+
+	shim.readLocalFileBase64 = async function(path) {
+		return RNFetchBlob.fs.readFile(path, 'base64')
+	}
 }
 
 export { shimInit }

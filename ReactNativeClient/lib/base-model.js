@@ -116,11 +116,18 @@ class BaseModel {
 	static applySqlOptions(options, sql, params = null) {
 		if (!options) options = {};
 
-		if (options.orderBy) {
-			sql += ' ORDER BY ' + options.orderBy;
-			if (options.caseInsensitive === true) sql += ' COLLATE NOCASE';
-			if (options.orderByDir) sql += ' ' + options.orderByDir;
+		if (options.order && options.order.length) {
+			let items = [];
+			for (let i = 0; i < options.order.length; i++) {
+				const o = options.order[i];
+				let item = o.by;
+				if (options.caseInsensitive === true) item += ' COLLATE NOCASE';
+				if (o.dir) item += ' ' + o.dir;
+				items.push(item);
+			}
+			sql += ' ORDER BY ' + items.join(', ');
 		}
+		
 		if (options.limit) sql += ' LIMIT ' + options.limit;
 
 		return { sql: sql, params: params };

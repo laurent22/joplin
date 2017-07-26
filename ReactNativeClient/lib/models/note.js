@@ -63,14 +63,14 @@ class Note extends BaseItem {
 		return output;
 	}
 
-	static sortNotes(notes, order) {
-		return notes.sort((a, b) => {
-			let r = -1;
-			if (a[order.orderBy] < b[order.orderBy]) r = +1;
-			if (order.orderByDir == 'ASC') r = -r;
-			return r;
-		});
-	}
+	// static sortNotes(notes, order) {
+	// 	return notes.sort((a, b) => {
+	// 		// let r = -1;
+	// 		// if (a[order.orderBy] < b[order.orderBy]) r = +1;
+	// 		// if (order.orderByDir == 'ASC') r = -r;
+	// 		// return r;
+	// 	});
+	// }
 
 	static previewFields() {
 		return ['id', 'title', 'body', 'is_todo', 'todo_completed', 'parent_id', 'updated_time'];
@@ -95,13 +95,13 @@ class Note extends BaseItem {
 		return results.length ? results[0] : null;
 	}
 
-	static previews(parentId, options = null) {
+	static async previews(parentId, options = null) {
 		if (!options) options = {};
-		if (!options.orderBy) options.orderBy = 'updated_time';
-		if (!options.orderByDir) options.orderByDir = 'DESC';
+		if (!options.order) options.order = { by: 'updated_time', dir: 'DESC' };
 		if (!options.conditions) options.conditions = [];
 		if (!options.conditionsParams) options.conditionsParams = [];
 		if (!options.fields) options.fields = this.previewFields();
+		if (!options.uncompletedTodosOnTop) options.uncompletedTodosOnTop = false;
 
 		if (parentId == Folder.conflictFolderId()) {
 			options.conditions.push('is_conflict = 1');
@@ -120,14 +120,45 @@ class Note extends BaseItem {
 			options.conditionsParams.push(pattern);
 		}
 
+		let hasNotes = true;
+		let hasTodos = true;
 		if (options.itemTypes && options.itemTypes.length) {
-			if (options.itemTypes.indexOf('note') >= 0 && options.itemTypes.indexOf('todo') >= 0) {
-				// Fetch everything
-			} else if (options.itemTypes.indexOf('note') >= 0) {
-				options.conditions.push('is_todo = 0');
-			} else if (options.itemTypes.indexOf('todo') >= 0) {
-				options.conditions.push('is_todo = 1');
+			if (options.itemTypes.indexOf('note') < 0) {
+				hasNotes = false;
+			} else if (options.itemTypes.indexOf('todo') < 0) {
+				hasTodos = false;
 			}
+		}
+
+		if (options.uncompletedTodosOnTop && hasTodos) {
+			let cond = options.conditions.slice();
+			cond.push('is_todo = 1');
+			cond.push('(todo_completed <= 0 OR todo_completed IS NULL)');
+			let tempOptions = Object.assign({}, options);
+			tempOptions.conditions = cond;
+
+			let uncompletedTodos = await this.search(tempOptions);
+
+			cond = options.conditions.slice();
+			if (hasNotes && hasTodos) {
+				cond.push('(is_todo = 0 OR (is_todo = 1 AND todo_completed > 0))');
+			} else {
+				cond.push('(is_todo = 1 AND todo_completed > 0)');
+			}
+
+			tempOptions = Object.assign({}, options);
+			tempOptions.conditions = cond;
+			let theRest = await this.search(tempOptions);
+
+			return uncompletedTodos.concat(theRest);
+		}
+
+		if (hasNotes && hasTodos) {
+			
+		} else if (hasNotes) {
+			options.conditions.push('is_todo = 0');
+		} else if (hasTodos) {
+			options.conditions.push('is_todo = 1');
 		}
 
 		return this.search(options);

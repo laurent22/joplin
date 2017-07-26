@@ -42,20 +42,21 @@ class Setting extends BaseModel {
 		this.cancelScheduleSave();
 		this.cache_ = [];
 		return this.modelSelectAll('SELECT * FROM settings').then((rows) => {
-			this.cache_ = rows;
+			this.cache_ = [];
 
-			for (let i = 0; i < this.cache_.length; i++) {
-				let c = this.cache_[i];
+			// Old keys - can be removed later
+			const ignore = ['clientId', 'sync.onedrive.auth', 'syncInterval', 'todoOnTop', 'todosOnTop'];
 
-				if (c.key == 'clientId') continue; // For older clients
-				if (c.key == 'sync.onedrive.auth') continue; // For older clients
-				if (c.key == 'syncInterval') continue; // For older clients
+			for (let i = 0; i < rows.length; i++) {
+				let c = rows[i];
+
+				if (ignore.indexOf(c.key) >= 0) continue;
 
 				// console.info(c.key + ' = ' + c.value);
 
 				c.value = this.formatValue(c.key, c.value);
 
-				this.cache_[i] = c;
+				this.cache_.push(c);
 			}
 
 			const keys = this.keys();
@@ -303,6 +304,7 @@ Setting.metadata_ = {
 		recent: _('Non-completed and recently completed ones'),
 		nonCompleted: _('Non-completed ones only'),
 	})},
+	'uncompletedTodosOnTop': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Show uncompleted todos on top of the lists') },
 	'trackLocation': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Save location with notes') },
 	'sync.interval': { value: 300, type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation interval'), options: () => {
 		return {

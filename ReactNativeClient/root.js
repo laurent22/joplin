@@ -49,10 +49,9 @@ let defaultState = {
 	screens: {},
 	loading: true,
 	historyCanGoBack: false,
-	notesOrder: {
-		orderBy: 'updated_time',
-		orderByDir: 'DESC',
-	},
+	notesOrder: [
+		{ by: 'updated_time', dir: 'DESC' },
+	],
 	syncStarted: false,
 	syncReport: {},
 	searchQuery: '',
@@ -85,6 +84,27 @@ function reducerActionsAreSame(a1, a2) {
 	}
 
 	return true;
+}
+
+function updateStateFromSettings(action, newState) {
+	// if (action.type == 'SETTINGS_UPDATE_ALL' || action.key == 'uncompletedTodosOnTop') {
+	// 	let newNotesOrder = [];
+	// 	for (let i = 0; i < newState.notesOrder.length; i++) {
+	// 		const o = newState.notesOrder[i];
+	// 		if (o.by == 'is_todo') continue;
+	// 		newNotesOrder.push(o);
+	// 	}
+
+	// 	if (newState.settings['uncompletedTodosOnTop']) {
+	// 		newNotesOrder.unshift({ by: 'is_todo', dir: 'DESC' });
+	// 	}
+
+	// 	newState.notesOrder = newNotesOrder;
+
+	// 	console.info('NEW', newNotesOrder);
+	// }
+
+	return newState;
 }
 
 const reducer = (state = defaultState, action) => {
@@ -179,6 +199,7 @@ const reducer = (state = defaultState, action) => {
 
 				newState = Object.assign({}, state);
 				newState.settings = action.settings;
+				newState = updateStateFromSettings(action, newState);
 				break;
 
 			case 'SETTINGS_UPDATE_ONE':
@@ -187,6 +208,7 @@ const reducer = (state = defaultState, action) => {
 				let newSettings = Object.assign({}, state.settings);
 				newSettings[action.key] = action.value;
 				newState.settings = newSettings;
+				newState = updateStateFromSettings(action, newState);
 				break;
 
 			// Replace all the notes with the provided array
@@ -223,7 +245,7 @@ const reducer = (state = defaultState, action) => {
 
 				if (!found && ('parent_id' in modNote) && modNote.parent_id == state.selectedFolderId) newNotes.push(modNote);
 
-				newNotes = Note.sortNotes(newNotes, state.notesOrder);
+				//newNotes = Note.sortNotes(newNotes, state.notesOrder);
 				newState = Object.assign({}, state);
 				newState.notes = newNotes;
 				break;

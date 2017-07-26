@@ -71,7 +71,7 @@ class ReportService {
 		section.body = [];
 
 		let folders = await Folder.all({
-			orderBy: 'title',
+			order: { by: 'title', dir: 'ASC' },
 			caseInsensitive: true,
 		});
 
