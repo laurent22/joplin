@@ -245,7 +245,11 @@ class JoplinDatabase extends Database {
 			// Will throw if the database has not been created yet, but this is handled below
 			versionRow = await this.selectOne('SELECT * FROM version LIMIT 1');
 		} catch (error) {
-			console.info(error);
+			if (error.message && (error.message.indexOf('no such table: version') >= 0)) {
+				// Ignore
+			} else {
+				console.info(error);
+			}
 		}
 
 		const version = !versionRow ? 0 : versionRow.version;

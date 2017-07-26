@@ -29,8 +29,9 @@ Resource.fsDriver_ = fsDriver;
 const logDir = __dirname + '/../tests/logs';
 fs.mkdirpSync(logDir, 0o755);
 
-//const syncTargetId_ = Setting.SYNC_TARGET_MEMORY;
-const syncTargetId_ = Setting.SYNC_TARGET_FILESYSTEM;
+const syncTargetId_ = Setting.SYNC_TARGET_MEMORY;
+//const syncTargetId_ = Setting.SYNC_TARGET_FILESYSTEM;
+//const syncTargetId_ = Setting.SYNC_TARGET_ONEDRIVE;
 const syncDir = __dirname + '/../tests/sync';
 
 const sleepTime = syncTargetId_ == Setting.SYNC_TARGET_FILESYSTEM ? 1001 : 200;
@@ -147,11 +148,26 @@ function fileApi() {
 		fs.removeSync(syncDir)
 		fs.mkdirpSync(syncDir, 0o755);
 		fileApi_ = new FileApi(syncDir, new FileApiDriverLocal());
-	} else {
+	} else if (syncTargetId_ == Setting.SYNC_TARGET_MEMORY) {
 		fileApi_ = new FileApi('/root', new FileApiDriverMemory());
 		fileApi_.setLogger(logger);
-		
 	}
+	// } else if (syncTargetId == Setting.SYNC_TARGET_ONEDRIVE) {
+	// 	let auth = require('./onedrive-auth.json');
+	// 	if (!auth) {
+	// 		const oneDriveApiUtils = new OneDriveApiNodeUtils(oneDriveApi);
+	// 		auth = await oneDriveApiUtils.oauthDance();
+	// 		fs.writeFileSync('./onedrive-auth.json', JSON.stringify(auth));
+	// 		process.exit(1);
+	// 	} else {
+	// 		auth = JSON.parse(auth);
+	// 	}
+
+	// 	// const oneDriveApiUtils = new OneDriveApiNodeUtils(reg.oneDriveApi());
+	// 	// const auth = await oneDriveApiUtils.oauthDance(this);
+	// 	// Setting.setValue('sync.3.auth', auth ? JSON.stringify(auth) : null);
+	// 	// if (!auth) return;
+	// }
 
 	fileApi_.setLogger(logger);
 	fileApi_.setSyncTargetId(syncTargetId_);
