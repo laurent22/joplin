@@ -274,7 +274,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const note = this.state.note;
 
 		return [
-			{ title: _('Attach file'), onPress: () => { this.attachFile_onPress(); } },
+			// { title: _('Attach file'), onPress: () => { this.attachFile_onPress(); } },
 			{ title: _('Delete note'), onPress: () => { this.deleteNote_onPress(); } },
 			{ title: note && !!note.is_todo ? _('Convert to regular note') : _('Convert to todo'), onPress: () => { this.toggleIsTodo_onPress(); } },
 			{ title: this.state.showNoteMetadata ? _('Hide metadata') : _('Show metadata'), onPress: () => { this.showMetadata_onPress(); } },

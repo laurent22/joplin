@@ -25,7 +25,7 @@ class Command extends BaseCommand {
 	}
 
 	description() {
-		return _('Synchronizes with remote storage.');
+		return _('Synchronises with remote storage.');
 	}
 
 	options() {
@@ -97,11 +97,11 @@ class Command extends BaseCommand {
 				randomFailures: args.options['random-failures'] === true,
 			};
 
-			this.log(_('Synchronization target: %s (%s)', Setting.enumOptionLabel('sync.target', this.syncTarget_), this.syncTarget_));
+			this.log(_('Synchronisation target: %s (%s)', Setting.enumOptionLabel('sync.target', this.syncTarget_), this.syncTarget_));
 
-			if (!sync) throw new Error(_('Cannot initialize synchronizer.'));
+			if (!sync) throw new Error(_('Cannot initialize synchroniser.'));
 
-			this.log(_('Starting synchronization...'));
+			this.log(_('Starting synchronisation...'));
 
 			let context = Setting.value('sync.context');
 			context = context ? JSON.parse(context) : {};

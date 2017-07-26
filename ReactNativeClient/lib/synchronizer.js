@@ -150,10 +150,9 @@ class Synchronizer {
 		if (!options) options = {};
 
 		if (this.state() != 'idle') {
-			let error = new Error(_('Synchronization is already in progress. State: %s', this.state()));
+			let error = new Error(_('Synchronisation is already in progress. State: %s', this.state()));
 			error.code = 'alreadyStarted';
 			throw error;
-			//this.logger().info('Synchronization is already in progress. State: ' + this.state());
 			return;
 		}	
 
@@ -180,7 +179,7 @@ class Synchronizer {
 
 		this.dispatch({ type: 'SYNC_STARTED' });
 
-		this.logSyncOperation('starting', null, null, 'Starting synchronization to target ' + syncTargetId + '... [' + synchronizationId + ']');
+		this.logSyncOperation('starting', null, null, 'Starting synchronisation to target ' + syncTargetId + '... [' + synchronizationId + ']');
 
 		try {
 			await this.api().mkdir(this.syncDirName_);
@@ -460,7 +459,7 @@ class Synchronizer {
 		}
 
 		if (this.cancelling()) {
-			this.logger().info('Synchronization was cancelled.');
+			this.logger().info('Synchronisation was cancelled.');
 			this.cancelling_ = false;
 		}
 
@@ -468,7 +467,7 @@ class Synchronizer {
 
 		this.progressReport_.completedTime = time.unixMs();
 
-		this.logSyncOperation('finished', null, null, 'Synchronization finished [' + synchronizationId + ']');
+		this.logSyncOperation('finished', null, null, 'Synchronisation finished [' + synchronizationId + ']');
 
 		await this.logSyncSummary(this.progressReport_);
 

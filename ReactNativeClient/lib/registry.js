@@ -122,7 +122,7 @@ reg.scheduleSync = async (delay = null) => {
 		const syncTargetId = Setting.value('sync.target');
 
 		if (!reg.syncHasAuth(syncTargetId)) {
-			reg.logger().info('Synchronizer is missing credentials - manual sync required to authenticate.');
+			reg.logger().info('Synchroniser is missing credentials - manual sync required to authenticate.');
 			return;
 		}
 

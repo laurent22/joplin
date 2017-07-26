@@ -14,7 +14,7 @@ class Command extends BaseCommand {
 	}
 
 	description() {
-		return _('<action> can either be "toggle" or "clear". Use "toggle" to toggle the given todo between completed and uncompleted state (If the target is not a single note it will be converted to a todo). Use "clear" to convert the todo back to a regular note.');
+		return _('<action> can either be "toggle" or "clear". Use "toggle" to toggle the given todo between completed and uncompleted state (If the target is a regular note it will be converted to a todo). Use "clear" to convert the todo back to a regular note.');
 	}
 
 	autocomplete() {

@@ -213,7 +213,7 @@ msgstr ""
 msgid "Displays summary about the notes and notebooks."
 msgstr ""
 
-msgid "Synchronizes with remote storage."
+msgid "Synchronises with remote storage."
 msgstr ""
 
 msgid "Sync to provided target (defaults to sync.target config value)"
@@ -223,13 +223,13 @@ msgid "Synchronisation is already in progress."
 msgstr ""
 
 #, javascript-format
-msgid "Synchronization target: %s (%s)"
+msgid "Synchronisation target: %s (%s)"
 msgstr ""
 
-msgid "Cannot initialize synchronizer."
+msgid "Cannot initialize synchroniser."
 msgstr ""
 
-msgid "Starting synchronization..."
+msgid "Starting synchronisation..."
 msgstr ""
 
 msgid "Done."
@@ -250,8 +250,8 @@ msgstr ""
 
 msgid ""
 "<action> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the "
-"given todo between completed and uncompleted state (If the target is not a "
-"single note it will be converted to a todo). Use \"clear\" to convert the "
+"given todo between completed and uncompleted state (If the target is a "
+"regular note it will be converted to a todo). Use \"clear\" to convert the "
 "todo back to a regular note."
 msgstr ""
 
@@ -322,7 +322,7 @@ msgid "Completed: %s"
 msgstr ""
 
 #, javascript-format
-msgid "Synchronization is already in progress. State: %s"
+msgid "Synchronisation is already in progress. State: %s"
 msgstr ""
 
 msgid "Conflicts"
@@ -447,10 +447,10 @@ msgstr ""
 msgid "Configuration"
 msgstr ""
 
-msgid "Synchronize"
+msgid "Synchronise"
 msgstr ""
 
-msgid "Cancel synchronization"
+msgid "Cancel synchronisation"
 msgstr ""
 
 #, javascript-format
@@ -464,9 +464,6 @@ msgid "Untitled"
 msgstr ""
 
 msgid "Delete note?"
-msgstr ""
-
-msgid "Attach file"
 msgstr ""
 
 msgid "Delete note"

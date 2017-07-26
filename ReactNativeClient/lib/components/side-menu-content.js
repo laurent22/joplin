@@ -16,6 +16,8 @@ let styles = {
 	menu: {
 		flex: 1,
 		backgroundColor: globalStyle.backgroundColor,
+		borderTopWidth: 1,
+		borderTopColor: globalStyle.dividerColor,
 	},
 	name: {
 		position: 'absolute',
@@ -148,7 +150,7 @@ class SideMenuContentComponent extends Component {
 	}
 
 	synchronizeButton(state) {
-		const title = state == 'sync' ? _('Synchronize') : _('Cancel synchronization');
+		const title = state == 'sync' ? _('Synchronise') : _('Cancel synchronisation');
 		const iconComp = state == 'sync' ? <Icon name='md-sync' style={globalStyle.icon} /> : <Icon name='md-close' style={globalStyle.icon} />;
 
 		return (
@@ -211,7 +213,7 @@ class SideMenuContentComponent extends Component {
 		return (
 			<View style={{flex:1, borderRightWidth: 1, borderRightColor: globalStyle.dividerColor }}>
 				<View style={{flexDirection:'row'}}>
-					<Image style={{flex:1, height: 150}} source={require('../images/SideMenuHeader.png')} />
+					<Image style={{flex:1, height: 100}} source={require('../images/SideMenuHeader.png')} />
 				</View>
 				<ScrollView scrollsToTop={false} style={styles.menu}>
 					{ items }
