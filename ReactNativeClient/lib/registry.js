@@ -97,7 +97,7 @@ reg.synchronizer = async (syncTargetId) => {
 	return sync;
 }
 
-reg.syncHasAuth = async (syncTargetId) => {
+reg.syncHasAuth = (syncTargetId) => {
 	if (syncTargetId == Setting.SYNC_TARGET_ONEDRIVE && !reg.oneDriveApi().auth()) {
 		return false;
 	}
@@ -121,7 +121,7 @@ reg.scheduleSync = async (delay = null) => {
 
 		const syncTargetId = Setting.value('sync.target');
 
-		if (!reg.syncHasAuth()) {
+		if (!reg.syncHasAuth(syncTargetId)) {
 			reg.logger().info('Synchronizer is missing credentials - manual sync required to authenticate.');
 			return;
 		}
@@ -135,7 +135,7 @@ reg.scheduleSync = async (delay = null) => {
 			Setting.setValue('sync.context', JSON.stringify(newContext));
 		} catch (error) {
 			if (error.code == 'alreadyStarted') {
-				reg.logger.info(error.message);
+				reg.logger().info(error.message);
 			} else {
 				throw error;
 			}
@@ -152,8 +152,9 @@ reg.scheduleSync = async (delay = null) => {
 }
 
 reg.syncStarted = async () => {
-	if (!reg.syncHasAuth()) return false;
-	const sync = await reg.synchronizer(Setting.value('sync.target'));
+	const syncTarget = Setting.value('sync.target');
+	if (!reg.syncHasAuth(syncTarget)) return false;
+	const sync = await reg.synchronizer(syncTarget);
 	return sync.state() != 'idle';
 }
 

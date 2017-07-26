@@ -122,10 +122,6 @@ msgid "Folder does not exists: \"%s\". Create it?"
 msgstr "Ce carnet n'existe pas : \"%s\". Le créer ?"
 
 #, javascript-format
-msgid "Imported - %s"
-msgstr "Importé - %s"
-
-#, javascript-format
 msgid "File \"%s\" will be imported into notebook \"%s\". Continue?"
 msgstr "Le fichier \"%s\" va être importé dans le carnet \"%s\". Continuer ?"
 
@@ -281,6 +277,13 @@ msgid "Invalid command: \"%s\""
 msgstr "Commande invalie : \"%s\""
 
 msgid ""
+"<action> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the "
+"given todo between completed and uncompleted state (If the target is not a "
+"single note it will be converted to a todo). Use \"clear\" to convert the "
+"todo back to a regular note."
+msgstr ""
+
+msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
@@ -295,12 +298,6 @@ msgstr "%s %s (%s)"
 
 msgid "Fatal error:"
 msgstr "Erreur fatale :"
-
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
-"Tous les ports sont en cours d'utilisation. Veuillez signaler ce problème "
-"sur %s"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
@@ -555,6 +552,14 @@ msgstr ""
 
 msgid "Welcome"
 msgstr ""
+
+#~ msgid "All potential ports are in use - please report the issue at %s"
+#~ msgstr ""
+#~ "Tous les ports sont en cours d'utilisation. Veuillez signaler ce problème "
+#~ "sur %s"
+
+#~ msgid "Imported - %s"
+#~ msgstr "Importé - %s"
 
 #~ msgid ""
 #~ "There is currently no notebook. Create one by clicking on the (+) button."

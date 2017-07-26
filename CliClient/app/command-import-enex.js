@@ -39,7 +39,6 @@ class Command extends BaseCommand {
 			}
 		} else {
 			folderTitle = filename(filePath);
-			folderTitle = _('Imported - %s', folderTitle);
 			let inc = 0;
 			while (true) {
 				let t = folderTitle + (inc ? ' (' + inc + ')' : '');

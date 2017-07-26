@@ -134,7 +134,12 @@ class Setting extends BaseModel {
 		const md = this.settingMetadata(key);
 		if (md.type == Setting.TYPE_INT) return Math.floor(Number(value));
 		if (md.type == Setting.TYPE_BOOL) {
-			if (typeof value === 'string') value = Number(value);
+			if (typeof value === 'string') {
+				value = value.toLowerCase();
+				if (value === 'true') return true;
+				if (value === 'false') return false;
+				value = Number(value);
+			}
 			return !!value;
 		}
 		return value;

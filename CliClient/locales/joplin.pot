@@ -111,10 +111,6 @@ msgid "Folder does not exists: \"%s\". Create it?"
 msgstr ""
 
 #, javascript-format
-msgid "Imported - %s"
-msgstr ""
-
-#, javascript-format
 msgid "File \"%s\" will be imported into notebook \"%s\". Continue?"
 msgstr ""
 
@@ -253,6 +249,13 @@ msgid "Invalid command: \"%s\""
 msgstr ""
 
 msgid ""
+"<action> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the "
+"given todo between completed and uncompleted state (If the target is not a "
+"single note it will be converted to a todo). Use \"clear\" to convert the "
+"todo back to a regular note."
+msgstr ""
+
+msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
@@ -265,10 +268,6 @@ msgid "%s %s (%s)"
 msgstr ""
 
 msgid "Fatal error:"
-msgstr ""
-
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
 msgstr ""
 
 msgid ""
