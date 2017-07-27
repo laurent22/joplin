@@ -245,7 +245,7 @@ const reducer = (state = defaultState, action) => {
 
 				if (!found && ('parent_id' in modNote) && modNote.parent_id == state.selectedFolderId) newNotes.push(modNote);
 
-				//newNotes = Note.sortNotes(newNotes, state.notesOrder);
+				newNotes = Note.sortNotes(newNotes, state.notesOrder, newState.settings.uncompletedTodosOnTop);
 				newState = Object.assign({}, state);
 				newState.notes = newNotes;
 				break;

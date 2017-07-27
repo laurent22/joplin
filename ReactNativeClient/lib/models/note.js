@@ -43,7 +43,7 @@ class Note extends BaseItem {
 
 	static geolocationUrl(note) {
 		if (!('latitude' in note) || !('longitude' in note)) throw new Error('Latitude or longitude is missing');
-		if (!note.latitude && !note.longitude) throw new Error(_('This note does not have geolocation information.'));
+		if (!Number(note.latitude) && !Number(note.longitude)) throw new Error(_('This note does not have geolocation information.'));
 		return sprintf('https://www.openstreetmap.org/?lat=%s&lon=%s&zoom=20', note.latitude, note.longitude)
 	}
 
@@ -63,14 +63,28 @@ class Note extends BaseItem {
 		return output;
 	}
 
-	// static sortNotes(notes, order) {
-	// 	return notes.sort((a, b) => {
-	// 		// let r = -1;
-	// 		// if (a[order.orderBy] < b[order.orderBy]) r = +1;
-	// 		// if (order.orderByDir == 'ASC') r = -r;
-	// 		// return r;
-	// 	});
-	// }
+	static sortNotes(notes, orders, uncompletedTodosOnTop) {
+		const noteOnTop = (note) => {
+			return uncompletedTodosOnTop && note.is_todo && !note.todo_completed;
+		}
+
+		return notes.sort((a, b) => {
+			if (noteOnTop(a) && !noteOnTop(b)) return -1;
+			if (!noteOnTop(a) && noteOnTop(b)) return +1;
+
+			let r = 0;
+
+			for (let i = 0; i < orders.length; i++) {
+				const order = orders[i];
+				if (a[order.by] < b[order.by]) r = +1;
+				if (a[order.by] > b[order.by]) r = -1;
+				if (order.dir == 'ASC') r = -r;
+				if (r) break;
+			}
+
+			return r;
+		});
+	}
 
 	static previewFields() {
 		return ['id', 'title', 'body', 'is_todo', 'todo_completed', 'parent_id', 'updated_time'];
@@ -96,6 +110,9 @@ class Note extends BaseItem {
 	}
 
 	static async previews(parentId, options = null) {
+		// Note: ordering logic must be duplicated in sortNotes, which
+		// is used to sort already loaded notes.
+
 		if (!options) options = {};
 		if (!options.order) options.order = { by: 'updated_time', dir: 'DESC' };
 		if (!options.conditions) options.conditions = [];

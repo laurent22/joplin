@@ -15,10 +15,6 @@ class Command extends BaseCommand {
 		return _('Switches to [notebook] - all further operations will happen within this notebook.');
 	}
 
-	aliases() {
-		return ['cd'];
-	}
-
 	autocomplete() {
 		return { data: autocompleteFolders };
 	}

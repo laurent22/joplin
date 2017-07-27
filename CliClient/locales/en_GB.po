@@ -94,6 +94,10 @@ msgstr ""
 msgid "No active notebook."
 msgstr ""
 
+#, javascript-format
+msgid "Note does not exist: \"%s\". Create it?"
+msgstr ""
+
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
 

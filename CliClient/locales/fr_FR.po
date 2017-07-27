@@ -14,8 +14,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.3\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "No notebook selected."
 msgstr "Aucun carnet n'est sélectionné."
@@ -104,6 +102,10 @@ msgstr ""
 
 msgid "No active notebook."
 msgstr "Aucun carnet actif."
+
+#, fuzzy, javascript-format
+msgid "Note does not exist: \"%s\". Create it?"
+msgstr "Ce carnet n'existe pas : \"%s\". Le créer ?"
 
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""

@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 import { BaseCommand } from './base-command.js';
 import { app } from './app.js';
 import { _ } from 'lib/locale.js';
+import { vorpalUtils } from './vorpal-utils.js';
 import { Folder } from 'lib/models/folder.js';
 import { Note } from 'lib/models/note.js';
 import { Setting } from 'lib/models/setting.js';
@@ -46,6 +47,8 @@ class Command extends BaseCommand {
 			let note = await app().loadItem(BaseModel.TYPE_NOTE, title);
 
 			if (!note) {
+				let ok = await vorpalUtils.cmdPromptConfirm(this, _('Note does not exist: "%s". Create it?', title))
+				if (!ok) return;
 				newNote = await Note.save({ title: title, parent_id: app().currentFolder().id });
 				note = await Note.load(newNote.id);
 			}

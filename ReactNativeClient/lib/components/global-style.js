@@ -8,6 +8,10 @@ const globalStyle = {
 	selectedColor: '#e5e5e5',
 	disabledOpacity: 0.3,
 
+	raisedBackgroundColor: "#0072D5",
+	raisedColor: "#003363",
+	raisedHighlightedColor: "#ffffff",
+
 	// For WebView - must correspond to the properties above
 	htmlFontSize: '14px',
 	htmlColor: 'black', // Note: CSS in WebView component only seem to work if the colour is written in full letters (so no hexadecimal)

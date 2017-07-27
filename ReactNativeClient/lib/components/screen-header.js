@@ -16,7 +16,7 @@ let styleObject = {
 		flexDirection: 'row',
 		paddingTop: 10,
 		paddingBottom: 10,
-		backgroundColor: globalStyle.backgroundColor,
+		backgroundColor: globalStyle.raisedBackgroundColor,
 		alignItems: 'center',
 		shadowColor: '#000000',
 		elevation: 5,
@@ -24,7 +24,7 @@ let styleObject = {
 	folderPicker: {
 		height: 30,
 		flex:1,
-		color: globalStyle.color,
+		color: globalStyle.raisedHighlightedColor,
 		// Note: cannot set backgroundStyle as that would remove the arrow in the component
 	},
 	divider: {
@@ -35,14 +35,14 @@ let styleObject = {
 	sideMenuButton: {
 		flex: 1,
 		alignItems: 'center',
-		backgroundColor: globalStyle.backgroundColor,
+		backgroundColor: globalStyle.raisedBackgroundColor,
 		paddingLeft: globalStyle.marginLeft,
 		paddingRight: 5,
 		marginRight: 2,
 	},
 	iconButton: {
 		flex: 1,
-		backgroundColor: globalStyle.backgroundColor,
+		backgroundColor: globalStyle.raisedBackgroundColor,
 		paddingLeft: 15,
 		paddingRight: 15,
 	},
@@ -70,11 +70,11 @@ let styleObject = {
 	contextMenuTrigger: {
 		fontSize: 25,
 		paddingRight: globalStyle.marginRight,
-		color: globalStyle.color,
+		color: globalStyle.raisedColor,
 		fontWeight: 'bold',
 	},
 	contextMenu: {
-		backgroundColor: globalStyle.backgroundColor,
+		backgroundColor: globalStyle.raisedBackgroundColor,
 	},
 	contextMenuItem: {
 		backgroundColor: globalStyle.backgroundColor,
@@ -91,13 +91,15 @@ let styleObject = {
 	titleText: {
 		flex: 1,
 		marginLeft: 0,
-		color: globalStyle.color,
+		color: globalStyle.raisedHighlightedColor,
+		fontWeight: 'bold',
 	}
 };
 
 styleObject.topIcon = Object.assign({}, globalStyle.icon);
 styleObject.topIcon.flex = 1;
 styleObject.topIcon.textAlignVertical = 'center';
+styleObject.topIcon.color = globalStyle.raisedColor;
 
 styleObject.backButton = Object.assign({}, styleObject.iconButton);
 styleObject.backButton.marginRight = 1;
