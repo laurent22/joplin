@@ -51,6 +51,48 @@ msgstr "Quitter le logiciel."
 msgid "No notebook is defined. Create one with `mkbook <notebook>`."
 msgstr "Aucun carnet n'est défini. Créez-en un avec `mkbook <carnet>`."
 
+msgid "NAME"
+msgstr ""
+
+msgid "joplin - a note taking and todo app with synchronisation capabilities"
+msgstr ""
+
+msgid "DESCRIPTION"
+msgstr ""
+
+msgid ""
+"Joplin is a note taking and todo application, which can handle a large "
+"number of notes organised into notebooks."
+msgstr ""
+
+msgid ""
+"The notes are searchable, can be copied, tagged and modified with your own "
+"text editor."
+msgstr ""
+
+msgid ""
+"The notes can be synchronised with various target including the file system "
+"(for example with a network directory) or with Microsoft OneDrive."
+msgstr ""
+
+msgid ""
+"Notes exported from Evenotes via .enex files can be imported into Joplin, "
+"including the formatted content, resources (images, attachments, etc.) and "
+"complete metadata (geolocation, updated time, created time, etc.)."
+msgstr ""
+
+msgid "WEBSITE"
+msgstr ""
+
+msgid "LICENSE"
+msgstr ""
+
+msgid "USAGE"
+msgstr ""
+
+msgid "cat <title>"
+msgstr "cat <titre>"
+
 msgid "Displays the given note."
 msgstr "Affiche la note."
 
@@ -60,6 +102,9 @@ msgstr "Affiche tous les détails de la note."
 #, javascript-format
 msgid "Cannot find \"%s\"."
 msgstr "Impossible de trouver \"%s\"."
+
+msgid "config [name] [value]"
+msgstr "config [nom] [valeur]"
 
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
@@ -81,12 +126,18 @@ msgstr "%s = %s (%s)"
 msgid "%s = %s"
 msgstr "%s = %s"
 
+msgid "cp <pattern> [notebook]"
+msgstr "cp <nom> [carnet]"
+
 msgid ""
 "Duplicates the notes matching <pattern> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
 "Copie les notes correspondant à [nom] vers [carnet]. Si aucun carnet n'est "
 "spécifié, la note est dupliqué sur place."
+
+msgid "edit <title>"
+msgstr "edit <titre>"
 
 msgid "Edit note."
 msgstr "Editer la note."
@@ -112,8 +163,15 @@ msgstr ""
 "Edition de la note en cours. Fermez l'éditeur de texte pour retourner à "
 "l'invite de commande."
 
+#, fuzzy
+msgid "geoloc <title>"
+msgstr "cat <titre>"
+
 msgid "Displays a geolocation URL for the note."
 msgstr "Afficher l'URL de l'emplacement de la note."
+
+msgid "import-enex <file> [notebook]"
+msgstr "import-enex <fichier> [carnet]"
 
 msgid "Imports an Evernote notebook file (.enex file)."
 msgstr "Importer un carnet Evernote (fichier .enex)."
@@ -156,6 +214,9 @@ msgstr "Etiquettes : %d."
 msgid "Importing notes..."
 msgstr "Importation des notes..."
 
+msgid "ls [pattern]"
+msgstr "ls [motif]"
+
 msgid ""
 "Displays the notes in [notebook]. Use `ls /` to display the list of "
 "notebooks."
@@ -163,8 +224,14 @@ msgstr ""
 "Affiche les notes dans le carnet. Utilisez `ls /` pour afficher la liste des "
 "carnets."
 
+msgid "-n, --limit <num>"
+msgstr ""
+
 msgid "Displays only the first top <num> notes."
 msgstr "Affiche uniquement les <num> premières notes."
+
+msgid "-s, --sort <field>"
+msgstr ""
 
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
@@ -172,6 +239,9 @@ msgstr ""
 
 msgid "Reverses the sorting order."
 msgstr "Inverser l'ordre."
+
+msgid "-t, --type <type>"
+msgstr ""
 
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
@@ -181,6 +251,9 @@ msgstr ""
 "Affiche uniquement les notes du ou des types spécifiés. Le type peut-être "
 "`n` pour les notes, `t` pour les tâches (par exemple, `-tt` affiche "
 "uniquement les tâches, tandis que `-ttd` affiche les notes et les tâches)."
+
+msgid "-f, --format <format>"
+msgstr ""
 
 msgid "Either \"text\" or \"json\""
 msgstr "Soit \"text\" soit \"json\""
@@ -195,14 +268,23 @@ msgstr ""
 msgid "Please select a notebook first."
 msgstr "Veuillez d'abord sélectionner un carnet."
 
+msgid "mkbook <notebook>"
+msgstr "mkbook <carnet>"
+
 msgid "Creates a new notebook."
 msgstr "Créer un carnet."
+
+msgid "mknote <note>"
+msgstr "mknote <note>"
 
 msgid "Creates a new note."
 msgstr "Créer une note."
 
 msgid "Notes can only be created within a notebook."
 msgstr "Les notes ne peuvent être créées que dans un carnet."
+
+msgid "mv <pattern> <destination>"
+msgstr "mv <motif> <destination>"
 
 msgid ""
 "Moves the notes matching <pattern> to <destination>. If <pattern> is a note, "
@@ -212,6 +294,9 @@ msgstr ""
 "Déplacer les notes correspondantes à <motif> vers <destination>. Si <motif> "
 "est une note, elle sera déplacée vers le carnet <destination>. Si <motif> "
 "est un carnet, il sera renommé <destination>."
+
+msgid "rm <pattern>"
+msgstr "rm <motif>"
 
 msgid "Deletes the items matching <pattern>."
 msgstr "Supprime les objets correspondants à <motif>."
@@ -230,8 +315,16 @@ msgstr "Supprimer le carnet \"%s\" ?"
 msgid "%d notes match this pattern. Delete them?"
 msgstr "%d notes correspondent à ce motif. Les supprimer ?"
 
+#, fuzzy
+msgid "search <pattern> [notebook]"
+msgstr "cp <nom> [carnet]"
+
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Chercher le motif <pattern> dans toutes les notes."
+
+#, fuzzy
+msgid "set <note> <name> [value]"
+msgstr "config [nom] [valeur]"
 
 msgid "Sets the property <name> of the given <note> to the given [value]."
 msgstr "Assigner la valeur [value] à la propriété <name> de la <note> donnée."
@@ -241,6 +334,9 @@ msgstr "Afficher un résumé des notes et carnets."
 
 msgid "Synchronises with remote storage."
 msgstr "Synchroniser les notes et carnets."
+
+msgid "--target <target>"
+msgstr ""
 
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
@@ -266,6 +362,9 @@ msgstr "Terminé."
 msgid "Cancelling..."
 msgstr "Annulation..."
 
+msgid "tag <command> [tag] [note]"
+msgstr ""
+
 msgid ""
 "<command> can be \"add\", \"remove\" or \"list\" to assign or remove [tag] "
 "from [note], or to list the notes associated with [tag]. The command `tag "
@@ -280,6 +379,9 @@ msgstr ""
 msgid "Invalid command: \"%s\""
 msgstr "Commande invalide : \"%s\""
 
+msgid "todo <action> <pattern>"
+msgstr ""
+
 #, fuzzy
 msgid ""
 "<action> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the "
@@ -291,6 +393,10 @@ msgstr ""
 "Utilisez \"toggle\" pour basculer la tâche entre le status terminé et non-"
 "terminé (Si la cible est une note, elle sera convertie en tâche). Utilisez "
 "\"clear\" pour convertir la tâche en note."
+
+#, fuzzy
+msgid "use <notebook>"
+msgstr "Nouveau carnet"
 
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
@@ -504,6 +610,9 @@ msgstr "Ce carnet n'a pas pu être sauvegardé : %s"
 msgid "Edit notebook"
 msgstr "Editer le carnet"
 
+msgid "Refresh"
+msgstr ""
+
 msgid "Untitled"
 msgstr "Sans titre"
 
@@ -581,33 +690,3 @@ msgstr "Bienvenu"
 #, fuzzy
 #~ msgid "Invalid command. Showing help:"
 #~ msgstr "Commande invalie : \"%s\""
-
-#~ msgid "cat <title>"
-#~ msgstr "cat <titre>"
-
-#~ msgid "config [name] [value]"
-#~ msgstr "config [nom] [valeur]"
-
-#~ msgid "cp <pattern> [notebook]"
-#~ msgstr "cp <nom> [carnet]"
-
-#~ msgid "edit <title>"
-#~ msgstr "edit <titre>"
-
-#~ msgid "import-enex <file> [notebook]"
-#~ msgstr "import-enex <fichier> [carnet]"
-
-#~ msgid "ls [pattern]"
-#~ msgstr "ls [motif]"
-
-#~ msgid "mkbook <notebook>"
-#~ msgstr "mkbook <carnet>"
-
-#~ msgid "mknote <note>"
-#~ msgstr "mknote <note>"
-
-#~ msgid "mv <pattern> <destination>"
-#~ msgstr "mv <motif> <destination>"
-
-#~ msgid "rm <pattern>"
-#~ msgstr "rm <motif>"

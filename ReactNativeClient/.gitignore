@@ -54,3 +54,5 @@ fastlane/screenshots
 
 # This is generated:
 locales
+android/build*
+android/app/build*

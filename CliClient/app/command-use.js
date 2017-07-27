@@ -8,7 +8,7 @@ import { autocompleteFolders } from './autocomplete.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return 'use <notebook>';
+		return _('use <notebook>');
 	}
 
 	description() {

@@ -7,7 +7,7 @@
     "url": "https://github.com/laurent22/joplin"
   },
   "url": "git://github.com/laurent22/joplin.git",
-  "version": "0.8.68",
+  "version": "0.8.70",
   "bin": {
     "joplin": "./main_launcher.js"
   },
@@ -50,7 +50,8 @@
     "babel-preset-es2015": "^6.1.4",
     "babel-preset-react": "^6.24.1",
     "gettext-parser": "^1.2.2",
-    "jasmine": "^2.6.0"
+    "jasmine": "^2.6.0",
+    "word-wrap": "^1.2.3"
   },
   "scripts": {
     "babelbuild": "babel app -d build",

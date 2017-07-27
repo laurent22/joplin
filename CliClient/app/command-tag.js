@@ -7,7 +7,7 @@ import { BaseModel } from 'lib/base-model.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return 'tag <command> [tag] [note]';
+		return _('tag <command> [tag] [note]');
 	}
 
 	description() {

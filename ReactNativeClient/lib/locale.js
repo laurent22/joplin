@@ -285,6 +285,10 @@ function setLocale(canonicalName) {
 	currentLocale_ = closestSupportedLocale(canonicalName);
 }
 
+function languageCode() {
+	return languageCodeOnly(currentLocale_);
+}
+
 function _(s, ...args) {
 	let strings = localeStrings(currentLocale_);
 	let result = strings[s];
@@ -292,4 +296,4 @@ function _(s, ...args) {
 	return sprintf(result, ...args);
 }
 
-export { _, supportedLocales, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale };
+export { _, supportedLocales, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode };

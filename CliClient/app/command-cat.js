@@ -9,7 +9,7 @@ import { autocompleteItems } from './autocomplete.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return 'cat <title>';
+		return _('cat <title>');
 	}
 
 	description() {

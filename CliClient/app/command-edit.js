@@ -12,7 +12,7 @@ import { autocompleteItems } from './autocomplete.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return 'edit <title>';
+		return _('edit <title>');
 	}
 
 	description() {
