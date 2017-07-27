@@ -63,7 +63,7 @@ class LogScreenComponent extends BaseScreenComponent {
 					renderRow={renderRow}
 					enableEmptySections={true}
 				/>
-				<Button title="Refresh" onPress={() => { this.resfreshLogEntries(); }}/>
+				<Button title={_("Refresh")} onPress={() => { this.resfreshLogEntries(); }}/>
 			</View>
 		);
 	}

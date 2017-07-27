@@ -81,7 +81,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 				<View style={styles.body}>
 					{ body }
 				</View>
-				<Button title="Refresh" onPress={() => this.resfreshScreen()}/>
+				<Button title={_("Refresh")} onPress={() => this.resfreshScreen()}/>
 			</View>
 		);
 	}

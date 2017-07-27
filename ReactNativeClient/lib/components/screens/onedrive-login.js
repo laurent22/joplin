@@ -94,7 +94,7 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 					onNavigationStateChange={(o) => { this.webview_load(o); }}
 					onError={(error) => { this.webview_error(error); }}
 				/>
-				<Button title="Retry" onPress={() => { this.retryButton_click(); }}></Button>
+				<Button title={_("Refresh")} onPress={() => { this.retryButton_click(); }}></Button>
 			</View>
 		);
 	}

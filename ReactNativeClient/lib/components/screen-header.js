@@ -54,17 +54,17 @@ let styleObject = {
 		paddingRight: 15,
 		marginRight: 10,
 		borderWidth: 1,
-		borderColor: globalStyle.color,
-		borderRadius: 10,
+		borderColor: globalStyle.raisedHighlightedColor,
+		borderRadius: 4,
 	},
 	saveButtonText: {
 		textAlignVertical: 'center',
-		color: globalStyle.color,
+		color: globalStyle.raisedHighlightedColor,
 		fontWeight: 'bold',
 	},
 	saveButtonIcon: {
 		fontSize: 20,
-		color: globalStyle.color,
+		color: globalStyle.raisedHighlightedColor,
 		marginRight: 5,
 	},
 	contextMenuTrigger: {

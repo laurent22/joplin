@@ -8,7 +8,7 @@ const globalStyle = {
 	selectedColor: '#e5e5e5',
 	disabledOpacity: 0.3,
 
-	raisedBackgroundColor: "#0072D5",
+	raisedBackgroundColor: "#0080EF",
 	raisedColor: "#003363",
 	raisedHighlightedColor: "#ffffff",
 
