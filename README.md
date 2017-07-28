@@ -1,4 +1,4 @@
-# Joplin
+# Joplin (BETA)
 
 Joplin is a note taking and todo application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor. The Android application supports markdown rendering.
 

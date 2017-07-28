@@ -30,7 +30,7 @@ class Command extends BaseCommand {
 
 	options() {
 		return [
-			[_('--target <target>'), _('Sync to provided target (defaults to sync.target config value)')],
+			['--target <target>', _('Sync to provided target (defaults to sync.target config value)')],
 			['--random-failures', 'For debugging purposes. Do not use.'],
 		];
 	}

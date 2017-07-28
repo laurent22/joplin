@@ -238,7 +238,7 @@ class OneDriveApi {
 	async refreshAccessToken() {
 		if (!this.auth_ || !this.auth_.refresh_token) {
 			this.setAuth(null);
-			throw new Error('Cannot refresh token: authentication data is missing');
+			throw new Error(_('Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem.'));
 		}
 
 		let body = new shim.FormData();

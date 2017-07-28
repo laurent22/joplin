@@ -7,7 +7,7 @@ import { reg } from 'lib/registry.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return _('mknote <note>');
+		return 'mknote <note>';
 	}
 
 	description() {

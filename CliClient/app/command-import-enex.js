@@ -9,7 +9,7 @@ import { filename, basename } from 'lib/path-utils.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return _('import-enex <file> [notebook]');
+		return 'import-enex <file> [notebook]';
 	}
 
 	description() {

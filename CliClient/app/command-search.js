@@ -12,7 +12,7 @@ import { vorpalUtils } from './vorpal-utils.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return _('search <pattern> [notebook]');
+		return 'search <pattern> [notebook]';
 	}
 
 	description() {

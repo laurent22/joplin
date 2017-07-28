@@ -9,7 +9,7 @@ import { autocompleteItems } from './autocomplete.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return _('geoloc <title>');
+		return 'geoloc <title>';
 	}
 
 	description() {

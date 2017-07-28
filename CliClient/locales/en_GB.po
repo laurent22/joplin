@@ -21,13 +21,8 @@ msgstr ""
 msgid "No notebook has been specified."
 msgstr ""
 
-msgid "Usage: --profile <dir-path>"
-msgstr ""
-
-msgid "Usage: --env <dev|prod>"
-msgstr ""
-
-msgid "Usage: --log-level <none|error|warn|info|debug>"
+#, javascript-format
+msgid "Usage: %s"
 msgstr ""
 
 #, javascript-format
@@ -88,9 +83,6 @@ msgstr ""
 msgid "USAGE"
 msgstr ""
 
-msgid "cat <title>"
-msgstr ""
-
 msgid "Displays the given note."
 msgstr ""
 
@@ -99,9 +91,6 @@ msgstr ""
 
 #, javascript-format
 msgid "Cannot find \"%s\"."
-msgstr ""
-
-msgid "config [name] [value]"
 msgstr ""
 
 msgid ""
@@ -121,15 +110,9 @@ msgstr ""
 msgid "%s = %s"
 msgstr ""
 
-msgid "cp <pattern> [notebook]"
-msgstr ""
-
 msgid ""
 "Duplicates the notes matching <pattern> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
-msgstr ""
-
-msgid "edit <title>"
 msgstr ""
 
 msgid "Edit note."
@@ -152,13 +135,7 @@ msgstr ""
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
 
-msgid "geoloc <title>"
-msgstr ""
-
 msgid "Displays a geolocation URL for the note."
-msgstr ""
-
-msgid "import-enex <file> [notebook]"
 msgstr ""
 
 msgid "Imports an Evernote notebook file (.enex file)."
@@ -202,21 +179,12 @@ msgstr ""
 msgid "Importing notes..."
 msgstr ""
 
-msgid "ls [pattern]"
-msgstr ""
-
 msgid ""
 "Displays the notes in [notebook]. Use `ls /` to display the list of "
 "notebooks."
 msgstr ""
 
-msgid "-n, --limit <num>"
-msgstr ""
-
 msgid "Displays only the first top <num> notes."
-msgstr ""
-
-msgid "-s, --sort <field>"
 msgstr ""
 
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
@@ -225,16 +193,10 @@ msgstr ""
 msgid "Reverses the sorting order."
 msgstr ""
 
-msgid "-t, --type <type>"
-msgstr ""
-
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for todos, or `nt` for notes and todos (eg. `-tt` would display only the "
 "todos, while `-ttd` would display notes and todos."
-msgstr ""
-
-msgid "-f, --format <format>"
 msgstr ""
 
 msgid "Either \"text\" or \"json\""
@@ -248,13 +210,7 @@ msgstr ""
 msgid "Please select a notebook first."
 msgstr ""
 
-msgid "mkbook <notebook>"
-msgstr ""
-
 msgid "Creates a new notebook."
-msgstr ""
-
-msgid "mknote <note>"
 msgstr ""
 
 msgid "Creates a new note."
@@ -263,16 +219,10 @@ msgstr ""
 msgid "Notes can only be created within a notebook."
 msgstr ""
 
-msgid "mv <pattern> <destination>"
-msgstr ""
-
 msgid ""
 "Moves the notes matching <pattern> to <destination>. If <pattern> is a note, "
 "it will be moved to the notebook <destination>. If <pattern> is a notebook, "
 "it will be renamed to <destination>."
-msgstr ""
-
-msgid "rm <pattern>"
 msgstr ""
 
 msgid "Deletes the items matching <pattern>."
@@ -292,13 +242,7 @@ msgstr ""
 msgid "%d notes match this pattern. Delete them?"
 msgstr ""
 
-msgid "search <pattern> [notebook]"
-msgstr ""
-
 msgid "Searches for the given <pattern> in all the notes."
-msgstr ""
-
-msgid "set <note> <name> [value]"
 msgstr ""
 
 msgid "Sets the property <name> of the given <note> to the given [value]."
@@ -308,9 +252,6 @@ msgid "Displays summary about the notes and notebooks."
 msgstr ""
 
 msgid "Synchronises with remote storage."
-msgstr ""
-
-msgid "--target <target>"
 msgstr ""
 
 msgid "Sync to provided target (defaults to sync.target config value)"
@@ -335,9 +276,6 @@ msgstr ""
 msgid "Cancelling..."
 msgstr ""
 
-msgid "tag <command> [tag] [note]"
-msgstr ""
-
 msgid ""
 "<command> can be \"add\", \"remove\" or \"list\" to assign or remove [tag] "
 "from [note], or to list the notes associated with [tag]. The command `tag "
@@ -348,17 +286,11 @@ msgstr ""
 msgid "Invalid command: \"%s\""
 msgstr ""
 
-msgid "todo <action> <pattern>"
-msgstr ""
-
 msgid ""
 "<action> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the "
 "given todo between completed and uncompleted state (If the target is a "
 "regular note it will be converted to a todo). Use \"clear\" to convert the "
 "todo back to a regular note."
-msgstr ""
-
-msgid "use <notebook>"
 msgstr ""
 
 msgid ""
