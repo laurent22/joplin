@@ -60,6 +60,7 @@ function getCommands() {
 		let CommandClass = require('./' + path);
 		let cmd = new CommandClass();
 		if (!cmd.enabled()) return;
+		if (cmd.hidden()) return;
 		output.push(cmd);
 	});
 	return output;

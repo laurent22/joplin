@@ -304,7 +304,8 @@ Setting.metadata_ = {
 	'locale': { value: defaultLocale(), type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Language'), options: () => {
 		return supportedLocalesToLanguages();
 	}},
-	'todoFilter': { value: 'all', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['mobile'], label: () => _('Todo filter'), options: () => ({
+	// Not used for now:
+	'todoFilter': { value: 'all', type: Setting.TYPE_STRING, isEnum: true, public: false, appTypes: ['mobile'], label: () => _('Todo filter'), options: () => ({
 		all: _('Show all'),
 		recent: _('Non-completed and recently completed ones'),
 		nonCompleted: _('Non-completed ones only'),

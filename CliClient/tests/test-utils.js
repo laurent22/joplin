@@ -34,7 +34,7 @@ const syncTargetId_ = Setting.SYNC_TARGET_MEMORY;
 //const syncTargetId_ = Setting.SYNC_TARGET_ONEDRIVE;
 const syncDir = __dirname + '/../tests/sync';
 
-const sleepTime = syncTargetId_ == Setting.SYNC_TARGET_FILESYSTEM ? 1001 : 200;
+const sleepTime = syncTargetId_ == Setting.SYNC_TARGET_FILESYSTEM ? 1001 : 400;
 
 const logger = new Logger();
 logger.addTarget('file', { path: logDir + '/log.txt' });
