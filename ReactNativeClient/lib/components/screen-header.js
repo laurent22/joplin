@@ -181,11 +181,13 @@ class ScreenHeaderComponent extends Component {
 		function saveButton(styles, onPress, disabled, show) {
 			if (!show) return null;
 
+			const title = disabled ? _('Saved') : _('Save');
+
 			return (
 				<TouchableOpacity onPress={onPress} disabled={disabled}>
 					<View style={disabled ? styles.saveButtonDisabled : styles.saveButton}>
 						{ disabled && <Icon name='md-checkmark' style={styles.saveButtonIcon} /> }
-						<Text style={styles.saveButtonText}>Save</Text>
+						<Text style={styles.saveButtonText}>{title}</Text>
 					</View>
 				</TouchableOpacity>
 			);

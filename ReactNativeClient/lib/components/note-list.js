@@ -33,6 +33,7 @@ class NoteListComponent extends Component {
 			items: [],
 			selectedItemIds: [],
 		};
+		this.rootRef_ = null;
 	}
 
 	filterNotes(notes) {
@@ -65,6 +66,11 @@ class NoteListComponent extends Component {
 		this.setState({
 			dataSource: this.state.dataSource.cloneWithRows(this.filterNotes(newProps.items)),
 		});
+
+		// Make sure scroll position is reset when switching from one folder to another or to a tag list.
+		if (this.rootRef_ && newProps.notesSource != this.props.notesSource) {
+			this.rootRef_.scrollTo({ x: 0, y: 0, animated: false });
+		}
 	}
 
 	render() {
@@ -73,6 +79,7 @@ class NoteListComponent extends Component {
 		if (this.state.dataSource.getRowCount()) {
 			return (
 				<ListView
+					ref={(ref) => this.rootRef_ = ref}
 					dataSource={this.state.dataSource}
 					renderRow={(note) => {
 						return <NoteItem note={note}/>
@@ -89,7 +96,10 @@ class NoteListComponent extends Component {
 
 const NoteList = connect(
 	(state) => {
-		return { items: state.notes };
+		return {
+			items: state.notes,
+			notesSource: state.notesSource,
+		};
 	}
 )(NoteListComponent)
 
