@@ -508,7 +508,7 @@ async function initialize(dispatch, backButtonHandler) {
 	reg.setupRecurrentSync();
 
 	if (Setting.value('env') == 'dev') {
-
+		// reg.scheduleSync();
 	} else {
 		reg.scheduleSync();
 	}

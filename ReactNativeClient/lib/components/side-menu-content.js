@@ -112,7 +112,14 @@ class SideMenuContentComponent extends Component {
 			return;
 		}
 
-		const sync = await reg.synchronizer(Setting.value('sync.target'))
+		let sync = null;
+		try {
+			sync = await reg.synchronizer(Setting.value('sync.target'))
+		} catch (error) {
+			reg.logger().info('Could not acquire synchroniser:');
+			reg.logger().info(error);
+			return;
+		}
 
 		if (this.props.syncStarted) {
 			sync.cancel();
