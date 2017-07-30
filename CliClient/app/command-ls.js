@@ -36,7 +36,6 @@ class Command extends BaseCommand {
 
 	async action(args) {
 		let pattern = args['pattern'];
-		let suffix = '';
 		let items = [];
 		let options = args.options;
 
@@ -59,7 +58,6 @@ class Command extends BaseCommand {
 		if (pattern == '/' || !app().currentFolder()) {
 			queryOptions.includeConflictFolder = true;
 			items = await Folder.all(queryOptions);
-			suffix = '/';
 			modelType = Folder.modelType();
 		} else {
 			if (!app().currentFolder()) throw new Error(_('Please select a notebook first.'));
@@ -97,7 +95,7 @@ class Command extends BaseCommand {
 					row.push(time.unixMsToLocalDateTime(item.updated_time));
 				}
 
-				let title = item.title + suffix;
+				let title = item.title;
 				if (!shortIdShown && (seenTitles.indexOf(item.title) >= 0 || !item.title)) {
 					title += ' (' + BaseModel.shortId(item.id) + ')';
 				} else {

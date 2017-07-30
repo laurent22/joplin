@@ -319,6 +319,11 @@ msgid "Please open this URL in your browser to authenticate the application:"
 msgstr ""
 
 msgid ""
+"Cannot refresh token: authentication data is missing. Starting the "
+"synchronisation again may fix the problem."
+msgstr ""
+
+msgid ""
 "Please set the \"sync.2.path\" config value to the desired synchronisation "
 "destination."
 msgstr ""

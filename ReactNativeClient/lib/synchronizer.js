@@ -154,7 +154,9 @@ class Synchronizer {
 			error.code = 'alreadyStarted';
 			throw error;
 			return;
-		}	
+		}
+
+		this.state_ = 'in_progress';
 
 		this.onProgress_ = options.onProgress ? options.onProgress : function(o) {};
 		this.progressReport_ = { errors: [] };
@@ -175,7 +177,6 @@ class Synchronizer {
 
 		let outputContext = Object.assign({}, lastContext);
 		
-		this.state_ = 'in_progress';
 
 		this.dispatch({ type: 'SYNC_STARTED' });
 
@@ -463,7 +464,6 @@ class Synchronizer {
 			this.cancelling_ = false;
 		}
 
-		this.state_ = 'idle';
 
 		this.progressReport_.completedTime = time.unixMs();
 
@@ -475,6 +475,8 @@ class Synchronizer {
 		this.progressReport_ = {};
 
 		this.dispatch({ type: 'SYNC_COMPLETED' });
+		
+		this.state_ = 'idle';
 
 		return outputContext;
 	}

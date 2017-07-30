@@ -17,9 +17,11 @@ let styles = {
 		borderBottomColor: globalStyle.dividerColor,
 		alignItems: 'center',
 		paddingLeft: globalStyle.marginLeft,
+		paddingRight: globalStyle.marginRight,
 		backgroundColor: globalStyle.backgroundColor,
 	},
 	listItemText: {
+		flex: 1,
 		color: globalStyle.color,
 	},
 };
@@ -70,7 +72,7 @@ class NoteItemComponent extends Component {
 		const listItemStyle = !!Number(note.is_todo) && checkboxChecked ? styles.listItemFadded : styles.listItem;
 
 		return (
-			<TouchableHighlight onPress={() => this.onPress()} underlayColor="#0066FF">
+			<TouchableHighlight style={{borderWidth:1, borderColor:'red'}} onPress={() => this.onPress()} underlayColor="#0066FF">
 				<View style={ listItemStyle }>
 					<Checkbox
 						style={checkboxStyle}
