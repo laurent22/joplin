@@ -19,11 +19,18 @@ let styles = {
 	settingText: {
 		fontWeight: 'bold',
 		color: globalStyle.color,
+		fontSize: globalStyle.fontSize,
 	},
 	settingControl: {
 		color: globalStyle.color,
 	},
+	pickerItem: {
+		fontSize: globalStyle.fontSize,
+	}
 }
+
+styles.switchSettingText = Object.assign({}, styles.settingText);
+styles.switchSettingText.width = '80%';
 
 styles.switchSettingContainer = Object.assign({}, styles.settingContainer);
 styles.switchSettingContainer.flexDirection = 'row';
@@ -31,6 +38,7 @@ styles.switchSettingContainer.justifyContent = 'space-between';
 
 styles.switchSettingControl = Object.assign({}, styles.settingControl);
 delete styles.switchSettingControl.color;
+styles.switchSettingControl.width = '20%';
 
 styles = StyleSheet.create(styles);
 
@@ -90,7 +98,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		} else if (setting.type == Setting.TYPE_BOOL) {
 			return (
 				<View key={key} style={styles.switchSettingContainer}>
-					<Text key="label" style={styles.settingText}>{setting.label()}</Text>
+					<Text key="label" style={styles.switchSettingText}>{setting.label()}</Text>
 					<Switch key="control" style={styles.switchSettingControl} value={value} onValueChange={(value) => updateSettingValue(key, value)} />
 				</View>
 			);

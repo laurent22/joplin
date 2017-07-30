@@ -54,6 +54,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 				paddingTop: 0,
 				paddingBottom: 0,
 				flex: 0,
+				fontSize: globalStyle.fontSize,
 			};
 			for (let i = 0; i < report.length; i++) {
 				let section = report[i];

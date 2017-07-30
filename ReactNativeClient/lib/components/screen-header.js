@@ -81,18 +81,21 @@ let styleObject = {
 	},
 	contextMenuItemText: {
 		flex: 1,
-		height: 40,
 		textAlignVertical: 'center',
 		paddingLeft: globalStyle.marginLeft,
 		paddingRight: globalStyle.marginRight,
+		paddingTop: globalStyle.itemMarginTop,
+		paddingBottom: globalStyle.itemMarginBottom,
 		color: globalStyle.color,
 		backgroundColor: globalStyle.backgroundColor,
+		fontSize: globalStyle.fontSize,
 	},
 	titleText: {
 		flex: 1,
 		marginLeft: 0,
 		color: globalStyle.raisedHighlightedColor,
 		fontWeight: 'bold',
+		fontSize: globalStyle.fontSize,
 	}
 };
 

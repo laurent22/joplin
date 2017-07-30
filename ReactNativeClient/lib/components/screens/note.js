@@ -26,6 +26,8 @@ const styleObject = {
 		paddingLeft: 0,
 		color: globalStyle.color,
 		backgroundColor: globalStyle.backgroundColor,
+		fontWeight: 'bold',
+		fontSize: globalStyle.fontSize,
 	},
 	bodyTextInput: {
 		flex: 1,
@@ -34,6 +36,7 @@ const styleObject = {
 		textAlignVertical: 'top',
 		color: globalStyle.color,
 		backgroundColor: globalStyle.backgroundColor,
+		fontSize: globalStyle.fontSize,
 	},
 	noteBodyViewer: {
 		flex: 1,
@@ -48,7 +51,6 @@ styleObject.titleContainer = {
 	flexDirection: 'row',
 	paddingLeft: globalStyle.marginLeft,
 	paddingRight: globalStyle.marginRight,
-	height: 40,
 	borderBottomColor: globalStyle.dividerColor,
 	borderBottomWidth: 1,
 };

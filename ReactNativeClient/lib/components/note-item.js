@@ -12,17 +12,20 @@ import { globalStyle } from 'lib/components/global-style.js';
 let styles = {
 	listItem: {
 		flexDirection: 'row',
-		height: 40,
+		//height: 40,
 		borderBottomWidth: 1,
 		borderBottomColor: globalStyle.dividerColor,
 		alignItems: 'center',
 		paddingLeft: globalStyle.marginLeft,
 		paddingRight: globalStyle.marginRight,
+		paddingTop: globalStyle.itemMarginTop,
+		paddingBottom: globalStyle.itemMarginBottom,
 		backgroundColor: globalStyle.backgroundColor,
 	},
 	listItemText: {
 		flex: 1,
 		color: globalStyle.color,
+		fontSize: globalStyle.fontSize,
 	},
 };
 

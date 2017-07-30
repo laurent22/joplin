@@ -3,6 +3,7 @@ import { StyleSheet, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ReactNativeActionButton from 'react-native-action-button';
 import { connect } from 'react-redux'
+import { globalStyle } from 'lib/components/global-style.js'
 import { Log } from 'lib/log.js'
 import { _ } from 'lib/locale.js'
 
@@ -12,6 +13,9 @@ const styles = StyleSheet.create({
 		height: 22,
 		color: 'white',
 	},
+	itemText: {
+		// fontSize: 14, // Cannot currently set fontsize since the bow surrounding the label has a fixed size
+	}
 });
 
 class ActionButtonComponent extends React.Component {
@@ -118,7 +122,7 @@ class ActionButtonComponent extends React.Component {
 			);
 		} else {
 			return (
-				<ReactNativeActionButton icon={mainIcon} buttonColor="rgba(231,76,60,1)" onPress={ function() { } }>
+				<ReactNativeActionButton textStyle={styles.itemText} icon={mainIcon} buttonColor="rgba(231,76,60,1)" onPress={ function() { } }>
 					{ buttonComps }
 				</ReactNativeActionButton>
 			);
