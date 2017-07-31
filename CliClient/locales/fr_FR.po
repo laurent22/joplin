@@ -155,12 +155,14 @@ msgstr "Importer un carnet Evernote (fichier .enex)."
 msgid "Do not ask for confirmation."
 msgstr "Ne pas demander de confirmation."
 
-#, javascript-format
-msgid "Folder does not exists: \"%s\". Create it?"
-msgstr "Ce carnet n'existe pas : \"%s\". Le créer ?"
+#, fuzzy, javascript-format
+msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+msgstr "Le fichier \"%s\" va être importé dans le carnet \"%s\". Continuer ?"
 
-#, javascript-format
-msgid "File \"%s\" will be imported into notebook \"%s\". Continue?"
+#, fuzzy, javascript-format
+msgid ""
+"New notebook \"%s\" will be created and file \"%s\" will be imported into "
+"it. Continue?"
 msgstr "Le fichier \"%s\" va être importé dans le carnet \"%s\". Continuer ?"
 
 #, javascript-format
@@ -237,6 +239,10 @@ msgstr "Créer une note."
 
 msgid "Notes can only be created within a notebook."
 msgstr "Les notes ne peuvent être créées que dans un carnet."
+
+#, fuzzy
+msgid "Creates a new todo."
+msgstr "Créer un carnet."
 
 msgid ""
 "Moves the notes matching <pattern> to <destination>. If <pattern> is a note, "
@@ -598,6 +604,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenu"
+
+#~ msgid "Folder does not exists: \"%s\". Create it?"
+#~ msgstr "Ce carnet n'existe pas : \"%s\". Le créer ?"
 
 #~ msgid "Usage: --profile <dir-path>"
 #~ msgstr "Utilisation: --profile <chemin>"

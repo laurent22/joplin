@@ -145,11 +145,13 @@ msgid "Do not ask for confirmation."
 msgstr ""
 
 #, javascript-format
-msgid "Folder does not exists: \"%s\". Create it?"
+msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
 msgstr ""
 
 #, javascript-format
-msgid "File \"%s\" will be imported into notebook \"%s\". Continue?"
+msgid ""
+"New notebook \"%s\" will be created and file \"%s\" will be imported into "
+"it. Continue?"
 msgstr ""
 
 #, javascript-format
@@ -217,6 +219,9 @@ msgid "Creates a new note."
 msgstr ""
 
 msgid "Notes can only be created within a notebook."
+msgstr ""
+
+msgid "Creates a new todo."
 msgstr ""
 
 msgid ""
