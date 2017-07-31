@@ -155,15 +155,18 @@ msgstr "Importer un carnet Evernote (fichier .enex)."
 msgid "Do not ask for confirmation."
 msgstr "Ne pas demander de confirmation."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
-msgstr "Le fichier \"%s\" va être importé dans le carnet \"%s\". Continuer ?"
+msgstr ""
+"Le fichier \"%s\" va être importé dans le carnet existant \"%s\". Continuer ?"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into "
 "it. Continue?"
-msgstr "Le fichier \"%s\" va être importé dans le carnet \"%s\". Continuer ?"
+msgstr ""
+"Un nouveau carnet \"%s\" va être créé et le fichier \"%s\" va être importé "
+"dedans. Continuer ?"
 
 #, javascript-format
 msgid "Found: %d."
@@ -240,9 +243,8 @@ msgstr "Créer une note."
 msgid "Notes can only be created within a notebook."
 msgstr "Les notes ne peuvent être créées que dans un carnet."
 
-#, fuzzy
 msgid "Creates a new todo."
-msgstr "Créer un carnet."
+msgstr "Créer une nouvelle tâche."
 
 msgid ""
 "Moves the notes matching <pattern> to <destination>. If <pattern> is a note, "
@@ -363,6 +365,8 @@ msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
+"Impossible de rafraîchir la connection à OneDrive. Démarrez la "
+"synchronisation à nouveau pour corriger le problème."
 
 msgid ""
 "Please set the \"sync.2.path\" config value to the desired synchronisation "
