@@ -3,6 +3,7 @@ import { app } from './app.js';
 import { _ } from 'lib/locale.js';
 import { BaseModel } from 'lib/base-model.js';
 import { Folder } from 'lib/models/folder.js';
+import { Setting } from 'lib/models/setting.js';
 import { Note } from 'lib/models/note.js';
 import { autocompleteFolders } from './autocomplete.js';
 import { sprintf } from 'sprintf-js';
@@ -53,6 +54,7 @@ class Command extends BaseCommand {
 			if (options.type.indexOf('t') >= 0) queryOptions.itemTypes.push('todo');
 		}
 		if (pattern) queryOptions.titlePattern = pattern;
+		queryOptions.uncompletedTodosOnTop = Setting.value('uncompletedTodosOnTop');
 
 		let modelType = null;
 		if (pattern == '/' || !app().currentFolder()) {

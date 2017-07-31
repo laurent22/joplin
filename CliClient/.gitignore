@@ -16,3 +16,4 @@ tests/cli-integration/
 *.mo
 *.*~
 tests/sync
+out.txt
