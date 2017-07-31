@@ -91,8 +91,8 @@ const headerHtml = `
 <div class="container">
 
 <div class="header">
-	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="images/ForkMe.png"/></a>
-	<h1 id="joplin"><img class="title-icon" src="images/Icon512.png">oplin</h1>
+	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="docs/images/ForkMe.png"/></a>
+	<h1 id="joplin"><img class="title-icon" src="docs/images/Icon512.png">oplin</h1>
 	<p class="sub-title">A free, open source, note taking and todo application with synchronisation capabilities.</p>
 </div>
 
@@ -117,7 +117,7 @@ const screenshotHtml = `
 	</tr>
 	<tr>
 		<td>
-			<img class="mobile-screenshot" src="images/Mobile.png"/>
+			<img class="mobile-screenshot" src="docs/images/Mobile.png"/>
 		</td>
 		<td class="cli-screenshot-wrapper">
 			<pre class="cli-screenshot">
@@ -141,7 +141,6 @@ const screenshotHtml = `
 `;
 
 const rootDir = dirname(dirname(__dirname));
-const docDir = rootDir + '/docs';
 
 function markdownToHtml(md) {
 	const renderer = new marked.Renderer();
@@ -164,7 +163,7 @@ async function main() {
 	const md = fs.readFileSync(rootDir + '/README.md', 'utf8');
 	const html = markdownToHtml(md);
 
-	fs.writeFileSync(docDir + '/index.html', html);
+	fs.writeFileSync(rootDir + '/index.html', html);
 }
 
 main().catch((error) => {
