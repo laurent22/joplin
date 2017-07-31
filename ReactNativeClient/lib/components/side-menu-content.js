@@ -95,6 +95,8 @@ class SideMenuContentComponent extends Component {
 	}
 
 	async synchronize_press() {
+		const action = this.props.syncStarted ? 'cancel' : 'start';
+
 		if (Setting.value('sync.target') == Setting.SYNC_TARGET_ONEDRIVE && !reg.oneDriveApi().auth()) {
 			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 			
@@ -114,7 +116,7 @@ class SideMenuContentComponent extends Component {
 			return;
 		}
 
-		if (this.props.syncStarted) {
+		if (action == 'cancel') {
 			sync.cancel();
 		} else {
 			reg.scheduleSync(0);

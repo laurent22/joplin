@@ -12,6 +12,8 @@ import { PoorManIntervals } from 'lib/poor-man-intervals.js';
 
 const reg = {};
 
+reg.initSynchronizerStates_ = {};
+
 reg.logger = () => {
 	if (!reg.logger_) {
 		console.warn('Calling logger before it is initialized');
@@ -54,10 +56,7 @@ reg.oneDriveApi = () => {
 	return reg.oneDriveApi_;
 }
 
-reg.synchronizer = async (syncTargetId) => {
-	if (!reg.synchronizers_) reg.synchronizers_ = [];
-	if (reg.synchronizers_[syncTargetId]) return reg.synchronizers_[syncTargetId];
-
+reg.initSynchronizer_ = async (syncTargetId) => {
 	if (!reg.db()) throw new Error('Cannot initialize synchronizer: db not initialized');
 
 	let fileApi = null;
@@ -92,9 +91,31 @@ reg.synchronizer = async (syncTargetId) => {
 	sync.setLogger(reg.logger());
 	sync.dispatch = reg.dispatch;
 
-	reg.synchronizers_[syncTargetId] = sync;
-
 	return sync;
+}
+
+reg.synchronizer = async (syncTargetId) => {
+	if (!reg.synchronizers_) reg.synchronizers_ = [];
+	if (reg.synchronizers_[syncTargetId]) return reg.synchronizers_[syncTargetId];
+	if (!reg.db()) throw new Error('Cannot initialize synchronizer: db not initialized');
+
+	if (reg.initSynchronizerStates_[syncTargetId] == 'started') {
+		// Synchronizer is already being initialized, so wait here till it's done.
+		return new Promise((resolve, reject) => {
+			const iid = setInterval(() => {
+				if (reg.initSynchronizerStates_[syncTargetId] == 'ready') {
+					clearInterval(iid);
+					resolve(reg.synchronizers_[syncTargetId]);
+				}
+			}, 1000);
+		});
+	} else {
+		reg.initSynchronizerStates_[syncTargetId] = 'started';
+		const sync = await reg.initSynchronizer_(syncTargetId);
+		reg.synchronizers_[syncTargetId] = sync;
+		reg.initSynchronizerStates_[syncTargetId] = 'ready';
+		return sync;
+	}
 }
 
 reg.syncHasAuth = (syncTargetId) => {
