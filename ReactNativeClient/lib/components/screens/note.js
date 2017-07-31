@@ -82,21 +82,24 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		this.saveButtonHasBeenShown_ = false;
 
-		this.backHandler = () => {
-			if (!this.state.note.id) {
-				return false;
-			}
+		// Disabled for now because it doesn't work consistently and proabably interfer with the backHandler
+		// on root.js. Handling of the back button should be in one single place for this to work well.
 
-			if (this.state.mode == 'edit') {
-				this.setState({
-					note: Object.assign({}, this.state.lastSavedNote),
-					mode: 'view',
-				});
-				return true;
-			}
+		// this.backHandler = () => {
+		// 	if (!this.state.note.id) {
+		// 		return false;
+		// 	}
 
-			return false;
-		};
+		// 	if (this.state.mode == 'edit') {
+		// 		this.setState({
+		// 			note: Object.assign({}, this.state.lastSavedNote),
+		// 			mode: 'view',
+		// 		});
+		// 		return true;
+		// 	}
+
+		// 	return false;
+		// };
 	}
 
 	isModified() {
@@ -107,7 +110,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	async componentWillMount() {
-		BackHandler.addEventListener('hardwareBackPress', this.backHandler);
+		// BackHandler.addEventListener('hardwareBackPress', this.backHandler);
 
 		let note = null;
 		let mode = 'view';
@@ -132,7 +135,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	componentWillUnmount() {
-		BackHandler.removeEventListener('hardwareBackPress', this.backHandler);
+		// BackHandler.removeEventListener('hardwareBackPress', this.backHandler);
 	}
 
 	noteComponent_change(propName, propValue) {

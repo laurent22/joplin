@@ -318,7 +318,7 @@ Setting.metadata_ = {
 			600: _('%d minutes', 10),
 			1800: _('%d minutes', 30),
 			3600: _('%d hour', 1),
-			43200: _('%d hour', 12),
+			43200: _('%d hours', 12),
 			86400: _('%d hours', 24),
 		};
 	}},
