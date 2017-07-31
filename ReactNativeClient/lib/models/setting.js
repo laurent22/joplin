@@ -38,6 +38,10 @@ class Setting extends BaseModel {
 		return output;
 	}
 
+	static isPublic(key) {
+		return this.publicKeys().indexOf(key) >= 0;
+	}
+
 	static load() {
 		this.cancelScheduleSave();
 		this.cache_ = [];
@@ -79,6 +83,8 @@ class Setting extends BaseModel {
 
 	static setValue(key, value) {
 		if (!this.cache_) throw new Error('Settings have not been initialized!');
+
+		value = this.formatValue(key, value);
 		
 		for (let i = 0; i < this.cache_.length; i++) {
 			let c = this.cache_[i];
@@ -93,7 +99,7 @@ class Setting extends BaseModel {
 
 				if (c.value === value) return;
 
-				this.logger().info('Setting: ' + key + ' = ' + value);
+				this.logger().info('Setting: ' + key + ' = ' + c.value + ' => ' + value);
 
 				c.value = this.formatValue(key, value);
 
@@ -287,6 +293,9 @@ Setting.TYPE_INT = 1;
 Setting.TYPE_STRING = 2;
 Setting.TYPE_BOOL = 3;
 
+Setting.THEME_LIGHT = 1;
+Setting.THEME_DARK = 2;
+
 Setting.metadata_ = {
 	'activeFolderId': { value: '', type: Setting.TYPE_STRING, public: false },
 	'firstStart': { value: true, type: Setting.TYPE_BOOL, public: false },
@@ -321,6 +330,12 @@ Setting.metadata_ = {
 			43200: _('%d hours', 12),
 			86400: _('%d hours', 24),
 		};
+	}},
+	'theme': { value: Setting.THEME_LIGHT, type: Setting.TYPE_INT, public: true, appTypes: ['mobile'], isEnum: true, label: () => _('Theme'), options: () => {
+		let output = {};
+		output[Setting.THEME_LIGHT] = _('Light');
+		output[Setting.THEME_DARK] = _('Dark');
+		return output;
 	}},
 };
 
