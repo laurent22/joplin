@@ -272,10 +272,8 @@ class Note extends BaseItem {
 
 		let output = Object.assign({}, note);
 		output.is_todo = output.is_todo ? 0 : 1;
-		if (!output.is_todo) {
-			output.todo_due = 0;
-			output.todo_completed = 0;
-		}
+		output.todo_due = 0;
+		output.todo_completed = 0;
 
 		return output;
 	}
