@@ -114,7 +114,7 @@ class Note extends BaseItem {
 		// is used to sort already loaded notes.
 
 		if (!options) options = {};
-		if (!options.order) options.order = { by: 'updated_time', dir: 'DESC' };
+		if (!options.order) options.order = [{ by: 'updated_time', dir: 'DESC' }];
 		if (!options.conditions) options.conditions = [];
 		if (!options.conditionsParams) options.conditionsParams = [];
 		if (!options.fields) options.fields = this.previewFields();

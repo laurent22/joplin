@@ -134,7 +134,12 @@ class NoteBodyViewer extends Component {
 			return '[Image: ' + htmlentities(r.title) + '(' + htmlentities(r.mime) + ')]';
 		}
 
-		let html = body ? '<style>' + normalizeCss + "\n" + css + '</style>' + marked(body, { gfm: true, breaks: true, renderer: renderer }) : '';
+		let html = body ? '<style>' + normalizeCss + "\n" + css + '</style>' + marked(body, {
+			gfm: true,
+			breaks: true,
+			renderer: renderer,
+			sanitize: true,
+		}) : '';
 
 		let elementId = 1;
 		while (html.indexOf('°°JOP°') >= 0) {
