@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ListView, StyleSheet, View, Text, Button } from 'react-native';
+import { ListView, StyleSheet, View, Text, Button, FlatList } from 'react-native';
 import { Setting } from 'lib/models/setting.js';
 import { connect } from 'react-redux'
 import { Log } from 'lib/log.js'
@@ -53,28 +53,47 @@ class StatusScreenComponent extends BaseScreenComponent {
 			let baseStyle = {
 				paddingLeft: 6,
 				paddingRight: 6,
-				paddingTop: 0,
-				paddingBottom: 0,
+				paddingTop: 2,
+				paddingBottom: 2,
 				flex: 0,
 				color: theme.color,
 				fontSize: theme.fontSize,
 			};
+
+			let lines = [];
+
 			for (let i = 0; i < report.length; i++) {
 				let section = report[i];
 
 				let style = Object.assign({}, baseStyle);
 				style.fontWeight = 'bold';
 				if (i > 0) style.paddingTop = 20;
-				output.push(<Text key={'sectiontitle_' + i} style={style}>{section.title}</Text>);
+				lines.push({ key: 'section_' + i, isSection: true, text: section.title });
 
 				for (let n in section.body) {
 					if (!section.body.hasOwnProperty(n)) continue;
 					style = Object.assign({}, baseStyle);
-					output.push(<Text key={'line_' + i + '_' + n} style={style}>{section.body[n]}</Text>);
+					lines.push({ key: 'item_' + i + '_' + n, text: section.body[n] });
 				}
+
+				lines.push({ key: 'divider2_' + i, isDivider: true });
 			}
 
-			return output;
+			return (<FlatList
+				data={lines}
+				renderItem={({item}) => {
+					let style = Object.assign({}, baseStyle);
+					if (item.isSection === true) {
+						style.fontWeight = 'bold';
+						style.marginBottom = 5;
+					}
+					if (item.isDivider) {
+						return (<View style={{borderBottomWidth: 1, borderBottomColor: 'white', marginTop: 20, marginBottom: 20}}/>);
+					} else {
+						return (<Text style={style}>{item.text}</Text>);
+					}
+				}}
+			/>);
 		}
 
 		let body = renderBody(this.state.report);
