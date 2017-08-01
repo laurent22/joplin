@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { ListView, View, Text, Button } from 'react-native';
+import { ListView, View, Text, Button, StyleSheet } from 'react-native';
 import { connect } from 'react-redux'
 import { Log } from 'lib/log.js'
 import { reg } from 'lib/registry.js'
 import { ScreenHeader } from 'lib/components/screen-header.js';
 import { time } from 'lib/time-utils'
+import { themeStyle } from 'lib/components/global-style.js';
 import { Logger } from 'lib/logger.js';
 import { BaseScreenComponent } from 'lib/components/base-screen.js';
 import { _ } from 'lib/locale.js';
@@ -23,6 +24,38 @@ class LogScreenComponent extends BaseScreenComponent {
 		this.state = {
 			dataSource: ds,
 		};
+		this.styles_ = {};
+	}
+
+	styles() {
+		const theme = themeStyle(this.props.theme);
+
+		if (this.styles_[this.props.theme]) return this.styles_[this.props.theme];
+		this.styles_ = {};
+
+		let styles = {
+			row: {
+				flexDirection: 'row',
+				paddingLeft: 1,
+				paddingRight: 1,
+				paddingTop:0,
+				paddingBottom:0,
+			},
+			rowText: {
+				fontFamily: 'monospace',
+				fontSize: 10,
+				color: theme.color,				
+			},
+		};
+
+		styles.rowTextError = Object.assign({}, styles.rowText);
+		styles.rowTextError.color = theme.colorError;
+
+		styles.rowTextWarn = Object.assign({}, styles.rowWarn);
+		styles.rowTextWarn.color = theme.colorWarn;
+
+		this.styles_[this.props.theme] = StyleSheet.create(styles);
+		return this.styles_[this.props.theme];
 	}
 
 	componentWillMount() {
@@ -38,25 +71,20 @@ class LogScreenComponent extends BaseScreenComponent {
 
 	render() {
 		let renderRow = (item) => {
-			let color = 'black';
-			if (item.level == Logger.LEVEL_WARN) color = '#9A5B00';
-			if (item.level == Logger.LEVEL_ERROR) color = 'red';
-
-			let style = {
-				fontFamily: 'monospace',
-				fontSize: 10,
-				color: color,
-			};
+			let textStyle = this.styles().rowText;
+			if (item.level == Logger.LEVEL_WARN) textStyle = this.styles().rowTextWarn;
+			if (item.level == Logger.LEVEL_ERROR) textStyle = this.styles().rowTextError;
+			
 			return (
-				<View style={{flexDirection: 'row', paddingLeft: 1, paddingRight: 1, paddingTop:0, paddingBottom:0 }}>
-					<Text style={style}>{time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm:ss') + ': ' + item.message}</Text>
+				<View style={this.styles().row}>
+					<Text style={textStyle}>{time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm:ss') + ': ' + item.message}</Text>
 				</View>
 			);
 		}
 
 		// `enableEmptySections` is to fix this warning: https://github.com/FaridSafi/react-native-gifted-listview/issues/39
 		return (
-			<View style={this.styles().screen}>
+			<View style={this.rootStyle(this.props.theme).root}>
 				<ScreenHeader title={_('Log')}/>
 				<ListView
 					dataSource={this.state.dataSource}
@@ -72,7 +100,9 @@ class LogScreenComponent extends BaseScreenComponent {
 
 const LogScreen = connect(
 	(state) => {
-		return {};
+		return {
+			theme: state.settings.theme,
+		};
 	}
 )(LogScreenComponent)
 

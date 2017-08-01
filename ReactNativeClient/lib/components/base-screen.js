@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet } from 'react-native';
-import { globalStyle } from 'lib/components/global-style.js';
+import { globalStyle, themeStyle } from 'lib/components/global-style.js';
 
 const styleObject_ = {
 	screen: {
@@ -11,6 +11,8 @@ const styleObject_ = {
 
 const styles_ = StyleSheet.create(styleObject_);
 
+let rootStyles_ = {};
+
 class BaseScreenComponent extends React.Component {
 
 	styles() {
@@ -19,6 +21,18 @@ class BaseScreenComponent extends React.Component {
 
 	styleObject() {
 		return styleObject_;
+	}
+
+	rootStyle(themeId) {
+		const theme = themeStyle(themeId);
+		if (rootStyles_[themeId]) return rootStyles_[themeId];
+		rootStyles_[themeId] = StyleSheet.create({
+			root: {
+				flex: 1,
+				backgroundColor: theme.backgroundColor,
+			},
+		});
+		return rootStyles_[themeId];
 	}
 
 }

@@ -1,3 +1,5 @@
+import { Setting } from 'lib/models/setting.js';
+
 const globalStyle = {
 	fontSize: 16,
 	margin: 15, // No text and no interactive component should be within this margin
@@ -5,6 +7,8 @@ const globalStyle = {
 	itemMarginBottom: 10,
 	backgroundColor: "#ffffff",
 	color: "#555555", // For regular text
+	colorError: "red",
+	colorWarn: "#9A5B00",
 	colorFaded: "#777777", // For less important text
 	fontSizeSmaller: 14,
 	dividerColor: "#dddddd",
@@ -37,4 +41,27 @@ globalStyle.lineInput = {
 	backgroundColor: globalStyle.backgroundColor,
 };
 
-export { globalStyle }
+let themeCache_ = {};
+
+function themeStyle(theme) {
+	if (themeCache_[theme]) return themeCache_[theme];
+
+	let output = Object.assign({}, globalStyle);
+	if (theme == Setting.THEME_LIGHT) return output;
+
+	output.backgroundColor = '#1D2024';
+	output.color = '#ffffff';
+	output.colorFaded = '#777777';
+	output.dividerColor = '#555555';
+	output.selectedColor = '#333333';
+	output.htmlColor = 'white';
+
+	output.raisedBackgroundColor = "#0F2051";
+	output.raisedColor = "#405593";
+	output.raisedHighlightedColor = "#ffffff";
+
+	themeCache_[theme] = output;
+	return themeCache_[theme];
+}
+
+export { globalStyle, themeStyle }

@@ -4,48 +4,62 @@ import { connect } from 'react-redux'
 import { ScreenHeader } from 'lib/components/screen-header.js';
 import { _, setLocale } from 'lib/locale.js';
 import { BaseScreenComponent } from 'lib/components/base-screen.js';
-import { globalStyle } from 'lib/components/global-style.js';
+import { themeStyle } from 'lib/components/global-style.js';
 import { Setting } from 'lib/models/setting.js';
-
-let styles = {
-	settingContainer: {
-		borderBottomWidth: 1,
-		borderBottomColor: globalStyle.dividerColor,
-		paddingTop: globalStyle.marginTop,
-		paddingBottom: globalStyle.marginBottom,
-		paddingLeft: globalStyle.marginLeft,
-		paddingRight: globalStyle.marginRight,
-	},
-	settingText: {
-		fontWeight: 'bold',
-		color: globalStyle.color,
-		fontSize: globalStyle.fontSize,
-	},
-	settingControl: {
-		color: globalStyle.color,
-	},
-	pickerItem: {
-		fontSize: globalStyle.fontSize,
-	}
-}
-
-styles.switchSettingText = Object.assign({}, styles.settingText);
-styles.switchSettingText.width = '80%';
-
-styles.switchSettingContainer = Object.assign({}, styles.settingContainer);
-styles.switchSettingContainer.flexDirection = 'row';
-styles.switchSettingContainer.justifyContent = 'space-between';
-
-styles.switchSettingControl = Object.assign({}, styles.settingControl);
-delete styles.switchSettingControl.color;
-styles.switchSettingControl.width = '20%';
-
-styles = StyleSheet.create(styles);
 
 class ConfigScreenComponent extends BaseScreenComponent {
 	
 	static navigationOptions(options) {
 		return { header: null };
+	}
+
+	constructor() {
+		super();
+		this.styles_ = {};
+	}
+
+	styles() {
+		const themeId = this.props.theme;
+		const theme = themeStyle(themeId);
+
+		if (this.styles_[themeId]) return this.styles_[themeId];
+		this.styles_ = {};
+
+		let styles = {
+			settingContainer: {
+				borderBottomWidth: 1,
+				borderBottomColor: theme.dividerColor,
+				paddingTop: theme.marginTop,
+				paddingBottom: theme.marginBottom,
+				paddingLeft: theme.marginLeft,
+				paddingRight: theme.marginRight,
+			},
+			settingText: {
+				fontWeight: 'bold',
+				color: theme.color,
+				fontSize: theme.fontSize,
+			},
+			settingControl: {
+				color: theme.color,
+			},
+			pickerItem: {
+				fontSize: theme.fontSize,
+			}
+		}
+
+		styles.switchSettingText = Object.assign({}, styles.settingText);
+		styles.switchSettingText.width = '80%';
+
+		styles.switchSettingContainer = Object.assign({}, styles.settingContainer);
+		styles.switchSettingContainer.flexDirection = 'row';
+		styles.switchSettingContainer.justifyContent = 'space-between';
+
+		styles.switchSettingControl = Object.assign({}, styles.settingControl);
+		delete styles.switchSettingControl.color;
+		styles.switchSettingControl.width = '20%';
+
+		this.styles_[themeId] = StyleSheet.create(styles);
+		return this.styles_[themeId];
 	}
 
 	settingToComponent(key, value) {
@@ -72,25 +86,25 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			}
 
 			return (
-				<View key={key} style={styles.settingContainer}>
-					<Text key="label" style={styles.settingText}>{md.label()}</Text>
-					<Picker key="control" style={styles.settingControl} selectedValue={value} onValueChange={(itemValue, itemIndex) => updateSettingValue(key, itemValue)} >
+				<View key={key} style={this.styles().settingContainer}>
+					<Text key="label" style={this.styles().settingText}>{md.label()}</Text>
+					<Picker key="control" style={this.styles().settingControl} selectedValue={value} onValueChange={(itemValue, itemIndex) => updateSettingValue(key, itemValue)} >
 						{ items }
 					</Picker>
 				</View>
 			);
 		} else if (md.type == Setting.TYPE_BOOL) {
 			return (
-				<View key={key} style={styles.switchSettingContainer}>
-					<Text key="label" style={styles.switchSettingText}>{md.label()}</Text>
-					<Switch key="control" style={styles.switchSettingControl} value={value} onValueChange={(value) => updateSettingValue(key, value)} />
+				<View key={key} style={this.styles().switchSettingContainer}>
+					<Text key="label" style={this.styles().switchSettingText}>{md.label()}</Text>
+					<Switch key="control" style={this.styles().switchSettingControl} value={value} onValueChange={(value) => updateSettingValue(key, value)} />
 				</View>
 			);
 		} else if (md.type == Setting.TYPE_INT) {
 			return (
-				<View key={key} style={styles.settingContainer}>
-					<Text key="label" style={styles.settingText}>{md.label()}</Text>
-					<Slider key="control" style={styles.settingControl} value={value} onValueChange={(value) => updateSettingValue(key, value)} />
+				<View key={key} style={this.styles().settingContainer}>
+					<Text key="label" style={this.styles().settingText}>{md.label()}</Text>
+					<Slider key="control" style={this.styles().settingControl} value={value} onValueChange={(value) => updateSettingValue(key, value)} />
 				</View>
 			);
 		} else {
@@ -115,9 +129,9 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		}
 
 		return (
-			<View style={this.styles().screen}>
+			<View style={this.rootStyle(this.props.theme).root}>
 				<ScreenHeader title={_('Configuration')}/>
-				<View style={styles.body}>
+				<View style={this.styles().body}>
 					{ settingComps }
 				</View>
 			</View>
@@ -128,7 +142,10 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 const ConfigScreen = connect(
 	(state) => {
-		return { settings: state.settings };
+		return {
+			settings: state.settings,
+			theme: state.settings.theme,
+		};
 	}
 )(ConfigScreenComponent)
 

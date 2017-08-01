@@ -7,6 +7,18 @@ import { _ } from 'lib/locale.js';
 class AppNavComponent extends Component {
 
 	render() {
+		// if (!this.props.route) throw new Error('Route must not be null');
+
+		// let route = this.props.route;
+		// let Screen = null;
+		// Screen = this.props.screens[route.routeName].screen;
+
+		// return (
+		// 	<View style={{ flex: 1 }}>
+		// 		<Screen navigation={{ state: route }} />
+		// 	</View>
+		// );
+
 		if (!this.props.route) throw new Error('Route must not be null');
 
 		let route = this.props.route;

@@ -10,60 +10,7 @@ import { FoldersScreenUtils } from 'lib/components/screens/folders-utils.js'
 import { Synchronizer } from 'lib/synchronizer.js';
 import { reg } from 'lib/registry.js';
 import { _ } from 'lib/locale.js';
-import { globalStyle } from 'lib/components/global-style.js';
-
-let styles = {
-	menu: {
-		flex: 1,
-		backgroundColor: globalStyle.backgroundColor,
-		borderTopWidth: 1,
-		borderTopColor: globalStyle.dividerColor,
-	},
-	button: {
-		flex: 1,
-		flexDirection: 'row',
-		height: 36,
-		alignItems: 'center',
-		paddingLeft: globalStyle.marginLeft,
-		paddingRight: globalStyle.marginRight,
-	},
-	buttonText: {
-		flex: 1,
-		color: globalStyle.color,
-		paddingLeft: 10,
-		fontSize: globalStyle.fontSize,
-	},
-	syncStatus: {
-		paddingLeft: globalStyle.marginLeft,
-		paddingRight: globalStyle.marginRight,
-		color: globalStyle.colorFaded,
-		fontSize: globalStyle.fontSizeSmaller,
-	},
-	tagItemList: {
-		flex: 1,
-		flexDirection: 'row',
-		flexWrap: 'wrap'
-	},
-};
-
-styles.folderButton = Object.assign({}, styles.button);
-styles.folderButtonText = Object.assign({}, styles.buttonText);
-styles.folderButtonSelected = Object.assign({}, styles.folderButton);
-styles.folderButtonSelected.backgroundColor = globalStyle.selectedColor;
-styles.folderIcon = Object.assign({}, globalStyle.icon);
-styles.folderIcon.color = '#0072d5';
-
-styles.tagButton = Object.assign({}, styles.button);
-styles.tagButtonSelected = Object.assign({}, styles.tagButton);
-styles.tagButtonSelected.backgroundColor = globalStyle.selectedColor;
-styles.tagButtonSelected.borderRadius = 1000;
-styles.tagButtonText = Object.assign({}, styles.buttonText);
-styles.tagButtonText.flex = 0;
-
-styles.syncButton = Object.assign({}, styles.button);
-styles.syncButtonText = Object.assign({}, styles.buttonText);
-
-styles = StyleSheet.create(styles);
+import { globalStyle, themeStyle } from 'lib/components/global-style.js';
 
 class SideMenuContentComponent extends Component {
 
@@ -72,6 +19,68 @@ class SideMenuContentComponent extends Component {
 		this.state = { syncReportText: '',
 			//width: 0,
 		};
+		this.styles_ = {};
+	}
+
+	styles() {
+		const theme = themeStyle(this.props.theme);
+
+		if (this.styles_[this.props.theme]) return this.styles_[this.props.theme];
+		this.styles_ = {};
+
+		let styles = {
+			menu: {
+				flex: 1,
+				backgroundColor: theme.backgroundColor,
+				borderTopWidth: 1,
+				borderTopColor: theme.dividerColor,
+			},
+			button: {
+				flex: 1,
+				flexDirection: 'row',
+				height: 36,
+				alignItems: 'center',
+				paddingLeft: theme.marginLeft,
+				paddingRight: theme.marginRight,
+			},
+			buttonText: {
+				flex: 1,
+				color: theme.color,
+				paddingLeft: 10,
+				fontSize: theme.fontSize,
+			},
+			syncStatus: {
+				paddingLeft: theme.marginLeft,
+				paddingRight: theme.marginRight,
+				color: theme.colorFaded,
+				fontSize: theme.fontSizeSmaller,
+			},
+			tagItemList: {
+				flex: 1,
+				flexDirection: 'row',
+				flexWrap: 'wrap'
+			},
+		};
+
+		styles.folderButton = Object.assign({}, styles.button);
+		styles.folderButtonText = Object.assign({}, styles.buttonText);
+		styles.folderButtonSelected = Object.assign({}, styles.folderButton);
+		styles.folderButtonSelected.backgroundColor = theme.selectedColor;
+		styles.folderIcon = Object.assign({}, theme.icon);
+		styles.folderIcon.color = '#0072d5';
+
+		styles.tagButton = Object.assign({}, styles.button);
+		styles.tagButtonSelected = Object.assign({}, styles.tagButton);
+		styles.tagButtonSelected.backgroundColor = theme.selectedColor;
+		styles.tagButtonSelected.borderRadius = 1000;
+		styles.tagButtonText = Object.assign({}, styles.buttonText);
+		styles.tagButtonText.flex = 0;
+
+		styles.syncButton = Object.assign({}, styles.button);
+		styles.syncButtonText = Object.assign({}, styles.buttonText);
+
+		this.styles_[this.props.theme] = StyleSheet.create(styles);
+		return this.styles_[this.props.theme];
 	}
 
 	folder_press(folder) {
@@ -124,28 +133,28 @@ class SideMenuContentComponent extends Component {
 	}
 
 	folderItem(folder, selected) {
-		const iconComp = selected ? <Icon name='md-folder-open' style={styles.folderIcon} /> : <Icon name='md-folder' style={styles.folderIcon} />;
-		const folderButtonStyle = selected ? styles.folderButtonSelected : styles.folderButton;
+		const iconComp = selected ? <Icon name='md-folder-open' style={this.styles().folderIcon} /> : <Icon name='md-folder' style={this.styles().folderIcon} />;
+		const folderButtonStyle = selected ? this.styles().folderButtonSelected : this.styles().folderButton;
 
 		return (
 			<TouchableOpacity key={folder.id} onPress={() => { this.folder_press(folder) }}>
 				<View style={folderButtonStyle}>
 					{ iconComp }
-					<Text numberOfLines={1} style={styles.folderButtonText}>{folder.title}</Text>
+					<Text numberOfLines={1} style={this.styles().folderButtonText}>{folder.title}</Text>
 				</View>
 			</TouchableOpacity>
 		);
 	}
 
 	tagItem(tag, selected) {
-		const iconComp = <Icon name='md-pricetag' style={styles.folderIcon} />
-		const tagButtonStyle = selected ? styles.tagButtonSelected : styles.tagButton;
+		const iconComp = <Icon name='md-pricetag' style={this.styles().folderIcon} />
+		const tagButtonStyle = selected ? this.styles().tagButtonSelected : this.styles().tagButton;
 
 		return (
 			<TouchableOpacity key={tag.id} onPress={() => { this.tag_press(tag) }}>
 				<View style={tagButtonStyle}>
 					{ iconComp }
-					<Text numberOfLines={1} style={styles.tagButtonText}>{tag.title}</Text>
+					<Text numberOfLines={1} style={this.styles().tagButtonText}>{tag.title}</Text>
 				</View>
 			</TouchableOpacity>
 		);
@@ -157,9 +166,9 @@ class SideMenuContentComponent extends Component {
 
 		return (
 			<TouchableOpacity key={'synchronize_button'} onPress={() => { this.synchronize_press() }}>
-				<View style={styles.syncButton}>
+				<View style={this.styles().syncButton}>
 					{ iconComp }
-					<Text style={styles.syncButtonText}>{title}</Text>
+					<Text style={this.styles().syncButtonText}>{title}</Text>
 				</View>
 			</TouchableOpacity>
 		);
@@ -193,7 +202,7 @@ class SideMenuContentComponent extends Component {
 			}
 
 			items.push(
-				<View style={styles.tagItemList} key="tag_items">
+				<View style={this.styles().tagItemList} key="tag_items">
 					{tagItems}
 				</View>
 			);
@@ -207,7 +216,7 @@ class SideMenuContentComponent extends Component {
 
 		items.push(this.synchronizeButton(this.props.syncStarted ? 'cancel' : 'sync'));
 
-		items.push(<Text key='sync_report' style={styles.syncStatus}>{syncReportText}</Text>);
+		items.push(<Text key='sync_report' style={this.styles().syncStatus}>{syncReportText}</Text>);
 
 		items.push(<View style={{ height: globalStyle.marginBottom }} key='bottom_padding_hack'/>);
 
@@ -216,7 +225,7 @@ class SideMenuContentComponent extends Component {
 				<View style={{flexDirection:'row'}}>
 					<Image style={{flex:1, height: 100}} source={require('../images/SideMenuHeader.png')} />
 				</View>
-				<ScrollView scrollsToTop={false} style={styles.menu}>
+				<ScrollView scrollsToTop={false} style={this.styles().menu}>
 					{ items }
 				</ScrollView>
 			</View>
@@ -235,6 +244,7 @@ const SideMenuContent = connect(
 			selectedTagId: state.selectedTagId,
 			notesParentType: state.notesParentType,
 			locale: state.settings.locale,
+			theme: state.settings.theme,
 		};
 	}
 )(SideMenuContentComponent)

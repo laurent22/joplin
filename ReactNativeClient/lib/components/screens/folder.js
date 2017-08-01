@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Button, TextInput } from 'react-native';
+import { View, Button, TextInput, StyleSheet } from 'react-native';
 import { connect } from 'react-redux'
 import { Log } from 'lib/log.js'
 import { ActionButton } from 'lib/components/action-button.js';
@@ -9,6 +9,7 @@ import { ScreenHeader } from 'lib/components/screen-header.js';
 import { reg } from 'lib/registry.js';
 import { BaseScreenComponent } from 'lib/components/base-screen.js';
 import { dialogs } from 'lib/dialogs.js';
+import { themeStyle } from 'lib/components/global-style.js';
 import { _ } from 'lib/locale.js';
 
 class FolderScreenComponent extends BaseScreenComponent {
@@ -23,6 +24,23 @@ class FolderScreenComponent extends BaseScreenComponent {
 			folder: Folder.new(),
 			lastSavedFolder: null,
 		};
+		this.styles_ = {};
+	}
+
+	styles() {
+		const theme = themeStyle(this.props.theme);
+
+		if (this.styles_[this.props.theme]) return this.styles_[this.props.theme];
+		this.styles_ = {};
+
+		let styles = {
+			textInput: {
+				color: theme.color,
+			},
+		};
+
+		this.styles_[this.props.theme] = StyleSheet.create(styles);
+		return this.styles_[this.props.theme];
 	}
 
 	componentWillMount() {
@@ -87,14 +105,14 @@ class FolderScreenComponent extends BaseScreenComponent {
 		let saveButtonDisabled = !this.isModified();
 
 		return (
-			<View style={this.styles().screen}>
+			<View style={this.rootStyle(this.props.theme).root}>
 				<ScreenHeader
 					title={_('Edit notebook')}
 					showSaveButton={true}
 					saveButtonDisabled={saveButtonDisabled}
 					onSaveButtonPress={() => this.saveFolderButton_press()}
 				/>
-				<TextInput autoFocus={true} value={this.state.folder.title} onChangeText={(text) => this.title_changeText(text)} />
+				<TextInput style={this.styles().textInput} autoFocus={true} value={this.state.folder.title} onChangeText={(text) => this.title_changeText(text)} />
 				<dialogs.DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
 			</View>
 		);
@@ -106,6 +124,7 @@ const FolderScreen = connect(
 	(state) => {
 		return {
 			folderId: state.selectedFolderId,
+			theme: state.settings.theme,
 		};
 	}
 )(FolderScreenComponent)

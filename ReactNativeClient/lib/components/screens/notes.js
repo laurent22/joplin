@@ -7,6 +7,8 @@ import { NoteList } from 'lib/components/note-list.js'
 import { Folder } from 'lib/models/folder.js'
 import { Tag } from 'lib/models/tag.js'
 import { Note } from 'lib/models/note.js'
+import { Setting } from 'lib/models/setting.js'
+import { themeStyle } from 'lib/components/global-style.js';
 import { ScreenHeader } from 'lib/components/screen-header.js';
 import { MenuOption, Text } from 'react-native-popup-menu';
 import { _ } from 'lib/locale.js';
@@ -131,7 +133,13 @@ class NotesScreenComponent extends BaseScreenComponent {
 		let title = parent ? parent.title : null;
 		const addFolderNoteButtons = this.props.selectedFolderId && this.props.selectedFolderId != Folder.conflictFolderId();
 
-		let rootStyle = Object.assign({}, this.styleObject().screen);
+		const theme = themeStyle(Setting.value('theme'));
+
+		let rootStyle = {
+			flex: 1,
+			backgroundColor: theme.backgroundColor,
+		}
+
 		if (!this.props.visible) {
 			rootStyle.flex = 0.001; // This is a bit of a hack but it seems to work fine - it makes the component invisible but without unmounting it
 		}
@@ -160,6 +168,7 @@ const NotesScreen = connect(
 			notesOrder: state.notesOrder,
 			notesSource: state.notesSource,
 			uncompletedTodosOnTop: state.settings.uncompletedTodosOnTop,
+			theme: state.settings.theme,
 		};
 	}
 )(NotesScreenComponent)

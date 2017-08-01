@@ -13,7 +13,7 @@ import { Folder } from 'lib/models/folder.js';
 import { ReportService } from 'lib/services/report.js';
 import { _ } from 'lib/locale.js';
 import { BaseScreenComponent } from 'lib/components/base-screen.js';
-import { globalStyle } from 'lib/components/global-style.js';
+import { globalStyle, themeStyle } from 'lib/components/global-style.js';
 
 const styles = StyleSheet.create({
 	body: {
@@ -46,6 +46,8 @@ class StatusScreenComponent extends BaseScreenComponent {
 	}
 
 	render() {
+		const theme = themeStyle(this.props.theme);
+
 		function renderBody(report) {
 			let output = [];
 			let baseStyle = {
@@ -54,7 +56,8 @@ class StatusScreenComponent extends BaseScreenComponent {
 				paddingTop: 0,
 				paddingBottom: 0,
 				flex: 0,
-				fontSize: globalStyle.fontSize,
+				color: theme.color,
+				fontSize: theme.fontSize,
 			};
 			for (let i = 0; i < report.length; i++) {
 				let section = report[i];
@@ -77,7 +80,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 		let body = renderBody(this.state.report);
 
 		return (
-			<View style={this.styles().screen}>
+			<View style={this.rootStyle(this.props.theme).root}>
 				<ScreenHeader title={_('Status')}/>
 				<View style={styles.body}>
 					{ body }
@@ -91,7 +94,9 @@ class StatusScreenComponent extends BaseScreenComponent {
 
 const StatusScreen = connect(
 	(state) => {
-		return {};
+		return {
+			theme: state.settings.theme,
+		};
 	}
 )(StatusScreenComponent)
 
