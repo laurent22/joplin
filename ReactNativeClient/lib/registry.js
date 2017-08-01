@@ -7,6 +7,7 @@ import { Database } from 'lib/database.js';
 import { Synchronizer } from 'lib/synchronizer.js';
 import { FileApiDriverOneDrive } from 'lib/file-api-driver-onedrive.js';
 import { shim } from 'lib/shim.js';
+import { time } from 'lib/time-utils.js';
 import { FileApiDriverMemory } from 'lib/file-api-driver-memory.js';
 import { PoorManIntervals } from 'lib/poor-man-intervals.js';
 
@@ -107,14 +108,24 @@ reg.synchronizer = async (syncTargetId) => {
 					clearInterval(iid);
 					resolve(reg.synchronizers_[syncTargetId]);
 				}
+				if (reg.initSynchronizerStates_[syncTargetId] == 'error') {
+					clearInterval(iid);
+					reject(new Error('Could not initialise synchroniser'));
+				}
 			}, 1000);
 		});
 	} else {
 		reg.initSynchronizerStates_[syncTargetId] = 'started';
-		const sync = await reg.initSynchronizer_(syncTargetId);
-		reg.synchronizers_[syncTargetId] = sync;
-		reg.initSynchronizerStates_[syncTargetId] = 'ready';
-		return sync;
+
+		try {
+			const sync = await reg.initSynchronizer_(syncTargetId);
+			reg.synchronizers_[syncTargetId] = sync;
+			reg.initSynchronizerStates_[syncTargetId] = 'ready';
+			return sync;
+		} catch (error) {
+			reg.initSynchronizerStates_[syncTargetId] = 'error';
+			throw error;
+		}
 	}
 }
 
