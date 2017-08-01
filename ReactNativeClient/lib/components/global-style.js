@@ -57,7 +57,7 @@ function themeStyle(theme) {
 	output.htmlColor = 'white';
 
 	output.raisedBackgroundColor = "#0F2051";
-	output.raisedColor = "#405593";
+	output.raisedColor = "#788BC3";
 	output.raisedHighlightedColor = "#ffffff";
 
 	themeCache_[theme] = output;

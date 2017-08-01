@@ -9,17 +9,7 @@ import { reg } from 'lib/registry.js';
 import { Note } from 'lib/models/note.js';
 import { Setting } from 'lib/models/setting.js';
 import { time } from 'lib/time-utils.js';
-import { globalStyle } from 'lib/components/global-style.js';
-
-const styles = StyleSheet.create({
-	noItemMessage: {
-		paddingLeft: globalStyle.marginLeft,
-		paddingRight: globalStyle.marginRight,
-		paddingTop: globalStyle.marginTop,
-		paddingBottom: globalStyle.marginBottom,
-		fontSize: globalStyle.fontSize,
-	},
-});
+import { themeStyle } from 'lib/components/global-style.js';
 
 class NoteListComponent extends Component {
 
@@ -34,6 +24,29 @@ class NoteListComponent extends Component {
 			selectedItemIds: [],
 		};
 		this.rootRef_ = null;
+		this.styles_ = {};
+	}
+
+	styles() {
+		const themeId = this.props.theme;
+		const theme = themeStyle(themeId);
+
+		if (this.styles_[themeId]) return this.styles_[themeId];
+		this.styles_ = {};
+
+		let styles = {
+			noItemMessage: {
+				paddingLeft: theme.marginLeft,
+				paddingRight: theme.marginRight,
+				paddingTop: theme.marginTop,
+				paddingBottom: theme.marginBottom,
+				fontSize: theme.fontSize,
+				color: theme.color,
+			},
+		};
+
+		this.styles_[themeId] = StyleSheet.create(styles);
+		return this.styles_[themeId];
 	}
 
 	filterNotes(notes) {
@@ -89,7 +102,7 @@ class NoteListComponent extends Component {
 			);
 		} else {
 			const noItemMessage = _('There are currently no notes. Create one by clicking on the (+) button.');
-			return <Text style={styles.noItemMessage} >{noItemMessage}</Text>;
+			return <Text style={this.styles().noItemMessage} >{noItemMessage}</Text>;
 		}
 	}
 }
@@ -99,6 +112,7 @@ const NoteList = connect(
 		return {
 			items: state.notes,
 			notesSource: state.notesSource,
+			theme: state.settings.theme,
 		};
 	}
 )(NoteListComponent)
