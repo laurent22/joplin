@@ -10,6 +10,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import org.pgsqlite.SQLitePluginPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
+import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +29,8 @@ public class MainApplication extends Application implements ReactApplication {
 				new SQLitePluginPackage(),
 				new MainReactPackage(),
 				new RNFSPackage(),
-				new RNFetchBlobPackage()
+				new RNFetchBlobPackage(),
+				new ReactNativeDocumentPicker()
 			);
 		}
 	};

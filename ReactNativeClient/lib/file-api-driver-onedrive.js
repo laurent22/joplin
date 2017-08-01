@@ -126,11 +126,15 @@ class FileApiDriverOneDrive {
 		return this.makeItem_(item);
 	}
 
-	put(path, content) {
-		let options = {
-			headers: { 'Content-Type': 'text/plain' },
-		};
-		return this.api_.exec('PUT', this.makePath_(path) + ':/content', null, content, options);
+	put(path, content, options = null) {
+		if (!options) options = {};
+
+		if (options.source == 'file') {
+			return this.api_.exec('PUT', this.makePath_(path) + ':/content', null, null, options);
+		} else {
+			options.headers = { 'Content-Type': 'text/plain' };
+			return this.api_.exec('PUT', this.makePath_(path) + ':/content', null, content, options);
+		}
 	}
 
 	delete(path) {

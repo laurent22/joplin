@@ -3,6 +3,7 @@ import { BaseItem } from 'lib/models/base-item.js';
 import { Setting } from 'lib/models/setting.js';
 import { mime } from 'lib/mime-utils.js';
 import { filename } from 'lib/path-utils.js';
+import { FsDriverDummy } from 'lib/fs-driver-dummy.js';
 import lodash  from 'lodash';
 
 class Resource extends BaseItem {
@@ -13,6 +14,11 @@ class Resource extends BaseItem {
 
 	static modelType() {
 		return BaseModel.TYPE_RESOURCE;
+	}
+
+	static isSupportedImageMimeType(type) {
+		const imageMimeTypes = ["image/jpg", "image/jpeg", "image/png", "image/gif"];
+		return imageMimeTypes.indexOf(type.toLowerCase()) >= 0;
 	}
 
 	static fsDriver() {
@@ -30,6 +36,22 @@ class Resource extends BaseItem {
 		let extension = mime.toFileExtension(resource.mime);
 		extension = extension ? '.' + extension : '';
 		return Setting.value('resourceDir') + '/' + resource.id + extension;
+	}
+
+	static markdownTag(resource) {
+		let tagAlt = resource.alt ? resource.alt : resource.title;
+		if (!tagAlt) tagAlt = '';
+		let lines = [];
+		if (Resource.isSupportedImageMimeType(resource.mime)) {
+			lines.push("![");
+			lines.push(tagAlt);
+			lines.push("](:/" + resource.id + ")");
+		} else {
+			lines.push("[");
+			lines.push(tagAlt);
+			lines.push("](:/" + resource.id + ")");
+		}
+		return lines.join('');
 	}
 
 	static pathToId(path) {

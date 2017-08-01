@@ -143,6 +143,7 @@ dependencies {
 	compile "com.facebook.react:react-native:+"  // From node_modules
 	compile project(':react-native-sqlite-storage')
 	compile project(':react-native-fetch-blob')
+	compile project(':react-native-document-picker')
 }
 
 // Run this once to be able to run the application with BUCK

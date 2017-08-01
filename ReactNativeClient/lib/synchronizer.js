@@ -7,6 +7,7 @@ import { sprintf } from 'sprintf-js';
 import { time } from 'lib/time-utils.js';
 import { Logger } from 'lib/logger.js'
 import { _ } from 'lib/locale.js';
+import { shim } from 'lib/shim.js';
 import moment from 'moment';
 
 class Synchronizer {
@@ -235,15 +236,21 @@ class Synchronizer {
 
 					if (local.type_ == BaseModel.TYPE_RESOURCE && (action == 'createRemote' || (action == 'itemConflict' && remote))) {
 						let remoteContentPath = this.resourceDirName_ + '/' + local.id;
-						let resourceContent = '';
-						try {
-							resourceContent = await Resource.content(local);
-						} catch (error) {
-							error.message = 'Cannot read resource content: ' + local.id + ': ' + error.message;
-							this.logger().error(error);
-							this.progressReport_.errors.push(error);
+						// TODO: handle node and mobile in the same way
+						if (shim.isNode()) {
+							let resourceContent = '';
+							try {
+								resourceContent = await Resource.content(local);
+							} catch (error) {
+								error.message = 'Cannot read resource content: ' + local.id + ': ' + error.message;
+								this.logger().error(error);
+								this.progressReport_.errors.push(error);
+							}
+							await this.api().put(remoteContentPath, resourceContent);
+						} else {
+							const localResourceContentPath = Resource.fullPath(local);
+							await this.api().put(remoteContentPath, null, { path: localResourceContentPath, source: 'file' });
 						}
-						await this.api().put(remoteContentPath, resourceContent);
 					}
 
 					if (action == 'createRemote' || action == 'updateRemote') {

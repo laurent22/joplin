@@ -164,6 +164,8 @@ function isImageMimeType(m) {
 }
 
 function addResourceTag(lines, resource, alt = "") {
+	// TODO: refactor to use Resource.markdownTag
+
 	let tagAlt = alt == "" ? resource.alt : alt;
 	if (!tagAlt) tagAlt = '';
 	if (isImageMimeType(resource.mime)) {

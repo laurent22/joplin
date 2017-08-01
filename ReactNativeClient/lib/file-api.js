@@ -87,9 +87,9 @@ class FileApi {
 		return this.driver_.get(this.fullPath_(path), options);
 	}
 
-	put(path, content) {
+	put(path, content, options = null) {
 		this.logger().debug('put ' + this.fullPath_(path));
-		return this.driver_.put(this.fullPath_(path), content);
+		return this.driver_.put(this.fullPath_(path), content, options);
 	}
 
 	delete(path) {

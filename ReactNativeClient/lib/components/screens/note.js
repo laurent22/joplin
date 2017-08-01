@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking } from 'react-native';
 import { connect } from 'react-redux'
+import { uuid } from 'lib/uuid.js';
 import { Log } from 'lib/log.js'
 import { Note } from 'lib/models/note.js'
 import { Resource } from 'lib/models/resource.js'
@@ -19,6 +20,9 @@ import { dialogs } from 'lib/dialogs.js';
 import { globalStyle, themeStyle } from 'lib/components/global-style.js';
 import DialogBox from 'react-native-dialogbox';
 import { NoteBodyViewer } from 'lib/components/note-body-viewer.js';
+import RNFetchBlob from 'react-native-fetch-blob';
+import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
+
 
 class NoteScreenComponent extends BaseScreenComponent {
 	
@@ -247,8 +251,42 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	attachFile_onPress() {
+	async pickDocument() {
+		return new Promise((resolve, reject) => {
+			DocumentPicker.show({ filetype: [DocumentPickerUtil.images()] }, (error,res) => {
+				if (error) {
+					reject(error);
+					return;
+				}
 
+				resolve(res);
+			});
+		});
+	}
+
+	async attachFile_onPress() {
+		const res = await this.pickDocument();
+
+		// res.uri,
+		// res.type, // mime type
+		// res.fileName,
+		// res.fileSize
+
+		let resource = Resource.new();
+		resource.id = uuid.create();
+		resource.mime = res.type;
+		resource.title = res.fileName ? res.fileName : _('Untitled');
+
+		const targetPath = Resource.fullPath(resource);
+		RNFetchBlob.fs.cp(res.uri, targetPath);
+
+		await Resource.save(resource, { isNew: true });
+
+		const resourceTag = Resource.markdownTag(resource);
+
+			const newNote = Object.assign({}, this.state.note);
+			newNote.body += "\n" + resourceTag;
+			this.setState({ note: newNote });
 	}
 
 	toggleIsTodo_onPress() {
@@ -279,7 +317,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const note = this.state.note;
 
 		return [
-			// { title: _('Attach file'), onPress: () => { this.attachFile_onPress(); } },
+			{ title: _('Attach file'), onPress: () => { this.attachFile_onPress(); } },
 			{ title: _('Delete note'), onPress: () => { this.deleteNote_onPress(); } },
 			{ title: note && !!note.is_todo ? _('Convert to regular note') : _('Convert to todo'), onPress: () => { this.toggleIsTodo_onPress(); } },
 			{ title: this.state.showNoteMetadata ? _('Hide metadata') : _('Show metadata'), onPress: () => { this.showMetadata_onPress(); } },

@@ -126,13 +126,14 @@ class NoteBodyViewer extends Component {
 			}
 
 			const r = this.state.resources[resourceId];
-			if (r.mime == 'image/png' || r.mime == 'image/jpg' || r.mime == 'image/gif') {
+			const mime = r.mime.toLowerCase();
+			if (mime == 'image/png' || mime == 'image/jpg' || mime == 'image/jpeg' || mime == 'image/gif') {
 				const src = 'data:' + r.mime + ';base64,' + r.base64;
-				let output = '<img title="' + htmlentities(title) + '" src="' + src + '"/>';
+				let output = '<img title="' + htmlentities(title) + '" src="' + htmlentities(src) + '"/>';
 				return output;
 			}
 			
-			return '[Image: ' + htmlentities(r.title) + '(' + htmlentities(r.mime) + ')]';
+			return '[Image: ' + htmlentities(r.title) + ' (' + htmlentities(mime) + ')]';
 		}
 
 		let styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>';
