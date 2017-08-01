@@ -44,45 +44,6 @@ msgstr ""
 msgid "No notebook is defined. Create one with `mkbook <notebook>`."
 msgstr ""
 
-msgid "NAME"
-msgstr ""
-
-msgid "joplin - a note taking and todo app with synchronisation capabilities"
-msgstr ""
-
-msgid "DESCRIPTION"
-msgstr ""
-
-msgid ""
-"Joplin is a note taking and todo application, which can handle a large "
-"number of notes organised into notebooks."
-msgstr ""
-
-msgid ""
-"The notes are searchable, can be copied, tagged and modified with your own "
-"text editor."
-msgstr ""
-
-msgid ""
-"The notes can be synchronised with various target including the file system "
-"(for example with a network directory) or with Microsoft OneDrive."
-msgstr ""
-
-msgid ""
-"Notes exported from Evenotes via .enex files can be imported into Joplin, "
-"including the formatted content, resources (images, attachments, etc.) and "
-"complete metadata (geolocation, updated time, created time, etc.)."
-msgstr ""
-
-msgid "WEBSITE"
-msgstr ""
-
-msgid "LICENSE"
-msgstr ""
-
-msgid "USAGE"
-msgstr ""
-
 msgid "Displays the given note."
 msgstr ""
 
@@ -446,6 +407,15 @@ msgstr ""
 
 #, javascript-format
 msgid "%d hours"
+msgstr ""
+
+msgid "Theme"
+msgstr ""
+
+msgid "Light"
+msgstr ""
+
+msgid "Dark"
 msgstr ""
 
 msgid "Sync status (synced items / total items)"

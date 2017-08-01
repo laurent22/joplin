@@ -21,8 +21,10 @@ const globalStyle = {
 
 	// For WebView - must correspond to the properties above
 	htmlFontSize: '20x',
-	htmlColor: 'black', // Note: CSS in WebView component only seem to work if the colour is written in full letters (so no hexadecimal)
+	htmlColor: 'black', // Note: CSS in WebView component only supports named colors or rgb() notation
+	htmlBackgroundColor: 'white',
 	htmlDividerColor: 'Gainsboro',
+	htmlLinkColor: 'blue',
 };
 
 globalStyle.marginRight = globalStyle.margin;
@@ -50,15 +52,18 @@ function themeStyle(theme) {
 	if (theme == Setting.THEME_LIGHT) return output;
 
 	output.backgroundColor = '#1D2024';
-	output.color = '#ffffff';
+	output.color = '#dddddd';
 	output.colorFaded = '#777777';
 	output.dividerColor = '#555555';
 	output.selectedColor = '#333333';
-	output.htmlColor = 'white';
 
 	output.raisedBackgroundColor = "#0F2051";
 	output.raisedColor = "#788BC3";
 	output.raisedHighlightedColor = "#ffffff";
+
+	output.htmlColor = 'rgb(220,220,220)';
+	output.htmlBackgroundColor = 'rgb(29,32,36)';
+	output.htmlLinkColor = 'rgb(166,166,255)';
 
 	themeCache_[theme] = output;
 	return themeCache_[theme];

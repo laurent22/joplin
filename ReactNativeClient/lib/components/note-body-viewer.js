@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { WebView, View } from 'react-native';
+import { WebView, View, Linking } from 'react-native';
 import { globalStyle } from 'lib/components/global-style.js';
 import { Resource } from 'lib/models/resource.js';
 import { shim } from 'lib/shim.js';
@@ -45,7 +45,7 @@ class NoteBodyViewer extends Component {
 		return body;
 	}
 
-	markdownToHtml (body, style) {
+	markdownToHtml(body, style) {
 		// https://necolas.github.io/normalize.css/
 		const normalizeCss = `
 			html{line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}
@@ -59,6 +59,7 @@ class NoteBodyViewer extends Component {
 				font-size: ` + style.htmlFontSize + `;
 				color: ` + style.htmlColor + `;
 				line-height: 1.5em;
+				background-color: ` + style.htmlBackgroundColor + `;
 			}
 			h1 {
 				font-size: 1.2em;
@@ -68,8 +69,8 @@ class NoteBodyViewer extends Component {
 				font-size: 1em;
 				font-weight: bold;
 			}
-			li {
-				
+			a {
+				color: ` + style.htmlLinkColor + `
 			}
 			ul {
 				padding-left: 1em;
@@ -134,12 +135,14 @@ class NoteBodyViewer extends Component {
 			return '[Image: ' + htmlentities(r.title) + '(' + htmlentities(r.mime) + ')]';
 		}
 
-		let html = body ? '<style>' + normalizeCss + "\n" + css + '</style>' + marked(body, {
+		let styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>';
+
+		let html = body ? styleHtml + marked(body, {
 			gfm: true,
 			breaks: true,
 			renderer: renderer,
 			sanitize: true,
-		}) : '';
+		}) : styleHtml;
 
 		let elementId = 1;
 		while (html.indexOf('°°JOP°') >= 0) {
@@ -166,7 +169,7 @@ class NoteBodyViewer extends Component {
 		return (
 			<View style={style}>
 				<WebView
-					source={{ html: this.markdownToHtml(note ? note.body : '', globalStyle) }}
+					source={{ html: this.markdownToHtml(note ? note.body : '', this.props.webViewStyle) }}
 					onMessage={(event) => {
 						let msg = event.nativeEvent.data;
 

@@ -46,45 +46,6 @@ msgstr "Quitter le logiciel."
 msgid "No notebook is defined. Create one with `mkbook <notebook>`."
 msgstr "Aucun carnet n'est défini. Créez-en un avec `mkbook <carnet>`."
 
-msgid "NAME"
-msgstr "NOM"
-
-msgid "joplin - a note taking and todo app with synchronisation capabilities"
-msgstr ""
-
-msgid "DESCRIPTION"
-msgstr "DESCRIPTION"
-
-msgid ""
-"Joplin is a note taking and todo application, which can handle a large "
-"number of notes organised into notebooks."
-msgstr ""
-
-msgid ""
-"The notes are searchable, can be copied, tagged and modified with your own "
-"text editor."
-msgstr ""
-
-msgid ""
-"The notes can be synchronised with various target including the file system "
-"(for example with a network directory) or with Microsoft OneDrive."
-msgstr ""
-
-msgid ""
-"Notes exported from Evenotes via .enex files can be imported into Joplin, "
-"including the formatted content, resources (images, attachments, etc.) and "
-"complete metadata (geolocation, updated time, created time, etc.)."
-msgstr ""
-
-msgid "WEBSITE"
-msgstr "SITE INTERNET"
-
-msgid "LICENSE"
-msgstr "LISENSE"
-
-msgid "USAGE"
-msgstr "UTILISATION"
-
 msgid "Displays the given note."
 msgstr "Affiche la note."
 
@@ -490,6 +451,15 @@ msgstr "%d heure"
 msgid "%d hours"
 msgstr "%d heures"
 
+msgid "Theme"
+msgstr "Apparence"
+
+msgid "Light"
+msgstr "Clair"
+
+msgid "Dark"
+msgstr "Sombre"
+
 msgid "Sync status (synced items / total items)"
 msgstr "Status de la synchronisation (objets synchro. / total)"
 
@@ -608,6 +578,21 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenu"
+
+#~ msgid "NAME"
+#~ msgstr "NOM"
+
+#~ msgid "DESCRIPTION"
+#~ msgstr "DESCRIPTION"
+
+#~ msgid "WEBSITE"
+#~ msgstr "SITE INTERNET"
+
+#~ msgid "LICENSE"
+#~ msgstr "LISENSE"
+
+#~ msgid "USAGE"
+#~ msgstr "UTILISATION"
 
 #~ msgid "Folder does not exists: \"%s\". Create it?"
 #~ msgstr "Ce carnet n'existe pas : \"%s\". Le créer ?"

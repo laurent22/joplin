@@ -35,6 +35,7 @@ An Android app and a command line interface are currently available. Both can sy
 - Search functionality.
 - Geolocation support.
 - Supports multiple languages.
+- Mobile: Support for dark theme / light theme.
 
 # Localisation
 
@@ -50,7 +51,6 @@ The applications are currently available in English and French. If you would lik
 - All clients: End to end encryption.
 - All clients: Support for Dropbox synchronisation.
 - Mobile: Compile Windows app?
-- Mobile: Support for dark theme / light theme.
 - Mobile: Link for non-image resources.
 - Mobile: Handle tags.
 - Mobile: Markdown edition support
