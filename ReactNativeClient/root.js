@@ -47,7 +47,6 @@ let defaultState = {
 	selectedItemType: 'note',
 	showSideMenu: false,
 	screens: {},
-	loading: true,
 	historyCanGoBack: false,
 	notesOrder: [
 		{ by: 'updated_time', dir: 'DESC' },
@@ -56,6 +55,7 @@ let defaultState = {
 	syncReport: {},
 	searchQuery: '',
 	settings: {},
+	appState: 'starting',
 };
 
 const initialRoute = {
@@ -186,13 +186,6 @@ const reducer = (state = defaultState, action) => {
 
 				newState.route = action;
 				newState.historyCanGoBack = !!navHistory.length;
-				break;
-
-			// Replace all the notes with the provided array
-			case 'APPLICATION_LOADING_DONE':
-
-				newState = Object.assign({}, state);
-				newState.loading = false;
 				break;
 
 			case 'SETTINGS_UPDATE_ALL':
@@ -348,6 +341,11 @@ const reducer = (state = defaultState, action) => {
 				newState = Object.assign({}, state);
 				newState.searchQuery = action.query.trim();
 
+			case 'SET_APP_STATE':
+
+				newState = Object.assign({}, state);
+				newState.appState = action.state;
+
 		}
 	} catch (error) {
 		error.message = 'In reducer: ' + error.message + ' Action: ' + JSON.stringify(action);
@@ -383,14 +381,8 @@ const generalMiddleware = store => next => async (action) => {
 
 let store = createStore(reducer, applyMiddleware(generalMiddleware));
 
-let initializationState_ = 'waiting';
-
 async function initialize(dispatch, backButtonHandler) {
-	if (initializationState_ != 'waiting') return;
-
 	shimInit();
-
-	initializationState_ = 'in_progress';
 
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
 	Setting.setConstant('appId', 'net.cozic.joplin');
@@ -476,10 +468,6 @@ async function initialize(dispatch, backButtonHandler) {
 			tags: tags,
 		});
 
-		dispatch({
-			type: 'APPLICATION_LOADING_DONE',
-		});
-
 		let folderId = Setting.value('activeFolderId');
 		let folder = await Folder.load(folderId);
 
@@ -513,8 +501,6 @@ async function initialize(dispatch, backButtonHandler) {
 		reg.scheduleSync();
 	}
 
-	initializationState_ = 'done';
-
 	reg.logger().info('Application initialized');
 }
 
@@ -526,7 +512,19 @@ class AppComponent extends React.Component {
 	}
 
 	async componentDidMount() {
-		await initialize(this.props.dispatch, this.backButtonHandler.bind(this));
+		if (this.props.appState == 'starting') {
+			this.props.dispatch({
+				type: 'SET_APP_STATE',
+				state: 'initializing',
+			});
+
+			await initialize(this.props.dispatch, this.backButtonHandler.bind(this));
+
+			this.props.dispatch({
+				type: 'SET_APP_STATE',
+				state: 'ready',
+			});
+		}
 	}
 
 	backButtonHandler() {
@@ -559,6 +557,8 @@ class AppComponent extends React.Component {
 	}
 
 	render() {
+		if (this.props.appState != 'ready') return null;
+
 		const sideMenuContent = <SideMenuContent/>;
 
 		const appNavInit = {
@@ -588,6 +588,7 @@ const mapStateToProps = (state) => {
   		historyCanGoBack: state.historyCanGoBack,
   		showSideMenu: state.showSideMenu,
   		syncStarted: state.syncStarted,
+  		appState: state.appState,
   	};
 };
 
