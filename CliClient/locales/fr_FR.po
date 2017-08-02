@@ -14,6 +14,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.3\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "No notebook selected."
 msgstr "Aucun carnet n'est sélectionné."
@@ -577,7 +579,7 @@ msgstr ""
 "(+)."
 
 msgid "Welcome"
-msgstr "Bienvenu"
+msgstr "Bienvenue"
 
 #~ msgid "NAME"
 #~ msgstr "NOM"

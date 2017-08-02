@@ -11,6 +11,7 @@ import com.facebook.soloader.SoLoader;
 import org.pgsqlite.SQLitePluginPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
+import fr.bamlab.rnimageresizer.ImageResizerPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +31,8 @@ public class MainApplication extends Application implements ReactApplication {
 				new MainReactPackage(),
 				new RNFSPackage(),
 				new RNFetchBlobPackage(),
-				new ReactNativeDocumentPicker()
+				new ReactNativeDocumentPicker(),
+				new ImageResizerPackage()
 			);
 		}
 	};

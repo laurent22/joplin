@@ -56,7 +56,7 @@ class Synchronizer {
 		if (report.updateRemote) lines.push(_('Updated remote items: %d.', report.updateRemote));
 		if (report.deleteLocal) lines.push(_('Deleted local items: %d.', report.deleteLocal));
 		if (report.deleteRemote) lines.push(_('Deleted remote items: %d.', report.deleteRemote));
-		if (!report.completedTime && report.state) lines.push(_('State: %s.', report.state.replace(/_/g, ' ')));
+		if (!report.completedTime && report.state) lines.push(_('State: "%s".', report.state));
 		if (report.errors && report.errors.length) lines.push(_('Last error: %s (stacktrace in log).', report.errors[report.errors.length-1].message));
 		if (report.cancelling && !report.completedTime) lines.push(_('Cancelling...'));
 		if (report.completedTime) lines.push(_('Completed: %s', time.unixMsToLocalDateTime(report.completedTime)));

@@ -20,6 +20,7 @@
     "react-native-document-picker": "^2.0.0",
     "react-native-fetch-blob": "^0.10.6",
     "react-native-fs": "^2.3.3",
+    "react-native-image-resizer": "^0.1.1",
     "react-native-popup-menu": "^0.7.4",
     "react-native-side-menu": "^0.20.1",
     "react-native-sqlite-storage": "3.3.*",

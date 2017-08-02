@@ -129,7 +129,7 @@ class NoteBodyViewer extends Component {
 			const mime = r.mime.toLowerCase();
 			if (mime == 'image/png' || mime == 'image/jpg' || mime == 'image/jpeg' || mime == 'image/gif') {
 				const src = 'data:' + r.mime + ';base64,' + r.base64;
-				let output = '<img title="' + htmlentities(title) + '" src="' + htmlentities(src) + '"/>';
+				let output = '<img title="' + htmlentities(title) + '" src="' + src + '"/>';
 				return output;
 			}
 			

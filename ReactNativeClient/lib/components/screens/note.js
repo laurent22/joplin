@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking } from 'react-native';
+import { BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking, Image } from 'react-native';
 import { connect } from 'react-redux'
 import { uuid } from 'lib/uuid.js';
 import { Log } from 'lib/log.js'
@@ -22,7 +22,7 @@ import DialogBox from 'react-native-dialogbox';
 import { NoteBodyViewer } from 'lib/components/note-body-viewer.js';
 import RNFetchBlob from 'react-native-fetch-blob';
 import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
-
+import ImageResizer from 'react-native-image-resizer';
 
 class NoteScreenComponent extends BaseScreenComponent {
 	
@@ -99,6 +99,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 				paddingRight: theme.marginRight,
 				paddingTop: theme.marginTop,
 				paddingBottom: theme.marginBottom,
+			},
+			metadata: {
+				paddingLeft: globalStyle.marginLeft,
+				paddingRight: globalStyle.marginRight,
+				color: theme.color,
 			},
 		};
 
@@ -264,8 +269,21 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
+	async imageDimensions(uri) {
+		return new Promise((resolve, reject) => {
+			Image.getSize(uri, (width, height) => {
+				resolve({ width: width, height: height });
+			}, (error) => { reject(error) });
+		});
+	}
+
 	async attachFile_onPress() {
 		const res = await this.pickDocument();
+
+		const localFilePath = res.uri;
+
+		reg.logger().info('Got file: ' + localFilePath);
+		reg.logger().info('Got type: ' + res.type);
 
 		// res.uri,
 		// res.type, // mime type
@@ -277,16 +295,42 @@ class NoteScreenComponent extends BaseScreenComponent {
 		resource.mime = res.type;
 		resource.title = res.fileName ? res.fileName : _('Untitled');
 
-		const targetPath = Resource.fullPath(resource);
-		RNFetchBlob.fs.cp(res.uri, targetPath);
+		let targetPath = Resource.fullPath(resource);
+
+		if (res.type == 'image/jpeg' || res.type == 'image/jpg' || res.type == 'image/png') {
+			const maxSize = 1920;
+
+			let dimensions = await this.imageDimensions(localFilePath);
+
+			reg.logger().info('Original dimensions ', dimensions);
+			if (dimensions.width > maxSize || dimensions.height > maxSize) {
+				dimensions.width = maxSize;
+				dimensions.height = maxSize;
+			}
+			reg.logger().info('New dimensions ', dimensions);
+
+			const format = res.type == 'image/png' ? 'PNG' : 'JPEG';
+			reg.logger().info('Resizing image ' + localFilePath);
+			const resizedImagePath = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85);
+			reg.logger().info('Resized image ', resizedImagePath);
+			RNFetchBlob.fs.cp(resizedImagePath, targetPath); // mv doesn't work ("source path does not exist") so need to do cp and unlink
+			
+			try {
+				RNFetchBlob.fs.unlink(resizedImagePath);
+			} catch (error) {
+				reg.logger().info('Error when unlinking cached file: ', error);
+			}
+		} else {
+			RNFetchBlob.fs.cp(localFilePath, targetPath);
+		}
 
 		await Resource.save(resource, { isNew: true });
 
 		const resourceTag = Resource.markdownTag(resource);
 
-			const newNote = Object.assign({}, this.state.note);
-			newNote.body += "\n" + resourceTag;
-			this.setState({ note: newNote });
+		const newNote = Object.assign({}, this.state.note);
+		newNote.body += "\n" + resourceTag;
+		this.setState({ note: newNote });
 	}
 
 	toggleIsTodo_onPress() {
@@ -467,7 +511,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				{ titleComp }
 				{ bodyComponent }
 				{ actionButtonComp }
-				{ this.state.showNoteMetadata && <Text style={{ paddingLeft: globalStyle.marginLeft, paddingRight: globalStyle.marginRight, }}>{this.state.noteMetadata}</Text> }
+				{ this.state.showNoteMetadata && <Text style={this.styles().metadata}>{this.state.noteMetadata}</Text> }
 				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
 			</View>
 		);
