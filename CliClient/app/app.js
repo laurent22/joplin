@@ -8,12 +8,13 @@ import { Note } from 'lib/models/note.js';
 import { Setting } from 'lib/models/setting.js';
 import { Logger } from 'lib/logger.js';
 import { sprintf } from 'sprintf-js';
-import { vorpalUtils } from 'vorpal-utils.js';
 import { reg } from 'lib/registry.js';
 import { fileExtension } from 'lib/path-utils.js';
 import { _, setLocale, defaultLocale, closestSupportedLocale } from 'lib/locale.js';
 import os from 'os';
 import fs from 'fs-extra';
+import yargParser from 'yargs-parser';
+import omelette from 'omelette';
 
 class Application {
 
@@ -23,9 +24,9 @@ class Application {
 		this.dbLogger_ = new Logger();
 	}
 
-	vorpal() {
-		return this.vorpal_;
-	}
+	// vorpal() {
+	// 	return this.vorpal_;
+	// }
 
 	currentFolder() {
 		return this.currentFolder_;
@@ -40,22 +41,9 @@ class Application {
 		this.switchCurrentFolder(newFolder);
 	}
 
-	updatePrompt() {
-		if (!this.showPromptString_) return '';
-
-		let path = '';
-		if (this.currentFolder()) {
-			path += '/' + this.currentFolder().title;
-		}
-		const prompt = Setting.value('appName') + ':' + path + '$ ';
-
-		this.vorpal().delimiter(prompt);
-	}
-
 	switchCurrentFolder(folder) {
 		this.currentFolder_ = folder;
 		Setting.setValue('activeFolderId', folder ? folder.id : '');
-		this.updatePrompt();
 	}
 
 	async guessTypeAndLoadItem(pattern, options = null) {
@@ -132,11 +120,11 @@ class Application {
 				continue;
 			}
 
-			if (arg == '--redraw-disabled') {
-				vorpalUtils.setRedrawEnabled(false);
-				argv.splice(0, 1);
-				continue;
-			}
+			// if (arg == '--redraw-disabled') {
+			// 	vorpalUtils.setRedrawEnabled(false);
+			// 	argv.splice(0, 1);
+			// 	continue;
+			// }
 
 			if (arg == '--update-geolocation-disabled') {
 				Note.updateGeolocationEnabled_ = false;
@@ -145,7 +133,7 @@ class Application {
 			}
 
 			if (arg == '--stack-trace-enabled') {
-				vorpalUtils.setStackTraceEnabled(true);
+				//vorpalUtils.setStackTraceEnabled(true);
 				argv.splice(0, 1);
 				continue;
 			}
@@ -154,6 +142,12 @@ class Application {
 				if (!nextArg) throw new Error(_('Usage: %s', '--log-level <none|error|warn|info|debug>'));
 				matched.logLevel = Logger.levelStringToId(nextArg);
 				argv.splice(0, 2);
+				continue;
+			}
+
+			if (arg == '--completion' || arg == '--compbash' || arg == '--compgen') {
+				// Handled by omelette
+				argv.splice(0, 1);
 				continue;
 			}
 
@@ -190,6 +184,8 @@ class Application {
 	}
 
 	onLocaleChanged() {
+		return;
+
 		let currentCommands = this.vorpal().commands;
 		for (let i = 0; i < currentCommands.length; i++) {
 			let cmd = currentCommands[i];
@@ -204,6 +200,8 @@ class Application {
 	}
 	
 	loadCommands_() {
+		return;
+
 		this.onLocaleChanged(); // Ensures that help and exit commands are translated
 
 		fs.readdirSync(__dirname).forEach((path) => {
@@ -272,10 +270,120 @@ class Application {
 		}
 	}
 
-	async start() {
-		this.vorpal_ = require('vorpal')();
-		vorpalUtils.initialize(this.vorpal());
+	findCommandByName(name) {
+		let CommandClass = null;
+		try {
+			CommandClass = require('./command-' + name + '.js');
+		} catch (error) {
+			let e = new Error('No such command: ' + name);
+			e.type = 'notFound';
+			throw e;
+		}
+		let cmd = new CommandClass();
 
+		cmd.log = (...object) => {
+			return console.log(...object);
+		}
+
+		return cmd;
+	}
+
+	makeCommandArgs(cmd, argv) {
+		let cmdUsage = cmd.usage();
+		cmdUsage = yargParser(cmdUsage);
+		let output = {};
+
+		let options = cmd.options();
+		let booleanFlags = [];
+		let aliases = {};
+		for (let i = 0; i < options.length; i++) {
+			if (options[i].length != 2) throw new Error('Invalid options: ' + options[i]);
+			let flags = options[i][0];
+			let text = options[i][1];
+
+			flags = this.parseFlags(flags);
+
+			if (!flags.arg) {
+				booleanFlags.push(flags.short);
+				if (flags.long) booleanFlags.push(flags.long);
+			}
+
+			if (flags.short && flags.long) {
+				aliases[flags.long] = [flags.short];
+			}
+		}
+
+		let args = yargParser(argv, {
+			boolean: booleanFlags,
+			alias: aliases,
+		});
+
+		for (let i = 1; i < cmdUsage['_'].length; i++) {
+			const a = this.parseCommandArg(cmdUsage['_'][i]);
+			if (a.required && !args['_'][i]) throw new Error('Missing required arg: ' + a.name);
+			if (i >= a.length) {
+				output[a.name] = null;
+			} else {
+				output[a.name] = args['_'][i];
+			}
+		}
+
+		let argOptions = {};
+		for (let key in args) {
+			if (!args.hasOwnProperty(key)) continue;
+			if (key == '_') continue;
+			argOptions[key] = args[key];
+		}
+
+		output.options = argOptions;
+
+		return output;
+	}
+
+	parseFlags(flags) {
+		let output = {};
+		flags = flags.split(',');
+		for (let i = 0; i < flags.length; i++) {
+			let f = flags[i].trim();
+
+			if (f.substr(0, 2) == '--') {
+				f = f.split(' ');
+				output.long = f[0].substr(2).trim();
+				if (f.length == 2) {
+					output.arg = this.parseCommandArg(f[1].trim());
+				}
+			} else if (f.substr(0, 1) == '-') {
+				output.short = f.substr(1);
+			}
+		}
+		return output;
+	}
+
+	parseCommandArg(arg) {
+		if (arg.length <= 2) throw new Error('Invalid command arg: ' + arg);
+
+		const c1 = arg[0];
+		const c2 = arg[arg.length - 1];
+		const name = arg.substr(1, arg.length - 2);
+
+		if (c1 == '<' && c2 == '>') {
+			return { required: true, name: name };
+		} else if (c1 == '[' && c2 == ']') {
+			return { required: false, name: name };
+		} else {
+			throw new Error('Invalid command arg: ' + arg);
+		}
+	}
+
+	async execCommand(argv) {
+		if (!argv.length) throw new Error('Empty command');
+		const commandName = argv[0];
+		const command = this.findCommandByName(commandName);
+		const cmdArgs = this.makeCommandArgs(command, argv);
+		await command.action(cmdArgs);
+	}
+
+	async start() {
 		let argv = process.argv;
 		let startFlags = await this.handleStartFlags_(argv);
 		argv = startFlags.argv;
@@ -330,7 +438,7 @@ class Application {
 
 		setLocale(Setting.value('locale'));
 
-		this.loadCommands_();
+		//this.loadCommands_();
 
 		let currentFolderId = Setting.value('activeFolderId');
 		this.currentFolder_ = null;
@@ -338,25 +446,101 @@ class Application {
 		if (!this.currentFolder_) this.currentFolder_ = await Folder.defaultFolder();
 		Setting.setValue('activeFolderId', this.currentFolder_ ? this.currentFolder_.id : '');
 
-		if (this.currentFolder_) await this.vorpal().exec('use ' + this.escapeShellArg(this.currentFolder_.title));
 
-		// If we still have arguments, pass it to Vorpal and exit
-		if (argv.length) {
-			let cmd = this.shellArgsToString(argv);
-			await this.vorpal().exec(cmd);
-		} else {
 
-			setInterval(() => {
-				reg.scheduleSync(0);
-			}, 1000 * 60 * 5);
+		const completion = omelette(`joplindev <title>`);
 
-			this.updatePrompt();
-			this.vorpal().show();
-			this.vorpal().history(Setting.value('appId')); // Enables persistent history
-			if (!this.currentFolder()) {
-				this.vorpal().log(_('No notebook is defined. Create one with `mkbook <notebook>`.'));
-			}
-		}
+		// Bind events for every template part.
+		completion.on('title', ({ before, reply }) => {
+			const child_process = require('child_process');
+			const stdout = child_process.execSync('joplindev autocompletion --before "' + before + '" notes');
+			reply(JSON.parse(stdout));
+		});
+
+		// Initialize the omelette.
+		completion.init()
+
+
+		// const omelCommand = ({ before, reply }) => {
+		// 	reply([ 'cat', 'ls' ]);
+		// }
+
+		// const omelTitle = ({ reply }) => {
+		// 	if (this.currentFolder_) {
+		// 		Note.previews(this.currentFolder_.id).then((notes) => {
+		// 			console.info(notes.length);
+		// 			const output = notes.map((n) => n.title);
+		// 			reply(['aa']);
+		// 			//reply(output);
+		// 		});
+		// 	} else {
+		// 		reply([]);
+		// 	}
+		// }
+
+		// omelette`joplindev ${omelCommand} ${omelTitle}`.init()
+
+
+
+
+
+
+
+
+
+		this.execCommand(argv);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		// if (this.currentFolder_) await this.vorpal().exec('use ' + this.escapeShellArg(this.currentFolder_.title));
+
+		// // If we still have arguments, pass it to Vorpal and exit
+		// if (argv.length) {
+		// 	let cmd = this.shellArgsToString(argv);
+		// 	await this.vorpal().exec(cmd);
+		// } else {
+
+		// 	setInterval(() => {
+		// 		reg.scheduleSync(0);
+		// 	}, 1000 * 60 * 5);
+
+		// 	this.updatePrompt();
+		// 	this.vorpal().show();
+		// 	this.vorpal().history(Setting.value('appId')); // Enables persistent history
+		// 	if (!this.currentFolder()) {
+		// 		this.vorpal().log(_('No notebook is defined. Create one with `mkbook <notebook>`.'));
+		// 	}
+		// }
 	}
 
 }

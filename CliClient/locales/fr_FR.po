@@ -14,8 +14,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.3\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "No notebook selected."
 msgstr "Aucun carnet n'est sélectionné."
@@ -44,9 +42,6 @@ msgstr "Affiche l'aide pour la commande donnée."
 
 msgid "Exits the application."
 msgstr "Quitter le logiciel."
-
-msgid "No notebook is defined. Create one with `mkbook <notebook>`."
-msgstr "Aucun carnet n'est défini. Créez-en un avec `mkbook <carnet>`."
 
 msgid "Displays the given note."
 msgstr "Affiche la note."
@@ -99,6 +94,10 @@ msgstr ""
 
 msgid "No active notebook."
 msgstr "Aucun carnet actif."
+
+#, fuzzy
+msgid "Note does not exist."
+msgstr "Ce carnet n'existe pas : \"%s\". Le créer ?"
 
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
@@ -226,10 +225,6 @@ msgstr "Supprime les objets sans demander la confirmation."
 
 msgid "Deletes a notebook."
 msgstr "Supprime le carnet."
-
-#, javascript-format
-msgid "Delete notebook \"%s\"?"
-msgstr "Supprimer le carnet \"%s\" ?"
 
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
@@ -362,8 +357,8 @@ msgstr "Objets supprimés localement : %d."
 msgid "Deleted remote items: %d."
 msgstr "Objets distants supprimés : %d."
 
-#, javascript-format
-msgid "State: %s."
+#, fuzzy, javascript-format
+msgid "State: \"%s\"."
 msgstr "Etat : %s."
 
 #, javascript-format
@@ -533,6 +528,9 @@ msgstr "Sans titre"
 msgid "Delete note?"
 msgstr "Supprimer la note ?"
 
+msgid "Attach file"
+msgstr "Attacher un fichier"
+
 msgid "Delete note"
 msgstr "Supprimer la note"
 
@@ -580,6 +578,12 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Delete notebook \"%s\"?"
+#~ msgstr "Supprimer le carnet \"%s\" ?"
+
+#~ msgid "No notebook is defined. Create one with `mkbook <notebook>`."
+#~ msgstr "Aucun carnet n'est défini. Créez-en un avec `mkbook <carnet>`."
 
 #~ msgid "NAME"
 #~ msgstr "NOM"
@@ -653,9 +657,6 @@ msgstr "Bienvenue"
 #, fuzzy
 #~ msgid "use <notebook>"
 #~ msgstr "Nouveau carnet"
-
-#~ msgid "Attach file"
-#~ msgstr "Attacher un fichier"
 
 #~ msgid "All potential ports are in use - please report the issue at %s"
 #~ msgstr ""

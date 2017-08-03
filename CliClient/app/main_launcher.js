@@ -12,6 +12,17 @@
 var spawn = require('child_process').spawn;
 
 var args = ['main.js'];
+
+if (process.argv[1].indexOf('joplindev') >= 0) {
+	args.push('--profile');
+	args.push('/mnt/d/Temp/TestNotes2');
+	args.push('--stack-trace-enabled');
+	args.push('--log-level');
+	args.push('debug');
+	args.push('--env');
+	args.push('dev');
+}
+
 var processArgs = process.argv.splice(2);
 args = args.concat(processArgs);
 

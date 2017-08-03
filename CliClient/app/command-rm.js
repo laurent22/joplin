@@ -6,7 +6,6 @@ import { Folder } from 'lib/models/folder.js';
 import { Note } from 'lib/models/note.js';
 import { BaseModel } from 'lib/base-model.js';
 import { autocompleteItems } from './autocomplete.js';
-import { vorpalUtils } from './vorpal-utils.js';
 
 class Command extends BaseCommand {
 
@@ -32,12 +31,12 @@ class Command extends BaseCommand {
 	async action(args) {
 		const pattern = args['pattern'].toString();
 		const recursive = args.options && args.options.recursive === true;
-		const force = args.options && args.options.force === true;
+		const force = true ||  args.options && args.options.force === true; // TODO
 
 		if (recursive) {
 			const folder = await app().loadItem(BaseModel.TYPE_FOLDER, pattern);
 			if (!folder) throw new Error(_('Cannot find "%s".', pattern));
-			const ok = force ? true : await vorpalUtils.cmdPromptConfirm(this, _('Delete notebook "%s"?', folder.title));
+			//const ok = force ? true : await vorpalUtils.cmdPromptConfirm(this, _('Delete notebook "%s"?', folder.title));
 			if (!ok) return;
 			await Folder.delete(folder.id);
 			await app().refreshCurrentFolder();

@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+// Loading time: 20170803: 1.5s with no commands
+
 require('source-map-support').install();
 require('babel-plugin-transform-runtime');
 
@@ -35,12 +37,6 @@ BaseItem.loadClass('NoteTag', NoteTag);
 
 Setting.setConstant('appId', 'net.cozic.joplin-cli');
 Setting.setConstant('appType', 'cli');
-
-process.stdin.on('keypress', (_, key) => {
-	if (key && key.name === 'return') {
-		app().updatePrompt();
-	}
-});
 
 shimInit();
 

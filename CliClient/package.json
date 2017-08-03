@@ -14,6 +14,7 @@
   "dependencies": {
     "app-module-path": "^2.2.0",
     "babel-plugin-transform-runtime": "^6.23.0",
+    "cache-require-paths": "^0.3.0",
     "follow-redirects": "^1.2.4",
     "form-data": "^2.1.4",
     "fs-extra": "^3.0.1",
@@ -25,6 +26,7 @@
     "moment": "^2.18.1",
     "moment-timezone": "^0.5.13",
     "node-fetch": "^1.7.1",
+    "omelette": "^0.4.4",
     "os-tmpdir": "^1.0.2",
     "promise": "^7.1.1",
     "proper-lockfile": "^2.0.1",
@@ -38,7 +40,8 @@
     "string-to-stream": "^1.1.0",
     "tcp-port-used": "^0.1.2",
     "uuid": "^3.0.1",
-    "vorpal": "^1.12.0"
+    "vorpal": "^1.12.0",
+    "yargs-parser": "^7.0.0"
   },
   "devDependencies": {
     "babel-changed": "^7.0.0",

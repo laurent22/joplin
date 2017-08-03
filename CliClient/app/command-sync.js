@@ -4,7 +4,6 @@ import { _ } from 'lib/locale.js';
 import { OneDriveApiNodeUtils } from './onedrive-api-node-utils.js';
 import { Setting } from 'lib/models/setting.js';
 import { BaseItem } from 'lib/models/base-item.js';
-import { vorpalUtils } from './vorpal-utils.js';
 import { Synchronizer } from 'lib/synchronizer.js';
 import { reg } from 'lib/registry.js';
 import md5 from 'md5';
@@ -88,7 +87,8 @@ class Command extends BaseCommand {
 			let options = {
 				onProgress: (report) => {
 					let lines = Synchronizer.reportToLines(report);
-					if (lines.length) vorpalUtils.redraw(lines.join(' '));
+					//if (lines.length) vorpalUtils.redraw(lines.join(' '));
+					if (lines.length) this.log(lines.join(' ')); // TODO
 				},
 				onMessage: (msg) => {
 					vorpalUtils.redrawDone();
@@ -117,8 +117,6 @@ class Command extends BaseCommand {
 					throw error;
 				}
 			}
-			
-			vorpalUtils.redrawDone();
 
 			await app().refreshCurrentFolder();
 
@@ -136,7 +134,6 @@ class Command extends BaseCommand {
 	async cancel() {
 		const target = this.syncTarget_ ? this.syncTarget_ : Setting.value('sync.target');
 
-		vorpalUtils.redrawDone();
 		this.log(_('Cancelling...'));
 
 		if (reg.syncHasAuth(target)) {

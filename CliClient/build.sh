@@ -8,6 +8,7 @@ rm -f "$CLIENT_DIR/app/lib"
 ln -s "$CLIENT_DIR/../ReactNativeClient/lib" "$CLIENT_DIR/app"
 cp "$CLIENT_DIR/package.json" "$CLIENT_DIR/build"
 
-yarn run build
+npm run build
+#yarn run build
 
-NODE_PATH="$CLIENT_DIR/build" node "$CLIENT_DIR/build/build-translation.js" --silent
+#NODE_PATH="$CLIENT_DIR/build" node "$CLIENT_DIR/build/build-translation.js" --silent

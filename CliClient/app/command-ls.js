@@ -8,7 +8,7 @@ import { Note } from 'lib/models/note.js';
 import { autocompleteFolders } from './autocomplete.js';
 import { sprintf } from 'sprintf-js';
 import { time } from 'lib/time-utils.js';
-import { vorpalUtils } from './vorpal-utils.js';
+import { cliUtils } from './cli-utils.js';
 
 class Command extends BaseCommand {
 
@@ -117,7 +117,7 @@ class Command extends BaseCommand {
 				rows.push(row);
 			}
 
-			vorpalUtils.printArray(this, rows);
+			cliUtils.printArray(this.log, rows);
 		}
 
 	}

@@ -41,9 +41,6 @@ msgstr ""
 msgid "Exits the application."
 msgstr ""
 
-msgid "No notebook is defined. Create one with `mkbook <notebook>`."
-msgstr ""
-
 msgid "Displays the given note."
 msgstr ""
 
@@ -87,6 +84,9 @@ msgid ""
 msgstr ""
 
 msgid "No active notebook."
+msgstr ""
+
+msgid "Note does not exist."
 msgstr ""
 
 #, javascript-format
@@ -198,10 +198,6 @@ msgid "Deletes the items without asking for confirmation."
 msgstr ""
 
 msgid "Deletes a notebook."
-msgstr ""
-
-#, javascript-format
-msgid "Delete notebook \"%s\"?"
 msgstr ""
 
 #, javascript-format
@@ -319,7 +315,7 @@ msgid "Deleted remote items: %d."
 msgstr ""
 
 #, javascript-format
-msgid "State: %s."
+msgid "State: \"%s\"."
 msgstr ""
 
 #, javascript-format
@@ -485,6 +481,9 @@ msgid "Untitled"
 msgstr ""
 
 msgid "Delete note?"
+msgstr ""
+
+msgid "Attach file"
 msgstr ""
 
 msgid "Delete note"
