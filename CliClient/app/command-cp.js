@@ -4,7 +4,6 @@ import { _ } from 'lib/locale.js';
 import { BaseModel } from 'lib/base-model.js';
 import { Folder } from 'lib/models/folder.js';
 import { Note } from 'lib/models/note.js';
-import { autocompleteItems } from './autocomplete.js';
 
 class Command extends BaseCommand {
 
@@ -14,10 +13,6 @@ class Command extends BaseCommand {
 
 	description() {
 		return _('Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.');
-	}
-
-	autocomplete() {
-		return { data: autocompleteItems };
 	}
 
 	async action(args) {

@@ -4,7 +4,6 @@ import { _ } from 'lib/locale.js';
 import { BaseModel } from 'lib/base-model.js';
 import { Folder } from 'lib/models/folder.js';
 import { Note } from 'lib/models/note.js';
-import { autocompleteFolders } from './autocomplete.js';
 import { sprintf } from 'sprintf-js';
 import { time } from 'lib/time-utils.js';
 
@@ -49,7 +48,7 @@ class Command extends BaseCommand {
 			if (idx >= 0) {
 				let fragment = note.body.substr(Math.max(0, idx - fragmentLength / 2), fragmentLength);
 				fragment = fragment.replace(/\n/g, ' ');
-				line = sprintf('%s: %s / %s: %s', BaseModel.shortId(note.id), note.title, parent.title, fragment);
+				line = sprintf('%s: %s / %s: %s', BaseModel.shortId(note.id), parent.title, note.title, fragment);
 			} else {
 				line = sprintf('%s: %s / %s', BaseModel.shortId(note.id), parent.title, note.title);
 			}

@@ -141,12 +141,6 @@ class Application {
 				continue;
 			}
 
-			if (arg == '--completion' || arg == '--compbash' || arg == '--compgen') {
-				// Handled by omelette
-				argv.splice(0, 1);
-				continue;
-			}
-
 			if (arg == '--autocompletion') {
 				this.autocompletion_.active = true;
 				argv.splice(0, 1);
@@ -175,6 +169,9 @@ class Application {
 			if (arg == '--ac-line') {
 				if (!nextArg) throw new Error(_('Usage: %s', '--ac-line <line>'));
 				let line = nextArg.replace(/\|__QUOTE__\|/g, '"');
+				line = line.replace(/\|__SPACE__\|/g, ' ');
+				line = line.replace(/\|__OPEN_RB__\|/g, '(');
+				line = line.replace(/\|__OPEN_CB__\|/g, ')');
 				line = line.split('|__SEP__|');
 				this.autocompletion_.line = line;
 				argv.splice(0, 2);
@@ -280,8 +277,9 @@ class Application {
 	async commandMetadata() {
 		if (this.commandMetadata_) return this.commandMetadata_;
 
+		const osTmpdir = require('os-tmpdir');
 		const storage = require('node-persist');
-		await storage.init({ dir: 'commandMetadata', ttl: 1000 * 60 * 60 * 24 });
+		await storage.init({ dir: osTmpdir() + '/commandMetadata', ttl: 1000 * 60 * 60 * 24 });
 
 		let output = await storage.getItem('metadata');
 		if (Setting.value('env') != 'dev' && output) {
@@ -326,7 +324,7 @@ class Application {
 	}
 
 	async execCommand(argv) {
-		if (!argv.length) throw new Error('Empty command');
+		if (!argv.length) return this.execCommand(['help']);
 		const commandName = argv[0];
 		this.activeCommand_ = this.findCommandByName(commandName);
 		const cmdArgs = cliUtils.makeCommandArgs(this.activeCommand_, argv);
@@ -416,6 +414,8 @@ class Application {
 				if (!items.length) return;
 				for (let i = 0; i < items.length; i++) {
 					items[i] = items[i].replace(/ /g, '\\ ');
+					items[i] = items[i].replace(/\(/g, '\\(');
+					items[i] = items[i].replace(/\)/g, '\\)');
 				}
 				console.info(items.join("\n"));
 			}

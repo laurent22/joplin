@@ -5,7 +5,6 @@ import { BaseModel } from 'lib/base-model.js';
 import { Folder } from 'lib/models/folder.js';
 import { Note } from 'lib/models/note.js';
 import { time } from 'lib/time-utils.js';
-import { autocompleteItems } from './autocomplete.js';
 
 class Command extends BaseCommand {
 
@@ -15,10 +14,6 @@ class Command extends BaseCommand {
 
 	description() {
 		return _('<todo-command> can either be "toggle" or "clear". Use "toggle" to toggle the given todo between completed and uncompleted state (If the target is a regular note it will be converted to a todo). Use "clear" to convert the todo back to a regular note.');
-	}
-
-	autocomplete() {
-		return { data: autocompleteItems };
 	}
 
 	async action(args) {

@@ -58,6 +58,13 @@ process.on("SIGINT", async function() {
 	await application.cancelCurrentCommand();
 });
 
+process.stdout.on('error', function( err ) {
+	// https://stackoverflow.com/questions/12329816/error-write-epipe-when-piping-node-output-to-head#15884508
+	if (err.code == "EPIPE") {
+		process.exit(0);
+	}
+});
+
 application.start().catch((error) => {
 	console.error(_('Fatal error:'));
 	console.error(error);

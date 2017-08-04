@@ -16,10 +16,6 @@ class BaseCommand {
 		return [];
 	}
 
-	autocomplete() {
-		return null;
-	}
-
 	options() {
 		return [];
 	}

@@ -3,7 +3,6 @@ import { app } from './app.js';
 import { _ } from 'lib/locale.js';
 import { BaseModel } from 'lib/base-model.js';
 import { Folder } from 'lib/models/folder.js';
-import { autocompleteFolders } from './autocomplete.js';
 
 class Command extends BaseCommand {
 

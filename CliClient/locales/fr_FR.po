@@ -135,6 +135,10 @@ msgstr ""
 msgid "Displays a geolocation URL for the note."
 msgstr "Afficher l'URL de l'emplacement de la note."
 
+#, fuzzy
+msgid "Displays usage information."
+msgstr "Affiche les informations de version"
+
 msgid "Imports an Evernote notebook file (.enex file)."
 msgstr "Importer un carnet Evernote (fichier .enex)."
 
@@ -269,6 +273,13 @@ msgid "Synchronisation is already in progress."
 msgstr "La synchronisation est déjà en cours."
 
 #, javascript-format
+msgid ""
+"Lock file is already being hold. If you know that no synchronisation is "
+"taking place, you may delete the lock file at \"%s\" and resume the "
+"operation."
+msgstr ""
+
+#, javascript-format
 msgid "Synchronisation target: %s (%s)"
 msgstr "Cible de la synchronisation : %s (%s)"
 
@@ -281,7 +292,8 @@ msgstr "Commencement de la synchronisation..."
 msgid "Done."
 msgstr "Terminé."
 
-msgid "Cancelling..."
+#, fuzzy
+msgid "Cancelling... Please wait."
 msgstr "Annulation..."
 
 #, fuzzy
@@ -323,6 +335,10 @@ msgstr "Affiche les informations de version"
 #, javascript-format
 msgid "%s %s (%s)"
 msgstr "%s %s (%s)"
+
+#, javascript-format
+msgid "Received %s"
+msgstr ""
 
 msgid "Fatal error:"
 msgstr "Erreur fatale :"
@@ -384,6 +400,9 @@ msgstr "Etat : %s."
 #, javascript-format
 msgid "Last error: %s (stacktrace in log)."
 msgstr "Dernière erreur : %s (Plus d'information dans le journal d'erreurs)"
+
+msgid "Cancelling..."
+msgstr "Annulation..."
 
 #, javascript-format
 msgid "Completed: %s"

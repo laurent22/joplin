@@ -14,6 +14,9 @@ _|__APPNAME__|_completion() {
 			ESCAPED_LINE="$ESCAPED_LINE|__SEP__|"
 		fi
 		WORD="${WORD/\"/|__QUOTE__|}"
+		WORD="${WORD/\\(/|__OPEN_RB__|}"
+		WORD="${WORD/\\)/|__CLOSE_RB__|}"
+		WORD="${WORD/\\ /|__SPACE__|}"
 		ESCAPED_LINE="$ESCAPED_LINE$WORD"
 	done
 
