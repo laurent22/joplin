@@ -9,6 +9,8 @@ ln -s "$CLIENT_DIR/../ReactNativeClient/lib" "$CLIENT_DIR/app"
 cp "$CLIENT_DIR/package.json" "$CLIENT_DIR/build"
 
 npm run build
+
+chmod 755 "$CLIENT_DIR/build/main_launcher.js"
 #yarn run build
 
 #NODE_PATH="$CLIENT_DIR/build" node "$CLIENT_DIR/build/build-translation.js" --silent
