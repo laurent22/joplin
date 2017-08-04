@@ -93,7 +93,7 @@ class OneDriveApiNodeUtils {
 
 			enableServerDestroy(server);
 
-			targetConsole.log(_('Please open this URL in your browser to authenticate the application:'));
+			targetConsole.log(_('Please open the following URL in your browser to authenticate the application. The application will create a directory in "Apps/Joplin" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.'));
 			targetConsole.log('');
 			targetConsole.log(authCodeUrl);
 		});

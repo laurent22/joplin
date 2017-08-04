@@ -128,8 +128,6 @@ class Command extends BaseCommand {
 			}
 
 			await app().refreshCurrentFolder();
-
-			this.log(_('Done.'));
 		} catch (error) {
 			cliUtils.redrawDone();
 			this.releaseLockFn_();

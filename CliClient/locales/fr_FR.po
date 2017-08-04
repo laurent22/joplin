@@ -350,10 +350,13 @@ msgstr "Le logiciel a été autorisé. Vous pouvez maintenant fermer cet onglet.
 msgid "The application has been successfully authorised."
 msgstr "Le logiciel a été autorisé."
 
-msgid "Please open this URL in your browser to authenticate the application:"
+msgid ""
+"Please open the following URL in your browser to authenticate the "
+"application. The application will create a directory in \"Apps/Joplin\" and "
+"will only read and write files in this directory. It will have no access to "
+"any files outside this directory nor to any other personal data. No data "
+"will be shared with any third party."
 msgstr ""
-"Veuillez ouvrir cette URL dans votre navigateur internet pour autoriser le "
-"logiciel :"
 
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
@@ -617,6 +620,12 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid ""
+#~ "Please open this URL in your browser to authenticate the application:"
+#~ msgstr ""
+#~ "Veuillez ouvrir cette URL dans votre navigateur internet pour autoriser "
+#~ "le logiciel :"
 
 #~ msgid "Note does not exist."
 #~ msgstr "Cette note n'existe pas."
