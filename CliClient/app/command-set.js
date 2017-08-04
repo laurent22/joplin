@@ -21,6 +21,10 @@ class Command extends BaseCommand {
 		return { data: autocompleteItems };
 	}
 
+	hidden() {
+		return true;
+	}
+
 	async action(args) {
 		let title = args['note'];
 		let propName = args['name'];

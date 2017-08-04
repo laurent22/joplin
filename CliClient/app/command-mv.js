@@ -9,11 +9,11 @@ import { autocompleteItems } from './autocomplete.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return 'mv <pattern> <destination>';
+		return 'mv <note-pattern> [notebook]';
 	}
 
 	description() {
-		return _('Moves the notes matching <pattern> to <destination>. If <pattern> is a note, it will be moved to the notebook <destination>. If <pattern> is a notebook, it will be renamed to <destination>.');
+		return _('Moves the notes matching <note-pattern> to [notebook].');
 	}
 
 	autocomplete() {
@@ -21,26 +21,17 @@ class Command extends BaseCommand {
 	}
 
 	async action(args) {
-		const pattern = args['pattern'];
-		const destination = args['destination'];
+		const pattern = args['note-pattern'];
+		const destination = args['notebook'];
+		
+		const folder = await Folder.loadByField('title', destination);
+		if (!folder) throw new Error(_('Cannot find "%s".', destination));
 
-		const item = await app().guessTypeAndLoadItem(pattern);
+		const notes = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
+		if (!notes.length) throw new Error(_('Cannot find "%s".', pattern));
 
-		if (!item) throw new Error(_('Cannot find "%s".', pattern));
-
-		if (item.type_ == BaseModel.TYPE_FOLDER) {
-			await Folder.save({ id: item.id, title: destination }, { userSideValidation: true });
-			await app().refreshCurrentFolder();
-		} else { // TYPE_NOTE
-			const folder = await Folder.loadByField('title', destination);
-			if (!folder) throw new Error(_('Cannot find "%s".', destination));
-
-			const notes = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
-			if (!notes.length) throw new Error(_('Cannot find "%s".', pattern));
-
-			for (let i = 0; i < notes.length; i++) {
-				await Note.moveToFolder(notes[i].id, folder.id);
-			}
+		for (let i = 0; i < notes.length; i++) {
+			await Note.moveToFolder(notes[i].id, folder.id);
 		}
 	}
 
