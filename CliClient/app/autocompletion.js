@@ -137,6 +137,11 @@ async function handleAutocompletion(autocompletion) {
 		return filterList(['toggle', 'clear'], currentWord);
 	}
 
+	if (argName == 'command') {
+		const commands = await app().commandNames();
+		return this.filterList(commands, currentWord);
+	}
+
 	return [];
 }
 

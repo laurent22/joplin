@@ -27,6 +27,7 @@ class Application {
 		this.commands_ = {};
 		this.commandMetadata_ = null;
 		this.activeCommand_ = null;
+		this.allCommandsLoaded_ = false;
 	}
 
 	currentFolder() {
@@ -242,7 +243,9 @@ class Application {
 		}
 	}
 
-	loadAllCommands() {
+	commands() {
+		if (this.allCommandsLoaded_) return this.commands_;
+
 		fs.readdirSync(__dirname).forEach((path) => {
 			if (path.indexOf('command-') !== 0) return;
 			const ext = fileExtension(path)
@@ -252,8 +255,26 @@ class Application {
 			let cmd = new CommandClass();
 			if (!cmd.enabled()) return;
 
+			cmd.log = (...object) => {
+				return console.log(...object);
+			}
+
 			this.commands_[cmd.name()] = cmd;
 		});
+
+		this.allCommandsLoaded_ = true;
+
+		return this.commands_;
+	}
+
+	async commandNames() {
+		const metadata = await this.commandMetadata();
+		let output = [];
+		for (let n in metadata) {
+			if (!metadata.hasOwnProperty(n)) continue;
+			output.push(n);
+		}
+		return output;
 	}
 
 	async commandMetadata() {
@@ -268,12 +289,12 @@ class Application {
 			return Object.assign({}, this.commandMetadata_);
 		}
 
-		this.loadAllCommands();
+		const commands = this.commands();
 
 		output = {};
-		for (let n in this.commands_) {
-			if (!this.commands_.hasOwnProperty(n)) continue;
-			const cmd = this.commands_[n];
+		for (let n in commands) {
+			if (!commands.hasOwnProperty(n)) continue;
+			const cmd = commands[n];
 			output[n] = cmd.metadata();
 		}
 
@@ -284,6 +305,8 @@ class Application {
 	}
 
 	findCommandByName(name) {
+		if (this.commands_[name]) return this.commands_[name];
+
 		let CommandClass = null;
 		try {
 			CommandClass = require('./command-' + name + '.js');
@@ -298,7 +321,8 @@ class Application {
 			return console.log(...object);
 		}
 
-		return cmd;
+		this.commands_[name] = cmd;
+		return this.commands_[name];
 	}
 
 	async execCommand(argv) {
