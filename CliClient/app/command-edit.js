@@ -11,7 +11,7 @@ import { autocompleteItems } from './autocomplete.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return 'edit <title>';
+		return 'edit <note>';
 	}
 
 	description() {
@@ -40,7 +40,7 @@ class Command extends BaseCommand {
 		}
 
 		try {		
-			let title = args['title'];
+			let title = args['note'];
 
 			if (!app().currentFolder()) throw new Error(_('No active notebook.'));
 			let note = await app().loadItem(BaseModel.TYPE_NOTE, title);
@@ -69,8 +69,6 @@ class Command extends BaseCommand {
 			const spawn	= require('child_process').spawn;
 
 			this.log(_('Starting to edit note. Close the editor to get back to the prompt.'));
-
-			//app().vorpal().hide();
 
 			await fs.writeFile(tempFilePath, content);
 
