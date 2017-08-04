@@ -43,6 +43,33 @@ msgstr "Affiche l'aide pour la commande donnée."
 msgid "Exits the application."
 msgstr "Quitter le logiciel."
 
+msgid "Only Bash is currently supported for autocompletion."
+msgstr ""
+
+#, javascript-format
+msgid "Adding autocompletion script to: \"%s\""
+msgstr ""
+
+msgid "Autocompletion script is already installed."
+msgstr ""
+
+msgid "Autocompletion has been installed."
+msgstr ""
+
+#, javascript-format
+msgid "Sourcing \"%s\"..."
+msgstr ""
+
+#, javascript-format
+msgid "Missing required argument: %s"
+msgstr ""
+
+msgid "Y"
+msgstr ""
+
+msgid "n"
+msgstr ""
+
 msgid "Displays the given note."
 msgstr "Affiche la note."
 
@@ -73,8 +100,9 @@ msgstr "%s = %s (%s)"
 msgid "%s = %s"
 msgstr "%s = %s"
 
+#, fuzzy
 msgid ""
-"Duplicates the notes matching <pattern> to [notebook]. If no notebook is "
+"Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
 "Copie les notes correspondant à [nom] vers [carnet]. Si aucun carnet n'est "
@@ -95,13 +123,9 @@ msgstr ""
 msgid "No active notebook."
 msgstr "Aucun carnet actif."
 
-#, fuzzy
-msgid "Note does not exist."
-msgstr "Ce carnet n'existe pas : \"%s\". Le créer ?"
-
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr "Ce carnet n'existe pas : \"%s\". Le créer ?"
+msgstr "Cette note n'existe pas : \"%s\". La créer ?"
 
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
@@ -157,9 +181,10 @@ msgstr "Etiquettes : %d."
 msgid "Importing notes..."
 msgstr "Importation des notes..."
 
+#, fuzzy
 msgid ""
-"Displays the notes in [notebook]. Use `ls /` to display the list of "
-"notebooks."
+"Displays the notes in the current notebook. Use `ls /` to display the list "
+"of notebooks."
 msgstr ""
 "Affiche les notes dans le carnet. Utilisez `ls /` pour afficher la liste des "
 "carnets."
@@ -208,23 +233,16 @@ msgstr "Les notes ne peuvent être créées que dans un carnet."
 msgid "Creates a new todo."
 msgstr "Créer une nouvelle tâche."
 
-msgid ""
-"Moves the notes matching <pattern> to <destination>. If <pattern> is a note, "
-"it will be moved to the notebook <destination>. If <pattern> is a notebook, "
-"it will be renamed to <destination>."
-msgstr ""
-"Déplacer les notes correspondantes à <motif> vers <destination>. Si <motif> "
-"est une note, elle sera déplacée vers le carnet <destination>. Si <motif> "
-"est un carnet, il sera renommé <destination>."
+#, fuzzy
+msgid "Moves the notes matching <note-pattern> to [notebook]."
+msgstr "Supprime les objets correspondants à <motif>."
 
-msgid "Deletes the items matching <pattern>."
+#, fuzzy
+msgid "Deletes the notes matching <note-pattern>."
 msgstr "Supprime les objets correspondants à <motif>."
 
 msgid "Deletes the items without asking for confirmation."
 msgstr "Supprime les objets sans demander la confirmation."
-
-msgid "Deletes a notebook."
-msgstr "Supprime le carnet."
 
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
@@ -266,10 +284,11 @@ msgstr "Terminé."
 msgid "Cancelling..."
 msgstr "Annulation..."
 
+#, fuzzy
 msgid ""
-"<command> can be \"add\", \"remove\" or \"list\" to assign or remove [tag] "
-"from [note], or to list the notes associated with [tag]. The command `tag "
-"list` can be used to list all the tags."
+"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
+"[tag] from [note], or to list the notes associated with [tag]. The command "
+"`tag list` can be used to list all the tags."
 msgstr ""
 "<command> peut être \"add\", \"remove\" ou \"list\" pour assigner ou enlever "
 "l'étiquette [tag] de la [note], our pour lister les notes associées avec "
@@ -280,11 +299,12 @@ msgstr ""
 msgid "Invalid command: \"%s\""
 msgstr "Commande invalide : \"%s\""
 
+#, fuzzy
 msgid ""
-"<action> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the "
-"given todo between completed and uncompleted state (If the target is a "
-"regular note it will be converted to a todo). Use \"clear\" to convert the "
-"todo back to a regular note."
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
+"toggle the given todo between completed and uncompleted state (If the target "
+"is a regular note it will be converted to a todo). Use \"clear\" to convert "
+"the todo back to a regular note."
 msgstr ""
 "Gère le status des tâches. <action> peut être \"toggle\" ou \"clear\". "
 "Utilisez \"toggle\" pour basculer la tâche entre le status terminé et non-"
@@ -578,6 +598,21 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Note does not exist."
+#~ msgstr "Cette note n'existe pas."
+
+#~ msgid ""
+#~ "Moves the notes matching <pattern> to <destination>. If <pattern> is a "
+#~ "note, it will be moved to the notebook <destination>. If <pattern> is a "
+#~ "notebook, it will be renamed to <destination>."
+#~ msgstr ""
+#~ "Déplacer les notes correspondantes à <motif> vers <destination>. Si "
+#~ "<motif> est une note, elle sera déplacée vers le carnet <destination>. Si "
+#~ "<motif> est un carnet, il sera renommé <destination>."
+
+#~ msgid "Deletes a notebook."
+#~ msgstr "Supprime le carnet."
 
 #~ msgid "Delete notebook \"%s\"?"
 #~ msgstr "Supprimer le carnet \"%s\" ?"

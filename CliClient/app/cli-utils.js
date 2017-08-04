@@ -1,4 +1,6 @@
 import yargParser from 'yargs-parser';
+import { _ } from 'lib/locale.js';
+import { time } from 'lib/time-utils.js';
 const stringPadding = require('string-padding');
 
 const cliUtils = {};
@@ -104,7 +106,7 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 
 	for (let i = 1; i < cmdUsage['_'].length; i++) {
 		const a = cliUtils.parseCommandArg(cmdUsage['_'][i]);
-		if (a.required && !args['_'][i]) throw new Error('Missing required arg: ' + a.name);
+		if (a.required && !args['_'][i]) throw new Error(_('Missing required argument: %s', a.name));
 		if (i >= a.length) {
 			output[a.name] = null;
 		} else {
@@ -122,6 +124,55 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 	output.options = argOptions;
 
 	return output;
+}
+
+cliUtils.promptConfirm = function(message, answers = null) {
+	if (!answers) answers = [_('Y'), _('n')];
+	const readline = require('readline');
+
+	const rl = readline.createInterface({
+		input: process.stdin,
+		output: process.stdout
+	});
+
+	message += ' (' + answers.join('/') + ')';
+
+	return new Promise((resolve, reject) => {
+		rl.question(message + ' ', (answer) => {
+			const ok = !answer || answer.toLowerCase() == answers[0].toLowerCase();
+			rl.close();
+			resolve(ok);
+		});
+	});
+}
+
+let redrawStarted_ = false;
+let redrawLastLog_ = null;
+let redrawLastUpdateTime_ = 0;
+
+cliUtils.redraw = function(s) {
+	const now = time.unixMs();
+
+	if (now - redrawLastUpdateTime_ > 4000) {
+		console.info(s);
+		redrawLastUpdateTime_ = now;
+		redrawLastLog_ = null;
+	} else {
+		redrawLastLog_ = s;
+	}
+
+   redrawStarted_ = true;
+}
+
+cliUtils.redrawDone = function() {
+	if (!redrawStarted_) return;
+
+	if (redrawLastLog_) {
+		console.info(redrawLastLog_);
+	}
+
+	redrawLastLog_ = null;
+	redrawStarted_ = false;
 }
 
 export { cliUtils };

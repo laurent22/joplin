@@ -41,6 +41,33 @@ msgstr ""
 msgid "Exits the application."
 msgstr ""
 
+msgid "Only Bash is currently supported for autocompletion."
+msgstr ""
+
+#, javascript-format
+msgid "Adding autocompletion script to: \"%s\""
+msgstr ""
+
+msgid "Autocompletion script is already installed."
+msgstr ""
+
+msgid "Autocompletion has been installed."
+msgstr ""
+
+#, javascript-format
+msgid "Sourcing \"%s\"..."
+msgstr ""
+
+#, javascript-format
+msgid "Missing required argument: %s"
+msgstr ""
+
+msgid "Y"
+msgstr ""
+
+msgid "n"
+msgstr ""
+
 msgid "Displays the given note."
 msgstr ""
 
@@ -69,7 +96,7 @@ msgid "%s = %s"
 msgstr ""
 
 msgid ""
-"Duplicates the notes matching <pattern> to [notebook]. If no notebook is "
+"Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
 
@@ -84,9 +111,6 @@ msgid ""
 msgstr ""
 
 msgid "No active notebook."
-msgstr ""
-
-msgid "Note does not exist."
 msgstr ""
 
 #, javascript-format
@@ -143,8 +167,8 @@ msgid "Importing notes..."
 msgstr ""
 
 msgid ""
-"Displays the notes in [notebook]. Use `ls /` to display the list of "
-"notebooks."
+"Displays the notes in the current notebook. Use `ls /` to display the list "
+"of notebooks."
 msgstr ""
 
 msgid "Displays only the first top <num> notes."
@@ -185,19 +209,13 @@ msgstr ""
 msgid "Creates a new todo."
 msgstr ""
 
-msgid ""
-"Moves the notes matching <pattern> to <destination>. If <pattern> is a note, "
-"it will be moved to the notebook <destination>. If <pattern> is a notebook, "
-"it will be renamed to <destination>."
+msgid "Moves the notes matching <note-pattern> to [notebook]."
 msgstr ""
 
-msgid "Deletes the items matching <pattern>."
+msgid "Deletes the notes matching <note-pattern>."
 msgstr ""
 
 msgid "Deletes the items without asking for confirmation."
-msgstr ""
-
-msgid "Deletes a notebook."
 msgstr ""
 
 #, javascript-format
@@ -239,9 +257,9 @@ msgid "Cancelling..."
 msgstr ""
 
 msgid ""
-"<command> can be \"add\", \"remove\" or \"list\" to assign or remove [tag] "
-"from [note], or to list the notes associated with [tag]. The command `tag "
-"list` can be used to list all the tags."
+"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
+"[tag] from [note], or to list the notes associated with [tag]. The command "
+"`tag list` can be used to list all the tags."
 msgstr ""
 
 #, javascript-format
@@ -249,10 +267,10 @@ msgid "Invalid command: \"%s\""
 msgstr ""
 
 msgid ""
-"<action> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the "
-"given todo between completed and uncompleted state (If the target is a "
-"regular note it will be converted to a todo). Use \"clear\" to convert the "
-"todo back to a regular note."
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
+"toggle the given todo between completed and uncompleted state (If the target "
+"is a regular note it will be converted to a todo). Use \"clear\" to convert "
+"the todo back to a regular note."
 msgstr ""
 
 msgid ""

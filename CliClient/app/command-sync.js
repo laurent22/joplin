@@ -6,6 +6,7 @@ import { Setting } from 'lib/models/setting.js';
 import { BaseItem } from 'lib/models/base-item.js';
 import { Synchronizer } from 'lib/synchronizer.js';
 import { reg } from 'lib/registry.js';
+import { cliUtils } from './cli-utils.js';
 import md5 from 'md5';
 const locker = require('proper-lockfile');
 const fs = require('fs-extra');
@@ -67,9 +68,18 @@ class Command extends BaseCommand {
 		const lockFilePath = osTmpdir() + '/synclock_' + md5(Setting.value('profileDir'));
 		if (!await fs.pathExists(lockFilePath)) await fs.writeFile(lockFilePath, 'synclock');
 
-		if (await Command.isLocked(lockFilePath)) throw new Error(_('Synchronisation is already in progress.'));
+		try {
+			if (await Command.isLocked(lockFilePath)) throw new Error(_('Synchronisation is already in progress.'));
 
-		this.releaseLockFn_ = await Command.lockFile(lockFilePath);
+			this.releaseLockFn_ = await Command.lockFile(lockFilePath);
+		} catch (error) {
+			if (error.code == 'ELOCKED') {
+				const msg = _('Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at "%s" and resume the operation.', error.file);
+				this.log(msg);
+				return;
+			}
+			throw error;
+		}
 
 		try {
 			this.syncTarget_ = Setting.value('sync.target');
@@ -87,11 +97,10 @@ class Command extends BaseCommand {
 			let options = {
 				onProgress: (report) => {
 					let lines = Synchronizer.reportToLines(report);
-					//if (lines.length) vorpalUtils.redraw(lines.join(' '));
-					if (lines.length) this.log(lines.join(' ')); // TODO
+					if (lines.length) cliUtils.redraw(lines.join(' '));
 				},
 				onMessage: (msg) => {
-					vorpalUtils.redrawDone();
+					cliUtils.redrawDone();
 					this.log(msg);
 				},
 				randomFailures: args.options['random-failures'] === true,
@@ -122,11 +131,13 @@ class Command extends BaseCommand {
 
 			this.log(_('Done.'));
 		} catch (error) {
+			cliUtils.redrawDone();
 			this.releaseLockFn_();
 			this.releaseLockFn_ = null;
 			throw error;
 		}
 
+		cliUtils.redrawDone();
 		this.releaseLockFn_();
 		this.releaseLockFn_ = null;
 	}
@@ -134,7 +145,9 @@ class Command extends BaseCommand {
 	async cancel() {
 		const target = this.syncTarget_ ? this.syncTarget_ : Setting.value('sync.target');
 
-		this.log(_('Cancelling...'));
+		cliUtils.redrawDone();
+
+		this.log(_('Cancelling... Please wait.'));
 
 		if (reg.syncHasAuth(target)) {
 			let sync = await reg.synchronizer(target);

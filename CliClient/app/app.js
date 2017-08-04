@@ -26,6 +26,7 @@ class Application {
 		this.autocompletion_ = { active: false };
 		this.commands_ = {};
 		this.commandMetadata_ = null;
+		this.activeCommand_ = null;
 	}
 
 	currentFolder() {
@@ -235,7 +236,7 @@ class Application {
 			case 'FOLDERS_UPDATE_ONE':
 			case 'FOLDER_DELETE':
 
-				reg.scheduleSync();
+				//reg.scheduleSync();
 				break;
 
 		}
@@ -303,9 +304,13 @@ class Application {
 	async execCommand(argv) {
 		if (!argv.length) throw new Error('Empty command');
 		const commandName = argv[0];
-		const command = this.findCommandByName(commandName);
-		const cmdArgs = cliUtils.makeCommandArgs(command, argv);
-		await command.action(cmdArgs);
+		this.activeCommand_ = this.findCommandByName(commandName);
+		const cmdArgs = cliUtils.makeCommandArgs(this.activeCommand_, argv);
+		await this.activeCommand_.action(cmdArgs);
+	}
+
+	async cancelCurrentCommand() {
+		await this.activeCommand_.cancel();
 	}
 
 	async start() {
@@ -388,14 +393,17 @@ class Application {
 				for (let i = 0; i < items.length; i++) {
 					items[i] = items[i].replace(/ /g, '\\ ');
 				}
-				//console.info(items);
 				console.info(items.join("\n"));
 			}
 			
 			return;
 		}
 
-		this.execCommand(argv);
+		try {
+			await this.execCommand(argv);
+		} catch (error) {
+			console.info(error);
+		}
 	}
 
 }
