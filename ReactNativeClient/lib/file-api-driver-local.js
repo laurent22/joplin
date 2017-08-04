@@ -168,10 +168,8 @@ class FileApiDriverLocal {
 					resolve();
 					return;
 				}
-
-				const mkdirp = require('mkdirp');
 			
-				mkdirp(path, (error) => {
+				fs.mkdirp(path, (error) => {
 					if (error) {
 						reject(this.fsErrorToJsError_(error));
 					} else {
