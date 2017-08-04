@@ -13,6 +13,8 @@ npm run build
 cp "$ROOT_DIR/package.json" "$ROOT_DIR/build"
 cp "$ROOT_DIR/app/autocompletion_template.txt" "$ROOT_DIR/build"
 
+chmod 755 "$ROOT_DIR/build/main.js"
+
 if [[ ! -f "$ROOT_DIR/package.json.md5" ]]; then
 	"$ROOT_DIR/update-package-md5.sh"
 fi
