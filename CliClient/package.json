@@ -9,7 +9,7 @@
   "url": "git://github.com/laurent22/joplin.git",
   "version": "0.9.0",
   "bin": {
-    "joplin": "./main_launcher.js"
+    "joplin": "./main.js"
   },
   "dependencies": {
     "app-module-path": "^2.2.0",
