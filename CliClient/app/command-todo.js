@@ -10,11 +10,11 @@ import { autocompleteItems } from './autocomplete.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return 'todo <action> <pattern>';
+		return 'todo <todo-command> <note-pattern>';
 	}
 
 	description() {
-		return _('<action> can either be "toggle" or "clear". Use "toggle" to toggle the given todo between completed and uncompleted state (If the target is a regular note it will be converted to a todo). Use "clear" to convert the todo back to a regular note.');
+		return _('<todo-command> can either be "toggle" or "clear". Use "toggle" to toggle the given todo between completed and uncompleted state (If the target is a regular note it will be converted to a todo). Use "clear" to convert the todo back to a regular note.');
 	}
 
 	autocomplete() {
@@ -22,8 +22,8 @@ class Command extends BaseCommand {
 	}
 
 	async action(args) {
-		const action = args.action;
-		const pattern = args.pattern;
+		const action = args['todo-command'];
+		const pattern = args['note-pattern'];
 		const notes = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
 		if (!notes.length) throw new Error(_('Cannot find "%s".', pattern));
 

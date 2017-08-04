@@ -7,6 +7,7 @@ mkdir -p "$CLIENT_DIR/build"
 rm -f "$CLIENT_DIR/app/lib"
 ln -s "$CLIENT_DIR/../ReactNativeClient/lib" "$CLIENT_DIR/app"
 cp "$CLIENT_DIR/package.json" "$CLIENT_DIR/build"
+cp "$CLIENT_DIR/app/autocompletion_template.txt" "$CLIENT_DIR/build"
 
 npm run build
 

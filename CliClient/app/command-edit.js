@@ -7,11 +7,12 @@ import { Note } from 'lib/models/note.js';
 import { Setting } from 'lib/models/setting.js';
 import { BaseModel } from 'lib/base-model.js';
 import { autocompleteItems } from './autocomplete.js';
+import { cliUtils } from './cli-utils.js';
 
 class Command extends BaseCommand {
 
 	usage() {
-		return 'edit <title>';
+		return 'edit <note>';
 	}
 
 	description() {
@@ -40,16 +41,13 @@ class Command extends BaseCommand {
 		}
 
 		try {		
-			let title = args['title'];
+			let title = args['note'];
 
 			if (!app().currentFolder()) throw new Error(_('No active notebook.'));
 			let note = await app().loadItem(BaseModel.TYPE_NOTE, title);
 
 			if (!note) {
-				// TODO
-				throw new Error(_('Note does not exist.'));
-
-				let ok = await vorpalUtils.cmdPromptConfirm(this, _('Note does not exist: "%s". Create it?', title))
+				const ok = await cliUtils.promptConfirm(_('Note does not exist: "%s". Create it?', title));
 				if (!ok) return;
 				newNote = await Note.save({ title: title, parent_id: app().currentFolder().id });
 				note = await Note.load(newNote.id);
@@ -69,8 +67,6 @@ class Command extends BaseCommand {
 			const spawn	= require('child_process').spawn;
 
 			this.log(_('Starting to edit note. Close the editor to get back to the prompt.'));
-
-			//app().vorpal().hide();
 
 			await fs.writeFile(tempFilePath, content);
 

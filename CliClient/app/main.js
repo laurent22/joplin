@@ -40,7 +40,25 @@ Setting.setConstant('appType', 'cli');
 
 shimInit();
 
-app().start().catch((error) => {
+const application = app();
+
+if (process.platform === "win32") {
+	var rl = require("readline").createInterface({
+		input: process.stdin,
+		output: process.stdout
+	});
+
+	rl.on("SIGINT", function () {
+		process.emit("SIGINT");
+	});
+}
+
+process.on("SIGINT", async function() {
+	console.info(_('Received %s', 'SIGINT'));
+	await application.cancelCurrentCommand();
+});
+
+application.start().catch((error) => {
 	console.error(_('Fatal error:'));
 	console.error(error);
 });
