@@ -13,6 +13,10 @@ npm run build
 cp "$ROOT_DIR/package.json" "$ROOT_DIR/build"
 cp "$ROOT_DIR/app/autocompletion_template.txt" "$ROOT_DIR/build"
 
+if [[ ! -f "$ROOT_DIR/package.json.md5" ]]; then
+	"$ROOT_DIR/update-package-md5.sh"
+fi
+
 # Add modules on top of main.js:
 # - cache-require-paths to cache require() calls
 # - app-module-path so that lib/something paths can be resolved.
