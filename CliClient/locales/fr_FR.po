@@ -289,9 +289,6 @@ msgstr "Impossible d'initialiser la synchronisation."
 msgid "Starting synchronisation..."
 msgstr "Commencement de la synchronisation..."
 
-msgid "Done."
-msgstr "Terminé."
-
 #, fuzzy
 msgid "Cancelling... Please wait."
 msgstr "Annulation..."
@@ -620,6 +617,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Done."
+#~ msgstr "Terminé."
 
 #~ msgid ""
 #~ "Please open this URL in your browser to authenticate the application:"

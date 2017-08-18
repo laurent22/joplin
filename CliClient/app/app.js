@@ -307,7 +307,7 @@ class Application {
 
 		let CommandClass = null;
 		try {
-			CommandClass = require('./command-' + name + '.js');
+			CommandClass = require(__dirname + '/command-' + name + '.js');
 		} catch (error) {
 			let e = new Error('No such command: ' + name);
 			e.type = 'notFound';

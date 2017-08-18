@@ -7,6 +7,7 @@ class FileApiDriverOneDrive {
 
 	constructor(api) {
 		this.api_ = api;
+		this.pathCache_ = {};
 	}
 
 	api() {
@@ -19,7 +20,7 @@ class FileApiDriverOneDrive {
 
 	itemFilter_() {
 		return {
-			select: 'name,file,folder,fileSystemInfo',
+			select: 'name,file,folder,fileSystemInfo,parentReference',
 		}
 	}
 
@@ -173,12 +174,22 @@ class FileApiDriverOneDrive {
 		throw new Error('Not implemented');
 	}
 
+	async pathDetails_(path) {
+		if (this.pathCache_[path]) return this.pathCache_[path];
+		let output = await this.api_.execJson('GET', path);
+		this.pathCache_[path] = output;
+		return this.pathCache_[path];
+	}
+
 	async delta(path, options = null) {
 		let output = {
 			hasMore: false,
 			context: {},
 			items: [],
 		};
+
+		let pathDetails = await this.pathDetails_(path);
+		const pathId = pathDetails.id;		
 
 		let context = options ? options.context : null;
 		let url = context ? context.nextLink : null;
@@ -191,7 +202,23 @@ class FileApiDriverOneDrive {
 		}
 
 		let response = await this.api_.execJson('GET', url, query);
-		let items = this.makeItems_(response.value);
+		let items = [];
+
+		// The delta API might return things that happen in subdirectories of the root and we don't want to
+		// deal with these since all the files we're interested in are at the root (The .resource dir
+		// is special since it's managed directly by the clients and resources never change - only the
+		// associated .md file at the root is synced). So in the loop below we check that the parent is
+		// indeed the root, otherwise the item is skipped.
+		// (Not sure but it's possible the delta API also returns events for files that are copied outside 
+		//  of the app directory and later deleted or modified. We also don't want to deal with
+		//  these files during sync).
+
+		for (let i = 0; i < response.value.length; i++) {
+			const v = response.value[i];
+			if (v.parentReference.id !== pathId) continue;
+			items.push(this.makeItem_(v));
+		}
+
 		output.items = output.items.concat(items);
 
 		let nextLink = null;

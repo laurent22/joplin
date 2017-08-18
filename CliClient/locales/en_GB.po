@@ -260,9 +260,6 @@ msgstr ""
 msgid "Starting synchronisation..."
 msgstr ""
 
-msgid "Done."
-msgstr ""
-
 msgid "Cancelling... Please wait."
 msgstr ""
 
