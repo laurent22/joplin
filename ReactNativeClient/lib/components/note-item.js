@@ -36,7 +36,7 @@ class NoteItemComponent extends Component {
 				//height: 40,
 				borderBottomWidth: 1,
 				borderBottomColor: theme.dividerColor,
-				alignItems: 'center',
+				alignItems: 'flex-start',
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
 				paddingTop: theme.itemMarginTop,
@@ -50,8 +50,14 @@ class NoteItemComponent extends Component {
 			},
 		};
 
-		styles.listItemFadded = Object.assign({}, styles.listItem);
-		styles.listItemFadded.opacity = 0.4;
+		styles.listItemWithCheckbox = Object.assign({}, styles.listItem);
+		delete styles.listItemWithCheckbox.paddingTop;
+		delete styles.listItemWithCheckbox.paddingBottom;
+		delete styles.listItemWithCheckbox.paddingLeft;
+
+		styles.listItemTextWithCheckbox = Object.assign({}, styles.listItemText);
+		styles.listItemTextWithCheckbox.marginTop = styles.listItem.paddingTop - 1;
+		styles.listItemTextWithCheckbox.marginBottom = styles.listItem.paddingBottom;
 
 		this.styles_[this.props.theme] = StyleSheet.create(styles);
 		return this.styles_[this.props.theme];
@@ -79,24 +85,35 @@ class NoteItemComponent extends Component {
 
 	render() {
 		const note = this.props.note ? this.props.note : {};
+		const isTodo = !!Number(note.is_todo);
 		const onPress = this.props.onPress;
 		const onCheckboxChange = this.props.onCheckboxChange;
 		const theme = themeStyle(this.props.theme);
 
-		const checkboxStyle = !Number(note.is_todo) ? { display: 'none' } : { color: theme.color };
+		let checkboxStyle = !isTodo ? { display: 'none' } : { color: theme.color };
+
+		if (isTodo) {
+			checkboxStyle.paddingRight = 10;
+			checkboxStyle.paddingTop = theme.itemMarginTop;
+			checkboxStyle.paddingBottom = theme.itemMarginBottom;
+			checkboxStyle.paddingLeft = theme.marginLeft;
+		}
+
 		const checkboxChecked = !!Number(note.todo_completed);
 
-		const listItemStyle = !!Number(note.is_todo) && checkboxChecked ? this.styles().listItemFadded : this.styles().listItem;
+		const listItemStyle = isTodo ? this.styles().listItemWithCheckbox : this.styles().listItem;
+		const listItemTextStyle = isTodo ? this.styles().listItemTextWithCheckbox : this.styles().listItemText;
+		const rootStyle = isTodo && checkboxChecked ? {opacity: 0.4} : {};
 
 		return (
-			<TouchableHighlight onPress={() => this.onPress()} underlayColor="#0066FF">
+			<TouchableHighlight onPress={() => this.onPress()} underlayColor="#0066FF" style={rootStyle}>
 				<View style={ listItemStyle }>
 					<Checkbox
 						style={checkboxStyle}
 						checked={checkboxChecked}
 						onChange={(checked) => this.todoCheckbox_change(checked)}
 					/>
-					<Text style={this.styles().listItemText}>{note.title}</Text>
+					<Text style={listItemTextStyle}>{note.title}</Text>
 				</View>
 			</TouchableHighlight>
 		);

@@ -6,7 +6,7 @@ const styles = {
 	checkboxIcon: {
 		fontSize: 20,
 		height: 22,
-		marginRight: 10,
+		//marginRight: 10,
 	},
 };
 
@@ -42,8 +42,13 @@ class Checkbox extends Component {
 		style.justifyContent = 'center';
 		style.alignItems = 'center';
 
-		const checkboxIconStyle = Object.assign({}, styles.checkboxIcon);
+		let checkboxIconStyle = Object.assign({}, styles.checkboxIcon);
 		if (style.color) checkboxIconStyle.color = style.color;
+
+		if (style.paddingTop) checkboxIconStyle.marginTop = style.paddingTop;
+		if (style.paddingBottom) checkboxIconStyle.marginBottom = style.paddingBottom;
+		if (style.paddingLeft) checkboxIconStyle.marginLeft = style.paddingLeft;
+		if (style.paddingRight) checkboxIconStyle.marginRight = style.paddingRight;
 
 		const thStyle = {
 			justifyContent: 'center',
