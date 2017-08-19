@@ -25,20 +25,20 @@ function installAutocompletionFile(appName, profileDir) {
 	const filePath = profileDir + '/autocompletion.sh';
 	fs.writeFileSync(filePath, content);
 
+	console.info(_('Created autocompletion script "%s".', filePath));
+
 	const bashProfilePath = os.homedir() + '/.bashrc';
 
 	let bashrcContent = fs.readFileSync(bashProfilePath, 'utf8');
 
 	const lineToAdd = 'source ' + filePath;
 
-	console.info(_('Adding autocompletion script to: "%s"', bashProfilePath));
-
 	if (bashrcContent.indexOf(lineToAdd) >= 0) {
-		console.info(_('Autocompletion script is already installed.'));
+		console.info(_('Autocompletion script is already present in "%s".', bashProfilePath));
 	} else {
 		bashrcContent += "\n" + lineToAdd + "\n";
 		fs.writeFileSync(bashProfilePath, bashrcContent);
-		console.info(_('Autocompletion has been installed.'));
+		console.info(_('Added autocompletion to "%s".', bashProfilePath));
 	}
 
 	console.info(_('Sourcing "%s"...', filePath));

@@ -188,7 +188,7 @@ class FileApiDriverOneDrive {
 			items: [],
 		};
 
-		let pathDetails = await this.pathDetails_(path);
+		const pathDetails = await this.pathDetails_(path);
 		const pathId = pathDetails.id;		
 
 		let context = options ? options.context : null;

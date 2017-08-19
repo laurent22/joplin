@@ -147,12 +147,6 @@ class Application {
 				continue;
 			}
 
-			if (arg == '--autocompletion') {
-				this.autocompletion_.active = true;
-				argv.splice(0, 1);
-				continue;
-			}
-
 			if (arg == '--ac-install') {
 				this.autocompletion_.install = true;
 				argv.splice(0, 1);

@@ -308,7 +308,12 @@ Setting.metadata_ = {
 		output[Setting.SYNC_TARGET_ONEDRIVE] = _('OneDrive');
 		return output;
 	}},
-	'sync.context': { value: '', type: Setting.TYPE_STRING, public: false },
+	'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },
+	'sync.2.context': { value: '', type: Setting.TYPE_STRING, public: false },
+	'sync.3.context': { value: '', type: Setting.TYPE_STRING, public: false },
+	'sync.4.context': { value: '', type: Setting.TYPE_STRING, public: false },
+	'sync.5.context': { value: '', type: Setting.TYPE_STRING, public: false },
+	'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
 	'editor': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'] },
 	'locale': { value: defaultLocale(), type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Language'), options: () => {
 		return supportedLocalesToLanguages();

@@ -112,13 +112,15 @@ class Command extends BaseCommand {
 
 			this.log(_('Starting synchronisation...'));
 
-			let context = Setting.value('sync.context');
+			const contextKey = 'sync.' + this.syncTarget_ + '.context';
+			let context = Setting.value(contextKey);
+
 			context = context ? JSON.parse(context) : {};
 			options.context = context;
 
 			try {
 				let newContext = await sync.start(options);
-				Setting.setValue('sync.context', JSON.stringify(newContext));
+				Setting.setValue(contextKey, JSON.stringify(newContext));
 			} catch (error) {
 				if (error.code == 'alreadyStarted') {
 					this.log(error.message);

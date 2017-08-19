@@ -161,12 +161,12 @@ reg.scheduleSync = async (delay = null) => {
 		try {
 			const sync = await reg.synchronizer(syncTargetId);
 
-
-			let context = Setting.value('sync.context');
+			const contextKey = 'sync.' + syncTargetId + '.context';
+			let context = Setting.value(contextKey);
 			context = context ? JSON.parse(context) : {};
 			try {
 				let newContext = await sync.start({ context: context });
-				Setting.setValue('sync.context', JSON.stringify(newContext));
+				Setting.setValue(contextKey, JSON.stringify(newContext));
 			} catch (error) {
 				if (error.code == 'alreadyStarted') {
 					reg.logger().info(error.message);

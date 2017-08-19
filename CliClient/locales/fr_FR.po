@@ -47,13 +47,15 @@ msgid "Only Bash is currently supported for autocompletion."
 msgstr ""
 
 #, javascript-format
-msgid "Adding autocompletion script to: \"%s\""
+msgid "Created autocompletion script \"%s\"."
 msgstr ""
 
-msgid "Autocompletion script is already installed."
+#, javascript-format
+msgid "Autocompletion script is already present in \"%s\"."
 msgstr ""
 
-msgid "Autocompletion has been installed."
+#, javascript-format
+msgid "Added autocompletion to \"%s\"."
 msgstr ""
 
 #, javascript-format

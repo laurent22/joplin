@@ -193,7 +193,7 @@ class JoplinDatabase extends Database {
 		// 1. Add the new version number to the existingDatabaseVersions array
 		// 2. Add the upgrade logic to the "switch (targetVersion)" statement below
 
-		const existingDatabaseVersions = [0, 1, 2, 3];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 		if (currentVersionIndex == existingDatabaseVersions.length - 1) return false;
@@ -226,6 +226,11 @@ class JoplinDatabase extends Database {
 
 			if (targetVersion == 3) {
 				queries = this.alterColumnQueries('settings', { key: 'TEXT PRIMARY KEY', value: 'TEXT' });
+			}
+
+			if (targetVersion == 4) {
+				queries.push("INSERT INTO settings (`key`, `value`) VALUES ('sync.3.context', (SELECT `value` FROM settings WHERE `key` = 'sync.context'))");
+				queries.push('DELETE FROM settings WHERE `key` = "sync.context"');
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });
