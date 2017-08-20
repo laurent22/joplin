@@ -133,6 +133,12 @@ class BaseModel {
 		return { sql: sql, params: params };
 	}
 
+	static async allIds(options = null) {
+		let q = this.applySqlOptions(options, 'SELECT id FROM `' + this.tableName() + '`');
+		const rows = await this.db().selectAll(q.sql, q.params);
+		return rows.map((r) => r.id);
+	}
+
 	static async all(options = null) {
 		let q = this.applySqlOptions(options, 'SELECT * FROM `' + this.tableName() + '`');
 		return this.modelSelectAll(q.sql);

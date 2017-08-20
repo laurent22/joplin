@@ -33,6 +33,16 @@ class BaseItem extends BaseModel {
 		throw new Error('Invalid class name: ' + name);
 	}
 
+	static getClassByItemType(itemType) {
+		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
+			if (BaseItem.syncItemDefinitions_[i].type == itemType) {
+				return BaseItem.syncItemDefinitions_[i].classRef;
+			}
+		}
+
+		throw new Error('Invalid item type: ' + itemType);
+	}
+
 	static async syncedCount(syncTarget) {
 		const ItemClass = this.itemClass(this.modelType());
 		const itemType = ItemClass.modelType();
@@ -356,6 +366,12 @@ class BaseItem extends BaseModel {
 	static syncItemClassNames() {
 		return BaseItem.syncItemDefinitions_.map((def) => {
 			return def.className;
+		});
+	}
+
+	static syncItemTypes() {
+		return BaseItem.syncItemDefinitions_.map((def) => {
+			return def.type;
 		});
 	}
 

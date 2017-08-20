@@ -134,6 +134,17 @@ msgstr ""
 "Edition de la note en cours. Fermez l'éditeur de texte pour retourner à "
 "l'invite de commande."
 
+msgid "Exports Joplin data to the given target."
+msgstr ""
+
+#, fuzzy
+msgid "Exports only the given note."
+msgstr "Affiche la note."
+
+#, fuzzy
+msgid "Exports only the given notebook."
+msgstr "Affiche la note."
+
 msgid "Displays a geolocation URL for the note."
 msgstr "Afficher l'URL de l'emplacement de la note."
 
@@ -335,10 +346,6 @@ msgstr "Affiche les informations de version"
 msgid "%s %s (%s)"
 msgstr "%s %s (%s)"
 
-#, javascript-format
-msgid "Received %s"
-msgstr ""
-
 msgid "Fatal error:"
 msgstr "Erreur fatale :"
 
@@ -476,6 +483,9 @@ msgstr "Enregistrer l'emplacement avec les notes"
 
 msgid "Synchronisation interval"
 msgstr "Interval de synchronisation"
+
+msgid "Disabled"
+msgstr ""
 
 #, javascript-format
 msgid "%d minutes"
@@ -619,6 +629,10 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#, fuzzy
+#~ msgid "Cancelling command..."
+#~ msgstr "Annulation..."
 
 #~ msgid "Done."
 #~ msgstr "Terminé."

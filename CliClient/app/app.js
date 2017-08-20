@@ -325,8 +325,8 @@ class Application {
 		await this.activeCommand_.action(cmdArgs);
 	}
 
-	async cancelCurrentCommand() {
-		await this.activeCommand_.cancel();
+	currentCommand() {
+		return this.activeCommand_;
 	}
 
 	async start() {
@@ -335,6 +335,12 @@ class Application {
 		argv = startFlags.argv;
 		let initArgs = startFlags.matched;
 		if (argv.length) this.showPromptString_ = false;
+
+		if (process.argv[1].indexOf('joplindev') >= 0) {
+			if (!initArgs.profileDir) initArgs.profileDir = '/mnt/d/Temp/TestNotes2';
+			initArgs.logLevel = Logger.LEVEL_DEBUG;
+			initArgs.env = 'dev';
+		}
 
 		Setting.setConstant('appName', initArgs.env == 'dev' ? 'joplindev' : 'joplin');
 
@@ -408,6 +414,8 @@ class Application {
 				if (!items.length) return;
 				for (let i = 0; i < items.length; i++) {
 					items[i] = items[i].replace(/ /g, '\\ ');
+					items[i] = items[i].replace(/'/g, "\\'");
+					items[i] = items[i].replace(/:/g, "\\:");
 					items[i] = items[i].replace(/\(/g, '\\(');
 					items[i] = items[i].replace(/\)/g, '\\)');
 				}

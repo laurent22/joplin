@@ -51,6 +51,14 @@ class Note extends BaseItem {
 		return BaseModel.TYPE_NOTE;
 	}
 
+	static linkedResourceIds(body) {
+		// For example: ![](:/fcca2938a96a22570e8eae2565bc6b0b)
+		if (!body || body.length <= 32) return [];
+		const matches = body.match(/\(:\/.{32}\)/g);
+		if (!matches) return [];
+		return matches.map((m) => m.substr(3, 32));
+	}
+
 	static new(parentId = '') {
 		let output = super.new();
 		output.parent_id = parentId;

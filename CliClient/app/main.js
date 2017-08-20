@@ -53,9 +53,17 @@ if (process.platform === "win32") {
 	});
 }
 
+let commandCancelCalled_ = false;
+
 process.on("SIGINT", async function() {
-	console.info(_('Received %s', 'SIGINT'));
-	await application.cancelCurrentCommand();
+	const cmd = application.currentCommand();
+
+	if (!cmd.cancellable() || commandCancelCalled_) {
+		process.exit(0);
+	} else {
+		commandCancelCalled_ = true;
+		await cmd.cancel();
+	}
 });
 
 process.stdout.on('error', function( err ) {

@@ -18,6 +18,11 @@ class NoteTag extends BaseItem {
 		return super.serialize(item, 'note_tag', fieldNames);
 	}
 
+	static async byNoteIds(noteIds) {
+		if (!noteIds.length) return [];
+		return this.modelSelectAll('SELECT * FROM note_tags WHERE note_id IN ("' + noteIds.join('","') + '")');
+	}
+
 }
 
 export { NoteTag };

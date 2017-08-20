@@ -10,6 +10,7 @@ import { shim } from 'lib/shim.js';
 import { time } from 'lib/time-utils.js';
 import { FileApiDriverMemory } from 'lib/file-api-driver-memory.js';
 import { PoorManIntervals } from 'lib/poor-man-intervals.js';
+import { _ } from 'lib/locale.js';
 
 const reg = {};
 
@@ -202,12 +203,16 @@ reg.setupRecurrentSync = () => {
 		reg.recurrentSyncId_ = null;
 	}
 
-	reg.logger().debug('Setting up recurrent sync with interval ' + Setting.value('sync.interval'));
+	if (!Setting.value('sync.interval')) {
+		reg.logger().debug('Recurrent sync is disabled');
+	} else {
+		reg.logger().debug('Setting up recurrent sync with interval ' + Setting.value('sync.interval'));
 
-	reg.recurrentSyncId_ = PoorManIntervals.setInterval(() => {
-		reg.logger().info('Running background sync on timer...');
-		reg.scheduleSync(0);
-	}, 1000 * Setting.value('sync.interval'));
+		reg.recurrentSyncId_ = PoorManIntervals.setInterval(() => {
+			reg.logger().info('Running background sync on timer...');
+			reg.scheduleSync(0);
+		}, 1000 * Setting.value('sync.interval'));
+	}
 }
 
 reg.setDb = (v) => {

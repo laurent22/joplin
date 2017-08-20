@@ -328,6 +328,7 @@ Setting.metadata_ = {
 	'trackLocation': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Save location with notes') },
 	'sync.interval': { value: 300, type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation interval'), options: () => {
 		return {
+			0: _('Disabled'),
 			300: _('%d minutes', 5),
 			600: _('%d minutes', 10),
 			1800: _('%d minutes', 30),

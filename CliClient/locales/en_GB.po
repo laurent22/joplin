@@ -122,6 +122,15 @@ msgstr ""
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
 
+msgid "Exports Joplin data to the given target."
+msgstr ""
+
+msgid "Exports only the given note."
+msgstr ""
+
+msgid "Exports only the given notebook."
+msgstr ""
+
 msgid "Displays a geolocation URL for the note."
 msgstr ""
 
@@ -294,10 +303,6 @@ msgstr ""
 msgid "%s %s (%s)"
 msgstr ""
 
-#, javascript-format
-msgid "Received %s"
-msgstr ""
-
 msgid "Fatal error:"
 msgstr ""
 
@@ -430,6 +435,9 @@ msgid "Save location with notes"
 msgstr ""
 
 msgid "Synchronisation interval"
+msgstr ""
+
+msgid "Disabled"
 msgstr ""
 
 #, javascript-format
