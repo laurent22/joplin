@@ -321,6 +321,14 @@ msgid ""
 "will be shared with any third party."
 msgstr ""
 
+#, javascript-format
+msgid "Unknown log level: %s"
+msgstr ""
+
+#, javascript-format
+msgid "Unknown level ID: %s"
+msgstr ""
+
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."

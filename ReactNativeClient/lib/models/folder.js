@@ -91,6 +91,7 @@ class Folder extends BaseItem {
 			id: this.conflictFolderId(),
 			title: this.conflictFolderTitle(),
 			updated_time: time.unixMs(),
+			user_updated_time: time.unixMs(),
 		};
 	}
 

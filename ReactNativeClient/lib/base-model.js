@@ -217,8 +217,14 @@ class BaseModel {
 		let query = {};
 		let modelId = o.id;
 
+		const timeNow = time.unixMs();
+
 		if (options.autoTimestamp && this.hasField('updated_time')) {
-			o.updated_time = time.unixMs();
+			o.updated_time = timeNow;
+		}
+
+		if (options.autoTimestamp && this.hasField('user_updated_time')) {
+			o.user_updated_time = timeNow;
 		}
 
 		if (options.isNew) {
@@ -228,7 +234,11 @@ class BaseModel {
 			}
 
 			if (!o.created_time && this.hasField('created_time')) {
-				o.created_time = time.unixMs();
+				o.created_time = timeNow;
+			}
+
+			if (!o.user_created_time && this.hasField('user_created_time')) {
+				o.user_created_time = timeNow;
 			}
 
 			query = Database.insertQuery(this.tableName(), o);
@@ -266,6 +276,8 @@ class BaseModel {
 			o.id = modelId;
 			if ('updated_time' in saveQuery.modObject) o.updated_time = saveQuery.modObject.updated_time;
 			if ('created_time' in saveQuery.modObject) o.created_time = saveQuery.modObject.created_time;
+			if ('user_updated_time' in saveQuery.modObject) o.user_updated_time = saveQuery.modObject.user_updated_time;
+			if ('user_created_time' in saveQuery.modObject) o.user_created_time = saveQuery.modObject.user_created_time;
 			o = this.addModelMd(o);
 			return this.filter(o);
 		}).catch((error) => {

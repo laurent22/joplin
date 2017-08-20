@@ -364,6 +364,14 @@ msgid ""
 "will be shared with any third party."
 msgstr ""
 
+#, fuzzy, javascript-format
+msgid "Unknown log level: %s"
+msgstr "Paramètre inconnu : %s"
+
+#, fuzzy, javascript-format
+msgid "Unknown level ID: %s"
+msgstr "Paramètre inconnu : %s"
+
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."

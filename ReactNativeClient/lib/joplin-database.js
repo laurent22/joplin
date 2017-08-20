@@ -193,7 +193,7 @@ class JoplinDatabase extends Database {
 		// 1. Add the new version number to the existingDatabaseVersions array
 		// 2. Add the upgrade logic to the "switch (targetVersion)" statement below
 
-		const existingDatabaseVersions = [0, 1, 2, 3, 4];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 		if (currentVersionIndex == existingDatabaseVersions.length - 1) return false;
@@ -231,6 +231,18 @@ class JoplinDatabase extends Database {
 			if (targetVersion == 4) {
 				queries.push("INSERT INTO settings (`key`, `value`) VALUES ('sync.3.context', (SELECT `value` FROM settings WHERE `key` = 'sync.context'))");
 				queries.push('DELETE FROM settings WHERE `key` = "sync.context"');
+			}
+
+			if (targetVersion == 5) {
+				const tableNames = ['notes', 'folders', 'tags', 'note_tags', 'resources'];
+				for (let i = 0; i < tableNames.length; i++) {
+					const n = tableNames[i];
+					queries.push('ALTER TABLE ' + n + ' ADD COLUMN user_created_time INT NOT NULL DEFAULT 0');
+					queries.push('ALTER TABLE ' + n + ' ADD COLUMN user_updated_time INT NOT NULL DEFAULT 0');
+					queries.push('UPDATE ' + n + ' SET user_created_time = created_time');
+					queries.push('UPDATE ' + n + ' SET user_updated_time = updated_time');
+					queries.push('CREATE INDEX ' + n + '_user_updated_time ON ' + n + ' (user_updated_time)');
+				}
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

@@ -144,7 +144,29 @@ class Logger {
 		if (s == 'warn') return Logger.LEVEL_WARN;
 		if (s == 'info') return Logger.LEVEL_INFO;
 		if (s == 'debug') return Logger.LEVEL_DEBUG;
-		throw new Error('Unknown log level: %s', s);
+		throw new Error(_('Unknown log level: %s', s));
+	}
+
+	static levelIdToString(id) {
+		if (id == Logger.LEVEL_NONE) return 'none';
+		if (id == Logger.LEVEL_ERROR) return 'error';
+		if (id == Logger.LEVEL_WARN) return 'warn';
+		if (id == Logger.LEVEL_INFO) return 'info';
+		if (id == Logger.LEVEL_DEBUG) return 'debug';
+		throw new Error(_('Unknown level ID: %s', id));
+	}
+
+	static levelIds() {
+		return [Logger.LEVEL_NONE, Logger.LEVEL_ERROR, Logger.LEVEL_WARN, Logger.LEVEL_INFO, Logger.LEVEL_DEBUG];
+	}
+
+	static levelEnum() {
+		let output = {};
+		const ids = this.levelIds();
+		for (let i = 0; i < ids.length; i++) {
+			output[ids[i]] = this.levelIdToString(ids[i]);
+		}
+		return output;
 	}
 
 }

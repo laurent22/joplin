@@ -180,7 +180,7 @@ class BaseItem extends BaseModel {
 	}
 
 	static serialize_format(propName, propValue) {
-		if (['created_time', 'updated_time', 'sync_time'].indexOf(propName) >= 0) {
+		if (['created_time', 'updated_time', 'sync_time', 'user_updated_time', 'user_created_time'].indexOf(propName) >= 0) {
 			if (!propValue) return '';
 			propValue = moment.unix(propValue / 1000).utc().format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z';
 		} else if (propValue === null || propValue === undefined) {
@@ -195,7 +195,7 @@ class BaseItem extends BaseModel {
 
 		let ItemClass = this.itemClass(type);
 
-		if (['created_time', 'updated_time'].indexOf(propName) >= 0) {
+		if (['created_time', 'updated_time', 'user_created_time', 'user_updated_time'].indexOf(propName) >= 0) {
 			if (!propValue) return 0;
 			propValue = moment(propValue, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x');
 		} else {

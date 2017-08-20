@@ -95,7 +95,7 @@ class Note extends BaseItem {
 	}
 
 	static previewFields() {
-		return ['id', 'title', 'body', 'is_todo', 'todo_completed', 'parent_id', 'updated_time'];
+		return ['id', 'title', 'body', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time'];
 	}
 
 	static previewFieldsSql() {
@@ -122,7 +122,7 @@ class Note extends BaseItem {
 		// is used to sort already loaded notes.
 
 		if (!options) options = {};
-		if (!options.order) options.order = [{ by: 'updated_time', dir: 'DESC' }];
+		if (!options.order) options.order = [{ by: 'user_updated_time', dir: 'DESC' }];
 		if (!options.conditions) options.conditions = [];
 		if (!options.conditionsParams) options.conditionsParams = [];
 		if (!options.fields) options.fields = this.previewFields();
@@ -269,11 +269,17 @@ class Note extends BaseItem {
 	static async moveToFolder(noteId, folderId) {
 		if (folderId == Folder.conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', Folder.conflictFolderIdTitle()));
 
-		return Note.save({
+		// When moving a note to a different folder, the user timestamp is not updated.
+		// However updated_time is updated so that the note can be synced later on.
+
+		const modifiedNote = {
 			id: noteId,
 			parent_id: folderId,
 			is_conflict: 0,
-		});
+			updated_time: time.unixMs(),
+		};
+
+		return Note.save(modifiedNote, { autoTimestamp: false });
 	}
 
 	static toggleIsTodo(note) {

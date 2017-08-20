@@ -49,7 +49,7 @@ let defaultState = {
 	screens: {},
 	historyCanGoBack: false,
 	notesOrder: [
-		{ by: 'updated_time', dir: 'DESC' },
+		{ by: 'user_updated_time', dir: 'DESC' },
 	],
 	syncStarted: false,
 	syncReport: {},
