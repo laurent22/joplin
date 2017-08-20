@@ -165,6 +165,7 @@ class Note extends BaseItem {
 
 			tempOptions = Object.assign({}, options);
 			tempOptions.conditions = cond;
+			if ('limit' in tempOptions) tempOptions.limit -= uncompletedTodos.length;
 			let theRest = await this.search(tempOptions);
 
 			return uncompletedTodos.concat(theRest);
