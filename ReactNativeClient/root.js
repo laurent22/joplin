@@ -218,7 +218,7 @@ const reducer = (state = defaultState, action) => {
 
 				const modNote = action.note;
 
-				let newNotes = state.notes.splice(0);
+				let newNotes = state.notes.slice();
 				var found = false;
 				for (let i = 0; i < newNotes.length; i++) {
 					let n = newNotes[i];
@@ -227,7 +227,13 @@ const reducer = (state = defaultState, action) => {
 						if (!('parent_id' in modNote) || modNote.parent_id == n.parent_id) {
 							// Merge the properties that have changed (in modNote) into
 							// the object we already have.
-							newNotes[i] = Object.assign(newNotes[i], action.note);
+							newNotes[i] = Object.assign({}, newNotes[i]);
+
+							for (let n in modNote) {
+								if (!modNote.hasOwnProperty(n)) continue;
+								newNotes[i][n] = modNote[n];
+							}
+
 						} else {
 							newNotes.splice(i, 1);
 						}

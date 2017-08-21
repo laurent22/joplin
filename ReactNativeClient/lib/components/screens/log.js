@@ -51,7 +51,7 @@ class LogScreenComponent extends BaseScreenComponent {
 		styles.rowTextError = Object.assign({}, styles.rowText);
 		styles.rowTextError.color = theme.colorError;
 
-		styles.rowTextWarn = Object.assign({}, styles.rowWarn);
+		styles.rowTextWarn = Object.assign({}, styles.rowText);
 		styles.rowTextWarn.color = theme.colorWarn;
 
 		this.styles_[this.props.theme] = StyleSheet.create(styles);

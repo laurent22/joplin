@@ -76,14 +76,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.styles_ = {};
 
 		let styles = {
-			// titleTextInput: {
-			// 	flex: 1,
-			// 	paddingLeft: 0,
-			// 	color: theme.color,
-			// 	backgroundColor: theme.backgroundColor,
-			// 	fontWeight: 'bold',
-			// 	fontSize: theme.fontSize,
-			// },
 			bodyTextInput: {
 				flex: 1,
 				paddingLeft: theme.marginLeft,
@@ -117,6 +109,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		};
 
 		styles.titleContainerTodo = Object.assign({}, styles.titleContainer);
+		styles.titleContainerTodo.paddingLeft = 0;
 
 		this.styles_[themeId] = StyleSheet.create(styles);
 		return this.styles_[themeId];
@@ -459,9 +452,15 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		titleTextInputStyle.height = this.state.titleTextInputHeight;
 
+		let checkboxStyle = {
+			color: theme.color,
+			paddingRight: 10,
+			paddingLeft: theme.marginLeft,
+		}
+
 		const titleComp = (
 			<View style={titleContainerStyle}>
-				{ isTodo && <Checkbox style={{ color: theme.color }} checked={!!Number(note.todo_completed)} onChange={(checked) => { this.todoCheckbox_change(checked) }} /> }
+				{ isTodo && <Checkbox style={checkboxStyle} checked={!!Number(note.todo_completed)} onChange={(checked) => { this.todoCheckbox_change(checked) }} /> }
 				<TextInput
 					onContentSizeChange={(event) => this.titleTextInput_contentSizeChange(event)}
 					autoFocus={isNew}
