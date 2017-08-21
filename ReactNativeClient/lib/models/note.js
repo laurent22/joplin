@@ -41,6 +41,17 @@ class Note extends BaseItem {
 		return super.serialize(note, 'note', fieldNames);
 	}
 
+	static defaultTitle(note) {
+		if (note.title && note.title.length) return note.title;
+
+		if (note.body && note.body.length) {
+			const lines = note.body.trim().split("\n");
+			return lines[0].trim().substr(0, 80).trim();
+		}
+
+		return _('Untitled');
+	}
+
 	static geolocationUrl(note) {
 		if (!('latitude' in note) || !('longitude' in note)) throw new Error('Latitude or longitude is missing');
 		if (!Number(note.latitude) && !Number(note.longitude)) throw new Error(_('This note does not have geolocation information.'));

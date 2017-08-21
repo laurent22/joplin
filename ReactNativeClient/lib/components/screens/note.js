@@ -196,7 +196,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		let isNew = !note.id;
-		if (!note.title) note.title = _('Untitled');
+
+		if (isNew && !note.title) {
+			note.title = Note.defaultTitle(note);
+		}
+		
 		note = await Note.save(note);
 		this.setState({
 			lastSavedNote: Object.assign({}, note),

@@ -102,6 +102,13 @@ msgid ""
 "specified the note is duplicated in the current notebook."
 msgstr ""
 
+msgid "Marks a todo as done."
+msgstr ""
+
+#, javascript-format
+msgid "Note is not a todo: \"%s\""
+msgstr ""
+
 msgid "Edit note."
 msgstr ""
 
@@ -291,6 +298,9 @@ msgid ""
 "the todo back to a regular note."
 msgstr ""
 
+msgid "Marks a todo as non-completed."
+msgstr ""
+
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
@@ -367,10 +377,6 @@ msgstr ""
 msgid "State: \"%s\"."
 msgstr ""
 
-#, javascript-format
-msgid "Last error: %s (stacktrace in log)."
-msgstr ""
-
 msgid "Cancelling..."
 msgstr ""
 
@@ -391,6 +397,9 @@ msgstr ""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
+msgstr ""
+
+msgid "Untitled"
 msgstr ""
 
 msgid "This note does not have geolocation information."
@@ -530,9 +539,6 @@ msgid "Edit notebook"
 msgstr ""
 
 msgid "Refresh"
-msgstr ""
-
-msgid "Untitled"
 msgstr ""
 
 msgid "Delete note?"

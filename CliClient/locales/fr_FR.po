@@ -110,6 +110,13 @@ msgstr ""
 "Copie les notes correspondant à [nom] vers [carnet]. Si aucun carnet n'est "
 "spécifié, la note est dupliqué sur place."
 
+msgid "Marks a todo as done."
+msgstr ""
+
+#, javascript-format
+msgid "Note is not a todo: \"%s\""
+msgstr ""
+
 msgid "Edit note."
 msgstr "Editer la note."
 
@@ -333,6 +340,9 @@ msgstr ""
 "terminé (Si la cible est une note, elle sera convertie en tâche). Utilisez "
 "\"clear\" pour convertir la tâche en note."
 
+msgid "Marks a todo as non-completed."
+msgstr ""
+
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
@@ -414,10 +424,6 @@ msgstr "Objets distants supprimés : %d."
 msgid "State: \"%s\"."
 msgstr "Etat : %s."
 
-#, javascript-format
-msgid "Last error: %s (stacktrace in log)."
-msgstr "Dernière erreur : %s (Plus d'information dans le journal d'erreurs)"
-
 msgid "Cancelling..."
 msgstr "Annulation..."
 
@@ -439,6 +445,9 @@ msgstr "Un carnet avec ce titre existe déjà : \"%s\""
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Les carnets ne peuvent être nommés \"%s\" car c'est un nom réservé."
+
+msgid "Untitled"
+msgstr "Sans titre"
 
 msgid "This note does not have geolocation information."
 msgstr "Cette note n'a pas d'information d'emplacement."
@@ -581,9 +590,6 @@ msgstr "Editer le carnet"
 msgid "Refresh"
 msgstr "Rafraîchir"
 
-msgid "Untitled"
-msgstr "Sans titre"
-
 msgid "Delete note?"
 msgstr "Supprimer la note ?"
 
@@ -637,6 +643,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Last error: %s (stacktrace in log)."
+#~ msgstr "Dernière erreur : %s (Plus d'information dans le journal d'erreurs)"
 
 #, fuzzy
 #~ msgid "Cancelling command..."

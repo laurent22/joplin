@@ -13,7 +13,10 @@ class NoteBodyViewer extends Component {
 		super();
 		this.state = {
 			resources: {},
+			webViewLoaded: false,
 		}
+
+		this.isMounted_ = false;
 	}
 
 	async loadResource(id) {
@@ -23,6 +26,14 @@ class NoteBodyViewer extends Component {
 		let newResources = Object.assign({}, this.state.resources);
 		newResources[id] = resource;
 		this.setState({ resources: newResources });
+	}
+
+	componentWillMount() {
+		this.isMounted_ = true;
+	}
+
+	componentWillUnmount() {
+		this.isMounted_ = false;
 	}
 
 	toggleTickAt(body, index) {
@@ -162,19 +173,35 @@ class NoteBodyViewer extends Component {
 		return html;
 	}
 
+	onLoadEnd() {
+		if (this.state.webViewLoaded) return;
+
+		// Need to display after a delay to avoid a white flash before
+		// the content is displayed.
+		setTimeout(() => {
+			if (!this.isMounted_) return;
+			
+			this.setState({ webViewLoaded: true });
+		}, 100);
+	}
+
 	render() {
 		const note = this.props.note;
 		const style = this.props.style;
 		const onCheckboxChange = this.props.onCheckboxChange;
+		const html = this.markdownToHtml(note ? note.body : '', this.props.webViewStyle);
+
+		let webViewStyle = {}
+		if (!this.state.webViewLoaded) webViewStyle.display = 'none';
 
 		return (
 			<View style={style}>
 				<WebView
-					source={{ html: this.markdownToHtml(note ? note.body : '', this.props.webViewStyle) }}
+					style={webViewStyle}
+					source={{ html: html }}
+					onLoadEnd={() => this.onLoadEnd()}
 					onMessage={(event) => {
 						let msg = event.nativeEvent.data;
-
-						//reg.logger().info('postMessage received: ' + msg);
 
 						if (msg.indexOf('checkboxclick:') === 0) {
 							msg = msg.split(':');
