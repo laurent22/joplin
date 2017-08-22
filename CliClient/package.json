@@ -7,7 +7,7 @@
     "url": "https://github.com/laurent22/joplin"
   },
   "url": "git://github.com/laurent22/joplin.git",
-  "version": "0.9.11",
+  "version": "0.9.16",
   "bin": {
     "joplin": "./main.js"
   },
@@ -57,6 +57,7 @@
     "babelbuild": "babel app -d build",
     "build": "babel-changed app -d build --source-maps && babel-changed app/lib/models -d build/lib/models --source-maps && babel-changed app/lib/services -d build/lib/services --source-maps",
     "clean": "babel-changed --reset",
-    "test": "babel-changed tests -d tests-build --source-maps && jasmine"
+    "test": "babel-changed tests -d tests-build --source-maps && jasmine",
+    "postinstall": "joplin --autocompletion --ac-install"
   }
 }

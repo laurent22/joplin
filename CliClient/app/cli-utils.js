@@ -147,6 +147,22 @@ cliUtils.promptConfirm = function(message, answers = null) {
 	});
 }
 
+cliUtils.promptInput = function(message) {
+	const readline = require('readline');
+
+	const rl = readline.createInterface({
+		input: process.stdin,
+		output: process.stdout
+	});
+
+	return new Promise((resolve, reject) => {
+		rl.question(message + ' ', (answer) => {
+			rl.close();
+			resolve(answer);
+		});
+	});
+}
+
 let redrawStarted_ = false;
 let redrawLastLog_ = null;
 let redrawLastUpdateTime_ = 0;

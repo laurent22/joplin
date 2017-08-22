@@ -76,6 +76,7 @@ class Command extends BaseCommand {
 					updatedNote = await Note.unserializeForEdit(updatedNote);
 					updatedNote.id = note.id;
 					await Note.save(updatedNote);
+					process.stdout.write('.');
 					watchTimeout = null;
 				}, 200);
 			});

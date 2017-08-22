@@ -402,7 +402,7 @@ class Application {
 		if (this.autocompletion_.active) {
 			if (this.autocompletion_.install) {
 				try {
-					installAutocompletionFile(Setting.value('appName'), Setting.value('profileDir'));
+					await installAutocompletionFile(Setting.value('appName'), Setting.value('profileDir'));
 				} catch (error) {
 					if (error.code == 'shellNotSupported') {
 						console.info(error.message);

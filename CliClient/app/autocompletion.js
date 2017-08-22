@@ -8,21 +8,31 @@ import fs from 'fs-extra';
 import os from 'os';
 import yargParser from 'yargs-parser';
 
-function autocompletionFileContent(appName) {
+function autocompletionFileContent(appName, alias) {
 	let content = fs.readFileSync(__dirname + '/autocompletion_template.txt', 'utf8');
 	content = content.replace(/\|__APPNAME__\|/g, appName);
+
+	if (!alias) alias = 'joplin_alias_support_is_disabled';
+	content = content.replace(/\|__APPALIAS__\|/g, alias);
+
 	return content;
 }
 
-function installAutocompletionFile(appName, profileDir) {
+function autocompletionScriptPath(profileDir) {
+	return profileDir + '/autocompletion.sh';
+}
+
+async function installAutocompletionFile(appName, profileDir) {
 	if (process.env.SHELL.indexOf('bash') < 0) {
 		let error = new Error(_('Only Bash is currently supported for autocompletion.'));
 		error.code = 'shellNotSupported';
 		throw error;
 	}
 
-	const content = autocompletionFileContent(appName);
-	const filePath = profileDir + '/autocompletion.sh';
+	const alias = await cliUtils.promptInput(_('Autocompletion can be made to work with an alias too (such as a one-letter command like "j").\nIf you would like to enable this, please type the alias now (leave it empty for no alias):'));
+
+	const content = autocompletionFileContent(appName, alias);
+	const filePath = autocompletionScriptPath(profileDir);
 	fs.writeFileSync(filePath, content);
 
 	console.info(_('Created autocompletion script "%s".', filePath));
@@ -41,10 +51,18 @@ function installAutocompletionFile(appName, profileDir) {
 		console.info(_('Added autocompletion to "%s".', bashProfilePath));
 	}
 
-	console.info(_('Sourcing "%s"...', filePath));
+	if (alias) {
+		if (bashrcContent.indexOf('alias ' + alias + '=') >= 0) {
+			console.info(_('Alias is already set in "%s".', bashProfilePath));
+		} else {
+			const l = 'alias ' + alias + '=' + appName;
+			bashrcContent += "\n" + l + "\n";
+			fs.writeFileSync(bashProfilePath, bashrcContent);
+			console.info(_('Added alias to "%s".', bashProfilePath));
+		}
+	}
 
-	const spawnSync	= require('child_process').spawnSync;
-	spawnSync('source', [filePath]);
+	console.info(_("IMPORTANT: run the following command to initialise autocompletion in the current shell:\nsource '%s'", filePath));
 }
 
 async function handleAutocompletion(autocompletion) {
@@ -154,4 +172,4 @@ function filterList(list, currentWord) {
 	return output;
 }
 
-export { handleAutocompletion, installAutocompletionFile };
+export { handleAutocompletion, installAutocompletionFile, autocompletionScriptPath };

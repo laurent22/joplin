@@ -44,6 +44,13 @@ msgstr ""
 msgid "Only Bash is currently supported for autocompletion."
 msgstr ""
 
+msgid ""
+"Autocompletion can be made to work with an alias too (such as a one-letter "
+"command like \"j\").\n"
+"If you would like to enable this, please type the alias now (leave it empty "
+"for no alias):"
+msgstr ""
+
 #, javascript-format
 msgid "Created autocompletion script \"%s\"."
 msgstr ""
@@ -57,7 +64,18 @@ msgid "Added autocompletion to \"%s\"."
 msgstr ""
 
 #, javascript-format
-msgid "Sourcing \"%s\"..."
+msgid "Alias is already set in \"%s\"."
+msgstr ""
+
+#, javascript-format
+msgid "Added alias to \"%s\"."
+msgstr ""
+
+#, javascript-format
+msgid ""
+"IMPORTANT: run the following command to initialise autocompletion in the "
+"current shell:\n"
+"source '%s'"
 msgstr ""
 
 #, javascript-format
@@ -86,7 +104,7 @@ msgid ""
 "current configuration."
 msgstr ""
 
-msgid "Also displays hidden config variables."
+msgid "Also displays unset and hidden config variables."
 msgstr ""
 
 #, javascript-format
@@ -418,7 +436,7 @@ msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr ""
 
 #, javascript-format
-msgid "%s (%s)"
+msgid "%s: %s"
 msgstr ""
 
 msgid "Synchronisation target"

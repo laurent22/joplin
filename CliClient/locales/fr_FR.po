@@ -46,6 +46,13 @@ msgstr "Quitter le logiciel."
 msgid "Only Bash is currently supported for autocompletion."
 msgstr ""
 
+msgid ""
+"Autocompletion can be made to work with an alias too (such as a one-letter "
+"command like \"j\").\n"
+"If you would like to enable this, please type the alias now (leave it empty "
+"for no alias):"
+msgstr ""
+
 #, javascript-format
 msgid "Created autocompletion script \"%s\"."
 msgstr ""
@@ -59,7 +66,18 @@ msgid "Added autocompletion to \"%s\"."
 msgstr ""
 
 #, javascript-format
-msgid "Sourcing \"%s\"..."
+msgid "Alias is already set in \"%s\"."
+msgstr ""
+
+#, javascript-format
+msgid "Added alias to \"%s\"."
+msgstr ""
+
+#, javascript-format
+msgid ""
+"IMPORTANT: run the following command to initialise autocompletion in the "
+"current shell:\n"
+"source '%s'"
 msgstr ""
 
 #, javascript-format
@@ -91,7 +109,8 @@ msgstr ""
 "fournie, la valeur de [nom] est affichée. Si ni le [nom] ni la [valeur] ne "
 "sont fournis, la configuration complète est affichée."
 
-msgid "Also displays hidden config variables."
+#, fuzzy
+msgid "Also displays unset and hidden config variables."
 msgstr "Afficher également les variables cachées."
 
 #, javascript-format
@@ -464,9 +483,9 @@ msgstr "Impossible de déplacer la note vers le carnet \"%s\""
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Option invalide: \"%s\". Les valeurs possibles sont : %s."
 
-#, javascript-format
-msgid "%s (%s)"
-msgstr "%s (%s)"
+#, fuzzy, javascript-format
+msgid "%s: %s"
+msgstr "%s: %d/%d"
 
 msgid "Synchronisation target"
 msgstr "Cible de la synchronisation"
@@ -643,6 +662,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "%s (%s)"
+#~ msgstr "%s (%s)"
 
 #~ msgid "Last error: %s (stacktrace in log)."
 #~ msgstr "Dernière erreur : %s (Plus d'information dans le journal d'erreurs)"

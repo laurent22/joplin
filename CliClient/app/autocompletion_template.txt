@@ -41,3 +41,4 @@ _|__APPNAME__|_completion() {
 }
 
 complete -o default -F _|__APPNAME__|_completion |__APPNAME__|
+complete -o default -F _|__APPNAME__|_completion |__APPALIAS__|

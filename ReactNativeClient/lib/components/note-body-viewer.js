@@ -180,9 +180,8 @@ class NoteBodyViewer extends Component {
 		// the content is displayed.
 		setTimeout(() => {
 			if (!this.isMounted_) return;
-			
 			this.setState({ webViewLoaded: true });
-		}, 100);
+		}, 200);
 	}
 
 	render() {

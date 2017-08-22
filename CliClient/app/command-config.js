@@ -15,24 +15,27 @@ class Command extends BaseCommand {
 
 	options() {
 		return [
-			['-v, --verbose', _('Also displays hidden config variables.')],
+			['-v, --verbose', _('Also displays unset and hidden config variables.')],
 		];
 	}
 
 	async action(args) {
+		const verbose = args.options.verbose;
 
 		const renderKeyValue = (name) => {
 			const value = Setting.value(name);
 			if (Setting.isEnum(name)) {
-				return _('%s = %s (%s)', name, value, Setting.enumOptionLabel(name, value));
+				return _('%s = %s (%s)', name, value, Setting.enumOptionsDoc(name));
 			} else {
 				return _('%s = %s', name, value);
 			}
 		}
 
 		if (!args.name && !args.value) {
-			let keys = args.options.verbose ? Setting.keys() : Setting.publicKeys();
+			let keys = Setting.keys(!verbose, 'cli');
 			for (let i = 0; i < keys.length; i++) {
+				const value = Setting.value(keys[i]);
+				if (!verbose && !value) continue;
 				this.log(renderKeyValue(keys[i]));
 			}
 			return;
