@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { View, Text, Button, StyleSheet, TouchableOpacity, Picker, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Log } from 'lib/log.js';
+import { BackButtonService } from 'lib/services/back-button.js';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import { _ } from 'lib/locale.js';
 import { Setting } from 'lib/models/setting.js';
@@ -143,8 +144,9 @@ class ScreenHeaderComponent extends Component {
 		this.props.dispatch({ type: 'SIDE_MENU_TOGGLE' });
 	}
 
-	backButton_press() {
-		this.props.dispatch({ type: 'NAV_BACK' });
+	async backButton_press() {
+		await BackButtonService.back();
+		//this.props.dispatch({ type: 'NAV_BACK' });
 	}
 
 	searchButton_press() {

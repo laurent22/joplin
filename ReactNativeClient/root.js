@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { BackHandler, Keyboard, NativeModules } from 'react-native';
+import { Keyboard, NativeModules } from 'react-native';
 import { connect, Provider } from 'react-redux'
+import { BackButtonService } from 'lib/services/back-button.js';
 import { createStore, applyMiddleware } from 'redux';
 import { shimInit } from 'lib/shim-init-react.js';
 import { Log } from 'lib/log.js'
@@ -497,9 +498,7 @@ async function initialize(dispatch, backButtonHandler) {
 		reg.logger().error('Initialization error:', error);
 	}
 
-	BackHandler.addEventListener('hardwareBackPress', () => {
-		return backButtonHandler();
-	});
+	BackButtonService.initialize(backButtonHandler);
 
 	reg.setupRecurrentSync();
 
@@ -535,7 +534,7 @@ class AppComponent extends React.Component {
 		}
 	}
 
-	backButtonHandler() {
+	async backButtonHandler() {
 		if (this.props.showSideMenu) {
 			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 			return true;
