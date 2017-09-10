@@ -15,6 +15,13 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "[Cancel]"
+msgstr ""
+
+#, javascript-format
+msgid "More than one item match \"%s\". Please select one:"
+msgstr ""
+
 msgid "No notebook selected."
 msgstr ""
 
@@ -80,6 +87,17 @@ msgstr ""
 
 #, javascript-format
 msgid "Missing required argument: %s"
+msgstr ""
+
+#, javascript-format
+msgid "%s: %s"
+msgstr ""
+
+msgid "Your choice: "
+msgstr ""
+
+#, javascript-format
+msgid "Invalid answer: %s"
 msgstr ""
 
 msgid "Y"
@@ -435,10 +453,6 @@ msgstr ""
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr ""
 
-#, javascript-format
-msgid "%s: %s"
-msgstr ""
-
 msgid "Synchronisation target"
 msgstr ""
 
@@ -543,15 +557,6 @@ msgstr ""
 msgid "Configuration"
 msgstr ""
 
-msgid "Select date"
-msgstr ""
-
-msgid "Confirm"
-msgstr ""
-
-msgid "Cancel"
-msgstr ""
-
 msgid "Synchronise"
 msgstr ""
 
@@ -577,6 +582,9 @@ msgstr ""
 msgid "Discard changes"
 msgstr ""
 
+msgid "Cancel"
+msgstr ""
+
 msgid "Delete note?"
 msgstr ""
 
@@ -584,12 +592,6 @@ msgid "Attach file"
 msgstr ""
 
 msgid "Delete note"
-msgstr ""
-
-msgid "Edit/Clear alarm"
-msgstr ""
-
-msgid "Set an alarm"
 msgstr ""
 
 msgid "Convert to regular note"

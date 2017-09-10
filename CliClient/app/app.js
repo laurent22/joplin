@@ -60,7 +60,20 @@ class Application {
 
 	async loadItem(type, pattern, options = null) {
 		let output = await this.loadItems(type, pattern, options);
-		return output.length ? output[0] : null;
+
+		if (output.length > 1) {
+			let answers = { 0: _('[Cancel]') };
+			for (let i = 0; i < output.length; i++) {
+				answers[i + 1] = output[i].title;
+			}
+			let msg = _('More than one item match "%s". Please select one:', pattern);
+			const response = await cliUtils.promptMcq(msg, answers);
+			if (!response) return null;
+
+			return output[response - 1];
+		} else {
+			return output.length ? output[0] : null;
+		}
 	}
 
 	async loadItems(type, pattern, options = null) {
@@ -89,9 +102,8 @@ class Application {
 			item = await ItemClass.load(pattern); // Load by id
 			if (item) return [item];
 
-			if (pattern.length >= 4) {
-				item = await ItemClass.loadByPartialId(pattern);
-				if (item) return [item];
+			if (pattern.length >= 2) {
+				return await ItemClass.loadByPartialId(pattern);
 			}
 		}
 

@@ -127,6 +127,37 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 	return output;
 }
 
+cliUtils.promptMcq = function(message, answers) {
+	const readline = require('readline');
+
+	const rl = readline.createInterface({
+		input: process.stdin,
+		output: process.stdout
+	});
+
+	message += "\n\n";
+	for (let n in answers) {
+		if (!answers.hasOwnProperty(n)) continue;
+		message += _('%s: %s', n, answers[n]) + "\n";
+	}
+
+	message += "\n";
+	message += _('Your choice: ');
+
+	return new Promise((resolve, reject) => {
+		rl.question(message, (answer) => {
+			rl.close();
+
+			if (!(answer in answers)) {
+				reject(new Error(_('Invalid answer: %s', answer)));
+				return;
+			}
+
+			resolve(answer);
+		});
+	});
+}
+
 cliUtils.promptConfirm = function(message, answers = null) {
 	if (!answers) answers = [_('Y'), _('n')];
 	const readline = require('readline');

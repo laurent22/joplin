@@ -15,6 +15,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.3\n"
 
+#, fuzzy
+msgid "[Cancel]"
+msgstr "Annulation..."
+
+#, javascript-format
+msgid "More than one item match \"%s\". Please select one:"
+msgstr ""
+
 msgid "No notebook selected."
 msgstr "Aucun carnet n'est sélectionné."
 
@@ -83,6 +91,17 @@ msgstr ""
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s: %s"
+msgstr "%s: %d/%d"
+
+msgid "Your choice: "
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Invalid answer: %s"
+msgstr "Commande invalide : \"%s\""
 
 msgid "Y"
 msgstr ""
@@ -483,10 +502,6 @@ msgstr "Impossible de déplacer la note vers le carnet \"%s\""
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Option invalide: \"%s\". Les valeurs possibles sont : %s."
 
-#, fuzzy, javascript-format
-msgid "%s: %s"
-msgstr "%s: %d/%d"
-
 msgid "Synchronisation target"
 msgstr "Cible de la synchronisation"
 
@@ -593,17 +608,6 @@ msgstr "Etat"
 msgid "Configuration"
 msgstr "Configuration"
 
-msgid "Select date"
-msgstr ""
-
-#, fuzzy
-msgid "Confirm"
-msgstr "Conflits"
-
-#, fuzzy
-msgid "Cancel"
-msgstr "Annulation..."
-
 msgid "Synchronise"
 msgstr "Synchroniser"
 
@@ -630,6 +634,10 @@ msgstr ""
 msgid "Discard changes"
 msgstr ""
 
+#, fuzzy
+msgid "Cancel"
+msgstr "Annulation..."
+
 msgid "Delete note?"
 msgstr "Supprimer la note ?"
 
@@ -638,12 +646,6 @@ msgstr "Attacher un fichier"
 
 msgid "Delete note"
 msgstr "Supprimer la note"
-
-msgid "Edit/Clear alarm"
-msgstr ""
-
-msgid "Set an alarm"
-msgstr ""
 
 msgid "Convert to regular note"
 msgstr "Convertir en note"
@@ -689,6 +691,10 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#, fuzzy
+#~ msgid "Confirm"
+#~ msgstr "Conflits"
 
 #~ msgid "%s (%s)"
 #~ msgstr "%s (%s)"
