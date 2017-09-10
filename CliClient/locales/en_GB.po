@@ -543,6 +543,15 @@ msgstr ""
 msgid "Configuration"
 msgstr ""
 
+msgid "Select date"
+msgstr ""
+
+msgid "Confirm"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
 msgid "Synchronise"
 msgstr ""
 
@@ -559,6 +568,15 @@ msgstr ""
 msgid "Refresh"
 msgstr ""
 
+msgid "This note has been modified:"
+msgstr ""
+
+msgid "Save changes"
+msgstr ""
+
+msgid "Discard changes"
+msgstr ""
+
 msgid "Delete note?"
 msgstr ""
 
@@ -566,6 +584,12 @@ msgid "Attach file"
 msgstr ""
 
 msgid "Delete note"
+msgstr ""
+
+msgid "Edit/Clear alarm"
+msgstr ""
+
+msgid "Set an alarm"
 msgstr ""
 
 msgid "Convert to regular note"

@@ -181,7 +181,7 @@ class NoteBodyViewer extends Component {
 		setTimeout(() => {
 			if (!this.isMounted_) return;
 			this.setState({ webViewLoaded: true });
-		}, 200);
+		}, 100);
 	}
 
 	render() {
@@ -191,7 +191,7 @@ class NoteBodyViewer extends Component {
 		const html = this.markdownToHtml(note ? note.body : '', this.props.webViewStyle);
 
 		let webViewStyle = {}
-		if (!this.state.webViewLoaded) webViewStyle.display = 'none';
+		webViewStyle.opacity = this.state.webViewLoaded ? 1 : 0.01;
 
 		return (
 			<View style={style}>

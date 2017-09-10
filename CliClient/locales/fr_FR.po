@@ -593,6 +593,17 @@ msgstr "Etat"
 msgid "Configuration"
 msgstr "Configuration"
 
+msgid "Select date"
+msgstr ""
+
+#, fuzzy
+msgid "Confirm"
+msgstr "Conflits"
+
+#, fuzzy
+msgid "Cancel"
+msgstr "Annulation..."
+
 msgid "Synchronise"
 msgstr "Synchroniser"
 
@@ -609,6 +620,16 @@ msgstr "Editer le carnet"
 msgid "Refresh"
 msgstr "Rafraîchir"
 
+#, fuzzy
+msgid "This note has been modified:"
+msgstr "Aucun carnet n'est spécifié."
+
+msgid "Save changes"
+msgstr ""
+
+msgid "Discard changes"
+msgstr ""
+
 msgid "Delete note?"
 msgstr "Supprimer la note ?"
 
@@ -617,6 +638,12 @@ msgstr "Attacher un fichier"
 
 msgid "Delete note"
 msgstr "Supprimer la note"
+
+msgid "Edit/Clear alarm"
+msgstr ""
+
+msgid "Set an alarm"
+msgstr ""
 
 msgid "Convert to regular note"
 msgstr "Convertir en note"
