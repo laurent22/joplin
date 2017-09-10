@@ -10,6 +10,10 @@ let time = {
 		return (new Date()).getTime();
 	},
 
+	unixMsToObject(ms) {
+		return new Date(ms);
+	},
+
 	unixMsToS(ms) {
 		return Math.floor(ms / 1000);
 	},

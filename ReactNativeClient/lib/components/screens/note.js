@@ -24,6 +24,7 @@ import { NoteBodyViewer } from 'lib/components/note-body-viewer.js';
 import RNFetchBlob from 'react-native-fetch-blob';
 import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
 import ImageResizer from 'react-native-image-resizer';
+import { SelectDateTimeDialog } from 'lib/components/select-date-time-dialog.js';
 
 class NoteScreenComponent extends BaseScreenComponent {
 	
@@ -43,6 +44,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			isLoading: true,
 			resources: {},
 			titleTextInputHeight: 20,
+			alarmDialogShown: false,
 		};
 
 		this.saveButtonHasBeenShown_ = false;
@@ -345,8 +347,27 @@ class NoteScreenComponent extends BaseScreenComponent {
 	toggleIsTodo_onPress() {
 		let newNote = Note.toggleIsTodo(this.state.note);
 		let newState = { note: newNote };
-		//if (!newNote.id) newState.lastSavedNote = Object.assign({}, newNote);
 		this.setState(newState);
+	}
+
+	setAlarm_onPress() {
+		this.setState({ alarmDialogShown: true });
+	}
+
+	async onAlarmDialogAccept(date) {
+		let newNote = Object.assign({}, this.state.note);
+		newNote.todo_due = date ? date.getTime() : 0;
+
+		this.setState({
+			alarmDialogShown: false,
+			note: newNote,
+		});
+		//await this.saveOneProperty('todo_due', date ? date.getTime() : 0);
+		//this.forceUpdate();
+	}
+
+	onAlarmDialogReject() {
+		this.setState({ alarmDialogShown: false });
 	}
 
 	showMetadata_onPress() {
@@ -474,6 +495,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			paddingLeft: theme.marginLeft,
 		}
 
+		const dueDate = isTodo && note.todo_due ? new Date(note.todo_due) : null;
+
 		const titleComp = (
 			<View style={titleContainerStyle}>
 				{ isTodo && <Checkbox style={checkboxStyle} checked={!!Number(note.todo_completed)} onChange={(checked) => { this.todoCheckbox_change(checked) }} /> }
@@ -527,6 +550,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 				{ bodyComponent }
 				{ actionButtonComp }
 				{ this.state.showNoteMetadata && <Text style={this.styles().metadata}>{this.state.noteMetadata}</Text> }
+
+				<SelectDateTimeDialog
+					shown={this.state.alarmDialogShown}
+					date={dueDate}
+					onAccept={(date) => this.onAlarmDialogAccept(date) }
+					onReject={() => this.onAlarmDialogReject() }
+				/>
+
 				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
 			</View>
 		);
