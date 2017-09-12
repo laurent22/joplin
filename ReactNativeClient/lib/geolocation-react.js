@@ -28,7 +28,7 @@ class GeolocationReact {
 			navigator.geolocation.getCurrentPosition((data) => {
 				resolve(data);
 			}, (error) => {
-				rejec(error);
+				reject(error);
 			}, options);
 		});
 	}

@@ -425,13 +425,13 @@ class Application {
 			} else {
 				let items = await handleAutocompletion(this.autocompletion_);
 				if (!items.length) return;
-				for (let i = 0; i < items.length; i++) {
-					items[i] = items[i].replace(/ /g, '\\ ');
-					items[i] = items[i].replace(/'/g, "\\'");
-					items[i] = items[i].replace(/:/g, "\\:");
-					items[i] = items[i].replace(/\(/g, '\\(');
-					items[i] = items[i].replace(/\)/g, '\\)');
-				}
+					for (let i = 0; i < items.length; i++) {
+						items[i] = items[i].replace(/ /g, '\\ ');
+						items[i] = items[i].replace(/'/g, "\\'");
+						items[i] = items[i].replace(/:/g, "\\:");
+						items[i] = items[i].replace(/\(/g, '\\(');
+						items[i] = items[i].replace(/\)/g, '\\)');
+					}
 				console.info(items.join("\n"));
 			}
 			

@@ -58,7 +58,7 @@ let commandCancelCalled_ = false;
 process.on("SIGINT", async function() {
 	const cmd = application.currentCommand();
 
-	if (!cmd.cancellable() || commandCancelCalled_) {
+	if (!cmd || !cmd.cancellable() || commandCancelCalled_) {
 		process.exit(0);
 	} else {
 		commandCancelCalled_ = true;
