@@ -334,6 +334,7 @@ Setting.metadata_ = {
 		nonCompleted: _('Non-completed ones only'),
 	})},
 	'uncompletedTodosOnTop': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Show uncompleted todos on top of the lists') },
+	'showAdvancedOptions': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile'], label: () => _('Show advanced options') },
 	'trackLocation': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Save location with notes') },
 	'sync.interval': { value: 300, type: Setting.TYPE_INT, isEnum: true, public: true, appTypes: ['mobile'], label: () => _('Synchronisation interval'), options: () => {
 		return {

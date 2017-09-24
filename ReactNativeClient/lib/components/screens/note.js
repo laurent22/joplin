@@ -220,6 +220,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 		if (isNew) Note.updateGeolocation(note.id);
 		this.refreshNoteMetadata();
+
+		Keyboard.dismiss();
 	}
 
 	async saveOneProperty(name, value) {
@@ -385,7 +387,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// }
 
 		output.push({ title: isTodo ? _('Convert to regular note') : _('Convert to todo'), onPress: () => { this.toggleIsTodo_onPress(); } });
-		output.push({ title: this.state.showNoteMetadata ? _('Hide metadata') : _('Show metadata'), onPress: () => { this.showMetadata_onPress(); } });
+		if (this.props.showAdvancedOptions) output.push({ title: this.state.showNoteMetadata ? _('Hide metadata') : _('Show metadata'), onPress: () => { this.showMetadata_onPress(); } });
 		output.push({ title: _('View location on map'), onPress: () => { this.showOnMap_onPress(); } });
 
 		return output;
@@ -555,6 +557,7 @@ const NoteScreen = connect(
 			itemType: state.selectedItemType,
 			folders: state.folders,
 			theme: state.settings.theme,
+			showAdvancedOptions: state.settings.showAdvancedOptions,
 		};
 	}
 )(NoteScreenComponent)

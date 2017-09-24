@@ -239,19 +239,21 @@ class ScreenHeaderComponent extends Component {
 				</MenuOption>);
 		}
 
-		if (menuOptionComponents.length) {
-			menuOptionComponents.push(<View key={'menuOption_' + key++} style={this.styles().divider}/>);
+		if (this.props.showAdvancedOptions) {
+			if (menuOptionComponents.length) {
+				menuOptionComponents.push(<View key={'menuOption_' + key++} style={this.styles().divider}/>);
+			}
+
+			menuOptionComponents.push(
+				<MenuOption value={() => this.log_press()} key={'menuOption_' + key++} style={this.styles().contextMenuItem}>
+					<Text style={this.styles().contextMenuItemText}>{_('Log')}</Text>
+				</MenuOption>);
+
+			menuOptionComponents.push(
+				<MenuOption value={() => this.status_press()} key={'menuOption_' + key++} style={this.styles().contextMenuItem}>
+					<Text style={this.styles().contextMenuItemText}>{_('Status')}</Text>
+				</MenuOption>);
 		}
-
-		menuOptionComponents.push(
-			<MenuOption value={() => this.log_press()} key={'menuOption_' + key++} style={this.styles().contextMenuItem}>
-				<Text style={this.styles().contextMenuItemText}>{_('Log')}</Text>
-			</MenuOption>);
-
-		menuOptionComponents.push(
-			<MenuOption value={() => this.status_press()} key={'menuOption_' + key++} style={this.styles().contextMenuItem}>
-				<Text style={this.styles().contextMenuItemText}>{_('Status')}</Text>
-			</MenuOption>);
 
 		if (menuOptionComponents.length) {
 			menuOptionComponents.push(<View key={'menuOption_' + key++} style={this.styles().divider}/>);
@@ -316,6 +318,7 @@ const ScreenHeader = connect(
 			historyCanGoBack: state.historyCanGoBack,
 			locale: state.settings.locale,
 			theme: state.settings.theme,
+			showAdvancedOptions: state.settings.showAdvancedOptions,
 		};
 	}
 )(ScreenHeaderComponent)

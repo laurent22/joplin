@@ -62,10 +62,13 @@ class Application {
 		let output = await this.loadItems(type, pattern, options);
 
 		if (output.length > 1) {
+			output.sort((a, b) => { return a.user_updated_time < b.user_updated_time ? +1 : -1; });
+
 			let answers = { 0: _('[Cancel]') };
 			for (let i = 0; i < output.length; i++) {
 				answers[i + 1] = output[i].title;
 			}
+
 			let msg = _('More than one item match "%s". Please select one:', pattern);
 			const response = await cliUtils.promptMcq(msg, answers);
 			if (!response) return null;
