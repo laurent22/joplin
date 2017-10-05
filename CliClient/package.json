@@ -37,9 +37,10 @@
     "string-padding": "^1.0.2",
     "string-to-stream": "^1.1.0",
     "tcp-port-used": "^0.1.2",
+    "tkwidgets": "^0.5.3",
     "uuid": "^3.0.1",
-    "yargs-parser": "^7.0.0",
-    "word-wrap": "^1.2.3"
+    "word-wrap": "^1.2.3",
+    "yargs-parser": "^7.0.0"
   },
   "devDependencies": {
     "babel-changed": "^7.0.0",
@@ -57,7 +58,6 @@
     "babelbuild": "babel app -d build",
     "build": "babel-changed app -d build --source-maps && babel-changed app/lib/models -d build/lib/models --source-maps && babel-changed app/lib/services -d build/lib/services --source-maps",
     "clean": "babel-changed --reset",
-    "test": "babel-changed tests -d tests-build --source-maps && jasmine",
-    "postinstall": "joplin --autocompletion --ac-install"
+    "test": "babel-changed tests -d tests-build --source-maps && jasmine"
   }
 }

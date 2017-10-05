@@ -480,6 +480,9 @@ msgstr ""
 msgid "Show uncompleted todos on top of the lists"
 msgstr ""
 
+msgid "Show advanced options"
+msgstr ""
+
 msgid "Save location with notes"
 msgstr ""
 

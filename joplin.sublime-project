@@ -2,8 +2,20 @@
 	"folders":
 	[
 		{
-			"path": ".",
-			"folder_exclude_patterns": [
+			"file_exclude_patterns":
+			[
+				"*.map",
+				"CliClient/app/src",
+				"CliClient/app/lib",
+				"*.jar",
+				"*.po",
+				"*.pot",
+				"locales/*.json",
+				"ReactNativeClient/locales/*",
+				"src/log.txt",
+			],
+			"folder_exclude_patterns":
+			[
 				"CliClient/node_modules",
 				"CliClient/build",
 				"CliClient/tests-build",
@@ -19,19 +31,22 @@
 				"ReactNativeClient/android/.gradle",
 				"ReactNativeClient/android/local.properties",
 				"ReactNativeClient/ios",
+				"src/node_modules",
 				"_vieux",
 				"tests/logs"
 			],
-			"file_exclude_patterns": [
-				"*.map",
-				"CliClient/app/src",
-				"CliClient/app/lib",
-				"*.jar",
-				"*.po",
-				"*.pot",
-				"locales/*.json",
-				"ReactNativeClient/locales/*",
-			]
+			"path": "."
+		},
+		{
+			"file_exclude_patterns":
+			[
+				"src/log.txt",
+			],
+			"folder_exclude_patterns":
+			[
+				"node_modules",
+			],
+			"path": "D:\\Docs\\PROGS\\Node\\tkwidgets"
 		}
 	]
 }

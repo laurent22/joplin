@@ -29,6 +29,7 @@ class Application {
 		this.activeCommand_ = null;
 		this.allCommandsLoaded_ = false;
 		this.showStackTraces_ = false;
+		this.gui_ = null;
 	}
 
 	currentFolder() {
@@ -414,42 +415,48 @@ class Application {
 		if (!this.currentFolder_) this.currentFolder_ = await Folder.defaultFolder();
 		Setting.setValue('activeFolderId', this.currentFolder_ ? this.currentFolder_.id : '');
 
-		if (this.autocompletion_.active) {
-			if (this.autocompletion_.install) {
-				try {
-					await installAutocompletionFile(Setting.value('appName'), Setting.value('profileDir'));
-				} catch (error) {
-					if (error.code == 'shellNotSupported') {
-						console.info(error.message);
-						return;
-					}
-					throw error;
-				}
-			} else {
-				let items = await handleAutocompletion(this.autocompletion_);
-				if (!items.length) return;
-					for (let i = 0; i < items.length; i++) {
-						items[i] = items[i].replace(/ /g, '\\ ');
-						items[i] = items[i].replace(/'/g, "\\'");
-						items[i] = items[i].replace(/:/g, "\\:");
-						items[i] = items[i].replace(/\(/g, '\\(');
-						items[i] = items[i].replace(/\)/g, '\\)');
-					}
-				console.info(items.join("\n"));
-			}
-			
-			return;
-		}
+		const AppGui = require('./app-gui.js');
+		this.gui_ = new AppGui(this);
+		this.gui_.setLogger(this.logger_);
+		await this.gui_.start();
 
-		try {
-			await this.execCommand(argv);
-		} catch (error) {
-			if (this.showStackTraces_) {
-				console.info(error);
-			} else {
-				console.info(error.message);
-			}
-		}
+		// if (this.autocompletion_.active) {
+		// 	if (this.autocompletion_.install) {
+		// 		try {
+		// 			await installAutocompletionFile(Setting.value('appName'), Setting.value('profileDir'));
+		// 		} catch (error) {
+		// 			if (error.code == 'shellNotSupported') {
+		// 				console.info(error.message);
+		// 				return;
+		// 			}
+		// 			throw error;
+		// 		}
+		// 	} else {
+		// 		let items = await handleAutocompletion(this.autocompletion_);
+		// 		if (!items.length) return;
+		// 			for (let i = 0; i < items.length; i++) {
+		// 				items[i] = items[i].replace(/ /g, '\\ ');
+		// 				items[i] = items[i].replace(/'/g, "\\'");
+		// 				items[i] = items[i].replace(/:/g, "\\:");
+		// 				items[i] = items[i].replace(/\(/g, '\\(');
+		// 				items[i] = items[i].replace(/\)/g, '\\)');
+		// 			}
+		// 		console.info(items.join("\n"));
+		// 	}
+			
+		// 	return;
+		// }
+
+		// try {
+		// 	await this.execCommand(argv);
+		// } catch (error) {
+		// 	if (this.showStackTraces_) {
+		// 		console.info(error);
+		// 	} else {
+		// 		console.info(error.message);
+		// 	}
+		// }
+
 	}
 
 }
