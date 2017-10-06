@@ -16,6 +16,7 @@ import fs from 'fs-extra';
 import yargParser from 'yargs-parser';
 import { handleAutocompletion, installAutocompletionFile } from './autocompletion.js';
 import { cliUtils } from './cli-utils.js';
+const EventEmitter = require('events');
 
 class Application {
 
@@ -30,6 +31,7 @@ class Application {
 		this.allCommandsLoaded_ = false;
 		this.showStackTraces_ = false;
 		this.gui_ = null;
+		this.eventEmitter_ = new EventEmitter();
 	}
 
 	currentFolder() {
@@ -238,17 +240,23 @@ class Application {
 	}
 
 	baseModelListener(action) {
-		switch (action.type) {
+		this.eventEmitter_.emit('modelAction', { action: action });
 
-			case 'NOTES_UPDATE_ONE':
-			case 'NOTES_DELETE':
-			case 'FOLDERS_UPDATE_ONE':
-			case 'FOLDER_DELETE':
+		// switch (action.type) {
 
-				//reg.scheduleSync();
-				break;
+		// 	case 'NOTES_UPDATE_ONE':
+		// 	case 'NOTES_DELETE':
+		// 	case 'FOLDERS_UPDATE_ONE':
+		// 	case 'FOLDER_DELETE':
 
-		}
+		// 		//reg.scheduleSync();
+		// 		break;
+
+		// }
+	}
+
+	on(eventName, callback) {
+		return this.eventEmitter_.on(eventName, callback);
 	}
 
 	commands() {
@@ -324,10 +332,17 @@ class Application {
 			e.type = 'notFound';
 			throw e;
 		}
+
 		let cmd = new CommandClass();
+		cmd.buffer_ = [];
 
 		cmd.log = (...object) => {
-			return console.log(...object);
+			cmd.buffer_ = cmd.buffer_.concat(object);
+			//return console.log(...object);
+		}
+
+		cmd.buffer = () => {
+			return cmd.buffer_;
 		}
 
 		this.commands_[name] = cmd;

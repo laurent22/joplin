@@ -5,6 +5,17 @@ const stringPadding = require('string-padding');
 
 const cliUtils = {};
 
+// Split a command string into an argument array
+cliUtils.splitCommandString = function(s) {
+	s = s.replace(/--/g, 'JOP_DASH_JOP_DASH');
+	let r = yargParser(s);
+	let output = [];
+	for (let i = 0; i < r._.length; i++) {
+		output.push(r._[i].replace(/JOP_DASH_JOP_DASH/g, '--'));
+	}
+	return output;
+}
+
 cliUtils.printArray = function(logFunction, rows, headers = null) {
 	if (!rows.length) return '';
 
