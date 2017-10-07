@@ -10,6 +10,10 @@ ln -s "$ROOT_DIR/../ReactNativeClient/lib" "$ROOT_DIR/app"
 
 npm run build
 
+# Files under app/gui are in ES6 already but I cannot get Babel
+# to ignore them, so copy them back to the build directory.
+rsync -a "$ROOT_DIR/app/gui/" "$ROOT_DIR/build/gui/"
+
 cp "$ROOT_DIR/package.json" "$ROOT_DIR/build"
 cp "$ROOT_DIR/app/autocompletion_template.txt" "$ROOT_DIR/build"
 

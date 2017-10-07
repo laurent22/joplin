@@ -118,6 +118,12 @@ const reducer = (state = defaultState, action) => {
 				newState.historyCanGoBack = !!navHistory.length;
 				break;
 
+			case 'NOTES_SELECT':
+
+				newState = Object.assign({}, state);
+				newState.selectedNoteId = action.noteId;
+				break;
+
 			case 'SETTINGS_UPDATE_ALL':
 
 				newState = Object.assign({}, state);

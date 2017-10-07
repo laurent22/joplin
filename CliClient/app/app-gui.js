@@ -14,20 +14,25 @@ const TextWidget = require('tkwidgets/TextWidget.js');
 const ConsoleWidget = require('tkwidgets/ConsoleWidget.js');
 const HLayoutWidget = require('tkwidgets/HLayoutWidget.js');
 const VLayoutWidget = require('tkwidgets/VLayoutWidget.js');
+const ReduxRootWidget = require('tkwidgets/ReduxRootWidget.js');
 const RootWidget = require('tkwidgets/RootWidget.js');
 const WindowWidget = require('tkwidgets/WindowWidget.js');
 
+const NoteWidget = require('./gui/NoteWidget.js');
+
 class AppGui {
 
-	constructor(app) {
+	constructor(app, store) {
 		this.app_ = app;
+		this.store_ = store;
 
 		BaseWidget.setLogger(app.logger());
 
 		this.term_ = tk.terminal;
 		this.renderer_ = null;
 		this.logger_ = new Logger();
-		this.rootWidget_ = this.buildUi();
+		this.buildUi();
+
 		this.renderer_ = new Renderer(this.term(), this.rootWidget_);
 
 		this.renderer_.on('renderDone', async (event) => {
@@ -42,8 +47,8 @@ class AppGui {
 	}
 
 	buildUi() {
-		const rootWidget = new RootWidget();
-		rootWidget.setName('rootWidget');
+		this.rootWidget_ = new ReduxRootWidget(this.store_);
+		this.rootWidget_.setName('rootWidget');
 
 		const folderList = new ListWidget();
 		folderList.items = [];
@@ -85,14 +90,23 @@ class AppGui {
 				}
 				noteList.setCurrentItem(note);
 			}
-			await this.updateNoteText(note);
+
+			this.store_.dispatch({
+				type: 'NOTES_SELECT',
+				noteId: note ? note.id : 0,
+			});
+			//await this.updateNoteText(note);
 		});
 
-		const noteText = new TextWidget();
+		const noteText = new NoteWidget();
 		noteText.setVStretch(true);
 		noteText.setName('noteText');
 		noteText.setStyle({
 			borderBottomWidth: 1,
+		});
+
+		this.rootWidget_.connect(noteText, (state) => {
+			return { noteId: state.selectedNoteId };
 		});
 
 		const consoleWidget = new ConsoleWidget();
@@ -117,9 +131,7 @@ class AppGui {
 		win1.addChild(vLayout);
 		win1.setName('mainWindow');
 
-		rootWidget.addChild(win1);
-
-		return rootWidget;
+		this.rootWidget_.addChild(win1);
 	}
 
 	setupShortcuts() {
