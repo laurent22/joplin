@@ -251,6 +251,33 @@ class Application {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
+	setupCommand(cmd) {
+		const consoleWidget = this.gui_.widget('console');
+
+		cmd.setStdout((...object) => {
+			for (let i = 0; i < object.length; i++) {
+				consoleWidget.bufferPush(object[i]);
+			}
+		});
+
+		cmd.setPrompt(async (message, options) => {
+			consoleWidget.focus();
+
+			if (options.type == 'boolean') {
+				message += ' (' + options.answers.join('/') + ')';
+			}
+			
+			var answer = await consoleWidget.waitForResult(message + ' ');
+
+			if (options.type == 'boolean') {
+				if (answer === null) return false;
+				return answer === '' || answer.toLowerCase() == options.answers[0].toLowerCase();
+			}
+		});
+
+		return cmd;
+	}
+
 	commands() {
 		if (this.allCommandsLoaded_) return this.commands_;
 
@@ -262,11 +289,7 @@ class Application {
 			let CommandClass = require('./' + path);
 			let cmd = new CommandClass();
 			if (!cmd.enabled()) return;
-
-			cmd.setStdout((...object) => {
-				this.commandStdout(...object);
-			});
-
+			cmd = this.setupCommand(cmd);
 			this.commands_[cmd.name()] = cmd;
 		});
 
@@ -283,13 +306,6 @@ class Application {
 			output.push(n);
 		}
 		return output;
-	}
-
-	commandStdout(...object) {
-		const consoleWidget = this.gui_.widget('console');
-		for (let i = 0; i < object.length; i++) {
-			consoleWidget.bufferPush(object[i]);
-		}
 	}
 
 	async commandMetadata() {
@@ -333,12 +349,7 @@ class Application {
 		}
 
 		let cmd = new CommandClass();
-		cmd.buffer_ = [];
-
-		cmd.setStdout((...object) => {
-			this.commandStdout(...object);
-		});
-
+		cmd = this.setupCommand(cmd);
 		this.commands_[name] = cmd;
 		return this.commands_[name];
 	}

@@ -1,7 +1,10 @@
+import { _ } from 'lib/locale.js';
+
 class BaseCommand {
 
 	constructor() {
 		this.stdout_ = null;
+		this.prompt_ = null;
 	}
 
 	usage() {
@@ -49,6 +52,18 @@ class BaseCommand {
 
 	stdout(...object) {
 		if (this.stdout_) this.stdout_(...object);
+	}
+
+	setPrompt(fn) {
+		this.prompt_ = fn;
+	}
+
+	async prompt(message, options = null) {
+		if (!this.prompt_) throw new Error('Prompt is undefined');
+		if (!options) options = {};
+		if (!options.type) options.type = 'boolean';
+		if (!options.answers) options.answers = [_('Y'), _('n')];
+		return await this.prompt_(message, options);
 	}
 
 	metadata() {

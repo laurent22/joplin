@@ -88,6 +88,12 @@ msgid ""
 "source '%s'"
 msgstr ""
 
+msgid "Y"
+msgstr ""
+
+msgid "n"
+msgstr ""
+
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr ""
@@ -102,12 +108,6 @@ msgstr ""
 #, fuzzy, javascript-format
 msgid "Invalid answer: %s"
 msgstr "Commande invalide : \"%s\""
-
-msgid "Y"
-msgstr ""
-
-msgid "n"
-msgstr ""
 
 msgid "Displays the given note."
 msgstr "Affiche la note."

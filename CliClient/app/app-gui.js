@@ -120,6 +120,7 @@ class AppGui {
 	setupShortcuts() {
 		const shortcuts = {};
 
+		shortcuts['DELETE'] = 'rm $n';
 		shortcuts['t'] = 'todo toggle $n';
 		shortcuts['c'] = () => { this.widget('console').focus(); };
 		shortcuts[' '] = 'edit $n';
@@ -250,7 +251,6 @@ class AppGui {
 			term.grabInput();
 
 			term.on('key', async (name, matches, data) => {
-
 				if (name === 'CTRL_C' ) {
 					termutils.showCursor(term);
 					term.fullscreen(false);
