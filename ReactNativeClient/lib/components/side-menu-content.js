@@ -6,7 +6,7 @@ import { Log } from 'lib/log.js';
 import { Tag } from 'lib/models/tag.js';
 import { Note } from 'lib/models/note.js';
 import { Setting } from 'lib/models/setting.js';
-import { FoldersScreenUtils } from 'lib/components/screens/folders-utils.js'
+import { FoldersScreenUtils } from 'lib/folders-screen-utils.js'
 import { Synchronizer } from 'lib/synchronizer.js';
 import { reg } from 'lib/registry.js';
 import { _ } from 'lib/locale.js';

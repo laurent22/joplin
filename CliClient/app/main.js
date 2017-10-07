@@ -19,10 +19,6 @@ import { FsDriverNode } from './fs-driver-node.js';
 import { shimInit } from 'lib/shim-init-node.js';
 import { _ } from 'lib/locale.js';
 
-process.on('unhandledRejection', (reason, p) => {
-	console.error('Unhandled promise rejection', p, 'reason:', reason);
-});
-
 const fsDriver = new FsDriverNode();
 Logger.fsDriver_ = fsDriver;
 Resource.fsDriver_ = fsDriver;

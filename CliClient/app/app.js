@@ -1,7 +1,8 @@
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { reducer, defaultState } from 'lib/reducer.js';
 import { JoplinDatabase } from 'lib/joplin-database.js';
 import { Database } from 'lib/database.js';
+import { FoldersScreenUtils } from 'lib/folders-screen-utils.js';
 import { DatabaseDriverNode } from 'lib/database-driver-node.js';
 import { BaseModel } from 'lib/base-model.js';
 import { Folder } from 'lib/models/folder.js';
@@ -38,6 +39,10 @@ class Application {
 
 	logger() {
 		return this.logger_;
+	}
+
+	store() {
+		return this.store_;
 	}
 
 	currentFolder() {
@@ -369,6 +374,45 @@ class Application {
 		return this.activeCommand_;
 	}
 
+	async refreshNotes() {
+		const state = this.store().getState();
+
+		let options = {
+			order: state.notesOrder,
+			uncompletedTodosOnTop: Setting.value('uncompletedTodosOnTop'),
+		};
+
+		const notes = await Note.previews(state.selectedFolderId, options);
+
+		this.store().dispatch({
+			type: 'NOTES_UPDATE_ALL',
+			notes: notes,
+		});
+
+		this.store().dispatch({
+			type: 'NOTES_SELECT',
+			noteId: notes.length ? notes[0].id : null,
+		});
+	}
+
+	generalMiddleware() {
+		const middleware = store => next => async (action) => {
+			this.logger().info('Middleware reducer action', action.type);
+
+			const result = next(action);
+			const newState = store.getState();
+
+			if (action.type == 'FOLDERS_SELECT') {
+				Setting.setValue('activeFolderId', newState.selectedFolderId);
+				await this.refreshNotes();
+			}
+
+		  	return result;
+		}
+
+		return middleware;
+	}
+
 	async start() {
 		let argv = process.argv;
 		let startFlags = await this.handleStartFlags_(argv);
@@ -406,6 +450,10 @@ class Application {
 		this.dbLogger_.addTarget('file', { path: profileDir + '/log-database.txt' });
 		this.dbLogger_.setLevel(initArgs.logLevel);
 
+		if (Setting.value('env') === 'dev') {
+			this.dbLogger_.setLevel(Logger.LEVEL_WARN);
+		}
+
 		const packageJson = require('./package.json');
 		this.logger_.info(sprintf('Starting %s %s (%s)...', packageJson.name, packageJson.version, Setting.value('env')));
 		this.logger_.info('Profile directory: ' + profileDir);
@@ -417,7 +465,6 @@ class Application {
 
 		reg.setDb(this.database_);
 		BaseModel.db_ = this.database_;
-		//BaseModel.dispatch = (action) => { this.baseModelListener(action) }
 
 		await Setting.load();
 
@@ -439,13 +486,21 @@ class Application {
 		if (!this.currentFolder_) this.currentFolder_ = await Folder.defaultFolder();
 		Setting.setValue('activeFolderId', this.currentFolder_ ? this.currentFolder_.id : '');
 
-		let store = createStore(reducer);
-		BaseModel.dispatch = store.dispatch;
+		this.store_ = createStore(reducer, applyMiddleware(this.generalMiddleware()));
+		BaseModel.dispatch = this.store().dispatch;
+		FoldersScreenUtils.dispatch = this.store().dispatch;
 
 		const AppGui = require('./app-gui.js');
-		this.gui_ = new AppGui(this, store);
+		this.gui_ = new AppGui(this, this.store());
 		this.gui_.setLogger(this.logger_);
 		await this.gui_.start();
+
+		await FoldersScreenUtils.refreshFolders();
+
+		this.store().dispatch({
+			type: 'FOLDERS_SELECT',
+			folderId: Setting.value('activeFolderId'),
+		});
 
 		// if (this.autocompletion_.active) {
 		// 	if (this.autocompletion_.install) {

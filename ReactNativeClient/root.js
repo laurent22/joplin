@@ -9,7 +9,7 @@ import { AppNav } from 'lib/components/app-nav.js'
 import { Logger } from 'lib/logger.js'
 import { Note } from 'lib/models/note.js'
 import { Folder } from 'lib/models/folder.js'
-import { FoldersScreenUtils } from 'lib/components/screens/folders-utils.js';
+import { FoldersScreenUtils } from 'lib/folders-screen-utils.js';
 import { Resource } from 'lib/models/resource.js'
 import { Tag } from 'lib/models/tag.js'
 import { NoteTag } from 'lib/models/note-tag.js'
