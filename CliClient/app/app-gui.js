@@ -46,7 +46,7 @@ class AppGui {
 		rootWidget.setName('rootWidget');
 
 		const folderList = new ListWidget();
-		folderList.setItems([]);
+		folderList.items = [];
 		folderList.setItemRenderer((item) => {
 			return item.title;
 		});
@@ -56,13 +56,13 @@ class AppGui {
 		folderList.setName('folderList');
 		folderList.setVStretch(true);
 		folderList.on('currentItemChange', async () => {
-			const folder = folderList.currentItem();
+			const folder = folderList.currentItem;
 			this.app().switchCurrentFolder(folder);
 			await this.updateNoteList(folder ? folder.id : null);
 		});
 
 		const noteList = new ListWidget();
-		noteList.setItems([]);
+		noteList.items = [];
 		noteList.setItemRenderer((note) => {
 			let label = note.title;
 			if (note.is_todo) {
@@ -78,7 +78,7 @@ class AppGui {
 			borderRightWidth: 1,
 		});
 		noteList.on('currentItemChange', async () => {
-			let note = noteList.currentItem();
+			let note = noteList.currentItem;
 			if (note) {
 				if (!('body' in note)) {
 					note = await Note.load(note.id);
@@ -158,7 +158,7 @@ class AppGui {
 		if (!widget) return null;
 		
 		if (widget.name() == 'noteList' || widget.name() == 'folderList') {
-			return widget.currentItem();
+			return widget.currentItem;
 		}
 
 		return null;
@@ -168,12 +168,12 @@ class AppGui {
 		this.logger().info('Action:', action);
 
 		let state = Object.assign({}, defaultState);
-		state.notes = this.widget('noteList').items();
+		state.notes = this.widget('noteList').items;
 
 		let newState = reducer(state, action);
 
 		if (newState !== state) {
-			this.widget('noteList').setItems(newState.notes);
+			this.widget('noteList').items = newState.notes;
 		}
 	}
 
@@ -203,8 +203,8 @@ class AppGui {
 			return;
 		}
 
-		let note = this.widget('noteList').currentItem();
-		let folder = this.widget('folderList').currentItem();
+		let note = this.widget('noteList').currentItem;
+		let folder = this.widget('folderList').currentItem;
 		let args = cliUtils.splitCommandString(cmd);
 
 		for (let i = 0; i < args.length; i++) {
@@ -227,19 +227,19 @@ class AppGui {
 
 	async updateFolderList() {
 		const folders = await Folder.all();
-		this.widget('folderList').setItems(folders);
+		this.widget('folderList').items = folders;
 	}
 
 	async updateNoteList(folderId) {
 		const fields = Note.previewFields();
 		fields.splice(fields.indexOf('body'), 1);
 		const notes = folderId ? await Note.previews(folderId, { fields: fields }) : [];
-		this.widget('noteList').setItems(notes);
+		this.widget('noteList').items = notes;
 	}
 
 	async updateNoteText(note) {
 		const text = note ? note.body : '';
-		this.widget('noteText').setText(text);
+		this.widget('noteText').text = text;
 	}
 
 	async start() {

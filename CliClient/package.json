@@ -29,6 +29,7 @@
     "promise": "^7.1.1",
     "proper-lockfile": "^2.0.1",
     "query-string": "4.3.4",
+    "redux": "^3.7.2",
     "sax": "^1.2.2",
     "server-destroy": "^1.0.1",
     "source-map-support": "^0.4.15",
