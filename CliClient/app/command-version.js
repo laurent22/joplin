@@ -14,7 +14,7 @@ class Command extends BaseCommand {
 
 	async action(args) {
 		const p = require('./package.json');
-		this.log(_('%s %s (%s)', p.name, p.version, Setting.value('env')));
+		this.stdout(_('%s %s (%s)', p.name, p.version, Setting.value('env')));
 	}
 
 }

@@ -63,7 +63,7 @@ class Command extends BaseCommand {
 		}
 
 		if (options.format && options.format == 'json') {
-			this.log(JSON.stringify(items));
+			this.stdout(JSON.stringify(items));
 		} else {
 			let hasTodos = false;
 			for (let i = 0; i < items.length; i++) {
@@ -112,7 +112,7 @@ class Command extends BaseCommand {
 				rows.push(row);
 			}
 
-			cliUtils.printArray(this.log, rows);
+			cliUtils.printArray(this.stdout, rows);
 		}
 
 	}

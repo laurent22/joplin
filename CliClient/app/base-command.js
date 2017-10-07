@@ -1,5 +1,9 @@
 class BaseCommand {
 
+	constructor() {
+		this.stdout_ = null;
+	}
+
 	usage() {
 		throw new Error('Usage not defined');
 	}
@@ -37,6 +41,14 @@ class BaseCommand {
 	name() {
 		let r = this.usage().split(' ');
 		return r[0];
+	}
+
+	setStdout(fn) {
+		this.stdout_ = fn;
+	}
+
+	stdout(...object) {
+		if (this.stdout_) this.stdout_(...object);
 	}
 
 	metadata() {

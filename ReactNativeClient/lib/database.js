@@ -12,6 +12,11 @@ class Database {
 		this.inTransaction_ = false;
 
 		this.logger_ = new Logger();
+		this.logExcludedQueryTypes_ = [];
+	}
+
+	setLogExcludedQueryTypes(v) {
+		this.logExcludedQueryTypes_ = v;
 	}
 
 	// Converts the SQLite error to a regular JS error
@@ -185,6 +190,13 @@ class Database {
 	}
 
 	logQuery(sql, params = null) {
+		if (this.logExcludedQueryTypes_.length) {
+			const temp = sql.toLowerCase();
+			for (let i = 0; i < this.logExcludedQueryTypes_.length; i++) {
+				if (temp.indexOf(this.logExcludedQueryTypes_[i].toLowerCase()) === 0) return;
+			}
+		}
+
 		this.logger().debug(sql);
 		if (params !== null && params.length) this.logger().debug(JSON.stringify(params));
 	}

@@ -21,15 +21,15 @@ class Command extends BaseCommand {
 		for (let i = 0; i < report.length; i++) {
 			let section = report[i];
 
-			if (i > 0) this.log('');
+			if (i > 0) this.stdout('');
 
-			this.log('# ' + section.title);
-			this.log('');
+			this.stdout('# ' + section.title);
+			this.stdout('');
 
 			for (let n in section.body) {
 				if (!section.body.hasOwnProperty(n)) continue;
 				let line = section.body[n];
-				this.log(line);
+				this.stdout(line);
 			}
 		}
 	}

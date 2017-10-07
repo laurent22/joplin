@@ -53,7 +53,7 @@ class Command extends BaseCommand {
 				line = sprintf('%s: %s / %s', BaseModel.shortId(note.id), parent.title, note.title);
 			}
 
-			this.log(line);
+			this.stdout(line);
 		}
 	}
 

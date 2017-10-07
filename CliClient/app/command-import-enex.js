@@ -49,12 +49,12 @@ class Command extends BaseCommand {
 			},
 			onError: (error) => {
 				let s = error.trace ? error.trace : error.toString();
-				this.log(s);
+				this.stdout(s);
 			},
 		}
 
 		folder = !folder ? await Folder.save({ title: folderTitle }) : folder;
-		this.log(_('Importing notes...'));
+		this.stdout(_('Importing notes...'));
 		await importEnex(folder.id, filePath, options);
 		cliUtils.redrawDone();
 	}

@@ -21,7 +21,7 @@ class Command extends BaseCommand {
 		let item = await app().loadItem(BaseModel.TYPE_NOTE, title, { parent: app().currentFolder() });
 		if (!item) throw new Error(_('Cannot find "%s".', title));
 		const url = Note.geolocationUrl(item);
-		this.log(url);
+		this.stdout(url);
 	}
 
 }

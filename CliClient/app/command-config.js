@@ -36,13 +36,13 @@ class Command extends BaseCommand {
 			for (let i = 0; i < keys.length; i++) {
 				const value = Setting.value(keys[i]);
 				if (!verbose && !value) continue;
-				this.log(renderKeyValue(keys[i]));
+				this.stdout(renderKeyValue(keys[i]));
 			}
 			return;
 		}
 
 		if (args.name && !args.value) {
-			this.log(renderKeyValue(args.name));
+			this.stdout(renderKeyValue(args.name));
 			return;
 		}
 

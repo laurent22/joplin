@@ -28,7 +28,7 @@ class Command extends BaseCommand {
 		if (!item) throw new Error(_('Cannot find "%s".', title));
 
 		const content = args.options.verbose ? await Note.serialize(item) : await Note.serializeForEdit(item);
-		this.log(content);
+		this.stdout(content);
 	}
 
 }

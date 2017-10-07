@@ -41,10 +41,10 @@ class Command extends BaseCommand {
 		} else if (command == 'list') {
 			if (tag) {
 				let notes = await Tag.notes(tag.id);
-				notes.map((note) => { this.log(note.title); });
+				notes.map((note) => { this.stdout(note.title); });
 			} else {
 				let tags = await Tag.all();
-				tags.map((tag) => { this.log(tag.title); });
+				tags.map((tag) => { this.stdout(tag.title); });
 			}
 		} else {
 			throw new Error(_('Invalid command: "%s"', command));
