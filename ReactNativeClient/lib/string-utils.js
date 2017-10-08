@@ -113,4 +113,13 @@ function escapeFilename(s, maxLength = 32) {
 	return output.substr(0, maxLength);
 }
 
-export { removeDiacritics, escapeFilename };
+function wrap(text, indent, width) {
+	const wrap_ = require('word-wrap');
+
+	return wrap_(text, {
+		width: width - indent.length,
+		indent: indent,
+	});
+}
+
+export { removeDiacritics, escapeFilename, wrap };

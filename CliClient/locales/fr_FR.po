@@ -16,6 +16,37 @@ msgstr ""
 "X-Generator: Poedit 2.0.3\n"
 
 #, fuzzy
+msgid "Delete a note"
+msgstr "Supprimer la note"
+
+#, fuzzy
+msgid "Set a todo as completed / not completed"
+msgstr "Tâches non-complétées et récentes"
+
+msgid "Enter the console"
+msgstr ""
+
+#, fuzzy
+msgid "Exit the console"
+msgstr "Quitter le logiciel."
+
+#, fuzzy
+msgid "Create a new todo"
+msgstr "Créer une nouvelle tâche."
+
+#, fuzzy
+msgid "Create a new note"
+msgstr "Créer une note."
+
+#, fuzzy
+msgid "Create a new notebook"
+msgstr "Créer un carnet."
+
+#, fuzzy
+msgid "Maximise/minimise the console"
+msgstr "Quitter le logiciel."
+
+#, fuzzy
 msgid "[Cancel]"
 msgstr "Annulation..."
 
@@ -196,6 +227,24 @@ msgstr "Afficher l'URL de l'emplacement de la note."
 #, fuzzy
 msgid "Displays usage information."
 msgstr "Affiche les informations de version"
+
+msgid "Type `help [command]` for more information about a command."
+msgstr ""
+
+msgid "The possible commands are:"
+msgstr ""
+
+msgid "To maximise/minimise the console, press Ctrl+J Ctrl+Z."
+msgstr ""
+
+msgid "To enter the console, press C"
+msgstr ""
+
+msgid "To exit the console, press ESCAPE"
+msgstr ""
+
+msgid "To view a list of available shortcuts type `help shortcuts`"
+msgstr ""
 
 msgid "Imports an Evernote notebook file (.enex file)."
 msgstr "Importer un carnet Evernote (fichier .enex)."

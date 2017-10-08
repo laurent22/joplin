@@ -15,6 +15,30 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "Delete a note"
+msgstr ""
+
+msgid "Set a todo as completed / not completed"
+msgstr ""
+
+msgid "Enter the console"
+msgstr ""
+
+msgid "Exit the console"
+msgstr ""
+
+msgid "Create a new todo"
+msgstr ""
+
+msgid "Create a new note"
+msgstr ""
+
+msgid "Create a new notebook"
+msgstr ""
+
+msgid "Maximise/minimise the console"
+msgstr ""
+
 msgid "[Cancel]"
 msgstr ""
 
@@ -178,6 +202,24 @@ msgid "Displays a geolocation URL for the note."
 msgstr ""
 
 msgid "Displays usage information."
+msgstr ""
+
+msgid "Type `help [command]` for more information about a command."
+msgstr ""
+
+msgid "The possible commands are:"
+msgstr ""
+
+msgid "To maximise/minimise the console, press Ctrl+J Ctrl+Z."
+msgstr ""
+
+msgid "To enter the console, press C"
+msgstr ""
+
+msgid "To exit the console, press ESCAPE"
+msgstr ""
+
+msgid "To view a list of available shortcuts type `help shortcuts`"
 msgstr ""
 
 msgid "Imports an Evernote notebook file (.enex file)."

@@ -2,22 +2,22 @@ require('source-map-support').install();
 require('babel-plugin-transform-runtime');
 
 import fs from 'fs-extra';
+import { wrap } from 'lib/string-utils.js';
 import { fileExtension, basename, dirname } from 'lib/path-utils.js';
-import wrap_ from 'word-wrap';
 import { _, setLocale, languageCode } from 'lib/locale.js';
 
 const rootDir = dirname(dirname(__dirname));
 const MAX_WIDTH = 78;
 const INDENT = '    ';
 
-function wrap(text, indent) {
-	return wrap_(text, {
-		width: MAX_WIDTH - indent.length,
-		indent: indent,
-	});
-}
+// function wrap(text, indent, width) {
+// 	return wrap_(text, {
+// 		width: width - indent.length,
+// 		indent: indent,
+// 	});
+// }
 
-function renderOptions(options, baseIndent) {
+function renderOptions(options, baseIndent, width) {
 	let output = [];
 	const optionColWidth = getOptionColWidth(options);
 
@@ -26,7 +26,7 @@ function renderOptions(options, baseIndent) {
 		const flag = option[0];
 		const indent = baseIndent + INDENT + ' '.repeat(optionColWidth + 2);
 		
-		let r = wrap(option[1], indent);
+		let r = wrap(option[1], indent, width);
 		r = r.substr(flag.length + (baseIndent + INDENT).length);
 		r = baseIndent + INDENT + flag + r;
 		output.push(r);
@@ -35,15 +35,17 @@ function renderOptions(options, baseIndent) {
 	return output.join("\n");
 }
 
-function renderCommandHelp(cmd) {
+function renderCommandHelp(cmd, width = null) {
+	if (width === null) width = MAX_WIDTH;
+
 	const baseIndent = '';
 
 	let output = [];
 	output.push(baseIndent + cmd.usage());
 	output.push('');
-	output.push(wrap(cmd.description(), baseIndent + INDENT));
+	output.push(wrap(cmd.description(), baseIndent + INDENT, width));
 
-	const optionString = renderOptions(cmd.options(), baseIndent);
+	const optionString = renderOptions(cmd.options(), baseIndent, width);
 
 	if (optionString) {
 		output.push('');

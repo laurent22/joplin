@@ -37,6 +37,10 @@ class Application {
 		this.eventEmitter_ = new EventEmitter();
 	}
 
+	gui() {
+		return this.gui_;
+	}
+
 	logger() {
 		return this.logger_;
 	}
@@ -47,6 +51,10 @@ class Application {
 
 	currentFolder() {
 		return this.currentFolder_;
+	}
+
+	commandStdoutMaxWidth() {
+		return 78;
 	}
 
 	async refreshCurrentFolder() {
