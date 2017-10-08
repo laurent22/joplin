@@ -49,11 +49,11 @@ class AppGui {
 
 	buildUi() {
 		this.rootWidget_ = new ReduxRootWidget(this.store_);
-		this.rootWidget_.setName('rootWidget');
+		this.rootWidget_.name = 'rootWidget';
 
 		const folderList = new FolderListWidget();
 		folderList.setStyle({ borderBottomWidth: 1 });
-		folderList.setName('folderList');
+		folderList.name = 'folderList';
 		folderList.setVStretch(true);
 		folderList.on('currentItemChange', async () => {
 			const folder = folderList.currentItem;
@@ -78,7 +78,7 @@ class AppGui {
 			}
 			return label;
 		});
-		noteList.setName('noteList');
+		noteList.name = 'noteList';
 		noteList.setVStretch(true);
 		noteList.setStyle({
 			borderBottomWidth: 1,
@@ -101,7 +101,7 @@ class AppGui {
 
 		const noteText = new NoteWidget();
 		noteText.setVStretch(true);
-		noteText.setName('noteText');
+		noteText.name = 'noteText';
 		noteText.setStyle({ borderBottomWidth: 1 });
 		this.rootWidget_.connect(noteText, (state) => {
 			return { noteId: state.selectedNoteId };
@@ -109,25 +109,25 @@ class AppGui {
 
 		const consoleWidget = new ConsoleWidget();
 		consoleWidget.setHStretch(true);
-		consoleWidget.setName('console');
+		consoleWidget.name = 'console';
 		consoleWidget.on('accept', (event) => {
-			this.processCommand(event.input);
+			this.processCommand(event.input, 'console');
 		});
 
 		const hLayout = new HLayoutWidget();
-		hLayout.setName('hLayout');
+		hLayout.name = 'hLayout';
 		hLayout.addChild(folderList, { type: 'stretch', factor: 1 });
 		hLayout.addChild(noteList, { type: 'stretch', factor: 1 });
 		hLayout.addChild(noteText, { type: 'stretch', factor: 1 });
 
 		const vLayout = new VLayoutWidget();
-		vLayout.setName('vLayout');
+		vLayout.name = 'vLayout';
 		vLayout.addChild(hLayout, { type: 'stretch', factor: 1 });
 		vLayout.addChild(consoleWidget, { type: 'fixed', factor: 5 });
 
 		const win1 = new WindowWidget();
 		win1.addChild(vLayout);
-		win1.setName('mainWindow');
+		win1.name = 'mainWindow';
 
 		this.rootWidget_.addChild(win1);
 	}
@@ -135,10 +135,36 @@ class AppGui {
 	setupShortcuts() {
 		const shortcuts = {};
 
+		const consoleWidget = this.widget('console');
+
 		shortcuts['DELETE'] = 'rm $n';
-		shortcuts['t'] = 'todo toggle $n';
-		shortcuts['c'] = () => { this.widget('console').focus(); };
-		shortcuts[' '] = 'edit $n';
+
+		shortcuts[' '] = 'todo toggle $n';
+
+		shortcuts['c'] = () => {
+			consoleWidget.focus();
+		}
+
+		shortcuts['ENTER'] = () => {
+			const w = this.widget('mainWindow').focusedWidget();
+			if (w.name == 'folderList') {
+				this.widget('noteList').focus();
+			} else if (w.name == 'noteList') {
+				this.processCommand('edit $n');
+			}
+		}
+
+		shortcuts[':nn'] = () => {
+			consoleWidget.focus('mknote ');
+		}
+
+		shortcuts[':nt'] = () => {
+			consoleWidget.focus('mktodo ');
+		}
+
+		shortcuts[':nb'] = () => {
+			consoleWidget.focus('mkbook ');
+		}
 
 		return shortcuts;
 	}
@@ -167,7 +193,7 @@ class AppGui {
 		const widget = this.widget('mainWindow').focusedWidget();
 		if (!widget) return null;
 		
-		if (widget.name() == 'noteList' || widget.name() == 'folderList') {
+		if (widget.name == 'noteList' || widget.name == 'folderList') {
 			return widget.currentItem;
 		}
 
@@ -194,9 +220,7 @@ class AppGui {
 
 		const consoleWidget = this.widget('console');
 
-		const metaCmd = cmd.substr(0, 2);
-		
-		if (metaCmd === ':m') {
+		if (cmd === ':m') {
 			if (consoleWidget.isMaximized__ === undefined) {
 				consoleWidget.isMaximized__ = false;
 			}
@@ -211,6 +235,11 @@ class AppGui {
 			this.widget('vLayout').setWidgetConstraints(consoleWidget, constraints);
 
 			return;
+		} else if (cmd[0] === ':') {
+			if (this.shortcuts_[cmd]) {
+				this.shortcuts_[cmd]();
+				return;				
+			}
 		}
 
 		let note = this.widget('noteList').currentItem;
@@ -218,10 +247,10 @@ class AppGui {
 		let args = cliUtils.splitCommandString(cmd);
 
 		for (let i = 0; i < args.length; i++) {
-			if (note && args[i] == '$n') {
-				args[i] = note.id;
-			} else if (folder && args[i] == '$b') {
-				args[i] = folder.id;
+			if (args[i] == '$n') {
+				args[i] = note ? note.id : '';
+			} else if (args[i] == '$b') {
+				args[i] = folder ? folder.id : '';
 			} else  if (args[i] == '$c') {
 				const item = this.activeListItem();
 				args[i] = item ? item.id : '';
@@ -263,8 +292,6 @@ class AppGui {
 
 			const consoleWidget = this.widget('console');
 
-			//await this.updateFolderList();
-
 			term.grabInput();
 
 			term.on('key', async (name, matches, data) => {
@@ -276,7 +303,9 @@ class AppGui {
 				}
 
 				if (!consoleWidget.hasFocus()) {
-					if (name in this.shortcuts_) {
+					if (name == ':') {
+						consoleWidget.focus(':');
+					} else if (name in this.shortcuts_) {
 						const cmd = this.shortcuts_[name];
 						if (typeof cmd === 'function') {
 							cmd();

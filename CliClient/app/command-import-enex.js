@@ -32,7 +32,7 @@ class Command extends BaseCommand {
 		if (!folderTitle) folderTitle = filename(filePath);
 		folder = await Folder.loadByField('title', folderTitle);
 		const msg = folder ? _('File "%s" will be imported into existing notebook "%s". Continue?', basename(filePath), folderTitle) : _('New notebook "%s" will be created and file "%s" will be imported into it. Continue?', folderTitle, basename(filePath));
-		const ok = force ? true : await cliUtils.promptConfirm(msg);
+		const ok = force ? true : await this.prompt(msg);
 		if (!ok) return;
 
 		let options = {

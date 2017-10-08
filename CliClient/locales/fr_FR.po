@@ -20,7 +20,7 @@ msgid "[Cancel]"
 msgstr "Annulation..."
 
 #, javascript-format
-msgid "More than one item match \"%s\". Please select one:"
+msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
 
 msgid "No notebook selected."
