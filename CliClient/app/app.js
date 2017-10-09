@@ -296,6 +296,11 @@ class Application {
 		return cmd;
 	}
 
+	async exit(code = 0) {
+		await Setting.saveAll();
+		process.exit(code);
+	}
+
 	commands() {
 		if (this.allCommandsLoaded_) return this.commands_;
 
@@ -462,7 +467,7 @@ class Application {
 		this.dbLogger_.setLevel(initArgs.logLevel);
 
 		if (Setting.value('env') === 'dev') {
-			this.dbLogger_.setLevel(Logger.LEVEL_WARN);
+			this.dbLogger_.setLevel(Logger.LEVEL_DEBUG);
 		}
 
 		const packageJson = require('./package.json');
@@ -470,12 +475,16 @@ class Application {
 		this.logger_.info('Profile directory: ' + profileDir);
 
 		this.database_ = new JoplinDatabase(new DatabaseDriverNode());
+		//this.database_.setLogExcludedQueryTypes(['SELECT']);
 		this.database_.setLogger(this.dbLogger_);
-		this.database_.setLogExcludedQueryTypes(['SELECT']);
 		await this.database_.open({ name: profileDir + '/database.sqlite' });
 
 		reg.setDb(this.database_);
 		BaseModel.db_ = this.database_;
+
+		this.store_ = createStore(reducer, applyMiddleware(this.generalMiddleware()));
+		BaseModel.dispatch = this.store().dispatch;
+		FoldersScreenUtils.dispatch = this.store().dispatch;
 
 		await Setting.load();
 
@@ -496,10 +505,6 @@ class Application {
 		if (currentFolderId) this.currentFolder_ = await Folder.load(currentFolderId);
 		if (!this.currentFolder_) this.currentFolder_ = await Folder.defaultFolder();
 		Setting.setValue('activeFolderId', this.currentFolder_ ? this.currentFolder_.id : '');
-
-		this.store_ = createStore(reducer, applyMiddleware(this.generalMiddleware()));
-		BaseModel.dispatch = this.store().dispatch;
-		FoldersScreenUtils.dispatch = this.store().dispatch;
 
 		const AppGui = require('./app-gui.js');
 		this.gui_ = new AppGui(this, this.store());

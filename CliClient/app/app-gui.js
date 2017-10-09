@@ -344,7 +344,7 @@ class AppGui {
 				if (name === 'CTRL_C' ) {
 					termutils.showCursor(term);
 					term.fullscreen(false);
-					process.exit();
+					await this.app().exit();
 					return;
 				}
 				
