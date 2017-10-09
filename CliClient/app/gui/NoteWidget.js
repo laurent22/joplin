@@ -20,7 +20,7 @@ class NoteWidget extends TextWidget {
 		this.invalidate();
 	}
 
-	async willRender() {
+	async onWillRender() {
 		if (!this.note_ && this.noteId_) {
 			this.note_ = await Note.load(this.noteId_);
 			this.text = this.note_.title + "\n\n" + this.note_.body;

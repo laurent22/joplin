@@ -38,7 +38,7 @@ class AppGui {
 		this.renderer_ = new Renderer(this.term(), this.rootWidget_);
 
 		this.renderer_.on('renderDone', async (event) => {
-			if (this.widget('console').hasFocus()) this.widget('console').resetCursor();
+			if (this.widget('console').hasFocus) this.widget('console').resetCursor();
 		});
 
 		this.app_.on('modelAction', async (event) => {
@@ -58,9 +58,9 @@ class AppGui {
 		this.rootWidget_.name = 'root';
 
 		const folderList = new FolderListWidget();
-		folderList.setStyle({ borderBottomWidth: 1 });
+		folderList.style = { borderBottomWidth: 1 };
 		folderList.name = 'folderList';
-		folderList.setVStretch(true);
+		folderList.vStretch = true;
 		folderList.on('currentItemChange', async () => {
 			const folder = folderList.currentItem;
 			this.store_.dispatch({
@@ -77,20 +77,20 @@ class AppGui {
 
 		const noteList = new ListWidget();
 		noteList.items = [];
-		noteList.setItemRenderer((note) => {
+		noteList.itemRenderer = (note) => {
 			let label = note.title;
 			if (note.is_todo) {
 				label = '[' + (note.todo_completed ? 'X' : ' ') + '] ' + label;
 			}
 			return label;
-		});
+		};
 		noteList.name = 'noteList';
-		noteList.setVStretch(true);
-		noteList.setStyle({
+		noteList.vStretch = true;
+		noteList.style = {
 			borderBottomWidth: 1,
 			borderLeftWidth: 1,
 			borderRightWidth: 1,
-		});
+		};
 		noteList.on('currentItemChange', async () => {
 			let note = noteList.currentItem;
 			this.store_.dispatch({
@@ -106,15 +106,15 @@ class AppGui {
 		});
 
 		const noteText = new NoteWidget();
-		noteText.setVStretch(true);
+		noteText.vStretch = true;
 		noteText.name = 'noteText';
-		noteText.setStyle({ borderBottomWidth: 1 });
+		noteText.style = { borderBottomWidth: 1 };
 		this.rootWidget_.connect(noteText, (state) => {
 			return { noteId: state.selectedNoteId };
 		});
 
 		const consoleWidget = new ConsoleWidget();
-		consoleWidget.setHStretch(true);
+		consoleWidget.hStretch = true;
 		consoleWidget.name = 'console';
 		consoleWidget.on('accept', (event) => {
 			this.processCommand(event.input, 'console');
@@ -167,7 +167,7 @@ class AppGui {
 		shortcuts['ENTER'] = {
 			description: null,
 			action: () => {
-				const w = this.widget('mainWindow').focusedWidget();
+				const w = this.widget('mainWindow').focusedWidget;
 				if (w.name == 'folderList') {
 					this.widget('noteList').focus();
 				} else if (w.name == 'noteList') {
@@ -220,7 +220,7 @@ class AppGui {
 
 		let constraints = {
 			type: 'fixed',
-			factor: !doMaximize ? 5 : this.widget('vLayout').height() - 4,
+			factor: !doMaximize ? 5 : this.widget('vLayout').height - 4,
 		};
 
 		consoleWidget.isMaximized__ = doMaximize;
@@ -262,7 +262,7 @@ class AppGui {
 	}
 
 	activeListItem() {
-		const widget = this.widget('mainWindow').focusedWidget();
+		const widget = this.widget('mainWindow').focusedWidget;
 		if (!widget) return null;
 		
 		if (widget.name == 'noteList' || widget.name == 'folderList') {
@@ -366,7 +366,7 @@ class AppGui {
 
 				// Don't process shortcut keys if the console is active, except if the shortcut
 				// starts with CTRL (eg. CTRL+J CTRL+Z to maximize the console window).
-				if (!consoleWidget.hasFocus() || this.currentShortcutKeys_.indexOf('CTRL') === 0) {
+				if (!consoleWidget.hasFocus || this.currentShortcutKeys_.indexOf('CTRL') === 0) {
 					this.logger().debug('Now: ' + name + ', Keys: ' + this.currentShortcutKeys_);
 
 					if (this.currentShortcutKeys_ in this.shortcuts_) {

@@ -6,9 +6,9 @@ class NoteListWidget extends ListWidget {
 	constructor() {
 		super();
 		this.selectedNoteId_ = 0;
-		this.setItemRenderer((item) => {
+		this.itemRenderer = (item) => {
 			return item.title;
-		});
+		};
 	}
 
 	get selectedNoteId() {
