@@ -408,7 +408,7 @@ class Application {
 
 	generalMiddleware() {
 		const middleware = store => next => async (action) => {
-			this.logger().info('Middleware reducer action', action.type);
+			this.logger().info('Reducer action', action.type);
 
 			const result = next(action);
 			const newState = store.getState();

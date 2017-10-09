@@ -1,4 +1,5 @@
 import { _ } from 'lib/locale.js';
+import { reg } from 'lib/registry.js';
 
 class BaseCommand {
 
@@ -73,6 +74,10 @@ class BaseCommand {
 			options: this.options(),
 			hidden: this.hidden(),
 		};
+	}
+
+	logger() {
+		return reg.logger();
 	}
 
 }

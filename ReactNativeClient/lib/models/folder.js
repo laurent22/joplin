@@ -77,6 +77,12 @@ class Folder extends BaseItem {
 		});
 	}
 
+	static batchDelete(ids, options = null) {
+		for (let i = 0; i < ids.length; i++) {
+			this.delete(ids[i], options);
+		}
+	}
+
 	static conflictFolderTitle() {
 		return _('Conflicts');
 	}

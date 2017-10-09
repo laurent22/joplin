@@ -191,15 +191,25 @@ const reducer = (state = defaultState, action) => {
 
 			case 'NOTES_DELETE':
 
+				var previousIndex = 0;
 				var newNotes = [];
 				for (let i = 0; i < state.notes.length; i++) {
 					let f = state.notes[i];
-					if (f.id == action.noteId) continue;
+					if (f.id == action.noteId) {
+						previousIndex = i;
+						continue;
+					}
 					newNotes.push(f);
 				}
 
 				newState = Object.assign({}, state);
 				newState.notes = newNotes;
+
+				if (previousIndex >= newNotes.length) {
+					previousIndex = newNotes.length - 1;
+				}
+
+				newState.selectedNoteId = previousIndex >= 0 ? newNotes[previousIndex].id : null;
 				break;
 
 			case 'FOLDERS_UPDATE_ALL':

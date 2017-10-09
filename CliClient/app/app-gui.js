@@ -21,6 +21,7 @@ const WindowWidget = require('tkwidgets/WindowWidget.js');
 
 const NoteWidget = require('./gui/NoteWidget.js');
 const FolderListWidget = require('./gui/FolderListWidget.js');
+const NoteListWidget = require('./gui/NoteListWidget.js');
 
 class AppGui {
 
@@ -49,7 +50,7 @@ class AppGui {
 
 		this.inputMode_ = AppGui.INPUT_MODE_NORMAL;
 
-		this.currentShortcutKeys_ = '';
+		this.currentShortcutKeys_ = [];
 		this.lastShortcutKeyTime_ = 0;
 	}
 
@@ -75,15 +76,7 @@ class AppGui {
 			};
 		});
 
-		const noteList = new ListWidget();
-		noteList.items = [];
-		noteList.itemRenderer = (note) => {
-			let label = note.title;
-			if (note.is_todo) {
-				label = '[' + (note.todo_completed ? 'X' : ' ') + '] ' + label;
-			}
-			return label;
-		};
+		const noteList = new NoteListWidget();
 		noteList.name = 'noteList';
 		noteList.vStretch = true;
 		noteList.style = {
@@ -329,6 +322,7 @@ class AppGui {
 		this.widget('noteText').text = text;
 	}
 
+	// Any key after which a shortcut is not possible.
 	isSpecialKey(name) {
 		return ['ENTER', 'DOWN', 'UP', 'LEFT', 'RIGHT', 'DELETE', 'BACKSPACE', 'ESCAPE', 'TAB', 'SHIFT_TAB'].indexOf(name) >= 0;
 	}
@@ -353,26 +347,33 @@ class AppGui {
 					process.exit();
 					return;
 				}
-
+				
 				const now = (new Date()).getTime();
 
-				if (now - this.lastShortcutKeyTime_ > 1000 || this.isSpecialKey(name)) {
-					this.currentShortcutKeys_ = name;
+				if (now - this.lastShortcutKeyTime_ > 800 || this.isSpecialKey(name)) {
+					this.currentShortcutKeys_ = [name];
 				} else {
-					this.currentShortcutKeys_ += name;
+					// If the previous key was a special key (eg. up, down arrow), this new key
+					// starts a new shortcut.
+					if (this.currentShortcutKeys_.length && this.isSpecialKey(this.currentShortcutKeys_[0])) {
+						this.currentShortcutKeys_ = [name];
+					} else {
+						this.currentShortcutKeys_.push(name);
+					}
 				}
 
 				this.lastShortcutKeyTime_ = now;
 
 				// Don't process shortcut keys if the console is active, except if the shortcut
 				// starts with CTRL (eg. CTRL+J CTRL+Z to maximize the console window).
-				if (!consoleWidget.hasFocus || this.currentShortcutKeys_.indexOf('CTRL') === 0) {
-					this.logger().debug('Now: ' + name + ', Keys: ' + this.currentShortcutKeys_);
+				if (!consoleWidget.hasFocus || (this.currentShortcutKeys_.length && this.currentShortcutKeys_[0].indexOf('CTRL') === 0)) {
+					this.logger().debug('Now: ' + name + ', Keys: ', this.currentShortcutKeys_);
 
-					if (this.currentShortcutKeys_ in this.shortcuts_) {
-						const cmd = this.shortcuts_[this.currentShortcutKeys_].action;
+					const shortcutKey = this.currentShortcutKeys_.join('');
+					if (shortcutKey in this.shortcuts_) {
+						const cmd = this.shortcuts_[shortcutKey].action;
 						if (!cmd.isDocOnly) {
-							this.currentShortcutKeys_ = '';
+							this.currentShortcutKeys_ = [];
 							if (typeof cmd === 'function') {
 								cmd();
 							} else {
