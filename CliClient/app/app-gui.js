@@ -109,6 +109,7 @@ class AppGui {
 		const consoleWidget = new ConsoleWidget();
 		consoleWidget.hStretch = true;
 		consoleWidget.name = 'console';
+		consoleWidget.prompt = this.term().format('^gJoplin^ ^y>^ ');
 		consoleWidget.on('accept', (event) => {
 			this.processCommand(event.input, 'console');
 		});

@@ -112,7 +112,7 @@ class Command extends BaseCommand {
 				rows.push(row);
 			}
 
-			cliUtils.printArray(this.stdout, rows);
+			cliUtils.printArray(this.stdout.bind(this), rows);
 		}
 
 	}
