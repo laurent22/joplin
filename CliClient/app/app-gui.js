@@ -6,7 +6,7 @@ import { reducer, defaultState } from 'lib/reducer.js';
 import { _ } from 'lib/locale.js';
 
 const tk = require('terminal-kit');
-const termutils = require('tkwidgets/framework/termutils.js');
+const TermWrapper = require('tkwidgets/framework/TermWrapper.js');
 const Renderer = require('tkwidgets/framework/Renderer.js');
 
 const BaseWidget = require('tkwidgets/BaseWidget.js');
@@ -31,7 +31,8 @@ class AppGui {
 
 		BaseWidget.setLogger(app.logger());
 
-		this.term_ = tk.terminal;
+		this.term_ = new TermWrapper(tk.terminal);
+
 		this.renderer_ = null;
 		this.logger_ = new Logger();
 		this.buildUi();
@@ -332,7 +333,7 @@ class AppGui {
 		const term = this.term();
 
 		term.fullscreen();
-		termutils.hideCursor(term);
+		term.hideCursor();
 
 		try {
 			this.renderer_.start();
@@ -343,7 +344,7 @@ class AppGui {
 
 			term.on('key', async (name, matches, data) => {
 				if (name === 'CTRL_C' ) {
-					termutils.showCursor(term);
+					term.showCursor();
 					term.fullscreen(false);
 					await this.app().exit();
 					return;
@@ -379,7 +380,9 @@ class AppGui {
 								cmd();
 							} else {
 								consoleWidget.bufferPush(cmd);
+								consoleWidget.pause();
 								await this.processCommand(cmd);
+								consoleWidget.resume();
 							}
 						}
 					}
@@ -388,13 +391,13 @@ class AppGui {
 		} catch (error) {
 			this.logger().error(error);
 			term.fullscreen(false);
-			termutils.showCursor(term);
+			this.term.showCursor();
 			console.error(error);
 		}
 
 		process.on('unhandledRejection', (reason, p) => {
 			term.fullscreen(false);
-			termutils.showCursor(term);
+			this.term.showCursor();
 			console.error('Unhandled promise rejection', p, 'reason:', reason);
 			process.exit(1);
 		});
