@@ -153,7 +153,7 @@ class Command extends BaseCommand {
 
 		if (reg.syncHasAuth(target)) {
 			let sync = await reg.synchronizer(target);
-			if (sync) sync.cancel();
+			if (sync) await sync.cancel();
 		} else {
 			if (this.releaseLockFn_) this.releaseLockFn_();
 			this.releaseLockFn_ = null;

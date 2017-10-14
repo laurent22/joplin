@@ -136,11 +136,20 @@ class Synchronizer {
 		return false;
 	}
 
-	cancel() {
+	async cancel() {
 		if (this.cancelling_ || this.state() == 'idle') return;
 		
 		this.logSyncOperation('cancelling', null, null, '');
 		this.cancelling_ = true;
+
+		return new Promise((resolve, reject) => {
+			const iid = setInterval(() => {
+				if (this.state() == 'idle') {
+					clearInterval(iid);
+					resolve();
+				}
+			}, 100);
+		});
 	}
 
 	cancelling() {

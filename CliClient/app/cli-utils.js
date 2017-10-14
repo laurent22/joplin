@@ -12,7 +12,7 @@ cliUtils.splitCommandString = function(s) {
 	let r = yargParser(s);
 	let output = [];
 	for (let i = 0; i < r._.length; i++) {
-		let a = r._[i];
+		let a = r._[i].toString();
 		a = a.replace(/__JOP_DASH_JOP_DASH__/g, '--');
 		a = a.replace(/__JOP_DASH__/g, '-');
 		output.push(a);
@@ -213,11 +213,15 @@ let redrawStarted_ = false;
 let redrawLastLog_ = null;
 let redrawLastUpdateTime_ = 0;
 
+cliUtils.setStdout = function(v) {
+	this.stdout_ = v;
+}
+
 cliUtils.redraw = function(s) {
 	const now = time.unixMs();
 
 	if (now - redrawLastUpdateTime_ > 4000) {
-		console.info(s);
+		this.stdout_ (s);
 		redrawLastUpdateTime_ = now;
 		redrawLastLog_ = null;
 	} else {
@@ -231,7 +235,7 @@ cliUtils.redrawDone = function() {
 	if (!redrawStarted_) return;
 
 	if (redrawLastLog_) {
-		console.info(redrawLastLog_);
+		this.stdout_(redrawLastLog_);
 	}
 
 	redrawLastLog_ = null;

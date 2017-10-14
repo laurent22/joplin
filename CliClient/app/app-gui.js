@@ -52,8 +52,20 @@ class AppGui {
 
 		this.inputMode_ = AppGui.INPUT_MODE_NORMAL;
 
+		this.commandCancelCalled_ = false;
+
 		this.currentShortcutKeys_ = [];
-		this.lastShortcutKeyTime_ = 0;
+		this.lastShortcutKeyTime_ = 0;	
+
+		cliUtils.setStdout((...object) => {
+			for (let i = 0; i < object.length; i++) {
+				this.widget('console').bufferPush(object[i]);
+			}
+		});
+	}
+
+	renderer() {
+		return this.renderer_;
 	}
 
 	buildUi() {
@@ -112,8 +124,10 @@ class AppGui {
 		consoleWidget.hStretch = true;
 		consoleWidget.name = 'console';
 		consoleWidget.prompt = chalk.green('Joplin') + ' ' + chalk.magenta('>') + ' ';
-		consoleWidget.on('accept', (event) => {
-			this.processCommand(event.input, 'console');
+		consoleWidget.on('accept', async (event) => {
+			consoleWidget.promptVisible = false;
+			await this.processCommand(event.input, 'console');
+			consoleWidget.promptVisible = true;
 		});
 
 		const hLayout = new HLayoutWidget();
@@ -330,11 +344,21 @@ class AppGui {
 		return ['ENTER', 'DOWN', 'UP', 'LEFT', 'RIGHT', 'DELETE', 'BACKSPACE', 'ESCAPE', 'TAB', 'SHIFT_TAB'].indexOf(name) >= 0;
 	}
 
+	fullScreen(enable = true) {
+		if (enable) {
+			this.term().fullscreen();
+			this.term().hideCursor();
+			this.widget('root').invalidate();
+		} else {
+			this.term().fullscreen(false);
+			this.term().showCursor();
+		}
+	}
+
 	async start() {
 		const term = this.term();
 
-		term.fullscreen();
-		term.hideCursor();
+		this.fullScreen();
 
 		try {
 			this.renderer_.start();
@@ -344,10 +368,30 @@ class AppGui {
 			term.grabInput();
 
 			term.on('key', async (name, matches, data) => {
-				if (name === 'CTRL_C' ) {
-					term.showCursor();
-					term.fullscreen(false);
+
+				if (name === 'CTRL_D') {
+					const cmd = this.app().currentCommand();
+
+					if (cmd && cmd.cancellable() && !this.commandCancelCalled_) {
+						this.commandCancelCalled_ = true;
+						await cmd.cancel();
+						this.commandCancelCalled_ = false;
+					}
+
+					this.fullScreen(false);
 					await this.app().exit();
+					return;
+				}
+
+				if (name === 'CTRL_C' ) {
+					const cmd = this.app().currentCommand();
+					if (!cmd || !cmd.cancellable() || this.commandCancelCalled_) {
+						consoleWidget.bufferPush(_('Press Ctrl+D or type "exit" to exit the application'));
+					} else {
+						this.commandCancelCalled_ = true;
+						await cmd.cancel();
+						this.commandCancelCalled_ = false;
+					}
 					return;
 				}
 				
@@ -381,24 +425,20 @@ class AppGui {
 								cmd();
 							} else {
 								consoleWidget.bufferPush(cmd);
-								consoleWidget.pause();
 								await this.processCommand(cmd);
-								consoleWidget.resume();
 							}
 						}
 					}
 				}
 			});
 		} catch (error) {
+			this.fullScreen(false);
 			this.logger().error(error);
-			term.fullscreen(false);
-			this.term.showCursor();
 			console.error(error);
 		}
 
 		process.on('unhandledRejection', (reason, p) => {
-			term.fullscreen(false);
-			this.term.showCursor();
+			this.fullScreen(false);
 			console.error('Unhandled promise rejection', p, 'reason:', reason);
 			process.exit(1);
 		});

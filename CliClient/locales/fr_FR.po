@@ -46,6 +46,9 @@ msgstr "Créer un carnet."
 msgid "Maximise/minimise the console"
 msgstr "Quitter le logiciel."
 
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr ""
+
 #, fuzzy
 msgid "[Cancel]"
 msgstr "Annulation..."
@@ -188,9 +191,6 @@ msgstr ""
 
 msgid "Edit note."
 msgstr "Editer la note."
-
-msgid "Done editing."
-msgstr "Edition terminée."
 
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
@@ -743,6 +743,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Done editing."
+#~ msgstr "Edition terminée."
 
 #, fuzzy
 #~ msgid "Confirm"

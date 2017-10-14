@@ -278,6 +278,11 @@ class Application {
 			}
 		});
 
+		cmd.setForceRender(async () => {
+			this.gui_.widget('root').invalidate();
+			await this.gui_.renderer().forceRender();
+		});
+
 		cmd.setPrompt(async (message, options) => {
 			consoleWidget.focus();
 
@@ -384,6 +389,7 @@ class Application {
 		this.activeCommand_ = this.findCommandByName(commandName);
 		const cmdArgs = cliUtils.makeCommandArgs(this.activeCommand_, argv);
 		await this.activeCommand_.action(cmdArgs);
+		this.activeCommand_ = null;
 	}
 
 	currentCommand() {

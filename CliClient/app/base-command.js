@@ -55,6 +55,14 @@ class BaseCommand {
 		if (this.stdout_) this.stdout_(...object);
 	}
 
+	setForceRender(fn) {
+		this.forceRender_ = fn;
+	}
+
+	async forceRender() {
+		if (this.forceRender_) await this.forceRender_();
+	}
+
 	setPrompt(fn) {
 		this.prompt_ = fn;
 	}
