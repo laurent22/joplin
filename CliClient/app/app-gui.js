@@ -68,6 +68,11 @@ class AppGui {
 		return this.renderer_;
 	}
 
+	async forceRender() {
+		this.widget('root').invalidate();
+		await this.renderer_.renderRoot();
+	}
+
 	buildUi() {
 		this.rootWidget_ = new ReduxRootWidget(this.store_);
 		this.rootWidget_.name = 'root';
@@ -123,7 +128,7 @@ class AppGui {
 		const consoleWidget = new ConsoleWidget();
 		consoleWidget.hStretch = true;
 		consoleWidget.name = 'console';
-		consoleWidget.prompt = chalk.green('Joplin') + ' ' + chalk.magenta('>') + ' ';
+		consoleWidget.prompt = chalk.cyan('Joplin >') + ' ';
 		consoleWidget.on('accept', async (event) => {
 			consoleWidget.promptVisible = false;
 			await this.processCommand(event.input, 'console');
@@ -341,7 +346,7 @@ class AppGui {
 
 	// Any key after which a shortcut is not possible.
 	isSpecialKey(name) {
-		return ['ENTER', 'DOWN', 'UP', 'LEFT', 'RIGHT', 'DELETE', 'BACKSPACE', 'ESCAPE', 'TAB', 'SHIFT_TAB'].indexOf(name) >= 0;
+		return ['ENTER', 'DOWN', 'UP', 'LEFT', 'RIGHT', 'DELETE', 'BACKSPACE', 'ESCAPE', 'TAB', 'SHIFT_TAB', 'PAGE_UP', 'PAGE_DOWN'].indexOf(name) >= 0;
 	}
 
 	fullScreen(enable = true) {
@@ -378,7 +383,6 @@ class AppGui {
 						this.commandCancelCalled_ = false;
 					}
 
-					this.fullScreen(false);
 					await this.app().exit();
 					return;
 				}

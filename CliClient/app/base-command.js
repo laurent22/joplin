@@ -47,20 +47,21 @@ class BaseCommand {
 		return r[0];
 	}
 
+	setDispatcher(fn) {
+		this.dispatcher_ = fn;
+	}
+
+	dispatch(action) {
+		if (!this.dispatcher_) throw new Error('Dispatcher not defined');
+		return this.dispatcher_(action);
+	}
+
 	setStdout(fn) {
 		this.stdout_ = fn;
 	}
 
 	stdout(...object) {
 		if (this.stdout_) this.stdout_(...object);
-	}
-
-	setForceRender(fn) {
-		this.forceRender_ = fn;
-	}
-
-	async forceRender() {
-		if (this.forceRender_) await this.forceRender_();
 	}
 
 	setPrompt(fn) {

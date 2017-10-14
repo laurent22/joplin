@@ -14,7 +14,9 @@ class NoteWidget extends TextWidget {
 	}
 
 	set noteId(v) {
-		if (v === this.noteId_) return;
+		// If this is called it means either the note ID has changed OR
+		// the note content has changed, so we always set note_ to null
+		// so that it can be reloaded in onWillRender().
 		this.noteId_ = v;
 		this.note_ = null;
 		this.invalidate();

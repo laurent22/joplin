@@ -75,12 +75,15 @@ class Command extends BaseCommand {
 			this.logger().info('Disabling fullscreen...');
 
 			this.stdout(_('Starting to edit note. Close the editor to get back to the prompt.'));
-			await this.forceRender();
+
+			app().gui().forceRender();
+			const termState = app().gui().term().saveState();
 
 			const spawnSync	= require('child_process').spawnSync;
 			spawnSync(editorPath, editorArgs, { stdio: 'inherit' });
 
-			await this.forceRender();
+			app().gui().term().restoreState(termState);
+			app().gui().forceRender();
 
 			// -------------------------------------------------------------------------
 			// Save the note and clean up
@@ -93,6 +96,11 @@ class Command extends BaseCommand {
 				await Note.save(updatedNote);
 				this.logger().info('Note has been saved');
 			}
+
+			this.dispatch({
+				type: 'NOTES_SELECT',
+				noteId: note.id,
+			});
 
 			await onFinishedEditing();
 
