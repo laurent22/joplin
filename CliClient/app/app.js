@@ -270,12 +270,8 @@ class Application {
 	}
 
 	setupCommand(cmd) {
-		const consoleWidget = this.gui_.widget('console');
-
 		cmd.setStdout((...object) => {
-			for (let i = 0; i < object.length; i++) {
-				consoleWidget.bufferPush(object[i]);
-			}
+			this.gui().stdout(...object);
 		});
 
 		cmd.setDispatcher((action) => {
@@ -283,15 +279,13 @@ class Application {
 		});
 
 		cmd.setPrompt(async (message, options) => {
-			consoleWidget.focus();
-
 			if (options.type == 'boolean') {
 				message += ' (' + options.answers.join('/') + ')';
 			}
-			
-			var answer = await consoleWidget.waitForResult(message + ' ');
 
-			if (options.type == 'boolean') {
+			const answer = await this.gui().widget('statusBar').prompt('', message + ' ');
+
+			if (options.type === 'boolean') {
 				if (answer === null) return false;
 				return answer === '' || answer.toLowerCase() == options.answers[0].toLowerCase();
 			}

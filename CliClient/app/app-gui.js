@@ -13,7 +13,6 @@ const Renderer = require('tkwidgets/framework/Renderer.js');
 const BaseWidget = require('tkwidgets/BaseWidget.js');
 const ListWidget = require('tkwidgets/ListWidget.js');
 const TextWidget = require('tkwidgets/TextWidget.js');
-const ConsoleWidget = require('tkwidgets/ConsoleWidget.js');
 const HLayoutWidget = require('tkwidgets/HLayoutWidget.js');
 const VLayoutWidget = require('tkwidgets/VLayoutWidget.js');
 const ReduxRootWidget = require('tkwidgets/ReduxRootWidget.js');
@@ -23,6 +22,8 @@ const WindowWidget = require('tkwidgets/WindowWidget.js');
 const NoteWidget = require('./gui/NoteWidget.js');
 const FolderListWidget = require('./gui/FolderListWidget.js');
 const NoteListWidget = require('./gui/NoteListWidget.js');
+const StatusBarWidget = require('./gui/StatusBarWidget.js');
+const ConsoleWidget = require('./gui/ConsoleWidget.js');
 
 class AppGui {
 
@@ -41,7 +42,7 @@ class AppGui {
 		this.renderer_ = new Renderer(this.term(), this.rootWidget_);
 
 		this.renderer_.on('renderDone', async (event) => {
-			if (this.widget('console').hasFocus) this.widget('console').resetCursor();
+			//if (this.widget('console').hasFocus) this.widget('console').resetCursor();
 		});
 
 		this.app_.on('modelAction', async (event) => {
@@ -58,9 +59,11 @@ class AppGui {
 		this.lastShortcutKeyTime_ = 0;	
 
 		cliUtils.setStdout((...object) => {
-			for (let i = 0; i < object.length; i++) {
-				this.widget('console').bufferPush(object[i]);
-			}
+			return this.stdout(...object);
+
+			// for (let i = 0; i < object.length; i++) {
+			// 	this.widget('console').bufferPush(object[i]);
+			// }
 		});
 	}
 
@@ -127,24 +130,21 @@ class AppGui {
 
 		const consoleWidget = new ConsoleWidget();
 		consoleWidget.hStretch = true;
-		consoleWidget.name = 'console';
-		consoleWidget.prompt = chalk.cyan('Joplin >') + ' ';
-		consoleWidget.on('accept', async (event) => {
-			consoleWidget.promptVisible = false;
-			await this.processCommand(event.input, 'console');
-			consoleWidget.promptVisible = true;
-		});
+
+		const statusBar = new StatusBarWidget();
+		statusBar.hStretch = true;
 
 		const hLayout = new HLayoutWidget();
 		hLayout.name = 'hLayout';
 		hLayout.addChild(folderList, { type: 'stretch', factor: 1 });
 		hLayout.addChild(noteList, { type: 'stretch', factor: 1 });
-		hLayout.addChild(noteText, { type: 'stretch', factor: 1 });
+		hLayout.addChild(noteText, { type: 'stretch', factor: 2 });
 
 		const vLayout = new VLayoutWidget();
 		vLayout.name = 'vLayout';
 		vLayout.addChild(hLayout, { type: 'stretch', factor: 1 });
-		vLayout.addChild(consoleWidget, { type: 'fixed', factor: 6 });
+		vLayout.addChild(consoleWidget, { type: 'fixed', factor: 3 });
+		vLayout.addChild(statusBar, { type: 'fixed', factor: 1 });
 
 		const win1 = new WindowWidget();
 		win1.addChild(vLayout);
@@ -155,8 +155,6 @@ class AppGui {
 
 	setupShortcuts() {
 		const shortcuts = {};
-
-		const consoleWidget = this.widget('console');
 
 		shortcuts['DELETE'] = {
 			description: _('Delete a note'),
@@ -169,9 +167,9 @@ class AppGui {
 			action: 'todo toggle $n',
 		}
 
-		shortcuts['c'] = {
+		shortcuts[':'] = {
 			description: _('Enter the console'),
-			action: () => { consoleWidget.focus(); }
+			isDocOnly: true,
 		};
 
 		shortcuts['ESC'] = {
@@ -191,24 +189,19 @@ class AppGui {
 			},
 		}
 
-		shortcuts['nt'] = {
-			description: _('Create a new todo'),
-			action: () => { consoleWidget.focus('mktodo '); },
-		}
-
 		shortcuts['nn'] = {
 			description: _('Create a new note'),
-			action: () => { consoleWidget.focus('mknote '); },
+			action: { type: 'prompt', initialText: 'mknote ' },
 		}
 
 		shortcuts['nt'] = {
 			description: _('Create a new todo'),
-			action: () => { consoleWidget.focus('mktodo '); },
+			action: { type: 'prompt', initialText: 'mktodo ' },
 		}
 
 		shortcuts['nb'] = {
 			description: _('Create a new notebook'),
-			action: () => { consoleWidget.focus('mkbook '); },
+			action: { type: 'prompt', initialText: 'mkbook ' },
 		}
 
 		shortcuts['CTRL_JCTRL_Z'] = {
@@ -225,30 +218,32 @@ class AppGui {
 	}
 
 	maximizeConsole(doMaximize = true) {
-		const consoleWidget = this.widget('console');
+		// const consoleWidget = this.widget('console');
 
-		if (consoleWidget.isMaximized__ === undefined) {
-			consoleWidget.isMaximized__ = false;
-		}
+		// if (consoleWidget.isMaximized__ === undefined) {
+		// 	consoleWidget.isMaximized__ = false;
+		// }
 
-		if (consoleWidget.isMaximized__ === doMaximize) return;
+		// if (consoleWidget.isMaximized__ === doMaximize) return;
 
-		let constraints = {
-			type: 'fixed',
-			factor: !doMaximize ? 5 : this.widget('vLayout').height - 4,
-		};
+		// let constraints = {
+		// 	type: 'fixed',
+		// 	factor: !doMaximize ? 5 : this.widget('vLayout').height - 4,
+		// };
 
-		consoleWidget.isMaximized__ = doMaximize;
+		// consoleWidget.isMaximized__ = doMaximize;
 
-		this.widget('vLayout').setWidgetConstraints(consoleWidget, constraints);
+		// this.widget('vLayout').setWidgetConstraints(consoleWidget, constraints);
 	}
 
 	minimizeConsole() {
-		this.maximizeConsole(false);
+		//this.maximizeConsole(false);
 	}
 
 	consoleIsMaximized() {
-		return this.widget('console').isMaximized__ === true;
+		return false;
+
+		//return this.widget('console').isMaximized__ === true;
 	}
 
 	widget(name) {
@@ -323,7 +318,7 @@ class AppGui {
 		try {
 			await this.app().execCommand(args);
 		} catch (error) {
-			this.widget('console').bufferPush(error.message);
+			this.stdout(error.message);
 		}
 	}
 
@@ -346,7 +341,7 @@ class AppGui {
 
 	// Any key after which a shortcut is not possible.
 	isSpecialKey(name) {
-		return ['ENTER', 'DOWN', 'UP', 'LEFT', 'RIGHT', 'DELETE', 'BACKSPACE', 'ESCAPE', 'TAB', 'SHIFT_TAB', 'PAGE_UP', 'PAGE_DOWN'].indexOf(name) >= 0;
+		return [':', 'ENTER', 'DOWN', 'UP', 'LEFT', 'RIGHT', 'DELETE', 'BACKSPACE', 'ESCAPE', 'TAB', 'SHIFT_TAB', 'PAGE_UP', 'PAGE_DOWN'].indexOf(name) >= 0;
 	}
 
 	fullScreen(enable = true) {
@@ -360,6 +355,15 @@ class AppGui {
 		}
 	}
 
+	stdout(...object) {
+		for (let i = 0; i < object.length; i++) {
+			const v = typeof object[i] === 'object' ? JSON.stringify(object[i]) : object[i];
+			this.widget('console').addItem(v);
+		}
+
+		if (object.length) this.widget('statusBar').setItemAt(0, object[object.length-1]);
+	}
+
 	async start() {
 		const term = this.term();
 
@@ -368,7 +372,7 @@ class AppGui {
 		try {
 			this.renderer_.start();
 
-			const consoleWidget = this.widget('console');
+			const statusBar = this.widget('statusBar');
 
 			term.grabInput();
 
@@ -390,7 +394,7 @@ class AppGui {
 				if (name === 'CTRL_C' ) {
 					const cmd = this.app().currentCommand();
 					if (!cmd || !cmd.cancellable() || this.commandCancelCalled_) {
-						consoleWidget.bufferPush(_('Press Ctrl+D or type "exit" to exit the application'));
+						this.stdout(_('Press Ctrl+D or type "exit" to exit the application'));
 					} else {
 						this.commandCancelCalled_ = true;
 						await cmd.cancel();
@@ -415,21 +419,34 @@ class AppGui {
 
 				this.lastShortcutKeyTime_ = now;
 
-				// Don't process shortcut keys if the console is active, except if the shortcut
-				// starts with CTRL (eg. CTRL+J CTRL+Z to maximize the console window).
-				if (!consoleWidget.hasFocus || (this.currentShortcutKeys_.length && this.currentShortcutKeys_[0].indexOf('CTRL') === 0)) {
-					this.logger().debug('Now: ' + name + ', Keys: ', this.currentShortcutKeys_);
+				if (name === ':' && !statusBar.promptActive) {
+					const cmd = await statusBar.prompt();
+					await this.processCommand(cmd);
+				} else {
+					// Don't process shortcut keys if the console is active, except if the shortcut
+					// starts with CTRL (eg. CTRL+J CTRL+Z to maximize the console window).
+					if (!statusBar.promptActive || (this.currentShortcutKeys_.length && this.currentShortcutKeys_[0].indexOf('CTRL') === 0)) {
+						this.logger().debug('Now: ' + name + ', Keys: ', this.currentShortcutKeys_);
 
-					const shortcutKey = this.currentShortcutKeys_.join('');
-					if (shortcutKey in this.shortcuts_) {
-						const cmd = this.shortcuts_[shortcutKey].action;
-						if (!cmd.isDocOnly) {
-							this.currentShortcutKeys_ = [];
-							if (typeof cmd === 'function') {
-								cmd();
-							} else {
-								consoleWidget.bufferPush(cmd);
-								await this.processCommand(cmd);
+						const shortcutKey = this.currentShortcutKeys_.join('');
+						if (shortcutKey in this.shortcuts_) {
+							const cmd = this.shortcuts_[shortcutKey].action;
+							if (!cmd.isDocOnly) {
+								this.currentShortcutKeys_ = [];
+								if (typeof cmd === 'function') {
+									await cmd();
+								} else if (typeof cmd === 'object') {
+									if (cmd.type === 'prompt') {
+										const commandString = await statusBar.prompt(cmd.initialText ? cmd.initialText : '');
+										this.stdout(commandString);
+										await this.processCommand(commandString);
+									} else {
+										throw new Error('Unknown command: ' + JSON.stringify(cmd));
+									}
+								} else {
+									this.stdout(cmd);
+									await this.processCommand(cmd);
+								}
 							}
 						}
 					}

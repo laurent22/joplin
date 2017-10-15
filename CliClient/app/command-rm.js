@@ -43,7 +43,7 @@ class Command extends BaseCommand {
 		const notes = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
 		if (!notes.length) throw new Error(_('Cannot find "%s".', pattern));
 
-		const ok = force ? true : await this.prompt(_('%d notes match this pattern. Delete them?', notes.length));
+		const ok = force ? true : await this.prompt(notes.length > 1 ? _('%d notes match this pattern. Delete them?', notes.length) : _('Delete note?'));
 		if (!ok) return;
 		let ids = notes.map((n) => n.id);
 		await Note.batchDelete(ids);

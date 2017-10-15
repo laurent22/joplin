@@ -27,10 +27,10 @@ msgstr ""
 msgid "Exit the console"
 msgstr ""
 
-msgid "Create a new todo"
+msgid "Create a new note"
 msgstr ""
 
-msgid "Create a new note"
+msgid "Create a new todo"
 msgstr ""
 
 msgid "Create a new notebook"
@@ -319,6 +319,9 @@ msgstr ""
 
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
+msgstr ""
+
+msgid "Delete note?"
 msgstr ""
 
 msgid "Searches for the given <pattern> in all the notes."
@@ -628,9 +631,6 @@ msgid "Discard changes"
 msgstr ""
 
 msgid "Cancel"
-msgstr ""
-
-msgid "Delete note?"
 msgstr ""
 
 msgid "Attach file"

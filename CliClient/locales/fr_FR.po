@@ -31,12 +31,12 @@ msgid "Exit the console"
 msgstr "Quitter le logiciel."
 
 #, fuzzy
-msgid "Create a new todo"
-msgstr "Créer une nouvelle tâche."
-
-#, fuzzy
 msgid "Create a new note"
 msgstr "Créer une note."
+
+#, fuzzy
+msgid "Create a new todo"
+msgstr "Créer une nouvelle tâche."
 
 #, fuzzy
 msgid "Create a new notebook"
@@ -358,6 +358,9 @@ msgstr "Supprime les objets sans demander la confirmation."
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
 msgstr "%d notes correspondent à ce motif. Les supprimer ?"
+
+msgid "Delete note?"
+msgstr "Supprimer la note ?"
 
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Chercher le motif <pattern> dans toutes les notes."
@@ -690,9 +693,6 @@ msgstr ""
 msgid "Cancel"
 msgstr "Annulation..."
 
-msgid "Delete note?"
-msgstr "Supprimer la note ?"
-
 msgid "Attach file"
 msgstr "Attacher un fichier"
 
@@ -743,6 +743,10 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#, fuzzy
+#~ msgid "Last command: %s"
+#~ msgstr "Commande invalide : \"%s\""
 
 #~ msgid "Done editing."
 #~ msgstr "Edition terminée."
