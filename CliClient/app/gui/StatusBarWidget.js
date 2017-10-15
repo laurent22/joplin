@@ -66,6 +66,13 @@ class StatusBarWidget extends BaseWidget {
 
 			this.term.showCursor(true);
 
+			if (this.inputEventEmitter_) {
+				this.inputEventEmitter_.redraw();
+				// TODO: use termutils:
+				this.inputEventEmitter_.rebase(this.absoluteInnerX + this.promptState_.promptString.length, this.absoluteInnerY);
+				return;
+			}
+
 			let options = {
 				cancelable: true,
 				history: this.history,

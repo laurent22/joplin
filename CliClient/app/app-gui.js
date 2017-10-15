@@ -361,7 +361,28 @@ class AppGui {
 			this.widget('console').addItem(v);
 		}
 
-		if (object.length) this.widget('statusBar').setItemAt(0, object[object.length-1]);
+		this.updateStatusBarMessage();
+	}
+
+	updateStatusBarMessage() {
+		const consoleWidget = this.widget('console');
+
+		let msg = '';
+
+		const text = consoleWidget.items.length ? consoleWidget.items[consoleWidget.items.length - 1] : '';
+
+		const cmd = this.app().currentCommand();
+		if (cmd) {
+			msg += cmd.name();
+			if (cmd.cancellable()) msg += ' [Press Ctrl+C to cancel]';
+			msg += ': ';
+		}
+
+		if (text && text.length) {
+			msg += text;
+		}
+
+		if (msg !== '') this.widget('statusBar').setItemAt(0, msg);
 	}
 
 	async start() {
@@ -419,38 +440,44 @@ class AppGui {
 
 				this.lastShortcutKeyTime_ = now;
 
-				if (name === ':' && !statusBar.promptActive) {
-					const cmd = await statusBar.prompt();
-					await this.processCommand(cmd);
-				} else {
-					// Don't process shortcut keys if the console is active, except if the shortcut
-					// starts with CTRL (eg. CTRL+J CTRL+Z to maximize the console window).
-					if (!statusBar.promptActive || (this.currentShortcutKeys_.length && this.currentShortcutKeys_[0].indexOf('CTRL') === 0)) {
-						this.logger().debug('Now: ' + name + ', Keys: ', this.currentShortcutKeys_);
+				if (!this.app().currentCommand()) {
+					if (name === ':' && !statusBar.promptActive) {
+						const cmd = await statusBar.prompt();
+						await this.processCommand(cmd);
+					} else {
+						// Don't process shortcut keys if the console is active, except if the shortcut
+						// starts with CTRL (eg. CTRL+J CTRL+Z to maximize the console window).
+						if (!statusBar.promptActive || (this.currentShortcutKeys_.length && this.currentShortcutKeys_[0].indexOf('CTRL') === 0)) {
+							this.logger().debug('Now: ' + name + ', Keys: ', this.currentShortcutKeys_);
 
-						const shortcutKey = this.currentShortcutKeys_.join('');
-						if (shortcutKey in this.shortcuts_) {
-							const cmd = this.shortcuts_[shortcutKey].action;
-							if (!cmd.isDocOnly) {
-								this.currentShortcutKeys_ = [];
-								if (typeof cmd === 'function') {
-									await cmd();
-								} else if (typeof cmd === 'object') {
-									if (cmd.type === 'prompt') {
-										const commandString = await statusBar.prompt(cmd.initialText ? cmd.initialText : '');
-										this.stdout(commandString);
-										await this.processCommand(commandString);
+							const shortcutKey = this.currentShortcutKeys_.join('');
+							if (shortcutKey in this.shortcuts_) {
+								const cmd = this.shortcuts_[shortcutKey].action;
+								if (!cmd.isDocOnly) {
+									this.currentShortcutKeys_ = [];
+									if (typeof cmd === 'function') {
+										await cmd();
+									} else if (typeof cmd === 'object') {
+										if (cmd.type === 'prompt') {
+											const commandString = await statusBar.prompt(cmd.initialText ? cmd.initialText : '');
+											this.stdout(commandString);
+											await this.processCommand(commandString);
+										} else {
+											throw new Error('Unknown command: ' + JSON.stringify(cmd));
+										}
 									} else {
-										throw new Error('Unknown command: ' + JSON.stringify(cmd));
+										this.stdout(cmd);
+										await this.processCommand(cmd);
 									}
-								} else {
-									this.stdout(cmd);
-									await this.processCommand(cmd);
 								}
 							}
 						}
 					}
 				}
+
+				// Optimisation: Update the status bar only
+				// if the user is not already typing a command:
+				if (!statusBar.promptActive) this.updateStatusBarMessage();
 			});
 		} catch (error) {
 			this.fullScreen(false);
