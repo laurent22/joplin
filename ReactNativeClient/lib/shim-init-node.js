@@ -8,8 +8,15 @@ function shimInit() {
 	shim.fs = fs;
 	shim.FileApiDriverLocal = FileApiDriverLocal;
 	shim.Geolocation = GeolocationNode;
-	shim.fetch = require('node-fetch');
 	shim.FormData = require('form-data');
+
+	const nodeFetch = require('node-fetch');
+
+	shim.fetch = function(url, options = null) {
+		if (!options) options = {};
+		if (!options.timeout) options.timeout = 1000 * 120; // ms
+		return nodeFetch(url, options);
+	}
 	
 	shim.fetchBlob = async function(url, options) {
 		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
