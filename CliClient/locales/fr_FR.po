@@ -23,12 +23,14 @@ msgstr "Supprimer la note"
 msgid "Set a todo as completed / not completed"
 msgstr "Tâches non-complétées et récentes"
 
-msgid "Enter the console"
+msgid "Toggle console between maximized/minimized/hidden/visible."
 msgstr ""
 
-#, fuzzy
-msgid "Exit the console"
-msgstr "Quitter le logiciel."
+msgid "Enter command line mode"
+msgstr ""
+
+msgid "Exit command line mode"
+msgstr ""
 
 #, fuzzy
 msgid "Create a new note"
@@ -41,10 +43,6 @@ msgstr "Créer une nouvelle tâche."
 #, fuzzy
 msgid "Create a new notebook"
 msgstr "Créer un carnet."
-
-#, fuzzy
-msgid "Maximise/minimise the console"
-msgstr "Quitter le logiciel."
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr ""
@@ -234,13 +232,14 @@ msgstr ""
 msgid "The possible commands are:"
 msgstr ""
 
-msgid "To maximise/minimise the console, press Ctrl+J Ctrl+Z."
+#, fuzzy
+msgid "To maximise/minimise the console, press \"C\"."
+msgstr "Quitter le logiciel."
+
+msgid "To enter command line mode, press \":\""
 msgstr ""
 
-msgid "To enter the console, press C"
-msgstr ""
-
-msgid "To exit the console, press ESCAPE"
+msgid "To exit command line mode, press ESCAPE"
 msgstr ""
 
 msgid "To view a list of available shortcuts type `help shortcuts`"
@@ -743,6 +742,14 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#, fuzzy
+#~ msgid "Show/Hide the console"
+#~ msgstr "Quitter le logiciel."
+
+#, fuzzy
+#~ msgid "Exit the console"
+#~ msgstr "Quitter le logiciel."
 
 #, fuzzy
 #~ msgid "Last command: %s"

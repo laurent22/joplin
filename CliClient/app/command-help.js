@@ -37,7 +37,6 @@ class Command extends BaseCommand {
 		} else if (args.command) {
 			const command = app().findCommandByName(args['command']);
 			if (!command) throw new Error(_('Cannot find "%s".', args.command));
-
 			this.stdout(renderCommandHelp(command, stdoutWidth));
 		} else {
 			const commands = app().commands();
@@ -50,21 +49,19 @@ class Command extends BaseCommand {
 
 			commandNames.sort();
 
-			let lines = [];
-			lines.push(_('Type `help [command]` for more information about a command.'));
-			lines.push('');
-			lines.push(_('The possible commands are:'));
-			lines.push('');
-			lines.push(commandNames.join(', '));
-			lines.push('');
-			lines.push(_('To maximise/minimise the console, press Ctrl+J Ctrl+Z.'));
-			lines.push(_('To enter the console, press C'));
-			lines.push(_('To exit the console, press ESCAPE'));
-			lines.push(_('To view a list of available shortcuts type `help shortcuts`'));
-
-			this.stdout(wrap(lines.join("\n"), '', stdoutWidth));
+			this.stdout(_('Type `help [command]` for more information about a command.'));
+			this.stdout('');
+			this.stdout(_('The possible commands are:'));
+			this.stdout('');
+			this.stdout(commandNames.join(', '));
+			this.stdout('');
+			this.stdout(_('To maximise/minimise the console, press "C".'));
+			this.stdout(_('To enter command line mode, press ":"'));
+			this.stdout(_('To exit command line mode, press ESCAPE'));
+			this.stdout(_('To view a list of available shortcuts type `help shortcuts`'));
 		}
 
+		app().gui().showConsole();
 		app().gui().maximizeConsole();
 	}
 

@@ -2146,6 +2146,12 @@ slash@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-1.0.0.tgz#c41f2f6c39fc16d1cd17ad4b5d896114ae470d55"
 
+slice-ansi@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/slice-ansi/-/slice-ansi-1.0.0.tgz#044f1a49d8842ff307aad6b505ed178bd950134d"
+  dependencies:
+    is-fullwidth-code-point "^2.0.0"
+
 sntp@1.x.x:
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/sntp/-/sntp-1.0.9.tgz#6541184cc90aeea6c6e7b35e2659082443c66198"
@@ -2314,11 +2320,12 @@ through@^2.3.4:
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
 
 tkwidgets@^0.5.3:
-  version "0.5.4"
-  resolved "https://registry.yarnpkg.com/tkwidgets/-/tkwidgets-0.5.4.tgz#e1341efeaef6a915e9cc3c867e25992acab7fd77"
+  version "0.5.9"
+  resolved "https://registry.yarnpkg.com/tkwidgets/-/tkwidgets-0.5.9.tgz#0770fb9db91d8e41f22fdbe77e436c40affaec01"
   dependencies:
     chalk "^2.1.0"
     node-emoji "^1.8.1"
+    slice-ansi "^1.0.0"
     string-width "^2.1.1"
     terminal-kit "^1.13.11"
     wrap-ansi "^3.0.1"

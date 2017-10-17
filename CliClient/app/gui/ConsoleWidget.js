@@ -1,18 +1,46 @@
-const ListWidget = require('tkwidgets/ListWidget.js');
+const TextWidget = require('tkwidgets/TextWidget.js');
 
-class ConsoleWidget extends ListWidget {
+class ConsoleWidget extends TextWidget {
 
 	constructor() {
 		super();
+		this.lines_ = [];
+		this.updateText_ = false;
+		this.markdownRendering = false;
+		this.stickToBottom = true;
 	}
 
 	get name() {
 		return 'console';
 	}
 
-	addItem(v) {
-		super.addItem(v);
-		this.currentIndex = this.items.length - 1;
+	get lastLine() {
+		return this.lines_.length ? this.lines_[this.lines_.length-1] : '';
+	}
+
+	addLine(line) {
+		this.lines_.push(line);
+		this.updateText_ = true;
+		this.invalidate();
+	}
+
+	onFocus() {
+		this.stickToBottom = false;
+		super.onFocus();
+	}
+
+	onBlur() {
+		this.stickToBottom = true;
+		super.onBlur();
+	}
+
+	render() {
+		if (this.updateText_) {
+			this.text = this.lines_.join("\n");
+			this.updateText_ = false;
+		}
+
+		super.render();
 	}
 
 }

@@ -21,10 +21,13 @@ msgstr ""
 msgid "Set a todo as completed / not completed"
 msgstr ""
 
-msgid "Enter the console"
+msgid "Toggle console between maximized/minimized/hidden/visible."
 msgstr ""
 
-msgid "Exit the console"
+msgid "Enter command line mode"
+msgstr ""
+
+msgid "Exit command line mode"
 msgstr ""
 
 msgid "Create a new note"
@@ -34,9 +37,6 @@ msgid "Create a new todo"
 msgstr ""
 
 msgid "Create a new notebook"
-msgstr ""
-
-msgid "Maximise/minimise the console"
 msgstr ""
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
@@ -210,13 +210,13 @@ msgstr ""
 msgid "The possible commands are:"
 msgstr ""
 
-msgid "To maximise/minimise the console, press Ctrl+J Ctrl+Z."
+msgid "To maximise/minimise the console, press \"C\"."
 msgstr ""
 
-msgid "To enter the console, press C"
+msgid "To enter command line mode, press \":\""
 msgstr ""
 
-msgid "To exit the console, press ESCAPE"
+msgid "To exit command line mode, press ESCAPE"
 msgstr ""
 
 msgid "To view a list of available shortcuts type `help shortcuts`"

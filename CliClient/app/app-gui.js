@@ -130,6 +130,7 @@ class AppGui {
 
 		const consoleWidget = new ConsoleWidget();
 		consoleWidget.hStretch = true;
+		consoleWidget.hide();
 
 		const statusBar = new StatusBarWidget();
 		statusBar.hStretch = true;
@@ -142,8 +143,8 @@ class AppGui {
 
 		const vLayout = new VLayoutWidget();
 		vLayout.name = 'vLayout';
-		vLayout.addChild(hLayout, { type: 'stretch', factor: 1 });
-		vLayout.addChild(consoleWidget, { type: 'fixed', factor: 3 });
+		vLayout.addChild(hLayout, { type: 'stretch', factor: 2 });
+		vLayout.addChild(consoleWidget, { type: 'stretch', factor: 1 });
 		vLayout.addChild(statusBar, { type: 'fixed', factor: 1 });
 
 		const win1 = new WindowWidget();
@@ -167,13 +168,35 @@ class AppGui {
 			action: 'todo toggle $n',
 		}
 
+		shortcuts['c'] = {
+			description: _('Toggle console between maximized/minimized/hidden/visible.'),
+			action: () => {
+				if (!this.consoleIsShown()) {
+					this.showConsole();
+					this.minimizeConsole();
+				} else {
+					if (this.consoleIsMaximized()) {
+						this.hideConsole();
+					} else {
+						this.maximizeConsole();
+					}
+				}
+			},
+			canRunAlongOtherCommands: true,
+		}
+
 		shortcuts[':'] = {
-			description: _('Enter the console'),
-			isDocOnly: true,
+			description: _('Enter command line mode'),
+			action: async () => {
+				const cmd = await this.widget('statusBar').prompt();
+				if (!cmd) return;
+				this.stdout('> ' + cmd);
+				await this.processCommand(cmd);
+			},
 		};
 
-		shortcuts['ESC'] = {
-			description: _('Exit the console'),
+		shortcuts['ESC'] = { // Built into terminal-kit inputField
+			description: _('Exit command line mode'),
 			isDocOnly: true,
 		};
 
@@ -187,6 +210,18 @@ class AppGui {
 					this.processCommand('edit $n');
 				}
 			},
+		}
+
+		shortcuts['CTRL_C'] = {
+			description: _('Cancel the current command.'),
+			friendlyName: 'Ctrl+C',
+			isDocOnly: true,
+		}
+
+		shortcuts['CTRL_D'] = {
+			description: _('Exit the application.'),
+			friendlyName: 'Ctrl+D',
+			isDocOnly: true,
 		}
 
 		shortcuts['nn'] = {
@@ -204,46 +239,52 @@ class AppGui {
 			action: { type: 'prompt', initialText: 'mkbook ' },
 		}
 
-		shortcuts['CTRL_JCTRL_Z'] = {
-			friendlyName: 'Ctrl+J Ctrl+Z',
-			description: _('Maximise/minimise the console'),
-			action: () => { this.toggleMaximizeConsole(); },
-		}
-
 		return shortcuts;
 	}
 
-	toggleMaximizeConsole() {
-		this.maximizeConsole(!this.consoleIsMaximized());
+	toggleConsole() {
+		this.showConsole(!this.consoleIsShown());
+	}
+
+	showConsole(doShow = true) {
+		const consoleWidget = this.widget('console');
+		consoleWidget.show(doShow);
+		this.widget('root').invalidate();
+	}
+
+	hideConsole() {
+		this.showConsole(false);
+	}
+
+	consoleIsShown() {
+		return this.widget('console').shown;
 	}
 
 	maximizeConsole(doMaximize = true) {
-		// const consoleWidget = this.widget('console');
+		const consoleWidget = this.widget('console');
 
-		// if (consoleWidget.isMaximized__ === undefined) {
-		// 	consoleWidget.isMaximized__ = false;
-		// }
+		if (consoleWidget.isMaximized__ === undefined) {
+			consoleWidget.isMaximized__ = false;
+		}
 
-		// if (consoleWidget.isMaximized__ === doMaximize) return;
+		if (consoleWidget.isMaximized__ === doMaximize) return;
 
-		// let constraints = {
-		// 	type: 'fixed',
-		// 	factor: !doMaximize ? 5 : this.widget('vLayout').height - 4,
-		// };
+		let constraints = {
+			type: 'stretch',
+			factor: !doMaximize ? 1 : 4,
+		};
 
-		// consoleWidget.isMaximized__ = doMaximize;
+		consoleWidget.isMaximized__ = doMaximize;
 
-		// this.widget('vLayout').setWidgetConstraints(consoleWidget, constraints);
+		this.widget('vLayout').setWidgetConstraints(consoleWidget, constraints);
 	}
 
 	minimizeConsole() {
-		//this.maximizeConsole(false);
+		this.maximizeConsole(false);
 	}
 
 	consoleIsMaximized() {
-		return false;
-
-		//return this.widget('console').isMaximized__ === true;
+		return this.widget('console').isMaximized__ === true;
 	}
 
 	widget(name) {
@@ -355,10 +396,13 @@ class AppGui {
 		}
 	}
 
-	stdout(...object) {
-		for (let i = 0; i < object.length; i++) {
-			const v = typeof object[i] === 'object' ? JSON.stringify(object[i]) : object[i];
-			this.widget('console').addItem(v);
+	stdout(text) {
+		if (text === null || text === undefined) return;
+
+		let lines = text.split('\n');
+		for (let i = 0; i < lines.length; i++) {
+			const v = typeof lines[i] === 'object' ? JSON.stringify(lines[i]) : lines[i];
+			this.widget('console').addLine(v);
 		}
 
 		this.updateStatusBarMessage();
@@ -369,7 +413,7 @@ class AppGui {
 
 		let msg = '';
 
-		const text = consoleWidget.items.length ? consoleWidget.items[consoleWidget.items.length - 1] : '';
+		const text = consoleWidget.lastLine;
 
 		const cmd = this.app().currentCommand();
 		if (cmd) {
@@ -399,6 +443,10 @@ class AppGui {
 
 			term.on('key', async (name, matches, data) => {
 
+				// -------------------------------------------------------------------------
+				// Handle special shortcuts
+				// -------------------------------------------------------------------------
+
 				if (name === 'CTRL_D') {
 					const cmd = this.app().currentCommand();
 
@@ -418,11 +466,15 @@ class AppGui {
 						this.stdout(_('Press Ctrl+D or type "exit" to exit the application'));
 					} else {
 						this.commandCancelCalled_ = true;
-						await cmd.cancel();
+						await cmd.cancel()
 						this.commandCancelCalled_ = false;
 					}
 					return;
 				}
+
+				// -------------------------------------------------------------------------
+				// Build up current shortcut
+				// -------------------------------------------------------------------------
 				
 				const now = (new Date()).getTime();
 
@@ -440,38 +492,34 @@ class AppGui {
 
 				this.lastShortcutKeyTime_ = now;
 
-				if (!this.app().currentCommand()) {
-					if (name === ':' && !statusBar.promptActive) {
-						const cmd = await statusBar.prompt();
-						await this.processCommand(cmd);
-					} else {
-						// Don't process shortcut keys if the console is active, except if the shortcut
-						// starts with CTRL (eg. CTRL+J CTRL+Z to maximize the console window).
-						if (!statusBar.promptActive || (this.currentShortcutKeys_.length && this.currentShortcutKeys_[0].indexOf('CTRL') === 0)) {
-							this.logger().debug('Now: ' + name + ', Keys: ', this.currentShortcutKeys_);
+				// -------------------------------------------------------------------------
+				// Process shortcut and execute associated command
+				// -------------------------------------------------------------------------
 
-							const shortcutKey = this.currentShortcutKeys_.join('');
-							if (shortcutKey in this.shortcuts_) {
-								const cmd = this.shortcuts_[shortcutKey].action;
-								if (!cmd.isDocOnly) {
-									this.currentShortcutKeys_ = [];
-									if (typeof cmd === 'function') {
-										await cmd();
-									} else if (typeof cmd === 'object') {
-										if (cmd.type === 'prompt') {
-											const commandString = await statusBar.prompt(cmd.initialText ? cmd.initialText : '');
-											this.stdout(commandString);
-											await this.processCommand(commandString);
-										} else {
-											throw new Error('Unknown command: ' + JSON.stringify(cmd));
-										}
-									} else {
-										this.stdout(cmd);
-										await this.processCommand(cmd);
-									}
-								}
-							}
+				const shortcutKey = this.currentShortcutKeys_.join('');
+				const cmd = shortcutKey in this.shortcuts_ ? this.shortcuts_[shortcutKey] : null;
+
+				let processShortcutKeys = !this.app().currentCommand() && !statusBar.promptActive && cmd;
+				if (cmd && cmd.canRunAlongOtherCommands) processShortcutKeys = true;
+				if (cmd && cmd.isDocOnly) processShortcutKeys = false;
+
+				this.logger().info('Shortcut:', shortcutKey, processShortcutKeys, cmd ? cmd.description : '(no command)');
+
+				if (processShortcutKeys) {
+					this.currentShortcutKeys_ = [];
+					if (typeof cmd.action === 'function') {
+						await cmd.action();
+					} else if (typeof cmd.action === 'object') {
+						if (cmd.action.type === 'prompt') {
+							const commandString = await statusBar.prompt(cmd.action.initialText ? cmd.action.initialText : '');
+							this.stdout(commandString);
+							await this.processCommand(commandString);
+						} else {
+							throw new Error('Unknown command: ' + JSON.stringify(cmd.action));
 						}
+					} else { // String
+						this.stdout(cmd.action);
+						await this.processCommand(cmd.action);
 					}
 				}
 

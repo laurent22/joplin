@@ -60,8 +60,8 @@ class BaseCommand {
 		this.stdout_ = fn;
 	}
 
-	stdout(...object) {
-		if (this.stdout_) this.stdout_(...object);
+	stdout(text) {
+		if (this.stdout_) this.stdout_(text);
 	}
 
 	setPrompt(fn) {

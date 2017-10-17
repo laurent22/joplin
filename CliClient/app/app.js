@@ -270,8 +270,8 @@ class Application {
 	}
 
 	setupCommand(cmd) {
-		cmd.setStdout((...object) => {
-			this.gui().stdout(...object);
+		cmd.setStdout((text) => {
+			this.gui().stdout(text);
 		});
 
 		cmd.setDispatcher((action) => {
@@ -382,8 +382,14 @@ class Application {
 		const commandName = argv[0];
 		this.activeCommand_ = this.findCommandByName(commandName);
 		const cmdArgs = cliUtils.makeCommandArgs(this.activeCommand_, argv);
-		await this.activeCommand_.action(cmdArgs);
+		let outException = null;
+		try {
+			await this.activeCommand_.action(cmdArgs);
+		} catch (error) {
+			outException = error;
+		}
 		this.activeCommand_ = null;
+		if (outException) throw outException;
 	}
 
 	currentCommand() {

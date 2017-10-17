@@ -1,5 +1,6 @@
 const BaseWidget = require('tkwidgets/BaseWidget.js');
 const chalk = require('chalk');
+const termutils = require('tkwidgets/framework/termutils.js');
 
 class StatusBarWidget extends BaseWidget {
 
@@ -14,6 +15,10 @@ class StatusBarWidget extends BaseWidget {
 
 	get name() {
 		return 'statusBar';
+	}
+
+	get canHaveFocus() {
+		return false;
 	}
 
 	setItemAt(index, text) {
@@ -64,14 +69,13 @@ class StatusBarWidget extends BaseWidget {
 
 			this.term.write(textStyle(this.promptState_.promptString));
 
-			this.term.showCursor(true);
-
 			if (this.inputEventEmitter_) {
 				this.inputEventEmitter_.redraw();
-				// TODO: use termutils:
-				this.inputEventEmitter_.rebase(this.absoluteInnerX + this.promptState_.promptString.length, this.absoluteInnerY);
+				this.inputEventEmitter_.rebase(this.absoluteInnerX + termutils.textLength(this.promptState_.promptString), this.absoluteInnerY);
 				return;
 			}
+
+			this.term.showCursor(true);
 
 			let options = {
 				cancelable: true,
@@ -95,6 +99,12 @@ class StatusBarWidget extends BaseWidget {
 					}
 				}
 
+				// If the inputField spans several lines invalidate the root so that
+				// the interface is relayouted.
+				if (termutils.textLength(this.promptState_.promptString) + termutils.textLength(input) >= this.innerWidth - 5) {
+					this.root.invalidate();
+				}
+
 				this.inputEventEmitter_ = null;
 				this.term.showCursor(false);
 				this.promptState_ = null;
@@ -108,7 +118,7 @@ class StatusBarWidget extends BaseWidget {
 		} else {
 
 			for (let i = 0; i < this.items_.length; i++) {
-				this.term.write(textStyle(this.items_[i]));
+				this.term.write(textStyle(this.items_[i].trim()));
 			}
 
 		}
