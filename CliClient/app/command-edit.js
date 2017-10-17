@@ -94,7 +94,7 @@ class Command extends BaseCommand {
 				let updatedNote = await Note.unserializeForEdit(updatedContent);
 				updatedNote.id = note.id;
 				await Note.save(updatedNote);
-				this.logger().info('Note has been saved');
+				this.stdout(_('Note has been saved.'));
 			}
 
 			this.dispatch({

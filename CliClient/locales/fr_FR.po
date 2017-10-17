@@ -33,6 +33,14 @@ msgid "Exit command line mode"
 msgstr ""
 
 #, fuzzy
+msgid "Cancel the current command."
+msgstr "Annulation..."
+
+#, fuzzy
+msgid "Exit the application."
+msgstr "Quitter le logiciel."
+
+#, fuzzy
 msgid "Create a new note"
 msgstr "Créer une note."
 
@@ -207,6 +215,10 @@ msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
 "Edition de la note en cours. Fermez l'éditeur de texte pour retourner à "
 "l'invite de commande."
+
+#, fuzzy
+msgid "Note has been saved."
+msgstr "Aucun carnet n'est spécifié."
 
 msgid "Exports Joplin data to the given target."
 msgstr ""
@@ -767,10 +779,6 @@ msgstr "Bienvenue"
 
 #~ msgid "Last error: %s (stacktrace in log)."
 #~ msgstr "Dernière erreur : %s (Plus d'information dans le journal d'erreurs)"
-
-#, fuzzy
-#~ msgid "Cancelling command..."
-#~ msgstr "Annulation..."
 
 #~ msgid "Done."
 #~ msgstr "Terminé."

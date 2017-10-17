@@ -30,6 +30,12 @@ msgstr ""
 msgid "Exit command line mode"
 msgstr ""
 
+msgid "Cancel the current command."
+msgstr ""
+
+msgid "Exit the application."
+msgstr ""
+
 msgid "Create a new note"
 msgstr ""
 
@@ -187,6 +193,9 @@ msgid "Note does not exist: \"%s\". Create it?"
 msgstr ""
 
 msgid "Starting to edit note. Close the editor to get back to the prompt."
+msgstr ""
+
+msgid "Note has been saved."
 msgstr ""
 
 msgid "Exports Joplin data to the given target."
