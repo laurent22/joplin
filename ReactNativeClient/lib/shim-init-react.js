@@ -1,9 +1,13 @@
 import { shim } from 'lib/shim.js';
 import { GeolocationReact } from 'lib/geolocation-react.js';
+import { PoorManIntervals } from 'lib/poor-man-intervals.js';
 import RNFetchBlob from 'react-native-fetch-blob';
 
 function shimInit() {
 	shim.Geolocation = GeolocationReact;
+
+	shim.setInterval = PoorManIntervals.setInterval;
+	shim.clearInterval = PoorManIntervals.clearInterval;
 
 	shim.fetchBlob = async function(url, options) {
 		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');

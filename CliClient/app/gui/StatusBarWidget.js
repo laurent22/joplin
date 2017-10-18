@@ -55,8 +55,22 @@ class StatusBarWidget extends BaseWidget {
 		return this.history_;
 	}
 
+	resetCursor() {
+		if (!this.promptActive) return;
+		if (!this.inputEventEmitter_) return;
+
+		this.inputEventEmitter_.redraw();
+		this.inputEventEmitter_.rebase(this.absoluteInnerX + termutils.textLength(this.promptState_.promptString), this.absoluteInnerY);
+		this.term.moveTo(this.absoluteInnerX + termutils.textLength(this.promptState_.promptString) + this.inputEventEmitter_.getInput().length, this.absoluteInnerY);
+	}
+
 	render() {
 		super.render();
+
+		const doSaveCursor = !this.promptActive;
+		
+		if (doSaveCursor) this.term.saveCursor();
+
 		this.innerClear();
 
 		const textStyle = chalk.bgBlueBright.white;
@@ -70,8 +84,9 @@ class StatusBarWidget extends BaseWidget {
 			this.term.write(textStyle(this.promptState_.promptString));
 
 			if (this.inputEventEmitter_) {
-				this.inputEventEmitter_.redraw();
-				this.inputEventEmitter_.rebase(this.absoluteInnerX + termutils.textLength(this.promptState_.promptString), this.absoluteInnerY);
+				// inputField is already waiting for input so in that case just make
+				// sure that the cursor is at the right position and exit.
+				this.resetCursor();
 				return;
 			}
 
@@ -122,6 +137,8 @@ class StatusBarWidget extends BaseWidget {
 			}
 
 		}
+
+		if (doSaveCursor) this.term.restoreCursor();
 	}
 
 }

@@ -66,18 +66,27 @@ class OneDriveApiNodeUtils {
 					response.end();
 				}
 
+				// After the response has been received, don't destroy the server right
+				// away or the browser might display a connection reset error (even
+				// though it worked).
+				const waitAndDestroy = () => {
+					setTimeout(() => {
+						server.destroy();
+					}, 1000);
+				}
+
 				if (!query.code) return writeResponse(400, '"code" query parameter is missing');
 
 				this.api().execTokenRequest(query.code, 'http://localhost:' + port.toString()).then(() => {
 					writeResponse(200, _('The application has been authorised - you may now close this browser tab.'));
 					targetConsole.log('');
 					targetConsole.log(_('The application has been successfully authorised.'));
-					server.destroy();
+					waitAndDestroy();
 				}).catch((error) => {
 					writeResponse(400, error.message);
 					targetConsole.log('');
 					targetConsole.log(error.message);
-					server.destroy();
+					waitAndDestroy();
 				});
 			});
 

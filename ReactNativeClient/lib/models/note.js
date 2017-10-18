@@ -98,10 +98,12 @@ class Note extends BaseItem {
 				if (a[order.by] < b[order.by]) r = +1;
 				if (a[order.by] > b[order.by]) r = -1;
 				if (order.dir == 'ASC') r = -r;
-				if (r) break;
+				if (r !== 0) break;
 			}
 
-			return r;
+			// Makes the sort deterministic, so that if, for example, a and b have the
+			// same updated_time, they aren't swapped every time a list is refreshed.
+			return a.title.toLowerCase() + a.id < b.title.toLowerCase() + b.id ? -1 : +1;
 		});
 	}
 

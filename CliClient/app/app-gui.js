@@ -3,6 +3,7 @@ import { Folder } from 'lib/models/folder.js';
 import { Note } from 'lib/models/note.js';
 import { cliUtils } from './cli-utils.js';
 import { reducer, defaultState } from 'lib/reducer.js';
+import { reg } from 'lib/registry.js';
 import { _ } from 'lib/locale.js';
 
 const chalk = require('chalk');
@@ -56,15 +57,16 @@ class AppGui {
 		this.commandCancelCalled_ = false;
 
 		this.currentShortcutKeys_ = [];
-		this.lastShortcutKeyTime_ = 0;	
+		this.lastShortcutKeyTime_ = 0;
 
 		cliUtils.setStdout((...object) => {
 			return this.stdout(...object);
-
-			// for (let i = 0; i < object.length; i++) {
-			// 	this.widget('console').bufferPush(object[i]);
-			// }
 		});
+
+		// Recurrent sync is setup only when the GUI is started. In
+		// a regular command it's not necessary since the process
+		// exits right away.
+		reg.setupRecurrentSync();
 	}
 
 	renderer() {

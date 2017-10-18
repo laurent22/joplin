@@ -15,5 +15,7 @@ shim.fs = null;
 shim.FileApiDriverLocal = null;
 shim.readLocalFileBase64 = () => { throw new Error('Not implemented'); }
 shim.uploadBlob = () => { throw new Error('Not implemented'); }
+shim.setInterval = setInterval;
+shim.clearInterval = clearInterval;
 
 export { shim };

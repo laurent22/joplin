@@ -180,6 +180,11 @@ class OneDriveApi {
 					// or error code, so hopefully that message won't change and is not localized
 				} else if (error.code == 'ECONNRESET') {
 					// request to https://public-ch3302....1fab24cb1bd5f.md failed, reason: socket hang up"
+				} else if (error.code == 'ENOTFOUND') {
+					// OneDrive (or Node?) sometimes sends back a "not found" error for resources
+					// that definitely exist and in this case repeating the request works.
+					// Error is:
+					// request to https://graph.microsoft.com/v1.0/drive/special/approot failed, reason: getaddrinfo ENOTFOUND graph.microsoft.com graph.microsoft.com:443
 				} else if (error.message.indexOf('network timeout') === 0) {
 					// network timeout at: https://public-ch3302...859f9b0e3ab.md
 				} else {
