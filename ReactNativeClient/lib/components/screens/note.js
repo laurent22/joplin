@@ -313,7 +313,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let targetPath = Resource.fullPath(resource);
 
 		if (res.type == 'image/jpeg' || res.type == 'image/jpg' || res.type == 'image/png') {
-			const maxSize = 1920;
+			const maxSize = Resource.IMAGE_MAX_DIMENSION;
 
 			let dimensions = await this.imageDimensions(localFilePath);
 

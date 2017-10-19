@@ -209,6 +209,25 @@ cliUtils.promptInput = function(message) {
 	});
 }
 
+// Note: initialText is there to have the same signature as statusBar.prompt() so that
+// it can be a drop-in replacement, however initialText is not used (and cannot be
+// with readline.question?).
+cliUtils.prompt = function(initialText = '', promptString = ':') {
+	const readline = require('readline');
+
+	const rl = readline.createInterface({
+		input: process.stdin,
+		output: process.stdout
+	});
+
+	return new Promise((resolve, reject) => {
+		rl.question(promptString, (answer) => {
+			rl.close();
+			resolve(answer);
+		});
+	});
+}
+
 let redrawStarted_ = false;
 let redrawLastLog_ = null;
 let redrawLastUpdateTime_ = 0;

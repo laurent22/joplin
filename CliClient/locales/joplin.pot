@@ -139,14 +139,21 @@ msgstr ""
 msgid "Invalid answer: %s"
 msgstr ""
 
-msgid "Displays the given note."
-msgstr ""
-
-msgid "Displays the complete information about note."
+msgid "Attaches the given file to the note."
 msgstr ""
 
 #, javascript-format
 msgid "Cannot find \"%s\"."
+msgstr ""
+
+#, javascript-format
+msgid "Cannot access %s"
+msgstr ""
+
+msgid "Displays the given note."
+msgstr ""
+
+msgid "Displays the complete information about note."
 msgstr ""
 
 msgid ""
@@ -403,6 +410,24 @@ msgstr ""
 msgid "%s %s (%s)"
 msgstr ""
 
+msgid "Enum"
+msgstr ""
+
+#, javascript-format
+msgid "Type: %s."
+msgstr ""
+
+#, javascript-format
+msgid "Possible values: %s."
+msgstr ""
+
+#, javascript-format
+msgid "Default: %s"
+msgstr ""
+
+msgid "Possible keys/values:"
+msgstr ""
+
 msgid "Fatal error:"
 msgstr ""
 
@@ -514,6 +539,11 @@ msgid "File system"
 msgstr ""
 
 msgid "OneDrive"
+msgstr ""
+
+msgid ""
+"The editor that will be used to open a note. If none is provided it will try "
+"to auto-detect the default editor."
 msgstr ""
 
 msgid "Language"

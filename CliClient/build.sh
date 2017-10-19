@@ -8,7 +8,7 @@ mkdir -p "$ROOT_DIR/build"
 rm -f "$ROOT_DIR/app/lib"
 ln -s "$ROOT_DIR/../ReactNativeClient/lib" "$ROOT_DIR/app"
 
-npm run build
+npm run build || exit 1
 
 # Files under app/gui are in ES6 already but I cannot get Babel
 # to ignore them, so copy them back to the build directory.

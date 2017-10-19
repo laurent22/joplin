@@ -82,9 +82,25 @@ class Note extends BaseItem {
 		return output;
 	}
 
+	// Note: sort logic must be duplicated in previews();
 	static sortNotes(notes, orders, uncompletedTodosOnTop) {
 		const noteOnTop = (note) => {
 			return uncompletedTodosOnTop && note.is_todo && !note.todo_completed;
+		}
+
+		const noteFieldComp = (f1, f2) => {
+			if (f1 === f2) return 0;
+			return f1 < f2 ? -1 : +1;
+		}
+
+		// Makes the sort deterministic, so that if, for example, a and b have the
+		// same updated_time, they aren't swapped every time a list is refreshed.
+		const sortIdenticalNotes = (a, b) => {
+			let r = null;
+			r = noteFieldComp(a.user_updated_time, b.user_updated_time); if (r) return r;
+			r = noteFieldComp(a.user_created_time, b.user_created_time); if (r) return r;
+			r = noteFieldComp(a.title.toLowerCase(), b.title.toLowerCase()); if (r) return r;
+			return noteFieldComp(a.id, b.id);
 		}
 
 		return notes.sort((a, b) => {
@@ -98,12 +114,10 @@ class Note extends BaseItem {
 				if (a[order.by] < b[order.by]) r = +1;
 				if (a[order.by] > b[order.by]) r = -1;
 				if (order.dir == 'ASC') r = -r;
-				if (r !== 0) break;
+				if (r !== 0) return r;
 			}
 
-			// Makes the sort deterministic, so that if, for example, a and b have the
-			// same updated_time, they aren't swapped every time a list is refreshed.
-			return a.title.toLowerCase() + a.id < b.title.toLowerCase() + b.id ? -1 : +1;
+			return sortIdenticalNotes(a, b);
 		});
 	}
 
@@ -131,11 +145,16 @@ class Note extends BaseItem {
 	}
 
 	static async previews(parentId, options = null) {
-		// Note: ordering logic must be duplicated in sortNotes, which
+		// Note: ordering logic must be duplicated in sortNotes(), which
 		// is used to sort already loaded notes.
 
 		if (!options) options = {};
-		if (!options.order) options.order = [{ by: 'user_updated_time', dir: 'DESC' }];
+		if (!options.order) options.order = [
+			{ by: 'user_updated_time', dir: 'DESC' },
+			{ by: 'user_created_time', dir: 'DESC' },
+			{ by: 'title', dir: 'DESC' },
+			{ by: 'id', dir: 'DESC' },
+		];
 		if (!options.conditions) options.conditions = [];
 		if (!options.conditionsParams) options.conditionsParams = [];
 		if (!options.fields) options.fields = this.previewFields();

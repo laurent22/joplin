@@ -1,6 +1,7 @@
 import { BaseModel } from 'lib/base-model.js';
 import { Database } from 'lib/database.js';
 import { Logger } from 'lib/logger.js';
+import { sprintf } from 'sprintf-js';
 import { _, supportedLocalesToLanguages, defaultLocale } from 'lib/locale.js';
 
 class Setting extends BaseModel {
@@ -205,12 +206,14 @@ class Setting extends BaseModel {
 		return this.metadata_[key].options();
 	}
 
-	static enumOptionsDoc(key) {
+	static enumOptionsDoc(key, templateString = null) {
+		if (templateString === null) templateString = '%s: %s';
+		console.info(templateString);
 		const options = this.enumOptions(key);
 		let output = [];
 		for (let n in options) {
 			if (!options.hasOwnProperty(n)) continue;
-			output.push(_('%s: %s', n, options[n]));
+			output.push(sprintf(templateString, n, options[n]));
 		}
 		return output.join(', ');
 	}
@@ -289,6 +292,12 @@ class Setting extends BaseModel {
 		return output;
 	}
 
+	static typeToString(typeId) {
+		if (typeId === Setting.TYPE_INT) return 'int';
+		if (typeId === Setting.TYPE_STRING) return 'string';
+		if (typeId === Setting.TYPE_BOOL) return 'bool';
+	}
+
 }
 
 Setting.SYNC_TARGET_MEMORY = 1;
@@ -320,7 +329,7 @@ Setting.metadata_ = {
 	'sync.4.context': { value: '', type: Setting.TYPE_STRING, public: false },
 	'sync.5.context': { value: '', type: Setting.TYPE_STRING, public: false },
 	'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
-	'editor': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'] },
+	'editor': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'], label: () => _('The editor that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
 	'locale': { value: defaultLocale(), type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Language'), options: () => {
 		return supportedLocalesToLanguages();
 	}},
@@ -336,7 +345,7 @@ Setting.metadata_ = {
 	'uncompletedTodosOnTop': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Show uncompleted todos on top of the lists') },
 	'showAdvancedOptions': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile'], label: () => _('Show advanced options') },
 	'trackLocation': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Save location with notes') },
-	'sync.interval': { value: 300, type: Setting.TYPE_INT, isEnum: true, public: true, appTypes: ['mobile'], label: () => _('Synchronisation interval'), options: () => {
+	'sync.interval': { value: 300, type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation interval'), options: () => {
 		return {
 			0: _('Disabled'),
 			300: _('%d minutes', 5),

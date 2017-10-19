@@ -78,4 +78,6 @@ class Resource extends BaseItem {
 
 }
 
+Resource.IMAGE_MAX_DIMENSION = 1920;
+
 export { Resource };

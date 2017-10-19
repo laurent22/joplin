@@ -149,15 +149,23 @@ msgstr ""
 msgid "Invalid answer: %s"
 msgstr "Commande invalide : \"%s\""
 
+#, fuzzy
+msgid "Attaches the given file to the note."
+msgstr "Chercher le motif <pattern> dans toutes les notes."
+
+#, javascript-format
+msgid "Cannot find \"%s\"."
+msgstr "Impossible de trouver \"%s\"."
+
+#, fuzzy, javascript-format
+msgid "Cannot access %s"
+msgstr "Impossible de trouver \"%s\"."
+
 msgid "Displays the given note."
 msgstr "Affiche la note."
 
 msgid "Displays the complete information about note."
 msgstr "Affiche tous les détails de la note."
-
-#, javascript-format
-msgid "Cannot find \"%s\"."
-msgstr "Impossible de trouver \"%s\"."
 
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
@@ -457,6 +465,24 @@ msgstr "Affiche les informations de version"
 msgid "%s %s (%s)"
 msgstr "%s %s (%s)"
 
+msgid "Enum"
+msgstr ""
+
+#, javascript-format
+msgid "Type: %s."
+msgstr ""
+
+#, javascript-format
+msgid "Possible values: %s."
+msgstr ""
+
+#, javascript-format
+msgid "Default: %s"
+msgstr ""
+
+msgid "Possible keys/values:"
+msgstr ""
+
 msgid "Fatal error:"
 msgstr "Erreur fatale :"
 
@@ -573,6 +599,11 @@ msgstr "Système de fichier"
 
 msgid "OneDrive"
 msgstr "OneDrive"
+
+msgid ""
+"The editor that will be used to open a note. If none is provided it will try "
+"to auto-detect the default editor."
+msgstr ""
 
 msgid "Language"
 msgstr "Langue"
@@ -755,6 +786,9 @@ msgstr ""
 msgid "Welcome"
 msgstr "Bienvenue"
 
+#~ msgid "%s (%s)"
+#~ msgstr "%s (%s)"
+
 #, fuzzy
 #~ msgid "Show/Hide the console"
 #~ msgstr "Quitter le logiciel."
@@ -773,9 +807,6 @@ msgstr "Bienvenue"
 #, fuzzy
 #~ msgid "Confirm"
 #~ msgstr "Conflits"
-
-#~ msgid "%s (%s)"
-#~ msgstr "%s (%s)"
 
 #~ msgid "Last error: %s (stacktrace in log)."
 #~ msgstr "Dernière erreur : %s (Plus d'information dans le journal d'erreurs)"
