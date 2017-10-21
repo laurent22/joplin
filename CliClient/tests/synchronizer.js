@@ -321,7 +321,7 @@ describe('Synchronizer', function() {
 
 		let note = await Note.save({ title: "note1", parent_id: folder1.id });
 		await synchronizer().start();
-		let items = await allItems();
+		let items = await allItems();		
 		expect(items.length).toBe(1);
 		expect(items[0].title).toBe('note1');
 		expect(items[0].is_conflict).toBe(1);

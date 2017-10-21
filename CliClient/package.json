@@ -1,15 +1,29 @@
 {
   "name": "joplin",
-  "description": "CLI client for Joplin",
+  "description": "Joplin CLI Client",
   "license": "MIT",
+  "author": "Laurent Cozic",
+  "bugs": {
+   "url": "https://github.com/laurent22/joplin/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/laurent22/joplin"
   },
-  "url": "git://github.com/laurent22/joplin.git",
-  "version": "0.10.43",
+  "copyright": {
+    "title": "Joplin CLI",
+    "years": [
+      2016,
+      2017
+    ],
+    "owner": "Laurent Cozic"
+  },
+  "version": "0.10.44",
   "bin": {
     "joplin": "./main.js"
+  },
+  "engines": {
+    "node": ">=8.7.0"
   },
   "dependencies": {
     "app-module-path": "^2.2.0",

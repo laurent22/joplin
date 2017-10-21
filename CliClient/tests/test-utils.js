@@ -106,6 +106,7 @@ function setupDatabase(id = null) {
 		// Don't care if the file doesn't exist
 	}).then(() => {
 		databases_[id] = new JoplinDatabase(new DatabaseDriverNode());
+		// databases_[id].setLogger(logger);
 		return databases_[id].open({ name: filePath }).then(() => {
 			BaseModel.db_ = databases_[id];
 			return setupDatabase(id);
