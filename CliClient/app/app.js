@@ -67,8 +67,14 @@ class Application {
 	}
 
 	switchCurrentFolder(folder) {
+		this.logger().info('SWITCHING TO ' + (folder ? folder.id : ''));
 		this.currentFolder_ = folder;
 		Setting.setValue('activeFolderId', folder ? folder.id : '');
+
+		this.dispatch({
+			type: 'FOLDERS_SELECT',
+			folderId: folder ? folder.id : '',
+		});
 	}
 
 	async guessTypeAndLoadItem(pattern, options = null) {
@@ -462,6 +468,10 @@ class Application {
 		}
 
 		return middleware;
+	}
+
+	dispatch(action) {
+		if (this.store()) return this.store().dispatch(action);
 	}
 
 	async start() {
