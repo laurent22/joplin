@@ -565,6 +565,11 @@ class Application {
 			this.gui_.setLogger(this.logger_);
 			await this.gui_.start();
 
+			// Since the settings need to be loaded before the store is created, it will never
+			// receive the SETTINGS_UPDATE_ALL even, which mean state.settings will not be
+			// initialised. So we manually call dispatchUpdateAll() to force an update.
+			Setting.dispatchUpdateAll();
+
 			await FoldersScreenUtils.refreshFolders();
 
 			this.store().dispatch({

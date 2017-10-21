@@ -19,15 +19,15 @@ cp "$ROOT_DIR/app/autocompletion_template.txt" "$ROOT_DIR/build"
 
 chmod 755 "$ROOT_DIR/build/main.js"
 
-if [[ ! -f "$ROOT_DIR/package.json.md5" ]]; then
-	"$ROOT_DIR/update-package-md5.sh"
-fi
+# if [[ ! -f "$ROOT_DIR/package.json.md5" ]]; then
+# 	"$ROOT_DIR/update-package-md5.sh"
+# fi
 
 # Add modules on top of main.js:
 # - cache-require-paths to cache require() calls
 # - app-module-path so that lib/something paths can be resolved.
 
-PACKAGE_MD5=$(cat "$ROOT_DIR/package.json.md5")
+#PACKAGE_MD5=$(cat "$ROOT_DIR/package.json.md5")
 MAIN_PATH="$ROOT_DIR/build/main.js"
 #LINE_TO_ADD="var osTmpdir = require('os-tmpdir'); process.env.CACHE_REQUIRE_PATHS_FILE = osTmpdir() + '/joplin-module-path-cache-$PACKAGE_MD5'; require('cache-require-paths'); require('app-module-path').addPath(__dirname);"
 LINE_TO_ADD="require('app-module-path').addPath(__dirname);"
