@@ -8,6 +8,7 @@ import { BaseModel } from 'lib/base-model.js';
 import { Folder } from 'lib/models/folder.js';
 import { BaseItem } from 'lib/models/base-item.js';
 import { Note } from 'lib/models/note.js';
+import { Tag } from 'lib/models/tag.js';
 import { Setting } from 'lib/models/setting.js';
 import { Logger } from 'lib/logger.js';
 import { sprintf } from 'sprintf-js';
@@ -67,7 +68,6 @@ class Application {
 	}
 
 	switchCurrentFolder(folder) {
-		this.logger().info('SWITCHING TO ' + (folder ? folder.id : ''));
 		this.currentFolder_ = folder;
 		Setting.setValue('activeFolderId', folder ? folder.id : '');
 
@@ -420,7 +420,7 @@ class Application {
 		return this.activeCommand_;
 	}
 
-	async refreshNotes() {
+	async refreshNotes(parentType, parentId) {
 		const state = this.store().getState();
 
 		let options = {
@@ -428,11 +428,17 @@ class Application {
 			uncompletedTodosOnTop: Setting.value('uncompletedTodosOnTop'),
 		};
 
-		const notes = await Note.previews(state.selectedFolderId, options);
+		const source = JSON.stringify({
+			options: options,
+			parentId: parentId,
+		});
+
+		const notes = parentType === Folder.modelType() ? await Note.previews(parentId, options) : await Tag.notes(parentId);
 
 		this.store().dispatch({
 			type: 'NOTES_UPDATE_ALL',
 			notes: notes,
+			notesSource: source,
 		});
 
 		this.store().dispatch({
@@ -444,20 +450,28 @@ class Application {
 	reducerActionToString(action) {
 		let o = [action.type];
 		if (action.noteId) o.push(action.noteId);
-		if (action.folderI) o.push(action.folderI);
+		if (action.folderId) o.push(action.folderId);
+		if (action.tagId) o.push(action.tagId);
+		if (action.tag) o.push(action.tag.id);
+		if (action.folder) o.push(action.folder.id);
+		if (action.notesSource) o.push(JSON.stringify(action.notesSource));
 		return o.join(', ');
 	}
 
 	generalMiddleware() {
 		const middleware = store => next => async (action) => {
-			this.logger().info('Reducer action', this.reducerActionToString(action));
+			this.logger().debug('Reducer action', this.reducerActionToString(action));
 
 			const result = next(action);
 			const newState = store.getState();
 
 			if (action.type == 'FOLDERS_SELECT') {
 				Setting.setValue('activeFolderId', newState.selectedFolderId);
-				await this.refreshNotes();
+				await this.refreshNotes(Folder.modelType(), newState.selectedFolderId);
+			}
+
+			if (action.type == 'TAGS_SELECT') {
+				await this.refreshNotes(Tag.modelType(), action.tagId);
 			}
 
 			if (this.gui() && action.type == 'SETTINGS_UPDATE_ONE' && action.key == 'sync.interval' || action.type == 'SETTINGS_UPDATE_ALL') {
@@ -512,7 +526,7 @@ class Application {
 		this.dbLogger_.setLevel(initArgs.logLevel);
 
 		if (Setting.value('env') === 'dev') {
-			this.dbLogger_.setLevel(Logger.LEVEL_DEBUG);
+			this.dbLogger_.setLevel(Logger.LEVEL_WARN);
 		}
 
 		const packageJson = require('./package.json');
@@ -581,6 +595,13 @@ class Application {
 			Setting.dispatchUpdateAll();
 
 			await FoldersScreenUtils.refreshFolders();
+
+			const tags = await Tag.allWithNotes();
+
+			this.dispatch({
+				type: 'TAGS_UPDATE_ALL',
+				tags: tags,
+			});
 
 			this.store().dispatch({
 				type: 'FOLDERS_SELECT',

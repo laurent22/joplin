@@ -43,10 +43,17 @@ class Tag extends BaseItem {
 		let hasIt = await this.hasNote(tagId, noteId);
 		if (hasIt) return;
 
-		return NoteTag.save({
+		const output = await NoteTag.save({
 			tag_id: tagId,
 			note_id: noteId,
 		});
+
+		this.dispatch({
+			type: 'TAGS_UPDATE_ONE',
+			tag: await Tag.load(tagId),
+		});
+
+		return output;
 	}
 
 	static async removeNote(tagId, noteId) {
@@ -54,11 +61,30 @@ class Tag extends BaseItem {
 		for (let i = 0; i < noteTags.length; i++) {
 			await NoteTag.delete(noteTags[i].id);
 		}
+
+		this.dispatch({
+			type: 'TAGS_UPDATE_ONE',
+			tag: await Tag.load(tagId),
+		});
 	}
 
 	static async hasNote(tagId, noteId) {
 		let r = await this.db().selectOne('SELECT note_id FROM note_tags WHERE tag_id = ? AND note_id = ? LIMIT 1', [tagId, noteId]);
 		return !!r;
+	}
+
+	static async allWithNotes() {
+		return await Tag.modelSelectAll('SELECT * FROM tags WHERE id IN (SELECT DISTINCT tag_id FROM note_tags)');
+	}
+
+	static async save(o, options = null) {
+		return super.save(o, options).then((tag) => {
+			this.dispatch({
+				type: 'TAGS_UPDATE_ONE',
+				tag: tag,
+			});
+			return tag;
+		});
 	}
 
 }

@@ -413,7 +413,6 @@ class Synchronizer {
 						let newContent = Object.assign({}, content);
 						let options = {
 							autoTimestamp: false,
-							applyMetadataChanges: true,
 							nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, newContent, time.unixMs()),
 						};
 						if (action == 'createLocal') options.isNew = true;
@@ -423,6 +422,9 @@ class Synchronizer {
 							let remoteResourceContentPath = this.resourceDirName_ + '/' + newContent.id;
 							await this.api().get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' });
 						}
+
+						if (!newContent.user_updated_time) newContent.user_updated_time = newContent.updated_time;
+						if (!newContent.user_created_time) newContent.user_created_time = newContent.created_time;
 
 						await ItemClass.save(newContent, options);
 

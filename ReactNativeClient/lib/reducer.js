@@ -37,6 +37,33 @@ function historyCanGoBackTo(route) {
 	return true;
 }
 
+function updateOneTagOrFolder(state, action) {
+	let newItems = action.type === 'TAGS_UPDATE_ONE' ? state.tags.splice(0) : state.folders.splice(0);
+	let item = action.type === 'TAGS_UPDATE_ONE' ? action.tag : action.folder;
+
+	var found = false;
+	for (let i = 0; i < newItems.length; i++) {
+		let n = newItems[i];
+		if (n.id == item.id) {
+			newItems[i] = Object.assign(newItems[i], item);
+			found = true;
+			break;
+		}
+	}
+
+	if (!found) newItems.push(item);
+
+	let newState = Object.assign({}, state);
+
+	if (action.type === 'TAGS_UPDATE_ONE') {
+		newState.tags = newItems;
+	} else {
+		newState.folders = newItems;
+	}
+
+	return newState;
+}
+
 const reducer = (state = defaultState, action) => {
 	let newState = state;
 	let historyGoingBack = false;
@@ -128,6 +155,7 @@ const reducer = (state = defaultState, action) => {
 
 				newState = Object.assign({}, state);
 				newState.selectedFolderId = action.folderId;
+				newState.notesParentType = 'Folder';
 				break;
 
 			case 'SETTINGS_UPDATE_ALL':
@@ -231,23 +259,52 @@ const reducer = (state = defaultState, action) => {
 				newState.tags = action.tags;
 				break;				
 
-			case 'FOLDERS_UPDATE_ONE':
-
-				var newFolders = state.folders.splice(0);
-				var found = false;
-				for (let i = 0; i < newFolders.length; i++) {
-					let n = newFolders[i];
-					if (n.id == action.folder.id) {
-						newFolders[i] = Object.assign(newFolders[i], action.folder);
-						found = true;
-						break;
-					}
-				}
-
-				if (!found) newFolders.push(action.folder);
+			case 'TAGS_SELECT':
 
 				newState = Object.assign({}, state);
-				newState.folders = newFolders;
+				newState.selectedTagId = action.tagId;
+				newState.notesParentType = 'Tag';
+				break;
+
+			case 'TAGS_UPDATE_ONE':
+
+				newState = updateOneTagOrFolder(state, action);
+
+				// var newTags = state.tags.splice(0);
+				// var found = false;
+				// for (let i = 0; i < newTags.length; i++) {
+				// 	let n = newTags[i];
+				// 	if (n.id == action.tag.id) {
+				// 		newTags[i] = Object.assign(newTags[i], action.tag);
+				// 		found = true;
+				// 		break;
+				// 	}
+				// }
+
+				// if (!found) newTags.push(action.tag);
+
+				// newState = Object.assign({}, state);
+				// newState.tags = newTags;
+				break;
+
+			case 'FOLDERS_UPDATE_ONE':
+
+				newState = updateOneTagOrFolder(state, action);
+				// var newFolders = state.folders.splice(0);
+				// var found = false;
+				// for (let i = 0; i < newFolders.length; i++) {
+				// 	let n = newFolders[i];
+				// 	if (n.id == action.folder.id) {
+				// 		newFolders[i] = Object.assign(newFolders[i], action.folder);
+				// 		found = true;
+				// 		break;
+				// 	}
+				// }
+
+				// if (!found) newFolders.push(action.folder);
+
+				// newState = Object.assign({}, state);
+				// newState.folders = newFolders;
 				break;
 
 			case 'FOLDER_DELETE':

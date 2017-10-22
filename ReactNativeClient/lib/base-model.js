@@ -238,7 +238,11 @@ class BaseModel {
 			}
 
 			if (!o.user_created_time && this.hasField('user_created_time')) {
-				o.user_created_time = timeNow;
+				o.user_created_time = o.created_time ? o.created_time : timeNow;
+			}
+
+			if (!o.user_updated_time && this.hasField('user_updated_time')) {
+				o.user_updated_time = o.updated_time ? o.updated_time : timeNow;
 			}
 
 			query = Database.insertQuery(this.tableName(), o);

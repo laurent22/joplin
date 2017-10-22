@@ -24,6 +24,8 @@ class Command extends BaseCommand {
 
 		note = await Note.save(note);
 		Note.updateGeolocation(note.id);
+
+		app().switchCurrentFolder(app().currentFolder());
 	}
 
 }

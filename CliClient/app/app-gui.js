@@ -1,5 +1,6 @@
 import { Logger } from 'lib/logger.js';
 import { Folder } from 'lib/models/folder.js';
+import { Tag } from 'lib/models/tag.js';
 import { Note } from 'lib/models/note.js';
 import { cliUtils } from './cli-utils.js';
 import { reducer, defaultState } from 'lib/reducer.js';
@@ -95,16 +96,29 @@ class AppGui {
 		folderList.name = 'folderList';
 		folderList.vStretch = true;
 		folderList.on('currentItemChange', async () => {
-			const folder = folderList.currentItem;
-			this.store_.dispatch({
-				type: 'FOLDERS_SELECT',
-				folderId: folder ? folder.id : 0,
-			});
+			const item = folderList.currentItem;
+
+			if (item.type_ === Folder.modelType()) {
+				this.store_.dispatch({
+					type: 'FOLDERS_SELECT',
+					folderId: item ? item.id : 0,
+				});
+			} else if (item.type_ === Tag.modelType()) {
+				this.store_.dispatch({
+					type: 'TAGS_SELECT',
+					tagId: item ? item.id : 0,
+				});
+			}
 		});
 		this.rootWidget_.connect(folderList, (state) => {
+			this.logger().info('Updating folder list...');
+
 			return {
 				selectedFolderId: state.selectedFolderId,
-				items: state.folders,
+				selectedTagId: state.selectedTagId,
+				notesParentType: state.notesParentType,
+				folders: state.folders,
+				tags: state.tags,
 			};
 		});
 
