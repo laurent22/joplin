@@ -26,6 +26,9 @@ msgstr "Tâches non-complétées et récentes"
 msgid "Toggle console between maximized/minimized/hidden/visible."
 msgstr ""
 
+msgid "Toggle note metadata."
+msgstr ""
+
 msgid "Enter command line mode"
 msgstr ""
 

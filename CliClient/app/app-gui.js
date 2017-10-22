@@ -21,6 +21,7 @@ const RootWidget = require('tkwidgets/RootWidget.js');
 const WindowWidget = require('tkwidgets/WindowWidget.js');
 
 const NoteWidget = require('./gui/NoteWidget.js');
+const NoteMetadataWidget = require('./gui/NoteMetadataWidget.js');
 const FolderListWidget = require('./gui/FolderListWidget.js');
 const NoteListWidget = require('./gui/NoteListWidget.js');
 const StatusBarWidget = require('./gui/StatusBarWidget.js');
@@ -87,7 +88,10 @@ class AppGui {
 		this.rootWidget_.name = 'root';
 
 		const folderList = new FolderListWidget();
-		folderList.style = { borderBottomWidth: 1 };
+		folderList.style = {
+			borderBottomWidth: 1,
+			borderRightWidth: 1,
+		};
 		folderList.name = 'folderList';
 		folderList.vStretch = true;
 		folderList.on('currentItemChange', async () => {
@@ -127,25 +131,49 @@ class AppGui {
 		});
 
 		const noteText = new NoteWidget();
-		noteText.vStretch = true;
+		noteText.hStretch = true;
 		noteText.name = 'noteText';
-		noteText.style = { borderBottomWidth: 1 };
+		noteText.style = {
+			borderBottomWidth: 1,
+			borderLeftWidth: 1,
+		};
 		this.rootWidget_.connect(noteText, (state) => {
 			return { noteId: state.selectedNoteId };
 		});
 
+		const noteMetadata = new NoteMetadataWidget();
+		noteMetadata.hStretch = true;
+		noteMetadata.name = 'noteMetadata';
+		noteMetadata.style = {
+			borderBottomWidth: 1,
+			borderLeftWidth: 1,
+			borderRightWidth: 1,
+		};
+		this.rootWidget_.connect(noteMetadata, (state) => {
+			return { noteId: state.selectedNoteId };
+		});
+		noteMetadata.hide();
+
 		const consoleWidget = new ConsoleWidget();
 		consoleWidget.hStretch = true;
+		consoleWidget.style = {
+			borderBottomWidth: 1,
+		};
 		consoleWidget.hide();
 
 		const statusBar = new StatusBarWidget();
 		statusBar.hStretch = true;
 
+		const noteLayout = new VLayoutWidget();
+		noteLayout.name = 'noteLayout';
+		noteLayout.addChild(noteText, { type: 'stretch', factor: 1 });
+		noteLayout.addChild(noteMetadata, { type: 'stretch', factor: 1 });
+
 		const hLayout = new HLayoutWidget();
 		hLayout.name = 'hLayout';
 		hLayout.addChild(folderList, { type: 'stretch', factor: 1 });
 		hLayout.addChild(noteList, { type: 'stretch', factor: 1 });
-		hLayout.addChild(noteText, { type: 'stretch', factor: 2 });
+		hLayout.addChild(noteLayout, { type: 'stretch', factor: 2 });
 
 		const vLayout = new VLayoutWidget();
 		vLayout.name = 'vLayout';
@@ -187,6 +215,14 @@ class AppGui {
 						this.maximizeConsole();
 					}
 				}
+			},
+			canRunAlongOtherCommands: true,
+		}
+
+		shortcuts['m'] = {
+			description: _('Toggle note metadata.'),
+			action: () => {
+				this.toggleNoteMetadata();
 			},
 			canRunAlongOtherCommands: true,
 		}
@@ -253,9 +289,7 @@ class AppGui {
 	}
 
 	showConsole(doShow = true) {
-		const consoleWidget = this.widget('console');
-		consoleWidget.show(doShow);
-		this.widget('root').invalidate();
+		this.widget('console').show(doShow);
 	}
 
 	hideConsole() {
@@ -291,6 +325,18 @@ class AppGui {
 
 	consoleIsMaximized() {
 		return this.widget('console').isMaximized__ === true;
+	}
+
+	showNoteMetadata(show = true) {
+		this.widget('noteMetadata').show(show);
+	}
+
+	hideNoteMetadata() {
+		this.showNoteMetadata(false);
+	}
+
+	toggleNoteMetadata() {
+		this.showNoteMetadata(!this.widget('noteMetadata').shown);
 	}
 
 	widget(name) {
