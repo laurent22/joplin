@@ -15,7 +15,13 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Delete a note"
+msgid "Delete the currently selected note or notebook."
+msgstr ""
+
+msgid "To delete a tag, untag the associated notes."
+msgstr ""
+
+msgid "Please select the note or notebook to be deleted first."
 msgstr ""
 
 msgid "Set a todo as completed / not completed"
@@ -125,6 +131,12 @@ msgid "Y"
 msgstr ""
 
 msgid "n"
+msgstr ""
+
+msgid "N"
+msgstr ""
+
+msgid "y"
 msgstr ""
 
 #, javascript-format
@@ -330,10 +342,20 @@ msgstr ""
 msgid "Moves the notes matching <note-pattern> to [notebook]."
 msgstr ""
 
+msgid "Deletes the given notebook."
+msgstr ""
+
+msgid "Deletes the notebook without asking for confirmation."
+msgstr ""
+
+#, javascript-format
+msgid "Delete notebook \"%s\"?"
+msgstr ""
+
 msgid "Deletes the notes matching <note-pattern>."
 msgstr ""
 
-msgid "Deletes the items without asking for confirmation."
+msgid "Deletes the notes without asking for confirmation."
 msgstr ""
 
 #, javascript-format

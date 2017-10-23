@@ -15,9 +15,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.3\n"
 
+msgid "Delete the currently selected note or notebook."
+msgstr ""
+
+msgid "To delete a tag, untag the associated notes."
+msgstr ""
+
 #, fuzzy
-msgid "Delete a note"
-msgstr "Supprimer la note"
+msgid "Please select the note or notebook to be deleted first."
+msgstr "Veuillez d'abord sélectionner un carnet."
 
 #, fuzzy
 msgid "Set a todo as completed / not completed"
@@ -135,6 +141,12 @@ msgid "Y"
 msgstr ""
 
 msgid "n"
+msgstr ""
+
+msgid "N"
+msgstr ""
+
+msgid "y"
 msgstr ""
 
 #, javascript-format
@@ -371,10 +383,23 @@ msgid "Moves the notes matching <note-pattern> to [notebook]."
 msgstr "Supprime les objets correspondants à <motif>."
 
 #, fuzzy
+msgid "Deletes the given notebook."
+msgstr "Supprime le carnet."
+
+#, fuzzy
+msgid "Deletes the notebook without asking for confirmation."
+msgstr "Supprime les objets sans demander la confirmation."
+
+#, javascript-format
+msgid "Delete notebook \"%s\"?"
+msgstr "Supprimer le carnet \"%s\" ?"
+
+#, fuzzy
 msgid "Deletes the notes matching <note-pattern>."
 msgstr "Supprime les objets correspondants à <motif>."
 
-msgid "Deletes the items without asking for confirmation."
+#, fuzzy
+msgid "Deletes the notes without asking for confirmation."
 msgstr "Supprime les objets sans demander la confirmation."
 
 #, javascript-format
@@ -789,6 +814,10 @@ msgstr ""
 msgid "Welcome"
 msgstr "Bienvenue"
 
+#, fuzzy
+#~ msgid "Delete a note"
+#~ msgstr "Supprimer la note"
+
 #~ msgid "%s (%s)"
 #~ msgstr "%s (%s)"
 
@@ -834,12 +863,6 @@ msgstr "Bienvenue"
 #~ "Déplacer les notes correspondantes à <motif> vers <destination>. Si "
 #~ "<motif> est une note, elle sera déplacée vers le carnet <destination>. Si "
 #~ "<motif> est un carnet, il sera renommé <destination>."
-
-#~ msgid "Deletes a notebook."
-#~ msgstr "Supprime le carnet."
-
-#~ msgid "Delete notebook \"%s\"?"
-#~ msgstr "Supprimer le carnet \"%s\" ?"
 
 #~ msgid "No notebook is defined. Create one with `mkbook <notebook>`."
 #~ msgstr "Aucun carnet n'est défini. Créez-en un avec `mkbook <carnet>`."

@@ -72,6 +72,10 @@ class AppGui {
 		reg.setupRecurrentSync();
 	}
 
+	store() {
+		return this.store_;
+	}
+
 	renderer() {
 		return this.renderer_;
 	}
@@ -96,23 +100,38 @@ class AppGui {
 		};
 		folderList.name = 'folderList';
 		folderList.vStretch = true;
-		folderList.on('currentItemChange', async () => {
+		folderList.on('currentItemChange', async (event) => {
 			const item = folderList.currentItem;
 
-			if (item.type_ === Folder.modelType()) {
+			if (item === '-') {
+				let newIndex = event.currentIndex + (event.previousIndex < event.currentIndex ? +1 : -1);
+				let nextItem = folderList.itemAt(newIndex);
+				if (!nextItem) nextItem = folderList.itemAt(event.previousIndex);
+
+				if (!nextItem) return; // Normally not possible
+
+				let actionType = 'FOLDERS_SELECT';
+				if (nextItem.type_ === BaseModel.TYPE_TAG) actionType = 'TAGS_SELECT';
+				if (nextItem.type_ === BaseModel.TYPE_SEARCH) actionType = 'SEARCH_SELECT';
+
+				this.store_.dispatch({
+					type: actionType,
+					id: nextItem.id,
+				});
+			} else if (item.type_ === Folder.modelType()) {
 				this.store_.dispatch({
 					type: 'FOLDERS_SELECT',
-					folderId: item ? item.id : 0,
+					id: item ? item.id : null,
 				});
 			} else if (item.type_ === Tag.modelType()) {
 				this.store_.dispatch({
 					type: 'TAGS_SELECT',
-					tagId: item ? item.id : 0,
+					id: item ? item.id : null,
 				});
 			} else if (item.type_ === BaseModel.TYPE_SEARCH) {
 				this.store_.dispatch({
 					type: 'SEARCH_SELECT',
-					searchId: item ? item.id : 0,
+					id: item ? item.id : null,
 				});
 			}
 		});
@@ -214,8 +233,26 @@ class AppGui {
 		const shortcuts = {};
 
 		shortcuts['DELETE'] = {
-			description: _('Delete a note'),
-			action: 'rm $n',
+			description: _('Delete the currently selected note or notebook.'),
+			action: async () => {
+				if (this.widget('folderList').hasFocus) {
+					const item = this.widget('folderList').selectedJoplinItem;
+					if (item.type_ === BaseModel.TYPE_FOLDER) {
+						await this.processCommand('rmbook ' + item.id);
+					} else if (item.type_ === BaseModel.TYPE_TAG) {
+						this.stdout(_('To delete a tag, untag the associated notes.'));
+					} else if (item.type_ === BaseModel.TYPE_SEARCH) {
+						this.store().dispatch({
+							type: 'SEARCH_REMOVE',
+							id: item.id,
+						});
+					}
+				} else if (this.widget('noteList').hasFocus) {
+					await this.processCommand('rmnote $n');
+				} else {
+					this.stdout(_('Please select the note or notebook to be deleted first.'));
+				}
+			}
 		};
 
 		shortcuts[' '] = {

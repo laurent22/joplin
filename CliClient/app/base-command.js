@@ -72,7 +72,8 @@ class BaseCommand {
 		if (!this.prompt_) throw new Error('Prompt is undefined');
 		if (!options) options = {};
 		if (!options.type) options.type = 'boolean';
-		if (!options.answers) options.answers = [_('Y'), _('n')];
+		if (!options.booleanAnswerDefault) options.booleanAnswerDefault = 'y';
+		if (!options.answers) options.answers = options.booleanAnswerDefault === 'y' ? [_('Y'), _('n')] : [_('N'), _('y')];
 		return await this.prompt_(message, options);
 	}
 

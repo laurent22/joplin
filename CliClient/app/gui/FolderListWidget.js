@@ -2,6 +2,7 @@ const Folder = require('lib/models/folder.js').Folder;
 const Tag = require('lib/models/tag.js').Tag;
 const BaseModel = require('lib/base-model.js').BaseModel;
 const ListWidget = require('tkwidgets/ListWidget.js');
+const _ = require('lib/locale.js')._;
 
 class FolderListWidget extends ListWidget {
 
@@ -20,14 +21,16 @@ class FolderListWidget extends ListWidget {
 
 		this.itemRenderer = (item) => {
 			let output = [];
-			if (item.type_ === Folder.modelType()) {
-				output.push('[n]');
+			if (item === '-') {
+				output.push('-'.repeat(this.innerWidth));
+			} else if (item.type_ === Folder.modelType()) {
+				output.push(item.title);
 			} else if (item.type_ === Tag.modelType()) {
-				output.push('[t]');
+				output.push('[' + item.title + ']');
 			} else if (item.type_ === BaseModel.TYPE_SEARCH) {
-				output.push('[s]');
-			}
-			output.push(item.title);
+				output.push(_('Search:'));
+				output.push(item.title);
+			}			
 			// output.push(item.id.substr(0, 5));
 			return output.join(' ');
 		};
@@ -115,17 +118,31 @@ class FolderListWidget extends ListWidget {
 
 	async onWillRender() {
 		if (this.updateItems_) {
-			this.logger().info('Rebuilding items...', this.notesParentType, this.selectedItemId, this.selectedSearchId);
-			const wasSelectedItemId = this.selectedItemId;
+			this.logger().debug('Rebuilding items...', this.notesParentType, this.selectedJoplinItemId, this.selectedSearchId);
+			const wasSelectedItemId = this.selectedJoplinItemId;
 			const previousParentType = this.notesParentType;
-			this.items = this.folders.concat(this.tags).concat(this.searches);
+
+			let newItems = this.folders.slice();
+
+			if (this.tags.length) {
+				if (newItems.length) newItems.push('-');
+				newItems = newItems.concat(this.tags);
+			}
+
+			if (this.searches.length) {
+				if (newItems.length) newItems.push('-');
+				newItems = newItems.concat(this.searches);
+			}
+
+			this.items = newItems;			
+
 			this.notesParentType = previousParentType;
 			this.updateIndexFromSelectedItemId(wasSelectedItemId)
 			this.updateItems_ = false;
 		}
 	}
 
-	get selectedItemId() {
+	get selectedJoplinItemId() {
 		if (!this.notesParentType) return '';
 		if (this.notesParentType === 'Folder') return this.selectedFolderId;
 		if (this.notesParentType === 'Tag') return this.selectedTagId;
@@ -133,10 +150,15 @@ class FolderListWidget extends ListWidget {
 		throw new Error('Unknown parent type: ' + this.notesParentType);
 	}
 
+	get selectedJoplinItem() {
+		const id = this.selectedJoplinItemId;
+		const index = this.itemIndexByKey('id', id);
+		return this.itemAt(index);
+	}
+
 	updateIndexFromSelectedItemId(itemId = null) {
-		if (itemId === null) itemId = this.selectedItemId;
+		if (itemId === null) itemId = this.selectedJoplinItemId;
 		const index = this.itemIndexByKey('id', itemId);
-		//this.logger().info('Setting index to', this.notesParentType, index);
 		this.currentIndex = index >= 0 ? index : 0;
 	}
 

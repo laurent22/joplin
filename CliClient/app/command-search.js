@@ -43,7 +43,7 @@ class Command extends BaseCommand {
 
 		this.dispatch({
 			type: 'SEARCH_SELECT',
-			searchId: searchId,
+			id: searchId,
 		});
 
 		// let fields = Note.previewFields();
