@@ -1,6 +1,7 @@
 import { Logger } from 'lib/logger.js';
 import { Folder } from 'lib/models/folder.js';
 import { Tag } from 'lib/models/tag.js';
+import { BaseModel } from 'lib/base-model.js';
 import { Note } from 'lib/models/note.js';
 import { cliUtils } from './cli-utils.js';
 import { reducer, defaultState } from 'lib/reducer.js';
@@ -108,6 +109,11 @@ class AppGui {
 					type: 'TAGS_SELECT',
 					tagId: item ? item.id : 0,
 				});
+			} else if (item.type_ === BaseModel.TYPE_SEARCH) {
+				this.store_.dispatch({
+					type: 'SEARCH_SELECT',
+					searchId: item ? item.id : 0,
+				});
 			}
 		});
 		this.rootWidget_.connect(folderList, (state) => {
@@ -116,9 +122,11 @@ class AppGui {
 			return {
 				selectedFolderId: state.selectedFolderId,
 				selectedTagId: state.selectedTagId,
+				selectedSearchId: state.selectedSearchId,
 				notesParentType: state.notesParentType,
 				folders: state.folders,
 				tags: state.tags,
+				searches: state.searches,
 			};
 		});
 

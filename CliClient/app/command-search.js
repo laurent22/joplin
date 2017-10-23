@@ -6,6 +6,7 @@ import { Folder } from 'lib/models/folder.js';
 import { Note } from 'lib/models/note.js';
 import { sprintf } from 'sprintf-js';
 import { time } from 'lib/time-utils.js';
+import { uuid } from 'lib/uuid.js';
 
 class Command extends BaseCommand {
 
@@ -27,34 +28,52 @@ class Command extends BaseCommand {
 			if (!folder) throw new Error(_('Cannot find "%s".', folderTitle));
 		}
 
-		let fields = Note.previewFields();
-		fields.push('body');
-		const notes = await Note.previews(folder ? folder.id : null, {
-			fields: fields,
-			anywherePattern: '*' + pattern + '*',
+		const searchId = uuid.create();
+
+		this.dispatch({
+			type: 'SEARCH_ADD',
+			search: {
+				id: searchId,
+				title: pattern,
+				query_pattern: pattern,
+				query_folder_id: folder ? folder.id : '',
+				type_: BaseModel.TYPE_SEARCH,
+			},
 		});
 
-		const fragmentLength = 50;
+		this.dispatch({
+			type: 'SEARCH_SELECT',
+			searchId: searchId,
+		});
 
-		let parents = {};
+		// let fields = Note.previewFields();
+		// fields.push('body');
+		// const notes = await Note.previews(folder ? folder.id : null, {
+		// 	fields: fields,
+		// 	anywherePattern: '*' + pattern + '*',
+		// });
 
-		for (let i = 0; i < notes.length; i++) {
-			const note = notes[i];
-			const parent = parents[note.parent_id] ? parents[note.parent_id] : await Folder.load(note.parent_id);
-			parents[note.parent_id] = parent;
+		// const fragmentLength = 50;
 
-			const idx = note.body.indexOf(pattern);
-			let line = '';
-			if (idx >= 0) {
-				let fragment = note.body.substr(Math.max(0, idx - fragmentLength / 2), fragmentLength);
-				fragment = fragment.replace(/\n/g, ' ');
-				line = sprintf('%s: %s / %s: %s', BaseModel.shortId(note.id), parent.title, note.title, fragment);
-			} else {
-				line = sprintf('%s: %s / %s', BaseModel.shortId(note.id), parent.title, note.title);
-			}
+		// let parents = {};
 
-			this.stdout(line);
-		}
+		// for (let i = 0; i < notes.length; i++) {
+		// 	const note = notes[i];
+		// 	const parent = parents[note.parent_id] ? parents[note.parent_id] : await Folder.load(note.parent_id);
+		// 	parents[note.parent_id] = parent;
+
+		// 	const idx = note.body.indexOf(pattern);
+		// 	let line = '';
+		// 	if (idx >= 0) {
+		// 		let fragment = note.body.substr(Math.max(0, idx - fragmentLength / 2), fragmentLength);
+		// 		fragment = fragment.replace(/\n/g, ' ');
+		// 		line = sprintf('%s: %s / %s: %s', BaseModel.shortId(note.id), parent.title, note.title, fragment);
+		// 	} else {
+		// 		line = sprintf('%s: %s / %s', BaseModel.shortId(note.id), parent.title, note.title);
+		// 	}
+
+		// 	this.stdout(line);
+		// }
 	}
 
 }

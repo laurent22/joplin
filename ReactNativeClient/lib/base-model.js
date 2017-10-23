@@ -350,6 +350,7 @@ BaseModel.TYPE_SETTING = 3;
 BaseModel.TYPE_RESOURCE = 4;
 BaseModel.TYPE_TAG = 5;
 BaseModel.TYPE_NOTE_TAG = 6;
+BaseModel.TYPE_SEARCH = 7;
 
 BaseModel.db_ = null;
 BaseModel.dispatch = function(o) {};

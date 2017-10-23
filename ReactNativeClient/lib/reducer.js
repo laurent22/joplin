@@ -6,9 +6,11 @@ const defaultState = {
 	notesParentType: null,
 	folders: [],
 	tags: [],
+	searches: [],
 	selectedNoteId: null,
 	selectedFolderId: null,
 	selectedTagId: null,
+	selectedSearchId: null,
 	selectedItemType: 'note',
 	showSideMenu: false,
 	screens: {},
@@ -360,6 +362,39 @@ const reducer = (state = defaultState, action) => {
 
 				newState = Object.assign({}, state);
 				newState.searchQuery = action.query.trim();
+				break;
+
+			case 'SEARCH_ADD':
+
+				newState = Object.assign({}, state);
+				let searches = newState.searches.slice();
+				searches.push(action.search);
+				newState.searches = searches;
+				break;
+
+			case 'SEARCH_REMOVE':
+				
+				let foundIndex = -1;
+				for (let i = 0; i < state.searches.length; i++) {
+					if (state.searches[i].id === action.searchId) {
+						foundIndex = i;
+						break;
+					}
+				}
+
+				if (foundIndex >= 0) {
+					newState = Object.assign({}, state);
+					let newSearches = newState.searches.slice();
+					newSearches.splice(foundIndex, 1);
+					newState.searches = newSearches;
+				}
+				break;			
+
+			case 'SEARCH_SELECT':
+
+				newState = Object.assign({}, state);
+				newState.selectedSearchId = action.searchId;
+				newState.notesParentType = 'Search';
 				break;
 
 			case 'SET_APP_STATE':
