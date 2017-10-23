@@ -470,6 +470,7 @@ class Application {
 
 	reducerActionToString(action) {
 		let o = [action.type];
+		if (action.id) o.push(action.id);
 		if (action.noteId) o.push(action.noteId);
 		if (action.folderId) o.push(action.folderId);
 		if (action.tagId) o.push(action.tagId);
@@ -492,7 +493,7 @@ class Application {
 			}
 
 			if (action.type == 'TAGS_SELECT') {
-				await this.refreshNotes(Tag.modelType(), action.tagId);
+				await this.refreshNotes(Tag.modelType(), action.id);
 			}
 
 			if (action.type == 'SEARCH_SELECT') {

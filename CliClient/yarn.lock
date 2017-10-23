@@ -805,8 +805,8 @@ camelcase@^4.1.0:
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-4.1.0.tgz#d545635be1e33c542649c69173e5de6acfae34dd"
 
 caniuse-lite@^1.0.30000744:
-  version "1.0.30000748"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000748.tgz#44c8d6da52ad65a5d7b9dca4efebd0bdd982ba09"
+  version "1.0.30000749"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000749.tgz#2ff382865aead8cca35dacfbab04f58effa4c01c"
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -1815,9 +1815,9 @@ node-bitmap@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/node-bitmap/-/node-bitmap-0.0.1.tgz#180eac7003e0c707618ef31368f62f84b2a69091"
 
-node-emoji@^1.8.1:
+"node-emoji@git+https://github.com/laurent22/node-emoji.git":
   version "1.8.1"
-  resolved "https://registry.yarnpkg.com/node-emoji/-/node-emoji-1.8.1.tgz#6eec6bfb07421e2148c75c6bba72421f8530a826"
+  resolved "git+https://github.com/laurent22/node-emoji.git#9fa01eac463e94dde1316ef8c53089eeef4973b5"
   dependencies:
     lodash.toarray "^4.4.0"
 
@@ -2470,11 +2470,11 @@ through@^2.3.4:
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
 
 tkwidgets@^0.5.3:
-  version "0.5.12"
-  resolved "https://registry.yarnpkg.com/tkwidgets/-/tkwidgets-0.5.12.tgz#f3eb4393a6b0eaeef8587eb542c5e7fe1f293d8e"
+  version "0.5.13"
+  resolved "https://registry.yarnpkg.com/tkwidgets/-/tkwidgets-0.5.13.tgz#2615145554ecafcf725ecc251863d9cea48b7c7c"
   dependencies:
     chalk "^2.1.0"
-    node-emoji "^1.8.1"
+    node-emoji "https://github.com/laurent22/node-emoji"
     slice-ansi "^1.0.0"
     string-width "^2.1.1"
     terminal-kit "^1.13.11"

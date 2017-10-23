@@ -291,7 +291,7 @@ class AppGui {
 			action: async () => {
 				const cmd = await this.widget('statusBar').prompt();
 				if (!cmd) return;
-				this.stdout('> ' + cmd);
+				this.stdout(chalk.cyan.bold('> ' + cmd));
 				await this.processCommand(cmd);
 			},
 		};
