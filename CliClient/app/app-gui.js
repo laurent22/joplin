@@ -230,6 +230,30 @@ class AppGui {
 		this.rootWidget_.addChild(win1);
 	}
 
+	showModalOverlay(text) {
+		if (!this.widget('overlayWindow')) {
+			const textWidget = new TextWidget();
+			textWidget.hStretch = true;
+			textWidget.vStretch = true;
+			textWidget.text = 'testing';
+			textWidget.name = 'overlayText';
+
+			const win = new WindowWidget();
+			win.name = 'overlayWindow';
+			win.addChild(textWidget);
+
+			this.rootWidget_.addChild(win);
+		}
+
+		this.widget('overlayWindow').activate();
+		this.widget('overlayText').text = text;
+	}
+
+	hideModalOverlay() {
+		if (this.widget('overlayWindow')) this.widget('overlayWindow').hide();
+		this.widget('mainWindow').activate();
+	}
+
 	addCommandToConsole(cmd) {
 		this.stdout(chalk.cyan.bold('> ' + cmd));
 	}

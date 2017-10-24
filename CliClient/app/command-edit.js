@@ -74,8 +74,9 @@ class Command extends BaseCommand {
 
 			this.logger().info('Disabling fullscreen...');
 
-			this.stdout(_('Starting to edit note. Close the editor to get back to the prompt.'));
+			//this.stdout(_('Starting to edit note. Close the editor to get back to the prompt.'));
 
+			app().gui().showModalOverlay(_('Starting to edit note. Close the editor to get back to the prompt.'));
 			app().gui().forceRender();
 			const termState = app().gui().term().saveState();
 
@@ -83,6 +84,7 @@ class Command extends BaseCommand {
 			spawnSync(editorPath, editorArgs, { stdio: 'inherit' });
 
 			app().gui().term().restoreState(termState);
+			app().gui().hideModalOverlay();
 			app().gui().forceRender();
 
 			// -------------------------------------------------------------------------

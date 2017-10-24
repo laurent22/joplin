@@ -419,6 +419,8 @@ class Application {
 			stdout: (text) => { console.info(text); },
 			fullScreen: (b=true) => {},
 			exit: () => {},
+			showModalOverlay: (text) => {},
+			hideModalOverlay: () => {},
 		};
 	}
 
