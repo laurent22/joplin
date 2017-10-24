@@ -77,7 +77,7 @@ function renderCommandHelp(cmd, width = null) {
 			
 			if (defaultString !== null) desc.push(_('Default: %s', defaultString));
 
-			return [md.key, desc.join('\n')];
+			return [md.key, desc.join("\n")];
 		};
 
 		output.push('');

@@ -212,7 +212,6 @@ class Setting extends BaseModel {
 
 	static enumOptionsDoc(key, templateString = null) {
 		if (templateString === null) templateString = '%s: %s';
-		console.info(templateString);
 		const options = this.enumOptions(key);
 		let output = [];
 		for (let n in options) {

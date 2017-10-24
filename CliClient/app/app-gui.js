@@ -259,7 +259,7 @@ class AppGui {
 	}
 
 	addCommandToConsole(cmd) {
-		this.stdout(chalk.cyan.bold('> ' + cmd));
+		this.stdout(chalk.cyan.bold('> ' + cmd));	
 	}
 
 	setupShortcuts() {
@@ -524,6 +524,8 @@ class AppGui {
 		} catch (error) {
 			this.stdout(error.message);
 		}
+
+		this.widget('console').scrollBottom();
 	}
 
 	async updateFolderList() {
