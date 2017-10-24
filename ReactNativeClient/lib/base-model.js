@@ -109,6 +109,15 @@ class BaseModel {
 		return id.substr(0, 5);
 	}
 
+	// static minimalPartialId(id) {
+	// 	let length = 2;
+	// 	while (true) {
+	// 		const partialId = id.substr(0, length);
+	// 		const r = await this.db().selectOne('SELECT count(*) as total FROM `' + this.tableName() + '` WHERE `id` LIKE ?', [partialId + '%']);
+	// 		if (r['total'] <= 1) return partialId;
+	// 	}
+	// }
+
 	static loadByPartialId(partialId) {
 		return this.modelSelectAll('SELECT * FROM `' + this.tableName() + '` WHERE `id` LIKE ?', [partialId + '%']);
 	}

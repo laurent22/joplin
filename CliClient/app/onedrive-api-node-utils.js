@@ -1,6 +1,6 @@
 import { _ } from 'lib/locale.js'
+import { netUtils } from 'lib/net-utils.js'
 
-const tcpPortUsed = require('tcp-port-used');
 const http = require("http");
 const urlParser = require("url");
 const FormData = require('form-data');
@@ -43,16 +43,7 @@ class OneDriveApiNodeUtils {
 
 		this.api().setAuth(null);
 
-		let ports = this.possibleOAuthDancePorts();
-		let port = null;
-		for (let i = 0; i < ports.length; i++) {
-			let inUse = await tcpPortUsed.check(ports[i]);
-			if (!inUse) {
-				port = ports[i];
-				break;
-			}
-		}
-
+		const port = netUtils.findAvailablePort(this.possibleOAuthDancePorts());
 		if (!port) throw new Error(_('All potential ports are in use - please report the issue at %s', 'https://github.com/laurent22/joplin'));
 
 		let authCodeUrl = this.api().authCodeUrl('http://localhost:' + port);

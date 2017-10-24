@@ -5,7 +5,7 @@ import { mime } from 'lib/mime-utils.js';
 import { filename } from 'lib/path-utils.js';
 import { FsDriverDummy } from 'lib/fs-driver-dummy.js';
 import { markdownUtils } from 'lib/markdown-utils.js';
-import lodash  from 'lodash';
+import lodash from 'lodash';
 
 class Resource extends BaseItem {
 
@@ -59,7 +59,7 @@ class Resource extends BaseItem {
 		return filename(path);
 	}
 
-	static content(resource) {
+	static async content(resource) {
 		return this.fsDriver().readFile(this.fullPath(resource));
 	}
 

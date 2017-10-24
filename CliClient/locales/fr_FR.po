@@ -100,6 +100,10 @@ msgstr "Affiche l'aide pour la commande donnée."
 msgid "Exits the application."
 msgstr "Quitter le logiciel."
 
+#, fuzzy
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "Annulation..."
+
 msgid "Only Bash is currently supported for autocompletion."
 msgstr ""
 

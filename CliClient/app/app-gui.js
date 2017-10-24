@@ -23,6 +23,7 @@ const RootWidget = require('tkwidgets/RootWidget.js');
 const WindowWidget = require('tkwidgets/WindowWidget.js');
 
 const NoteWidget = require('./gui/NoteWidget.js');
+const ResourceServer = require('./ResourceServer.js');
 const NoteMetadataWidget = require('./gui/NoteMetadataWidget.js');
 const FolderListWidget = require('./gui/FolderListWidget.js');
 const NoteListWidget = require('./gui/NoteListWidget.js');
@@ -229,6 +230,10 @@ class AppGui {
 		this.rootWidget_.addChild(win1);
 	}
 
+	addCommandToConsole(cmd) {
+		this.stdout(chalk.cyan.bold('> ' + cmd));
+	}
+
 	setupShortcuts() {
 		const shortcuts = {};
 
@@ -291,7 +296,7 @@ class AppGui {
 			action: async () => {
 				const cmd = await this.widget('statusBar').prompt();
 				if (!cmd) return;
-				this.stdout(chalk.cyan.bold('> ' + cmd));
+				this.addCommandToConsole(cmd);
 				await this.processCommand(cmd);
 			},
 		};
@@ -327,17 +332,17 @@ class AppGui {
 
 		shortcuts['nn'] = {
 			description: _('Create a new note'),
-			action: { type: 'prompt', initialText: 'mknote ' },
+			action: { type: 'prompt', initialText: 'mknote ""', cursorPosition: -2 },
 		}
 
 		shortcuts['nt'] = {
 			description: _('Create a new todo'),
-			action: { type: 'prompt', initialText: 'mktodo ' },
+			action: { type: 'prompt', initialText: 'mktodo ""', cursorPosition: -2 },
 		}
 
 		shortcuts['nb'] = {
 			description: _('Create a new notebook'),
-			action: { type: 'prompt', initialText: 'mkbook ' },
+			action: { type: 'prompt', initialText: 'mkbook ""', cursorPosition: -2 },
 		}
 
 		return shortcuts;
@@ -526,6 +531,11 @@ class AppGui {
 		this.updateStatusBarMessage();
 	}
 
+	exit() {
+		this.fullScreen(false);
+		this.resourceServer_.stop();
+	}
+
 	updateStatusBarMessage() {
 		const consoleWidget = this.widget('console');
 
@@ -547,12 +557,58 @@ class AppGui {
 		if (msg !== '') this.widget('statusBar').setItemAt(0, msg);
 	}
 
+	setupResourceServer() {
+		const linkStyle = chalk.blue.underline;
+		const noteTextWidget = this.widget('noteText');
+		const resourceIdRegex = /^:\/[a-f0-9]+$/i
+
+		const regularUrlRenderer = (url) => {
+			if (!url) return url;
+			const l = url.toLowerCase();
+			if (l.indexOf('http://') === 0 || l.indexOf('https://') === 0 || l.indexOf('www.') === 0) {
+				return linkStyle(url);
+			}
+			return url;
+		}
+
+		// By default, before the server is started, only the regular
+		// URLs appear in blue.
+		noteTextWidget.markdownRendererOptions = {
+			linkUrlRenderer: (url) => {
+				if (resourceIdRegex.test(url)) {
+					return url;
+				} else {
+					return regularUrlRenderer(url);
+				}
+			},
+		};
+
+		this.resourceServer_ = new ResourceServer();
+		this.resourceServer_.setLogger(this.app().logger());
+		this.resourceServer_.start().then(() => {
+			if (this.resourceServer_.baseUrl()) {
+				noteTextWidget.markdownRendererOptions = {
+					linkUrlRenderer: (url) => {
+						if (resourceIdRegex.test(url)) {
+							const resourceId = url.substr(2);
+							return linkStyle(this.resourceServer_.baseUrl() + '/' + resourceId.substr(0, 7));
+						} else {
+							return regularUrlRenderer(url);
+						}
+					},
+				};
+			}
+		});
+	}
+
 	async start() {
 		const term = this.term();
 
 		this.fullScreen();
 
 		try {
+			this.setupResourceServer();
+
 			this.renderer_.start();
 
 			const statusBar = this.widget('statusBar');
@@ -630,8 +686,10 @@ class AppGui {
 						await cmd.action();
 					} else if (typeof cmd.action === 'object') {
 						if (cmd.action.type === 'prompt') {
-							const commandString = await statusBar.prompt(cmd.action.initialText ? cmd.action.initialText : '');
-							this.stdout(commandString);
+							let promptOptions = {};
+							if ('cursorPosition' in cmd.action) promptOptions.cursorPosition = cmd.action.cursorPosition;
+							const commandString = await statusBar.prompt(cmd.action.initialText ? cmd.action.initialText : '', null, promptOptions);
+							this.addCommandToConsole(commandString);
 							await this.processCommand(commandString);
 						} else {
 							throw new Error('Unknown command: ' + JSON.stringify(cmd.action));

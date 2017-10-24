@@ -90,6 +90,9 @@ msgstr ""
 msgid "Exits the application."
 msgstr ""
 
+msgid "Cancelling background synchronisation... Please wait."
+msgstr ""
+
 msgid "Only Bash is currently supported for autocompletion."
 msgstr ""
 

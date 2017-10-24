@@ -63,7 +63,7 @@ class Command extends BaseCommand {
 
 		await Resource.save(resource, { isNew: true });
 
-		note.body += "\n" + Resource.markdownTag(resource);
+		note.body += "\n\n" + Resource.markdownTag(resource);
 		await Note.save(note);
 	}
 

@@ -14,6 +14,7 @@ import { _ } from 'lib/locale.js';
 const reg = {};
 
 reg.initSynchronizerStates_ = {};
+reg.synchronizers_ = {};
 
 reg.logger = () => {
 	if (!reg.logger_) {
@@ -96,7 +97,6 @@ reg.initSynchronizer_ = async (syncTargetId) => {
 }
 
 reg.synchronizer = async (syncTargetId) => {
-	if (!reg.synchronizers_) reg.synchronizers_ = [];
 	if (reg.synchronizers_[syncTargetId]) return reg.synchronizers_[syncTargetId];
 	if (!reg.db()) throw new Error('Cannot initialize synchronizer: db not initialized');
 
@@ -191,6 +191,7 @@ reg.scheduleSync = async (delay = null) => {
 
 reg.syncStarted = async () => {
 	const syncTarget = Setting.value('sync.target');
+	if (!reg.synchronizers_[syncTarget]) return false;
 	if (!reg.syncHasAuth(syncTarget)) return false;
 	const sync = await reg.synchronizer(syncTarget);
 	return sync.state() != 'idle';

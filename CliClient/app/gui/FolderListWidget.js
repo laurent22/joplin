@@ -32,7 +32,7 @@ class FolderListWidget extends ListWidget {
 				output.push(item.title);
 			}			
 
-			if (item && item.id) output.push(item.id.substr(0, 5));
+			// if (item && item.id) output.push(item.id.substr(0, 5));
 			
 			return output.join(' ');
 		};

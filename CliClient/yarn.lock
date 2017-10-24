@@ -14,8 +14,8 @@ ajv@^4.9.1:
     json-stable-stringify "^1.0.1"
 
 ajv@^5.1.0:
-  version "5.2.4"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-5.2.4.tgz#3daf9a8b67221299fdae8d82d117ed8e6c80244b"
+  version "5.2.5"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-5.2.5.tgz#b637234d3e2675eb5f79fc652242a853a48cb49f"
   dependencies:
     co "^4.6.0"
     fast-deep-equal "^1.0.0"
@@ -832,8 +832,8 @@ chalk@^1.1.3:
     supports-color "^2.0.0"
 
 chalk@^2.1.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.2.0.tgz#477b3bf2f9b8fd5ca9e429747e37f724ee7af240"
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.3.0.tgz#b5ea48efc9c1793dccc9b4767c93914d3f2d52ba"
   dependencies:
     ansi-styles "^3.1.0"
     escape-string-regexp "^1.0.5"
@@ -1815,9 +1815,9 @@ node-bitmap@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/node-bitmap/-/node-bitmap-0.0.1.tgz#180eac7003e0c707618ef31368f62f84b2a69091"
 
-"node-emoji@https://github.com/laurent22/node-emoji":
+"node-emoji@git+https://github.com/laurent22/node-emoji.git":
   version "1.8.1"
-  resolved "https://github.com/laurent22/node-emoji#9fa01eac463e94dde1316ef8c53089eeef4973b5"
+  resolved "git+https://github.com/laurent22/node-emoji.git#9fa01eac463e94dde1316ef8c53089eeef4973b5"
   dependencies:
     lodash.toarray "^4.4.0"
 
@@ -2455,8 +2455,8 @@ tcp-port-used@^0.1.2:
     q "0.9.7"
 
 terminal-kit@^1.13.11:
-  version "1.13.13"
-  resolved "https://registry.yarnpkg.com/terminal-kit/-/terminal-kit-1.13.13.tgz#fa53dbc17f5fb7e1630784274a7e57a10b1c0201"
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/terminal-kit/-/terminal-kit-1.14.0.tgz#1cb89c22bf697152a3f8e54569c61d5084ed690a"
   dependencies:
     async-kit "^2.2.3"
     get-pixels "^3.3.0"
