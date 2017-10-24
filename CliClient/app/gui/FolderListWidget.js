@@ -31,7 +31,9 @@ class FolderListWidget extends ListWidget {
 				output.push(_('Search:'));
 				output.push(item.title);
 			}			
-			// output.push(item.id.substr(0, 5));
+
+			if (item && item.id) output.push(item.id.substr(0, 5));
+			
 			return output.join(' ');
 		};
 	}

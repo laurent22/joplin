@@ -36,6 +36,11 @@ class Application {
 		this.showStackTraces_ = false;
 		this.gui_ = null;
 		this.eventEmitter_ = new EventEmitter();
+
+		// Note: this is basically a cache of state.selectedFolderId. It should *only* 
+		// be derived from the state and not set directly since that would make the
+		// state and UI out of sync.
+		this.currentFolder_ = null; 
 	}
 
 	gui() {
@@ -68,9 +73,6 @@ class Application {
 	}
 
 	switchCurrentFolder(folder) {
-		this.currentFolder_ = folder;
-		Setting.setValue('activeFolderId', folder ? folder.id : '');
-
 		this.dispatch({
 			type: 'FOLDERS_SELECT',
 			id: folder ? folder.id : '',
@@ -489,6 +491,7 @@ class Application {
 
 			if (action.type == 'FOLDERS_SELECT') {
 				Setting.setValue('activeFolderId', newState.selectedFolderId);
+				this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
 				await this.refreshNotes(Folder.modelType(), newState.selectedFolderId);
 			}
 
@@ -586,10 +589,14 @@ class Application {
 		setLocale(Setting.value('locale'));
 
 		let currentFolderId = Setting.value('activeFolderId');
-		this.currentFolder_ = null;
-		if (currentFolderId) this.currentFolder_ = await Folder.load(currentFolderId);
-		if (!this.currentFolder_) this.currentFolder_ = await Folder.defaultFolder();
-		Setting.setValue('activeFolderId', this.currentFolder_ ? this.currentFolder_.id : '');
+		let currentFolder = null;
+		if (currentFolderId) currentFolder = await Folder.load(currentFolderId);
+		if (!currentFolder) currentFolder = await Folder.defaultFolder();
+		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
+
+		setInterval(() => {
+			this.logger().debug(Setting.value('activeFolderId'), this.store().getState().settings.activeFolderId, this.store().getState().selectedFolderId);
+		}, 1000);
 
 		// If we have some arguments left at this point, it's a command
 		// so execute it.
