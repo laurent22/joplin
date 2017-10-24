@@ -8,15 +8,15 @@ import { Note } from 'lib/models/note.js';
 class Command extends BaseCommand {
 
 	usage() {
-		return 'mv <note-pattern> [notebook]';
+		return 'mv <note> [notebook]';
 	}
 
 	description() {
-		return _('Moves the notes matching <note-pattern> to [notebook].');
+		return _('Moves the notes matching <note> to [notebook].');
 	}
 
 	async action(args) {
-		const pattern = args['note-pattern'];
+		const pattern = args['note'];
 		const destination = args['notebook'];
 		
 		const folder = await Folder.loadByField('title', destination);

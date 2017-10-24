@@ -33,10 +33,10 @@ msgstr ""
 msgid "Set a todo as completed / not completed"
 msgstr ""
 
-msgid "Toggle console between maximized/minimized/hidden/visible."
+msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
 msgstr ""
 
-msgid "Toggle note metadata."
+msgid "[t]oggle note [m]etadata."
 msgstr ""
 
 msgid "Enter command line mode"
@@ -51,13 +51,19 @@ msgstr ""
 msgid "Exit the application."
 msgstr ""
 
-msgid "Create a new note"
+msgid "Create a [n]ew [n]ote"
 msgstr ""
 
-msgid "Create a new todo"
+msgid "Create a [n]ew [t]odo"
 msgstr ""
 
-msgid "Create a new notebook"
+msgid "Create a [n]ew [n]otebook"
+msgstr ""
+
+msgid "Copy the note to a notebook."
+msgstr ""
+
+msgid "Move the note to a notebook."
 msgstr ""
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
@@ -365,7 +371,7 @@ msgstr ""
 msgid "Creates a new todo."
 msgstr ""
 
-msgid "Moves the notes matching <note-pattern> to [notebook]."
+msgid "Moves the notes matching <note> to [notebook]."
 msgstr ""
 
 msgid "Deletes the given notebook."
