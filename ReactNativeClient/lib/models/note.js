@@ -41,6 +41,34 @@ class Note extends BaseItem {
 		return super.serialize(note, 'note', fieldNames);
 	}
 
+	static minimalSerializeForDisplay(note) {
+		let n = Object.assign({}, note);
+
+		let fieldNames = this.fieldNames();
+
+		if (!n.is_conflict) lodash.pull(fieldNames, 'is_conflict');
+		if (!Number(n.latitude)) lodash.pull(fieldNames, 'latitude');
+		if (!Number(n.longitude)) lodash.pull(fieldNames, 'longitude');
+		if (!Number(n.altitude)) lodash.pull(fieldNames, 'altitude');
+		if (!n.author) lodash.pull(fieldNames, 'author');
+		if (!n.source_url) lodash.pull(fieldNames, 'source_url');
+		if (!n.is_todo) {
+			lodash.pull(fieldNames, 'is_todo');
+			lodash.pull(fieldNames, 'todo_due');
+			lodash.pull(fieldNames, 'todo_completed');
+		}
+		if (!n.application_data) lodash.pull(fieldNames, 'application_data');
+
+		lodash.pull(fieldNames, 'type_');
+		lodash.pull(fieldNames, 'title');
+		lodash.pull(fieldNames, 'body');
+		lodash.pull(fieldNames, 'created_time');
+		lodash.pull(fieldNames, 'updated_time');
+		lodash.pull(fieldNames, 'order');
+
+		return super.serialize(n, 'note', fieldNames);
+	}
+
 	static defaultTitle(note) {
 		if (note.title && note.title.length) return note.title;
 
