@@ -161,7 +161,7 @@ class AppGui {
 			let note = noteList.currentItem;
 			this.store_.dispatch({
 				type: 'NOTES_SELECT',
-				noteId: note ? note.id : 0,
+				noteId: note ? note.id : null,
 			});
 		});
 		this.rootWidget_.connect(noteList, (state) => {
