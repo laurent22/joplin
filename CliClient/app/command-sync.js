@@ -18,6 +18,7 @@ class Command extends BaseCommand {
 		super();
 		this.syncTarget_ = null;
 		this.releaseLockFn_ = null;
+		this.oneDriveApiUtils_ = null;
 	}
 
 	usage() {
@@ -81,6 +82,14 @@ class Command extends BaseCommand {
 			throw error;
 		}
 
+		const cleanUp = () => {
+			cliUtils.redrawDone();
+			if (this.releaseLockFn_) {
+				this.releaseLockFn_();
+				this.releaseLockFn_ = null;
+			}
+		};
+
 		try {
 			this.syncTarget_ = Setting.value('sync.target');
 			if (args.options.target) this.syncTarget_ = args.options.target;
@@ -88,12 +97,16 @@ class Command extends BaseCommand {
 			if (this.syncTarget_ == Setting.SYNC_TARGET_ONEDRIVE && !reg.syncHasAuth(this.syncTarget_)) {
 				app().gui().showConsole();
 				app().gui().maximizeConsole();
-				const oneDriveApiUtils = new OneDriveApiNodeUtils(reg.oneDriveApi());
-				const auth = await oneDriveApiUtils.oauthDance({
+				this.oneDriveApiUtils_ = new OneDriveApiNodeUtils(reg.oneDriveApi());
+				const auth = await this.oneDriveApiUtils_.oauthDance({
 					log: (...s) => { return this.stdout(...s); }
 				});
+				this.oneDriveApiUtils_ = null;
 				Setting.setValue('sync.3.auth', auth ? JSON.stringify(auth) : null);
-				if (!auth) return;
+				if (!auth) {
+					this.stdout(_('Authentication was not completed (did not receive an authentication token).'));
+					return cleanUp();
+				}
 			}
 			
 			let sync = await reg.synchronizer(this.syncTarget_);
@@ -135,18 +148,19 @@ class Command extends BaseCommand {
 
 			await app().refreshCurrentFolder();
 		} catch (error) {
-			cliUtils.redrawDone();
-			this.releaseLockFn_();
-			this.releaseLockFn_ = null;
+			cleanUp();
 			throw error;
 		}
 
-		cliUtils.redrawDone();
-		this.releaseLockFn_();
-		this.releaseLockFn_ = null;
+		cleanUp();
 	}
 
 	async cancel() {
+		if (this.oneDriveApiUtils_) {
+			this.oneDriveApiUtils_.cancelOAuthDance();
+			return;
+		}
+
 		const target = this.syncTarget_ ? this.syncTarget_ : Setting.value('sync.target');
 
 		cliUtils.redrawDone();

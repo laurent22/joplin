@@ -1,6 +1,7 @@
 const BaseWidget = require('tkwidgets/BaseWidget.js');
 const chalk = require('chalk');
 const termutils = require('tkwidgets/framework/termutils.js');
+const stripAnsi = require('strip-ansi');
 
 class StatusBarWidget extends BaseWidget {
 
@@ -22,7 +23,7 @@ class StatusBarWidget extends BaseWidget {
 	}
 
 	setItemAt(index, text) {
-		this.items_[index] = text;
+		this.items_[index] = stripAnsi(text).trim();
 		this.invalidate();
 	}
 
@@ -33,8 +34,8 @@ class StatusBarWidget extends BaseWidget {
 
 		this.promptState_ = {
 			promise: null,
-			initialText: initialText,
-			promptString: promptString,
+			initialText: stripAnsi(initialText),
+			promptString: stripAnsi(promptString),
 		};
 
 		this.promptState_.promise = new Promise((resolve, reject) => {
@@ -133,7 +134,8 @@ class StatusBarWidget extends BaseWidget {
 		} else {
 
 			for (let i = 0; i < this.items_.length; i++) {
-				this.term.write(textStyle(this.items_[i].trim()));
+				const s = this.items_[i].substr(0, this.innerWidth - 1);
+				this.term.write(textStyle(s));
 			}
 
 		}

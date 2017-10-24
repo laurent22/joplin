@@ -436,6 +436,10 @@ msgid ""
 "operation."
 msgstr ""
 
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr ""
+
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
 msgstr "Cible de la synchronisation : %s (%s)"

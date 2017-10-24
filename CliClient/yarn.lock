@@ -1815,9 +1815,9 @@ node-bitmap@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/node-bitmap/-/node-bitmap-0.0.1.tgz#180eac7003e0c707618ef31368f62f84b2a69091"
 
-"node-emoji@git+https://github.com/laurent22/node-emoji.git":
+"node-emoji@https://github.com/laurent22/node-emoji":
   version "1.8.1"
-  resolved "git+https://github.com/laurent22/node-emoji.git#9fa01eac463e94dde1316ef8c53089eeef4973b5"
+  resolved "https://github.com/laurent22/node-emoji#9fa01eac463e94dde1316ef8c53089eeef4973b5"
   dependencies:
     lodash.toarray "^4.4.0"
 
