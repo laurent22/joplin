@@ -18,6 +18,10 @@ class Command extends BaseCommand {
 		return _('Searches for the given <pattern> in all the notes.');
 	}
 
+	compatibleUis() {
+		return ['gui'];
+	}
+
 	async action(args) {
 		let pattern = args['pattern'];
 		let folderTitle = args['notebook'];

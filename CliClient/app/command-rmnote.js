@@ -13,10 +13,6 @@ class Command extends BaseCommand {
 		return 'rmnote <note-pattern>';
 	}
 
-	aliases() {
-		return ['rm'];
-	}
-
 	description() {
 		return _('Deletes the notes matching <note-pattern>.');
 	}

@@ -18,6 +18,10 @@ class Command extends BaseCommand {
 	description() {
 		return _('Displays the notes in the current notebook. Use `ls /` to display the list of notebooks.');
 	}
+
+	enabled() {
+		return false;
+	}
 	
 	options() {
 		return [

@@ -99,6 +99,10 @@ msgstr ""
 msgid "Cancelling background synchronisation... Please wait."
 msgstr ""
 
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr ""
+
 msgid "Only Bash is currently supported for autocompletion."
 msgstr ""
 
@@ -254,8 +258,8 @@ msgid "To move from one widget to another, press Tab or Shift+Tab."
 msgstr ""
 
 msgid ""
-"Use the arrows and page up/down to scroll the lists and text area (including "
-"the console)."
+"Use the arrows and page up/down to scroll the lists and text areas "
+"(including this console)."
 msgstr ""
 
 msgid "To maximise/minimise the console, press \"C\"."

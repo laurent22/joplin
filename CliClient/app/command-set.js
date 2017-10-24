@@ -12,6 +12,10 @@ class Command extends BaseCommand {
 		return 'set <note> <name> [value]';
 	}
 
+	enabled() {
+		return false;
+	}
+
 	description() {
 		return _('Sets the property <name> of the given <note> to the given [value].');
 	}

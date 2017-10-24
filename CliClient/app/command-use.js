@@ -18,6 +18,10 @@ class Command extends BaseCommand {
 		return { data: autocompleteFolders };
 	}
 
+	enabled() {
+		return false;
+	}
+
 	async action(args) {
 		let folder = await app().loadItem(BaseModel.TYPE_FOLDER, args['notebook']);
 		if (!folder) throw new Error(_('Cannot find "%s".', args['notebook']));

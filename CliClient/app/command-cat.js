@@ -21,6 +21,10 @@ class Command extends BaseCommand {
 		];
 	}
 
+	enabled() {
+		return false;
+	}
+
 	async action(args) {
 		let title = args['note'];
 

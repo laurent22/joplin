@@ -44,6 +44,7 @@ class Command extends BaseCommand {
 			for (let n in commands) {
 				if (!commands.hasOwnProperty(n)) continue;
 				const command = commands[n];
+				if (command.hidden()) continue;
 				commandNames.push(command.name());
 			}
 

@@ -413,6 +413,7 @@ class Application {
 
 	dummyGui() {
 		return {
+			isDummy: () => { return true; },
 			prompt: (initialText = '', promptString = '') => { return cliUtils.prompt(initialText, promptString); },
 			showConsole: () => {},
 			maximizeConsole: () => {},
@@ -430,8 +431,10 @@ class Application {
 		reg.logger().info('execCommand()', argv);
 		const commandName = argv[0];
 		this.activeCommand_ = this.findCommandByName(commandName);
+
 		let outException = null;
 		try {
+			if (this.gui().isDummy() && !this.activeCommand_.supportsUi('cli')) throw new Error(_('The command "%s" is only available in GUI mode', this.activeCommand_.name()));			
 			const cmdArgs = cliUtils.makeCommandArgs(this.activeCommand_, argv);
 			await this.activeCommand_.action(cmdArgs);
 		} catch (error) {

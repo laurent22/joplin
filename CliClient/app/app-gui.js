@@ -94,6 +94,10 @@ class AppGui {
 		return this.widget('console').innerWidth - 1;
 	}
 
+	isDummy() {
+		return false;
+	}
+
 	buildUi() {
 		this.rootWidget_ = new ReduxRootWidget(this.store_);
 		this.rootWidget_.name = 'root';
