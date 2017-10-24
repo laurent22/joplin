@@ -35,6 +35,8 @@ class Command extends BaseCommand {
 		const ok = force ? true : await this.prompt(msg);
 		if (!ok) return;
 
+		let lastProgress = '';
+
 		let options = {
 			fuzzyMatching: args.options['fuzzy-matching'] === true,
 			onProgress: (progressState) => {
@@ -45,7 +47,8 @@ class Command extends BaseCommand {
 				if (progressState.skipped) line.push(_('Skipped: %d.', progressState.skipped));
 				if (progressState.resourcesCreated) line.push(_('Resources: %d.', progressState.resourcesCreated));
 				if (progressState.notesTagged) line.push(_('Tagged: %d.', progressState.notesTagged));
-				cliUtils.redraw(line.join(' '));
+				lastProgress = line.join(' ');
+				cliUtils.redraw(lastProgress);
 			},
 			onError: (error) => {
 				let s = error.trace ? error.trace : error.toString();
@@ -57,6 +60,7 @@ class Command extends BaseCommand {
 		this.stdout(_('Importing notes...'));
 		await importEnex(folder.id, filePath, options);
 		cliUtils.redrawDone();
+		this.stdout(_('The notes have been imported: %s', lastProgress));
 	}
 
 }

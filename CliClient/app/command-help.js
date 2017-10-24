@@ -55,10 +55,11 @@ class Command extends BaseCommand {
 			this.stdout('');
 			this.stdout(commandNames.join(', '));
 			this.stdout('');
+			this.stdout(_('To move from one widget to another, press Tab or Shift+Tab.'));
 			this.stdout(_('To maximise/minimise the console, press "C".'));
 			this.stdout(_('To enter command line mode, press ":"'));
 			this.stdout(_('To exit command line mode, press ESCAPE'));
-			this.stdout(_('To view a list of available shortcuts type `help shortcuts`'));
+			this.stdout(_('For the complete list of available keyboard shortcuts, type `help shortcuts`'));
 		}
 
 		app().gui().showConsole();

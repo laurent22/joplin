@@ -49,10 +49,15 @@ function renderCommandHelp(cmd, width = null) {
 	if (cmd.name() === 'config') {
 		const renderMetadata = (md) => {
 			let desc = [];
+
 			if (md.label) {
 				let label = md.label();
 				if (label.length && label[label.length - 1] !== '.') label += '.';
 				desc.push(label);
+			}
+
+			if (md.description) {
+				desc.push(md.description());
 			}
 
 			desc.push(_('Type: %s.', md.isEnum ? _('Enum') : Setting.typeToString(md.type)));
@@ -82,6 +87,7 @@ function renderCommandHelp(cmd, width = null) {
 		let keysValues = [];
 		const keys = Setting.keys(true, 'cli');
 		for (let i = 0; i < keys.length; i++) {
+			if (keysValues.length) keysValues.push(['','']);
 			const md = Setting.settingMetadata(keys[i]);
 			if (!md.label) continue;
 			keysValues.push(renderMetadata(md));

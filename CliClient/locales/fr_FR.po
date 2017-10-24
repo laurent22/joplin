@@ -15,6 +15,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.3\n"
 
+msgid "Give focus to next widget"
+msgstr ""
+
+msgid "Give focus to previous widget"
+msgstr ""
+
 msgid "Delete the currently selected note or notebook."
 msgstr ""
 
@@ -271,6 +277,9 @@ msgstr ""
 msgid "The possible commands are:"
 msgstr ""
 
+msgid "To move from one widget to another, press Tab or Shift+Tab."
+msgstr ""
+
 #, fuzzy
 msgid "To maximise/minimise the console, press \"C\"."
 msgstr "Quitter le logiciel."
@@ -281,7 +290,8 @@ msgstr ""
 msgid "To exit command line mode, press ESCAPE"
 msgstr ""
 
-msgid "To view a list of available shortcuts type `help shortcuts`"
+msgid ""
+"For the complete list of available keyboard shortcuts, type `help shortcuts`"
 msgstr ""
 
 msgid "Imports an Evernote notebook file (.enex file)."
@@ -329,6 +339,10 @@ msgstr "Etiquettes : %d."
 
 msgid "Importing notes..."
 msgstr "Importation des notes..."
+
+#, fuzzy, javascript-format
+msgid "The notes have been imported: %s"
+msgstr "Aucun carnet n'est spécifié."
 
 #, fuzzy
 msgid ""
@@ -627,14 +641,31 @@ msgstr "Impossible de déplacer la note vers le carnet \"%s\""
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Option invalide: \"%s\". Les valeurs possibles sont : %s."
 
+#, fuzzy
+msgid "File system synchronisation target directory"
+msgstr "Cible de la synchronisation"
+
+msgid ""
+"The path to synchronise with when file system synchronisation is enabled. "
+"See `sync.target`."
+msgstr ""
+
 msgid "Synchronisation target"
 msgstr "Cible de la synchronisation"
+
+msgid ""
+"The target to synchonise to. If synchronising with the file system, set "
+"`sync.2.path` to specify the target directory."
+msgstr ""
 
 msgid "File system"
 msgstr "Système de fichier"
 
 msgid "OneDrive"
 msgstr "OneDrive"
+
+msgid "Text editor"
+msgstr ""
 
 msgid ""
 "The editor that will be used to open a note. If none is provided it will try "
@@ -644,25 +675,14 @@ msgstr ""
 msgid "Language"
 msgstr "Langue"
 
-msgid "Todo filter"
-msgstr "Filtre des tâches"
-
-msgid "Show all"
-msgstr "Afficher tous"
-
-msgid "Non-completed and recently completed ones"
-msgstr "Tâches non-complétées et récentes"
-
-msgid "Non-completed ones only"
-msgstr "Tâches complétées seulement"
-
 msgid "Show uncompleted todos on top of the lists"
 msgstr "Tâches non-terminées en haut des listes"
 
 msgid "Show advanced options"
 msgstr ""
 
-msgid "Save location with notes"
+#, fuzzy
+msgid "Save geo-location with notes"
 msgstr "Enregistrer l'emplacement avec les notes"
 
 msgid "Synchronisation interval"
@@ -821,6 +841,18 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Todo filter"
+#~ msgstr "Filtre des tâches"
+
+#~ msgid "Show all"
+#~ msgstr "Afficher tous"
+
+#~ msgid "Non-completed and recently completed ones"
+#~ msgstr "Tâches non-complétées et récentes"
+
+#~ msgid "Non-completed ones only"
+#~ msgstr "Tâches complétées seulement"
 
 #, fuzzy
 #~ msgid "Delete a note"

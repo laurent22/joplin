@@ -318,9 +318,9 @@ Setting.THEME_DARK = 2;
 Setting.metadata_ = {
 	'activeFolderId': { value: '', type: Setting.TYPE_STRING, public: false },
 	'firstStart': { value: true, type: Setting.TYPE_BOOL, public: false },
-	'sync.2.path': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'] },
+	'sync.2.path': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'], label: () => _('File system synchronisation target directory'), description: () => _('The path to synchronise with when file system synchronisation is enabled. See `sync.target`.') },
 	'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
-	'sync.target': { value: Setting.SYNC_TARGET_ONEDRIVE, type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation target'), options: () => {
+	'sync.target': { value: Setting.SYNC_TARGET_ONEDRIVE, type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation target'), description: () => _('The target to synchonise to. If synchronising with the file system, set `sync.2.path` to specify the target directory.'), options: () => {
 		let output = {};
 		output[Setting.SYNC_TARGET_MEMORY] = 'Memory';
 		output[Setting.SYNC_TARGET_FILESYSTEM] = _('File system');
@@ -333,7 +333,7 @@ Setting.metadata_ = {
 	'sync.4.context': { value: '', type: Setting.TYPE_STRING, public: false },
 	'sync.5.context': { value: '', type: Setting.TYPE_STRING, public: false },
 	'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
-	'editor': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'], label: () => _('The editor that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
+	'editor': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'], label: () => _('Text editor'), description: () => _('The editor that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
 	'locale': { value: defaultLocale(), type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Language'), options: () => {
 		return supportedLocalesToLanguages();
 	}},
@@ -341,14 +341,14 @@ Setting.metadata_ = {
 	// 	return Logger.levelEnum();
 	// }},
 	// Not used for now:
-	'todoFilter': { value: 'all', type: Setting.TYPE_STRING, isEnum: true, public: false, appTypes: ['mobile'], label: () => _('Todo filter'), options: () => ({
-		all: _('Show all'),
-		recent: _('Non-completed and recently completed ones'),
-		nonCompleted: _('Non-completed ones only'),
-	})},
+	// 'todoFilter': { value: 'all', type: Setting.TYPE_STRING, isEnum: true, public: false, appTypes: ['mobile'], label: () => _('Todo filter'), options: () => ({
+	// 	all: _('Show all'),
+	// 	recent: _('Non-completed and recently completed ones'),
+	// 	nonCompleted: _('Non-completed ones only'),
+	// })},
 	'uncompletedTodosOnTop': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Show uncompleted todos on top of the lists') },
 	'showAdvancedOptions': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile'], label: () => _('Show advanced options') },
-	'trackLocation': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Save location with notes') },
+	'trackLocation': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Save geo-location with notes') },
 	'sync.interval': { value: 300, type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation interval'), options: () => {
 		return {
 			0: _('Disabled'),

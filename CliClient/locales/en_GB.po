@@ -15,6 +15,12 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "Give focus to next widget"
+msgstr ""
+
+msgid "Give focus to previous widget"
+msgstr ""
+
 msgid "Delete the currently selected note or notebook."
 msgstr ""
 
@@ -244,6 +250,9 @@ msgstr ""
 msgid "The possible commands are:"
 msgstr ""
 
+msgid "To move from one widget to another, press Tab or Shift+Tab."
+msgstr ""
+
 msgid "To maximise/minimise the console, press \"C\"."
 msgstr ""
 
@@ -253,7 +262,8 @@ msgstr ""
 msgid "To exit command line mode, press ESCAPE"
 msgstr ""
 
-msgid "To view a list of available shortcuts type `help shortcuts`"
+msgid ""
+"For the complete list of available keyboard shortcuts, type `help shortcuts`"
 msgstr ""
 
 msgid "Imports an Evernote notebook file (.enex file)."
@@ -297,6 +307,10 @@ msgid "Tagged: %d."
 msgstr ""
 
 msgid "Importing notes..."
+msgstr ""
+
+#, javascript-format
+msgid "The notes have been imported: %s"
 msgstr ""
 
 msgid ""
@@ -564,13 +578,29 @@ msgstr ""
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr ""
 
+msgid "File system synchronisation target directory"
+msgstr ""
+
+msgid ""
+"The path to synchronise with when file system synchronisation is enabled. "
+"See `sync.target`."
+msgstr ""
+
 msgid "Synchronisation target"
+msgstr ""
+
+msgid ""
+"The target to synchonise to. If synchronising with the file system, set "
+"`sync.2.path` to specify the target directory."
 msgstr ""
 
 msgid "File system"
 msgstr ""
 
 msgid "OneDrive"
+msgstr ""
+
+msgid "Text editor"
 msgstr ""
 
 msgid ""
@@ -581,25 +611,13 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-msgid "Todo filter"
-msgstr ""
-
-msgid "Show all"
-msgstr ""
-
-msgid "Non-completed and recently completed ones"
-msgstr ""
-
-msgid "Non-completed ones only"
-msgstr ""
-
 msgid "Show uncompleted todos on top of the lists"
 msgstr ""
 
 msgid "Show advanced options"
 msgstr ""
 
-msgid "Save location with notes"
+msgid "Save geo-location with notes"
 msgstr ""
 
 msgid "Synchronisation interval"
