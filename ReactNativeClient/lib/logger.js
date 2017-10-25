@@ -45,6 +45,8 @@ class Logger {
 		if (typeof object === 'object') {
 			if (object instanceof Error) {
 				output = object.toString();
+				if (object.code) output += "\nCode: " + object.code;
+				if (object.request) output += "\nRequest: " + object.request;
 				if (object.stack) output += "\n" + object.stack;
 			} else {
 				output = JSON.stringify(object);
