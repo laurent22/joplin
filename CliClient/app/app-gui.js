@@ -63,10 +63,6 @@ class AppGui {
 		this.currentShortcutKeys_ = [];
 		this.lastShortcutKeyTime_ = 0;
 
-		cliUtils.setStdout((...object) => {
-			return this.stdout(...object);
-		});
-
 		// Recurrent sync is setup only when the GUI is started. In
 		// a regular command it's not necessary since the process
 		// exits right away.

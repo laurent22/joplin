@@ -240,7 +240,7 @@ cliUtils.redraw = function(s) {
 	const now = time.unixMs();
 
 	if (now - redrawLastUpdateTime_ > 4000) {
-		this.stdout_ (s);
+		this.stdout_(s);
 		redrawLastUpdateTime_ = now;
 		redrawLastLog_ = null;
 	} else {

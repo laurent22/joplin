@@ -43,7 +43,7 @@ class OneDriveApiNodeUtils {
 
 		this.api().setAuth(null);
 
-		const port = netUtils.findAvailablePort(this.possibleOAuthDancePorts());
+		const port = await netUtils.findAvailablePort(this.possibleOAuthDancePorts());
 		if (!port) throw new Error(_('All potential ports are in use - please report the issue at %s', 'https://github.com/laurent22/joplin'));
 
 		let authCodeUrl = this.api().authCodeUrl('http://localhost:' + port);

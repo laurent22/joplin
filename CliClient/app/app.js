@@ -592,6 +592,10 @@ class Application {
 		reg.setDb(this.database_);
 		BaseModel.db_ = this.database_;
 
+		cliUtils.setStdout((object) => {
+			return this.stdout(object);
+		});
+
 		// this.store_ = createStore(reducer, applyMiddleware(this.generalMiddleware()));
 		// BaseModel.dispatch = this.store().dispatch;
 		// FoldersScreenUtils.dispatch = this.store().dispatch;
