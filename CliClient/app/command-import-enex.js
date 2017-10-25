@@ -55,6 +55,8 @@ class Command extends BaseCommand {
 		}
 
 		folder = !folder ? await Folder.save({ title: folderTitle }) : folder;
+		
+		app().gui().showConsole();
 		this.stdout(_('Importing notes...'));
 		await importEnex(folder.id, filePath, options);
 		cliUtils.redrawDone();

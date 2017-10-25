@@ -22,6 +22,8 @@ class Command extends BaseCommand {
 		if (!item) throw new Error(_('Cannot find "%s".', title));
 		const url = Note.geolocationUrl(item);
 		this.stdout(url);
+
+		app().gui().showConsole();
 	}
 
 }

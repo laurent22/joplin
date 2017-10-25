@@ -53,7 +53,15 @@ class OneDriveApiNodeUtils {
 			let errorMessage = null;
 
 			this.oauthServer_.on('request', (request, response) => {
-				const query = urlParser.parse(request.url, true).query;
+				const url = urlParser.parse(request.url, true);
+
+				if (url.pathname === '/auth') {
+					response.writeHead(302, { 'Location': authCodeUrl });
+					response.end();
+					return;
+				}
+
+				const query = url.query;
 
 				const writeResponse = (code, message) => {
 					response.writeHead(code, {"Content-Type": "text/html"});
@@ -98,9 +106,14 @@ class OneDriveApiNodeUtils {
 
 			enableServerDestroy(this.oauthServer_);
 
+			// Rather than displaying authCodeUrl directly, we go throught the local
+			// server. This is just so that the URL being displayed is shorter and
+			// doesn't get cut in terminals (especially those that don't handle multi
+			// lines URLs).
+
 			targetConsole.log(_('Please open the following URL in your browser to authenticate the application. The application will create a directory in "Apps/Joplin" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.'));
 			targetConsole.log('');
-			targetConsole.log(authCodeUrl);
+			targetConsole.log('http://127.0.0.1:' + port + '/auth');
 		});
 	}
 

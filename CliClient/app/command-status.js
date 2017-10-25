@@ -1,5 +1,6 @@
 import { BaseCommand } from './base-command.js';
 import { Database } from 'lib/database.js';
+import { app } from './app.js';
 import { Setting } from 'lib/models/setting.js';
 import { _ } from 'lib/locale.js';
 import { ReportService } from 'lib/services/report.js';
@@ -32,6 +33,9 @@ class Command extends BaseCommand {
 				this.stdout(line);
 			}
 		}
+
+		app().gui().showConsole();
+		app().gui().maximizeConsole();
 	}
 
 }
