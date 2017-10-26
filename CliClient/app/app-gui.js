@@ -616,6 +616,8 @@ class AppGui {
 		// URLs appear in blue.
 		noteTextWidget.markdownRendererOptions = {
 			linkUrlRenderer: (index, url) => {
+				if (!url) return url;
+
 				if (resourceIdRegex.test(url)) {
 					return url;
 				} else if (url.indexOf('http://') === 0 || url.indexOf('https://') === 0) {
