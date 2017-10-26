@@ -69,9 +69,6 @@ msgstr ""
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr ""
 
-msgid "[Cancel]"
-msgstr ""
-
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
@@ -372,6 +369,9 @@ msgid "Creates a new todo."
 msgstr ""
 
 msgid "Moves the notes matching <note> to [notebook]."
+msgstr ""
+
+msgid "Renames the given <item> (note or notebook) to <name>."
 msgstr ""
 
 msgid "Deletes the given notebook."

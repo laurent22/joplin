@@ -92,12 +92,12 @@ class Application {
 		let output = await this.loadItems(type, pattern, options);
 
 		if (output.length > 1) {
-			output.sort((a, b) => { return a.user_updated_time < b.user_updated_time ? +1 : -1; });
+			// output.sort((a, b) => { return a.user_updated_time < b.user_updated_time ? +1 : -1; });
 
-			let answers = { 0: _('[Cancel]') };
-			for (let i = 0; i < output.length; i++) {
-				answers[i + 1] = output[i].title;
-			}
+			// let answers = { 0: _('[Cancel]') };
+			// for (let i = 0; i < output.length; i++) {
+			// 	answers[i + 1] = output[i].title;
+			// }
 
 			// Not really useful with new UI?
 			throw new Error(_('More than one item match "%s". Please narrow down your query.', pattern));
@@ -113,6 +113,12 @@ class Application {
 	}
 
 	async loadItems(type, pattern, options = null) {
+		if (type === 'folderOrNote') {
+			const folders = await this.loadItems(BaseModel.TYPE_FOLDER, pattern, options);
+			if (folders.length) return folders;
+			return await this.loadItems(BaseModel.TYPE_NOTE, pattern, options);
+		}
+
 		pattern = pattern ? pattern.toString() : '';
 
 		if (type == BaseModel.TYPE_FOLDER && (pattern == Folder.conflictFolderTitle() || pattern == Folder.conflictFolderId())) return [Folder.conflictFolder()];

@@ -78,10 +78,6 @@ msgstr "Impossible de déplacer la note vers le carnet \"%s\""
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr ""
 
-#, fuzzy
-msgid "[Cancel]"
-msgstr "Annulation..."
-
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
@@ -416,6 +412,9 @@ msgstr "Créer une nouvelle tâche."
 #, fuzzy
 msgid "Moves the notes matching <note> to [notebook]."
 msgstr "Supprime les objets correspondants à <motif>."
+
+msgid "Renames the given <item> (note or notebook) to <name>."
+msgstr ""
 
 #, fuzzy
 msgid "Deletes the given notebook."
@@ -858,6 +857,10 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#, fuzzy
+#~ msgid "[Cancel]"
+#~ msgstr "Annulation..."
 
 #~ msgid "Todo filter"
 #~ msgstr "Filtre des tâches"
