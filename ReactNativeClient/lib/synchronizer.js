@@ -358,14 +358,15 @@ class Synchronizer {
 			while (true) {
 				if (this.cancelling()) break;
 
-				let allIds = null;
-				if (!this.api().supportsDelta()) {
-					allIds = await BaseItem.syncedItemIds(syncTargetId);
-				}
+				// let allIds = null;
+				// if (!this.api().supportsDelta()) {
+				// 	allIds = await BaseItem.syncedItemIds(syncTargetId);
+				// }
 
 				let listResult = await this.api().delta('', {
 					context: context,
-					itemIds: allIds,
+					// itemIds: allIds,
+					allItemIdsHandler: async () => { return BaseItem.syncedItemIds(syncTargetId); }
 				});
 
 				let remotes = listResult.items;

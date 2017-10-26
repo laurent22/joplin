@@ -79,6 +79,8 @@ class FileApiDriverLocal {
 	}
 
 	async delta(path, options) {
+		const itemIds = await options.allItemIdsHandler();
+
 		try {
 			let items = await fs.readdir(path);
 			let output = [];
@@ -89,11 +91,11 @@ class FileApiDriverLocal {
 				output.push(stat);
 			}
 
-			if (!Array.isArray(options.itemIds)) throw new Error('Delta API not supported - local IDs must be provided');
+			if (!Array.isArray(itemIds)) throw new Error('Delta API not supported - local IDs must be provided');
 
 			let deletedItems = [];
-			for (let i = 0; i < options.itemIds.length; i++) {
-				const itemId = options.itemIds[i];
+			for (let i = 0; i < itemIds.length; i++) {
+				const itemId = itemIds[i];
 				let found = false;
 				for (let j = 0; j < output.length; j++) {
 					const item = output[j];
