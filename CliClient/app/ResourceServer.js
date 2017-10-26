@@ -13,6 +13,8 @@ class ResourceServer {
 		this.server_ = null;
 		this.logger_ = new Logger();
 		this.port_ = null;
+		this.linkHandler_ = null;
+		this.started_ = false;
 	}
 
 	setLogger(logger) {
@@ -23,9 +25,17 @@ class ResourceServer {
 		return this.logger_;
 	}
 
+	started() {
+		return this.started_;
+	}
+
 	baseUrl() {
 		if (!this.port_) return '';
 		return 'http://127.0.0.1:' + this.port_;
+	}
+
+	setLinkHandler(handler) {
+		this.linkHandler_ = handler;
 	}
 
 	async start() {
@@ -52,18 +62,18 @@ class ResourceServer {
 			}
 			resourceId = resourceId[1];
 
+			if (!this.linkHandler_) throw new Error('No link handler is defined');
+
 			try {
-				let resource = await Resource.loadByPartialId(resourceId);
-				if (!resource.length) throw new Error('No resource with ID ' + resourceId);
-				if (resource.length > 2) throw new Error('More than one resource match ID ' + resourceId); // That's very unlikely
-				resource = resource[0];
-				if (resource.mime) response.setHeader('Content-Type', resource.mime);
-				writeResponse(await Resource.content(resource));
+				const done = await this.linkHandler_(resourceId, response);
+				if (!done) throw new Error('Unhandled resource: ' + resourceId);
 			} catch (error) {
 				response.setHeader('Content-Type', 'text/plain');
 				response.statusCode = 400;
-				writeResponse('Error: could not retrieve resource: ' + error.message);
+				response.write(error.message);
 			}
+
+			response.end();
 		});
 
 		this.server_.on('error', (error) => {
@@ -73,6 +83,8 @@ class ResourceServer {
 		this.server_.listen(this.port_);
 
 		enableServerDestroy(this.server_);
+
+		this.started_ = true;
 	}
 
 	stop() {

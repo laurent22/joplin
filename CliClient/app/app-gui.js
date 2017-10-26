@@ -3,6 +3,7 @@ import { Folder } from 'lib/models/folder.js';
 import { Tag } from 'lib/models/tag.js';
 import { BaseModel } from 'lib/base-model.js';
 import { Note } from 'lib/models/note.js';
+import { Resource } from 'lib/models/resource.js';
 import { cliUtils } from './cli-utils.js';
 import { reducer, defaultState } from 'lib/reducer.js';
 import { reg } from 'lib/registry.js';
@@ -45,10 +46,6 @@ class AppGui {
 		this.buildUi();
 
 		this.renderer_ = new Renderer(this.term(), this.rootWidget_);
-
-		this.renderer_.on('renderDone', async (event) => {
-			//if (this.widget('console').hasFocus) this.widget('console').resetCursor();
-		});
 
 		this.app_.on('modelAction', async (event) => {
 			await this.handleModelAction(event.action);
@@ -609,48 +606,70 @@ class AppGui {
 		if (msg !== '') this.widget('statusBar').setItemAt(0, msg);
 	}
 
-	setupResourceServer() {
+	async setupResourceServer() {
 		const linkStyle = chalk.blue.underline;
 		const noteTextWidget = this.widget('noteText');
 		const resourceIdRegex = /^:\/[a-f0-9]+$/i
-
-		const regularUrlRenderer = (url) => {
-			if (!url) return url;
-			const l = url.toLowerCase();
-			if (l.indexOf('http://') === 0 || l.indexOf('https://') === 0 || l.indexOf('www.') === 0) {
-				return linkStyle(url);
-			}
-			return url;
-		}
+		const noteLinks = {};
 
 		// By default, before the server is started, only the regular
 		// URLs appear in blue.
 		noteTextWidget.markdownRendererOptions = {
-			linkUrlRenderer: (url) => {
+			linkUrlRenderer: (index, url) => {
 				if (resourceIdRegex.test(url)) {
 					return url;
+				} else if (url.indexOf('http://') === 0 || url.indexOf('https://') === 0) {
+					return linkStyle(url);
 				} else {
-					return regularUrlRenderer(url);
+					return url;
 				}
 			},
 		};
 
 		this.resourceServer_ = new ResourceServer();
 		this.resourceServer_.setLogger(this.app().logger());
-		this.resourceServer_.start().then(() => {
-			if (this.resourceServer_.baseUrl()) {
-				noteTextWidget.markdownRendererOptions = {
-					linkUrlRenderer: (url) => {
-						if (resourceIdRegex.test(url)) {
-							const resourceId = url.substr(2);
-							return linkStyle(this.resourceServer_.baseUrl() + '/' + resourceId.substr(0, 7));
-						} else {
-							return regularUrlRenderer(url);
-						}
-					},
-				};
+		this.resourceServer_.setLinkHandler(async (path, response) => {
+			const link = noteLinks[path];
+
+			if (link.type === 'url') {
+				response.writeHead(302, { 'Location': link.url });
+				return true;
 			}
+
+			if (link.type === 'resource') {
+				const resourceId = link.id;
+				let resource = await Resource.load(resourceId);
+				if (!resource) throw new Error('No resource with ID ' + resourceId); // Should be nearly impossible
+				if (resource.mime) response.setHeader('Content-Type', resource.mime);
+				response.write(await Resource.content(resource));
+				return true;
+			}
+
+			return false;
 		});
+
+		await this.resourceServer_.start();
+		if (!this.resourceServer_.started()) return;
+
+		noteTextWidget.markdownRendererOptions = {
+			linkUrlRenderer: (index, url) => {
+				if (!url) return url;
+
+				if (resourceIdRegex.test(url)) {
+					noteLinks[index] = {
+						type: 'resource',
+						id: url.substr(2),
+					};					
+				} else {
+					noteLinks[index] = {
+						type: 'url',
+						url: url,
+					};
+				}
+
+				return linkStyle(this.resourceServer_.baseUrl() + '/' + index);
+			},
+		};
 	}
 
 	async start() {
