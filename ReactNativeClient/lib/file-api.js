@@ -23,10 +23,6 @@ class FileApi {
 		return this.syncTargetId_;
 	}
 
-	supportsDelta() {
-		return this.driver_.supportsDelta();
-	}
-
 	setLogger(l) {
 		this.logger_ = l;
 	}

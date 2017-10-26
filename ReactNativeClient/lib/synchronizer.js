@@ -358,14 +358,14 @@ class Synchronizer {
 			while (true) {
 				if (this.cancelling()) break;
 
-				// let allIds = null;
-				// if (!this.api().supportsDelta()) {
-				// 	allIds = await BaseItem.syncedItemIds(syncTargetId);
-				// }
-
 				let listResult = await this.api().delta('', {
 					context: context,
-					// itemIds: allIds,
+
+					// allItemIdsHandler() provides a way for drivers that don't have a delta API to
+					// still provide delta functionality by comparing the items they have to the items
+					// the client has. Very inefficient but that's the only possible workaround.
+					// It's a function so that it is only called if the driver needs these IDs. For
+					// drivers with a delta functionality it's a noop.
 					allItemIdsHandler: async () => { return BaseItem.syncedItemIds(syncTargetId); }
 				});
 
