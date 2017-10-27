@@ -33,18 +33,6 @@ class Command extends BaseCommand {
 		} else {
 			await Note.save(newItem);
 		}
-
-
-		
-		// const folder = await Folder.loadByField('title', destination);
-		// if (!folder) throw new Error(_('Cannot find "%s".', destination));
-
-		// const notes = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
-		// if (!notes.length) throw new Error(_('Cannot find "%s".', pattern));
-
-		// for (let i = 0; i < notes.length; i++) {
-		// 	await Note.moveToFolder(notes[i].id, folder.id);
-		// }
 	}
 
 }
