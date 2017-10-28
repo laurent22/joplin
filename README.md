@@ -26,7 +26,7 @@ The demo application shows various Wikipedia articles converted to Markdown and 
 
 To start the application type `joplin`. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via shortcuts (see shortcuts below).
 
-![](doc/images/ScreenshotTerminal.png)
+![Joplin Terminal Screenshot](https://github.com/laurent22/joplin/blob/master/docs/images/ScreenshotTerminal.png)
 
 ## Input modes
 
