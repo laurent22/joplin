@@ -13,6 +13,7 @@
 				"locales/*.json",
 				"ReactNativeClient/locales/*",
 				"src/log.txt",
+				"log.txt",
 			],
 			"folder_exclude_patterns":
 			[
