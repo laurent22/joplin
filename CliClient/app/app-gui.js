@@ -179,7 +179,10 @@ class AppGui {
 			borderLeftWidth: 1,
 		};
 		this.rootWidget_.connect(noteText, (state) => {
-			return { noteId: state.selectedNoteId };
+			return {
+				noteId: state.selectedNoteId,
+				notes: state.notes,
+			};
 		});
 
 		const noteMetadata = new NoteMetadataWidget();
