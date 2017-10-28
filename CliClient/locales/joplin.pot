@@ -99,6 +99,18 @@ msgstr ""
 msgid "Exits the application."
 msgstr ""
 
+msgid "Y"
+msgstr ""
+
+msgid "n"
+msgstr ""
+
+msgid "N"
+msgstr ""
+
+msgid "y"
+msgstr ""
+
 msgid "Cancelling background synchronisation... Please wait."
 msgstr ""
 
@@ -141,18 +153,6 @@ msgid ""
 "IMPORTANT: run the following command to initialise autocompletion in the "
 "current shell:\n"
 "source '%s'"
-msgstr ""
-
-msgid "Y"
-msgstr ""
-
-msgid "n"
-msgstr ""
-
-msgid "N"
-msgstr ""
-
-msgid "y"
 msgstr ""
 
 #, javascript-format

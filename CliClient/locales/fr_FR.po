@@ -110,6 +110,18 @@ msgstr "Affiche l'aide pour la commande donnée."
 msgid "Exits the application."
 msgstr "Quitter le logiciel."
 
+msgid "Y"
+msgstr ""
+
+msgid "n"
+msgstr ""
+
+msgid "N"
+msgstr ""
+
+msgid "y"
+msgstr ""
+
 #, fuzzy
 msgid "Cancelling background synchronisation... Please wait."
 msgstr "Annulation..."
@@ -153,18 +165,6 @@ msgid ""
 "IMPORTANT: run the following command to initialise autocompletion in the "
 "current shell:\n"
 "source '%s'"
-msgstr ""
-
-msgid "Y"
-msgstr ""
-
-msgid "n"
-msgstr ""
-
-msgid "N"
-msgstr ""
-
-msgid "y"
 msgstr ""
 
 #, javascript-format
