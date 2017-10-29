@@ -1,12 +1,22 @@
+# Joplin
+
+INTRODUCTION
+
+![Joplin Terminal Screenshot](https://github.com/laurent22/joplin/blob/master/docs/images/ScreenshotTerminal.png)
+
 # Installation
 
 	npm install -g joplin
 
+To start it, type `joplin`.
+
 # Demo
 
-The demo application shows various Wikipedia articles converted to Markdown and organised into notebooks in order to test and demonstrate the application. The demo application and its settings will be installed in a separate directory so as not to interfere with any existing Joplin application.
+The demo application shows various Wikipedia articles converted to Markdown and organised into notebooks, as well as an example todo list, in order to test and demonstrate the application. The demo application and its settings will be installed in a separate directory so as not to interfere with any existing Joplin application.
 
 	npm install -g demo-joplin
+
+To start it, type `demo-joplin`.
 
 # Features
 
@@ -16,7 +26,7 @@ The demo application shows various Wikipedia articles converted to Markdown and 
 - Ability to synchronise with multiple targets, including the file system and OneDrive (Dropbox is planned).
 - Synchronises to a plain text format, which can be easily manipulated, backed up, or exported to a different format.
 - Plain text notes, which are rendered as markdown in the mobile application.
-- Tag support (currently, tags can be imported from Evernote and modified in the CLI application, but not yet in the mobile one)
+- Tag support
 - File attachment support (likewise, all file attachements can be imported from Evernote but currently cannot be manually added to a note)
 - Search functionality.
 - Geolocation support.
@@ -26,19 +36,17 @@ The demo application shows various Wikipedia articles converted to Markdown and 
 
 To start the application type `joplin`. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via shortcuts (see shortcuts below).
 
-![Joplin Terminal Screenshot](https://github.com/laurent22/joplin/blob/master/docs/images/ScreenshotTerminal.png)
-
 ## Input modes
 
 Joplin user interface is partly based on vim and offers two different modes to interact with the notes and notebooks:
 
 ### Normal mode
 
-Allows moving from one pane to another using the `Tab` and `Shift-Tab` keys, and to select/view notes. Press `Enter` to edit a note. Various other [shortcuts](#shortcuts) are available.
+Allows moving from one pane to another using the `Tab` and `Shift-Tab` keys, and to select/view notes. Press `Enter` to edit a note. Various other [shortcuts](#available-shortcuts) are available.
 
 ### Command-line mode
 
-Press `:` to enter the command line mode. From there, all the Joplin comands are available such as `mknote` or `search`. See the [full list of commands](#commands).
+Press `:` to enter command line mode. From there, the Joplin comands such as `mknote` or `search` are available. See the [full list of commands](#available-commands).
 
 It is possible to refer to a note or notebook by title or ID. However the simplest way is to refer to the currently selected item using one of these shortcuts:
 
@@ -47,6 +55,8 @@ Shortcut | Description
 `$n`     | Refers to the currently selected note
 `$b`     | Refers to the currently selected notebook
 `$c`     | Refers to the currently selected item. For example, if the note list is current active, `$c` will refer to the currently selected note.
+
+**Examples:**
 
 Create a new note with title "Wednesday's meeting":
 
@@ -86,17 +96,7 @@ If the help is not fully visible, press `Tab` multiple times till the console is
 
 ## Editing a note
 
-HOW TO EDIT A NOTE
-
-# Available commands
-
-PUT LIST OF COMMANDS
-
-# Available keyboard shortcuts
-
-There are two types of shortcuts: those that manipulate the user interface directly, such as TAB to move from one widget to another, and those that are simply shortcuts to actual commands. For example, typing `nn`, which is used to create a new note, will switch to command line mode and pre-fill it with `mknote ""` from where the title of the note can be entered.
-
-PUT LIST OF SHORTCUT
+To edit a note, select it and press `ENTER`. Or, in command-line, mode type `edit $n` to edit the currently selected note, or `edit "Note title"` to edit a particular note.
 
 # Importing notes from Evernote
 
@@ -118,15 +118,15 @@ LINK TO ANDROID CLIENT
 
 # URLs
 
-One issue with rendering markdown in a terminal is that URLs often end up looking like this:
+By pressing Ctrl+Click on a URL, most terminals will open that URL in the default browser. However, one issue especially with long URLs is that they can end up like this:
 
-IMAGE OF WORD WRAP LINK
+![Cut URL in terminal](https://github.com/laurent22/joplin/blob/master/docs/images/UrlCut.png)
 
-Not only it makes the text hard to read, but the link, being cut in two, will also not be clickable (in most terminals pressing Ctrl+Click opens the link).
+Not only it makes the text hard to read, but the link, being cut in two, will also not be clickable.
 
-As a solution Joplin tries to start a mini-server in the background and, if successful, all the links will be converted to a much shorter, local URL.
+As a solution Joplin tries to start a mini-server in the background and, if successful, all the links will be converted to a much shorter, local URL:
 
-IMAGE OF CONVERTED TEXT
+![Converted URL in terminal](https://github.com/laurent22/joplin/blob/master/docs/images/UrlNoCut.png)
 
 With this it means that not only the text will be more readable but links are also unlikely to be cut. Note that both resources (files that are attached to notes) and external links are handled in this way.
 
@@ -143,7 +143,191 @@ The applications is currently available in English and French. If you would like
 - In Poedit, open this .pot file, go into the Catalog menu and click Configuration. Change "Country" and "Language" to your own country and language.
 - From then you can translate the file. Once it's done, please send the file to [this address](https://raw.githubusercontent.com/laurent22/joplin/master/Assets/Adresse.png).
 
-# Command line mode
+# Available shortcuts
+
+There are two types of shortcuts: those that manipulate the user interface directly, such as TAB to move from one widget to another, and those that are simply shortcuts to actual commands. In a way similar to Vim, these commands are generally a verb followed by an object. For example, typing `mn` ([m]ake [n]ote), is used to create a new note, it will switch the interface to command line mode and pre-fill it with `mknote ""` from where the title of the note can be entered.
+
+*List of shortcuts:*
+
+	Tab       Give focus to next widget
+	Shift+Tab Give focus to previous widget
+	:         Enter command line mode
+	ESC       Exit command line mode
+	Ctrl+C    Cancel the current command.
+	Ctrl+D    Exit the application.
+	DELETE    Delete the currently selected note or notebook.
+	SPACE     Set a todo as completed / not completed
+	tc        [t]oggle [c]onsole between maximized/minimized/hidden/visible.
+	tm        [t]oggle note [m]etadata.
+	mn        [m]ake a new [n]ote
+	mt        [m]ake a new [t]odo
+	mb        [m]ake a new note[b]ook
+	yn        Copy ([y]ank) the [n]ote to a notebook.
+	dn        Move the note to a notebook.
+
+# Available commands
+
+The following commands are available in [command-line mode](#command-line-mode):
+
+	attach <note> <file>
+
+	    Attaches the given file to the note.
+
+	config [name] [value]
+
+	    Gets or sets a config value. If [value] is not provided, it will show the 
+	    value of [name]. If neither [name] nor [value] is provided, it will list 
+	    the current configuration.
+
+	    -v, --verbose  Also displays unset and hidden config variables.
+
+	Possible keys/values:
+
+	    editor                 Text editor.
+	                           The editor that will be used to open a note. If 
+	                           none is provided it will try to auto-detect the 
+	                           default editor.
+	                           Type: string.
+	                           
+	    locale                 Language.
+	                           Type: Enum.
+	                           Possible values: en_GB (English), fr_FR (Français).
+	                           Default: "en_GB"
+	                           
+	    sync.2.path            File system synchronisation target directory.
+	                           The path to synchronise with when file system 
+	                           synchronisation is enabled. See `sync.target`.
+	                           Type: string.
+	                           
+	    sync.interval          Synchronisation interval.
+	                           Type: Enum.
+	                           Possible values: 0 (Disabled), 300 (5 minutes), 600 
+	                           (10 minutes), 1800 (30 minutes), 3600 (1 hour), 
+	                           43200 (12 hours), 86400 (24 hours).
+	                           Default: 300
+	                           
+	    sync.target            Synchronisation target.
+	                           The target to synchonise to. If synchronising with 
+	                           the file system, set `sync.2.path` to specify the 
+	                           target directory.
+	                           Type: Enum.
+	                           Possible values: 1 (Memory), 2 (File system), 3 
+	                           (OneDrive).
+	                           Default: 3
+	                           
+	    trackLocation          Save geo-location with notes.
+	                           Type: bool.
+	                           Default: true
+	                           
+	    uncompletedTodosOnTop  Show uncompleted todos on top of the lists.
+	                           Type: bool.
+	                           Default: true
+
+	cp <note> [notebook]
+
+	    Duplicates the notes matching <note> to [notebook]. If no notebook is 
+	    specified the note is duplicated in the current notebook.
+
+	done <note>
+
+	    Marks a todo as done.
+
+	edit <note>
+
+	    Edit note.
+
+	exit
+
+	    Exits the application.
+
+	export <destination>
+
+	    Exports Joplin data to the given target.
+
+	    --note <note>          Exports only the given note.
+	    --notebook <notebook>  Exports only the given notebook.
+
+	geoloc <note>
+
+	    Displays a geolocation URL for the note.
+
+	help [command]
+
+	    Displays usage information.
+
+	import-enex <file> [notebook]
+
+	    Imports an Evernote notebook file (.enex file).
+
+	    -f, --force  Do not ask for confirmation.
+
+	mkbook <new-notebook>
+
+	    Creates a new notebook.
+
+	mknote <new-note>
+
+	    Creates a new note.
+
+	mktodo <new-todo>
+
+	    Creates a new todo.
+
+	mv <note> [notebook]
+
+	    Moves the notes matching <note> to [notebook].
+
+	ren <item> <name>
+
+	    Renames the given <item> (note or notebook) to <name>.
+
+	rmbook <notebook>
+
+	    Deletes the given notebook.
+
+	    -f, --force  Deletes the notebook without asking for confirmation.
+
+	rmnote <note-pattern>
+
+	    Deletes the notes matching <note-pattern>.
+
+	    -f, --force  Deletes the notes without asking for confirmation.
+
+	search <pattern> [notebook]
+
+	    Searches for the given <pattern> in all the notes.
+
+	status
+
+	    Displays summary about the notes and notebooks.
+
+	sync
+
+	    Synchronises with remote storage.
+
+	    --target <target>  Sync to provided target (defaults to sync.target config 
+	                       value)
+
+	tag <tag-command> [tag] [note]
+
+	    <tag-command> can be "add", "remove" or "list" to assign or remove [tag] 
+	    from [note], or to list the notes associated with [tag]. The command `tag 
+	    list` can be used to list all the tags.
+
+	todo <todo-command> <note-pattern>
+
+	    <todo-command> can either be "toggle" or "clear". Use "toggle" to toggle 
+	    the given todo between completed and uncompleted state (If the target is a 
+	    regular note it will be converted to a todo). Use "clear" to convert the 
+	    todo back to a regular note.
+
+	undone <note>
+
+	    Marks a todo as non-completed.
+
+	version
+
+	    Displays version information
 
 # License
 

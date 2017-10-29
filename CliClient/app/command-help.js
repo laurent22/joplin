@@ -17,10 +17,30 @@ class Command extends BaseCommand {
 		return _('Displays usage information.');
 	}
 
+	allCommands() {
+		const commands = app().commands();
+		let output = [];
+		for (let n in commands) {
+			if (!commands.hasOwnProperty(n)) continue;
+			const command = commands[n];
+			if (command.hidden()) continue;
+			if (!command.enabled()) continue;
+			output.push(command);
+		}
+
+		output.sort((a, b) => a.name() < b.name() ? -1 : +1);
+
+		return output;
+	}
+
 	async action(args) {
 		const stdoutWidth = app().commandStdoutMaxWidth();
 
 		if (args.command === 'shortcuts') {
+			if (app().gui().isDummy()) {
+				throw new Error(_('Shortcuts are not available in CLI mode.'));
+			}
+
 			const shortcuts = app().gui().shortcuts();
 
 			let rows = [];
@@ -34,21 +54,16 @@ class Command extends BaseCommand {
 			}
 
 			cliUtils.printArray(this.stdout.bind(this), rows);
+		} else if (args.command === 'all') {
+			const commands = this.allCommands();
+			const output = commands.map((c) => renderCommandHelp(c));
+			this.stdout(output.join('\n\n'));
 		} else if (args.command) {
 			const command = app().findCommandByName(args['command']);
 			if (!command) throw new Error(_('Cannot find "%s".', args.command));
 			this.stdout(renderCommandHelp(command, stdoutWidth));
 		} else {
-			const commands = app().commands();
-			let commandNames = [];
-			for (let n in commands) {
-				if (!commands.hasOwnProperty(n)) continue;
-				const command = commands[n];
-				if (command.hidden()) continue;
-				commandNames.push(command.name());
-			}
-
-			commandNames.sort();
+			const commandNames = this.allCommands().map((a) => a.name());
 
 			this.stdout(_('Type `help [command]` for more information about a command.'));
 			this.stdout('');

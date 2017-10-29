@@ -21,6 +21,20 @@ msgstr ""
 msgid "Give focus to previous widget"
 msgstr ""
 
+msgid "Enter command line mode"
+msgstr ""
+
+msgid "Exit command line mode"
+msgstr ""
+
+#, fuzzy
+msgid "Cancel the current command."
+msgstr "Annulation..."
+
+#, fuzzy
+msgid "Exit the application."
+msgstr "Quitter le logiciel."
+
 msgid "Delete the currently selected note or notebook."
 msgstr ""
 
@@ -41,34 +55,20 @@ msgstr ""
 msgid "[t]oggle note [m]etadata."
 msgstr ""
 
-msgid "Enter command line mode"
-msgstr ""
-
-msgid "Exit command line mode"
-msgstr ""
-
 #, fuzzy
-msgid "Cancel the current command."
-msgstr "Annulation..."
-
-#, fuzzy
-msgid "Exit the application."
-msgstr "Quitter le logiciel."
-
-#, fuzzy
-msgid "Create a [n]ew [n]ote"
+msgid "[M]ake a new [n]ote"
 msgstr "Créer une note."
 
 #, fuzzy
-msgid "Create a [n]ew [t]odo"
+msgid "[M]ake a new [t]odo"
 msgstr "Créer une nouvelle tâche."
 
 #, fuzzy
-msgid "Create a [n]ew [n]otebook"
+msgid "[M]ake a new note[b]ook"
 msgstr "Créer un carnet."
 
 #, fuzzy
-msgid "Copy the note to a notebook."
+msgid "Copy ([Y]ank) the [n]ote to a notebook."
 msgstr "Impossible de copier la note dans le carnet \"%s\""
 
 #, fuzzy
@@ -278,6 +278,9 @@ msgstr "Afficher l'URL de l'emplacement de la note."
 #, fuzzy
 msgid "Displays usage information."
 msgstr "Affiche les informations de version"
+
+msgid "Shortcuts are not available in CLI mode."
+msgstr ""
 
 msgid "Type `help [command]` for more information about a command."
 msgstr ""
@@ -857,6 +860,10 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#, fuzzy
+#~ msgid "Create a [n]ew [n]otebook"
+#~ msgstr "Créer un carnet."
 
 #, fuzzy
 #~ msgid "[Cancel]"

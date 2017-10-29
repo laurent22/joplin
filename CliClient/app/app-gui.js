@@ -276,6 +276,45 @@ class AppGui {
 			isDocOnly: true,
 		}
 
+		shortcuts[':'] = {
+			description: _('Enter command line mode'),
+			action: async () => {
+				const cmd = await this.widget('statusBar').prompt();
+				if (!cmd) return;
+				this.addCommandToConsole(cmd);
+				await this.processCommand(cmd);
+			},
+		};
+
+		shortcuts['ESC'] = { // Built into terminal-kit inputField
+			description: _('Exit command line mode'),
+			isDocOnly: true,
+		};
+
+		shortcuts['ENTER'] = {
+			description: null,
+			action: () => {
+				const w = this.widget('mainWindow').focusedWidget;
+				if (w.name === 'folderList') {
+					this.widget('noteList').focus();
+				} else if (w.name === 'noteList' || w.name === 'noteText') {
+					this.processCommand('edit $n');
+				}
+			},
+		}
+
+		shortcuts['CTRL_C'] = {
+			description: _('Cancel the current command.'),
+			friendlyName: 'Ctrl+C',
+			isDocOnly: true,
+		}
+
+		shortcuts['CTRL_D'] = {
+			description: _('Exit the application.'),
+			friendlyName: 'Ctrl+D',
+			isDocOnly: true,
+		}
+
 		shortcuts['DELETE'] = {
 			description: _('Delete the currently selected note or notebook.'),
 			action: async () => {
@@ -330,66 +369,27 @@ class AppGui {
 			canRunAlongOtherCommands: true,
 		}
 
-		shortcuts[':'] = {
-			description: _('Enter command line mode'),
-			action: async () => {
-				const cmd = await this.widget('statusBar').prompt();
-				if (!cmd) return;
-				this.addCommandToConsole(cmd);
-				await this.processCommand(cmd);
-			},
-		};
-
-		shortcuts['ESC'] = { // Built into terminal-kit inputField
-			description: _('Exit command line mode'),
-			isDocOnly: true,
-		};
-
-		shortcuts['ENTER'] = {
-			description: null,
-			action: () => {
-				const w = this.widget('mainWindow').focusedWidget;
-				if (w.name === 'folderList') {
-					this.widget('noteList').focus();
-				} else if (w.name === 'noteList' || w.name === 'noteText') {
-					this.processCommand('edit $n');
-				}
-			},
-		}
-
-		shortcuts['CTRL_C'] = {
-			description: _('Cancel the current command.'),
-			friendlyName: 'Ctrl+C',
-			isDocOnly: true,
-		}
-
-		shortcuts['CTRL_D'] = {
-			description: _('Exit the application.'),
-			friendlyName: 'Ctrl+D',
-			isDocOnly: true,
-		}
-
-		shortcuts['nn'] = {
-			description: _('Create a [n]ew [n]ote'),
+		shortcuts['mn'] = {
+			description: _('[M]ake a new [n]ote'),
 			action: { type: 'prompt', initialText: 'mknote ""', cursorPosition: -2 },
 		}
 
-		shortcuts['nt'] = {
-			description: _('Create a [n]ew [t]odo'),
+		shortcuts['mt'] = {
+			description: _('[M]ake a new [t]odo'),
 			action: { type: 'prompt', initialText: 'mktodo ""', cursorPosition: -2 },
 		}
 
-		shortcuts['nb'] = {
-			description: _('Create a [n]ew [n]otebook'),
+		shortcuts['mb'] = {
+			description: _('[M]ake a new note[b]ook'),
 			action: { type: 'prompt', initialText: 'mkbook ""', cursorPosition: -2 },
 		}
 
-		shortcuts['cp'] = {
-			description: _('Copy the note to a notebook.'),
+		shortcuts['yn'] = {
+			description: _('Copy ([Y]ank) the [n]ote to a notebook.'),
 			action: { type: 'prompt', initialText: 'cp $n ""', cursorPosition: -2 },
 		}
 
-		shortcuts['mv'] = {
+		shortcuts['dn'] = {
 			description: _('Move the note to a notebook.'),
 			action: { type: 'prompt', initialText: 'mv $n ""', cursorPosition: -2 },
 		}

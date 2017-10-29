@@ -21,6 +21,18 @@ msgstr ""
 msgid "Give focus to previous widget"
 msgstr ""
 
+msgid "Enter command line mode"
+msgstr ""
+
+msgid "Exit command line mode"
+msgstr ""
+
+msgid "Cancel the current command."
+msgstr ""
+
+msgid "Exit the application."
+msgstr ""
+
 msgid "Delete the currently selected note or notebook."
 msgstr ""
 
@@ -39,28 +51,16 @@ msgstr ""
 msgid "[t]oggle note [m]etadata."
 msgstr ""
 
-msgid "Enter command line mode"
+msgid "[M]ake a new [n]ote"
 msgstr ""
 
-msgid "Exit command line mode"
+msgid "[M]ake a new [t]odo"
 msgstr ""
 
-msgid "Cancel the current command."
+msgid "[M]ake a new note[b]ook"
 msgstr ""
 
-msgid "Exit the application."
-msgstr ""
-
-msgid "Create a [n]ew [n]ote"
-msgstr ""
-
-msgid "Create a [n]ew [t]odo"
-msgstr ""
-
-msgid "Create a [n]ew [n]otebook"
-msgstr ""
-
-msgid "Copy the note to a notebook."
+msgid "Copy ([Y]ank) the [n]ote to a notebook."
 msgstr ""
 
 msgid "Move the note to a notebook."
@@ -249,6 +249,9 @@ msgid "Displays a geolocation URL for the note."
 msgstr ""
 
 msgid "Displays usage information."
+msgstr ""
+
+msgid "Shortcuts are not available in CLI mode."
 msgstr ""
 
 msgid "Type `help [command]` for more information about a command."
