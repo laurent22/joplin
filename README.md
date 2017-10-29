@@ -120,9 +120,9 @@ To import Evernote data, follow these steps:
 * In Joplin, in [command-line mode](#command-line-mode), type `import-enex /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
 * Then repeat the process each notebook that needs to be imported.
 
-# Synchronization
+# Synchronisation
 
-Joplin does synchronisation by creating simple text files that represent notes, notebooks, tags and resources. These files can then be synchronised with OneDrive or any other supported target (currently it can also synchronise with the local file system; and a Dropbox driver is also planned). When syncing, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory. To initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application. After that, the application will synchronise in the background whenever it is running. It's possible to also synchronise outside of the user interface by typing `joplin sync`. This can be used to setup a cron script to synchronise at regular interval. For example, this would synchronise every 30 minutes:
+Joplin does synchronisation by creating simple text files that represent notes, notebooks, tags and resources. These files can then be synchronised with OneDrive or any other supported target (currently it can also synchronise with the local file system; and a Dropbox driver is also planned). When syncing, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory. To initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application. After that, the application will synchronise in the background whenever it is running. It's possible to also synchronise outside of the user interface by typing `joplin sync`. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:
 
 	*/30 * * * * /path/to/joplin sync
 
@@ -134,17 +134,17 @@ An Android client is available and can synchronise with the terminal client via 
 
 # URLs
 
-By pressing Ctrl+Click on a URL, most terminals will open that URL in the default browser. However, one issue, especially with long URLs, is that they can end up like this:
+When Ctrl+Clicking a URL, most terminals will open that URL in the default browser. However, one issue, especially with long URLs, is that they can end up like this:
 
 <img src="https://github.com/laurent22/joplin/blob/master/docs/images/UrlCut.png" width="240px">
 
 Not only it makes the text hard to read, but the link, being cut in two, will also not be clickable.
 
-As a solution Joplin tries to start a mini-server in the background and, if successful, all the links will be converted to a much shorter, local URL:
+As a solution Joplin tries to start a mini-server in the background and, if successful, all the links will be converted to a much shorter URL:
 
 <img src="https://github.com/laurent22/joplin/blob/master/docs/images/UrlNoCut.png" width="240px">
 
-Since this is still an actual URL, the terminal should still make it clickable. And with shorter URLs, the text is more readable and the links are unlikely to be cut. Note that both resources (files that are attached to notes) and external links are handled in this way.
+Since this is still an actual URL, the terminal will still make it clickable. And with shorter URLs, the text is more readable and the links unlikely to be cut. Both resources (files that are attached to notes) and external links are handled in this way.
 
 # Attachments / Resources
 
