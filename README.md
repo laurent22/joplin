@@ -42,7 +42,7 @@ To start it, type `demo-joplin`.
 
 To start the application type `joplin`. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via [shortcuts](#available-shortcuts).
 
-<img src="https://github.com/laurent22/joplin/blob/master/docs/images/ScreenshotTerminalCaptions.png" height="400px">
+<img src="https://github.com/laurent22/joplin/blob/master/docs/images/ScreenshotTerminalCaptions.png" height="450px">
 
 ## Input modes
 
@@ -163,10 +163,10 @@ This translation will apply to both the terminal and the Android application.
 
 # Available shortcuts
 
-There are two types of shortcuts: those that manipulate the user interface directly, such as `TAB` to move from one widget to another, and those that are simply shortcuts to actual commands. In a way similar to Vim, these commands are generally a verb followed by an object. For example, typing `mn` ([m]ake [n]ote), is used to create a new note: it will switch the interface to command line mode and pre-fill it with `mknote ""` from where the title of the note can be entered. See below for the full list of shortcuts:
+There are two types of shortcuts: those that manipulate the user interface directly, such as `TAB` to move from one pane to another, and those that are simply shortcuts to actual commands. In a way similar to Vim, these shortcuts are generally a verb followed by an object. For example, typing `mn` ([m]ake [n]ote), is used to create a new note: it will switch the interface to command line mode and pre-fill it with `mknote ""` from where the title of the note can be entered. See below for the full list of shortcuts:
 
-	Tab       Give focus to next widget
-	Shift+Tab Give focus to previous widget
+	Tab       Give focus to next pane
+	Shift+Tab Give focus to previous pane
 	:         Enter command line mode
 	ESC       Exit command line mode
 	Ctrl+C    Cancel the current command.

@@ -10,11 +10,11 @@ import fs from 'fs-extra';
 class Command extends BaseCommand {
 
 	usage() {
-		return 'export <destination>';
+		return 'export <directory>';
 	}
 
 	description() {
-		return _('Exports Joplin data to the given target.');
+		return _('Exports Joplin data to the given directory. By default, it will export the complete database including notebooks, notes, tags and resources.');
 	}
 
 	options() {
@@ -26,7 +26,7 @@ class Command extends BaseCommand {
 	
 	async action(args) {
 		let exportOptions = {};
-		exportOptions.destDir = args.destination;
+		exportOptions.destDir = args.directory;
 		exportOptions.writeFile = (filePath, data) => {
 			return fs.writeFile(filePath, data);
 		};

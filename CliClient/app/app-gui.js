@@ -266,13 +266,13 @@ class AppGui {
 
 		shortcuts['TAB'] = {
 			friendlyName: 'Tab',
-			description: _('Give focus to next widget'),
+			description: _('Give focus to next pane'),
 			isDocOnly: true,
 		}
 
 		shortcuts['SHIFT_TAB'] = {
 			friendlyName: 'Shift+Tab',
-			description: _('Give focus to previous widget'),
+			description: _('Give focus to previous pane'),
 			isDocOnly: true,
 		}
 
