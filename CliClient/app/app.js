@@ -520,7 +520,7 @@ class Application {
 			const result = next(action);
 			const newState = store.getState();
 
-			if (action.type == 'FOLDERS_SELECT') {
+			if (action.type == 'FOLDERS_SELECT' || action.type === 'FOLDER_DELETE') {
 				Setting.setValue('activeFolderId', newState.selectedFolderId);
 				this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
 				await this.refreshNotes(Folder.modelType(), newState.selectedFolderId);

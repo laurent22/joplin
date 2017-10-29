@@ -1,6 +1,12 @@
 # Joplin
 
-INTRODUCTION
+Joplin is a free, open source note taking and todo application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor.
+
+Notes exported from Evenotes via .enex files [can be imported](#importing-notes-from-evernote) into Joplin, including the formatted content (which is converted to markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).
+
+The notes can be [synchronised](#synchronisation) with various targets including the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
+
+The application is still under development but is out of Beta and should be suitable for every day use.
 
 ![Joplin Terminal Screenshot](https://github.com/laurent22/joplin/blob/master/docs/images/ScreenshotTerminal.png)
 
@@ -114,19 +120,21 @@ INFO ABOUT SYNC
 
 # Android client
 
-LINK TO ANDROID CLIENT
+An Android client is available and can synchronise with the terminal client via OneDrive:
+
+<a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
 
 # URLs
 
 By pressing Ctrl+Click on a URL, most terminals will open that URL in the default browser. However, one issue especially with long URLs is that they can end up like this:
 
-<img src="https://github.com/laurent22/joplin/blob/master/docs/images/UrlCut.png" width="240">
+<img src="https://github.com/laurent22/joplin/blob/master/docs/images/UrlCut.png" width="240px">
 
 Not only it makes the text hard to read, but the link, being cut in two, will also not be clickable.
 
 As a solution Joplin tries to start a mini-server in the background and, if successful, all the links will be converted to a much shorter, local URL:
 
-<img src="https://github.com/laurent22/joplin/blob/master/docs/images/UrlNoCut.png" width="240">
+<img src="https://github.com/laurent22/joplin/blob/master/docs/images/UrlNoCut.png" width="240px">
 
 With this it means that not only the text will be more readable but links are also unlikely to be cut. Note that both resources (files that are attached to notes) and external links are handled in this way.
 
@@ -146,8 +154,6 @@ The applications is currently available in English and French. If you would like
 # Available shortcuts
 
 There are two types of shortcuts: those that manipulate the user interface directly, such as TAB to move from one widget to another, and those that are simply shortcuts to actual commands. In a way similar to Vim, these commands are generally a verb followed by an object. For example, typing `mn` ([m]ake [n]ote), is used to create a new note, it will switch the interface to command line mode and pre-fill it with `mknote ""` from where the title of the note can be entered.
-
-*List of shortcuts:*
 
 	Tab       Give focus to next widget
 	Shift+Tab Give focus to previous widget
