@@ -71,7 +71,7 @@ class NoteListComponent extends Component {
 
 	componentWillMount() {
 		const newDataSource = this.state.dataSource.cloneWithRows(this.filterNotes(this.props.items));
-		this.state = { dataSource: newDataSource };
+		this.setState({ dataSource: newDataSource });
 	}
 
 	componentWillReceiveProps(newProps) {

@@ -326,7 +326,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			const format = res.type == 'image/png' ? 'PNG' : 'JPEG';
 			reg.logger().info('Resizing image ' + localFilePath);
-			const resizedImagePath = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85);
+			const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85);
+			const resizedImagePath = resizedImage.uri;
 			reg.logger().info('Resized image ', resizedImagePath);
 			RNFetchBlob.fs.cp(resizedImagePath, targetPath); // mv doesn't work ("source path does not exist") so need to do cp and unlink
 			

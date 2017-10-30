@@ -46,7 +46,7 @@ msgid "Please select the note or notebook to be deleted first."
 msgstr "Veuillez d'abord sélectionner un carnet."
 
 #, fuzzy
-msgid "Set a todo as completed / not completed"
+msgid "Set a to-do as completed / not completed"
 msgstr "Tâches non-complétées et récentes"
 
 msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
@@ -229,11 +229,11 @@ msgstr ""
 "Copie les notes correspondant à [nom] vers [carnet]. Si aucun carnet n'est "
 "spécifié, la note est dupliqué sur place."
 
-msgid "Marks a todo as done."
+msgid "Marks a to-do as done."
 msgstr ""
 
 #, javascript-format
-msgid "Note is not a todo: \"%s\""
+msgid "Note is not a to-do: \"%s\""
 msgstr ""
 
 msgid "Edit note."
@@ -386,10 +386,11 @@ msgstr ""
 msgid "Reverses the sorting order."
 msgstr "Inverser l'ordre."
 
+#, fuzzy
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
-"for todos, or `nt` for notes and todos (eg. `-tt` would display only the "
-"todos, while `-ttd` would display notes and todos."
+"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
+"to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
 "Affiche uniquement les notes du ou des types spécifiés. Le type peut-être "
 "`n` pour les notes, `t` pour les tâches (par exemple, `-tt` affiche "
@@ -398,9 +399,10 @@ msgstr ""
 msgid "Either \"text\" or \"json\""
 msgstr "Soit \"text\" soit \"json\""
 
+#, fuzzy
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
-"TODO_CHECKED (for todos), TITLE"
+"TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
 "Utilise le format de liste longue. Le format est ID, NOMBRE_DE_NOTES (pour "
 "les carnets), DATE, TACHE_TERMINE (pour les tâches), TITRE"
@@ -417,7 +419,8 @@ msgstr "Créer une note."
 msgid "Notes can only be created within a notebook."
 msgstr "Les notes ne peuvent être créées que dans un carnet."
 
-msgid "Creates a new todo."
+#, fuzzy
+msgid "Creates a new to-do."
 msgstr "Créer une nouvelle tâche."
 
 #, fuzzy
@@ -517,17 +520,18 @@ msgstr "Commande invalide : \"%s\""
 #, fuzzy
 msgid ""
 "<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
-"toggle the given todo between completed and uncompleted state (If the target "
-"is a regular note it will be converted to a todo). Use \"clear\" to convert "
-"the todo back to a regular note."
+"toggle the given to-do between completed and uncompleted state (If the "
+"target is a regular note it will be converted to a to-do). Use \"clear\" to "
+"convert the to-do back to a regular note."
 msgstr ""
 "Gère le status des tâches. <action> peut être \"toggle\" ou \"clear\". "
 "Utilisez \"toggle\" pour basculer la tâche entre le status terminé et non-"
 "terminé (Si la cible est une note, elle sera convertie en tâche). Utilisez "
 "\"clear\" pour convertir la tâche en note."
 
-msgid "Marks a todo as non-completed."
-msgstr ""
+#, fuzzy
+msgid "Marks a to-do as non-completed."
+msgstr "Tâches non-complétées et récentes"
 
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
@@ -765,7 +769,8 @@ msgstr "Carnets"
 msgid "%s: %d notes"
 msgstr "%s : %d notes"
 
-msgid "New todo"
+#, fuzzy
+msgid "New to-do"
 msgstr "Nouvelle tâche"
 
 msgid "New note"
