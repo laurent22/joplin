@@ -3,6 +3,7 @@ import { WebView, View, Linking } from 'react-native';
 import { globalStyle } from 'lib/components/global-style.js';
 import { Resource } from 'lib/models/resource.js';
 import { shim } from 'lib/shim.js';
+import { reg } from 'lib/registry.js';
 import marked from 'lib/marked.js';
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = (new Entities()).encode;
@@ -172,8 +173,6 @@ class NoteBodyViewer extends Component {
 
 		html = '<body onscroll="postMessage(\'bodyscroll:\' + document.body.scrollTop);">' + html + scriptHtml + '</body>';
 
-		// console.info(html);
-
 		return html;
 	}
 
@@ -203,6 +202,7 @@ class NoteBodyViewer extends Component {
 					style={webViewStyle}
 					source={{ html: html }}
 					onLoadEnd={() => this.onLoadEnd()}
+					onError={(e) => reg.logger().error('WebView error', e) }
 					onMessage={(event) => {
 						let msg = event.nativeEvent.data;
 

@@ -23,6 +23,7 @@ const defaultState = {
 	searchQuery: '',
 	settings: {},
 	appState: 'starting',
+	sideMenuOpenPercent: 0,
 	route: {
 		type: 'NAV_GO',
 		routeName: 'Welcome',
@@ -335,6 +336,12 @@ const reducer = (state = defaultState, action) => {
 				newState = Object.assign({}, state);
 				newState.showSideMenu = false
 				break;
+
+			case 'SIDE_MENU_OPEN_PERCENT':
+
+				newState = Object.assign({}, state);
+				newState.sideMenuOpenPercent = action.value;
+				break;				
 
 			case 'SYNC_STARTED':
 

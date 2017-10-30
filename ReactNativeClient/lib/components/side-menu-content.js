@@ -181,6 +181,8 @@ class SideMenuContentComponent extends Component {
 	render() {
 		let items = [];
 
+		const theme = themeStyle(this.props.theme);
+
 		// HACK: inner height of ScrollView doesn't appear to be calculated correctly when
 		// using padding. So instead creating blank elements for padding bottom and top.
 		items.push(<View style={{ height: globalStyle.marginTop }} key='bottom_top_hack'/>);
@@ -222,14 +224,23 @@ class SideMenuContentComponent extends Component {
 
 		items.push(<View style={{ height: globalStyle.marginBottom }} key='bottom_padding_hack'/>);
 
+		let style = {
+			flex:1,
+			borderRightWidth: 1,
+			borderRightColor: globalStyle.dividerColor,
+			backgroundColor: theme.backgroundColor,
+		};
+
 		return (
-			<View style={{flex:1, borderRightWidth: 1, borderRightColor: globalStyle.dividerColor }}>
-				<View style={{flexDirection:'row'}}>
-					<Image style={{flex:1, height: 100}} source={require('../images/SideMenuHeader.png')} />
+			<View style={style}>
+				<View style={{flex:1, opacity: this.props.opacity}}>
+					<View style={{flexDirection:'row'}}>
+						<Image style={{flex:1, height: 100}} source={require('../images/SideMenuHeader.png')} />
+					</View>
+					<ScrollView scrollsToTop={false} style={this.styles().menu}>
+						{ items }
+					</ScrollView>
 				</View>
-				<ScrollView scrollsToTop={false} style={this.styles().menu}>
-					{ items }
-				</ScrollView>
 			</View>
 		);
 	}
@@ -247,6 +258,7 @@ const SideMenuContent = connect(
 			notesParentType: state.notesParentType,
 			locale: state.settings.locale,
 			theme: state.settings.theme,
+			opacity: state.sideMenuOpenPercent,
 		};
 	}
 )(SideMenuContentComponent)
