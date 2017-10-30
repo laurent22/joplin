@@ -79,6 +79,7 @@ const headerHtml = `
 		padding-left: 2em;
 		padding-right: 2em;
 		padding-bottom: 2em;
+		padding-top: 2em;
 	}
 	.forkme {
 		position: absolute;
