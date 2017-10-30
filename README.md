@@ -169,16 +169,18 @@ There are two types of shortcuts: those that manipulate the user interface direc
 	Shift+Tab Give focus to previous pane
 	:         Enter command line mode
 	ESC       Exit command line mode
+	ENTER     Edit the selected note
 	Ctrl+C    Cancel the current command.
 	Ctrl+D    Exit the application.
 	DELETE    Delete the currently selected note or notebook.
-	SPACE     Set a todo as completed / not completed
+	SPACE     Set a to-do as completed / not completed
 	tc        [t]oggle [c]onsole between maximized/minimized/hidden/visible.
+	/         Search
 	tm        [t]oggle note [m]etadata.
-	mn        [m]ake a new [n]ote
-	mt        [m]ake a new [t]odo
-	mb        [m]ake a new note[b]ook
-	yn        Copy ([y]ank) the [n]ote to a notebook.
+	mn        [M]ake a new [n]ote
+	mt        [M]ake a new [t]odo
+	mb        [M]ake a new note[b]ook
+	yn        Copy ([Y]ank) the [n]ote to a notebook.
 	dn        Move the note to a notebook.
 
 # Available commands
@@ -187,163 +189,169 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	attach <note> <file>
 
-	    Attaches the given file to the note.
+	    Joindre le fichier fourni à la note.
 
 	config [name] [value]
 
-	    Gets or sets a config value. If [value] is not provided, it will show the 
-	    value of [name]. If neither [name] nor [value] is provided, it will list 
-	    the current configuration.
+	    Obtient ou modifie une valeur de configuration. Si la [valeur] n'est pas 
+	    fournie, la valeur de [nom] est affichée. Si ni le [nom] ni la [valeur] ne 
+	    sont fournis, la configuration complète est affichée.
 
-	    -v, --verbose  Also displays unset and hidden config variables.
+	    -v, --verbose  Afficher également les variables cachées.
 
-	Possible keys/values:
+	Clefs/Valeurs possibles :
 
-	    editor                 Text editor.
-	                           The editor that will be used to open a note. If 
-	                           none is provided it will try to auto-detect the 
-	                           default editor.
-	                           Type: string.
+	    editor                 Editeur de texte.
+	                           L'éditeur de texte pour ouvrir et modifier les 
+	                           notes. Si aucun n'est spécifié, il sera détecté 
+	                           automatiquement.
+	                           Type : string.
 	                           
-	    locale                 Language.
-	                           Type: Enum.
-	                           Possible values: en_GB (English), fr_FR (Français).
-	                           Default: "en_GB"
+	    locale                 Langue.
+	                           Type : Enum.
+	                           Valeurs possibles : en_GB (English), fr_FR 
+	                           (Français).
+	                           Défaut : "en_GB"
 	                           
-	    sync.2.path            File system synchronisation target directory.
-	                           The path to synchronise with when file system 
-	                           synchronisation is enabled. See `sync.target`.
-	                           Type: string.
+	    sync.2.path            Cible de la synchronisation sur le disque dur.
+	                           Le chemin du répertoire avec lequel synchroniser 
+	                           lorsque la synchronisation par système de fichier 
+	                           est activée. Voir `sync.target`.
+	                           Type : string.
 	                           
-	    sync.interval          Synchronisation interval.
-	                           Type: Enum.
-	                           Possible values: 0 (Disabled), 300 (5 minutes), 600 
-	                           (10 minutes), 1800 (30 minutes), 3600 (1 hour), 
-	                           43200 (12 hours), 86400 (24 hours).
-	                           Default: 300
+	    sync.interval          Interval de synchronisation.
+	                           Type : Enum.
+	                           Valeurs possibles : 0 (Désactivé), 300 (5 minutes), 
+	                           600 (10 minutes), 1800 (30 minutes), 3600 (1 
+	                           heure), 43200 (12 heures), 86400 (24 heures).
+	                           Défaut : 300
 	                           
-	    sync.target            Synchronisation target.
-	                           The target to synchonise to. If synchronising with 
-	                           the file system, set `sync.2.path` to specify the 
-	                           target directory.
-	                           Type: Enum.
-	                           Possible values: 1 (Memory), 2 (File system), 3 
-	                           (OneDrive).
-	                           Default: 3
+	    sync.target            Cible de la synchronisation.
+	                           La cible avec laquelle synchroniser. Pour 
+	                           synchroniser avec le système de fichier, veuillez 
+	                           spécifier le répertoire avec `sync.2.path`.
+	                           Type : Enum.
+	                           Valeurs possibles : 1 (Memory), 2 (Système de 
+	                           fichier), 3 (OneDrive).
+	                           Défaut : 3
 	                           
-	    trackLocation          Save geo-location with notes.
-	                           Type: bool.
-	                           Default: true
+	    trackLocation          Enregistrer l'emplacement avec les notes.
+	                           Type : bool.
+	                           Défaut : true
 	                           
-	    uncompletedTodosOnTop  Show uncompleted todos on top of the lists.
-	                           Type: bool.
-	                           Default: true
+	    uncompletedTodosOnTop  Tâches non-terminées en haut des listes.
+	                           Type : bool.
+	                           Défaut : true
 
 	cp <note> [notebook]
 
-	    Duplicates the notes matching <note> to [notebook]. If no notebook is 
-	    specified the note is duplicated in the current notebook.
+	    Copie les notes correspondant à <nom> vers [carnet]. Si aucun carnet n'est 
+	    spécifié, la note est dupliquée sur place.
 
 	done <note>
 
-	    Marks a todo as done.
+	    Marquer la tâche comme complétée.
 
 	edit <note>
 
-	    Edit note.
+	    Editer la note.
 
 	exit
 
-	    Exits the application.
+	    Quitter le logiciel.
 
-	export <destination>
+	export <directory>
 
-	    Exports Joplin data to the given target.
+	    Exporter les données de Joplin vers le dossier fourni. Par défaut, la base 
+	    de donnée complète sera exportée, y compris les carnets, notes, tags et 
+	    resources.
 
-	    --note <note>          Exports only the given note.
-	    --notebook <notebook>  Exports only the given notebook.
+	    --note <note>          Exporter uniquement la note spécifiée.
+	    --notebook <notebook>  Exporter uniquement le carnet spécifié.
 
 	geoloc <note>
 
-	    Displays a geolocation URL for the note.
+	    Afficher l'URL de l'emplacement de la note.
 
 	help [command]
 
-	    Displays usage information.
+	    Affiche les informations d'utilisation.
 
 	import-enex <file> [notebook]
 
-	    Imports an Evernote notebook file (.enex file).
+	    Importer un carnet Evernote (fichier .enex).
 
-	    -f, --force  Do not ask for confirmation.
+	    -f, --force  Ne pas demander de confirmation.
 
 	mkbook <new-notebook>
 
-	    Creates a new notebook.
+	    Créer un carnet.
 
 	mknote <new-note>
 
-	    Creates a new note.
+	    Créer une note.
 
 	mktodo <new-todo>
 
-	    Creates a new todo.
+	    Créer une nouvelle tâche.
 
 	mv <note> [notebook]
 
-	    Moves the notes matching <note> to [notebook].
+	    Déplacer les notes correspondant à <note> vers [notebook].
 
 	ren <item> <name>
 
-	    Renames the given <item> (note or notebook) to <name>.
+	    Renommer l'objet <item> (note ou carnet) en <name>.
 
 	rmbook <notebook>
 
-	    Deletes the given notebook.
+	    Supprimer le carnet.
 
-	    -f, --force  Deletes the notebook without asking for confirmation.
+	    -f, --force  Supprimer le carnet sans demander la confirmation.
 
 	rmnote <note-pattern>
 
-	    Deletes the notes matching <note-pattern>.
+	    Supprimer les notes correspondants à <note-pattern>.
 
-	    -f, --force  Deletes the notes without asking for confirmation.
+	    -f, --force  Supprimer les notes sans demander la confirmation.
 
 	search <pattern> [notebook]
 
-	    Searches for the given <pattern> in all the notes.
+	    Chercher le motif <pattern> dans toutes les notes.
 
 	status
 
-	    Displays summary about the notes and notebooks.
+	    Afficher un résumé des notes et carnets.
 
 	sync
 
-	    Synchronises with remote storage.
+	    Synchroniser les notes et carnets.
 
-	    --target <target>  Sync to provided target (defaults to sync.target config 
-	                       value)
+	    --target <target>  Synchroniser avec la cible donnée (par défaut, la 
+	                       valeur de configuration `sync.target`).
+	    --random-failures  For debugging purposes. Do not use.
 
 	tag <tag-command> [tag] [note]
 
-	    <tag-command> can be "add", "remove" or "list" to assign or remove [tag] 
-	    from [note], or to list the notes associated with [tag]. The command `tag 
-	    list` can be used to list all the tags.
+	    <tag-command> peut être "add", "remove" ou "list" pour assigner ou enlever 
+	    l'étiquette [tag] de la [note], our pour lister les notes associées avec 
+	    l'étiquette [tag]. La commande `tag list` peut être utilisée pour lister 
+	    les étiquettes.
 
 	todo <todo-command> <note-pattern>
 
-	    <todo-command> can either be "toggle" or "clear". Use "toggle" to toggle 
-	    the given todo between completed and uncompleted state (If the target is a 
-	    regular note it will be converted to a todo). Use "clear" to convert the 
-	    todo back to a regular note.
+	    Gère le status des tâches. <todo-command> peut être "toggle" ou "clear". 
+	    Utilisez "toggle" pour basculer la tâche entre le status terminé et 
+	    non-terminé (Si la cible est une note, elle sera convertie en tâche). 
+	    Utilisez "clear" pour convertir la tâche en note.
 
 	undone <note>
 
-	    Marks a todo as non-completed.
+	    Marquer une tâche comme non-complétée.
 
 	version
 
-	    Displays version information
+	    Affiche les informations de version
 
 # Known bugs
 
