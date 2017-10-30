@@ -10,7 +10,7 @@ const headerHtml = `
 <!doctype html>
 <html>
 <head>
-	<title>Joplin - a free, open source, note taking and todo application with synchronisation capabilities</title>
+	<title>Joplin - a free, open source, note taking and to-do application with synchronisation capabilities</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -95,7 +95,7 @@ const headerHtml = `
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="docs/images/ForkMe.png"/></a>
 	<h1 id="joplin"><img class="title-icon" src="docs/images/Icon512.png">oplin</h1>
-	<p class="sub-title">A free, open source, note taking and todo application with synchronisation capabilities.</p>
+	<p class="sub-title">A free, open source, note taking and to-do application with synchronisation capabilities.</p>
 </div>
 
 <div class="content">

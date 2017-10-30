@@ -340,7 +340,7 @@ class AppGui {
 
 		shortcuts[' '] = {
 			friendlyName: 'SPACE',
-			description: _('Set a todo as completed / not completed'),
+			description: _('Set a to-do as completed / not completed'),
 			action: 'todo toggle $n',
 		}
 

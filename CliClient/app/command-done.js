@@ -13,13 +13,13 @@ class Command extends BaseCommand {
 	}
 
 	description() {
-		return _('Marks a todo as done.');
+		return _('Marks a to-do as done.');
 	}
 
 	static async handleAction(args, isCompleted) {
 		const note = await app().loadItem(BaseModel.TYPE_NOTE, args.note);
 		if (!note) throw new Error(_('Cannot find "%s".', args.note));
-		if (!note.is_todo) throw new Error(_('Note is not a todo: "%s"', args.note));
+		if (!note.is_todo) throw new Error(_('Note is not a to-do: "%s"', args.note));
 
 		const todoCompleted = !!note.todo_completed;
 

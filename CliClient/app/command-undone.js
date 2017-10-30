@@ -15,7 +15,7 @@ class Command extends BaseCommand {
 	}
 
 	description() {
-		return _('Marks a todo as non-completed.');
+		return _('Marks a to-do as non-completed.');
 	}
 
 	async action(args) {

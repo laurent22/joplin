@@ -1,6 +1,6 @@
 # Joplin
 
-Joplin is a free, open source note taking and todo application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor.
+Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor.
 
 Notes exported from Evernote via .enex files [can be imported](#importing-notes-from-evernote) into Joplin, including the formatted content (which is converted to markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).
 
@@ -18,7 +18,7 @@ To start it, type `joplin`.
 
 # Demo
 
-The demo application shows various Wikipedia articles converted to Markdown and organised into notebooks, as well as an example todo list, in order to test and demonstrate the application. The demo application and its settings will be installed in a separate directory so as not to interfere with any existing Joplin application.
+The demo application shows various Wikipedia articles converted to Markdown and organised into notebooks, as well as an example to-do list, in order to test and demonstrate the application. The demo application and its settings will be installed in a separate directory so as not to interfere with any existing Joplin application.
 
 	npm install -g demo-joplin
 
@@ -27,7 +27,7 @@ To start it, type `demo-joplin`.
 # Features
 
 - Mobile and command line applications.
-- Support notes, todos, tags and notebooks.
+- Support notes, to-dos, tags and notebooks.
 - Offline first, so the entire data is always available on the device.
 - Ability to synchronise with multiple targets, including the file system and OneDrive (Dropbox is planned).
 - Synchronises to a plain text format, which can be easily manipulated, backed up, or exported to a different format.
@@ -70,7 +70,7 @@ Create a new note with title "Wednesday's meeting":
 
 	mknote "Wednesday's meeting"
 
-Create a new todo:
+Create a new to-do:
 
 	mktodo "Buy bread"
 
