@@ -73,9 +73,9 @@ class Command extends BaseCommand {
 			this.stdout('');
 			this.stdout(_('In any command, a note or notebook can be refered to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.'));
 			this.stdout('');
-			this.stdout(_('To move from one widget to another, press Tab or Shift+Tab.'));
+			this.stdout(_('To move from one pane to another, press Tab or Shift+Tab.'));
 			this.stdout(_('Use the arrows and page up/down to scroll the lists and text areas (including this console).'));
-			this.stdout(_('To maximise/minimise the console, press "C".'));
+			this.stdout(_('To maximise/minimise the console, press "TC".'));
 			this.stdout(_('To enter command line mode, press ":"'));
 			this.stdout(_('To exit command line mode, press ESCAPE'));
 			this.stdout(_('For the complete list of available keyboard shortcuts, type `help shortcuts`'));

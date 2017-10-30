@@ -121,43 +121,6 @@ msgstr ""
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr ""
 
-msgid "Only Bash is currently supported for autocompletion."
-msgstr ""
-
-msgid ""
-"Autocompletion can be made to work with an alias too (such as a one-letter "
-"command like \"j\").\n"
-"If you would like to enable this, please type the alias now (leave it empty "
-"for no alias):"
-msgstr ""
-
-#, javascript-format
-msgid "Created autocompletion script \"%s\"."
-msgstr ""
-
-#, javascript-format
-msgid "Autocompletion script is already present in \"%s\"."
-msgstr ""
-
-#, javascript-format
-msgid "Added autocompletion to \"%s\"."
-msgstr ""
-
-#, javascript-format
-msgid "Alias is already set in \"%s\"."
-msgstr ""
-
-#, javascript-format
-msgid "Added alias to \"%s\"."
-msgstr ""
-
-#, javascript-format
-msgid ""
-"IMPORTANT: run the following command to initialise autocompletion in the "
-"current shell:\n"
-"source '%s'"
-msgstr ""
-
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr ""
@@ -271,7 +234,7 @@ msgid ""
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
 
-msgid "To move from one widget to another, press Tab or Shift+Tab."
+msgid "To move from one pane to another, press Tab or Shift+Tab."
 msgstr ""
 
 msgid ""
@@ -279,7 +242,7 @@ msgid ""
 "(including this console)."
 msgstr ""
 
-msgid "To maximise/minimise the console, press \"C\"."
+msgid "To maximise/minimise the console, press \"TC\"."
 msgstr ""
 
 msgid "To enter command line mode, press \":\""

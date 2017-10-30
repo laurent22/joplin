@@ -15,7 +15,6 @@ npm run build || exit 1
 rsync -a "$ROOT_DIR/app/gui/" "$ROOT_DIR/build/gui/"
 
 cp "$ROOT_DIR/package.json" "$ROOT_DIR/build"
-cp "$ROOT_DIR/app/autocompletion_template.txt" "$ROOT_DIR/build"
 
 chmod 755 "$ROOT_DIR/build/main.js"
 
