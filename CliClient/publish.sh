@@ -2,6 +2,7 @@
 set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$SCRIPT_DIR"
 npm version patch
 #$SCRIPT_DIR/update-package-md5.sh
 touch "$SCRIPT_DIR/app/main.js"

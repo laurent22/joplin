@@ -24,7 +24,7 @@ const opt = {
 	stdio: [process.stdin, process.stdout, process.stderr]
 };
 
-const app = spawn(joplinPath, ['--profile', profileDir], opt);
+const app = spawn(joplinPath, ['--is-demo', '--profile', profileDir], opt);
 
 app.on('close', (code) => {
 	process.exit(code);

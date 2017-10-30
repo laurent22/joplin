@@ -32,9 +32,10 @@
 				"ReactNativeClient/android/.gradle",
 				"ReactNativeClient/android/local.properties",
 				"ReactNativeClient/ios",
-				"src/node_modules",
+				"node_modules",
 				"_vieux",
-				"tests/logs"
+				"tests/logs",
+				"_mydocs/mdtest/Pages/Countries",
 			],
 			"path": "."
 		},

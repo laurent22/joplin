@@ -376,13 +376,14 @@ Setting.metadata_ = {
 // Contains constants that are set by the application and
 // cannot be modified by the user:
 Setting.constants_ = {
-	'env': 'SET_ME',
-	'appName': 'joplin',
-	'appId': 'SET_ME', // Each app should set this identifier
-	'appType': 'SET_ME', // 'cli' or 'mobile'
-	'resourceDir': '',
-	'profileDir': '',
-	'tempDir': '',
+	env: 'SET_ME',
+	isDemo: false,
+	appName: 'joplin',
+	appId: 'SET_ME', // Each app should set this identifier
+	appType: 'SET_ME', // 'cli' or 'mobile'
+	resourceDir: '',
+	profileDir: '',
+	tempDir: '',
 }
 
 export { Setting };

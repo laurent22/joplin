@@ -177,6 +177,12 @@ class Application {
 				continue;
 			}
 
+			if (arg == '--is-demo') {
+				Setting.setConstant('isDemo', true);
+				argv.splice(0, 1);
+				continue;
+			}
+
 			if (arg == '--update-geolocation-disabled') {
 				Note.updateGeolocationEnabled_ = false;
 				argv.splice(0, 1);
