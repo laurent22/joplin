@@ -266,18 +266,18 @@ class AppGui {
 
 		shortcuts['TAB'] = {
 			friendlyName: 'Tab',
-			description: _('Give focus to next pane'),
+			description: () => _('Give focus to next pane'),
 			isDocOnly: true,
 		}
 
 		shortcuts['SHIFT_TAB'] = {
 			friendlyName: 'Shift+Tab',
-			description: _('Give focus to previous pane'),
+			description: () => _('Give focus to previous pane'),
 			isDocOnly: true,
 		}
 
 		shortcuts[':'] = {
-			description: _('Enter command line mode'),
+			description: () => _('Enter command line mode'),
 			action: async () => {
 				const cmd = await this.widget('statusBar').prompt();
 				if (!cmd) return;
@@ -287,12 +287,12 @@ class AppGui {
 		};
 
 		shortcuts['ESC'] = { // Built into terminal-kit inputField
-			description: _('Exit command line mode'),
+			description: () => _('Exit command line mode'),
 			isDocOnly: true,
 		};
 
 		shortcuts['ENTER'] = {
-			description: null,
+			description: () => _('Edit the selected note'),
 			action: () => {
 				const w = this.widget('mainWindow').focusedWidget;
 				if (w.name === 'folderList') {
@@ -304,19 +304,19 @@ class AppGui {
 		}
 
 		shortcuts['CTRL_C'] = {
-			description: _('Cancel the current command.'),
+			description: () => _('Cancel the current command.'),
 			friendlyName: 'Ctrl+C',
 			isDocOnly: true,
 		}
 
 		shortcuts['CTRL_D'] = {
-			description: _('Exit the application.'),
+			description: () => _('Exit the application.'),
 			friendlyName: 'Ctrl+D',
 			isDocOnly: true,
 		}
 
 		shortcuts['DELETE'] = {
-			description: _('Delete the currently selected note or notebook.'),
+			description: () => _('Delete the currently selected note or notebook.'),
 			action: async () => {
 				if (this.widget('folderList').hasFocus) {
 					const item = this.widget('folderList').selectedJoplinItem;
@@ -340,12 +340,12 @@ class AppGui {
 
 		shortcuts[' '] = {
 			friendlyName: 'SPACE',
-			description: _('Set a to-do as completed / not completed'),
+			description: () => _('Set a to-do as completed / not completed'),
 			action: 'todo toggle $n',
 		}
 
 		shortcuts['tc'] = {
-			description: _('[t]oggle [c]onsole between maximized/minimized/hidden/visible.'),
+			description: () => _('[t]oggle [c]onsole between maximized/minimized/hidden/visible.'),
 			action: () => {
 				if (!this.consoleIsShown()) {
 					this.showConsole();
@@ -362,12 +362,12 @@ class AppGui {
 		}
 
 		shortcuts['/'] = {
-			description: _('Search'),
+			description: () => _('Search'),
 			action: { type: 'prompt', initialText: 'search ""', cursorPosition: -2 },
 		};
 
 		shortcuts['tm'] = {
-			description: _('[t]oggle note [m]etadata.'),
+			description: () => _('[t]oggle note [m]etadata.'),
 			action: () => {
 				this.toggleNoteMetadata();
 			},
@@ -375,27 +375,27 @@ class AppGui {
 		}
 
 		shortcuts['mn'] = {
-			description: _('[M]ake a new [n]ote'),
+			description: () => _('[M]ake a new [n]ote'),
 			action: { type: 'prompt', initialText: 'mknote ""', cursorPosition: -2 },
 		}
 
 		shortcuts['mt'] = {
-			description: _('[M]ake a new [t]odo'),
+			description: () => _('[M]ake a new [t]odo'),
 			action: { type: 'prompt', initialText: 'mktodo ""', cursorPosition: -2 },
 		}
 
 		shortcuts['mb'] = {
-			description: _('[M]ake a new note[b]ook'),
+			description: () => _('[M]ake a new note[b]ook'),
 			action: { type: 'prompt', initialText: 'mkbook ""', cursorPosition: -2 },
 		}
 
 		shortcuts['yn'] = {
-			description: _('Copy ([Y]ank) the [n]ote to a notebook.'),
+			description: () => _('Copy ([Y]ank) the [n]ote to a notebook.'),
 			action: { type: 'prompt', initialText: 'cp $n ""', cursorPosition: -2 },
 		}
 
 		shortcuts['dn'] = {
-			description: _('Move the note to a notebook.'),
+			description: () => _('Move the note to a notebook.'),
 			action: { type: 'prompt', initialText: 'mv $n ""', cursorPosition: -2 },
 		}
 
@@ -772,7 +772,7 @@ class AppGui {
 				if (cmd && cmd.isDocOnly) processShortcutKeys = false;
 
 				if (processShortcutKeys) {
-					this.logger().info('Shortcut:', shortcutKey, cmd.description);
+					this.logger().info('Shortcut:', shortcutKey, cmd.description());
 
 					this.currentShortcutKeys_ = [];
 					if (typeof cmd.action === 'function') {

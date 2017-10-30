@@ -27,6 +27,9 @@ msgstr ""
 msgid "Exit command line mode"
 msgstr ""
 
+msgid "Edit the selected note"
+msgstr ""
+
 msgid "Cancel the current command."
 msgstr ""
 

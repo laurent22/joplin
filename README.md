@@ -118,7 +118,7 @@ To import Evernote data, follow these steps:
 
 * First, export your Evernote notebooks to ENEX files as described [here](https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks).
 * In Joplin, in [command-line mode](#command-line-mode), type `import-enex /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
-* Then repeat the process each notebook that needs to be imported.
+* Then repeat the process for each notebook that needs to be imported.
 
 # Synchronisation
 
@@ -344,6 +344,10 @@ The following commands are available in [command-line mode](#command-line-mode):
 	version
 
 	    Displays version information
+
+# Known bugs
+
+- Non-alphabetical characters such as Chinese or Arabic might create glitches in the user interface on Windows. This is a limitation of the current Windows console.
 
 # License
 

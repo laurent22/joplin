@@ -1,6 +1,6 @@
 {
   "name": "demo-joplin",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "Demo for Joplin CLI",
   "bin": {
     "demo-joplin": "./index.js"
@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "fs-extra": "^4.0.2",
-    "joplin": "^0.10.63"
+    "joplin": "^0.10.64"
   },
   "author": "Laurent Cozic",
   "license": "MIT"

@@ -50,7 +50,7 @@ class Command extends BaseCommand {
 				const shortcut = shortcuts[n];
 				if (!shortcut.description) continue;
 				n = shortcut.friendlyName ? shortcut.friendlyName : n;
-				rows.push([n, shortcut.description]);
+				rows.push([n, shortcut.description()]);
 			}
 
 			cliUtils.printArray(this.stdout.bind(this), rows);

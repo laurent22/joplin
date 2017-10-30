@@ -27,6 +27,9 @@ msgstr "Démarrer le mode de ligne de commande"
 msgid "Exit command line mode"
 msgstr "Sortir du mode de ligne de commande"
 
+msgid "Edit the selected note"
+msgstr "Editer la note sélectionnée"
+
 msgid "Cancel the current command."
 msgstr "Annuler la commande en cours."
 
@@ -263,9 +266,8 @@ msgstr ""
 "Utilisez les touches fléchées et page précédente/suivante pour faire défiler "
 "les listes et zones de texte (y compris cette console)."
 
-#, fuzzy
 msgid "To maximise/minimise the console, press \"TC\"."
-msgstr "Pour maximiser ou minimiser la console, pressez \"tc\"."
+msgstr "Pour maximiser ou minimiser la console, pressez \"TC\"."
 
 msgid "To enter command line mode, press \":\""
 msgstr "Pour démarrer le mode ligne de commande, pressez \":\""
@@ -856,10 +858,6 @@ msgstr "Bienvenue"
 
 #, fuzzy
 #~ msgid "Show/Hide the console"
-#~ msgstr "Quitter le logiciel."
-
-#, fuzzy
-#~ msgid "Exit the console"
 #~ msgstr "Quitter le logiciel."
 
 #, fuzzy
