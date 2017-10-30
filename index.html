@@ -180,7 +180,9 @@
 <pre><code>ren $n /home/laurent/pictures/Vacation12.jpg
 </code></pre><p>The configuration can also be changed from command-line mode. For example, to change the current editor to Sublime Text:</p>
 <pre><code>config editor &quot;subl -w&quot;
-</code></pre><h2 id="getting-help">Getting help</h2>
+</code></pre><h2 id="editing-a-note">Editing a note</h2>
+<p>To edit a note, select it and press <code>ENTER</code>. Or, in command-line mode, type <code>edit $n</code> to edit the currently selected note, or <code>edit &quot;Note title&quot;</code> to edit a particular note.</p>
+<h2 id="getting-help">Getting help</h2>
 <p>The complete usage information is available from command-line mode, by typing one of these commands:</p>
 <table>
 <thead>
@@ -205,8 +207,6 @@
 </tbody>
 </table>
 <p>If the help is not fully visible, press <code>Tab</code> multiple times till the console is in focus and use the arrow keys or page up/down to scroll the text.</p>
-<h2 id="editing-a-note">Editing a note</h2>
-<p>To edit a note, select it and press <code>ENTER</code>. Or, in command-line mode, type <code>edit $n</code> to edit the currently selected note, or <code>edit &quot;Note title&quot;</code> to edit a particular note.</p>
 <h1 id="importing-notes-from-evernote">Importing notes from Evernote</h1>
 <p>Joplin was designed as a replacement for Evernote and so can import complete Evernote notebooks, as well as notes, tags, resources (attached files) and note metadata (such as author, geo-location, etc.) via ENEX files. In terms of data, the only two things that might slightly differ are:</p>
 <ul>
@@ -222,7 +222,9 @@
 <li>Then repeat the process for each notebook that needs to be imported.</li>
 </ul>
 <h1 id="synchronisation">Synchronisation</h1>
-<p>Joplin does synchronisation by creating simple text files that represent notes, notebooks, tags and resources. These files can then be synchronised with OneDrive or any other supported target (currently it can also synchronise with the local file system; and a Dropbox driver is also planned). When syncing, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory. To initiate the synchronisation process, type <code>:sync</code>. You will be asked to follow a link to authorise the application. After that, the application will synchronise in the background whenever it is running. It&#39;s possible to also synchronise outside of the user interface by typing <code>joplin sync</code>. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:</p>
+<p>One of the goal of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as OneDrive or Dropbox, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.</p>
+<p>Currently, synchronisation is possible with OneDrive (by default) or the local filesystem. A Dropbox driver will also be available once <a href="https://github.com/facebook/react-native/issues/14445">this React Native bug</a> is fixed. When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
+<p>To initiate the synchronisation process, type <code>:sync</code>. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). After that, the application will synchronise in the background whenever it is running. It is possible to also synchronise outside of the user interface by typing <code>joplin sync</code> from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:</p>
 <pre><code>*/30 * * * * /path/to/joplin sync
 </code></pre><h1 id="android-client">Android client</h1>
 <p>An Android client is available and can synchronise with the terminal client via OneDrive:</p>
