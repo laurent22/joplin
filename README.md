@@ -122,7 +122,7 @@ To import Evernote data, follow these steps:
 
 # Synchronisation
 
-One of the goal of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as OneDrive or Dropbox, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.
+One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as OneDrive or Dropbox, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.
 
 Currently, synchronisation is possible with OneDrive (by default) or the local filesystem. A Dropbox driver will also be available once [this React Native bug](https://github.com/facebook/react-native/issues/14445) is fixed. When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
 
@@ -193,169 +193,165 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	attach <note> <file>
 
-	    Joindre le fichier fourni à la note.
+	    Attaches the given file to the note.
 
 	config [name] [value]
 
-	    Obtient ou modifie une valeur de configuration. Si la [valeur] n'est pas 
-	    fournie, la valeur de [nom] est affichée. Si ni le [nom] ni la [valeur] ne 
-	    sont fournis, la configuration complète est affichée.
+	    Gets or sets a config value. If [value] is not provided, it will show the 
+	    value of [name]. If neither [name] nor [value] is provided, it will list 
+	    the current configuration.
 
-	    -v, --verbose  Afficher également les variables cachées.
+	    -v, --verbose  Also displays unset and hidden config variables.
 
-	Clefs/Valeurs possibles :
+	Possible keys/values:
 
-	    editor                 Editeur de texte.
-	                           L'éditeur de texte pour ouvrir et modifier les 
-	                           notes. Si aucun n'est spécifié, il sera détecté 
-	                           automatiquement.
-	                           Type : string.
+	    editor                 Text editor.
+	                           The editor that will be used to open a note. If 
+	                           none is provided it will try to auto-detect the 
+	                           default editor.
+	                           Type: string.
 	                           
-	    locale                 Langue.
-	                           Type : Enum.
-	                           Valeurs possibles : en_GB (English), fr_FR 
-	                           (Français).
-	                           Défaut : "en_GB"
+	    locale                 Language.
+	                           Type: Enum.
+	                           Possible values: en_GB (English), fr_FR (Français).
+	                           Default: "en_GB"
 	                           
-	    sync.2.path            Cible de la synchronisation sur le disque dur.
-	                           Le chemin du répertoire avec lequel synchroniser 
-	                           lorsque la synchronisation par système de fichier 
-	                           est activée. Voir `sync.target`.
-	                           Type : string.
+	    sync.2.path            File system synchronisation target directory.
+	                           The path to synchronise with when file system 
+	                           synchronisation is enabled. See `sync.target`.
+	                           Type: string.
 	                           
-	    sync.interval          Interval de synchronisation.
-	                           Type : Enum.
-	                           Valeurs possibles : 0 (Désactivé), 300 (5 minutes), 
-	                           600 (10 minutes), 1800 (30 minutes), 3600 (1 
-	                           heure), 43200 (12 heures), 86400 (24 heures).
-	                           Défaut : 300
+	    sync.interval          Synchronisation interval.
+	                           Type: Enum.
+	                           Possible values: 0 (Disabled), 300 (5 minutes), 600 
+	                           (10 minutes), 1800 (30 minutes), 3600 (1 hour), 
+	                           43200 (12 hours), 86400 (24 hours).
+	                           Default: 300
 	                           
-	    sync.target            Cible de la synchronisation.
-	                           La cible avec laquelle synchroniser. Pour 
-	                           synchroniser avec le système de fichier, veuillez 
-	                           spécifier le répertoire avec `sync.2.path`.
-	                           Type : Enum.
-	                           Valeurs possibles : 1 (Memory), 2 (Système de 
-	                           fichier), 3 (OneDrive).
-	                           Défaut : 3
+	    sync.target            Synchronisation target.
+	                           The target to synchonise to. If synchronising with 
+	                           the file system, set `sync.2.path` to specify the 
+	                           target directory.
+	                           Type: Enum.
+	                           Possible values: 1 (Memory), 2 (File system), 3 
+	                           (OneDrive).
+	                           Default: 3
 	                           
-	    trackLocation          Enregistrer l'emplacement avec les notes.
-	                           Type : bool.
-	                           Défaut : true
+	    trackLocation          Save geo-location with notes.
+	                           Type: bool.
+	                           Default: true
 	                           
-	    uncompletedTodosOnTop  Tâches non-terminées en haut des listes.
-	                           Type : bool.
-	                           Défaut : true
+	    uncompletedTodosOnTop  Show uncompleted todos on top of the lists.
+	                           Type: bool.
+	                           Default: true
 
 	cp <note> [notebook]
 
-	    Copie les notes correspondant à <nom> vers [carnet]. Si aucun carnet n'est 
-	    spécifié, la note est dupliquée sur place.
+	    Duplicates the notes matching <note> to [notebook]. If no notebook is 
+	    specified the note is duplicated in the current notebook.
 
 	done <note>
 
-	    Marquer la tâche comme complétée.
+	    Marks a to-do as done.
 
 	edit <note>
 
-	    Editer la note.
+	    Edit note.
 
 	exit
 
-	    Quitter le logiciel.
+	    Exits the application.
 
 	export <directory>
 
-	    Exporter les données de Joplin vers le dossier fourni. Par défaut, la base 
-	    de donnée complète sera exportée, y compris les carnets, notes, tags et 
-	    resources.
+	    Exports Joplin data to the given directory. By default, it will export the 
+	    complete database including notebooks, notes, tags and resources.
 
-	    --note <note>          Exporter uniquement la note spécifiée.
-	    --notebook <notebook>  Exporter uniquement le carnet spécifié.
+	    --note <note>          Exports only the given note.
+	    --notebook <notebook>  Exports only the given notebook.
 
 	geoloc <note>
 
-	    Afficher l'URL de l'emplacement de la note.
+	    Displays a geolocation URL for the note.
 
 	help [command]
 
-	    Affiche les informations d'utilisation.
+	    Displays usage information.
 
 	import-enex <file> [notebook]
 
-	    Importer un carnet Evernote (fichier .enex).
+	    Imports an Evernote notebook file (.enex file).
 
-	    -f, --force  Ne pas demander de confirmation.
+	    -f, --force  Do not ask for confirmation.
 
 	mkbook <new-notebook>
 
-	    Créer un carnet.
+	    Creates a new notebook.
 
 	mknote <new-note>
 
-	    Créer une note.
+	    Creates a new note.
 
 	mktodo <new-todo>
 
-	    Créer une nouvelle tâche.
+	    Creates a new to-do.
 
 	mv <note> [notebook]
 
-	    Déplacer les notes correspondant à <note> vers [notebook].
+	    Moves the notes matching <note> to [notebook].
 
 	ren <item> <name>
 
-	    Renommer l'objet <item> (note ou carnet) en <name>.
+	    Renames the given <item> (note or notebook) to <name>.
 
 	rmbook <notebook>
 
-	    Supprimer le carnet.
+	    Deletes the given notebook.
 
-	    -f, --force  Supprimer le carnet sans demander la confirmation.
+	    -f, --force  Deletes the notebook without asking for confirmation.
 
 	rmnote <note-pattern>
 
-	    Supprimer les notes correspondants à <note-pattern>.
+	    Deletes the notes matching <note-pattern>.
 
-	    -f, --force  Supprimer les notes sans demander la confirmation.
+	    -f, --force  Deletes the notes without asking for confirmation.
 
 	search <pattern> [notebook]
 
-	    Chercher le motif <pattern> dans toutes les notes.
+	    Searches for the given <pattern> in all the notes.
 
 	status
 
-	    Afficher un résumé des notes et carnets.
+	    Displays summary about the notes and notebooks.
 
 	sync
 
-	    Synchroniser les notes et carnets.
+	    Synchronises with remote storage.
 
-	    --target <target>  Synchroniser avec la cible donnée (par défaut, la 
-	                       valeur de configuration `sync.target`).
+	    --target <target>  Sync to provided target (defaults to sync.target config 
+	                       value)
 	    --random-failures  For debugging purposes. Do not use.
 
 	tag <tag-command> [tag] [note]
 
-	    <tag-command> peut être "add", "remove" ou "list" pour assigner ou enlever 
-	    l'étiquette [tag] de la [note], our pour lister les notes associées avec 
-	    l'étiquette [tag]. La commande `tag list` peut être utilisée pour lister 
-	    les étiquettes.
+	    <tag-command> can be "add", "remove" or "list" to assign or remove [tag] 
+	    from [note], or to list the notes associated with [tag]. The command `tag 
+	    list` can be used to list all the tags.
 
 	todo <todo-command> <note-pattern>
 
-	    Gère le status des tâches. <todo-command> peut être "toggle" ou "clear". 
-	    Utilisez "toggle" pour basculer la tâche entre le status terminé et 
-	    non-terminé (Si la cible est une note, elle sera convertie en tâche). 
-	    Utilisez "clear" pour convertir la tâche en note.
+	    <todo-command> can either be "toggle" or "clear". Use "toggle" to toggle 
+	    the given to-do between completed and uncompleted state (If the target is 
+	    a regular note it will be converted to a to-do). Use "clear" to convert 
+	    the to-do back to a regular note.
 
 	undone <note>
 
-	    Marquer une tâche comme non-complétée.
+	    Marks a to-do as non-completed.
 
 	version
 
-	    Affiche les informations de version
+	    Displays version information
 
 # Known bugs
 
