@@ -8,7 +8,7 @@ The notes can be [synchronised](#synchronisation) with various targets including
 
 The application is still under development but is out of Beta and should be suitable for every day use. The UI of the terminal client is built on top of the great [terminal-kit](https://github.com/cronvel/terminal-kit) library, and the Android client front end is done using [React Native](https://facebook.github.io/react-native/).
 
-![Joplin Terminal Screenshot](https://github.com/laurent22/joplin/blob/master/docs/images/ScreenshotTerminal.png)
+![Joplin Terminal Screenshot](https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/ScreenshotTerminal.png)
 
 # Installation
 
@@ -42,7 +42,7 @@ To start it, type `demo-joplin`.
 
 To start the application type `joplin`. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via [shortcuts](#available-shortcuts).
 
-<img src="https://github.com/laurent22/joplin/blob/master/docs/images/ScreenshotTerminalCaptions.png" height="450px">
+<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/ScreenshotTerminalCaptions.png" height="450px">
 
 ## Input modes
 
@@ -136,13 +136,13 @@ An Android client is available and can synchronise with the terminal client via 
 
 When Ctrl+Clicking a URL, most terminals will open that URL in the default browser. However, one issue, especially with long URLs, is that they can end up like this:
 
-<img src="https://github.com/laurent22/joplin/blob/master/docs/images/UrlCut.png" width="240px">
+<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/UrlCut.png" width="240px">
 
 Not only it makes the text hard to read, but the link, being cut in two, will also not be clickable.
 
 As a solution Joplin tries to start a mini-server in the background and, if successful, all the links will be converted to a much shorter URL:
 
-<img src="https://github.com/laurent22/joplin/blob/master/docs/images/UrlNoCut.png" width="240px">
+<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/UrlNoCut.png" width="240px">
 
 Since this is still an actual URL, the terminal will still make it clickable. And with shorter URLs, the text is more readable and the links unlikely to be cut. Both resources (files that are attached to notes) and external links are handled in this way.
 
