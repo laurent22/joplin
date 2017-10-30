@@ -48,6 +48,9 @@ msgstr ""
 msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
 msgstr ""
 
+msgid "Search"
+msgstr ""
+
 msgid "[t]oggle note [m]etadata."
 msgstr ""
 
@@ -779,9 +782,6 @@ msgid "Delete notebook"
 msgstr ""
 
 msgid "Login with OneDrive"
-msgstr ""
-
-msgid "Search"
 msgstr ""
 
 msgid ""

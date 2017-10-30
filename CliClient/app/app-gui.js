@@ -361,6 +361,11 @@ class AppGui {
 			canRunAlongOtherCommands: true,
 		}
 
+		shortcuts['/'] = {
+			description: _('Search'),
+			action: { type: 'prompt', initialText: 'search ""', cursorPosition: -2 },
+		};
+
 		shortcuts['tm'] = {
 			description: _('[t]oggle note [m]etadata.'),
 			action: () => {
