@@ -21,6 +21,10 @@ class Setting extends BaseModel {
 		return output;
 	}
 
+	static keyExists(key) {
+		return key in this.metadata_;
+	}
+
 	static keys(publicOnly = false, appType = null) {
 		if (!this.keys_) {
 			this.keys_ = [];
@@ -56,12 +60,14 @@ class Setting extends BaseModel {
 			this.cache_ = [];
 
 			// Old keys - can be removed later
-			const ignore = ['clientId', 'sync.onedrive.auth', 'syncInterval', 'todoOnTop', 'todosOnTop'];
+			//const ignore = ['clientId', 'sync.onedrive.auth', 'syncInterval', 'todoOnTop', 'todosOnTop', 'todoFilter'];
 
 			for (let i = 0; i < rows.length; i++) {
 				let c = rows[i];
 
-				if (ignore.indexOf(c.key) >= 0) continue;
+				if (!this.keyExists(c.key)) continue;
+
+				//if (ignore.indexOf(c.key) >= 0) continue;
 
 				// console.info(c.key + ' = ' + c.value);
 

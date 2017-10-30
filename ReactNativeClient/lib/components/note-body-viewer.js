@@ -130,6 +130,10 @@ class NoteBodyViewer extends Component {
 		}
 
 		renderer.image = (href, title, text) => {
+			if (!Resource.isResourceUrl(href)) {
+				return '<span>' + href + '</span><img title="' + htmlentities(title) + '" src="' + href + '"/>';
+			}
+
 			const resourceId = Resource.urlToId(href);
 			if (!this.state.resources[resourceId]) {
 				this.loadResource(resourceId);

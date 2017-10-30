@@ -15,10 +15,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.3\n"
 
-msgid "Give focus to next widget"
+msgid "Give focus to next pane"
 msgstr ""
 
-msgid "Give focus to previous widget"
+msgid "Give focus to previous pane"
 msgstr ""
 
 msgid "Enter command line mode"
@@ -261,7 +261,9 @@ msgstr ""
 msgid "Note has been saved."
 msgstr "Aucun carnet n'est spécifié."
 
-msgid "Exports Joplin data to the given target."
+msgid ""
+"Exports Joplin data to the given directory. By default, it will export the "
+"complete database including notebooks, notes, tags and resources."
 msgstr ""
 
 #, fuzzy
@@ -286,6 +288,12 @@ msgid "Type `help [command]` for more information about a command."
 msgstr ""
 
 msgid "The possible commands are:"
+msgstr ""
+
+msgid ""
+"In any command, a note or notebook can be refered to by title or ID, or "
+"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
+"note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
 
 msgid "To move from one widget to another, press Tab or Shift+Tab."
