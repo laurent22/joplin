@@ -24,7 +24,7 @@ const headerHtml = `
 	table {
 		margin-bottom: 1em;
 	}
-	td {
+	td, th {
 		padding: .5em 1em .5em 0;
 	}
 	.title-icon {
