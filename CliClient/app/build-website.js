@@ -10,7 +10,7 @@ const headerHtml = `
 <!doctype html>
 <html>
 <head>
-	<title>Joplin - a free, open source, note taking and to-do application with synchronisation capabilities</title>
+	<title>Joplin - a free, open source, 	te taking and to-do application with synchronisation capabilities</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,6 +20,12 @@ const headerHtml = `
 	body {
 		background-color: #F1F1F1;
 		color: #333333;
+	}
+	table {
+		margin-bottom: 1em;
+	}
+	td {
+		padding: .5em 1em .5em 0;
 	}
 	.title-icon {
 		height: 2em;

@@ -136,13 +136,13 @@ An Android client is available and can synchronise with the terminal client via 
 
 When Ctrl+Clicking a URL, most terminals will open that URL in the default browser. However, one issue, especially with long URLs, is that they can end up like this:
 
-<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/UrlCut.png" width="240px">
+<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/UrlCut.png" width="300px">
 
 Not only it makes the text hard to read, but the link, being cut in two, will also not be clickable.
 
 As a solution Joplin tries to start a mini-server in the background and, if successful, all the links will be converted to a much shorter URL:
 
-<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/UrlNoCut.png" width="240px">
+<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/UrlNoCut.png" width="300px">
 
 Since this is still an actual URL, the terminal will still make it clickable. And with shorter URLs, the text is more readable and the links unlikely to be cut. Both resources (files that are attached to notes) and external links are handled in this way.
 
