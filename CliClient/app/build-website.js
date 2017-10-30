@@ -27,12 +27,15 @@ const headerHtml = `
 	td, th {
 		padding: .5em 1em .5em 0;
 	}
-	h1 {
+	h1, h2 {
 		border-bottom: 1px solid #eaecef;
 		padding-bottom: 0.3em;
 		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 		font-weight: 600;
 		font-size: 2em;
+	}
+	h2 {
+		font-size: 1.6em;
 	}
 	.title-icon {
 		height: 2em;
@@ -75,9 +78,6 @@ const headerHtml = `
 	}
 	.cli-screenshot .prompt {
 		color: #48C2F0;
-	}
-	h1 {
-		font-weight: bold;
 	}
 	.header {
 		position: relative;
