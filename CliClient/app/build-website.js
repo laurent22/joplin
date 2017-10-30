@@ -33,9 +33,13 @@ const headerHtml = `
 		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 		font-weight: 600;
 		font-size: 2em;
+		margin-bottom: 16px;
 	}
 	h2 {
 		font-size: 1.6em;
+	}
+	h3 {
+		font-size: 1.3em;
 	}
 	.title-icon {
 		height: 2em;
