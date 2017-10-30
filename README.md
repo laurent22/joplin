@@ -8,7 +8,7 @@ The notes can be [synchronised](#synchronisation) with various targets including
 
 The application is still under development but is out of Beta and should be suitable for every day use. The UI of the terminal client is built on top of the great [terminal-kit](https://github.com/cronvel/terminal-kit) library, and the Android client front end is done using [React Native](https://facebook.github.io/react-native/).
 
-![Joplin Terminal Screenshot](https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/ScreenshotTerminal.png)
+<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/ScreenshotTerminal.png" width="100%">
 
 # Installation
 
