@@ -41,6 +41,14 @@ const headerHtml = `
 	h3 {
 		font-size: 1.3em;
 	}
+	code {
+		color: black;
+		background-color: #eee;
+		border: 1px solid #ccc;
+	}
+	pre code {
+		border: none;
+	}
 	.title-icon {
 		height: 2em;
 	}
