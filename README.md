@@ -134,6 +134,8 @@ To initiate the synchronisation process, type `:sync`. You will be asked to foll
 
 An Android client is available and can synchronise with the terminal client via OneDrive:
 
+<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/Phone.png">
+
 <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="60px" src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
 
 # URLs

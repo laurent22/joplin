@@ -293,7 +293,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	async attachFile_onPress() {
 		const res = await this.pickDocument();
-		if (!res) return;
+		if (!res) {
+			reg.logger().info('Did not get any file (user cancel?)');
+			return;
+		}
 
 		const localFilePath = res.uri;
 

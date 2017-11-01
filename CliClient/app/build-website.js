@@ -128,7 +128,6 @@ const headerHtml = `
 `;
 
 const footerHtml = `
-<hr/>Copyright (c) 2016-2017 Laurent Cozic
 </body>
 </html>
 `;
