@@ -280,7 +280,7 @@ class BaseItem extends BaseModel {
 			output.title = title[0];
 		}
 
-		if (body.length) output.body = body.join("\n");
+		if (output.type_ === BaseModel.TYPE_NOTE) output.body = body.join("\n");
 
 		for (let n in output) {
 			if (!output.hasOwnProperty(n)) continue;

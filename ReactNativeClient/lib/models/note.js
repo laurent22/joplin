@@ -415,6 +415,17 @@ class Note extends BaseItem {
 		return result;
 	}
 
+	// Tells whether the conflict between the local and remote note can be ignored.
+	static mustHandleConflict(localNote, remoteNote) {
+		// That shouldn't happen so throw an exception
+		if (localNote.id !== remoteNote.id) throw new Error('Cannot handle conflict for two different notes');
+
+		if (localNote.title !== remoteNote.title) return true;
+		if (localNote.body !== remoteNote.body) return true;
+
+		return false;
+	}
+
 }
 
 Note.updateGeolocationEnabled_ = true;

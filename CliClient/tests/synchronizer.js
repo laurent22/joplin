@@ -567,5 +567,45 @@ describe('Synchronizer', function() {
 
 		done();
 	});
+
+	it('should not consider it is a conflict if neither the title nor body of the note have changed', async (done) => {
+		// That was previously a common conflict:
+		// - Client 1 mark todo as "done", and sync
+		// - Client 2 doesn't sync, mark todo as "done" todo. Then sync.
+		// In theory it is a conflict because the todo_completed dates are different
+		// but in practice it doesn't matter, we can just take the date when the
+		// todo was marked as "done" the first time.
+
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: "un", is_todo: 1, parent_id: folder1.id });
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		let note2 = await Note.load(note1.id);
+		note2.todo_completed = time.unixMs()-1;
+		await Note.save(note2);
+		note2 = await Note.load(note2.id);
+		await synchronizer().start();
+
+		await switchClient(1);
+
+		let note2conf = await Note.load(note1.id);
+		note2conf.todo_completed = time.unixMs();
+		await Note.save(note2conf);
+		note2conf = await Note.load(note1.id);
+		await synchronizer().start();
+
+		let conflictedNotes = await Note.conflictedNotes();
+		expect(conflictedNotes.length).toBe(0);
+
+		let notes = await Note.all();
+		expect(notes.length).toBe(1);
+		expect(notes[0].id).toBe(note1.id);
+		expect(notes[0].todo_completed).toBe(note2.todo_completed);
+
+		done();
+	});
 	
 });

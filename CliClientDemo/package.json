@@ -16,7 +16,7 @@
     "node": ">=8.7.0"
   },
   "copyright": {
-    "title": "Joplin CLI",
+    "title": "Demo for Joplin CLI",
     "years": [
       2016,
       2017

@@ -57,7 +57,6 @@ class Synchronizer {
 		if (report.deleteLocal) lines.push(_('Deleted local items: %d.', report.deleteLocal));
 		if (report.deleteRemote) lines.push(_('Deleted remote items: %d.', report.deleteRemote));
 		if (!report.completedTime && report.state) lines.push(_('State: "%s".', report.state));
-		//if (report.errors && report.errors.length) lines.push(_('Last error: %s (stacktrace in log).', report.errors[report.errors.length-1].message));
 		if (report.cancelling && !report.completedTime) lines.push(_('Cancelling...'));
 		if (report.completedTime) lines.push(_('Completed: %s', time.unixMsToLocalDateTime(report.completedTime)));
 
@@ -125,17 +124,6 @@ class Synchronizer {
 		}
 	}
 
-	randomFailure(options, name) {
-		if (!options.randomFailures) return false;
-
-		if (this.randomFailureChoice_ == name) {
-			options.onMessage('Random failure: ' + name);
-			return true;
-		}
-
-		return false;
-	}
-
 	async cancel() {
 		if (this.cancelling_ || this.state() == 'idle') return;
 		
@@ -175,7 +163,6 @@ class Synchronizer {
 
 		const syncTargetId = this.api().syncTargetId();
 
-		this.randomFailureChoice_ = Math.floor(Math.random() * 5);
 		this.cancelling_ = false;
 
 		// ------------------------------------------------------------------------
@@ -187,7 +174,6 @@ class Synchronizer {
 
 		let outputContext = Object.assign({}, lastContext);
 		
-
 		this.dispatch({ type: 'SYNC_STARTED' });
 
 		this.logSyncOperation('starting', null, null, 'Starting synchronisation to target ' + syncTargetId + '... [' + synchronizationId + ']');
@@ -225,13 +211,14 @@ class Synchronizer {
 							reason = 'remote does not exist, and local is new and has never been synced';
 						} else {
 							// Note or item was modified after having been deleted remotely
+							// "itemConflict" if for all the items except the notes, which are dealt with in a special way
 							action = local.type_ == BaseModel.TYPE_NOTE ? 'noteConflict' : 'itemConflict';
 							reason = 'remote has been deleted, but local has changes';
 						}
 					} else {
 						if (remote.updated_time > local.sync_time) {
-							// Since, in this loop, we are only dealing with notes that require sync, if the
-							// remote has been modified after the sync time, it means both notes have been
+							// Since, in this loop, we are only dealing with items that require sync, if the
+							// remote has been modified after the sync time, it means both items have been
 							// modified and so there's a conflict.
 							action = local.type_ == BaseModel.TYPE_NOTE ? 'noteConflict' : 'itemConflict';
 							reason = 'both remote and local have changes';
@@ -276,13 +263,7 @@ class Synchronizer {
 						// await this.api().move(tempPath, path);
 
 						await this.api().put(path, content);
-
-						if (this.randomFailure(options, 0)) return;
-
 						await this.api().setTimestamp(path, local.updated_time);
-
-						if (this.randomFailure(options, 1)) return;
-
 						await ItemClass.saveSyncTime(syncTargetId, local, time.unixMs());
 
 					} else if (action == 'itemConflict') {
@@ -299,22 +280,43 @@ class Synchronizer {
 
 					} else if (action == 'noteConflict') {
 
-						// - Create a duplicate of local note into Conflicts folder (to preserve the user's changes)
-						// - Overwrite local note with remote note
-						let conflictedNote = Object.assign({}, local);
-						delete conflictedNote.id;
-						conflictedNote.is_conflict = 1;
-						await Note.save(conflictedNote, { autoTimestamp: false });
+						// ------------------------------------------------------------------------------
+						// First find out if the conflict matters. For example, if the conflict is on the title or body
+						// we want to preserve all the changes. If it's on todo_completed it doesn't really matter
+						// so in this case we just take the remote content.
+						// ------------------------------------------------------------------------------
 
-						if (this.randomFailure(options, 2)) return;
+						let loadedRemote = null;
+						let mustHandleConflict = true;
+						if (remote) {
+							const remoteContent = await this.api().get(path);
+							loadedRemote = await BaseItem.unserialize(remoteContent);
+							mustHandleConflict = Note.mustHandleConflict(local, loadedRemote);
+						}
+
+						// ------------------------------------------------------------------------------
+						// Create a duplicate of local note into Conflicts folder
+						// (to preserve the user's changes)
+						// ------------------------------------------------------------------------------
+
+						if (mustHandleConflict) {
+							let conflictedNote = Object.assign({}, local);
+							delete conflictedNote.id;
+							conflictedNote.is_conflict = 1;
+							await Note.save(conflictedNote, { autoTimestamp: false });
+						}
+
+						// ------------------------------------------------------------------------------
+						// Either copy the remote content to local or, if the remote content has
+						// been deleted, delete the local content.
+						// ------------------------------------------------------------------------------
 
 						if (remote) {
-							let remoteContent = await this.api().get(path);
-							local = await BaseItem.unserialize(remoteContent);
-
+							local = loadedRemote;
 							const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
 							await ItemClass.save(local, { autoTimestamp: false, nextQueries: syncTimeQueries });
 						} else {
+							// Remote no longer exists (note deleted) so delete local one too
 							await ItemClass.delete(local.id);
 						}
 
@@ -338,7 +340,6 @@ class Synchronizer {
 				let path = BaseItem.systemPath(item.item_id)
 				this.logSyncOperation('deleteRemote', null, { id: item.item_id }, 'local has been deleted');
 				await this.api().delete(path);
-				if (this.randomFailure(options, 3)) return;
 				await BaseItem.remoteDeletedItem(syncTargetId, item.item_id);
 			}
 
