@@ -358,6 +358,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 # Known bugs
 
 - Non-alphabetical characters such as Chinese or Arabic might create glitches in the user interface on Windows. This is a limitation of the current Windows console.
+- In the React Native app, changing the notebook of a note sometimes has no effect, due to [this bug](https://github.com/facebook/react-native/issues/15556).
 
 # License
 
