@@ -21,6 +21,7 @@
     "electron-builder": "^19.43.4"
   },
   "dependencies": {
+    "app-module-path": "^2.2.0",
     "sqlite3": "^3.1.13"
   }
 }
