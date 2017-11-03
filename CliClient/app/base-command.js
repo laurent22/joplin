@@ -96,4 +96,4 @@ class BaseCommand {
 
 }
 
-export { BaseCommand };
+module.exports = { BaseCommand };

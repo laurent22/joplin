@@ -8,4 +8,4 @@ const uuid = {
 
 }
 
-export { uuid };
+module.exports = { uuid };

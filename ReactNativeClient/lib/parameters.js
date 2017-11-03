@@ -32,4 +32,4 @@ function parameters() {
 	return output;
 }
 
-export { parameters }
+module.exports = { parameters };

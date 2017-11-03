@@ -25,4 +25,4 @@ class GeolocationNode {
 
 }
 
-export { GeolocationNode };
+module.exports = { GeolocationNode };

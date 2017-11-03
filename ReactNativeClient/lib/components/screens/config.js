@@ -149,4 +149,4 @@ const ConfigScreen = connect(
 	}
 )(ConfigScreenComponent)
 
-export { ConfigScreen };
+module.exports = { ConfigScreen };

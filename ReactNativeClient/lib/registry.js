@@ -223,4 +223,4 @@ reg.db = () => {
 	return reg.db_;
 }
 
-export { reg }
+module.exports = { reg };

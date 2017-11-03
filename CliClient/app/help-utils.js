@@ -108,4 +108,4 @@ function getOptionColWidth(options) {
 	return output;
 }
 
-export { renderCommandHelp };
+module.exports = { renderCommandHelp };

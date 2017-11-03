@@ -323,4 +323,4 @@ const ScreenHeader = connect(
 	}
 )(ScreenHeaderComponent)
 
-export { ScreenHeader };
+module.exports = { ScreenHeader };

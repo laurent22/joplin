@@ -40,4 +40,4 @@ class BackButtonService {
 BackButtonService.defaultHandler_ = null;
 BackButtonService.handlers_ = [];
 
-export { BackButtonService };
+module.exports = { BackButtonService };

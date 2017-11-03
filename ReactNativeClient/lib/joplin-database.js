@@ -304,4 +304,4 @@ Database.TYPE_INT = 1;
 Database.TYPE_TEXT = 2;
 Database.TYPE_NUMERIC = 3;
 
-export { JoplinDatabase };
+module.exports = { JoplinDatabase };

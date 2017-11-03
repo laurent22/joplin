@@ -119,4 +119,4 @@ class OneDriveApiNodeUtils {
 
 }
 
-export { OneDriveApiNodeUtils };
+module.exports = { OneDriveApiNodeUtils };

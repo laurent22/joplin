@@ -263,4 +263,4 @@ const SideMenuContent = connect(
 	}
 )(SideMenuContentComponent)
 
-export { SideMenuContent };
+module.exports = { SideMenuContent };

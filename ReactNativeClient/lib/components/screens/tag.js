@@ -73,4 +73,4 @@ const TagScreen = connect(
 	}
 )(TagScreenComponent)
 
-export { TagScreen };
+module.exports = { TagScreen };

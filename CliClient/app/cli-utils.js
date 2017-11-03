@@ -315,4 +315,4 @@ cliUtils.redrawDone = function() {
 	redrawStarted_ = false;
 }
 
-export { cliUtils };
+module.exports = { cliUtils };

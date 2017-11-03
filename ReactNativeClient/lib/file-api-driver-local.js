@@ -235,4 +235,4 @@ class FileApiDriverLocal {
 
 }
 
-export { FileApiDriverLocal };
+module.exports = { FileApiDriverLocal };

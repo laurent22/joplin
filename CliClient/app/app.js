@@ -652,4 +652,4 @@ function app() {
 	return application_;
 }
 
-export { app };
+module.exports = { app };

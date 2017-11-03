@@ -70,4 +70,4 @@ function shimInit() {
 	}
 }
 
-export { shimInit }
+module.exports = { shimInit };

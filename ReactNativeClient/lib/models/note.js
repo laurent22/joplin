@@ -430,4 +430,4 @@ class Note extends BaseItem {
 Note.updateGeolocationEnabled_ = true;
 Note.geolocationUpdating_ = false;
 
-export { Note };
+module.exports = { Note };

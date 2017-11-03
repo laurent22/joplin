@@ -63,4 +63,4 @@ dialogs.error = (parentComponent, message) => {
 
 dialogs.DialogBox = DialogBox
 
-export { dialogs };
+module.exports = { dialogs };

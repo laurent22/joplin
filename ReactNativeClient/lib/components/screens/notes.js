@@ -171,4 +171,4 @@ const NotesScreen = connect(
 	}
 )(NotesScreenComponent)
 
-export { NotesScreen };
+module.exports = { NotesScreen };

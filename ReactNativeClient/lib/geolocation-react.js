@@ -35,4 +35,4 @@ class GeolocationReact {
 
 }
 
-export { GeolocationReact };
+module.exports = { GeolocationReact };

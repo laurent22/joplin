@@ -17,4 +17,4 @@ function main() {
 	// AppComponent.componentDidMount(), when the application is ready.
 }
 
-export { main }
+module.exports = { main };

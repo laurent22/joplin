@@ -408,4 +408,4 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 	});
 }
 
-export { importEnex };
+module.exports = { importEnex };

@@ -106,4 +106,4 @@ const LogScreen = connect(
 	}
 )(LogScreenComponent)
 
-export { LogScreen };
+module.exports = { LogScreen };

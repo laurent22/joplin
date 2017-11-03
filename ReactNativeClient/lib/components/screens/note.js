@@ -570,4 +570,4 @@ const NoteScreen = connect(
 	}
 )(NoteScreenComponent)
 
-export { NoteScreen };
+module.exports = { NoteScreen };

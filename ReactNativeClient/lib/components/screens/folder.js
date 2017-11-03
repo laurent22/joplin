@@ -129,4 +129,4 @@ const FolderScreen = connect(
 	}
 )(FolderScreenComponent)
 
-export { FolderScreen };
+module.exports = { FolderScreen };

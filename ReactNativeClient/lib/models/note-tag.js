@@ -25,4 +25,4 @@ class NoteTag extends BaseItem {
 
 }
 
-export { NoteTag };
+module.exports = { NoteTag };

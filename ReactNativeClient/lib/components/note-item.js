@@ -129,4 +129,4 @@ const NoteItem = connect(
 	}
 )(NoteItemComponent)
 
-export { NoteItem }
+module.exports = { NoteItem };

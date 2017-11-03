@@ -620,4 +620,4 @@ async function enexXmlToMd(stream, resources) {
 	return processMdArrayNewLines(mdLines);
 }
 
-export { enexXmlToMd, processMdArrayNewLines, NEWLINE, addResourceTag };
+module.exports = { enexXmlToMd, processMdArrayNewLines, NEWLINE, addResourceTag };

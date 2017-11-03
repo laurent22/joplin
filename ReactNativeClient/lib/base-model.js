@@ -364,4 +364,4 @@ BaseModel.TYPE_SEARCH = 7;
 BaseModel.db_ = null;
 BaseModel.dispatch = function(o) {};
 
-export { BaseModel };
+module.exports = { BaseModel };

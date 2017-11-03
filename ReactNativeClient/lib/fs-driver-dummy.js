@@ -7,4 +7,4 @@ class FsDriverDummy {
 
 }
 
-export { FsDriverDummy }
+module.exports = { FsDriverDummy };

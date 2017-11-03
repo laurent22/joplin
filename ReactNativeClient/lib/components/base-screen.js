@@ -37,4 +37,4 @@ class BaseScreenComponent extends React.Component {
 
 }
 
-export { BaseScreenComponent };
+module.exports = { BaseScreenComponent };

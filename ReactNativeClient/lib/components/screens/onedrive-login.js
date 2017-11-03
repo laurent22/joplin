@@ -107,4 +107,4 @@ const OneDriveLoginScreen = connect(
 	}
 )(OneDriveLoginScreenComponent)
 
-export { OneDriveLoginScreen };
+module.exports = { OneDriveLoginScreen };

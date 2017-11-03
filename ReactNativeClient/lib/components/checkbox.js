@@ -66,4 +66,4 @@ class Checkbox extends Component {
 
 }
 
-export { Checkbox };
+module.exports = { Checkbox };

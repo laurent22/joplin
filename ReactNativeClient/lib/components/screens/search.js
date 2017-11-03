@@ -178,4 +178,4 @@ const SearchScreen = connect(
 	}
 )(SearchScreenComponent)
 
-export { SearchScreen };
+module.exports = { SearchScreen };

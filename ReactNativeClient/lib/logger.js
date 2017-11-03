@@ -180,4 +180,4 @@ Logger.LEVEL_WARN = 20;
 Logger.LEVEL_INFO = 30;
 Logger.LEVEL_DEBUG = 40;
 
-export { Logger };
+module.exports = { Logger };

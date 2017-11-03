@@ -61,4 +61,4 @@ const WelcomeScreen = connect(
 	}
 )(WelcomeScreenComponent)
 
-export { WelcomeScreen };
+module.exports = { WelcomeScreen };

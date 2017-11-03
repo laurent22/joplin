@@ -119,4 +119,4 @@ const StatusScreen = connect(
 	}
 )(StatusScreenComponent)
 
-export { StatusScreen };
+module.exports = { StatusScreen };

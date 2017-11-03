@@ -138,4 +138,4 @@ const ActionButton = connect(
 	}
 )(ActionButtonComponent)
 
-export { ActionButton };
+module.exports = { ActionButton };

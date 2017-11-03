@@ -109,4 +109,4 @@ class FileApi {
 
 }
 
-export { FileApi };
+module.exports = { FileApi };

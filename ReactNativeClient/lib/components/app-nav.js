@@ -63,4 +63,4 @@ const AppNav = connect(
 	}
 )(AppNavComponent)
 
-export { AppNav };
+module.exports = { AppNav };

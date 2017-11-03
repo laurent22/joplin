@@ -69,4 +69,4 @@ function themeStyle(theme) {
 	return themeCache_[theme];
 }
 
-export { globalStyle, themeStyle }
+module.exports = { globalStyle, themeStyle };

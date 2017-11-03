@@ -419,4 +419,4 @@ const reducer = (state = defaultState, action) => {
 	return newState;
 }
 
-export { reducer, defaultState };
+module.exports = { reducer, defaultState };

@@ -35,4 +35,4 @@ function isHidden(path) {
 	return b[0] === '.';
 }
 
-export { basename, dirname, filename, isHidden, fileExtension };
+module.exports = { basename, dirname, filename, isHidden, fileExtension };

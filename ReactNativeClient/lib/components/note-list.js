@@ -117,4 +117,4 @@ const NoteList = connect(
 	}
 )(NoteListComponent)
 
-export { NoteList };
+module.exports = { NoteList };

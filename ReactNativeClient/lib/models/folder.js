@@ -152,4 +152,4 @@ class Folder extends BaseItem {
 
 }
 
-export { Folder };
+module.exports = { Folder };
