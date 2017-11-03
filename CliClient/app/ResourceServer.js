@@ -1,7 +1,7 @@
-import { _ } from 'lib/locale.js'
-import { Logger } from 'lib/logger.js';
-import { Resource } from 'lib/models/resource.js';
-import { netUtils } from 'lib/net-utils.js'
+const { _ } = require('lib/locale.js');
+const { Logger } = require('lib/logger.js');
+const { Resource } = require('lib/models/resource.js');
+const { netUtils } = require('lib/net-utils.js');
 
 const http = require("http");
 const urlParser = require("url");

@@ -1,11 +1,11 @@
-import { BaseCommand } from './base-command.js';
-import { Exporter } from 'lib/services/exporter.js';
-import { BaseModel } from 'lib/base-model.js';
-import { Note } from 'lib/models/note.js';
-import { reg } from 'lib/registry.js';
-import { app } from './app.js';
-import { _ } from 'lib/locale.js';
-import fs from 'fs-extra';
+const { BaseCommand } = require('./base-command.js');
+const { Exporter } = require('lib/services/exporter.js');
+const { BaseModel } = require('lib/base-model.js');
+const { Note } = require('lib/models/note.js');
+const { reg } = require('lib/registry.js');
+const { app } = require('./app.js');
+const { _ } = require('lib/locale.js');
+const fs = require('fs-extra');
 
 class Command extends BaseCommand {
 

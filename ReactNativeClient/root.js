@@ -1,41 +1,41 @@
-import React, { Component } from 'react';
-import { Keyboard, NativeModules } from 'react-native';
-import { connect, Provider } from 'react-redux'
-import { BackButtonService } from 'lib/services/back-button.js';
-import { createStore, applyMiddleware } from 'redux';
-import { shimInit } from 'lib/shim-init-react.js';
-import { Log } from 'lib/log.js'
-import { AppNav } from 'lib/components/app-nav.js'
-import { Logger } from 'lib/logger.js'
-import { Note } from 'lib/models/note.js'
-import { Folder } from 'lib/models/folder.js'
-import { FoldersScreenUtils } from 'lib/folders-screen-utils.js';
-import { Resource } from 'lib/models/resource.js'
-import { Tag } from 'lib/models/tag.js'
-import { NoteTag } from 'lib/models/note-tag.js'
-import { BaseItem } from 'lib/models/base-item.js'
-import { BaseModel } from 'lib/base-model.js'
-import { JoplinDatabase } from 'lib/joplin-database.js'
-import { Database } from 'lib/database.js'
-import { NotesScreen } from 'lib/components/screens/notes.js'
-import { NoteScreen } from 'lib/components/screens/note.js'
-import { ConfigScreen } from 'lib/components/screens/config.js'
-import { FolderScreen } from 'lib/components/screens/folder.js'
-import { LogScreen } from 'lib/components/screens/log.js'
-import { StatusScreen } from 'lib/components/screens/status.js'
-import { WelcomeScreen } from 'lib/components/screens/welcome.js'
-import { SearchScreen } from 'lib/components/screens/search.js'
-import { OneDriveLoginScreen } from 'lib/components/screens/onedrive-login.js'
-import { Setting } from 'lib/models/setting.js'
-import { MenuContext } from 'react-native-popup-menu';
-import { SideMenu } from 'lib/components/side-menu.js';
-import { SideMenuContent } from 'lib/components/side-menu-content.js';
-import { DatabaseDriverReactNative } from 'lib/database-driver-react-native';
-import { reg } from 'lib/registry.js';
-import { _, setLocale, closestSupportedLocale, defaultLocale } from 'lib/locale.js';
-import RNFetchBlob from 'react-native-fetch-blob';
-import { PoorManIntervals } from 'lib/poor-man-intervals.js';
-import { reducer, defaultState } from 'lib/reducer.js';
+const React = require('react'); const Component = React.Component;
+const { Keyboard, NativeModules } = require('react-native');
+const { connect, Provider } = require('react-redux');
+const { BackButtonService } = require('lib/services/back-button.js');
+const { createStore, applyMiddleware } = require('redux');
+const { shimInit } = require('lib/shim-init-react.js');
+const { Log } = require('lib/log.js');
+const { AppNav } = require('lib/components/app-nav.js');
+const { Logger } = require('lib/logger.js');
+const { Note } = require('lib/models/note.js');
+const { Folder } = require('lib/models/folder.js');
+const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
+const { Resource } = require('lib/models/resource.js');
+const { Tag } = require('lib/models/tag.js');
+const { NoteTag } = require('lib/models/note-tag.js');
+const { BaseItem } = require('lib/models/base-item.js');
+const { BaseModel } = require('lib/base-model.js');
+const { JoplinDatabase } = require('lib/joplin-database.js');
+const { Database } = require('lib/database.js');
+const { NotesScreen } = require('lib/components/screens/notes.js');
+const { NoteScreen } = require('lib/components/screens/note.js');
+const { ConfigScreen } = require('lib/components/screens/config.js');
+const { FolderScreen } = require('lib/components/screens/folder.js');
+const { LogScreen } = require('lib/components/screens/log.js');
+const { StatusScreen } = require('lib/components/screens/status.js');
+const { WelcomeScreen } = require('lib/components/screens/welcome.js');
+const { SearchScreen } = require('lib/components/screens/search.js');
+const { OneDriveLoginScreen } = require('lib/components/screens/onedrive-login.js');
+const { Setting } = require('lib/models/setting.js');
+const { MenuContext } = require('react-native-popup-menu');
+const { SideMenu } = require('lib/components/side-menu.js');
+const { SideMenuContent } = require('lib/components/side-menu-content.js');
+const { DatabaseDriverReactNative } = require('lib/database-driver-react-native');
+const { reg } = require('lib/registry.js');
+const { _, setLocale, closestSupportedLocale, defaultLocale } = require('lib/locale.js');
+const RNFetchBlob = require('react-native-fetch-blob').default;
+const { PoorManIntervals } = require('lib/poor-man-intervals.js');
+const { reducer, defaultState } = require('lib/reducer.js');
 
 const generalMiddleware = store => next => async (action) => {
 	if (action.type !== 'SIDE_MENU_OPEN_PERCENT') reg.logger().info('Reducer action', action.type);

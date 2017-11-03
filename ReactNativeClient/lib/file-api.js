@@ -1,5 +1,5 @@
-import { isHidden } from 'lib/path-utils.js';
-import { Logger } from 'lib/logger.js';
+const { isHidden } = require('lib/path-utils.js');
+const { Logger } = require('lib/logger.js');
 
 class FileApi {
 

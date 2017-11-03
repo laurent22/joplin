@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import { ListView, Text, TouchableHighlight, View, StyleSheet } from 'react-native';
-import { Log } from 'lib/log.js';
-import { _ } from 'lib/locale.js';
-import { Checkbox } from 'lib/components/checkbox.js';
-import { reg } from 'lib/registry.js';
-import { Note } from 'lib/models/note.js';
-import { time } from 'lib/time-utils.js';
-import { globalStyle, themeStyle } from 'lib/components/global-style.js';
+const React = require('react'); const Component = React.Component;
+const { connect } = require('react-redux');
+const { ListView, Text, TouchableHighlight, View, StyleSheet } = require('react-native');
+const { Log } = require('lib/log.js');
+const { _ } = require('lib/locale.js');
+const { Checkbox } = require('lib/components/checkbox.js');
+const { reg } = require('lib/registry.js');
+const { Note } = require('lib/models/note.js');
+const { time } = require('lib/time-utils.js');
+const { globalStyle, themeStyle } = require('lib/components/global-style.js');
 
 class NoteItemComponent extends Component {
 

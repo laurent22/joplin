@@ -1,4 +1,4 @@
-import { Note } from 'lib/models/note.js';
+const { Note } = require('lib/models/note.js');
 
 const defaultState = {
 	notes: [],

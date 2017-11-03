@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import { TouchableOpacity , Button, Text, Image, StyleSheet, ScrollView, View } from 'react-native';
-import { connect } from 'react-redux'
-import Icon from 'react-native-vector-icons/Ionicons';
-import { Log } from 'lib/log.js';
-import { Tag } from 'lib/models/tag.js';
-import { Note } from 'lib/models/note.js';
-import { Setting } from 'lib/models/setting.js';
-import { FoldersScreenUtils } from 'lib/folders-screen-utils.js'
-import { Synchronizer } from 'lib/synchronizer.js';
-import { reg } from 'lib/registry.js';
-import { _ } from 'lib/locale.js';
-import { globalStyle, themeStyle } from 'lib/components/global-style.js';
+const React = require('react'); const Component = React.Component;
+const { TouchableOpacity , Button, Text, Image, StyleSheet, ScrollView, View } = require('react-native');
+const { connect } = require('react-redux');
+const Icon = require('react-native-vector-icons/Ionicons').default;
+const { Log } = require('lib/log.js');
+const { Tag } = require('lib/models/tag.js');
+const { Note } = require('lib/models/note.js');
+const { Setting } = require('lib/models/setting.js');
+const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
+const { Synchronizer } = require('lib/synchronizer.js');
+const { reg } = require('lib/registry.js');
+const { _ } = require('lib/locale.js');
+const { globalStyle, themeStyle } = require('lib/components/global-style.js');
 
 class SideMenuContentComponent extends Component {
 

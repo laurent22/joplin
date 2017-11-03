@@ -1,11 +1,11 @@
-import { BaseCommand } from './base-command.js';
-import { app } from './app.js';
-import { _ } from 'lib/locale.js';
-import { BaseItem } from 'lib/models/base-item.js';
-import { Folder } from 'lib/models/folder.js';
-import { Note } from 'lib/models/note.js';
-import { BaseModel } from 'lib/base-model.js';
-import { cliUtils } from './cli-utils.js';
+const { BaseCommand } = require('./base-command.js');
+const { app } = require('./app.js');
+const { _ } = require('lib/locale.js');
+const { BaseItem } = require('lib/models/base-item.js');
+const { Folder } = require('lib/models/folder.js');
+const { Note } = require('lib/models/note.js');
+const { BaseModel } = require('lib/base-model.js');
+const { cliUtils } = require('./cli-utils.js');
 
 class Command extends BaseCommand {
 

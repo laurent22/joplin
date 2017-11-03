@@ -4,7 +4,7 @@
  * @flow
  */
 
-import React, { Component } from 'react';
+const React = require('react'); const Component = React.Component;
 import {
   AppRegistry,
   StyleSheet,

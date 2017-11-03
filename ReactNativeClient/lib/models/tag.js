@@ -1,9 +1,9 @@
-import { BaseModel } from 'lib/base-model.js';
-import { BaseItem } from 'lib/models/base-item.js';
-import { NoteTag } from 'lib/models/note-tag.js';
-import { Note } from 'lib/models/note.js';
-import { time } from 'lib/time-utils.js';
-import lodash  from 'lodash';
+const { BaseModel } = require('lib/base-model.js');
+const { BaseItem } = require('lib/models/base-item.js');
+const { NoteTag } = require('lib/models/note-tag.js');
+const { Note } = require('lib/models/note.js');
+const { time } = require('lib/time-utils.js');
+const lodash = require('lodash');
 
 class Tag extends BaseItem {
 

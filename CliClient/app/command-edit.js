@@ -1,14 +1,14 @@
-import fs from 'fs-extra';
-import { BaseCommand } from './base-command.js';
-import { uuid } from 'lib/uuid.js';
-import { app } from './app.js';
-import { _ } from 'lib/locale.js';
-import { Folder } from 'lib/models/folder.js';
-import { Note } from 'lib/models/note.js';
-import { Setting } from 'lib/models/setting.js';
-import { BaseModel } from 'lib/base-model.js';
-import { cliUtils } from './cli-utils.js';
-import { time } from 'lib/time-utils.js';
+const fs = require('fs-extra');
+const { BaseCommand } = require('./base-command.js');
+const { uuid } = require('lib/uuid.js');
+const { app } = require('./app.js');
+const { _ } = require('lib/locale.js');
+const { Folder } = require('lib/models/folder.js');
+const { Note } = require('lib/models/note.js');
+const { Setting } = require('lib/models/setting.js');
+const { BaseModel } = require('lib/base-model.js');
+const { cliUtils } = require('./cli-utils.js');
+const { time } = require('lib/time-utils.js');
 
 class Command extends BaseCommand {
 

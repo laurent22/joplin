@@ -1,8 +1,8 @@
-import fs from 'fs-extra';
-import { promiseChain } from 'lib/promise-utils.js';
-import moment from 'moment';
-import { BaseItem } from 'lib/models/base-item.js';
-import { time } from 'lib/time-utils.js';
+const fs = require('fs-extra');
+const { promiseChain } = require('lib/promise-utils.js');
+const moment = require('moment');
+const { BaseItem } = require('lib/models/base-item.js');
+const { time } = require('lib/time-utils.js');
 
 // NOTE: when synchronising with the file system the time resolution is the second (unlike milliseconds for OneDrive for instance).
 // What it means is that if, for example, client 1 changes a note at time t, and client 2 changes the same note within the same second,

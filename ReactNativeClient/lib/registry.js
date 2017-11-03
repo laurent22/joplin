@@ -1,15 +1,15 @@
-import { Logger } from 'lib/logger.js';
-import { Setting } from 'lib/models/setting.js';
-import { OneDriveApi } from 'lib/onedrive-api.js';
-import { parameters } from 'lib/parameters.js';
-import { FileApi } from 'lib/file-api.js';
-import { Database } from 'lib/database.js';
-import { Synchronizer } from 'lib/synchronizer.js';
-import { FileApiDriverOneDrive } from 'lib/file-api-driver-onedrive.js';
-import { shim } from 'lib/shim.js';
-import { time } from 'lib/time-utils.js';
-import { FileApiDriverMemory } from 'lib/file-api-driver-memory.js';
-import { _ } from 'lib/locale.js';
+const { Logger } = require('lib/logger.js');
+const { Setting } = require('lib/models/setting.js');
+const { OneDriveApi } = require('lib/onedrive-api.js');
+const { parameters } = require('lib/parameters.js');
+const { FileApi } = require('lib/file-api.js');
+const { Database } = require('lib/database.js');
+const { Synchronizer } = require('lib/synchronizer.js');
+const { FileApiDriverOneDrive } = require('lib/file-api-driver-onedrive.js');
+const { shim } = require('lib/shim.js');
+const { time } = require('lib/time-utils.js');
+const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');
+const { _ } = require('lib/locale.js');
 
 const reg = {};
 

@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { View, Switch, Slider, StyleSheet, Picker, Text, Button } from 'react-native';
-import { connect } from 'react-redux'
-import { ScreenHeader } from 'lib/components/screen-header.js';
-import { _, setLocale } from 'lib/locale.js';
-import { BaseScreenComponent } from 'lib/components/base-screen.js';
-import { themeStyle } from 'lib/components/global-style.js';
-import { Setting } from 'lib/models/setting.js';
+const React = require('react'); const Component = React.Component;
+const { View, Switch, Slider, StyleSheet, Picker, Text, Button } = require('react-native');
+const { connect } = require('react-redux');
+const { ScreenHeader } = require('lib/components/screen-header.js');
+const { _, setLocale } = require('lib/locale.js');
+const { BaseScreenComponent } = require('lib/components/base-screen.js');
+const { themeStyle } = require('lib/components/global-style.js');
+const { Setting } = require('lib/models/setting.js');
 
 class ConfigScreenComponent extends BaseScreenComponent {
 	

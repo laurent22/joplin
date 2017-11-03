@@ -1,8 +1,8 @@
-import fs from 'fs-extra';
-import { shim } from 'lib/shim.js';
-import { GeolocationNode } from 'lib/geolocation-node.js';
-import { FileApiDriverLocal } from 'lib/file-api-driver-local.js';
-import { time } from 'lib/time-utils.js';
+const fs = require('fs-extra');
+const { shim } = require('lib/shim.js');
+const { GeolocationNode } = require('lib/geolocation-node.js');
+const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
+const { time } = require('lib/time-utils.js');
 
 function fetchRequestCanBeRetried(error) {
 	if (!error) return false;

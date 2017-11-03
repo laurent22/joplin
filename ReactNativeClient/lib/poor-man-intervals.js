@@ -1,4 +1,4 @@
-import { time } from 'lib/time-utils.js';
+const { time } = require('lib/time-utils.js');
 
 class PoorManIntervals {
 

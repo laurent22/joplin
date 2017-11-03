@@ -1,6 +1,6 @@
-import { BaseItem } from 'lib/models/base-item.js';
-import { BaseModel } from 'lib/base-model.js';
-import lodash  from 'lodash';
+const { BaseItem } = require('lib/models/base-item.js');
+const { BaseModel } = require('lib/base-model.js');
+const lodash = require('lodash');
 
 class NoteTag extends BaseItem {
 

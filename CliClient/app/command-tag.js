@@ -1,8 +1,8 @@
-import { BaseCommand } from './base-command.js';
-import { app } from './app.js';
-import { _ } from 'lib/locale.js';
-import { Tag } from 'lib/models/tag.js';
-import { BaseModel } from 'lib/base-model.js';
+const { BaseCommand } = require('./base-command.js');
+const { app } = require('./app.js');
+const { _ } = require('lib/locale.js');
+const { Tag } = require('lib/models/tag.js');
+const { BaseModel } = require('lib/base-model.js');
 
 class Command extends BaseCommand {
 

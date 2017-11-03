@@ -1,5 +1,5 @@
-import { _ } from 'lib/locale.js'
-import { netUtils } from 'lib/net-utils.js'
+const { _ } = require('lib/locale.js');
+const { netUtils } = require('lib/net-utils.js');
 
 const http = require("http");
 const urlParser = require("url");

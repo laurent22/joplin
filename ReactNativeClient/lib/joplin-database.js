@@ -1,7 +1,7 @@
-import { uuid } from 'lib/uuid.js';
-import { promiseChain } from 'lib/promise-utils.js';
-import { time } from 'lib/time-utils.js'
-import { Database } from 'lib/database.js'
+const { uuid } = require('lib/uuid.js');
+const { promiseChain } = require('lib/promise-utils.js');
+const { time } = require('lib/time-utils.js');
+const { Database } = require('lib/database.js');
 
 const structureSql = `
 CREATE TABLE folders (

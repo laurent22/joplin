@@ -1,14 +1,13 @@
-import { BaseModel } from 'lib/base-model.js';
-import { Log } from 'lib/log.js';
-import { sprintf } from 'sprintf-js';
-import { Folder } from 'lib/models/folder.js';
-import { BaseItem } from 'lib/models/base-item.js';
-import { Setting } from 'lib/models/setting.js';
-import { shim } from 'lib/shim.js';
-import { time } from 'lib/time-utils.js';
-import { _ } from 'lib/locale.js';
-import moment from 'moment';
-import lodash  from 'lodash';
+const { BaseModel } = require('lib/base-model.js');
+const { Log } = require('lib/log.js');
+const { sprintf } = require('sprintf-js');
+const { BaseItem } = require('lib/models/base-item.js');
+const { Setting } = require('lib/models/setting.js');
+const { shim } = require('lib/shim.js');
+const { time } = require('lib/time-utils.js');
+const { _ } = require('lib/locale.js');
+const moment = require('moment');
+const lodash = require('lodash');
 
 class Note extends BaseItem {
 
@@ -188,7 +187,7 @@ class Note extends BaseItem {
 		if (!options.fields) options.fields = this.previewFields();
 		if (!options.uncompletedTodosOnTop) options.uncompletedTodosOnTop = false;
 
-		if (parentId == Folder.conflictFolderId()) {
+		if (parentId == BaseItem.getClass('Folder').conflictFolderId()) {
 			options.conditions.push('is_conflict = 1');
 		} else {
 			options.conditions.push('is_conflict = 0');
@@ -326,7 +325,7 @@ class Note extends BaseItem {
 	}
 
 	static async copyToFolder(noteId, folderId) {
-		if (folderId == Folder.conflictFolderId()) throw new Error(_('Cannot copy note to "%s" notebook', Folder.conflictFolderIdTitle()));
+		if (folderId == this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot copy note to "%s" notebook', this.getClass('Folder').conflictFolderIdTitle()));
 
 		return Note.duplicate(noteId, {
 			changes: {
@@ -337,7 +336,7 @@ class Note extends BaseItem {
 	}
 
 	static async moveToFolder(noteId, folderId) {
-		if (folderId == Folder.conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', Folder.conflictFolderIdTitle()));
+		if (folderId == this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', this.getClass('Folder').conflictFolderIdTitle()));
 
 		// When moving a note to a different folder, the user timestamp is not updated.
 		// However updated_time is updated so that the note can be synced later on.

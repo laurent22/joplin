@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { WebView, View, Linking } from 'react-native';
-import { globalStyle } from 'lib/components/global-style.js';
-import { Resource } from 'lib/models/resource.js';
-import { shim } from 'lib/shim.js';
-import { reg } from 'lib/registry.js';
-import marked from 'lib/marked.js';
+const React = require('react'); const Component = React.Component;
+const { WebView, View, Linking } = require('react-native');
+const { globalStyle } = require('lib/components/global-style.js');
+const { Resource } = require('lib/models/resource.js');
+const { shim } = require('lib/shim.js');
+const { reg } = require('lib/registry.js');
+const marked = require('lib/marked.js');
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = (new Entities()).encode;
 

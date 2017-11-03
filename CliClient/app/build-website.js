@@ -1,10 +1,10 @@
 require('source-map-support').install();
 require('babel-plugin-transform-runtime');
 
-import fs from 'fs-extra';
-import { fileExtension, basename, dirname } from 'lib/path-utils.js';
-import { _, setLocale, languageCode } from 'lib/locale.js';
-import marked from 'lib/marked.js';
+const fs = require('fs-extra');
+const { fileExtension, basename, dirname } = require('lib/path-utils.js');
+const { _, setLocale, languageCode } = require('lib/locale.js');
+const marked = require('lib/marked.js');
 
 const headerHtml = `
 <!doctype html>

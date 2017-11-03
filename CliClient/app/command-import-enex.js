@@ -1,10 +1,10 @@
-import { BaseCommand } from './base-command.js';
-import { app } from './app.js';
-import { _ } from 'lib/locale.js';
-import { Folder } from 'lib/models/folder.js';
-import { importEnex } from 'import-enex';
-import { filename, basename } from 'lib/path-utils.js';
-import { cliUtils } from './cli-utils.js';
+const { BaseCommand } = require('./base-command.js');
+const { app } = require('./app.js');
+const { _ } = require('lib/locale.js');
+const { Folder } = require('lib/models/folder.js');
+const { importEnex } = require('import-enex');
+const { filename, basename } = require('lib/path-utils.js');
+const { cliUtils } = require('./cli-utils.js');
 
 class Command extends BaseCommand {
 

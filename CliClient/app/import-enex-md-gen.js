@@ -1,4 +1,4 @@
-import stringPadding from 'string-padding';
+const stringPadding = require('string-padding');
 
 const BLOCK_OPEN = "[[BLOCK_OPEN]]";
 const BLOCK_CLOSE = "[[BLOCK_CLOSE]]";

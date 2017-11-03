@@ -1,13 +1,13 @@
-import { Logger } from 'lib/logger.js';
-import { Folder } from 'lib/models/folder.js';
-import { Tag } from 'lib/models/tag.js';
-import { BaseModel } from 'lib/base-model.js';
-import { Note } from 'lib/models/note.js';
-import { Resource } from 'lib/models/resource.js';
-import { cliUtils } from './cli-utils.js';
-import { reducer, defaultState } from 'lib/reducer.js';
-import { reg } from 'lib/registry.js';
-import { _ } from 'lib/locale.js';
+const { Logger } = require('lib/logger.js');
+const { Folder } = require('lib/models/folder.js');
+const { Tag } = require('lib/models/tag.js');
+const { BaseModel } = require('lib/base-model.js');
+const { Note } = require('lib/models/note.js');
+const { Resource } = require('lib/models/resource.js');
+const { cliUtils } = require('./cli-utils.js');
+const { reducer, defaultState } = require('lib/reducer.js');
+const { reg } = require('lib/registry.js');
+const { _ } = require('lib/locale.js');
 
 const chalk = require('chalk');
 const tk = require('terminal-kit');

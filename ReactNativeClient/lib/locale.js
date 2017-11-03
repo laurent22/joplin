@@ -1,4 +1,4 @@
-import { sprintf } from 'sprintf-js';
+const { sprintf } = require('sprintf-js');
 
 let codeToLanguageE_ = {};
 codeToLanguageE_["aa"] = "Afar";

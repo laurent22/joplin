@@ -1,8 +1,8 @@
-import { time } from 'lib/time-utils'
-import { BaseItem } from 'lib/models/base-item.js';
-import { Folder } from 'lib/models/folder.js';
-import { Note } from 'lib/models/note.js';
-import { _ } from 'lib/locale.js';
+const { time } = require('lib/time-utils');
+const { BaseItem } = require('lib/models/base-item.js');
+const { Folder } = require('lib/models/folder.js');
+const { Note } = require('lib/models/note.js');
+const { _ } = require('lib/locale.js');
 
 class ReportService {
 

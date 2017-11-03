@@ -1,7 +1,7 @@
-import { shim } from 'lib/shim.js';
-import { GeolocationReact } from 'lib/geolocation-react.js';
-import { PoorManIntervals } from 'lib/poor-man-intervals.js';
-import RNFetchBlob from 'react-native-fetch-blob';
+const { shim } = require('lib/shim.js');
+const { GeolocationReact } = require('lib/geolocation-react.js');
+const { PoorManIntervals } = require('lib/poor-man-intervals.js');
+const RNFetchBlob = require('react-native-fetch-blob').default;
 
 function shimInit() {
 	shim.Geolocation = GeolocationReact;

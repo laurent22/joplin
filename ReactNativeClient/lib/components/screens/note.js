@@ -1,29 +1,29 @@
-import React, { Component } from 'react';
-import { Keyboard, BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking, Image } from 'react-native';
-import { connect } from 'react-redux'
-import { uuid } from 'lib/uuid.js';
-import { Log } from 'lib/log.js'
-import { Note } from 'lib/models/note.js'
-import { Resource } from 'lib/models/resource.js'
-import { Folder } from 'lib/models/folder.js'
-import { BackButtonService } from 'lib/services/back-button.js';
-import { BaseModel } from 'lib/base-model.js'
-import { ActionButton } from 'lib/components/action-button.js';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { ScreenHeader } from 'lib/components/screen-header.js';
-import { time } from 'lib/time-utils.js';
-import { Checkbox } from 'lib/components/checkbox.js'
-import { _ } from 'lib/locale.js';
-import { reg } from 'lib/registry.js';
-import { shim } from 'lib/shim.js';
-import { BaseScreenComponent } from 'lib/components/base-screen.js';
-import { dialogs } from 'lib/dialogs.js';
-import { globalStyle, themeStyle } from 'lib/components/global-style.js';
-import DialogBox from 'react-native-dialogbox';
-import { NoteBodyViewer } from 'lib/components/note-body-viewer.js';
-import RNFetchBlob from 'react-native-fetch-blob';
-import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
-import ImageResizer from 'react-native-image-resizer';
+const React = require('react'); const Component = React.Component;
+const { Keyboard, BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking, Image } = require('react-native');
+const { connect } = require('react-redux');
+const { uuid } = require('lib/uuid.js');
+const { Log } = require('lib/log.js');
+const { Note } = require('lib/models/note.js');
+const { Resource } = require('lib/models/resource.js');
+const { Folder } = require('lib/models/folder.js');
+const { BackButtonService } = require('lib/services/back-button.js');
+const { BaseModel } = require('lib/base-model.js');
+const { ActionButton } = require('lib/components/action-button.js');
+const Icon = require('react-native-vector-icons/Ionicons').default;
+const { ScreenHeader } = require('lib/components/screen-header.js');
+const { time } = require('lib/time-utils.js');
+const { Checkbox } = require('lib/components/checkbox.js');
+const { _ } = require('lib/locale.js');
+const { reg } = require('lib/registry.js');
+const { shim } = require('lib/shim.js');
+const { BaseScreenComponent } = require('lib/components/base-screen.js');
+const { dialogs } = require('lib/dialogs.js');
+const { globalStyle, themeStyle } = require('lib/components/global-style.js');
+const DialogBox = require('react-native-dialogbox').default;
+const { NoteBodyViewer } = require('lib/components/note-body-viewer.js');
+const RNFetchBlob = require('react-native-fetch-blob').default;
+const { DocumentPicker, DocumentPickerUtil } = require('react-native-document-picker');
+const ImageResizer = require('react-native-image-resizer').default;
 
 class NoteScreenComponent extends BaseScreenComponent {
 	

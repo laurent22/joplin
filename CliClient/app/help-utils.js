@@ -1,11 +1,11 @@
 require('source-map-support').install();
 require('babel-plugin-transform-runtime');
 
-import fs from 'fs-extra';
-import { wrap } from 'lib/string-utils.js';
-import { Setting } from 'lib/models/setting.js';
-import { fileExtension, basename, dirname } from 'lib/path-utils.js';
-import { _, setLocale, languageCode } from 'lib/locale.js';
+const fs = require('fs-extra');
+const { wrap } = require('lib/string-utils.js');
+const { Setting } = require('lib/models/setting.js');
+const { fileExtension, basename, dirname } = require('lib/path-utils.js');
+const { _, setLocale, languageCode } = require('lib/locale.js');
 
 const rootDir = dirname(dirname(__dirname));
 const MAX_WIDTH = 78;

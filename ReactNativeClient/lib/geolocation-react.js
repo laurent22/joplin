@@ -1,4 +1,4 @@
-import { Setting } from 'lib/models/setting.js';
+const { Setting } = require('lib/models/setting.js');
 
 class GeolocationReact {
 

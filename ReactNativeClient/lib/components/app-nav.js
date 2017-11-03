@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import { NotesScreen } from 'lib/components/screens/notes.js';
-import { SearchScreen } from 'lib/components/screens/search.js';
-import { View } from 'react-native';
-import { _ } from 'lib/locale.js';
-import { themeStyle } from 'lib/components/global-style.js';
+const React = require('react'); const Component = React.Component;
+const { connect } = require('react-redux');
+const { NotesScreen } = require('lib/components/screens/notes.js');
+const { SearchScreen } = require('lib/components/screens/search.js');
+const { View } = require('react-native');
+const { _ } = require('lib/locale.js');
+const { themeStyle } = require('lib/components/global-style.js');
 
 class AppNavComponent extends Component {
 

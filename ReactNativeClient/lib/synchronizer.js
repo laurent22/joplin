@@ -1,14 +1,14 @@
-import { BaseItem } from 'lib/models/base-item.js';
-import { Folder } from 'lib/models/folder.js';
-import { Note } from 'lib/models/note.js';
-import { Resource } from 'lib/models/resource.js';
-import { BaseModel } from 'lib/base-model.js';
-import { sprintf } from 'sprintf-js';
-import { time } from 'lib/time-utils.js';
-import { Logger } from 'lib/logger.js'
-import { _ } from 'lib/locale.js';
-import { shim } from 'lib/shim.js';
-import moment from 'moment';
+const { BaseItem } = require('lib/models/base-item.js');
+const { Folder } = require('lib/models/folder.js');
+const { Note } = require('lib/models/note.js');
+const { Resource } = require('lib/models/resource.js');
+const { BaseModel } = require('lib/base-model.js');
+const { sprintf } = require('sprintf-js');
+const { time } = require('lib/time-utils.js');
+const { Logger } = require('lib/logger.js');
+const { _ } = require('lib/locale.js');
+const { shim } = require('lib/shim.js');
+const moment = require('moment');
 
 class Synchronizer {
 

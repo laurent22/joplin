@@ -1,6 +1,6 @@
-import yargParser from 'yargs-parser';
-import { _ } from 'lib/locale.js';
-import { time } from 'lib/time-utils.js';
+const yargParser = require('yargs-parser');
+const { _ } = require('lib/locale.js');
+const { time } = require('lib/time-utils.js');
 const stringPadding = require('string-padding');
 
 const cliUtils = {};

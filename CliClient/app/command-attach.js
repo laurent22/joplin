@@ -1,12 +1,12 @@
-import { BaseCommand } from './base-command.js';
-import { app } from './app.js';
-import { _ } from 'lib/locale.js';
-import { BaseModel } from 'lib/base-model.js';
-import { Folder } from 'lib/models/folder.js';
-import { Note } from 'lib/models/note.js';
-import { Resource } from 'lib/models/resource.js';
-import { uuid } from 'lib/uuid.js';
-import { filename } from 'lib/path-utils.js';
+const { BaseCommand } = require('./base-command.js');
+const { app } = require('./app.js');
+const { _ } = require('lib/locale.js');
+const { BaseModel } = require('lib/base-model.js');
+const { Folder } = require('lib/models/folder.js');
+const { Note } = require('lib/models/note.js');
+const { Resource } = require('lib/models/resource.js');
+const { uuid } = require('lib/uuid.js');
+const { filename } = require('lib/path-utils.js');
 
 const fs = require('fs-extra');
 const mime = require('mime/lite');

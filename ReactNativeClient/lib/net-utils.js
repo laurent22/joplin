@@ -1,4 +1,4 @@
-import { shim } from 'lib/shim.js'
+const { shim } = require('lib/shim.js');
 
 const tcpPortUsed = require('tcp-port-used');
 

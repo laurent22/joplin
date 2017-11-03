@@ -1,7 +1,7 @@
-import { BaseCommand } from './base-command.js';
-import { _, setLocale } from 'lib/locale.js';
-import { app } from './app.js';
-import { Setting } from 'lib/models/setting.js';
+const { BaseCommand } = require('./base-command.js');
+const { _, setLocale } = require('lib/locale.js');
+const { app } = require('./app.js');
+const { Setting } = require('lib/models/setting.js');
 
 class Command extends BaseCommand {
 

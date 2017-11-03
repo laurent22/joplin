@@ -1,11 +1,11 @@
-import { BaseCommand } from './base-command.js';
-import { app } from './app.js';
-import { renderCommandHelp } from './help-utils.js';
-import { Database } from 'lib/database.js';
-import { Setting } from 'lib/models/setting.js';
-import { wrap } from 'lib/string-utils.js';
-import { _ } from 'lib/locale.js';
-import { cliUtils } from './cli-utils.js';
+const { BaseCommand } = require('./base-command.js');
+const { app } = require('./app.js');
+const { renderCommandHelp } = require('./help-utils.js');
+const { Database } = require('lib/database.js');
+const { Setting } = require('lib/models/setting.js');
+const { wrap } = require('lib/string-utils.js');
+const { _ } = require('lib/locale.js');
+const { cliUtils } = require('./cli-utils.js');
 
 class Command extends BaseCommand {
 
