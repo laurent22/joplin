@@ -2,8 +2,7 @@
 
 // Loading time: 20170803: 1.5s with no commands
 
-require('source-map-support').install();
-require('babel-plugin-transform-runtime');
+require('app-module-path').addPath(__dirname);
 
 const { app } = require('./app.js');
 const { BaseModel } = require('lib/base-model.js');

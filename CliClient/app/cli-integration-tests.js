@@ -1,8 +1,5 @@
 "use strict"
 
-require('source-map-support').install();
-require('babel-plugin-transform-runtime');
-
 const fs = require('fs-extra');
 const { Logger } = require('lib/logger.js');
 const { dirname } = require('lib/path-utils.js');

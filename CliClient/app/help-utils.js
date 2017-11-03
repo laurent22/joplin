@@ -1,6 +1,3 @@
-require('source-map-support').install();
-require('babel-plugin-transform-runtime');
-
 const fs = require('fs-extra');
 const { wrap } = require('lib/string-utils.js');
 const { Setting } = require('lib/models/setting.js');

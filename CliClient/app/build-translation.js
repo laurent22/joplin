@@ -1,7 +1,6 @@
 "use strict"
 
-require('source-map-support').install();
-require('babel-plugin-transform-runtime');
+require('app-module-path').addPath(__dirname);
 
 const processArgs = process.argv.splice(2, process.argv.length);
 
