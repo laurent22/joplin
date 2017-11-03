@@ -54,6 +54,10 @@ const generalMiddleware = store => next => async (action) => {
 		reg.setupRecurrentSync();
 	}
 
+	if (action.type == 'SETTINGS_UPDATE_ONE' && action.key == 'locale' || action.type == 'SETTINGS_UPDATE_ALL') {
+		setLocale(Setting.value('locale'));
+	}	
+
 	if (action.type == 'NAV_GO' && action.routeName == 'Notes') {
 		Setting.setValue('activeFolderId', newState.selectedFolderId);
 	}

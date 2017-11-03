@@ -138,7 +138,7 @@ reg.syncHasAuth = (syncTargetId) => {
 }
 
 reg.scheduleSync = async (delay = null) => {
-	if (delay === null) delay = 1000 * 10;
+	if (delay === null) delay = 1000 * 3;
 
 	if (reg.scheduleSyncId_) {
 		clearTimeout(reg.scheduleSyncId_);
@@ -146,6 +146,11 @@ reg.scheduleSync = async (delay = null) => {
 	}
 
 	reg.logger().info('Scheduling sync operation...');
+
+	// if (Setting.value('env') === 'dev') {
+	// 	reg.logger().info('Scheduling sync operation DISABLED!!!');
+	// 	return;
+	// }
 
 	const timeoutCallback = async () => {
 		reg.scheduleSyncId_ = null;
