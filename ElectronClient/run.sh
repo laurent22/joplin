@@ -1,4 +1,4 @@
 #!/bin/bash
-/mnt/c/Users/Laurent/AppData/Roaming/npm/electron .
-
-# /mnt/c/Users/Laurent/AppData/Roaming/npm/npm
+ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$ROOT_DIR/build"
+node_modules/.bin/electron .
