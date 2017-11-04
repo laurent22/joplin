@@ -278,11 +278,11 @@ class AppComponent extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
-  		historyCanGoBack: state.historyCanGoBack,
-  		showSideMenu: state.showSideMenu,
-  		syncStarted: state.syncStarted,
-  		appState: state.appState,
-  	};
+		historyCanGoBack: state.historyCanGoBack,
+		showSideMenu: state.showSideMenu,
+		syncStarted: state.syncStarted,
+		appState: state.appState,
+	};
 };
 
 const App = connect(mapStateToProps)(AppComponent);

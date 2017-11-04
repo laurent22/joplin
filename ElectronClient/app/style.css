@@ -1,0 +1,9 @@
+.note-list .item {
+	height: 40px;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.note-list .item.odd {
+	background-color: lightgray;
+}

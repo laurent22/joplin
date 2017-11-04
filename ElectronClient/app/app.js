@@ -67,13 +67,11 @@ class Application extends BaseApplication {
 let application_ = null;
 
 function app() {
-	console.info('AAAAAAAAA');
 	if (!application_) throw new Error('Application has not been initialized');
 	return application_;
 }
 
 function initApp(electronApp) {
-	console.info('INIT');
 	if (application_) throw new Error('Application has already been initialized');
 	application_ = new Application(electronApp);
 	return application_;
