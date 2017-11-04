@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "install-app-deps"
+    "postinstall": "electron-builder install-app-deps"
   },
   "repository": {
     "type": "git",
@@ -18,10 +18,18 @@
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
-    "electron-builder": "^19.43.4"
+    "electron": "^1.7.9",
+    "electron-builder": "^19.43.4",
+    "electron-rebuild": "^1.6.0"
   },
   "dependencies": {
     "app-module-path": "^2.2.0",
+    "fs-extra": "^4.0.2",
+    "lodash": "^4.17.4",
+    "moment": "^2.19.1",
+    "promise": "^8.0.1",
+    "query-string": "^5.0.1",
+    "sprintf-js": "^1.1.1",
     "sqlite3": "^3.1.13"
   }
 }

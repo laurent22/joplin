@@ -59,18 +59,10 @@ class Setting extends BaseModel {
 		return this.modelSelectAll('SELECT * FROM settings').then((rows) => {
 			this.cache_ = [];
 
-			// Old keys - can be removed later
-			//const ignore = ['clientId', 'sync.onedrive.auth', 'syncInterval', 'todoOnTop', 'todosOnTop', 'todoFilter'];
-
 			for (let i = 0; i < rows.length; i++) {
 				let c = rows[i];
 
 				if (!this.keyExists(c.key)) continue;
-
-				//if (ignore.indexOf(c.key) >= 0) continue;
-
-				// console.info(c.key + ' = ' + c.value);
-
 				c.value = this.formatValue(c.key, c.value);
 
 				this.cache_.push(c);

@@ -1,7 +1,7 @@
 const moment = require('moment');
 const { _ } = require('lib/locale.js');
 const { time } = require('lib/time-utils.js');
-const { FSdRiverdUmmy } = require('lib/fs-driver-dummy.js');
+const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
 
 class Logger {
 
