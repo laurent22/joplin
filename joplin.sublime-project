@@ -15,6 +15,7 @@
 				"package-lock.json",
 				"ReactNativeClient/locales/*",
 				"src/log.txt",
+				"*.min.js",
 			],
 			"folder_exclude_patterns":
 			[

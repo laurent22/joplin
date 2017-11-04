@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-react": "^6.24.1",
     "electron": "^1.7.9",
     "electron-builder": "^19.43.4",
     "electron-rebuild": "^1.6.0"
@@ -30,6 +32,9 @@
     "node-fetch": "^1.7.3",
     "promise": "^8.0.1",
     "query-string": "^5.0.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "sprintf-js": "^1.1.1",
     "sqlite3": "^3.1.13",

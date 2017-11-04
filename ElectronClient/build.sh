@@ -5,6 +5,11 @@ BUILD_DIR="$ROOT_DIR/app"
 
 rsync -a "$ROOT_DIR/../ReactNativeClient/lib/" "$BUILD_DIR/lib/"
 
+for JSX_FILE in "$BUILD_DIR"/*.jsx; do   
+    JS_FILE="${JSX_FILE::-4}.min.js"
+    "$ROOT_DIR/app/node_modules/.bin/babel" --presets react "$JSX_FILE" > "$JS_FILE"
+done
+
 TRANSLATION_BUILD_SCRIPT="$ROOT_DIR/../CliClient/build/build-translation.js"
 if [[ ! -f $TRANSLATION_BUILD_SCRIPT ]]; then
 	echo "Build the CLI app first ($TRANSLATION_BUILD_SCRIPT missing)"
