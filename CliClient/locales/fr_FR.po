@@ -85,28 +85,6 @@ msgstr "Aucun carnet n'est sélectionné."
 msgid "No notebook has been specified."
 msgstr "Aucun carnet n'est spécifié."
 
-#, javascript-format
-msgid "Usage: %s"
-msgstr "Utilisation : %s"
-
-#, javascript-format
-msgid "Unknown flag: %s"
-msgstr "Paramètre inconnu : %s"
-
-#, javascript-format
-msgid ""
-"Command line argument \"%s\" contains both quotes and double-quotes - "
-"aborting."
-msgstr ""
-"Le paramètre de ligne de commande \"%s\" contient à la fois des guillemets "
-"simples et doubles - impossible de continuer."
-
-msgid "Provides help for a given command."
-msgstr "Affiche l'aide pour la commande donnée."
-
-msgid "Exits the application."
-msgstr "Quitter le logiciel."
-
 msgid "Y"
 msgstr "O"
 
@@ -216,6 +194,9 @@ msgstr ""
 
 msgid "Note has been saved."
 msgstr "La note a été enregistrée."
+
+msgid "Exits the application."
+msgstr "Quitter le logiciel."
 
 msgid ""
 "Exports Joplin data to the given directory. By default, it will export the "
@@ -540,6 +521,14 @@ msgstr ""
 "personnelles. Aucune donnée ne sera partagé avec aucun tier."
 
 #, javascript-format
+msgid "Usage: %s"
+msgstr "Utilisation : %s"
+
+#, javascript-format
+msgid "Unknown flag: %s"
+msgstr "Paramètre inconnu : %s"
+
+#, javascript-format
 msgid "Unknown log level: %s"
 msgstr "Paramètre inconnu : %s"
 
@@ -828,6 +817,16 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid ""
+#~ "Command line argument \"%s\" contains both quotes and double-quotes - "
+#~ "aborting."
+#~ msgstr ""
+#~ "Le paramètre de ligne de commande \"%s\" contient à la fois des "
+#~ "guillemets simples et doubles - impossible de continuer."
+
+#~ msgid "Provides help for a given command."
+#~ msgstr "Affiche l'aide pour la commande donnée."
 
 #, fuzzy
 #~ msgid "Create a [n]ew [n]otebook"

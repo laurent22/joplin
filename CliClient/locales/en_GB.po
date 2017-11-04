@@ -85,26 +85,6 @@ msgstr ""
 msgid "No notebook has been specified."
 msgstr ""
 
-#, javascript-format
-msgid "Usage: %s"
-msgstr ""
-
-#, javascript-format
-msgid "Unknown flag: %s"
-msgstr ""
-
-#, javascript-format
-msgid ""
-"Command line argument \"%s\" contains both quotes and double-quotes - "
-"aborting."
-msgstr ""
-
-msgid "Provides help for a given command."
-msgstr ""
-
-msgid "Exits the application."
-msgstr ""
-
 msgid "Y"
 msgstr ""
 
@@ -203,6 +183,9 @@ msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
 
 msgid "Note has been saved."
+msgstr ""
+
+msgid "Exits the application."
 msgstr ""
 
 msgid ""
@@ -485,6 +468,14 @@ msgid ""
 "will only read and write files in this directory. It will have no access to "
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
+msgstr ""
+
+#, javascript-format
+msgid "Usage: %s"
+msgstr ""
+
+#, javascript-format
+msgid "Unknown flag: %s"
 msgstr ""
 
 #, javascript-format
