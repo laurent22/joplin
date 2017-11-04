@@ -12,6 +12,6 @@ process.on('unhandledRejection', (reason, p) => {
 const app = initApp(electronApp);
 
 app.start(process.argv).catch((error) => {
-	console.error(_('Fatal error:'));
+	console.error('Fatal error:');
 	console.error(error);
 });
