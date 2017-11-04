@@ -14,7 +14,7 @@ const { Tag } = require('lib/models/tag.js');
 const { NoteTag } = require('lib/models/note-tag.js');
 const { Setting } = require('lib/models/setting.js');
 const { Logger } = require('lib/logger.js');
-const { FsDriverNode } = require('./fs-driver-node.js');
+const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { shimInit } = require('lib/shim-init-node.js');
 const { _ } = require('lib/locale.js');
 

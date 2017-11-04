@@ -312,9 +312,7 @@ class Application extends BaseApplication {
 				}
 			}
 		} else { // Otherwise open the GUI
-			this.store_ = createStore(reducer, applyMiddleware(this.generalMiddleware()));
-			BaseModel.dispatch = this.store().dispatch;
-			FoldersScreenUtils.dispatch = this.store().dispatch;
+			this.initRedux();
 
 			const AppGui = require('./app-gui.js');
 			this.gui_ = new AppGui(this, this.store());

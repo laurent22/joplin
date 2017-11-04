@@ -27,10 +27,12 @@
     "fs-extra": "^4.0.2",
     "lodash": "^4.17.4",
     "moment": "^2.19.1",
+    "node-fetch": "^1.7.3",
     "promise": "^8.0.1",
     "query-string": "^5.0.1",
     "redux": "^3.7.2",
     "sprintf-js": "^1.1.1",
-    "sqlite3": "^3.1.13"
+    "sqlite3": "^3.1.13",
+    "tcp-port-used": "^0.1.2"
   }
 }

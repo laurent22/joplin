@@ -227,8 +227,15 @@ class BaseApplication {
 		if (this.store()) return this.store().dispatch(action);
 	}
 
+	initRedux() {
+		this.store_ = createStore(reducer, applyMiddleware(this.generalMiddleware()));
+		BaseModel.dispatch = this.store().dispatch;
+		FoldersScreenUtils.dispatch = this.store().dispatch;
+	}
+
 	async start(argv) {
 		let startFlags = await this.handleStartFlags_(argv);
+
 		argv = startFlags.argv;
 		let initArgs = startFlags.matched;
 		if (argv.length) this.showPromptString_ = false;
@@ -239,7 +246,9 @@ class BaseApplication {
 			initArgs.env = 'dev';
 		}
 
-		Setting.setConstant('appName', initArgs.env == 'dev' ? 'joplindev' : 'joplin');
+		let appName = initArgs.env == 'dev' ? 'joplindev' : 'joplin';
+		if (Setting.value('appId').indexOf('-desktop') >= 0) appName += '-desktop';
+		Setting.setConstant('appName', appName);
 
 		const profileDir = initArgs.profileDir ? initArgs.profileDir : os.homedir() + '/.config/' + Setting.value('appName');
 		const resourceDir = profileDir + '/resources';
@@ -250,13 +259,12 @@ class BaseApplication {
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
 
-		console.info(Setting.value('env'), Setting.value('profileDir'), Setting.value('resourceDir'), Setting.value('tempDir'));
-
 		await fs.mkdirp(profileDir, 0o755);
 		await fs.mkdirp(resourceDir, 0o755);
 		await fs.mkdirp(tempDir, 0o755);
 
 		this.logger_.addTarget('file', { path: profileDir + '/log.txt' });
+		//this.logger_.addTarget('console');
 		this.logger_.setLevel(initArgs.logLevel);
 
 		reg.setLogger(this.logger_);
@@ -269,8 +277,8 @@ class BaseApplication {
 			this.dbLogger_.setLevel(Logger.LEVEL_WARN);
 		}
 
-		const packageJson = require('./package.json');
-		this.logger_.info(sprintf('Starting %s %s (%s)...', packageJson.name, packageJson.version, Setting.value('env')));
+		// const packageJson = require('./package.json');
+		// this.logger_.info(sprintf('Starting %s %s (%s)...', packageJson.name, packageJson.version, Setting.value('env')));
 		this.logger_.info('Profile directory: ' + profileDir);
 
 		this.database_ = new JoplinDatabase(new DatabaseDriverNode());

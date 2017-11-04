@@ -111,8 +111,6 @@ class Logger {
 			} else if (target.type == 'file') {
 				let serializedObject = this.objectsToString(...object);
 				Logger.fsDriver().appendFileSync(target.path, line + serializedObject + "\n");
-			} else if (target.type == 'vorpal') {
-				//target.vorpal.log(...object);
 			} else if (target.type == 'database') {
 				let msg = this.objectsToString(...object);
 

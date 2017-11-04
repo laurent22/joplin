@@ -5,14 +5,23 @@ const path = require('path')
 
 class ElectronAppWrapper {
 
-	constructor(electronApp) {
+	constructor(electronApp, app, store) {
+		this.app_ = app;
 		this.electronApp_ = electronApp;
-		this.loadState_ = 'start';
+		this.store_ = store;
 		this.win_ = null;
+	}
 
-		this.electronApp_.on('ready', () => {
-			this.loadState_ = 'ready';
-		});
+	electronApp() {
+		return this.electronApp_;
+	}
+
+	setLogger(v) {
+		this.logger_ = v;
+	}
+
+	logger() {
+		return this.logger_;
 	}
 
 	createWindow() {
@@ -39,16 +48,20 @@ class ElectronAppWrapper {
 	}
 
 	async waitForElectronAppReady() {
-		if (this.loadState_ === 'ready') return Promise.resolve();
+		if (this.electronApp().isReady()) return Promise.resolve();
 
 		return new Promise((resolve, reject) => {
 			const iid = setInterval(() => {
-				if (this.loadState_ === 'ready') {
+				if (this.electronApp().isReady()) {
 					clearInterval(iid);
 					resolve();
 				}
 			}, 10);
 		});
+	}
+
+	async exit() {
+		this.electronApp_.quit();
 	}
 
 	async start() {
