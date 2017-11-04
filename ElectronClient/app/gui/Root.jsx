@@ -10,17 +10,29 @@ const { app } = require('electron').remote.require('./app');
 class ReactRootComponent extends React.Component {
 
 	render() {
+		const style = {
+			width: this.props.size.width,
+			height: this.props.size.height,
+		};
+
+		const noteListStyle = {
+			width: this.props.size.width,
+			height: this.props.size.height,
+		};
+
 		return (
-			<div style={{height: "1000px"}}>
-				<NoteList></NoteList>
+			<div style={style}>
+				<NoteList itemHeight={40} style={noteListStyle}></NoteList>
 			</div>
-		)
+		);
 	}
 
 }
 
 const mapStateToProps = (state) => {
-	return {};
+	return {
+		size: state.windowContentSize,
+	};
 };
 
 const ReactRoot = connect(mapStateToProps)(ReactRootComponent);

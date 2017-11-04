@@ -29,6 +29,7 @@ const defaultState = {
 		routeName: 'Welcome',
 		params: {},
 	},
+	windowContentSize: { width: 0, height: 0 },
 };
 
 let navHistory = [];
@@ -408,6 +409,12 @@ const reducer = (state = defaultState, action) => {
 
 				newState = Object.assign({}, state);
 				newState.appState = action.state;
+				break;
+
+			case 'WINDOW_CONTENT_SIZE_SET':
+
+				newState = Object.assign({}, state);
+				newState.windowContentSize = action.size;
 				break;
 
 		}

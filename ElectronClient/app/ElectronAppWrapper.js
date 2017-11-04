@@ -24,6 +24,20 @@ class ElectronAppWrapper {
 		return this.logger_;
 	}
 
+	store() {
+		return this.store_;
+	}
+
+	dispatch(action) {
+		return this.store().dispatch(action);
+	}
+
+	windowContentSize() {
+		if (!this.win_) return { width: 0, height: 0 };
+		const s = this.win_.getContentSize();
+		return { width: s[0], height: s[1] };
+	}
+
 	createWindow() {
 		// Create the browser window.
 		this.win_ = new BrowserWindow({width: 800, height: 600})
@@ -45,6 +59,18 @@ class ElectronAppWrapper {
 			// when you should delete the corresponding element.
 			this.win_ = null
 		})
+
+		this.win_.on('resize', () => {
+			this.dispatch({
+				type: 'WINDOW_CONTENT_SIZE_SET',
+				size: this.windowContentSize(),
+			});
+		});
+
+		this.dispatch({
+			type: 'WINDOW_CONTENT_SIZE_SET',
+			size: this.windowContentSize(),
+		});
 	}
 
 	async waitForElectronAppReady() {

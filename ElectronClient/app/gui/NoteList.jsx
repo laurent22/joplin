@@ -10,21 +10,25 @@ class NoteListComponent extends React.Component {
 
 	render() {
 		return (
-			<div className={"note-list"}>
-				<h1>Notes</h1>
-				<ItemList
-					items={this.props.notes}
-					itemRenderer={ (index, item) => { return this.itemRenderer(index, item) } }
-				/>
-			</div>
+			<ItemList
+				itemHeight={this.props.itemHeight}
+				style={this.props.style}
+				className={"note-list"}
+				items={this.props.notes}
+				itemRenderer={ (index, item) => { return this.itemRenderer(index, item) } }
+			/>
 		);
 	}
 
 }
 
 const mapStateToProps = (state) => {
+	let notes = [];
+	for (let i = 0; i < 100; i++) notes.push({ title: "Note " + i });
+
 	return {
-		notes: state.notes,
+		//notes: state.notes,
+		notes: notes,
 	};
 };
 

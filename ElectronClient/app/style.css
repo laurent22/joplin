@@ -1,5 +1,19 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+
+#react-root {
+	height: 100%;
+}
+
+.item-list {
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
 .note-list .item {
-	height: 40px;
+	height: 40px; /* This must match NoteList.itemHeight */
 	vertical-align: middle;
 	cursor: pointer;
 }
