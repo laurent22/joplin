@@ -30,6 +30,8 @@
 				"CliClient/tests/src",
 				"CliClient/tests/sync",
 				"ElectronClient/build",
+				"ElectronClient/app/lib",
+				"ElectronClient/app/locale",
 				"node_modules",
 				"ReactNativeClient/android/.gradle",
 				"ReactNativeClient/android/.idea",
