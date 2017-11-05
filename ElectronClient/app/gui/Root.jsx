@@ -3,6 +3,7 @@ const { render } = require('react-dom');
 const { createStore } = require('redux');
 const { connect, Provider } = require('react-redux');
 
+const { SideBar } = require('./SideBar.min.js');
 const { NoteList } = require('./NoteList.min.js');
 const { NoteText } = require('./NoteText.min.js');
 
@@ -49,14 +50,21 @@ class ReactRootComponent extends React.Component {
 		};
 
 		const noteListStyle = {
-			width: Math.floor(this.props.size.width / 2),
+			width: Math.floor(this.props.size.width / 3),
 			height: this.props.size.height,
 			display: 'inline-block',
 			verticalAlign: 'top',
 		};
 
 		const noteTextStyle = {
-			width: this.props.size.width - noteListStyle.width,
+			width: noteListStyle.width,
+			height: this.props.size.height,
+			display: 'inline-block',
+			verticalAlign: 'top',
+		};
+
+		const sideBarStyle = {
+			width: this.props.size.width - (noteTextStyle.width + noteListStyle.width),
 			height: this.props.size.height,
 			display: 'inline-block',
 			verticalAlign: 'top',
@@ -64,6 +72,7 @@ class ReactRootComponent extends React.Component {
 
 		return (
 			<div style={style}>
+				<SideBar style={sideBarStyle}></SideBar>
 				<NoteList itemHeight={40} style={noteListStyle}></NoteList>
 				<NoteText style={noteTextStyle}></NoteText>
 			</div>

@@ -21,3 +21,11 @@ body {
 .note-list .item.odd {
 	background-color: lightgray;
 }
+
+.note-list .selected {
+	font-weight: bold;
+}
+
+.side-bar .selected {
+	font-weight: bold;
+}

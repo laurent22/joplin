@@ -14,6 +14,7 @@ class NoteListComponent extends React.Component {
 
 		let classes = ['item'];
 		classes.push(index % 2 === 0 ? 'even' : 'odd');
+		if (this.props.selectedNoteId === item.id) classes.push('selected');
 		return <div onClick={() => { onClick(item) }} className={classes.join(' ')} key={index}>{item.title + ' ' + item.id.substr(0,4)}</div>
 	}
 
@@ -34,6 +35,7 @@ class NoteListComponent extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		notes: state.notes,
+		selectedNoteId: state.selectedNoteId,
 	};
 };
 

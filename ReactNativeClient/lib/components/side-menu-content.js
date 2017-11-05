@@ -11,6 +11,7 @@ const { Synchronizer } = require('lib/synchronizer.js');
 const { reg } = require('lib/registry.js');
 const { _ } = require('lib/locale.js');
 const { globalStyle, themeStyle } = require('lib/components/global-style.js');
+const shared = require('lib/components/shared/side-menu-shared.js');
 
 class SideMenuContentComponent extends Component {
 
@@ -188,22 +189,13 @@ class SideMenuContentComponent extends Component {
 		items.push(<View style={{ height: globalStyle.marginTop }} key='bottom_top_hack'/>);
 
 		if (this.props.folders.length) {
-			for (let i = 0; i < this.props.folders.length; i++) {
-				let folder = this.props.folders[i];
-				items.push(this.folderItem(folder, this.props.selectedFolderId == folder.id && this.props.notesParentType == 'Folder'));
-			}
-
+			const folderItems = shared.renderFolders(this.props, this.folderItem.bind(this));
+			items = items.concat(folderItems);
 			if (items.length) items.push(this.makeDivider('divider_1'));
 		}
 
 		if (this.props.tags.length) {
-			let tags = this.props.tags.slice();
-			tags.sort((a, b) => { return a.title < b.title ? -1 : +1; });
-			let tagItems = [];
-			for (let i = 0; i < tags.length; i++) {
-				const tag = tags[i];
-				tagItems.push(this.tagItem(tag, this.props.selectedTagId == tag.id && this.props.notesParentType == 'Tag'));
-			}
+			const tagItems = shared.renderTags(this.props, this.tagItem.bind(this));
 
 			items.push(
 				<View style={this.styles().tagItemList} key="tag_items">
