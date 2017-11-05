@@ -1,3 +1,5 @@
+// This is the initialization for the Electron RENDERER process
+
 // Make it possible to require("/lib/...") without specifying full path
 require('app-module-path').addPath(__dirname);
 

@@ -10,8 +10,6 @@ const { app } = require('../app');
 
 const { bridge } = require('electron').remote.require('./bridge');
 
-//const { app } = require('electron').remote.require('./app');
-
 async function initialize(dispatch) {
 	bridge().window().on('resize', function() {
 		store.dispatch({
