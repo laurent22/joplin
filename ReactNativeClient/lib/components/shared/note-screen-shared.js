@@ -40,7 +40,7 @@ shared.saveNoteButton_press = async function(comp) {
 		note: note,
 	});
 	if (isNew) Note.updateGeolocation(note.id);
-	shared.refreshNoteMetadata(comp);
+	comp.refreshNoteMetadata();
 }
 
 shared.saveOneProperty = async function(comp, name, value) {
@@ -111,7 +111,7 @@ shared.initState = async function(comp) {
 
 shared.showMetadata_onPress = function(comp) {
 	comp.setState({ showNoteMetadata: !comp.state.showNoteMetadata });
-	shared.refreshNoteMetadata(comp, true);
+	comp.refreshNoteMetadata(true);
 }
 
 shared.toggleIsTodo_onPress = function(comp) {

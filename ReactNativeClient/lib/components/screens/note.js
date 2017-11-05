@@ -42,7 +42,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			folder: null,
 			lastSavedNote: null,
 			isLoading: true,
-			resources: {},
 			titleTextInputHeight: 20,
 		};
 
@@ -137,7 +136,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		await shared.initState(this);
 
-		shared.refreshNoteMetadata(this);
+		this.refreshNoteMetadata();
+	}
+
+	refreshNoteMetadata(force = null) {
+		return shared.refreshNoteMetadata(this, force);
 	}
 
 	componentWillUnmount() {
