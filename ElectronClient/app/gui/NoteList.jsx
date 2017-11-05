@@ -1,4 +1,6 @@
 const { ItemList } = require('./ItemList.min.js');
+const React = require('react');
+const { connect } = require('react-redux');
 
 class NoteListComponent extends React.Component {
 

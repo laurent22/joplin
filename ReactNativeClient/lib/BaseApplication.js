@@ -192,6 +192,10 @@ class BaseApplication {
 		return o.join(', ');
 	}
 
+	hasGui() {
+		return false;
+	}
+
 	generalMiddleware() {
 		const middleware = store => next => async (action) => {
 			this.logger().debug('Reducer action', this.reducerActionToString(action));
@@ -213,7 +217,7 @@ class BaseApplication {
 				await this.refreshNotes(BaseModel.TYPE_SEARCH, action.id);
 			}
 
-			if (this.gui() && action.type == 'SETTINGS_UPDATE_ONE' && action.key == 'sync.interval' || action.type == 'SETTINGS_UPDATE_ALL') {
+			if (this.hasGui() && action.type == 'SETTINGS_UPDATE_ONE' && action.key == 'sync.interval' || action.type == 'SETTINGS_UPDATE_ALL') {
 				reg.setupRecurrentSync();
 			}
 

@@ -17,14 +17,12 @@ const { ElectronAppWrapper } = require('./ElectronAppWrapper');
 
 class Application extends BaseApplication {
 
-	constructor(electronApp) {
+	constructor() {
 		super();
-
-		this.electronApp_ = electronApp;
 	}
 
-	gui() {
-		return this.gui_;
+	hasGui() {
+		return true;
 	}
 
 	async start(argv) {
@@ -32,11 +30,11 @@ class Application extends BaseApplication {
 
 		this.initRedux();
 
-		this.gui_ = new ElectronAppWrapper(this.electronApp_, this, this.store());
+		//this.gui_ = new ElectronAppWrapper(this.electronApp_, this, this.store());
 
 		try {
-			this.gui_.setLogger(this.logger());
-			await this.gui().start();
+			// this.gui_.setLogger(this.logger());
+			// await this.gui().start();
 
 			// Since the settings need to be loaded before the store is created, it will never
 			// receive the SETTINGS_UPDATE_ALL even, which mean state.settings will not be
@@ -57,7 +55,7 @@ class Application extends BaseApplication {
 				id: Setting.value('activeFolderId'),
 			});
 		} catch (error) {
-			await this.gui_.exit();
+			//await this.gui_.exit();
 			throw error;
 		}
 	}
@@ -67,7 +65,8 @@ class Application extends BaseApplication {
 let application_ = null;
 
 function app() {
-	if (!application_) throw new Error('Application has not been initialized');
+	//if (!application_) throw new Error('Application has not been initialized');
+	if (!application_) application_ = new Application();
 	return application_;
 }
 

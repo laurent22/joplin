@@ -1,3 +1,5 @@
+const React = require('react');
+
 class ItemList extends React.Component {
 
 	constructor() {
@@ -6,34 +8,32 @@ class ItemList extends React.Component {
 		this.scrollTop_ = 0;
 	}
 
-	componentWillMount() {
+	updateStateItemIndexes(props) {
+		if (typeof props === 'undefined') props = this.props;
+
+		const topItemIndex = Math.floor(this.scrollTop_ / props.itemHeight);
+		const visibleItemCount = Math.ceil(props.style.height / props.itemHeight);
+
+		let bottomItemIndex = topItemIndex + visibleItemCount;
+		if (bottomItemIndex >= props.items.length) bottomItemIndex = props.items.length - 1;
+
 		this.setState({
-			topItemIndex: this.topItemIndex(),
-			bottomItemIndex: this.bottomItemIndex(),
+			topItemIndex: topItemIndex,
+			bottomItemIndex: bottomItemIndex,
 		});
+	}
+
+	componentWillMount() {
+		this.updateStateItemIndexes();
+	}
+
+	componentWillReceiveProps(newProps) {
+		this.updateStateItemIndexes(newProps);
 	}
 
 	onScroll(scrollTop) {
 		this.scrollTop_ = scrollTop;
-
-		this.setState({
-			topItemIndex: this.topItemIndex(),
-			bottomItemIndex: this.bottomItemIndex(),
-		});
-	}
-
-	topItemIndex() {
-		return Math.floor(this.scrollTop_ / this.props.itemHeight);
-	}
-
-	visibleItemCount() {
-		return Math.ceil(this.props.style.height / this.props.itemHeight);
-	}
-
-	bottomItemIndex() {
-		let r = this.topItemIndex() + this.visibleItemCount();
-		if (r >= this.props.items.length) r = this.props.items.length - 1;
-		return r;
+		this.updateStateItemIndexes();
 	}
 
 	render() {

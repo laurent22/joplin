@@ -3,12 +3,46 @@ const { render } = require('react-dom');
 const { createStore } = require('redux');
 const { connect, Provider } = require('react-redux');
 
-const { NoteList } = require('./gui/NoteList.min.js');
-const { NoteText } = require('./gui/NoteText.min.js');
+const { NoteList } = require('./NoteList.min.js');
+const { NoteText } = require('./NoteText.min.js');
 
-const { app } = require('electron').remote.require('./app');
+const { app } = require('../app');
+
+const { bridge } = require('electron').remote.require('./bridge');
+
+//const { app } = require('electron').remote.require('./app');
+
+async function initialize(dispatch) {
+	bridge().window().on('resize', function() {
+		store.dispatch({
+			type: 'WINDOW_CONTENT_SIZE_SET',
+			size: bridge().windowContentSize(),
+		});
+	});
+
+	store.dispatch({
+		type: 'WINDOW_CONTENT_SIZE_SET',
+		size: bridge().windowContentSize(),
+	});
+}
 
 class ReactRootComponent extends React.Component {
+
+	async componentDidMount() {
+		if (this.props.appState == 'starting') {
+			this.props.dispatch({
+				type: 'SET_APP_STATE',
+				state: 'initializing',
+			});
+
+			await initialize(this.props.dispatch);
+
+			this.props.dispatch({
+				type: 'SET_APP_STATE',
+				state: 'ready',
+			});
+		}
+	}
 
 	render() {
 		const style = {
@@ -33,7 +67,7 @@ class ReactRootComponent extends React.Component {
 		return (
 			<div style={style}>
 				<NoteList itemHeight={40} style={noteListStyle}></NoteList>
-				<NoteText style={noteTextStyle}></NoteText>
+				{/*<NoteText style={noteTextStyle}></NoteText>*/}
 			</div>
 		);
 	}
@@ -43,6 +77,7 @@ class ReactRootComponent extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		size: state.windowContentSize,
+		appState: state.appState,
 	};
 };
 

@@ -1,5 +1,8 @@
 //const { BaseModel } = require('lib/base-model.js');
 
+const React = require('react');
+const { connect } = require('react-redux');
+
 class NoteTextComponent extends React.Component {
 
 	componentWillMount() {

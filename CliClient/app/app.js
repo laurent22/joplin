@@ -235,6 +235,10 @@ class Application extends BaseApplication {
 		return Object.assign({}, this.commandMetadata_);
 	}
 
+	hasGui() {
+		return this.gui() && !this.gui().isDummy();
+	}
+
 	findCommandByName(name) {
 		if (this.commands_[name]) return this.commands_[name];
 

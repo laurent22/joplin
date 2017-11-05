@@ -5,10 +5,9 @@ const path = require('path')
 
 class ElectronAppWrapper {
 
-	constructor(electronApp, app, store) {
-		this.app_ = app;
+	constructor(electronApp) {
 		this.electronApp_ = electronApp;
-		this.store_ = store;
+		//this.store_ = store;
 		this.win_ = null;
 	}
 
@@ -24,19 +23,23 @@ class ElectronAppWrapper {
 		return this.logger_;
 	}
 
-	store() {
-		return this.store_;
+	window() {
+		return this.win_;
 	}
 
-	dispatch(action) {
-		return this.store().dispatch(action);
-	}
+	// store() {
+	// 	return this.store_;
+	// }
 
-	windowContentSize() {
-		if (!this.win_) return { width: 0, height: 0 };
-		const s = this.win_.getContentSize();
-		return { width: s[0], height: s[1] };
-	}
+	// dispatch(action) {
+	// 	return this.store().dispatch(action);
+	// }
+
+	// windowContentSize() {
+	// 	if (!this.win_) return { width: 0, height: 0 };
+	// 	const s = this.win_.getContentSize();
+	// 	return { width: s[0], height: s[1] };
+	// }
 
 	createWindow() {
 		this.win_ = new BrowserWindow({width: 800, height: 600})
@@ -54,16 +57,16 @@ class ElectronAppWrapper {
 		})
 
 		this.win_.on('resize', () => {
-			this.dispatch({
-				type: 'WINDOW_CONTENT_SIZE_SET',
-				size: this.windowContentSize(),
-			});
+			// this.dispatch({
+			// 	type: 'WINDOW_CONTENT_SIZE_SET',
+			// 	size: this.windowContentSize(),
+			// });
 		});
 
-		this.dispatch({
-			type: 'WINDOW_CONTENT_SIZE_SET',
-			size: this.windowContentSize(),
-		});
+		// this.dispatch({
+		// 	type: 'WINDOW_CONTENT_SIZE_SET',
+		// 	size: this.windowContentSize(),
+		// });
 	}
 
 	async waitForElectronAppReady() {
