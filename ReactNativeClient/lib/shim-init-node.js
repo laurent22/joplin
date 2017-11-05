@@ -55,6 +55,11 @@ function shimInit() {
 
 	const nodeFetch = require('node-fetch');
 
+	shim.readLocalFileBase64 = (path) => {
+		const data = fs.readFileSync(path);
+		return new Buffer(data).toString('base64');
+	}
+
 	shim.fetch = async function(url, options = null) {
 		if (!options) options = {};
 		if (!options.timeout) options.timeout = 1000 * 120; // ms

@@ -27,7 +27,9 @@
   "dependencies": {
     "app-module-path": "^2.2.0",
     "fs-extra": "^4.0.2",
+    "html-entities": "^1.2.1",
     "lodash": "^4.17.4",
+    "marked": "^0.3.6",
     "moment": "^2.19.1",
     "node-fetch": "^1.7.3",
     "promise": "^8.0.1",

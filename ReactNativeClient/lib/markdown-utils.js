@@ -9,12 +9,16 @@ class MdToHtml {
 	render(body, style, options = null) {
 		if (!options) options = {};
 
+		if (!options.postMessageSyntax) options.postMessageSyntax = 'postMessage';
+
+		// ipcRenderer.sendToHost('pong')
+
 		const { Resource } = require('lib/models/resource.js');
 		const Entities = require('html-entities').AllHtmlEntities;
 		const htmlentities = (new Entities()).encode;
 		const { shim } = require('lib/shim.js');
 
-		const loadResource = async function(id) {
+		const loadResource = async (id) => {
 			const resource = await Resource.load(id);
 			resource.base64 = await shim.readLocalFileBase64(Resource.fullPath(resource));
 
@@ -91,7 +95,7 @@ class MdToHtml {
 			if (Resource.isResourceUrl(href)) {
 				return '[Resource not yet supported: ' + htmlentities(text) + ']';
 			} else {
-				const js = "postMessage(" + JSON.stringify(href) + "); return false;";
+				const js = options.postMessageSyntax + "(" + JSON.stringify(href) + "); return false;";
 				let output = "<a title='" + htmlentities(title) + "' href='#' onclick='" + js + "'>" + htmlentities(text) + '</a>';
 				return output;
 			}
@@ -104,7 +108,7 @@ class MdToHtml {
 
 			const resourceId = Resource.urlToId(href);
 			if (!this.loadedResources_[resourceId]) {
-				this.loadResource(resourceId);
+				loadResource(resourceId);
 				return '';
 			}
 
@@ -131,7 +135,7 @@ class MdToHtml {
 		let elementId = 1;
 		while (html.indexOf('°°JOP°') >= 0) {
 			html = html.replace(/°°JOP°CHECKBOX°([A-Z]+)°(\d+)°°/, function(v, type, index) {
-				const js = "postMessage('checkboxclick:" + type + ':' + index + "'); this.textContent = this.textContent == '☐' ? '☑' : '☐'; return false;";
+				const js = options.postMessageSyntax + "('checkboxclick:" + type + ':' + index + "'); this.textContent = this.textContent == '☐' ? '☑' : '☐'; return false;";
 				return '<a href="#" onclick="' + js + '" class="checkbox">' + (type == 'NOTICK' ? '☐' : '☑') + '</a>';
 			});
 		}
@@ -139,7 +143,8 @@ class MdToHtml {
 		//let scriptHtml = '<script>document.body.scrollTop = ' + this.bodyScrollTop_ + ';</script>';
 		let scriptHtml = '';
 
-		html = '<body onscroll="postMessage(\'bodyscroll:\' + document.body.scrollTop);">' + html + scriptHtml + '</body>';
+		//html = '<body onscroll="postMessage(\'bodyscroll:\' + document.body.scrollTop);">' + html + scriptHtml + '</body>';
+		html = '<body>' + html + scriptHtml + '</body>';
 
 		return html;
 	}
