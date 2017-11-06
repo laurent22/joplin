@@ -14,15 +14,71 @@ const { sprintf } = require('sprintf-js');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');
 const { ElectronAppWrapper } = require('./ElectronAppWrapper');
+const { defaultState } = require('lib/reducer.js');
+
+const appDefaultState = Object.assign({}, defaultState, {
+	route: {
+		type: 'NAV_GO',
+		routeName: 'Main',
+		params: {},
+	},
+	navHistory: [],
+}); 
 
 class Application extends BaseApplication {
 
-	constructor() {
-		super();
-	}
-
 	hasGui() {
 		return true;
+	}
+
+	reducer(state = appDefaultState, action) {
+		let newState = state;
+
+		try {
+			switch (action.type) {
+
+				case 'NAV_BACK':
+				case 'NAV_GO':
+
+					const goingBack = action.type === 'NAV_BACK';
+
+					if (goingBack && !state.navHistory.length) break;
+
+					const currentRoute = state.route;
+
+					newState = Object.assign({}, state);
+					let newNavHistory = state.navHistory.slice();
+
+					if (goingBack) {
+						let newAction = null;
+						while (newNavHistory.length) {
+							newAction = newNavHistory.pop();
+							if (newAction.routeName !== state.route.routeName) break;
+						}
+
+						if (!newAction) break;
+
+						action = newAction;
+					}
+					
+					if (!goingBack) newNavHistory.push(currentRoute);
+					newState.navHistory = newNavHistory
+					newState.route = action;
+					break;
+
+				case 'WINDOW_CONTENT_SIZE_SET':
+
+					newState = Object.assign({}, state);
+					newState.windowContentSize = action.size;
+					break;
+
+			}
+		} catch (error) {
+			error.message = 'In reducer: ' + error.message + ' Action: ' + JSON.stringify(action);
+			throw error;
+		}
+
+		return super.reducer(newState, action);
 	}
 
 	async start(argv) {
@@ -30,34 +86,24 @@ class Application extends BaseApplication {
 
 		this.initRedux();
 
-		//this.gui_ = new ElectronAppWrapper(this.electronApp_, this, this.store());
+		// Since the settings need to be loaded before the store is created, it will never
+		// receive the SETTINGS_UPDATE_ALL even, which mean state.settings will not be
+		// initialised. So we manually call dispatchUpdateAll() to force an update.
+		Setting.dispatchUpdateAll();
 
-		try {
-			// this.gui_.setLogger(this.logger());
-			// await this.gui().start();
+		await FoldersScreenUtils.refreshFolders();
 
-			// Since the settings need to be loaded before the store is created, it will never
-			// receive the SETTINGS_UPDATE_ALL even, which mean state.settings will not be
-			// initialised. So we manually call dispatchUpdateAll() to force an update.
-			Setting.dispatchUpdateAll();
+		const tags = await Tag.allWithNotes();
 
-			await FoldersScreenUtils.refreshFolders();
+		this.dispatch({
+			type: 'TAGS_UPDATE_ALL',
+			tags: tags,
+		});
 
-			const tags = await Tag.allWithNotes();
-
-			this.dispatch({
-				type: 'TAGS_UPDATE_ALL',
-				tags: tags,
-			});
-
-			this.store().dispatch({
-				type: 'FOLDERS_SELECT',
-				id: Setting.value('activeFolderId'),
-			});
-		} catch (error) {
-			//await this.gui_.exit();
-			throw error;
-		}
+		this.store().dispatch({
+			type: 'FOLDERS_SELECT',
+			id: Setting.value('activeFolderId'),
+		});
 	}
 
 }
@@ -65,7 +111,6 @@ class Application extends BaseApplication {
 let application_ = null;
 
 function app() {
-	//if (!application_) throw new Error('Application has not been initialized');
 	if (!application_) application_ = new Application();
 	return application_;
 }

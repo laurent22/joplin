@@ -231,8 +231,12 @@ class BaseApplication {
 		if (this.store()) return this.store().dispatch(action);
 	}
 
+	reducer(state = defaultState, action) {
+		return reducer(state, action);
+	}
+
 	initRedux() {
-		this.store_ = createStore(reducer, applyMiddleware(this.generalMiddleware()));
+		this.store_ = createStore(this.reducer, applyMiddleware(this.generalMiddleware()));
 		BaseModel.dispatch = this.store().dispatch;
 		FoldersScreenUtils.dispatch = this.store().dispatch;
 	}

@@ -32,7 +32,7 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 	}
 
 	redirectUrl() {
-		return 'https://login.microsoftonline.com/common/oauth2/nativeclient';
+		return reg.oneDriveApi().nativeClientRedirectUrl();
 	}
 
 	async webview_load(noIdeaWhatThisIs) {

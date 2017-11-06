@@ -47,6 +47,10 @@ class OneDriveApi {
 		return 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
 	}
 
+	nativeClientRedirectUrl() {
+		return 'https://login.microsoftonline.com/common/oauth2/nativeclient';
+	}
+
 	auth() {
 		return this.auth_;
 	}
