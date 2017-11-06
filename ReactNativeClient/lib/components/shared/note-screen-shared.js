@@ -107,6 +107,8 @@ shared.initState = async function(comp) {
 		folder: folder,
 		isLoading: false,
 	});
+
+	comp.lastLoadedNoteId_ = note ? note.id : null;
 }
 
 shared.showMetadata_onPress = function(comp) {

@@ -19,6 +19,8 @@ class NoteTextComponent extends React.Component {
 			isLoading: true,
 			webviewReady: false,
 		};
+
+		this.lastLoadedNoteId_ = null;
 	}
 
 	async componentWillMount() {
@@ -36,8 +38,15 @@ class NoteTextComponent extends React.Component {
 		this.webview_.addEventListener('dom-ready', this.webview_domReady.bind(this));
 	}
 
-	componentWillReceiveProps(nextProps) {
-		if (nextProps.noteId) this.reloadNote(nextProps.noteId);
+	async componentWillReceiveProps(nextProps) {
+		if ('noteId' in nextProps) {
+			const noteId = nextProps.noteId;
+			this.lastLoadedNoteId_ = noteId;
+			const note = noteId ? await Note.load(noteId) : null;
+			if (noteId !== this.lastLoadedNoteId_) return; // Race condition - current note was changed while this one was loading
+
+			this.setState({ note: note });
+		}
 	}
 
 	isModified() {
@@ -77,7 +86,7 @@ class NoteTextComponent extends React.Component {
 			webviewReady: true,
 		});
 
-		// this.webview_.openDevTools(); 
+		this.webview_.openDevTools(); 
 
 		this.webview_.addEventListener('ipc-message', (event) => {
 			const msg = event.channel;
@@ -89,17 +98,8 @@ class NoteTextComponent extends React.Component {
 		})
 	}
 
-	async reloadNote(noteId) {
-		const note = noteId ? await Note.load(noteId) : null;
-
-		this.setState({
-			note: note,
-		});
-	}
-
 	render() {
 		const note = this.state.note;
-		const body = note ? note.body : 'no note';
 
 		if (this.state.webviewReady) {
 			const mdOptions = {
@@ -132,7 +132,7 @@ class NoteTextComponent extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		noteId: state.selectedNoteId,
-		notes: state.notes,
+		//notes: state.notes,
 		folderId: state.selectedFolderId,
 		itemType: state.selectedItemType,
 		folders: state.folders,
