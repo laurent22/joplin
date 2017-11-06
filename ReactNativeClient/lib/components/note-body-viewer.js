@@ -44,8 +44,8 @@ class NoteBodyViewer extends Component {
 		const onCheckboxChange = this.props.onCheckboxChange;
 
 		const mdOptions = {
-			onResourceLoaded: function() {
-				this.forceUpdated();
+			onResourceLoaded: () => {
+				this.forceUpdate();
 			},
 		};
 
