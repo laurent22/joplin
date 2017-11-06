@@ -19,11 +19,8 @@ class SideBarComponent extends React.Component {
 		});
 	}
 
-	sync_click() {
-		this.props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'OneDriveAuth',
-		});
+	async sync_click() {
+		await shared.synchronize_press(this);
 	}
 
 	folderItem(folder, selected) {

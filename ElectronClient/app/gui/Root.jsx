@@ -4,7 +4,7 @@ const { createStore } = require('redux');
 const { connect, Provider } = require('react-redux');
 
 const { MainScreen } = require('./MainScreen.min.js');
-const { OneDriveAuthScreen } = require('./OneDriveAuthScreen.min.js');
+const { OneDriveLoginScreen } = require('./OneDriveLoginScreen.min.js');
 const { Navigator } = require('./Navigator.min.js');
 
 const { app } = require('../app');
@@ -51,7 +51,7 @@ class RootComponent extends React.Component {
 
 		const screens = {
 			Main: { screen: MainScreen },
-			OneDriveAuth: { screen: OneDriveAuthScreen },
+			OneDriveLogin: { screen: OneDriveLoginScreen },
 		};
 
 		return (

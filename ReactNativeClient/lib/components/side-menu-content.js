@@ -105,32 +105,8 @@ class SideMenuContentComponent extends Component {
 	}
 
 	async synchronize_press() {
-		const action = this.props.syncStarted ? 'cancel' : 'start';
-
-		if (Setting.value('sync.target') == Setting.SYNC_TARGET_ONEDRIVE && !reg.oneDriveApi().auth()) {
-			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-			
-			this.props.dispatch({
-				type: 'NAV_GO',
-				routeName: 'OneDriveLogin',
-			});
-			return;
-		}
-
-		let sync = null;
-		try {
-			sync = await reg.synchronizer(Setting.value('sync.target'))
-		} catch (error) {
-			reg.logger().info('Could not acquire synchroniser:');
-			reg.logger().info(error);
-			return;
-		}
-
-		if (action == 'cancel') {
-			sync.cancel();
-		} else {
-			reg.scheduleSync(0);
-		}
+		const actionDone = await shared.synchronize_press(this);
+		if (actionDone === 'auth') this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 	}
 
 	folderItem(folder, selected) {
