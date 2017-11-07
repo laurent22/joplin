@@ -11,6 +11,8 @@
   "dependencies": {
     "form-data": "^2.1.4",
     "html-entities": "^1.2.1",
+    "markdown-it": "^8.4.0",
+    "md5": "^2.2.1",
     "moment": "^2.18.1",
     "prop-types": "^15.6.0",
     "query-string": "4.3.4",

@@ -68,7 +68,7 @@ class Resource extends BaseItem {
 	}
 
 	static isResourceUrl(url) {
-		return url.length === 34 && url[0] === ':' && url[1] === '/';
+		return url && url.length === 34 && url[0] === ':' && url[1] === '/';
 	}
 
 	static urlToId(url) {

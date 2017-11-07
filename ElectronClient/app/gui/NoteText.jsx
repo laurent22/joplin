@@ -1,7 +1,7 @@
 const React = require('react');
 const { Note } = require('lib/models/note.js');
 const { connect } = require('react-redux');
-const { MdToHtml } = require('lib/markdown-utils.js');
+const MdToHtml = require('lib/MdToHtml');
 const shared = require('lib/components/shared/note-screen-shared.js');
 
 class NoteTextComponent extends React.Component {
