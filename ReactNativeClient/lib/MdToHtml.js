@@ -122,7 +122,6 @@ class MdToHtml {
 			return '[Resource not yet supported: ' + htmlentities(text) + ']';
 		} else {
 			const js = options.postMessageSyntax + "(" + JSON.stringify(href) + "); return false;";
-			//let output = "<a title='" + htmlentities(title) + "' href='#' onclick='" + js + "'>" + htmlentities(text) + '</a>';
 			let output = "<a title='" + htmlentities(title) + "' href='#' onclick='" + js + "'>";
 			return output;
 		}

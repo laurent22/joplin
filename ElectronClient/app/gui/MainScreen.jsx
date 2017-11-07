@@ -5,6 +5,7 @@ const { SideBar } = require('./SideBar.min.js');
 const { NoteList } = require('./NoteList.min.js');
 const { NoteText } = require('./NoteText.min.js');
 const { themeStyle } = require('../theme.js');
+const layoutUtils = require('lib/layout-utils.js');
 
 class MainScreenComponent extends React.Component {
 
@@ -18,22 +19,22 @@ class MainScreenComponent extends React.Component {
 
 		const rowHeight = style.height - theme.headerHeight;
 
+		const sideBarStyle = {
+			width: layoutUtils.size(style.width * .2, 100, 300),
+			height: rowHeight,
+			display: 'inline-block',
+			verticalAlign: 'top',
+		};
+
 		const noteListStyle = {
-			width: Math.floor(style.width / 3),
+			width: layoutUtils.size(style.width * .2, 100, 300),
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
 		};
 
 		const noteTextStyle = {
-			width: noteListStyle.width,
-			height: rowHeight,
-			display: 'inline-block',
-			verticalAlign: 'top',
-		};
-
-		const sideBarStyle = {
-			width: style.width - (noteTextStyle.width + noteListStyle.width),
+			width: layoutUtils.size(style.width - sideBarStyle.width - noteListStyle.width, 0),
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',

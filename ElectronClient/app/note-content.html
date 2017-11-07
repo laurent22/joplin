@@ -1,8 +1,60 @@
+<style>
+body {
+	overflow: hidden;
+}
+
+#content {
+	overflow-y: scroll;
+	height: 100%;
+}
+</style>
+
 <div id="content"></div>
 
 <script>
-const {ipcRenderer} = require('electron')
+const { ipcRenderer } = require('electron');
+const contentElement = document.getElementById('content');
+
 ipcRenderer.on('setHtml', (event, html) => {
- 	document.getElementById('content').innerHTML = html;
+	contentElement.innerHTML = html;
 });
+
+let ignoreNextScroll = false;
+ipcRenderer.on('setPercentScroll', (event, percent) => {
+	ignoreNextScroll = true;
+	contentElement.scrollTop = percent * maxScrollTop();
+});
+
+function elementMapCoordinates(element) {
+	while (true) {
+		if (!element) break;
+
+		const m = element.getAttribute('data-map');
+		if (m) return m.split(':');
+		element = element.parentElement;
+	}
+
+	return null;
+}
+
+function maxScrollTop() {
+	return Math.max(0, contentElement.scrollHeight - contentElement.clientHeight);
+}
+
+contentElement.addEventListener('scroll', function(e) {
+	if (ignoreNextScroll) {
+		ignoreNextScroll = false;
+		return;
+	}
+	const m = maxScrollTop();
+	ipcRenderer.sendToHost('percentScroll', m ? contentElement.scrollTop / m : 0);
+});
+
+// document.addEventListener('click', function(e) {
+// 	e = e || window.event;
+// 	const target = e.target || e.srcElement;
+
+// 	const coords = elementMapCoordinates(target);
+// 	ipcRenderer.sendToHost('editNote', coords);
+// }, false);
 </script>

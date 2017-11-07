@@ -1,6 +1,7 @@
-body {
+body, textarea {
 	margin: 0;
 	padding: 0;
+	border: none;
 }
 
 #react-root {

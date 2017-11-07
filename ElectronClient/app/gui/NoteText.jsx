@@ -1,8 +1,11 @@
 const React = require('react');
 const { Note } = require('lib/models/note.js');
 const { connect } = require('react-redux');
+const { _ } = require('lib/locale.js');
+const { reg } = require('lib/registry.js');
 const MdToHtml = require('lib/MdToHtml');
 const shared = require('lib/components/shared/note-screen-shared.js');
+const { bridge } = require('electron').remote.require('./bridge');
 
 class NoteTextComponent extends React.Component {
 
@@ -18,34 +21,45 @@ class NoteTextComponent extends React.Component {
 			lastSavedNote: null,
 			isLoading: true,
 			webviewReady: false,
+			scrollHeight: null,
 		};
 
 		this.lastLoadedNoteId_ = null;
+
+		this.webviewListeners_ = null;
+		this.ignoreNextEditorScroll_ = false;
+	}
+
+	mdToHtml() {
+		if (this.mdToHtml_) return this.mdToHtml_;
+		this.mdToHtml_ = new MdToHtml();
+		return this.mdToHtml_;
 	}
 
 	async componentWillMount() {
-		this.mdToHtml_ = new MdToHtml();
+		
 
 		await shared.initState(this);
 	}
 
-	componentDidMount() {
-		this.webview_.addEventListener('dom-ready', this.webview_domReady.bind(this));
-	}
-
 	componentWillUnmount() {
 		this.mdToHtml_ = null;
-		this.webview_.addEventListener('dom-ready', this.webview_domReady.bind(this));
+		this.destroyWebview();
 	}
 
 	async componentWillReceiveProps(nextProps) {
 		if ('noteId' in nextProps) {
+			this.mdToHtml_ = null;
+
 			const noteId = nextProps.noteId;
 			this.lastLoadedNoteId_ = noteId;
 			const note = noteId ? await Note.load(noteId) : null;
 			if (noteId !== this.lastLoadedNoteId_) return; // Race condition - current note was changed while this one was loading
 
-			this.setState({ note: note });
+			this.setState({
+				note: note,
+				mode: 'view',
+			});
 		}
 	}
 
@@ -63,6 +77,7 @@ class NoteTextComponent extends React.Component {
 
 	body_changeText(text) {
 		shared.noteComponent_change(this, 'body', text);
+		//this.updateScrollHeight();
 	}
 
 	async saveNoteButton_press() {
@@ -81,25 +96,137 @@ class NoteTextComponent extends React.Component {
 		shared.showMetadata_onPress(this);
 	}
 
+	webview_ipcMessage(event) {
+		const msg = event.channel ? event.channel : '';
+		const args = event.args;
+		const arg0 = args && args.length >= 1 ? args[0] : null;
+		const arg1 = args && args.length >= 2 ? args[1] : null;
+
+		reg.logger().info('Got ipc-message: ' + msg, args);
+
+		if (msg.indexOf('checkboxclick:') === 0) {
+			const newBody = this.mdToHtml_.handleCheckboxClick(msg, this.state.note.body);
+			this.saveOneProperty('body', newBody);
+		} else if (msg.toLowerCase().indexOf('http') === 0) {
+			require('electron').shell.openExternal(msg);
+		} else if (msg === 'editNote') {
+			const lineIndex = arg0 && arg0.length ? arg0[0] : 0;
+			this.webview_ref(null);
+			this.setState({ 
+				mode: 'edit',
+				webviewReady: false,
+			});
+		} else if (msg === 'percentScroll') {
+			this.ignoreNextEditorScroll_ = true;
+			this.setEditorPercentScroll(arg0);
+		} else {
+			bridge().showMessageBox({
+				type: 'error',
+				message: _('Unsupported link or message: %s', msg),
+			});
+		}
+	}
+
+	editorMaxScroll() {
+		return Math.max(0, this.editor_.scrollHeight - this.editor_.clientHeight);
+	}
+
+	setEditorPercentScroll(p) {
+		this.editor_.scrollTop = p * this.editorMaxScroll();
+	}
+
+	setViewerPercentScroll(p) {
+		this.webview_.send('setPercentScroll', p);
+	}
+
+	editor_scroll() {
+		if (this.ignoreNextEditorScroll_) {
+			this.ignoreNextEditorScroll_ = false;
+			return;
+		}
+		const m = this.editorMaxScroll();
+		this.setViewerPercentScroll(m ? this.editor_.scrollTop / m : 0);
+	}
+
 	webview_domReady() {
+		if (!this.webview_) return;
+
 		this.setState({
 			webviewReady: true,
 		});
 
 		this.webview_.openDevTools(); 
+	}
 
-		this.webview_.addEventListener('ipc-message', (event) => {
-			const msg = event.channel;
+	webview_ref(element) {
+		if (this.webview_) {
+			if (this.webview_ === element) return;
+			this.destroyWebview();
+		}
 
-			if (msg.indexOf('checkboxclick:') === 0) {
-				const newBody = this.mdToHtml_.handleCheckboxClick(msg, this.state.note.body);
-				this.saveOneProperty('body', newBody);
-			}
-		})
+		if (!element) {
+			this.destroyWebview();
+		} else {
+			this.initWebview(element);
+		}
+	}
+
+	editor_ref(element) {
+		if (this.editor_ === element) return;
+		this.editor_ = element;
+	}
+
+	initWebview(wv) {
+		if (!this.webviewListeners_) {
+			this.webviewListeners_ = {
+				'dom-ready': this.webview_domReady.bind(this),
+				'ipc-message': this.webview_ipcMessage.bind(this),
+			};
+		}
+
+		for (let n in this.webviewListeners_) {
+			if (!this.webviewListeners_.hasOwnProperty(n)) continue;
+			const fn = this.webviewListeners_[n];
+			wv.addEventListener(n, fn);
+		}
+
+		this.webview_ = wv;
+	}
+
+	destroyWebview() {
+		if (!this.webview_) return;
+
+		for (let n in this.webviewListeners_) {
+			if (!this.webviewListeners_.hasOwnProperty(n)) continue;
+			const fn = this.webviewListeners_[n];
+			this.webview_.removeEventListener(n, fn);
+		}
+
+		this.webview_ = null;
 	}
 
 	render() {
+		const style = this.props.style;
 		const note = this.state.note;
+		const body = note ? note.body : '';
+
+		console.info(this.state.scrollHeight);
+
+		const viewerStyle = {
+			width: Math.floor(style.width / 2),
+			height: style.height,
+			overflow: 'hidden',
+			float: 'left',
+			verticalAlign: 'top',
+		};
+
+		const editorStyle = {
+			width: style.width - viewerStyle.width,
+			height: style.height,
+			overflowY: 'scroll',
+			float: 'left',
+			verticalAlign: 'top',
+		};
 
 		if (this.state.webviewReady) {
 			const mdOptions = {
@@ -108,21 +235,17 @@ class NoteTextComponent extends React.Component {
 				},
 				postMessageSyntax: 'ipcRenderer.sendToHost',
 			};
-
-			const html = this.mdToHtml_.render(note ? note.body : '', {}, mdOptions);
-
+			const html = this.mdToHtml().render(body, {}, mdOptions);
 			this.webview_.send('setHtml', html);
 		}
 
-		const webviewStyle = {
-			width: this.props.style.width,
-			height: this.props.style.height,
-			overflow: 'hidden',
-		};
+		const viewer = <webview style={viewerStyle} nodeintegration="1" src="note-content.html" ref={(elem) => { this.webview_ref(elem); } } />
+		const editor = <textarea style={editorStyle} value={body} onScroll={() => { this.editor_scroll(); }} onChange={(text) => { this.body_changeText(text) }} ref={(elem) => { this.editor_ref(elem); } }></textarea>
 
 		return (
-			<div style={this.props.style}>
-				<webview style={webviewStyle} nodeintegration="1" src="note-content.html" ref={elem => this.webview_ = elem} />
+			<div style={style}>
+				{ editor }
+				{ viewer }
 			</div>
 		);
 	}
@@ -132,7 +255,6 @@ class NoteTextComponent extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		noteId: state.selectedNoteId,
-		//notes: state.notes,
 		folderId: state.selectedFolderId,
 		itemType: state.selectedItemType,
 		folders: state.folders,
