@@ -46,21 +46,18 @@ class Tag extends BaseItem {
 			await NoteTag.delete(noteTags[i].id);
 		}
 
-		const tags = await Tag.allWithNotes();
+		await Tag.delete(tagId);
+	}
+
+	static async delete(id, options = null) {
+		if (!options) options = {};
+
+		await super.delete(id, options);
 
 		this.dispatch({
-			type: 'TAG_UPDATE_ALL',
-			tags: tags,
+			type: 'TAG_DELETE',
+			id: id,
 		});
-
-		this.dispatch({
-			type: 'TAG_SELECT',
-			id: null,
-		});
-
-		// Currently not actually deleting it as the reducer would need to be updated. The
-		// tag will stay in the db but just won't show up in the UI.
-		//await Tag.delete(tagId);
 	}
 
 	static async addNote(tagId, noteId) {

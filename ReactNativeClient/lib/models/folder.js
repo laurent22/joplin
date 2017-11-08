@@ -73,7 +73,7 @@ class Folder extends BaseItem {
 
 		this.dispatch({
 			type: 'FOLDER_DELETE',
-			folderId: folderId,
+			id: folderId,
 		});
 	}
 

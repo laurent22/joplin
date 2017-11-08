@@ -26,23 +26,29 @@ const defaultState = {
 	windowContentSize: { width: 0, height: 0 },
 };
 
-function folderOrNoteDelete(state, action) {
+// When deleting a note, tag or folder
+function handleItemDelete(state, action) {
 	let newState = Object.assign({}, state);
 
-	const idKey = action.type === 'FOLDER_DELETE' ? 'folderId' : 'noteId';
-	const listKey = action.type === 'FOLDER_DELETE' ? 'folders' : 'notes';
-	const selectedItemKey = action.type === 'FOLDER_DELETE' ? 'selectedFolderId' : 'selectedNoteId';
+	const map = {
+		'FOLDER_DELETE': ['folders', 'selectedFolderId'],
+		'NOTE_DELETE': ['notes', 'selectedNoteId'],
+		'TAG_DELETE': ['tags', 'selectedTagId'],
+	};
+
+	const listKey = map[action.type][0];
+	const selectedItemKey = map[action.type][1];
 
 	let previousIndex = 0;
 	let newItems = [];
 	const items = state[listKey];
 	for (let i = 0; i < items.length; i++) {
-		let f = items[i];
-		if (f.id == action[idKey]) {
+		let item = items[i];
+		if (item.id == action.id) {
 			previousIndex = i;
 			continue;
 		}
-		newItems.push(f);
+		newItems.push(item);
 	}
 
 	newState = Object.assign({}, state);
@@ -190,7 +196,12 @@ const reducer = (state = defaultState, action) => {
 
 			case 'NOTE_DELETE':
 
-				newState = folderOrNoteDelete(state, action);
+				newState = handleItemDelete(state, action);
+				break;
+
+			case 'TAG_DELETE':
+
+				newState = handleItemDelete(state, action);
 				break;
 
 			case 'FOLDER_UPDATE_ALL':
@@ -228,7 +239,7 @@ const reducer = (state = defaultState, action) => {
 
 			case 'FOLDER_DELETE':
 
-				newState = folderOrNoteDelete(state, action);
+				newState = handleItemDelete(state, action);
 				break;
 
 			case 'SYNC_STARTED':

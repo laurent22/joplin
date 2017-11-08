@@ -399,7 +399,7 @@ class Note extends BaseItem {
 
 		this.dispatch({
 			type: 'NOTE_DELETE',
-			noteId: id,
+			id: id,
 		});
 	}
 
@@ -408,7 +408,7 @@ class Note extends BaseItem {
 		for (let i = 0; i < ids.length; i++) {
 			this.dispatch({
 				type: 'NOTE_DELETE',
-				noteId: ids[i],
+				id: ids[i],
 			});
 		}
 		return result;

@@ -18,7 +18,7 @@
     ],
     "owner": "Laurent Cozic"
   },
-  "version": "0.10.65",
+  "version": "0.10.66",
   "bin": {
     "joplin": "./main.js"
   },
@@ -53,7 +53,7 @@
     "string-to-stream": "^1.1.0",
     "strip-ansi": "^4.0.0",
     "tcp-port-used": "^0.1.2",
-    "tkwidgets": "^0.5.19",
+    "tkwidgets": "^0.5.20",
     "uuid": "^3.0.1",
     "word-wrap": "^1.2.3",
     "yargs-parser": "^7.0.0"
