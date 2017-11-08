@@ -20,11 +20,12 @@ const globalStyle = {
 	raisedHighlightedColor: "#ffffff",
 
 	// For WebView - must correspond to the properties above
-	htmlFontSize: '20x',
+	htmlFontSize: '16px',
 	htmlColor: 'black', // Note: CSS in WebView component only supports named colors or rgb() notation
 	htmlBackgroundColor: 'white',
 	htmlDividerColor: 'Gainsboro',
 	htmlLinkColor: 'blue',
+	htmlLineHeight: '20px',
 };
 
 globalStyle.marginRight = globalStyle.margin;

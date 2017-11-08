@@ -203,6 +203,8 @@ class MdToHtml {
 		if (!options) options = {};
 		if (!options.postMessageSyntax) options.postMessageSyntax = 'postMessage';
 
+		console.info(style);
+
 		const cacheKey = this.makeContentKey(this.loadedResources_, body, style, options);
 		if (this.cachedContentKey_ === cacheKey) return this.cachedContent_;
 
@@ -255,8 +257,13 @@ class MdToHtml {
 			body {
 				font-size: ` + style.htmlFontSize + `;
 				color: ` + style.htmlColor + `;
-				line-height: 1.5em;
+				line-height: ` + style.htmlLineHeight + `;
 				background-color: ` + style.htmlBackgroundColor + `;
+				font-family: sans-serif;
+			}
+			p, h1, h2, h3, h4, ul {
+				margin-top: 14px;
+				margin-bottom: 14px;
 			}
 			h1 {
 				font-size: 1.2em;

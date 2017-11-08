@@ -6,6 +6,7 @@ const globalStyle = {
 	itemMarginTop: 10,
 	itemMarginBottom: 10,
 	backgroundColor: "#ffffff",
+	oddBackgroundColor: "#dddddd",
 	color: "#555555", // For regular text
 	colorError: "red",
 	colorWarn: "#9A5B00",
@@ -15,17 +16,21 @@ const globalStyle = {
 	selectedColor: '#e5e5e5',
 	disabledOpacity: 0.3,
 	headerHeight: 20,
+	buttonMinWidth: 50,
+	buttonMinHeight: 30,
+	textAreaLineHeight: 17,
 
 	raisedBackgroundColor: "#0080EF",
 	raisedColor: "#003363",
 	raisedHighlightedColor: "#ffffff",
 
 	// For WebView - must correspond to the properties above
-	htmlFontSize: '20x',
+	htmlFontSize: '16px',
 	htmlColor: 'black', // Note: CSS in WebView component only supports named colors or rgb() notation
 	htmlBackgroundColor: 'white',
 	htmlDividerColor: 'Gainsboro',
 	htmlLinkColor: 'blue',
+	htmlLineHeight: '20px',
 };
 
 globalStyle.marginRight = globalStyle.margin;

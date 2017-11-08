@@ -6,6 +6,7 @@ const { reg } = require('lib/registry.js');
 const MdToHtml = require('lib/MdToHtml');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const { bridge } = require('electron').remote.require('./bridge');
+const { themeStyle } = require('../theme.js');
 
 class NoteTextComponent extends React.Component {
 
@@ -55,6 +56,10 @@ class NoteTextComponent extends React.Component {
 		await shared.saveNoteButton_press(this);
 	}
 
+	async saveOneProperty(name, value) {
+		await shared.saveOneProperty(this, name, value);
+	}
+
 	scheduleSave() {
 		if (this.scheduleSaveTimeout_) clearTimeout(this.scheduleSaveTimeout_);
 		this.scheduleSaveTimeout_ = setTimeout(() => {
@@ -73,6 +78,7 @@ class NoteTextComponent extends React.Component {
 
 			this.setState({
 				note: note,
+				lastSavedNote: Object.assign({}, note),
 				mode: 'view',
 			});
 		}
@@ -164,7 +170,7 @@ class NoteTextComponent extends React.Component {
 			webviewReady: true,
 		});
 
-		this.webview_.openDevTools(); 
+		//this.webview_.openDevTools(); 
 	}
 
 	webview_ref(element) {
@@ -218,6 +224,7 @@ class NoteTextComponent extends React.Component {
 		const style = this.props.style;
 		const note = this.state.note;
 		const body = note ? note.body : '';
+		const theme = themeStyle(this.props.theme);
 
 		const viewerStyle = {
 			width: Math.floor(style.width / 2),
@@ -227,12 +234,17 @@ class NoteTextComponent extends React.Component {
 			verticalAlign: 'top',
 		};
 
+		const paddingTop = 14;
+
 		const editorStyle = {
 			width: style.width - viewerStyle.width,
-			height: style.height,
+			height: style.height - paddingTop,
 			overflowY: 'scroll',
 			float: 'left',
 			verticalAlign: 'top',
+			paddingTop: paddingTop + 'px',
+			lineHeight: theme.textAreaLineHeight + 'px',
+			fontSize: theme.fontSize + 'px',
 		};
 
 		if (this.state.webviewReady) {
@@ -242,7 +254,7 @@ class NoteTextComponent extends React.Component {
 				},
 				postMessageSyntax: 'ipcRenderer.sendToHost',
 			};
-			const html = this.mdToHtml().render(body, {}, mdOptions);
+			const html = this.mdToHtml().render(body, theme, mdOptions);
 			this.webview_.send('setHtml', html);
 		}
 
