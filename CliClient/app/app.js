@@ -324,7 +324,7 @@ class Application extends BaseApplication {
 			await this.gui_.start();
 
 			// Since the settings need to be loaded before the store is created, it will never
-			// receive the SETTINGS_UPDATE_ALL even, which mean state.settings will not be
+			// receive the SETTING_UPDATE_ALL even, which mean state.settings will not be
 			// initialised. So we manually call dispatchUpdateAll() to force an update.
 			Setting.dispatchUpdateAll();
 
@@ -333,12 +333,12 @@ class Application extends BaseApplication {
 			const tags = await Tag.allWithNotes();
 
 			this.dispatch({
-				type: 'TAGS_UPDATE_ALL',
+				type: 'TAG_UPDATE_ALL',
 				tags: tags,
 			});
 
 			this.store().dispatch({
-				type: 'FOLDERS_SELECT',
+				type: 'FOLDER_SELECT',
 				id: Setting.value('activeFolderId'),
 			});
 		}

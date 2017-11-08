@@ -98,8 +98,8 @@ class Command extends BaseCommand {
 			}
 
 			this.dispatch({
-				type: 'NOTES_SELECT',
-				noteId: note.id,
+				type: 'NOTE_SELECT',
+				id: note.id,
 			});
 
 			await onFinishedEditing();

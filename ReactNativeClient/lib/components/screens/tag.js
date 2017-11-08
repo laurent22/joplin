@@ -40,7 +40,7 @@ class TagScreenComponent extends BaseScreenComponent {
 		const notes = await Tag.notes(props.selectedTagId);
 
 		this.props.dispatch({
-			type: 'NOTES_UPDATE_ALL',
+			type: 'NOTE_UPDATE_ALL',
 			notes: notes,
 			notesSource: source,
 		});

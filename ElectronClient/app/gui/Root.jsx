@@ -30,14 +30,14 @@ class RootComponent extends React.Component {
 	async componentDidMount() {
 		if (this.props.appState == 'starting') {
 			this.props.dispatch({
-				type: 'SET_APP_STATE',
+				type: 'APP_STATE_SET',
 				state: 'initializing',
 			});
 
 			await initialize(this.props.dispatch);
 
 			this.props.dispatch({
-				type: 'SET_APP_STATE',
+				type: 'APP_STATE_SET',
 				state: 'ready',
 			});
 		}

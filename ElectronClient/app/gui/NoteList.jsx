@@ -14,7 +14,7 @@ class NoteListComponent extends React.Component {
 		if (!noteId) throw new Error('No data-id on element');
 
 		const menu = new Menu()
-		menu.append(new MenuItem({label: _('Delete'), async click() {
+		menu.append(new MenuItem({label: _('Delete'), click: async () => {
 			const ok = bridge().showConfirmMessageBox(_('Delete note?'));
 			if (!ok) return;
 			await Note.delete(noteId);
@@ -25,8 +25,8 @@ class NoteListComponent extends React.Component {
 	itemRenderer(index, item, theme) {
 		const onClick = (item) => {
 			this.props.dispatch({
-				type: 'NOTES_SELECT',
-				noteId: item.id,
+				type: 'NOTE_SELECT',
+				id: item.id,
 			});
 		}
 

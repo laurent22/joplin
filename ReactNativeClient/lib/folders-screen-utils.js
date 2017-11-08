@@ -6,7 +6,7 @@ class FoldersScreenUtils {
 		let initialFolders = await Folder.all({ includeConflictFolder: true });
 
 		this.dispatch({
-			type: 'FOLDERS_UPDATE_ALL',
+			type: 'FOLDER_UPDATE_ALL',
 			folders: initialFolders,
 		});
 	}

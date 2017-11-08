@@ -203,8 +203,6 @@ class MdToHtml {
 		if (!options) options = {};
 		if (!options.postMessageSyntax) options.postMessageSyntax = 'postMessage';
 
-		console.info(style);
-
 		const cacheKey = this.makeContentKey(this.loadedResources_, body, style, options);
 		if (this.cachedContentKey_ === cacheKey) return this.cachedContent_;
 

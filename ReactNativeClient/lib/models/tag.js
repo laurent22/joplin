@@ -39,6 +39,30 @@ class Tag extends BaseItem {
 		});
 	}
 
+	// Untag all the notes and delete tag
+	static async untagAll(tagId) {
+		const noteTags = await NoteTag.modelSelectAll('SELECT id FROM note_tags WHERE tag_id = ?', [tagId]);
+		for (let i = 0; i < noteTags.length; i++) {
+			await NoteTag.delete(noteTags[i].id);
+		}
+
+		const tags = await Tag.allWithNotes();
+
+		this.dispatch({
+			type: 'TAG_UPDATE_ALL',
+			tags: tags,
+		});
+
+		this.dispatch({
+			type: 'TAG_SELECT',
+			id: null,
+		});
+
+		// Currently not actually deleting it as the reducer would need to be updated. The
+		// tag will stay in the db but just won't show up in the UI.
+		//await Tag.delete(tagId);
+	}
+
 	static async addNote(tagId, noteId) {
 		let hasIt = await this.hasNote(tagId, noteId);
 		if (hasIt) return;
@@ -49,7 +73,7 @@ class Tag extends BaseItem {
 		});
 
 		this.dispatch({
-			type: 'TAGS_UPDATE_ONE',
+			type: 'TAG_UPDATE_ONE',
 			tag: await Tag.load(tagId),
 		});
 
@@ -63,7 +87,7 @@ class Tag extends BaseItem {
 		}
 
 		this.dispatch({
-			type: 'TAGS_UPDATE_ONE',
+			type: 'TAG_UPDATE_ONE',
 			tag: await Tag.load(tagId),
 		});
 	}
@@ -80,7 +104,7 @@ class Tag extends BaseItem {
 	static async save(o, options = null) {
 		return super.save(o, options).then((tag) => {
 			this.dispatch({
-				type: 'TAGS_UPDATE_ONE',
+				type: 'TAG_UPDATE_ONE',
 				tag: tag,
 			});
 			return tag;

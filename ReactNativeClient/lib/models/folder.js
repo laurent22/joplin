@@ -143,7 +143,7 @@ class Folder extends BaseItem {
 
 		return super.save(o, options).then((folder) => {
 			this.dispatch({
-				type: 'FOLDERS_UPDATE_ONE',
+				type: 'FOLDER_UPDATE_ONE',
 				folder: folder,
 			});
 			return folder;

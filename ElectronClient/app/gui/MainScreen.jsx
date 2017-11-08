@@ -7,6 +7,7 @@ const { NoteText } = require('./NoteText.min.js');
 const { PromptDialog } = require('./PromptDialog.min.js');
 const { Setting } = require('lib/models/setting.js');
 const { Note } = require('lib/models/note.js');
+const { Folder } = require('lib/models/folder.js');
 const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
 const layoutUtils = require('lib/layout-utils.js');
@@ -16,6 +17,7 @@ class MainScreenComponent extends React.Component {
 
 	componentWillMount() {
 		this.setState({ newNotePromptVisible: false });
+		this.setState({ newFolderPromptVisible: false });
 	}
 
 	render() {
@@ -60,28 +62,57 @@ class MainScreenComponent extends React.Component {
 				onClick: () => {
 					this.setState({ newNotePromptVisible: true });
 				},
+			}, {
+				title: _('New notebook'),
+				onClick: () => {
+					this.setState({ newFolderPromptVisible: true });
+				},
 			},
 		];
 
-		const newNotePromptOnAccept = async (answer) => {
-			const folderId = Setting.value('activeFolderId');
-			if (!folderId) return;
+		const newNotePromptOnClose = async (answer) => {
+			if (answer) {
+				const folderId = Setting.value('activeFolderId');
+				if (!folderId) return;
 
-			const note = await Note.save({
-				title: answer,
-				parent_id: folderId,
-			});
-			Note.updateGeolocation(note.id);
+				const note = await Note.save({
+					title: answer,
+					parent_id: folderId,
+				});
+				Note.updateGeolocation(note.id);
 
-			this.props.dispatch({
-				type: 'NOTES_SELECT',
-				noteId: note.id,
-			});
+				this.props.dispatch({
+					type: 'NOTE_SELECT',
+					id: note.id,
+				});
+			}
+
+			this.setState({ newNotePromptVisible: false });
+		}
+
+		const newFolderPromptOnClose = async (answer) => {
+			if (answer) {
+				let folder = null;
+				try {
+					folder = await Folder.save({ title: answer }, { userSideValidation: true });		
+				} catch (error) {
+					bridge().showErrorMessageBox(error.message);
+					return;
+				}
+
+				this.props.dispatch({
+					type: 'FOLDER_SELECT',
+					id: folder.id,
+				});
+			}
+
+			this.setState({ newFolderPromptVisible: false });
 		}
 
 		return (
 			<div style={style}>
-				<PromptDialog style={promptStyle} onAccept={(answer) => newNotePromptOnAccept(answer)} message={_('Note title:')} visible={this.state.newNotePromptVisible}/>
+				<PromptDialog style={promptStyle} onClose={(answer) => newNotePromptOnClose(answer)}   message={_('Note title:')}     visible={this.state.newNotePromptVisible}/>
+				<PromptDialog style={promptStyle} onClose={(answer) => newFolderPromptOnClose(answer)} message={_('Notebook title:')} visible={this.state.newFolderPromptVisible}/>
 				<Header style={headerStyle} showBackButton={false} buttons={headerButtons} />
 				<SideBar style={sideBarStyle} />
 				<NoteList itemHeight={40} style={noteListStyle} />

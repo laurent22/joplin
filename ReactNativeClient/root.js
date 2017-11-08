@@ -46,15 +46,15 @@ const generalMiddleware = store => next => async (action) => {
 
 	if (action.type == 'NAV_GO') Keyboard.dismiss();
 
-	if (['NOTES_UPDATE_ONE', 'NOTES_DELETE', 'FOLDERS_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
+	if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
 		if (!await reg.syncStarted()) reg.scheduleSync();
 	}
 
-	if (action.type == 'SETTINGS_UPDATE_ONE' && action.key == 'sync.interval' || action.type == 'SETTINGS_UPDATE_ALL') {
+	if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'sync.interval' || action.type == 'SETTING_UPDATE_ALL') {
 		reg.setupRecurrentSync();
 	}
 
-	if (action.type == 'SETTINGS_UPDATE_ONE' && action.key == 'locale' || action.type == 'SETTINGS_UPDATE_ALL') {
+	if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'locale' || action.type == 'SETTING_UPDATE_ALL') {
 		setLocale(Setting.value('locale'));
 	}	
 
@@ -281,7 +281,7 @@ async function initialize(dispatch, backButtonHandler) {
 		const tags = await Tag.all();
 
 		dispatch({
-			type: 'TAGS_UPDATE_ALL',
+			type: 'TAG_UPDATE_ALL',
 			tags: tags,
 		});
 
@@ -329,14 +329,14 @@ class AppComponent extends React.Component {
 	async componentDidMount() {
 		if (this.props.appState == 'starting') {
 			this.props.dispatch({
-				type: 'SET_APP_STATE',
+				type: 'APP_STATE_SET',
 				state: 'initializing',
 			});
 
 			await initialize(this.props.dispatch, this.backButtonHandler.bind(this));
 
 			this.props.dispatch({
-				type: 'SET_APP_STATE',
+				type: 'APP_STATE_SET',
 				state: 'ready',
 			});
 		}

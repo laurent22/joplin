@@ -112,8 +112,8 @@ class AppGui {
 
 				if (!nextItem) return; // Normally not possible
 
-				let actionType = 'FOLDERS_SELECT';
-				if (nextItem.type_ === BaseModel.TYPE_TAG) actionType = 'TAGS_SELECT';
+				let actionType = 'FOLDER_SELECT';
+				if (nextItem.type_ === BaseModel.TYPE_TAG) actionType = 'TAG_SELECT';
 				if (nextItem.type_ === BaseModel.TYPE_SEARCH) actionType = 'SEARCH_SELECT';
 
 				this.store_.dispatch({
@@ -122,12 +122,12 @@ class AppGui {
 				});
 			} else if (item.type_ === Folder.modelType()) {
 				this.store_.dispatch({
-					type: 'FOLDERS_SELECT',
+					type: 'FOLDER_SELECT',
 					id: item ? item.id : null,
 				});
 			} else if (item.type_ === Tag.modelType()) {
 				this.store_.dispatch({
-					type: 'TAGS_SELECT',
+					type: 'TAG_SELECT',
 					id: item ? item.id : null,
 				});
 			} else if (item.type_ === BaseModel.TYPE_SEARCH) {
@@ -160,8 +160,8 @@ class AppGui {
 		noteList.on('currentItemChange', async () => {
 			let note = noteList.currentItem;
 			this.store_.dispatch({
-				type: 'NOTES_SELECT',
-				noteId: note ? note.id : null,
+				type: 'NOTE_SELECT',
+				id: note ? note.id : null,
 			});
 		});
 		this.rootWidget_.connect(noteList, (state) => {

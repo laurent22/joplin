@@ -56,7 +56,7 @@ class BaseApplication {
 
 	switchCurrentFolder(folder) {
 		this.dispatch({
-			type: 'FOLDERS_SELECT',
+			type: 'FOLDER_SELECT',
 			id: folder ? folder.id : '',
 		});
 	}
@@ -169,14 +169,14 @@ class BaseApplication {
 		}
 
 		this.store().dispatch({
-			type: 'NOTES_UPDATE_ALL',
+			type: 'NOTE_UPDATE_ALL',
 			notes: notes,
 			notesSource: source,
 		});
 
 		this.store().dispatch({
-			type: 'NOTES_SELECT',
-			noteId: notes.length ? notes[0].id : null,
+			type: 'NOTE_SELECT',
+			id: notes.length ? notes[0].id : null,
 		});
 	}
 
@@ -203,13 +203,13 @@ class BaseApplication {
 			const result = next(action);
 			const newState = store.getState();
 
-			if (action.type == 'FOLDERS_SELECT' || action.type === 'FOLDER_DELETE') {
+			if (action.type == 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE') {
 				Setting.setValue('activeFolderId', newState.selectedFolderId);
 				this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
 				await this.refreshNotes(Folder.modelType(), newState.selectedFolderId);
 			}
 
-			if (action.type == 'TAGS_SELECT') {
+			if (action.type == 'TAG_SELECT') {
 				await this.refreshNotes(Tag.modelType(), action.id);
 			}
 
@@ -217,7 +217,7 @@ class BaseApplication {
 				await this.refreshNotes(BaseModel.TYPE_SEARCH, action.id);
 			}
 
-			if (this.hasGui() && action.type == 'SETTINGS_UPDATE_ONE' && action.key == 'sync.interval' || action.type == 'SETTINGS_UPDATE_ALL') {
+			if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && action.key == 'sync.interval' || action.type == 'SETTING_UPDATE_ALL') {
 				reg.setupRecurrentSync();
 			}
 
