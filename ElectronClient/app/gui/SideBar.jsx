@@ -16,14 +16,36 @@ class SideBarComponent extends React.Component {
 	style() {
 		const theme = themeStyle(this.props.theme);
 
-		const itemHeight = 20;
+		const itemHeight = 25;
 
 		let style = {
-			root: {},
+			root: {
+				backgroundColor: theme.backgroundColor2,
+			},
 			listItem: {
-				display: 'block',
-				cursor: 'pointer',
 				height: itemHeight,
+				fontFamily: theme.fontFamily,
+				fontSize: theme.fontSize,
+				textDecoration: 'none',
+				boxSizing: 'border-box',
+				color: theme.color2,
+				paddingLeft: 14,
+				display: 'flex',
+				alignItems: 'center',
+			},
+			listItemSelected: {
+				backgroundColor: theme.selectedColor2,
+			},
+			header: {
+				height: itemHeight * 1.8,
+				fontFamily: theme.fontFamily,
+				fontSize: theme.fontSize * 1.3,
+				textDecoration: 'none',
+				boxSizing: 'border-box',
+				color: theme.color2,
+				paddingLeft: 8,
+				display: 'flex',
+				alignItems: 'center',
 			},
 		};
 
@@ -78,21 +100,25 @@ class SideBarComponent extends React.Component {
 	}
 
 	folderItem(folder, selected) {
-		const style = Object.assign({}, this.style().listItem, {
-			fontWeight: selected ? 'bold' : 'normal',
-		});
+		let style = Object.assign({}, this.style().listItem);
+		if (selected) style = Object.assign(style, this.style().listItemSelected);
 		return <a href="#" data-id={folder.id} data-type={BaseModel.TYPE_FOLDER} onContextMenu={(event) => this.itemContextMenu(event)} key={folder.id} style={style} onClick={() => {this.folderItem_click(folder)}}>{folder.title}</a>
 	}
 
 	tagItem(tag, selected) {
-		const style = Object.assign({}, this.style().listItem, {
-			fontWeight: selected ? 'bold' : 'normal',
-		});
-		return <a href="#" data-id={tag.id} data-type={BaseModel.TYPE_TAG} onContextMenu={(event) => this.itemContextMenu(event)} key={tag.id} style={style} onClick={() => {this.tagItem_click(tag)}}>Tag: {tag.title}</a>
+		let style = Object.assign({}, this.style().listItem);
+		if (selected) style = Object.assign(style, this.style().listItemSelected);
+		return <a href="#" data-id={tag.id} data-type={BaseModel.TYPE_TAG} onContextMenu={(event) => this.itemContextMenu(event)} key={tag.id} style={style} onClick={() => {this.tagItem_click(tag)}}>{tag.title}</a>
 	}
 
 	makeDivider(key) {
 		return <div style={{height:2, backgroundColor:'blue' }} key={key}></div>
+	}
+
+	makeHeader(key, label, iconName) {
+		const style = this.style().header;
+		const icon = <i style={{fontSize: style.fontSize * 1.2, marginRight: 5}} className={"icon " + iconName}></i>
+		return <div style={style} key={key}>{icon}{label}</div>
 	}
 
 	synchronizeButton(label) {
@@ -105,18 +131,19 @@ class SideBarComponent extends React.Component {
 
 		let items = [];
 
+		items.push(this.makeHeader('folderHeader', _('Notebooks'), 'ion-android-folder'));
+
 		if (this.props.folders.length) {
 			const folderItems = shared.renderFolders(this.props, this.folderItem.bind(this));
 			items = items.concat(folderItems);
-			if (items.length) items.push(this.makeDivider('divider_1'));
 		}
+
+		items.push(this.makeHeader('tagHeader', _('Tags'), 'ion-pricetags'));
 
 		if (this.props.tags.length) {
 			const tagItems = shared.renderTags(this.props, this.tagItem.bind(this));
 
 			items.push(<div className="tags" key="tag_items">{tagItems}</div>);
-
-			if (tagItems.length) items.push(this.makeDivider('divider_2'));
 		}
 
 		let lines = Synchronizer.reportToLines(this.props.syncReport);

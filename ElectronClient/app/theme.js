@@ -20,6 +20,10 @@ const globalStyle = {
 	buttonMinHeight: 30,
 	textAreaLineHeight: 17,
 
+	backgroundColor2: "#3B314E",
+	color2: "#ffffff",
+	selectedColor2: "#4F416A",
+
 	headerHeight: 35,
 	headerButtonHPadding: 6,
 
