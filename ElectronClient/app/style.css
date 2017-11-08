@@ -30,3 +30,12 @@ body, textarea {
 .side-bar .selected {
 	font-weight: bold;
 }
+
+.header .button:hover {
+	background-color: rgba(0,160,255,0.1);
+	border: 1px solid rgba(0,160,255,0.5);
+}
+
+.header .button {
+	border: 1px solid rgba(0,160,255,0);
+}
