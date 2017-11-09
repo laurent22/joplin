@@ -146,6 +146,7 @@ class MdToHtml {
 			let openTag = null;
 			let closeTag = null;
 			let attrs = t.attrs ? t.attrs : [];
+			const isCodeBlock = tag === 'code' && t.block;
 
 			if (t.map) attrs.push(['data-map', t.map.join(':')]);
 
@@ -157,15 +158,23 @@ class MdToHtml {
 				openTag = tag;
 			} else if (t.type === 'link_open') {
 				openTag = 'a';
+			} else if (isCodeBlock) {
+				openTag = 'pre';
 			}
 
 			if (openTag) {
 				if (openTag === 'a') {
 					output.push(this.renderOpenLink_(attrs, options));
 				} else {
-					const attrsHtml = attrs ? this.renderAttrs_(attrs) : '';
+					const attrsHtml = this.renderAttrs_(attrs);
 					output.push('<' + openTag + (attrsHtml ? ' ' + attrsHtml : '') + '>');
 				}
+			}
+
+			if (isCodeBlock) {
+				const codeAttrs = ['code'];
+				if (t.info) codeAttrs.push(t.info); // t.info contains the language when the token is a codeblock
+				output.push('<code class="' + codeAttrs.join(' ') + '">');
 			}
 
 			if (t.type === 'image') {
@@ -186,7 +195,11 @@ class MdToHtml {
 				closeTag = 'a';
 			} else if (tag && t.type.indexOf('inline') >= 0) {
 				closeTag = openTag;
+			} else if (isCodeBlock) {
+				closeTag = openTag;
 			}
+
+			if (isCodeBlock) output.push('</code>');
 
 			if (closeTag) {
 				if (closeTag === 'a') {
@@ -302,6 +315,7 @@ class MdToHtml {
 		const styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>';
 
 		const output = styleHtml + renderedBody;
+
 		this.cachedContent_ = output;
 		this.cachedContentKey_ = cacheKey;
 		return this.cachedContent_;

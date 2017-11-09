@@ -332,6 +332,9 @@ class NoteTextComponent extends React.Component {
 			// selection change this will be disabled in the next version set
 			// editor.$blockScrolling = Infinity to disable this message"
 			editorProps={{$blockScrolling: true}}
+
+			// This is buggy (gets outside the container)
+			highlightActiveLine={false}
 		/>
 
 		return (

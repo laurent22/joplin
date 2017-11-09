@@ -9,6 +9,9 @@ body {
 }
 </style>
 
+<link rel="stylesheet" href="highlight/styles/atom-one-light.css">
+<script src="highlight/highlight.pack.js"></script>
+
 <div id="content"></div>
 
 <script>
@@ -17,6 +20,11 @@ const contentElement = document.getElementById('content');
 
 ipcRenderer.on('setHtml', (event, html) => {
 	contentElement.innerHTML = html;
+
+	var codeElements = document.getElementsByClassName('code');
+	for (var i = 0; i < codeElements.length; i++) {
+		hljs.highlightBlock(codeElements[i]);
+	}
 });
 
 let ignoreNextScroll = false;
@@ -49,12 +57,4 @@ contentElement.addEventListener('scroll', function(e) {
 	const m = maxScrollTop();
 	ipcRenderer.sendToHost('percentScroll', m ? contentElement.scrollTop / m : 0);
 });
-
-// document.addEventListener('click', function(e) {
-// 	e = e || window.event;
-// 	const target = e.target || e.srcElement;
-
-// 	const coords = elementMapCoordinates(target);
-// 	ipcRenderer.sendToHost('editNote', coords);
-// }, false);
 </script>
