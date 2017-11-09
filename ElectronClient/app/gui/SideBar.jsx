@@ -32,6 +32,7 @@ class SideBarComponent extends React.Component {
 				paddingLeft: 14,
 				display: 'flex',
 				alignItems: 'center',
+				cursor: 'default',
 			},
 			listItemSelected: {
 				backgroundColor: theme.selectedColor2,
@@ -46,6 +47,22 @@ class SideBarComponent extends React.Component {
 				paddingLeft: 8,
 				display: 'flex',
 				alignItems: 'center',
+			},
+			button: {
+				padding: 6,
+				fontFamily: theme.fontFamily,
+				fontSize: theme.fontSize,
+				textDecoration: 'none',
+				boxSizing: 'border-box',
+				color: theme.color2,
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center',
+				border: "1px solid rgba(255,255,255,0.2)",
+				marginTop: 10,
+				marginLeft: 5,
+				marginRight: 5,
+				cursor: 'default',
 			},
 		};
 
@@ -102,13 +119,13 @@ class SideBarComponent extends React.Component {
 	folderItem(folder, selected) {
 		let style = Object.assign({}, this.style().listItem);
 		if (selected) style = Object.assign(style, this.style().listItemSelected);
-		return <a href="#" data-id={folder.id} data-type={BaseModel.TYPE_FOLDER} onContextMenu={(event) => this.itemContextMenu(event)} key={folder.id} style={style} onClick={() => {this.folderItem_click(folder)}}>{folder.title}</a>
+		return <a className="list-item" href="#" data-id={folder.id} data-type={BaseModel.TYPE_FOLDER} onContextMenu={(event) => this.itemContextMenu(event)} key={folder.id} style={style} onClick={() => {this.folderItem_click(folder)}}>{folder.title}</a>
 	}
 
 	tagItem(tag, selected) {
 		let style = Object.assign({}, this.style().listItem);
 		if (selected) style = Object.assign(style, this.style().listItemSelected);
-		return <a href="#" data-id={tag.id} data-type={BaseModel.TYPE_TAG} onContextMenu={(event) => this.itemContextMenu(event)} key={tag.id} style={style} onClick={() => {this.tagItem_click(tag)}}>{tag.title}</a>
+		return <a className="list-item" href="#" data-id={tag.id} data-type={BaseModel.TYPE_TAG} onContextMenu={(event) => this.itemContextMenu(event)} key={tag.id} style={style} onClick={() => {this.tagItem_click(tag)}}>{tag.title}</a>
 	}
 
 	makeDivider(key) {
@@ -122,7 +139,8 @@ class SideBarComponent extends React.Component {
 	}
 
 	synchronizeButton(label) {
-		return <a href="#" key="sync_button" onClick={() => {this.sync_click()}}>{label}</a>
+		const style = this.style().button;
+		return <a className="synchronize-button" style={style} href="#" key="sync_button" onClick={() => {this.sync_click()}}>{label}</a>
 	}
 
 	render() {
@@ -150,7 +168,7 @@ class SideBarComponent extends React.Component {
 		while (lines.length < 10) lines.push(''); // Add blank lines so that height of report text is fixed and doesn't affect scrolling
 		const syncReportText = lines.join("\n");
 
-		items.push(this.synchronizeButton(this.props.syncStarted ? 'cancel' : 'sync'));
+		items.push(this.synchronizeButton(this.props.syncStarted ? _('Cancel') : _('Synchronise')));
 
 		items.push(<div key='sync_report'>{syncReportText}</div>);
 

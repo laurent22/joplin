@@ -8,13 +8,13 @@ body, textarea {
 	height: 100%;
 }
 
-.item-list {
+/*.item-list {
 	overflow-x: hidden;
 	overflow-y: scroll;
 }
 
 .note-list .item {
-	height: 40px; /* This must match NoteList.itemHeight */
+	height: 40px;  This must match NoteList.itemHeight 
 	vertical-align: middle;
 	cursor: pointer;
 }
@@ -27,13 +27,25 @@ body, textarea {
 	font-weight: bold;
 }
 
+*/
+
+.note-list .list-item:hover {
+	background-color: rgba(0,160,255,0.1) !important;
+}
+
 .side-bar .selected {
 	font-weight: bold;
+}
+
+.side-bar .list-item:hover,
+.side-bar .synchronize-button:hover {
+	background-color: #533d7d;
 }
 
 .header .button:hover {
 	background-color: rgba(0,160,255,0.1);
 	border: 1px solid rgba(0,160,255,0.5);
+	box-sizing: 'border-box';
 }
 
 .header .button {

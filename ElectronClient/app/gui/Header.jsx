@@ -15,7 +15,6 @@ class HeaderComponent extends React.Component {
 		if (options.iconName) {
 			icon = <i style={{fontSize: style.fontSize * 1.4, marginRight: 5}} className={"icon " + options.iconName}></i>
 		}
-		console.info(style);
 		return <a className="button" style={style} key={key} href="#" onClick={() => {options.onClick()}}>{icon}{options.title}</a>
 	}
 
@@ -43,6 +42,7 @@ class HeaderComponent extends React.Component {
 			fontFamily: theme.fontFamily,
 			fontSize: theme.fontSize,
 			boxSizing: 'border-box',
+			cursor: 'default',
 		};
 
 		if (this.props.buttons) {

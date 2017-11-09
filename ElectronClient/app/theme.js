@@ -22,7 +22,7 @@ const globalStyle = {
 
 	backgroundColor2: "#3B314E",
 	color2: "#ffffff",
-	selectedColor2: "#4F416A",
+	selectedColor2: "#674b98",
 
 	headerHeight: 35,
 	headerButtonHPadding: 6,
