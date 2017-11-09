@@ -7,6 +7,9 @@ const MdToHtml = require('lib/MdToHtml');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const { themeStyle } = require('../theme.js');
+const AceEditor = require('react-ace').default;
+require('brace/mode/markdown');
+require('brace/theme/chrome');
 
 class NoteTextComponent extends React.Component {
 
@@ -23,6 +26,7 @@ class NoteTextComponent extends React.Component {
 			isLoading: true,
 			webviewReady: false,
 			scrollHeight: null,
+			editorScrollTop: 0,
 		};
 
 		this.lastLoadedNoteId_ = null;
@@ -30,6 +34,20 @@ class NoteTextComponent extends React.Component {
 		this.webviewListeners_ = null;
 		this.ignoreNextEditorScroll_ = false;
 		this.scheduleSaveTimeout_ = null;
+		this.restoreScrollTop_ = null;
+
+		// Complicated but reliable method to get editor content height
+		// https://github.com/ajaxorg/ace/issues/2046
+		this.editorMaxScrollTop_ = 0;
+		this.onAfterEditorRender_ = () => {
+			const r = this.editor_.editor.renderer;
+			this.editorMaxScrollTop_ = Math.max(0, r.layerConfig.maxHeight - r.$size.scrollerHeight);
+
+			if (this.restoreScrollTop_) {
+				this.editorSetScrollTop(this.restoreScrollTop_);
+				this.restoreScrollTop_ = null;
+			}
+		}
 	}
 
 	mdToHtml() {
@@ -120,6 +138,12 @@ class NoteTextComponent extends React.Component {
 		reg.logger().info('Got ipc-message: ' + msg, args);
 
 		if (msg.indexOf('checkboxclick:') === 0) {
+			// Ugly hack because setting the body here will make the scrollbar
+			// go to some random position. So we save the scrollTop here and it
+			// will be restored after the editor ref has been reset, and the
+			// "afterRender" event has been called.
+			this.restoreScrollTop_ = this.editorScrollTop();
+
 			const newBody = this.mdToHtml_.handleCheckboxClick(msg, this.state.note.body);
 			this.saveOneProperty('body', newBody);
 		} else if (msg.toLowerCase().indexOf('http') === 0) {
@@ -143,11 +167,19 @@ class NoteTextComponent extends React.Component {
 	}
 
 	editorMaxScroll() {
-		return Math.max(0, this.editor_.scrollHeight - this.editor_.clientHeight);
+		return this.editorMaxScrollTop_;
+	}
+
+	editorScrollTop() {
+		return this.editor_.editor.getSession().getScrollTop();
+	}
+
+	editorSetScrollTop(v) {
+		this.editor_.editor.getSession().setScrollTop(v);
 	}
 
 	setEditorPercentScroll(p) {
-		this.editor_.scrollTop = p * this.editorMaxScroll();
+		this.editorSetScrollTop(p * this.editorMaxScroll());
 	}
 
 	setViewerPercentScroll(p) {
@@ -159,8 +191,9 @@ class NoteTextComponent extends React.Component {
 			this.ignoreNextEditorScroll_ = false;
 			return;
 		}
+
 		const m = this.editorMaxScroll();
-		this.setViewerPercentScroll(m ? this.editor_.scrollTop / m : 0);
+		this.setViewerPercentScroll(m ? this.editorScrollTop() / m : 0);
 	}
 
 	webview_domReady() {
@@ -188,7 +221,17 @@ class NoteTextComponent extends React.Component {
 
 	editor_ref(element) {
 		if (this.editor_ === element) return;
+
+		if (this.editor_) {
+			this.editorMaxScrollTop_ = 0;
+			this.editor_.editor.renderer.off('afterRender', this.onAfterEditorRender_);
+		}
+
 		this.editor_ = element;
+
+		if (this.editor_) {
+			this.editor_.editor.renderer.on('afterRender', this.onAfterEditorRender_);
+		}
 	}
 
 	initWebview(wv) {
@@ -220,6 +263,11 @@ class NoteTextComponent extends React.Component {
 		this.webview_ = null;
 	}
 
+	aceEditor_change(body) {
+		shared.noteComponent_change(this, 'body', body);
+		this.scheduleSave();
+	}
+
 	render() {
 		const style = this.props.style;
 		const note = this.state.note;
@@ -239,7 +287,7 @@ class NoteTextComponent extends React.Component {
 		const editorStyle = {
 			width: style.width - viewerStyle.width,
 			height: style.height - paddingTop,
-			overflowY: 'scroll',
+			overflowY: 'hidden',
 			float: 'left',
 			verticalAlign: 'top',
 			paddingTop: paddingTop + 'px',
@@ -259,7 +307,32 @@ class NoteTextComponent extends React.Component {
 		}
 
 		const viewer = <webview style={viewerStyle} nodeintegration="1" src="note-content.html" ref={(elem) => { this.webview_ref(elem); } } />
-		const editor = <textarea style={editorStyle} value={body} onScroll={() => { this.editor_scroll(); }} onChange={(event) => { this.editor_change(event) }} ref={(elem) => { this.editor_ref(elem); } }></textarea>
+
+		const editorRootStyle = Object.assign({}, editorStyle);
+		delete editorRootStyle.width;
+		delete editorRootStyle.height;
+		delete editorRootStyle.fontSize;
+
+		const editor =  <AceEditor
+			value={body}
+			mode="markdown"
+			theme="chrome"
+			style={editorRootStyle}
+			width={editorStyle.width + 'px'}
+			height={editorStyle.height + 'px'}
+			fontSize={editorStyle.fontSize}
+			showGutter={false}
+			name="note-editor"
+			wrapEnabled={true}
+			onScroll={(event) => { this.editor_scroll(); }}
+			ref={(elem) => { this.editor_ref(elem); } }
+			onChange={(body) => { this.aceEditor_change(body) }}
+
+			// Disable warning: "Automatically scrolling cursor into view after
+			// selection change this will be disabled in the next version set
+			// editor.$blockScrolling = Infinity to disable this message"
+			editorProps={{$blockScrolling: true}}
+		/>
 
 		return (
 			<div style={style}>
