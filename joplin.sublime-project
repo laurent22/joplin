@@ -17,7 +17,8 @@
 				"src/log.txt",
 				"*.min.js",
 				"ElectronClient/app/highlight/*.pack.js",
-				"app/css/font-awesome.min.css",
+				"ElectronClient/app/gui/note-viewer/css/font-awesome.min.css",
+				"_mydocs/mdtest/vendor/bin/html-to-markdown",
 			],
 			"folder_exclude_patterns":
 			[
