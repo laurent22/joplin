@@ -81,6 +81,14 @@ class Application extends BaseApplication {
 		return super.reducer(newState, action);
 	}
 
+	async generalMiddleware(store, next, action) {
+		if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
+			if (!await reg.syncStarted()) reg.scheduleSync();
+		}
+
+		return super.generalMiddleware(store, next, action);
+	}
+
 	async start(argv) {
 		argv = await super.start(argv);
 
