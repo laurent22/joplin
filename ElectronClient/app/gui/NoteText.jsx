@@ -9,6 +9,9 @@ const { bridge } = require('electron').remote.require('./bridge');
 const { themeStyle } = require('../theme.js');
 const AceEditor = require('react-ace').default;
 require('brace/mode/markdown');
+
+// https://ace.c9.io/build/kitchen-sink.html
+// https://highlightjs.org/static/demo/
 require('brace/theme/chrome');
 
 class NoteTextComponent extends React.Component {

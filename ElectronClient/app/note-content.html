@@ -9,22 +9,72 @@ body {
 }
 </style>
 
-<link rel="stylesheet" href="highlight/styles/atom-one-light.css">
-<script src="highlight/highlight.pack.js"></script>
-
+<div id="hlScriptContainer"></div>
 <div id="content"></div>
 
 <script>
 const { ipcRenderer } = require('electron');
 const contentElement = document.getElementById('content');
 
-ipcRenderer.on('setHtml', (event, html) => {
-	contentElement.innerHTML = html;
 
+// ----------------------------------------------------------------------
+// Handle dynamically loading HLJS when a code element is present
+// ----------------------------------------------------------------------
+
+let hljsScriptAdded = false;
+let hljsLoaded = false;
+
+function loadHljs(callback) {
+	hljsScriptAdded = true;
+
+	const script = document.createElement('script');
+	script.onload = function () {
+		hljsLoaded = true;
+    	applyHljs();
+	};
+	script.src = 'highlight/highlight.pack.js';
+	document.getElementById('hlScriptContainer').appendChild(script);
+
+	const link = document.createElement('link');
+	link.rel = 'stylesheet';
+	// https://ace.c9.io/build/kitchen-sink.html
+	// https://highlightjs.org/static/demo/
+	link.href = 'highlight/styles/atom-one-light.css';
+	document.getElementById('hlScriptContainer').appendChild(link);
+}
+
+function loadAndApplyHljs() {
 	var codeElements = document.getElementsByClassName('code');
+	if (!codeElements.length) return;
+
+	if (!hljsScriptAdded) {
+		this.loadHljs();
+		return;
+	}
+
+	// If HLJS is not loaded yet, no need to do anything. When it loads
+	// it will automatically apply the style to all the code elements.
+	if (hljsLoaded) applyHljs(codeElements);
+}
+
+function applyHljs(codeElements) {
+	if (typeof codeElements === 'undefined') codeElements = document.getElementsByClassName('code');
+
 	for (var i = 0; i < codeElements.length; i++) {
 		hljs.highlightBlock(codeElements[i]);
 	}
+}
+
+// ----------------------------------------------------------------------
+// / Handle dynamically loading HLJS when a code element is present
+// ----------------------------------------------------------------------
+
+
+
+ipcRenderer.on('setHtml', (event, html) => {
+	contentElement.innerHTML = html;
+
+	loadAndApplyHljs();
 
 	// A checkbox list is rendered like this by markdown-it:
 	// <ul>

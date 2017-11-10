@@ -16,6 +16,7 @@
 				"ReactNativeClient/locales/*",
 				"src/log.txt",
 				"*.min.js",
+				"ElectronClient/app/highlight/*.pack.js",
 			],
 			"folder_exclude_patterns":
 			[
@@ -41,6 +42,7 @@
 				"ReactNativeClient/android/local.properties",
 				"ReactNativeClient/ios",
 				"ReactNativeClient/node_modules",
+				"ElectronClient/app/highlight/styles",
 				"tests/logs",
 			],
 			"path": "."
