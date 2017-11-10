@@ -115,6 +115,10 @@ class NoteTextComponent extends React.Component {
 			// is going to be removed in render().
 			const webviewReady = this.webview_ && this.state.webviewReady && noteId;
 
+			this.editorMaxScrollTop_ = 0;
+
+			this.editorSetScrollTop(0);
+
 			this.setState({
 				note: note,
 				lastSavedNote: Object.assign({}, note),
@@ -131,13 +135,8 @@ class NoteTextComponent extends React.Component {
 		return shared.refreshNoteMetadata(this, force);
 	}
 
-	title_changeText(text) {
-		shared.noteComponent_change(this, 'title', text);
-		this.scheduleSave();
-	}
-
-	editor_change(event) {
-		shared.noteComponent_change(this, 'body', event.target.value);
+	title_changeText(event) {
+		shared.noteComponent_change(this, 'title', event.target.value);
 		this.scheduleSave();
 	}
 
@@ -156,7 +155,7 @@ class NoteTextComponent extends React.Component {
 		const arg0 = args && args.length >= 1 ? args[0] : null;
 		const arg1 = args && args.length >= 2 ? args[1] : null;
 
-		reg.logger().info('Got ipc-message: ' + msg, args);
+		reg.logger().debug('Got ipc-message: ' + msg, args);
 
 		if (msg.indexOf('checkboxclick:') === 0) {
 			// Ugly hack because setting the body here will make the scrollbar
@@ -189,6 +188,7 @@ class NoteTextComponent extends React.Component {
 	}
 
 	editorSetScrollTop(v) {
+		if (!this.editor_) return;
 		this.editor_.editor.getSession().setScrollTop(v);
 	}
 
@@ -237,7 +237,6 @@ class NoteTextComponent extends React.Component {
 		if (this.editor_ === element) return;
 
 		if (this.editor_) {
-			this.editorMaxScrollTop_ = 0;
 			this.editor_.editor.renderer.off('afterRender', this.onAfterEditorRender_);
 		}
 
@@ -289,17 +288,44 @@ class NoteTextComponent extends React.Component {
 		const theme = themeStyle(this.props.theme);
 		const visiblePanes = this.props.visiblePanes || ['editor', 'viewer'];
 
+		const borderWidth = 1;
+
+		const rootStyle = Object.assign({
+			borderLeft: borderWidth + 'px solid ' + theme.dividerColor,
+			boxSizing: 'border-box',
+			paddingLeft: 10,
+			paddingRight: 0,
+		}, style);
+
+		const innerWidth = rootStyle.width - rootStyle.paddingLeft - rootStyle.paddingRight - borderWidth;
+
 		if (!note) {
 			const emptyDivStyle = Object.assign({
 				backgroundColor: 'black',
 				opacity: 0.1,
-			}, style);
+			}, rootStyle);
 			return <div style={emptyDivStyle}></div>
 		}
 
+		const titleEditorStyle = {
+			width: innerWidth - rootStyle.paddingLeft,
+			height: 24,
+			display: 'block',
+			boxSizing: 'border-box',
+			paddingTop: 5,
+			paddingBottom: 5,
+			paddingLeft: 8,
+			paddingRight: 8,
+			marginTop: 10,
+			marginBottom: 10,
+			marginRight: rootStyle.paddingLeft,
+		};
+
+		const bottomRowHeight = rootStyle.height - titleEditorStyle.height - titleEditorStyle.marginBottom - titleEditorStyle.marginTop;
+
 		const viewerStyle = {
-			width: Math.floor(style.width / 2),
-			height: style.height,
+			width: Math.floor(innerWidth / 2),
+			height: bottomRowHeight,
 			overflow: 'hidden',
 			float: 'left',
 			verticalAlign: 'top',
@@ -308,8 +334,8 @@ class NoteTextComponent extends React.Component {
 		const paddingTop = 14;
 
 		const editorStyle = {
-			width: style.width - viewerStyle.width,
-			height: style.height - paddingTop,
+			width: innerWidth - viewerStyle.width,
+			height: bottomRowHeight - paddingTop,
 			overflowY: 'hidden',
 			float: 'left',
 			verticalAlign: 'top',
@@ -323,12 +349,12 @@ class NoteTextComponent extends React.Component {
 			// to this bug: https://github.com/electron/electron/issues/8277
 			// So instead setting the width 0.
 			viewerStyle.width = 0;
-			editorStyle.width = style.width;
+			editorStyle.width = innerWidth;
 		}
 
 		if (visiblePanes.indexOf('editor') < 0) {
 			editorStyle.display = 'none';
-			viewerStyle.width = style.width;
+			viewerStyle.width = innerWidth;
 		}
 
 		if (this.state.webviewReady) {
@@ -341,6 +367,13 @@ class NoteTextComponent extends React.Component {
 			const html = this.mdToHtml().render(body, theme, mdOptions);
 			this.webview_.send('setHtml', html);
 		}
+
+		const titleEditor = <input
+			type="text"
+			style={titleEditorStyle}
+			value={note ? note.title : ''}
+			onChange={(event) => { this.title_changeText(event); }}
+		/>
 
 		const viewer = <webview
 			style={viewerStyle}
@@ -379,7 +412,8 @@ class NoteTextComponent extends React.Component {
 		/>
 
 		return (
-			<div style={style}>
+			<div style={rootStyle}>
+				{ titleEditor }
 				{ editor }
 				{ viewer }
 			</div>

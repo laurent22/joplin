@@ -13,7 +13,7 @@ class NoteListComponent extends React.Component {
 	style() {
 		const theme = themeStyle(this.props.theme);
 
-		const itemHeight = 26;
+		const itemHeight = 34;
 
 		let style = {
 			root: {
@@ -30,9 +30,6 @@ class NoteListComponent extends React.Component {
 			listItemSelected: {
 				backgroundColor: theme.selectedColor,
 			},
-			listItemCompleted: {
-				opacity: 0.5,
-			},
 			listItemTitle: {
 				fontFamily: theme.fontFamily,
 				fontSize: theme.fontSize,
@@ -44,6 +41,10 @@ class NoteListComponent extends React.Component {
 				display: 'flex',
 				alignItems: 'center',
 				overflow: 'hidden',
+			},
+			listItemTitleCompleted: {
+				opacity: 0.5,
+				textDecoration: 'line-through',
 			},
 		};
 
@@ -93,12 +94,9 @@ class NoteListComponent extends React.Component {
 			</div>
 		: null;
 
-		if (item.is_todo && !!item.todo_completed) {
-			style = Object.assign(style, this.style().listItemCompleted);
-		}
-
-		const listItemTitleStyle = Object.assign({}, this.style().listItemTitle);
+		let listItemTitleStyle = Object.assign({}, this.style().listItemTitle);
 		listItemTitleStyle.paddingLeft = checkbox ? padding : 4;
+		if (item.is_todo && !!item.todo_completed) listItemTitleStyle = Object.assign(listItemTitleStyle, this.style().listItemTitleCompleted);
 
 		return <div key={item.id} style={style}>
 			{checkbox}

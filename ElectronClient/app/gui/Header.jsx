@@ -31,6 +31,8 @@ class HeaderComponent extends React.Component {
 		style.height = theme.headerHeight;
 		style.display = 'flex';
 		style.flexDirection  = 'row';
+		style.borderBottom = '1px solid ' + theme.dividerColor;
+		style.boxSizing = 'border-box';
 
 		const buttons = [];
 		if (showBackButton) {
