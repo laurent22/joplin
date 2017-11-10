@@ -51,3 +51,9 @@ body, textarea {
 .header .button {
 	border: 1px solid rgba(0,160,255,0);
 }
+
+.icon-button:hover {
+	background-color: rgba(0,0,0,0.05) !important;
+	border: 1px solid rgba(0,0,0,0.10);
+	border-radius: 5px;
+}

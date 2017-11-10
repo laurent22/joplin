@@ -17,6 +17,7 @@
 				"src/log.txt",
 				"*.min.js",
 				"ElectronClient/app/highlight/*.pack.js",
+				"app/css/font-awesome.min.css",
 			],
 			"folder_exclude_patterns":
 			[

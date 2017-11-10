@@ -126,10 +126,6 @@ msgstr ""
 msgid "Cannot find \"%s\"."
 msgstr ""
 
-#, javascript-format
-msgid "Cannot access %s"
-msgstr ""
-
 msgid "Displays the given note."
 msgstr ""
 
@@ -494,6 +490,10 @@ msgstr ""
 msgid ""
 "Please set the \"sync.2.path\" config value to the desired synchronisation "
 "destination."
+msgstr ""
+
+#, javascript-format
+msgid "Cannot access %s"
 msgstr ""
 
 #, javascript-format

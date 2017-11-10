@@ -127,10 +127,6 @@ msgstr "Joindre le fichier fourni à la note."
 msgid "Cannot find \"%s\"."
 msgstr "Impossible de trouver \"%s\"."
 
-#, javascript-format
-msgid "Cannot access %s"
-msgstr "Impossible d'accéder à %s"
-
 msgid "Displays the given note."
 msgstr "Affiche la note."
 
@@ -549,6 +545,10 @@ msgid ""
 msgstr ""
 "Veuillez attribuer une valeur au paramètre de configuration \"sync.2.path\" "
 "pour indiquer le dossier où devra se faire la synchronisation."
+
+#, javascript-format
+msgid "Cannot access %s"
+msgstr "Impossible d'accéder à %s"
 
 #, javascript-format
 msgid "Created local items: %d."

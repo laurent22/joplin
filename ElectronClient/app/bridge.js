@@ -20,6 +20,11 @@ class Bridge {
 		return { width: s[0], height: s[1] };
 	}
 
+	showOpenDialog(options) {
+		const {dialog} = require('electron');
+		return dialog.showOpenDialog(options);
+	}
+
 	showMessageBox(options) {
 		const {dialog} = require('electron');
 		return dialog.showMessageBox(options);

@@ -53,6 +53,55 @@ function shimInit() {
 		return locale;
 	}
 
+	const resizeImage_ = async function(filePath, targetPath) {
+		const sharp = require('sharp');
+		const { Resource } = require('lib/models/resource.js');
+
+		return new Promise((resolve, reject) => {
+			sharp(filePath)
+			.resize(Resource.IMAGE_MAX_DIMENSION, Resource.IMAGE_MAX_DIMENSION)
+			.max()
+			.withoutEnlargement()
+			.toFile(targetPath, (err, info) => {
+				if (err) {
+					reject(err);
+				} else {
+					resolve(info);
+				}
+			});
+		});
+	}
+
+	shim.attachFileToNote = async function(note, filePath) {
+		const { Resource } = require('lib/models/resource.js');
+		const { uuid } = require('lib/uuid.js');
+		const { filename } = require('lib/path-utils.js');
+		const mime = require('mime/lite');
+		const { Note } = require('lib/models/note.js');
+
+		if (!(await fs.pathExists(filePath))) throw new Error(_('Cannot access %s', filePath));
+
+		let resource = Resource.new();
+		resource.id = uuid.create();
+		resource.mime = mime.getType(filePath);
+		resource.title = filename(filePath);
+
+		let targetPath = Resource.fullPath(resource);
+
+		if (resource.mime == 'image/jpeg' || resource.mime == 'image/jpg' || resource.mime == 'image/png') {
+			const result = await resizeImage_(filePath, targetPath);
+		} else {
+			await fs.copy(filePath, targetPath, { overwrite: true });
+		}
+
+		await Resource.save(resource, { isNew: true });
+
+		const newNote = Object.assign({}, note, {
+			body: note.body + "\n\n" + Resource.markdownTag(resource),
+		});
+		return await Note.save(newNote);
+	}
+
 	const nodeFetch = require('node-fetch');
 
 	shim.readLocalFileBase64 = (path) => {

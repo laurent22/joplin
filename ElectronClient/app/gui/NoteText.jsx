@@ -1,5 +1,6 @@
 const React = require('react');
 const { Note } = require('lib/models/note.js');
+const { IconButton } = require('./IconButton.min.js');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const { reg } = require('lib/registry.js');
@@ -8,8 +9,11 @@ const shared = require('lib/components/shared/note-screen-shared.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const { themeStyle } = require('../theme.js');
 const AceEditor = require('react-ace').default;
-require('brace/mode/markdown');
+const Menu = bridge().Menu;
+const MenuItem = bridge().MenuItem;
+const { shim } = require('lib/shim.js');
 
+require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
 // https://highlightjs.org/static/demo/
 require('brace/theme/chrome');
@@ -281,6 +285,31 @@ class NoteTextComponent extends React.Component {
 		this.scheduleSave();
 	}
 
+	itemContextMenu(event) {
+		const noteId = this.props.noteId;
+		if (!noteId) return;
+
+		const menu = new Menu()
+
+		menu.append(new MenuItem({label: _('Attach file'), click: async () => {
+			const filePaths = bridge().showOpenDialog({
+				properties: ['openFile', 'createDirectory'],
+			});
+			if (!filePaths || !filePaths.length) return;
+
+			await this.saveIfNeeded();
+			const note = await Note.load(noteId);
+			const newNote = await shim.attachFileToNote(note, filePaths[0]);
+
+			this.setState({
+				note: newNote,
+				lastSavedNote: Object.assign({}, newNote),
+			});
+		}}));
+
+		menu.popup(bridge().window());
+	}
+
 	render() {
 		const style = this.props.style;
 		const note = this.state.note;
@@ -307,21 +336,28 @@ class NoteTextComponent extends React.Component {
 			return <div style={emptyDivStyle}></div>
 		}
 
-		const titleEditorStyle = {
+		const titleBarStyle = {
 			width: innerWidth - rootStyle.paddingLeft,
-			height: 24,
-			display: 'block',
+			height: 30,
 			boxSizing: 'border-box',
+			marginTop: 10,
+			marginBottom: 10,
+			display: 'flex',
+			flexDirection: 'row',
+		};
+
+		const titleEditorStyle = {
+			display: 'flex',
+			flex: 1,
+			display: 'inline-block',
 			paddingTop: 5,
 			paddingBottom: 5,
 			paddingLeft: 8,
 			paddingRight: 8,
-			marginTop: 10,
-			marginBottom: 10,
 			marginRight: rootStyle.paddingLeft,
 		};
 
-		const bottomRowHeight = rootStyle.height - titleEditorStyle.height - titleEditorStyle.marginBottom - titleEditorStyle.marginTop;
+		const bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop;
 
 		const viewerStyle = {
 			width: Math.floor(innerWidth / 2),
@@ -382,6 +418,10 @@ class NoteTextComponent extends React.Component {
 			onChange={(event) => { this.title_changeText(event); }}
 		/>
 
+		const titleBarMenuButton = <IconButton style={{
+			display: 'flex',
+		}} iconName="fa-caret-down" theme={this.props.theme} onClick={() => { this.itemContextMenu() }} />
+
 		const viewer = <webview
 			style={viewerStyle}
 			nodeintegration="1"
@@ -421,7 +461,10 @@ class NoteTextComponent extends React.Component {
 
 		return (
 			<div style={rootStyle}>
-				{ titleEditor }
+				<div style={titleBarStyle}>
+					{ titleEditor }
+					{ titleBarMenuButton }
+				</div>
 				{ editor }
 				{ viewer }
 			</div>
