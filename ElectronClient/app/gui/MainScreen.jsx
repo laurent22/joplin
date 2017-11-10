@@ -16,8 +16,24 @@ const { bridge } = require('electron').remote.require('./bridge');
 class MainScreenComponent extends React.Component {
 
 	componentWillMount() {
-		this.setState({ newNotePromptVisible: false });
-		this.setState({ newFolderPromptVisible: false });
+		this.setState({
+			newNotePromptVisible: false,
+			newFolderPromptVisible: false,
+			noteVisiblePanes: ['editor', 'viewer'],
+		});
+	}
+
+	toggleVisiblePanes() {
+		let panes = this.state.noteVisiblePanes.slice();
+		if (panes.length === 2) {
+			panes = ['editor'];
+		} else if (panes.indexOf('editor') >= 0) {
+			panes = ['viewer'];
+		} else if (panes.indexOf('viewer') >= 0) {
+			panes = ['editor', 'viewer'];
+		}
+
+		this.setState({ noteVisiblePanes: panes });
 	}
 
 	render() {
@@ -62,15 +78,22 @@ class MainScreenComponent extends React.Component {
 				onClick: () => {
 					this.setState({ newNotePromptVisible: true });
 				},
-				iconName: 'ion-document',
+				iconName: 'fa-file-o',
 			}, {
 				title: _('New notebook'),
 				onClick: () => {
 					this.setState({ newFolderPromptVisible: true });
 				},
-				iconName: 'ion-android-folder-open',
+				iconName: 'fa-folder-o',
+			}, {
+				title: _('Layout'),
+				onClick: () => {
+					this.toggleVisiblePanes();
+				},
+				iconName: 'fa-columns',
 			},
 		];
+
 
 		const newNotePromptOnClose = async (answer) => {
 			if (answer) {
@@ -118,7 +141,7 @@ class MainScreenComponent extends React.Component {
 				<Header style={headerStyle} showBackButton={false} buttons={headerButtons} />
 				<SideBar style={sideBarStyle} />
 				<NoteList itemHeight={40} style={noteListStyle} />
-				<NoteText style={noteTextStyle} />
+				<NoteText style={noteTextStyle} visiblePanes={this.state.noteVisiblePanes} />
 			</div>
 		);
 	}
