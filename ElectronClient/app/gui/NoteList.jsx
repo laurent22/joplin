@@ -1,6 +1,7 @@
 const { ItemList } = require('./ItemList.min.js');
 const React = require('react');
 const { connect } = require('react-redux');
+const { time } = require('lib/time-utils.js');
 const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
@@ -20,20 +21,29 @@ class NoteListComponent extends React.Component {
 			},
 			listItem: {
 				height: itemHeight,
-				fontFamily: theme.fontFamily,
-				fontSize: theme.fontSize,
-				textDecoration: 'none',
 				boxSizing: 'border-box',
-				color: theme.color,
-				paddingLeft: 6,
 				display: 'flex',
-				alignItems: 'center',
-				cursor: 'default',
+				alignItems: 'stretch',
 				backgroundColor: theme.backgroundColor,
 				borderBottom: '1px solid ' + theme.dividerColor,
 			},
 			listItemSelected: {
 				backgroundColor: theme.selectedColor,
+			},
+			listItemCompleted: {
+				opacity: 0.5,
+			},
+			listItemTitle: {
+				fontFamily: theme.fontFamily,
+				fontSize: theme.fontSize,
+				textDecoration: 'none',
+				color: theme.color,
+				cursor: 'default',
+				whiteSpace: 'nowrap',
+				flex: 1,
+				display: 'flex',
+				alignItems: 'center',
+				overflow: 'hidden',
 			},
 		};
 
@@ -53,18 +63,56 @@ class NoteListComponent extends React.Component {
 		menu.popup(bridge().window());
 	}
 
-	itemRenderer(index, item, theme) {
-		const onClick = (item) => {
+	itemRenderer(item, theme, width) {
+		const onTitleClick = async (event, item) => {
 			this.props.dispatch({
 				type: 'NOTE_SELECT',
 				id: item.id,
 			});
 		}
 
-		let style = Object.assign({}, this.style().listItem);
+		const onCheckboxClick = async (event) => {
+			const checked = event.target.checked;
+			const newNote = {
+				id: item.id,
+				todo_completed: checked ? time.unixMs() : 0,
+			}
+			await Note.save(newNote);
+		}
+
+		const padding = 6;
+
+		let style = Object.assign({ width: width }, this.style().listItem);
 		if (this.props.selectedNoteId === item.id) style = Object.assign(style, this.style().listItemSelected);
 
-		return <a data-id={item.id} className="list-item" onContextMenu={(event) => this.itemContextMenu(event)} href="#" style={style} onClick={() => { onClick(item) }} key={index}>{item.title}</a>
+		// Setting marginBottom = 1 because it makes the checkbox looks more centered, at least on Windows
+		// but don't know how it will look in other OSes.
+		const checkbox = item.is_todo ? 
+			<div style={{display: 'flex', height: style.height, alignItems: 'center', paddingLeft: padding}}>
+				<input style={{margin:0, marginBottom:1}} type="checkbox" defaultChecked={!!item.todo_completed} onClick={(event) => { onCheckboxClick(event, item) }}/>
+			</div>
+		: null;
+
+		if (item.is_todo && !!item.todo_completed) {
+			style = Object.assign(style, this.style().listItemCompleted);
+		}
+
+		const listItemTitleStyle = Object.assign({}, this.style().listItemTitle);
+		listItemTitleStyle.paddingLeft = checkbox ? padding : 4;
+
+		return <div key={item.id} style={style}>
+			{checkbox}
+			<a
+				data-id={item.id}
+				className="list-item"
+				onContextMenu={(event) => this.itemContextMenu(event)}
+				href="#"
+				style={listItemTitleStyle}
+				onClick={(event) => { onTitleClick(event, item) }}
+			>
+			{item.title}
+			</a>
+		</div>
 	}
 
 	render() {
@@ -91,7 +139,7 @@ class NoteListComponent extends React.Component {
 				style={style}
 				className={"note-list"}
 				items={this.props.notes}
-				itemRenderer={ (index, item) => { return this.itemRenderer(index, item, theme) } }
+				itemRenderer={ (item) => { return this.itemRenderer(item, theme, style.width) } }
 			></ItemList>
 		);
 	}

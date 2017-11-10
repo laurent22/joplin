@@ -48,7 +48,7 @@ class ItemList extends React.Component {
 		let itemComps = [blankItem('top', this.state.topItemIndex * this.props.itemHeight)];
 
 		for (let i = this.state.topItemIndex; i <= this.state.bottomItemIndex; i++) {
-			const itemComp = this.props.itemRenderer(i, items[i]);
+			const itemComp = this.props.itemRenderer(items[i]);
 			itemComps.push(itemComp);
 		}
 
