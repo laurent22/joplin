@@ -203,7 +203,7 @@ class NoteTextComponent extends React.Component {
 			webviewReady: true,
 		});
 
-		//this.webview_.openDevTools(); 
+		this.webview_.openDevTools(); 
 	}
 
 	webview_ref(element) {
