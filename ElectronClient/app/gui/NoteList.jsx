@@ -69,11 +69,26 @@ class NoteListComponent extends React.Component {
 
 	render() {
 		const theme = themeStyle(this.props.theme);
+		const style = this.props.style;
+
+		if (!this.props.notes.length) {
+			const padding = 10;
+			const emptyDivStyle = Object.assign({
+				padding: padding + 'px',
+				fontSize: theme.fontSize,
+				color: theme.color,
+				backgroundColor: theme.backgroundColor,
+				fontFamily: theme.fontFamily,
+			}, style);
+			emptyDivStyle.width = emptyDivStyle.width - padding * 2;
+			emptyDivStyle.height = emptyDivStyle.height - padding * 2;
+			return <div style={emptyDivStyle}>{_('No notes in here. Create one by clicking on "New note".')}</div>
+		}
 
 		return (
 			<ItemList
 				itemHeight={this.props.itemHeight}
-				style={this.props.style}
+				style={style}
 				className={"note-list"}
 				items={this.props.notes}
 				itemRenderer={ (index, item) => { return this.itemRenderer(index, item, theme) } }

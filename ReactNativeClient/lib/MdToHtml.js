@@ -148,7 +148,7 @@ class MdToHtml {
 			let attrs = t.attrs ? t.attrs : [];
 			const isCodeBlock = tag === 'code' && t.block;
 
-			if (t.map) attrs.push(['data-map', t.map.join(':')]);
+			// if (t.map) attrs.push(['data-map', t.map.join(':')]);
 
 			if (tag && t.type.indexOf('_open') >= 0) {
 				openTag = tag;
