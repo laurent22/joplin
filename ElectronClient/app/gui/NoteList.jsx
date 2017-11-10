@@ -88,7 +88,7 @@ class NoteListComponent extends React.Component {
 			await Note.save(newNote);
 		}
 
-		const padding = 6;
+		const hPadding = 10;
 
 		let style = Object.assign({ width: width }, this.style().listItem);
 		if (this.props.selectedNoteId === item.id) style = Object.assign(style, this.style().listItemSelected);
@@ -96,13 +96,13 @@ class NoteListComponent extends React.Component {
 		// Setting marginBottom = 1 because it makes the checkbox looks more centered, at least on Windows
 		// but don't know how it will look in other OSes.
 		const checkbox = item.is_todo ? 
-			<div style={{display: 'flex', height: style.height, alignItems: 'center', paddingLeft: padding}}>
+			<div style={{display: 'flex', height: style.height, alignItems: 'center', paddingLeft: hPadding}}>
 				<input style={{margin:0, marginBottom:1}} type="checkbox" defaultChecked={!!item.todo_completed} onClick={(event) => { onCheckboxClick(event, item) }}/>
 			</div>
 		: null;
 
 		let listItemTitleStyle = Object.assign({}, this.style().listItemTitle);
-		listItemTitleStyle.paddingLeft = checkbox ? padding : 4;
+		listItemTitleStyle.paddingLeft = !checkbox ? hPadding : 4;
 		if (item.is_todo && !!item.todo_completed) listItemTitleStyle = Object.assign(listItemTitleStyle, this.style().listItemTitleCompleted);
 
 		return <div key={item.id} style={style}>

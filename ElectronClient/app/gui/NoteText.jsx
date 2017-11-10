@@ -329,7 +329,6 @@ class NoteTextComponent extends React.Component {
 			overflow: 'hidden',
 			float: 'left',
 			verticalAlign: 'top',
-			borderLeft: '1px solid ' + theme.dividerColor,
 			boxSizing: 'border-box',
 		};
 
@@ -351,13 +350,18 @@ class NoteTextComponent extends React.Component {
 			// to this bug: https://github.com/electron/electron/issues/8277
 			// So instead setting the width 0.
 			viewerStyle.width = 0;
-			viewerStyle.borderLeft = 'none';
 			editorStyle.width = innerWidth;
 		}
 
 		if (visiblePanes.indexOf('editor') < 0) {
 			editorStyle.display = 'none';
 			viewerStyle.width = innerWidth;
+		}
+
+		if (visiblePanes.indexOf('viewer') >= 0 && visiblePanes.indexOf('editor') >= 0) {
+			viewerStyle.borderLeft = '1px solid ' + theme.dividerColor;
+		} else {
+			viewerStyle.borderLeft = 'none';
 		}
 
 		if (this.state.webviewReady) {
@@ -404,6 +408,7 @@ class NoteTextComponent extends React.Component {
 			onScroll={(event) => { this.editor_scroll(); }}
 			ref={(elem) => { this.editor_ref(elem); } }
 			onChange={(body) => { this.aceEditor_change(body) }}
+			showPrintMargin={false}
 
 			// Disable warning: "Automatically scrolling cursor into view after
 			// selection change this will be disabled in the next version set
