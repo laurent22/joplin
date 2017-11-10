@@ -25,6 +25,28 @@ ipcRenderer.on('setHtml', (event, html) => {
 	for (var i = 0; i < codeElements.length; i++) {
 		hljs.highlightBlock(codeElements[i]);
 	}
+
+	// A checkbox list is rendered like this by markdown-it:
+	// <ul>
+	//    <li>
+	//       <p>
+	//          [x] some item
+	//       </p>
+	//    </li>
+	// ...
+	// </ul>
+	// And we need to remove the padding from "p" and the bullet from "ul"
+	const checkboxes = document.getElementsByClassName('checkbox');
+	for (let i = 0; i < checkboxes.length; i++) {
+		const cb = checkboxes[i];
+		cb.parentElement.style.marginBottom = 0;
+		const ul = cb.parentElement.parentElement.parentElement;
+		if (!ul) {
+			console.warn('Unexpected layout for checkbox');
+			continue;
+		}
+		ul.style.listStyleType = 'none';
+	}
 });
 
 let ignoreNextScroll = false;
@@ -33,17 +55,17 @@ ipcRenderer.on('setPercentScroll', (event, percent) => {
 	contentElement.scrollTop = percent * maxScrollTop();
 });
 
-function elementMapCoordinates(element) {
-	while (true) {
-		if (!element) break;
+// function elementMapCoordinates(element) {
+// 	while (true) {
+// 		if (!element) break;
 
-		const m = element.getAttribute('data-map');
-		if (m) return m.split(':');
-		element = element.parentElement;
-	}
+// 		const m = element.getAttribute('data-map');
+// 		if (m) return m.split(':');
+// 		element = element.parentElement;
+// 	}
 
-	return null;
-}
+// 	return null;
+// }
 
 function maxScrollTop() {
 	return Math.max(0, contentElement.scrollHeight - contentElement.clientHeight);
