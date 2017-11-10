@@ -288,7 +288,7 @@ class MdToHtml {
 				color: ` + style.htmlLinkColor + `
 			}
 			ul {
-				padding-left: 1em;
+				padding-left: 0;
 			}
 			a.checkbox {
 				font-size: 1.6em;

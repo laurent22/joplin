@@ -217,7 +217,7 @@ class NoteTextComponent extends React.Component {
 			webviewReady: true,
 		});
 
-		// this.webview_.openDevTools(); 
+		//this.webview_.openDevTools(); 
 	}
 
 	webview_ref(element) {
@@ -329,6 +329,8 @@ class NoteTextComponent extends React.Component {
 			overflow: 'hidden',
 			float: 'left',
 			verticalAlign: 'top',
+			borderLeft: '1px solid ' + theme.dividerColor,
+			boxSizing: 'border-box',
 		};
 
 		const paddingTop = 14;
@@ -349,6 +351,7 @@ class NoteTextComponent extends React.Component {
 			// to this bug: https://github.com/electron/electron/issues/8277
 			// So instead setting the width 0.
 			viewerStyle.width = 0;
+			viewerStyle.borderLeft = 'none';
 			editorStyle.width = innerWidth;
 		}
 
