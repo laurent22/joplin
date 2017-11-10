@@ -44,7 +44,7 @@ class PromptDialog extends React.Component {
 
 		const promptDialogStyle = {
 			backgroundColor: 'white',
-			padding: 10,
+			padding: 16,
 			display: 'inline-block',
 			boxShadow: '6px 6px 20px rgba(0,0,0,0.5)',
 		};
@@ -53,6 +53,13 @@ class PromptDialog extends React.Component {
 			minWidth: theme.buttonMinWidth,
 			minHeight: theme.buttonMinHeight,
 			marginLeft: 5,
+		};
+
+		const labelStyle = {
+			marginRight: 5,
+			fontSize: theme.fontSize,
+			color: theme.color,
+			fontFamily: theme.fontFamily,
 		};
 
 		const inputStyle = {
@@ -80,7 +87,7 @@ class PromptDialog extends React.Component {
 		return (
 			<div style={modalLayerStyle}>
 				<div style={promptDialogStyle}>
-					<label style={{ marginRight: 5 }}>{this.props.message ? this.props.message : ''}</label>
+					<label style={labelStyle}>{this.props.message ? this.props.message : ''}</label>
 					<input
 						style={inputStyle}
 						ref={input => this.answerInput_ = input}
