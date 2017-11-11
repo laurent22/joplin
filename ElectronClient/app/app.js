@@ -24,12 +24,19 @@ const appDefaultState = Object.assign({}, defaultState, {
 	route: {
 		type: 'NAV_GO',
 		routeName: 'Main',
-		params: {},
+		props: {},
 	},
 	navHistory: [],
+	fileToImport: null,
+	windowCommand: null,
 }); 
 
 class Application extends BaseApplication {
+
+	constructor() {
+		super();
+		this.lastMenuScreen_ = null;
+	}
 
 	hasGui() {
 		return true;
@@ -76,6 +83,12 @@ class Application extends BaseApplication {
 					newState.windowContentSize = action.size;
 					break;
 
+				case 'WINDOW_COMMAND':
+
+					newState = Object.assign({}, state);
+					newState.windowCommand = { name: action.name };
+					break;
+
 			}
 		} catch (error) {
 			error.message = 'In reducer: ' + error.message + ' Action: ' + JSON.stringify(action);
@@ -90,16 +103,75 @@ class Application extends BaseApplication {
 			if (!await reg.syncStarted()) reg.scheduleSync();
 		}
 
-		return super.generalMiddleware(store, next, action);
+		const result = await super.generalMiddleware(store, next, action);
+		const newState = store.getState();
+
+		if (action.type === 'NAV_GO' || action.type === 'NAV_BACK') {
+			app().updateMenu(newState.route.routeName);
+		}
+
+		return result;
+
 	}
 
-	setupMenu() {
+	updateMenu(screen) {
+		if (this.lastMenuScreen_ === screen) return;
+
 		const template = [
 			{
 				label: 'File',
 				submenu: [{
+					label: _('New note'),
+					accelerator: 'CommandOrControl+N',
+					screens: ['Main'],
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'newNote',
+						});
+					}
+				}, {
+					label: _('New to-do'),
+					accelerator: 'CommandOrControl+T',
+					screens: ['Main'],
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'newTodo',
+						});
+					}
+				}, {
+					label: _('New notebook'),
+					screens: ['Main'],
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'newNotebook',
+						});
+					}
+				}, {
+					type: 'separator',
+				}, {
 					label: _('Import Evernote notes'),
-					click () {  }
+					click: () => {
+						const filePaths = bridge().showOpenDialog({
+							properties: ['openFile', 'createDirectory'],
+							filters: [
+								{ name: _('Evernote Export Files'), extensions: ['enex'] },
+							]
+						});
+						if (!filePaths || !filePaths.length) return;
+
+						this.dispatch({
+							type: 'NAV_GO',
+							routeName: 'Import',
+							props: {
+								filePath: filePaths[0],
+							},
+						});
+					}
+				}, {
+					type: 'separator',
 				}, {
 					label: _('Quit'),
 					accelerator: 'CommandOrControl+Q',
@@ -113,19 +185,34 @@ class Application extends BaseApplication {
 					click () { bridge().openExternal('http://joplin.cozic.net') }
 				}, {
 					label: _('About Joplin'),
-					click () {  }
+					click () { }
 				}]
 			},
-		]
+		];
 
-		const menu = Menu.buildFromTemplate(template)
-		Menu.setApplicationMenu(menu)
+		function removeUnwantedItems(template, screen) {
+			let output = [];
+			for (let i = 0; i < template.length; i++) {
+				const t = Object.assign({}, template[i]);
+				if (t.screens && t.screens.indexOf(screen) < 0) continue;
+				if (t.submenu) t.submenu = removeUnwantedItems(t.submenu, screen);
+				output.push(t);
+			}
+			return output;
+		}
+
+		let screenTemplate = removeUnwantedItems(template, screen);
+
+		const menu = Menu.buildFromTemplate(screenTemplate);
+		Menu.setApplicationMenu(menu);
+
+		this.lastMenuScreen_ = screen;
 	}
 
 	async start(argv) {
 		argv = await super.start(argv);
 
-		this.setupMenu();
+		this.updateMenu('Main');
 
 		this.initRedux();
 

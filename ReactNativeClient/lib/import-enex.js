@@ -12,7 +12,7 @@ const { time } = require('lib/time-utils.js');
 const Levenshtein = require('levenshtein');
 const jsSHA = require("jssha");
 
-const Promise = require('promise');
+//const Promise = require('promise');
 const fs = require('fs-extra');
 const stringToStream = require('string-to-stream')
 

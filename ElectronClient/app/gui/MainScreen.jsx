@@ -24,6 +24,12 @@ class MainScreenComponent extends React.Component {
 		});
 	}
 
+	componentWillReceiveProps(newProps) {
+		if (newProps.windowCommand) {
+			this.doCommand(newProps.windowCommand);
+		}
+	}
+
 	toggleVisiblePanes() {
 		let panes = this.state.noteVisiblePanes.slice();
 		if (panes.length === 2) {
@@ -35,6 +41,84 @@ class MainScreenComponent extends React.Component {
 		}
 
 		this.setState({ noteVisiblePanes: panes });
+	}
+
+	doCommand(command) {
+		if (!command) return;
+
+		const createNewNote = async (title, isTodo) => {
+			const folderId = Setting.value('activeFolderId');
+			if (!folderId) return;
+
+			const note = await Note.save({
+				title: title,
+				parent_id: folderId,
+				is_todo: isTodo ? 1 : 0,
+			});
+			Note.updateGeolocation(note.id);
+
+			this.props.dispatch({
+				type: 'NOTE_SELECT',
+				id: note.id,
+			});
+		}
+
+		let commandProcessed = true;
+
+		if (command.name === 'newNote') {
+			this.setState({
+				promptOptions: {
+					message: _('Note title:'),
+					onClose: async (answer) => {
+						if (answer) await createNewNote(answer, false);
+						this.setState({ promptOptions: null });
+					}
+				},
+			});
+		} else if (command.name === 'newTodo') {
+			this.setState({
+				promptOptions: {
+					message: _('To-do title:'),
+					onClose: async (answer) => {
+						if (answer) await createNewNote(answer, true);
+						this.setState({ promptOptions: null });
+					}
+				},
+			});
+		} else if (command.name === 'newNotebook') {
+			this.setState({
+				promptOptions: {
+					message: _('Notebook title:'),
+					onClose: async (answer) => {
+						if (answer) {
+							let folder = null;
+							try {
+								folder = await Folder.save({ title: answer }, { userSideValidation: true });		
+							} catch (error) {
+								bridge().showErrorMessageBox(error.message);
+								return;
+							}
+
+							this.props.dispatch({
+								type: 'FOLDER_SELECT',
+								id: folder.id,
+							});
+						}
+
+						this.setState({ promptOptions: null });
+					}
+				},
+			});
+		} else {
+			commandProcessed = false;
+		}
+
+		if (commandProcessed) {
+			this.props.dispatch({
+				type: 'WINDOW_COMMAND',
+				name: null,
+			});
+		}
 	}
 
 	render() {
@@ -74,85 +158,24 @@ class MainScreenComponent extends React.Component {
 			height: style.height,
 		};
 
-		const createNewNote = async (title, isTodo) => {
-			const folderId = Setting.value('activeFolderId');
-			if (!folderId) return;
-
-			const note = await Note.save({
-				title: title,
-				parent_id: folderId,
-				is_todo: isTodo ? 1 : 0,
-			});
-			Note.updateGeolocation(note.id);
-
-			this.props.dispatch({
-				type: 'NOTE_SELECT',
-				id: note.id,
-			});
-		}
-
 		const headerButtons = [];
 
 		headerButtons.push({
 			title: _('New note'),
 			iconName: 'fa-file-o',
-			onClick: () => {
-				this.setState({
-					promptOptions: {
-						message: _('Note title:'),
-						onClose: async (answer) => {
-							if (answer) await createNewNote(answer, false);
-							this.setState({ promptOptions: null });
-						}
-					},
-				});
-			},
+			onClick: () => { this.doCommand({ name: 'newNote' }) },
 		});
 				
 		headerButtons.push({
 			title: _('New to-do'),
 			iconName: 'fa-check-square-o',
-			onClick: () => {
-				this.setState({
-					promptOptions: {
-						message: _('Note title:'),
-						onClose: async (answer) => {
-							if (answer) await createNewNote(answer, true);
-							this.setState({ promptOptions: null });
-						}
-					},
-				});
-			},
+			onClick: () => { this.doCommand({ name: 'newTodo' }) },
 		});
 
 		headerButtons.push({
 			title: _('New notebook'),
 			iconName: 'fa-folder-o',
-			onClick: () => {
-				this.setState({
-					promptOptions: {
-						message: _('Notebook title:'),
-						onClose: async (answer) => {
-							if (answer) {
-								let folder = null;
-								try {
-									folder = await Folder.save({ title: answer }, { userSideValidation: true });		
-								} catch (error) {
-									bridge().showErrorMessageBox(error.message);
-									return;
-								}
-
-								this.props.dispatch({
-									type: 'FOLDER_SELECT',
-									id: folder.id,
-								});
-							}
-
-							this.setState({ promptOptions: null });
-						}
-					},
-				});
-			},
+			onClick: () => { this.doCommand({ name: 'newNotebook' }) },
 		});
 
 		headerButtons.push({
@@ -179,6 +202,7 @@ class MainScreenComponent extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		theme: state.settings.theme,
+		windowCommand: state.windowCommand,
 	};
 };
 

@@ -35,9 +35,6 @@ class HeaderComponent extends React.Component {
 		style.boxSizing = 'border-box';
 
 		const buttons = [];
-		if (showBackButton) {
-			buttons.push(this.makeButton('back', {}, { title: _('Back'), onClick: () => this.back_click() }));
-		}
 
 		const buttonStyle = {
 			height: theme.headerHeight,
@@ -52,6 +49,10 @@ class HeaderComponent extends React.Component {
 			boxSizing: 'border-box',
 			cursor: 'default',
 		};
+
+		if (showBackButton) {
+			buttons.push(this.makeButton('back', buttonStyle, { title: _('Back'), onClick: () => this.back_click(), iconName: 'fa-chevron-left ' }));
+		}
 
 		if (this.props.buttons) {
 			for (let i = 0; i < this.props.buttons.length; i++) {
