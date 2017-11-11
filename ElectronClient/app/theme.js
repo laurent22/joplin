@@ -56,6 +56,16 @@ globalStyle.lineInput = {
 	backgroundColor: globalStyle.backgroundColor,
 };
 
+globalStyle.textStyle = {
+	color: globalStyle.color,
+	fontFamily: globalStyle.fontFamily,
+	fontSize: globalStyle.fontSize,
+};
+
+globalStyle.textStyle2 = Object.assign({}, globalStyle.textStyle, {
+	color: globalStyle.color2,
+});
+
 let themeCache_ = {};
 
 function themeStyle(theme) {

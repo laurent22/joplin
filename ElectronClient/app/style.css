@@ -6,35 +6,11 @@ body, textarea {
 
 #react-root {
 	height: 100%;
+	overflow: hidden;
 }
-
-/*.item-list {
-	overflow-x: hidden;
-	overflow-y: scroll;
-}
-
-.note-list .item {
-	height: 40px;  This must match NoteList.itemHeight 
-	vertical-align: middle;
-	cursor: pointer;
-}
-
-.note-list .item.odd {
-	background-color: lightgray;
-}
-
-.note-list .selected {
-	font-weight: bold;
-}
-
-*/
 
 .note-list .list-item:hover {
 	background-color: rgba(0,160,255,0.1) !important;
-}
-
-.side-bar .selected {
-	font-weight: bold;
 }
 
 .side-bar .list-item:hover,

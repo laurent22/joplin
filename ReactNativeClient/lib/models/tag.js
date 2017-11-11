@@ -98,7 +98,38 @@ class Tag extends BaseItem {
 		return await Tag.modelSelectAll('SELECT * FROM tags WHERE id IN (SELECT DISTINCT tag_id FROM note_tags)');
 	}
 
+	static async tagsByNoteId(noteId) {
+		const tagIds = await NoteTag.tagIdsByNoteId(noteId);
+		return this.modelSelectAll('SELECT * FROM tags WHERE id IN ("' + tagIds.join('","') + '")');
+	}
+
+	static async setNoteTagsByTitles(noteId, tagTitles) {
+		const previousTags = await this.tagsByNoteId(noteId);
+		const addedTitles = [];
+
+		for (let i = 0; i < tagTitles.length; i++) {
+			const title = tagTitles[i].trim().toLowerCase();
+			if (!title) continue;
+			let tag = await this.loadByField('title', title);
+			if (!tag) tag = await Tag.save({ title: title }, { userSideValidation: true });
+			await this.addNote(tag.id, noteId);
+			addedTitles.push(title);
+		}
+
+		for (let i = 0; i < previousTags.length; i++) {
+			if (addedTitles.indexOf(previousTags[i].title) < 0) {
+				await this.removeNote(previousTags[i].id, noteId);
+			}
+		}
+	}
+
 	static async save(o, options = null) {
+		if (options.userSideValidation) {
+			if ('title' in o) {
+				o.title = o.title.trim().toLowerCase();
+			}
+		}
+
 		return super.save(o, options).then((tag) => {
 			this.dispatch({
 				type: 'TAG_UPDATE_ONE',

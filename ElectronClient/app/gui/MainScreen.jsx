@@ -6,6 +6,7 @@ const { NoteList } = require('./NoteList.min.js');
 const { NoteText } = require('./NoteText.min.js');
 const { PromptDialog } = require('./PromptDialog.min.js');
 const { Setting } = require('lib/models/setting.js');
+const { Tag } = require('lib/models/tag.js');
 const { Note } = require('lib/models/note.js');
 const { Folder } = require('lib/models/folder.js');
 const { themeStyle } = require('../theme.js');
@@ -17,8 +18,6 @@ class MainScreenComponent extends React.Component {
 
 	componentWillMount() {
 		this.setState({
-			newNotePromptVisible: false,
-			newFolderPromptVisible: false,
 			promptOptions: null,
 			noteVisiblePanes: ['editor', 'viewer'],
 		});
@@ -43,7 +42,7 @@ class MainScreenComponent extends React.Component {
 		this.setState({ noteVisiblePanes: panes });
 	}
 
-	doCommand(command) {
+	async doCommand(command) {
 		if (!command) return;
 
 		const createNewNote = async (title, isTodo) => {
@@ -68,7 +67,7 @@ class MainScreenComponent extends React.Component {
 		if (command.name === 'newNote') {
 			this.setState({
 				promptOptions: {
-					message: _('Note title:'),
+					label: _('Note title:'),
 					onClose: async (answer) => {
 						if (answer) await createNewNote(answer, false);
 						this.setState({ promptOptions: null });
@@ -78,7 +77,7 @@ class MainScreenComponent extends React.Component {
 		} else if (command.name === 'newTodo') {
 			this.setState({
 				promptOptions: {
-					message: _('To-do title:'),
+					label: _('To-do title:'),
 					onClose: async (answer) => {
 						if (answer) await createNewNote(answer, true);
 						this.setState({ promptOptions: null });
@@ -88,7 +87,7 @@ class MainScreenComponent extends React.Component {
 		} else if (command.name === 'newNotebook') {
 			this.setState({
 				promptOptions: {
-					message: _('Notebook title:'),
+					label: _('Notebook title:'),
 					onClose: async (answer) => {
 						if (answer) {
 							let folder = null;
@@ -105,6 +104,24 @@ class MainScreenComponent extends React.Component {
 							});
 						}
 
+						this.setState({ promptOptions: null });
+					}
+				},
+			});
+		} else if (command.name === 'setTags') {
+			const tags = await Tag.tagsByNoteId(command.noteId);
+			const tagTitles = tags.map((a) => { return a.title });
+
+			this.setState({
+				promptOptions: {
+					label: _('Add or remove tags:'),
+					description: _('Separate each tag by a comma.'),
+					value: tagTitles.join(', '),
+					onClose: async (answer) => {
+						if (answer !== null) {
+							const tagTitles = answer.split(',').map((a) => { return a.trim() });
+							await Tag.setNoteTagsByTitles(command.noteId, tagTitles);
+						}
 						this.setState({ promptOptions: null });
 					}
 				},
@@ -133,14 +150,14 @@ class MainScreenComponent extends React.Component {
 		const rowHeight = style.height - theme.headerHeight;
 
 		const sideBarStyle = {
-			width: Math.floor(layoutUtils.size(style.width * .2, 100, 300)),
+			width: Math.floor(layoutUtils.size(style.width * .2, 150, 300)),
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
 		};
 
 		const noteListStyle = {
-			width: Math.floor(layoutUtils.size(style.width * .2, 100, 300)),
+			width: Math.floor(layoutUtils.size(style.width * .2, 150, 300)),
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
@@ -188,7 +205,14 @@ class MainScreenComponent extends React.Component {
 
 		return (
 			<div style={style}>
-				<PromptDialog theme={this.props.theme} style={promptStyle} onClose={(answer) => promptOptions.onClose(answer)} message={promptOptions ? promptOptions.message : ''} visible={!!this.state.promptOptions}/>
+				<PromptDialog
+					value={promptOptions && promptOptions.value ? promptOptions.value : ''}
+					theme={this.props.theme}
+					style={promptStyle}
+					onClose={(answer) => promptOptions.onClose(answer)}
+					label={promptOptions ? promptOptions.label : ''}
+					description={promptOptions ? promptOptions.description : null}
+					visible={!!this.state.promptOptions} />
 				<Header style={headerStyle} showBackButton={false} buttons={headerButtons} />
 				<SideBar style={sideBarStyle} />
 				<NoteList itemHeight={40} style={noteListStyle} />

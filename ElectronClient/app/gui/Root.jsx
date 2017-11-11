@@ -13,11 +13,18 @@ const { app } = require('../app');
 const { bridge } = require('electron').remote.require('./bridge');
 
 async function initialize(dispatch) {
+	this.wcsTimeoutId_ = null;
+
 	bridge().window().on('resize', function() {
-		store.dispatch({
-			type: 'WINDOW_CONTENT_SIZE_SET',
-			size: bridge().windowContentSize(),
-		});
+		if (this.wcsTimeoutId_) clearTimeout(this.wcsTimeoutId_);
+
+		this.wcsTimeoutId_ = setTimeout(() => {
+			store.dispatch({
+				type: 'WINDOW_CONTENT_SIZE_SET',
+				size: bridge().windowContentSize(),
+			});
+			this.wcsTimeoutId_ = null;
+		}, 10);
 	});
 
 	store.dispatch({

@@ -28,7 +28,7 @@ class Command extends BaseCommand {
 
 		if (command == 'add') {
 			if (!notes.length) throw new Error(_('Cannot find "%s".', args.note));
-			if (!tag) tag = await Tag.save({ title: args.tag });
+			if (!tag) tag = await Tag.save({ title: args.tag }, { userSideValidation: true });
 			for (let i = 0; i < notes.length; i++) {
 				await Tag.addNote(tag.id, notes[i].id);
 			}

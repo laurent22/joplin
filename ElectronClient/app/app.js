@@ -86,7 +86,9 @@ class Application extends BaseApplication {
 				case 'WINDOW_COMMAND':
 
 					newState = Object.assign({}, state);
-					newState.windowCommand = { name: action.name };
+					let command = Object.assign({}, action);
+					delete command.type;
+					newState.windowCommand = command;
 					break;
 
 			}
