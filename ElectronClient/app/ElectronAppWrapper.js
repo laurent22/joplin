@@ -8,7 +8,6 @@ class ElectronAppWrapper {
 
 	constructor(electronApp) {
 		this.electronApp_ = electronApp;
-		//this.store_ = store;
 		this.win_ = null;
 	}
 

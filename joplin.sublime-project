@@ -16,14 +16,15 @@
 				"ReactNativeClient/locales/*",
 				"src/log.txt",
 				"*.min.js",
-				"ElectronClient/app/highlight/*.pack.js",
-				"ElectronClient/app/gui/note-viewer/css/font-awesome.min.css",
+				"ElectronClient/app/gui/note-viewer/highlight/*.pack.js",
+				"ElectronClient/app/css/font-awesome.min.css",
 				"_mydocs/mdtest/vendor/bin/html-to-markdown",
 			],
 			"folder_exclude_patterns":
 			[
 				"_mydocs/mdtest/Pages/Countries",
 				"_vieux",
+				"ElectronClient/app/fonts",
 				"CliClient/app/lib",
 				"CliClient/app/src",
 				"CliClient/build",
@@ -44,7 +45,7 @@
 				"ReactNativeClient/android/local.properties",
 				"ReactNativeClient/ios",
 				"ReactNativeClient/node_modules",
-				"ElectronClient/app/highlight/styles",
+				"ElectronClient/app/gui/note-viewer/highlight/styles",
 				"tests/logs",
 			],
 			"path": "."

@@ -14,7 +14,6 @@ const { Setting } = require('lib/models/setting.js');
 const { Logger } = require('lib/logger.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { shimInit } = require('lib/shim-init-node.js');
-
 const { bridge } = require('electron').remote.require('./bridge');
 
 const fsDriver = new FsDriverNode();

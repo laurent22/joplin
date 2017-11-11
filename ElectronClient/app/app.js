@@ -16,6 +16,10 @@ const { DatabaseDriverNode } = require('lib/database-driver-node.js');
 const { ElectronAppWrapper } = require('./ElectronAppWrapper');
 const { defaultState } = require('lib/reducer.js');
 
+const { bridge } = require('electron').remote.require('./bridge');
+const Menu = bridge().Menu;
+const MenuItem = bridge().MenuItem;
+
 const appDefaultState = Object.assign({}, defaultState, {
 	route: {
 		type: 'NAV_GO',
@@ -89,8 +93,39 @@ class Application extends BaseApplication {
 		return super.generalMiddleware(store, next, action);
 	}
 
+	setupMenu() {
+		const template = [
+			{
+				label: 'File',
+				submenu: [{
+					label: _('Import Evernote notes'),
+					click () {  }
+				}, {
+					label: _('Quit'),
+					accelerator: 'CommandOrControl+Q',
+					click: () => { bridge().electronApp().exit() }
+				}]
+			}, {
+				label: 'Help',
+				submenu: [{
+					label: _('Documentation'),
+					accelerator: 'F1',
+					click () { bridge().openExternal('http://joplin.cozic.net') }
+				}, {
+					label: _('About Joplin'),
+					click () {  }
+				}]
+			},
+		]
+
+		const menu = Menu.buildFromTemplate(template)
+		Menu.setApplicationMenu(menu)
+	}
+
 	async start(argv) {
 		argv = await super.start(argv);
+
+		this.setupMenu();
 
 		this.initRedux();
 
@@ -123,10 +158,4 @@ function app() {
 	return application_;
 }
 
-function initApp(electronApp) {
-	if (application_) throw new Error('Application has already been initialized');
-	application_ = new Application(electronApp);
-	return application_;
-}
-
-module.exports = { app, initApp };
+module.exports = { app };
