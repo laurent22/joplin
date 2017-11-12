@@ -34,6 +34,11 @@ async function initialize(dispatch) {
 		type: 'WINDOW_CONTENT_SIZE_SET',
 		size: bridge().windowContentSize(),
 	});
+
+	store.dispatch({
+		type: 'NOTE_VISIBLE_PANES_SET',
+		panes: Setting.value('noteVisiblePanes'),
+	});
 }
 
 class RootComponent extends React.Component {

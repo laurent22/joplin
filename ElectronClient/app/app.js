@@ -29,6 +29,7 @@ const appDefaultState = Object.assign({}, defaultState, {
 	navHistory: [],
 	fileToImport: null,
 	windowCommand: null,
+	noteVisiblePanes: ['editor', 'viewer'],
 }); 
 
 class Application extends BaseApplication {
@@ -91,6 +92,29 @@ class Application extends BaseApplication {
 					newState.windowCommand = command;
 					break;
 
+				case 'NOTE_VISIBLE_PANES_TOGGLE':
+
+					let panes = state.noteVisiblePanes.slice();
+					if (panes.length === 2) {
+						panes = ['editor'];
+					} else if (panes.indexOf('editor') >= 0) {
+						panes = ['viewer'];
+					} else if (panes.indexOf('viewer') >= 0) {
+						panes = ['editor', 'viewer'];
+					} else {
+						panes = ['editor', 'viewer'];
+					}
+
+					newState = Object.assign({}, state);
+					newState.noteVisiblePanes = panes;
+					break;
+
+				case 'NOTE_VISIBLE_PANES_SET':
+				
+					newState = Object.assign({}, state);
+					newState.noteVisiblePanes = action.panes;
+					break;
+
 			}
 		} catch (error) {
 			error.message = 'In reducer: ' + error.message + ' Action: ' + JSON.stringify(action);
@@ -108,13 +132,17 @@ class Application extends BaseApplication {
 
 		if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
 			if (!await reg.syncStarted()) reg.scheduleSync();
-		}	
+		}
 
 		const result = await super.generalMiddleware(store, next, action);
 		const newState = store.getState();
 
 		if (action.type === 'NAV_GO' || action.type === 'NAV_BACK') {
 			app().updateMenu(newState.route.routeName);
+		}
+
+		if (['NOTE_VISIBLE_PANES_TOGGLE', 'NOTE_VISIBLE_PANES_SET'].indexOf(action.type) >= 0) {
+			Setting.setValue('noteVisiblePanes', newState.noteVisiblePanes);
 		}
 
 		return result;
