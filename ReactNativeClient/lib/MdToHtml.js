@@ -324,7 +324,8 @@ class MdToHtml {
 				border: 1px solid ` + style.htmlDividerColor + `;
 			}
 			img {
-				width: 100%;
+				width: auto;
+				max-width: 100%;
 			}
 		`;
 
