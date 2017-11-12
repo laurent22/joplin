@@ -183,7 +183,6 @@ class SideBarComponent extends React.Component {
 		}
 
 		let lines = Synchronizer.reportToLines(this.props.syncReport);
-		console.info(lines);
 		const syncReportText = [];
 		for (let i = 0; i < lines.length; i++) {
 			syncReportText.push(<div key={i}>{lines[i]}</div>);
