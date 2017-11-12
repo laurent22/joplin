@@ -32,7 +32,7 @@ class Setting extends BaseModel {
 				if (!this.metadata_.hasOwnProperty(n)) continue;
 				this.keys_.push(n);
 			}
-			this.keys_.sort();
+			//this.keys_.sort();
 		}
 
 		if (appType || publicOnly) {
@@ -334,6 +334,12 @@ Setting.metadata_ = {
 	'locale': { value: defaultLocale(), type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Language'), options: () => {
 		return supportedLocalesToLanguages();
 	}},
+	'theme': { value: Setting.THEME_LIGHT, type: Setting.TYPE_INT, public: true, appTypes: ['mobile', 'desktop'], isEnum: true, label: () => _('Theme'), options: () => {
+		let output = {};
+		output[Setting.THEME_LIGHT] = _('Light');
+		output[Setting.THEME_DARK] = _('Dark');
+		return output;
+	}},
 	// 'logLevel': { value: Logger.LEVEL_INFO, type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Log level'), options: () => {
 	// 	return Logger.levelEnum();
 	// }},
@@ -344,7 +350,6 @@ Setting.metadata_ = {
 	// 	nonCompleted: _('Non-completed ones only'),
 	// })},
 	'uncompletedTodosOnTop': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Show uncompleted todos on top of the lists') },
-	'showAdvancedOptions': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile'], label: () => _('Show advanced options') },
 	'trackLocation': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Save geo-location with notes') },
 	'sync.interval': { value: 300, type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation interval'), options: () => {
 		return {
@@ -357,12 +362,7 @@ Setting.metadata_ = {
 			86400: _('%d hours', 24),
 		};
 	}},
-	'theme': { value: Setting.THEME_LIGHT, type: Setting.TYPE_INT, public: true, appTypes: ['mobile'], isEnum: true, label: () => _('Theme'), options: () => {
-		let output = {};
-		output[Setting.THEME_LIGHT] = _('Light');
-		output[Setting.THEME_DARK] = _('Dark');
-		return output;
-	}},
+	'showAdvancedOptions': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile', 'desktop'], label: () => _('Show advanced options') },
 };
 
 // Contains constants that are set by the application and

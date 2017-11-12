@@ -4,7 +4,7 @@ const { BaseApplication } = require('lib/BaseApplication');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const { Setting } = require('lib/models/setting.js');
 const { BaseModel } = require('lib/base-model.js');
-const { _ } = require('lib/locale.js');
+const { _, setLocale } = require('lib/locale.js');
 const os = require('os');
 const fs = require('fs-extra');
 const { Logger } = require('lib/logger.js');
@@ -101,9 +101,14 @@ class Application extends BaseApplication {
 	}
 
 	async generalMiddleware(store, next, action) {
+		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'locale' || action.type == 'SETTING_UPDATE_ALL') {
+			setLocale(Setting.value('locale'));
+			this.refreshMenu();
+		}
+
 		if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
 			if (!await reg.syncStarted()) reg.scheduleSync();
-		}
+		}	
 
 		const result = await super.generalMiddleware(store, next, action);
 		const newState = store.getState();
@@ -113,7 +118,12 @@ class Application extends BaseApplication {
 		}
 
 		return result;
+	}
 
+	refreshMenu() {
+		const screen = this.lastMenuScreen_;
+		this.lastMenuScreen_ = null;
+		this.updateMenu(screen);
 	}
 
 	updateMenu(screen) {
@@ -121,7 +131,7 @@ class Application extends BaseApplication {
 
 		const template = [
 			{
-				label: 'File',
+				label: _('File'),
 				submenu: [{
 					label: _('New note'),
 					accelerator: 'CommandOrControl+N',
@@ -180,14 +190,36 @@ class Application extends BaseApplication {
 					click: () => { bridge().electronApp().exit() }
 				}]
 			}, {
-				label: 'Help',
+				label: _('Tools'),
+				submenu: [{
+					label: _('Options'),
+					click: () => {
+						this.dispatch({
+							type: 'NAV_GO',
+							routeName: 'Config',
+						});
+					}
+				}]
+			}, {
+				label: _('Help'),
 				submenu: [{
 					label: _('Documentation'),
 					accelerator: 'F1',
 					click () { bridge().openExternal('http://joplin.cozic.net') }
 				}, {
 					label: _('About Joplin'),
-					click () { }
+					click: () => {
+						const p = require('./package.json');
+						let message = [
+							p.description,
+							'',
+							'Copyright © 2016-2017',
+							_('%s %s (%s)', p.name, p.version, Setting.value('env')),
+						];
+						bridge().showMessageBox({
+							message: message.join('\n'),
+						});
+					}
 				}]
 			},
 		];

@@ -33,6 +33,7 @@ class SideBarComponent extends React.Component {
 				display: 'flex',
 				alignItems: 'center',
 				cursor: 'default',
+				opacity: 0.8,
 			},
 			listItemSelected: {
 				backgroundColor: theme.selectedColor2,
@@ -68,7 +69,7 @@ class SideBarComponent extends React.Component {
 				fontFamily: theme.fontFamily,
 				fontSize: Math.round(theme.fontSize * .9),
 				color: theme.color2,
-				opacity: .8,
+				opacity: .5,
 				display: 'flex',
 				alignItems: 'left',
 				justifyContent: 'top',
@@ -147,7 +148,7 @@ class SideBarComponent extends React.Component {
 
 	makeHeader(key, label, iconName) {
 		const style = this.style().header;
-		const icon = <i style={{fontSize: style.fontSize * 1.2, marginRight: 5}} className={"icon " + iconName}></i>
+		const icon = <i style={{fontSize: style.fontSize * 1.2, marginRight: 5}} className={"fa " + iconName}></i>
 		return <div style={style} key={key}>{icon}{label}</div>
 	}
 
@@ -165,14 +166,14 @@ class SideBarComponent extends React.Component {
 
 		let items = [];
 
-		items.push(this.makeHeader('folderHeader', _('Notebooks'), 'ion-android-folder'));
+		items.push(this.makeHeader('folderHeader', _('Notebooks'), 'fa-folder-o'));
 
 		if (this.props.folders.length) {
 			const folderItems = shared.renderFolders(this.props, this.folderItem.bind(this));
 			items = items.concat(folderItems);
 		}
 
-		items.push(this.makeHeader('tagHeader', _('Tags'), 'ion-pricetags'));
+		items.push(this.makeHeader('tagHeader', _('Tags'), 'fa-tags'));
 
 		if (this.props.tags.length) {
 			const tagItems = shared.renderTags(this.props, this.tagItem.bind(this));

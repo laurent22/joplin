@@ -466,6 +466,111 @@ msgid ""
 "will be shared with any third party."
 msgstr ""
 
+msgid "Search:"
+msgstr ""
+
+msgid "New note"
+msgstr ""
+
+msgid "New to-do"
+msgstr ""
+
+msgid "New notebook"
+msgstr ""
+
+msgid "Import Evernote notes"
+msgstr ""
+
+msgid "Evernote Export Files"
+msgstr ""
+
+msgid "Quit"
+msgstr ""
+
+msgid "Tools"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Help"
+msgstr ""
+
+msgid "Documentation"
+msgstr ""
+
+msgid "About Joplin"
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgstr ""
+
+msgid "Note title:"
+msgstr ""
+
+msgid "To-do title:"
+msgstr ""
+
+msgid "Notebook title:"
+msgstr ""
+
+msgid "Add or remove tags:"
+msgstr ""
+
+msgid "Separate each tag by a comma."
+msgstr ""
+
+msgid "Layout"
+msgstr ""
+
+msgid "Add or remove tags"
+msgstr ""
+
+msgid "Switch between note and to-do"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr ""
+
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr ""
+
+msgid "Attach file"
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+msgid "Delete notebook?"
+msgstr ""
+
+msgid "Remove this tag from all the notes?"
+msgstr ""
+
+msgid "Notebooks"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
+msgid "Synchronise"
+msgstr ""
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr ""
@@ -597,10 +702,16 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-msgid "Show uncompleted todos on top of the lists"
+msgid "Theme"
 msgstr ""
 
-msgid "Show advanced options"
+msgid "Light"
+msgstr ""
+
+msgid "Dark"
+msgstr ""
+
+msgid "Show uncompleted todos on top of the lists"
 msgstr ""
 
 msgid "Save geo-location with notes"
@@ -624,13 +735,7 @@ msgstr ""
 msgid "%d hours"
 msgstr ""
 
-msgid "Theme"
-msgstr ""
-
-msgid "Light"
-msgstr ""
-
-msgid "Dark"
+msgid "Show advanced options"
 msgstr ""
 
 msgid "Sync status (synced items / total items)"
@@ -659,15 +764,6 @@ msgstr ""
 msgid "%s: %d notes"
 msgstr ""
 
-msgid "New to-do"
-msgstr ""
-
-msgid "New note"
-msgstr ""
-
-msgid "New notebook"
-msgstr ""
-
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 
@@ -680,9 +776,6 @@ msgstr ""
 msgid "Configuration"
 msgstr ""
 
-msgid "Synchronise"
-msgstr ""
-
 msgid "Cancel synchronisation"
 msgstr ""
 
@@ -693,9 +786,6 @@ msgstr ""
 msgid "Edit notebook"
 msgstr ""
 
-msgid "Refresh"
-msgstr ""
-
 msgid "This note has been modified:"
 msgstr ""
 
@@ -703,12 +793,6 @@ msgid "Save changes"
 msgstr ""
 
 msgid "Discard changes"
-msgstr ""
-
-msgid "Cancel"
-msgstr ""
-
-msgid "Attach file"
 msgstr ""
 
 msgid "Delete note"
@@ -730,9 +814,6 @@ msgid "View location on map"
 msgstr ""
 
 msgid "Edit"
-msgstr ""
-
-msgid "Delete notebook?"
 msgstr ""
 
 msgid "Delete notebook"

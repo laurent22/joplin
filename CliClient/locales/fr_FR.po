@@ -516,6 +516,122 @@ msgstr ""
 "aucun fichier en dehors de ce répertoire, ni à d'autres données "
 "personnelles. Aucune donnée ne sera partagé avec aucun tier."
 
+#, fuzzy
+msgid "Search:"
+msgstr "Chercher"
+
+msgid "New note"
+msgstr "Nouvelle note"
+
+msgid "New to-do"
+msgstr "Nouvelle tâche"
+
+msgid "New notebook"
+msgstr "Nouveau carnet"
+
+msgid "Import Evernote notes"
+msgstr "Importer notes d'Evernotes"
+
+msgid "Evernote Export Files"
+msgstr "Fichiers d'export Evernote"
+
+msgid "Quit"
+msgstr "Quitter"
+
+msgid "Tools"
+msgstr "Outils"
+
+msgid "Options"
+msgstr "Options"
+
+msgid "Help"
+msgstr "Aide"
+
+msgid "Documentation"
+msgstr "Documentation"
+
+msgid "About Joplin"
+msgstr "A props de Joplin"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Cancel"
+msgstr "Annulation"
+
+msgid "Back"
+msgstr "Retour"
+
+#, fuzzy, javascript-format
+msgid ""
+"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgstr ""
+"Un nouveau carnet \"%s\" va être créé et le fichier \"%s\" va être importé "
+"dedans. Continuer ?"
+
+#, fuzzy
+msgid "Note title:"
+msgstr "cat <titre>"
+
+#, fuzzy
+msgid "To-do title:"
+msgstr "cat <titre>"
+
+#, fuzzy
+msgid "Notebook title:"
+msgstr "cat <titre>"
+
+msgid "Add or remove tags:"
+msgstr "Modifier les étiquettes"
+
+msgid "Separate each tag by a comma."
+msgstr ""
+
+msgid "Layout"
+msgstr ""
+
+msgid "Add or remove tags"
+msgstr ""
+
+msgid "Switch between note and to-do"
+msgstr ""
+
+#, fuzzy
+msgid "Delete"
+msgstr "Supprimer la note"
+
+#, fuzzy
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr ""
+"Vous n'avez pour l'instant pas de carnets. Créez-en un en pressant le bouton "
+"(+)."
+
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr ""
+
+msgid "Attach file"
+msgstr "Attacher un fichier"
+
+msgid "Refresh"
+msgstr "Rafraîchir"
+
+msgid "Delete notebook?"
+msgstr "Supprimer le carnet ?"
+
+msgid "Remove this tag from all the notes?"
+msgstr ""
+
+#, fuzzy
+msgid "Notebooks"
+msgstr "Nouveau carnet"
+
+msgid "Tags"
+msgstr ""
+
+msgid "Synchronise"
+msgstr "Synchroniser"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Utilisation : %s"
@@ -657,11 +773,17 @@ msgstr ""
 msgid "Language"
 msgstr "Langue"
 
+msgid "Theme"
+msgstr "Apparence"
+
+msgid "Light"
+msgstr "Clair"
+
+msgid "Dark"
+msgstr "Sombre"
+
 msgid "Show uncompleted todos on top of the lists"
 msgstr "Tâches non-terminées en haut des listes"
-
-msgid "Show advanced options"
-msgstr "Montrer les options avancées"
 
 msgid "Save geo-location with notes"
 msgstr "Enregistrer l'emplacement avec les notes"
@@ -684,14 +806,8 @@ msgstr "%d heure"
 msgid "%d hours"
 msgstr "%d heures"
 
-msgid "Theme"
-msgstr "Apparence"
-
-msgid "Light"
-msgstr "Clair"
-
-msgid "Dark"
-msgstr "Sombre"
+msgid "Show advanced options"
+msgstr "Montrer les options avancées"
 
 msgid "Sync status (synced items / total items)"
 msgstr "Status de la synchronisation (objets synchro. / total)"
@@ -719,15 +835,6 @@ msgstr "Carnets"
 msgid "%s: %d notes"
 msgstr "%s : %d notes"
 
-msgid "New to-do"
-msgstr "Nouvelle tâche"
-
-msgid "New note"
-msgstr "Nouvelle note"
-
-msgid "New notebook"
-msgstr "Nouveau carnet"
-
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 "Ce carnet ne contient aucune note. Créez-en une en appuyant sur le bouton "
@@ -742,9 +849,6 @@ msgstr "Etat"
 msgid "Configuration"
 msgstr "Configuration"
 
-msgid "Synchronise"
-msgstr "Synchroniser"
-
 msgid "Cancel synchronisation"
 msgstr "Annuler synchronisation"
 
@@ -755,9 +859,6 @@ msgstr "Ce carnet n'a pas pu être sauvegardé : %s"
 msgid "Edit notebook"
 msgstr "Editer le carnet"
 
-msgid "Refresh"
-msgstr "Rafraîchir"
-
 msgid "This note has been modified:"
 msgstr "Cette note a été modifiée :"
 
@@ -766,12 +867,6 @@ msgstr "Enregistrer les changements"
 
 msgid "Discard changes"
 msgstr "Ignorer les changements"
-
-msgid "Cancel"
-msgstr "Annulation"
-
-msgid "Attach file"
-msgstr "Attacher un fichier"
 
 msgid "Delete note"
 msgstr "Supprimer la note"
@@ -793,9 +888,6 @@ msgstr "Voir l'emplacement sur la carte"
 
 msgid "Edit"
 msgstr "Editer"
-
-msgid "Delete notebook?"
-msgstr "Supprimer le carnet ?"
 
 msgid "Delete notebook"
 msgstr "Supprimer le carnet"
@@ -924,9 +1016,6 @@ msgstr "Bienvenue"
 #~ msgid "Usage: --log-level <none|error|warn|info|debug>"
 #~ msgstr "Utilisation: --log-level <none|error|warn|info|debug>"
 
-#~ msgid "cat <title>"
-#~ msgstr "cat <titre>"
-
 #~ msgid "config [name] [value]"
 #~ msgstr "config [nom] [valeur]"
 
@@ -935,10 +1024,6 @@ msgstr "Bienvenue"
 
 #~ msgid "edit <title>"
 #~ msgstr "edit <titre>"
-
-#, fuzzy
-#~ msgid "geoloc <title>"
-#~ msgstr "cat <titre>"
 
 #~ msgid "import-enex <file> [notebook]"
 #~ msgstr "import-enex <fichier> [carnet]"

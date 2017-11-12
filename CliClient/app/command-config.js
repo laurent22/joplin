@@ -33,6 +33,7 @@ class Command extends BaseCommand {
 
 		if (!args.name && !args.value) {
 			let keys = Setting.keys(!verbose, 'cli');
+			keys.sort();
 			for (let i = 0; i < keys.length; i++) {
 				const value = Setting.value(keys[i]);
 				if (!verbose && !value) continue;

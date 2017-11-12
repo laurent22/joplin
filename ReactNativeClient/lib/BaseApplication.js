@@ -216,6 +216,10 @@ class BaseApplication {
 			await this.refreshNotes(Folder.modelType(), newState.selectedFolderId);
 		}
 
+		if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && action.key == 'uncompletedTodosOnTop' || action.type == 'SETTING_UPDATE_ALL') {
+			await this.refreshNotes(Folder.modelType(), newState.selectedFolderId);
+		}
+
 		if (action.type == 'TAG_SELECT') {
 			await this.refreshNotes(Tag.modelType(), action.id);
 		}
