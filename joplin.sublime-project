@@ -35,6 +35,7 @@
 				"CliClient/tests/fuzzing",
 				"CliClient/tests/src",
 				"CliClient/tests/sync",
+				"ElectronClient/dist",
 				"ElectronClient/build",
 				"ElectronClient/app/lib",
 				"ElectronClient/app/locale",

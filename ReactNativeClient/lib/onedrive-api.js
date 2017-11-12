@@ -177,32 +177,8 @@ class OneDriveApi {
 					response = await shim.fetchBlob(url, options);
 				}
 			} catch (error) {
-				// let canRetry = true;
-
-				// if (error.message == 'Network request failed') {
-				// 	// Unfortunately the error 'Network request failed' doesn't have a type
-				// 	// or error code, so hopefully that message won't change and is not localized
-				// } else if (error.code == 'ECONNRESET') {
-				// 	// request to https://public-ch3302....1fab24cb1bd5f.md failed, reason: socket hang up"
-				// } else if (error.code == 'ENOTFOUND') {
-				// 	// OneDrive (or Node?) sometimes sends back a "not found" error for resources
-				// 	// that definitely exist and in this case repeating the request works.
-				// 	// Error is:
-				// 	// request to https://graph.microsoft.com/v1.0/drive/special/approot failed, reason: getaddrinfo ENOTFOUND graph.microsoft.com graph.microsoft.com:443
-				// } else if (error.message.indexOf('network timeout') === 0) {
-				// 	// network timeout at: https://public-ch3302...859f9b0e3ab.md
-				// } else {
-				// 	canRetry = false;
-				// }
-
-				// if (canRetry) {
-				// 	this.logger().info('Got error code ' + error.code + ': ' + error.message + ' - retrying (' + i + ')...');
-				// 	await time.sleep((i + 1) * 3);
-				// 	continue;
-				// } else {
 				this.logger().error('Got unhandled error:', error ? error.code : '', error ? error.message : '', error);
 				throw error;
-				//}
 			}
 
 			if (!response.ok) {

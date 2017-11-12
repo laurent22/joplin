@@ -5,7 +5,9 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "repository": {
     "type": "git",
@@ -16,12 +18,15 @@
   "bugs": {
     "url": "https://github.com/laurent22/joplin/issues"
   },
+ "build": {
+   "appId": "net.cozic.joplin-desktop"
+ },
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.24.1",
     "electron": "^1.7.9",
-    "electron-builder": "^19.43.4",
+    "electron-builder": "^19.45.4",
     "electron-rebuild": "^1.6.0"
   },
   "dependencies": {
