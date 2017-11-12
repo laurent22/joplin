@@ -3,6 +3,8 @@ const { render } = require('react-dom');
 const { createStore } = require('redux');
 const { connect, Provider } = require('react-redux');
 
+const { _ } = require('lib/locale.js');
+
 const { MainScreen } = require('./MainScreen.min.js');
 const { OneDriveLoginScreen } = require('./OneDriveLoginScreen.min.js');
 const { ImportScreen } = require('./ImportScreen.min.js');
@@ -60,9 +62,9 @@ class RootComponent extends React.Component {
 
 		const screens = {
 			Main: { screen: MainScreen },
-			OneDriveLogin: { screen: OneDriveLoginScreen },
-			Import: { screen: ImportScreen },
-			Config: { screen: ConfigScreen },
+			OneDriveLogin: { screen: OneDriveLoginScreen, title: () => _('OneDrive Login') },
+			Import: { screen: ImportScreen, title: () => _('Import') },
+			Config: { screen: ConfigScreen, title: () => _('Configuration') },
 		};
 
 		return (
