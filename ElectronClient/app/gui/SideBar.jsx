@@ -38,6 +38,10 @@ class SideBarComponent extends React.Component {
 			listItemSelected: {
 				backgroundColor: theme.selectedColor2,
 			},
+			conflictFolder: {
+				color: theme.colorError2,
+				fontWeight: 'bold',
+			},
 			header: {
 				height: itemHeight * 1.8,
 				fontFamily: theme.fontFamily,
@@ -134,6 +138,7 @@ class SideBarComponent extends React.Component {
 	folderItem(folder, selected) {
 		let style = Object.assign({}, this.style().listItem);
 		if (selected) style = Object.assign(style, this.style().listItemSelected);
+		if (folder.id === Folder.conflictFolderId()) style = Object.assign(style, this.style().conflictFolder);
 		return <a className="list-item" href="#" data-id={folder.id} data-type={BaseModel.TYPE_FOLDER} onContextMenu={(event) => this.itemContextMenu(event)} key={folder.id} style={style} onClick={() => {this.folderItem_click(folder)}}>{folder.title}</a>
 	}
 

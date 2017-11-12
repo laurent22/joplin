@@ -1,3 +1,5 @@
+require('app-module-path').addPath(__dirname);
+
 const { time } = require('lib/time-utils.js');
 const { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId } = require('test-utils.js');
 const { Folder } = require('lib/models/folder.js');

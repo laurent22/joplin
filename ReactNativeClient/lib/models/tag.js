@@ -124,7 +124,7 @@ class Tag extends BaseItem {
 	}
 
 	static async save(o, options = null) {
-		if (options.userSideValidation) {
+		if (options && options.userSideValidation) {
 			if ('title' in o) {
 				o.title = o.title.trim().toLowerCase();
 			}

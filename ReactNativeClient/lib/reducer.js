@@ -1,4 +1,5 @@
 const { Note } = require('lib/models/note.js');
+const { Folder } = require('lib/models/folder.js');
 
 const defaultState = {
 	notes: [],
@@ -160,6 +161,12 @@ const reducer = (state = defaultState, action) => {
 
 				const modNote = action.note;
 
+				const noteIsInFolder = function(note, folderId) {
+					if (note.is_conflict) return folderId === Folder.conflictFolderId();
+					if (!('parent_id' in modNote) || note.parent_id == folderId) return true;
+					return false;
+				}
+
 				let noteFolderHasChanged = false;
 				let newNotes = state.notes.slice();
 				var found = false;
@@ -168,7 +175,7 @@ const reducer = (state = defaultState, action) => {
 					if (n.id == modNote.id) {
 
 						// Note is still in the same folder
-						if (!('parent_id' in modNote) || modNote.parent_id == n.parent_id) {
+						if (noteIsInFolder(modNote, n.parent_id)) {
 							// Merge the properties that have changed (in modNote) into
 							// the object we already have.
 							newNotes[i] = Object.assign({}, newNotes[i]);
@@ -187,7 +194,13 @@ const reducer = (state = defaultState, action) => {
 					}
 				}
 
-				if (!found && ('parent_id' in modNote) && modNote.parent_id == state.selectedFolderId) newNotes.push(modNote);
+				// Note was not found - if the current folder is the same as the note folder,
+				// add it to it.
+				if (!found) {
+					if (noteIsInFolder(modNote, state.selectedFolderId)) {
+						newNotes.push(modNote);
+					}
+				}
 
 				newNotes = Note.sortNotes(newNotes, state.notesOrder, newState.settings.uncompletedTodosOnTop);
 				newState = Object.assign({}, state);

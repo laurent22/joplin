@@ -136,8 +136,6 @@ class BaseApplication {
 		process.exit(code);
 	}
 
-	//async refreshNotes(parentType, parentId) {
-	//async refreshNotes(parentType, parentId) {
 	async refreshNotes(state) {
 		let parentType = state.notesParentType;
 		let parentId = null;
@@ -243,6 +241,13 @@ class BaseApplication {
 
 		if (action.type == 'SEARCH_SELECT' || action.type === 'SEARCH_DELETE') {
 			await this.refreshNotes(newState);
+		}
+
+		if (action.type === 'NOTE_UPDATE_ONE') {
+			// If there is a conflict, we refresh the folders so as to display "Conflicts" folder
+			if (action.note && action.note.is_conflict) {
+				await FoldersScreenUtils.refreshFolders();
+			}
 		}
 
 		if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && action.key == 'sync.interval' || action.type == 'SETTING_UPDATE_ALL') {

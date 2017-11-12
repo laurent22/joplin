@@ -30,6 +30,7 @@
 				"CliClient/build",
 				"CliClient/node_modules",
 				"CliClient/tests-build",
+				"CliClient/tests-build/lib",
 				"CliClient/tests/fuzzing -*",
 				"CliClient/tests/fuzzing",
 				"CliClient/tests/src",
