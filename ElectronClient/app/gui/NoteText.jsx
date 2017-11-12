@@ -58,7 +58,7 @@ class NoteTextComponent extends React.Component {
 
 	mdToHtml() {
 		if (this.mdToHtml_) return this.mdToHtml_;
-		this.mdToHtml_ = new MdToHtml();
+		this.mdToHtml_ = new MdToHtml({ supportsResourceLinks: true });
 		return this.mdToHtml_;
 	}
 
@@ -175,6 +175,12 @@ class NoteTextComponent extends React.Component {
 		} else if (msg === 'percentScroll') {
 			this.ignoreNextEditorScroll_ = true;
 			this.setEditorPercentScroll(arg0);
+		} else if (msg.indexOf('joplin://') === 0) {
+			const resourceId = msg.substr('joplin://'.length);
+			Resource.load(resourceId).then((resource) => {
+				const filePath = Resource.fullPath(resource);
+				bridge().openItem(filePath);
+			});
 		} else {
 			bridge().showMessageBox({
 				type: 'error',

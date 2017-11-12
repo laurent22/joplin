@@ -7,7 +7,10 @@ const md5 = require('md5');
 
 class MdToHtml {
 
-	constructor() {
+	constructor(options = null) {
+		if (!options) options = {};
+
+		this.supportsResourceLinks_ = !!options.supportsResourceLinks;
 		this.loadedResources_ = {};
 		this.cachedContent_ = null;
 		this.cachedContentKey_ = null;
@@ -118,15 +121,21 @@ class MdToHtml {
 	}
 
 	renderOpenLink_(attrs, options) {
-		const href = this.getAttr_(attrs, 'href');
+		let href = this.getAttr_(attrs, 'href');
 		const title = this.getAttr_(attrs, 'title');
 		const text = this.getAttr_(attrs, 'text');
+		const isResourceUrl = Resource.isResourceUrl(href);
 
-		if (Resource.isResourceUrl(href)) {
+		if (isResourceUrl && !this.supportsResourceLinks_) {
 			// In mobile, links to local resources, such as PDF, etc. currently aren't supported.
 			// Ideally they should be opened in the user's browser.
-			return '[Resource not yet supported: ' + htmlentities(text) + ']';
+			return '[Resource not yet supported: '; //+ htmlentities(text) + ']';
 		} else {
+			if (isResourceUrl) {
+				const resourceId = Resource.pathToId(href);
+				href = 'joplin://' + resourceId;
+			}
+
 			const js = options.postMessageSyntax + "(" + JSON.stringify(href) + "); return false;";
 			let output = "<a title='" + htmlentities(title) + "' href='#' onclick='" + js + "'>";
 			return output;
@@ -135,9 +144,10 @@ class MdToHtml {
 
 	renderCloseLink_(attrs, options) {
 		const href = this.getAttr_(attrs, 'href');
+		const isResourceUrl = Resource.isResourceUrl(href);
 
-		if (Resource.isResourceUrl(href)) {
-			return '';
+		if (isResourceUrl && !this.supportsResourceLinks_) {
+			return ']';
 		} else {
 			return '</a>';
 		}
