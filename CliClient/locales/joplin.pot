@@ -469,6 +469,9 @@ msgstr ""
 msgid "Search:"
 msgstr ""
 
+msgid "File"
+msgstr ""
+
 msgid "New note"
 msgstr ""
 
@@ -554,6 +557,15 @@ msgid "Attach file"
 msgstr ""
 
 msgid "Refresh"
+msgstr ""
+
+msgid "OneDrive Login"
+msgstr ""
+
+msgid "Import"
+msgstr ""
+
+msgid "Configuration"
 msgstr ""
 
 msgid "Delete notebook?"
@@ -771,9 +783,6 @@ msgid "Log"
 msgstr ""
 
 msgid "Status"
-msgstr ""
-
-msgid "Configuration"
 msgstr ""
 
 msgid "Cancel synchronisation"

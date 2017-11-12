@@ -520,6 +520,9 @@ msgstr ""
 msgid "Search:"
 msgstr "Chercher"
 
+msgid "File"
+msgstr ""
+
 msgid "New note"
 msgstr "Nouvelle note"
 
@@ -615,6 +618,17 @@ msgstr "Attacher un fichier"
 
 msgid "Refresh"
 msgstr "Rafraîchir"
+
+#, fuzzy
+msgid "OneDrive Login"
+msgstr "OneDrive"
+
+#, fuzzy
+msgid "Import"
+msgstr "Importé - %s"
+
+msgid "Configuration"
+msgstr "Configuration"
 
 msgid "Delete notebook?"
 msgstr "Supprimer le carnet ?"
@@ -846,9 +860,6 @@ msgstr "Journal"
 msgid "Status"
 msgstr "Etat"
 
-msgid "Configuration"
-msgstr "Configuration"
-
 msgid "Cancel synchronisation"
 msgstr "Annuler synchronisation"
 
@@ -1059,9 +1070,6 @@ msgstr "Bienvenue"
 #~ msgstr ""
 #~ "Tous les ports sont en cours d'utilisation. Veuillez signaler ce problème "
 #~ "sur %s"
-
-#~ msgid "Imported - %s"
-#~ msgstr "Importé - %s"
 
 #~ msgid ""
 #~ "There is currently no notebook. Create one by clicking on the (+) button."

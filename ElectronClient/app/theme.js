@@ -1,7 +1,7 @@
 const { Setting } = require('lib/models/setting.js');
 
 const globalStyle = {
-	fontSize: 13,
+	fontSize: 12,
 	fontFamily: 'sans-serif',
 	margin: 15, // No text and no interactive component should be within this margin
 	itemMarginTop: 10,

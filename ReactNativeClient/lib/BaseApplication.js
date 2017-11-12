@@ -136,10 +136,27 @@ class BaseApplication {
 		process.exit(code);
 	}
 
-	async refreshNotes(parentType, parentId) {
-		this.logger().debug('Refreshing notes:', parentType, parentId);
+	//async refreshNotes(parentType, parentId) {
+	//async refreshNotes(parentType, parentId) {
+	async refreshNotes(state) {
+		let parentType = state.notesParentType;
+		let parentId = null;
+		
+		if (parentType === 'Folder') {
+			parentId = state.selectedFolderId;
+			parentType = BaseModel.TYPE_FOLDER;
+		} else if (parentType === 'Note') {
+			parentId = state.selectedNoteId;
+			parentType = BaseModel.TYPE_NOTE;
+		} else if (parentType === 'Tag') {
+			parentId = state.selectedTagId;
+			parentType = BaseModel.TYPE_TAG;
+		} else if (parentType === 'Search') {
+			parentId = state.selectedSearchId;
+			parentType = BaseModel.TYPE_SEARCH;
+		}
 
-		const state = this.store().getState();
+		this.logger().debug('Refreshing notes:', parentType, parentId);
 
 		let options = {
 			order: state.notesOrder,
@@ -213,19 +230,19 @@ class BaseApplication {
 		if (action.type == 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE') {
 			Setting.setValue('activeFolderId', newState.selectedFolderId);
 			this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
-			await this.refreshNotes(Folder.modelType(), newState.selectedFolderId);
+			await this.refreshNotes(newState);
 		}
 
 		if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && action.key == 'uncompletedTodosOnTop' || action.type == 'SETTING_UPDATE_ALL') {
-			await this.refreshNotes(Folder.modelType(), newState.selectedFolderId);
+			await this.refreshNotes(newState);
 		}
 
-		if (action.type == 'TAG_SELECT') {
-			await this.refreshNotes(Tag.modelType(), action.id);
+		if (action.type == 'TAG_SELECT' || action.type === 'TAG_DELETE') {
+			await this.refreshNotes(newState);
 		}
 
-		if (action.type == 'SEARCH_SELECT') {
-			await this.refreshNotes(BaseModel.TYPE_SEARCH, action.id);
+		if (action.type == 'SEARCH_SELECT' || action.type === 'SEARCH_DELETE') {
+			await this.refreshNotes(newState);
 		}
 
 		if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && action.key == 'sync.interval' || action.type == 'SETTING_UPDATE_ALL') {

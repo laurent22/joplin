@@ -61,6 +61,10 @@ function handleItemDelete(state, action) {
 	const newIndex = previousIndex >= 0 ? newItems[previousIndex].id : null;
 	newState[selectedItemKey] = newIndex;
 
+	if (!newIndex && newState.notesParentType !== 'Folder') {
+		newState.notesParentType = 'Folder';
+	}
+
 	return newState;
 }
 
