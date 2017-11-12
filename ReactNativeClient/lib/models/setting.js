@@ -346,7 +346,7 @@ Setting.metadata_ = {
 	'locale': { value: defaultLocale(), type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Language'), options: () => {
 		return supportedLocalesToLanguages();
 	}},
-	'theme': { value: Setting.THEME_LIGHT, type: Setting.TYPE_INT, public: true, appTypes: ['mobile', 'desktop'], isEnum: true, label: () => _('Theme'), options: () => {
+	'theme': { value: Setting.THEME_LIGHT, type: Setting.TYPE_INT, public: true, appTypes: ['mobile'], isEnum: true, label: () => _('Theme'), options: () => {
 		let output = {};
 		output[Setting.THEME_LIGHT] = _('Light');
 		output[Setting.THEME_DARK] = _('Dark');
@@ -374,7 +374,7 @@ Setting.metadata_ = {
 			86400: _('%d hours', 24),
 		};
 	}},
-	'showAdvancedOptions': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile', 'desktop'], label: () => _('Show advanced options') },
+	'showAdvancedOptions': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile' ], label: () => _('Show advanced options') },
 	'noteVisiblePanes': { value: ['editor', 'viewer'], type: Setting.TYPE_ARRAY, public: false, appTypes: ['desktop'] },
 };
 

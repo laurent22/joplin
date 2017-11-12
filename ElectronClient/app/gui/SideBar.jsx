@@ -73,6 +73,7 @@ class SideBarComponent extends React.Component {
 				display: 'flex',
 				alignItems: 'left',
 				justifyContent: 'top',
+				flexDirection: 'column',
 				marginTop: 10,
 				marginLeft: 5,
 				marginRight: 5,
@@ -182,8 +183,11 @@ class SideBarComponent extends React.Component {
 		}
 
 		let lines = Synchronizer.reportToLines(this.props.syncReport);
-		while (lines.length < 10) lines.push(''); // Add blank lines so that height of report text is fixed and doesn't affect scrolling
-		const syncReportText = lines.join("\n");
+		console.info(lines);
+		const syncReportText = [];
+		for (let i = 0; i < lines.length; i++) {
+			syncReportText.push(<div key={i}>{lines[i]}</div>);
+		}
 
 		items.push(this.synchronizeButton(this.props.syncStarted ? _('Cancel') : _('Synchronise')));
 

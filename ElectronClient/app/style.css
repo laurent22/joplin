@@ -15,12 +15,23 @@ body, textarea {
 
 .side-bar .list-item:hover,
 .side-bar .synchronize-button:hover {
-	background-color: #533d7d;
+	background-color: #453E53;
+}
+
+.side-bar .list-item:active,
+.side-bar .synchronize-button:active {
+	background-color: #564B6C;
 }
 
 .header .button:hover {
 	background-color: rgba(0,160,255,0.1);
 	border: 1px solid rgba(0,160,255,0.5);
+	box-sizing: 'border-box';
+}
+
+.header .button:active {
+	background-color: rgba(0,160,255,0.2);
+	border: 1px solid rgba(0,160,255,0.7);
 	box-sizing: 'border-box';
 }
 
@@ -31,5 +42,11 @@ body, textarea {
 .icon-button:hover {
 	background-color: rgba(0,0,0,0.05) !important;
 	border: 1px solid rgba(0,0,0,0.10);
+	border-radius: 5px;
+}
+
+.icon-button:active {
+	background-color: rgba(0,0,0,0.10) !important;
+	border: 1px solid rgba(0,0,0,0.15);
 	border-radius: 5px;
 }

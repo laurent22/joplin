@@ -131,4 +131,18 @@ contentElement.addEventListener('scroll', function(e) {
 	const m = maxScrollTop();
 	ipcRenderer.sendToHost('percentScroll', m ? contentElement.scrollTop / m : 0);
 });
+
+// Disable drag and drop otherwise it's possible to drop a URL
+// on it and it will open in the view as a website.
+document.addEventListener('drop', function(e) {
+	e.preventDefault();
+	e.stopPropagation();
+});
+document.addEventListener('dragover', function(e) {
+	e.preventDefault();
+	e.stopPropagation();
+});
+webview.addEventListener('dragover', function(e) {
+	e.preventDefault();
+});
 </script>
