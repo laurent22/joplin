@@ -26,3 +26,5 @@ script:
     cd ElectronClient/app
     npm install
     yarn dist
+
+# r
