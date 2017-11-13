@@ -24,7 +24,7 @@ The demo application shows various Wikipedia articles converted to Markdown and 
 
 To start it, type `demo-joplin`.
 
-# Features
+# Features 
 
 - Mobile and command line applications.
 - Support notes, to-dos, tags and notebooks.
