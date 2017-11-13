@@ -4,7 +4,8 @@ platform:
   - x64
 
 cache:
-  - node_modules
+  # Not caching node_modules because appveyor doesn't restore it afterwards (not sure why)
+  # - node_modules
   - '%USERPROFILE%\.electron'
 
 install:
