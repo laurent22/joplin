@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "pack": "electron-builder --dir",
+    "pack": "node_modules/.bin/electron-builder --dir",
     "dist": "node_modules/.bin/electron-builder"
   },
   "repository": {
@@ -29,6 +29,9 @@
     "babel-preset-react": "^6.24.1",
     "electron": "^1.7.9",
     "electron-builder": "^19.45.4"
+  },
+  "optionalDependencies": {
+    "7zip-bin-mac": "^1.0.1"
   },
   "dependencies": {
     "app-module-path": "^2.2.0",
