@@ -1,3 +1,5 @@
+rvm: 2.3.3
+
 matrix:
   include:
     - os: osx
