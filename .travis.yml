@@ -10,11 +10,11 @@ matrix:
         - ELECTRON_CACHE=$HOME/.cache/electron
         - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
 
-cache:
-  directories:
-  - node_modules
-  - $HOME/.cache/electron
-  - $HOME/.cache/electron-builder
+# cache:
+#   directories:
+#   - node_modules
+#   - $HOME/.cache/electron
+#   - $HOME/.cache/electron-builder
  
 before_install:
   # HOMEBREW_NO_AUTO_UPDATE needed so that Homebrew doesn't upgrade to the next
