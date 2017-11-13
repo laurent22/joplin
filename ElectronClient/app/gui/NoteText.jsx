@@ -107,8 +107,6 @@ class NoteTextComponent extends React.Component {
 	}
 
 	async reloadNote(props) {
-		console.info('Reload note...');
-
 		this.mdToHtml_ = null;
 
 		const noteId = props.noteId;

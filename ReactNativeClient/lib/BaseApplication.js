@@ -313,7 +313,7 @@ class BaseApplication {
 		this.dbLogger_.setLevel(initArgs.logLevel);
 
 		if (Setting.value('env') === 'dev') {
-			this.dbLogger_.setLevel(Logger.LEVEL_WARN);
+			this.dbLogger_.setLevel(Logger.LEVEL_DEBUG);
 		}
 
 		// const packageJson = require('./package.json');

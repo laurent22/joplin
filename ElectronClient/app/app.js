@@ -30,7 +30,7 @@ const appDefaultState = Object.assign({}, defaultState, {
 	fileToImport: null,
 	windowCommand: null,
 	noteVisiblePanes: ['editor', 'viewer'],
-}); 
+});
 
 class Application extends BaseApplication {
 
@@ -234,6 +234,11 @@ class Application extends BaseApplication {
 					label: _('Documentation'),
 					accelerator: 'F1',
 					click () { bridge().openExternal('http://joplin.cozic.net') }
+				}, {
+					label: _('Check for updates'),
+					click () {
+		 				bridge().checkForUpdatesAndNotify()
+					}
 				}, {
 					label: _('About Joplin'),
 					click: () => {

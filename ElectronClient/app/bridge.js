@@ -1,5 +1,7 @@
 const { _ } = require('lib/locale.js');
 
+const autoUpdater = require("electron-updater").autoUpdater;
+
 class Bridge {
 
 	constructor(electronWrapper) {
@@ -65,6 +67,13 @@ class Bridge {
 	openItem(fullPath) {
 		return require('electron').shell.openItem(fullPath)
 	}
+
+	checkForUpdatesAndNotify() {
+		autoUpdater.logger = require("electron-log")
+		autoUpdater.logger.info('Hello, log');
+		autoUpdater.logger.transports.file.level = "info"
+		return autoUpdater.checkForUpdatesAndNotify();
+	}	
 
 }
 

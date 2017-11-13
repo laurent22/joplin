@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "pack": "node_modules/.bin/electron-builder --dir",
-    "dist": "node_modules/.bin/electron-builder"
+    "dist": "node_modules/.bin/electron-builder",
+    "publish": "build -p always"
   },
   "repository": {
     "type": "git",
@@ -20,7 +21,10 @@
   "build": {
     "appId": "net.cozic.joplin-desktop",
     "win": {
-      "icon": "../../Assets/Joplin.ico"
+      "icon": "../../Assets/Joplin.ico",
+      "publish": [
+        "github"
+      ]
     }
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
@@ -37,6 +41,8 @@
   "dependencies": {
     "app-module-path": "^2.2.0",
     "electron-context-menu": "^0.9.1",
+    "electron-log": "^2.2.11",
+    "electron-updater": "^2.16.1",
     "follow-redirects": "^1.2.5",
     "form-data": "^2.3.1",
     "fs-extra": "^4.0.2",
