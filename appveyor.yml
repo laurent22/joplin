@@ -14,6 +14,7 @@ install:
 
 build_script:
   - ps: cd ElectronClient\app
+  - ./build.sh
   - npm install
   - yarn dist
 
