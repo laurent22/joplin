@@ -1,5 +1,6 @@
 const React = require('react');
 const { Note } = require('lib/models/note.js');
+const { Setting } = require('lib/models/setting.js');
 const { IconButton } = require('./IconButton.min.js');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
@@ -46,7 +47,6 @@ class NoteTextComponent extends React.Component {
 		// https://github.com/ajaxorg/ace/issues/2046
 		this.editorMaxScrollTop_ = 0;
 		this.onAfterEditorRender_ = () => {
-			console.info('ENDER done');
 			const r = this.editor_.editor.renderer;
 			this.editorMaxScrollTop_ = Math.max(0, r.layerConfig.maxHeight - r.$size.scrollerHeight);
 
@@ -243,7 +243,7 @@ class NoteTextComponent extends React.Component {
 			webviewReady: true,
 		});
 
-		this.webview_.openDevTools(); 
+		// if (Setting.value('env') === 'dev') this.webview_.openDevTools();
 	}
 
 	webview_ref(element) {

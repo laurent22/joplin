@@ -573,8 +573,16 @@ msgstr ""
 "dedans. Continuer ?"
 
 #, fuzzy
+msgid "Please create a notebook first."
+msgstr "Veuillez d'abord sélectionner un carnet."
+
+#, fuzzy
 msgid "Note title:"
 msgstr "cat <titre>"
+
+#, fuzzy
+msgid "Please create a notebook first"
+msgstr "Veuillez d'abord sélectionner un carnet."
 
 #, fuzzy
 msgid "To-do title:"

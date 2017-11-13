@@ -353,8 +353,6 @@ class MdToHtml {
 
 		const output = styleHtml + renderedBody;
 
-		console.info(renderedBody);
-
 		this.cachedContent_ = output;
 		this.cachedContentKey_ = cacheKey;
 		return this.cachedContent_;

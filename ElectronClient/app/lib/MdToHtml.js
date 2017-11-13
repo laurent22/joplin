@@ -347,16 +347,11 @@ class MdToHtml {
 				width: auto;
 				max-width: 100%;
 			}
-			pre, code {
-				white-space: pre;
-			}
 		`;
 
 		const styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>';
 
 		const output = styleHtml + renderedBody;
-
-		console.info(renderedBody);
 
 		this.cachedContent_ = output;
 		this.cachedContentKey_ = cacheKey;

@@ -519,7 +519,13 @@ msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr ""
 
+msgid "Please create a notebook first."
+msgstr ""
+
 msgid "Note title:"
+msgstr ""
+
+msgid "Please create a notebook first"
 msgstr ""
 
 msgid "To-do title:"
