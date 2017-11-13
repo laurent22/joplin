@@ -1,22 +1,18 @@
-# Test against the latest version of this Node.js version
-environment:
-  nodejs_version: "8"
+image: Visual Studio 2017
 
-# Install scripts. (runs after repo cloning)
+platform:
+  - x64
+
+cache:
+  - node_modules
+  - '%USERPROFILE%\.electron'
+
 install:
-  # Get the latest stable version of Node.js or io.js
-  - ps: Install-Product node $env:nodejs_version
-  - ps: Install-Product yarn
-  # install modules
-  - npm install
+  - ps: Install-Product node 8 x64
+  - yarn
 
-# Post-install test scripts.
-test_script:
-  # Output useful info for debugging.
-  - node --version
-  - npm --version
-  
-# Don't actually build.
-build:
-  - ps: cd ElectronClient\app
+build_script:
+  - ps: cd Electron\app
   - yarn dist
+
+test: off
