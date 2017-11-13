@@ -15,13 +15,7 @@ cache:
   - $HOME/.cache/electron-builder
 
 script:
-  - cd ElectronClient/app
-  - npm install
-  - yarn dist
-  
-before_cache:
-  - rm -rf $HOME/.cache/electron-builder/wine
-
-branches:
-  except:
-- "/^v\\d+\\.\\d+\\.\\d+$/"
+  - |
+    cd ElectronClient/app
+    npm install
+    yarn dist
