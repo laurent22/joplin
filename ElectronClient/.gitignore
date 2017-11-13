@@ -3,3 +3,4 @@ app/locales/
 app/node_modules/
 app/lib/
 *.min.js
+dist/

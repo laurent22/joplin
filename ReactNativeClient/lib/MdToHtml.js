@@ -275,7 +275,7 @@ class MdToHtml {
 		const tokens = md.parse(body, env);
 
 		// console.info(body);
-		console.info(tokens);
+		// console.info(tokens);
 
 		let renderedBody = this.renderTokens_(tokens, options);
 
@@ -352,6 +352,8 @@ class MdToHtml {
 		const styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>';
 
 		const output = styleHtml + renderedBody;
+
+		console.info(renderedBody);
 
 		this.cachedContent_ = output;
 		this.cachedContentKey_ = cacheKey;
