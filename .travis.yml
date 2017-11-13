@@ -25,4 +25,4 @@ script:
   - |
     cd ElectronClient/app
     npm install
-    npm dist
+    yarn dist
