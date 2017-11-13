@@ -37,7 +37,7 @@ const globalStyle = {
 globalStyle.htmlFontSize = globalStyle.fontSize + 'px';
 globalStyle.htmlColor ='black'; // Note: CSS in WebView component only supports named colors or rgb() notation
 globalStyle.htmlBackgroundColor ='white';
-globalStyle.htmlDividerColor ='Gainsboro';
+globalStyle.htmlDividerColor = 'rgb(150,150,150)';
 globalStyle.htmlLinkColor ='blue';
 globalStyle.htmlLineHeight ='20px';
 

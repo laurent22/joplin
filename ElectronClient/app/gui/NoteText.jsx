@@ -46,10 +46,11 @@ class NoteTextComponent extends React.Component {
 		// https://github.com/ajaxorg/ace/issues/2046
 		this.editorMaxScrollTop_ = 0;
 		this.onAfterEditorRender_ = () => {
+			console.info('ENDER done');
 			const r = this.editor_.editor.renderer;
 			this.editorMaxScrollTop_ = Math.max(0, r.layerConfig.maxHeight - r.$size.scrollerHeight);
 
-			if (this.restoreScrollTop_) {
+			if (this.restoreScrollTop_ !== null) {
 				this.editorSetScrollTop(this.restoreScrollTop_);
 				this.restoreScrollTop_ = null;
 			}
@@ -106,6 +107,8 @@ class NoteTextComponent extends React.Component {
 	}
 
 	async reloadNote(props) {
+		console.info('Reload note...');
+
 		this.mdToHtml_ = null;
 
 		const noteId = props.noteId;
@@ -120,7 +123,12 @@ class NoteTextComponent extends React.Component {
 
 		this.editorMaxScrollTop_ = 0;
 
-		this.editorSetScrollTop(0);
+		// HACK: To go around a bug in Ace editor, we first set the scroll position to 1
+		// and then (in the renderer callback) to the value we actually need. The first
+		// operation helps clear the scroll position cache. See:
+		// https://github.com/ajaxorg/ace/issues/2195
+		this.editorSetScrollTop(1);
+		this.restoreScrollTop_ = 0;
 
 		this.setState({
 			note: note,
@@ -235,7 +243,7 @@ class NoteTextComponent extends React.Component {
 			webviewReady: true,
 		});
 
-		//this.webview_.openDevTools(); 
+		this.webview_.openDevTools(); 
 	}
 
 	webview_ref(element) {

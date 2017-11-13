@@ -78,26 +78,17 @@ ipcRenderer.on('setHtml', (event, html) => {
 
 	loadAndApplyHljs();
 
-	// A checkbox list is rendered like this by markdown-it:
-	// <ul>
-	//    <li>
-	//       <p>
-	//          [x] some item
-	//       </p>
-	//    </li>
-	// ...
-	// </ul>
-	// And we need to remove the padding from "p" and the bullet from "ul"
+	// Remove the bullet from "ul" for checkbox lists and extra padding
 	const checkboxes = document.getElementsByClassName('checkbox');
 	for (let i = 0; i < checkboxes.length; i++) {
 		const cb = checkboxes[i];
-		cb.parentElement.style.marginBottom = 0;
-		const ul = cb.parentElement.parentElement.parentElement;
+		const ul = cb.parentElement.parentElement;
 		if (!ul) {
 			console.warn('Unexpected layout for checkbox');
 			continue;
 		}
 		ul.style.listStyleType = 'none';
+		ul.style.paddingLeft = 0;
 	}
 });
 
@@ -106,18 +97,6 @@ ipcRenderer.on('setPercentScroll', (event, percent) => {
 	ignoreNextScroll = true;
 	contentElement.scrollTop = percent * maxScrollTop();
 });
-
-// function elementMapCoordinates(element) {
-// 	while (true) {
-// 		if (!element) break;
-
-// 		const m = element.getAttribute('data-map');
-// 		if (m) return m.split(':');
-// 		element = element.parentElement;
-// 	}
-
-// 	return null;
-// }
 
 function maxScrollTop() {
 	return Math.max(0, contentElement.scrollHeight - contentElement.clientHeight);
@@ -142,7 +121,7 @@ document.addEventListener('dragover', function(e) {
 	e.preventDefault();
 	e.stopPropagation();
 });
-webview.addEventListener('dragover', function(e) {
+document.addEventListener('dragover', function(e) {
 	e.preventDefault();
 });
 </script>

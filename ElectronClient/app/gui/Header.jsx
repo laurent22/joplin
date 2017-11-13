@@ -21,7 +21,23 @@ class HeaderComponent extends React.Component {
 			icon = <i style={iconStyle} className={"fa " + options.iconName}></i>
 		}
 
-		return <a className="button" style={style} key={key} href="#" onClick={() => {options.onClick()}}>{icon}{options.title ? options.title : ''}</a>
+		const isEnabled = (!('enabled' in options) || options.enabled);
+		let classes = ['button'];
+		if (!isEnabled) classes.push('disabled');
+
+		const finalStyle = Object.assign({}, style, {
+			opacity: isEnabled ? 1 : 0.4,
+		});
+
+		return <a
+			className={classes.join(' ')}
+			style={finalStyle}
+			key={key}
+			href="#"
+			onClick={() => { if (isEnabled) options.onClick() }}
+		>
+			{icon}{options.title ? options.title : ''}
+		</a>
 	}
 
 	render() {

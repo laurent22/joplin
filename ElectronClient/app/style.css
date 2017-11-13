@@ -23,13 +23,13 @@ body, textarea {
 	background-color: #564B6C;
 }
 
-.header .button:hover {
+.header .button:not(.disabled):hover {
 	background-color: rgba(0,160,255,0.1);
 	border: 1px solid rgba(0,160,255,0.5);
 	box-sizing: 'border-box';
 }
 
-.header .button:active {
+.header .button:not(.disabled):active {
 	background-color: rgba(0,160,255,0.2);
 	border: 1px solid rgba(0,160,255,0.7);
 	box-sizing: 'border-box';

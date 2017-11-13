@@ -86,7 +86,8 @@ class OneDriveLoginScreenComponent extends React.Component {
 		const headerButtons = [
 			{
 				title: _('Refresh'),
-				onClick: () => this.refresh_click()
+				onClick: () => this.refresh_click(),
+				iconName: 'fa-refresh',
 			},
 		];
 
