@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "pack": "node_modules/.bin/electron-builder --dir",
     "dist": "node_modules/.bin/electron-builder",
-    "publish": "build -p always"
+    "publish": "build -p always",
+    "postinstall": "node compile-jsx.js",
+    "compile": "node compile-jsx.js"
   },
   "repository": {
     "type": "git",
