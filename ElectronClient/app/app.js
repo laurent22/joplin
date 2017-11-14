@@ -235,11 +235,6 @@ class Application extends BaseApplication {
 					accelerator: 'F1',
 					click () { bridge().openExternal('http://joplin.cozic.net') }
 				}, {
-					label: _('Check for updates'),
-					click () {
-		 				bridge().checkForUpdatesAndNotify()
-					}
-				}, {
 					label: _('About Joplin'),
 					click: () => {
 						const p = require('./package.json');
@@ -301,6 +296,10 @@ class Application extends BaseApplication {
 			type: 'FOLDER_SELECT',
 			id: Setting.value('activeFolderId'),
 		});
+
+		setTimeout(() => {
+			bridge().checkForUpdatesAndNotify(reg.logger());
+		}, 5000);
 	}
 
 }
