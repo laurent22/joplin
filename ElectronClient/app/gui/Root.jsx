@@ -4,6 +4,7 @@ const { createStore } = require('redux');
 const { connect, Provider } = require('react-redux');
 
 const { _ } = require('lib/locale.js');
+const { Setting } = require('lib/models/setting.js');
 
 const { MainScreen } = require('./MainScreen.min.js');
 const { OneDriveLoginScreen } = require('./OneDriveLoginScreen.min.js');
@@ -28,11 +29,6 @@ async function initialize(dispatch) {
 			});
 			this.wcsTimeoutId_ = null;
 		}, 10);
-	});
-
-	store.dispatch({
-		type: 'WINDOW_CONTENT_SIZE_SET',
-		size: bridge().windowContentSize(),
 	});
 
 	store.dispatch({

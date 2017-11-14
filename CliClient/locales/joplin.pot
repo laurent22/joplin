@@ -499,10 +499,14 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-msgid "Documentation"
+msgid "Website and documentation"
 msgstr ""
 
 msgid "About Joplin"
+msgstr ""
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
 msgstr ""
 
 msgid "OK"

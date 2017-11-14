@@ -110,7 +110,7 @@ class Setting extends BaseModel {
 
 				this.logger().info('Setting: ' + key + ' = ' + c.value + ' => ' + value);
 
-				c.value = this.formatValue(key, value);
+				c.value = value;
 
 				this.dispatch({
 					type: 'SETTING_UPDATE_ONE',
@@ -143,6 +143,7 @@ class Setting extends BaseModel {
 		if (md.type == Setting.TYPE_INT) return value.toFixed(0);
 		if (md.type == Setting.TYPE_BOOL) return value ? '1' : '0';
 		if (md.type == Setting.TYPE_ARRAY) return value ? JSON.stringify(value) : '[]';
+		if (md.type == Setting.TYPE_OBJECT) return value ? JSON.stringify(value) : '{}';
 		return value;
 	}
 
@@ -162,9 +163,17 @@ class Setting extends BaseModel {
 		}
 
 		if (md.type === Setting.TYPE_ARRAY) {
+			if (!value) return [];
 			if (Array.isArray(value)) return value;
 			if (typeof value === 'string') return JSON.parse(value);
 			return [];
+		}
+
+		if (md.type === Setting.TYPE_OBJECT) {
+			if (!value) return {};
+			if (typeof value === 'object') return value;
+			if (typeof value === 'string') return JSON.parse(value);
+			return {};
 		}
 
 		return value;
@@ -308,6 +317,7 @@ class Setting extends BaseModel {
 		if (typeId === Setting.TYPE_STRING) return 'string';
 		if (typeId === Setting.TYPE_BOOL) return 'bool';
 		if (typeId === Setting.TYPE_ARRAY) return 'array';
+		if (typeId === Setting.TYPE_OBJECT) return 'object';
 	}
 
 }
@@ -320,6 +330,7 @@ Setting.TYPE_INT = 1;
 Setting.TYPE_STRING = 2;
 Setting.TYPE_BOOL = 3;
 Setting.TYPE_ARRAY = 4;
+Setting.TYPE_OBJECT = 5;
 
 Setting.THEME_LIGHT = 1;
 Setting.THEME_DARK = 2;

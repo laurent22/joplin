@@ -550,11 +550,16 @@ msgstr "Options"
 msgid "Help"
 msgstr "Aide"
 
-msgid "Documentation"
+#, fuzzy
+msgid "Website and documentation"
 msgstr "Documentation"
 
 msgid "About Joplin"
 msgstr "A props de Joplin"
+
+#, fuzzy, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s)"
 
 msgid "OK"
 msgstr "OK"

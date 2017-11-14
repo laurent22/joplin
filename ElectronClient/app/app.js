@@ -3,6 +3,7 @@ require('app-module-path').addPath(__dirname);
 const { BaseApplication } = require('lib/BaseApplication');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const { Setting } = require('lib/models/setting.js');
+const { shim } = require('lib/shim.js');
 const { BaseModel } = require('lib/base-model.js');
 const { _, setLocale } = require('lib/locale.js');
 const os = require('os');
@@ -30,6 +31,7 @@ const appDefaultState = Object.assign({}, defaultState, {
 	fileToImport: null,
 	windowCommand: null,
 	noteVisiblePanes: ['editor', 'viewer'],
+	windowContentSize: bridge().windowContentSize(),
 });
 
 class Application extends BaseApplication {
@@ -231,7 +233,7 @@ class Application extends BaseApplication {
 			}, {
 				label: _('Help'),
 				submenu: [{
-					label: _('Documentation'),
+					label: _('Website and documentation'),
 					accelerator: 'F1',
 					click () { bridge().openExternal('http://joplin.cozic.net') }
 				}, {
@@ -242,7 +244,7 @@ class Application extends BaseApplication {
 							p.description,
 							'',
 							'Copyright © 2016-2017',
-							_('%s %s (%s)', p.name, p.version, Setting.value('env')),
+							_('%s %s (%s, %s)', p.name, p.version, Setting.value('env'), process.platform),
 						];
 						bridge().showMessageBox({
 							message: message.join('\n'),
@@ -278,6 +280,16 @@ class Application extends BaseApplication {
 
 		this.initRedux();
 
+		// const windowSize = Setting.value('windowSize');
+		// const width = windowSize && windowSize.width ? windowSize.width : 800;
+		// const height = windowSize && windowSize.height ? windowSize.height : 800;
+		// bridge().windowSetSize(width, height);
+
+		// this.store().dispatch({
+		// 	type: 'WINDOW_CONTENT_SIZE_SET',
+		// 	size: bridge().windowContentSize(),
+		// });
+
 		// Since the settings need to be loaded before the store is created, it will never
 		// receive the SETTING_UPDATE_ALL even, which mean state.settings will not be
 		// initialised. So we manually call dispatchUpdateAll() to force an update.
@@ -297,13 +309,17 @@ class Application extends BaseApplication {
 			id: Setting.value('activeFolderId'),
 		});
 
-		const runAutoUpdateCheck = function() {
-			bridge().checkForUpdatesAndNotify(Setting.value('profileDir') + '/log-autoupdater.txt');
+		// Note: Auto-update currently doesn't work in Linux: it downloads the update
+		// but then doesn't install it on exit.
+		if (shim.isWindows() || shim.isMac()) {
+			const runAutoUpdateCheck = function() {
+				bridge().checkForUpdatesAndNotify(Setting.value('profileDir') + '/log-autoupdater.txt');
+			}
+			
+			setTimeout(() => { runAutoUpdateCheck() }, 5000);
+			// For those who leave the app always open
+			setInterval(() => { runAutoUpdateCheck() }, 2 * 60 * 60 * 1000);
 		}
-
-		setTimeout(() => { runAutoUpdateCheck() }, 5000);
-		// For those who leave the app always open
-		setInterval(() => { runAutoUpdateCheck() }, 2 * 60 * 60 * 1000);
 	}
 
 }

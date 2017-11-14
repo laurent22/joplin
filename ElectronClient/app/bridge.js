@@ -25,6 +25,17 @@ class Bridge {
 		return { width: s[0], height: s[1] };
 	}
 
+	windowSize() {
+		if (!this.window()) return { width: 0, height: 0 };
+		const s = this.window().getSize();
+		return { width: s[0], height: s[1] };
+	}
+
+	windowSetSize(width, height) {
+		if (!this.window()) return;
+		return this.window().setSize(width, height);
+	}
+
 	showOpenDialog(options) {
 		const {dialog} = require('electron');
 		return dialog.showOpenDialog(options);
