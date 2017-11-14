@@ -6,6 +6,8 @@ require('app-module-path').addPath(__dirname);
 const electronApp = require('electron').app;
 const { ElectronAppWrapper } = require('./ElectronAppWrapper');
 const { initBridge } = require('./bridge');
+const { Logger } = require('lib/logger.js');
+const { FsDriverNode } = require('lib/fs-driver-node.js');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.error('Unhandled promise rejection', p, 'reason:', reason);
@@ -21,6 +23,8 @@ function envFromArgs(args) {
 	if (envIndex === devIndex - 1) return 'dev';
 	return 'prod';
 }
+
+Logger.fsDriver_ = new FsDriverNode();
 
 const env = envFromArgs(process.argv);
 

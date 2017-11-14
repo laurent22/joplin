@@ -297,9 +297,13 @@ class Application extends BaseApplication {
 			id: Setting.value('activeFolderId'),
 		});
 
-		setTimeout(() => {
-			bridge().checkForUpdatesAndNotify(reg.logger());
-		}, 5000);
+		const runAutoUpdateCheck = function() {
+			bridge().checkForUpdatesAndNotify(Setting.value('profileDir') + '/log-autoupdater.txt');
+		}
+
+		setTimeout(() => { runAutoUpdateCheck() }, 5000);
+		// For those who leave the app always open
+		setInterval(() => { runAutoUpdateCheck() }, 2 * 60 * 60 * 1000);
 	}
 
 }

@@ -1,4 +1,5 @@
 const { _ } = require('lib/locale.js');
+const { Logger } = require('lib/logger.js');
 
 class Bridge {
 
@@ -66,11 +67,17 @@ class Bridge {
 		return require('electron').shell.openItem(fullPath)
 	}
 
-	checkForUpdatesAndNotify(logger) {
-		const autoUpdater = require("electron-updater").autoUpdater;
-		logger.info('Doing autoupdate checkForUpdatesAndNotify...');
-		autoUpdater.logger = logger;
-		return autoUpdater.checkForUpdatesAndNotify();
+	checkForUpdatesAndNotify(logFilePath) {
+		if (!this.autoUpdater_) {
+			const logger = new Logger();
+			logger.addTarget('file', { path: logFilePath });
+			logger.setLevel(Logger.LEVEL_DEBUG);
+			logger.info('checkForUpdatesAndNotify: Intializing...');
+			this.autoUpdater_ = require("electron-updater").autoUpdater;
+			this.autoUpdater_.logger = logger;
+		}
+
+		return this.autoUpdater_.checkForUpdatesAndNotify();
 	}
 
 }
