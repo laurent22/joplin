@@ -45,7 +45,6 @@
 				"ReactNativeClient/android/app/build",
 				"ReactNativeClient/android/build",
 				"ReactNativeClient/android/local.properties",
-				"ReactNativeClient/ios",
 				"ReactNativeClient/node_modules",
 				"ElectronClient/app/gui/note-viewer/highlight/styles",
 				"tests/logs",
