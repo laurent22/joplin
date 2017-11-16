@@ -38,7 +38,8 @@
   },
   "optionalDependencies": {
     "7zip-bin-mac": "^1.0.1",
-    "7zip-bin-linux": "^1.0.1"
+    "7zip-bin-linux": "^1.0.1",
+    "7zip-bin-win": "^1.0.1"
   },
   "dependencies": {
     "app-module-path": "^2.2.0",
