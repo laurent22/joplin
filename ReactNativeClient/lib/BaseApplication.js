@@ -11,6 +11,7 @@ const { Note } = require('lib/models/note.js');
 const { Tag } = require('lib/models/tag.js');
 const { Setting } = require('lib/models/setting.js');
 const { Logger } = require('lib/logger.js');
+const { splitCommandString } = require('lib/string-utils.js');
 const { sprintf } = require('sprintf-js');
 const { reg } = require('lib/registry.js');
 const { fileExtension } = require('lib/path-utils.js');
@@ -63,7 +64,7 @@ class BaseApplication {
 
 	// Handles the initial flags passed to main script and
 	// returns the remaining args.
-	async handleStartFlags_(argv) {
+	async handleStartFlags_(argv, setDefaults = true) {
 		let matched = {};
 		argv = argv.slice(0);
 		argv.splice(0, 2); // First arguments are the node executable, and the node JS file
@@ -118,8 +119,10 @@ class BaseApplication {
 			}
 		}
 
-		if (!matched.logLevel) matched.logLevel = Logger.LEVEL_INFO;
-		if (!matched.env) matched.env = 'prod';
+		if (setDefaults) {
+			if (!matched.logLevel) matched.logLevel = Logger.LEVEL_INFO;
+			if (!matched.env) matched.env = 'prod';
+		}
 
 		return {
 			matched: matched,
@@ -272,6 +275,22 @@ class BaseApplication {
 		reg.dispatch = this.store().dispatch;
 	}
 
+	async readFlagsFromFile(flagPath) {
+		if (!fs.existsSync(flagPath)) return {};
+		let flagContent = fs.readFileSync(flagPath, 'utf8');
+		if (!flagContent) return {};
+
+		flagContent = flagContent.trim();
+
+		let flags = splitCommandString(flagContent);
+		flags.splice(0, 0, 'cmd');
+		flags.splice(0, 0, 'node');
+
+		flags = await this.handleStartFlags_(flags, false);
+		
+		return flags.matched;
+	}
+
 	async start(argv) {
 		let startFlags = await this.handleStartFlags_(argv);
 
@@ -301,6 +320,9 @@ class BaseApplication {
 		await fs.mkdirp(profileDir, 0o755);
 		await fs.mkdirp(resourceDir, 0o755);
 		await fs.mkdirp(tempDir, 0o755);
+
+		const extraFlags = await this.readFlagsFromFile(profileDir + '/flags.txt');
+		initArgs = Object.assign(initArgs, extraFlags);
 
 		this.logger_.addTarget('file', { path: profileDir + '/log.txt' });
 		//this.logger_.addTarget('console');
