@@ -27,6 +27,9 @@
       "publish": [
         "github"
       ]
+    },
+    "mac": {
+      "asar": false
     }
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
