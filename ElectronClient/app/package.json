@@ -26,7 +26,11 @@
       "icon": "../../Assets/Joplin.ico"
     },
     "mac": {
-      "icon": "../../Assets/macOs.icns"
+      "icon": "../../Assets/macOs.icns",
+      "asar": false
+    },
+    "linux": {
+      "asar": false
     }
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
