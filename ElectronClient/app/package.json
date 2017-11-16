@@ -23,16 +23,10 @@
   "build": {
     "appId": "net.cozic.joplin-desktop",
     "win": {
-      "icon": "../../Assets/Joplin.ico",
-      "publish": [
-        "github"
-      ]
+      "icon": "../../Assets/Joplin.ico"
     },
     "mac": {
-      "asar": false
-    },
-    "linux": {
-      "asar": false
+      "icon": "../../Assets/macOs.icns"
     }
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
