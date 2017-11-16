@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-               BuildableName = "AwesomeProject-tvOS.app"
-               BlueprintName = "AwesomeProject-tvOS"
-               ReferencedContainer = "container:AwesomeProject.xcodeproj">
+               BuildableName = "Joplin-tvOS.app"
+               BlueprintName = "Joplin-tvOS"
+               ReferencedContainer = "container:Joplin.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "AwesomeProject-tvOSTests.xctest"
-               BlueprintName = "AwesomeProject-tvOSTests"
-               ReferencedContainer = "container:AwesomeProject.xcodeproj">
+               BuildableName = "Joplin-tvOSTests.xctest"
+               BlueprintName = "Joplin-tvOSTests"
+               ReferencedContainer = "container:Joplin.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -61,9 +61,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "AwesomeProject-tvOSTests.xctest"
-               BlueprintName = "AwesomeProject-tvOSTests"
-               ReferencedContainer = "container:AwesomeProject.xcodeproj">
+               BuildableName = "Joplin-tvOSTests.xctest"
+               BlueprintName = "Joplin-tvOSTests"
+               ReferencedContainer = "container:Joplin.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "AwesomeProject-tvOS.app"
-            BlueprintName = "AwesomeProject-tvOS"
-            ReferencedContainer = "container:AwesomeProject.xcodeproj">
+            BuildableName = "Joplin-tvOS.app"
+            BlueprintName = "Joplin-tvOS"
+            ReferencedContainer = "container:Joplin.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -94,9 +94,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "AwesomeProject-tvOS.app"
-            BlueprintName = "AwesomeProject-tvOS"
-            ReferencedContainer = "container:AwesomeProject.xcodeproj">
+            BuildableName = "Joplin-tvOS.app"
+            BlueprintName = "Joplin-tvOS"
+            ReferencedContainer = "container:Joplin.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -113,9 +113,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "AwesomeProject-tvOS.app"
-            BlueprintName = "AwesomeProject-tvOS"
-            ReferencedContainer = "container:AwesomeProject.xcodeproj">
+            BuildableName = "Joplin-tvOS.app"
+            BlueprintName = "Joplin-tvOS"
+            ReferencedContainer = "container:Joplin.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
