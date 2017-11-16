@@ -48,6 +48,8 @@
 				"ReactNativeClient/node_modules",
 				"ElectronClient/app/gui/note-viewer/highlight/styles",
 				"tests/logs",
+				"ReactNativeClient/ios/build",
+				"ElectronClient/app/dist",
 			],
 			"path": "."
 		},
