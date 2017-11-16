@@ -2,3 +2,4 @@ build/
 app/node_modules/
 dist/
 app/lib/
+app/gui/*.min.js
