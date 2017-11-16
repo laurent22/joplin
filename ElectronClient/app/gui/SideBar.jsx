@@ -115,6 +115,14 @@ class SideBarComponent extends React.Component {
 			}
 		}}))
 
+		menu.append(new MenuItem({label: _('Rename'), click: async () => {
+			this.props.dispatch({
+				type: 'WINDOW_COMMAND',
+				name: 'renameNotebook',
+				id: itemId,
+			});
+		}}))
+
 		menu.popup(bridge().window());
 	}
 

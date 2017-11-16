@@ -280,16 +280,6 @@ class Application extends BaseApplication {
 
 		this.initRedux();
 
-		// const windowSize = Setting.value('windowSize');
-		// const width = windowSize && windowSize.width ? windowSize.width : 800;
-		// const height = windowSize && windowSize.height ? windowSize.height : 800;
-		// bridge().windowSetSize(width, height);
-
-		// this.store().dispatch({
-		// 	type: 'WINDOW_CONTENT_SIZE_SET',
-		// 	size: bridge().windowContentSize(),
-		// });
-
 		// Since the settings need to be loaded before the store is created, it will never
 		// receive the SETTING_UPDATE_ALL even, which mean state.settings will not be
 		// initialised. So we manually call dispatchUpdateAll() to force an update.

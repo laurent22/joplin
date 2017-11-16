@@ -28,13 +28,17 @@ matrix:
 before_install:
   # HOMEBREW_NO_AUTO_UPDATE needed so that Homebrew doesn't upgrade to the next
   # version, which requires Ruby 2.3, which is not available on the Travis VM.
+
+  # Silence apt-get update errors (for example when a module doesn't exist) since
+  # otherwise it will make the whole build fails, even though all we need is yarn.
   - |
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       HOMEBREW_NO_AUTO_UPDATE=1 brew install yarn
     else
       curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
       echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-      sudo apt-get update && sudo apt-get install yarn
+      sudo apt-get update || true
+      sudo apt-get install -y yarn
     fi
 
 script:
