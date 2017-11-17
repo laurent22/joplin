@@ -93,6 +93,12 @@ class BaseApplication {
 				continue;
 			}
 
+			if (arg == '--open-dev-tools') {
+				Setting.setConstant('openDevTools', true);
+				argv.splice(0, 1);
+				continue;
+			}
+
 			if (arg == '--update-geolocation-disabled') {
 				Note.updateGeolocationEnabled_ = false;
 				argv.splice(0, 1);
@@ -338,8 +344,6 @@ class BaseApplication {
 			this.dbLogger_.setLevel(Logger.LEVEL_DEBUG);
 		}
 
-		// const packageJson = require('./package.json');
-		// this.logger_.info(sprintf('Starting %s %s (%s)...', packageJson.name, packageJson.version, Setting.value('env')));
 		this.logger_.info('Profile directory: ' + profileDir);
 
 		this.database_ = new JoplinDatabase(new DatabaseDriverNode());

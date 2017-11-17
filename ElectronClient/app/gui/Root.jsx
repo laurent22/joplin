@@ -31,6 +31,15 @@ async function initialize(dispatch) {
 		}, 10);
 	});
 
+	// Need to dispatch this to make sure the components are
+	// displayed at the right size. The windowContentSize is
+	// also set in the store default state, but at that point
+	// the window might not be at its final size.
+	store.dispatch({
+		type: 'WINDOW_CONTENT_SIZE_SET',
+		size: bridge().windowContentSize(),
+	});
+
 	store.dispatch({
 		type: 'NOTE_VISIBLE_PANES_SET',
 		panes: Setting.value('noteVisiblePanes'),

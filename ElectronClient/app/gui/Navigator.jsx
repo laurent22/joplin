@@ -33,8 +33,6 @@ class NavigatorComponent extends Component {
 			height: this.props.style.height,
 		};
 
-
-
 		return (
 			<div style={this.props.style}>
 				<Screen style={screenStyle} {...screenProps}/>

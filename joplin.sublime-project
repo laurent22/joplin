@@ -18,11 +18,10 @@
 				"*.min.js",
 				"ElectronClient/app/gui/note-viewer/highlight/*.pack.js",
 				"ElectronClient/app/css/font-awesome.min.css",
-				"_mydocs/mdtest/vendor/bin/html-to-markdown",
 			],
 			"folder_exclude_patterns":
 			[
-				"_mydocs/mdtest/Pages/Countries",
+				"_mydocs/mdtest",
 				"_vieux",
 				"ElectronClient/app/fonts",
 				"CliClient/app/lib",
@@ -39,6 +38,7 @@
 				"ElectronClient/build",
 				"ElectronClient/app/lib",
 				"ElectronClient/app/locale",
+				"ElectronClient/app/dist",
 				"node_modules",
 				"ReactNativeClient/android/.gradle",
 				"ReactNativeClient/android/.idea",
