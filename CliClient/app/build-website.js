@@ -4,8 +4,7 @@ const { _, setLocale, languageCode } = require('lib/locale.js');
 const marked = require('lib/marked.js');
 const Mustache = require('mustache');
 
-const headerHtml = `
-<!doctype html>
+const headerHtml = `<!doctype html>
 <html>
 <head>
 	<title>Joplin - an open source note taking and to-do application with synchronisation capabilities</title>
@@ -14,6 +13,7 @@ const headerHtml = `
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
 	<style>
 	body {
 		background-color: #F1F1F1;
@@ -110,17 +110,33 @@ const headerHtml = `
 		right: 0;
 		top:0;
 	}
+	.nav-wrapper {
+		position: relative;
+		width: inherit;
+	}
 	.nav {
 		background-color: black;
+		display: table;
+		width: inherit;
+	}
+	.nav.sticky {
+		position:fixed;
+		top: 0;
+		width: inherit;
 	}
 	.nav a {
 		color: white;
 		display: inline-block;
 		padding: .7em 1.4em .7em 1.4em;
 	}
+	.nav.sticky a {
+		padding: .4em 1.4em .4em 1.4em;
+	}
 	.nav ul {
 		padding-left: 2em;
 		margin-bottom: 0;
+		display: table-cell;
+		min-width: 400px;
 	}
 	.nav ul li {
 		display: inline-block;
@@ -129,6 +145,16 @@ const headerHtml = `
 	.nav li.selected {
 		background-color: #222;
 		font-weight: bold;
+	}
+	.nav-right {
+		display: table-cell;
+		width: 100%;
+		text-align: right;
+		vertical-align: middle;
+		padding-top: 3px;
+	}
+	.twitter-share-button {
+		margin-right: 5px;
 	}
 	</style>
 </head>
@@ -143,11 +169,18 @@ const headerHtml = `
 	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
 </div>
 
-<div class="nav">
-	<ul>
-		<li class="{{selectedHome}}"><a href="{{baseUrl}}/">Home</a></li>
-		<li class="{{selectedTerminal}}"><a href="{{baseUrl}}/terminal">Terminal App Manual</a></li>
-	</ul>
+<div class="nav-wrapper">
+	<div class="nav">
+		<ul>
+			<li class="{{selectedHome}}"><a href="{{baseUrl}}/">Home</a></li>
+			<li class="{{selectedTerminal}}"><a href="{{baseUrl}}/terminal">Terminal App Manual</a></li>
+		</ul>
+		<div class="nav-right">
+			<iframe src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+			<a class="twitter-share-button" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fjoplin.cozic.net">Tweet</a>
+			<iframe style="display: inline-block;" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="110px" height="20px"></iframe>
+		</div>
+	</div>
 </div>
 
 <div class="content">
@@ -193,16 +226,41 @@ const footerHtml = `
 // </table>
 // `;
 
-const gaHtml = `
+const scriptHtml = `
+<script>window.twttr = (function(d, s, id) {
+	var js, fjs = d.getElementsByTagName(s)[0],
+	t = window.twttr || {};
+	if (d.getElementById(id)) return t;
+	js = d.createElement(s);
+	js.id = id;
+	js.src = "https://platform.twitter.com/widgets.js";
+	fjs.parentNode.insertBefore(js, fjs);
+	t._e = [];
+	t.ready = function(f) {
+	t._e.push(f);
+	};
+	return t;
+}(document, "script", "twitter-wjs"));</script>
+
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	function stickyHeader() { 
+		if ($(window).scrollTop() > 179) {
+			$('.nav').addClass('sticky'); 
+		} else {
+			$('.nav').removeClass('sticky');
+		}
+	}
 
-  ga('create', 'UA-103586105-1', 'auto');
-  ga('send', 'pageview');
+	$(window).scroll(function() {
+		stickyHeader();
+	});
 
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-103586105-1', 'auto');
+	ga('send', 'pageview');
 </script>
 `;
 
@@ -222,7 +280,7 @@ function markdownToHtml(md) {
 
 	//output = output.replace(/<!-- \[SCREENSHOTS\] -->/, screenshotHtml);
 
-	return headerHtml + output + gaHtml + footerHtml;
+	return headerHtml + output + scriptHtml + footerHtml;
 }
 
 function renderFileToHtml(sourcePath, targetPath, params) {

@@ -72,7 +72,7 @@ This will open a new screen which will display the import progress. The notes wi
 ## Terminal application
 
 * First, export your Evernote notebooks to ENEX files as described [here](https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks).
-* In Joplin, in [command-line mode](#command-line-mode), type `import-enex /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
+* In Joplin, in [command-line mode](/terminal#command-line-mode), type `import-enex /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
 * Then repeat the process for each notebook that needs to be imported.
 
 # Synchronisation
