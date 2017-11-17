@@ -93,7 +93,7 @@ To initiate the synchronisation process, type `:sync`. You will be asked to foll
 
 # Attachments / Resources
 
-In Markdown, links to resources are represented as a simple ID to the resource. In the note viewer however, these resources, if they are images, will be displayed or, if they are other files (PDF, text files, etc.) they will be displayed as links. Clicking on this link will open the file in the default application.
+Any kind of file can be attached to a note. In Markdown, links to these files are represented as a simple ID to the resource. In the note viewer, these files, if they are images, will be displayed or, if they are other files (PDF, text files, etc.) they will be displayed as links. Clicking on this link will open the file in the default application.
 
 # Localisation
 
@@ -105,6 +105,13 @@ Joplin is currently available in English and French. If you would like to contri
 - From then you can translate the file. Once it's done, please send the file to [this address](https://raw.githubusercontent.com/laurent22/joplin/master/Assets/Adresse.png) or open a pull request.
 
 This translation will apply to both the terminal and the Android application.
+
+# Coming features
+
+The two main features that remain to be implemented are:
+
+- iOS application (80% done)
+- End to end encryption (to-do)
 
 # Known bugs
 

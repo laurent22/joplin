@@ -2,12 +2,13 @@ const fs = require('fs-extra');
 const { fileExtension, basename, dirname } = require('lib/path-utils.js');
 const { _, setLocale, languageCode } = require('lib/locale.js');
 const marked = require('lib/marked.js');
+const Mustache = require('mustache');
 
 const headerHtml = `
 <!doctype html>
 <html>
 <head>
-	<title>Joplin - a free, open source, 	te taking and to-do application with synchronisation capabilities</title>
+	<title>Joplin - an open source note taking and to-do application with synchronisation capabilities</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,7 +23,8 @@ const headerHtml = `
 		margin-bottom: 1em;
 	}
 	td, th {
-		padding: .5em 1em .5em 0;
+		padding: .8em;
+		border: 1px solid #ccc;
 	}
 	h1, h2 {
 		border-bottom: 1px solid #eaecef;
@@ -108,6 +110,24 @@ const headerHtml = `
 		right: 0;
 		top:0;
 	}
+	.nav {
+		background-color: black;
+	}
+	.nav a {
+		color: white;
+	}
+	.nav ul {
+		padding-left: 2em;
+		margin-bottom: 0;
+	}
+	.nav ul li {
+		display: inline-block;
+		padding: .7em 1.4em .7em 1.4em;
+	}
+	.nav li.selected {
+		background-color: #222;
+		font-weight: bold;
+	}
 	</style>
 </head>
 
@@ -116,9 +136,16 @@ const headerHtml = `
 <div class="container">
 
 <div class="header">
-	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="images/ForkMe.png"/></a>
-	<h1 id="joplin"><img class="title-icon" src="images/Icon512.png">oplin</h1>
-	<p class="sub-title">A free, open source, note taking and to-do application with synchronisation capabilities.</p>
+	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="{{{imageBaseUrl}}}/ForkMe.png"/></a>
+	<h1 id="joplin"><img class="title-icon" src="{{{imageBaseUrl}}}/Icon512.png">oplin</h1>
+	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
+</div>
+
+<div class="nav">
+	<ul>
+		<li class="{{selectedHome}}"><a href="{{baseUrl}}/">Home</a></li>
+		<li class="{{selectedTerminal}}"><a href="{{baseUrl}}/terminal">Terminal App Manual</a></li>
+	</ul>
 </div>
 
 <div class="content">
@@ -196,11 +223,24 @@ function markdownToHtml(md) {
 	return headerHtml + output + gaHtml + footerHtml;
 }
 
-async function main() {
-	const md = fs.readFileSync(rootDir + '/README.md', 'utf8');
-	const html = markdownToHtml(md);
+function renderFileToHtml(sourcePath, targetPath, params) {
+	const md = fs.readFileSync(sourcePath, 'utf8');
+	params.baseUrl = 'http://joplin.cozic.net';
+	params.imageBaseUrl = params.baseUrl + '/images';
+	const html = Mustache.render(markdownToHtml(md), params);
+	fs.writeFileSync(targetPath, html);
+}
 
-	fs.writeFileSync(rootDir + '/docs/index.html', html);
+async function main() {
+	renderFileToHtml(rootDir + '/README.md', rootDir + '/docs/index.html', {
+		baseUrl: '',
+		selectedHome: 'selected',
+	});
+
+	renderFileToHtml(rootDir + '/README_terminal.md', rootDir + '/docs/terminal/index.html', {
+		baseUrl: '..',
+		selectedTerminal: 'selected',
+	});
 }
 
 main().catch((error) => {
