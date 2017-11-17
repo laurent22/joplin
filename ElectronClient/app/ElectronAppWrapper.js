@@ -10,6 +10,7 @@ class ElectronAppWrapper {
 		this.electronApp_ = electronApp;
 		this.env_ = env;
 		this.win_ = null;
+		this.willQuitApp_ = false;
 	}
 
 	electronApp() {
@@ -52,8 +53,13 @@ class ElectronAppWrapper {
 
 		if (this.env_ === 'dev') this.win_.webContents.openDevTools();
 
-		this.win_.on('closed', () => {
-			this.win_ = null
+		this.win_.on('close', (event) => {
+			if (this.willQuitApp_ || process.platform !== 'darwin') {
+				this.win_ = null;
+			} else {
+				event.preventDefault();
+				this.win_.hide();
+			}
 		})
 
 		// Let us register listeners on the window, so we can update the state
@@ -86,20 +92,16 @@ class ElectronAppWrapper {
 
 		this.createWindow();
 
+		this.electronApp_.on('before-quit', () => {
+			this.willQuitApp_ = true;
+		})
+
 		this.electronApp_.on('window-all-closed', () => {
-			// On macOS it is common for applications and their menu bar
-			// to stay active until the user quits explicitly with Cmd + Q
-			if (process.platform !== 'darwin') {
-				this.electronApp_.quit()
-			}
+			this.electronApp_.quit();
 		})
 
 		this.electronApp_.on('activate', () => {
-			// On macOS it's common to re-create a window in the app when the
-			// dock icon is clicked and there are no other windows open.
-			if (this.win_ === null) {
-				createWindow()
-			}
+			this.win_.show();
 		})
 	}
 
