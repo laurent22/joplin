@@ -541,6 +541,22 @@ msgstr "Fichiers d'export Evernote"
 msgid "Quit"
 msgstr "Quitter"
 
+msgid "Edit"
+msgstr "Editer"
+
+msgid "Copy"
+msgstr ""
+
+msgid "Cut"
+msgstr ""
+
+msgid "Paste"
+msgstr ""
+
+#, fuzzy
+msgid "Search in all the notes"
+msgstr "Chercher le motif <pattern> dans toutes les notes."
+
 msgid "Tools"
 msgstr "Outils"
 
@@ -607,6 +623,12 @@ msgstr ""
 msgid "Rename notebook:"
 msgstr "Nouveau carnet"
 
+msgid "Seach:"
+msgstr ""
+
+msgid "Seach"
+msgstr ""
+
 msgid "Layout"
 msgstr ""
 
@@ -653,6 +675,9 @@ msgstr "Supprimer le carnet ?"
 msgid "Remove this tag from all the notes?"
 msgstr ""
 
+msgid "Remove this search from the sidebar?"
+msgstr ""
+
 msgid "Rename"
 msgstr ""
 
@@ -662,6 +687,10 @@ msgstr "Nouveau carnet"
 
 msgid "Tags"
 msgstr ""
+
+#, fuzzy
+msgid "Searches"
+msgstr "Chercher"
 
 msgid "Synchronise"
 msgstr "Synchroniser"
@@ -916,9 +945,6 @@ msgstr "Afficher les métadonnées"
 
 msgid "View location on map"
 msgstr "Voir l'emplacement sur la carte"
-
-msgid "Edit"
-msgstr "Editer"
 
 msgid "Delete notebook"
 msgstr "Supprimer le carnet"

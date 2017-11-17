@@ -490,6 +490,21 @@ msgstr ""
 msgid "Quit"
 msgstr ""
 
+msgid "Edit"
+msgstr ""
+
+msgid "Copy"
+msgstr ""
+
+msgid "Cut"
+msgstr ""
+
+msgid "Paste"
+msgstr ""
+
+msgid "Search in all the notes"
+msgstr ""
+
 msgid "Tools"
 msgstr ""
 
@@ -547,6 +562,12 @@ msgstr ""
 msgid "Rename notebook:"
 msgstr ""
 
+msgid "Seach:"
+msgstr ""
+
+msgid "Seach"
+msgstr ""
+
 msgid "Layout"
 msgstr ""
 
@@ -587,6 +608,9 @@ msgstr ""
 msgid "Remove this tag from all the notes?"
 msgstr ""
 
+msgid "Remove this search from the sidebar?"
+msgstr ""
+
 msgid "Rename"
 msgstr ""
 
@@ -594,6 +618,9 @@ msgid "Notebooks"
 msgstr ""
 
 msgid "Tags"
+msgstr ""
+
+msgid "Searches"
 msgstr ""
 
 msgid "Synchronise"
@@ -836,9 +863,6 @@ msgid "Show metadata"
 msgstr ""
 
 msgid "View location on map"
-msgstr ""
-
-msgid "Edit"
 msgstr ""
 
 msgid "Delete notebook"

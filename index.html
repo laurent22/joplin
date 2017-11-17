@@ -120,101 +120,71 @@
 <p>Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor.</p>
 <p>Notes exported from Evernote via .enex files <a href="#importing-notes-from-evernote">can be imported</a> into Joplin, including the formatted content (which is converted to markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).</p>
 <p>The notes can be <a href="#synchronisation">synchronised</a> with various targets including the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
-<p>The application is still under development but is out of Beta and should be suitable for every day use. The UI of the terminal client is built on top of the great <a href="https://github.com/cronvel/terminal-kit">terminal-kit</a> library, and the Android client front end is done using <a href="https://facebook.github.io/react-native/">React Native</a>.</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/ScreenshotTerminal.png" width="100%"></p>
+<p>Joplin is still under development but is out of Beta and should be suitable for every day use. The UI of the terminal client is built on top of the great <a href="https://github.com/cronvel/terminal-kit">terminal-kit</a> library, and the Android client front end is done using <a href="https://facebook.github.io/react-native/">React Native</a>.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/AllClients.jpg" width="100%"></p>
 <h1 id="installation">Installation</h1>
+<p>Three types of applications are available: <strong>desktop</strong> (Windows, macOS and Linux), <strong>mobile</strong> (Android) or for <strong>terminal</strong> emulator (Windows, macOS and Linux). All applications have similar user interfaces and can synchronise with each others.</p>
+<h2 id="desktop-applications">Desktop applications</h2>
+<table>
+<thead>
+<tr>
+<th>Operating system</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Windows</td>
+<td><a href="https://github.com/laurent22/joplin/releases/download/v0.10.20/Joplin-Setup-0.10.20.exe">Download Joplin for Windows</a></td>
+</tr>
+<tr>
+<td>macOS</td>
+<td><a href="https://github.com/laurent22/joplin/releases/download/v0.10.20/Joplin-0.10.20.dmg">Download Joplin for macOS</a></td>
+</tr>
+<tr>
+<td>Linux</td>
+<td><a href="https://github.com/laurent22/joplin/releases/download/v0.10.20/Joplin-0.10.20-x86_64.AppImage">Download Joplin for Linux</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="mobile-applications">Mobile applications</h2>
+<table>
+<thead>
+<tr>
+<th>Operating system</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Android</td>
+<td><a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="60px" src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a></td>
+</tr>
+<tr>
+<td>iOS</td>
+<td>Coming soon!</td>
+</tr>
+</tbody>
+</table>
+<h2 id="terminal-application">Terminal application</h2>
+<p>On macOS, Linux or Windows (via <a href="https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&amp;MSPPError=-2147217396">WSL</a>), type:</p>
 <pre><code>npm install -g joplin
 </code></pre><p>To start it, type <code>joplin</code>.</p>
-<h1 id="demo">Demo</h1>
-<p>The demo application shows various Wikipedia articles converted to Markdown and organised into notebooks, as well as an example to-do list, in order to test and demonstrate the application. The demo application and its settings will be installed in a separate directory so as not to interfere with any existing Joplin application.</p>
-<pre><code>npm install -g demo-joplin
-</code></pre><p>To start it, type <code>demo-joplin</code>.</p>
+<p>For usage information, please refer to the full <a href="http://joplin.cozic.net/terminal">Joplin Terminal Application Documentation</a>.</p>
 <h1 id="features">Features</h1>
 <ul>
-<li>Mobile and command line applications.</li>
+<li>Desktop, mobile and terminal applications.</li>
 <li>Support notes, to-dos, tags and notebooks.</li>
-<li>Offline first, so the entire data is always available on the device.</li>
+<li>Offline first, so the entire data is always available on the device even without an internet connection.</li>
 <li>Ability to synchronise with multiple targets, including the file system and OneDrive (Dropbox is planned).</li>
 <li>Synchronises to a plain text format, which can be easily manipulated, backed up, or exported to a different format.</li>
-<li>Plain text notes, which are rendered as markdown in the mobile application.</li>
+<li>Plain text notes, which are rendered as markdown in the mobile and desktop application.</li>
 <li>Tag support</li>
-<li>File attachment support (likewise, all file attachments can be imported from Evernote but currently cannot be manually added to a note)</li>
+<li>File attachment support (images are displayed, and other files are linked and can be opened in the relevant application).</li>
 <li>Search functionality.</li>
 <li>Geo-location support.</li>
-<li>Supports multiple languages.</li>
+<li>Supports multiple languages</li>
 </ul>
-<h1 id="usage">Usage</h1>
-<p>To start the application type <code>joplin</code>. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via <a href="#available-shortcuts">shortcuts</a>.</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/ScreenshotTerminalCaptions.png" height="450px"></p>
-<h2 id="input-modes">Input modes</h2>
-<p>Joplin user interface is partly based on the text editor Vim and offers two different modes to interact with the notes and notebooks:</p>
-<h3 id="normal-mode">Normal mode</h3>
-<p>Allows moving from one pane to another using the <code>Tab</code> and <code>Shift-Tab</code> keys, and to select/view notes using the arrow keys. Text area can be scrolled using the arrow keys too. Press <code>Enter</code> to edit a note. Various other <a href="#available-shortcuts">shortcuts</a> are available.</p>
-<h3 id="command-line-mode">Command-line mode</h3>
-<p>Press <code>:</code> to enter command line mode. From there, the Joplin commands such as <code>mknote</code> or <code>search</code> are available. See the <a href="#available-commands">full list of commands</a>.</p>
-<p>It is possible to refer to a note or notebook by title or ID. However the simplest way is to refer to the currently selected item using one of these shortcuts:</p>
-<table>
-<thead>
-<tr>
-<th>Shortcut</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>$n</code></td>
-<td>Refers to the currently selected note</td>
-</tr>
-<tr>
-<td><code>$b</code></td>
-<td>Refers to the currently selected notebook</td>
-</tr>
-<tr>
-<td><code>$c</code></td>
-<td>Refers to the currently selected item. For example, if the note list is current active, <code>$c</code> will refer to the currently selected note.</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Examples:</strong></p>
-<p>Create a new note with title &quot;Wednesday&#39;s meeting&quot;:</p>
-<pre><code>mknote &quot;Wednesday&#39;s meeting&quot;
-</code></pre><p>Create a new to-do:</p>
-<pre><code>mktodo &quot;Buy bread&quot;
-</code></pre><p>Move the currently selected note ($n) to the notebook with title &quot;Personal&quot;</p>
-<pre><code>mv $n &quot;Personal&quot;
-</code></pre><p>Rename the currently selected notebook ($b) to &quot;Something&quot;:</p>
-<pre><code>ren $b &quot;Something&quot;
-</code></pre><p>Attach a local file to the currently selected note ($n):</p>
-<pre><code>ren $n /home/laurent/pictures/Vacation12.jpg
-</code></pre><p>The configuration can also be changed from command-line mode. For example, to change the current editor to Sublime Text:</p>
-<pre><code>config editor &quot;subl -w&quot;
-</code></pre><h2 id="editing-a-note">Editing a note</h2>
-<p>To edit a note, select it and press <code>ENTER</code>. Or, in command-line mode, type <code>edit $n</code> to edit the currently selected note, or <code>edit &quot;Note title&quot;</code> to edit a particular note.</p>
-<h2 id="getting-help">Getting help</h2>
-<p>The complete usage information is available from command-line mode, by typing one of these commands:</p>
-<table>
-<thead>
-<tr>
-<th>Command</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>help</code></td>
-<td>General help information</td>
-</tr>
-<tr>
-<td><code>help shortcuts</code></td>
-<td>Lists the available shortcuts</td>
-</tr>
-<tr>
-<td><code>help [command]</code></td>
-<td>Displays information about a particular command</td>
-</tr>
-</tbody>
-</table>
-<p>If the help is not fully visible, press <code>Tab</code> multiple times till the console is in focus and use the arrow keys or page up/down to scroll the text.</p>
 <h1 id="importing-notes-from-evernote">Importing notes from Evernote</h1>
 <p>Joplin was designed as a replacement for Evernote and so can import complete Evernote notebooks, as well as notes, tags, resources (attached files) and note metadata (such as author, geo-location, etc.) via ENEX files. In terms of data, the only two things that might slightly differ are:</p>
 <ul>
@@ -224,6 +194,12 @@
 </li>
 </ul>
 <p>To import Evernote data, follow these steps:</p>
+<h2 id="desktop-application">Desktop application</h2>
+<ul>
+<li>Open the &quot;File&quot; menu and click &quot;Import Evernote notes&quot;</li>
+</ul>
+<p>This will open a new screen which will display the import progress. The notes will be imported into a new separate notebook (so that, in case of a mistake, the notes are not mixed up with any existing notes). If needed then can then be moved to a different notebook, or the notebook can be renamed, etc.</p>
+<h2 id="terminal-application">Terminal application</h2>
 <ul>
 <li>First, export your Evernote notebooks to ENEX files as described <a href="https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks">here</a>.</li>
 <li>In Joplin, in <a href="#command-line-mode">command-line mode</a>, type <code>import-enex /path/to/file.enex</code>. This will import the notes into a new notebook named after the filename.</li>
@@ -232,21 +208,13 @@
 <h1 id="synchronisation">Synchronisation</h1>
 <p>One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as OneDrive or Dropbox, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.</p>
 <p>Currently, synchronisation is possible with OneDrive (by default) or the local filesystem. A Dropbox driver will also be available once <a href="https://github.com/facebook/react-native/issues/14445">this React Native bug</a> is fixed. When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
+<h2 id="desktop-application">Desktop application</h2>
+<p>To initiate the synchronisation process, click on the &quot;Synchronise&quot; button in the sidebar. You will be asked to login to OneDrive to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). After that, the application will synchronise in the background whenever it is running, or you can click on &quot;Synchronise&quot; to start a synchronisation manually</p>
+<h2 id="terminal-application">Terminal application</h2>
 <p>To initiate the synchronisation process, type <code>:sync</code>. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). After that, the application will synchronise in the background whenever it is running. It is possible to also synchronise outside of the user interface by typing <code>joplin sync</code> from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:</p>
 <pre><code>*/30 * * * * /path/to/joplin sync
-</code></pre><h1 id="android-client">Android client</h1>
-<p>An Android client is available and can synchronise with the terminal client via OneDrive:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/Phone.png"></p>
-<p><a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="60px" src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a></p>
-<h1 id="urls">URLs</h1>
-<p>When Ctrl+Clicking a URL, most terminals will open that URL in the default browser. However, one issue, especially with long URLs, is that they can end up like this:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/UrlCut.png" width="300px"></p>
-<p>Not only it makes the text hard to read, but the link, being cut in two, will also not be clickable.</p>
-<p>As a solution Joplin tries to start a mini-server in the background and, if successful, all the links will be converted to a much shorter URL:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/UrlNoCut.png" width="300px"></p>
-<p>Since this is still an actual URL, the terminal will still make it clickable. And with shorter URLs, the text is more readable and the links unlikely to be cut. Both resources (files that are attached to notes) and external links are handled in this way.</p>
-<h1 id="attachments-resources">Attachments / Resources</h1>
-<p>In Markdown, links to resources are represented as a simple ID to the resource. In order to give access to these resources, they will be, like links, converted to local URLs. Clicking this link will then open a browser, which will handle the file - i.e. display the image, open the PDF file, etc.</p>
+</code></pre><h1 id="attachments-resources">Attachments / Resources</h1>
+<p>In Markdown, links to resources are represented as a simple ID to the resource. In the note viewer however, these resources, if they are images, will be displayed or, if they are other files (PDF, text files, etc.) they will be displayed as links. Clicking on this link will open the file in the default application.</p>
 <h1 id="localisation">Localisation</h1>
 <p>Joplin is currently available in English and French. If you would like to contribute a translation, it is quite straightforward, please follow these steps:</p>
 <ul>
@@ -256,191 +224,10 @@
 <li>From then you can translate the file. Once it&#39;s done, please send the file to <a href="https://raw.githubusercontent.com/laurent22/joplin/master/Assets/Adresse.png">this address</a> or open a pull request.</li>
 </ul>
 <p>This translation will apply to both the terminal and the Android application.</p>
-<h1 id="available-shortcuts">Available shortcuts</h1>
-<p>There are two types of shortcuts: those that manipulate the user interface directly, such as <code>TAB</code> to move from one pane to another, and those that are simply shortcuts to actual commands. In a way similar to Vim, these shortcuts are generally a verb followed by an object. For example, typing <code>mn</code> ([m]ake [n]ote), is used to create a new note: it will switch the interface to command line mode and pre-fill it with <code>mknote &quot;&quot;</code> from where the title of the note can be entered. See below for the full list of shortcuts:</p>
-<pre><code>Tab       Give focus to next pane
-Shift+Tab Give focus to previous pane
-:         Enter command line mode
-ESC       Exit command line mode
-ENTER     Edit the selected note
-Ctrl+C    Cancel the current command.
-Ctrl+D    Exit the application.
-DELETE    Delete the currently selected note or notebook.
-SPACE     Set a to-do as completed / not completed
-tc        [t]oggle [c]onsole between maximized/minimized/hidden/visible.
-/         Search
-tm        [t]oggle note [m]etadata.
-mn        [M]ake a new [n]ote
-mt        [M]ake a new [t]odo
-mb        [M]ake a new note[b]ook
-yn        Copy ([Y]ank) the [n]ote to a notebook.
-dn        Move the note to a notebook.
-</code></pre><h1 id="available-commands">Available commands</h1>
-<p>The following commands are available in <a href="#command-line-mode">command-line mode</a>:</p>
-<pre><code>attach &lt;note&gt; &lt;file&gt;
-
-    Attaches the given file to the note.
-
-config [name] [value]
-
-    Gets or sets a config value. If [value] is not provided, it will show the 
-    value of [name]. If neither [name] nor [value] is provided, it will list 
-    the current configuration.
-
-    -v, --verbose  Also displays unset and hidden config variables.
-
-Possible keys/values:
-
-    editor                 Text editor.
-                           The editor that will be used to open a note. If 
-                           none is provided it will try to auto-detect the 
-                           default editor.
-                           Type: string.
-
-    locale                 Language.
-                           Type: Enum.
-                           Possible values: en_GB (English), fr_FR (Français).
-                           Default: &quot;en_GB&quot;
-
-    sync.2.path            File system synchronisation target directory.
-                           The path to synchronise with when file system 
-                           synchronisation is enabled. See `sync.target`.
-                           Type: string.
-
-    sync.interval          Synchronisation interval.
-                           Type: Enum.
-                           Possible values: 0 (Disabled), 300 (5 minutes), 600 
-                           (10 minutes), 1800 (30 minutes), 3600 (1 hour), 
-                           43200 (12 hours), 86400 (24 hours).
-                           Default: 300
-
-    sync.target            Synchronisation target.
-                           The target to synchonise to. If synchronising with 
-                           the file system, set `sync.2.path` to specify the 
-                           target directory.
-                           Type: Enum.
-                           Possible values: 1 (Memory), 2 (File system), 3 
-                           (OneDrive).
-                           Default: 3
-
-    trackLocation          Save geo-location with notes.
-                           Type: bool.
-                           Default: true
-
-    uncompletedTodosOnTop  Show uncompleted todos on top of the lists.
-                           Type: bool.
-                           Default: true
-
-cp &lt;note&gt; [notebook]
-
-    Duplicates the notes matching &lt;note&gt; to [notebook]. If no notebook is 
-    specified the note is duplicated in the current notebook.
-
-done &lt;note&gt;
-
-    Marks a to-do as done.
-
-edit &lt;note&gt;
-
-    Edit note.
-
-exit
-
-    Exits the application.
-
-module.exports = &lt;directory&gt;
-
-    Exports Joplin data to the given directory. By default, it will export the 
-    complete database including notebooks, notes, tags and resources.
-
-    --note &lt;note&gt;          Exports only the given note.
-    --notebook &lt;notebook&gt;  Exports only the given notebook.
-
-geoloc &lt;note&gt;
-
-    Displays a geolocation URL for the note.
-
-help [command]
-
-    Displays usage information.
-
-import-enex &lt;file&gt; [notebook]
-
-    Imports an Evernote notebook file (.enex file).
-
-    -f, --force  Do not ask for confirmation.
-
-mkbook &lt;new-notebook&gt;
-
-    Creates a new notebook.
-
-mknote &lt;new-note&gt;
-
-    Creates a new note.
-
-mktodo &lt;new-todo&gt;
-
-    Creates a new to-do.
-
-mv &lt;note&gt; [notebook]
-
-    Moves the notes matching &lt;note&gt; to [notebook].
-
-ren &lt;item&gt; &lt;name&gt;
-
-    Renames the given &lt;item&gt; (note or notebook) to &lt;name&gt;.
-
-rmbook &lt;notebook&gt;
-
-    Deletes the given notebook.
-
-    -f, --force  Deletes the notebook without asking for confirmation.
-
-rmnote &lt;note-pattern&gt;
-
-    Deletes the notes matching &lt;note-pattern&gt;.
-
-    -f, --force  Deletes the notes without asking for confirmation.
-
-search &lt;pattern&gt; [notebook]
-
-    Searches for the given &lt;pattern&gt; in all the notes.
-
-status
-
-    Displays summary about the notes and notebooks.
-
-sync
-
-    Synchronises with remote storage.
-
-    --target &lt;target&gt;  Sync to provided target (defaults to sync.target config 
-                       value)
-    --random-failures  For debugging purposes. Do not use.
-
-tag &lt;tag-command&gt; [tag] [note]
-
-    &lt;tag-command&gt; can be &quot;add&quot;, &quot;remove&quot; or &quot;list&quot; to assign or remove [tag] 
-    from [note], or to list the notes associated with [tag]. The command `tag 
-    list` can be used to list all the tags.
-
-todo &lt;todo-command&gt; &lt;note-pattern&gt;
-
-    &lt;todo-command&gt; can either be &quot;toggle&quot; or &quot;clear&quot;. Use &quot;toggle&quot; to toggle 
-    the given to-do between completed and uncompleted state (If the target is 
-    a regular note it will be converted to a to-do). Use &quot;clear&quot; to convert 
-    the to-do back to a regular note.
-
-undone &lt;note&gt;
-
-    Marks a to-do as non-completed.
-
-version
-
-    Displays version information
-</code></pre><h1 id="known-bugs">Known bugs</h1>
+<h1 id="known-bugs">Known bugs</h1>
 <ul>
-<li>Non-alphabetical characters such as Chinese or Arabic might create glitches in the user interface on Windows. This is a limitation of the current Windows console.</li>
+<li>Non-alphabetical characters such as Chinese or Arabic might create glitches in the terminal on Windows. This is a limitation of the current Windows console.</li>
+<li>In the React Native app, changing the notebook of a note sometimes has no effect, due to <a href="https://github.com/facebook/react-native/issues/15556">this bug</a>. Due to <a href="https://github.com/facebook/react-native/issues/13351">this other bug</a>, changing one config value sometimes also set a different one. This is likely to be resolved soon in a future version of React Native.</li>
 </ul>
 <h1 id="license">License</h1>
 <p>Copyright (c) 2016-2017 Laurent Cozic</p>
