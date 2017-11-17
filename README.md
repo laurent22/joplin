@@ -6,7 +6,7 @@ Notes exported from Evernote via .enex files [can be imported](#importing-notes-
 
 The notes can be [synchronised](#synchronisation) with various targets including the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
 
-Joplin is still under development but is out of Beta and should be suitable for every day use. The UI of the terminal client is built on top of the great [terminal-kit](https://github.com/cronvel/terminal-kit) library, and the Android client front end is done using [React Native](https://facebook.github.io/react-native/).
+Joplin is still under development but is out of Beta and should be suitable for every day use. The UI of the terminal client is built on top of the great [terminal-kit](https://github.com/cronvel/terminal-kit) library, the desktop client using [Electron](https://electronjs.org/), and the Android client front end is done using [React Native](https://facebook.github.io/react-native/).
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/AllClients.jpg" width="100%">
 
