@@ -8,25 +8,26 @@ The notes can be [synchronised](#synchronisation) with various targets including
 
 Joplin is still under development but is out of Beta and should be suitable for every day use. The UI of the terminal client is built on top of the great [terminal-kit](https://github.com/cronvel/terminal-kit) library, and the Android client front end is done using [React Native](https://facebook.github.io/react-native/).
 
-**SCREENSHOT OF THREE CLIENTS SIDE BY SIDE**
-
-<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/ScreenshotTerminal.png" width="100%">
-<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/Phone.png">
+<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/AllClients.jpg" width="100%">
 
 # Installation
 
-Three types of applications are available: **desktop** (Windows, macOS and Linux), **mobile** (Android and iOS) or for **terminal** emulator (Windows, macOS and Linux). All applications have similar user interfaces and can synchronise with each others.
+Three types of applications are available: **desktop** (Windows, macOS and Linux), **mobile** (Android) or for **terminal** emulator (Windows, macOS and Linux). All applications have similar user interfaces and can synchronise with each others.
 
 ## Desktop applications
 
-* Download Joplin for Windows
-* Download Joplin for macOS
-* Download Joplin for Linux
+Operating system | Link
+-----------------|--------
+Windows          | [Download Joplin for Windows](https://github.com/laurent22/joplin/releases/download/v0.10.20/Joplin-Setup-0.10.20.exe)
+macOS            | [Download Joplin for macOS](https://github.com/laurent22/joplin/releases/download/v0.10.20/Joplin-0.10.20.dmg)
+Linux            | [Download Joplin for Linux](https://github.com/laurent22/joplin/releases/download/v0.10.20/Joplin-0.10.20-x86_64.AppImage)
 
 ## Mobile applications
 
-* Get Android app - <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="60px" src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
-* Get iOS app
+Operating system | Link
+-----------------|--------
+Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="60px" src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
+iOS              | Coming soon!
 
 ## Terminal application
 
@@ -36,7 +37,7 @@ On macOS, Linux or Windows (via [WSL](https://msdn.microsoft.com/en-us/commandli
 
 To start it, type `joplin`.
 
-For usage information, please see the full [Joplin Terminal Application Documentation](http://joplin.cozic.net/terminal).
+For usage information, please refer to the full [Joplin Terminal Application Documentation](http://joplin.cozic.net/terminal).
 
 # Features 
 
@@ -47,10 +48,10 @@ For usage information, please see the full [Joplin Terminal Application Document
 - Synchronises to a plain text format, which can be easily manipulated, backed up, or exported to a different format.
 - Plain text notes, which are rendered as markdown in the mobile and desktop application.
 - Tag support
-- File attachment support (images are displayed and other files are linked and can be opened in the relevant application).
+- File attachment support (images are displayed, and other files are linked and can be opened in the relevant application).
 - Search functionality.
 - Geo-location support.
-- Supports multiple languages (Currently English and French).
+- Supports multiple languages
 
 # Importing notes from Evernote
 
