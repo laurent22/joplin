@@ -154,7 +154,7 @@ class MainScreenComponent extends React.Component {
 		} else if (command.name === 'search') {
 			this.setState({
 				promptOptions: {
-					label: _('Seach:'),
+					label: _('Search:'),
 					onClose: async (answer) => {
 						if (answer !== null) {
 							const searchId = uuid.create();
@@ -253,7 +253,7 @@ class MainScreenComponent extends React.Component {
 		});
 
 		headerButtons.push({
-			title: _('Seach'),
+			title: _('Search'),
 			iconName: 'fa-search',
 			onClick: () => { this.doCommand({ name: 'search' }) },
 		});

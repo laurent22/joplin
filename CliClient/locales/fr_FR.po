@@ -114,7 +114,7 @@ msgid "%s: %s"
 msgstr "%s : %s"
 
 msgid "Your choice: "
-msgstr "Votre choix :"
+msgstr "Votre choix : "
 
 #, javascript-format
 msgid "Invalid answer: %s"
@@ -516,12 +516,11 @@ msgstr ""
 "aucun fichier en dehors de ce répertoire, ni à d'autres données "
 "personnelles. Aucune donnée ne sera partagé avec aucun tier."
 
-#, fuzzy
 msgid "Search:"
-msgstr "Chercher"
+msgstr "Recherche :"
 
 msgid "File"
-msgstr ""
+msgstr "Fichier"
 
 msgid "New note"
 msgstr "Nouvelle note"
@@ -542,20 +541,19 @@ msgid "Quit"
 msgstr "Quitter"
 
 msgid "Edit"
-msgstr "Editer"
+msgstr "Edition"
 
 msgid "Copy"
-msgstr ""
+msgstr "Copier"
 
 msgid "Cut"
-msgstr ""
+msgstr "Couper"
 
 msgid "Paste"
-msgstr ""
+msgstr "Coller"
 
-#, fuzzy
 msgid "Search in all the notes"
-msgstr "Chercher le motif <pattern> dans toutes les notes."
+msgstr "Chercher dans toutes les notes"
 
 msgid "Tools"
 msgstr "Outils"
@@ -566,16 +564,15 @@ msgstr "Options"
 msgid "Help"
 msgstr "Aide"
 
-#, fuzzy
 msgid "Website and documentation"
-msgstr "Documentation"
+msgstr "Documentation en ligne"
 
 msgid "About Joplin"
 msgstr "A props de Joplin"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s)"
+msgstr "%s %s (%s, %s)"
 
 msgid "OK"
 msgstr "OK"
@@ -586,71 +583,62 @@ msgstr "Annulation"
 msgid "Back"
 msgstr "Retour"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr ""
 "Un nouveau carnet \"%s\" va être créé et le fichier \"%s\" va être importé "
-"dedans. Continuer ?"
+"dedans"
 
-#, fuzzy
 msgid "Please create a notebook first."
 msgstr "Veuillez d'abord sélectionner un carnet."
 
-#, fuzzy
 msgid "Note title:"
-msgstr "cat <titre>"
+msgstr "Titre de la note :"
 
-#, fuzzy
 msgid "Please create a notebook first"
-msgstr "Veuillez d'abord sélectionner un carnet."
+msgstr "Veuillez d'abord créer un carnet d'abord"
 
-#, fuzzy
 msgid "To-do title:"
-msgstr "cat <titre>"
+msgstr "Titre de la tâche :"
 
-#, fuzzy
 msgid "Notebook title:"
-msgstr "cat <titre>"
+msgstr "Titre du carnet :"
 
 msgid "Add or remove tags:"
-msgstr "Modifier les étiquettes"
+msgstr "Modifier les étiquettes :"
 
 msgid "Separate each tag by a comma."
-msgstr ""
+msgstr "Séparez chaque étiquette par une virgule."
 
-#, fuzzy
 msgid "Rename notebook:"
-msgstr "Nouveau carnet"
+msgstr "Renommer le carnet :"
 
 msgid "Seach:"
-msgstr ""
+msgstr "Chercher :"
 
 msgid "Seach"
-msgstr ""
+msgstr "Chercher"
 
 msgid "Layout"
-msgstr ""
+msgstr "Disposition"
 
 msgid "Add or remove tags"
-msgstr ""
+msgstr "Gérer les étiquettes"
 
 msgid "Switch between note and to-do"
-msgstr ""
+msgstr "Alterner entre note et tâche"
 
-#, fuzzy
 msgid "Delete"
-msgstr "Supprimer la note"
+msgstr "Supprimer"
 
-#, fuzzy
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr ""
-"Vous n'avez pour l'instant pas de carnets. Créez-en un en pressant le bouton "
-"(+)."
+"Pas de notes ici. Créez-en une en pressant le bouton \"Nouvelle note\"."
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
-msgstr ""
+msgstr "Lien ou message non géré : %s"
 
 msgid "Attach file"
 msgstr "Attacher un fichier"
@@ -658,13 +646,11 @@ msgstr "Attacher un fichier"
 msgid "Refresh"
 msgstr "Rafraîchir"
 
-#, fuzzy
 msgid "OneDrive Login"
-msgstr "OneDrive"
+msgstr "Connection OneDrive"
 
-#, fuzzy
 msgid "Import"
-msgstr "Importé - %s"
+msgstr "Importer"
 
 msgid "Configuration"
 msgstr "Configuration"
@@ -673,24 +659,22 @@ msgid "Delete notebook?"
 msgstr "Supprimer le carnet ?"
 
 msgid "Remove this tag from all the notes?"
-msgstr ""
+msgstr "Enlever cette étiquette de toutes les notes ?"
 
 msgid "Remove this search from the sidebar?"
-msgstr ""
+msgstr "Enlever cette recherche de la barre latérale ?"
 
 msgid "Rename"
-msgstr ""
+msgstr "Renommer"
 
-#, fuzzy
 msgid "Notebooks"
-msgstr "Nouveau carnet"
+msgstr "Carnets"
 
 msgid "Tags"
-msgstr ""
+msgstr "Etiquettes"
 
-#, fuzzy
 msgid "Searches"
-msgstr "Chercher"
+msgstr "Recherches"
 
 msgid "Synchronise"
 msgstr "Synchroniser"
