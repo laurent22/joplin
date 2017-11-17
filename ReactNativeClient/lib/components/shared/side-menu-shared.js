@@ -20,6 +20,16 @@ shared.renderTags = function(props, renderItem) {
 	return tagItems;
 }
 
+shared.renderSearches = function(props, renderItem) {
+	let searches = props.searches.slice();
+	let searchItems = [];
+	for (let i = 0; i < searches.length; i++) {
+		const search = searches[i];
+		searchItems.push(renderItem(search, props.selectedSearchId == search.id && props.notesParentType == 'Search'));
+	}
+	return searchItems;
+}
+
 shared.synchronize_press = async function(comp) {
 	const { Setting } = require('lib/models/setting.js');
 	const { reg } = require('lib/registry.js');

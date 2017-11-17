@@ -157,7 +157,7 @@ const footerHtml = `
 //     Grocery shopping list 📝
 //     Work itinerary
 //     Tuesday random note
-//     Vacation plans ☀️
+//     Vacation plans ☀
 // 			</pre>
 // 		</td>
 // 	</tr>

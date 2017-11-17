@@ -220,6 +220,36 @@ class Application extends BaseApplication {
 					click: () => { bridge().electronApp().exit() }
 				}]
 			}, {
+				label: _('Edit'),
+				submenu: [{
+					label: _('Copy'),
+					screens: ['Main'],
+					role: 'copy',
+					accelerator: 'CommandOrControl+C',
+				}, {
+					label: _('Cut'),
+					screens: ['Main'],
+					role: 'copy',
+					accelerator: 'CommandOrControl+X',
+				}, {
+					label: _('Paste'),
+					screens: ['Main'],
+					role: 'copy',
+					accelerator: 'CommandOrControl+V',
+				}, {
+					type: 'separator',
+				}, {
+					label: _('Search in all the notes'),
+					screens: ['Main'],
+					accelerator: 'F6',
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'search',
+						});
+					},
+				}]
+			}, {
 				label: _('Tools'),
 				submenu: [{
 					label: _('Options'),

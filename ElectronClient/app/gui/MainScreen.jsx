@@ -6,8 +6,10 @@ const { NoteList } = require('./NoteList.min.js');
 const { NoteText } = require('./NoteText.min.js');
 const { PromptDialog } = require('./PromptDialog.min.js');
 const { Setting } = require('lib/models/setting.js');
+const { BaseModel } = require('lib/base-model.js');
 const { Tag } = require('lib/models/tag.js');
 const { Note } = require('lib/models/note.js');
+const { uuid } = require('lib/uuid.js');
 const { Folder } = require('lib/models/folder.js');
 const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
@@ -148,7 +150,35 @@ class MainScreenComponent extends React.Component {
 						this.setState({ promptOptions: null });
 					}
 				},
-			});			
+			});
+		} else if (command.name === 'search') {
+			this.setState({
+				promptOptions: {
+					label: _('Seach:'),
+					onClose: async (answer) => {
+						if (answer !== null) {
+							const searchId = uuid.create();
+
+							this.props.dispatch({
+								type: 'SEARCH_ADD',
+								search: {
+									id: searchId,
+									title: answer,
+									query_pattern: answer,
+									query_folder_id: null,
+									type_: BaseModel.TYPE_SEARCH,
+								},
+							});
+
+							this.props.dispatch({
+								type: 'SEARCH_SELECT',
+								id: searchId,
+							});
+						}
+						this.setState({ promptOptions: null });
+					}
+				},
+			});	
 		} else {
 			commandProcessed = false;
 		}
@@ -220,6 +250,12 @@ class MainScreenComponent extends React.Component {
 			title: _('New notebook'),
 			iconName: 'fa-folder-o',
 			onClick: () => { this.doCommand({ name: 'newNotebook' }) },
+		});
+
+		headerButtons.push({
+			title: _('Seach'),
+			iconName: 'fa-search',
+			onClick: () => { this.doCommand({ name: 'search' }) },
 		});
 
 		headerButtons.push({

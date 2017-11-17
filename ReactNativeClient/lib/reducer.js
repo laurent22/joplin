@@ -35,6 +35,7 @@ function handleItemDelete(state, action) {
 		'FOLDER_DELETE': ['folders', 'selectedFolderId'],
 		'NOTE_DELETE': ['notes', 'selectedNoteId'],
 		'TAG_DELETE': ['tags', 'selectedTagId'],
+		'SEARCH_DELETE': ['searches', 'selectedSearchId'],
 	};
 
 	const listKey = map[action.type][0];
@@ -291,22 +292,9 @@ const reducer = (state = defaultState, action) => {
 				newState.searches = searches;
 				break;
 
-			case 'SEARCH_REMOVE':
-				
-				let foundIndex = -1;
-				for (let i = 0; i < state.searches.length; i++) {
-					if (state.searches[i].id === action.id) {
-						foundIndex = i;
-						break;
-					}
-				}
+			case 'SEARCH_DELETE':
 
-				if (foundIndex >= 0) {
-					newState = Object.assign({}, state);
-					let newSearches = newState.searches.slice();
-					newSearches.splice(foundIndex, 1);
-					newState.searches = newSearches;
-				}
+				newState = handleItemDelete(state, action);
 				break;			
 
 			case 'SEARCH_SELECT':

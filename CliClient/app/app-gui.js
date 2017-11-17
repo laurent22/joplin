@@ -327,7 +327,7 @@ class AppGui {
 						this.stdout(_('To delete a tag, untag the associated notes.'));
 					} else if (item.type_ === BaseModel.TYPE_SEARCH) {
 						this.store().dispatch({
-							type: 'SEARCH_REMOVE',
+							type: 'SEARCH_DELETE',
 							id: item.id,
 						});
 					}
