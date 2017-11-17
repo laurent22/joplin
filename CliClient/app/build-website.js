@@ -115,6 +115,8 @@ const headerHtml = `
 	}
 	.nav a {
 		color: white;
+		display: inline-block;
+		padding: .7em 1.4em .7em 1.4em;
 	}
 	.nav ul {
 		padding-left: 2em;
@@ -122,7 +124,7 @@ const headerHtml = `
 	}
 	.nav ul li {
 		display: inline-block;
-		padding: .7em 1.4em .7em 1.4em;
+		padding: 0;
 	}
 	.nav li.selected {
 		background-color: #222;
