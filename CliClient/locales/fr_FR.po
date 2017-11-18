@@ -614,12 +614,6 @@ msgstr "Séparez chaque étiquette par une virgule."
 msgid "Rename notebook:"
 msgstr "Renommer le carnet :"
 
-msgid "Seach:"
-msgstr "Chercher :"
-
-msgid "Seach"
-msgstr "Chercher"
-
 msgid "Layout"
 msgstr "Disposition"
 
@@ -950,6 +944,12 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Seach:"
+#~ msgstr "Chercher :"
+
+#~ msgid "Seach"
+#~ msgstr "Chercher"
 
 #~ msgid ""
 #~ "Command line argument \"%s\" contains both quotes and double-quotes - "

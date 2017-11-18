@@ -562,12 +562,6 @@ msgstr ""
 msgid "Rename notebook:"
 msgstr ""
 
-msgid "Seach:"
-msgstr ""
-
-msgid "Seach"
-msgstr ""
-
 msgid "Layout"
 msgstr ""
 
