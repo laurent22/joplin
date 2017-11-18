@@ -13,6 +13,7 @@ const headerHtml = `<!doctype html>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+	<link rel="stylesheet" href="https://opensource.keycdn.com/fontawesome/4.7.0/font-awesome.min.css" integrity="sha384-dNpIIXE8U05kAbPhy3G1cz+yZmTzA6CY8Vg/u2L9xRnHjJiAK76m2BIEaSEV+/aU" crossorigin="anonymous"> 
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
 	<style>
 	body {
@@ -128,13 +129,13 @@ const headerHtml = `<!doctype html>
 	.nav a {
 		color: white;
 		display: inline-block;
-		padding: .6em 1.1em .6em 1.1em;
+		padding: .6em .9em .6em .9em;
 	}
 	.nav ul {
 		padding-left: 2em;
 		margin-bottom: 0;
 		display: table-cell;
-		min-width: 420px;
+		min-width: 165px;
 	}
 	.nav ul li {
 		display: inline-block;
@@ -173,14 +174,14 @@ const headerHtml = `<!doctype html>
 <div class="nav-wrapper">
 	<div class="nav">
 		<ul>
-			<li class="{{selectedHome}}"><a href="{{baseUrl}}/">Home</a></li>
-			<li class="{{selectedTerminal}}"><a href="{{baseUrl}}/terminal">Terminal App Manual</a></li>
-			<li class="{{selectedDesktop}}"><a href="{{baseUrl}}/desktop">Desktop App</a></li>
+			<li class="{{selectedHome}}"><a href="{{baseUrl}}/" title="Home"><i class="fa fa-home"></i></a></li>
+			<li class="{{selectedTerminal}}"><a href="{{baseUrl}}/terminal" title="Terminal"><i class="fa fa-terminal"></i></a></li>
+			<li class="{{selectedDesktop}}"><a href="{{baseUrl}}/desktop" title="Desktop"><i class="fa fa-desktop"></i></a></li>
 		</ul>
 		<div class="nav-right">
 			<iframe src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
 			<a class="twitter-share-button" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fjoplin.cozic.net">Tweet</a>
-			<iframe class="github-share-button" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="110px" height="20px"></iframe>
+			<iframe class="github-share-button" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="80px" height="20px"></iframe>
 		</div>
 	</div>
 </div>
