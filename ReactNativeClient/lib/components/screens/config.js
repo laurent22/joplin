@@ -1,9 +1,10 @@
 const React = require('react'); const Component = React.Component;
-const { View, Switch, Slider, StyleSheet, Picker, Text, Button } = require('react-native');
+const { View, Switch, Slider, StyleSheet, Text, Button, ScrollView } = require('react-native');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { _, setLocale } = require('lib/locale.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
+const { Dropdown } = require('lib/components/Dropdown.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const { Setting } = require('lib/models/setting.js');
 
@@ -26,7 +27,14 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		this.styles_ = {};
 
 		let styles = {
+			body: {
+				flex: 1,
+				justifyContent: 'flex-start',
+				flexDirection: 'column',
+			},
 			settingContainer: {
+				flex: 1,
+				flexDirection: 'row',
 				borderBottomWidth: 1,
 				borderBottomColor: theme.dividerColor,
 				paddingTop: theme.marginTop,
@@ -38,13 +46,12 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				fontWeight: 'bold',
 				color: theme.color,
 				fontSize: theme.fontSize,
+				flex: 1,
 			},
 			settingControl: {
 				color: theme.color,
+				flex: 1,
 			},
-			pickerItem: {
-				fontSize: theme.fontSize,
-			}
 		}
 
 		styles.switchSettingText = Object.assign({}, styles.settingText);
@@ -63,6 +70,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	}
 
 	settingToComponent(key, value) {
+		const themeId = this.props.theme;
+		const theme = themeStyle(themeId);
 		let output = null;
 
 		const updateSettingValue = (key, value) => {
@@ -72,25 +81,36 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		const md = Setting.settingMetadata(key);
 
 		if (md.isEnum) {
-			// The Picker component doesn't work properly with int values, so
-			// convert everything to string (Setting.setValue will convert
-			// back to the correct type.
-
 			value = value.toString();
 
 			let items = [];
 			const settingOptions = md.options();
 			for (let k in settingOptions) {
 				if (!settingOptions.hasOwnProperty(k)) continue;
-				items.push(<Picker.Item label={settingOptions[k]} value={k.toString()} key={k}/>);
+				items.push({ label: settingOptions[k], value: k.toString() });
 			}
 
 			return (
 				<View key={key} style={this.styles().settingContainer}>
 					<Text key="label" style={this.styles().settingText}>{md.label()}</Text>
-					<Picker key="control" style={this.styles().settingControl} selectedValue={value} onValueChange={(itemValue, itemIndex) => updateSettingValue(key, itemValue)} >
-						{ items }
-					</Picker>
+					<Dropdown
+						key="control"
+						style={this.styles().settingControl}
+						items={items}
+						selectedValue={value}
+						itemListStyle={{
+							backgroundColor: theme.backgroundColor,
+						}}
+						headerStyle={{
+							color: theme.color,
+							fontSize: theme.fontSize,
+						}}
+						itemStyle={{
+							color: theme.color,
+							fontSize: theme.fontSize,
+						}}
+						onValueChange={(itemValue, itemIndex) => { updateSettingValue(key, itemValue); }}
+					/>
 				</View>
 			);
 		} else if (md.type == Setting.TYPE_BOOL) {
@@ -128,12 +148,14 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			settingComps.push(comp);
 		}
 
+		//style={this.styles().body}
+
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>
 				<ScreenHeader title={_('Configuration')}/>
-				<View style={this.styles().body}>
+				<ScrollView >
 					{ settingComps }
-				</View>
+				</ScrollView>
 			</View>
 		);
 	}

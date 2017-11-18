@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { View, Button, Picker } = require('react-native');
+const { View, Button } = require('react-native');
 const { connect } = require('react-redux');
 const { reg } = require('lib/registry.js');
 const { Log } = require('lib/log.js');

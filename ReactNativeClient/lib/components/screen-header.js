@@ -1,6 +1,6 @@
 const React = require('react'); const Component = React.Component;
 const { connect } = require('react-redux');
-const { View, Text, Button, StyleSheet, TouchableOpacity, Picker, Image } = require('react-native');
+const { Modal, View, Text, Button, StyleSheet, TouchableOpacity, Image } = require('react-native');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { Log } = require('lib/log.js');
 const { BackButtonService } = require('lib/services/back-button.js');
@@ -11,6 +11,8 @@ const { FileApi } = require('lib/file-api.js');
 const { FileApiDriverOneDrive } = require('lib/file-api-driver-onedrive.js');
 const { reg } = require('lib/registry.js');
 const { themeStyle } = require('lib/components/global-style.js');
+const { ItemList } = require('lib/components/ItemList.js');
+const { Dropdown } = require('lib/components/Dropdown.js');
 
 // Rather than applying a padding to the whole bar, it is applied to each
 // individual component (button, picker, etc.) so that the touchable areas
@@ -39,11 +41,6 @@ class ScreenHeaderComponent extends Component {
 				alignItems: 'center',
 				shadowColor: '#000000',
 				elevation: 5,
-			},
-			folderPicker: {
-				flex:1,
-				color: theme.raisedHighlightedColor,
-				// Note: cannot set backgroundStyle as that would remove the arrow in the component
 			},
 			divider: {
 				borderBottomWidth: 1,
@@ -265,19 +262,29 @@ class ScreenHeaderComponent extends Component {
 			</MenuOption>);
 
 		const createTitleComponent = () => {
+			const themeId = Setting.value('theme');
+			const theme = themeStyle(themeId);
+
 			const p = this.props.titlePicker;
 			if (p) {
-				let items = [];
-				for (let i = 0; i < p.items.length; i++) {
-					let item = p.items[i];
-					items.push(<Picker.Item label={item.label} value={item.value} key={item.value}/>);
-				}
 				return (
-					<View style={{ flex: 1 }}>
-						<Picker style={this.styles().folderPicker} selectedValue={p.selectedValue} onValueChange={(itemValue, itemIndex) => { if (p.onValueChange) p.onValueChange(itemValue, itemIndex); }}>
-							{ items }
-						</Picker>
-					</View>
+					<Dropdown
+						items={p.items}
+						itemHeight={35}
+						selectedValue={p.selectedValue}
+						itemListStyle={{
+							backgroundColor: theme.backgroundColor,
+						}}
+						headerStyle={{
+							color: theme.raisedColor,
+							fontSize: theme.fontSize,
+						}}
+						itemStyle={{
+							color: theme.color,
+							fontSize: theme.fontSize,
+						}}
+						onValueChange={(itemValue, itemIndex) => { if (p.onValueChange) p.onValueChange(itemValue, itemIndex); }}
+					/>
 				);
 			} else {
 				let title = 'title' in this.props && this.props.title !== null ? this.props.title : '';
@@ -294,7 +301,7 @@ class ScreenHeaderComponent extends Component {
 				{ saveButton(this.styles(), () => { if (this.props.onSaveButtonPress) this.props.onSaveButtonPress() }, this.props.saveButtonDisabled === true, this.props.showSaveButton === true) }
 				{ titleComp }
 				{ searchButton(this.styles(), () => this.searchButton_press()) }
-			    <Menu onSelect={(value) => this.menu_select(value)} style={this.styles().contextMenu}>
+				<Menu onSelect={(value) => this.menu_select(value)} style={this.styles().contextMenu}>
 					<MenuTrigger style={{ paddingTop: PADDING_V, paddingBottom: PADDING_V }}>
 						<Text style={this.styles().contextMenuTrigger}>  &#8942;</Text>
 					</MenuTrigger>
