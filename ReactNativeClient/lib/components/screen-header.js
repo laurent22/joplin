@@ -1,6 +1,6 @@
 const React = require('react'); const Component = React.Component;
 const { connect } = require('react-redux');
-const { Modal, View, Text, Button, StyleSheet, TouchableOpacity, Image } = require('react-native');
+const { Platform, View, Text, Button, StyleSheet, TouchableOpacity, Image } = require('react-native');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { Log } = require('lib/log.js');
 const { BackButtonService } = require('lib/services/back-button.js');
@@ -41,6 +41,7 @@ class ScreenHeaderComponent extends Component {
 				alignItems: 'center',
 				shadowColor: '#000000',
 				elevation: 5,
+				paddingTop: Platform.OS === 'ios' ? 10 : 0, // Extra padding for iOS because the top icons are there
 			},
 			divider: {
 				borderBottomWidth: 1,
