@@ -35,6 +35,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			settingContainer: {
 				flex: 1,
 				flexDirection: 'row',
+				alignItems: 'center',
 				borderBottomWidth: 1,
 				borderBottomColor: theme.dividerColor,
 				paddingTop: theme.marginTop,
@@ -63,7 +64,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		styles.switchSettingControl = Object.assign({}, styles.settingControl);
 		delete styles.switchSettingControl.color;
-		styles.switchSettingControl.width = '20%';
+		//styles.switchSettingControl.width = '20%';
+		styles.switchSettingControl.flex = 0;
 
 		this.styles_[themeId] = StyleSheet.create(styles);
 		return this.styles_[themeId];

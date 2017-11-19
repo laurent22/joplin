@@ -91,7 +91,7 @@ class NoteItemComponent extends Component {
 		const theme = themeStyle(this.props.theme);
 
 		// IOS: display: none crashes the app
-		let checkboxStyle = !isTodo ? { } : { color: theme.color };
+		let checkboxStyle = !isTodo ? { display: 'none' } : { color: theme.color };
 
 		if (isTodo) {
 			checkboxStyle.paddingRight = 10;

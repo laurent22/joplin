@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { StyleSheet, TouchableHighlight } = require('react-native');
+const { StyleSheet, View, TouchableHighlight } = require('react-native');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 
 const styles = {
@@ -55,7 +55,9 @@ class Checkbox extends Component {
 			alignItems: 'center',
 		};
 
-		if (style.display) thStyle.display = style.display;
+		if (style && style.display === 'none') return <View/>
+
+		//if (style.display) thStyle.display = style.display;
 
 		return (
 			<TouchableHighlight onPress={() => this.onPress()} style={thStyle}>

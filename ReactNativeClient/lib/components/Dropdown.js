@@ -64,8 +64,8 @@ class Dropdown extends React.Component {
 			height: 35,
 			// borderWidth: 1,
 			// borderColor: '#ccc',
-			paddingLeft: 20,
-			paddingRight: 20,
+			//paddingLeft: 20,
+			//paddingRight: 20,
 			flex: 1,
 			flexDirection: 'row',
 			alignItems: 'center',
@@ -77,6 +77,7 @@ class Dropdown extends React.Component {
 
 		const headerArrowStyle = Object.assign({}, this.props.headerStyle ? this.props.headerStyle : {}, {
 			flex: 0,
+			marginRight: 10,
 		});
 
 		const itemStyle = Object.assign({}, this.props.itemStyle ? this.props.itemStyle : {}, {
@@ -104,8 +105,8 @@ class Dropdown extends React.Component {
 		return (
 			<View style={{flex: 1, flexDirection: 'column' }}>
 				<TouchableOpacity style={headerWrapperStyle} ref={(ref) => this.headerRef_ = ref} onPress={() => { this.setState({ listVisible: true }) }}>
-					<Text ellipsizeMode="tail" numberOfLines={1} style={headerStyle}>{headerLabel}</Text>
 					<Text style={headerArrowStyle}>{'▼'}</Text>
+					<Text ellipsizeMode="tail" numberOfLines={1} style={headerStyle}>{headerLabel}</Text>
 				</TouchableOpacity>
 				<Modal transparent={true} visible={this.state.listVisible} onRequestClose={() => { closeList(); }} >
 					<TouchableWithoutFeedback onPressOut={() => { closeList() }}>

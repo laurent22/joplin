@@ -277,7 +277,7 @@ class ScreenHeaderComponent extends Component {
 							backgroundColor: theme.backgroundColor,
 						}}
 						headerStyle={{
-							color: theme.raisedColor,
+							color: theme.raisedHighlightedColor,
 							fontSize: theme.fontSize,
 						}}
 						itemStyle={{
