@@ -41,7 +41,7 @@ class ScreenHeaderComponent extends Component {
 				alignItems: 'center',
 				shadowColor: '#000000',
 				elevation: 5,
-				paddingTop: Platform.OS === 'ios' ? 10 : 0, // Extra padding for iOS because the top icons are there
+				paddingTop: Platform.OS === 'ios' ? 15 : 0, // Extra padding for iOS because the top icons are there
 			},
 			divider: {
 				borderBottomWidth: 1,
