@@ -51,6 +51,10 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>To allow attaching images to a note</string>
+	<key>NSCameraUsageDescription</key>
+	<string>To allow attaching a photo to a note</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>

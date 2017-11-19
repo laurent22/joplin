@@ -24,6 +24,7 @@
     "react-native-document-picker": "^2.1.0",
     "react-native-fetch-blob": "^0.10.6",
     "react-native-fs": "^2.8.1",
+    "react-native-image-picker": "^0.26.7",
     "react-native-image-resizer": "^1.0.0",
     "react-native-material-dropdown": "^0.5.2",
     "react-native-popup-dialog": "^0.9.35",
