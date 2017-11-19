@@ -3,13 +3,17 @@ const { Platform, Keyboard, BackHandler, View, Button, TextInput, WebView, Text,
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
 const { Log } = require('lib/log.js');
+const RNFS = require('react-native-fs');
 const { Note } = require('lib/models/note.js');
+const { Setting } = require('lib/models/setting.js');
 const { Resource } = require('lib/models/resource.js');
 const { Folder } = require('lib/models/folder.js');
 const { BackButtonService } = require('lib/services/back-button.js');
 const { BaseModel } = require('lib/base-model.js');
 const { ActionButton } = require('lib/components/action-button.js');
 const Icon = require('react-native-vector-icons/Ionicons').default;
+const { fileExtension, basename } = require('lib/path-utils.js');
+const mimeUtils = require('lib/mime-utils.js').mime;
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { time } = require('lib/time-utils.js');
 const { Checkbox } = require('lib/components/checkbox.js');
@@ -233,15 +237,18 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const format = mimeType == 'image/png' ? 'PNG' : 'JPEG';
 		reg.logger().info('Resizing image ' + localFilePath);
-		const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85);
+		const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85); //, 0, targetPath);
+		
 		const resizedImagePath = resizedImage.uri;
 		reg.logger().info('Resized image ', resizedImagePath);
-		RNFetchBlob.fs.cp(resizedImagePath, targetPath); // mv doesn't work ("source path does not exist") so need to do cp and unlink
+		reg.logger().info('Moving ' + resizedImagePath + ' => ' + targetPath);
+		
+		await RNFS.copyFile(resizedImagePath, targetPath);
 		
 		try {
-			RNFetchBlob.fs.unlink(resizedImagePath);
+			await RNFS.unlink(resizedImagePath);
 		} catch (error) {
-			reg.logger().info('Error when unlinking cached file: ', error);
+			reg.logger().warn('Error when unlinking cached file: ', error);
 		}
 	}
 
@@ -262,26 +269,37 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		const localFilePath = pickerResponse.uri;
+		let mimeType = pickerResponse.type;
+
+		if (!mimeType) {
+			const ext = fileExtension(localFilePath);
+			mimeType = mimeUtils.fromFileExtension(ext);
+		}
 
 		reg.logger().info('Got file: ' + localFilePath);
-		reg.logger().info('Got type: ' + pickerResponse.type);
+		reg.logger().info('Got type: ' + mimeType);
 
 		let resource = Resource.new();
 		resource.id = uuid.create();
-		resource.mime = pickerResponse.type;
+		resource.mime = mimeType;
 		resource.title = pickerResponse.fileName ? pickerResponse.fileName : _('Untitled');
 
 		let targetPath = Resource.fullPath(resource);
 
-		if (pickerResponse.type == 'image/jpeg' || pickerResponse.type == 'image/jpg' || pickerResponse.type == 'image/png') {
-			await this.resizeImage(localFilePath, targetPath, pickerResponse.mime);
-		} else {
-			if (fileType === 'image') {
-				dialogs.error(this, _('Unsupported image type: %s', pickerResponse.type));
-				return;
+		try {
+			if (mimeType == 'image/jpeg' || mimeType == 'image/jpg' || mimeType == 'image/png') {
+				await this.resizeImage(localFilePath, targetPath, pickerResponse.mime);
 			} else {
-				RNFetchBlob.fs.cp(localFilePath, targetPath);
+				if (fileType === 'image') {
+					dialogs.error(this, _('Unsupported image type: %s', mimeType));
+					return;
+				} else {
+					await RNFetchBlob.fs.cp(localFilePath, targetPath);
+				}
 			}
+		} catch (error) {
+			reg.logger().warn('Could not attach file:', error);
+			return;
 		}
 
 		await Resource.save(resource, { isNew: true });

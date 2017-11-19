@@ -204,6 +204,7 @@ async function initialize(dispatch, backButtonHandler) {
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
 	Setting.setConstant('appId', 'net.cozic.joplin');
 	Setting.setConstant('appType', 'mobile');
+	//Setting.setConstant('resourceDir', () => { return RNFetchBlob.fs.dirs.DocumentDir; });
 	Setting.setConstant('resourceDir', RNFetchBlob.fs.dirs.DocumentDir);
 
 	const logDatabase = new Database(new DatabaseDriverReactNative());

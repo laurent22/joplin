@@ -34,7 +34,7 @@ class Resource extends BaseItem {
 	}
 
 	static fullPath(resource) {
-		let extension = mime.toFileExtension(resource.mime);
+		let extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
 		extension = extension ? '.' + extension : '';
 		return Setting.value('resourceDir') + '/' + resource.id + extension;
 	}

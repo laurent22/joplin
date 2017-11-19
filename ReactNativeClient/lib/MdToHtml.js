@@ -83,7 +83,12 @@ class MdToHtml {
 				return;
 			}
 
-			resource.base64 = await shim.readLocalFileBase64(Resource.fullPath(resource));
+			try {
+				resource.base64 = await shim.readLocalFileBase64(Resource.fullPath(resource));
+			} catch (error) {
+				console.warn('Could not load resource file: ' + id, Resource.fullPath(resource), error);
+				return;
+			}
 
 			let newResources = Object.assign({}, this.loadedResources_);
 			newResources[id] = resource;

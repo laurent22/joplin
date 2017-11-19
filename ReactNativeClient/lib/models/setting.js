@@ -181,7 +181,8 @@ class Setting extends BaseModel {
 
 	static value(key) {
 		if (key in this.constants_) {
-			let output = this.constants_[key];
+			const v = this.constants_[key];
+			const output = typeof v === 'function' ? v() : v;
 			if (output == 'SET_ME') throw new Error('Setting constant has not been set: ' + key);
 			return output;
 		}

@@ -33,3 +33,4 @@ sync_staging.sh
 *.swp
 _vieux/
 _mydocs
+.DS_Store
