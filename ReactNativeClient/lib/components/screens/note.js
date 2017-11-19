@@ -25,6 +25,7 @@ const RNFetchBlob = require('react-native-fetch-blob').default;
 const { DocumentPicker, DocumentPickerUtil } = require('react-native-document-picker');
 const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('lib/components/shared/note-screen-shared.js');
+const ImagePicker = require('react-native-image-picker');
 
 class NoteScreenComponent extends BaseScreenComponent {
 	
@@ -210,56 +211,77 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	async attachFile_onPress() {
-		const res = await this.pickDocument();
-		if (!res) {
-			reg.logger().info('Did not get any file (user cancel?)');
+	showImagePicker(options) {
+		return new Promise((resolve, reject) => {
+			ImagePicker.showImagePicker(options, (response) => {
+				resolve(response);
+			});
+		});
+	}
+
+	async resizeImage(localFilePath, targetPath, mimeType) {
+		const maxSize = Resource.IMAGE_MAX_DIMENSION;
+
+		let dimensions = await this.imageDimensions(localFilePath);
+
+		reg.logger().info('Original dimensions ', dimensions);
+		if (dimensions.width > maxSize || dimensions.height > maxSize) {
+			dimensions.width = maxSize;
+			dimensions.height = maxSize;
+		}
+		reg.logger().info('New dimensions ', dimensions);
+
+		const format = mimeType == 'image/png' ? 'PNG' : 'JPEG';
+		reg.logger().info('Resizing image ' + localFilePath);
+		const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85);
+		const resizedImagePath = resizedImage.uri;
+		reg.logger().info('Resized image ', resizedImagePath);
+		RNFetchBlob.fs.cp(resizedImagePath, targetPath); // mv doesn't work ("source path does not exist") so need to do cp and unlink
+		
+		try {
+			RNFetchBlob.fs.unlink(resizedImagePath);
+		} catch (error) {
+			reg.logger().info('Error when unlinking cached file: ', error);
+		}
+	}
+
+	async attachFile(pickerResponse, fileType) {
+		if (!pickerResponse) {
+			reg.logger().warn('Got no response from picker');
 			return;
 		}
 
-		const localFilePath = res.uri;
+		if (pickerResponse.error) {
+			reg.logger().warn('Got error from picker', pickerResponse.error);
+			return;
+		}
+
+		if (pickerResponse.didCancel) {
+			reg.logger().info('User cancelled picker');
+			return;
+		}
+
+		const localFilePath = pickerResponse.uri;
 
 		reg.logger().info('Got file: ' + localFilePath);
-		reg.logger().info('Got type: ' + res.type);
-
-		// res.uri,
-		// res.type, // mime type
-		// res.fileName,
-		// res.fileSize
+		reg.logger().info('Got type: ' + pickerResponse.type);
 
 		let resource = Resource.new();
 		resource.id = uuid.create();
-		resource.mime = res.type;
-		resource.title = res.fileName ? res.fileName : _('Untitled');
+		resource.mime = pickerResponse.type;
+		resource.title = pickerResponse.fileName ? pickerResponse.fileName : _('Untitled');
 
 		let targetPath = Resource.fullPath(resource);
 
-		if (res.type == 'image/jpeg' || res.type == 'image/jpg' || res.type == 'image/png') {
-			const maxSize = Resource.IMAGE_MAX_DIMENSION;
-
-			let dimensions = await this.imageDimensions(localFilePath);
-
-			reg.logger().info('Original dimensions ', dimensions);
-			if (dimensions.width > maxSize || dimensions.height > maxSize) {
-				dimensions.width = maxSize;
-				dimensions.height = maxSize;
-			}
-			reg.logger().info('New dimensions ', dimensions);
-
-			const format = res.type == 'image/png' ? 'PNG' : 'JPEG';
-			reg.logger().info('Resizing image ' + localFilePath);
-			const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85);
-			const resizedImagePath = resizedImage.uri;
-			reg.logger().info('Resized image ', resizedImagePath);
-			RNFetchBlob.fs.cp(resizedImagePath, targetPath); // mv doesn't work ("source path does not exist") so need to do cp and unlink
-			
-			try {
-				RNFetchBlob.fs.unlink(resizedImagePath);
-			} catch (error) {
-				reg.logger().info('Error when unlinking cached file: ', error);
-			}
+		if (pickerResponse.type == 'image/jpeg' || pickerResponse.type == 'image/jpg' || pickerResponse.type == 'image/png') {
+			await this.resizeImage(localFilePath, targetPath, pickerResponse.mime);
 		} else {
-			RNFetchBlob.fs.cp(localFilePath, targetPath);
+			if (fileType === 'image') {
+				dialogs.error(this, _('Unsupported image type: %s', pickerResponse.type));
+				return;
+			} else {
+				RNFetchBlob.fs.cp(localFilePath, targetPath);
+			}
 		}
 
 		await Resource.save(resource, { isNew: true });
@@ -269,6 +291,19 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const newNote = Object.assign({}, this.state.note);
 		newNote.body += "\n" + resourceTag;
 		this.setState({ note: newNote });
+	}
+
+	async attachImage_onPress() {
+		const options = {
+			mediaType: 'photo',
+		};
+		const response = await this.showImagePicker(options);
+		await this.attachFile(response, 'image');
+	}
+
+	async attachFile_onPress() {
+		const response = await this.pickDocument();
+		await this.attachFile(response, 'all');
 	}
 
 	toggleIsTodo_onPress() {
@@ -297,7 +332,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		let output = [];
 
-		output.push({ title: _('Attach file'), onPress: () => { this.attachFile_onPress(); } });
+		output.push({ title: _('Attach image'), onPress: () => { this.attachImage_onPress(); } });
+		output.push({ title: _('Attach any other file'), onPress: () => { this.attachFile_onPress(); } });
 		output.push({ title: _('Delete note'), onPress: () => { this.deleteNote_onPress(); } });
 
 		// if (isTodo) {

@@ -1,38 +1,37 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="net.cozic.joplin"
-    android:versionCode="2"
-    android:versionName="0.8.0">
+  xmlns:tools="http://schemas.android.com/tools"
+  package="net.cozic.joplin"
+  android:versionCode="2"
+  android:versionName="0.8.0">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />  -->
-    <!-- <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/> -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" tools:node="remove"/>
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.CAMERA" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.READ_PHONE_STATE" tools:node="remove"/>
 
-    <uses-sdk
-        android:minSdkVersion="16"
-        android:targetSdkVersion="22" />
+  <uses-sdk
+    android:minSdkVersion="16"
+    android:targetSdkVersion="22" />
 
-    <application
-      android:name=".MainApplication"
-      android:allowBackup="true"
+  <application
+    android:name=".MainApplication"
+    android:allowBackup="true"
+    android:label="@string/app_name"
+    android:icon="@mipmap/ic_launcher"
+    android:theme="@style/AppTheme">
+    <activity
+      android:name=".MainActivity"
       android:label="@string/app_name"
-      android:icon="@mipmap/ic_launcher"
-      android:theme="@style/AppTheme">
-      <activity
-        android:name=".MainActivity"
-        android:label="@string/app_name"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-        android:windowSoftInputMode="adjustResize"
-        android:launchMode="singleInstance">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-     <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
-        </intent-filter>
-      </activity>
-      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-    </application>
-
+      android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+      android:windowSoftInputMode="adjustResize"
+      android:launchMode="singleInstance">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+        <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
+      </intent-filter>
+    </activity>
+    <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+  </application>
 </manifest>
