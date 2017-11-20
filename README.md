@@ -18,16 +18,16 @@ Three types of applications are available: **desktop** (Windows, macOS and Linux
 
 Operating system | Link
 -----------------|--------
-Windows          | [Download Joplin for Windows](https://github.com/laurent22/joplin/releases/download/v0.10.20/Joplin-Setup-0.10.20.exe)
-macOS            | [Download Joplin for macOS](https://github.com/laurent22/joplin/releases/download/v0.10.20/Joplin-0.10.20.dmg)
-Linux            | [Download Joplin for Linux](https://github.com/laurent22/joplin/releases/download/v0.10.20/Joplin-0.10.20-x86_64.AppImage)
+Windows          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.22/Joplin-Setup-0.10.22.exe'><img alt='Get it on Windows' height="60px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a>
+macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.22/Joplin-0.10.22.dmg'><img alt='Get it on macOS' height="60px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a>
+Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.22/Joplin-0.10.22-x86_64.AppImage'><img alt='Get it on macOS' height="60px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a>
 
 ## Mobile applications
 
 Operating system | Link
 -----------------|--------
-Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="60px" src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
-iOS              | Coming soon!
+Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="60px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeAndroid.png'/></a>
+iOS              | <a href='#'><img alt='Get it on the App Store' height="60px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeIOS.png'/></a>
 
 ## Terminal application
 

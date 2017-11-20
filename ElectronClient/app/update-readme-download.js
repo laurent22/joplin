@@ -57,9 +57,9 @@ async function main() {
 
 	let content = readmeContent();
 
-	if (winUrl) content = content.replace(/(\(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/.*?\.exe\))/, '(' + winUrl + ')');
-	if (macOsUrl) content = content.replace(/(\(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/.*?\.dmg\))/, '(' + macOsUrl + ')');
-	if (linuxUrl) content = content.replace(/(\(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/.*?\.AppImage\))/, '(' + linuxUrl + ')');
+	if (winUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/.*?\.exe)/, winUrl);
+	if (macOsUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/.*?\.dmg)/, macOsUrl);
+	if (linuxUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/.*?\.AppImage)/, linuxUrl);
 
 	setReadmeContent(content);
 }
