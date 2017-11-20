@@ -276,6 +276,15 @@ class NoteScreenComponent extends BaseScreenComponent {
 			mimeType = mimeUtils.fromFileExtension(ext);
 		}
 
+		if (!mimeType && fileType === 'image') {
+			// Assume JPEG if we couldn't determine the file type. It seems to happen with the image picker
+			// when the file path is something like content://media/external/images/media/123456
+			// If the image is not a JPEG, something will throw an error below, but there's a good chance
+			// it will work.
+			reg.logger().info('Missing file type and could not detect it - assuming image/jpg');
+			mimeType = 'image/jpg';
+		}
+
 		reg.logger().info('Got file: ' + localFilePath);
 		reg.logger().info('Got type: ' + mimeType);
 
