@@ -59,10 +59,28 @@ class NoteBodyViewer extends Component {
 			webViewStyle.opacity = this.state.webViewLoaded ? 1 : 0.01;
 		}
 
+		// On iOS scalesPageToFit work like this:
+		//
+		// Find the widest image, resize it *and everything else* by x% so that
+		// the image fits within the viewport. The problem is that it means if there's
+		// a large image, everything is going to be scaled to a very small size, making
+		// the text unreadable.
+		//
+		// On Android:
+		//
+		// Find the widest elements and scale them (and them only) to fit within the viewport
+		// It means it's going to scale large images, but the text will remain at the normal
+		// size.
+		//
+		// That means we can use scalesPageToFix on Android but not on iOS.
+		// The weird thing is that on iOS, scalesPageToFix=false along with a CSS
+		// rule "img { max-width: 100% }", works like scalesPageToFix=true on Android.
+		// So we use scalesPageToFix=false on iOS along with that CSS rule.
+
 		return (
 			<View style={style}>
 				<WebView
-				scalesPageToFit={false}
+					scalesPageToFit={Platform.OS !== 'ios'}
 					style={webViewStyle}
 					source={{ html: html }}
 					onLoadEnd={() => this.onLoadEnd()}
