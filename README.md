@@ -12,7 +12,7 @@ Joplin is still under development but is out of Beta and should be suitable for 
 
 # Installation
 
-Three types of applications are available: **desktop** (Windows, macOS and Linux), **mobile** (Android) or for **terminal** emulator (Windows, macOS and Linux). All applications have similar user interfaces and can synchronise with each others.
+Three types of applications are available: **desktop** (Windows, macOS and Linux), **mobile** (Android and iOS) and for **terminal** (Windows, macOS and Linux). All applications have similar user interfaces and can synchronise with each others.
 
 ## Desktop applications
 
