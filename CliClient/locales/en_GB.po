@@ -608,6 +608,9 @@ msgstr ""
 msgid "Rename"
 msgstr ""
 
+msgid "Synchronise"
+msgstr ""
+
 msgid "Notebooks"
 msgstr ""
 
@@ -615,9 +618,6 @@ msgid "Tags"
 msgstr ""
 
 msgid "Searches"
-msgstr ""
-
-msgid "Synchronise"
 msgstr ""
 
 #, javascript-format

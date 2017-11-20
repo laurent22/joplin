@@ -28,7 +28,7 @@ msgid "Exit command line mode"
 msgstr "Sortir du mode de ligne de commande"
 
 msgid "Edit the selected note"
-msgstr "Editer la note sélectionnée"
+msgstr "Éditer la note sélectionnée"
 
 msgid "Cancel the current command."
 msgstr "Annuler la commande en cours."
@@ -157,7 +157,7 @@ msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"Copie les notes correspondant à <nom> vers [carnet]. Si aucun carnet n'est "
+"Copier les notes correspondant à <nom> vers [carnet]. Si aucun carnet n'est "
 "spécifié, la note est dupliquée sur place."
 
 msgid "Marks a to-do as done."
@@ -168,7 +168,7 @@ msgid "Note is not a to-do: \"%s\""
 msgstr "La note n'est pas une tâche : \"%s\""
 
 msgid "Edit note."
-msgstr "Editer la note."
+msgstr "Éditer la note."
 
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
@@ -185,7 +185,7 @@ msgstr "Cette note n'existe pas : \"%s\". La créer ?"
 
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
-"Edition de la note en cours. Fermez l'éditeur de texte pour retourner à "
+"Édition de la note en cours. Fermez l'éditeur de texte pour retourner à "
 "l'invite de commande."
 
 msgid "Note has been saved."
@@ -228,8 +228,8 @@ msgid ""
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
-"Dans n'importe quelle commande, une note ou carnet peut être référé par "
-"titre ou identifiant, ou en utilisant les raccourcis `$n` et `$b` pour, "
+"Dans une commande, une note ou carnet peut être référé par titre ou "
+"identifiant, ou en utilisant les raccourcis `$n` et `$b` pour, "
 "respectivement, la note sélectionnée et le carnet sélectionné. `$c` peut "
 "être utilisé pour faire référence à l'objet sélectionné en cours."
 
@@ -286,7 +286,7 @@ msgstr "Créés : %d."
 
 #, javascript-format
 msgid "Updated: %d."
-msgstr "Mise à jour : %d."
+msgstr "Mis à jour : %d."
 
 #, javascript-format
 msgid "Skipped: %d."
@@ -298,7 +298,7 @@ msgstr "Ressources : %d."
 
 #, javascript-format
 msgid "Tagged: %d."
-msgstr "Etiquettes : %d."
+msgstr "Étiquettes : %d."
 
 msgid "Importing notes..."
 msgstr "Importation des notes..."
@@ -510,9 +510,9 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
-"Veuillez ouvrir le lien ci-dessous dans votre browser pour authentifier le "
-"logiciel. Joplin va créer un répertoire \"Apps/Joplin\" et lire/écrira des "
-"fichiers uniquement dans ce répertoire. Le logiciel n'aura pas d'accès à "
+"Veuillez ouvrir le lien ci-dessous dans votre navigateur pour authentifier "
+"le logiciel. Joplin va créer un répertoire \"Apps/Joplin\" et lire/écrira "
+"des fichiers uniquement dans ce répertoire. Le logiciel n'aura pas d'accès à "
 "aucun fichier en dehors de ce répertoire, ni à d'autres données "
 "personnelles. Aucune donnée ne sera partagé avec aucun tier."
 
@@ -532,7 +532,7 @@ msgid "New notebook"
 msgstr "Nouveau carnet"
 
 msgid "Import Evernote notes"
-msgstr "Importer notes d'Evernotes"
+msgstr "Importer notes d'Evernote"
 
 msgid "Evernote Export Files"
 msgstr "Fichiers d'export Evernote"
@@ -541,7 +541,7 @@ msgid "Quit"
 msgstr "Quitter"
 
 msgid "Edit"
-msgstr "Edition"
+msgstr "Édition"
 
 msgid "Copy"
 msgstr "Copier"
@@ -568,7 +568,7 @@ msgid "Website and documentation"
 msgstr "Documentation en ligne"
 
 msgid "About Joplin"
-msgstr "A props de Joplin"
+msgstr "A propos de Joplin"
 
 #, javascript-format
 msgid "%s %s (%s, %s)"
@@ -641,7 +641,7 @@ msgid "Refresh"
 msgstr "Rafraîchir"
 
 msgid "OneDrive Login"
-msgstr "Connection OneDrive"
+msgstr "Connexion OneDrive"
 
 msgid "Import"
 msgstr "Importer"
@@ -661,17 +661,17 @@ msgstr "Enlever cette recherche de la barre latérale ?"
 msgid "Rename"
 msgstr "Renommer"
 
+msgid "Synchronise"
+msgstr "Synchroniser"
+
 msgid "Notebooks"
 msgstr "Carnets"
 
 msgid "Tags"
-msgstr "Etiquettes"
+msgstr "Étiquettes"
 
 msgid "Searches"
 msgstr "Recherches"
-
-msgid "Synchronise"
-msgstr "Synchroniser"
 
 #, javascript-format
 msgid "Usage: %s"
@@ -693,7 +693,7 @@ msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
-"Impossible de rafraîchir la connection à OneDrive. Démarrez la "
+"Impossible de rafraîchir la connexion à OneDrive. Démarrez la "
 "synchronisation à nouveau pour corriger le problème."
 
 msgid ""
@@ -733,7 +733,7 @@ msgstr "Objets distants supprimés : %d."
 
 #, javascript-format
 msgid "State: \"%s\"."
-msgstr "Etat : \"%s\"."
+msgstr "État : \"%s\"."
 
 msgid "Cancelling..."
 msgstr "Annulation..."
@@ -744,7 +744,7 @@ msgstr "Terminé : %s"
 
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
-msgstr "La synchronisation est déjà en cours. Etat : %s"
+msgstr "La synchronisation est déjà en cours. État : %s"
 
 msgid "Conflicts"
 msgstr "Conflits"
@@ -802,7 +802,7 @@ msgid "OneDrive"
 msgstr "OneDrive"
 
 msgid "Text editor"
-msgstr "Editeur de texte"
+msgstr "Éditeur de texte"
 
 msgid ""
 "The editor that will be used to open a note. If none is provided it will try "
@@ -830,7 +830,7 @@ msgid "Save geo-location with notes"
 msgstr "Enregistrer l'emplacement avec les notes"
 
 msgid "Synchronisation interval"
-msgstr "Interval de synchronisation"
+msgstr "Intervalle de synchronisation"
 
 msgid "Disabled"
 msgstr "Désactivé"
@@ -885,7 +885,7 @@ msgid "Log"
 msgstr "Journal"
 
 msgid "Status"
-msgstr "Etat"
+msgstr "État"
 
 msgid "Cancel synchronisation"
 msgstr "Annuler synchronisation"
@@ -895,7 +895,7 @@ msgid "The notebook could not be saved: %s"
 msgstr "Ce carnet n'a pas pu être sauvegardé : %s"
 
 msgid "Edit notebook"
-msgstr "Editer le carnet"
+msgstr "Éditer le carnet"
 
 msgid "This note has been modified:"
 msgstr "Cette note a été modifiée :"
@@ -906,17 +906,15 @@ msgstr "Enregistrer les changements"
 msgid "Discard changes"
 msgstr "Ignorer les changements"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Unsupported image type: %s"
-msgstr "Lien ou message non géré : %s"
+msgstr "Type d'image non géré : %s"
 
-#, fuzzy
 msgid "Attach image"
-msgstr "Attacher un fichier"
+msgstr "Joindre une image ou photo"
 
-#, fuzzy
 msgid "Attach any other file"
-msgstr "Attacher un fichier"
+msgstr "Joindre un fichier"
 
 msgid "Delete note"
 msgstr "Supprimer la note"
@@ -940,7 +938,7 @@ msgid "Delete notebook"
 msgstr "Supprimer le carnet"
 
 msgid "Login with OneDrive"
-msgstr "Se connecter avec OneDrive"
+msgstr "Se connecter à OneDrive"
 
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
