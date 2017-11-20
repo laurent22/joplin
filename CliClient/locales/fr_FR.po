@@ -906,6 +906,18 @@ msgstr "Enregistrer les changements"
 msgid "Discard changes"
 msgstr "Ignorer les changements"
 
+#, fuzzy, javascript-format
+msgid "Unsupported image type: %s"
+msgstr "Lien ou message non géré : %s"
+
+#, fuzzy
+msgid "Attach image"
+msgstr "Attacher un fichier"
+
+#, fuzzy
+msgid "Attach any other file"
+msgstr "Attacher un fichier"
+
 msgid "Delete note"
 msgstr "Supprimer la note"
 

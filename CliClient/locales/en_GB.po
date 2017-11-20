@@ -841,6 +841,16 @@ msgstr ""
 msgid "Discard changes"
 msgstr ""
 
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr ""
+
+msgid "Attach image"
+msgstr ""
+
+msgid "Attach any other file"
+msgstr ""
+
 msgid "Delete note"
 msgstr ""
 

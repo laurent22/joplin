@@ -3,7 +3,6 @@ package net.cozic.joplin;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.rnfs.RNFSPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -32,8 +31,7 @@ public class MainApplication extends Application implements ReactApplication {
 			return Arrays.<ReactPackage>asList(
 				new ImageResizerPackage(),
 				new MainReactPackage(),
-            new RNFSPackage(),
-            new ImagePickerPackage(),
+				new ImagePickerPackage(),
 				new ReactNativeDocumentPicker(),
 				new RNFetchBlobPackage(),
 				new RNFSPackage(),

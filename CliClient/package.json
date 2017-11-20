@@ -37,6 +37,7 @@
     "md5": "^2.2.1",
     "mime": "^2.0.3",
     "moment": "^2.18.1",
+    "node-emoji": "^1.8.1",
     "node-fetch": "^1.7.1",
     "node-persist": "^2.1.0",
     "os-tmpdir": "^1.0.2",

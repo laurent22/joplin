@@ -78,13 +78,15 @@ class NoteBodyViewer extends Component {
 		// rule "img { max-width: 100% }", works like scalesPageToFix=true on Android.
 		// So we use scalesPageToFix=false on iOS along with that CSS rule.
 
+		// `baseUrl` is where the images will be loaded from. So images must use a path relative to resourceDir.
+		const source = { html: html, baseUrl: 'file://' + Setting.value('resourceDir') + '/' };
+
 		return (
 			<View style={style}>
 				<WebView
 					scalesPageToFit={Platform.OS !== 'ios'}
 					style={webViewStyle}
-					{/* baseUrl is where the images will be loaded from. So images must use a path relative to resourceDir. */}
-					source={{ html: html, baseUrl: 'file://' + Setting.value('resourceDir') + '/' }}
+					source={source}
 					onLoadEnd={() => this.onLoadEnd()}
 					onError={(e) => reg.logger().error('WebView error', e) }
 					onMessage={(event) => {

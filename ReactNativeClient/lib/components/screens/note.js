@@ -350,8 +350,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		let output = [];
 
-		output.push({ title: _('Attach image'), onPress: () => { this.attachImage_onPress(); } });
-		output.push({ title: _('Attach any other file'), onPress: () => { this.attachFile_onPress(); } });
+		// The file attachement modules only work in Android >= 5 (Version 21)
+		// https://github.com/react-community/react-native-image-picker/issues/606
+		if (Platform.Version >= 21) {
+			output.push({ title: _('Attach image'), onPress: () => { this.attachImage_onPress(); } });
+			output.push({ title: _('Attach any other file'), onPress: () => { this.attachFile_onPress(); } });
+		}
 		output.push({ title: _('Delete note'), onPress: () => { this.deleteNote_onPress(); } });
 
 		// if (isTodo) {
