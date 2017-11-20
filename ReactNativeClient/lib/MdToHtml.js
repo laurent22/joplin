@@ -77,24 +77,7 @@ class MdToHtml {
 			this.loadedResources_[id] = {};
 
 			const resource = await Resource.load(id);
-
-			if (!resource) {
-				console.warn('Could not load resource ' + id);
-				return;
-			}
-
-			try {
-				resource.base64 = await shim.readLocalFileBase64(Resource.fullPath(resource));
-			} catch (error) {
-				console.warn('Could not load resource file: ' + id, Resource.fullPath(resource), error);
-				return;
-			}
-
-			let newResources = Object.assign({}, this.loadedResources_);
-			newResources[id] = resource;
-			this.loadedResources_ = newResources;
-
-			console.info('Resource loaded: ', resource.title);
+			this.loadedResources_[id] = resource;
 
 			if (options.onResourceLoaded) options.onResourceLoaded();
 		}
@@ -107,22 +90,22 @@ class MdToHtml {
 		}
 
 		const resourceId = Resource.urlToId(href);
-		if (!this.loadedResources_[resourceId]) {
+		const resource = this.loadedResources_[resourceId];
+		if (!resource) {
 			loadResource(resourceId);
 			return '';
 		}
 
-		const r = this.loadedResources_[resourceId];
-		if (!r.base64) return '';
+		if (!resource.id) return ''; // Resource is being loaded
 
-		const mime = r.mime.toLowerCase();
+		const mime = resource.mime ? resource.mime.toLowerCase() : '';
 		if (mime == 'image/png' || mime == 'image/jpg' || mime == 'image/jpeg' || mime == 'image/gif') {
-			const src = 'data:' + r.mime + ';base64,' + r.base64;
+			const src = './' + Resource.filename(resource);
 			let output = '<img title="' + htmlentities(title) + '" src="' + src + '"/>';
 			return output;
 		}
 		
-		return '[Image: ' + htmlentities(r.title) + ' (' + htmlentities(mime) + ')]';
+		return '[Image: ' + htmlentities(resource.title) + ' (' + htmlentities(mime) + ')]';
 	}
 
 	renderOpenLink_(attrs, options) {

@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { View, Switch, Slider, StyleSheet, Text, Button, ScrollView } = require('react-native');
+const { TouchableOpacity, Linking, View, Switch, Slider, StyleSheet, Text, Button, ScrollView } = require('react-native');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { _, setLocale } = require('lib/locale.js');
@@ -61,6 +61,12 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		styles.switchSettingContainer = Object.assign({}, styles.settingContainer);
 		styles.switchSettingContainer.flexDirection = 'row';
 		styles.switchSettingContainer.justifyContent = 'space-between';
+
+		styles.linkText = Object.assign({}, styles.settingText);
+		styles.linkText.borderBottomWidth = 1;
+		styles.linkText.borderBottomColor = theme.color;
+		styles.linkText.flex = 0;
+		styles.linkText.fontWeight = 'normal';
 
 		styles.switchSettingControl = Object.assign({}, styles.settingControl);
 		delete styles.switchSettingControl.color;
@@ -149,6 +155,22 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			if (!comp) continue;
 			settingComps.push(comp);
 		}
+		
+		settingComps.push(
+			<View key="website_link" style={this.styles().settingContainer}>
+				<TouchableOpacity onPress={() => { Linking.openURL('http://joplin.cozic.net/') }}>
+					<Text key="label" style={this.styles().linkText}>Joplin Website</Text>
+				</TouchableOpacity>
+			</View>
+		);
+
+		settingComps.push(
+			<View key="privacy_link" style={this.styles().settingContainer}>
+				<TouchableOpacity onPress={() => { Linking.openURL('http://joplin.cozic.net/privacy/') }}>
+					<Text key="label" style={this.styles().linkText}>Privacy Policy</Text>
+				</TouchableOpacity>
+			</View>
+		);
 
 		//style={this.styles().body}
 

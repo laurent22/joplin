@@ -33,10 +33,14 @@ class Resource extends BaseItem {
 		return super.serialize(item, 'resource', fieldNames);
 	}
 
-	static fullPath(resource) {
+	static filename(resource) {
 		let extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
 		extension = extension ? '.' + extension : '';
-		return Setting.value('resourceDir') + '/' + resource.id + extension;
+		return resource.id + extension;
+	}
+
+	static fullPath(resource) {
+		return Setting.value('resourceDir') + '/' + this.filename(resource);
 	}
 
 	static markdownTag(resource) {

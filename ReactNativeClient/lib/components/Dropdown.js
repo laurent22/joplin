@@ -105,8 +105,8 @@ class Dropdown extends React.Component {
 		return (
 			<View style={{flex: 1, flexDirection: 'column' }}>
 				<TouchableOpacity style={headerWrapperStyle} ref={(ref) => this.headerRef_ = ref} onPress={() => { this.setState({ listVisible: true }) }}>
-					<Text style={headerArrowStyle}>{'▼'}</Text>
 					<Text ellipsizeMode="tail" numberOfLines={1} style={headerStyle}>{headerLabel}</Text>
+					<Text style={headerArrowStyle}>{'▼'}</Text>
 				</TouchableOpacity>
 				<Modal transparent={true} visible={this.state.listVisible} onRequestClose={() => { closeList(); }} >
 					<TouchableWithoutFeedback onPressOut={() => { closeList() }}>
