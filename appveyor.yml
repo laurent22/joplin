@@ -6,7 +6,7 @@ platform:
 cache:
   # Not caching node_modules because appveyor doesn't restore it afterwards (not sure why)
   # - node_modules
-  - '%USERPROFILE%\.electron'
+  # - '%USERPROFILE%\.electron'
 
 install:
   - ps: Install-Product node 8 x64
