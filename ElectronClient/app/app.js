@@ -336,7 +336,9 @@ class Application extends BaseApplication {
 		// but then doesn't install it on exit.
 		if (shim.isWindows() || shim.isMac()) {
 			const runAutoUpdateCheck = function() {
-				bridge().checkForUpdatesAndNotify(Setting.value('profileDir') + '/log-autoupdater.txt');
+				if (Setting.value('autoUpdateEnabled')) {
+					bridge().checkForUpdatesAndNotify(Setting.value('profileDir') + '/log-autoupdater.txt');
+				}
 			}
 			
 			setTimeout(() => { runAutoUpdateCheck() }, 5000);
