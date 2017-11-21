@@ -8,7 +8,6 @@ const { BaseModel } = require('lib/base-model.js');
 const { _, setLocale } = require('lib/locale.js');
 const os = require('os');
 const fs = require('fs-extra');
-const { Logger } = require('lib/logger.js');
 const { Tag } = require('lib/models/tag.js');
 const { reg } = require('lib/registry.js');
 const { sprintf } = require('sprintf-js');

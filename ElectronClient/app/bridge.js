@@ -5,6 +5,7 @@ class Bridge {
 
 	constructor(electronWrapper) {
 		this.electronWrapper_ = electronWrapper;
+		this.autoUpdateLogger_ = null;
 	}
 
 	electronApp() {
@@ -78,17 +79,21 @@ class Bridge {
 		return require('electron').shell.openItem(fullPath)
 	}
 
-	checkForUpdatesAndNotify(logFilePath) {
+	async checkForUpdatesAndNotify(logFilePath) {
 		if (!this.autoUpdater_) {
-			const logger = new Logger();
-			logger.addTarget('file', { path: logFilePath });
-			logger.setLevel(Logger.LEVEL_DEBUG);
-			logger.info('checkForUpdatesAndNotify: Intializing...');
+			this.autoUpdateLogger_ = new Logger();
+			this.autoUpdateLogger_.addTarget('file', { path: logFilePath });
+			this.autoUpdateLogger_.setLevel(Logger.LEVEL_DEBUG);
+			this.autoUpdateLogger_.info('checkForUpdatesAndNotify: Intializing...');
 			this.autoUpdater_ = require("electron-updater").autoUpdater;
-			this.autoUpdater_.logger = logger;
+			this.autoUpdater_.logger = this.autoUpdateLogger_;
 		}
 
-		return this.autoUpdater_.checkForUpdatesAndNotify();
+		try {
+			await this.autoUpdater_.checkForUpdatesAndNotify();
+		} catch (error) {
+			this.autoUpdateLogger_.error(error);
+		}
 	}
 
 }
