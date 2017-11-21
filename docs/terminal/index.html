@@ -85,6 +85,10 @@
 	.cli-screenshot .prompt {
 		color: #48C2F0;
 	}
+	.top-screenshot {
+		margin-top: 2em;
+		text-align: center;
+	}
 	.header {
 		position: relative;
 		padding-left: 2em;
@@ -144,15 +148,29 @@
 		width: 100%;
 		text-align: right;
 		vertical-align: middle;
-		padding-top: 3px;
+		line-height: 0;
 	}
-	.twitter-share-button {
-		
+	.nav-right .share-btn {
+		display: none;
 	}
-	.github-share-button {
+	.share-btn-github {
 		display: inline-block;
 	}
-	</style>
+	.nav-right .small-share-btn {
+		display: none;
+	}
+	.nav-right .share-btn-github {
+		display: inline-block;
+	}
+	@media all and (min-width: 400px) {
+		.nav-right .share-btn {
+			display: inline-block;
+		}
+		.nav-right .small-share-btn {
+			display: none;
+		}
+	}
+</style>
 </head>
 
 <body>
@@ -173,9 +191,9 @@
 			<li class=""><a href="http:&#x2F;&#x2F;joplin.cozic.net/desktop" title="Desktop"><i class="fa fa-desktop"></i></a></li>
 		</ul>
 		<div class="nav-right">
-			<iframe src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-			<a class="twitter-share-button" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fjoplin.cozic.net">Tweet</a>
-			<iframe class="github-share-button" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="80px" height="20px"></iframe>
+			<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+			<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplin.cozic.net" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
+			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="80px" height="20px"></iframe>
 		</div>
 	</div>
 </div>
@@ -473,21 +491,6 @@ version
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
 <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
 <p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
-
-<script>window.twttr = (function(d, s, id) {
-	var js, fjs = d.getElementsByTagName(s)[0],
-	t = window.twttr || {};
-	if (d.getElementById(id)) return t;
-	js = d.createElement(s);
-	js.id = id;
-	js.src = "https://platform.twitter.com/widgets.js";
-	fjs.parentNode.insertBefore(js, fjs);
-	t._e = [];
-	t.ready = function(f) {
-	t._e.push(f);
-	};
-	return t;
-}(document, "script", "twitter-wjs"));</script>
 
 <script>
 	function stickyHeader() { 

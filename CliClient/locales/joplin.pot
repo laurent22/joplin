@@ -822,6 +822,9 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
+msgid "Export Status Data"
+msgstr ""
+
 msgid "Cancel synchronisation"
 msgstr ""
 

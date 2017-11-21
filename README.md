@@ -8,7 +8,7 @@ The notes can be [synchronised](#synchronisation) with various targets including
 
 Joplin is still under development but is out of Beta and should be suitable for every day use. The UI of the terminal client is built on top of the great [terminal-kit](https://github.com/cronvel/terminal-kit) library, the desktop client using [Electron](https://electronjs.org/), and the Android client front end is done using [React Native](https://facebook.github.io/react-native/).
 
-<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/AllClients.jpg" style="max-width: 100%">
+<div class="top-screenshot"><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/AllClients.jpg" style="max-width: 100%; max-height: 35em;"></div>
 
 # Installation
 
@@ -16,18 +16,18 @@ Three types of applications are available: **desktop** (Windows, macOS and Linux
 
 ## Desktop applications
 
-Operating system | Link
+Operating System | Download
 -----------------|--------
-Windows          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.22/Joplin-Setup-0.10.22.exe'><img alt='Get it on Windows' height="60px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a>
-macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.22/Joplin-0.10.22.dmg'><img alt='Get it on macOS' height="60px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a>
-Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.22/Joplin-0.10.22-x86_64.AppImage'><img alt='Get it on macOS' height="60px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a>
+Windows          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.22/Joplin-Setup-0.10.22.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a>
+macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.22/Joplin-0.10.22.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a>
+Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.22/Joplin-0.10.22-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a>
 
 ## Mobile applications
 
-Operating system | Link
+Operating System | Download
 -----------------|--------
-Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="60px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeAndroid.png'/></a>
-iOS              | <a href='#'><img alt='Get it on the App Store' height="60px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeIOS.png'/></a>
+Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeAndroid.png'/></a>
+iOS              | <a href='#'><img alt='Get it on the App Store' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeIOS.png'/></a>
 
 ## Terminal application
 
@@ -108,15 +108,16 @@ This translation will apply to both the terminal and the Android application.
 
 # Coming features
 
-The two main features that remain to be implemented are:
-
-- iOS application (80% done)
-- End to end encryption (to-do)
+- All: End to end encryption
+- Windows: Tray icon
+- Desktop apps: Tag auto-complete
+- Desktop apps: Dark theme
+- Linux: Enable auto-update for desktop app
 
 # Known bugs
 
 - Non-alphabetical characters such as Chinese or Arabic might create glitches in the terminal on Windows. This is a limitation of the current Windows console.
-- In the React Native app, changing the notebook of a note sometimes has no effect, due to [this bug](https://github.com/facebook/react-native/issues/15556). Due to [this other bug](https://github.com/facebook/react-native/issues/13351), changing one config value sometimes also set a different one. This is likely to be resolved soon in a future version of React Native.
+- Auto-update is not working in the Linux desktop application.
 
 # License
 

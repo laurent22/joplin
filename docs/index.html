@@ -85,6 +85,10 @@
 	.cli-screenshot .prompt {
 		color: #48C2F0;
 	}
+	.top-screenshot {
+		margin-top: 2em;
+		text-align: center;
+	}
 	.header {
 		position: relative;
 		padding-left: 2em;
@@ -144,15 +148,29 @@
 		width: 100%;
 		text-align: right;
 		vertical-align: middle;
-		padding-top: 3px;
+		line-height: 0;
 	}
-	.twitter-share-button {
-		
+	.nav-right .share-btn {
+		display: none;
 	}
-	.github-share-button {
+	.share-btn-github {
 		display: inline-block;
 	}
-	</style>
+	.nav-right .small-share-btn {
+		display: none;
+	}
+	.nav-right .share-btn-github {
+		display: inline-block;
+	}
+	@media all and (min-width: 400px) {
+		.nav-right .share-btn {
+			display: inline-block;
+		}
+		.nav-right .small-share-btn {
+			display: none;
+		}
+	}
+</style>
 </head>
 
 <body>
@@ -173,9 +191,9 @@
 			<li class=""><a href="http:&#x2F;&#x2F;joplin.cozic.net/desktop" title="Desktop"><i class="fa fa-desktop"></i></a></li>
 		</ul>
 		<div class="nav-right">
-			<iframe src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-			<a class="twitter-share-button" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fjoplin.cozic.net">Tweet</a>
-			<iframe class="github-share-button" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="80px" height="20px"></iframe>
+			<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+			<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplin.cozic.net" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
+			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="80px" height="20px"></iframe>
 		</div>
 	</div>
 </div>
@@ -185,29 +203,30 @@
 <p>Notes exported from Evernote via .enex files <a href="#importing-notes-from-evernote">can be imported</a> into Joplin, including the formatted content (which is converted to markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).</p>
 <p>The notes can be <a href="#synchronisation">synchronised</a> with various targets including the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
 <p>Joplin is still under development but is out of Beta and should be suitable for every day use. The UI of the terminal client is built on top of the great <a href="https://github.com/cronvel/terminal-kit">terminal-kit</a> library, the desktop client using <a href="https://electronjs.org/">Electron</a>, and the Android client front end is done using <a href="https://facebook.github.io/react-native/">React Native</a>.</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/AllClients.jpg" style="max-width: 100%"></p>
+<div class="top-screenshot"><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/AllClients.jpg" style="max-width: 100%; max-height: 35em;"></div>
+
 <h1 id="installation">Installation</h1>
 <p>Three types of applications are available: <strong>desktop</strong> (Windows, macOS and Linux), <strong>mobile</strong> (Android and iOS) and for <strong>terminal</strong> (Windows, macOS and Linux). All applications have similar user interfaces and can synchronise with each others.</p>
 <h2 id="desktop-applications">Desktop applications</h2>
 <table>
 <thead>
 <tr>
-<th>Operating system</th>
-<th>Link</th>
+<th>Operating System</th>
+<th>Download</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Windows</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.22/Joplin-Setup-0.10.22.exe'><img alt='Get it on Windows' height="60px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.22/Joplin-Setup-0.10.22.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a></td>
 </tr>
 <tr>
 <td>macOS</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.22/Joplin-0.10.22.dmg'><img alt='Get it on macOS' height="60px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.22/Joplin-0.10.22.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a></td>
 </tr>
 <tr>
 <td>Linux</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.22/Joplin-0.10.22-x86_64.AppImage'><img alt='Get it on macOS' height="60px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.22/Joplin-0.10.22-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a></td>
 </tr>
 </tbody>
 </table>
@@ -215,18 +234,18 @@
 <table>
 <thead>
 <tr>
-<th>Operating system</th>
-<th>Link</th>
+<th>Operating System</th>
+<th>Download</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Android</td>
-<td><a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="60px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeAndroid.png'/></a></td>
+<td><a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeAndroid.png'/></a></td>
 </tr>
 <tr>
 <td>iOS</td>
-<td><a href='#'><img alt='Get it on the App Store' height="60px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeIOS.png'/></a></td>
+<td><a href='#'><img alt='Get it on the App Store' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeIOS.png'/></a></td>
 </tr>
 </tbody>
 </table>
@@ -289,36 +308,23 @@
 </ul>
 <p>This translation will apply to both the terminal and the Android application.</p>
 <h1 id="coming-features">Coming features</h1>
-<p>The two main features that remain to be implemented are:</p>
 <ul>
-<li>iOS application (80% done)</li>
-<li>End to end encryption (to-do)</li>
+<li>All: End to end encryption</li>
+<li>Windows: Tray icon</li>
+<li>Desktop apps: Tag auto-complete</li>
+<li>Desktop apps: Dark theme</li>
+<li>Linux: Enable auto-update for desktop app</li>
 </ul>
 <h1 id="known-bugs">Known bugs</h1>
 <ul>
 <li>Non-alphabetical characters such as Chinese or Arabic might create glitches in the terminal on Windows. This is a limitation of the current Windows console.</li>
-<li>In the React Native app, changing the notebook of a note sometimes has no effect, due to <a href="https://github.com/facebook/react-native/issues/15556">this bug</a>. Due to <a href="https://github.com/facebook/react-native/issues/13351">this other bug</a>, changing one config value sometimes also set a different one. This is likely to be resolved soon in a future version of React Native.</li>
+<li>Auto-update is not working in the Linux desktop application.</li>
 </ul>
 <h1 id="license">License</h1>
 <p>Copyright (c) 2016-2017 Laurent Cozic</p>
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
 <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
 <p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
-
-<script>window.twttr = (function(d, s, id) {
-	var js, fjs = d.getElementsByTagName(s)[0],
-	t = window.twttr || {};
-	if (d.getElementById(id)) return t;
-	js = d.createElement(s);
-	js.id = id;
-	js.src = "https://platform.twitter.com/widgets.js";
-	fjs.parentNode.insertBefore(js, fjs);
-	t._e = [];
-	t.ready = function(f) {
-	t._e.push(f);
-	};
-	return t;
-}(document, "script", "twitter-wjs"));</script>
 
 <script>
 	function stickyHeader() { 

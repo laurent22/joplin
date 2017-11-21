@@ -85,7 +85,9 @@ class Logger {
 		for (let i = 0; i < this.targets_.length; i++) {
 			const target = this.targets_[i];
 			if (target.type == 'database') {
-				return await target.database.selectAll('SELECT * FROM logs ORDER BY timestamp DESC LIMIT ' + limit);
+				let sql = 'SELECT * FROM logs ORDER BY timestamp DESC';
+				if (limit !== null) sql += ' LIMIT ' + limit
+				return await target.database.selectAll(sql);
 			}
 		}
 		return [];

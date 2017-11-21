@@ -404,6 +404,9 @@ class BaseItem extends BaseModel {
 		return this.db().transactionExecBatch(queries);
 	}
 
+	// When an item is deleted, its associated sync_items data is not immediately deleted for
+	// performance reason. So this function is used to look for these remaining sync_items and
+	// delete them.
 	static async deleteOrphanSyncItems() {
 		const classNames = this.syncItemClassNames();
 

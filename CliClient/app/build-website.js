@@ -91,6 +91,10 @@ const headerHtml = `<!doctype html>
 	.cli-screenshot .prompt {
 		color: #48C2F0;
 	}
+	.top-screenshot {
+		margin-top: 2em;
+		text-align: center;
+	}
 	.header {
 		position: relative;
 		padding-left: 2em;
@@ -150,15 +154,29 @@ const headerHtml = `<!doctype html>
 		width: 100%;
 		text-align: right;
 		vertical-align: middle;
-		padding-top: 3px;
+		line-height: 0;
 	}
-	.twitter-share-button {
-		
+	.nav-right .share-btn {
+		display: none;
 	}
-	.github-share-button {
+	.share-btn-github {
 		display: inline-block;
 	}
-	</style>
+	.nav-right .small-share-btn {
+		display: none;
+	}
+	.nav-right .share-btn-github {
+		display: inline-block;
+	}
+	@media all and (min-width: 400px) {
+		.nav-right .share-btn {
+			display: inline-block;
+		}
+		.nav-right .small-share-btn {
+			display: none;
+		}
+	}
+</style>
 </head>
 
 <body>
@@ -179,9 +197,9 @@ const headerHtml = `<!doctype html>
 			<li class="{{selectedDesktop}}"><a href="{{baseUrl}}/desktop" title="Desktop"><i class="fa fa-desktop"></i></a></li>
 		</ul>
 		<div class="nav-right">
-			<iframe src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-			<a class="twitter-share-button" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fjoplin.cozic.net">Tweet</a>
-			<iframe class="github-share-button" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="80px" height="20px"></iframe>
+			<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+			<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplin.cozic.net" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
+			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="80px" height="20px"></iframe>
 		</div>
 	</div>
 </div>
@@ -230,21 +248,6 @@ const footerHtml = `
 // `;
 
 const scriptHtml = `
-<script>window.twttr = (function(d, s, id) {
-	var js, fjs = d.getElementsByTagName(s)[0],
-	t = window.twttr || {};
-	if (d.getElementById(id)) return t;
-	js = d.createElement(s);
-	js.id = id;
-	js.src = "https://platform.twitter.com/widgets.js";
-	fjs.parentNode.insertBefore(js, fjs);
-	t._e = [];
-	t.ready = function(f) {
-	t._e.push(f);
-	};
-	return t;
-}(document, "script", "twitter-wjs"));</script>
-
 <script>
 	function stickyHeader() { 
 		if ($(window).scrollTop() > 179) {
@@ -266,6 +269,10 @@ const scriptHtml = `
 	ga('send', 'pageview');
 </script>
 `;
+
+// <a href="#" class="small-share-btn" style="background-color: #365899;"><img src="images/ShareFacebook.svg" style=" width: 1.2em; height: 1.2em"/></a>
+// <a href="#" class="small-share-btn" style="background-color: #1b95e0;"><img src="images/ShareTwitter.svg" style=" width: 1.2em; height: 1.2em"/></a>
+// <a href="#" class="small-share-btn" style="background-color: #eee;"><img src="images/ShareGithub.svg" style=" width: 1.2em; height: 1.2em"/></a>
 
 const rootDir = dirname(dirname(__dirname));
 

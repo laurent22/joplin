@@ -4,6 +4,7 @@ const { Platform, View, Text, Button, StyleSheet, TouchableOpacity, Image } = re
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { Log } = require('lib/log.js');
 const { BackButtonService } = require('lib/services/back-button.js');
+const { ReportService } = require('lib/services/report.js');
 const { Menu, MenuOptions, MenuOption, MenuTrigger } = require('react-native-popup-menu');
 const { _ } = require('lib/locale.js');
 const { Setting } = require('lib/models/setting.js');
@@ -13,6 +14,8 @@ const { reg } = require('lib/registry.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const { ItemList } = require('lib/components/ItemList.js');
 const { Dropdown } = require('lib/components/Dropdown.js');
+const { time } = require('lib/time-utils');
+const RNFS = require('react-native-fs');
 
 // Rather than applying a padding to the whole bar, it is applied to each
 // individual component (button, picker, etc.) so that the touchable areas
@@ -181,6 +184,32 @@ class ScreenHeaderComponent extends Component {
 		});	
 	}
 
+	async debugReport_press() {
+		const service = new ReportService();
+
+		const logItems = await reg.logger().lastEntries(null);
+		const logItemRows = [
+			['Date','Level','Message']
+		];
+		for (let i = 0; i < logItems.length; i++) {
+			const item = logItems[i];
+			logItemRows.push([
+				time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm:ss'),
+				item.level,
+				item.message
+			]);
+		}
+		const logItemCsv = service.csvCreate(logItemRows);
+
+		const itemListCsv = await service.basicItemList({ format: 'csv' });
+		const filePath = RNFS.ExternalDirectoryPath + '/syncReport-' + (new Date()).getTime() + '.txt';
+
+		const finalText = [logItemCsv, itemListCsv].join("\n--------------------------------------------------------------------------------");
+
+		await RNFS.writeFile(filePath, finalText);
+		alert('Debug report exported to ' + filePath);
+	}
+
 	render() {
 
 		function sideMenuButton(styles, onPress) {
@@ -243,14 +272,21 @@ class ScreenHeaderComponent extends Component {
 			}
 
 			menuOptionComponents.push(
-				<MenuOption value={() => this.log_press()} key={'menuOption_' + key++} style={this.styles().contextMenuItem}>
+				<MenuOption value={() => this.log_press()} key={'menuOption_log'} style={this.styles().contextMenuItem}>
 					<Text style={this.styles().contextMenuItemText}>{_('Log')}</Text>
 				</MenuOption>);
 
 			menuOptionComponents.push(
-				<MenuOption value={() => this.status_press()} key={'menuOption_' + key++} style={this.styles().contextMenuItem}>
+				<MenuOption value={() => this.status_press()} key={'menuOption_status'} style={this.styles().contextMenuItem}>
 					<Text style={this.styles().contextMenuItemText}>{_('Status')}</Text>
 				</MenuOption>);
+
+			if (Platform.OS === 'android') {
+				menuOptionComponents.push(
+					<MenuOption value={() => this.debugReport_press()} key={'menuOption_debugReport'} style={this.styles().contextMenuItem}>
+						<Text style={this.styles().contextMenuItemText}>{_('Export Debug Report')}</Text>
+					</MenuOption>);
+			} 
 		}
 
 		if (menuOptionComponents.length) {
