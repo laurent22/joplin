@@ -822,7 +822,7 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-msgid "Export Status Data"
+msgid "Export Debug Report"
 msgstr ""
 
 msgid "Cancel synchronisation"

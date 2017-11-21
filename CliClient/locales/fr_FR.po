@@ -887,8 +887,8 @@ msgstr "Journal"
 msgid "Status"
 msgstr "État"
 
-msgid "Export Status Data"
-msgstr ""
+msgid "Export Debug Report"
+msgstr "Exporter rapport de débogage"
 
 msgid "Cancel synchronisation"
 msgstr "Annuler synchronisation"
