@@ -14,6 +14,9 @@ class MdToHtml {
 		this.loadedResources_ = {};
 		this.cachedContent_ = null;
 		this.cachedContentKey_ = null;
+
+		// Must include last "/"
+		this.resourceBaseUrl_ = ('resourceBaseUrl' in options) ? options.resourceBaseUrl : null;
 	}
 
 	makeContentKey(resources, body, style, options) {
@@ -100,7 +103,8 @@ class MdToHtml {
 
 		const mime = resource.mime ? resource.mime.toLowerCase() : '';
 		if (mime == 'image/png' || mime == 'image/jpg' || mime == 'image/jpeg' || mime == 'image/gif') {
-			const src = './' + Resource.filename(resource);
+			let src = './' + Resource.filename(resource);
+			if (this.resourceBaseUrl_ !== null) src = this.resourceBaseUrl_ + src;
 			let output = '<img title="' + htmlentities(title) + '" src="' + src + '"/>';
 			return output;
 		}

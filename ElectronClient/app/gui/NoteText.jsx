@@ -59,7 +59,10 @@ class NoteTextComponent extends React.Component {
 
 	mdToHtml() {
 		if (this.mdToHtml_) return this.mdToHtml_;
-		this.mdToHtml_ = new MdToHtml({ supportsResourceLinks: true });
+		this.mdToHtml_ = new MdToHtml({
+			supportsResourceLinks: true,
+			resourceBaseUrl: 'file://' + Setting.value('resourceDir') + '/',
+		});
 		return this.mdToHtml_;
 	}
 
