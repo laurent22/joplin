@@ -22,6 +22,10 @@ class Synchronizer {
 		this.appType_ = appType;
 		this.cancelling_ = false;
 
+		// Debug flags are used to test certain hard-to-test conditions
+		// such as cancelling in the middle of a loop.
+		this.debugFlags_ = [];
+
 		this.onProgress_ = function(s) {};
 		this.progressReport_ = {};
 
@@ -354,10 +358,11 @@ class Synchronizer {
 			let context = null;
 			let newDeltaContext = null;
 			let localFoldersToDelete = [];
+			let hasCancelled = false;
 			if (lastContext.delta) context = lastContext.delta;
 
 			while (true) {
-				if (this.cancelling()) break;
+				if (this.cancelling() || hasCancelled) break;
 
 				let listResult = await this.api().delta('', {
 					context: context,
@@ -372,7 +377,10 @@ class Synchronizer {
 
 				let remotes = listResult.items;
 				for (let i = 0; i < remotes.length; i++) {
-					if (this.cancelling()) break;
+					if (this.cancelling() || this.debugFlags_.indexOf('cancelDeltaLoop2') >= 0) {
+						hasCancelled = true;
+						break;
+					}
 
 					let remote = remotes[i];
 					if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
@@ -443,11 +451,18 @@ class Synchronizer {
 					}
 				}
 
-				if (!listResult.hasMore) {
-					newDeltaContext = listResult.context;
-					break;
+				// If user has cancelled, don't record the new context (2) so that synchronisation
+				// can start again from the previous context (1) next time. It is ok if some items
+				// have been synced between (1) and (2) because the loop above will handle the same
+				// items being synced twice as an update. If the local and remote items are indentical
+				// the update will simply be skipped.
+				if (!hasCancelled) {
+					if (!listResult.hasMore) {
+						newDeltaContext = listResult.context;
+						break;
+					}
+					context = listResult.context;
 				}
-				context = listResult.context;
 			}
 
 			outputContext.delta = newDeltaContext ? newDeltaContext : lastContext.delta;
