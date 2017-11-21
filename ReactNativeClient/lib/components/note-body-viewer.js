@@ -48,6 +48,7 @@ class NoteBodyViewer extends Component {
 			onResourceLoaded: () => {
 				this.forceUpdate();
 			},
+			paddingBottom: '3.8em', // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
 		};
 
 		const html = this.mdToHtml_.render(note ? note.body : '', this.props.webViewStyle, mdOptions);
@@ -79,7 +80,10 @@ class NoteBodyViewer extends Component {
 		// So we use scalesPageToFix=false on iOS along with that CSS rule.
 
 		// `baseUrl` is where the images will be loaded from. So images must use a path relative to resourceDir.
-		const source = { html: html, baseUrl: 'file://' + Setting.value('resourceDir') + '/' };
+		const source = {
+			html: html,
+			baseUrl: 'file://' + Setting.value('resourceDir') + '/',
+		};
 
 		return (
 			<View style={style}>

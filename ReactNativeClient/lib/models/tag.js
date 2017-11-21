@@ -3,7 +3,6 @@ const { BaseItem } = require('lib/models/base-item.js');
 const { NoteTag } = require('lib/models/note-tag.js');
 const { Note } = require('lib/models/note.js');
 const { time } = require('lib/time-utils.js');
-const lodash = require('lodash');
 
 class Tag extends BaseItem {
 

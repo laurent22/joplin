@@ -345,6 +345,8 @@ class Application extends BaseApplication {
 			// For those who leave the app always open
 			setInterval(() => { runAutoUpdateCheck() }, 2 * 60 * 60 * 1000);
 		}
+
+		reg.scheduleSync();
 	}
 
 }

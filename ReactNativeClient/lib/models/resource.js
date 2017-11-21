@@ -5,7 +5,6 @@ const { mime } = require('lib/mime-utils.js');
 const { filename } = require('lib/path-utils.js');
 const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
 const { markdownUtils } = require('lib/markdown-utils.js');
-const lodash = require('lodash');
 
 class Resource extends BaseItem {
 

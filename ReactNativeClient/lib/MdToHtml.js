@@ -238,6 +238,7 @@ class MdToHtml {
 	render(body, style, options = null) {
 		if (!options) options = {};
 		if (!options.postMessageSyntax) options.postMessageSyntax = 'postMessage';
+		if (!options.paddingBottom) options.paddingBottom = '0';
 
 		const cacheKey = this.makeContentKey(this.loadedResources_, body, style, options);
 		if (this.cachedContentKey_ === cacheKey) return this.cachedContent_;
@@ -298,6 +299,7 @@ class MdToHtml {
 				line-height: ` + style.htmlLineHeight + `;
 				background-color: ` + style.htmlBackgroundColor + `;
 				font-family: sans-serif;
+				padding-bottom: ` + options.paddingBottom + `;
 			}
 			p, h1, h2, h3, h4, ul, table {
 				margin-top: 0;
