@@ -850,6 +850,10 @@ msgstr "%d heures"
 msgid "Show advanced options"
 msgstr "Montrer les options avancées"
 
+#, fuzzy
+msgid "Automatically update the application"
+msgstr "Quitter le logiciel."
+
 msgid "Sync status (synced items / total items)"
 msgstr "Status de la synchronisation (objets synchro. / total)"
 
