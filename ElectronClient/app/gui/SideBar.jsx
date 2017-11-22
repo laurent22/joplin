@@ -4,6 +4,7 @@ const shared = require('lib/components/shared/side-menu-shared.js');
 const { Synchronizer } = require('lib/synchronizer.js');
 const { BaseModel } = require('lib/base-model.js');
 const { Folder } = require('lib/models/folder.js');
+const { Note } = require('lib/models/note.js');
 const { Tag } = require('lib/models/tag.js');
 const { _ } = require('lib/locale.js');
 const { themeStyle } = require('../theme.js');
@@ -164,7 +165,32 @@ class SideBarComponent extends React.Component {
 		let style = Object.assign({}, this.style().listItem);
 		if (selected) style = Object.assign(style, this.style().listItemSelected);
 		if (folder.id === Folder.conflictFolderId()) style = Object.assign(style, this.style().conflictFolder);
-		return <a className="list-item" href="#" data-id={folder.id} data-type={BaseModel.TYPE_FOLDER} onContextMenu={(event) => this.itemContextMenu(event)} key={folder.id} style={style} onClick={() => {this.folderItem_click(folder)}}>{folder.title}</a>
+
+		const onDragOver = (event, folder) => {
+			if (event.dataTransfer.types.indexOf('text/x-jop-note-ids') >= 0) event.preventDefault();
+		}
+
+		const onDrop = async (event, folder) => {
+			if (event.dataTransfer.types.indexOf('text/x-jop-note-ids') < 0) return;
+			event.preventDefault();
+
+			const noteIds = JSON.parse(event.dataTransfer.getData('text/x-jop-note-ids'));
+			for (let i = 0; i < noteIds.length; i++) {
+				await Note.moveToFolder(noteIds[i], folder.id);
+			}
+		}
+
+		return <a
+			className="list-item"
+			onDragOver={(event) => { onDragOver(event, folder) } }
+			onDrop={(event) => { onDrop(event, folder) } }
+			href="#"
+			data-id={folder.id}
+			data-type={BaseModel.TYPE_FOLDER}
+			onContextMenu={(event) => this.itemContextMenu(event)}
+			key={folder.id}
+			style={style} onClick={() => {this.folderItem_click(folder)}}>{folder.title}
+		</a>
 	}
 
 	tagItem(tag, selected) {

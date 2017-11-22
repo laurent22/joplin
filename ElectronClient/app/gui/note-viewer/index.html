@@ -12,7 +12,7 @@ body {
 </style>
 
 <div id="hlScriptContainer"></div>
-<div id="content"></div>
+<div id="content" ondragstart="return false;" ondrop="return false;"></div>
 
 <script>
 const { ipcRenderer } = require('electron');
@@ -70,8 +70,6 @@ function applyHljs(codeElements) {
 // ----------------------------------------------------------------------
 // / Handle dynamically loading HLJS when a code element is present
 // ----------------------------------------------------------------------
-
-
 
 ipcRenderer.on('setHtml', (event, html) => {
 	contentElement.innerHTML = html;
