@@ -1,5 +1,6 @@
 const { Note } = require('lib/models/note.js');
 const { Folder } = require('lib/models/folder.js');
+const ArrayUtils = require('lib/ArrayUtils.js');
 
 const defaultState = {
 	notes: [],
@@ -8,7 +9,7 @@ const defaultState = {
 	folders: [],
 	tags: [],
 	searches: [],
-	selectedNoteId: null,
+	selectedNoteIds: [],
 	selectedFolderId: null,
 	selectedTagId: null,
 	selectedSearchId: null,
@@ -33,7 +34,7 @@ function handleItemDelete(state, action) {
 
 	const map = {
 		'FOLDER_DELETE': ['folders', 'selectedFolderId'],
-		'NOTE_DELETE': ['notes', 'selectedNoteId'],
+		'NOTE_DELETE': ['notes', 'selectedNoteIds'],
 		'TAG_DELETE': ['tags', 'selectedTagId'],
 		'SEARCH_DELETE': ['searches', 'selectedSearchId'],
 	};
@@ -60,10 +61,10 @@ function handleItemDelete(state, action) {
 		previousIndex = newItems.length - 1;
 	}
 
-	const newIndex = previousIndex >= 0 ? newItems[previousIndex].id : null;
-	newState[selectedItemKey] = newIndex;
+	const newId = previousIndex >= 0 ? newItems[previousIndex].id : null;
+	newState[selectedItemKey] = action.type === 'NOTE_DELETE' ? [newId] : newId;
 
-	if (!newIndex && newState.notesParentType !== 'Folder') {
+	if (!newId && newState.notesParentType !== 'Folder') {
 		newState.notesParentType = 'Folder';
 	}
 
@@ -111,6 +112,51 @@ function defaultNotesParentType(state, exclusion) {
 	return newNotesParentType;
 }
 
+function changeSelectedNotes(state, action) {
+	const noteIds = 'id' in action ? (action.id ? [action.id] : []) : action.ids;
+	let newState = Object.assign({}, state);
+
+	if (action.type === 'NOTE_SELECT') {
+		newState.selectedNoteIds = noteIds;
+		return newState;
+	}
+
+	if (action.type === 'NOTE_SELECT_ADD') {
+		if (!noteIds.length) return state;
+		newState.selectedNoteIds = ArrayUtils.unique(newState.selectedNoteIds.concat(noteIds));
+		return newState;
+	}
+
+	if (action.type === 'NOTE_SELECT_REMOVE') {
+		if (!noteIds.length) return state; // Nothing to unselect
+		if (state.selectedNoteIds.length <= 1) return state; // Cannot unselect the last note
+
+		let newSelectedNoteIds = [];
+		for (let i = 0; i < newState.selectedNoteIds.length; i++) {
+			const id = newState.selectedNoteIds[i];
+			if (noteIds.indexOf(id) >= 0) continue;
+			newSelectedNoteIds.push(id);
+		}
+		newState.selectedNoteIds = newSelectedNoteIds;
+
+		return newState;
+	}
+
+	if (action.type === 'NOTE_SELECT_TOGGLE') {
+		if (!noteIds.length) return state;
+
+		if (newState.selectedNoteIds.indexOf(noteIds[0]) >= 0) {
+			newState = changeSelectedNotes(state, { type: 'NOTE_SELECT_REMOVE', id: noteIds[0] });
+		} else {
+			newState = changeSelectedNotes(state, { type: 'NOTE_SELECT_ADD', id: noteIds[0] });
+		}
+
+		return newState;
+	}
+
+	throw new Error('Unreachable');
+}
+
 const reducer = (state = defaultState, action) => {
 	let newState = state;
 
@@ -118,9 +164,44 @@ const reducer = (state = defaultState, action) => {
 		switch (action.type) {
 
 			case 'NOTE_SELECT':
+			case 'NOTE_SELECT_ADD':
+			case 'NOTE_SELECT_REMOVE':
+			case 'NOTE_SELECT_TOGGLE':
+
+				newState = changeSelectedNotes(state, action);
+				break;
+
+			case 'NOTE_SELECT_EXTEND':
 
 				newState = Object.assign({}, state);
-				newState.selectedNoteId = action.id;
+
+				if (!newState.selectedNoteIds.length) {
+					newState.selectedNoteIds = [action.id];
+				} else {
+					const selectRangeId1 = state.selectedNoteIds[state.selectedNoteIds.length - 1];
+					const selectRangeId2 = action.id;
+					if (selectRangeId1 === selectRangeId2) return state;
+
+					let newSelectedNoteIds = state.selectedNoteIds.slice();
+					let selectionStarted = false;
+					for (let i = 0; i < state.notes.length; i++) {
+						const id = state.notes[i].id;
+
+						if (!selectionStarted && (id === selectRangeId1 || id === selectRangeId2)) {
+							selectionStarted = true;
+							if (newSelectedNoteIds.indexOf(id) < 0) newSelectedNoteIds.push(id);
+							continue;
+						} else if (selectionStarted && (id === selectRangeId1 || id === selectRangeId2)) {
+							if (newSelectedNoteIds.indexOf(id) < 0) newSelectedNoteIds.push(id);
+							break;
+						}
+
+						if (selectionStarted && newSelectedNoteIds.indexOf(id) < 0) {
+							newSelectedNoteIds.push(id);
+						}
+					}
+					newState.selectedNoteIds = newSelectedNoteIds;
+				}
 				break;
 
 			case 'FOLDER_SELECT':
@@ -208,7 +289,7 @@ const reducer = (state = defaultState, action) => {
 				newState.notes = newNotes;
 
 				if (noteFolderHasChanged) {
-					newState.selectedNoteId = newNotes.length ? newNotes[0].id : null;
+					newState.selectedNoteIds = newNotes.length ? [newNotes[0].id] : null;
 				}
 				break;
 

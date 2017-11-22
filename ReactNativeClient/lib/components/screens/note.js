@@ -550,7 +550,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 const NoteScreen = connect(
 	(state) => {
 		return {
-			noteId: state.selectedNoteId,
+			noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 			folderId: state.selectedFolderId,
 			itemType: state.selectedItemType,
 			folders: state.folders,

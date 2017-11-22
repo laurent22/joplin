@@ -152,9 +152,6 @@ class BaseApplication {
 		if (parentType === 'Folder') {
 			parentId = state.selectedFolderId;
 			parentType = BaseModel.TYPE_FOLDER;
-		} else if (parentType === 'Note') {
-			parentId = state.selectedNoteId;
-			parentType = BaseModel.TYPE_NOTE;
 		} else if (parentType === 'Tag') {
 			parentId = state.selectedTagId;
 			parentType = BaseModel.TYPE_TAG;

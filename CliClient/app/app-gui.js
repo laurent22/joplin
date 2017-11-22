@@ -167,7 +167,7 @@ class AppGui {
 		});
 		this.rootWidget_.connect(noteList, (state) => {
 			return {
-				selectedNoteId: state.selectedNoteId,
+				selectedNoteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 				items: state.notes,
 			};
 		});
@@ -181,7 +181,7 @@ class AppGui {
 		};
 		this.rootWidget_.connect(noteText, (state) => {
 			return {
-				noteId: state.selectedNoteId,
+				noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 				notes: state.notes,
 			};
 		});
@@ -195,7 +195,7 @@ class AppGui {
 			borderRightWidth: 1,
 		};
 		this.rootWidget_.connect(noteMetadata, (state) => {
-			return { noteId: state.selectedNoteId };
+			return { noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null };
 		});
 		noteMetadata.hide();
 

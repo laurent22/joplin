@@ -142,7 +142,7 @@ const appReducer = (state = appDefaultState, action) => {
 				newState = Object.assign({}, state);
 
 				if ('noteId' in action) {
-					newState.selectedNoteId = action.noteId;
+					newState.selectedNoteIds = action.noteId ? [action.noteId] : [];
 				}
 
 				if ('folderId' in action) {
