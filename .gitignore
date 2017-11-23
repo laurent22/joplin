@@ -35,3 +35,4 @@ _vieux/
 _mydocs
 .DS_Store
 Assets/DownloadBadges*.psd
+node_modules
