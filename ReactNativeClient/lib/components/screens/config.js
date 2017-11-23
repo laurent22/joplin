@@ -145,10 +145,11 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	render() {
 		const settings = this.props.settings;
 
+		const keys = Setting.keys(true, 'mobile');
 		let settingComps = [];
-		for (let key in settings) {
+		for (let i = 0; i < keys.length; i++) {
+			const key = keys[i];
 			if (key == 'sync.target') continue;
-			if (!settings.hasOwnProperty(key)) continue;
 			if (!Setting.isPublic(key)) continue;
 
 			const comp = this.settingToComponent(key, settings[key]);

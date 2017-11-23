@@ -132,7 +132,7 @@ class NoteItemComponent extends Component {
 		const selectionWrapperStyle = isSelected ? this.styles().selectionWrapperSelected : this.styles().selectionWrapper;
 
 		return (
-			<TouchableOpacity onPress={() => this.onPress()} onLongPress={() => this.onLongPress()}>
+			<TouchableOpacity onPress={() => this.onPress()} onLongPress={() => this.onLongPress() } activeOpacity={0.5}>
 				<View style={ selectionWrapperStyle }>
 					<View style={ opacityStyle }>
 						<View style={ listItemStyle }>
