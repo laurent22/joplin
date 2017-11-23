@@ -25,6 +25,7 @@ async function gitHubLatestRelease() {
 			if (error) {
 				reject(error);
 			} else if (response.statusCode !== 200) {
+				console.warn(data);
 				reject(new Error('Error HTTP ' + response.statusCode));
 			} else {
 				resolve(data);
@@ -67,7 +68,7 @@ async function main(argv) {
 		if (!waitForVersion) break;
 
 		if (release.tag_name !== waitForVersion) {
-			await msleep(15000);
+			await msleep(60000 * 5);
 		} else {
 			console.info('Got version ' + waitForVersion);
 			break;

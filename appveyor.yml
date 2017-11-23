@@ -3,7 +3,7 @@ image: Visual Studio 2017
 platform:
   - x64
 
-cache:
+# cache:
   # Not caching node_modules because appveyor doesn't restore it afterwards (not sure why)
   # - node_modules
   # - '%USERPROFILE%\.electron'
