@@ -9,6 +9,7 @@ const { Menu, MenuOptions, MenuOption, MenuTrigger } = require('react-native-pop
 const { _ } = require('lib/locale.js');
 const { Setting } = require('lib/models/setting.js');
 const { Note } = require('lib/models/note.js');
+const { Folder } = require('lib/models/folder.js');
 const { FileApi } = require('lib/file-api.js');
 const { FileApiDriverOneDrive } = require('lib/file-api-driver-onedrive.js');
 const { reg } = require('lib/registry.js');
@@ -162,7 +163,6 @@ class ScreenHeaderComponent extends Component {
 	async deleteButton_press() {
 		// Dialog needs to be displayed as a child of the parent component, otherwise
 		// it won't be visible within the header component.
-		if (!this.props.parentComponent) throw new Error('parentComponent not set');
 		const ok = await dialogs.confirm(this.props.parentComponent, _('Delete these notes?'));
 		if (!ok) return;
 
@@ -368,9 +368,29 @@ class ScreenHeaderComponent extends Component {
 							color: theme.color,
 							fontSize: theme.fontSize,
 						}}
-						onValueChange={(itemValue, itemIndex) => {
-							if (!folderPickerOptions.onValueChange) return;
-							folderPickerOptions.onValueChange(itemValue, itemIndex);
+						onValueChange={async (folderId, itemIndex) => {
+							// If onValueChange is specified, use this as a callback, otherwise do the default
+							// which is to take the selectedNoteIds from the state and move them to the
+							// chosen folder.
+
+							if (folderPickerOptions.onValueChange) {
+								folderPickerOptions.onValueChange(folderId, itemIndex);
+								return;
+							}
+
+							if (!folderId) return;
+							const noteIds = this.props.selectedNoteIds;
+							if (!noteIds.length) return;
+
+							const folder = await Folder.load(folderId);
+
+							const ok = noteIds.length > 1 ? await dialogs.confirm(this.props.parentComponent, _('Move %d notes to notebook "%s"?', noteIds.length, folder.title)) : true;
+							if (!ok) return;
+
+							this.props.dispatch({ type: 'NOTE_SELECTION_END' });
+							for (let i = 0; i < noteIds.length; i++) {
+								await Note.moveToFolder(noteIds[i], folderId);
+							}
 						}}
 					/>
 				);

@@ -143,6 +143,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 		let title = parent ? parent.title : null;
 		const addFolderNoteButtons = this.props.selectedFolderId && this.props.selectedFolderId != Folder.conflictFolderId();
 		const thisComp = this;
+		const actionButtonComp = this.props.noteSelectionEnabled ? null : <ActionButton addFolderNoteButtons={addFolderNoteButtons} parentFolderId={this.props.selectedFolderId}></ActionButton>
 
 		return (
 			<View style={rootStyle}>
@@ -153,25 +154,10 @@ class NotesScreenComponent extends BaseScreenComponent {
 					folderPickerOptions={{
 						enabled: this.props.noteSelectionEnabled,
 						mustSelect: true,
-						onValueChange: async (folderId, itemIndex) => {
-							if (!folderId) return;
-							const noteIds = this.props.selectedNoteIds;
-							if (!noteIds.length) return;
-
-							const folder = await Folder.load(folderId);
-
-							const ok = await dialogs.confirm(this, _('Move %d note(s) to notebook "%s"?', noteIds.length, folder.title));
-							if (!ok) return;
-
-							this.props.dispatch({ type: 'NOTE_SELECTION_END' });
-							for (let i = 0; i < noteIds.length; i++) {
-								await Note.moveToFolder(noteIds[i], folderId);
-							}
-						},
 					}}
 				/>
 				<NoteList style={{flex: 1}}/>
-				<ActionButton addFolderNoteButtons={addFolderNoteButtons} parentFolderId={this.props.selectedFolderId}></ActionButton>
+				{ actionButtonComp }
 				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
 			</View>
 		);

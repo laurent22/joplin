@@ -100,7 +100,7 @@ class NoteItemComponent extends Component {
 		if (!this.props.note) return;
 
 		this.props.dispatch({
-			type: 'NOTE_SELECTION_START',
+			type: this.props.noteSelectionEnabled ? 'NOTE_SELECTION_TOGGLE' : 'NOTE_SELECTION_START',
 			id: this.props.note.id,
 		});
 	}
@@ -126,21 +126,23 @@ class NoteItemComponent extends Component {
 
 		const listItemStyle = isTodo ? this.styles().listItemWithCheckbox : this.styles().listItem;
 		const listItemTextStyle = isTodo ? this.styles().listItemTextWithCheckbox : this.styles().listItemText;
-		const rootStyle = isTodo && checkboxChecked ? {opacity: 0.4} : {};
+		const opacityStyle = isTodo && checkboxChecked ? {opacity: 0.4} : {};
 		const isSelected = this.props.noteSelectionEnabled && this.props.selectedNoteIds.indexOf(note.id) >= 0;
 
 		const selectionWrapperStyle = isSelected ? this.styles().selectionWrapperSelected : this.styles().selectionWrapper;
 
 		return (
-			<TouchableOpacity onPress={() => this.onPress()} style={rootStyle} onLongPress={() => this.onLongPress()}>
+			<TouchableOpacity onPress={() => this.onPress()} onLongPress={() => this.onLongPress()}>
 				<View style={ selectionWrapperStyle }>
-					<View style={ listItemStyle }>
-						<Checkbox
-							style={checkboxStyle}
-							checked={checkboxChecked}
-							onChange={(checked) => this.todoCheckbox_change(checked)}
-						/>
-						<Text style={listItemTextStyle}>{note.title}</Text>
+					<View style={ opacityStyle }>
+						<View style={ listItemStyle }>
+							<Checkbox
+								style={checkboxStyle}
+								checked={checkboxChecked}
+								onChange={(checked) => this.todoCheckbox_change(checked)}
+							/>
+							<Text style={listItemTextStyle}>{note.title}</Text>
+						</View>
 					</View>
 				</View>
 			</TouchableOpacity>

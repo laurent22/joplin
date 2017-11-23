@@ -8,6 +8,8 @@ const { Note } = require('lib/models/note.js');
 const { NoteItem } = require('lib/components/note-item.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { themeStyle } = require('lib/components/global-style.js');
+const { dialogs } = require('lib/dialogs.js');
+const DialogBox = require('react-native-dialogbox').default;
 
 class SearchScreenComponent extends BaseScreenComponent {
 	
@@ -139,9 +141,18 @@ class SearchScreenComponent extends BaseScreenComponent {
 			rootStyle.flex = 0.001; // This is a bit of a hack but it seems to work fine - it makes the component invisible but without unmounting it
 		}
 
+		const thisComponent = this;
+
 		return (
 			<View style={rootStyle}>
-				<ScreenHeader title={_('Search')}/>
+				<ScreenHeader
+					title={_('Search')}
+					parentComponent={thisComponent}
+					folderPickerOptions={{
+						enabled: this.props.noteSelectionEnabled,
+						mustSelect: true,
+					}}
+				/>
 				<View style={this.styles().body}>
 					<View style={this.styles().searchContainer}>
 						<TextInput
@@ -163,6 +174,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 						renderItem={(event) => <NoteItem note={event.item}/>}
 					/>
 				</View>
+				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
 			</View>
 		);
 	}
@@ -174,6 +186,7 @@ const SearchScreen = connect(
 		return {
 			query: state.searchQuery,
 			theme: state.settings.theme,
+			noteSelectionEnabled: state.noteSelectionEnabled,
 		};
 	}
 )(SearchScreenComponent)
