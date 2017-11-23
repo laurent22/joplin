@@ -1,10 +1,11 @@
 const { Logger } = require('lib/logger.js');
 const { Setting } = require('lib/models/setting.js');
-const { OneDriveApi } = require('lib/onedrive-api.js');
 const { parameters } = require('lib/parameters.js');
 const { FileApi } = require('lib/file-api.js');
 const { Database } = require('lib/database.js');
 const { Synchronizer } = require('lib/synchronizer.js');
+const SyncTarget1 = require('lib/SyncTarget1.js');
+const SyncTarget3 = require('lib/SyncTarget3.js');
 const { FileApiDriverOneDrive } = require('lib/file-api-driver-onedrive.js');
 const { shim } = require('lib/shim.js');
 const { time } = require('lib/time-utils.js');
@@ -14,6 +15,12 @@ const { _ } = require('lib/locale.js');
 const reg = {};
 
 reg.initSynchronizerStates_ = {};
+reg.syncTargetClasses_ = {
+	1: SyncTarget1,
+	// 2: SyncTarget2,
+	3: SyncTarget3,
+};
+reg.syncTargets_ = {};
 reg.synchronizers_ = {};
 
 reg.logger = () => {
@@ -29,71 +36,17 @@ reg.setLogger = (l) => {
 	reg.logger_ = l;
 }
 
-reg.oneDriveApi = () => {
-	if (reg.oneDriveApi_) return reg.oneDriveApi_;
+reg.syncTarget = (syncTargetId = null) => {
+	if (syncTargetId === null) syncTargetId = Setting.value('sync.target');
+	if (reg.syncTargets_[syncTargetId]) return reg.syncTargets_[syncTargetId];
 
-	const isPublic = Setting.value('appType') != 'cli';
+	const SyncTargetClass = reg.syncTargetClasses_[syncTargetId];
+	if (!reg.db()) throw new Error('Cannot initialize sync without a db');
 
-	reg.oneDriveApi_ = new OneDriveApi(parameters().oneDrive.id, parameters().oneDrive.secret, isPublic);
-	reg.oneDriveApi_.setLogger(reg.logger());
-
-	reg.oneDriveApi_.on('authRefreshed', (a) => {
-		reg.logger().info('Saving updated OneDrive auth.');
-		Setting.setValue('sync.3.auth', a ? JSON.stringify(a) : null);
-	});
-
-	let auth = Setting.value('sync.3.auth');
-	if (auth) {
-		try {
-			auth = JSON.parse(auth);
-		} catch (error) {
-			reg.logger().warn('Could not parse OneDrive auth token');
-			reg.logger().warn(error);
-			auth = null;
-		}
-
-		reg.oneDriveApi_.setAuth(auth);
-	}
-	
-	return reg.oneDriveApi_;
-}
-
-reg.initSynchronizer_ = async (syncTargetId) => {
-	if (!reg.db()) throw new Error('Cannot initialize synchronizer: db not initialized');
-
-	let fileApi = null;
-
-	if (syncTargetId == Setting.SYNC_TARGET_ONEDRIVE) {
-
-		if (!reg.oneDriveApi().auth()) throw new Error('User is not authentified');
-		let appDir = await reg.oneDriveApi().appDirectory();
-		fileApi = new FileApi(appDir, new FileApiDriverOneDrive(reg.oneDriveApi()));
-
-	} else if (syncTargetId == Setting.SYNC_TARGET_MEMORY) {
-
-		fileApi = new FileApi('joplin', new FileApiDriverMemory());
-
-	} else if (syncTargetId == Setting.SYNC_TARGET_FILESYSTEM) {
-
-		let syncDir = Setting.value('sync.2.path');
-		if (!syncDir) throw new Error(_('Please set the "sync.2.path" config value to the desired synchronisation destination.'));
-		await shim.fs.mkdirp(syncDir, 0o755);
-		fileApi = new FileApi(syncDir, new shim.FileApiDriverLocal());
-
-	} else {
-
-		throw new Error('Unknown sync target: ' + syncTargetId);
-
-	}
-
-	fileApi.setSyncTargetId(syncTargetId);
-	fileApi.setLogger(reg.logger());
-
-	let sync = new Synchronizer(reg.db(), fileApi, Setting.value('appType'));
-	sync.setLogger(reg.logger());
-	sync.dispatch = reg.dispatch;
-
-	return sync;
+	const target = new SyncTargetClass(reg.db());
+	target.setLogger(reg.logger());
+	reg.syncTargets_[syncTargetId] = target;
+	return target;
 }
 
 reg.synchronizer = async (syncTargetId) => {
@@ -130,11 +83,7 @@ reg.synchronizer = async (syncTargetId) => {
 }
 
 reg.syncHasAuth = (syncTargetId) => {
-	if (syncTargetId == Setting.SYNC_TARGET_ONEDRIVE && !reg.oneDriveApi().auth()) {
-		return false;
-	}
-
-	return true;
+	return reg.syncTargets(syncTargetId).isAuthenticated();
 }
 
 reg.scheduleSync = async (delay = null) => {
@@ -164,7 +113,7 @@ reg.scheduleSync = async (delay = null) => {
 		}
 
 		try {
-			const sync = await reg.synchronizer(syncTargetId);
+			const sync = await reg.syncTarget(syncTargetId).synchronizer();
 
 			const contextKey = 'sync.' + syncTargetId + '.context';
 			let context = Setting.value(contextKey);
@@ -195,11 +144,7 @@ reg.scheduleSync = async (delay = null) => {
 }
 
 reg.syncStarted = async () => {
-	const syncTarget = Setting.value('sync.target');
-	if (!reg.synchronizers_[syncTarget]) return false;
-	if (!reg.syncHasAuth(syncTarget)) return false;
-	const sync = await reg.synchronizer(syncTarget);
-	return sync.state() != 'idle';
+	return reg.syncTarget().syncStarted();
 }
 
 reg.setupRecurrentSync = () => {

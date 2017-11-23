@@ -30,8 +30,6 @@ const logDir = __dirname + '/../tests/logs';
 fs.mkdirpSync(logDir, 0o755);
 
 const syncTargetId_ = Setting.SYNC_TARGET_MEMORY;
-//const syncTargetId_ = Setting.SYNC_TARGET_FILESYSTEM;
-//const syncTargetId_ = Setting.SYNC_TARGET_ONEDRIVE;
 const syncDir = __dirname + '/../tests/sync';
 
 const sleepTime = syncTargetId_ == Setting.SYNC_TARGET_FILESYSTEM ? 1001 : 400;

@@ -568,10 +568,13 @@ msgstr ""
 msgid "Add or remove tags"
 msgstr ""
 
-msgid "Switch between note and to-do"
+msgid "Switch between note and to-do type"
 msgstr ""
 
 msgid "Delete"
+msgstr ""
+
+msgid "Delete notes?"
 msgstr ""
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
@@ -628,6 +631,9 @@ msgstr ""
 msgid "Unknown flag: %s"
 msgstr ""
 
+msgid "OneDrive"
+msgstr ""
+
 #, javascript-format
 msgid "Unknown log level: %s"
 msgstr ""
@@ -639,11 +645,6 @@ msgstr ""
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
-msgstr ""
-
-msgid ""
-"Please set the \"sync.2.path\" config value to the desired synchronisation "
-"destination."
 msgstr ""
 
 #, javascript-format
@@ -737,9 +738,6 @@ msgstr ""
 msgid "File system"
 msgstr ""
 
-msgid "OneDrive"
-msgstr ""
-
 msgid "Text editor"
 msgstr ""
 
@@ -784,10 +782,10 @@ msgstr ""
 msgid "%d hours"
 msgstr ""
 
-msgid "Show advanced options"
+msgid "Automatically update the application"
 msgstr ""
 
-msgid "Automatically update the application"
+msgid "Show advanced options"
 msgstr ""
 
 msgid "Sync status (synced items / total items)"
@@ -819,6 +817,9 @@ msgstr ""
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 
+msgid "Delete these notes?"
+msgstr ""
+
 msgid "Log"
 msgstr ""
 
@@ -826,6 +827,13 @@ msgid "Status"
 msgstr ""
 
 msgid "Export Debug Report"
+msgstr ""
+
+msgid "Move to notebook..."
+msgstr ""
+
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
 msgstr ""
 
 msgid "Cancel synchronisation"

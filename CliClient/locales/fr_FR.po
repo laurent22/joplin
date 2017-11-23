@@ -620,11 +620,16 @@ msgstr "Disposition"
 msgid "Add or remove tags"
 msgstr "Gérer les étiquettes"
 
-msgid "Switch between note and to-do"
+#, fuzzy
+msgid "Switch between note and to-do type"
 msgstr "Alterner entre note et tâche"
 
 msgid "Delete"
 msgstr "Supprimer"
+
+#, fuzzy
+msgid "Delete notes?"
+msgstr "Supprimer la note ?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr ""
@@ -681,6 +686,9 @@ msgstr "Utilisation : %s"
 msgid "Unknown flag: %s"
 msgstr "Paramètre inconnu : %s"
 
+msgid "OneDrive"
+msgstr "OneDrive"
+
 #, javascript-format
 msgid "Unknown log level: %s"
 msgstr "Paramètre inconnu : %s"
@@ -695,13 +703,6 @@ msgid ""
 msgstr ""
 "Impossible de rafraîchir la connexion à OneDrive. Démarrez la "
 "synchronisation à nouveau pour corriger le problème."
-
-msgid ""
-"Please set the \"sync.2.path\" config value to the desired synchronisation "
-"destination."
-msgstr ""
-"Veuillez attribuer une valeur au paramètre de configuration \"sync.2.path\" "
-"pour indiquer le dossier où devra se faire la synchronisation."
 
 #, javascript-format
 msgid "Cannot access %s"
@@ -798,9 +799,6 @@ msgstr ""
 msgid "File system"
 msgstr "Système de fichier"
 
-msgid "OneDrive"
-msgstr "OneDrive"
-
 msgid "Text editor"
 msgstr "Éditeur de texte"
 
@@ -847,12 +845,12 @@ msgstr "%d heure"
 msgid "%d hours"
 msgstr "%d heures"
 
-msgid "Show advanced options"
-msgstr "Montrer les options avancées"
-
 #, fuzzy
 msgid "Automatically update the application"
 msgstr "Quitter le logiciel."
+
+msgid "Show advanced options"
+msgstr "Montrer les options avancées"
 
 msgid "Sync status (synced items / total items)"
 msgstr "Status de la synchronisation (objets synchro. / total)"
@@ -885,6 +883,10 @@ msgstr ""
 "Ce carnet ne contient aucune note. Créez-en une en appuyant sur le bouton "
 "(+)."
 
+#, fuzzy
+msgid "Delete these notes?"
+msgstr "Supprimer la note ?"
+
 msgid "Log"
 msgstr "Journal"
 
@@ -893,6 +895,14 @@ msgstr "État"
 
 msgid "Export Debug Report"
 msgstr "Exporter rapport de débogage"
+
+#, fuzzy
+msgid "Move to notebook..."
+msgstr "Déplacer la note vers un carnet."
+
+#, fuzzy, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr "Déplacer la note vers un carnet."
 
 msgid "Cancel synchronisation"
 msgstr "Annuler synchronisation"
@@ -961,6 +971,13 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid ""
+#~ "Please set the \"sync.2.path\" config value to the desired "
+#~ "synchronisation destination."
+#~ msgstr ""
+#~ "Veuillez attribuer une valeur au paramètre de configuration \"sync.2.path"
+#~ "\" pour indiquer le dossier où devra se faire la synchronisation."
 
 #~ msgid "Seach:"
 #~ msgstr "Chercher :"

@@ -72,16 +72,19 @@ class Setting extends BaseModel {
 		});
 	}
 
-	static dispatchUpdateAll() {
+	static toPlainObject() {
 		const keys = this.keys();
 		let keyToValues = {};
 		for (let i = 0; i < keys.length; i++) {
 			keyToValues[keys[i]] = this.value(keys[i]);
 		}
+		return keyToValues;
+	}
 
+	static dispatchUpdateAll() {
 		this.dispatch({
 			type: 'SETTING_UPDATE_ALL',
-			settings: keyToValues,
+			settings: this.toPlainObject(),
 		});
 	}
 
@@ -326,6 +329,7 @@ class Setting extends BaseModel {
 Setting.SYNC_TARGET_MEMORY = 1;
 Setting.SYNC_TARGET_FILESYSTEM = 2;
 Setting.SYNC_TARGET_ONEDRIVE = 3;
+//Setting.SYNC_TARGET_ONEDRIVE_DEV = 4;
 
 Setting.TYPE_INT = 1;
 Setting.TYPE_STRING = 2;
@@ -341,11 +345,13 @@ Setting.metadata_ = {
 	'firstStart': { value: true, type: Setting.TYPE_BOOL, public: false },
 	'sync.2.path': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'], label: () => _('File system synchronisation target directory'), description: () => _('The path to synchronise with when file system synchronisation is enabled. See `sync.target`.') },
 	'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
+	'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
 	'sync.target': { value: Setting.SYNC_TARGET_ONEDRIVE, type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation target'), description: () => _('The target to synchonise to. If synchronising with the file system, set `sync.2.path` to specify the target directory.'), options: () => {
 		let output = {};
 		output[Setting.SYNC_TARGET_MEMORY] = 'Memory';
 		output[Setting.SYNC_TARGET_FILESYSTEM] = _('File system');
 		output[Setting.SYNC_TARGET_ONEDRIVE] = _('OneDrive');
+		//output[Setting.SYNC_TARGET_ONEDRIVE_DEV] = _('OneDrive (Testing Only)');
 		return output;
 	}},
 	'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },
