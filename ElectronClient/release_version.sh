@@ -11,4 +11,4 @@ git push && git push --tags
 
 echo "Create a draft release at: https://github.com/laurent22/joplin/releases/tag/$VERSION"
 
-node "$APP_DIR/update-readme-download.js v$VERSION"
+node "$APP_DIR/update-readme-download.js" $VERSION
