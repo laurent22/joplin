@@ -7,6 +7,14 @@ const request = require('request');
 const url = 'https://api.github.com/repos/laurent22/joplin/releases/latest';
 const readmePath = __dirname + '/../../README.md';
 
+async function msleep(ms) {
+	return new Promise((resolve, reject) => {
+		setTimeout(() => {
+			resolve();
+		}, ms);
+	});
+}
+
 async function gitHubLatestRelease() {
 	return new Promise((resolve, reject) => {
 		request.get({
@@ -48,8 +56,23 @@ function setReadmeContent(content) {
 	return fs.writeFileSync(readmePath, content);
 }
 
-async function main() {
-	const release = await gitHubLatestRelease();
+async function main(argv) {
+	const waitForVersion = argv.length === 3 ? argv[2] : null;
+
+	if (waitForVersion) console.info('Waiting for version ' + waitForVersion + ' to be released before updating readme...');
+
+	let release = null;
+	while (true) {
+		release = await gitHubLatestRelease();
+		if (!waitForVersion) break;
+
+		if (release.tag_name !== waitForVersion) {
+			await msleep(15000);
+		} else {
+			console.info('Got version ' + waitForVersion);
+			break;
+		}
+	}
 
 	const winUrl = downloadUrl(release, 'windows');
 	const macOsUrl = downloadUrl(release, 'macos');
@@ -64,6 +87,6 @@ async function main() {
 	setReadmeContent(content);
 }
 
-main().catch((error) => {
+main(process.argv).catch((error) => {
 	console.error('Fatal error', error);
 });
