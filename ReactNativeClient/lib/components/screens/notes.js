@@ -142,10 +142,34 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 		let title = parent ? parent.title : null;
 		const addFolderNoteButtons = this.props.selectedFolderId && this.props.selectedFolderId != Folder.conflictFolderId();
+		const thisComp = this;
 
 		return (
 			<View style={rootStyle}>
-				<ScreenHeader title={title} menuOptions={this.menuOptions()} />
+				<ScreenHeader
+					title={title}
+					menuOptions={this.menuOptions()}
+					parentComponent={thisComp}
+					folderPickerOptions={{
+						enabled: this.props.noteSelectionEnabled,
+						mustSelect: true,
+						onValueChange: async (folderId, itemIndex) => {
+							if (!folderId) return;
+							const noteIds = this.props.selectedNoteIds;
+							if (!noteIds.length) return;
+
+							const folder = await Folder.load(folderId);
+
+							const ok = await dialogs.confirm(this, _('Move %d note(s) to notebook "%s"?', noteIds.length, folder.title));
+							if (!ok) return;
+
+							this.props.dispatch({ type: 'NOTE_SELECTION_END' });
+							for (let i = 0; i < noteIds.length; i++) {
+								await Note.moveToFolder(noteIds[i], folderId);
+							}
+						},
+					}}
+				/>
 				<NoteList style={{flex: 1}}/>
 				<ActionButton addFolderNoteButtons={addFolderNoteButtons} parentFolderId={this.props.selectedFolderId}></ActionButton>
 				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
@@ -160,6 +184,7 @@ const NotesScreen = connect(
 			folders: state.folders,
 			tags: state.tags,
 			selectedFolderId: state.selectedFolderId,
+			selectedNoteIds: state.selectedNoteIds,
 			selectedTagId: state.selectedTagId,
 			notesParentType: state.notesParentType,
 			notes: state.notes,
@@ -167,6 +192,7 @@ const NotesScreen = connect(
 			notesSource: state.notesSource,
 			uncompletedTodosOnTop: state.settings.uncompletedTodosOnTop,
 			theme: state.settings.theme,
+			noteSelectionEnabled: state.noteSelectionEnabled,
 		};
 	}
 )(NotesScreenComponent)

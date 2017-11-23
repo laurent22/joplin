@@ -448,15 +448,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			return <ActionButton multiStates={true} buttons={buttons} buttonIndex={0} />
 		}
 
-		const titlePickerItems = () => {
-			let output = [];
-			for (let i = 0; i < this.props.folders.length; i++) {
-				let f = this.props.folders[i];
-				output.push({ label: f.title, value: f.id });
-			}
-			return output;
-		}
-
 		const actionButtonComp = renderActionButton();
 
 		let showSaveButton = this.state.mode == 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
@@ -506,19 +497,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>
 				<ScreenHeader
-					titlePicker={{
-						items: titlePickerItems(),
-						selectedValue: folder ? folder.id : null,
+					folderPickerOptions={{
+						enabled: true,
+						selectedFolderId: folder ? folder.id : null,
 						onValueChange: async (itemValue, itemIndex) => {
-							let note = Object.assign({}, this.state.note);
-
-							// RN bug: https://github.com/facebook/react-native/issues/9220
-							// The Picker fires the onValueChange when the component is initialized
-							// so we need to check that it has actually changed.
-							if (note.parent_id == itemValue) return;
-
-							reg.logger().info('Moving note: ' + note.parent_id + ' => ' + itemValue);
-
 							if (note.id) await Note.moveToFolder(note.id, itemValue);
 							note.parent_id = itemValue;
 
@@ -529,7 +511,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 								note: note,
 								folder: folder,
 							});
-						}
+						},
 					}}
 					menuOptions={this.menuOptions()}
 					showSaveButton={showSaveButton}

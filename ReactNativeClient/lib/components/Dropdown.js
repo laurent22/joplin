@@ -87,7 +87,10 @@ class Dropdown extends React.Component {
 		let headerLabel = '...';
 		for (let i = 0; i < items.length; i++) {
 			const item = items[i];
-			if (item.value === this.props.selectedValue) headerLabel = item.label;
+			if (item.value === this.props.selectedValue) {
+				headerLabel = item.label;
+				break;
+			}
 		}
 
 		const closeList = () => {

@@ -270,6 +270,7 @@ class MainScreenComponent extends React.Component {
 		return (
 			<div style={style}>
 				<PromptDialog
+					autocomplete={promptOptions && ('autocomplete' in promptOptions) ? promptOptions.autocomplete : null}
 					value={promptOptions && promptOptions.value ? promptOptions.value : ''}
 					theme={this.props.theme}
 					style={promptStyle}
