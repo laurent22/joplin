@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>0.10.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>3</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -35,12 +35,12 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>To allow attaching a photo to a note</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>To add geo-location information to a note. Can be disabled in app.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To allow attaching images to a note</string>
-	<key>NSCameraUsageDescription</key>
-	<string>To allow attaching a photo to a note</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>
