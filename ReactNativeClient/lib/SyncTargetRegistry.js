@@ -16,8 +16,6 @@ class SyncTargetRegistry {
 	}
 
 	static nameToId(name) {
-		console.info(this.reg_);
-
 		for (let n in this.reg_) {
 			if (!this.reg_.hasOwnProperty(n)) continue;
 			if (this.reg_[n].name === name) return this.reg_[n].id;

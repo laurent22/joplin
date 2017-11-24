@@ -24,9 +24,6 @@ class Setting extends BaseModel {
 			'sync.2.path': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'], label: () => _('File system synchronisation target directory'), description: () => _('The path to synchronise with when file system synchronisation is enabled. See `sync.target`.') },
 			'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.target': { value: SyncTargetRegistry.nameToId('onedrive'), type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation target'), description: () => _('The target to synchonise to. If synchronising with the file system, set `sync.2.path` to specify the target directory.'), options: () => {
-				return SyncTargetRegistry.idAndLabelPlainObject();
-			}},
 			'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.2.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.3.context': { value: '', type: Setting.TYPE_STRING, public: false },
@@ -68,6 +65,9 @@ class Setting extends BaseModel {
 			'noteVisiblePanes': { value: ['editor', 'viewer'], type: Setting.TYPE_ARRAY, public: false, appTypes: ['desktop'] },
 			'autoUpdateEnabled': { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
 			'showAdvancedOptions': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile' ], label: () => _('Show advanced options') },
+			'sync.target': { value: SyncTargetRegistry.nameToId('onedrive'), type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation target'), description: () => _('The target to synchonise to. If synchronising with the file system, set `sync.2.path` to specify the target directory.'), options: () => {
+				return SyncTargetRegistry.idAndLabelPlainObject();
+			}},
 		};
 
 		return this.metadata_;

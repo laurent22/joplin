@@ -149,7 +149,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		let settingComps = [];
 		for (let i = 0; i < keys.length; i++) {
 			const key = keys[i];
-			if (key == 'sync.target') continue;
+			if (key == 'sync.target' && !settings.showAdvancedOptions) continue;
 			if (!Setting.isPublic(key)) continue;
 
 			const comp = this.settingToComponent(key, settings[key]);

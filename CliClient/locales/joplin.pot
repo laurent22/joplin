@@ -637,6 +637,9 @@ msgstr ""
 msgid "OneDrive"
 msgstr ""
 
+msgid "OneDrive Dev (For testing only)"
+msgstr ""
+
 #, javascript-format
 msgid "Unknown log level: %s"
 msgstr ""

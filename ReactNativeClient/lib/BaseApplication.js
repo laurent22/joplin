@@ -24,9 +24,11 @@ const EventEmitter = require('events');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
+const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
 
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
+SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
 
 class BaseApplication {
 
@@ -364,6 +366,7 @@ class BaseApplication {
 		if (Setting.value('firstStart')) {
 			const locale = shim.detectAndSetLocale(Setting);
 			reg.logger().info('First start: detected locale as ' + locale);
+			if (Setting.value('env') === 'dev') Setting.setValue('sync.target', SyncTargetRegistry.nameToId('onedrive_dev'));
 			Setting.setValue('firstStart', 0)
 		} else {
 			setLocale(Setting.value('locale'));
