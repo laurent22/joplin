@@ -37,6 +37,8 @@ const { _, setLocale, closestSupportedLocale, defaultLocale } = require('lib/loc
 const RNFetchBlob = require('react-native-fetch-blob').default;
 const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const { reducer, defaultState } = require('lib/reducer.js');
+const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
+const SyncTarget3 = require('lib/SyncTarget3.js');
 
 const generalMiddleware = store => next => async (action) => {
 	if (action.type !== 'SIDE_MENU_OPEN_PERCENT') reg.logger().info('Reducer action', action.type);
@@ -254,6 +256,8 @@ async function initialize(dispatch, backButtonHandler) {
 	mainLogger.setLevel(Logger.LEVEL_DEBUG);
 
 	reg.setLogger(mainLogger);
+
+	SyncTargetRegistry.addClass(SyncTarget3);
 
 	reg.logger().info('====================================');
 	reg.logger().info('Starting application ' + Setting.value('appId') + ' (' + Setting.value('env') + ')');

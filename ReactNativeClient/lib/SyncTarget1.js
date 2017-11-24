@@ -7,15 +7,11 @@ const { Synchronizer } = require('lib/synchronizer.js');
 
 class SyncTarget1 extends BaseSyncTarget {
 
-	id() {
+	static id() {
 		return 1;
 	}
 
-	name() {
-		return 'memory';
-	}
-
-	label() {
+	static label() {
 		return 'Memory';
 	}
 
@@ -26,12 +22,12 @@ class SyncTarget1 extends BaseSyncTarget {
 	initFileApi() {
 		const fileApi = new FileApi('/root', new FileApiDriverMemory());
 		fileApi.setLogger(this.logger());
-		fileApi.setSyncTargetId(this.id());
+		fileApi.setSyncTargetId(SyncTarget1.id());
 		return fileApi;
 	}
 
 	async initSynchronizer() {
-		return new Synchronizer(this.db(), this.fileApi(), Setting.value('appType'));
+		return new Synchronizer(this.db(), await this.fileApi(), Setting.value('appType'));
 	}
 
 }

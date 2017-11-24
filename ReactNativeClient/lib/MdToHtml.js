@@ -80,6 +80,14 @@ class MdToHtml {
 			this.loadedResources_[id] = {};
 
 			const resource = await Resource.load(id);
+
+			if (!resource) {
+				// Can happen for example if an image is attached to a note, but the resource hasn't
+				// been download from the sync target yet.
+				console.warn('Cannot load resource: ' + id);
+				return;
+			}
+
 			this.loadedResources_[id] = resource;
 
 			if (options.onResourceLoaded) options.onResourceLoaded();

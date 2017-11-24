@@ -7,15 +7,11 @@ const { Synchronizer } = require('lib/synchronizer.js');
 
 class SyncTarget2 extends BaseSyncTarget {
 
-	id() {
+	static id() {
 		return 2;
 	}
 
-	name() {
-		return 'filesystem';
-	}
-
-	label() {
+	static label() {
 		return _('File system');
 	}
 
@@ -23,15 +19,15 @@ class SyncTarget2 extends BaseSyncTarget {
 		return true;
 	}
 
-	initFileApi() {
+	async initFileApi() {
 		const fileApi = new FileApi(Setting.value('sync.2.path'), new FileApiDriverLocal());
 		fileApi.setLogger(this.logger());
-		fileApi.setSyncTargetId(this.id());
+		fileApi.setSyncTargetId(SyncTarget2.id());
 		return fileApi;
 	}
 
 	async initSynchronizer() {
-		return new Synchronizer(this.db(), this.fileApi(), Setting.value('appType'));
+		return new Synchronizer(this.db(), await this.fileApi(), Setting.value('appType'));
 	}
 
 }

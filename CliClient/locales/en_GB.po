@@ -631,6 +631,9 @@ msgstr ""
 msgid "Unknown flag: %s"
 msgstr ""
 
+msgid "File system"
+msgstr ""
+
 msgid "OneDrive"
 msgstr ""
 
@@ -733,9 +736,6 @@ msgstr ""
 msgid ""
 "The target to synchonise to. If synchronising with the file system, set "
 "`sync.2.path` to specify the target directory."
-msgstr ""
-
-msgid "File system"
 msgstr ""
 
 msgid "Text editor"

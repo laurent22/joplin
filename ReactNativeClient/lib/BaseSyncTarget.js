@@ -30,25 +30,25 @@ class BaseSyncTarget {
 		return false;
 	}
 
-	name() {
-		throw new Error('Not implemented');
+	static id() {
+		throw new Error('id() not implemented');
 	}
 
-	label() {
-		throw new Error('Not implemented');
+	static label() {
+		throw new Error('label() not implemented');
 	}
 
 	async initSynchronizer() {
-		throw new Error('Not implemented');
+		throw new Error('initSynchronizer() not implemented');
 	}
 
-	initFileApi() {
-		throw new Error('Not implemented');
+	async initFileApi() {
+		throw new Error('initFileApi() not implemented');
 	}
 
-	fileApi() {
+	async fileApi() {
 		if (this.fileApi_) return this.fileApi_;
-		this.fileApi_ = this.initFileApi();
+		this.fileApi_ = await this.initFileApi();
 		return this.fileApi_;
 	}
 

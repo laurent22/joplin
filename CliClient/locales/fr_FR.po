@@ -686,6 +686,9 @@ msgstr "Utilisation : %s"
 msgid "Unknown flag: %s"
 msgstr "Paramètre inconnu : %s"
 
+msgid "File system"
+msgstr "Système de fichier"
+
 msgid "OneDrive"
 msgstr "OneDrive"
 
@@ -795,9 +798,6 @@ msgid ""
 msgstr ""
 "La cible avec laquelle synchroniser. Pour synchroniser avec le système de "
 "fichier, veuillez spécifier le répertoire avec `sync.2.path`."
-
-msgid "File system"
-msgstr "Système de fichier"
 
 msgid "Text editor"
 msgstr "Éditeur de texte"

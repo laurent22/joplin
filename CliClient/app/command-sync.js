@@ -117,7 +117,7 @@ class Command extends BaseCommand {
 
 			const syncTarget = reg.syncTarget(this.syncTargetId_);
 
-			if (syncTarget.isAuthenticated()) {
+			if (!syncTarget.isAuthenticated()) {
 				app().gui().showConsole();
 				app().gui().maximizeConsole();
 

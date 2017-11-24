@@ -21,6 +21,9 @@ const { _, setLocale, defaultLocale, closestSupportedLocale } = require('lib/loc
 const os = require('os');
 const fs = require('fs-extra');
 const EventEmitter = require('events');
+const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
+const SyncTarget2 = require('lib/SyncTarget2.js');
+const SyncTarget3 = require('lib/SyncTarget3.js');
 
 class BaseApplication {
 
@@ -321,6 +324,9 @@ class BaseApplication {
 		Setting.setConstant('profileDir', profileDir);
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
+
+		SyncTargetRegistry.addClass(SyncTarget2);
+		SyncTargetRegistry.addClass(SyncTarget3);
 
 		await fs.mkdirp(profileDir, 0o755);
 		await fs.mkdirp(resourceDir, 0o755);
