@@ -11,7 +11,7 @@ class SyncTarget3 extends BaseSyncTarget {
 
 	constructor(db) {
 		super();
-		this.oneDriveApi_ = null;
+		this.api_ = null;
 	}
 
 	id() {
@@ -27,18 +27,18 @@ class SyncTarget3 extends BaseSyncTarget {
 	}
 
 	isAuthenticated() {
-		return this.oneDriveApi_ && this.oneDriveApi_.auth();
+		return this.api().auth();
 	}
 
-	oneDriveApi() {
-		if (this.oneDriveApi_) return this.oneDriveApi_;
+	api() {
+		if (this.api_) return this.api_;
 
 		const isPublic = Setting.value('appType') != 'cli';
 
-		this.oneDriveApi_ = new OneDriveApi(parameters().oneDrive.id, parameters().oneDrive.secret, isPublic);
-		this.oneDriveApi_.setLogger(this.logger());
+		this.api_ = new OneDriveApi(parameters().oneDrive.id, parameters().oneDrive.secret, isPublic);
+		this.api_.setLogger(this.logger());
 
-		this.oneDriveApi_.on('authRefreshed', (a) => {
+		this.api_.on('authRefreshed', (a) => {
 			this.logger().info('Saving updated OneDrive auth.');
 			Setting.setValue('sync.' + this.id() + '.auth', a ? JSON.stringify(a) : null);
 		});
@@ -53,26 +53,22 @@ class SyncTarget3 extends BaseSyncTarget {
 				auth = null;
 			}
 
-			this.oneDriveApi_.setAuth(auth);
+			this.api_.setAuth(auth);
 		}
 		
-		return this.oneDriveApi_;
+		return this.api_;
 	}
 
 	async initSynchronizer() {
 		let fileApi = null;
 
-		if (!this.oneDriveApi().auth()) throw new Error('User is not authentified');
-		const appDir = await this.oneDriveApi().appDirectory();
-		fileApi = new FileApi(appDir, new FileApiDriverOneDrive(this.oneDriveApi()));
+		if (!this.api().auth()) throw new Error('User is not authentified');
+		const appDir = await this.api().appDirectory();
+		fileApi = new FileApi(appDir, new FileApiDriverOneDrive(this.api()));
 		fileApi.setSyncTargetId(this.id());
 		fileApi.setLogger(this.logger());
 
 		return new Synchronizer(this.db(), fileApi, Setting.value('appType'));
-	}
-
-	isAuthenticated() {
-		return true;
 	}
 
 }

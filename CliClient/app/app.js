@@ -168,9 +168,9 @@ class Application extends BaseApplication {
 			await doExit();
 		}, 5000);
 
-		if (await reg.syncStarted()) {
+		if (await reg.syncTarget().syncStarted()) {
 			this.stdout(_('Cancelling background synchronisation... Please wait.'));
-			const sync = await reg.synchronizer(Setting.value('sync.target'));
+			const sync = await reg.syncTarget().synchronizer();
 			await sync.cancel();
 		}
 

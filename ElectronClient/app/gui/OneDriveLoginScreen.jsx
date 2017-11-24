@@ -47,7 +47,7 @@ class OneDriveLoginScreenComponent extends React.Component {
 			this.authCode_ = code[1];
 
 			try {
-				await reg.oneDriveApi().execTokenRequest(this.authCode_, this.redirectUrl(), true);
+				await reg.syncTarget().api().execTokenRequest(this.authCode_, this.redirectUrl(), true);
 				this.props.dispatch({ type: 'NAV_BACK' });
 				reg.scheduleSync(0);
 			} catch (error) {
@@ -62,11 +62,11 @@ class OneDriveLoginScreenComponent extends React.Component {
 	}
 
 	startUrl() {
-		return reg.oneDriveApi().authCodeUrl(this.redirectUrl());
+		return reg.syncTarget().api().authCodeUrl(this.redirectUrl());
 	}
 
 	redirectUrl() {
-		return reg.oneDriveApi().nativeClientRedirectUrl();
+		return reg.syncTarget().api().nativeClientRedirectUrl();
 	}
 
 	render() {

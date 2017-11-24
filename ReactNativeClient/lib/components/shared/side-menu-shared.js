@@ -36,7 +36,7 @@ shared.synchronize_press = async function(comp) {
 
 	const action = comp.props.syncStarted ? 'cancel' : 'start';
 
-	if (Setting.value('sync.target') == Setting.SYNC_TARGET_ONEDRIVE && !reg.oneDriveApi().auth()) {		
+	if (!reg.syncTarget().isAuthenticated()) {		
 		comp.props.dispatch({
 			type: 'NAV_GO',
 			routeName: 'OneDriveLogin',
@@ -46,7 +46,7 @@ shared.synchronize_press = async function(comp) {
 
 	let sync = null;
 	try {
-		sync = await reg.synchronizer(Setting.value('sync.target'))
+		sync = await reg.syncTarget().synchronizer();
 	} catch (error) {
 		reg.logger().info('Could not acquire synchroniser:');
 		reg.logger().info(error);

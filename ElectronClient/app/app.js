@@ -132,7 +132,7 @@ class Application extends BaseApplication {
 		}
 
 		if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-			if (!await reg.syncStarted()) reg.scheduleSync();
+			if (!await reg.syncTarget().syncStarted()) reg.scheduleSync();
 		}
 
 		const result = await super.generalMiddleware(store, next, action);

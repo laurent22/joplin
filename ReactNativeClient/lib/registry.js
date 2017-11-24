@@ -4,8 +4,6 @@ const { parameters } = require('lib/parameters.js');
 const { FileApi } = require('lib/file-api.js');
 const { Database } = require('lib/database.js');
 const { Synchronizer } = require('lib/synchronizer.js');
-const SyncTarget1 = require('lib/SyncTarget1.js');
-const SyncTarget3 = require('lib/SyncTarget3.js');
 const { FileApiDriverOneDrive } = require('lib/file-api-driver-onedrive.js');
 const { shim } = require('lib/shim.js');
 const { time } = require('lib/time-utils.js');
@@ -16,12 +14,12 @@ const reg = {};
 
 reg.initSynchronizerStates_ = {};
 reg.syncTargetClasses_ = {
-	1: SyncTarget1,
-	// 2: SyncTarget2,
-	3: SyncTarget3,
+	1: require('lib/SyncTarget1.js'),
+	// 2: require('lib/SyncTarget2.js'),
+	3: require('lib/SyncTarget3.js'),
 };
 reg.syncTargets_ = {};
-reg.synchronizers_ = {};
+//reg.synchronizers_ = {};
 
 reg.logger = () => {
 	if (!reg.logger_) {
@@ -49,42 +47,42 @@ reg.syncTarget = (syncTargetId = null) => {
 	return target;
 }
 
-reg.synchronizer = async (syncTargetId) => {
-	if (reg.synchronizers_[syncTargetId]) return reg.synchronizers_[syncTargetId];
-	if (!reg.db()) throw new Error('Cannot initialize synchronizer: db not initialized');
+// reg.synchronizer = async (syncTargetId) => {
+// 	if (reg.synchronizers_[syncTargetId]) return reg.synchronizers_[syncTargetId];
+// 	if (!reg.db()) throw new Error('Cannot initialize synchronizer: db not initialized');
 
-	if (reg.initSynchronizerStates_[syncTargetId] == 'started') {
-		// Synchronizer is already being initialized, so wait here till it's done.
-		return new Promise((resolve, reject) => {
-			const iid = setInterval(() => {
-				if (reg.initSynchronizerStates_[syncTargetId] == 'ready') {
-					clearInterval(iid);
-					resolve(reg.synchronizers_[syncTargetId]);
-				}
-				if (reg.initSynchronizerStates_[syncTargetId] == 'error') {
-					clearInterval(iid);
-					reject(new Error('Could not initialise synchroniser'));
-				}
-			}, 1000);
-		});
-	} else {
-		reg.initSynchronizerStates_[syncTargetId] = 'started';
+// 	if (reg.initSynchronizerStates_[syncTargetId] == 'started') {
+// 		// Synchronizer is already being initialized, so wait here till it's done.
+// 		return new Promise((resolve, reject) => {
+// 			const iid = setInterval(() => {
+// 				if (reg.initSynchronizerStates_[syncTargetId] == 'ready') {
+// 					clearInterval(iid);
+// 					resolve(reg.synchronizers_[syncTargetId]);
+// 				}
+// 				if (reg.initSynchronizerStates_[syncTargetId] == 'error') {
+// 					clearInterval(iid);
+// 					reject(new Error('Could not initialise synchroniser'));
+// 				}
+// 			}, 1000);
+// 		});
+// 	} else {
+// 		reg.initSynchronizerStates_[syncTargetId] = 'started';
 
-		try {
-			const sync = await reg.initSynchronizer_(syncTargetId);
-			reg.synchronizers_[syncTargetId] = sync;
-			reg.initSynchronizerStates_[syncTargetId] = 'ready';
-			return sync;
-		} catch (error) {
-			reg.initSynchronizerStates_[syncTargetId] = 'error';
-			throw error;
-		}
-	}
-}
+// 		try {
+// 			const sync = await reg.initSynchronizer_(syncTargetId);
+// 			reg.synchronizers_[syncTargetId] = sync;
+// 			reg.initSynchronizerStates_[syncTargetId] = 'ready';
+// 			return sync;
+// 		} catch (error) {
+// 			reg.initSynchronizerStates_[syncTargetId] = 'error';
+// 			throw error;
+// 		}
+// 	}
+// }
 
-reg.syncHasAuth = (syncTargetId) => {
-	return reg.syncTargets(syncTargetId).isAuthenticated();
-}
+// reg.syncHasAuth = (syncTargetId) => {
+// 	return reg.syncTarget(syncTargetId).isAuthenticated();
+// }
 
 reg.scheduleSync = async (delay = null) => {
 	if (delay === null) delay = 1000 * 3;
@@ -107,7 +105,7 @@ reg.scheduleSync = async (delay = null) => {
 
 		const syncTargetId = Setting.value('sync.target');
 
-		if (!reg.syncHasAuth(syncTargetId)) {
+		if (!reg.syncTarget(syncTargetId).isAuthenticated()) {
 			reg.logger().info('Synchroniser is missing credentials - manual sync required to authenticate.');
 			return;
 		}
@@ -143,9 +141,9 @@ reg.scheduleSync = async (delay = null) => {
 	}
 }
 
-reg.syncStarted = async () => {
-	return reg.syncTarget().syncStarted();
-}
+// reg.syncStarted = async () => {
+// 	return reg.syncTarget().syncStarted();
+// }
 
 reg.setupRecurrentSync = () => {
 	if (reg.recurrentSyncId_) {

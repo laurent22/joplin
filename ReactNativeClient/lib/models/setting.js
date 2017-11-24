@@ -32,7 +32,6 @@ class Setting extends BaseModel {
 				if (!this.metadata_.hasOwnProperty(n)) continue;
 				this.keys_.push(n);
 			}
-			//this.keys_.sort();
 		}
 
 		if (appType || publicOnly) {

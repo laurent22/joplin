@@ -9,6 +9,7 @@ const { AppNav } = require('lib/components/app-nav.js');
 const { Logger } = require('lib/logger.js');
 const { Note } = require('lib/models/note.js');
 const { Folder } = require('lib/models/folder.js');
+const BaseSyncTarget = require('lib/BaseSyncTarget.js');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const { Resource } = require('lib/models/resource.js');
 const { Tag } = require('lib/models/tag.js');
@@ -47,7 +48,7 @@ const generalMiddleware = store => next => async (action) => {
 	if (action.type == 'NAV_GO') Keyboard.dismiss();
 
 	if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-		if (!await reg.syncStarted()) reg.scheduleSync();
+		if (!await reg.syncTarget().syncStarted()) reg.scheduleSync();
 	}
 
 	if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'sync.interval' || action.type == 'SETTING_UPDATE_ALL') {
@@ -273,6 +274,7 @@ async function initialize(dispatch, backButtonHandler) {
 	reg.dispatch = dispatch;
 	BaseModel.dispatch = dispatch;
 	FoldersScreenUtils.dispatch = dispatch;
+	BaseSyncTarget.dispatch = dispatch;
 	BaseModel.db_ = db;
 
 	BaseItem.loadClass('Note', Note);

@@ -64,7 +64,7 @@ class Command extends BaseCommand {
 
 	async doAuth(syncTargetId) {
 		const syncTarget = reg.syncTarget(this.syncTargetId_);
-		this.oneDriveApiUtils_ = new OneDriveApiNodeUtils(syncTarget.oneDriveApi());
+		this.oneDriveApiUtils_ = new OneDriveApiNodeUtils(syncTarget.api());
 		const auth = await this.oneDriveApiUtils_.oauthDance({
 			log: (...s) => { return this.stdout(...s); }
 		});
