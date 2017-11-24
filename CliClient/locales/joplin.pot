@@ -729,14 +729,6 @@ msgid ""
 "See `sync.target`."
 msgstr ""
 
-msgid "Synchronisation target"
-msgstr ""
-
-msgid ""
-"The target to synchonise to. If synchronising with the file system, set "
-"`sync.2.path` to specify the target directory."
-msgstr ""
-
 msgid "Text editor"
 msgstr ""
 
@@ -785,6 +777,14 @@ msgid "Automatically update the application"
 msgstr ""
 
 msgid "Show advanced options"
+msgstr ""
+
+msgid "Synchronisation target"
+msgstr ""
+
+msgid ""
+"The target to synchonise to. If synchronising with the file system, set "
+"`sync.2.path` to specify the target directory."
 msgstr ""
 
 #, javascript-format

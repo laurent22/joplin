@@ -620,16 +620,14 @@ msgstr "Disposition"
 msgid "Add or remove tags"
 msgstr "Gérer les étiquettes"
 
-#, fuzzy
 msgid "Switch between note and to-do type"
 msgstr "Alterner entre note et tâche"
 
 msgid "Delete"
 msgstr "Supprimer"
 
-#, fuzzy
 msgid "Delete notes?"
-msgstr "Supprimer la note ?"
+msgstr "Supprimer les notes ?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr ""
@@ -693,7 +691,7 @@ msgid "OneDrive"
 msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
-msgstr ""
+msgstr "OneDrive Dév (Pour tester uniquement)"
 
 #, javascript-format
 msgid "Unknown log level: %s"
@@ -788,16 +786,6 @@ msgstr ""
 "Le chemin du répertoire avec lequel synchroniser lorsque la synchronisation "
 "par système de fichier est activée. Voir `sync.target`."
 
-msgid "Synchronisation target"
-msgstr "Cible de la synchronisation"
-
-msgid ""
-"The target to synchonise to. If synchronising with the file system, set "
-"`sync.2.path` to specify the target directory."
-msgstr ""
-"La cible avec laquelle synchroniser. Pour synchroniser avec le système de "
-"fichier, veuillez spécifier le répertoire avec `sync.2.path`."
-
 msgid "Text editor"
 msgstr "Éditeur de texte"
 
@@ -844,12 +832,21 @@ msgstr "%d heure"
 msgid "%d hours"
 msgstr "%d heures"
 
-#, fuzzy
 msgid "Automatically update the application"
-msgstr "Quitter le logiciel."
+msgstr "Mettre à jour le logiciel automatiquement"
 
 msgid "Show advanced options"
 msgstr "Montrer les options avancées"
+
+msgid "Synchronisation target"
+msgstr "Cible de la synchronisation"
+
+msgid ""
+"The target to synchonise to. If synchronising with the file system, set "
+"`sync.2.path` to specify the target directory."
+msgstr ""
+"La cible avec laquelle synchroniser. Pour synchroniser avec le système de "
+"fichier, veuillez spécifier le répertoire avec `sync.2.path`."
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -886,9 +883,8 @@ msgstr ""
 "Ce carnet ne contient aucune note. Créez-en une en appuyant sur le bouton "
 "(+)."
 
-#, fuzzy
 msgid "Delete these notes?"
-msgstr "Supprimer la note ?"
+msgstr "Supprimer ces notes ?"
 
 msgid "Log"
 msgstr "Journal"
@@ -899,13 +895,12 @@ msgstr "État"
 msgid "Export Debug Report"
 msgstr "Exporter rapport de débogage"
 
-#, fuzzy
 msgid "Move to notebook..."
-msgstr "Déplacer la note vers un carnet."
+msgstr "Déplacer la note vers carnet..."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr "Déplacer la note vers un carnet."
+msgstr "Déplacer %d notes vers carnet \"%s\" ?"
 
 msgid "Cancel synchronisation"
 msgstr "Annuler synchronisation"
