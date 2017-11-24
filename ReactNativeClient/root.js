@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { Keyboard, NativeModules } = require('react-native');
+const { Keyboard, NativeModules, PushNotificationIOS } = require('react-native');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
 const { createStore, applyMiddleware } = require('redux');
@@ -366,12 +366,23 @@ async function initialize(dispatch, backButtonHandler) {
 	}
 
 
+	reg.logger().info('Scheduling iOS notification');
 
-
-	PushNotification.localNotificationSchedule({
-		message: "My Notification Message", // (required)
-		date: new Date(Date.now() + (10 * 1000)) // in 60 secs
+	PushNotificationIOS.scheduleLocalNotification({
+		alertTitle: "From Joplin",
+		alertBody : "Testing notification on iOS",
+		fireDate: new Date(Date.now() + (10 * 1000)),
 	});
+
+
+
+	// const r = PushNotification.localNotificationSchedule({
+	// 	id: '222456',
+	// 	message: "My Notification Message", // (required)
+	// 	date: new Date(Date.now() + (10 * 1000)) // in 60 secs
+	// });
+
+	//PushNotification.cancelLocalNotifications({ id: '222456' });
 
 
 	reg.logger().info('Application initialized');
