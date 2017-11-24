@@ -1,7 +1,7 @@
-import moment from 'moment';
-import { time } from 'lib/time-utils.js';
-import { dirname, basename } from 'lib/path-utils.js';
-import { OneDriveApi } from 'lib/onedrive-api.js';
+const moment = require('moment');
+const { time } = require('lib/time-utils.js');
+const { dirname, basename } = require('lib/path-utils.js');
+const { OneDriveApi } = require('lib/onedrive-api.js');
 
 class FileApiDriverOneDrive {
 
@@ -12,10 +12,6 @@ class FileApiDriverOneDrive {
 
 	api() {
 		return this.api_;
-	}
-
-	supportsDelta() {
-		return true;
 	}
 
 	itemFilter_() {
@@ -197,11 +193,37 @@ class FileApiDriverOneDrive {
 
 		if (!url) {
 			url = this.makePath_(path) + ':/delta';
-			query = this.itemFilter_();
+			const query = this.itemFilter_();
 			query.select += ',deleted';
 		}
 
-		let response = await this.api_.execJson('GET', url, query);
+		let response = null;
+		try {
+			response = await this.api_.execJson('GET', url, query);
+		} catch (error) {
+			if (error.code === 'resyncRequired') {
+				// Error: Resync required. Replace any local items with the server's version (including deletes) if you're sure that the service was up to date with your local changes when you last sync'd. Upload any local changes that the server doesn't know about.
+				// Code: resyncRequired
+				// Request: GET https://graph.microsoft.com/v1.0/drive/root:/Apps/JoplinDev:/delta?select=...
+
+				// The delta token has expired or is invalid and so a full resync is required.
+				// It is an error that is hard to replicate and it's not entirely clear what
+				// URL is in the Location header. What might happen is that:
+				// - OneDrive will get all the latest changes (since delta is done at the
+				//   end of the sync process)
+				// - Client will get all the new files and updates from OneDrive
+				// This is unknown:
+				// - Will the files that have been deleted on OneDrive be part of the this
+				//   URL in the Location header?
+				//
+				// More info there: https://stackoverflow.com/q/46941371/561309
+				url = error.headers.get('location');
+				response = await this.api_.execJson('GET', url, query);
+			} else {
+				throw error;
+			}
+		}
+
 		let items = [];
 
 		// The delta API might return things that happen in subdirectories of the root and we don't want to
@@ -252,4 +274,4 @@ class FileApiDriverOneDrive {
 
 }
 
-export { FileApiDriverOneDrive };
+module.exports = { FileApiDriverOneDrive };

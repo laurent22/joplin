@@ -1,15 +1,19 @@
-import { BaseCommand } from './base-command.js';
-import { app } from './app.js';
-import { _ } from 'lib/locale.js';
-import { BaseModel } from 'lib/base-model.js';
-import { Folder } from 'lib/models/folder.js';
-import { Note } from 'lib/models/note.js';
-import { BaseItem } from 'lib/models/base-item.js';
+const { BaseCommand } = require('./base-command.js');
+const { app } = require('./app.js');
+const { _ } = require('lib/locale.js');
+const { BaseModel } = require('lib/base-model.js');
+const { Folder } = require('lib/models/folder.js');
+const { Note } = require('lib/models/note.js');
+const { BaseItem } = require('lib/models/base-item.js');
 
 class Command extends BaseCommand {
 
 	usage() {
 		return 'set <note> <name> [value]';
+	}
+
+	enabled() {
+		return false;
 	}
 
 	description() {

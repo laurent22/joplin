@@ -1,12 +1,12 @@
-import { BaseItem } from 'lib/models/base-item.js';
-import { BaseModel } from 'lib/base-model.js';
-import { Resource } from 'lib/models/resource.js';
-import { Folder } from 'lib/models/folder.js';
-import { NoteTag } from 'lib/models/note-tag.js';
-import { Note } from 'lib/models/note.js';
-import { Tag } from 'lib/models/tag.js';
-import { basename } from 'lib/path-utils.js';
-import fs from 'fs-extra';
+const { BaseItem } = require('lib/models/base-item.js');
+const { BaseModel } = require('lib/base-model.js');
+const { Resource } = require('lib/models/resource.js');
+const { Folder } = require('lib/models/folder.js');
+const { NoteTag } = require('lib/models/note-tag.js');
+const { Note } = require('lib/models/note.js');
+const { Tag } = require('lib/models/tag.js');
+const { basename } = require('lib/path-utils.js');
+const fs = require('fs-extra');
 
 class Exporter {
 
@@ -93,4 +93,4 @@ class Exporter {
 
 }
 
-export { Exporter }
+module.exports = { Exporter };

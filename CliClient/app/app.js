@@ -1,52 +1,47 @@
-import { JoplinDatabase } from 'lib/joplin-database.js';
-import { Database } from 'lib/database.js';
-import { DatabaseDriverNode } from 'lib/database-driver-node.js';
-import { BaseModel } from 'lib/base-model.js';
-import { Folder } from 'lib/models/folder.js';
-import { BaseItem } from 'lib/models/base-item.js';
-import { Note } from 'lib/models/note.js';
-import { Setting } from 'lib/models/setting.js';
-import { Logger } from 'lib/logger.js';
-import { sprintf } from 'sprintf-js';
-import { reg } from 'lib/registry.js';
-import { fileExtension } from 'lib/path-utils.js';
-import { _, setLocale, defaultLocale, closestSupportedLocale } from 'lib/locale.js';
-import os from 'os';
-import fs from 'fs-extra';
-import yargParser from 'yargs-parser';
-import { handleAutocompletion, installAutocompletionFile } from './autocompletion.js';
-import { cliUtils } from './cli-utils.js';
+const { BaseApplication } = require('lib/BaseApplication');
+const { createStore, applyMiddleware } = require('redux');
+const { reducer, defaultState } = require('lib/reducer.js');
+const { JoplinDatabase } = require('lib/joplin-database.js');
+const { Database } = require('lib/database.js');
+const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
+const { DatabaseDriverNode } = require('lib/database-driver-node.js');
+const { BaseModel } = require('lib/base-model.js');
+const { Folder } = require('lib/models/folder.js');
+const { BaseItem } = require('lib/models/base-item.js');
+const { Note } = require('lib/models/note.js');
+const { Tag } = require('lib/models/tag.js');
+const { Setting } = require('lib/models/setting.js');
+const { Logger } = require('lib/logger.js');
+const { sprintf } = require('sprintf-js');
+const { reg } = require('lib/registry.js');
+const { fileExtension } = require('lib/path-utils.js');
+const { shim } = require('lib/shim.js');
+const { _, setLocale, defaultLocale, closestSupportedLocale } = require('lib/locale.js');
+const os = require('os');
+const fs = require('fs-extra');
+const { cliUtils } = require('./cli-utils.js');
+const EventEmitter = require('events');
 
-class Application {
+class Application extends BaseApplication {
 
 	constructor() {
+		super();
+
 		this.showPromptString_ = true;
-		this.logger_ = new Logger();
-		this.dbLogger_ = new Logger();
-		this.autocompletion_ = { active: false };
 		this.commands_ = {};
 		this.commandMetadata_ = null;
 		this.activeCommand_ = null;
 		this.allCommandsLoaded_ = false;
 		this.showStackTraces_ = false;
+		this.gui_ = null;
 	}
 
-	currentFolder() {
-		return this.currentFolder_;
+	gui() {
+		return this.gui_;
 	}
 
-	async refreshCurrentFolder() {
-		let newFolder = null;
-		
-		if (this.currentFolder_) newFolder = await Folder.load(this.currentFolder_.id);
-		if (!newFolder) newFolder = await Folder.defaultFolder();
-
-		this.switchCurrentFolder(newFolder);
-	}
-
-	switchCurrentFolder(folder) {
-		this.currentFolder_ = folder;
-		Setting.setValue('activeFolderId', folder ? folder.id : '');
+	commandStdoutMaxWidth() {
+		return this.gui().stdoutMaxWidth();
 	}
 
 	async guessTypeAndLoadItem(pattern, options = null) {
@@ -60,10 +55,35 @@ class Application {
 
 	async loadItem(type, pattern, options = null) {
 		let output = await this.loadItems(type, pattern, options);
-		return output.length ? output[0] : null;
+
+		if (output.length > 1) {
+			// output.sort((a, b) => { return a.user_updated_time < b.user_updated_time ? +1 : -1; });
+
+			// let answers = { 0: _('[Cancel]') };
+			// for (let i = 0; i < output.length; i++) {
+			// 	answers[i + 1] = output[i].title;
+			// }
+
+			// Not really useful with new UI?
+			throw new Error(_('More than one item match "%s". Please narrow down your query.', pattern));
+
+			// let msg = _('More than one item match "%s". Please select one:', pattern);
+			// const response = await cliUtils.promptMcq(msg, answers);
+			// if (!response) return null;
+
+			return output[response - 1];
+		} else {
+			return output.length ? output[0] : null;
+		}
 	}
 
 	async loadItems(type, pattern, options = null) {
+		if (type === 'folderOrNote') {
+			const folders = await this.loadItems(BaseModel.TYPE_FOLDER, pattern, options);
+			if (folders.length) return folders;
+			return await this.loadItems(BaseModel.TYPE_NOTE, pattern, options);
+		}
+
 		pattern = pattern ? pattern.toString() : '';
 
 		if (type == BaseModel.TYPE_FOLDER && (pattern == Folder.conflictFolderTitle() || pattern == Folder.conflictFolderId())) return [Folder.conflictFolder()];
@@ -89,150 +109,72 @@ class Application {
 			item = await ItemClass.load(pattern); // Load by id
 			if (item) return [item];
 
-			if (pattern.length >= 4) {
-				item = await ItemClass.loadByPartialId(pattern);
-				if (item) return [item];
+			if (pattern.length >= 2) {
+				return await ItemClass.loadByPartialId(pattern);
 			}
 		}
 
 		return [];
 	}
 
-	// Handles the initial flags passed to main script and
-	// returns the remaining args.
-	async handleStartFlags_(argv) {
-		let matched = {};
-		argv = argv.slice(0);
-		argv.splice(0, 2); // First arguments are the node executable, and the node JS file
+	stdout(text) {
+		return this.gui().stdout(text);
+	}
 
-		while (argv.length) {
-			let arg = argv[0];
-			let nextArg = argv.length >= 2 ? argv[1] : null;
-			
-			if (arg == '--profile') {
-				if (!nextArg) throw new Error(_('Usage: %s', '--profile <dir-path>'));
-				matched.profileDir = nextArg;
-				argv.splice(0, 2);
-				continue;
-			}
+	setupCommand(cmd) {
+		cmd.setStdout((text) => {
+			return this.stdout(text);
+		});
 
-			if (arg == '--env') {
-				if (!nextArg) throw new Error(_('Usage: %s', '--env <dev|prod>'));
-				matched.env = nextArg;
-				argv.splice(0, 2);
-				continue;
-			}
-
-			if (arg == '--update-geolocation-disabled') {
-				Note.updateGeolocationEnabled_ = false;
-				argv.splice(0, 1);
-				continue;
-			}
-
-			if (arg == '--stack-trace-enabled') {
-				this.showStackTraces_ = true;
-				argv.splice(0, 1);
-				continue;
-			}
-
-			if (arg == '--log-level') {
-				if (!nextArg) throw new Error(_('Usage: %s', '--log-level <none|error|warn|info|debug>'));
-				matched.logLevel = Logger.levelStringToId(nextArg);
-				argv.splice(0, 2);
-				continue;
-			}
-
-			if (arg == '--autocompletion') {
-				this.autocompletion_.active = true;
-				argv.splice(0, 1);
-				continue;
-			}
-
-			if (arg == '--ac-install') {
-				this.autocompletion_.install = true;
-				argv.splice(0, 1);
-				continue;
-			}
-
-			if (arg == '--ac-current') {
-				if (!nextArg) throw new Error(_('Usage: %s', '--ac-current <num>'));
-				this.autocompletion_.current = nextArg;
-				argv.splice(0, 2);
-				continue;
-			}
-
-			if (arg == '--ac-line') {
-				if (!nextArg) throw new Error(_('Usage: %s', '--ac-line <line>'));
-				let line = nextArg.replace(/\|__QUOTE__\|/g, '"');
-				line = line.replace(/\|__SPACE__\|/g, ' ');
-				line = line.replace(/\|__OPEN_RB__\|/g, '(');
-				line = line.replace(/\|__OPEN_CB__\|/g, ')');
-				line = line.split('|__SEP__|');
-				this.autocompletion_.line = line;
-				argv.splice(0, 2);
-				continue;
-			}
-
-			if (arg.length && arg[0] == '-') {
-				throw new Error(_('Unknown flag: %s', arg));
+		cmd.setDispatcher((action) => {
+			if (this.store()) {
+				return this.store().dispatch(action);
 			} else {
-				break;
+				return (action) => {};
 			}
-		}
+		});
 
-		if (!matched.logLevel) matched.logLevel = Logger.LEVEL_INFO;
-		if (!matched.env) matched.env = 'prod';
+		cmd.setPrompt(async (message, options) => {
+			if (!options) options = {};
+			if (!options.type) options.type = 'boolean';
+			if (!options.booleanAnswerDefault) options.booleanAnswerDefault = 'y';
+			if (!options.answers) options.answers = options.booleanAnswerDefault === 'y' ? [_('Y'), _('n')] : [_('N'), _('y')];
 
-		return {
-			matched: matched,
-			argv: argv,
+			if (options.type == 'boolean') {
+				message += ' (' + options.answers.join('/') + ')';
+			}
+
+			let answer = await this.gui().prompt('', message + ' ');
+
+			if (options.type === 'boolean') {
+				if (answer === null) return false; // Pressed ESCAPE
+				if (!answer) answer = options.answers[0];
+				let positiveIndex = options.booleanAnswerDefault == 'y' ? 0 : 1;
+				return answer.toLowerCase() === options.answers[positiveIndex].toLowerCase();
+			}
+		});
+
+		return cmd;
+	}
+
+	async exit(code = 0) {
+		const doExit = async () => {
+			this.gui().exit();
+			await super.exit(code);
 		};
-	}
 
-	escapeShellArg(arg) {
-		if (arg.indexOf('"') >= 0 && arg.indexOf("'") >= 0) throw new Error(_('Command line argument "%s" contains both quotes and double-quotes - aborting.', arg)); // Hopeless case
-		let quote = '"';
-		if (arg.indexOf('"') >= 0) quote = "'";
-		if (arg.indexOf(' ') >= 0 || arg.indexOf("\t") >= 0) return quote + arg + quote;
-		return arg;
-	}
+		// Give it a few seconds to cancel otherwise exit anyway
+		setTimeout(async () => {
+			await doExit();
+		}, 5000);
 
-	shellArgsToString(args) {
-		let output = [];
-		for (let i = 0; i < args.length; i++) {
-			output.push(this.escapeShellArg(args[i]));
+		if (await reg.syncTarget().syncStarted()) {
+			this.stdout(_('Cancelling background synchronisation... Please wait.'));
+			const sync = await reg.syncTarget().synchronizer();
+			await sync.cancel();
 		}
-		return output.join(' ');
-	}
 
-	onLocaleChanged() {
-		return;
-
-		let currentCommands = this.vorpal().commands;
-		for (let i = 0; i < currentCommands.length; i++) {
-			let cmd = currentCommands[i];
-			if (cmd._name == 'help') {
-				cmd.description(_('Provides help for a given command.'));
-			} else if (cmd._name == 'exit') {
-				cmd.description(_('Exits the application.'));
-			} else if (cmd.__commandObject) {
-				cmd.description(cmd.__commandObject.description());
-			}
-		}
-	}
-
-	baseModelListener(action) {
-		switch (action.type) {
-
-			case 'NOTES_UPDATE_ONE':
-			case 'NOTES_DELETE':
-			case 'FOLDERS_UPDATE_ONE':
-			case 'FOLDER_DELETE':
-
-				//reg.scheduleSync();
-				break;
-
-		}
+		await doExit();
 	}
 
 	commands() {
@@ -246,11 +188,7 @@ class Application {
 			let CommandClass = require('./' + path);
 			let cmd = new CommandClass();
 			if (!cmd.enabled()) return;
-
-			cmd.log = (...object) => {
-				return console.log(...object);
-			}
-
+			cmd = this.setupCommand(cmd);
 			this.commands_[cmd.name()] = cmd;
 		});
 
@@ -297,6 +235,10 @@ class Application {
 		return Object.assign({}, this.commandMetadata_);
 	}
 
+	hasGui() {
+		return this.gui() && !this.gui().isDummy();
+	}
+
 	findCommandByName(name) {
 		if (this.commands_[name]) return this.commands_[name];
 
@@ -308,132 +250,97 @@ class Application {
 			e.type = 'notFound';
 			throw e;
 		}
+
 		let cmd = new CommandClass();
-
-		cmd.log = (...object) => {
-			return console.log(...object);
-		}
-
+		cmd = this.setupCommand(cmd);
 		this.commands_[name] = cmd;
 		return this.commands_[name];
 	}
 
+	dummyGui() {
+		return {
+			isDummy: () => { return true; },
+			prompt: (initialText = '', promptString = '') => { return cliUtils.prompt(initialText, promptString); },
+			showConsole: () => {},
+			maximizeConsole: () => {},
+			stdout: (text) => { console.info(text); },
+			fullScreen: (b=true) => {},
+			exit: () => {},
+			showModalOverlay: (text) => {},
+			hideModalOverlay: () => {},
+			stdoutMaxWidth: () => { return 78; }
+		};
+	}
+
 	async execCommand(argv) {
 		if (!argv.length) return this.execCommand(['help']);
+		reg.logger().info('execCommand()', argv);
 		const commandName = argv[0];
 		this.activeCommand_ = this.findCommandByName(commandName);
-		const cmdArgs = cliUtils.makeCommandArgs(this.activeCommand_, argv);
-		await this.activeCommand_.action(cmdArgs);
+
+		let outException = null;
+		try {
+			if (this.gui().isDummy() && !this.activeCommand_.supportsUi('cli')) throw new Error(_('The command "%s" is only available in GUI mode', this.activeCommand_.name()));			
+			const cmdArgs = cliUtils.makeCommandArgs(this.activeCommand_, argv);
+			await this.activeCommand_.action(cmdArgs);
+		} catch (error) {
+			outException = error;
+		}
+		this.activeCommand_ = null;
+		if (outException) throw outException;
 	}
 
 	currentCommand() {
 		return this.activeCommand_;
 	}
 
-	async start() {
-		let argv = process.argv;
-		let startFlags = await this.handleStartFlags_(argv);
-		argv = startFlags.argv;
-		let initArgs = startFlags.matched;
-		if (argv.length) this.showPromptString_ = false;
+	async start(argv) {
+		argv = await super.start(argv);
 
-		if (process.argv[1].indexOf('joplindev') >= 0) {
-			if (!initArgs.profileDir) initArgs.profileDir = '/mnt/d/Temp/TestNotes2';
-			initArgs.logLevel = Logger.LEVEL_DEBUG;
-			initArgs.env = 'dev';
-		}
+		cliUtils.setStdout((object) => {
+			return this.stdout(object);
+		});
 
-		Setting.setConstant('appName', initArgs.env == 'dev' ? 'joplindev' : 'joplin');
+		// If we have some arguments left at this point, it's a command
+		// so execute it.
+		if (argv.length) {
+			this.gui_ = this.dummyGui();
 
-		const profileDir = initArgs.profileDir ? initArgs.profileDir : os.homedir() + '/.config/' + Setting.value('appName');
-		const resourceDir = profileDir + '/resources';
-		const tempDir = profileDir + '/tmp';
-
-		Setting.setConstant('env', initArgs.env);
-		Setting.setConstant('profileDir', profileDir);
-		Setting.setConstant('resourceDir', resourceDir);
-		Setting.setConstant('tempDir', tempDir);
-
-		await fs.mkdirp(profileDir, 0o755);
-		await fs.mkdirp(resourceDir, 0o755);
-		await fs.mkdirp(tempDir, 0o755);
-
-		this.logger_.addTarget('file', { path: profileDir + '/log.txt' });
-		this.logger_.setLevel(initArgs.logLevel);
-
-		reg.setLogger(this.logger_);
-		reg.dispatch = (o) => {};
-
-		this.dbLogger_.addTarget('file', { path: profileDir + '/log-database.txt' });
-		this.dbLogger_.setLevel(initArgs.logLevel);
-
-		const packageJson = require('./package.json');
-		this.logger_.info(sprintf('Starting %s %s (%s)...', packageJson.name, packageJson.version, Setting.value('env')));
-		this.logger_.info('Profile directory: ' + profileDir);
-
-		this.database_ = new JoplinDatabase(new DatabaseDriverNode());
-		this.database_.setLogger(this.dbLogger_);
-		await this.database_.open({ name: profileDir + '/database.sqlite' });
-
-		reg.setDb(this.database_);
-		BaseModel.db_ = this.database_;
-		BaseModel.dispatch = (action) => { this.baseModelListener(action) }
-
-		await Setting.load();
-
-		if (Setting.value('firstStart')) {
-			let locale = process.env.LANG;
-			if (!locale) locale = defaultLocale();
-			locale = locale.split('.');
-			locale = locale[0];
-			reg.logger().info('First start: detected locale as ' + locale);
-			Setting.setValue('locale', closestSupportedLocale(locale));
-			Setting.setValue('firstStart', 0)
-		}
-
-		setLocale(Setting.value('locale'));
-
-		let currentFolderId = Setting.value('activeFolderId');
-		this.currentFolder_ = null;
-		if (currentFolderId) this.currentFolder_ = await Folder.load(currentFolderId);
-		if (!this.currentFolder_) this.currentFolder_ = await Folder.defaultFolder();
-		Setting.setValue('activeFolderId', this.currentFolder_ ? this.currentFolder_.id : '');
-
-		if (this.autocompletion_.active) {
-			if (this.autocompletion_.install) {
-				try {
-					await installAutocompletionFile(Setting.value('appName'), Setting.value('profileDir'));
-				} catch (error) {
-					if (error.code == 'shellNotSupported') {
-						console.info(error.message);
-						return;
-					}
-					throw error;
+			try {
+				await this.execCommand(argv);
+			} catch (error) {
+				if (this.showStackTraces_) {
+					console.info(error);
+				} else {
+					console.info(error.message);
 				}
-			} else {
-				let items = await handleAutocompletion(this.autocompletion_);
-				if (!items.length) return;
-				for (let i = 0; i < items.length; i++) {
-					items[i] = items[i].replace(/ /g, '\\ ');
-					items[i] = items[i].replace(/'/g, "\\'");
-					items[i] = items[i].replace(/:/g, "\\:");
-					items[i] = items[i].replace(/\(/g, '\\(');
-					items[i] = items[i].replace(/\)/g, '\\)');
-				}
-				console.info(items.join("\n"));
 			}
-			
-			return;
-		}
+		} else { // Otherwise open the GUI
+			this.initRedux();
 
-		try {
-			await this.execCommand(argv);
-		} catch (error) {
-			if (this.showStackTraces_) {
-				console.info(error);
-			} else {
-				console.info(error.message);
-			}
+			const AppGui = require('./app-gui.js');
+			this.gui_ = new AppGui(this, this.store());
+			this.gui_.setLogger(this.logger_);
+			await this.gui_.start();
+
+			// Since the settings need to be loaded before the store is created, it will never
+			// receive the SETTING_UPDATE_ALL even, which mean state.settings will not be
+			// initialised. So we manually call dispatchUpdateAll() to force an update.
+			Setting.dispatchUpdateAll();
+
+			await FoldersScreenUtils.refreshFolders();
+
+			const tags = await Tag.allWithNotes();
+
+			this.dispatch({
+				type: 'TAG_UPDATE_ALL',
+				tags: tags,
+			});
+
+			this.store().dispatch({
+				type: 'FOLDER_SELECT',
+				id: Setting.value('activeFolderId'),
+			});
 		}
 	}
 
@@ -447,4 +354,4 @@ function app() {
 	return application_;
 }
 
-export { app };
+module.exports = { app };

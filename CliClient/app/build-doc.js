@@ -1,10 +1,7 @@
-require('source-map-support').install();
-require('babel-plugin-transform-runtime');
-
-import fs from 'fs-extra';
-import { fileExtension, basename, dirname } from 'lib/path-utils.js';
-import wrap_ from 'word-wrap';
-import { _, setLocale, languageCode } from 'lib/locale.js';
+const fs = require('fs-extra');
+const { fileExtension, basename, dirname } = require('lib/path-utils.js');
+const wrap_ = require('word-wrap');
+const { _, setLocale, languageCode } = require('lib/locale.js');
 
 const rootDir = dirname(dirname(__dirname));
 const MAX_WIDTH = 78;
@@ -80,7 +77,7 @@ function getHeader() {
 
 	output.push('NAME');
 	output.push('');
-	output.push(wrap('joplin - a note taking and todo app with synchronisation capabilities'), INDENT);
+	output.push(wrap('joplin - a note taking and to-do app with synchronisation capabilities'), INDENT);
 
 	output.push('');
 
@@ -88,7 +85,7 @@ function getHeader() {
 	output.push('');
 
 	let description = [];
-	description.push('Joplin is a note taking and todo application, which can handle a large number of notes organised into notebooks.');
+	description.push('Joplin is a note taking and to-do application, which can handle a large number of notes organised into notebooks.');
 	description.push('The notes are searchable, can be copied, tagged and modified with your own text editor.');
 	description.push("\n\n");
 	description.push('The notes can be synchronised with various target including the file system (for example with a network directory) or with Microsoft OneDrive.');

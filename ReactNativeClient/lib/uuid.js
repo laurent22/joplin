@@ -1,4 +1,4 @@
-import createUuidV4 from 'uuid/v4';
+const createUuidV4 = require('uuid/v4');
 
 const uuid = {
 
@@ -8,4 +8,4 @@ const uuid = {
 
 }
 
-export { uuid };
+module.exports = { uuid };

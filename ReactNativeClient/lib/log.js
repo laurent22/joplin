@@ -37,4 +37,4 @@ Log.LEVEL_INFO = 10;
 Log.LEVEL_WARN = 20;
 Log.LEVEL_ERROR = 30;
 
-export { Log };
+module.exports = { Log };

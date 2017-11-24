@@ -1,25 +1,53 @@
-require('source-map-support').install();
-require('babel-plugin-transform-runtime');
+const fs = require('fs-extra');
+const { fileExtension, basename, dirname } = require('lib/path-utils.js');
+const { _, setLocale, languageCode } = require('lib/locale.js');
+const marked = require('lib/marked.js');
+const Mustache = require('mustache');
 
-import fs from 'fs-extra';
-import { fileExtension, basename, dirname } from 'lib/path-utils.js';
-import { _, setLocale, languageCode } from 'lib/locale.js';
-import marked from 'lib/marked.js';
-
-const headerHtml = `
-<!doctype html>
+const headerHtml = `<!doctype html>
 <html>
 <head>
-	<title>Joplin - a free, open source, note taking and todo application with synchronisation capabilities</title>
+	<title>Joplin - an open source note taking and to-do application with synchronisation capabilities</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+	<link rel="stylesheet" href="https://opensource.keycdn.com/fontawesome/4.7.0/font-awesome.min.css" integrity="sha384-dNpIIXE8U05kAbPhy3G1cz+yZmTzA6CY8Vg/u2L9xRnHjJiAK76m2BIEaSEV+/aU" crossorigin="anonymous"> 
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
 	<style>
 	body {
 		background-color: #F1F1F1;
 		color: #333333;
+	}
+	table {
+		margin-bottom: 1em;
+	}
+	td, th {
+		padding: .8em;
+		border: 1px solid #ccc;
+	}
+	h1, h2 {
+		border-bottom: 1px solid #eaecef;
+		padding-bottom: 0.3em;
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+		font-weight: 600;
+		font-size: 2em;
+		margin-bottom: 16px;
+	}
+	h2 {
+		font-size: 1.6em;
+	}
+	h3 {
+		font-size: 1.3em;
+	}
+	code {
+		color: black;
+		background-color: #eee;
+		border: 1px solid #ccc;
+	}
+	pre code {
+		border: none;
 	}
 	.title-icon {
 		height: 2em;
@@ -63,8 +91,9 @@ const headerHtml = `
 	.cli-screenshot .prompt {
 		color: #48C2F0;
 	}
-	h1 {
-		font-weight: bold;
+	.top-screenshot {
+		margin-top: 2em;
+		text-align: center;
 	}
 	.header {
 		position: relative;
@@ -79,13 +108,75 @@ const headerHtml = `
 		padding-left: 2em;
 		padding-right: 2em;
 		padding-bottom: 2em;
+		padding-top: 2em;
 	}
 	.forkme {
 		position: absolute;
 		right: 0;
 		top:0;
 	}
-	</style>
+	.nav-wrapper {
+		position: relative;
+		width: inherit;
+	}
+	.nav {
+		background-color: black;
+		display: table;
+		width: inherit;
+	}
+	.nav.sticky {
+		position:fixed;
+		top: 0;
+		width: inherit;
+		box-shadow: 0 0 10px #000000;
+	}
+	.nav a {
+		color: white;
+		display: inline-block;
+		padding: .6em .9em .6em .9em;
+	}
+	.nav ul {
+		padding-left: 2em;
+		margin-bottom: 0;
+		display: table-cell;
+		min-width: 165px;
+	}
+	.nav ul li {
+		display: inline-block;
+		padding: 0;
+	}
+	.nav li.selected {
+		background-color: #222;
+		font-weight: bold;
+	}
+	.nav-right {
+		display: table-cell;
+		width: 100%;
+		text-align: right;
+		vertical-align: middle;
+		line-height: 0;
+	}
+	.nav-right .share-btn {
+		display: none;
+	}
+	.share-btn-github {
+		display: inline-block;
+	}
+	.nav-right .small-share-btn {
+		display: none;
+	}
+	.nav-right .share-btn-github {
+		display: inline-block;
+	}
+	@media all and (min-width: 400px) {
+		.nav-right .share-btn {
+			display: inline-block;
+		}
+		.nav-right .small-share-btn {
+			display: none;
+		}
+	}
+</style>
 </head>
 
 <body>
@@ -93,67 +184,95 @@ const headerHtml = `
 <div class="container">
 
 <div class="header">
-	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="docs/images/ForkMe.png"/></a>
-	<h1 id="joplin"><img class="title-icon" src="docs/images/Icon512.png">oplin</h1>
-	<p class="sub-title">A free, open source, note taking and todo application with synchronisation capabilities.</p>
+	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="{{{imageBaseUrl}}}/ForkMe.png"/></a>
+	<h1 id="joplin"><img class="title-icon" src="{{{imageBaseUrl}}}/Icon512.png">oplin</h1>
+	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
+</div>
+
+<div class="nav-wrapper">
+	<div class="nav">
+		<ul>
+			<li class="{{selectedHome}}"><a href="{{baseUrl}}/" title="Home"><i class="fa fa-home"></i></a></li>
+			<li class="{{selectedTerminal}}"><a href="{{baseUrl}}/terminal" title="Terminal"><i class="fa fa-terminal"></i></a></li>
+			<li class="{{selectedDesktop}}"><a href="{{baseUrl}}/desktop" title="Desktop"><i class="fa fa-desktop"></i></a></li>
+		</ul>
+		<div class="nav-right">
+			<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+			<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplin.cozic.net" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
+			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="80px" height="20px"></iframe>
+		</div>
+	</div>
 </div>
 
 <div class="content">
 `;
 
 const footerHtml = `
-<hr/>Copyright (c) 2017 Laurent Cozic
 </body>
 </html>
 `;
 
-const screenshotHtml = `
-<table class="screenshots">
-	<tr>
-		<th>
-			Mobile
-		</th>
-		<th>
-			Command line
-		</th>
-	</tr>
-	<tr>
-		<td>
-			<img class="mobile-screenshot" src="docs/images/Mobile.png"/>
-		</td>
-		<td class="cli-screenshot-wrapper">
-			<pre class="cli-screenshot">
-<span class="prompt">joplin:/My notebook$</span> ls -n 12
-[ ] 8am conference call ☎
-[ ] Make vet appointment
-[ ] Go pick up parcel
-[ ] Pay flat rent 💸
-[X] Book ferry 🚢
-[X] Deploy Joplin app
-    Open source stuff
-    Swimming pool time table 🏊
-    Grocery shopping list 📝
-    Work itinerary
-    Tuesday random note
-    Vacation plans ☀️
-			</pre>
-		</td>
-	</tr>
-</table>
-`;
+// const screenshotHtml = `
+// <table class="screenshots">
+// 	<tr>
+// 		<th>
+// 			Mobile
+// 		</th>
+// 		<th>
+// 			Command line
+// 		</th>
+// 	</tr>
+// 	<tr>
+// 		<td>
+// 			<img class="mobile-screenshot" src="docs/images/Mobile.png"/>
+// 		</td>
+// 		<td class="cli-screenshot-wrapper">
+// 			<pre class="cli-screenshot">
+// <span class="prompt">joplin:/My notebook$</span> ls -n 12
+// [ ] 8am conference call ☎
+// [ ] Make vet appointment
+// [ ] Go pick up parcel
+// [ ] Pay flat rent 💸
+// [X] Book ferry 🚢
+// [X] Deploy Joplin app
+//     Open source stuff
+//     Swimming pool time table 🏊
+//     Grocery shopping list 📝
+//     Work itinerary
+//     Tuesday random note
+//     Vacation plans ☀
+// 			</pre>
+// 		</td>
+// 	</tr>
+// </table>
+// `;
 
-const gaHtml = `
+const scriptHtml = `
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	function stickyHeader() { 
+		if ($(window).scrollTop() > 179) {
+			$('.nav').addClass('sticky'); 
+		} else {
+			$('.nav').removeClass('sticky');
+		}
+	}
 
-  ga('create', 'UA-103586105-1', 'auto');
-  ga('send', 'pageview');
+	$(window).scroll(function() {
+		stickyHeader();
+	});
 
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-103586105-1', 'auto');
+	ga('send', 'pageview');
 </script>
 `;
+
+// <a href="#" class="small-share-btn" style="background-color: #365899;"><img src="images/ShareFacebook.svg" style=" width: 1.2em; height: 1.2em"/></a>
+// <a href="#" class="small-share-btn" style="background-color: #1b95e0;"><img src="images/ShareTwitter.svg" style=" width: 1.2em; height: 1.2em"/></a>
+// <a href="#" class="small-share-btn" style="background-color: #eee;"><img src="images/ShareGithub.svg" style=" width: 1.2em; height: 1.2em"/></a>
 
 const rootDir = dirname(dirname(__dirname));
 
@@ -169,16 +288,31 @@ function markdownToHtml(md) {
 		renderer: renderer,
 	});
 
-	output = output.replace(/<!-- \[SCREENSHOTS\] -->/, screenshotHtml);
+	//output = output.replace(/<!-- \[SCREENSHOTS\] -->/, screenshotHtml);
 
-	return headerHtml + output + gaHtml + footerHtml;
+	return headerHtml + output + scriptHtml + footerHtml;
+}
+
+function renderFileToHtml(sourcePath, targetPath, params) {
+	const md = fs.readFileSync(sourcePath, 'utf8');
+	params.baseUrl = 'http://joplin.cozic.net';
+	params.imageBaseUrl = params.baseUrl + '/images';
+	const html = Mustache.render(markdownToHtml(md), params);
+	fs.writeFileSync(targetPath, html);
 }
 
 async function main() {
-	const md = fs.readFileSync(rootDir + '/README.md', 'utf8');
-	const html = markdownToHtml(md);
+	renderFileToHtml(rootDir + '/README.md', rootDir + '/docs/index.html', {
+		selectedHome: 'selected',
+	});
 
-	fs.writeFileSync(rootDir + '/index.html', html);
+	renderFileToHtml(rootDir + '/README_terminal.md', rootDir + '/docs/terminal/index.html', {
+		selectedTerminal: 'selected',
+	});
+
+	renderFileToHtml(rootDir + '/README_desktop.md', rootDir + '/docs/desktop/index.html', {
+		selectedDesktop: 'selected',
+	});
 }
 
 main().catch((error) => {

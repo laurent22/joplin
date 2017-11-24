@@ -1,8 +1,8 @@
-import { BaseCommand } from './base-command.js';
-import { app } from './app.js';
-import { _ } from 'lib/locale.js';
-import { Tag } from 'lib/models/tag.js';
-import { BaseModel } from 'lib/base-model.js';
+const { BaseCommand } = require('./base-command.js');
+const { app } = require('./app.js');
+const { _ } = require('lib/locale.js');
+const { Tag } = require('lib/models/tag.js');
+const { BaseModel } = require('lib/base-model.js');
 
 class Command extends BaseCommand {
 
@@ -28,7 +28,7 @@ class Command extends BaseCommand {
 
 		if (command == 'add') {
 			if (!notes.length) throw new Error(_('Cannot find "%s".', args.note));
-			if (!tag) tag = await Tag.save({ title: args.tag });
+			if (!tag) tag = await Tag.save({ title: args.tag }, { userSideValidation: true });
 			for (let i = 0; i < notes.length; i++) {
 				await Tag.addNote(tag.id, notes[i].id);
 			}
@@ -41,10 +41,10 @@ class Command extends BaseCommand {
 		} else if (command == 'list') {
 			if (tag) {
 				let notes = await Tag.notes(tag.id);
-				notes.map((note) => { this.log(note.title); });
+				notes.map((note) => { this.stdout(note.title); });
 			} else {
 				let tags = await Tag.all();
-				tags.map((tag) => { this.log(tag.title); });
+				tags.map((tag) => { this.stdout(tag.title); });
 			}
 		} else {
 			throw new Error(_('Invalid command: "%s"', command));

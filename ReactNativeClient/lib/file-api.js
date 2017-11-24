@@ -1,5 +1,5 @@
-import { isHidden } from 'lib/path-utils.js';
-import { Logger } from 'lib/logger.js';
+const { isHidden } = require('lib/path-utils.js');
+const { Logger } = require('lib/logger.js');
 
 class FileApi {
 
@@ -21,10 +21,6 @@ class FileApi {
 	syncTargetId() {
 		if (this.syncTargetId_ === null) throw new Error('syncTargetId has not been set!!');
 		return this.syncTargetId_;
-	}
-
-	supportsDelta() {
-		return this.driver_.supportsDelta();
 	}
 
 	setLogger(l) {
@@ -113,4 +109,4 @@ class FileApi {
 
 }
 
-export { FileApi };
+module.exports = { FileApi };

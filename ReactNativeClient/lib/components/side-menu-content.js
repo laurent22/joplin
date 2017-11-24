@@ -1,16 +1,17 @@
-import React, { Component } from 'react';
-import { TouchableOpacity , Button, Text, Image, StyleSheet, ScrollView, View } from 'react-native';
-import { connect } from 'react-redux'
-import Icon from 'react-native-vector-icons/Ionicons';
-import { Log } from 'lib/log.js';
-import { Tag } from 'lib/models/tag.js';
-import { Note } from 'lib/models/note.js';
-import { Setting } from 'lib/models/setting.js';
-import { FoldersScreenUtils } from 'lib/components/screens/folders-utils.js'
-import { Synchronizer } from 'lib/synchronizer.js';
-import { reg } from 'lib/registry.js';
-import { _ } from 'lib/locale.js';
-import { globalStyle, themeStyle } from 'lib/components/global-style.js';
+const React = require('react'); const Component = React.Component;
+const { TouchableOpacity , Button, Text, Image, StyleSheet, ScrollView, View } = require('react-native');
+const { connect } = require('react-redux');
+const Icon = require('react-native-vector-icons/Ionicons').default;
+const { Log } = require('lib/log.js');
+const { Tag } = require('lib/models/tag.js');
+const { Note } = require('lib/models/note.js');
+const { Setting } = require('lib/models/setting.js');
+const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
+const { Synchronizer } = require('lib/synchronizer.js');
+const { reg } = require('lib/registry.js');
+const { _ } = require('lib/locale.js');
+const { globalStyle, themeStyle } = require('lib/components/global-style.js');
+const shared = require('lib/components/shared/side-menu-shared.js');
 
 class SideMenuContentComponent extends Component {
 
@@ -104,32 +105,8 @@ class SideMenuContentComponent extends Component {
 	}
 
 	async synchronize_press() {
-		const action = this.props.syncStarted ? 'cancel' : 'start';
-
-		if (Setting.value('sync.target') == Setting.SYNC_TARGET_ONEDRIVE && !reg.oneDriveApi().auth()) {
-			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-			
-			this.props.dispatch({
-				type: 'NAV_GO',
-				routeName: 'OneDriveLogin',
-			});
-			return;
-		}
-
-		let sync = null;
-		try {
-			sync = await reg.synchronizer(Setting.value('sync.target'))
-		} catch (error) {
-			reg.logger().info('Could not acquire synchroniser:');
-			reg.logger().info(error);
-			return;
-		}
-
-		if (action == 'cancel') {
-			sync.cancel();
-		} else {
-			reg.scheduleSync(0);
-		}
+		const actionDone = await shared.synchronize_press(this);
+		if (actionDone === 'auth') this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 	}
 
 	folderItem(folder, selected) {
@@ -181,27 +158,20 @@ class SideMenuContentComponent extends Component {
 	render() {
 		let items = [];
 
+		const theme = themeStyle(this.props.theme);
+
 		// HACK: inner height of ScrollView doesn't appear to be calculated correctly when
 		// using padding. So instead creating blank elements for padding bottom and top.
 		items.push(<View style={{ height: globalStyle.marginTop }} key='bottom_top_hack'/>);
 
 		if (this.props.folders.length) {
-			for (let i = 0; i < this.props.folders.length; i++) {
-				let folder = this.props.folders[i];
-				items.push(this.folderItem(folder, this.props.selectedFolderId == folder.id && this.props.notesParentType == 'Folder'));
-			}
-
+			const folderItems = shared.renderFolders(this.props, this.folderItem.bind(this));
+			items = items.concat(folderItems);
 			if (items.length) items.push(this.makeDivider('divider_1'));
 		}
 
 		if (this.props.tags.length) {
-			let tags = this.props.tags.slice();
-			tags.sort((a, b) => { return a.title < b.title ? -1 : +1; });
-			let tagItems = [];
-			for (let i = 0; i < tags.length; i++) {
-				const tag = tags[i];
-				tagItems.push(this.tagItem(tag, this.props.selectedTagId == tag.id && this.props.notesParentType == 'Tag'));
-			}
+			const tagItems = shared.renderTags(this.props, this.tagItem.bind(this));
 
 			items.push(
 				<View style={this.styles().tagItemList} key="tag_items">
@@ -222,14 +192,23 @@ class SideMenuContentComponent extends Component {
 
 		items.push(<View style={{ height: globalStyle.marginBottom }} key='bottom_padding_hack'/>);
 
+		let style = {
+			flex:1,
+			borderRightWidth: 1,
+			borderRightColor: globalStyle.dividerColor,
+			backgroundColor: theme.backgroundColor,
+		};
+
 		return (
-			<View style={{flex:1, borderRightWidth: 1, borderRightColor: globalStyle.dividerColor }}>
-				<View style={{flexDirection:'row'}}>
-					<Image style={{flex:1, height: 100}} source={require('../images/SideMenuHeader.png')} />
+			<View style={style}>
+				<View style={{flex:1, opacity: this.props.opacity}}>
+					<View style={{flexDirection:'row'}}>
+						<Image style={{flex:1, height: 100}} source={require('../images/SideMenuHeader.png')} />
+					</View>
+					<ScrollView scrollsToTop={false} style={this.styles().menu}>
+						{ items }
+					</ScrollView>
 				</View>
-				<ScrollView scrollsToTop={false} style={this.styles().menu}>
-					{ items }
-				</ScrollView>
 			</View>
 		);
 	}
@@ -247,8 +226,9 @@ const SideMenuContent = connect(
 			notesParentType: state.notesParentType,
 			locale: state.settings.locale,
 			theme: state.settings.theme,
+			opacity: state.sideMenuOpenPercent,
 		};
 	}
 )(SideMenuContentComponent)
 
-export { SideMenuContent };
+module.exports = { SideMenuContent };

@@ -1,3 +1,4 @@
 #!/bin/bash
 set -e
-./build.sh && NODE_PATH=build node build/build-website.js
+ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+"$ROOT_DIR/build.sh" && NODE_PATH="$ROOT_DIR/build" node "$ROOT_DIR/build/build-website.js"

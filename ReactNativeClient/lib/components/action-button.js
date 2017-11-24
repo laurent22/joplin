@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { StyleSheet, Text } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import ReactNativeActionButton from 'react-native-action-button';
-import { connect } from 'react-redux'
-import { globalStyle } from 'lib/components/global-style.js'
-import { Log } from 'lib/log.js'
-import { _ } from 'lib/locale.js'
+const React = require('react'); const Component = React.Component;
+const { StyleSheet, Text } = require('react-native');
+const Icon = require('react-native-vector-icons/Ionicons').default;
+const ReactNativeActionButton = require('react-native-action-button').default;
+const { connect } = require('react-redux');
+const { globalStyle } = require('lib/components/global-style.js');
+const { Log } = require('lib/log.js');
+const { _ } = require('lib/locale.js');
 
 const styles = StyleSheet.create({
 	actionButtonIcon: {
@@ -67,7 +67,7 @@ class ActionButtonComponent extends React.Component {
 		if (this.props.addFolderNoteButtons) {
 			if (this.props.folders.length) {
 				buttons.push({
-					title: _('New todo'),
+					title: _('New to-do'),
 					onPress: () => { this.newTodo_press() },
 					color: '#9b59b6',
 					icon: 'md-checkbox-outline',
@@ -134,8 +134,9 @@ const ActionButton = connect(
 	(state) => {
 		return {
 			folders: state.folders,
+			locale: state.settings.locale,
 		};
 	}
 )(ActionButtonComponent)
 
-export { ActionButton };
+module.exports = { ActionButton };

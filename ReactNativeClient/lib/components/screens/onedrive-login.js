@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import { View } from 'react-native';
-import { WebView, Button, Text } from 'react-native';
-import { connect } from 'react-redux'
-import { Log } from 'lib/log.js'
-import { Setting } from 'lib/models/setting.js'
-import { ScreenHeader } from 'lib/components/screen-header.js';
-import { reg } from 'lib/registry.js';
-import { _ } from 'lib/locale.js';
-import { BaseScreenComponent } from 'lib/components/base-screen.js';
+const React = require('react'); const Component = React.Component;
+const { View } = require('react-native');
+const { WebView, Button, Text } = require('react-native');
+const { connect } = require('react-redux');
+const { Log } = require('lib/log.js');
+const { Setting } = require('lib/models/setting.js');
+const { ScreenHeader } = require('lib/components/screen-header.js');
+const { reg } = require('lib/registry.js');
+const { _ } = require('lib/locale.js');
+const { BaseScreenComponent } = require('lib/components/base-screen.js');
 
 class OneDriveLoginScreenComponent extends BaseScreenComponent {
 	
@@ -28,11 +28,11 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 	}
 
 	startUrl() {
-		return reg.oneDriveApi().authCodeUrl(this.redirectUrl());
+		return reg.syncTarget().api().authCodeUrl(this.redirectUrl());
 	}
 
 	redirectUrl() {
-		return 'https://login.microsoftonline.com/common/oauth2/nativeclient';
+		return reg.syncTarget().api().nativeClientRedirectUrl();
 	}
 
 	async webview_load(noIdeaWhatThisIs) {
@@ -48,7 +48,7 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 			this.authCode_ = code[1];
 
 			try {
-				await reg.oneDriveApi().execTokenRequest(this.authCode_, this.redirectUrl(), true);
+				await reg.syncTarget().api().execTokenRequest(this.authCode_, this.redirectUrl(), true);
 				this.props.dispatch({ type: 'NAV_BACK' });
 				reg.scheduleSync(0);
 			} catch (error) {
@@ -107,4 +107,4 @@ const OneDriveLoginScreen = connect(
 	}
 )(OneDriveLoginScreenComponent)
 
-export { OneDriveLoginScreen };
+module.exports = { OneDriveLoginScreen };

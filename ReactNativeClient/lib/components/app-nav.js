@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import { NotesScreen } from 'lib/components/screens/notes.js';
-import { SearchScreen } from 'lib/components/screens/search.js';
-import { View } from 'react-native';
-import { _ } from 'lib/locale.js';
+const React = require('react'); const Component = React.Component;
+const { connect } = require('react-redux');
+const { NotesScreen } = require('lib/components/screens/notes.js');
+const { SearchScreen } = require('lib/components/screens/search.js');
+const { View } = require('react-native');
+const { _ } = require('lib/locale.js');
+const { themeStyle } = require('lib/components/global-style.js');
 
 class AppNavComponent extends Component {
 
@@ -38,8 +39,12 @@ class AppNavComponent extends Component {
 
 		this.previousRouteName_ = route.routeName;
 
+		const theme = themeStyle(this.props.theme);
+
+		const style = { flex: 1, backgroundColor: theme.backgroundColor }
+
 		return (
-			<View style={{ flex: 1 }}>
+			<View style={style}>
 				<NotesScreen visible={notesScreenVisible} navigation={{ state: route }} />
 				{ searchScreenLoaded && <SearchScreen visible={searchScreenVisible} navigation={{ state: route }} /> }
 				{ (!notesScreenVisible && !searchScreenVisible) && <Screen navigation={{ state: route }} /> }
@@ -53,8 +58,9 @@ const AppNav = connect(
 	(state) => {
 		return {
 			route: state.route,
+			theme: state.settings.theme,
 		};
 	}
 )(AppNavComponent)
 
-export { AppNav };
+module.exports = { AppNav };

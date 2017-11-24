@@ -1,7 +1,7 @@
-import { uuid } from 'lib/uuid.js';
-import { promiseChain } from 'lib/promise-utils.js';
-import { time } from 'lib/time-utils.js'
-import { Database } from 'lib/database.js'
+const { uuid } = require('lib/uuid.js');
+const { promiseChain } = require('lib/promise-utils.js');
+const { time } = require('lib/time-utils.js');
+const { Database } = require('lib/database.js');
 
 const structureSql = `
 CREATE TABLE folders (
@@ -193,6 +193,14 @@ class JoplinDatabase extends Database {
 		// 1. Add the new version number to the existingDatabaseVersions array
 		// 2. Add the upgrade logic to the "switch (targetVersion)" statement below
 
+		// IMPORTANT:
+		//
+		// Whenever adding a new database property, some additional logic might be needed 
+		// in the synchronizer to handle this property. For example, when adding a property
+		// that should have a default value, existing remote items will not have this
+		// default value and thus might cause problems. In that case, the default value
+		// must be set in the synchronizer too.
+
 		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
@@ -296,4 +304,4 @@ Database.TYPE_INT = 1;
 Database.TYPE_TEXT = 2;
 Database.TYPE_NUMERIC = 3;
 
-export { JoplinDatabase };
+module.exports = { JoplinDatabase };

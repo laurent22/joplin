@@ -1,7 +1,7 @@
-import { BaseCommand } from './base-command.js';
-import { app } from './app.js';
-import { _ } from 'lib/locale.js';
-import { Note } from 'lib/models/note.js';
+const { BaseCommand } = require('./base-command.js');
+const { app } = require('./app.js');
+const { _ } = require('lib/locale.js');
+const { Note } = require('lib/models/note.js');
 
 class Command extends BaseCommand {
 
@@ -23,6 +23,8 @@ class Command extends BaseCommand {
 
 		note = await Note.save(note);
 		Note.updateGeolocation(note.id);
+
+		app().switchCurrentFolder(app().currentFolder());
 	}
 
 }

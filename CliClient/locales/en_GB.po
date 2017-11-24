@@ -15,71 +15,74 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "Give focus to next pane"
+msgstr ""
+
+msgid "Give focus to previous pane"
+msgstr ""
+
+msgid "Enter command line mode"
+msgstr ""
+
+msgid "Exit command line mode"
+msgstr ""
+
+msgid "Edit the selected note"
+msgstr ""
+
+msgid "Cancel the current command."
+msgstr ""
+
+msgid "Exit the application."
+msgstr ""
+
+msgid "Delete the currently selected note or notebook."
+msgstr ""
+
+msgid "To delete a tag, untag the associated notes."
+msgstr ""
+
+msgid "Please select the note or notebook to be deleted first."
+msgstr ""
+
+msgid "Set a to-do as completed / not completed"
+msgstr ""
+
+msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "[t]oggle note [m]etadata."
+msgstr ""
+
+msgid "[M]ake a new [n]ote"
+msgstr ""
+
+msgid "[M]ake a new [t]odo"
+msgstr ""
+
+msgid "[M]ake a new note[b]ook"
+msgstr ""
+
+msgid "Copy ([Y]ank) the [n]ote to a notebook."
+msgstr ""
+
+msgid "Move the note to a notebook."
+msgstr ""
+
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr ""
+
+#, javascript-format
+msgid "More than one item match \"%s\". Please narrow down your query."
+msgstr ""
+
 msgid "No notebook selected."
 msgstr ""
 
 msgid "No notebook has been specified."
-msgstr ""
-
-#, javascript-format
-msgid "Usage: %s"
-msgstr ""
-
-#, javascript-format
-msgid "Unknown flag: %s"
-msgstr ""
-
-#, javascript-format
-msgid ""
-"Command line argument \"%s\" contains both quotes and double-quotes - "
-"aborting."
-msgstr ""
-
-msgid "Provides help for a given command."
-msgstr ""
-
-msgid "Exits the application."
-msgstr ""
-
-msgid "Only Bash is currently supported for autocompletion."
-msgstr ""
-
-msgid ""
-"Autocompletion can be made to work with an alias too (such as a one-letter "
-"command like \"j\").\n"
-"If you would like to enable this, please type the alias now (leave it empty "
-"for no alias):"
-msgstr ""
-
-#, javascript-format
-msgid "Created autocompletion script \"%s\"."
-msgstr ""
-
-#, javascript-format
-msgid "Autocompletion script is already present in \"%s\"."
-msgstr ""
-
-#, javascript-format
-msgid "Added autocompletion to \"%s\"."
-msgstr ""
-
-#, javascript-format
-msgid "Alias is already set in \"%s\"."
-msgstr ""
-
-#, javascript-format
-msgid "Added alias to \"%s\"."
-msgstr ""
-
-#, javascript-format
-msgid ""
-"IMPORTANT: run the following command to initialise autocompletion in the "
-"current shell:\n"
-"source '%s'"
-msgstr ""
-
-#, javascript-format
-msgid "Missing required argument: %s"
 msgstr ""
 
 msgid "Y"
@@ -88,14 +91,45 @@ msgstr ""
 msgid "n"
 msgstr ""
 
-msgid "Displays the given note."
+msgid "N"
 msgstr ""
 
-msgid "Displays the complete information about note."
+msgid "y"
+msgstr ""
+
+msgid "Cancelling background synchronisation... Please wait."
+msgstr ""
+
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr ""
+
+#, javascript-format
+msgid "Missing required argument: %s"
+msgstr ""
+
+#, javascript-format
+msgid "%s: %s"
+msgstr ""
+
+msgid "Your choice: "
+msgstr ""
+
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr ""
+
+msgid "Attaches the given file to the note."
 msgstr ""
 
 #, javascript-format
 msgid "Cannot find \"%s\"."
+msgstr ""
+
+msgid "Displays the given note."
+msgstr ""
+
+msgid "Displays the complete information about note."
 msgstr ""
 
 msgid ""
@@ -120,17 +154,14 @@ msgid ""
 "specified the note is duplicated in the current notebook."
 msgstr ""
 
-msgid "Marks a todo as done."
+msgid "Marks a to-do as done."
 msgstr ""
 
 #, javascript-format
-msgid "Note is not a todo: \"%s\""
+msgid "Note is not a to-do: \"%s\""
 msgstr ""
 
 msgid "Edit note."
-msgstr ""
-
-msgid "Done editing."
 msgstr ""
 
 msgid ""
@@ -147,7 +178,15 @@ msgstr ""
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
 
-msgid "Exports Joplin data to the given target."
+msgid "Note has been saved."
+msgstr ""
+
+msgid "Exits the application."
+msgstr ""
+
+msgid ""
+"Exports Joplin data to the given directory. By default, it will export the "
+"complete database including notebooks, notes, tags and resources."
 msgstr ""
 
 msgid "Exports only the given note."
@@ -160,6 +199,42 @@ msgid "Displays a geolocation URL for the note."
 msgstr ""
 
 msgid "Displays usage information."
+msgstr ""
+
+msgid "Shortcuts are not available in CLI mode."
+msgstr ""
+
+msgid "Type `help [command]` for more information about a command."
+msgstr ""
+
+msgid "The possible commands are:"
+msgstr ""
+
+msgid ""
+"In any command, a note or notebook can be refered to by title or ID, or "
+"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
+"note or notebook. `$c` can be used to refer to the currently selected item."
+msgstr ""
+
+msgid "To move from one pane to another, press Tab or Shift+Tab."
+msgstr ""
+
+msgid ""
+"Use the arrows and page up/down to scroll the lists and text areas "
+"(including this console)."
+msgstr ""
+
+msgid "To maximise/minimise the console, press \"TC\"."
+msgstr ""
+
+msgid "To enter command line mode, press \":\""
+msgstr ""
+
+msgid "To exit command line mode, press ESCAPE"
+msgstr ""
+
+msgid ""
+"For the complete list of available keyboard shortcuts, type `help shortcuts`"
 msgstr ""
 
 msgid "Imports an Evernote notebook file (.enex file)."
@@ -205,6 +280,10 @@ msgstr ""
 msgid "Importing notes..."
 msgstr ""
 
+#, javascript-format
+msgid "The notes have been imported: %s"
+msgstr ""
+
 msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
 "of notebooks."
@@ -221,8 +300,8 @@ msgstr ""
 
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
-"for todos, or `nt` for notes and todos (eg. `-tt` would display only the "
-"todos, while `-ttd` would display notes and todos."
+"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
+"to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
 
 msgid "Either \"text\" or \"json\""
@@ -230,7 +309,7 @@ msgstr ""
 
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
-"TODO_CHECKED (for todos), TITLE"
+"TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
 
 msgid "Please select a notebook first."
@@ -245,20 +324,36 @@ msgstr ""
 msgid "Notes can only be created within a notebook."
 msgstr ""
 
-msgid "Creates a new todo."
+msgid "Creates a new to-do."
 msgstr ""
 
-msgid "Moves the notes matching <note-pattern> to [notebook]."
+msgid "Moves the notes matching <note> to [notebook]."
+msgstr ""
+
+msgid "Renames the given <item> (note or notebook) to <name>."
+msgstr ""
+
+msgid "Deletes the given notebook."
+msgstr ""
+
+msgid "Deletes the notebook without asking for confirmation."
+msgstr ""
+
+#, javascript-format
+msgid "Delete notebook \"%s\"?"
 msgstr ""
 
 msgid "Deletes the notes matching <note-pattern>."
 msgstr ""
 
-msgid "Deletes the items without asking for confirmation."
+msgid "Deletes the notes without asking for confirmation."
 msgstr ""
 
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
+msgstr ""
+
+msgid "Delete note?"
 msgstr ""
 
 msgid "Searches for the given <pattern> in all the notes."
@@ -286,6 +381,10 @@ msgid ""
 "operation."
 msgstr ""
 
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr ""
+
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
 msgstr ""
@@ -311,12 +410,12 @@ msgstr ""
 
 msgid ""
 "<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
-"toggle the given todo between completed and uncompleted state (If the target "
-"is a regular note it will be converted to a todo). Use \"clear\" to convert "
-"the todo back to a regular note."
+"toggle the given to-do between completed and uncompleted state (If the "
+"target is a regular note it will be converted to a to-do). Use \"clear\" to "
+"convert the to-do back to a regular note."
 msgstr ""
 
-msgid "Marks a todo as non-completed."
+msgid "Marks a to-do as non-completed."
 msgstr ""
 
 msgid ""
@@ -329,6 +428,24 @@ msgstr ""
 
 #, javascript-format
 msgid "%s %s (%s)"
+msgstr ""
+
+msgid "Enum"
+msgstr ""
+
+#, javascript-format
+msgid "Type: %s."
+msgstr ""
+
+#, javascript-format
+msgid "Possible values: %s."
+msgstr ""
+
+#, javascript-format
+msgid "Default: %s"
+msgstr ""
+
+msgid "Possible keys/values:"
 msgstr ""
 
 msgid "Fatal error:"
@@ -349,6 +466,180 @@ msgid ""
 "will be shared with any third party."
 msgstr ""
 
+msgid "Search:"
+msgstr ""
+
+msgid "File"
+msgstr ""
+
+msgid "New note"
+msgstr ""
+
+msgid "New to-do"
+msgstr ""
+
+msgid "New notebook"
+msgstr ""
+
+msgid "Import Evernote notes"
+msgstr ""
+
+msgid "Evernote Export Files"
+msgstr ""
+
+msgid "Quit"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Copy"
+msgstr ""
+
+msgid "Cut"
+msgstr ""
+
+msgid "Paste"
+msgstr ""
+
+msgid "Search in all the notes"
+msgstr ""
+
+msgid "Tools"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Help"
+msgstr ""
+
+msgid "Website and documentation"
+msgstr ""
+
+msgid "About Joplin"
+msgstr ""
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgstr ""
+
+msgid "Please create a notebook first."
+msgstr ""
+
+msgid "Note title:"
+msgstr ""
+
+msgid "Please create a notebook first"
+msgstr ""
+
+msgid "To-do title:"
+msgstr ""
+
+msgid "Notebook title:"
+msgstr ""
+
+msgid "Add or remove tags:"
+msgstr ""
+
+msgid "Separate each tag by a comma."
+msgstr ""
+
+msgid "Rename notebook:"
+msgstr ""
+
+msgid "Layout"
+msgstr ""
+
+msgid "Add or remove tags"
+msgstr ""
+
+msgid "Switch between note and to-do type"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Delete notes?"
+msgstr ""
+
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr ""
+
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr ""
+
+msgid "Attach file"
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+msgid "OneDrive Login"
+msgstr ""
+
+msgid "Import"
+msgstr ""
+
+msgid "Configuration"
+msgstr ""
+
+msgid "Delete notebook?"
+msgstr ""
+
+msgid "Remove this tag from all the notes?"
+msgstr ""
+
+msgid "Remove this search from the sidebar?"
+msgstr ""
+
+msgid "Rename"
+msgstr ""
+
+msgid "Synchronise"
+msgstr ""
+
+msgid "Notebooks"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
+msgid "Searches"
+msgstr ""
+
+#, javascript-format
+msgid "Usage: %s"
+msgstr ""
+
+#, javascript-format
+msgid "Unknown flag: %s"
+msgstr ""
+
+msgid "File system"
+msgstr ""
+
+msgid "OneDrive"
+msgstr ""
+
+msgid "OneDrive Dev (For testing only)"
+msgstr ""
+
 #, javascript-format
 msgid "Unknown log level: %s"
 msgstr ""
@@ -362,9 +653,8 @@ msgid ""
 "synchronisation again may fix the problem."
 msgstr ""
 
-msgid ""
-"Please set the \"sync.2.path\" config value to the desired synchronisation "
-"destination."
+#, javascript-format
+msgid "Cannot access %s"
 msgstr ""
 
 #, javascript-format
@@ -431,42 +721,38 @@ msgstr ""
 msgid "Cannot move note to \"%s\" notebook"
 msgstr ""
 
-#, javascript-format
-msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgid "File system synchronisation target directory"
 msgstr ""
 
-#, javascript-format
-msgid "%s: %s"
+msgid ""
+"The path to synchronise with when file system synchronisation is enabled. "
+"See `sync.target`."
 msgstr ""
 
-msgid "Synchronisation target"
+msgid "Text editor"
 msgstr ""
 
-msgid "File system"
-msgstr ""
-
-msgid "OneDrive"
+msgid ""
+"The editor that will be used to open a note. If none is provided it will try "
+"to auto-detect the default editor."
 msgstr ""
 
 msgid "Language"
 msgstr ""
 
-msgid "Todo filter"
+msgid "Theme"
 msgstr ""
 
-msgid "Show all"
+msgid "Light"
 msgstr ""
 
-msgid "Non-completed and recently completed ones"
-msgstr ""
-
-msgid "Non-completed ones only"
+msgid "Dark"
 msgstr ""
 
 msgid "Show uncompleted todos on top of the lists"
 msgstr ""
 
-msgid "Save location with notes"
+msgid "Save geo-location with notes"
 msgstr ""
 
 msgid "Synchronisation interval"
@@ -487,13 +773,22 @@ msgstr ""
 msgid "%d hours"
 msgstr ""
 
-msgid "Theme"
+msgid "Automatically update the application"
 msgstr ""
 
-msgid "Light"
+msgid "Show advanced options"
 msgstr ""
 
-msgid "Dark"
+msgid "Synchronisation target"
+msgstr ""
+
+msgid ""
+"The target to synchonise to. If synchronising with the file system, set "
+"`sync.2.path` to specify the target directory."
+msgstr ""
+
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr ""
 
 msgid "Sync status (synced items / total items)"
@@ -522,16 +817,10 @@ msgstr ""
 msgid "%s: %d notes"
 msgstr ""
 
-msgid "New todo"
-msgstr ""
-
-msgid "New note"
-msgstr ""
-
-msgid "New notebook"
-msgstr ""
-
 msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgstr ""
+
+msgid "Delete these notes?"
 msgstr ""
 
 msgid "Log"
@@ -540,10 +829,14 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-msgid "Configuration"
+msgid "Export Debug Report"
 msgstr ""
 
-msgid "Synchronise"
+msgid "Move to notebook..."
+msgstr ""
+
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
 msgstr ""
 
 msgid "Cancel synchronisation"
@@ -556,13 +849,23 @@ msgstr ""
 msgid "Edit notebook"
 msgstr ""
 
-msgid "Refresh"
+msgid "This note has been modified:"
 msgstr ""
 
-msgid "Delete note?"
+msgid "Save changes"
 msgstr ""
 
-msgid "Attach file"
+msgid "Discard changes"
+msgstr ""
+
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr ""
+
+msgid "Attach image"
+msgstr ""
+
+msgid "Attach any other file"
 msgstr ""
 
 msgid "Delete note"
@@ -583,19 +886,10 @@ msgstr ""
 msgid "View location on map"
 msgstr ""
 
-msgid "Edit"
-msgstr ""
-
-msgid "Delete notebook?"
-msgstr ""
-
 msgid "Delete notebook"
 msgstr ""
 
 msgid "Login with OneDrive"
-msgstr ""
-
-msgid "Search"
 msgstr ""
 
 msgid ""

@@ -1,8 +1,9 @@
-import { BaseCommand } from './base-command.js';
-import { Database } from 'lib/database.js';
-import { Setting } from 'lib/models/setting.js';
-import { _ } from 'lib/locale.js';
-import { ReportService } from 'lib/services/report.js';
+const { BaseCommand } = require('./base-command.js');
+const { Database } = require('lib/database.js');
+const { app } = require('./app.js');
+const { Setting } = require('lib/models/setting.js');
+const { _ } = require('lib/locale.js');
+const { ReportService } = require('lib/services/report.js');
 
 class Command extends BaseCommand {
 
@@ -21,17 +22,20 @@ class Command extends BaseCommand {
 		for (let i = 0; i < report.length; i++) {
 			let section = report[i];
 
-			if (i > 0) this.log('');
+			if (i > 0) this.stdout('');
 
-			this.log('# ' + section.title);
-			this.log('');
+			this.stdout('# ' + section.title);
+			this.stdout('');
 
 			for (let n in section.body) {
 				if (!section.body.hasOwnProperty(n)) continue;
 				let line = section.body[n];
-				this.log(line);
+				this.stdout(line);
 			}
 		}
+
+		app().gui().showConsole();
+		app().gui().maximizeConsole();
 	}
 
 }

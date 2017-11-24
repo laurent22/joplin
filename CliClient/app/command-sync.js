@@ -1,13 +1,13 @@
-import { BaseCommand } from './base-command.js';
-import { app } from './app.js';
-import { _ } from 'lib/locale.js';
-import { OneDriveApiNodeUtils } from './onedrive-api-node-utils.js';
-import { Setting } from 'lib/models/setting.js';
-import { BaseItem } from 'lib/models/base-item.js';
-import { Synchronizer } from 'lib/synchronizer.js';
-import { reg } from 'lib/registry.js';
-import { cliUtils } from './cli-utils.js';
-import md5 from 'md5';
+const { BaseCommand } = require('./base-command.js');
+const { app } = require('./app.js');
+const { _ } = require('lib/locale.js');
+const { OneDriveApiNodeUtils } = require('./onedrive-api-node-utils.js');
+const { Setting } = require('lib/models/setting.js');
+const { BaseItem } = require('lib/models/base-item.js');
+const { Synchronizer } = require('lib/synchronizer.js');
+const { reg } = require('lib/registry.js');
+const { cliUtils } = require('./cli-utils.js');
+const md5 = require('md5');
 const locker = require('proper-lockfile');
 const fs = require('fs-extra');
 const osTmpdir = require('os-tmpdir');
@@ -16,8 +16,9 @@ class Command extends BaseCommand {
 
 	constructor() {
 		super();
-		this.syncTarget_ = null;
+		this.syncTargetId_ = null;
 		this.releaseLockFn_ = null;
+		this.oneDriveApiUtils_ = null;
 	}
 
 	usage() {
@@ -61,6 +62,27 @@ class Command extends BaseCommand {
 		});
 	}
 
+	async doAuth(syncTargetId) {
+		const syncTarget = reg.syncTarget(this.syncTargetId_);
+		this.oneDriveApiUtils_ = new OneDriveApiNodeUtils(syncTarget.api());
+		const auth = await this.oneDriveApiUtils_.oauthDance({
+			log: (...s) => { return this.stdout(...s); }
+		});
+		this.oneDriveApiUtils_ = null;
+		return auth;
+	}
+
+	cancelAuth() {
+		if (this.oneDriveApiUtils_) {
+			this.oneDriveApiUtils_.cancelOAuthDance();
+			return;
+		}
+	}
+
+	doingAuth() {
+		return !!this.oneDriveApiUtils_;
+	}
+
 	async action(args) {
 		this.releaseLockFn_ = null;
 
@@ -75,24 +97,39 @@ class Command extends BaseCommand {
 		} catch (error) {
 			if (error.code == 'ELOCKED') {
 				const msg = _('Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at "%s" and resume the operation.', error.file);
-				this.log(msg);
+				this.stdout(msg);
 				return;
 			}
 			throw error;
 		}
 
-		try {
-			this.syncTarget_ = Setting.value('sync.target');
-			if (args.options.target) this.syncTarget_ = args.options.target;
+		const cleanUp = () => {
+			cliUtils.redrawDone();
+			if (this.releaseLockFn_) {
+				this.releaseLockFn_();
+				this.releaseLockFn_ = null;
+			}
+		};
 
-			if (this.syncTarget_ == Setting.SYNC_TARGET_ONEDRIVE && !reg.syncHasAuth(this.syncTarget_)) {
-				const oneDriveApiUtils = new OneDriveApiNodeUtils(reg.oneDriveApi());
-				const auth = await oneDriveApiUtils.oauthDance(this);
-				Setting.setValue('sync.3.auth', auth ? JSON.stringify(auth) : null);
-				if (!auth) return;
+		try {
+			this.syncTargetId_ = Setting.value('sync.target');
+			if (args.options.target) this.syncTargetId_ = args.options.target;
+
+			const syncTarget = reg.syncTarget(this.syncTargetId_);
+
+			if (!syncTarget.isAuthenticated()) {
+				app().gui().showConsole();
+				app().gui().maximizeConsole();
+
+				const auth = await this.doAuth(this.syncTargetId_);
+				Setting.setValue('sync.' + this.syncTargetId_ + '.auth', auth ? JSON.stringify(auth) : null);
+				if (!auth) {
+					this.stdout(_('Authentication was not completed (did not receive an authentication token).'));
+					return cleanUp();
+				}
 			}
 			
-			let sync = await reg.synchronizer(this.syncTarget_);
+			const sync = await syncTarget.synchronizer();
 
 			let options = {
 				onProgress: (report) => {
@@ -101,18 +138,18 @@ class Command extends BaseCommand {
 				},
 				onMessage: (msg) => {
 					cliUtils.redrawDone();
-					this.log(msg);
+					this.stdout(msg);
 				},
 				randomFailures: args.options['random-failures'] === true,
 			};
 
-			this.log(_('Synchronisation target: %s (%s)', Setting.enumOptionLabel('sync.target', this.syncTarget_), this.syncTarget_));
+			this.stdout(_('Synchronisation target: %s (%s)', Setting.enumOptionLabel('sync.target', this.syncTargetId_), this.syncTargetId_));
 
 			if (!sync) throw new Error(_('Cannot initialize synchroniser.'));
 
-			this.log(_('Starting synchronisation...'));
+			this.stdout(_('Starting synchronisation...'));
 
-			const contextKey = 'sync.' + this.syncTarget_ + '.context';
+			const contextKey = 'sync.' + this.syncTargetId_ + '.context';
 			let context = Setting.value(contextKey);
 
 			context = context ? JSON.parse(context) : {};
@@ -123,7 +160,7 @@ class Command extends BaseCommand {
 				Setting.setValue(contextKey, JSON.stringify(newContext));
 			} catch (error) {
 				if (error.code == 'alreadyStarted') {
-					this.log(error.message);
+					this.stdout(error.message);
 				} else {
 					throw error;
 				}
@@ -131,33 +168,36 @@ class Command extends BaseCommand {
 
 			await app().refreshCurrentFolder();
 		} catch (error) {
-			cliUtils.redrawDone();
-			this.releaseLockFn_();
-			this.releaseLockFn_ = null;
+			cleanUp();
 			throw error;
 		}
 
-		cliUtils.redrawDone();
-		this.releaseLockFn_();
-		this.releaseLockFn_ = null;
+		cleanUp();
 	}
 
 	async cancel() {
-		const target = this.syncTarget_ ? this.syncTarget_ : Setting.value('sync.target');
+		if (this.doingAuth()) {
+			this.cancelAuth();
+			return;
+		}
+
+		const syncTargetId = this.syncTargetId_ ? this.syncTargetId_ : Setting.value('sync.target');
 
 		cliUtils.redrawDone();
 
-		this.log(_('Cancelling... Please wait.'));
+		this.stdout(_('Cancelling... Please wait.'));
 
-		if (reg.syncHasAuth(target)) {
-			let sync = await reg.synchronizer(target);
-			if (sync) sync.cancel();
+		const syncTarget = reg.syncTarget(syncTargetId);
+
+		if (syncTarget.isAuthenticated()) {
+			const sync = await syncTarget.synchronizer();
+			if (sync) await sync.cancel();
 		} else {
 			if (this.releaseLockFn_) this.releaseLockFn_();
 			this.releaseLockFn_ = null;
 		}
 
-		this.syncTarget_ = null;
+		this.syncTargetId_ = null;
 	}
 
 	cancellable() {

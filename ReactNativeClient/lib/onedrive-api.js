@@ -1,7 +1,7 @@
-import { shim } from 'lib/shim.js';
-import { stringify } from 'query-string';
-import { time } from 'lib/time-utils.js';
-import { Logger } from 'lib/logger.js'
+const { shim } = require('lib/shim.js');
+const { stringify } = require('query-string');
+const { time } = require('lib/time-utils.js');
+const { Logger } = require('lib/logger.js');
 
 class OneDriveApi {
 
@@ -45,6 +45,10 @@ class OneDriveApi {
 
 	tokenBaseUrl() {
 		return 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
+	}
+
+	nativeClientRedirectUrl() {
+		return 'https://login.microsoftonline.com/common/oauth2/nativeclient';
 	}
 
 	auth() {
@@ -158,6 +162,8 @@ class OneDriveApi {
 
 		if (data) options.body = data;
 
+		options.timeout = 1000 * 60 * 5; // in ms
+
 		for (let i = 0; i < 5; i++) {
 			options.headers['Authorization'] = 'bearer ' + this.token();
 
@@ -171,15 +177,8 @@ class OneDriveApi {
 					response = await shim.fetchBlob(url, options);
 				}
 			} catch (error) {
-				if (error.message == 'Network request failed') {
-					// Unfortunately the error 'Network request failed' doesn't have a type
-					// or error code, so hopefully that message won't change and is not localized
-					this.logger().info('Got error "Network request failed" - retrying (' + i + ')...');
-					await time.sleep((i + 1) * 3);
-					continue;
-				} else {
-					throw error;
-				}
+				this.logger().error('Got unhandled error:', error ? error.code : '', error ? error.message : '', error);
+				throw error;
 			}
 
 			if (!response.ok) {
@@ -214,6 +213,7 @@ class OneDriveApi {
 					return;
 				} else {
 					error.request = method + ' ' + url + ' ' + JSON.stringify(query) + ' ' + JSON.stringify(data) + ' ' + JSON.stringify(options);
+					error.headers = await response.headers;
 					throw error;
 				}
 			}
@@ -267,4 +267,4 @@ class OneDriveApi {
 
 }
 
-export { OneDriveApi };
+module.exports = { OneDriveApi };

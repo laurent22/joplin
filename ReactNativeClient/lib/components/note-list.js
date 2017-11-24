@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import { ListView, Text, TouchableHighlight, Switch, View, StyleSheet } from 'react-native';
-import { Log } from 'lib/log.js';
-import { _ } from 'lib/locale.js';
-import { Checkbox } from 'lib/components/checkbox.js';
-import { NoteItem } from 'lib/components/note-item.js';
-import { reg } from 'lib/registry.js';
-import { Note } from 'lib/models/note.js';
-import { Setting } from 'lib/models/setting.js';
-import { time } from 'lib/time-utils.js';
-import { themeStyle } from 'lib/components/global-style.js';
+const React = require('react'); const Component = React.Component;
+const { connect } = require('react-redux');
+const { ListView, Text, TouchableHighlight, Switch, View, StyleSheet } = require('react-native');
+const { Log } = require('lib/log.js');
+const { _ } = require('lib/locale.js');
+const { Checkbox } = require('lib/components/checkbox.js');
+const { NoteItem } = require('lib/components/note-item.js');
+const { reg } = require('lib/registry.js');
+const { Note } = require('lib/models/note.js');
+const { Setting } = require('lib/models/setting.js');
+const { time } = require('lib/time-utils.js');
+const { themeStyle } = require('lib/components/global-style.js');
 
 class NoteListComponent extends Component {
 
@@ -50,7 +50,7 @@ class NoteListComponent extends Component {
 	}
 
 	filterNotes(notes) {
-		const todoFilter = Setting.value('todoFilter');
+		const todoFilter = 'all'; //Setting.value('todoFilter');
 		if (todoFilter == 'all') return notes;
 
 		const now = time.unixMs();
@@ -71,7 +71,7 @@ class NoteListComponent extends Component {
 
 	componentWillMount() {
 		const newDataSource = this.state.dataSource.cloneWithRows(this.filterNotes(this.props.items));
-		this.state = { dataSource: newDataSource };
+		this.setState({ dataSource: newDataSource });
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -113,8 +113,9 @@ const NoteList = connect(
 			items: state.notes,
 			notesSource: state.notesSource,
 			theme: state.settings.theme,
+			noteSelectionEnabled: state.noteSelectionEnabled,
 		};
 	}
 )(NoteListComponent)
 
-export { NoteList };
+module.exports = { NoteList };

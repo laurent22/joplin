@@ -1,4 +1,4 @@
-import { Setting } from 'lib/models/setting.js';
+const { Setting } = require('lib/models/setting.js');
 
 const globalStyle = {
 	fontSize: 16,
@@ -20,11 +20,12 @@ const globalStyle = {
 	raisedHighlightedColor: "#ffffff",
 
 	// For WebView - must correspond to the properties above
-	htmlFontSize: '20x',
+	htmlFontSize: '16px',
 	htmlColor: 'black', // Note: CSS in WebView component only supports named colors or rgb() notation
 	htmlBackgroundColor: 'white',
 	htmlDividerColor: 'Gainsboro',
 	htmlLinkColor: 'blue',
+	htmlLineHeight: '20px',
 };
 
 globalStyle.marginRight = globalStyle.margin;
@@ -69,4 +70,4 @@ function themeStyle(theme) {
 	return themeCache_[theme];
 }
 
-export { globalStyle, themeStyle }
+module.exports = { globalStyle, themeStyle };

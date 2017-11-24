@@ -1,21 +1,24 @@
-import fs from 'fs-extra';
-import { JoplinDatabase } from 'lib/joplin-database.js';
-import { DatabaseDriverNode } from 'lib/database-driver-node.js';
-import { BaseModel } from 'lib/base-model.js';
-import { Folder } from 'lib/models/folder.js';
-import { Note } from 'lib/models/note.js';
-import { Resource } from 'lib/models/resource.js';
-import { Tag } from 'lib/models/tag.js';
-import { NoteTag } from 'lib/models/note-tag.js';
-import { Logger } from 'lib/logger.js';
-import { Setting } from 'lib/models/setting.js';
-import { BaseItem } from 'lib/models/base-item.js';
-import { Synchronizer } from 'lib/synchronizer.js';
-import { FileApi } from 'lib/file-api.js';
-import { FileApiDriverMemory } from 'lib/file-api-driver-memory.js';
-import { FileApiDriverLocal } from 'lib/file-api-driver-local.js';
-import { FsDriverNode } from '../app/fs-driver-node.js';
-import { time } from 'lib/time-utils.js';
+const fs = require('fs-extra');
+const { JoplinDatabase } = require('lib/joplin-database.js');
+const { DatabaseDriverNode } = require('lib/database-driver-node.js');
+const { BaseModel } = require('lib/base-model.js');
+const { Folder } = require('lib/models/folder.js');
+const { Note } = require('lib/models/note.js');
+const { Resource } = require('lib/models/resource.js');
+const { Tag } = require('lib/models/tag.js');
+const { NoteTag } = require('lib/models/note-tag.js');
+const { Logger } = require('lib/logger.js');
+const { Setting } = require('lib/models/setting.js');
+const { BaseItem } = require('lib/models/base-item.js');
+const { Synchronizer } = require('lib/synchronizer.js');
+const { FileApi } = require('lib/file-api.js');
+const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');
+const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
+const { FsDriverNode } = require('lib/fs-driver-node.js');
+const { time } = require('lib/time-utils.js');
+const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
+const SyncTargetMemory = require('lib/SyncTargetMemory.js');
+const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 
 let databases_ = [];
 let synchronizers_ = [];
@@ -29,12 +32,13 @@ Resource.fsDriver_ = fsDriver;
 const logDir = __dirname + '/../tests/logs';
 fs.mkdirpSync(logDir, 0o755);
 
-const syncTargetId_ = Setting.SYNC_TARGET_MEMORY;
-//const syncTargetId_ = Setting.SYNC_TARGET_FILESYSTEM;
-//const syncTargetId_ = Setting.SYNC_TARGET_ONEDRIVE;
+SyncTargetRegistry.addClass(SyncTargetMemory);
+SyncTargetRegistry.addClass(SyncTargetFilesystem);
+
+const syncTargetId_ = SyncTargetRegistry.nameToId('memory');
 const syncDir = __dirname + '/../tests/sync';
 
-const sleepTime = syncTargetId_ == Setting.SYNC_TARGET_FILESYSTEM ? 1001 : 400;
+const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 400;
 
 const logger = new Logger();
 logger.addTarget('file', { path: logDir + '/log.txt' });
@@ -106,6 +110,8 @@ function setupDatabase(id = null) {
 		// Don't care if the file doesn't exist
 	}).then(() => {
 		databases_[id] = new JoplinDatabase(new DatabaseDriverNode());
+		// databases_[id].setLogger(logger);
+		// console.info(filePath);
 		return databases_[id].open({ name: filePath }).then(() => {
 			BaseModel.db_ = databases_[id];
 			return setupDatabase(id);
@@ -119,11 +125,14 @@ async function setupDatabaseAndSynchronizer(id = null) {
 	await setupDatabase(id);
 
 	if (!synchronizers_[id]) {
-		synchronizers_[id] = new Synchronizer(db(id), fileApi(), Setting.value('appType'));
-		synchronizers_[id].setLogger(logger);
+		const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId_);
+		const syncTarget = new SyncTargetClass(db(id));
+		syncTarget.setFileApi(fileApi());
+		syncTarget.setLogger(logger);
+		synchronizers_[id] = await syncTarget.synchronizer();
 	}
 
-	if (syncTargetId_ == Setting.SYNC_TARGET_FILESYSTEM) {
+	if (syncTargetId_ == SyncTargetRegistry.nameToId('filesystem')) {
 		fs.removeSync(syncDir)
 		fs.mkdirpSync(syncDir, 0o755);
 	} else {
@@ -144,13 +153,12 @@ function synchronizer(id = null) {
 function fileApi() {
 	if (fileApi_) return fileApi_;
 
-	if (syncTargetId_ == Setting.SYNC_TARGET_FILESYSTEM) {
+	if (syncTargetId_ == SyncTargetRegistry.nameToId('filesystem')) {
 		fs.removeSync(syncDir)
 		fs.mkdirpSync(syncDir, 0o755);
 		fileApi_ = new FileApi(syncDir, new FileApiDriverLocal());
-	} else if (syncTargetId_ == Setting.SYNC_TARGET_MEMORY) {
+	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('memory')) {
 		fileApi_ = new FileApi('/root', new FileApiDriverMemory());
-		fileApi_.setLogger(logger);
 	}
 	// } else if (syncTargetId == Setting.SYNC_TARGET_ONEDRIVE) {
 	// 	let auth = require('./onedrive-auth.json');
@@ -174,4 +182,4 @@ function fileApi() {
 	return fileApi_;
 }
 
-export { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId };
+module.exports = { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId };

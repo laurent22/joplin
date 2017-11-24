@@ -1,7 +1,7 @@
-import { BaseCommand } from './base-command.js';
-import { _, setLocale } from 'lib/locale.js';
-import { app } from './app.js';
-import { Setting } from 'lib/models/setting.js';
+const { BaseCommand } = require('./base-command.js');
+const { _, setLocale } = require('lib/locale.js');
+const { app } = require('./app.js');
+const { Setting } = require('lib/models/setting.js');
 
 class Command extends BaseCommand {
 
@@ -33,16 +33,21 @@ class Command extends BaseCommand {
 
 		if (!args.name && !args.value) {
 			let keys = Setting.keys(!verbose, 'cli');
+			keys.sort();
 			for (let i = 0; i < keys.length; i++) {
 				const value = Setting.value(keys[i]);
 				if (!verbose && !value) continue;
-				this.log(renderKeyValue(keys[i]));
+				this.stdout(renderKeyValue(keys[i]));
 			}
+			app().gui().showConsole();
+			app().gui().maximizeConsole();
 			return;
 		}
 
 		if (args.name && !args.value) {
-			this.log(renderKeyValue(args.name));
+			this.stdout(renderKeyValue(args.name));
+			app().gui().showConsole();
+			app().gui().maximizeConsole();
 			return;
 		}
 

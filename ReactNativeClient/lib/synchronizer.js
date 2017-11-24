@@ -1,14 +1,14 @@
-import { BaseItem } from 'lib/models/base-item.js';
-import { Folder } from 'lib/models/folder.js';
-import { Note } from 'lib/models/note.js';
-import { Resource } from 'lib/models/resource.js';
-import { BaseModel } from 'lib/base-model.js';
-import { sprintf } from 'sprintf-js';
-import { time } from 'lib/time-utils.js';
-import { Logger } from 'lib/logger.js'
-import { _ } from 'lib/locale.js';
-import { shim } from 'lib/shim.js';
-import moment from 'moment';
+const { BaseItem } = require('lib/models/base-item.js');
+const { Folder } = require('lib/models/folder.js');
+const { Note } = require('lib/models/note.js');
+const { Resource } = require('lib/models/resource.js');
+const { BaseModel } = require('lib/base-model.js');
+const { sprintf } = require('sprintf-js');
+const { time } = require('lib/time-utils.js');
+const { Logger } = require('lib/logger.js');
+const { _ } = require('lib/locale.js');
+const { shim } = require('lib/shim.js');
+const moment = require('moment');
 
 class Synchronizer {
 
@@ -21,6 +21,10 @@ class Synchronizer {
 		this.logger_ = new Logger();
 		this.appType_ = appType;
 		this.cancelling_ = false;
+
+		// Debug flags are used to test certain hard-to-test conditions
+		// such as cancelling in the middle of a loop.
+		this.debugFlags_ = [];
 
 		this.onProgress_ = function(s) {};
 		this.progressReport_ = {};
@@ -57,7 +61,6 @@ class Synchronizer {
 		if (report.deleteLocal) lines.push(_('Deleted local items: %d.', report.deleteLocal));
 		if (report.deleteRemote) lines.push(_('Deleted remote items: %d.', report.deleteRemote));
 		if (!report.completedTime && report.state) lines.push(_('State: "%s".', report.state));
-		//if (report.errors && report.errors.length) lines.push(_('Last error: %s (stacktrace in log).', report.errors[report.errors.length-1].message));
 		if (report.cancelling && !report.completedTime) lines.push(_('Cancelling...'));
 		if (report.completedTime) lines.push(_('Completed: %s', time.unixMsToLocalDateTime(report.completedTime)));
 
@@ -125,22 +128,20 @@ class Synchronizer {
 		}
 	}
 
-	randomFailure(options, name) {
-		if (!options.randomFailures) return false;
-
-		if (this.randomFailureChoice_ == name) {
-			options.onMessage('Random failure: ' + name);
-			return true;
-		}
-
-		return false;
-	}
-
-	cancel() {
+	async cancel() {
 		if (this.cancelling_ || this.state() == 'idle') return;
 		
 		this.logSyncOperation('cancelling', null, null, '');
 		this.cancelling_ = true;
+
+		return new Promise((resolve, reject) => {
+			const iid = setInterval(() => {
+				if (this.state() == 'idle') {
+					clearInterval(iid);
+					resolve();
+				}
+			}, 100);
+		});
 	}
 
 	cancelling() {
@@ -166,7 +167,6 @@ class Synchronizer {
 
 		const syncTargetId = this.api().syncTargetId();
 
-		this.randomFailureChoice_ = Math.floor(Math.random() * 5);
 		this.cancelling_ = false;
 
 		// ------------------------------------------------------------------------
@@ -178,7 +178,6 @@ class Synchronizer {
 
 		let outputContext = Object.assign({}, lastContext);
 		
-
 		this.dispatch({ type: 'SYNC_STARTED' });
 
 		this.logSyncOperation('starting', null, null, 'Starting synchronisation to target ' + syncTargetId + '... [' + synchronizationId + ']');
@@ -216,13 +215,14 @@ class Synchronizer {
 							reason = 'remote does not exist, and local is new and has never been synced';
 						} else {
 							// Note or item was modified after having been deleted remotely
+							// "itemConflict" if for all the items except the notes, which are dealt with in a special way
 							action = local.type_ == BaseModel.TYPE_NOTE ? 'noteConflict' : 'itemConflict';
 							reason = 'remote has been deleted, but local has changes';
 						}
 					} else {
 						if (remote.updated_time > local.sync_time) {
-							// Since, in this loop, we are only dealing with notes that require sync, if the
-							// remote has been modified after the sync time, it means both notes have been
+							// Since, in this loop, we are only dealing with items that require sync, if the
+							// remote has been modified after the sync time, it means both items have been
 							// modified and so there's a conflict.
 							action = local.type_ == BaseModel.TYPE_NOTE ? 'noteConflict' : 'itemConflict';
 							reason = 'both remote and local have changes';
@@ -267,13 +267,7 @@ class Synchronizer {
 						// await this.api().move(tempPath, path);
 
 						await this.api().put(path, content);
-
-						if (this.randomFailure(options, 0)) return;
-
 						await this.api().setTimestamp(path, local.updated_time);
-
-						if (this.randomFailure(options, 1)) return;
-
 						await ItemClass.saveSyncTime(syncTargetId, local, time.unixMs());
 
 					} else if (action == 'itemConflict') {
@@ -290,22 +284,43 @@ class Synchronizer {
 
 					} else if (action == 'noteConflict') {
 
-						// - Create a duplicate of local note into Conflicts folder (to preserve the user's changes)
-						// - Overwrite local note with remote note
-						let conflictedNote = Object.assign({}, local);
-						delete conflictedNote.id;
-						conflictedNote.is_conflict = 1;
-						await Note.save(conflictedNote, { autoTimestamp: false });
+						// ------------------------------------------------------------------------------
+						// First find out if the conflict matters. For example, if the conflict is on the title or body
+						// we want to preserve all the changes. If it's on todo_completed it doesn't really matter
+						// so in this case we just take the remote content.
+						// ------------------------------------------------------------------------------
 
-						if (this.randomFailure(options, 2)) return;
+						let loadedRemote = null;
+						let mustHandleConflict = true;
+						if (remote) {
+							const remoteContent = await this.api().get(path);
+							loadedRemote = await BaseItem.unserialize(remoteContent);
+							mustHandleConflict = Note.mustHandleConflict(local, loadedRemote);
+						}
+
+						// ------------------------------------------------------------------------------
+						// Create a duplicate of local note into Conflicts folder
+						// (to preserve the user's changes)
+						// ------------------------------------------------------------------------------
+
+						if (mustHandleConflict) {
+							let conflictedNote = Object.assign({}, local);
+							delete conflictedNote.id;
+							conflictedNote.is_conflict = 1;
+							await Note.save(conflictedNote, { autoTimestamp: false });
+						}
+
+						// ------------------------------------------------------------------------------
+						// Either copy the remote content to local or, if the remote content has
+						// been deleted, delete the local content.
+						// ------------------------------------------------------------------------------
 
 						if (remote) {
-							let remoteContent = await this.api().get(path);
-							local = await BaseItem.unserialize(remoteContent);
-
+							local = loadedRemote;
 							const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
 							await ItemClass.save(local, { autoTimestamp: false, nextQueries: syncTimeQueries });
 						} else {
+							// Remote no longer exists (note deleted) so delete local one too
 							await ItemClass.delete(local.id);
 						}
 
@@ -329,7 +344,6 @@ class Synchronizer {
 				let path = BaseItem.systemPath(item.item_id)
 				this.logSyncOperation('deleteRemote', null, { id: item.item_id }, 'local has been deleted');
 				await this.api().delete(path);
-				if (this.randomFailure(options, 3)) return;
 				await BaseItem.remoteDeletedItem(syncTargetId, item.item_id);
 			}
 
@@ -344,24 +358,29 @@ class Synchronizer {
 			let context = null;
 			let newDeltaContext = null;
 			let localFoldersToDelete = [];
+			let hasCancelled = false;
 			if (lastContext.delta) context = lastContext.delta;
 
 			while (true) {
-				if (this.cancelling()) break;
-
-				let allIds = null;
-				if (!this.api().supportsDelta()) {
-					allIds = await BaseItem.syncedItemIds(syncTargetId);
-				}
+				if (this.cancelling() || hasCancelled) break;
 
 				let listResult = await this.api().delta('', {
 					context: context,
-					itemIds: allIds,
+
+					// allItemIdsHandler() provides a way for drivers that don't have a delta API to
+					// still provide delta functionality by comparing the items they have to the items
+					// the client has. Very inefficient but that's the only possible workaround.
+					// It's a function so that it is only called if the driver needs these IDs. For
+					// drivers with a delta functionality it's a noop.
+					allItemIdsHandler: async () => { return BaseItem.syncedItemIds(syncTargetId); }
 				});
 
 				let remotes = listResult.items;
 				for (let i = 0; i < remotes.length; i++) {
-					if (this.cancelling()) break;
+					if (this.cancelling() || this.debugFlags_.indexOf('cancelDeltaLoop2') >= 0) {
+						hasCancelled = true;
+						break;
+					}
 
 					let remote = remotes[i];
 					if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
@@ -404,7 +423,6 @@ class Synchronizer {
 						let newContent = Object.assign({}, content);
 						let options = {
 							autoTimestamp: false,
-							applyMetadataChanges: true,
 							nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, newContent, time.unixMs()),
 						};
 						if (action == 'createLocal') options.isNew = true;
@@ -414,6 +432,9 @@ class Synchronizer {
 							let remoteResourceContentPath = this.resourceDirName_ + '/' + newContent.id;
 							await this.api().get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' });
 						}
+
+						if (!newContent.user_updated_time) newContent.user_updated_time = newContent.updated_time;
+						if (!newContent.user_created_time) newContent.user_created_time = newContent.created_time;
 
 						await ItemClass.save(newContent, options);
 
@@ -430,11 +451,18 @@ class Synchronizer {
 					}
 				}
 
-				if (!listResult.hasMore) {
-					newDeltaContext = listResult.context;
-					break;
+				// If user has cancelled, don't record the new context (2) so that synchronisation
+				// can start again from the previous context (1) next time. It is ok if some items
+				// have been synced between (1) and (2) because the loop above will handle the same
+				// items being synced twice as an update. If the local and remote items are indentical
+				// the update will simply be skipped.
+				if (!hasCancelled) {
+					if (!listResult.hasMore) {
+						newDeltaContext = listResult.context;
+						break;
+					}
+					context = listResult.context;
 				}
-				context = listResult.context;
 			}
 
 			outputContext.delta = newDeltaContext ? newDeltaContext : lastContext.delta;
@@ -489,4 +517,4 @@ class Synchronizer {
 
 }
 
-export { Synchronizer };
+module.exports = { Synchronizer };

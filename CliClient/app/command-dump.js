@@ -1,9 +1,9 @@
-import { BaseCommand } from './base-command.js';
-import { app } from './app.js';
-import { _ } from 'lib/locale.js';
-import { Folder } from 'lib/models/folder.js';
-import { Note } from 'lib/models/note.js';
-import { Tag } from 'lib/models/tag.js';
+const { BaseCommand } = require('./base-command.js');
+const { app } = require('./app.js');
+const { _ } = require('lib/locale.js');
+const { Folder } = require('lib/models/folder.js');
+const { Note } = require('lib/models/note.js');
+const { Tag } = require('lib/models/tag.js');
 
 class Command extends BaseCommand {
 
@@ -36,7 +36,7 @@ class Command extends BaseCommand {
 
 		items = items.concat(tags);
 		
-		this.log(JSON.stringify(items));
+		this.stdout(JSON.stringify(items));
 	}
 
 }

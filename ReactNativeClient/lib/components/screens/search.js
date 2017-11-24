@@ -1,13 +1,15 @@
-import React, { Component } from 'react';
-import { ListView, StyleSheet, View, TextInput, FlatList, TouchableHighlight } from 'react-native';
-import { connect } from 'react-redux'
-import { ScreenHeader } from 'lib/components/screen-header.js';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { _ } from 'lib/locale.js';
-import { Note } from 'lib/models/note.js';
-import { NoteItem } from 'lib/components/note-item.js';
-import { BaseScreenComponent } from 'lib/components/base-screen.js';
-import { themeStyle } from 'lib/components/global-style.js';
+const React = require('react'); const Component = React.Component;
+const { ListView, StyleSheet, View, TextInput, FlatList, TouchableHighlight } = require('react-native');
+const { connect } = require('react-redux');
+const { ScreenHeader } = require('lib/components/screen-header.js');
+const Icon = require('react-native-vector-icons/Ionicons').default;
+const { _ } = require('lib/locale.js');
+const { Note } = require('lib/models/note.js');
+const { NoteItem } = require('lib/components/note-item.js');
+const { BaseScreenComponent } = require('lib/components/base-screen.js');
+const { themeStyle } = require('lib/components/global-style.js');
+const { dialogs } = require('lib/dialogs.js');
+const DialogBox = require('react-native-dialogbox').default;
 
 class SearchScreenComponent extends BaseScreenComponent {
 	
@@ -139,9 +141,18 @@ class SearchScreenComponent extends BaseScreenComponent {
 			rootStyle.flex = 0.001; // This is a bit of a hack but it seems to work fine - it makes the component invisible but without unmounting it
 		}
 
+		const thisComponent = this;
+
 		return (
 			<View style={rootStyle}>
-				<ScreenHeader title={_('Search')}/>
+				<ScreenHeader
+					title={_('Search')}
+					parentComponent={thisComponent}
+					folderPickerOptions={{
+						enabled: this.props.noteSelectionEnabled,
+						mustSelect: true,
+					}}
+				/>
 				<View style={this.styles().body}>
 					<View style={this.styles().searchContainer}>
 						<TextInput
@@ -163,6 +174,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 						renderItem={(event) => <NoteItem note={event.item}/>}
 					/>
 				</View>
+				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
 			</View>
 		);
 	}
@@ -174,8 +186,9 @@ const SearchScreen = connect(
 		return {
 			query: state.searchQuery,
 			theme: state.settings.theme,
+			noteSelectionEnabled: state.noteSelectionEnabled,
 		};
 	}
 )(SearchScreenComponent)
 
-export { SearchScreen };
+module.exports = { SearchScreen };

@@ -1,14 +1,10 @@
-import { time } from 'lib/time-utils.js';
+const { time } = require('lib/time-utils.js');
 
 class FileApiDriverMemory {
 
 	constructor() {
 		this.items_ = [];
 		this.deletedItems_ = [];
-	}
-
-	supportsDelta() {
-		return true;
 	}
 
 	itemIndexByPath(path) {
@@ -169,4 +165,4 @@ class FileApiDriverMemory {
 
 }
 
-export { FileApiDriverMemory };
+module.exports = { FileApiDriverMemory };

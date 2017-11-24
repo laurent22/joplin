@@ -1,11 +1,10 @@
 #!/bin/bash
-CLIENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+BUILD_DIR="$ROOT_DIR/tests-build"
 
-rm -f "$CLIENT_DIR/tests-build/lib"
-mkdir -p "$CLIENT_DIR/tests-build/data"
-ln -s "$CLIENT_DIR/build/lib" "$CLIENT_DIR/tests-build"
+rsync -a --exclude "node_modules/" "$ROOT_DIR/tests/" "$BUILD_DIR/"
+rsync -a "$ROOT_DIR/../ReactNativeClient/lib/" "$BUILD_DIR/lib/"
+rsync -a "$ROOT_DIR/build/locales/" "$BUILD_DIR/locales/"
+mkdir -p "$BUILD_DIR/data"
 
-npm run build && NODE_PATH="$CLIENT_DIR/tests-build/" npm test tests-build/synchronizer.js
-
-#npm run build && NODE_PATH="$CLIENT_DIR/tests-build/" npm test tests-build/synchronizer.js
-#npm run build && NODE_PATH="$CLIENT_DIR/tests-build/" npm test tests-build/base-model.js
+npm test tests-build/synchronizer.js

@@ -1,0 +1,517 @@
+<!doctype html>
+<html>
+<head>
+	<title>Joplin - an open source note taking and to-do application with synchronisation capabilities</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+	<link rel="stylesheet" href="https://opensource.keycdn.com/fontawesome/4.7.0/font-awesome.min.css" integrity="sha384-dNpIIXE8U05kAbPhy3G1cz+yZmTzA6CY8Vg/u2L9xRnHjJiAK76m2BIEaSEV+/aU" crossorigin="anonymous"> 
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+	<style>
+	body {
+		background-color: #F1F1F1;
+		color: #333333;
+	}
+	table {
+		margin-bottom: 1em;
+	}
+	td, th {
+		padding: .8em;
+		border: 1px solid #ccc;
+	}
+	h1, h2 {
+		border-bottom: 1px solid #eaecef;
+		padding-bottom: 0.3em;
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+		font-weight: 600;
+		font-size: 2em;
+		margin-bottom: 16px;
+	}
+	h2 {
+		font-size: 1.6em;
+	}
+	h3 {
+		font-size: 1.3em;
+	}
+	code {
+		color: black;
+		background-color: #eee;
+		border: 1px solid #ccc;
+	}
+	pre code {
+		border: none;
+	}
+	.title-icon {
+		height: 2em;
+	}
+	.sub-title {
+		font-weight: bold;
+		font-size: 1.5em;
+	}
+	.container {
+		background-color: white;
+		padding: 0;
+		box-shadow: 0 10px 20px #888888;
+	}
+	table.screenshots {
+		margin-top: 2em;
+		margin-bottom: 2em;
+	}
+	table.screenshots th {
+		height: 3em;
+		text-align: center;
+	}
+	table.screenshots th, 
+	table.screenshots td {
+		border: 1px solid #C2C2C2;
+	}
+	.mobile-screenshot {
+		height: 40em;
+		padding: 1em;
+	}
+	.cli-screenshot-wrapper {
+		background-color: black;
+		vertical-align: top;
+		padding: 1em 2em 1em 1em;
+	}
+	.cli-screenshot {
+		font-family: "Monaco", "Inconsolata", "CONSOLAS", "Deja Vu Sans Mono", "Droid Sans Mono", "Andale Mono", monospace;
+		background-color: black;
+		color: white;
+		border: none;
+	}
+	.cli-screenshot .prompt {
+		color: #48C2F0;
+	}
+	.top-screenshot {
+		margin-top: 2em;
+		text-align: center;
+	}
+	.header {
+		position: relative;
+		padding-left: 2em;
+		padding-right: 2em;
+		padding-top: 1em;
+		padding-bottom: 1em;
+		color: white;
+		background-color: #2B2B3D;
+	}
+	.content {
+		padding-left: 2em;
+		padding-right: 2em;
+		padding-bottom: 2em;
+		padding-top: 2em;
+	}
+	.forkme {
+		position: absolute;
+		right: 0;
+		top:0;
+	}
+	.nav-wrapper {
+		position: relative;
+		width: inherit;
+	}
+	.nav {
+		background-color: black;
+		display: table;
+		width: inherit;
+	}
+	.nav.sticky {
+		position:fixed;
+		top: 0;
+		width: inherit;
+		box-shadow: 0 0 10px #000000;
+	}
+	.nav a {
+		color: white;
+		display: inline-block;
+		padding: .6em .9em .6em .9em;
+	}
+	.nav ul {
+		padding-left: 2em;
+		margin-bottom: 0;
+		display: table-cell;
+		min-width: 165px;
+	}
+	.nav ul li {
+		display: inline-block;
+		padding: 0;
+	}
+	.nav li.selected {
+		background-color: #222;
+		font-weight: bold;
+	}
+	.nav-right {
+		display: table-cell;
+		width: 100%;
+		text-align: right;
+		vertical-align: middle;
+		line-height: 0;
+	}
+	.nav-right .share-btn {
+		display: none;
+	}
+	.share-btn-github {
+		display: inline-block;
+	}
+	.nav-right .small-share-btn {
+		display: none;
+	}
+	.nav-right .share-btn-github {
+		display: inline-block;
+	}
+	@media all and (min-width: 400px) {
+		.nav-right .share-btn {
+			display: inline-block;
+		}
+		.nav-right .small-share-btn {
+			display: none;
+		}
+	}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="http://joplin.cozic.net/images/ForkMe.png"/></a>
+	<h1 id="joplin"><img class="title-icon" src="http://joplin.cozic.net/images/Icon512.png">oplin</h1>
+	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
+</div>
+
+<div class="nav-wrapper">
+	<div class="nav">
+		<ul>
+			<li class=""><a href="http:&#x2F;&#x2F;joplin.cozic.net/" title="Home"><i class="fa fa-home"></i></a></li>
+			<li class="selected"><a href="http:&#x2F;&#x2F;joplin.cozic.net/terminal" title="Terminal"><i class="fa fa-terminal"></i></a></li>
+			<li class=""><a href="http:&#x2F;&#x2F;joplin.cozic.net/desktop" title="Desktop"><i class="fa fa-desktop"></i></a></li>
+		</ul>
+		<div class="nav-right">
+			<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+			<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplin.cozic.net" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
+			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="80px" height="20px"></iframe>
+		</div>
+	</div>
+</div>
+
+<div class="content">
+<p>Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor.</p>
+<p>Notes exported from Evernote via .enex files <a href="#importing-notes-from-evernote">can be imported</a> into Joplin, including the formatted content (which is converted to markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).</p>
+<p>The notes can be <a href="#synchronisation">synchronised</a> with various targets including the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/ScreenshotTerminal.png" style="max-width: 60%"></p>
+<h1 id="installation">Installation</h1>
+<p>On macOS, Linux or Windows (via <a href="https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&amp;MSPPError=-2147217396">WSL</a>), type:</p>
+<pre><code>npm install -g joplin
+</code></pre><p>To start it, type <code>joplin</code>.</p>
+<h1 id="demo">Demo</h1>
+<p>The demo application shows various Wikipedia articles converted to Markdown and organised into notebooks, as well as an example to-do list, in order to test and demonstrate the application. The demo application and its settings will be installed in a separate directory so as not to interfere with any existing Joplin application.</p>
+<pre><code>npm install -g demo-joplin
+</code></pre><p>To start it, type <code>demo-joplin</code>.</p>
+<h1 id="usage">Usage</h1>
+<p>To start the application type <code>joplin</code>. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via <a href="#available-shortcuts">shortcuts</a>.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/ScreenshotTerminalCaptions.png" height="450px"></p>
+<h2 id="input-modes">Input modes</h2>
+<p>Joplin user interface is partly based on the text editor Vim and offers two different modes to interact with the notes and notebooks:</p>
+<h3 id="normal-mode">Normal mode</h3>
+<p>Allows moving from one pane to another using the <code>Tab</code> and <code>Shift-Tab</code> keys, and to select/view notes using the arrow keys. Text area can be scrolled using the arrow keys too. Press <code>Enter</code> to edit a note. Various other <a href="#available-shortcuts">shortcuts</a> are available.</p>
+<h3 id="command-line-mode">Command-line mode</h3>
+<p>Press <code>:</code> to enter command line mode. From there, the Joplin commands such as <code>mknote</code> or <code>search</code> are available. See the <a href="#available-commands">full list of commands</a>.</p>
+<p>It is possible to refer to a note or notebook by title or ID. However the simplest way is to refer to the currently selected item using one of these shortcuts:</p>
+<table>
+<thead>
+<tr>
+<th>Shortcut</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$n</code></td>
+<td>Refers to the currently selected note</td>
+</tr>
+<tr>
+<td><code>$b</code></td>
+<td>Refers to the currently selected notebook</td>
+</tr>
+<tr>
+<td><code>$c</code></td>
+<td>Refers to the currently selected item. For example, if the note list is current active, <code>$c</code> will refer to the currently selected note.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Examples:</strong></p>
+<p>Create a new note with title &quot;Wednesday&#39;s meeting&quot;:</p>
+<pre><code>mknote &quot;Wednesday&#39;s meeting&quot;
+</code></pre><p>Create a new to-do:</p>
+<pre><code>mktodo &quot;Buy bread&quot;
+</code></pre><p>Move the currently selected note ($n) to the notebook with title &quot;Personal&quot;</p>
+<pre><code>mv $n &quot;Personal&quot;
+</code></pre><p>Rename the currently selected notebook ($b) to &quot;Something&quot;:</p>
+<pre><code>ren $b &quot;Something&quot;
+</code></pre><p>Attach a local file to the currently selected note ($n):</p>
+<pre><code>ren $n /home/laurent/pictures/Vacation12.jpg
+</code></pre><p>The configuration can also be changed from command-line mode. For example, to change the current editor to Sublime Text:</p>
+<pre><code>config editor &quot;subl -w&quot;
+</code></pre><h2 id="editing-a-note">Editing a note</h2>
+<p>To edit a note, select it and press <code>ENTER</code>. Or, in command-line mode, type <code>edit $n</code> to edit the currently selected note, or <code>edit &quot;Note title&quot;</code> to edit a particular note.</p>
+<h2 id="getting-help">Getting help</h2>
+<p>The complete usage information is available from command-line mode, by typing one of these commands:</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>help</code></td>
+<td>General help information</td>
+</tr>
+<tr>
+<td><code>help shortcuts</code></td>
+<td>Lists the available shortcuts</td>
+</tr>
+<tr>
+<td><code>help [command]</code></td>
+<td>Displays information about a particular command</td>
+</tr>
+</tbody>
+</table>
+<p>If the help is not fully visible, press <code>Tab</code> multiple times till the console is in focus and use the arrow keys or page up/down to scroll the text.</p>
+<h1 id="importing-notes-from-evernote">Importing notes from Evernote</h1>
+<p>To import Evernote data, follow these steps:</p>
+<ul>
+<li>First, export your Evernote notebooks to ENEX files as described <a href="https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks">here</a>.</li>
+<li>In Joplin, in <a href="#command-line-mode">command-line mode</a>, type <code>import-enex /path/to/file.enex</code>. This will import the notes into a new notebook named after the filename.</li>
+<li>Then repeat the process for each notebook that needs to be imported.</li>
+</ul>
+<h1 id="synchronisation">Synchronisation</h1>
+<p>One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as OneDrive or Dropbox, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.</p>
+<p>Currently, synchronisation is possible with OneDrive (by default) or the local filesystem. A Dropbox driver will also be available once <a href="https://github.com/facebook/react-native/issues/14445">this React Native bug</a> is fixed. When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
+<p>To initiate the synchronisation process, type <code>:sync</code>. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). After that, the application will synchronise in the background whenever it is running. It is possible to also synchronise outside of the user interface by typing <code>joplin sync</code> from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:</p>
+<pre><code>*/30 * * * * /path/to/joplin sync
+</code></pre><h1 id="urls">URLs</h1>
+<p>When Ctrl+Clicking a URL, most terminals will open that URL in the default browser. However, one issue, especially with long URLs, is that they can end up like this:</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/UrlCut.png" width="300px"></p>
+<p>Not only it makes the text hard to read, but the link, being cut in two, will also not be clickable.</p>
+<p>As a solution Joplin tries to start a mini-server in the background and, if successful, all the links will be converted to a much shorter URL:</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/UrlNoCut.png" width="300px"></p>
+<p>Since this is still an actual URL, the terminal will still make it clickable. And with shorter URLs, the text is more readable and the links unlikely to be cut. Both resources (files that are attached to notes) and external links are handled in this way.</p>
+<h1 id="attachments-resources">Attachments / Resources</h1>
+<p>In Markdown, links to resources are represented as a simple ID to the resource. In order to give access to these resources, they will be, like links, converted to local URLs. Clicking this link will then open a browser, which will handle the file - i.e. display the image, open the PDF file, etc.</p>
+<h1 id="available-shortcuts">Available shortcuts</h1>
+<p>There are two types of shortcuts: those that manipulate the user interface directly, such as <code>TAB</code> to move from one pane to another, and those that are simply shortcuts to actual commands. In a way similar to Vim, these shortcuts are generally a verb followed by an object. For example, typing <code>mn</code> ([m]ake [n]ote), is used to create a new note: it will switch the interface to command line mode and pre-fill it with <code>mknote &quot;&quot;</code> from where the title of the note can be entered. See below for the full list of shortcuts:</p>
+<pre><code>Tab       Give focus to next pane
+Shift+Tab Give focus to previous pane
+:         Enter command line mode
+ESC       Exit command line mode
+ENTER     Edit the selected note
+Ctrl+C    Cancel the current command.
+Ctrl+D    Exit the application.
+DELETE    Delete the currently selected note or notebook.
+SPACE     Set a to-do as completed / not completed
+tc        [t]oggle [c]onsole between maximized/minimized/hidden/visible.
+/         Search
+tm        [t]oggle note [m]etadata.
+mn        [M]ake a new [n]ote
+mt        [M]ake a new [t]odo
+mb        [M]ake a new note[b]ook
+yn        Copy ([Y]ank) the [n]ote to a notebook.
+dn        Move the note to a notebook.
+</code></pre><h1 id="available-commands">Available commands</h1>
+<p>The following commands are available in <a href="#command-line-mode">command-line mode</a>:</p>
+<pre><code>attach &lt;note&gt; &lt;file&gt;
+
+    Attaches the given file to the note.
+
+config [name] [value]
+
+    Gets or sets a config value. If [value] is not provided, it will show the 
+    value of [name]. If neither [name] nor [value] is provided, it will list 
+    the current configuration.
+
+    -v, --verbose  Also displays unset and hidden config variables.
+
+Possible keys/values:
+
+    editor                 Text editor.
+                           The editor that will be used to open a note. If 
+                           none is provided it will try to auto-detect the 
+                           default editor.
+                           Type: string.
+
+    locale                 Language.
+                           Type: Enum.
+                           Possible values: en_GB (English), fr_FR (Français).
+                           Default: &quot;en_GB&quot;
+
+    sync.2.path            File system synchronisation target directory.
+                           The path to synchronise with when file system 
+                           synchronisation is enabled. See `sync.target`.
+                           Type: string.
+
+    sync.interval          Synchronisation interval.
+                           Type: Enum.
+                           Possible values: 0 (Disabled), 300 (5 minutes), 600 
+                           (10 minutes), 1800 (30 minutes), 3600 (1 hour), 
+                           43200 (12 hours), 86400 (24 hours).
+                           Default: 300
+
+    sync.target            Synchronisation target.
+                           The target to synchonise to. If synchronising with 
+                           the file system, set `sync.2.path` to specify the 
+                           target directory.
+                           Type: Enum.
+                           Possible values: 1 (Memory), 2 (File system), 3 
+                           (OneDrive).
+                           Default: 3
+
+    trackLocation          Save geo-location with notes.
+                           Type: bool.
+                           Default: true
+
+    uncompletedTodosOnTop  Show uncompleted todos on top of the lists.
+                           Type: bool.
+                           Default: true
+
+cp &lt;note&gt; [notebook]
+
+    Duplicates the notes matching &lt;note&gt; to [notebook]. If no notebook is 
+    specified the note is duplicated in the current notebook.
+
+done &lt;note&gt;
+
+    Marks a to-do as done.
+
+edit &lt;note&gt;
+
+    Edit note.
+
+exit
+
+    Exits the application.
+
+export &lt;directory&gt;
+
+    Exports Joplin data to the given directory. By default, it will export the 
+    complete database including notebooks, notes, tags and resources.
+
+    --note &lt;note&gt;          Exports only the given note.
+    --notebook &lt;notebook&gt;  Exports only the given notebook.
+
+geoloc &lt;note&gt;
+
+    Displays a geolocation URL for the note.
+
+help [command]
+
+    Displays usage information.
+
+import-enex &lt;file&gt; [notebook]
+
+    Imports an Evernote notebook file (.enex file).
+
+    -f, --force  Do not ask for confirmation.
+
+mkbook &lt;new-notebook&gt;
+
+    Creates a new notebook.
+
+mknote &lt;new-note&gt;
+
+    Creates a new note.
+
+mktodo &lt;new-todo&gt;
+
+    Creates a new to-do.
+
+mv &lt;note&gt; [notebook]
+
+    Moves the notes matching &lt;note&gt; to [notebook].
+
+ren &lt;item&gt; &lt;name&gt;
+
+    Renames the given &lt;item&gt; (note or notebook) to &lt;name&gt;.
+
+rmbook &lt;notebook&gt;
+
+    Deletes the given notebook.
+
+    -f, --force  Deletes the notebook without asking for confirmation.
+
+rmnote &lt;note-pattern&gt;
+
+    Deletes the notes matching &lt;note-pattern&gt;.
+
+    -f, --force  Deletes the notes without asking for confirmation.
+
+search &lt;pattern&gt; [notebook]
+
+    Searches for the given &lt;pattern&gt; in all the notes.
+
+status
+
+    Displays summary about the notes and notebooks.
+
+sync
+
+    Synchronises with remote storage.
+
+    --target &lt;target&gt;  Sync to provided target (defaults to sync.target config 
+                       value)
+    --random-failures  For debugging purposes. Do not use.
+
+tag &lt;tag-command&gt; [tag] [note]
+
+    &lt;tag-command&gt; can be &quot;add&quot;, &quot;remove&quot; or &quot;list&quot; to assign or remove [tag] 
+    from [note], or to list the notes associated with [tag]. The command `tag 
+    list` can be used to list all the tags.
+
+todo &lt;todo-command&gt; &lt;note-pattern&gt;
+
+    &lt;todo-command&gt; can either be &quot;toggle&quot; or &quot;clear&quot;. Use &quot;toggle&quot; to toggle 
+    the given to-do between completed and uncompleted state (If the target is 
+    a regular note it will be converted to a to-do). Use &quot;clear&quot; to convert 
+    the to-do back to a regular note.
+
+undone &lt;note&gt;
+
+    Marks a to-do as non-completed.
+
+version
+
+    Displays version information
+</code></pre><h1 id="license">License</h1>
+<p>Copyright (c) 2016-2017 Laurent Cozic</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+
+<script>
+	function stickyHeader() { 
+		if ($(window).scrollTop() > 179) {
+			$('.nav').addClass('sticky'); 
+		} else {
+			$('.nav').removeClass('sticky');
+		}
+	}
+
+	$(window).scroll(function() {
+		stickyHeader();
+	});
+
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-103586105-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+</body>
+</html>

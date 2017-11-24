@@ -1,4 +1,4 @@
-import moment from 'moment';
+const moment = require('moment');
 
 let time = {
 
@@ -48,4 +48,4 @@ let time = {
 
 }
 
-export { time };
+module.exports = { time };

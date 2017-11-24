@@ -1,12 +1,14 @@
-import fs from 'fs-extra';
-import { BaseCommand } from './base-command.js';
-import { app } from './app.js';
-import { _ } from 'lib/locale.js';
-import { Folder } from 'lib/models/folder.js';
-import { Note } from 'lib/models/note.js';
-import { Setting } from 'lib/models/setting.js';
-import { BaseModel } from 'lib/base-model.js';
-import { cliUtils } from './cli-utils.js';
+const fs = require('fs-extra');
+const { BaseCommand } = require('./base-command.js');
+const { uuid } = require('lib/uuid.js');
+const { app } = require('./app.js');
+const { _ } = require('lib/locale.js');
+const { Folder } = require('lib/models/folder.js');
+const { Note } = require('lib/models/note.js');
+const { Setting } = require('lib/models/setting.js');
+const { BaseModel } = require('lib/base-model.js');
+const { cliUtils } = require('./cli-utils.js');
+const { time } = require('lib/time-utils.js');
 
 class Command extends BaseCommand {
 
@@ -20,13 +22,10 @@ class Command extends BaseCommand {
 
 	async action(args) {
 		let watcher = null;
-		let newNote = null;
+		let tempFilePath = null;
 
 		const onFinishedEditing = async () => {
-			if (watcher) watcher.close();
-			//app().vorpal().show();
-			newNote = null;
-			this.log(_('Done editing.'));
+			if (tempFilePath) fs.removeSync(tempFilePath);
 		}
 
 		const textEditorPath = () => {
@@ -36,17 +35,25 @@ class Command extends BaseCommand {
 		}
 
 		try {		
+			// -------------------------------------------------------------------------
+			// Load note or create it if it doesn't exist
+			// -------------------------------------------------------------------------
+
 			let title = args['note'];
 
 			if (!app().currentFolder()) throw new Error(_('No active notebook.'));
 			let note = await app().loadItem(BaseModel.TYPE_NOTE, title);
 
 			if (!note) {
-				const ok = await cliUtils.promptConfirm(_('Note does not exist: "%s". Create it?', title));
+				const ok = await this.prompt(_('Note does not exist: "%s". Create it?', title));
 				if (!ok) return;
-				newNote = await Note.save({ title: title, parent_id: app().currentFolder().id });
-				note = await Note.load(newNote.id);
+				note = await Note.save({ title: title, parent_id: app().currentFolder().id });
+				note = await Note.load(note.id);
 			}
+
+			// -------------------------------------------------------------------------
+			// Create the file to be edited and prepare the editor program arguments
+			// -------------------------------------------------------------------------
 
 			let editorPath = textEditorPath();
 			let editorArgs = editorPath.split(' ');
@@ -54,37 +61,49 @@ class Command extends BaseCommand {
 			editorPath = editorArgs[0];
 			editorArgs = editorArgs.splice(1);
 
-			let content = await Note.serializeForEdit(note);
+			const originalContent = await Note.serializeForEdit(note);
 
-			let tempFilePath = Setting.value('tempDir') + '/' + Note.systemPath(note);
+			tempFilePath = Setting.value('tempDir') + '/' + uuid.create() + '.md';
 			editorArgs.push(tempFilePath);
 
-			const spawn	= require('child_process').spawn;
+			await fs.writeFile(tempFilePath, originalContent);
 
-			this.log(_('Starting to edit note. Close the editor to get back to the prompt.'));
+			// -------------------------------------------------------------------------
+			// Start editing the file
+			// -------------------------------------------------------------------------
 
-			await fs.writeFile(tempFilePath, content);
+			this.logger().info('Disabling fullscreen...');
 
-			let watchTimeout = null;
-			watcher = fs.watch(tempFilePath, (eventType, filename) => {
-				// We need a timeout because for each change to the file, multiple events are generated.
+			app().gui().showModalOverlay(_('Starting to edit note. Close the editor to get back to the prompt.'));
+			await app().gui().forceRender();
+			const termState = app().gui().term().saveState();
 
-				if (watchTimeout) return;
+			const spawnSync	= require('child_process').spawnSync;
+			spawnSync(editorPath, editorArgs, { stdio: 'inherit' });
 
-				watchTimeout = setTimeout(async () => {
-					let updatedNote = await fs.readFile(tempFilePath, 'utf8');
-					updatedNote = await Note.unserializeForEdit(updatedNote);
-					updatedNote.id = note.id;
-					await Note.save(updatedNote);
-					process.stdout.write('.');
-					watchTimeout = null;
-				}, 200);
+			app().gui().term().restoreState(termState);
+			app().gui().hideModalOverlay();
+			app().gui().forceRender();
+
+			// -------------------------------------------------------------------------
+			// Save the note and clean up
+			// -------------------------------------------------------------------------
+
+			const updatedContent = await fs.readFile(tempFilePath, 'utf8');
+			if (updatedContent !== originalContent) {
+				let updatedNote = await Note.unserializeForEdit(updatedContent);
+				updatedNote.id = note.id;
+				await Note.save(updatedNote);
+				this.stdout(_('Note has been saved.'));
+			}
+
+			this.dispatch({
+				type: 'NOTE_SELECT',
+				id: note.id,
 			});
 
-			const childProcess = spawn(editorPath, editorArgs, { stdio: 'inherit' });
-			childProcess.on('exit', async (error, code) => {
-				await onFinishedEditing();
-			});
+			await onFinishedEditing();
+
 		} catch(error) {
 			await onFinishedEditing();
 			throw error;

@@ -1,63 +1,70 @@
 {
   "name": "joplin",
-  "description": "CLI client for Joplin",
+  "description": "Joplin CLI Client",
   "license": "MIT",
+  "author": "Laurent Cozic",
+  "bugs": {
+    "url": "https://github.com/laurent22/joplin/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/laurent22/joplin"
   },
-  "url": "git://github.com/laurent22/joplin.git",
-  "version": "0.9.17",
+  "copyright": {
+    "title": "Joplin CLI",
+    "years": [
+      2016,
+      2017
+    ],
+    "owner": "Laurent Cozic"
+  },
+  "version": "0.10.74",
   "bin": {
     "joplin": "./main.js"
   },
+  "engines": {
+    "node": ">=8.7.0"
+  },
   "dependencies": {
     "app-module-path": "^2.2.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "cache-require-paths": "^0.3.0",
     "follow-redirects": "^1.2.4",
     "form-data": "^2.1.4",
     "fs-extra": "^3.0.1",
+    "html-entities": "^1.2.1",
     "jssha": "^2.3.0",
     "levenshtein": "^1.0.5",
     "lodash": "^4.17.4",
     "md5": "^2.2.1",
+    "mime": "^2.0.3",
     "moment": "^2.18.1",
+    "node-emoji": "^1.8.1",
     "node-fetch": "^1.7.1",
     "node-persist": "^2.1.0",
     "os-tmpdir": "^1.0.2",
     "promise": "^7.1.1",
     "proper-lockfile": "^2.0.1",
     "query-string": "4.3.4",
+    "redux": "^3.7.2",
     "sax": "^1.2.2",
     "server-destroy": "^1.0.1",
-    "source-map-support": "^0.4.15",
+    "sharp": "^0.18.4",
     "sprintf-js": "^1.1.1",
     "sqlite3": "^3.1.8",
     "string-padding": "^1.0.2",
     "string-to-stream": "^1.1.0",
+    "strip-ansi": "^4.0.0",
     "tcp-port-used": "^0.1.2",
+    "tkwidgets": "^0.5.20",
     "uuid": "^3.0.1",
-    "yargs-parser": "^7.0.0",
-    "word-wrap": "^1.2.3"
+    "word-wrap": "^1.2.3",
+    "yargs-parser": "^7.0.0"
   },
   "devDependencies": {
-    "babel-changed": "^7.0.0",
-    "babel-cli": "^6.24.1",
-    "babel-plugin-syntax-async-functions": "^6.1.4",
-    "babel-plugin-transform-regenerator": "^6.1.4",
-    "babel-polyfill": "^6.1.4",
-    "babel-preset-env": "^1.5.1",
-    "babel-preset-es2015": "^6.1.4",
-    "babel-preset-react": "^6.24.1",
     "gettext-parser": "^1.2.2",
-    "jasmine": "^2.6.0"
+    "jasmine": "^2.6.0",
+    "mustache": "^2.3.0"
   },
   "scripts": {
-    "babelbuild": "babel app -d build",
-    "build": "babel-changed app -d build --source-maps && babel-changed app/lib/models -d build/lib/models --source-maps && babel-changed app/lib/services -d build/lib/services --source-maps",
-    "clean": "babel-changed --reset",
-    "test": "babel-changed tests -d tests-build --source-maps && jasmine",
-    "postinstall": "joplin --autocompletion --ac-install"
+    "test": "jasmine"
   }
 }

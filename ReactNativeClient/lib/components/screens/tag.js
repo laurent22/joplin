@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import { ListView, StyleSheet, View, TextInput, FlatList, TouchableHighlight } from 'react-native';
-import { connect } from 'react-redux'
-import { ScreenHeader } from 'lib/components/screen-header.js';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { _ } from 'lib/locale.js';
-import { Note } from 'lib/models/note.js';
-import { NoteItem } from 'lib/components/note-item.js';
-import { BaseScreenComponent } from 'lib/components/base-screen.js';
-import { globalStyle } from 'lib/components/global-style.js';
+const React = require('react'); const Component = React.Component;
+const { ListView, StyleSheet, View, TextInput, FlatList, TouchableHighlight } = require('react-native');
+const { connect } = require('react-redux');
+const { ScreenHeader } = require('lib/components/screen-header.js');
+const Icon = require('react-native-vector-icons/Ionicons').default;
+const { _ } = require('lib/locale.js');
+const { Note } = require('lib/models/note.js');
+const { NoteItem } = require('lib/components/note-item.js');
+const { BaseScreenComponent } = require('lib/components/base-screen.js');
+const { globalStyle } = require('lib/components/global-style.js');
 
 let styles = {
 	body: {
@@ -40,7 +40,7 @@ class TagScreenComponent extends BaseScreenComponent {
 		const notes = await Tag.notes(props.selectedTagId);
 
 		this.props.dispatch({
-			type: 'NOTES_UPDATE_ALL',
+			type: 'NOTE_UPDATE_ALL',
 			notes: notes,
 			notesSource: source,
 		});
@@ -73,4 +73,4 @@ const TagScreen = connect(
 	}
 )(TagScreenComponent)
 
-export { TagScreen };
+module.exports = { TagScreen };

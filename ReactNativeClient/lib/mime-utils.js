@@ -2,6 +2,17 @@ const mimeTypes = [{t:"application/andrew-inset",e:["ez"]},{t:"application/appli
 
 const mime = {
 
+	fromFileExtension(ext) {
+		ext = ext.toLowerCase();
+		for (let i = 0; i < mimeTypes.length; i++) {
+			const t = mimeTypes[i];
+			if (t.e.indexOf(ext) >= 0) {
+				return t.t;
+			}
+		}
+		return null;
+	},
+
 	toFileExtension(mimeType) {
 		mimeType = mimeType.toLowerCase();
 		for (let i = 0; i < mimeTypes.length; i++) {
@@ -20,4 +31,4 @@ const mime = {
 
 }
 
-export { mime };
+module.exports = { mime };

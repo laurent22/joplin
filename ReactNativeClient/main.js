@@ -6,9 +6,9 @@
 
 // So there's basically still a one way flux: React => SQLite => Redux => React
 
-import { AppRegistry } from 'react-native';
-import { Log } from 'lib/log.js'
-import { Root } from './root.js';
+const { AppRegistry } = require('react-native');
+const { Log } = require('lib/log.js');
+const { Root } = require('./root.js');
 
 function main() {
 	AppRegistry.registerComponent('Joplin', () => Root);
@@ -17,4 +17,4 @@ function main() {
 	// AppComponent.componentDidMount(), when the application is ready.
 }
 
-export { main }
+module.exports = { main };

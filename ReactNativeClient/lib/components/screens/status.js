@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import { ListView, StyleSheet, View, Text, Button, FlatList } from 'react-native';
-import { Setting } from 'lib/models/setting.js';
-import { connect } from 'react-redux'
-import { Log } from 'lib/log.js'
-import { reg } from 'lib/registry.js'
-import { ScreenHeader } from 'lib/components/screen-header.js';
-import { time } from 'lib/time-utils'
-import { Logger } from 'lib/logger.js';
-import { BaseItem } from 'lib/models/base-item.js';
-import { Database } from 'lib/database.js';
-import { Folder } from 'lib/models/folder.js';
-import { ReportService } from 'lib/services/report.js';
-import { _ } from 'lib/locale.js';
-import { BaseScreenComponent } from 'lib/components/base-screen.js';
-import { globalStyle, themeStyle } from 'lib/components/global-style.js';
+const React = require('react'); const Component = React.Component;
+const { ListView, StyleSheet, View, Text, Button, FlatList } = require('react-native');
+const { Setting } = require('lib/models/setting.js');
+const { connect } = require('react-redux');
+const { Log } = require('lib/log.js');
+const { reg } = require('lib/registry.js');
+const { ScreenHeader } = require('lib/components/screen-header.js');
+const { time } = require('lib/time-utils');
+const { Logger } = require('lib/logger.js');
+const { BaseItem } = require('lib/models/base-item.js');
+const { Database } = require('lib/database.js');
+const { Folder } = require('lib/models/folder.js');
+const { ReportService } = require('lib/services/report.js');
+const { _ } = require('lib/locale.js');
+const { BaseScreenComponent } = require('lib/components/base-screen.js');
+const { globalStyle, themeStyle } = require('lib/components/global-style.js');
 
 const styles = StyleSheet.create({
 	body: {
@@ -119,4 +119,4 @@ const StatusScreen = connect(
 	}
 )(StatusScreenComponent)
 
-export { StatusScreen };
+module.exports = { StatusScreen };

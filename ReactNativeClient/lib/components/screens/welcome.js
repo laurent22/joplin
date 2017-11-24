@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { connect } from 'react-redux'
-import { Log } from 'lib/log.js'
-import { ScreenHeader } from 'lib/components/screen-header.js';
-import { ActionButton } from 'lib/components/action-button.js';
-import { BaseScreenComponent } from 'lib/components/base-screen.js';
-import { _ } from 'lib/locale.js';
-import { themeStyle } from 'lib/components/global-style.js';
+const React = require('react'); const Component = React.Component;
+const { View, Text, StyleSheet } = require('react-native');
+const { connect } = require('react-redux');
+const { Log } = require('lib/log.js');
+const { ScreenHeader } = require('lib/components/screen-header.js');
+const { ActionButton } = require('lib/components/action-button.js');
+const { BaseScreenComponent } = require('lib/components/base-screen.js');
+const { _ } = require('lib/locale.js');
+const { themeStyle } = require('lib/components/global-style.js');
 
 class WelcomeScreenComponent extends BaseScreenComponent {
 	
@@ -61,4 +61,4 @@ const WelcomeScreen = connect(
 	}
 )(WelcomeScreenComponent)
 
-export { WelcomeScreen };
+module.exports = { WelcomeScreen };

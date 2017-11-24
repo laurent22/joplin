@@ -1,4 +1,4 @@
-import { sprintf } from 'sprintf-js';
+const { sprintf } = require('sprintf-js');
 
 let codeToLanguageE_ = {};
 codeToLanguageE_["aa"] = "Afar";
@@ -296,4 +296,4 @@ function _(s, ...args) {
 	return sprintf(result, ...args);
 }
 
-export { _, supportedLocales, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode };
+module.exports = { _, supportedLocales, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode };

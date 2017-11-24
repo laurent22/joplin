@@ -1,6 +1,6 @@
-import { _ } from 'lib/locale.js'
+const { _ } = require('lib/locale.js');
+const { netUtils } = require('lib/net-utils.js');
 
-const tcpPortUsed = require('tcp-port-used');
 const http = require("http");
 const urlParser = require("url");
 const FormData = require('form-data');
@@ -10,6 +10,7 @@ class OneDriveApiNodeUtils {
 
 	constructor(api) {
 		this.api_ = api;
+		this.oauthServer_ = null;
 	}
 
 	api() {
@@ -32,38 +33,50 @@ class OneDriveApiNodeUtils {
 		return header + message + footer;
 	}
 
+	cancelOAuthDance() {
+		if (!this.oauthServer_) return;
+		this.oauthServer_.destroy();
+	}
+
 	async oauthDance(targetConsole = null) {
 		if (targetConsole === null) targetConsole = console;
 
 		this.api().setAuth(null);
 
-
-
-		let ports = this.possibleOAuthDancePorts();
-		let port = null;
-		for (let i = 0; i < ports.length; i++) {
-			let inUse = await tcpPortUsed.check(ports[i]);
-			if (!inUse) {
-				port = ports[i];
-				break;
-			}
-		}
-
+		const port = await netUtils.findAvailablePort(this.possibleOAuthDancePorts(), 0);
 		if (!port) throw new Error(_('All potential ports are in use - please report the issue at %s', 'https://github.com/laurent22/joplin'));
 
 		let authCodeUrl = this.api().authCodeUrl('http://localhost:' + port);
 
 		return new Promise((resolve, reject) => {			
-			let server = http.createServer();
+			this.oauthServer_ = http.createServer();
 			let errorMessage = null;
 
-			server.on('request', (request, response) => {
-				const query = urlParser.parse(request.url, true).query;
+			this.oauthServer_.on('request', (request, response) => {
+				const url = urlParser.parse(request.url, true);
+
+				if (url.pathname === '/auth') {
+					response.writeHead(302, { 'Location': authCodeUrl });
+					response.end();
+					return;
+				}
+
+				const query = url.query;
 
 				const writeResponse = (code, message) => {
 					response.writeHead(code, {"Content-Type": "text/html"});
 					response.write(this.makePage(message));
 					response.end();
+				}
+
+				// After the response has been received, don't destroy the server right
+				// away or the browser might display a connection reset error (even
+				// though it worked).
+				const waitAndDestroy = () => {
+					setTimeout(() => {
+						this.oauthServer_.destroy();
+						this.oauthServer_ = null;
+					}, 1000);
 				}
 
 				if (!query.code) return writeResponse(400, '"code" query parameter is missing');
@@ -72,16 +85,16 @@ class OneDriveApiNodeUtils {
 					writeResponse(200, _('The application has been authorised - you may now close this browser tab.'));
 					targetConsole.log('');
 					targetConsole.log(_('The application has been successfully authorised.'));
-					server.destroy();
+					waitAndDestroy();
 				}).catch((error) => {
 					writeResponse(400, error.message);
 					targetConsole.log('');
 					targetConsole.log(error.message);
-					server.destroy();
+					waitAndDestroy();
 				});
 			});
 
-			server.on('close', () => {
+			this.oauthServer_.on('close', () => {
 				if (errorMessage) {
 					reject(new Error(errorMessage));
 				} else {
@@ -89,16 +102,21 @@ class OneDriveApiNodeUtils {
 				}
 			});
 
-			server.listen(port);
+			this.oauthServer_.listen(port);
 
-			enableServerDestroy(server);
+			enableServerDestroy(this.oauthServer_);
+
+			// Rather than displaying authCodeUrl directly, we go throught the local
+			// server. This is just so that the URL being displayed is shorter and
+			// doesn't get cut in terminals (especially those that don't handle multi
+			// lines URLs).
 
 			targetConsole.log(_('Please open the following URL in your browser to authenticate the application. The application will create a directory in "Apps/Joplin" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.'));
 			targetConsole.log('');
-			targetConsole.log(authCodeUrl);
+			targetConsole.log('http://127.0.0.1:' + port + '/auth');
 		});
 	}
 
 }
 
-export { OneDriveApiNodeUtils };
+module.exports = { OneDriveApiNodeUtils };

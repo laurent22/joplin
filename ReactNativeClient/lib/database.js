@@ -1,8 +1,8 @@
-import { uuid } from 'lib/uuid.js';
-import { promiseChain } from 'lib/promise-utils.js';
-import { Logger } from 'lib/logger.js'
-import { time } from 'lib/time-utils.js'
-import { sprintf } from 'sprintf-js';
+const { uuid } = require('lib/uuid.js');
+const { promiseChain } = require('lib/promise-utils.js');
+const { Logger } = require('lib/logger.js');
+const { time } = require('lib/time-utils.js');
+const { sprintf } = require('sprintf-js');
 
 class Database {
 
@@ -12,6 +12,11 @@ class Database {
 		this.inTransaction_ = false;
 
 		this.logger_ = new Logger();
+		this.logExcludedQueryTypes_ = [];
+	}
+
+	setLogExcludedQueryTypes(v) {
+		this.logExcludedQueryTypes_ = v;
 	}
 
 	// Converts the SQLite error to a regular JS error
@@ -185,6 +190,13 @@ class Database {
 	}
 
 	logQuery(sql, params = null) {
+		if (this.logExcludedQueryTypes_.length) {
+			const temp = sql.toLowerCase();
+			for (let i = 0; i < this.logExcludedQueryTypes_.length; i++) {
+				if (temp.indexOf(this.logExcludedQueryTypes_[i].toLowerCase()) === 0) return;
+			}
+		}
+
 		this.logger().debug(sql);
 		if (params !== null && params.length) this.logger().debug(JSON.stringify(params));
 	}
@@ -298,4 +310,4 @@ Database.TYPE_INT = 1;
 Database.TYPE_TEXT = 2;
 Database.TYPE_NUMERIC = 3;
 
-export { Database };
+module.exports = { Database };

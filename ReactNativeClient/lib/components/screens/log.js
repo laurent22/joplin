@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { ListView, View, Text, Button, StyleSheet } from 'react-native';
-import { connect } from 'react-redux'
-import { Log } from 'lib/log.js'
-import { reg } from 'lib/registry.js'
-import { ScreenHeader } from 'lib/components/screen-header.js';
-import { time } from 'lib/time-utils'
-import { themeStyle } from 'lib/components/global-style.js';
-import { Logger } from 'lib/logger.js';
-import { BaseScreenComponent } from 'lib/components/base-screen.js';
-import { _ } from 'lib/locale.js';
+const React = require('react'); const Component = React.Component;
+const { ListView, View, Text, Button, StyleSheet } = require('react-native');
+const { connect } = require('react-redux');
+const { Log } = require('lib/log.js');
+const { reg } = require('lib/registry.js');
+const { ScreenHeader } = require('lib/components/screen-header.js');
+const { time } = require('lib/time-utils');
+const { themeStyle } = require('lib/components/global-style.js');
+const { Logger } = require('lib/logger.js');
+const { BaseScreenComponent } = require('lib/components/base-screen.js');
+const { _ } = require('lib/locale.js');
 
 class LogScreenComponent extends BaseScreenComponent {
 	
@@ -106,4 +106,4 @@ const LogScreen = connect(
 	}
 )(LogScreenComponent)
 
-export { LogScreen };
+module.exports = { LogScreen };

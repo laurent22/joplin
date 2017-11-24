@@ -1,14 +1,11 @@
 "use strict"
 
-require('source-map-support').install();
-require('babel-plugin-transform-runtime');
-
-import { time } from 'lib/time-utils.js';
-import { Logger } from 'lib/logger.js';
-import { Resource } from 'lib/models/resource.js';
-import { dirname } from 'lib/path-utils.js';
-import { FsDriverNode } from './fs-driver-node.js';
-import lodash from 'lodash';
+const { time } = require('lib/time-utils.js');
+const { Logger } = require('lib/logger.js');
+const { Resource } = require('lib/models/resource.js');
+const { dirname } = require('lib/path-utils.js');
+const { FsDriverNode } = require('./fs-driver-node.js');
+const lodash = require('lodash');
 const exec = require('child_process').exec
 const fs = require('fs-extra');
 

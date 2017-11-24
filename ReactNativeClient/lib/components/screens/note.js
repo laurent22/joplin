@@ -1,30 +1,36 @@
-import React, { Component } from 'react';
-import { Keyboard, BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking, Image } from 'react-native';
-import { connect } from 'react-redux'
-import { uuid } from 'lib/uuid.js';
-import { Log } from 'lib/log.js'
-import { Note } from 'lib/models/note.js'
-import { Resource } from 'lib/models/resource.js'
-import { Folder } from 'lib/models/folder.js'
-import { BackButtonService } from 'lib/services/back-button.js';
-import { BaseModel } from 'lib/base-model.js'
-import { ActionButton } from 'lib/components/action-button.js';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { ScreenHeader } from 'lib/components/screen-header.js';
-import { time } from 'lib/time-utils.js';
-import { Checkbox } from 'lib/components/checkbox.js'
-import { _ } from 'lib/locale.js';
-import { reg } from 'lib/registry.js';
-import { shim } from 'lib/shim.js';
-import { BaseScreenComponent } from 'lib/components/base-screen.js';
-import { dialogs } from 'lib/dialogs.js';
-import { globalStyle, themeStyle } from 'lib/components/global-style.js';
-import DialogBox from 'react-native-dialogbox';
-import { NoteBodyViewer } from 'lib/components/note-body-viewer.js';
-import RNFetchBlob from 'react-native-fetch-blob';
-import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
-import ImageResizer from 'react-native-image-resizer';
-import { SelectDateTimeDialog } from 'lib/components/select-date-time-dialog.js';
+const React = require('react'); const Component = React.Component;
+const { Platform, Keyboard, BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking, Image } = require('react-native');
+const { connect } = require('react-redux');
+const { uuid } = require('lib/uuid.js');
+const { Log } = require('lib/log.js');
+const RNFS = require('react-native-fs');
+const { Note } = require('lib/models/note.js');
+const { Setting } = require('lib/models/setting.js');
+const { Resource } = require('lib/models/resource.js');
+const { Folder } = require('lib/models/folder.js');
+const { BackButtonService } = require('lib/services/back-button.js');
+const { BaseModel } = require('lib/base-model.js');
+const { ActionButton } = require('lib/components/action-button.js');
+const Icon = require('react-native-vector-icons/Ionicons').default;
+const { fileExtension, basename } = require('lib/path-utils.js');
+const mimeUtils = require('lib/mime-utils.js').mime;
+const { ScreenHeader } = require('lib/components/screen-header.js');
+const { time } = require('lib/time-utils.js');
+const { Checkbox } = require('lib/components/checkbox.js');
+const { _ } = require('lib/locale.js');
+const { reg } = require('lib/registry.js');
+const { shim } = require('lib/shim.js');
+const { BaseScreenComponent } = require('lib/components/base-screen.js');
+const { dialogs } = require('lib/dialogs.js');
+const { globalStyle, themeStyle } = require('lib/components/global-style.js');
+const DialogBox = require('react-native-dialogbox').default;
+const { NoteBodyViewer } = require('lib/components/note-body-viewer.js');
+const RNFetchBlob = require('react-native-fetch-blob').default;
+const { DocumentPicker, DocumentPickerUtil } = require('react-native-document-picker');
+const ImageResizer = require('react-native-image-resizer').default;
+const shared = require('lib/components/shared/note-screen-shared.js');
+const ImagePicker = require('react-native-image-picker');
+const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog.js');
 
 class NoteScreenComponent extends BaseScreenComponent {
 	
@@ -42,11 +48,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 			folder: null,
 			lastSavedNote: null,
 			isLoading: true,
-			resources: {},
 			titleTextInputHeight: 20,
 			alarmDialogShown: false,
 		};
 
+		// iOS doesn't support multiline text fields properly so disable it
+		this.enableMultilineTitle_ = Platform.OS !== 'ios';
+		
 		this.saveButtonHasBeenShown_ = false;
 
 		this.styles_ = {};
@@ -130,123 +138,41 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	isModified() {
-		if (!this.state.note || !this.state.lastSavedNote) return false;
-		let diff = BaseModel.diffObjects(this.state.note, this.state.lastSavedNote);
-		delete diff.type_;
-		return !!Object.getOwnPropertyNames(diff).length;
+		return shared.isModified(this);
 	}
 
 	async componentWillMount() {
 		BackButtonService.addHandler(this.backHandler);
 
-		let note = null;
-		let mode = 'view';
-		if (!this.props.noteId) {
-			note = this.props.itemType == 'todo' ? Note.newTodo(this.props.folderId) : Note.new(this.props.folderId);
-			mode = 'edit';
-		} else {
-			note = await Note.load(this.props.noteId);
-		}
-
-		const folder = Folder.byId(this.props.folders, note.parent_id);
-
-		this.setState({
-			lastSavedNote: Object.assign({}, note),
-			note: note,
-			mode: mode,
-			folder: folder,
-			isLoading: false,
-		});
+		await shared.initState(this);
 
 		this.refreshNoteMetadata();
+	}
+
+	refreshNoteMetadata(force = null) {
+		return shared.refreshNoteMetadata(this, force);
 	}
 
 	componentWillUnmount() {
 		BackButtonService.removeHandler(this.backHandler);
 	}
 
-	noteComponent_change(propName, propValue) {
-		let note = Object.assign({}, this.state.note);
-		note[propName] = propValue;
-		this.setState({ note: note });
-	}
-
-	async refreshNoteMetadata(force = null) {
-		if (force !== true && !this.state.showNoteMetadata) return;
-
-		let noteMetadata = await Note.serializeAllProps(this.state.note);
-		this.setState({ noteMetadata: noteMetadata });
-	}
-
 	title_changeText(text) {
-		this.noteComponent_change('title', text);
+		shared.noteComponent_change(this, 'title', text);
 	}
 
 	body_changeText(text) {
-		this.noteComponent_change('body', text);
-	}
-
-	async noteExists(noteId) {
-		const existingNote = await Note.load(noteId);
-		return !!existingNote;
+		shared.noteComponent_change(this, 'body', text);
 	}
 
 	async saveNoteButton_press() {
-		let note = Object.assign({}, this.state.note);
+		await shared.saveNoteButton_press(this);
 
-		// Note has been deleted while user was modifying it. In that, we
-		// just save a new note by clearing the note ID.
-		if (note.id && !(await this.noteExists(note.id))) delete note.id;
-
-		reg.logger().info('Saving note: ', note);
-
-		if (!note.parent_id) {
-			let folder = await Folder.defaultFolder();
-			if (!folder) {
-				Log.warn('Cannot save note without a notebook');
-				return;
-			}
-			note.parent_id = folder.id;
-		}
-
-		let isNew = !note.id;
-
-		if (isNew && !note.title) {
-			note.title = Note.defaultTitle(note);
-		}
-		
-		note = await Note.save(note);
-		this.setState({
-			lastSavedNote: Object.assign({}, note),
-			note: note,
-		});
-		if (isNew) Note.updateGeolocation(note.id);
-		this.refreshNoteMetadata();
+		Keyboard.dismiss();
 	}
 
 	async saveOneProperty(name, value) {
-		let note = Object.assign({}, this.state.note);
-
-		// Note has been deleted while user was modifying it. In that, we
-		// just save a new note by clearing the note ID.
-		if (note.id && !(await this.noteExists(note.id))) delete note.id;
-
-		reg.logger().info('Saving note property: ', note.id, name, value);
-
-		if (note.id) {
-			let toSave = { id: note.id };
-			toSave[name] = value;
-			toSave = await Note.save(toSave);
-			note[name] = toSave[name];
-
-			this.setState({
-				lastSavedNote: Object.assign({}, note),
-				note: note,
-			});
-		} else {
-			note[name] = value;
-			this.setState({	note: note });
-		}
+		await shared.saveOneProperty(this, name, value);
 	}
 
 	async deleteNote_onPress() {
@@ -269,9 +195,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	async pickDocument() {
 		return new Promise((resolve, reject) => {
-			DocumentPicker.show({ filetype: [DocumentPickerUtil.images()] }, (error,res) => {
+			DocumentPicker.show({ filetype: [DocumentPickerUtil.allFiles()] }, (error,res) => {
 				if (error) {
-					reject(error);
+					// Also returns an error if the user doesn't pick a file
+					// so just resolve with null.
+					console.info('pickDocument error:', error);
+					resolve(null);
 					return;
 				}
 
@@ -288,51 +217,100 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	async attachFile_onPress() {
-		const res = await this.pickDocument();
+	showImagePicker(options) {
+		return new Promise((resolve, reject) => {
+			ImagePicker.showImagePicker(options, (response) => {
+				resolve(response);
+			});
+		});
+	}
 
-		const localFilePath = res.uri;
+	async resizeImage(localFilePath, targetPath, mimeType) {
+		const maxSize = Resource.IMAGE_MAX_DIMENSION;
+
+		let dimensions = await this.imageDimensions(localFilePath);
+
+		reg.logger().info('Original dimensions ', dimensions);
+		if (dimensions.width > maxSize || dimensions.height > maxSize) {
+			dimensions.width = maxSize;
+			dimensions.height = maxSize;
+		}
+		reg.logger().info('New dimensions ', dimensions);
+
+		const format = mimeType == 'image/png' ? 'PNG' : 'JPEG';
+		reg.logger().info('Resizing image ' + localFilePath);
+		const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85); //, 0, targetPath);
+		
+		const resizedImagePath = resizedImage.uri;
+		reg.logger().info('Resized image ', resizedImagePath);
+		reg.logger().info('Moving ' + resizedImagePath + ' => ' + targetPath);
+		
+		await RNFS.copyFile(resizedImagePath, targetPath);
+		
+		try {
+			await RNFS.unlink(resizedImagePath);
+		} catch (error) {
+			reg.logger().warn('Error when unlinking cached file: ', error);
+		}
+	}
+
+	async attachFile(pickerResponse, fileType) {
+		if (!pickerResponse) {
+			reg.logger().warn('Got no response from picker');
+			return;
+		}
+
+		if (pickerResponse.error) {
+			reg.logger().warn('Got error from picker', pickerResponse.error);
+			return;
+		}
+
+		if (pickerResponse.didCancel) {
+			reg.logger().info('User cancelled picker');
+			return;
+		}
+
+		const localFilePath = pickerResponse.uri;
+		let mimeType = pickerResponse.type;
+
+		if (!mimeType) {
+			const ext = fileExtension(localFilePath);
+			mimeType = mimeUtils.fromFileExtension(ext);
+		}
+
+		if (!mimeType && fileType === 'image') {
+			// Assume JPEG if we couldn't determine the file type. It seems to happen with the image picker
+			// when the file path is something like content://media/external/images/media/123456
+			// If the image is not a JPEG, something will throw an error below, but there's a good chance
+			// it will work.
+			reg.logger().info('Missing file type and could not detect it - assuming image/jpg');
+			mimeType = 'image/jpg';
+		}
 
 		reg.logger().info('Got file: ' + localFilePath);
-		reg.logger().info('Got type: ' + res.type);
-
-		// res.uri,
-		// res.type, // mime type
-		// res.fileName,
-		// res.fileSize
+		reg.logger().info('Got type: ' + mimeType);
 
 		let resource = Resource.new();
 		resource.id = uuid.create();
-		resource.mime = res.type;
-		resource.title = res.fileName ? res.fileName : _('Untitled');
+		resource.mime = mimeType;
+		resource.title = pickerResponse.fileName ? pickerResponse.fileName : _('Untitled');
 
 		let targetPath = Resource.fullPath(resource);
 
-		if (res.type == 'image/jpeg' || res.type == 'image/jpg' || res.type == 'image/png') {
-			const maxSize = 1920;
-
-			let dimensions = await this.imageDimensions(localFilePath);
-
-			reg.logger().info('Original dimensions ', dimensions);
-			if (dimensions.width > maxSize || dimensions.height > maxSize) {
-				dimensions.width = maxSize;
-				dimensions.height = maxSize;
+		try {
+			if (mimeType == 'image/jpeg' || mimeType == 'image/jpg' || mimeType == 'image/png') {
+				await this.resizeImage(localFilePath, targetPath, pickerResponse.mime);
+			} else {
+				if (fileType === 'image') {
+					dialogs.error(this, _('Unsupported image type: %s', mimeType));
+					return;
+				} else {
+					await RNFetchBlob.fs.cp(localFilePath, targetPath);
+				}
 			}
-			reg.logger().info('New dimensions ', dimensions);
-
-			const format = res.type == 'image/png' ? 'PNG' : 'JPEG';
-			reg.logger().info('Resizing image ' + localFilePath);
-			const resizedImagePath = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85);
-			reg.logger().info('Resized image ', resizedImagePath);
-			RNFetchBlob.fs.cp(resizedImagePath, targetPath); // mv doesn't work ("source path does not exist") so need to do cp and unlink
-			
-			try {
-				RNFetchBlob.fs.unlink(resizedImagePath);
-			} catch (error) {
-				reg.logger().info('Error when unlinking cached file: ', error);
-			}
-		} else {
-			RNFetchBlob.fs.cp(localFilePath, targetPath);
+		} catch (error) {
+			reg.logger().warn('Could not attach file:', error);
+			return;
 		}
 
 		await Resource.save(resource, { isNew: true });
@@ -344,10 +322,21 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ note: newNote });
 	}
 
+	async attachImage_onPress() {
+		const options = {
+			mediaType: 'photo',
+		};
+		const response = await this.showImagePicker(options);
+		await this.attachFile(response, 'image');
+	}
+
+	async attachFile_onPress() {
+		const response = await this.pickDocument();
+		await this.attachFile(response, 'all');
+	}
+
 	toggleIsTodo_onPress() {
-		let newNote = Note.toggleIsTodo(this.state.note);
-		let newState = { note: newNote };
-		this.setState(newState);
+		shared.toggleIsTodo_onPress(this);
 	}
 
 	setAlarm_onPress() {
@@ -371,8 +360,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	showMetadata_onPress() {
-		this.setState({ showNoteMetadata: !this.state.showNoteMetadata });
-		this.refreshNoteMetadata(true);
+		shared.showMetadata_onPress(this);
 	}
 
 	async showOnMap_onPress() {
@@ -389,14 +377,31 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	menuOptions() {
 		const note = this.state.note;
+		const isTodo = note && !!note.is_todo;
 
-		return [
-			{ title: _('Attach file'), onPress: () => { this.attachFile_onPress(); } },
-			{ title: _('Delete note'), onPress: () => { this.deleteNote_onPress(); } },
-			{ title: note && !!note.is_todo ? _('Convert to regular note') : _('Convert to todo'), onPress: () => { this.toggleIsTodo_onPress(); } },
-			{ title: this.state.showNoteMetadata ? _('Hide metadata') : _('Show metadata'), onPress: () => { this.showMetadata_onPress(); } },
-			{ title: _('View location on map'), onPress: () => { this.showOnMap_onPress(); } },
-		];
+		let output = [];
+
+		// The file attachement modules only work in Android >= 5 (Version 21)
+		// https://github.com/react-community/react-native-image-picker/issues/606
+		let canAttachPicture = true;
+		if (Platform.OS === 'android' && Platform.Version < 21) canAttachPicture = false;
+		if (canAttachPicture) {
+			output.push({ title: _('Attach image'), onPress: () => { this.attachImage_onPress(); } });
+			output.push({ title: _('Attach any other file'), onPress: () => { this.attachFile_onPress(); } });
+		}
+		output.push({ title: _('Delete note'), onPress: () => { this.deleteNote_onPress(); } });
+		output.push({ title: _('Alarm'), onPress: () => { this.setState({ alarmDialogShown: true }) }});;
+
+		// if (isTodo) {
+		// 	let text = note.todo_due ? _('Edit/Clear alarm') : _('Set an alarm');
+		// 	output.push({ title: text, onPress: () => { this.setAlarm_onPress(); } });
+		// }
+
+		output.push({ title: isTodo ? _('Convert to regular note') : _('Convert to todo'), onPress: () => { this.toggleIsTodo_onPress(); } });
+		if (this.props.showAdvancedOptions) output.push({ title: this.state.showNoteMetadata ? _('Hide metadata') : _('Show metadata'), onPress: () => { this.showMetadata_onPress(); } });
+		output.push({ title: _('View location on map'), onPress: () => { this.showOnMap_onPress(); } });
+
+		return output;
 	}
 
 	async todoCheckbox_change(checked) {
@@ -404,6 +409,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	titleTextInput_contentSizeChange(event) {
+		if (!this.enableMultilineTitle_) return;
+
 		let height = event.nativeEvent.contentSize.height;
 		this.setState({ titleTextInputHeight: height });
 	}
@@ -432,6 +439,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 			bodyComponent = <NoteBodyViewer style={this.styles().noteBodyViewer} webViewStyle={theme} note={note} onCheckboxChange={(newBody) => { onCheckboxChange(newBody) }}/>
 		} else {
 			const focusBody = !isNew && !!note.title;
+
+			// Note: blurOnSubmit is necessary to get multiline to work.
+			// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
 			bodyComponent = (
 				<TextInput
 					autoCapitalize="sentences"
@@ -440,6 +450,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					multiline={true}
 					value={note.body}
 					onChangeText={(text) => this.body_changeText(text)}
+					blurOnSubmit={false}
 				/>
 			);
 		}
@@ -460,15 +471,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			return <ActionButton multiStates={true} buttons={buttons} buttonIndex={0} />
 		}
 
-		const titlePickerItems = () => {
-			let output = [];
-			for (let i = 0; i < this.props.folders.length; i++) {
-				let f = this.props.folders[i];
-				output.push({ label: f.title, value: f.id });
-			}
-			return output;
-		}
-
 		const actionButtonComp = renderActionButton();
 
 		let showSaveButton = this.state.mode == 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
@@ -485,14 +487,18 @@ class NoteScreenComponent extends BaseScreenComponent {
 			backgroundColor: theme.backgroundColor,
 			fontWeight: 'bold',
 			fontSize: theme.fontSize,
+			paddingTop: 10, // Added for iOS (Not needed for Android??)
+			paddingBottom: 10, // Added for iOS (Not needed for Android??)
 		};
 
-		titleTextInputStyle.height = this.state.titleTextInputHeight;
+		if (this.enableMultilineTitle_) titleTextInputStyle.height = this.state.titleTextInputHeight;
 
 		let checkboxStyle = {
 			color: theme.color,
 			paddingRight: 10,
 			paddingLeft: theme.marginLeft,
+			paddingTop: 10, // Added for iOS (Not needed for Android??)
+			paddingBottom: 10, // Added for iOS (Not needed for Android??)
 		}
 
 		const dueDate = isTodo && note.todo_due ? new Date(note.todo_due) : null;
@@ -503,7 +509,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				<TextInput
 					onContentSizeChange={(event) => this.titleTextInput_contentSizeChange(event)}
 					autoFocus={isNew}
-					multiline={true}
+					multiline={this.enableMultilineTitle_}
 					underlineColorAndroid="#ffffff00"
 					autoCapitalize="sentences"
 					style={titleTextInputStyle}
@@ -516,19 +522,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>
 				<ScreenHeader
-					titlePicker={{
-						items: titlePickerItems(),
-						selectedValue: folder ? folder.id : null,
+					folderPickerOptions={{
+						enabled: true,
+						selectedFolderId: folder ? folder.id : null,
 						onValueChange: async (itemValue, itemIndex) => {
-							let note = Object.assign({}, this.state.note);
-
-							// RN bug: https://github.com/facebook/react-native/issues/9220
-							// The Picker fires the onValueChange when the component is initialized
-							// so we need to check that it has actually changed.
-							if (note.parent_id == itemValue) return;
-
-							reg.logger().info('Moving note: ' + note.parent_id + ' => ' + itemValue);
-
 							if (note.id) await Note.moveToFolder(note.id, itemValue);
 							note.parent_id = itemValue;
 
@@ -539,7 +536,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 								note: note,
 								folder: folder,
 							});
-						}
+						},
 					}}
 					menuOptions={this.menuOptions()}
 					showSaveButton={showSaveButton}
@@ -568,13 +565,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 const NoteScreen = connect(
 	(state) => {
 		return {
-			noteId: state.selectedNoteId,
+			noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 			folderId: state.selectedFolderId,
 			itemType: state.selectedItemType,
 			folders: state.folders,
 			theme: state.settings.theme,
+			showAdvancedOptions: state.settings.showAdvancedOptions,
 		};
 	}
 )(NoteScreenComponent)
 
-export { NoteScreen };
+module.exports = { NoteScreen };

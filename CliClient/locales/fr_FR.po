@@ -15,90 +15,123 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.3\n"
 
+msgid "Give focus to next pane"
+msgstr "Activer le volet suivant"
+
+msgid "Give focus to previous pane"
+msgstr "Activer le volet précédent"
+
+msgid "Enter command line mode"
+msgstr "Démarrer le mode de ligne de commande"
+
+msgid "Exit command line mode"
+msgstr "Sortir du mode de ligne de commande"
+
+msgid "Edit the selected note"
+msgstr "Éditer la note sélectionnée"
+
+msgid "Cancel the current command."
+msgstr "Annuler la commande en cours."
+
+msgid "Exit the application."
+msgstr "Quitter le logiciel."
+
+msgid "Delete the currently selected note or notebook."
+msgstr "Supprimer la note ou carnet sélectionné."
+
+msgid "To delete a tag, untag the associated notes."
+msgstr "Pour supprimer une vignette, enlever là des notes associées."
+
+msgid "Please select the note or notebook to be deleted first."
+msgstr "Veuillez d'abord sélectionner un carnet."
+
+msgid "Set a to-do as completed / not completed"
+msgstr "Marquer une tâches comme complétée / non-complétée"
+
+msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+msgstr "Maximiser, minimiser, cacher ou rendre visible la console."
+
+msgid "Search"
+msgstr "Chercher"
+
+msgid "[t]oggle note [m]etadata."
+msgstr "Afficher/Cacher les métadonnées des notes."
+
+msgid "[M]ake a new [n]ote"
+msgstr "Créer une nouvelle note"
+
+msgid "[M]ake a new [t]odo"
+msgstr "Créer une nouvelle tâche"
+
+msgid "[M]ake a new note[b]ook"
+msgstr "Créer un nouveau carnet"
+
+msgid "Copy ([Y]ank) the [n]ote to a notebook."
+msgstr "Copier la note dans un autre carnet."
+
+msgid "Move the note to a notebook."
+msgstr "Déplacer la note vers un carnet."
+
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "Appuyez sur Ctrl+D ou tapez \"exit\" pour sortir du logiciel"
+
+#, javascript-format
+msgid "More than one item match \"%s\". Please narrow down your query."
+msgstr "Plus d'un objet correspond à \"%s\". Veuillez préciser votre requête."
+
 msgid "No notebook selected."
 msgstr "Aucun carnet n'est sélectionné."
 
 msgid "No notebook has been specified."
 msgstr "Aucun carnet n'est spécifié."
 
-#, javascript-format
-msgid "Usage: %s"
-msgstr "Utilisation : %s."
+msgid "Y"
+msgstr "O"
+
+msgid "n"
+msgstr "n"
+
+msgid "N"
+msgstr "N"
+
+msgid "y"
+msgstr "o"
+
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "Annulation de la synchronisation... Veuillez patienter."
 
 #, javascript-format
-msgid "Unknown flag: %s"
-msgstr "Paramètre inconnu : %s"
-
-#, javascript-format
-msgid ""
-"Command line argument \"%s\" contains both quotes and double-quotes - "
-"aborting."
+msgid "The command \"%s\" is only available in GUI mode"
 msgstr ""
-"Le paramètre de ligne de commande \"%s\" contient à la fois des guillemets "
-"simples et doubles - impossible de continuer."
-
-msgid "Provides help for a given command."
-msgstr "Affiche l'aide pour la commande donnée."
-
-msgid "Exits the application."
-msgstr "Quitter le logiciel."
-
-msgid "Only Bash is currently supported for autocompletion."
-msgstr ""
-
-msgid ""
-"Autocompletion can be made to work with an alias too (such as a one-letter "
-"command like \"j\").\n"
-"If you would like to enable this, please type the alias now (leave it empty "
-"for no alias):"
-msgstr ""
-
-#, javascript-format
-msgid "Created autocompletion script \"%s\"."
-msgstr ""
-
-#, javascript-format
-msgid "Autocompletion script is already present in \"%s\"."
-msgstr ""
-
-#, javascript-format
-msgid "Added autocompletion to \"%s\"."
-msgstr ""
-
-#, javascript-format
-msgid "Alias is already set in \"%s\"."
-msgstr ""
-
-#, javascript-format
-msgid "Added alias to \"%s\"."
-msgstr ""
-
-#, javascript-format
-msgid ""
-"IMPORTANT: run the following command to initialise autocompletion in the "
-"current shell:\n"
-"source '%s'"
-msgstr ""
+"La commande \"%s\" est disponible uniquement en mode d'interface graphique"
 
 #, javascript-format
 msgid "Missing required argument: %s"
-msgstr ""
+msgstr "Paramètre requis manquant : %s"
 
-msgid "Y"
-msgstr ""
+#, javascript-format
+msgid "%s: %s"
+msgstr "%s : %s"
 
-msgid "n"
-msgstr ""
+msgid "Your choice: "
+msgstr "Votre choix : "
+
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr "Réponse invalide : %s"
+
+msgid "Attaches the given file to the note."
+msgstr "Joindre le fichier fourni à la note."
+
+#, javascript-format
+msgid "Cannot find \"%s\"."
+msgstr "Impossible de trouver \"%s\"."
 
 msgid "Displays the given note."
 msgstr "Affiche la note."
 
 msgid "Displays the complete information about note."
 msgstr "Affiche tous les détails de la note."
-
-#, javascript-format
-msgid "Cannot find \"%s\"."
-msgstr "Impossible de trouver \"%s\"."
 
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
@@ -109,7 +142,6 @@ msgstr ""
 "fournie, la valeur de [nom] est affichée. Si ni le [nom] ni la [valeur] ne "
 "sont fournis, la configuration complète est affichée."
 
-#, fuzzy
 msgid "Also displays unset and hidden config variables."
 msgstr "Afficher également les variables cachées."
 
@@ -121,26 +153,22 @@ msgstr "%s = %s (%s)"
 msgid "%s = %s"
 msgstr "%s = %s"
 
-#, fuzzy
 msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"Copie les notes correspondant à [nom] vers [carnet]. Si aucun carnet n'est "
-"spécifié, la note est dupliqué sur place."
+"Copier les notes correspondant à <nom> vers [carnet]. Si aucun carnet n'est "
+"spécifié, la note est dupliquée sur place."
 
-msgid "Marks a todo as done."
-msgstr ""
+msgid "Marks a to-do as done."
+msgstr "Marquer la tâche comme complétée."
 
 #, javascript-format
-msgid "Note is not a todo: \"%s\""
-msgstr ""
+msgid "Note is not a to-do: \"%s\""
+msgstr "La note n'est pas une tâche : \"%s\""
 
 msgid "Edit note."
-msgstr "Editer la note."
-
-msgid "Done editing."
-msgstr "Edition terminée."
+msgstr "Éditer la note."
 
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
@@ -157,26 +185,77 @@ msgstr "Cette note n'existe pas : \"%s\". La créer ?"
 
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
-"Edition de la note en cours. Fermez l'éditeur de texte pour retourner à "
+"Édition de la note en cours. Fermez l'éditeur de texte pour retourner à "
 "l'invite de commande."
 
-msgid "Exports Joplin data to the given target."
+msgid "Note has been saved."
+msgstr "La note a été enregistrée."
+
+msgid "Exits the application."
+msgstr "Quitter le logiciel."
+
+msgid ""
+"Exports Joplin data to the given directory. By default, it will export the "
+"complete database including notebooks, notes, tags and resources."
 msgstr ""
+"Exporter les données de Joplin vers le dossier fourni. Par défaut, la base "
+"de donnée complète sera exportée, y compris les carnets, notes, tags et "
+"resources."
 
-#, fuzzy
 msgid "Exports only the given note."
-msgstr "Affiche la note."
+msgstr "Exporter uniquement la note spécifiée."
 
-#, fuzzy
 msgid "Exports only the given notebook."
-msgstr "Affiche la note."
+msgstr "Exporter uniquement le carnet spécifié."
 
 msgid "Displays a geolocation URL for the note."
 msgstr "Afficher l'URL de l'emplacement de la note."
 
-#, fuzzy
 msgid "Displays usage information."
-msgstr "Affiche les informations de version"
+msgstr "Affiche les informations d'utilisation."
+
+msgid "Shortcuts are not available in CLI mode."
+msgstr "Les raccourcis ne sont pas disponible en mode de ligne de commande."
+
+msgid "Type `help [command]` for more information about a command."
+msgstr "Tapez `help [command]` pour plus d'information sur une commande."
+
+msgid "The possible commands are:"
+msgstr "Les commandes possibles sont :"
+
+msgid ""
+"In any command, a note or notebook can be refered to by title or ID, or "
+"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
+"note or notebook. `$c` can be used to refer to the currently selected item."
+msgstr ""
+"Dans une commande, une note ou carnet peut être référé par titre ou "
+"identifiant, ou en utilisant les raccourcis `$n` et `$b` pour, "
+"respectivement, la note sélectionnée et le carnet sélectionné. `$c` peut "
+"être utilisé pour faire référence à l'objet sélectionné en cours."
+
+msgid "To move from one pane to another, press Tab or Shift+Tab."
+msgstr "Pour aller d'un volet à l'autre, pressez Tab ou Maj+Tab."
+
+msgid ""
+"Use the arrows and page up/down to scroll the lists and text areas "
+"(including this console)."
+msgstr ""
+"Utilisez les touches fléchées et page précédente/suivante pour faire défiler "
+"les listes et zones de texte (y compris cette console)."
+
+msgid "To maximise/minimise the console, press \"TC\"."
+msgstr "Pour maximiser ou minimiser la console, pressez \"TC\"."
+
+msgid "To enter command line mode, press \":\""
+msgstr "Pour démarrer le mode ligne de commande, pressez \":\""
+
+msgid "To exit command line mode, press ESCAPE"
+msgstr "Pour sortir du mode ligne de commande, pressez ECHAP"
+
+msgid ""
+"For the complete list of available keyboard shortcuts, type `help shortcuts`"
+msgstr ""
+"Pour la liste complète des raccourcis disponibles, tapez `help shortcuts`"
 
 msgid "Imports an Evernote notebook file (.enex file)."
 msgstr "Importer un carnet Evernote (fichier .enex)."
@@ -207,7 +286,7 @@ msgstr "Créés : %d."
 
 #, javascript-format
 msgid "Updated: %d."
-msgstr "Mise à jour : %d."
+msgstr "Mis à jour : %d."
 
 #, javascript-format
 msgid "Skipped: %d."
@@ -219,12 +298,15 @@ msgstr "Ressources : %d."
 
 #, javascript-format
 msgid "Tagged: %d."
-msgstr "Etiquettes : %d."
+msgstr "Étiquettes : %d."
 
 msgid "Importing notes..."
 msgstr "Importation des notes..."
 
-#, fuzzy
+#, javascript-format
+msgid "The notes have been imported: %s"
+msgstr "Les notes ont été importées : %s"
+
 msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
 "of notebooks."
@@ -244,8 +326,8 @@ msgstr "Inverser l'ordre."
 
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
-"for todos, or `nt` for notes and todos (eg. `-tt` would display only the "
-"todos, while `-ttd` would display notes and todos."
+"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
+"to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
 "Affiche uniquement les notes du ou des types spécifiés. Le type peut-être "
 "`n` pour les notes, `t` pour les tâches (par exemple, `-tt` affiche "
@@ -256,7 +338,7 @@ msgstr "Soit \"text\" soit \"json\""
 
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
-"TODO_CHECKED (for todos), TITLE"
+"TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
 "Utilise le format de liste longue. Le format est ID, NOMBRE_DE_NOTES (pour "
 "les carnets), DATE, TACHE_TERMINE (pour les tâches), TITRE"
@@ -273,23 +355,37 @@ msgstr "Créer une note."
 msgid "Notes can only be created within a notebook."
 msgstr "Les notes ne peuvent être créées que dans un carnet."
 
-msgid "Creates a new todo."
+msgid "Creates a new to-do."
 msgstr "Créer une nouvelle tâche."
 
-#, fuzzy
-msgid "Moves the notes matching <note-pattern> to [notebook]."
-msgstr "Supprime les objets correspondants à <motif>."
+msgid "Moves the notes matching <note> to [notebook]."
+msgstr "Déplacer les notes correspondant à <note> vers [notebook]."
 
-#, fuzzy
+msgid "Renames the given <item> (note or notebook) to <name>."
+msgstr "Renommer l'objet <item> (note ou carnet) en <name>."
+
+msgid "Deletes the given notebook."
+msgstr "Supprimer le carnet."
+
+msgid "Deletes the notebook without asking for confirmation."
+msgstr "Supprimer le carnet sans demander la confirmation."
+
+#, javascript-format
+msgid "Delete notebook \"%s\"?"
+msgstr "Supprimer le carnet \"%s\" ?"
+
 msgid "Deletes the notes matching <note-pattern>."
-msgstr "Supprime les objets correspondants à <motif>."
+msgstr "Supprimer les notes correspondants à <note-pattern>."
 
-msgid "Deletes the items without asking for confirmation."
-msgstr "Supprime les objets sans demander la confirmation."
+msgid "Deletes the notes without asking for confirmation."
+msgstr "Supprimer les notes sans demander la confirmation."
 
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
 msgstr "%d notes correspondent à ce motif. Les supprimer ?"
+
+msgid "Delete note?"
+msgstr "Supprimer la note ?"
 
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Chercher le motif <pattern> dans toutes les notes."
@@ -317,6 +413,13 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
+"La synchronisation est déjà en cours ou ne s'est pas interrompue "
+"correctement. Si vous savez qu'aucune autre synchronisation est en cours, "
+"vous pouvez supprimer le fichier \"%s\" pour reprendre l'opération."
+
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "Impossible d'autoriser le logiciel (jeton d'identification non-reçu)."
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
@@ -328,39 +431,36 @@ msgstr "Impossible d'initialiser la synchronisation."
 msgid "Starting synchronisation..."
 msgstr "Commencement de la synchronisation..."
 
-#, fuzzy
 msgid "Cancelling... Please wait."
-msgstr "Annulation..."
+msgstr "Annulation... Veuillez attendre."
 
-#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
 "`tag list` can be used to list all the tags."
 msgstr ""
-"<command> peut être \"add\", \"remove\" ou \"list\" pour assigner ou enlever "
-"l'étiquette [tag] de la [note], our pour lister les notes associées avec "
-"l'étiquette [tag]. La commande `tag list` peut être utilisée pour lister les "
-"étiquettes."
+"<tag-command> peut être \"add\", \"remove\" ou \"list\" pour assigner ou "
+"enlever l'étiquette [tag] de la [note], our pour lister les notes associées "
+"avec l'étiquette [tag]. La commande `tag list` peut être utilisée pour "
+"lister les étiquettes."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
 msgstr "Commande invalide : \"%s\""
 
-#, fuzzy
 msgid ""
 "<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
-"toggle the given todo between completed and uncompleted state (If the target "
-"is a regular note it will be converted to a todo). Use \"clear\" to convert "
-"the todo back to a regular note."
+"toggle the given to-do between completed and uncompleted state (If the "
+"target is a regular note it will be converted to a to-do). Use \"clear\" to "
+"convert the to-do back to a regular note."
 msgstr ""
-"Gère le status des tâches. <action> peut être \"toggle\" ou \"clear\". "
+"Gère le status des tâches. <todo-command> peut être \"toggle\" ou \"clear\". "
 "Utilisez \"toggle\" pour basculer la tâche entre le status terminé et non-"
 "terminé (Si la cible est une note, elle sera convertie en tâche). Utilisez "
 "\"clear\" pour convertir la tâche en note."
 
-msgid "Marks a todo as non-completed."
-msgstr ""
+msgid "Marks a to-do as non-completed."
+msgstr "Marquer une tâche comme non-complétée."
 
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
@@ -374,6 +474,24 @@ msgstr "Affiche les informations de version"
 #, javascript-format
 msgid "%s %s (%s)"
 msgstr "%s %s (%s)"
+
+msgid "Enum"
+msgstr "Enum"
+
+#, javascript-format
+msgid "Type: %s."
+msgstr "Type : %s."
+
+#, javascript-format
+msgid "Possible values: %s."
+msgstr "Valeurs possibles : %s."
+
+#, javascript-format
+msgid "Default: %s"
+msgstr "Défaut : %s"
+
+msgid "Possible keys/values:"
+msgstr "Clefs/Valeurs possibles :"
 
 msgid "Fatal error:"
 msgstr "Erreur fatale :"
@@ -392,12 +510,194 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
+"Veuillez ouvrir le lien ci-dessous dans votre navigateur pour authentifier "
+"le logiciel. Joplin va créer un répertoire \"Apps/Joplin\" et lire/écrira "
+"des fichiers uniquement dans ce répertoire. Le logiciel n'aura pas d'accès à "
+"aucun fichier en dehors de ce répertoire, ni à d'autres données "
+"personnelles. Aucune donnée ne sera partagé avec aucun tier."
 
-#, fuzzy, javascript-format
+msgid "Search:"
+msgstr "Recherche :"
+
+msgid "File"
+msgstr "Fichier"
+
+msgid "New note"
+msgstr "Nouvelle note"
+
+msgid "New to-do"
+msgstr "Nouvelle tâche"
+
+msgid "New notebook"
+msgstr "Nouveau carnet"
+
+msgid "Import Evernote notes"
+msgstr "Importer notes d'Evernote"
+
+msgid "Evernote Export Files"
+msgstr "Fichiers d'export Evernote"
+
+msgid "Quit"
+msgstr "Quitter"
+
+msgid "Edit"
+msgstr "Édition"
+
+msgid "Copy"
+msgstr "Copier"
+
+msgid "Cut"
+msgstr "Couper"
+
+msgid "Paste"
+msgstr "Coller"
+
+msgid "Search in all the notes"
+msgstr "Chercher dans toutes les notes"
+
+msgid "Tools"
+msgstr "Outils"
+
+msgid "Options"
+msgstr "Options"
+
+msgid "Help"
+msgstr "Aide"
+
+msgid "Website and documentation"
+msgstr "Documentation en ligne"
+
+msgid "About Joplin"
+msgstr "A propos de Joplin"
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Cancel"
+msgstr "Annulation"
+
+msgid "Back"
+msgstr "Retour"
+
+#, javascript-format
+msgid ""
+"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgstr ""
+"Un nouveau carnet \"%s\" va être créé et le fichier \"%s\" va être importé "
+"dedans"
+
+msgid "Please create a notebook first."
+msgstr "Veuillez d'abord sélectionner un carnet."
+
+msgid "Note title:"
+msgstr "Titre de la note :"
+
+msgid "Please create a notebook first"
+msgstr "Veuillez d'abord créer un carnet d'abord"
+
+msgid "To-do title:"
+msgstr "Titre de la tâche :"
+
+msgid "Notebook title:"
+msgstr "Titre du carnet :"
+
+msgid "Add or remove tags:"
+msgstr "Modifier les étiquettes :"
+
+msgid "Separate each tag by a comma."
+msgstr "Séparez chaque étiquette par une virgule."
+
+msgid "Rename notebook:"
+msgstr "Renommer le carnet :"
+
+msgid "Layout"
+msgstr "Disposition"
+
+msgid "Add or remove tags"
+msgstr "Gérer les étiquettes"
+
+msgid "Switch between note and to-do type"
+msgstr "Alterner entre note et tâche"
+
+msgid "Delete"
+msgstr "Supprimer"
+
+msgid "Delete notes?"
+msgstr "Supprimer les notes ?"
+
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr ""
+"Pas de notes ici. Créez-en une en pressant le bouton \"Nouvelle note\"."
+
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Lien ou message non géré : %s"
+
+msgid "Attach file"
+msgstr "Attacher un fichier"
+
+msgid "Refresh"
+msgstr "Rafraîchir"
+
+msgid "OneDrive Login"
+msgstr "Connexion OneDrive"
+
+msgid "Import"
+msgstr "Importer"
+
+msgid "Configuration"
+msgstr "Configuration"
+
+msgid "Delete notebook?"
+msgstr "Supprimer le carnet ?"
+
+msgid "Remove this tag from all the notes?"
+msgstr "Enlever cette étiquette de toutes les notes ?"
+
+msgid "Remove this search from the sidebar?"
+msgstr "Enlever cette recherche de la barre latérale ?"
+
+msgid "Rename"
+msgstr "Renommer"
+
+msgid "Synchronise"
+msgstr "Synchroniser"
+
+msgid "Notebooks"
+msgstr "Carnets"
+
+msgid "Tags"
+msgstr "Étiquettes"
+
+msgid "Searches"
+msgstr "Recherches"
+
+#, javascript-format
+msgid "Usage: %s"
+msgstr "Utilisation : %s"
+
+#, javascript-format
+msgid "Unknown flag: %s"
+msgstr "Paramètre inconnu : %s"
+
+msgid "File system"
+msgstr "Système de fichier"
+
+msgid "OneDrive"
+msgstr "OneDrive"
+
+msgid "OneDrive Dev (For testing only)"
+msgstr "OneDrive Dév (Pour tester uniquement)"
+
+#, javascript-format
 msgid "Unknown log level: %s"
 msgstr "Paramètre inconnu : %s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Unknown level ID: %s"
 msgstr "Paramètre inconnu : %s"
 
@@ -405,15 +705,12 @@ msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
-"Impossible de rafraîchir la connection à OneDrive. Démarrez la "
+"Impossible de rafraîchir la connexion à OneDrive. Démarrez la "
 "synchronisation à nouveau pour corriger le problème."
 
-msgid ""
-"Please set the \"sync.2.path\" config value to the desired synchronisation "
-"destination."
-msgstr ""
-"Veuillez attribuer une valeur au paramètre de configuration \"sync.2.path\" "
-"pour indiquer le dossier où devra se faire la synchronisation."
+#, javascript-format
+msgid "Cannot access %s"
+msgstr "Impossible d'accéder à %s"
 
 #, javascript-format
 msgid "Created local items: %d."
@@ -439,9 +736,9 @@ msgstr "Objets supprimés localement : %d."
 msgid "Deleted remote items: %d."
 msgstr "Objets distants supprimés : %d."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "State: \"%s\"."
-msgstr "Etat : %s."
+msgstr "État : \"%s\"."
 
 msgid "Cancelling..."
 msgstr "Annulation..."
@@ -452,7 +749,7 @@ msgstr "Terminé : %s"
 
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
-msgstr "La synchronisation est déjà en cours. Etat : %s"
+msgstr "La synchronisation est déjà en cours. État : %s"
 
 msgid "Conflicts"
 msgstr "Conflits"
@@ -473,55 +770,55 @@ msgstr "Cette note n'a pas d'information d'emplacement."
 
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
-msgstr "Impossible de copier la note dans le carnet \"%s\""
+msgstr "Impossible de copier la note vers le carnet \"%s\""
 
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Impossible de déplacer la note vers le carnet \"%s\""
 
-#, javascript-format
-msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "Option invalide: \"%s\". Les valeurs possibles sont : %s."
+msgid "File system synchronisation target directory"
+msgstr "Cible de la synchronisation sur le disque dur"
 
-#, fuzzy, javascript-format
-msgid "%s: %s"
-msgstr "%s: %d/%d"
+msgid ""
+"The path to synchronise with when file system synchronisation is enabled. "
+"See `sync.target`."
+msgstr ""
+"Le chemin du répertoire avec lequel synchroniser lorsque la synchronisation "
+"par système de fichier est activée. Voir `sync.target`."
 
-msgid "Synchronisation target"
-msgstr "Cible de la synchronisation"
+msgid "Text editor"
+msgstr "Éditeur de texte"
 
-msgid "File system"
-msgstr "Système de fichier"
-
-msgid "OneDrive"
-msgstr "OneDrive"
+msgid ""
+"The editor that will be used to open a note. If none is provided it will try "
+"to auto-detect the default editor."
+msgstr ""
+"L'éditeur de texte pour ouvrir et modifier les notes. Si aucun n'est "
+"spécifié, il sera détecté automatiquement."
 
 msgid "Language"
 msgstr "Langue"
 
-msgid "Todo filter"
-msgstr "Filtre des tâches"
+msgid "Theme"
+msgstr "Apparence"
 
-msgid "Show all"
-msgstr "Afficher tous"
+msgid "Light"
+msgstr "Clair"
 
-msgid "Non-completed and recently completed ones"
-msgstr "Tâches non-complétées et récentes"
-
-msgid "Non-completed ones only"
-msgstr "Tâches complétées seulement"
+msgid "Dark"
+msgstr "Sombre"
 
 msgid "Show uncompleted todos on top of the lists"
 msgstr "Tâches non-terminées en haut des listes"
 
-msgid "Save location with notes"
+msgid "Save geo-location with notes"
 msgstr "Enregistrer l'emplacement avec les notes"
 
 msgid "Synchronisation interval"
-msgstr "Interval de synchronisation"
+msgstr "Intervalle de synchronisation"
 
 msgid "Disabled"
-msgstr ""
+msgstr "Désactivé"
 
 #, javascript-format
 msgid "%d minutes"
@@ -535,14 +832,25 @@ msgstr "%d heure"
 msgid "%d hours"
 msgstr "%d heures"
 
-msgid "Theme"
-msgstr "Apparence"
+msgid "Automatically update the application"
+msgstr "Mettre à jour le logiciel automatiquement"
 
-msgid "Light"
-msgstr "Clair"
+msgid "Show advanced options"
+msgstr "Montrer les options avancées"
 
-msgid "Dark"
-msgstr "Sombre"
+msgid "Synchronisation target"
+msgstr "Cible de la synchronisation"
+
+msgid ""
+"The target to synchonise to. If synchronising with the file system, set "
+"`sync.2.path` to specify the target directory."
+msgstr ""
+"La cible avec laquelle synchroniser. Pour synchroniser avec le système de "
+"fichier, veuillez spécifier le répertoire avec `sync.2.path`."
+
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "Option invalide: \"%s\". Les valeurs possibles sont : %s."
 
 msgid "Sync status (synced items / total items)"
 msgstr "Status de la synchronisation (objets synchro. / total)"
@@ -570,31 +878,29 @@ msgstr "Carnets"
 msgid "%s: %d notes"
 msgstr "%s : %d notes"
 
-msgid "New todo"
-msgstr "Nouvelle tâche"
-
-msgid "New note"
-msgstr "Nouvelle note"
-
-msgid "New notebook"
-msgstr "Nouveau carnet"
-
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 "Ce carnet ne contient aucune note. Créez-en une en appuyant sur le bouton "
 "(+)."
 
+msgid "Delete these notes?"
+msgstr "Supprimer ces notes ?"
+
 msgid "Log"
 msgstr "Journal"
 
 msgid "Status"
-msgstr "Etat"
+msgstr "État"
 
-msgid "Configuration"
-msgstr "Configuration"
+msgid "Export Debug Report"
+msgstr "Exporter rapport de débogage"
 
-msgid "Synchronise"
-msgstr "Synchroniser"
+msgid "Move to notebook..."
+msgstr "Déplacer la note vers carnet..."
+
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr "Déplacer %d notes vers carnet \"%s\" ?"
 
 msgid "Cancel synchronisation"
 msgstr "Annuler synchronisation"
@@ -604,16 +910,26 @@ msgid "The notebook could not be saved: %s"
 msgstr "Ce carnet n'a pas pu être sauvegardé : %s"
 
 msgid "Edit notebook"
-msgstr "Editer le carnet"
+msgstr "Éditer le carnet"
 
-msgid "Refresh"
-msgstr "Rafraîchir"
+msgid "This note has been modified:"
+msgstr "Cette note a été modifiée :"
 
-msgid "Delete note?"
-msgstr "Supprimer la note ?"
+msgid "Save changes"
+msgstr "Enregistrer les changements"
 
-msgid "Attach file"
-msgstr "Attacher un fichier"
+msgid "Discard changes"
+msgstr "Ignorer les changements"
+
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr "Type d'image non géré : %s"
+
+msgid "Attach image"
+msgstr "Joindre une image ou photo"
+
+msgid "Attach any other file"
+msgstr "Joindre un fichier"
 
 msgid "Delete note"
 msgstr "Supprimer la note"
@@ -633,20 +949,11 @@ msgstr "Afficher les métadonnées"
 msgid "View location on map"
 msgstr "Voir l'emplacement sur la carte"
 
-msgid "Edit"
-msgstr "Editer"
-
-msgid "Delete notebook?"
-msgstr "Supprimer le carnet ?"
-
 msgid "Delete notebook"
 msgstr "Supprimer le carnet"
 
 msgid "Login with OneDrive"
-msgstr "Se connecter avec OneDrive"
-
-msgid "Search"
-msgstr "Chercher"
+msgstr "Se connecter à OneDrive"
 
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
@@ -663,15 +970,73 @@ msgstr ""
 msgid "Welcome"
 msgstr "Bienvenue"
 
+#~ msgid ""
+#~ "Please set the \"sync.2.path\" config value to the desired "
+#~ "synchronisation destination."
+#~ msgstr ""
+#~ "Veuillez attribuer une valeur au paramètre de configuration \"sync.2.path"
+#~ "\" pour indiquer le dossier où devra se faire la synchronisation."
+
+#~ msgid "Seach:"
+#~ msgstr "Chercher :"
+
+#~ msgid "Seach"
+#~ msgstr "Chercher"
+
+#~ msgid ""
+#~ "Command line argument \"%s\" contains both quotes and double-quotes - "
+#~ "aborting."
+#~ msgstr ""
+#~ "Le paramètre de ligne de commande \"%s\" contient à la fois des "
+#~ "guillemets simples et doubles - impossible de continuer."
+
+#~ msgid "Provides help for a given command."
+#~ msgstr "Affiche l'aide pour la commande donnée."
+
+#, fuzzy
+#~ msgid "Create a [n]ew [n]otebook"
+#~ msgstr "Créer un carnet."
+
+#, fuzzy
+#~ msgid "[Cancel]"
+#~ msgstr "Annulation..."
+
+#~ msgid "Todo filter"
+#~ msgstr "Filtre des tâches"
+
+#~ msgid "Show all"
+#~ msgstr "Afficher tous"
+
+#~ msgid "Non-completed and recently completed ones"
+#~ msgstr "Tâches non-complétées et récentes"
+
+#~ msgid "Non-completed ones only"
+#~ msgstr "Tâches complétées seulement"
+
+#, fuzzy
+#~ msgid "Delete a note"
+#~ msgstr "Supprimer la note"
+
 #~ msgid "%s (%s)"
 #~ msgstr "%s (%s)"
 
-#~ msgid "Last error: %s (stacktrace in log)."
-#~ msgstr "Dernière erreur : %s (Plus d'information dans le journal d'erreurs)"
+#, fuzzy
+#~ msgid "Show/Hide the console"
+#~ msgstr "Quitter le logiciel."
 
 #, fuzzy
-#~ msgid "Cancelling command..."
-#~ msgstr "Annulation..."
+#~ msgid "Last command: %s"
+#~ msgstr "Commande invalide : \"%s\""
+
+#~ msgid "Done editing."
+#~ msgstr "Edition terminée."
+
+#, fuzzy
+#~ msgid "Confirm"
+#~ msgstr "Conflits"
+
+#~ msgid "Last error: %s (stacktrace in log)."
+#~ msgstr "Dernière erreur : %s (Plus d'information dans le journal d'erreurs)"
 
 #~ msgid "Done."
 #~ msgstr "Terminé."
@@ -693,12 +1058,6 @@ msgstr "Bienvenue"
 #~ "Déplacer les notes correspondantes à <motif> vers <destination>. Si "
 #~ "<motif> est une note, elle sera déplacée vers le carnet <destination>. Si "
 #~ "<motif> est un carnet, il sera renommé <destination>."
-
-#~ msgid "Deletes a notebook."
-#~ msgstr "Supprime le carnet."
-
-#~ msgid "Delete notebook \"%s\"?"
-#~ msgstr "Supprimer le carnet \"%s\" ?"
 
 #~ msgid "No notebook is defined. Create one with `mkbook <notebook>`."
 #~ msgstr "Aucun carnet n'est défini. Créez-en un avec `mkbook <carnet>`."
@@ -730,9 +1089,6 @@ msgstr "Bienvenue"
 #~ msgid "Usage: --log-level <none|error|warn|info|debug>"
 #~ msgstr "Utilisation: --log-level <none|error|warn|info|debug>"
 
-#~ msgid "cat <title>"
-#~ msgstr "cat <titre>"
-
 #~ msgid "config [name] [value]"
 #~ msgstr "config [nom] [valeur]"
 
@@ -741,10 +1097,6 @@ msgstr "Bienvenue"
 
 #~ msgid "edit <title>"
 #~ msgstr "edit <titre>"
-
-#, fuzzy
-#~ msgid "geoloc <title>"
-#~ msgstr "cat <titre>"
 
 #~ msgid "import-enex <file> [notebook]"
 #~ msgstr "import-enex <fichier> [carnet]"
@@ -780,9 +1132,6 @@ msgstr "Bienvenue"
 #~ msgstr ""
 #~ "Tous les ports sont en cours d'utilisation. Veuillez signaler ce problème "
 #~ "sur %s"
-
-#~ msgid "Imported - %s"
-#~ msgstr "Importé - %s"
 
 #~ msgid ""
 #~ "There is currently no notebook. Create one by clicking on the (+) button."

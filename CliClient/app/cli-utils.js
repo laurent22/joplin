@@ -1,6 +1,6 @@
-import yargParser from 'yargs-parser';
-import { _ } from 'lib/locale.js';
-import { time } from 'lib/time-utils.js';
+const yargParser = require('yargs-parser');
+const { _ } = require('lib/locale.js');
+const { time } = require('lib/time-utils.js');
 const stringPadding = require('string-padding');
 
 const cliUtils = {};
@@ -127,6 +127,37 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 	return output;
 }
 
+cliUtils.promptMcq = function(message, answers) {
+	const readline = require('readline');
+
+	const rl = readline.createInterface({
+		input: process.stdin,
+		output: process.stdout
+	});
+
+	message += "\n\n";
+	for (let n in answers) {
+		if (!answers.hasOwnProperty(n)) continue;
+		message += _('%s: %s', n, answers[n]) + "\n";
+	}
+
+	message += "\n";
+	message += _('Your choice: ');
+
+	return new Promise((resolve, reject) => {
+		rl.question(message, (answer) => {
+			rl.close();
+
+			if (!(answer in answers)) {
+				reject(new Error(_('Invalid answer: %s', answer)));
+				return;
+			}
+
+			resolve(answer);
+		});
+	});
+}
+
 cliUtils.promptConfirm = function(message, answers = null) {
 	if (!answers) answers = [_('Y'), _('n')];
 	const readline = require('readline');
@@ -163,15 +194,38 @@ cliUtils.promptInput = function(message) {
 	});
 }
 
+// Note: initialText is there to have the same signature as statusBar.prompt() so that
+// it can be a drop-in replacement, however initialText is not used (and cannot be
+// with readline.question?).
+cliUtils.prompt = function(initialText = '', promptString = ':') {
+	const readline = require('readline');
+
+	const rl = readline.createInterface({
+		input: process.stdin,
+		output: process.stdout
+	});
+
+	return new Promise((resolve, reject) => {
+		rl.question(promptString, (answer) => {
+			rl.close();
+			resolve(answer);
+		});
+	});
+}
+
 let redrawStarted_ = false;
 let redrawLastLog_ = null;
 let redrawLastUpdateTime_ = 0;
+
+cliUtils.setStdout = function(v) {
+	this.stdout_ = v;
+}
 
 cliUtils.redraw = function(s) {
 	const now = time.unixMs();
 
 	if (now - redrawLastUpdateTime_ > 4000) {
-		console.info(s);
+		this.stdout_(s);
 		redrawLastUpdateTime_ = now;
 		redrawLastLog_ = null;
 	} else {
@@ -185,11 +239,11 @@ cliUtils.redrawDone = function() {
 	if (!redrawStarted_) return;
 
 	if (redrawLastLog_) {
-		console.info(redrawLastLog_);
+		this.stdout_(redrawLastLog_);
 	}
 
 	redrawLastLog_ = null;
 	redrawStarted_ = false;
 }
 
-export { cliUtils };
+module.exports = { cliUtils };

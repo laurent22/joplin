@@ -1,5 +1,5 @@
-import DialogBox from 'react-native-dialogbox';
-import { Keyboard } from 'react-native';
+const DialogBox = require('react-native-dialogbox').default;
+const { Keyboard } = require('react-native');
 
 // Add this at the bottom of the component:
 //
@@ -8,7 +8,8 @@ import { Keyboard } from 'react-native';
 let dialogs = {};
 
 dialogs.confirm = (parentComponent, message) => {
-	if (!'dialogbox' in parentComponent) throw new Error('A "dialogbox" component must be defined on the parent component!');
+	if (!parentComponent) throw new Error('parentComponent is required');
+	if (!('dialogbox' in parentComponent)) throw new Error('A "dialogbox" component must be defined on the parent component!');
 
 	return new Promise((resolve, reject) => {
 		Keyboard.dismiss();
@@ -33,7 +34,8 @@ dialogs.confirm = (parentComponent, message) => {
 };
 
 dialogs.pop = (parentComponent, message, buttons) => {
-	if (!'dialogbox' in parentComponent) throw new Error('A "dialogbox" component must be defined on the parent component!');
+	if (!parentComponent) throw new Error('parentComponent is required');
+	if (!('dialogbox' in parentComponent)) throw new Error('A "dialogbox" component must be defined on the parent component!');
 
 	return new Promise((resolve, reject) => {
 		Keyboard.dismiss();
@@ -63,4 +65,4 @@ dialogs.error = (parentComponent, message) => {
 
 dialogs.DialogBox = DialogBox
 
-export { dialogs };
+module.exports = { dialogs };

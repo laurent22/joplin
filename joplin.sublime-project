@@ -2,36 +2,67 @@
 	"folders":
 	[
 		{
-			"path": ".",
-			"folder_exclude_patterns": [
-				"CliClient/node_modules",
-				"CliClient/build",
-				"CliClient/tests-build",
-				"CliClient/app/src",
-				"CliClient/app/lib",
-				"CliClient/tests/src",
-				"CliClient/tests/fuzzing",
-				"CliClient/tests/fuzzing -*",
-				"ReactNativeClient/node_modules",
-				"ReactNativeClient/android/app/build",
-				"ReactNativeClient/android/build",
-				"ReactNativeClient/android/.idea",
-				"ReactNativeClient/android/.gradle",
-				"ReactNativeClient/android/local.properties",
-				"ReactNativeClient/ios",
-				"_vieux",
-				"tests/logs"
-			],
-			"file_exclude_patterns": [
-				"*.map",
-				"CliClient/app/src",
-				"CliClient/app/lib",
+			"file_exclude_patterns":
+			[
 				"*.jar",
+				"*.map",
 				"*.po",
 				"*.pot",
+				"CliClient/app/lib",
+				"CliClient/app/src",
 				"locales/*.json",
+				"log.txt",
+				"package-lock.json",
 				"ReactNativeClient/locales/*",
-			]
+				"src/log.txt",
+				"*.min.js",
+				"ElectronClient/app/gui/note-viewer/highlight/*.pack.js",
+				"ElectronClient/app/css/font-awesome.min.css",
+			],
+			"folder_exclude_patterns":
+			[
+				"_mydocs/mdtest",
+				"_vieux",
+				"ElectronClient/app/fonts",
+				"CliClient/app/lib",
+				"CliClient/app/src",
+				"CliClient/build",
+				"CliClient/node_modules",
+				"CliClient/tests-build",
+				"CliClient/tests-build/lib",
+				"CliClient/tests/fuzzing -*",
+				"CliClient/tests/fuzzing",
+				"CliClient/tests/src",
+				"CliClient/tests/sync",
+				"ElectronClient/dist",
+				"ElectronClient/build",
+				"ElectronClient/app/lib",
+				"ElectronClient/app/locale",
+				"ElectronClient/app/dist",
+				"node_modules",
+				"ReactNativeClient/android/.gradle",
+				"ReactNativeClient/android/.idea",
+				"ReactNativeClient/android/app/build",
+				"ReactNativeClient/android/build",
+				"ReactNativeClient/android/local.properties",
+				"ReactNativeClient/node_modules",
+				"ElectronClient/app/gui/note-viewer/highlight/styles",
+				"tests/logs",
+				"ReactNativeClient/ios/build",
+				"ElectronClient/app/dist",
+			],
+			"path": "."
+		},
+		{
+			"file_exclude_patterns":
+			[
+				"src/log.txt",
+			],
+			"folder_exclude_patterns":
+			[
+				"node_modules",
+			],
+			"path": "D:\\Docs\\PROGS\\Node\\tkwidgets"
 		}
 	]
 }

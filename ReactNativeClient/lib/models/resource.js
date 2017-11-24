@@ -1,11 +1,10 @@
-import { BaseModel } from 'lib/base-model.js';
-import { BaseItem } from 'lib/models/base-item.js';
-import { Setting } from 'lib/models/setting.js';
-import { mime } from 'lib/mime-utils.js';
-import { filename } from 'lib/path-utils.js';
-import { FsDriverDummy } from 'lib/fs-driver-dummy.js';
-import { markdownUtils } from 'lib/markdown-utils.js';
-import lodash  from 'lodash';
+const { BaseModel } = require('lib/base-model.js');
+const { BaseItem } = require('lib/models/base-item.js');
+const { Setting } = require('lib/models/setting.js');
+const { mime } = require('lib/mime-utils.js');
+const { filename } = require('lib/path-utils.js');
+const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
+const { markdownUtils } = require('lib/markdown-utils.js');
 
 class Resource extends BaseItem {
 
@@ -33,10 +32,14 @@ class Resource extends BaseItem {
 		return super.serialize(item, 'resource', fieldNames);
 	}
 
-	static fullPath(resource) {
-		let extension = mime.toFileExtension(resource.mime);
+	static filename(resource) {
+		let extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
 		extension = extension ? '.' + extension : '';
-		return Setting.value('resourceDir') + '/' + resource.id + extension;
+		return resource.id + extension;
+	}
+
+	static fullPath(resource) {
+		return Setting.value('resourceDir') + '/' + this.filename(resource);
 	}
 
 	static markdownTag(resource) {
@@ -59,7 +62,7 @@ class Resource extends BaseItem {
 		return filename(path);
 	}
 
-	static content(resource) {
+	static async content(resource) {
 		return this.fsDriver().readFile(this.fullPath(resource));
 	}
 
@@ -68,7 +71,7 @@ class Resource extends BaseItem {
 	}
 
 	static isResourceUrl(url) {
-		return url.length === 34 && url[0] === ':' && url[1] === '/';
+		return url && url.length === 34 && url[0] === ':' && url[1] === '/';
 	}
 
 	static urlToId(url) {
@@ -78,4 +81,6 @@ class Resource extends BaseItem {
 
 }
 
-export { Resource };
+Resource.IMAGE_MAX_DIMENSION = 1920;
+
+module.exports = { Resource };
