@@ -2,11 +2,16 @@ const { reg } = require('lib/registry.js');
 
 class BaseSyncTarget {
 
-	constructor(db) {
+	constructor(db, options = null) {
 		this.db_ = db;
 		this.synchronizer_ = null;
 		this.initState_ = null;
 		this.logger_ = null;
+		this.options_ = options;
+	}
+
+	option(name, defaultValue = null) {
+		return this.options_ && (name in this.options_) ? this.options_[name] : defaultValue;
 	}
 
 	logger() {
@@ -35,6 +40,23 @@ class BaseSyncTarget {
 
 	async initSynchronizer() {
 		throw new Error('Not implemented');
+	}
+
+	initFileApi() {
+		throw new Error('Not implemented');
+	}
+
+	fileApi() {
+		if (this.fileApi_) return this.fileApi_;
+		this.fileApi_ = this.initFileApi();
+		return this.fileApi_;
+	}
+
+	// Usually each sync target should create and setup its own file API via initFileApi()
+	// but for testing purposes it might be convenient to provide it here so that multiple
+	// clients can share and sync to the same file api (see test-utils.js)
+	setFileApi(v) {
+		this.fileApi_ = v;
 	}
 
 	async synchronizer() {
@@ -78,5 +100,7 @@ class BaseSyncTarget {
 	}
 
 }
+
+BaseSyncTarget.dispatch = (action) => {};
 
 module.exports = BaseSyncTarget;

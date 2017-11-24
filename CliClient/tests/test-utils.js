@@ -16,6 +16,7 @@ const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { time } = require('lib/time-utils.js');
+const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 
 let databases_ = [];
 let synchronizers_ = [];
@@ -119,8 +120,11 @@ async function setupDatabaseAndSynchronizer(id = null) {
 	await setupDatabase(id);
 
 	if (!synchronizers_[id]) {
-		synchronizers_[id] = new Synchronizer(db(id), fileApi(), Setting.value('appType'));
-		synchronizers_[id].setLogger(logger);
+		const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId_);
+		const syncTarget = new SyncTargetClass(db(id));
+		syncTarget.setFileApi(fileApi());
+		syncTarget.setLogger(logger);
+		synchronizers_[id] = await syncTarget.synchronizer();
 	}
 
 	if (syncTargetId_ == Setting.SYNC_TARGET_FILESYSTEM) {
@@ -150,7 +154,6 @@ function fileApi() {
 		fileApi_ = new FileApi(syncDir, new FileApiDriverLocal());
 	} else if (syncTargetId_ == Setting.SYNC_TARGET_MEMORY) {
 		fileApi_ = new FileApi('/root', new FileApiDriverMemory());
-		fileApi_.setLogger(logger);
 	}
 	// } else if (syncTargetId == Setting.SYNC_TARGET_ONEDRIVE) {
 	// 	let auth = require('./onedrive-auth.json');

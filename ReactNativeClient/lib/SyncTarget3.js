@@ -9,8 +9,8 @@ const { FileApiDriverOneDrive } = require('lib/file-api-driver-onedrive.js');
 
 class SyncTarget3 extends BaseSyncTarget {
 
-	constructor(db) {
-		super();
+	constructor(db, options = null) {
+		super(db, options);
 		this.api_ = null;
 	}
 
@@ -19,7 +19,7 @@ class SyncTarget3 extends BaseSyncTarget {
 	}
 
 	name() {
-		return 'OneDrive';
+		return 'onedrive';
 	}
 
 	label() {
@@ -59,16 +59,18 @@ class SyncTarget3 extends BaseSyncTarget {
 		return this.api_;
 	}
 
-	async initSynchronizer() {
-		let fileApi = null;
-
-		if (!this.api().auth()) throw new Error('User is not authentified');
-		const appDir = await this.api().appDirectory();
-		fileApi = new FileApi(appDir, new FileApiDriverOneDrive(this.api()));
+	initFileApi() {
+		const fileApi = new FileApi(appDir, new FileApiDriverOneDrive(this.api()));
 		fileApi.setSyncTargetId(this.id());
 		fileApi.setLogger(this.logger());
+		return fileApi;
+	}
 
-		return new Synchronizer(this.db(), fileApi, Setting.value('appType'));
+	async initSynchronizer() {
+		if (!this.isAuthenticated()) throw new Error('User is not authentified');
+		
+		const appDir = await this.api().appDirectory();
+		return new Synchronizer(this.db(), this.fileApi(), Setting.value('appType'));
 	}
 
 }

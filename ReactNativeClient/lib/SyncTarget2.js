@@ -2,21 +2,21 @@ const BaseSyncTarget = require('lib/BaseSyncTarget.js');
 const { _ } = require('lib/locale.js');
 const { Setting } = require('lib/models/setting.js');
 const { FileApi } = require('lib/file-api.js');
-const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');
+const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const { Synchronizer } = require('lib/synchronizer.js');
 
-class SyncTarget1 extends BaseSyncTarget {
+class SyncTarget2 extends BaseSyncTarget {
 
 	id() {
-		return 1;
+		return 2;
 	}
 
 	name() {
-		return 'memory';
+		return 'filesystem';
 	}
 
 	label() {
-		return 'Memory';
+		return _('File system');
 	}
 
 	isAuthenticated() {
@@ -24,7 +24,7 @@ class SyncTarget1 extends BaseSyncTarget {
 	}
 
 	initFileApi() {
-		const fileApi = new FileApi('/root', new FileApiDriverMemory());
+		const fileApi = new FileApi(Setting.value('sync.2.path'), new FileApiDriverLocal());
 		fileApi.setLogger(this.logger());
 		fileApi.setSyncTargetId(this.id());
 		return fileApi;
@@ -36,4 +36,4 @@ class SyncTarget1 extends BaseSyncTarget {
 
 }
 
-module.exports = SyncTarget1;
+module.exports = SyncTarget2;
