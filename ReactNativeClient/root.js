@@ -37,10 +37,11 @@ const { _, setLocale, closestSupportedLocale, defaultLocale } = require('lib/loc
 const RNFetchBlob = require('react-native-fetch-blob').default;
 const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const { reducer, defaultState } = require('lib/reducer.js');
+const PushNotification = require('react-native-push-notification');
+
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
-
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
 
@@ -363,6 +364,15 @@ async function initialize(dispatch, backButtonHandler) {
 	} else {
 		reg.scheduleSync();
 	}
+
+
+
+
+	PushNotification.localNotificationSchedule({
+		message: "My Notification Message", // (required)
+		date: new Date(Date.now() + (10 * 1000)) // in 60 secs
+	});
+
 
 	reg.logger().info('Application initialized');
 }
