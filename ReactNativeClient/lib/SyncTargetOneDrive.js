@@ -18,6 +18,10 @@ class SyncTargetOneDrive extends BaseSyncTarget {
 		return 3;
 	}
 
+	static targetName() {
+		return 'onedrive';
+	}
+
 	static label() {
 		return _('OneDrive');
 	}

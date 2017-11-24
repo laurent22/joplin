@@ -11,6 +11,10 @@ class SyncTargetMemory extends BaseSyncTarget {
 		return 1;
 	}
 
+	static targetName() {
+		return 'memory';
+	}
+
 	static label() {
 		return 'Memory';
 	}

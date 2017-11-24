@@ -34,6 +34,12 @@ class BaseSyncTarget {
 		throw new Error('id() not implemented');
 	}
 
+	// Note: it cannot be called just "name()" because that's a reserved keyword and
+	// it would throw an obscure error in React Native.
+	static targetName() {
+		throw new Error('targetName() not implemented');
+	}
+
 	static label() {
 		throw new Error('label() not implemented');
 	}

@@ -775,10 +775,6 @@ msgstr "Impossible de copier la note vers le carnet \"%s\""
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Impossible de déplacer la note vers le carnet \"%s\""
 
-#, javascript-format
-msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "Option invalide: \"%s\". Les valeurs possibles sont : %s."
-
 msgid "File system synchronisation target directory"
 msgstr "Cible de la synchronisation sur le disque dur"
 
@@ -851,6 +847,10 @@ msgstr "Quitter le logiciel."
 
 msgid "Show advanced options"
 msgstr "Montrer les options avancées"
+
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "Option invalide: \"%s\". Les valeurs possibles sont : %s."
 
 msgid "Sync status (synced items / total items)"
 msgstr "Status de la synchronisation (objets synchro. / total)"

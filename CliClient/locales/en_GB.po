@@ -718,10 +718,6 @@ msgstr ""
 msgid "Cannot move note to \"%s\" notebook"
 msgstr ""
 
-#, javascript-format
-msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr ""
-
 msgid "File system synchronisation target directory"
 msgstr ""
 
@@ -786,6 +782,10 @@ msgid "Automatically update the application"
 msgstr ""
 
 msgid "Show advanced options"
+msgstr ""
+
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr ""
 
 msgid "Sync status (synced items / total items)"

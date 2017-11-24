@@ -1,6 +1,7 @@
 const { BaseModel } = require('lib/base-model.js');
 const { Database } = require('lib/database.js');
 const { Logger } = require('lib/logger.js');
+const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const { sprintf } = require('sprintf-js');
 const { _, supportedLocalesToLanguages, defaultLocale } = require('lib/locale.js');
 
@@ -14,22 +15,82 @@ class Setting extends BaseModel {
 		return BaseModel.TYPE_SETTING;
 	}
 
+	static metadata() {
+		if (this.metadata_) return this.metadata_;
+
+		this.metadata_ = {
+			'activeFolderId': { value: '', type: Setting.TYPE_STRING, public: false },
+			'firstStart': { value: true, type: Setting.TYPE_BOOL, public: false },
+			'sync.2.path': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'], label: () => _('File system synchronisation target directory'), description: () => _('The path to synchronise with when file system synchronisation is enabled. See `sync.target`.') },
+			'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.target': { value: SyncTargetRegistry.nameToId('onedrive'), type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation target'), description: () => _('The target to synchonise to. If synchronising with the file system, set `sync.2.path` to specify the target directory.'), options: () => {
+				return SyncTargetRegistry.idAndLabelPlainObject();
+			}},
+			'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.2.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.3.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.4.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.5.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'editor': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'], label: () => _('Text editor'), description: () => _('The editor that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
+			'locale': { value: defaultLocale(), type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Language'), options: () => {
+				return supportedLocalesToLanguages();
+			}},
+			'theme': { value: Setting.THEME_LIGHT, type: Setting.TYPE_INT, public: true, appTypes: ['mobile'], isEnum: true, label: () => _('Theme'), options: () => {
+				let output = {};
+				output[Setting.THEME_LIGHT] = _('Light');
+				output[Setting.THEME_DARK] = _('Dark');
+				return output;
+			}},
+			// 'logLevel': { value: Logger.LEVEL_INFO, type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Log level'), options: () => {
+			// 	return Logger.levelEnum();
+			// }},
+			// Not used for now:
+			// 'todoFilter': { value: 'all', type: Setting.TYPE_STRING, isEnum: true, public: false, appTypes: ['mobile'], label: () => _('Todo filter'), options: () => ({
+			// 	all: _('Show all'),
+			// 	recent: _('Non-completed and recently completed ones'),
+			// 	nonCompleted: _('Non-completed ones only'),
+			// })},
+			'uncompletedTodosOnTop': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Show uncompleted todos on top of the lists') },
+			'trackLocation': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Save geo-location with notes') },
+			'sync.interval': { value: 300, type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation interval'), options: () => {
+				return {
+					0: _('Disabled'),
+					300: _('%d minutes', 5),
+					600: _('%d minutes', 10),
+					1800: _('%d minutes', 30),
+					3600: _('%d hour', 1),
+					43200: _('%d hours', 12),
+					86400: _('%d hours', 24),
+				};
+			}},
+			'noteVisiblePanes': { value: ['editor', 'viewer'], type: Setting.TYPE_ARRAY, public: false, appTypes: ['desktop'] },
+			'autoUpdateEnabled': { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
+			'showAdvancedOptions': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile' ], label: () => _('Show advanced options') },
+		};
+
+		return this.metadata_;
+	}
+
 	static settingMetadata(key) {
-		if (!(key in this.metadata_)) throw new Error('Unknown key: ' + key);
-		let output = Object.assign({}, this.metadata_[key]);
+		const metadata = this.metadata();
+		if (!(key in metadata)) throw new Error('Unknown key: ' + key);
+		let output = Object.assign({}, metadata[key]);
 		output.key = key;
 		return output;
 	}
 
 	static keyExists(key) {
-		return key in this.metadata_;
+		return key in this.metadata();
 	}
 
 	static keys(publicOnly = false, appType = null) {
 		if (!this.keys_) {
+			const metadata = this.metadata();
 			this.keys_ = [];
-			for (let n in this.metadata_) {
-				if (!this.metadata_.hasOwnProperty(n)) continue;
+			for (let n in metadata) {
+				if (!metadata.hasOwnProperty(n)) continue;
 				this.keys_.push(n);
 			}
 		}
@@ -225,9 +286,10 @@ class Setting extends BaseModel {
 	}
 
 	static enumOptions(key) {
-		if (!this.metadata_[key]) throw new Error('Unknown key: ' + key);
-		if (!this.metadata_[key].options) throw new Error('No options for: ' + key);
-		return this.metadata_[key].options();
+		const metadata = this.metadata();
+		if (!metadata[key]) throw new Error('Unknown key: ' + key);
+		if (!metadata[key].options) throw new Error('No options for: ' + key);
+		return metadata[key].options();
 	}
 
 	static enumOptionsDoc(key, templateString = null) {
@@ -303,10 +365,12 @@ class Setting extends BaseModel {
 	static publicSettings(appType) {
 		if (!appType) throw new Error('appType is required');
 
+		const metadata = this.metadata();
+
 		let output = {};
-		for (let key in Setting.metadata_) {
-			if (!Setting.metadata_.hasOwnProperty(key)) continue;
-			let s = Object.assign({}, Setting.metadata_[key]);
+		for (let key in metadata) {
+			if (!metadata.hasOwnProperty(key)) continue;
+			let s = Object.assign({}, metadata[key]);
 			if (!s.public) continue;
 			if (s.appTypes && s.appTypes.indexOf(appType) < 0) continue;
 			s.value = this.value(key);
@@ -325,11 +389,6 @@ class Setting extends BaseModel {
 
 }
 
-Setting.SYNC_TARGET_MEMORY = 1;
-Setting.SYNC_TARGET_FILESYSTEM = 2;
-Setting.SYNC_TARGET_ONEDRIVE = 3;
-//Setting.SYNC_TARGET_ONEDRIVE_DEV = 4;
-
 Setting.TYPE_INT = 1;
 Setting.TYPE_STRING = 2;
 Setting.TYPE_BOOL = 3;
@@ -338,63 +397,6 @@ Setting.TYPE_OBJECT = 5;
 
 Setting.THEME_LIGHT = 1;
 Setting.THEME_DARK = 2;
-
-Setting.metadata_ = {
-	'activeFolderId': { value: '', type: Setting.TYPE_STRING, public: false },
-	'firstStart': { value: true, type: Setting.TYPE_BOOL, public: false },
-	'sync.2.path': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'], label: () => _('File system synchronisation target directory'), description: () => _('The path to synchronise with when file system synchronisation is enabled. See `sync.target`.') },
-	'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
-	'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
-	'sync.target': { value: Setting.SYNC_TARGET_ONEDRIVE, type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation target'), description: () => _('The target to synchonise to. If synchronising with the file system, set `sync.2.path` to specify the target directory.'), options: () => {
-		let output = {};
-		output[Setting.SYNC_TARGET_MEMORY] = 'Memory';
-		output[Setting.SYNC_TARGET_FILESYSTEM] = _('File system');
-		output[Setting.SYNC_TARGET_ONEDRIVE] = _('OneDrive');
-		//output[Setting.SYNC_TARGET_ONEDRIVE_DEV] = _('OneDrive (Testing Only)');
-		return output;
-	}},
-	'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },
-	'sync.2.context': { value: '', type: Setting.TYPE_STRING, public: false },
-	'sync.3.context': { value: '', type: Setting.TYPE_STRING, public: false },
-	'sync.4.context': { value: '', type: Setting.TYPE_STRING, public: false },
-	'sync.5.context': { value: '', type: Setting.TYPE_STRING, public: false },
-	'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
-	'editor': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'], label: () => _('Text editor'), description: () => _('The editor that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
-	'locale': { value: defaultLocale(), type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Language'), options: () => {
-		return supportedLocalesToLanguages();
-	}},
-	'theme': { value: Setting.THEME_LIGHT, type: Setting.TYPE_INT, public: true, appTypes: ['mobile'], isEnum: true, label: () => _('Theme'), options: () => {
-		let output = {};
-		output[Setting.THEME_LIGHT] = _('Light');
-		output[Setting.THEME_DARK] = _('Dark');
-		return output;
-	}},
-	// 'logLevel': { value: Logger.LEVEL_INFO, type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Log level'), options: () => {
-	// 	return Logger.levelEnum();
-	// }},
-	// Not used for now:
-	// 'todoFilter': { value: 'all', type: Setting.TYPE_STRING, isEnum: true, public: false, appTypes: ['mobile'], label: () => _('Todo filter'), options: () => ({
-	// 	all: _('Show all'),
-	// 	recent: _('Non-completed and recently completed ones'),
-	// 	nonCompleted: _('Non-completed ones only'),
-	// })},
-	'uncompletedTodosOnTop': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Show uncompleted todos on top of the lists') },
-	'trackLocation': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Save geo-location with notes') },
-	'sync.interval': { value: 300, type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation interval'), options: () => {
-		return {
-			0: _('Disabled'),
-			300: _('%d minutes', 5),
-			600: _('%d minutes', 10),
-			1800: _('%d minutes', 30),
-			3600: _('%d hour', 1),
-			43200: _('%d hours', 12),
-			86400: _('%d hours', 24),
-		};
-	}},
-	'noteVisiblePanes': { value: ['editor', 'viewer'], type: Setting.TYPE_ARRAY, public: false, appTypes: ['desktop'] },
-	'autoUpdateEnabled': { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
-	'showAdvancedOptions': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile' ], label: () => _('Show advanced options') },
-};
 
 // Contains constants that are set by the application and
 // cannot be modified by the user:
