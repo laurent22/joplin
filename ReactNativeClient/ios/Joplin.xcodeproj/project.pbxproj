@@ -23,6 +23,7 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		1E71C4672AEC47CE94DFF507 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FD370E24D76E461D960DD85D /* Feather.ttf */; };
 		350318CF7C9E4BD68821EBE9 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FF411B45E68B4A8CBCC35777 /* Ionicons.ttf */; };
+		4DDA31241FC88F2400B5A80D /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDA310F1FC88EEB00B5A80D /* libRCTPushNotification.a */; };
 		5AFCE00CC1414FE6BD618F0D /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 15FD7D2C8F0A445BBA807A9D /* MaterialIcons.ttf */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		725A77EC604947A0AFF12C2B /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5E37D05726A4A08B2EE323A /* libRNFetchBlob.a */; };
@@ -199,6 +200,20 @@
 			remoteGlobalIDString = 014A3B5C1C6CF33500B6D375;
 			remoteInfo = RNImagePicker;
 		};
+		4DDA310E1FC88EEB00B5A80D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4DDA31011FC88EEA00B5A80D /* RCTPushNotification.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RCTPushNotification;
+		};
+		4DDA31101FC88EEB00B5A80D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4DDA31011FC88EEA00B5A80D /* RCTPushNotification.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3D05745F1DE6004600184BB4;
+			remoteInfo = "RCTPushNotification-tvOS";
+		};
 		5E9157321DD0AC6500FF2AA8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */;
@@ -254,6 +269,7 @@
 		3FFC0F5EFDC54862B1F998DD /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		44A39642217548C8ADA91CBA /* libRNImagePicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNImagePicker.a; sourceTree = "<group>"; };
 		4DA7F7A61FC1196F00353191 /* Joplin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Joplin.entitlements; path = Joplin/Joplin.entitlements; sourceTree = "<group>"; };
+		4DDA31011FC88EEA00B5A80D /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
 		508DD20D1EA341CA8F730F22 /* libRCTImageResizer.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTImageResizer.a; sourceTree = "<group>"; };
 		51BCEC3BC28046C8BB19531F /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
@@ -284,6 +300,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4DDA31241FC88F2400B5A80D /* libRCTPushNotification.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
@@ -475,6 +492,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		4DDA31021FC88EEA00B5A80D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4DDA310F1FC88EEB00B5A80D /* libRCTPushNotification.a */,
+				4DDA31111FC88EEB00B5A80D /* libRCTPushNotification-tvOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		5E91572E1DD0AC6500FF2AA8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -512,6 +538,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				4DDA31011FC88EEA00B5A80D /* RCTPushNotification.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -658,6 +685,10 @@
 				{
 					ProductGroup = 00C302D41ABCB9D200DB3ED1 /* Products */;
 					ProjectRef = 00C302D31ABCB9D200DB3ED1 /* RCTNetwork.xcodeproj */;
+				},
+				{
+					ProductGroup = 4DDA31021FC88EEA00B5A80D /* Products */;
+					ProjectRef = 4DDA31011FC88EEA00B5A80D /* RCTPushNotification.xcodeproj */;
 				},
 				{
 					ProductGroup = 139105B71AF99BAD00B5F7CC /* Products */;
@@ -864,6 +895,20 @@
 			fileType = archive.ar;
 			path = libRNImagePicker.a;
 			remoteRef = 4DA7F80C1FC1DA9C00353191 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4DDA310F1FC88EEB00B5A80D /* libRCTPushNotification.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTPushNotification.a;
+			remoteRef = 4DDA310E1FC88EEB00B5A80D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4DDA31111FC88EEB00B5A80D /* libRCTPushNotification-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRCTPushNotification-tvOS.a";
+			remoteRef = 4DDA31101FC88EEB00B5A80D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */ = {
