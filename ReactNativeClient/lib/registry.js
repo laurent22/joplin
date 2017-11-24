@@ -1,19 +1,11 @@
 const { Logger } = require('lib/logger.js');
 const { Setting } = require('lib/models/setting.js');
-const { parameters } = require('lib/parameters.js');
-const { FileApi } = require('lib/file-api.js');
-const { Database } = require('lib/database.js');
-const { Synchronizer } = require('lib/synchronizer.js');
-const { FileApiDriverOneDrive } = require('lib/file-api-driver-onedrive.js');
 const { shim } = require('lib/shim.js');
-const { time } = require('lib/time-utils.js');
-const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const { _ } = require('lib/locale.js');
 
 const reg = {};
 
-reg.initSynchronizerStates_ = {};
 reg.syncTargets_ = {};
 
 reg.logger = () => {
