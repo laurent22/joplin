@@ -1,8 +1,8 @@
 # Joplin
 
-Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor.
+Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](https://daringfireball.net/projects/markdown/basics).
 
-Notes exported from Evernote via .enex files [can be imported](#importing-notes-from-evernote) into Joplin, including the formatted content (which is converted to markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).
+Notes exported from Evernote via .enex files [can be imported](#importing-notes-from-evernote) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).
 
 The notes can be [synchronised](#synchronisation) with various targets including the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
 
@@ -12,7 +12,7 @@ Joplin is still under development but is out of Beta and should be suitable for 
 
 # Installation
 
-Three types of applications are available: **desktop** (Windows, macOS and Linux), **mobile** (Android and iOS) and for **terminal** (Windows, macOS and Linux). All applications have similar user interfaces and can synchronise with each others.
+Three types of applications are available: for the **desktop** (Windows, macOS and Linux), for **mobile** (Android and iOS) and for **terminal** (Windows, macOS and Linux). All applications have similar user interfaces and can synchronise with each others.
 
 ## Desktop applications
 
@@ -35,6 +35,8 @@ On macOS, Linux or Windows (via [WSL](https://msdn.microsoft.com/en-us/commandli
 
 	npm install -g joplin
 
+If the application does not install due to permission issues, please make sure that your global npm permissions are correct by following the instructions [here](https://docs.npmjs.com/getting-started/fixing-npm-permissions).
+
 To start it, type `joplin`.
 
 For usage information, please refer to the full [Joplin Terminal Application Documentation](http://joplin.cozic.net/terminal).
@@ -46,7 +48,7 @@ For usage information, please refer to the full [Joplin Terminal Application Doc
 - Offline first, so the entire data is always available on the device even without an internet connection.
 - Ability to synchronise with multiple targets, including the file system and OneDrive (Dropbox is planned).
 - Synchronises to a plain text format, which can be easily manipulated, backed up, or exported to a different format.
-- Plain text notes, which are rendered as markdown in the mobile and desktop application.
+- Markdown notes, which are rendered with images and formatting in the desktop and mobile applications.
 - Tag support
 - File attachment support (images are displayed, and other files are linked and can be opened in the relevant application).
 - Search functionality.
@@ -61,19 +63,11 @@ Joplin was designed as a replacement for Evernote and so can import complete Eve
 
 - Colour, font sizes and faces - Evernote text is stored as HTML and this is converted to Markdown during the import process. For notes that are mostly plain text or with basic formatting (bold, italic, bullet points, links, etc.) this is a lossless conversion, and the note, once rendered back to HTML should be very similar. Tables are also imported and converted to Markdown tables. For very complex notes, some formatting data might be loss - in particular colours, font sizes and font faces will not be imported. The text itself however is always imported in full regardless of formatting.
 
-To import Evernote data, follow these steps:
+To import Evernote data, first export your Evernote notebooks to ENEX files as described [here](https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks). Then follow these steps:
 
-## Desktop application
+On the **desktop application**, open the "File" menu, click "Import Evernote notes" and select your ENEX file. This will open a new screen which will display the import progress. The notes will be imported into a new separate notebook (so that, in case of a mistake, the notes are not mixed up with any existing notes). If needed then can then be moved to a different notebook, or the notebook can be renamed, etc.
 
-* Open the "File" menu and click "Import Evernote notes"
-
-This will open a new screen which will display the import progress. The notes will be imported into a new separate notebook (so that, in case of a mistake, the notes are not mixed up with any existing notes). If needed then can then be moved to a different notebook, or the notebook can be renamed, etc.
-
-## Terminal application
-
-* First, export your Evernote notebooks to ENEX files as described [here](https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks).
-* In Joplin, in [command-line mode](/terminal#command-line-mode), type `import-enex /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
-* Then repeat the process for each notebook that needs to be imported.
+On the **desktop application**, in [command-line mode](/terminal#command-line-mode), type `import-enex /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
 
 # Synchronisation
 
@@ -81,13 +75,9 @@ One of the goals of Joplin was to avoid being tied to any particular company or 
 
 Currently, synchronisation is possible with OneDrive (by default) or the local filesystem. A Dropbox driver will also be available once [this React Native bug](https://github.com/facebook/react-native/issues/14445) is fixed. When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
 
-## Desktop application
+On the **desktop application**, to initiate the synchronisation process, click on the "Synchronise" button in the sidebar. You will be asked to login to OneDrive to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). After that, the application will synchronise in the background whenever it is running, or you can click on "Synchronise" to start a synchronisation manually.
 
-To initiate the synchronisation process, click on the "Synchronise" button in the sidebar. You will be asked to login to OneDrive to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). After that, the application will synchronise in the background whenever it is running, or you can click on "Synchronise" to start a synchronisation manually
-
-## Terminal application
-
-To initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). After that, the application will synchronise in the background whenever it is running. It is possible to also synchronise outside of the user interface by typing `joplin sync` from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:
+On the **terminal application**, to initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). After that, the application will synchronise in the background whenever it is running. It is possible to also synchronise outside of the user interface by typing `joplin sync` from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:
 
 	*/30 * * * * /path/to/joplin sync
 
@@ -104,7 +94,7 @@ Joplin is currently available in English and French. If you would like to contri
 - In Poedit, open this .pot file, go into the Catalog menu and click Configuration. Change "Country" and "Language" to your own country and language.
 - From then you can translate the file. Once it's done, please send the file to [this address](https://raw.githubusercontent.com/laurent22/joplin/master/Assets/Adresse.png) or open a pull request.
 
-This translation will apply to both the terminal and the Android application.
+This translation will apply to the three applications - desktop, mobile and terminal.
 
 # Coming features
 
@@ -118,6 +108,7 @@ This translation will apply to both the terminal and the Android application.
 
 - Non-alphabetical characters such as Chinese or Arabic might create glitches in the terminal on Windows. This is a limitation of the current Windows console.
 - Auto-update is not working in the Linux desktop application.
+- While the mobile can sync and load tags, it is not currently possible to create new ones. The desktop and terminal apps can create, delete and edit tags.
 
 # License
 
