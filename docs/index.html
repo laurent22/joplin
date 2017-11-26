@@ -199,14 +199,14 @@
 </div>
 
 <div class="content">
-<p>Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor.</p>
-<p>Notes exported from Evernote via .enex files <a href="#importing-notes-from-evernote">can be imported</a> into Joplin, including the formatted content (which is converted to markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).</p>
+<p>Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in <a href="https://daringfireball.net/projects/markdown/basics">Markdown format</a>.</p>
+<p>Notes exported from Evernote via .enex files <a href="#importing-notes-from-evernote">can be imported</a> into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).</p>
 <p>The notes can be <a href="#synchronisation">synchronised</a> with various targets including the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
 <p>Joplin is still under development but is out of Beta and should be suitable for every day use. The UI of the terminal client is built on top of the great <a href="https://github.com/cronvel/terminal-kit">terminal-kit</a> library, the desktop client using <a href="https://electronjs.org/">Electron</a>, and the Android client front end is done using <a href="https://facebook.github.io/react-native/">React Native</a>.</p>
 <div class="top-screenshot"><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/AllClients.jpg" style="max-width: 100%; max-height: 35em;"></div>
 
 <h1 id="installation">Installation</h1>
-<p>Three types of applications are available: <strong>desktop</strong> (Windows, macOS and Linux), <strong>mobile</strong> (Android and iOS) and for <strong>terminal</strong> (Windows, macOS and Linux). All applications have similar user interfaces and can synchronise with each others.</p>
+<p>Three types of applications are available: for the <strong>desktop</strong> (Windows, macOS and Linux), for <strong>mobile</strong> (Android and iOS) and for <strong>terminal</strong> (Windows, macOS and Linux). All applications have similar user interfaces and can synchronise with each others.</p>
 <h2 id="desktop-applications">Desktop applications</h2>
 <table>
 <thead>
@@ -218,15 +218,15 @@
 <tbody>
 <tr>
 <td>Windows</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.23/Joplin-Setup-0.10.23.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.25/Joplin-Setup-0.10.25.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a></td>
 </tr>
 <tr>
 <td>macOS</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.23/Joplin-0.10.23.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.25/Joplin-0.10.25.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a></td>
 </tr>
 <tr>
 <td>Linux</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.23/Joplin-0.10.23-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.25/Joplin-0.10.25-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a></td>
 </tr>
 </tbody>
 </table>
@@ -252,7 +252,8 @@
 <h2 id="terminal-application">Terminal application</h2>
 <p>On macOS, Linux or Windows (via <a href="https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&amp;MSPPError=-2147217396">WSL</a>), type:</p>
 <pre><code>npm install -g joplin
-</code></pre><p>To start it, type <code>joplin</code>.</p>
+</code></pre><p>If the application does not install due to permission issues, please make sure that your global npm permissions are correct by following the instructions <a href="https://docs.npmjs.com/getting-started/fixing-npm-permissions">here</a>.</p>
+<p>To start it, type <code>joplin</code>.</p>
 <p>For usage information, please refer to the full <a href="http://joplin.cozic.net/terminal">Joplin Terminal Application Documentation</a>.</p>
 <h1 id="features">Features</h1>
 <ul>
@@ -261,7 +262,7 @@
 <li>Offline first, so the entire data is always available on the device even without an internet connection.</li>
 <li>Ability to synchronise with multiple targets, including the file system and OneDrive (Dropbox is planned).</li>
 <li>Synchronises to a plain text format, which can be easily manipulated, backed up, or exported to a different format.</li>
-<li>Plain text notes, which are rendered as markdown in the mobile and desktop application.</li>
+<li>Markdown notes, which are rendered with images and formatting in the desktop and mobile applications.</li>
 <li>Tag support</li>
 <li>File attachment support (images are displayed, and other files are linked and can be opened in the relevant application).</li>
 <li>Search functionality.</li>
@@ -276,25 +277,14 @@
 <li><p>Colour, font sizes and faces - Evernote text is stored as HTML and this is converted to Markdown during the import process. For notes that are mostly plain text or with basic formatting (bold, italic, bullet points, links, etc.) this is a lossless conversion, and the note, once rendered back to HTML should be very similar. Tables are also imported and converted to Markdown tables. For very complex notes, some formatting data might be loss - in particular colours, font sizes and font faces will not be imported. The text itself however is always imported in full regardless of formatting.</p>
 </li>
 </ul>
-<p>To import Evernote data, follow these steps:</p>
-<h2 id="desktop-application">Desktop application</h2>
-<ul>
-<li>Open the &quot;File&quot; menu and click &quot;Import Evernote notes&quot;</li>
-</ul>
-<p>This will open a new screen which will display the import progress. The notes will be imported into a new separate notebook (so that, in case of a mistake, the notes are not mixed up with any existing notes). If needed then can then be moved to a different notebook, or the notebook can be renamed, etc.</p>
-<h2 id="terminal-application">Terminal application</h2>
-<ul>
-<li>First, export your Evernote notebooks to ENEX files as described <a href="https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks">here</a>.</li>
-<li>In Joplin, in <a href="/terminal#command-line-mode">command-line mode</a>, type <code>import-enex /path/to/file.enex</code>. This will import the notes into a new notebook named after the filename.</li>
-<li>Then repeat the process for each notebook that needs to be imported.</li>
-</ul>
+<p>To import Evernote data, first export your Evernote notebooks to ENEX files as described <a href="https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks">here</a>. Then follow these steps:</p>
+<p>On the <strong>desktop application</strong>, open the &quot;File&quot; menu, click &quot;Import Evernote notes&quot; and select your ENEX file. This will open a new screen which will display the import progress. The notes will be imported into a new separate notebook (so that, in case of a mistake, the notes are not mixed up with any existing notes). If needed then can then be moved to a different notebook, or the notebook can be renamed, etc.</p>
+<p>On the <strong>desktop application</strong>, in <a href="/terminal#command-line-mode">command-line mode</a>, type <code>import-enex /path/to/file.enex</code>. This will import the notes into a new notebook named after the filename.</p>
 <h1 id="synchronisation">Synchronisation</h1>
 <p>One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as OneDrive or Dropbox, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.</p>
 <p>Currently, synchronisation is possible with OneDrive (by default) or the local filesystem. A Dropbox driver will also be available once <a href="https://github.com/facebook/react-native/issues/14445">this React Native bug</a> is fixed. When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
-<h2 id="desktop-application">Desktop application</h2>
-<p>To initiate the synchronisation process, click on the &quot;Synchronise&quot; button in the sidebar. You will be asked to login to OneDrive to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). After that, the application will synchronise in the background whenever it is running, or you can click on &quot;Synchronise&quot; to start a synchronisation manually</p>
-<h2 id="terminal-application">Terminal application</h2>
-<p>To initiate the synchronisation process, type <code>:sync</code>. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). After that, the application will synchronise in the background whenever it is running. It is possible to also synchronise outside of the user interface by typing <code>joplin sync</code> from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:</p>
+<p>On the <strong>desktop application</strong>, to initiate the synchronisation process, click on the &quot;Synchronise&quot; button in the sidebar. You will be asked to login to OneDrive to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). After that, the application will synchronise in the background whenever it is running, or you can click on &quot;Synchronise&quot; to start a synchronisation manually.</p>
+<p>On the <strong>terminal application</strong>, to initiate the synchronisation process, type <code>:sync</code>. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). After that, the application will synchronise in the background whenever it is running. It is possible to also synchronise outside of the user interface by typing <code>joplin sync</code> from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:</p>
 <pre><code>*/30 * * * * /path/to/joplin sync
 </code></pre><h1 id="attachments-resources">Attachments / Resources</h1>
 <p>Any kind of file can be attached to a note. In Markdown, links to these files are represented as a simple ID to the resource. In the note viewer, these files, if they are images, will be displayed or, if they are other files (PDF, text files, etc.) they will be displayed as links. Clicking on this link will open the file in the default application.</p>
@@ -306,7 +296,7 @@
 <li>In Poedit, open this .pot file, go into the Catalog menu and click Configuration. Change &quot;Country&quot; and &quot;Language&quot; to your own country and language.</li>
 <li>From then you can translate the file. Once it&#39;s done, please send the file to <a href="https://raw.githubusercontent.com/laurent22/joplin/master/Assets/Adresse.png">this address</a> or open a pull request.</li>
 </ul>
-<p>This translation will apply to both the terminal and the Android application.</p>
+<p>This translation will apply to the three applications - desktop, mobile and terminal.</p>
 <h1 id="coming-features">Coming features</h1>
 <ul>
 <li>All: End to end encryption</li>
@@ -319,6 +309,7 @@
 <ul>
 <li>Non-alphabetical characters such as Chinese or Arabic might create glitches in the terminal on Windows. This is a limitation of the current Windows console.</li>
 <li>Auto-update is not working in the Linux desktop application.</li>
+<li>While the mobile can sync and load tags, it is not currently possible to create new ones. The desktop and terminal apps can create, delete and edit tags.</li>
 </ul>
 <h1 id="license">License</h1>
 <p>Copyright (c) 2016-2017 Laurent Cozic</p>
