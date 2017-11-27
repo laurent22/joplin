@@ -354,7 +354,7 @@ class BaseApplication {
 		this.logger_.info('Profile directory: ' + profileDir);
 
 		this.database_ = new JoplinDatabase(new DatabaseDriverNode());
-		//this.database_.setLogExcludedQueryTypes(['SELECT']);
+		this.database_.setLogExcludedQueryTypes(['SELECT']);
 		this.database_.setLogger(this.dbLogger_);
 		await this.database_.open({ name: profileDir + '/database.sqlite' });
 

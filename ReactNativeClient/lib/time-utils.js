@@ -3,11 +3,11 @@ const moment = require('moment');
 let time = {
 
 	unix() {
-		return Math.floor((new Date()).getTime() / 1000);
+		return Math.floor(Date.now() / 1000);
 	},
 
 	unixMs() {
-		return (new Date()).getTime();
+		return Date.now();
 	},
 
 	unixMsToObject(ms) {

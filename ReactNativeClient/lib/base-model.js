@@ -286,7 +286,7 @@ class BaseModel {
 
 		return this.db().transactionExecBatch(queries).then(() => {
 			o = Object.assign({}, o);
-			o.id = modelId;
+			if (modelId) o.id = modelId;
 			if ('updated_time' in saveQuery.modObject) o.updated_time = saveQuery.modObject.updated_time;
 			if ('created_time' in saveQuery.modObject) o.created_time = saveQuery.modObject.created_time;
 			if ('user_updated_time' in saveQuery.modObject) o.user_updated_time = saveQuery.modObject.user_updated_time;
@@ -360,6 +360,7 @@ BaseModel.TYPE_RESOURCE = 4;
 BaseModel.TYPE_TAG = 5;
 BaseModel.TYPE_NOTE_TAG = 6;
 BaseModel.TYPE_SEARCH = 7;
+BaseModel.TYPE_ALARM = 8;
 
 BaseModel.db_ = null;
 BaseModel.dispatch = function(o) {};

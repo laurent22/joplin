@@ -389,6 +389,13 @@ class Note extends BaseItem {
 				type: 'NOTE_UPDATE_ONE',
 				note: note,
 			});
+
+			if ('todo_due' in o || 'todo_completed' in o || 'is_todo' in o || 'is_conflict' in o) {
+				this.dispatch({
+					type: 'EVENT_NOTE_ALARM_FIELD_CHANGE',
+					id: note.id,
+				});
+			}
 			
 			return note;
 		});
@@ -412,6 +419,14 @@ class Note extends BaseItem {
 			});
 		}
 		return result;
+	}
+
+	static dueNotes() {
+		return this.modelSelectAll('SELECT id, title, body, todo_due FROM notes WHERE is_conflict = 0 AND is_todo = 1 AND todo_completed = 0 AND todo_due > ?', [time.unixMs()]);
+	}
+
+	static needAlarm(note) {
+		return note.is_todo && !note.todo_completed && note.todo_due >= time.unixMs() && !note.is_conflict;
 	}
 
 	// Tells whether the conflict between the local and remote note can be ignored.

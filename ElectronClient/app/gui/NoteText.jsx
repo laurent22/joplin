@@ -336,6 +336,14 @@ class NoteTextComponent extends React.Component {
 			}
 		}}));
 
+		menu.append(new MenuItem({label: _('Set or clear alarm'), click: async () => {
+			this.props.dispatch({
+				type: 'WINDOW_COMMAND',
+				name: 'editAlarm',
+				noteId: noteId,
+			});
+		}}));
+
 		menu.popup(bridge().window());
 	}
 

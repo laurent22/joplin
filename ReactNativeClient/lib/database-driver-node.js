@@ -67,6 +67,10 @@ class DatabaseDriverNode {
 		});
 	}
 
+	lastInsertId() {
+		throw new Error('NOT IMPLEMENTED');
+	}
+
 }
 
 module.exports = { DatabaseDriverNode };

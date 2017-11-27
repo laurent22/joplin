@@ -30,6 +30,7 @@ const { DocumentPicker, DocumentPickerUtil } = require('react-native-document-pi
 const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('lib/components/shared/note-screen-shared.js');
 const ImagePicker = require('react-native-image-picker');
+const AlarmService = require('lib/services/AlarmService.js');
 const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog.js');
 
 class NoteScreenComponent extends BaseScreenComponent {
@@ -347,12 +348,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let newNote = Object.assign({}, this.state.note);
 		newNote.todo_due = date ? date.getTime() : 0;
 
-		this.setState({
-			alarmDialogShown: false,
-			note: newNote,
-		});
-		//await this.saveOneProperty('todo_due', date ? date.getTime() : 0);
-		//this.forceUpdate();
+		await this.saveOneProperty('todo_due', date ? date.getTime() : 0);
+
+		this.setState({ alarmDialogShown: false });
 	}
 
 	onAlarmDialogReject() {
@@ -389,14 +387,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 			output.push({ title: _('Attach image'), onPress: () => { this.attachImage_onPress(); } });
 			output.push({ title: _('Attach any other file'), onPress: () => { this.attachFile_onPress(); } });
 		}
+
+		if (isTodo) {
+			output.push({ title: _('Set or clear alarm'), onPress: () => { this.setState({ alarmDialogShown: true }) }});;
+		}
+
 		output.push({ title: _('Delete note'), onPress: () => { this.deleteNote_onPress(); } });
-		output.push({ title: _('Alarm'), onPress: () => { this.setState({ alarmDialogShown: true }) }});;
-
-		// if (isTodo) {
-		// 	let text = note.todo_due ? _('Edit/Clear alarm') : _('Set an alarm');
-		// 	output.push({ title: text, onPress: () => { this.setAlarm_onPress(); } });
-		// }
-
 		output.push({ title: isTodo ? _('Convert to regular note') : _('Convert to todo'), onPress: () => { this.toggleIsTodo_onPress(); } });
 		if (this.props.showAdvancedOptions) output.push({ title: this.state.showNoteMetadata ? _('Hide metadata') : _('Show metadata'), onPress: () => { this.showMetadata_onPress(); } });
 		output.push({ title: _('View location on map'), onPress: () => { this.showOnMap_onPress(); } });

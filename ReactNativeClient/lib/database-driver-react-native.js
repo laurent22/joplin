@@ -2,6 +2,10 @@ const SQLite = require('react-native-sqlite-storage');
 
 class DatabaseDriverReactNative {
 
+	constructor() {
+		this.lastInsertId_ = null;
+	}
+
 	open(options) {
 		//SQLite.DEBUG(true);
 		return new Promise((resolve, reject) => {
@@ -45,11 +49,16 @@ class DatabaseDriverReactNative {
 	exec(sql, params = null) {
 		return new Promise((resolve, reject) => {
 			this.db_.executeSql(sql, params, (r) => {
+				if ('insertId' in r) this.lastInsertId_ = r.insertId;
 				resolve(r);
 			}, (error) => {
 				reject(error);
 			});
 		});
+	}
+
+	lastInsertId() {
+		return this.lastInsertId_;
 	}
 
 }

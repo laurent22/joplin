@@ -15,6 +15,8 @@ const { JoplinDatabase } = require('lib/joplin-database.js');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');
 const { ElectronAppWrapper } = require('./ElectronAppWrapper');
 const { defaultState } = require('lib/reducer.js');
+const AlarmService = require('lib/services/AlarmService.js');
+const AlarmServiceDriverNode = require('lib/services/AlarmServiceDriverNode');
 
 const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
@@ -133,6 +135,10 @@ class Application extends BaseApplication {
 
 		if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
 			if (!await reg.syncTarget().syncStarted()) reg.scheduleSync();
+		}
+
+		if (['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >= 0) {
+			await AlarmService.updateNoteNotification(action.id, action.type === 'NOTE_DELETE');
 		}
 
 		const result = await super.generalMiddleware(store, next, action);
@@ -304,6 +310,9 @@ class Application extends BaseApplication {
 
 	async start(argv) {
 		argv = await super.start(argv);
+
+		AlarmService.setDriver(new AlarmServiceDriverNode());
+		AlarmService.setLogger(reg.logger());
 
 		if (Setting.value('openDevTools')) {
 			bridge().window().webContents.openDevTools();

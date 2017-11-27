@@ -1,7 +1,9 @@
 const React = require('react'); const Component = React.Component;
-const { Keyboard, NativeModules, PushNotificationIOS } = require('react-native');
+const { Keyboard, NativeModules } = require('react-native');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
+const AlarmService = require('lib/services/AlarmService.js');
+const AlarmServiceDriver = require('lib/services/AlarmServiceDriver');
 const { createStore, applyMiddleware } = require('redux');
 const { shimInit } = require('lib/shim-init-react.js');
 const { Log } = require('lib/log.js');
@@ -37,7 +39,6 @@ const { _, setLocale, closestSupportedLocale, defaultLocale } = require('lib/loc
 const RNFetchBlob = require('react-native-fetch-blob').default;
 const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const { reducer, defaultState } = require('lib/reducer.js');
-const PushNotification = require('react-native-push-notification');
 
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
@@ -290,6 +291,9 @@ async function initialize(dispatch, backButtonHandler) {
 	BaseItem.loadClass('Tag', Tag);
 	BaseItem.loadClass('NoteTag', NoteTag);
 
+	AlarmService.setDriver(new AlarmServiceDriver());
+	AlarmService.setLogger(mainLogger);
+
 	try {
 		if (Setting.value('env') == 'prod') {
 			await db.open({ name: 'joplin.sqlite' })
@@ -366,13 +370,14 @@ async function initialize(dispatch, backButtonHandler) {
 	}
 
 
-	reg.logger().info('Scheduling iOS notification');
 
-	PushNotificationIOS.scheduleLocalNotification({
-		alertTitle: "From Joplin",
-		alertBody : "Testing notification on iOS",
-		fireDate: new Date(Date.now() + (10 * 1000)),
-	});
+	//reg.logger().info('Scheduling iOS notification');
+
+	// PushNotificationIOS.scheduleLocalNotification({
+	// 	alertTitle: "From Joplin",
+	// 	alertBody : "Testing notification on iOS",
+	// 	fireDate: new Date(Date.now() + (10 * 1000)),
+	// });
 
 
 

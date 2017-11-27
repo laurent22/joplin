@@ -33,12 +33,22 @@ shared.saveNoteButton_press = async function(comp) {
 	if (isNew && !note.title) {
 		note.title = Note.defaultTitle(note);
 	}
-	
-	note = await Note.save(note);
+
+	// Save only the properties that have changed
+	const diff = BaseModel.diffObjects(comp.state.lastSavedNote, note);
+	diff.type_ = note.type_;
+	diff.id = note.id;
+
+	const savedNote = await Note.save(diff);
+
+	// Re-assign any property that might have changed during saving (updated_time, etc.)
+	note = Object.assign(note, savedNote);
+
 	comp.setState({
 		lastSavedNote: Object.assign({}, note),
 		note: note,
 	});
+
 	if (isNew) Note.updateGeolocation(note.id);
 	comp.refreshNoteMetadata();
 }

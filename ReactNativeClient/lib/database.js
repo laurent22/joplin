@@ -78,8 +78,10 @@ class Database {
 			} catch (error) {
 				if (error && (error.code == 'SQLITE_IOERR' || error.code == 'SQLITE_BUSY')) {
 					if (totalWaitTime >= 20000) throw this.sqliteErrorToJsError(error, sql, params);
-					this.logger().warn(sprintf('Error %s: will retry in %s milliseconds', error.code, waitTime));
-					this.logger().warn('Error was: ' + error.toString());
+					// NOTE: don't put logger statements here because it might log to the database, which
+					// could result in an error being thrown again.
+					// this.logger().warn(sprintf('Error %s: will retry in %s milliseconds', error.code, waitTime));
+					// this.logger().warn('Error was: ' + error.toString());
 					await time.msleep(waitTime);
 					totalWaitTime += waitTime;
 					waitTime *= 1.5;

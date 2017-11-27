@@ -160,6 +160,7 @@ class JoplinDatabase extends Database {
 				let tableName = tableRows[i].name;
 				if (tableName == 'android_metadata') continue;
 				if (tableName == 'table_fields') continue;
+				if (tableName == 'sqlite_sequence') continue;
 				chain.push(() => {
 					return this.selectAll('PRAGMA table_info("' + tableName + '")').then((pragmas) => {
 						for (let i = 0; i < pragmas.length; i++) {
@@ -201,7 +202,7 @@ class JoplinDatabase extends Database {
 		// default value and thus might cause problems. In that case, the default value
 		// must be set in the synchronizer too.
 
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 		if (currentVersionIndex == existingDatabaseVersions.length - 1) return false;
@@ -251,6 +252,11 @@ class JoplinDatabase extends Database {
 					queries.push('UPDATE ' + n + ' SET user_updated_time = updated_time');
 					queries.push('CREATE INDEX ' + n + '_user_updated_time ON ' + n + ' (user_updated_time)');
 				}
+			}
+
+			if (targetVersion == 6) {
+				queries.push('CREATE TABLE alarms (id INTEGER PRIMARY KEY AUTOINCREMENT, note_id TEXT NOT NULL, trigger_time INT NOT NULL)');
+				queries.push('CREATE INDEX alarm_note_id ON alarms (note_id)');
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

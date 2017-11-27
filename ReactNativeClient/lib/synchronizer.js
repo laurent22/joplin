@@ -419,8 +419,20 @@ class Synchronizer {
 						}
 						content = await BaseItem.unserialize(content);
 						let ItemClass = BaseItem.itemClass(content);
+						content = ItemClass.filter(content);
 
-						let newContent = Object.assign({}, content);
+						let newContent = null;
+
+						if (action === 'createLocal') {
+							newContent = Object.assign({}, content);
+						} else if (action === 'updateLocal') {
+							newContent = BaseModel.diffObjects(local, content);
+							newContent.type_ = content.type_;
+							newContent.id = content.id;
+						} else {
+							throw new Error('Unknown action: ' + action);
+						}
+
 						let options = {
 							autoTimestamp: false,
 							nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, newContent, time.unixMs()),
