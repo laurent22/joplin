@@ -562,6 +562,9 @@ msgstr ""
 msgid "Rename notebook:"
 msgstr ""
 
+msgid "Set or clear alarm:"
+msgstr ""
+
 msgid "Layout"
 msgstr ""
 
@@ -587,7 +590,13 @@ msgstr ""
 msgid "Attach file"
 msgstr ""
 
+msgid "Set or clear alarm"
+msgstr ""
+
 msgid "Refresh"
+msgstr ""
+
+msgid "Clear"
 msgstr ""
 
 msgid "OneDrive Login"
@@ -740,6 +749,12 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
+msgid "Date format"
+msgstr ""
+
+msgid "Time format"
+msgstr ""
+
 msgid "Theme"
 msgstr ""
 
@@ -837,6 +852,12 @@ msgstr ""
 
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
+msgstr ""
+
+msgid "Select date"
+msgstr ""
+
+msgid "Confirm"
 msgstr ""
 
 msgid "Cancel synchronisation"

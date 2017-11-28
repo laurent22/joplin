@@ -60,7 +60,6 @@
     "levenshtein": "^1.0.5",
     "lodash": "^4.17.4",
     "markdown-it": "^8.4.0",
-    "marked": "^0.3.6",
     "md5": "^2.2.1",
     "mime": "^2.0.3",
     "moment": "^2.19.1",

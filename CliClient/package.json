@@ -62,6 +62,7 @@
   "devDependencies": {
     "gettext-parser": "^1.2.2",
     "jasmine": "^2.6.0",
+    "marked": "^0.3.6",
     "mustache": "^2.3.0"
   },
   "scripts": {

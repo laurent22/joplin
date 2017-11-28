@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 const { fileExtension, basename, dirname } = require('lib/path-utils.js');
 const { _, setLocale, languageCode } = require('lib/locale.js');
-const marked = require('lib/marked.js');
+const marked = require('marked');
 const Mustache = require('mustache');
 
 const headerHtml = `<!doctype html>
