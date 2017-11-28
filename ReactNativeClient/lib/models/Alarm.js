@@ -39,6 +39,10 @@ class Alarm extends BaseModel {
 		return output;		
 	}
 
+	static async allDue() {
+		return this.modelSelectAll('SELECT * FROM alarms WHERE trigger_time >= ?', [Date.now()]);
+	}
+
 }
 
 module.exports = Alarm;

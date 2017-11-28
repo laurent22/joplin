@@ -384,18 +384,21 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let canAttachPicture = true;
 		if (Platform.OS === 'android' && Platform.Version < 21) canAttachPicture = false;
 		if (canAttachPicture) {
-			output.push({ title: _('Attach image'), onPress: () => { this.attachImage_onPress(); } });
-			output.push({ title: _('Attach any other file'), onPress: () => { this.attachFile_onPress(); } });
+			output.push({ title: _('Attach photo'), onPress: () => { this.attachImage_onPress(); } });
+			output.push({ title: _('Attach any file'), onPress: () => { this.attachFile_onPress(); } });
+			output.push({ isDivider: true });
 		}
 
 		if (isTodo) {
-			output.push({ title: _('Set or clear alarm'), onPress: () => { this.setState({ alarmDialogShown: true }) }});;
+			output.push({ title: _('Set alarm'), onPress: () => { this.setState({ alarmDialogShown: true }) }});;
 		}
 
-		output.push({ title: _('Delete note'), onPress: () => { this.deleteNote_onPress(); } });
-		output.push({ title: isTodo ? _('Convert to regular note') : _('Convert to todo'), onPress: () => { this.toggleIsTodo_onPress(); } });
+		output.push({ title: isTodo ? _('Convert to note') : _('Convert to todo'), onPress: () => { this.toggleIsTodo_onPress(); } });
+		output.push({ isDivider: true });
 		if (this.props.showAdvancedOptions) output.push({ title: this.state.showNoteMetadata ? _('Hide metadata') : _('Show metadata'), onPress: () => { this.showMetadata_onPress(); } });
-		output.push({ title: _('View location on map'), onPress: () => { this.showOnMap_onPress(); } });
+		output.push({ title: _('View on map'), onPress: () => { this.showOnMap_onPress(); } });
+		output.push({ isDivider: true });
+		output.push({ title: _('Delete'), onPress: () => { this.deleteNote_onPress(); } });
 
 		return output;
 	}

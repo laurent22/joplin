@@ -115,9 +115,6 @@ class AlarmService {
 		}
 	}
 
-	// TODO: inner notifications (when app is active)
-	// TODO: status to view active notifications
-
 }
 
 module.exports = AlarmService;

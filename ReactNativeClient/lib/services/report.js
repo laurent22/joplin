@@ -1,5 +1,6 @@
 const { time } = require('lib/time-utils');
 const { BaseItem } = require('lib/models/base-item.js');
+const Alarm = require('lib/models/Alarm');
 const { Folder } = require('lib/models/folder.js');
 const { Note } = require('lib/models/note.js');
 const { _ } = require('lib/locale.js');
@@ -108,10 +109,8 @@ class ReportService {
 	async status(syncTarget) {
 		let r = await this.syncStatus(syncTarget);
 		let sections = [];
-		let section = {};
 
-		section.title = _('Sync status (synced items / total items)');
-		section.body = [];
+		let section = { title: _('Sync status (synced items / total items)'), body: [] };
 
 		for (let n in r.items) {
 			if (!r.items.hasOwnProperty(n)) continue;
@@ -125,18 +124,27 @@ class ReportService {
 
 		sections.push(section);
 
-		section = {};
-		section.title = _('Folders');
-		section.body = [];
+		section = { title: _('Folders'), body: [] };
 
-		let folders = await Folder.all({
+		const folders = await Folder.all({
 			order: { by: 'title', dir: 'ASC' },
 			caseInsensitive: true,
 		});
 
 		for (let i = 0; i < folders.length; i++) {
-			let folder = folders[i];
+			const folder = folders[i];
 			section.body.push(_('%s: %d notes', folders[i].title, await Folder.noteCount(folders[i].id)));
+		}
+
+		sections.push(section);
+
+		section = { title: _('Coming alarms'), body: [] };
+
+		const alarms = await Alarm.allDue();
+		for (let i = 0; i < alarms.length; i++) {
+			const alarm = alarms[i];
+			const note = await Note.load(alarm.note_id);
+			section.body.push(_('On %s: %s', time.formatMsToLocal(alarm.trigger_time), note.title));
 		}
 
 		sections.push(section);
