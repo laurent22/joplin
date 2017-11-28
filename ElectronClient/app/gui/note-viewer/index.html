@@ -71,6 +71,33 @@ function applyHljs(codeElements) {
 // / Handle dynamically loading HLJS when a code element is present
 // ----------------------------------------------------------------------
 
+// Note: the scroll position source of truth is "percentScroll_". This is easier to manage than scrollTop because
+// the scrollTop value depends on the images being loaded or not. For example, if the scrollTop is saved while
+// images are being displayed then restored while images are being reloaded, the new scrollTop might be changed
+// so that it is not greater than contentHeight. On the other hand, with percentScroll it is possible to restore
+// it at any time knowing that it's not going to be changed because the content height has changed.
+// To restore percentScroll the "checkScrollIID" interval is used. It constantly resets the scroll position during
+// one second after the content has been updated.
+//
+// ignoreNextScroll is used to differentiate between scroll event from the users and those that are the result
+// of programmatically changing scrollTop. We only want to respond to events initiated by the user.
+
+let percentScroll_ = 0;
+let checkScrollIID_ = null;
+
+function setPercentScroll(percent) {
+	percentScroll_ = percent;
+	contentElement.scrollTop = percentScroll_ * maxScrollTop();
+}
+
+function percentScroll() {
+	return percentScroll_;
+}
+
+function restorePercentScroll() {
+	setPercentScroll(percentScroll_);
+}
+
 ipcRenderer.on('setHtml', (event, html) => {
 	contentElement.innerHTML = html;
 
@@ -88,12 +115,37 @@ ipcRenderer.on('setHtml', (event, html) => {
 		ul.style.listStyleType = 'none';
 		ul.style.paddingLeft = 0;
 	}
+
+	let previousContentHeight = contentElement.scrollHeight;
+	let startTime = Date.now();
+	ignoreNextScrollEvent = true;
+	restorePercentScroll();
+
+	if (!checkScrollIID_) {
+		checkScrollIID_ = setInterval(() => {
+			const h = contentElement.scrollHeight;
+			if (h !== previousContentHeight) {
+				previousContentHeight = h;
+				ignoreNextScrollEvent = true;
+				restorePercentScroll();
+			}
+			if (Date.now() - startTime >= 1000) {
+				clearInterval(checkScrollIID_);
+				checkScrollIID_ = null;
+			}
+		}, 1);
+	}
 });
 
-let ignoreNextScroll = false;
+let ignoreNextScrollEvent = false;
 ipcRenderer.on('setPercentScroll', (event, percent) => {
-	ignoreNextScroll = true;
-	contentElement.scrollTop = percent * maxScrollTop();
+	if (checkScrollIID_) {
+		clearInterval(checkScrollIID_);
+		checkScrollIID_ = null;
+	}
+
+	ignoreNextScrollEvent = true;
+	setPercentScroll(percent);
 });
 
 function maxScrollTop() {
@@ -101,12 +153,14 @@ function maxScrollTop() {
 }
 
 contentElement.addEventListener('scroll', function(e) {
-	if (ignoreNextScroll) {
-		ignoreNextScroll = false;
+	if (ignoreNextScrollEvent) {
+		ignoreNextScrollEvent = false;
 		return;
 	}
 	const m = maxScrollTop();
-	ipcRenderer.sendToHost('percentScroll', m ? contentElement.scrollTop / m : 0);
+	const percent = m ? contentElement.scrollTop / m : 0;
+	setPercentScroll(percent);
+	ipcRenderer.sendToHost('percentScroll', percent);
 });
 
 // Disable drag and drop otherwise it's possible to drop a URL

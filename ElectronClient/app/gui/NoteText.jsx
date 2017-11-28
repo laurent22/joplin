@@ -117,6 +117,13 @@ class NoteTextComponent extends React.Component {
 		const note = noteId ? await Note.load(noteId) : null;
 		if (noteId !== this.lastLoadedNoteId_) return; // Race condition - current note was changed while this one was loading
 
+		// If the note hasn't been changed, exit now
+		if (this.state.note && note) {
+			let diff = Note.diffObjects(this.state.note, note);
+			delete diff.type_;
+			if (!Object.getOwnPropertyNames(diff).length) return;
+		}
+
 		// If we are loading nothing (noteId == null), make sure to
 		// set webviewReady to false too because the webview component
 		// is going to be removed in render().
@@ -128,8 +135,8 @@ class NoteTextComponent extends React.Component {
 		// and then (in the renderer callback) to the value we actually need. The first
 		// operation helps clear the scroll position cache. See:
 		// https://github.com/ajaxorg/ace/issues/2195
-		this.editorSetScrollTop(1);
-		this.restoreScrollTop_ = 0;
+			this.editorSetScrollTop(1);
+			this.restoreScrollTop_ = 0;
 
 		this.setState({
 			note: note,
