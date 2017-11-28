@@ -85,6 +85,20 @@ On the **terminal application**, to initiate the synchronisation process, type `
 
 Any kind of file can be attached to a note. In Markdown, links to these files are represented as a simple ID to the resource. In the note viewer, these files, if they are images, will be displayed or, if they are other files (PDF, text files, etc.) they will be displayed as links. Clicking on this link will open the file in the default application.
 
+# Notifications
+
+On the desktop and mobile apps, an alarm can be associated with any to-do. It will be triggered at the given time by displaying a notification. How the notification will be displayed depends on the operating system since each has a different way to handle this. Please see below for the requirements for the desktop applications:
+
+- **Windows**: >= 8. Make sure the Action Center is enabled on Windows. Task bar balloon for Windows < 8. Growl as fallback. Growl takes precedence over Windows balloons.
+- **macOS**: >= 10.8 or Growl if earlier.
+- **Linux**: `notify-osd` or `libnotify-bin` installed (Ubuntu should have this by default). Growl otherwise
+
+See [documentation and flow chart for reporter choice](./DECISION_FLOW.md)
+
+On mobile, the alarms will be displayed using the built-in notification system.
+
+If for any reason the notifications do not work, please [open an issue](https://github.com/laurent22/joplin/issues).
+
 # Localisation
 
 Joplin is currently available in English and French. If you would like to contribute a translation, it is quite straightforward, please follow these steps:

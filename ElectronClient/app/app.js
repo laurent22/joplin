@@ -274,7 +274,7 @@ class Application extends BaseApplication {
 				}, {
 					label: _('About Joplin'),
 					click: () => {
-						const p = require('./package.json');
+						const p = this.packageInfo();
 						let message = [
 							p.description,
 							'',
@@ -308,10 +308,16 @@ class Application extends BaseApplication {
 		this.lastMenuScreen_ = screen;
 	}
 
+	packageInfo() {
+		if (this.packageInfo_) return this.packageInfo_;
+		this.packageInfo_ = require('./package.json');
+		return this.packageInfo_;
+	}
+
 	async start(argv) {
 		argv = await super.start(argv);
 
-		AlarmService.setDriver(new AlarmServiceDriverNode());
+		AlarmService.setDriver(new AlarmServiceDriverNode({ appName: this.packageInfo().build.appId }));
 		AlarmService.setLogger(reg.logger());
 
 		if (Setting.value('openDevTools')) {
