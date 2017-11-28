@@ -4,6 +4,7 @@ const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
 const AlarmService = require('lib/services/AlarmService.js');
 const AlarmServiceDriver = require('lib/services/AlarmServiceDriver');
+const Alarm = require('lib/models/Alarm');
 const { createStore, applyMiddleware } = require('redux');
 const { shimInit } = require('lib/shim-init-react.js');
 const { Log } = require('lib/log.js');
@@ -40,6 +41,7 @@ const { _, setLocale, closestSupportedLocale, defaultLocale } = require('lib/loc
 const RNFetchBlob = require('react-native-fetch-blob').default;
 const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const { reducer, defaultState } = require('lib/reducer.js');
+const DropdownAlert = require('react-native-dropdownalert').default;
 
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
@@ -407,6 +409,12 @@ class AppComponent extends React.Component {
 				state: 'ready',
 			});
 		}
+
+		AlarmService.setInAppNotificationHandler(async (alarmId) => {
+			const alarm = await Alarm.load(alarmId);
+			const notification = await Alarm.makeNotification(alarm);
+			this.dropdownAlert_.alertWithType('info', notification.title, notification.body ? notification.body : '');
+		});
 	}
 
 	async backButtonHandler() {
@@ -473,6 +481,7 @@ class AppComponent extends React.Component {
 				>
 				<MenuContext style={{ flex: 1 }}>
 					<AppNav screens={appNavInit} />
+					<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
 				</MenuContext>
 			</SideMenu>
 		);

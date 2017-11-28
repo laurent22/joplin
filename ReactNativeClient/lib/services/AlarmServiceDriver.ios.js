@@ -4,6 +4,19 @@ class AlarmServiceDriver {
 
 	constructor() {
 		this.hasPermission_ = null;
+		this.inAppNotificationHandler_ = null;
+
+		PushNotificationIOS.addEventListener('localNotification ', (instance) => {
+			if (!this.inAppNotificationHandler_) return;
+
+			if (!instance || !instance._data || !instance._data.id) {
+				console.warn('PushNotificationIOS.addEventListener: Did not receive a proper notification instance');
+				return;
+			}
+
+			const id = instance._data.id;
+			this.inAppNotificationHandler_(id);
+		});
 	}
 
 	hasPersistentNotifications() {
@@ -12,6 +25,10 @@ class AlarmServiceDriver {
 
 	notificationIsSet(alarmId) {
 		throw new Error('Available only for non-persistent alarms');	
+	}
+
+	setInAppNotificationHandler(v) {
+		this.inAppNotificationHandler_ = v;
 	}
 
 	async hasPermissions(perm = null) {

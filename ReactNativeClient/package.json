@@ -22,6 +22,7 @@
     "react-native-datepicker": "^1.6.0",
     "react-native-dialogbox": "^0.6.6",
     "react-native-document-picker": "^2.1.0",
+    "react-native-dropdownalert": "^3.1.2",
     "react-native-fetch-blob": "^0.10.6",
     "react-native-fs": "^2.8.5",
     "react-native-image-picker": "^0.26.7",
