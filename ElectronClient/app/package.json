@@ -8,8 +8,8 @@
     "pack": "node_modules/.bin/electron-builder --dir",
     "dist": "node_modules/.bin/electron-builder",
     "publish": "build -p always",
-    "postinstall": "node compile-jsx.js",
-    "compile": "node compile-jsx.js"
+    "postinstall": "node compile-jsx.js && node compile-package-info.js",
+    "compile": "node compile-jsx.js && node compile-package-info.js"
   },
   "repository": {
     "type": "git",
