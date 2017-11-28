@@ -17,11 +17,11 @@ class AlarmServiceDriver {
 	async scheduleNotification(notification) {
 		const androidNotification = {
 			id: notification.id,
-			message: notification.title.substr(0, 100), // No idea what the limits are for title and body but set something reasonable anyway
+			message: notification.title, // No idea what the limits are for title and body but set something reasonable anyway
 			date: notification.date,
 		};
 
-		if ('body' in notification) androidNotification.body = notification.body.substr(0, 512);
+		if ('body' in notification) androidNotification.body = notification.body;
 
 		PushNotification.localNotificationSchedule(androidNotification);
 	}

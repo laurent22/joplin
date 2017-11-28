@@ -15,6 +15,20 @@ class PoorManIntervals {
 		return PoorManIntervals.intervalId_;
 	}
 
+	static setTimeout(callback, interval) {
+		PoorManIntervals.intervalId_++;
+
+		PoorManIntervals.intervals_.push({
+			id: PoorManIntervals.intervalId_,
+			callback: callback,
+			interval: interval,
+			lastIntervalTime: time.unixMs(),
+			oneOff: true,
+		});
+
+		return PoorManIntervals.intervalId_;
+	}
+
 	static intervalById(id) {
 		for (let i = 0; i < PoorManIntervals.intervals_.length; i++) {
 			if (PoorManIntervals.intervals_[i].id == id) return PoorManIntervals.intervals_[id];
@@ -41,6 +55,9 @@ class PoorManIntervals {
 			if (now - interval.lastIntervalTime >= interval.interval) {
 				interval.lastIntervalTime = now;
 				interval.callback();
+				if (interval.oneOff) {
+					this.clearInterval(interval.id);
+				}
 			}
 		}
 
