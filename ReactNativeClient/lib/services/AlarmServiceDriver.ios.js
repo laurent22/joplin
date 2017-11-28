@@ -6,7 +6,7 @@ class AlarmServiceDriver {
 		this.hasPermission_ = null;
 		this.inAppNotificationHandler_ = null;
 
-		PushNotificationIOS.addEventListener('localNotification ', (instance) => {
+		PushNotificationIOS.addEventListener('localNotification', (instance) => {
 			if (!this.inAppNotificationHandler_) return;
 
 			if (!instance || !instance._data || !instance._data.id) {
