@@ -2,6 +2,7 @@ const React = require('react');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const { themeStyle } = require('../theme.js');
+const { time } = require('lib/time-utils.js');
 const Datetime = require('react-datetime');
 
 class PromptDialog extends React.Component {
@@ -106,8 +107,8 @@ class PromptDialog extends React.Component {
 		if (this.props.inputType === 'datetime') {
 			inputComp = <Datetime
 				value={this.state.answer}
-				dateFormat="DD/MM/YYYY"
-				timeFormat="HH:mm"
+				dateFormat={time.dateFormat()}
+				timeFormat={time.timeFormat()}
 				onChange={(momentObject) => onDateTimeChange(momentObject)}
 			/>
 		} else {

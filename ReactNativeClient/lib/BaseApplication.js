@@ -14,6 +14,7 @@ const { Logger } = require('lib/logger.js');
 const { splitCommandString } = require('lib/string-utils.js');
 const { sprintf } = require('sprintf-js');
 const { reg } = require('lib/registry.js');
+const { time } = require('lib/time-utils.js');
 const BaseSyncTarget = require('lib/BaseSyncTarget.js');
 const { fileExtension } = require('lib/path-utils.js');
 const { shim } = require('lib/shim.js');
@@ -248,6 +249,11 @@ class BaseApplication {
 
 		if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && action.key == 'uncompletedTodosOnTop' || action.type == 'SETTING_UPDATE_ALL') {
 			await this.refreshNotes(newState);
+		}
+
+		if ((action.type == 'SETTING_UPDATE_ONE' && (action.key == 'dateFormat' || action.key == 'timeFormat')) || (action.type == 'SETTING_UPDATE_ALL')) {
+			time.setDateFormat(Setting.value('dateFormat'));
+			time.setTimeFormat(Setting.value('timeFormat'));
 		}
 
 		if (action.type == 'TAG_SELECT' || action.type === 'TAG_DELETE') {

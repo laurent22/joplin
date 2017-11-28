@@ -2,6 +2,7 @@ const { BaseModel } = require('lib/base-model.js');
 const { Database } = require('lib/database.js');
 const { Logger } = require('lib/logger.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
+const { time } = require('lib/time-utils.js');
 const { sprintf } = require('sprintf-js');
 const { _, supportedLocalesToLanguages, defaultLocale } = require('lib/locale.js');
 
@@ -33,6 +34,23 @@ class Setting extends BaseModel {
 			'editor': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'], label: () => _('Text editor'), description: () => _('The editor that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
 			'locale': { value: defaultLocale(), type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Language'), options: () => {
 				return supportedLocalesToLanguages();
+			}},
+			'dateFormat': { value: Setting.DATE_FORMAT_1, type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Date format'), options: () => {
+				let options = {}
+				const now = (new Date('2017-01-30T12:00:00')).getTime();
+				options[Setting.DATE_FORMAT_1] = time.formatMsToLocal(now, Setting.DATE_FORMAT_1);
+				options[Setting.DATE_FORMAT_2] = time.formatMsToLocal(now, Setting.DATE_FORMAT_2);
+				options[Setting.DATE_FORMAT_3] = time.formatMsToLocal(now, Setting.DATE_FORMAT_3);
+				options[Setting.DATE_FORMAT_4] = time.formatMsToLocal(now, Setting.DATE_FORMAT_4);
+				options[Setting.DATE_FORMAT_5] = time.formatMsToLocal(now, Setting.DATE_FORMAT_5);
+				return options;
+			}},
+			'timeFormat': { value: Setting.TIME_FORMAT_1, type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Time format'), options: () => {
+				let options = {}
+				const now = (new Date('2017-01-30T20:30:00')).getTime();
+				options[Setting.TIME_FORMAT_1] = time.formatMsToLocal(now, Setting.TIME_FORMAT_1);
+				options[Setting.TIME_FORMAT_2] = time.formatMsToLocal(now, Setting.TIME_FORMAT_2);
+				return options;
 			}},
 			'theme': { value: Setting.THEME_LIGHT, type: Setting.TYPE_INT, public: true, appTypes: ['mobile'], isEnum: true, label: () => _('Theme'), options: () => {
 				let output = {};
@@ -397,6 +415,15 @@ Setting.TYPE_OBJECT = 5;
 
 Setting.THEME_LIGHT = 1;
 Setting.THEME_DARK = 2;
+
+Setting.DATE_FORMAT_1 = 'DD/MM/YYYY'
+Setting.DATE_FORMAT_2 = 'DD/MM/YY';
+Setting.DATE_FORMAT_3 = 'MM/DD/YYYY';
+Setting.DATE_FORMAT_4 = 'MM/DD/YY';
+Setting.DATE_FORMAT_5 = 'YYYY-MM-DD';
+
+Setting.TIME_FORMAT_1 = 'HH:mm';
+Setting.TIME_FORMAT_2 = 'h:mm A';
 
 // Contains constants that are set by the application and
 // cannot be modified by the user:

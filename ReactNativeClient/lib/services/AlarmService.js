@@ -64,8 +64,6 @@ class AlarmService {
 			}
 		}
 
-		console.info('NOTE', note, Note.needAlarm(note));
-
 		if (isDeleted ||
 		    !Note.needAlarm(note) ||
 		    (alarm && alarm.trigger_time !== note.todo_due))
@@ -124,7 +122,6 @@ class AlarmService {
 	}
 
 	// TODO: inner notifications (when app is active)
-	// TODO: locale-dependent format
 	// TODO: status to view active notifications
 
 }
