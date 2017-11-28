@@ -8,6 +8,7 @@ const { ScreenHeader } = require('lib/components/screen-header.js');
 const { reg } = require('lib/registry.js');
 const { _ } = require('lib/locale.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
+const parseUri = require('lib/parseUri');
 
 class OneDriveLoginScreenComponent extends BaseScreenComponent {
 	
@@ -40,19 +41,19 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 		// doesn't exist, use this for now. The whole component is completely undocumented
 		// at the moment so it's likely to change.
 		const url = noIdeaWhatThisIs.url;
+		const parsedUrl = parseUri(url);
 
-		if (!this.authCode_ && url.indexOf(this.redirectUrl() + '?code=') === 0) {
-			Log.info('URL: ' + url);
+		if (!this.authCode_ && parsedUrl && parsedUrl.queryKey && parsedUrl.queryKey.code) {
+			Log.info('URL: ', url, parsedUrl.queryKey);
 
-			let code = url.split('?code=');
-			this.authCode_ = code[1];
+			this.authCode_ = parsedUrl.queryKey.code
 
 			try {
 				await reg.syncTarget().api().execTokenRequest(this.authCode_, this.redirectUrl(), true);
 				this.props.dispatch({ type: 'NAV_BACK' });
 				reg.scheduleSync(0);
 			} catch (error) {
-				alert(error.message);
+				alert('Could not login to OneDrive. Please try again\n\n' + error.message + '\n\n' + url);
 			}
 
 			this.authCode_ = null;
