@@ -110,8 +110,6 @@ class NoteTextComponent extends React.Component {
 	}
 
 	async reloadNote(props) {
-		this.mdToHtml_ = null;
-
 		const noteId = props.noteId;
 		this.lastLoadedNoteId_ = noteId;
 		const note = noteId ? await Note.load(noteId) : null;
@@ -123,6 +121,8 @@ class NoteTextComponent extends React.Component {
 			delete diff.type_;
 			if (!Object.getOwnPropertyNames(diff).length) return;
 		}
+
+		this.mdToHtml_ = null;
 
 		// If we are loading nothing (noteId == null), make sure to
 		// set webviewReady to false too because the webview component
