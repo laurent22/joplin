@@ -84,7 +84,7 @@ class Bridge {
 			this.autoUpdateLogger_ = new Logger();
 			this.autoUpdateLogger_.addTarget('file', { path: logFilePath });
 			this.autoUpdateLogger_.setLevel(Logger.LEVEL_DEBUG);
-			this.autoUpdateLogger_.info('checkForUpdatesAndNotify: Intializing...');
+			this.autoUpdateLogger_.info('checkForUpdatesAndNotify: Initializing...');
 			this.autoUpdater_ = require("electron-updater").autoUpdater;
 			this.autoUpdater_.logger = this.autoUpdateLogger_;
 		}

@@ -2,6 +2,14 @@ const PushNotification = require('react-native-push-notification');
 
 class AlarmServiceDriver {
 
+	hasPersistentNotifications() {
+		return true;
+	}
+
+	notificationIsSet(alarmId) {
+		throw new Error('Available only for non-persistent alarms');	
+	}
+
 	async clearNotification(id) {
 		PushNotification.cancelLocalNotifications({ id: id });
 	}

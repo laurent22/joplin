@@ -20,12 +20,51 @@ class AlarmService {
 		return this.logger_;
 	}
 
-	static async updateNoteNotification(noteId, isDeleted = false) {
-		const note = await Note.load(noteId);
+	static async garbageCollect() {
+		this.logger().info('Garbage collecting alarms...');
+
+		// Delete alarms that have already been triggered
+		await Alarm.deleteExpiredAlarms();
+
+		// Delete alarms that correspond to non-existent notes
+		const alarmIds = await Alarm.alarmIdsWithoutNotes();
+		for (let i = 0; i < alarmIds.length; i++) {
+			this.logger().info('Clearing notification for non-existing note. Alarm ' + alarmIds[i]);
+			await this.driver().clearNotification(alarmIds[i]);
+		}
+		await Alarm.batchDelete(alarmIds);
+	}
+
+	// When passing a note, make sure it has all the required properties 
+	// (better to pass a complete note or else just the ID)
+	static async updateNoteNotification(noteOrId, isDeleted = false) {
+		let note = null;
+		let noteId = null;
+
+		if (typeof noteOrId === 'object') {
+			note = noteOrId;
+			noteId = note.id;
+		} else {
+			note = await Note.load(noteOrId);
+			noteId = note ? note.id : null;
+		}
+
 		if (!note && !isDeleted) return;
+
+		const driver = this.driver();
 
 		let alarm = await Alarm.byNoteId(note.id);
 		let clearAlarm = false;
+
+		const makeNotificationFromAlarm = (alarm) => {
+			return {
+				id: alarm.id,
+				date: new Date(note.todo_due),
+				title: note.title,
+			}
+		}
+
+		console.info('NOTE', note, Note.needAlarm(note));
 
 		if (isDeleted ||
 		    !Note.needAlarm(note) ||
@@ -34,11 +73,24 @@ class AlarmService {
 			clearAlarm = !!alarm;
 		}
 
-		if (!clearAlarm && alarm) return; // Alarm already exists and set at the right time
+		if (!clearAlarm && alarm) { // Alarm already exists and set at the right time
+
+			// For persistent notifications (those that stay active after the app has been closed, like on mobile), if we have
+			// an alarm object we can be sure that the notification has already been set, so there's nothing to do.
+			// For non-persistent notifications however we need to check that the notification has been set because, for example,
+			// if the app has just started the notifications need to be set again. so we do this below.
+			if (!driver.hasPersistentNotifications() && !driver.notificationIsSet(alarm.id)) {
+				const notification = makeNotificationFromAlarm(alarm);
+				this.logger().info('Scheduling (non-persistent) notification for note ' + note.id, notification);
+				driver.scheduleNotification(notification);
+			}
+
+			return;
+		}
 
 		if (clearAlarm) {
 			this.logger().info('Clearing notification for note ' + noteId);
-			await this.driver().clearNotification(alarm.id);
+			await driver.clearNotification(alarm.id);
 			await Alarm.delete(alarm.id);
 		}
 
@@ -52,20 +104,28 @@ class AlarmService {
 		// Reload alarm to get its ID
 		alarm = await Alarm.byNoteId(note.id);
 
-		const notification = {
-			id: alarm.id,
-			date: new Date(note.todo_due),
-			title: note.title,
-		};
+		const notification = makeNotificationFromAlarm(alarm);
 
 		if (note.body) notification.body = note.body;
 
 		this.logger().info('Scheduling notification for note ' + note.id, notification);
-		await this.driver().scheduleNotification(notification);
+		await driver.scheduleNotification(notification);
+	}
+
+	static async updateAllNotifications() {
+		this.logger().info('Updading all notifications...');
+
+		await this.garbageCollect();
+
+		const dueNotes = await Note.dueNotes();
+		for (let i = 0; i < dueNotes.length; i++) {
+			await this.updateNoteNotification(dueNotes[i]);
+		}
 	}
 
 	// TODO: inner notifications (when app is active)
 	// TODO: locale-dependent format
+	// TODO: status to view active notifications
 
 }
 

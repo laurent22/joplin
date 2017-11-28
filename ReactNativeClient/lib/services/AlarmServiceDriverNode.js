@@ -1,21 +1,32 @@
 class AlarmServiceDriverNode {
 
+	constructor() {
+		this.notifications_ = {};
+	}
+
+	hasPersistentNotifications() {
+		return false;
+	}
+
+	notificationIsSet(id) {
+		return id in this.notifications_;
+	}
+
 	async clearNotification(id) {
-		console.info('AlarmServiceDriverNode::clearNotification', id);
+		if (!this.notificationIsSet(id)) return;
+		clearTimeout(this.notifications_[id].timeoutId);
+		delete this.notifications_[id];
 	}
 	
 	async scheduleNotification(notification) {
-		console.info('AlarmServiceDriverNode::scheduleNotification', notification);
+		const now = Date.now();
+		const interval = notification.date.getTime() - now;
+		if (interval < 0) return;
 
-		// const androidNotification = {
-		// 	id: notification.id,
-		// 	message: notification.title.substr(0, 100), // No idea what the limits are for title and body but set something reasonable anyway
-		// 	date: notification.date,
-		// };
-
-		// if ('body' in notification) androidNotification.body = notification.body.substr(0, 512);
-
-		// PushNotification.localNotificationSchedule(androidNotification);
+		const timeoutId = setTimeout(() => {
+			console.info('NOTIFICATION: ', notification);
+			this.clearNotification(notification.id);
+		}, interval);
 	}
 
 }

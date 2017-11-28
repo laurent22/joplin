@@ -37,6 +37,11 @@ reg.syncTarget = (syncTargetId = null) => {
 reg.scheduleSync = async (delay = null) => {
 	if (delay === null) delay = 1000 * 3;
 
+	let promiseResolve = null;
+	const promise = new Promise((resolve, reject) => {
+		promiseResolve = resolve;
+	});
+
 	if (reg.scheduleSyncId_) {
 		clearTimeout(reg.scheduleSyncId_);
 		reg.scheduleSyncId_ = null;
@@ -57,6 +62,7 @@ reg.scheduleSync = async (delay = null) => {
 
 		if (!reg.syncTarget(syncTargetId).isAuthenticated()) {
 			reg.logger().info('Synchroniser is missing credentials - manual sync required to authenticate.');
+			promiseResolve();
 			return;
 		}
 
@@ -73,6 +79,7 @@ reg.scheduleSync = async (delay = null) => {
 				if (error.code == 'alreadyStarted') {
 					reg.logger().info(error.message);
 				} else {
+					promiseResolve();
 					throw error;
 				}
 			}
@@ -82,6 +89,8 @@ reg.scheduleSync = async (delay = null) => {
 		}
 
 		reg.setupRecurrentSync();
+
+		promiseResolve();
 	};
 
 	if (delay === 0) {
@@ -89,6 +98,8 @@ reg.scheduleSync = async (delay = null) => {
 	} else {
 		reg.scheduleSyncId_ = setTimeout(timeoutCallback, delay);
 	}
+
+	return promise;
 }
 
 reg.setupRecurrentSync = () => {

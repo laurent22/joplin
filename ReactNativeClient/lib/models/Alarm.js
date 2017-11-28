@@ -14,16 +14,14 @@ class Alarm extends BaseModel {
 		return this.modelSelectOne('SELECT * FROM alarms WHERE note_id = ?', [noteId]);
 	}
 
-	static async garbageCollect() {
-		// Delete alarms that have already been triggered
-		await this.db().exec('DELETE FROM alarms WHERE trigger_time <= ?', [Date.now()]);
+	static async deleteExpiredAlarms() {
+		return this.db().exec('DELETE FROM alarms WHERE trigger_time <= ?', [Date.now()]);
+	}
 
-		// Delete alarms that correspond to non-existent notes
+	static async alarmIdsWithoutNotes() {
 		// https://stackoverflow.com/a/4967229/561309
-		await this.db().exec('DELETE FROM alarms WHERE id IN (SELECT alarms.id FROM alarms LEFT JOIN notes ON alarms.note_id = notes.id WHERE notes.id IS NULL)');
-
-		// TODO: Check for duplicate alarms for a note
-		// const rows = await this.db().exec('SELECT count(*) as note_count, note_id from alarms group by note_id having note_count >= 2');
+		const alarms = await this.db().selectAll('SELECT alarms.id FROM alarms LEFT JOIN notes ON alarms.note_id = notes.id WHERE notes.id IS NULL');
+		return alarms.map((a) => { return a.id });
 	}
 
 }

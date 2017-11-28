@@ -331,14 +331,14 @@ class BaseModel {
 	}
 
 	static delete(id, options = null) {
-		options = this.modOptions(options);
 		if (!id) throw new Error('Cannot delete object without an ID');
+		options = this.modOptions(options);
 		return this.db().exec('DELETE FROM ' + this.tableName() + ' WHERE id = ?', [id]);
 	}
 
 	static batchDelete(ids, options = null) {
+		if (!ids.length) return;
 		options = this.modOptions(options);
-		if (!ids.length) throw new Error('Cannot delete object without an ID');
 		return this.db().exec('DELETE FROM ' + this.tableName() + ' WHERE id IN ("' + ids.join('","') + '")');
 	}	
 

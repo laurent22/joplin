@@ -355,7 +355,15 @@ class Application extends BaseApplication {
 			setInterval(() => { runAutoUpdateCheck() }, 2 * 60 * 60 * 1000);
 		}
 
-		reg.scheduleSync();
+		setTimeout(() => {
+			AlarmService.garbageCollect();
+		}, 1000 * 60 * 60);
+
+		reg.scheduleSync().then(() => {
+			// Wait for the first sync before updating the notifications, since synchronisation
+			// might change the notifications.
+			AlarmService.updateAllNotifications();
+		});
 	}
 
 }
