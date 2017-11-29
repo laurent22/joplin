@@ -7,6 +7,7 @@ const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
+const eventManager = require('../eventManager');
 
 class NoteListComponent extends React.Component {
 
@@ -69,6 +70,7 @@ class NoteListComponent extends React.Component {
 			for (let i = 0; i < noteIds.length; i++) {
 				const note = await Note.load(noteIds[i]);
 				await Note.save(Note.toggleIsTodo(note));
+				eventManager.emit('noteTypeToggle', { noteId: note.id });
 			}
 		}}));
 
@@ -119,6 +121,7 @@ class NoteListComponent extends React.Component {
 				todo_completed: checked ? time.unixMs() : 0,
 			}
 			await Note.save(newNote);
+			eventManager.emit('todoToggle', { noteId: item.id });
 		}
 
 		const hPadding = 10;

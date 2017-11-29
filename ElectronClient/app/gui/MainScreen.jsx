@@ -15,6 +15,7 @@ const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
 const layoutUtils = require('lib/layout-utils.js');
 const { bridge } = require('electron').remote.require('./bridge');
+const eventManager = require('../eventManager');
 
 class MainScreenComponent extends React.Component {
 
@@ -205,6 +206,7 @@ class MainScreenComponent extends React.Component {
 
 						if (newNote) {
 							await Note.save(newNote);
+							eventManager.emit('alarmChange', { noteId: note.id });
 						}
 
 						this.setState({ promptOptions: null });
@@ -223,44 +225,58 @@ class MainScreenComponent extends React.Component {
 		}
 	}
 
+	styles(themeId, width, height) {
+		const styleKey = themeId + '_' + width + '_' + height;
+		if (styleKey === this.styleKey_) return this.styles_;
+
+		const theme = themeStyle(themeId);
+
+		this.styleKey_ = styleKey;
+
+		this.styles_ = {};
+
+		const rowHeight = height - theme.headerHeight;
+
+		this.styles_.header = {
+			width: width,
+		};
+
+		this.styles_.sideBar = {
+			width: Math.floor(layoutUtils.size(width * .2, 150, 300)),
+			height: rowHeight,
+			display: 'inline-block',
+			verticalAlign: 'top',
+		};
+
+		this.styles_.noteList = {
+			width: Math.floor(layoutUtils.size(width * .2, 150, 300)),
+			height: rowHeight,
+			display: 'inline-block',
+			verticalAlign: 'top',
+		};
+
+		this.styles_.noteText = {
+			width: Math.floor(layoutUtils.size(width - this.styles_.sideBar.width - this.styles_.noteList.width, 0)),
+			height: rowHeight,
+			display: 'inline-block',
+			verticalAlign: 'top',
+		};
+
+		this.styles_.prompt = {
+			width: width,
+			height: height,
+		};
+
+		return this.styles_;
+	}
+
 	render() {
 		const style = this.props.style;
-		const theme = themeStyle(this.props.theme);
 		const promptOptions = this.state.promptOptions;
 		const folders = this.props.folders;
 		const notes = this.props.notes;
 
-		const headerStyle = {
-			width: style.width,
-		};
-
-		const rowHeight = style.height - theme.headerHeight;
-
-		const sideBarStyle = {
-			width: Math.floor(layoutUtils.size(style.width * .2, 150, 300)),
-			height: rowHeight,
-			display: 'inline-block',
-			verticalAlign: 'top',
-		};
-
-		const noteListStyle = {
-			width: Math.floor(layoutUtils.size(style.width * .2, 150, 300)),
-			height: rowHeight,
-			display: 'inline-block',
-			verticalAlign: 'top',
-		};
-
-		const noteTextStyle = {
-			width: Math.floor(layoutUtils.size(style.width - sideBarStyle.width - noteListStyle.width, 0)),
-			height: rowHeight,
-			display: 'inline-block',
-			verticalAlign: 'top',
-		};
-
-		const promptStyle = {
-			width: style.width,
-			height: style.height,
-		};
+		const styles = this.styles(this.props.theme, style.width, style.height);
 
 		const headerButtons = [];
 
@@ -299,23 +315,29 @@ class MainScreenComponent extends React.Component {
 			},
 		});
 
+		if (!this.promptOnClose_) {
+			this.promptOnClose_ = (answer, buttonType) => {
+				return this.state.promptOptions.onClose(answer, buttonType);
+			}
+		}
+
 		return (
 			<div style={style}>
 				<PromptDialog
 					autocomplete={promptOptions && ('autocomplete' in promptOptions) ? promptOptions.autocomplete : null}
-					value={promptOptions && promptOptions.value ? promptOptions.value : ''}
+					defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''}
 					theme={this.props.theme}
-					style={promptStyle}
-					onClose={(answer, buttonType) => promptOptions.onClose(answer, buttonType)}
+					style={styles.prompt}
+					onClose={this.promptOnClose_}
 					label={promptOptions ? promptOptions.label : ''}
 					description={promptOptions ? promptOptions.description : null}
 					visible={!!this.state.promptOptions}
 					buttons={promptOptions && ('buttons' in promptOptions) ? promptOptions.buttons : null}
 					inputType={promptOptions && ('inputType' in promptOptions) ? promptOptions.inputType : null} />
-				<Header style={headerStyle} showBackButton={false} buttons={headerButtons} />
-				<SideBar style={sideBarStyle} />
-				<NoteList style={noteListStyle} />
-				<NoteText style={noteTextStyle} visiblePanes={this.props.noteVisiblePanes} />
+				<Header style={styles.header} showBackButton={false} buttons={headerButtons} />
+				<SideBar style={styles.sideBar} />
+				<NoteList style={styles.noteList} />
+				<NoteText style={styles.noteText} visiblePanes={this.props.noteVisiblePanes} />
 			</div>
 		);
 	}
