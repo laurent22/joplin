@@ -46,7 +46,7 @@ For usage information, please refer to the full [Joplin Terminal Application Doc
 - Desktop, mobile and terminal applications.
 - Support notes, to-dos, tags and notebooks.
 - Offline first, so the entire data is always available on the device even without an internet connection.
-- Ability to synchronise with multiple targets, including the file system and OneDrive (Dropbox is planned).
+- Ability to synchronise with multiple targets, including the file system and OneDrive (NextCloud and Dropbox are planned).
 - Synchronises to a plain text format, which can be easily manipulated, backed up, or exported to a different format.
 - Markdown notes, which are rendered with images and formatting in the desktop and mobile applications.
 - Tag support
@@ -73,7 +73,7 @@ On the **terminal application**, in [command-line mode](/terminal#command-line-m
 
 One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as OneDrive or Dropbox, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.
 
-Currently, synchronisation is possible with OneDrive (by default) or the local filesystem. A Dropbox driver will also be available once [this React Native bug](https://github.com/facebook/react-native/issues/14445) is fixed. When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
+Currently, synchronisation is possible with OneDrive (by default) or the local filesystem. A NextCloud driver, and a Dropbox one will also be available once [this React Native bug](https://github.com/facebook/react-native/issues/14445) is fixed. When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
 
 On the **desktop application**, to initiate the synchronisation process, click on the "Synchronise" button in the sidebar. You will be asked to login to OneDrive to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). After that, the application will synchronise in the background whenever it is running, or you can click on "Synchronise" to start a synchronisation manually.
 
@@ -112,6 +112,7 @@ This translation will apply to the three applications - desktop, mobile and term
 
 # Coming features
 
+- NextCloud support
 - All: End to end encryption
 - Windows: Tray icon
 - Desktop apps: Tag auto-complete
