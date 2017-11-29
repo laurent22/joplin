@@ -832,6 +832,13 @@ msgstr ""
 msgid "%s: %d notes"
 msgstr ""
 
+msgid "Coming alarms"
+msgstr ""
+
+#, javascript-format
+msgid "On %s: %s"
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 
@@ -883,16 +890,16 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr ""
 
-msgid "Attach image"
+msgid "Attach photo"
 msgstr ""
 
-msgid "Attach any other file"
+msgid "Attach any file"
 msgstr ""
 
-msgid "Delete note"
+msgid "Set alarm"
 msgstr ""
 
-msgid "Convert to regular note"
+msgid "Convert to note"
 msgstr ""
 
 msgid "Convert to todo"
@@ -904,7 +911,7 @@ msgstr ""
 msgid "Show metadata"
 msgstr ""
 
-msgid "View location on map"
+msgid "View on map"
 msgstr ""
 
 msgid "Delete notebook"

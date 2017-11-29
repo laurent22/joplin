@@ -218,15 +218,15 @@
 <tbody>
 <tr>
 <td>Windows</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.25/Joplin-Setup-0.10.25.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.26/Joplin-Setup-0.10.26.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a></td>
 </tr>
 <tr>
 <td>macOS</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.25/Joplin-0.10.25.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.26/Joplin-0.10.26.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a></td>
 </tr>
 <tr>
 <td>Linux</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.25/Joplin-0.10.25-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.26/Joplin-0.10.26-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a></td>
 </tr>
 </tbody>
 </table>
@@ -288,6 +288,16 @@
 <pre><code>*/30 * * * * /path/to/joplin sync
 </code></pre><h1 id="attachments-resources">Attachments / Resources</h1>
 <p>Any kind of file can be attached to a note. In Markdown, links to these files are represented as a simple ID to the resource. In the note viewer, these files, if they are images, will be displayed or, if they are other files (PDF, text files, etc.) they will be displayed as links. Clicking on this link will open the file in the default application.</p>
+<h1 id="notifications">Notifications</h1>
+<p>On the desktop and mobile apps, an alarm can be associated with any to-do. It will be triggered at the given time by displaying a notification. How the notification will be displayed depends on the operating system since each has a different way to handle this. Please see below for the requirements for the desktop applications:</p>
+<ul>
+<li><strong>Windows</strong>: &gt;= 8. Make sure the Action Center is enabled on Windows. Task bar balloon for Windows &lt; 8. Growl as fallback. Growl takes precedence over Windows balloons.</li>
+<li><strong>macOS</strong>: &gt;= 10.8 or Growl if earlier.</li>
+<li><strong>Linux</strong>: <code>notify-osd</code> or <code>libnotify-bin</code> installed (Ubuntu should have this by default). Growl otherwise</li>
+</ul>
+<p>See <a href="./DECISION_FLOW.md">documentation and flow chart for reporter choice</a></p>
+<p>On mobile, the alarms will be displayed using the built-in notification system.</p>
+<p>If for any reason the notifications do not work, please <a href="https://github.com/laurent22/joplin/issues">open an issue</a>.</p>
 <h1 id="localisation">Localisation</h1>
 <p>Joplin is currently available in English and French. If you would like to contribute a translation, it is quite straightforward, please follow these steps:</p>
 <ul>
