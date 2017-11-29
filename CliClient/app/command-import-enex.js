@@ -2,7 +2,7 @@ const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
 const { _ } = require('lib/locale.js');
 const { Folder } = require('lib/models/folder.js');
-const { importEnex } = require('import-enex');
+const { importEnex } = require('lib/import-enex');
 const { filename, basename } = require('lib/path-utils.js');
 const { cliUtils } = require('./cli-utils.js');
 

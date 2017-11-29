@@ -643,7 +643,8 @@ msgstr "Lien ou message non géré : %s"
 msgid "Attach file"
 msgstr "Attacher un fichier"
 
-msgid "Set or clear alarm"
+#, fuzzy
+msgid "Set alarm"
 msgstr "Définir ou modifier alarme"
 
 msgid "Refresh"
@@ -894,11 +895,11 @@ msgid "%s: %d notes"
 msgstr "%s : %d notes"
 
 msgid "Coming alarms"
-msgstr ""
+msgstr "Alarmes à venir"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "On %s: %s"
-msgstr "%s : %s"
+msgstr "Le %s  : %s"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
@@ -953,21 +954,14 @@ msgstr "Ignorer les changements"
 msgid "Unsupported image type: %s"
 msgstr "Type d'image non géré : %s"
 
-#, fuzzy
 msgid "Attach photo"
-msgstr "Attacher un fichier"
+msgstr "Attacher une photo"
 
-#, fuzzy
 msgid "Attach any file"
 msgstr "Attacher un fichier"
 
-#, fuzzy
-msgid "Set alarm"
-msgstr "Définir ou modifier alarme"
-
-#, fuzzy
 msgid "Convert to note"
-msgstr "Convertir en tâche"
+msgstr "Convertir en note"
 
 msgid "Convert to todo"
 msgstr "Convertir en tâche"
@@ -978,9 +972,8 @@ msgstr "Cacher les métadonnées"
 msgid "Show metadata"
 msgstr "Afficher les métadonnées"
 
-#, fuzzy
 msgid "View on map"
-msgstr "Voir l'emplacement sur la carte"
+msgstr "Voir emplacement sur carte"
 
 msgid "Delete notebook"
 msgstr "Supprimer le carnet"
@@ -1002,6 +995,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Set or clear alarm"
+#~ msgstr "Définir ou modifier alarme"
 
 #~ msgid "Attach image"
 #~ msgstr "Joindre une image ou photo"
