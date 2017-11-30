@@ -6,7 +6,7 @@ const processArgs = process.argv.splice(2, process.argv.length);
 
 const silentLog = processArgs.indexOf('--silent') >= 0;
 
-const { basename, dirname } = require('lib/path-utils.js');
+const { basename, dirname, filename, fileExtension } = require('lib/path-utils.js');
 const fs = require('fs-extra');
 const gettextParser = require('gettext-parser');
 
@@ -110,6 +110,17 @@ function buildIndex(locales) {
 	return output.join("\n");
 }
 
+function availableLocales(defaultLocale) {
+	const output = [defaultLocale];
+	fs.readdirSync(cliLocalesDir).forEach((path) => {
+		if (fileExtension(path) !== 'po') return;
+		const locale = filename(path);
+		if (locale === defaultLocale) return;
+		output.push(locale);
+	});
+	return output;
+}
+
 async function main() {
 	let potFilePath = cliLocalesDir + '/joplin.pot';
 	let jsonLocalesDir = cliDir + '/build/locales';
@@ -131,7 +142,7 @@ async function main() {
 
 	fs.mkdirpSync(jsonLocalesDir, 0o755);
 
-	let locales = [defaultLocale, 'fr_FR'];
+	let locales = availableLocales(defaultLocale);
 	for (let i = 0; i < locales.length; i++) {
 		const locale = locales[i];
 		const poFilePäth = cliLocalesDir + '/' + locale + '.po';

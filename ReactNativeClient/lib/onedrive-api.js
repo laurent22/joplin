@@ -182,7 +182,15 @@ class OneDriveApi {
 			}
 
 			if (!response.ok) {
-				let errorResponse = await response.json();
+				let errorResponseText = await response.text();
+				let errorResponse = null;
+				try {
+					errorResponse = JSON.parse(errorResponseText);//await response.json();
+				} catch (error) {
+					error.message = 'OneDriveApi::exec: Cannot parse JSON error: ' + errorResponseText + " " + error.message;
+					throw error;
+				}
+
 				let error = this.oneDriveErrorResponseToError(errorResponse);
 
 				if (error.code == 'InvalidAuthenticationToken' || error.code == 'unauthenticated') {
@@ -226,8 +234,15 @@ class OneDriveApi {
 
 	async execJson(method, path, query, data) {
 		let response = await this.exec(method, path, query, data);
-		let output = await response.json();
-		return output;
+		let errorResponseText = await response.text();
+		try {
+			let output = JSON.parse(errorResponseText); //await response.json();
+			return output;
+		} catch (error) {
+			error.message = 'OneDriveApi::execJson: Cannot parse JSON: ' + errorResponseText + " " + error.message;
+			throw error;
+			//throw new Error('Cannot parse JSON: ' + text);
+		}
 	}
 
 	async execText(method, path, query, data) {
