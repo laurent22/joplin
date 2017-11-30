@@ -360,11 +360,15 @@ class Application extends BaseApplication {
 			AlarmService.garbageCollect();
 		}, 1000 * 60 * 60);
 
-		reg.scheduleSync().then(() => {
-			// Wait for the first sync before updating the notifications, since synchronisation
-			// might change the notifications.
+		if (Setting.value('env') === 'dev') {
 			AlarmService.updateAllNotifications();
-		});
+		} else {
+			reg.scheduleSync().then(() => {
+				// Wait for the first sync before updating the notifications, since synchronisation
+				// might change the notifications.
+				AlarmService.updateAllNotifications();
+			});
+		}
 	}
 
 }
