@@ -659,9 +659,6 @@ msgstr "Connexion OneDrive"
 msgid "Import"
 msgstr "Importer"
 
-msgid "Configuration"
-msgstr "Configuration"
-
 msgid "Delete notebook?"
 msgstr "Supprimer le carnet ?"
 
@@ -917,6 +914,9 @@ msgstr "État"
 
 msgid "Export Debug Report"
 msgstr "Exporter rapport de débogage"
+
+msgid "Configuration"
+msgstr "Configuration"
 
 msgid "Move to notebook..."
 msgstr "Déplacer la note vers carnet..."

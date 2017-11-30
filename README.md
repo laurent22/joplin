@@ -18,9 +18,9 @@ Three types of applications are available: for the **desktop** (Windows, macOS a
 
 Operating System | Download
 -----------------|--------
-Windows          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.28/Joplin-Setup-0.10.28.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a>
-macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.28/Joplin-0.10.28.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a>
-Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.28/Joplin-0.10.28-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a>
+Windows          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.30/Joplin-Setup-0.10.30.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a>
+macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.30/Joplin-0.10.30.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a>
+Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.30/Joplin-0.10.30-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a>
 
 ## Mobile applications
 
@@ -101,7 +101,7 @@ If for any reason the notifications do not work, please [open an issue](https://
 
 # Localisation
 
-Joplin is currently available in English and French. If you would like to contribute a translation, it is quite straightforward, please follow these steps:
+Joplin is currently available in English, French and Spanish. If you would like to contribute a translation, it is quite straightforward, please follow these steps:
 
 - [Download Poedit](https://poedit.net/), the translation editor, and install it.
 - [Download the file to be translated](https://raw.githubusercontent.com/laurent22/joplin/master/CliClient/locales/joplin.pot).

@@ -605,9 +605,6 @@ msgstr ""
 msgid "Import"
 msgstr ""
 
-msgid "Configuration"
-msgstr ""
-
 msgid "Delete notebook?"
 msgstr ""
 
@@ -852,6 +849,9 @@ msgid "Status"
 msgstr ""
 
 msgid "Export Debug Report"
+msgstr ""
+
+msgid "Configuration"
 msgstr ""
 
 msgid "Move to notebook..."

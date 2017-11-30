@@ -654,9 +654,6 @@ msgstr "Inicio de sesión de OneDrive"
 msgid "Import"
 msgstr "Importar"
 
-msgid "Configuration"
-msgstr "Configuración"
-
 msgid "Delete notebook?"
 msgstr "¿Eliminar cuaderno?"
 
@@ -911,6 +908,9 @@ msgstr "Estado"
 
 msgid "Export Debug Report"
 msgstr "Exportar reporte de fallos"
+
+msgid "Configuration"
+msgstr "Configuración"
 
 msgid "Move to notebook..."
 msgstr "Mover a cuaderno..."
