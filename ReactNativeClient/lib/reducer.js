@@ -289,7 +289,7 @@ const reducer = (state = defaultState, action) => {
 				newState.notes = newNotes;
 
 				if (noteFolderHasChanged) {
-					newState.selectedNoteIds = newNotes.length ? [newNotes[0].id] : null;
+					newState.selectedNoteIds = newNotes.length ? [newNotes[0].id] : [];
 				}
 				break;
 

@@ -310,7 +310,7 @@ async function initialize(dispatch, backButtonHandler) {
 		if (Setting.value('env') == 'prod') {
 			await db.open({ name: 'joplin.sqlite' })
 		} else {
-			await db.open({ name: 'joplin-66.sqlite' })
+			await db.open({ name: 'joplin-67.sqlite' })
 			//await db.open({ name: 'joplin-67.sqlite' })
 
 			// await db.exec('DELETE FROM notes');
