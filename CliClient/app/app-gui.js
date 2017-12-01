@@ -526,22 +526,22 @@ class AppGui {
 			return;
 		}	
 
-		let note = this.widget('noteList').currentItem;
-		let folder = this.widget('folderList').currentItem;
-		let args = splitCommandString(cmd);
+		try {			
+			let note = this.widget('noteList').currentItem;
+			let folder = this.widget('folderList').currentItem;
+			let args = splitCommandString(cmd);
 
-		for (let i = 0; i < args.length; i++) {
-			if (args[i] == '$n') {
-				args[i] = note ? note.id : '';
-			} else if (args[i] == '$b') {
-				args[i] = folder ? folder.id : '';
-			} else  if (args[i] == '$c') {
-				const item = this.activeListItem();
-				args[i] = item ? item.id : '';
+			for (let i = 0; i < args.length; i++) {
+				if (args[i] == '$n') {
+					args[i] = note ? note.id : '';
+				} else if (args[i] == '$b') {
+					args[i] = folder ? folder.id : '';
+				} else  if (args[i] == '$c') {
+					const item = this.activeListItem();
+					args[i] = item ? item.id : '';
+				}
 			}
-		}
 
-		try {
 			await this.app().execCommand(args);
 		} catch (error) {
 			this.stdout(error.message);

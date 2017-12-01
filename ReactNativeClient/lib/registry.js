@@ -21,6 +21,15 @@ reg.setLogger = (l) => {
 	reg.logger_ = l;
 }
 
+reg.setShowErrorMessageBoxHandler = (v) => {
+	reg.showErrorMessageBoxHandler_ = v;
+}
+
+reg.showErrorMessageBox = (message) => {
+	if (!reg.showErrorMessageBoxHandler_) return;
+	reg.showErrorMessageBoxHandler_(message);
+}
+
 reg.syncTarget = (syncTargetId = null) => {
 	if (syncTargetId === null) syncTargetId = Setting.value('sync.target');
 	if (reg.syncTargets_[syncTargetId]) return reg.syncTargets_[syncTargetId];
@@ -84,8 +93,22 @@ reg.scheduleSync = async (delay = null) => {
 				}
 			}
 		} catch (error) {
-			reg.logger().info('Could not run background sync: ');
+			reg.logger().info('Could not run background sync:');
 			reg.logger().info(error);
+
+			// Special case to display OneDrive Business error. This is the full error that's received when trying to use a OneDrive Business account:
+			//
+			// {"error":"invalid_client","error_description":"AADSTS50011: The reply address 'http://localhost:1917' does not match the reply addresses configured for
+			// the application: 'cbabb902-d276-4ea4-aa88-062a5889d6dc'. More details: not specified\r\nTrace ID: 6e63dac6-8b37-47e2-bd1b-4768f8713400\r\nCorrelation
+			// ID: acfd6503-8d97-4349-ae2e-e7a19dd7b6bc\r\nTimestamp: 2017-12-01 13:35:55Z","error_codes":[50011],"timestamp":"2017-12-01 13:35:55Z","trace_id":
+			// "6e63dac6-8b37-47e2-bd1b-4768f8713400","correlation_id":"acfd6503-8d97-4349-ae2e-e7a19dd7b6bc"}: TOKEN: null Error: {"error":"invalid_client",
+			// "error_description":"AADSTS50011: The reply address 'http://localhost:1917' does not match the reply addresses configured for the application:
+			// 'cbabb902-d276-4ea4-aa88-062a5889d6dc'. More details: not specified\r\nTrace ID: 6e63dac6-8b37-47e2-bd1b-4768f8713400\r\nCorrelation ID
+			//  acfd6503-8d97-4349-ae2e-e7a19dd7b6bc\r\nTimestamp: 2017-12-01 13:35:55Z","error_codes":[50011],"timestamp":"2017-12-01 13:35:55Z","trace_id":
+			// "6e63dac6-8b37-47e2-bd1b-4768f8713400","correlation_id":"acfd6503-8d97-4349-ae2e-e7a19dd7b6bc"}
+			if (error && error.message && error.message.indexOf('"invalid_client"') >= 0) {
+				reg.showErrorMessageBox(_('Could not synchronize with OneDrive.\n\nThis error often happens when using OneDrive for Business, which unfortunately cannot be supported.\n\nPlease consider using a regular OneDrive account.'));
+			}
 		}
 
 		reg.setupRecurrentSync();
