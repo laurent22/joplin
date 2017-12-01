@@ -312,15 +312,19 @@ class MdToHtml {
 				font-family: sans-serif;
 				padding-bottom: ` + options.paddingBottom + `;
 			}
-			p, h1, h2, h3, h4, ul, table {
+			p, h1, h2, h3, h4, h5, h6, ul, table {
 				margin-top: 0;
 				margin-bottom: 14px;
 			}
 			h1 {
-				font-size: 1.2em;
+				font-size: 1.5em;
 				font-weight: bold;
 			}
 			h2 {
+				font-size: 1.2em;
+				font-weight: bold;
+			}
+			h3, h4, h5, h6 {
 				font-size: 1em;
 				font-weight: bold;
 			}
