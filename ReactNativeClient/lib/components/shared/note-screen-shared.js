@@ -13,11 +13,11 @@ shared.noteExists = async function(noteId) {
 shared.saveNoteButton_press = async function(comp) {
 	let note = Object.assign({}, comp.state.note);
 
-	// Note has been deleted while user was modifying it. In that, we
+	// Note has been deleted while user was modifying it. In that case, we
 	// just save a new note by clearing the note ID.
 	if (note.id && !(await shared.noteExists(note.id))) delete note.id;
 
-	reg.logger().info('Saving note: ', note);
+	// reg.logger().info('Saving note: ', note);
 
 	if (!note.parent_id) {
 		let folder = await Folder.defaultFolder();
@@ -46,8 +46,18 @@ shared.saveNoteButton_press = async function(comp) {
 
 	const savedNote = await Note.save(diff);
 
+	const stateNote = comp.state.note;
 	// Re-assign any property that might have changed during saving (updated_time, etc.)
 	note = Object.assign(note, savedNote);
+
+	if (stateNote) {
+		// But we preserve the current title and body because
+		// the user might have changed them between the time
+		// saveNoteButton_press was called and the note was
+		// saved (it's done asynchronously)
+		note.title = stateNote.title;
+		note.body = stateNote.body;
+	}
 
 	comp.setState({
 		lastSavedNote: Object.assign({}, note),
@@ -65,7 +75,7 @@ shared.saveOneProperty = async function(comp, name, value) {
 	// just save a new note by clearing the note ID.
 	if (note.id && !(await shared.noteExists(note.id))) delete note.id;
 
-	reg.logger().info('Saving note property: ', note.id, name, value);
+	// reg.logger().info('Saving note property: ', note.id, name, value);
 
 	if (note.id) {
 		let toSave = { id: note.id };

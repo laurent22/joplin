@@ -124,11 +124,15 @@ class NoteTextComponent extends React.Component {
 		}, 500);
 	}
 
-	async reloadNote(props) {
+	async reloadNote(props, options = null) {
+		if (!options) options = {};
+		if (!('noReloadIfLocalChanges' in options)) options.noReloadIfLocalChanges = false;
+
 		const noteId = props.noteId;
 		this.lastLoadedNoteId_ = noteId;
 		const note = noteId ? await Note.load(noteId) : null;
 		if (noteId !== this.lastLoadedNoteId_) return; // Race condition - current note was changed while this one was loading
+		if (!options.noReloadIfLocalChanges && this.isModified()) return;
 
 		// If the note hasn't been changed, exit now
 		if (this.state.note && note) {
@@ -166,7 +170,7 @@ class NoteTextComponent extends React.Component {
 		}
 
 		if ('syncStarted' in nextProps && !nextProps.syncStarted && !this.isModified()) {
-			await this.reloadNote(nextProps);
+			await this.reloadNote(nextProps, { noReloadIfLocalChanges: true });
 		}
 	}
 
