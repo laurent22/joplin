@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { Keyboard, NativeModules } = require('react-native');
+const { Keyboard, NativeModules, BackHandler } = require('react-native');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
 const AlarmService = require('lib/services/AlarmService.js');
@@ -255,7 +255,7 @@ const appReducer = (state = appDefaultState, action) => {
 
 let store = createStore(appReducer, applyMiddleware(generalMiddleware));
 
-async function initialize(dispatch, backButtonHandler) {
+async function initialize(dispatch) {
 	shimInit();
 
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
@@ -372,8 +372,6 @@ async function initialize(dispatch, backButtonHandler) {
 		reg.logger().error('Initialization error:', error);
 	}
 
-	BackButtonService.initialize(backButtonHandler);
-
 	reg.setupRecurrentSync();
 
 	PoorManIntervals.setTimeout(() => {
@@ -394,6 +392,10 @@ class AppComponent extends React.Component {
 	constructor() {
 		super();
 		this.lastSyncStarted_ = defaultState.syncStarted;
+
+		this.backButtonHandler_ = () => {
+			return this.backButtonHandler();
+		}
 	}
 
 	async componentDidMount() {
@@ -403,13 +405,15 @@ class AppComponent extends React.Component {
 				state: 'initializing',
 			});
 
-			await initialize(this.props.dispatch, this.backButtonHandler.bind(this));
+			await initialize(this.props.dispatch);
 
 			this.props.dispatch({
 				type: 'APP_STATE_SET',
 				state: 'ready',
 			});
 		}
+
+		BackButtonService.initialize(this.backButtonHandler_);
 
 		AlarmService.setInAppNotificationHandler(async (alarmId) => {
 			const alarm = await Alarm.load(alarmId);
@@ -433,6 +437,8 @@ class AppComponent extends React.Component {
 			this.props.dispatch({ type: 'NAV_BACK' });
 			return true;
 		}
+
+		BackHandler.exitApp();
 
 		return false;
 	}
