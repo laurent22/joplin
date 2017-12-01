@@ -708,6 +708,15 @@ msgid ""
 "synchronisation again may fix the problem."
 msgstr ""
 
+msgid ""
+"Could not synchronize with OneDrive.\n"
+"\n"
+"This error often happens when using OneDrive for Business, which "
+"unfortunately cannot be supported.\n"
+"\n"
+"Please consider using a regular OneDrive account."
+msgstr ""
+
 #, fuzzy, javascript-format
 msgid "Cannot access %s"
 msgstr "No se puede acceder a %s"
