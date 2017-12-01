@@ -614,8 +614,9 @@ msgstr "Séparez chaque étiquette par une virgule."
 msgid "Rename notebook:"
 msgstr "Renommer le carnet :"
 
-msgid "Set or clear alarm:"
-msgstr "Définir ou modifier alarme :"
+#, fuzzy
+msgid "Set alarm:"
+msgstr "Définir ou modifier alarme"
 
 msgid "Layout"
 msgstr "Disposition"
@@ -1004,6 +1005,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Set or clear alarm:"
+#~ msgstr "Définir ou modifier alarme :"
 
 #~ msgid "Set or clear alarm"
 #~ msgstr "Définir ou modifier alarme"

@@ -562,7 +562,7 @@ msgstr ""
 msgid "Rename notebook:"
 msgstr ""
 
-msgid "Set or clear alarm:"
+msgid "Set alarm:"
 msgstr ""
 
 msgid "Layout"

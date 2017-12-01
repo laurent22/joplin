@@ -609,8 +609,8 @@ msgid "Rename notebook:"
 msgstr "Renombrar cuaderno:"
 
 #, fuzzy
-msgid "Set or clear alarm:"
-msgstr "Establecer o eliminar alarma:"
+msgid "Set alarm:"
+msgstr "Establecer alarma"
 
 #, fuzzy
 msgid "Layout"
@@ -996,3 +996,7 @@ msgstr "Actualmente no tiene cuadernos. Cree uno presionando el botón (+)."
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+#, fuzzy
+#~ msgid "Set or clear alarm:"
+#~ msgstr "Establecer o eliminar alarma:"

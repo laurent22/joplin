@@ -10,9 +10,18 @@ The notes can be [synchronised](#synchronisation) with various targets including
 
 # Installation
 
-On macOS, Linux or Windows (via [WSL](https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&MSPPError=-2147217396)), type:
+**IMPORTANT: Node v8+ is required**
 
-    npm install -g joplin
+On macOS:
+
+	brew install joplin
+
+On Linux or Windows (via [WSL](https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&MSPPError=-2147217396)), type:
+
+	NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin
+	sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
+
+By default, the application binary will be installed under `~/.joplin-bin`. You may change this directory if needed. Alternatively, if your npm permissions are setup as described [here](https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory) (Option 2) then simply running `npm -g install joplin` would work.
 
 To start it, type `joplin`.
 
@@ -20,7 +29,7 @@ To start it, type `joplin`.
 
 The demo application shows various Wikipedia articles converted to Markdown and organised into notebooks, as well as an example to-do list, in order to test and demonstrate the application. The demo application and its settings will be installed in a separate directory so as not to interfere with any existing Joplin application.
 
-    npm install -g demo-joplin
+	npm install -g demo-joplin
 
 To start it, type `demo-joplin`.
 
@@ -54,27 +63,27 @@ Shortcut | Description
 
 Create a new note with title "Wednesday's meeting":
 
-    mknote "Wednesday's meeting"
+	mknote "Wednesday's meeting"
 
 Create a new to-do:
 
-    mktodo "Buy bread"
+	mktodo "Buy bread"
 
 Move the currently selected note ($n) to the notebook with title "Personal"
 
-    mv $n "Personal"
+	mv $n "Personal"
 
 Rename the currently selected notebook ($b) to "Something":
 
-    ren $b "Something"
+	ren $b "Something"
 
 Attach a local file to the currently selected note ($n):
 
-    ren $n /home/laurent/pictures/Vacation12.jpg
+	ren $n /home/laurent/pictures/Vacation12.jpg
 
 The configuration can also be changed from command-line mode. For example, to change the current editor to Sublime Text:
 
-    config editor "subl -w"
+	config editor "subl -w"
 
 ## Editing a note
 
@@ -108,7 +117,7 @@ Currently, synchronisation is possible with OneDrive (by default) or the local f
 
 To initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). After that, the application will synchronise in the background whenever it is running. It is possible to also synchronise outside of the user interface by typing `joplin sync` from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:
 
-    */30 * * * * /path/to/joplin sync
+	*/30 * * * * /path/to/joplin sync
 
 # URLs
 
@@ -132,189 +141,202 @@ In Markdown, links to resources are represented as a simple ID to the resource. 
 
 There are two types of shortcuts: those that manipulate the user interface directly, such as `TAB` to move from one pane to another, and those that are simply shortcuts to actual commands. In a way similar to Vim, these shortcuts are generally a verb followed by an object. For example, typing `mn` ([m]ake [n]ote), is used to create a new note: it will switch the interface to command line mode and pre-fill it with `mknote ""` from where the title of the note can be entered. See below for the full list of shortcuts:
 
-    Tab       Give focus to next pane
-    Shift+Tab Give focus to previous pane
-    :         Enter command line mode
-    ESC       Exit command line mode
-    ENTER     Edit the selected note
-    Ctrl+C    Cancel the current command.
-    Ctrl+D    Exit the application.
-    DELETE    Delete the currently selected note or notebook.
-    SPACE     Set a to-do as completed / not completed
-    tc        [t]oggle [c]onsole between maximized/minimized/hidden/visible.
-    /         Search
-    tm        [t]oggle note [m]etadata.
-    mn        [M]ake a new [n]ote
-    mt        [M]ake a new [t]odo
-    mb        [M]ake a new note[b]ook
-    yn        Copy ([Y]ank) the [n]ote to a notebook.
-    dn        Move the note to a notebook.
+	Tab       Give focus to next pane
+	Shift+Tab Give focus to previous pane
+	:         Enter command line mode
+	ESC       Exit command line mode
+	ENTER     Edit the selected note
+	Ctrl+C    Cancel the current command.
+	Ctrl+D    Exit the application.
+	DELETE    Delete the currently selected note or notebook.
+	SPACE     Set a to-do as completed / not completed
+	tc        [t]oggle [c]onsole between maximized/minimized/hidden/visible.
+	/         Search
+	tm        [t]oggle note [m]etadata.
+	mn        [M]ake a new [n]ote
+	mt        [M]ake a new [t]odo
+	mb        [M]ake a new note[b]ook
+	yn        Copy ([Y]ank) the [n]ote to a notebook.
+	dn        Move the note to a notebook.
 
 # Available commands
 
 The following commands are available in [command-line mode](#command-line-mode):
 
-    attach <note> <file>
+	attach <note> <file>
 
-        Attaches the given file to the note.
+	    Attaches the given file to the note.
 
-    config [name] [value]
+	config [name] [value]
 
-        Gets or sets a config value. If [value] is not provided, it will show the 
-        value of [name]. If neither [name] nor [value] is provided, it will list 
-        the current configuration.
+	    Gets or sets a config value. If [value] is not provided, it will show the 
+	    value of [name]. If neither [name] nor [value] is provided, it will list 
+	    the current configuration.
 
-        -v, --verbose  Also displays unset and hidden config variables.
+	    -v, --verbose  Also displays unset and hidden config variables.
 
-    Possible keys/values:
+	Possible keys/values:
 
-        editor                 Text editor.
-                               The editor that will be used to open a note. If 
-                               none is provided it will try to auto-detect the 
-                               default editor.
-                               Type: string.
-                               
-        locale                 Language.
-                               Type: Enum.
-                               Possible values: en_GB (English), fr_FR (Français).
-                               Default: "en_GB"
-                               
-        sync.2.path            File system synchronisation target directory.
-                               The path to synchronise with when file system 
-                               synchronisation is enabled. See `sync.target`.
-                               Type: string.
-                               
-        sync.interval          Synchronisation interval.
-                               Type: Enum.
-                               Possible values: 0 (Disabled), 300 (5 minutes), 600 
-                               (10 minutes), 1800 (30 minutes), 3600 (1 hour), 
-                               43200 (12 hours), 86400 (24 hours).
-                               Default: 300
-                               
-        sync.target            Synchronisation target.
-                               The target to synchonise to. If synchronising with 
-                               the file system, set `sync.2.path` to specify the 
-                               target directory.
-                               Type: Enum.
-                               Possible values: 1 (Memory), 2 (File system), 3 
-                               (OneDrive).
-                               Default: 3
-                               
-        trackLocation          Save geo-location with notes.
-                               Type: bool.
-                               Default: true
-                               
-        uncompletedTodosOnTop  Show uncompleted todos on top of the lists.
-                               Type: bool.
-                               Default: true
+	    sync.2.path            File system synchronisation target directory.
+	                           The path to synchronise with when file system 
+	                           synchronisation is enabled. See `sync.target`.
+	                           Type: string.
+	                           
+	    editor                 Text editor.
+	                           The editor that will be used to open a note. If 
+	                           none is provided it will try to auto-detect the 
+	                           default editor.
+	                           Type: string.
+	                           
+	    locale                 Language.
+	                           Type: Enum.
+	                           Possible values: en_GB (English), es_CR (Español), 
+	                           fr_FR (Français).
+	                           Default: "en_GB"
+	                           
+	    dateFormat             Date format.
+	                           Type: Enum.
+	                           Possible values: DD/MM/YYYY (30/01/2017), DD/MM/YY 
+	                           (30/01/17), MM/DD/YYYY (01/30/2017), MM/DD/YY 
+	                           (01/30/17), YYYY-MM-DD (2017-01-30).
+	                           Default: "DD/MM/YYYY"
+	                           
+	    timeFormat             Time format.
+	                           Type: Enum.
+	                           Possible values: HH:mm (20:30), h:mm A (8:30 PM).
+	                           Default: "HH:mm"
+	                           
+	    uncompletedTodosOnTop  Show uncompleted todos on top of the lists.
+	                           Type: bool.
+	                           Default: true
+	                           
+	    trackLocation          Save geo-location with notes.
+	                           Type: bool.
+	                           Default: true
+	                           
+	    sync.interval          Synchronisation interval.
+	                           Type: Enum.
+	                           Possible values: 0 (Disabled), 300 (5 minutes), 600 
+	                           (10 minutes), 1800 (30 minutes), 3600 (1 hour), 
+	                           43200 (12 hours), 86400 (24 hours).
+	                           Default: 300
+	                           
+	    sync.target            Synchronisation target.
+	                           The target to synchonise to. If synchronising with 
+	                           the file system, set `sync.2.path` to specify the 
+	                           target directory.
+	                           Type: Enum.
+	                           Possible values: 2 (File system), 3 (OneDrive), 4 
+	                           (OneDrive Dev (For testing only)).
+	                           Default: 3
 
-    cp <note> [notebook]
+	cp <note> [notebook]
 
-        Duplicates the notes matching <note> to [notebook]. If no notebook is 
-        specified the note is duplicated in the current notebook.
+	    Duplicates the notes matching <note> to [notebook]. If no notebook is 
+	    specified the note is duplicated in the current notebook.
 
-    done <note>
+	done <note>
 
-        Marks a to-do as done.
+	    Marks a to-do as done.
 
-    edit <note>
+	edit <note>
 
-        Edit note.
+	    Edit note.
 
-    exit
+	exit
 
-        Exits the application.
+	    Exits the application.
 
-    export <directory>
+	export <directory>
 
-        Exports Joplin data to the given directory. By default, it will export the 
-        complete database including notebooks, notes, tags and resources.
+	    Exports Joplin data to the given directory. By default, it will export the 
+	    complete database including notebooks, notes, tags and resources.
 
-        --note <note>          Exports only the given note.
-        --notebook <notebook>  Exports only the given notebook.
+	    --note <note>          Exports only the given note.
+	    --notebook <notebook>  Exports only the given notebook.
 
-    geoloc <note>
+	geoloc <note>
 
-        Displays a geolocation URL for the note.
+	    Displays a geolocation URL for the note.
 
-    help [command]
+	help [command]
 
-        Displays usage information.
+	    Displays usage information.
 
-    import-enex <file> [notebook]
+	import-enex <file> [notebook]
 
-        Imports an Evernote notebook file (.enex file).
+	    Imports an Evernote notebook file (.enex file).
 
-        -f, --force  Do not ask for confirmation.
+	    -f, --force  Do not ask for confirmation.
 
-    mkbook <new-notebook>
+	mkbook <new-notebook>
 
-        Creates a new notebook.
+	    Creates a new notebook.
 
-    mknote <new-note>
+	mknote <new-note>
 
-        Creates a new note.
+	    Creates a new note.
 
-    mktodo <new-todo>
+	mktodo <new-todo>
 
-        Creates a new to-do.
+	    Creates a new to-do.
 
-    mv <note> [notebook]
+	mv <note> [notebook]
 
-        Moves the notes matching <note> to [notebook].
+	    Moves the notes matching <note> to [notebook].
 
-    ren <item> <name>
+	ren <item> <name>
 
-        Renames the given <item> (note or notebook) to <name>.
+	    Renames the given <item> (note or notebook) to <name>.
 
-    rmbook <notebook>
+	rmbook <notebook>
 
-        Deletes the given notebook.
+	    Deletes the given notebook.
 
-        -f, --force  Deletes the notebook without asking for confirmation.
+	    -f, --force  Deletes the notebook without asking for confirmation.
 
-    rmnote <note-pattern>
+	rmnote <note-pattern>
 
-        Deletes the notes matching <note-pattern>.
+	    Deletes the notes matching <note-pattern>.
 
-        -f, --force  Deletes the notes without asking for confirmation.
+	    -f, --force  Deletes the notes without asking for confirmation.
 
-    search <pattern> [notebook]
+	search <pattern> [notebook]
 
-        Searches for the given <pattern> in all the notes.
+	    Searches for the given <pattern> in all the notes.
 
-    status
+	status
 
-        Displays summary about the notes and notebooks.
+	    Displays summary about the notes and notebooks.
 
-    sync
+	sync
 
-        Synchronises with remote storage.
+	    Synchronises with remote storage.
 
-        --target <target>  Sync to provided target (defaults to sync.target config 
-                           value)
-        --random-failures  For debugging purposes. Do not use.
+	    --target <target>  Sync to provided target (defaults to sync.target config 
+	                       value)
+	    --random-failures  For debugging purposes. Do not use.
 
-    tag <tag-command> [tag] [note]
+	tag <tag-command> [tag] [note]
 
-        <tag-command> can be "add", "remove" or "list" to assign or remove [tag] 
-        from [note], or to list the notes associated with [tag]. The command `tag 
-        list` can be used to list all the tags.
+	    <tag-command> can be "add", "remove" or "list" to assign or remove [tag] 
+	    from [note], or to list the notes associated with [tag]. The command `tag 
+	    list` can be used to list all the tags.
 
-    todo <todo-command> <note-pattern>
+	todo <todo-command> <note-pattern>
 
-        <todo-command> can either be "toggle" or "clear". Use "toggle" to toggle 
-        the given to-do between completed and uncompleted state (If the target is 
-        a regular note it will be converted to a to-do). Use "clear" to convert 
-        the to-do back to a regular note.
+	    <todo-command> can either be "toggle" or "clear". Use "toggle" to toggle 
+	    the given to-do between completed and uncompleted state (If the target is 
+	    a regular note it will be converted to a to-do). Use "clear" to convert 
+	    the to-do back to a regular note.
 
-    undone <note>
+	undone <note>
 
-        Marks a to-do as non-completed.
+	    Marks a to-do as non-completed.
 
-    version
+	version
 
-        Displays version information
+	    Displays version information
 
 # License
 
