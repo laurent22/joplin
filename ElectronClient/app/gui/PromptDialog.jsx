@@ -1,6 +1,7 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
+const moment = require('moment');
 const { themeStyle } = require('../theme.js');
 const { time } = require('lib/time-utils.js');
 const Datetime = require('react-datetime');
@@ -113,7 +114,13 @@ class PromptDialog extends React.Component {
 		const styles = this.styles(this.props.theme, style.width, style.height, this.state.visible);
 
 		const onClose = (accept, buttonType) => {
-			if (this.props.onClose) this.props.onClose(accept ? this.state.answer : null, buttonType);
+			if (this.props.onClose) {
+				let outputAnswer = this.state.answer;
+				if (this.props.inputType === 'datetime') {
+					outputAnswer = anythingToDate(outputAnswer);
+				}
+				this.props.onClose(accept ? outputAnswer : null, buttonType);
+			}
 			this.setState({ visible: false, answer: '' });
 		}
 
@@ -121,8 +128,17 @@ class PromptDialog extends React.Component {
 			this.setState({ answer: event.target.value });
 		}
 
+		const anythingToDate = (o) => {
+			if (o && o.toDate) return o.toDate();
+			if (!o) return null;
+			let m = moment(o, time.dateTimeFormat());
+			if (m.isValid()) return m.toDate();
+			m = moment(o, time.dateFormat());
+			return m.isValid() ? m.toDate() : null;
+		}
+
 		const onDateTimeChange = (momentObject) => {
-			this.setState({ answer: momentObject.toDate() });
+			this.setState({ answer: momentObject });
 		}
 
 		const onKeyDown = (event) => {

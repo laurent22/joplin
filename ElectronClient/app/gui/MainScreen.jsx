@@ -183,12 +183,16 @@ class MainScreenComponent extends React.Component {
 		} else if (command.name === 'editAlarm') {
 			const note = await Note.load(command.noteId);
 
+			let defaultDate = new Date(Date.now() + 2 * 3600 * 1000);
+			defaultDate.setMinutes(0);
+			defaultDate.setSeconds(0);
+
 			this.setState({
 				promptOptions: {
 					label: _('Set alarm:'),
 					inputType: 'datetime',
 					buttons: ['ok', 'cancel', 'clear'],
-					value: note.todo_due ? new Date(note.todo_due) : null,
+					value: note.todo_due ? new Date(note.todo_due) : defaultDate,
 					onClose: async (answer, buttonType) => {
 						let newNote = null;
 
