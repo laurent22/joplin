@@ -132,7 +132,7 @@ class MdToHtml {
 		if (isResourceUrl && !this.supportsResourceLinks_) {
 			// In mobile, links to local resources, such as PDF, etc. currently aren't supported.
 			// Ideally they should be opened in the user's browser.
-			return '[Resource not yet supported: '; //+ htmlentities(text) + ']';
+			return '<span style="opacity: 0.5">(Resource not yet supported: '; //+ htmlentities(text) + ']';
 		} else {
 			if (isResourceUrl) {
 				const resourceId = Resource.pathToId(href);
@@ -150,7 +150,7 @@ class MdToHtml {
 		const isResourceUrl = Resource.isResourceUrl(href);
 
 		if (isResourceUrl && !this.supportsResourceLinks_) {
-			return ']';
+			return ')</span>';
 		} else {
 			return '</a>';
 		}
@@ -159,6 +159,7 @@ class MdToHtml {
 	renderTokens_(tokens, options) {
 		let output = [];
 		let previousToken = null;
+		let anchorAttrs = [];
 		for (let i = 0; i < tokens.length; i++) {
 			const t = tokens[i];
 			const nextToken = i < tokens.length ? tokens[i+1] : null;
@@ -190,6 +191,7 @@ class MdToHtml {
 
 			if (openTag) {
 				if (openTag === 'a') {
+					anchorAttrs.push(attrs);
 					output.push(this.renderOpenLink_(attrs, options));
 				} else {
 					const attrsHtml = this.renderAttrs_(attrs);
@@ -235,7 +237,7 @@ class MdToHtml {
 
 			if (closeTag) {
 				if (closeTag === 'a') {
-					output.push(this.renderCloseLink_(attrs, options));
+					output.push(this.renderCloseLink_(anchorAttrs.pop(), options));
 				} else {
 					output.push('</' + closeTag + '>');
 				}

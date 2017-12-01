@@ -13,26 +13,6 @@ function shimInit() {
 		return shim.fetchWithRetry(() => {
 			return shim.nativeFetch_(url, options)
 		}, options);
-
-		// if (!options) options = {};
-		// if (!options.timeout) options.timeout = 1000 * 120; // ms
-		// if (!('maxRetry' in options)) options.maxRetry = 5;
-
-		// let retryCount = 0;
-		// while (true) {
-		// 	try {
-		// 		const response = await nodeFetch(url, options);
-		// 		return response;
-		// 	} catch (error) {
-		// 		if (fetchRequestCanBeRetried(error)) {
-		// 			retryCount++;
-		// 			if (retryCount > options.maxRetry) throw error;
-		// 			await time.sleep(retryCount * 3);
-		// 		} else {
-		// 			throw error;
-		// 		}
-		// 	}
-		// }
 	}
 
 	shim.fetchBlob = async function(url, options) {

@@ -12,7 +12,7 @@ const { BackButtonService } = require('lib/services/back-button.js');
 const { BaseModel } = require('lib/base-model.js');
 const { ActionButton } = require('lib/components/action-button.js');
 const Icon = require('react-native-vector-icons/Ionicons').default;
-const { fileExtension, basename } = require('lib/path-utils.js');
+const { fileExtension, basename, safeFileExtension } = require('lib/path-utils.js');
 const mimeUtils = require('lib/mime-utils.js').mime;
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { time } = require('lib/time-utils.js');
@@ -295,6 +295,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 		resource.id = uuid.create();
 		resource.mime = mimeType;
 		resource.title = pickerResponse.fileName ? pickerResponse.fileName : _('Untitled');
+		resource.file_extension = safeFileExtension(fileExtension(pickerResponse.fileName));
+
+		if (!resource.mime) resource.mime = 'application/octet-stream';
 
 		let targetPath = Resource.fullPath(resource);
 

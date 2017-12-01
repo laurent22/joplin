@@ -202,7 +202,7 @@ class JoplinDatabase extends Database {
 		// default value and thus might cause problems. In that case, the default value
 		// must be set in the synchronizer too.
 
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 		if (currentVersionIndex == existingDatabaseVersions.length - 1) return false;
@@ -228,7 +228,7 @@ class JoplinDatabase extends Database {
 					);
 				`;
 
-				queries.push({ sql: 'DROP TABLE deleted_items' });
+				// queries.push({ sql: 'DROP TABLE deleted_items' });
 				queries.push({ sql: this.sqlStringToLines(newTableSql)[0] });
 				queries.push({ sql: "CREATE INDEX deleted_items_sync_target ON deleted_items (sync_target)" });
 			}
@@ -257,6 +257,10 @@ class JoplinDatabase extends Database {
 			if (targetVersion == 6) {
 				queries.push('CREATE TABLE alarms (id INTEGER PRIMARY KEY AUTOINCREMENT, note_id TEXT NOT NULL, trigger_time INT NOT NULL)');
 				queries.push('CREATE INDEX alarm_note_id ON alarms (note_id)');
+			}
+
+			if (targetVersion == 7) {
+				queries.push('ALTER TABLE resources ADD COLUMN file_extension TEXT NOT NULL DEFAULT ""');
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

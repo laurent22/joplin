@@ -33,7 +33,8 @@ class Resource extends BaseItem {
 	}
 
 	static filename(resource) {
-		let extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
+		let extension = resource.file_extension;
+		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
 		extension = extension ? '.' + extension : '';
 		return resource.id + extension;
 	}

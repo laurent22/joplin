@@ -82,7 +82,7 @@ function shimInit() {
 	shim.attachFileToNote = async function(note, filePath) {
 		const { Resource } = require('lib/models/resource.js');
 		const { uuid } = require('lib/uuid.js');
-		const { filename } = require('lib/path-utils.js');
+		const { basename, fileExtension, safeFileExtension } = require('lib/path-utils.js');
 		const mime = require('mime/lite');
 		const { Note } = require('lib/models/note.js');
 
@@ -91,7 +91,10 @@ function shimInit() {
 		let resource = Resource.new();
 		resource.id = uuid.create();
 		resource.mime = mime.getType(filePath);
-		resource.title = filename(filePath);
+		resource.title = basename(filePath);
+		resource.file_extension = safeFileExtension(fileExtension(filePath));
+
+		if (!resource.mime) resource.mime = 'application/octet-stream';
 
 		let targetPath = Resource.fullPath(resource);
 
@@ -120,26 +123,6 @@ function shimInit() {
 		return shim.fetchWithRetry(() => {
 			return nodeFetch(url, options)
 		}, options);
-
-		// if (!options) options = {};
-		// if (!options.timeout) options.timeout = 1000 * 120; // ms
-		// if (!('maxRetry' in options)) options.maxRetry = 5;
-
-		// let retryCount = 0;
-		// while (true) {
-		// 	try {
-		// 		const response = await nodeFetch(url, options);
-		// 		return response;
-		// 	} catch (error) {
-		// 		if (fetchRequestCanBeRetried(error)) {
-		// 			retryCount++;
-		// 			if (retryCount > options.maxRetry) throw error;
-		// 			await time.sleep(retryCount * 3);
-		// 		} else {
-		// 			throw error;
-		// 		}
-		// 	}
-		// }
 	}
 	
 	shim.fetchBlob = async function(url, options) {
@@ -204,22 +187,6 @@ function shimInit() {
 		};
 
 		return shim.fetchWithRetry(doFetchOperation, options);
-
-		// let retryCount = 0;
-		// while (true) {
-		// 	try {
-		// 		const response = await doFetchOperation();
-		// 		return response;
-		// 	} catch (error) {
-		// 		if (fetchRequestCanBeRetried(error)) {
-		// 			retryCount++;
-		// 			if (retryCount > options.maxRetry) throw error;
-		// 			await time.sleep(retryCount * 3);
-		// 		} else {
-		// 			throw error;
-		// 		}
-		// 	}
-		// }
 	}
 }
 

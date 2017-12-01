@@ -35,4 +35,9 @@ function isHidden(path) {
 	return b[0] === '.';
 }
 
-module.exports = { basename, dirname, filename, isHidden, fileExtension };
+function safeFileExtension(e) {
+	if (!e || !e.replace) return '';
+	return e.replace(/[^a-zA-Z0-9]/g, '')
+}
+
+module.exports = { basename, dirname, filename, isHidden, fileExtension, safeFileExtension };
