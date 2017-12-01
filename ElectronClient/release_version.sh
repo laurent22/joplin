@@ -9,6 +9,9 @@ git commit -m "Electron release $VERSION"
 git tag $VERSION
 git push && git push --tags
 
+echo ""
 echo "Create a draft release at: https://github.com/laurent22/joplin/releases/tag/$VERSION"
 echo ""
-echo "Then run $APP_DIR/update-readme-download.js"
+echo "Then run:"
+echo ""
+echo "node $APP_DIR/update-readme-download.js"
