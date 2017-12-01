@@ -204,9 +204,14 @@
 <p>The notes can be <a href="#synchronisation">synchronised</a> with various targets including the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
 <p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/ScreenshotTerminal.png" style="max-width: 60%"></p>
 <h1 id="installation">Installation</h1>
-<p>On macOS, Linux or Windows (via <a href="https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&amp;MSPPError=-2147217396">WSL</a>), type:</p>
-<pre><code>npm install -g joplin
-</code></pre><p>To start it, type <code>joplin</code>.</p>
+<p><strong>IMPORTANT: Node v8+ is required</strong></p>
+<p>On macOS:</p>
+<pre><code>brew install joplin
+</code></pre><p>On Linux or Windows (via <a href="https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&amp;MSPPError=-2147217396">WSL</a>), type:</p>
+<pre><code>NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin
+sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
+</code></pre><p>By default, the application binary will be installed under <code>~/.joplin-bin</code>. You may change this directory if needed. Alternatively, if your npm permissions are setup as described <a href="https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory">here</a> (Option 2) then simply running <code>npm -g install joplin</code> would work.</p>
+<p>To start it, type <code>joplin</code>.</p>
 <h1 id="demo">Demo</h1>
 <p>The demo application shows various Wikipedia articles converted to Markdown and organised into notebooks, as well as an example to-do list, in order to test and demonstrate the application. The demo application and its settings will be installed in a separate directory so as not to interfere with any existing Joplin application.</p>
 <pre><code>npm install -g demo-joplin
@@ -339,6 +344,11 @@ config [name] [value]
 
 Possible keys/values:
 
+    sync.2.path            File system synchronisation target directory.
+                           The path to synchronise with when file system 
+                           synchronisation is enabled. See `sync.target`.
+                           Type: string.
+
     editor                 Text editor.
                            The editor that will be used to open a note. If 
                            none is provided it will try to auto-detect the 
@@ -347,13 +357,29 @@ Possible keys/values:
 
     locale                 Language.
                            Type: Enum.
-                           Possible values: en_GB (English), fr_FR (Français).
+                           Possible values: en_GB (English), es_CR (Español), 
+                           fr_FR (Français).
                            Default: &quot;en_GB&quot;
 
-    sync.2.path            File system synchronisation target directory.
-                           The path to synchronise with when file system 
-                           synchronisation is enabled. See `sync.target`.
-                           Type: string.
+    dateFormat             Date format.
+                           Type: Enum.
+                           Possible values: DD/MM/YYYY (30/01/2017), DD/MM/YY 
+                           (30/01/17), MM/DD/YYYY (01/30/2017), MM/DD/YY 
+                           (01/30/17), YYYY-MM-DD (2017-01-30).
+                           Default: &quot;DD/MM/YYYY&quot;
+
+    timeFormat             Time format.
+                           Type: Enum.
+                           Possible values: HH:mm (20:30), h:mm A (8:30 PM).
+                           Default: &quot;HH:mm&quot;
+
+    uncompletedTodosOnTop  Show uncompleted todos on top of the lists.
+                           Type: bool.
+                           Default: true
+
+    trackLocation          Save geo-location with notes.
+                           Type: bool.
+                           Default: true
 
     sync.interval          Synchronisation interval.
                            Type: Enum.
@@ -367,17 +393,9 @@ Possible keys/values:
                            the file system, set `sync.2.path` to specify the 
                            target directory.
                            Type: Enum.
-                           Possible values: 1 (Memory), 2 (File system), 3 
-                           (OneDrive).
+                           Possible values: 2 (File system), 3 (OneDrive), 4 
+                           (OneDrive Dev (For testing only)).
                            Default: 3
-
-    trackLocation          Save geo-location with notes.
-                           Type: bool.
-                           Default: true
-
-    uncompletedTodosOnTop  Show uncompleted todos on top of the lists.
-                           Type: bool.
-                           Default: true
 
 cp &lt;note&gt; [notebook]
 

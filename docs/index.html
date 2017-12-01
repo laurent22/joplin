@@ -250,9 +250,13 @@
 </tbody>
 </table>
 <h2 id="terminal-application">Terminal application</h2>
-<p>On macOS, Linux or Windows (via <a href="https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&amp;MSPPError=-2147217396">WSL</a>), type:</p>
-<pre><code>npm install -g joplin
-</code></pre><p>If the application does not install due to permission issues, please make sure that your global npm permissions are correct by following the instructions <a href="https://docs.npmjs.com/getting-started/fixing-npm-permissions">here</a>.</p>
+<p><strong>IMPORTANT: Node v8+ is required</strong></p>
+<p>On macOS:</p>
+<pre><code>brew install joplin
+</code></pre><p>On Linux or Windows (via <a href="https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&amp;MSPPError=-2147217396">WSL</a>), type:</p>
+<pre><code>NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin
+sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
+</code></pre><p>By default, the application binary will be installed under <code>~/.joplin-bin</code>. You may change this directory if needed. Alternatively, if your npm permissions are setup as described <a href="https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory">here</a> (Option 2) then simply running <code>npm -g install joplin</code> would work.</p>
 <p>To start it, type <code>joplin</code>.</p>
 <p>For usage information, please refer to the full <a href="http://joplin.cozic.net/terminal">Joplin Terminal Application Documentation</a>.</p>
 <h1 id="features">Features</h1>
