@@ -185,7 +185,7 @@ class MainScreenComponent extends React.Component {
 
 			this.setState({
 				promptOptions: {
-					label: _('Set or clear alarm:'),
+					label: _('Set alarm:'),
 					inputType: 'datetime',
 					buttons: ['ok', 'cancel', 'clear'],
 					value: note.todo_due ? new Date(note.todo_due) : null,

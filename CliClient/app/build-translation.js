@@ -68,8 +68,8 @@ function buildLocale(inputFile, outputFile) {
 }
 
 async function removePoHeaderDate(filePath) {
-	await execCommand('sed -i -e\'/POT-Creation-Date:/d\' "' + filePath + '"');
-	await execCommand('sed -i -e\'/PO-Revision-Date:/d\' "' + filePath + '"');
+	await execCommand('sed -i "" -e\'/POT-Creation-Date:/d\' "' + filePath + '"');
+	await execCommand('sed -i "" -e\'/PO-Revision-Date:/d\' "' + filePath + '"');
 }
 
 async function createPotFile(potFilePath, sources) {
