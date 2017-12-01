@@ -1,4 +1,5 @@
 const { _ } = require('lib/locale.js');
+const { dirname } = require('lib/path-utils.js');
 const { Logger } = require('lib/logger.js');
 
 class Bridge {
@@ -6,6 +7,7 @@ class Bridge {
 	constructor(electronWrapper) {
 		this.electronWrapper_ = electronWrapper;
 		this.autoUpdateLogger_ = null;
+		this.lastSelectedPath_ = null;
 	}
 
 	electronApp() {
@@ -39,7 +41,13 @@ class Bridge {
 
 	showOpenDialog(options) {
 		const {dialog} = require('electron');
-		return dialog.showOpenDialog(options);
+		if (!options) options = {};
+		if (!('defaultPath' in options) && this.lastSelectedPath_) options.defaultPath = this.lastSelectedPath_;
+		const filePaths = dialog.showOpenDialog(options);
+		if (filePaths && filePaths.length) {
+			this.lastSelectedPath_ = dirname(filePaths[0]);
+		}
+		return filePaths;
 	}
 
 	showMessageBox(options) {

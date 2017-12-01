@@ -339,23 +339,26 @@ class NoteTextComponent extends React.Component {
 		if (!noteId) return;
 
 		const filePaths = bridge().showOpenDialog({
-			properties: ['openFile', 'createDirectory'],
+			properties: ['openFile', 'createDirectory', 'multiSelections'],
 		});
 		if (!filePaths || !filePaths.length) return;
 
 		await this.saveIfNeeded();
-		const note = await Note.load(noteId);
+		let note = await Note.load(noteId);
 
-		try {
-			reg.logger().info('Attaching ' + filePaths[0]);
-			const newNote = await shim.attachFileToNote(note, filePaths[0]);
-			reg.logger().info('File was attached.');
-			this.setState({
-				note: newNote,
-				lastSavedNote: Object.assign({}, newNote),
-			});
-		} catch (error) {
-			reg.logger().error(error);
+		for (let i = 0; i < filePaths.length; i++) {
+			const filePath = filePaths[i];
+			try {
+				reg.logger().info('Attaching ' + filePath);
+				note = await shim.attachFileToNote(note, filePath);
+				reg.logger().info('File was attached.');
+				this.setState({
+					note: Object.assign({}, note),
+					lastSavedNote: Object.assign({}, note),
+				});
+			} catch (error) {
+				reg.logger().error(error);
+			}
 		}
 	}
 
