@@ -286,6 +286,10 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					note.updated_time = dateToTimestamp(text);
 				} else if (n == 'tag') {
 					note.tags.push(text);
+				} else if (n == 'note') {
+					// Ignore - white space between the opening tag <note> and the first sub-tag
+				} else if (n == 'content') {
+					// Ignore - white space between the opening tag <content> and the <![CDATA[< block where the content actually is
 				} else {
 					console.warn('Unsupported note tag: ' + n);
 				}

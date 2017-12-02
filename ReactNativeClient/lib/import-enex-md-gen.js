@@ -149,6 +149,17 @@ function collapseWhiteSpaceAndAppend(lines, state, text) {
 
 		if (!spaceLeft && !spaceRight && text == "") return lines;
 
+		if (state.inQuote) {
+			// Add a ">" at the beginning of the block then at the beginning of each lines. So it turns this:
+			// "my quote\nsecond line" into this => "> my quote\n> second line"
+			lines.push('> ');
+			if (lines.indexOf('\r') >= 0) {
+				text = text.replace(/\n\r/g, '\n\r> ');
+			} else {
+				text = text.replace(/\n/g, '\n> ');
+			}
+		}
+
 		if (spaceLeft) lines.push(SPACE);
 		lines.push(text);
 		if (spaceRight) lines.push(SPACE);
@@ -199,7 +210,7 @@ function isAnchor(n) {
 }
 
 function isIgnoredEndTag(n) {
-	return n=="en-note" || n=="en-todo" || n=="span" || n=="body" || n=="html" || n=="font" || n=="br" || n=='hr' || n=='s' || n == 'tbody';
+	return n=="en-note" || n=="en-todo" || n=="span" || n=="body" || n=="html" || n=="font" || n=="br" || n=='hr' || n=='s' || n == 'tbody' || n == 'sup';
 }
 
 function isListTag(n) {
@@ -212,6 +223,24 @@ function isNewLineOnlyEndTag(n) {
 }
 
 function isCodeTag(n) {
+	// NOTE: This handles "code" tags that were copied and pasted from a browser to Evernote. Evernote also has its own code block, which
+	// of course is way more complicated and currently not fully supported (the code will be imported and indented properly, but it won't
+	// have the extra Markdown indentation that identifies the block as code). For reference this is an example of Evernote-style code block:
+	//
+	// <div style="-en-codeblock: true; box-sizing: border-box; padding: 8px; font-family: Monaco, Menlo, Consolas, &quot;Courier New&quot;,
+	// monospace; font-size: 12px; color: rgb(51, 51, 51); border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius:
+	// 4px; border-bottom-left-radius: 4px; background-color: rgb(251, 250, 248); border: 1px solid rgba(0, 0, 0, 0.14902); background-position:
+	// initial initial; background-repeat: initial initial;"><div>function justTesting() {</div><div>&nbsp; &nbsp; &nbsp;someCodeBlock();</div>
+	// <div>&nbsp; &nbsp; &nbsp;return true;</div><div>}</div></div>
+	//
+	// Which in normal HTML would be:
+	//
+	// <code>
+	// function justTesting() {
+	//    someCodeBlock();
+	//    return true;
+	// }
+	// <code>
 	return n == "pre" || n == "code";
 }
 
@@ -230,6 +259,7 @@ function enexXmlToMdArray(stream, resources) {
 	return new Promise((resolve, reject) => {
 		let state = {
 			inCode: false,
+			inQuote: false,
 			lists: [],
 			anchorAttributes: [],
 		};
@@ -314,6 +344,8 @@ function enexXmlToMdArray(stream, resources) {
 				section.lines.push("**");
 			} else if (n == 's') {
 				// Not supported
+			} else if (n == 'q') {
+				section.lines.push('"');
 			} else if (isAnchor(n)) {
 				state.anchorAttributes.push(node.attributes);
 				section.lines.push('[');
@@ -340,7 +372,10 @@ function enexXmlToMdArray(stream, resources) {
 				section.lines.push(BLOCK_OPEN); section.lines.push("##### ");
 			} else if (n == "h6") {
 				section.lines.push(BLOCK_OPEN); section.lines.push("###### ");
-			} else if (isCodeTag(n)) {
+			} else if (n == 'blockquote') {
+				section.lines.push(BLOCK_OPEN);
+				state.inQuote = true;
+			} else if (isCodeTag(n, node.attributes)) {
 				section.lines.push(BLOCK_OPEN);
 				state.inCode = true;
 			} else if (n == "br") {
@@ -416,7 +451,7 @@ function enexXmlToMdArray(stream, resources) {
 						section.lines = addResourceTag(section.lines, resource, node.attributes.alt);
 					}
 				}
-			} else if (n == "span" || n == "font") {
+			} else if (n == "span" || n == "font" || n == 'sup') {
 				// Ignore
 			} else {
 				console.warn("Unsupported start tag: " + n);
@@ -443,6 +478,11 @@ function enexXmlToMdArray(stream, resources) {
 				section.lines.push("**");
 			} else if (isEmTag(n)) {
 				section.lines.push("*");
+			} else if (n == 'q') {
+				section.lines.push('"');
+			} else if (n == 'blockquote') {
+				section.lines.push(BLOCK_OPEN);
+				state.inQuote = false;
 			} else if (isCodeTag(n)) {
 				state.inCode = false;
 				section.lines.push(BLOCK_CLOSE);
