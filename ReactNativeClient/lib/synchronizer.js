@@ -421,10 +421,13 @@ class Synchronizer {
 						let ItemClass = BaseItem.itemClass(content);
 						content = ItemClass.filter(content);
 
+						if (!content.user_updated_time) content.user_updated_time = content.updated_time;
+						if (!content.user_created_time) content.user_created_time = content.created_time;
+
 						let newContent = null;
 
 						if (action === 'createLocal') {
-							newContent = Object.assign({}, content);
+							newContent = Object.assign({}, content);							
 						} else if (action === 'updateLocal') {
 							newContent = BaseModel.diffObjects(local, content);
 							newContent.type_ = content.type_;
@@ -444,9 +447,6 @@ class Synchronizer {
 							let remoteResourceContentPath = this.resourceDirName_ + '/' + newContent.id;
 							await this.api().get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' });
 						}
-
-						if (!newContent.user_updated_time) newContent.user_updated_time = newContent.updated_time;
-						if (!newContent.user_created_time) newContent.user_created_time = newContent.created_time;
 
 						await ItemClass.save(newContent, options);
 
