@@ -228,7 +228,7 @@ class JoplinDatabase extends Database {
 					);
 				`;
 
-				// queries.push({ sql: 'DROP TABLE deleted_items' });
+				queries.push({ sql: 'DROP TABLE deleted_items' });
 				queries.push({ sql: this.sqlStringToLines(newTableSql)[0] });
 				queries.push({ sql: "CREATE INDEX deleted_items_sync_target ON deleted_items (sync_target)" });
 			}
