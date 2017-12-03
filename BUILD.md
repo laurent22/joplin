@@ -2,6 +2,7 @@
 
 - All the applications share the same library, which, for historical reasons, is in ReactNativeClient/lib. This library is copied to the relevant directories when builing each app.
 - The translations are built by running CliClient/build-translation.sh. For this reasons, it's generally better to get the CLI app to build first so that everything is setup correctly.
+- Note: building translations is not longer required to run the apps, so you can ignore all the below requirements about gettext.
 
 ## macOS dependencies
 
