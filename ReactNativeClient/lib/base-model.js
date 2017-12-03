@@ -201,17 +201,23 @@ class BaseModel {
 		let output = {};
 		let type = null;
 		for (let n in newModel) {
+			if (!newModel.hasOwnProperty(n)) continue;
 			if (n == 'type_') {
-				type = n;
+				type = newModel[n];
 				continue;
 			}
-			if (!newModel.hasOwnProperty(n)) continue;
 			if (!(n in oldModel) || newModel[n] !== oldModel[n]) {
 				output[n] = newModel[n];
 			}
 		}
 		if (type !== null) output.type_ = type;
 		return output;
+	}
+
+	static modelsAreSame(oldModel, newModel) {
+		const diff = this.diffObjects(oldModel, newModel);
+		delete diff.type_;
+		return !Object.getOwnPropertyNames(diff).length;
 	}
 
 	static saveQuery(o, options) {

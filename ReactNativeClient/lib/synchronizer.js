@@ -221,6 +221,8 @@ class Synchronizer {
 						}
 					} else {
 						if (remote.updated_time > local.sync_time) {
+							console.info('CONFLICT', local.sync_time, remote.updated_time);
+
 							// Since, in this loop, we are only dealing with items that require sync, if the
 							// remote has been modified after the sync time, it means both items have been
 							// modified and so there's a conflict.
@@ -265,6 +267,8 @@ class Synchronizer {
 						// await this.api().put(tempPath, content);
 						// await this.api().setTimestamp(tempPath, local.updated_time);
 						// await this.api().move(tempPath, path);
+
+						console.info('Update remote: ', local);
 
 						await this.api().put(path, content);
 						await this.api().setTimestamp(path, local.updated_time);
@@ -421,6 +425,11 @@ class Synchronizer {
 						let ItemClass = BaseItem.itemClass(content);
 						content = ItemClass.filter(content);
 
+						// 2017-12-03: This was added because the new user_updated_time and user_created_time properties were added
+						// to the items. However changing the database is not enough since remote items that haven't been synced yet
+						// will not have these properties and, since they are required, it would cause a problem. So this check
+						// if they are present and, if not, set them to a reasonable default.
+						// Let's leave these two lines for 6 months, by which time all the clients should have been synced.
 						if (!content.user_updated_time) content.user_updated_time = content.updated_time;
 						if (!content.user_created_time) content.user_created_time = content.created_time;
 
@@ -447,6 +456,9 @@ class Synchronizer {
 							let remoteResourceContentPath = this.resourceDirName_ + '/' + newContent.id;
 							await this.api().get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' });
 						}
+
+						// if (!newContent.user_updated_time) newContent.user_updated_time = newContent.updated_time;
+						// if (!newContent.user_created_time) newContent.user_created_time = newContent.created_time;
 
 						await ItemClass.save(newContent, options);
 
