@@ -8,6 +8,7 @@ const { Setting } = require('lib/models/setting.js');
 
 const { MainScreen } = require('./MainScreen.min.js');
 const { OneDriveLoginScreen } = require('./OneDriveLoginScreen.min.js');
+const { SyncDisabledItemsScreen } = require('./SyncDisabledItemsScreen.min.js');
 const { ImportScreen } = require('./ImportScreen.min.js');
 const { ConfigScreen } = require('./ConfigScreen.min.js');
 const { Navigator } = require('./Navigator.min.js');
@@ -75,6 +76,7 @@ class RootComponent extends React.Component {
 			OneDriveLogin: { screen: OneDriveLoginScreen, title: () => _('OneDrive Login') },
 			Import: { screen: ImportScreen, title: () => _('Import') },
 			Config: { screen: ConfigScreen, title: () => _('Options') },
+			SyncDisabledItems: { screen: SyncDisabledItemsScreen, title: () => _('Items that cannot be synchronised') },
 		};
 
 		return (

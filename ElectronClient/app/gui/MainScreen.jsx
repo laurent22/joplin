@@ -229,8 +229,8 @@ class MainScreenComponent extends React.Component {
 		}
 	}
 
-	styles(themeId, width, height) {
-		const styleKey = themeId + '_' + width + '_' + height;
+	styles(themeId, width, height, messageBoxVisible) {
+		const styleKey = themeId + '_' + width + '_' + height + '_' + messageBoxVisible;
 		if (styleKey === this.styleKey_) return this.styles_;
 
 		const theme = themeStyle(themeId);
@@ -239,11 +239,20 @@ class MainScreenComponent extends React.Component {
 
 		this.styles_ = {};
 
-		const rowHeight = height - theme.headerHeight;
-
 		this.styles_.header = {
 			width: width,
 		};
+
+		this.styles_.messageBox = {
+			width: width,
+			height: 30,
+			display: 'flex',
+			alignItems: 'center',
+			paddingLeft: 10,
+			backgroundColor: theme.warningBackgroundColor,
+		}
+
+		const rowHeight = height - theme.headerHeight - (messageBoxVisible ? this.styles_.messageBox.height : 0);
 
 		this.styles_.sideBar = {
 			width: Math.floor(layoutUtils.size(width * .2, 150, 300)),
@@ -280,7 +289,8 @@ class MainScreenComponent extends React.Component {
 		const folders = this.props.folders;
 		const notes = this.props.notes;
 
-		const styles = this.styles(this.props.theme, style.width, style.height);
+		const styles = this.styles(this.props.theme, style.width, style.height, true);
+		const theme = themeStyle(this.props.theme);
 
 		const headerButtons = [];
 
@@ -325,6 +335,21 @@ class MainScreenComponent extends React.Component {
 			}
 		}
 
+		const onViewDisabledItemsClick = () => {
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'SyncDisabledItems',
+			});
+		}
+
+		const messageComp = (
+			<div style={styles.messageBox}>
+				<span style={theme.textStyle}>
+					{_('Some items cannot be synchronised.')} <a href="#" onClick={() => { onViewDisabledItemsClick() }}>{_('View them now')}</a>
+				</span>
+			</div>
+		);
+
 		return (
 			<div style={style}>
 				<PromptDialog
@@ -339,6 +364,7 @@ class MainScreenComponent extends React.Component {
 					buttons={promptOptions && ('buttons' in promptOptions) ? promptOptions.buttons : null}
 					inputType={promptOptions && ('inputType' in promptOptions) ? promptOptions.inputType : null} />
 				<Header style={styles.header} showBackButton={false} buttons={headerButtons} />
+				{messageComp}
 				<SideBar style={styles.sideBar} />
 				<NoteList style={styles.noteList} />
 				<NoteText style={styles.noteText} visiblePanes={this.props.noteVisiblePanes} />
