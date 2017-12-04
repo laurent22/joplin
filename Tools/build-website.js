@@ -1,6 +1,5 @@
 const fs = require('fs-extra');
-const { fileExtension, basename, dirname } = require('lib/path-utils.js');
-const { _, setLocale, languageCode } = require('lib/locale.js');
+const dirname = require('path').dirname;
 const marked = require('marked');
 const Mustache = require('mustache');
 
@@ -199,7 +198,7 @@ const headerHtml = `<!doctype html>
 		<div class="nav-right">
 			<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
 			<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplin.cozic.net" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
-			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="80px" height="20px"></iframe>
+			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
 		</div>
 	</div>
 </div>
@@ -270,11 +269,7 @@ const scriptHtml = `
 </script>
 `;
 
-// <a href="#" class="small-share-btn" style="background-color: #365899;"><img src="images/ShareFacebook.svg" style=" width: 1.2em; height: 1.2em"/></a>
-// <a href="#" class="small-share-btn" style="background-color: #1b95e0;"><img src="images/ShareTwitter.svg" style=" width: 1.2em; height: 1.2em"/></a>
-// <a href="#" class="small-share-btn" style="background-color: #eee;"><img src="images/ShareGithub.svg" style=" width: 1.2em; height: 1.2em"/></a>
-
-const rootDir = dirname(dirname(__dirname));
+const rootDir = dirname(__dirname);
 
 function markdownToHtml(md) {
 	const renderer = new marked.Renderer();

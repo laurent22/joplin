@@ -10,13 +10,13 @@ The notes can be [synchronised](#synchronisation) with various targets including
 
 # Installation
 
-**IMPORTANT: Node v8+ is required**
-
 On macOS:
 
-	brew install joplin
+	brew install node joplin
 
-On Linux or Windows (via [WSL](https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&MSPPError=-2147217396)), type:
+On Linux or Windows (via [WSL](https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&MSPPError=-2147217396)):
+
+**Important:** First, [install Node 8+](https://nodejs.org/en/download/package-manager/). Node 8 is LTS but not yet available everywhere so you might need to manually install it.
 
 	NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin
 	sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin

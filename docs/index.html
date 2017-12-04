@@ -193,7 +193,7 @@
 		<div class="nav-right">
 			<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
 			<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplin.cozic.net" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
-			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="80px" height="20px"></iframe>
+			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
 		</div>
 	</div>
 </div>
@@ -250,10 +250,10 @@
 </tbody>
 </table>
 <h2 id="terminal-application">Terminal application</h2>
-<p><strong>IMPORTANT: Node v8+ is required</strong></p>
 <p>On macOS:</p>
-<pre><code>brew install joplin
-</code></pre><p>On Linux or Windows (via <a href="https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&amp;MSPPError=-2147217396">WSL</a>), type:</p>
+<pre><code>brew install node joplin
+</code></pre><p>On Linux or Windows (via <a href="https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&amp;MSPPError=-2147217396">WSL</a>):</p>
+<p><strong>Important:</strong> First, <a href="https://nodejs.org/en/download/package-manager/">install Node 8+</a>. Node 8 is LTS but not yet available everywhere so you might need to manually install it.</p>
 <pre><code>NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin
 sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 </code></pre><p>By default, the application binary will be installed under <code>~/.joplin-bin</code>. You may change this directory if needed. Alternatively, if your npm permissions are setup as described <a href="https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory">here</a> (Option 2) then simply running <code>npm -g install joplin</code> would work.</p>

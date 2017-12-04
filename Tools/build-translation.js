@@ -1,16 +1,15 @@
 "use strict"
 
-require('app-module-path').addPath(__dirname);
+const rootDir = __dirname + '/..';
 
 const processArgs = process.argv.splice(2, process.argv.length);
 
 const silentLog = processArgs.indexOf('--silent') >= 0;
 
-const { basename, dirname, filename, fileExtension } = require('lib/path-utils.js');
+const { basename, dirname, filename, fileExtension } = require(rootDir + '/ReactNativeClient/lib/path-utils.js');
 const fs = require('fs-extra');
 const gettextParser = require('gettext-parser');
 
-const rootDir = dirname(dirname(__dirname));
 const cliDir = rootDir + '/CliClient';
 const cliLocalesDir = cliDir + '/locales';
 const rnDir = rootDir + '/ReactNativeClient';
