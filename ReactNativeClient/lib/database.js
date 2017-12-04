@@ -308,6 +308,7 @@ class Database {
 
 }
 
+Database.TYPE_UNKNOWN = 0;
 Database.TYPE_INT = 1;
 Database.TYPE_TEXT = 2;
 Database.TYPE_NUMERIC = 3;
