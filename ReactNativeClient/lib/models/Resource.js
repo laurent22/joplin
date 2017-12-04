@@ -76,10 +76,11 @@ class Resource extends BaseItem {
 		return super.save(decryptedItem, { autoTimestamp: false });
 	}
 
-
 	// Prepare the resource by encrypting it if needed.
-	// The call returns the path to the physical file AND the resource object
-	// which may have been modified. So the caller should update their copy with this.
+	// The call returns the path to the physical file AND a representation of the resource object
+	// as it should be uploaded to the sync target. Note that this may be different from what is stored
+	// in the database. In particular, the flag encryption_blob_encrypted might be 1 on the sync target
+	// if the resource is encrypted, but will be 0 locally because the device has the decrypted resource.
 	static async fullPathForSyncUpload(resource) {
 		const plainTextPath = this.fullPath(resource);
 
@@ -93,10 +94,9 @@ class Resource extends BaseItem {
 		if (resource.encryption_blob_encrypted) return { path: encryptedPath, resource: resource };
 		await this.encryptionService().encryptFile(plainTextPath, encryptedPath);
 
-		resource.encryption_blob_encrypted = 1;
-		await Resource.save(resource, { autoTimestamp: false });
-
-		return { path: encryptedPath, resource: resource };
+		const resourceCopy = Object.assign({}, resource);
+		resourceCopy.encryption_blob_encrypted = 1;
+		return { path: encryptedPath, resource: resourceCopy };
 	}
 
 	static markdownTag(resource) {

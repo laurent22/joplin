@@ -948,4 +948,19 @@ describe('Synchronizer', function() {
 		expect(await allSyncTargetItemsEncrypted()).toBe(true);
 	}));
 
+	it('should upload encrypted resource, but it should not mark the blob as encrypted locally', asyncTest(async () => {
+		while (insideBeforeEach) await time.msleep(100);
+
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		const masterKey = await loadEncryptionMasterKey();
+		await encryptionService().enableEncryption(masterKey, '123456');
+		await encryptionService().loadMasterKeysFromSettings();
+		await synchronizer().start();
+
+		let resource1 = (await Resource.all())[0];
+		expect(resource1.encryption_blob_encrypted).toBe(0);
+	}));
+
 });

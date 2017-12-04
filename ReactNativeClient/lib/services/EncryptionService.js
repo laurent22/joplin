@@ -322,7 +322,10 @@ class EncryptionService {
 
 	async decryptAbstract_(source, destination) {
 		const identifier = await source.read(5);
+		if (!this.isValidHeaderIdentifier(identifier)) throw new Error('Invalid encryption identifier. Data is not actually encrypted? ID was: ' + identifier);
 		const mdSizeHex = await source.read(6);
+		const mdSize = parseInt(mdSizeHex, 16);
+		if (isNaN(mdSize) || !mdSize) throw new Error('Invalid header metadata size: ' + mdSizeHex);
 		const md = await source.read(parseInt(mdSizeHex, 16));
 		const header = this.decodeHeader_(identifier + mdSizeHex + md);
 		const masterKeyPlainText = this.loadedMasterKey(header.masterKeyId);
@@ -501,6 +504,25 @@ class EncryptionService {
 		}
 
 		return output;
+	}
+
+	isValidHeaderIdentifier(id, ignoreTooLongLength = false) {
+		if (!ignoreTooLongLength && !id || id.length !== 5) return false;
+		return /JED\d\d/.test(id);
+	}
+
+	async itemIsEncrypted(item) {
+		if (!item) throw new Error('No item');
+		const ItemClass = BaseItem.itemClass(item);
+		if (!ItemClass.encryptionSupported()) return false;
+		return item.encryption_applied && this.isValidHeaderIdentifier(item.encryption_cipher_text);
+	}
+
+	async fileIsEncrypted(path) {
+		const handle = await this.fsDriver().open(path, 'r');
+		const headerIdentifier = await this.fsDriver().readFileChunk(handle, 5, 'ascii');
+		await this.fsDriver().close(handle);
+		return this.isValidHeaderIdentifier(headerIdentifier);
 	}
 
 }
