@@ -629,4 +629,32 @@ describe('Synchronizer', function() {
 		done();
 	});
 
+	it('items should skip items that cannot be synced', async (done) => {
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: "un", is_todo: 1, parent_id: folder1.id });
+		const noteId = note1.id;
+		await synchronizer().start();
+		let disabledItems = await BaseItem.syncDisabledItems();
+		expect(disabledItems.length).toBe(0);
+		await Note.save({ id: noteId, title: "un mod", });
+		synchronizer().debugFlags_ = ['cannotSync'];
+		await synchronizer().start();
+		synchronizer().debugFlags_ = [];
+		await synchronizer().start(); // Another sync to check that this item is now excluded from sync
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		let notes = await Note.all();
+		expect(notes.length).toBe(1);
+		expect(notes[0].title).toBe('un');
+
+		await switchClient(1);
+
+		disabledItems = await BaseItem.syncDisabledItems();
+		expect(disabledItems.length).toBe(1);
+
+		done();
+	});
+
 });
