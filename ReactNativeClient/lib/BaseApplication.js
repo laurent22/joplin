@@ -271,6 +271,11 @@ class BaseApplication {
 			}
 		}
 
+		// if (action.type === 'NOTE_DELETE') {
+		// 	// Update folders if a note is deleted in case the deleted note was a conflict
+		// 	await FoldersScreenUtils.refreshFolders();
+		// }
+
 		if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && action.key == 'sync.interval' || action.type == 'SETTING_UPDATE_ALL') {
 			reg.setupRecurrentSync();
 		}

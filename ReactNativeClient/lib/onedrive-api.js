@@ -216,6 +216,18 @@ class OneDriveApi {
 					this.logger().info(error);
 					await time.sleep((i + 1) * 3);
 					continue;
+				} else if (error && error.error && error.error.code === 'resourceModified') {
+					// NOTE: not tested, very hard to reproduce and non-informative error message, but can be repeated
+
+					// Error: ETag does not match current item's value
+					// Code: resourceModified
+					// Header: {"_headers":{"cache-control":["private"],"transfer-encoding":["chunked"],"content-type":["application/json"],"request-id":["d...ea47"],"client-request-id":["d99...ea47"],"x-ms-ags-diagnostic":["{\"ServerInfo\":{\"DataCenter\":\"North Europe\",\"Slice\":\"SliceA\",\"Ring\":\"2\",\"ScaleUnit\":\"000\",\"Host\":\"AGSFE_IN_13\",\"ADSiteName\":\"DUB\"}}"],"duration":["96.9464"],"date":[],"connection":["close"]}}
+					// Request: PATCH https://graph.microsoft.com/v1.0/drive/root:/Apps/JoplinDev/f56c5601fee94b8085524513bf3e352f.md null "{\"fileSystemInfo\":{\"lastModifiedDateTime\":\"....\"}}" {"headers":{"Content-Type":"application/json","Authorization":"bearer ...
+
+					this.logger().info('Got error below - retrying (' + i + ')...');
+					this.logger().info(error);
+					await time.sleep((i + 1) * 3);
+					continue;
 				} else if (error.code == 'itemNotFound' && method == 'DELETE') {
 					// Deleting a non-existing item is ok - noop
 					return;
