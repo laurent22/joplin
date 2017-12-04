@@ -7,4 +7,4 @@ rsync -a "$ROOT_DIR/../ReactNativeClient/lib/" "$BUILD_DIR/lib/"
 rsync -a "$ROOT_DIR/build/locales/" "$BUILD_DIR/locales/"
 mkdir -p "$BUILD_DIR/data"
 
-npm test tests-build/synchronizer.js
+(cd "$ROOT_DIR" && npm test tests-build/synchronizer.js)

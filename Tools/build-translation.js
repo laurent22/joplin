@@ -15,25 +15,7 @@ const cliLocalesDir = cliDir + '/locales';
 const rnDir = rootDir + '/ReactNativeClient';
 const electronDir = rootDir + '/ElectronClient/app';
 
-function execCommand(command) {
-	if (!silentLog) console.info('Running: ' + command);
-
-	const exec = require('child_process').exec
-
-	return new Promise((resolve, reject) => {
-		let childProcess = exec(command, (error, stdout, stderr) => {
-			if (error) {
-				if (error.signal == 'SIGTERM') {
-					resolve('Process was killed');
-				} else {
-					reject(error);
-				}
-			} else {
-				resolve(stdout.trim());
-			}
-		});
-	});
-}
+const { execCommand } = require('./tool-utils.js');
 
 function parsePoFile(filePath) {
 	const content = fs.readFileSync(filePath);
