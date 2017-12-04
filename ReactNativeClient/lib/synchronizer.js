@@ -208,6 +208,7 @@ class Synchronizer {
 					let action = null;
 					let updateSyncTimeOnly = true;
 					let reason = '';					
+					let remoteContent = null;
 
 					if (!remote) {
 						if (!local.sync_time) {
@@ -220,9 +221,25 @@ class Synchronizer {
 							reason = 'remote has been deleted, but local has changes';
 						}
 					} else {
-						if (remote.updated_time > local.sync_time) {
-							console.info('CONFLICT', local.sync_time, remote.updated_time);
+						// Note: in order to know the real updated_time value, we need to load the content. In theory we could
+						// rely on the file timestamp (in remote.updated_time) but in practice it's not accurate enough and
+						// can lead to conflicts (for example when the file timestamp is slightly ahead of it's real
+						// updated_time). updated_time is set and managed by clients so it's always accurate.
+						// Same situation below for updateLocal.
+						// 
+						// This is a bit inefficient because if the resulting action is "updateRemote" we don't need the whole
+						// content, but for now that will do since being reliable is the priority.
+						//
+						// TODO: assuming a particular sync target is guaranteed to have accurate timestamps, the driver maybe
+						// could expose this with a accurateTimestamps() method that returns "true". In that case, the test
+						// could be done using the file timestamp and the potentially unecessary content loading could be skipped.
+						// OneDrive does not appear to have accurate timestamps as lastModifiedDateTime would occasionally be
+						// a few seconds ahead of what it was set with setTimestamp()
+						remoteContent = await this.api().get(path);
+						if (!remoteContent) throw new Error('Got metadata for path but could not fetch content: ' + path);
+						remoteContent = await BaseItem.unserialize(remoteContent);
 
+						if (remoteContent.updated_time > local.sync_time) {
 							// Since, in this loop, we are only dealing with items that require sync, if the
 							// remote has been modified after the sync time, it means both items have been
 							// modified and so there's a conflict.
@@ -268,8 +285,6 @@ class Synchronizer {
 						// await this.api().setTimestamp(tempPath, local.updated_time);
 						// await this.api().move(tempPath, path);
 
-						console.info('Update remote: ', local);
-
 						await this.api().put(path, content);
 						await this.api().setTimestamp(path, local.updated_time);
 						await ItemClass.saveSyncTime(syncTargetId, local, time.unixMs());
@@ -277,8 +292,7 @@ class Synchronizer {
 					} else if (action == 'itemConflict') {
 
 						if (remote) {
-							let remoteContent = await this.api().get(path);
-							local = await BaseItem.unserialize(remoteContent);
+							local = remoteContent;
 
 							const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
 							await ItemClass.save(local, { autoTimestamp: false, nextQueries: syncTimeQueries });
@@ -294,12 +308,9 @@ class Synchronizer {
 						// so in this case we just take the remote content.
 						// ------------------------------------------------------------------------------
 
-						let loadedRemote = null;
 						let mustHandleConflict = true;
-						if (remote) {
-							const remoteContent = await this.api().get(path);
-							loadedRemote = await BaseItem.unserialize(remoteContent);
-							mustHandleConflict = Note.mustHandleConflict(local, loadedRemote);
+						if (remoteContent) {
+							mustHandleConflict = Note.mustHandleConflict(local, remoteContent);
 						}
 
 						// ------------------------------------------------------------------------------
@@ -320,7 +331,7 @@ class Synchronizer {
 						// ------------------------------------------------------------------------------
 
 						if (remote) {
-							local = loadedRemote;
+							local = remoteContent;
 							const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
 							await ItemClass.save(local, { autoTimestamp: false, nextQueries: syncTimeQueries });
 						} else {
@@ -389,21 +400,30 @@ class Synchronizer {
 					let remote = remotes[i];
 					if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
 
+					const loadContent = async () => {
+						content = await this.api().get(path);
+						if (!content) return null;
+						return await BaseItem.unserialize(content);
+					}
+
 					let path = remote.path;
 					let action = null;
 					let reason = '';
 					let local = await BaseItem.loadItemByPath(path);
+					let content = null;
 					if (!local) {
-						if (!remote.isDeleted) {
+						if (remote.isDeleted !== true) {
 							action = 'createLocal';
 							reason = 'remote exists but local does not';
+							content = await loadContent();
 						}
 					} else {
 						if (remote.isDeleted) {
 							action = 'deleteLocal';
 							reason = 'remote has been deleted';
 						} else {
-							if (remote.updated_time > local.updated_time) {
+							content = await loadContent();								
+							if (content && content.updated_time > local.updated_time) {
 								action = 'updateLocal';
 								reason = 'remote is more recent than local';
 							}
@@ -416,12 +436,10 @@ class Synchronizer {
 
 					if (action == 'createLocal' || action == 'updateLocal') {
 
-						let content = await this.api().get(path);
 						if (content === null) {
 							this.logger().warn('Remote has been deleted between now and the list() call? In that case it will be handled during the next sync: ' + path);
 							continue;
 						}
-						content = await BaseItem.unserialize(content);
 						let ItemClass = BaseItem.itemClass(content);
 						content = ItemClass.filter(content);
 
