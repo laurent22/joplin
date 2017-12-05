@@ -109,8 +109,21 @@ class ReportService {
 	async status(syncTarget) {
 		let r = await this.syncStatus(syncTarget);
 		let sections = [];
+		let section = null;
 
-		let section = { title: _('Sync status (synced items / total items)'), body: [] };
+		const disabledItems = await BaseItem.syncDisabledItems(syncTarget);
+
+		if (disabledItems.length) {
+			section = { title: _('Items that cannot be synchronised'), body: [] };
+
+			for (let i = 0; i < disabledItems.length; i++) {
+				const row = disabledItems[i];
+				section.body.push(_('"%s": "%s"', row.item.title, row.syncInfo.sync_disabled_reason));
+			}
+			sections.push(section);
+		}
+
+		section = { title: _('Sync status (synced items / total items)'), body: [] };
 
 		for (let n in r.items) {
 			if (!r.items.hasOwnProperty(n)) continue;
@@ -138,16 +151,19 @@ class ReportService {
 
 		sections.push(section);
 
-		section = { title: _('Coming alarms'), body: [] };
-
 		const alarms = await Alarm.allDue();
-		for (let i = 0; i < alarms.length; i++) {
-			const alarm = alarms[i];
-			const note = await Note.load(alarm.note_id);
-			section.body.push(_('On %s: %s', time.formatMsToLocal(alarm.trigger_time), note.title));
-		}
 
-		sections.push(section);
+		if (alarms.length) {
+			section = { title: _('Coming alarms'), body: [] };
+
+			for (let i = 0; i < alarms.length; i++) {
+				const alarm = alarms[i];
+				const note = await Note.load(alarm.note_id);
+				section.body.push(_('On %s: %s', time.formatMsToLocal(alarm.trigger_time), note.title));
+			}
+
+			sections.push(section);
+		}
 
 		return sections;
 	}

@@ -202,7 +202,7 @@ class JoplinDatabase extends Database {
 		// default value and thus might cause problems. In that case, the default value
 		// must be set in the synchronizer too.
 
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 		// currentVersionIndex < 0 if for the case where an old version of Joplin used with a newer
@@ -263,6 +263,11 @@ class JoplinDatabase extends Database {
 
 			if (targetVersion == 7) {
 				queries.push('ALTER TABLE resources ADD COLUMN file_extension TEXT NOT NULL DEFAULT ""');
+			}
+
+			if (targetVersion == 8) {
+				queries.push('ALTER TABLE sync_items ADD COLUMN sync_disabled INT NOT NULL DEFAULT "0"');
+				queries.push('ALTER TABLE sync_items ADD COLUMN sync_disabled_reason TEXT NOT NULL DEFAULT ""');
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });
