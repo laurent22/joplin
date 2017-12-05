@@ -7,7 +7,6 @@ const { Header } = require('./Header.min.js');
 const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
 const { ReportService } = require('lib/services/report.js');
-const { BaseItem } = require('lib/models/base-item.js');
 
 class StatusScreenComponent extends React.Component {
 
@@ -15,7 +14,6 @@ class StatusScreenComponent extends React.Component {
 		super();
 		this.state = {
 			report: [],
-			disabledItems: [],
 		};
 	}
 
@@ -26,11 +24,7 @@ class StatusScreenComponent extends React.Component {
 	async resfreshScreen() {
 		const service = new ReportService();
 		const report = await service.status(Setting.value('sync.target'));
-		const disabledItems = await BaseItem.syncDisabledItems();
-		this.setState({
-			report: report,
-			disabledItems: disabledItems,
-		});
+		this.setState({ report: report });
 	}
 
 	render() {
@@ -70,7 +64,7 @@ class StatusScreenComponent extends React.Component {
 			);
 		}
 
-		function renderBodyHtml(report, disabledItems) {
+		function renderBodyHtml(report) {
 			let output = [];
 			let baseStyle = {
 				paddingLeft: 6,
@@ -83,27 +77,6 @@ class StatusScreenComponent extends React.Component {
 			};
 
 			let sectionsHtml = [];
-
-			if (disabledItems.length) {
-				const titleHtml = [renderSectionTitleHtml('disabled_sync_items', _('Items that cannot be synchronised'))];
-				const trsHtml = [];
-				for (let i = 0; i < disabledItems.length; i++) {
-					const row = disabledItems[i];
-					trsHtml.push(<tr key={'item_' + i}><td style={theme.textStyle}>{row.item.title}</td><td style={theme.textStyle}>{row.syncInfo.sync_disabled_reason}</td></tr>);
-				}
-
-				sectionsHtml.push(
-					<div key={'disabled_sync_items'}>
-						{titleHtml}
-						<table>
-							<tbody>
-								<tr><th style={theme.textStyle}>{_('Name')}</th><th style={theme.textStyle}>{_('Reason')}</th></tr>
-								{trsHtml}
-							</tbody>
-						</table>
-					</div>
-				);
-			}
 
 			for (let i = 0; i < report.length; i++) {
 				let section = report[i];
@@ -118,9 +91,7 @@ class StatusScreenComponent extends React.Component {
 			);
 		}
 
-		console.info(this.state.disabledItems);
-
-		let body = renderBodyHtml(this.state.report, this.state.disabledItems);
+		let body = renderBodyHtml(this.state.report);
 		
 		return (
 			<div style={style}>

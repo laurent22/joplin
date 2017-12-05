@@ -383,8 +383,8 @@ class BaseItem extends BaseModel {
 		throw new Error('Invalid type: ' + type);
 	}
 
-	static async syncDisabledItems() {
-		const rows = await this.db().selectAll('SELECT * FROM sync_items WHERE sync_disabled = 1');
+	static async syncDisabledItems(syncTargetId) {
+		const rows = await this.db().selectAll('SELECT * FROM sync_items WHERE sync_disabled = 1 AND sync_target = ?', [syncTargetId]);
 		let output = [];
 		for (let i = 0; i < rows.length; i++) {
 			const item = await this.loadItem(rows[i].item_type, rows[i].item_id);
