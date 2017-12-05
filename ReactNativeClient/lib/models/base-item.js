@@ -387,7 +387,8 @@ class BaseItem extends BaseModel {
 		const rows = await this.db().selectAll('SELECT * FROM sync_items WHERE sync_disabled = 1');
 		let output = [];
 		for (let i = 0; i < rows.length; i++) {
-			const item = await this.loadItem(rows[i].item_type, rows[i].id);
+			const item = await this.loadItem(rows[i].item_type, rows[i].item_id);
+			if (!item) continue; // The referenced item no longer exist
 			output.push({
 				syncInfo: rows[i],
 				item: item,

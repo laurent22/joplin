@@ -259,6 +259,14 @@ class Application extends BaseApplication {
 			}, {
 				label: _('Tools'),
 				submenu: [{
+					label: _('Synchronisation status'),
+					click: () => {
+						this.dispatch({
+							type: 'NAV_GO',
+							routeName: 'Status',
+						});
+					}
+				},{
 					label: _('Options'),
 					click: () => {
 						this.dispatch({

@@ -9,6 +9,19 @@ body, textarea {
 	overflow: hidden;
 }
 
+table {
+	border-collapse: collapse;
+}
+
+table th {
+	text-align: left;
+}
+
+table td, table th {
+	padding: .5em;
+	border: 1px solid #ccc;
+}
+
 /* By default, the Ice Editor displays invalid characters, such as non-breaking spaces
    as red boxes, but since those are actually valid characters and common in imported
    Evernote data, we hide them here. */

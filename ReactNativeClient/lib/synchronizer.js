@@ -253,8 +253,9 @@ class Synchronizer {
 
 					this.logSyncOperation(action, local, remote, reason);
 
-					async function handleCannotSyncItem(syncTargetId, item, cannotSyncReason) {
+					const handleCannotSyncItem = async (syncTargetId, item, cannotSyncReason) => {
 						await ItemClass.saveSyncDisabled(syncTargetId, item, cannotSyncReason);
+						this.dispatch({ type: 'SYNC_HAS_DISABLED_SYNC_ITEMS' });
 					}
 
 					if (local.type_ == BaseModel.TYPE_RESOURCE && (action == 'createRemote' || (action == 'itemConflict' && remote))) {

@@ -338,17 +338,17 @@ class MainScreenComponent extends React.Component {
 		const onViewDisabledItemsClick = () => {
 			this.props.dispatch({
 				type: 'NAV_GO',
-				routeName: 'SyncDisabledItems',
+				routeName: 'Status',
 			});
 		}
 
-		const messageComp = (
+		const messageComp = this.props.hasDisabledSyncItems ? (
 			<div style={styles.messageBox}>
 				<span style={theme.textStyle}>
 					{_('Some items cannot be synchronised.')} <a href="#" onClick={() => { onViewDisabledItemsClick() }}>{_('View them now')}</a>
 				</span>
 			</div>
-		);
+		) : null;
 
 		return (
 			<div style={style}>
@@ -381,6 +381,7 @@ const mapStateToProps = (state) => {
 		noteVisiblePanes: state.noteVisiblePanes,
 		folders: state.folders,
 		notes: state.notes,
+		hasDisabledSyncItems: state.hasDisabledSyncItems,
 	};
 };
 
