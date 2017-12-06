@@ -42,3 +42,4 @@ From `/CliClient`:
 - Run `npm install`
 - Then `build.sh`
 - Copy the translations to the build directory: `rsync -aP ../ReactNativeClient/locales/ build/locales/`
+- Run `run.sh` to start the application for testing.
