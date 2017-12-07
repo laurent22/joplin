@@ -18,8 +18,8 @@ class Command extends BaseCommand {
 		return { data: autocompleteFolders };
 	}
 
-	enabled() {
-		return false;
+	compatibleUis() {
+		return ['cli'];
 	}
 
 	async action(args) {

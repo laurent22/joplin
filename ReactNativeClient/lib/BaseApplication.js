@@ -66,10 +66,15 @@ class BaseApplication {
 	}
 
 	switchCurrentFolder(folder) {
-		this.dispatch({
-			type: 'FOLDER_SELECT',
-			id: folder ? folder.id : '',
-		});
+		if (!this.hasGui()) {
+			this.currentFolder_ = Object.assign({}, folder);
+			Setting.setValue('activeFolderId', folder ? folder.id : '');
+		} else {
+			this.dispatch({
+				type: 'FOLDER_SELECT',
+				id: folder ? folder.id : '',
+			});
+		}
 	}
 
 	// Handles the initial flags passed to main script and
@@ -225,6 +230,10 @@ class BaseApplication {
 
 	hasGui() {
 		return false;
+	}
+
+	uiType() {
+		return this.hasGui() ? 'gui' : 'cli';
 	}
 
 	generalMiddlewareFn() {

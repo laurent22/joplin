@@ -309,7 +309,18 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <p>Since this is still an actual URL, the terminal will still make it clickable. And with shorter URLs, the text is more readable and the links unlikely to be cut. Both resources (files that are attached to notes) and external links are handled in this way.</p>
 <h1 id="attachments-resources">Attachments / Resources</h1>
 <p>In Markdown, links to resources are represented as a simple ID to the resource. In order to give access to these resources, they will be, like links, converted to local URLs. Clicking this link will then open a browser, which will handle the file - i.e. display the image, open the PDF file, etc.</p>
-<h1 id="available-shortcuts">Available shortcuts</h1>
+<h1 id="shell-mode">Shell mode</h1>
+<p>Commands can also be used directly from a shell. To view the list of available commands, type <code>joplin help all</code>. To reference a note, notebook or tag you can either use the ID (type <code>joplin ls -l</code> to view the ID) or by title.</p>
+<p>For example, this will create a new note &quot;My note&quot; in the notebook &quot;My notebook&quot;:</p>
+<pre><code>$ joplin mkbook &quot;My notebook&quot;
+$ joplin use &quot;My notebook&quot;
+$ joplin mknote &quot;My note&quot;
+</code></pre><p>To view the newly created note:</p>
+<pre><code>$ joplin ls -l
+fe889 07/12/2017 17:57 My note
+</code></pre><p>Give a new title to the note:</p>
+<pre><code>$ joplin set &quot;My note&quot; title &quot;New title&quot;
+</code></pre><h1 id="available-shortcuts">Available shortcuts</h1>
 <p>There are two types of shortcuts: those that manipulate the user interface directly, such as <code>TAB</code> to move from one pane to another, and those that are simply shortcuts to actual commands. In a way similar to Vim, these shortcuts are generally a verb followed by an object. For example, typing <code>mn</code> ([m]ake [n]ote), is used to create a new note: it will switch the interface to command line mode and pre-fill it with <code>mknote &quot;&quot;</code> from where the title of the note can be entered. See below for the full list of shortcuts:</p>
 <pre><code>Tab       Give focus to next pane
 Shift+Tab Give focus to previous pane
