@@ -1,6 +1,6 @@
 const React = require('react'); const Component = React.Component;
 const { connect } = require('react-redux');
-const { Platform, View, Text, Button, StyleSheet, TouchableOpacity, Image } = require('react-native');
+const { Platform, View, Text, Button, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions } = require('react-native');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { Log } = require('lib/log.js');
 const { BackButtonService } = require('lib/services/back-button.js');
@@ -410,6 +410,7 @@ class ScreenHeaderComponent extends Component {
 		const backButtonComp = backButton(this.styles(), () => this.backButton_press(), !this.props.historyCanGoBack);
 		const searchButtonComp = this.props.noteSelectionEnabled ? null : searchButton(this.styles(), () => this.searchButton_press());
 		const deleteButtonComp = this.props.noteSelectionEnabled ? deleteButton(this.styles(), () => this.deleteButton_press()) : null;
+		const windowHeight = Dimensions.get('window').height - 50;
 
 		const menuComp = (
 			<Menu onSelect={(value) => this.menu_select(value)} style={this.styles().contextMenu}>
@@ -417,7 +418,9 @@ class ScreenHeaderComponent extends Component {
 					<Text style={this.styles().contextMenuTrigger}>  &#8942;</Text>
 				</MenuTrigger>
 				<MenuOptions>
-					{ menuOptionComponents }
+					<ScrollView style={{ maxHeight: windowHeight }}>
+						{ menuOptionComponents }
+					</ScrollView>
 				</MenuOptions>
 			</Menu>
 		);
