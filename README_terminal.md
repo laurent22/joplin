@@ -137,6 +137,25 @@ Since this is still an actual URL, the terminal will still make it clickable. An
 
 In Markdown, links to resources are represented as a simple ID to the resource. In order to give access to these resources, they will be, like links, converted to local URLs. Clicking this link will then open a browser, which will handle the file - i.e. display the image, open the PDF file, etc.
 
+# Shell mode
+
+Commands can also be used directly from a shell. To view the list of available commands, type `joplin help all`. To reference a note, notebook or tag you can either use the ID (type `joplin ls -l` to view the ID) or by title.
+
+For example, this will create a new note "My note" in the notebook "My notebook":
+
+	$ joplin mkbook "My notebook"
+	$ joplin use "My notebook"
+	$ joplin mknote "My note"
+
+To view the newly created note:
+
+	$ joplin ls -l
+	fe889 07/12/2017 17:57 My note
+
+Give a new title to the note:
+
+	$ joplin set fe889 title "New title"
+
 # Available shortcuts
 
 There are two types of shortcuts: those that manipulate the user interface directly, such as `TAB` to move from one pane to another, and those that are simply shortcuts to actual commands. In a way similar to Vim, these shortcuts are generally a verb followed by an object. For example, typing `mn` ([m]ake [n]ote), is used to create a new note: it will switch the interface to command line mode and pre-fill it with `mknote ""` from where the title of the note can be entered. See below for the full list of shortcuts:

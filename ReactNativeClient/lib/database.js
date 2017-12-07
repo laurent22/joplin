@@ -165,6 +165,16 @@ class Database {
 		throw new Error('Unknown enum type or value: ' + type + ', ' + s);
 	}
 
+	static enumName(type, id) {
+		if (type === 'fieldType') {
+			if (id === Database.TYPE_UNKNOWN) return 'unknown';
+			if (id === Database.TYPE_INT) return 'int';
+			if (id === Database.TYPE_TEXT) return 'text';
+			if (id === Database.TYPE_NUMERIC) return 'numeric';
+			throw new Error('Invalid type id: ' + id);
+		}
+	}
+
 	static formatValue(type, value) {
 		if (value === null || value === undefined) return null;
 		if (type == this.TYPE_INT) return Number(value);

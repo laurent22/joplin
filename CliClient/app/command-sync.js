@@ -32,7 +32,6 @@ class Command extends BaseCommand {
 	options() {
 		return [
 			['--target <target>', _('Sync to provided target (defaults to sync.target config value)')],
-			['--random-failures', 'For debugging purposes. Do not use.'],
 		];
 	}
 
@@ -140,7 +139,6 @@ class Command extends BaseCommand {
 					cliUtils.redrawDone();
 					this.stdout(msg);
 				},
-				randomFailures: args.options['random-failures'] === true,
 			};
 
 			this.stdout(_('Synchronisation target: %s (%s)', Setting.enumOptionLabel('sync.target', this.syncTargetId_), this.syncTargetId_));

@@ -288,8 +288,9 @@ class MainScreenComponent extends React.Component {
 		const promptOptions = this.state.promptOptions;
 		const folders = this.props.folders;
 		const notes = this.props.notes;
+		const messageBoxVisible = this.props.hasDisabledSyncItems;
 
-		const styles = this.styles(this.props.theme, style.width, style.height, true);
+		const styles = this.styles(this.props.theme, style.width, style.height, messageBoxVisible);
 		const theme = themeStyle(this.props.theme);
 
 		const headerButtons = [];
@@ -342,7 +343,7 @@ class MainScreenComponent extends React.Component {
 			});
 		}
 
-		const messageComp = this.props.hasDisabledSyncItems ? (
+		const messageComp = messageBoxVisible ? (
 			<div style={styles.messageBox}>
 				<span style={theme.textStyle}>
 					{_('Some items cannot be synchronised.')} <a href="#" onClick={() => { onViewDisabledItemsClick() }}>{_('View them now')}</a>

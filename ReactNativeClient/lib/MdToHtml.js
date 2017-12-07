@@ -100,7 +100,7 @@ class MdToHtml {
 		const href = this.getAttr_(attrs, 'src');
 
 		if (!Resource.isResourceUrl(href)) {
-			return '<span>' + href + '</span><img title="' + htmlentities(title) + '" src="' + href + '"/>';
+			return '<img title="' + htmlentities(title) + '" src="' + href + '"/>';
 		}
 
 		const resourceId = Resource.urlToId(href);

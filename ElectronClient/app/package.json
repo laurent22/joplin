@@ -1,6 +1,6 @@
 {
   "name": "Joplin",
-  "version": "0.10.36",
+  "version": "0.10.37",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "scripts": {
@@ -24,6 +24,10 @@
     "appId": "net.cozic.joplin-desktop",
     "win": {
       "icon": "../../Assets/Joplin.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     },
     "mac": {
       "icon": "../../Assets/macOs.icns",

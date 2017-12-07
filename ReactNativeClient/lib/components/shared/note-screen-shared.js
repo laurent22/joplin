@@ -29,9 +29,11 @@ shared.saveNoteButton_press = async function(comp) {
 	}
 
 	let isNew = !note.id;
+	let titleWasAutoAssigned = false;
 
 	if (isNew && !note.title) {
 		note.title = Note.defaultTitle(note);
+		titleWasAutoAssigned = true;
 	}
 
 	// Save only the properties that have changed
@@ -54,8 +56,11 @@ shared.saveNoteButton_press = async function(comp) {
 		// But we preserve the current title and body because
 		// the user might have changed them between the time
 		// saveNoteButton_press was called and the note was
-		// saved (it's done asynchronously)
-		note.title = stateNote.title;
+		// saved (it's done asynchronously).
+		//
+		// If the title was auto-assigned above, we don't restore
+		// it from the state because it will be empty there.
+		if (!titleWasAutoAssigned) note.title = stateNote.title;
 		note.body = stateNote.body;
 	}
 

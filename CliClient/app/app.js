@@ -177,22 +177,33 @@ class Application extends BaseApplication {
 		await doExit();
 	}
 
-	commands() {
-		if (this.allCommandsLoaded_) return this.commands_;
+	commands(uiType = null) {
+		if (!this.allCommandsLoaded_) {
+			fs.readdirSync(__dirname).forEach((path) => {
+				if (path.indexOf('command-') !== 0) return;
+				const ext = fileExtension(path)
+				if (ext != 'js') return;
 
-		fs.readdirSync(__dirname).forEach((path) => {
-			if (path.indexOf('command-') !== 0) return;
-			const ext = fileExtension(path)
-			if (ext != 'js') return;
+				let CommandClass = require('./' + path);
+				let cmd = new CommandClass();
+				if (!cmd.enabled()) return;
+				cmd = this.setupCommand(cmd);
+				this.commands_[cmd.name()] = cmd;
+			});
 
-			let CommandClass = require('./' + path);
-			let cmd = new CommandClass();
-			if (!cmd.enabled()) return;
-			cmd = this.setupCommand(cmd);
-			this.commands_[cmd.name()] = cmd;
-		});
+			this.allCommandsLoaded_ = true;
+		}
 
-		this.allCommandsLoaded_ = true;
+		if (uiType !== null) {
+			let temp = [];
+			for (let n in this.commands_) {
+				if (!this.commands_.hasOwnProperty(n)) continue;
+				const c = this.commands_[n];
+				if (!c.supportsUi(uiType)) continue;
+				temp[n] = c;
+			}
+			return temp;
+		}
 
 		return this.commands_;
 	}
@@ -309,6 +320,8 @@ class Application extends BaseApplication {
 		// so execute it.
 		if (argv.length) {
 			this.gui_ = this.dummyGui();
+
+			this.currentFolder_ = await Folder.load(Setting.value('activeFolderId'));
 
 			try {
 				await this.execCommand(argv);
