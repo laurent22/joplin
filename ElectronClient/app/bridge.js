@@ -39,10 +39,22 @@ class Bridge {
 		return this.window().setSize(width, height);
 	}
 
+	showSaveDialog(options) {
+		const {dialog} = require('electron');
+		if (!options) options = {};
+		if (!('defaultPath' in options) && this.lastSelectedPath_) options.defaultPath = this.lastSelectedPath_;
+		const filePath = dialog.showSaveDialog(options);
+		if (filePath) {
+			this.lastSelectedPath_ = filePath;
+		}
+		return filePath;
+	}
+
 	showOpenDialog(options) {
 		const {dialog} = require('electron');
 		if (!options) options = {};
 		if (!('defaultPath' in options) && this.lastSelectedPath_) options.defaultPath = this.lastSelectedPath_;
+		if (!('createDirectory' in options)) options.createDirectory = true;
 		const filePaths = dialog.showOpenDialog(options);
 		if (filePaths && filePaths.length) {
 			this.lastSelectedPath_ = dirname(filePaths[0]);
@@ -67,6 +79,15 @@ class Bridge {
 			type: 'question',
 			message: message,
 			buttons: [_('OK'), _('Cancel')],
+		});
+		return result === 0;
+	}
+
+	showInfoMessageBox(message) {
+		const result = this.showMessageBox({
+			type: 'info',
+			message: message,
+			buttons: [_('OK')],
 		});
 		return result === 0;
 	}

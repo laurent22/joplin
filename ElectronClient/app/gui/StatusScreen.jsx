@@ -7,6 +7,7 @@ const { Header } = require('./Header.min.js');
 const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
 const { ReportService } = require('lib/services/report.js');
+const fs = require('fs-extra');
 
 class StatusScreenComponent extends React.Component {
 
@@ -25,6 +26,21 @@ class StatusScreenComponent extends React.Component {
 		const service = new ReportService();
 		const report = await service.status(Setting.value('sync.target'));
 		this.setState({ report: report });
+	}
+
+	async exportDebugReportClick() {
+		const filename = 'syncReport-' + (new Date()).getTime() + '.csv';
+
+		const filePath = bridge().showSaveDialog({
+			title: _('Please select where the sync status should be exported to'),
+			defaultPath: filename,
+		});
+
+		if (!filePath) return;
+
+		const service = new ReportService();
+		const csv = await service.basicItemList({ format: 'csv' });
+		await fs.writeFileSync(filePath, csv);
 	}
 
 	render() {
@@ -97,6 +113,7 @@ class StatusScreenComponent extends React.Component {
 			<div style={style}>
 				<Header style={headerStyle} />
 				<div style={containerStyle}>
+					<a style={theme.textStyle} onClick={() => this.exportDebugReportClick()}href="#">Export debug report</a>
 					{body}
 				</div>
 			</div>

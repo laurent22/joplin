@@ -218,7 +218,7 @@ class ScreenHeaderComponent extends Component {
 		const itemListCsv = await service.basicItemList({ format: 'csv' });
 		const filePath = RNFS.ExternalDirectoryPath + '/syncReport-' + (new Date()).getTime() + '.txt';
 
-		const finalText = [logItemCsv, itemListCsv].join("\n--------------------------------------------------------------------------------");
+		const finalText = [logItemCsv, itemListCsv].join("\n================================================================================\n");
 
 		await RNFS.writeFile(filePath, finalText);
 		alert('Debug report exported to ' + filePath);
