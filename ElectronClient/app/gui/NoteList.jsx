@@ -174,7 +174,7 @@ class NoteListComponent extends React.Component {
 			}, style);
 			emptyDivStyle.width = emptyDivStyle.width - padding * 2;
 			emptyDivStyle.height = emptyDivStyle.height - padding * 2;
-			return <div style={emptyDivStyle}>{_('No notes in here. Create one by clicking on "New note".')}</div>
+			return <div style={emptyDivStyle}>{ this.props.folders.length ? _('No notes in here. Create one by clicking on "New note".') : _('There is currently no notebook. Create one by clicking on "New notebook".')}</div>
 		}
 
 		return (
@@ -193,6 +193,7 @@ class NoteListComponent extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		notes: state.notes,
+		folders: state.folders,
 		selectedNoteIds: state.selectedNoteIds,
 		theme: state.settings.theme,
 		// uncompletedTodosOnTop: state.settings.uncompletedTodosOnTop,
