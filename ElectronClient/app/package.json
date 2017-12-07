@@ -25,6 +25,10 @@
     "win": {
       "icon": "../../Assets/Joplin.ico"
     },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
     "mac": {
       "icon": "../../Assets/macOs.icns",
       "asar": false
