@@ -17,15 +17,13 @@ class Dropdown extends React.Component {
 		});
 	}
 
-	componentDidMount() {
+	updateHeaderCoordinates() {
 		// https://stackoverflow.com/questions/30096038/react-native-getting-the-position-of-an-element
-		setTimeout(() => {
-			this.headerRef_.measure((fx, fy, width, height, px, py) => {
-				this.setState({
-					headerSize: { x: px, y: py, width: width, height: height }
-				});
+		this.headerRef_.measure((fx, fy, width, height, px, py) => {
+			this.setState({
+				headerSize: { x: px, y: py, width: width, height: height }
 			});
-		}, 100);
+		});
 	}
 
 	render() {
@@ -107,7 +105,10 @@ class Dropdown extends React.Component {
 
 		return (
 			<View style={{flex: 1, flexDirection: 'column' }}>
-				<TouchableOpacity style={headerWrapperStyle} ref={(ref) => this.headerRef_ = ref} onPress={() => { this.setState({ listVisible: true }) }}>
+				<TouchableOpacity style={headerWrapperStyle} ref={(ref) => this.headerRef_ = ref} onPress={() => {
+					this.updateHeaderCoordinates();
+					this.setState({ listVisible: true });
+				}}>
 					<Text ellipsizeMode="tail" numberOfLines={1} style={headerStyle}>{headerLabel}</Text>
 					<Text style={headerArrowStyle}>{'▼'}</Text>
 				</TouchableOpacity>
