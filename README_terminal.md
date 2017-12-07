@@ -154,7 +154,7 @@ To view the newly created note:
 
 Give a new title to the note:
 
-	$ joplin set "My note" title "New title"
+	$ joplin set fe889 title "New title"
 
 # Available shortcuts
 
