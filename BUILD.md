@@ -1,20 +1,21 @@
 # General information
 
 - All the applications share the same library, which, for historical reasons, is in ReactNativeClient/lib. This library is copied to the relevant directories when builing each app.
-- The translations are built by running CliClient/build-translation.sh. For this reasons, it's generally better to get the CLI app to build first so that everything is setup correctly.
-- Note: building translations is no longer required to run the apps, so you can ignore all the below requirements about gettext.
+- The translations are built by running CliClient/build-translation.sh. You normally don't need to run this if you haven't updated the translation since the compiled files are on the repository.
 
 ## macOS dependencies
 
-     brew install yarn node xgettext
-     npm install -g node-gyp
-    echo 'export PATH="/usr/local/opt/gettext/bin:$PATH"' >> ~/.bash_profile
-    source ~/.bash_profile
+	brew install yarn node
+	echo 'export PATH="/usr/local/opt/gettext/bin:$PATH"' >> ~/.bash_profile
+	source ~/.bash_profile
+     
+If you get a node-gyp related error you might need to manually install it: `npm install -g node-gyp`
 
-## Linux and Windows dependencies
+## Linux and Windows (WSL) dependencies
 
 - Install yarn - https://yarnpkg.com/lang/en/docs/install/
 - Install node v8.x (check with `node --version`) - https://nodejs.org/en/
+- If you get a node-gyp related error you might need to manually install it: `npm install -g node-gyp`
 
 # Building the Electron application
 
@@ -37,4 +38,8 @@ From `/ReactNativeClient`, run `npm install`, then `react-native run-ios` or `re
 
 # Building the Terminal application
 
-From `/CliClient`, run `npm install` then run `run.sh`. If you get an error about `xgettext`, comment out the command `node build-translation.js --silent` in build.sh
+From `/CliClient`:
+- Run `npm install`
+- Then `build.sh`
+- Copy the translations to the build directory: `rsync -aP ../ReactNativeClient/locales/ build/locales/`
+- Run `run.sh` to start the application for testing.

@@ -246,9 +246,13 @@ class Application extends BaseApplication {
 		try {
 			CommandClass = require(__dirname + '/command-' + name + '.js');
 		} catch (error) {
-			let e = new Error('No such command: ' + name);
-			e.type = 'notFound';
-			throw e;
+			if (error.message && error.message.indexOf('Cannot find module') >= 0) {
+				let e = new Error(_('No such command: %s', name));
+				e.type = 'notFound';
+				throw e;
+			} else {
+				throw error;
+			}
 		}
 
 		let cmd = new CommandClass();

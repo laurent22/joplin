@@ -339,6 +339,7 @@ class BaseItem extends BaseModel {
 					JOIN sync_items s ON s.item_id = items.id
 					WHERE sync_target = %d
 					AND s.sync_time < items.updated_time
+					AND s.sync_disabled = 0
 					%s
 					LIMIT %d
 				`,
@@ -382,7 +383,21 @@ class BaseItem extends BaseModel {
 		throw new Error('Invalid type: ' + type);
 	}
 
-	static updateSyncTimeQueries(syncTarget, item, syncTime) {
+	static async syncDisabledItems(syncTargetId) {
+		const rows = await this.db().selectAll('SELECT * FROM sync_items WHERE sync_disabled = 1 AND sync_target = ?', [syncTargetId]);
+		let output = [];
+		for (let i = 0; i < rows.length; i++) {
+			const item = await this.loadItem(rows[i].item_type, rows[i].item_id);
+			if (!item) continue; // The referenced item no longer exist
+			output.push({
+				syncInfo: rows[i],
+				item: item,
+			});
+		}
+		return output;
+	}
+
+	static updateSyncTimeQueries(syncTarget, item, syncTime, syncDisabled = false, syncDisabledReason = '') {
 		const itemType = item.type_;
 		const itemId = item.id;
 		if (!itemType || !itemId || syncTime === undefined) throw new Error('Invalid parameters in updateSyncTimeQueries()');
@@ -393,14 +408,20 @@ class BaseItem extends BaseModel {
 				params: [syncTarget, itemType, itemId],
 			},
 			{
-				sql: 'INSERT INTO sync_items (sync_target, item_type, item_id, sync_time) VALUES (?, ?, ?, ?)',
-				params: [syncTarget, itemType, itemId, syncTime],
+				sql: 'INSERT INTO sync_items (sync_target, item_type, item_id, sync_time, sync_disabled, sync_disabled_reason) VALUES (?, ?, ?, ?, ?, ?)',
+				params: [syncTarget, itemType, itemId, syncTime, syncDisabled ? 1 : 0, syncDisabledReason + ''],
 			}
 		];
 	}
 
 	static async saveSyncTime(syncTarget, item, syncTime) {
 		const queries = this.updateSyncTimeQueries(syncTarget, item, syncTime);
+		return this.db().transactionExecBatch(queries);
+	}
+
+	static async saveSyncDisabled(syncTargetId, item, syncDisabledReason) {
+		const syncTime = 'sync_time' in item ? item.sync_time : 0;
+		const queries = this.updateSyncTimeQueries(syncTargetId, item, syncTime, true, syncDisabledReason);
 		return this.db().transactionExecBatch(queries);
 	}
 

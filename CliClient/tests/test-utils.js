@@ -43,8 +43,9 @@ const syncDir = __dirname + '/../tests/sync';
 const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 400;
 
 const logger = new Logger();
+logger.addTarget('console');
 logger.addTarget('file', { path: logDir + '/log.txt' });
-logger.setLevel(Logger.LEVEL_DEBUG);
+logger.setLevel(Logger.LEVEL_WARN);
 
 BaseItem.loadClass('Note', Note);
 BaseItem.loadClass('Folder', Folder);

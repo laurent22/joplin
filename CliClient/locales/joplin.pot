@@ -101,6 +101,10 @@ msgid "Cancelling background synchronisation... Please wait."
 msgstr ""
 
 #, javascript-format
+msgid "No such command: %s"
+msgstr ""
+
+#, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr ""
 
@@ -508,6 +512,9 @@ msgstr ""
 msgid "Tools"
 msgstr ""
 
+msgid "Synchronisation status"
+msgstr ""
+
 msgid "Options"
 msgstr ""
 
@@ -568,6 +575,12 @@ msgstr ""
 msgid "Layout"
 msgstr ""
 
+msgid "Some items cannot be synchronised."
+msgstr ""
+
+msgid "View them now"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr ""
 
@@ -603,6 +616,9 @@ msgid "OneDrive Login"
 msgstr ""
 
 msgid "Import"
+msgstr ""
+
+msgid "Synchronisation Status"
 msgstr ""
 
 msgid "Delete notebook?"
@@ -810,6 +826,13 @@ msgstr ""
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr ""
+
+msgid "Items that cannot be synchronised"
+msgstr ""
+
+#, javascript-format
+msgid "\"%s\": \"%s\""
 msgstr ""
 
 msgid "Sync status (synced items / total items)"

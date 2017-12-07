@@ -123,15 +123,27 @@ class FileApiDriverOneDrive {
 		return this.makeItem_(item);
 	}
 
-	put(path, content, options = null) {
+	async put(path, content, options = null) {
 		if (!options) options = {};
 
-		if (options.source == 'file') {
-			return this.api_.exec('PUT', this.makePath_(path) + ':/content', null, null, options);
-		} else {
-			options.headers = { 'Content-Type': 'text/plain' };
-			return this.api_.exec('PUT', this.makePath_(path) + ':/content', null, content, options);
+		let response = null;
+
+		try {
+			if (options.source == 'file') {
+				response = await this.api_.exec('PUT', this.makePath_(path) + ':/content', null, null, options);
+			} else {
+				options.headers = { 'Content-Type': 'text/plain' };
+				response = await this.api_.exec('PUT', this.makePath_(path) + ':/content', null, content, options);
+			}
+		} catch (error) {
+			if (error && error.code === 'BadRequest' && error.message === 'Maximum request length exceeded.') {
+				error.code = 'cannotSync';
+				error.message = 'Resource exceeds OneDrive max file size (4MB)';
+			}
+			throw error;
 		}
+
+		return response;
 	}
 
 	delete(path) {
