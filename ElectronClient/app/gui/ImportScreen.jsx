@@ -41,17 +41,22 @@ class ImportScreenComponent extends React.Component {
 		const messages = this.state.messages.slice();
 		let found = false;
 
-		for (let i = 0; i < messages.length; i++) {
-			if (messages[i].key === key) {
-				messages[i].text = text;
-				found = true;
-				break;
-			}
-		}
-
-		if (!found) messages.push({ key: key, text: text });
+		messages.push({ key: key, text: text });
 
 		this.setState({ messages: messages });
+	}
+
+	uniqueMessages() {
+		let output = [];
+		const messages = this.state.messages.slice();
+		let foundKeys = [];
+		for (let i = messages.length - 1; i >= 0; i--) {
+			const msg = messages[i];
+			if (foundKeys.indexOf(msg.key) >= 0) continue;
+			foundKeys.push(msg.key);
+			output.unshift(msg);
+		}
+		return output;
 	}
 
 	async doImport() {
@@ -77,10 +82,9 @@ class ImportScreenComponent extends React.Component {
 				this.addMessage('progress', lastProgress);
 			},
 			onError: (error) => {
-				const messages = this.state.messages.slice();
-				let s = error.trace ? error.trace : error.toString();
-				messages.push({ key: 'error_' + (progressCount++), text: s });
-				this.addMessage('error_' + (progressCount++), lastProgress);
+				// Don't display the error directly because most of the time it doesn't matter
+				// (eg. for weird broken HTML, but the note is still imported)
+				console.warn('When importing ENEX file', error);
 			},
 		}
 
@@ -95,7 +99,7 @@ class ImportScreenComponent extends React.Component {
 	render() {
 		const theme = themeStyle(this.props.theme);
 		const style = this.props.style;
-		const messages = this.state.messages;
+		const messages = this.uniqueMessages();
 
 		const messagesStyle = {
 			padding: 10,

@@ -214,7 +214,7 @@ function isAnchor(n) {
 }
 
 function isIgnoredEndTag(n) {
-	return n=="en-note" || n=="en-todo" || n=="span" || n=="body" || n=="html" || n=="font" || n=="br" || n=='hr' || n=='s' || n == 'tbody' || n == 'sup' || n == 'img' || n == 'abbr' || n == 'cite' || n == 'thead' || n == 'small' || n == 'tt' || n == 'sub';
+	return n=="en-note" || n=="en-todo" || n=="span" || n=="body" || n=="html" || n=="font" || n=="br" || n=='hr' || n == 'tbody' || n == 'sup' || n == 'img' || n == 'abbr' || n == 'cite' || n == 'thead' || n == 'small' || n == 'tt' || n == 'sub';
 }
 
 function isListTag(n) {
@@ -541,6 +541,10 @@ function enexXmlToMdArray(stream, resources) {
 
 				if (section.lines.length < 1) throw new Error('Invalid anchor tag closing'); // Sanity check, but normally not possible
 
+				const pushEmptyAnchor = (url) => {
+					section.lines.push('[link](' + url + ')');
+				}
+
 				// When closing the anchor tag, check if there's is any text content. If not
 				// put the URL as is (don't wrap it in [](url)). The markdown parser, using
 				// GitHub flavour, will turn this URL into a link. This is to generate slightly
@@ -548,14 +552,15 @@ function enexXmlToMdArray(stream, resources) {
 				let previous = section.lines[section.lines.length - 1];
 				if (previous == '[') {
 					section.lines.pop();
-					section.lines.push(url);
+					pushEmptyAnchor(url);
 				} else if (!previous || previous == url) {
 					section.lines.pop();
 					section.lines.pop();
-					section.lines.push(url);
+					pushEmptyAnchor(url);
 				} else {
 					// Need to remove any new line character between the current ']' and the previous '['
 					// otherwise it won't render properly.
+					let allSpaces = true;
 					for (let i = section.lines.length - 1; i >= 0; i--) {
 						const c = section.lines[i];
 						if (c === '[') {
@@ -563,10 +568,22 @@ function enexXmlToMdArray(stream, resources) {
 						} else {
 							if (c === BLOCK_CLOSE || c === BLOCK_OPEN || c === NEWLINE) {
 								section.lines[i] = SPACE;
+							} else {
+								if (!isWhiteSpace(c)) allSpaces = false;
 							}
 						}
 					}
-					section.lines.push('](' + url + ')');
+
+					if (allSpaces) {
+						for (let i = section.lines.length - 1; i >= 0; i--) {
+							const c = section.lines.pop();
+							if (c === '[') break;
+						}						
+						//section.lines.push(url);
+						pushEmptyAnchor(url);
+					} else {
+						section.lines.push('](' + url + ')');
+					}
 				}
 			} else if (isListTag(n)) {
 				section.lines.push(BLOCK_CLOSE);

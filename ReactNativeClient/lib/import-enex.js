@@ -222,9 +222,9 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					const body = await enexXmlToMd(contentStream, note.resources);
 					delete note.bodyXml;
 
-					// console.info('-----------------------------------------------------------');
+					// console.info('*************************************************************************');
 					// console.info(body);
-					// console.info('-----------------------------------------------------------');
+					// console.info('*************************************************************************');
 
 					note.id = uuid.create();
 					note.parent_id = parentFolderId;
