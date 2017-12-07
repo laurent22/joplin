@@ -22,15 +22,6 @@ class Setting extends BaseModel {
 		this.metadata_ = {
 			'activeFolderId': { value: '', type: Setting.TYPE_STRING, public: false },
 			'firstStart': { value: true, type: Setting.TYPE_BOOL, public: false },
-			'sync.2.path': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'], label: () => _('File system synchronisation target directory'), description: () => _('The path to synchronise with when file system synchronisation is enabled. See `sync.target`.') },
-			'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.2.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.3.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.4.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.5.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'editor': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'], label: () => _('Text editor'), description: () => _('The editor that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
 			'locale': { value: defaultLocale(), type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Language'), options: () => {
 				return supportedLocalesToLanguages();
@@ -86,6 +77,15 @@ class Setting extends BaseModel {
 			'sync.target': { value: SyncTargetRegistry.nameToId('onedrive'), type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation target'), description: () => _('The target to synchonise to. If synchronising with the file system, set `sync.2.path` to specify the target directory.'), options: () => {
 				return SyncTargetRegistry.idAndLabelPlainObject();
 			}},
+			'sync.2.path': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('filesystem') }, public: true, label: () => _('Directory to synchronise with (absolute path)'), description: () => _('The path to synchronise with when file system synchronisation is enabled. See `sync.target`.') },
+			'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.2.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.3.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.4.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.5.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
 		};
 
 		return this.metadata_;
