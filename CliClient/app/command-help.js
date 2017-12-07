@@ -18,7 +18,7 @@ class Command extends BaseCommand {
 	}
 
 	allCommands() {
-		const commands = app().commands();
+		const commands = app().commands(app().uiType());
 		let output = [];
 		for (let n in commands) {
 			if (!commands.hasOwnProperty(n)) continue;
@@ -68,6 +68,8 @@ class Command extends BaseCommand {
 			this.stdout(_('Type `help [command]` for more information about a command.'));
 			this.stdout('');
 			this.stdout(_('The possible commands are:'));
+			this.stdout('');
+			this.stdout(_('Type `help all` for the complete help of all the commands.'));
 			this.stdout('');
 			this.stdout(commandNames.join(', '));
 			this.stdout('');
