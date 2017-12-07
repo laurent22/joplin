@@ -1,5 +1,6 @@
 const React = require('react'); const Component = React.Component;
 const { Keyboard, NativeModules, BackHandler } = require('react-native');
+const { SafeAreaView } = require('react-navigation');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
 const AlarmService = require('lib/services/AlarmService.js');
@@ -461,7 +462,7 @@ class AppComponent extends React.Component {
 	render() {
 		if (this.props.appState != 'ready') return null;
 
-		const sideMenuContent = <SideMenuContent/>;
+		const sideMenuContent = <SafeAreaView style={{flex:1}}><SideMenuContent/></SafeAreaView>;
 
 		const appNavInit = {
 			Welcome: { screen: WelcomeScreen },
@@ -487,7 +488,9 @@ class AppComponent extends React.Component {
 				}}
 				>
 				<MenuContext style={{ flex: 1 }}>
-					<AppNav screens={appNavInit} />
+					<SafeAreaView style={{flex:1}}>
+						<AppNav screens={appNavInit} />
+					</SafeAreaView>
 					<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
 				</MenuContext>
 			</SideMenu>
