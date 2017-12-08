@@ -5,6 +5,7 @@ const { Setting } = require('lib/models/setting.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const { Header } = require('./Header.min.js');
 const { themeStyle } = require('../theme.js');
+const pathUtils = require('lib/path-utils.js');
 const { _ } = require('lib/locale.js');
 
 class ConfigScreenComponent extends React.Component {
@@ -146,6 +147,9 @@ class ConfigScreenComponent extends React.Component {
 			<div style={style}>
 				<Header style={headerStyle} />
 				<div style={containerStyle}>
+					<div style={Object.assign({}, theme.textStyle, {marginBottom: 20})}>
+						{_('Notes and settings are stored in: %s', pathUtils.toSystemSlashes(Setting.value('profileDir'), process.platform))}
+					</div>
 					{ settingComps }
 					<button onClick={() => {this.onSaveClick()}} style={buttonStyle}>{_('Save')}</button>
 					<button onClick={() => {this.onCancelClick()}} style={buttonStyle}>{_('Cancel')}</button>

@@ -40,4 +40,9 @@ function safeFileExtension(e) {
 	return e.replace(/[^a-zA-Z0-9]/g, '')
 }
 
-module.exports = { basename, dirname, filename, isHidden, fileExtension, safeFileExtension };
+function toSystemSlashes(path, os) {
+	if (os === 'win32') return path.replace(/\//g, "\\");
+	return path.replace(/\\/g, "/");
+}
+
+module.exports = { basename, dirname, filename, isHidden, fileExtension, safeFileExtension, toSystemSlashes };
