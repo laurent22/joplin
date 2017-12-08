@@ -194,7 +194,7 @@ function addResourceTag(lines, resource, alt = "") {
 
 
 function isBlockTag(n) {
-	return n=="div" || n=="p" || n=="dl" || n=="dd" || n == 'dt' || n=="center";
+	return ["div", "p", "dl", "dd", 'dt', "center", 'address'].indexOf(n) >= 0;
 }
 
 function isStrongTag(n) {
@@ -214,7 +214,7 @@ function isAnchor(n) {
 }
 
 function isIgnoredEndTag(n) {
-	return n=="en-note" || n=="en-todo" || n=="span" || n=="body" || n=="html" || n=="font" || n=="br" || n=='hr' || n == 'tbody' || n == 'sup' || n == 'img' || n == 'abbr' || n == 'cite' || n == 'thead' || n == 'small' || n == 'tt' || n == 'sub';
+	return ["en-note", "en-todo", "span", "body", "html", "font", "br", 'hr', 'tbody', 'sup', 'img', 'abbr', 'cite', 'thead', 'small', 'tt', 'sub', 'colgroup', 'col', 'ins', 'caption', 'var', 'map', 'area'].indexOf(n) >= 0;
 }
 
 function isListTag(n) {
@@ -223,7 +223,7 @@ function isListTag(n) {
 
 // Elements that don't require any special treatment beside adding a newline character
 function isNewLineOnlyEndTag(n) {
-	return n=="div" || n=="p" || n=="li" || n=="h1" || n=="h2" || n=="h3" || n=="h4" || n=="h5" || n=='h6' || n=="dl" || n=="dd" || n == 'dt' || n=="center";
+	return ["div", "p", "li", "h1", "h2", "h3", "h4", "h5", 'h6', "dl", "dd", 'dt', "center", 'address'].indexOf(n) >= 0;
 }
 
 function isCodeTag(n) {
@@ -246,6 +246,10 @@ function isCodeTag(n) {
 	// }
 	// <code>
 	return n == "pre" || n == "code";
+}
+
+function isInlineCodeTag(n) {
+	return ['samp', 'kbd'].indexOf(n) >= 0;
 }
 
 function isNewLineBlock(s) {
@@ -377,7 +381,7 @@ function enexXmlToMdArray(stream, resources) {
 				section.lines.push("**");
 			} else if (isStrikeTag(n)) {
 				section.lines.push('(');
-			} else if (n == 'samp') {
+			} else if (isInlineCodeTag(n)) {
 				section.lines.push('`');
 			} else if (n == 'q') {
 				section.lines.push('"');
@@ -494,7 +498,7 @@ function enexXmlToMdArray(stream, resources) {
 						section.lines = addResourceTag(section.lines, resource, nodeAttributes.alt);
 					}
 				}
-			} else if (n == "span" || n == "font" || n == 'sup' || n == 'cite' || n == 'abbr' || n == 'small' || n == 'tt' || n == 'sub') {
+			} else if (["span", "font", 'sup', 'cite', 'abbr', 'small', 'tt', 'sub', 'colgroup', 'col', 'ins', 'caption', 'var', 'map', 'area'].indexOf(n) >= 0) {
 				// Inline tags that can be ignored in Markdown
 			} else {
 				console.warn("Unsupported start tag: " + n);
@@ -523,7 +527,7 @@ function enexXmlToMdArray(stream, resources) {
 				section.lines.push("**");
 			} else if (isStrikeTag(n)) {
 				section.lines.push(')');
-			} else if (n == 'samp') {
+			} else if (isInlineCodeTag(n)) {
 				section.lines.push('`');
 			} else if (isEmTag(n)) {
 				section.lines.push("*");
