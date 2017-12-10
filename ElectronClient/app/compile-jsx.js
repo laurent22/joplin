@@ -21,7 +21,7 @@ fs.readdirSync(guiPath).forEach((filename) => {
 	if (ext !== 'jsx') return;
 	p.pop();
 
-	const basePath = p.join('/');
+	const basePath = p.join('.');
 
 	const jsPath = basePath + '.min.js';
 

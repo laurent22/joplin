@@ -34,12 +34,17 @@ From `/ElectronClient` you can also run `run.sh` to run the app for testing.
 
 # Building the Mobile application
 
-From `/ReactNativeClient`, run `npm install`, then `react-native run-ios` or `react-native run-android`.
+First you need to to setup React Native to build projects with native code. For this, follow the instructions on the [Get Started](https://facebook.github.io/react-native/docs/getting-started.html) tutorial, in the "Building Projects with Native Code" tab.
+
+Then, from `/ReactNativeClient`, run `npm install`, then `react-native run-ios` or `react-native run-android`.
 
 # Building the Terminal application
 
-From `/CliClient`:
-- Run `npm install`
-- Then `build.sh`
-- Copy the translations to the build directory: `rsync -aP ../ReactNativeClient/locales/ build/locales/`
-- Run `run.sh` to start the application for testing.
+```
+cd CliClient
+npm install
+./build.sh
+rsync -aP ../ReactNativeClient/locales/ build/locales/
+```
+
+Run `run.sh` to start the application for testing.
