@@ -98,7 +98,7 @@ class SideBarComponent extends React.Component {
 
 		let deleteMessage = '';
 		if (itemType === BaseModel.TYPE_FOLDER) {
-			deleteMessage = _('Delete notebook?');
+			deleteMessage = _('Delete notebook? All notes within this notebook will also be deleted.');
 		} else if (itemType === BaseModel.TYPE_TAG) {
 			deleteMessage = _('Remove this tag from all the notes?');
 		} else if (itemType === BaseModel.TYPE_SEARCH) {

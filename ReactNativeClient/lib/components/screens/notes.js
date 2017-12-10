@@ -69,7 +69,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 	}
 
 	deleteFolder_onPress(folderId) {
-		dialogs.confirm(this, _('Delete notebook?')).then((ok) => {
+		dialogs.confirm(this, _('Delete notebook? All notes within this notebook will also be deleted.')).then((ok) => {
 			if (!ok) return;
 
 			Folder.delete(folderId).then(() => {
