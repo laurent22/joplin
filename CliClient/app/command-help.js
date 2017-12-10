@@ -65,11 +65,9 @@ class Command extends BaseCommand {
 		} else {
 			const commandNames = this.allCommands().map((a) => a.name());
 
-			this.stdout(_('Type `help [command]` for more information about a command.'));
+			this.stdout(_('Type `help [command]` for more information about a command; or type `help all` for the complete usage information.'));
 			this.stdout('');
 			this.stdout(_('The possible commands are:'));
-			this.stdout('');
-			this.stdout(_('Type `help all` for the complete help of all the commands.'));
 			this.stdout('');
 			this.stdout(commandNames.join(', '));
 			this.stdout('');
