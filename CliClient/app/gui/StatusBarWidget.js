@@ -5,13 +5,14 @@ const stripAnsi = require('strip-ansi');
 
 class StatusBarWidget extends BaseWidget {
 
-	constructor() {
+	constructor(autoComplete = null) {
 		super();
 
 		this.promptState_ = null;
 		this.inputEventEmitter_ = null;
 		this.history_ = [];
 		this.items_ = [];
+        this.autoComplete = autoComplete;
 	}
 
 	get name() {
@@ -22,7 +23,10 @@ class StatusBarWidget extends BaseWidget {
 		return false;
 	}
 
-	setItemAt(index, text) {
+    setAutoComplete(auto) {
+        this.autoComplete = auto;
+    }
+    setItemAt(index, text) {
 		this.items_[index] = stripAnsi(text).trim();
 		this.invalidate();
 	}
@@ -108,6 +112,9 @@ class StatusBarWidget extends BaseWidget {
 				cancelable: true,
 				history: this.history,
 				default: this.promptState_.initialText,
+                autoComplete: this.autoComplete,
+                autoCompleteMenu: true,
+                autoCompleteHint : true,
 			};
 
 			if ('cursorPosition' in this.promptState_) options.cursorPosition = this.promptState_.cursorPosition;
