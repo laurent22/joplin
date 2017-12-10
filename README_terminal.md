@@ -79,7 +79,7 @@ Rename the currently selected notebook ($b) to "Something":
 
 Attach a local file to the currently selected note ($n):
 
-	ren $n /home/laurent/pictures/Vacation12.jpg
+	attach $n /home/laurent/pictures/Vacation12.jpg
 
 The configuration can also be changed from command-line mode. For example, to change the current editor to Sublime Text:
 
