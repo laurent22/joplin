@@ -5,9 +5,9 @@ const RNFetchBlob = require('react-native-fetch-blob').default;
 
 function shimInit() {
 	shim.Geolocation = GeolocationReact;
-
 	shim.setInterval = PoorManIntervals.setInterval;
 	shim.clearInterval = PoorManIntervals.clearInterval;
+	shim.sjclModule = require('lib/vendor/sjcl-rn.js');
 
 	shim.fetch = async function(url, options = null) {
 		return shim.fetchWithRetry(() => {

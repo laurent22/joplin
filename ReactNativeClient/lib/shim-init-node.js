@@ -10,6 +10,7 @@ function shimInit() {
 	shim.FileApiDriverLocal = FileApiDriverLocal;
 	shim.Geolocation = GeolocationNode;
 	shim.FormData = require('form-data');
+	shim.sjclModule = require('lib/vendor/sjcl.js');
 
 	shim.detectAndSetLocale = function (Setting) {
 		let locale = process.env.LANG;

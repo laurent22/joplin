@@ -37,7 +37,8 @@
     "react-navigation": "^1.0.0-beta.21",
     "react-redux": "4.4.8",
     "redux": "3.6.0",
-    "uuid": "^3.0.1"
+    "uuid": "^3.0.1",
+    "word-wrap": "^1.2.3"
   },
   "devDependencies": {
     "babel-jest": "19.0.0",
