@@ -80,8 +80,8 @@ class AppGui {
 		await this.renderer_.renderRoot();
 	}
 
-	prompt(initialText = '', promptString = ':') {
-		return this.widget('statusBar').prompt(initialText, promptString);
+	prompt(initialText = '', promptString = ':', options = null) {
+		return this.widget('statusBar').prompt(initialText, promptString, options);
 	}
 
 	stdoutMaxWidth() {

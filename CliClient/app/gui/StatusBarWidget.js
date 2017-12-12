@@ -41,6 +41,7 @@ class StatusBarWidget extends BaseWidget {
 		};
 
 		if ('cursorPosition' in options) this.promptState_.cursorPosition = options.cursorPosition;
+		if ('secure' in options) this.promptState_.secure = options.secure;
 
 		this.promptState_.promise = new Promise((resolve, reject) => {
 			this.promptState_.resolve = resolve;
@@ -111,6 +112,7 @@ class StatusBarWidget extends BaseWidget {
 			};
 
 			if ('cursorPosition' in this.promptState_) options.cursorPosition = this.promptState_.cursorPosition;
+			if (this.promptState_.secure) options.echoChar = true;
 
 			this.inputEventEmitter_ = this.term.inputField(options, (error, input) => {
 				let resolveResult = null;
