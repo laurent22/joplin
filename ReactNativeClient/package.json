@@ -31,6 +31,7 @@
     "react-native-popup-dialog": "^0.9.35",
     "react-native-popup-menu": "^0.10.0",
     "react-native-push-notification": "^3.0.1",
+    "react-native-securerandom": "^0.1.1",
     "react-native-side-menu": "^1.1.3",
     "react-native-sqlite-storage": "3.3.*",
     "react-native-vector-icons": "^4.4.2",

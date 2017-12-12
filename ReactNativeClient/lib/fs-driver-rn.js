@@ -27,7 +27,7 @@ class FsDriverRN {
 		}
 	}
 
-	close(handler) {
+	close(handle) {
 		return null;
 	}
 

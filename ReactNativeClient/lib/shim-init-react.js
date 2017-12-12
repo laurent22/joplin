@@ -2,12 +2,23 @@ const { shim } = require('lib/shim.js');
 const { GeolocationReact } = require('lib/geolocation-react.js');
 const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const RNFetchBlob = require('react-native-fetch-blob').default;
+const { generateSecureRandom }  = require('react-native-securerandom');
 
 function shimInit() {
 	shim.Geolocation = GeolocationReact;
 	shim.setInterval = PoorManIntervals.setInterval;
 	shim.clearInterval = PoorManIntervals.clearInterval;
 	shim.sjclModule = require('lib/vendor/sjcl-rn.js');
+
+	shim.randomBytes = async (count) => {
+		const randomBytes = await generateSecureRandom(count);
+		let temp = [];
+		for (let n in randomBytes) {
+			if (!randomBytes.hasOwnProperty(n)) continue;
+			temp.push(randomBytes[n]);
+		}
+		return temp;
+	}
 
 	shim.fetch = async function(url, options = null) {
 		return shim.fetchWithRetry(() => {
