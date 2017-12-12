@@ -401,6 +401,7 @@ BaseModel.TYPE_TAG = 5;
 BaseModel.TYPE_NOTE_TAG = 6;
 BaseModel.TYPE_SEARCH = 7;
 BaseModel.TYPE_ALARM = 8;
+BaseModel.TYPE_MASTER_KEY = 9;
 
 BaseModel.db_ = null;
 BaseModel.dispatch = function(o) {};

@@ -153,6 +153,7 @@ class Database {
 			if (s == 'string') return 2;
 		}
 		if (type == 'fieldType') {
+			if (s) s = s.toUpperCase();
 			if (s == 'INTEGER') s = 'INT';
 			if (!(('TYPE_' + s) in this)) throw new Error('Unkonwn fieldType: ' + s);
 			return this['TYPE_' + s];

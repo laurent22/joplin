@@ -60,6 +60,7 @@ class Setting extends BaseModel {
 			// })},
 			'uncompletedTodosOnTop': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Show uncompleted todos on top of the lists') },
 			'trackLocation': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Save geo-location with notes') },
+			'encryption.enabled': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'sync.interval': { value: 300, type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation interval'), options: () => {
 				return {
 					0: _('Disabled'),

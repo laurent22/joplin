@@ -1,10 +1,9 @@
 const { BaseCommand } = require('./base-command.js');
-const { app } = require('./app.js');
 const { _ } = require('lib/locale.js');
-const { Folder } = require('lib/models/folder.js');
-const { importEnex } = require('lib/import-enex');
-const { filename, basename } = require('lib/path-utils.js');
 const { cliUtils } = require('./cli-utils.js');
+const EncryptionService = require('lib/services/EncryptionService');
+const MasterKey = require('lib/models/MasterKey');
+const { Setting } = require('lib/models/setting.js');
 
 class Command extends BaseCommand {
 
@@ -22,7 +21,17 @@ class Command extends BaseCommand {
 
 		if (args.command === 'init') {
 			const password = await this.prompt(_('Enter master password:'), { type: 'string', secure: true });
-			this.logger().info(password);
+			if (!password) {
+				this.stdout(_('Operation cancelled'));
+				return;
+			}
+
+			const service = new EncryptionService();
+			const masterKey = await service.generateMasterKey(password);
+
+			await MasterKey.save(masterKey);
+
+			Setting.setValue('encryption.enabled', true);
 		}
 	}
 

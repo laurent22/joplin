@@ -1,6 +1,5 @@
 const { padLeft } = require('lib/string-utils.js');
 const { shim } = require('lib/shim.js');
-const sjcl = shim.sjclModule;
 
 class EncryptionService {
 
@@ -10,6 +9,7 @@ class EncryptionService {
 	}
 
 	sha256(string) {
+		const sjcl = shim.sjclModule;
 		const bitArray = sjcl.hash.sha256.hash(string);  
 		return sjcl.codec.hex.fromBits(bitArray);
 	}
@@ -39,6 +39,8 @@ class EncryptionService {
 	}
 
 	async encrypt(method, key, plainText) {
+		const sjcl = shim.sjclModule;
+
 		if (method === EncryptionService.METHOD_SJCL) {
 			// Good demo to understand each parameter: https://bitwiseshiftleft.github.io/sjcl/demo/
 			return sjcl.json.encrypt(key, plainText, {
@@ -68,6 +70,8 @@ class EncryptionService {
 	}
 
 	async decrypt(method, key, cipherText) {
+		const sjcl = shim.sjclModule;
+		
 		if (method === EncryptionService.METHOD_SJCL || method === EncryptionService.METHOD_SJCL_2) {
 			return sjcl.json.decrypt(key, cipherText);
 		}
