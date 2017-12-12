@@ -206,10 +206,7 @@ class AppGui {
 		};
 		consoleWidget.hide();
 
-        const statusBar = new StatusBarWidget();
-        this.app().commandNames().then((names)=>{
-            statusBar.setAutoComplete(names);
-        });
+		const statusBar = new StatusBarWidget();
 		statusBar.hStretch = true;
 
 		const noteLayout = new VLayoutWidget();
