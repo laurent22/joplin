@@ -323,6 +323,11 @@ class Synchronizer {
 
 					} else if (action == 'itemConflict') {
 
+						// ------------------------------------------------------------------------------
+						// For non-note conflicts, we take the remote version (i.e. the version that was
+						// synced first) and overwrite the local content.
+						// ------------------------------------------------------------------------------
+
 						if (remote) {
 							local = remoteContent;
 

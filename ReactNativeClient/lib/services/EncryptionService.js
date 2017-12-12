@@ -9,25 +9,70 @@ class EncryptionService {
 		return EncryptionService.fsDriver_;
 	}
 
+	sha256(string) {
+		const bitArray = sjcl.hash.sha256.hash(string);  
+		return sjcl.codec.hex.fromBits(bitArray);
+	}
+
+	async generateMasterKey(password) {
+		const bytes = await shim.randomBytes(256);
+		const hexaBytes = bytes.map((a) => { return a.toString(16); }).join('');
+		const checksum = this.sha256(hexaBytes);
+		const encryptionMethod = EncryptionService.METHOD_SJCL_2;
+		const cipherText = await this.encrypt(encryptionMethod, password, hexaBytes);
+		const now = Date.now();
+
+		return {
+			created_time: now,
+			updated_time: now,
+			encryption_method: encryptionMethod,
+			checksum: checksum,
+			content: cipherText,
+		};
+	}
+
+	async decryptMasterKey(model, password) {
+		const plainText = await this.decrypt(model.encryption_method, password, model.content);
+		const checksum = this.sha256(plainText);
+		if (checksum !== model.checksum) throw new Error('Could not decrypt master key (checksum failed)');
+		return plainText;
+	}
+
 	async encrypt(method, key, plainText) {
 		if (method === EncryptionService.METHOD_SJCL) {
 			// Good demo to understand each parameter: https://bitwiseshiftleft.github.io/sjcl/demo/
 			return sjcl.json.encrypt(key, plainText, {
-				"v": 1, // version
-				"iter":1000, // Defaults to 10000 in sjcl but since we're running this on mobile devices, use a lower value. Maybe review this after some time. https://security.stackexchange.com/questions/3959/recommended-of-iterations-when-using-pkbdf2-sha256
-				"ks":128, // Key size - "128 bits should be secure enough"
-				"ts":64, // ???
-				"mode":"ocb2", //  The cipher mode is a standard for how to use AES and other algorithms to encrypt and authenticate your message. OCB2 mode is slightly faster and has more features, but CCM mode has wider support because it is not patented. 
+				v: 1, // version
+				iter: 1000, // Defaults to 10000 in sjcl but since we're running this on mobile devices, use a lower value. Maybe review this after some time. https://security.stackexchange.com/questions/3959/recommended-of-iterations-when-using-pkbdf2-sha256
+				ks: 128, // Key size - "128 bits should be secure enough"
+				ts: 64, // ???
+				mode: "ocb2", //  The cipher mode is a standard for how to use AES and other algorithms to encrypt and authenticate your message. OCB2 mode is slightly faster and has more features, but CCM mode has wider support because it is not patented. 
 				//"adata":"", // Associated Data - not needed?
-				"cipher":"aes"
+				cipher: "aes"
 			});
 		}
+
+		// Same as first one but slightly more secure (but slower) to encrypt master keys
+		if (method === EncryptionService.METHOD_SJCL_2) {
+			return sjcl.json.encrypt(key, plainText, {
+				v: 1,
+				iter: 10000,
+				ks: 256,
+				ts: 64,
+				mode: "ocb2",
+				cipher: "aes"
+			});
+		}
+
+		throw new Error('Unknown encryption method: ' + method);
 	}
 
 	async decrypt(method, key, cipherText) {
-		if (method === EncryptionService.METHOD_SJCL) {
+		if (method === EncryptionService.METHOD_SJCL || method === EncryptionService.METHOD_SJCL_2) {
 			return sjcl.json.decrypt(key, cipherText);
 		}
+
+		throw new Error('Unknown decryption method: ' + method);
 	}
 
 	async encryptFile(method, key, srcPath, destPath) {
@@ -117,6 +162,7 @@ class EncryptionService {
 }
 
 EncryptionService.METHOD_SJCL = 1;
+EncryptionService.METHOD_SJCL_2 = 2;
 
 EncryptionService.fsDriver_ = null;
 
