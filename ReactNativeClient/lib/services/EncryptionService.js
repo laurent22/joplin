@@ -1,7 +1,52 @@
 const { padLeft } = require('lib/string-utils.js');
 const { shim } = require('lib/shim.js');
 
+function hexPad(s, length) {
+	return padLeft(s, length, '0');
+}
+
 class EncryptionService {
+
+	constructor() {
+		// Note: 1 MB is very slow with Node and probably even worse on mobile. 50 KB seems to work well
+		// and doesn't produce too much overhead in terms of headers.
+		this.chunkSize_ = 50000;
+		this.loadedMasterKeys_ = {};
+		this.activeMasterKeyId_ = null;
+		this.defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL;
+	}
+
+	chunkSize() {
+		return this.chunkSize_;
+	}
+
+	defaultEncryptionMethod() {
+		return this.defaultEncryptionMethod_;
+	}
+
+	setActiveMasterKeyId(id) {
+		this.activeMasterKeyId_ = id;
+	}
+
+	activeMasterKeyId() {
+		if (!this.activeMasterKeyId_) throw new Error('No master key is defined as active');
+		return this.activeMasterKeyId_;
+	}
+
+	async loadMasterKey(model, password, makeActive = false) {
+		if (!model.id) throw new Error('Master key does not have an ID - save it first');
+		this.loadedMasterKeys_[model.id] = await this.decryptMasterKey(model, password);
+		if (makeActive) this.setActiveMasterKeyId(model.id);
+	}
+
+	unloadMasterKey(model) {
+		delete this.loadedMasterKeys_[model.id];
+	}
+
+	loadedMasterKey(id) {
+		if (!this.loadedMasterKeys_[id]) throw new Error('Master key is not loaded: ' + id);
+		return this.loadedMasterKeys_[id];
+	}
 
 	fsDriver() {
 		if (!EncryptionService.fsDriver_) throw new Error('EncryptionService.fsDriver_ not set!');
@@ -14,12 +59,24 @@ class EncryptionService {
 		return sjcl.codec.hex.fromBits(bitArray);
 	}
 
+	async seedSjcl() {
+		throw new Error('NOT TESTED');
+
+		// Just putting this here in case it becomes needed
+
+		const sjcl = shim.sjclModule;
+		const randomBytes = await shim.randomBytes(1024/8);
+		const hexBytes = randomBytes.map((a) => { return a.toString(16) });
+		const hexSeed = sjcl.codec.hex.toBits(hexBytes.join(''));
+		sjcl.random.addEntropy(hexSeed, 1024, 'shim.randomBytes');
+	}
+
 	async generateMasterKey(password) {
 		const bytes = await shim.randomBytes(256);
-		const hexaBytes = bytes.map((a) => { return a.toString(16); }).join('');
+		const hexaBytes = bytes.map((a) => { return hexPad(a.toString(16), 2); }).join('');
 		const checksum = this.sha256(hexaBytes);
 		const encryptionMethod = EncryptionService.METHOD_SJCL_2;
-		const cipherText = await this.encrypt(encryptionMethod, password, hexaBytes);
+		const cipherText = await this.encrypt_(encryptionMethod, password, hexaBytes);
 		const now = Date.now();
 
 		return {
@@ -32,13 +89,13 @@ class EncryptionService {
 	}
 
 	async decryptMasterKey(model, password) {
-		const plainText = await this.decrypt(model.encryption_method, password, model.content);
+		const plainText = await this.decrypt_(model.encryption_method, password, model.content);
 		const checksum = this.sha256(plainText);
 		if (checksum !== model.checksum) throw new Error('Could not decrypt master key (checksum failed)');
 		return plainText;
 	}
 
-	async encrypt(method, key, plainText) {
+	async encrypt_(method, key, plainText) {
 		const sjcl = shim.sjclModule;
 
 		if (method === EncryptionService.METHOD_SJCL) {
@@ -69,7 +126,7 @@ class EncryptionService {
 		throw new Error('Unknown encryption method: ' + method);
 	}
 
-	async decrypt(method, key, cipherText) {
+	async decrypt_(method, key, cipherText) {
 		const sjcl = shim.sjclModule;
 		
 		if (method === EncryptionService.METHOD_SJCL || method === EncryptionService.METHOD_SJCL_2) {
@@ -77,6 +134,61 @@ class EncryptionService {
 		}
 
 		throw new Error('Unknown decryption method: ' + method);
+	}
+
+	async encryptString(plainText) {
+		const method = this.defaultEncryptionMethod();
+		const masterKeyId = this.activeMasterKeyId();
+		const masterKeyPlainText = this.loadedMasterKey(masterKeyId);
+
+		const header = {
+			version: 1,
+			encryptionMethod: method,
+			masterKeyId: masterKeyId,
+		};
+
+		let cipherText = [];
+
+		cipherText.push(this.encodeHeader_(header));
+
+		let fromIndex = 0;
+
+		while (true) {
+			const block = plainText.substr(fromIndex, this.chunkSize_);
+			if (!block) break;
+
+			fromIndex += block.length;
+
+			const encrypted = await this.encrypt_(method, masterKeyPlainText, block);
+
+			cipherText.push(padLeft(encrypted.length.toString(16), 6, '0'));
+			cipherText.push(encrypted);
+		}
+
+		return cipherText.join('');
+	}
+
+	async decryptString(cipherText) {
+		const header = this.decodeHeader_(cipherText);
+
+		const masterKeyPlainText = this.loadedMasterKey(header.masterKeyId);
+
+		let index = header.length;
+
+		let output = [];
+
+		while (index < cipherText.length) {
+			const length = parseInt(cipherText.substr(index, 6), 16);
+			index += 6;
+			if (!length) continue; // Weird but could be not completely invalid (block of size 0) so continue decrypting
+			const block = cipherText.substr(index, length);
+			index += length;
+
+			const plainText = await this.decrypt_(header.encryptionMethod, masterKeyPlainText, block);
+			output.push(plainText);
+		}
+
+		return output.join('');
 	}
 
 	async encryptFile(method, key, srcPath, destPath) {
@@ -89,10 +201,6 @@ class EncryptionService {
 			handle = null;
 		}
 
-		// Note: 1 MB is very slow with Node and probably even worse on mobile. 50 KB seems to work well
-		// and doesn't produce too much overhead in terms of headers.
-		const chunkSize = 50000;
-
 		try {
 			await fsDriver.unlink(destPath);
 
@@ -101,10 +209,10 @@ class EncryptionService {
 			await fsDriver.appendFile(destPath, padLeft(EncryptionService.METHOD_SJCL.toString(16), 2, '0'), 'ascii'); // Encryption method
 
 			while (true) {
-				const plainText = await fsDriver.readFileChunk(handle, chunkSize, 'base64');
+				const plainText = await fsDriver.readFileChunk(handle, this.chunkSize_, 'base64');
 				if (!plainText) break;
 
-				const cipherText = await this.encrypt(method, key, plainText);
+				const cipherText = await this.encrypt_(method, key, plainText);
 
 				await fsDriver.appendFile(destPath, padLeft(cipherText.length.toString(16), 6, '0'), 'ascii'); // Data - Length
 				await fsDriver.appendFile(destPath, cipherText, 'ascii'); // Data - Data
@@ -132,7 +240,7 @@ class EncryptionService {
 			await fsDriver.unlink(destPath);
 
 			const headerHexaBytes = await fsDriver.readFileChunk(handle, 4, 'ascii');
-			const header = this.parseFileHeader_(headerHexaBytes);
+			const header = this.decodeHeader_(headerHexaBytes);
 
 			while (true) {
 				const lengthHex = await fsDriver.readFileChunk(handle, 6, 'ascii');
@@ -143,7 +251,7 @@ class EncryptionService {
 				const cipherText = await fsDriver.readFileChunk(handle, length, 'ascii');
 				if (!cipherText) break;
 
-				const plainText = await this.decrypt(header.encryptionMethod, key, cipherText);
+				const plainText = await this.decrypt_(header.encryptionMethod, key, cipherText);
 
 				await fsDriver.appendFile(destPath, plainText, 'base64');
 			}
@@ -156,11 +264,54 @@ class EncryptionService {
 		cleanUp();
 	}
 
-	parseFileHeader_(headerHexaBytes) {
-		return {
-			version: parseInt(headerHexaBytes.substr(0,2), 16),
-			encryptionMethod: parseInt(headerHexaBytes.substr(2,2), 16),
+	encodeHeader_(header) {
+		// Sanity check
+		if (header.masterKeyId.length !== 32) throw new Error('Invalid master key ID size: ' + header.masterKeyId);
+
+		const output = [];
+		output.push(padLeft(header.version.toString(16), 2, '0'));
+		output.push(padLeft(header.encryptionMethod.toString(16), 2, '0'));
+		output.push(header.masterKeyId);
+		return output.join('');
+	}
+
+	decodeHeader_(headerHexaBytes) {
+		const headerTemplates = {
+			1: [
+				[ 'encryptionMethod', 2, 'int' ],
+				[ 'masterKeyId', 32, 'hex' ],
+			],
 		};
+
+		const output = {};
+		const version = parseInt(headerHexaBytes.substr(0, 2), 16);
+		const template = headerTemplates[version];
+
+		if (!template) throw new Error('Invalid header version: ' + version);
+
+		output.version = version;
+
+		let index = 2;
+		for (let i = 0; i < template.length; i++) {
+			const m = template[i];
+			const type = m[2];
+			let v = headerHexaBytes.substr(index, m[1]);
+
+			if (type === 'int') {
+				v = parseInt(v, 16);
+			} else if (type === 'hex') {
+				// Already in hexa
+			} else {
+				throw new Error('Invalid type: ' + type);
+			}
+
+			index += m[1];
+			output[m[0]] = v;
+		}
+
+		output.length = index;
+
+		return output;
 	}
 
 }

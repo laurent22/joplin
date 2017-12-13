@@ -204,7 +204,7 @@ class Synchronizer {
 					if (donePaths.indexOf(path) > 0) throw new Error(sprintf('Processing a path that has already been done: %s. sync_time was not updated?', path));
 
 					let remote = await this.api().stat(path);
-					let content = await ItemClass.serialize(local);
+					let content = await ItemClass.serializeForSync(local);
 					let action = null;
 					let updateSyncTimeOnly = true;
 					let reason = '';					

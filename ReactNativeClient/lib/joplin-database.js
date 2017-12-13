@@ -202,7 +202,7 @@ class JoplinDatabase extends Database {
 		// default value and thus might cause problems. In that case, the default value
 		// must be set in the synchronizer too.
 
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 		// currentVersionIndex < 0 if for the case where an old version of Joplin used with a newer
@@ -268,6 +268,15 @@ class JoplinDatabase extends Database {
 			if (targetVersion == 8) {
 				queries.push('ALTER TABLE sync_items ADD COLUMN sync_disabled INT NOT NULL DEFAULT "0"');
 				queries.push('ALTER TABLE sync_items ADD COLUMN sync_disabled_reason TEXT NOT NULL DEFAULT ""');
+			}
+
+			if (targetVersion == 9) {
+				queries.push('CREATE TABLE master_keys (id TEXT PRIMARY KEY, created_time INT NOT NULL, updated_time INT NOT NULL, encryption_method INT NOT NULL, checksum TEXT NOT NULL, content TEXT NOT NULL);');
+				queries.push('ALTER TABLE notes ADD COLUMN encryption_cipher_text TEXT NOT NULL DEFAULT ""');
+				queries.push('ALTER TABLE folders ADD COLUMN encryption_cipher_text TEXT NOT NULL DEFAULT ""');
+				queries.push('ALTER TABLE tags ADD COLUMN encryption_cipher_text TEXT NOT NULL DEFAULT ""');
+				queries.push('ALTER TABLE note_tags ADD COLUMN encryption_cipher_text TEXT NOT NULL DEFAULT ""');
+				queries.push('ALTER TABLE resources ADD COLUMN encryption_cipher_text TEXT NOT NULL DEFAULT ""');
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });
