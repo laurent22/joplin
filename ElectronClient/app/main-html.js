@@ -10,15 +10,18 @@ const { BaseItem } = require('lib/models/base-item.js');
 const { Note } = require('lib/models/note.js');
 const { Tag } = require('lib/models/tag.js');
 const { NoteTag } = require('lib/models/note-tag.js');
+const MasterKey = require('lib/models/MasterKey');
 const { Setting } = require('lib/models/setting.js');
 const { Logger } = require('lib/logger.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { shimInit } = require('lib/shim-init-node.js');
+const EncryptionService = require('lib/services/EncryptionService');
 const { bridge } = require('electron').remote.require('./bridge');
 
 const fsDriver = new FsDriverNode();
 Logger.fsDriver_ = fsDriver;
 Resource.fsDriver_ = fsDriver;
+EncryptionService.fsDriver_ = fsDriver;
 
 // That's not good, but it's to avoid circular dependency issues
 // in the BaseItem class.
@@ -27,6 +30,7 @@ BaseItem.loadClass('Folder', Folder);
 BaseItem.loadClass('Resource', Resource);
 BaseItem.loadClass('Tag', Tag);
 BaseItem.loadClass('NoteTag', NoteTag);
+BaseItem.loadClass('MasterKey', MasterKey);
 
 Setting.setConstant('appId', 'net.cozic.joplin-desktop');
 Setting.setConstant('appType', 'desktop');
