@@ -570,13 +570,11 @@ describe('Synchronizer', function() {
 		done();
 	});
 
-	it('should not consider it is a conflict if neither the title nor body of the note have changed', async (done) => {
-		// That was previously a common conflict:
-		// - Client 1 mark todo as "done", and sync
-		// - Client 2 doesn't sync, mark todo as "done" todo. Then sync.
-		// In theory it is a conflict because the todo_completed dates are different
-		// but in practice it doesn't matter, we can just take the date when the
-		// todo was marked as "done" the first time.
+	async function ignorableConflictTest(withEncryption) {
+		if (withEncryption) {
+			Setting.setValue('encryption.enabled', true);
+			await loadEncryptionMasterKey();
+		}
 
 		let folder1 = await Folder.save({ title: "folder1" });
 		let note1 = await Note.save({ title: "un", is_todo: 1, parent_id: folder1.id });
@@ -599,13 +597,36 @@ describe('Synchronizer', function() {
 		note2conf = await Note.load(note1.id);
 		await synchronizer().start();
 
-		let conflictedNotes = await Note.conflictedNotes();
-		expect(conflictedNotes.length).toBe(0);
+		if (!withEncryption) {
+			// That was previously a common conflict:
+			// - Client 1 mark todo as "done", and sync
+			// - Client 2 doesn't sync, mark todo as "done" todo. Then sync.
+			// In theory it is a conflict because the todo_completed dates are different
+			// but in practice it doesn't matter, we can just take the date when the
+			// todo was marked as "done" the first time.
 
-		let notes = await Note.all();
-		expect(notes.length).toBe(1);
-		expect(notes[0].id).toBe(note1.id);
-		expect(notes[0].todo_completed).toBe(note2.todo_completed);
+			let conflictedNotes = await Note.conflictedNotes();
+			expect(conflictedNotes.length).toBe(0);
+
+			let notes = await Note.all();
+			expect(notes.length).toBe(1);
+			expect(notes[0].id).toBe(note1.id);
+			expect(notes[0].todo_completed).toBe(note2.todo_completed);		
+		} else {
+			// If the notes are encrypted however it's not possible to do this kind of
+			// smart conflict resolving since we don't know the content, so in that
+			// case it's handled as a regular conflict.
+
+			let conflictedNotes = await Note.conflictedNotes();
+			expect(conflictedNotes.length).toBe(1);
+
+			let notes = await Note.all();
+			expect(notes.length).toBe(2);
+		}
+	}
+
+	it('should not consider it is a conflict if neither the title nor body of the note have changed', async (done) => {
+		await ignorableConflictTest(false);
 
 		done();
 	});
@@ -699,6 +720,12 @@ describe('Synchronizer', function() {
 		expect(folder1_2.updated_time).toBe(folder1.updated_time);
 		expect(!folder1_2.encryption_cipher_text).toBe(true);
 
+		done();
+	});
+
+	it('should always handle conflict if local or remote are encrypted', async (done) => {
+		await ignorableConflictTest(true);
+		
 		done();
 	});
 

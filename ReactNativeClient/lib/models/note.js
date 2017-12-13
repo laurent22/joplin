@@ -438,6 +438,10 @@ class Note extends BaseItem {
 		// That shouldn't happen so throw an exception
 		if (localNote.id !== remoteNote.id) throw new Error('Cannot handle conflict for two different notes');
 
+		// For encrypted notes the conflict must always be handled
+		if (localNote.encryption_cipher_text || remoteNote.encryption_cipher_text) return true;
+
+		// Otherwise only handle the conflict if there's a different on the title or body
 		if (localNote.title !== remoteNote.title) return true;
 		if (localNote.body !== remoteNote.body) return true;
 
