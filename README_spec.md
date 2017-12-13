@@ -7,7 +7,7 @@ Encrypted data is encoded to ASCII because encryption/decryption functions in Re
 ### Header
 
 Name               |  Size
----------------------------------------------
+-------------------|-------------------------
 Version number     |  2 chars (Hexa string)
 Encryption method  |  2 chars (Hexa string)
 Master key ID      |  32 chars (Hexa string)
@@ -19,7 +19,7 @@ See lib/services/EncryptionService.js for the list of available encryption metho
 The data is encoded in one or more chuncks for performance reasons. That way it is possible to take a block of data from one file and encrypt it to another block in another file. Encrypting/decrypting the whole file in one go would not work (on mobile especially).
 
 Name    |  Size
--------------------------------------
+--------|----------------------------
 Length  |  6 chars (Hexa string)
 Data    |  ("Length" bytes) (ASCII)
 
