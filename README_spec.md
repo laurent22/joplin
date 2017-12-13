@@ -27,7 +27,7 @@ Data    |  ("Length" bytes) (ASCII)
 
 The master keys are used to encrypt and decrypt data. They can be generated from the Encryption Service, and are saved to the database. They are themselves encrypted via a user password.
 
-These encrypted master keys are transmitted with the sync data so that they can be available to each clients. Each client will need to supply the user password to decrypt each keys.
+These encrypted master keys are transmitted with the sync data so that they can be available to each client. Each client will need to supply the user password to decrypt each key.
 
 The application supports multiple master keys in order to handle cases where one offline client starts encrypting notes, then another offline client starts encrypting notes too, and later both sync. Both master keys will have to be decrypted separately with the user password.
 
