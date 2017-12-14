@@ -1,6 +1,6 @@
 const { _ } = require('lib/locale.js');
 const { Logger } = require('lib/logger.js');
-const { Resource } = require('lib/models/resource.js');
+const Resource = require('lib/models/Resource.js');
 const { netUtils } = require('lib/net-utils.js');
 
 const http = require("http");

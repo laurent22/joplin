@@ -1,5 +1,5 @@
-const { BaseModel } = require('lib/base-model.js');
-const { BaseItem } = require('lib/models/base-item.js');
+const BaseModel = require('lib/BaseModel.js');
+const BaseItem = require('lib/models/BaseItem.js');
 
 class MasterKey extends BaseItem {
 

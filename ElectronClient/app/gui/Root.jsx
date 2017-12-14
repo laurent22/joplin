@@ -4,7 +4,7 @@ const { createStore } = require('redux');
 const { connect, Provider } = require('react-redux');
 
 const { _ } = require('lib/locale.js');
-const { Setting } = require('lib/models/setting.js');
+const Setting = require('lib/models/Setting.js');
 
 const { MainScreen } = require('./MainScreen.min.js');
 const { OneDriveLoginScreen } = require('./OneDriveLoginScreen.min.js');

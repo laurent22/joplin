@@ -1,5 +1,5 @@
 const { Logger } = require('lib/logger.js');
-const { Setting } = require('lib/models/setting.js');
+const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const { _ } = require('lib/locale.js');

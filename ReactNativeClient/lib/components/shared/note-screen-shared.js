@@ -1,7 +1,7 @@
 const { reg } = require('lib/registry.js');
-const { Folder } = require('lib/models/folder.js');
-const { BaseModel } = require('lib/base-model.js');
-const { Note } = require('lib/models/note.js');
+const Folder = require('lib/models/Folder.js');
+const BaseModel = require('lib/BaseModel.js');
+const Note = require('lib/models/Note.js');
 
 const shared = {};
 

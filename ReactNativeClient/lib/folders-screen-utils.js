@@ -1,4 +1,4 @@
-const { Folder } = require('lib/models/folder.js');
+const Folder = require('lib/models/Folder.js');
 
 class FoldersScreenUtils {
 

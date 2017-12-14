@@ -1,7 +1,7 @@
 const React = require('react');
-const { Note } = require('lib/models/note.js');
+const Note = require('lib/models/Note.js');
 const { time } = require('lib/time-utils.js');
-const { Setting } = require('lib/models/setting.js');
+const Setting = require('lib/models/Setting.js');
 const { IconButton } = require('./IconButton.min.js');
 const Toolbar = require('./Toolbar.min.js');
 const { connect } = require('react-redux');

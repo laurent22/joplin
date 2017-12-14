@@ -1,6 +1,6 @@
-const { BaseModel } = require('lib/base-model.js');
+const BaseModel = require('lib/BaseModel.js');
 const { Database } = require('lib/database.js');
-const { Setting } = require('lib/models/setting.js');
+const Setting = require('lib/models/Setting.js');
 const { time } = require('lib/time-utils.js');
 const { sprintf } = require('sprintf-js');
 const moment = require('moment');
@@ -511,4 +511,4 @@ BaseItem.syncItemDefinitions_ = [
 	{ type: BaseModel.TYPE_MASTER_KEY, className: 'MasterKey' },
 ];
 
-module.exports = { BaseItem };
+module.exports = BaseItem;

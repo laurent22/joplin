@@ -30,7 +30,7 @@ function shimInit() {
 
 	const resizeImage_ = async function(filePath, targetPath) {
 		const sharp = require('sharp');
-		const { Resource } = require('lib/models/resource.js');
+		const Resource = require('lib/models/Resource.js');
 
 		return new Promise((resolve, reject) => {
 			sharp(filePath)
@@ -48,11 +48,11 @@ function shimInit() {
 	}
 
 	shim.attachFileToNote = async function(note, filePath) {
-		const { Resource } = require('lib/models/resource.js');
+		const Resource = require('lib/models/Resource.js');
 		const { uuid } = require('lib/uuid.js');
 		const { basename, fileExtension, safeFileExtension } = require('lib/path-utils.js');
 		const mime = require('mime/lite');
-		const { Note } = require('lib/models/note.js');
+		const Note = require('lib/models/Note.js');
 
 		if (!(await fs.pathExists(filePath))) throw new Error(_('Cannot access %s', filePath));
 

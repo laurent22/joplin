@@ -1,7 +1,7 @@
 const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
 const { _ } = require('lib/locale.js');
-const { BaseModel } = require('lib/base-model.js');
+const BaseModel = require('lib/BaseModel.js');
 const { shim } = require('lib/shim.js');
 const fs = require('fs-extra');
 

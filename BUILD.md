@@ -21,7 +21,7 @@ If you get a node-gyp related error you might need to manually install it: `npm 
 
 ```
 cd ElectronClient/app
-rsync -a ../../ReactNativeClient/lib/ lib/
+rsync --delete -a ../../ReactNativeClient/lib/ lib/
 npm install
 yarn dist
 ```
@@ -41,5 +41,5 @@ From `/ReactNativeClient`, run `npm install`, then `react-native run-ios` or `re
 From `/CliClient`:
 - Run `npm install`
 - Then `build.sh`
-- Copy the translations to the build directory: `rsync -aP ../ReactNativeClient/locales/ build/locales/`
+- Copy the translations to the build directory: `rsync --delete -aP ../ReactNativeClient/locales/ build/locales/`
 - Run `run.sh` to start the application for testing.

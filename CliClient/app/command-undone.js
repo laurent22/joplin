@@ -1,9 +1,9 @@
 const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
 const { _ } = require('lib/locale.js');
-const { BaseModel } = require('lib/base-model.js');
-const { Folder } = require('lib/models/folder.js');
-const { Note } = require('lib/models/note.js');
+const BaseModel = require('lib/BaseModel.js');
+const Folder = require('lib/models/Folder.js');
+const Note = require('lib/models/Note.js');
 const { time } = require('lib/time-utils.js');
 
 const CommandDone = require('./command-done.js');

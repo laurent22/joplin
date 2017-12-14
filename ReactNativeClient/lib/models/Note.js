@@ -1,8 +1,8 @@
-const { BaseModel } = require('lib/base-model.js');
+const BaseModel = require('lib/BaseModel.js');
 const { Log } = require('lib/log.js');
 const { sprintf } = require('sprintf-js');
-const { BaseItem } = require('lib/models/base-item.js');
-const { Setting } = require('lib/models/setting.js');
+const BaseItem = require('lib/models/BaseItem.js');
+const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim.js');
 const { time } = require('lib/time-utils.js');
 const { _ } = require('lib/locale.js');
@@ -453,4 +453,4 @@ class Note extends BaseItem {
 Note.updateGeolocationEnabled_ = true;
 Note.geolocationUpdating_ = false;
 
-module.exports = { Note };
+module.exports = Note;

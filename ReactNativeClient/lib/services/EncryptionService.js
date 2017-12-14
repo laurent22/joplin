@@ -1,6 +1,6 @@
 const { padLeft } = require('lib/string-utils.js');
 const { shim } = require('lib/shim.js');
-const { Setting } = require('lib/models/setting.js');
+const Setting = require('lib/models/Setting.js');
 const MasterKey = require('lib/models/MasterKey');
 
 function hexPad(s, length) {

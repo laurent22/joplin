@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 const { promiseChain } = require('lib/promise-utils.js');
 const moment = require('moment');
-const { BaseItem } = require('lib/models/base-item.js');
+const BaseItem = require('lib/models/BaseItem.js');
 const { time } = require('lib/time-utils.js');
 
 // NOTE: when synchronising with the file system the time resolution is the second (unlike milliseconds for OneDrive for instance).

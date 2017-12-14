@@ -1,4 +1,4 @@
-const { Note } = require('lib/models/note.js');
+const Note = require('lib/models/Note.js');
 const Alarm = require('lib/models/Alarm.js');
 
 class AlarmService {

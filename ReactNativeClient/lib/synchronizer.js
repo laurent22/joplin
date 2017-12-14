@@ -1,8 +1,8 @@
-const { BaseItem } = require('lib/models/base-item.js');
-const { Folder } = require('lib/models/folder.js');
-const { Note } = require('lib/models/note.js');
-const { Resource } = require('lib/models/resource.js');
-const { BaseModel } = require('lib/base-model.js');
+const BaseItem = require('lib/models/BaseItem.js');
+const Folder = require('lib/models/Folder.js');
+const Note = require('lib/models/Note.js');
+const Resource = require('lib/models/Resource.js');
+const BaseModel = require('lib/BaseModel.js');
 const { sprintf } = require('sprintf-js');
 const { time } = require('lib/time-utils.js');
 const { Logger } = require('lib/logger.js');

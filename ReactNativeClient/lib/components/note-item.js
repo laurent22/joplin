@@ -5,7 +5,7 @@ const { Log } = require('lib/log.js');
 const { _ } = require('lib/locale.js');
 const { Checkbox } = require('lib/components/checkbox.js');
 const { reg } = require('lib/registry.js');
-const { Note } = require('lib/models/note.js');
+const Note = require('lib/models/Note.js');
 const { time } = require('lib/time-utils.js');
 const { globalStyle, themeStyle } = require('lib/components/global-style.js');
 

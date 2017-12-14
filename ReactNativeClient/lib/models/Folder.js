@@ -1,13 +1,13 @@
-const { BaseModel } = require('lib/base-model.js');
+const BaseModel = require('lib/BaseModel.js');
 const { Log } = require('lib/log.js');
 const { promiseChain } = require('lib/promise-utils.js');
 const { time } = require('lib/time-utils.js');
-const { Note } = require('lib/models/note.js');
-const { Setting } = require('lib/models/setting.js');
+const Note = require('lib/models/Note.js');
+const Setting = require('lib/models/Setting.js');
 const { Database } = require('lib/database.js');
 const { _ } = require('lib/locale.js');
 const moment = require('moment');
-const { BaseItem } = require('lib/models/base-item.js');
+const BaseItem = require('lib/models/BaseItem.js');
 const lodash = require('lodash');
 
 class Folder extends BaseItem {
@@ -165,4 +165,4 @@ class Folder extends BaseItem {
 
 }
 
-module.exports = { Folder };
+module.exports = Folder;

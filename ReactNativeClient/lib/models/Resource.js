@@ -1,6 +1,6 @@
-const { BaseModel } = require('lib/base-model.js');
-const { BaseItem } = require('lib/models/base-item.js');
-const { Setting } = require('lib/models/setting.js');
+const BaseModel = require('lib/BaseModel.js');
+const BaseItem = require('lib/models/BaseItem.js');
+const Setting = require('lib/models/Setting.js');
 const { mime } = require('lib/mime-utils.js');
 const { filename } = require('lib/path-utils.js');
 const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
@@ -84,4 +84,4 @@ class Resource extends BaseItem {
 
 Resource.IMAGE_MAX_DIMENSION = 1920;
 
-module.exports = { Resource };
+module.exports = Resource;

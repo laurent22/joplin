@@ -1,10 +1,10 @@
-const { BaseItem } = require('lib/models/base-item.js');
-const { BaseModel } = require('lib/base-model.js');
-const { Resource } = require('lib/models/resource.js');
-const { Folder } = require('lib/models/folder.js');
-const { NoteTag } = require('lib/models/note-tag.js');
-const { Note } = require('lib/models/note.js');
-const { Tag } = require('lib/models/tag.js');
+const BaseItem = require('lib/models/BaseItem.js');
+const BaseModel = require('lib/BaseModel.js');
+const Resource = require('lib/models/Resource.js');
+const Folder = require('lib/models/Folder.js');
+const NoteTag = require('lib/models/NoteTag.js');
+const Note = require('lib/models/Note.js');
+const Tag = require('lib/models/Tag.js');
 const { basename } = require('lib/path-utils.js');
 const fs = require('fs-extra');
 

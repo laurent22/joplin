@@ -406,4 +406,4 @@ BaseModel.TYPE_MASTER_KEY = 9;
 BaseModel.db_ = null;
 BaseModel.dispatch = function(o) {};
 
-module.exports = { BaseModel };
+module.exports = BaseModel;

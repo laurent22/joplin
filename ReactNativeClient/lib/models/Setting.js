@@ -1,4 +1,4 @@
-const { BaseModel } = require('lib/base-model.js');
+const BaseModel = require('lib/BaseModel.js');
 const { Database } = require('lib/database.js');
 const { Logger } = require('lib/logger.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
@@ -442,4 +442,4 @@ Setting.constants_ = {
 	openDevTools: false,
 }
 
-module.exports = { Setting };
+module.exports = Setting;

@@ -1,4 +1,4 @@
-const { Setting } = require('lib/models/setting.js');
+const Setting = require('lib/models/Setting.js');
 
 const globalStyle = {
 	fontSize: 16,

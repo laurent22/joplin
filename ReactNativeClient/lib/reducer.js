@@ -1,5 +1,5 @@
-const { Note } = require('lib/models/note.js');
-const { Folder } = require('lib/models/folder.js');
+const Note = require('lib/models/Note.js');
+const Folder = require('lib/models/Folder.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 
 const defaultState = {

@@ -4,14 +4,14 @@
 require('app-module-path').addPath(__dirname);
 
 const { app } = require('./app.js');
-const { Folder } = require('lib/models/folder.js');
-const { Resource } = require('lib/models/resource.js');
-const { BaseItem } = require('lib/models/base-item.js');
-const { Note } = require('lib/models/note.js');
-const { Tag } = require('lib/models/tag.js');
-const { NoteTag } = require('lib/models/note-tag.js');
+const Folder = require('lib/models/Folder.js');
+const Resource = require('lib/models/Resource.js');
+const BaseItem = require('lib/models/BaseItem.js');
+const Note = require('lib/models/Note.js');
+const Tag = require('lib/models/Tag.js');
+const NoteTag = require('lib/models/NoteTag.js');
 const MasterKey = require('lib/models/MasterKey');
-const { Setting } = require('lib/models/setting.js');
+const Setting = require('lib/models/Setting.js');
 const { Logger } = require('lib/logger.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { shimInit } = require('lib/shim-init-node.js');

@@ -2,14 +2,14 @@ require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
 const { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey } = require('test-utils.js');
-const { Folder } = require('lib/models/folder.js');
-const { Note } = require('lib/models/note.js');
-const { Tag } = require('lib/models/tag.js');
+const Folder = require('lib/models/Folder.js');
+const Note = require('lib/models/Note.js');
+const Tag = require('lib/models/Tag.js');
 const { Database } = require('lib/database.js');
-const { Setting } = require('lib/models/setting.js');
+const Setting = require('lib/models/Setting.js');
 const MasterKey = require('lib/models/MasterKey');
-const { BaseItem } = require('lib/models/base-item.js');
-const { BaseModel } = require('lib/base-model.js');
+const BaseItem = require('lib/models/BaseItem.js');
+const BaseModel = require('lib/BaseModel.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 
 process.on('unhandledRejection', (reason, p) => {

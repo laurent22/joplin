@@ -3,7 +3,7 @@ const { _ } = require('lib/locale.js');
 const { cliUtils } = require('./cli-utils.js');
 const EncryptionService = require('lib/services/EncryptionService');
 const MasterKey = require('lib/models/MasterKey');
-const { Setting } = require('lib/models/setting.js');
+const Setting = require('lib/models/Setting.js');
 
 class Command extends BaseCommand {
 

@@ -1,8 +1,8 @@
 const { time } = require('lib/time-utils');
-const { BaseItem } = require('lib/models/base-item.js');
+const BaseItem = require('lib/models/BaseItem.js');
 const Alarm = require('lib/models/Alarm');
-const { Folder } = require('lib/models/folder.js');
-const { Note } = require('lib/models/note.js');
+const Folder = require('lib/models/Folder.js');
+const Note = require('lib/models/Note.js');
 const { _ } = require('lib/locale.js');
 
 class ReportService {
