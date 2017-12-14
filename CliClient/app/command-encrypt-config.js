@@ -27,11 +27,16 @@ class Command extends BaseCommand {
 			}
 
 			const service = new EncryptionService();
-			const masterKey = await service.generateMasterKey(password);
-
-			await MasterKey.save(masterKey);
+			
+			let masterKey = await service.generateMasterKey(password);
+			masterKey = await MasterKey.save(masterKey);
 
 			Setting.setValue('encryption.enabled', true);
+			Setting.setValue('encryption.activeMasterKeyId', masterKey.id);
+
+			let passwordCache = Setting.value('encryption.passwordCache');
+			passwordCache[masterKey.id] = password;
+			Setting.setValue('encryption.passwordCache', passwordCache);
 		}
 	}
 

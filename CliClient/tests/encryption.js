@@ -127,7 +127,7 @@ describe('Encryption', function() {
 		done();
 	});
 
-	it('should encrypt and decrypt serialised data', async (done) => {
+	it('should encrypt and decrypt notes and folders', async (done) => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 		await service.loadMasterKey(masterKey, '123456', true);

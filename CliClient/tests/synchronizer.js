@@ -498,7 +498,13 @@ describe('Synchronizer', function() {
 		done();
 	});
 
-	it('should sync tags', async (done) => {
+	async function shoudSyncTagTest(withEncryption) {
+		let masterKey = null;
+		if (withEncryption) {
+			Setting.setValue('encryption.enabled', true);
+			masterKey = await loadEncryptionMasterKey();
+		}
+
 		let f1 = await Folder.save({ title: "folder" });
 		let n1 = await Note.save({ title: "mynote" });
 		let n2 = await Note.save({ title: "mynote2" });
@@ -508,6 +514,12 @@ describe('Synchronizer', function() {
 		await switchClient(2);
 
 		await synchronizer().start();
+		if (withEncryption) {
+			const masterKey_2 = await MasterKey.load(masterKey.id);
+			await encryptionService().loadMasterKey(masterKey_2, '123456', true);
+			let t = await Tag.load(tag.id);
+			await Tag.decrypt(t);
+		}
 		let remoteTag = await Tag.loadByTitle(tag.title);
 		expect(!!remoteTag).toBe(true);
 		expect(remoteTag.id).toBe(tag.id);
@@ -533,7 +545,15 @@ describe('Synchronizer', function() {
 		noteIds = await Tag.noteIds(tag.id);
 		expect(noteIds.length).toBe(1);
 		expect(remoteNoteIds[0]).toBe(noteIds[0]);
+	}
 
+	it('should sync tags', async (done) => {
+		await shoudSyncTagTest(false);
+		done();
+	});
+
+	it('should sync encrypted tags', async (done) => {
+		await shoudSyncTagTest(true);
 		done();
 	});
 
@@ -570,7 +590,7 @@ describe('Synchronizer', function() {
 		done();
 	});
 
-	async function ignorableConflictTest(withEncryption) {
+	async function ignorableNoteConflictTest(withEncryption) {
 		if (withEncryption) {
 			Setting.setValue('encryption.enabled', true);
 			await loadEncryptionMasterKey();
@@ -626,7 +646,7 @@ describe('Synchronizer', function() {
 	}
 
 	it('should not consider it is a conflict if neither the title nor body of the note have changed', async (done) => {
-		await ignorableConflictTest(false);
+		await ignorableNoteConflictTest(false);
 
 		done();
 	});
@@ -724,12 +744,9 @@ describe('Synchronizer', function() {
 	});
 
 	it('should always handle conflict if local or remote are encrypted', async (done) => {
-		await ignorableConflictTest(true);
-		
+		await ignorableNoteConflictTest(true);
+
 		done();
 	});
-
-	// TODO: test tags
-	// TODO: test resources
 
 });

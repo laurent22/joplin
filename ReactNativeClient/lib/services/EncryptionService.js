@@ -1,5 +1,7 @@
 const { padLeft } = require('lib/string-utils.js');
 const { shim } = require('lib/shim.js');
+const { Setting } = require('lib/models/setting.js');
+const MasterKey = require('lib/models/MasterKey');
 
 function hexPad(s, length) {
 	return padLeft(s, length, '0');
@@ -14,6 +16,27 @@ class EncryptionService {
 		this.loadedMasterKeys_ = {};
 		this.activeMasterKeyId_ = null;
 		this.defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL;
+	}
+
+	static instance() {
+		if (this.instance_) return this.instance_;
+		this.instance_ = new EncryptionService();
+		return this.instance_;
+	}
+
+	async loadMasterKeysFromSettings() {
+		if (!Setting.value('encryption.enabled')) return;
+		const masterKeys = await MasterKey.all();
+		const passwords = Setting.value('encryption.passwordCache');
+		const activeMasterKeyId = Setting.value('encryption.activeMasterKeyId');
+
+		for (let i = 0; i < masterKeys.length; i++) {
+			const mk = masterKeys[i];
+			const password = passwords[mk.id];
+			if (!password) continue;
+
+			await this.loadMasterKey(mk, password, activeMasterKeyId === mk.id);
+		}
 	}
 
 	chunkSize() {
@@ -76,7 +99,7 @@ class EncryptionService {
 		const hexaBytes = bytes.map((a) => { return hexPad(a.toString(16), 2); }).join('');
 		const checksum = this.sha256(hexaBytes);
 		const encryptionMethod = EncryptionService.METHOD_SJCL_2;
-		const cipherText = await this.encrypt_(encryptionMethod, password, hexaBytes);
+		const cipherText = await this.encrypt(encryptionMethod, password, hexaBytes);
 		const now = Date.now();
 
 		return {
@@ -89,13 +112,13 @@ class EncryptionService {
 	}
 
 	async decryptMasterKey(model, password) {
-		const plainText = await this.decrypt_(model.encryption_method, password, model.content);
+		const plainText = await this.decrypt(model.encryption_method, password, model.content);
 		const checksum = this.sha256(plainText);
 		if (checksum !== model.checksum) throw new Error('Could not decrypt master key (checksum failed)');
 		return plainText;
 	}
 
-	async encrypt_(method, key, plainText) {
+	async encrypt(method, key, plainText) {
 		const sjcl = shim.sjclModule;
 
 		if (method === EncryptionService.METHOD_SJCL) {
@@ -126,7 +149,7 @@ class EncryptionService {
 		throw new Error('Unknown encryption method: ' + method);
 	}
 
-	async decrypt_(method, key, cipherText) {
+	async decrypt(method, key, cipherText) {
 		const sjcl = shim.sjclModule;
 		
 		if (method === EncryptionService.METHOD_SJCL || method === EncryptionService.METHOD_SJCL_2) {
@@ -159,7 +182,7 @@ class EncryptionService {
 
 			fromIndex += block.length;
 
-			const encrypted = await this.encrypt_(method, masterKeyPlainText, block);
+			const encrypted = await this.encrypt(method, masterKeyPlainText, block);
 
 			cipherText.push(padLeft(encrypted.length.toString(16), 6, '0'));
 			cipherText.push(encrypted);
@@ -184,7 +207,7 @@ class EncryptionService {
 			const block = cipherText.substr(index, length);
 			index += length;
 
-			const plainText = await this.decrypt_(header.encryptionMethod, masterKeyPlainText, block);
+			const plainText = await this.decrypt(header.encryptionMethod, masterKeyPlainText, block);
 			output.push(plainText);
 		}
 
@@ -212,7 +235,7 @@ class EncryptionService {
 				const plainText = await fsDriver.readFileChunk(handle, this.chunkSize_, 'base64');
 				if (!plainText) break;
 
-				const cipherText = await this.encrypt_(method, key, plainText);
+				const cipherText = await this.encrypt(method, key, plainText);
 
 				await fsDriver.appendFile(destPath, padLeft(cipherText.length.toString(16), 6, '0'), 'ascii'); // Data - Length
 				await fsDriver.appendFile(destPath, cipherText, 'ascii'); // Data - Data
@@ -251,7 +274,7 @@ class EncryptionService {
 				const cipherText = await fsDriver.readFileChunk(handle, length, 'ascii');
 				if (!cipherText) break;
 
-				const plainText = await this.decrypt_(header.encryptionMethod, key, cipherText);
+				const plainText = await this.decrypt(header.encryptionMethod, key, cipherText);
 
 				await fsDriver.appendFile(destPath, plainText, 'base64');
 			}

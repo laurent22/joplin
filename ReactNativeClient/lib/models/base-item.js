@@ -259,9 +259,14 @@ class BaseItem extends BaseModel {
 		const cipherText = await BaseItem.encryptionService_.encryptString(serialized);
 
 		const reducedItem = Object.assign({}, item);
-		const keepKeys = ['id', 'title', 'parent_id', 'body', 'updated_time', 'type_'];
-		if ('title' in reducedItem) reducedItem.title = '';
-		if ('body' in reducedItem) reducedItem.body = '';
+
+		// List of keys that won't be encrypted - mostly foreign keys required to link items
+		// with each others and timestamp required for synchronisation.
+		const keepKeys = ['id', 'note_id', 'tag_id', 'parent_id', 'updated_time', 'type_'];
+		
+		// const keepKeys = ['id', 'title', 'note_id', 'tag_id', 'parent_id', 'body', 'updated_time', 'type_'];
+		// if ('title' in reducedItem) reducedItem.title = '';
+		// if ('body' in reducedItem) reducedItem.body = '';
 
 		for (let n in reducedItem) {
 			if (!reducedItem.hasOwnProperty(n)) continue;

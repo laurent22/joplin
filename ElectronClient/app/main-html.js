@@ -35,6 +35,8 @@ BaseItem.loadClass('MasterKey', MasterKey);
 Setting.setConstant('appId', 'net.cozic.joplin-desktop');
 Setting.setConstant('appType', 'desktop');
 
+shimInit();
+
 // Disable drag and drop of links inside application (which would
 // open it as if the whole app was a browser)
 document.addEventListener('dragover', event => event.preventDefault());
@@ -47,8 +49,6 @@ document.addEventListener('auxclick', event => event.preventDefault());
 // so disable the default. In particular this will disable Ctrl+Clicking a link
 // which would open a new browser window.
 document.addEventListener('click', (event) => event.preventDefault());
-
-shimInit();
 
 app().start(bridge().processArgv()).then(() => {
 	require('./gui/Root.min.js');
