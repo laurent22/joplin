@@ -111,7 +111,6 @@ class StatusBarWidget extends BaseWidget {
 				history: this.history,
 				default: this.promptState_.initialText,
 				autoComplete: handleAutocompletion,
-				autoCompleteMenu: true,
 				autoCompleteHint : true,
 			};
 
