@@ -374,7 +374,24 @@ const reducer = (state = defaultState, action) => {
 
 				if (state.missingMasterKeys.indexOf(action.id) < 0) {
 					newState = Object.assign({}, state);
-					newState.missingMasterKeys.push(action.id);
+					const keys = newState.missingMasterKeys.slice();
+					keys.push(action.id);
+					newState.missingMasterKeys = keys;
+				}
+				break;
+
+			case 'MASTERKEY_REMOVE_MISSING':
+
+				const ids = action.id ? [action.id] : action.ids;
+				for (let i = 0; i < ids.length; i++) {
+					const id = ids[i];
+					const index = state.missingMasterKeys.indexOf(id);
+					if (index >= 0) {
+						newState = Object.assign({}, state);
+						const keys = newState.missingMasterKeys.slice();
+						keys.splice(index, 1);
+						newState.missingMasterKeys = keys;
+					}
 				}
 				break;
 

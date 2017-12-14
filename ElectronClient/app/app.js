@@ -256,7 +256,7 @@ class Application extends BaseApplication {
 							name: 'search',
 						});
 					},
-				}]
+				}],
 			}, {
 				label: _('Tools'),
 				submenu: [{
@@ -275,7 +275,26 @@ class Application extends BaseApplication {
 							routeName: 'Config',
 						});
 					}
-				}]
+				}],
+			}, {
+				label: _('Encryption'),
+				submenu: [{
+					label: _('Enable'),
+					click: () => {
+						// this.dispatch({
+						// 	type: 'NAV_GO',
+						// 	routeName: 'MasterKeys',
+						// });
+					}
+				},{
+					label: _('Master Keys'),
+					click: () => {
+						this.dispatch({
+							type: 'NAV_GO',
+							routeName: 'MasterKeys',
+						});
+					}
+				}],
 			}, {
 				label: _('Help'),
 				submenu: [{

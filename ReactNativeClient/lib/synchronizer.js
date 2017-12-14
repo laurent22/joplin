@@ -2,7 +2,9 @@ const BaseItem = require('lib/models/BaseItem.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
+const MasterKey = require('lib/models/MasterKey.js');
 const BaseModel = require('lib/BaseModel.js');
+const DecryptionWorker = require('lib/services/DecryptionWorker');
 const { sprintf } = require('sprintf-js');
 const { time } = require('lib/time-utils.js');
 const { Logger } = require('lib/logger.js');
@@ -50,6 +52,14 @@ class Synchronizer {
 
 	logger() {
 		return this.logger_;
+	}
+
+	setEncryptionService(v) {
+		this.encryptionService_ = v;
+	}
+
+	encryptionService(v) {
+		return this.encryptionService_;
 	}
 
 	static reportToLines(report) {
@@ -168,6 +178,8 @@ class Synchronizer {
 		const syncTargetId = this.api().syncTargetId();
 
 		this.cancelling_ = false;
+
+		const masterKeysBefore = await MasterKey.count();
 
 		// ------------------------------------------------------------------------
 		// First, find all the items that have been changed since the
@@ -565,6 +577,22 @@ class Synchronizer {
 		if (this.cancelling()) {
 			this.logger().info('Synchronisation was cancelled.');
 			this.cancelling_ = false;
+		}
+
+		const masterKeysAfter = await MasterKey.count();
+
+		if (!masterKeysBefore && masterKeysAfter) {
+			this.logger().info('One master key was downloaded and none was previously available: automatically enabling encryption');
+			const mk = await MasterKey.latest();
+			if (mk) {
+				this.logger().info('Using master key: ', mk);
+				await this.encryptionService().initializeEncryption(mk);
+				await this.encryptionService().loadMasterKeysFromSettings();
+			}
+		}
+
+		if (masterKeysAfter) {
+			DecryptionWorker.instance().scheduleStart();
 		}
 
 		this.progressReport_.completedTime = time.unixMs();

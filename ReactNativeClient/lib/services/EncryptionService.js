@@ -24,19 +24,45 @@ class EncryptionService {
 		return this.instance_;
 	}
 
+	setLogger(l) {
+		this.logger_ = l;
+	}
+
+	logger() {
+		return this.logger_;
+	}
+
+	async initializeEncryption(masterKey, password = null) {
+		Setting.setValue('encryption.enabled', true);
+		Setting.setValue('encryption.activeMasterKeyId', masterKey.id);
+
+		if (password) {
+			let passwordCache = Setting.value('encryption.passwordCache');
+			passwordCache[masterKey.id] = password;	
+			Setting.setValue('encryption.passwordCache', passwordCache);		
+		}
+	}
+
 	async loadMasterKeysFromSettings() {
-		if (!Setting.value('encryption.enabled')) return;
-		const masterKeys = await MasterKey.all();
-		const passwords = Setting.value('encryption.passwordCache');
-		const activeMasterKeyId = Setting.value('encryption.activeMasterKeyId');
+		if (!Setting.value('encryption.enabled')) {
+			this.unloadAllMasterKeys();
+		} else {
+			const masterKeys = await MasterKey.all();
+			const passwords = Setting.value('encryption.passwordCache');
+			const activeMasterKeyId = Setting.value('encryption.activeMasterKeyId');
 
-		for (let i = 0; i < masterKeys.length; i++) {
-			const mk = masterKeys[i];
-			const password = passwords[mk.id];
-			if (this.isMasterKeyLoaded(mk.id)) continue;
-			if (!password) continue;
+			for (let i = 0; i < masterKeys.length; i++) {
+				const mk = masterKeys[i];
+				const password = passwords[mk.id];
+				if (this.isMasterKeyLoaded(mk.id)) continue;
+				if (!password) continue;
 
-			await this.loadMasterKey(mk, password, activeMasterKeyId === mk.id);
+				try {
+					await this.loadMasterKey(mk, password, activeMasterKeyId === mk.id);
+				} catch (error) {
+					this.logger().warn('Cannot load master key ' + mk.id + '. Invalid password?', error);
+				}
+			}
 		}
 	}
 
@@ -71,6 +97,13 @@ class EncryptionService {
 		delete this.loadedMasterKeys_[model.id];
 	}
 
+	unloadAllMasterKeys() {
+		for (let id in this.loadedMasterKeys_) {
+			if (!this.loadedMasterKeys_.hasOwnProperty(id)) continue;
+			this.unloadMasterKey(this.loadedMasterKeys_[id]);
+		}
+	}
+
 	loadedMasterKey(id) {
 		if (!this.loadedMasterKeys_[id]) {
 			const error = new Error('Master key is not loaded: ' + id);
@@ -79,6 +112,15 @@ class EncryptionService {
 			throw error;
 		}
 		return this.loadedMasterKeys_[id];
+	}
+
+	loadedMasterKeyIds() {
+		let output = [];
+		for (let id in this.loadedMasterKeys_) {
+			if (!this.loadedMasterKeys_.hasOwnProperty(id)) continue;
+			output.push(id);
+		}
+		return output;
 	}
 
 	fsDriver() {
@@ -129,32 +171,52 @@ class EncryptionService {
 		return plainText;
 	}
 
+	async checkMasterKeyPassword(model, password) {
+		try {
+			await this.decryptMasterKey(model, password);
+		} catch (error) {
+			return false;
+		}
+
+		return true;
+	}
+
 	async encrypt(method, key, plainText) {
 		const sjcl = shim.sjclModule;
 
 		if (method === EncryptionService.METHOD_SJCL) {
-			// Good demo to understand each parameter: https://bitwiseshiftleft.github.io/sjcl/demo/
-			return sjcl.json.encrypt(key, plainText, {
-				v: 1, // version
-				iter: 1000, // Defaults to 10000 in sjcl but since we're running this on mobile devices, use a lower value. Maybe review this after some time. https://security.stackexchange.com/questions/3959/recommended-of-iterations-when-using-pkbdf2-sha256
-				ks: 128, // Key size - "128 bits should be secure enough"
-				ts: 64, // ???
-				mode: "ocb2", //  The cipher mode is a standard for how to use AES and other algorithms to encrypt and authenticate your message. OCB2 mode is slightly faster and has more features, but CCM mode has wider support because it is not patented. 
-				//"adata":"", // Associated Data - not needed?
-				cipher: "aes"
-			});
+			try {
+				// Good demo to understand each parameter: https://bitwiseshiftleft.github.io/sjcl/demo/
+				return sjcl.json.encrypt(key, plainText, {
+					v: 1, // version
+					iter: 1000, // Defaults to 10000 in sjcl but since we're running this on mobile devices, use a lower value. Maybe review this after some time. https://security.stackexchange.com/questions/3959/recommended-of-iterations-when-using-pkbdf2-sha256
+					ks: 128, // Key size - "128 bits should be secure enough"
+					ts: 64, // ???
+					mode: "ocb2", //  The cipher mode is a standard for how to use AES and other algorithms to encrypt and authenticate your message. OCB2 mode is slightly faster and has more features, but CCM mode has wider support because it is not patented. 
+					//"adata":"", // Associated Data - not needed?
+					cipher: "aes"
+				});
+			} catch (error) {
+				// SJCL returns a string as error which means stack trace is missing so convert to an error object here
+				throw new Error(error.message);
+			}
 		}
 
 		// Same as first one but slightly more secure (but slower) to encrypt master keys
 		if (method === EncryptionService.METHOD_SJCL_2) {
-			return sjcl.json.encrypt(key, plainText, {
-				v: 1,
-				iter: 10000,
-				ks: 256,
-				ts: 64,
-				mode: "ocb2",
-				cipher: "aes"
-			});
+			try {
+				return sjcl.json.encrypt(key, plainText, {
+					v: 1,
+					iter: 10000,
+					ks: 256,
+					ts: 64,
+					mode: "ocb2",
+					cipher: "aes"
+				});
+			} catch (error) {
+				// SJCL returns a string as error which means stack trace is missing so convert to an error object here
+				throw new Error(error.message);
+			}
 		}
 
 		throw new Error('Unknown encryption method: ' + method);
@@ -164,7 +226,12 @@ class EncryptionService {
 		const sjcl = shim.sjclModule;
 		
 		if (method === EncryptionService.METHOD_SJCL || method === EncryptionService.METHOD_SJCL_2) {
-			return sjcl.json.decrypt(key, cipherText);
+			try {
+				return sjcl.json.decrypt(key, cipherText);
+			} catch (error) {
+				// SJCL returns a string as error which means stack trace is missing so convert to an error object here
+				throw new Error(error.message);
+			}
 		}
 
 		throw new Error('Unknown decryption method: ' + method);

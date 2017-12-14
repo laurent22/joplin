@@ -264,6 +264,16 @@ class Setting extends BaseModel {
 	}
 
 	static value(key) {
+		// Need to copy arrays and objects since in setValue(), the old value and new one is compared
+		// with strict equality and the value is updated only if changed. However if the caller acquire
+		// and object and change a key, the objects will be detected as equal. By returning a copy
+		// we avoid this problem.
+		function copyIfNeeded(value) {
+			if (Array.isArray(value)) return value.slice();
+			if (typeof value === 'object') return Object.assign({}, value);
+			return value;
+		}
+
 		if (key in this.constants_) {
 			const v = this.constants_[key];
 			const output = typeof v === 'function' ? v() : v;
@@ -275,12 +285,12 @@ class Setting extends BaseModel {
 
 		for (let i = 0; i < this.cache_.length; i++) {
 			if (this.cache_[i].key == key) {
-				return this.cache_[i].value;
+				return copyIfNeeded(this.cache_[i].value);
 			}
 		}
 
 		const md = this.settingMetadata(key);
-		return md.value;
+		return copyIfNeeded(md.value);
 	}
 
 	static isEnum(key) {
