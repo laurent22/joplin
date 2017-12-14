@@ -3,6 +3,7 @@ const chalk = require('chalk');
 const termutils = require('tkwidgets/framework/termutils.js');
 const stripAnsi = require('strip-ansi');
 const { app } = require('../app.js');
+const { handleAutocompletion } = require('../autocompletion.js');
 
 class StatusBarWidget extends BaseWidget {
 
@@ -113,7 +114,7 @@ class StatusBarWidget extends BaseWidget {
 				cancelable: true,
 				history: this.history,
 				default: this.promptState_.initialText,
-                autoComplete: this.autocomplete_,
+                autoComplete: handleAutocompletion,
                 autoCompleteMenu: true,
                 autoCompleteHint : true,
 			};
