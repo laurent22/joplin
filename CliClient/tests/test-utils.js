@@ -101,6 +101,7 @@ function clearDatabase(id = null) {
 		'DELETE FROM tags',
 		'DELETE FROM note_tags',
 		'DELETE FROM master_keys',
+		'DELETE FROM settings',
 		
 		'DELETE FROM deleted_items',
 		'DELETE FROM sync_items',
@@ -145,9 +146,9 @@ async function setupDatabaseAndSynchronizer(id = null) {
 		synchronizers_[id] = await syncTarget.synchronizer();
 	}
 
-	if (!encryptionServices_[id]) {
+	//if (!encryptionServices_[id]) {
 		encryptionServices_[id] = new EncryptionService();
-	}
+	//}
 
 	if (syncTargetId_ == SyncTargetRegistry.nameToId('filesystem')) {
 		fs.removeSync(syncDir)

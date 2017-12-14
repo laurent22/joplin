@@ -671,7 +671,7 @@ describe('Synchronizer', function() {
 		done();
 	});
 
-	it('items should skip items that cannot be synced', async (done) => {
+	it('should skip items that cannot be synced', async (done) => {
 		let folder1 = await Folder.save({ title: "folder1" });
 		let note1 = await Note.save({ title: "un", is_todo: 1, parent_id: folder1.id });
 		const noteId = note1.id;
