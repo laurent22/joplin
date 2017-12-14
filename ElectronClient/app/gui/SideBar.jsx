@@ -180,6 +180,8 @@ class SideBarComponent extends React.Component {
 			}
 		}
 
+		const itemTitle = folder.encryption_applied ? 'Encrypted 🔑' : folder.title;
+
 		return <a
 			className="list-item"
 			onDragOver={(event) => { onDragOver(event, folder) } }
@@ -189,7 +191,7 @@ class SideBarComponent extends React.Component {
 			data-type={BaseModel.TYPE_FOLDER}
 			onContextMenu={(event) => this.itemContextMenu(event)}
 			key={folder.id}
-			style={style} onClick={() => {this.folderItem_click(folder)}}>{folder.title}
+			style={style} onClick={() => {this.folderItem_click(folder)}}>{itemTitle}
 		</a>
 	}
 

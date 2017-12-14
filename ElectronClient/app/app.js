@@ -5,6 +5,7 @@ const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const { Setting } = require('lib/models/setting.js');
 const { shim } = require('lib/shim.js');
 const { BaseModel } = require('lib/base-model.js');
+const MasterKey = require('lib/models/MasterKey');
 const { _, setLocale } = require('lib/locale.js');
 const os = require('os');
 const fs = require('fs-extra');
@@ -354,7 +355,14 @@ class Application extends BaseApplication {
 
 		this.dispatch({
 			type: 'TAG_UPDATE_ALL',
-			tags: tags,
+			items: tags,
+		});
+
+		const masterKeys = await MasterKey.all();
+
+		this.dispatch({
+			type: 'MASTERKEY_UPDATE_ALL',
+			items: masterKeys,
 		});
 
 		this.store().dispatch({

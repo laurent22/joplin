@@ -7,7 +7,7 @@ class FoldersScreenUtils {
 
 		this.dispatch({
 			type: 'FOLDER_UPDATE_ALL',
-			folders: initialFolders,
+			items: initialFolders,
 		});
 	}
 

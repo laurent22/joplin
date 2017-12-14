@@ -70,7 +70,7 @@ class Tag extends BaseItem {
 
 		this.dispatch({
 			type: 'TAG_UPDATE_ONE',
-			tag: await Tag.load(tagId),
+			item: await Tag.load(tagId),
 		});
 
 		return output;
@@ -84,7 +84,7 @@ class Tag extends BaseItem {
 
 		this.dispatch({
 			type: 'TAG_UPDATE_ONE',
-			tag: await Tag.load(tagId),
+			item: await Tag.load(tagId),
 		});
 	}
 
@@ -132,7 +132,7 @@ class Tag extends BaseItem {
 		return super.save(o, options).then((tag) => {
 			this.dispatch({
 				type: 'TAG_UPDATE_ONE',
-				tag: tag,
+				item: tag,
 			});
 			return tag;
 		});

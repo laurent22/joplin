@@ -272,11 +272,12 @@ class JoplinDatabase extends Database {
 
 			if (targetVersion == 9) {
 				queries.push('CREATE TABLE master_keys (id TEXT PRIMARY KEY, created_time INT NOT NULL, updated_time INT NOT NULL, encryption_method INT NOT NULL, checksum TEXT NOT NULL, content TEXT NOT NULL);');
-				queries.push('ALTER TABLE notes ADD COLUMN encryption_cipher_text TEXT NOT NULL DEFAULT ""');
-				queries.push('ALTER TABLE folders ADD COLUMN encryption_cipher_text TEXT NOT NULL DEFAULT ""');
-				queries.push('ALTER TABLE tags ADD COLUMN encryption_cipher_text TEXT NOT NULL DEFAULT ""');
-				queries.push('ALTER TABLE note_tags ADD COLUMN encryption_cipher_text TEXT NOT NULL DEFAULT ""');
-				queries.push('ALTER TABLE resources ADD COLUMN encryption_cipher_text TEXT NOT NULL DEFAULT ""');
+				const tableNames = ['notes', 'folders', 'tags', 'note_tags', 'resources'];
+				for (let i = 0; i < tableNames.length; i++) {
+					const n = tableNames[i];
+					queries.push('ALTER TABLE ' + n + ' ADD COLUMN encryption_cipher_text TEXT NOT NULL DEFAULT ""');
+					queries.push('ALTER TABLE ' + n + ' ADD COLUMN encryption_applied INT NOT NULL DEFAULT 0');
+				}
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

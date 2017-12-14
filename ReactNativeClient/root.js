@@ -349,7 +349,7 @@ async function initialize(dispatch) {
 
 		dispatch({
 			type: 'TAG_UPDATE_ALL',
-			tags: tags,
+			items: tags,
 		});
 
 		let folderId = Setting.value('activeFolderId');

@@ -353,7 +353,7 @@ class Application extends BaseApplication {
 
 			this.dispatch({
 				type: 'TAG_UPDATE_ALL',
-				tags: tags,
+				items: tags,
 			});
 
 			this.store().dispatch({
