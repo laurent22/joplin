@@ -107,6 +107,11 @@ class SideBarComponent extends React.Component {
 
 		const menu = new Menu();
 
+		let item = null;
+		if (itemType === BaseModel.TYPE_FOLDER) {
+			item = BaseModel.byId(this.props.folders, itemId);
+		}
+
 		menu.append(new MenuItem({label: _('Delete'), click: async () => {
 			const ok = bridge().showConfirmMessageBox(deleteMessage);
 			if (!ok) return;
@@ -123,11 +128,11 @@ class SideBarComponent extends React.Component {
 			}
 		}}))
 
-		if (itemType === BaseModel.TYPE_FOLDER) {
+		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
 			menu.append(new MenuItem({label: _('Rename'), click: async () => {
 				this.props.dispatch({
 					type: 'WINDOW_COMMAND',
-					name: 'renameNotebook',
+					name: 'renameFolder',
 					id: itemId,
 				});
 			}}))
@@ -180,7 +185,7 @@ class SideBarComponent extends React.Component {
 			}
 		}
 
-		const itemTitle = folder.encryption_applied ? 'Encrypted 🔑' : folder.title;
+		const itemTitle = Folder.displayTitle(folder);
 
 		return <a
 			className="list-item"
@@ -198,7 +203,7 @@ class SideBarComponent extends React.Component {
 	tagItem(tag, selected) {
 		let style = Object.assign({}, this.style().listItem);
 		if (selected) style = Object.assign(style, this.style().listItemSelected);
-		return <a className="list-item" href="#" data-id={tag.id} data-type={BaseModel.TYPE_TAG} onContextMenu={(event) => this.itemContextMenu(event)} key={tag.id} style={style} onClick={() => {this.tagItem_click(tag)}}>{tag.title}</a>
+		return <a className="list-item" href="#" data-id={tag.id} data-type={BaseModel.TYPE_TAG} onContextMenu={(event) => this.itemContextMenu(event)} key={tag.id} style={style} onClick={() => {this.tagItem_click(tag)}}>{Tag.displayTitle(tag)}</a>
 	}
 
 	searchItem(search, selected) {

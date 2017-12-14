@@ -132,7 +132,7 @@ class MainScreenComponent extends React.Component {
 					}
 				},
 			});
-		} else if (command.name === 'renameNotebook') {
+		} else if (command.name === 'renameFolder') {
 			const folder = await Folder.load(command.id);
 			if (!folder) return;
 
@@ -143,7 +143,8 @@ class MainScreenComponent extends React.Component {
 					onClose: async (answer) => {
 						if (answer !== null) {
 							try {
-								await Folder.save({ id: folder.id, title: answer }, { userSideValidation: true });
+								folder.title = answer;
+								await Folder.save(folder, { fields: ['title'], userSideValidation: true });
 							} catch (error) {
 								bridge().showErrorMessageBox(error.message);
 							}

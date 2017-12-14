@@ -22,9 +22,9 @@ class MasterKeysScreenComponent extends React.Component {
 		this.setState({
 			masterKeys: this.props.masterKeys,
 			passwords: this.props.passwords ? this.props.passwords : {},
+		}, () => {
+			this.checkPasswords();
 		});
-
-		this.checkPasswords();
 	}
 
 	async checkPasswords() {

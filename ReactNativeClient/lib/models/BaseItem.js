@@ -3,6 +3,7 @@ const { Database } = require('lib/database.js');
 const Setting = require('lib/models/Setting.js');
 const { time } = require('lib/time-utils.js');
 const { sprintf } = require('sprintf-js');
+const { _ } = require('lib/locale.js');
 const moment = require('moment');
 
 class BaseItem extends BaseModel {
@@ -538,6 +539,21 @@ class BaseItem extends BaseModel {
 		}
 
 		await this.db().transactionExecBatch(queries);
+	}
+
+	static displayTitle(item) {
+		if (!item) return '';
+		return !!item.encryption_applied ? '🔑 ' + _('Encrypted') : item.title + '';
+	}
+
+	static async save(o, options = null) {
+		if (!options) options = {};
+
+		if (options.userSideValidation === true) {
+			if (!!o.encryption_applied) throw new Error(_('Encrypted items cannot be modified'));
+		}
+
+		return super.save(o, options);
 	}
 
 }

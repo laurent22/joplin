@@ -418,7 +418,7 @@ class NoteTextComponent extends React.Component {
 
 		const innerWidth = rootStyle.width - rootStyle.paddingLeft - rootStyle.paddingRight - borderWidth;
 
-		if (!note) {
+		if (!note || !!note.encryption_applied) {
 			const emptyDivStyle = Object.assign({
 				backgroundColor: 'black',
 				opacity: 0.1,
