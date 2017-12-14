@@ -288,8 +288,7 @@ class MainScreenComponent extends React.Component {
 		const promptOptions = this.state.promptOptions;
 		const folders = this.props.folders;
 		const notes = this.props.notes;
-		const messageBoxVisible = this.props.hasDisabledSyncItems;
-
+		const messageBoxVisible = this.props.hasDisabledSyncItems || this.props.missingMasterKeys.length;
 		const styles = this.styles(this.props.theme, style.width, style.height, messageBoxVisible);
 		const theme = themeStyle(this.props.theme);
 
@@ -343,13 +342,31 @@ class MainScreenComponent extends React.Component {
 			});
 		}
 
-		const messageComp = messageBoxVisible ? (
-			<div style={styles.messageBox}>
-				<span style={theme.textStyle}>
-					{_('Some items cannot be synchronised.')} <a href="#" onClick={() => { onViewDisabledItemsClick() }}>{_('View them now')}</a>
-				</span>
-			</div>
-		) : null;
+		const onViewMasterKeysClick = () => {
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'MasterKeys',
+			});
+		}
+
+		let messageComp = null;
+
+		if (messageBoxVisible) {
+			let msg = null;
+			if (this.props.hasDisabledSyncItems) {
+				msg = <span>{_('Some items cannot be synchronised.')} <a href="#" onClick={() => { onViewDisabledItemsClick() }}>{_('View them now')}</a></span>
+			} else if (this.props.missingMasterKeys.length) {
+				msg = <span>{_('Some items cannot be decrypted.')} <a href="#" onClick={() => { onViewMasterKeysClick() }}>{_('Set the password')}</a></span>
+			}
+
+			messageComp = (
+				<div style={styles.messageBox}>
+					<span style={theme.textStyle}>
+						{msg}
+					</span>
+				</div>
+			);
+		}
 
 		return (
 			<div style={style}>
@@ -383,6 +400,7 @@ const mapStateToProps = (state) => {
 		folders: state.folders,
 		notes: state.notes,
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
+		missingMasterKeys: state.missingMasterKeys,
 	};
 };
 

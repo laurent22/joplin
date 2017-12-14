@@ -271,12 +271,24 @@ class JoplinDatabase extends Database {
 			}
 
 			if (targetVersion == 9) {
-				queries.push('CREATE TABLE master_keys (id TEXT PRIMARY KEY, created_time INT NOT NULL, updated_time INT NOT NULL, encryption_method INT NOT NULL, checksum TEXT NOT NULL, content TEXT NOT NULL);');
+				const newTableSql = `
+					CREATE TABLE master_keys (
+						id TEXT PRIMARY KEY,
+						created_time INT NOT NULL,
+						updated_time INT NOT NULL,
+						source_application TEXT NOT NULL,
+						encryption_method INT NOT NULL,
+						checksum TEXT NOT NULL,
+						content TEXT NOT NULL
+					);
+				`;
+				queries.push(this.sqlStringToLines(newTableSql)[0]);
 				const tableNames = ['notes', 'folders', 'tags', 'note_tags', 'resources'];
 				for (let i = 0; i < tableNames.length; i++) {
 					const n = tableNames[i];
 					queries.push('ALTER TABLE ' + n + ' ADD COLUMN encryption_cipher_text TEXT NOT NULL DEFAULT ""');
 					queries.push('ALTER TABLE ' + n + ' ADD COLUMN encryption_applied INT NOT NULL DEFAULT 0');
+					queries.push('CREATE INDEX ' + n + '_encryption_applied ON ' + n + ' (encryption_applied)');
 				}
 			}
 

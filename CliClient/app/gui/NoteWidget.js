@@ -1,4 +1,4 @@
-const Note = require('lib/models/note.js').Note;
+const Note = require('lib/models/Note.js');
 const TextWidget = require('tkwidgets/TextWidget.js');
 
 class NoteWidget extends TextWidget {

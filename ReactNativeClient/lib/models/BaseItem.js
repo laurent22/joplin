@@ -249,14 +249,17 @@ class BaseItem extends BaseModel {
 		return temp.join("\n\n");
 	}
 
+	static encryptionService() {
+		if (!this.encryptionService_) throw new Error('BaseItem.encryptionService_ is not set!!');
+		return this.encryptionService_;
+	}
+
 	static async serializeForSync(item) {
 		const ItemClass = this.itemClass(item);
 		let serialized = await ItemClass.serialize(item);
 		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported()) return serialized;
 
-		if (!BaseItem.encryptionService_) throw new Error('BaseItem.encryptionService_ is not set!!');
-
-		const cipherText = await BaseItem.encryptionService_.encryptString(serialized);
+		const cipherText = await this.encryptionService().encryptString(serialized);
 
 		const reducedItem = Object.assign({}, item);
 
@@ -284,7 +287,7 @@ class BaseItem extends BaseModel {
 		if (!item.encryption_cipher_text) throw new Error('Item is not encrypted: ' + item.id);
 
 		const ItemClass = this.itemClass(item);
-		const plainText = await BaseItem.encryptionService_.decryptString(item.encryption_cipher_text);
+		const plainText = await this.encryptionService().decryptString(item.encryption_cipher_text);
 
 		// Note: decryption does not count has a change, so don't update any timestamp
 		const plainItem = await ItemClass.unserialize(plainText);
@@ -337,6 +340,39 @@ class BaseItem extends BaseModel {
 		}
 
 		return output;
+	}
+
+	static async itemsThatNeedDecryption(exclusions = [], limit = 100) {
+		const classNames = this.encryptableItemClassNames();
+
+		for (let i = 0; i < classNames.length; i++) {
+			const className = classNames[i];
+			const ItemClass = this.getClass(className);
+
+			const whereSql = ['encryption_applied = 1'];
+			if (exclusions.length) whereSql.push('id NOT IN ("' + exclusions.join('","') + '")');
+
+			const sql = sprintf(`
+				SELECT *
+				FROM %s
+				WHERE %s
+				LIMIT %d
+				`,
+				this.db().escapeField(ItemClass.tableName()),
+				whereSql.join(' AND '),
+				limit
+			);
+
+			const items = await ItemClass.modelSelectAll(sql);
+
+			if (i >= classNames.length - 1) {
+				return { hasMore: items.length >= limit, items: items };
+			} else {
+				if (items.length) return { hasMore: true, items: items };
+			}
+		}
+
+		throw new Error('Unreachable');
 	}
 
 	static async itemsThatNeedSync(syncTarget, limit = 100) {
@@ -417,6 +453,16 @@ class BaseItem extends BaseModel {
 		return BaseItem.syncItemDefinitions_.map((def) => {
 			return def.className;
 		});
+	}
+
+	static encryptableItemClassNames() {
+		const temp = this.syncItemClassNames();
+		let output = [];
+		for (let i = 0; i < temp.length; i++) {
+			if (temp[i] === 'MasterKey') continue;
+			output.push(temp[i]);
+		}
+		return output;
 	}
 
 	static syncItemTypes() {

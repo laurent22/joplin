@@ -33,6 +33,7 @@ class EncryptionService {
 		for (let i = 0; i < masterKeys.length; i++) {
 			const mk = masterKeys[i];
 			const password = passwords[mk.id];
+			if (this.isMasterKeyLoaded(mk.id)) continue;
 			if (!password) continue;
 
 			await this.loadMasterKey(mk, password, activeMasterKeyId === mk.id);
@@ -56,6 +57,10 @@ class EncryptionService {
 		return this.activeMasterKeyId_;
 	}
 
+	isMasterKeyLoaded(id) {
+		return !!this.loadedMasterKeys_[id];
+	}
+
 	async loadMasterKey(model, password, makeActive = false) {
 		if (!model.id) throw new Error('Master key does not have an ID - save it first');
 		this.loadedMasterKeys_[model.id] = await this.decryptMasterKey(model, password);
@@ -67,7 +72,12 @@ class EncryptionService {
 	}
 
 	loadedMasterKey(id) {
-		if (!this.loadedMasterKeys_[id]) throw new Error('Master key is not loaded: ' + id);
+		if (!this.loadedMasterKeys_[id]) {
+			const error = new Error('Master key is not loaded: ' + id);
+			error.code = 'missingMasterKey';
+			error.masterKeyId = id;
+			throw error;
+		}
 		return this.loadedMasterKeys_[id];
 	}
 
@@ -105,6 +115,7 @@ class EncryptionService {
 		return {
 			created_time: now,
 			updated_time: now,
+			source_application: Setting.value('appId'),
 			encryption_method: encryptionMethod,
 			checksum: checksum,
 			content: cipherText,

@@ -1,6 +1,6 @@
-const Folder = require('lib/models/folder.js').Folder;
-const Tag = require('lib/models/tag.js').Tag;
-const BaseModel = require('lib/base-model.js').BaseModel;
+const Folder = require('lib/models/Folder.js');
+const Tag = require('lib/models/Tag.js');
+const BaseModel = require('lib/BaseModel.js');
 const ListWidget = require('tkwidgets/ListWidget.js');
 const _ = require('lib/locale.js')._;
 

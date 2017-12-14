@@ -27,6 +27,7 @@ const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
 const EncryptionService = require('lib/services/EncryptionService');
+const DecryptionWorker = require('lib/services/DecryptionWorker');
 
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -307,6 +308,7 @@ class BaseApplication {
 		FoldersScreenUtils.dispatch = this.store().dispatch;
 		reg.dispatch = this.store().dispatch;
 		BaseSyncTarget.dispatch = this.store().dispatch;
+		DecryptionWorker.instance().dispatch = this.store().dispatch;
 	}
 
 	async readFlagsFromFile(flagPath) {
@@ -394,7 +396,9 @@ class BaseApplication {
 		}
 
 		BaseItem.encryptionService_ = EncryptionService.instance();
+		DecryptionWorker.encryptionService_ = EncryptionService.instance();
 		await EncryptionService.instance().loadMasterKeysFromSettings();
+		DecryptionWorker.instance().start();
 
 		let currentFolderId = Setting.value('activeFolderId');
 		let currentFolder = null;

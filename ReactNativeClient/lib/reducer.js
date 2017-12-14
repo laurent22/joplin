@@ -9,6 +9,7 @@ const defaultState = {
 	folders: [],
 	tags: [],
 	masterKeys: [],
+	missingMasterKeys: [],
 	searches: [],
 	selectedNoteIds: [],
 	selectedFolderId: null,
@@ -367,6 +368,14 @@ const reducer = (state = defaultState, action) => {
 
 				newState = Object.assign({}, state);
 				newState.masterKeys = action.items;
+				break;
+
+			case 'MASTERKEY_ADD_MISSING':
+
+				if (state.missingMasterKeys.indexOf(action.id) < 0) {
+					newState = Object.assign({}, state);
+					newState.missingMasterKeys.push(action.id);
+				}
 				break;
 
 			case 'SYNC_STARTED':
