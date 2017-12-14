@@ -2,6 +2,7 @@ const { padLeft } = require('lib/string-utils.js');
 const { shim } = require('lib/shim.js');
 const Setting = require('lib/models/Setting.js');
 const MasterKey = require('lib/models/MasterKey');
+const BaseItem = require('lib/models/BaseItem');
 
 function hexPad(s, length) {
 	return padLeft(s, length, '0');
@@ -41,6 +42,8 @@ class EncryptionService {
 			passwordCache[masterKey.id] = password;	
 			Setting.setValue('encryption.passwordCache', passwordCache);		
 		}
+
+		await BaseItem.markAllNonEncryptedForSync();
 	}
 
 	async loadMasterKeysFromSettings() {

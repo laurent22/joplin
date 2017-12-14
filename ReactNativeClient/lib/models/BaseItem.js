@@ -424,7 +424,7 @@ class BaseItem extends BaseModel {
 					SELECT %s FROM %s items
 					JOIN sync_items s ON s.item_id = items.id
 					WHERE sync_target = %d
-					AND s.sync_time < items.updated_time
+					AND (s.sync_time < items.updated_time OR force_sync = 1)
 					AND s.sync_disabled = 0
 					%s
 					LIMIT %d
@@ -544,6 +544,28 @@ class BaseItem extends BaseModel {
 	static displayTitle(item) {
 		if (!item) return '';
 		return !!item.encryption_applied ? '🔑 ' + _('Encrypted') : item.title + '';
+	}
+
+	static async markAllNonEncryptedForSync() {
+		const classNames = this.encryptableItemClassNames();
+
+		for (let i = 0; i < classNames.length; i++) {
+			const className = classNames[i];
+			const ItemClass = this.getClass(className);
+
+			const sql = sprintf(`
+				SELECT id
+				FROM %s
+				WHERE encryption_applied = 0`,
+				this.db().escapeField(ItemClass.tableName()),
+			);
+
+			const items = await ItemClass.modelSelectAll(sql);
+			const ids = items.map((item) => {return item.id});
+			if (!ids.length) continue;
+
+			await this.db().exec('UPDATE sync_items SET force_sync = 1 WHERE item_id IN ("' + ids.join('","') + '")');
+		}
 	}
 
 	static async save(o, options = null) {

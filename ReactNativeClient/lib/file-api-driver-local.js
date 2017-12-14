@@ -146,11 +146,17 @@ class FileApiDriverLocal {
 		let output = null;
 
 		try {
-			if (options.encoding == 'binary') {
-				output = fs.readFile(path);
+			if (options.target === 'file') {
+				output = await fs.copy(path, options.path, { overwrite: true });
 			} else {
-				output = fs.readFile(path, options.encoding);
+				output = await fs.readFile(path, options.encoding);
 			}
+
+			// if (options.encoding == 'binary') {
+			// 	output = await fs.readFile(path);
+			// } else {
+			// 	output = await fs.readFile(path, options.encoding);
+			// }
 		} catch (error) {
 			if (error.code == 'ENOENT') return null;
 			throw this.fsErrorToJsError_(error);
