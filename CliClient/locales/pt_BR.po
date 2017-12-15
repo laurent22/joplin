@@ -9,92 +9,85 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: de_DE\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.4\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.0.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "Give focus to next pane"
-msgstr "Das nächste Fenster fokussieren"
+msgstr "Dar o foco para o próximo painel"
 
 msgid "Give focus to previous pane"
-msgstr "Das vorherige Fenster fokussieren"
+msgstr "Dar o foco para o painel anterior"
 
 msgid "Enter command line mode"
-msgstr "Zum Terminal-Modus wechseln"
+msgstr "Entrar no modo de linha de comando"
 
 msgid "Exit command line mode"
-msgstr "Den Terminal-Modus verlassen"
+msgstr "Sair do modo de linha de comando"
 
 msgid "Edit the selected note"
-msgstr "Die ausgewählte Notiz bearbeiten"
+msgstr "Editar nota selecionada"
 
 msgid "Cancel the current command."
-msgstr "Den momentanen Befehl abbrechen."
+msgstr "Cancelar comando atual."
 
 msgid "Exit the application."
-msgstr "Das Programm verlassen."
+msgstr "Sair da aplicação."
 
 msgid "Delete the currently selected note or notebook."
-msgstr "Die momentan ausgewählte Notiz(-buch) löschen."
+msgstr "Excluir nota selecionada ou notebook."
 
 msgid "To delete a tag, untag the associated notes."
-msgstr ""
-"Hebe die Markierungen zugehöriger Notizen auf, um eine Markierung zu löschen."
+msgstr "Para eliminar uma tag, remova a tag das notas associadas a ela."
 
 msgid "Please select the note or notebook to be deleted first."
-msgstr ""
-"Wähle bitte zuerst eine Notiz oder ein Notizbuch aus, das gelöscht werden "
-"soll."
+msgstr "Por favor, primeiro, selecione a nota ou caderno a excluir."
 
 msgid "Set a to-do as completed / not completed"
-msgstr "Ein To-Do as abgeschlossen / nicht abgeschlossen markieren"
+msgstr "Marcar uma tarefa como completada / não completada"
 
-#, fuzzy
 msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-msgstr ""
-"Schal[t]e das Terminal zwischen maximiert/minimiert/versteckt/sichtbar um."
+msgstr "al[t]ernar [c]onsole entre maximizado / minimizado / oculto / visível."
 
 msgid "Search"
-msgstr "Suchen"
+msgstr "Procurar"
 
 msgid "[t]oggle note [m]etadata."
-msgstr "Notiz-[M]etadata einschal[t]en."
+msgstr "al[t]ernar [m]etadados de notas."
 
 msgid "[M]ake a new [n]ote"
-msgstr "Eine neue [N]otiz [m]achen"
+msgstr "Criar ([M]ake) uma nova [n]ota"
 
 msgid "[M]ake a new [t]odo"
-msgstr "Ein neues [T]o-Do [m]achen"
+msgstr "Criar ([M]ake) nova [t]arefa"
 
 msgid "[M]ake a new note[b]ook"
-msgstr "Ein neues Notiz[b]uch [m]achen"
+msgstr "Criar ([M]ake) novo caderno (note[b]ook)"
 
 msgid "Copy ([Y]ank) the [n]ote to a notebook."
-msgstr "Die Notiz zu einem Notizbuch kopieren."
+msgstr "Copiar ([Y]ank) a [n]ota a um caderno."
 
 msgid "Move the note to a notebook."
-msgstr "Die Notiz zu einem Notizbuch verschieben."
+msgstr "Mover nota para um caderno."
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "Drücke Strg+D oder schreibe \"exit\", um das Programm zu verlassen"
+msgstr "Digite Ctrl+D ou \"exit\" para sair da aplicação"
 
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr ""
-"Mehr als eine Notiz stimmt mit \"%s\" überein. Bitte schränke deine Suche "
-"ein."
+msgstr "Mais que um item combinam com \"%s\". Por favor, refine sua pesquisa."
 
 msgid "No notebook selected."
-msgstr "Kein Notizbuch ausgewählt."
+msgstr "Nenhum caderno selecionado."
 
 msgid "No notebook has been specified."
-msgstr "Kein Notizbuch wurde angegeben."
+msgstr "Nenhum caderno foi especificado."
 
 msgid "Y"
-msgstr "J"
+msgstr "S"
 
 msgid "n"
 msgstr "n"
@@ -103,59 +96,58 @@ msgid "N"
 msgstr "N"
 
 msgid "y"
-msgstr "j"
+msgstr "s"
 
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "Breche Hintergrund-Synchronisations ab....Bitte warten."
+msgstr "Cancelando sincronização em segundo plano... Por favor, aguarde."
 
 #, fuzzy, javascript-format
 msgid "No such command: %s"
-msgstr "Ungültiger Befehl: \"%s\""
+msgstr "Comando inválido: \"%s\""
 
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
-msgstr "Der Befehl \"%s\" ist nur im GUI Modus verfügbar"
+msgstr "O comando \"%s\" está disponível somente em modo gráfico"
 
 #, javascript-format
 msgid "Missing required argument: %s"
-msgstr "Fehlendes benötigtes Argument: %s"
+msgstr "Argumento requerido faltando: %s"
 
 #, javascript-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
 msgid "Your choice: "
-msgstr "Deine Auswahl: "
+msgstr "Sua escolha: "
 
 #, javascript-format
 msgid "Invalid answer: %s"
-msgstr "Ungültige Antwort: %s"
+msgstr "Resposta inválida: %s"
 
 msgid "Attaches the given file to the note."
-msgstr "Hängt die ausgewählte Datei an die Notiz an."
+msgstr "Anexa o arquivo dado à nota."
 
 #, javascript-format
 msgid "Cannot find \"%s\"."
-msgstr "Kann \"%s\" nicht finden."
+msgstr "Não posso encontrar \"%s\"."
 
 msgid "Displays the given note."
-msgstr "Zeigt die jeweilige Notiz an."
+msgstr "Exibe a nota informada."
 
 msgid "Displays the complete information about note."
-msgstr "Zeigt alle Informationen über die Notiz an."
+msgstr "Exibe a informação completa sobre a nota."
 
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
-"Zeigt an oder stellt einen Optionswert. Wenn kein [Wert] angegeben ist, wird "
-"der Wert vom gegebenenen [Namen] angezeigt. Wenn weder [Name] noch [Wert] "
-"gegeben sind, wird eine Liste der momentanen Konfiguration angezeigt."
+"Obtém ou define um valor de configuração. Se [valor] não for fornecido, ele "
+"mostrará o valor de [nome]. Se nem [nome] nem [valor] forem fornecidos, ele "
+"listará a configuração atual."
 
 msgid "Also displays unset and hidden config variables."
-msgstr ""
-"Zeige auch nicht angegebene oder versteckte Konfigurationsvariablen an."
+msgstr "Também exibe variáveis de configuração não definidas e ocultas."
 
 #, javascript-format
 msgid "%s = %s (%s)"
@@ -169,246 +161,237 @@ msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"Vervielfältigt die Notizen die mit <note> übereinstimmen zu [Notizbuch]. "
-"Wenn kein Notizbuch angegeben ist, wird die Notiz in das momentane Notizbuch "
-"kopiert."
+"Duplica as notas que correspondem a <nota> para o [caderno]. Se nenhum "
+"caderno for especificado, a nota será duplicada no caderno atual."
 
 msgid "Marks a to-do as done."
-msgstr "Markiert ein To-Do als abgeschlossen."
+msgstr "Marca uma tarefa como feita."
 
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
-msgstr "Notiz ist kein To-Do: \"%s\""
+msgstr "Nota não é uma tarefa: \"%s\""
 
 msgid "Edit note."
-msgstr "Notiz bearbeiten."
+msgstr "Editar nota."
 
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
-"Kein Textbearbeitungsprogramm angegeben. Bitte lege eines mit `config editor "
-"<Pfad-Zum-Textbearbeitungsprogramm>` fest"
+"Nenhum editor de texto está definido. Defina-o usando o comando `config edit "
+"<caminho-do-editor>`"
 
 msgid "No active notebook."
-msgstr "Kein aktives Notizbuch."
+msgstr "Nenhum caderno ativo."
 
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr "Notiz \"%s\" existiert nicht. Soll sie erstellt werden?"
+msgstr "A nota não existe: \"%s\". Criar?"
 
 msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr ""
-"Beginne die Notiz zu bearbeiten. Schließ das Textbearbeitungsprogramm, um "
-"zurück zum Terminal zu kommen."
+msgstr "Começando a editar a nota. Feche o editor para voltar ao prompt."
 
 msgid "Note has been saved."
-msgstr "Die Notiz wurde gespeichert."
+msgstr "Nota gravada."
 
 msgid "Exits the application."
-msgstr "Schließt das Programm."
+msgstr "Sai da aplicação."
 
 msgid ""
 "Exports Joplin data to the given directory. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
-"Exportiert Joplins Datein zu dem angegebenen Pfad. Standardmäßig wird die "
-"komplette Datenbank inklusive Notizbüchern, Notizen, Markierungen usw. "
-"exportiert."
+"Exporta os dados do Joplin para o diretório informado. Por padrão, ele "
+"exportará o banco de dados completo, incluindo cadernos, notas, tags e "
+"recursos."
 
 msgid "Exports only the given note."
-msgstr "Exportiert nur die angegebene Notiz."
+msgstr "Exporta apenas a nota fornecida."
 
 msgid "Exports only the given notebook."
-msgstr "Exportiert nur das angegebene Notizbuch."
+msgstr "Exporta apenas o caderno fornecido."
 
 msgid "Displays a geolocation URL for the note."
-msgstr "Zeigt die Standort-URL der Notiz an."
+msgstr "Exibe uma URL de geolocalização para a nota."
 
 msgid "Displays usage information."
-msgstr "Zeigt die Benutzungsstatistik an."
+msgstr "Exibe informações de uso."
 
 msgid "Shortcuts are not available in CLI mode."
-msgstr ""
+msgstr "Os atalhos não estão disponíveis no modo CLI."
 
 #, fuzzy
 msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
-msgstr ""
-"Tippe `help [Befehl]` ein, um mehr Informationen über einen Befehl zu "
-"erhalten."
+msgstr "Digite `help [comando]` para obter mais informações sobre um comando."
 
 msgid "The possible commands are:"
-msgstr "Mögliche Befehle sind:"
+msgstr "Os comandos possíveis são:"
 
 msgid ""
 "In any command, a note or notebook can be refered to by title or ID, or "
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
-"In jedem Befehl können Notizen oder Notizbücher durch ihren Titel oder ihre "
-"ID spezifiziert werden, oder durch die Abkürzung `$n` oder `$b` um entweder "
-"das momentan augewählte Notizbuch oder die momentan ausgewählte Notiz zu "
-"wählen. `$c` kann benutzt werden, um die momentane Auswahl zu verweisen."
+"Em qualquer comando, uma nota ou caderno pode ser referenciado por título ou "
+"ID, ou usando os atalhos `$n` ou` $b` para, respectivamente, a nota ou "
+"caderno selecionado. `$c` pode ser usado para se referenciar ao item "
+"atualmente selecionado."
 
 msgid "To move from one pane to another, press Tab or Shift+Tab."
-msgstr ""
-"Um ein von einem Fenster zu einem anderen zu wechseln, drücke Tab oder Shift"
-"+Tab."
+msgstr "Para mover de um painel para outro, pressione Tab ou Shift + Tab."
 
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
 msgstr ""
-"Benutze die Pfeiltasten und Bild hoch/runter um durch Listen und Texte zu "
-"scrollen ( inklusive diesem Terminal )."
+"Use as setas e a Page Up/Page Down para rolar as listas e áreas de texto "
+"(incluindo este console)."
 
 msgid "To maximise/minimise the console, press \"TC\"."
-msgstr "Um das Terminal zu maximieren/minimieren, drücke \"TC\"."
+msgstr "Para maximizar / minimizar o console, pressione \"TC\"."
 
 msgid "To enter command line mode, press \":\""
-msgstr ""
+msgstr "Para entrar no modo de linha de comando, pressione \":\""
 
 msgid "To exit command line mode, press ESCAPE"
-msgstr ""
+msgstr "Para sair do modo de linha de comando, pressione o ESC"
 
 msgid ""
 "For the complete list of available keyboard shortcuts, type `help shortcuts`"
 msgstr ""
-"Um die komplette Liste von verfügbaren Tastenkürzeln anzuzeigen, tippe `help "
-"shortcuts` ein"
+"Para a lista completa de atalhos de teclado disponíveis, digite `help "
+"shortcuts`"
 
 msgid "Imports an Evernote notebook file (.enex file)."
-msgstr "Importiert eine Evernote Notizbuch-Datei (.enex Datei)."
+msgstr "Importa um arquivo de caderno do Evernote (arquivo .enex)."
 
 msgid "Do not ask for confirmation."
-msgstr "Nicht nach einer Bestätigung fragen."
+msgstr "Não pedir confirmação."
 
 #, javascript-format
 msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
 msgstr ""
-"Datei \"%s\" wird importiert in das existierende Notizbuch \"%s\". "
-"Fortfahren?"
+"O arquivo \"%s\" será importado para o caderno existente \"%s\". Continuar?"
 
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into "
 "it. Continue?"
 msgstr ""
-"Ein neues Notizbuch \"%s\" wird erstellt und die Datei \"%s\" wird in es "
-"importiert. Fortfahren?"
+"O novo caderno \"%s\" será criado e o arquivo \"%s\" será importado para "
+"ele. Continuar?"
 
 #, javascript-format
 msgid "Found: %d."
-msgstr "Gefunden: %d."
+msgstr "Encontrado: %d."
 
 #, javascript-format
 msgid "Created: %d."
-msgstr "Erstellt: %d."
+msgstr "Criado: %d."
 
 #, javascript-format
 msgid "Updated: %d."
-msgstr "Aktualisiert: %d."
+msgstr "Atualizado: %d."
 
 #, javascript-format
 msgid "Skipped: %d."
-msgstr "Übersprungen: %d."
+msgstr "Ignorado: %d."
 
 #, javascript-format
 msgid "Resources: %d."
-msgstr ""
+msgstr "Recursos: %d."
 
 #, javascript-format
 msgid "Tagged: %d."
-msgstr "Markiert: %d."
+msgstr "Tag adicionada: %d."
 
 msgid "Importing notes..."
-msgstr "Importiere Notizen..."
+msgstr "Importando notas ..."
 
 #, javascript-format
 msgid "The notes have been imported: %s"
-msgstr "Die Notizen wurden importiert: %s"
+msgstr "As notas foram importadas: %s"
 
 msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
 "of notebooks."
 msgstr ""
-"Zeigt die Notizen im momentanen Notizbuch an. Benutze `ls /` um eine Liste "
-"aller Notizbücher anzuzeigen."
+"Exibe as notas no caderno atual. Use `ls /` para exibir a lista de cadernos."
 
 msgid "Displays only the first top <num> notes."
-msgstr "Zeigt nur die Top-<num> Notizen an."
+msgstr "Exibe apenas as primeiras <num>notas."
 
-#, fuzzy
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
-msgstr "Sortiert nach <field> ( z.B. Titel,"
+msgstr "Classifica o item por <campo> (ex.: title, update_time, created_time)."
 
 msgid "Reverses the sorting order."
-msgstr "Dreht die Sortierreihenfolge um."
+msgstr "Inverte a ordem de classificação."
 
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
-"Zeige nur bestimmt Typen an. Kann `n` für Notizen sein, `t` für To-Dos, oder "
-"`nt` für Notizen und To-Dos ( z.B. würde `-tt` nur To-Dos anzeigen, während "
-"`-ttd` Notizen und To-Dos anzeigen würde )."
+"Exibe apenas os itens do(s) tipo(s) específico(s). Pode ser `n` para notas,` "
+"t` para tarefas, ou `nt` para notas e tarefas (por exemplo.` -tt` exibiria "
+"apenas os itens pendentes, enquanto `-ttd` exibiria notas e tarefas ."
 
 msgid "Either \"text\" or \"json\""
-msgstr "Entweder \"text\" oder \"json\""
+msgstr "Ou \"text\" ou \"json\""
 
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
+"Use o formato da lista longa. O formato é ID, NOTE_COUNT (para caderno), "
+"DATE, TODO_CHECKED (para tarefas), TITLE"
 
 msgid "Please select a notebook first."
-msgstr "Bitte wähle erst ein Notizbuch aus."
+msgstr "Por favor, selecione um caderno primeiro."
 
 msgid "Creates a new notebook."
-msgstr "Erstellt ein neues Notizbuch."
+msgstr "Cria um novo caderno."
 
 msgid "Creates a new note."
-msgstr "Erstellt eine neue Notiz."
+msgstr "Cria uma nova nota."
 
 msgid "Notes can only be created within a notebook."
-msgstr "Notizen können nur in einem Notizbuch erstellt werden."
+msgstr "As notas só podem ser criadas dentro de um caderno."
 
 msgid "Creates a new to-do."
-msgstr "Erstellt ein neues To-Do."
+msgstr "Cria uma nova tarefa."
 
 msgid "Moves the notes matching <note> to [notebook]."
-msgstr "Verschiebt die Notizen, die mit <note> übereinstimmen, zu [Notizbuch]"
+msgstr "Move as notas correspondentes <note> para [caderno]."
 
 msgid "Renames the given <item> (note or notebook) to <name>."
-msgstr "Benennt das gegebene <item> ( Notiz oder Notizbuch ) zu <name> um."
+msgstr "Renomeia o <item> dado (nota ou caderno) para <name>."
 
 msgid "Deletes the given notebook."
-msgstr "Löscht das gegebene Notizbuch."
+msgstr "Exclui o caderno informado."
 
 msgid "Deletes the notebook without asking for confirmation."
-msgstr "Löscht das Notizbuch, ohne nach einer Bestätigung zu fragen."
+msgstr "Exclui o caderno sem pedir confirmação."
 
 msgid "Delete notebook? All notes within this notebook will also be deleted."
 msgstr ""
 
 msgid "Deletes the notes matching <note-pattern>."
-msgstr "Löscht die Notizen, die mit <note-pattern> übereinstimmen."
+msgstr "Exclui as notas correspondentes ao padrão <note-pattern>."
 
 msgid "Deletes the notes without asking for confirmation."
-msgstr "Löscht die Notizen, ohne nach einer Bestätigung zu fragen."
+msgstr "Exclui as notas sem pedir confirmação."
 
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
-msgstr ""
-"%d Notizen stimmen mit diesem Muster überein. Sollen sie gelöscht werden?"
+msgstr "%d notas correspondem a este padrão. Apagar todos?"
 
 msgid "Delete note?"
-msgstr "Notiz löschen?"
+msgstr "Apagar nota?"
 
 msgid "Searches for the given <pattern> in all the notes."
-msgstr "Sucht nach dem gegebenen <pattern> in allen Notizen."
+msgstr "Procura o padrão <pattern>em todas as notas."
 
 #, fuzzy, javascript-format
 msgid ""
@@ -416,23 +399,21 @@ msgid ""
 "properties are:\n"
 "\n"
 "%s"
-msgstr ""
-"Setzt die Eigenschaft <name> der gegebenen <note> zu dem gegebenen [Wert]."
+msgstr "Define a propriedade <name> da <note> para o dado [valor]."
 
 msgid "Displays summary about the notes and notebooks."
-msgstr "Zeigt eine Zusammenfassung über die Notizen und Notizbücher an."
+msgstr "Exibe sumário sobre as notas e cadernos."
 
-#, fuzzy
 msgid "Synchronises with remote storage."
-msgstr "Synchronisiert mit "
+msgstr "Sincroniza com o armazenamento remoto."
 
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
-"Mit dem gegebenen Ziel synchronisieren ( voreingestellt auf den sync.target "
-"Optionswert)"
+"Sincronizar para destino fornecido (p padrão é o valor de configuração sync."
+"target)"
 
 msgid "Synchronisation is already in progress."
-msgstr "Synchronisation ist bereits im Gange."
+msgstr "A sincronização já está em andamento."
 
 #, javascript-format
 msgid ""
@@ -440,101 +421,97 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
-"Eine Sperrdatei ist vorhanden. Wenn du dir sicher bist, dass keine "
-"Synchronisation im Gange ist, kannst du die Sperrdatei \"%s\" löschen und "
-"vortfahren."
+"O arquivo de bloqueio já está ativo. Se você sabe que nenhuma sincronização "
+"está ocorrendo, você pode excluir o arquivo de bloqueio em \"%s\" e retomar "
+"a operação."
 
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr ""
-"Authentikation wurde nicht abgeschlossen (keinen Authentikations-Token "
-"erhalten)."
+"A autenticação não foi concluída (não recebeu um token de autenticação)."
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
-msgstr "Synchronisationsziel: %s (%s)"
+msgstr "Alvo de sincronização: %s (%s)"
 
 msgid "Cannot initialize synchroniser."
-msgstr "Kann Synchronisierer nicht initialisieren."
+msgstr "Não é possível inicializar o sincronizador."
 
 msgid "Starting synchronisation..."
-msgstr "Starte Synchronisation..."
+msgstr "Iniciando sincronização..."
 
 msgid "Cancelling... Please wait."
-msgstr "Breche ab... Bitte warten."
+msgstr "Cancelando... Aguarde."
 
-#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
 "`tag list` can be used to list all the tags."
 msgstr ""
-"<tag-command> kann \"add\", \"remove\" or \"list\" sein, um eine "
-"[Markierung] zu [Notiz] zuzuweisen oder zu entfernen, oder um mit "
-"[Markierung] markierte Notizen anzuzeigen. Mit dem Befehl `tag list` können "
-"alle Notizen angezeigt werden."
+"<tag-command> pode ser \"add\", \"remove\" ou \"list\" para atribuir ou "
+"remover [tag] de [nota], ou para listar as notas associadas a [tag]. O "
+"comando `taglist` pode ser usado para listar todas as tags."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
-msgstr "Ungültiger Befehl: \"%s\""
+msgstr "Comando inválido: \"%s\""
 
-#, fuzzy
 msgid ""
 "<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
 "toggle the given to-do between completed and uncompleted state (If the "
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command> kann entweder \"toggle\" oder \"clear\" sein. Benutze \"toggle"
-"\", um ein To-Do abzuschließen, oder es zu beginnen (Wenn das Ziel eine "
-"normale Notiz ist, wird es zu einem To-Do umgewandelt). Benutze \"clear\", "
-"um es zurück zu einem To-Do zu verwandeln."
+"<todo-command> pode ser \"toggle\" ou \"clear\". Use \"toggle\" para "
+"alternar entre as tarefas entre o estado completo e incompleto (se o alvo "
+"for uma nota comum, ele será convertido em uma tarefa a fazer). Use \"clear"
+"\" para converter a tarefa em uma nota normal."
 
 msgid "Marks a to-do as non-completed."
-msgstr "Makiert ein To-Do als nicht-abgeschlossen."
+msgstr "Marca uma tarefa como não completada."
 
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
-"Wechselt zu [Notizbuch] - alle weiteren Tätigkeiten werden in diesem "
-"Notizbuch verrichtet."
+"Alterna para [caderno] - todas as operações adicionais acontecerão dentro "
+"deste caderno."
 
 msgid "Displays version information"
-msgstr "Zeigt die Versionsnummer an"
+msgstr "Exibe informações da versão"
 
 #, javascript-format
 msgid "%s %s (%s)"
 msgstr "%s %s (%s)"
 
 msgid "Enum"
-msgstr ""
+msgstr "Enum"
 
 #, javascript-format
 msgid "Type: %s."
-msgstr "Typ: %s."
+msgstr "Tipo: %s."
 
 #, javascript-format
 msgid "Possible values: %s."
-msgstr "Mögliche Werte: %s."
+msgstr "Valores possíveis: %s."
 
 #, javascript-format
 msgid "Default: %s"
-msgstr "Standard: %s"
+msgstr "Padrão: %s"
 
 msgid "Possible keys/values:"
-msgstr "Mögliche Werte:"
+msgstr "Possíveis chaves/valores:"
 
 msgid "Fatal error:"
-msgstr "Schwerwiegender Fehler:"
+msgstr "Erro fatal:"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr ""
-"Das Programm wurde authorisiert - Du kannst nun diesen Browsertab schließen."
+"O aplicativo foi autorizado - agora você pode fechar esta guia do navegador."
 
 msgid "The application has been successfully authorised."
-msgstr "Das Programm wurde erfolgreich authorisiert."
+msgstr "O aplicativo foi autorizado com sucesso."
 
 msgid ""
 "Please open the following URL in your browser to authenticate the "
@@ -543,14 +520,14 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
-"Bitte öffne die folgende URL in deinem Browser, um das Programm zu "
-"authentifizieren. Das Programm wird einen Ordner in \"Apps/Joplin\" "
-"erstellen und wird nur in diesem Ordner schreiben und lesen. Es wird weder "
-"Zugriff auf Dateien außerhalb dieses Ordners haben, noch auf persönliche "
-"Daten. Es werden keine Daten mit Dritten geteilt."
+"Abra a seguinte URL no seu navegador para autenticar o aplicativo. O "
+"aplicativo criará um diretório em \"Apps/Joplin\" e somente lerá e gravará "
+"arquivos neste diretório. Não terá acesso a nenhum arquivo fora deste "
+"diretório nem a nenhum outro dado pessoal. Nenhum dado será compartilhado "
+"com terceiros."
 
 msgid "Search:"
-msgstr "Suchen:"
+msgstr "Procurar:"
 
 msgid ""
 "Welcome to Joplin!\n"
@@ -562,59 +539,59 @@ msgid ""
 msgstr ""
 
 msgid "File"
-msgstr "Datei"
+msgstr "Arquivo"
 
 msgid "New note"
-msgstr "Neue Notiz"
+msgstr "Nova nota"
 
 msgid "New to-do"
-msgstr "Neues To-Do"
+msgstr "Nova tarefa"
 
 msgid "New notebook"
-msgstr "Neues Notizbuch"
+msgstr "Novo caderno"
 
 msgid "Import Evernote notes"
-msgstr "Evernote Notizen importieren"
+msgstr "Importar notas do Evernote"
 
 msgid "Evernote Export Files"
-msgstr ""
+msgstr "Arquivos de Exportação do Evernote"
 
 msgid "Quit"
-msgstr "Verlassen"
+msgstr "Sair"
 
 msgid "Edit"
-msgstr "Bearbeiten"
+msgstr "Editar"
 
 msgid "Copy"
-msgstr "Kopieren"
+msgstr "Copiar"
 
 msgid "Cut"
-msgstr "Ausschneiden"
+msgstr "Cortar"
 
 msgid "Paste"
-msgstr "Einfügen"
+msgstr "Colar"
 
 msgid "Search in all the notes"
-msgstr "Alle Notizen durchsuchen"
+msgstr "Pesquisar em todas as notas"
 
 msgid "Tools"
-msgstr "Werkzeuge"
+msgstr "Ferramentas"
 
 #, fuzzy
 msgid "Synchronisation status"
-msgstr "Synchronisationsziel"
+msgstr "Alvo de sincronização"
 
 msgid "Options"
-msgstr "Optionen"
+msgstr "Opções"
 
 msgid "Help"
-msgstr "Hilfe"
+msgstr "Ajuda"
 
 msgid "Website and documentation"
-msgstr "Webseite und Dokumentation"
+msgstr "Website e documentação"
 
 msgid "About Joplin"
-msgstr "Über Joplin"
+msgstr "Sobre o Joplin"
 
 #, javascript-format
 msgid "%s %s (%s, %s)"
@@ -624,7 +601,7 @@ msgid "OK"
 msgstr "OK"
 
 msgid "Cancel"
-msgstr "Abbrechen"
+msgstr "Cancelar"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -634,48 +611,47 @@ msgid "Save"
 msgstr ""
 
 msgid "Back"
-msgstr "Zurück"
+msgstr "Voltar"
 
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr ""
-"Ein neues Notizbuch \"%s\" wird erstellt und die Datei \"%s\" wird in es "
-"importiert"
+"O novo caderno \"%s\" será criado e o arquivo \"%s\" será importado para ele"
 
 msgid "Please create a notebook first."
-msgstr "Bitte erstelle zuerst ein Notizbuch."
+msgstr "Primeiro, crie um caderno."
 
 msgid "Note title:"
-msgstr "Notiz Titel:"
+msgstr "Título da nota:"
 
 msgid "Please create a notebook first"
-msgstr "Bitte erstelle zuerst ein Notizbuch"
+msgstr "Primeiro, crie um caderno"
 
 msgid "To-do title:"
-msgstr "To-Do Titel:"
+msgstr "Título da tarefa:"
 
 msgid "Notebook title:"
-msgstr "Notizbuch Titel:"
+msgstr "Título do caderno:"
 
 msgid "Add or remove tags:"
-msgstr "Füge hinzu oder entferne Markierungen:"
+msgstr "Adicionar ou remover tags:"
 
 msgid "Separate each tag by a comma."
-msgstr "Trenne jede Markierung mit einem Komma."
+msgstr "Separe cada tag por vírgula."
 
 msgid "Rename notebook:"
-msgstr "Benne Notizbuch um:"
+msgstr "Renomear caderno:"
 
 msgid "Set alarm:"
-msgstr "Alarm erstellen:"
+msgstr "Definir alarme:"
 
 msgid "Layout"
 msgstr "Layout"
 
 #, fuzzy
 msgid "Some items cannot be synchronised."
-msgstr "Kann Synchronisierer nicht initialisieren."
+msgstr "Não é possível inicializar o sincronizador."
 
 msgid "View them now"
 msgstr ""
@@ -688,120 +664,114 @@ msgstr ""
 
 #, fuzzy
 msgid "Created"
-msgstr "Erstellt: %d."
+msgstr "Criado: %d."
 
 #, fuzzy
 msgid "Updated"
-msgstr "Aktualisiert: %d."
+msgstr "Atualizado: %d."
 
 msgid "Add or remove tags"
-msgstr "Markierungen hinzufügen oder entfernen"
+msgstr "Adicionar ou remover tags"
 
 msgid "Switch between note and to-do type"
-msgstr "Zwischen Notiz und To-Do Typ wechseln"
+msgstr "Alternar entre os tipos Nota e Tarefa"
 
 msgid "Delete"
-msgstr "Löschen"
+msgstr "Excluir"
 
 msgid "Delete notes?"
-msgstr "Notizen löschen?"
+msgstr "Excluir notas?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr ""
-"Hier sind noch keine Notizen. Erstelle eine, indem du auf \"Neue Notiz\" "
-"drückst."
+msgstr "Não há notas aqui. Crie uma, clicando em \"Nova nota\"."
 
 #, fuzzy
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr ""
-"Momentan existieren noch keine Notizen. Erstelle eine, indem du auf den (+) "
-"Knopf drückst."
+msgstr "Atualmente, não há notas. Crie uma, clicando no botão (+)."
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
-msgstr "Nicht unterstützter Link oder Nachricht: %s"
+msgstr "Link ou mensagem não suportada: %s"
 
 msgid "Attach file"
-msgstr "Datei anhängen"
+msgstr "Anexar arquivo"
 
 msgid "Set alarm"
-msgstr "Alarm erstellen"
+msgstr "Definir alarme"
 
 msgid "Refresh"
-msgstr "Aktualisieren"
+msgstr "Atualizar"
 
 msgid "Clear"
-msgstr ""
+msgstr "Limpar (clear)"
 
 msgid "OneDrive Login"
-msgstr "OneDrive login"
+msgstr "Login no OneDrive"
 
 msgid "Import"
-msgstr "Importieren"
+msgstr "Importar"
 
 #, fuzzy
 msgid "Synchronisation Status"
-msgstr "Synchronisationsziel"
+msgstr "Alvo de sincronização"
 
 msgid "Remove this tag from all the notes?"
-msgstr "Diese Markierung von allen Notizen löschen?"
+msgstr "Remover esta tag de todas as notas?"
 
 msgid "Remove this search from the sidebar?"
-msgstr "Diese Suche von der Seitenleiste entfernen?"
+msgstr "Remover essa pesquisa da barra lateral?"
 
 msgid "Rename"
-msgstr "Umbenennen"
+msgstr "Renomear"
 
 msgid "Synchronise"
-msgstr "Synchronisieren"
+msgstr "Sincronizar"
 
 msgid "Notebooks"
-msgstr "Notizbücher"
+msgstr "Cadernos"
 
 msgid "Tags"
-msgstr "Markierungen"
+msgstr "Tags"
 
 msgid "Searches"
-msgstr "Suchen"
+msgstr "Pesquisas"
 
 #, fuzzy
 msgid "Please select where the sync status should be exported to"
-msgstr ""
-"Wähle bitte zuerst eine Notiz oder ein Notizbuch aus, das gelöscht werden "
-"soll."
+msgstr "Por favor, primeiro, selecione a nota ou caderno a excluir."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Usage: %s"
-msgstr "Benutzung: %s"
+msgstr "Uso: %s"
 
 #, javascript-format
 msgid "Unknown flag: %s"
-msgstr "Unbekanntes Argument: %s"
+msgstr "Flag desconhecido: %s"
 
 msgid "File system"
-msgstr "Dateisystem"
+msgstr "Sistema de arquivos"
 
 msgid "OneDrive"
 msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
-msgstr "OneDrive Dev ( Nur für Tests )"
+msgstr "OneDrive Dev (apenas para testes)"
 
 #, javascript-format
 msgid "Unknown log level: %s"
-msgstr "Unbekanntes Loglevel: %s"
+msgstr "Nível de log desconhecido: %s"
 
 #, javascript-format
 msgid "Unknown level ID: %s"
-msgstr "Unbekannte Level-ID: %s"
+msgstr "Nível ID desconhecido: %s"
 
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
-"Kann Token nicht erneuern: Authentikationsdaten nicht vorhanden. Ein "
-"Neustart der Synchronisation behebt das Problem vielleicht."
+"Não é possível atualizar token: faltam dados de autenticação. Iniciar a "
+"sincronização novamente pode corrigir o problema."
 
 msgid ""
 "Could not synchronize with OneDrive.\n"
@@ -811,151 +781,149 @@ msgid ""
 "\n"
 "Please consider using a regular OneDrive account."
 msgstr ""
-"Konnte nicht mit OneDrive synchronisieren.\n"
+"Não foi possível sincronizar com o OneDrive.\n"
 "\n"
-"Dieser Fehler kommt oft vor, wenn OneDrive Business benutzt wird, das leider "
-"nicht unterstützt wird.\n"
+"Este erro geralmente acontece ao usar o OneDrive for Business, que "
+"infelizmente não pode ser suportado.\n"
 "\n"
-"Bitte benutze stattdessen einen normalen OneDrive account."
+"Considere usar uma conta regular do OneDrive."
 
 #, javascript-format
 msgid "Cannot access %s"
-msgstr "Kann nicht auf %s zugreifen"
+msgstr "Não é possível acessar %s"
 
 #, javascript-format
 msgid "Created local items: %d."
-msgstr ""
+msgstr "Itens locais criados: %d."
 
 #, javascript-format
 msgid "Updated local items: %d."
-msgstr ""
+msgstr "Itens locais atualizados: %d."
 
 #, javascript-format
 msgid "Created remote items: %d."
-msgstr ""
+msgstr "Itens remotos criados: %d."
 
 #, javascript-format
 msgid "Updated remote items: %d."
-msgstr ""
+msgstr "Itens remotos atualizados: %d."
 
 #, javascript-format
 msgid "Deleted local items: %d."
-msgstr ""
+msgstr "Itens locais excluídos: %d."
 
 #, javascript-format
 msgid "Deleted remote items: %d."
-msgstr ""
+msgstr "Itens remotos excluídos: %d."
 
 #, javascript-format
 msgid "State: \"%s\"."
-msgstr "Status: \"%s\"."
+msgstr "Estado: \"%s\"."
 
 msgid "Cancelling..."
-msgstr "Breche ab..."
+msgstr "Cancelando..."
 
 #, javascript-format
 msgid "Completed: %s"
-msgstr "Abgeschlossen: %s"
+msgstr "Completado: %s"
 
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
-msgstr "Synchronisation ist bereits im Gange. Status: %s"
+msgstr "Sincronização já em andamento. Estado: %s"
 
 msgid "Conflicts"
-msgstr "Konflikte"
+msgstr "Conflitos"
 
 #, javascript-format
 msgid "A notebook with this title already exists: \"%s\""
-msgstr "Ein Notizbuch mit diesem Titel existiert bereits : \"%s\""
+msgstr "Já existe caderno com este título: \"%s\""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
-"Notizbuch kann nicht \"%s\" genannt werden. Dies ist ein reservierter Titel."
+"Os cadernos não podem ser nomeados como\"%s\", que é um título reservado."
 
 msgid "Untitled"
-msgstr "Unbenannt"
+msgstr "Sem título"
 
 msgid "This note does not have geolocation information."
-msgstr "Diese Notiz hat keine Standort-Informationen."
+msgstr "Esta nota não possui informações de geolocalização."
 
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
-msgstr "Kann Notiz nicht zu Notizbuch \"%s\" kopieren"
+msgstr "Não é possível copiar a nota para o caderno \"%s\" "
 
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
-msgstr "Kann Notiz nicht zu Notizbuch \"%s\" verschieben"
+msgstr "Não é possível mover a nota para o caderno \"%s\""
 
 msgid "Text editor"
-msgstr "Textbearbeitungsprogramm"
+msgstr "Editor de texto"
 
 msgid ""
 "The editor that will be used to open a note. If none is provided it will try "
 "to auto-detect the default editor."
 msgstr ""
-"Das Textbearbeitungsprogramm, mit dem Notizen geöffnet werden. Wenn keines "
-"ausgewählt wurde, wird Joplin versuchen das standard-"
-"Textbearbeitungsprogramm zu erkennen."
+"O editor que será usado para abrir uma nota. Se nenhum for indicado, ele "
+"tentará detectar automaticamente o editor padrão."
 
 msgid "Language"
-msgstr "Sprache"
+msgstr "Idioma"
 
 msgid "Date format"
-msgstr "Datumsformat"
+msgstr "Formato de data"
 
 msgid "Time format"
-msgstr "Zeitformat"
+msgstr "Formato de hora"
 
 msgid "Theme"
-msgstr "Thema"
+msgstr "Tema"
 
 msgid "Light"
-msgstr "Hell"
+msgstr "Light"
 
 msgid "Dark"
-msgstr "Dunkel"
+msgstr "Dark"
 
 msgid "Show uncompleted todos on top of the lists"
-msgstr "Unvollständige To-Dos oben in der Liste anzeigen"
+msgstr "Mostrar tarefas incompletas no topo das listas"
 
 msgid "Save geo-location with notes"
-msgstr "Momentanen Standort zusammen mit Notizen speichern"
+msgstr "Salvar  geolocalização com notas"
 
 msgid "Synchronisation interval"
-msgstr "Synchronisationsinterval"
+msgstr "Intervalo de sincronização"
 
 msgid "Disabled"
-msgstr "Deaktiviert"
+msgstr "Desabilitado"
 
 #, javascript-format
 msgid "%d minutes"
-msgstr "%d Minuten"
+msgstr "%d minutos"
 
 #, javascript-format
 msgid "%d hour"
-msgstr "%d Stunde"
+msgstr "%d hora"
 
 #, javascript-format
 msgid "%d hours"
-msgstr "%d Stunden"
+msgstr "%d horas"
 
 msgid "Automatically update the application"
-msgstr "Die Applikation automatisch aktualisieren"
+msgstr "Atualizar automaticamente o aplicativo"
 
 msgid "Show advanced options"
-msgstr "Erweiterte Optionen anzeigen"
+msgstr "Mostrar opções avançadas"
 
 msgid "Synchronisation target"
-msgstr "Synchronisationsziel"
+msgstr "Alvo de sincronização"
 
 msgid ""
 "The target to synchonise to. If synchronising with the file system, set "
 "`sync.2.path` to specify the target directory."
 msgstr ""
-"Das Synchronisationsziel, mit dem synchronisiert werden soll. Wenn mit dem "
-"Dateisystem synchronisiert werden soll, setz den Wert zu `sync.2.path`, um "
-"den Zielpfad zu spezifizieren."
+"O alvo para sincronizar. Se estiver sincronizando com o sistema de arquivos, "
+"configure `sync.2.path` para especificar o diretório de destino."
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr ""
@@ -964,23 +932,22 @@ msgid ""
 "The path to synchronise with when file system synchronisation is enabled. "
 "See `sync.target`."
 msgstr ""
-"Der Pfad, mit dem synchronisiert wird, wenn Dateisystem-Synchronisation "
-"aktiviert ist. Siehe `sync.target`."
+"O caminho para sincronizar, quando a sincronização do sistema de arquivos "
+"está habilitada. Veja `sync.target`."
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "Ungültiger Optionswert: \"%s\". Mögliche Werte sind: %s."
+msgstr "Valor da opção inválida: \"%s\". Os valores possíveis são: %s."
 
 msgid "Items that cannot be synchronised"
 msgstr ""
 
 #, javascript-format
 msgid "\"%s\": \"%s\""
-msgstr "\"%s\": \"%s\""
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
-msgstr ""
-"Synchronisationsstatus (synchronisierte Notizen / vorhandenen Notizen )"
+msgstr "Status de sincronização (sincronizados / totais)"
 
 #, javascript-format
 msgid "%s: %d/%d"
@@ -988,37 +955,35 @@ msgstr "%s: %d/%d"
 
 #, javascript-format
 msgid "Total: %d/%d"
-msgstr "Insgesamt: %d/%d"
+msgstr "Total: %d/%d"
 
 #, javascript-format
 msgid "Conflicted: %d"
-msgstr ""
+msgstr "Em conflito: %d"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "To delete: %d"
-msgstr "Zu löschende Notizen: %d"
+msgstr "Para excluir: %d"
 
 msgid "Folders"
-msgstr "Ordner"
+msgstr "Pastas"
 
 #, javascript-format
 msgid "%s: %d notes"
-msgstr "%s: %d Notizen"
+msgstr "%s: %d notas"
 
 msgid "Coming alarms"
-msgstr "Anstehende Alarme"
+msgstr "Próximos alarmes"
 
 #, javascript-format
 msgid "On %s: %s"
-msgstr "Auf %s: %s"
+msgstr "Em %s: %s"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr ""
-"Momentan existieren noch keine Notizen. Erstelle eine, indem du auf den (+) "
-"Knopf drückst."
+msgstr "Atualmente, não há notas. Crie uma, clicando no botão (+)."
 
 msgid "Delete these notes?"
-msgstr "Sollen diese Notizen gelöscht werden?"
+msgstr "Excluir estas notas?"
 
 msgid "Log"
 msgstr "Log"
@@ -1027,101 +992,92 @@ msgid "Status"
 msgstr "Status"
 
 msgid "Export Debug Report"
-msgstr "Fehlerbreicht exportieren"
+msgstr "Exportar Relatório de Debug"
 
 msgid "Configuration"
-msgstr "Konfiguration"
+msgstr "Configuração"
 
 msgid "Move to notebook..."
-msgstr "Zu Notizbuch verschieben..."
+msgstr "Mover para o caderno..."
 
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr "%d Notizen zu dem Notizbuch \"%s\" verschieben?"
+msgstr "Mover %d notas para o caderno \"%s\"?"
 
 msgid "Select date"
-msgstr "Datum ausswählen"
+msgstr "Selecionar data"
 
 msgid "Confirm"
-msgstr "Bestätigen"
+msgstr "Confirmar"
 
 msgid "Cancel synchronisation"
-msgstr "Synchronisation abbrechen"
+msgstr "Cancelar sincronização"
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"
-msgstr "Dieses Notizbuch konnte nicht gespeichert werden: %s"
+msgstr "O caderno não pôde ser salvo: %s"
 
 msgid "Edit notebook"
-msgstr "Notizbuch bearbeiten"
+msgstr "Editar caderno"
 
 msgid "This note has been modified:"
-msgstr "Diese Notiz wurde verändert:"
+msgstr "Esta nota foi modificada:"
 
 msgid "Save changes"
-msgstr "Änderungen speichern"
+msgstr "Gravar alterações"
 
 msgid "Discard changes"
-msgstr "Änderungen verwerfen"
+msgstr "Descartar alterações"
 
 #, javascript-format
 msgid "Unsupported image type: %s"
-msgstr "Nicht unterstütztes Fotoformat: %s"
+msgstr "Tipo de imagem não suportada: %s"
 
 msgid "Attach photo"
-msgstr "Foto anhängen"
+msgstr "Anexar foto"
 
 msgid "Attach any file"
-msgstr "Beliebige Datei anhängen"
+msgstr "Anexar qualquer arquivo"
 
 msgid "Convert to note"
-msgstr "Zu einer Notiz umwandeln"
+msgstr "Converter para nota"
 
 msgid "Convert to todo"
-msgstr "Zu einem To-Do umwandeln"
+msgstr "Converter para tarefa"
 
 msgid "Hide metadata"
-msgstr "Metadaten verstecken"
+msgstr "Ocultar metadados"
 
 msgid "Show metadata"
-msgstr "Metadaten anzeigen"
+msgstr "Exibir metadados"
 
 msgid "View on map"
-msgstr "Auf der Karte anzeigen"
+msgstr "Ver no mapa"
 
 msgid "Delete notebook"
-msgstr "Notizbuch löschen"
+msgstr "Excluir caderno"
 
 msgid "Login with OneDrive"
-msgstr "Mit OneDrive anmelden"
+msgstr "Login com OneDrive"
 
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
 msgstr ""
-"Drücke auf den (+) Knopf, um eine neue Notiz oder ein neues Notizbuch zu "
-"erstellen."
+"Clique no botão (+) para criar uma nova nota ou caderno. Clique no menu "
+"lateral para acessar seus cadernos existentes."
 
 msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr ""
-"Du hast noch kein Notizbuch. Du kannst eines erstellen, indem du auf den (+) "
-"Knopf drückst."
+msgstr "Você não possui cadernos. Crie um clicando no botão (+)."
 
 msgid "Welcome"
-msgstr "Wilkommen"
-
-#, fuzzy
-#~ msgid "Some items cannot be decrypted."
-#~ msgstr "Kann Synchronisierer nicht initialisieren."
+msgstr "Bem-vindo"
 
 #~ msgid "Delete notebook?"
-#~ msgstr "Notizbuch löschen?"
+#~ msgstr "Excluir caderno?"
 
 #~ msgid "Delete notebook \"%s\"?"
-#~ msgstr "Notizbuch \"%s\" löschen?"
+#~ msgstr "Apagar o caderno \"%s\"?"
 
 #~ msgid "File system synchronisation target directory"
-#~ msgstr "Dateisystem-Synchronisation Zielpfad"
-
-#~ msgid "Set or clear alarm:"
-#~ msgstr "Erstelle oder entferne Alarm:"
+#~ msgstr "Diretório de destino de sincronização do sistema de arquivos"

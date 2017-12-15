@@ -221,7 +221,10 @@ msgstr "Affiche les informations d'utilisation."
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Les raccourcis ne sont pas disponible en mode de ligne de commande."
 
-msgid "Type `help [command]` for more information about a command."
+#, fuzzy
+msgid ""
+"Type `help [command]` for more information about a command; or type `help "
+"all` for the complete usage information."
 msgstr "Tapez `help [command]` pour plus d'information sur une commande."
 
 msgid "The possible commands are:"
@@ -374,9 +377,8 @@ msgstr "Supprimer le carnet."
 msgid "Deletes the notebook without asking for confirmation."
 msgstr "Supprimer le carnet sans demander la confirmation."
 
-#, javascript-format
-msgid "Delete notebook \"%s\"?"
-msgstr "Supprimer le carnet \"%s\" ?"
+msgid "Delete notebook? All notes within this notebook will also be deleted."
+msgstr ""
 
 msgid "Deletes the notes matching <note-pattern>."
 msgstr "Supprimer les notes correspondants à <note-pattern>."
@@ -394,7 +396,12 @@ msgstr "Supprimer la note ?"
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Chercher le motif <pattern> dans toutes les notes."
 
-msgid "Sets the property <name> of the given <note> to the given [value]."
+#, fuzzy, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
 msgstr "Assigner la valeur [value] à la propriété <name> de la <note> donnée."
 
 msgid "Displays summary about the notes and notebooks."
@@ -523,6 +530,15 @@ msgstr ""
 msgid "Search:"
 msgstr "Recherche :"
 
+msgid ""
+"Welcome to Joplin!\n"
+"\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
+"for usage information.\n"
+"\n"
+"For example, to create a notebook press `mb`; to create a note press `mn`."
+msgstr ""
+
 msgid "File"
 msgstr "Fichier"
 
@@ -588,6 +604,13 @@ msgstr "OK"
 msgid "Cancel"
 msgstr "Annulation"
 
+#, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
 msgid "Back"
 msgstr "Retour"
 
@@ -636,6 +659,20 @@ msgstr "Impossible d'initialiser la synchronisation."
 msgid "View them now"
 msgstr ""
 
+msgid "ID"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+#, fuzzy
+msgid "Created"
+msgstr "Créés : %d."
+
+#, fuzzy
+msgid "Updated"
+msgstr "Mis à jour : %d."
+
 msgid "Add or remove tags"
 msgstr "Gérer les étiquettes"
 
@@ -651,6 +688,13 @@ msgstr "Supprimer les notes ?"
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr ""
 "Pas de notes ici. Créez-en une en pressant le bouton \"Nouvelle note\"."
+
+#, fuzzy
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr ""
+"Il n'y a pour l'instant aucun carnet. Créez-en un en cliquant sur le bouton "
+"(+)"
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -679,9 +723,6 @@ msgstr "Importer"
 msgid "Synchronisation Status"
 msgstr "Cible de la synchronisation"
 
-msgid "Delete notebook?"
-msgstr "Supprimer le carnet ?"
-
 msgid "Remove this tag from all the notes?"
 msgstr "Enlever cette étiquette de toutes les notes ?"
 
@@ -702,6 +743,10 @@ msgstr "Étiquettes"
 
 msgid "Searches"
 msgstr "Recherches"
+
+#, fuzzy
+msgid "Please select where the sync status should be exported to"
+msgstr "Veuillez d'abord sélectionner un carnet."
 
 #, javascript-format
 msgid "Usage: %s"
@@ -812,16 +857,6 @@ msgstr "Impossible de copier la note vers le carnet \"%s\""
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Impossible de déplacer la note vers le carnet \"%s\""
 
-msgid "File system synchronisation target directory"
-msgstr "Cible de la synchronisation sur le disque dur"
-
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-"Le chemin du répertoire avec lequel synchroniser lorsque la synchronisation "
-"par système de fichier est activée. Voir `sync.target`."
-
 msgid "Text editor"
 msgstr "Éditeur de texte"
 
@@ -889,6 +924,16 @@ msgid ""
 msgstr ""
 "La cible avec laquelle synchroniser. Pour synchroniser avec le système de "
 "fichier, veuillez spécifier le répertoire avec `sync.2.path`."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr ""
+
+msgid ""
+"The path to synchronise with when file system synchronisation is enabled. "
+"See `sync.target`."
+msgstr ""
+"Le chemin du répertoire avec lequel synchroniser lorsque la synchronisation "
+"par système de fichier est activée. Voir `sync.target`."
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1031,6 +1076,19 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#, fuzzy
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Impossible d'initialiser la synchronisation."
+
+#~ msgid "Delete notebook?"
+#~ msgstr "Supprimer le carnet ?"
+
+#~ msgid "Delete notebook \"%s\"?"
+#~ msgstr "Supprimer le carnet \"%s\" ?"
+
+#~ msgid "File system synchronisation target directory"
+#~ msgstr "Cible de la synchronisation sur le disque dur"
 
 #~ msgid "Set or clear alarm:"
 #~ msgstr "Définir ou modifier alarme :"
@@ -1204,12 +1262,6 @@ msgstr "Bienvenue"
 #~ msgstr ""
 #~ "Tous les ports sont en cours d'utilisation. Veuillez signaler ce problème "
 #~ "sur %s"
-
-#~ msgid ""
-#~ "There is currently no notebook. Create one by clicking on the (+) button."
-#~ msgstr ""
-#~ "Il n'y a pour l'instant aucun carnet. Créez-en un en cliquant sur le "
-#~ "bouton (+)"
 
 #~ msgid "Synchronizing with directory \"%s\""
 #~ msgstr "Synchronisation avec dossier \"%s\""

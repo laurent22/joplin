@@ -208,7 +208,9 @@ msgstr ""
 msgid "Shortcuts are not available in CLI mode."
 msgstr ""
 
-msgid "Type `help [command]` for more information about a command."
+msgid ""
+"Type `help [command]` for more information about a command; or type `help "
+"all` for the complete usage information."
 msgstr ""
 
 msgid "The possible commands are:"
@@ -343,8 +345,7 @@ msgstr ""
 msgid "Deletes the notebook without asking for confirmation."
 msgstr ""
 
-#, javascript-format
-msgid "Delete notebook \"%s\"?"
+msgid "Delete notebook? All notes within this notebook will also be deleted."
 msgstr ""
 
 msgid "Deletes the notes matching <note-pattern>."
@@ -363,7 +364,12 @@ msgstr ""
 msgid "Searches for the given <pattern> in all the notes."
 msgstr ""
 
-msgid "Sets the property <name> of the given <note> to the given [value]."
+#, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
 msgstr ""
 
 msgid "Displays summary about the notes and notebooks."
@@ -473,6 +479,15 @@ msgstr ""
 msgid "Search:"
 msgstr ""
 
+msgid ""
+"Welcome to Joplin!\n"
+"\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
+"for usage information.\n"
+"\n"
+"For example, to create a notebook press `mb`; to create a note press `mn`."
+msgstr ""
+
 msgid "File"
 msgstr ""
 
@@ -537,6 +552,13 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
+#, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
 msgid "Back"
 msgstr ""
 
@@ -581,6 +603,18 @@ msgstr ""
 msgid "View them now"
 msgstr ""
 
+msgid "ID"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Created"
+msgstr ""
+
+msgid "Updated"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr ""
 
@@ -594,6 +628,10 @@ msgid "Delete notes?"
 msgstr ""
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr ""
+
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
 
 #, javascript-format
@@ -621,9 +659,6 @@ msgstr ""
 msgid "Synchronisation Status"
 msgstr ""
 
-msgid "Delete notebook?"
-msgstr ""
-
 msgid "Remove this tag from all the notes?"
 msgstr ""
 
@@ -643,6 +678,9 @@ msgid "Tags"
 msgstr ""
 
 msgid "Searches"
+msgstr ""
+
+msgid "Please select where the sync status should be exported to"
 msgstr ""
 
 #, javascript-format
@@ -752,14 +790,6 @@ msgstr ""
 msgid "Cannot move note to \"%s\" notebook"
 msgstr ""
 
-msgid "File system synchronisation target directory"
-msgstr ""
-
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-
 msgid "Text editor"
 msgstr ""
 
@@ -822,6 +852,14 @@ msgstr ""
 msgid ""
 "The target to synchonise to. If synchronising with the file system, set "
 "`sync.2.path` to specify the target directory."
+msgstr ""
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr ""
+
+msgid ""
+"The path to synchronise with when file system synchronisation is enabled. "
+"See `sync.target`."
 msgstr ""
 
 #, javascript-format
