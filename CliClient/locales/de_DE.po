@@ -15,70 +15,70 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "Give focus to next pane"
-msgstr "Fokussiere das nächste Fenster"
+msgstr "Das nächste Fenster fokussieren"
 
 msgid "Give focus to previous pane"
-msgstr "Fokussiere das vorherige Fenster"
+msgstr "Das vorherige Fenster fokussieren"
 
 msgid "Enter command line mode"
-msgstr "Wechsle zum Terminal-Modus"
+msgstr "Zum Terminal-Modus wechseln"
 
 msgid "Exit command line mode"
-msgstr "Verlasse den Terminal-Modus"
+msgstr "Den Terminal-Modus verlassen"
 
 msgid "Edit the selected note"
-msgstr "Bearbeite die ausgewählte Notiz"
+msgstr "Die ausgewählte Notiz bearbeiten"
 
 msgid "Cancel the current command."
-msgstr "Breche den momentanen Befehl ab."
+msgstr "Den momentanen Befehl abbrechen."
 
 msgid "Exit the application."
-msgstr "Verlasse das Programm."
+msgstr "Das Programm verlassen."
 
 msgid "Delete the currently selected note or notebook."
-msgstr ""
-"Lösche die momentan ausgewählte Notiz oder das momentan ausgewählte "
-"Notizbuch."
+msgstr "Die momentan ausgewählte Notiz(-buch) löschen."
 
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
-"Um eine Markierung zu löschen, habe die Markierungen zugehöriger Notizen auf."
+"Hebe die Markierungen zugehöriger Notizen auf, um eine Markierung zu löschen."
 
 msgid "Please select the note or notebook to be deleted first."
 msgstr ""
-"Bitte wählen Sie zuert eine Notiz oder ein Notizbuch aus, das gelöscht "
-"werden soll."
+"Wähle bitte zuerst eine Notiz oder ein Notizbuch aus, das gelöscht werden "
+"soll."
 
 msgid "Set a to-do as completed / not completed"
-msgstr "Markiere ein ToDo as abgeschlossen / nicht abgeschlossen"
+msgstr "Ein To-Do as abgeschlossen / nicht abgeschlossen markieren"
 
+#, fuzzy
 msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
 msgstr ""
 "Schal[t]e das Terminal zwischen maximiert/minimiert/versteckt/sichtbar um."
 
 msgid "Search"
-msgstr "Suche"
+msgstr "Suchen"
 
 msgid "[t]oggle note [m]etadata."
-msgstr "Schal[t]e Notiz-[M]etadata ein."
+msgstr "Notiz-[M]etadata einschal[t]en."
 
 msgid "[M]ake a new [n]ote"
-msgstr "Erstelle eine neue Notiz"
+msgstr "Eine neue [N]otiz [m]achen"
 
 msgid "[M]ake a new [t]odo"
-msgstr "Erstelle ein neues To-Do"
+msgstr "Ein neues [T]o-Do [m]achen"
 
 msgid "[M]ake a new note[b]ook"
-msgstr "Erstelle ein neues Notiz[b]uch"
+msgstr "Ein neues Notiz[b]uch [m]achen"
 
-#, fuzzy
 msgid "Copy ([Y]ank) the [n]ote to a notebook."
-msgstr "Kopiere die Notiz zu einem Notizbuch."
+msgstr "Die Notiz zu einem Notizbuch kopieren."
 
 msgid "Move the note to a notebook."
-msgstr "Verschiebe die Notiz zu einem Notizbuch."
+msgstr "Die Notiz zu einem Notizbuch verschieben."
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Drücke Strg+D oder schreibe \"exit\", um das Programm zu verlassen"
@@ -120,7 +120,7 @@ msgstr "Der Befehl \"%s\" ist nur im GUI Modus verfügbar"
 
 #, javascript-format
 msgid "Missing required argument: %s"
-msgstr "Fehlender benötigtes Argument: %s"
+msgstr "Fehlendes benötigtes Argument: %s"
 
 #, javascript-format
 msgid "%s: %s"
@@ -176,14 +176,14 @@ msgstr ""
 "kopiert."
 
 msgid "Marks a to-do as done."
-msgstr "Markiert ein ToDo als abgeschlossen."
+msgstr "Markiert ein To-Do als abgeschlossen."
 
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
-msgstr "Notiz ist kein Todo: \"%s\""
+msgstr "Notiz ist kein To-Do: \"%s\""
 
 msgid "Edit note."
-msgstr "Bearbeite Notiz."
+msgstr "Notiz bearbeiten."
 
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
@@ -200,7 +200,7 @@ msgstr "Notiz \"%s\" existiert nicht. Soll sie erstellt werden?"
 
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
-"Beginne die Notiz zu bearbeiten. Schließ das Textbearbeitungsprogramm um "
+"Beginne die Notiz zu bearbeiten. Schließ das Textbearbeitungsprogramm, um "
 "zurück zum Terminal zu kommen."
 
 msgid "Note has been saved."
@@ -405,7 +405,7 @@ msgstr ""
 "%d Notizen stimmen mit diesem Muster überein. Sollen sie gelöscht werden?"
 
 msgid "Delete note?"
-msgstr "Lösche Notiz?"
+msgstr "Notiz löschen?"
 
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Sucht nach dem gegebenen <pattern> in allen Notizen."
@@ -423,7 +423,7 @@ msgstr "Synchronisiert mit "
 
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
-"Synchronisiere mit dem gegebenen Ziel ( voreingestellt auf den sync.target "
+"Mit dem gegebenen Ziel synchronisieren ( voreingestellt auf den sync.target "
 "Optionswert)"
 
 msgid "Synchronisation is already in progress."
@@ -496,7 +496,7 @@ msgstr ""
 "Notizbuch verrichtet."
 
 msgid "Displays version information"
-msgstr ""
+msgstr "Zeigt die Versionsnummer an"
 
 #, javascript-format
 msgid "%s %s (%s)"
@@ -540,7 +540,7 @@ msgid ""
 msgstr ""
 "Bitte öffne die folgende URL in deinem Browser, um das Programm zu "
 "authentifizieren. Das Programm wird einen Ordner in \"Apps/Joplin\" "
-"erstellen und wird nur in diesem Ordner schreiben und lesen. Es wird keinen "
+"erstellen und wird nur in diesem Ordner schreiben und lesen. Es wird weder "
 "Zugriff auf Dateien außerhalb dieses Ordners haben, noch auf persönliche "
 "Daten. Es werden keine Daten mit Dritten geteilt."
 
@@ -560,7 +560,7 @@ msgid "New notebook"
 msgstr "Neues Notizbuch"
 
 msgid "Import Evernote notes"
-msgstr "Importiere Evernote Notizen"
+msgstr "Evernote Notizen importieren"
 
 msgid "Evernote Export Files"
 msgstr ""
@@ -626,7 +626,7 @@ msgid "Please create a notebook first."
 msgstr "Bitte erstelle zuerst ein Notizbuch."
 
 msgid "Note title:"
-msgstr "Notiz titel:"
+msgstr "Notiz Titel:"
 
 msgid "Please create a notebook first"
 msgstr "Bitte erstelle zuerst ein Notizbuch"
@@ -646,9 +646,8 @@ msgstr "Trenne jede Markierung mit einem Komma."
 msgid "Rename notebook:"
 msgstr "Benne Notizbuch um:"
 
-#, fuzzy
 msgid "Set alarm:"
-msgstr "Erstelle Alarm"
+msgstr "Alarm erstellen:"
 
 msgid "Layout"
 msgstr "Layout"
@@ -661,10 +660,10 @@ msgid "View them now"
 msgstr ""
 
 msgid "Add or remove tags"
-msgstr "Füge hinzu oder entferne Markierungen"
+msgstr "Markierungen hinzufügen oder entfernen"
 
 msgid "Switch between note and to-do type"
-msgstr "Wechsel zwischen Notiz und To-Do Typ"
+msgstr "Zwischen Notiz und To-Do Typ wechseln"
 
 msgid "Delete"
 msgstr "Löschen"
@@ -674,17 +673,18 @@ msgstr "Notizen löschen?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr ""
-"Hier sind keine Notizen. Erstelle eine indem zu auf \"Neue Notiz\" drückst."
+"Hier sind noch keine Notizen. Erstelle eine, indem du auf \"Neue Notiz\" "
+"drückst."
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Nicht unterstützter Link oder Nachricht: %s"
 
 msgid "Attach file"
-msgstr "Hänge Datei an"
+msgstr "Datei anhängen"
 
 msgid "Set alarm"
-msgstr "Erstelle Alarm"
+msgstr "Alarm erstellen"
 
 msgid "Refresh"
 msgstr "Aktualisieren"
@@ -724,15 +724,15 @@ msgid "Tags"
 msgstr "Markierungen"
 
 msgid "Searches"
-msgstr "Sucht"
+msgstr "Suchen"
 
-#, javascript-format
+#, fuzzy, javascript-format
 msgid "Usage: %s"
-msgstr ""
+msgstr "Benutzung: %s"
 
 #, javascript-format
 msgid "Unknown flag: %s"
-msgstr ""
+msgstr "Unbekanntes Argument: %s"
 
 msgid "File system"
 msgstr "Dateisystem"
@@ -766,6 +766,12 @@ msgid ""
 "\n"
 "Please consider using a regular OneDrive account."
 msgstr ""
+"Konnte nicht mit OneDrive synchronisieren.\n"
+"\n"
+"Dieser Fehler kommt oft vor, wenn OneDrive Business benutzt wird, das leider "
+"nicht unterstützt wird.\n"
+"\n"
+"Bitte benutze stattdessen einen normalen OneDrive account."
 
 #, javascript-format
 msgid "Cannot access %s"
@@ -876,10 +882,10 @@ msgid "Dark"
 msgstr "Dunkel"
 
 msgid "Show uncompleted todos on top of the lists"
-msgstr "Zeige unvollständige ToDos oben in der Liste an"
+msgstr "Unvollständige To-Dos oben in der Liste anzeigen"
 
 msgid "Save geo-location with notes"
-msgstr "Speicher momentanen Standort zusammen mit Notizen"
+msgstr "Momentanen Standort zusammen mit Notizen speichern"
 
 msgid "Synchronisation interval"
 msgstr "Synchronisationsinterval"
@@ -900,10 +906,10 @@ msgid "%d hours"
 msgstr "%d Stunden"
 
 msgid "Automatically update the application"
-msgstr "Halte die Applikation automatisch auf den neusten Stand"
+msgstr "Die Applikation automatisch aktualisieren"
 
 msgid "Show advanced options"
-msgstr "Zeige erweiterte Optionen an"
+msgstr "Erweiterte Optionen anzeigen"
 
 msgid "Synchronisation target"
 msgstr "Synchronisationsziel"
@@ -913,8 +919,8 @@ msgid ""
 "`sync.2.path` to specify the target directory."
 msgstr ""
 "Das Synchronisationsziel, mit dem synchronisiert werden soll. Wenn mit dem "
-"Dateisystem synchronisiert werden soll, setzen Sie den Wert zu `sync.2."
-"path`, um den Zielpfad zu spezifizieren."
+"Dateisystem synchronisiert werden soll, setz den Wert zu `sync.2.path`, um "
+"den Zielpfad zu spezifizieren."
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -925,10 +931,11 @@ msgstr ""
 
 #, javascript-format
 msgid "\"%s\": \"%s\""
-msgstr ""
+msgstr "\"%s\": \"%s\""
 
 msgid "Sync status (synced items / total items)"
-msgstr "Synchronisations status (synchronisierte Notizen / insgesamt )"
+msgstr ""
+"Synchronisationsstatus (synchronisierte Notizen / vorhandenen Notizen )"
 
 #, javascript-format
 msgid "%s: %d/%d"
@@ -954,7 +961,7 @@ msgid "%s: %d notes"
 msgstr "%s: %d Notizen"
 
 msgid "Coming alarms"
-msgstr "Anstehender Alarm"
+msgstr "Anstehende Alarme"
 
 #, javascript-format
 msgid "On %s: %s"
@@ -962,8 +969,8 @@ msgstr "Auf %s: %s"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
-"Momentan existieren noch keine Notizen. Erstelle eine indem Sie auf den (+) "
-"Knopf drücken."
+"Momentan existieren noch keine Notizen. Erstelle eine, indem du auf den (+) "
+"Knopf drückst."
 
 msgid "Delete these notes?"
 msgstr "Sollen diese Notizen gelöscht werden?"
@@ -981,11 +988,11 @@ msgid "Configuration"
 msgstr "Konfiguration"
 
 msgid "Move to notebook..."
-msgstr "Verschiebe zu Notizbuch..."
+msgstr "Zu Notizbuch verschieben..."
 
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr "Verschiebe %d Notizen zu dem Notizbuch \"%s\"?"
+msgstr "%d Notizen zu dem Notizbuch \"%s\" verschieben?"
 
 msgid "Select date"
 msgstr "Datum ausswählen"
@@ -1026,7 +1033,7 @@ msgid "Convert to note"
 msgstr "Zu einer Notiz umwandeln"
 
 msgid "Convert to todo"
-msgstr "Zu einem ToDo umwandeln"
+msgstr "Zu einem To-Do umwandeln"
 
 msgid "Hide metadata"
 msgstr "Metadaten verstecken"
@@ -1047,13 +1054,13 @@ msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
 msgstr ""
-"Drücken Sie auf den (+) Knopf, um eine neue Notiz oder ein neues Notizbuch "
-"zu erstellen."
+"Drücke auf den (+) Knopf, um eine neue Notiz oder ein neues Notizbuch zu "
+"erstellen."
 
 msgid "You currently have no notebook. Create one by clicking on (+) button."
 msgstr ""
-"Du habst noch kein Notizbuch. Sie können eines erstellen, indem Sie auf den "
-"(+) Knopf drücken."
+"Du hast noch kein Notizbuch. Du kannst eines erstellen, indem du auf den (+) "
+"Knopf drückst."
 
 msgid "Welcome"
 msgstr "Wilkommen"

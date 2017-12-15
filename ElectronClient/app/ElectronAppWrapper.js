@@ -1,5 +1,6 @@
 const { _ } = require('lib/locale.js');
 const { BrowserWindow } = require('electron');
+const { shim } = require('lib/shim');
 const url = require('url')
 const path = require('path')
 const urlUtils = require('lib/urlUtils.js');
@@ -38,12 +39,18 @@ class ElectronAppWrapper {
 			defaultHeight: 600,
 		});
 
-		this.win_ = new BrowserWindow({
+		const windowOptions = {
 			'x': windowState.x,
 			'y': windowState.y,
 			'width': windowState.width,
-			'height': windowState.height
-		})
+			'height': windowState.height,
+		};
+
+		// Linux icon workaround for bug https://github.com/electron-userland/electron-builder/issues/2098
+		// Fix: https://github.com/electron-userland/electron-builder/issues/2269
+		if (shim.isLinux()) windowOptions.icon = __dirname + '/build/icons/128x128.png';
+
+		this.win_ = new BrowserWindow(windowOptions)
 
 		this.win_.loadURL(url.format({
 			pathname: path.join(__dirname, 'index.html'),
