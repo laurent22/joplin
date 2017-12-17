@@ -172,6 +172,7 @@ codeToLanguage_["hu"] = "Magyar";
 
 let codeToCountry_ = {};
 codeToCountry_["BR"] = "Brasil";
+codeToCountry_["CR"] = "Costa Rica";
 codeToCountry_["CN"] = "中国";
 
 let supportedLocales_ = null;

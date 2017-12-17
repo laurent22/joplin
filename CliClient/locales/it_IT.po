@@ -659,6 +659,16 @@ msgstr "Alcuni elementi non possono essere sincronizzati."
 msgid "View them now"
 msgstr "Mostrali ora"
 
+#, fuzzy
+msgid "Some items cannot be decrypted."
+msgstr "Alcuni elementi non possono essere sincronizzati."
+
+msgid "Set the password"
+msgstr ""
+
+msgid "Active"
+msgstr ""
+
 msgid "ID"
 msgstr ""
 
@@ -672,6 +682,18 @@ msgstr "Creato: %d."
 #, fuzzy
 msgid "Updated"
 msgstr "Aggiornato: %d."
+
+msgid "Password"
+msgstr ""
+
+msgid "Password OK"
+msgstr ""
+
+msgid ""
+"Note: Only one master key is going to be used for encryption (the one marked "
+"as \"active\"). Any of the keys might be used for decryption, depending on "
+"how the notes or notebooks were originally encrypted."
+msgstr ""
 
 msgid "Add or remove tags"
 msgstr "Aggiungi o rimuovi etichetta"
@@ -717,6 +739,9 @@ msgstr "Importa"
 
 msgid "Synchronisation Status"
 msgstr "Stato della Sincronizzazione"
+
+msgid "Master Keys"
+msgstr ""
 
 msgid "Remove this tag from all the notes?"
 msgstr "Rimuovere questa etichetta da tutte le note?"
@@ -1076,10 +1101,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvenuto"
-
-#, fuzzy
-#~ msgid "Some items cannot be decrypted."
-#~ msgstr "Alcuni elementi non possono essere sincronizzati."
 
 #~ msgid "Delete notebook?"
 #~ msgstr "Eliminare il blocco note?"
