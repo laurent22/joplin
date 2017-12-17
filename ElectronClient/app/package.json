@@ -1,6 +1,6 @@
 {
   "name": "Joplin",
-  "version": "0.10.39",
+  "version": "0.10.40",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "scripts": {
@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "app-module-path": "^2.2.0",
+    "electron": "^1.7.9",
     "electron-context-menu": "^0.9.1",
     "electron-log": "^2.2.11",
     "electron-updater": "^2.16.1",
