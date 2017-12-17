@@ -82,7 +82,11 @@ class EncryptionService {
 	}
 
 	activeMasterKeyId() {
-		if (!this.activeMasterKeyId_) throw new Error('No master key is defined as active');
+		if (!this.activeMasterKeyId_) {
+			const error = new Error('No master key is defined as active. Check this: Either one or more master keys exist but no password was provided for any of them. Or no master key exist. Or master keys and password exist, but none was set as active.');
+			error.code = 'noActiveMasterKey';
+			throw error;
+		}
 		return this.activeMasterKeyId_;
 	}
 

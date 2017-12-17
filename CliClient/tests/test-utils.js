@@ -51,7 +51,7 @@ const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1
 const logger = new Logger();
 logger.addTarget('console');
 logger.addTarget('file', { path: logDir + '/log.txt' });
-logger.setLevel(Logger.LEVEL_WARN);
+logger.setLevel(Logger.LEVEL_WARN); // Set to INFO to display sync process in console
 
 BaseItem.loadClass('Note', Note);
 BaseItem.loadClass('Folder', Folder);
@@ -173,11 +173,19 @@ function encryptionService(id = null) {
 	return encryptionServices_[id];
 }
 
-async function loadEncryptionMasterKey(id = null) {
+async function loadEncryptionMasterKey(id = null, useExisting = false) {
 	const service = encryptionService(id);
 
-	let masterKey = await service.generateMasterKey('123456');
-	masterKey = await MasterKey.save(masterKey);
+	let masterKey = null;
+
+	if (!useExisting) { // Create it
+		masterKey = await service.generateMasterKey('123456');
+		masterKey = await MasterKey.save(masterKey);
+	} else { // Use the one already available
+		materKey = await MasterKey.all();
+		if (!materKey.length) throw new Error('No mater key available');
+		masterKey = materKey[0];
+	}
 
 	await service.loadMasterKey(masterKey, '123456', true);
 

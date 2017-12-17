@@ -221,6 +221,20 @@ class Setting extends BaseModel {
 		this.scheduleSave();
 	}
 
+	static setObjectKey(settingKey, objectKey, value) {
+		const o = this.value(settingKey);
+		if (typeof o !== 'object') o = {};
+		o[objectKey] = value;
+		this.setValue(settingKey, o);
+	}
+
+	static deleteObjectKey(settingKey, objectKey) {
+		const o = this.value(settingKey);
+		if (typeof o !== 'object') return;
+		delete o[objectKey];
+		this.setValue(settingKey, o);
+	}
+
 	static valueToString(key, value) {
 		const md = this.settingMetadata(key);
 		value = this.formatValue(key, value);

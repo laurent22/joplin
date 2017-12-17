@@ -603,6 +603,7 @@ describe('Synchronizer', function() {
 		await switchClient(2);
 
 		await synchronizer().start();
+		if (withEncryption) await loadEncryptionMasterKey(null, true);
 		let note2 = await Note.load(note1.id);
 		note2.todo_completed = time.unixMs()-1;
 		await Note.save(note2);
@@ -748,5 +749,89 @@ describe('Synchronizer', function() {
 
 		done();
 	});
+
+	it('should enable encryption automatically when downloading new master key (and none was previously available)', async (done) => {
+		// Enable encryption on client 1 and sync an item
+		Setting.setValue('encryption.enabled', true);
+		await loadEncryptionMasterKey();
+		let folder1 = await Folder.save({ title: "folder1" });
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		// Synchronising should enable encryption since we're going to get a master key
+		expect(Setting.value('encryption.enabled')).toBe(false);
+		await synchronizer().start();
+		expect(Setting.value('encryption.enabled')).toBe(true);
+
+		// Check that we got the master key from client 1
+		const masterKey = (await MasterKey.all())[0];
+		expect(!!masterKey).toBe(true);
+
+		// Since client 2 hasn't supplied a password yet, no master key is currently loaded
+		expect(encryptionService().loadedMasterKeyIds().length).toBe(0);
+
+		// If we sync now, nothing should be sent to target since we don't have a password
+		let folder1_2 = await Folder.save({ id: folder1.id, title: "change test" });
+		await synchronizer().start();
+		await switchClient(1);
+		await synchronizer().start();
+		folder1 = await Folder.load(folder1.id);
+		expect(folder1.title).toBe('folder1'); // Still at old value
+
+		await switchClient(2);
+
+		// Now client 2 set the master key password
+		Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
+		await encryptionService().loadMasterKeysFromSettings();
+
+		// Now that master key should be loaded
+		expect(encryptionService().loadedMasterKeyIds()[0]).toBe(masterKey.id);
+
+		// If we sync now, this time client 1 should get the changes we did earlier
+		await synchronizer().start();
+
+		await switchClient(1);
+
+		// NOTE: there might be a race condition here but can't figure it out. Up to this point all the tests
+		// will pass, which means the master key is loaded. However, the below test find that the title is still
+		// the previous value. Possible reasons are:
+		// - Client 2 didn't send the updated item
+		// - Client 1 didn't receive it
+		// Maybe due to sync_time/updated_time having the same value on one or both of the clients when tests run fast?
+		await synchronizer().start();
+		folder1 = await Folder.load(folder1.id);
+		expect(folder1.title).toBe('change test'); // Got title from client 2
+
+		done();
+	});
+
+	it('should encrypt existing notes too when enabling E2EE', async (done) => {
+		// First create a folder, without encryption enabled, and sync it
+		const service = encryptionService();
+		let folder1 = await Folder.save({ title: "folder1" });
+		await synchronizer().start();
+		let files = await fileApi().list()
+		expect(files.items[0].content.indexOf('folder1') >= 0).toBe(true)
+
+		// Then enable encryption and sync again
+		let masterKey = await service.generateMasterKey('123456');
+		masterKey = await MasterKey.save(masterKey);
+		await service.initializeEncryption(masterKey, '123456');
+		await service.loadMasterKeysFromSettings();
+		await synchronizer().start();
+		
+		// Even though the folder has not been changed it should have been synced again so that
+		// an encrypted version of it replaces the decrypted version.
+		files = await fileApi().list()
+		expect(files.items.length).toBe(2);
+		// By checking that the folder title is not present, we can confirm that the item has indeed been encrypted
+		// One of the two items is the master key
+		expect(files.items[0].content.indexOf('folder1') < 0).toBe(true);
+		expect(files.items[1].content.indexOf('folder1') < 0).toBe(true);
+
+		done();
+	});
+
 
 });

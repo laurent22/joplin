@@ -41,14 +41,19 @@ class MasterKeysScreenComponent extends React.Component {
 	renderMasterKey(mk) {
 		const onSaveClick = () => {
 			const password = this.state.passwords[mk.id];
-			const cache = Setting.value('encryption.passwordCache');
-			if (!cache) cache = {};
 			if (!password) {
-				delete cache[mk.id];
+				Setting.deleteObjectKey('encryption.passwordCache', mk.id);
 			} else {
-				cache[mk.id] = password;
+				Setting.setObjectKey('encryption.passwordCache', mk.id, password);
 			}
-			Setting.setValue('encryption.passwordCache', cache);
+			// const cache = Setting.value('encryption.passwordCache');
+			// if (!cache) cache = {};
+			// if (!password) {
+			// 	delete cache[mk.id];
+			// } else {
+			// 	cache[mk.id] = password;
+			// }
+			// Setting.setValue('encryption.passwordCache', cache);
 
 			this.checkPasswords();
 		}

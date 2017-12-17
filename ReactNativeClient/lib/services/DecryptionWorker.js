@@ -6,7 +6,7 @@ class DecryptionWorker {
 		this.state_ = 'idle';
 
 		this.dispatch = (action) => {
-			console.warn('DecryptionWorker.dispatch is not defined');
+			//console.warn('DecryptionWorker.dispatch is not defined');
 		};
 
 		this.scheduleId_ = null;

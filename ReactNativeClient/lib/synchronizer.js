@@ -570,8 +570,14 @@ class Synchronizer {
 				await BaseItem.deleteOrphanSyncItems();
 			}
 		} catch (error) {
-			this.logger().error(error);
-			this.progressReport_.errors.push(error);
+			if (error && error.code === 'noActiveMasterKey') {
+				// Don't log an error for this as this is a common
+				// condition that the UI should report anyway.
+				this.logger().info(error.message);
+			} else {
+				this.logger().error(error);
+				this.progressReport_.errors.push(error);
+			}
 		}
 
 		if (this.cancelling()) {
@@ -588,6 +594,7 @@ class Synchronizer {
 				this.logger().info('Using master key: ', mk);
 				await this.encryptionService().initializeEncryption(mk);
 				await this.encryptionService().loadMasterKeysFromSettings();
+				this.logger().info('Encryption has been enabled with downloaded master key as active key. However, note that no password was initially supplied. It will need to be provided by user.');
 			}
 		}
 
