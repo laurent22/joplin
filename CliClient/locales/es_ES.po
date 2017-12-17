@@ -673,13 +673,6 @@ msgstr "No se han podido sincronizar algunos de los elementos."
 msgid "View them now"
 msgstr "Verlos ahora"
 
-#, fuzzy
-msgid "Some items cannot be decrypted."
-msgstr "No se han podido sincronizar algunos de los elementos."
-
-msgid "Set the password"
-msgstr ""
-
 msgid "Active"
 msgstr ""
 
@@ -750,9 +743,6 @@ msgstr "Importar"
 
 msgid "Synchronisation Status"
 msgstr "Estado de la sincronización"
-
-msgid "Master Keys"
-msgstr ""
 
 msgid "Remove this tag from all the notes?"
 msgstr "¿Desea eliminar esta etiqueta de todas las notas?"
@@ -1110,6 +1100,10 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+#, fuzzy
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "No se han podido sincronizar algunos de los elementos."
 
 #~ msgid "Delete notebook?"
 #~ msgstr "Eliminar libreta?"

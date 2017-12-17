@@ -662,13 +662,6 @@ msgstr "No se puede inicializar sincronizador."
 msgid "View them now"
 msgstr ""
 
-#, fuzzy
-msgid "Some items cannot be decrypted."
-msgstr "No se puede inicializar sincronizador."
-
-msgid "Set the password"
-msgstr ""
-
 msgid "Active"
 msgstr ""
 
@@ -745,9 +738,6 @@ msgstr "Importar"
 #, fuzzy
 msgid "Synchronisation Status"
 msgstr "Sincronización de objetivo"
-
-msgid "Master Keys"
-msgstr ""
 
 msgid "Remove this tag from all the notes?"
 msgstr "Remover esta etiqueta de todas las notas?"
@@ -1120,6 +1110,10 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+#, fuzzy
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "No se puede inicializar sincronizador."
 
 #~ msgid "Delete notebook?"
 #~ msgstr "Eliminar libreta?"

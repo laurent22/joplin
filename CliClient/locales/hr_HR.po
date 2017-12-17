@@ -683,13 +683,6 @@ msgstr "Neke stavke se ne mogu sinkronizirati."
 msgid "View them now"
 msgstr "Pogledaj ih sada"
 
-#, fuzzy
-msgid "Some items cannot be decrypted."
-msgstr "Neke stavke se ne mogu sinkronizirati."
-
-msgid "Set the password"
-msgstr ""
-
 msgid "Active"
 msgstr ""
 
@@ -760,9 +753,6 @@ msgstr "Uvoz"
 
 msgid "Synchronisation Status"
 msgstr "Status Sinkronizacije"
-
-msgid "Master Keys"
-msgstr ""
 
 msgid "Remove this tag from all the notes?"
 msgstr "Makni ovu oznaku iz svih bilješki?"
@@ -1116,3 +1106,7 @@ msgstr "Trenutno nemaš nijednu bilježnicu. Stvori novu klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobro došli"
+
+#, fuzzy
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Neke stavke se ne mogu sinkronizirati."

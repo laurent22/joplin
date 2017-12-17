@@ -603,12 +603,6 @@ msgstr ""
 msgid "View them now"
 msgstr ""
 
-msgid "Some items cannot be decrypted."
-msgstr ""
-
-msgid "Set the password"
-msgstr ""
-
 msgid "Active"
 msgstr ""
 
@@ -678,9 +672,6 @@ msgid "Import"
 msgstr ""
 
 msgid "Synchronisation Status"
-msgstr ""
-
-msgid "Master Keys"
 msgstr ""
 
 msgid "Remove this tag from all the notes?"
