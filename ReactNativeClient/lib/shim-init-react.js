@@ -46,10 +46,7 @@ function shimInit() {
 
 		try {
 			const response = await shim.fetchWithRetry(doFetchBlob, options);
-			// let response = await RNFetchBlob.config({
-			// 	path: localFilePath
-			// }).fetch(method, url, headers);
-
+			
 			// Returns an object that's roughtly compatible with a standard Response object
 			let output = {
 				ok: response.respInfo.status < 400,

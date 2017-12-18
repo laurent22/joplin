@@ -156,6 +156,16 @@ function shimInit() {
 
 		return shim.fetchWithRetry(doFetchOperation, options);
 	}
+
+	shim.uploadBlob = async function(url, options) {
+		 if (!options || !options.path) throw new Error('uploadBlob: source file path is missing');
+		const content = await fs.readFile(options.path);
+		options = Object.assign({}, options, {
+			body: content,
+		});
+		return shim.fetch(url, options);
+	}
+
 }
 
 module.exports = { shimInit };
