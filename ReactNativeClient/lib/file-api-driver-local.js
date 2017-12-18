@@ -151,12 +151,6 @@ class FileApiDriverLocal {
 			} else {
 				output = await fs.readFile(path, options.encoding);
 			}
-
-			// if (options.encoding == 'binary') {
-			// 	output = await fs.readFile(path);
-			// } else {
-			// 	output = await fs.readFile(path, options.encoding);
-			// }
 		} catch (error) {
 			if (error.code == 'ENOENT') return null;
 			throw this.fsErrorToJsError_(error);
@@ -184,7 +178,11 @@ class FileApiDriverLocal {
 		});
 	}
 
-	put(path, content) {
+	async put(path, content, options = null) {
+		if (!options) options = {};
+
+		if (options.source === 'file') content = await fs.readFile(options.path);
+
 		return new Promise((resolve, reject) => {
 			fs.writeFile(path, content, function(error) {
 				if (error) {
