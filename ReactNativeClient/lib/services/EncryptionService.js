@@ -244,7 +244,7 @@ class EncryptionService {
 		throw new Error('Unknown decryption method: ' + method);
 	}
 
-	async encryptString(plainText) {
+	async encryptAbstract_(source, destination) {
 		const method = this.defaultEncryptionMethod();
 		const masterKeyId = this.activeMasterKeyId();
 		const masterKeyPlainText = this.loadedMasterKey(masterKeyId);
@@ -255,76 +255,130 @@ class EncryptionService {
 			masterKeyId: masterKeyId,
 		};
 
-		let cipherText = [];
-
-		cipherText.push(this.encodeHeader_(header));
+		await destination.append(this.encodeHeader_(header));
 
 		let fromIndex = 0;
 
 		while (true) {
-			const block = plainText.substr(fromIndex, this.chunkSize_);
+			const block = await source.read(this.chunkSize_);
 			if (!block) break;
 
 			fromIndex += block.length;
 
 			const encrypted = await this.encrypt(method, masterKeyPlainText, block);
-
-			cipherText.push(padLeft(encrypted.length.toString(16), 6, '0'));
-			cipherText.push(encrypted);
+			
+			await destination.append(padLeft(encrypted.length.toString(16), 6, '0'));
+			await destination.append(encrypted);
 		}
-
-		return cipherText.join('');
 	}
 
-	async decryptString(cipherText) {
-		const header = this.decodeHeader_(cipherText);
-
+	async decryptAbstract_(source, destination) {
+		const headerVersionHexaBytes = await source.read(2);
+		const headerVersion = this.decodeHeaderVersion_(headerVersionHexaBytes);
+		const headerSize = this.headerSize_(headerVersion);
+		const headerHexaBytes = await source.read(headerSize - 2);
+		const header = this.decodeHeader_(headerVersionHexaBytes + headerHexaBytes);
 		const masterKeyPlainText = this.loadedMasterKey(header.masterKeyId);
 
 		let index = header.length;
 
-		let output = [];
-
-		while (index < cipherText.length) {
-			const length = parseInt(cipherText.substr(index, 6), 16);
+		while (true) {
+			const lengthHex = await source.read(6);
+			if (!lengthHex) break;
+			if (lengthHex.length !== 6) throw new Error('Invalid block size: ' + lengthHex);
+			const length = parseInt(lengthHex, 16);
 			index += 6;
 			if (!length) continue; // Weird but could be not completely invalid (block of size 0) so continue decrypting
-			const block = cipherText.substr(index, length);
+
+			const block = await source.read(length);
 			index += length;
 
 			const plainText = await this.decrypt(header.encryptionMethod, masterKeyPlainText, block);
-			output.push(plainText);
+			await destination.append(plainText);
 		}
-
-		return output.join('');
 	}
 
-	async encryptFile(method, key, srcPath, destPath) {
-		const fsDriver = this.fsDriver();
+	stringReader_(string) {
+		const reader = {
+			index: 0,
+			read: async function(size) {
+				const output = string.substr(reader.index, size);
+				reader.index += size;
+				return output;
+			},
+			close: function() {},
+		};
+		return reader;
+	}
 
-		let handle = await fsDriver.open(srcPath, 'r');
+	stringWriter_() {
+		const output = {
+			data: [],
+			append: async function(data) {
+				output.data.push(data);
+			},
+			result: function() {
+				return output.data.join('');
+			},
+			close: function() {},
+		};
+		return output;
+	}
+
+	async fileReader_(path, encoding) {
+		const fsDriver = this.fsDriver();
+		const handle = await fsDriver.open(path, 'r');
+		const reader = {
+			handle: handle,
+			read: async function(size) {
+				return fsDriver.readFileChunk(reader.handle, size, encoding);
+			},
+			close: function() {
+				fsDriver.close(reader.handle);
+			},
+		};
+		return reader;
+	}
+
+	async fileWriter_(path, encoding) {
+		const fsDriver = this.fsDriver();
+		return {
+			append: async function(data) {
+				return fsDriver.appendFile(path, data, encoding);
+			},
+			close: function() {},
+		};
+	}
+
+	async encryptString(plainText) {
+		const source = this.stringReader_(plainText);
+		const destination = this.stringWriter_();
+		await this.encryptAbstract_(source, destination);
+		return destination.result();
+	}
+
+	async decryptString(cipherText) {
+		const source = this.stringReader_(cipherText);
+		const destination = this.stringWriter_();
+		await this.decryptAbstract_(source, destination);
+		return destination.data.join('');
+	}
+
+	async encryptFile(srcPath, destPath) {
+		const fsDriver = this.fsDriver();		
+		let source = await this.fileReader_(srcPath, 'base64');
+		let destination = await this.fileWriter_(destPath, 'ascii');
 
 		const cleanUp = () => {
-			if (handle) fsDriver.close(handle);
-			handle = null;
+			if (source) source.close();
+			if (destination) destination.close();
+			source = null;
+			destination = null;
 		}
 
 		try {
 			await fsDriver.unlink(destPath);
-
-			// Header
-			await fsDriver.appendFile(destPath, '01', 'ascii'); // Version number
-			await fsDriver.appendFile(destPath, padLeft(EncryptionService.METHOD_SJCL.toString(16), 2, '0'), 'ascii'); // Encryption method
-
-			while (true) {
-				const plainText = await fsDriver.readFileChunk(handle, this.chunkSize_, 'base64');
-				if (!plainText) break;
-
-				const cipherText = await this.encrypt(method, key, plainText);
-
-				await fsDriver.appendFile(destPath, padLeft(cipherText.length.toString(16), 6, '0'), 'ascii'); // Data - Length
-				await fsDriver.appendFile(destPath, cipherText, 'ascii'); // Data - Data
-			}
+			await this.encryptAbstract_(source, destination);
 		} catch (error) {
 			cleanUp();
 			await fsDriver.unlink(destPath);
@@ -334,35 +388,21 @@ class EncryptionService {
 		cleanUp();
 	}
 
-	async decryptFile(key, srcPath, destPath) {
-		const fsDriver = this.fsDriver();
-
-		let handle = await fsDriver.open(srcPath, 'r');
+	async decryptFile(srcPath, destPath) {
+		const fsDriver = this.fsDriver();		
+		let source = await this.fileReader_(srcPath, 'ascii');
+		let destination = await this.fileWriter_(destPath, 'base64');
 
 		const cleanUp = () => {
-			if (handle) fsDriver.close(handle);
-			handle = null;
+			if (source) source.close();
+			if (destination) destination.close();
+			source = null;
+			destination = null;
 		}
 
 		try {
 			await fsDriver.unlink(destPath);
-
-			const headerHexaBytes = await fsDriver.readFileChunk(handle, 4, 'ascii');
-			const header = this.decodeHeader_(headerHexaBytes);
-
-			while (true) {
-				const lengthHex = await fsDriver.readFileChunk(handle, 6, 'ascii');
-				if (!lengthHex) break;
-
-				const length = parseInt(lengthHex, 16);
-
-				const cipherText = await fsDriver.readFileChunk(handle, length, 'ascii');
-				if (!cipherText) break;
-
-				const plainText = await this.decrypt(header.encryptionMethod, key, cipherText);
-
-				await fsDriver.appendFile(destPath, plainText, 'base64');
-			}
+			await this.decryptAbstract_(source, destination);
 		} catch (error) {
 			cleanUp();
 			await fsDriver.unlink(destPath);
@@ -370,6 +410,16 @@ class EncryptionService {
 		}
 
 		cleanUp();
+	}
+
+	decodeHeaderVersion_(hexaByte) {
+		if (hexaByte.length !== 2) throw new Error('Invalid header version length: ' + hexaByte);
+		return parseInt(hexaByte, 16);
+	}
+
+	headerSize_(version) {
+		if (version === 1) return 36;
+		throw new Error('Unknown header version: ' + version);
 	}
 
 	encodeHeader_(header) {

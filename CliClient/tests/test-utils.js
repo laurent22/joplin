@@ -35,6 +35,7 @@ shimInit();
 const fsDriver = new FsDriverNode();
 Logger.fsDriver_ = fsDriver;
 Resource.fsDriver_ = fsDriver;
+EncryptionService.fsDriver_ = fsDriver;
 
 const logDir = __dirname + '/../tests/logs';
 fs.mkdirpSync(logDir, 0o755);
@@ -87,6 +88,9 @@ async function switchClient(id) {
 	Setting.db_ = databases_[id];
 
 	BaseItem.encryptionService_ = encryptionServices_[id];
+	Resource.encryptionService_ = encryptionServices_[id];
+
+	Setting.setConstant('resourceDir', resourceDir(id));
 
 	return Setting.load();
 }
@@ -120,6 +124,7 @@ function setupDatabase(id = null) {
 	}
 
 	const filePath = __dirname + '/data/test-' + id + '.sqlite';
+	// Setting.setConstant('resourceDir', RNFetchBlob.fs.dirs.DocumentDir);
 	return fs.unlink(filePath).catch(() => {
 		// Don't care if the file doesn't exist
 	}).then(() => {
@@ -133,10 +138,18 @@ function setupDatabase(id = null) {
 	});
 }
 
+function resourceDir(id = null) {
+	if (id === null) id = currentClient_;
+	return __dirname + '/data/resources-' + id;
+}
+
 async function setupDatabaseAndSynchronizer(id = null) {
 	if (id === null) id = currentClient_;
 
 	await setupDatabase(id);
+
+	await fs.remove(resourceDir(id));
+	await fs.mkdirp(resourceDir(id), 0o755);
 
 	if (!synchronizers_[id]) {
 		const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId_);
@@ -243,4 +256,11 @@ async function checkThrowAsync(asyncFn) {
 	return hasThrown;
 }
 
-module.exports = { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey };
+function fileContentEqual(path1, path2) {
+	const fs = require('fs-extra');
+	const content1 = fs.readFileSync(path1, 'base64');
+	const content2 = fs.readFileSync(path2, 'base64');
+	return content1 === content2;
+}
+
+module.exports = { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual };

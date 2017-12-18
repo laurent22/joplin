@@ -36,3 +36,11 @@ Only one master key can be active for encryption purposes. For decryption, the a
 ## Encryption Service
 
 The applications make use of the EncryptionService class to handle encryption and decryption. Before it can be used, a least one master key must be loaded into it and marked as "active".
+
+## Encryption workflow
+
+Items are encrypted only during synchronisation, when they are serialised (via BaseItem.serializeForSync), so before being sent to the sync target.
+
+They are decrypted by DecryptionWorker in the background.
+
+The apps handle displaying both decrypted and encrypted items, so that user is aware that these items are there even if not yet decrypted. Encrypted items are mostly read-only to the user, except that they can be deleted.

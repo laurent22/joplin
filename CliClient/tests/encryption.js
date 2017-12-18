@@ -1,7 +1,7 @@
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
@@ -156,6 +156,24 @@ describe('Encryption', function() {
 		expect(decryptedNote.body).toBe(note.body);
 		expect(decryptedNote.id).toBe(note.id);
 		expect(decryptedNote.parent_id).toBe(note.parent_id);
+
+		done();
+	});
+
+	it('should encrypt and decrypt files', async (done) => {
+		let masterKey = await service.generateMasterKey('123456');
+		masterKey = await MasterKey.save(masterKey);
+		await service.loadMasterKey(masterKey, '123456', true);
+
+		const sourcePath = __dirname + '/../tests/support/photo.jpg';
+		const encryptedPath = __dirname + '/data/photo.crypted';
+		const decryptedPath = __dirname + '/data/photo.jpg';
+
+		await service.encryptFile(sourcePath, encryptedPath);
+		await service.decryptFile(encryptedPath, decryptedPath);
+
+		expect(fileContentEqual(sourcePath, encryptedPath)).toBe(false);
+		expect(fileContentEqual(sourcePath, decryptedPath)).toBe(true);
 
 		done();
 	});
