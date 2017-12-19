@@ -15,6 +15,14 @@ class FsDriverNode {
 		return fs.writeFile(path, buffer);
 	}
 
+	move(source, dest) {
+		return fs.move(source, dest, { overwrite: true });
+	}
+
+	exists(path) {
+		return fs.pathExists(path);
+	}
+
 	open(path, mode) {
 		return fs.open(path, mode);
 	}

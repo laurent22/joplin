@@ -23,6 +23,7 @@ class Synchronizer {
 		this.logger_ = new Logger();
 		this.appType_ = appType;
 		this.cancelling_ = false;
+		this.autoStartDecryptionWorker_ = true;
 
 		// Debug flags are used to test certain hard-to-test conditions
 		// such as cancelling in the middle of a loop.
@@ -216,7 +217,7 @@ class Synchronizer {
 					if (donePaths.indexOf(path) > 0) throw new Error(sprintf('Processing a path that has already been done: %s. sync_time was not updated?', path));
 
 					let remote = await this.api().stat(path);
-					let content = await ItemClass.serializeForSync(local);
+					//let content = await ItemClass.serializeForSync(local);
 					let action = null;
 					let updateSyncTimeOnly = true;
 					let reason = '';					
@@ -271,23 +272,12 @@ class Synchronizer {
 					}
 
 					if (local.type_ == BaseModel.TYPE_RESOURCE && (action == 'createRemote' || (action == 'itemConflict' && remote))) {
-						let remoteContentPath = this.resourceDirName_ + '/' + local.id;
 						try {
-							// TODO: handle node and mobile in the same way
-							if (shim.isNode()) {
-								let resourceContent = '';
-								try {
-									resourceContent = await Resource.content(local);
-								} catch (error) {
-									error.message = 'Cannot read resource content: ' + local.id + ': ' + error.message;
-									this.logger().error(error);
-									this.progressReport_.errors.push(error);
-								}
-								await this.api().put(remoteContentPath, resourceContent);
-							} else {
-								const localResourceContentPath = Resource.fullPath(local);
-								await this.api().put(remoteContentPath, null, { path: localResourceContentPath, source: 'file' });
-							}
+							const remoteContentPath = this.resourceDirName_ + '/' + local.id;
+							const result = await Resource.fullPathForSyncUpload(local);
+							local = result.resource;
+							const localResourceContentPath = result.path;
+							await this.api().put(remoteContentPath, null, { path: localResourceContentPath, source: 'file' });
 						} catch (error) {
 							if (error && error.code === 'cannotSync') {
 								await handleCannotSyncItem(syncTargetId, local, error.message);
@@ -318,6 +308,7 @@ class Synchronizer {
 								error.code = 'cannotSync';
 								throw error;
 							}
+							const content = await ItemClass.serializeForSync(local);
 							await this.api().put(path, content);
 						} catch (error) {
 							if (error && error.code === 'cannotSync') {
@@ -598,7 +589,7 @@ class Synchronizer {
 			}
 		}
 
-		if (masterKeysAfter) {
+		if (masterKeysAfter && this.autoStartDecryptionWorker_) {
 			DecryptionWorker.instance().scheduleStart();
 		}
 

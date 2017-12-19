@@ -14,6 +14,10 @@ class FsDriverRN {
 		throw new Error('Not implemented');
 	}
 
+	move(source, dest) {
+		throw new Error('Not implemented');
+	}
+
 	async open(path, mode) {
 		// Note: RNFS.read() doesn't provide any way to know if the end of file has been reached.
 		// So instead we stat the file here and use stat.size to manually check for end of file.

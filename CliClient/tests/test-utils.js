@@ -23,10 +23,12 @@ const SyncTargetMemory = require('lib/SyncTargetMemory.js');
 const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 const EncryptionService = require('lib/services/EncryptionService.js');
+const DecryptionWorker = require('lib/services/DecryptionWorker.js');
 
 let databases_ = [];
 let synchronizers_ = [];
 let encryptionServices_ = [];
+let decryptionWorkers_ = [];
 let fileApi_ = null;
 let currentClient_ = 1;
 
@@ -44,7 +46,8 @@ SyncTargetRegistry.addClass(SyncTargetMemory);
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 
-const syncTargetId_ = SyncTargetRegistry.nameToId('memory');
+//const syncTargetId_ = SyncTargetRegistry.nameToId('memory');
+const syncTargetId_ = SyncTargetRegistry.nameToId('filesystem');
 const syncDir = __dirname + '/../tests/sync';
 
 const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 400;
@@ -157,11 +160,12 @@ async function setupDatabaseAndSynchronizer(id = null) {
 		syncTarget.setFileApi(fileApi());
 		syncTarget.setLogger(logger);
 		synchronizers_[id] = await syncTarget.synchronizer();
+		synchronizers_[id].autoStartDecryptionWorker_ = false; // For testing we disable this since it would make the tests non-deterministic
 	}
 
-	//if (!encryptionServices_[id]) {
-		encryptionServices_[id] = new EncryptionService();
-	//}
+	encryptionServices_[id] = new EncryptionService();
+	decryptionWorkers_[id] = new DecryptionWorker();
+	decryptionWorkers_[id].setEncryptionService(encryptionServices_[id]);
 
 	if (syncTargetId_ == SyncTargetRegistry.nameToId('filesystem')) {
 		fs.removeSync(syncDir)
@@ -184,6 +188,11 @@ function synchronizer(id = null) {
 function encryptionService(id = null) {
 	if (id === null) id = currentClient_;
 	return encryptionServices_[id];
+}
+
+function decryptionWorker(id = null) {
+	if (id === null) id = currentClient_;
+	return decryptionWorkers_[id];
 }
 
 async function loadEncryptionMasterKey(id = null, useExisting = false) {
@@ -263,4 +272,4 @@ function fileContentEqual(path1, path2) {
 	return content1 === content2;
 }
 
-module.exports = { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual };
+module.exports = { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker };

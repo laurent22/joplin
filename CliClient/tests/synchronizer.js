@@ -1,9 +1,11 @@
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey } = require('test-utils.js');
+const { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker } = require('test-utils.js');
+const { shim } = require('lib/shim.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
+const Resource = require('lib/models/Resource.js');
 const Tag = require('lib/models/Tag.js');
 const { Database } = require('lib/database.js');
 const Setting = require('lib/models/Setting.js');
@@ -589,7 +591,7 @@ describe('Synchronizer', function() {
 
 		done();
 	});
-
+	
 	async function ignorableNoteConflictTest(withEncryption) {
 		if (withEncryption) {
 			Setting.setValue('encryption.enabled', true);
@@ -771,10 +773,14 @@ describe('Synchronizer', function() {
 		// Since client 2 hasn't supplied a password yet, no master key is currently loaded
 		expect(encryptionService().loadedMasterKeyIds().length).toBe(0);
 
-		// If we sync now, nothing should be sent to target since we don't have a password
+		// If we sync now, nothing should be sent to target since we don't have a password.
+		// Technically it's incorrect to set the property of an encrypted variable but it allows confirming
+		// that encryption doesn't work if user hasn't supplied a password.
 		let folder1_2 = await Folder.save({ id: folder1.id, title: "change test" });
 		await synchronizer().start();
+
 		await switchClient(1);
+
 		await synchronizer().start();
 		folder1 = await Folder.load(folder1.id);
 		expect(folder1.title).toBe('folder1'); // Still at old value
@@ -788,18 +794,18 @@ describe('Synchronizer', function() {
 		// Now that master key should be loaded
 		expect(encryptionService().loadedMasterKeyIds()[0]).toBe(masterKey.id);
 
+		// Decrypt all the data. Now change the title and sync again - this time the changes should be transmitted
+		await decryptionWorker().start();
+		folder1_2 = await Folder.save({ id: folder1.id, title: "change test" });
+
 		// If we sync now, this time client 1 should get the changes we did earlier
 		await synchronizer().start();
 
 		await switchClient(1);
 
-		// NOTE: there might be a race condition here but can't figure it out. Up to this point all the tests
-		// will pass, which means the master key is loaded. However, the below test find that the title is still
-		// the previous value. Possible reasons are:
-		// - Client 2 didn't send the updated item
-		// - Client 1 didn't receive it
-		// Maybe due to sync_time/updated_time having the same value on one or both of the clients when tests run fast?
 		await synchronizer().start();
+		// Decrypt the data we just got
+		await decryptionWorker().start();
 		folder1 = await Folder.load(folder1.id);
 		expect(folder1.title).toBe('change test'); // Got title from client 2
 
@@ -812,7 +818,8 @@ describe('Synchronizer', function() {
 		let folder1 = await Folder.save({ title: "folder1" });
 		await synchronizer().start();
 		let files = await fileApi().list()
-		expect(files.items[0].content.indexOf('folder1') >= 0).toBe(true)
+		let content = await fileApi().get(files.items[0].path);
+		expect(content.indexOf('folder1') >= 0).toBe(true)
 
 		// Then enable encryption and sync again
 		let masterKey = await service.generateMasterKey('123456');
@@ -827,11 +834,58 @@ describe('Synchronizer', function() {
 		expect(files.items.length).toBe(2);
 		// By checking that the folder title is not present, we can confirm that the item has indeed been encrypted
 		// One of the two items is the master key
-		expect(files.items[0].content.indexOf('folder1') < 0).toBe(true);
-		expect(files.items[1].content.indexOf('folder1') < 0).toBe(true);
+		content = await fileApi().get(files.items[0].path);
+		expect(content.indexOf('folder1') < 0).toBe(true);
+		content = await fileApi().get(files.items[1].path);
+		expect(content.indexOf('folder1') < 0).toBe(true);
 
 		done();
 	});
 
+	it('should sync resources', async (done) => {
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		let resource1 = (await Resource.all())[0];
+		let resourcePath1 = Resource.fullPath(resource1);
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		let resource1_2 = (await Resource.all())[0];
+		let resourcePath1_2 = Resource.fullPath(resource1_2);
+
+		expect(resource1_2.id).toBe(resource1.id);
+		expect(fileContentEqual(resourcePath1, resourcePath1_2)).toBe(true);
+
+		done();
+	});
+
+	it('should encryt resources', async (done) => {
+		Setting.setValue('encryption.enabled', true);
+		const masterKey = await loadEncryptionMasterKey();
+
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		let resource1 = (await Resource.all())[0];
+		let resourcePath1 = Resource.fullPath(resource1);
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
+		await encryptionService().loadMasterKeysFromSettings();
+
+		let resource1_2 = (await Resource.all())[0];
+		resource1_2 = await Resource.decrypt(resource1_2);
+		let resourcePath1_2 = Resource.fullPath(resource1_2);
+
+		expect(fileContentEqual(resourcePath1, resourcePath1_2)).toBe(true);
+
+		done();
+	});
 
 });

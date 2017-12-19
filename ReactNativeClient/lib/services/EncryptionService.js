@@ -145,6 +145,8 @@ class EncryptionService {
 		throw new Error('NOT TESTED');
 
 		// Just putting this here in case it becomes needed
+		// Normally seeding random bytes is not needed for our use since
+		// we use shim.randomBytes directly to generate master keys.
 
 		const sjcl = shim.sjclModule;
 		const randomBytes = await shim.randomBytes(1024/8);
