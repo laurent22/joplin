@@ -7,94 +7,94 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: \n"
+"Last-Translator: Hrvoje Mandić <trbuhom@net.hr>\n"
 "Language-Team: \n"
-"Language: de_DE\n"
+"Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.4\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgid "Give focus to next pane"
-msgstr "Das nächste Fenster fokussieren"
+msgstr "Fokusiraj sljedeće okno"
 
 msgid "Give focus to previous pane"
-msgstr "Das vorherige Fenster fokussieren"
+msgstr "Fokusiraj prethodno okno"
 
 msgid "Enter command line mode"
-msgstr "Zum Terminal-Modus wechseln"
+msgstr "Otvori naredbeni redak"
 
 msgid "Exit command line mode"
-msgstr "Den Terminal-Modus verlassen"
+msgstr "Napusti naredbeni redak"
 
 msgid "Edit the selected note"
-msgstr "Die ausgewählte Notiz bearbeiten"
+msgstr "Uredi odabranu bilješku"
 
 msgid "Cancel the current command."
-msgstr "Den momentanen Befehl abbrechen."
+msgstr "Prekini trenutnu naredbu."
 
 msgid "Exit the application."
-msgstr "Das Programm verlassen."
+msgstr "Izađi iz aplikacije."
 
 msgid "Delete the currently selected note or notebook."
-msgstr "Die momentan ausgewählte Notiz(-buch) löschen."
+msgstr "Obriši odabranu bilješku ili bilježnicu."
 
 msgid "To delete a tag, untag the associated notes."
-msgstr ""
-"Hebe die Markierungen zugehöriger Notizen auf, um eine Markierung zu löschen."
+msgstr "Da bi mogao obrisati oznaku, skini oznaku s povezanih bilješki."
 
 msgid "Please select the note or notebook to be deleted first."
-msgstr ""
-"Wähle bitte zuerst eine Notiz oder ein Notizbuch aus, das gelöscht werden "
-"soll."
+msgstr "Odaberi bilješku ili bilježnicu za brisanje."
 
 msgid "Set a to-do as completed / not completed"
-msgstr "Ein To-Do as abgeschlossen / nicht abgeschlossen markieren"
+msgstr "Postavi zadatak kao završen/nezavršen"
 
 #, fuzzy
 msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-msgstr ""
-"Schal[t]e das Terminal zwischen maximiert/minimiert/versteckt/sichtbar um."
+msgstr "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
 
 msgid "Search"
-msgstr "Suchen"
+msgstr "Traži"
 
+#, fuzzy
 msgid "[t]oggle note [m]etadata."
-msgstr "Notiz-[M]etadata einschal[t]en."
+msgstr "[t]oggle note [m]etadata."
 
+#, fuzzy
 msgid "[M]ake a new [n]ote"
-msgstr "Eine neue [N]otiz [m]achen"
+msgstr "[M]ake a new [n]ote"
 
+#, fuzzy
 msgid "[M]ake a new [t]odo"
-msgstr "Ein neues [T]o-Do [m]achen"
+msgstr "[M]ake a new [t]odo"
 
+#, fuzzy
 msgid "[M]ake a new note[b]ook"
-msgstr "Ein neues Notiz[b]uch [m]achen"
+msgstr "[M]ake a new note[b]ook"
 
+#, fuzzy
 msgid "Copy ([Y]ank) the [n]ote to a notebook."
-msgstr "Die Notiz zu einem Notizbuch kopieren."
+msgstr "Copy ([Y]ank) the [n]ote to a notebook."
 
 msgid "Move the note to a notebook."
-msgstr "Die Notiz zu einem Notizbuch verschieben."
+msgstr "Premjesti bilješku u bilježnicu."
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "Drücke Strg+D oder schreibe \"exit\", um das Programm zu verlassen"
+msgstr "Pritisni Ctrl+D ili napiši \"exit\" za izlazak iz aplikacije"
 
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr ""
-"Mehr als eine Notiz stimmt mit \"%s\" überein. Bitte schränke deine Suche "
-"ein."
+msgstr "Više od jednog rezultata odgovara \"%s\". Promijeni upit."
 
 msgid "No notebook selected."
-msgstr "Kein Notizbuch ausgewählt."
+msgstr "Nije odabrana bilježnica."
 
 msgid "No notebook has been specified."
-msgstr "Kein Notizbuch wurde angegeben."
+msgstr "Nije specificirana bilježnica."
 
 msgid "Y"
-msgstr "J"
+msgstr "Y"
 
 msgid "n"
 msgstr "n"
@@ -103,59 +103,59 @@ msgid "N"
 msgstr "N"
 
 msgid "y"
-msgstr "j"
+msgstr "y"
 
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "Breche Hintergrund-Synchronisations ab....Bitte warten."
+msgstr "Prekid sinkronizacije u pozadini... Pričekaj."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "No such command: %s"
-msgstr "Ungültiger Befehl: \"%s\""
+msgstr "Ne postoji naredba: %s"
 
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
-msgstr "Der Befehl \"%s\" ist nur im GUI Modus verfügbar"
+msgstr "Naredba \"%s\" postoji samo u inačici s grafičkim sučeljem"
 
 #, javascript-format
 msgid "Missing required argument: %s"
-msgstr "Fehlendes benötigtes Argument: %s"
+msgstr "Nedostaje obavezni argument: %s"
 
 #, javascript-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
 msgid "Your choice: "
-msgstr "Deine Auswahl: "
+msgstr "Tvoj izbor: "
 
 #, javascript-format
 msgid "Invalid answer: %s"
-msgstr "Ungültige Antwort: %s"
+msgstr "Nevažeći odgovor: %s"
 
 msgid "Attaches the given file to the note."
-msgstr "Hängt die ausgewählte Datei an die Notiz an."
+msgstr "Prilaže datu datoteku bilješci."
 
 #, javascript-format
 msgid "Cannot find \"%s\"."
-msgstr "Kann \"%s\" nicht finden."
+msgstr "Ne mogu naći \"%s\"."
 
 msgid "Displays the given note."
-msgstr "Zeigt die jeweilige Notiz an."
+msgstr "Prikazuje datu bilješku."
 
 msgid "Displays the complete information about note."
-msgstr "Zeigt alle Informationen über die Notiz an."
+msgstr "Prikazuje potpunu informaciju o bilješci."
 
+#, fuzzy
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
-"Zeigt an oder stellt einen Optionswert. Wenn kein [Wert] angegeben ist, wird "
-"der Wert vom gegebenenen [Namen] angezeigt. Wenn weder [Name] noch [Wert] "
-"gegeben sind, wird eine Liste der momentanen Konfiguration angezeigt."
+"Gets or sets a config value. If [value] is not provided, it will show the "
+"value of [name]. If neither [name] nor [value] is provided, it will list the "
+"current configuration."
 
 msgid "Also displays unset and hidden config variables."
-msgstr ""
-"Zeige auch nicht angegebene oder versteckte Konfigurationsvariablen an."
+msgstr "Također prikazuje nepostavljene i skrivene konfiguracijske varijable."
 
 #, javascript-format
 msgid "%s = %s (%s)"
@@ -165,250 +165,252 @@ msgstr "%s = %s (%s)"
 msgid "%s = %s"
 msgstr "%s = %s"
 
+#, fuzzy
 msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"Vervielfältigt die Notizen die mit <note> übereinstimmen zu [Notizbuch]. "
-"Wenn kein Notizbuch angegeben ist, wird die Notiz in das momentane Notizbuch "
-"kopiert."
+"Duplicates the notes matching <note> to [notebook]. If no notebook is "
+"specified the note is duplicated in the current notebook."
 
 msgid "Marks a to-do as done."
-msgstr "Markiert ein To-Do als abgeschlossen."
+msgstr "Označava zadatak završenim."
 
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
-msgstr "Notiz ist kein To-Do: \"%s\""
+msgstr "Bilješka nije zadatak: \"%s\""
 
 msgid "Edit note."
-msgstr "Notiz bearbeiten."
+msgstr "Uredi bilješku."
 
+#, fuzzy
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
-"Kein Textbearbeitungsprogramm angegeben. Bitte lege eines mit `config editor "
-"<Pfad-Zum-Textbearbeitungsprogramm>` fest"
+"Nije definiran program za uređivanje teksta. Postavi ga koristeći `config "
+"editor <editor-path>`"
 
 msgid "No active notebook."
-msgstr "Kein aktives Notizbuch."
+msgstr "Nema aktivne bilježnice."
 
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr "Notiz \"%s\" existiert nicht. Soll sie erstellt werden?"
+msgstr "Bilješka ne postoji: \"%s\". Napravi je?"
 
+#, fuzzy
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
-"Beginne die Notiz zu bearbeiten. Schließ das Textbearbeitungsprogramm, um "
-"zurück zum Terminal zu kommen."
+"Počinjem uređivati bilješku. Za povratak u naredbeni redak, zatvori uređivač."
 
 msgid "Note has been saved."
-msgstr "Die Notiz wurde gespeichert."
+msgstr "Bilješka je spremljena."
 
 msgid "Exits the application."
-msgstr "Schließt das Programm."
+msgstr "Izlaz iz aplikacije."
 
 msgid ""
 "Exports Joplin data to the given directory. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
-"Exportiert Joplins Datein zu dem angegebenen Pfad. Standardmäßig wird die "
-"komplette Datenbank inklusive Notizbüchern, Notizen, Markierungen usw. "
-"exportiert."
+"Izvozi podatke u dati direktorij. Po defaultu izvozi sve podatke uključujući "
+"bilježnice, bilješke, zadatke i resurse."
 
 msgid "Exports only the given note."
-msgstr "Exportiert nur die angegebene Notiz."
+msgstr "Izvozi samo datu bilješku."
 
 msgid "Exports only the given notebook."
-msgstr "Exportiert nur das angegebene Notizbuch."
+msgstr "Izvozi samo datu bilježnicu."
 
 msgid "Displays a geolocation URL for the note."
-msgstr "Zeigt die Standort-URL der Notiz an."
+msgstr "Prikazuje geolokacijski URL bilješke."
 
 msgid "Displays usage information."
-msgstr "Zeigt die Benutzungsstatistik an."
+msgstr "Prikazuje informacije o korištenju."
 
 msgid "Shortcuts are not available in CLI mode."
-msgstr ""
+msgstr "Prečaci nisu podržani u naredbenom retku."
 
-#, fuzzy
 msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
-"Tippe `help [Befehl]` ein, um mehr Informationen über einen Befehl zu "
-"erhalten."
+"Upiši `help [naredba]` za više informacija o naredbi ili `help all` za sve "
+"informacije o korištenju."
 
 msgid "The possible commands are:"
-msgstr "Mögliche Befehle sind:"
+msgstr "Moguće naredbe su:"
 
+#, fuzzy
 msgid ""
 "In any command, a note or notebook can be refered to by title or ID, or "
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
-"In jedem Befehl können Notizen oder Notizbücher durch ihren Titel oder ihre "
-"ID spezifiziert werden, oder durch die Abkürzung `$n` oder `$b` um entweder "
-"das momentan augewählte Notizbuch oder die momentan ausgewählte Notiz zu "
-"wählen. `$c` kann benutzt werden, um die momentane Auswahl zu verweisen."
+"In any command, a note or notebook can be refered to by title or ID, or "
+"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
+"note or notebook. `$c` can be used to refer to the currently selected item."
 
 msgid "To move from one pane to another, press Tab or Shift+Tab."
-msgstr ""
-"Um ein von einem Fenster zu einem anderen zu wechseln, drücke Tab oder Shift"
-"+Tab."
+msgstr "Za prijelaz iz jednog okna u drugo, pritisni Tab ili Shift+Tab."
 
+#, fuzzy
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
 msgstr ""
-"Benutze die Pfeiltasten und Bild hoch/runter um durch Listen und Texte zu "
-"scrollen ( inklusive diesem Terminal )."
+"Use the arrows and page up/down to scroll the lists and text areas "
+"(including this console)."
 
 msgid "To maximise/minimise the console, press \"TC\"."
-msgstr "Um das Terminal zu maximieren/minimieren, drücke \"TC\"."
+msgstr "Za maksimiziranje/minimiziranje konzole, pritisni \"TC\"."
 
 msgid "To enter command line mode, press \":\""
-msgstr ""
+msgstr "Za ulaz u naredbeni redak, pritisni \":\""
 
 msgid "To exit command line mode, press ESCAPE"
-msgstr ""
+msgstr "Za izlaz iz naredbenog retka, pritisni Esc"
 
 msgid ""
 "For the complete list of available keyboard shortcuts, type `help shortcuts`"
-msgstr ""
-"Um die komplette Liste von verfügbaren Tastenkürzeln anzuzeigen, tippe `help "
-"shortcuts` ein"
+msgstr "Za potpunu listu mogućih prečaca, upiši `help shortcuts`"
 
 msgid "Imports an Evernote notebook file (.enex file)."
-msgstr "Importiert eine Evernote Notizbuch-Datei (.enex Datei)."
+msgstr "Uvozi Evernote bilježnicu (.enex datoteku)."
 
 msgid "Do not ask for confirmation."
-msgstr "Nicht nach einer Bestätigung fragen."
+msgstr "Ne pitaj za potvrdu."
 
 #, javascript-format
 msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
 msgstr ""
-"Datei \"%s\" wird importiert in das existierende Notizbuch \"%s\". "
-"Fortfahren?"
+"Datoteka \"%s\" će biti uvezena u postojeću bilježnicu \"%s\". Nastavi?"
 
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into "
 "it. Continue?"
 msgstr ""
-"Ein neues Notizbuch \"%s\" wird erstellt und die Datei \"%s\" wird in es "
-"importiert. Fortfahren?"
+"Nova bilježnica \"%s\" će biti stvorena i datoteka \"%s\" će biti uvezena u "
+"nju. Nastavi?"
 
 #, javascript-format
 msgid "Found: %d."
-msgstr "Gefunden: %d."
+msgstr "Nađeno: %d."
 
 #, javascript-format
 msgid "Created: %d."
-msgstr "Erstellt: %d."
+msgstr "Stvoreno: %d."
 
 #, javascript-format
 msgid "Updated: %d."
-msgstr "Aktualisiert: %d."
+msgstr "Ažurirano: %d."
 
 #, javascript-format
 msgid "Skipped: %d."
-msgstr "Übersprungen: %d."
+msgstr "Preskočeno: %d."
 
 #, javascript-format
 msgid "Resources: %d."
-msgstr ""
+msgstr "Resursi: %d."
 
 #, javascript-format
 msgid "Tagged: %d."
-msgstr "Markiert: %d."
+msgstr "Označeno: %d."
 
 msgid "Importing notes..."
-msgstr "Importiere Notizen..."
+msgstr "Uvozim bilješke..."
 
 #, javascript-format
 msgid "The notes have been imported: %s"
-msgstr "Die Notizen wurden importiert: %s"
+msgstr "Bilješke su uvezene: %s"
 
 msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
 "of notebooks."
 msgstr ""
-"Zeigt die Notizen im momentanen Notizbuch an. Benutze `ls /` um eine Liste "
-"aller Notizbücher anzuzeigen."
+"Prikazuje bilješke u trenutnoj bilježnici. Upiši `ls /` za prikaz liste "
+"bilježnica."
 
 msgid "Displays only the first top <num> notes."
-msgstr "Zeigt nur die Top-<num> Notizen an."
+msgstr "Prikaži samo prvih <num> bilješki."
 
 #, fuzzy
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
-msgstr "Sortiert nach <field> ( z.B. Titel,"
+msgstr "Sorts the item by <field> (eg. title, updated_time, created_time)."
 
 msgid "Reverses the sorting order."
-msgstr "Dreht die Sortierreihenfolge um."
+msgstr "Mijenja redoslijed."
 
+#, fuzzy
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
-"Zeige nur bestimmt Typen an. Kann `n` für Notizen sein, `t` für To-Dos, oder "
-"`nt` für Notizen und To-Dos ( z.B. würde `-tt` nur To-Dos anzeigen, während "
-"`-ttd` Notizen und To-Dos anzeigen würde )."
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
+"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
+"to-dos, while `-ttd` would display notes and to-dos."
 
 msgid "Either \"text\" or \"json\""
-msgstr "Entweder \"text\" oder \"json\""
+msgstr "Ili \"text\" ili \"json\""
 
+#, fuzzy
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
+"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
+"TODO_CHECKED (for to-dos), TITLE"
 
 msgid "Please select a notebook first."
-msgstr "Bitte wähle erst ein Notizbuch aus."
+msgstr "Odaberi bilježnicu."
 
 msgid "Creates a new notebook."
-msgstr "Erstellt ein neues Notizbuch."
+msgstr "Stvara novu bilježnicu."
 
 msgid "Creates a new note."
-msgstr "Erstellt eine neue Notiz."
+msgstr "Stvara novu bilješku."
 
 msgid "Notes can only be created within a notebook."
-msgstr "Notizen können nur in einem Notizbuch erstellt werden."
+msgstr "Bilješke je moguće stvoriti samo u sklopu bilježnice."
 
 msgid "Creates a new to-do."
-msgstr "Erstellt ein neues To-Do."
+msgstr "Stvara novi zadatak."
 
 msgid "Moves the notes matching <note> to [notebook]."
-msgstr "Verschiebt die Notizen, die mit <note> übereinstimmen, zu [Notizbuch]"
+msgstr "Premješta podudarajuće bilješke <note> u [bilježnicu]."
 
+#, fuzzy
 msgid "Renames the given <item> (note or notebook) to <name>."
-msgstr "Benennt das gegebene <item> ( Notiz oder Notizbuch ) zu <name> um."
+msgstr "Preimenuje datu bilješku ili bilježnicu <item> u <name>."
 
 msgid "Deletes the given notebook."
-msgstr "Löscht das gegebene Notizbuch."
+msgstr "Briše datu bilježnicu."
 
 msgid "Deletes the notebook without asking for confirmation."
-msgstr "Löscht das Notizbuch, ohne nach einer Bestätigung zu fragen."
+msgstr "Briše bilježnicu bez traženja potvrde."
 
 msgid "Delete notebook? All notes within this notebook will also be deleted."
 msgstr ""
+"Obrisati bilježnicu? Sve bilješke u toj bilježnici će također biti obrisane."
 
+#, fuzzy
 msgid "Deletes the notes matching <note-pattern>."
-msgstr "Löscht die Notizen, die mit <note-pattern> übereinstimmen."
+msgstr "Briše bilješke koje se podudaraju s <note-pattern>."
 
 msgid "Deletes the notes without asking for confirmation."
-msgstr "Löscht die Notizen, ohne nach einer Bestätigung zu fragen."
+msgstr "Briše bilješke bez traženja potvrde."
 
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
-msgstr ""
-"%d Notizen stimmen mit diesem Muster überein. Sollen sie gelöscht werden?"
+msgstr "%d bilješki se podudara s pojmom pretraživanja. Obriši ih?"
 
 msgid "Delete note?"
-msgstr "Notiz löschen?"
+msgstr "Obrisati bilješku?"
 
+#, fuzzy
 msgid "Searches for the given <pattern> in all the notes."
-msgstr "Sucht nach dem gegebenen <pattern> in allen Notizen."
+msgstr "Pretražuje dati <pattern> u svim bilješkama."
 
 #, fuzzy, javascript-format
 msgid ""
@@ -417,22 +419,22 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Setzt die Eigenschaft <name> der gegebenen <note> zu dem gegebenen [Wert]."
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
 
 msgid "Displays summary about the notes and notebooks."
-msgstr "Zeigt eine Zusammenfassung über die Notizen und Notizbücher an."
+msgstr "Prikazuje sažetak o bilješkama i bilježnicama."
 
-#, fuzzy
 msgid "Synchronises with remote storage."
-msgstr "Synchronisiert mit "
+msgstr "Sinkronizira sa udaljenom pohranom podataka."
 
 msgid "Sync to provided target (defaults to sync.target config value)"
-msgstr ""
-"Mit dem gegebenen Ziel synchronisieren ( voreingestellt auf den sync.target "
-"Optionswert)"
+msgstr "Sinkroniziraj sa metom (default je polje sync.target u konfiguraciji)"
 
 msgid "Synchronisation is already in progress."
-msgstr "Synchronisation ist bereits im Gange."
+msgstr "Sinkronizacija je već u toku."
 
 #, javascript-format
 msgid ""
@@ -440,28 +442,26 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
-"Eine Sperrdatei ist vorhanden. Wenn du dir sicher bist, dass keine "
-"Synchronisation im Gange ist, kannst du die Sperrdatei \"%s\" löschen und "
-"vortfahren."
+"Ako sinkronizacija nije u toku, obriši lock datoteku u \"%s\" i nastavi..."
 
+#, fuzzy
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr ""
-"Authentikation wurde nicht abgeschlossen (keinen Authentikations-Token "
-"erhalten)."
+"Ovjera nije dovršena (nije dobivena potvrda ovjere - authentication token)."
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
-msgstr "Synchronisationsziel: %s (%s)"
+msgstr "Meta sinkronizacije: %s (%s)"
 
 msgid "Cannot initialize synchroniser."
-msgstr "Kann Synchronisierer nicht initialisieren."
+msgstr "Ne mogu započeti sinkronizaciju."
 
 msgid "Starting synchronisation..."
-msgstr "Starte Synchronisation..."
+msgstr "Započinjem sinkronizaciju..."
 
 msgid "Cancelling... Please wait."
-msgstr "Breche ab... Bitte warten."
+msgstr "Prekidam... Pričekaj."
 
 #, fuzzy
 msgid ""
@@ -469,14 +469,13 @@ msgid ""
 "[tag] from [note], or to list the notes associated with [tag]. The command "
 "`tag list` can be used to list all the tags."
 msgstr ""
-"<tag-command> kann \"add\", \"remove\" or \"list\" sein, um eine "
-"[Markierung] zu [Notiz] zuzuweisen oder zu entfernen, oder um mit "
-"[Markierung] markierte Notizen anzuzeigen. Mit dem Befehl `tag list` können "
-"alle Notizen angezeigt werden."
+"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
+"[tag] from [note], or to list the notes associated with [tag]. The command "
+"`tag list` can be used to list all the tags."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
-msgstr "Ungültiger Befehl: \"%s\""
+msgstr "Nevažeća naredba: \"%s\""
 
 #, fuzzy
 msgid ""
@@ -485,56 +484,56 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command> kann entweder \"toggle\" oder \"clear\" sein. Benutze \"toggle"
-"\", um ein To-Do abzuschließen, oder es zu beginnen (Wenn das Ziel eine "
-"normale Notiz ist, wird es zu einem To-Do umgewandelt). Benutze \"clear\", "
-"um es zurück zu einem To-Do zu verwandeln."
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
+"toggle the given to-do between completed and uncompleted state (If the "
+"target is a regular note it will be converted to a to-do). Use \"clear\" to "
+"convert the to-do back to a regular note."
 
 msgid "Marks a to-do as non-completed."
-msgstr "Makiert ein To-Do als nicht-abgeschlossen."
+msgstr "Označava zadatak kao nezavršen."
 
+#, fuzzy
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
-"Wechselt zu [Notizbuch] - alle weiteren Tätigkeiten werden in diesem "
-"Notizbuch verrichtet."
+"Switches to [notebook] - all further operations will happen within this "
+"notebook."
 
 msgid "Displays version information"
-msgstr "Zeigt die Versionsnummer an"
+msgstr "Prikazuje verziju"
 
 #, javascript-format
 msgid "%s %s (%s)"
 msgstr "%s %s (%s)"
 
 msgid "Enum"
-msgstr ""
+msgstr "Enumeracija"
 
 #, javascript-format
 msgid "Type: %s."
-msgstr "Typ: %s."
+msgstr "Vrsta: %s."
 
 #, javascript-format
 msgid "Possible values: %s."
-msgstr "Mögliche Werte: %s."
+msgstr "Moguće vrijednosti: %s."
 
 #, javascript-format
 msgid "Default: %s"
-msgstr "Standard: %s"
+msgstr "Default: %s"
 
 msgid "Possible keys/values:"
-msgstr "Mögliche Werte:"
+msgstr "Mogući ključevi/vrijednosti:"
 
 msgid "Fatal error:"
-msgstr "Schwerwiegender Fehler:"
+msgstr "Fatalna greška:"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
-msgstr ""
-"Das Programm wurde authorisiert - Du kannst nun diesen Browsertab schließen."
+msgstr "Aplikacija je autorizirana - smiješ zatvoriti karticu preglednika."
 
 msgid "The application has been successfully authorised."
-msgstr "Das Programm wurde erfolgreich authorisiert."
+msgstr "Aplikacija je uspješno autorizirana."
 
 msgid ""
 "Please open the following URL in your browser to authenticate the "
@@ -543,15 +542,15 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
-"Bitte öffne die folgende URL in deinem Browser, um das Programm zu "
-"authentifizieren. Das Programm wird einen Ordner in \"Apps/Joplin\" "
-"erstellen und wird nur in diesem Ordner schreiben und lesen. Es wird weder "
-"Zugriff auf Dateien außerhalb dieses Ordners haben, noch auf persönliche "
-"Daten. Es werden keine Daten mit Dritten geteilt."
+"Otvori sljedeći URL u pregledniku da bi ovjerio aplikaciju. Aplikacija će "
+"stvoriti direktorij u \"Apps/Joplin\" i koristiti će samo taj direktorij za "
+"čitanje i pisanje. Aplikacija neće imati pristup osobnim podacima niti ičemu "
+"izvan tog direktorija. Nijedan se podatak neće dijeliti s trećom stranom."
 
 msgid "Search:"
-msgstr "Suchen:"
+msgstr "Traži:"
 
+#, fuzzy
 msgid ""
 "Welcome to Joplin!\n"
 "\n"
@@ -560,142 +559,144 @@ msgid ""
 "\n"
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
+"Welcome to Joplin!\n"
+"\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
+"for usage information.\n"
+"\n"
+"For example, to create a notebook press `mb`; to create a note press `mn`."
 
 msgid "File"
-msgstr "Datei"
+msgstr "Datoteka"
 
 msgid "New note"
-msgstr "Neue Notiz"
+msgstr "Nova bilješka"
 
 msgid "New to-do"
-msgstr "Neues To-Do"
+msgstr "Novi zadatak"
 
 msgid "New notebook"
-msgstr "Neues Notizbuch"
+msgstr "Nova bilježnica"
 
 msgid "Import Evernote notes"
-msgstr "Evernote Notizen importieren"
+msgstr "Uvezi Evernote bilješke"
 
 msgid "Evernote Export Files"
-msgstr ""
+msgstr "Evernote izvozne datoteke"
 
 msgid "Quit"
-msgstr "Verlassen"
+msgstr "Izađi"
 
 msgid "Edit"
-msgstr "Bearbeiten"
+msgstr "Uredi"
 
 msgid "Copy"
-msgstr "Kopieren"
+msgstr "Kopiraj"
 
 msgid "Cut"
-msgstr "Ausschneiden"
+msgstr "Izreži"
 
 msgid "Paste"
-msgstr "Einfügen"
+msgstr "Zalijepi"
 
 msgid "Search in all the notes"
-msgstr "Alle Notizen durchsuchen"
+msgstr "Pretraži u svim bilješkama"
 
 msgid "Tools"
-msgstr "Werkzeuge"
+msgstr "Alati"
 
-#, fuzzy
 msgid "Synchronisation status"
-msgstr "Synchronisationsziel"
+msgstr "Status sinkronizacije"
 
 msgid "Options"
-msgstr "Optionen"
+msgstr "Opcije"
 
 msgid "Help"
-msgstr "Hilfe"
+msgstr "Pomoć"
 
 msgid "Website and documentation"
-msgstr "Webseite und Dokumentation"
+msgstr "Website i dokumentacija"
 
 msgid "About Joplin"
-msgstr "Über Joplin"
+msgstr "O Joplinu"
 
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
 msgid "OK"
-msgstr "OK"
+msgstr "U redu"
 
 msgid "Cancel"
-msgstr "Abbrechen"
+msgstr "Odustani"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
-msgstr ""
+msgstr "Bilješke i postavke su pohranjene u: %s"
 
 msgid "Save"
-msgstr ""
+msgstr "Spremi"
 
 msgid "Back"
-msgstr "Zurück"
+msgstr "Natrag"
 
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr ""
-"Ein neues Notizbuch \"%s\" wird erstellt und die Datei \"%s\" wird in es "
-"importiert"
+"Nova bilježnica \"%s\" će biti stvorena i datoteka \"%s\" će biti uvezena u "
+"nju"
 
 msgid "Please create a notebook first."
-msgstr "Bitte erstelle zuerst ein Notizbuch."
+msgstr "Prvo stvori bilježnicu."
 
 msgid "Note title:"
-msgstr "Notiz Titel:"
+msgstr "Naslov bilješke:"
 
 msgid "Please create a notebook first"
-msgstr "Bitte erstelle zuerst ein Notizbuch"
+msgstr "Prvo stvori bilježnicu"
 
 msgid "To-do title:"
-msgstr "To-Do Titel:"
+msgstr "Naslov zadatka:"
 
 msgid "Notebook title:"
-msgstr "Notizbuch Titel:"
+msgstr "Naslov bilježnice:"
 
 msgid "Add or remove tags:"
-msgstr "Füge hinzu oder entferne Markierungen:"
+msgstr "Dodaj ili makni oznake:"
 
 msgid "Separate each tag by a comma."
-msgstr "Trenne jede Markierung mit einem Komma."
+msgstr "Odvoji oznake zarezom."
 
 msgid "Rename notebook:"
-msgstr "Benne Notizbuch um:"
+msgstr "Preimenuj bilježnicu:"
 
 msgid "Set alarm:"
-msgstr "Alarm erstellen:"
+msgstr "Postavi upozorenje:"
 
 msgid "Layout"
-msgstr "Layout"
+msgstr "Izgled"
 
-#, fuzzy
 msgid "Some items cannot be synchronised."
-msgstr "Kann Synchronisierer nicht initialisieren."
+msgstr "Neke stavke se ne mogu sinkronizirati."
 
 msgid "View them now"
-msgstr ""
+msgstr "Pogledaj ih sada"
 
 msgid "Active"
 msgstr ""
 
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 msgid "Source"
-msgstr ""
+msgstr "Izvor"
 
-#, fuzzy
 msgid "Created"
-msgstr "Erstellt: %d."
+msgstr "Stvoreno"
 
-#, fuzzy
 msgid "Updated"
-msgstr "Aktualisiert: %d."
+msgstr "Ažurirano"
 
 msgid "Password"
 msgstr ""
@@ -710,113 +711,102 @@ msgid ""
 msgstr ""
 
 msgid "Add or remove tags"
-msgstr "Markierungen hinzufügen oder entfernen"
+msgstr "Dodaj ili makni oznake"
 
 msgid "Switch between note and to-do type"
-msgstr "Zwischen Notiz und To-Do Typ wechseln"
+msgstr "Zamijeni bilješku i zadatak"
 
 msgid "Delete"
-msgstr "Löschen"
+msgstr "Obriši"
 
 msgid "Delete notes?"
-msgstr "Notizen löschen?"
+msgstr "Obriši bilješke?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr ""
-"Hier sind noch keine Notizen. Erstelle eine, indem du auf \"Neue Notiz\" "
-"drückst."
+msgstr "Ovdje nema bilješki. Stvori novu pritiskom na \"Nova bilješka\"."
 
-#, fuzzy
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr ""
-"Momentan existieren noch keine Notizen. Erstelle eine, indem du auf den (+) "
-"Knopf drückst."
+msgstr "Ovdje nema bilježnica. Stvori novu pritiskom na \"Nova bilježnica\"."
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
-msgstr "Nicht unterstützter Link oder Nachricht: %s"
+msgstr "Nepodržana poveznica ili poruka: %s"
 
 msgid "Attach file"
-msgstr "Datei anhängen"
+msgstr "Priloži datoteku"
 
 msgid "Set alarm"
-msgstr "Alarm erstellen"
+msgstr "Postavi upozorenje"
 
 msgid "Refresh"
-msgstr "Aktualisieren"
+msgstr "Osvježi"
 
 msgid "Clear"
-msgstr ""
+msgstr "Očisti"
 
 msgid "OneDrive Login"
-msgstr "OneDrive login"
+msgstr "OneDrive Login"
 
 msgid "Import"
-msgstr "Importieren"
+msgstr "Uvoz"
 
-#, fuzzy
 msgid "Synchronisation Status"
-msgstr "Synchronisationsziel"
+msgstr "Status Sinkronizacije"
 
 msgid "Remove this tag from all the notes?"
-msgstr "Diese Markierung von allen Notizen löschen?"
+msgstr "Makni ovu oznaku iz svih bilješki?"
 
 msgid "Remove this search from the sidebar?"
-msgstr "Diese Suche von der Seitenleiste entfernen?"
+msgstr "Makni ovu pretragu iz izbornika?"
 
 msgid "Rename"
-msgstr "Umbenennen"
+msgstr "Preimenuj"
 
 msgid "Synchronise"
-msgstr "Synchronisieren"
+msgstr "Sinkroniziraj"
 
 msgid "Notebooks"
-msgstr "Notizbücher"
+msgstr "Bilježnice"
 
 msgid "Tags"
-msgstr "Markierungen"
+msgstr "Oznake"
 
 msgid "Searches"
-msgstr "Suchen"
+msgstr "Pretraživanja"
 
-#, fuzzy
 msgid "Please select where the sync status should be exported to"
-msgstr ""
-"Wähle bitte zuerst eine Notiz oder ein Notizbuch aus, das gelöscht werden "
-"soll."
+msgstr "Odaberi lokaciju za izvoz statusa sinkronizacije"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Usage: %s"
-msgstr "Benutzung: %s"
+msgstr "Korištenje: %s"
 
 #, javascript-format
 msgid "Unknown flag: %s"
-msgstr "Unbekanntes Argument: %s"
+msgstr "Nepoznata zastavica: %s"
 
 msgid "File system"
-msgstr "Dateisystem"
+msgstr "Datotečni sustav"
 
 msgid "OneDrive"
 msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
-msgstr "OneDrive Dev ( Nur für Tests )"
+msgstr "OneDrive Dev (Samo za testiranje)"
 
 #, javascript-format
 msgid "Unknown log level: %s"
-msgstr "Unbekanntes Loglevel: %s"
+msgstr "Nepoznata razina logiranja: %s"
 
 #, javascript-format
 msgid "Unknown level ID: %s"
-msgstr "Unbekannte Level-ID: %s"
+msgstr "Nepoznat ID razine: %s"
 
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
-msgstr ""
-"Kann Token nicht erneuern: Authentikationsdaten nicht vorhanden. Ein "
-"Neustart der Synchronisation behebt das Problem vielleicht."
+msgstr "Nedostaju podaci za ovjeru. Pokušaj ponovo započeti sinkronizaciju."
 
 msgid ""
 "Could not synchronize with OneDrive.\n"
@@ -826,176 +816,172 @@ msgid ""
 "\n"
 "Please consider using a regular OneDrive account."
 msgstr ""
-"Konnte nicht mit OneDrive synchronisieren.\n"
+"Ne mogu sinkronizirati OneDrive.\n"
 "\n"
-"Dieser Fehler kommt oft vor, wenn OneDrive Business benutzt wird, das leider "
-"nicht unterstützt wird.\n"
+"Ova greška se često javlja pri korištenju usluge OneDrive for Business koja "
+"nije podržana.\n"
 "\n"
-"Bitte benutze stattdessen einen normalen OneDrive account."
+"Molimo da koristite obični OneDrive korisnički račun."
 
 #, javascript-format
 msgid "Cannot access %s"
-msgstr "Kann nicht auf %s zugreifen"
+msgstr "Ne mogu pristupiti %s"
 
 #, javascript-format
 msgid "Created local items: %d."
-msgstr ""
+msgstr "Stvorene lokalne stavke: %d."
 
 #, javascript-format
 msgid "Updated local items: %d."
-msgstr ""
+msgstr "Ažurirane lokalne stavke: %d."
 
 #, javascript-format
 msgid "Created remote items: %d."
-msgstr ""
+msgstr "Stvorene udaljene stavke: %d."
 
 #, javascript-format
 msgid "Updated remote items: %d."
-msgstr ""
+msgstr "Ažurirane udaljene stavke: %d."
 
 #, javascript-format
 msgid "Deleted local items: %d."
-msgstr ""
+msgstr "Obrisane lokalne stavke: %d."
 
 #, javascript-format
 msgid "Deleted remote items: %d."
-msgstr ""
+msgstr "Obrisane udaljene stavke: %d."
 
 #, javascript-format
 msgid "State: \"%s\"."
-msgstr "Status: \"%s\"."
+msgstr "Stanje: \"%s\"."
 
 msgid "Cancelling..."
-msgstr "Breche ab..."
+msgstr "Prekidam..."
 
 #, javascript-format
 msgid "Completed: %s"
-msgstr "Abgeschlossen: %s"
+msgstr "Dovršeno: %s"
 
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
-msgstr "Synchronisation ist bereits im Gange. Status: %s"
+msgstr "Sinkronizacija je već u toku. Stanje: %s"
 
 msgid "Conflicts"
-msgstr "Konflikte"
+msgstr "Sukobi"
 
 #, javascript-format
 msgid "A notebook with this title already exists: \"%s\""
-msgstr "Ein Notizbuch mit diesem Titel existiert bereits : \"%s\""
+msgstr "Bilježnica s ovim naslovom već postoji: \"%s\""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr ""
-"Notizbuch kann nicht \"%s\" genannt werden. Dies ist ein reservierter Titel."
+msgstr "Naslov \"%s\" je rezerviran i ne može se koristiti."
 
 msgid "Untitled"
-msgstr "Unbenannt"
+msgstr "Nenaslovljen"
 
 msgid "This note does not have geolocation information."
-msgstr "Diese Notiz hat keine Standort-Informationen."
+msgstr "Ova bilješka nema geolokacijske informacije."
 
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
-msgstr "Kann Notiz nicht zu Notizbuch \"%s\" kopieren"
+msgstr "Ne mogu kopirati bilješku u bilježnicu %s"
 
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
-msgstr "Kann Notiz nicht zu Notizbuch \"%s\" verschieben"
+msgstr "Ne mogu premjestiti bilješku u bilježnicu %s"
 
 msgid "Text editor"
-msgstr "Textbearbeitungsprogramm"
+msgstr "Uređivač teksta"
 
 msgid ""
 "The editor that will be used to open a note. If none is provided it will try "
 "to auto-detect the default editor."
 msgstr ""
-"Das Textbearbeitungsprogramm, mit dem Notizen geöffnet werden. Wenn keines "
-"ausgewählt wurde, wird Joplin versuchen das standard-"
-"Textbearbeitungsprogramm zu erkennen."
+"Program za uređivanje koji će biti korišten za uređivanje bilješki. Ako ni "
+"jedan nije odabran, pokušati će se sa default programom."
 
 msgid "Language"
-msgstr "Sprache"
+msgstr "Jezik"
 
 msgid "Date format"
-msgstr "Datumsformat"
+msgstr "Format datuma"
 
 msgid "Time format"
-msgstr "Zeitformat"
+msgstr "Format vremena"
 
 msgid "Theme"
-msgstr "Thema"
+msgstr "Tema"
 
 msgid "Light"
-msgstr "Hell"
+msgstr "Svijetla"
 
 msgid "Dark"
-msgstr "Dunkel"
+msgstr "Tamna"
 
 msgid "Show uncompleted todos on top of the lists"
-msgstr "Unvollständige To-Dos oben in der Liste anzeigen"
+msgstr "Prikaži nezavršene zadatke na vrhu liste"
 
 msgid "Save geo-location with notes"
-msgstr "Momentanen Standort zusammen mit Notizen speichern"
+msgstr "Spremi geolokacijske podatke sa bilješkama"
 
 msgid "Synchronisation interval"
-msgstr "Synchronisationsinterval"
+msgstr "Interval sinkronizacije"
 
 msgid "Disabled"
-msgstr "Deaktiviert"
+msgstr "Onemogućeno"
 
 #, javascript-format
 msgid "%d minutes"
-msgstr "%d Minuten"
+msgstr "%d minuta"
 
 #, javascript-format
 msgid "%d hour"
-msgstr "%d Stunde"
+msgstr "%d sat"
 
 #, javascript-format
 msgid "%d hours"
-msgstr "%d Stunden"
+msgstr "%d sati"
 
 msgid "Automatically update the application"
-msgstr "Die Applikation automatisch aktualisieren"
+msgstr "Automatsko instaliranje nove verzije"
 
 msgid "Show advanced options"
-msgstr "Erweiterte Optionen anzeigen"
+msgstr "Prikaži napredne opcije"
 
 msgid "Synchronisation target"
-msgstr "Synchronisationsziel"
+msgstr "Sinkroniziraj sa"
 
 msgid ""
 "The target to synchonise to. If synchronising with the file system, set "
 "`sync.2.path` to specify the target directory."
 msgstr ""
-"Das Synchronisationsziel, mit dem synchronisiert werden soll. Wenn mit dem "
-"Dateisystem synchronisiert werden soll, setz den Wert zu `sync.2.path`, um "
-"den Zielpfad zu spezifizieren."
+"Meta sinkronizacije. U slučaju sinkroniziranja s vlastitim datotečnim "
+"sustavom, postavi `sync.2.path` na ciljani direktorij."
 
 msgid "Directory to synchronise with (absolute path)"
-msgstr ""
+msgstr "Direktorij za sinkroniziranje (apsolutna putanja)"
 
 msgid ""
 "The path to synchronise with when file system synchronisation is enabled. "
 "See `sync.target`."
 msgstr ""
-"Der Pfad, mit dem synchronisiert wird, wenn Dateisystem-Synchronisation "
-"aktiviert ist. Siehe `sync.target`."
+"Putanja do direktorija za sinkronizaciju u slučaju kad je sinkronizacija sa "
+"datotečnim sustavom omogućena. Vidi `sync.target`."
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "Ungültiger Optionswert: \"%s\". Mögliche Werte sind: %s."
+msgstr "Nevažeća vrijednost: \"%s\". Moguće vrijednosti su: %s."
 
 msgid "Items that cannot be synchronised"
-msgstr ""
+msgstr "Stavke koje se ne mogu sinkronizirati"
 
 #, javascript-format
 msgid "\"%s\": \"%s\""
 msgstr "\"%s\": \"%s\""
 
 msgid "Sync status (synced items / total items)"
-msgstr ""
-"Synchronisationsstatus (synchronisierte Notizen / vorhandenen Notizen )"
+msgstr "Status (sinkronizirane stavke / ukupni broj stavki)"
 
 #, javascript-format
 msgid "%s: %d/%d"
@@ -1003,37 +989,35 @@ msgstr "%s: %d/%d"
 
 #, javascript-format
 msgid "Total: %d/%d"
-msgstr "Insgesamt: %d/%d"
+msgstr "Ukupno: %d/%d"
 
 #, javascript-format
 msgid "Conflicted: %d"
-msgstr ""
+msgstr "U sukobu: %d"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "To delete: %d"
-msgstr "Zu löschende Notizen: %d"
+msgstr "Za brisanje: %d"
 
 msgid "Folders"
-msgstr "Ordner"
+msgstr "Mape"
 
-#, javascript-format
+#, fuzzy, javascript-format
 msgid "%s: %d notes"
-msgstr "%s: %d Notizen"
+msgstr "%s: %d bilješki"
 
 msgid "Coming alarms"
-msgstr "Anstehende Alarme"
+msgstr "Nadolazeća upozorenja"
 
-#, javascript-format
+#, fuzzy, javascript-format
 msgid "On %s: %s"
-msgstr "Auf %s: %s"
+msgstr "On %s: %s"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr ""
-"Momentan existieren noch keine Notizen. Erstelle eine, indem du auf den (+) "
-"Knopf drückst."
+msgstr "Trenutno nema bilješki. Stvori novu klikom na (+) gumb."
 
 msgid "Delete these notes?"
-msgstr "Sollen diese Notizen gelöscht werden?"
+msgstr "Obriši ove bilješke?"
 
 msgid "Log"
 msgstr "Log"
@@ -1042,101 +1026,87 @@ msgid "Status"
 msgstr "Status"
 
 msgid "Export Debug Report"
-msgstr "Fehlerbreicht exportieren"
+msgstr "Izvezi Debug izvještaj"
 
 msgid "Configuration"
-msgstr "Konfiguration"
+msgstr "Konfiguracija"
 
 msgid "Move to notebook..."
-msgstr "Zu Notizbuch verschieben..."
+msgstr "Premjesti u bilježnicu..."
 
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr "%d Notizen zu dem Notizbuch \"%s\" verschieben?"
+msgstr "Premjesti %d bilješke u bilježnicu \"%s\"?"
 
 msgid "Select date"
-msgstr "Datum ausswählen"
+msgstr "Odaberi datum"
 
 msgid "Confirm"
-msgstr "Bestätigen"
+msgstr "Potvrdi"
 
 msgid "Cancel synchronisation"
-msgstr "Synchronisation abbrechen"
+msgstr "Prekini sinkronizaciju"
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"
-msgstr "Dieses Notizbuch konnte nicht gespeichert werden: %s"
+msgstr "Bilježnicu nije moguće snimiti: %s"
 
 msgid "Edit notebook"
-msgstr "Notizbuch bearbeiten"
+msgstr "Uredi bilježnicu"
 
 msgid "This note has been modified:"
-msgstr "Diese Notiz wurde verändert:"
+msgstr "Bilješka je promijenjena:"
 
 msgid "Save changes"
-msgstr "Änderungen speichern"
+msgstr "Spremi promjene"
 
 msgid "Discard changes"
-msgstr "Änderungen verwerfen"
+msgstr "Odbaci promjene"
 
 #, javascript-format
 msgid "Unsupported image type: %s"
-msgstr "Nicht unterstütztes Fotoformat: %s"
+msgstr "Nepodržana vrsta slike: %s"
 
 msgid "Attach photo"
-msgstr "Foto anhängen"
+msgstr "Priloži sliku"
 
 msgid "Attach any file"
-msgstr "Beliebige Datei anhängen"
+msgstr "Priloži datoteku"
 
 msgid "Convert to note"
-msgstr "Zu einer Notiz umwandeln"
+msgstr "Pretvori u bilješku"
 
 msgid "Convert to todo"
-msgstr "Zu einem To-Do umwandeln"
+msgstr "Pretvori u zadatak"
 
 msgid "Hide metadata"
-msgstr "Metadaten verstecken"
+msgstr "Sakrij metapodatke"
 
 msgid "Show metadata"
-msgstr "Metadaten anzeigen"
+msgstr "Prikaži metapodatke"
 
 msgid "View on map"
-msgstr "Auf der Karte anzeigen"
+msgstr "Vidi na karti"
 
 msgid "Delete notebook"
-msgstr "Notizbuch löschen"
+msgstr "Obriši bilježnicu"
 
 msgid "Login with OneDrive"
-msgstr "Mit OneDrive anmelden"
+msgstr "Prijavi se u OneDrive"
 
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
 msgstr ""
-"Drücke auf den (+) Knopf, um eine neue Notiz oder ein neues Notizbuch zu "
-"erstellen."
+"Klikni (+) gumb za dodavanje nove bilješke ili bilježnice ili odaberi "
+"postojeću bilježnicu iz izbornika."
 
 msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr ""
-"Du hast noch kein Notizbuch. Du kannst eines erstellen, indem du auf den (+) "
-"Knopf drückst."
+msgstr "Trenutno nemaš nijednu bilježnicu. Stvori novu klikom na (+) gumb."
 
 msgid "Welcome"
-msgstr "Wilkommen"
+msgstr "Dobro došli"
 
 #, fuzzy
 #~ msgid "Some items cannot be decrypted."
-#~ msgstr "Kann Synchronisierer nicht initialisieren."
-
-#~ msgid "Delete notebook?"
-#~ msgstr "Notizbuch löschen?"
-
-#~ msgid "Delete notebook \"%s\"?"
-#~ msgstr "Notizbuch \"%s\" löschen?"
-
-#~ msgid "File system synchronisation target directory"
-#~ msgstr "Dateisystem-Synchronisation Zielpfad"
-
-#~ msgid "Set or clear alarm:"
-#~ msgstr "Erstelle oder entferne Alarm:"
+#~ msgstr "Neke stavke se ne mogu sinkronizirati."

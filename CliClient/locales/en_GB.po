@@ -603,6 +603,9 @@ msgstr ""
 msgid "View them now"
 msgstr ""
 
+msgid "Active"
+msgstr ""
+
 msgid "ID"
 msgstr ""
 
@@ -613,6 +616,18 @@ msgid "Created"
 msgstr ""
 
 msgid "Updated"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Password OK"
+msgstr ""
+
+msgid ""
+"Note: Only one master key is going to be used for encryption (the one marked "
+"as \"active\"). Any of the keys might be used for decryption, depending on "
+"how the notes or notebooks were originally encrypted."
 msgstr ""
 
 msgid "Add or remove tags"

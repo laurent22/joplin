@@ -662,6 +662,9 @@ msgstr "No se puede inicializar sincronizador."
 msgid "View them now"
 msgstr ""
 
+msgid "Active"
+msgstr ""
+
 msgid "ID"
 msgstr ""
 
@@ -675,6 +678,18 @@ msgstr "Creado: %d."
 #, fuzzy
 msgid "Updated"
 msgstr "Actualizado: %d."
+
+msgid "Password"
+msgstr ""
+
+msgid "Password OK"
+msgstr ""
+
+msgid ""
+"Note: Only one master key is going to be used for encryption (the one marked "
+"as \"active\"). Any of the keys might be used for decryption, depending on "
+"how the notes or notebooks were originally encrypted."
+msgstr ""
 
 msgid "Add or remove tags"
 msgstr "Agregar o borrar etiquetas"
@@ -1095,6 +1110,10 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+#, fuzzy
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "No se puede inicializar sincronizador."
 
 #~ msgid "Delete notebook?"
 #~ msgstr "Eliminar libreta?"
