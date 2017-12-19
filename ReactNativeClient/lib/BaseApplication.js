@@ -1,3 +1,4 @@
+const {unionWith} =require('lodash');
 const { createStore, applyMiddleware } = require('redux');
 const { reducer, defaultState } = require('lib/reducer.js');
 const { JoplinDatabase } = require('lib/joplin-database.js');
@@ -26,7 +27,7 @@ const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
-
+const {searchNotes} = require('./search-utils');
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
@@ -197,10 +198,8 @@ class BaseApplication {
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				let fields = Note.previewFields();
 				let search = BaseModel.byId(state.searches, parentId);
-				notes = await Note.previews(null, {
-					fields: fields,
-					anywherePattern: '*' + search.query_pattern + '*',
-				});
+				notes=await searchNotes(search.query_pattern);
+
 			}
 		}
 

@@ -11,6 +11,7 @@
   "dependencies": {
     "form-data": "^2.1.4",
     "html-entities": "^1.2.1",
+    "lodash": "^4.17.4",
     "markdown-it": "^8.4.0",
     "md5": "^2.2.1",
     "moment": "^2.18.1",

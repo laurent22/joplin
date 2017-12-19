@@ -1,3 +1,4 @@
+
 const React = require('react'); const Component = React.Component;
 const { ListView, StyleSheet, View, TextInput, FlatList, TouchableHighlight } = require('react-native');
 const { connect } = require('react-redux');
@@ -10,6 +11,7 @@ const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
+const {searchNotes} =require("../../search-utils");
 
 class SearchScreenComponent extends BaseScreenComponent {
 	
@@ -105,17 +107,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 		let notes = []
 
 		if (query) {
-			let p = query.split(' ');
-			let temp = [];
-			for (let i = 0; i < p.length; i++) {
-				let t = p[i].trim();
-				if (!t) continue;
-				temp.push(t);
-			}
-
-			notes = await Note.previews(null, {
-				anywherePattern: '*' + temp.join('*') + '*',
-			});
+			notes= await searchNotes(query);
 		}
 
 		if (!this.isMounted_) return;
