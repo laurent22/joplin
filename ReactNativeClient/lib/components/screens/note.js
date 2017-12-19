@@ -34,7 +34,7 @@ const AlarmService = require('lib/services/AlarmService.js');
 const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog.js');
 
 class NoteScreenComponent extends BaseScreenComponent {
-	
+
 	static navigationOptions(options) {
 		return { header: null };
 	}
@@ -56,7 +56,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		// iOS doesn't support multiline text fields properly so disable it
 		this.enableMultilineTitle_ = Platform.OS !== 'ios';
-		
+
 		this.saveButtonHasBeenShown_ = false;
 
 		this.styles_ = {};
@@ -149,9 +149,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 		await shared.initState(this);
 
 		this.refreshNoteMetadata();
-        if(Platform.OS === 'ios'){
-            this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
-            this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
+		if(Platform.OS === 'ios'){
+        	this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
+        	this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
 		}
 
 	}
@@ -162,24 +162,24 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	componentWillUnmount() {
 		BackButtonService.removeHandler(this.backHandler);
-        if(Platform.OS === 'ios'){
-            this.keyboardDidShowListener.remove();
-            this.keyboardDidHideListener.remove();
+		if(Platform.OS === 'ios'){
+			this.keyboardDidShowListener.remove();
+			this.keyboardDidHideListener.remove();
         }
 
 	}
 
-    _keyboardDidShow () {
+	_keyboardDidShow () {
 		this.setState({
-            heightBumpView:30
+			heightBumpView:30
 		})
     }
 
-    _keyboardDidHide () {
-        this.setState({
-            heightBumpView:0
-        })
-    }
+	_keyboardDidHide () {
+		this.setState({
+			heightBumpView:0
+		})
+	}
 
 	title_changeText(text) {
 		shared.noteComponent_change(this, 'title', text);
@@ -264,13 +264,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const format = mimeType == 'image/png' ? 'PNG' : 'JPEG';
 		reg.logger().info('Resizing image ' + localFilePath);
 		const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85); //, 0, targetPath);
-		
+
 		const resizedImagePath = resizedImage.uri;
 		reg.logger().info('Resized image ', resizedImagePath);
 		reg.logger().info('Moving ' + resizedImagePath + ' => ' + targetPath);
-		
+
 		await RNFS.copyFile(resizedImagePath, targetPath);
-		
+
 		try {
 			await RNFS.unlink(resizedImagePath);
 		} catch (error) {
