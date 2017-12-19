@@ -149,8 +149,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		await shared.initState(this);
 
 		this.refreshNoteMetadata();
-        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
-        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
+        if(Platform.OS === 'ios'){
+            this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
+            this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
+		}
+
 	}
 
 	refreshNoteMetadata(force = null) {
@@ -159,8 +162,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	componentWillUnmount() {
 		BackButtonService.removeHandler(this.backHandler);
-        this.keyboardDidShowListener.remove();
-        this.keyboardDidHideListener.remove();
+        if(Platform.OS === 'ios'){
+            this.keyboardDidShowListener.remove();
+            this.keyboardDidHideListener.remove();
+        }
+
 	}
 
     _keyboardDidShow () {
@@ -539,7 +545,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		);
 
 		return (
-			<KeyboardAvoidingView  behavior="padding" style={this.rootStyle(this.props.theme).root}>
+			<KeyboardAvoidingView  behavior= {(Platform.OS === 'ios')? "padding" : null} style={this.rootStyle(this.props.theme).root}>
 				<ScreenHeader
 					folderPickerOptions={{
 						enabled: true,
