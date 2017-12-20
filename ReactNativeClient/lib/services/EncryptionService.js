@@ -3,6 +3,7 @@ const { shim } = require('lib/shim.js');
 const Setting = require('lib/models/Setting.js');
 const MasterKey = require('lib/models/MasterKey');
 const BaseItem = require('lib/models/BaseItem');
+const { _ } = require('lib/locale.js');
 
 function hexPad(s, length) {
 	return padLeft(s, length, '0');
@@ -33,7 +34,7 @@ class EncryptionService {
 		return this.logger_;
 	}
 
-	async initializeEncryption(masterKey, password = null) {
+	async enableEncryption(masterKey, password = null) {
 		Setting.setValue('encryption.enabled', true);
 		Setting.setValue('encryption.activeMasterKeyId', masterKey.id);
 
@@ -43,7 +44,19 @@ class EncryptionService {
 			Setting.setValue('encryption.passwordCache', passwordCache);		
 		}
 
+		// Mark only the non-encrypted ones for sync since, if there are encrypted ones,
+		// it means they come from the sync target and are already encrypted over there.
 		await BaseItem.markAllNonEncryptedForSync();
+	}
+
+	async disableEncryption() {
+		const hasEncryptedItems = await BaseItem.hasEncryptedItems();
+		if (hasEncryptedItems) throw new Error(_('Encryption cannot currently be disabled because some items are still encrypted. Please wait for all the items to be decrypted and try again.'));
+		
+		Setting.setValue('encryption.enabled', false);
+		// The only way to make sure everything gets decrypted on the sync target is
+		// to re-sync everything.
+		await BaseItem.forceSyncAll();
 	}
 
 	async loadMasterKeysFromSettings() {

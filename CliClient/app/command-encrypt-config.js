@@ -29,7 +29,7 @@ class Command extends BaseCommand {
 			const service = new EncryptionService();
 			let masterKey = await service.generateMasterKey(password);
 			masterKey = await MasterKey.save(masterKey);
-			await service.initializeEncryption(masterKey, password);
+			await service.enableEncryption(masterKey, password);
 		}
 	}
 

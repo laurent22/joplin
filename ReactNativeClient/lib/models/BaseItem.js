@@ -258,7 +258,13 @@ class BaseItem extends BaseModel {
 	static async serializeForSync(item) {
 		const ItemClass = this.itemClass(item);
 		let serialized = await ItemClass.serialize(item);
-		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported()) return serialized;
+		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported()) {
+			// Sanity check - normally not possible
+			if (!!item.encryption_applied) throw new Error('Item is encrypted but encryption is currently disabled');
+			return serialized;
+		}
+
+		if (!!item.encryption_applied) { const e = new Error('Trying to encrypt item that is already encrypted'); e.code = 'cannotEncryptEncrypted'; throw e; }
 
 		const cipherText = await this.encryptionService().encryptString(serialized);
 
@@ -341,6 +347,20 @@ class BaseItem extends BaseModel {
 		}
 
 		return output;
+	}
+
+	static async hasEncryptedItems() {
+		const classNames = this.encryptableItemClassNames();
+
+		for (let i = 0; i < classNames.length; i++) {
+			const className = classNames[i];
+			const ItemClass = this.getClass(className);
+
+			const count = await ItemClass.count({ where: 'encryption_applied = 1' });
+			if (count) return true;
+		}
+
+		return false;
 	}
 
 	static async itemsThatNeedDecryption(exclusions = [], limit = 100) {
@@ -566,6 +586,14 @@ class BaseItem extends BaseModel {
 
 			await this.db().exec('UPDATE sync_items SET force_sync = 1 WHERE item_id IN ("' + ids.join('","') + '")');
 		}
+	}
+
+	static async forceSync(itemId) {
+		await this.db().exec('UPDATE sync_items SET force_sync = 1 WHERE item_id = ?', [itemId]);
+	}
+
+	static async forceSyncAll() {
+		await this.db().exec('UPDATE sync_items SET force_sync = 1');
 	}
 
 	static async save(o, options = null) {

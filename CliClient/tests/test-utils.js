@@ -98,7 +98,7 @@ async function switchClient(id) {
 	return Setting.load();
 }
 
-function clearDatabase(id = null) {
+async function clearDatabase(id = null) {
 	if (id === null) id = currentClient_;
 
 	let queries = [
@@ -114,31 +114,53 @@ function clearDatabase(id = null) {
 		'DELETE FROM sync_items',
 	];
 
-	return databases_[id].transactionExecBatch(queries);
+	await databases_[id].transactionExecBatch(queries);
 }
 
-function setupDatabase(id = null) {
+async function setupDatabase(id = null) {
 	if (id === null) id = currentClient_;
 
+	Setting.cancelScheduleSave();
+	Setting.cache_ = null;
+
 	if (databases_[id]) {
-		return clearDatabase(id).then(() => {
-			return Setting.load();
-		});
+		await clearDatabase(id);
+		await Setting.load();
+		return;
 	}
 
 	const filePath = __dirname + '/data/test-' + id + '.sqlite';
-	// Setting.setConstant('resourceDir', RNFetchBlob.fs.dirs.DocumentDir);
-	return fs.unlink(filePath).catch(() => {
+
+	try {
+		await fs.unlink(filePath);
+	} catch (error) {
 		// Don't care if the file doesn't exist
-	}).then(() => {
-		databases_[id] = new JoplinDatabase(new DatabaseDriverNode());
-		// databases_[id].setLogger(logger);
-		// console.info(filePath);
-		return databases_[id].open({ name: filePath }).then(() => {
-			BaseModel.db_ = databases_[id];
-			return setupDatabase(id);
-		});
-	});
+	};
+
+	databases_[id] = new JoplinDatabase(new DatabaseDriverNode());
+	await databases_[id].open({ name: filePath });
+
+	BaseModel.db_ = databases_[id];
+	await Setting.load();
+	//return setupDatabase(id);
+
+
+
+	// return databases_[id].open({ name: filePath }).then(() => {
+	// 	BaseModel.db_ = databases_[id];
+	// 	return setupDatabase(id);
+	// });
+
+
+	// return fs.unlink(filePath).catch(() => {
+	// 	// Don't care if the file doesn't exist
+	// }).then(() => {
+	// 	databases_[id] = new JoplinDatabase(new DatabaseDriverNode());
+	// 	return databases_[id].open({ name: filePath }).then(() => {
+	// 		BaseModel.db_ = databases_[id];
+	// 		return setupDatabase(id);
+	// 	});
+	// });
 }
 
 function resourceDir(id = null) {
@@ -150,6 +172,9 @@ async function setupDatabaseAndSynchronizer(id = null) {
 	if (id === null) id = currentClient_;
 
 	await setupDatabase(id);
+
+	EncryptionService.instance_ = null;
+	DecryptionWorker.instance_ = null;
 
 	await fs.remove(resourceDir(id));
 	await fs.mkdirp(resourceDir(id), 0o755);

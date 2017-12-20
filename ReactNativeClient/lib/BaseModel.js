@@ -96,8 +96,11 @@ class BaseModel {
 		return options;
 	}
 
-	static count() {
-		return this.db().selectOne('SELECT count(*) as total FROM `' + this.tableName() + '`').then((r) => {
+	static count(options = null) {
+		if (!options) options = {};
+		let sql = 'SELECT count(*) as total FROM `' + this.tableName() + '`';
+		if (options.where) sql += ' WHERE ' + options.where;
+		return this.db().selectOne(sql).then((r) => {
 			return r ? r['total'] : 0;
 		});
 	}

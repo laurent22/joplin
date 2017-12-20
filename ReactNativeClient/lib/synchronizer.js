@@ -217,7 +217,6 @@ class Synchronizer {
 					if (donePaths.indexOf(path) > 0) throw new Error(sprintf('Processing a path that has already been done: %s. sync_time was not updated?', path));
 
 					let remote = await this.api().stat(path);
-					//let content = await ItemClass.serializeForSync(local);
 					let action = null;
 					let updateSyncTimeOnly = true;
 					let reason = '';					
@@ -561,9 +560,9 @@ class Synchronizer {
 				await BaseItem.deleteOrphanSyncItems();
 			}
 		} catch (error) {
-			if (error && error.code === 'noActiveMasterKey') {
-				// Don't log an error for this as this is a common
-				// condition that the UI should report anyway.
+			if (error && ['cannotEncryptEncrypted', 'noActiveMasterKey'].indexOf(error.code) >= 0) {
+				// Only log an info statement for this since this is a common condition that is reported
+				// in the application, and needs to be resolved by the user
 				this.logger().info(error.message);
 			} else {
 				this.logger().error(error);
@@ -583,7 +582,7 @@ class Synchronizer {
 			const mk = await MasterKey.latest();
 			if (mk) {
 				this.logger().info('Using master key: ', mk);
-				await this.encryptionService().initializeEncryption(mk);
+				await this.encryptionService().enableEncryption(mk);
 				await this.encryptionService().loadMasterKeysFromSettings();
 				this.logger().info('Encryption has been enabled with downloaded master key as active key. However, note that no password was initially supplied. It will need to be provided by user.');
 			}

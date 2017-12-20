@@ -81,10 +81,14 @@ class Resource extends BaseItem {
 		const plainTextPath = this.fullPath(resource);
 
 		if (!Setting.value('encryption.enabled')) {
-			if (resource.encryption_blob_encrypted) {
-				resource.encryption_blob_encrypted = 0;
-				await Resource.save(resource, { autoTimestamp: false });
-			}
+			// Sanity check - normally not possible
+			if (!!resource.encryption_blob_encrypted) throw new Error('Trying to access encrypted resource but encryption is currently disabled');
+
+			// // TODO: why is it set to 0 without decrypting first?
+			// if (resource.encryption_blob_encrypted) {
+			// 	resource.encryption_blob_encrypted = 0;
+			// 	await Resource.save(resource, { autoTimestamp: false });
+			// }
 			return { path: plainTextPath, resource: resource };
 		}
 

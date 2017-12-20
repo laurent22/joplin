@@ -1,7 +1,7 @@
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker } = require('test-utils.js');
+const { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync } = require('test-utils.js');
 const { shim } = require('lib/shim.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
@@ -24,6 +24,24 @@ async function allItems() {
 	let folders = await Folder.all();
 	let notes = await Note.all();
 	return folders.concat(notes);
+}
+
+async function allSyncTargetItemsEncrypted() {
+	const list = await fileApi().list();
+	const files = list.items;
+
+	let output = false;
+	for (let i = 0; i < files.length; i++) {
+		const file = files[i];
+		const remoteContentString = await fileApi().get(file.path);
+		const remoteContent = await BaseItem.unserialize(remoteContentString);
+		const ItemClass = BaseItem.itemClass(remoteContent);
+
+		if (!ItemClass.encryptionSupported()) continue;
+		if (!!remoteContent.encryption_applied) output = true;
+	}	
+
+	return output;
 }
 
 async function localItemsSameAsRemote(locals, expect) {
@@ -56,13 +74,19 @@ async function localItemsSameAsRemote(locals, expect) {
 	}
 }
 
+let insideBeforeEach = false;
+
 describe('Synchronizer', function() {
 
-	beforeEach( async (done) => {
+	beforeEach(async (done) => {
+		insideBeforeEach = true;
+
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
 		done();
+
+		insideBeforeEach = false;
 	});
 
 	it('should create remote items', async (done) => {
@@ -605,7 +629,10 @@ describe('Synchronizer', function() {
 		await switchClient(2);
 
 		await synchronizer().start();
-		if (withEncryption) await loadEncryptionMasterKey(null, true);
+		if (withEncryption) {
+			await loadEncryptionMasterKey(null, true);
+			await decryptionWorker().start();
+		}
 		let note2 = await Note.load(note1.id);
 		note2.todo_completed = time.unixMs()-1;
 		await Note.save(note2);
@@ -650,6 +677,12 @@ describe('Synchronizer', function() {
 
 	it('should not consider it is a conflict if neither the title nor body of the note have changed', async (done) => {
 		await ignorableNoteConflictTest(false);
+
+		done();
+	});
+
+	it('should always handle conflict if local or remote are encrypted', async (done) => {
+		await ignorableNoteConflictTest(true);
 
 		done();
 	});
@@ -746,12 +779,6 @@ describe('Synchronizer', function() {
 		done();
 	});
 
-	it('should always handle conflict if local or remote are encrypted', async (done) => {
-		await ignorableNoteConflictTest(true);
-
-		done();
-	});
-
 	it('should enable encryption automatically when downloading new master key (and none was previously available)', async (done) => {
 		// Enable encryption on client 1 and sync an item
 		Setting.setValue('encryption.enabled', true);
@@ -776,7 +803,7 @@ describe('Synchronizer', function() {
 		// If we sync now, nothing should be sent to target since we don't have a password.
 		// Technically it's incorrect to set the property of an encrypted variable but it allows confirming
 		// that encryption doesn't work if user hasn't supplied a password.
-		let folder1_2 = await Folder.save({ id: folder1.id, title: "change test" });
+		await BaseItem.forceSync(folder1.id);
 		await synchronizer().start();
 
 		await switchClient(1);
@@ -814,7 +841,6 @@ describe('Synchronizer', function() {
 
 	it('should encrypt existing notes too when enabling E2EE', async (done) => {
 		// First create a folder, without encryption enabled, and sync it
-		const service = encryptionService();
 		let folder1 = await Folder.save({ title: "folder1" });
 		await synchronizer().start();
 		let files = await fileApi().list()
@@ -822,10 +848,10 @@ describe('Synchronizer', function() {
 		expect(content.indexOf('folder1') >= 0).toBe(true)
 
 		// Then enable encryption and sync again
-		let masterKey = await service.generateMasterKey('123456');
+		let masterKey = await encryptionService().generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
-		await service.initializeEncryption(masterKey, '123456');
-		await service.loadMasterKeysFromSettings();
+		await encryptionService().enableEncryption(masterKey, '123456');
+		await encryptionService().loadMasterKeysFromSettings();
 		await synchronizer().start();
 		
 		// Even though the folder has not been changed it should have been synced again so that
@@ -849,11 +875,14 @@ describe('Synchronizer', function() {
 		let resource1 = (await Resource.all())[0];
 		let resourcePath1 = Resource.fullPath(resource1);
 		await synchronizer().start();
+		expect((await fileApi().list()).items.length).toBe(3);
 
 		await switchClient(2);
 
 		await synchronizer().start();
-		let resource1_2 = (await Resource.all())[0];
+		let allResources = await Resource.all();
+		expect(allResources.length).toBe(1);
+		let resource1_2 = allResources[0];
 		let resourcePath1_2 = Resource.fullPath(resource1_2);
 
 		expect(resource1_2.id).toBe(resource1.id);
@@ -884,6 +913,64 @@ describe('Synchronizer', function() {
 		let resourcePath1_2 = Resource.fullPath(resource1_2);
 
 		expect(fileContentEqual(resourcePath1, resourcePath1_2)).toBe(true);
+
+		done();
+	});
+
+	it('should upload decrypted items to sync target after encryption disabled', async (done) => {
+		Setting.setValue('encryption.enabled', true);
+		const masterKey = await loadEncryptionMasterKey();
+
+		let folder1 = await Folder.save({ title: "folder1" });
+		await synchronizer().start();
+
+		let allEncrypted = await allSyncTargetItemsEncrypted();
+		expect(allEncrypted).toBe(true);
+
+		await encryptionService().disableEncryption();
+
+		await synchronizer().start();
+		allEncrypted = await allSyncTargetItemsEncrypted();
+		expect(allEncrypted).toBe(false);
+
+		done();
+	});
+
+	it('should not upload any item if encryption was enabled, and items have not been decrypted, and then encryption disabled', async (done) => {
+		// For some reason I can't explain, this test is sometimes executed before beforeEach is finished
+		// which means it's going to fail in unexpected way. So the loop below wait for beforeEach to be done.
+		while (insideBeforeEach) await time.msleep(100);
+
+		Setting.setValue('encryption.enabled', true);
+		const masterKey = await loadEncryptionMasterKey();
+
+		let folder1 = await Folder.save({ title: "folder1" });
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		expect(Setting.value('encryption.enabled')).toBe(true);
+
+		// If we try to disable encryption now, it should throw an error because some items are
+		// currently encrypted. They must be decrypted first so that they can be sent as
+		// plain text to the sync target.
+		let hasThrown = await checkThrowAsync(async () => await encryptionService().disableEncryption());
+		expect(hasThrown).toBe(true);
+
+		// Now supply the password, and decrypt the items
+		Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
+		await encryptionService().loadMasterKeysFromSettings();	
+		await decryptionWorker().start();
+
+		// Try to disable encryption again
+		hasThrown = await checkThrowAsync(async () => await encryptionService().disableEncryption());
+		expect(hasThrown).toBe(false);
+
+		// If we sync now the target should receive the decrypted items
+		await synchronizer().start();
+		allEncrypted = await allSyncTargetItemsEncrypted();
+		expect(allEncrypted).toBe(false);
 
 		done();
 	});
