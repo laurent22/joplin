@@ -18,6 +18,15 @@ class EncryptionService {
 		this.loadedMasterKeys_ = {};
 		this.activeMasterKeyId_ = null;
 		this.defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL;
+
+		this.headerTemplates_ = {
+			1: {
+				fields: [
+					[ 'encryptionMethod', 2, 'int' ],
+					[ 'masterKeyId', 32, 'hex' ],
+				],
+			},
+		};
 	}
 
 	static instance() {
@@ -265,7 +274,6 @@ class EncryptionService {
 		const masterKeyPlainText = this.loadedMasterKey(masterKeyId);
 
 		const header = {
-			version: 1,
 			encryptionMethod: method,
 			masterKeyId: masterKeyId,
 		};
@@ -288,11 +296,11 @@ class EncryptionService {
 	}
 
 	async decryptAbstract_(source, destination) {
-		const headerVersionHexaBytes = await source.read(2);
-		const headerVersion = this.decodeHeaderVersion_(headerVersionHexaBytes);
-		const headerSize = this.headerSize_(headerVersion);
-		const headerHexaBytes = await source.read(headerSize - 2);
-		const header = this.decodeHeader_(headerVersionHexaBytes + headerHexaBytes);
+		const identifier = await source.read(5);
+		const mdSizeHex = await source.read(6);
+		const md = await source.read(parseInt(mdSizeHex, 16));
+		const header = this.decodeHeader_(identifier + mdSizeHex + md);
+
 		const masterKeyPlainText = this.loadedMasterKey(header.masterKeyId);
 
 		let index = header.length;
@@ -313,13 +321,13 @@ class EncryptionService {
 		}
 	}
 
-	stringReader_(string) {
+	stringReader_(string, sync = false) {
 		const reader = {
 			index: 0,
-			read: async function(size) {
+			read: function(size) {
 				const output = string.substr(reader.index, size);
 				reader.index += size;
-				return output;
+				return !sync ? Promise.resolve(output) : output;
 			},
 			close: function() {},
 		};
@@ -432,43 +440,38 @@ class EncryptionService {
 		return parseInt(hexaByte, 16);
 	}
 
-	headerSize_(version) {
-		if (version === 1) return 36;
-		throw new Error('Unknown header version: ' + version);
+	headerTemplate(version) {
+		const r = this.headerTemplates_[version];
+		if (!r) throw new Error('Unknown header version: ' + version);
+		return r;
 	}
 
 	encodeHeader_(header) {
 		// Sanity check
 		if (header.masterKeyId.length !== 32) throw new Error('Invalid master key ID size: ' + header.masterKeyId);
 
-		const output = [];
-		output.push(padLeft(header.version.toString(16), 2, '0'));
-		output.push(padLeft(header.encryptionMethod.toString(16), 2, '0'));
-		output.push(header.masterKeyId);
-		return output.join('');
+		let encryptionMetadata = '';
+		encryptionMetadata += padLeft(header.encryptionMethod.toString(16), 2, '0');
+		encryptionMetadata += header.masterKeyId;
+		encryptionMetadata = padLeft(encryptionMetadata.length.toString(16), 6, '0') + encryptionMetadata;
+		return 'JED01' + encryptionMetadata;
 	}
 
 	decodeHeader_(headerHexaBytes) {
-		const headerTemplates = {
-			1: [
-				[ 'encryptionMethod', 2, 'int' ],
-				[ 'masterKeyId', 32, 'hex' ],
-			],
-		};
+		const reader = this.stringReader_(headerHexaBytes, true);
+		const identifier = reader.read(3);
+		const version = parseInt(reader.read(2), 16);
+		if (identifier !== 'JED') throw new Error('Invalid header (missing identifier)');
+		const template = this.headerTemplate(version);
 
-		const output = {};
-		const version = parseInt(headerHexaBytes.substr(0, 2), 16);
-		const template = headerTemplates[version];
+		const size = parseInt(reader.read(6), 16);
 
-		if (!template) throw new Error('Invalid header version: ' + version);
+		let output = {};
 
-		output.version = version;
-
-		let index = 2;
-		for (let i = 0; i < template.length; i++) {
-			const m = template[i];
+		for (let i = 0; i < template.fields.length; i++) {
+			const m = template.fields[i];
 			const type = m[2];
-			let v = headerHexaBytes.substr(index, m[1]);
+			let v = reader.read(m[1]);
 
 			if (type === 'int') {
 				v = parseInt(v, 16);
@@ -478,11 +481,8 @@ class EncryptionService {
 				throw new Error('Invalid type: ' + type);
 			}
 
-			index += m[1];
 			output[m[0]] = v;
 		}
-
-		output.length = index;
 
 		return output;
 	}

@@ -35,7 +35,6 @@ describe('Encryption', function() {
 
 	it('should encode and decode header', async (done) => {
 		const header = {
-			version: 1,
 			encryptionMethod: EncryptionService.METHOD_SJCL,
 			masterKeyId: '01234568abcdefgh01234568abcdefgh',
 		};
