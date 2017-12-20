@@ -270,7 +270,7 @@ class Synchronizer {
 						this.dispatch({ type: 'SYNC_HAS_DISABLED_SYNC_ITEMS' });
 					}
 
-					if (local.type_ == BaseModel.TYPE_RESOURCE && (action == 'createRemote' || (action == 'itemConflict' && remote))) {
+					if (local.type_ == BaseModel.TYPE_RESOURCE && (action == 'createRemote' || action === 'updateRemote' || (action == 'itemConflict' && remote))) {
 						try {
 							const remoteContentPath = this.resourceDirName_ + '/' + local.id;
 							const result = await Resource.fullPathForSyncUpload(local);

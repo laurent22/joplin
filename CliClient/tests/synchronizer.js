@@ -3,6 +3,7 @@ require('app-module-path').addPath(__dirname);
 const { time } = require('lib/time-utils.js');
 const { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync } = require('test-utils.js');
 const { shim } = require('lib/shim.js');
+const fs = require('fs-extra');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
@@ -30,7 +31,10 @@ async function allSyncTargetItemsEncrypted() {
 	const list = await fileApi().list();
 	const files = list.items;
 
-	let output = false;
+	//console.info(Setting.value('resourceDir'));
+
+	let totalCount = 0;
+	let encryptedCount = 0;
 	for (let i = 0; i < files.length; i++) {
 		const file = files[i];
 		const remoteContentString = await fileApi().get(file.path);
@@ -38,10 +42,21 @@ async function allSyncTargetItemsEncrypted() {
 		const ItemClass = BaseItem.itemClass(remoteContent);
 
 		if (!ItemClass.encryptionSupported()) continue;
-		if (!!remoteContent.encryption_applied) output = true;
-	}	
 
-	return output;
+		totalCount++;
+
+		if (remoteContent.type_ === BaseModel.TYPE_RESOURCE) {
+			const content = await fileApi().get('.resource/' + remoteContent.id);
+			totalCount++;
+			if (content.substr(0, 5) === 'JED01') output = encryptedCount++;
+		}
+
+		if (!!remoteContent.encryption_applied) encryptedCount++;
+	}
+
+	if (!totalCount) throw new Error('No encryptable item on sync target');
+
+	return totalCount === encryptedCount;
 }
 
 async function localItemsSameAsRemote(locals, expect) {
@@ -971,6 +986,28 @@ describe('Synchronizer', function() {
 		await synchronizer().start();
 		allEncrypted = await allSyncTargetItemsEncrypted();
 		expect(allEncrypted).toBe(false);
+
+		done();
+	});
+
+	it('should encrypt remote resources after encryption has been enabled', async (done) => {
+		while (insideBeforeEach) await time.msleep(100);
+
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		let resource1 = (await Resource.all())[0];
+		await synchronizer().start();
+
+		expect(await allSyncTargetItemsEncrypted()).toBe(false);
+
+		const masterKey = await loadEncryptionMasterKey();
+		await encryptionService().enableEncryption(masterKey, '123456');
+		await encryptionService().loadMasterKeysFromSettings();
+
+		await synchronizer().start();
+
+		expect(await allSyncTargetItemsEncrypted()).toBe(true);
 
 		done();
 	});
