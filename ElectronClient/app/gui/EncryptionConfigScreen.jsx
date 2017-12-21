@@ -7,7 +7,7 @@ const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
 const { time } = require('lib/time-utils.js');
 
-class MasterKeysScreenComponent extends React.Component {
+class EncryptionConfigScreenComponent extends React.Component {
 
 	constructor() {
 		super();
@@ -131,6 +131,6 @@ const mapStateToProps = (state) => {
 	};
 };
 
-const MasterKeysScreen = connect(mapStateToProps)(MasterKeysScreenComponent);
+const EncryptionConfigScreen = connect(mapStateToProps)(EncryptionConfigScreenComponent);
 
-module.exports = { MasterKeysScreen };
+module.exports = { EncryptionConfigScreen };

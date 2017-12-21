@@ -268,20 +268,17 @@ class BaseItem extends BaseModel {
 
 		const cipherText = await this.encryptionService().encryptString(serialized);
 
-		const reducedItem = Object.assign({}, item);
+		//const reducedItem = Object.assign({}, item);
 
 		// List of keys that won't be encrypted - mostly foreign keys required to link items
 		// with each others and timestamp required for synchronisation.
 		const keepKeys = ['id', 'note_id', 'tag_id', 'parent_id', 'updated_time', 'type_'];
+		const reducedItem = {};
 
-		for (let n in reducedItem) {
-			if (!reducedItem.hasOwnProperty(n)) continue;
-
-			if (keepKeys.indexOf(n) >= 0) {
-				continue;
-			} else {
-				delete reducedItem[n];
-			}
+		for (let i = 0; i < keepKeys.length; i++) {
+			const n = keepKeys[i];
+			if (!item.hasOwnProperty(n)) continue;
+			reducedItem[n] = item[n];
 		}
 
 		reducedItem.encryption_applied = 1;
@@ -370,7 +367,7 @@ class BaseItem extends BaseModel {
 			const className = classNames[i];
 			const ItemClass = this.getClass(className);
 
-			const whereSql = ['encryption_applied = 1'];
+			const whereSql = className === 'Resource' ? ['(encryption_blob_encrypted = 1 OR encryption_applied = 1)'] : ['encryption_applied = 1'];
 			if (exclusions.length) whereSql.push('id NOT IN ("' + exclusions.join('","') + '")');
 
 			const sql = sprintf(`

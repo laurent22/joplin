@@ -267,31 +267,23 @@ class Application extends BaseApplication {
 							routeName: 'Status',
 						});
 					}
+				}, {
+					type: 'separator',
+					screens: ['Main'],
 				},{
-					label: _('Options'),
+					label: _('Encryption options'),
+					click: () => {
+						this.dispatch({
+							type: 'NAV_GO',
+							routeName: 'EncryptionConfig',
+						});
+					}
+				},{
+					label: _('General Options'),
 					click: () => {
 						this.dispatch({
 							type: 'NAV_GO',
 							routeName: 'Config',
-						});
-					}
-				}],
-			}, {
-				label: _('Encryption'),
-				submenu: [{
-					label: _('Enable'),
-					click: () => {
-						// this.dispatch({
-						// 	type: 'NAV_GO',
-						// 	routeName: 'MasterKeys',
-						// });
-					}
-				},{
-					label: _('Master Keys'),
-					click: () => {
-						this.dispatch({
-							type: 'NAV_GO',
-							routeName: 'MasterKeys',
 						});
 					}
 				}],
@@ -414,6 +406,8 @@ class Application extends BaseApplication {
 				// Wait for the first sync before updating the notifications, since synchronisation
 				// might change the notifications.
 				AlarmService.updateAllNotifications();
+
+				DecryptionWorker.instance().scheduleStart();
 			});
 		}
 	}

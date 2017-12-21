@@ -11,7 +11,7 @@ const { OneDriveLoginScreen } = require('./OneDriveLoginScreen.min.js');
 const { StatusScreen } = require('./StatusScreen.min.js');
 const { ImportScreen } = require('./ImportScreen.min.js');
 const { ConfigScreen } = require('./ConfigScreen.min.js');
-const { MasterKeysScreen } = require('./MasterKeysScreen.min.js');
+const { EncryptionConfigScreen } = require('./EncryptionConfigScreen.min.js');
 const { Navigator } = require('./Navigator.min.js');
 
 const { app } = require('../app');
@@ -78,7 +78,7 @@ class RootComponent extends React.Component {
 			Import: { screen: ImportScreen, title: () => _('Import') },
 			Config: { screen: ConfigScreen, title: () => _('Options') },
 			Status: { screen: StatusScreen, title: () => _('Synchronisation Status') },
-			MasterKeys: { screen: MasterKeysScreen, title: () => _('Master Keys') },
+			EncryptionConfig: { screen: EncryptionConfigScreen, title: () => _('Encryption Options') },
 		};
 
 		return (

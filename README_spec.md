@@ -8,7 +8,14 @@ Encrypted data is encoded to ASCII because encryption/decryption functions in Re
 
 Name               |  Size
 -------------------|-------------------------
+Identifier         |  3 chars ("JED")
 Version number     |  2 chars (Hexa string)
+
+This is followed by the encryption metadata:
+
+Name               |  Size
+-------------------|-------------------------
+Length             |  6 chars (Hexa string)
 Encryption method  |  2 chars (Hexa string)
 Master key ID      |  32 chars (Hexa string)
 

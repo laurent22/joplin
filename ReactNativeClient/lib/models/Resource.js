@@ -53,7 +53,9 @@ class Resource extends BaseItem {
 
 	// For resources, we need to decrypt the item (metadata) and the resource binary blob.
 	static async decrypt(item) {
-		const decryptedItem = await super.decrypt(item);
+		// The item might already be decrypted but not the blob (for instance if it crashes while
+		// decrypting the blob or was otherwise interrupted).
+		const decryptedItem = item.encryption_cipher_text ? await super.decrypt(item) : Object.assign({}, item);
 		if (!decryptedItem.encryption_blob_encrypted) return decryptedItem;
 
 		const plainTextPath = this.fullPath(decryptedItem);
@@ -69,7 +71,7 @@ class Resource extends BaseItem {
 		}
 
 		await this.encryptionService().decryptFile(encryptedPath, plainTextPath);
-		item.encryption_blob_encrypted = 0;
+		decryptedItem.encryption_blob_encrypted = 0;
 		return Resource.save(decryptedItem, { autoTimestamp: false });
 	}
 

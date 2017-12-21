@@ -268,14 +268,16 @@ class BaseApplication {
 		}
 
 		if ((action.type == 'SETTING_UPDATE_ONE' && (action.key.indexOf('encryption.') === 0)) || (action.type == 'SETTING_UPDATE_ALL')) {
-			await EncryptionService.instance().loadMasterKeysFromSettings();
-			DecryptionWorker.instance().scheduleStart();
-			const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
+			if (this.hasGui()) {
+				await EncryptionService.instance().loadMasterKeysFromSettings();
+				DecryptionWorker.instance().scheduleStart();
+				const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
 
-			this.dispatch({
-				type: 'MASTERKEY_REMOVE_MISSING',
-				ids: loadedMasterKeyIds,
-			});
+				this.dispatch({
+					type: 'MASTERKEY_REMOVE_MISSING',
+					ids: loadedMasterKeyIds,
+				});
+			}
 		}
 
 		if (action.type == 'TAG_SELECT' || action.type === 'TAG_DELETE') {
@@ -300,6 +302,10 @@ class BaseApplication {
 
 		if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && action.key == 'sync.interval' || action.type == 'SETTING_UPDATE_ALL') {
 			reg.setupRecurrentSync();
+		}
+
+		if (this.hasGui() && action.type === 'SYNC_GOT_ENCRYPTED_ITEM') {
+			DecryptionWorker.instance().scheduleStart();
 		}
 
 	  	return result;
@@ -411,7 +417,6 @@ class BaseApplication {
 		DecryptionWorker.instance().setLogger(this.logger_);
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
 		await EncryptionService.instance().loadMasterKeysFromSettings();
-		DecryptionWorker.instance().scheduleStart();
 
 		let currentFolderId = Setting.value('activeFolderId');
 		let currentFolder = null;

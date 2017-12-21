@@ -14,6 +14,7 @@ const chalk = require('chalk');
 const tk = require('terminal-kit');
 const TermWrapper = require('tkwidgets/framework/TermWrapper.js');
 const Renderer = require('tkwidgets/framework/Renderer.js');
+const DecryptionWorker = require('lib/services/DecryptionWorker');
 
 const BaseWidget = require('tkwidgets/BaseWidget.js');
 const ListWidget = require('tkwidgets/ListWidget.js');
@@ -65,6 +66,7 @@ class AppGui {
 		// a regular command it's not necessary since the process
 		// exits right away.
 		reg.setupRecurrentSync();
+		DecryptionWorker.instance().scheduleStart();
 	}
 
 	store() {

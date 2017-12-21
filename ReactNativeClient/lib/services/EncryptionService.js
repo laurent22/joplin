@@ -300,21 +300,16 @@ class EncryptionService {
 		const mdSizeHex = await source.read(6);
 		const md = await source.read(parseInt(mdSizeHex, 16));
 		const header = this.decodeHeader_(identifier + mdSizeHex + md);
-
 		const masterKeyPlainText = this.loadedMasterKey(header.masterKeyId);
-
-		let index = header.length;
 
 		while (true) {
 			const lengthHex = await source.read(6);
 			if (!lengthHex) break;
 			if (lengthHex.length !== 6) throw new Error('Invalid block size: ' + lengthHex);
 			const length = parseInt(lengthHex, 16);
-			index += 6;
 			if (!length) continue; // Weird but could be not completely invalid (block of size 0) so continue decrypting
 
 			const block = await source.read(length);
-			index += length;
 
 			const plainText = await this.decrypt(header.encryptionMethod, masterKeyPlainText, block);
 			await destination.append(plainText);
@@ -349,25 +344,23 @@ class EncryptionService {
 	}
 
 	async fileReader_(path, encoding) {
-		const fsDriver = this.fsDriver();
-		const handle = await fsDriver.open(path, 'r');
+		const handle = await this.fsDriver().open(path, 'r');
 		const reader = {
 			handle: handle,
-			read: async function(size) {
-				return fsDriver.readFileChunk(reader.handle, size, encoding);
+			read: async (size) => {
+				return this.fsDriver().readFileChunk(reader.handle, size, encoding);
 			},
-			close: function() {
-				fsDriver.close(reader.handle);
+			close: () => {
+				this.fsDriver().close(reader.handle);
 			},
 		};
 		return reader;
 	}
 
 	async fileWriter_(path, encoding) {
-		const fsDriver = this.fsDriver();
 		return {
-			append: async function(data) {
-				return fsDriver.appendFile(path, data, encoding);
+			append: async (data) => {
+				return this.fsDriver().appendFile(path, data, encoding);
 			},
 			close: function() {},
 		};
@@ -388,7 +381,6 @@ class EncryptionService {
 	}
 
 	async encryptFile(srcPath, destPath) {
-		const fsDriver = this.fsDriver();		
 		let source = await this.fileReader_(srcPath, 'base64');
 		let destination = await this.fileWriter_(destPath, 'ascii');
 
@@ -400,11 +392,11 @@ class EncryptionService {
 		}
 
 		try {
-			await fsDriver.unlink(destPath);
+			await this.fsDriver().unlink(destPath);
 			await this.encryptAbstract_(source, destination);
 		} catch (error) {
 			cleanUp();
-			await fsDriver.unlink(destPath);
+			await this.fsDriver().unlink(destPath);
 			throw error;
 		}
 
@@ -412,7 +404,6 @@ class EncryptionService {
 	}
 
 	async decryptFile(srcPath, destPath) {
-		const fsDriver = this.fsDriver();		
 		let source = await this.fileReader_(srcPath, 'ascii');
 		let destination = await this.fileWriter_(destPath, 'base64');
 
@@ -424,11 +415,11 @@ class EncryptionService {
 		}
 
 		try {
-			await fsDriver.unlink(destPath);
+			await this.fsDriver().unlink(destPath);
 			await this.decryptAbstract_(source, destination);
 		} catch (error) {
 			cleanUp();
-			await fsDriver.unlink(destPath);
+			await this.fsDriver().unlink(destPath);
 			throw error;
 		}
 
@@ -461,7 +452,7 @@ class EncryptionService {
 		const reader = this.stringReader_(headerHexaBytes, true);
 		const identifier = reader.read(3);
 		const version = parseInt(reader.read(2), 16);
-		if (identifier !== 'JED') throw new Error('Invalid header (missing identifier)');
+		if (identifier !== 'JED') throw new Error('Invalid header (missing identifier): ' + headerHexaBytes.substr(0,64));
 		const template = this.headerTemplate(version);
 
 		const size = parseInt(reader.read(6), 16);

@@ -346,7 +346,7 @@ class MainScreenComponent extends React.Component {
 		const onViewMasterKeysClick = () => {
 			this.props.dispatch({
 				type: 'NAV_GO',
-				routeName: 'MasterKeys',
+				routeName: 'EncryptionConfig',
 			});
 		}
 

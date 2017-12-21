@@ -181,6 +181,7 @@ class Synchronizer {
 		this.cancelling_ = false;
 
 		const masterKeysBefore = await MasterKey.count();
+		let hasAutoEnabledEncryption = false;
 
 		// ------------------------------------------------------------------------
 		// First, find all the items that have been changed since the
@@ -508,6 +509,17 @@ class Synchronizer {
 
 						await ItemClass.save(content, options);
 
+						if (!hasAutoEnabledEncryption && content.type_ === BaseModel.TYPE_MASTER_KEY && !masterKeysBefore) {
+							hasAutoEnabledEncryption = true;
+							this.logger().info('One master key was downloaded and none was previously available: automatically enabling encryption');
+							this.logger().info('Using master key: ', content);
+							await this.encryptionService().enableEncryption(content);
+							await this.encryptionService().loadMasterKeysFromSettings();
+							this.logger().info('Encryption has been enabled with downloaded master key as active key. However, note that no password was initially supplied. It will need to be provided by user.');
+						}
+
+						if (!!content.encryption_applied) this.dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });
+
 					} else if (action == 'deleteLocal') {
 
 						if (local.type_ == BaseModel.TYPE_FOLDER) {
@@ -573,23 +585,6 @@ class Synchronizer {
 		if (this.cancelling()) {
 			this.logger().info('Synchronisation was cancelled.');
 			this.cancelling_ = false;
-		}
-
-		const masterKeysAfter = await MasterKey.count();
-
-		if (!masterKeysBefore && masterKeysAfter) {
-			this.logger().info('One master key was downloaded and none was previously available: automatically enabling encryption');
-			const mk = await MasterKey.latest();
-			if (mk) {
-				this.logger().info('Using master key: ', mk);
-				await this.encryptionService().enableEncryption(mk);
-				await this.encryptionService().loadMasterKeysFromSettings();
-				this.logger().info('Encryption has been enabled with downloaded master key as active key. However, note that no password was initially supplied. It will need to be provided by user.');
-			}
-		}
-
-		if (masterKeysAfter && this.autoStartDecryptionWorker_) {
-			DecryptionWorker.instance().scheduleStart();
 		}
 
 		this.progressReport_.completedTime = time.unixMs();
