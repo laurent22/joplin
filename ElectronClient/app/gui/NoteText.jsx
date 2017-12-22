@@ -37,6 +37,7 @@ class NoteTextComponent extends React.Component {
 			webviewReady: false,
 			scrollHeight: null,
 			editorScrollTop: 0,
+			editor:null
 		};
 
 		this.lastLoadedNoteId_ = null;
@@ -167,6 +168,13 @@ class NoteTextComponent extends React.Component {
 	async componentWillReceiveProps(nextProps) {
 		if ('noteId' in nextProps && nextProps.noteId !== this.props.noteId) {
 			await this.reloadNote(nextProps);
+			const editor=this.state.editor;
+			if(editor){
+				const session = editor.getSession();
+				const undoManager = session.getUndoManager();
+				undoManager.reset();
+				session.setUndoManager(undoManager);
+			}
 		}
 
 		if ('syncStarted' in nextProps && !nextProps.syncStarted && !this.isModified()) {
@@ -332,6 +340,10 @@ class NoteTextComponent extends React.Component {
 	aceEditor_change(body) {
 		shared.noteComponent_change(this, 'body', body);
 		this.scheduleSave();
+	}
+
+	aceEditor_onLoad(editor){
+		this.setState({editor:editor});
 	}
 
 	async commandAttachFile() {
@@ -549,7 +561,6 @@ class NoteTextComponent extends React.Component {
 		delete editorRootStyle.width;
 		delete editorRootStyle.height;
 		delete editorRootStyle.fontSize;
-
 		const editor =  <AceEditor
 			value={body}
 			mode="markdown"
@@ -559,6 +570,7 @@ class NoteTextComponent extends React.Component {
 			height={editorStyle.height + 'px'}
 			fontSize={editorStyle.fontSize}
 			showGutter={false}
+			onLoad={editor => this.aceEditor_onLoad.bind(this)(editor)}
 			name="note-editor"
 			wrapEnabled={true}
 			onScroll={(event) => { this.editor_scroll(); }}
