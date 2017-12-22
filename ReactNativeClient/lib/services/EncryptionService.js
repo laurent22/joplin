@@ -136,7 +136,7 @@ class EncryptionService {
 	loadedMasterKey(id) {
 		if (!this.loadedMasterKeys_[id]) {
 			const error = new Error('Master key is not loaded: ' + id);
-			error.code = 'missingMasterKey';
+			error.code = 'masterKeyNotLoaded';
 			error.masterKeyId = id;
 			throw error;
 		}

@@ -274,7 +274,7 @@ class BaseApplication {
 				const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
 
 				this.dispatch({
-					type: 'MASTERKEY_REMOVE_MISSING',
+					type: 'MASTERKEY_REMOVE_NOT_LOADED',
 					ids: loadedMasterKeyIds,
 				});
 			}

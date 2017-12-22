@@ -62,10 +62,10 @@ class DecryptionWorker {
 					try {
 						await ItemClass.decrypt(item);
 					} catch (error) {
-						if (error.code === 'missingMasterKey') {
+						if (error.code === 'masterKeyNotLoaded') {
 							excludedIds.push(item.id);
 							this.dispatch({
-								type: 'MASTERKEY_ADD_MISSING',
+								type: 'MASTERKEY_ADD_NOT_LOADED',
 								id: error.masterKeyId,
 							});
 							continue;

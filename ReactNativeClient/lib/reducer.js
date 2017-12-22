@@ -9,7 +9,7 @@ const defaultState = {
 	folders: [],
 	tags: [],
 	masterKeys: [],
-	missingMasterKeys: [],
+	notLoadedMasterKeys: [],
 	searches: [],
 	selectedNoteIds: [],
 	selectedFolderId: null,
@@ -370,27 +370,27 @@ const reducer = (state = defaultState, action) => {
 				newState.masterKeys = action.items;
 				break;
 
-			case 'MASTERKEY_ADD_MISSING':
+			case 'MASTERKEY_ADD_NOT_LOADED':
 
-				if (state.missingMasterKeys.indexOf(action.id) < 0) {
+				if (state.notLoadedMasterKeys.indexOf(action.id) < 0) {
 					newState = Object.assign({}, state);
-					const keys = newState.missingMasterKeys.slice();
+					const keys = newState.notLoadedMasterKeys.slice();
 					keys.push(action.id);
-					newState.missingMasterKeys = keys;
+					newState.notLoadedMasterKeys = keys;
 				}
 				break;
 
-			case 'MASTERKEY_REMOVE_MISSING':
+			case 'MASTERKEY_REMOVE_NOT_LOADED':
 
 				const ids = action.id ? [action.id] : action.ids;
 				for (let i = 0; i < ids.length; i++) {
 					const id = ids[i];
-					const index = state.missingMasterKeys.indexOf(id);
+					const index = state.notLoadedMasterKeys.indexOf(id);
 					if (index >= 0) {
 						newState = Object.assign({}, state);
-						const keys = newState.missingMasterKeys.slice();
+						const keys = newState.notLoadedMasterKeys.slice();
 						keys.splice(index, 1);
-						newState.missingMasterKeys = keys;
+						newState.notLoadedMasterKeys = keys;
 					}
 				}
 				break;
