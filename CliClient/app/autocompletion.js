@@ -8,7 +8,7 @@ var yargParser = require('yargs-parser');
 async function handleAutocompletionPromise(line) {
 	// Auto-complete the command name
 	const names = await app().commandNames();
-	let words = line.split(' ');
+	let words = getArguments(line);
 	//If there is only one word and it is not already a command name then you
 	//should look for commmands it could be
 	if (words.length == 1) {
@@ -46,54 +46,55 @@ async function handleAutocompletionPromise(line) {
 			//First two elements are the flag and the third is the description
 			//Only autocomplete long
 			if (options.length > 1 && options[1].indexOf(next) === 0) {
-				l.push(line.slice(0, line.lastIndexOf(next)) + options[1] + ' ');
+				l.push([...words.slice(0, -1), options[1]]);
 			} else if (options[0].indexOf(next) === 0) {
-				l.push(line.slice(0, line.lastIndexOf(next)) + options[0] + ' ');
-			} 
+				l.push([...words.slice(0, -1), options[2]]);
+			}
 		}
+		return l.length > 0 ? l.map(toCommandLine) : line;
 	}
 	//Complete an argument
 	//Determine the number of positional arguments by counting the number of
 	//words that don't start with a - less one for the command name
-	const positionalArgs = words.filter((a)=>a.indexOf('-') !== 0 && a !== '').length - 1;
+	const positionalArgs = words.filter((a)=>a.indexOf('-') !== 0).length - 1;
 
 	let cmdUsage = yargParser(metadata.usage)['_'];
 	cmdUsage.splice(0, 1);
 
-	if (cmdUsage.length > positionalArgs) {
+	if (cmdUsage.length >= positionalArgs) {
 
-		let argName = cmdUsage[positionalArgs];
+		let argName = cmdUsage[positionalArgs - 1];
 		argName = cliUtils.parseCommandArg(argName).name;
 
 		if (argName == 'note' || argName == 'note-pattern' && app().currentFolder()) {
 			const notes = await Note.previews(app().currentFolder().id, { titlePattern: next + '*' });
-			l = l.concat(notes.map((n) => line.slice(0, line.lastIndexOf(next)) + n.title + ' '));
+			l.push(...notes.map((n) => [...words.slice(0, -1), n.title]));
 		}
 
 		if (argName == 'notebook') {
 			const folders = await Folder.search({ titlePattern: next + '*' });
-			l = l.concat(folders.map((n) => line.slice(0, line.lastIndexOf(next)) + n.title + ' '));
+			l.push(...folders.map((n) => [...words.slice(0, -1), n.title]));
 		}
 
 		if (argName == 'tag') {
 			let tags = await Tag.search({ titlePattern: next + '*' });
-			l = l.concat(tags.map((n) => line.slice(0, line.lastIndexOf(next)) + n.title + ' '));
+			l.push(...tags.map((n) => [...words.slice(0, -1), n.title]));
 		}
 
 		if (argName == 'tag-command') {
 			let c = filterList(['add', 'remove', 'list'], next);
-			l = l.concat(c.map((n) => line.slice(0, line.lastIndexOf(next)) + n + ' '))
+			l.push(...c.map((n) => [...words.slice(0, -1), n]));
 		}
 
 		if (argName == 'todo-command') {
 			let c = filterList(['toggle', 'clear'], next);
-			l = l.concat(c.map((n) => line.slice(0, line.lastIndexOf(next)) + n + ' '))
+			l.push(...c.map((n) => [...words.slice(0, -1), n]));
 		}
 	}
 	if (l.length === 1) {
-		return l[0];
+		return toCommandLine(l[0]);
 	} else if (l.length > 1) {
-		return l;
+		return l.map(a=>toCommandLine(a));
 	}
 	return line;
 
@@ -103,7 +104,58 @@ function handleAutocompletion(str, callback) {
 		callback(undefined, res);
 	});
 }
-
+function toCommandLine(args) {
+	return args.map(function(a) {
+		if(a.indexOf('"') !== -1 || a.indexOf(' ') !== -1) {
+			return "'" + a + "'";
+		} else if (a.indexOf("'") !== -1) {
+			return '"' + a + '"';
+		} else {
+			return a;
+		}
+	}).join(' ');
+}
+function getArguments(line) {
+	let inSingleQuotes = false;
+	let inDoubleQuotes = false;
+	let currentWord = '';
+	let parsed = [];
+	for(let i = 0; i<line.length; i++) {
+		if(line[i] === '"') {
+			if(inDoubleQuotes) {
+				inDoubleQuotes = false;
+				//maybe push word to parsed?
+				//currentWord += '"';
+			} else {
+				inDoubleQuotes = true;
+				//currentWord += '"';
+			}
+		} else if(line[i] === "'") {
+			if(inSingleQuotes) {
+				inSingleQuotes = false;
+				//maybe push word to parsed?
+				//currentWord += "'";
+			} else {
+				inSingleQuotes = true;
+				//currentWord += "'";
+			}
+		} else if (/\s/.test(line[i]) &&
+			!(inDoubleQuotes || inSingleQuotes)) {
+			if (currentWord !== '') {
+				parsed.push(currentWord);
+				currentWord = '';
+			}
+		} else {
+			currentWord += line[i];
+		}
+	}
+	if (!(inSingleQuotes || inDoubleQuotes) && /\s/.test(line[line.length - 1])) {
+		parsed.push('');
+	} else {
+		parsed.push(currentWord);
+	}
+	return parsed;
+}
 function filterList(list, next) {
 	let output = [];
 	for (let i = 0; i < list.length; i++) {
