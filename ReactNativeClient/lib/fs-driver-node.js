@@ -46,8 +46,9 @@ class FsDriverNode {
 
 	async readFileChunk(handle, length, encoding = 'base64') {
 		let buffer = new Buffer(length);
-		const result = await fs.read(handle, buffer, 0, length, null)
+		const result = await fs.read(handle, buffer, 0, length, null);
 		if (!result.bytesRead) return null;
+		buffer = buffer.slice(0, result.bytesRead);
 		if (encoding === 'base64') return buffer.toString('base64');
 		if (encoding === 'ascii') return buffer.toString('ascii');
 		throw new Error('Unsupported encoding: ' + encoding);
