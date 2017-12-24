@@ -35,7 +35,7 @@ async function handleAutocompletionPromise(line) {
 	if (next[0] === '-') {
 		for (let i = 0; i<metadata.options.length; i++) {
 			const options = metadata.options[i][0].split(' ');
-			//if there are multiple options then they will be seperated by comma and
+		//if there are multiple options then they will be seperated by comma and
 			//space. The comma should be removed
 			if (options[0][options[0].length - 1] === ',') {
 				options[0] = options[0].slice(0, -1);
@@ -46,12 +46,17 @@ async function handleAutocompletionPromise(line) {
 			//First two elements are the flag and the third is the description
 			//Only autocomplete long
 			if (options.length > 1 && options[1].indexOf(next) === 0) {
-				l.push([...words.slice(0, -1), options[1]]);
+				l.push(options[1]);
 			} else if (options[0].indexOf(next) === 0) {
-				l.push([...words.slice(0, -1), options[2]]);
+				l.push(options[2]);
 			}
 		}
-		return l.length > 0 ? l.map(toCommandLine) : line;
+		if (l.length === 0) {
+			return line;
+		}
+		let ret = l.map(a=>toCommandLine(a));
+		ret.prefix = toCommandLine(words.slice(0, -1)) + ' ';
+		return ret;
 	}
 	//Complete an argument
 	//Determine the number of positional arguments by counting the number of
@@ -68,33 +73,35 @@ async function handleAutocompletionPromise(line) {
 
 		if (argName == 'note' || argName == 'note-pattern' && app().currentFolder()) {
 			const notes = await Note.previews(app().currentFolder().id, { titlePattern: next + '*' });
-			l.push(...notes.map((n) => [...words.slice(0, -1), n.title]));
+			l.push(...notes.map((n) => n.title));
 		}
 
 		if (argName == 'notebook') {
 			const folders = await Folder.search({ titlePattern: next + '*' });
-			l.push(...folders.map((n) => [...words.slice(0, -1), n.title]));
+			l.push(...folders.map((n) => n.title));
 		}
 
 		if (argName == 'tag') {
 			let tags = await Tag.search({ titlePattern: next + '*' });
-			l.push(...tags.map((n) => [...words.slice(0, -1), n.title]));
+			l.push(...tags.map((n) => n.title));
 		}
 
 		if (argName == 'tag-command') {
 			let c = filterList(['add', 'remove', 'list'], next);
-			l.push(...c.map((n) => [...words.slice(0, -1), n]));
+			l.push(...c);
 		}
 
 		if (argName == 'todo-command') {
 			let c = filterList(['toggle', 'clear'], next);
-			l.push(...c.map((n) => [...words.slice(0, -1), n]));
+			l.push(...c);
 		}
 	}
 	if (l.length === 1) {
-		return toCommandLine(l[0]);
+		return toCommandLine([...words.slice(0, -1), l[0]]);
 	} else if (l.length > 1) {
-		return l.map(a=>toCommandLine(a));
+		let ret = l.map(a=>toCommandLine(a));
+		ret.prefix = toCommandLine(words.slice(0, -1)) + ' ';
+		return ret;
 	}
 	return line;
 
@@ -105,15 +112,25 @@ function handleAutocompletion(str, callback) {
 	});
 }
 function toCommandLine(args) {
-	return args.map(function(a) {
-		if(a.indexOf('"') !== -1 || a.indexOf(' ') !== -1) {
-			return "'" + a + "'";
-		} else if (a.indexOf("'") !== -1) {
-			return '"' + a + '"';
+	if (Array.isArray(args)) {
+		return args.map(function(a) {
+			if(a.indexOf('"') !== -1 || a.indexOf(' ') !== -1) {
+				return "'" + a + "'";
+			} else if (a.indexOf("'") !== -1) {
+				return '"' + a + '"';
+			} else {
+				return a;
+			}
+		}).join(' ');
+	} else {
+		if(args.indexOf('"') !== -1 || args.indexOf(' ') !== -1) {
+			return "'" + args + "' ";
+		} else if (args.indexOf("'") !== -1) {
+			return '"' + args + '" ';
 		} else {
-			return a;
+			return args + ' ';
 		}
-	}).join(' ');
+	}
 }
 function getArguments(line) {
 	let inSingleQuotes = false;

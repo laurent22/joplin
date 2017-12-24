@@ -111,6 +111,7 @@ class StatusBarWidget extends BaseWidget {
 				default: this.promptState_.initialText,
 				autoComplete: handleAutocompletion,
 				autoCompleteHint : true,
+				autoCompleteMenu : true,
 			};
 
 			if ('cursorPosition' in this.promptState_) options.cursorPosition = this.promptState_.cursorPosition;
