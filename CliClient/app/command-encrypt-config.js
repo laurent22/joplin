@@ -15,12 +15,21 @@ class Command extends BaseCommand {
 		return _('Manages encryption configuration.');
 	}
 
+	options() {
+		return [
+			// This is here mostly for testing - shouldn't be used
+			['-p, --password <password>', 'Use this password as master password (For security reasons, it is not recommended to use this option).'],
+		];
+	}
+
 	async action(args) {
 		// init
 		// change-password
 
+		const options = args.options;
+
 		if (args.command === 'init') {
-			const password = await this.prompt(_('Enter master password:'), { type: 'string', secure: true });
+			const password = options.password ? options.password.toString() : await this.prompt(_('Enter master password:'), { type: 'string', secure: true });
 			if (!password) {
 				this.stdout(_('Operation cancelled'));
 				return;

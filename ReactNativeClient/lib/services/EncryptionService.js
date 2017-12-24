@@ -280,16 +280,11 @@ class EncryptionService {
 
 		await destination.append(this.encodeHeader_(header));
 
-		let fromIndex = 0;
-
 		while (true) {
 			const block = await source.read(this.chunkSize_);
 			if (!block) break;
 
-			fromIndex += block.length;
-
 			const encrypted = await this.encrypt(method, masterKeyPlainText, block);
-			
 			await destination.append(padLeft(encrypted.length.toString(16), 6, '0'));
 			await destination.append(encrypted);
 		}

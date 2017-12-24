@@ -346,6 +346,37 @@ class BaseItem extends BaseModel {
 		return output;
 	}
 
+	static async encryptedItemsStats() {
+		const classNames = this.encryptableItemClassNames();
+		let encryptedCount = 0;
+		let totalCount = 0;
+
+		for (let i = 0; i < classNames.length; i++) {
+			const ItemClass = this.getClass(classNames[i]);
+			encryptedCount += await ItemClass.count({ where: 'encryption_applied = 1' });
+			totalCount += await ItemClass.count();
+		}
+
+		return {
+			encrypted: encryptedCount,
+			total: totalCount,
+		};
+	}
+
+	static async encryptedItemsCount() {
+		const classNames = this.encryptableItemClassNames();
+		let output = 0;
+
+		for (let i = 0; i < classNames.length; i++) {
+			const className = classNames[i];
+			const ItemClass = this.getClass(className);
+			const count = await ItemClass.count({ where: 'encryption_applied = 1' });
+			output += count;
+		}
+
+		return output;
+	}
+
 	static async hasEncryptedItems() {
 		const classNames = this.encryptableItemClassNames();
 
