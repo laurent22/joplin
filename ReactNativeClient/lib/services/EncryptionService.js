@@ -43,6 +43,13 @@ class EncryptionService {
 		return this.logger_;
 	}
 
+	async generateMasterKeyAndEnableEncryption(password) {
+		let masterKey = await this.generateMasterKey(password);
+		masterKey = await MasterKey.save(masterKey);
+		await this.enableEncryption(masterKey, password);
+		await this.loadMasterKeysFromSettings();
+	}
+
 	async enableEncryption(masterKey, password = null) {
 		Setting.setValue('encryption.enabled', true);
 		Setting.setValue('encryption.activeMasterKeyId', masterKey.id);

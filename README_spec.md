@@ -51,3 +51,12 @@ Items are encrypted only during synchronisation, when they are serialised (via B
 They are decrypted by DecryptionWorker in the background.
 
 The apps handle displaying both decrypted and encrypted items, so that user is aware that these items are there even if not yet decrypted. Encrypted items are mostly read-only to the user, except that they can be deleted.
+
+## Enabling and disabling encryption
+
+Enabling/disabling E2EE while two clients are in sync might have an unintuitive behaviour (although that behaviour might be correct), so below some scenarios are explained:
+
+- If client 1 enables E2EE, all items will be synced to target and will appear encrypted on target. Although all items have been re-uploaded to the target, their timestamps did *not* change (because the item data itself has not changed, only its representation). Because of this, client 2 will not be re-download the items - it does not need to do so anyway since it has already the item data.
+- When a client sync and download a master key for the first time, encryption will be automatically enabled (user will need to supply the master key password). In that case, all items that are not encrypted will be re-synced. Uploading only non-encrypted items is an optimisation since if an item is already encrypted locally it means it's encrytped on target too.
+- If both clients are in sync with E2EE enabled: if client 1 disable E2EE, it's going to re-upload all the items unencrypted. Client 2 again will not re-download the items for the same reason as above (data did not change, only representation). Note that user *must* manually disable E2EE on all clients otherwise some will continue to upload encrypted items. Since synchronisation is stateless, clients do not know whether other clients use E2EE or not so this step has to be manual.
+- Although messy, Joplin supports having some clients send encrypted and others unencrypted ones. The situation gets resolved once all the clients have the same E2EE settings.

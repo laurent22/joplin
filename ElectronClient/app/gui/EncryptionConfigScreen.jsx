@@ -34,10 +34,10 @@ class EncryptionConfigScreenComponent extends React.Component {
 		this.isMounted_ = false;
 	}
 
-	componentWillMount() {
+	initState(props) {
 		this.setState({
-			masterKeys: this.props.masterKeys,
-			passwords: this.props.passwords ? this.props.passwords : {},
+			masterKeys: props.masterKeys,
+			passwords: props.passwords ? props.passwords : {},
 		}, () => {
 			this.checkPasswords();
 		});
@@ -49,7 +49,6 @@ class EncryptionConfigScreenComponent extends React.Component {
 			this.refreshStatsIID_ = null;
 		}
 
-
 		this.refreshStatsIID_ = setInterval(() => {
 			if (!this.isMounted_) {
 				clearInterval(this.refreshStatsIID_);
@@ -58,6 +57,14 @@ class EncryptionConfigScreenComponent extends React.Component {
 			}
 			this.refreshStats();
 		}, 3000);
+	}
+
+	componentWillMount() {
+		this.initState(this.props);
+	}
+
+	componentWillReceiveProps(nextProps) {
+		this.initState(nextProps);
 	}
 
 	async refreshStats() {
@@ -141,9 +148,9 @@ class EncryptionConfigScreenComponent extends React.Component {
 
 			let answer = null;
 			if (isEnabled) {
-				answer = await dialogs.confirm(_('Disabling encryption means <b>all</b> your notes and attachments are going to re-synchronized and sent unencrypted to the sync target. Do you wish to continue?'));
+				answer = await dialogs.confirm(_('Disabling encryption means <b>all</b> your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?'));
 			} else {
-				answer = await dialogs.prompt(_('Enabling encryption means <b>all</b> your notes and attachments are going to re-synchronized and sent encrypted to the sync target. Do not lose the password as, for security purposes, this will be the <b>only</b> way to decrypt the data! To enable encryption, please enter your password below.'), '', '', { type: 'password' });
+				answer = await dialogs.prompt(_('Enabling encryption means <b>all</b> your notes and attachments are going to be re-synchronised and sent encrypted to the sync target. Do not lose the password as, for security purposes, this will be the <b>only</b> way to decrypt the data! To enable encryption, please enter your password below.'), '', '', { type: 'password' });
 			}
 
 			if (!answer) return;
@@ -152,7 +159,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 				if (isEnabled) {
 					await EncryptionService.instance().disableEncryption();
 				} else {
-					await EncryptionService.instance().enableEncryption();
+					await EncryptionService.instance().generateMasterKeyAndEnableEncryption(answer);
 				}
 			} catch (error) {
 				await dialogs.alert(error.message);
@@ -187,9 +194,6 @@ class EncryptionConfigScreenComponent extends React.Component {
 				</div>
 			);
 		}
-
-		// Disabling encryption means *all* your notes and attachments are going to re-synchronized and sent unencrypted to the sync target.
-		// Enabling End-To-End Encryption (E2EE) means *all* your notes and attachments are going to re-synchronized and sent encrypted to the sync target. Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data. To enable E2EE, please enter your password below and click "Enable E2EE".
 
 		return (
 			<div>
