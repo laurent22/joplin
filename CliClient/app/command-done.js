@@ -16,8 +16,9 @@ class Command extends BaseCommand {
 		return _('Marks a to-do as done.');
 	}
 
-	static async handleAction(args, isCompleted) {
+	static async handleAction(commandInstance, args, isCompleted) {
 		const note = await app().loadItem(BaseModel.TYPE_NOTE, args.note);
+		commandInstance.encryptionCheck(note);
 		if (!note) throw new Error(_('Cannot find "%s".', args.note));
 		if (!note.is_todo) throw new Error(_('Note is not a to-do: "%s"', args.note));
 
@@ -32,7 +33,7 @@ class Command extends BaseCommand {
 	}
 
 	async action(args) {
-		await Command.handleAction(args, true);
+		await Command.handleAction(this, args, true);
 	}
 
 }

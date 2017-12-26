@@ -40,12 +40,22 @@ class DecryptionWorker {
 
 		this.scheduleId_ = setTimeout(() => {
 			this.scheduleId_ = null;
-			this.start();
+			this.start({
+				materKeyNotLoadedHandler: 'dispatch',
+			});
 		}, 1000);
 	}
 
-	async start() {
-		if (this.state_ !== 'idle') return;
+	async start(options = null) {
+		if (options === null) options = {};
+		if (!('materKeyNotLoadedHandler' in options)) options.materKeyNotLoadedHandler = 'throw';
+
+		if (this.state_ !== 'idle') {
+			this.logger().info('DecryptionWorker: cannot start because state is "' + this.state_ + '"');
+			return;
+		}
+
+		this.logger().info('DecryptionWorker: starting decryption...');
 
 		this.state_ = 'started';
 
@@ -58,11 +68,12 @@ class DecryptionWorker {
 
 				for (let i = 0; i < items.length; i++) {
 					const item = items[i];
+					this.logger().debug('DecryptionWorker: decrypting: ' + item.id);
 					const ItemClass = BaseItem.itemClass(item);
 					try {
 						await ItemClass.decrypt(item);
 					} catch (error) {
-						if (error.code === 'masterKeyNotLoaded') {
+						if (error.code === 'masterKeyNotLoaded' && options.materKeyNotLoadedHandler === 'dispatch') {
 							excludedIds.push(item.id);
 							this.dispatch({
 								type: 'MASTERKEY_ADD_NOT_LOADED',
@@ -77,8 +88,12 @@ class DecryptionWorker {
 				if (!result.hasMore) break;
 			}
 		} catch (error) {
-			this.logger().error('DecryptionWorker::start:', error);
+			this.logger().error('DecryptionWorker:', error);
+			this.state_ = 'idle';
+			throw error;
 		}
+
+		this.logger().info('DecryptionWorker: completed decryption.');
 
 		this.state_ = 'idle';
 	}

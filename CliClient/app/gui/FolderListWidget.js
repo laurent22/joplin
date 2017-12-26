@@ -24,9 +24,9 @@ class FolderListWidget extends ListWidget {
 			if (item === '-') {
 				output.push('-'.repeat(this.innerWidth));
 			} else if (item.type_ === Folder.modelType()) {
-				output.push(item.title);
+				output.push(Folder.displayTitle(item));
 			} else if (item.type_ === Tag.modelType()) {
-				output.push('[' + item.title + ']');
+				output.push('[' + Folder.displayTitle(item) + ']');
 			} else if (item.type_ === BaseModel.TYPE_SEARCH) {
 				output.push(_('Search:'));
 				output.push(item.title);

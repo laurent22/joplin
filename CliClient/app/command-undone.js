@@ -19,7 +19,7 @@ class Command extends BaseCommand {
 	}
 
 	async action(args) {
-		await CommandDone.handleAction(args, false);
+		await CommandDone.handleAction(this, args, false);
 	}
 
 }

@@ -12,6 +12,10 @@ class BaseCommand {
 		throw new Error('Usage not defined');
 	}
 
+	encryptionCheck(item) {
+		if (item && item.encryption_applied) throw new Error(_('Cannot change encrypted item'));
+	}
+
 	description() {
 		throw new Error('Description not defined');
 	}

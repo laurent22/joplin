@@ -48,6 +48,7 @@ class EncryptionService {
 		masterKey = await MasterKey.save(masterKey);
 		await this.enableEncryption(masterKey, password);
 		await this.loadMasterKeysFromSettings();
+		return masterKey;
 	}
 
 	async enableEncryption(masterKey, password = null) {
@@ -220,6 +221,9 @@ class EncryptionService {
 	}
 
 	async encrypt(method, key, plainText) {
+		if (!method) throw new Error('Encryption method is required');
+		if (!key) throw new Error('Encryption key is required');
+
 		const sjcl = shim.sjclModule;
 
 		if (method === EncryptionService.METHOD_SJCL) {
@@ -261,6 +265,9 @@ class EncryptionService {
 	}
 
 	async decrypt(method, key, cipherText) {
+		if (!method) throw new Error('Encryption method is required');
+		if (!key) throw new Error('Encryption key is required');
+
 		const sjcl = shim.sjclModule;
 		
 		if (method === EncryptionService.METHOD_SJCL || method === EncryptionService.METHOD_SJCL_2) {

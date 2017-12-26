@@ -20,6 +20,7 @@ class Command extends BaseCommand {
 		const name = args['name'];
 
 		const item = await app().loadItem('folderOrNote', pattern);
+		this.encryptionCheck(item);
 		if (!item) throw new Error(_('Cannot find "%s".', pattern));
 
 		const newItem = {

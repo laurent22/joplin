@@ -25,6 +25,8 @@ class Command extends BaseCommand {
 		for (let i = 0; i < notes.length; i++) {
 			const note = notes[i];
 
+			this.encryptionCheck(note);
+
 			let toSave = {
 				id: note.id,
 			};

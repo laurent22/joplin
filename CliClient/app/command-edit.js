@@ -44,6 +44,8 @@ class Command extends BaseCommand {
 			if (!app().currentFolder()) throw new Error(_('No active notebook.'));
 			let note = await app().loadItem(BaseModel.TYPE_NOTE, title);
 
+			this.encryptionCheck(note);
+
 			if (!note) {
 				const ok = await this.prompt(_('Note does not exist: "%s". Create it?', title));
 				if (!ok) return;

@@ -35,6 +35,8 @@ class Command extends BaseCommand {
 		if (!notes.length) throw new Error(_('Cannot find "%s".', title));
 
 		for (let i = 0; i < notes.length; i++) {
+			this.encryptionCheck(notes[i]);
+
 			let newNote = {
 				id: notes[i].id,
 				type_: notes[i].type_,

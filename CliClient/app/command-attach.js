@@ -19,6 +19,7 @@ class Command extends BaseCommand {
 		let title = args['note'];
 
 		let note = await app().loadItem(BaseModel.TYPE_NOTE, title, { parent: app().currentFolder() });
+		this.encryptionCheck(note);
 		if (!note) throw new Error(_('Cannot find "%s".', title));
 
 		const localFilePath = args['file'];

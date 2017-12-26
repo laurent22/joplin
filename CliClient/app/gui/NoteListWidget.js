@@ -10,7 +10,7 @@ class NoteListWidget extends ListWidget {
 		this.updateIndexFromSelectedNoteId_ = false;
 
 		this.itemRenderer = (note) => {
-			let label = note.title; // + ' ' + note.id;
+			let label = Note.displayTitle(note); // + ' ' + note.id;
 			if (note.is_todo) {
 				label = '[' + (note.todo_completed ? 'X' : ' ') + '] ' + label;
 			}
