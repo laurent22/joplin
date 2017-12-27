@@ -71,6 +71,7 @@ class Setting extends BaseModel {
 					86400: _('%d hours', 24),
 				};
 			}},
+			'fontSize': {value: "12", type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], label: () => _('Set application font size'), minimum: "8", maximum: "72"},
 			'noteVisiblePanes': { value: ['editor', 'viewer'], type: Setting.TYPE_ARRAY, public: false, appTypes: ['desktop'] },
 			'autoUpdateEnabled': { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
 			'showAdvancedOptions': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile' ], label: () => _('Show advanced options') },
