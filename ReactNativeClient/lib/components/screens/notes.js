@@ -95,10 +95,13 @@ class NotesScreenComponent extends BaseScreenComponent {
 		if (this.props.notesParentType == 'Folder') {
 			if (this.props.selectedFolderId == Folder.conflictFolderId()) return [];
 
-			return [
-				{ title: _('Delete notebook'), onPress: () => { this.deleteFolder_onPress(this.props.selectedFolderId); } },
-				{ title: _('Edit notebook'), onPress: () => { this.editFolder_onPress(this.props.selectedFolderId); } },
-			];
+			const folder = this.parentItem();
+
+			let output = [];
+			if (!folder.encryption_applied) output.push({ title: _('Edit notebook'), onPress: () => { this.editFolder_onPress(this.props.selectedFolderId); } });
+			output.push({ title: _('Delete notebook'), onPress: () => { this.deleteFolder_onPress(this.props.selectedFolderId); } });
+
+			return output;
 		} else {
 			return []; // For tags - TODO
 		}

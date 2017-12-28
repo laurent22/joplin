@@ -81,6 +81,7 @@ class NoteItemComponent extends Component {
 
 	onPress() {
 		if (!this.props.note) return;
+		if (!!this.props.note.encryption_applied) return;
 
 		if (this.props.noteSelectionEnabled) {
 			this.props.dispatch({
@@ -141,7 +142,7 @@ class NoteItemComponent extends Component {
 								checked={checkboxChecked}
 								onChange={(checked) => this.todoCheckbox_change(checked)}
 							/>
-							<Text style={listItemTextStyle}>{note.title}</Text>
+							<Text style={listItemTextStyle}>{Note.displayTitle(note)}</Text>
 						</View>
 					</View>
 				</View>

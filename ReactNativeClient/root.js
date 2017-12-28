@@ -20,6 +20,7 @@ const Resource = require('lib/models/Resource.js');
 const Tag = require('lib/models/Tag.js');
 const NoteTag = require('lib/models/NoteTag.js');
 const BaseItem = require('lib/models/BaseItem.js');
+const MasterKey = require('lib/models/MasterKey.js');
 const BaseModel = require('lib/BaseModel.js');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { Database } = require('lib/database.js');
@@ -304,6 +305,7 @@ async function initialize(dispatch) {
 	BaseItem.loadClass('Resource', Resource);
 	BaseItem.loadClass('Tag', Tag);
 	BaseItem.loadClass('NoteTag', NoteTag);
+	BaseItem.loadClass('MasterKey', MasterKey);
 
 	AlarmService.setDriver(new AlarmServiceDriver());
 	AlarmService.setLogger(mainLogger);

@@ -14,8 +14,12 @@ class FsDriverRN {
 		throw new Error('Not implemented');
 	}
 
-	move(source, dest) {
-		throw new Error('Not implemented');
+	async move(source, dest) {
+		return RNFS.moveFile(source, dest);
+	}
+
+	async exists(path) {
+		return RNFS.exists(path);
 	}
 
 	async open(path, mode) {

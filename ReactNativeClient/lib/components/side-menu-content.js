@@ -5,6 +5,7 @@ const Icon = require('react-native-vector-icons/Ionicons').default;
 const { Log } = require('lib/log.js');
 const Tag = require('lib/models/Tag.js');
 const Note = require('lib/models/Note.js');
+const Folder = require('lib/models/Folder.js');
 const Setting = require('lib/models/Setting.js');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const { Synchronizer } = require('lib/synchronizer.js');
@@ -117,7 +118,7 @@ class SideMenuContentComponent extends Component {
 			<TouchableOpacity key={folder.id} onPress={() => { this.folder_press(folder) }}>
 				<View style={folderButtonStyle}>
 					{ iconComp }
-					<Text numberOfLines={1} style={this.styles().folderButtonText}>{folder.title}</Text>
+					<Text numberOfLines={1} style={this.styles().folderButtonText}>{Folder.displayTitle(folder)}</Text>
 				</View>
 			</TouchableOpacity>
 		);
@@ -131,7 +132,7 @@ class SideMenuContentComponent extends Component {
 			<TouchableOpacity key={tag.id} onPress={() => { this.tag_press(tag) }}>
 				<View style={tagButtonStyle}>
 					{ iconComp }
-					<Text numberOfLines={1} style={this.styles().tagButtonText}>{tag.title}</Text>
+					<Text numberOfLines={1} style={this.styles().tagButtonText}>{Tag.displayTitle(tag)}</Text>
 				</View>
 			</TouchableOpacity>
 		);

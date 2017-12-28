@@ -31,6 +31,8 @@ class BaseItem extends BaseModel {
 	static getClass(name) {
 		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
 			if (BaseItem.syncItemDefinitions_[i].className == name) {
+				const classRef = BaseItem.syncItemDefinitions_[i].classRef;
+				if (!classRef) throw new Error('Class has not been loaded: ' + name);
 				return BaseItem.syncItemDefinitions_[i].classRef;
 			}
 		}

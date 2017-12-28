@@ -222,7 +222,7 @@ class Setting extends BaseModel {
 	}
 
 	static setObjectKey(settingKey, objectKey, value) {
-		const o = this.value(settingKey);
+		let o = this.value(settingKey);
 		if (typeof o !== 'object') o = {};
 		o[objectKey] = value;
 		this.setValue(settingKey, o);
