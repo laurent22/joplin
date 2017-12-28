@@ -80,6 +80,14 @@ class AppGui {
 		await this.renderer_.renderRoot();
 	}
 
+	termSaveState() {
+		return this.term().saveState();
+	}
+
+	termRestoreState(state) {
+		return this.term().restoreState(state);
+	}
+
 	prompt(initialText = '', promptString = ':') {
 		return this.widget('statusBar').prompt(initialText, promptString);
 	}

@@ -283,7 +283,10 @@ class Application extends BaseApplication {
 			exit: () => {},
 			showModalOverlay: (text) => {},
 			hideModalOverlay: () => {},
-			stdoutMaxWidth: () => { return 78; }
+			stdoutMaxWidth: () => { return 78; },
+			forceRender: () => {},
+			termSaveState: () => {},
+			termRestoreState: (state) => {},
 		};
 	}
 
