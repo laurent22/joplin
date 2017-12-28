@@ -105,6 +105,8 @@ class StatusBarWidget extends BaseWidget {
 
 			this.term.showCursor(true);
 
+			const isSecurePrompt = !!this.promptState_.secure;
+
 			let options = {
 				cancelable: true,
 				history: this.history,
@@ -112,7 +114,7 @@ class StatusBarWidget extends BaseWidget {
 			};
 
 			if ('cursorPosition' in this.promptState_) options.cursorPosition = this.promptState_.cursorPosition;
-			if (this.promptState_.secure) options.echoChar = true;
+			if (isSecurePrompt) options.echoChar = true;
 
 			this.inputEventEmitter_ = this.term.inputField(options, (error, input) => {
 				let resolveResult = null;
@@ -127,7 +129,7 @@ class StatusBarWidget extends BaseWidget {
 						resolveResult = input ? input.trim() : input;
 						// Add the command to history but only if it's longer than one character.
 						// Below that it's usually an answer like "y"/"n", etc.
-						if (input && input.length > 1) this.history_.push(input);
+						if (!isSecurePrompt && input && input.length > 1) this.history_.push(input);
 					}
 				}
 

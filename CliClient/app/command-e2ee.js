@@ -45,6 +45,8 @@ class Command extends BaseCommand {
 		}
 
 		if (args.command === 'decrypt') {
+			this.stdout(_('Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.'));
+
 			while (true) {
 				try {
 					await DecryptionWorker.instance().start();
@@ -65,6 +67,9 @@ class Command extends BaseCommand {
 					throw error;
 				}
 			}
+
+			this.stdout(_('Completed decryption.'));
+
 			return;
 		}
 	}
