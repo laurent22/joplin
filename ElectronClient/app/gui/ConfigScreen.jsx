@@ -114,7 +114,6 @@ class ConfigScreenComponent extends React.Component {
 				const settings = Object.assign({}, this.state.settings);
 				settings[key] = event.target.value;
 				this.setState({ settings: settings});
-				console.log(key)
 			};
 
 			return (
