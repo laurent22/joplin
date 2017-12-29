@@ -556,6 +556,10 @@ class AppGui {
 		}
 
 		this.widget('console').scrollBottom();
+		
+		// Invalidate so that the screen is redrawn in case inputting a command has moved
+		// the GUI up (in particular due to autocompletion), it's moved back to the right position.
+		this.widget('root').invalidate();
 	}
 
 	async updateFolderList() {
