@@ -36,7 +36,7 @@ class NoteTextComponent extends React.Component {
 			isLoading: true,
 			webviewReady: false,
 			scrollHeight: null,
-			editorScrollTop: 0,
+			editorScrollTop: 0
 		};
 
 		this.lastLoadedNoteId_ = null;
@@ -167,6 +167,12 @@ class NoteTextComponent extends React.Component {
 	async componentWillReceiveProps(nextProps) {
 		if ('noteId' in nextProps && nextProps.noteId !== this.props.noteId) {
 			await this.reloadNote(nextProps);
+			if(this.editor_){
+				const session = this.editor_.editor.getSession();
+				const undoManager = session.getUndoManager();
+				undoManager.reset();
+				session.setUndoManager(undoManager);
+			}
 		}
 
 		if ('syncStarted' in nextProps && !nextProps.syncStarted && !this.isModified()) {
@@ -333,6 +339,7 @@ class NoteTextComponent extends React.Component {
 		shared.noteComponent_change(this, 'body', body);
 		this.scheduleSave();
 	}
+
 
 	async commandAttachFile() {
 		const noteId = this.props.noteId;
@@ -549,7 +556,6 @@ class NoteTextComponent extends React.Component {
 		delete editorRootStyle.width;
 		delete editorRootStyle.height;
 		delete editorRootStyle.fontSize;
-
 		const editor =  <AceEditor
 			value={body}
 			mode="markdown"
