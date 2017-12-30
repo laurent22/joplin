@@ -43,7 +43,7 @@ class ScreenHeaderComponent extends Component {
 
 		let styleObject = {
 			container: {
-				flexDirection: 'row',
+				flexDirection: 'column',
 				backgroundColor: theme.raisedBackgroundColor,
 				alignItems: 'center',
 				shadowColor: '#000000',
@@ -123,11 +123,17 @@ class ScreenHeaderComponent extends Component {
 			},
 			titleText: {
 				flex: 1,
+				textAlignVertical: 'center',
 				marginLeft: 0,
 				color: theme.raisedHighlightedColor,
 				fontWeight: 'bold',
 				fontSize: theme.fontSize,
-			}
+			},
+			warningBox: {
+				backgroundColor: "#ff9900",
+				flexDirection: 'row',
+				padding: theme.marginLeft,
+			},
 		};
 
 		styleObject.topIcon = Object.assign({}, theme.icon);
@@ -196,6 +202,20 @@ class ScreenHeaderComponent extends Component {
 			type: 'NAV_GO',
 			routeName: 'Config',
 		});	
+	}
+
+	encryptionConfig_press() {
+		this.props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'EncryptionConfig',
+		});
+	}
+
+	warningBox_press() {
+		this.props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'EncryptionConfig',
+		});
 	}
 
 	async debugReport_press() {
@@ -325,6 +345,11 @@ class ScreenHeaderComponent extends Component {
 			}
 
 			menuOptionComponents.push(
+				<MenuOption value={() => this.encryptionConfig_press()} key={'menuOption_encryptionConfig'} style={this.styles().contextMenuItem}>
+					<Text style={this.styles().contextMenuItemText}>{_('Encryption Configuration')}</Text>
+				</MenuOption>);
+
+			menuOptionComponents.push(
 				<MenuOption value={() => this.config_press()} key={'menuOption_config'} style={this.styles().contextMenuItem}>
 					<Text style={this.styles().contextMenuItemText}>{_('Configuration')}</Text>
 				</MenuOption>);
@@ -405,6 +430,12 @@ class ScreenHeaderComponent extends Component {
 			}
 		}
 
+		const warningComp = this.props.showMissingMasterKeyMessage ? (
+			<TouchableOpacity style={this.styles().warningBox} onPress={() => this.warningBox_press()} activeOpacity={0.8}>
+				<Text style={{flex:1}}>{_('Press to set the decryption password.')}</Text>
+			</TouchableOpacity>
+		) : null;
+
 		const titleComp = createTitleComponent();
 		const sideMenuComp = this.props.noteSelectionEnabled ? null : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
 		const backButtonComp = backButton(this.styles(), () => this.backButton_press(), !this.props.historyCanGoBack);
@@ -427,13 +458,16 @@ class ScreenHeaderComponent extends Component {
 
 		return (
 			<View style={this.styles().container} >
-				{ sideMenuComp }
-				{ backButtonComp }
-				{ saveButton(this.styles(), () => { if (this.props.onSaveButtonPress) this.props.onSaveButtonPress() }, this.props.saveButtonDisabled === true, this.props.showSaveButton === true) }
-				{ titleComp }
-				{ searchButtonComp }
-				{ deleteButtonComp }
-				{ menuComp }
+				<View style={{flexDirection:'row'}}>
+					{ sideMenuComp }
+					{ backButtonComp }
+					{ saveButton(this.styles(), () => { if (this.props.onSaveButtonPress) this.props.onSaveButtonPress() }, this.props.saveButtonDisabled === true, this.props.showSaveButton === true) }
+					{ titleComp }
+					{ searchButtonComp }
+					{ deleteButtonComp }
+					{ menuComp }
+				</View>
+				{ warningComp }
 				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
 			</View>
 		);
@@ -455,6 +489,7 @@ const ScreenHeader = connect(
 			showAdvancedOptions: state.settings.showAdvancedOptions,
 			noteSelectionEnabled: state.noteSelectionEnabled,
 			selectedNoteIds: state.selectedNoteIds,
+			showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,
 		};
 	}
 )(ScreenHeaderComponent)

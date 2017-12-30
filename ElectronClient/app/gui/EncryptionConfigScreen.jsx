@@ -8,22 +8,13 @@ const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
 const { time } = require('lib/time-utils.js');
 const dialogs = require('./dialogs');
+const shared = require('lib/components/shared/encryption-config-shared.js');
 
 class EncryptionConfigScreenComponent extends React.Component {
 
 	constructor() {
 		super();
-		this.state = {
-			masterKeys: [],
-			passwords: {},
-			passwordChecks: {},
-			stats: {
-				encrypted: null,
-				total: null,
-			},
-		};
-		this.isMounted_ = false;
-		this.refreshStatsIID_ = null;
+		shared.constructor(this);
 	}
 
 	componentDidMount() {
@@ -35,28 +26,11 @@ class EncryptionConfigScreenComponent extends React.Component {
 	}
 
 	initState(props) {
-		this.setState({
-			masterKeys: props.masterKeys,
-			passwords: props.passwords ? props.passwords : {},
-		}, () => {
-			this.checkPasswords();
-		});
+		return shared.initState(this, props);
+	}
 
-		this.refreshStats();
-
-		if (this.refreshStatsIID_) {
-			clearInterval(this.refreshStatsIID_);
-			this.refreshStatsIID_ = null;
-		}
-
-		this.refreshStatsIID_ = setInterval(() => {
-			if (!this.isMounted_) {
-				clearInterval(this.refreshStatsIID_);
-				this.refreshStatsIID_ = null;
-				return;
-			}
-			this.refreshStats();
-		}, 3000);
+	async refreshStats() {
+		return shared.refreshStats(this);
 	}
 
 	componentWillMount() {
@@ -67,40 +41,19 @@ class EncryptionConfigScreenComponent extends React.Component {
 		this.initState(nextProps);
 	}
 
-	async refreshStats() {
-		const stats = await BaseItem.encryptedItemsStats();
-		this.setState({ stats: stats });
-	}
-
 	async checkPasswords() {
-		const passwordChecks = Object.assign({}, this.state.passwordChecks);
-		for (let i = 0; i < this.state.masterKeys.length; i++) {
-			const mk = this.state.masterKeys[i];
-			const password = this.state.passwords[mk.id];
-			const ok = password ? await EncryptionService.instance().checkMasterKeyPassword(mk, password) : false;
-			passwordChecks[mk.id] = ok;
-		}
-		this.setState({ passwordChecks: passwordChecks });
+		return shared.checkPasswords(this);
 	}
 
 	renderMasterKey(mk) {
 		const theme = themeStyle(this.props.theme);
 
 		const onSaveClick = () => {
-			const password = this.state.passwords[mk.id];
-			if (!password) {
-				Setting.deleteObjectKey('encryption.passwordCache', mk.id);
-			} else {
-				Setting.setObjectKey('encryption.passwordCache', mk.id, password);
-			}
-
-			this.checkPasswords();
+			return shared.onSavePasswordClick(this, mk);
 		}
 
 		const onPasswordChange = (event) => {
-			const passwords = this.state.passwords;
-			passwords[mk.id] = event.target.value;
-			this.setState({ passwords: passwords });
+			return shared.onPasswordChange(this, mk, event.target.value);
 		}
 
 		const password = this.state.passwords[mk.id] ? this.state.passwords[mk.id] : '';
@@ -166,8 +119,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 			}
 		}
 
-		const stats = this.state.stats;
-		const decryptedItemsInfo = this.props.encryptionEnabled ? <p style={theme.textStyle}>{_('Decrypted items: %s / %s', stats.encrypted !== null ? (stats.total - stats.encrypted) : '-', stats.total !== null ? stats.total : '-')}</p> : null;
+		const decryptedItemsInfo = this.props.encryptionEnabled ? <p style={theme.textStyle}>{shared.decryptedStatText(this)}</p> : null;
 		const toggleButton = <button onClick={() => { onToggleButtonClick() }}>{this.props.encryptionEnabled ? _('Disable encryption') : _('Enable encryption')}</button>
 
 		let masterKeySection = null;

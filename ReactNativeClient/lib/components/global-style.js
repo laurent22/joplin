@@ -19,6 +19,8 @@ const globalStyle = {
 	raisedColor: "#003363",
 	raisedHighlightedColor: "#ffffff",
 
+	warningBackgroundColor: "#FFD08D",
+
 	// For WebView - must correspond to the properties above
 	htmlFontSize: '16px',
 	htmlColor: 'black', // Note: CSS in WebView component only supports named colors or rgb() notation
