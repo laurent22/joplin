@@ -232,7 +232,10 @@ msgstr "Zeigt die Benutzungsstatistik an."
 msgid "Shortcuts are not available in CLI mode."
 msgstr ""
 
-msgid "Type `help [command]` for more information about a command."
+#, fuzzy
+msgid ""
+"Type `help [command]` for more information about a command; or type `help "
+"all` for the complete usage information."
 msgstr ""
 "Tippe `help [Befehl]` ein, um mehr Informationen über einen Befehl zu "
 "erhalten."
@@ -389,9 +392,8 @@ msgstr "Löscht das gegebene Notizbuch."
 msgid "Deletes the notebook without asking for confirmation."
 msgstr "Löscht das Notizbuch, ohne nach einer Bestätigung zu fragen."
 
-#, javascript-format
-msgid "Delete notebook \"%s\"?"
-msgstr "Notizbuch \"%s\" löschen?"
+msgid "Delete notebook? All notes within this notebook will also be deleted."
+msgstr ""
 
 msgid "Deletes the notes matching <note-pattern>."
 msgstr "Löscht die Notizen, die mit <note-pattern> übereinstimmen."
@@ -410,7 +412,12 @@ msgstr "Notiz löschen?"
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Sucht nach dem gegebenen <pattern> in allen Notizen."
 
-msgid "Sets the property <name> of the given <note> to the given [value]."
+#, fuzzy, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
 msgstr ""
 "Setzt die Eigenschaft <name> der gegebenen <note> zu dem gegebenen [Wert]."
 
@@ -547,6 +554,15 @@ msgstr ""
 msgid "Search:"
 msgstr "Suchen:"
 
+msgid ""
+"Welcome to Joplin!\n"
+"\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
+"for usage information.\n"
+"\n"
+"For example, to create a notebook press `mb`; to create a note press `mn`."
+msgstr ""
+
 msgid "File"
 msgstr "Datei"
 
@@ -612,6 +628,13 @@ msgstr "OK"
 msgid "Cancel"
 msgstr "Abbrechen"
 
+#, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
 msgid "Back"
 msgstr "Zurück"
 
@@ -659,6 +682,35 @@ msgstr "Kann Synchronisierer nicht initialisieren."
 msgid "View them now"
 msgstr ""
 
+msgid "Active"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+#, fuzzy
+msgid "Created"
+msgstr "Erstellt: %d."
+
+#, fuzzy
+msgid "Updated"
+msgstr "Aktualisiert: %d."
+
+msgid "Password"
+msgstr ""
+
+msgid "Password OK"
+msgstr ""
+
+msgid ""
+"Note: Only one master key is going to be used for encryption (the one marked "
+"as \"active\"). Any of the keys might be used for decryption, depending on "
+"how the notes or notebooks were originally encrypted."
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Markierungen hinzufügen oder entfernen"
 
@@ -675,6 +727,13 @@ msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr ""
 "Hier sind noch keine Notizen. Erstelle eine, indem du auf \"Neue Notiz\" "
 "drückst."
+
+#, fuzzy
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr ""
+"Momentan existieren noch keine Notizen. Erstelle eine, indem du auf den (+) "
+"Knopf drückst."
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -702,9 +761,6 @@ msgstr "Importieren"
 msgid "Synchronisation Status"
 msgstr "Synchronisationsziel"
 
-msgid "Delete notebook?"
-msgstr "Notizbuch löschen?"
-
 msgid "Remove this tag from all the notes?"
 msgstr "Diese Markierung von allen Notizen löschen?"
 
@@ -725,6 +781,12 @@ msgstr "Markierungen"
 
 msgid "Searches"
 msgstr "Suchen"
+
+#, fuzzy
+msgid "Please select where the sync status should be exported to"
+msgstr ""
+"Wähle bitte zuerst eine Notiz oder ein Notizbuch aus, das gelöscht werden "
+"soll."
 
 #, fuzzy, javascript-format
 msgid "Usage: %s"
@@ -842,16 +904,6 @@ msgstr "Kann Notiz nicht zu Notizbuch \"%s\" kopieren"
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Kann Notiz nicht zu Notizbuch \"%s\" verschieben"
 
-msgid "File system synchronisation target directory"
-msgstr "Dateisystem-Synchronisation Zielpfad"
-
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-"Der Pfad, mit dem synchronisiert wird, wenn Dateisystem-Synchronisation "
-"aktiviert ist. Siehe `sync.target`."
-
 msgid "Text editor"
 msgstr "Textbearbeitungsprogramm"
 
@@ -921,6 +973,16 @@ msgstr ""
 "Das Synchronisationsziel, mit dem synchronisiert werden soll. Wenn mit dem "
 "Dateisystem synchronisiert werden soll, setz den Wert zu `sync.2.path`, um "
 "den Zielpfad zu spezifizieren."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr ""
+
+msgid ""
+"The path to synchronise with when file system synchronisation is enabled. "
+"See `sync.target`."
+msgstr ""
+"Der Pfad, mit dem synchronisiert wird, wenn Dateisystem-Synchronisation "
+"aktiviert ist. Siehe `sync.target`."
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1064,6 +1126,19 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Wilkommen"
+
+#, fuzzy
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Kann Synchronisierer nicht initialisieren."
+
+#~ msgid "Delete notebook?"
+#~ msgstr "Notizbuch löschen?"
+
+#~ msgid "Delete notebook \"%s\"?"
+#~ msgstr "Notizbuch \"%s\" löschen?"
+
+#~ msgid "File system synchronisation target directory"
+#~ msgstr "Dateisystem-Synchronisation Zielpfad"
 
 #~ msgid "Set or clear alarm:"
 #~ msgstr "Erstelle oder entferne Alarm:"

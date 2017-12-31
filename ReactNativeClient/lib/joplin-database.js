@@ -205,10 +205,13 @@ class JoplinDatabase extends Database {
 		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
+
+		if (currentVersionIndex < 0) throw new Error('Unknown profile version. Most likely this is an old version of Joplin, while the profile was created by a newer version. Please upgrade Joplin at http://joplin.cozic.net and try again.');
+
 		// currentVersionIndex < 0 if for the case where an old version of Joplin used with a newer
 		// version of the database, so that migration is not run in this case.
-		if (currentVersionIndex == existingDatabaseVersions.length - 1 || currentVersionIndex < 0) return false;
-		
+		if (currentVersionIndex == existingDatabaseVersions.length - 1) return false;
+
 		while (currentVersionIndex < existingDatabaseVersions.length - 1) {
 			const targetVersion = existingDatabaseVersions[currentVersionIndex + 1];
 			this.logger().info("Converting database to version " + targetVersion);

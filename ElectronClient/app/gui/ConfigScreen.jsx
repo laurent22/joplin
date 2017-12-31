@@ -22,6 +22,23 @@ class ConfigScreenComponent extends React.Component {
 		this.setState({ settings: this.props.settings });
 	}
 
+	keyValueToArray(kv) {
+		let output = [];
+		for (let k in kv) {
+			if (!kv.hasOwnProperty(k)) continue;
+			output.push({
+				key: k,
+				label: kv[k],
+			});
+		}
+
+		output.sort((a, b) => {
+			return a.label.toLowerCase() < b.label.toLowerCase() ? -1 : +1;
+		});
+
+		return output;
+	}
+
 	settingToComponent(key, value) {
 		const theme = themeStyle(this.props.theme);
 
@@ -53,9 +70,10 @@ class ConfigScreenComponent extends React.Component {
 		if (md.isEnum) {
 			let items = [];
 			const settingOptions = md.options();
-			for (let k in settingOptions) {
-				if (!settingOptions.hasOwnProperty(k)) continue;
-				items.push(<option value={k.toString()} key={k}>{settingOptions[k]}</option>);
+			let array = this.keyValueToArray(settingOptions);
+			for (let i = 0; i < array.length; i++) {
+				const e = array[i];
+				items.push(<option value={e.key.toString()} key={e.key}>{settingOptions[e.key]}</option>);
 			}
 
 			return (

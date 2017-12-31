@@ -78,12 +78,12 @@ class Command extends BaseCommand {
 
 			app().gui().showModalOverlay(_('Starting to edit note. Close the editor to get back to the prompt.'));
 			await app().gui().forceRender();
-			const termState = app().gui().term().saveState();
+			const termState = app().gui().termSaveState();
 
 			const spawnSync	= require('child_process').spawnSync;
 			spawnSync(editorPath, editorArgs, { stdio: 'inherit' });
 
-			app().gui().term().restoreState(termState);
+			app().gui().termRestoreState(termState);
 			app().gui().hideModalOverlay();
 			app().gui().forceRender();
 

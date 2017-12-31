@@ -2,6 +2,7 @@ const BaseWidget = require('tkwidgets/BaseWidget.js');
 const chalk = require('chalk');
 const termutils = require('tkwidgets/framework/termutils.js');
 const stripAnsi = require('strip-ansi');
+const { handleAutocompletion } = require('../autocompletion.js');
 
 class StatusBarWidget extends BaseWidget {
 
@@ -111,6 +112,9 @@ class StatusBarWidget extends BaseWidget {
 				cancelable: true,
 				history: this.history,
 				default: this.promptState_.initialText,
+				autoComplete: handleAutocompletion,
+				autoCompleteHint : true,
+				autoCompleteMenu : true,
 			};
 
 			if ('cursorPosition' in this.promptState_) options.cursorPosition = this.promptState_.cursorPosition;

@@ -82,6 +82,14 @@ class AppGui {
 		await this.renderer_.renderRoot();
 	}
 
+	termSaveState() {
+		return this.term().saveState();
+	}
+
+	termRestoreState(state) {
+		return this.term().restoreState(state);
+	}
+
 	prompt(initialText = '', promptString = ':', options = null) {
 		return this.widget('statusBar').prompt(initialText, promptString, options);
 	}
@@ -550,6 +558,10 @@ class AppGui {
 		}
 
 		this.widget('console').scrollBottom();
+		
+		// Invalidate so that the screen is redrawn in case inputting a command has moved
+		// the GUI up (in particular due to autocompletion), it's moved back to the right position.
+		this.widget('root').invalidate();
 	}
 
 	async updateFolderList() {
