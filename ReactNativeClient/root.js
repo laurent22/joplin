@@ -281,8 +281,12 @@ async function initialize(dispatch) {
 
 	const mainLogger = new Logger();
 	mainLogger.addTarget('database', { database: logDatabase, source: 'm' });
-	if (Setting.value('env') == 'dev') mainLogger.addTarget('console');
-	mainLogger.setLevel(Logger.LEVEL_DEBUG);
+	mainLogger.setLevel(Logger.LEVEL_INFO);
+	
+	if (Setting.value('env') == 'dev') {
+		mainLogger.addTarget('console');
+		mainLogger.setLevel(Logger.LEVEL_DEBUG);
+	}
 
 	reg.setLogger(mainLogger);
 	reg.setShowErrorMessageBoxHandler((message) => { alert(message) });
@@ -345,7 +349,7 @@ async function initialize(dispatch) {
 		await Setting.load();
 
 		if (Setting.value('firstStart')) {
-			const locale = NativeModules.I18nManager.localeIdentifier
+			let locale = NativeModules.I18nManager.localeIdentifier
 			if (!locale) locale = defaultLocale();
 			Setting.setValue('locale', closestSupportedLocale(locale));
 			if (Setting.value('env') === 'dev') Setting.setValue('sync.target', SyncTargetRegistry.nameToId('onedrive_dev'));

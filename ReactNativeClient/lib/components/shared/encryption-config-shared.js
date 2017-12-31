@@ -58,7 +58,6 @@ shared.checkPasswords = async function(comp) {
 		const ok = password ? await EncryptionService.instance().checkMasterKeyPassword(mk, password) : false;
 		passwordChecks[mk.id] = ok;
 	}
-	console.info(passwordChecks);
 	comp.setState({ passwordChecks: passwordChecks });
 }
 

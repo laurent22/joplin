@@ -1,5 +1,6 @@
 const React = require('react'); const Component = React.Component;
 const { TextInput, TouchableOpacity, Linking, View, Switch, Slider, StyleSheet, Text, Button, ScrollView } = require('react-native');
+const EncryptionService = require('lib/services/EncryptionService');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { _ } = require('lib/locale.js');
@@ -9,6 +10,8 @@ const { themeStyle } = require('lib/components/global-style.js');
 const { time } = require('lib/time-utils.js');
 const Setting = require('lib/models/Setting.js');
 const shared = require('lib/components/shared/encryption-config-shared.js');
+const { dialogs } = require('lib/dialogs.js');
+const DialogBox = require('react-native-dialogbox').default;
 
 class EncryptionConfigScreenComponent extends BaseScreenComponent {
 	
@@ -18,6 +21,11 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 
 	constructor() {
 		super();
+
+		this.state = {
+			passwordPromptShow: false,
+			passwordPromptAnswer: '',
+		};
 
 		shared.constructor(this);
 
@@ -67,6 +75,8 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 				fontSize: theme.fontSize,
 				paddingTop: 5,
 				paddingBottom: 5,
+				marginTop: theme.marginTop,
+				marginBottom: 5,
 			},
 			normalText: {
 				flex: 1,
@@ -103,9 +113,39 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 				<Text style={this.styles().normalText}>{_('Created: %s', time.formatMsToLocal(mk.created_time))}</Text>
 				<View style={{flexDirection: 'row', alignItems: 'center'}}>
 					<Text style={{flex:0, fontSize: theme.fontSize, marginRight: 10}}>{_('Password:')}</Text>
-					<TextInput value={password} onChangeText={(text) => onPasswordChange(text)} style={{flex:1, marginRight: 10}}></TextInput>
+					<TextInput secureTextEntry={true} value={password} onChangeText={(text) => onPasswordChange(text)} style={{flex:1, marginRight: 10}}></TextInput>
 					<Text style={{fontSize: theme.fontSize, marginRight: 10}}>{passwordOk}</Text>
 					<Button title={_('Save')} onPress={() => onSaveClick()}></Button>
+				</View>
+			</View>
+		);
+	}
+
+	passwordPromptComponent() {
+		const theme = themeStyle(this.props.theme);
+
+		const onEnableClick = async () => {
+			try {
+				const password = this.state.passwordPromptAnswer;
+				if (!password) throw new Error(_('Password cannot be empty'));
+				await EncryptionService.instance().generateMasterKeyAndEnableEncryption(password);
+				this.setState({ passwordPromptShow: false });
+			} catch (error) {
+				await dialogs.error(this, error.message);
+			}
+		}
+
+		return (
+			<View style={{flex:1, borderColor: theme.dividerColor, borderWidth: 1, padding: 10, marginTop: 10, marginBottom: 10}}>
+				<Text style={{fontSize: theme.fontSize}}>{_('Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target. Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.')}</Text>
+				<TextInput secureTextEntry={true} value={this.state.passwordPromptAnswer} onChangeText={(text) => { this.setState({ passwordPromptAnswer: text }) }}></TextInput>
+				<View style={{flexDirection: 'row'}}>
+					<View style={{flex:1 , marginRight:10}} >
+						<Button title={_('Enable')} onPress={() => { onEnableClick() }}></Button>
+					</View>
+					<View style={{flex:1}} >
+						<Button title={_('Cancel')} onPress={() => { this.setState({ passwordPromptShow: false}) }}></Button>
+					</View>
 				</View>
 			</View>
 		);
@@ -121,15 +161,40 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 			mkComps.push(this.renderMasterKey(i+1, mk));
 		}
 
+		const onToggleButtonClick = async () => {
+			if (this.props.encryptionEnabled) {
+				const ok = await dialogs.confirm(this, _('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?'));
+				if (!ok) return;
+
+				try {
+					await EncryptionService.instance().disableEncryption();
+				} catch (error) {
+					await dialogs.error(this, error.message);
+				}
+			} else {
+				this.setState({
+					passwordPromptShow: true,
+					passwordPromptAnswer: '',
+				});
+				return;
+			}
+		};
+
+		const passwordPromptComp = this.state.passwordPromptShow ? this.passwordPromptComponent() : null;
+		const toggleButton = !this.state.passwordPromptShow ? <View style={{marginTop: 10}}><Button title={this.props.encryptionEnabled ? _('Disable encryption') : _('Enable encryption')} onPress={() => onToggleButtonClick()}></Button></View> : null;
+
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>
-				<ScreenHeader title={_('Configuration')}/>
+				<ScreenHeader title={_('Encryption Config')}/>
 				<ScrollView style={this.styles().container}>
 					<Text style={this.styles().titleText}>{_('Status')}</Text>
 					<Text style={this.styles().normalText}>{_('Encryption is: %s', this.props.encryptionEnabled ? _('Enabled') : _('Disabled'))}</Text>
 					{decryptedItemsInfo}
+					{toggleButton}
+					{passwordPromptComp}
 					{mkComps}
 				</ScrollView>
+				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
 			</View>
 		);
 	}

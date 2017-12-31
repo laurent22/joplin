@@ -214,7 +214,9 @@ class Synchronizer {
 					let ItemClass = BaseItem.itemClass(local);
 					let path = BaseItem.systemPath(local);
 
-					// Safety check to avoid infinite loops:
+					// Safety check to avoid infinite loops.
+					// In fact this error is possible if the item is marked for sync (via sync_time or force_sync) while synchronisation is in
+					// progress. In that case exit anyway to be sure we aren't in a loop and the item will be re-synced next time.
 					if (donePaths.indexOf(path) > 0) throw new Error(sprintf('Processing a path that has already been done: %s. sync_time was not updated?', path));
 
 					let remote = await this.api().stat(path);

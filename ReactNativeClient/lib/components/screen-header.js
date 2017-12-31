@@ -346,7 +346,7 @@ class ScreenHeaderComponent extends Component {
 
 			menuOptionComponents.push(
 				<MenuOption value={() => this.encryptionConfig_press()} key={'menuOption_encryptionConfig'} style={this.styles().contextMenuItem}>
-					<Text style={this.styles().contextMenuItemText}>{_('Encryption Configuration')}</Text>
+					<Text style={this.styles().contextMenuItemText}>{_('Encryption Config')}</Text>
 				</MenuOption>);
 
 			menuOptionComponents.push(
