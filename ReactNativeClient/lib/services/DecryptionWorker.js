@@ -1,9 +1,11 @@
 const BaseItem = require('lib/models/BaseItem');
+const { Logger } = require('lib/logger.js');
 
 class DecryptionWorker {
 
 	constructor() {
 		this.state_ = 'idle';
+		this.logger_ = new Logger();
 
 		this.dispatch = (action) => {
 			//console.warn('DecryptionWorker.dispatch is not defined');

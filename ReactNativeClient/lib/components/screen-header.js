@@ -458,7 +458,7 @@ class ScreenHeaderComponent extends Component {
 
 		return (
 			<View style={this.styles().container} >
-				<View style={{flexDirection:'row'}}>
+				<View style={{flexDirection:'row', alignItems: 'center'}}>
 					{ sideMenuComp }
 					{ backButtonComp }
 					{ saveButton(this.styles(), () => { if (this.props.onSaveButtonPress) this.props.onSaveButtonPress() }, this.props.saveButtonDisabled === true, this.props.showSaveButton === true) }
