@@ -629,6 +629,68 @@ msgstr "Las notas y los ajustes se guardan en: %s"
 msgid "Save"
 msgstr "Guardar"
 
+msgid ""
+"Disabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent unencrypted to the sync target. Do you wish to "
+"continue?"
+msgstr ""
+
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
+msgstr ""
+
+msgid "Disable encryption"
+msgstr ""
+
+msgid "Enable encryption"
+msgstr ""
+
+msgid "Master Keys"
+msgstr ""
+
+msgid "Active"
+msgstr ""
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Source"
+msgstr "Origen"
+
+msgid "Created"
+msgstr "Creado"
+
+msgid "Updated"
+msgstr "Actualizado"
+
+msgid "Password"
+msgstr ""
+
+msgid "Password OK"
+msgstr ""
+
+msgid ""
+"Note: Only one master key is going to be used for encryption (the one marked "
+"as \"active\"). Any of the keys might be used for decryption, depending on "
+"how the notes or notebooks were originally encrypted."
+msgstr ""
+
+msgid "Status"
+msgstr "Estado"
+
+msgid "Encryption is:"
+msgstr ""
+
+#, fuzzy
+msgid "Enabled"
+msgstr "Deshabilitado"
+
+msgid "Disabled"
+msgstr "Deshabilitado"
+
 msgid "Back"
 msgstr "Atrás"
 
@@ -673,31 +735,11 @@ msgstr "No se han podido sincronizar algunos de los elementos."
 msgid "View them now"
 msgstr "Verlos ahora"
 
-msgid "Active"
-msgstr ""
+#, fuzzy
+msgid "Some items cannot be decrypted."
+msgstr "No se han podido sincronizar algunos de los elementos."
 
-msgid "ID"
-msgstr "ID"
-
-msgid "Source"
-msgstr "Origen"
-
-msgid "Created"
-msgstr "Creado"
-
-msgid "Updated"
-msgstr "Actualizado"
-
-msgid "Password"
-msgstr ""
-
-msgid "Password OK"
-msgstr ""
-
-msgid ""
-"Note: Only one master key is going to be used for encryption (the one marked "
-"as \"active\"). Any of the keys might be used for decryption, depending on "
-"how the notes or notebooks were originally encrypted."
+msgid "Set the password"
 msgstr ""
 
 msgid "Add or remove tags"
@@ -743,6 +785,9 @@ msgstr "Importar"
 
 msgid "Synchronisation Status"
 msgstr "Estado de la sincronización"
+
+msgid "Encryption Options"
+msgstr ""
 
 msgid "Remove this tag from all the notes?"
 msgstr "¿Desea eliminar esta etiqueta de todas las notas?"
@@ -921,9 +966,6 @@ msgstr "Guardar geolocalización en las notas"
 msgid "Synchronisation interval"
 msgstr "Intervalo de sincronización"
 
-msgid "Disabled"
-msgstr "Deshabilitado"
-
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d minutos"
@@ -1015,9 +1057,6 @@ msgstr "¿Desea borrar estas notas?"
 msgid "Log"
 msgstr "Log"
 
-msgid "Status"
-msgstr "Estado"
-
 msgid "Export Debug Report"
 msgstr "Exportar informe de depuración"
 
@@ -1100,10 +1139,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
-
-#, fuzzy
-#~ msgid "Some items cannot be decrypted."
-#~ msgstr "No se han podido sincronizar algunos de los elementos."
 
 #~ msgid "Delete notebook?"
 #~ msgstr "Eliminar libreta?"
