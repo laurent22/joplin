@@ -1,4 +1,5 @@
 const { padLeft } = require('lib/string-utils.js');
+const { Logger } = require('lib/logger.js');
 const { shim } = require('lib/shim.js');
 const Setting = require('lib/models/Setting.js');
 const MasterKey = require('lib/models/MasterKey');
@@ -18,6 +19,7 @@ class EncryptionService {
 		this.loadedMasterKeys_ = {};
 		this.activeMasterKeyId_ = null;
 		this.defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL;
+		this.logger_ = new Logger();
 
 		this.headerTemplates_ = {
 			1: {
