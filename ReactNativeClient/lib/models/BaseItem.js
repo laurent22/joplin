@@ -1,6 +1,7 @@
 const BaseModel = require('lib/BaseModel.js');
 const { Database } = require('lib/database.js');
 const Setting = require('lib/models/Setting.js');
+const JoplinError = require('lib/JoplinError.js');
 const { time } = require('lib/time-utils.js');
 const { sprintf } = require('sprintf-js');
 const { _ } = require('lib/locale.js');
@@ -261,16 +262,14 @@ class BaseItem extends BaseModel {
 		const ItemClass = this.itemClass(item);
 		let serialized = await ItemClass.serialize(item);
 		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported()) {
-			// Sanity check - normally not possible
-			if (!!item.encryption_applied) throw new Error('Item is encrypted but encryption is currently disabled');
+			// Normally not possible since itemsThatNeedSync should only return decrypted items
+			if (!!item.encryption_applied) throw new JoplinError('Item is encrypted but encryption is currently disabled', 'cannotSyncEncrypted');
 			return serialized;
 		}
 
 		if (!!item.encryption_applied) { const e = new Error('Trying to encrypt item that is already encrypted'); e.code = 'cannotEncryptEncrypted'; throw e; }
 
 		const cipherText = await this.encryptionService().encryptString(serialized);
-
-		//const reducedItem = Object.assign({}, item);
 
 		// List of keys that won't be encrypted - mostly foreign keys required to link items
 		// with each others and timestamp required for synchronisation.
@@ -440,7 +439,12 @@ class BaseItem extends BaseModel {
 			// // CHANGED:
 			// 'SELECT * FROM [ITEMS] items JOIN sync_items s ON s.item_id = items.id WHERE sync_target = ? AND'
 
-			let extraWhere = className == 'Note' ? 'AND is_conflict = 0' : '';
+			let extraWhere = [];
+			if (className == 'Note') extraWhere.push('is_conflict = 0');
+			if (className == 'Resource') extraWhere.push('encryption_blob_encrypted = 0');
+			if (ItemClass.encryptionSupported()) extraWhere.push('encryption_applied = 0');
+
+			extraWhere = extraWhere.length ? 'AND ' + extraWhere.join(' AND ') : '';
 
 			// First get all the items that have never been synced under this sync target
 

@@ -71,8 +71,9 @@ class Resource extends BaseItem {
 		}
 
 		await this.encryptionService().decryptFile(encryptedPath, plainTextPath);
+
 		decryptedItem.encryption_blob_encrypted = 0;
-		return Resource.save(decryptedItem, { autoTimestamp: false });
+		return super.save(decryptedItem, { autoTimestamp: false });
 	}
 
 
@@ -83,14 +84,8 @@ class Resource extends BaseItem {
 		const plainTextPath = this.fullPath(resource);
 
 		if (!Setting.value('encryption.enabled')) {
-			// Sanity check - normally not possible
+			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (!!resource.encryption_blob_encrypted) throw new Error('Trying to access encrypted resource but encryption is currently disabled');
-
-			// // TODO: why is it set to 0 without decrypting first?
-			// if (resource.encryption_blob_encrypted) {
-			// 	resource.encryption_blob_encrypted = 0;
-			// 	await Resource.save(resource, { autoTimestamp: false });
-			// }
 			return { path: plainTextPath, resource: resource };
 		}
 

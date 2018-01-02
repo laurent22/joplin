@@ -297,4 +297,17 @@ function fileContentEqual(path1, path2) {
 	return content1 === content2;
 }
 
-module.exports = { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker };
+// Wrap an async test in a try/catch block so that done() is always called
+// and display a proper error message instead of "unhandled promise error"
+function asyncTest(callback) {
+	return async function(done) {
+		try {
+			await callback();
+		} catch (error) {
+			console.error(error);
+		}
+		done();
+	}
+}
+
+module.exports = { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest };

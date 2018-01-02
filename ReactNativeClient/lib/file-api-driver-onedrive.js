@@ -137,7 +137,7 @@ class FileApiDriverOneDrive {
 			}
 		} catch (error) {
 			if (error && error.code === 'BadRequest' && error.message === 'Maximum request length exceeded.') {
-				error.code = 'cannotSync';
+				error.code = 'rejectedByTarget';
 				error.message = 'Resource exceeds OneDrive max file size (4MB)';
 			}
 			throw error;

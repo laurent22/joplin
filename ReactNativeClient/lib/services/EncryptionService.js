@@ -67,8 +67,13 @@ class EncryptionService {
 	}
 
 	async disableEncryption() {
-		const hasEncryptedItems = await BaseItem.hasEncryptedItems();
-		if (hasEncryptedItems) throw new Error(_('Encryption cannot currently be disabled because some items are still encrypted. Please wait for all the items to be decrypted and try again.'));
+		// Allow disabling encryption even if some items are still encrypted, because whether E2EE is enabled or disabled
+		// should not affect whether items will enventually be decrypted or not (DecryptionWorker will still work as
+		// long as there are encrypted items). Also even if decryption is disabled, it's possible that encrypted items
+		// will still be received via synchronisation.
+
+		// const hasEncryptedItems = await BaseItem.hasEncryptedItems();
+		// if (hasEncryptedItems) throw new Error(_('Encryption cannot currently be disabled because some items are still encrypted. Please wait for all the items to be decrypted and try again.'));
 		
 		Setting.setValue('encryption.enabled', false);
 		// The only way to make sure everything gets decrypted on the sync target is
@@ -77,26 +82,35 @@ class EncryptionService {
 	}
 
 	async loadMasterKeysFromSettings() {
-		if (!Setting.value('encryption.enabled')) {
-			this.unloadAllMasterKeys();
-		} else {
-			const masterKeys = await MasterKey.all();
-			const passwords = Setting.value('encryption.passwordCache');
-			const activeMasterKeyId = Setting.value('encryption.activeMasterKeyId');
+		const masterKeys = await MasterKey.all();
+		const passwords = Setting.value('encryption.passwordCache');
+		const activeMasterKeyId = Setting.value('encryption.activeMasterKeyId');
 
-			for (let i = 0; i < masterKeys.length; i++) {
-				const mk = masterKeys[i];
-				const password = passwords[mk.id];
-				if (this.isMasterKeyLoaded(mk.id)) continue;
-				if (!password) continue;
+		this.logger().info('Trying to load ' + masterKeys.length + ' master keys...');
 
-				try {
-					await this.loadMasterKey(mk, password, activeMasterKeyId === mk.id);
-				} catch (error) {
-					this.logger().warn('Cannot load master key ' + mk.id + '. Invalid password?', error);
-				}
+		for (let i = 0; i < masterKeys.length; i++) {
+			const mk = masterKeys[i];
+			const password = passwords[mk.id];
+			if (this.isMasterKeyLoaded(mk.id)) continue;
+			if (!password) continue;
+
+			try {
+				await this.loadMasterKey(mk, password, activeMasterKeyId === mk.id);
+			} catch (error) {
+				this.logger().warn('Cannot load master key ' + mk.id + '. Invalid password?', error);
 			}
 		}
+
+		this.logger().info('Loaded master keys: ' + this.loadedMasterKeysCount());
+	}
+
+	loadedMasterKeysCount() {
+		let output = 0;
+		for (let n in this.loadedMasterKeys_) {
+			if (!this.loadedMasterKeys_[n]) continue;
+			output++;
+		}
+		return output;
 	}
 
 	chunkSize() {

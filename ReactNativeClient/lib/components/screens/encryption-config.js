@@ -109,7 +109,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 
 		return (
 			<View key={mk.id}>
-				<Text style={this.styles().titleText}>{_('Master Key %d', num)}</Text>
+				<Text style={this.styles().titleText}>{_('Master Key %s', mk.id.substr(0,6))}</Text>
 				<Text style={this.styles().normalText}>{_('Created: %s', time.formatMsToLocal(mk.created_time))}</Text>
 				<View style={{flexDirection: 'row', alignItems: 'center'}}>
 					<Text style={{flex:0, fontSize: theme.fontSize, marginRight: 10}}>{_('Password:')}</Text>
@@ -193,6 +193,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 					{toggleButton}
 					{passwordPromptComp}
 					{mkComps}
+					<View style={{flex:1, height: 20}}></View>
 				</ScrollView>
 				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
 			</View>

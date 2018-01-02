@@ -281,7 +281,7 @@ class Synchronizer {
 							const localResourceContentPath = result.path;
 							await this.api().put(remoteContentPath, null, { path: localResourceContentPath, source: 'file' });
 						} catch (error) {
-							if (error && error.code === 'cannotSync') {
+							if (error && error.code === 'rejectedByTarget') {
 								await handleCannotSyncItem(syncTargetId, local, error.message);
 								action = null;
 							} else {
@@ -305,15 +305,15 @@ class Synchronizer {
 
 						let canSync = true;
 						try {
-							if (this.debugFlags_.indexOf('cannotSync') >= 0) {
-								const error = new Error('Testing cannotSync');
-								error.code = 'cannotSync';
+							if (this.debugFlags_.indexOf('rejectedByTarget') >= 0) {
+								const error = new Error('Testing rejectedByTarget');
+								error.code = 'rejectedByTarget';
 								throw error;
 							}
 							const content = await ItemClass.serializeForSync(local);
 							await this.api().put(path, content);
 						} catch (error) {
-							if (error && error.code === 'cannotSync') {
+							if (error && error.code === 'rejectedByTarget') {
 								await handleCannotSyncItem(syncTargetId, local, error.message);
 								canSync = false;
 							} else {

@@ -56,6 +56,8 @@ const FsDriverRN = require('lib/fs-driver-rn.js').FsDriverRN;
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const EncryptionService = require('lib/services/EncryptionService');
 
+let storeDispatch = function(action) {};
+
 const generalMiddleware = store => next => async (action) => {
 	if (action.type !== 'SIDE_MENU_OPEN_PERCENT') reg.logger().info('Reducer action', action.type);
 	PoorManIntervals.update(); // This function needs to be called regularly so put it here
@@ -84,7 +86,18 @@ const generalMiddleware = store => next => async (action) => {
 
 	if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'locale' || action.type == 'SETTING_UPDATE_ALL') {
 		setLocale(Setting.value('locale'));
-	}	
+	}
+
+	if ((action.type == 'SETTING_UPDATE_ONE' && (action.key.indexOf('encryption.') === 0)) || (action.type == 'SETTING_UPDATE_ALL')) {
+		await EncryptionService.instance().loadMasterKeysFromSettings();
+		DecryptionWorker.instance().scheduleStart();
+		const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
+
+		storeDispatch({
+			type: 'MASTERKEY_REMOVE_NOT_LOADED',
+			ids: loadedMasterKeyIds,
+		});
+	}
 
 	if (action.type == 'NAV_GO' && action.routeName == 'Notes') {
 		Setting.setValue('activeFolderId', newState.selectedFolderId);
@@ -265,12 +278,13 @@ const appReducer = (state = appDefaultState, action) => {
 }
 
 let store = createStore(appReducer, applyMiddleware(generalMiddleware));
+storeDispatch = store.dispatch;
 
 async function initialize(dispatch) {
 	shimInit();
 
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
-	Setting.setConstant('appId', 'net.cozic.joplin');
+	Setting.setConstant('appId', 'net.cozic.joplin-mobile');
 	Setting.setConstant('appType', 'mobile');
 	//Setting.setConstant('resourceDir', () => { return RNFetchBlob.fs.dirs.DocumentDir; });
 	Setting.setConstant('resourceDir', RNFetchBlob.fs.dirs.DocumentDir);
@@ -367,6 +381,7 @@ async function initialize(dispatch) {
 		EncryptionService.fsDriver_ = fsDriver;
 		EncryptionService.instance().setLogger(mainLogger);
 		BaseItem.encryptionService_ = EncryptionService.instance();
+		DecryptionWorker.instance().dispatch = dispatch;
 		DecryptionWorker.instance().setLogger(mainLogger);
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
 		await EncryptionService.instance().loadMasterKeysFromSettings();
