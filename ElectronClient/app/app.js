@@ -288,7 +288,7 @@ class Application extends BaseApplication {
 						let message = [
 							p.description,
 							'',
-							'Copyright © 2016-2017 Laurent Cozic',
+							'Copyright © 2016-2018 Laurent Cozic',
 							_('%s %s (%s, %s)', p.name, p.version, Setting.value('env'), process.platform),
 						];
 						bridge().showMessageBox({

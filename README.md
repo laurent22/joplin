@@ -115,7 +115,7 @@ If for any reason the notifications do not work, please [open an issue](https://
 
 # Localisation
 
-Joplin is currently available in English, French, Spanish, German, Portuguese and Italian. If you would like to contribute a translation, it is quite straightforward, please follow these steps:
+Joplin is currently available in English, French, Spanish, German, Portuguese, Chinese, Japanese, Russian, Croatian and Italian. If you would like to contribute a translation, it is quite straightforward, please follow these steps:
 
 - [Download Poedit](https://poedit.net/), the translation editor, and install it.
 - [Download the file to be translated](https://raw.githubusercontent.com/laurent22/joplin/master/CliClient/locales/joplin.pot).
@@ -141,7 +141,7 @@ This translation will apply to the three applications - desktop, mobile and term
 
 # License
 
-Copyright (c) 2016-2017 Laurent Cozic
+Copyright (c) 2016-2018 Laurent Cozic
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

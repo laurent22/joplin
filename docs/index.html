@@ -284,6 +284,12 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <p>To import Evernote data, first export your Evernote notebooks to ENEX files as described <a href="https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks">here</a>. Then follow these steps:</p>
 <p>On the <strong>desktop application</strong>, open the &quot;File&quot; menu, click &quot;Import Evernote notes&quot; and select your ENEX file. This will open a new screen which will display the import progress. The notes will be imported into a new separate notebook (so that, in case of a mistake, the notes are not mixed up with any existing notes). If needed then can then be moved to a different notebook, or the notebook can be renamed, etc.</p>
 <p>On the <strong>terminal application</strong>, in <a href="/terminal#command-line-mode">command-line mode</a>, type <code>import-enex /path/to/file.enex</code>. This will import the notes into a new notebook named after the filename.</p>
+<h1 id="importing-notes-from-other-applications">Importing notes from other applications</h1>
+<p>In general the way to import notes from any application into Joplin is to convert the notes to ENEX files (Evernote format) and to import these ENEX files into Joplin using the method above. Most note-taking applications support ENEX files so it should be relatively straightforward. For help about specific applications, see below:</p>
+<ul>
+<li>Standard Notes: Please see <a href="https://programadorwebvalencia.com/migrate-notes-from-standard-notes-to-joplin/">this tutorial</a></li>
+<li>Tomboy Notes: Export the notes to ENEX files <a href="https://askubuntu.com/questions/243691/how-can-i-export-my-tomboy-notes-into-evernote/608551">as described here</a> for example, and import these ENEX files into Joplin.</li>
+</ul>
 <h1 id="synchronisation">Synchronisation</h1>
 <p>One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as OneDrive or Dropbox, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.</p>
 <p>Currently, synchronisation is possible with OneDrive (by default) or the local filesystem. A NextCloud driver, and a Dropbox one will also be available once <a href="https://github.com/facebook/react-native/issues/14445">this React Native bug</a> is fixed. When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
@@ -303,7 +309,7 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <p>On mobile, the alarms will be displayed using the built-in notification system.</p>
 <p>If for any reason the notifications do not work, please <a href="https://github.com/laurent22/joplin/issues">open an issue</a>.</p>
 <h1 id="localisation">Localisation</h1>
-<p>Joplin is currently available in English, French, Spanish, German, Portuguese and Italian. If you would like to contribute a translation, it is quite straightforward, please follow these steps:</p>
+<p>Joplin is currently available in English, French, Spanish, German, Portuguese, Chinese, Japanese, Russian, Croatian and Italian. If you would like to contribute a translation, it is quite straightforward, please follow these steps:</p>
 <ul>
 <li><a href="https://poedit.net/">Download Poedit</a>, the translation editor, and install it.</li>
 <li><a href="https://raw.githubusercontent.com/laurent22/joplin/master/CliClient/locales/joplin.pot">Download the file to be translated</a>.</li>
@@ -327,7 +333,7 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <li>While the mobile can sync and load tags, it is not currently possible to create new ones. The desktop and terminal apps can create, delete and edit tags.</li>
 </ul>
 <h1 id="license">License</h1>
-<p>Copyright (c) 2016-2017 Laurent Cozic</p>
+<p>Copyright (c) 2016-2018 Laurent Cozic</p>
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
 <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
 <p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
