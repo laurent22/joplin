@@ -2,387 +2,399 @@
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: RCJacH <RCJacH@outlook.com>\n"
+"Language-Team: RCJacH <RCJacH@outlook.com>\n"
+"Language: zh-cn\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Give focus to next pane"
-msgstr ""
+msgstr "聚焦于下个面板"
 
 msgid "Give focus to previous pane"
-msgstr ""
+msgstr "聚焦于上个面板"
 
 msgid "Enter command line mode"
-msgstr ""
+msgstr "进入命令行模式"
 
 msgid "Exit command line mode"
-msgstr ""
+msgstr "退出命令行模式"
 
 msgid "Edit the selected note"
-msgstr ""
+msgstr "编辑所选笔记"
 
 msgid "Cancel the current command."
-msgstr ""
+msgstr "取消当前命令。"
 
 msgid "Exit the application."
-msgstr ""
+msgstr "退出程序。"
 
 msgid "Delete the currently selected note or notebook."
-msgstr ""
+msgstr "删除当前所选笔记或笔记本。"
 
 msgid "To delete a tag, untag the associated notes."
-msgstr ""
+msgstr "移除相关笔记的标签后才可删除此标签。"
 
 msgid "Please select the note or notebook to be deleted first."
-msgstr ""
+msgstr "请选择最先删除的笔记或笔记本。"
 
 msgid "Set a to-do as completed / not completed"
-msgstr ""
+msgstr "设置待办事项为已完成或未完成"
 
 msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-msgstr ""
+msgstr "在最大化/最小化/隐藏/显示间切换[t]控制台[c]。"
 
 msgid "Search"
-msgstr ""
+msgstr "搜索"
 
 msgid "[t]oggle note [m]etadata."
-msgstr ""
+msgstr "切换[t]笔记元数据[m]。"
 
 msgid "[M]ake a new [n]ote"
-msgstr ""
+msgstr "创建[M]新笔记[n]"
 
 msgid "[M]ake a new [t]odo"
-msgstr ""
+msgstr "创建[M]新待办事项[t]"
 
 msgid "[M]ake a new note[b]ook"
-msgstr ""
+msgstr "创建[M]新笔记本[b]"
 
 msgid "Copy ([Y]ank) the [n]ote to a notebook."
-msgstr ""
+msgstr "复制[Y]笔记[n]至笔记本。"
 
 msgid "Move the note to a notebook."
-msgstr ""
+msgstr "移动笔记至笔记本。"
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr ""
+msgstr "按Ctrl+D或输入\"exit\"退出程序"
 
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr ""
+msgstr "有多个项目与\"%s\"匹配，请缩小您的查询范围。"
 
 msgid "No notebook selected."
-msgstr ""
+msgstr "未选择笔记本。"
 
 msgid "No notebook has been specified."
-msgstr ""
+msgstr "无指定笔记本。"
 
 msgid "Y"
-msgstr ""
+msgstr "是"
 
 msgid "n"
-msgstr ""
+msgstr "否"
 
 msgid "N"
-msgstr ""
+msgstr "否"
 
 msgid "y"
-msgstr ""
+msgstr "是"
 
 msgid "Cancelling background synchronisation... Please wait."
-msgstr ""
+msgstr "正在取消背景同步...请稍后。"
 
 #, javascript-format
 msgid "No such command: %s"
-msgstr ""
+msgstr "无以下命令：%s"
 
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
-msgstr ""
+msgstr "命令\"%s\"仅在GUI模式下可用"
 
 #, javascript-format
 msgid "Missing required argument: %s"
-msgstr ""
+msgstr "缺失所需参数：%s"
 
 #, javascript-format
 msgid "%s: %s"
-msgstr ""
+msgstr "%s: %s"
 
 msgid "Your choice: "
-msgstr ""
+msgstr "您的选择： "
 
 #, javascript-format
 msgid "Invalid answer: %s"
-msgstr ""
+msgstr "此答案无效：%s"
 
 msgid "Attaches the given file to the note."
-msgstr ""
+msgstr "给笔记附加给定文件。"
 
 #, javascript-format
 msgid "Cannot find \"%s\"."
-msgstr ""
+msgstr "无法找到 \"%s\"。"
 
 msgid "Displays the given note."
-msgstr ""
+msgstr "显示给定笔记。"
 
 msgid "Displays the complete information about note."
-msgstr ""
+msgstr "显示关于笔记的全部信息。"
 
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
+"获取或设置配置变量。若未提供[value]，则会显示[name]的值。若[name]及[value]都"
+"未提供，则列出当前配置。"
 
 msgid "Also displays unset and hidden config variables."
-msgstr ""
+msgstr "同时显示未设置的与隐藏的配置变量。"
 
 #, javascript-format
 msgid "%s = %s (%s)"
-msgstr ""
+msgstr "%s = %s (%s)"
 
 #, javascript-format
 msgid "%s = %s"
-msgstr ""
+msgstr "%s = %s"
 
 msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
+"复制符合<note>的笔记至[notebook]。若无指定笔记本则在当前笔记本内复制该笔记。"
 
 msgid "Marks a to-do as done."
-msgstr ""
+msgstr "标记待办事项为完成。"
 
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
-msgstr ""
+msgstr "笔记非待办事项：\"%s\""
 
 msgid "Edit note."
-msgstr ""
+msgstr "编辑笔记。"
 
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
-msgstr ""
+msgstr "未定义文本编辑器。请通过 `config editor <editor-path>`设置。"
 
 msgid "No active notebook."
-msgstr ""
+msgstr "无活动笔记本。"
 
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr ""
+msgstr "此笔记不存在：\"%s\"。是否创建？"
 
 msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr ""
+msgstr "开始编辑笔记。关闭编辑器则返回提示。"
 
 msgid "Note has been saved."
-msgstr ""
+msgstr "笔记已被保存。"
 
 msgid "Exits the application."
-msgstr ""
+msgstr "退出程序。"
 
 msgid ""
 "Exports Joplin data to the given directory. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
+"导出Joplin数据至给定文件目录。默认为导出所有的数据库，包含笔记本、笔记、标签"
+"及资源。"
 
 msgid "Exports only the given note."
-msgstr ""
+msgstr "仅导出给定笔记。"
 
 msgid "Exports only the given notebook."
-msgstr ""
+msgstr "仅导出给定笔记本。"
 
 msgid "Displays a geolocation URL for the note."
-msgstr ""
+msgstr "显示此笔记的地理定位URL地址。"
 
 msgid "Displays usage information."
-msgstr ""
+msgstr "显示使用信息。"
 
 msgid "Shortcuts are not available in CLI mode."
-msgstr ""
+msgstr "快捷键在CLI模式下不可用。"
 
+#, fuzzy
 msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
-msgstr ""
+msgstr "输入`help [command]`显示更多关于某命令的信息。"
 
 msgid "The possible commands are:"
-msgstr ""
+msgstr "可用命令为："
 
 msgid ""
 "In any command, a note or notebook can be refered to by title or ID, or "
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
+"在任意命令中，笔记或笔记本可通过其标题或ID来引用，也可使用代表当前所选笔记或"
+"笔记本的变量`$n`与`$b`。`$c`可用于引用当前所选项目。"
 
 msgid "To move from one pane to another, press Tab or Shift+Tab."
-msgstr ""
+msgstr "按Tab或Shift+Tab切换面板。"
 
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
-msgstr ""
+msgstr "通过上下左右与page up/down键来滚动列表与文本区域（包含此控制台）。"
 
 msgid "To maximise/minimise the console, press \"TC\"."
-msgstr ""
+msgstr "按\"TC\"最大化/最小化控制台。"
 
 msgid "To enter command line mode, press \":\""
-msgstr ""
+msgstr "按\":\"键进入命令行模式"
 
 msgid "To exit command line mode, press ESCAPE"
-msgstr ""
+msgstr "按ESC键退出命令行模式"
 
 msgid ""
 "For the complete list of available keyboard shortcuts, type `help shortcuts`"
-msgstr ""
+msgstr "输入`help shortcuts`显示全部可用的快捷键列表。"
 
 msgid "Imports an Evernote notebook file (.enex file)."
-msgstr ""
+msgstr "导入Evernote笔记本文件（.enex文件）。"
 
 msgid "Do not ask for confirmation."
-msgstr ""
+msgstr "不再要求确认。"
 
 #, javascript-format
 msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
-msgstr ""
+msgstr "文件\"%s\"将会被导入至现有笔记本\"%s\"。是否继续？"
 
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into "
 "it. Continue?"
-msgstr ""
+msgstr "将创建新笔记本\"%s\"并将文件\"%s\"导入至其中。是否继续？"
 
 #, javascript-format
 msgid "Found: %d."
-msgstr ""
+msgstr "已找到：%d条。"
 
 #, javascript-format
 msgid "Created: %d."
-msgstr ""
+msgstr "已创建：%d条。"
 
 #, javascript-format
 msgid "Updated: %d."
-msgstr ""
+msgstr "已更新：%d条。"
 
 #, javascript-format
 msgid "Skipped: %d."
-msgstr ""
+msgstr "已跳过：%d条。"
 
 #, javascript-format
 msgid "Resources: %d."
-msgstr ""
+msgstr "资源：%d。"
 
 #, javascript-format
 msgid "Tagged: %d."
-msgstr ""
+msgstr "已标签：%d条。"
 
 msgid "Importing notes..."
-msgstr ""
+msgstr "正在导入笔记..."
 
 #, javascript-format
 msgid "The notes have been imported: %s"
-msgstr ""
+msgstr "以下笔记已被导入：%s"
 
 msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
 "of notebooks."
-msgstr ""
+msgstr "显示当前笔记本的笔记。使用`ls /`显示笔记本列表。"
 
 msgid "Displays only the first top <num> notes."
-msgstr ""
+msgstr "只显示最上方的<num>条笔记。"
 
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
-msgstr ""
+msgstr "使用<field>排序项目（例标题、更新日期、创建日期）。"
 
 msgid "Reverses the sorting order."
-msgstr ""
+msgstr "反转排序顺序。"
 
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
+"仅显示指定格式的项目。`n`代表笔记，`t`代表待办事项，`nt`代表笔记和待办事项"
+"（例，`-tt`则会仅显示待办事项，`-ttd`则会显示笔记和待办事项）。"
 
 msgid "Either \"text\" or \"json\""
-msgstr ""
+msgstr "\"文本\"或\"json\""
 
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
+"使用长列表格式。格式为ID, NOTE_COUNT（笔记本）, DATE, TODO_CHECKED（待办事"
+"项）,TITLE"
 
 msgid "Please select a notebook first."
-msgstr ""
+msgstr "请先选择笔记本。"
 
 msgid "Creates a new notebook."
-msgstr ""
+msgstr "创建新笔记本。"
 
 msgid "Creates a new note."
-msgstr ""
+msgstr "创建新笔记。"
 
 msgid "Notes can only be created within a notebook."
-msgstr ""
+msgstr "笔记只能创建于笔记本内。"
 
 msgid "Creates a new to-do."
-msgstr ""
+msgstr "创建新待办事项。"
 
 msgid "Moves the notes matching <note> to [notebook]."
-msgstr ""
+msgstr "移动符合<note>的笔记至[notebook]。"
 
 msgid "Renames the given <item> (note or notebook) to <name>."
-msgstr ""
+msgstr "重命名给定的<item>（笔记或笔记本）至<name>。"
 
 msgid "Deletes the given notebook."
-msgstr ""
+msgstr "删除给定笔记本。"
 
 msgid "Deletes the notebook without asking for confirmation."
-msgstr ""
+msgstr "删除笔记本（不要求确认）。"
 
 msgid "Delete notebook? All notes within this notebook will also be deleted."
 msgstr ""
 
 msgid "Deletes the notes matching <note-pattern>."
-msgstr ""
+msgstr "删除符合<note-pattern>的笔记。"
 
 msgid "Deletes the notes without asking for confirmation."
-msgstr ""
+msgstr "删除笔记（不要求确认）。"
 
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
-msgstr ""
+msgstr "%d条笔记符合此模式。是否删除它们？"
 
 msgid "Delete note?"
-msgstr ""
+msgstr "是否删除笔记？"
 
 msgid "Searches for the given <pattern> in all the notes."
-msgstr ""
+msgstr "在所有笔记内搜索给定的<pattern>。"
 
-#, javascript-format
+#, fuzzy, javascript-format
 msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
 "%s"
-msgstr ""
+msgstr "将给定的<note>的属性<name>设置为[value]。"
 
 msgid "Displays summary about the notes and notebooks."
-msgstr ""
+msgstr "显示关于笔记与笔记本的概况。"
 
 msgid "Synchronises with remote storage."
-msgstr ""
+msgstr "与远程储存空间同步。"
 
 msgid "Sync to provided target (defaults to sync.target config value)"
-msgstr ""
+msgstr "同步至所提供的目标（默认为同步目标配置值）"
 
 msgid "Synchronisation is already in progress."
-msgstr ""
+msgstr "同步正在进行中。"
 
 #, javascript-format
 msgid ""
@@ -390,33 +402,37 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
+"锁定文件已被保留。若当前没有任何正在进行的同步，您可以在\"%s\"删除锁定文件并"
+"继续操作。"
 
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
-msgstr ""
+msgstr "认证未完成（未收到认证令牌）。"
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
-msgstr ""
+msgstr "同步目标：%s (%s)"
 
 msgid "Cannot initialize synchroniser."
-msgstr ""
+msgstr "无法初始化同步。"
 
 msgid "Starting synchronisation..."
-msgstr ""
+msgstr "开始同步..."
 
 msgid "Cancelling... Please wait."
-msgstr ""
+msgstr "正在取消...请稍后。"
 
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
 "`tag list` can be used to list all the tags."
 msgstr ""
+"<tag-command>可添加\"add\"、删除\"remove\"，或列出\"list\"于[note]，用来指定"
+"或移除[tag]，也可以列出于[tag]相关的笔记。`tag list`命令可用于列出所有标签。"
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
-msgstr ""
+msgstr "无效命令：\"%s\""
 
 msgid ""
 "<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
@@ -424,49 +440,52 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
+"<todo-command>可被切换\"toggle\"或清除\"clear\"。用\"toggle\"可使给定待办事项"
+"在已完成与未完成两个状态下切换（若目标为常规笔记，它将被转换成待办事项）。用"
+"\"clear\"可把该待办事项转换回常规笔记。"
 
 msgid "Marks a to-do as non-completed."
-msgstr ""
+msgstr "标记待办事项为未完成。"
 
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
-msgstr ""
+msgstr "切换至[notebook] - 所有进一步处理将在此笔记本中进行。"
 
 msgid "Displays version information"
-msgstr ""
+msgstr "显示版本信息。"
 
 #, javascript-format
 msgid "%s %s (%s)"
-msgstr ""
+msgstr "%s %s (%s)"
 
 msgid "Enum"
-msgstr ""
+msgstr "枚举"
 
 #, javascript-format
 msgid "Type: %s."
-msgstr ""
+msgstr "格式：%s。"
 
 #, javascript-format
 msgid "Possible values: %s."
-msgstr ""
+msgstr "可用值: %s。"
 
 #, javascript-format
 msgid "Default: %s"
-msgstr ""
+msgstr "默认值: %s"
 
 msgid "Possible keys/values:"
-msgstr ""
+msgstr "可用键/值："
 
 msgid "Fatal error:"
-msgstr ""
+msgstr "严重错误："
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
-msgstr ""
+msgstr "此程序已被授权 - 您可以关闭此浏览页面了。"
 
 msgid "The application has been successfully authorised."
-msgstr ""
+msgstr "此程序已被成功授权。"
 
 msgid ""
 "Please open the following URL in your browser to authenticate the "
@@ -475,9 +494,12 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
+"请用网页浏览器打开以下URL来认证此程序。此程序将创建\"Apps/Joplin\"目录，并仅"
+"在此目录内写入及读取文件。程序对于在该目录外的文件或任何个人数据没有任何访问"
+"权限。同时也不会与第三方共享任何数据。"
 
 msgid "Search:"
-msgstr ""
+msgstr "搜索："
 
 msgid ""
 "Welcome to Joplin!\n"
@@ -489,68 +511,68 @@ msgid ""
 msgstr ""
 
 msgid "File"
-msgstr ""
+msgstr "文件"
 
 msgid "New note"
-msgstr ""
+msgstr "新笔记"
 
 msgid "New to-do"
-msgstr ""
+msgstr "新待办事项"
 
 msgid "New notebook"
-msgstr ""
+msgstr "新笔记本"
 
 msgid "Import Evernote notes"
-msgstr ""
+msgstr "导入Evernote笔记"
 
 msgid "Evernote Export Files"
-msgstr ""
+msgstr "Evernote导出文件"
 
 msgid "Quit"
-msgstr ""
+msgstr "退出"
 
 msgid "Edit"
-msgstr ""
+msgstr "编辑"
 
 msgid "Copy"
-msgstr ""
+msgstr "复制"
 
 msgid "Cut"
-msgstr ""
+msgstr "剪切"
 
 msgid "Paste"
-msgstr ""
+msgstr "粘贴"
 
 msgid "Search in all the notes"
-msgstr ""
+msgstr "在所有笔记内搜索"
 
 msgid "Tools"
-msgstr ""
+msgstr "工具"
 
 msgid "Synchronisation status"
-msgstr ""
+msgstr "同步状态"
 
 msgid "Options"
-msgstr ""
+msgstr "选项"
 
 msgid "Help"
-msgstr ""
+msgstr "帮助"
 
 msgid "Website and documentation"
-msgstr ""
+msgstr "网站与文档"
 
 msgid "About Joplin"
-msgstr ""
+msgstr "关于Joplin"
 
 #, javascript-format
 msgid "%s %s (%s, %s)"
-msgstr ""
+msgstr "%s %s (%s, %s)"
 
 msgid "OK"
-msgstr ""
+msgstr "确认"
 
 msgid "Cancel"
-msgstr ""
+msgstr "取消"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -590,11 +612,13 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
+#, fuzzy
 msgid "Created"
-msgstr ""
+msgstr "已创建：%d条。"
 
+#, fuzzy
 msgid "Updated"
-msgstr ""
+msgstr "已更新：%d条。"
 
 msgid "Password"
 msgstr ""
@@ -609,167 +633,171 @@ msgid ""
 msgstr ""
 
 msgid "Status"
-msgstr ""
+msgstr "状态"
 
 msgid "Encryption is:"
 msgstr ""
 
+#, fuzzy
 msgid "Enabled"
-msgstr ""
+msgstr "已禁止"
 
 msgid "Disabled"
-msgstr ""
+msgstr "已禁止"
 
 msgid "Back"
-msgstr ""
+msgstr "返回"
 
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
-msgstr ""
+msgstr "将创建新笔记本\"%s\"并将文件\"%s\"导入至其中"
 
 msgid "Please create a notebook first."
-msgstr ""
+msgstr "请先创建笔记本。"
 
 msgid "Note title:"
-msgstr ""
+msgstr "笔记标题："
 
 msgid "Please create a notebook first"
-msgstr ""
+msgstr "请先创建笔记本"
 
 msgid "To-do title:"
-msgstr ""
+msgstr "待办事项标题："
 
 msgid "Notebook title:"
-msgstr ""
+msgstr "笔记本标题："
 
 msgid "Add or remove tags:"
-msgstr ""
+msgstr "添加或删除标签："
 
 msgid "Separate each tag by a comma."
-msgstr ""
+msgstr "用逗号\",\"分开每个标签。"
 
 msgid "Rename notebook:"
-msgstr ""
+msgstr "重命名笔记本："
 
 msgid "Set alarm:"
-msgstr ""
+msgstr "设置提醒："
 
 msgid "Layout"
-msgstr ""
+msgstr "布局"
 
 msgid "Some items cannot be synchronised."
-msgstr ""
+msgstr "一些项目无法被同步。"
 
 msgid "View them now"
-msgstr ""
+msgstr "马上查看"
 
+#, fuzzy
 msgid "Some items cannot be decrypted."
-msgstr ""
+msgstr "一些项目无法被同步。"
 
 msgid "Set the password"
 msgstr ""
 
 msgid "Add or remove tags"
-msgstr ""
+msgstr "添加或删除标签"
 
 msgid "Switch between note and to-do type"
-msgstr ""
+msgstr "在笔记和待办事项类型之间切换"
 
 msgid "Delete"
-msgstr ""
+msgstr "删除"
 
 msgid "Delete notes?"
-msgstr ""
+msgstr "是否删除笔记？"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr ""
+msgstr "此处无笔记。点击\"新笔记\"创建新笔记。"
 
+#, fuzzy
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr ""
+msgstr "当前无笔记。点击(+)创建新笔记。"
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
-msgstr ""
+msgstr "不支持的链接或信息：%s"
 
 msgid "Attach file"
-msgstr ""
+msgstr "附加文件"
 
 msgid "Set alarm"
-msgstr ""
+msgstr "设置提醒"
 
 msgid "Refresh"
-msgstr ""
+msgstr "刷新"
 
 msgid "Clear"
-msgstr ""
+msgstr "清除"
 
 msgid "OneDrive Login"
-msgstr ""
+msgstr "登陆OneDrive"
 
 msgid "Import"
-msgstr ""
+msgstr "导入"
 
 msgid "Synchronisation Status"
-msgstr ""
+msgstr "同步状态"
 
 msgid "Encryption Options"
 msgstr ""
 
 msgid "Remove this tag from all the notes?"
-msgstr ""
+msgstr "从所有笔记中删除此标签？"
 
 msgid "Remove this search from the sidebar?"
-msgstr ""
+msgstr "从侧栏中删除此项搜索历史？"
 
 msgid "Rename"
-msgstr ""
+msgstr "重命名"
 
 msgid "Synchronise"
-msgstr ""
+msgstr "同步"
 
 msgid "Notebooks"
-msgstr ""
+msgstr "笔记本"
 
 msgid "Tags"
-msgstr ""
+msgstr "标签"
 
 msgid "Searches"
-msgstr ""
+msgstr "搜索历史"
 
+#, fuzzy
 msgid "Please select where the sync status should be exported to"
-msgstr ""
+msgstr "请选择最先删除的笔记或笔记本。"
 
 #, javascript-format
 msgid "Usage: %s"
-msgstr ""
+msgstr "使用：%s"
 
 #, javascript-format
 msgid "Unknown flag: %s"
-msgstr ""
+msgstr "未知标记：%s"
 
 msgid "File system"
-msgstr ""
+msgstr "文件系统"
 
 msgid "OneDrive"
-msgstr ""
+msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
-msgstr ""
+msgstr "OneDrive开发员（仅测试用）"
 
 #, javascript-format
 msgid "Unknown log level: %s"
-msgstr ""
+msgstr "未知日志level：%s"
 
 #, javascript-format
 msgid "Unknown level ID: %s"
-msgstr ""
+msgstr "未知 level ID：%s"
 
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
-msgstr ""
+msgstr "无法刷新令牌：缺失认证数据。请尝试重新启动同步。"
 
 msgid ""
 "Could not synchronize with OneDrive.\n"
@@ -779,135 +807,140 @@ msgid ""
 "\n"
 "Please consider using a regular OneDrive account."
 msgstr ""
+"无法与OneDrive同步。\n"
+"\n"
+"此错误经常在使用OneDrive for Business时出现。很可惜我们无法支持此服务。\n"
+"\n"
+"请您考虑使用常规的OneDrive账号。"
 
 #, javascript-format
 msgid "Cannot access %s"
-msgstr ""
+msgstr "无法访问%s"
 
 #, javascript-format
 msgid "Created local items: %d."
-msgstr ""
+msgstr "已新建本地项目: %d。"
 
 #, javascript-format
 msgid "Updated local items: %d."
-msgstr ""
+msgstr "已更新本地项目: %d。"
 
 #, javascript-format
 msgid "Created remote items: %d."
-msgstr ""
+msgstr "已新建远程项目: %d。"
 
 #, javascript-format
 msgid "Updated remote items: %d."
-msgstr ""
+msgstr "已更新远程项目: %d。"
 
 #, javascript-format
 msgid "Deleted local items: %d."
-msgstr ""
+msgstr "已删除本地项目: %d。"
 
 #, javascript-format
 msgid "Deleted remote items: %d."
-msgstr ""
+msgstr "已删除远程项目: %d。"
 
 #, javascript-format
 msgid "State: \"%s\"."
-msgstr ""
+msgstr "状态：\"%s\"。"
 
 msgid "Cancelling..."
-msgstr ""
+msgstr "正在取消..."
 
 #, javascript-format
 msgid "Completed: %s"
-msgstr ""
+msgstr "已完成：\"%s\""
 
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
-msgstr ""
+msgstr "同步正在进行中。状态：%s"
 
 msgid "Conflicts"
-msgstr ""
+msgstr "冲突"
 
 #, javascript-format
 msgid "A notebook with this title already exists: \"%s\""
-msgstr ""
+msgstr "以此标题命名的笔记本已存在：\"%s\""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr ""
+msgstr "笔记本无法被命名为\"%s\"，此标题为保留标题。"
 
 msgid "Untitled"
-msgstr ""
+msgstr "无标题"
 
 msgid "This note does not have geolocation information."
-msgstr ""
+msgstr "此笔记不包含地理定位信息。"
 
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
-msgstr ""
+msgstr "无法复制笔记至\"%s\"笔记本"
 
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
-msgstr ""
+msgstr "无法移动笔记至\"%s\"笔记本"
 
 msgid "Text editor"
-msgstr ""
+msgstr "文本编辑器"
 
 msgid ""
 "The editor that will be used to open a note. If none is provided it will try "
 "to auto-detect the default editor."
-msgstr ""
+msgstr "将用于打开笔记的编辑器。若未提供，将自动尝试检测默认编辑器。"
 
 msgid "Language"
-msgstr ""
+msgstr "语言"
 
 msgid "Date format"
-msgstr ""
+msgstr "日期格式"
 
 msgid "Time format"
-msgstr ""
+msgstr "时间格式"
 
 msgid "Theme"
-msgstr ""
+msgstr "主题"
 
 msgid "Light"
-msgstr ""
+msgstr "浅色"
 
 msgid "Dark"
-msgstr ""
+msgstr "深色"
 
 msgid "Show uncompleted todos on top of the lists"
-msgstr ""
+msgstr "在列表上方显示未完成的待办事项"
 
 msgid "Save geo-location with notes"
-msgstr ""
+msgstr "保存笔记时同时保存地理定位信息"
 
 msgid "Synchronisation interval"
-msgstr ""
+msgstr "同步间隔"
 
 #, javascript-format
 msgid "%d minutes"
-msgstr ""
+msgstr "%d分"
 
 #, javascript-format
 msgid "%d hour"
-msgstr ""
+msgstr "%d小时"
 
 #, javascript-format
 msgid "%d hours"
-msgstr ""
+msgstr "%d小时"
 
 msgid "Automatically update the application"
-msgstr ""
+msgstr "自动更新此程序"
 
 msgid "Show advanced options"
-msgstr ""
+msgstr "显示高级选项"
 
 msgid "Synchronisation target"
-msgstr ""
+msgstr "同步目标"
 
 msgid ""
 "The target to synchonise to. If synchronising with the file system, set "
 "`sync.2.path` to specify the target directory."
-msgstr ""
+msgstr "同步的目标。若与文件系统同步，设置`sync.2.path`为指定目标目录。"
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr ""
@@ -915,137 +948,146 @@ msgstr ""
 msgid ""
 "The path to synchronise with when file system synchronisation is enabled. "
 "See `sync.target`."
-msgstr ""
+msgstr "当文件系统同步开启时的同步路径。参考`sync.target`。"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr ""
+msgstr "无效的选项值：\"%s\"。可用值为：%s。"
 
 msgid "Items that cannot be synchronised"
-msgstr ""
+msgstr "项目无法被同步。"
 
 #, javascript-format
 msgid "\"%s\": \"%s\""
-msgstr ""
+msgstr "\"%s\": \"%s\""
 
 msgid "Sync status (synced items / total items)"
-msgstr ""
+msgstr "同步状态（已同步项目/项目总数）"
 
 #, javascript-format
 msgid "%s: %d/%d"
-msgstr ""
+msgstr "%s：%d/%d条"
 
 #, javascript-format
 msgid "Total: %d/%d"
-msgstr ""
+msgstr "总数：%d/%d条"
 
 #, javascript-format
 msgid "Conflicted: %d"
-msgstr ""
+msgstr "有冲突的：%d条"
 
 #, javascript-format
 msgid "To delete: %d"
-msgstr ""
+msgstr "将删除：%d条"
 
 msgid "Folders"
-msgstr ""
+msgstr "文件夹"
 
 #, javascript-format
 msgid "%s: %d notes"
-msgstr ""
+msgstr "%s: %d条笔记"
 
 msgid "Coming alarms"
-msgstr ""
+msgstr "临近提醒"
 
 #, javascript-format
 msgid "On %s: %s"
-msgstr ""
+msgstr "%s：%s"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr ""
+msgstr "当前无笔记。点击(+)创建新笔记。"
 
 msgid "Delete these notes?"
-msgstr ""
+msgstr "是否删除这些笔记？"
 
 msgid "Log"
-msgstr ""
+msgstr "日志"
 
 msgid "Export Debug Report"
-msgstr ""
+msgstr "导出调试报告"
 
 msgid "Configuration"
-msgstr ""
+msgstr "配置"
 
 msgid "Move to notebook..."
-msgstr ""
+msgstr "移动至笔记本..."
 
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr ""
+msgstr "移动%d条笔记至笔记本\"%s\"？"
 
 msgid "Select date"
-msgstr ""
+msgstr "选择日期"
 
 msgid "Confirm"
-msgstr ""
+msgstr "确认"
 
 msgid "Cancel synchronisation"
-msgstr ""
+msgstr "取消同步"
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"
-msgstr ""
+msgstr "此笔记本无法保存：%s"
 
 msgid "Edit notebook"
-msgstr ""
+msgstr "编辑笔记本"
 
 msgid "This note has been modified:"
-msgstr ""
+msgstr "此笔记已被修改："
 
 msgid "Save changes"
-msgstr ""
+msgstr "保存更改"
 
 msgid "Discard changes"
-msgstr ""
+msgstr "放弃更改"
 
 #, javascript-format
 msgid "Unsupported image type: %s"
-msgstr ""
+msgstr "不支持的图片格式：%s"
 
 msgid "Attach photo"
-msgstr ""
+msgstr "附加照片"
 
 msgid "Attach any file"
-msgstr ""
+msgstr "附加任何文件"
 
 msgid "Convert to note"
-msgstr ""
+msgstr "转换至笔记"
 
 msgid "Convert to todo"
-msgstr ""
+msgstr "转换至待办事项"
 
 msgid "Hide metadata"
-msgstr ""
+msgstr "隐藏元数据"
 
 msgid "Show metadata"
-msgstr ""
+msgstr "显示元数据"
 
 msgid "View on map"
-msgstr ""
+msgstr "查看地图"
 
 msgid "Delete notebook"
-msgstr ""
+msgstr "删除笔记本"
 
 msgid "Login with OneDrive"
-msgstr ""
+msgstr "用OneDrive登陆"
 
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
-msgstr ""
+msgstr "点击(+)按钮创建新笔记或笔记本。点击侧边菜单来访问您现有的笔记本。"
 
 msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr ""
+msgstr "您当前没有任何笔记本。点击(+)按钮创建新笔记本。"
 
 msgid "Welcome"
-msgstr ""
+msgstr "欢迎"
+
+#~ msgid "Delete notebook \"%s\"?"
+#~ msgstr "删除笔记本\"%s\"?"
+
+#~ msgid "Delete notebook?"
+#~ msgstr "是否删除笔记本？"
+
+#~ msgid "File system synchronisation target directory"
+#~ msgstr "文件系统同步目标目录"

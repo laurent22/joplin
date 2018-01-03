@@ -14,4 +14,4 @@ echo "Create a draft release at: https://github.com/laurent22/joplin/releases/ta
 echo ""
 echo "Then run:"
 echo ""
-echo "node $APP_DIR/update-readme-download.js && git add -A && git commit -m 'Update website' && git push"
+echo "git pull && node $APP_DIR/update-readme-download.js && git add -A && git commit -m 'Update website' && git push && git push --tags"

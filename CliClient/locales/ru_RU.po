@@ -624,6 +624,68 @@ msgstr "Заметки и настройки сохранены в: %s"
 msgid "Save"
 msgstr "Сохранить"
 
+msgid ""
+"Disabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent unencrypted to the sync target. Do you wish to "
+"continue?"
+msgstr ""
+
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
+msgstr ""
+
+msgid "Disable encryption"
+msgstr ""
+
+msgid "Enable encryption"
+msgstr ""
+
+msgid "Master Keys"
+msgstr ""
+
+msgid "Active"
+msgstr ""
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Source"
+msgstr "Источник"
+
+msgid "Created"
+msgstr "Создана"
+
+msgid "Updated"
+msgstr "Обновлена"
+
+msgid "Password"
+msgstr ""
+
+msgid "Password OK"
+msgstr ""
+
+msgid ""
+"Note: Only one master key is going to be used for encryption (the one marked "
+"as \"active\"). Any of the keys might be used for decryption, depending on "
+"how the notes or notebooks were originally encrypted."
+msgstr ""
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Encryption is:"
+msgstr ""
+
+#, fuzzy
+msgid "Enabled"
+msgstr "Отключена"
+
+msgid "Disabled"
+msgstr "Отключена"
+
 msgid "Back"
 msgstr "Назад"
 
@@ -668,31 +730,11 @@ msgstr "Некоторые элементы не могут быть синхр�
 msgid "View them now"
 msgstr "Просмотреть их сейчас"
 
-msgid "Active"
-msgstr ""
+#, fuzzy
+msgid "Some items cannot be decrypted."
+msgstr "Некоторые элементы не могут быть синхронизированы."
 
-msgid "ID"
-msgstr "ID"
-
-msgid "Source"
-msgstr "Источник"
-
-msgid "Created"
-msgstr "Создана"
-
-msgid "Updated"
-msgstr "Обновлена"
-
-msgid "Password"
-msgstr ""
-
-msgid "Password OK"
-msgstr ""
-
-msgid ""
-"Note: Only one master key is going to be used for encryption (the one marked "
-"as \"active\"). Any of the keys might be used for decryption, depending on "
-"how the notes or notebooks were originally encrypted."
+msgid "Set the password"
 msgstr ""
 
 msgid "Add or remove tags"
@@ -738,6 +780,9 @@ msgstr "Импорт"
 
 msgid "Synchronisation Status"
 msgstr "Статус синхронизации"
+
+msgid "Encryption Options"
+msgstr ""
 
 msgid "Remove this tag from all the notes?"
 msgstr "Убрать этот тег со всех заметок?"
@@ -915,9 +960,6 @@ msgstr "Сохранять информацию о геолокации в за�
 msgid "Synchronisation interval"
 msgstr "Интервал синхронизации"
 
-msgid "Disabled"
-msgstr "Отключена"
-
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d минут"
@@ -1008,9 +1050,6 @@ msgstr "Удалить эти заметки?"
 
 msgid "Log"
 msgstr "Лог"
-
-msgid "Status"
-msgstr "Статус"
 
 msgid "Export Debug Report"
 msgstr "Экспортировать отладочный отчёт"
