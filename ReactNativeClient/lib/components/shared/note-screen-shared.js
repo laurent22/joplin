@@ -45,12 +45,18 @@ shared.saveNoteButton_press = async function(comp) {
 	} else {
 		diff = Object.assign({}, note);
 	}
-
-	const savedNote = await Note.save(diff);
-
-	const stateNote = comp.state.note;
+	let savedNote= await Note.save(diff);
 	// Re-assign any property that might have changed during saving (updated_time, etc.)
 	note = Object.assign(note, savedNote);
+	if (isNew){
+		const geoNote=await Note.updateGeolocation(note.id);
+		if(geoNote){
+			note = Object.assign(note, geoNote);
+		}
+	}
+
+	const stateNote = comp.state.note;
+
 
 	if (stateNote) {
 		// But we preserve the current title and body because
@@ -69,7 +75,7 @@ shared.saveNoteButton_press = async function(comp) {
 		note: note,
 	});
 
-	if (isNew) Note.updateGeolocation(note.id);
+
 	comp.refreshNoteMetadata();
 }
 
