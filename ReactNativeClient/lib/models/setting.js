@@ -27,7 +27,7 @@ class Setting extends BaseModel {
 				return supportedLocalesToLanguages();
 			}},
 			'dateFormat': { value: Setting.DATE_FORMAT_1, type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Date format'), options: () => {
-				let options = {}
+				let options = {};
 				const now = (new Date('2017-01-30T12:00:00')).getTime();
 				options[Setting.DATE_FORMAT_1] = time.formatMsToLocal(now, Setting.DATE_FORMAT_1);
 				options[Setting.DATE_FORMAT_2] = time.formatMsToLocal(now, Setting.DATE_FORMAT_2);
@@ -37,7 +37,7 @@ class Setting extends BaseModel {
 				return options;
 			}},
 			'timeFormat': { value: Setting.TIME_FORMAT_1, type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Time format'), options: () => {
-				let options = {}
+				let options = {};
 				const now = (new Date('2017-01-30T20:30:00')).getTime();
 				options[Setting.TIME_FORMAT_1] = time.formatMsToLocal(now, Setting.TIME_FORMAT_1);
 				options[Setting.TIME_FORMAT_2] = time.formatMsToLocal(now, Setting.TIME_FORMAT_2);
@@ -71,6 +71,7 @@ class Setting extends BaseModel {
 					86400: _('%d hours', 24),
 				};
 			}},
+			'style.zoom': {value: "100", type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], label: () => _('Set application zoom percentage'), minimum: "50", maximum: "500", step: "10"},
 			'noteVisiblePanes': { value: ['editor', 'viewer'], type: Setting.TYPE_ARRAY, public: false, appTypes: ['desktop'] },
 			'autoUpdateEnabled': { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
 			'showAdvancedOptions': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile' ], label: () => _('Show advanced options') },
@@ -416,7 +417,7 @@ Setting.TYPE_OBJECT = 5;
 Setting.THEME_LIGHT = 1;
 Setting.THEME_DARK = 2;
 
-Setting.DATE_FORMAT_1 = 'DD/MM/YYYY'
+Setting.DATE_FORMAT_1 = 'DD/MM/YYYY';
 Setting.DATE_FORMAT_2 = 'DD/MM/YY';
 Setting.DATE_FORMAT_3 = 'MM/DD/YYYY';
 Setting.DATE_FORMAT_4 = 'MM/DD/YY';
@@ -437,6 +438,6 @@ Setting.constants_ = {
 	profileDir: '',
 	tempDir: '',
 	openDevTools: false,
-}
+};
 
 module.exports = { Setting };

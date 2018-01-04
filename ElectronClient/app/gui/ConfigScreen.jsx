@@ -61,7 +61,7 @@ class ConfigScreenComponent extends React.Component {
 			const settings = Object.assign({}, this.state.settings);
 			settings[key] = value;
 			this.setState({ settings: settings });
-		}
+		};
 
 		// Component key needs to be key+value otherwise it doesn't update when the settings change.
 
@@ -87,7 +87,7 @@ class ConfigScreenComponent extends React.Component {
 		} else if (md.type === Setting.TYPE_BOOL) {
 			const onCheckboxClick = (event) => {
 				updateSettingValue(key, !value)
-			}
+			};
 
 			return (
 				<div key={key} style={rowStyle}>
@@ -101,13 +101,26 @@ class ConfigScreenComponent extends React.Component {
 				const settings = Object.assign({}, this.state.settings);
 				settings[key] = event.target.value;
 				this.setState({ settings: settings });
-			}
+			};
 
 			return (
 				<div key={key} style={rowStyle}>
 					<div style={labelStyle}><label>{md.label()}</label></div>
 					<input type="text" style={controlStyle} value={this.state.settings[key]} onChange={(event) => {onTextChange(event)}} />
 				</div>
+			);
+		} else if (md.type === Setting.TYPE_INT) {
+			const onNumChange = (event) => {
+				const settings = Object.assign({}, this.state.settings);
+				settings[key] = event.target.value;
+				this.setState({ settings: settings});
+			};
+
+			return (
+                <div key={key} style={rowStyle}>
+                    <div style={labelStyle}><label>{md.label()}</label></div>
+                    <input type="number" style={controlStyle} value={this.state.settings[key]} onChange={(event) => {onNumChange(event)}} min={md.minimum} max={md.maximum} step={md.step}/>
+                </div>
 			);
 		} else {
 			console.warn('Type not implemented: ' + key);
@@ -144,7 +157,7 @@ class ConfigScreenComponent extends React.Component {
 		const buttonStyle = {
 			display: this.state.settings === this.props.settings ? 'none' : 'inline-block',
 			marginRight: 10,
-		}
+		};
 
 		let settingComps = [];
 		let keys = Setting.keys(true, 'desktop');
