@@ -1,9 +1,4 @@
-const fs = require('fs-extra');
-const dirname = require('path').dirname;
-const marked = require('marked');
-const Mustache = require('mustache');
-
-const headerHtml = `<!doctype html>
+<!doctype html>
 <html>
 <head>
 	<title>Joplin - an open source note taking and to-do application with synchronisation capabilities</title>
@@ -183,17 +178,17 @@ const headerHtml = `<!doctype html>
 <div class="container">
 
 <div class="header">
-	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="{{{imageBaseUrl}}}/ForkMe.png"/></a>
-	<h1 id="joplin"><img class="title-icon" src="{{{imageBaseUrl}}}/Icon512.png">oplin</h1>
+	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="http://joplin.cozic.net/images/ForkMe.png"/></a>
+	<h1 id="joplin"><img class="title-icon" src="http://joplin.cozic.net/images/Icon512.png">oplin</h1>
 	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
 </div>
 
 <div class="nav-wrapper">
 	<div class="nav">
 		<ul>
-			<li class="{{selectedHome}}"><a href="{{baseUrl}}/" title="Home"><i class="fa fa-home"></i></a></li>
-			<li class="{{selectedTerminal}}"><a href="{{baseUrl}}/terminal" title="Terminal"><i class="fa fa-terminal"></i></a></li>
-			<li class="{{selectedDesktop}}"><a href="{{baseUrl}}/desktop" title="Desktop"><i class="fa fa-desktop"></i></a></li>
+			<li class=""><a href="http:&#x2F;&#x2F;joplin.cozic.net/" title="Home"><i class="fa fa-home"></i></a></li>
+			<li class=""><a href="http:&#x2F;&#x2F;joplin.cozic.net/terminal" title="Terminal"><i class="fa fa-terminal"></i></a></li>
+			<li class=""><a href="http:&#x2F;&#x2F;joplin.cozic.net/desktop" title="Desktop"><i class="fa fa-desktop"></i></a></li>
 		</ul>
 		<div class="nav-right">
 			<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
@@ -204,49 +199,27 @@ const headerHtml = `<!doctype html>
 </div>
 
 <div class="content">
-`;
+<h1 id="about-end-to-end-encryption-e2ee-">About End-To-End Encryption (E2EE)</h1>
+<ol>
+<li>Now you need to synchronise all your notes so that thEnd-to-end encryption (E2EE) is a system where only the owner of the notes, notebooks, tags or resources can read them. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developer of Joplin from being able to access the data.</li>
+</ol>
+<p>The systems is designed to defeat any attempts at surveillance or tampering because no third parties can decipher the data being communicated or stored.</p>
+<p>There is a small overhead to using E2EE since data constantly have to be encrypted and decrypted so consider whether you really need the feature.</p>
+<h1 id="enabling-e2ee">Enabling E2EE</h1>
+<p>Due to the decentralised nature of Joplin, E2EE needs to be manually enabled on all the applications that you synchronise with. It is recommended to first enable it on the desktop or terminal application since they generally run on more powerful devices (unlike the mobile application), and so they can encrypt the initial data faster.</p>
+<p>To enable it, please follow these steps:</p>
+<ol>
+<li>On your first device (eg. on the desktop application), go to the Encryption Config screen and click &quot;Enable encryption&quot;</li>
+<li>Input your password. This is the Master Key password which will be used to encrypt all your notes. Make sure you do not forget it since, for security reason, it cannot be recovered.
+ey are sent encrypted to the sync target (eg. to OneDrive, Nextcloud, etc.). Wait for any synchronisation that might be in progress and click on &quot;Synchronise&quot;.</li>
+<li>Wait for this synchronisation operation to complete. Since all the data needs to be re-sent (encrypted) to the sync target, it may take a long time, especially if you have many notes and resources. Note that even if synchronisation seems stuck, most likely it is still running - do not cancel it and simply let it run over night if needed.</li>
+<li>Once this first synchronisation operation is done, open the next device you are synchronising with. Click &quot;Synchronise&quot; and wait for the sync operation to complete. The device will receive the master key, and you will need to provide the password for it. At this point E2EE will be automatically enabled on this device. Once done, click Synchronise again and wait for it to complete.</li>
+<li>Repeat step 5 for each device.</li>
+</ol>
+<p>Once all the devices are in sync with E2EE enabled, the encryption/decryption should be mostly transparent. Occasionally you may see encrypted items but they will get decrypted in the background eventually.</p>
+<h1 id="disabling-e2ee">Disabling E2EE</h1>
+<p>Follow the same procedure as above but instead disable E2EE on each device one by one. Again it might be simpler to do it one device at a time and to wait every time for the synchronisation to complete.</p>
 
-const footerHtml = `
-</body>
-</html>
-`;
-
-// const screenshotHtml = `
-// <table class="screenshots">
-// 	<tr>
-// 		<th>
-// 			Mobile
-// 		</th>
-// 		<th>
-// 			Command line
-// 		</th>
-// 	</tr>
-// 	<tr>
-// 		<td>
-// 			<img class="mobile-screenshot" src="docs/images/Mobile.png"/>
-// 		</td>
-// 		<td class="cli-screenshot-wrapper">
-// 			<pre class="cli-screenshot">
-// <span class="prompt">joplin:/My notebook$</span> ls -n 12
-// [ ] 8am conference call ☎
-// [ ] Make vet appointment
-// [ ] Go pick up parcel
-// [ ] Pay flat rent 💸
-// [X] Book ferry 🚢
-// [X] Deploy Joplin app
-//     Open source stuff
-//     Swimming pool time table 🏊
-//     Grocery shopping list 📝
-//     Work itinerary
-//     Tuesday random note
-//     Vacation plans ☀
-// 			</pre>
-// 		</td>
-// 	</tr>
-// </table>
-// `;
-
-const scriptHtml = `
 <script>
 	function stickyHeader() { 
 		if ($(window).scrollTop() > 179) {
@@ -267,53 +240,6 @@ const scriptHtml = `
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
-`;
 
-const rootDir = dirname(__dirname);
-
-function markdownToHtml(md) {
-	const renderer = new marked.Renderer();
-
-	// Remove the header because it's going to be added back as HTML
-	md = md.replace(/# Joplin/, '');
-
-	let output = marked(md, {
-		gfm: true,
-		break: true,
-		renderer: renderer,
-	});
-
-	//output = output.replace(/<!-- \[SCREENSHOTS\] -->/, screenshotHtml);
-
-	return headerHtml + output + scriptHtml + footerHtml;
-}
-
-function renderFileToHtml(sourcePath, targetPath, params) {
-	const md = fs.readFileSync(sourcePath, 'utf8');
-	params.baseUrl = 'http://joplin.cozic.net';
-	params.imageBaseUrl = params.baseUrl + '/images';
-	const html = Mustache.render(markdownToHtml(md), params);
-	fs.writeFileSync(targetPath, html);
-}
-
-async function main() {
-	renderFileToHtml(rootDir + '/README.md', rootDir + '/docs/index.html', {
-		selectedHome: 'selected',
-	});
-
-	renderFileToHtml(rootDir + '/README_terminal.md', rootDir + '/docs/terminal/index.html', {
-		selectedTerminal: 'selected',
-	});
-
-	renderFileToHtml(rootDir + '/README_desktop.md', rootDir + '/docs/desktop/index.html', {
-		selectedDesktop: 'selected',
-	});
-
-	renderFileToHtml(rootDir + '/README_e2ee.md', rootDir + '/docs/help/e2ee.html', {});
-	renderFileToHtml(rootDir + '/README_spec.md', rootDir + '/docs/help/spec.html', {});
-	
-}
-
-main().catch((error) => {
-	console.error(error);
-});
+</body>
+</html>

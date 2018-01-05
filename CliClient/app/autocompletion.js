@@ -1,7 +1,7 @@
 var { app } = require('./app.js');
-var { Note } = require('lib/models/note.js');
-var { Folder } = require('lib/models/folder.js');
-var { Tag } = require('lib/models/tag.js');
+var Note = require('lib/models/Note.js');
+var Folder = require('lib/models/Folder.js');
+var Tag = require('lib/models/Tag.js');
 var { cliUtils } = require('./cli-utils.js');
 var yargParser = require('yargs-parser');
 

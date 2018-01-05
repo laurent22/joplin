@@ -14,7 +14,7 @@ class Command extends BaseCommand {
 	}
 
 	description() {
-		return _('Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt` and `target-status`.');
+		return _('Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status` and `target-status`.');
 	}
 
 	options() {
@@ -72,6 +72,11 @@ class Command extends BaseCommand {
 
 			this.stdout(_('Completed decryption.'));
 
+			return;
+		}
+
+		if (args.command === 'status') {
+			this.stdout(_('Encryption is: %s', Setting.value('encryption.enabled') ? _('Enabled') : _('Disabled')));
 			return;
 		}
 
@@ -169,6 +174,7 @@ class Command extends BaseCommand {
 				}
 			}
 
+			return;
 		}
 	}
 
