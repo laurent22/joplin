@@ -90,8 +90,8 @@ android {
 		applicationId "net.cozic.joplin"
 		minSdkVersion 16
 		targetSdkVersion 22
-		versionCode 83
-		versionName "0.10.68"
+		versionCode 84
+		versionName "0.10.69"
 		ndk {
 			abiFilters "armeabi-v7a", "x86"
 		}
