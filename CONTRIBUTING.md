@@ -3,4 +3,4 @@ If you want to add a new feature, consider asking about it before implementing i
 
 # Style
 - Only use tabs for indentation, not spaces.
-- Do not remove or add optional characters from other lines (such as colons or new line characters) as it can make the commit needlessly big.
+- Do not remove or add optional characters from other lines (such as colons or new line characters) as it can make the commit needlessly big, and create conflicts with other changes.
