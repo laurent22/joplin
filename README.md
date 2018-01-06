@@ -124,6 +124,10 @@ Joplin is currently available in English, French, Spanish, German, Portuguese, C
 
 This translation will apply to the three applications - desktop, mobile and terminal.
 
+# Contributing
+
+Please see the guide for information on how to contribute to the development of Joplin: https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md
+
 # Coming features
 
 - NextCloud support

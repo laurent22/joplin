@@ -13,9 +13,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Poedit 2.0.5\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "Give focus to next pane"
 msgstr "Переключиться на следующую панель"
@@ -575,7 +577,7 @@ msgid "Quit"
 msgstr "Выход"
 
 msgid "Edit"
-msgstr "Редактировать"
+msgstr "Правка"
 
 msgid "Copy"
 msgstr "Копировать"
@@ -629,6 +631,9 @@ msgid ""
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
+"Отключение шифрования означает, что *все* ваши заметки и вложения будут "
+"пересинхронизированы и отправлены в расшифрованном виде к цели "
+"синхронизации. Желаете продолжить?"
 
 msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
@@ -636,18 +641,23 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
+"Включение шифрования означает, что *все* ваши заметки и вложения будут "
+"пересинхронизированы и отправлены в зашифрованном виде к цели синхронизации. "
+"Не теряйте пароль, так как в целях безопасности *только* с его помощью можно "
+"будет расшифровать данные! Чтобы включить шифрование, введите ваш пароль "
+"ниже."
 
 msgid "Disable encryption"
-msgstr ""
+msgstr "Отключить шифрование"
 
 msgid "Enable encryption"
-msgstr ""
+msgstr "Включить шифрование"
 
 msgid "Master Keys"
-msgstr ""
+msgstr "Мастер-ключи"
 
 msgid "Active"
-msgstr ""
+msgstr "Активен"
 
 msgid "ID"
 msgstr "ID"
@@ -656,35 +666,38 @@ msgid "Source"
 msgstr "Источник"
 
 msgid "Created"
-msgstr "Создана"
+msgstr "Создан"
 
 msgid "Updated"
-msgstr "Обновлена"
+msgstr "Обновлён"
 
 msgid "Password"
-msgstr ""
+msgstr "Пароль"
 
 msgid "Password OK"
-msgstr ""
+msgstr "Пароль OK"
 
 msgid ""
 "Note: Only one master key is going to be used for encryption (the one marked "
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
+"Внимание: Для шифрования может быть использован только один мастер-ключ "
+"(отмеченный как «активный»). Для расшифровки может использоваться любой из "
+"ключей, в зависимости от того, как изначально были зашифрованы заметки или "
+"блокноты."
 
 msgid "Status"
 msgstr "Статус"
 
 msgid "Encryption is:"
-msgstr ""
+msgstr "Шифрование:"
 
-#, fuzzy
 msgid "Enabled"
-msgstr "Отключена"
+msgstr "Включено"
 
 msgid "Disabled"
-msgstr "Отключена"
+msgstr "Отключено"
 
 msgid "Back"
 msgstr "Назад"
@@ -730,12 +743,11 @@ msgstr "Некоторые элементы не могут быть синхр�
 msgid "View them now"
 msgstr "Просмотреть их сейчас"
 
-#, fuzzy
 msgid "Some items cannot be decrypted."
-msgstr "Некоторые элементы не могут быть синхронизированы."
+msgstr "Некоторые элементы не могут быть расшифрованы."
 
 msgid "Set the password"
-msgstr ""
+msgstr "Установить пароль"
 
 msgid "Add or remove tags"
 msgstr "Добавить или удалить теги"
@@ -782,7 +794,7 @@ msgid "Synchronisation Status"
 msgstr "Статус синхронизации"
 
 msgid "Encryption Options"
-msgstr ""
+msgstr "Настройки шифрования"
 
 msgid "Remove this tag from all the notes?"
 msgstr "Убрать этот тег со всех заметок?"
