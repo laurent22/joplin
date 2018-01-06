@@ -1,7 +1,7 @@
 const React = require('react');
-const { Note } = require('lib/models/note.js');
+const Note = require('lib/models/Note.js');
 const { time } = require('lib/time-utils.js');
-const { Setting } = require('lib/models/setting.js');
+const Setting = require('lib/models/Setting.js');
 const { IconButton } = require('./IconButton.min.js');
 const Toolbar = require('./Toolbar.min.js');
 const { connect } = require('react-redux');
@@ -36,7 +36,7 @@ class NoteTextComponent extends React.Component {
 			isLoading: true,
 			webviewReady: false,
 			scrollHeight: null,
-			editorScrollTop: 0,
+			editorScrollTop: 0
 		};
 
 		this.lastLoadedNoteId_ = null;
@@ -167,6 +167,12 @@ class NoteTextComponent extends React.Component {
 	async componentWillReceiveProps(nextProps) {
 		if ('noteId' in nextProps && nextProps.noteId !== this.props.noteId) {
 			await this.reloadNote(nextProps);
+			if(this.editor_){
+				const session = this.editor_.editor.getSession();
+				const undoManager = session.getUndoManager();
+				undoManager.reset();
+				session.setUndoManager(undoManager);
+			}
 		}
 
 		if ('syncStarted' in nextProps && !nextProps.syncStarted && !this.isModified()) {
@@ -334,6 +340,7 @@ class NoteTextComponent extends React.Component {
 		this.scheduleSave();
 	}
 
+
 	async commandAttachFile() {
 		const noteId = this.props.noteId;
 		if (!noteId) return;
@@ -418,7 +425,7 @@ class NoteTextComponent extends React.Component {
 
 		const innerWidth = rootStyle.width - rootStyle.paddingLeft - rootStyle.paddingRight - borderWidth;
 
-		if (!note) {
+		if (!note || !!note.encryption_applied) {
 			const emptyDivStyle = Object.assign({
 				backgroundColor: 'black',
 				opacity: 0.1,
@@ -549,7 +556,6 @@ class NoteTextComponent extends React.Component {
 		delete editorRootStyle.width;
 		delete editorRootStyle.height;
 		delete editorRootStyle.fontSize;
-
 		const editor =  <AceEditor
 			value={body}
 			mode="markdown"

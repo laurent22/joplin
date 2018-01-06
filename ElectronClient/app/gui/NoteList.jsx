@@ -3,6 +3,7 @@ const React = require('react');
 const { connect } = require('react-redux');
 const { time } = require('lib/time-utils.js');
 const { themeStyle } = require('../theme.js');
+const BaseModel = require('lib/BaseModel');
 const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
@@ -56,23 +57,32 @@ class NoteListComponent extends React.Component {
 		const noteIds = this.props.selectedNoteIds;
 		if (!noteIds.length) return;
 
+		const notes = noteIds.map((id) => BaseModel.byId(this.props.notes, id));
+
+		let hasEncrypted = false;
+		for (let i = 0; i < notes.length; i++) {
+			if (!!notes[i].encryption_applied) hasEncrypted = true;
+		}
+
 		const menu = new Menu()
 
-		menu.append(new MenuItem({label: _('Add or remove tags'), enabled: noteIds.length === 1, click: async () => {
-			this.props.dispatch({
-				type: 'WINDOW_COMMAND',
-				name: 'setTags',
-				noteId: noteIds[0],
-			});
-		}}));
+		if (!hasEncrypted) {
+			menu.append(new MenuItem({label: _('Add or remove tags'), enabled: noteIds.length === 1, click: async () => {
+				this.props.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'setTags',
+					noteId: noteIds[0],
+				});
+			}}));
 
-		menu.append(new MenuItem({label: _('Switch between note and to-do type'), click: async () => {
-			for (let i = 0; i < noteIds.length; i++) {
-				const note = await Note.load(noteIds[i]);
-				await Note.save(Note.toggleIsTodo(note));
-				eventManager.emit('noteTypeToggle', { noteId: note.id });
-			}
-		}}));
+			menu.append(new MenuItem({label: _('Switch between note and to-do type'), click: async () => {
+				for (let i = 0; i < noteIds.length; i++) {
+					const note = await Note.load(noteIds[i]);
+					await Note.save(Note.toggleIsTodo(note), { userSideValidation: true });
+					eventManager.emit('noteTypeToggle', { noteId: note.id });
+				}
+			}}));
+		}
 
 		menu.append(new MenuItem({label: _('Delete'), click: async () => {
 			const ok = bridge().showConfirmMessageBox(noteIds.length > 1 ? _('Delete notes?') : _('Delete note?'));
@@ -120,7 +130,7 @@ class NoteListComponent extends React.Component {
 				id: item.id,
 				todo_completed: checked ? time.unixMs() : 0,
 			}
-			await Note.save(newNote);
+			await Note.save(newNote, { userSideValidation: true });
 			eventManager.emit('todoToggle', { noteId: item.id });
 		}
 
@@ -154,7 +164,7 @@ class NoteListComponent extends React.Component {
 				onClick={(event) => { onTitleClick(event, item) }}
 				onDragStart={(event) => onDragStart(event) }
 			>
-			{item.title}
+			{Note.displayTitle(item)}
 			</a>
 		</div>
 	}

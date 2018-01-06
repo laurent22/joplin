@@ -4,10 +4,10 @@ const { connect } = require('react-redux');
 const { reg } = require('lib/registry.js');
 const { Log } = require('lib/log.js');
 const { NoteList } = require('lib/components/note-list.js');
-const { Folder } = require('lib/models/folder.js');
-const { Tag } = require('lib/models/tag.js');
-const { Note } = require('lib/models/note.js');
-const { Setting } = require('lib/models/setting.js');
+const Folder = require('lib/models/Folder.js');
+const Tag = require('lib/models/Tag.js');
+const Note = require('lib/models/Note.js');
+const Setting = require('lib/models/Setting.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { MenuOption, Text } = require('react-native-popup-menu');
@@ -95,10 +95,13 @@ class NotesScreenComponent extends BaseScreenComponent {
 		if (this.props.notesParentType == 'Folder') {
 			if (this.props.selectedFolderId == Folder.conflictFolderId()) return [];
 
-			return [
-				{ title: _('Delete notebook'), onPress: () => { this.deleteFolder_onPress(this.props.selectedFolderId); } },
-				{ title: _('Edit notebook'), onPress: () => { this.editFolder_onPress(this.props.selectedFolderId); } },
-			];
+			const folder = this.parentItem();
+
+			let output = [];
+			if (!folder.encryption_applied) output.push({ title: _('Edit notebook'), onPress: () => { this.editFolder_onPress(this.props.selectedFolderId); } });
+			output.push({ title: _('Delete notebook'), onPress: () => { this.deleteFolder_onPress(this.props.selectedFolderId); } });
+
+			return output;
 		} else {
 			return []; // For tags - TODO
 		}

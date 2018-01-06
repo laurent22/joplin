@@ -2,7 +2,7 @@
 
 const { time } = require('lib/time-utils.js');
 const { Logger } = require('lib/logger.js');
-const { Resource } = require('lib/models/resource.js');
+const Resource = require('lib/models/Resource.js');
 const { dirname } = require('lib/path-utils.js');
 const { FsDriverNode } = require('./fs-driver-node.js');
 const lodash = require('lodash');

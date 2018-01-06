@@ -1,0 +1,1134 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Laurent Cozic
+# This file is distributed under the same license as the Joplin-CLI package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Joplin-CLI 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: rtmkrlv <artyom.karlov@gmail.com>\n"
+"Language-Team: \n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.4\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid "Give focus to next pane"
+msgstr "Переключиться на следующую панель"
+
+msgid "Give focus to previous pane"
+msgstr "Переключиться на предыдущую панель"
+
+msgid "Enter command line mode"
+msgstr "Войти в режим командной строки"
+
+msgid "Exit command line mode"
+msgstr "Выйти из режима командной строки"
+
+msgid "Edit the selected note"
+msgstr "Редактировать выбранную заметку"
+
+msgid "Cancel the current command."
+msgstr "Отменить текущую команду."
+
+msgid "Exit the application."
+msgstr "Выйти из приложения."
+
+msgid "Delete the currently selected note or notebook."
+msgstr "Удалить текущую выбранную заметку или блокнот."
+
+msgid "To delete a tag, untag the associated notes."
+msgstr "Чтобы удалить тег, уберите его с ассоциированных с ним заметок."
+
+msgid "Please select the note or notebook to be deleted first."
+msgstr "Сначала выберите заметку или блокнот, которые должны быть удалены."
+
+msgid "Set a to-do as completed / not completed"
+msgstr "Отметить задачу как завершённую/незавершённую"
+
+msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+msgstr "[tc] переключить консоль между развёрнутой/свёрнутой/скрытой/видимой."
+
+msgid "Search"
+msgstr "Поиск"
+
+msgid "[t]oggle note [m]etadata."
+msgstr "[tm] переключить отображение метаданных заметки."
+
+msgid "[M]ake a new [n]ote"
+msgstr "[mn] создать новую заметку"
+
+msgid "[M]ake a new [t]odo"
+msgstr "[mt] создать новую задачу"
+
+msgid "[M]ake a new note[b]ook"
+msgstr "[mb] создать новый блокнот"
+
+msgid "Copy ([Y]ank) the [n]ote to a notebook."
+msgstr "[yn] копировать заметку в блокнот."
+
+msgid "Move the note to a notebook."
+msgstr "Переместить заметку в блокнот."
+
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "Для выхода из приложения нажмите Ctrl+D или введите «exit»"
+
+#, javascript-format
+msgid "More than one item match \"%s\". Please narrow down your query."
+msgstr ""
+"Более одного элемента соответствуют «%s». Уточните ваш запрос, пожалуйста."
+
+msgid "No notebook selected."
+msgstr "Не выбран блокнот."
+
+msgid "No notebook has been specified."
+msgstr "Не был указан блокнот."
+
+msgid "Y"
+msgstr "Y"
+
+msgid "n"
+msgstr "n"
+
+msgid "N"
+msgstr "N"
+
+msgid "y"
+msgstr "y"
+
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "Отмена фоновой синхронизации... Пожалуйста, ожидайте."
+
+#, javascript-format
+msgid "No such command: %s"
+msgstr "Нет такой команды: %s"
+
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "Команда «%s» доступна только в режиме GUI"
+
+#, javascript-format
+msgid "Missing required argument: %s"
+msgstr "Отсутствует требуемый аргумент: %s"
+
+#, javascript-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+msgid "Your choice: "
+msgstr "Ваш выбор:"
+
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr "Неверный ответ: %s"
+
+msgid "Attaches the given file to the note."
+msgstr "Прикрепляет заданный файл к заметке."
+
+#, javascript-format
+msgid "Cannot find \"%s\"."
+msgstr "Не удалось найти «%s»."
+
+msgid "Displays the given note."
+msgstr "Отображает заданную заметку."
+
+msgid "Displays the complete information about note."
+msgstr "Отображает полную информацию о заметке."
+
+msgid ""
+"Gets or sets a config value. If [value] is not provided, it will show the "
+"value of [name]. If neither [name] nor [value] is provided, it will list the "
+"current configuration."
+msgstr ""
+"Выводит или задаёт параметр конфигурации. Если [value] не указано, выведет "
+"значение [name]. Если не указаны ни [name], ни [value], выведет текущую "
+"конфигурацию."
+
+msgid "Also displays unset and hidden config variables."
+msgstr "Также выводит неустановленные или скрытые переменные конфигурации."
+
+#, javascript-format
+msgid "%s = %s (%s)"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s = %s"
+msgstr "%s = %s"
+
+msgid ""
+"Duplicates the notes matching <note> to [notebook]. If no notebook is "
+"specified the note is duplicated in the current notebook."
+msgstr ""
+"Дублирует заметки, содержащие <note>, в [notebook]. Если блокнот не указан, "
+"заметки продублируются в текущем."
+
+msgid "Marks a to-do as done."
+msgstr "Отмечает задачу как завершённую."
+
+#, javascript-format
+msgid "Note is not a to-do: \"%s\""
+msgstr "Заметка не является задачей: «%s»"
+
+msgid "Edit note."
+msgstr "Редактировать заметку."
+
+msgid ""
+"No text editor is defined. Please set it using `config editor <editor-path>`"
+msgstr ""
+"Текстовый редактор не определён. Задайте его, используя `config editor "
+"<editor-path>`"
+
+msgid "No active notebook."
+msgstr "Нет активного блокнота."
+
+#, javascript-format
+msgid "Note does not exist: \"%s\". Create it?"
+msgstr "Заметки не существует: «%s». Создать?"
+
+msgid "Starting to edit note. Close the editor to get back to the prompt."
+msgstr ""
+"Запуск редактирования заметки. Закройте редактор, чтобы вернуться к "
+"командной строке."
+
+msgid "Note has been saved."
+msgstr "Заметка сохранена."
+
+msgid "Exits the application."
+msgstr "Выход из приложения."
+
+msgid ""
+"Exports Joplin data to the given directory. By default, it will export the "
+"complete database including notebooks, notes, tags and resources."
+msgstr ""
+"Экспортирует данные Joplin в заданный каталог. По умолчанию экспортируется "
+"полная база данных, включая блокноты, заметки, теги и ресурсы."
+
+msgid "Exports only the given note."
+msgstr "Экспортирует только заданную заметку."
+
+msgid "Exports only the given notebook."
+msgstr "Экспортирует только заданный блокнот."
+
+msgid "Displays a geolocation URL for the note."
+msgstr "Выводит URL геолокации для заметки."
+
+msgid "Displays usage information."
+msgstr "Выводит информацию об использовании."
+
+msgid "Shortcuts are not available in CLI mode."
+msgstr "Ярлыки недоступны в режиме командной строки."
+
+msgid ""
+"Type `help [command]` for more information about a command; or type `help "
+"all` for the complete usage information."
+msgstr ""
+"Введите `help [команда]` для получения информации о команде или `help all` "
+"для получения полной информации по использованию."
+
+msgid "The possible commands are:"
+msgstr "Доступные команды:"
+
+msgid ""
+"In any command, a note or notebook can be refered to by title or ID, or "
+"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
+"note or notebook. `$c` can be used to refer to the currently selected item."
+msgstr ""
+"В любой команде можно ссылаться на заметку или блокнот по названию или ID, "
+"либо используя ярлыки `$n` или `$b`, указывающие на текущую заметку или "
+"блокнот соответственно. С помощью `$c` можно ссылаться на текущий выбранный "
+"элемент."
+
+msgid "To move from one pane to another, press Tab or Shift+Tab."
+msgstr "Чтобы переключаться между панелями, нажимайте Tab или Shift+Tab"
+
+msgid ""
+"Use the arrows and page up/down to scroll the lists and text areas "
+"(including this console)."
+msgstr ""
+"Используйте стрелки и клавиши перелистывания страницы вверх/вниз для "
+"прокрутки списков и текстовых областей (включая эту консоль)."
+
+msgid "To maximise/minimise the console, press \"TC\"."
+msgstr "Чтобы развернуть/свернуть консоль, нажимайте «TC»."
+
+msgid "To enter command line mode, press \":\""
+msgstr "Чтобы войти в режим командной строки, нажмите «:»"
+
+msgid "To exit command line mode, press ESCAPE"
+msgstr "Чтобы выйти из режима командной строки, нажмите ESCAPE"
+
+msgid ""
+"For the complete list of available keyboard shortcuts, type `help shortcuts`"
+msgstr ""
+"Для просмотра списка доступных клавиатурных сочетаний введите `help "
+"shortcuts`."
+
+msgid "Imports an Evernote notebook file (.enex file)."
+msgstr "Импортирует файл блокнотов Evernote (.enex-файл)."
+
+msgid "Do not ask for confirmation."
+msgstr "Не запрашивать подтверждение."
+
+#, javascript-format
+msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+msgstr "Файл «%s» будет импортирован в существующий блокнот «%s». Продолжить?"
+
+#, javascript-format
+msgid ""
+"New notebook \"%s\" will be created and file \"%s\" will be imported into "
+"it. Continue?"
+msgstr ""
+"Будет создан новый блокнот «%s» и в него будет импортирован файл «%s». "
+"Продолжить?"
+
+#, javascript-format
+msgid "Found: %d."
+msgstr "Найдено: %d."
+
+#, javascript-format
+msgid "Created: %d."
+msgstr "Создано: %d."
+
+#, javascript-format
+msgid "Updated: %d."
+msgstr "Обновлено: %d."
+
+#, javascript-format
+msgid "Skipped: %d."
+msgstr "Пропущено: %d."
+
+#, javascript-format
+msgid "Resources: %d."
+msgstr "Ресурсов: %d."
+
+#, javascript-format
+msgid "Tagged: %d."
+msgstr "С тегами: %d."
+
+msgid "Importing notes..."
+msgstr "Импорт заметок..."
+
+#, javascript-format
+msgid "The notes have been imported: %s"
+msgstr "Импортировано заметок: %s"
+
+msgid ""
+"Displays the notes in the current notebook. Use `ls /` to display the list "
+"of notebooks."
+msgstr ""
+"Выводит заметки текущего блокнота. Используйте `ls /` для вывода списка "
+"блокнотов."
+
+msgid "Displays only the first top <num> notes."
+msgstr "Выводит только первые <num> заметок."
+
+msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
+msgstr ""
+"Сортирует элементы по <field> (например, title, updated_time, created_time)."
+
+msgid "Reverses the sorting order."
+msgstr "Обращает порядок сортировки."
+
+msgid ""
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
+"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
+"to-dos, while `-ttd` would display notes and to-dos."
+msgstr ""
+"Выводит только элементы указанного типа. Может быть `n` для заметок, `t` для "
+"задач или `nt` для заметок и задач (например, `-tt` выведет только задачи, в "
+"то время как `-ttd` выведет заметки и задачи)."
+
+msgid "Either \"text\" or \"json\""
+msgstr "«text» или «json»"
+
+msgid ""
+"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
+"TODO_CHECKED (for to-dos), TITLE"
+msgstr ""
+"Использовать формат длинного списка. Форматом является ID, NOTE_COUNT (для "
+"блокнотов), DATE, TODO_CHECKED (для задач), TITLE"
+
+msgid "Please select a notebook first."
+msgstr "Сначала выберите блокнот."
+
+msgid "Creates a new notebook."
+msgstr "Создаёт новый блокнот."
+
+msgid "Creates a new note."
+msgstr "Создаёт новую заметку."
+
+msgid "Notes can only be created within a notebook."
+msgstr "Заметки могут быть созданы только в блокноте."
+
+msgid "Creates a new to-do."
+msgstr "Создаёт новую задачу."
+
+msgid "Moves the notes matching <note> to [notebook]."
+msgstr "Перемещает заметки, содержащие <note> в [notebook]."
+
+msgid "Renames the given <item> (note or notebook) to <name>."
+msgstr "Переименовывает заданный <item> (заметку или блокнот) в <name>."
+
+msgid "Deletes the given notebook."
+msgstr "Удаляет заданный блокнот."
+
+msgid "Deletes the notebook without asking for confirmation."
+msgstr "Удаляет блокнот без запроса подтверждения."
+
+msgid "Delete notebook? All notes within this notebook will also be deleted."
+msgstr "Удалить блокнот? Все заметки в этом блокноте также будут удалены."
+
+msgid "Deletes the notes matching <note-pattern>."
+msgstr "Удаляет заметки, соответствующие <note-pattern>."
+
+msgid "Deletes the notes without asking for confirmation."
+msgstr "Удаляет заметки без запроса подтверждения."
+
+#, javascript-format
+msgid "%d notes match this pattern. Delete them?"
+msgstr "%d заметок соответствуют этому шаблону. Удалить их?"
+
+msgid "Delete note?"
+msgstr "Удалить заметку?"
+
+msgid "Searches for the given <pattern> in all the notes."
+msgstr "Запросы для заданного <pattern> во всех заметках."
+
+#, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+msgstr ""
+"Устанавливает для свойства <name> заданной <note> заданное [value]. "
+"Возможные свойства:\n"
+"\n"
+"%s"
+
+msgid "Displays summary about the notes and notebooks."
+msgstr "Выводит общую информацию о заметках и блокнотах."
+
+msgid "Synchronises with remote storage."
+msgstr "Синхронизирует с удалённым хранилищем."
+
+msgid "Sync to provided target (defaults to sync.target config value)"
+msgstr ""
+"Синхронизация с заданной целью (по умолчанию — значение конфигурации sync."
+"target)"
+
+msgid "Synchronisation is already in progress."
+msgstr "Синхронизация уже выполняется."
+
+#, javascript-format
+msgid ""
+"Lock file is already being hold. If you know that no synchronisation is "
+"taking place, you may delete the lock file at \"%s\" and resume the "
+"operation."
+msgstr ""
+"Файл блокировки уже установлен. Если вам известно, что синхронизация не "
+"производится, вы можете удалить файл блокировки в «%s» и возобновить "
+"операцию."
+
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "Аутентификация не была завершена (не получен токен аутентификации)."
+
+#, javascript-format
+msgid "Synchronisation target: %s (%s)"
+msgstr "Цель синхронизации: %s (%s)"
+
+msgid "Cannot initialize synchroniser."
+msgstr "Не удалось инициировать синхронизацию."
+
+msgid "Starting synchronisation..."
+msgstr "Начало синхронизации..."
+
+msgid "Cancelling... Please wait."
+msgstr "Отмена... Пожалуйста, ожидайте."
+
+msgid ""
+"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
+"[tag] from [note], or to list the notes associated with [tag]. The command "
+"`tag list` can be used to list all the tags."
+msgstr ""
+"<tag-command> может быть «add», «remove» или «list», чтобы назначить или "
+"убрать [tag] с [note], или чтобы вывести список заметок, ассоциированых с "
+"[tag]. Команда `tag list` может быть использована для вывода списка всех "
+"тегов."
+
+#, javascript-format
+msgid "Invalid command: \"%s\""
+msgstr "Неверная команда: «%s»"
+
+msgid ""
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
+"toggle the given to-do between completed and uncompleted state (If the "
+"target is a regular note it will be converted to a to-do). Use \"clear\" to "
+"convert the to-do back to a regular note."
+msgstr ""
+"<todo-command> может быть «toggle» или «clear». «toggle» используется для "
+"переключения статуса заданной задачи на завершённую или незавершённую (если "
+"применить к обычной заметке, она будет преобразована в задачу). «clear» "
+"используется для преобразования задачи обратно в обычную заметку."
+
+msgid "Marks a to-do as non-completed."
+msgstr "Отмечает задачу как незавершённую."
+
+msgid ""
+"Switches to [notebook] - all further operations will happen within this "
+"notebook."
+msgstr ""
+"Переключает на [блокнот] — все дальнейшие операции будут происходить в этом "
+"блокноте."
+
+msgid "Displays version information"
+msgstr "Выводит информацию о версии"
+
+#, javascript-format
+msgid "%s %s (%s)"
+msgstr "%s %s (%s)"
+
+msgid "Enum"
+msgstr "Enum"
+
+#, javascript-format
+msgid "Type: %s."
+msgstr "Тип: %s."
+
+#, javascript-format
+msgid "Possible values: %s."
+msgstr "Возможные значения: %s."
+
+#, javascript-format
+msgid "Default: %s"
+msgstr "По умолчанию: %s"
+
+msgid "Possible keys/values:"
+msgstr "Возможные ключи/значения:"
+
+msgid "Fatal error:"
+msgstr "Фатальная ошибка:"
+
+msgid ""
+"The application has been authorised - you may now close this browser tab."
+msgstr "Приложение авторизовано — можно закрыть вкладку браузера."
+
+msgid "The application has been successfully authorised."
+msgstr "Приложение успешно авторизовано."
+
+msgid ""
+"Please open the following URL in your browser to authenticate the "
+"application. The application will create a directory in \"Apps/Joplin\" and "
+"will only read and write files in this directory. It will have no access to "
+"any files outside this directory nor to any other personal data. No data "
+"will be shared with any third party."
+msgstr ""
+"Откройте следующую ссылку в вашем браузере для аутентификации приложения. "
+"Приложением будет создан каталог «Apps/Joplin». Чтение и запись файлов будет "
+"осуществляться только в его пределах. У приложения не будет доступа к каким-"
+"либо файлам за пределами этого каталога и другим личным данным. Никакая "
+"информация не будет передана третьим лицам."
+
+msgid "Search:"
+msgstr "Поиск:"
+
+msgid ""
+"Welcome to Joplin!\n"
+"\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
+"for usage information.\n"
+"\n"
+"For example, to create a notebook press `mb`; to create a note press `mn`."
+msgstr ""
+"Добро пожаловать в Joplin!\n"
+"\n"
+"Введите `:help shortcuts` для просмотра списка клавиатурных сочетаний или "
+"просто `:help` для просмотра информации об использовании.\n"
+"\n"
+"Например, для создания блокнота нужно ввести `mb`, для создания заметки — "
+"`mn`."
+
+msgid "File"
+msgstr "Файл"
+
+msgid "New note"
+msgstr "Новая заметка"
+
+msgid "New to-do"
+msgstr "Новая задача"
+
+msgid "New notebook"
+msgstr "Новый блокнот"
+
+msgid "Import Evernote notes"
+msgstr "Импортировать заметки из Evernote"
+
+msgid "Evernote Export Files"
+msgstr "Файлы экспорта Evernote"
+
+msgid "Quit"
+msgstr "Выход"
+
+msgid "Edit"
+msgstr "Редактировать"
+
+msgid "Copy"
+msgstr "Копировать"
+
+msgid "Cut"
+msgstr "Вырезать"
+
+msgid "Paste"
+msgstr "Вставить"
+
+msgid "Search in all the notes"
+msgstr "Поиск во всех заметках"
+
+msgid "Tools"
+msgstr "Инструменты"
+
+msgid "Synchronisation status"
+msgstr "Статус синхронизации"
+
+msgid "Options"
+msgstr "Настройки"
+
+msgid "Help"
+msgstr "Помощь"
+
+msgid "Website and documentation"
+msgstr "Сайт и документация"
+
+msgid "About Joplin"
+msgstr "О Joplin"
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+#, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr "Заметки и настройки сохранены в: %s"
+
+msgid "Save"
+msgstr "Сохранить"
+
+msgid ""
+"Disabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent unencrypted to the sync target. Do you wish to "
+"continue?"
+msgstr ""
+
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
+msgstr ""
+
+msgid "Disable encryption"
+msgstr ""
+
+msgid "Enable encryption"
+msgstr ""
+
+msgid "Master Keys"
+msgstr ""
+
+msgid "Active"
+msgstr ""
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Source"
+msgstr "Источник"
+
+msgid "Created"
+msgstr "Создана"
+
+msgid "Updated"
+msgstr "Обновлена"
+
+msgid "Password"
+msgstr ""
+
+msgid "Password OK"
+msgstr ""
+
+msgid ""
+"Note: Only one master key is going to be used for encryption (the one marked "
+"as \"active\"). Any of the keys might be used for decryption, depending on "
+"how the notes or notebooks were originally encrypted."
+msgstr ""
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Encryption is:"
+msgstr ""
+
+#, fuzzy
+msgid "Enabled"
+msgstr "Отключена"
+
+msgid "Disabled"
+msgstr "Отключена"
+
+msgid "Back"
+msgstr "Назад"
+
+#, javascript-format
+msgid ""
+"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgstr "Будет создан новый блокнот «%s» и в него будет импортирован файл «%s»"
+
+msgid "Please create a notebook first."
+msgstr "Сначала создайте блокнот."
+
+msgid "Note title:"
+msgstr "Название заметки:"
+
+msgid "Please create a notebook first"
+msgstr "Сначала создайте блокнот"
+
+msgid "To-do title:"
+msgstr "Название задачи:"
+
+msgid "Notebook title:"
+msgstr "Название блокнота:"
+
+msgid "Add or remove tags:"
+msgstr "Добавить или удалить теги:"
+
+msgid "Separate each tag by a comma."
+msgstr "Каждый тег отделяется запятой."
+
+msgid "Rename notebook:"
+msgstr "Переименовать блокнот:"
+
+msgid "Set alarm:"
+msgstr "Установить напоминание:"
+
+msgid "Layout"
+msgstr "Вид"
+
+msgid "Some items cannot be synchronised."
+msgstr "Некоторые элементы не могут быть синхронизированы."
+
+msgid "View them now"
+msgstr "Просмотреть их сейчас"
+
+#, fuzzy
+msgid "Some items cannot be decrypted."
+msgstr "Некоторые элементы не могут быть синхронизированы."
+
+msgid "Set the password"
+msgstr ""
+
+msgid "Add or remove tags"
+msgstr "Добавить или удалить теги"
+
+msgid "Switch between note and to-do type"
+msgstr "Переключить тип между заметкой и задачей"
+
+msgid "Delete"
+msgstr "Удалить"
+
+msgid "Delete notes?"
+msgstr "Удалить заметки?"
+
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr "Здесь нет заметок. Создайте новую нажатием на «Новая заметка»."
+
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr "Сейчас здесь нет блокнотов. Создайте новый нажав «Новый блокнот»."
+
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Неподдерживаемая ссыка или сообщение: %s"
+
+msgid "Attach file"
+msgstr "Прикрепить файл"
+
+msgid "Set alarm"
+msgstr "Установить напоминание"
+
+msgid "Refresh"
+msgstr "Обновить"
+
+msgid "Clear"
+msgstr "Очистить"
+
+msgid "OneDrive Login"
+msgstr "Вход в OneDrive"
+
+msgid "Import"
+msgstr "Импорт"
+
+msgid "Synchronisation Status"
+msgstr "Статус синхронизации"
+
+msgid "Encryption Options"
+msgstr ""
+
+msgid "Remove this tag from all the notes?"
+msgstr "Убрать этот тег со всех заметок?"
+
+msgid "Remove this search from the sidebar?"
+msgstr "Убрать этот запрос с боковой панели?"
+
+msgid "Rename"
+msgstr "Переименовать"
+
+msgid "Synchronise"
+msgstr "Синхронизировать"
+
+msgid "Notebooks"
+msgstr "Блокноты"
+
+msgid "Tags"
+msgstr "Теги"
+
+msgid "Searches"
+msgstr "Запросы"
+
+msgid "Please select where the sync status should be exported to"
+msgstr "Выберите, куда должен быть экспортирован статус синхронизации"
+
+#, javascript-format
+msgid "Usage: %s"
+msgstr "Использование: %s"
+
+#, javascript-format
+msgid "Unknown flag: %s"
+msgstr "Неизвестный флаг: %s"
+
+msgid "File system"
+msgstr "Файловая система"
+
+msgid "OneDrive"
+msgstr "OneDrive"
+
+msgid "OneDrive Dev (For testing only)"
+msgstr "OneDrive Dev (только для тестирования)"
+
+#, javascript-format
+msgid "Unknown log level: %s"
+msgstr "Неизвестный уровень лога: %s"
+
+#, javascript-format
+msgid "Unknown level ID: %s"
+msgstr "Неизвестный ID уровня: %s"
+
+msgid ""
+"Cannot refresh token: authentication data is missing. Starting the "
+"synchronisation again may fix the problem."
+msgstr ""
+"Не удалось обновить токен: отсутствуют данные аутентификации. Повторный "
+"запуск синхронизации может решить проблему."
+
+msgid ""
+"Could not synchronize with OneDrive.\n"
+"\n"
+"This error often happens when using OneDrive for Business, which "
+"unfortunately cannot be supported.\n"
+"\n"
+"Please consider using a regular OneDrive account."
+msgstr ""
+"Не удалось синхронизироваться с OneDrive.\n"
+"\n"
+"Такая ошибка часто возникает при использовании OneDrive для бизнеса, "
+"который, к сожалению, не поддерживается.\n"
+"\n"
+"Пожалуйста, рассмотрите возможность использования обычного аккаунта OneDrive."
+
+#, javascript-format
+msgid "Cannot access %s"
+msgstr "Не удалось получить доступ %s"
+
+#, javascript-format
+msgid "Created local items: %d."
+msgstr "Создано локальных элементов: %d."
+
+#, javascript-format
+msgid "Updated local items: %d."
+msgstr "Обновлено локальных элементов: %d."
+
+#, javascript-format
+msgid "Created remote items: %d."
+msgstr "Создано удалённых элементов: %d."
+
+#, javascript-format
+msgid "Updated remote items: %d."
+msgstr "Обновлено удалённых элементов: %d."
+
+#, javascript-format
+msgid "Deleted local items: %d."
+msgstr "Удалено локальных элементов: %d."
+
+#, javascript-format
+msgid "Deleted remote items: %d."
+msgstr "Удалено удалённых элементов: %d."
+
+#, javascript-format
+msgid "State: \"%s\"."
+msgstr "Статус: «%s»."
+
+msgid "Cancelling..."
+msgstr "Отмена..."
+
+#, javascript-format
+msgid "Completed: %s"
+msgstr "Завершено: %s"
+
+#, javascript-format
+msgid "Synchronisation is already in progress. State: %s"
+msgstr "Синхронизация уже выполняется. Статус: %s"
+
+msgid "Conflicts"
+msgstr "Конфликты"
+
+#, javascript-format
+msgid "A notebook with this title already exists: \"%s\""
+msgstr "Блокнот с таким названием уже существует: «%s»"
+
+#, javascript-format
+msgid "Notebooks cannot be named \"%s\", which is a reserved title."
+msgstr "Блокнот не может быть назван «%s», это зарезервированное название."
+
+msgid "Untitled"
+msgstr "Без имени"
+
+msgid "This note does not have geolocation information."
+msgstr "Эта заметка не содержит информации о геолокации."
+
+#, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr "Не удалось скопировать заметку в блокнот «%s»"
+
+#, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr "Не удалось переместить заметку в блокнот «%s»"
+
+msgid "Text editor"
+msgstr "Текстовый редактор"
+
+msgid ""
+"The editor that will be used to open a note. If none is provided it will try "
+"to auto-detect the default editor."
+msgstr ""
+"Редактор, в котором будут открываться заметки. Если не задан, будет "
+"произведена попытка автоматического определения редактора по умолчанию."
+
+msgid "Language"
+msgstr "Язык"
+
+msgid "Date format"
+msgstr "Формат даты"
+
+msgid "Time format"
+msgstr "Формат времени"
+
+msgid "Theme"
+msgstr "Тема"
+
+msgid "Light"
+msgstr "Светлая"
+
+msgid "Dark"
+msgstr "Тёмная"
+
+msgid "Show uncompleted todos on top of the lists"
+msgstr "Показывать незавершённые задачи вверху списков"
+
+msgid "Save geo-location with notes"
+msgstr "Сохранять информацию о геолокации в заметках"
+
+msgid "Synchronisation interval"
+msgstr "Интервал синхронизации"
+
+#, javascript-format
+msgid "%d minutes"
+msgstr "%d минут"
+
+#, javascript-format
+msgid "%d hour"
+msgstr "%d час"
+
+#, javascript-format
+msgid "%d hours"
+msgstr "%d часов"
+
+msgid "Automatically update the application"
+msgstr "Автоматически обновлять приложение"
+
+msgid "Show advanced options"
+msgstr "Показывать расширенные настройки"
+
+msgid "Synchronisation target"
+msgstr "Цель синхронизации"
+
+msgid ""
+"The target to synchonise to. If synchronising with the file system, set "
+"`sync.2.path` to specify the target directory."
+msgstr ""
+"То, с чем будет осуществляться синхронизация. При синхронизации с файловой "
+"системой в `sync.2.path` указывается целевой каталог."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Каталог синхронизации (абсолютный путь)"
+
+msgid ""
+"The path to synchronise with when file system synchronisation is enabled. "
+"See `sync.target`."
+msgstr ""
+"Путь для синхронизации при включённой синхронизации с файловой системой. См. "
+"`sync.target`."
+
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "Неверное значение параметра: «%s». Доступные значения: %s."
+
+msgid "Items that cannot be synchronised"
+msgstr "Элементы, которые не могут быть синхронизированы"
+
+#, javascript-format
+msgid "\"%s\": \"%s\""
+msgstr "«%s»: «%s»"
+
+msgid "Sync status (synced items / total items)"
+msgstr "Статус синхронизации (элементов синхронизировано/всего)"
+
+#, javascript-format
+msgid "%s: %d/%d"
+msgstr "%s: %d/%d"
+
+#, javascript-format
+msgid "Total: %d/%d"
+msgstr "Всего: %d/%d"
+
+#, javascript-format
+msgid "Conflicted: %d"
+msgstr "Конфликтующих: %d"
+
+#, javascript-format
+msgid "To delete: %d"
+msgstr "К удалению: %d"
+
+msgid "Folders"
+msgstr "Папки"
+
+#, javascript-format
+msgid "%s: %d notes"
+msgstr "%s: %d заметок"
+
+msgid "Coming alarms"
+msgstr "Грядущие напоминания"
+
+#, javascript-format
+msgid "On %s: %s"
+msgstr "В %s: %s"
+
+msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgstr "Сейчас здесь нет заметок. Создаёте новую, нажав кнопку (+)."
+
+msgid "Delete these notes?"
+msgstr "Удалить эти заметки?"
+
+msgid "Log"
+msgstr "Лог"
+
+msgid "Export Debug Report"
+msgstr "Экспортировать отладочный отчёт"
+
+msgid "Configuration"
+msgstr "Конфигурация"
+
+msgid "Move to notebook..."
+msgstr "Переместить в блокнот..."
+
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr "Переместить %d заметок в блокнот «%s»?"
+
+msgid "Select date"
+msgstr "Выбрать дату"
+
+msgid "Confirm"
+msgstr "Подтвердить"
+
+msgid "Cancel synchronisation"
+msgstr "Отменить синхронизацию"
+
+#, javascript-format
+msgid "The notebook could not be saved: %s"
+msgstr "Не удалось сохранить блокнот: %s"
+
+msgid "Edit notebook"
+msgstr "Редактировать блокнот"
+
+msgid "This note has been modified:"
+msgstr "Эта заметка была изменена:"
+
+msgid "Save changes"
+msgstr "Сохранить изменения"
+
+msgid "Discard changes"
+msgstr "Отменить изменения"
+
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr "Неподдерживаемый формат изображения: %s"
+
+msgid "Attach photo"
+msgstr "Прикрепить фото"
+
+msgid "Attach any file"
+msgstr "Прикрепить любой файл"
+
+msgid "Convert to note"
+msgstr "Преобразовать в заметку"
+
+msgid "Convert to todo"
+msgstr "Преобразовать в задачу"
+
+msgid "Hide metadata"
+msgstr "Скрыть метаданные"
+
+msgid "Show metadata"
+msgstr "Показать метаданные"
+
+msgid "View on map"
+msgstr "Посмотреть на карте"
+
+msgid "Delete notebook"
+msgstr "Удалить блокнот"
+
+msgid "Login with OneDrive"
+msgstr "Войти в OneDrive"
+
+msgid ""
+"Click on the (+) button to create a new note or notebook. Click on the side "
+"menu to access your existing notebooks."
+msgstr ""
+"Нажмите на кнопку (+) для создания новой заметки или нового блокнота. "
+"Нажмите на боковое меню для доступа к вашим существующим блокнотам."
+
+msgid "You currently have no notebook. Create one by clicking on (+) button."
+msgstr "У вас сейчас нет блокнота. Создайте его нажатием на кнопку (+)."
+
+msgid "Welcome"
+msgstr "Добро пожаловать"

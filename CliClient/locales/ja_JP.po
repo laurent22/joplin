@@ -1,0 +1,1134 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Laurent Cozic
+# This file is distributed under the same license as the Joplin-CLI package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Joplin-CLI 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ja_JP\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.5\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Give focus to next pane"
+msgstr "次のペインへ"
+
+msgid "Give focus to previous pane"
+msgstr "前のペインへ"
+
+msgid "Enter command line mode"
+msgstr "コマンドラインモードに入る"
+
+msgid "Exit command line mode"
+msgstr "コマンドラインモードの終了"
+
+msgid "Edit the selected note"
+msgstr "選択したノートを編集"
+
+msgid "Cancel the current command."
+msgstr "現在のコマンドをキャンセル"
+
+msgid "Exit the application."
+msgstr "アプリケーションを終了する"
+
+msgid "Delete the currently selected note or notebook."
+msgstr "選択中のノートまたはノートブックを削除"
+
+msgid "To delete a tag, untag the associated notes."
+msgstr "タグを削除するには、関連するノートからタグを外してください。"
+
+msgid "Please select the note or notebook to be deleted first."
+msgstr "ます削除するノートかノートブックを選択してください。"
+
+msgid "Set a to-do as completed / not completed"
+msgstr "ToDoを完了/未完に設定"
+
+msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+msgstr "コンソールを最大表示/最小表示/非表示/可視で切り替える([t][c])"
+
+msgid "Search"
+msgstr "検索"
+
+msgid "[t]oggle note [m]etadata."
+msgstr "ノートのメタ情報を切り替える [tm]"
+
+msgid "[M]ake a new [n]ote"
+msgstr "新しいノートの作成 [mn]"
+
+msgid "[M]ake a new [t]odo"
+msgstr "新しいToDoの作成 [mt]"
+
+msgid "[M]ake a new note[b]ook"
+msgstr "新しいノートブックの作成 [mb]"
+
+msgid "Copy ([Y]ank) the [n]ote to a notebook."
+msgstr "ノートをノートブックにコピー [yn]"
+
+msgid "Move the note to a notebook."
+msgstr "ノートをノートブックに移動"
+
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "アプリケーションを終了するには、Ctrl+Dまたは\"exit\"と入力してください"
+
+#, javascript-format
+msgid "More than one item match \"%s\". Please narrow down your query."
+msgstr ""
+"一つ以上のアイテムが\"%s\"に一致しました。クエリを絞るようにしてください。"
+
+msgid "No notebook selected."
+msgstr "ノートブックが選択されていません。"
+
+msgid "No notebook has been specified."
+msgstr "ノートブックが選択されていません。"
+
+msgid "Y"
+msgstr ""
+
+msgid "n"
+msgstr ""
+
+msgid "N"
+msgstr ""
+
+msgid "y"
+msgstr ""
+
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "バックグラウンド同期を中止中… しばらくお待ちください。"
+
+#, javascript-format
+msgid "No such command: %s"
+msgstr "コマンドが違います：%s"
+
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "コマンド \"%s\"は、GUIのみで有効です。"
+
+#, javascript-format
+msgid "Missing required argument: %s"
+msgstr "引数が足りません：%s"
+
+#, javascript-format
+msgid "%s: %s"
+msgstr ""
+
+msgid "Your choice: "
+msgstr "選択："
+
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr "無効な入力：%s"
+
+msgid "Attaches the given file to the note."
+msgstr "選択されたファイルをノートに添付"
+
+#, javascript-format
+msgid "Cannot find \"%s\"."
+msgstr "\"%s\"は見つかりませんでした。"
+
+msgid "Displays the given note."
+msgstr "選択されたノートを表示"
+
+msgid "Displays the complete information about note."
+msgstr "ノートに関するすべての情報を表示"
+
+msgid ""
+"Gets or sets a config value. If [value] is not provided, it will show the "
+"value of [name]. If neither [name] nor [value] is provided, it will list the "
+"current configuration."
+msgstr ""
+"設定を行います。[value]がない場合は、[name]で示された設定項目の値を表示しま"
+"す。両方とも指定されていない場合は、現在の設定のリストを表示します。"
+
+msgid "Also displays unset and hidden config variables."
+msgstr "未設定または非表示の設定項目も表示します。"
+
+#, javascript-format
+msgid "%s = %s (%s)"
+msgstr ""
+
+#, javascript-format
+msgid "%s = %s"
+msgstr ""
+
+msgid ""
+"Duplicates the notes matching <note> to [notebook]. If no notebook is "
+"specified the note is duplicated in the current notebook."
+msgstr ""
+"<note>に一致するノートを[notebook]に複製します。[notebook]が指定されていない"
+"場合は、現在のノートブックに複製を行います。"
+
+msgid "Marks a to-do as done."
+msgstr "ToDoを完了として"
+
+#, javascript-format
+msgid "Note is not a to-do: \"%s\""
+msgstr "ノートはToDoリストではありません：\"%s\""
+
+msgid "Edit note."
+msgstr "ノートを編集する。"
+
+msgid ""
+"No text editor is defined. Please set it using `config editor <editor-path>`"
+msgstr ""
+"テキストエディタが設定されていません。`config editor <editor-path>`で設定を"
+"行ってください。"
+
+msgid "No active notebook."
+msgstr "有効な\bノートブックがありません。"
+
+#, javascript-format
+msgid "Note does not exist: \"%s\". Create it?"
+msgstr "\"%s\"というノートはありません。お作りいたしますか？"
+
+msgid "Starting to edit note. Close the editor to get back to the prompt."
+msgstr "ノートの編集の開始。エディタを閉じると元の画面に戻ることが出来ます。"
+
+msgid "Note has been saved."
+msgstr "ノートは保存されました。"
+
+msgid "Exits the application."
+msgstr "アプリケーションの終了。"
+
+msgid ""
+"Exports Joplin data to the given directory. By default, it will export the "
+"complete database including notebooks, notes, tags and resources."
+msgstr ""
+"Joplinのデータを選択されたディレクトリに出力する。標準では、ノートブック・"
+"ノート・タグ・添付データを含むすべてのデータベースを出力します。"
+
+msgid "Exports only the given note."
+msgstr "選択されたノートのみを出力する。"
+
+msgid "Exports only the given notebook."
+msgstr "選択されたノートブックのみを出力する。"
+
+msgid "Displays a geolocation URL for the note."
+msgstr "ノートの位置情報URLを表示する。"
+
+msgid "Displays usage information."
+msgstr "使い方を表示する。"
+
+msgid "Shortcuts are not available in CLI mode."
+msgstr "CLIモードではショートカットは使用できません。"
+
+msgid ""
+"Type `help [command]` for more information about a command; or type `help "
+"all` for the complete usage information."
+msgstr ""
+"コマンドのさらなる情報は、`help [command]`で見ることが出来ます；または、"
+"`help all`ですべての使用方法の情報を表示できます。"
+
+msgid "The possible commands are:"
+msgstr "有効なコマンドは："
+
+msgid ""
+"In any command, a note or notebook can be refered to by title or ID, or "
+"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
+"note or notebook. `$c` can be used to refer to the currently selected item."
+msgstr ""
+"すべてのコマンドで、ノートまたはノートブックは、題名またはID、または選択中の"
+"物はそれぞれショートカット`$n`または`$b`で指定できます。`$c`で選択中のアイテ"
+"ムを参照できます。"
+
+msgid "To move from one pane to another, press Tab or Shift+Tab."
+msgstr "ペイン間を移動するには、TabかShift+Tabをおしてください。"
+
+msgid ""
+"Use the arrows and page up/down to scroll the lists and text areas "
+"(including this console)."
+msgstr "リストや入力エリアの移動には矢印キーまたはPage Up/Downを使用します。"
+
+msgid "To maximise/minimise the console, press \"TC\"."
+msgstr "コンソールの最大化・最小化には\"TC\"と入力してください。"
+
+msgid "To enter command line mode, press \":\""
+msgstr "コマンドラインモードに入るには、\":\"を入力してください。"
+
+msgid "To exit command line mode, press ESCAPE"
+msgstr "コマンドラインモードを終了するには、ESCキーを押してください。"
+
+msgid ""
+"For the complete list of available keyboard shortcuts, type `help shortcuts`"
+msgstr ""
+"有効なすべてのキーボードショートカットを表示するには、`help shortcuts`と入力"
+"してください。"
+
+msgid "Imports an Evernote notebook file (.enex file)."
+msgstr "Evernoteノートブックファイル(.enex)のインポート"
+
+msgid "Do not ask for confirmation."
+msgstr "確認を行わない。"
+
+#, javascript-format
+msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+msgstr ""
+"ファイル \"%s\" はノートブック \"%s\"に取り込まれます。よろしいですか？"
+
+#, javascript-format
+msgid ""
+"New notebook \"%s\" will be created and file \"%s\" will be imported into "
+"it. Continue?"
+msgstr ""
+"新しいノートブック\"%s\"が作成され、ファイル\"%s\"が取り込まれます。よろしい"
+"ですか？"
+
+#, javascript-format
+msgid "Found: %d."
+msgstr "見つかりました：%d"
+
+#, javascript-format
+msgid "Created: %d."
+msgstr "作成しました：%d"
+
+#, javascript-format
+msgid "Updated: %d."
+msgstr "アップデートしました：%d"
+
+#, javascript-format
+msgid "Skipped: %d."
+msgstr "スキップしました：%d"
+
+#, javascript-format
+msgid "Resources: %d."
+msgstr "リソース：%d"
+
+#, javascript-format
+msgid "Tagged: %d."
+msgstr "タグ付き：%d"
+
+msgid "Importing notes..."
+msgstr "ノートのインポート…"
+
+#, javascript-format
+msgid "The notes have been imported: %s"
+msgstr "ノートはインポートされました：%s"
+
+msgid ""
+"Displays the notes in the current notebook. Use `ls /` to display the list "
+"of notebooks."
+msgstr ""
+"現在のノートブック中のノートを表示します。ノートブックのリストを表示するに"
+"は、`ls /`と入力してください。"
+
+msgid "Displays only the first top <num> notes."
+msgstr "上位 <num>件のノートを表示する。"
+
+msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
+msgstr "アイテムを<field>で並び替え (例： title, updated_time, created_time)."
+
+msgid "Reverses the sorting order."
+msgstr "逆順に並び替える。"
+
+#, fuzzy
+msgid ""
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
+"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
+"to-dos, while `-ttd` would display notes and to-dos."
+msgstr ""
+"選択した種類の項目のみ表示します。`n`でノートを、`t`でToDoを、`nt`でその両方"
+"を指定できます。 (例： `-tt` ではToDoのみを表示し、`-ttd`ではノートとToDoを表"
+"示します。)"
+
+msgid "Either \"text\" or \"json\""
+msgstr "\"text\"または\"json\"のどちらか"
+
+msgid ""
+"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
+"TODO_CHECKED (for to-dos), TITLE"
+msgstr ""
+"長い形式のリストフォーマットを使用します。フォーマットは：ID, NOTE_COUNT "
+"(ノートブックのみ), DATE, TODO_CHECKED (ToDoのみ), TITLE"
+
+msgid "Please select a notebook first."
+msgstr "ますはノートブックを選択して下さい。"
+
+msgid "Creates a new notebook."
+msgstr "あたらしいノートブックを作成します。"
+
+msgid "Creates a new note."
+msgstr "あたらしいノートを作成します。"
+
+msgid "Notes can only be created within a notebook."
+msgstr "ノートは、ノートブック内のみで作ることが出来ます。"
+
+msgid "Creates a new to-do."
+msgstr "新しいToDoを作成します。"
+
+msgid "Moves the notes matching <note> to [notebook]."
+msgstr "<note>に一致するアイテムを、[notebook]に移動します。"
+
+msgid "Renames the given <item> (note or notebook) to <name>."
+msgstr "<item> (ノートまたはノートブック)の名前を、<name>に変更します。"
+
+msgid "Deletes the given notebook."
+msgstr "指定されたノートブックを削除します。"
+
+msgid "Deletes the notebook without asking for confirmation."
+msgstr "ノートブックを確認なしで削除します。"
+
+msgid "Delete notebook? All notes within this notebook will also be deleted."
+msgstr "ノートブックを削除しますか？中にあるノートはすべて消えてしまいます。"
+
+msgid "Deletes the notes matching <note-pattern>."
+msgstr "<note-pattern>に一致するノートを削除する。"
+
+msgid "Deletes the notes without asking for confirmation."
+msgstr "ノートを確認なしで削除します。"
+
+#, javascript-format
+msgid "%d notes match this pattern. Delete them?"
+msgstr "%d個のノートが一致しました。削除しますか？"
+
+msgid "Delete note?"
+msgstr "ノートを削除しますか？"
+
+msgid "Searches for the given <pattern> in all the notes."
+msgstr "指定された<pattern>をすべてのノートから検索する。"
+
+#, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+msgstr ""
+"<note>のプロパティ<name> を、指示された[value]に設定します。有効なプロパティ"
+"は：\n"
+"\n"
+"%s"
+
+msgid "Displays summary about the notes and notebooks."
+msgstr "ノートとノートブックのサマリを表示します。"
+
+msgid "Synchronises with remote storage."
+msgstr "リモート保存領域と同期します。"
+
+msgid "Sync to provided target (defaults to sync.target config value)"
+msgstr "指定のターゲットと同期します。(標準： sync.targetの設定値)"
+
+msgid "Synchronisation is already in progress."
+msgstr "同期はすでに実行中です。"
+
+#, javascript-format
+msgid ""
+"Lock file is already being hold. If you know that no synchronisation is "
+"taking place, you may delete the lock file at \"%s\" and resume the "
+"operation."
+msgstr ""
+"ロックファイルがすでに保持されています。同期作業が行われていない場合は、\"%s"
+"\"にあるロックファイルを削除して、作業を再度行ってください。"
+
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "認証は完了していません(認証トークンが得られませんでした)"
+
+#, javascript-format
+msgid "Synchronisation target: %s (%s)"
+msgstr "同期先: %s (%s)"
+
+msgid "Cannot initialize synchroniser."
+msgstr "同期プロセスを初期化できませんでした。"
+
+msgid "Starting synchronisation..."
+msgstr "同期を開始中..."
+
+msgid "Cancelling... Please wait."
+msgstr "中止中...お待ちください。"
+
+msgid ""
+"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
+"[tag] from [note], or to list the notes associated with [tag]. The command "
+"`tag list` can be used to list all the tags."
+msgstr ""
+"<tag-command> は\"add\", \"remove\", \"list\"のいずれかで、指定したノートから"
+"タグをつけたり外したり出来ます。`tag list`で、すべてのタグを見ることが出来ま"
+"す。"
+
+#, javascript-format
+msgid "Invalid command: \"%s\""
+msgstr "無効な命令: \"%s\""
+
+msgid ""
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
+"toggle the given to-do between completed and uncompleted state (If the "
+"target is a regular note it will be converted to a to-do). Use \"clear\" to "
+"convert the to-do back to a regular note."
+msgstr ""
+"<todo-command>は、\"toggle\"または\"clear\"を指定できます。\"toggle\"を指定す"
+"ると、指定したToDoの完了済み/未完を反転できます。指定したノートが通常のノート"
+"であれば、ToDoに変換されます。\"clear\"を指定すると、ToDoを通常のノートに変換"
+"できます。"
+
+msgid "Marks a to-do as non-completed."
+msgstr "ToDoを未完としてマーク"
+
+msgid ""
+"Switches to [notebook] - all further operations will happen within this "
+"notebook."
+msgstr ""
+"ノートブック [notebook]に切り替え - これ以降の作業は、指定のノートブック内で"
+"行われます。"
+
+msgid "Displays version information"
+msgstr "バージョン情報の表示"
+
+#, javascript-format
+msgid "%s %s (%s)"
+msgstr ""
+
+msgid "Enum"
+msgstr "列挙"
+
+#, javascript-format
+msgid "Type: %s."
+msgstr "種類: %s."
+
+#, javascript-format
+msgid "Possible values: %s."
+msgstr "取り得る値: %s."
+
+#, javascript-format
+msgid "Default: %s"
+msgstr "規定値: %s"
+
+msgid "Possible keys/values:"
+msgstr "取り得るキーバリュー: "
+
+msgid "Fatal error:"
+msgstr "致命的なエラー: "
+
+msgid ""
+"The application has been authorised - you may now close this browser tab."
+msgstr ""
+"アプリケーションは認証されました - ブラウザを閉じて頂いてかまいません。"
+
+msgid "The application has been successfully authorised."
+msgstr "アプリケーションは問題なく認証されました。"
+
+msgid ""
+"Please open the following URL in your browser to authenticate the "
+"application. The application will create a directory in \"Apps/Joplin\" and "
+"will only read and write files in this directory. It will have no access to "
+"any files outside this directory nor to any other personal data. No data "
+"will be shared with any third party."
+msgstr ""
+"このアプリケーションを認証するためには下記のURLをブラウザで開いてください。ア"
+"プリケーションは\"Apps/Joplin\"フォルダを作成し、その中のファイルのみを読み書"
+"きします。あなたの個人的なファイルや、ディレクトリ外のファイルにはアクセスし"
+"ません。第三者にデータが共有されることもありません。"
+
+msgid "Search:"
+msgstr "検索: "
+
+msgid ""
+"Welcome to Joplin!\n"
+"\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
+"for usage information.\n"
+"\n"
+"For example, to create a notebook press `mb`; to create a note press `mn`."
+msgstr ""
+"Joplinへようこそ！\n"
+"\n"
+"`:help shortcuts`と入力することで、キーボードショートカットのリストを見ること"
+"が出来ます。また、`:help`で使い方を確認できます。\n"
+"\n"
+"例えば、ノートブックの作成には`mb`で出来、ノートの作成は`mn`で行うことが出来"
+"ます。"
+
+msgid "File"
+msgstr "ファイル"
+
+msgid "New note"
+msgstr "新しいノート"
+
+msgid "New to-do"
+msgstr "新しいToDo"
+
+msgid "New notebook"
+msgstr "新しいノートブック"
+
+msgid "Import Evernote notes"
+msgstr "Evernoteのインポート"
+
+msgid "Evernote Export Files"
+msgstr "Evernote Exportファイル"
+
+msgid "Quit"
+msgstr "終了"
+
+msgid "Edit"
+msgstr "編集"
+
+msgid "Copy"
+msgstr "コピー"
+
+msgid "Cut"
+msgstr "切り取り"
+
+msgid "Paste"
+msgstr "貼り付け"
+
+msgid "Search in all the notes"
+msgstr "すべてのノートを検索"
+
+msgid "Tools"
+msgstr "ツール"
+
+msgid "Synchronisation status"
+msgstr "同期状況"
+
+msgid "Options"
+msgstr "オプション"
+
+msgid "Help"
+msgstr "ヘルプ"
+
+msgid "Website and documentation"
+msgstr "Webサイトとドキュメント"
+
+msgid "About Joplin"
+msgstr "Joplinについて"
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+msgid "Cancel"
+msgstr "キャンセル"
+
+#, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr "ノートと設定は、%sに保存されます。"
+
+msgid "Save"
+msgstr "保存"
+
+msgid ""
+"Disabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent unencrypted to the sync target. Do you wish to "
+"continue?"
+msgstr ""
+
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
+msgstr ""
+
+msgid "Disable encryption"
+msgstr ""
+
+msgid "Enable encryption"
+msgstr ""
+
+msgid "Master Keys"
+msgstr ""
+
+msgid "Active"
+msgstr "アクティブ"
+
+msgid "ID"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+#, fuzzy
+msgid "Created"
+msgstr "作成しました：%d"
+
+#, fuzzy
+msgid "Updated"
+msgstr "アップデートしました：%d"
+
+msgid "Password"
+msgstr ""
+
+msgid "Password OK"
+msgstr ""
+
+msgid ""
+"Note: Only one master key is going to be used for encryption (the one marked "
+"as \"active\"). Any of the keys might be used for decryption, depending on "
+"how the notes or notebooks were originally encrypted."
+msgstr ""
+"注意：\"active\"に指定されたマスターキーのみが暗号化に使用されます。暗号化に"
+"使用されたキーの応じて、すべてのキーが暗号解除のために使用されます。"
+
+msgid "Status"
+msgstr "状態"
+
+msgid "Encryption is:"
+msgstr ""
+
+#, fuzzy
+msgid "Enabled"
+msgstr "無効"
+
+msgid "Disabled"
+msgstr "無効"
+
+msgid "Back"
+msgstr "戻る"
+
+#, javascript-format
+msgid ""
+"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgstr ""
+"\"%s\"という名前の新しいノートブックが作成され、ファイル\"%s\"がインポートさ"
+"れます。"
+
+msgid "Please create a notebook first."
+msgstr "ますはノートブックを作成して下さい。"
+
+msgid "Note title:"
+msgstr "ノートの題名："
+
+msgid "Please create a notebook first"
+msgstr "ますはノートブックを作成して下さい。"
+
+msgid "To-do title:"
+msgstr "ToDoの題名："
+
+msgid "Notebook title:"
+msgstr "ノートブックの題名："
+
+msgid "Add or remove tags:"
+msgstr "タグの追加・削除："
+
+msgid "Separate each tag by a comma."
+msgstr "それぞれのタグをカンマ(,)で区切ってください。"
+
+msgid "Rename notebook:"
+msgstr "ノートブックの名前を変更："
+
+msgid "Set alarm:"
+msgstr "アラームをセット："
+
+msgid "Layout"
+msgstr "レイアウト"
+
+msgid "Some items cannot be synchronised."
+msgstr "いくつかの項目は同期されませんでした。"
+
+msgid "View them now"
+msgstr "今すぐ表示"
+
+#, fuzzy
+msgid "Some items cannot be decrypted."
+msgstr "いくつかの項目は同期されませんでした。"
+
+msgid "Set the password"
+msgstr ""
+
+msgid "Add or remove tags"
+msgstr "タグの追加・削除"
+
+msgid "Switch between note and to-do type"
+msgstr "ノートとToDoを切り替え"
+
+msgid "Delete"
+msgstr "削除"
+
+msgid "Delete notes?"
+msgstr "ノートを削除しますか？"
+
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr "ノートがありません。新しいノートを作成して下さい。"
+
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr "ノートブックがありません。新しいノートブックを作成してください。"
+
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr ""
+
+msgid "Attach file"
+msgstr "ファイルを添付"
+
+msgid "Set alarm"
+msgstr "アラームをセット"
+
+msgid "Refresh"
+msgstr "更新"
+
+msgid "Clear"
+msgstr "クリア"
+
+msgid "OneDrive Login"
+msgstr "OneDriveログイン"
+
+msgid "Import"
+msgstr "インポート"
+
+msgid "Synchronisation Status"
+msgstr "同期状況"
+
+msgid "Encryption Options"
+msgstr ""
+
+msgid "Remove this tag from all the notes?"
+msgstr "すべてのノートからこのタグを削除しますか？"
+
+msgid "Remove this search from the sidebar?"
+msgstr "サイドバーからこの検索を削除しますか？"
+
+msgid "Rename"
+msgstr "名前の変更"
+
+msgid "Synchronise"
+msgstr "同期"
+
+msgid "Notebooks"
+msgstr "ノートブック"
+
+msgid "Tags"
+msgstr "タグ"
+
+msgid "Searches"
+msgstr "検索"
+
+msgid "Please select where the sync status should be exported to"
+msgstr "同期状況の出力先を選択してください"
+
+#, javascript-format
+msgid "Usage: %s"
+msgstr "使用方法: %s"
+
+#, javascript-format
+msgid "Unknown flag: %s"
+msgstr "不明なフラグ: %s"
+
+msgid "File system"
+msgstr "ファイルシステム"
+
+msgid "OneDrive"
+msgstr ""
+
+msgid "OneDrive Dev (For testing only)"
+msgstr ""
+
+#, javascript-format
+msgid "Unknown log level: %s"
+msgstr ""
+
+#, javascript-format
+msgid "Unknown level ID: %s"
+msgstr ""
+
+msgid ""
+"Cannot refresh token: authentication data is missing. Starting the "
+"synchronisation again may fix the problem."
+msgstr ""
+"トークンの更新が出来ませんでした。認証データがありません。同期を再度行うこと"
+"で解決することがあります。"
+
+msgid ""
+"Could not synchronize with OneDrive.\n"
+"\n"
+"This error often happens when using OneDrive for Business, which "
+"unfortunately cannot be supported.\n"
+"\n"
+"Please consider using a regular OneDrive account."
+msgstr ""
+"OneDriveと同期できませんでした。\n"
+"\n"
+"OneDrive for Business(未サポート)を使用中はこのエラーが起こることがありま"
+"す。\n"
+"\n"
+"通常のOneDriveアカウントの使用をご検討ください。"
+
+#, javascript-format
+msgid "Cannot access %s"
+msgstr "%sにアクセスできません"
+
+#, javascript-format
+msgid "Created local items: %d."
+msgstr "ローカルアイテムの作成: %d."
+
+#, javascript-format
+msgid "Updated local items: %d."
+msgstr "ローカルアイテムの更新: %d."
+
+#, javascript-format
+msgid "Created remote items: %d."
+msgstr "リモートアイテムの作成: %d."
+
+#, javascript-format
+msgid "Updated remote items: %d."
+msgstr "リモートアイテムの更新: %d."
+
+#, javascript-format
+msgid "Deleted local items: %d."
+msgstr "ローカルアイテムの削除: %d."
+
+#, javascript-format
+msgid "Deleted remote items: %d."
+msgstr "リモートアイテムの削除: %d."
+
+#, javascript-format
+msgid "State: \"%s\"."
+msgstr "状態: \"%s\"。"
+
+msgid "Cancelling..."
+msgstr "中止中..."
+
+#, javascript-format
+msgid "Completed: %s"
+msgstr "完了: %s"
+
+#, javascript-format
+msgid "Synchronisation is already in progress. State: %s"
+msgstr "同期作業はすでに実行中です。状態: %s"
+
+msgid "Conflicts"
+msgstr "衝突"
+
+#, javascript-format
+msgid "A notebook with this title already exists: \"%s\""
+msgstr "\"%s\"という名前のノートブックはすでに存在しています。"
+
+#, javascript-format
+msgid "Notebooks cannot be named \"%s\", which is a reserved title."
+msgstr ""
+"\"%s\"と言う名前はシステムで使用するために予約済みです。名前の変更が出来ませ"
+"ん。"
+
+msgid "Untitled"
+msgstr "名称未設定"
+
+msgid "This note does not have geolocation information."
+msgstr "このノートには位置情報がありません。"
+
+#, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr "ノートをノートブック \"%s\"にコピーできませんでした。"
+
+#, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr "ノートをノートブック \"%s\"に移動できませんでした。"
+
+msgid "Text editor"
+msgstr "テキストエディタ"
+
+msgid ""
+"The editor that will be used to open a note. If none is provided it will try "
+"to auto-detect the default editor."
+msgstr ""
+"ノートを開くために使用されるエディタです。特に指定がなければ、デフォルトのエ"
+"ディタの検出を試みます。"
+
+msgid "Language"
+msgstr "言語"
+
+msgid "Date format"
+msgstr "日付の形式"
+
+msgid "Time format"
+msgstr "時刻の形式"
+
+msgid "Theme"
+msgstr "テーマ"
+
+msgid "Light"
+msgstr "明るい"
+
+msgid "Dark"
+msgstr "暗い"
+
+msgid "Show uncompleted todos on top of the lists"
+msgstr "未完のToDoをリストの上部に表示"
+
+msgid "Save geo-location with notes"
+msgstr "ノートに位置情報を保存"
+
+msgid "Synchronisation interval"
+msgstr "同期間隔"
+
+#, javascript-format
+msgid "%d minutes"
+msgstr "%d 分"
+
+#, javascript-format
+msgid "%d hour"
+msgstr "%d 時間"
+
+#, javascript-format
+msgid "%d hours"
+msgstr "%d 時間"
+
+msgid "Automatically update the application"
+msgstr "アプリケーションの自動更新"
+
+msgid "Show advanced options"
+msgstr "詳細な設定の表示"
+
+msgid "Synchronisation target"
+msgstr "同期先"
+
+msgid ""
+"The target to synchonise to. If synchronising with the file system, set "
+"`sync.2.path` to specify the target directory."
+msgstr ""
+"同期先です。ローカルのファイルシステムと同期する場合は、`sync.2.path`を同期先"
+"のディレクトリに設定してください。"
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "同期先のディレクトリ(絶対パス)"
+
+msgid ""
+"The path to synchronise with when file system synchronisation is enabled. "
+"See `sync.target`."
+msgstr ""
+"ファイルシステム同期の有効時に同期を行うパスです。`sync.target`も参考にしてく"
+"ださい。"
+
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "無効な設定値: \"%s\"。有効な値は: %sです。"
+
+msgid "Items that cannot be synchronised"
+msgstr "同期が出来なかったアイテム"
+
+#, javascript-format
+msgid "\"%s\": \"%s\""
+msgstr ""
+
+msgid "Sync status (synced items / total items)"
+msgstr "同期状況 (同期済/総数)"
+
+#, javascript-format
+msgid "%s: %d/%d"
+msgstr ""
+
+#, javascript-format
+msgid "Total: %d/%d"
+msgstr "総数: %d/%d"
+
+#, javascript-format
+msgid "Conflicted: %d"
+msgstr "衝突: %d"
+
+#, javascript-format
+msgid "To delete: %d"
+msgstr "削除予定: %d"
+
+msgid "Folders"
+msgstr "フォルダ"
+
+#, javascript-format
+msgid "%s: %d notes"
+msgstr "%s: %d ノート"
+
+msgid "Coming alarms"
+msgstr "時間のきたアラーム"
+
+#, javascript-format
+msgid "On %s: %s"
+msgstr ""
+
+msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgstr "ノートがありません。(+)ボタンを押して新しいノートを作成してください。"
+
+msgid "Delete these notes?"
+msgstr "ノートを削除しますか？"
+
+msgid "Log"
+msgstr "ログ"
+
+msgid "Export Debug Report"
+msgstr "デバッグレポートの出力"
+
+msgid "Configuration"
+msgstr "設定"
+
+msgid "Move to notebook..."
+msgstr "ノートブックへ移動..."
+
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr "%d個のノートを\"%s\"に移動しますか？"
+
+msgid "Select date"
+msgstr "日付の選択"
+
+msgid "Confirm"
+msgstr "確認"
+
+msgid "Cancel synchronisation"
+msgstr "同期の中止"
+
+#, javascript-format
+msgid "The notebook could not be saved: %s"
+msgstr "ノートブックは保存できませんでした：%s"
+
+msgid "Edit notebook"
+msgstr "ノートブックの編集"
+
+msgid "This note has been modified:"
+msgstr "ノートは変更されています："
+
+msgid "Save changes"
+msgstr "変更を保存"
+
+msgid "Discard changes"
+msgstr "変更を破棄"
+
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr "サポートされていないイメージ形式: %s."
+
+msgid "Attach photo"
+msgstr "写真を添付"
+
+msgid "Attach any file"
+msgstr "ファイルを添付"
+
+msgid "Convert to note"
+msgstr "ノートに変換"
+
+msgid "Convert to todo"
+msgstr "ToDoに変換"
+
+msgid "Hide metadata"
+msgstr "メタデータを隠す"
+
+msgid "Show metadata"
+msgstr "メタデータを表示"
+
+msgid "View on map"
+msgstr "地図上に表示"
+
+msgid "Delete notebook"
+msgstr "ノートブックを削除"
+
+msgid "Login with OneDrive"
+msgstr "OneDriveログイン"
+
+msgid ""
+"Click on the (+) button to create a new note or notebook. Click on the side "
+"menu to access your existing notebooks."
+msgstr ""
+"(+)ボタンを押してノートやノートブックを作成してください。サイドメニューからあ"
+"なたのノートブックにアクセスが出来ます。"
+
+msgid "You currently have no notebook. Create one by clicking on (+) button."
+msgstr ""
+"ノートブックがありません。(+)をクリックして新しいノートブックを作成してくださ"
+"い。"
+
+msgid "Welcome"
+msgstr "ようこそ"

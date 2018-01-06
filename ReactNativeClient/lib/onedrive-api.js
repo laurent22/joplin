@@ -216,7 +216,7 @@ class OneDriveApi {
 					this.logger().info(error);
 					await time.sleep((i + 1) * 3);
 					continue;
-				} else if (error && error.error && error.error.code === 'resourceModified') {
+				} else if (error && (error.code === 'resourceModified' || (error.error && error.error.code === 'resourceModified'))) {
 					// NOTE: not tested, very hard to reproduce and non-informative error message, but can be repeated
 
 					// Error: ETag does not match current item's value

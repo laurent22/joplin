@@ -1,8 +1,8 @@
-const { BaseModel } = require('lib/base-model.js');
+const BaseModel = require('lib/BaseModel.js');
 const { Log } = require('lib/log.js');
 const { sprintf } = require('sprintf-js');
-const { BaseItem } = require('lib/models/base-item.js');
-const { Setting } = require('lib/models/setting.js');
+const BaseItem = require('lib/models/BaseItem.js');
+const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim.js');
 const { time } = require('lib/time-utils.js');
 const { _ } = require('lib/locale.js');
@@ -153,7 +153,7 @@ class Note extends BaseItem {
 	}
 
 	static previewFields() {
-		return ['id', 'title', 'body', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time'];
+		return ['id', 'title', 'body', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'encryption_applied'];
 	}
 
 	static previewFieldsSql() {
@@ -438,6 +438,10 @@ class Note extends BaseItem {
 		// That shouldn't happen so throw an exception
 		if (localNote.id !== remoteNote.id) throw new Error('Cannot handle conflict for two different notes');
 
+		// For encrypted notes the conflict must always be handled
+		if (localNote.encryption_cipher_text || remoteNote.encryption_cipher_text) return true;
+
+		// Otherwise only handle the conflict if there's a different on the title or body
 		if (localNote.title !== remoteNote.title) return true;
 		if (localNote.body !== remoteNote.body) return true;
 
@@ -449,4 +453,4 @@ class Note extends BaseItem {
 Note.updateGeolocationEnabled_ = true;
 Note.geolocationUpdating_ = false;
 
-module.exports = { Note };
+module.exports = Note;

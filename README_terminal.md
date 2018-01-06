@@ -12,7 +12,7 @@ The notes can be [synchronised](#synchronisation) with various targets including
 
 On macOS:
 
-	brew install node joplin
+	brew install joplin
 
 On Linux or Windows (via [WSL](https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&MSPPError=-2147217396)):
 
@@ -359,7 +359,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 # License
 
-Copyright (c) 2016-2017 Laurent Cozic
+Copyright (c) 2016-2018 Laurent Cozic
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

@@ -1,15 +1,15 @@
 const React = require('react'); const Component = React.Component;
 const { ListView, StyleSheet, View, Text, Button, FlatList } = require('react-native');
-const { Setting } = require('lib/models/setting.js');
+const Setting = require('lib/models/Setting.js');
 const { connect } = require('react-redux');
 const { Log } = require('lib/log.js');
 const { reg } = require('lib/registry.js');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { time } = require('lib/time-utils');
 const { Logger } = require('lib/logger.js');
-const { BaseItem } = require('lib/models/base-item.js');
+const BaseItem = require('lib/models/BaseItem.js');
 const { Database } = require('lib/database.js');
-const { Folder } = require('lib/models/folder.js');
+const Folder = require('lib/models/Folder.js');
 const { ReportService } = require('lib/services/report.js');
 const { _ } = require('lib/locale.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');

@@ -1,7 +1,7 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const { reg } = require('lib/registry.js');
-const { Setting } = require('lib/models/setting.js');
+const Setting = require('lib/models/Setting.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const { Header } = require('./Header.min.js');
 const { themeStyle } = require('../theme.js');
@@ -70,7 +70,9 @@ class StatusScreenComponent extends React.Component {
 
 			for (let n in section.body) {
 				if (!section.body.hasOwnProperty(n)) continue;
-				itemsHtml.push(<div style={theme.textStyle} key={'item_' + n}>{section.body[n]}</div>);
+				let text = section.body[n];
+				if (!text) text = '\xa0';
+				itemsHtml.push(<div style={theme.textStyle} key={'item_' + n}>{text}</div>);
 			}
 
 			return (

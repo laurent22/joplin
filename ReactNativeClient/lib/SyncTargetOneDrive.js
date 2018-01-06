@@ -1,7 +1,7 @@
 const BaseSyncTarget = require('lib/BaseSyncTarget.js');
 const { _ } = require('lib/locale.js');
 const { OneDriveApi } = require('lib/onedrive-api.js');
-const { Setting } = require('lib/models/setting.js');
+const Setting = require('lib/models/Setting.js');
 const { parameters } = require('lib/parameters.js');
 const { FileApi } = require('lib/file-api.js');
 const { Synchronizer } = require('lib/synchronizer.js');

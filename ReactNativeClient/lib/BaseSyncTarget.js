@@ -1,4 +1,4 @@
-const { reg } = require('lib/registry.js');
+const EncryptionService = require('lib/services/EncryptionService.js');
 
 class BaseSyncTarget {
 
@@ -88,6 +88,7 @@ class BaseSyncTarget {
 			try {
 				this.synchronizer_ = await this.initSynchronizer();
 				this.synchronizer_.setLogger(this.logger());
+				this.synchronizer_.setEncryptionService(EncryptionService.instance());
 				this.synchronizer_.dispatch = BaseSyncTarget.dispatch;
 				this.initState_ = 'ready';
 				return this.synchronizer_;
