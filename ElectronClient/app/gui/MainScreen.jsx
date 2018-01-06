@@ -5,12 +5,12 @@ const { SideBar } = require('./SideBar.min.js');
 const { NoteList } = require('./NoteList.min.js');
 const { NoteText } = require('./NoteText.min.js');
 const { PromptDialog } = require('./PromptDialog.min.js');
-const { Setting } = require('lib/models/setting.js');
-const { BaseModel } = require('lib/base-model.js');
-const { Tag } = require('lib/models/tag.js');
-const { Note } = require('lib/models/note.js');
+const Setting = require('lib/models/Setting.js');
+const BaseModel = require('lib/BaseModel.js');
+const Tag = require('lib/models/Tag.js');
+const Note = require('lib/models/Note.js');
 const { uuid } = require('lib/uuid.js');
-const { Folder } = require('lib/models/folder.js');
+const Folder = require('lib/models/Folder.js');
 const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
 const layoutUtils = require('lib/layout-utils.js');
@@ -132,7 +132,7 @@ class MainScreenComponent extends React.Component {
 					}
 				},
 			});
-		} else if (command.name === 'renameNotebook') {
+		} else if (command.name === 'renameFolder') {
 			const folder = await Folder.load(command.id);
 			if (!folder) return;
 
@@ -143,7 +143,8 @@ class MainScreenComponent extends React.Component {
 					onClose: async (answer) => {
 						if (answer !== null) {
 							try {
-								await Folder.save({ id: folder.id, title: answer }, { userSideValidation: true });
+								folder.title = answer;
+								await Folder.save(folder, { fields: ['title'], userSideValidation: true });
 							} catch (error) {
 								bridge().showErrorMessageBox(error.message);
 							}
@@ -288,8 +289,7 @@ class MainScreenComponent extends React.Component {
 		const promptOptions = this.state.promptOptions;
 		const folders = this.props.folders;
 		const notes = this.props.notes;
-		const messageBoxVisible = this.props.hasDisabledSyncItems;
-
+		const messageBoxVisible = this.props.hasDisabledSyncItems || this.props.showMissingMasterKeyMessage;
 		const styles = this.styles(this.props.theme, style.width, style.height, messageBoxVisible);
 		const theme = themeStyle(this.props.theme);
 
@@ -343,13 +343,31 @@ class MainScreenComponent extends React.Component {
 			});
 		}
 
-		const messageComp = messageBoxVisible ? (
-			<div style={styles.messageBox}>
-				<span style={theme.textStyle}>
-					{_('Some items cannot be synchronised.')} <a href="#" onClick={() => { onViewDisabledItemsClick() }}>{_('View them now')}</a>
-				</span>
-			</div>
-		) : null;
+		const onViewMasterKeysClick = () => {
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'EncryptionConfig',
+			});
+		}
+
+		let messageComp = null;
+
+		if (messageBoxVisible) {
+			let msg = null;
+			if (this.props.hasDisabledSyncItems) {
+				msg = <span>{_('Some items cannot be synchronised.')} <a href="#" onClick={() => { onViewDisabledItemsClick() }}>{_('View them now')}</a></span>
+			} else if (this.props.showMissingMasterKeyMessage) {
+				msg = <span>{_('Some items cannot be decrypted.')} <a href="#" onClick={() => { onViewMasterKeysClick() }}>{_('Set the password')}</a></span>
+			}
+
+			messageComp = (
+				<div style={styles.messageBox}>
+					<span style={theme.textStyle}>
+						{msg}
+					</span>
+				</div>
+			);
+		}
 
 		return (
 			<div style={style}>
@@ -383,6 +401,7 @@ const mapStateToProps = (state) => {
 		folders: state.folders,
 		notes: state.notes,
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
+		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,
 	};
 };
 

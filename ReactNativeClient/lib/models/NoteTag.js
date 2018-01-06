@@ -1,5 +1,5 @@
-const { BaseItem } = require('lib/models/base-item.js');
-const { BaseModel } = require('lib/base-model.js');
+const BaseItem = require('lib/models/BaseItem.js');
+const BaseModel = require('lib/BaseModel.js');
 
 class NoteTag extends BaseItem {
 
@@ -33,4 +33,4 @@ class NoteTag extends BaseItem {
 
 }
 
-module.exports = { NoteTag };
+module.exports = NoteTag;

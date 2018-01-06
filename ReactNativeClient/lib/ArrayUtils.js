@@ -6,4 +6,11 @@ ArrayUtils.unique = function(array) {
 	});
 }
 
+ArrayUtils.removeElement = function(array, element) {
+	const index = array.indexOf(element);
+	if (index < 0) return array;
+	array.splice(index, 1);
+	return array;
+}
+
 module.exports = ArrayUtils;

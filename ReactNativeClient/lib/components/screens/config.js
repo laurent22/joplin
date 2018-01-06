@@ -6,7 +6,7 @@ const { _, setLocale } = require('lib/locale.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { Dropdown } = require('lib/components/Dropdown.js');
 const { themeStyle } = require('lib/components/global-style.js');
-const { Setting } = require('lib/models/setting.js');
+const Setting = require('lib/models/Setting.js');
 
 class ConfigScreenComponent extends BaseScreenComponent {
 	

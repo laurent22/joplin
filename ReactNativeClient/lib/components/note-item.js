@@ -5,7 +5,7 @@ const { Log } = require('lib/log.js');
 const { _ } = require('lib/locale.js');
 const { Checkbox } = require('lib/components/checkbox.js');
 const { reg } = require('lib/registry.js');
-const { Note } = require('lib/models/note.js');
+const Note = require('lib/models/Note.js');
 const { time } = require('lib/time-utils.js');
 const { globalStyle, themeStyle } = require('lib/components/global-style.js');
 
@@ -81,6 +81,7 @@ class NoteItemComponent extends Component {
 
 	onPress() {
 		if (!this.props.note) return;
+		if (!!this.props.note.encryption_applied) return;
 
 		if (this.props.noteSelectionEnabled) {
 			this.props.dispatch({
@@ -141,7 +142,7 @@ class NoteItemComponent extends Component {
 								checked={checkboxChecked}
 								onChange={(checked) => this.todoCheckbox_change(checked)}
 							/>
-							<Text style={listItemTextStyle}>{note.title}</Text>
+							<Text style={listItemTextStyle}>{Note.displayTitle(note)}</Text>
 						</View>
 					</View>
 				</View>

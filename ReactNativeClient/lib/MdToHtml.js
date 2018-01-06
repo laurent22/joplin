@@ -1,7 +1,7 @@
 const MarkdownIt = require('markdown-it');
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = (new Entities()).encode;
-const { Resource } = require('lib/models/resource.js');
+const Resource = require('lib/models/Resource.js');
 const ModelCache = require('lib/ModelCache');
 const { shim } = require('lib/shim.js');
 const md5 = require('md5');

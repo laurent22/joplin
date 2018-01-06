@@ -2,13 +2,14 @@ require('app-module-path').addPath(__dirname);
 
 const { BaseApplication } = require('lib/BaseApplication');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
-const { Setting } = require('lib/models/setting.js');
+const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim.js');
-const { BaseModel } = require('lib/base-model.js');
+const BaseModel = require('lib/BaseModel.js');
+const MasterKey = require('lib/models/MasterKey');
 const { _, setLocale } = require('lib/locale.js');
 const os = require('os');
 const fs = require('fs-extra');
-const { Tag } = require('lib/models/tag.js');
+const Tag = require('lib/models/Tag.js');
 const { reg } = require('lib/registry.js');
 const { sprintf } = require('sprintf-js');
 const { JoplinDatabase } = require('lib/joplin-database.js');
@@ -18,6 +19,7 @@ const { defaultState } = require('lib/reducer.js');
 const packageInfo = require('./packageInfo.js');
 const AlarmService = require('lib/services/AlarmService.js');
 const AlarmServiceDriverNode = require('lib/services/AlarmServiceDriverNode');
+const DecryptionWorker = require('lib/services/DecryptionWorker');
 
 const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
@@ -255,7 +257,7 @@ class Application extends BaseApplication {
 							name: 'search',
 						});
 					},
-				}]
+				}],
 			}, {
 				label: _('Tools'),
 				submenu: [{
@@ -266,15 +268,26 @@ class Application extends BaseApplication {
 							routeName: 'Status',
 						});
 					}
+				}, {
+					type: 'separator',
+					screens: ['Main'],
 				},{
-					label: _('Options'),
+					label: _('Encryption options'),
+					click: () => {
+						this.dispatch({
+							type: 'NAV_GO',
+							routeName: 'EncryptionConfig',
+						});
+					}
+				},{
+					label: _('General Options'),
 					click: () => {
 						this.dispatch({
 							type: 'NAV_GO',
 							routeName: 'Config',
 						});
 					}
-				}]
+				}],
 			}, {
 				label: _('Help'),
 				submenu: [{
@@ -288,7 +301,7 @@ class Application extends BaseApplication {
 						let message = [
 							p.description,
 							'',
-							'Copyright © 2016-2017 Laurent Cozic',
+							'Copyright © 2016-2018 Laurent Cozic',
 							_('%s %s (%s, %s)', p.name, p.version, Setting.value('env'), process.platform),
 						];
 						bridge().showMessageBox({
@@ -354,7 +367,14 @@ class Application extends BaseApplication {
 
 		this.dispatch({
 			type: 'TAG_UPDATE_ALL',
-			tags: tags,
+			items: tags,
+		});
+
+		const masterKeys = await MasterKey.all();
+
+		this.dispatch({
+			type: 'MASTERKEY_UPDATE_ALL',
+			items: masterKeys,
 		});
 
 		this.store().dispatch({
@@ -387,6 +407,8 @@ class Application extends BaseApplication {
 				// Wait for the first sync before updating the notifications, since synchronisation
 				// might change the notifications.
 				AlarmService.updateAllNotifications();
+
+				DecryptionWorker.instance().scheduleStart();
 			});
 		}
 	}

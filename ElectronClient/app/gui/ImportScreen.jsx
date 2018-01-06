@@ -1,7 +1,7 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const { reg } = require('lib/registry.js');
-const { Folder } = require('lib/models/folder.js');
+const Folder = require('lib/models/Folder.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const { Header } = require('./Header.min.js');
 const { themeStyle } = require('../theme.js');

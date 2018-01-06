@@ -1,5 +1,5 @@
 const { Logger } = require('lib/logger.js');
-const { Setting } = require('lib/models/setting.js');
+const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const { _ } = require('lib/locale.js');
@@ -65,7 +65,7 @@ reg.scheduleSync = async (delay = null) => {
 
 	const timeoutCallback = async () => {
 		reg.scheduleSyncId_ = null;
-		reg.logger().info('Doing scheduled sync');
+		reg.logger().info('Preparing scheduled sync');
 
 		const syncTargetId = Setting.value('sync.target');
 
@@ -82,6 +82,7 @@ reg.scheduleSync = async (delay = null) => {
 			let context = Setting.value(contextKey);
 			context = context ? JSON.parse(context) : {};
 			try {
+				reg.logger().info('Starting scheduled sync');
 				let newContext = await sync.start({ context: context });
 				Setting.setValue(contextKey, JSON.stringify(newContext));
 			} catch (error) {

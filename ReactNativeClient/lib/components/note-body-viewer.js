@@ -1,8 +1,8 @@
 const React = require('react'); const Component = React.Component;
 const { Platform, WebView, View, Linking } = require('react-native');
 const { globalStyle } = require('lib/components/global-style.js');
-const { Resource } = require('lib/models/resource.js');
-const { Setting } = require('lib/models/setting.js');
+const Resource = require('lib/models/Resource.js');
+const Setting = require('lib/models/Setting.js');
 const { reg } = require('lib/registry.js');
 const MdToHtml = require('lib/MdToHtml.js');
 

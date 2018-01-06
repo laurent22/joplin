@@ -31,7 +31,7 @@ shared.renderSearches = function(props, renderItem) {
 }
 
 shared.synchronize_press = async function(comp) {
-	const { Setting } = require('lib/models/setting.js');
+	const Setting = require('lib/models/Setting.js');
 	const { reg } = require('lib/registry.js');
 
 	const action = comp.props.syncStarted ? 'cancel' : 'start';

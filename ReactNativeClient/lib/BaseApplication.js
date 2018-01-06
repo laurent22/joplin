@@ -4,12 +4,12 @@ const { JoplinDatabase } = require('lib/joplin-database.js');
 const { Database } = require('lib/database.js');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');
-const { BaseModel } = require('lib/base-model.js');
-const { Folder } = require('lib/models/folder.js');
-const { BaseItem } = require('lib/models/base-item.js');
-const { Note } = require('lib/models/note.js');
-const { Tag } = require('lib/models/tag.js');
-const { Setting } = require('lib/models/setting.js');
+const BaseModel = require('lib/BaseModel.js');
+const Folder = require('lib/models/Folder.js');
+const BaseItem = require('lib/models/BaseItem.js');
+const Note = require('lib/models/Note.js');
+const Tag = require('lib/models/Tag.js');
+const Setting = require('lib/models/Setting.js');
 const { Logger } = require('lib/logger.js');
 const { splitCommandString } = require('lib/string-utils.js');
 const { sprintf } = require('sprintf-js');
@@ -26,6 +26,8 @@ const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
+const EncryptionService = require('lib/services/EncryptionService');
+const DecryptionWorker = require('lib/services/DecryptionWorker');
 
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -265,6 +267,19 @@ class BaseApplication {
 			time.setTimeFormat(Setting.value('timeFormat'));
 		}
 
+		if ((action.type == 'SETTING_UPDATE_ONE' && (action.key.indexOf('encryption.') === 0)) || (action.type == 'SETTING_UPDATE_ALL')) {
+			if (this.hasGui()) {
+				await EncryptionService.instance().loadMasterKeysFromSettings();
+				DecryptionWorker.instance().scheduleStart();
+				const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
+
+				this.dispatch({
+					type: 'MASTERKEY_REMOVE_NOT_LOADED',
+					ids: loadedMasterKeyIds,
+				});
+			}
+		}
+
 		if (action.type == 'TAG_SELECT' || action.type === 'TAG_DELETE') {
 			await this.refreshNotes(newState);
 		}
@@ -289,6 +304,10 @@ class BaseApplication {
 			reg.setupRecurrentSync();
 		}
 
+		if (this.hasGui() && action.type === 'SYNC_GOT_ENCRYPTED_ITEM') {
+			DecryptionWorker.instance().scheduleStart();
+		}
+
 	  	return result;
 	}
 
@@ -306,6 +325,7 @@ class BaseApplication {
 		FoldersScreenUtils.dispatch = this.store().dispatch;
 		reg.dispatch = this.store().dispatch;
 		BaseSyncTarget.dispatch = this.store().dispatch;
+		DecryptionWorker.instance().dispatch = this.store().dispatch;
 	}
 
 	async readFlagsFromFile(flagPath) {
@@ -391,6 +411,12 @@ class BaseApplication {
 		} else {
 			setLocale(Setting.value('locale'));
 		}
+
+		EncryptionService.instance().setLogger(this.logger_);
+		BaseItem.encryptionService_ = EncryptionService.instance();
+		DecryptionWorker.instance().setLogger(this.logger_);
+		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
+		await EncryptionService.instance().loadMasterKeysFromSettings();
 
 		let currentFolderId = Setting.value('activeFolderId');
 		let currentFolder = null;

@@ -1,6 +1,6 @@
-const Folder = require('lib/models/folder.js').Folder;
-const Tag = require('lib/models/tag.js').Tag;
-const BaseModel = require('lib/base-model.js').BaseModel;
+const Folder = require('lib/models/Folder.js');
+const Tag = require('lib/models/Tag.js');
+const BaseModel = require('lib/BaseModel.js');
 const ListWidget = require('tkwidgets/ListWidget.js');
 const _ = require('lib/locale.js')._;
 
@@ -24,9 +24,9 @@ class FolderListWidget extends ListWidget {
 			if (item === '-') {
 				output.push('-'.repeat(this.innerWidth));
 			} else if (item.type_ === Folder.modelType()) {
-				output.push(item.title);
+				output.push(Folder.displayTitle(item));
 			} else if (item.type_ === Tag.modelType()) {
-				output.push('[' + item.title + ']');
+				output.push('[' + Folder.displayTitle(item) + ']');
 			} else if (item.type_ === BaseModel.TYPE_SEARCH) {
 				output.push(_('Search:'));
 				output.push(item.title);

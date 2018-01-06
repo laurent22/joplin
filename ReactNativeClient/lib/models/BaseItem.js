@@ -1,13 +1,19 @@
-const { BaseModel } = require('lib/base-model.js');
+const BaseModel = require('lib/BaseModel.js');
 const { Database } = require('lib/database.js');
-const { Setting } = require('lib/models/setting.js');
+const Setting = require('lib/models/Setting.js');
+const JoplinError = require('lib/JoplinError.js');
 const { time } = require('lib/time-utils.js');
 const { sprintf } = require('sprintf-js');
+const { _ } = require('lib/locale.js');
 const moment = require('moment');
 
 class BaseItem extends BaseModel {
 
 	static useUuid() {
+		return true;
+	}
+
+	static encryptionSupported() {
 		return true;
 	}
 
@@ -26,6 +32,8 @@ class BaseItem extends BaseModel {
 	static getClass(name) {
 		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
 			if (BaseItem.syncItemDefinitions_[i].className == name) {
+				const classRef = BaseItem.syncItemDefinitions_[i].classRef;
+				if (!classRef) throw new Error('Class has not been loaded: ' + name);
 				return BaseItem.syncItemDefinitions_[i].classRef;
 			}
 		}
@@ -245,6 +253,55 @@ class BaseItem extends BaseModel {
 		return temp.join("\n\n");
 	}
 
+	static encryptionService() {
+		if (!this.encryptionService_) throw new Error('BaseItem.encryptionService_ is not set!!');
+		return this.encryptionService_;
+	}
+
+	static async serializeForSync(item) {
+		const ItemClass = this.itemClass(item);
+		let serialized = await ItemClass.serialize(item);
+		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported()) {
+			// Normally not possible since itemsThatNeedSync should only return decrypted items
+			if (!!item.encryption_applied) throw new JoplinError('Item is encrypted but encryption is currently disabled', 'cannotSyncEncrypted');
+			return serialized;
+		}
+
+		if (!!item.encryption_applied) { const e = new Error('Trying to encrypt item that is already encrypted'); e.code = 'cannotEncryptEncrypted'; throw e; }
+
+		const cipherText = await this.encryptionService().encryptString(serialized);
+
+		// List of keys that won't be encrypted - mostly foreign keys required to link items
+		// with each others and timestamp required for synchronisation.
+		const keepKeys = ['id', 'note_id', 'tag_id', 'parent_id', 'updated_time', 'type_'];
+		const reducedItem = {};
+
+		for (let i = 0; i < keepKeys.length; i++) {
+			const n = keepKeys[i];
+			if (!item.hasOwnProperty(n)) continue;
+			reducedItem[n] = item[n];
+		}
+
+		reducedItem.encryption_applied = 1;
+		reducedItem.encryption_cipher_text = cipherText;
+
+		return ItemClass.serialize(reducedItem)
+	}
+
+	static async decrypt(item) {
+		if (!item.encryption_cipher_text) throw new Error('Item is not encrypted: ' + item.id);
+
+		const ItemClass = this.itemClass(item);
+		const plainText = await this.encryptionService().decryptString(item.encryption_cipher_text);
+
+		// Note: decryption does not count has a change, so don't update any timestamp
+		const plainItem = await ItemClass.unserialize(plainText);
+		plainItem.updated_time = item.updated_time;
+		plainItem.encryption_cipher_text = '';
+		plainItem.encryption_applied = 0;
+		return ItemClass.save(plainItem, { autoTimestamp: false });
+	}
+
 	static async unserialize(content) {
 		let lines = content.split("\n");
 		let output = {};
@@ -290,6 +347,84 @@ class BaseItem extends BaseModel {
 		return output;
 	}
 
+	static async encryptedItemsStats() {
+		const classNames = this.encryptableItemClassNames();
+		let encryptedCount = 0;
+		let totalCount = 0;
+
+		for (let i = 0; i < classNames.length; i++) {
+			const ItemClass = this.getClass(classNames[i]);
+			encryptedCount += await ItemClass.count({ where: 'encryption_applied = 1' });
+			totalCount += await ItemClass.count();
+		}
+
+		return {
+			encrypted: encryptedCount,
+			total: totalCount,
+		};
+	}
+
+	static async encryptedItemsCount() {
+		const classNames = this.encryptableItemClassNames();
+		let output = 0;
+
+		for (let i = 0; i < classNames.length; i++) {
+			const className = classNames[i];
+			const ItemClass = this.getClass(className);
+			const count = await ItemClass.count({ where: 'encryption_applied = 1' });
+			output += count;
+		}
+
+		return output;
+	}
+
+	static async hasEncryptedItems() {
+		const classNames = this.encryptableItemClassNames();
+
+		for (let i = 0; i < classNames.length; i++) {
+			const className = classNames[i];
+			const ItemClass = this.getClass(className);
+
+			const count = await ItemClass.count({ where: 'encryption_applied = 1' });
+			if (count) return true;
+		}
+
+		return false;
+	}
+
+	static async itemsThatNeedDecryption(exclusions = [], limit = 100) {
+		const classNames = this.encryptableItemClassNames();
+
+		for (let i = 0; i < classNames.length; i++) {
+			const className = classNames[i];
+			const ItemClass = this.getClass(className);
+
+			const whereSql = className === 'Resource' ? ['(encryption_blob_encrypted = 1 OR encryption_applied = 1)'] : ['encryption_applied = 1'];
+			if (exclusions.length) whereSql.push('id NOT IN ("' + exclusions.join('","') + '")');
+
+			const sql = sprintf(`
+				SELECT *
+				FROM %s
+				WHERE %s
+				LIMIT %d
+				`,
+				this.db().escapeField(ItemClass.tableName()),
+				whereSql.join(' AND '),
+				limit
+			);
+
+			const items = await ItemClass.modelSelectAll(sql);
+
+			if (i >= classNames.length - 1) {
+				return { hasMore: items.length >= limit, items: items };
+			} else {
+				if (items.length) return { hasMore: true, items: items };
+			}
+		}
+
+		throw new Error('Unreachable');
+	}
+
 	static async itemsThatNeedSync(syncTarget, limit = 100) {
 		const classNames = this.syncItemClassNames();
 
@@ -304,7 +439,12 @@ class BaseItem extends BaseModel {
 			// // CHANGED:
 			// 'SELECT * FROM [ITEMS] items JOIN sync_items s ON s.item_id = items.id WHERE sync_target = ? AND'
 
-			let extraWhere = className == 'Note' ? 'AND is_conflict = 0' : '';
+			let extraWhere = [];
+			if (className == 'Note') extraWhere.push('is_conflict = 0');
+			if (className == 'Resource') extraWhere.push('encryption_blob_encrypted = 0');
+			if (ItemClass.encryptionSupported()) extraWhere.push('encryption_applied = 0');
+
+			extraWhere = extraWhere.length ? 'AND ' + extraWhere.join(' AND ') : '';
 
 			// First get all the items that have never been synced under this sync target
 
@@ -338,7 +478,7 @@ class BaseItem extends BaseModel {
 					SELECT %s FROM %s items
 					JOIN sync_items s ON s.item_id = items.id
 					WHERE sync_target = %d
-					AND s.sync_time < items.updated_time
+					AND (s.sync_time < items.updated_time OR force_sync = 1)
 					AND s.sync_disabled = 0
 					%s
 					LIMIT %d
@@ -368,6 +508,16 @@ class BaseItem extends BaseModel {
 		return BaseItem.syncItemDefinitions_.map((def) => {
 			return def.className;
 		});
+	}
+
+	static encryptableItemClassNames() {
+		const temp = this.syncItemClassNames();
+		let output = [];
+		for (let i = 0; i < temp.length; i++) {
+			if (temp[i] === 'MasterKey') continue;
+			output.push(temp[i]);
+		}
+		return output;
 	}
 
 	static syncItemTypes() {
@@ -445,7 +595,54 @@ class BaseItem extends BaseModel {
 		await this.db().transactionExecBatch(queries);
 	}
 
+	static displayTitle(item) {
+		if (!item) return '';
+		return !!item.encryption_applied ? '🔑 ' + _('Encrypted') : item.title + '';
+	}
+
+	static async markAllNonEncryptedForSync() {
+		const classNames = this.encryptableItemClassNames();
+
+		for (let i = 0; i < classNames.length; i++) {
+			const className = classNames[i];
+			const ItemClass = this.getClass(className);
+
+			const sql = sprintf(`
+				SELECT id
+				FROM %s
+				WHERE encryption_applied = 0`,
+				this.db().escapeField(ItemClass.tableName()),
+			);
+
+			const items = await ItemClass.modelSelectAll(sql);
+			const ids = items.map((item) => {return item.id});
+			if (!ids.length) continue;
+
+			await this.db().exec('UPDATE sync_items SET force_sync = 1 WHERE item_id IN ("' + ids.join('","') + '")');
+		}
+	}
+
+	static async forceSync(itemId) {
+		await this.db().exec('UPDATE sync_items SET force_sync = 1 WHERE item_id = ?', [itemId]);
+	}
+
+	static async forceSyncAll() {
+		await this.db().exec('UPDATE sync_items SET force_sync = 1');
+	}
+
+	static async save(o, options = null) {
+		if (!options) options = {};
+
+		if (options.userSideValidation === true) {
+			if (!!o.encryption_applied) throw new Error(_('Encrypted items cannot be modified'));
+		}
+
+		return super.save(o, options);
+	}
+
 }
+
+BaseItem.encryptionService_ = null;
 
 // Also update:
 // - itemsThatNeedSync()
@@ -457,6 +654,7 @@ BaseItem.syncItemDefinitions_ = [
 	{ type: BaseModel.TYPE_RESOURCE, className: 'Resource' },
 	{ type: BaseModel.TYPE_TAG, className: 'Tag' },
 	{ type: BaseModel.TYPE_NOTE_TAG, className: 'NoteTag' },
+	{ type: BaseModel.TYPE_MASTER_KEY, className: 'MasterKey' },
 ];
 
-module.exports = { BaseItem };
+module.exports = BaseItem;

@@ -5,10 +5,10 @@ const { Logger } = require('lib/logger.js');
 const { dirname } = require('lib/path-utils.js');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');
 const { JoplinDatabase } = require('lib/joplin-database.js');
-const { BaseModel } = require('lib/base-model.js');
-const { Folder } = require('lib/models/folder.js');
-const { Note } = require('lib/models/note.js');
-const { Setting } = require('lib/models/setting.js');
+const BaseModel = require('lib/BaseModel.js');
+const Folder = require('lib/models/Folder.js');
+const Note = require('lib/models/Note.js');
+const Setting = require('lib/models/Setting.js');
 const { sprintf } = require('sprintf-js');
 const exec = require('child_process').exec
 

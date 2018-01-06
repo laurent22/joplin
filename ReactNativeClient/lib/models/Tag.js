@@ -1,7 +1,7 @@
-const { BaseModel } = require('lib/base-model.js');
-const { BaseItem } = require('lib/models/base-item.js');
-const { NoteTag } = require('lib/models/note-tag.js');
-const { Note } = require('lib/models/note.js');
+const BaseModel = require('lib/BaseModel.js');
+const BaseItem = require('lib/models/BaseItem.js');
+const NoteTag = require('lib/models/NoteTag.js');
+const Note = require('lib/models/Note.js');
 const { time } = require('lib/time-utils.js');
 
 class Tag extends BaseItem {
@@ -70,7 +70,7 @@ class Tag extends BaseItem {
 
 		this.dispatch({
 			type: 'TAG_UPDATE_ONE',
-			tag: await Tag.load(tagId),
+			item: await Tag.load(tagId),
 		});
 
 		return output;
@@ -84,7 +84,7 @@ class Tag extends BaseItem {
 
 		this.dispatch({
 			type: 'TAG_UPDATE_ONE',
-			tag: await Tag.load(tagId),
+			item: await Tag.load(tagId),
 		});
 	}
 
@@ -132,7 +132,7 @@ class Tag extends BaseItem {
 		return super.save(o, options).then((tag) => {
 			this.dispatch({
 				type: 'TAG_UPDATE_ONE',
-				tag: tag,
+				item: tag,
 			});
 			return tag;
 		});
@@ -140,4 +140,4 @@ class Tag extends BaseItem {
 
 }
 
-module.exports = { Tag };
+module.exports = Tag;

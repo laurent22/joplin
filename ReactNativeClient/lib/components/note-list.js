@@ -6,8 +6,8 @@ const { _ } = require('lib/locale.js');
 const { Checkbox } = require('lib/components/checkbox.js');
 const { NoteItem } = require('lib/components/note-item.js');
 const { reg } = require('lib/registry.js');
-const { Note } = require('lib/models/note.js');
-const { Setting } = require('lib/models/setting.js');
+const Note = require('lib/models/Note.js');
+const Setting = require('lib/models/Setting.js');
 const { time } = require('lib/time-utils.js');
 const { themeStyle } = require('lib/components/global-style.js');
 
