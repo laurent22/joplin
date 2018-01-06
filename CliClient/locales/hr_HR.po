@@ -116,6 +116,9 @@ msgstr "Ne postoji naredba: %s"
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Naredba \"%s\" postoji samo u inačici s grafičkim sučeljem"
 
+msgid "Cannot change encrypted item"
+msgstr ""
+
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr "Nedostaje obavezni argument: %s"
@@ -179,6 +182,36 @@ msgstr "Označava zadatak završenim."
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "Bilješka nije zadatak: \"%s\""
+
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status` and `target-status`."
+msgstr ""
+
+msgid "Enter master password:"
+msgstr ""
+
+msgid "Operation cancelled"
+msgstr ""
+
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+
+msgid "Completed decryption."
+msgstr ""
+
+#, fuzzy
+msgid "Enabled"
+msgstr "Onemogućeno"
+
+msgid "Disabled"
+msgstr "Onemogućeno"
+
+#, javascript-format
+msgid "Encryption is: %s"
+msgstr ""
 
 msgid "Edit note."
 msgstr "Uredi bilješku."
@@ -566,8 +599,18 @@ msgstr ""
 "\n"
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+
 msgid "File"
 msgstr "Datoteka"
+
+msgid "Save"
+msgstr "Spremi"
 
 msgid "New note"
 msgstr "Nova bilješka"
@@ -608,7 +651,11 @@ msgstr "Alati"
 msgid "Synchronisation status"
 msgstr "Status sinkronizacije"
 
-msgid "Options"
+msgid "Encryption options"
+msgstr ""
+
+#, fuzzy
+msgid "General Options"
 msgstr "Opcije"
 
 msgid "Help"
@@ -633,9 +680,6 @@ msgstr "Odustani"
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Bilješke i postavke su pohranjene u: %s"
-
-msgid "Save"
-msgstr "Spremi"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -691,13 +735,6 @@ msgstr "Status"
 
 msgid "Encryption is:"
 msgstr ""
-
-#, fuzzy
-msgid "Enabled"
-msgstr "Onemogućeno"
-
-msgid "Disabled"
-msgstr "Onemogućeno"
 
 msgid "Back"
 msgstr "Natrag"
@@ -792,6 +829,9 @@ msgstr "OneDrive Login"
 
 msgid "Import"
 msgstr "Uvoz"
+
+msgid "Options"
+msgstr "Opcije"
 
 msgid "Synchronisation Status"
 msgstr "Status Sinkronizacije"
@@ -911,6 +951,13 @@ msgstr "Dovršeno: %s"
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Sinkronizacija je već u toku. Stanje: %s"
 
+msgid "Encrypted"
+msgstr ""
+
+#, fuzzy
+msgid "Encrypted items cannot be modified"
+msgstr "Neke stavke se ne mogu sinkronizirati."
+
 msgid "Conflicts"
 msgstr "Sukobi"
 
@@ -1018,9 +1065,15 @@ msgstr "Nevažeća vrijednost: \"%s\". Moguće vrijednosti su: %s."
 msgid "Items that cannot be synchronised"
 msgstr "Stavke koje se ne mogu sinkronizirati"
 
-#, javascript-format
-msgid "\"%s\": \"%s\""
-msgstr "\"%s\": \"%s\""
+#, fuzzy, javascript-format
+msgid "%s (%s): %s"
+msgstr "%s %s (%s)"
+
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "Status (sinkronizirane stavke / ukupni broj stavki)"
@@ -1067,6 +1120,9 @@ msgstr "Log"
 msgid "Export Debug Report"
 msgstr "Izvezi Debug izvještaj"
 
+msgid "Encryption Config"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Konfiguracija"
 
@@ -1077,6 +1133,9 @@ msgstr "Premjesti u bilježnicu..."
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "Premjesti %d bilješke u bilježnicu \"%s\"?"
 
+msgid "Press to set the decryption password."
+msgstr ""
+
 msgid "Select date"
 msgstr "Odaberi datum"
 
@@ -1085,6 +1144,24 @@ msgstr "Potvrdi"
 
 msgid "Cancel synchronisation"
 msgstr "Prekini sinkronizaciju"
+
+#, javascript-format
+msgid "Master Key %s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Created: %s"
+msgstr "Stvoreno: %d."
+
+msgid "Password:"
+msgstr ""
+
+msgid "Password cannot be empty"
+msgstr ""
+
+#, fuzzy
+msgid "Enable"
+msgstr "Onemogućeno"
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"
@@ -1145,3 +1222,6 @@ msgstr "Trenutno nemaš nijednu bilježnicu. Stvori novu klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobro došli"
+
+#~ msgid "\"%s\": \"%s\""
+#~ msgstr "\"%s\": \"%s\""

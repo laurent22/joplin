@@ -110,6 +110,9 @@ msgstr "Comando inválido: \"%s\""
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "El comando \"%s\" unicamente disponible en modo GUI"
 
+msgid "Cannot change encrypted item"
+msgstr ""
+
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr "Falta un argumento requerido: %s"
@@ -171,6 +174,36 @@ msgstr "Marca una tarea como hecha."
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "Una nota no es una tarea: \"%s\""
+
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status` and `target-status`."
+msgstr ""
+
+msgid "Enter master password:"
+msgstr ""
+
+msgid "Operation cancelled"
+msgstr ""
+
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+
+msgid "Completed decryption."
+msgstr ""
+
+#, fuzzy
+msgid "Enabled"
+msgstr "Deshabilitado"
+
+msgid "Disabled"
+msgstr "Deshabilitado"
+
+#, javascript-format
+msgid "Encryption is: %s"
+msgstr ""
 
 msgid "Edit note."
 msgstr "Editar una nota."
@@ -543,8 +576,18 @@ msgid ""
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
 
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+
 msgid "File"
 msgstr "Archivo"
+
+msgid "Save"
+msgstr ""
 
 msgid "New note"
 msgstr "Nueva nota"
@@ -586,7 +629,11 @@ msgstr "Herramientas"
 msgid "Synchronisation status"
 msgstr "Sincronización de objetivo"
 
-msgid "Options"
+msgid "Encryption options"
+msgstr ""
+
+#, fuzzy
+msgid "General Options"
 msgstr "Opciones"
 
 msgid "Help"
@@ -610,9 +657,6 @@ msgstr "Cancelar"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
-msgstr ""
-
-msgid "Save"
 msgstr ""
 
 msgid ""
@@ -671,13 +715,6 @@ msgstr "Estatus"
 
 msgid "Encryption is:"
 msgstr ""
-
-#, fuzzy
-msgid "Enabled"
-msgstr "Deshabilitado"
-
-msgid "Disabled"
-msgstr "Deshabilitado"
 
 #, fuzzy
 msgid "Back"
@@ -776,6 +813,9 @@ msgstr "Inicio de sesión de OneDrive"
 
 msgid "Import"
 msgstr "Importar"
+
+msgid "Options"
+msgstr "Opciones"
 
 #, fuzzy
 msgid "Synchronisation Status"
@@ -902,6 +942,13 @@ msgstr "Completado: %s"
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "La sincronizacion ya esta en progreso. Estod: %s"
 
+msgid "Encrypted"
+msgstr ""
+
+#, fuzzy
+msgid "Encrypted items cannot be modified"
+msgstr "No se puede inicializar sincronizador."
+
 msgid "Conflicts"
 msgstr "Conflictos"
 
@@ -1013,8 +1060,14 @@ msgstr "Valor inválido de opción: \"%s\". Los válores inválidos son: %s."
 msgid "Items that cannot be synchronised"
 msgstr ""
 
-#, javascript-format
-msgid "\"%s\": \"%s\""
+#, fuzzy, javascript-format
+msgid "%s (%s): %s"
+msgstr "%s %s (%s)"
+
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
 msgstr ""
 
 msgid "Sync status (synced items / total items)"
@@ -1067,6 +1120,9 @@ msgstr "Log"
 msgid "Export Debug Report"
 msgstr "Exportar reporte depuracion"
 
+msgid "Encryption Config"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Configuracion"
 
@@ -1077,6 +1133,9 @@ msgstr "Mover a libreta...."
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "Mover %d notas a libreta \"%s\"?"
 
+msgid "Press to set the decryption password."
+msgstr ""
+
 msgid "Select date"
 msgstr "Seleccionar fecha"
 
@@ -1085,6 +1144,24 @@ msgstr "Confirmar"
 
 msgid "Cancel synchronisation"
 msgstr "Sincronizacion cancelada"
+
+#, javascript-format
+msgid "Master Key %s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Created: %s"
+msgstr "Creado: %d."
+
+msgid "Password:"
+msgstr ""
+
+msgid "Password cannot be empty"
+msgstr ""
+
+#, fuzzy
+msgid "Enable"
+msgstr "Deshabilitado"
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"

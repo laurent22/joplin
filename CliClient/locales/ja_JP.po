@@ -110,6 +110,9 @@ msgstr "コマンドが違います：%s"
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "コマンド \"%s\"は、GUIのみで有効です。"
 
+msgid "Cannot change encrypted item"
+msgstr ""
+
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr "引数が足りません：%s"
@@ -170,6 +173,36 @@ msgstr "ToDoを完了として"
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "ノートはToDoリストではありません：\"%s\""
+
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status` and `target-status`."
+msgstr ""
+
+msgid "Enter master password:"
+msgstr ""
+
+msgid "Operation cancelled"
+msgstr ""
+
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+
+msgid "Completed decryption."
+msgstr ""
+
+#, fuzzy
+msgid "Enabled"
+msgstr "無効"
+
+msgid "Disabled"
+msgstr "無効"
+
+#, javascript-format
+msgid "Encryption is: %s"
+msgstr ""
 
 msgid "Edit note."
 msgstr "ノートを編集する。"
@@ -543,8 +576,18 @@ msgstr ""
 "例えば、ノートブックの作成には`mb`で出来、ノートの作成は`mn`で行うことが出来"
 "ます。"
 
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+
 msgid "File"
 msgstr "ファイル"
+
+msgid "Save"
+msgstr "保存"
 
 msgid "New note"
 msgstr "新しいノート"
@@ -585,7 +628,11 @@ msgstr "ツール"
 msgid "Synchronisation status"
 msgstr "同期状況"
 
-msgid "Options"
+msgid "Encryption options"
+msgstr ""
+
+#, fuzzy
+msgid "General Options"
 msgstr "オプション"
 
 msgid "Help"
@@ -610,9 +657,6 @@ msgstr "キャンセル"
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "ノートと設定は、%sに保存されます。"
-
-msgid "Save"
-msgstr "保存"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -672,13 +716,6 @@ msgstr "状態"
 
 msgid "Encryption is:"
 msgstr ""
-
-#, fuzzy
-msgid "Enabled"
-msgstr "無効"
-
-msgid "Disabled"
-msgstr "無効"
 
 msgid "Back"
 msgstr "戻る"
@@ -773,6 +810,9 @@ msgstr "OneDriveログイン"
 
 msgid "Import"
 msgstr "インポート"
+
+msgid "Options"
+msgstr "オプション"
 
 msgid "Synchronisation Status"
 msgstr "同期状況"
@@ -894,6 +934,13 @@ msgstr "完了: %s"
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "同期作業はすでに実行中です。状態: %s"
 
+msgid "Encrypted"
+msgstr ""
+
+#, fuzzy
+msgid "Encrypted items cannot be modified"
+msgstr "いくつかの項目は同期されませんでした。"
+
 msgid "Conflicts"
 msgstr "衝突"
 
@@ -1004,7 +1051,13 @@ msgid "Items that cannot be synchronised"
 msgstr "同期が出来なかったアイテム"
 
 #, javascript-format
-msgid "\"%s\": \"%s\""
+msgid "%s (%s): %s"
+msgstr ""
+
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
 msgstr ""
 
 msgid "Sync status (synced items / total items)"
@@ -1052,6 +1105,9 @@ msgstr "ログ"
 msgid "Export Debug Report"
 msgstr "デバッグレポートの出力"
 
+msgid "Encryption Config"
+msgstr ""
+
 msgid "Configuration"
 msgstr "設定"
 
@@ -1062,6 +1118,9 @@ msgstr "ノートブックへ移動..."
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "%d個のノートを\"%s\"に移動しますか？"
 
+msgid "Press to set the decryption password."
+msgstr ""
+
 msgid "Select date"
 msgstr "日付の選択"
 
@@ -1070,6 +1129,24 @@ msgstr "確認"
 
 msgid "Cancel synchronisation"
 msgstr "同期の中止"
+
+#, javascript-format
+msgid "Master Key %s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Created: %s"
+msgstr "作成しました：%d"
+
+msgid "Password:"
+msgstr ""
+
+msgid "Password cannot be empty"
+msgstr ""
+
+#, fuzzy
+msgid "Enable"
+msgstr "無効"
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"

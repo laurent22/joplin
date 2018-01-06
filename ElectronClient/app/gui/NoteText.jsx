@@ -178,6 +178,14 @@ class NoteTextComponent extends React.Component {
 		if ('syncStarted' in nextProps && !nextProps.syncStarted && !this.isModified()) {
 			await this.reloadNote(nextProps, { noReloadIfLocalChanges: true });
 		}
+
+		if (newProps.windowCommand) {
+			this.doCommand(newProps.windowCommand);
+		}
+	}
+
+	async doCommand(command) {
+		console.info(command);
 	}
 
 	isModified() {
@@ -369,6 +377,10 @@ class NoteTextComponent extends React.Component {
 		}
 	}
 
+	async commandSave() {
+
+	}
+
 	commandSetAlarm() {
 		const noteId = this.props.noteId;
 		if (!noteId) return;
@@ -513,6 +525,13 @@ class NoteTextComponent extends React.Component {
 		}
 
 		const toolbarItems = [];
+
+		toolbarItems.push({
+			title: _('Save'),
+			iconName: 'fa-save',
+			enabled: this.isModified(),
+			onClick: () => {  },
+		});
 
 		toolbarItems.push({
 			title: _('Attach file'),

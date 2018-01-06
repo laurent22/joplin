@@ -2,7 +2,7 @@
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -108,6 +108,9 @@ msgstr "无以下命令：%s"
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "命令\"%s\"仅在GUI模式下可用"
 
+msgid "Cannot change encrypted item"
+msgstr ""
+
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr "缺失所需参数：%s"
@@ -167,6 +170,36 @@ msgstr "标记待办事项为完成。"
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "笔记非待办事项：\"%s\""
+
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status` and `target-status`."
+msgstr ""
+
+msgid "Enter master password:"
+msgstr ""
+
+msgid "Operation cancelled"
+msgstr ""
+
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+
+msgid "Completed decryption."
+msgstr ""
+
+#, fuzzy
+msgid "Enabled"
+msgstr "已禁止"
+
+msgid "Disabled"
+msgstr "已禁止"
+
+#, javascript-format
+msgid "Encryption is: %s"
+msgstr ""
 
 msgid "Edit note."
 msgstr "编辑笔记。"
@@ -510,8 +543,18 @@ msgid ""
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
 
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+
 msgid "File"
 msgstr "文件"
+
+msgid "Save"
+msgstr ""
 
 msgid "New note"
 msgstr "新笔记"
@@ -552,7 +595,11 @@ msgstr "工具"
 msgid "Synchronisation status"
 msgstr "同步状态"
 
-msgid "Options"
+msgid "Encryption options"
+msgstr ""
+
+#, fuzzy
+msgid "General Options"
 msgstr "选项"
 
 msgid "Help"
@@ -576,9 +623,6 @@ msgstr "取消"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
-msgstr ""
-
-msgid "Save"
 msgstr ""
 
 msgid ""
@@ -637,13 +681,6 @@ msgstr "状态"
 
 msgid "Encryption is:"
 msgstr ""
-
-#, fuzzy
-msgid "Enabled"
-msgstr "已禁止"
-
-msgid "Disabled"
-msgstr "已禁止"
 
 msgid "Back"
 msgstr "返回"
@@ -737,6 +774,9 @@ msgstr "登陆OneDrive"
 
 msgid "Import"
 msgstr "导入"
+
+msgid "Options"
+msgstr "选项"
 
 msgid "Synchronisation Status"
 msgstr "同步状态"
@@ -856,6 +896,13 @@ msgstr "已完成：\"%s\""
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "同步正在进行中。状态：%s"
 
+msgid "Encrypted"
+msgstr ""
+
+#, fuzzy
+msgid "Encrypted items cannot be modified"
+msgstr "一些项目无法被同步。"
+
 msgid "Conflicts"
 msgstr "冲突"
 
@@ -957,9 +1004,15 @@ msgstr "无效的选项值：\"%s\"。可用值为：%s。"
 msgid "Items that cannot be synchronised"
 msgstr "项目无法被同步。"
 
-#, javascript-format
-msgid "\"%s\": \"%s\""
-msgstr "\"%s\": \"%s\""
+#, fuzzy, javascript-format
+msgid "%s (%s): %s"
+msgstr "%s %s (%s)"
+
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "同步状态（已同步项目/项目总数）"
@@ -1006,6 +1059,9 @@ msgstr "日志"
 msgid "Export Debug Report"
 msgstr "导出调试报告"
 
+msgid "Encryption Config"
+msgstr ""
+
 msgid "Configuration"
 msgstr "配置"
 
@@ -1016,6 +1072,9 @@ msgstr "移动至笔记本..."
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "移动%d条笔记至笔记本\"%s\"？"
 
+msgid "Press to set the decryption password."
+msgstr ""
+
 msgid "Select date"
 msgstr "选择日期"
 
@@ -1024,6 +1083,24 @@ msgstr "确认"
 
 msgid "Cancel synchronisation"
 msgstr "取消同步"
+
+#, javascript-format
+msgid "Master Key %s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Created: %s"
+msgstr "已创建：%d条。"
+
+msgid "Password:"
+msgstr ""
+
+msgid "Password cannot be empty"
+msgstr ""
+
+#, fuzzy
+msgid "Enable"
+msgstr "已禁止"
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"
@@ -1082,6 +1159,9 @@ msgstr "您当前没有任何笔记本。点击(+)按钮创建新笔记本。"
 
 msgid "Welcome"
 msgstr "欢迎"
+
+#~ msgid "\"%s\": \"%s\""
+#~ msgstr "\"%s\": \"%s\""
 
 #~ msgid "Delete notebook \"%s\"?"
 #~ msgstr "删除笔记本\"%s\"?"

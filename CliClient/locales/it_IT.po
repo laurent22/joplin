@@ -112,6 +112,9 @@ msgstr "Nessun comando: %s"
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Il comando \"%s\" è disponibile solo nella modalità grafica"
 
+msgid "Cannot change encrypted item"
+msgstr ""
+
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr "Argomento richiesto mancante: %s"
@@ -173,6 +176,36 @@ msgstr "Segna un'attività come completata."
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "La nota non è un'attività: \"%s\""
+
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status` and `target-status`."
+msgstr ""
+
+msgid "Enter master password:"
+msgstr ""
+
+msgid "Operation cancelled"
+msgstr ""
+
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+
+msgid "Completed decryption."
+msgstr ""
+
+#, fuzzy
+msgid "Enabled"
+msgstr "Disabilitato"
+
+msgid "Disabled"
+msgstr "Disabilitato"
+
+#, javascript-format
+msgid "Encryption is: %s"
+msgstr ""
 
 msgid "Edit note."
 msgstr "Modifica nota."
@@ -544,8 +577,18 @@ msgid ""
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
 
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+
 msgid "File"
 msgstr "File"
+
+msgid "Save"
+msgstr ""
 
 msgid "New note"
 msgstr "Nuova nota"
@@ -586,7 +629,11 @@ msgstr "Strumenti"
 msgid "Synchronisation status"
 msgstr "Stato di sincronizzazione"
 
-msgid "Options"
+msgid "Encryption options"
+msgstr ""
+
+#, fuzzy
+msgid "General Options"
 msgstr "Opzioni"
 
 msgid "Help"
@@ -610,9 +657,6 @@ msgstr "Cancella"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
-msgstr ""
-
-msgid "Save"
 msgstr ""
 
 msgid ""
@@ -671,13 +715,6 @@ msgstr "Stato"
 
 msgid "Encryption is:"
 msgstr ""
-
-#, fuzzy
-msgid "Enabled"
-msgstr "Disabilitato"
-
-msgid "Disabled"
-msgstr "Disabilitato"
 
 msgid "Back"
 msgstr "Indietro"
@@ -771,6 +808,9 @@ msgstr "Login OneDrive"
 
 msgid "Import"
 msgstr "Importa"
+
+msgid "Options"
+msgstr "Opzioni"
 
 msgid "Synchronisation Status"
 msgstr "Stato della Sincronizzazione"
@@ -893,6 +933,13 @@ msgstr "Completata: %s"
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "La sincronizzazione è già in corso. Stato: %s"
 
+msgid "Encrypted"
+msgstr ""
+
+#, fuzzy
+msgid "Encrypted items cannot be modified"
+msgstr "Alcuni elementi non possono essere sincronizzati."
+
 msgid "Conflicts"
 msgstr "Conflitti"
 
@@ -1001,9 +1048,15 @@ msgstr "Oprione non valida: \"%s\". I valori possibili sono: %s."
 msgid "Items that cannot be synchronised"
 msgstr "Elementi che non possono essere sincronizzati"
 
-#, javascript-format
-msgid "\"%s\": \"%s\""
-msgstr "\"%s\": \"%s\""
+#, fuzzy, javascript-format
+msgid "%s (%s): %s"
+msgstr "%s %s (%s)"
+
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "Stato di sincronizzazione (Elementi sincronizzati / Elementi totali)"
@@ -1050,6 +1103,9 @@ msgstr "Log"
 msgid "Export Debug Report"
 msgstr "Esporta il Report di Debug"
 
+msgid "Encryption Config"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Configurazione"
 
@@ -1060,6 +1116,9 @@ msgstr "Sposta sul blocco note..."
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "Spostare le note %d sul blocco note \"%s\"?"
 
+msgid "Press to set the decryption password."
+msgstr ""
+
 msgid "Select date"
 msgstr "Seleziona la data"
 
@@ -1068,6 +1127,24 @@ msgstr "Conferma"
 
 msgid "Cancel synchronisation"
 msgstr "Cancella la sincronizzazione"
+
+#, javascript-format
+msgid "Master Key %s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Created: %s"
+msgstr "Creato: %d."
+
+msgid "Password:"
+msgstr ""
+
+msgid "Password cannot be empty"
+msgstr ""
+
+#, fuzzy
+msgid "Enable"
+msgstr "Disabilitato"
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"
@@ -1130,6 +1207,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvenuto"
+
+#~ msgid "\"%s\": \"%s\""
+#~ msgstr "\"%s\": \"%s\""
 
 #~ msgid "Delete notebook?"
 #~ msgstr "Eliminare il blocco note?"

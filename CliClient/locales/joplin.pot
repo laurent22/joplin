@@ -108,6 +108,9 @@ msgstr ""
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr ""
 
+msgid "Cannot change encrypted item"
+msgstr ""
+
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr ""
@@ -163,6 +166,35 @@ msgstr ""
 
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
+msgstr ""
+
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status` and `target-status`."
+msgstr ""
+
+msgid "Enter master password:"
+msgstr ""
+
+msgid "Operation cancelled"
+msgstr ""
+
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+
+msgid "Completed decryption."
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+msgid "Disabled"
+msgstr ""
+
+#, javascript-format
+msgid "Encryption is: %s"
 msgstr ""
 
 msgid "Edit note."
@@ -488,7 +520,17 @@ msgid ""
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
 
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+
 msgid "File"
+msgstr ""
+
+msgid "Save"
 msgstr ""
 
 msgid "New note"
@@ -530,7 +572,10 @@ msgstr ""
 msgid "Synchronisation status"
 msgstr ""
 
-msgid "Options"
+msgid "Encryption options"
+msgstr ""
+
+msgid "General Options"
 msgstr ""
 
 msgid "Help"
@@ -554,9 +599,6 @@ msgstr ""
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
-msgstr ""
-
-msgid "Save"
 msgstr ""
 
 msgid ""
@@ -612,12 +654,6 @@ msgid "Status"
 msgstr ""
 
 msgid "Encryption is:"
-msgstr ""
-
-msgid "Enabled"
-msgstr ""
-
-msgid "Disabled"
 msgstr ""
 
 msgid "Back"
@@ -709,6 +745,9 @@ msgid "OneDrive Login"
 msgstr ""
 
 msgid "Import"
+msgstr ""
+
+msgid "Options"
 msgstr ""
 
 msgid "Synchronisation Status"
@@ -823,6 +862,12 @@ msgstr ""
 msgid "Synchronisation is already in progress. State: %s"
 msgstr ""
 
+msgid "Encrypted"
+msgstr ""
+
+msgid "Encrypted items cannot be modified"
+msgstr ""
+
 msgid "Conflicts"
 msgstr ""
 
@@ -925,7 +970,13 @@ msgid "Items that cannot be synchronised"
 msgstr ""
 
 #, javascript-format
-msgid "\"%s\": \"%s\""
+msgid "%s (%s): %s"
+msgstr ""
+
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
 msgstr ""
 
 msgid "Sync status (synced items / total items)"
@@ -973,6 +1024,9 @@ msgstr ""
 msgid "Export Debug Report"
 msgstr ""
 
+msgid "Encryption Config"
+msgstr ""
+
 msgid "Configuration"
 msgstr ""
 
@@ -983,6 +1037,9 @@ msgstr ""
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr ""
 
+msgid "Press to set the decryption password."
+msgstr ""
+
 msgid "Select date"
 msgstr ""
 
@@ -990,6 +1047,23 @@ msgid "Confirm"
 msgstr ""
 
 msgid "Cancel synchronisation"
+msgstr ""
+
+#, javascript-format
+msgid "Master Key %s"
+msgstr ""
+
+#, javascript-format
+msgid "Created: %s"
+msgstr ""
+
+msgid "Password:"
+msgstr ""
+
+msgid "Password cannot be empty"
+msgstr ""
+
+msgid "Enable"
 msgstr ""
 
 #, javascript-format

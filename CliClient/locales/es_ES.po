@@ -111,6 +111,9 @@ msgstr "El comando no existe: %s"
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "El comando «%s» solamente está disponible en modo GUI"
 
+msgid "Cannot change encrypted item"
+msgstr ""
+
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr "Falta un argumento requerido: %s"
@@ -172,6 +175,36 @@ msgstr "Marca una tarea como hecha."
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "Una nota no es una tarea: \"%s\""
+
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status` and `target-status`."
+msgstr ""
+
+msgid "Enter master password:"
+msgstr ""
+
+msgid "Operation cancelled"
+msgstr ""
+
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+
+msgid "Completed decryption."
+msgstr ""
+
+#, fuzzy
+msgid "Enabled"
+msgstr "Deshabilitado"
+
+msgid "Disabled"
+msgstr "Deshabilitado"
+
+#, javascript-format
+msgid "Encryption is: %s"
+msgstr ""
 
 msgid "Edit note."
 msgstr "Editar una nota."
@@ -558,8 +591,18 @@ msgstr ""
 "Por ejemplo, para crear una libreta escriba «mb», para crear una nota "
 "escriba «mn»."
 
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+
 msgid "File"
 msgstr "Archivo"
+
+msgid "Save"
+msgstr "Guardar"
 
 msgid "New note"
 msgstr "Nota nueva"
@@ -600,7 +643,11 @@ msgstr "Herramientas"
 msgid "Synchronisation status"
 msgstr "Estado de la sincronización"
 
-msgid "Options"
+msgid "Encryption options"
+msgstr ""
+
+#, fuzzy
+msgid "General Options"
 msgstr "Opciones"
 
 msgid "Help"
@@ -625,9 +672,6 @@ msgstr "Cancelar"
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Las notas y los ajustes se guardan en: %s"
-
-msgid "Save"
-msgstr "Guardar"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -683,13 +727,6 @@ msgstr "Estado"
 
 msgid "Encryption is:"
 msgstr ""
-
-#, fuzzy
-msgid "Enabled"
-msgstr "Deshabilitado"
-
-msgid "Disabled"
-msgstr "Deshabilitado"
 
 msgid "Back"
 msgstr "Atrás"
@@ -782,6 +819,9 @@ msgstr "Inicio de sesión de OneDrive"
 
 msgid "Import"
 msgstr "Importar"
+
+msgid "Options"
+msgstr "Opciones"
 
 msgid "Synchronisation Status"
 msgstr "Estado de la sincronización"
@@ -903,6 +943,13 @@ msgstr "Completado: %s"
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "La sincronización ya está en progreso. Estado: %s"
 
+msgid "Encrypted"
+msgstr ""
+
+#, fuzzy
+msgid "Encrypted items cannot be modified"
+msgstr "No se han podido sincronizar algunos de los elementos."
+
 msgid "Conflicts"
 msgstr "Conflictos"
 
@@ -1011,9 +1058,15 @@ msgstr "Opción inválida: «%s». Los valores posibles son: %s."
 msgid "Items that cannot be synchronised"
 msgstr "Elementos que no se pueden sincronizar"
 
-#, javascript-format
-msgid "\"%s\": \"%s\""
-msgstr "«%s»: «%s»"
+#, fuzzy, javascript-format
+msgid "%s (%s): %s"
+msgstr "%s %s (%s)"
+
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "Estado de sincronización (elementos sincronizados/elementos totales)"
@@ -1060,6 +1113,9 @@ msgstr "Log"
 msgid "Export Debug Report"
 msgstr "Exportar informe de depuración"
 
+msgid "Encryption Config"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Configuración"
 
@@ -1070,6 +1126,9 @@ msgstr "Mover a la libreta..."
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "¿Desea mover %d notas a libreta «%s»?"
 
+msgid "Press to set the decryption password."
+msgstr ""
+
 msgid "Select date"
 msgstr "Seleccione fecha"
 
@@ -1078,6 +1137,24 @@ msgstr "Confirmar"
 
 msgid "Cancel synchronisation"
 msgstr "Cancelar sincronización"
+
+#, javascript-format
+msgid "Master Key %s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Created: %s"
+msgstr "Creado: %d."
+
+msgid "Password:"
+msgstr ""
+
+msgid "Password cannot be empty"
+msgstr ""
+
+#, fuzzy
+msgid "Enable"
+msgstr "Deshabilitado"
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"
@@ -1139,6 +1216,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+#~ msgid "\"%s\": \"%s\""
+#~ msgstr "«%s»: «%s»"
 
 #~ msgid "Delete notebook?"
 #~ msgstr "Eliminar libreta?"
