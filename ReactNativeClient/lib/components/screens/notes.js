@@ -96,6 +96,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 			if (this.props.selectedFolderId == Folder.conflictFolderId()) return [];
 
 			const folder = this.parentItem();
+			if (!folder) return [];
 
 			let output = [];
 			if (!folder.encryption_applied) output.push({ title: _('Edit notebook'), onPress: () => { this.editFolder_onPress(this.props.selectedFolderId); } });
