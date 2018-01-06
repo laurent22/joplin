@@ -77,10 +77,12 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 				paddingBottom: 5,
 				marginTop: theme.marginTop,
 				marginBottom: 5,
+				color: theme.color,
 			},
 			normalText: {
 				flex: 1,
 				fontSize: theme.fontSize,
+				color: theme.color,
 			},
 			container: {
 				flex: 1,
@@ -112,9 +114,9 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 				<Text style={this.styles().titleText}>{_('Master Key %s', mk.id.substr(0,6))}</Text>
 				<Text style={this.styles().normalText}>{_('Created: %s', time.formatMsToLocal(mk.created_time))}</Text>
 				<View style={{flexDirection: 'row', alignItems: 'center'}}>
-					<Text style={{flex:0, fontSize: theme.fontSize, marginRight: 10}}>{_('Password:')}</Text>
-					<TextInput secureTextEntry={true} value={password} onChangeText={(text) => onPasswordChange(text)} style={{flex:1, marginRight: 10}}></TextInput>
-					<Text style={{fontSize: theme.fontSize, marginRight: 10}}>{passwordOk}</Text>
+					<Text style={{flex:0, fontSize: theme.fontSize, marginRight: 10, color: theme.color}}>{_('Password:')}</Text>
+					<TextInput secureTextEntry={true} value={password} onChangeText={(text) => onPasswordChange(text)} style={{flex:1, marginRight: 10, color: theme.color}}></TextInput>
+					<Text style={{fontSize: theme.fontSize, marginRight: 10, color: theme.color}}>{passwordOk}</Text>
 					<Button title={_('Save')} onPress={() => onSaveClick()}></Button>
 				</View>
 			</View>
@@ -137,8 +139,8 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 
 		return (
 			<View style={{flex:1, borderColor: theme.dividerColor, borderWidth: 1, padding: 10, marginTop: 10, marginBottom: 10}}>
-				<Text style={{fontSize: theme.fontSize}}>{_('Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target. Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.')}</Text>
-				<TextInput secureTextEntry={true} value={this.state.passwordPromptAnswer} onChangeText={(text) => { this.setState({ passwordPromptAnswer: text }) }}></TextInput>
+				<Text style={{fontSize: theme.fontSize, color: theme.color}}>{_('Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target. Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.')}</Text>
+				<TextInput style={{margin: 10, color: theme.color, borderWidth: 1, borderColor: theme.dividerColor }} secureTextEntry={true} value={this.state.passwordPromptAnswer} onChangeText={(text) => { this.setState({ passwordPromptAnswer: text }) }}></TextInput>
 				<View style={{flexDirection: 'row'}}>
 					<View style={{flex:1 , marginRight:10}} >
 						<Button title={_('Enable')} onPress={() => { onEnableClick() }}></Button>
