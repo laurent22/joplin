@@ -166,7 +166,6 @@ class Synchronizer {
 			let error = new Error(_('Synchronisation is already in progress. State: %s', this.state()));
 			error.code = 'alreadyStarted';
 			throw error;
-			return;
 		}
 
 		this.state_ = 'in_progress';

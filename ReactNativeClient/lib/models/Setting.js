@@ -242,7 +242,9 @@ class Setting extends BaseModel {
 		if (md.type == Setting.TYPE_BOOL) return value ? '1' : '0';
 		if (md.type == Setting.TYPE_ARRAY) return value ? JSON.stringify(value) : '[]';
 		if (md.type == Setting.TYPE_OBJECT) return value ? JSON.stringify(value) : '{}';
-		return value;
+		if (md.type == Setting.TYPE_STRING) return value ? value + '' : '';
+
+		throw new Error('Unhandled value type: ' + md.type);	
 	}
 
 	static formatValue(key, value) {
@@ -274,7 +276,12 @@ class Setting extends BaseModel {
 			return {};
 		}
 
-		return value;
+		if (md.type === Setting.TYPE_STRING) {
+			if (!value) return '';
+			return value + '';
+		}
+
+		throw new Error('Unhandled value type: ' + md.type);
 	}
 
 	static value(key) {
@@ -283,6 +290,7 @@ class Setting extends BaseModel {
 		// and object and change a key, the objects will be detected as equal. By returning a copy
 		// we avoid this problem.
 		function copyIfNeeded(value) {
+			if (value === null || value === undefined) return value;
 			if (Array.isArray(value)) return value.slice();
 			if (typeof value === 'object') return Object.assign({}, value);
 			return value;
