@@ -250,7 +250,7 @@ class Setting extends BaseModel {
 	static formatValue(key, value) {
 		const md = this.settingMetadata(key);
 
-		if (md.type == Setting.TYPE_INT) return Math.floor(Number(value));
+		if (md.type == Setting.TYPE_INT) return !value ? 0 : Math.floor(Number(value));
 
 		if (md.type == Setting.TYPE_BOOL) {
 			if (typeof value === 'string') {
