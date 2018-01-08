@@ -167,7 +167,7 @@ class NoteTextComponent extends React.Component {
 	async componentWillReceiveProps(nextProps) {
 		if ('noteId' in nextProps && nextProps.noteId !== this.props.noteId) {
 			await this.reloadNote(nextProps);
-			if(this.editor_){
+			if (this.editor_){
 				const session = this.editor_.editor.getSession();
 				const undoManager = session.getUndoManager();
 				undoManager.reset();

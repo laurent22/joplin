@@ -320,9 +320,23 @@ class Synchronizer {
 							}
 						}
 
+						// Note: Currently, we set sync_time to update_time, which should work fine given that the resolution is the millisecond.
+						// In theory though, this could happen:
+						//
+						// 1. t0: Editor: Note is modified
+						// 2. t0: Sync: Found that note was modified so start uploading it
+						// 3. t0: Editor: Note is modified again
+						// 4. t1: Sync: Note has finished uploading, set sync_time to t0
+						//
+						// Later any attempt to sync will not detect that note was modified in (3) (within the same millisecond as it was being uploaded)
+						// because sync_time will be t0 too.
+						//
+						// The solution would be to use something like an etag (a simple counter incremented on every change) to make sure each
+						// change is uniquely identified. Leaving it like this for now.
+
 						if (canSync) {
 							await this.api().setTimestamp(path, local.updated_time);
-							await ItemClass.saveSyncTime(syncTargetId, local, time.unixMs());
+							await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time);
 						}
 
 					} else if (action == 'itemConflict') {
