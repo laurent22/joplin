@@ -193,8 +193,12 @@ class BaseModel {
 		});
 	}
 
-	static loadByField(fieldName, fieldValue) {
-		return this.modelSelectOne('SELECT * FROM `' + this.tableName() + '` WHERE `' + fieldName + '` = ?', [fieldValue]);
+	static loadByField(fieldName, fieldValue, options = null) {
+		if (!options) options = {};
+		if (!('caseInsensitive' in options)) options.caseInsensitive = false;
+		let sql = 'SELECT * FROM `' + this.tableName() + '` WHERE `' + fieldName + '` = ?';
+		if (options.caseInsensitive) sql += ' COLLATE NOCASE';
+		return this.modelSelectOne(sql, [fieldValue]);
 	}
 
 	static loadByTitle(fieldValue) {
