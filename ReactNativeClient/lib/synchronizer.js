@@ -66,6 +66,7 @@ class Synchronizer {
 	static reportToLines(report) {
 		let lines = [];
 		if (report.createLocal) lines.push(_('Created local items: %d.', report.createLocal));
+		if (report.fetchingTotal && report.fetchingProcessed) lines.push(_('Fetched items: %d/%d.', report.fetchingProcessed, report.fetchingTotal));
 		if (report.updateLocal) lines.push(_('Updated local items: %d.', report.updateLocal));
 		if (report.createRemote) lines.push(_('Created remote items: %d.', report.createRemote));
 		if (report.updateRemote) lines.push(_('Updated remote items: %d.', report.updateRemote));
@@ -78,7 +79,7 @@ class Synchronizer {
 		return lines;
 	}
 
-	logSyncOperation(action, local = null, remote = null, message = null) {
+	logSyncOperation(action, local = null, remote = null, message = null, actionCount = 1) {
 		let line = ['Sync'];
 		line.push(action);
 		if (message) line.push(message);
@@ -105,7 +106,7 @@ class Synchronizer {
 		this.logger().debug(line.join(': '));
 
 		if (!this.progressReport_[action]) this.progressReport_[action] = 0;
-		this.progressReport_[action]++;
+		this.progressReport_[action] += actionCount;
 		this.progressReport_.state = this.state();
 		this.onProgress_(this.progressReport_);
 
@@ -446,11 +447,16 @@ class Synchronizer {
 				});
 
 				let remotes = listResult.items;
+
+				this.logSyncOperation('fetchingTotal', null, null, 'Fetching delta items from sync target', remotes.length);
+
 				for (let i = 0; i < remotes.length; i++) {
 					if (this.cancelling() || this.debugFlags_.indexOf('cancelDeltaLoop2') >= 0) {
 						hasCancelled = true;
 						break;
 					}
+
+					this.logSyncOperation('fetchingProcessed', null, null, 'Processing fetched item');
 
 					let remote = remotes[i];
 					if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
