@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { Platform, Keyboard, BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking, Image,KeyboardAvoidingView } = require('react-native');
+const { Platform, Keyboard, BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking, Image, KeyboardAvoidingView } = require('react-native');
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
 const { Log } = require('lib/log.js');
@@ -149,9 +149,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 		await shared.initState(this);
 
 		this.refreshNoteMetadata();
-		if(Platform.OS === 'ios'){
-        	this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
-        	this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
+
+		if (Platform.OS === 'ios') {
+			this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
+			this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
 		}
 
 	}
@@ -162,23 +163,19 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	componentWillUnmount() {
 		BackButtonService.removeHandler(this.backHandler);
-		if(Platform.OS === 'ios'){
+
+		if (Platform.OS === 'ios'){
 			this.keyboardDidShowListener.remove();
 			this.keyboardDidHideListener.remove();
-        }
-
+		}
 	}
 
 	_keyboardDidShow () {
-		this.setState({
-			heightBumpView:30
-		})
-    }
+		this.setState({ heightBumpView:30 })
+	}
 
 	_keyboardDidHide () {
-		this.setState({
-			heightBumpView:0
-		})
+		this.setState({ heightBumpView:0 })
 	}
 
 	title_changeText(text) {
@@ -581,7 +578,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				/>
 
 				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
-                <View style={{ height: this.state.heightBumpView }} />
+				<View style={{ height: this.state.heightBumpView }} />
 			</KeyboardAvoidingView>
 		);
 	}
