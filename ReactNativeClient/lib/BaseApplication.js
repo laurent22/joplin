@@ -277,6 +277,10 @@ class BaseApplication {
 					type: 'MASTERKEY_REMOVE_NOT_LOADED',
 					ids: loadedMasterKeyIds,
 				});
+
+				// Schedule a sync operation so that items that need to be encrypted
+				// are sent to sync target.
+				reg.scheduleSync();
 			}
 		}
 
