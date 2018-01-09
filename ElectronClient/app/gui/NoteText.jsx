@@ -128,7 +128,9 @@ class NoteTextComponent extends React.Component {
 		if (!options) options = {};
 		if (!('noReloadIfLocalChanges' in options)) options.noReloadIfLocalChanges = false;
 
+		const stateNoteId = this.state.note ? this.state.note.id : null;
 		const noteId = props.noteId;
+		let loadingNewNote = stateNoteId !== noteId;
 		this.lastLoadedNoteId_ = noteId;
 		const note = noteId ? await Note.load(noteId) : null;
 		if (noteId !== this.lastLoadedNoteId_) return; // Race condition - current note was changed while this one was loading
@@ -148,14 +150,17 @@ class NoteTextComponent extends React.Component {
 		// is going to be removed in render().
 		const webviewReady = this.webview_ && this.state.webviewReady && noteId;
 
-		this.editorMaxScrollTop_ = 0;
+		// Scroll back to top when loading new note
+		if (loadingNewNote) {
+			this.editorMaxScrollTop_ = 0;
 
-		// HACK: To go around a bug in Ace editor, we first set the scroll position to 1
-		// and then (in the renderer callback) to the value we actually need. The first
-		// operation helps clear the scroll position cache. See:
-		// https://github.com/ajaxorg/ace/issues/2195
-		this.editorSetScrollTop(1);
-		this.restoreScrollTop_ = 0;
+			// HACK: To go around a bug in Ace editor, we first set the scroll position to 1
+			// and then (in the renderer callback) to the value we actually need. The first
+			// operation helps clear the scroll position cache. See:
+			// https://github.com/ajaxorg/ace/issues/2195
+			this.editorSetScrollTop(1);
+			this.restoreScrollTop_ = 0;
+		}
 
 		this.setState({
 			note: note,
