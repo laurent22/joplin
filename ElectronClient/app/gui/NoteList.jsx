@@ -54,7 +54,16 @@ class NoteListComponent extends React.Component {
 	}
 
 	itemContextMenu(event) {
-		const noteIds = this.props.selectedNoteIds;
+		const currentItemId = event.currentTarget.getAttribute('data-id');
+		if (!currentItemId) return;
+
+		let noteIds = [];
+		if (this.props.selectedNoteIds.indexOf(currentItemId) < 0) {
+			noteIds = [currentItemId];
+		} else {
+			noteIds = this.props.selectedNoteIds;
+		}
+
 		if (!noteIds.length) return;
 
 		const notes = noteIds.map((id) => BaseModel.byId(this.props.notes, id));
@@ -163,6 +172,7 @@ class NoteListComponent extends React.Component {
 				style={listItemTitleStyle}
 				onClick={(event) => { onTitleClick(event, item) }}
 				onDragStart={(event) => onDragStart(event) }
+				data-id={item.id}
 			>
 			{Note.displayTitle(item)}
 			</a>
