@@ -10,3 +10,9 @@ cp "$SCRIPT_DIR/package.json" build/
 cp "$SCRIPT_DIR/../README.md" build/
 cd "$SCRIPT_DIR/build"
 npm publish
+
+NEW_VERSION=$("cat package.json | jq -r .version")
+git add -A
+git commit -m "CLI v$NEW_VERSION"
+git tag "cli-v$NEW_VERSION"
+git push && git push --tags
