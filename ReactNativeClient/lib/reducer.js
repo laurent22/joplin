@@ -1,5 +1,5 @@
-const { Note } = require('lib/models/note.js');
-const { Folder } = require('lib/models/folder.js');
+const Note = require('lib/models/Note.js');
+const Folder = require('lib/models/Folder.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 
 const defaultState = {
@@ -8,6 +8,8 @@ const defaultState = {
 	notesParentType: null,
 	folders: [],
 	tags: [],
+	masterKeys: [],
+	notLoadedMasterKeys: [],
 	searches: [],
 	selectedNoteIds: [],
 	selectedFolderId: null,
@@ -28,6 +30,20 @@ const defaultState = {
 	//windowContentSize: { width: 0, height: 0 },
 	hasDisabledSyncItems: false,
 };
+
+function arrayHasEncryptedItems(array) {
+	for (let i = 0; i < array.length; i++) {
+		if (!!array[i].encryption_applied) return true;
+	}
+	return false
+}
+
+function stateHasEncryptedItems(state) {
+	if (arrayHasEncryptedItems(state.notes)) return true;
+	if (arrayHasEncryptedItems(state.folders)) return true;
+	if (arrayHasEncryptedItems(state.tags)) return true;
+	return false;
+}
 
 // When deleting a note, tag or folder
 function handleItemDelete(state, action) {
@@ -72,9 +88,16 @@ function handleItemDelete(state, action) {
 	return newState;
 }
 
-function updateOneTagOrFolder(state, action) {
-	let newItems = action.type === 'TAG_UPDATE_ONE' ? state.tags.splice(0) : state.folders.splice(0);
-	let item = action.type === 'TAG_UPDATE_ONE' ? action.tag : action.folder;
+function updateOneItem(state, action) {
+	// let newItems = action.type === 'TAG_UPDATE_ONE' ? state.tags.splice(0) : state.folders.splice(0);
+	// let item = action.type === 'TAG_UPDATE_ONE' ? action.tag : action.folder;
+	let itemsKey = null;
+	if (action.type === 'TAG_UPDATE_ONE') itemsKey = 'tags';
+	if (action.type === 'FOLDER_UPDATE_ONE') itemsKey = 'folders';
+	if (action.type === 'MASTERKEY_UPDATE_ONE') itemsKey = 'masterKeys';
+
+	let newItems = state[itemsKey].splice(0);
+	let item = action.item;
 
 	var found = false;
 	for (let i = 0; i < newItems.length; i++) {
@@ -90,11 +113,13 @@ function updateOneTagOrFolder(state, action) {
 
 	let newState = Object.assign({}, state);
 
-	if (action.type === 'TAG_UPDATE_ONE') {
-		newState.tags = newItems;
-	} else {
-		newState.folders = newItems;
-	}
+	newState[itemsKey] = newItems;
+
+	// if (action.type === 'TAG_UPDATE_ONE') {
+	// 	newState.tags = newItems;
+	// } else {
+	// 	newState.folders = newItems;
+	// }
 
 	return newState;
 }
@@ -307,14 +332,14 @@ const reducer = (state = defaultState, action) => {
 			case 'FOLDER_UPDATE_ALL':
 
 				newState = Object.assign({}, state);
-				newState.folders = action.folders;
+				newState.folders = action.items;
 				break;
 
 			case 'TAG_UPDATE_ALL':
 
 				newState = Object.assign({}, state);
-				newState.tags = action.tags;
-				break;				
+				newState.tags = action.items;
+				break;
 
 			case 'TAG_SELECT':
 
@@ -328,18 +353,46 @@ const reducer = (state = defaultState, action) => {
 				break;
 
 			case 'TAG_UPDATE_ONE':
-
-				newState = updateOneTagOrFolder(state, action);
-				break;
-
 			case 'FOLDER_UPDATE_ONE':
+			case 'MASTERKEY_UPDATE_ONE':
 
-				newState = updateOneTagOrFolder(state, action);
+				newState = updateOneItem(state, action);
 				break;
 
 			case 'FOLDER_DELETE':
 
 				newState = handleItemDelete(state, action);
+				break;
+
+			case 'MASTERKEY_UPDATE_ALL':
+
+				newState = Object.assign({}, state);
+				newState.masterKeys = action.items;
+				break;
+
+			case 'MASTERKEY_ADD_NOT_LOADED':
+
+				if (state.notLoadedMasterKeys.indexOf(action.id) < 0) {
+					newState = Object.assign({}, state);
+					const keys = newState.notLoadedMasterKeys.slice();
+					keys.push(action.id);
+					newState.notLoadedMasterKeys = keys;
+				}
+				break;
+
+			case 'MASTERKEY_REMOVE_NOT_LOADED':
+
+				const ids = action.id ? [action.id] : action.ids;
+				for (let i = 0; i < ids.length; i++) {
+					const id = ids[i];
+					const index = state.notLoadedMasterKeys.indexOf(id);
+					if (index >= 0) {
+						newState = Object.assign({}, state);
+						const keys = newState.notLoadedMasterKeys.slice();
+						keys.splice(index, 1);
+						newState.notLoadedMasterKeys = keys;
+					}
+				}
 				break;
 
 			case 'SYNC_STARTED':
@@ -406,6 +459,11 @@ const reducer = (state = defaultState, action) => {
 	} catch (error) {
 		error.message = 'In reducer: ' + error.message + ' Action: ' + JSON.stringify(action);
 		throw error;
+	}
+
+	if (action.type.indexOf('NOTE_UPDATE') === 0 || action.type.indexOf('FOLDER_UPDATE') === 0 || action.type.indexOf('TAG_UPDATE') === 0) {
+		newState = Object.assign({}, newState);
+		newState.hasEncryptedItems = stateHasEncryptedItems(newState);
 	}
 
 	return newState;

@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 const { wrap } = require('lib/string-utils.js');
-const { Setting } = require('lib/models/setting.js');
+const Setting = require('lib/models/Setting.js');
 const { fileExtension, basename, dirname } = require('lib/path-utils.js');
 const { _, setLocale, languageCode } = require('lib/locale.js');
 

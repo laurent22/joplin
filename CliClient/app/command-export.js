@@ -1,7 +1,7 @@
 const { BaseCommand } = require('./base-command.js');
 const { Exporter } = require('lib/services/exporter.js');
-const { BaseModel } = require('lib/base-model.js');
-const { Note } = require('lib/models/note.js');
+const BaseModel = require('lib/BaseModel.js');
+const Note = require('lib/models/Note.js');
 const { reg } = require('lib/registry.js');
 const { app } = require('./app.js');
 const { _ } = require('lib/locale.js');

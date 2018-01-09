@@ -1,5 +1,5 @@
 const { Logger } = require('lib/logger.js');
-const { Setting } = require('lib/models/setting.js');
+const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const { _ } = require('lib/locale.js');
@@ -44,7 +44,7 @@ reg.syncTarget = (syncTargetId = null) => {
 }
 
 reg.scheduleSync = async (delay = null) => {
-	if (delay === null) delay = 1000 * 3;
+	if (delay === null) delay = 1000 * 30;
 
 	let promiseResolve = null;
 	const promise = new Promise((resolve, reject) => {
@@ -65,7 +65,7 @@ reg.scheduleSync = async (delay = null) => {
 
 	const timeoutCallback = async () => {
 		reg.scheduleSyncId_ = null;
-		reg.logger().info('Doing scheduled sync');
+		reg.logger().info('Preparing scheduled sync');
 
 		const syncTargetId = Setting.value('sync.target');
 
@@ -80,8 +80,19 @@ reg.scheduleSync = async (delay = null) => {
 
 			const contextKey = 'sync.' + syncTargetId + '.context';
 			let context = Setting.value(contextKey);
-			context = context ? JSON.parse(context) : {};
 			try {
+				context = context ? JSON.parse(context) : {};
+			} catch (error) {
+				// Clearing the context is inefficient since it means all items are going to be re-downloaded
+				// however it won't result in duplicate items since the synchroniser is going to compare each
+				// item to the current state.
+				reg.logger().warn('Could not parse JSON sync context ' + contextKey + ':', context);
+				reg.logger().info('Clearing context and starting from scratch');
+				context = null;
+			}
+
+			try {
+				reg.logger().info('Starting scheduled sync');
 				let newContext = await sync.start({ context: context });
 				Setting.setValue(contextKey, JSON.stringify(newContext));
 			} catch (error) {

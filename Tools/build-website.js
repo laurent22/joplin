@@ -308,6 +308,10 @@ async function main() {
 	renderFileToHtml(rootDir + '/README_desktop.md', rootDir + '/docs/desktop/index.html', {
 		selectedDesktop: 'selected',
 	});
+
+	renderFileToHtml(rootDir + '/README_e2ee.md', rootDir + '/docs/help/e2ee.html', {});
+	renderFileToHtml(rootDir + '/README_spec.md', rootDir + '/docs/help/spec.html', {});
+	
 }
 
 main().catch((error) => {

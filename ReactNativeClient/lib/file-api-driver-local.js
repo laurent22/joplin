@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 const { promiseChain } = require('lib/promise-utils.js');
 const moment = require('moment');
-const { BaseItem } = require('lib/models/base-item.js');
+const BaseItem = require('lib/models/BaseItem.js');
 const { time } = require('lib/time-utils.js');
 
 // NOTE: when synchronising with the file system the time resolution is the second (unlike milliseconds for OneDrive for instance).
@@ -146,10 +146,10 @@ class FileApiDriverLocal {
 		let output = null;
 
 		try {
-			if (options.encoding == 'binary') {
-				output = fs.readFile(path);
+			if (options.target === 'file') {
+				output = await fs.copy(path, options.path, { overwrite: true });
 			} else {
-				output = fs.readFile(path, options.encoding);
+				output = await fs.readFile(path, options.encoding);
 			}
 		} catch (error) {
 			if (error.code == 'ENOENT') return null;
@@ -178,7 +178,11 @@ class FileApiDriverLocal {
 		});
 	}
 
-	put(path, content) {
+	async put(path, content, options = null) {
+		if (!options) options = {};
+
+		if (options.source === 'file') content = await fs.readFile(options.path);
+
 		return new Promise((resolve, reject) => {
 			fs.writeFile(path, content, function(error) {
 				if (error) {

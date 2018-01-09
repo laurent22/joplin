@@ -10,6 +10,12 @@ function shimInit() {
 	shim.FileApiDriverLocal = FileApiDriverLocal;
 	shim.Geolocation = GeolocationNode;
 	shim.FormData = require('form-data');
+	shim.sjclModule = require('lib/vendor/sjcl.js');
+
+	shim.randomBytes = async (count) => {
+		const buffer = require('crypto').randomBytes(count);
+		return Array.from(buffer);
+	}
 
 	shim.detectAndSetLocale = function (Setting) {
 		let locale = process.env.LANG;
@@ -24,7 +30,7 @@ function shimInit() {
 
 	const resizeImage_ = async function(filePath, targetPath) {
 		const sharp = require('sharp');
-		const { Resource } = require('lib/models/resource.js');
+		const Resource = require('lib/models/Resource.js');
 
 		return new Promise((resolve, reject) => {
 			sharp(filePath)
@@ -42,11 +48,11 @@ function shimInit() {
 	}
 
 	shim.attachFileToNote = async function(note, filePath) {
-		const { Resource } = require('lib/models/resource.js');
+		const Resource = require('lib/models/Resource.js');
 		const { uuid } = require('lib/uuid.js');
 		const { basename, fileExtension, safeFileExtension } = require('lib/path-utils.js');
 		const mime = require('mime/lite');
-		const { Note } = require('lib/models/note.js');
+		const Note = require('lib/models/Note.js');
 
 		if (!(await fs.pathExists(filePath))) throw new Error(_('Cannot access %s', filePath));
 
@@ -150,6 +156,16 @@ function shimInit() {
 
 		return shim.fetchWithRetry(doFetchOperation, options);
 	}
+
+	shim.uploadBlob = async function(url, options) {
+		 if (!options || !options.path) throw new Error('uploadBlob: source file path is missing');
+		const content = await fs.readFile(options.path);
+		options = Object.assign({}, options, {
+			body: content,
+		});
+		return shim.fetch(url, options);
+	}
+
 }
 
 module.exports = { shimInit };

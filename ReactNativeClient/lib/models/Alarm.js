@@ -1,5 +1,5 @@
-const { BaseModel } = require('lib/base-model.js');
-const { Note } = require('lib/models/note.js');
+const BaseModel = require('lib/BaseModel.js');
+const Note = require('lib/models/Note.js');
 
 class Alarm extends BaseModel {
 

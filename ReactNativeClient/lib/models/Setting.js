@@ -1,4 +1,4 @@
-const { BaseModel } = require('lib/base-model.js');
+const BaseModel = require('lib/BaseModel.js');
 const { Database } = require('lib/database.js');
 const { Logger } = require('lib/logger.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
@@ -60,6 +60,9 @@ class Setting extends BaseModel {
 			// })},
 			'uncompletedTodosOnTop': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Show uncompleted todos on top of the lists') },
 			'trackLocation': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Save geo-location with notes') },
+			'encryption.enabled': { value: false, type: Setting.TYPE_BOOL, public: false },
+			'encryption.activeMasterKeyId': { value: '', type: Setting.TYPE_STRING, public: false },
+			'encryption.passwordCache': { value: {}, type: Setting.TYPE_OBJECT, public: false },
 			'sync.interval': { value: 300, type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation interval'), options: () => {
 				return {
 					0: _('Disabled'),
@@ -218,6 +221,20 @@ class Setting extends BaseModel {
 		this.scheduleSave();
 	}
 
+	static setObjectKey(settingKey, objectKey, value) {
+		let o = this.value(settingKey);
+		if (typeof o !== 'object') o = {};
+		o[objectKey] = value;
+		this.setValue(settingKey, o);
+	}
+
+	static deleteObjectKey(settingKey, objectKey) {
+		const o = this.value(settingKey);
+		if (typeof o !== 'object') return;
+		delete o[objectKey];
+		this.setValue(settingKey, o);
+	}
+
 	static valueToString(key, value) {
 		const md = this.settingMetadata(key);
 		value = this.formatValue(key, value);
@@ -225,13 +242,15 @@ class Setting extends BaseModel {
 		if (md.type == Setting.TYPE_BOOL) return value ? '1' : '0';
 		if (md.type == Setting.TYPE_ARRAY) return value ? JSON.stringify(value) : '[]';
 		if (md.type == Setting.TYPE_OBJECT) return value ? JSON.stringify(value) : '{}';
-		return value;
+		if (md.type == Setting.TYPE_STRING) return value ? value + '' : '';
+
+		throw new Error('Unhandled value type: ' + md.type);	
 	}
 
 	static formatValue(key, value) {
 		const md = this.settingMetadata(key);
 
-		if (md.type == Setting.TYPE_INT) return Math.floor(Number(value));
+		if (md.type == Setting.TYPE_INT) return !value ? 0 : Math.floor(Number(value));
 
 		if (md.type == Setting.TYPE_BOOL) {
 			if (typeof value === 'string') {
@@ -257,10 +276,26 @@ class Setting extends BaseModel {
 			return {};
 		}
 
-		return value;
+		if (md.type === Setting.TYPE_STRING) {
+			if (!value) return '';
+			return value + '';
+		}
+
+		throw new Error('Unhandled value type: ' + md.type);
 	}
 
 	static value(key) {
+		// Need to copy arrays and objects since in setValue(), the old value and new one is compared
+		// with strict equality and the value is updated only if changed. However if the caller acquire
+		// and object and change a key, the objects will be detected as equal. By returning a copy
+		// we avoid this problem.
+		function copyIfNeeded(value) {
+			if (value === null || value === undefined) return value;
+			if (Array.isArray(value)) return value.slice();
+			if (typeof value === 'object') return Object.assign({}, value);
+			return value;
+		}
+
 		if (key in this.constants_) {
 			const v = this.constants_[key];
 			const output = typeof v === 'function' ? v() : v;
@@ -272,12 +307,12 @@ class Setting extends BaseModel {
 
 		for (let i = 0; i < this.cache_.length; i++) {
 			if (this.cache_[i].key == key) {
-				return this.cache_[i].value;
+				return copyIfNeeded(this.cache_[i].value);
 			}
 		}
 
 		const md = this.settingMetadata(key);
-		return md.value;
+		return copyIfNeeded(md.value);
 	}
 
 	static isEnum(key) {
@@ -439,4 +474,4 @@ Setting.constants_ = {
 	openDevTools: false,
 }
 
-module.exports = { Setting };
+module.exports = Setting;

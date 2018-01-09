@@ -202,13 +202,16 @@ class JoplinDatabase extends Database {
 		// default value and thus might cause problems. In that case, the default value
 		// must be set in the synchronizer too.
 
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
+
+		if (currentVersionIndex < 0) throw new Error('Unknown profile version. Most likely this is an old version of Joplin, while the profile was created by a newer version. Please upgrade Joplin at http://joplin.cozic.net and try again.');
+
 		// currentVersionIndex < 0 if for the case where an old version of Joplin used with a newer
 		// version of the database, so that migration is not run in this case.
-		if (currentVersionIndex == existingDatabaseVersions.length - 1 || currentVersionIndex < 0) return false;
-		
+		if (currentVersionIndex == existingDatabaseVersions.length - 1) return false;
+
 		while (currentVersionIndex < existingDatabaseVersions.length - 1) {
 			const targetVersion = existingDatabaseVersions[currentVersionIndex + 1];
 			this.logger().info("Converting database to version " + targetVersion);
@@ -268,6 +271,31 @@ class JoplinDatabase extends Database {
 			if (targetVersion == 8) {
 				queries.push('ALTER TABLE sync_items ADD COLUMN sync_disabled INT NOT NULL DEFAULT "0"');
 				queries.push('ALTER TABLE sync_items ADD COLUMN sync_disabled_reason TEXT NOT NULL DEFAULT ""');
+			}
+
+			if (targetVersion == 9) {
+				const newTableSql = `
+					CREATE TABLE master_keys (
+						id TEXT PRIMARY KEY,
+						created_time INT NOT NULL,
+						updated_time INT NOT NULL,
+						source_application TEXT NOT NULL,
+						encryption_method INT NOT NULL,
+						checksum TEXT NOT NULL,
+						content TEXT NOT NULL
+					);
+				`;
+				queries.push(this.sqlStringToLines(newTableSql)[0]);
+				const tableNames = ['notes', 'folders', 'tags', 'note_tags', 'resources'];
+				for (let i = 0; i < tableNames.length; i++) {
+					const n = tableNames[i];
+					queries.push('ALTER TABLE ' + n + ' ADD COLUMN encryption_cipher_text TEXT NOT NULL DEFAULT ""');
+					queries.push('ALTER TABLE ' + n + ' ADD COLUMN encryption_applied INT NOT NULL DEFAULT 0');
+					queries.push('CREATE INDEX ' + n + '_encryption_applied ON ' + n + ' (encryption_applied)');
+				}
+
+				queries.push('ALTER TABLE sync_items ADD COLUMN force_sync INT NOT NULL DEFAULT 0');
+				queries.push('ALTER TABLE resources ADD COLUMN encryption_blob_encrypted INT NOT NULL DEFAULT 0');
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

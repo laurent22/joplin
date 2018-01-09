@@ -5,12 +5,12 @@ const { JoplinDatabase } = require('lib/joplin-database.js');
 const { Database } = require('lib/database.js');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');
-const { BaseModel } = require('lib/base-model.js');
-const { Folder } = require('lib/models/folder.js');
-const { BaseItem } = require('lib/models/base-item.js');
-const { Note } = require('lib/models/note.js');
-const { Tag } = require('lib/models/tag.js');
-const { Setting } = require('lib/models/setting.js');
+const BaseModel = require('lib/BaseModel.js');
+const Folder = require('lib/models/Folder.js');
+const BaseItem = require('lib/models/BaseItem.js');
+const Note = require('lib/models/Note.js');
+const Tag = require('lib/models/Tag.js');
+const Setting = require('lib/models/Setting.js');
 const { Logger } = require('lib/logger.js');
 const { sprintf } = require('sprintf-js');
 const { reg } = require('lib/registry.js');
@@ -144,13 +144,15 @@ class Application extends BaseApplication {
 				message += ' (' + options.answers.join('/') + ')';
 			}
 
-			let answer = await this.gui().prompt('', message + ' ');
+			let answer = await this.gui().prompt('', message + ' ', options);
 
 			if (options.type === 'boolean') {
 				if (answer === null) return false; // Pressed ESCAPE
 				if (!answer) answer = options.answers[0];
 				let positiveIndex = options.booleanAnswerDefault == 'y' ? 0 : 1;
 				return answer.toLowerCase() === options.answers[positiveIndex].toLowerCase();
+			} else {
+				return answer;
 			}
 		});
 
@@ -275,7 +277,7 @@ class Application extends BaseApplication {
 	dummyGui() {
 		return {
 			isDummy: () => { return true; },
-			prompt: (initialText = '', promptString = '') => { return cliUtils.prompt(initialText, promptString); },
+			prompt: (initialText = '', promptString = '', options = null) => { return cliUtils.prompt(initialText, promptString, options); },
 			showConsole: () => {},
 			maximizeConsole: () => {},
 			stdout: (text) => { console.info(text); },
@@ -283,7 +285,10 @@ class Application extends BaseApplication {
 			exit: () => {},
 			showModalOverlay: (text) => {},
 			hideModalOverlay: () => {},
-			stdoutMaxWidth: () => { return 78; }
+			stdoutMaxWidth: () => { return 78; },
+			forceRender: () => {},
+			termSaveState: () => {},
+			termRestoreState: (state) => {},
 		};
 	}
 
@@ -351,7 +356,7 @@ class Application extends BaseApplication {
 
 			this.dispatch({
 				type: 'TAG_UPDATE_ALL',
-				tags: tags,
+				items: tags,
 			});
 
 			this.store().dispatch({

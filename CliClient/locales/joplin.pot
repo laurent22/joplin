@@ -108,6 +108,9 @@ msgstr ""
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr ""
 
+msgid "Cannot change encrypted item"
+msgstr ""
+
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr ""
@@ -163,6 +166,35 @@ msgstr ""
 
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
+msgstr ""
+
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status` and `target-status`."
+msgstr ""
+
+msgid "Enter master password:"
+msgstr ""
+
+msgid "Operation cancelled"
+msgstr ""
+
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+
+msgid "Completed decryption."
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+msgid "Disabled"
+msgstr ""
+
+#, javascript-format
+msgid "Encryption is: %s"
 msgstr ""
 
 msgid "Edit note."
@@ -488,7 +520,17 @@ msgid ""
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
 
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+
 msgid "File"
+msgstr ""
+
+msgid "Save"
 msgstr ""
 
 msgid "New note"
@@ -530,7 +572,10 @@ msgstr ""
 msgid "Synchronisation status"
 msgstr ""
 
-msgid "Options"
+msgid "Encryption options"
+msgstr ""
+
+msgid "General Options"
 msgstr ""
 
 msgid "Help"
@@ -556,7 +601,59 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr ""
 
-msgid "Save"
+msgid ""
+"Disabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent unencrypted to the sync target. Do you wish to "
+"continue?"
+msgstr ""
+
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
+msgstr ""
+
+msgid "Disable encryption"
+msgstr ""
+
+msgid "Enable encryption"
+msgstr ""
+
+msgid "Master Keys"
+msgstr ""
+
+msgid "Active"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Created"
+msgstr ""
+
+msgid "Updated"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Password OK"
+msgstr ""
+
+msgid ""
+"Note: Only one master key is going to be used for encryption (the one marked "
+"as \"active\"). Any of the keys might be used for decryption, depending on "
+"how the notes or notebooks were originally encrypted."
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Encryption is:"
 msgstr ""
 
 msgid "Back"
@@ -603,31 +700,10 @@ msgstr ""
 msgid "View them now"
 msgstr ""
 
-msgid "Active"
+msgid "Some items cannot be decrypted."
 msgstr ""
 
-msgid "ID"
-msgstr ""
-
-msgid "Source"
-msgstr ""
-
-msgid "Created"
-msgstr ""
-
-msgid "Updated"
-msgstr ""
-
-msgid "Password"
-msgstr ""
-
-msgid "Password OK"
-msgstr ""
-
-msgid ""
-"Note: Only one master key is going to be used for encryption (the one marked "
-"as \"active\"). Any of the keys might be used for decryption, depending on "
-"how the notes or notebooks were originally encrypted."
+msgid "Set the password"
 msgstr ""
 
 msgid "Add or remove tags"
@@ -671,7 +747,13 @@ msgstr ""
 msgid "Import"
 msgstr ""
 
+msgid "Options"
+msgstr ""
+
 msgid "Synchronisation Status"
+msgstr ""
+
+msgid "Encryption Options"
 msgstr ""
 
 msgid "Remove this tag from all the notes?"
@@ -780,6 +862,12 @@ msgstr ""
 msgid "Synchronisation is already in progress. State: %s"
 msgstr ""
 
+msgid "Encrypted"
+msgstr ""
+
+msgid "Encrypted items cannot be modified"
+msgstr ""
+
 msgid "Conflicts"
 msgstr ""
 
@@ -840,9 +928,6 @@ msgstr ""
 msgid "Synchronisation interval"
 msgstr ""
 
-msgid "Disabled"
-msgstr ""
-
 #, javascript-format
 msgid "%d minutes"
 msgstr ""
@@ -885,7 +970,13 @@ msgid "Items that cannot be synchronised"
 msgstr ""
 
 #, javascript-format
-msgid "\"%s\": \"%s\""
+msgid "%s (%s): %s"
+msgstr ""
+
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
 msgstr ""
 
 msgid "Sync status (synced items / total items)"
@@ -930,10 +1021,10 @@ msgstr ""
 msgid "Log"
 msgstr ""
 
-msgid "Status"
+msgid "Export Debug Report"
 msgstr ""
 
-msgid "Export Debug Report"
+msgid "Encryption Config"
 msgstr ""
 
 msgid "Configuration"
@@ -946,6 +1037,9 @@ msgstr ""
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr ""
 
+msgid "Press to set the decryption password."
+msgstr ""
+
 msgid "Select date"
 msgstr ""
 
@@ -953,6 +1047,23 @@ msgid "Confirm"
 msgstr ""
 
 msgid "Cancel synchronisation"
+msgstr ""
+
+#, javascript-format
+msgid "Master Key %s"
+msgstr ""
+
+#, javascript-format
+msgid "Created: %s"
+msgstr ""
+
+msgid "Password:"
+msgstr ""
+
+msgid "Password cannot be empty"
+msgstr ""
+
+msgid "Enable"
 msgstr ""
 
 #, javascript-format

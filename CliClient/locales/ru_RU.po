@@ -13,7 +13,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Poedit 2.0.5\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
@@ -111,6 +111,9 @@ msgstr "Нет такой команды: %s"
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Команда «%s» доступна только в режиме GUI"
 
+msgid "Cannot change encrypted item"
+msgstr ""
+
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr "Отсутствует требуемый аргумент: %s"
@@ -172,6 +175,37 @@ msgstr "Отмечает задачу как завершённую."
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "Заметка не является задачей: «%s»"
+
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status` and `target-status`."
+msgstr ""
+
+#, fuzzy
+msgid "Enter master password:"
+msgstr "Установить пароль"
+
+msgid "Operation cancelled"
+msgstr ""
+
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+
+#, fuzzy
+msgid "Completed decryption."
+msgstr "Включить шифрование"
+
+msgid "Enabled"
+msgstr "Включено"
+
+msgid "Disabled"
+msgstr "Отключено"
+
+#, fuzzy, javascript-format
+msgid "Encryption is: %s"
+msgstr "Шифрование:"
 
 msgid "Edit note."
 msgstr "Редактировать заметку."
@@ -553,8 +587,18 @@ msgstr ""
 "Например, для создания блокнота нужно ввести `mb`, для создания заметки — "
 "`mn`."
 
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+
 msgid "File"
 msgstr "Файл"
+
+msgid "Save"
+msgstr "Сохранить"
 
 msgid "New note"
 msgstr "Новая заметка"
@@ -575,7 +619,7 @@ msgid "Quit"
 msgstr "Выход"
 
 msgid "Edit"
-msgstr "Редактировать"
+msgstr "Правка"
 
 msgid "Copy"
 msgstr "Копировать"
@@ -595,7 +639,12 @@ msgstr "Инструменты"
 msgid "Synchronisation status"
 msgstr "Статус синхронизации"
 
-msgid "Options"
+#, fuzzy
+msgid "Encryption options"
+msgstr "Настройки шифрования"
+
+#, fuzzy
+msgid "General Options"
 msgstr "Настройки"
 
 msgid "Help"
@@ -621,8 +670,72 @@ msgstr "Отмена"
 msgid "Notes and settings are stored in: %s"
 msgstr "Заметки и настройки сохранены в: %s"
 
-msgid "Save"
-msgstr "Сохранить"
+msgid ""
+"Disabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent unencrypted to the sync target. Do you wish to "
+"continue?"
+msgstr ""
+"Отключение шифрования означает, что *все* ваши заметки и вложения будут "
+"пересинхронизированы и отправлены в расшифрованном виде к цели "
+"синхронизации. Желаете продолжить?"
+
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
+msgstr ""
+"Включение шифрования означает, что *все* ваши заметки и вложения будут "
+"пересинхронизированы и отправлены в зашифрованном виде к цели синхронизации. "
+"Не теряйте пароль, так как в целях безопасности *только* с его помощью можно "
+"будет расшифровать данные! Чтобы включить шифрование, введите ваш пароль "
+"ниже."
+
+msgid "Disable encryption"
+msgstr "Отключить шифрование"
+
+msgid "Enable encryption"
+msgstr "Включить шифрование"
+
+msgid "Master Keys"
+msgstr "Мастер-ключи"
+
+msgid "Active"
+msgstr "Активен"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Source"
+msgstr "Источник"
+
+msgid "Created"
+msgstr "Создан"
+
+msgid "Updated"
+msgstr "Обновлён"
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "Password OK"
+msgstr "Пароль OK"
+
+msgid ""
+"Note: Only one master key is going to be used for encryption (the one marked "
+"as \"active\"). Any of the keys might be used for decryption, depending on "
+"how the notes or notebooks were originally encrypted."
+msgstr ""
+"Внимание: Для шифрования может быть использован только один мастер-ключ "
+"(отмеченный как «активный»). Для расшифровки может использоваться любой из "
+"ключей, в зависимости от того, как изначально были зашифрованы заметки или "
+"блокноты."
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Encryption is:"
+msgstr "Шифрование:"
 
 msgid "Back"
 msgstr "Назад"
@@ -668,32 +781,11 @@ msgstr "Некоторые элементы не могут быть синхр�
 msgid "View them now"
 msgstr "Просмотреть их сейчас"
 
-msgid "Active"
-msgstr ""
+msgid "Some items cannot be decrypted."
+msgstr "Некоторые элементы не могут быть расшифрованы."
 
-msgid "ID"
-msgstr "ID"
-
-msgid "Source"
-msgstr "Источник"
-
-msgid "Created"
-msgstr "Создана"
-
-msgid "Updated"
-msgstr "Обновлена"
-
-msgid "Password"
-msgstr ""
-
-msgid "Password OK"
-msgstr ""
-
-msgid ""
-"Note: Only one master key is going to be used for encryption (the one marked "
-"as \"active\"). Any of the keys might be used for decryption, depending on "
-"how the notes or notebooks were originally encrypted."
-msgstr ""
+msgid "Set the password"
+msgstr "Установить пароль"
 
 msgid "Add or remove tags"
 msgstr "Добавить или удалить теги"
@@ -736,8 +828,14 @@ msgstr "Вход в OneDrive"
 msgid "Import"
 msgstr "Импорт"
 
+msgid "Options"
+msgstr "Настройки"
+
 msgid "Synchronisation Status"
 msgstr "Статус синхронизации"
+
+msgid "Encryption Options"
+msgstr "Настройки шифрования"
 
 msgid "Remove this tag from all the notes?"
 msgstr "Убрать этот тег со всех заметок?"
@@ -853,6 +951,14 @@ msgstr "Завершено: %s"
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Синхронизация уже выполняется. Статус: %s"
 
+#, fuzzy
+msgid "Encrypted"
+msgstr "Шифрование:"
+
+#, fuzzy
+msgid "Encrypted items cannot be modified"
+msgstr "Некоторые элементы не могут быть синхронизированы."
+
 msgid "Conflicts"
 msgstr "Конфликты"
 
@@ -915,9 +1021,6 @@ msgstr "Сохранять информацию о геолокации в за�
 msgid "Synchronisation interval"
 msgstr "Интервал синхронизации"
 
-msgid "Disabled"
-msgstr "Отключена"
-
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d минут"
@@ -963,9 +1066,15 @@ msgstr "Неверное значение параметра: «%s». Досту
 msgid "Items that cannot be synchronised"
 msgstr "Элементы, которые не могут быть синхронизированы"
 
-#, javascript-format
-msgid "\"%s\": \"%s\""
-msgstr "«%s»: «%s»"
+#, fuzzy, javascript-format
+msgid "%s (%s): %s"
+msgstr "%s %s (%s)"
+
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "Статус синхронизации (элементов синхронизировано/всего)"
@@ -1009,11 +1118,12 @@ msgstr "Удалить эти заметки?"
 msgid "Log"
 msgstr "Лог"
 
-msgid "Status"
-msgstr "Статус"
-
 msgid "Export Debug Report"
 msgstr "Экспортировать отладочный отчёт"
+
+#, fuzzy
+msgid "Encryption Config"
+msgstr "Шифрование:"
 
 msgid "Configuration"
 msgstr "Конфигурация"
@@ -1025,6 +1135,9 @@ msgstr "Переместить в блокнот..."
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "Переместить %d заметок в блокнот «%s»?"
 
+msgid "Press to set the decryption password."
+msgstr ""
+
 msgid "Select date"
 msgstr "Выбрать дату"
 
@@ -1033,6 +1146,25 @@ msgstr "Подтвердить"
 
 msgid "Cancel synchronisation"
 msgstr "Отменить синхронизацию"
+
+#, fuzzy, javascript-format
+msgid "Master Key %s"
+msgstr "Мастер-ключи"
+
+#, fuzzy, javascript-format
+msgid "Created: %s"
+msgstr "Создано: %d."
+
+#, fuzzy
+msgid "Password:"
+msgstr "Пароль"
+
+msgid "Password cannot be empty"
+msgstr ""
+
+#, fuzzy
+msgid "Enable"
+msgstr "Включено"
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"
@@ -1093,3 +1225,6 @@ msgstr "У вас сейчас нет блокнота. Создайте его 
 
 msgid "Welcome"
 msgstr "Добро пожаловать"
+
+#~ msgid "\"%s\": \"%s\""
+#~ msgstr "«%s»: «%s»"

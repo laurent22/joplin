@@ -4,13 +4,14 @@ const { createStore } = require('redux');
 const { connect, Provider } = require('react-redux');
 
 const { _ } = require('lib/locale.js');
-const { Setting } = require('lib/models/setting.js');
+const Setting = require('lib/models/Setting.js');
 
 const { MainScreen } = require('./MainScreen.min.js');
 const { OneDriveLoginScreen } = require('./OneDriveLoginScreen.min.js');
 const { StatusScreen } = require('./StatusScreen.min.js');
 const { ImportScreen } = require('./ImportScreen.min.js');
 const { ConfigScreen } = require('./ConfigScreen.min.js');
+const { EncryptionConfigScreen } = require('./EncryptionConfigScreen.min.js');
 const { Navigator } = require('./Navigator.min.js');
 
 const { app } = require('../app');
@@ -77,6 +78,7 @@ class RootComponent extends React.Component {
 			Import: { screen: ImportScreen, title: () => _('Import') },
 			Config: { screen: ConfigScreen, title: () => _('Options') },
 			Status: { screen: StatusScreen, title: () => _('Synchronisation Status') },
+			EncryptionConfig: { screen: EncryptionConfigScreen, title: () => _('Encryption Options') },
 		};
 
 		return (

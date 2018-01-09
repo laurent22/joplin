@@ -1,4 +1,4 @@
-const { Folder } = require('lib/models/folder.js');
+const Folder = require('lib/models/Folder.js');
 
 class FoldersScreenUtils {
 
@@ -7,7 +7,7 @@ class FoldersScreenUtils {
 
 		this.dispatch({
 			type: 'FOLDER_UPDATE_ALL',
-			folders: initialFolders,
+			items: initialFolders,
 		});
 	}
 
