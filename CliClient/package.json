@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "app-module-path": "^2.2.0",
+    "compare-version": "^0.1.2",
     "follow-redirects": "^1.2.4",
     "form-data": "^2.1.4",
     "fs-extra": "^5.0.0",
