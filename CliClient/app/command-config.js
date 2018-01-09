@@ -23,7 +23,8 @@ class Command extends BaseCommand {
 		const verbose = args.options.verbose;
 
 		const renderKeyValue = (name) => {
-			const value = Setting.value(name);
+			let value = Setting.value(name);
+			if (typeof value === 'object' || Array.isArray(value)) value = JSON.stringify(value);
 			if (Setting.isEnum(name)) {
 				return _('%s = %s (%s)', name, value, Setting.enumOptionsDoc(name));
 			} else {
