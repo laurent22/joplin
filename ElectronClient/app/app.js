@@ -171,16 +171,6 @@ class Application extends BaseApplication {
 			{
 				label: _('File'),
 				submenu: [{
-				// 	label: _('Save'),
-				// 	accelerator: 'CommandOrControl+S',
-				// 	screens: ['Main'],
-				// 	click: () => {
-				// 		this.dispatch({
-				// 			type: 'WINDOW_COMMAND',
-				// 			name: 'save_ntoe',
-				// 		});
-				// 	}
-				// }, {
 					label: _('New note'),
 					accelerator: 'CommandOrControl+N',
 					screens: ['Main'],
