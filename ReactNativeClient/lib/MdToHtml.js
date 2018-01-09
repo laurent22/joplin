@@ -125,9 +125,9 @@ class MdToHtml {
 
 	renderOpenLink_(attrs, options) {
 		let href = this.getAttr_(attrs, 'href');
-		const title = this.getAttr_(attrs, 'title');
 		const text = this.getAttr_(attrs, 'text');
 		const isResourceUrl = Resource.isResourceUrl(href);
+		const title = isResourceUrl ? this.getAttr_(attrs, 'title') : href;
 
 		if (isResourceUrl && !this.supportsResourceLinks_) {
 			// In mobile, links to local resources, such as PDF, etc. currently aren't supported.
