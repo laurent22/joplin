@@ -305,13 +305,15 @@ class MdToHtml {
 			b,strong{font-weight:bolder}small{font-size:80%}img{border-style:none}
 		`;
 
+		const fontFamily = 'sans-serif';
+
 		const css = `
 			body {
 				font-size: ` + style.htmlFontSize + `;
 				color: ` + style.htmlColor + `;
 				line-height: ` + style.htmlLineHeight + `;
 				background-color: ` + style.htmlBackgroundColor + `;
-				font-family: sans-serif;
+				font-family: ` + fontFamily + `;
 				padding-bottom: ` + options.paddingBottom + `;
 			}
 			p, h1, h2, h3, h4, h5, h6, ul, table {
@@ -359,6 +361,10 @@ class MdToHtml {
 			td, th {
 				border: 1px solid silver;
 				padding: .5em 1em .5em 1em;
+				font-size: ` + style.htmlFontSize + `;
+				color: ` + style.htmlColor + `;
+				background-color: ` + style.htmlBackgroundColor + `;
+				font-family: ` + fontFamily + `;
 			}
 			hr {
 				border: none;
