@@ -128,13 +128,15 @@ class NoteTextComponent extends React.Component {
 		if (!options) options = {};
 		if (!('noReloadIfLocalChanges' in options)) options.noReloadIfLocalChanges = false;
 
+		await this.saveIfNeeded();
+
 		const stateNoteId = this.state.note ? this.state.note.id : null;
 		const noteId = props.noteId;
 		let loadingNewNote = stateNoteId !== noteId;
 		this.lastLoadedNoteId_ = noteId;
 		const note = noteId ? await Note.load(noteId) : null;
 		if (noteId !== this.lastLoadedNoteId_) return; // Race condition - current note was changed while this one was loading
-		if (!options.noReloadIfLocalChanges && this.isModified()) return;
+		if (options.noReloadIfLocalChanges && this.isModified()) return;
 
 		// If the note hasn't been changed, exit now
 		if (this.state.note && note) {

@@ -17,14 +17,9 @@ shared.saveNoteButton_press = async function(comp) {
 	// just save a new note by clearing the note ID.
 	if (note.id && !(await shared.noteExists(note.id))) delete note.id;
 
-	// reg.logger().info('Saving note: ', note);
-
 	if (!note.parent_id) {
 		let folder = await Folder.defaultFolder();
-		if (!folder) {
-			//Log.warn('Cannot save note without a notebook');
-			return;
-		}
+		if (!folder) return;
 		note.parent_id = folder.id;
 	}
 
@@ -35,18 +30,6 @@ shared.saveNoteButton_press = async function(comp) {
 		note.title = Note.defaultTitle(note);
 		titleWasAutoAssigned = true;
 	}
-
-	// Save only the properties that have changed
-	// let diff = null;
-	// if (!isNew) {
-	// 	diff = BaseModel.diffObjects(comp.state.lastSavedNote, note);
-	// 	diff.type_ = note.type_;
-	// 	diff.id = note.id;
-	// } else {
-	// 	diff = Object.assign({}, note);
-	// }
-
-	// const savedNote = await Note.save(diff);
 
 	let options = {};
 	if (!isNew) {
