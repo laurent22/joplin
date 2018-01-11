@@ -156,7 +156,7 @@ class MdToHtml {
 		}
 	}
 
-	renderTokens_(tokens, options) {
+	renderTokens_(markdownIt, tokens, options) {
 		let output = [];
 		let previousToken = null;
 		let anchorAttrs = [];
@@ -212,9 +212,15 @@ class MdToHtml {
 				output.push('<br/>');
 			} else if (t.type === 'hr') {
 				output.push('<hr/>');
+ 			} else if (t.type === 'math_inline') {
+				const mathText = markdownIt.render('$' + t.content + '$');
+				output.push(mathText);
+ 			} else if (t.type === 'math_block') {
+				const mathText = markdownIt.render('$$' + t.content + '$$');
+				output.push(mathText);
 			} else {
 				if (t.children) {
-					const parsedChildren = this.renderTokens_(t.children, options);
+					const parsedChildren = this.renderTokens_(markdownIt, t.children, options);
 					output = output.concat(parsedChildren);
 				} else {
 					if (t.content) {
@@ -260,7 +266,8 @@ class MdToHtml {
 			breaks: true,
 			linkify: true,
 		});
-		const env = {};
+
+		md.use(require('markdown-it-katex'));
 
 		// Hack to make checkboxes clickable. Ideally, checkboxes should be parsed properly in
 		// renderTokens_(), but for now this hack works. Marking it with HORRIBLE_HACK so
@@ -278,12 +285,13 @@ class MdToHtml {
 			}
 		}
 
+		const env = {};
 		const tokens = md.parse(body, env);
 
 		// console.info(body);
 		// console.info(tokens);
 
-		let renderedBody = this.renderTokens_(tokens, options);
+		let renderedBody = this.renderTokens_(md, tokens, options);
 
 		if (HORRIBLE_HACK) {
 			let loopCount = 0;
@@ -374,9 +382,14 @@ class MdToHtml {
 				width: auto;
 				max-width: 100%;
 			}
+
+			.katex .mfrac .frac-line:before {
+				/* top: 50%; */
+				/* padding-bottom: .7em; */
+			}
 		`;
 
-		const styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>';
+		const styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>' + '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">';
 
 		const output = styleHtml + renderedBody;
 
