@@ -24,25 +24,29 @@ shared.saveNoteButton_press = async function(comp) {
 	}
 
 	let isNew = !note.id;
-	let titleWasAutoAssigned = false;
 
-	if (isNew && !note.title) {
-		note.title = Note.defaultTitle(note);
-		titleWasAutoAssigned = true;
-	}
-
-	let options = {};
+	let options = { userSideValidation: true };
 	if (!isNew) {
 		options.fields = BaseModel.diffObjectsFields(comp.state.lastSavedNote, note);
 	}
 
-	const savedNote = ('fields' in options) && !options.fields.length ? Object.assign({}, note) : await Note.save(note, { userSideValidation: true });
+	const hasAutoTitle = comp.state.newAndNoTitleChangeNoteId || (isNew && !note.title);
+	if (hasAutoTitle) {
+		note.title = Note.defaultTitle(note);
+		if (options.fields && options.fields.indexOf('title') < 0) options.fields.push('title');
+	}
+
+	const savedNote = ('fields' in options) && !options.fields.length ? Object.assign({}, note) : await Note.save(note, options);
 
 	const stateNote = comp.state.note;
+
+	// Note was reloaded while being saved.
+	if (!isNew && (!stateNote || stateNote.id !== savedNote.id)) return;
+
 	// Re-assign any property that might have changed during saving (updated_time, etc.)
 	note = Object.assign(note, savedNote);
 
-	if (stateNote) {
+	if (stateNote.id === note.id) {
 		// But we preserve the current title and body because
 		// the user might have changed them between the time
 		// saveNoteButton_press was called and the note was
@@ -50,17 +54,30 @@ shared.saveNoteButton_press = async function(comp) {
 		//
 		// If the title was auto-assigned above, we don't restore
 		// it from the state because it will be empty there.
-		if (!titleWasAutoAssigned) note.title = stateNote.title;
+		if (!hasAutoTitle) note.title = stateNote.title;
 		note.body = stateNote.body;
 	}
 
-	comp.setState({
+	let newState = {
 		lastSavedNote: Object.assign({}, note),
 		note: note,
-	});
+	};
+
+	if (isNew) newState.newAndNoTitleChangeNoteId = note.id;
+
+	comp.setState(newState);
 
 	if (isNew) Note.updateGeolocation(note.id);
 	comp.refreshNoteMetadata();
+
+	if (isNew) {
+		// Clear the newNote item now that the note has been saved, and
+		// make sure that the note we're editing is selected.
+		comp.props.dispatch({
+			type: 'NOTE_SELECT',
+			id: savedNote.id,
+		});
+	}
 }
 
 shared.saveOneProperty = async function(comp, name, value) {
@@ -89,9 +106,13 @@ shared.saveOneProperty = async function(comp, name, value) {
 }
 
 shared.noteComponent_change = function(comp, propName, propValue) {
+	let newState = {}
+
 	let note = Object.assign({}, comp.state.note);
 	note[propName] = propValue;
-	comp.setState({ note: note });
+	newState.note = note;
+
+	comp.setState(newState);
 }
 
 shared.refreshNoteMetadata = async function(comp, force = null) {
@@ -103,7 +124,7 @@ shared.refreshNoteMetadata = async function(comp, force = null) {
 
 shared.isModified = function(comp) {
 	if (!comp.state.note || !comp.state.lastSavedNote) return false;
-	let diff = BaseModel.diffObjects(comp.state.note, comp.state.lastSavedNote);
+	let diff = BaseModel.diffObjects(comp.state.lastSavedNote, comp.state.note);
 	delete diff.type_;
 	return !!Object.getOwnPropertyNames(diff).length;
 }
