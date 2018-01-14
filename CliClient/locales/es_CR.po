@@ -586,9 +586,6 @@ msgstr ""
 msgid "File"
 msgstr "Archivo"
 
-msgid "Save"
-msgstr ""
-
 msgid "New note"
 msgstr "Nueva nota"
 
@@ -657,6 +654,9 @@ msgstr "Cancelar"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
+msgstr ""
+
+msgid "Save"
 msgstr ""
 
 msgid ""
@@ -729,14 +729,8 @@ msgstr ""
 msgid "Please create a notebook first."
 msgstr "Por favor crea una libreta primero."
 
-msgid "Note title:"
-msgstr "Título de nota:"
-
 msgid "Please create a notebook first"
 msgstr "Por favor crea una libreta primero"
-
-msgid "To-do title:"
-msgstr "Títuto de lista de tareas:"
 
 msgid "Notebook title:"
 msgstr "Título de libreta:"
@@ -926,6 +920,10 @@ msgstr "Artículos locales borrados: %d."
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "Artículos remotos borrados: %d."
+
+#, fuzzy, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Artículos locales creados: %d."
 
 #, javascript-format
 msgid "State: \"%s\"."
@@ -1226,6 +1224,12 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+#~ msgid "Note title:"
+#~ msgstr "Título de nota:"
+
+#~ msgid "To-do title:"
+#~ msgstr "Títuto de lista de tareas:"
 
 #~ msgid "Delete notebook?"
 #~ msgstr "Eliminar libreta?"

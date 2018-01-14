@@ -178,7 +178,7 @@ msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status` and `target-status`."
 msgstr ""
-"Gérer la configuration E2EE (Encryption de bout à bout). Les commandes sont "
+"Gérer la configuration E2EE (Cryptage de bout à bout). Les commandes sont "
 "`enable`, `disable`, `decrypt` et `status` et `target-status`."
 
 msgid "Enter master password:"
@@ -205,7 +205,7 @@ msgstr "Désactivé"
 
 #, javascript-format
 msgid "Encryption is: %s"
-msgstr "L'encryptage est : %s"
+msgstr "Le cryptage est : %s"
 
 msgid "Edit note."
 msgstr "Éditer la note."
@@ -603,9 +603,6 @@ msgstr ""
 msgid "File"
 msgstr "Fichier"
 
-msgid "Save"
-msgstr "Enregistrer"
-
 msgid "New note"
 msgstr "Nouvelle note"
 
@@ -646,7 +643,7 @@ msgid "Synchronisation status"
 msgstr "État de la synchronisation"
 
 msgid "Encryption options"
-msgstr "Optons d'encryptage"
+msgstr "Options de cryptage"
 
 msgid "General Options"
 msgstr "Options générales"
@@ -674,14 +671,17 @@ msgstr "Annulation"
 msgid "Notes and settings are stored in: %s"
 msgstr "Les notes et paramètres se trouve dans : %s"
 
+msgid "Save"
+msgstr "Enregistrer"
+
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
-"Désactiver l'encryptage signifie que *toutes* les notes et fichiers vont "
-"être re-synchronisés et envoyés décryptés sur la cible de la "
-"synchronisation. Souhaitez vous continuer ?"
+"Désactiver le cryptage signifie que *toutes* les notes et fichiers vont être "
+"re-synchronisés et envoyés décryptés sur la cible de la synchronisation. "
+"Souhaitez vous continuer ?"
 
 msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
@@ -689,17 +689,17 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
-"Activer l'encryptage signifie que *toutes* les notes et fichiers vont être "
-"re-synchronisés et envoyés encrypté vers la cible de la synchronisation. Ne "
+"Activer le cryptage signifie que *toutes* les notes et fichiers vont être re-"
+"synchronisés et envoyés cryptés vers la cible de la synchronisation. Ne "
 "perdez pas votre mot de passe car, pour des raisons de sécurité, ce sera la "
-"*seule* façon de décrypter les données ! Pour activer l'encryptage, veuillez "
+"*seule* façon de décrypter les données ! Pour activer le cryptage, veuillez "
 "entrer votre mot de passe ci-dessous."
 
 msgid "Disable encryption"
-msgstr "Désactiver l'encryptage"
+msgstr "Désactiver le cryptage"
 
 msgid "Enable encryption"
-msgstr "Activer l'encryptage"
+msgstr "Activer le cryptage"
 
 msgid "Master Keys"
 msgstr "Clefs maître"
@@ -730,16 +730,16 @@ msgid ""
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"Note : seule une clef maître va être utilisée pour l'encryptage (celle "
+"Note : seule une clef maître va être utilisée pour le cryptage (celle "
 "marquée comme \"actif\" ci-dessus). N'importe quel clef peut-être utilisée "
-"pour le décryptage, selon la façon dont les notes ou carnets étaient "
-"encryptés à l'origine."
+"pour le décryptage, selon la façon dont les notes ou carnets étaient cryptés "
+"à l'origine."
 
 msgid "Status"
 msgstr "État"
 
 msgid "Encryption is:"
-msgstr "L'encryptage est :"
+msgstr "Le cryptage est :"
 
 msgid "Back"
 msgstr "Retour"
@@ -754,14 +754,8 @@ msgstr ""
 msgid "Please create a notebook first."
 msgstr "Veuillez d'abord sélectionner un carnet."
 
-msgid "Note title:"
-msgstr "Titre de la note :"
-
 msgid "Please create a notebook first"
 msgstr "Veuillez d'abord créer un carnet d'abord"
-
-msgid "To-do title:"
-msgstr "Titre de la tâche :"
 
 msgid "Notebook title:"
 msgstr "Titre du carnet :"
@@ -844,7 +838,7 @@ msgid "Synchronisation Status"
 msgstr "État de la synchronisation"
 
 msgid "Encryption Options"
-msgstr "Options d'encryptage"
+msgstr "Options de cryptage"
 
 msgid "Remove this tag from all the notes?"
 msgstr "Enlever cette étiquette de toutes les notes ?"
@@ -945,6 +939,10 @@ msgstr "Objets supprimés localement : %d."
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "Objets distants supprimés : %d."
+
+#, fuzzy, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Objets créés localement : %d."
 
 #, javascript-format
 msgid "State: \"%s\"."
@@ -1135,7 +1133,7 @@ msgid "Export Debug Report"
 msgstr "Exporter rapport de débogage"
 
 msgid "Encryption Config"
-msgstr "Config encryptage"
+msgstr "Config cryptage"
 
 msgid "Configuration"
 msgstr "Configuration"
@@ -1237,6 +1235,12 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Note title:"
+#~ msgstr "Titre de la note :"
+
+#~ msgid "To-do title:"
+#~ msgstr "Titre de la tâche :"
 
 #~ msgid "Delete notebook?"
 #~ msgstr "Supprimer le carnet ?"

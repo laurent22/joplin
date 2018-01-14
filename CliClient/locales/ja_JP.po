@@ -586,9 +586,6 @@ msgstr ""
 msgid "File"
 msgstr "ファイル"
 
-msgid "Save"
-msgstr "保存"
-
 msgid "New note"
 msgstr "新しいノート"
 
@@ -657,6 +654,9 @@ msgstr "キャンセル"
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "ノートと設定は、%sに保存されます。"
+
+msgid "Save"
+msgstr "保存"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -730,14 +730,8 @@ msgstr ""
 msgid "Please create a notebook first."
 msgstr "ますはノートブックを作成して下さい。"
 
-msgid "Note title:"
-msgstr "ノートの題名："
-
 msgid "Please create a notebook first"
 msgstr "ますはノートブックを作成して下さい。"
-
-msgid "To-do title:"
-msgstr "ToDoの題名："
 
 msgid "Notebook title:"
 msgstr "ノートブックの題名："
@@ -918,6 +912,10 @@ msgstr "ローカルアイテムの削除: %d."
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "リモートアイテムの削除: %d."
+
+#, fuzzy, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "ローカルアイテムの作成: %d."
 
 #, javascript-format
 msgid "State: \"%s\"."
@@ -1209,3 +1207,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
+
+#~ msgid "Note title:"
+#~ msgstr "ノートの題名："
+
+#~ msgid "To-do title:"
+#~ msgstr "ToDoの題名："

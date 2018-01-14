@@ -581,9 +581,6 @@ msgstr ""
 msgid "File"
 msgstr "Arquivo"
 
-msgid "Save"
-msgstr ""
-
 msgid "New note"
 msgstr "Nova nota"
 
@@ -652,6 +649,9 @@ msgstr "Cancelar"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
+msgstr ""
+
+msgid "Save"
 msgstr ""
 
 msgid ""
@@ -723,14 +723,8 @@ msgstr ""
 msgid "Please create a notebook first."
 msgstr "Primeiro, crie um caderno."
 
-msgid "Note title:"
-msgstr "Título da nota:"
-
 msgid "Please create a notebook first"
 msgstr "Primeiro, crie um caderno"
-
-msgid "To-do title:"
-msgstr "Título da tarefa:"
 
 msgid "Notebook title:"
 msgstr "Título do caderno:"
@@ -915,6 +909,10 @@ msgstr "Itens locais excluídos: %d."
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "Itens remotos excluídos: %d."
+
+#, fuzzy, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Itens locais criados: %d."
 
 #, javascript-format
 msgid "State: \"%s\"."
@@ -1203,6 +1201,12 @@ msgstr "Você não possui cadernos. Crie um clicando no botão (+)."
 
 msgid "Welcome"
 msgstr "Bem-vindo"
+
+#~ msgid "Note title:"
+#~ msgstr "Título da nota:"
+
+#~ msgid "To-do title:"
+#~ msgstr "Título da tarefa:"
 
 #~ msgid "Delete notebook?"
 #~ msgstr "Excluir caderno?"

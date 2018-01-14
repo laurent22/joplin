@@ -530,9 +530,6 @@ msgstr ""
 msgid "File"
 msgstr ""
 
-msgid "Save"
-msgstr ""
-
 msgid "New note"
 msgstr ""
 
@@ -601,6 +598,9 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr ""
 
+msgid "Save"
+msgstr ""
+
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
@@ -667,13 +667,7 @@ msgstr ""
 msgid "Please create a notebook first."
 msgstr ""
 
-msgid "Note title:"
-msgstr ""
-
 msgid "Please create a notebook first"
-msgstr ""
-
-msgid "To-do title:"
 msgstr ""
 
 msgid "Notebook title:"
@@ -845,6 +839,10 @@ msgstr ""
 
 #, javascript-format
 msgid "Deleted remote items: %d."
+msgstr ""
+
+#, javascript-format
+msgid "Fetched items: %d/%d."
 msgstr ""
 
 #, javascript-format

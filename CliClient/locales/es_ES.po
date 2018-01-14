@@ -601,9 +601,6 @@ msgstr ""
 msgid "File"
 msgstr "Archivo"
 
-msgid "Save"
-msgstr "Guardar"
-
 msgid "New note"
 msgstr "Nota nueva"
 
@@ -673,6 +670,9 @@ msgstr "Cancelar"
 msgid "Notes and settings are stored in: %s"
 msgstr "Las notas y los ajustes se guardan en: %s"
 
+msgid "Save"
+msgstr "Guardar"
+
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
@@ -739,14 +739,8 @@ msgstr "Se creará la nueva libreta «%s» y se importará en ella el archivo «
 msgid "Please create a notebook first."
 msgstr "Cree primero una libreta."
 
-msgid "Note title:"
-msgstr "Título de la nota:"
-
 msgid "Please create a notebook first"
 msgstr "Por favor crea una libreta primero"
-
-msgid "To-do title:"
-msgstr "Títuto de lista de tareas:"
 
 msgid "Notebook title:"
 msgstr "Título de libreta:"
@@ -927,6 +921,10 @@ msgstr "Elementos locales borrados: %d."
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "Elementos remotos borrados: %d."
+
+#, fuzzy, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Elementos locales creados: %d."
 
 #, javascript-format
 msgid "State: \"%s\"."
@@ -1216,6 +1214,12 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+#~ msgid "Note title:"
+#~ msgstr "Título de la nota:"
+
+#~ msgid "To-do title:"
+#~ msgstr "Títuto de lista de tareas:"
 
 #~ msgid "\"%s\": \"%s\""
 #~ msgstr "«%s»: «%s»"

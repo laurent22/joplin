@@ -587,9 +587,6 @@ msgstr ""
 msgid "File"
 msgstr "File"
 
-msgid "Save"
-msgstr ""
-
 msgid "New note"
 msgstr "Nuova nota"
 
@@ -657,6 +654,9 @@ msgstr "Cancella"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
+msgstr ""
+
+msgid "Save"
 msgstr ""
 
 msgid ""
@@ -727,14 +727,8 @@ msgstr "Il nuovo blocco note \"%s\" verrà creato e \"%s\" vi verrà importato"
 msgid "Please create a notebook first."
 msgstr "Per favore prima crea un blocco note."
 
-msgid "Note title:"
-msgstr "Titolo della Nota:"
-
 msgid "Please create a notebook first"
 msgstr "Per favore prima crea un blocco note"
-
-msgid "To-do title:"
-msgstr "Titolo dell'attività:"
 
 msgid "Notebook title:"
 msgstr "Titolo del blocco note:"
@@ -917,6 +911,10 @@ msgstr "Elementi locali eliminati: %d."
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "Elementi remoti eliminati: %d."
+
+#, fuzzy, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Elementi locali creati: %d."
 
 #, javascript-format
 msgid "State: \"%s\"."
@@ -1207,6 +1205,12 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvenuto"
+
+#~ msgid "Note title:"
+#~ msgstr "Titolo della Nota:"
+
+#~ msgid "To-do title:"
+#~ msgstr "Titolo dell'attività:"
 
 #~ msgid "\"%s\": \"%s\""
 #~ msgstr "\"%s\": \"%s\""

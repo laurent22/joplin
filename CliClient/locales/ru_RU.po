@@ -597,9 +597,6 @@ msgstr ""
 msgid "File"
 msgstr "Файл"
 
-msgid "Save"
-msgstr "Сохранить"
-
 msgid "New note"
 msgstr "Новая заметка"
 
@@ -669,6 +666,9 @@ msgstr "Отмена"
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Заметки и настройки сохранены в: %s"
+
+msgid "Save"
+msgstr "Сохранить"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -748,14 +748,8 @@ msgstr "Будет создан новый блокнот «%s» и в него 
 msgid "Please create a notebook first."
 msgstr "Сначала создайте блокнот."
 
-msgid "Note title:"
-msgstr "Название заметки:"
-
 msgid "Please create a notebook first"
 msgstr "Сначала создайте блокнот"
-
-msgid "To-do title:"
-msgstr "Название задачи:"
 
 msgid "Notebook title:"
 msgstr "Название блокнота:"
@@ -935,6 +929,10 @@ msgstr "Удалено локальных элементов: %d."
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "Удалено удалённых элементов: %d."
+
+#, fuzzy, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Создано локальных элементов: %d."
 
 #, javascript-format
 msgid "State: \"%s\"."
@@ -1225,6 +1223,12 @@ msgstr "У вас сейчас нет блокнота. Создайте его 
 
 msgid "Welcome"
 msgstr "Добро пожаловать"
+
+#~ msgid "Note title:"
+#~ msgstr "Название заметки:"
+
+#~ msgid "To-do title:"
+#~ msgstr "Название задачи:"
 
 #~ msgid "\"%s\": \"%s\""
 #~ msgstr "«%s»: «%s»"

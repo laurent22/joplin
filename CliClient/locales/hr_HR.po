@@ -609,9 +609,6 @@ msgstr ""
 msgid "File"
 msgstr "Datoteka"
 
-msgid "Save"
-msgstr "Spremi"
-
 msgid "New note"
 msgstr "Nova bilješka"
 
@@ -681,6 +678,9 @@ msgstr "Odustani"
 msgid "Notes and settings are stored in: %s"
 msgstr "Bilješke i postavke su pohranjene u: %s"
 
+msgid "Save"
+msgstr "Spremi"
+
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
@@ -749,14 +749,8 @@ msgstr ""
 msgid "Please create a notebook first."
 msgstr "Prvo stvori bilježnicu."
 
-msgid "Note title:"
-msgstr "Naslov bilješke:"
-
 msgid "Please create a notebook first"
 msgstr "Prvo stvori bilježnicu"
-
-msgid "To-do title:"
-msgstr "Naslov zadatka:"
 
 msgid "Notebook title:"
 msgstr "Naslov bilježnice:"
@@ -935,6 +929,10 @@ msgstr "Obrisane lokalne stavke: %d."
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "Obrisane udaljene stavke: %d."
+
+#, fuzzy, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Stvorene lokalne stavke: %d."
 
 #, javascript-format
 msgid "State: \"%s\"."
@@ -1222,6 +1220,12 @@ msgstr "Trenutno nemaš nijednu bilježnicu. Stvori novu klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobro došli"
+
+#~ msgid "Note title:"
+#~ msgstr "Naslov bilješke:"
+
+#~ msgid "To-do title:"
+#~ msgstr "Naslov zadatka:"
 
 #~ msgid "\"%s\": \"%s\""
 #~ msgstr "\"%s\": \"%s\""

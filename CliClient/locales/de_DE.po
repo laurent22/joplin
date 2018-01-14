@@ -616,9 +616,6 @@ msgstr ""
 msgid "File"
 msgstr "Datei"
 
-msgid "Save"
-msgstr "Speichern"
-
 msgid "New note"
 msgstr "Neue Notiz"
 
@@ -687,6 +684,9 @@ msgstr "Abbrechen"
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Notizen und Einstellungen gespeichert in: %s"
+
+msgid "Save"
+msgstr "Speichern"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -760,14 +760,8 @@ msgstr ""
 msgid "Please create a notebook first."
 msgstr "Bitte erstelle zuerst ein Notizbuch."
 
-msgid "Note title:"
-msgstr "Notizen Titel:"
-
 msgid "Please create a notebook first"
 msgstr "Bitte erstelle zuerst ein Notizbuch"
-
-msgid "To-do title:"
-msgstr "To-Do Titel:"
 
 msgid "Notebook title:"
 msgstr "Notizbuch Titel:"
@@ -953,6 +947,10 @@ msgstr "Lokale Objekte gelöscht: %d."
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "Remote Objekte gelöscht: %d."
+
+#, fuzzy, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Lokale Objekte erstellt: %d."
 
 #, javascript-format
 msgid "State: \"%s\"."
@@ -1249,6 +1247,12 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Willkommen"
+
+#~ msgid "Note title:"
+#~ msgstr "Notizen Titel:"
+
+#~ msgid "To-do title:"
+#~ msgstr "To-Do Titel:"
 
 #~ msgid "\"%s\": \"%s\""
 #~ msgstr "\"%s\": \"%s\""

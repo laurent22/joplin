@@ -553,9 +553,6 @@ msgstr ""
 msgid "File"
 msgstr "文件"
 
-msgid "Save"
-msgstr ""
-
 msgid "New note"
 msgstr "新笔记"
 
@@ -623,6 +620,9 @@ msgstr "取消"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
+msgstr ""
+
+msgid "Save"
 msgstr ""
 
 msgid ""
@@ -693,14 +693,8 @@ msgstr "将创建新笔记本\"%s\"并将文件\"%s\"导入至其中"
 msgid "Please create a notebook first."
 msgstr "请先创建笔记本。"
 
-msgid "Note title:"
-msgstr "笔记标题："
-
 msgid "Please create a notebook first"
 msgstr "请先创建笔记本"
-
-msgid "To-do title:"
-msgstr "待办事项标题："
 
 msgid "Notebook title:"
 msgstr "笔记本标题："
@@ -880,6 +874,10 @@ msgstr "已删除本地项目: %d。"
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "已删除远程项目: %d。"
+
+#, fuzzy, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "已新建本地项目: %d。"
 
 #, javascript-format
 msgid "State: \"%s\"."
@@ -1159,6 +1157,12 @@ msgstr "您当前没有任何笔记本。点击(+)按钮创建新笔记本。"
 
 msgid "Welcome"
 msgstr "欢迎"
+
+#~ msgid "Note title:"
+#~ msgstr "笔记标题："
+
+#~ msgid "To-do title:"
+#~ msgstr "待办事项标题："
 
 #~ msgid "\"%s\": \"%s\""
 #~ msgstr "\"%s\": \"%s\""
