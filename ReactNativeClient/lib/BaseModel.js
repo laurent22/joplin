@@ -271,7 +271,7 @@ class BaseModel {
 
 		o = temp;
 
-		const modelId = temp.id;
+		let modelId = temp.id;
 		let query = {};
 
 		const timeNow = time.unixMs();
