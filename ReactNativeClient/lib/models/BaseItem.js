@@ -174,7 +174,7 @@ class BaseItem extends BaseModel {
 		}
 	}
 
-	// Note: Currently, one a deleted_items entry has been processed, it is removed from the database. In practice it means that
+	// Note: Currently, once a deleted_items entry has been processed, it is removed from the database. In practice it means that
 	// the following case will not work as expected:
 	// - Client 1 creates a note and sync with target 1 and 2
 	// - Client 2 sync with target 1

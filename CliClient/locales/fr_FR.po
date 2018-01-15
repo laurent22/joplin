@@ -940,9 +940,9 @@ msgstr "Objets supprimés localement : %d."
 msgid "Deleted remote items: %d."
 msgstr "Objets distants supprimés : %d."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Fetched items: %d/%d."
-msgstr "Objets créés localement : %d."
+msgstr "Téléchargés : %d/%d."
 
 #, javascript-format
 msgid "State: \"%s\"."
@@ -1210,10 +1210,10 @@ msgid "Hide metadata"
 msgstr "Cacher les métadonnées"
 
 msgid "Show metadata"
-msgstr "Afficher les métadonnées"
+msgstr "Voir métadonnées"
 
 msgid "View on map"
-msgstr "Voir emplacement sur carte"
+msgstr "Voir sur carte"
 
 msgid "Delete notebook"
 msgstr "Supprimer le carnet"
