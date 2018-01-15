@@ -268,6 +268,24 @@ describe('Synchronizer', function() {
 		expect(deletedItems.length).toBe(0);
 	}));
 
+	it('should not created deleted_items entries for items deleted via sync', asyncTest(async () => {
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: "un", parent_id: folder1.id });
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		await Folder.delete(folder1.id);
+		await synchronizer().start();
+
+		await switchClient(1);
+
+		await synchronizer().start();
+		let deletedItems = await BaseItem.deletedItems(syncTargetId());
+		expect(deletedItems.length).toBe(0);
+	}));
+
 	it('should delete local notes', asyncTest(async () => {
 		let folder1 = await Folder.save({ title: "folder1" });
 		let note1 = await Note.save({ title: "un", parent_id: folder1.id });

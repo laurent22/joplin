@@ -585,7 +585,7 @@ class Synchronizer {
 					if (noteIds.length) { // CONFLICT
 						await Folder.markNotesAsConflict(item.id);
 					}
-					await Folder.delete(item.id, { deleteChildren: false });
+					await Folder.delete(item.id, { deleteChildren: false, trackDeleted: false });
 				}
 			}
 
