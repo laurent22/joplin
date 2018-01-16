@@ -24,3 +24,7 @@ Once all the devices are in sync with E2EE enabled, the encryption/decryption sh
 # Disabling E2EE
 
 Follow the same procedure as above but instead disable E2EE on each device one by one. Again it might be simpler to do it one device at a time and to wait every time for the synchronisation to complete.
+
+# Technical specification
+
+For a more technical description, mostly relevant for development or to review the method being used, please see the [Encryption specification](http://joplin.cozic.net/help/spec).
