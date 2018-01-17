@@ -36,7 +36,7 @@ class FsDriverRN {
 		return {
 			birthtime: r.ctime, // Confusingly, "ctime" normally means "change time" but here it's used as "creation time"
 			mtime: r.mtime,
-			isDirectory: () => return r.isDirectory(),
+			isDirectory: () => r.isDirectory(),
 			path: path,
 		};  
 	}
