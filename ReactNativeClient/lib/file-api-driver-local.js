@@ -143,7 +143,6 @@ class FileApiDriverLocal {
 	}
 
 	async mkdir(path) {
-		console.info('EXISTST ' + path, await this.fsDriver().exists(path));
 		if (await this.fsDriver().exists(path)) return;
 
 		try {

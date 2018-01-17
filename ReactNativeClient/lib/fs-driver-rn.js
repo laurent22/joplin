@@ -34,19 +34,9 @@ class FsDriverRN {
 		let output = [];
 		for (let i = 0; i < items.length; i++) {
 			const item = items[i];
-			console.info('ITEM', item);
 			const relativePath = item.path.substr(path.length + 1);
 			output.push(this.rnfsStatToStd_(item, relativePath));
-
-			// let stat = await this.stat(path + '/' + items[i]);
-			// if (!stat) continue; // Has been deleted between the readdir() call and now
-			// stat.path = stat.path.substr(path.length + 1);
-			// output.push(stat);
 		}
-
-		console.info('READ DIR', path);
-		console.info(output);
-
 		return output;
 	}
 

@@ -92,14 +92,12 @@ class Synchronizer {
 		if (local) {
 			let s = [];
 			s.push(local.id);
-			if ('title' in local) s.push('"' + local.title + '"');
 			line.push('(Local ' + s.join(', ') + ')');
 		}
 
 		if (remote) {
 			let s = [];
 			s.push(remote.id ? remote.id : remote.path);
-			if ('title' in remote) s.push('"' + remote.title + '"');
 			line.push('(Remote ' + s.join(', ') + ')');
 		}
 

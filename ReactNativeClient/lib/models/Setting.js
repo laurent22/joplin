@@ -192,7 +192,8 @@ class Setting extends BaseModel {
 
 				if (c.value === value) return;
 
-				this.logger().info('Setting: ' + key + ' = ' + c.value + ' => ' + value);
+				// Don't log this to prevent sensitive info (passwords, auth tokens...) to end up in logs
+				// this.logger().info('Setting: ' + key + ' = ' + c.value + ' => ' + value);
 
 				c.value = value;
 
