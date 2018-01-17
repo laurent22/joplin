@@ -18,6 +18,38 @@ class FsDriverRN {
 		throw new Error('Not implemented');
 	}
 
+	// Returns a format compatible with Node.js format
+	rnfsStatToStd_(stat, path) {
+		return {
+			birthtime: stat.ctime ? stat.ctime : stat.mtime, // Confusingly, "ctime" normally means "change time" but here it's used as "creation time". Also sometimes it is null
+			mtime: stat.mtime,
+			isDirectory: () => stat.isDirectory(),
+			path: path,
+			size: stat.size,
+		};  
+	}
+
+	async readDirStats(path) {
+		let items = await RNFS.readDir(path);
+		let output = [];
+		for (let i = 0; i < items.length; i++) {
+			const item = items[i];
+			console.info('ITEM', item);
+			const relativePath = item.path.substr(path.length + 1);
+			output.push(this.rnfsStatToStd_(item, relativePath));
+
+			// let stat = await this.stat(path + '/' + items[i]);
+			// if (!stat) continue; // Has been deleted between the readdir() call and now
+			// stat.path = stat.path.substr(path.length + 1);
+			// output.push(stat);
+		}
+
+		console.info('READ DIR', path);
+		console.info(output);
+
+		return output;
+	}
+
 	async move(source, dest) {
 		return RNFS.moveFile(source, dest);
 	}
@@ -27,22 +59,30 @@ class FsDriverRN {
 	}
 
 	async mkdir(path) {
-		return fs.mkdir(path);
+		return RNFS.mkdir(path);
 	}
 
 	async stat(path) {
-		const r = await RNFS.stat(path);
-		// Returns a format compatible with Node.js format
-		return {
-			birthtime: r.ctime, // Confusingly, "ctime" normally means "change time" but here it's used as "creation time"
-			mtime: r.mtime,
-			isDirectory: () => r.isDirectory(),
-			path: path,
-		};  
+		try {
+			const r = await RNFS.stat(path);
+			return this.rnfsStatToStd_(r, path);
+		} catch (error) {
+			if (error && error.message && error.message.indexOf('exist') >= 0) {
+				// Probably { [Error: File does not exist] framesToPop: 1, code: 'EUNSPECIFIED' }
+				// which unfortunately does not have a proper error code. Can be ignored.
+				return null;
+			} else {
+				throw error;
+			}
+		}
 	}
 
+	// NOTE: DOES NOT WORK - no error is thrown and the function is called with the right
+	// arguments but the function returns `false` and the timestamp is not set.
+	// Current setTimestamp is not really used so keep it that way, but careful if it
+	// becomes needed.
 	async setTimestamp(path, timestampDate) {
-		return RNFS.touch(path, timestampDate);
+		// return RNFS.touch(path, timestampDate, timestampDate);
 	}
 
 	async open(path, mode) {

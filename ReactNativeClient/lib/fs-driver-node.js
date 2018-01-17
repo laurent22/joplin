@@ -35,7 +35,7 @@ class FsDriverNode {
 					await time.sleep(1);
 					continue;
 				}
-				throw this.fsErrorToJsError_(error);
+				throw error;
 			}
 		}
 
@@ -51,9 +51,14 @@ class FsDriverNode {
 	}
 
 	async stat(path) {
-		const s = await fs.stat(path);
-		s.path = path;
-		return s;
+		try {
+			const s = await fs.stat(path);
+			s.path = path;
+			return s;
+		} catch (error) {
+			if (error.code == 'ENOENT') return null;
+			throw error;
+		}
 	}
 
 	async setTimestamp(path, timestampDate) {

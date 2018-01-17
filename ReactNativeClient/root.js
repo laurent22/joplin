@@ -44,13 +44,18 @@ const { _, setLocale, closestSupportedLocale, defaultLocale } = require('lib/loc
 const RNFetchBlob = require('react-native-fetch-blob').default;
 const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const { reducer, defaultState } = require('lib/reducer.js');
+const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const DropdownAlert = require('react-native-dropdownalert').default;
 
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
+const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
+
+// Disabled because not fully working
+//SyncTargetRegistry.addClass(SyncTargetFilesystem);
 
 const FsDriverRN = require('lib/fs-driver-rn.js').FsDriverRN;
 const DecryptionWorker = require('lib/services/DecryptionWorker');
@@ -341,6 +346,7 @@ async function initialize(dispatch) {
 	const fsDriver = new FsDriverRN();
 
 	Resource.fsDriver_ = fsDriver;
+	FileApiDriverLocal.fsDriver_ = fsDriver;
 
 	AlarmService.setDriver(new AlarmServiceDriver());
 	AlarmService.setLogger(mainLogger);

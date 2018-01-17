@@ -1,6 +1,3 @@
-const fs = require('fs-extra');
-const { promiseChain } = require('lib/promise-utils.js');
-const moment = require('moment');
 const BaseItem = require('lib/models/BaseItem.js');
 const { time } = require('lib/time-utils.js');
 
@@ -19,8 +16,9 @@ const { time } = require('lib/time-utils.js');
 
 class FileApiDriverLocal {
 
-	fsErrorToJsError_(error) {
+	fsErrorToJsError_(error, path = null) {
 		let msg = error.toString();
+		if (path !== null) msg += '. Path: ' + path;
 		let output = new Error(msg);
 		if (error.code) output.code = error.code;
 		return output;
@@ -34,9 +32,9 @@ class FileApiDriverLocal {
 	async stat(path) {
 		try {
 			const s = await this.fsDriver().stat(path);
+			if (!s) return null;
 			return this.metadataFromStat_(s);
 		} catch (error) {
-			if (error.code == 'ENOENT') return null;
 			throw this.fsErrorToJsError_(error);
 		}
 	}
@@ -106,7 +104,7 @@ class FileApiDriverLocal {
 				items: output,
 			};
 		} catch(error) {
-			throw this.fsErrorToJsError_(error);
+			throw this.fsErrorToJsError_(error, path);
 		}
 	}
 
@@ -121,7 +119,7 @@ class FileApiDriverLocal {
 				context: null,
 			};
 		} catch(error) {
-			throw this.fsErrorToJsError_(error);
+			throw this.fsErrorToJsError_(error, path);
 		}
 	}
 
@@ -138,19 +136,20 @@ class FileApiDriverLocal {
 			}
 		} catch (error) {
 			if (error.code == 'ENOENT') return null;
-			throw this.fsErrorToJsError_(error);
+			throw this.fsErrorToJsError_(error, path);
 		}
 
 		return output;
 	}
 
 	async mkdir(path) {
+		console.info('EXISTST ' + path, await this.fsDriver().exists(path));
 		if (await this.fsDriver().exists(path)) return;
 
 		try {
 			await this.fsDriver().mkdir(path);
 		} catch (error) {
-			throw this.fsErrorToJsError_(error);
+			throw this.fsErrorToJsError_(error, path);
 		}
 
 		// return new Promise((resolve, reject) => {
@@ -182,7 +181,7 @@ class FileApiDriverLocal {
 		
 			await this.fsDriver().writeFile(path, content, 'utf8');
 		} catch (error) {
-			throw this.fsErrorToJsError_(error);
+			throw this.fsErrorToJsError_(error, path);
 		}
 
 		// if (!options) options = {};
@@ -204,7 +203,7 @@ class FileApiDriverLocal {
 		try {
 			await this.fsDriver().unlink(path);
 		} catch (error) {
-			throw this.fsErrorToJsError_(error);
+			throw this.fsErrorToJsError_(error, path);
 		}
 
 		// return new Promise((resolve, reject) => {
@@ -224,7 +223,11 @@ class FileApiDriverLocal {
 	}
 
 	async move(oldPath, newPath) {
-		return this.fsDriver().move(oldPath, newPath);
+		try {
+			await this.fsDriver().move(oldPath, newPath);
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
+		}
 
 		// let lastError = null;
 		
