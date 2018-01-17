@@ -14,6 +14,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.3\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "Give focus to next pane"
 msgstr "Activer le volet suivant"
@@ -770,7 +772,7 @@ msgid "Rename notebook:"
 msgstr "Renommer le carnet :"
 
 msgid "Set alarm:"
-msgstr "Définir ou modifier alarme :"
+msgstr "Régler alarme :"
 
 msgid "Layout"
 msgstr "Disposition"
@@ -817,7 +819,7 @@ msgid "Attach file"
 msgstr "Attacher un fichier"
 
 msgid "Set alarm"
-msgstr "Définir ou modifier alarme"
+msgstr "Régler alarme"
 
 msgid "Refresh"
 msgstr "Rafraîchir"

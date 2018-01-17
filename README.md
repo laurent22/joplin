@@ -95,6 +95,12 @@ On the **terminal application**, to initiate the synchronisation process, type `
 
 	*/30 * * * * /path/to/joplin sync
 
+# Encryption
+
+Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the notes, notebooks, tags or resources can read them. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the [End-To-End Encryption Tutorial](http://joplin.cozic.net/help/e2ee) for more information about this feature and how to enable it.
+
+For a more technical description, mostly relevant for development or to review the method being used, please see the [Encryption specification](http://joplin.cozic.net/help/spec).
+
 # Attachments / Resources
 
 Any kind of file can be attached to a note. In Markdown, links to these files are represented as a simple ID to the resource. In the note viewer, these files, if they are images, will be displayed or, if they are other files (PDF, text files, etc.) they will be displayed as links. Clicking on this link will open the file in the default application.
