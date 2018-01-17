@@ -113,7 +113,7 @@ On the desktop and mobile apps, an alarm can be associated with any to-do. It wi
 - **macOS**: >= 10.8 or Growl if earlier.
 - **Linux**: `notify-osd` or `libnotify-bin` installed (Ubuntu should have this by default). Growl otherwise
 
-See [documentation and flow chart for reporter choice](./DECISION_FLOW.md)
+See [documentation and flow chart for reporter choice](https://github.com/mikaelbr/node-notifier/blob/master/DECISION_FLOW.md)
 
 On mobile, the alarms will be displayed using the built-in notification system.
 
@@ -121,7 +121,7 @@ If for any reason the notifications do not work, please [open an issue](https://
 
 # Localisation
 
-Joplin is currently available in English, French, Spanish, German, Portuguese, Chinese, Japanese, Russian, Croatian and Italian. If you would like to contribute a translation, it is quite straightforward, please follow these steps:
+Joplin is currently available in English, French, Spanish, German, Portuguese, Chinese, Japanese, Russian, Croatian, Dutch and Italian. If you would like to contribute a translation, it is quite straightforward, please follow these steps:
 
 - [Download Poedit](https://poedit.net/), the translation editor, and install it.
 - [Download the file to be translated](https://raw.githubusercontent.com/laurent22/joplin/master/CliClient/locales/joplin.pot).
