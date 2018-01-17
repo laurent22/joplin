@@ -23,12 +23,14 @@ const { Logger } = require('lib/logger.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { shimInit } = require('lib/shim-init-node.js');
 const { _ } = require('lib/locale.js');
+const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const EncryptionService = require('lib/services/EncryptionService');
 
 const fsDriver = new FsDriverNode();
 Logger.fsDriver_ = fsDriver;
 Resource.fsDriver_ = fsDriver;
 EncryptionService.fsDriver_ = fsDriver;
+FileApiDriverLocal.fsDriver_ = fsDriver;
 
 // That's not good, but it's to avoid circular dependency issues
 // in the BaseItem class.

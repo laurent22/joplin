@@ -10,6 +10,10 @@ class FsDriverRN {
 		return RNFS.appendFile(path, string, encoding);
 	}
 
+	writeFile(path, string, encoding = 'base64') {
+		return RNFS.writeFile(path, string, encoding);
+	}
+
 	writeBinaryFile(path, content) {
 		throw new Error('Not implemented');
 	}
@@ -22,11 +26,30 @@ class FsDriverRN {
 		return RNFS.exists(path);
 	}
 
+	async mkdir(path) {
+		return fs.mkdir(path);
+	}
+
+	async stat(path) {
+		const r = await RNFS.stat(path);
+		// Returns a format compatible with Node.js format
+		return {
+			birthtime: r.ctime, // Confusingly, "ctime" normally means "change time" but here it's used as "creation time"
+			mtime: r.mtime,
+			isDirectory: () => return r.isDirectory(),
+			path: path,
+		};  
+	}
+
+	async setTimestamp(path, timestampDate) {
+		return RNFS.touch(path, timestampDate);
+	}
+
 	async open(path, mode) {
 		// Note: RNFS.read() doesn't provide any way to know if the end of file has been reached.
 		// So instead we stat the file here and use stat.size to manually check for end of file.
 		// Bug: https://github.com/itinance/react-native-fs/issues/342
-		const stat = await RNFS.stat(path);
+		const stat = await this.stat(path);
 		return {
 			path: path,
 			offset: 0,
@@ -39,8 +62,23 @@ class FsDriverRN {
 		return null;
 	}
 
-	readFile(path) {
-		throw new Error('Not implemented');
+	readFile(path, encoding = 'utf8') {
+		if (encoding === 'Buffer') throw new Error('Raw buffer output not supported for FsDriverRN.readFile');
+		return RNFS.readFile(path, encoding);
+	}
+
+	// Always overwrite destination
+	async copy(source, dest) {
+		let retry = false;
+		try {
+			await RNFS.copyFile(source, dest);
+		} catch (error) {
+			// On iOS it will throw an error if the file already exist
+			retry = true;
+			await this.unlink(dest);
+		}
+
+		if (retry) await RNFS.copyFile(source, dest);
 	}
 
 	async unlink(path) {

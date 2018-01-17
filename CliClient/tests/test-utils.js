@@ -38,6 +38,7 @@ const fsDriver = new FsDriverNode();
 Logger.fsDriver_ = fsDriver;
 Resource.fsDriver_ = fsDriver;
 EncryptionService.fsDriver_ = fsDriver;
+FileApiDriverLocal.fsDriver_ = fsDriver;
 
 const logDir = __dirname + '/../tests/logs';
 fs.mkdirpSync(logDir, 0o755);
@@ -142,25 +143,6 @@ async function setupDatabase(id = null) {
 
 	BaseModel.db_ = databases_[id];
 	await Setting.load();
-	//return setupDatabase(id);
-
-
-
-	// return databases_[id].open({ name: filePath }).then(() => {
-	// 	BaseModel.db_ = databases_[id];
-	// 	return setupDatabase(id);
-	// });
-
-
-	// return fs.unlink(filePath).catch(() => {
-	// 	// Don't care if the file doesn't exist
-	// }).then(() => {
-	// 	databases_[id] = new JoplinDatabase(new DatabaseDriverNode());
-	// 	return databases_[id].open({ name: filePath }).then(() => {
-	// 		BaseModel.db_ = databases_[id];
-	// 		return setupDatabase(id);
-	// 	});
-	// });
 }
 
 function resourceDir(id = null) {

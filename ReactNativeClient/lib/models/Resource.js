@@ -120,7 +120,7 @@ class Resource extends BaseItem {
 	}
 
 	static async content(resource) {
-		return this.fsDriver().readFile(this.fullPath(resource));
+		return this.fsDriver().readFile(this.fullPath(resource), 'Buffer');
 	}
 
 	static setContent(resource, content) {
