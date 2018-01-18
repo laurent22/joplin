@@ -48,7 +48,7 @@ async function handleAutocompletionPromise(line) {
 			if (options.length > 1 && options[1].indexOf(next) === 0) {
 				l.push(options[1]);
 			} else if (options[0].indexOf(next) === 0) {
-				l.push(options[2]);
+				l.push(options[0]);
 			}
 		}
 		if (l.length === 0) {
