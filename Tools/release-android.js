@@ -80,11 +80,11 @@ async function main() {
 	readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/.*?\.apk)/, downloadUrl);
 	await fs.writeFile('README.md', readmeContent);
 
-	await execCommand('git add -A');
-	await execCommand('git commit -m "Android release v' + version + '"');
-	await execCommand('git tag ' + tagName);
-	await execCommand('git push');
-	await execCommand('git push --tags');
+	console.info(await execCommand('git add -A'));
+	console.info(await execCommand('git commit -m "Android release v' + version + '"'));
+	console.info(await execCommand('git tag ' + tagName));
+	console.info(await execCommand('git push'));
+	console.info(await execCommand('git push --tags'));
 
 	console.info('Creating GitHub release ' + tagName + '...');
 
@@ -93,7 +93,7 @@ async function main() {
 		body: JSON.stringify({
 			tag_name: tagName,
 			name: tagName,
-			draft: true,
+			draft: false,
 		}),
 		headers: {
 			'Content-Type': 'application/json',
