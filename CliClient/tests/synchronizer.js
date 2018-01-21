@@ -74,11 +74,11 @@ async function localItemsSameAsRemote(locals, expect) {
 			expect(!!remote).toBe(true);
 			if (!remote) continue;
 
-			if (syncTargetId() == SyncTargetRegistry.nameToId('filesystem')) {
-				expect(remote.updated_time).toBe(Math.floor(dbItem.updated_time / 1000) * 1000);
-			} else {
-				expect(remote.updated_time).toBe(dbItem.updated_time);
-			}
+			// if (syncTargetId() == SyncTargetRegistry.nameToId('filesystem')) {
+			// 	expect(remote.updated_time).toBe(Math.floor(dbItem.updated_time / 1000) * 1000);
+			// } else {
+			// 	expect(remote.updated_time).toBe(dbItem.updated_time);
+			// }
 
 			let remoteContent = await fileApi().get(path);
 			remoteContent = dbItem.type_ == BaseModel.TYPE_NOTE ? await Note.unserialize(remoteContent) : await Folder.unserialize(remoteContent);
@@ -683,12 +683,12 @@ describe('Synchronizer', function() {
 
 		await switchClient(2);
 
-		synchronizer().debugFlags_ = ['cancelDeltaLoop2'];		
+		synchronizer().testingHooks_ = ['cancelDeltaLoop2'];		
 		let context = await synchronizer().start();
 		let notes = await Note.all();
 		expect(notes.length).toBe(0);
 
-		synchronizer().debugFlags_ = [];
+		synchronizer().testingHooks_ = [];
 		await synchronizer().start({ context: context });
 		notes = await Note.all();
 		expect(notes.length).toBe(1);
@@ -702,9 +702,9 @@ describe('Synchronizer', function() {
 		let disabledItems = await BaseItem.syncDisabledItems(syncTargetId());
 		expect(disabledItems.length).toBe(0);
 		await Note.save({ id: noteId, title: "un mod", });
-		synchronizer().debugFlags_ = ['rejectedByTarget'];
+		synchronizer().testingHooks_ = ['rejectedByTarget'];
 		await synchronizer().start();
-		synchronizer().debugFlags_ = [];
+		synchronizer().testingHooks_ = [];
 		await synchronizer().start(); // Another sync to check that this item is now excluded from sync
 
 		await switchClient(2);

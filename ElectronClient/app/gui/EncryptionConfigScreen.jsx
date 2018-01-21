@@ -121,7 +121,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 			}
 		}
 
-		const decryptedItemsInfo = this.props.encryptionEnabled ? <p style={theme.textStyle}>{shared.decryptedStatText(this)}</p> : null;
+		const decryptedItemsInfo = <p style={theme.textStyle}>{shared.decryptedStatText(this)}</p>;
 		const toggleButton = <button onClick={() => { onToggleButtonClick() }}>{this.props.encryptionEnabled ? _('Disable encryption') : _('Enable encryption')}</button>
 
 		let masterKeySection = null;
