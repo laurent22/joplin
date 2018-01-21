@@ -73,7 +73,7 @@ class MdToHtml {
 
 	renderImage_(attrs, options) {
 		const loadResource = async (id) => {
-			console.info('Loading resource: ' + id);
+			// console.info('Loading resource: ' + id);
 
 			// Initially set to to an empty object to make
 			// it clear that it is being loaded. Otherwise

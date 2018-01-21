@@ -3,6 +3,15 @@
 // Make it possible to require("/lib/...") without specifying full path
 require('app-module-path').addPath(__dirname);
 
+// Disable React message in console "Download the React DevTools for a better development experience"
+// https://stackoverflow.com/questions/42196819/disable-hide-download-the-react-devtools#42196820
+__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+	supportsFiber: true,
+	inject: function() {},
+	onCommitFiberRoot: function() {},
+	onCommitFiberUnmount: function() {},
+};
+
 const { app } = require('./app.js');
 const Folder = require('lib/models/Folder.js');
 const Resource = require('lib/models/Resource.js');

@@ -10,7 +10,7 @@ const { time } = require('lib/time-utils.js');
 const { Logger } = require('lib/logger.js');
 const { _ } = require('lib/locale.js');
 const { shim } = require('lib/shim.js');
-const moment = require('moment');
+const JoplinError = require('lib/JoplinError');
 
 class Synchronizer {
 
@@ -27,7 +27,7 @@ class Synchronizer {
 
 		// Debug flags are used to test certain hard-to-test conditions
 		// such as cancelling in the middle of a loop.
-		this.debugFlags_ = [];
+		this.testingHooks_ = [];
 
 		this.onProgress_ = function(s) {};
 		this.progressReport_ = {};
@@ -279,7 +279,7 @@ class Synchronizer {
 							const localResourceContentPath = result.path;
 							await this.api().put(remoteContentPath, null, { path: localResourceContentPath, source: 'file' });
 						} catch (error) {
-							if (error && error.code === 'rejectedByTarget') {
+							if (error && ['rejectedByTarget', 'fileNotFound'].indexOf(error.code) >= 0) {
 								await handleCannotSyncItem(syncTargetId, local, error.message);
 								action = null;
 							} else {
@@ -303,11 +303,7 @@ class Synchronizer {
 
 						let canSync = true;
 						try {
-							if (this.debugFlags_.indexOf('rejectedByTarget') >= 0) {
-								const error = new Error('Testing rejectedByTarget');
-								error.code = 'rejectedByTarget';
-								throw error;
-							}
+							if (this.testingHooks_.indexOf('rejectedByTarget') >= 0) throw new JoplinError('Testing rejectedByTarget', 'rejectedByTarget');
 							const content = await ItemClass.serializeForSync(local);
 							await this.api().put(path, content);
 						} catch (error) {
@@ -449,7 +445,7 @@ class Synchronizer {
 				this.logSyncOperation('fetchingTotal', null, null, 'Fetching delta items from sync target', remotes.length);
 
 				for (let i = 0; i < remotes.length; i++) {
-					if (this.cancelling() || this.debugFlags_.indexOf('cancelDeltaLoop2') >= 0) {
+					if (this.cancelling() || this.testingHooks_.indexOf('cancelDeltaLoop2') >= 0) {
 						hasCancelled = true;
 						break;
 					}

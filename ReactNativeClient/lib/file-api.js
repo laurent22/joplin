@@ -1,5 +1,7 @@
 const { isHidden } = require('lib/path-utils.js');
 const { Logger } = require('lib/logger.js');
+const { shim } = require('lib/shim');
+const JoplinError = require('lib/JoplinError');
 
 class FileApi {
 
@@ -8,6 +10,10 @@ class FileApi {
 		this.driver_ = driver;
 		this.logger_ = new Logger();
 		this.syncTargetId_ = null;
+	}
+
+	fsDriver() {
+		return shim.fsDriver();
 	}
 
 	driver() {
@@ -83,8 +89,13 @@ class FileApi {
 		return this.driver_.get(this.fullPath_(path), options);
 	}
 
-	put(path, content, options = null) {
-		this.logger().debug('put ' + this.fullPath_(path));
+	async put(path, content, options = null) {
+		this.logger().debug('put ' + this.fullPath_(path), options);
+		
+		if (options && options.source === 'file') {
+			if (!await this.fsDriver().exists(options.path)) throw new JoplinError('File not found: ' + options.path, 'fileNotFound');
+		}
+
 		return this.driver_.put(this.fullPath_(path), content, options);
 	}
 
