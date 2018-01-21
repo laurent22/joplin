@@ -74,11 +74,11 @@ async function localItemsSameAsRemote(locals, expect) {
 			expect(!!remote).toBe(true);
 			if (!remote) continue;
 
-			if (syncTargetId() == SyncTargetRegistry.nameToId('filesystem')) {
-				expect(remote.updated_time).toBe(Math.floor(dbItem.updated_time / 1000) * 1000);
-			} else {
-				expect(remote.updated_time).toBe(dbItem.updated_time);
-			}
+			// if (syncTargetId() == SyncTargetRegistry.nameToId('filesystem')) {
+			// 	expect(remote.updated_time).toBe(Math.floor(dbItem.updated_time / 1000) * 1000);
+			// } else {
+			// 	expect(remote.updated_time).toBe(dbItem.updated_time);
+			// }
 
 			let remoteContent = await fileApi().get(path);
 			remoteContent = dbItem.type_ == BaseModel.TYPE_NOTE ? await Note.unserialize(remoteContent) : await Folder.unserialize(remoteContent);

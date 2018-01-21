@@ -330,7 +330,12 @@ class Synchronizer {
 						// change is uniquely identified. Leaving it like this for now.
 
 						if (canSync) {
-							await this.api().setTimestamp(path, local.updated_time);
+							// 2018-01-21: Setting timestamp is not needed because the delta() logic doesn't rely
+							// on it (instead it uses a more reliable `context` object) and the itemsThatNeedSync loop
+							// above also doesn't use it because it fetches the whole remote object and read the
+							// more reliable 'updated_time' property. Basically remote.updated_time is deprecated.
+
+							// await this.api().setTimestamp(path, local.updated_time);
 							await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time);
 						}
 

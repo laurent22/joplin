@@ -67,21 +67,89 @@ class FileApiDriverLocal {
 		}
 	}
 
+	contextFromOptions_(options) {
+		let output = {
+			timestamp: 0,
+			filesAtTimestamp: [],
+			statsCache: null,
+		};
+
+		if (!options || !options.context) return output;
+		const d = new Date(options.context.timestamp);
+
+		output.timestamp = isNaN(d.getTime()) ? 0 : options.context.timestamp;
+		output.filesAtTimestamp = Array.isArray(options.context.filesAtTimestamp) ? options.context.filesAtTimestamp.slice() : [];
+		output.statsCache = options.context && options.context.statsCache ? options.context.statsCache : null;
+
+		return output;
+	}
+
 	async delta(path, options) {
+		const outputLimit = 1000;
 		const itemIds = await options.allItemIdsHandler();
 
 		try {
-			const stats = await this.fsDriver().readDirStats(path);
-			let output = this.metadataFromStats_(stats);
+			const context = this.contextFromOptions_(options);
+
+			let newContext = {
+				timestamp: context.timestamp,
+				filesAtTimestamp: context.filesAtTimestamp.slice(),
+				statsCache: context.statsCache,
+			};
+
+			// Stats are cached until all items have been processed (until hasMore is false)
+			if (newContext.statsCache === null) {
+				const stats = await this.fsDriver().readDirStats(path);
+				newContext.statsCache = this.metadataFromStats_(stats);
+				newContext.statsCache.sort(function(a, b) {
+					return a.updated_time - b.updated_time;
+				});
+			}
+
+			let output = [];
+
+			// Find out which files have been changed since the last time. Note that we keep
+			// both the timestamp of the most recent change, *and* the items that exactly match
+			// this timestamp. This to handle cases where an item is modified while this delta
+			// function is running. For example:
+			// t0: Item 1 is changed
+			// t0: Sync items - run delta function
+			// t0: While delta() is running, modify Item 2
+			// Since item 2 was modified within the same millisecond, it would be skipped in the
+			// next sync if we relied exclusively on a timestamp.
+			for (let i = 0; i < newContext.statsCache.length; i++) {
+				const stat = newContext.statsCache[i];
+
+				if (stat.isDir) continue;
+
+				if (stat.updated_time < context.timestamp) continue;
+
+				// Special case for items that exactly match the timestamp
+				if (stat.updated_time === context.timestamp) {
+					if (context.filesAtTimestamp.indexOf(stat.path) >= 0) continue;
+				}
+
+				if (stat.updated_time > newContext.timestamp) {
+					newContext.timestamp = stat.updated_time;
+					newContext.filesAtTimestamp = [];
+				}
+
+				newContext.filesAtTimestamp.push(stat.path);
+				output.push(stat);
+
+				if (output.length >= outputLimit) break;
+			}
 
 			if (!Array.isArray(itemIds)) throw new Error('Delta API not supported - local IDs must be provided');
 
 			let deletedItems = [];
 			for (let i = 0; i < itemIds.length; i++) {
+				if (output.length + deletedItems.length >= outputLimit) break;
+
 				const itemId = itemIds[i];
 				let found = false;
-				for (let j = 0; j < output.length; j++) {
-					const item = output[j];
+				for (let j = 0; j < newContext.statsCache.length; j++) {
+					const item = newContext.statsCache[j];
 					if (BaseItem.pathToId(item.path) == itemId) {
 						found = true;
 						break;
@@ -98,9 +166,12 @@ class FileApiDriverLocal {
 
 			output = output.concat(deletedItems);
 
+			const hasMore = output.length >= outputLimit;
+			if (!hasMore) newContext.statsCache = null;
+
 			return {
-				hasMore: false,
-				context: null,
+				hasMore: hasMore,
+				context: newContext,
 				items: output,
 			};
 		} catch(error) {
