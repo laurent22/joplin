@@ -59,6 +59,7 @@
     "tkwidgets": "^0.5.21",
     "uuid": "^3.0.1",
     "word-wrap": "^1.2.3",
+    "xml2js": "^0.4.19",
     "yargs-parser": "^7.0.0"
   },
   "devDependencies": {

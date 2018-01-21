@@ -66,6 +66,35 @@ process.stdout.on('error', function( err ) {
 	}
 });
 
+
+
+
+
+// async function main() {
+// 	const WebDavApi = require('lib/WebDavApi');
+// 	const api = new WebDavApi('http://nextcloud.local/remote.php/dav/files/admin/Joplin', { username: 'admin', password: '123456' });
+// 	const { FileApiDriverWebDav } = new require('lib/file-api-driver-webdav');
+// 	const driver = new FileApiDriverWebDav(api);
+
+// 	//await driver.stat('testing.txt');
+// 	const stat = await driver.stat('testing.txt');
+// 	console.info(stat);
+
+// 	//await api.execPropFind('');
+
+// 	//const stat = await driver.stat('testing.txt');
+// 	//console.info(stat);
+// }
+
+// main().catch((error) => { console.error(error); });
+
+
+
+
+
+
+
+
 application.start(process.argv).catch((error) => {
 	console.error(_('Fatal error:'));
 	console.error(error);
