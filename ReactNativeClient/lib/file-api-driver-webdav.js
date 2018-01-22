@@ -47,52 +47,15 @@ class FileApiDriverWebDav {
 	}
 
 	async setTimestamp(path, timestampMs) {
-
+		throw new Error('Not implemented'); // Not needed anymore
 	}
 
 	async delta(path, options) {
-		// const itemIds = await options.allItemIdsHandler();
-
-		// try {
-		// 	const stats = await this.fsDriver().readDirStats(path);
-		// 	let output = this.metadataFromStats_(stats);
-
-		// 	if (!Array.isArray(itemIds)) throw new Error('Delta API not supported - local IDs must be provided');
-
-		// 	let deletedItems = [];
-		// 	for (let i = 0; i < itemIds.length; i++) {
-		// 		const itemId = itemIds[i];
-		// 		let found = false;
-		// 		for (let j = 0; j < output.length; j++) {
-		// 			const item = output[j];
-		// 			if (BaseItem.pathToId(item.path) == itemId) {
-		// 				found = true;
-		// 				break;
-		// 			}
-		// 		}
-
-		// 		if (!found) {
-		// 			deletedItems.push({
-		// 				path: BaseItem.systemPath(itemId),
-		// 				isDeleted: true,
-		// 			});
-		// 		}
-		// 	}
-
-		// 	output = output.concat(deletedItems);
-
-		// 	return {
-		// 		hasMore: false,
-		// 		context: null,
-		// 		items: output,
-		// 	};
-		// } catch(error) {
-		// 	throw this.fsErrorToJsError_(error, path);
-		// }
+		
 	}
 
 	async list(path, options) {
-
+		throw new Error('Not implemented'); // Not needed
 	}
 
 	async get(path, options) {
