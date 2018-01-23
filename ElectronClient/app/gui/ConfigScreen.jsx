@@ -89,18 +89,19 @@ class ConfigScreenComponent extends React.Component {
 				updateSettingValue(key, !value)
 			}
 
+			// Hack: The {key+value.toString()} is needed as otherwise the checkbox doesn't update when the state changes.
+			// There's probably a better way to do this but can't figure it out.
+
 			return (
-				<div key={key} style={rowStyle}>
+				<div key={key+value.toString()} style={rowStyle}>
 					<div style={controlStyle}>
-						<input id={'setting_checkbox_' + key} type="checkbox" checked={!!value} onChange={(event) => { onCheckboxClick(event) }}/><label onClick={(event) => { onCheckboxClick(event) }} style={labelStyle} htmlFor={'setting_checkbox_' + key}>{md.label()}</label>
+						<input id={'setting_checkbox_' + key} type="checkbox" checked={!!value} onChange={(event) => { onCheckboxClick(event) }}/><label onClick={(event) => { onCheckboxClick(event) }} style={labelStyle} htmlFor={'setting_checkbox_' + key}>{md.label()}</label>						
 					</div>
 				</div>
 			);
 		} else if (md.type === Setting.TYPE_STRING) {
 			const onTextChange = (event) => {
-				const settings = Object.assign({}, this.state.settings);
-				settings[key] = event.target.value;
-				this.setState({ settings: settings });
+				updateSettingValue(key, event.target.value);
 			}
 
 			return (
@@ -111,16 +112,14 @@ class ConfigScreenComponent extends React.Component {
 			);
 		} else if (md.type === Setting.TYPE_INT) {
 			const onNumChange = (event) => {
-				const settings = Object.assign({}, this.state.settings);
-				settings[key] = event.target.value;
-				this.setState({ settings: settings});
+				updateSettingValue(key, event.target.value);
 			};
 
 			return (
-			<div key={key} style={rowStyle}>
-				<div style={labelStyle}><label>{md.label()}</label></div>
-				<input type="number" style={controlStyle} value={this.state.settings[key]} onChange={(event) => {onNumChange(event)}} min={md.minimum} max={md.maximum} step={md.step}/>
-			</div>
+				<div key={key} style={rowStyle}>
+					<div style={labelStyle}><label>{md.label()}</label></div>
+					<input type="number" style={controlStyle} value={this.state.settings[key]} onChange={(event) => {onNumChange(event)}} min={md.minimum} max={md.maximum} step={md.step}/>
+				</div>
 			);
 		} else {
 			console.warn('Type not implemented: ' + key);
