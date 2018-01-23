@@ -289,18 +289,6 @@ class Synchronizer {
 					}
 
 					if (action == 'createRemote' || action == 'updateRemote') {
-
-						// Make the operation atomic by doing the work on a copy of the file
-						// and then copying it back to the original location.
-						// let tempPath = this.syncDirName_ + '/' + path + '_' + time.unixMs();
-						//
-						// Atomic operation is disabled for now because it's not possible
-						// to do an atomic move with OneDrive (see file-api-driver-onedrive.js)
-						
-						// await this.api().put(tempPath, content);
-						// await this.api().setTimestamp(tempPath, local.updated_time);
-						// await this.api().move(tempPath, path);
-
 						let canSync = true;
 						try {
 							if (this.testingHooks_.indexOf('rejectedByTarget') >= 0) throw new JoplinError('Testing rejectedByTarget', 'rejectedByTarget');

@@ -34,10 +34,6 @@ class WebDavApi {
 		return this.baseUrl_;
 	}
 
-	davNs(json) {
-
-	}
-
 	async xmlToJson(xml) {
 
 		const nameProcessor = (name) => {
@@ -56,7 +52,7 @@ class WebDavApi {
 		return new Promise((resolve, reject) => {
 			parseXmlString(xml, options, (error, result) => {
 				if (error) {
-					reject(error);
+					resolve(null); // Error handled by caller which will display the XML text (or plain text) if null is returned from this function
 					return;
 				}
 				resolve(result);
@@ -87,35 +83,11 @@ class WebDavApi {
 
 	stringFromJson(json, keys) {
 		return this.valueFromJson(json, keys, 'string');
-		// let output = json;
-		// for (let i = 0; i < keys.length; i++) {
-		// 	const key = keys[i];
-		// 	if (!output || !output[key]) return null;
-		// 	output = output[key];
-		// }
-		// if (typeof output !== 'string') return null;
-		// return output;
 	}
 
 	objectFromJson(json, keys) {
 		return this.valueFromJson(json, keys, 'object');
-		// let output = json;
-		// for (let i = 0; i < keys.length; i++) {
-		// 	const key = keys[i];
-		// 	if (!output || !output[key]) return null;
-		// 	output = output[key];
-		// }
-		// if (!Array.isArray(output) && typeof output === 'object') return output;
-		// return null;
 	}
-
-	// isDirectory(propStat) {
-	// 	try {
-	// 		return propStat[0]['d:prop'][0]['d:resourcetype'][0]['d:collection'];
-	// 	} catch (error) {
-	// 		return false;
-	// 	}
-	// }
 
 	async execPropFind(path, fields = null) {
 		if (fields === null) fields = ['d:getlastmodified'];
@@ -127,17 +99,17 @@ class WebDavApi {
 
 		// To find all available properties:
 		//
-		const body=`<?xml version="1.0" encoding="utf-8" ?>
-			<propfind xmlns="DAV:">
-			<propname/>
-		</propfind>`;
+		// const body=`<?xml version="1.0" encoding="utf-8" ?>
+		// 	<propfind xmlns="DAV:">
+		// 	<propname/>
+		// </propfind>`;
 
-		// const body = `<?xml version="1.0" encoding="UTF-8"?>
-		// 	<d:propfind xmlns:d="DAV:">
-		// 		<d:prop xmlns:oc="http://owncloud.org/ns">
-		// 			` + fieldsXml + `
-		// 		</d:prop>
-		// 	</d:propfind>`;
+		const body = `<?xml version="1.0" encoding="UTF-8"?>
+			<d:propfind xmlns:d="DAV:">
+				<d:prop xmlns:oc="http://owncloud.org/ns">
+					` + fieldsXml + `
+				</d:prop>
+			</d:propfind>`;
 
 		return this.exec('PROPFIND', path, body);
 	}
@@ -149,8 +121,11 @@ class WebDavApi {
 	//    </d:prop>
 	//  </d:propfind>'
 
-	async exec(method, path = '', body = null, headers = null) {
+	async exec(method, path = '', body = null, headers = null, options = null) {
 		if (headers === null) headers = {};
+		if (options === null) options = {};
+		if (!options.responseFormat) options.responseFormat = 'json';
+		if (!options.target) options.target = 'string';
 
 		const authToken = this.authToken();
 
@@ -159,50 +134,50 @@ class WebDavApi {
 		const fetchOptions = {};
 		fetchOptions.headers = headers;
 		fetchOptions.method = method;
+		if (options.path) fetchOptions.path = options.path;
 		if (body) fetchOptions.body = body;
 
 		const url = this.baseUrl() + '/' + path;
 
-		const response = await shim.fetch(url, fetchOptions);
-		const responseText = await response.text();
-		const responseJson = await this.xmlToJson(responseText);
+		let response = null;
 
-		if (!responseJson) throw new Error('Could not parse response: ' + responseText);
-
-		if (responseJson['d:error']) {
-			const code = responseJson['d:error']['s:exception'] ? responseJson['d:error']['s:exception'].join(' ') : null;
-			const message = responseJson['d:error']['s:message'] ? responseJson['d:error']['s:message'].join("\n") : responseText;
-			throw new JoplinError(message, code);
+		if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
+			response = await shim.uploadBlob(url, fetchOptions);
+		} else if (options.target == 'string') {
+			response = await shim.fetch(url, fetchOptions);
+		} else { // file
+			response = await shim.fetchBlob(url, fetchOptions);
 		}
 
-		return responseJson;
+		const responseText = await response.text();
 
+		let responseJson_ = null;
+		const loadResponseJson = async () => {
+			if (!responseText) return null;
+			if (responseJson_) return responseJson_;
+			responseJson_ = await this.xmlToJson(responseText);
+			if (!responseJson_) throw new JoplinError('Cannot parse JSON response: ' + responseText, response.status);
+			return responseJson_;
+		}
 
-		// //console.info(JSON.stringify(responseJson['d:multistatus']['d:response']));
+		if (!response.ok) {
+			// When using fetchBlob we only get a string (not xml or json) back
+			if (options.target === 'file') throw new JoplinError(responseText, response.status);
 
+			const json = await loadResponseJson();
 
-		// body = `<?xml version="1.0" encoding="UTF-8"?>
-		// 	<d:propfind xmlns:d="DAV:">
-		// 		<d:prop xmlns:oc="http://owncloud.org/ns">
-		// 			<d:getlastmodified/>
-		// 		</d:prop>
-		// 	</d:propfind>`;
+			if (json['d:error']) {
+				const code = json['d:error']['s:exception'] ? json['d:error']['s:exception'].join(' ') : response.status;
+				const message = json['d:error']['s:message'] ? json['d:error']['s:message'].join("\n") : responseText;
+				throw new JoplinError(message + ' (' + code + ')', response.status);
+			}
 
-		// const authToken = this.authToken();
-		// const url = 'http://nextcloud.local/remote.php/dav/files/admin/Joplin';
-		// const fetchOptions = {
-		// 	method: 'PROPFIND',
-		// 	headers: {
-		// 		'Authorization': 'Basic ' + authToken,
-		// 	},
-		// 	body: body,
-		// };
+			throw new JoplinError(responseText, response.status);
+		}
+		
+		if (options.responseFormat === 'text') return responseText;
 
-		// console.info(url, fetchOptions);
-
-		// const response = await shim.fetch(url, fetchOptions);
-
-		// console.info(await response.text());
+		return await loadResponseJson();
 	}
 
 }

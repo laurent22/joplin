@@ -59,23 +59,37 @@ class FileApiDriverWebDav {
 	}
 
 	async get(path, options) {
-
+		if (!options) options = {};
+		if (!options.responseFormat) options.responseFormat = 'text';
+		try {
+			return await this.api().exec('GET', path, null, null, options);
+		} catch (error) {
+			if (error.code !== 404) throw error;
+		}
 	}
 
 	async mkdir(path) {
-
+		try {
+			await this.api().exec('MKCOL', path);
+		} catch (error) {
+			if (error.code !== 405) throw error; // 405 means that the collection already exists (Method Not Allowed)
+		}
 	}
 
 	async put(path, content, options = null) {
-
+		await this.api().exec('PUT', path, content, null, options);
 	}
 
 	async delete(path) {
-
+		try {
+			await this.api().exec('DELETE', path);
+		} catch (error) {
+			if (error.code !== 404) throw error;
+		}
 	}
 
 	async move(oldPath, newPath) {
-		
+		throw new Error('Not implemented');
 	}
 
 	format() {
