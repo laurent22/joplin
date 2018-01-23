@@ -41,7 +41,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.24.1",
-    "electron": "^1.7.9",
+    "electron": "^1.7.11",
     "electron-builder": "^19.45.4"
   },
   "optionalDependencies": {
