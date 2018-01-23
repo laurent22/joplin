@@ -74,6 +74,7 @@ class Setting extends BaseModel {
 					86400: _('%d hours', 24),
 				};
 			}},
+			'style.zoom': {value: "100", type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], label: () => _('Set application zoom percentage'), minimum: "50", maximum: "500", step: "10"},
 			'noteVisiblePanes': { value: ['editor', 'viewer'], type: Setting.TYPE_ARRAY, public: false, appTypes: ['desktop'] },
 			'autoUpdateEnabled': { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
 			'showAdvancedOptions': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile' ], label: () => _('Show advanced options') },
