@@ -1,7 +1,7 @@
 const Setting = require('lib/models/Setting.js');
 
 const globalStyle = {
-	fontSize: 12,
+	fontSize: 12 * Setting.value('style.zoom')/100,
 	fontFamily: 'sans-serif',
 	margin: 15, // No text and no interactive component should be within this margin
 	itemMarginTop: 10,

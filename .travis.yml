@@ -1,3 +1,6 @@
+# Only build tags
+if: tag IS present
+
 rvm: 2.3.3
 
 matrix:

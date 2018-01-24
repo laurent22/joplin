@@ -489,7 +489,7 @@ class Synchronizer {
 					if (action == 'createLocal' || action == 'updateLocal') {
 
 						if (content === null) {
-							this.logger().warn('Remote has been deleted between now and the list() call? In that case it will be handled during the next sync: ' + path);
+							this.logger().warn('Remote has been deleted between now and the delta() call? In that case it will be handled during the next sync: ' + path);
 							continue;
 						}
 						content = ItemClass.filter(content);
