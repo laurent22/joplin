@@ -2,6 +2,8 @@ const { Logger } = require('lib/logger.js');
 const { shim } = require('lib/shim.js');
 const parseXmlString = require('xml2js').parseString;
 const JoplinError = require('lib/JoplinError');
+const urlParser = require("url");
+const { rtrimSlashes, ltrimSlashes } = require('lib/path-utils.js');
 
 // Note that the d: namespace (the DAV namespace) is specific to Nextcloud. The RFC for example uses "D:" however
 // we make all the tags and attributes lowercase so we handle both the Nextcloud style and RFC. Hopefully other
@@ -11,10 +13,11 @@ const JoplinError = require('lib/JoplinError');
 
 class WebDavApi {
 
-	constructor(baseUrl, options) {
+	constructor(options) {
 		this.logger_ = new Logger();
-		this.baseUrl_ = baseUrl.replace(/\/+$/, ""); // Remove last trailing slashes
 		this.options_ = options;
+
+		
 	}
 
 	setLogger(l) {
@@ -26,12 +29,17 @@ class WebDavApi {
 	}
 
 	authToken() {
-		if (!this.options_.username || !this.options_.password) return null;
-		return (new Buffer(this.options_.username + ':' + this.options_.password)).toString('base64');
+		if (!this.options_.username() || !this.options_.password()) return null;
+		return (new Buffer(this.options_.username() + ':' + this.options_.password())).toString('base64');
 	}
 
 	baseUrl() {
-		return this.baseUrl_;
+		return this.options_.baseUrl();
+	}
+
+	relativeBaseUrl() {
+		const url = urlParser.parse(this.baseUrl(), true);
+		return url.path;
 	}
 
 	async xmlToJson(xml) {
@@ -60,11 +68,16 @@ class WebDavApi {
 		});
 	}
 
-	valueFromJson(json, keys, type) {
+	valueFromJson(json, keys, type) {	
 		let output = json;
+
 		for (let i = 0; i < keys.length; i++) {
 			const key = keys[i];
-			if (!output || !output[key]) return null;
+
+			// console.info(key, typeof key, typeof output, typeof output === 'object' && (key in output), Array.isArray(output));
+
+			if (typeof key === 'number' && !Array.isArray(output)) return null;
+			if (typeof key === 'string' && (typeof output !== 'object' || !(key in output))) return null;
 			output = output[key];
 		}
 
@@ -78,6 +91,10 @@ class WebDavApi {
 			return null;
 		}
 
+		if (type === 'array') {
+			return Array.isArray(output) ? output : null;
+		}
+
 		return null;
 	}
 
@@ -89,7 +106,11 @@ class WebDavApi {
 		return this.valueFromJson(json, keys, 'object');
 	}
 
-	async execPropFind(path, fields = null) {
+	arrayFromJson(json, keys) {
+		return this.valueFromJson(json, keys, 'array');
+	}
+
+	async execPropFind(path, depth, fields = null) {
 		if (fields === null) fields = ['d:getlastmodified'];
 
 		let fieldsXml = '';
@@ -111,7 +132,7 @@ class WebDavApi {
 				</d:prop>
 			</d:propfind>`;
 
-		return this.exec('PROPFIND', path, body);
+		return this.exec('PROPFIND', path, body, { 'Depth': depth });
 	}
 
 	// curl -u admin:123456 'http://nextcloud.local/remote.php/dav/files/admin/' -X PROPFIND --data '<?xml version="1.0" encoding="UTF-8"?>
@@ -151,33 +172,45 @@ class WebDavApi {
 
 		const responseText = await response.text();
 
+		// Gives a shorter response for error messages. Useful for cases where a full HTML page is accidentally loaded instead of
+		// JSON. That way the error message will still show there's a problem but without filling up the log or screen.
+		const shortResponseText = () => {
+			return (responseText + '').substr(0, 1024);
+		}
+
 		let responseJson_ = null;
 		const loadResponseJson = async () => {
 			if (!responseText) return null;
 			if (responseJson_) return responseJson_;
 			responseJson_ = await this.xmlToJson(responseText);
-			if (!responseJson_) throw new JoplinError('Cannot parse JSON response: ' + responseText, response.status);
+			if (!responseJson_) throw new JoplinError('Cannot parse JSON response: ' + shortResponseText(), response.status);
 			return responseJson_;
 		}
 
 		if (!response.ok) {
 			// When using fetchBlob we only get a string (not xml or json) back
-			if (options.target === 'file') throw new JoplinError(responseText, response.status);
+			if (options.target === 'file') throw new JoplinError(shortResponseText(), response.status);
 
 			const json = await loadResponseJson();
 
 			if (json['d:error']) {
 				const code = json['d:error']['s:exception'] ? json['d:error']['s:exception'].join(' ') : response.status;
-				const message = json['d:error']['s:message'] ? json['d:error']['s:message'].join("\n") : responseText;
+				const message = json['d:error']['s:message'] ? json['d:error']['s:message'].join("\n") : shortResponseText();
 				throw new JoplinError(message + ' (' + code + ')', response.status);
 			}
 
-			throw new JoplinError(responseText, response.status);
+			throw new JoplinError(shortResponseText(), response.status);
 		}
 		
 		if (options.responseFormat === 'text') return responseText;
 
-		return await loadResponseJson();
+		const output = await loadResponseJson();
+
+		// Check that we didn't get for example an HTML page (as an error) instead of the JSON response
+		// null responses are possible, for example for DELETE calls
+		if (output !== null && typeof output === 'object' && !('d:multistatus' in output)) throw new Error('Not a valid JSON response: ' + shortResponseText());
+
+		return output;
 	}
 
 }

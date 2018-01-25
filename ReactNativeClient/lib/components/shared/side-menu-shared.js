@@ -36,12 +36,17 @@ shared.synchronize_press = async function(comp) {
 
 	const action = comp.props.syncStarted ? 'cancel' : 'start';
 
-	if (!reg.syncTarget().isAuthenticated()) {		
-		comp.props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'OneDriveLogin',
-		});
-		return 'auth';
+	if (!reg.syncTarget().isAuthenticated()) {
+		if (reg.syncTarget().authRouteName()) {
+			comp.props.dispatch({
+				type: 'NAV_GO',
+				routeName: reg.syncTarget().authRouteName(),
+			});
+			return 'auth';
+		}
+
+		reg.logger().info('Not authentified with sync target - please check your credential.');
+		return 'error';
 	}
 
 	let sync = null;

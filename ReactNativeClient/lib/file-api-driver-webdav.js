@@ -1,5 +1,7 @@
 const BaseItem = require('lib/models/BaseItem.js');
 const { time } = require('lib/time-utils.js');
+const { basicDelta } = require('lib/file-api');
+const { rtrimSlashes, ltrimSlashes } = require('lib/path-utils.js');
 
 class FileApiDriverWebDav { 
 
@@ -12,19 +14,25 @@ class FileApiDriverWebDav {
 	}
 
 	async stat(path) {
-		const result = await this.api().execPropFind(path, [
-			'd:getlastmodified',
-			'd:resourcetype',
-		]);
+		try {
+			const result = await this.api().execPropFind(path, 0, [
+				'd:getlastmodified',
+				'd:resourcetype',
+			]);
 
-		return this.metadataFromStat_(result, path);
+			const resource = this.api().objectFromJson(result, ['d:multistatus', 'd:response', 0]);
+			return this.statFromResource_(resource, path);
+		} catch (error) {
+			if (error.code === 404) return null;
+			throw error;
+		}
 	}
 
-	metadataFromStat_(stat, path) {
-		const isCollection = this.api().stringFromJson(stat, ['d:multistatus', 'd:response', 0, 'd:propstat', 0, 'd:prop', 0, 'd:resourcetype', 0, 'd:collection', 0]);
-		const lastModifiedString = this.api().stringFromJson(stat, ['d:multistatus', 'd:response', 0, 'd:propstat', 0, 'd:prop', 0, 'd:getlastmodified', 0]);
+	statFromResource_(resource, path) {
+		const isCollection = this.api().stringFromJson(resource, ['d:propstat', 0, 'd:prop', 0, 'd:resourcetype', 0, 'd:collection', 0]);
+		const lastModifiedString = this.api().stringFromJson(resource, ['d:propstat', 0, 'd:prop', 0, 'd:getlastmodified', 0]);
 
-		if (!lastModifiedString) throw new Error('Could not get lastModified date: ' + JSON.stringify(stat));
+		if (!lastModifiedString) throw new Error('Could not get lastModified date: ' + JSON.stringify(resource));
 
 		const lastModifiedDate = new Date(lastModifiedString);
 		if (isNaN(lastModifiedDate.getTime())) throw new Error('Invalid date: ' + lastModifiedString);
@@ -37,11 +45,17 @@ class FileApiDriverWebDav {
 		};
 	}
 
-	metadataFromStats_(stats) {
+	statsFromResources_(resources) {
+		const relativeBaseUrl = this.api().relativeBaseUrl();
 		let output = [];
-		for (let i = 0; i < stats.length; i++) {
-			const mdStat = this.metadataFromStat_(stats[i]);
-			output.push(mdStat);
+		for (let i = 0; i < resources.length; i++) {
+			const resource = resources[i];
+			const href = this.api().stringFromJson(resource, ['d:href', 0]);
+			if (href.indexOf(relativeBaseUrl) < 0) throw new Error('Path not inside base URL: ' + relativeBaseUrl); // Normally not possible
+			const path = rtrimSlashes(ltrimSlashes(href.substr(relativeBaseUrl.length)));
+			if (path === '') continue; // The list of resources includes the root dir too, which we don't want
+			const stat = this.statFromResource_(resources[i], path);
+			output.push(stat);
 		}
 		return output;
 	}
@@ -51,7 +65,17 @@ class FileApiDriverWebDav {
 	}
 
 	async delta(path, options) {
-		
+		const getDirStats = async (path) => {
+			const result = await this.api().execPropFind(path, 1, [
+				'd:getlastmodified',
+				'd:resourcetype',
+			]);
+
+			const resources = this.api().arrayFromJson(result, ['d:multistatus', 'd:response']);
+			return this.statsFromResources_(resources);
+		};
+
+		return await basicDelta(path, getDirStats, options);
 	}
 
 	async list(path, options) {

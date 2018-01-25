@@ -139,9 +139,9 @@ function basicDeltaContextFromOptions_(options) {
 }
 
 // This is the basic delta algorithm, which can be used in case the cloud service does not have
-// a built-on delta API. OneDrive and Dropbox have one for example, but Nextcloud and obviously
+// a built-in delta API. OneDrive and Dropbox have one for example, but Nextcloud and obviously
 // the file system do not.
-async function basicDelta(path, getStatFn, options) {
+async function basicDelta(path, getDirStatFn, options) {
 	const outputLimit = 1000;
 	const itemIds = await options.allItemIdsHandler();
 	if (!Array.isArray(itemIds)) throw new Error('Delta API not supported - local IDs must be provided');
@@ -156,7 +156,7 @@ async function basicDelta(path, getStatFn, options) {
 
 	// Stats are cached until all items have been processed (until hasMore is false)
 	if (newContext.statsCache === null) {
-		newContext.statsCache = await getStatFn(path);
+		newContext.statsCache = await getDirStatFn(path);
 		newContext.statsCache.sort(function(a, b) {
 			return a.updated_time - b.updated_time;
 		});
@@ -196,6 +196,8 @@ async function basicDelta(path, getStatFn, options) {
 		if (output.length >= outputLimit) break;
 	}
 
+	// Find out which items have been deleted on the sync target by comparing the items
+	// we have to the items on the target.
 	let deletedItems = [];
 	for (let i = 0; i < itemIds.length; i++) {
 		if (output.length + deletedItems.length >= outputLimit) break;

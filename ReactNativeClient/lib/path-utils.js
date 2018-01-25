@@ -45,4 +45,12 @@ function toSystemSlashes(path, os) {
 	return path.replace(/\\/g, "/");
 }
 
-module.exports = { basename, dirname, filename, isHidden, fileExtension, safeFileExtension, toSystemSlashes };
+function rtrimSlashes(path) {
+	return path.replace(/\/+$/, '');
+}
+
+function ltrimSlashes(path) {
+	return path.replace(/^\/+/, '');
+}
+
+module.exports = { basename, dirname, filename, isHidden, fileExtension, safeFileExtension, toSystemSlashes, rtrimSlashes, ltrimSlashes };
