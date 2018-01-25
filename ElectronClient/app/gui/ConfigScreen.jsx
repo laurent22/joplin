@@ -104,10 +104,12 @@ class ConfigScreenComponent extends React.Component {
 				updateSettingValue(key, event.target.value);
 			}
 
+			const inputType = md.secure === true ? 'password' : 'text';
+
 			return (
 				<div key={key} style={rowStyle}>
 					<div style={labelStyle}><label>{md.label()}</label></div>
-					<input type="text" style={controlStyle} value={this.state.settings[key]} onChange={(event) => {onTextChange(event)}} />
+					<input type={inputType} style={controlStyle} value={this.state.settings[key]} onChange={(event) => {onTextChange(event)}} />
 				</div>
 			);
 		} else if (md.type === Setting.TYPE_INT) {

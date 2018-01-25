@@ -78,7 +78,7 @@ class Setting extends BaseModel {
 			}},
 			'noteVisiblePanes': { value: ['editor', 'viewer'], type: Setting.TYPE_ARRAY, public: false, appTypes: ['desktop'] },
 			'showAdvancedOptions': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile' ], label: () => _('Show advanced options') },
-			'sync.target': { value: SyncTargetRegistry.nameToId('onedrive'), type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation target'), description: () => _('The target to synchonise to. If synchronising with the file system, set `sync.2.path` to specify the target directory.'), options: () => {
+			'sync.target': { value: SyncTargetRegistry.nameToId('onedrive'), type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation target'), description: () => _('The target to synchonise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).'), options: () => {
 				return SyncTargetRegistry.idAndLabelPlainObject();
 			}},
 
@@ -92,7 +92,7 @@ class Setting extends BaseModel {
 
 			'sync.5.path': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nexcloud WebDAV URL') },
 			'sync.5.username': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nexcloud username') },
-			'sync.5.password': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nexcloud password') },
+			'sync.5.password': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nexcloud password'), secure: true },
 			'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },

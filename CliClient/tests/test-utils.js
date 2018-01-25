@@ -181,14 +181,7 @@ async function setupDatabaseAndSynchronizer(id = null) {
 	decryptionWorkers_[id] = new DecryptionWorker();
 	decryptionWorkers_[id].setEncryptionService(encryptionServices_[id]);
 
-	// if (syncTargetId_ == SyncTargetRegistry.nameToId('filesystem')) {
-	// 	fs.removeSync(syncDir)
-	// 	fs.mkdirpSync(syncDir, 0o755);
-	// } else {
-		await fileApi().clearRoot();
-
-		//await fileApi().format();
-	//}
+	await fileApi().clearRoot();
 }
 
 function db(id = null) {

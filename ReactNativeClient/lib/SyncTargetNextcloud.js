@@ -22,7 +22,7 @@ class SyncTargetNextcloud extends BaseSyncTarget {
 	}
 
 	static label() {
-		return _('Nextcloud');
+		return _('Nextcloud (Beta)');
 	}
 
 	isAuthenticated() {
@@ -37,19 +37,8 @@ class SyncTargetNextcloud extends BaseSyncTarget {
 			password: () => Setting.value('sync.5.password'),
 		};
 
-		//const api = new WebDavApi('http://nextcloud.local/remote.php/dav/files/admin/Joplin', { username: 'admin', password: '123456' });
 		const api = new WebDavApi(options);
 		const driver = new FileApiDriverWebDav(api);
-
-		// this.authenticated_ = true;
-		// try {
-		// 	await driver.stat('');
-		// } catch (error) {
-		// 	console.info(error);
-		// 	this.authenticated_ = false;
-		// 	if (error.code !== 401) throw error;
-		// }
-
 		const fileApi = new FileApi('', driver);
 		fileApi.setSyncTargetId(SyncTargetNextcloud.id());
 		fileApi.setLogger(this.logger());

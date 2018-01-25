@@ -163,7 +163,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			return (
 				<View key={key} style={this.styles().settingContainer}>
 					<Text key="label" style={this.styles().settingText}>{md.label()}</Text>
-					<TextInput key="control" style={this.styles().settingControl} value={value} onChangeText={(value) => updateSettingValue(key, value)} />
+					<TextInput key="control" style={this.styles().settingControl} value={value} onChangeText={(value) => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
 				</View>
 			);
 		} else {
