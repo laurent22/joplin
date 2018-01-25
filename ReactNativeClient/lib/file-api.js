@@ -64,6 +64,7 @@ class FileApi {
 		});
 	}
 
+	// Deprectated
 	setTimestamp(path, timestampMs) {
 		this.logger().debug('setTimestamp ' + this.fullPath_(path));
 		return this.driver_.setTimestamp(this.fullPath_(path), timestampMs);
@@ -105,13 +106,19 @@ class FileApi {
 		return this.driver_.delete(this.fullPath_(path));
 	}
 
+	// Deprectated
 	move(oldPath, newPath) {
 		this.logger().debug('move ' + this.fullPath_(oldPath) + ' => ' + this.fullPath_(newPath));
 		return this.driver_.move(this.fullPath_(oldPath), this.fullPath_(newPath));
 	}
 
+	// Deprectated
 	format() {
 		return this.driver_.format();
+	}
+
+	clearRoot() {
+		return this.driver_.clearRoot(this.baseDir_);
 	}
 
 	delta(path, options = null) {

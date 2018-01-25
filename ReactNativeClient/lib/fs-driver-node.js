@@ -20,6 +20,11 @@ class FsDriverNode {
 		return fs.writeFile(path, string, { encoding: encoding });
 	}
 
+	// same as rm -rf
+	async remove(path) {
+		return fs.remove(path);
+	}
+
 	async move(source, dest) {
 		let lastError = null;
 

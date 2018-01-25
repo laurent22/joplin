@@ -304,7 +304,7 @@ describe('Synchronizer', function() {
 		expect(items.length).toBe(1);
 		let deletedItems = await BaseItem.deletedItems(syncTargetId());
 		expect(deletedItems.length).toBe(0);
-			}));
+	}));
 
 	it('should delete remote folder', asyncTest(async () => {
 		let folder1 = await Folder.save({ title: "folder1" });
@@ -322,8 +322,8 @@ describe('Synchronizer', function() {
 		await synchronizer().start();
 
 		let all = await allItems();
-		localItemsSameAsRemote(all, expect);
-			}));
+		await localItemsSameAsRemote(all, expect);
+	}));
 
 	it('should delete local folder', asyncTest(async () => {
 		let folder1 = await Folder.save({ title: "folder1" });
@@ -345,8 +345,8 @@ describe('Synchronizer', function() {
 		await synchronizer().start();
 
 		let items = await allItems();
-		localItemsSameAsRemote(items, expect);
-			}));
+		await localItemsSameAsRemote(items, expect);
+	}));
 
 	it('should resolve conflict if remote folder has been deleted, but note has been added to folder locally', asyncTest(async () => {
 		let folder1 = await Folder.save({ title: "folder1" });
@@ -388,8 +388,8 @@ describe('Synchronizer', function() {
 		expect(items.length).toBe(1);
 		expect(items[0].title).toBe('folder');
 
-		localItemsSameAsRemote(items, expect);
-			}));
+		await localItemsSameAsRemote(items, expect);
+	}));
 
 	it('should cross delete all folders', asyncTest(async () => {
 		// If client1 and 2 have two folders, client 1 deletes item 1 and client

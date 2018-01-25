@@ -31,6 +31,10 @@ class SyncTargetRegistry {
 		throw new Error('ID not found: ' + id);
 	}
 
+	static idToName(id) {
+		return this.idToMetadata(id).name;
+	}
+
 	static idAndLabelPlainObject() {
 		let output = {};
 		for (let n in this.reg_) {

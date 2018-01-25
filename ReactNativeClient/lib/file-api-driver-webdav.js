@@ -66,20 +66,26 @@ class FileApiDriverWebDav {
 
 	async delta(path, options) {
 		const getDirStats = async (path) => {
-			const result = await this.api().execPropFind(path, 1, [
-				'd:getlastmodified',
-				'd:resourcetype',
-			]);
-
-			const resources = this.api().arrayFromJson(result, ['d:multistatus', 'd:response']);
-			return this.statsFromResources_(resources);
+			const result = await this.list(path);
+			return result.items;
 		};
 
 		return await basicDelta(path, getDirStats, options);
 	}
 
 	async list(path, options) {
-		throw new Error('Not implemented'); // Not needed
+		const result = await this.api().execPropFind(path, 1, [
+			'd:getlastmodified',
+			'd:resourcetype',
+		]);
+
+		const resources = this.api().arrayFromJson(result, ['d:multistatus', 'd:response']);
+
+		return {
+			items: this.statsFromResources_(resources),
+			hasMore: false,
+			context: null,
+		};
 	}
 
 	async get(path, options) {
@@ -118,6 +124,11 @@ class FileApiDriverWebDav {
 
 	format() {
 		throw new Error('Not supported');
+	}
+
+	async clearRoot() {
+		await this.delete('');
+		await this.mkdir('');
 	}
 
 }

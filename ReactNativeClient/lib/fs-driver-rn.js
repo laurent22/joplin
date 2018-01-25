@@ -14,6 +14,11 @@ class FsDriverRN {
 		return RNFS.writeFile(path, string, encoding);
 	}
 
+	// same as rm -rf
+	async remove(path) {
+		throw new Error('Not implemented');
+	}
+
 	writeBinaryFile(path, content) {
 		throw new Error('Not implemented');
 	}

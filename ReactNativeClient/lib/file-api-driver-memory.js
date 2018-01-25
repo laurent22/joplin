@@ -159,6 +159,11 @@ class FileApiDriverMemory {
 		return output;
 	}
 
+	clearRoot() {
+		this.items_ = [];
+		return Promise.resolve();
+	}
+
 }
 
 module.exports = { FileApiDriverMemory };

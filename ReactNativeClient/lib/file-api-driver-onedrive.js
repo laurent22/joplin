@@ -189,6 +189,10 @@ class FileApiDriverOneDrive {
 		return this.pathCache_[path];
 	}
 
+	clearRoot() {
+		throw new Error('Not implemented');
+	}
+
 	async delta(path, options = null) {
 		let output = {
 			hasMore: false,

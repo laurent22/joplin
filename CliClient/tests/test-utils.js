@@ -15,6 +15,7 @@ const { Synchronizer } = require('lib/synchronizer.js');
 const { FileApi } = require('lib/file-api.js');
 const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
+const { FileApiDriverWebDav } = require('lib/file-api-driver-webdav.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { time } = require('lib/time-utils.js');
 const { shimInit } = require('lib/shim-init-node.js');
@@ -22,8 +23,10 @@ const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetMemory = require('lib/SyncTargetMemory.js');
 const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
+const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const EncryptionService = require('lib/services/EncryptionService.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker.js');
+const WebDavApi = require('lib/WebDavApi');
 
 let databases_ = [];
 let synchronizers_ = [];
@@ -46,12 +49,16 @@ fs.mkdirpSync(logDir, 0o755);
 SyncTargetRegistry.addClass(SyncTargetMemory);
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
+SyncTargetRegistry.addClass(SyncTargetNextcloud);
 
-//const syncTargetId_ = SyncTargetRegistry.nameToId('memory');
-const syncTargetId_ = SyncTargetRegistry.nameToId('filesystem');
+//const syncTargetId_ = SyncTargetRegistry.nameToId('nextcloud');
+const syncTargetId_ = SyncTargetRegistry.nameToId('memory');
+//const syncTargetId_ = SyncTargetRegistry.nameToId('filesystem');
 const syncDir = __dirname + '/../tests/sync';
 
 const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 400;
+
+console.info('Testing with sync target: ' + SyncTargetRegistry.idToName(syncTargetId_));
 
 const logger = new Logger();
 logger.addTarget('console');
@@ -174,12 +181,14 @@ async function setupDatabaseAndSynchronizer(id = null) {
 	decryptionWorkers_[id] = new DecryptionWorker();
 	decryptionWorkers_[id].setEncryptionService(encryptionServices_[id]);
 
-	if (syncTargetId_ == SyncTargetRegistry.nameToId('filesystem')) {
-		fs.removeSync(syncDir)
-		fs.mkdirpSync(syncDir, 0o755);
-	} else {
-		await fileApi().format();
-	}
+	// if (syncTargetId_ == SyncTargetRegistry.nameToId('filesystem')) {
+	// 	fs.removeSync(syncDir)
+	// 	fs.mkdirpSync(syncDir, 0o755);
+	// } else {
+		await fileApi().clearRoot();
+
+		//await fileApi().format();
+	//}
 }
 
 function db(id = null) {
@@ -230,7 +239,17 @@ function fileApi() {
 		fileApi_ = new FileApi(syncDir, new FileApiDriverLocal());
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('memory')) {
 		fileApi_ = new FileApi('/root', new FileApiDriverMemory());
+	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('nextcloud')) {
+		const options = {
+			baseUrl: () => 'http://nextcloud.local/remote.php/dav/files/admin/JoplinTest',
+			username: () => 'admin',
+			password: () => '123456',
+		};
+
+		const api = new WebDavApi(options);
+		fileApi_ = new FileApi('', new FileApiDriverWebDav(api));
 	}
+
 	// } else if (syncTargetId == Setting.SYNC_TARGET_ONEDRIVE) {
 	// 	let auth = require('./onedrive-auth.json');
 	// 	if (!auth) {

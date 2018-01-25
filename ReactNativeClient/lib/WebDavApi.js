@@ -195,7 +195,7 @@ class WebDavApi {
 			if (json['d:error']) {
 				const code = json['d:error']['s:exception'] ? json['d:error']['s:exception'].join(' ') : response.status;
 				const message = json['d:error']['s:message'] ? json['d:error']['s:message'].join("\n") : shortResponseText();
-				throw new JoplinError(message + ' (' + code + ')', response.status);
+				throw new JoplinError(method + ' ' + path + ': ' + message + ' (' + code + ')', response.status);
 			}
 
 			throw new JoplinError(shortResponseText(), response.status);

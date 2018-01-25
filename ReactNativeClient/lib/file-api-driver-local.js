@@ -224,6 +224,11 @@ class FileApiDriverLocal {
 		throw new Error('Not supported');
 	}
 
+	async clearRoot(baseDir) {
+		await this.fsDriver().remove(baseDir);
+		await this.fsDriver().mkdir(baseDir);
+	}
+
 }
 
 module.exports = { FileApiDriverLocal };
