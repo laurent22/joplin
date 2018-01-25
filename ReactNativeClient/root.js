@@ -51,8 +51,10 @@ const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
+const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
+SyncTargetRegistry.addClass(SyncTargetNextcloud);
 
 // Disabled because not fully working
 //SyncTargetRegistry.addClass(SyncTargetFilesystem);

@@ -2,8 +2,9 @@ const { Logger } = require('lib/logger.js');
 const { shim } = require('lib/shim.js');
 const parseXmlString = require('xml2js').parseString;
 const JoplinError = require('lib/JoplinError');
-const urlParser = require("url");
+const URL = require('url-parse');
 const { rtrimSlashes, ltrimSlashes } = require('lib/path-utils.js');
+const base64 = require('base-64');
 
 // Note that the d: namespace (the DAV namespace) is specific to Nextcloud. The RFC for example uses "D:" however
 // we make all the tags and attributes lowercase so we handle both the Nextcloud style and RFC. Hopefully other
@@ -16,8 +17,6 @@ class WebDavApi {
 	constructor(options) {
 		this.logger_ = new Logger();
 		this.options_ = options;
-
-		
 	}
 
 	setLogger(l) {
@@ -30,7 +29,7 @@ class WebDavApi {
 
 	authToken() {
 		if (!this.options_.username() || !this.options_.password()) return null;
-		return (new Buffer(this.options_.username() + ':' + this.options_.password())).toString('base64');
+		return base64.encode(this.options_.username() + ':' + this.options_.password());
 	}
 
 	baseUrl() {
@@ -38,8 +37,8 @@ class WebDavApi {
 	}
 
 	relativeBaseUrl() {
-		const url = urlParser.parse(this.baseUrl(), true);
-		return url.path;
+		const url = new URL(this.baseUrl());
+		return url.pathname + url.query;
 	}
 
 	async xmlToJson(xml) {
