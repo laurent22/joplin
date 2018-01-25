@@ -507,7 +507,8 @@ class EncryptionService {
 	}
 
 	isValidHeaderIdentifier(id, ignoreTooLongLength = false) {
-		if (!ignoreTooLongLength && !id || id.length !== 5) return false;
+		if (!id) return false;
+		if (!ignoreTooLongLength && id.length !== 5) return false;
 		return /JED\d\d/.test(id);
 	}
 
@@ -515,7 +516,7 @@ class EncryptionService {
 		if (!item) throw new Error('No item');
 		const ItemClass = BaseItem.itemClass(item);
 		if (!ItemClass.encryptionSupported()) return false;
-		return item.encryption_applied && this.isValidHeaderIdentifier(item.encryption_cipher_text);
+		return item.encryption_applied && this.isValidHeaderIdentifier(item.encryption_cipher_text, true);
 	}
 
 	async fileIsEncrypted(path) {
