@@ -91,6 +91,8 @@ Currently, synchronisation is possible with Nextcloud and OneDrive (by default) 
 
 ## Nextcloud synchronisation
 
+**Important: This is a beta feature. It has been extensively tested and is already in use by some users, but it is possible that some bugs remain. If you wish to you use it, it is recommended that you keep a backup of your data. The simplest way is to regularly backup the profile directory of the desktop or terminal application.**
+
 On the **desktop application** or **mobile application**, go to the config screen and select Nextcloud as the synchronisation target. Then input [the WebDAV URL](https://docs.nextcloud.com/server/9/user_manual/files/access_webdav.html), this is normally `https://example.com/nextcloud/remote.php/dav/files/USERNAME/Joplin` (make sure to create the "Joplin" directory in Nextcloud and to replace USERNAME by your Nextcloud username), and set the username and password.
 
 On the **terminal application**, you will need to set the `sync.target` config variable and all the `sync.5.path`, `sync.5.username` and `sync.5.password` config variables to, respectively the Nextcloud WebDAV URL, your username and your password. This can be done from the command line mode using:
