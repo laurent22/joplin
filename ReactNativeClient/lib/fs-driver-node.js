@@ -3,26 +3,50 @@ const { time } = require('lib/time-utils.js');
 
 class FsDriverNode {
 
+	fsErrorToJsError_(error, path = null) {
+		let msg = error.toString();
+		if (path !== null) msg += '. Path: ' + path;
+		let output = new Error(msg);
+		if (error.code) output.code = error.code;
+		return output;
+	}
+
 	appendFileSync(path, string) {
 		return fs.appendFileSync(path, string);
 	}
 
-	appendFile(path, string, encoding = 'base64') {
-		return fs.appendFile(path, string, { encoding: encoding });
+	async appendFile(path, string, encoding = 'base64') {
+		try {
+			return await fs.appendFile(path, string, { encoding: encoding });
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
+		}
 	}
 
-	writeBinaryFile(path, content) {
-		let buffer = new Buffer(content);
-		return fs.writeFile(path, buffer);
+	async writeBinaryFile(path, content) {
+		try {
+			let buffer = new Buffer(content);
+			return await fs.writeFile(path, buffer);
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
+		}
 	}
 
-	writeFile(path, string, encoding = 'base64') {
-		return fs.writeFile(path, string, { encoding: encoding });
+	async writeFile(path, string, encoding = 'base64') {
+		try {
+			return await fs.writeFile(path, string, { encoding: encoding });
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
+		}
 	}
 
 	// same as rm -rf
 	async remove(path) {
-		return fs.remove(path);
+		try {
+			return await fs.remove(path);
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
+		}
 	}
 
 	async move(source, dest) {
@@ -40,7 +64,7 @@ class FsDriverNode {
 					await time.sleep(1);
 					continue;
 				}
-				throw error;
+				throw this.fsErrorToJsError_(error);
 			}
 		}
 
@@ -82,12 +106,20 @@ class FsDriverNode {
 		return output;
 	}
 
-	open(path, mode) {
-		return fs.open(path, mode);
+	async open(path, mode) {
+		try {
+			return await fs.open(path, mode);
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
+		}
 	}
 
-	close(handle) {
-		return fs.close(handle);
+	async close(handle) {
+		try {
+			return await fs.close(handle);
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
+		}
 	}
 
 	readFile(path, encoding = 'utf8') {
