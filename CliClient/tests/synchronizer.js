@@ -848,7 +848,7 @@ describe('Synchronizer', function() {
 	}));
 
 	it('should sync resources', asyncTest(async () => {
-		while (insideBeforeEach) await time.msleep(100);
+		while (insideBeforeEach) await time.msleep(500);
 
 		let folder1 = await Folder.save({ title: "folder1" });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
