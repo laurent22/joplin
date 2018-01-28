@@ -230,7 +230,7 @@ msgstr ""
 
 #, javascript-format
 msgid "Error opening note in editor: %s"
-msgstr ""
+msgstr "Erreur lors de l'ouverture de la note dans l'éditeur de texte : %s"
 
 msgid "Note has been saved."
 msgstr "La note a été enregistrée."
@@ -469,6 +469,8 @@ msgstr "Impossible d'autoriser le logiciel (jeton d'identification non-reçu)."
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr ""
+"Non-connecté à %s. Veuillez fournir les identifiants et mots de passe "
+"manquants."
 
 msgid "Synchronisation is already in progress."
 msgstr "La synchronisation est déjà en cours."
@@ -673,7 +675,7 @@ msgid "OK"
 msgstr "OK"
 
 msgid "Cancel"
-msgstr "Annulation"
+msgstr "Annuler"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -885,7 +887,7 @@ msgid "File system"
 msgstr "Système de fichier"
 
 msgid "Nextcloud (Beta)"
-msgstr ""
+msgstr "Nextcloud (Beta)"
 
 msgid "OneDrive"
 msgstr "OneDrive"
@@ -1036,7 +1038,7 @@ msgid "Save geo-location with notes"
 msgstr "Enregistrer l'emplacement avec les notes"
 
 msgid "Set application zoom percentage"
-msgstr ""
+msgstr "Niveau de zoom"
 
 msgid "Automatically update the application"
 msgstr "Mettre à jour le logiciel automatiquement"
@@ -1066,6 +1068,9 @@ msgid ""
 "The target to synchonise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
+"La cible avec laquelle synchroniser. Chaque cible de synchronisation peut "
+"avoir des paramètres supplémentaires sous le nom `sync.NUM.NOM` (documentés "
+"ci-dessous)."
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Répertoire avec lequel synchroniser (chemin absolu)"
@@ -1078,14 +1083,13 @@ msgstr ""
 "par système de fichier est activée. Voir `sync.target`."
 
 msgid "Nexcloud WebDAV URL"
-msgstr ""
+msgstr "Nextcloud : URL WebDAV"
 
 msgid "Nexcloud username"
-msgstr ""
+msgstr "Nextcloud : Nom utilisateur"
 
-#, fuzzy
 msgid "Nexcloud password"
-msgstr "Définir le mot de passe"
+msgstr "Nextcloud : Mot de passe"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
