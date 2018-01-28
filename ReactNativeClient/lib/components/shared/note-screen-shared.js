@@ -67,7 +67,28 @@ shared.saveNoteButton_press = async function(comp) {
 
 	comp.setState(newState);
 
-	if (isNew) Note.updateGeolocation(note.id);
+	if (isNew) {
+		Note.updateGeolocation(note.id).then((geoNote) => {
+			const stateNote = comp.state.note;
+			if (stateNote.id !== geoNote.id) return; // Another note has been loaded while geoloc was being retrieved
+
+			// Geo-location for this note has been saved to the database however the properties
+			// are is not in the state so set them now.
+
+			const geoInfo = {
+				longitude: geoNote.longitude,
+				latitude: geoNote.latitude,
+				altitude: geoNote.altitude,
+			}
+
+			const modNote = Object.assign({}, stateNote, geoInfo);
+			const modLastSavedNote = Object.assign({}, comp.state.lastSavedNote, geoInfo);
+
+			comp.setState({ note: modNote, lastSavedNote: modLastSavedNote });
+			comp.refreshNoteMetadata();
+		});
+	}
+
 	comp.refreshNoteMetadata();
 
 	if (isNew) {
