@@ -4,6 +4,7 @@ var Folder = require('lib/models/Folder.js');
 var Tag = require('lib/models/Tag.js');
 var { cliUtils } = require('./cli-utils.js');
 var yargParser = require('yargs-parser');
+var fs = require('fs-extra');
 
 async function handleAutocompletionPromise(line) {
 	// Auto-complete the command name
@@ -84,7 +85,12 @@ async function handleAutocompletionPromise(line) {
 		if (argName == 'tag') {
 			let tags = await Tag.search({ titlePattern: next + '*' });
 			l.push(...tags.map((n) => n.title));
-		}
+    }
+    
+    if (argName == 'file') {
+      let files = await fs.readdir('.');
+      l.push(...files);
+    }
 
 		if (argName == 'tag-command') {
 			let c = filterList(['add', 'remove', 'list'], next);
