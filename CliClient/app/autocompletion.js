@@ -72,8 +72,10 @@ async function handleAutocompletionPromise(line) {
 		let argName = cmdUsage[positionalArgs - 1];
 		argName = cliUtils.parseCommandArg(argName).name;
 
-		if (argName == 'note' || argName == 'note-pattern' && app().currentFolder()) {
-			const notes = await Note.previews(app().currentFolder().id, { titlePattern: next + '*' });
+		const currentFolder = app().currentFolder();
+
+		if (argName == 'note' || argName == 'note-pattern') {
+			const notes = currentFolder ? await Note.previews(currentFolder.id, { titlePattern: next + '*' }) : [];
 			l.push(...notes.map((n) => n.title));
 		}
 
@@ -83,7 +85,7 @@ async function handleAutocompletionPromise(line) {
 		}
 
 		if (argName == 'item') {
-			const notes = await Note.previews(app().currentFolder().id, { titlePattern: next + '*' });
+			const notes = currentFolder ? await Note.previews(currentFolder.id, { titlePattern: next + '*' }) : [];
 			const folders = await Folder.search({ titlePattern: next + '*' });
 			l.push(...notes.map((n) => n.title), folders.map((n) => n.title));
 		}
