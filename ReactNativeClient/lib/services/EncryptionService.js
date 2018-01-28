@@ -378,8 +378,8 @@ class EncryptionService {
 			read: async (size) => {
 				return this.fsDriver().readFileChunk(reader.handle, size, encoding);
 			},
-			close: () => {
-				this.fsDriver().close(reader.handle);
+			close: async () => {
+				await this.fsDriver().close(reader.handle);
 			},
 		};
 		return reader;
@@ -412,9 +412,9 @@ class EncryptionService {
 		let source = await this.fileReader_(srcPath, 'base64');
 		let destination = await this.fileWriter_(destPath, 'ascii');
 
-		const cleanUp = () => {
-			if (source) source.close();
-			if (destination) destination.close();
+		const cleanUp = async () => {
+			if (source) await source.close();
+			if (destination) await destination.close();
 			source = null;
 			destination = null;
 		}
@@ -428,16 +428,16 @@ class EncryptionService {
 			throw error;
 		}
 
-		cleanUp();
+		await cleanUp();
 	}
 
 	async decryptFile(srcPath, destPath) {
 		let source = await this.fileReader_(srcPath, 'ascii');
 		let destination = await this.fileWriter_(destPath, 'base64');
 
-		const cleanUp = () => {
-			if (source) source.close();
-			if (destination) destination.close();
+		const cleanUp = async () => {
+			if (source) await source.close();
+			if (destination) await destination.close();
 			source = null;
 			destination = null;
 		}
@@ -451,7 +451,7 @@ class EncryptionService {
 			throw error;
 		}
 
-		cleanUp();
+		await cleanUp();
 	}
 
 	decodeHeaderVersion_(hexaByte) {
