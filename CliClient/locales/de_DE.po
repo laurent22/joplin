@@ -234,6 +234,10 @@ msgstr ""
 "Beginne die Notiz zu bearbeiten. Schließe das Textverarbeitungsprogramm, um "
 "zurück zum Terminal zu gelangen."
 
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr ""
+
 msgid "Note has been saved."
 msgstr "Die Notiz wurde gespeichert."
 
@@ -470,6 +474,16 @@ msgstr ""
 "Mit dem angegebenen Ziel synchronisieren (voreingestellt auf den sync.target "
 "Optionswert)"
 
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr ""
+"Authentifizierung wurde nicht abgeschlossen (keinen Authentifizierung-Token "
+"erhalten)."
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+
 msgid "Synchronisation is already in progress."
 msgstr "Synchronisation ist bereits im Gange."
 
@@ -482,12 +496,6 @@ msgstr ""
 "Eine Sperrdatei ist vorhanden. Wenn du dir sicher bist, dass keine "
 "Synchronisation im Gange ist, kannst du die Sperrdatei \"%s\" löschen und "
 "fortfahren."
-
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
-msgstr ""
-"Authentifizierung wurde nicht abgeschlossen (keinen Authentifizierung-Token "
-"erhalten)."
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
@@ -884,6 +892,9 @@ msgstr "Unbekanntes Argument: %s"
 msgid "File system"
 msgstr "Dateisystem"
 
+msgid "Nextcloud (Beta)"
+msgstr ""
+
 msgid "OneDrive"
 msgstr "OneDrive"
 
@@ -1035,6 +1046,12 @@ msgstr "Zeige unvollständige To-Dos oben in der Liste"
 msgid "Save geo-location with notes"
 msgstr "Momentanen Standort zusammen mit Notizen speichern"
 
+msgid "Set application zoom percentage"
+msgstr ""
+
+msgid "Automatically update the application"
+msgstr "Die Applikation automatisch aktualisieren"
+
 msgid "Synchronisation interval"
 msgstr "Synchronisationsinterval"
 
@@ -1050,9 +1067,6 @@ msgstr "%d Stunde"
 msgid "%d hours"
 msgstr "%d Stunden"
 
-msgid "Automatically update the application"
-msgstr "Die Applikation automatisch aktualisieren"
-
 msgid "Show advanced options"
 msgstr "Erweiterte Optionen anzeigen"
 
@@ -1060,12 +1074,9 @@ msgid "Synchronisation target"
 msgstr "Synchronisationsziel"
 
 msgid ""
-"The target to synchonise to. If synchronising with the file system, set "
-"`sync.2.path` to specify the target directory."
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"Das Synchronisationsziel, mit dem synchronisiert werden soll. Wenn mit dem "
-"Dateisystem synchronisiert werden soll, setze den Wert zu `sync.2.path`, um "
-"den Zielpfad zu spezifizieren."
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Verzeichnis zum synchronisieren (absoluter Pfad)"
@@ -1076,6 +1087,15 @@ msgid ""
 msgstr ""
 "Der Pfad, mit dem synchronisiert wird, wenn Dateisystem-Synchronisation "
 "aktiviert ist. Siehe `sync.target`."
+
+msgid "Nexcloud WebDAV URL"
+msgstr ""
+
+msgid "Nexcloud username"
+msgstr ""
+
+msgid "Nexcloud password"
+msgstr ""
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1247,6 +1267,14 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Willkommen"
+
+#~ msgid ""
+#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "`sync.2.path` to specify the target directory."
+#~ msgstr ""
+#~ "Das Synchronisationsziel, mit dem synchronisiert werden soll. Wenn mit "
+#~ "dem Dateisystem synchronisiert werden soll, setze den Wert zu `sync.2."
+#~ "path`, um den Zielpfad zu spezifizieren."
 
 #~ msgid "Note title:"
 #~ msgstr "Notizen Titel:"

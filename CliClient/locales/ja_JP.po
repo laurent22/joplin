@@ -223,6 +223,10 @@ msgstr "\"%s\"というノートはありません。お作りいたしますか
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr "ノートの編集の開始。エディタを閉じると元の画面に戻ることが出来ます。"
 
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr ""
+
 msgid "Note has been saved."
 msgstr "ノートは保存されました。"
 
@@ -446,6 +450,14 @@ msgstr "リモート保存領域と同期します。"
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr "指定のターゲットと同期します。(標準： sync.targetの設定値)"
 
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "認証は完了していません(認証トークンが得られませんでした)"
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+
 msgid "Synchronisation is already in progress."
 msgstr "同期はすでに実行中です。"
 
@@ -457,10 +469,6 @@ msgid ""
 msgstr ""
 "ロックファイルがすでに保持されています。同期作業が行われていない場合は、\"%s"
 "\"にあるロックファイルを削除して、作業を再度行ってください。"
-
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
-msgstr "認証は完了していません(認証トークンが得られませんでした)"
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
@@ -849,6 +857,9 @@ msgstr "不明なフラグ: %s"
 msgid "File system"
 msgstr "ファイルシステム"
 
+msgid "Nextcloud (Beta)"
+msgstr ""
+
 msgid "OneDrive"
 msgstr ""
 
@@ -1000,6 +1011,12 @@ msgstr "未完のToDoをリストの上部に表示"
 msgid "Save geo-location with notes"
 msgstr "ノートに位置情報を保存"
 
+msgid "Set application zoom percentage"
+msgstr ""
+
+msgid "Automatically update the application"
+msgstr "アプリケーションの自動更新"
+
 msgid "Synchronisation interval"
 msgstr "同期間隔"
 
@@ -1015,9 +1032,6 @@ msgstr "%d 時間"
 msgid "%d hours"
 msgstr "%d 時間"
 
-msgid "Automatically update the application"
-msgstr "アプリケーションの自動更新"
-
 msgid "Show advanced options"
 msgstr "詳細な設定の表示"
 
@@ -1025,11 +1039,9 @@ msgid "Synchronisation target"
 msgstr "同期先"
 
 msgid ""
-"The target to synchonise to. If synchronising with the file system, set "
-"`sync.2.path` to specify the target directory."
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"同期先です。ローカルのファイルシステムと同期する場合は、`sync.2.path`を同期先"
-"のディレクトリに設定してください。"
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr "同期先のディレクトリ(絶対パス)"
@@ -1040,6 +1052,15 @@ msgid ""
 msgstr ""
 "ファイルシステム同期の有効時に同期を行うパスです。`sync.target`も参考にしてく"
 "ださい。"
+
+msgid "Nexcloud WebDAV URL"
+msgstr ""
+
+msgid "Nexcloud username"
+msgstr ""
+
+msgid "Nexcloud password"
+msgstr ""
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1207,6 +1228,13 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
+
+#~ msgid ""
+#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "`sync.2.path` to specify the target directory."
+#~ msgstr ""
+#~ "同期先です。ローカルのファイルシステムと同期する場合は、`sync.2.path`を同"
+#~ "期先のディレクトリに設定してください。"
 
 #~ msgid "Note title:"
 #~ msgstr "ノートの題名："

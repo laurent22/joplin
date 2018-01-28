@@ -228,6 +228,10 @@ msgstr ""
 "Запуск редактирования заметки. Закройте редактор, чтобы вернуться к "
 "командной строке."
 
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr ""
+
 msgid "Note has been saved."
 msgstr "Заметка сохранена."
 
@@ -455,6 +459,14 @@ msgstr ""
 "Синхронизация с заданной целью (по умолчанию — значение конфигурации sync."
 "target)"
 
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "Аутентификация не была завершена (не получен токен аутентификации)."
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+
 msgid "Synchronisation is already in progress."
 msgstr "Синхронизация уже выполняется."
 
@@ -467,10 +479,6 @@ msgstr ""
 "Файл блокировки уже установлен. Если вам известно, что синхронизация не "
 "производится, вы можете удалить файл блокировки в «%s» и возобновить "
 "операцию."
-
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
-msgstr "Аутентификация не была завершена (не получен токен аутентификации)."
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
@@ -866,6 +874,9 @@ msgstr "Неизвестный флаг: %s"
 msgid "File system"
 msgstr "Файловая система"
 
+msgid "Nextcloud (Beta)"
+msgstr ""
+
 msgid "OneDrive"
 msgstr "OneDrive"
 
@@ -1016,6 +1027,12 @@ msgstr "Показывать незавершённые задачи вверх�
 msgid "Save geo-location with notes"
 msgstr "Сохранять информацию о геолокации в заметках"
 
+msgid "Set application zoom percentage"
+msgstr ""
+
+msgid "Automatically update the application"
+msgstr "Автоматически обновлять приложение"
+
 msgid "Synchronisation interval"
 msgstr "Интервал синхронизации"
 
@@ -1031,9 +1048,6 @@ msgstr "%d час"
 msgid "%d hours"
 msgstr "%d часов"
 
-msgid "Automatically update the application"
-msgstr "Автоматически обновлять приложение"
-
 msgid "Show advanced options"
 msgstr "Показывать расширенные настройки"
 
@@ -1041,11 +1055,9 @@ msgid "Synchronisation target"
 msgstr "Цель синхронизации"
 
 msgid ""
-"The target to synchonise to. If synchronising with the file system, set "
-"`sync.2.path` to specify the target directory."
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"То, с чем будет осуществляться синхронизация. При синхронизации с файловой "
-"системой в `sync.2.path` указывается целевой каталог."
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Каталог синхронизации (абсолютный путь)"
@@ -1056,6 +1068,16 @@ msgid ""
 msgstr ""
 "Путь для синхронизации при включённой синхронизации с файловой системой. См. "
 "`sync.target`."
+
+msgid "Nexcloud WebDAV URL"
+msgstr ""
+
+msgid "Nexcloud username"
+msgstr ""
+
+#, fuzzy
+msgid "Nexcloud password"
+msgstr "Установить пароль"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1223,6 +1245,13 @@ msgstr "У вас сейчас нет блокнота. Создайте его 
 
 msgid "Welcome"
 msgstr "Добро пожаловать"
+
+#~ msgid ""
+#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "`sync.2.path` to specify the target directory."
+#~ msgstr ""
+#~ "То, с чем будет осуществляться синхронизация. При синхронизации с "
+#~ "файловой системой в `sync.2.path` указывается целевой каталог."
 
 #~ msgid "Note title:"
 #~ msgstr "Название заметки:"

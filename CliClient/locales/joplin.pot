@@ -214,6 +214,10 @@ msgstr ""
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
 
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr ""
+
 msgid "Note has been saved."
 msgstr ""
 
@@ -413,6 +417,14 @@ msgstr ""
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
 
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr ""
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+
 msgid "Synchronisation is already in progress."
 msgstr ""
 
@@ -421,10 +433,6 @@ msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
-msgstr ""
-
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
 msgstr ""
 
 #, javascript-format
@@ -785,6 +793,9 @@ msgstr ""
 msgid "File system"
 msgstr ""
 
+msgid "Nextcloud (Beta)"
+msgstr ""
+
 msgid "OneDrive"
 msgstr ""
 
@@ -923,6 +934,12 @@ msgstr ""
 msgid "Save geo-location with notes"
 msgstr ""
 
+msgid "Set application zoom percentage"
+msgstr ""
+
+msgid "Automatically update the application"
+msgstr ""
+
 msgid "Synchronisation interval"
 msgstr ""
 
@@ -938,9 +955,6 @@ msgstr ""
 msgid "%d hours"
 msgstr ""
 
-msgid "Automatically update the application"
-msgstr ""
-
 msgid "Show advanced options"
 msgstr ""
 
@@ -948,8 +962,8 @@ msgid "Synchronisation target"
 msgstr ""
 
 msgid ""
-"The target to synchonise to. If synchronising with the file system, set "
-"`sync.2.path` to specify the target directory."
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 
 msgid "Directory to synchronise with (absolute path)"
@@ -958,6 +972,15 @@ msgstr ""
 msgid ""
 "The path to synchronise with when file system synchronisation is enabled. "
 "See `sync.target`."
+msgstr ""
+
+msgid "Nexcloud WebDAV URL"
+msgstr ""
+
+msgid "Nexcloud username"
+msgstr ""
+
+msgid "Nexcloud password"
 msgstr ""
 
 #, javascript-format

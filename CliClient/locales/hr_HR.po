@@ -235,6 +235,10 @@ msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
 "Počinjem uređivati bilješku. Za povratak u naredbeni redak, zatvori uređivač."
 
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr ""
+
 msgid "Note has been saved."
 msgstr "Bilješka je spremljena."
 
@@ -466,6 +470,16 @@ msgstr "Sinkronizira sa udaljenom pohranom podataka."
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr "Sinkroniziraj sa metom (default je polje sync.target u konfiguraciji)"
 
+#, fuzzy
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr ""
+"Ovjera nije dovršena (nije dobivena potvrda ovjere - authentication token)."
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+
 msgid "Synchronisation is already in progress."
 msgstr "Sinkronizacija je već u toku."
 
@@ -476,12 +490,6 @@ msgid ""
 "operation."
 msgstr ""
 "Ako sinkronizacija nije u toku, obriši lock datoteku u \"%s\" i nastavi..."
-
-#, fuzzy
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
-msgstr ""
-"Ovjera nije dovršena (nije dobivena potvrda ovjere - authentication token)."
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
@@ -868,6 +876,9 @@ msgstr "Nepoznata zastavica: %s"
 msgid "File system"
 msgstr "Datotečni sustav"
 
+msgid "Nextcloud (Beta)"
+msgstr ""
+
 msgid "OneDrive"
 msgstr "OneDrive"
 
@@ -1015,6 +1026,12 @@ msgstr "Prikaži nezavršene zadatke na vrhu liste"
 msgid "Save geo-location with notes"
 msgstr "Spremi geolokacijske podatke sa bilješkama"
 
+msgid "Set application zoom percentage"
+msgstr ""
+
+msgid "Automatically update the application"
+msgstr "Automatsko instaliranje nove verzije"
+
 msgid "Synchronisation interval"
 msgstr "Interval sinkronizacije"
 
@@ -1030,9 +1047,6 @@ msgstr "%d sat"
 msgid "%d hours"
 msgstr "%d sati"
 
-msgid "Automatically update the application"
-msgstr "Automatsko instaliranje nove verzije"
-
 msgid "Show advanced options"
 msgstr "Prikaži napredne opcije"
 
@@ -1040,11 +1054,9 @@ msgid "Synchronisation target"
 msgstr "Sinkroniziraj sa"
 
 msgid ""
-"The target to synchonise to. If synchronising with the file system, set "
-"`sync.2.path` to specify the target directory."
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"Meta sinkronizacije. U slučaju sinkroniziranja s vlastitim datotečnim "
-"sustavom, postavi `sync.2.path` na ciljani direktorij."
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Direktorij za sinkroniziranje (apsolutna putanja)"
@@ -1055,6 +1067,15 @@ msgid ""
 msgstr ""
 "Putanja do direktorija za sinkronizaciju u slučaju kad je sinkronizacija sa "
 "datotečnim sustavom omogućena. Vidi `sync.target`."
+
+msgid "Nexcloud WebDAV URL"
+msgstr ""
+
+msgid "Nexcloud username"
+msgstr ""
+
+msgid "Nexcloud password"
+msgstr ""
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1220,6 +1241,13 @@ msgstr "Trenutno nemaš nijednu bilježnicu. Stvori novu klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobro došli"
+
+#~ msgid ""
+#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "`sync.2.path` to specify the target directory."
+#~ msgstr ""
+#~ "Meta sinkronizacije. U slučaju sinkroniziranja s vlastitim datotečnim "
+#~ "sustavom, postavi `sync.2.path` na ciljani direktorij."
 
 #~ msgid "Note title:"
 #~ msgstr "Naslov bilješke:"

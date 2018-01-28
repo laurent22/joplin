@@ -218,6 +218,10 @@ msgstr "此笔记不存在：\"%s\"。是否创建？"
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr "开始编辑笔记。关闭编辑器则返回提示。"
 
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr ""
+
 msgid "Note has been saved."
 msgstr "笔记已被保存。"
 
@@ -426,6 +430,14 @@ msgstr "与远程储存空间同步。"
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr "同步至所提供的目标（默认为同步目标配置值）"
 
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "认证未完成（未收到认证令牌）。"
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+
 msgid "Synchronisation is already in progress."
 msgstr "同步正在进行中。"
 
@@ -437,10 +449,6 @@ msgid ""
 msgstr ""
 "锁定文件已被保留。若当前没有任何正在进行的同步，您可以在\"%s\"删除锁定文件并"
 "继续操作。"
-
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
-msgstr "认证未完成（未收到认证令牌）。"
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
@@ -814,6 +822,9 @@ msgstr "未知标记：%s"
 msgid "File system"
 msgstr "文件系统"
 
+msgid "Nextcloud (Beta)"
+msgstr ""
+
 msgid "OneDrive"
 msgstr "OneDrive"
 
@@ -958,6 +969,12 @@ msgstr "在列表上方显示未完成的待办事项"
 msgid "Save geo-location with notes"
 msgstr "保存笔记时同时保存地理定位信息"
 
+msgid "Set application zoom percentage"
+msgstr ""
+
+msgid "Automatically update the application"
+msgstr "自动更新此程序"
+
 msgid "Synchronisation interval"
 msgstr "同步间隔"
 
@@ -973,9 +990,6 @@ msgstr "%d小时"
 msgid "%d hours"
 msgstr "%d小时"
 
-msgid "Automatically update the application"
-msgstr "自动更新此程序"
-
 msgid "Show advanced options"
 msgstr "显示高级选项"
 
@@ -983,9 +997,9 @@ msgid "Synchronisation target"
 msgstr "同步目标"
 
 msgid ""
-"The target to synchonise to. If synchronising with the file system, set "
-"`sync.2.path` to specify the target directory."
-msgstr "同步的目标。若与文件系统同步，设置`sync.2.path`为指定目标目录。"
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr ""
@@ -994,6 +1008,15 @@ msgid ""
 "The path to synchronise with when file system synchronisation is enabled. "
 "See `sync.target`."
 msgstr "当文件系统同步开启时的同步路径。参考`sync.target`。"
+
+msgid "Nexcloud WebDAV URL"
+msgstr ""
+
+msgid "Nexcloud username"
+msgstr ""
+
+msgid "Nexcloud password"
+msgstr ""
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1157,6 +1180,11 @@ msgstr "您当前没有任何笔记本。点击(+)按钮创建新笔记本。"
 
 msgid "Welcome"
 msgstr "欢迎"
+
+#~ msgid ""
+#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "`sync.2.path` to specify the target directory."
+#~ msgstr "同步的目标。若与文件系统同步，设置`sync.2.path`为指定目标目录。"
 
 #~ msgid "Note title:"
 #~ msgstr "笔记标题："
