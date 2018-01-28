@@ -95,10 +95,10 @@ On the **desktop application** or **mobile application**, go to the config scree
 
 On the **terminal application**, you will need to set the `sync.target` config variable and all the `sync.5.path`, `sync.5.username` and `sync.5.password` config variables to, respectively the Nextcloud WebDAV URL, your username and your password. This can be done from the command line mode using:
 
+    :config sync.5.path https://example.com/nextcloud/remote.php/dav/files/USERNAME/Joplin
+    :config sync.5.username YOUR_USERNAME
+    :config sync.5.password YOUR_PASSWORD
 	:config sync.target 5
-	:config sync.5.path https://example.com/nextcloud/remote.php/dav/files/USERNAME/Joplin
-	:config sync.5.username YOUR_USERNAME
-	:config sync.5.password YOUR_PASSWORD
 
 If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.
 
