@@ -64,6 +64,8 @@ class DecryptionWorker {
 		let excludedIds = [];
 
 		try {
+			const notLoadedMasterKeyDisptaches = [];
+
 			while (true) {
 				const result = await BaseItem.itemsThatNeedDecryption(excludedIds);
 				const items = result.items;
@@ -77,10 +79,13 @@ class DecryptionWorker {
 					} catch (error) {
 						if (error.code === 'masterKeyNotLoaded' && options.materKeyNotLoadedHandler === 'dispatch') {
 							excludedIds.push(item.id);
-							this.dispatch({
-								type: 'MASTERKEY_ADD_NOT_LOADED',
-								id: error.masterKeyId,
-							});
+							if (notLoadedMasterKeyDisptaches.indexOf(error.masterKeyId) < 0) {
+								this.dispatch({
+									type: 'MASTERKEY_ADD_NOT_LOADED',
+									id: error.masterKeyId,
+								});
+								notLoadedMasterKeyDisptaches.push(error.masterKeyId);
+							}
 							continue;
 						}
 						this.logger().warn('DecryptionWorker: error for: ' + item.id + ' (' + ItemClass.tableName() + ')');
