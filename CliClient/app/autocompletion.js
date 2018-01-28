@@ -82,15 +82,21 @@ async function handleAutocompletionPromise(line) {
 			l.push(...folders.map((n) => n.title));
 		}
 
+		if (argName == 'item') {
+			const notes = await Note.previews(app().currentFolder().id, { titlePattern: next + '*' });
+			const folders = await Folder.search({ titlePattern: next + '*' });
+			l.push(...notes.map((n) => n.title), folders.map((n) => n.title));
+		}
+
 		if (argName == 'tag') {
 			let tags = await Tag.search({ titlePattern: next + '*' });
 			l.push(...tags.map((n) => n.title));
-    }
-    
-    if (argName == 'file') {
-      let files = await fs.readdir('.');
-      l.push(...files);
-    }
+		}
+
+		if (argName == 'file') {
+			let files = await fs.readdir('.');
+			l.push(...files);
+		}
 
 		if (argName == 'tag-command') {
 			let c = filterList(['add', 'remove', 'list'], next);
