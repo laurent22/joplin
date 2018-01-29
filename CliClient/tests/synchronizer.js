@@ -19,7 +19,7 @@ process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000; // The first test is slow because the database needs to be built
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 35000; // The first test is slow because the database needs to be built
 
 async function allItems() {
 	let folders = await Folder.all();
@@ -459,7 +459,7 @@ describe('Synchronizer', function() {
 		let unconflictedNotes = await Note.unconflictedNotes();
 
 		expect(unconflictedNotes.length).toBe(0);
-			}));
+	}));
 
 	it('should handle conflict when remote folder is deleted then local folder is renamed', asyncTest(async () => {
 		let folder1 = await Folder.save({ title: "folder1" });
@@ -489,7 +489,7 @@ describe('Synchronizer', function() {
 		let items = await allItems();
 
 		expect(items.length).toBe(1);
-			}));
+	}));
 
 	it('should allow duplicate folder titles', asyncTest(async () => {
 		let localF1 = await Folder.save({ title: "folder" });
@@ -575,10 +575,12 @@ describe('Synchronizer', function() {
 	}
 
 	it('should sync tags', asyncTest(async () => {
-		await shoudSyncTagTest(false);	}));
+		await shoudSyncTagTest(false);
+	}));
 
 	it('should sync encrypted tags', asyncTest(async () => {
-		await shoudSyncTagTest(true);	}));
+		await shoudSyncTagTest(true);
+	}));
 
 	it('should not sync notes with conflicts', asyncTest(async () => {
 		let f1 = await Folder.save({ title: "folder" });

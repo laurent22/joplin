@@ -109,7 +109,7 @@ class WebDavApi {
 		return this.valueFromJson(json, keys, 'array');
 	}
 
-	async execPropFind(path, depth, fields = null) {
+	async execPropFind(path, depth, fields = null, options = null) {
 		if (fields === null) fields = ['d:getlastmodified'];
 
 		let fieldsXml = '';
@@ -131,7 +131,7 @@ class WebDavApi {
 				</d:prop>
 			</d:propfind>`;
 
-		return this.exec('PROPFIND', path, body, { 'Depth': depth });
+		return this.exec('PROPFIND', path, body, { 'Depth': depth }, options);
 	}
 
 	// curl -u admin:123456 'http://nextcloud.local/remote.php/dav/files/admin/' -X PROPFIND --data '<?xml version="1.0" encoding="UTF-8"?>

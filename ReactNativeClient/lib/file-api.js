@@ -3,6 +3,7 @@ const { Logger } = require('lib/logger.js');
 const { shim } = require('lib/shim');
 const BaseItem = require('lib/models/BaseItem.js');
 const JoplinError = require('lib/JoplinError');
+const ArrayUtils = require('lib/ArrayUtils');
 
 class FileApi {
 
@@ -167,6 +168,8 @@ async function basicDelta(path, getDirStatFn, options) {
 		newContext.statsCache.sort(function(a, b) {
 			return a.updated_time - b.updated_time;
 		});
+		newContext.statIdsCache = newContext.statsCache.map((item) => BaseItem.pathToId(item.path));
+		newContext.statIdsCache.sort(); // Items must be sorted to use binary search below
 	}
 
 	let output = [];
@@ -210,16 +213,8 @@ async function basicDelta(path, getDirStatFn, options) {
 		if (output.length + deletedItems.length >= outputLimit) break;
 
 		const itemId = itemIds[i];
-		let found = false;
-		for (let j = 0; j < newContext.statsCache.length; j++) {
-			const item = newContext.statsCache[j];
-			if (BaseItem.pathToId(item.path) == itemId) {
-				found = true;
-				break;
-			}
-		}
 
-		if (!found) {
+		if (ArrayUtils.binarySearch(newContext.statIdsCache, itemId) < 0) {
 			deletedItems.push({
 				path: BaseItem.systemPath(itemId),
 				isDeleted: true,
