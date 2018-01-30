@@ -8,7 +8,7 @@ process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
-describe('Encryption', function() {
+describe('ArrayUtils', function() {
 
 	beforeEach(async (done) => {
 		done();

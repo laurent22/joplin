@@ -146,14 +146,19 @@ function basicDeltaContextFromOptions_(options) {
 		timestamp: 0,
 		filesAtTimestamp: [],
 		statsCache: null,
+		statIdsCache: null,
+		deletedItemsProcessed: false,
 	};
 
 	if (!options || !options.context) return output;
+
 	const d = new Date(options.context.timestamp);
 
 	output.timestamp = isNaN(d.getTime()) ? 0 : options.context.timestamp;
 	output.filesAtTimestamp = Array.isArray(options.context.filesAtTimestamp) ? options.context.filesAtTimestamp.slice() : [];
 	output.statsCache = options.context && options.context.statsCache ? options.context.statsCache : null;
+	output.statIdsCache = options.context && options.context.statIdsCache ? options.context.statIdsCache : null;
+	output.deletedItemsProcessed = options.context && ('deletedItemsProcessed' in options.context) ? options.context.deletedItemsProcessed : false;
 
 	return output;
 }
@@ -172,6 +177,8 @@ async function basicDelta(path, getDirStatFn, options) {
 		timestamp: context.timestamp,
 		filesAtTimestamp: context.filesAtTimestamp.slice(),
 		statsCache: context.statsCache,
+		statIdsCache: context.statIdsCache,
+		deletedItemsProcessed: context.deletedItemsProcessed,
 	};
 
 	// Stats are cached until all items have been processed (until hasMore is false)
@@ -218,23 +225,27 @@ async function basicDelta(path, getDirStatFn, options) {
 		if (output.length >= outputLimit) break;
 	}
 
-	// Find out which items have been deleted on the sync target by comparing the items
-	// we have to the items on the target.
-	let deletedItems = [];
-	for (let i = 0; i < itemIds.length; i++) {
-		if (output.length + deletedItems.length >= outputLimit) break;
+	if (!newContext.deletedItemsProcessed) {
+		// Find out which items have been deleted on the sync target by comparing the items
+		// we have to the items on the target.
+		// Note that when deleted items are processed it might result in the output having
+		// more items than outputLimit. This is acceptable since delete operations are cheap.
+		let deletedItems = [];
+		for (let i = 0; i < itemIds.length; i++) {
+			const itemId = itemIds[i];
 
-		const itemId = itemIds[i];
-
-		if (ArrayUtils.binarySearch(newContext.statIdsCache, itemId) < 0) {
-			deletedItems.push({
-				path: BaseItem.systemPath(itemId),
-				isDeleted: true,
-			});
+			if (ArrayUtils.binarySearch(newContext.statIdsCache, itemId) < 0) {
+				deletedItems.push({
+					path: BaseItem.systemPath(itemId),
+					isDeleted: true,
+				});
+			}
 		}
+
+		output = output.concat(deletedItems);
 	}
 
-	output = output.concat(deletedItems);
+	newContext.deletedItemsProcessed = true;
 
 	const hasMore = output.length >= outputLimit;
 	if (!hasMore) newContext.statsCache = null;
