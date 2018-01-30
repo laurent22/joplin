@@ -190,13 +190,21 @@ class NoteTextComponent extends React.Component {
 			this.editorSetScrollTop(1);
 			this.restoreScrollTop_ = 0;
 
+			if (note) {
+				const focusSettingName = !!note.is_todo ? 'newTodoFocus' : 'newNoteFocus';
+
+				if (Setting.value(focusSettingName) === 'title') {
+					if (this.titleField_) this.titleField_.focus();
+				} else {
+					if (this.editor_) this.editor_.editor.focus();
+				}
+			}
+
 			if (this.editor_) {
 				const session = this.editor_.editor.getSession();
 				const undoManager = session.getUndoManager();
 				undoManager.reset();
 				session.setUndoManager(undoManager);
-
-				this.editor_.editor.focus();
 				this.editor_.editor.clearSelection();
 				this.editor_.editor.moveCursorTo(0,0);
 			}
@@ -576,6 +584,7 @@ class NoteTextComponent extends React.Component {
 
 		const titleEditor = <input
 			type="text"
+			ref={(elem) => { this.titleField_ = elem; } }
 			style={titleEditorStyle}
 			value={note && note.title ? note.title : ''}
 			onChange={(event) => { this.title_changeText(event); }}

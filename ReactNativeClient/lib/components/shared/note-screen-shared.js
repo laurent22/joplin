@@ -71,6 +71,7 @@ shared.saveNoteButton_press = async function(comp) {
 	if (isNew) {
 		Note.updateGeolocation(note.id).then((geoNote) => {
 			const stateNote = comp.state.note;
+			if (!stateNote || !geoNote) return;
 			if (stateNote.id !== geoNote.id) return; // Another note has been loaded while geoloc was being retrieved
 
 			// Geo-location for this note has been saved to the database however the properties
