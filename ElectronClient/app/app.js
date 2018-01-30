@@ -43,6 +43,7 @@ class Application extends BaseApplication {
 	constructor() {
 		super();
 		this.lastMenuScreen_ = null;
+		this.checkForUpdateLoggerPath_ = Setting.value('profileDir') + '/log-autoupdater.txt';
 	}
 
 	hasGui() {
@@ -295,6 +296,11 @@ class Application extends BaseApplication {
 					accelerator: 'F1',
 					click () { bridge().openExternal('http://joplin.cozic.net') }
 				}, {
+					label: _('Check for updates...'),
+					click: () => {
+						bridge().checkForUpdates(false, this.checkForUpdateLoggerPath_);
+					}
+				}, {
 					label: _('About Joplin'),
 					click: () => {
 						const p = packageInfo;
@@ -387,7 +393,7 @@ class Application extends BaseApplication {
 		if (shim.isWindows() || shim.isMac()) {
 			const runAutoUpdateCheck = function() {
 				if (Setting.value('autoUpdateEnabled')) {
-					bridge().checkForUpdatesAndNotify(Setting.value('profileDir') + '/log-autoupdater.txt');
+					bridge().checkForUpdates(true, this.checkForUpdateLoggerPath_);
 				}
 			}
 			
