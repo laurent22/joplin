@@ -88,8 +88,7 @@ class DecryptionWorker {
 							}
 							continue;
 						}
-						this.logger().warn('DecryptionWorker: error for: ' + item.id + ' (' + ItemClass.tableName() + ')');
-						throw error;
+						this.logger().warn('DecryptionWorker: error for: ' + item.id + ' (' + ItemClass.tableName() + ')', error);
 					}
 				}
 
