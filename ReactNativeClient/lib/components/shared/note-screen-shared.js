@@ -30,6 +30,7 @@ shared.saveNoteButton_press = async function(comp) {
 		options.fields = BaseModel.diffObjectsFields(comp.state.lastSavedNote, note);
 	}
 
+
 	const hasAutoTitle = comp.state.newAndNoTitleChangeNoteId || (isNew && !note.title);
 	if (hasAutoTitle) {
 		note.title = Note.defaultTitle(note);
@@ -63,7 +64,7 @@ shared.saveNoteButton_press = async function(comp) {
 		note: note,
 	};
 
-	if (isNew) newState.newAndNoTitleChangeNoteId = note.id;
+	if (isNew && hasAutoTitle) newState.newAndNoTitleChangeNoteId = note.id;
 
 	comp.setState(newState);
 
