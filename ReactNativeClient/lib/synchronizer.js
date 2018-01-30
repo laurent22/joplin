@@ -18,7 +18,7 @@ class Synchronizer {
 		this.state_ = 'idle';
 		this.db_ = db;
 		this.api_ = api;
-		//this.syncDirName_ = '.sync';
+		this.syncDirName_ = '.sync';
 		this.resourceDirName_ = '.resource';
 		this.logger_ = new Logger();
 		this.appType_ = appType;
@@ -195,7 +195,8 @@ class Synchronizer {
 		this.logSyncOperation('starting', null, null, 'Starting synchronisation to target ' + syncTargetId + '... [' + synchronizationId + ']');
 
 		try {
-			//await this.api().mkdir(this.syncDirName_);
+			await this.api().mkdir(this.syncDirName_);
+			this.api().setTempDirName(this.syncDirName_);
 			await this.api().mkdir(this.resourceDirName_);
 
 			let donePaths = [];

@@ -12,6 +12,17 @@ class FileApi {
 		this.driver_ = driver;
 		this.logger_ = new Logger();
 		this.syncTargetId_ = null;
+		this.tempDirName_ = null;
+		this.driver_.fileApi_ = this;
+	}
+
+	tempDirName() {
+		if (this.tempDirName_ === null) throw Error('Temp dir not set!');
+		return this.tempDirName_;
+	}
+
+	setTempDirName(v) {
+		this.tempDirName_ = v;
 	}
 
 	fsDriver() {
@@ -40,9 +51,10 @@ class FileApi {
 	}
 
 	fullPath_(path) {
-		let output = this.baseDir_;
-		if (path != '') output += '/' + path;
-		return output;
+		let output = [];
+		if (this.baseDir_) output.push(this.baseDir_);
+		if (path) output.push(path);
+		return output.join('/');
 	}
 
 	// DRIVER MUST RETURN PATHS RELATIVE TO `path`

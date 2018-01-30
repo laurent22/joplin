@@ -161,6 +161,8 @@ class WebDavApi {
 
 		let response = null;
 
+		// console.info('WebDAV', method + ' ' + path, headers, options);
+
 		if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
 			response = await shim.uploadBlob(url, fetchOptions);
 		} else if (options.target == 'string') {
