@@ -151,6 +151,8 @@ class WebDavApi {
 
 		if (authToken) headers['Authorization'] = 'Basic ' + authToken;
 
+		if (typeof body === 'string') headers['Content-length'] = body.length;
+
 		const fetchOptions = {};
 		fetchOptions.headers = headers;
 		fetchOptions.method = method;
