@@ -104,7 +104,6 @@ shim.fetchWithRetry = async function(fetchFn, options = null) {
 	}
 }
 
-shim.nativeFetch_ = typeof fetch !== 'undefined' ? fetch : null;
 shim.fetch = () => { throw new Error('Not implemented'); }
 shim.FormData = typeof FormData !== 'undefined' ? FormData : null;
 shim.fsDriver = () => { throw new Error('Not implemented') }

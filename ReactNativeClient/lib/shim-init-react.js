@@ -4,6 +4,7 @@ const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const RNFetchBlob = require('react-native-fetch-blob').default;
 const { generateSecureRandom }  = require('react-native-securerandom');
 const FsDriverRN = require('lib/fs-driver-rn.js').FsDriverRN;
+const urlValidator = require('valid-url');
 
 function shimInit() {
 	shim.Geolocation = GeolocationReact;
@@ -27,20 +28,15 @@ function shimInit() {
 	}
 
 	shim.fetch = async function(url, options = null) {
+		// The native fetch() throws an uncatable error that crashes the app if calling it with an
+		// invalid URL such as '//.resource' or "http://ocloud. de" so detect if the URL is valid beforehand
+		// and throw a catchable error.
+		// Bug: https://github.com/facebook/react-native/issues/7436
+		const validatedUrl = urlValidator.isUri(url);
+		if (!validatedUrl) throw new Error('Not a valid URL: ' + url);
+
 		return shim.fetchWithRetry(() => {
-			// The native fetch() throws an uncatable error if calling it with an invalid URL
-			// such as '//.resource' so detect if the URL is valid beforehand and throw
-			// a catchable error.
-
-			if (typeof url !== 'string') {
-				console.info('NOT A STRING: ', url);
-				throw new Error('shim.fetch: URL is not a string');
-			}
-
-			const lcUrl = url.toLowerCase();
-			if (lcUrl.indexOf('http:') !== 0 && lcUrl.indexOf('https:') !== 0) throw new Error('shim.fetch: Invalid URL: ' + lcUrl);
-
-			return shim.nativeFetch_(url, options);
+			return fetch(validatedUrl, options);
 		}, options);
 	}
 
