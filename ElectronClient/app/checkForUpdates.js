@@ -18,7 +18,7 @@ autoUpdater.on('update-available', () => {
 	dialog.showMessageBox({
 		type: 'info',
 		message: _('An update is available, do you want to update now?'),
-		buttons: ['Sure', 'No']
+		buttons: [_('Yes'), _('No')]
 	}, (buttonIndex) => {
 		if (buttonIndex === 0) {
 			try {
@@ -61,7 +61,12 @@ function checkForUpdates(inBackground, logFilePath) {
 
 	checkInBackground_ = inBackground;
 
-	autoUpdater.checkForUpdates()
+	try {
+		autoUpdater.checkForUpdates()
+	} catch (error) {
+		autoUpdateLogger_.error(error);
+		if (!checkInBackground_) dialog.showErrorBox(_('Error'), error.message);
+	}
 }
 
 module.exports.checkForUpdates = checkForUpdates
