@@ -85,11 +85,15 @@ class Logger {
 	}
 
 	// Only for database at the moment
-	async lastEntries(limit = 100) {
+	async lastEntries(limit = 100, options = null) {
+		if (options === null) options = {};
+		if (!options.levels) options.levels = [Logger.LEVEL_DEBUG, Logger.LEVEL_INFO, Logger.LEVEL_WARN, Logger.LEVEL_ERROR];
+		if (!options.levels.length) return [];
+
 		for (let i = 0; i < this.targets_.length; i++) {
 			const target = this.targets_[i];
 			if (target.type == 'database') {
-				let sql = 'SELECT * FROM logs ORDER BY timestamp DESC';
+				let sql = 'SELECT * FROM logs WHERE level IN (' + options.levels.join(',') + ') ORDER BY timestamp DESC';
 				if (limit !== null) sql += ' LIMIT ' + limit
 				return await target.database.selectAll(sql);
 			}
