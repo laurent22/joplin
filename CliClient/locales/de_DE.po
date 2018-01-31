@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.6\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "Give focus to next pane"
 msgstr "Das nächste Fenster fokussieren"
@@ -683,6 +681,9 @@ msgstr "Hilfe"
 msgid "Website and documentation"
 msgstr "Webseite und Dokumentation"
 
+msgid "Check for updates..."
+msgstr ""
+
 msgid "About Joplin"
 msgstr "Über Joplin"
 
@@ -695,6 +696,26 @@ msgstr "OK"
 
 msgid "Cancel"
 msgstr "Abbrechen"
+
+msgid "Error"
+msgstr ""
+
+msgid "An update is available, do you want to update now?"
+msgstr ""
+
+#, javascript-format
+msgid "Could not download the update: %s"
+msgstr ""
+
+msgid "Current version is up-to-date."
+msgstr ""
+
+msgid "New version downloaded - application will quit now and update..."
+msgstr ""
+
+#, javascript-format
+msgid "Could not install the update: %s"
+msgstr ""
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -1059,6 +1080,21 @@ msgstr "Zeige unvollständige To-Dos oben in der Liste"
 msgid "Save geo-location with notes"
 msgstr "Momentanen Standort zusammen mit Notizen speichern"
 
+#, fuzzy
+msgid "When creating a new to-do:"
+msgstr "Erstellt ein neues To-Do."
+
+#, fuzzy
+msgid "Focus title"
+msgstr "Notiz Titel:"
+
+msgid "Focus body"
+msgstr ""
+
+#, fuzzy
+msgid "When creating a new note:"
+msgstr "Erstellt eine neue Notiz."
+
 msgid "Set application zoom percentage"
 msgstr "Einstellen des Anwendungszooms"
 
@@ -1292,9 +1328,6 @@ msgstr "Willkommen"
 #~ "Das Synchronisationsziel, mit dem synchronisiert werden soll. Wenn mit "
 #~ "dem Dateisystem synchronisiert werden soll, setze den Wert zu `sync.2."
 #~ "path`, um den Zielpfad zu spezifizieren."
-
-#~ msgid "Note title:"
-#~ msgstr "Notiz Titel:"
 
 #~ msgid "To-do title:"
 #~ msgstr "To-Do Titel:"

@@ -642,6 +642,9 @@ msgstr "Ajuda"
 msgid "Website and documentation"
 msgstr "Website e documentação"
 
+msgid "Check for updates..."
+msgstr ""
+
 msgid "About Joplin"
 msgstr "Sobre o Joplin"
 
@@ -654,6 +657,26 @@ msgstr "OK"
 
 msgid "Cancel"
 msgstr "Cancelar"
+
+msgid "Error"
+msgstr ""
+
+msgid "An update is available, do you want to update now?"
+msgstr ""
+
+#, javascript-format
+msgid "Could not download the update: %s"
+msgstr ""
+
+msgid "Current version is up-to-date."
+msgstr ""
+
+msgid "New version downloaded - application will quit now and update..."
+msgstr ""
+
+#, javascript-format
+msgid "Could not install the update: %s"
+msgstr ""
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -1007,6 +1030,21 @@ msgstr "Mostrar tarefas incompletas no topo das listas"
 msgid "Save geo-location with notes"
 msgstr "Salvar  geolocalização com notas"
 
+#, fuzzy
+msgid "When creating a new to-do:"
+msgstr "Cria uma nova tarefa."
+
+#, fuzzy
+msgid "Focus title"
+msgstr "Título da nota:"
+
+msgid "Focus body"
+msgstr ""
+
+#, fuzzy
+msgid "When creating a new note:"
+msgstr "Cria uma nova nota."
+
 msgid "Set application zoom percentage"
 msgstr ""
 
@@ -1229,9 +1267,6 @@ msgstr "Bem-vindo"
 #~ msgstr ""
 #~ "O alvo para sincronizar. Se estiver sincronizando com o sistema de "
 #~ "arquivos, configure `sync.2.path` para especificar o diretório de destino."
-
-#~ msgid "Note title:"
-#~ msgstr "Título da nota:"
 
 #~ msgid "To-do title:"
 #~ msgstr "Título da tarefa:"

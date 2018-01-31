@@ -613,6 +613,9 @@ msgstr "帮助"
 msgid "Website and documentation"
 msgstr "网站与文档"
 
+msgid "Check for updates..."
+msgstr ""
+
 msgid "About Joplin"
 msgstr "关于Joplin"
 
@@ -625,6 +628,26 @@ msgstr "确认"
 
 msgid "Cancel"
 msgstr "取消"
+
+msgid "Error"
+msgstr ""
+
+msgid "An update is available, do you want to update now?"
+msgstr ""
+
+#, javascript-format
+msgid "Could not download the update: %s"
+msgstr ""
+
+msgid "Current version is up-to-date."
+msgstr ""
+
+msgid "New version downloaded - application will quit now and update..."
+msgstr ""
+
+#, javascript-format
+msgid "Could not install the update: %s"
+msgstr ""
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -969,6 +992,21 @@ msgstr "在列表上方显示未完成的待办事项"
 msgid "Save geo-location with notes"
 msgstr "保存笔记时同时保存地理定位信息"
 
+#, fuzzy
+msgid "When creating a new to-do:"
+msgstr "创建新待办事项。"
+
+#, fuzzy
+msgid "Focus title"
+msgstr "笔记标题："
+
+msgid "Focus body"
+msgstr ""
+
+#, fuzzy
+msgid "When creating a new note:"
+msgstr "创建新笔记。"
+
 msgid "Set application zoom percentage"
 msgstr ""
 
@@ -1185,9 +1223,6 @@ msgstr "欢迎"
 #~ "The target to synchonise to. If synchronising with the file system, set "
 #~ "`sync.2.path` to specify the target directory."
 #~ msgstr "同步的目标。若与文件系统同步，设置`sync.2.path`为指定目标目录。"
-
-#~ msgid "Note title:"
-#~ msgstr "笔记标题："
 
 #~ msgid "To-do title:"
 #~ msgstr "待办事项标题："

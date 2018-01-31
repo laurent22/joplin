@@ -669,6 +669,9 @@ msgstr "Pomoć"
 msgid "Website and documentation"
 msgstr "Website i dokumentacija"
 
+msgid "Check for updates..."
+msgstr ""
+
 msgid "About Joplin"
 msgstr "O Joplinu"
 
@@ -681,6 +684,26 @@ msgstr "U redu"
 
 msgid "Cancel"
 msgstr "Odustani"
+
+msgid "Error"
+msgstr ""
+
+msgid "An update is available, do you want to update now?"
+msgstr ""
+
+#, javascript-format
+msgid "Could not download the update: %s"
+msgstr ""
+
+msgid "Current version is up-to-date."
+msgstr ""
+
+msgid "New version downloaded - application will quit now and update..."
+msgstr ""
+
+#, javascript-format
+msgid "Could not install the update: %s"
+msgstr ""
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -1026,6 +1049,21 @@ msgstr "Prikaži nezavršene zadatke na vrhu liste"
 msgid "Save geo-location with notes"
 msgstr "Spremi geolokacijske podatke sa bilješkama"
 
+#, fuzzy
+msgid "When creating a new to-do:"
+msgstr "Stvara novi zadatak."
+
+#, fuzzy
+msgid "Focus title"
+msgstr "Naslov bilješke:"
+
+msgid "Focus body"
+msgstr ""
+
+#, fuzzy
+msgid "When creating a new note:"
+msgstr "Stvara novu bilješku."
+
 msgid "Set application zoom percentage"
 msgstr ""
 
@@ -1248,9 +1286,6 @@ msgstr "Dobro došli"
 #~ msgstr ""
 #~ "Meta sinkronizacije. U slučaju sinkroniziranja s vlastitim datotečnim "
 #~ "sustavom, postavi `sync.2.path` na ciljani direktorij."
-
-#~ msgid "Note title:"
-#~ msgstr "Naslov bilješke:"
 
 #~ msgid "To-do title:"
 #~ msgstr "Naslov zadatka:"

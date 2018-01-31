@@ -589,6 +589,9 @@ msgstr ""
 msgid "Website and documentation"
 msgstr ""
 
+msgid "Check for updates..."
+msgstr ""
+
 msgid "About Joplin"
 msgstr ""
 
@@ -600,6 +603,26 @@ msgid "OK"
 msgstr ""
 
 msgid "Cancel"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "An update is available, do you want to update now?"
+msgstr ""
+
+#, javascript-format
+msgid "Could not download the update: %s"
+msgstr ""
+
+msgid "Current version is up-to-date."
+msgstr ""
+
+msgid "New version downloaded - application will quit now and update..."
+msgstr ""
+
+#, javascript-format
+msgid "Could not install the update: %s"
 msgstr ""
 
 #, javascript-format
@@ -932,6 +955,18 @@ msgid "Show uncompleted todos on top of the lists"
 msgstr ""
 
 msgid "Save geo-location with notes"
+msgstr ""
+
+msgid "When creating a new to-do:"
+msgstr ""
+
+msgid "Focus title"
+msgstr ""
+
+msgid "Focus body"
+msgstr ""
+
+msgid "When creating a new note:"
 msgstr ""
 
 msgid "Set application zoom percentage"

@@ -646,6 +646,9 @@ msgstr "ヘルプ"
 msgid "Website and documentation"
 msgstr "Webサイトとドキュメント"
 
+msgid "Check for updates..."
+msgstr ""
+
 msgid "About Joplin"
 msgstr "Joplinについて"
 
@@ -658,6 +661,26 @@ msgstr ""
 
 msgid "Cancel"
 msgstr "キャンセル"
+
+msgid "Error"
+msgstr ""
+
+msgid "An update is available, do you want to update now?"
+msgstr ""
+
+#, javascript-format
+msgid "Could not download the update: %s"
+msgstr ""
+
+msgid "Current version is up-to-date."
+msgstr ""
+
+msgid "New version downloaded - application will quit now and update..."
+msgstr ""
+
+#, javascript-format
+msgid "Could not install the update: %s"
+msgstr ""
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -1011,6 +1034,21 @@ msgstr "未完のToDoをリストの上部に表示"
 msgid "Save geo-location with notes"
 msgstr "ノートに位置情報を保存"
 
+#, fuzzy
+msgid "When creating a new to-do:"
+msgstr "新しいToDoを作成します。"
+
+#, fuzzy
+msgid "Focus title"
+msgstr "ノートの題名："
+
+msgid "Focus body"
+msgstr ""
+
+#, fuzzy
+msgid "When creating a new note:"
+msgstr "あたらしいノートを作成します。"
+
 msgid "Set application zoom percentage"
 msgstr ""
 
@@ -1235,9 +1273,6 @@ msgstr "ようこそ"
 #~ msgstr ""
 #~ "同期先です。ローカルのファイルシステムと同期する場合は、`sync.2.path`を同"
 #~ "期先のディレクトリに設定してください。"
-
-#~ msgid "Note title:"
-#~ msgstr "ノートの題名："
 
 #~ msgid "To-do title:"
 #~ msgstr "ToDoの題名："

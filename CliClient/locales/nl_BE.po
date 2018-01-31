@@ -664,6 +664,9 @@ msgstr "Help"
 msgid "Website and documentation"
 msgstr "Website en documentatie"
 
+msgid "Check for updates..."
+msgstr ""
+
 msgid "About Joplin"
 msgstr "Over Joplin"
 
@@ -676,6 +679,26 @@ msgstr "OK"
 
 msgid "Cancel"
 msgstr "Annuleer"
+
+msgid "Error"
+msgstr ""
+
+msgid "An update is available, do you want to update now?"
+msgstr ""
+
+#, javascript-format
+msgid "Could not download the update: %s"
+msgstr ""
+
+msgid "Current version is up-to-date."
+msgstr ""
+
+msgid "New version downloaded - application will quit now and update..."
+msgstr ""
+
+#, javascript-format
+msgid "Could not install the update: %s"
+msgstr ""
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -1036,6 +1059,20 @@ msgstr "Toon onvoltooide to-do's aan de top van de lijsten"
 
 msgid "Save geo-location with notes"
 msgstr "Sla geo-locatie op bij notities"
+
+#, fuzzy
+msgid "When creating a new to-do:"
+msgstr "Maakt nieuwe to-do aan."
+
+msgid "Focus title"
+msgstr ""
+
+msgid "Focus body"
+msgstr ""
+
+#, fuzzy
+msgid "When creating a new note:"
+msgstr "Maakt een nieuwe notitie aan."
 
 msgid "Set application zoom percentage"
 msgstr ""
