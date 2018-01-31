@@ -28,7 +28,7 @@ class MdToHtml {
 			const r = resources[n];
 			k.push(r.id);
 		}
-		k.push(md5(body));
+		k.push(md5(escape(body))); // https://github.com/pvorb/node-md5/issues/41
 		k.push(md5(JSON.stringify(style)));
 		k.push(md5(JSON.stringify(options)));
 		return k.join('_');

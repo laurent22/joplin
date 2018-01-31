@@ -101,7 +101,7 @@ class Command extends BaseCommand {
 		this.releaseLockFn_ = null;
 
 		// Lock is unique per profile/database
-		const lockFilePath = osTmpdir() + '/synclock_' + md5(Setting.value('profileDir'));
+		const lockFilePath = osTmpdir() + '/synclock_' + md5(escape(Setting.value('profileDir'))); // https://github.com/pvorb/node-md5/issues/41
 		if (!await fs.pathExists(lockFilePath)) await fs.writeFile(lockFilePath, 'synclock');
 
 		try {
