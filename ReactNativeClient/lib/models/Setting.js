@@ -72,6 +72,7 @@ class Setting extends BaseModel {
 					'body': _('Focus body'),
 				};
 			}},
+			'showTrayIcon': { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Show tray icon') },
 			'encryption.enabled': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'encryption.activeMasterKeyId': { value: '', type: Setting.TYPE_STRING, public: false },
 			'encryption.passwordCache': { value: {}, type: Setting.TYPE_OBJECT, public: false },
