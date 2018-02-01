@@ -42,18 +42,34 @@ class WebDavApi {
 	}
 
 	async xmlToJson(xml) {
+		let davNamespaces = []; // Yes, there can be more than one... xmlns:a="DAV:" xmlns:D="DAV:"
 
 		const nameProcessor = (name) => {
-			// const idx = name.indexOf(':');
-			// if (idx >= 0) {
-			// 	if (name.indexOf('xmlns:') !== 0) name = name.substr(idx + 1);
-			// }
+			if (name.indexOf('xmlns:') !== 0) {
+				// Check if the current name is within the DAV namespace. If it is, normalise it
+				// by moving it to the "d:" namespace, which is what all the functions are using.
+				const p = name.split(':');
+				if (p.length == 2) {
+					const ns = p[0];
+					if (davNamespaces.indexOf(ns) >= 0) {
+						name = 'd:' + p[1];
+					}
+				}
+			}
 			return name.toLowerCase();
 		};
+
+		const attrValueProcessor = (value, name) => {
+			if (value.toLowerCase() === 'dav:') {
+				const p = name.split(':');
+				davNamespaces.push(p[p.length - 1]);
+			}
+		}
 
 		const options = {
 			tagNameProcessors: [nameProcessor],
 			attrNameProcessors: [nameProcessor],
+			attrValueProcessors: [attrValueProcessor]
 		}
 
 		return new Promise((resolve, reject) => {
@@ -81,6 +97,14 @@ class WebDavApi {
 		}
 
 		if (type === 'string') {
+			// If the XML has not attribute the value is directly a string
+			// If the XML node has attributes, the value is under "_".
+			// Eg for this XML, the string will be under {"_":"Thu, 01 Feb 2018 17:24:05 GMT"}:
+			// <a:getlastmodified b:dt="dateTime.rfc1123">Thu, 01 Feb 2018 17:24:05 GMT</a:getlastmodified>
+			// For this XML, the value will be "Thu, 01 Feb 2018 17:24:05 GMT"
+			// <a:getlastmodified>Thu, 01 Feb 2018 17:24:05 GMT</a:getlastmodified>
+
+			if (typeof output === 'object' && '_' in output) output = output['_'];
 			if (typeof output !== 'string') return null;
 			return output;
 		}
@@ -151,7 +175,7 @@ class WebDavApi {
 
 		if (authToken) headers['Authorization'] = 'Basic ' + authToken;
 
-		if (typeof body === 'string') headers['Content-length'] = body.length;
+		if (typeof body === 'string') headers['Content-Length'] = body.length;
 
 		const fetchOptions = {};
 		fetchOptions.headers = headers;
@@ -163,7 +187,7 @@ class WebDavApi {
 
 		let response = null;
 
-		// console.info('WebDAV', method + ' ' + path, headers, options);
+		// console.info('WebDAV', method + ' ' + url, headers, options);
 
 		if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
 			response = await shim.uploadBlob(url, fetchOptions);
@@ -202,7 +226,7 @@ class WebDavApi {
 				throw new JoplinError(method + ' ' + path + ': ' + message + ' (' + code + ')', response.status);
 			}
 
-			throw new JoplinError(shortResponseText(), response.status);
+			throw new JoplinError(method + ' ' + path + ': ' + shortResponseText(), response.status);
 		}
 		
 		if (options.responseFormat === 'text') return responseText;

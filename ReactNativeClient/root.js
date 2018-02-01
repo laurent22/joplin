@@ -52,9 +52,11 @@ const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
 const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
+const SyncTargetWebDAV = require('lib/SyncTargetWebDAV.js');
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
+SyncTargetRegistry.addClass(SyncTargetWebDAV);
 
 // Disabled because not fully working
 //SyncTargetRegistry.addClass(SyncTargetFilesystem);
