@@ -13,7 +13,7 @@ const globalStyle = {
 	fontSizeSmaller: 14,
 	dividerColor: "#dddddd",
 	selectedColor: '#e5e5e5',
-	disabledOpacity: 0.3,
+	disabledOpacity: 0.2,
 
 	raisedBackgroundColor: "#0080EF",
 	raisedColor: "#003363",

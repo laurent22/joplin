@@ -30,6 +30,10 @@ class BaseSyncTarget {
 		return false;
 	}
 
+	authRouteName() {
+		return null;
+	}
+
 	static id() {
 		throw new Error('id() not implemented');
 	}

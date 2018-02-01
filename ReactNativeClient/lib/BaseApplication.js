@@ -26,12 +26,14 @@ const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
+const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const EncryptionService = require('lib/services/EncryptionService');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
+SyncTargetRegistry.addClass(SyncTargetNextcloud);
 
 class BaseApplication {
 
@@ -277,6 +279,10 @@ class BaseApplication {
 					type: 'MASTERKEY_REMOVE_NOT_LOADED',
 					ids: loadedMasterKeyIds,
 				});
+
+				// Schedule a sync operation so that items that need to be encrypted
+				// are sent to sync target.
+				reg.scheduleSync();
 			}
 		}
 

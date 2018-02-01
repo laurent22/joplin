@@ -1,8 +1,5 @@
-const fs = require('fs-extra');
-const { promiseChain } = require('lib/promise-utils.js');
-const moment = require('moment');
-const BaseItem = require('lib/models/BaseItem.js');
 const { time } = require('lib/time-utils.js');
+const { basicDelta } = require('lib/file-api');
 
 // NOTE: when synchronising with the file system the time resolution is the second (unlike milliseconds for OneDrive for instance).
 // What it means is that if, for example, client 1 changes a note at time t, and client 2 changes the same note within the same second,
@@ -19,118 +16,73 @@ const { time } = require('lib/time-utils.js');
 
 class FileApiDriverLocal {
 
-	fsErrorToJsError_(error) {
+	fsErrorToJsError_(error, path = null) {
 		let msg = error.toString();
+		if (path !== null) msg += '. Path: ' + path;
 		let output = new Error(msg);
 		if (error.code) output.code = error.code;
 		return output;
 	}
 
-	stat(path) {
-		return new Promise((resolve, reject) => {
-			fs.stat(path, (error, s) => {
-				if (error) {
-					if (error.code == 'ENOENT') {
-						resolve(null);
-					} else {
-						reject(this.fsErrorToJsError_(error));
-					}
-					return;
-				}
-				resolve(this.metadataFromStats_(path, s));
-			});			
-		});
+	fsDriver() {
+		if (!FileApiDriverLocal.fsDriver_) throw new Error('FileApiDriverLocal.fsDriver_ not set!');
+		return FileApiDriverLocal.fsDriver_;
 	}
 
-	statTimeToTimestampMs_(time) {
-		let m = moment(time, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
-		if (!m.isValid()) {
-			throw new Error('Invalid date: ' + time);
+	async stat(path) {
+		try {
+			const s = await this.fsDriver().stat(path);
+			if (!s) return null;
+			return this.metadataFromStat_(s);
+		} catch (error) {
+			throw this.fsErrorToJsError_(error);
 		}
-		return m.toDate().getTime();
 	}
 
-	metadataFromStats_(path, stats) {
+	metadataFromStat_(stat) {
 		return {
-			path: path,
-			created_time: this.statTimeToTimestampMs_(stats.birthtime),
-			updated_time: this.statTimeToTimestampMs_(stats.mtime),
-			created_time_orig: stats.birthtime,
-			updated_time_orig: stats.mtime,
-			isDir: stats.isDirectory(),
+			path: stat.path,
+			created_time: stat.birthtime.getTime(),
+			updated_time: stat.mtime.getTime(),
+			isDir: stat.isDirectory(),
 		};
 	}
 
-	setTimestamp(path, timestampMs) {
-		return new Promise((resolve, reject) => {
-			let t = Math.floor(timestampMs / 1000);
-			fs.utimes(path, t, t, (error) => {
-				if (error) {
-					reject(this.fsErrorToJsError_(error));
-					return;
-				}
-				resolve();
-			});
-		});
+	metadataFromStats_(stats) {
+		let output = [];
+		for (let i = 0; i < stats.length; i++) {
+			const mdStat = this.metadataFromStat_(stats[i]);
+			output.push(mdStat);
+		}
+		return output;
+	}
+
+	async setTimestamp(path, timestampMs) {
+		try {
+			await this.fsDriver().setTimestamp(path, new Date(timestampMs));
+		} catch (error) {
+			throw this.fsErrorToJsError_(error);
+		}
 	}
 
 	async delta(path, options) {
-		const itemIds = await options.allItemIdsHandler();
+		const getStatFn = async (path) => {
+			const stats = await this.fsDriver().readDirStats(path);
+			return this.metadataFromStats_(stats);
+		};
 
 		try {
-			let items = await fs.readdir(path);
-			let output = [];
-			for (let i = 0; i < items.length; i++) {
-				let stat = await this.stat(path + '/' + items[i]);
-				if (!stat) continue; // Has been deleted between the readdir() call and now
-				stat.path = items[i];
-				output.push(stat);
-			}
-
-			if (!Array.isArray(itemIds)) throw new Error('Delta API not supported - local IDs must be provided');
-
-			let deletedItems = [];
-			for (let i = 0; i < itemIds.length; i++) {
-				const itemId = itemIds[i];
-				let found = false;
-				for (let j = 0; j < output.length; j++) {
-					const item = output[j];
-					if (BaseItem.pathToId(item.path) == itemId) {
-						found = true;
-						break;
-					}
-				}
-
-				if (!found) {
-					deletedItems.push({
-						path: BaseItem.systemPath(itemId),
-						isDeleted: true,
-					});
-				}
-			}
-
-			output = output.concat(deletedItems);
-
-			return {
-				hasMore: false,
-				context: null,
-				items: output,
-			};
+			const output = await basicDelta(path, getStatFn, options);
+			return output;
 		} catch(error) {
-			throw this.fsErrorToJsError_(error);
+			throw this.fsErrorToJsError_(error, path);
 		}
 	}
 
 	async list(path, options) {
 		try {
-			let items = await fs.readdir(path);
-			let output = [];
-			for (let i = 0; i < items.length; i++) {
-				let stat = await this.stat(path + '/' + items[i]);
-				if (!stat) continue; // Has been deleted between the readdir() call and now
-				stat.path = items[i];
-				output.push(stat);
-			}
+			const stats = await this.fsDriver().readDirStats(path);
+			const output = this.metadataFromStats_(stats);
 
 			return {
 				items: output,
@@ -138,7 +90,7 @@ class FileApiDriverLocal {
 				context: null,
 			};
 		} catch(error) {
-			throw this.fsErrorToJsError_(error);
+			throw this.fsErrorToJsError_(error, path);
 		}
 	}
 
@@ -147,94 +99,134 @@ class FileApiDriverLocal {
 
 		try {
 			if (options.target === 'file') {
-				output = await fs.copy(path, options.path, { overwrite: true });
+				//output = await fs.copy(path, options.path, { overwrite: true });
+				output = await this.fsDriver().copy(path, options.path);
 			} else {
-				output = await fs.readFile(path, options.encoding);
+				//output = await fs.readFile(path, options.encoding);
+				output = await this.fsDriver().readFile(path, options.encoding);
 			}
 		} catch (error) {
 			if (error.code == 'ENOENT') return null;
-			throw this.fsErrorToJsError_(error);
+			throw this.fsErrorToJsError_(error, path);
 		}
 
 		return output;
 	}
 
-	mkdir(path) {
-		return new Promise((resolve, reject) => {
-			fs.exists(path, (exists) => {
-				if (exists) {
-					resolve();
-					return;
-				}
+	async mkdir(path) {
+		if (await this.fsDriver().exists(path)) return;
+
+		try {
+			await this.fsDriver().mkdir(path);
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
+		}
+
+		// return new Promise((resolve, reject) => {
+		// 	fs.exists(path, (exists) => {
+		// 		if (exists) {
+		// 			resolve();
+		// 			return;
+		// 		}
 			
-				fs.mkdirp(path, (error) => {
-					if (error) {
-						reject(this.fsErrorToJsError_(error));
-					} else {
-						resolve();
-					}
-				});
-			});
-		});
+		// 		fs.mkdirp(path, (error) => {
+		// 			if (error) {
+		// 				reject(this.fsErrorToJsError_(error));
+		// 			} else {
+		// 				resolve();
+		// 			}
+		// 		});
+		// 	});
+		// });
 	}
 
 	async put(path, content, options = null) {
 		if (!options) options = {};
 
-		if (options.source === 'file') content = await fs.readFile(options.path);
+		try {
+			if (options.source === 'file') {
+				await this.fsDriver().copy(options.path, path);
+				return;
+			}
+		
+			await this.fsDriver().writeFile(path, content, 'utf8');
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
+		}
 
-		return new Promise((resolve, reject) => {
-			fs.writeFile(path, content, function(error) {
-				if (error) {
-					reject(this.fsErrorToJsError_(error));
-				} else {
-					resolve();
-				}
-			});
-		});
+		// if (!options) options = {};
+
+		// if (options.source === 'file') content = await fs.readFile(options.path);
+
+		// return new Promise((resolve, reject) => {
+		// 	fs.writeFile(path, content, function(error) {
+		// 		if (error) {
+		// 			reject(this.fsErrorToJsError_(error));
+		// 		} else {
+		// 			resolve();
+		// 		}
+		// 	});
+		// });
 	}
 
-	delete(path) {
-		return new Promise((resolve, reject) => {
-			fs.unlink(path, function(error) {
-				if (error) {
-					if (error && error.code == 'ENOENT') {
-						// File doesn't exist - it's fine
-						resolve();
-					} else {
-						reject(this.fsErrorToJsError_(error));
-					}
-				} else {
-					resolve();
-				}
-			});
-		});
+	async delete(path) {
+		try {
+			await this.fsDriver().unlink(path);
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
+		}
+
+		// return new Promise((resolve, reject) => {
+		// 	fs.unlink(path, function(error) {
+		// 		if (error) {
+		// 			if (error && error.code == 'ENOENT') {
+		// 				// File doesn't exist - it's fine
+		// 				resolve();
+		// 			} else {
+		// 				reject(this.fsErrorToJsError_(error));
+		// 			}
+		// 		} else {
+		// 			resolve();
+		// 		}
+		// 	});
+		// });
 	}
 
 	async move(oldPath, newPath) {
-		let lastError = null;
-		
-		for (let i = 0; i < 5; i++) {
-			try {
-				let output = await fs.move(oldPath, newPath, { overwrite: true });
-				return output;
-			} catch (error) {
-				lastError = error;
-				// Normally cannot happen with the `overwrite` flag but sometime it still does.
-				// In this case, retry.
-				if (error.code == 'EEXIST') {
-					await time.sleep(1);
-					continue;
-				}
-				throw this.fsErrorToJsError_(error);
-			}
+		try {
+			await this.fsDriver().move(oldPath, newPath);
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
 		}
 
-		throw lastError;
+		// let lastError = null;
+		
+		// for (let i = 0; i < 5; i++) {
+		// 	try {
+		// 		let output = await fs.move(oldPath, newPath, { overwrite: true });
+		// 		return output;
+		// 	} catch (error) {
+		// 		lastError = error;
+		// 		// Normally cannot happen with the `overwrite` flag but sometime it still does.
+		// 		// In this case, retry.
+		// 		if (error.code == 'EEXIST') {
+		// 			await time.sleep(1);
+		// 			continue;
+		// 		}
+		// 		throw this.fsErrorToJsError_(error);
+		// 	}
+		// }
+
+		// throw lastError;
 	}
 
 	format() {
 		throw new Error('Not supported');
+	}
+
+	async clearRoot(baseDir) {
+		await this.fsDriver().remove(baseDir);
+		await this.fsDriver().mkdir(baseDir);
 	}
 
 }

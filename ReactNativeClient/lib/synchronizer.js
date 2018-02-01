@@ -10,7 +10,7 @@ const { time } = require('lib/time-utils.js');
 const { Logger } = require('lib/logger.js');
 const { _ } = require('lib/locale.js');
 const { shim } = require('lib/shim.js');
-const moment = require('moment');
+const JoplinError = require('lib/JoplinError');
 
 class Synchronizer {
 
@@ -27,7 +27,7 @@ class Synchronizer {
 
 		// Debug flags are used to test certain hard-to-test conditions
 		// such as cancelling in the middle of a loop.
-		this.debugFlags_ = [];
+		this.testingHooks_ = [];
 
 		this.onProgress_ = function(s) {};
 		this.progressReport_ = {};
@@ -71,6 +71,7 @@ class Synchronizer {
 		if (report.updateRemote) lines.push(_('Updated remote items: %d.', report.updateRemote));
 		if (report.deleteLocal) lines.push(_('Deleted local items: %d.', report.deleteLocal));
 		if (report.deleteRemote) lines.push(_('Deleted remote items: %d.', report.deleteRemote));
+		if (report.fetchingTotal && report.fetchingProcessed) lines.push(_('Fetched items: %d/%d.', report.fetchingProcessed, report.fetchingTotal));
 		if (!report.completedTime && report.state) lines.push(_('State: "%s".', report.state));
 		if (report.cancelling && !report.completedTime) lines.push(_('Cancelling...'));
 		if (report.completedTime) lines.push(_('Completed: %s', time.unixMsToLocalDateTime(report.completedTime)));
@@ -78,7 +79,7 @@ class Synchronizer {
 		return lines;
 	}
 
-	logSyncOperation(action, local = null, remote = null, message = null) {
+	logSyncOperation(action, local = null, remote = null, message = null, actionCount = 1) {
 		let line = ['Sync'];
 		line.push(action);
 		if (message) line.push(message);
@@ -91,21 +92,19 @@ class Synchronizer {
 		if (local) {
 			let s = [];
 			s.push(local.id);
-			if ('title' in local) s.push('"' + local.title + '"');
 			line.push('(Local ' + s.join(', ') + ')');
 		}
 
 		if (remote) {
 			let s = [];
 			s.push(remote.id ? remote.id : remote.path);
-			if ('title' in remote) s.push('"' + remote.title + '"');
 			line.push('(Remote ' + s.join(', ') + ')');
 		}
 
 		this.logger().debug(line.join(': '));
 
 		if (!this.progressReport_[action]) this.progressReport_[action] = 0;
-		this.progressReport_[action]++;
+		this.progressReport_[action] += actionCount;
 		this.progressReport_.state = this.state();
 		this.onProgress_(this.progressReport_);
 
@@ -166,7 +165,6 @@ class Synchronizer {
 			let error = new Error(_('Synchronisation is already in progress. State: %s', this.state()));
 			error.code = 'alreadyStarted';
 			throw error;
-			return;
 		}
 
 		this.state_ = 'in_progress';
@@ -198,6 +196,7 @@ class Synchronizer {
 
 		try {
 			await this.api().mkdir(this.syncDirName_);
+			this.api().setTempDirName(this.syncDirName_);
 			await this.api().mkdir(this.resourceDirName_);
 
 			let donePaths = [];
@@ -281,7 +280,7 @@ class Synchronizer {
 							const localResourceContentPath = result.path;
 							await this.api().put(remoteContentPath, null, { path: localResourceContentPath, source: 'file' });
 						} catch (error) {
-							if (error && error.code === 'rejectedByTarget') {
+							if (error && ['rejectedByTarget', 'fileNotFound'].indexOf(error.code) >= 0) {
 								await handleCannotSyncItem(syncTargetId, local, error.message);
 								action = null;
 							} else {
@@ -291,25 +290,9 @@ class Synchronizer {
 					}
 
 					if (action == 'createRemote' || action == 'updateRemote') {
-
-						// Make the operation atomic by doing the work on a copy of the file
-						// and then copying it back to the original location.
-						// let tempPath = this.syncDirName_ + '/' + path + '_' + time.unixMs();
-						//
-						// Atomic operation is disabled for now because it's not possible
-						// to do an atomic move with OneDrive (see file-api-driver-onedrive.js)
-						
-						// await this.api().put(tempPath, content);
-						// await this.api().setTimestamp(tempPath, local.updated_time);
-						// await this.api().move(tempPath, path);
-
 						let canSync = true;
 						try {
-							if (this.debugFlags_.indexOf('rejectedByTarget') >= 0) {
-								const error = new Error('Testing rejectedByTarget');
-								error.code = 'rejectedByTarget';
-								throw error;
-							}
+							if (this.testingHooks_.indexOf('rejectedByTarget') >= 0) throw new JoplinError('Testing rejectedByTarget', 'rejectedByTarget');
 							const content = await ItemClass.serializeForSync(local);
 							await this.api().put(path, content);
 						} catch (error) {
@@ -321,9 +304,28 @@ class Synchronizer {
 							}
 						}
 
+						// Note: Currently, we set sync_time to update_time, which should work fine given that the resolution is the millisecond.
+						// In theory though, this could happen:
+						//
+						// 1. t0: Editor: Note is modified
+						// 2. t0: Sync: Found that note was modified so start uploading it
+						// 3. t0: Editor: Note is modified again
+						// 4. t1: Sync: Note has finished uploading, set sync_time to t0
+						//
+						// Later any attempt to sync will not detect that note was modified in (3) (within the same millisecond as it was being uploaded)
+						// because sync_time will be t0 too.
+						//
+						// The solution would be to use something like an etag (a simple counter incremented on every change) to make sure each
+						// change is uniquely identified. Leaving it like this for now.
+
 						if (canSync) {
-							await this.api().setTimestamp(path, local.updated_time);
-							await ItemClass.saveSyncTime(syncTargetId, local, time.unixMs());
+							// 2018-01-21: Setting timestamp is not needed because the delta() logic doesn't rely
+							// on it (instead it uses a more reliable `context` object) and the itemsThatNeedSync loop
+							// above also doesn't use it because it fetches the whole remote object and read the
+							// more reliable 'updated_time' property. Basically remote.updated_time is deprecated.
+
+							// await this.api().setTimestamp(path, local.updated_time);
+							await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time);
 						}
 
 					} else if (action == 'itemConflict') {
@@ -433,11 +435,16 @@ class Synchronizer {
 				});
 
 				let remotes = listResult.items;
+
+				this.logSyncOperation('fetchingTotal', null, null, 'Fetching delta items from sync target', remotes.length);
+
 				for (let i = 0; i < remotes.length; i++) {
-					if (this.cancelling() || this.debugFlags_.indexOf('cancelDeltaLoop2') >= 0) {
+					if (this.cancelling() || this.testingHooks_.indexOf('cancelDeltaLoop2') >= 0) {
 						hasCancelled = true;
 						break;
 					}
+
+					this.logSyncOperation('fetchingProcessed', null, null, 'Processing fetched item');
 
 					let remote = remotes[i];
 					if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
@@ -483,7 +490,7 @@ class Synchronizer {
 					if (action == 'createLocal' || action == 'updateLocal') {
 
 						if (content === null) {
-							this.logger().warn('Remote has been deleted between now and the list() call? In that case it will be handled during the next sync: ' + path);
+							this.logger().warn('Remote has been deleted between now and the delta() call? In that case it will be handled during the next sync: ' + path);
 							continue;
 						}
 						content = ItemClass.filter(content);
@@ -566,7 +573,7 @@ class Synchronizer {
 					if (noteIds.length) { // CONFLICT
 						await Folder.markNotesAsConflict(item.id);
 					}
-					await Folder.delete(item.id, { deleteChildren: false });
+					await Folder.delete(item.id, { deleteChildren: false, trackDeleted: false });
 				}
 			}
 

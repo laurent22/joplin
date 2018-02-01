@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { Platform, Keyboard, BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking, Image } = require('react-native');
+const { Platform, Keyboard, BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking, Image, KeyboardAvoidingView } = require('react-native');
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
 const { Log } = require('lib/log.js');
@@ -34,7 +34,7 @@ const AlarmService = require('lib/services/AlarmService.js');
 const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog.js');
 
 class NoteScreenComponent extends BaseScreenComponent {
-	
+
 	static navigationOptions(options) {
 		return { header: null };
 	}
@@ -51,11 +51,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 			isLoading: true,
 			titleTextInputHeight: 20,
 			alarmDialogShown: false,
+			heightBumpView:0
 		};
 
 		// iOS doesn't support multiline text fields properly so disable it
 		this.enableMultilineTitle_ = Platform.OS !== 'ios';
-		
+
 		this.saveButtonHasBeenShown_ = false;
 
 		this.styles_ = {};
@@ -148,6 +149,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 		await shared.initState(this);
 
 		this.refreshNoteMetadata();
+
+		if (Platform.OS === 'ios') {
+			this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
+			this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
+		}
+
 	}
 
 	refreshNoteMetadata(force = null) {
@@ -156,6 +163,19 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	componentWillUnmount() {
 		BackButtonService.removeHandler(this.backHandler);
+
+		if (Platform.OS === 'ios'){
+			this.keyboardDidShowListener.remove();
+			this.keyboardDidHideListener.remove();
+		}
+	}
+
+	_keyboardDidShow () {
+		this.setState({ heightBumpView:30 })
+	}
+
+	_keyboardDidHide () {
+		this.setState({ heightBumpView:0 })
 	}
 
 	title_changeText(text) {
@@ -241,13 +261,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const format = mimeType == 'image/png' ? 'PNG' : 'JPEG';
 		reg.logger().info('Resizing image ' + localFilePath);
 		const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85); //, 0, targetPath);
-		
+
 		const resizedImagePath = resizedImage.uri;
 		reg.logger().info('Resized image ', resizedImagePath);
 		reg.logger().info('Moving ' + resizedImagePath + ' => ' + targetPath);
-		
+
 		await RNFS.copyFile(resizedImagePath, targetPath);
-		
+
 		try {
 			await RNFS.unlink(resizedImagePath);
 		} catch (error) {
@@ -522,7 +542,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		);
 
 		return (
-			<View style={this.rootStyle(this.props.theme).root}>
+			<KeyboardAvoidingView  behavior= {(Platform.OS === 'ios')? "padding" : null} style={this.rootStyle(this.props.theme).root}>
 				<ScreenHeader
 					folderPickerOptions={{
 						enabled: true,
@@ -558,7 +578,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 				/>
 
 				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
-			</View>
+				<View style={{ height: this.state.heightBumpView }} />
+			</KeyboardAvoidingView>
 		);
 	}
 

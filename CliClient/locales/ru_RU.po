@@ -211,6 +211,10 @@ msgstr "Запуск редактирования заметки. Закройт
 msgid "Error opening note in editor: %s"
 msgstr "Ошибка при открытии заметки в редакторе: %s"
 
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr ""
+
 msgid "Note has been saved."
 msgstr "Заметка сохранена."
 
@@ -400,6 +404,14 @@ msgstr "Аутентификация не была завершена (не по
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr "Не аутентифицировано с %s. Пожалуйста, предоставьте все недостающие данные."
 
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "Аутентификация не была завершена (не получен токен аутентификации)."
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+
 msgid "Synchronisation is already in progress."
 msgstr "Синхронизация уже выполняется."
 
@@ -491,6 +503,13 @@ msgstr ""
 
 msgid "One or more items are currently encrypted and you may need to supply a master password. To do so please type `e2ee decrypt`. If you have already supplied the password, the encrypted items are being decrypted in the background and will be available soon."
 msgstr "Один или несколько элементов сейчас зашифрованы и может потребоваться, чтобы вы предоставили мастер-пароль. Для этого введите, пожалуйста, «e2ee decrypt». Если пароль уже был вами предоставлен, зашифрованные элементы расшифруются в фоновом режиме и вскоре станут доступны."
+
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
 
 msgid "File"
 msgstr "Файл"
@@ -822,6 +841,10 @@ msgstr "Удалено локальных элементов: %d."
 msgid "Deleted remote items: %d."
 msgstr "Удалено удалённых элементов: %d."
 
+#, fuzzy, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Создано локальных элементов: %d."
+
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Получено элементов: %d/%d."
@@ -959,6 +982,16 @@ msgstr "Имя пользователя Nexcloud"
 msgid "Nexcloud password"
 msgstr "Пароль Nexcloud"
 
+msgid "Nexcloud WebDAV URL"
+msgstr ""
+
+msgid "Nexcloud username"
+msgstr ""
+
+#, fuzzy
+msgid "Nexcloud password"
+msgstr "Установить пароль"
+
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Неверное значение параметра: «%s». Доступные значения: %s."
@@ -1042,6 +1075,25 @@ msgstr "Подтвердить"
 
 msgid "Cancel synchronisation"
 msgstr "Отменить синхронизацию"
+
+#, fuzzy, javascript-format
+msgid "Master Key %s"
+msgstr "Мастер-ключи"
+
+#, fuzzy, javascript-format
+msgid "Created: %s"
+msgstr "Создано: %d."
+
+#, fuzzy
+msgid "Password:"
+msgstr "Пароль"
+
+msgid "Password cannot be empty"
+msgstr ""
+
+#, fuzzy
+msgid "Enable"
+msgstr "Включено"
 
 #, javascript-format
 msgid "Master Key %s"

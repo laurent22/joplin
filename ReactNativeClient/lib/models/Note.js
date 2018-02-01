@@ -69,8 +69,6 @@ class Note extends BaseItem {
 	}
 
 	static defaultTitle(note) {
-		if (note.title && note.title.length) return note.title;
-
 		if (note.body && note.body.length) {
 			const lines = note.body.trim().split("\n");
 			return lines[0].trim().substr(0, 80).trim();

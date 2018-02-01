@@ -44,13 +44,20 @@ const { _, setLocale, closestSupportedLocale, defaultLocale } = require('lib/loc
 const RNFetchBlob = require('react-native-fetch-blob').default;
 const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const { reducer, defaultState } = require('lib/reducer.js');
+const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const DropdownAlert = require('react-native-dropdownalert').default;
 
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
+const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
+const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
+SyncTargetRegistry.addClass(SyncTargetNextcloud);
+
+// Disabled because not fully working
+//SyncTargetRegistry.addClass(SyncTargetFilesystem);
 
 const FsDriverRN = require('lib/fs-driver-rn.js').FsDriverRN;
 const DecryptionWorker = require('lib/services/DecryptionWorker');
@@ -59,7 +66,7 @@ const EncryptionService = require('lib/services/EncryptionService');
 let storeDispatch = function(action) {};
 
 const generalMiddleware = store => next => async (action) => {
-	if (action.type !== 'SIDE_MENU_OPEN_PERCENT') reg.logger().info('Reducer action', action.type);
+	if (['SIDE_MENU_OPEN_PERCENT', 'SYNC_REPORT_UPDATE'].indexOf(action.type) < 0) reg.logger().info('Reducer action', action.type);
 	PoorManIntervals.update(); // This function needs to be called regularly so put it here
 
 	const result = next(action);
@@ -97,6 +104,10 @@ const generalMiddleware = store => next => async (action) => {
 			type: 'MASTERKEY_REMOVE_NOT_LOADED',
 			ids: loadedMasterKeyIds,
 		});
+
+		// Schedule a sync operation so that items that need to be encrypted
+		// are sent to sync target.
+		reg.scheduleSync();
 	}
 
 	if (action.type == 'NAV_GO' && action.routeName == 'Notes') {
@@ -337,6 +348,7 @@ async function initialize(dispatch) {
 	const fsDriver = new FsDriverRN();
 
 	Resource.fsDriver_ = fsDriver;
+	FileApiDriverLocal.fsDriver_ = fsDriver;
 
 	AlarmService.setDriver(new AlarmServiceDriver());
 	AlarmService.setLogger(mainLogger);

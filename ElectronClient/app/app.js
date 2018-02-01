@@ -49,6 +49,10 @@ class Application extends BaseApplication {
 		return true;
 	}
 
+	checkForUpdateLoggerPath() {
+		return Setting.value('profileDir') + '/log-autoupdater.txt';
+	}
+
 	reducer(state = appDefaultState, action) {
 		let newState = state;
 
@@ -295,6 +299,11 @@ class Application extends BaseApplication {
 					accelerator: 'F1',
 					click () { bridge().openExternal('http://joplin.cozic.net') }
 				}, {
+					label: _('Check for updates...'),
+					click: () => {
+						bridge().checkForUpdates(false, this.checkForUpdateLoggerPath());
+					}
+				}, {
 					label: _('About Joplin'),
 					click: () => {
 						const p = packageInfo;
@@ -385,9 +394,9 @@ class Application extends BaseApplication {
 		// Note: Auto-update currently doesn't work in Linux: it downloads the update
 		// but then doesn't install it on exit.
 		if (shim.isWindows() || shim.isMac()) {
-			const runAutoUpdateCheck = function() {
+			const runAutoUpdateCheck = () => {
 				if (Setting.value('autoUpdateEnabled')) {
-					bridge().checkForUpdatesAndNotify(Setting.value('profileDir') + '/log-autoupdater.txt');
+					bridge().checkForUpdates(true, this.checkForUpdateLoggerPath());
 				}
 			}
 			

@@ -9,13 +9,13 @@ const { FileApiDriverOneDrive } = require('lib/file-api-driver-onedrive.js');
 
 class SyncTargetOneDrive extends BaseSyncTarget {
 
+	static id() {
+		return 3;
+	}
+
 	constructor(db, options = null) {
 		super(db, options);
 		this.api_ = null;
-	}
-
-	static id() {
-		return 3;
 	}
 
 	static targetName() {
@@ -36,6 +36,10 @@ class SyncTargetOneDrive extends BaseSyncTarget {
 
 	oneDriveParameters() {
 		return parameters().oneDrive;
+	}
+
+	authRouteName() {
+		return 'OneDriveLogin';
 	}
 
 	api() {

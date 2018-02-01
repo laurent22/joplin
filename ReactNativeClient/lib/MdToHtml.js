@@ -28,7 +28,7 @@ class MdToHtml {
 			const r = resources[n];
 			k.push(r.id);
 		}
-		k.push(md5(body));
+		k.push(md5(escape(body))); // https://github.com/pvorb/node-md5/issues/41
 		k.push(md5(JSON.stringify(style)));
 		k.push(md5(JSON.stringify(options)));
 		return k.join('_');
@@ -73,7 +73,7 @@ class MdToHtml {
 
 	renderImage_(attrs, options) {
 		const loadResource = async (id) => {
-			console.info('Loading resource: ' + id);
+			// console.info('Loading resource: ' + id);
 
 			// Initially set to to an empty object to make
 			// it clear that it is being loaded. Otherwise
@@ -125,9 +125,9 @@ class MdToHtml {
 
 	renderOpenLink_(attrs, options) {
 		let href = this.getAttr_(attrs, 'href');
-		const title = this.getAttr_(attrs, 'title');
 		const text = this.getAttr_(attrs, 'text');
 		const isResourceUrl = Resource.isResourceUrl(href);
+		const title = isResourceUrl ? this.getAttr_(attrs, 'title') : href;
 
 		if (isResourceUrl && !this.supportsResourceLinks_) {
 			// In mobile, links to local resources, such as PDF, etc. currently aren't supported.
@@ -305,13 +305,15 @@ class MdToHtml {
 			b,strong{font-weight:bolder}small{font-size:80%}img{border-style:none}
 		`;
 
+		const fontFamily = 'sans-serif';
+
 		const css = `
 			body {
 				font-size: ` + style.htmlFontSize + `;
 				color: ` + style.htmlColor + `;
 				line-height: ` + style.htmlLineHeight + `;
 				background-color: ` + style.htmlBackgroundColor + `;
-				font-family: sans-serif;
+				font-family: ` + fontFamily + `;
 				padding-bottom: ` + options.paddingBottom + `;
 			}
 			p, h1, h2, h3, h4, h5, h6, ul, table {
@@ -359,6 +361,10 @@ class MdToHtml {
 			td, th {
 				border: 1px solid silver;
 				padding: .5em 1em .5em 1em;
+				font-size: ` + style.htmlFontSize + `;
+				color: ` + style.htmlColor + `;
+				background-color: ` + style.htmlBackgroundColor + `;
+				font-family: ` + fontFamily + `;
 			}
 			hr {
 				border: none;

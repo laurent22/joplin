@@ -1,38 +1,135 @@
 const fs = require('fs-extra');
+const { time } = require('lib/time-utils.js');
 
 class FsDriverNode {
+
+	fsErrorToJsError_(error, path = null) {
+		let msg = error.toString();
+		if (path !== null) msg += '. Path: ' + path;
+		let output = new Error(msg);
+		if (error.code) output.code = error.code;
+		return output;
+	}
 
 	appendFileSync(path, string) {
 		return fs.appendFileSync(path, string);
 	}
 
-	appendFile(path, string, encoding = 'base64') {
-		return fs.appendFile(path, string, { encoding: encoding });
+	async appendFile(path, string, encoding = 'base64') {
+		try {
+			return await fs.appendFile(path, string, { encoding: encoding });
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
+		}
 	}
 
-	writeBinaryFile(path, content) {
-		let buffer = new Buffer(content);
-		return fs.writeFile(path, buffer);
+	async writeBinaryFile(path, content) {
+		try {
+			let buffer = new Buffer(content);
+			return await fs.writeFile(path, buffer);
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
+		}
 	}
 
-	move(source, dest) {
-		return fs.move(source, dest, { overwrite: true });
+	async writeFile(path, string, encoding = 'base64') {
+		try {
+			return await fs.writeFile(path, string, { encoding: encoding });
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
+		}
+	}
+
+	// same as rm -rf
+	async remove(path) {
+		try {
+			return await fs.remove(path);
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
+		}
+	}
+
+	async move(source, dest) {
+		let lastError = null;
+
+		for (let i = 0; i < 5; i++) {
+			try {
+				const output = await fs.move(source, dest, { overwrite: true });
+				return output;
+			} catch (error) {
+				lastError = error;
+				// Normally cannot happen with the `overwrite` flag but sometime it still does.
+				// In this case, retry.
+				if (error.code == 'EEXIST') {
+					await time.sleep(1);
+					continue;
+				}
+				throw this.fsErrorToJsError_(error);
+			}
+		}
+
+		throw lastError;
 	}
 
 	exists(path) {
 		return fs.pathExists(path);
 	}
 
-	open(path, mode) {
-		return fs.open(path, mode);
+	async mkdir(path) {
+		return fs.mkdirp(path);
 	}
 
-	close(handle) {
-		return fs.close(handle);
+	async stat(path) {
+		try {
+			const s = await fs.stat(path);
+			s.path = path;
+			return s;
+		} catch (error) {
+			if (error.code == 'ENOENT') return null;
+			throw error;
+		}
 	}
 
-	readFile(path) {
-		return fs.readFile(path);
+	async setTimestamp(path, timestampDate) {
+		return fs.utimes(path, timestampDate, timestampDate);
+	}
+
+	async readDirStats(path) {
+		let items = await fs.readdir(path);
+		let output = [];
+		for (let i = 0; i < items.length; i++) {
+			let stat = await this.stat(path + '/' + items[i]);
+			if (!stat) continue; // Has been deleted between the readdir() call and now
+			stat.path = stat.path.substr(path.length + 1);
+			output.push(stat);
+		}
+		return output;
+	}
+
+	async open(path, mode) {
+		try {
+			return await fs.open(path, mode);
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
+		}
+	}
+
+	async close(handle) {
+		try {
+			return await fs.close(handle);
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
+		}
+	}
+
+	readFile(path, encoding = 'utf8') {
+		if (encoding === 'Buffer') return fs.readFile(path); // Returns the raw buffer
+		return fs.readFile(path, encoding);
+	}
+
+	// Always overwrite destination
+	async copy(source, dest) {
+		return fs.copy(source, dest, { overwrite: true });
 	}
 
 	async unlink(path) {

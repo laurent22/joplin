@@ -60,9 +60,23 @@ class Setting extends BaseModel {
 			// })},
 			'uncompletedTodosOnTop': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Show uncompleted todos on top of the lists') },
 			'trackLocation': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Save geo-location with notes') },
+			'newTodoFocus': { value: 'title', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('When creating a new to-do:'), options: () => {
+				return {
+					'title': _('Focus title'),
+					'body': _('Focus body'),
+				};
+			}},
+			'newNoteFocus': { value: 'body', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('When creating a new note:'), options: () => {
+				return {
+					'title': _('Focus title'),
+					'body': _('Focus body'),
+				};
+			}},
 			'encryption.enabled': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'encryption.activeMasterKeyId': { value: '', type: Setting.TYPE_STRING, public: false },
 			'encryption.passwordCache': { value: {}, type: Setting.TYPE_OBJECT, public: false },
+			'style.zoom': {value: "100", type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], label: () => _('Set application zoom percentage'), minimum: "50", maximum: "500", step: "10"},
+			'autoUpdateEnabled': { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
 			'sync.interval': { value: 300, type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation interval'), options: () => {
 				return {
 					0: _('Disabled'),
@@ -75,12 +89,22 @@ class Setting extends BaseModel {
 				};
 			}},
 			'noteVisiblePanes': { value: ['editor', 'viewer'], type: Setting.TYPE_ARRAY, public: false, appTypes: ['desktop'] },
-			'autoUpdateEnabled': { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
 			'showAdvancedOptions': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile' ], label: () => _('Show advanced options') },
-			'sync.target': { value: SyncTargetRegistry.nameToId('onedrive'), type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation target'), description: () => _('The target to synchonise to. If synchronising with the file system, set `sync.2.path` to specify the target directory.'), options: () => {
+			'sync.target': { value: SyncTargetRegistry.nameToId('onedrive'), type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation target'), description: () => _('The target to synchonise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).'), options: () => {
 				return SyncTargetRegistry.idAndLabelPlainObject();
 			}},
-			'sync.2.path': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('filesystem') }, public: true, label: () => _('Directory to synchronise with (absolute path)'), description: () => _('The path to synchronise with when file system synchronisation is enabled. See `sync.target`.') },
+
+			'sync.2.path': { value: '', type: Setting.TYPE_STRING, show: (settings) => {
+				try {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('filesystem')
+				} catch (error) {
+					return false;
+				}
+			}, public: true, label: () => _('Directory to synchronise with (absolute path)'), description: () => _('The path to synchronise with when file system synchronisation is enabled. See `sync.target`.') },
+
+			'sync.5.path': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nexcloud WebDAV URL') },
+			'sync.5.username': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nexcloud username') },
+			'sync.5.password': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nexcloud password'), secure: true },
 			'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },
@@ -192,7 +216,8 @@ class Setting extends BaseModel {
 
 				if (c.value === value) return;
 
-				this.logger().info('Setting: ' + key + ' = ' + c.value + ' => ' + value);
+				// Don't log this to prevent sensitive info (passwords, auth tokens...) to end up in logs
+				// this.logger().info('Setting: ' + key + ' = ' + c.value + ' => ' + value);
 
 				c.value = value;
 
@@ -242,13 +267,15 @@ class Setting extends BaseModel {
 		if (md.type == Setting.TYPE_BOOL) return value ? '1' : '0';
 		if (md.type == Setting.TYPE_ARRAY) return value ? JSON.stringify(value) : '[]';
 		if (md.type == Setting.TYPE_OBJECT) return value ? JSON.stringify(value) : '{}';
-		return value;
+		if (md.type == Setting.TYPE_STRING) return value ? value + '' : '';
+
+		throw new Error('Unhandled value type: ' + md.type);	
 	}
 
 	static formatValue(key, value) {
 		const md = this.settingMetadata(key);
 
-		if (md.type == Setting.TYPE_INT) return Math.floor(Number(value));
+		if (md.type == Setting.TYPE_INT) return !value ? 0 : Math.floor(Number(value));
 
 		if (md.type == Setting.TYPE_BOOL) {
 			if (typeof value === 'string') {
@@ -274,7 +301,12 @@ class Setting extends BaseModel {
 			return {};
 		}
 
-		return value;
+		if (md.type === Setting.TYPE_STRING) {
+			if (!value) return '';
+			return value + '';
+		}
+
+		throw new Error('Unhandled value type: ' + md.type);
 	}
 
 	static value(key) {
@@ -283,6 +315,7 @@ class Setting extends BaseModel {
 		// and object and change a key, the objects will be detected as equal. By returning a copy
 		// we avoid this problem.
 		function copyIfNeeded(value) {
+			if (value === null || value === undefined) return value;
 			if (Array.isArray(value)) return value.slice();
 			if (typeof value === 'object') return Object.assign({}, value);
 			return value;

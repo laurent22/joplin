@@ -54,7 +54,16 @@ class NoteListComponent extends React.Component {
 	}
 
 	itemContextMenu(event) {
-		const noteIds = this.props.selectedNoteIds;
+		const currentItemId = event.currentTarget.getAttribute('data-id');
+		if (!currentItemId) return;
+
+		let noteIds = [];
+		if (this.props.selectedNoteIds.indexOf(currentItemId) < 0) {
+			noteIds = [currentItemId];
+		} else {
+			noteIds = this.props.selectedNoteIds;
+		}
+
 		if (!noteIds.length) return;
 
 		const notes = noteIds.map((id) => BaseModel.byId(this.props.notes, id));
@@ -137,7 +146,10 @@ class NoteListComponent extends React.Component {
 		const hPadding = 10;
 
 		let style = Object.assign({ width: width }, this.style().listItem);
-		if (this.props.selectedNoteIds.indexOf(item.id) >= 0) style = Object.assign(style, this.style().listItemSelected);
+
+		if (this.props.selectedNoteIds.indexOf(item.id) >= 0) {
+			style = Object.assign(style, this.style().listItemSelected);
+		}
 
 		// Setting marginBottom = 1 because it makes the checkbox looks more centered, at least on Windows
 		// but don't know how it will look in other OSes.
@@ -163,6 +175,7 @@ class NoteListComponent extends React.Component {
 				style={listItemTitleStyle}
 				onClick={(event) => { onTitleClick(event, item) }}
 				onDragStart={(event) => onDragStart(event) }
+				data-id={item.id}
 			>
 			{Note.displayTitle(item)}
 			</a>
@@ -172,8 +185,9 @@ class NoteListComponent extends React.Component {
 	render() {
 		const theme = themeStyle(this.props.theme);
 		const style = this.props.style;
+		let notes = this.props.notes.slice();
 
-		if (!this.props.notes.length) {
+		if (!notes.length) {
 			const padding = 10;
 			const emptyDivStyle = Object.assign({
 				padding: padding + 'px',
@@ -192,7 +206,7 @@ class NoteListComponent extends React.Component {
 				itemHeight={this.style().listItem.height}
 				style={style}
 				className={"note-list"}
-				items={this.props.notes}
+				items={notes}
 				itemRenderer={ (item) => { return this.itemRenderer(item, theme, style.width) } }
 			></ItemList>
 		);

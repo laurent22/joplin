@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { TouchableOpacity, Linking, View, Switch, Slider, StyleSheet, Text, Button, ScrollView } = require('react-native');
+const { TouchableOpacity, Linking, View, Switch, Slider, StyleSheet, Text, Button, ScrollView, TextInput } = require('react-native');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { _, setLocale } = require('lib/locale.js');
@@ -17,6 +17,23 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	constructor() {
 		super();
 		this.styles_ = {};
+
+		this.state = {
+			settings: {},
+			settingsChanged: false,
+		};
+
+		this.saveButton_press = () => {
+			for (let n in this.state.settings) {
+				if (!this.state.settings.hasOwnProperty(n)) continue;
+				Setting.setValue(n, this.state.settings[n]);
+			}
+			this.setState({settingsChanged:false});
+		};
+	}
+
+	componentWillMount() {
+		this.setState({ settings: this.props.settings });
 	}
 
 	styles() {
@@ -83,7 +100,14 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		let output = null;
 
 		const updateSettingValue = (key, value) => {
-			Setting.setValue(key, value);
+			const settings = Object.assign({}, this.state.settings);
+			settings[key] = value;
+			this.setState({
+				settings: settings,
+				settingsChanged: true,
+			});
+
+			console.info(settings['sync.5.path']);
 		}
 
 		const md = Setting.settingMetadata(key);
@@ -135,22 +159,32 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					<Slider key="control" style={this.styles().settingControl} value={value} onValueChange={(value) => updateSettingValue(key, value)} />
 				</View>
 			);
+		} else if (md.type == Setting.TYPE_STRING) {
+			return (
+				<View key={key} style={this.styles().settingContainer}>
+					<Text key="label" style={this.styles().settingText}>{md.label()}</Text>
+					<TextInput key="control" style={this.styles().settingControl} value={value} onChangeText={(value) => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
+				</View>
+			);
 		} else {
-			//throw new Error('Unsupported setting type: ' + setting.type);
+			//throw new Error('Unsupported setting type: ' + md.type);
 		}
 
 		return output;
 	}
 
 	render() {
-		const settings = this.props.settings;
+		const settings = this.state.settings;
 
 		const keys = Setting.keys(true, 'mobile');
 		let settingComps = [];
 		for (let i = 0; i < keys.length; i++) {
 			const key = keys[i];
-			if (key == 'sync.target' && !settings.showAdvancedOptions) continue;
+			//if (key == 'sync.target' && !settings.showAdvancedOptions) continue;
 			if (!Setting.isPublic(key)) continue;
+
+			const md = Setting.settingMetadata(key);
+			if (md.show && !md.show(settings)) continue;
 
 			const comp = this.settingToComponent(key, settings[key]);
 			if (!comp) continue;
@@ -173,11 +207,14 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			</View>
 		);
 
-		//style={this.styles().body}
-
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>
-				<ScreenHeader title={_('Configuration')}/>
+				<ScreenHeader
+					title={_('Configuration')}
+					showSaveButton={true}
+					saveButtonDisabled={!this.state.settingsChanged}
+					onSaveButtonPress={this.saveButton_press}
+				/>
 				<ScrollView >
 					{ settingComps }
 				</ScrollView>

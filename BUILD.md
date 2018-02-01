@@ -28,6 +28,8 @@ yarn dist
 
 If there's an error `while loading shared libraries: libgconf-2.so.4: cannot open shared object file: No such file or directory`, run `sudo apt-get install libgconf-2-4`
 
+For node-gyp to work, you might need to install the `windows-build-tools` using `npm install --global windows-build-tools`.
+
 That will create the executable file in the `dist` directory.
 
 From `/ElectronClient` you can also run `run.sh` to run the app for testing.

@@ -8,7 +8,7 @@ process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
-describe('Encryption', function() {
+describe('ArrayUtils', function() {
 
 	beforeEach(async (done) => {
 		done();
@@ -25,6 +25,21 @@ describe('Encryption', function() {
 		a = ['un', 'deux', 'trois'];
 		a = ArrayUtils.removeElement(a, 'not in there');
 		expect(a.length).toBe(3);
+
+		done();
+	});
+
+	it('should find items using binary search', async (done) => {
+		let items = ['aaa', 'ccc', 'bbb'];
+		expect(ArrayUtils.binarySearch(items, 'bbb')).toBe(-1); // Array not sorted!
+		items.sort();
+		expect(ArrayUtils.binarySearch(items, 'bbb')).toBe(1);
+		expect(ArrayUtils.binarySearch(items, 'ccc')).toBe(2);
+		expect(ArrayUtils.binarySearch(items, 'oops')).toBe(-1);
+		expect(ArrayUtils.binarySearch(items, 'aaa')).toBe(0);
+
+		items = [];
+		expect(ArrayUtils.binarySearch(items, 'aaa')).toBe(-1);
 
 		done();
 	});
