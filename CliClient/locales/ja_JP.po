@@ -755,6 +755,15 @@ msgstr ""
 "注意：\"active\"に指定されたマスターキーのみが暗号化に使用されます。暗号化に"
 "使用されたキーの応じて、すべてのキーが暗号解除のために使用されます。"
 
+msgid "Missing Master Keys"
+msgstr ""
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+
 msgid "Status"
 msgstr "状態"
 

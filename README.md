@@ -104,6 +104,12 @@ On the **terminal application**, you will need to set the `sync.target` config v
 
 If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.
 
+## WebDAV synchronisation
+
+**Important: This is a beta feature. It has been extensively tested and is already in use by some users, but it is possible that some bugs remain. If you wish to you use it, it is recommended that you keep a backup of your data. The simplest way is to regularly backup the profile directory of the desktop or terminal application.**
+
+Select the "WebDAV" synchronisation target and follow the same instructions as for Nextcloud above.
+
 ## OneDrive synchronisation
 
 When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
@@ -140,14 +146,35 @@ If for any reason the notifications do not work, please [open an issue](https://
 
 # Localisation
 
-Joplin is currently available in English, French, Spanish, German, Portuguese, Chinese, Japanese, Russian, Croatian, Dutch and Italian. If you would like to contribute a translation, it is quite straightforward, please follow these steps:
+Joplin is currently available in the languages below. If you would like to contribute a **new translation**, it is quite straightforward, please follow these steps:
 
 - [Download Poedit](https://poedit.net/), the translation editor, and install it.
 - [Download the file to be translated](https://raw.githubusercontent.com/laurent22/joplin/master/CliClient/locales/joplin.pot).
 - In Poedit, open this .pot file, go into the Catalog menu and click Configuration. Change "Country" and "Language" to your own country and language.
 - From then you can translate the file. Once it is done, please either [open a pull request](https://github.com/laurent22/joplin/pulls) or send the file to [this address](https://raw.githubusercontent.com/laurent22/joplin/master/Assets/Adresse.png).
 
+To **update a translation**, follow the same steps as above but instead of getting the .pot file, get the .po file for your language from there: https://github.com/laurent22/joplin/tree/master/CliClient/locales
+
 This translation will apply to the three applications - desktop, mobile and terminal.
+
+Current translations:
+
+<!-- LOCALE-TABLE-AUTO-GENERATED -->
+Language  |  Code  |  Last translator  |  Percent done
+---|---|---|---
+Croatian  |  hr_HR  |  Hrvoje Mandić <trbuhom@net.hr>  |  72%
+Deutsch  |  de_DE  |  Tobias Strobel <git@strobeltobias.de>  |  92%
+English  |  en_GB  |    |  100%
+Español  |  es_ES  |  Lucas Vieites  |  80%
+Español (Costa Rica)  |  es_CR  |    |  68%
+Français  |  fr_FR  |  Laurent Cozic  |  100%
+Italiano  |  it_IT  |    |  76%
+Nederlands  |  nl_BE  |    |  90%
+Português (Brasil)  |  pt_BR  |    |  74%
+Русский  |  ru_RU  |  Artyom Karlov <artyom.karlov@gmail.com>  |  96%
+中文 (简体)  |  zh_CN  |  RCJacH <RCJacH@outlook.com>  |  76%
+日本語  |  ja_JP  |    |  74%
+<!-- LOCALE-TABLE-AUTO-GENERATED -->
 
 # Contributing
 

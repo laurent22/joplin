@@ -694,6 +694,15 @@ msgid ""
 "how the notes or notebooks were originally encrypted."
 msgstr ""
 
+msgid "Missing Master Keys"
+msgstr ""
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+
 msgid "Status"
 msgstr ""
 

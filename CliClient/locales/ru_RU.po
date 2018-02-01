@@ -782,6 +782,16 @@ msgstr ""
 "ключей, в зависимости от того, как изначально были зашифрованы заметки или "
 "блокноты."
 
+#, fuzzy
+msgid "Missing Master Keys"
+msgstr "Мастер-ключи"
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+
 msgid "Status"
 msgstr "Статус"
 

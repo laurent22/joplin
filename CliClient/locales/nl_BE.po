@@ -781,6 +781,16 @@ msgstr ""
 "(aangeduid met \"active\"). Alle sleutels kunnen gebruikt worden voor "
 "decodering, afhankelijk van hoe de notitieboeken initieel versleuteld zijn."
 
+#, fuzzy
+msgid "Missing Master Keys"
+msgstr "Hoofdsleutels"
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+
 msgid "Status"
 msgstr "Status"
 

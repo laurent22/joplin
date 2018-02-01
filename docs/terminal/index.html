@@ -305,6 +305,8 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 :config sync.5.username YOUR_USERNAME
 :config sync.5.password YOUR_PASSWORD
 </code></pre><p>If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.</p>
+<h2 id="webdav-synchronisation">WebDAV synchronisation</h2>
+<p>Select the &quot;WebDAV&quot; synchronisation target and follow the same instructions as for Nextcloud above.</p>
 <h2 id="onedrive-synchronisation">OneDrive synchronisation</h2>
 <p>When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
 <p>To initiate the synchronisation process, type <code>:sync</code>. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). It is possible to also synchronise outside of the user interface by typing <code>joplin sync</code> from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:</p>

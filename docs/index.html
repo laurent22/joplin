@@ -305,6 +305,9 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 :config sync.5.password YOUR_PASSWORD
 :config sync.target 5
 </code></pre><p>If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.</p>
+<h2 id="webdav-synchronisation">WebDAV synchronisation</h2>
+<p><strong>Important: This is a beta feature. It has been extensively tested and is already in use by some users, but it is possible that some bugs remain. If you wish to you use it, it is recommended that you keep a backup of your data. The simplest way is to regularly backup the profile directory of the desktop or terminal application.</strong></p>
+<p>Select the &quot;WebDAV&quot; synchronisation target and follow the same instructions as for Nextcloud above.</p>
 <h2 id="onedrive-synchronisation">OneDrive synchronisation</h2>
 <p>When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
 <p>On the <strong>desktop application</strong> or <strong>mobile application</strong>, select &quot;OneDrive&quot; as the synchronisation target in the config screen (it is selected by default). Then, to initiate the synchronisation process, click on the &quot;Synchronise&quot; button in the sidebar. You will be asked to login to OneDrive to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive).</p>
@@ -326,14 +329,102 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <p>On mobile, the alarms will be displayed using the built-in notification system.</p>
 <p>If for any reason the notifications do not work, please <a href="https://github.com/laurent22/joplin/issues">open an issue</a>.</p>
 <h1 id="localisation">Localisation</h1>
-<p>Joplin is currently available in English, French, Spanish, German, Portuguese, Chinese, Japanese, Russian, Croatian, Dutch and Italian. If you would like to contribute a translation, it is quite straightforward, please follow these steps:</p>
+<p>Joplin is currently available in the languages below. If you would like to contribute a <strong>new translation</strong>, it is quite straightforward, please follow these steps:</p>
 <ul>
 <li><a href="https://poedit.net/">Download Poedit</a>, the translation editor, and install it.</li>
 <li><a href="https://raw.githubusercontent.com/laurent22/joplin/master/CliClient/locales/joplin.pot">Download the file to be translated</a>.</li>
 <li>In Poedit, open this .pot file, go into the Catalog menu and click Configuration. Change &quot;Country&quot; and &quot;Language&quot; to your own country and language.</li>
 <li>From then you can translate the file. Once it is done, please either <a href="https://github.com/laurent22/joplin/pulls">open a pull request</a> or send the file to <a href="https://raw.githubusercontent.com/laurent22/joplin/master/Assets/Adresse.png">this address</a>.</li>
 </ul>
+<p>To <strong>update a translation</strong>, follow the same steps as above but instead of getting the .pot file, get the .po file for your language from there: <a href="https://github.com/laurent22/joplin/tree/master/CliClient/locales">https://github.com/laurent22/joplin/tree/master/CliClient/locales</a></p>
 <p>This translation will apply to the three applications - desktop, mobile and terminal.</p>
+<p>Current translations:</p>
+<!-- LOCALE-TABLE-AUTO-GENERATED -->
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Code</th>
+<th>Last translator</th>
+<th>Percent done</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Croatian</td>
+<td>hr_HR</td>
+<td>Hrvoje Mandić <a href="&#109;&#97;&#105;&#108;&#116;&#x6f;&#58;&#116;&#114;&#98;&#117;&#x68;&#x6f;&#109;&#x40;&#x6e;&#101;&#x74;&#46;&#104;&#x72;">&#116;&#114;&#98;&#117;&#x68;&#x6f;&#109;&#x40;&#x6e;&#101;&#x74;&#46;&#104;&#x72;</a></td>
+<td>72%</td>
+</tr>
+<tr>
+<td>Deutsch</td>
+<td>de_DE</td>
+<td>Tobias Strobel <a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#x67;&#x69;&#116;&#x40;&#x73;&#116;&#114;&#x6f;&#x62;&#101;&#x6c;&#116;&#111;&#98;&#x69;&#97;&#x73;&#x2e;&#100;&#x65;">&#x67;&#x69;&#116;&#x40;&#x73;&#116;&#114;&#x6f;&#x62;&#101;&#x6c;&#116;&#111;&#98;&#x69;&#97;&#x73;&#x2e;&#100;&#x65;</a></td>
+<td>92%</td>
+</tr>
+<tr>
+<td>English</td>
+<td>en_GB</td>
+<td></td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Español</td>
+<td>es_ES</td>
+<td>Lucas Vieites</td>
+<td>80%</td>
+</tr>
+<tr>
+<td>Español (Costa Rica)</td>
+<td>es_CR</td>
+<td></td>
+<td>68%</td>
+</tr>
+<tr>
+<td>Français</td>
+<td>fr_FR</td>
+<td>Laurent Cozic</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Italiano</td>
+<td>it_IT</td>
+<td></td>
+<td>76%</td>
+</tr>
+<tr>
+<td>Nederlands</td>
+<td>nl_BE</td>
+<td></td>
+<td>90%</td>
+</tr>
+<tr>
+<td>Português (Brasil)</td>
+<td>pt_BR</td>
+<td></td>
+<td>74%</td>
+</tr>
+<tr>
+<td>Русский</td>
+<td>ru_RU</td>
+<td>Artyom Karlov <a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6f;&#58;&#x61;&#x72;&#116;&#121;&#x6f;&#x6d;&#x2e;&#107;&#x61;&#x72;&#108;&#x6f;&#118;&#64;&#103;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#109;">&#x61;&#x72;&#116;&#121;&#x6f;&#x6d;&#x2e;&#107;&#x61;&#x72;&#108;&#x6f;&#118;&#64;&#103;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#109;</a></td>
+<td>96%</td>
+</tr>
+<tr>
+<td>中文 (简体)</td>
+<td>zh_CN</td>
+<td>RCJacH <a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#111;&#58;&#82;&#67;&#74;&#x61;&#99;&#72;&#64;&#x6f;&#117;&#x74;&#108;&#111;&#111;&#107;&#46;&#x63;&#111;&#109;">&#82;&#67;&#74;&#x61;&#99;&#72;&#64;&#x6f;&#117;&#x74;&#108;&#111;&#111;&#107;&#46;&#x63;&#111;&#109;</a></td>
+<td>76%</td>
+</tr>
+<tr>
+<td>日本語</td>
+<td>ja_JP</td>
+<td></td>
+<td>74%</td>
+</tr>
+</tbody>
+</table>
+<!-- LOCALE-TABLE-AUTO-GENERATED -->
 <h1 id="contributing">Contributing</h1>
 <p>Please see the guide for information on how to contribute to the development of Joplin: <a href="https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md">https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md</a></p>
 <h1 id="coming-features">Coming features</h1>

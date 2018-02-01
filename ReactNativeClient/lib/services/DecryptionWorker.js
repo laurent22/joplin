@@ -73,10 +73,14 @@ class DecryptionWorker {
 				for (let i = 0; i < items.length; i++) {
 					const item = items[i];
 
-					if (['edf44b7a0e4f8cbf248e206cd8dfa800', '2ccb3c9af0b1adac2ec6b66a5961fbb1'].indexOf(item.id) >= 0) continue; // Temp hack
+					// Temp hack
+					if (['edf44b7a0e4f8cbf248e206cd8dfa800', '2ccb3c9af0b1adac2ec6b66a5961fbb1'].indexOf(item.id) >= 0) {
+						excludedIds.push(item.id);
+						continue;
+					}
 
 					const ItemClass = BaseItem.itemClass(item);
-					this.logger().debug('DecryptionWorker: decrypting: ' + item.id + ' (' + ItemClass.tableName() + ')');
+					this.logger().info('DecryptionWorker: decrypting: ' + item.id + ' (' + ItemClass.tableName() + ')');
 					try {
 						await ItemClass.decrypt(item);
 					} catch (error) {

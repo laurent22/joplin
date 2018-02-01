@@ -799,6 +799,16 @@ msgstr ""
 "verwendet werden, abhängig davon, wie die jeweiligen Notizen oder "
 "Notizbücher ursprünglich verschlüsselt wurden."
 
+#, fuzzy
+msgid "Missing Master Keys"
+msgstr "Hauptschlüssel"
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+
 msgid "Status"
 msgstr "Status"
 
