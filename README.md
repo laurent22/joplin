@@ -160,20 +160,20 @@ This translation will apply to the three applications - desktop, mobile and term
 Current translations:
 
 <!-- LOCALE-TABLE-AUTO-GENERATED -->
-Language  |  Code  |  Last translator  |  Percent done
----|---|---|---
-Croatian  |  hr_HR  |  Hrvoje Mandić <trbuhom@net.hr>  |  72%
-Deutsch  |  de_DE  |  Tobias Strobel <git@strobeltobias.de>  |  92%
-English  |  en_GB  |    |  100%
-Español  |  es_ES  |  Lucas Vieites  |  80%
-Español (Costa Rica)  |  es_CR  |    |  68%
-Français  |  fr_FR  |  Laurent Cozic  |  100%
-Italiano  |  it_IT  |    |  76%
-Nederlands  |  nl_BE  |    |  90%
-Português (Brasil)  |  pt_BR  |    |  74%
-Русский  |  ru_RU  |  Artyom Karlov <artyom.karlov@gmail.com>  |  96%
-中文 (简体)  |  zh_CN  |  RCJacH <RCJacH@outlook.com>  |  76%
-日本語  |  ja_JP  |    |  74%
+&nbsp;  |  Language  |  Code  |  Last translator  |  Percent done
+---|---|---|---|---
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/hr.png)  |  Croatian  |  hr_HR  |  Hrvoje Mandić <trbuhom@net.hr>  |  72%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/de.png)  |  Deutsch  |  de_DE  |  Tobias Strobel <git@strobeltobias.de>  |  92%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/gb.png)  |  English  |  en_GB  |    |  100%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/es.png)  |  Español  |  es_ES  |  Lucas Vieites  |  80%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/cr.png)  |  Español (Costa Rica)  |  es_CR  |    |  68%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/fr.png)  |  Français  |  fr_FR  |  Laurent Cozic  |  100%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/it.png)  |  Italiano  |  it_IT  |    |  76%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/be.png)  |  Nederlands  |  nl_BE  |    |  90%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/br.png)  |  Português (Brasil)  |  pt_BR  |    |  74%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/ru.png)  |  Русский  |  ru_RU  |  Artyom Karlov <artyom.karlov@gmail.com>  |  96%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/cn.png)  |  中文 (简体)  |  zh_CN  |  RCJacH <RCJacH@outlook.com>  |  76%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/jp.png)  |  日本語  |  ja_JP  |    |  74%
 <!-- LOCALE-TABLE-AUTO-GENERATED -->
 
 # Contributing

@@ -18,7 +18,7 @@ const rnDir = rootDir + '/ReactNativeClient';
 const electronDir = rootDir + '/ElectronClient/app';
 
 const { execCommand } = require('./tool-utils.js');
-const { countryDisplayName } = require('lib/locale.js');
+const { countryDisplayName, countryCodeOnly } = require('lib/locale.js');
 
 function parsePoFile(filePath) {
 	const content = fs.readFileSync(filePath);
@@ -140,11 +140,12 @@ async function translationStatus(isDefault, poFile) {
 
 function translationStatusToMdTable(status) {
 	let output = [];
-	output.push(['Language', 'Code', 'Last translator', 'Percent done'].join('  |  '));
-	output.push(['---', '---', '---', '---'].join('|'));
+	output.push(['&nbsp;', 'Language', 'Code', 'Last translator', 'Percent done'].join('  |  '));
+	output.push(['---', '---', '---', '---', '---'].join('|'));
 	for (let i = 0; i < status.length; i++) {
 		const stat = status[i];
-		output.push([stat.languageName, stat.locale, stat.translatorName, stat.percentDone + '%'].join('  |  '));
+		const flagUrl = 'https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/' + countryCodeOnly(stat.locale).toLowerCase() + '.png';
+		output.push(['![](' + flagUrl + ')', stat.languageName, stat.locale, stat.translatorName, stat.percentDone + '%'].join('  |  '));
 	}
 	return output.join('\n');
 }
@@ -156,7 +157,8 @@ async function updateReadmeWithStats(stats) {
 	mdTable = mdTableMarkerOpen + mdTable + mdTableMarkerClose;
 
 	let content = await fs.readFile(rootDir + '/README.md', 'utf-8');
-	const regex = new RegExp(mdTableMarkerOpen + '.*?' + mdTableMarkerClose);
+	// [^]* matches any character including new lines
+	const regex = new RegExp(mdTableMarkerOpen + '[^]*?' + mdTableMarkerClose);
 	content = content.replace(regex, mdTable);
 	await fs.writeFile(rootDir + '/README.md', content);
 }
