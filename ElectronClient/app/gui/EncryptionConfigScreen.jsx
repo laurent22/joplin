@@ -92,10 +92,14 @@ class EncryptionConfigScreenComponent extends React.Component {
 		};
 
 		const mkComps = [];
+		let nonExistingMasterKeyIds = this.props.notLoadedMasterKeys.slice();
 
 		for (let i = 0; i < masterKeys.length; i++) {
 			const mk = masterKeys[i];
 			mkComps.push(this.renderMasterKey(mk));
+
+			const idx = nonExistingMasterKeyIds.indexOf(mk.id);
+			if (idx >= 0) nonExistingMasterKeyIds.splice(idx, 1);
 		}
 
 		const onToggleButtonClick = async () => {
@@ -149,6 +153,31 @@ class EncryptionConfigScreenComponent extends React.Component {
 			);
 		}
 
+		let nonExistingMasterKeySection = null;
+
+		if (nonExistingMasterKeyIds.length) {
+			const rows = [];
+			for (let i = 0; i < nonExistingMasterKeyIds.length; i++) {
+				const id = nonExistingMasterKeyIds[i];
+				rows.push(<tr key={id}><td style={theme.textStyle}>{id}</td></tr>);
+			}
+
+			nonExistingMasterKeySection = (
+				<div>
+					<h1 style={theme.h1Style}>{_('Missing Master Keys')}</h1>
+					<p style={theme.textStyle}>{_('The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.')}</p>
+					<table>
+						<tbody>
+							<tr>
+								<th style={theme.textStyle}>{_('ID')}</th>
+							</tr>
+							{ rows }
+						</tbody>
+					</table>
+				</div>
+			);
+		}
+
 		return (
 			<div>
 				<Header style={headerStyle} />
@@ -169,6 +198,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 					{decryptedItemsInfo}
 					{toggleButton}
 					{masterKeySection}
+					{nonExistingMasterKeySection}
 				</div>
 			</div>
 		);
@@ -183,6 +213,7 @@ const mapStateToProps = (state) => {
 		passwords: state.settings['encryption.passwordCache'],
 		encryptionEnabled: state.settings['encryption.enabled'],
 		activeMasterKeyId: state.settings['encryption.activeMasterKeyId'],
+		notLoadedMasterKeys: state.notLoadedMasterKeys,
 	};
 };
 
