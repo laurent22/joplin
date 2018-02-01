@@ -189,6 +189,10 @@ class FileApiDriverOneDrive {
 		return this.pathCache_[path];
 	}
 
+	clearRoot() {
+		throw new Error('Not implemented');
+	}
+
 	async delta(path, options = null) {
 		let output = {
 			hasMore: false,
@@ -196,17 +200,24 @@ class FileApiDriverOneDrive {
 			items: [],
 		};
 
+		const freshStartDelta = () => {
+			const url = this.makePath_(path) + ':/delta';
+			const query = this.itemFilter_();
+			query.select += ',deleted';
+			return { url: url, query: query };
+		}
+
 		const pathDetails = await this.pathDetails_(path);
-		const pathId = pathDetails.id;		
+		const pathId = pathDetails.id;	
 
 		let context = options ? options.context : null;
 		let url = context ? context.nextLink : null;
 		let query = null;
 
 		if (!url) {
-			url = this.makePath_(path) + ':/delta';
-			const query = this.itemFilter_();
-			query.select += ',deleted';
+			const info = freshStartDelta();
+			url = info.url;
+			query = info.query;
 		}
 
 		let response = null;
@@ -218,18 +229,18 @@ class FileApiDriverOneDrive {
 				// Code: resyncRequired
 				// Request: GET https://graph.microsoft.com/v1.0/drive/root:/Apps/JoplinDev:/delta?select=...
 
-				// The delta token has expired or is invalid and so a full resync is required.
-				// It is an error that is hard to replicate and it's not entirely clear what
-				// URL is in the Location header. What might happen is that:
-				// - OneDrive will get all the latest changes (since delta is done at the
-				//   end of the sync process)
-				// - Client will get all the new files and updates from OneDrive
-				// This is unknown:
-				// - Will the files that have been deleted on OneDrive be part of the this
-				//   URL in the Location header?
-				//
+				// The delta token has expired or is invalid and so a full resync is required. This happens for example when all the items
+				// on the OneDrive App folder are manually deleted. In this case, instead of sending the list of deleted items in the delta
+				// call, OneDrive simply request the client to re-sync everything. 
+
+				// OneDrive provides a URL to resume syncing from but it does not appear to work so below we simply start over from
+				// the beginning. The synchronizer will ensure that no duplicate are created and conflicts will be resolved.
+
 				// More info there: https://stackoverflow.com/q/46941371/561309
-				url = error.headers.get('location');
+
+				const info = freshStartDelta();
+				url = info.url;
+				query = info.query;
 				response = await this.api_.execJson('GET', url, query);
 			} else {
 				throw error;

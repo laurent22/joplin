@@ -193,8 +193,12 @@ class BaseModel {
 		});
 	}
 
-	static loadByField(fieldName, fieldValue) {
-		return this.modelSelectOne('SELECT * FROM `' + this.tableName() + '` WHERE `' + fieldName + '` = ?', [fieldValue]);
+	static loadByField(fieldName, fieldValue, options = null) {
+		if (!options) options = {};
+		if (!('caseInsensitive' in options)) options.caseInsensitive = false;
+		let sql = 'SELECT * FROM `' + this.tableName() + '` WHERE `' + fieldName + '` = ?';
+		if (options.caseInsensitive) sql += ' COLLATE NOCASE';
+		return this.modelSelectOne(sql, [fieldValue]);
 	}
 
 	static loadByTitle(fieldValue) {
@@ -250,10 +254,25 @@ class BaseModel {
 			let n = fieldNames[i];
 			if (n in o) temp[n] = o[n];
 		}
+
+		// Remove fields that are not in the `fields` list, if provided.
+		// Note that things like update_time, user_update_time will still
+		// be part of the final list of fields if autoTimestamp is on.
+		// id also will stay.
+		if (!options.isNew && options.fields) {
+			const filtered = {};
+			for (let k in temp) {
+				if (!temp.hasOwnProperty(k)) continue;
+				if (k !== 'id' && options.fields.indexOf(k) < 0) continue;
+				filtered[k] = temp[k];
+			}
+			temp = filtered;
+		}
+
 		o = temp;
 
+		let modelId = temp.id;
 		let query = {};
-		let modelId = o.id;
 
 		const timeNow = time.unixMs();
 
@@ -291,15 +310,6 @@ class BaseModel {
 			let where = { id: o.id };
 			let temp = Object.assign({}, o);
 			delete temp.id;
-
-			if (options.fields) {
-				let filtered = {};
-				for (let i = 0; i < options.fields.length; i++) {
-					const f = options.fields[i];
-					filtered[f] = o[f];
-				}
-				temp = filtered;
-			}
 
 			query = Database.updateQuery(this.tableName(), temp, where);
 		}

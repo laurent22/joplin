@@ -23,6 +23,18 @@ class SyncTargetRegistry {
 		throw new Error('Name not found: ' + name);
 	}
 
+	static idToMetadata(id) {
+		for (let n in this.reg_) {
+			if (!this.reg_.hasOwnProperty(n)) continue;
+			if (this.reg_[n].id === id) return this.reg_[n];
+		}
+		throw new Error('ID not found: ' + id);
+	}
+
+	static idToName(id) {
+		return this.idToMetadata(id).name;
+	}
+
 	static idAndLabelPlainObject() {
 		let output = {};
 		for (let n in this.reg_) {

@@ -19,11 +19,11 @@ Length             |  6 chars (Hexa string)
 Encryption method  |  2 chars (Hexa string)
 Master key ID      |  32 chars (Hexa string)
 
-See lib/services/EncryptionService.js for the list of available encryption methods.
+See `lib/services/EncryptionService.js` for the list of available encryption methods.
 
 ### Data chunk
 
-The data is encoded in one or more chuncks for performance reasons. That way it is possible to take a block of data from one file and encrypt it to another block in another file. Encrypting/decrypting the whole file in one go would not work (on mobile especially).
+The data is encoded in one or more chunks for performance reasons. That way it is possible to take a block of data from one file and encrypt it to another block in another file. Encrypting/decrypting the whole file in one go would not work (on mobile especially).
 
 Name    |  Size
 --------|----------------------------
@@ -42,11 +42,11 @@ Only one master key can be active for encryption purposes. For decryption, the a
 
 ## Encryption Service
 
-The applications make use of the EncryptionService class to handle encryption and decryption. Before it can be used, a least one master key must be loaded into it and marked as "active".
+The applications make use of the `EncryptionService` class to handle encryption and decryption. Before it can be used, a least one master key must be loaded into it and be marked as "active".
 
 ## Encryption workflow
 
-Items are encrypted only during synchronisation, when they are serialised (via BaseItem.serializeForSync), so before being sent to the sync target.
+Items are encrypted only during synchronisation, when they are serialised (via `BaseItem.serializeForSync`), so before being sent to the sync target.
 
 They are decrypted by DecryptionWorker in the background.
 

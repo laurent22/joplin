@@ -2,7 +2,7 @@
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -108,6 +108,9 @@ msgstr "无以下命令：%s"
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "命令\"%s\"仅在GUI模式下可用"
 
+msgid "Cannot change encrypted item"
+msgstr ""
+
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr "缺失所需参数：%s"
@@ -168,6 +171,36 @@ msgstr "标记待办事项为完成。"
 msgid "Note is not a to-do: \"%s\""
 msgstr "笔记非待办事项：\"%s\""
 
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status` and `target-status`."
+msgstr ""
+
+msgid "Enter master password:"
+msgstr ""
+
+msgid "Operation cancelled"
+msgstr ""
+
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+
+msgid "Completed decryption."
+msgstr ""
+
+#, fuzzy
+msgid "Enabled"
+msgstr "已禁止"
+
+msgid "Disabled"
+msgstr "已禁止"
+
+#, javascript-format
+msgid "Encryption is: %s"
+msgstr ""
+
 msgid "Edit note."
 msgstr "编辑笔记。"
 
@@ -184,6 +217,10 @@ msgstr "此笔记不存在：\"%s\"。是否创建？"
 
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr "开始编辑笔记。关闭编辑器则返回提示。"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr ""
 
 msgid "Note has been saved."
 msgstr "笔记已被保存。"
@@ -393,6 +430,14 @@ msgstr "与远程储存空间同步。"
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr "同步至所提供的目标（默认为同步目标配置值）"
 
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "认证未完成（未收到认证令牌）。"
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+
 msgid "Synchronisation is already in progress."
 msgstr "同步正在进行中。"
 
@@ -404,10 +449,6 @@ msgid ""
 msgstr ""
 "锁定文件已被保留。若当前没有任何正在进行的同步，您可以在\"%s\"删除锁定文件并"
 "继续操作。"
-
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
-msgstr "认证未完成（未收到认证令牌）。"
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
@@ -510,6 +551,13 @@ msgid ""
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
 
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+
 msgid "File"
 msgstr "文件"
 
@@ -552,7 +600,11 @@ msgstr "工具"
 msgid "Synchronisation status"
 msgstr "同步状态"
 
-msgid "Options"
+msgid "Encryption options"
+msgstr ""
+
+#, fuzzy
+msgid "General Options"
 msgstr "选项"
 
 msgid "Help"
@@ -560,6 +612,9 @@ msgstr "帮助"
 
 msgid "Website and documentation"
 msgstr "网站与文档"
+
+msgid "Check for updates..."
+msgstr ""
 
 msgid "About Joplin"
 msgstr "关于Joplin"
@@ -573,6 +628,26 @@ msgstr "确认"
 
 msgid "Cancel"
 msgstr "取消"
+
+msgid "Error"
+msgstr ""
+
+msgid "An update is available, do you want to update now?"
+msgstr ""
+
+#, javascript-format
+msgid "Could not download the update: %s"
+msgstr ""
+
+msgid "Current version is up-to-date."
+msgstr ""
+
+msgid "New version downloaded - application will quit now and update..."
+msgstr ""
+
+#, javascript-format
+msgid "Could not install the update: %s"
+msgstr ""
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -638,13 +713,6 @@ msgstr "状态"
 msgid "Encryption is:"
 msgstr ""
 
-#, fuzzy
-msgid "Enabled"
-msgstr "已禁止"
-
-msgid "Disabled"
-msgstr "已禁止"
-
 msgid "Back"
 msgstr "返回"
 
@@ -656,14 +724,8 @@ msgstr "将创建新笔记本\"%s\"并将文件\"%s\"导入至其中"
 msgid "Please create a notebook first."
 msgstr "请先创建笔记本。"
 
-msgid "Note title:"
-msgstr "笔记标题："
-
 msgid "Please create a notebook first"
 msgstr "请先创建笔记本"
-
-msgid "To-do title:"
-msgstr "待办事项标题："
 
 msgid "Notebook title:"
 msgstr "笔记本标题："
@@ -738,6 +800,9 @@ msgstr "登陆OneDrive"
 msgid "Import"
 msgstr "导入"
 
+msgid "Options"
+msgstr "选项"
+
 msgid "Synchronisation Status"
 msgstr "同步状态"
 
@@ -779,6 +844,9 @@ msgstr "未知标记：%s"
 
 msgid "File system"
 msgstr "文件系统"
+
+msgid "Nextcloud (Beta)"
+msgstr ""
 
 msgid "OneDrive"
 msgstr "OneDrive"
@@ -841,6 +909,10 @@ msgstr "已删除本地项目: %d。"
 msgid "Deleted remote items: %d."
 msgstr "已删除远程项目: %d。"
 
+#, fuzzy, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "已新建本地项目: %d。"
+
 #, javascript-format
 msgid "State: \"%s\"."
 msgstr "状态：\"%s\"。"
@@ -855,6 +927,13 @@ msgstr "已完成：\"%s\""
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "同步正在进行中。状态：%s"
+
+msgid "Encrypted"
+msgstr ""
+
+#, fuzzy
+msgid "Encrypted items cannot be modified"
+msgstr "一些项目无法被同步。"
 
 msgid "Conflicts"
 msgstr "冲突"
@@ -913,6 +992,27 @@ msgstr "在列表上方显示未完成的待办事项"
 msgid "Save geo-location with notes"
 msgstr "保存笔记时同时保存地理定位信息"
 
+#, fuzzy
+msgid "When creating a new to-do:"
+msgstr "创建新待办事项。"
+
+#, fuzzy
+msgid "Focus title"
+msgstr "笔记标题："
+
+msgid "Focus body"
+msgstr ""
+
+#, fuzzy
+msgid "When creating a new note:"
+msgstr "创建新笔记。"
+
+msgid "Set application zoom percentage"
+msgstr ""
+
+msgid "Automatically update the application"
+msgstr "自动更新此程序"
+
 msgid "Synchronisation interval"
 msgstr "同步间隔"
 
@@ -928,9 +1028,6 @@ msgstr "%d小时"
 msgid "%d hours"
 msgstr "%d小时"
 
-msgid "Automatically update the application"
-msgstr "自动更新此程序"
-
 msgid "Show advanced options"
 msgstr "显示高级选项"
 
@@ -938,9 +1035,9 @@ msgid "Synchronisation target"
 msgstr "同步目标"
 
 msgid ""
-"The target to synchonise to. If synchronising with the file system, set "
-"`sync.2.path` to specify the target directory."
-msgstr "同步的目标。若与文件系统同步，设置`sync.2.path`为指定目标目录。"
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr ""
@@ -950,6 +1047,15 @@ msgid ""
 "See `sync.target`."
 msgstr "当文件系统同步开启时的同步路径。参考`sync.target`。"
 
+msgid "Nexcloud WebDAV URL"
+msgstr ""
+
+msgid "Nexcloud username"
+msgstr ""
+
+msgid "Nexcloud password"
+msgstr ""
+
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "无效的选项值：\"%s\"。可用值为：%s。"
@@ -957,9 +1063,15 @@ msgstr "无效的选项值：\"%s\"。可用值为：%s。"
 msgid "Items that cannot be synchronised"
 msgstr "项目无法被同步。"
 
-#, javascript-format
-msgid "\"%s\": \"%s\""
-msgstr "\"%s\": \"%s\""
+#, fuzzy, javascript-format
+msgid "%s (%s): %s"
+msgstr "%s %s (%s)"
+
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "同步状态（已同步项目/项目总数）"
@@ -1006,6 +1118,9 @@ msgstr "日志"
 msgid "Export Debug Report"
 msgstr "导出调试报告"
 
+msgid "Encryption Config"
+msgstr ""
+
 msgid "Configuration"
 msgstr "配置"
 
@@ -1016,6 +1131,9 @@ msgstr "移动至笔记本..."
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "移动%d条笔记至笔记本\"%s\"？"
 
+msgid "Press to set the decryption password."
+msgstr ""
+
 msgid "Select date"
 msgstr "选择日期"
 
@@ -1024,6 +1142,24 @@ msgstr "确认"
 
 msgid "Cancel synchronisation"
 msgstr "取消同步"
+
+#, javascript-format
+msgid "Master Key %s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Created: %s"
+msgstr "已创建：%d条。"
+
+msgid "Password:"
+msgstr ""
+
+msgid "Password cannot be empty"
+msgstr ""
+
+#, fuzzy
+msgid "Enable"
+msgstr "已禁止"
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"
@@ -1082,6 +1218,17 @@ msgstr "您当前没有任何笔记本。点击(+)按钮创建新笔记本。"
 
 msgid "Welcome"
 msgstr "欢迎"
+
+#~ msgid ""
+#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "`sync.2.path` to specify the target directory."
+#~ msgstr "同步的目标。若与文件系统同步，设置`sync.2.path`为指定目标目录。"
+
+#~ msgid "To-do title:"
+#~ msgstr "待办事项标题："
+
+#~ msgid "\"%s\": \"%s\""
+#~ msgstr "\"%s\": \"%s\""
 
 #~ msgid "Delete notebook \"%s\"?"
 #~ msgstr "删除笔记本\"%s\"?"

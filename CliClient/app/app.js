@@ -21,6 +21,7 @@ const os = require('os');
 const fs = require('fs-extra');
 const { cliUtils } = require('./cli-utils.js');
 const EventEmitter = require('events');
+const Cache = require('lib/Cache');
 
 class Application extends BaseApplication {
 
@@ -34,6 +35,7 @@ class Application extends BaseApplication {
 		this.allCommandsLoaded_ = false;
 		this.showStackTraces_ = false;
 		this.gui_ = null;
+		this.cache_ = new Cache();
 	}
 
 	gui() {
@@ -223,12 +225,8 @@ class Application extends BaseApplication {
 	async commandMetadata() {
 		if (this.commandMetadata_) return this.commandMetadata_;
 
-		const osTmpdir = require('os-tmpdir');
-		const storage = require('node-persist');
-		await storage.init({ dir: osTmpdir() + '/commandMetadata', ttl: 1000 * 60 * 60 * 24 });
-
-		let output = await storage.getItem('metadata');
-		if (Setting.value('env') != 'dev' && output) {
+		let output = await this.cache_.getItem('metadata');
+		if (output) {
 			this.commandMetadata_ = output;
 			return Object.assign({}, this.commandMetadata_);
 		}
@@ -242,7 +240,7 @@ class Application extends BaseApplication {
 			output[n] = cmd.metadata();
 		}
 
-		await storage.setItem('metadata', output);
+		await this.cache_.setItem('metadata', output, 1000 * 60 * 60 * 24);
 
 		this.commandMetadata_ = output;
 		return Object.assign({}, this.commandMetadata_);

@@ -25,6 +25,10 @@ class Logger {
 		return this.level_;
 	}
 
+	targets() {
+		return this.targets_;
+	}
+
 	clearTargets() {
 		this.targets_.clear();
 	}

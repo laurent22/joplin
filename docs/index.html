@@ -201,7 +201,7 @@
 <div class="content">
 <p>Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in <a href="https://daringfireball.net/projects/markdown/basics">Markdown format</a>.</p>
 <p>Notes exported from Evernote via .enex files <a href="#importing-notes-from-evernote">can be imported</a> into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).</p>
-<p>The notes can be <a href="#synchronisation">synchronised</a> with various targets including the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
+<p>The notes can be <a href="#synchronisation">synchronised</a> with various targets including <a href="https://nextcloud.com/">Nextcloud</a>, the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
 <p>Joplin is still under development but is out of Beta and should be suitable for every day use. The UI of the terminal client is built on top of the great <a href="https://github.com/cronvel/terminal-kit">terminal-kit</a> library, the desktop client using <a href="https://electronjs.org/">Electron</a>, and the Android client front end is done using <a href="https://facebook.github.io/react-native/">React Native</a>.</p>
 <div class="top-screenshot"><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/AllClients.jpg" style="max-width: 100%; max-height: 35em;"></div>
 
@@ -218,15 +218,15 @@
 <tbody>
 <tr>
 <td>Windows</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.41/Joplin-Setup-0.10.41.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.54/Joplin-Setup-0.10.54.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a></td>
 </tr>
 <tr>
 <td>macOS</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.41/Joplin-0.10.41.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.54/Joplin-0.10.54.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a></td>
 </tr>
 <tr>
 <td>Linux</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.41/Joplin-0.10.41-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.54/Joplin-0.10.54-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a></td>
 </tr>
 </tbody>
 </table>
@@ -236,16 +236,19 @@
 <tr>
 <th>Operating System</th>
 <th>Download</th>
+<th>Alt. Download</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Android</td>
 <td><a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeAndroid.png'/></a></td>
+<td>or <a href="https://github.com/laurent22/joplin/releases/download/android-v0.10.81/joplin-v0.10.81.apk">Download APK File</a></td>
 </tr>
 <tr>
 <td>iOS</td>
 <td><a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeIOS.png'/></a></td>
+<td>-</td>
 </tr>
 </tbody>
 </table>
@@ -264,7 +267,7 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <li>Desktop, mobile and terminal applications.</li>
 <li>Support notes, to-dos, tags and notebooks.</li>
 <li>Offline first, so the entire data is always available on the device even without an internet connection.</li>
-<li>Ability to synchronise with multiple targets, including the file system and OneDrive (NextCloud and Dropbox are planned).</li>
+<li>Ability to synchronise with multiple targets, including NextCloud, the file system and OneDrive (Dropbox is planned).</li>
 <li>Synchronises to a plain text format, which can be easily manipulated, backed up, or exported to a different format.</li>
 <li>Markdown notes, which are rendered with images and formatting in the desktop and mobile applications.</li>
 <li>Tag support</li>
@@ -291,12 +294,26 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <li>Tomboy Notes: Export the notes to ENEX files <a href="https://askubuntu.com/questions/243691/how-can-i-export-my-tomboy-notes-into-evernote/608551">as described here</a> for example, and import these ENEX files into Joplin.</li>
 </ul>
 <h1 id="synchronisation">Synchronisation</h1>
-<p>One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as OneDrive or Dropbox, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.</p>
-<p>Currently, synchronisation is possible with OneDrive (by default) or the local filesystem. A NextCloud driver, and a Dropbox one will also be available once <a href="https://github.com/facebook/react-native/issues/14445">this React Native bug</a> is fixed. When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
-<p>On the <strong>desktop application</strong>, to initiate the synchronisation process, click on the &quot;Synchronise&quot; button in the sidebar. You will be asked to login to OneDrive to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). After that, the application will synchronise in the background whenever it is running, or you can click on &quot;Synchronise&quot; to start a synchronisation manually.</p>
-<p>On the <strong>terminal application</strong>, to initiate the synchronisation process, type <code>:sync</code>. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). After that, the application will synchronise in the background whenever it is running. It is possible to also synchronise outside of the user interface by typing <code>joplin sync</code> from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:</p>
+<p>One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as Nextcloud or OneDrive, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.</p>
+<p>Currently, synchronisation is possible with Nextcloud and OneDrive (by default) or the local filesystem. A Dropbox one will also be available once <a href="https://github.com/facebook/react-native/issues/14445">this React Native bug</a> is fixed. To setup synchronisation please follow the instructions below. After that, the application will synchronise in the background whenever it is running, or you can click on &quot;Synchronise&quot; to start a synchronisation manually.</p>
+<h2 id="nextcloud-synchronisation">Nextcloud synchronisation</h2>
+<p><strong>Important: This is a beta feature. It has been extensively tested and is already in use by some users, but it is possible that some bugs remain. If you wish to you use it, it is recommended that you keep a backup of your data. The simplest way is to regularly backup the profile directory of the desktop or terminal application.</strong></p>
+<p>On the <strong>desktop application</strong> or <strong>mobile application</strong>, go to the config screen and select Nextcloud as the synchronisation target. Then input <a href="https://docs.nextcloud.com/server/9/user_manual/files/access_webdav.html">the WebDAV URL</a>, this is normally <code>https://example.com/nextcloud/remote.php/dav/files/USERNAME/Joplin</code> (make sure to create the &quot;Joplin&quot; directory in Nextcloud and to replace USERNAME by your Nextcloud username), and set the username and password.</p>
+<p>On the <strong>terminal application</strong>, you will need to set the <code>sync.target</code> config variable and all the <code>sync.5.path</code>, <code>sync.5.username</code> and <code>sync.5.password</code> config variables to, respectively the Nextcloud WebDAV URL, your username and your password. This can be done from the command line mode using:</p>
+<pre><code>:config sync.5.path https://example.com/nextcloud/remote.php/dav/files/USERNAME/Joplin
+:config sync.5.username YOUR_USERNAME
+:config sync.5.password YOUR_PASSWORD
+:config sync.target 5
+</code></pre><p>If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.</p>
+<h2 id="onedrive-synchronisation">OneDrive synchronisation</h2>
+<p>When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
+<p>On the <strong>desktop application</strong> or <strong>mobile application</strong>, select &quot;OneDrive&quot; as the synchronisation target in the config screen (it is selected by default). Then, to initiate the synchronisation process, click on the &quot;Synchronise&quot; button in the sidebar. You will be asked to login to OneDrive to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive).</p>
+<p>On the <strong>terminal application</strong>, to initiate the synchronisation process, type <code>:sync</code>. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). It is possible to also synchronise outside of the user interface by typing <code>joplin sync</code> from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:</p>
 <pre><code>*/30 * * * * /path/to/joplin sync
-</code></pre><h1 id="attachments-resources">Attachments / Resources</h1>
+</code></pre><h1 id="encryption">Encryption</h1>
+<p>Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the notes, notebooks, tags or resources can read them. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the <a href="http://joplin.cozic.net/help/e2ee">End-To-End Encryption Tutorial</a> for more information about this feature and how to enable it.</p>
+<p>For a more technical description, mostly relevant for development or to review the method being used, please see the <a href="http://joplin.cozic.net/help/spec">Encryption specification</a>.</p>
+<h1 id="attachments-resources">Attachments / Resources</h1>
 <p>Any kind of file can be attached to a note. In Markdown, links to these files are represented as a simple ID to the resource. In the note viewer, these files, if they are images, will be displayed or, if they are other files (PDF, text files, etc.) they will be displayed as links. Clicking on this link will open the file in the default application.</p>
 <h1 id="notifications">Notifications</h1>
 <p>On the desktop and mobile apps, an alarm can be associated with any to-do. It will be triggered at the given time by displaying a notification. How the notification will be displayed depends on the operating system since each has a different way to handle this. Please see below for the requirements for the desktop applications:</p>
@@ -305,11 +322,11 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <li><strong>macOS</strong>: &gt;= 10.8 or Growl if earlier.</li>
 <li><strong>Linux</strong>: <code>notify-osd</code> or <code>libnotify-bin</code> installed (Ubuntu should have this by default). Growl otherwise</li>
 </ul>
-<p>See <a href="./DECISION_FLOW.md">documentation and flow chart for reporter choice</a></p>
+<p>See <a href="https://github.com/mikaelbr/node-notifier/blob/master/DECISION_FLOW.md">documentation and flow chart for reporter choice</a></p>
 <p>On mobile, the alarms will be displayed using the built-in notification system.</p>
 <p>If for any reason the notifications do not work, please <a href="https://github.com/laurent22/joplin/issues">open an issue</a>.</p>
 <h1 id="localisation">Localisation</h1>
-<p>Joplin is currently available in English, French, Spanish, German, Portuguese, Chinese, Japanese, Russian, Croatian and Italian. If you would like to contribute a translation, it is quite straightforward, please follow these steps:</p>
+<p>Joplin is currently available in English, French, Spanish, German, Portuguese, Chinese, Japanese, Russian, Croatian, Dutch and Italian. If you would like to contribute a translation, it is quite straightforward, please follow these steps:</p>
 <ul>
 <li><a href="https://poedit.net/">Download Poedit</a>, the translation editor, and install it.</li>
 <li><a href="https://raw.githubusercontent.com/laurent22/joplin/master/CliClient/locales/joplin.pot">Download the file to be translated</a>.</li>
@@ -317,10 +334,11 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <li>From then you can translate the file. Once it is done, please either <a href="https://github.com/laurent22/joplin/pulls">open a pull request</a> or send the file to <a href="https://raw.githubusercontent.com/laurent22/joplin/master/Assets/Adresse.png">this address</a>.</li>
 </ul>
 <p>This translation will apply to the three applications - desktop, mobile and terminal.</p>
+<h1 id="contributing">Contributing</h1>
+<p>Please see the guide for information on how to contribute to the development of Joplin: <a href="https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md">https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md</a></p>
 <h1 id="coming-features">Coming features</h1>
 <ul>
-<li>NextCloud support</li>
-<li>All: End to end encryption</li>
+<li>Mobile: manage tags</li>
 <li>Windows: Tray icon</li>
 <li>Desktop apps: Tag auto-complete</li>
 <li>Desktop apps: Dark theme</li>

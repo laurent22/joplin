@@ -110,6 +110,9 @@ msgstr "Comando inválido: \"%s\""
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "El comando \"%s\" unicamente disponible en modo GUI"
 
+msgid "Cannot change encrypted item"
+msgstr ""
+
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr "Falta un argumento requerido: %s"
@@ -172,6 +175,36 @@ msgstr "Marca una tarea como hecha."
 msgid "Note is not a to-do: \"%s\""
 msgstr "Una nota no es una tarea: \"%s\""
 
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status` and `target-status`."
+msgstr ""
+
+msgid "Enter master password:"
+msgstr ""
+
+msgid "Operation cancelled"
+msgstr ""
+
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+
+msgid "Completed decryption."
+msgstr ""
+
+#, fuzzy
+msgid "Enabled"
+msgstr "Deshabilitado"
+
+msgid "Disabled"
+msgstr "Deshabilitado"
+
+#, javascript-format
+msgid "Encryption is: %s"
+msgstr ""
+
 msgid "Edit note."
 msgstr "Editar una nota."
 
@@ -190,6 +223,10 @@ msgstr "La nota no existe: \"%s\". Crearla?"
 
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr "Iniciando a editar una nota. Cierra el editor para regresar al prompt."
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr ""
 
 msgid "Note has been saved."
 msgstr "La nota a sido guardada."
@@ -416,6 +453,14 @@ msgstr ""
 "Sincronizar con objetivo proveído ( por defecto al valor de configuración "
 "sync.target)"
 
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "Autenticación no completada (no se recibió token de autenticación)."
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+
 msgid "Synchronisation is already in progress."
 msgstr "Sincronzación en progreso."
 
@@ -428,10 +473,6 @@ msgstr ""
 "Archivo de bloqueo encontrado. Si tu sabes que no hay una sincronización en "
 "curso, puedes eliminar el archivo de bloqueo en \"%s\" y reanudar la "
 "operación."
-
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
-msgstr "Autenticación no completada (no se recibió token de autenticación)."
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
@@ -543,6 +584,13 @@ msgid ""
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
 
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+
 msgid "File"
 msgstr "Archivo"
 
@@ -586,7 +634,11 @@ msgstr "Herramientas"
 msgid "Synchronisation status"
 msgstr "Sincronización de objetivo"
 
-msgid "Options"
+msgid "Encryption options"
+msgstr ""
+
+#, fuzzy
+msgid "General Options"
 msgstr "Opciones"
 
 msgid "Help"
@@ -594,6 +646,9 @@ msgstr "Ayuda"
 
 msgid "Website and documentation"
 msgstr "Sitio web y documentacion"
+
+msgid "Check for updates..."
+msgstr ""
 
 msgid "About Joplin"
 msgstr "Acerca de Joplin"
@@ -607,6 +662,26 @@ msgstr "Ok"
 
 msgid "Cancel"
 msgstr "Cancelar"
+
+msgid "Error"
+msgstr ""
+
+msgid "An update is available, do you want to update now?"
+msgstr ""
+
+#, javascript-format
+msgid "Could not download the update: %s"
+msgstr ""
+
+msgid "Current version is up-to-date."
+msgstr ""
+
+msgid "New version downloaded - application will quit now and update..."
+msgstr ""
+
+#, javascript-format
+msgid "Could not install the update: %s"
+msgstr ""
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -673,13 +748,6 @@ msgid "Encryption is:"
 msgstr ""
 
 #, fuzzy
-msgid "Enabled"
-msgstr "Deshabilitado"
-
-msgid "Disabled"
-msgstr "Deshabilitado"
-
-#, fuzzy
 msgid "Back"
 msgstr "Retroceder"
 
@@ -692,14 +760,8 @@ msgstr ""
 msgid "Please create a notebook first."
 msgstr "Por favor crea una libreta primero."
 
-msgid "Note title:"
-msgstr "Título de nota:"
-
 msgid "Please create a notebook first"
 msgstr "Por favor crea una libreta primero"
-
-msgid "To-do title:"
-msgstr "Títuto de lista de tareas:"
 
 msgid "Notebook title:"
 msgstr "Título de libreta:"
@@ -777,6 +839,9 @@ msgstr "Inicio de sesión de OneDrive"
 msgid "Import"
 msgstr "Importar"
 
+msgid "Options"
+msgstr "Opciones"
+
 #, fuzzy
 msgid "Synchronisation Status"
 msgstr "Sincronización de objetivo"
@@ -819,6 +884,9 @@ msgstr "Etiqueta desconocida: %s"
 
 msgid "File system"
 msgstr "Sistema de archivos"
+
+msgid "Nextcloud (Beta)"
+msgstr ""
 
 msgid "OneDrive"
 msgstr "OneDrive"
@@ -887,6 +955,10 @@ msgstr "Artículos locales borrados: %d."
 msgid "Deleted remote items: %d."
 msgstr "Artículos remotos borrados: %d."
 
+#, fuzzy, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Artículos locales creados: %d."
+
 #, javascript-format
 msgid "State: \"%s\"."
 msgstr "Estado: \"%s\"."
@@ -901,6 +973,13 @@ msgstr "Completado: %s"
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "La sincronizacion ya esta en progreso. Estod: %s"
+
+msgid "Encrypted"
+msgstr ""
+
+#, fuzzy
+msgid "Encrypted items cannot be modified"
+msgstr "No se puede inicializar sincronizador."
 
 msgid "Conflicts"
 msgstr "Conflictos"
@@ -964,6 +1043,27 @@ msgstr "Mostrar lista de tareas incompletas al inio de las listas"
 msgid "Save geo-location with notes"
 msgstr "Guardar notas con geo-licalización"
 
+#, fuzzy
+msgid "When creating a new to-do:"
+msgstr "Crea una nueva lista de tareas."
+
+#, fuzzy
+msgid "Focus title"
+msgstr "Título de nota:"
+
+msgid "Focus body"
+msgstr ""
+
+#, fuzzy
+msgid "When creating a new note:"
+msgstr "Crea una nueva nota."
+
+msgid "Set application zoom percentage"
+msgstr ""
+
+msgid "Automatically update the application"
+msgstr "Actualizacion automatica de la aplicación"
+
 msgid "Synchronisation interval"
 msgstr "Intervalo de sincronización"
 
@@ -979,22 +1079,16 @@ msgstr "%d hora"
 msgid "%d hours"
 msgstr "%d horas"
 
-msgid "Automatically update the application"
-msgstr "Actualizacion automatica de la aplicación"
-
 msgid "Show advanced options"
 msgstr "Mostrar opciones "
 
 msgid "Synchronisation target"
 msgstr "Sincronización de objetivo"
 
-#, fuzzy
 msgid ""
-"The target to synchonise to. If synchronising with the file system, set "
-"`sync.2.path` to specify the target directory."
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"El objetivo para sincronizarse a. Si sincronizando con el sistema de "
-"archivos,  establecer `sync.2.path` especifique el directorio destino."
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr ""
@@ -1006,6 +1100,15 @@ msgstr ""
 "La ubicacion para sincronizar cuando el sistema de archivo tenga habilitada "
 "la sincronización. Ver `sync.target`."
 
+msgid "Nexcloud WebDAV URL"
+msgstr ""
+
+msgid "Nexcloud username"
+msgstr ""
+
+msgid "Nexcloud password"
+msgstr ""
+
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Valor inválido de opción: \"%s\". Los válores inválidos son: %s."
@@ -1013,8 +1116,14 @@ msgstr "Valor inválido de opción: \"%s\". Los válores inválidos son: %s."
 msgid "Items that cannot be synchronised"
 msgstr ""
 
-#, javascript-format
-msgid "\"%s\": \"%s\""
+#, fuzzy, javascript-format
+msgid "%s (%s): %s"
+msgstr "%s %s (%s)"
+
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
 msgstr ""
 
 msgid "Sync status (synced items / total items)"
@@ -1067,6 +1176,9 @@ msgstr "Log"
 msgid "Export Debug Report"
 msgstr "Exportar reporte depuracion"
 
+msgid "Encryption Config"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Configuracion"
 
@@ -1077,6 +1189,9 @@ msgstr "Mover a libreta...."
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "Mover %d notas a libreta \"%s\"?"
 
+msgid "Press to set the decryption password."
+msgstr ""
+
 msgid "Select date"
 msgstr "Seleccionar fecha"
 
@@ -1085,6 +1200,24 @@ msgstr "Confirmar"
 
 msgid "Cancel synchronisation"
 msgstr "Sincronizacion cancelada"
+
+#, javascript-format
+msgid "Master Key %s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Created: %s"
+msgstr "Creado: %d."
+
+msgid "Password:"
+msgstr ""
+
+msgid "Password cannot be empty"
+msgstr ""
+
+#, fuzzy
+msgid "Enable"
+msgstr "Deshabilitado"
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"
@@ -1149,6 +1282,17 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+#, fuzzy
+#~ msgid ""
+#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "`sync.2.path` to specify the target directory."
+#~ msgstr ""
+#~ "El objetivo para sincronizarse a. Si sincronizando con el sistema de "
+#~ "archivos,  establecer `sync.2.path` especifique el directorio destino."
+
+#~ msgid "To-do title:"
+#~ msgstr "Títuto de lista de tareas:"
 
 #~ msgid "Delete notebook?"
 #~ msgstr "Eliminar libreta?"

@@ -244,9 +244,9 @@
 </tr>
 </tbody>
 </table>
-<p>See lib/services/EncryptionService.js for the list of available encryption methods.</p>
+<p>See <code>lib/services/EncryptionService.js</code> for the list of available encryption methods.</p>
 <h3 id="data-chunk">Data chunk</h3>
-<p>The data is encoded in one or more chuncks for performance reasons. That way it is possible to take a block of data from one file and encrypt it to another block in another file. Encrypting/decrypting the whole file in one go would not work (on mobile especially).</p>
+<p>The data is encoded in one or more chunks for performance reasons. That way it is possible to take a block of data from one file and encrypt it to another block in another file. Encrypting/decrypting the whole file in one go would not work (on mobile especially).</p>
 <table>
 <thead>
 <tr>
@@ -271,9 +271,9 @@
 <p>The application supports multiple master keys in order to handle cases where one offline client starts encrypting notes, then another offline client starts encrypting notes too, and later both sync. Both master keys will have to be decrypted separately with the user password.</p>
 <p>Only one master key can be active for encryption purposes. For decryption, the algorithm will check the Master Key ID in the header, then check if it&#39;s available to the current app and, if so, use this for decryption.</p>
 <h2 id="encryption-service">Encryption Service</h2>
-<p>The applications make use of the EncryptionService class to handle encryption and decryption. Before it can be used, a least one master key must be loaded into it and marked as &quot;active&quot;.</p>
+<p>The applications make use of the <code>EncryptionService</code> class to handle encryption and decryption. Before it can be used, a least one master key must be loaded into it and be marked as &quot;active&quot;.</p>
 <h2 id="encryption-workflow">Encryption workflow</h2>
-<p>Items are encrypted only during synchronisation, when they are serialised (via BaseItem.serializeForSync), so before being sent to the sync target.</p>
+<p>Items are encrypted only during synchronisation, when they are serialised (via <code>BaseItem.serializeForSync</code>), so before being sent to the sync target.</p>
 <p>They are decrypted by DecryptionWorker in the background.</p>
 <p>The apps handle displaying both decrypted and encrypted items, so that user is aware that these items are there even if not yet decrypted. Encrypted items are mostly read-only to the user, except that they can be deleted.</p>
 <h2 id="enabling-and-disabling-encryption">Enabling and disabling encryption</h2>

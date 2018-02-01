@@ -1,6 +1,6 @@
 {
   "name": "Joplin",
-  "version": "0.10.41",
+  "version": "0.10.54",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "scripts": {
@@ -41,7 +41,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.24.1",
-    "electron": "^1.7.9",
+    "electron": "^1.7.11",
     "electron-builder": "^19.45.4"
   },
   "optionalDependencies": {
@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "app-module-path": "^2.2.0",
+    "base-64": "^0.1.0",
     "electron-context-menu": "^0.9.1",
     "electron-log": "^2.2.11",
     "electron-updater": "^2.16.1",
@@ -84,6 +85,8 @@
     "string-padding": "^1.0.2",
     "string-to-stream": "^1.1.0",
     "tcp-port-used": "^0.1.2",
-    "uuid": "^3.1.0"
+    "url-parse": "^1.2.0",
+    "uuid": "^3.1.0",
+    "xml2js": "^0.4.19"
   }
 }

@@ -12,8 +12,6 @@
 - [ ] Mobile
 - [ ] Terminal
 
-*If it is a bug if possible please provide a screenshot showing the problem*
-
-*If there is an error, please copy and paste the full error message*
-
----
+<!--
+Please the guide first! https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md
+-->
