@@ -691,6 +691,13 @@ msgstr "Über Joplin"
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
+#, fuzzy, javascript-format
+msgid "Open %s"
+msgstr "Auf %s: %s"
+
+msgid "Exit"
+msgstr ""
+
 msgid "OK"
 msgstr "OK"
 
@@ -702,6 +709,13 @@ msgstr ""
 
 msgid "An update is available, do you want to update now?"
 msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+#, fuzzy
+msgid "No"
+msgstr "N"
 
 #, javascript-format
 msgid "Could not download the update: %s"
@@ -936,6 +950,9 @@ msgstr "OneDrive"
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dev (Nur für Tests)"
 
+msgid "WebDAV (Beta)"
+msgstr ""
+
 #, javascript-format
 msgid "Unknown log level: %s"
 msgstr "Unbekanntes Log Level: %s"
@@ -1095,6 +1112,9 @@ msgstr ""
 msgid "When creating a new note:"
 msgstr "Erstellt eine neue Notiz."
 
+msgid "Show tray icon"
+msgstr ""
+
 msgid "Set application zoom percentage"
 msgstr "Einstellen des Anwendungszooms"
 
@@ -1148,6 +1168,18 @@ msgstr "Nexcloud Benutzername"
 
 msgid "Nexcloud password"
 msgstr "Nexcloud Passwort"
+
+#, fuzzy
+msgid "WebDAV URL"
+msgstr "Nexcloud WebDAV URL"
+
+#, fuzzy
+msgid "WebDAV username"
+msgstr "Nexcloud Benutzername"
+
+#, fuzzy
+msgid "WebDAV password"
+msgstr "Setze ein Passwort"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1264,6 +1296,12 @@ msgstr "Dieses Notizbuch konnte nicht gespeichert werden: %s"
 
 msgid "Edit notebook"
 msgstr "Notizbuch bearbeiten"
+
+msgid "Show all"
+msgstr ""
+
+msgid "Errors only"
+msgstr ""
 
 msgid "This note has been modified:"
 msgstr "Diese Notiz wurde verändert:"

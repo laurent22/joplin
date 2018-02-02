@@ -599,6 +599,13 @@ msgstr ""
 msgid "%s %s (%s, %s)"
 msgstr ""
 
+#, javascript-format
+msgid "Open %s"
+msgstr ""
+
+msgid "Exit"
+msgstr ""
+
 msgid "OK"
 msgstr ""
 
@@ -609,6 +616,12 @@ msgid "Error"
 msgstr ""
 
 msgid "An update is available, do you want to update now?"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
 msgstr ""
 
 #, javascript-format
@@ -825,6 +838,9 @@ msgstr ""
 msgid "OneDrive Dev (For testing only)"
 msgstr ""
 
+msgid "WebDAV (Beta)"
+msgstr ""
+
 #, javascript-format
 msgid "Unknown log level: %s"
 msgstr ""
@@ -969,6 +985,9 @@ msgstr ""
 msgid "When creating a new note:"
 msgstr ""
 
+msgid "Show tray icon"
+msgstr ""
+
 msgid "Set application zoom percentage"
 msgstr ""
 
@@ -1016,6 +1035,15 @@ msgid "Nexcloud username"
 msgstr ""
 
 msgid "Nexcloud password"
+msgstr ""
+
+msgid "WebDAV URL"
+msgstr ""
+
+msgid "WebDAV username"
+msgstr ""
+
+msgid "WebDAV password"
 msgstr ""
 
 #, javascript-format
@@ -1127,6 +1155,12 @@ msgid "The notebook could not be saved: %s"
 msgstr ""
 
 msgid "Edit notebook"
+msgstr ""
+
+msgid "Show all"
+msgstr ""
+
+msgid "Errors only"
 msgstr ""
 
 msgid "This note has been modified:"

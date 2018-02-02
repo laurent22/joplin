@@ -14,6 +14,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.3\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "Give focus to next pane"
 msgstr "Activer le volet suivant"
@@ -665,7 +667,7 @@ msgid "Website and documentation"
 msgstr "Documentation en ligne"
 
 msgid "Check for updates..."
-msgstr ""
+msgstr "Vérifier les mises à jour..."
 
 msgid "About Joplin"
 msgstr "A propos de Joplin"
@@ -674,6 +676,13 @@ msgstr "A propos de Joplin"
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
+#, javascript-format
+msgid "Open %s"
+msgstr "Ouvrir %s"
+
+msgid "Exit"
+msgstr "Quitter"
+
 msgid "OK"
 msgstr "OK"
 
@@ -681,24 +690,33 @@ msgid "Cancel"
 msgstr "Annuler"
 
 msgid "Error"
-msgstr ""
+msgstr "Erreur"
 
 msgid "An update is available, do you want to update now?"
 msgstr ""
+"Une mise à jour est disponible, souhaitez vous la télécharger maintenant ?"
+
+msgid "Yes"
+msgstr "Oui"
+
+msgid "No"
+msgstr "Non"
 
 #, javascript-format
 msgid "Could not download the update: %s"
-msgstr ""
+msgstr "Impossible de télécharger la mise à jour : %s"
 
 msgid "Current version is up-to-date."
-msgstr ""
+msgstr "La version actuelle est à jour."
 
 msgid "New version downloaded - application will quit now and update..."
 msgstr ""
+"La nouvelle version a été téléchargée - le programme va se fermer et se "
+"mettre à jour..."
 
 #, javascript-format
 msgid "Could not install the update: %s"
-msgstr ""
+msgstr "Impossible d'installer la mise à jour : %s"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -918,6 +936,9 @@ msgstr "OneDrive"
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dév (Pour tester uniquement)"
 
+msgid "WebDAV (Beta)"
+msgstr "WebDAV (Bêta)"
+
 #, javascript-format
 msgid "Unknown log level: %s"
 msgstr "Paramètre inconnu : %s"
@@ -1060,20 +1081,20 @@ msgstr "Tâches non-terminées en haut des listes"
 msgid "Save geo-location with notes"
 msgstr "Enregistrer l'emplacement avec les notes"
 
-#, fuzzy
 msgid "When creating a new to-do:"
-msgstr "Créer une nouvelle tâche."
+msgstr "Lors de la création d'une tâche :"
 
-#, fuzzy
 msgid "Focus title"
-msgstr "Titre de la note :"
+msgstr "Curseur sur le titre"
 
 msgid "Focus body"
-msgstr ""
+msgstr "Curseur sur corps du message"
 
-#, fuzzy
 msgid "When creating a new note:"
-msgstr "Créer une note."
+msgstr "Lors de la création d'une note :"
+
+msgid "Show tray icon"
+msgstr "Afficher icône dans la zone de notifications"
 
 msgid "Set application zoom percentage"
 msgstr "Niveau de zoom"
@@ -1128,6 +1149,15 @@ msgstr "Nextcloud : Nom utilisateur"
 
 msgid "Nexcloud password"
 msgstr "Nextcloud : Mot de passe"
+
+msgid "WebDAV URL"
+msgstr "WebDAV : URL"
+
+msgid "WebDAV username"
+msgstr "WebDAV : Nom utilisateur"
+
+msgid "WebDAV password"
+msgstr "WebDAV : Mot de passe"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1244,6 +1274,12 @@ msgstr "Ce carnet n'a pas pu être sauvegardé : %s"
 
 msgid "Edit notebook"
 msgstr "Éditer le carnet"
+
+msgid "Show all"
+msgstr "Afficher tous"
+
+msgid "Errors only"
+msgstr "Erreurs seulement"
 
 msgid "This note has been modified:"
 msgstr "Cette note a été modifiée :"
@@ -1370,9 +1406,6 @@ msgstr "Bienvenue"
 
 #~ msgid "Todo filter"
 #~ msgstr "Filtre des tâches"
-
-#~ msgid "Show all"
-#~ msgstr "Afficher tous"
 
 #~ msgid "Non-completed and recently completed ones"
 #~ msgstr "Tâches non-complétées et récentes"

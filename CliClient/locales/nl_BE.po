@@ -674,6 +674,13 @@ msgstr "Over Joplin"
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
+#, fuzzy, javascript-format
+msgid "Open %s"
+msgstr "Op %s: %s"
+
+msgid "Exit"
+msgstr ""
+
 msgid "OK"
 msgstr "OK"
 
@@ -685,6 +692,13 @@ msgstr ""
 
 msgid "An update is available, do you want to update now?"
 msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+#, fuzzy
+msgid "No"
+msgstr "N"
 
 #, javascript-format
 msgid "Could not download the update: %s"
@@ -915,6 +929,9 @@ msgstr "OneDrive"
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dev (Alleen voor testen)"
 
+msgid "WebDAV (Beta)"
+msgstr ""
+
 #, javascript-format
 msgid "Unknown log level: %s"
 msgstr "Onbekend log level: %s"
@@ -1074,6 +1091,9 @@ msgstr ""
 msgid "When creating a new note:"
 msgstr "Maakt een nieuwe notitie aan."
 
+msgid "Show tray icon"
+msgstr ""
+
 msgid "Set application zoom percentage"
 msgstr ""
 
@@ -1124,6 +1144,16 @@ msgstr ""
 
 #, fuzzy
 msgid "Nexcloud password"
+msgstr "Stel wachtwoord in"
+
+msgid "WebDAV URL"
+msgstr ""
+
+msgid "WebDAV username"
+msgstr ""
+
+#, fuzzy
+msgid "WebDAV password"
 msgstr "Stel wachtwoord in"
 
 #, javascript-format
@@ -1240,6 +1270,12 @@ msgstr "Het notitieboek kon niet opgeslaan worden: %s"
 
 msgid "Edit notebook"
 msgstr "Bewerk notitieboek"
+
+msgid "Show all"
+msgstr ""
+
+msgid "Errors only"
+msgstr ""
 
 msgid "This note has been modified:"
 msgstr "Deze notitie werd aangepast:"
