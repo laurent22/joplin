@@ -297,4 +297,4 @@ function _(s, ...args) {
 	return sprintf(result, ...args);
 }
 
-module.exports = { _, supportedLocales, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode };
+module.exports = { _, supportedLocales, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };

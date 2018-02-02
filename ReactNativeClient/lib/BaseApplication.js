@@ -26,12 +26,16 @@ const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
+const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
+const SyncTargetWebDAV = require('lib/SyncTargetWebDAV.js');
 const EncryptionService = require('lib/services/EncryptionService');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
+SyncTargetRegistry.addClass(SyncTargetNextcloud);
+SyncTargetRegistry.addClass(SyncTargetWebDAV);
 
 class BaseApplication {
 

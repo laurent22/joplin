@@ -223,6 +223,10 @@ msgstr "\"%s\"というノートはありません。お作りいたしますか
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr "ノートの編集の開始。エディタを閉じると元の画面に戻ることが出来ます。"
 
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr ""
+
 msgid "Note has been saved."
 msgstr "ノートは保存されました。"
 
@@ -446,6 +450,14 @@ msgstr "リモート保存領域と同期します。"
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr "指定のターゲットと同期します。(標準： sync.targetの設定値)"
 
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "認証は完了していません(認証トークンが得られませんでした)"
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+
 msgid "Synchronisation is already in progress."
 msgstr "同期はすでに実行中です。"
 
@@ -457,10 +469,6 @@ msgid ""
 msgstr ""
 "ロックファイルがすでに保持されています。同期作業が行われていない場合は、\"%s"
 "\"にあるロックファイルを削除して、作業を再度行ってください。"
-
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
-msgstr "認証は完了していません(認証トークンが得られませんでした)"
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
@@ -586,9 +594,6 @@ msgstr ""
 msgid "File"
 msgstr "ファイル"
 
-msgid "Save"
-msgstr "保存"
-
 msgid "New note"
 msgstr "新しいノート"
 
@@ -641,11 +646,21 @@ msgstr "ヘルプ"
 msgid "Website and documentation"
 msgstr "Webサイトとドキュメント"
 
+msgid "Check for updates..."
+msgstr ""
+
 msgid "About Joplin"
 msgstr "Joplinについて"
 
 #, javascript-format
 msgid "%s %s (%s, %s)"
+msgstr ""
+
+#, javascript-format
+msgid "Open %s"
+msgstr ""
+
+msgid "Exit"
 msgstr ""
 
 msgid "OK"
@@ -654,9 +669,38 @@ msgstr ""
 msgid "Cancel"
 msgstr "キャンセル"
 
+msgid "Error"
+msgstr ""
+
+msgid "An update is available, do you want to update now?"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+#, javascript-format
+msgid "Could not download the update: %s"
+msgstr ""
+
+msgid "Current version is up-to-date."
+msgstr ""
+
+msgid "New version downloaded - application will quit now and update..."
+msgstr ""
+
+#, javascript-format
+msgid "Could not install the update: %s"
+msgstr ""
+
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "ノートと設定は、%sに保存されます。"
+
+msgid "Save"
+msgstr "保存"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -711,6 +755,15 @@ msgstr ""
 "注意：\"active\"に指定されたマスターキーのみが暗号化に使用されます。暗号化に"
 "使用されたキーの応じて、すべてのキーが暗号解除のために使用されます。"
 
+msgid "Missing Master Keys"
+msgstr ""
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+
 msgid "Status"
 msgstr "状態"
 
@@ -730,14 +783,8 @@ msgstr ""
 msgid "Please create a notebook first."
 msgstr "ますはノートブックを作成して下さい。"
 
-msgid "Note title:"
-msgstr "ノートの題名："
-
 msgid "Please create a notebook first"
 msgstr "ますはノートブックを作成して下さい。"
-
-msgid "To-do title:"
-msgstr "ToDoの題名："
 
 msgid "Notebook title:"
 msgstr "ノートブックの題名："
@@ -855,10 +902,16 @@ msgstr "不明なフラグ: %s"
 msgid "File system"
 msgstr "ファイルシステム"
 
+msgid "Nextcloud (Beta)"
+msgstr ""
+
 msgid "OneDrive"
 msgstr ""
 
 msgid "OneDrive Dev (For testing only)"
+msgstr ""
+
+msgid "WebDAV (Beta)"
 msgstr ""
 
 #, javascript-format
@@ -918,6 +971,10 @@ msgstr "ローカルアイテムの削除: %d."
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "リモートアイテムの削除: %d."
+
+#, fuzzy, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "ローカルアイテムの作成: %d."
 
 #, javascript-format
 msgid "State: \"%s\"."
@@ -1002,6 +1059,30 @@ msgstr "未完のToDoをリストの上部に表示"
 msgid "Save geo-location with notes"
 msgstr "ノートに位置情報を保存"
 
+#, fuzzy
+msgid "When creating a new to-do:"
+msgstr "新しいToDoを作成します。"
+
+#, fuzzy
+msgid "Focus title"
+msgstr "ノートの題名："
+
+msgid "Focus body"
+msgstr ""
+
+#, fuzzy
+msgid "When creating a new note:"
+msgstr "あたらしいノートを作成します。"
+
+msgid "Show tray icon"
+msgstr ""
+
+msgid "Set application zoom percentage"
+msgstr ""
+
+msgid "Automatically update the application"
+msgstr "アプリケーションの自動更新"
+
 msgid "Synchronisation interval"
 msgstr "同期間隔"
 
@@ -1017,9 +1098,6 @@ msgstr "%d 時間"
 msgid "%d hours"
 msgstr "%d 時間"
 
-msgid "Automatically update the application"
-msgstr "アプリケーションの自動更新"
-
 msgid "Show advanced options"
 msgstr "詳細な設定の表示"
 
@@ -1027,11 +1105,9 @@ msgid "Synchronisation target"
 msgstr "同期先"
 
 msgid ""
-"The target to synchonise to. If synchronising with the file system, set "
-"`sync.2.path` to specify the target directory."
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"同期先です。ローカルのファイルシステムと同期する場合は、`sync.2.path`を同期先"
-"のディレクトリに設定してください。"
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr "同期先のディレクトリ(絶対パス)"
@@ -1042,6 +1118,24 @@ msgid ""
 msgstr ""
 "ファイルシステム同期の有効時に同期を行うパスです。`sync.target`も参考にしてく"
 "ださい。"
+
+msgid "Nexcloud WebDAV URL"
+msgstr ""
+
+msgid "Nexcloud username"
+msgstr ""
+
+msgid "Nexcloud password"
+msgstr ""
+
+msgid "WebDAV URL"
+msgstr ""
+
+msgid "WebDAV username"
+msgstr ""
+
+msgid "WebDAV password"
+msgstr ""
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1155,6 +1249,12 @@ msgstr "ノートブックは保存できませんでした：%s"
 msgid "Edit notebook"
 msgstr "ノートブックの編集"
 
+msgid "Show all"
+msgstr ""
+
+msgid "Errors only"
+msgstr ""
+
 msgid "This note has been modified:"
 msgstr "ノートは変更されています："
 
@@ -1209,3 +1309,13 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
+
+#~ msgid ""
+#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "`sync.2.path` to specify the target directory."
+#~ msgstr ""
+#~ "同期先です。ローカルのファイルシステムと同期する場合は、`sync.2.path`を同"
+#~ "期先のディレクトリに設定してください。"
+
+#~ msgid "To-do title:"
+#~ msgstr "ToDoの題名："

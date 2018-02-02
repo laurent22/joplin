@@ -174,6 +174,15 @@ class BaseItem extends BaseModel {
 		}
 	}
 
+	// Note: Currently, once a deleted_items entry has been processed, it is removed from the database. In practice it means that
+	// the following case will not work as expected:
+	// - Client 1 creates a note and sync with target 1 and 2
+	// - Client 2 sync with target 1
+	// - Client 2 deletes note and sync with target 1
+	// - Client 1 syncs with target 1 only (note is deleted from local machine, as expected)
+	// - Client 1 syncs with target 2 only => the note is *not* deleted from target 2 because no information
+	//   that it was previously deleted exist (deleted_items entry has been deleted).
+	// The solution would be to permanently store the list of deleted items on each client.
 	static deletedItems(syncTarget) {
 		return this.db().selectAll('SELECT * FROM deleted_items WHERE sync_target = ?', [syncTarget]);
 	}

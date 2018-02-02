@@ -19,7 +19,7 @@ process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000; // The first test is slow because the database needs to be built
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 35000; // The first test is slow because the database needs to be built
 
 async function allItems() {
 	let folders = await Folder.all();
@@ -74,11 +74,11 @@ async function localItemsSameAsRemote(locals, expect) {
 			expect(!!remote).toBe(true);
 			if (!remote) continue;
 
-			if (syncTargetId() == SyncTargetRegistry.nameToId('filesystem')) {
-				expect(remote.updated_time).toBe(Math.floor(dbItem.updated_time / 1000) * 1000);
-			} else {
-				expect(remote.updated_time).toBe(dbItem.updated_time);
-			}
+			// if (syncTargetId() == SyncTargetRegistry.nameToId('filesystem')) {
+			// 	expect(remote.updated_time).toBe(Math.floor(dbItem.updated_time / 1000) * 1000);
+			// } else {
+			// 	expect(remote.updated_time).toBe(dbItem.updated_time);
+			// }
 
 			let remoteContent = await fileApi().get(path);
 			remoteContent = dbItem.type_ == BaseModel.TYPE_NOTE ? await Note.unserialize(remoteContent) : await Folder.unserialize(remoteContent);
@@ -268,6 +268,24 @@ describe('Synchronizer', function() {
 		expect(deletedItems.length).toBe(0);
 	}));
 
+	it('should not created deleted_items entries for items deleted via sync', asyncTest(async () => {
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: "un", parent_id: folder1.id });
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		await Folder.delete(folder1.id);
+		await synchronizer().start();
+
+		await switchClient(1);
+
+		await synchronizer().start();
+		let deletedItems = await BaseItem.deletedItems(syncTargetId());
+		expect(deletedItems.length).toBe(0);
+	}));
+
 	it('should delete local notes', asyncTest(async () => {
 		let folder1 = await Folder.save({ title: "folder1" });
 		let note1 = await Note.save({ title: "un", parent_id: folder1.id });
@@ -286,7 +304,7 @@ describe('Synchronizer', function() {
 		expect(items.length).toBe(1);
 		let deletedItems = await BaseItem.deletedItems(syncTargetId());
 		expect(deletedItems.length).toBe(0);
-			}));
+	}));
 
 	it('should delete remote folder', asyncTest(async () => {
 		let folder1 = await Folder.save({ title: "folder1" });
@@ -304,8 +322,8 @@ describe('Synchronizer', function() {
 		await synchronizer().start();
 
 		let all = await allItems();
-		localItemsSameAsRemote(all, expect);
-			}));
+		await localItemsSameAsRemote(all, expect);
+	}));
 
 	it('should delete local folder', asyncTest(async () => {
 		let folder1 = await Folder.save({ title: "folder1" });
@@ -327,8 +345,8 @@ describe('Synchronizer', function() {
 		await synchronizer().start();
 
 		let items = await allItems();
-		localItemsSameAsRemote(items, expect);
-			}));
+		await localItemsSameAsRemote(items, expect);
+	}));
 
 	it('should resolve conflict if remote folder has been deleted, but note has been added to folder locally', asyncTest(async () => {
 		let folder1 = await Folder.save({ title: "folder1" });
@@ -370,8 +388,8 @@ describe('Synchronizer', function() {
 		expect(items.length).toBe(1);
 		expect(items[0].title).toBe('folder');
 
-		localItemsSameAsRemote(items, expect);
-			}));
+		await localItemsSameAsRemote(items, expect);
+	}));
 
 	it('should cross delete all folders', asyncTest(async () => {
 		// If client1 and 2 have two folders, client 1 deletes item 1 and client
@@ -441,7 +459,7 @@ describe('Synchronizer', function() {
 		let unconflictedNotes = await Note.unconflictedNotes();
 
 		expect(unconflictedNotes.length).toBe(0);
-			}));
+	}));
 
 	it('should handle conflict when remote folder is deleted then local folder is renamed', asyncTest(async () => {
 		let folder1 = await Folder.save({ title: "folder1" });
@@ -471,7 +489,7 @@ describe('Synchronizer', function() {
 		let items = await allItems();
 
 		expect(items.length).toBe(1);
-			}));
+	}));
 
 	it('should allow duplicate folder titles', asyncTest(async () => {
 		let localF1 = await Folder.save({ title: "folder" });
@@ -557,10 +575,12 @@ describe('Synchronizer', function() {
 	}
 
 	it('should sync tags', asyncTest(async () => {
-		await shoudSyncTagTest(false);	}));
+		await shoudSyncTagTest(false);
+	}));
 
 	it('should sync encrypted tags', asyncTest(async () => {
-		await shoudSyncTagTest(true);	}));
+		await shoudSyncTagTest(true);
+	}));
 
 	it('should not sync notes with conflicts', asyncTest(async () => {
 		let f1 = await Folder.save({ title: "folder" });
@@ -665,12 +685,12 @@ describe('Synchronizer', function() {
 
 		await switchClient(2);
 
-		synchronizer().debugFlags_ = ['cancelDeltaLoop2'];		
+		synchronizer().testingHooks_ = ['cancelDeltaLoop2'];		
 		let context = await synchronizer().start();
 		let notes = await Note.all();
 		expect(notes.length).toBe(0);
 
-		synchronizer().debugFlags_ = [];
+		synchronizer().testingHooks_ = [];
 		await synchronizer().start({ context: context });
 		notes = await Note.all();
 		expect(notes.length).toBe(1);
@@ -684,9 +704,9 @@ describe('Synchronizer', function() {
 		let disabledItems = await BaseItem.syncDisabledItems(syncTargetId());
 		expect(disabledItems.length).toBe(0);
 		await Note.save({ id: noteId, title: "un mod", });
-		synchronizer().debugFlags_ = ['rejectedByTarget'];
+		synchronizer().testingHooks_ = ['rejectedByTarget'];
 		await synchronizer().start();
-		synchronizer().debugFlags_ = [];
+		synchronizer().testingHooks_ = [];
 		await synchronizer().start(); // Another sync to check that this item is now excluded from sync
 
 		await switchClient(2);
@@ -830,7 +850,7 @@ describe('Synchronizer', function() {
 	}));
 
 	it('should sync resources', asyncTest(async () => {
-		while (insideBeforeEach) await time.msleep(100);
+		while (insideBeforeEach) await time.msleep(500);
 
 		let folder1 = await Folder.save({ title: "folder1" });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });

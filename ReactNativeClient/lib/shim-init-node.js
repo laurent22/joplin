@@ -4,13 +4,19 @@ const { GeolocationNode } = require('lib/geolocation-node.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const { time } = require('lib/time-utils.js');
 const { setLocale, defaultLocale, closestSupportedLocale } = require('lib/locale.js');
+const { FsDriverNode } = require('lib/fs-driver-node.js');
 
 function shimInit() {
-	shim.fs = fs;
+	shim.fsDriver = () => { throw new Error('Not implemented') }
 	shim.FileApiDriverLocal = FileApiDriverLocal;
 	shim.Geolocation = GeolocationNode;
 	shim.FormData = require('form-data');
 	shim.sjclModule = require('lib/vendor/sjcl.js');
+
+	shim.fsDriver = () => {
+		if (!shim.fsDriver_) shim.fsDriver_ = new FsDriverNode();
+		return shim.fsDriver_;
+	}
 
 	shim.randomBytes = async (count) => {
 		const buffer = require('crypto').randomBytes(count);

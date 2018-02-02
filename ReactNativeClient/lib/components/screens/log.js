@@ -23,6 +23,7 @@ class LogScreenComponent extends BaseScreenComponent {
 		});
 		this.state = {
 			dataSource: ds,
+			showErrorsOnly: false,
 		};
 		this.styles_ = {};
 	}
@@ -62,11 +63,22 @@ class LogScreenComponent extends BaseScreenComponent {
 		this.resfreshLogEntries();
 	}
 
-	resfreshLogEntries() {
-		reg.logger().lastEntries(1000).then((entries) => {
+	resfreshLogEntries(showErrorsOnly = null) {
+		if (showErrorsOnly === null) showErrorsOnly = this.state.showErrorsOnly;
+
+		let levels = [Logger.LEVEL_DEBUG, Logger.LEVEL_INFO, Logger.LEVEL_WARN, Logger.LEVEL_ERROR];
+		if  (showErrorsOnly) levels = [Logger.LEVEL_WARN, Logger.LEVEL_ERROR]
+
+		reg.logger().lastEntries(1000, { levels: levels }).then((entries) => {
 			const newDataSource = this.state.dataSource.cloneWithRows(entries);
 			this.setState({ dataSource: newDataSource });
 		});
+	}
+
+	toggleErrorsOnly() {
+		const showErrorsOnly = !this.state.showErrorsOnly;
+		this.setState({ showErrorsOnly: showErrorsOnly });
+		this.resfreshLogEntries(showErrorsOnly);
 	}
 
 	render() {
@@ -91,7 +103,14 @@ class LogScreenComponent extends BaseScreenComponent {
 					renderRow={renderRow}
 					enableEmptySections={true}
 				/>
-				<Button title={_("Refresh")} onPress={() => { this.resfreshLogEntries(); }}/>
+				<View style={{flexDirection: 'row'}}>
+					<View style={{flex:1, marginRight: 5 }}>
+						<Button title={_("Refresh")} onPress={() => { this.resfreshLogEntries(); }}/>
+					</View>
+					<View style={{flex:1}}>
+						<Button title={this.state.showErrorsOnly ? _("Show all") : _("Errors only")} onPress={() => { this.toggleErrorsOnly(); }}/>
+					</View>
+				</View>
 			</View>
 		);
 	}

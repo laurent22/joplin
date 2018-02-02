@@ -28,7 +28,7 @@ class MdToHtml {
 			const r = resources[n];
 			k.push(r.id);
 		}
-		k.push(md5(body));
+		k.push(md5(escape(body))); // https://github.com/pvorb/node-md5/issues/41
 		k.push(md5(JSON.stringify(style)));
 		k.push(md5(JSON.stringify(options)));
 		return k.join('_');
@@ -73,7 +73,7 @@ class MdToHtml {
 
 	renderImage_(attrs, options) {
 		const loadResource = async (id) => {
-			console.info('Loading resource: ' + id);
+			// console.info('Loading resource: ' + id);
 
 			// Initially set to to an empty object to make
 			// it clear that it is being loaded. Otherwise

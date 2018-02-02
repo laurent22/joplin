@@ -218,6 +218,10 @@ msgstr "此笔记不存在：\"%s\"。是否创建？"
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr "开始编辑笔记。关闭编辑器则返回提示。"
 
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr ""
+
 msgid "Note has been saved."
 msgstr "笔记已被保存。"
 
@@ -426,6 +430,14 @@ msgstr "与远程储存空间同步。"
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr "同步至所提供的目标（默认为同步目标配置值）"
 
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "认证未完成（未收到认证令牌）。"
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+
 msgid "Synchronisation is already in progress."
 msgstr "同步正在进行中。"
 
@@ -437,10 +449,6 @@ msgid ""
 msgstr ""
 "锁定文件已被保留。若当前没有任何正在进行的同步，您可以在\"%s\"删除锁定文件并"
 "继续操作。"
-
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
-msgstr "认证未完成（未收到认证令牌）。"
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
@@ -553,9 +561,6 @@ msgstr ""
 msgid "File"
 msgstr "文件"
 
-msgid "Save"
-msgstr ""
-
 msgid "New note"
 msgstr "新笔记"
 
@@ -608,6 +613,9 @@ msgstr "帮助"
 msgid "Website and documentation"
 msgstr "网站与文档"
 
+msgid "Check for updates..."
+msgstr ""
+
 msgid "About Joplin"
 msgstr "关于Joplin"
 
@@ -615,14 +623,51 @@ msgstr "关于Joplin"
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
+#, fuzzy, javascript-format
+msgid "Open %s"
+msgstr "%s：%s"
+
+msgid "Exit"
+msgstr ""
+
 msgid "OK"
 msgstr "确认"
 
 msgid "Cancel"
 msgstr "取消"
 
+msgid "Error"
+msgstr ""
+
+msgid "An update is available, do you want to update now?"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+#, fuzzy
+msgid "No"
+msgstr "否"
+
+#, javascript-format
+msgid "Could not download the update: %s"
+msgstr ""
+
+msgid "Current version is up-to-date."
+msgstr ""
+
+msgid "New version downloaded - application will quit now and update..."
+msgstr ""
+
+#, javascript-format
+msgid "Could not install the update: %s"
+msgstr ""
+
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
+msgstr ""
+
+msgid "Save"
 msgstr ""
 
 msgid ""
@@ -676,6 +721,15 @@ msgid ""
 "how the notes or notebooks were originally encrypted."
 msgstr ""
 
+msgid "Missing Master Keys"
+msgstr ""
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+
 msgid "Status"
 msgstr "状态"
 
@@ -693,14 +747,8 @@ msgstr "将创建新笔记本\"%s\"并将文件\"%s\"导入至其中"
 msgid "Please create a notebook first."
 msgstr "请先创建笔记本。"
 
-msgid "Note title:"
-msgstr "笔记标题："
-
 msgid "Please create a notebook first"
 msgstr "请先创建笔记本"
-
-msgid "To-do title:"
-msgstr "待办事项标题："
 
 msgid "Notebook title:"
 msgstr "笔记本标题："
@@ -820,11 +868,17 @@ msgstr "未知标记：%s"
 msgid "File system"
 msgstr "文件系统"
 
+msgid "Nextcloud (Beta)"
+msgstr ""
+
 msgid "OneDrive"
 msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive开发员（仅测试用）"
+
+msgid "WebDAV (Beta)"
+msgstr ""
 
 #, javascript-format
 msgid "Unknown log level: %s"
@@ -880,6 +934,10 @@ msgstr "已删除本地项目: %d。"
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "已删除远程项目: %d。"
+
+#, fuzzy, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "已新建本地项目: %d。"
 
 #, javascript-format
 msgid "State: \"%s\"."
@@ -960,6 +1018,30 @@ msgstr "在列表上方显示未完成的待办事项"
 msgid "Save geo-location with notes"
 msgstr "保存笔记时同时保存地理定位信息"
 
+#, fuzzy
+msgid "When creating a new to-do:"
+msgstr "创建新待办事项。"
+
+#, fuzzy
+msgid "Focus title"
+msgstr "笔记标题："
+
+msgid "Focus body"
+msgstr ""
+
+#, fuzzy
+msgid "When creating a new note:"
+msgstr "创建新笔记。"
+
+msgid "Show tray icon"
+msgstr ""
+
+msgid "Set application zoom percentage"
+msgstr ""
+
+msgid "Automatically update the application"
+msgstr "自动更新此程序"
+
 msgid "Synchronisation interval"
 msgstr "同步间隔"
 
@@ -975,9 +1057,6 @@ msgstr "%d小时"
 msgid "%d hours"
 msgstr "%d小时"
 
-msgid "Automatically update the application"
-msgstr "自动更新此程序"
-
 msgid "Show advanced options"
 msgstr "显示高级选项"
 
@@ -985,9 +1064,9 @@ msgid "Synchronisation target"
 msgstr "同步目标"
 
 msgid ""
-"The target to synchonise to. If synchronising with the file system, set "
-"`sync.2.path` to specify the target directory."
-msgstr "同步的目标。若与文件系统同步，设置`sync.2.path`为指定目标目录。"
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr ""
@@ -996,6 +1075,24 @@ msgid ""
 "The path to synchronise with when file system synchronisation is enabled. "
 "See `sync.target`."
 msgstr "当文件系统同步开启时的同步路径。参考`sync.target`。"
+
+msgid "Nexcloud WebDAV URL"
+msgstr ""
+
+msgid "Nexcloud username"
+msgstr ""
+
+msgid "Nexcloud password"
+msgstr ""
+
+msgid "WebDAV URL"
+msgstr ""
+
+msgid "WebDAV username"
+msgstr ""
+
+msgid "WebDAV password"
+msgstr ""
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1109,6 +1206,12 @@ msgstr "此笔记本无法保存：%s"
 msgid "Edit notebook"
 msgstr "编辑笔记本"
 
+msgid "Show all"
+msgstr ""
+
+msgid "Errors only"
+msgstr ""
+
 msgid "This note has been modified:"
 msgstr "此笔记已被修改："
 
@@ -1159,6 +1262,14 @@ msgstr "您当前没有任何笔记本。点击(+)按钮创建新笔记本。"
 
 msgid "Welcome"
 msgstr "欢迎"
+
+#~ msgid ""
+#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "`sync.2.path` to specify the target directory."
+#~ msgstr "同步的目标。若与文件系统同步，设置`sync.2.path`为指定目标目录。"
+
+#~ msgid "To-do title:"
+#~ msgstr "待办事项标题："
 
 #~ msgid "\"%s\": \"%s\""
 #~ msgstr "\"%s\": \"%s\""

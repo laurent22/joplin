@@ -223,6 +223,10 @@ msgstr "A nota não existe: \"%s\". Criar?"
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr "Começando a editar a nota. Feche o editor para voltar ao prompt."
 
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr ""
+
 msgid "Note has been saved."
 msgstr "Nota gravada."
 
@@ -445,6 +449,15 @@ msgstr ""
 "Sincronizar para destino fornecido (p padrão é o valor de configuração sync."
 "target)"
 
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr ""
+"A autenticação não foi concluída (não recebeu um token de autenticação)."
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+
 msgid "Synchronisation is already in progress."
 msgstr "A sincronização já está em andamento."
 
@@ -457,11 +470,6 @@ msgstr ""
 "O arquivo de bloqueio já está ativo. Se você sabe que nenhuma sincronização "
 "está ocorrendo, você pode excluir o arquivo de bloqueio em \"%s\" e retomar "
 "a operação."
-
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
-msgstr ""
-"A autenticação não foi concluída (não recebeu um token de autenticação)."
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
@@ -581,9 +589,6 @@ msgstr ""
 msgid "File"
 msgstr "Arquivo"
 
-msgid "Save"
-msgstr ""
-
 msgid "New note"
 msgstr "Nova nota"
 
@@ -637,6 +642,9 @@ msgstr "Ajuda"
 msgid "Website and documentation"
 msgstr "Website e documentação"
 
+msgid "Check for updates..."
+msgstr ""
+
 msgid "About Joplin"
 msgstr "Sobre o Joplin"
 
@@ -644,14 +652,51 @@ msgstr "Sobre o Joplin"
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
+#, fuzzy, javascript-format
+msgid "Open %s"
+msgstr "Em %s: %s"
+
+msgid "Exit"
+msgstr ""
+
 msgid "OK"
 msgstr "OK"
 
 msgid "Cancel"
 msgstr "Cancelar"
 
+msgid "Error"
+msgstr ""
+
+msgid "An update is available, do you want to update now?"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+#, fuzzy
+msgid "No"
+msgstr "N"
+
+#, javascript-format
+msgid "Could not download the update: %s"
+msgstr ""
+
+msgid "Current version is up-to-date."
+msgstr ""
+
+msgid "New version downloaded - application will quit now and update..."
+msgstr ""
+
+#, javascript-format
+msgid "Could not install the update: %s"
+msgstr ""
+
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
+msgstr ""
+
+msgid "Save"
 msgstr ""
 
 msgid ""
@@ -705,6 +750,15 @@ msgid ""
 "how the notes or notebooks were originally encrypted."
 msgstr ""
 
+msgid "Missing Master Keys"
+msgstr ""
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+
 msgid "Status"
 msgstr "Status"
 
@@ -723,14 +777,8 @@ msgstr ""
 msgid "Please create a notebook first."
 msgstr "Primeiro, crie um caderno."
 
-msgid "Note title:"
-msgstr "Título da nota:"
-
 msgid "Please create a notebook first"
 msgstr "Primeiro, crie um caderno"
-
-msgid "To-do title:"
-msgstr "Título da tarefa:"
 
 msgid "Notebook title:"
 msgstr "Título do caderno:"
@@ -852,11 +900,17 @@ msgstr "Flag desconhecido: %s"
 msgid "File system"
 msgstr "Sistema de arquivos"
 
+msgid "Nextcloud (Beta)"
+msgstr ""
+
 msgid "OneDrive"
 msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dev (apenas para testes)"
+
+msgid "WebDAV (Beta)"
+msgstr ""
 
 #, javascript-format
 msgid "Unknown log level: %s"
@@ -915,6 +969,10 @@ msgstr "Itens locais excluídos: %d."
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "Itens remotos excluídos: %d."
+
+#, fuzzy, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Itens locais criados: %d."
 
 #, javascript-format
 msgid "State: \"%s\"."
@@ -998,6 +1056,30 @@ msgstr "Mostrar tarefas incompletas no topo das listas"
 msgid "Save geo-location with notes"
 msgstr "Salvar  geolocalização com notas"
 
+#, fuzzy
+msgid "When creating a new to-do:"
+msgstr "Cria uma nova tarefa."
+
+#, fuzzy
+msgid "Focus title"
+msgstr "Título da nota:"
+
+msgid "Focus body"
+msgstr ""
+
+#, fuzzy
+msgid "When creating a new note:"
+msgstr "Cria uma nova nota."
+
+msgid "Show tray icon"
+msgstr ""
+
+msgid "Set application zoom percentage"
+msgstr ""
+
+msgid "Automatically update the application"
+msgstr "Atualizar automaticamente o aplicativo"
+
 msgid "Synchronisation interval"
 msgstr "Intervalo de sincronização"
 
@@ -1013,9 +1095,6 @@ msgstr "%d hora"
 msgid "%d hours"
 msgstr "%d horas"
 
-msgid "Automatically update the application"
-msgstr "Atualizar automaticamente o aplicativo"
-
 msgid "Show advanced options"
 msgstr "Mostrar opções avançadas"
 
@@ -1023,11 +1102,9 @@ msgid "Synchronisation target"
 msgstr "Alvo de sincronização"
 
 msgid ""
-"The target to synchonise to. If synchronising with the file system, set "
-"`sync.2.path` to specify the target directory."
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"O alvo para sincronizar. Se estiver sincronizando com o sistema de arquivos, "
-"configure `sync.2.path` para especificar o diretório de destino."
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr ""
@@ -1038,6 +1115,24 @@ msgid ""
 msgstr ""
 "O caminho para sincronizar, quando a sincronização do sistema de arquivos "
 "está habilitada. Veja `sync.target`."
+
+msgid "Nexcloud WebDAV URL"
+msgstr ""
+
+msgid "Nexcloud username"
+msgstr ""
+
+msgid "Nexcloud password"
+msgstr ""
+
+msgid "WebDAV URL"
+msgstr ""
+
+msgid "WebDAV username"
+msgstr ""
+
+msgid "WebDAV password"
+msgstr ""
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1151,6 +1246,12 @@ msgstr "O caderno não pôde ser salvo: %s"
 msgid "Edit notebook"
 msgstr "Editar caderno"
 
+msgid "Show all"
+msgstr ""
+
+msgid "Errors only"
+msgstr ""
+
 msgid "This note has been modified:"
 msgstr "Esta nota foi modificada:"
 
@@ -1203,6 +1304,16 @@ msgstr "Você não possui cadernos. Crie um clicando no botão (+)."
 
 msgid "Welcome"
 msgstr "Bem-vindo"
+
+#~ msgid ""
+#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "`sync.2.path` to specify the target directory."
+#~ msgstr ""
+#~ "O alvo para sincronizar. Se estiver sincronizando com o sistema de "
+#~ "arquivos, configure `sync.2.path` para especificar o diretório de destino."
+
+#~ msgid "To-do title:"
+#~ msgstr "Título da tarefa:"
 
 #~ msgid "Delete notebook?"
 #~ msgstr "Excluir caderno?"

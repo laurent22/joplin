@@ -1,5 +1,7 @@
 "use strict"
 
+require('app-module-path').addPath(__dirname + '/../ReactNativeClient');
+
 const rootDir = __dirname + '/..';
 
 const processArgs = process.argv.splice(2, process.argv.length);
@@ -16,6 +18,7 @@ const rnDir = rootDir + '/ReactNativeClient';
 const electronDir = rootDir + '/ElectronClient/app';
 
 const { execCommand } = require('./tool-utils.js');
+const { countryDisplayName, countryCodeOnly } = require('lib/locale.js');
 
 function parsePoFile(filePath) {
 	const content = fs.readFileSync(filePath);
@@ -105,6 +108,61 @@ function availableLocales(defaultLocale) {
 	return output;
 }
 
+async function translationStatus(isDefault, poFile) {
+	// "apt install translate-toolkit" to have pocount
+	const command = 'pocount "' + poFile + '"';
+	const result = await execCommand(command);
+	const matches = result.match(/translated:\s*?(\d+)\s*\((.+?)%\)/);
+	if (matches.length < 3) throw new Error('Cannot extract status: ' + command + ':\n' + result);
+	
+	const percentDone = Number(matches[2]);
+	if (isNaN(percentDone)) throw new Error('Cannot extract percent translated: ' + command + ':\n' + result);
+
+	let translatorName = '';
+	const content = await fs.readFile(poFile, 'utf-8');
+	// "Last-Translator: Hrvoje Mandić <trbuhom@net.hr>\n"
+	const translatorMatch = content.match(/Last-Translator:\s*?(.*)/);
+	
+	if (translatorMatch.length >= 1) {
+		translatorName = translatorMatch[1];
+		translatorName = translatorName.replace(/["\s]+$/, '');
+		translatorName = translatorName.replace(/\\n$/, '');
+		translatorName = translatorName.replace(/^\s*/, '');
+	}
+
+	if (translatorName.indexOf('FULL NAME') >= 0) translatorName = '';
+
+	return {
+		percentDone: isDefault ? 100 : percentDone,
+		translatorName: translatorName,
+	};
+}
+
+function translationStatusToMdTable(status) {
+	let output = [];
+	output.push(['&nbsp;', 'Language', 'Code', 'Last translator', 'Percent done'].join('  |  '));
+	output.push(['---', '---', '---', '---', '---'].join('|'));
+	for (let i = 0; i < status.length; i++) {
+		const stat = status[i];
+		const flagUrl = 'https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/' + countryCodeOnly(stat.locale).toLowerCase() + '.png';
+		output.push(['![](' + flagUrl + ')', stat.languageName, stat.locale, stat.translatorName, stat.percentDone + '%'].join('  |  '));
+	}
+	return output.join('\n');
+}
+
+async function updateReadmeWithStats(stats) {
+	const mdTableMarkerOpen = '<!-- LOCALE-TABLE-AUTO-GENERATED -->\n';
+	const mdTableMarkerClose = '\n<!-- LOCALE-TABLE-AUTO-GENERATED -->';
+	let mdTable = translationStatusToMdTable(stats);
+	mdTable = mdTableMarkerOpen + mdTable + mdTableMarkerClose;
+
+	let content = await fs.readFile(rootDir + '/README.md', 'utf-8');
+	// [^]* matches any character including new lines
+	const regex = new RegExp(mdTableMarkerOpen + '[^]*?' + mdTableMarkerClose);
+	content = content.replace(regex, mdTable);
+	await fs.writeFile(rootDir + '/README.md', content);
+}
+
 async function main() {
 	let potFilePath = cliLocalesDir + '/joplin.pot';
 	let jsonLocalesDir = cliDir + '/build/locales';
@@ -126,6 +184,8 @@ async function main() {
 
 	fs.mkdirpSync(jsonLocalesDir, 0o755);
 
+	let stats = [];
+
 	let locales = availableLocales(defaultLocale);
 	for (let i = 0; i < locales.length; i++) {
 		const locale = locales[i];
@@ -133,7 +193,14 @@ async function main() {
 		const jsonFilePath = jsonLocalesDir + '/' + locale + '.json';
 		if (locale != defaultLocale) await mergePotToPo(potFilePath, poFilePäth);
 		buildLocale(poFilePäth, jsonFilePath);
+
+		const stat = await translationStatus(defaultLocale === locale, poFilePäth);
+		stat.locale = locale;
+		stat.languageName = countryDisplayName(locale);
+		stats.push(stat);
 	}
+
+	stats.sort((a, b) => a.languageName < b.languageName ? -1 : +1);
 
 	saveToFile(jsonLocalesDir + '/index.js', buildIndex(locales));
 
@@ -142,6 +209,8 @@ async function main() {
 
 	const electronJsonLocaleDir = electronDir + '/locales';
 	await execCommand('rsync -a "' + jsonLocalesDir + '/" "' + electronJsonLocaleDir + '"');
+
+	await updateReadmeWithStats(stats);
 }
 
 main().catch((error) => {

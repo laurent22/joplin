@@ -7,13 +7,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: rtmkrlv <artyom.karlov@gmail.com>\n"
+"Last-Translator: Artyom Karlov <artyom.karlov@gmail.com>\n"
 "Language-Team: \n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.5\n"
+"X-Generator: Poedit 2.0.6\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
@@ -112,7 +112,7 @@ msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Команда «%s» доступна только в режиме GUI"
 
 msgid "Cannot change encrypted item"
-msgstr ""
+msgstr "Не удалось изменить зашифрованный элемент"
 
 #, javascript-format
 msgid "Missing required argument: %s"
@@ -123,7 +123,7 @@ msgid "%s: %s"
 msgstr "%s: %s"
 
 msgid "Your choice: "
-msgstr "Ваш выбор:"
+msgstr "Ваш выбор: "
 
 #, javascript-format
 msgid "Invalid answer: %s"
@@ -180,22 +180,24 @@ msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status` and `target-status`."
 msgstr ""
+"Управляет конфигурацией E2EE. Команды: `enable`, `disable`, `decrypt`, "
+"`status` и `target-status`."
 
-#, fuzzy
 msgid "Enter master password:"
-msgstr "Установить пароль"
+msgstr "Введите мастер-пароль:"
 
 msgid "Operation cancelled"
-msgstr ""
+msgstr "Операция отменена"
 
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
 msgstr ""
+"Запуск расшифровки... Пожалуйста, ожидайте. Время расшифровки зависит от "
+"объёма расшифровываемых данных."
 
-#, fuzzy
 msgid "Completed decryption."
-msgstr "Включить шифрование"
+msgstr "Расшифровка завершена."
 
 msgid "Enabled"
 msgstr "Включено"
@@ -203,9 +205,9 @@ msgstr "Включено"
 msgid "Disabled"
 msgstr "Отключено"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Encryption is: %s"
-msgstr "Шифрование:"
+msgstr "Шифрование: %s"
 
 msgid "Edit note."
 msgstr "Редактировать заметку."
@@ -227,6 +229,10 @@ msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
 "Запуск редактирования заметки. Закройте редактор, чтобы вернуться к "
 "командной строке."
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Ошибка при открытии заметки в редакторе: %s"
 
 msgid "Note has been saved."
 msgstr "Заметка сохранена."
@@ -277,7 +283,7 @@ msgstr ""
 "элемент."
 
 msgid "To move from one pane to another, press Tab or Shift+Tab."
-msgstr "Чтобы переключаться между панелями, нажимайте Tab или Shift+Tab"
+msgstr "Чтобы переключаться между панелями, нажимайте Tab или Shift+Tab."
 
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
@@ -299,7 +305,7 @@ msgid ""
 "For the complete list of available keyboard shortcuts, type `help shortcuts`"
 msgstr ""
 "Для просмотра списка доступных клавиатурных сочетаний введите `help "
-"shortcuts`."
+"shortcuts`"
 
 msgid "Imports an Evernote notebook file (.enex file)."
 msgstr "Импортирует файл блокнотов Evernote (.enex-файл)."
@@ -455,6 +461,15 @@ msgstr ""
 "Синхронизация с заданной целью (по умолчанию — значение конфигурации sync."
 "target)"
 
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "Аутентификация не была завершена (не получен токен аутентификации)."
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+"Не аутентифицировано с %s. Пожалуйста, предоставьте все недостающие данные."
+
 msgid "Synchronisation is already in progress."
 msgstr "Синхронизация уже выполняется."
 
@@ -467,10 +482,6 @@ msgstr ""
 "Файл блокировки уже установлен. Если вам известно, что синхронизация не "
 "производится, вы можете удалить файл блокировки в «%s» и возобновить "
 "операцию."
-
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
-msgstr "Аутентификация не была завершена (не получен токен аутентификации)."
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
@@ -593,12 +604,13 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
+"Один или несколько элементов сейчас зашифрованы и может потребоваться, чтобы "
+"вы предоставили мастер-пароль. Для этого введите, пожалуйста, «e2ee "
+"decrypt». Если пароль уже был вами предоставлен, зашифрованные элементы "
+"расшифруются в фоновом режиме и вскоре станут доступны."
 
 msgid "File"
 msgstr "Файл"
-
-msgid "Save"
-msgstr "Сохранить"
 
 msgid "New note"
 msgstr "Новая заметка"
@@ -639,19 +651,20 @@ msgstr "Инструменты"
 msgid "Synchronisation status"
 msgstr "Статус синхронизации"
 
-#, fuzzy
 msgid "Encryption options"
 msgstr "Настройки шифрования"
 
-#, fuzzy
 msgid "General Options"
-msgstr "Настройки"
+msgstr "Основные настройки"
 
 msgid "Help"
 msgstr "Помощь"
 
 msgid "Website and documentation"
 msgstr "Сайт и документация"
+
+msgid "Check for updates..."
+msgstr "Проверить обновления..."
 
 msgid "About Joplin"
 msgstr "О Joplin"
@@ -660,15 +673,53 @@ msgstr "О Joplin"
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
+#, fuzzy, javascript-format
+msgid "Open %s"
+msgstr "В %s: %s"
+
+msgid "Exit"
+msgstr ""
+
 msgid "OK"
 msgstr "OK"
 
 msgid "Cancel"
 msgstr "Отмена"
 
+msgid "Error"
+msgstr "Ошибка"
+
+msgid "An update is available, do you want to update now?"
+msgstr "Доступно обновление. Обновить сейчас?"
+
+msgid "Yes"
+msgstr ""
+
+#, fuzzy
+msgid "No"
+msgstr "N"
+
+#, javascript-format
+msgid "Could not download the update: %s"
+msgstr "Не удалось загрузить обновление: %s"
+
+msgid "Current version is up-to-date."
+msgstr "Вы используете самую свежую версию."
+
+msgid "New version downloaded - application will quit now and update..."
+msgstr ""
+"Новая версия загружена — приложение сейчас будет закрыто и обновлено..."
+
+#, javascript-format
+msgid "Could not install the update: %s"
+msgstr "Не удалось установить обновление: %s"
+
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Заметки и настройки сохранены в: %s"
+
+msgid "Save"
+msgstr "Сохранить"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -731,6 +782,16 @@ msgstr ""
 "ключей, в зависимости от того, как изначально были зашифрованы заметки или "
 "блокноты."
 
+#, fuzzy
+msgid "Missing Master Keys"
+msgstr "Мастер-ключи"
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+
 msgid "Status"
 msgstr "Статус"
 
@@ -748,14 +809,8 @@ msgstr "Будет создан новый блокнот «%s» и в него 
 msgid "Please create a notebook first."
 msgstr "Сначала создайте блокнот."
 
-msgid "Note title:"
-msgstr "Название заметки:"
-
 msgid "Please create a notebook first"
 msgstr "Сначала создайте блокнот"
-
-msgid "To-do title:"
-msgstr "Название задачи:"
 
 msgid "Notebook title:"
 msgstr "Название блокнота:"
@@ -872,11 +927,17 @@ msgstr "Неизвестный флаг: %s"
 msgid "File system"
 msgstr "Файловая система"
 
+msgid "Nextcloud (Beta)"
+msgstr "Nextcloud (Beta)"
+
 msgid "OneDrive"
 msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dev (только для тестирования)"
+
+msgid "WebDAV (Beta)"
+msgstr ""
 
 #, javascript-format
 msgid "Unknown log level: %s"
@@ -937,6 +998,10 @@ msgid "Deleted remote items: %d."
 msgstr "Удалено удалённых элементов: %d."
 
 #, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Получено элементов: %d/%d."
+
+#, javascript-format
 msgid "State: \"%s\"."
 msgstr "Статус: «%s»."
 
@@ -951,13 +1016,11 @@ msgstr "Завершено: %s"
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Синхронизация уже выполняется. Статус: %s"
 
-#, fuzzy
 msgid "Encrypted"
-msgstr "Шифрование:"
+msgstr "Зашифровано"
 
-#, fuzzy
 msgid "Encrypted items cannot be modified"
-msgstr "Некоторые элементы не могут быть синхронизированы."
+msgstr "Зашифрованные элементы не могут быть изменены"
 
 msgid "Conflicts"
 msgstr "Конфликты"
@@ -1018,6 +1081,27 @@ msgstr "Показывать незавершённые задачи вверх�
 msgid "Save geo-location with notes"
 msgstr "Сохранять информацию о геолокации в заметках"
 
+msgid "When creating a new to-do:"
+msgstr "При создании новой задачи:"
+
+msgid "Focus title"
+msgstr "Фокус на названии"
+
+msgid "Focus body"
+msgstr "Фокус на содержимом"
+
+msgid "When creating a new note:"
+msgstr "При создании новой заметки:"
+
+msgid "Show tray icon"
+msgstr ""
+
+msgid "Set application zoom percentage"
+msgstr "Масштаб приложения в процентах"
+
+msgid "Automatically update the application"
+msgstr "Автоматически обновлять приложение"
+
 msgid "Synchronisation interval"
 msgstr "Интервал синхронизации"
 
@@ -1033,9 +1117,6 @@ msgstr "%d час"
 msgid "%d hours"
 msgstr "%d часов"
 
-msgid "Automatically update the application"
-msgstr "Автоматически обновлять приложение"
-
 msgid "Show advanced options"
 msgstr "Показывать расширенные настройки"
 
@@ -1043,11 +1124,11 @@ msgid "Synchronisation target"
 msgstr "Цель синхронизации"
 
 msgid ""
-"The target to synchonise to. If synchronising with the file system, set "
-"`sync.2.path` to specify the target directory."
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"То, с чем будет осуществляться синхронизация. При синхронизации с файловой "
-"системой в `sync.2.path` указывается целевой каталог."
+"Цель синхронизации. Каждая цель синхронизации может иметь дополнительные "
+"параметры, именованные как «sync.NUM.NAME» (все описаны ниже)."
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Каталог синхронизации (абсолютный путь)"
@@ -1059,6 +1140,27 @@ msgstr ""
 "Путь для синхронизации при включённой синхронизации с файловой системой. См. "
 "`sync.target`."
 
+msgid "Nexcloud WebDAV URL"
+msgstr "Nexcloud WebDAV URL"
+
+msgid "Nexcloud username"
+msgstr "Имя пользователя Nexcloud"
+
+msgid "Nexcloud password"
+msgstr "Пароль Nexcloud"
+
+#, fuzzy
+msgid "WebDAV URL"
+msgstr "Nexcloud WebDAV URL"
+
+#, fuzzy
+msgid "WebDAV username"
+msgstr "Имя пользователя Nexcloud"
+
+#, fuzzy
+msgid "WebDAV password"
+msgstr "Установить пароль"
+
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Неверное значение параметра: «%s». Доступные значения: %s."
@@ -1066,15 +1168,18 @@ msgstr "Неверное значение параметра: «%s». Досту
 msgid "Items that cannot be synchronised"
 msgstr "Элементы, которые не могут быть синхронизированы"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s (%s): %s"
-msgstr "%s %s (%s)"
+msgstr "%s (%s): %s"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
+"Эти элементы будут оставаться на устройстве, но не будут загружены в целевой "
+"объект синхронизации. Чтобы найти эти элементы, воспользуйтесь поиском по "
+"названию или ID (который указывается в скобках выше)."
 
 msgid "Sync status (synced items / total items)"
 msgstr "Статус синхронизации (элементов синхронизировано/всего)"
@@ -1121,9 +1226,8 @@ msgstr "Лог"
 msgid "Export Debug Report"
 msgstr "Экспортировать отладочный отчёт"
 
-#, fuzzy
 msgid "Encryption Config"
-msgstr "Шифрование:"
+msgstr "Конфигурация шифрования"
 
 msgid "Configuration"
 msgstr "Конфигурация"
@@ -1136,7 +1240,7 @@ msgid "Move %d notes to notebook \"%s\"?"
 msgstr "Переместить %d заметок в блокнот «%s»?"
 
 msgid "Press to set the decryption password."
-msgstr ""
+msgstr "Нажмите, чтобы установить пароль для расшифровки."
 
 msgid "Select date"
 msgstr "Выбрать дату"
@@ -1147,22 +1251,20 @@ msgstr "Подтвердить"
 msgid "Cancel synchronisation"
 msgstr "Отменить синхронизацию"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Master Key %s"
-msgstr "Мастер-ключи"
+msgstr "Мастер-ключ %s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Created: %s"
-msgstr "Создано: %d."
+msgstr "Создано: %s"
 
-#, fuzzy
 msgid "Password:"
-msgstr "Пароль"
+msgstr "Пароль:"
 
 msgid "Password cannot be empty"
-msgstr ""
+msgstr "Пароль не может быть пустым"
 
-#, fuzzy
 msgid "Enable"
 msgstr "Включено"
 
@@ -1172,6 +1274,13 @@ msgstr "Не удалось сохранить блокнот: %s"
 
 msgid "Edit notebook"
 msgstr "Редактировать блокнот"
+
+msgid "Show all"
+msgstr ""
+
+#, fuzzy
+msgid "Errors only"
+msgstr "Ошибка"
 
 msgid "This note has been modified:"
 msgstr "Эта заметка была изменена:"
@@ -1225,6 +1334,16 @@ msgstr "У вас сейчас нет блокнота. Создайте его 
 
 msgid "Welcome"
 msgstr "Добро пожаловать"
+
+#~ msgid ""
+#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "`sync.2.path` to specify the target directory."
+#~ msgstr ""
+#~ "То, с чем будет осуществляться синхронизация. При синхронизации с "
+#~ "файловой системой в `sync.2.path` указывается целевой каталог."
+
+#~ msgid "To-do title:"
+#~ msgstr "Название задачи:"
 
 #~ msgid "\"%s\": \"%s\""
 #~ msgstr "«%s»: «%s»"

@@ -3,6 +3,15 @@
 // Make it possible to require("/lib/...") without specifying full path
 require('app-module-path').addPath(__dirname);
 
+// Disable React message in console "Download the React DevTools for a better development experience"
+// https://stackoverflow.com/questions/42196819/disable-hide-download-the-react-devtools#42196820
+__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+	supportsFiber: true,
+	inject: function() {},
+	onCommitFiberRoot: function() {},
+	onCommitFiberUnmount: function() {},
+};
+
 const { app } = require('./app.js');
 const Folder = require('lib/models/Folder.js');
 const Resource = require('lib/models/Resource.js');
@@ -17,11 +26,13 @@ const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { shimInit } = require('lib/shim-init-node.js');
 const EncryptionService = require('lib/services/EncryptionService');
 const { bridge } = require('electron').remote.require('./bridge');
+const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 
 const fsDriver = new FsDriverNode();
 Logger.fsDriver_ = fsDriver;
 Resource.fsDriver_ = fsDriver;
 EncryptionService.fsDriver_ = fsDriver;
+FileApiDriverLocal.fsDriver_ = fsDriver;
 
 // That's not good, but it's to avoid circular dependency issues
 // in the BaseItem class.

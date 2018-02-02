@@ -226,6 +226,10 @@ msgstr "Non esiste la nota: \"%s\". Desideri crearla?"
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr "Comincia a modificare la nota. Chiudi l'editor per tornare al prompt."
 
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr ""
+
 msgid "Note has been saved."
 msgstr "La nota è stata salvata."
 
@@ -449,6 +453,16 @@ msgstr ""
 "Sincronizza con l'obiettivo fornito (come predefinito il valore di "
 "configurazione sync.target)"
 
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr ""
+"Autenticazione non completata (non è stato ricevuto alcun token di "
+"autenticazione)."
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+
 msgid "Synchronisation is already in progress."
 msgstr "La sincronizzazione è in corso."
 
@@ -461,12 +475,6 @@ msgstr ""
 "Trovato un file di blocco. Se si è certi che non è in corso alcuna "
 "sincronizzazione, è possibile eliminare il file di blocco in \"% s\" e "
 "riprendere l'operazione."
-
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
-msgstr ""
-"Autenticazione non completata (non è stato ricevuto alcun token di "
-"autenticazione)."
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
@@ -587,9 +595,6 @@ msgstr ""
 msgid "File"
 msgstr "File"
 
-msgid "Save"
-msgstr ""
-
 msgid "New note"
 msgstr "Nuova nota"
 
@@ -642,6 +647,9 @@ msgstr "Aiuto"
 msgid "Website and documentation"
 msgstr "Sito web e documentazione"
 
+msgid "Check for updates..."
+msgstr ""
+
 msgid "About Joplin"
 msgstr "Informazione si Joplin"
 
@@ -649,14 +657,51 @@ msgstr "Informazione si Joplin"
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
+#, fuzzy, javascript-format
+msgid "Open %s"
+msgstr "Su %s: %s"
+
+msgid "Exit"
+msgstr ""
+
 msgid "OK"
 msgstr "OK"
 
 msgid "Cancel"
 msgstr "Cancella"
 
+msgid "Error"
+msgstr ""
+
+msgid "An update is available, do you want to update now?"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+#, fuzzy
+msgid "No"
+msgstr "N"
+
+#, javascript-format
+msgid "Could not download the update: %s"
+msgstr ""
+
+msgid "Current version is up-to-date."
+msgstr ""
+
+msgid "New version downloaded - application will quit now and update..."
+msgstr ""
+
+#, javascript-format
+msgid "Could not install the update: %s"
+msgstr ""
+
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
+msgstr ""
+
+msgid "Save"
 msgstr ""
 
 msgid ""
@@ -710,6 +755,15 @@ msgid ""
 "how the notes or notebooks were originally encrypted."
 msgstr ""
 
+msgid "Missing Master Keys"
+msgstr ""
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+
 msgid "Status"
 msgstr "Stato"
 
@@ -727,14 +781,8 @@ msgstr "Il nuovo blocco note \"%s\" verrà creato e \"%s\" vi verrà importato"
 msgid "Please create a notebook first."
 msgstr "Per favore prima crea un blocco note."
 
-msgid "Note title:"
-msgstr "Titolo della Nota:"
-
 msgid "Please create a notebook first"
 msgstr "Per favore prima crea un blocco note"
-
-msgid "To-do title:"
-msgstr "Titolo dell'attività:"
 
 msgid "Notebook title:"
 msgstr "Titolo del blocco note:"
@@ -854,11 +902,17 @@ msgstr "Etichetta sconosciuta: %s"
 msgid "File system"
 msgstr "File system"
 
+msgid "Nextcloud (Beta)"
+msgstr ""
+
 msgid "OneDrive"
 msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dev (solo per test)"
+
+msgid "WebDAV (Beta)"
+msgstr ""
 
 #, javascript-format
 msgid "Unknown log level: %s"
@@ -917,6 +971,10 @@ msgstr "Elementi locali eliminati: %d."
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "Elementi remoti eliminati: %d."
+
+#, fuzzy, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Elementi locali creati: %d."
 
 #, javascript-format
 msgid "State: \"%s\"."
@@ -999,6 +1057,30 @@ msgstr "Mostra todo inclompleti in cima alla lista"
 msgid "Save geo-location with notes"
 msgstr "Salva geo-localizzazione con le note"
 
+#, fuzzy
+msgid "When creating a new to-do:"
+msgstr "Crea una nuova attività."
+
+#, fuzzy
+msgid "Focus title"
+msgstr "Titolo della Nota:"
+
+msgid "Focus body"
+msgstr ""
+
+#, fuzzy
+msgid "When creating a new note:"
+msgstr "Crea una nuova nota."
+
+msgid "Show tray icon"
+msgstr ""
+
+msgid "Set application zoom percentage"
+msgstr ""
+
+msgid "Automatically update the application"
+msgstr "Aggiorna automaticamente l'applicazione"
+
 msgid "Synchronisation interval"
 msgstr "Intervallo di sincronizzazione"
 
@@ -1014,9 +1096,6 @@ msgstr "%d ora"
 msgid "%d hours"
 msgstr "%d ore"
 
-msgid "Automatically update the application"
-msgstr "Aggiorna automaticamente l'applicazione"
-
 msgid "Show advanced options"
 msgstr "Mostra opzioni avanzate"
 
@@ -1024,12 +1103,9 @@ msgid "Synchronisation target"
 msgstr "Destinazione di sincronizzazione"
 
 msgid ""
-"The target to synchonise to. If synchronising with the file system, set "
-"`sync.2.path` to specify the target directory."
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"La destinazione della sincronizzazione. Se si sincronizza con il file "
-"system, impostare ' Sync. 2. Path ' per specificare la directory di "
-"destinazione."
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr ""
@@ -1040,6 +1116,24 @@ msgid ""
 msgstr ""
 "Il percorso di sincronizzazione quando la sincronizzazione è abilitata. Vedi "
 "`sync.target`."
+
+msgid "Nexcloud WebDAV URL"
+msgstr ""
+
+msgid "Nexcloud username"
+msgstr ""
+
+msgid "Nexcloud password"
+msgstr ""
+
+msgid "WebDAV URL"
+msgstr ""
+
+msgid "WebDAV username"
+msgstr ""
+
+msgid "WebDAV password"
+msgstr ""
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1153,6 +1247,12 @@ msgstr "Il blocco note non può essere salvato: %s"
 msgid "Edit notebook"
 msgstr "Modifica blocco note"
 
+msgid "Show all"
+msgstr ""
+
+msgid "Errors only"
+msgstr ""
+
 msgid "This note has been modified:"
 msgstr "Questa note è stata modificata:"
 
@@ -1207,6 +1307,17 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvenuto"
+
+#~ msgid ""
+#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "`sync.2.path` to specify the target directory."
+#~ msgstr ""
+#~ "La destinazione della sincronizzazione. Se si sincronizza con il file "
+#~ "system, impostare ' Sync. 2. Path ' per specificare la directory di "
+#~ "destinazione."
+
+#~ msgid "To-do title:"
+#~ msgstr "Titolo dell'attività:"
 
 #~ msgid "\"%s\": \"%s\""
 #~ msgstr "\"%s\": \"%s\""

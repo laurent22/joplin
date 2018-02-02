@@ -1,5 +1,9 @@
 const { isHidden } = require('lib/path-utils.js');
 const { Logger } = require('lib/logger.js');
+const { shim } = require('lib/shim');
+const BaseItem = require('lib/models/BaseItem.js');
+const JoplinError = require('lib/JoplinError');
+const ArrayUtils = require('lib/ArrayUtils');
 
 class FileApi {
 
@@ -8,6 +12,21 @@ class FileApi {
 		this.driver_ = driver;
 		this.logger_ = new Logger();
 		this.syncTargetId_ = null;
+		this.tempDirName_ = null;
+		this.driver_.fileApi_ = this;
+	}
+
+	tempDirName() {
+		if (this.tempDirName_ === null) throw Error('Temp dir not set!');
+		return this.tempDirName_;
+	}
+
+	setTempDirName(v) {
+		this.tempDirName_ = v;
+	}
+
+	fsDriver() {
+		return shim.fsDriver();
 	}
 
 	driver() {
@@ -32,9 +51,10 @@ class FileApi {
 	}
 
 	fullPath_(path) {
-		let output = this.baseDir_;
-		if (path != '') output += '/' + path;
-		return output;
+		let output = [];
+		if (this.baseDir_) output.push(this.baseDir_);
+		if (path) output.push(path);
+		return output.join('/');
 	}
 
 	// DRIVER MUST RETURN PATHS RELATIVE TO `path`
@@ -57,6 +77,7 @@ class FileApi {
 		});
 	}
 
+	// Deprectated
 	setTimestamp(path, timestampMs) {
 		this.logger().debug('setTimestamp ' + this.fullPath_(path));
 		return this.driver_.setTimestamp(this.fullPath_(path), timestampMs);
@@ -83,8 +104,13 @@ class FileApi {
 		return this.driver_.get(this.fullPath_(path), options);
 	}
 
-	put(path, content, options = null) {
-		this.logger().debug('put ' + this.fullPath_(path));
+	async put(path, content, options = null) {
+		this.logger().debug('put ' + this.fullPath_(path), options);
+		
+		if (options && options.source === 'file') {
+			if (!await this.fsDriver().exists(options.path)) throw new JoplinError('File not found: ' + options.path, 'fileNotFound');
+		}
+
 		return this.driver_.put(this.fullPath_(path), content, options);
 	}
 
@@ -93,13 +119,19 @@ class FileApi {
 		return this.driver_.delete(this.fullPath_(path));
 	}
 
+	// Deprectated
 	move(oldPath, newPath) {
 		this.logger().debug('move ' + this.fullPath_(oldPath) + ' => ' + this.fullPath_(newPath));
 		return this.driver_.move(this.fullPath_(oldPath), this.fullPath_(newPath));
 	}
 
+	// Deprectated
 	format() {
 		return this.driver_.format();
+	}
+
+	clearRoot() {
+		return this.driver_.clearRoot(this.baseDir_);
 	}
 
 	delta(path, options = null) {
@@ -109,4 +141,120 @@ class FileApi {
 
 }
 
-module.exports = { FileApi };
+function basicDeltaContextFromOptions_(options) {
+	let output = {
+		timestamp: 0,
+		filesAtTimestamp: [],
+		statsCache: null,
+		statIdsCache: null,
+		deletedItemsProcessed: false,
+	};
+
+	if (!options || !options.context) return output;
+
+	const d = new Date(options.context.timestamp);
+
+	output.timestamp = isNaN(d.getTime()) ? 0 : options.context.timestamp;
+	output.filesAtTimestamp = Array.isArray(options.context.filesAtTimestamp) ? options.context.filesAtTimestamp.slice() : [];
+	output.statsCache = options.context && options.context.statsCache ? options.context.statsCache : null;
+	output.statIdsCache = options.context && options.context.statIdsCache ? options.context.statIdsCache : null;
+	output.deletedItemsProcessed = options.context && ('deletedItemsProcessed' in options.context) ? options.context.deletedItemsProcessed : false;
+
+	return output;
+}
+
+// This is the basic delta algorithm, which can be used in case the cloud service does not have
+// a built-in delta API. OneDrive and Dropbox have one for example, but Nextcloud and obviously
+// the file system do not.
+async function basicDelta(path, getDirStatFn, options) {
+	const outputLimit = 1000;
+	const itemIds = await options.allItemIdsHandler();
+	if (!Array.isArray(itemIds)) throw new Error('Delta API not supported - local IDs must be provided');
+
+	const context = basicDeltaContextFromOptions_(options);
+
+	let newContext = {
+		timestamp: context.timestamp,
+		filesAtTimestamp: context.filesAtTimestamp.slice(),
+		statsCache: context.statsCache,
+		statIdsCache: context.statIdsCache,
+		deletedItemsProcessed: context.deletedItemsProcessed,
+	};
+
+	// Stats are cached until all items have been processed (until hasMore is false)
+	if (newContext.statsCache === null) {
+		newContext.statsCache = await getDirStatFn(path);
+		newContext.statsCache.sort(function(a, b) {
+			return a.updated_time - b.updated_time;
+		});
+		newContext.statIdsCache = newContext.statsCache.map((item) => BaseItem.pathToId(item.path));
+		newContext.statIdsCache.sort(); // Items must be sorted to use binary search below
+	}
+
+	let output = [];
+
+	// Find out which files have been changed since the last time. Note that we keep
+	// both the timestamp of the most recent change, *and* the items that exactly match
+	// this timestamp. This to handle cases where an item is modified while this delta
+	// function is running. For example:
+	// t0: Item 1 is changed
+	// t0: Sync items - run delta function
+	// t0: While delta() is running, modify Item 2
+	// Since item 2 was modified within the same millisecond, it would be skipped in the
+	// next sync if we relied exclusively on a timestamp.
+	for (let i = 0; i < newContext.statsCache.length; i++) {
+		const stat = newContext.statsCache[i];
+
+		if (stat.isDir) continue;
+
+		if (stat.updated_time < context.timestamp) continue;
+
+		// Special case for items that exactly match the timestamp
+		if (stat.updated_time === context.timestamp) {
+			if (context.filesAtTimestamp.indexOf(stat.path) >= 0) continue;
+		}
+
+		if (stat.updated_time > newContext.timestamp) {
+			newContext.timestamp = stat.updated_time;
+			newContext.filesAtTimestamp = [];
+		}
+
+		newContext.filesAtTimestamp.push(stat.path);
+		output.push(stat);
+
+		if (output.length >= outputLimit) break;
+	}
+
+	if (!newContext.deletedItemsProcessed) {
+		// Find out which items have been deleted on the sync target by comparing the items
+		// we have to the items on the target.
+		// Note that when deleted items are processed it might result in the output having
+		// more items than outputLimit. This is acceptable since delete operations are cheap.
+		let deletedItems = [];
+		for (let i = 0; i < itemIds.length; i++) {
+			const itemId = itemIds[i];
+
+			if (ArrayUtils.binarySearch(newContext.statIdsCache, itemId) < 0) {
+				deletedItems.push({
+					path: BaseItem.systemPath(itemId),
+					isDeleted: true,
+				});
+			}
+		}
+
+		output = output.concat(deletedItems);
+	}
+
+	newContext.deletedItemsProcessed = true;
+
+	const hasMore = output.length >= outputLimit;
+	if (!hasMore) newContext.statsCache = null;
+
+	return {
+		hasMore: hasMore,
+		context: newContext,
+		items: output,
+	};
+}
+
+module.exports = { FileApi, basicDelta };

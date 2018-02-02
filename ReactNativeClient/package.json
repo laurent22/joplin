@@ -9,6 +9,9 @@
     "test": "jest"
   },
   "dependencies": {
+    "base-64": "^0.1.0",
+    "buffer": "^5.0.8",
+    "events": "^1.1.1",
     "form-data": "^2.1.4",
     "html-entities": "^1.2.1",
     "markdown-it": "^8.4.0",
@@ -38,8 +41,13 @@
     "react-navigation": "^1.0.0-beta.21",
     "react-redux": "4.4.8",
     "redux": "3.6.0",
+    "stream": "0.0.2",
+    "timers": "^0.1.1",
+    "url-parse": "^1.2.0",
     "uuid": "^3.0.1",
-    "word-wrap": "^1.2.3"
+    "valid-url": "^1.0.9",
+    "word-wrap": "^1.2.3",
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {
     "babel-jest": "19.0.0",

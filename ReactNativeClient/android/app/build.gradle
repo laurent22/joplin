@@ -75,7 +75,7 @@ apply from: "../../node_modules/react-native/react.gradle"
  * Upload all the APKs to the Play Store and people will download
  * the correct one based on the CPU architecture of their device.
  */
-def enableSeparateBuildPerCPUArchitecture = true
+def enableSeparateBuildPerCPUArchitecture = false
 
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
@@ -90,8 +90,8 @@ android {
 		applicationId "net.cozic.joplin"
 		minSdkVersion 16
 		targetSdkVersion 22
-		versionCode 86
-		versionName "0.10.71"
+		versionCode 2097259
+		versionName "0.10.81"
 		ndk {
 			abiFilters "armeabi-v7a", "x86"
 		}
@@ -137,11 +137,11 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-securerandom')
-    compile project(':react-native-push-notification')
-    compile project(':react-native-fs')
-    compile project(':react-native-image-picker')
-    compile project(':react-native-vector-icons')
+	compile project(':react-native-securerandom')
+	compile project(':react-native-push-notification')
+	compile project(':react-native-fs')
+	compile project(':react-native-image-picker')
+	compile project(':react-native-vector-icons')
 	compile project(':react-native-fs')
 	compile fileTree(dir: "libs", include: ["*.jar"])
 	compile "com.android.support:appcompat-v7:23.0.1"

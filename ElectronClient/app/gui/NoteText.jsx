@@ -36,7 +36,13 @@ class NoteTextComponent extends React.Component {
 			isLoading: true,
 			webviewReady: false,
 			scrollHeight: null,
-			editorScrollTop: 0
+			editorScrollTop: 0,
+			newNote: null,
+
+			// If the current note was just created, and the title has never been
+			// changed by the user, this variable contains that note ID. Used
+			// to automatically set the title.
+			newAndNoTitleChangeNoteId: null,
 		};
 
 		this.lastLoadedNoteId_ = null;
@@ -75,7 +81,10 @@ class NoteTextComponent extends React.Component {
 
 	async componentWillMount() {
 		let note = null;
-		if (this.props.noteId) {
+
+		if (this.props.newNote) {
+			note = Object.assign({}, this.props.newNote);
+		} else if (this.props.noteId) {
 			note = await Note.load(this.props.noteId);
 		}
 
@@ -114,7 +123,14 @@ class NoteTextComponent extends React.Component {
 	}
 
 	async saveOneProperty(name, value) {
-		await shared.saveOneProperty(this, name, value);
+		if (this.state.note && !this.state.note.id) {
+			const note = Object.assign({}, this.state.note);
+			note[name] = value;
+			this.setState({ note: note });
+			this.scheduleSave();
+		} else {
+			await shared.saveOneProperty(this, name, value);
+		}
 	}
 
 	scheduleSave() {
@@ -128,19 +144,32 @@ class NoteTextComponent extends React.Component {
 		if (!options) options = {};
 		if (!('noReloadIfLocalChanges' in options)) options.noReloadIfLocalChanges = false;
 
-		const stateNoteId = this.state.note ? this.state.note.id : null;
-		const noteId = props.noteId;
-		let loadingNewNote = stateNoteId !== noteId;
-		this.lastLoadedNoteId_ = noteId;
-		const note = noteId ? await Note.load(noteId) : null;
-		if (noteId !== this.lastLoadedNoteId_) return; // Race condition - current note was changed while this one was loading
-		if (!options.noReloadIfLocalChanges && this.isModified()) return;
+		await this.saveIfNeeded();
 
-		// If the note hasn't been changed, exit now
-		if (this.state.note && note) {
-			let diff = Note.diffObjects(this.state.note, note);
-			delete diff.type_;
-			if (!Object.getOwnPropertyNames(diff).length) return;
+		const previousNote = this.state.note ? Object.assign({}, this.state.note) : null;
+
+		const stateNoteId = this.state.note ? this.state.note.id : null;
+		let noteId = null;
+		let note = null;
+		let loadingNewNote = true;
+
+		if (props.newNote) {
+			note = Object.assign({}, props.newNote);
+			this.lastLoadedNoteId_ = null;
+		} else {
+			noteId = props.noteId;
+			loadingNewNote = stateNoteId !== noteId;
+			this.lastLoadedNoteId_ = noteId;
+			note = noteId ? await Note.load(noteId) : null;
+			if (noteId !== this.lastLoadedNoteId_) return; // Race condition - current note was changed while this one was loading
+			if (options.noReloadIfLocalChanges && this.isModified()) return;
+
+			// If the note hasn't been changed, exit now
+			if (this.state.note && note) {
+				let diff = Note.diffObjects(this.state.note, note);
+				delete diff.type_;
+				if (!Object.getOwnPropertyNames(diff).length) return;
+			}
 		}
 
 		this.mdToHtml_ = null;
@@ -148,7 +177,7 @@ class NoteTextComponent extends React.Component {
 		// If we are loading nothing (noteId == null), make sure to
 		// set webviewReady to false too because the webview component
 		// is going to be removed in render().
-		const webviewReady = this.webview_ && this.state.webviewReady && noteId;
+		const webviewReady = this.webview_ && this.state.webviewReady && (noteId || props.newNote);
 
 		// Scroll back to top when loading new note
 		if (loadingNewNote) {
@@ -160,24 +189,47 @@ class NoteTextComponent extends React.Component {
 			// https://github.com/ajaxorg/ace/issues/2195
 			this.editorSetScrollTop(1);
 			this.restoreScrollTop_ = 0;
-		}
 
-		this.setState({
-			note: note,
-			lastSavedNote: Object.assign({}, note),
-			webviewReady: webviewReady,
-		});
-	}
+			if (note) {
+				const focusSettingName = !!note.is_todo ? 'newTodoFocus' : 'newNoteFocus';
 
-	async componentWillReceiveProps(nextProps) {
-		if ('noteId' in nextProps && nextProps.noteId !== this.props.noteId) {
-			await this.reloadNote(nextProps);
-			if (this.editor_){
+				if (Setting.value(focusSettingName) === 'title') {
+					if (this.titleField_) this.titleField_.focus();
+				} else {
+					if (this.editor_) this.editor_.editor.focus();
+				}
+			}
+
+			if (this.editor_) {
 				const session = this.editor_.editor.getSession();
 				const undoManager = session.getUndoManager();
 				undoManager.reset();
 				session.setUndoManager(undoManager);
+				this.editor_.editor.clearSelection();
+				this.editor_.editor.moveCursorTo(0,0);
 			}
+		}
+
+		let newState = {
+			note: note,
+			lastSavedNote: Object.assign({}, note),
+			webviewReady: webviewReady,
+		};
+
+		if (!note) {
+			newState.newAndNoTitleChangeNoteId = null;
+		} else if (note.id !== this.state.newAndNoTitleChangeNoteId) {
+			newState.newAndNoTitleChangeNoteId = null;
+		}
+
+		this.setState(newState);
+	}
+
+	async componentWillReceiveProps(nextProps) {
+		if (nextProps.newNote) {
+			await this.reloadNote(nextProps);
+		} else if ('noteId' in nextProps && nextProps.noteId !== this.props.noteId) {
+			await this.reloadNote(nextProps);
 		}
 
 		if ('syncStarted' in nextProps && !nextProps.syncStarted && !this.isModified()) {
@@ -195,6 +247,7 @@ class NoteTextComponent extends React.Component {
 
 	title_changeText(event) {
 		shared.noteComponent_change(this, 'title', event.target.value);
+		this.setState({ newAndNoTitleChangeNoteId: null });
 		this.scheduleSave();
 	}
 
@@ -402,20 +455,10 @@ class NoteTextComponent extends React.Component {
 		menu.popup(bridge().window());
 	}
 
-	// shouldComponentUpdate(nextProps, nextState) {
-	// 	//console.info('NEXT PROPS', JSON.stringify(nextProps));
-	// 	console.info('NEXT STATE ====================');
-	// 	for (var n in nextProps) {
-	// 		if (!nextProps.hasOwnProperty(n)) continue;
-	// 		console.info(n + ' = ' + (nextProps[n] === this.props[n]));
-	// 	}
-	// 	return true;
-	// }
-
 	render() {
 		const style = this.props.style;
 		const note = this.state.note;
-		const body = note ? note.body : '';
+		const body = note && note.body ? note.body : '';
 		const theme = themeStyle(this.props.theme);
 		const visiblePanes = this.props.visiblePanes || ['editor', 'viewer'];
 
@@ -519,13 +562,6 @@ class NoteTextComponent extends React.Component {
 
 		const toolbarItems = [];
 
-		// toolbarItems.push({
-		// 	title: _('Save'),
-		// 	iconName: 'fa-save',
-		// 	enabled: this.isModified(),
-		// 	onClick: () => {  },
-		// });
-
 		toolbarItems.push({
 			title: _('Attach file'),
 			iconName: 'fa-paperclip',
@@ -548,8 +584,9 @@ class NoteTextComponent extends React.Component {
 
 		const titleEditor = <input
 			type="text"
+			ref={(elem) => { this.titleField_ = elem; } }
 			style={titleEditorStyle}
-			value={note ? note.title : ''}
+			value={note && note.title ? note.title : ''}
 			onChange={(event) => { this.title_changeText(event); }}
 		/>
 
@@ -617,6 +654,7 @@ const mapStateToProps = (state) => {
 		theme: state.settings.theme,
 		showAdvancedOptions: state.settings.showAdvancedOptions,
 		syncStarted: state.syncStarted,
+		newNote: state.newNote,
 	};
 };
 

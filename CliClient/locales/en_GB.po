@@ -214,6 +214,10 @@ msgstr ""
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
 
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr ""
+
 msgid "Note has been saved."
 msgstr ""
 
@@ -413,6 +417,14 @@ msgstr ""
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
 
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr ""
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+
 msgid "Synchronisation is already in progress."
 msgstr ""
 
@@ -421,10 +433,6 @@ msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
-msgstr ""
-
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
 msgstr ""
 
 #, javascript-format
@@ -530,9 +538,6 @@ msgstr ""
 msgid "File"
 msgstr ""
 
-msgid "Save"
-msgstr ""
-
 msgid "New note"
 msgstr ""
 
@@ -584,11 +589,21 @@ msgstr ""
 msgid "Website and documentation"
 msgstr ""
 
+msgid "Check for updates..."
+msgstr ""
+
 msgid "About Joplin"
 msgstr ""
 
 #, javascript-format
 msgid "%s %s (%s, %s)"
+msgstr ""
+
+#, javascript-format
+msgid "Open %s"
+msgstr ""
+
+msgid "Exit"
 msgstr ""
 
 msgid "OK"
@@ -597,8 +612,37 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
+msgid "Error"
+msgstr ""
+
+msgid "An update is available, do you want to update now?"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+#, javascript-format
+msgid "Could not download the update: %s"
+msgstr ""
+
+msgid "Current version is up-to-date."
+msgstr ""
+
+msgid "New version downloaded - application will quit now and update..."
+msgstr ""
+
+#, javascript-format
+msgid "Could not install the update: %s"
+msgstr ""
+
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
+msgstr ""
+
+msgid "Save"
 msgstr ""
 
 msgid ""
@@ -650,6 +694,15 @@ msgid ""
 "how the notes or notebooks were originally encrypted."
 msgstr ""
 
+msgid "Missing Master Keys"
+msgstr ""
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+
 msgid "Status"
 msgstr ""
 
@@ -667,13 +720,7 @@ msgstr ""
 msgid "Please create a notebook first."
 msgstr ""
 
-msgid "Note title:"
-msgstr ""
-
 msgid "Please create a notebook first"
-msgstr ""
-
-msgid "To-do title:"
 msgstr ""
 
 msgid "Notebook title:"
@@ -791,10 +838,16 @@ msgstr ""
 msgid "File system"
 msgstr ""
 
+msgid "Nextcloud (Beta)"
+msgstr ""
+
 msgid "OneDrive"
 msgstr ""
 
 msgid "OneDrive Dev (For testing only)"
+msgstr ""
+
+msgid "WebDAV (Beta)"
 msgstr ""
 
 #, javascript-format
@@ -845,6 +898,10 @@ msgstr ""
 
 #, javascript-format
 msgid "Deleted remote items: %d."
+msgstr ""
+
+#, javascript-format
+msgid "Fetched items: %d/%d."
 msgstr ""
 
 #, javascript-format
@@ -925,6 +982,27 @@ msgstr ""
 msgid "Save geo-location with notes"
 msgstr ""
 
+msgid "When creating a new to-do:"
+msgstr ""
+
+msgid "Focus title"
+msgstr ""
+
+msgid "Focus body"
+msgstr ""
+
+msgid "When creating a new note:"
+msgstr ""
+
+msgid "Show tray icon"
+msgstr ""
+
+msgid "Set application zoom percentage"
+msgstr ""
+
+msgid "Automatically update the application"
+msgstr ""
+
 msgid "Synchronisation interval"
 msgstr ""
 
@@ -940,9 +1018,6 @@ msgstr ""
 msgid "%d hours"
 msgstr ""
 
-msgid "Automatically update the application"
-msgstr ""
-
 msgid "Show advanced options"
 msgstr ""
 
@@ -950,8 +1025,8 @@ msgid "Synchronisation target"
 msgstr ""
 
 msgid ""
-"The target to synchonise to. If synchronising with the file system, set "
-"`sync.2.path` to specify the target directory."
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 
 msgid "Directory to synchronise with (absolute path)"
@@ -960,6 +1035,24 @@ msgstr ""
 msgid ""
 "The path to synchronise with when file system synchronisation is enabled. "
 "See `sync.target`."
+msgstr ""
+
+msgid "Nexcloud WebDAV URL"
+msgstr ""
+
+msgid "Nexcloud username"
+msgstr ""
+
+msgid "Nexcloud password"
+msgstr ""
+
+msgid "WebDAV URL"
+msgstr ""
+
+msgid "WebDAV username"
+msgstr ""
+
+msgid "WebDAV password"
 msgstr ""
 
 #, javascript-format
@@ -1071,6 +1164,12 @@ msgid "The notebook could not be saved: %s"
 msgstr ""
 
 msgid "Edit notebook"
+msgstr ""
+
+msgid "Show all"
+msgstr ""
+
+msgid "Errors only"
 msgstr ""
 
 msgid "This note has been modified:"

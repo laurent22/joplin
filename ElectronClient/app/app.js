@@ -49,6 +49,10 @@ class Application extends BaseApplication {
 		return true;
 	}
 
+	checkForUpdateLoggerPath() {
+		return Setting.value('profileDir') + '/log-autoupdater.txt';
+	}
+
 	reducer(state = appDefaultState, action) {
 		let newState = state;
 
@@ -134,6 +138,10 @@ class Application extends BaseApplication {
 		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'locale' || action.type == 'SETTING_UPDATE_ALL') {
 			setLocale(Setting.value('locale'));
 			this.refreshMenu();
+		}
+
+		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'showTrayIcon' || action.type == 'SETTING_UPDATE_ALL') {
+			this.updateTray();
 		}
 
 		if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
@@ -295,6 +303,11 @@ class Application extends BaseApplication {
 					accelerator: 'F1',
 					click () { bridge().openExternal('http://joplin.cozic.net') }
 				}, {
+					label: _('Check for updates...'),
+					click: () => {
+						bridge().checkForUpdates(false, this.checkForUpdateLoggerPath());
+					}
+				}, {
 					label: _('About Joplin'),
 					click: () => {
 						const p = packageInfo;
@@ -338,6 +351,23 @@ class Application extends BaseApplication {
 		Menu.setApplicationMenu(menu);
 
 		this.lastMenuScreen_ = screen;
+	}
+
+	updateTray() {
+		const app = bridge().electronApp();
+
+		if (app.trayShown() === Setting.value('showTrayIcon')) return;
+
+		if (!Setting.value('showTrayIcon')) {
+			app.destroyTray();
+		} else {
+			const contextMenu = Menu.buildFromTemplate([
+				{ label: _('Open %s', app.electronApp().getName()), click: () => { app.window().show(); } },
+				{ type: 'separator' },
+				{ label: _('Exit'), click: () => { app.exit() } },
+			])
+			app.createTray(contextMenu);
+		}
 	}
 
 	async start(argv) {
@@ -385,9 +415,9 @@ class Application extends BaseApplication {
 		// Note: Auto-update currently doesn't work in Linux: it downloads the update
 		// but then doesn't install it on exit.
 		if (shim.isWindows() || shim.isMac()) {
-			const runAutoUpdateCheck = function() {
+			const runAutoUpdateCheck = () => {
 				if (Setting.value('autoUpdateEnabled')) {
-					bridge().checkForUpdatesAndNotify(Setting.value('profileDir') + '/log-autoupdater.txt');
+					bridge().checkForUpdates(true, this.checkForUpdateLoggerPath());
 				}
 			}
 			
@@ -395,6 +425,8 @@ class Application extends BaseApplication {
 			// For those who leave the app always open
 			setInterval(() => { runAutoUpdateCheck() }, 2 * 60 * 60 * 1000);
 		}
+
+		this.updateTray();
 
 		setTimeout(() => {
 			AlarmService.garbageCollect();

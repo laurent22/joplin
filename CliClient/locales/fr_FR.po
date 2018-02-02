@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: \n"
+"Last-Translator: Laurent Cozic\n"
 "Language-Team: \n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
@@ -178,7 +178,7 @@ msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status` and `target-status`."
 msgstr ""
-"Gérer la configuration E2EE (Encryption de bout à bout). Les commandes sont "
+"Gérer la configuration E2EE (Cryptage de bout à bout). Les commandes sont "
 "`enable`, `disable`, `decrypt` et `status` et `target-status`."
 
 msgid "Enter master password:"
@@ -205,7 +205,7 @@ msgstr "Désactivé"
 
 #, javascript-format
 msgid "Encryption is: %s"
-msgstr "L'encryptage est : %s"
+msgstr "Le cryptage est : %s"
 
 msgid "Edit note."
 msgstr "Éditer la note."
@@ -227,6 +227,10 @@ msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
 "Édition de la note en cours. Fermez l'éditeur de texte pour retourner à "
 "l'invite de commande."
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Erreur lors de l'ouverture de la note dans l'éditeur de texte : %s"
 
 msgid "Note has been saved."
 msgstr "La note a été enregistrée."
@@ -458,6 +462,16 @@ msgstr ""
 "Synchroniser avec la cible donnée (par défaut, la valeur de configuration "
 "`sync.target`)."
 
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "Impossible d'autoriser le logiciel (jeton d'identification non-reçu)."
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+"Non-connecté à %s. Veuillez fournir les identifiants et mots de passe "
+"manquants."
+
 msgid "Synchronisation is already in progress."
 msgstr "La synchronisation est déjà en cours."
 
@@ -470,10 +484,6 @@ msgstr ""
 "La synchronisation est déjà en cours ou ne s'est pas interrompue "
 "correctement. Si vous savez qu'aucune autre synchronisation est en cours, "
 "vous pouvez supprimer le fichier \"%s\" pour reprendre l'opération."
-
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
-msgstr "Impossible d'autoriser le logiciel (jeton d'identification non-reçu)."
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
@@ -603,9 +613,6 @@ msgstr ""
 msgid "File"
 msgstr "Fichier"
 
-msgid "Save"
-msgstr "Enregistrer"
-
 msgid "New note"
 msgstr "Nouvelle note"
 
@@ -646,7 +653,7 @@ msgid "Synchronisation status"
 msgstr "État de la synchronisation"
 
 msgid "Encryption options"
-msgstr "Optons d'encryptage"
+msgstr "Options de cryptage"
 
 msgid "General Options"
 msgstr "Options générales"
@@ -657,6 +664,9 @@ msgstr "Aide"
 msgid "Website and documentation"
 msgstr "Documentation en ligne"
 
+msgid "Check for updates..."
+msgstr "Vérifier les mises à jour..."
+
 msgid "About Joplin"
 msgstr "A propos de Joplin"
 
@@ -664,24 +674,63 @@ msgstr "A propos de Joplin"
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
+#, javascript-format
+msgid "Open %s"
+msgstr "Ouvrir %s"
+
+msgid "Exit"
+msgstr "Quitter"
+
 msgid "OK"
 msgstr "OK"
 
 msgid "Cancel"
-msgstr "Annulation"
+msgstr "Annuler"
+
+msgid "Error"
+msgstr "Erreur"
+
+msgid "An update is available, do you want to update now?"
+msgstr ""
+"Une mise à jour est disponible, souhaitez vous la télécharger maintenant ?"
+
+msgid "Yes"
+msgstr "Oui"
+
+msgid "No"
+msgstr "Non"
+
+#, javascript-format
+msgid "Could not download the update: %s"
+msgstr "Impossible de télécharger la mise à jour : %s"
+
+msgid "Current version is up-to-date."
+msgstr "La version actuelle est à jour."
+
+msgid "New version downloaded - application will quit now and update..."
+msgstr ""
+"La nouvelle version a été téléchargée - le programme va se fermer et se "
+"mettre à jour..."
+
+#, javascript-format
+msgid "Could not install the update: %s"
+msgstr "Impossible d'installer la mise à jour : %s"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Les notes et paramètres se trouve dans : %s"
+
+msgid "Save"
+msgstr "Enregistrer"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
-"Désactiver l'encryptage signifie que *toutes* les notes et fichiers vont "
-"être re-synchronisés et envoyés décryptés sur la cible de la "
-"synchronisation. Souhaitez vous continuer ?"
+"Désactiver le cryptage signifie que *toutes* les notes et fichiers vont être "
+"re-synchronisés et envoyés décryptés sur la cible de la synchronisation. "
+"Souhaitez vous continuer ?"
 
 msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
@@ -689,17 +738,17 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
-"Activer l'encryptage signifie que *toutes* les notes et fichiers vont être "
-"re-synchronisés et envoyés encrypté vers la cible de la synchronisation. Ne "
+"Activer le cryptage signifie que *toutes* les notes et fichiers vont être re-"
+"synchronisés et envoyés cryptés vers la cible de la synchronisation. Ne "
 "perdez pas votre mot de passe car, pour des raisons de sécurité, ce sera la "
-"*seule* façon de décrypter les données ! Pour activer l'encryptage, veuillez "
+"*seule* façon de décrypter les données ! Pour activer le cryptage, veuillez "
 "entrer votre mot de passe ci-dessous."
 
 msgid "Disable encryption"
-msgstr "Désactiver l'encryptage"
+msgstr "Désactiver le cryptage"
 
 msgid "Enable encryption"
-msgstr "Activer l'encryptage"
+msgstr "Activer le cryptage"
 
 msgid "Master Keys"
 msgstr "Clefs maître"
@@ -730,16 +779,28 @@ msgid ""
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"Note : seule une clef maître va être utilisée pour l'encryptage (celle "
+"Note : seule une clef maître va être utilisée pour le cryptage (celle "
 "marquée comme \"actif\" ci-dessus). N'importe quel clef peut-être utilisée "
-"pour le décryptage, selon la façon dont les notes ou carnets étaient "
-"encryptés à l'origine."
+"pour le décryptage, selon la façon dont les notes ou carnets étaient cryptés "
+"à l'origine."
+
+msgid "Missing Master Keys"
+msgstr "Clefs maître manquantes"
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+"Les clefs maître avec ces identifiants sont utilisées pour crypter certains "
+"de vos objets, cependant le logiciel n'y a pour l'instant pas accès. Il est "
+"probable qu'elle vont être prochainement disponible via la synchronisation."
 
 msgid "Status"
 msgstr "État"
 
 msgid "Encryption is:"
-msgstr "L'encryptage est :"
+msgstr "Le cryptage est :"
 
 msgid "Back"
 msgstr "Retour"
@@ -754,14 +815,8 @@ msgstr ""
 msgid "Please create a notebook first."
 msgstr "Veuillez d'abord sélectionner un carnet."
 
-msgid "Note title:"
-msgstr "Titre de la note :"
-
 msgid "Please create a notebook first"
 msgstr "Veuillez d'abord créer un carnet d'abord"
-
-msgid "To-do title:"
-msgstr "Titre de la tâche :"
 
 msgid "Notebook title:"
 msgstr "Titre du carnet :"
@@ -776,7 +831,7 @@ msgid "Rename notebook:"
 msgstr "Renommer le carnet :"
 
 msgid "Set alarm:"
-msgstr "Définir ou modifier alarme :"
+msgstr "Régler alarme :"
 
 msgid "Layout"
 msgstr "Disposition"
@@ -823,7 +878,7 @@ msgid "Attach file"
 msgstr "Attacher un fichier"
 
 msgid "Set alarm"
-msgstr "Définir ou modifier alarme"
+msgstr "Régler alarme"
 
 msgid "Refresh"
 msgstr "Rafraîchir"
@@ -844,7 +899,7 @@ msgid "Synchronisation Status"
 msgstr "État de la synchronisation"
 
 msgid "Encryption Options"
-msgstr "Options d'encryptage"
+msgstr "Options de cryptage"
 
 msgid "Remove this tag from all the notes?"
 msgstr "Enlever cette étiquette de toutes les notes ?"
@@ -882,11 +937,17 @@ msgstr "Paramètre inconnu : %s"
 msgid "File system"
 msgstr "Système de fichier"
 
+msgid "Nextcloud (Beta)"
+msgstr "Nextcloud (Beta)"
+
 msgid "OneDrive"
 msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dév (Pour tester uniquement)"
+
+msgid "WebDAV (Beta)"
+msgstr "WebDAV (Bêta)"
 
 #, javascript-format
 msgid "Unknown log level: %s"
@@ -945,6 +1006,10 @@ msgstr "Objets supprimés localement : %d."
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "Objets distants supprimés : %d."
+
+#, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Téléchargés : %d/%d."
 
 #, javascript-format
 msgid "State: \"%s\"."
@@ -1026,6 +1091,27 @@ msgstr "Tâches non-terminées en haut des listes"
 msgid "Save geo-location with notes"
 msgstr "Enregistrer l'emplacement avec les notes"
 
+msgid "When creating a new to-do:"
+msgstr "Lors de la création d'une tâche :"
+
+msgid "Focus title"
+msgstr "Curseur sur le titre"
+
+msgid "Focus body"
+msgstr "Curseur sur corps du message"
+
+msgid "When creating a new note:"
+msgstr "Lors de la création d'une note :"
+
+msgid "Show tray icon"
+msgstr "Afficher icône dans la zone de notifications"
+
+msgid "Set application zoom percentage"
+msgstr "Niveau de zoom"
+
+msgid "Automatically update the application"
+msgstr "Mettre à jour le logiciel automatiquement"
+
 msgid "Synchronisation interval"
 msgstr "Intervalle de synchronisation"
 
@@ -1041,9 +1127,6 @@ msgstr "%d heure"
 msgid "%d hours"
 msgstr "%d heures"
 
-msgid "Automatically update the application"
-msgstr "Mettre à jour le logiciel automatiquement"
-
 msgid "Show advanced options"
 msgstr "Montrer les options avancées"
 
@@ -1051,11 +1134,12 @@ msgid "Synchronisation target"
 msgstr "Cible de la synchronisation"
 
 msgid ""
-"The target to synchonise to. If synchronising with the file system, set "
-"`sync.2.path` to specify the target directory."
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"La cible avec laquelle synchroniser. Pour synchroniser avec le système de "
-"fichier, veuillez spécifier le répertoire avec `sync.2.path`."
+"La cible avec laquelle synchroniser. Chaque cible de synchronisation peut "
+"avoir des paramètres supplémentaires sous le nom `sync.NUM.NOM` (documentés "
+"ci-dessous)."
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Répertoire avec lequel synchroniser (chemin absolu)"
@@ -1066,6 +1150,24 @@ msgid ""
 msgstr ""
 "Le chemin du répertoire avec lequel synchroniser lorsque la synchronisation "
 "par système de fichier est activée. Voir `sync.target`."
+
+msgid "Nexcloud WebDAV URL"
+msgstr "Nextcloud : URL WebDAV"
+
+msgid "Nexcloud username"
+msgstr "Nextcloud : Nom utilisateur"
+
+msgid "Nexcloud password"
+msgstr "Nextcloud : Mot de passe"
+
+msgid "WebDAV URL"
+msgstr "WebDAV : URL"
+
+msgid "WebDAV username"
+msgstr "WebDAV : Nom utilisateur"
+
+msgid "WebDAV password"
+msgstr "WebDAV : Mot de passe"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1135,7 +1237,7 @@ msgid "Export Debug Report"
 msgstr "Exporter rapport de débogage"
 
 msgid "Encryption Config"
-msgstr "Config encryptage"
+msgstr "Config cryptage"
 
 msgid "Configuration"
 msgstr "Configuration"
@@ -1183,6 +1285,12 @@ msgstr "Ce carnet n'a pas pu être sauvegardé : %s"
 msgid "Edit notebook"
 msgstr "Éditer le carnet"
 
+msgid "Show all"
+msgstr "Afficher tous"
+
+msgid "Errors only"
+msgstr "Erreurs seulement"
+
 msgid "This note has been modified:"
 msgstr "Cette note a été modifiée :"
 
@@ -1212,10 +1320,10 @@ msgid "Hide metadata"
 msgstr "Cacher les métadonnées"
 
 msgid "Show metadata"
-msgstr "Afficher les métadonnées"
+msgstr "Voir métadonnées"
 
 msgid "View on map"
-msgstr "Voir emplacement sur carte"
+msgstr "Voir sur carte"
 
 msgid "Delete notebook"
 msgstr "Supprimer le carnet"
@@ -1237,6 +1345,16 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid ""
+#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "`sync.2.path` to specify the target directory."
+#~ msgstr ""
+#~ "La cible avec laquelle synchroniser. Pour synchroniser avec le système de "
+#~ "fichier, veuillez spécifier le répertoire avec `sync.2.path`."
+
+#~ msgid "To-do title:"
+#~ msgstr "Titre de la tâche :"
 
 #~ msgid "Delete notebook?"
 #~ msgstr "Supprimer le carnet ?"
@@ -1298,9 +1416,6 @@ msgstr "Bienvenue"
 
 #~ msgid "Todo filter"
 #~ msgstr "Filtre des tâches"
-
-#~ msgid "Show all"
-#~ msgstr "Afficher tous"
 
 #~ msgid "Non-completed and recently completed ones"
 #~ msgstr "Tâches non-complétées et récentes"
