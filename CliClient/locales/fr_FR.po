@@ -14,6 +14,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.3\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "Give focus to next pane"
 msgstr "Activer le volet suivant"
@@ -1243,7 +1245,7 @@ msgid "Configuration"
 msgstr "Configuration"
 
 msgid "Move to notebook..."
-msgstr "Déplacer la note vers carnet..."
+msgstr "Déplacer vers..."
 
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"

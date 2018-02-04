@@ -17,14 +17,13 @@
 	</style>
 </head>
 
-<body>
+<body id="body">
 	<div id="hlScriptContainer"></div>
 	<div id="content" ondragstart="return false;" ondrop="return false;"></div>
 
 	<script>
 	const { ipcRenderer } = require('electron');
 	const contentElement = document.getElementById('content');
-
 
 	// ----------------------------------------------------------------------
 	// Handle dynamically loading HLJS when a code element is present
@@ -110,6 +109,8 @@
 	}
 
 	ipcRenderer.on('setHtml', (event, html) => {
+		updateBodyHeight();
+
 		contentElement.innerHTML = html;
 
 		loadAndApplyHljs();
@@ -163,6 +164,11 @@
 		return Math.max(0, contentElement.scrollHeight - contentElement.clientHeight);
 	}
 
+	// The body element needs to have a fixed height for the content to be scrollable
+	function updateBodyHeight() {
+		document.getElementById('body').style.height = window.innerHeight + 'px';
+	}
+
 	contentElement.addEventListener('scroll', function(e) {
 		if (ignoreNextScrollEvent) {
 			ignoreNextScrollEvent = false;
@@ -187,6 +193,12 @@
 	document.addEventListener('dragover', function(e) {
 		e.preventDefault();
 	});
+
+	window.addEventListener('resize', function() {
+		updateBodyHeight();
+	});
+
+	updateBodyHeight();	
 	</script>
 
 </body>
