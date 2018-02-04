@@ -17,7 +17,6 @@ async function main() {
 
 	console.info(await execCommand('git add -A'));
 	console.info(await execCommand('git commit -m "Electron release ' + version + '"'));
-	await handleCommitHook();
 	console.info(await execCommand('git tag ' + tagName));
 	console.info(await execCommand('git push && git push --tags'));
 

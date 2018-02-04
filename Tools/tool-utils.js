@@ -115,14 +115,4 @@ toolUtils.githubRelease = async function(tagName, isDraft) {
 	return responseJson;
 }
 
-toolUtils.handleCommitHook = async function() {
-	const fs = require('fs-extra');
-	const filePath = __dirname + '/commit_hook.txt';
-	if (!(await fs.pathExists(filePath))) return;
-	const content = await fs.readFile(filePath);
-	if (!content) throw new Error('No content in ' + filePath); 
-	console.info('Running hook: ' + content);
-	console.info(await toolUtils.execCommand(content));
-}
-
 module.exports = toolUtils;
