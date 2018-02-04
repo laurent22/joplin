@@ -83,13 +83,13 @@ toolUtils.fileExists = async function(filePath) {
 
 toolUtils.githubOauthToken = async function() {
 	const fs = require('fs-extra');
-	const r = await fs.readFile(__dirname + '/Tools/github_oauth_token.txt');
+	const r = await fs.readFile(__dirname + '/github_oauth_token.txt');
 	return r.toString();
 }
 
 toolUtils.githubRelease = async function(tagName, isDraft) {
 	const fetch = require('node-fetch');
-	
+
 	const oauthToken = await githubOauthToken();
 	
 	const response = await fetch('https://api.github.com/repos/laurent22/joplin/releases', {
