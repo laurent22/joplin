@@ -1,5 +1,5 @@
 const fs = require('fs-extra');
-const { execCommand } = require('./tool-utils.js');
+const { execCommand, githubRelease, githubOauthToken } = require('./tool-utils.js');
 const path = require('path');
 const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
@@ -46,14 +46,7 @@ function gradleVersionName(content) {
 	return matches[1];
 }
 
-async function githubOauthToken() {
-	const r = await fs.readFile(rootDir + '/Tools/github_oauth_token.txt');
-	return r.toString();
-}
-
 async function main() {
-	const oauthToken = await githubOauthToken();
-
 	const newContent = updateGradleConfig();
 	const version = gradleVersionName(newContent);
 	const tagName = 'android-v' + version;
@@ -88,27 +81,13 @@ async function main() {
 
 	console.info('Creating GitHub release ' + tagName + '...');
 
-	const response = await fetch('https://api.github.com/repos/laurent22/joplin/releases', {
-		method: 'POST', 
-		body: JSON.stringify({
-			tag_name: tagName,
-			name: tagName,
-			draft: false,
-		}),
-		headers: {
-			'Content-Type': 'application/json',
-			'Authorization': 'token ' + oauthToken,
-		},
-	});
-
-	const responseText = await response.text();
-	const responseJson = JSON.parse(responseText);
-	if (!responseJson.upload_url) throw new Error('No upload URL for release: ' + responseText);
-
-	const uploadUrlTemplate = uriTemplate.parse(responseJson.upload_url);
+	const release = await githubRelease(tagName, false);
+	const uploadUrlTemplate = uriTemplate.parse(release.upload_url);
 	const uploadUrl = uploadUrlTemplate.expand({ name: apkFilename });
 
 	const binaryBody = await fs.readFile(apkFilePath);
+
+	const oauthToken = await githubOauthToken();
 
 	console.info('Uploading ' + apkFilename + ' to ' + uploadUrl);
 

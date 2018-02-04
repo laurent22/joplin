@@ -81,4 +81,45 @@ toolUtils.fileExists = async function(filePath) {
 	});
 }
 
+toolUtils.githubOauthToken = async function() {
+	const r = await fs.readFile(__dirname + '/Tools/github_oauth_token.txt');
+	return r.toString();
+}
+
+toolUtils.githubRelease = async function(tagName, isDraft) {
+	const oauthToken = await githubOauthToken();
+	
+	const response = await fetch('https://api.github.com/repos/laurent22/joplin/releases', {
+		method: 'POST', 
+		body: JSON.stringify({
+			tag_name: tagName,
+			name: tagName,
+			draft: isDraft,
+		}),
+		headers: {
+			'Content-Type': 'application/json',
+			'Authorization': 'token ' + oauthToken,
+		},
+	});
+
+	const responseText = await response.text();
+	
+	if (!response.ok) throw new Error('Cannot create GitHub release: ' + responseText);
+
+	const responseJson = JSON.parse(responseText);
+	if (!responseJson.url) throw new Error('No URL for release: ' + responseText);
+
+	return responseJson;
+}
+
+toolUtils.handleCommitHook = async function() {
+	const fs = require('fs-extra');
+	const filePath = __dirname + '/commit_hook.txt');
+	if (!(await fs.pathExists(filePath)) return;
+	const content = await fs.readFile(filePath);
+	if (!content) throw new Error('No content in ' + filePath); 
+	console.info('Running hook: ' + content);
+	console.info(await toolUtils.execCommand(content));
+}
+
 module.exports = toolUtils;
