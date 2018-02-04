@@ -1,8 +1,5 @@
-const fs = require('fs-extra');
 const { execCommand, githubRelease, handleCommitHook, githubOauthToken } = require('./tool-utils.js');
 const path = require('path');
-const fetch = require('node-fetch');
-const uriTemplate = require('uri-template');
 
 const rootDir = path.dirname(__dirname);
 const appDir = rootDir + '/ElectronClient/app';
