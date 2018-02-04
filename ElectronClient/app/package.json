@@ -34,7 +34,8 @@
       "asar": false
     },
     "linux": {
-      "asar": false
+      "asar": false,
+      "category": "Office"
     }
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
@@ -79,7 +80,7 @@
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
-    "sharp": "^0.18.4",
+    "sharp": "^0.17.3",
     "smalltalk": "^2.5.1",
     "sprintf-js": "^1.1.1",
     "sqlite3": "^3.1.13",

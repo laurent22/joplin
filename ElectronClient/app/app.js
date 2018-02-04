@@ -354,6 +354,11 @@ class Application extends BaseApplication {
 	}
 
 	updateTray() {
+		// Tray icon (called AppIndicator) doesn't work in Ubuntu
+		// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html
+		// Might be fixed in Electron 18.x but no non-beta release yet.
+		if (!shim.isWindows() && !shim.isMac()) return;
+
 		const app = bridge().electronApp();
 
 		if (app.trayShown() === Setting.value('showTrayIcon')) return;
