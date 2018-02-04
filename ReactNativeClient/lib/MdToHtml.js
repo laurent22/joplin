@@ -5,6 +5,7 @@ const Resource = require('lib/models/Resource.js');
 const ModelCache = require('lib/ModelCache');
 const { shim } = require('lib/shim.js');
 const md5 = require('md5');
+const MdToHtml_Katex = require('lib/MdToHtml_Katex');
 
 class MdToHtml {
 
@@ -156,26 +157,55 @@ class MdToHtml {
 		}
 	}
 
+	customCodeHandler_(language) {
+		if (!language) return null;
+
+		const handlers = {};
+		handlers['katex'] = new MdToHtml_Katex();
+		return language in handlers ? handlers[language] : null;
+	}
+
+	parseInlineCodeLanguage_(content) {
+		const m = content.match(/^\{\.([a-zA-Z0-9]+)\}/);
+		if (m && m.length >= 2) {
+			const language = m[1];
+			return {
+				language: language,
+				newContent: content.substr(language.length + 3),
+			};
+		}
+
+		return null;
+	}
+
 	renderTokens_(markdownIt, tokens, options) {
 		let output = [];
 		let previousToken = null;
 		let anchorAttrs = [];
+		let extraCssBlocks = {};
+
 		for (let i = 0; i < tokens.length; i++) {
-			const t = tokens[i];
+			let t = tokens[i];
 			const nextToken = i < tokens.length ? tokens[i+1] : null;
 
 			let tag = t.tag;
 			let openTag = null;
 			let closeTag = null;
 			let attrs = t.attrs ? t.attrs : [];
+			let tokenContent = t.content ? t.content : null;
 			const isCodeBlock = tag === 'code' && t.block;
+			const isInlineCode = t.type === 'code_inline';
+			const codeBlockLanguage = t && t.info ? t.info : null;
+			let codeBlockHandler = null;
 
-			// if (t.map) attrs.push(['data-map', t.map.join(':')]);
+			if (isCodeBlock) codeBlockHandler = this.customCodeHandler_(codeBlockLanguage);
 
 			if (previousToken && previousToken.tag === 'li' && tag === 'p') {
 				// Markdown-it render list items as <li><p>Text<p></li> which makes it
 				// complicated to style and layout the HTML, so we remove this extra
 				// <p> here and below in closeTag.
+				openTag = null;
+			} else if (isInlineCode) {
 				openTag = null;
 			} else if (tag && t.type.indexOf('_open') >= 0) {
 				openTag = tag;
@@ -186,7 +216,11 @@ class MdToHtml {
 			} else if (t.type === 'link_open') {
 				openTag = 'a';
 			} else if (isCodeBlock) {
-				openTag = 'pre';
+				if (codeBlockHandler) {
+					openTag = null;
+				} else {
+					openTag = 'pre';
+				}
 			}
 
 			if (openTag) {
@@ -201,30 +235,42 @@ class MdToHtml {
 
 			if (isCodeBlock) {
 				const codeAttrs = ['code'];
-				if (t.info) codeAttrs.push(t.info); // t.info contains the language when the token is a codeblock
-				output.push('<code class="' + codeAttrs.join(' ') + '">');
+				if (!codeBlockHandler) {
+					if (codeBlockLanguage) codeAttrs.push(t.info); // t.info contains the language when the token is a codeblock
+					output.push('<code class="' + codeAttrs.join(' ') + '">');
+				}
+			} else if (isInlineCode) {
+				const result = this.parseInlineCodeLanguage_(tokenContent);
+				if (result) {
+					codeBlockHandler = this.customCodeHandler_(result.language);
+					tokenContent = result.newContent;
+				}
+
+				if (!codeBlockHandler) {
+					output.push('<code>');
+				}
 			}
 
+			if (codeBlockHandler) codeBlockHandler.loadAssets();
+
 			if (t.type === 'image') {
-				if (t.content) attrs.push(['title', t.content]);
+				if (tokenContent) attrs.push(['title', tokenContent]);
 				output.push(this.renderImage_(attrs, options));
 			} else if (t.type === 'softbreak') {
 				output.push('<br/>');
 			} else if (t.type === 'hr') {
 				output.push('<hr/>');
- 			} else if (t.type === 'math_inline') {
-				const mathText = markdownIt.render('$' + t.content + '$');
-				output.push(mathText);
- 			} else if (t.type === 'math_block') {
-				const mathText = markdownIt.render('$$' + t.content + '$$');
-				output.push(mathText);
 			} else {
 				if (t.children) {
 					const parsedChildren = this.renderTokens_(markdownIt, t.children, options);
 					output = output.concat(parsedChildren);
 				} else {
-					if (t.content) {
-						output.push(htmlentities(t.content));
+					if (tokenContent) {
+						if ((isCodeBlock || isInlineCode) && codeBlockHandler) {
+							output = codeBlockHandler.processContent(output, tokenContent);
+						} else {
+							output.push(htmlentities(tokenContent));
+						}
 					}
 				}
 			}
@@ -236,10 +282,18 @@ class MdToHtml {
 			} else if (tag && t.type.indexOf('inline') >= 0) {
 				closeTag = openTag;
 			} else if (isCodeBlock) {
-				closeTag = openTag;
+				if (!codeBlockHandler) closeTag = openTag;
 			}
 
-			if (isCodeBlock) output.push('</code>');
+			if (isCodeBlock) {
+				if (!codeBlockHandler) {
+					output.push('</code>');
+				}
+			} else if (isInlineCode) {
+				if (!codeBlockHandler) {
+					output.push('</code>');
+				}
+			}
 
 			if (closeTag) {
 				if (closeTag === 'a') {
@@ -249,8 +303,28 @@ class MdToHtml {
 				}
 			}
 
+			if (codeBlockHandler) {
+				const extraCss = codeBlockHandler.extraCss();
+				const name = codeBlockHandler.name();
+				if (extraCss && !(name in extraCssBlocks)) {
+					extraCssBlocks[name] = extraCss;
+				}
+			}
+
 			previousToken = t;
 		}
+
+		// Insert the extra CSS at the top of the HTML
+
+		const temp = ['<style>'];
+		for (let n in extraCssBlocks) {
+			if (!extraCssBlocks.hasOwnProperty(n)) continue;
+			temp.push(extraCssBlocks[n]);
+		}
+		temp.push('</style>');
+
+		output = temp.concat(output);
+
 		return output.join('');
 	}
 
@@ -266,8 +340,6 @@ class MdToHtml {
 			breaks: true,
 			linkify: true,
 		});
-
-		md.use(require('markdown-it-katex'));
 
 		// Hack to make checkboxes clickable. Ideally, checkboxes should be parsed properly in
 		// renderTokens_(), but for now this hack works. Marking it with HORRIBLE_HACK so
@@ -288,10 +360,11 @@ class MdToHtml {
 		const env = {};
 		const tokens = md.parse(body, env);
 
+		let renderedBody = this.renderTokens_(md, tokens, options);
+
 		// console.info(body);
 		// console.info(tokens);
-
-		let renderedBody = this.renderTokens_(md, tokens, options);
+		// console.info(renderedBody);
 
 		if (HORRIBLE_HACK) {
 			let loopCount = 0;
@@ -389,7 +462,7 @@ class MdToHtml {
 			}
 		`;
 
-		const styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>' + '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">';
+		const styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>'; //+ '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">';
 
 		const output = styleHtml + renderedBody;
 

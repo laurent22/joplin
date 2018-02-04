@@ -1,179 +1,193 @@
-<style>
-body {
-	overflow: hidden;
-}
-
-#content {
-	overflow-y: auto;
-	height: 100%;
-	padding-left: 10px;
-	padding-right: 10px;
-}
-</style>
-
-<div id="hlScriptContainer"></div>
-<div id="content" ondragstart="return false;" ondrop="return false;"></div>
-
-<script>
-const { ipcRenderer } = require('electron');
-const contentElement = document.getElementById('content');
-
-
-// ----------------------------------------------------------------------
-// Handle dynamically loading HLJS when a code element is present
-// ----------------------------------------------------------------------
-
-let hljsScriptAdded = false;
-let hljsLoaded = false;
-
-function loadHljs(callback) {
-	hljsScriptAdded = true;
-
-	const script = document.createElement('script');
-	script.onload = function () {
-		hljsLoaded = true;
-    	applyHljs();
-	};
-	script.src = 'highlight/highlight.pack.js';
-	document.getElementById('hlScriptContainer').appendChild(script);
-
-	const link = document.createElement('link');
-	link.rel = 'stylesheet';
-	// https://ace.c9.io/build/kitchen-sink.html
-	// https://highlightjs.org/static/demo/
-	link.href = 'highlight/styles/atom-one-light.css';
-	document.getElementById('hlScriptContainer').appendChild(link);
-}
-
-function loadAndApplyHljs() {
-	var codeElements = document.getElementsByClassName('code');
-	if (!codeElements.length) return;
-
-	if (!hljsScriptAdded) {
-		this.loadHljs();
-		return;
-	}
-
-	// If HLJS is not loaded yet, no need to do anything. When it loads
-	// it will automatically apply the style to all the code elements.
-	if (hljsLoaded) applyHljs(codeElements);
-}
-
-function applyHljs(codeElements) {
-	if (typeof codeElements === 'undefined') codeElements = document.getElementsByClassName('code');
-
-	for (var i = 0; i < codeElements.length; i++) {
-		hljs.highlightBlock(codeElements[i]);
-	}
-}
-
-// ----------------------------------------------------------------------
-// / Handle dynamically loading HLJS when a code element is present
-// ----------------------------------------------------------------------
-
-// Note: the scroll position source of truth is "percentScroll_". This is easier to manage than scrollTop because
-// the scrollTop value depends on the images being loaded or not. For example, if the scrollTop is saved while
-// images are being displayed then restored while images are being reloaded, the new scrollTop might be changed
-// so that it is not greater than contentHeight. On the other hand, with percentScroll it is possible to restore
-// it at any time knowing that it's not going to be changed because the content height has changed.
-// To restore percentScroll the "checkScrollIID" interval is used. It constantly resets the scroll position during
-// one second after the content has been updated.
-//
-// ignoreNextScroll is used to differentiate between scroll event from the users and those that are the result
-// of programmatically changing scrollTop. We only want to respond to events initiated by the user.
-
-let percentScroll_ = 0;
-let checkScrollIID_ = null;
-
-function setPercentScroll(percent) {
-	percentScroll_ = percent;
-	contentElement.scrollTop = percentScroll_ * maxScrollTop();
-}
-
-function percentScroll() {
-	return percentScroll_;
-}
-
-function restorePercentScroll() {
-	setPercentScroll(percentScroll_);
-}
-
-ipcRenderer.on('setHtml', (event, html) => {
-	contentElement.innerHTML = html;
-
-	loadAndApplyHljs();
-
-	// Remove the bullet from "ul" for checkbox lists and extra padding
-	const checkboxes = document.getElementsByClassName('checkbox');
-	for (let i = 0; i < checkboxes.length; i++) {
-		const cb = checkboxes[i];
-		const ul = cb.parentElement.parentElement;
-		if (!ul) {
-			console.warn('Unexpected layout for checkbox');
-			continue;
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		body {
+			overflow: hidden;
 		}
-		ul.style.listStyleType = 'none';
-		ul.style.paddingLeft = 0;
+
+		#content {
+			overflow-y: auto;
+			height: 100%;
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+
+		.katex { font-size: 1.3em; } /* This controls the global Katex font size*/
+	</style>
+</head>
+
+<body>
+	<div id="hlScriptContainer"></div>
+	<div id="content" ondragstart="return false;" ondrop="return false;"></div>
+
+	<script>
+	const { ipcRenderer } = require('electron');
+	const contentElement = document.getElementById('content');
+
+
+	// ----------------------------------------------------------------------
+	// Handle dynamically loading HLJS when a code element is present
+	// ----------------------------------------------------------------------
+
+	let hljsScriptAdded = false;
+	let hljsLoaded = false;
+
+	function loadHljs(callback) {
+		hljsScriptAdded = true;
+
+		const script = document.createElement('script');
+		script.onload = function () {
+			hljsLoaded = true;
+	    	applyHljs();
+		};
+		script.src = 'highlight/highlight.pack.js';
+		document.getElementById('hlScriptContainer').appendChild(script);
+
+		const link = document.createElement('link');
+		link.rel = 'stylesheet';
+		// https://ace.c9.io/build/kitchen-sink.html
+		// https://highlightjs.org/static/demo/
+		link.href = 'highlight/styles/atom-one-light.css';
+		document.getElementById('hlScriptContainer').appendChild(link);
 	}
 
-	let previousContentHeight = contentElement.scrollHeight;
-	let startTime = Date.now();
-	ignoreNextScrollEvent = true;
-	restorePercentScroll();
+	function loadAndApplyHljs() {
+		var codeElements = document.getElementsByClassName('code');
+		if (!codeElements.length) return;
 
-	if (!checkScrollIID_) {
-		checkScrollIID_ = setInterval(() => {
-			const h = contentElement.scrollHeight;
-			if (h !== previousContentHeight) {
-				previousContentHeight = h;
-				ignoreNextScrollEvent = true;
-				restorePercentScroll();
+		if (!hljsScriptAdded) {
+			this.loadHljs();
+			return;
+		}
+
+		// If HLJS is not loaded yet, no need to do anything. When it loads
+		// it will automatically apply the style to all the code elements.
+		if (hljsLoaded) applyHljs(codeElements);
+	}
+
+	function applyHljs(codeElements) {
+		if (typeof codeElements === 'undefined') codeElements = document.getElementsByClassName('code');
+
+		for (var i = 0; i < codeElements.length; i++) {
+			try {
+				hljs.highlightBlock(codeElements[i]);
+			} catch (error) {
+				console.warn('Cannot highlight code', error);
 			}
-			if (Date.now() - startTime >= 1000) {
-				clearInterval(checkScrollIID_);
-				checkScrollIID_ = null;
+		}
+	}
+
+	// ----------------------------------------------------------------------
+	// / Handle dynamically loading HLJS when a code element is present
+	// ----------------------------------------------------------------------
+
+	// Note: the scroll position source of truth is "percentScroll_". This is easier to manage than scrollTop because
+	// the scrollTop value depends on the images being loaded or not. For example, if the scrollTop is saved while
+	// images are being displayed then restored while images are being reloaded, the new scrollTop might be changed
+	// so that it is not greater than contentHeight. On the other hand, with percentScroll it is possible to restore
+	// it at any time knowing that it's not going to be changed because the content height has changed.
+	// To restore percentScroll the "checkScrollIID" interval is used. It constantly resets the scroll position during
+	// one second after the content has been updated.
+	//
+	// ignoreNextScroll is used to differentiate between scroll event from the users and those that are the result
+	// of programmatically changing scrollTop. We only want to respond to events initiated by the user.
+
+	let percentScroll_ = 0;
+	let checkScrollIID_ = null;
+
+	function setPercentScroll(percent) {
+		percentScroll_ = percent;
+		contentElement.scrollTop = percentScroll_ * maxScrollTop();
+	}
+
+	function percentScroll() {
+		return percentScroll_;
+	}
+
+	function restorePercentScroll() {
+		setPercentScroll(percentScroll_);
+	}
+
+	ipcRenderer.on('setHtml', (event, html) => {
+		contentElement.innerHTML = html;
+
+		loadAndApplyHljs();
+
+		// Remove the bullet from "ul" for checkbox lists and extra padding
+		const checkboxes = document.getElementsByClassName('checkbox');
+		for (let i = 0; i < checkboxes.length; i++) {
+			const cb = checkboxes[i];
+			const ul = cb.parentElement.parentElement;
+			if (!ul) {
+				console.warn('Unexpected layout for checkbox');
+				continue;
 			}
-		}, 1);
+			ul.style.listStyleType = 'none';
+			ul.style.paddingLeft = 0;
+		}
+
+		let previousContentHeight = contentElement.scrollHeight;
+		let startTime = Date.now();
+		ignoreNextScrollEvent = true;
+		restorePercentScroll();
+
+		if (!checkScrollIID_) {
+			checkScrollIID_ = setInterval(() => {
+				const h = contentElement.scrollHeight;
+				if (h !== previousContentHeight) {
+					previousContentHeight = h;
+					ignoreNextScrollEvent = true;
+					restorePercentScroll();
+				}
+				if (Date.now() - startTime >= 1000) {
+					clearInterval(checkScrollIID_);
+					checkScrollIID_ = null;
+				}
+			}, 1);
+		}
+	});
+
+	let ignoreNextScrollEvent = false;
+	ipcRenderer.on('setPercentScroll', (event, percent) => {
+		if (checkScrollIID_) {
+			clearInterval(checkScrollIID_);
+			checkScrollIID_ = null;
+		}
+
+		ignoreNextScrollEvent = true;
+		setPercentScroll(percent);
+	});
+
+	function maxScrollTop() {
+		return Math.max(0, contentElement.scrollHeight - contentElement.clientHeight);
 	}
-});
 
-let ignoreNextScrollEvent = false;
-ipcRenderer.on('setPercentScroll', (event, percent) => {
-	if (checkScrollIID_) {
-		clearInterval(checkScrollIID_);
-		checkScrollIID_ = null;
-	}
+	contentElement.addEventListener('scroll', function(e) {
+		if (ignoreNextScrollEvent) {
+			ignoreNextScrollEvent = false;
+			return;
+		}
+		const m = maxScrollTop();
+		const percent = m ? contentElement.scrollTop / m : 0;
+		setPercentScroll(percent);
+		ipcRenderer.sendToHost('percentScroll', percent);
+	});
 
-	ignoreNextScrollEvent = true;
-	setPercentScroll(percent);
-});
+	// Disable drag and drop otherwise it's possible to drop a URL
+	// on it and it will open in the view as a website.
+	document.addEventListener('drop', function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+	});
+	document.addEventListener('dragover', function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+	});
+	document.addEventListener('dragover', function(e) {
+		e.preventDefault();
+	});
+	</script>
 
-function maxScrollTop() {
-	return Math.max(0, contentElement.scrollHeight - contentElement.clientHeight);
-}
-
-contentElement.addEventListener('scroll', function(e) {
-	if (ignoreNextScrollEvent) {
-		ignoreNextScrollEvent = false;
-		return;
-	}
-	const m = maxScrollTop();
-	const percent = m ? contentElement.scrollTop / m : 0;
-	setPercentScroll(percent);
-	ipcRenderer.sendToHost('percentScroll', percent);
-});
-
-// Disable drag and drop otherwise it's possible to drop a URL
-// on it and it will open in the view as a website.
-document.addEventListener('drop', function(e) {
-	e.preventDefault();
-	e.stopPropagation();
-});
-document.addEventListener('dragover', function(e) {
-	e.preventDefault();
-	e.stopPropagation();
-});
-document.addEventListener('dragover', function(e) {
-	e.preventDefault();
-});
-</script>
+</body>
+</html>

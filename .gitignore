@@ -38,3 +38,5 @@ Assets/DownloadBadges*.psd
 node_modules
 Tools/github_oauth_token.txt
 _releases
+ReactNativeClient/lib/csstojs/
+ElectronClient/app/gui/note-viewer/fonts/

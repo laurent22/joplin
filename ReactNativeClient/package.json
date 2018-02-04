@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "node ../Tools/copycss.js"
   },
   "dependencies": {
     "base-64": "^0.1.0",
@@ -14,6 +15,7 @@
     "events": "^1.1.1",
     "form-data": "^2.1.4",
     "html-entities": "^1.2.1",
+    "katex": "^0.9.0-beta1",
     "markdown-it": "^8.4.0",
     "md5": "^2.2.1",
     "moment": "^2.18.1",

@@ -8,8 +8,8 @@
     "pack": "node_modules/.bin/electron-builder --dir",
     "dist": "node_modules/.bin/electron-builder",
     "publish": "build -p always",
-    "postinstall": "node compile-jsx.js && node compile-package-info.js",
-    "compile": "node compile-jsx.js && node compile-package-info.js"
+    "postinstall": "node compile-jsx.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts",
+    "compile": "node compile-jsx.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts"
   },
   "repository": {
     "type": "git",
@@ -62,10 +62,10 @@
     "highlight.js": "^9.12.0",
     "html-entities": "^1.2.1",
     "jssha": "^2.3.1",
+    "katex": "^0.9.0-beta1",
     "levenshtein": "^1.0.5",
     "lodash": "^4.17.4",
     "markdown-it": "^8.4.0",
-    "markdown-it-katex": "^2.0.3",
     "md5": "^2.2.1",
     "mime": "^2.0.3",
     "moment": "^2.19.1",

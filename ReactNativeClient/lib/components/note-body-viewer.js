@@ -51,7 +51,19 @@ class NoteBodyViewer extends Component {
 			paddingBottom: '3.8em', // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
 		};
 
-		const html = this.mdToHtml_.render(note ? note.body : '', this.props.webViewStyle, mdOptions);
+		let html = this.mdToHtml_.render(note ? note.body : '', this.props.webViewStyle, mdOptions);
+
+		html = `
+			<!DOCTYPE html>
+			<html>
+				<head>
+					
+				</head>
+				<body>
+					` + html + `
+				</body>
+			</html>
+		`;
 
 		let webViewStyle = {}
 		// On iOS, the onLoadEnd() event is never fired so always
