@@ -9,9 +9,12 @@ class MdToHtml_Katex {
 		return 'katex';
 	}
 
-	processContent(renderedTokens, content) {
+	processContent(renderedTokens, content, tagType) {
 		try {
-			const renderered = katex.renderToString(content);
+			let renderered = katex.renderToString(content);
+
+			if (tagType === 'block') renderered = '<p>' + renderered + '</p>';
+
 			renderedTokens.push(renderered);
 		} catch (error) {
 			renderedTokens.push('Cannot render Katex content: ' + error.message);
@@ -33,6 +36,7 @@ class MdToHtml_Katex {
 			// Fonts must go under the resourceDir directory because this is the baseUrl of NoteBodyViewer
 			const baseDir = Setting.value('resourceDir');
 			await shim.fsDriver().mkdir(baseDir + '/fonts');
+			
 			await shim.fetchBlob('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta1/fonts/KaTeX_Main-Regular.woff2', { overwrite: false, path: baseDir + '/fonts/KaTeX_Main-Regular.woff2' });
 			await shim.fetchBlob('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta1/fonts/KaTeX_Math-Italic.woff2', { overwrite: false, path: baseDir + '/fonts/KaTeX_Math-Italic.woff2' });
 			await shim.fetchBlob('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta1/fonts/KaTeX_Size1-Regular.woff2', { overwrite: false, path: baseDir + '/fonts/KaTeX_Size1-Regular.woff2' });

@@ -251,7 +251,11 @@ class MdToHtml {
 				}
 			}
 
-			if (codeBlockHandler) codeBlockHandler.loadAssets();
+			if (codeBlockHandler) {
+				codeBlockHandler.loadAssets().catch((error) => {
+					console.warn('MdToHtml: Error loading assets for ' + codeBlockHandler.name() + ': ', error.message);
+				});
+			}
 
 			if (t.type === 'image') {
 				if (tokenContent) attrs.push(['title', tokenContent]);
@@ -267,7 +271,7 @@ class MdToHtml {
 				} else {
 					if (tokenContent) {
 						if ((isCodeBlock || isInlineCode) && codeBlockHandler) {
-							output = codeBlockHandler.processContent(output, tokenContent);
+							output = codeBlockHandler.processContent(output, tokenContent, isCodeBlock ? 'block' : 'inline');
 						} else {
 							output.push(htmlentities(tokenContent));
 						}
