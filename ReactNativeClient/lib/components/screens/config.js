@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { TouchableOpacity, Linking, View, Switch, Slider, StyleSheet, Text, Button, ScrollView, TextInput } = require('react-native');
+const { Platform, TouchableOpacity, Linking, View, Switch, Slider, StyleSheet, Text, Button, ScrollView, TextInput } = require('react-native');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { _, setLocale } = require('lib/locale.js');
@@ -72,6 +72,11 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			},
 		}
 
+		if (Platform.OS === 'ios') {
+			styles.settingControl.borderBottomWidth = 1;
+			styles.settingControl.borderBottomColor = theme.dividerColor;
+		}
+
 		styles.switchSettingText = Object.assign({}, styles.settingText);
 		styles.switchSettingText.width = '80%';
 
@@ -106,8 +111,6 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				settings: settings,
 				settingsChanged: true,
 			});
-
-			console.info(settings['sync.5.path']);
 		}
 
 		const md = Setting.settingMetadata(key);
@@ -163,7 +166,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			return (
 				<View key={key} style={this.styles().settingContainer}>
 					<Text key="label" style={this.styles().settingText}>{md.label()}</Text>
-					<TextInput key="control" style={this.styles().settingControl} value={value} onChangeText={(value) => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
+					<TextInput autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={(value) => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
 				</View>
 			);
 		} else {
