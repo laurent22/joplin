@@ -1,6 +1,6 @@
 {
   "name": "Joplin",
-  "version": "0.10.58",
+  "version": "0.10.59",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "scripts": {
@@ -22,7 +22,9 @@
   },
   "build": {
     "appId": "net.cozic.joplin-desktop",
-    "extraResources": ["build/icons/*"],
+    "extraResources": [
+      "build/icons/*"
+    ],
     "win": {
       "icon": "../../Assets/Joplin.ico"
     },
