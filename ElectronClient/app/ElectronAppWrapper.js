@@ -4,6 +4,7 @@ const { shim } = require('lib/shim');
 const url = require('url')
 const path = require('path')
 const urlUtils = require('lib/urlUtils.js');
+const { dirname } = require('lib/path-utils');
 
 class ElectronAppWrapper {
 
@@ -114,9 +115,15 @@ class ElectronAppWrapper {
 		return !!this.tray_;
 	}
 
+	buildDir() {
+		let dir = __dirname;
+		if (dir.indexOf('.asar') >= 0) dir = dirname(dir);
+		return dir + '/build';
+	}
+
 	// Note: this must be called only after the "ready" event of the app has been dispatched
 	createTray(contextMenu) {
-		this.tray_ = new Tray(__dirname + '/build/icons/16x16.png')
+		this.tray_ = new Tray(this.buildDir() + '/icons/16x16.png')
 		this.tray_.setToolTip(this.electronApp_.getName())
 		this.tray_.setContextMenu(contextMenu)
 
