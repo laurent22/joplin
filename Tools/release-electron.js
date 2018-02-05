@@ -22,7 +22,7 @@ async function main() {
 
 	const release = await githubRelease(tagName, true);
 
-	console.info('Created GitHub release: ' + release.url);
+	console.info(release);
 }
 
 main().catch((error) => {
