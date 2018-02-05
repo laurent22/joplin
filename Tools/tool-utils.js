@@ -90,7 +90,7 @@ toolUtils.githubOauthToken = async function() {
 toolUtils.githubRelease = async function(tagName, isDraft) {
 	const fetch = require('node-fetch');
 
-	const oauthToken = await githubOauthToken();
+	const oauthToken = await toolUtils.githubOauthToken();
 	
 	const response = await fetch('https://api.github.com/repos/laurent22/joplin/releases', {
 		method: 'POST', 
