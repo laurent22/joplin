@@ -46,6 +46,8 @@ before_install:
 
 script:
   - |
-    cd ElectronClient/app
+    cd Tools
+    npm install
+    cd ../ElectronClient/app
     rsync -aP --delete ../../ReactNativeClient/lib/ lib/
     npm install && yarn dist
