@@ -2,7 +2,7 @@ const React = require('react'); const Component = React.Component;
 const { connect } = require('react-redux');
 const { NotesScreen } = require('lib/components/screens/notes.js');
 const { SearchScreen } = require('lib/components/screens/search.js');
-const { View } = require('react-native');
+const { KeyboardAvoidingView, Keyboard, Platform, View } = require('react-native');
 const { _ } = require('lib/locale.js');
 const { themeStyle } = require('lib/components/global-style.js');
 
@@ -11,6 +11,31 @@ class AppNavComponent extends Component {
 	constructor() {
 		super();
 		this.previousRouteName_ = null;
+		this.state = {
+			autoCompletionBarExtraHeight: 0, // Extra padding for the auto completion bar at the top of the keyboard
+		}
+	}
+
+	componentWillMount() {
+		if (Platform.OS === 'ios') {
+			this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow.bind(this));
+			this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide.bind(this));
+		}
+	}
+
+	componentWillUnmount() {
+		if (this.keyboardDidShowListener) this.keyboardDidShowListener.remove();
+		if (this.keyboardDidHideListener) this.keyboardDidHideListener.remove();
+		this.keyboardDidShowListener = null;
+		this.keyboardDidHideListener = null;
+	}
+
+	keyboardDidShow () {
+		this.setState({ autoCompletionBarExtraHeight: 30 })
+	}
+
+	keyboardDidHide () {
+		this.setState({ autoCompletionBarExtraHeight:0  })
 	}
 
 	render() {
@@ -44,11 +69,12 @@ class AppNavComponent extends Component {
 		const style = { flex: 1, backgroundColor: theme.backgroundColor }
 
 		return (
-			<View style={style}>
+			<KeyboardAvoidingView behavior={ Platform.OS === 'ios' ? "padding" : null } style={style}>
 				<NotesScreen visible={notesScreenVisible} navigation={{ state: route }} />
 				{ searchScreenLoaded && <SearchScreen visible={searchScreenVisible} navigation={{ state: route }} /> }
 				{ (!notesScreenVisible && !searchScreenVisible) && <Screen navigation={{ state: route }} /> }
-			</View>
+				<View style={{ height: this.state.autoCompletionBarExtraHeight }} />
+			</KeyboardAvoidingView>
 		);
 	}
 
