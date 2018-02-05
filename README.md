@@ -176,6 +176,40 @@ Current translations:
 ![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/jp.png)  |  日本語  |  ja_JP  |    |  74%
 <!-- LOCALE-TABLE-AUTO-GENERATED -->
 
+# Markdown
+
+Joplin uses and renders [Github-flavoured Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) with a few variations and additions. In particular:
+
+## Math notation
+
+Math expressions can be added using the [Katex notation](https://khan.github.io/KaTeX/). To add an inline equation, wrap the expression in ``{.katex}EXPRESSION``, eg. ``{.katex}\sqrt{3x-1}+(1+x)^2``. To create an expression block, wrap it as follow:
+
+    ```katex
+    EXPRESSION
+    ```
+
+For example:
+
+    ```katex
+    f(x) = \int_{-\infty}^\infty
+        \hat f(\xi)\,e^{2 \pi i \xi x}
+        \,d\xi
+    ```
+
+Here is an example with the Markdown and rendered result side by side:
+
+<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/Katex.png" style="max-width: 100%; max-height: 35em;">
+
+## Checkboxes
+
+Checkboxes can be added like so:
+
+    -[ ] Milk
+    -[ ] Rice
+    -[ ] Eggs
+
+The checkboxes can then be ticked in the mobile and desktop applications.
+
 # Contributing
 
 Please see the guide for information on how to contribute to the development of Joplin: https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md
