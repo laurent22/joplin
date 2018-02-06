@@ -461,6 +461,7 @@ class NoteTextComponent extends React.Component {
 		const body = note && note.body ? note.body : '';
 		const theme = themeStyle(this.props.theme);
 		const visiblePanes = this.props.visiblePanes || ['editor', 'viewer'];
+		const isTodo = note && !!note.is_todo;
 
 		const borderWidth = 1;
 
@@ -588,6 +589,7 @@ class NoteTextComponent extends React.Component {
 			style={titleEditorStyle}
 			value={note && note.title ? note.title : ''}
 			onChange={(event) => { this.title_changeText(event); }}
+			placeholder={ this.props.newNote ? _('Creating new %s...', isTodo ? _('to-do') : _('note')) : '' }
 		/>
 
 		const titleBarMenuButton = <IconButton style={{
