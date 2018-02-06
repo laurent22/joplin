@@ -218,15 +218,15 @@
 <tbody>
 <tr>
 <td>Windows</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.54/Joplin-Setup-0.10.54.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.59/Joplin-Setup-0.10.59.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a></td>
 </tr>
 <tr>
 <td>macOS</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.54/Joplin-0.10.54.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.59/Joplin-0.10.59.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a></td>
 </tr>
 <tr>
 <td>Linux</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.54/Joplin-0.10.54-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v0.10.59/Joplin-0.10.59-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a></td>
 </tr>
 </tbody>
 </table>
@@ -328,6 +328,29 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <p>See <a href="https://github.com/mikaelbr/node-notifier/blob/master/DECISION_FLOW.md">documentation and flow chart for reporter choice</a></p>
 <p>On mobile, the alarms will be displayed using the built-in notification system.</p>
 <p>If for any reason the notifications do not work, please <a href="https://github.com/laurent22/joplin/issues">open an issue</a>.</p>
+<h1 id="markdown">Markdown</h1>
+<p>Joplin uses and renders <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Github-flavoured Markdown</a> with a few variations and additions. In particular:</p>
+<h2 id="math-notation">Math notation</h2>
+<p>Math expressions can be added using the <a href="https://khan.github.io/KaTeX/">Katex notation</a>. To add an inline equation, wrap the expression in <code>`{.katex}EXPRESSION` </code>, eg. <code>`{.katex}\sqrt{3x-1}+(1+x)^2` </code>. To create an expression block, wrap it as follow:</p>
+<pre><code>```katex
+EXPRESSION
+```
+</code></pre><p>For example:</p>
+<pre><code>```katex
+f(x) = \int_{-\infty}^\infty
+    \hat f(\xi)\,e^{2 \pi i \xi x}
+    \,d\xi
+```
+</code></pre><p>Here is an example with the Markdown and rendered result side by side:</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/Katex.png" style="max-width: 100%; max-height: 35em;"></p>
+<h2 id="checkboxes">Checkboxes</h2>
+<p>Checkboxes can be added like so:</p>
+<pre><code>-[ ] Milk
+-[ ] Rice
+-[ ] Eggs
+</code></pre><p>The checkboxes can then be ticked in the mobile and desktop applications.</p>
+<h1 id="contributing">Contributing</h1>
+<p>Please see the guide for information on how to contribute to the development of Joplin: <a href="https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md">https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md</a></p>
 <h1 id="localisation">Localisation</h1>
 <p>Joplin is currently available in the languages below. If you would like to contribute a <strong>new translation</strong>, it is quite straightforward, please follow these steps:</p>
 <ul>
@@ -355,14 +378,14 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/hr.png" alt=""></td>
 <td>Croatian</td>
 <td>hr_HR</td>
-<td>Hrvoje Mandić <a href="&#x6d;&#97;&#105;&#108;&#116;&#111;&#x3a;&#x74;&#114;&#98;&#x75;&#x68;&#111;&#109;&#x40;&#x6e;&#101;&#x74;&#x2e;&#104;&#x72;">&#x74;&#114;&#98;&#x75;&#x68;&#111;&#109;&#x40;&#x6e;&#101;&#x74;&#x2e;&#104;&#x72;</a></td>
+<td>Hrvoje Mandić <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#x3a;&#x74;&#114;&#x62;&#x75;&#104;&#111;&#109;&#64;&#x6e;&#101;&#116;&#46;&#x68;&#x72;">&#x74;&#114;&#x62;&#x75;&#104;&#111;&#109;&#64;&#x6e;&#101;&#116;&#46;&#x68;&#x72;</a></td>
 <td>72%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/de.png" alt=""></td>
 <td>Deutsch</td>
 <td>de_DE</td>
-<td>Tobias Strobel <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#x3a;&#x67;&#x69;&#116;&#64;&#x73;&#116;&#114;&#111;&#98;&#101;&#108;&#116;&#x6f;&#x62;&#x69;&#97;&#115;&#46;&#100;&#x65;">&#x67;&#x69;&#116;&#64;&#x73;&#116;&#114;&#111;&#98;&#101;&#108;&#116;&#x6f;&#x62;&#x69;&#97;&#115;&#46;&#100;&#x65;</a></td>
+<td>Tobias Strobel <a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#111;&#x3a;&#103;&#105;&#x74;&#x40;&#x73;&#x74;&#x72;&#x6f;&#x62;&#x65;&#x6c;&#x74;&#111;&#98;&#x69;&#97;&#x73;&#46;&#x64;&#x65;">&#103;&#105;&#x74;&#x40;&#x73;&#x74;&#x72;&#x6f;&#x62;&#x65;&#x6c;&#x74;&#111;&#98;&#x69;&#97;&#x73;&#46;&#x64;&#x65;</a></td>
 <td>92%</td>
 </tr>
 <tr>
@@ -418,14 +441,14 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/ru.png" alt=""></td>
 <td>Русский</td>
 <td>ru_RU</td>
-<td>Artyom Karlov <a href="&#x6d;&#97;&#105;&#108;&#116;&#x6f;&#58;&#x61;&#114;&#x74;&#x79;&#x6f;&#109;&#46;&#x6b;&#x61;&#x72;&#108;&#x6f;&#118;&#x40;&#x67;&#109;&#x61;&#x69;&#x6c;&#46;&#99;&#111;&#109;">&#x61;&#114;&#x74;&#x79;&#x6f;&#109;&#46;&#x6b;&#x61;&#x72;&#108;&#x6f;&#118;&#x40;&#x67;&#109;&#x61;&#x69;&#x6c;&#46;&#99;&#111;&#109;</a></td>
+<td>Artyom Karlov <a href="&#x6d;&#x61;&#105;&#108;&#116;&#111;&#58;&#97;&#114;&#x74;&#121;&#111;&#x6d;&#x2e;&#x6b;&#97;&#114;&#108;&#111;&#x76;&#64;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#99;&#111;&#109;">&#97;&#114;&#x74;&#121;&#111;&#x6d;&#x2e;&#x6b;&#97;&#114;&#108;&#111;&#x76;&#64;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#99;&#111;&#109;</a></td>
 <td>96%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/cn.png" alt=""></td>
 <td>中文 (简体)</td>
 <td>zh_CN</td>
-<td>RCJacH <a href="&#109;&#x61;&#105;&#108;&#116;&#111;&#58;&#x52;&#67;&#x4a;&#97;&#x63;&#x48;&#64;&#x6f;&#117;&#x74;&#108;&#x6f;&#x6f;&#x6b;&#46;&#x63;&#111;&#x6d;">&#x52;&#67;&#x4a;&#97;&#x63;&#x48;&#64;&#x6f;&#117;&#x74;&#108;&#x6f;&#x6f;&#x6b;&#46;&#x63;&#111;&#x6d;</a></td>
+<td>RCJacH <a href="&#109;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#82;&#x43;&#74;&#x61;&#x63;&#x48;&#64;&#111;&#117;&#x74;&#108;&#x6f;&#x6f;&#x6b;&#x2e;&#99;&#x6f;&#x6d;">&#82;&#x43;&#74;&#x61;&#x63;&#x48;&#64;&#111;&#117;&#x74;&#108;&#x6f;&#x6f;&#x6b;&#x2e;&#99;&#x6f;&#x6d;</a></td>
 <td>76%</td>
 </tr>
 <tr>
@@ -438,29 +461,6 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 </tbody>
 </table>
 <!-- LOCALE-TABLE-AUTO-GENERATED -->
-<h1 id="markdown">Markdown</h1>
-<p>Joplin uses and renders <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Github-flavoured Markdown</a> with a few variations and additions. In particular:</p>
-<h2 id="math-notation">Math notation</h2>
-<p>Math expressions can be added using the <a href="https://khan.github.io/KaTeX/">Katex notation</a>. To add an inline equation, wrap the expression in <code>`{.katex}EXPRESSION` </code>, eg. <code>`{.katex}\sqrt{3x-1}+(1+x)^2` </code>. To create an expression block, wrap it as follow:</p>
-<pre><code>```katex
-EXPRESSION
-```
-</code></pre><p>For example:</p>
-<pre><code>```katex
-f(x) = \int_{-\infty}^\infty
-    \hat f(\xi)\,e^{2 \pi i \xi x}
-    \,d\xi
-```
-</code></pre><p>Here is an example with the Markdown and rendered result side by side:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/Katex.png" style="max-width: 100%; max-height: 35em;"></p>
-<h2 id="checkboxes">Checkboxes</h2>
-<p>Checkboxes can be added like so:</p>
-<pre><code>-[ ] Milk
--[ ] Rice
--[ ] Eggs
-</code></pre><p>The checkboxes can then be ticked in the mobile and desktop applications.</p>
-<h1 id="contributing">Contributing</h1>
-<p>Please see the guide for information on how to contribute to the development of Joplin: <a href="https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md">https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md</a></p>
 <h1 id="coming-features">Coming features</h1>
 <ul>
 <li>Mobile: manage tags</li>
