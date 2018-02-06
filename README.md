@@ -150,19 +150,19 @@ Joplin uses and renders [Github-flavoured Markdown](https://github.com/adam-p/ma
 
 ## Math notation
 
-Math expressions can be added using the [Katex notation](https://khan.github.io/KaTeX/). To add an inline equation, wrap the expression in `` `{.katex}EXPRESSION` ``, eg. `` `{.katex}\sqrt{3x-1}+(1+x)^2` ``. To create an expression block, wrap it as follow:
+Math expressions can be added using the [Katex notation](https://khan.github.io/KaTeX/). To add an inline equation, wrap the expression in `$EXPRESSION$`, eg. `$\sqrt{3x-1}+(1+x)^2$`. To create an expression block, wrap it as follow:
 
-    ```katex
+    $$
     EXPRESSION
-    ```
+    $$
 
 For example:
 
-    ```katex
+    $$
     f(x) = \int_{-\infty}^\infty
         \hat f(\xi)\,e^{2 \pi i \xi x}
         \,d\xi
-    ```
+    $$
 
 Here is an example with the Markdown and rendered result side by side:
 

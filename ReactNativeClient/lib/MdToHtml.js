@@ -157,7 +157,7 @@ class MdToHtml {
 		}
 	}
 
-	customCodeHandler_(language) {
+	rendererPlugin_(language) {
 		if (!language) return null;
 
 		const handlers = {};
@@ -196,9 +196,10 @@ class MdToHtml {
 			const isCodeBlock = tag === 'code' && t.block;
 			const isInlineCode = t.type === 'code_inline';
 			const codeBlockLanguage = t && t.info ? t.info : null;
-			let codeBlockHandler = null;
+			let rendererPlugin = null;
+			let rendererPluginOptions = { tagType: 'inline' };
 
-			if (isCodeBlock) codeBlockHandler = this.customCodeHandler_(codeBlockLanguage);
+			if (isCodeBlock) rendererPlugin = this.rendererPlugin_(codeBlockLanguage);
 
 			if (previousToken && previousToken.tag === 'li' && tag === 'p') {
 				// Markdown-it render list items as <li><p>Text<p></li> which makes it
@@ -216,7 +217,7 @@ class MdToHtml {
 			} else if (t.type === 'link_open') {
 				openTag = 'a';
 			} else if (isCodeBlock) {
-				if (codeBlockHandler) {
+				if (rendererPlugin) {
 					openTag = null;
 				} else {
 					openTag = 'pre';
@@ -235,25 +236,30 @@ class MdToHtml {
 
 			if (isCodeBlock) {
 				const codeAttrs = ['code'];
-				if (!codeBlockHandler) {
+				if (!rendererPlugin) {
 					if (codeBlockLanguage) codeAttrs.push(t.info); // t.info contains the language when the token is a codeblock
 					output.push('<code class="' + codeAttrs.join(' ') + '">');
 				}
 			} else if (isInlineCode) {
 				const result = this.parseInlineCodeLanguage_(tokenContent);
 				if (result) {
-					codeBlockHandler = this.customCodeHandler_(result.language);
+					rendererPlugin = this.rendererPlugin_(result.language);
 					tokenContent = result.newContent;
 				}
 
-				if (!codeBlockHandler) {
+				if (!rendererPlugin) {
 					output.push('<code>');
 				}
 			}
 
-			if (codeBlockHandler) {
-				codeBlockHandler.loadAssets().catch((error) => {
-					console.warn('MdToHtml: Error loading assets for ' + codeBlockHandler.name() + ': ', error.message);
+			if (t.type === 'math_inline' || t.type === 'math_block') {
+				rendererPlugin = this.rendererPlugin_('katex');
+				rendererPluginOptions = { tagType: t.type === 'math_block' ? 'block' : 'inline' };
+			}
+
+			if (rendererPlugin) {
+				rendererPlugin.loadAssets().catch((error) => {
+					console.warn('MdToHtml: Error loading assets for ' + rendererPlugin.name() + ': ', error.message);
 				});
 			}
 
@@ -270,8 +276,10 @@ class MdToHtml {
 					output = output.concat(parsedChildren);
 				} else {
 					if (tokenContent) {
-						if ((isCodeBlock || isInlineCode) && codeBlockHandler) {
-							output = codeBlockHandler.processContent(output, tokenContent, isCodeBlock ? 'block' : 'inline');
+						if ((isCodeBlock || isInlineCode) && rendererPlugin) {
+							output = rendererPlugin.processContent(output, tokenContent, isCodeBlock ? 'block' : 'inline');
+						} else if (rendererPlugin) {
+							output = rendererPlugin.processContent(output, tokenContent, rendererPluginOptions.tagType);
 						} else {
 							output.push(htmlentities(tokenContent));
 						}
@@ -286,15 +294,15 @@ class MdToHtml {
 			} else if (tag && t.type.indexOf('inline') >= 0) {
 				closeTag = openTag;
 			} else if (isCodeBlock) {
-				if (!codeBlockHandler) closeTag = openTag;
+				if (!rendererPlugin) closeTag = openTag;
 			}
 
 			if (isCodeBlock) {
-				if (!codeBlockHandler) {
+				if (!rendererPlugin) {
 					output.push('</code>');
 				}
 			} else if (isInlineCode) {
-				if (!codeBlockHandler) {
+				if (!rendererPlugin) {
 					output.push('</code>');
 				}
 			}
@@ -307,9 +315,9 @@ class MdToHtml {
 				}
 			}
 
-			if (codeBlockHandler) {
-				const extraCss = codeBlockHandler.extraCss();
-				const name = codeBlockHandler.name();
+			if (rendererPlugin) {
+				const extraCss = rendererPlugin.extraCss();
+				const name = rendererPlugin.name();
 				if (extraCss && !(name in extraCssBlocks)) {
 					extraCssBlocks[name] = extraCss;
 				}
@@ -344,6 +352,13 @@ class MdToHtml {
 			breaks: true,
 			linkify: true,
 		});
+
+		// This is currently used only so that the $expression$ and $$\nexpression\n$$ blocks are translated
+		// to math_inline and math_block blocks. These blocks are then processed directly with the Katex
+		// library.  It is better this way as then it is possible to conditionally load the CSS required by
+		// Katex and use an up-to-date version of Katex (as of 2018, the plugin is still using 0.6, which is
+		// buggy instead of 0.9).
+		md.use(require('markdown-it-katex'));
 
 		// Hack to make checkboxes clickable. Ideally, checkboxes should be parsed properly in
 		// renderTokens_(), but for now this hack works. Marking it with HORRIBLE_HACK so

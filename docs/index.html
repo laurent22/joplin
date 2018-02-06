@@ -331,16 +331,16 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <h1 id="markdown">Markdown</h1>
 <p>Joplin uses and renders <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Github-flavoured Markdown</a> with a few variations and additions. In particular:</p>
 <h2 id="math-notation">Math notation</h2>
-<p>Math expressions can be added using the <a href="https://khan.github.io/KaTeX/">Katex notation</a>. To add an inline equation, wrap the expression in <code>`{.katex}EXPRESSION` </code>, eg. <code>`{.katex}\sqrt{3x-1}+(1+x)^2` </code>. To create an expression block, wrap it as follow:</p>
-<pre><code>```katex
+<p>Math expressions can be added using the <a href="https://khan.github.io/KaTeX/">Katex notation</a>. To add an inline equation, wrap the expression in <code>$EXPRESSION$</code>, eg. <code>$\sqrt{3x-1}+(1+x)^2$</code>. To create an expression block, wrap it as follow:</p>
+<pre><code>$$
 EXPRESSION
-```
+$$
 </code></pre><p>For example:</p>
-<pre><code>```katex
+<pre><code>$$
 f(x) = \int_{-\infty}^\infty
     \hat f(\xi)\,e^{2 \pi i \xi x}
     \,d\xi
-```
+$$
 </code></pre><p>Here is an example with the Markdown and rendered result side by side:</p>
 <p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/Katex.png" style="max-width: 100%; max-height: 35em;"></p>
 <h2 id="checkboxes">Checkboxes</h2>
@@ -378,14 +378,14 @@ f(x) = \int_{-\infty}^\infty
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/hr.png" alt=""></td>
 <td>Croatian</td>
 <td>hr_HR</td>
-<td>Hrvoje Mandić <a href="&#109;&#97;&#x69;&#x6c;&#116;&#111;&#x3a;&#x74;&#114;&#98;&#117;&#104;&#x6f;&#x6d;&#x40;&#110;&#101;&#x74;&#46;&#104;&#114;">&#x74;&#114;&#98;&#117;&#104;&#x6f;&#x6d;&#x40;&#110;&#101;&#x74;&#46;&#104;&#114;</a></td>
+<td>Hrvoje Mandić <a href="&#109;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#116;&#114;&#98;&#117;&#x68;&#111;&#109;&#64;&#110;&#101;&#116;&#46;&#104;&#114;">&#116;&#114;&#98;&#117;&#x68;&#111;&#109;&#64;&#110;&#101;&#116;&#46;&#104;&#114;</a></td>
 <td>72%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/de.png" alt=""></td>
 <td>Deutsch</td>
 <td>de_DE</td>
-<td>Tobias Strobel <a href="&#109;&#97;&#105;&#108;&#x74;&#111;&#58;&#x67;&#x69;&#x74;&#64;&#x73;&#x74;&#x72;&#x6f;&#x62;&#x65;&#108;&#x74;&#111;&#98;&#x69;&#97;&#x73;&#x2e;&#x64;&#x65;">&#x67;&#x69;&#x74;&#64;&#x73;&#x74;&#x72;&#x6f;&#x62;&#x65;&#108;&#x74;&#111;&#98;&#x69;&#97;&#x73;&#x2e;&#x64;&#x65;</a></td>
+<td>Tobias Strobel <a href="&#x6d;&#97;&#105;&#108;&#116;&#111;&#58;&#x67;&#x69;&#116;&#x40;&#115;&#x74;&#114;&#111;&#98;&#101;&#108;&#x74;&#111;&#98;&#x69;&#x61;&#x73;&#46;&#x64;&#x65;">&#x67;&#x69;&#116;&#x40;&#115;&#x74;&#114;&#111;&#98;&#101;&#108;&#x74;&#111;&#98;&#x69;&#x61;&#x73;&#46;&#x64;&#x65;</a></td>
 <td>92%</td>
 </tr>
 <tr>
@@ -441,14 +441,14 @@ f(x) = \int_{-\infty}^\infty
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/ru.png" alt=""></td>
 <td>Русский</td>
 <td>ru_RU</td>
-<td>Artyom Karlov <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#x61;&#114;&#116;&#x79;&#111;&#109;&#46;&#107;&#x61;&#114;&#x6c;&#x6f;&#118;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x61;&#114;&#116;&#x79;&#111;&#109;&#46;&#107;&#x61;&#114;&#x6c;&#x6f;&#118;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a></td>
+<td>Artyom Karlov <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#x61;&#114;&#x74;&#121;&#111;&#109;&#46;&#x6b;&#97;&#114;&#108;&#x6f;&#118;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#x61;&#114;&#x74;&#121;&#111;&#109;&#46;&#x6b;&#97;&#114;&#108;&#x6f;&#118;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;</a></td>
 <td>96%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/cn.png" alt=""></td>
 <td>中文 (简体)</td>
 <td>zh_CN</td>
-<td>RCJacH <a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#x52;&#67;&#x4a;&#97;&#x63;&#72;&#x40;&#x6f;&#x75;&#116;&#108;&#111;&#x6f;&#107;&#x2e;&#x63;&#111;&#109;">&#x52;&#67;&#x4a;&#97;&#x63;&#72;&#x40;&#x6f;&#x75;&#116;&#108;&#111;&#x6f;&#107;&#x2e;&#x63;&#111;&#109;</a></td>
+<td>RCJacH <a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#111;&#58;&#x52;&#x43;&#74;&#x61;&#99;&#x48;&#x40;&#x6f;&#117;&#x74;&#108;&#111;&#111;&#107;&#x2e;&#x63;&#x6f;&#109;">&#x52;&#x43;&#74;&#x61;&#99;&#x48;&#x40;&#x6f;&#117;&#x74;&#108;&#111;&#111;&#107;&#x2e;&#x63;&#x6f;&#109;</a></td>
 <td>76%</td>
 </tr>
 <tr>
