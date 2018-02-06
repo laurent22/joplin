@@ -115,10 +115,14 @@ class NoteTextComponent extends React.Component {
 		eventManager.removeListener('todoToggle', this.onTodoToggle_);
 	}
 
-	async saveIfNeeded() {
+	async saveIfNeeded(saveIfNewNote = false) {
+		const forceSave = saveIfNewNote && (this.state.note && !this.state.note.id);
+
 		if (this.scheduleSaveTimeout_) clearTimeout(this.scheduleSaveTimeout_);
 		this.scheduleSaveTimeout_ = null;
-		if (!shared.isModified(this)) return;
+		if (!forceSave) {
+			if (!shared.isModified(this)) return;
+		}
 		await shared.saveNoteButton_press(this);
 	}
 
@@ -400,16 +404,13 @@ class NoteTextComponent extends React.Component {
 
 
 	async commandAttachFile() {
-		const noteId = this.props.noteId;
-		if (!noteId) return;
-
 		const filePaths = bridge().showOpenDialog({
 			properties: ['openFile', 'createDirectory', 'multiSelections'],
 		});
 		if (!filePaths || !filePaths.length) return;
 
-		await this.saveIfNeeded();
-		let note = await Note.load(noteId);
+		await this.saveIfNeeded(true);
+		let note = await Note.load(this.state.note.id);
 
 		for (let i = 0; i < filePaths.length; i++) {
 			const filePath = filePaths[i];
@@ -427,20 +428,19 @@ class NoteTextComponent extends React.Component {
 		}
 	}
 
-	commandSetAlarm() {
-		const noteId = this.props.noteId;
-		if (!noteId) return;
+	async commandSetAlarm() {
+		await this.saveIfNeeded(true);
 
 		this.props.dispatch({
 			type: 'WINDOW_COMMAND',
 			name: 'editAlarm',
-			noteId: noteId,
+			noteId: this.state.note.id,
 		});
 	}
 
 	itemContextMenu(event) {
-		const noteId = this.props.noteId;
-		if (!noteId) return;
+		const note = this.state.note;
+		if (!note) return;
 
 		const menu = new Menu()
 
@@ -448,9 +448,11 @@ class NoteTextComponent extends React.Component {
 			return this.commandAttachFile();
 		}}));
 
-		menu.append(new MenuItem({label: _('Set alarm'), click: async () => {
-			return this.commandSetAlarm();
-		}}));
+		if (!!note.is_todo) {
+			menu.append(new MenuItem({label: _('Set alarm'), click: async () => {
+				return this.commandSetAlarm();
+			}}));
+		}
 
 		menu.popup(bridge().window());
 	}
