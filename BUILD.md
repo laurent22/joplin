@@ -17,6 +17,15 @@ If you get a node-gyp related error you might need to manually install it: `npm 
 - Install node v8.x (check with `node --version`) - https://nodejs.org/en/
 - If you get a node-gyp related error you might need to manually install it: `npm install -g node-gyp`
 
+# Building the tools
+
+Before building any of the applications, you need to build the tools:
+
+```
+cd Tools
+npm install
+```
+
 # Building the Electron application
 
 ```
