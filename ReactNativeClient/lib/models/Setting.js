@@ -392,26 +392,42 @@ class Setting extends BaseModel {
 		return !!options[value];
 	}
 
-	// Currently only supports objects with properties one level deep
-	static object(key) {
+	// For example, if settings is:
+	// { sync.5.path: 'http://example', sync.5.username: 'testing' }
+	// and baseKey is 'sync.5', the function will return
+	// { path: 'http://example', username: 'testing' }
+	static subValues(baseKey, settings) {
 		let output = {};
-		let keys = this.keys();
-		for (let i = 0; i < keys.length; i++) {
-			let k = keys[i].split('.');
-			if (k[0] == key) {
-				output[k[1]] = this.value(keys[i]);
+		for (let key in settings) {
+			if (!settings.hasOwnProperty(key)) continue;
+			if (key.indexOf(baseKey) === 0) {
+				const subKey = key.substr(baseKey.length + 1);
+				output[subKey] = settings[key];
 			}
 		}
 		return output;
 	}
 
 	// Currently only supports objects with properties one level deep
-	static setObject(key, object) {
-		for (let n in object) {
-			if (!object.hasOwnProperty(n)) continue;
-			this.setValue(key + '.' + n, object[n]);
-		}
-	}
+	// static object(key) {
+	// 	let output = {};
+	// 	let keys = this.keys();
+	// 	for (let i = 0; i < keys.length; i++) {
+	// 		let k = keys[i].split('.');
+	// 		if (k[0] == key) {
+	// 			output[k[1]] = this.value(keys[i]);
+	// 		}
+	// 	}
+	// 	return output;
+	// }
+
+	// Currently only supports objects with properties one level deep
+	// static setObject(key, object) {
+	// 	for (let n in object) {
+	// 		if (!object.hasOwnProperty(n)) continue;
+	// 		this.setValue(key + '.' + n, object[n]);
+	// 	}
+	// }
 
 	static saveAll() {
 		if (!this.saveTimeoutId_) return Promise.resolve();

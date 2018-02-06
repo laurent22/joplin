@@ -187,7 +187,7 @@ class WebDavApi {
 
 		let response = null;
 
-		// console.info('WebDAV', method + ' ' + url, headers, options);
+		// console.info('WebDAV Call', method + ' ' + url, headers, options);
 
 		if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
 			response = await shim.uploadBlob(url, fetchOptions);
@@ -198,6 +198,8 @@ class WebDavApi {
 		}
 
 		const responseText = await response.text();
+
+		// console.info('WebDAV Response', responseText);
 
 		// Gives a shorter response for error messages. Useful for cases where a full HTML page is accidentally loaded instead of
 		// JSON. That way the error message will still show there's a problem but without filling up the log or screen.

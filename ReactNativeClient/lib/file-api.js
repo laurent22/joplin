@@ -43,6 +43,7 @@ class FileApi {
 	}
 
 	setLogger(l) {
+		if (!l) l = new Logger();
 		this.logger_ = l;
 	}
 

@@ -7,6 +7,8 @@ const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { Dropdown } = require('lib/components/Dropdown.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const Setting = require('lib/models/Setting.js');
+const shared = require('lib/components/shared/config-shared.js');
+const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 
 class ConfigScreenComponent extends BaseScreenComponent {
 	
@@ -22,6 +24,12 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			settings: {},
 			settingsChanged: false,
 		};
+
+		shared.init(this);
+
+		this.checkSyncConfig_ = async () => {
+			await shared.checkSyncConfig(this, this.state.settings);
+		}
 
 		this.saveButton_press = () => {
 			for (let n in this.state.settings) {
@@ -192,6 +200,27 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			const comp = this.settingToComponent(key, settings[key]);
 			if (!comp) continue;
 			settingComps.push(comp);
+		}
+
+		const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
+
+		if (syncTargetMd.supportsConfigCheck) {
+			const messages = shared.checkSyncConfigMessages(this);
+			const statusComp = !messages.length ? null : (
+				<View style={{flex:1, marginTop: 10}}>
+					<Text>{messages[0]}</Text>
+					{messages.length >= 1 ? (<Text style={{marginTop:10}}>{messages[1]}</Text>) : null}
+				</View>);
+
+			settingComps.push(
+				<View key="check_sync_config_button" style={this.styles().settingContainer}>
+					<View style={{flex:1, flexDirection: 'column'}}>
+						<View style={{flex:1}}>
+							<Button title={_('Check synchronisation configuration')} onPress={this.checkSyncConfig_}/>
+						</View>
+						{ statusComp }
+					</View>
+				</View>);
 		}
 		
 		settingComps.push(
