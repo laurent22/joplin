@@ -4,7 +4,7 @@ const { shim } = require('lib/shim');
 const url = require('url')
 const path = require('path')
 const urlUtils = require('lib/urlUtils.js');
-const { dirname } = require('lib/path-utils');
+const { dirname, basename } = require('lib/path-utils');
 
 class ElectronAppWrapper {
 
@@ -117,7 +117,7 @@ class ElectronAppWrapper {
 
 	buildDir() {
 		let dir = __dirname;
-		if (dir.indexOf('.asar') >= 0) dir = dirname(dir);
+		if (dir.indexOf('.asar') >= 0 || basename(dir) === 'app') dir = dirname(dir);
 		return dir + '/build';
 	}
 
