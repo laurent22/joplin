@@ -5,6 +5,7 @@ const url = require('url')
 const path = require('path')
 const urlUtils = require('lib/urlUtils.js');
 const { dirname, basename } = require('lib/path-utils');
+const fs = require('fs-extra');
 
 class ElectronAppWrapper {
 
@@ -14,6 +15,7 @@ class ElectronAppWrapper {
 		this.win_ = null;
 		this.willQuitApp_ = false;
 		this.tray_ = null;
+		this.buildDir_ = null;
 	}
 
 	electronApp() {
@@ -116,20 +118,30 @@ class ElectronAppWrapper {
 	}
 
 	buildDir() {
-		let dir = __dirname;
-		if (dir.indexOf('.asar') >= 0 || basename(dir) === 'app') dir = dirname(dir);
-		return dir + '/build';
+		if (this.buildDir_) return this.buildDir_;
+		let dir = __dirname + '/build';
+		if (!fs.pathExistsSync(dir)) {
+			dir = dirname(__dirname) + '/build';
+			if (!fs.pathExistsSync(dir)) throw new Error('Cannot find build dir');
+		}
+
+		this.buildDir_ = dir;
+		return dir;
 	}
 
 	// Note: this must be called only after the "ready" event of the app has been dispatched
 	createTray(contextMenu) {
-		this.tray_ = new Tray(this.buildDir() + '/icons/16x16.png')
-		this.tray_.setToolTip(this.electronApp_.getName())
-		this.tray_.setContextMenu(contextMenu)
+		try {
+			this.tray_ = new Tray(this.buildDir() + '/icons/16x16.png')
+			this.tray_.setToolTip(this.electronApp_.getName())
+			this.tray_.setContextMenu(contextMenu)
 
-		this.tray_.on('click', () => {
-			this.window().show();
-		});
+			this.tray_.on('click', () => {
+				this.window().show();
+			});
+		} catch (error) {
+			console.error("Cannot create tray", error);
+		}
 	}
 
 	destroyTray() {
