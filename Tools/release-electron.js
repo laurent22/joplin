@@ -20,7 +20,7 @@ async function main() {
 	console.info(await execCommand('git tag ' + tagName));
 	console.info(await execCommand('git push && git push --tags'));
 
-	const release = await githubRelease(tagName, true);
+	const release = await githubRelease('joplin', tagName, true);
 
 	console.info('Created GitHub release: ' + release.html_url);
 }

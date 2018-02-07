@@ -87,12 +87,12 @@ toolUtils.githubOauthToken = async function() {
 	return r.toString();
 }
 
-toolUtils.githubRelease = async function(tagName, isDraft) {
+toolUtils.githubRelease = async function(project, tagName, isDraft) {
 	const fetch = require('node-fetch');
 
 	const oauthToken = await toolUtils.githubOauthToken();
 	
-	const response = await fetch('https://api.github.com/repos/laurent22/joplin/releases', {
+	const response = await fetch('https://api.github.com/repos/laurent22/' + project + '/releases', {
 		method: 'POST', 
 		body: JSON.stringify({
 			tag_name: tagName,

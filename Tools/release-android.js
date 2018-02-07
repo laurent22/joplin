@@ -81,7 +81,7 @@ async function main() {
 
 	console.info('Creating GitHub release ' + tagName + '...');
 
-	const release = await githubRelease(tagName, false);
+	const release = await githubRelease('joplin-android', tagName, false);
 	const uploadUrlTemplate = uriTemplate.parse(release.upload_url);
 	const uploadUrl = uploadUrlTemplate.expand({ name: apkFilename });
 
