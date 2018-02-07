@@ -47,12 +47,13 @@ function gradleVersionName(content) {
 }
 
 async function main() {
+	const projectName = 'joplin-android';
 	const newContent = updateGradleConfig();
 	const version = gradleVersionName(newContent);
 	const tagName = 'android-v' + version;
 	const apkFilename = 'joplin-v' + version + '.apk';
 	const apkFilePath = releaseDir + '/' + apkFilename;
-	const downloadUrl = 'https://github.com/laurent22/joplin/releases/download/' + tagName + '/' + apkFilename;
+	const downloadUrl = 'https://github.com/laurent22/' + projectName + '/releases/download/' + tagName + '/' + apkFilename;
 
 	process.chdir(rootDir);
 
@@ -70,7 +71,7 @@ async function main() {
 	console.info('Updating Readme URL...');
 
 	let readmeContent = await fs.readFile('README.md', 'utf8');
-	readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/.*?\.apk)/, downloadUrl);
+	readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/.*?\.apk)/, downloadUrl);
 	await fs.writeFile('README.md', readmeContent);
 
 	console.info(await execCommand('git add -A'));
@@ -81,7 +82,7 @@ async function main() {
 
 	console.info('Creating GitHub release ' + tagName + '...');
 
-	const release = await githubRelease('joplin-android', tagName, false);
+	const release = await githubRelease(projectName, tagName, false);
 	const uploadUrlTemplate = uriTemplate.parse(release.upload_url);
 	const uploadUrl = uploadUrlTemplate.expand({ name: apkFilename });
 
