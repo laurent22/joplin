@@ -465,6 +465,16 @@ class NoteTextComponent extends React.Component {
 		});
 	}
 
+	async commandSetTags() {
+		await this.saveIfNeeded(true);
+
+		this.props.dispatch({
+			type: 'WINDOW_COMMAND',
+			name: 'setTags',
+			noteId: this.state.note.id,
+		});
+	}
+
 	itemContextMenu(event) {
 		const note = this.state.note;
 		if (!note) return;
@@ -473,6 +483,10 @@ class NoteTextComponent extends React.Component {
 
 		menu.append(new MenuItem({label: _('Attach file'), click: async () => {
 			return this.commandAttachFile();
+		}}));
+
+		menu.append(new MenuItem({label: _('Tags'), click: async () => {
+			return this.commandSetTags();
 		}}));
 
 		if (!!note.is_todo) {
@@ -596,6 +610,12 @@ class NoteTextComponent extends React.Component {
 			title: _('Attach file'),
 			iconName: 'fa-paperclip',
 			onClick: () => { return this.commandAttachFile(); },
+		});
+
+		toolbarItems.push({
+			title: _('Tags'),
+			iconName: 'fa-tags',
+			onClick: () => { return this.commandSetTags(); },
 		});
 
 		if (note.is_todo) {
