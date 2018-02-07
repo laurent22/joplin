@@ -180,6 +180,16 @@
 		ipcRenderer.sendToHost('percentScroll', percent);
 	});
 
+	document.addEventListener('contextmenu', function(event) {
+		const element = event.target;
+		if (element && element.getAttribute('data-resource-id')) {
+			ipcRenderer.sendToHost('contextMenu', {
+				type: element.getAttribute('src') ? 'image' : 'link',
+				resourceId: element.getAttribute('data-resource-id'),
+			});
+		}
+	});
+
 	// Disable drag and drop otherwise it's possible to drop a URL
 	// on it and it will open in the view as a website.
 	document.addEventListener('drop', function(e) {

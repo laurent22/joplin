@@ -117,7 +117,7 @@ class MdToHtml {
 		if (mime == 'image/png' || mime == 'image/jpg' || mime == 'image/jpeg' || mime == 'image/gif') {
 			let src = './' + Resource.filename(resource);
 			if (this.resourceBaseUrl_ !== null) src = this.resourceBaseUrl_ + src;
-			let output = '<img title="' + htmlentities(title) + '" src="' + src + '"/>';
+			let output = '<img data-resource-id="' + resource.id + '" title="' + htmlentities(title) + '" src="' + src + '"/>';
 			return output;
 		}
 		

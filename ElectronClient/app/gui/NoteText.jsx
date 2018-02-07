@@ -16,6 +16,7 @@ const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const { shim } = require('lib/shim.js');
 const eventManager = require('../eventManager');
+const fs = require('fs-extra');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -264,7 +265,7 @@ class NoteTextComponent extends React.Component {
 		shared.showMetadata_onPress(this);
 	}
 
-	webview_ipcMessage(event) {
+	async webview_ipcMessage(event) {
 		const msg = event.channel ? event.channel : '';
 		const args = event.args;
 		const arg0 = args && args.length >= 1 ? args[0] : null;
@@ -286,6 +287,32 @@ class NoteTextComponent extends React.Component {
 		} else if (msg === 'percentScroll') {
 			this.ignoreNextEditorScroll_ = true;
 			this.setEditorPercentScroll(arg0);
+		} else if (msg === 'contextMenu') {
+			const itemType = arg0 && arg0.type;
+
+			const menu = new Menu()
+
+			if (itemType === 'image') {
+				const resource = await Resource.load(arg0.resourceId);
+				const resourcePath = Resource.fullPath(resource);
+
+				menu.append(new MenuItem({label: _('Open...'), click: async () => {
+					bridge().openExternal(resourcePath);
+				}}));
+
+				menu.append(new MenuItem({label: _('Save as...'), click: async () => {
+					const filePath = bridge().showSaveDialog({
+						defaultPath: resource.filename ? resource.filename : resource.title,
+					});
+					if (!filePath) return;
+					await fs.copy(resourcePath, filePath);
+				}}));
+			} else {
+				reg.logger().error('Unhandled item type: ' + itemType);
+				return;
+			}
+
+			menu.popup(bridge().window());
 		} else if (msg.indexOf('joplin://') === 0) {
 			const resourceId = msg.substr('joplin://'.length);
 			Resource.load(resourceId).then((resource) => {
