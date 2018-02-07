@@ -18,6 +18,10 @@ class FileApiDriverWebDav {
 		return this.api_;
 	}
 
+	requestRepeatCount() {
+		return 3;
+	}
+
 	async stat(path) {
 		try {
 			const result = await this.api().execPropFind(path, 0, [

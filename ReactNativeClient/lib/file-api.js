@@ -4,6 +4,31 @@ const { shim } = require('lib/shim');
 const BaseItem = require('lib/models/BaseItem.js');
 const JoplinError = require('lib/JoplinError');
 const ArrayUtils = require('lib/ArrayUtils');
+const { time } = require('lib/time-utils.js');
+
+function requestCanBeRepeated(error) {
+	const errorCode = typeof error === 'object' && error.code ? error.code : null;
+
+	if (errorCode === 'rejectedByTarget') return false;
+
+	return true;
+}
+
+async function tryAndRepeat(fn, count) {
+	let retryCount = 0;
+
+	while (true) {
+		try {
+			const result = await fn();
+			return result;
+		} catch (error) {
+			if (retryCount >= count) throw error;
+			if (!requestCanBeRepeated(error)) throw error;
+			retryCount++;
+			await time.sleep(1 + retryCount * 3);
+		}
+	}
+}
 
 class FileApi {
 
@@ -14,6 +39,14 @@ class FileApi {
 		this.syncTargetId_ = null;
 		this.tempDirName_ = null;
 		this.driver_.fileApi_ = this;
+	}
+
+	// Ideally all requests repeating should be done at the FileApi level to remove duplicate code in the drivers, but
+	// historically some drivers (eg. OneDrive) are already handling request repeating, so this is optional, per driver,
+	// and it defaults to no repeating.
+	requestRepeatCount() {
+		if (this.driver_.requestRepeatCount) return this.driver_.requestRepeatCount();
+		return 0;
 	}
 
 	tempDirName() {
@@ -59,50 +92,70 @@ class FileApi {
 	}
 
 	// DRIVER MUST RETURN PATHS RELATIVE TO `path`
-	list(path = '', options = null) {
+	async list(path = '', options = null) {
 		if (!options) options = {};
 		if (!('includeHidden' in options)) options.includeHidden = false;
 		if (!('context' in options)) options.context = null;
 
 		this.logger().debug('list ' + this.baseDir_);
 
-		return this.driver_.list(this.baseDir_, options).then((result) => {
-			if (!options.includeHidden) {
-				let temp = [];
-				for (let i = 0; i < result.items.length; i++) {
-					if (!isHidden(result.items[i].path)) temp.push(result.items[i]);
-				}
-				result.items = temp;
+		const result = await tryAndRepeat(() => this.driver_.list(this.baseDir_, options), this.requestRepeatCount());
+
+		if (!options.includeHidden) {
+			let temp = [];
+			for (let i = 0; i < result.items.length; i++) {
+				if (!isHidden(result.items[i].path)) temp.push(result.items[i]);
 			}
-			return result;
-		});
+			result.items = temp;
+		}
+
+		return result;
+	
+		// return this.driver_.list(this.baseDir_, options).then((result) => {
+		// 	if (!options.includeHidden) {
+		// 		let temp = [];
+		// 		for (let i = 0; i < result.items.length; i++) {
+		// 			if (!isHidden(result.items[i].path)) temp.push(result.items[i]);
+		// 		}
+		// 		result.items = temp;
+		// 	}
+		// 	return result;
+		// });
 	}
 
 	// Deprectated
 	setTimestamp(path, timestampMs) {
 		this.logger().debug('setTimestamp ' + this.fullPath_(path));
-		return this.driver_.setTimestamp(this.fullPath_(path), timestampMs);
+		return tryAndRepeat(() => this.driver_.setTimestamp(this.fullPath_(path), timestampMs), this.requestRepeatCount());
+		//return this.driver_.setTimestamp(this.fullPath_(path), timestampMs);
 	}
 
 	mkdir(path) {
 		this.logger().debug('mkdir ' + this.fullPath_(path));
-		return this.driver_.mkdir(this.fullPath_(path));
+		return tryAndRepeat(() => this.driver_.mkdir(this.fullPath_(path)), this.requestRepeatCount());
 	}
 
-	stat(path) {
+	async stat(path) {
 		this.logger().debug('stat ' + this.fullPath_(path));
-		return this.driver_.stat(this.fullPath_(path)).then((output) => {
-			if (!output) return output;
-			output.path = path;
-			return output;
-		});
+
+		const output = await tryAndRepeat(() => this.driver_.stat(this.fullPath_(path)), this.requestRepeatCount());
+
+		if (!output) return output;
+		output.path = path;
+		return output;
+
+		// return this.driver_.stat(this.fullPath_(path)).then((output) => {
+		// 	if (!output) return output;
+		// 	output.path = path;
+		// 	return output;
+		// });
 	}
 
 	get(path, options = null) {
 		if (!options) options = {};
 		if (!options.encoding) options.encoding = 'utf8';
 		this.logger().debug('get ' + this.fullPath_(path));
-		return this.driver_.get(this.fullPath_(path), options);
+		return tryAndRepeat(() => this.driver_.get(this.fullPath_(path), options), this.requestRepeatCount());
 	}
 
 	async put(path, content, options = null) {
@@ -112,32 +165,32 @@ class FileApi {
 			if (!await this.fsDriver().exists(options.path)) throw new JoplinError('File not found: ' + options.path, 'fileNotFound');
 		}
 
-		return this.driver_.put(this.fullPath_(path), content, options);
+		return tryAndRepeat(() => this.driver_.put(this.fullPath_(path), content, options), this.requestRepeatCount());
 	}
 
 	delete(path) {
 		this.logger().debug('delete ' + this.fullPath_(path));
-		return this.driver_.delete(this.fullPath_(path));
+		return tryAndRepeat(() => this.driver_.delete(this.fullPath_(path)), this.requestRepeatCount());
 	}
 
 	// Deprectated
 	move(oldPath, newPath) {
 		this.logger().debug('move ' + this.fullPath_(oldPath) + ' => ' + this.fullPath_(newPath));
-		return this.driver_.move(this.fullPath_(oldPath), this.fullPath_(newPath));
+		return tryAndRepeat(() => this.driver_.move(this.fullPath_(oldPath), this.fullPath_(newPath)), this.requestRepeatCount());
 	}
 
 	// Deprectated
 	format() {
-		return this.driver_.format();
+		return tryAndRepeat(() => this.driver_.format(), this.requestRepeatCount());
 	}
 
 	clearRoot() {
-		return this.driver_.clearRoot(this.baseDir_);
+		return tryAndRepeat(() => this.driver_.clearRoot(this.baseDir_), this.requestRepeatCount());
 	}
 
 	delta(path, options = null) {
 		this.logger().debug('delta ' + this.fullPath_(path));
-		return this.driver_.delta(this.fullPath_(path), options);
+		return tryAndRepeat(() => this.driver_.delta(this.fullPath_(path), options), this.requestRepeatCount());
 	}
 
 }
