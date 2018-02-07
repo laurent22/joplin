@@ -381,26 +381,26 @@ class Note extends BaseItem {
 		return this.save(newNote);
 	}
 
-	static save(o, options = null) {
+	static async save(o, options = null) {
 		let isNew = this.isNew(o, options);
 		if (isNew && !o.source) o.source = Setting.value('appName');
 		if (isNew && !o.source_application) o.source_application = Setting.value('appId');
 
-		return super.save(o, options).then((note) => {
-			this.dispatch({
-				type: 'NOTE_UPDATE_ONE',
-				note: note,
-			});
+		const note = await super.save(o, options);
 
-			if ('todo_due' in o || 'todo_completed' in o || 'is_todo' in o || 'is_conflict' in o) {
-				this.dispatch({
-					type: 'EVENT_NOTE_ALARM_FIELD_CHANGE',
-					id: note.id,
-				});
-			}
-			
-			return note;
+		this.dispatch({
+			type: 'NOTE_UPDATE_ONE',
+			note: note,
 		});
+
+		if ('todo_due' in o || 'todo_completed' in o || 'is_todo' in o || 'is_conflict' in o) {
+			this.dispatch({
+				type: 'EVENT_NOTE_ALARM_FIELD_CHANGE',
+				id: note.id,
+			});
+		}
+		
+		return note;
 	}
 
 	static async delete(id, options = null) {

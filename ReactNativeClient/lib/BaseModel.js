@@ -2,6 +2,7 @@ const { Log } = require('lib/log.js');
 const { Database } = require('lib/database.js');
 const { uuid } = require('lib/uuid.js');
 const { time } = require('lib/time-utils.js');
+const Mutex = require('async-mutex').Mutex;
 
 class BaseModel {
 
@@ -247,6 +248,40 @@ class BaseModel {
 		return !Object.getOwnPropertyNames(diff).length;
 	}
 
+	static saveMutex(modelOrId) {
+		const noLockMutex = {
+			acquire: function() { return null; }
+		};
+
+		if (!modelOrId) return noLockMutex;
+
+		let modelId = typeof modelOrId === 'string' ? modelOrId : modelOrId.id;
+
+		if (!modelId) return noLockMutex;
+
+		let mutex = BaseModel.saveMutexes_[modelId];
+		if (mutex) return mutex;
+
+		mutex = new Mutex();
+		BaseModel.saveMutexes_[modelId] = mutex;
+		return mutex;
+	}
+
+	static releaseSaveMutex(modelOrId, release) {
+		if (!release) return;
+		if (!modelOrId) return release();
+
+		let modelId = typeof modelOrId === 'string' ? modelOrId : modelOrId.id;
+
+		if (!modelId) return release();
+
+		let mutex = BaseModel.saveMutexes_[modelId];
+		if (!mutex) return release();
+
+		delete BaseModel.saveMutexes_[modelId];
+		release();
+	}
+
 	static saveQuery(o, options) {
 		let temp = {}
 		let fieldNames = this.fieldNames();
@@ -320,7 +355,16 @@ class BaseModel {
 		return query;
 	}
 
-	static save(o, options = null) {
+	static async save(o, options = null) {
+		// When saving, there's a mutex per model ID. This is because the model returned from this function
+		// is basically its input `o` (instead of being read from the database, for performance reasons).
+		// This works well in general except if that model is saved simultaneously in two places. In that
+		// case, the output won't be up-to-date and would cause for example display issues with out-dated
+		// notes being displayed. This was an issue when notes were being synchronised while being decrypted
+		// at the same time.
+
+		const mutexRelease = await this.saveMutex(o).acquire();
+
 		options = this.modOptions(options);
 		options.isNew = this.isNew(o, options);
 
@@ -348,7 +392,11 @@ class BaseModel {
 			queries = queries.concat(options.nextQueries);
 		}
 
-		return this.db().transactionExecBatch(queries).then(() => {
+		let output = null;
+
+		try {
+			await this.db().transactionExecBatch(queries);
+
 			o = Object.assign({}, o);
 			if (modelId) o.id = modelId;
 			if ('updated_time' in saveQuery.modObject) o.updated_time = saveQuery.modObject.updated_time;
@@ -365,10 +413,14 @@ class BaseModel {
 				}
 			}
 
-			return this.filter(o);
-		}).catch((error) => {
+			output = this.filter(o);
+		} catch (error) {
 			Log.error('Cannot save model', error);
-		});
+		}
+
+		this.releaseSaveMutex(o, mutexRelease);
+
+		return output;
 	}
 
 	static isNew(object, options) {
@@ -447,5 +499,6 @@ BaseModel.TYPE_MASTER_KEY = 9;
 
 BaseModel.db_ = null;
 BaseModel.dispatch = function(o) {};
+BaseModel.saveMutexes_ = {};
 
 module.exports = BaseModel;

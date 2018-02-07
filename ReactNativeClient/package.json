@@ -10,6 +10,7 @@
     "postinstall": "node ../Tools/copycss.js"
   },
   "dependencies": {
+    "async-mutex": "^0.1.3",
     "base-64": "^0.1.0",
     "buffer": "^5.0.8",
     "events": "^1.1.1",

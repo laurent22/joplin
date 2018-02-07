@@ -55,6 +55,7 @@
   },
   "dependencies": {
     "app-module-path": "^2.2.0",
+    "async-mutex": "^0.1.3",
     "base-64": "^0.1.0",
     "electron-context-menu": "^0.9.1",
     "electron-log": "^2.2.11",
