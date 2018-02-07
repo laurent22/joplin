@@ -74,6 +74,7 @@ async function main() {
 	readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/.*?\.apk)/, downloadUrl);
 	await fs.writeFile('README.md', readmeContent);
 
+	console.info(await execCommand('git pull'));
 	console.info(await execCommand('git add -A'));
 	console.info(await execCommand('git commit -m "Android release v' + version + '"'));
 	console.info(await execCommand('git tag ' + tagName));
