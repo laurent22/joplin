@@ -41,7 +41,7 @@ class FileApiDriverOneDrive {
 		if ('deleted' in odItem) {
 			output.isDeleted = true;
 		} else {
-			output.created_time = moment(odItem.fileSystemInfo.createdDateTime, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x');
+			// output.created_time = moment(odItem.fileSystemInfo.createdDateTime, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x');
 			output.updated_time = moment(odItem.fileSystemInfo.lastModifiedDateTime, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x');
 		}
 

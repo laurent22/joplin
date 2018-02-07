@@ -52,7 +52,7 @@ class FileApiDriverWebDav {
 
 		return {
 			path: path,
-			created_time: lastModifiedDate.getTime(),
+			// created_time: lastModifiedDate.getTime(),
 			updated_time: lastModifiedDate.getTime(),
 			isDir: isCollection === '',
 			sizeDONOTUSE: sizeDONOTUSE, // This property is used only for the WebDAV PUT hack (see below) so mark it as such so that it can be removed with the hack later on.
