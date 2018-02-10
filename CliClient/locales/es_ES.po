@@ -687,7 +687,14 @@ msgstr "Cancelar"
 msgid "Error"
 msgstr ""
 
-msgid "An update is available, do you want to update now?"
+#, fuzzy, javascript-format
+msgid ""
+"Release notes:\n"
+"\n"
+"%s"
+msgstr "¿Desea eliminar notas?"
+
+msgid "An update is available, do you want to download it now?"
 msgstr ""
 
 msgid "Yes"
@@ -697,19 +704,12 @@ msgstr ""
 msgid "No"
 msgstr "N"
 
-#, javascript-format
-msgid "Could not download the update: %s"
-msgstr ""
-
 msgid "Current version is up-to-date."
 msgstr ""
 
-msgid "New version downloaded - application will quit now and update..."
-msgstr ""
-
-#, javascript-format
-msgid "Could not install the update: %s"
-msgstr ""
+#, fuzzy
+msgid "Check synchronisation configuration"
+msgstr "Cancelar sincronización"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -846,6 +846,13 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "No hay ninguna libreta. Cree una pulsando en «Libreta nueva»."
 
+msgid "Open..."
+msgstr ""
+
+#, fuzzy
+msgid "Save as..."
+msgstr "Guardar cambios"
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Enlace o mensaje no soportado: %s"
@@ -853,8 +860,23 @@ msgstr "Enlace o mensaje no soportado: %s"
 msgid "Attach file"
 msgstr "Adjuntar archivo"
 
+msgid "Tags"
+msgstr "Etiquetas"
+
 msgid "Set alarm"
 msgstr "Fijar alarma"
+
+#, fuzzy
+msgid "to-do"
+msgstr "Lista de tareas nueva"
+
+#, fuzzy
+msgid "note"
+msgstr "Nota nueva"
+
+#, fuzzy, javascript-format
+msgid "Creating new %s..."
+msgstr "Importando notas..."
 
 msgid "Refresh"
 msgstr "Refrescar"
@@ -891,9 +913,6 @@ msgstr "Sincronizar"
 
 msgid "Notebooks"
 msgstr "Libretas"
-
-msgid "Tags"
-msgstr "Etiquetas"
 
 msgid "Searches"
 msgstr "Búsquedas"

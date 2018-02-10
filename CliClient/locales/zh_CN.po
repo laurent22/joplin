@@ -639,7 +639,14 @@ msgstr "取消"
 msgid "Error"
 msgstr ""
 
-msgid "An update is available, do you want to update now?"
+#, fuzzy, javascript-format
+msgid ""
+"Release notes:\n"
+"\n"
+"%s"
+msgstr "是否删除笔记？"
+
+msgid "An update is available, do you want to download it now?"
 msgstr ""
 
 msgid "Yes"
@@ -649,19 +656,12 @@ msgstr ""
 msgid "No"
 msgstr "否"
 
-#, javascript-format
-msgid "Could not download the update: %s"
-msgstr ""
-
 msgid "Current version is up-to-date."
 msgstr ""
 
-msgid "New version downloaded - application will quit now and update..."
-msgstr ""
-
-#, javascript-format
-msgid "Could not install the update: %s"
-msgstr ""
+#, fuzzy
+msgid "Check synchronisation configuration"
+msgstr "取消同步"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -801,6 +801,13 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "当前无笔记。点击(+)创建新笔记。"
 
+msgid "Open..."
+msgstr ""
+
+#, fuzzy
+msgid "Save as..."
+msgstr "保存更改"
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "不支持的链接或信息：%s"
@@ -808,8 +815,23 @@ msgstr "不支持的链接或信息：%s"
 msgid "Attach file"
 msgstr "附加文件"
 
+msgid "Tags"
+msgstr "标签"
+
 msgid "Set alarm"
 msgstr "设置提醒"
+
+#, fuzzy
+msgid "to-do"
+msgstr "新待办事项"
+
+#, fuzzy
+msgid "note"
+msgstr "新笔记"
+
+#, fuzzy, javascript-format
+msgid "Creating new %s..."
+msgstr "正在导入笔记..."
 
 msgid "Refresh"
 msgstr "刷新"
@@ -846,9 +868,6 @@ msgstr "同步"
 
 msgid "Notebooks"
 msgstr "笔记本"
-
-msgid "Tags"
-msgstr "标签"
 
 msgid "Searches"
 msgstr "搜索历史"

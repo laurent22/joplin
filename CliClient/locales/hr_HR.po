@@ -695,7 +695,14 @@ msgstr "Odustani"
 msgid "Error"
 msgstr ""
 
-msgid "An update is available, do you want to update now?"
+#, fuzzy, javascript-format
+msgid ""
+"Release notes:\n"
+"\n"
+"%s"
+msgstr "Obriši bilješke?"
+
+msgid "An update is available, do you want to download it now?"
 msgstr ""
 
 msgid "Yes"
@@ -705,19 +712,12 @@ msgstr ""
 msgid "No"
 msgstr "N"
 
-#, javascript-format
-msgid "Could not download the update: %s"
-msgstr ""
-
 msgid "Current version is up-to-date."
 msgstr ""
 
-msgid "New version downloaded - application will quit now and update..."
-msgstr ""
-
-#, javascript-format
-msgid "Could not install the update: %s"
-msgstr ""
+#, fuzzy
+msgid "Check synchronisation configuration"
+msgstr "Prekini sinkronizaciju"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -856,6 +856,13 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "Ovdje nema bilježnica. Stvori novu pritiskom na \"Nova bilježnica\"."
 
+msgid "Open..."
+msgstr ""
+
+#, fuzzy
+msgid "Save as..."
+msgstr "Spremi promjene"
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Nepodržana poveznica ili poruka: %s"
@@ -863,8 +870,23 @@ msgstr "Nepodržana poveznica ili poruka: %s"
 msgid "Attach file"
 msgstr "Priloži datoteku"
 
+msgid "Tags"
+msgstr "Oznake"
+
 msgid "Set alarm"
 msgstr "Postavi upozorenje"
+
+#, fuzzy
+msgid "to-do"
+msgstr "Novi zadatak"
+
+#, fuzzy
+msgid "note"
+msgstr "Nova bilješka"
+
+#, fuzzy, javascript-format
+msgid "Creating new %s..."
+msgstr "Uvozim bilješke..."
 
 msgid "Refresh"
 msgstr "Osvježi"
@@ -901,9 +923,6 @@ msgstr "Sinkroniziraj"
 
 msgid "Notebooks"
 msgstr "Bilježnice"
-
-msgid "Tags"
-msgstr "Oznake"
 
 msgid "Searches"
 msgstr "Pretraživanja"

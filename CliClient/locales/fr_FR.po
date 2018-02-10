@@ -14,8 +14,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.3\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "Give focus to next pane"
 msgstr "Activer le volet suivant"
@@ -692,7 +690,17 @@ msgstr "Annuler"
 msgid "Error"
 msgstr "Erreur"
 
-msgid "An update is available, do you want to update now?"
+#, javascript-format
+msgid ""
+"Release notes:\n"
+"\n"
+"%s"
+msgstr ""
+"Notes de version :\n"
+"\n"
+"%s"
+
+msgid "An update is available, do you want to download it now?"
 msgstr ""
 "Une mise à jour est disponible, souhaitez vous la télécharger maintenant ?"
 
@@ -702,21 +710,11 @@ msgstr "Oui"
 msgid "No"
 msgstr "Non"
 
-#, javascript-format
-msgid "Could not download the update: %s"
-msgstr "Impossible de télécharger la mise à jour : %s"
-
 msgid "Current version is up-to-date."
 msgstr "La version actuelle est à jour."
 
-msgid "New version downloaded - application will quit now and update..."
-msgstr ""
-"La nouvelle version a été téléchargée - le programme va se fermer et se "
-"mettre à jour..."
-
-#, javascript-format
-msgid "Could not install the update: %s"
-msgstr "Impossible d'installer la mise à jour : %s"
+msgid "Check synchronisation configuration"
+msgstr "Vérifier config synchronisation"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -872,6 +870,12 @@ msgstr ""
 "Il n'y a pour l'instant aucun carnet. Créez-en un en cliquant sur \"Nouveau "
 "carnet\"."
 
+msgid "Open..."
+msgstr "Ouvrir..."
+
+msgid "Save as..."
+msgstr "Enregistrer sous..."
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Lien ou message non géré : %s"
@@ -879,8 +883,21 @@ msgstr "Lien ou message non géré : %s"
 msgid "Attach file"
 msgstr "Attacher un fichier"
 
+msgid "Tags"
+msgstr "Étiquettes"
+
 msgid "Set alarm"
 msgstr "Régler alarme"
+
+msgid "to-do"
+msgstr "tâche"
+
+msgid "note"
+msgstr "note"
+
+#, javascript-format
+msgid "Creating new %s..."
+msgstr "Création de %s..."
 
 msgid "Refresh"
 msgstr "Rafraîchir"
@@ -917,9 +934,6 @@ msgstr "Synchroniser"
 
 msgid "Notebooks"
 msgstr "Carnets"
-
-msgid "Tags"
-msgstr "Étiquettes"
 
 msgid "Searches"
 msgstr "Recherches"
@@ -1347,6 +1361,17 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Could not download the update: %s"
+#~ msgstr "Impossible de télécharger la mise à jour : %s"
+
+#~ msgid "New version downloaded - application will quit now and update..."
+#~ msgstr ""
+#~ "La nouvelle version a été téléchargée - le programme va se fermer et se "
+#~ "mettre à jour..."
+
+#~ msgid "Could not install the update: %s"
+#~ msgstr "Impossible d'installer la mise à jour : %s"
 
 #~ msgid ""
 #~ "The target to synchonise to. If synchronising with the file system, set "

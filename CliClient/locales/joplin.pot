@@ -615,7 +615,14 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-msgid "An update is available, do you want to update now?"
+#, javascript-format
+msgid ""
+"Release notes:\n"
+"\n"
+"%s"
+msgstr ""
+
+msgid "An update is available, do you want to download it now?"
 msgstr ""
 
 msgid "Yes"
@@ -624,18 +631,10 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#, javascript-format
-msgid "Could not download the update: %s"
-msgstr ""
-
 msgid "Current version is up-to-date."
 msgstr ""
 
-msgid "New version downloaded - application will quit now and update..."
-msgstr ""
-
-#, javascript-format
-msgid "Could not install the update: %s"
+msgid "Check synchronisation configuration"
 msgstr ""
 
 #, javascript-format
@@ -772,6 +771,12 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
 
+msgid "Open..."
+msgstr ""
+
+msgid "Save as..."
+msgstr ""
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr ""
@@ -779,7 +784,20 @@ msgstr ""
 msgid "Attach file"
 msgstr ""
 
+msgid "Tags"
+msgstr ""
+
 msgid "Set alarm"
+msgstr ""
+
+msgid "to-do"
+msgstr ""
+
+msgid "note"
+msgstr ""
+
+#, javascript-format
+msgid "Creating new %s..."
 msgstr ""
 
 msgid "Refresh"
@@ -816,9 +834,6 @@ msgid "Synchronise"
 msgstr ""
 
 msgid "Notebooks"
-msgstr ""
-
-msgid "Tags"
 msgstr ""
 
 msgid "Searches"
