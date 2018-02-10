@@ -200,7 +200,7 @@ Current translations:
 <!-- LOCALE-TABLE-AUTO-GENERATED -->
 &nbsp;  |  Language  |  Code  |  Last translator  |  Percent done
 ---|---|---|---|---
-![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/.png)  |  Basque  |  eu  |    |  89%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/es/basque_country.png)  |  Basque  |  eu  |    |  89%
 ![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/hr.png)  |  Croatian  |  hr_HR  |  Hrvoje Mandić <trbuhom@net.hr>  |  72%
 ![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/de.png)  |  Deutsch  |  de_DE  |  Tobias Strobel <git@strobeltobias.de>  |  91%
 ![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/gb.png)  |  English  |  en_GB  |    |  100%

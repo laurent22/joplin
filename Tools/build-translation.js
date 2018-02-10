@@ -138,13 +138,21 @@ async function translationStatus(isDefault, poFile) {
 	};
 }
 
+function flagImageUrl(locale) {
+	if (locale === 'eu') {
+		return 'https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/es/basque_country.png';
+	} else {
+		return 'https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/' + countryCodeOnly(locale).toLowerCase() + '.png'
+	}
+}
+
 function translationStatusToMdTable(status) {
 	let output = [];
 	output.push(['&nbsp;', 'Language', 'Code', 'Last translator', 'Percent done'].join('  |  '));
 	output.push(['---', '---', '---', '---', '---'].join('|'));
 	for (let i = 0; i < status.length; i++) {
 		const stat = status[i];
-		const flagUrl = 'https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/' + countryCodeOnly(stat.locale).toLowerCase() + '.png';
+		const flagUrl = flagImageUrl(stat.locale); //'https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/' + countryCodeOnly(stat.locale).toLowerCase() + '.png';
 		output.push(['![](' + flagUrl + ')', stat.languageName, stat.locale, stat.translatorName, stat.percentDone + '%'].join('  |  '));
 	}
 	return output.join('\n');
