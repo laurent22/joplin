@@ -108,6 +108,23 @@ function availableLocales(defaultLocale) {
 	return output;
 }
 
+function extractTranslator(regex, poContent) {
+	const translatorMatch = poContent.match(regex);
+	let translatorName = '';
+	
+	if (translatorMatch && translatorMatch.length >= 1) {
+		translatorName = translatorMatch[1];
+		translatorName = translatorName.replace(/["\s]+$/, '');
+		translatorName = translatorName.replace(/\\n$/, '');
+		translatorName = translatorName.replace(/^\s*/, '');
+	}
+
+	if (translatorName.indexOf('FULL NAME') >= 0) return '';
+	if (translatorName.indexOf('LL@li.org') >= 0) return '';
+
+	return translatorName;
+}
+
 async function translationStatus(isDefault, poFile) {
 	// "apt install translate-toolkit" to have pocount
 	const command = 'pocount "' + poFile + '"';
@@ -120,17 +137,26 @@ async function translationStatus(isDefault, poFile) {
 
 	let translatorName = '';
 	const content = await fs.readFile(poFile, 'utf-8');
-	// "Last-Translator: Hrvoje Mandić <trbuhom@net.hr>\n"
-	const translatorMatch = content.match(/Last-Translator:\s*?(.*)/);
-	
-	if (translatorMatch.length >= 1) {
-		translatorName = translatorMatch[1];
-		translatorName = translatorName.replace(/["\s]+$/, '');
-		translatorName = translatorName.replace(/\\n$/, '');
-		translatorName = translatorName.replace(/^\s*/, '');
+
+	translatorName = extractTranslator(/Last-Translator:\s*?(.*)/, content);
+	if (!translatorName) {
+		translatorName = extractTranslator(/Language-Team:\s*?(.*)/, content);
 	}
 
-	if (translatorName.indexOf('FULL NAME') >= 0) translatorName = '';
+	// "Last-Translator: Hrvoje Mandić <trbuhom@net.hr>\n"
+	// let translatorMatch = content.match(/Last-Translator:\s*?(.*)/);
+	// if (translatorMatch.length < 1) {
+	// 	translatorMatch = content.match(/Last-Team:\s*?(.*)/);
+	// }
+	
+	// if (translatorMatch.length >= 1) {
+	// 	translatorName = translatorMatch[1];
+	// 	translatorName = translatorName.replace(/["\s]+$/, '');
+	// 	translatorName = translatorName.replace(/\\n$/, '');
+	// 	translatorName = translatorName.replace(/^\s*/, '');
+	// }
+
+	// if (translatorName.indexOf('FULL NAME') >= 0) translatorName = '';
 
 	return {
 		percentDone: isDefault ? 100 : percentDone,
