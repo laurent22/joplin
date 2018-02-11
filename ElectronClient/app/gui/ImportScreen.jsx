@@ -25,9 +25,7 @@ class ImportScreenComponent extends React.Component {
 				doImport: true,
 				filePath: newProps.filePath,
 				messages: [],
-			});
-
-			this.doImport();
+			}, () => { this.doImport() });
 		}
 	}
 
