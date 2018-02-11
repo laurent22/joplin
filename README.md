@@ -6,7 +6,7 @@ Notes exported from Evernote via .enex files [can be imported](#importing-notes-
 
 The notes can be [synchronised](#synchronisation) with various targets including [Nextcloud](https://nextcloud.com/), the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
 
-Joplin is still under development but is out of Beta and should be suitable for every day use. The UI of the terminal client is built on top of the great [terminal-kit](https://github.com/cronvel/terminal-kit) library, the desktop client using [Electron](https://electronjs.org/), and the Android client front end is done using [React Native](https://facebook.github.io/react-native/).
+The UI of the terminal client is built on top of the great [terminal-kit](https://github.com/cronvel/terminal-kit) library, the desktop client using [Electron](https://electronjs.org/), and the Android client front end is done using [React Native](https://facebook.github.io/react-native/).
 
 <div class="top-screenshot"><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/AllClients.jpg" style="max-width: 100%; max-height: 35em;"></div>
 
@@ -91,8 +91,6 @@ Currently, synchronisation is possible with Nextcloud and OneDrive (by default) 
 
 ## Nextcloud synchronisation
 
-**Important: This is a beta feature. It has been extensively tested and is already in use by some users, but it is possible that some bugs remain. If you wish to you use it, it is recommended that you keep a backup of your data. The simplest way is to regularly backup the profile directory of the desktop or terminal application.**
-
 On the **desktop application** or **mobile application**, go to the config screen and select Nextcloud as the synchronisation target. Then input [the WebDAV URL](https://docs.nextcloud.com/server/9/user_manual/files/access_webdav.html), this is normally `https://example.com/nextcloud/remote.php/dav/files/USERNAME/Joplin` (make sure to create the "Joplin" directory in Nextcloud and to replace USERNAME by your Nextcloud username), and set the username and password.
 
 On the **terminal application**, you will need to set the `sync.target` config variable and all the `sync.5.path`, `sync.5.username` and `sync.5.password` config variables to, respectively the Nextcloud WebDAV URL, your username and your password. This can be done from the command line mode using:
@@ -105,8 +103,6 @@ On the **terminal application**, you will need to set the `sync.target` config v
 If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.
 
 ## WebDAV synchronisation
-
-**Important: This is a beta feature. It has been extensively tested and is already in use by some users, but it is possible that some bugs remain. If you wish to you use it, it is recommended that you keep a backup of your data. The simplest way is to regularly backup the profile directory of the desktop or terminal application.**
 
 Select the "WebDAV" synchronisation target and follow the same instructions as for Nextcloud above.
 
@@ -214,14 +210,6 @@ Current translations:
 ![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/cn.png)  |  中文 (简体)  |  zh_CN  |  RCJacH <RCJacH@outlook.com>  |  75%
 ![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/jp.png)  |  日本語  |  ja_JP  |    |  73%
 <!-- LOCALE-TABLE-AUTO-GENERATED -->
-
-# Coming features
-
-- Mobile: manage tags
-- Windows: Tray icon
-- Desktop apps: Tag auto-complete
-- Desktop apps: Dark theme
-- Linux: Enable auto-update for desktop app
 
 # Known bugs
 

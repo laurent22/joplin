@@ -21,7 +21,7 @@ class SyncTargetWebDAV extends BaseSyncTarget {
 	}
 
 	static label() {
-		return _('WebDAV (Beta)');
+		return _('WebDAV');
 	}
 
 	isAuthenticated() {

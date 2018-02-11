@@ -25,7 +25,7 @@ class SyncTargetNextcloud extends BaseSyncTarget {
 	}
 
 	static label() {
-		return _('Nextcloud (Beta)');
+		return _('Nextcloud');
 	}
 
 	isAuthenticated() {

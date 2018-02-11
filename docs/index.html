@@ -202,7 +202,7 @@
 <p>Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in <a href="https://daringfireball.net/projects/markdown/basics">Markdown format</a>.</p>
 <p>Notes exported from Evernote via .enex files <a href="#importing-notes-from-evernote">can be imported</a> into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).</p>
 <p>The notes can be <a href="#synchronisation">synchronised</a> with various targets including <a href="https://nextcloud.com/">Nextcloud</a>, the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
-<p>Joplin is still under development but is out of Beta and should be suitable for every day use. The UI of the terminal client is built on top of the great <a href="https://github.com/cronvel/terminal-kit">terminal-kit</a> library, the desktop client using <a href="https://electronjs.org/">Electron</a>, and the Android client front end is done using <a href="https://facebook.github.io/react-native/">React Native</a>.</p>
+<p>The UI of the terminal client is built on top of the great <a href="https://github.com/cronvel/terminal-kit">terminal-kit</a> library, the desktop client using <a href="https://electronjs.org/">Electron</a>, and the Android client front end is done using <a href="https://facebook.github.io/react-native/">React Native</a>.</p>
 <div class="top-screenshot"><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/AllClients.jpg" style="max-width: 100%; max-height: 35em;"></div>
 
 <h1 id="installation">Installation</h1>
@@ -297,7 +297,6 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <p>One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as Nextcloud or OneDrive, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.</p>
 <p>Currently, synchronisation is possible with Nextcloud and OneDrive (by default) or the local filesystem. A Dropbox one will also be available once <a href="https://github.com/facebook/react-native/issues/14445">this React Native bug</a> is fixed. To setup synchronisation please follow the instructions below. After that, the application will synchronise in the background whenever it is running, or you can click on &quot;Synchronise&quot; to start a synchronisation manually.</p>
 <h2 id="nextcloud-synchronisation">Nextcloud synchronisation</h2>
-<p><strong>Important: This is a beta feature. It has been extensively tested and is already in use by some users, but it is possible that some bugs remain. If you wish to you use it, it is recommended that you keep a backup of your data. The simplest way is to regularly backup the profile directory of the desktop or terminal application.</strong></p>
 <p>On the <strong>desktop application</strong> or <strong>mobile application</strong>, go to the config screen and select Nextcloud as the synchronisation target. Then input <a href="https://docs.nextcloud.com/server/9/user_manual/files/access_webdav.html">the WebDAV URL</a>, this is normally <code>https://example.com/nextcloud/remote.php/dav/files/USERNAME/Joplin</code> (make sure to create the &quot;Joplin&quot; directory in Nextcloud and to replace USERNAME by your Nextcloud username), and set the username and password.</p>
 <p>On the <strong>terminal application</strong>, you will need to set the <code>sync.target</code> config variable and all the <code>sync.5.path</code>, <code>sync.5.username</code> and <code>sync.5.password</code> config variables to, respectively the Nextcloud WebDAV URL, your username and your password. This can be done from the command line mode using:</p>
 <pre><code>:config sync.5.path https://example.com/nextcloud/remote.php/dav/files/USERNAME/Joplin
@@ -306,7 +305,6 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 :config sync.target 5
 </code></pre><p>If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.</p>
 <h2 id="webdav-synchronisation">WebDAV synchronisation</h2>
-<p><strong>Important: This is a beta feature. It has been extensively tested and is already in use by some users, but it is possible that some bugs remain. If you wish to you use it, it is recommended that you keep a backup of your data. The simplest way is to regularly backup the profile directory of the desktop or terminal application.</strong></p>
 <p>Select the &quot;WebDAV&quot; synchronisation target and follow the same instructions as for Nextcloud above.</p>
 <h2 id="onedrive-synchronisation">OneDrive synchronisation</h2>
 <p>When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
@@ -385,14 +383,14 @@ $$
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/hr.png" alt=""></td>
 <td>Croatian</td>
 <td>hr_HR</td>
-<td>Hrvoje Mandić <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x74;&#114;&#98;&#117;&#104;&#x6f;&#x6d;&#x40;&#110;&#x65;&#x74;&#46;&#x68;&#x72;">&#x74;&#114;&#98;&#117;&#104;&#x6f;&#x6d;&#x40;&#110;&#x65;&#x74;&#46;&#x68;&#x72;</a></td>
+<td>Hrvoje Mandić <a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#x6f;&#58;&#x74;&#114;&#98;&#117;&#104;&#x6f;&#109;&#x40;&#x6e;&#101;&#x74;&#x2e;&#104;&#x72;">&#x74;&#114;&#98;&#117;&#104;&#x6f;&#109;&#x40;&#x6e;&#101;&#x74;&#x2e;&#104;&#x72;</a></td>
 <td>72%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/de.png" alt=""></td>
 <td>Deutsch</td>
 <td>de_DE</td>
-<td>Tobias Strobel <a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x67;&#x69;&#116;&#64;&#x73;&#116;&#114;&#x6f;&#98;&#x65;&#x6c;&#x74;&#x6f;&#98;&#x69;&#x61;&#x73;&#x2e;&#x64;&#x65;">&#x67;&#x69;&#116;&#64;&#x73;&#116;&#114;&#x6f;&#98;&#x65;&#x6c;&#x74;&#x6f;&#98;&#x69;&#x61;&#x73;&#x2e;&#x64;&#x65;</a></td>
+<td>Tobias Strobel <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#x67;&#x69;&#116;&#x40;&#x73;&#116;&#114;&#x6f;&#x62;&#x65;&#108;&#x74;&#111;&#98;&#105;&#x61;&#115;&#46;&#100;&#101;">&#x67;&#x69;&#116;&#x40;&#x73;&#116;&#114;&#x6f;&#x62;&#x65;&#108;&#x74;&#111;&#98;&#105;&#x61;&#115;&#46;&#100;&#101;</a></td>
 <td>91%</td>
 </tr>
 <tr>
@@ -448,14 +446,14 @@ $$
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/ru.png" alt=""></td>
 <td>Русский</td>
 <td>ru_RU</td>
-<td>Artyom Karlov <a href="&#x6d;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#97;&#x72;&#x74;&#x79;&#111;&#x6d;&#x2e;&#x6b;&#97;&#114;&#x6c;&#111;&#118;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#111;&#x6d;">&#97;&#x72;&#x74;&#x79;&#111;&#x6d;&#x2e;&#x6b;&#97;&#114;&#x6c;&#111;&#118;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#111;&#x6d;</a></td>
+<td>Artyom Karlov <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#x61;&#114;&#116;&#x79;&#111;&#x6d;&#x2e;&#x6b;&#97;&#x72;&#108;&#x6f;&#x76;&#64;&#103;&#109;&#97;&#x69;&#108;&#46;&#99;&#111;&#109;">&#x61;&#114;&#116;&#x79;&#111;&#x6d;&#x2e;&#x6b;&#97;&#x72;&#108;&#x6f;&#x76;&#64;&#103;&#109;&#97;&#x69;&#108;&#46;&#99;&#111;&#109;</a></td>
 <td>94%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/cn.png" alt=""></td>
 <td>中文 (简体)</td>
 <td>zh_CN</td>
-<td>RCJacH <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#x3a;&#x52;&#x43;&#x4a;&#x61;&#99;&#72;&#x40;&#111;&#117;&#x74;&#x6c;&#x6f;&#111;&#x6b;&#46;&#x63;&#111;&#109;">&#x52;&#x43;&#x4a;&#x61;&#99;&#72;&#x40;&#111;&#117;&#x74;&#x6c;&#x6f;&#111;&#x6b;&#46;&#x63;&#111;&#109;</a></td>
+<td>RCJacH <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#82;&#x43;&#74;&#x61;&#99;&#x48;&#64;&#x6f;&#117;&#x74;&#108;&#111;&#111;&#x6b;&#46;&#99;&#111;&#109;">&#82;&#x43;&#74;&#x61;&#99;&#x48;&#64;&#x6f;&#117;&#x74;&#108;&#111;&#111;&#x6b;&#46;&#99;&#111;&#109;</a></td>
 <td>75%</td>
 </tr>
 <tr>
@@ -468,14 +466,6 @@ $$
 </tbody>
 </table>
 <!-- LOCALE-TABLE-AUTO-GENERATED -->
-<h1 id="coming-features">Coming features</h1>
-<ul>
-<li>Mobile: manage tags</li>
-<li>Windows: Tray icon</li>
-<li>Desktop apps: Tag auto-complete</li>
-<li>Desktop apps: Dark theme</li>
-<li>Linux: Enable auto-update for desktop app</li>
-</ul>
 <h1 id="known-bugs">Known bugs</h1>
 <ul>
 <li>Non-alphabetical characters such as Chinese or Arabic might create glitches in the terminal on Windows. This is a limitation of the current Windows console.</li>

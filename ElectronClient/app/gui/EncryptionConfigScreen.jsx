@@ -182,7 +182,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 			<div>
 				<Header style={headerStyle} />
 				<div style={containerStyle}>
-					<div style={{backgroundColor: theme.warningBackgroundColor, paddingLeft: 10, paddingRight: 10, paddingTop: 2, paddingBottom: 2 }}>
+					{/*<div style={{backgroundColor: theme.warningBackgroundColor, paddingLeft: 10, paddingRight: 10, paddingTop: 2, paddingBottom: 2 }}>
 						<p style={theme.textStyle}>
 							Important: This is a <b>beta</b> feature. It has been extensively tested and is already in use by some users, but it is possible that some bugs remain.
 						</p>
@@ -192,7 +192,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 						<p style={theme.textStyle}>
 							For more information about End-To-End Encryption (E2EE) and how it is going to work, please check the documentation: <a onClick={() => {bridge().openExternal('http://joplin.cozic.net/help/e2ee.html')}} href="#">http://joplin.cozic.net/help/e2ee.html</a>
 						</p>
-					</div>
+					</div>*/}
 					<h1 style={theme.h1Style}>{_('Status')}</h1>
 					<p style={theme.textStyle}>{_('Encryption is:')} <strong>{this.props.encryptionEnabled ? _('Enabled') : _('Disabled')}</strong></p>
 					{decryptedItemsInfo}

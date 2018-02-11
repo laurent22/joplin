@@ -50,6 +50,7 @@
 				"tests/logs",
 				"ReactNativeClient/ios/build",
 				"ElectronClient/app/dist",
+				"_releases"
 			],
 			"path": "."
 		},
