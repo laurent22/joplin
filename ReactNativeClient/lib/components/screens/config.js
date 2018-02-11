@@ -114,7 +114,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		const updateSettingValue = (key, value) => {
 			const settings = Object.assign({}, this.state.settings);
-			settings[key] = value;
+			settings[key] = Setting.formatValue(key, value);
 			this.setState({
 				settings: settings,
 				settingsChanged: true,
