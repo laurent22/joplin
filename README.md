@@ -51,13 +51,15 @@ For usage information, please refer to the full [Joplin Terminal Application Doc
 # Features 
 
 - Desktop, mobile and terminal applications.
+- Import Enex files (Evernote export format)
 - Support notes, to-dos, tags and notebooks.
+- Support for alarms (notifications) in mobile and desktop applications.
 - Offline first, so the entire data is always available on the device even without an internet connection.
-- Ability to synchronise with multiple targets, including NextCloud, the file system and OneDrive (Dropbox is planned).
+- Synchronisation with various services, including NextCloud, WebDAV and OneDrive. Dropbox is planned.
+- End To End Encryption (E2EE)
 - Synchronises to a plain text format, which can be easily manipulated, backed up, or exported to a different format.
-- Markdown notes, which are rendered with images and formatting in the desktop and mobile applications.
-- Tag support
-- File attachment support (images are displayed, and other files are linked and can be opened in the relevant application).
+- Markdown notes, which are rendered with images and formatting in the desktop and mobile applications. Support for extra features such as math notation and checkboxes.
+- File attachment support - images are displayed, and other files are linked and can be opened in the relevant application.
 - Search functionality.
 - Geo-location support.
 - Supports multiple languages
@@ -105,6 +107,11 @@ If synchronisation does not work, please consult the logs in the app profile dir
 ## WebDAV synchronisation
 
 Select the "WebDAV" synchronisation target and follow the same instructions as for Nextcloud above.
+
+Known compatible services that use WebDAV:
+
+- [DriveHQ](https://www.drivehq.com)
+- [Zimbra](https://www.zimbra.com/)
 
 ## OneDrive synchronisation
 

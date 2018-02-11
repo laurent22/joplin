@@ -265,13 +265,15 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <h1 id="features">Features</h1>
 <ul>
 <li>Desktop, mobile and terminal applications.</li>
+<li>Import Enex files (Evernote export format)</li>
 <li>Support notes, to-dos, tags and notebooks.</li>
+<li>Support for alarms (notifications) in mobile and desktop applications.</li>
 <li>Offline first, so the entire data is always available on the device even without an internet connection.</li>
-<li>Ability to synchronise with multiple targets, including NextCloud, the file system and OneDrive (Dropbox is planned).</li>
+<li>Synchronisation with various services, including NextCloud, WebDAV and OneDrive. Dropbox is planned.</li>
+<li>End To End Encryption (E2EE)</li>
 <li>Synchronises to a plain text format, which can be easily manipulated, backed up, or exported to a different format.</li>
-<li>Markdown notes, which are rendered with images and formatting in the desktop and mobile applications.</li>
-<li>Tag support</li>
-<li>File attachment support (images are displayed, and other files are linked and can be opened in the relevant application).</li>
+<li>Markdown notes, which are rendered with images and formatting in the desktop and mobile applications. Support for extra features such as math notation and checkboxes.</li>
+<li>File attachment support - images are displayed, and other files are linked and can be opened in the relevant application.</li>
 <li>Search functionality.</li>
 <li>Geo-location support.</li>
 <li>Supports multiple languages</li>
@@ -306,6 +308,11 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 </code></pre><p>If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.</p>
 <h2 id="webdav-synchronisation">WebDAV synchronisation</h2>
 <p>Select the &quot;WebDAV&quot; synchronisation target and follow the same instructions as for Nextcloud above.</p>
+<p>Known compatible services that use WebDAV:</p>
+<ul>
+<li><a href="https://www.drivehq.com">DriveHQ</a></li>
+<li><a href="https://www.zimbra.com/">Zimbra</a></li>
+</ul>
 <h2 id="onedrive-synchronisation">OneDrive synchronisation</h2>
 <p>When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
 <p>On the <strong>desktop application</strong> or <strong>mobile application</strong>, select &quot;OneDrive&quot; as the synchronisation target in the config screen (it is selected by default). Then, to initiate the synchronisation process, click on the &quot;Synchronise&quot; button in the sidebar. You will be asked to login to OneDrive to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive).</p>
@@ -383,14 +390,14 @@ $$
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/hr.png" alt=""></td>
 <td>Croatian</td>
 <td>hr_HR</td>
-<td>Hrvoje Mandić <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#111;&#x3a;&#x74;&#114;&#98;&#117;&#104;&#x6f;&#x6d;&#64;&#110;&#101;&#116;&#46;&#x68;&#x72;">&#x74;&#114;&#98;&#117;&#104;&#x6f;&#x6d;&#64;&#110;&#101;&#116;&#46;&#x68;&#x72;</a></td>
+<td>Hrvoje Mandić <a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6f;&#58;&#x74;&#114;&#x62;&#117;&#x68;&#x6f;&#109;&#64;&#x6e;&#x65;&#116;&#46;&#104;&#x72;">&#x74;&#114;&#x62;&#117;&#x68;&#x6f;&#109;&#64;&#x6e;&#x65;&#116;&#46;&#104;&#x72;</a></td>
 <td>72%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/de.png" alt=""></td>
 <td>Deutsch</td>
 <td>de_DE</td>
-<td>Tobias Strobel <a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#x67;&#x69;&#x74;&#x40;&#115;&#116;&#x72;&#111;&#x62;&#101;&#108;&#x74;&#x6f;&#98;&#x69;&#97;&#x73;&#x2e;&#x64;&#x65;">&#x67;&#x69;&#x74;&#x40;&#115;&#116;&#x72;&#111;&#x62;&#101;&#108;&#x74;&#x6f;&#98;&#x69;&#97;&#x73;&#x2e;&#x64;&#x65;</a></td>
+<td>Tobias Strobel <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#103;&#x69;&#x74;&#64;&#x73;&#116;&#x72;&#x6f;&#98;&#x65;&#x6c;&#116;&#111;&#x62;&#x69;&#97;&#x73;&#x2e;&#100;&#x65;">&#103;&#x69;&#x74;&#64;&#x73;&#116;&#x72;&#x6f;&#98;&#x65;&#x6c;&#116;&#111;&#x62;&#x69;&#97;&#x73;&#x2e;&#100;&#x65;</a></td>
 <td>91%</td>
 </tr>
 <tr>
@@ -446,14 +453,14 @@ $$
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/ru.png" alt=""></td>
 <td>Русский</td>
 <td>ru_RU</td>
-<td>Artyom Karlov <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x61;&#114;&#116;&#121;&#x6f;&#109;&#46;&#107;&#x61;&#x72;&#x6c;&#111;&#118;&#x40;&#x67;&#109;&#97;&#105;&#108;&#46;&#x63;&#111;&#109;">&#x61;&#114;&#116;&#121;&#x6f;&#109;&#46;&#107;&#x61;&#x72;&#x6c;&#111;&#118;&#x40;&#x67;&#109;&#97;&#105;&#108;&#46;&#x63;&#111;&#109;</a></td>
+<td>Artyom Karlov <a href="&#109;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#x61;&#114;&#x74;&#x79;&#111;&#x6d;&#46;&#x6b;&#97;&#x72;&#108;&#x6f;&#x76;&#x40;&#103;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#111;&#109;">&#x61;&#114;&#x74;&#x79;&#111;&#x6d;&#46;&#x6b;&#97;&#x72;&#108;&#x6f;&#x76;&#x40;&#103;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#111;&#109;</a></td>
 <td>94%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/cn.png" alt=""></td>
 <td>中文 (简体)</td>
 <td>zh_CN</td>
-<td>RCJacH <a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x52;&#67;&#x4a;&#97;&#99;&#72;&#x40;&#x6f;&#117;&#x74;&#108;&#111;&#111;&#107;&#x2e;&#99;&#111;&#x6d;">&#x52;&#67;&#x4a;&#97;&#99;&#72;&#x40;&#x6f;&#117;&#x74;&#108;&#111;&#111;&#107;&#x2e;&#99;&#111;&#x6d;</a></td>
+<td>RCJacH <a href="&#109;&#97;&#105;&#108;&#x74;&#111;&#58;&#x52;&#x43;&#x4a;&#x61;&#x63;&#72;&#x40;&#x6f;&#117;&#x74;&#108;&#111;&#111;&#107;&#46;&#x63;&#111;&#109;">&#x52;&#x43;&#x4a;&#x61;&#x63;&#72;&#x40;&#x6f;&#117;&#x74;&#108;&#111;&#111;&#107;&#46;&#x63;&#111;&#109;</a></td>
 <td>75%</td>
 </tr>
 <tr>
