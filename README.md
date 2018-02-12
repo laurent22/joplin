@@ -18,9 +18,9 @@ Three types of applications are available: for the **desktop** (Windows, macOS a
 
 Operating System | Download
 -----------------|--------
-Windows          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.61/Joplin-Setup-0.10.61.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a>
-macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.61/Joplin-0.10.61.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a>
-Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.61/Joplin-0.10.61-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a>
+Windows          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.62/Joplin-Setup-1.0.62.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a>
+macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.62/Joplin-1.0.62.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a>
+Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.62/Joplin-1.0.62-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a>
 
 ## Mobile applications
 
