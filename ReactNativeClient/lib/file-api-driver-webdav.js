@@ -42,8 +42,8 @@ class FileApiDriverWebDav {
 		const isCollection = this.api().stringFromJson(resource, ['d:propstat', 0, 'd:prop', 0, 'd:resourcetype', 0, 'd:collection', 0]);
 		const lastModifiedString = this.api().stringFromJson(resource, ['d:propstat', 0, 'd:prop', 0, 'd:getlastmodified', 0]);
 
-		const sizeDONOTUSE = Number(this.api().stringFromJson(resource, ['d:propstat', 0, 'd:prop', 0, 'd:getcontentlength', 0]));
-		if (isNaN(sizeDONOTUSE)) throw new Error('Cannot get content size: ' + JSON.stringify(resource));
+		// const sizeDONOTUSE = Number(this.api().stringFromJson(resource, ['d:propstat', 0, 'd:prop', 0, 'd:getcontentlength', 0]));
+		// if (isNaN(sizeDONOTUSE)) throw new Error('Cannot get content size: ' + JSON.stringify(resource));
 
 		if (!lastModifiedString) throw new Error('Could not get lastModified date: ' + JSON.stringify(resource));
 
@@ -55,7 +55,7 @@ class FileApiDriverWebDav {
 			// created_time: lastModifiedDate.getTime(),
 			updated_time: lastModifiedDate.getTime(),
 			isDir: isCollection === '',
-			sizeDONOTUSE: sizeDONOTUSE, // This property is used only for the WebDAV PUT hack (see below) so mark it as such so that it can be removed with the hack later on.
+			// sizeDONOTUSE: sizeDONOTUSE, // This property is used only for the WebDAV PUT hack (see below) so mark it as such so that it can be removed with the hack later on.
 		};
 	}
 
@@ -304,32 +304,7 @@ class FileApiDriverWebDav {
 	}
 
 	async put(path, content, options = null) {
-		// In theory, if a client doesn't complete an upload, the file will not appear in the Nextcloud app. Likewise if
-		// the server interrupts the upload midway, the client should receive some kind of error and try uploading the
-		// file again next time. At the very least the file should not appear half-uploaded on the server. In practice
-		// however it seems some files might end up half uploaded on the server (at least on ocloud.de) so, for now,
-		// instead of doing a simple PUT, we do it to a temp file on Nextcloud, then check the file size and, if it
-		// matches, move it its actual place (hoping the server won't mess up and only copy half of the file).
-		// This is innefficient so once the bug is better understood it should hopefully be possible to go back to
-		// using a single PUT call.
-
-		let contentSize = 0;
-		if (content) contentSize = content.length;
-		if (options && options.path) {
-			const stat = await shim.fsDriver().stat(options.path);
-			contentSize = stat.size;
-		}
-
-		const tempPath = this.fileApi_.tempDirName() + '/' + basename(path) + '_' + Date.now();
-		await this.api().exec('PUT', tempPath, content, null, options);
-
-		const stat = await this.stat(tempPath);
-		if (stat.sizeDONOTUSE != contentSize) {
-			// await this.delete(tempPath);
-			throw new Error('WebDAV PUT - Size check failed for ' + tempPath + ' Expected: ' + contentSize + '. Found: ' + stat.sizeDONOTUSE);
-		}
-
-		await this.move(tempPath, path);
+		return await this.api().exec('PUT', path, content, null, options);
 	}
 
 	async delete(path) {

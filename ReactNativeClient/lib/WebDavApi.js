@@ -158,6 +158,22 @@ class WebDavApi {
 		return this.exec('PROPFIND', path, body, { 'Depth': depth }, options);
 	}
 
+	requestToCurl_(url, options) {
+		let output = [];
+		output.push('curl');
+		if (options.method) output.push('-X ' + options.method);
+		if (options.headers) {
+			for (let n in options.headers) {
+				if (!options.headers.hasOwnProperty(n)) continue;
+				output.push('-H ' + '"' + n + ': ' + options.headers[n] + '"');
+			}
+		}
+		if (options.body) output.push('--data ' + "'" + options.body + "'");
+		output.push(url);
+
+		return output.join(' ');		
+	}	
+
 	// curl -u admin:123456 'http://nextcloud.local/remote.php/dav/files/admin/' -X PROPFIND --data '<?xml version="1.0" encoding="UTF-8"?>
 	//  <d:propfind xmlns:d="DAV:">
 	//    <d:prop xmlns:oc="http://owncloud.org/ns">
@@ -175,7 +191,10 @@ class WebDavApi {
 
 		if (authToken) headers['Authorization'] = 'Basic ' + authToken;
 
-		if (typeof body === 'string') headers['Content-Length'] = body.length;
+		// /!\ Doesn't work with UTF-8 strings as it results in truncated content. Content-Length
+		// /!\ should not be needed anyway, but was required by one service. If re-implementing this
+		// /!\ test with various content, including binary blobs.
+		// if (typeof body === 'string') headers['Content-Length'] = body.length;
 
 		const fetchOptions = {};
 		fetchOptions.headers = headers;
@@ -188,6 +207,7 @@ class WebDavApi {
 		let response = null;
 
 		// console.info('WebDAV Call', method + ' ' + url, headers, options);
+		// console.info(this.requestToCurl_(url, fetchOptions));
 
 		if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
 			response = await shim.uploadBlob(url, fetchOptions);
