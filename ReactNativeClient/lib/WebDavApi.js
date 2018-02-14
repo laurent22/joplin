@@ -133,6 +133,42 @@ class WebDavApi {
 		return this.valueFromJson(json, keys, 'array');
 	}
 
+	resourcePropByName(resource, outputType, propName) {
+		const propStats = resource['d:propstat'];
+		let output = null;
+		if (!Array.isArray(propStats)) throw new Error('Missing d:propstat property');
+		for (let i = 0; i < propStats.length; i++) {
+			const props = propStats[i]['d:prop'];
+			if (!Array.isArray(props) || !props.length) continue;
+			const prop = props[0];
+			if (Array.isArray(prop[propName])) {
+				output = prop[propName];
+				break;
+			}
+		}
+
+		if (outputType === 'string') {
+			// If the XML has not attribute the value is directly a string
+			// If the XML node has attributes, the value is under "_".
+			// Eg for this XML, the string will be under {"_":"Thu, 01 Feb 2018 17:24:05 GMT"}:
+			// <a:getlastmodified b:dt="dateTime.rfc1123">Thu, 01 Feb 2018 17:24:05 GMT</a:getlastmodified>
+			// For this XML, the value will be "Thu, 01 Feb 2018 17:24:05 GMT"
+			// <a:getlastmodified>Thu, 01 Feb 2018 17:24:05 GMT</a:getlastmodified>
+
+			output = output[0];
+
+			if (typeof output === 'object' && '_' in output) output = output['_'];
+			if (typeof output !== 'string') return null;
+			return output;
+		}
+
+		if (outputType === 'array') {
+			return output;
+		}
+
+		throw new Error('Invalid output type: ' + outputType);
+	}
+
 	async execPropFind(path, depth, fields = null, options = null) {
 		if (fields === null) fields = ['d:getlastmodified'];
 

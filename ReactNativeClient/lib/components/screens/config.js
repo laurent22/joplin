@@ -65,6 +65,11 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				fontSize: theme.fontSize,
 				flex: 1,
 			},
+			descriptionText: {
+				color: theme.color,
+				fontSize: theme.fontSize,
+				flex: 1,
+			},
 			settingControl: {
 				color: theme.color,
 				flex: 1,
@@ -181,8 +186,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			const messages = shared.checkSyncConfigMessages(this);
 			const statusComp = !messages.length ? null : (
 				<View style={{flex:1, marginTop: 10}}>
-					<Text>{messages[0]}</Text>
-					{messages.length >= 1 ? (<Text style={{marginTop:10}}>{messages[1]}</Text>) : null}
+					<Text style={this.styles().descriptionText}>{messages[0]}</Text>
+					{messages.length >= 1 ? (<View style={{marginTop:10}}><Text style={this.styles().descriptionText}>{messages[1]}</Text></View>) : null}
 				</View>);
 
 			settingComps.push(

@@ -27,7 +27,7 @@ class FileApiDriverWebDav {
 			const result = await this.api().execPropFind(path, 0, [
 				'd:getlastmodified',
 				'd:resourcetype',
-				'd:getcontentlength', // Remove this once PUT call issue is sorted out
+				// 'd:getcontentlength', // Remove this once PUT call issue is sorted out
 			]);
 
 			const resource = this.api().objectFromJson(result, ['d:multistatus', 'd:response', 0]);
@@ -39,22 +39,40 @@ class FileApiDriverWebDav {
 	}
 
 	statFromResource_(resource, path) {
-		const isCollection = this.api().stringFromJson(resource, ['d:propstat', 0, 'd:prop', 0, 'd:resourcetype', 0, 'd:collection', 0]);
-		const lastModifiedString = this.api().stringFromJson(resource, ['d:propstat', 0, 'd:prop', 0, 'd:getlastmodified', 0]);
+		// WebDAV implementations are always slighly different from one server to another but, at the minimum,
+		// a resource should have a propstat key - if not it's probably an error.
+		const propStat = this.api().arrayFromJson(resource, ['d:propstat']);
+		if (!Array.isArray(propStat)) throw new Error('Invalid WebDAV resource format: ' + JSON.stringify(resource));
+
+		const resourceTypes = this.api().resourcePropByName(resource, 'array', 'd:resourcetype');
+		let isDir = false;
+		if (Array.isArray(resourceTypes)) {
+			for (let i = 0; i < resourceTypes.length; i++) {
+				const t = resourceTypes[i];
+				if (typeof t === 'object' && 'd:collection' in t) {
+					isDir = true;
+					break;
+				}
+			}
+		}
+
+		const lastModifiedString = this.api().resourcePropByName(resource, 'string', 'd:getlastmodified');	
 
 		// const sizeDONOTUSE = Number(this.api().stringFromJson(resource, ['d:propstat', 0, 'd:prop', 0, 'd:getcontentlength', 0]));
 		// if (isNaN(sizeDONOTUSE)) throw new Error('Cannot get content size: ' + JSON.stringify(resource));
 
-		if (!lastModifiedString) throw new Error('Could not get lastModified date: ' + JSON.stringify(resource));
 
-		const lastModifiedDate = new Date(lastModifiedString);
+		// Note: Not all WebDAV servers return a getlastmodified date (eg. Seafile, which doesn't return the
+		// property for folders) so we can only throw an error if it's a file.
+		if (!lastModifiedString && !isDir) throw new Error('Could not get lastModified date for resource: ' + JSON.stringify(resource));
+		const lastModifiedDate = lastModifiedString ? new Date(lastModifiedString) : new Date();
 		if (isNaN(lastModifiedDate.getTime())) throw new Error('Invalid date: ' + lastModifiedString);
 
 		return {
 			path: path,
 			// created_time: lastModifiedDate.getTime(),
 			updated_time: lastModifiedDate.getTime(),
-			isDir: isCollection === '',
+			isDir: isDir,
 			// sizeDONOTUSE: sizeDONOTUSE, // This property is used only for the WebDAV PUT hack (see below) so mark it as such so that it can be removed with the hack later on.
 		};
 	}
@@ -260,7 +278,7 @@ class FileApiDriverWebDav {
 		]);
 
 		const resources = this.api().arrayFromJson(result, ['d:multistatus', 'd:response']);
-		const stats = this.statsFromResources_(resources)
+		const stats = this.statsFromResources_(resources);
 
 		return {
 			items: stats,
