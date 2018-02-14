@@ -110,6 +110,7 @@ Select the "WebDAV" synchronisation target and follow the same instructions as f
 
 Known compatible services that use WebDAV:
 
+- [Box.com](https://www.box.com/)
 - [DriveHQ](https://www.drivehq.com)
 - [Zimbra](https://www.zimbra.com/)
 

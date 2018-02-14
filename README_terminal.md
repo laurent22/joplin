@@ -244,7 +244,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                           Possible values: HH:mm (20:30), h:mm A (8:30 PM).
 	                           Default: "HH:mm"
 	                           
-	    uncompletedTodosOnTop  Show uncompleted todos on top of the lists.
+	    uncompletedTodosOnTop  Show uncompleted to-dos on top of the lists.
 	                           Type: bool.
 	                           Default: true
 	                           
