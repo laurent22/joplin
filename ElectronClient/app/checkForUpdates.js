@@ -5,17 +5,13 @@ const { _ } = require('lib/locale.js');
 
 let autoUpdateLogger_ = new Logger();
 let checkInBackground_ = false;
+let isCheckingForUpdate_ = false;
+let parentWindow_ = null;
 
 // Note: Electron Builder's autoUpdater is incredibly buggy so currently it's only used
 // to detect if a new version is present. If it is, the download link is simply opened
 // in a new browser window.
 autoUpdater.autoDownload = false;
-
-autoUpdater.on('error', (error) => {
-	autoUpdateLogger_.error(error);
-	if (checkInBackground_) return;
-	dialog.showErrorBox(_('Error'), error == null ? "unknown" : (error.stack || error).toString())
-})
 
 function htmlToText_(html) {
 	let output = html.replace(/\n/g, '');
@@ -28,11 +24,35 @@ function htmlToText_(html) {
 	return output;
 }
 
+function showErrorMessageBox(message) {
+	return dialog.showMessageBox(parentWindow_, {
+		type: 'error',
+		message: message,
+	});
+}
+
+function onCheckStarted() {
+	autoUpdateLogger_.info('checkForUpdates: Starting...');
+	isCheckingForUpdate_ = true;
+}
+
+function onCheckEnded() {
+	autoUpdateLogger_.info('checkForUpdates: Done.');
+	isCheckingForUpdate_ = false;
+}
+
+autoUpdater.on('error', (error) => {
+	autoUpdateLogger_.error(error);
+	if (checkInBackground_) return onCheckEnded();
+	showErrorMessageBox(error == null ? "unknown" : (error.stack || error).toString())
+	onCheckEnded();
+})
+
 autoUpdater.on('update-available', (info) => {
 	if (!info.version || !info.path) {
-		if (checkInBackground_) return;
-		dialog.showErrorBox(_('Error'), ('Could not get version info: ' + JSON.stringify(info)));
-		return;
+		if (checkInBackground_) return onCheckEnded();
+		showErrorMessageBox(('Could not get version info: ' + JSON.stringify(info)));
+		return onCheckEnded();
 	}
 
 	const downloadUrl = 'https://github.com/laurent22/joplin/releases/download/v' + info.version + '/' + info.path;
@@ -40,37 +60,33 @@ autoUpdater.on('update-available', (info) => {
 	let releaseNotes = info.releaseNotes + '';
 	if (releaseNotes) releaseNotes = '\n\n' + _('Release notes:\n\n%s', htmlToText_(releaseNotes));
 
-	dialog.showMessageBox({
+	const buttonIndex = dialog.showMessageBox(parentWindow_, {
 		type: 'info',
 		message: _('An update is available, do you want to download it now?' + releaseNotes),
 		buttons: [_('Yes'), _('No')]
-	}, (buttonIndex) => {
-		if (buttonIndex === 0) {
-			require('electron').shell.openExternal(downloadUrl);
-		}
-	})
+	});
+
+	onCheckEnded();
+
+	if (buttonIndex === 0) require('electron').shell.openExternal(downloadUrl);
 })
 
 autoUpdater.on('update-not-available', () => {
-	if (checkInBackground_) return;
-
+	if (checkInBackground_) return onCheckEnded();
 	dialog.showMessageBox({ message: _('Current version is up-to-date.') })
+	onCheckEnded();
 })
 
-// autoUpdater.on('update-downloaded', () => {
-// 	dialog.showMessageBox({ message: _('New version downloaded - application will quit now and update...') }, () => {
-// 		setTimeout(() => {
-// 			try {
-// 				autoUpdater.quitAndInstall();
-// 			} catch (error) {
-// 				autoUpdateLogger_.error(error);
-// 				dialog.showErrorBox(_('Error'), _('Could not install the update: %s', error.message));
-// 			}
-// 		}, 100);
-// 	})
-// })
+function checkForUpdates(inBackground, window, logFilePath) {
+	if (isCheckingForUpdate_) {
+		autoUpdateLogger_.info('checkForUpdates: Skipping check because it is already running');
+		return;
+	}
 
-function checkForUpdates(inBackground, logFilePath) {
+	parentWindow_ = window;
+
+	onCheckStarted();
+
 	if (logFilePath && !autoUpdateLogger_.targets().length) {
 		autoUpdateLogger_ = new Logger();
 		autoUpdateLogger_.addTarget('file', { path: logFilePath });
@@ -85,7 +101,8 @@ function checkForUpdates(inBackground, logFilePath) {
 		autoUpdater.checkForUpdates()
 	} catch (error) {
 		autoUpdateLogger_.error(error);
-		if (!checkInBackground_) dialog.showErrorBox(_('Error'), error.message);
+		if (!checkInBackground_) showErrorMessageBox(error.message);
+		onCheckEnded();
 	}
 }
 

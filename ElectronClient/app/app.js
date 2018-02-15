@@ -305,7 +305,7 @@ class Application extends BaseApplication {
 				}, {
 					label: _('Check for updates...'),
 					click: () => {
-						bridge().checkForUpdates(false, this.checkForUpdateLoggerPath());
+						bridge().checkForUpdates(false, bridge().window(), this.checkForUpdateLoggerPath());
 					}
 				}, {
 					label: _('About Joplin'),
@@ -422,13 +422,14 @@ class Application extends BaseApplication {
 		if (shim.isWindows() || shim.isMac()) {
 			const runAutoUpdateCheck = () => {
 				if (Setting.value('autoUpdateEnabled')) {
-					bridge().checkForUpdates(true, this.checkForUpdateLoggerPath());
+					bridge().checkForUpdates(true, bridge().window(), this.checkForUpdateLoggerPath());
 				}
 			}
 			
+			// Initial check on startup
 			setTimeout(() => { runAutoUpdateCheck() }, 5000);
-			// For those who leave the app always open
-			setInterval(() => { runAutoUpdateCheck() }, 2 * 60 * 60 * 1000);
+			// Then every x hours
+			setInterval(() => { runAutoUpdateCheck() }, 12 * 60 * 60 * 1000);
 		}
 
 		this.updateTray();
