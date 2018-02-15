@@ -62,7 +62,7 @@ class FsDriverRN {
 			const r = await RNFS.stat(path);
 			return this.rnfsStatToStd_(r, path);
 		} catch (error) {
-			if (error && error.message && error.message.indexOf('exist') >= 0) {
+			if (error && ((error.message && error.message.indexOf('exist') >= 0) || error.code === 'ENOENT')) {
 				// Probably { [Error: File does not exist] framesToPop: 1, code: 'EUNSPECIFIED' }
 				// which unfortunately does not have a proper error code. Can be ignored.
 				return null;
@@ -120,7 +120,7 @@ class FsDriverRN {
 		try {
 			await RNFS.unlink(path);
 		} catch (error) {
-			if (error && error.message && error.message.indexOf('exist') >= 0) {
+			if (error && ((error.message && error.message.indexOf('exist') >= 0) || error.code === 'ENOENT')) {
 				// Probably { [Error: File does not exist] framesToPop: 1, code: 'EUNSPECIFIED' }
 				// which unfortunately does not have a proper error code. Can be ignored.
 			} else {

@@ -84,8 +84,9 @@ class DecryptionWorker {
 					try {
 						await ItemClass.decrypt(item);
 					} catch (error) {
+						excludedIds.push(item.id);
+						
 						if (error.code === 'masterKeyNotLoaded' && options.materKeyNotLoadedHandler === 'dispatch') {
-							excludedIds.push(item.id);
 							if (notLoadedMasterKeyDisptaches.indexOf(error.masterKeyId) < 0) {
 								this.dispatch({
 									type: 'MASTERKEY_ADD_NOT_LOADED',

@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { ListView, View, Text, Button, StyleSheet } = require('react-native');
+const { ListView, View, Text, Button, StyleSheet, Platform } = require('react-native');
 const { connect } = require('react-redux');
 const { Log } = require('lib/log.js');
 const { reg } = require('lib/registry.js');
@@ -43,11 +43,14 @@ class LogScreenComponent extends BaseScreenComponent {
 				paddingBottom:0,
 			},
 			rowText: {
-				fontFamily: 'monospace',
 				fontSize: 10,
 				color: theme.color,				
 			},
 		};
+
+		if (Platform.OS !== 'ios') { // Crashes on iOS with error "Unrecognized font family 'monospace'"
+			styles.rowText.fontFamily = 'monospace';
+		}
 
 		styles.rowTextError = Object.assign({}, styles.rowText);
 		styles.rowTextError.color = theme.colorError;
