@@ -18,15 +18,15 @@ Three types of applications are available: for the **desktop** (Windows, macOS a
 
 Operating System | Download
 -----------------|--------
-Windows          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.62/Joplin-Setup-1.0.62.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a>
-macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.62/Joplin-1.0.62.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a>
-Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.62/Joplin-1.0.62-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a>
+Windows          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.63/Joplin-Setup-1.0.63.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a>
+macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.63/Joplin-1.0.63.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a>
+Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.63/Joplin-1.0.63-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a>
 
 ## Mobile applications
 
 Operating System | Download | Alt. Download
 -----------------|----------|----------------
-Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeAndroid.png'/></a> | or [Download APK File](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.95/joplin-v1.0.95.apk)
+Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeAndroid.png'/></a> | or [Download APK File](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.97/joplin-v1.0.97.apk)
 iOS              | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeIOS.png'/></a> | -
 
 ## Terminal application

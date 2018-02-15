@@ -992,7 +992,6 @@ describe('Synchronizer', function() {
 	it('should create remote items with UTF-8 content', asyncTest(async () => {
 		let folder = await Folder.save({ title: "Fahrräder" });
 		await Note.save({ title: "Fahrräder", body: "Fahrräder", parent_id: folder.id });
-
 		let all = await allItems();
 
 		await synchronizer().start();
