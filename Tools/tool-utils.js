@@ -81,4 +81,38 @@ toolUtils.fileExists = async function(filePath) {
 	});
 }
 
+toolUtils.githubOauthToken = async function() {
+	const fs = require('fs-extra');
+	const r = await fs.readFile(__dirname + '/github_oauth_token.txt');
+	return r.toString();
+}
+
+toolUtils.githubRelease = async function(project, tagName, isDraft) {
+	const fetch = require('node-fetch');
+
+	const oauthToken = await toolUtils.githubOauthToken();
+	
+	const response = await fetch('https://api.github.com/repos/laurent22/' + project + '/releases', {
+		method: 'POST', 
+		body: JSON.stringify({
+			tag_name: tagName,
+			name: tagName,
+			draft: isDraft,
+		}),
+		headers: {
+			'Content-Type': 'application/json',
+			'Authorization': 'token ' + oauthToken,
+		},
+	});
+
+	const responseText = await response.text();
+	
+	if (!response.ok) throw new Error('Cannot create GitHub release: ' + responseText);
+
+	const responseJson = JSON.parse(responseText);
+	if (!responseJson.url) throw new Error('No URL for release: ' + responseText);
+
+	return responseJson;
+}
+
 module.exports = toolUtils;

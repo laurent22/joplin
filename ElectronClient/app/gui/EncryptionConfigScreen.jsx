@@ -92,10 +92,14 @@ class EncryptionConfigScreenComponent extends React.Component {
 		};
 
 		const mkComps = [];
+		let nonExistingMasterKeyIds = this.props.notLoadedMasterKeys.slice();
 
 		for (let i = 0; i < masterKeys.length; i++) {
 			const mk = masterKeys[i];
 			mkComps.push(this.renderMasterKey(mk));
+
+			const idx = nonExistingMasterKeyIds.indexOf(mk.id);
+			if (idx >= 0) nonExistingMasterKeyIds.splice(idx, 1);
 		}
 
 		const onToggleButtonClick = async () => {
@@ -149,11 +153,36 @@ class EncryptionConfigScreenComponent extends React.Component {
 			);
 		}
 
+		let nonExistingMasterKeySection = null;
+
+		if (nonExistingMasterKeyIds.length) {
+			const rows = [];
+			for (let i = 0; i < nonExistingMasterKeyIds.length; i++) {
+				const id = nonExistingMasterKeyIds[i];
+				rows.push(<tr key={id}><td style={theme.textStyle}>{id}</td></tr>);
+			}
+
+			nonExistingMasterKeySection = (
+				<div>
+					<h1 style={theme.h1Style}>{_('Missing Master Keys')}</h1>
+					<p style={theme.textStyle}>{_('The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.')}</p>
+					<table>
+						<tbody>
+							<tr>
+								<th style={theme.textStyle}>{_('ID')}</th>
+							</tr>
+							{ rows }
+						</tbody>
+					</table>
+				</div>
+			);
+		}
+
 		return (
 			<div>
 				<Header style={headerStyle} />
 				<div style={containerStyle}>
-					<div style={{backgroundColor: theme.warningBackgroundColor, paddingLeft: 10, paddingRight: 10, paddingTop: 2, paddingBottom: 2 }}>
+					{/*<div style={{backgroundColor: theme.warningBackgroundColor, paddingLeft: 10, paddingRight: 10, paddingTop: 2, paddingBottom: 2 }}>
 						<p style={theme.textStyle}>
 							Important: This is a <b>beta</b> feature. It has been extensively tested and is already in use by some users, but it is possible that some bugs remain.
 						</p>
@@ -163,12 +192,13 @@ class EncryptionConfigScreenComponent extends React.Component {
 						<p style={theme.textStyle}>
 							For more information about End-To-End Encryption (E2EE) and how it is going to work, please check the documentation: <a onClick={() => {bridge().openExternal('http://joplin.cozic.net/help/e2ee.html')}} href="#">http://joplin.cozic.net/help/e2ee.html</a>
 						</p>
-					</div>
+					</div>*/}
 					<h1 style={theme.h1Style}>{_('Status')}</h1>
 					<p style={theme.textStyle}>{_('Encryption is:')} <strong>{this.props.encryptionEnabled ? _('Enabled') : _('Disabled')}</strong></p>
 					{decryptedItemsInfo}
 					{toggleButton}
 					{masterKeySection}
+					{nonExistingMasterKeySection}
 				</div>
 			</div>
 		);
@@ -183,6 +213,7 @@ const mapStateToProps = (state) => {
 		passwords: state.settings['encryption.passwordCache'],
 		encryptionEnabled: state.settings['encryption.enabled'],
 		activeMasterKeyId: state.settings['encryption.activeMasterKeyId'],
+		notLoadedMasterKeys: state.notLoadedMasterKeys,
 	};
 };
 

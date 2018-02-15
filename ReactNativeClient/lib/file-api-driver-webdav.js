@@ -6,6 +6,7 @@ const Entities = require('html-entities').AllHtmlEntities;
 const html_entity_decode = (new Entities()).decode;
 const { shim } = require('lib/shim');
 const { basename } = require('lib/path-utils');
+const JoplinError = require('lib/JoplinError');
 
 class FileApiDriverWebDav { 
 
@@ -17,12 +18,16 @@ class FileApiDriverWebDav {
 		return this.api_;
 	}
 
+	requestRepeatCount() {
+		return 3;
+	}
+
 	async stat(path) {
 		try {
 			const result = await this.api().execPropFind(path, 0, [
 				'd:getlastmodified',
 				'd:resourcetype',
-				'd:getcontentlength', // Remove this once PUT call issue is sorted out
+				// 'd:getcontentlength', // Remove this once PUT call issue is sorted out
 			]);
 
 			const resource = this.api().objectFromJson(result, ['d:multistatus', 'd:response', 0]);
@@ -34,23 +39,41 @@ class FileApiDriverWebDav {
 	}
 
 	statFromResource_(resource, path) {
-		const isCollection = this.api().stringFromJson(resource, ['d:propstat', 0, 'd:prop', 0, 'd:resourcetype', 0, 'd:collection', 0]);
-		const lastModifiedString = this.api().stringFromJson(resource, ['d:propstat', 0, 'd:prop', 0, 'd:getlastmodified', 0]);
+		// WebDAV implementations are always slighly different from one server to another but, at the minimum,
+		// a resource should have a propstat key - if not it's probably an error.
+		const propStat = this.api().arrayFromJson(resource, ['d:propstat']);
+		if (!Array.isArray(propStat)) throw new Error('Invalid WebDAV resource format: ' + JSON.stringify(resource));
 
-		const sizeDONOTUSE = Number(this.api().stringFromJson(resource, ['d:propstat', 0, 'd:prop', 0, 'd:getcontentlength', 0]));
-		if (isNaN(sizeDONOTUSE)) throw new Error('Cannot get content size: ' + JSON.stringify(resource));
+		const resourceTypes = this.api().resourcePropByName(resource, 'array', 'd:resourcetype');
+		let isDir = false;
+		if (Array.isArray(resourceTypes)) {
+			for (let i = 0; i < resourceTypes.length; i++) {
+				const t = resourceTypes[i];
+				if (typeof t === 'object' && 'd:collection' in t) {
+					isDir = true;
+					break;
+				}
+			}
+		}
 
-		if (!lastModifiedString) throw new Error('Could not get lastModified date: ' + JSON.stringify(resource));
+		const lastModifiedString = this.api().resourcePropByName(resource, 'string', 'd:getlastmodified');	
 
-		const lastModifiedDate = new Date(lastModifiedString);
+		// const sizeDONOTUSE = Number(this.api().stringFromJson(resource, ['d:propstat', 0, 'd:prop', 0, 'd:getcontentlength', 0]));
+		// if (isNaN(sizeDONOTUSE)) throw new Error('Cannot get content size: ' + JSON.stringify(resource));
+
+
+		// Note: Not all WebDAV servers return a getlastmodified date (eg. Seafile, which doesn't return the
+		// property for folders) so we can only throw an error if it's a file.
+		if (!lastModifiedString && !isDir) throw new Error('Could not get lastModified date for resource: ' + JSON.stringify(resource));
+		const lastModifiedDate = lastModifiedString ? new Date(lastModifiedString) : new Date();
 		if (isNaN(lastModifiedDate.getTime())) throw new Error('Invalid date: ' + lastModifiedString);
 
 		return {
 			path: path,
-			created_time: lastModifiedDate.getTime(),
+			// created_time: lastModifiedDate.getTime(),
 			updated_time: lastModifiedDate.getTime(),
-			isDir: isCollection === '',
-			sizeDONOTUSE: sizeDONOTUSE, // This property is used only for the WebDAV PUT hack (see below) so mark it as such so that it can be removed with the hack later on.
+			isDir: isDir,
+			// sizeDONOTUSE: sizeDONOTUSE, // This property is used only for the WebDAV PUT hack (see below) so mark it as such so that it can be removed with the hack later on.
 		};
 	}
 
@@ -67,8 +90,41 @@ class FileApiDriverWebDav {
 		return await basicDelta(path, getDirStats, options);
 	}
 
-	async list(path, options) {
+	// A file href, as found in the result of a PROPFIND, can be either an absolute URL or a
+	// relative URL (an absolute URL minus the protocol and domain), while the sync algorithm
+	// works with paths relative to the base URL.
+	hrefToRelativePath_(href, baseUrl, relativeBaseUrl) {
+		let output = '';
+		if (href.indexOf(baseUrl) === 0) {
+			output = href.substr(baseUrl.length);
+		} else if (href.indexOf(relativeBaseUrl) === 0) {
+			output = href.substr(relativeBaseUrl.length);
+		} else {
+			throw new Error('href ' + href + ' not in baseUrl ' + baseUrl + ' nor relativeBaseUrl ' + relativeBaseUrl);
+		}
+
+		return rtrimSlashes(ltrimSlashes(output));
+	}
+
+	statsFromResources_(resources) {
 		const relativeBaseUrl = this.api().relativeBaseUrl();
+		const baseUrl = this.api().baseUrl();
+		let output = [];
+		for (let i = 0; i < resources.length; i++) {
+			const resource = resources[i];
+			const href = this.api().stringFromJson(resource, ['d:href', 0]);
+			const path = this.hrefToRelativePath_(href, baseUrl, relativeBaseUrl);
+			// if (href.indexOf(relativeBaseUrl) !== 0) throw new Error('Path "' + href + '" not inside base URL: ' + relativeBaseUrl);
+			// const path = rtrimSlashes(ltrimSlashes(href.substr(relativeBaseUrl.length)));
+			if (path === '') continue; // The list of resources includes the root dir too, which we don't want
+			const stat = this.statFromResource_(resources[i], path);
+			output.push(stat);
+		}
+		return output;
+	}
+
+	async list(path, options) {
+		// const relativeBaseUrl = this.api().relativeBaseUrl();
 
 		// function parsePropFindXml(xmlString) {
 		// 	return new Promise(async (resolve, reject) => {
@@ -176,39 +232,53 @@ class FileApiDriverWebDav {
 		// instead of being processed by xml2json like the other WebDAV responses. This is over 2 times faster
 		// and it means the mobile app does not freeze during sync. 
 
-		async function parsePropFindXml2(xmlString) {
-			const regex = /<d:response>[\S\s]*?<d:href>([\S\s]*?)<\/d:href>[\S\s]*?<d:getlastmodified>(.*?)<\/d:getlastmodified>/g;
+		// async function parsePropFindXml2(xmlString) {
+		// 	const regex = /<d:response>[\S\s]*?<d:href>([\S\s]*?)<\/d:href>[\S\s]*?<d:getlastmodified>(.*?)<\/d:getlastmodified>/g;
 
-			let output = [];
-			let match = null;
+		// 	let output = [];
+		// 	let match = null;
 
-			while (match = regex.exec(xmlString)) {
-				const href = html_entity_decode(match[1]);
-				if (href.indexOf(relativeBaseUrl) < 0) throw new Error('Path not inside base URL: ' + relativeBaseUrl); // Normally not possible
-				const path = rtrimSlashes(ltrimSlashes(href.substr(relativeBaseUrl.length)));
+		// 	while (match = regex.exec(xmlString)) {
+		// 		const href = html_entity_decode(match[1]);
+		// 		if (href.indexOf(relativeBaseUrl) < 0) throw new Error('Path not inside base URL: ' + relativeBaseUrl); // Normally not possible
+		// 		const path = rtrimSlashes(ltrimSlashes(href.substr(relativeBaseUrl.length)));
 
-				if (!path) continue; // The list of resources includes the root dir too, which we don't want
+		// 		if (!path) continue; // The list of resources includes the root dir too, which we don't want
 
-				const lastModifiedDate = new Date(match[2]);
-				if (isNaN(lastModifiedDate.getTime())) throw new Error('Invalid date: ' + match[2]);
+		// 		const lastModifiedDate = new Date(match[2]);
+		// 		if (isNaN(lastModifiedDate.getTime())) throw new Error('Invalid date: ' + match[2]);
 
-				output.push({
-					path: path,
-					updated_time: lastModifiedDate.getTime(),
-					created_time: lastModifiedDate.getTime(),
-					isDir: !BaseItem.isSystemPath(path),
-				});
-			}
+		// 		output.push({
+		// 			path: path,
+		// 			updated_time: lastModifiedDate.getTime(),
+		// 			created_time: lastModifiedDate.getTime(),
+		// 			isDir: !BaseItem.isSystemPath(path),
+		// 		});
+		// 	}
 
-			return output;
-		}
+		// 	return output;
+		// }
 
-		const resultXml = await this.api().execPropFind(path, 1, [
+		// const resultXml = await this.api().execPropFind(path, 1, [
+		// 	'd:getlastmodified',
+		// 	//'d:resourcetype', // Include this to use parsePropFindXml()
+		// ], { responseFormat: 'text' });
+
+		// const stats = await parsePropFindXml2(resultXml);
+
+		// return {
+		// 	items: stats,
+		// 	hasMore: false,
+		// 	context: null,
+		// };
+
+		const result = await this.api().execPropFind(path, 1, [
 			'd:getlastmodified',
-			//'d:resourcetype', // Include this to use parsePropFindXml()
-		], { responseFormat: 'text' });
+			'd:resourcetype',
+		]);
 
-		const stats = await parsePropFindXml2(resultXml);
+		const resources = this.api().arrayFromJson(result, ['d:multistatus', 'd:response']);
+		const stats = this.statsFromResources_(resources);
 
 		return {
 			items: stats,
@@ -221,7 +291,13 @@ class FileApiDriverWebDav {
 		if (!options) options = {};
 		if (!options.responseFormat) options.responseFormat = 'text';
 		try {
-			return await this.api().exec('GET', path, null, null, options);
+			const response = await this.api().exec('GET', path, null, null, options);
+
+			// This is awful but instead of a 404 Not Found, Microsoft IIS returns an HTTP code 200
+			// with a response body "The specified file doesn't exist." for non-existing files,
+			// so we need to check for this.
+			if (response === "The specified file doesn't exist.") throw new JoplinError(response, 404);
+			return response;
 		} catch (error) {
 			if (error.code !== 404) throw error;
 		}
@@ -231,37 +307,22 @@ class FileApiDriverWebDav {
 		try {
 			await this.api().exec('MKCOL', path);
 		} catch (error) {
-			if (error.code !== 405) throw error; // 405 means that the collection already exists (Method Not Allowed)
+			if (error.code === 405) return; // 405 means that the collection already exists (Method Not Allowed)
+
+			// 409 should only be returned if a parent path does not exists (eg. when trying to create a/b/c when a/b does not exist)
+			// however non-compliant servers (eg. Microsoft IIS) also return this code when the directory already exists. So here, if
+			// we get this code, verify that indeed the directory already exists and exit if it does.
+			if (error.code === 409) {
+				const stat = await this.stat(path);
+				if (stat) return;
+			}
+			
+			throw error;
 		}
 	}
 
 	async put(path, content, options = null) {
-		// In theory, if a client doesn't complete an upload, the file will not appear in the Nextcloud app. Likewise if
-		// the server interrupts the upload midway, the client should receive some kind of error and try uploading the
-		// file again next time. At the very least the file should not appear half-uploaded on the server. In practice
-		// however it seems some files might end up half uploaded on the server (at least on ocloud.de) so, for now,
-		// instead of doing a simple PUT, we do it to a temp file on Nextcloud, then check the file size and, if it
-		// matches, move it its actual place (hoping the server won't mess up and only copy half of the file).
-		// This is innefficient so once the bug is better understood it should hopefully be possible to go back to
-		// using a single PUT call.
-
-		let contentSize = 0;
-		if (content) contentSize = content.length;
-		if (options && options.path) {
-			const stat = await shim.fsDriver().stat(options.path);
-			contentSize = stat.size;
-		}
-
-		const tempPath = this.fileApi_.tempDirName() + '/' + basename(path) + '_' + Date.now();
-		await this.api().exec('PUT', tempPath, content, null, options);
-
-		const stat = await this.stat(tempPath);
-		if (stat.sizeDONOTUSE != contentSize) {
-			// await this.delete(tempPath);
-			throw new Error('WebDAV PUT - Size check failed for ' + tempPath + ' Expected: ' + contentSize + '. Found: ' + stat.sizeDONOTUSE);
-		}
-
-		await this.move(tempPath, path);
+		return await this.api().exec('PUT', path, content, null, options);
 	}
 
 	async delete(path) {
@@ -275,6 +336,7 @@ class FileApiDriverWebDav {
 	async move(oldPath, newPath) {
 		await this.api().exec('MOVE', oldPath, null, {
 			'Destination': this.api().baseUrl() + '/' + newPath,
+			'Overwrite': 'T',
 		});
 	}
 

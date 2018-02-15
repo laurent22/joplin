@@ -1,9 +1,13 @@
+// The Nextcloud sync target is essentially a wrapper over the WebDAV sync target,
+// thus all the calls to SyncTargetWebDAV to avoid duplicate code.
+
 const BaseSyncTarget = require('lib/BaseSyncTarget.js');
 const { _ } = require('lib/locale.js');
 const Setting = require('lib/models/Setting.js');
 const { FileApi } = require('lib/file-api.js');
 const { Synchronizer } = require('lib/synchronizer.js');
 const WebDavApi = require('lib/WebDavApi');
+const SyncTargetWebDAV = require('lib/SyncTargetWebDAV');
 const { FileApiDriverWebDav } = require('lib/file-api-driver-webdav');
 
 class SyncTargetNextcloud extends BaseSyncTarget {
@@ -12,9 +16,8 @@ class SyncTargetNextcloud extends BaseSyncTarget {
 		return 5;
 	}
 
-	constructor(db, options = null) {
-		super(db, options);
-		// this.authenticated_ = false;
+	static supportsConfigCheck() {
+		return true;
 	}
 
 	static targetName() {
@@ -22,26 +25,26 @@ class SyncTargetNextcloud extends BaseSyncTarget {
 	}
 
 	static label() {
-		return _('Nextcloud (Beta)');
+		return _('Nextcloud');
 	}
 
 	isAuthenticated() {
 		return true;
-		//return this.authenticated_;
+	}
+
+	static async checkConfig(options) {
+		return SyncTargetWebDAV.checkConfig(options);
 	}
 
 	async initFileApi() {
-		const options = {
-			baseUrl: () => Setting.value('sync.5.path'),
-			username: () => Setting.value('sync.5.username'),
-			password: () => Setting.value('sync.5.password'),
-		};
+		const fileApi = await SyncTargetWebDAV.initFileApi_({
+			path: Setting.value('sync.5.path'),
+			username: Setting.value('sync.5.username'),
+			password: Setting.value('sync.5.password'),
+		});
 
-		const api = new WebDavApi(options);
-		const driver = new FileApiDriverWebDav(api);
-		const fileApi = new FileApi('', driver);
-		fileApi.setSyncTargetId(SyncTargetNextcloud.id());
 		fileApi.setLogger(this.logger());
+
 		return fileApi;
 	}
 

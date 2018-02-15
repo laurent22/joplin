@@ -652,6 +652,13 @@ msgstr "Sobre o Joplin"
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
+#, fuzzy, javascript-format
+msgid "Open %s"
+msgstr "Em %s: %s"
+
+msgid "Exit"
+msgstr ""
+
 msgid "OK"
 msgstr "OK"
 
@@ -661,22 +668,29 @@ msgstr "Cancelar"
 msgid "Error"
 msgstr ""
 
-msgid "An update is available, do you want to update now?"
+#, fuzzy, javascript-format
+msgid ""
+"Release notes:\n"
+"\n"
+"%s"
+msgstr "Excluir notas?"
+
+msgid "An update is available, do you want to download it now?"
 msgstr ""
 
-#, javascript-format
-msgid "Could not download the update: %s"
+msgid "Yes"
 msgstr ""
+
+#, fuzzy
+msgid "No"
+msgstr "N"
 
 msgid "Current version is up-to-date."
 msgstr ""
 
-msgid "New version downloaded - application will quit now and update..."
-msgstr ""
-
-#, javascript-format
-msgid "Could not install the update: %s"
-msgstr ""
+#, fuzzy
+msgid "Check synchronisation configuration"
+msgstr "Cancelar sincronização"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -734,6 +748,15 @@ msgid ""
 "Note: Only one master key is going to be used for encryption (the one marked "
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
+msgstr ""
+
+msgid "Missing Master Keys"
+msgstr ""
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
 msgstr ""
 
 msgid "Status"
@@ -809,6 +832,13 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "Atualmente, não há notas. Crie uma, clicando no botão (+)."
 
+msgid "Open..."
+msgstr ""
+
+#, fuzzy
+msgid "Save as..."
+msgstr "Gravar alterações"
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Link ou mensagem não suportada: %s"
@@ -816,8 +846,23 @@ msgstr "Link ou mensagem não suportada: %s"
 msgid "Attach file"
 msgstr "Anexar arquivo"
 
+msgid "Tags"
+msgstr "Tags"
+
 msgid "Set alarm"
 msgstr "Definir alarme"
+
+#, fuzzy
+msgid "to-do"
+msgstr "Nova tarefa"
+
+#, fuzzy
+msgid "note"
+msgstr "Nova nota"
+
+#, fuzzy, javascript-format
+msgid "Creating new %s..."
+msgstr "Importando notas ..."
 
 msgid "Refresh"
 msgstr "Atualizar"
@@ -856,9 +901,6 @@ msgstr "Sincronizar"
 msgid "Notebooks"
 msgstr "Cadernos"
 
-msgid "Tags"
-msgstr "Tags"
-
 msgid "Searches"
 msgstr "Pesquisas"
 
@@ -885,6 +927,9 @@ msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dev (apenas para testes)"
+
+msgid "WebDAV (Beta)"
+msgstr ""
 
 #, javascript-format
 msgid "Unknown log level: %s"
@@ -1045,6 +1090,9 @@ msgstr ""
 msgid "When creating a new note:"
 msgstr "Cria uma nova nota."
 
+msgid "Show tray icon"
+msgstr ""
+
 msgid "Set application zoom percentage"
 msgstr ""
 
@@ -1094,6 +1142,15 @@ msgid "Nexcloud username"
 msgstr ""
 
 msgid "Nexcloud password"
+msgstr ""
+
+msgid "WebDAV URL"
+msgstr ""
+
+msgid "WebDAV username"
+msgstr ""
+
+msgid "WebDAV password"
 msgstr ""
 
 #, javascript-format
@@ -1207,6 +1264,12 @@ msgstr "O caderno não pôde ser salvo: %s"
 
 msgid "Edit notebook"
 msgstr "Editar caderno"
+
+msgid "Show all"
+msgstr ""
+
+msgid "Errors only"
+msgstr ""
 
 msgid "This note has been modified:"
 msgstr "Esta nota foi modificada:"

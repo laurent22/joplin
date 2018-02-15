@@ -274,20 +274,22 @@ class MainScreenComponent extends React.Component {
 		const messageBoxVisible = this.props.hasDisabledSyncItems || this.props.showMissingMasterKeyMessage;
 		const styles = this.styles(this.props.theme, style.width, style.height, messageBoxVisible);
 		const theme = themeStyle(this.props.theme);
+		const selectedFolderId = this.props.selectedFolderId;
+		const onConflictFolder = this.props.selectedFolderId === Folder.conflictFolderId();
 
 		const headerButtons = [];
 
 		headerButtons.push({
 			title: _('New note'),
 			iconName: 'fa-file-o',
-			enabled: !!folders.length,
+			enabled: !!folders.length && !onConflictFolder,
 			onClick: () => { this.doCommand({ name: 'newNote' }) },
 		});
 				
 		headerButtons.push({
 			title: _('New to-do'),
 			iconName: 'fa-check-square-o',
-			enabled: !!folders.length,
+			enabled: !!folders.length && !onConflictFolder,
 			onClick: () => { this.doCommand({ name: 'newTodo' }) },
 		});
 
@@ -384,6 +386,7 @@ const mapStateToProps = (state) => {
 		notes: state.notes,
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,
+		selectedFolderId: state.selectedFolderId,
 	};
 };
 

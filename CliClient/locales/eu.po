@@ -2,403 +2,441 @@
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: \n"
+"Language-Team: juan.abasolo@ehu.eus\n"
+"Language: eu\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Give focus to next pane"
-msgstr ""
+msgstr "Eraman fokua hurrengo panelera"
 
 msgid "Give focus to previous pane"
-msgstr ""
+msgstr "Eraman fokua aurreko panelera"
 
 msgid "Enter command line mode"
-msgstr ""
+msgstr "Sartu komando-lerro moduan "
 
 msgid "Exit command line mode"
-msgstr ""
+msgstr "Irten komando-lerro modutik"
 
 msgid "Edit the selected note"
-msgstr ""
+msgstr "Editatu aukeratutako oharra"
 
 msgid "Cancel the current command."
-msgstr ""
+msgstr "Utzi uneko komandoa"
 
 msgid "Exit the application."
-msgstr ""
+msgstr "Irten aplikaziotik"
 
 msgid "Delete the currently selected note or notebook."
-msgstr ""
+msgstr "Ezabatu aukeratutako oharra edo koadernoa"
 
 msgid "To delete a tag, untag the associated notes."
-msgstr ""
+msgstr "Etiketa ezabatzeko, kendu etiketa duten oharrei"
 
 msgid "Please select the note or notebook to be deleted first."
-msgstr ""
+msgstr "Aurretik aukeratu ezabatzeko oharra edo koadernoa, mesedez."
 
 msgid "Set a to-do as completed / not completed"
-msgstr ""
+msgstr "Zeregina eginda / ez-eginda markatu"
 
 msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-msgstr ""
+msgstr "[t]xandakatu [k]ontsola maximizatu/minimizatu/ezkutatu/ikusgai artean"
 
 msgid "Search"
-msgstr ""
+msgstr "Bilatu"
 
 msgid "[t]oggle note [m]etadata."
-msgstr ""
+msgstr "[t]xandakatu oharra eta [m]etadatuak"
 
 msgid "[M]ake a new [n]ote"
-msgstr ""
+msgstr "[S]ortu [o]har berria"
 
 msgid "[M]ake a new [t]odo"
-msgstr ""
+msgstr "[S]ortu [z]ereginen zerrenda"
 
 msgid "[M]ake a new note[b]ook"
-msgstr ""
+msgstr "[S]ortu koa[d]erno berria"
 
 msgid "Copy ([Y]ank) the [n]ote to a notebook."
-msgstr ""
+msgstr "Kopiatu ([E]raman) [o]harra koadernora"
 
 msgid "Move the note to a notebook."
-msgstr ""
+msgstr "Eraman oharra koadernora"
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr ""
+msgstr "Sakatu Ktrl+D edo idatzi \"exit\" aplikaziotik irteteko"
 
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
+"Elementu bat baino gehiago bat dator \"%s\" bilaketarekin. Mugatu zure "
+"bilaketa, mesedez."
 
 msgid "No notebook selected."
-msgstr ""
+msgstr "Ez dago koadernorik aukeratuta"
 
 msgid "No notebook has been specified."
-msgstr ""
+msgstr "Ez dago koadernorik aukeratuta."
 
 msgid "Y"
-msgstr ""
+msgstr "B"
 
 msgid "n"
-msgstr ""
+msgstr "e"
 
 msgid "N"
-msgstr ""
+msgstr "E"
 
 msgid "y"
-msgstr ""
+msgstr "b"
 
 msgid "Cancelling background synchronisation... Please wait."
-msgstr ""
+msgstr "Atzeko sinkronizazioa uzten... Mesedez itxaron."
 
 #, javascript-format
 msgid "No such command: %s"
-msgstr ""
+msgstr "Ez dago komandorik: %s"
 
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
-msgstr ""
+msgstr "\"%s\" komandoa  soilik eskuragarri GUI moduan"
 
 msgid "Cannot change encrypted item"
-msgstr ""
+msgstr "Ezinezkoa zifratutako itema aldatzea"
 
 #, javascript-format
 msgid "Missing required argument: %s"
-msgstr ""
+msgstr "Beharrezko argumentua faltan: %s"
 
 #, javascript-format
 msgid "%s: %s"
-msgstr ""
+msgstr "%s: %s"
 
 msgid "Your choice: "
-msgstr ""
+msgstr "Zure aukera:"
 
 #, javascript-format
 msgid "Invalid answer: %s"
-msgstr ""
+msgstr "Erantzun baliogabea: %s"
 
 msgid "Attaches the given file to the note."
-msgstr ""
+msgstr "Erantsi fitxategia notan"
 
 #, javascript-format
 msgid "Cannot find \"%s\"."
-msgstr ""
+msgstr "Ezin aurkitu \"%s\""
 
 msgid "Displays the given note."
-msgstr ""
+msgstr "Oharra erakutsi"
 
 msgid "Displays the complete information about note."
-msgstr ""
+msgstr "Erakutsi oharrari buruzko informazio guztia."
 
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
+"Konfigurazio balioa hartu edo ezartzen du. Baldin eta [balioa] ez bada "
+"ematen, [izena]ren balioa erakutsiko du. Ez bada ematen [izena] ez [balioa], "
+"oraingo konfigurazioaren zerrenda erakutsiko da."
 
 msgid "Also displays unset and hidden config variables."
-msgstr ""
+msgstr "Ezkutuko edo zehaztu gabeko konfigurazio aldagaiak ere erakusten ditu."
 
 #, javascript-format
 msgid "%s = %s (%s)"
-msgstr ""
+msgstr "%s = %s (%s)"
 
 #, javascript-format
 msgid "%s = %s"
-msgstr ""
+msgstr "%s = %s"
 
 msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
+"<oharra>rekin bat datozen oharrak [koaderno]ra kopiatzen ditu. Koadernorik "
+"ez bada zehazten, oharra oraingo koadernoan bikoiztuko da"
 
 msgid "Marks a to-do as done."
-msgstr ""
+msgstr "Markatu zeregina egindakotzat."
 
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
-msgstr ""
+msgstr "Oharra ez da zeregina: \"%s\""
 
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status` and `target-status`."
 msgstr ""
+"E2EEren konfigurazioa erabiltzen du. Komandoak dira `enable`, `disable`, "
+"`decrypt`, `status` eta `target-status`."
 
 msgid "Enter master password:"
-msgstr ""
+msgstr "Sartu pasahitz nagusia:"
 
 msgid "Operation cancelled"
-msgstr ""
+msgstr " Eragiketa utzita"
 
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
 msgstr ""
+"Deszifratzearen hasiera... Mesedez itxaron, prozesua luzea izan daiteke, "
+"zenbat dagoen prozesatzeko."
 
 msgid "Completed decryption."
-msgstr ""
+msgstr "Deszifratuta."
 
 msgid "Enabled"
-msgstr ""
+msgstr "Gaituta"
 
 msgid "Disabled"
-msgstr ""
+msgstr "Desgaituta"
 
 #, javascript-format
 msgid "Encryption is: %s"
-msgstr ""
+msgstr "Zifratzea da: %s"
 
 msgid "Edit note."
-msgstr ""
+msgstr "Oharra editatu."
 
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
+"Testu editorerik ez dago definituta. Egin hau erabilita, mesedez: `config "
+"editor <editorearen-helbidea>`"
 
 msgid "No active notebook."
-msgstr ""
+msgstr "Ez dago koadernorik aukeratuta."
 
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr ""
+msgstr "Ez dago oharrik: \"%s\". Sortu?"
 
 msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr ""
+msgstr "Oharra editatzearen hasiera. Itxi editorea prompt-era bueltatzeko."
 
 #, javascript-format
 msgid "Error opening note in editor: %s"
-msgstr ""
+msgstr "Errorea editorean oharra zabaltzean: %s"
 
 msgid "Note has been saved."
-msgstr ""
+msgstr "Oharra gorde da."
 
 msgid "Exits the application."
-msgstr ""
+msgstr "Irten aplikaziotik."
 
+#, fuzzy
 msgid ""
 "Exports Joplin data to the given directory. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
-msgstr ""
+msgstr "Esportatu Joplineko datuak esandako karpetara"
 
 msgid "Exports only the given note."
-msgstr ""
+msgstr "Esportatu emandako oharra soilik."
 
 msgid "Exports only the given notebook."
-msgstr ""
+msgstr "Esportatu emandako koadernoa soilik."
 
 msgid "Displays a geolocation URL for the note."
-msgstr ""
+msgstr "Erakutsi URL geolokalizazioa oharrean."
 
 msgid "Displays usage information."
-msgstr ""
+msgstr "Erakutsi erabilera datuak."
 
 msgid "Shortcuts are not available in CLI mode."
-msgstr ""
+msgstr "CLI moduan ez dago lasterbiderik erabilgarri."
 
 msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
+"Idatzi `help [command]` komandoari buruzko informazio gehiagorako; edo "
+"idatzi `help all` erabilerari buruzko informazio osoa lortzeko."
 
 msgid "The possible commands are:"
-msgstr ""
+msgstr "Litezkeen komandoak hauek dira:"
 
 msgid ""
 "In any command, a note or notebook can be refered to by title or ID, or "
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
+"Edozein komandotan, oharra edo koadernoari erreferentzia egin ahal zaio "
+"izenburuz edo ID erabilita, edo `$n` edo `$b` lasterbideak erabilita, "
+"aukeratuta dagoen oharra edo koadernoa erabiltzeko. `$c` ere erabil daiteke "
+"aukeratutako elementua erabiltzeko."
 
 msgid "To move from one pane to another, press Tab or Shift+Tab."
-msgstr ""
+msgstr "Panel batetik bestera mugitzeko, sakatu Tab edo Shifft + Tab."
 
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
 msgstr ""
+"Erabili geziak edo page up/down list eta testu guneen artean aldatzeko "
+"(kontsola hau ere kontuan izanda)."
 
 msgid "To maximise/minimise the console, press \"TC\"."
-msgstr ""
+msgstr "Kontsola maximizatu edo minimizatzeko, saka \"TC\" ."
 
 msgid "To enter command line mode, press \":\""
-msgstr ""
+msgstr "Komando lerroa sartzeko, idatzi \":\""
 
 msgid "To exit command line mode, press ESCAPE"
-msgstr ""
+msgstr "Komando lerrotik irteteko, sakatu ESC, mesedez"
 
 msgid ""
 "For the complete list of available keyboard shortcuts, type `help shortcuts`"
-msgstr ""
+msgstr "Laster bideen zerrenda osoa ikusteko, idatzi `help shortcuts`"
 
 msgid "Imports an Evernote notebook file (.enex file)."
-msgstr ""
+msgstr "Inportatu Evernote koaderno fitxategia (.enex fitxategia)."
 
 msgid "Do not ask for confirmation."
-msgstr ""
+msgstr "Ez galdetu berresteko."
 
 #, javascript-format
 msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
 msgstr ""
+" \"%s\" izeneko fitxategia \"%s\" izeneko koadernoan inportatzekotan zaude. "
+"Jarraitu nahi duzu?"
 
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into "
 "it. Continue?"
 msgstr ""
+" \"%s\" izeneko koaderno berria sortzekotan zaude eta bertan \"%s\" "
+"fitxategia bertara inportatzekotan zaude. Jarraitu nahi duzu?"
 
 #, javascript-format
 msgid "Found: %d."
-msgstr ""
+msgstr "Aurkitua: %d"
 
 #, javascript-format
 msgid "Created: %d."
-msgstr ""
+msgstr "Sortuta: %d."
 
 #, javascript-format
 msgid "Updated: %d."
-msgstr ""
+msgstr "Eguneratuta: %d."
 
 #, javascript-format
 msgid "Skipped: %d."
-msgstr ""
+msgstr "Saltatuta: %d."
 
 #, javascript-format
 msgid "Resources: %d."
-msgstr ""
+msgstr "Baliabideak: %d."
 
 #, javascript-format
 msgid "Tagged: %d."
-msgstr ""
+msgstr "Etiketatuta: %d."
 
 msgid "Importing notes..."
-msgstr ""
+msgstr "Oharrak inportatzen..."
 
 #, javascript-format
 msgid "The notes have been imported: %s"
-msgstr ""
+msgstr "Oharrak inportatu dira: %s"
 
 msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
 "of notebooks."
 msgstr ""
+"Oraingo koadernoko oharrak erakusten ditu. Erabili `ls /` koadernoen "
+"zerrenda erakusteko."
 
 msgid "Displays only the first top <num> notes."
-msgstr ""
+msgstr "Erakusten ditu soilik gorengo <num> oharrak."
 
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
+"Itemak antolatzen ditu <field> arabera (esate baterako, izenburua, "
+"eguneratze_unea, sortze_unea)."
 
 msgid "Reverses the sorting order."
-msgstr ""
+msgstr "Alderantziz antolatzen du."
 
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
+"Zehaztutako item motak baino ez du erakusten. Izan daiteke `n` oharretarako, "
+"`t` zereginetarako, edo `nt` ohar eta zereginetarako (esate batrako, `-tt` "
+"zereginak erakutsiko ditu soilik, `-ttd` berriz zereginak eta oharrak."
 
+#, fuzzy
 msgid "Either \"text\" or \"json\""
-msgstr ""
+msgstr " Bietarik bat \"text\" edo \"json\""
 
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
+"Zerrenda luzearen formatua erabili. Formatua hau da, ID, NOTE_COUNT "
+"(libururako), DATE, TODO_CHECKED (zereginetarako), TITLE"
 
 msgid "Please select a notebook first."
-msgstr ""
+msgstr "Aurretik aukeratu formatua, mesedez."
 
 msgid "Creates a new notebook."
-msgstr ""
+msgstr "Koaderno berria sortzen du."
 
 msgid "Creates a new note."
-msgstr ""
+msgstr "Ohar berria sortzen du."
 
 msgid "Notes can only be created within a notebook."
-msgstr ""
+msgstr "Oharrak soilik sor daitezke koaderno baten barruan."
 
 msgid "Creates a new to-do."
-msgstr ""
+msgstr "Zeregin berria sortu."
 
 msgid "Moves the notes matching <note> to [notebook]."
-msgstr ""
+msgstr "Oharrak eramaten ditu <note> bilatuta [notebook]era."
 
 msgid "Renames the given <item> (note or notebook) to <name>."
 msgstr ""
+"Ber izendatu emandako <item> (oharra edo koadernoa) <name> izen berriaz."
 
 msgid "Deletes the given notebook."
-msgstr ""
+msgstr "Ezabatu emandako koadernoak."
 
 msgid "Deletes the notebook without asking for confirmation."
-msgstr ""
+msgstr "Ezabatu koadernoak berrespenik gabe."
 
 msgid "Delete notebook? All notes within this notebook will also be deleted."
-msgstr ""
+msgstr "Koadernoa ezabatu? Dituen ohar guztiak ere ezabatuko dira."
 
 msgid "Deletes the notes matching <note-pattern>."
-msgstr ""
+msgstr "Ezabatu bat datozen oharrak: <note-patern> ."
 
 msgid "Deletes the notes without asking for confirmation."
-msgstr ""
+msgstr "Ezabatu oharrak berrespenik eskatu gabe."
 
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
-msgstr ""
+msgstr "%d oharrak bat datoz ereduarekin. Ezabatu nahi dituzu?"
 
 msgid "Delete note?"
-msgstr ""
+msgstr "Oharra ezabatu?"
 
 msgid "Searches for the given <pattern> in all the notes."
-msgstr ""
+msgstr "Emandako <pattern> bilatzen du ohar guztietan."
 
 #, javascript-format
 msgid ""
@@ -407,26 +445,33 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Emandako <note>ren <name> ezaugarrian emandako [value] balioa ezartzen du. "
+"Litezkeen ezaugarriak dira:\n"
+"\n"
+"%s"
 
 msgid "Displays summary about the notes and notebooks."
-msgstr ""
+msgstr "Oharren eta koadernoen laburpena erakusten du."
 
 msgid "Synchronises with remote storage."
-msgstr ""
+msgstr "Urruneko biltegiarekin sinkronizatzen du."
 
+#, fuzzy
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
+"Sinkronizatu emandako helburura (lehenetsia da sync.target-eko konfigurazio "
+"baliokoa)"
 
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
-msgstr ""
+msgstr "Autentifikazioa ez da egin osorik (ez du token-ik hartu)."
 
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
-msgstr ""
+msgstr "Ez da autentifikatu %s -rekin. Eman galdutako kredentzialak."
 
 msgid "Synchronisation is already in progress."
-msgstr ""
+msgstr "Sinkronizazio prozesua dagoeneko abian da."
 
 #, javascript-format
 msgid ""
@@ -434,29 +479,36 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
+"Giltzatzeko fitxategia dagoeneko eutsita dagoeneko. Baldin eta badakizu ez "
+"dena sinkronizaziorik egiten ari, ken dezakezu giltzatzeko fitxategia \"%s\"-"
+"n eta berrekin eragiketari."
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
-msgstr ""
+msgstr "Sinkronizazio helburua: %s (%s)"
 
 msgid "Cannot initialize synchroniser."
-msgstr ""
+msgstr "Ezin has daiteke sinkronizazio prozesua."
 
 msgid "Starting synchronisation..."
-msgstr ""
+msgstr "Sinkronizazioa hasten..."
 
 msgid "Cancelling... Please wait."
-msgstr ""
+msgstr "Bertan behera uzten... itxaron, mesedez."
 
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
 "`tag list` can be used to list all the tags."
 msgstr ""
+"<tag-command> izan daiteke \"add\", \"remove\" edo \"list\" [oharra]tik "
+"[etiketa] esleitu edo kentzeko, edo [etiketa]rekin elkartutako oharrak "
+"zerrendatzeko. Etiketa guztiak zerrendatzeko `tag list` komandoa erabil "
+"daiteke. "
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
-msgstr ""
+msgstr "Komando baliogabea: \"%s\""
 
 msgid ""
 "<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
@@ -464,50 +516,56 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
+"<todo-command> erabil daiteke \"txandakatzeko\" edo \"garbitzeko\". Erabili "
+"\"txandakatu\", emandako zeregina txandakatzeko bete ala ez-betea "
+"txandaketzeko (helburua ohar arrunta bada, zeregin bihurtuko da. Erabili "
+"\"garbitu\" zeregina ohar arrunt bilakatzeko."
 
 msgid "Marks a to-do as non-completed."
-msgstr ""
+msgstr "Markatu zeregina betegabe moduan."
 
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
+"Aldatu [koaderno]ra - hurrengo eragiketak koaderno horretan jazoko dira."
 
 msgid "Displays version information"
-msgstr ""
+msgstr "Erakutsi bertsioko informazioa"
 
 #, javascript-format
 msgid "%s %s (%s)"
-msgstr ""
+msgstr "%s %s (%s)"
 
 msgid "Enum"
-msgstr ""
+msgstr "Zenbakitu"
 
 #, javascript-format
 msgid "Type: %s."
-msgstr ""
+msgstr "Idatz: %s."
 
 #, javascript-format
 msgid "Possible values: %s."
-msgstr ""
+msgstr "Litezkeen balioak: %s."
 
 #, javascript-format
 msgid "Default: %s"
-msgstr ""
+msgstr "Lehenetsia: %s"
 
 msgid "Possible keys/values:"
-msgstr ""
+msgstr "Litezkeen balioak:"
 
 msgid "Fatal error:"
-msgstr ""
+msgstr "Aio! Agur! :_( "
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
-msgstr ""
+msgstr "Aplikazioak baimena hartu du - Orain fitxa hau zarratu dezakezu."
 
 msgid "The application has been successfully authorised."
-msgstr ""
+msgstr "Aplikazioak baimena hartu du."
 
+#, fuzzy
 msgid ""
 "Please open the following URL in your browser to authenticate the "
 "application. The application will create a directory in \"Apps/Joplin\" and "
@@ -515,9 +573,14 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
+"Zabaldu hurrengo URL zure nabigatzailean aplikazioari baimena emateko. "
+"Aplikazioak direktorioa sortuko du \"Apps/Joplin\"-en eta bertan soilik "
+"irakur-idatz fitxategiak. Ez du izango inolako sarrerarik direktorio "
+"horretatik kanpoko fitxategietara ezta bestelako datu pertsonaletara. Ez da "
+"sareratuko bestelako daturik ezein hirugarren parterekin."
 
 msgid "Search:"
-msgstr ""
+msgstr "Bilatu:"
 
 msgid ""
 "Welcome to Joplin!\n"
@@ -527,6 +590,12 @@ msgid ""
 "\n"
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
+"Ongi etorri Joplin-era!\n"
+"\n"
+"Idatz `:help shortcuts` lasterbideak ikusteko, edo soilik `:help`erabilerako "
+"informaziorako.\n"
+"\n"
+"Esate baterako, koadernoa sortzeko sakatu `mb`: oharra sortzeko sakatu `mn`"
 
 msgid ""
 "One or more items are currently encrypted and you may need to supply a "
@@ -534,93 +603,97 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
+"Item bat edo gehiago orain zifratuta daude eta baliteke zuk pasahitz nagusia "
+"ordezkatu behar izatea. Horixe egiteko, mesedez, idatz `e2ee decrypt`. "
+"Dagoeneko pasahitza ordezkatua baduzu, itemak deszifratzen ari izango dira "
+"atzeko planoan eta laster izango dira eskuragarri."
 
 msgid "File"
-msgstr ""
+msgstr "Fitxategia"
 
 msgid "New note"
-msgstr ""
+msgstr "Ohar berria"
 
 msgid "New to-do"
-msgstr ""
+msgstr "Zeregin berria"
 
 msgid "New notebook"
-msgstr ""
+msgstr "Koaderno berria"
 
 msgid "Import Evernote notes"
-msgstr ""
+msgstr "Inportatu Evernoteko oharrak"
 
 msgid "Evernote Export Files"
-msgstr ""
+msgstr "Evernotetik esportatutako fitxategiak"
 
 msgid "Quit"
-msgstr ""
+msgstr "Irten"
 
 msgid "Edit"
-msgstr ""
+msgstr "Editatu"
 
 msgid "Copy"
-msgstr ""
+msgstr "Kopiatu"
 
 msgid "Cut"
-msgstr ""
+msgstr "Moztu"
 
 msgid "Paste"
-msgstr ""
+msgstr "Itsatsi"
 
 msgid "Search in all the notes"
-msgstr ""
+msgstr "Bilatu ohar guztietan"
 
 msgid "Tools"
-msgstr ""
+msgstr "Tresnak"
 
 msgid "Synchronisation status"
-msgstr ""
+msgstr "Sinkronizazioaren egoera"
 
 msgid "Encryption options"
-msgstr ""
+msgstr "Zifratzeko aukerak"
 
 msgid "General Options"
-msgstr ""
+msgstr "Ezarpenak"
 
 msgid "Help"
-msgstr ""
+msgstr "Laguntza"
 
 msgid "Website and documentation"
-msgstr ""
+msgstr "Web orria eta dokumentazioa (en)"
 
 msgid "Check for updates..."
 msgstr ""
 
 msgid "About Joplin"
-msgstr ""
+msgstr "Joplin-i buruz"
 
 #, javascript-format
 msgid "%s %s (%s, %s)"
-msgstr ""
+msgstr "%s %s (%s, %s)"
 
-#, javascript-format
+#, fuzzy, javascript-format
 msgid "Open %s"
-msgstr ""
+msgstr "On %s: %s"
 
 msgid "Exit"
 msgstr ""
 
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 msgid "Cancel"
-msgstr ""
+msgstr "Utzi"
 
 msgid "Error"
 msgstr ""
 
-#, javascript-format
+#, fuzzy, javascript-format
 msgid ""
 "Release notes:\n"
 "\n"
 "%s"
-msgstr ""
+msgstr "Oharrak ezabatu?"
 
 msgid "An update is available, do you want to download it now?"
 msgstr ""
@@ -628,27 +701,32 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
+#, fuzzy
 msgid "No"
-msgstr ""
+msgstr "E"
 
 msgid "Current version is up-to-date."
 msgstr ""
 
+#, fuzzy
 msgid "Check synchronisation configuration"
-msgstr ""
+msgstr "Sinkronizazioa utzi"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
-msgstr ""
+msgstr "Oharrak eta ezarpenak hemen daude gordeta: %s"
 
 msgid "Save"
-msgstr ""
+msgstr "Gorde"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
+"Zifratua desgaitzeak esan nahi du zure ohar eta eranskin *guztiak* berriro "
+"deszifratuta sinkronizatuko eta bidaliko direla sinkronizazio helburura. "
+"Segitu nahi duzu?"
 
 msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
@@ -656,45 +734,54 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
+"Zifratua gaitzeak esan nahi du zure ohar eta eranskin *guztiak* zifratuta "
+"sinkronizatuko eta bidaliko direla sinkronizazio helburura. Ez galdu "
+"pasahitza, bera izango baita datuak deszifratzeko bide *bakarra*! Zifratua "
+"baimentzeko, mesedez, aurretik sartu zure pasahitza."
 
 msgid "Disable encryption"
-msgstr ""
+msgstr "Zifratzea desgaitu"
 
 msgid "Enable encryption"
-msgstr ""
+msgstr "Zifratua gaitu"
 
 msgid "Master Keys"
-msgstr ""
+msgstr "Pasahitz nagusia"
 
 msgid "Active"
-msgstr ""
+msgstr "Aktibo"
 
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 msgid "Source"
-msgstr ""
+msgstr "Iturburua"
 
 msgid "Created"
-msgstr ""
+msgstr "Sortua"
 
 msgid "Updated"
-msgstr ""
+msgstr "Eguneratua"
 
 msgid "Password"
-msgstr ""
+msgstr "Pasahitza"
 
 msgid "Password OK"
-msgstr ""
+msgstr "Pasahitza ondo"
 
+#, fuzzy
 msgid ""
 "Note: Only one master key is going to be used for encryption (the one marked "
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
+"Oharra: Pasahitz nagusi bakarra baino ez da erabiliko zifratzeko (\"aktibo\" "
+"hitzaz markatua). Edozein pasahitz erabil daiteke deszifratzeko, hasieran "
+"zein ohar edo zein koaderno egon den zifratuta."
 
+#, fuzzy
 msgid "Missing Master Keys"
-msgstr ""
+msgstr "Pasahitz nagusia"
 
 msgid ""
 "The master keys with these IDs are used to encrypt some of your items, "
@@ -703,181 +790,191 @@ msgid ""
 msgstr ""
 
 msgid "Status"
-msgstr ""
+msgstr "Egoera"
 
 msgid "Encryption is:"
-msgstr ""
+msgstr "Zifratua  da:"
 
 msgid "Back"
-msgstr ""
+msgstr "Atzera"
 
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr ""
+"\"%s\" koaderno berria sortuko da eta \"%s\" Fitxategia inportatuko da "
+"bertara"
 
 msgid "Please create a notebook first."
-msgstr ""
+msgstr "Aurretik sortu koadernoa, mesedez."
 
 msgid "Please create a notebook first"
-msgstr ""
+msgstr "Aurretik sortu koadernoa, mesedez"
 
 msgid "Notebook title:"
-msgstr ""
+msgstr "Koadernoaren izenburua: "
 
 msgid "Add or remove tags:"
-msgstr ""
+msgstr "Gehitu edo ezabatu etiketak:"
 
 msgid "Separate each tag by a comma."
-msgstr ""
+msgstr "Banatu etiketak koma erabiliaz."
 
 msgid "Rename notebook:"
-msgstr ""
+msgstr "Berrizendatu koadernoa:"
 
 msgid "Set alarm:"
-msgstr ""
+msgstr "Ezarri alarma:"
 
 msgid "Layout"
-msgstr ""
+msgstr "Diseinua"
 
 msgid "Some items cannot be synchronised."
-msgstr ""
+msgstr "Zenbait item ezin dira sinkronizatu."
 
 msgid "View them now"
-msgstr ""
+msgstr "Ikusi hori orain"
 
 msgid "Some items cannot be decrypted."
-msgstr ""
+msgstr "Zenbait item ezin dira deszifratu."
 
 msgid "Set the password"
-msgstr ""
+msgstr "Ezarri pasahitza"
 
 msgid "Add or remove tags"
-msgstr ""
+msgstr "Gehitu edo ezabatu etiketak"
 
 msgid "Switch between note and to-do type"
-msgstr ""
+msgstr "Aldatu oharra eta zeregin eren artean."
 
 msgid "Delete"
-msgstr ""
+msgstr "Ezabatu"
 
 msgid "Delete notes?"
-msgstr ""
+msgstr "Oharrak ezabatu?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr ""
+msgstr "Hemen ez dago oharrik. Sortu bat \"Ohar berria\" sakatuta."
 
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr ""
+msgstr "Momentuz ez dago koadernorik. Sortu bat \"Koaderno berria\" sakatuta."
 
 msgid "Open..."
 msgstr ""
 
+#, fuzzy
 msgid "Save as..."
-msgstr ""
+msgstr "Gorde aldaketak"
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
-msgstr ""
+msgstr "Esteka edo mezu ez dago onartua: %s"
 
 msgid "Attach file"
-msgstr ""
+msgstr "Erantsi fitxategia"
 
 msgid "Tags"
-msgstr ""
+msgstr "Etiketak"
 
 msgid "Set alarm"
-msgstr ""
+msgstr "Ezarri alarma"
 
+#, fuzzy
 msgid "to-do"
-msgstr ""
+msgstr "Zeregin berria"
 
+#, fuzzy
 msgid "note"
-msgstr ""
+msgstr "Ohar berria"
 
-#, javascript-format
+#, fuzzy, javascript-format
 msgid "Creating new %s..."
-msgstr ""
+msgstr "Oharrak inportatzen..."
 
+#, fuzzy
 msgid "Refresh"
-msgstr ""
+msgstr "Freskatu"
 
 msgid "Clear"
-msgstr ""
+msgstr "Garbitu"
 
 msgid "OneDrive Login"
-msgstr ""
+msgstr "Logeatu OneDriven"
 
 msgid "Import"
-msgstr ""
+msgstr "Inportatu"
 
 msgid "Options"
-msgstr ""
+msgstr "Aukerak"
 
 msgid "Synchronisation Status"
-msgstr ""
+msgstr "Sinkronizazioaren egoera"
 
 msgid "Encryption Options"
-msgstr ""
+msgstr "Zifratzeko aukerak"
 
 msgid "Remove this tag from all the notes?"
-msgstr ""
+msgstr "Kendu etiketa hori ohar guztietatik?"
 
 msgid "Remove this search from the sidebar?"
-msgstr ""
+msgstr "Kendu bilaketa hori ohar guztietatik?"
 
 msgid "Rename"
-msgstr ""
+msgstr "Berrizendatu"
 
 msgid "Synchronise"
-msgstr ""
+msgstr "Sinkronizatu"
 
 msgid "Notebooks"
-msgstr ""
+msgstr "Koadernoak"
 
 msgid "Searches"
-msgstr ""
+msgstr "Bilaketak"
 
+#, fuzzy
 msgid "Please select where the sync status should be exported to"
-msgstr ""
+msgstr "Aukeratu nora esportatu sinkronizazioaren egoera, mesedez"
 
 #, javascript-format
 msgid "Usage: %s"
-msgstr ""
+msgstr "Erabili: %s"
 
 #, javascript-format
 msgid "Unknown flag: %s"
-msgstr ""
+msgstr "Marka ezezaguna: %s"
 
 msgid "File system"
-msgstr ""
+msgstr "Fitxategi sistema"
 
 msgid "Nextcloud (Beta)"
-msgstr ""
+msgstr "NextCloud (Beta)"
 
 msgid "OneDrive"
-msgstr ""
+msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
-msgstr ""
+msgstr "OneDrive Dev (aprobetarako soilik)"
 
 msgid "WebDAV (Beta)"
 msgstr ""
 
 #, javascript-format
 msgid "Unknown log level: %s"
-msgstr ""
+msgstr "Egunkari maila ezezaguna: %s"
 
 #, javascript-format
 msgid "Unknown level ID: %s"
-msgstr ""
+msgstr "IDa maila ezezaguna: %s"
 
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
+"Tokena ezin eguneratu daiteke: egiaztatze-datuak desagertuta daude. Agian, "
+"berriro sinkronizatzeak arazoa konpon lezake."
 
+#, fuzzy
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -886,119 +983,127 @@ msgid ""
 "\n"
 "Please consider using a regular OneDrive account."
 msgstr ""
+"Ez du sinkronizatu OneDrive-rekin\n"
+"\n"
+"Akats hori gertatzen da OneDrive for Business erabilita; hori, zoritxarrez, "
+"ez dago onartuta."
 
 #, javascript-format
 msgid "Cannot access %s"
-msgstr ""
+msgstr "Ezin atzituta %s"
 
 #, javascript-format
 msgid "Created local items: %d."
-msgstr ""
+msgstr "Item lokalak sortuta: %d."
 
 #, javascript-format
 msgid "Updated local items: %d."
-msgstr ""
+msgstr "Item lokalak eguneratuta: %d."
 
 #, javascript-format
 msgid "Created remote items: %d."
-msgstr ""
+msgstr "Urruneko itemak sortuta: %d."
 
 #, javascript-format
 msgid "Updated remote items: %d."
-msgstr ""
+msgstr "Urruneko itemak eguneratuta: %d."
 
 #, javascript-format
 msgid "Deleted local items: %d."
-msgstr ""
+msgstr "Item lokala ezabatuta: %d."
 
 #, javascript-format
 msgid "Deleted remote items: %d."
-msgstr ""
+msgstr "Urruneko itemak ezabatuta: %d."
 
 #, javascript-format
 msgid "Fetched items: %d/%d."
-msgstr ""
+msgstr "Itemak eskuratuta: %d%d."
 
 #, javascript-format
 msgid "State: \"%s\"."
-msgstr ""
+msgstr "Egoera: \"%s\"."
 
 msgid "Cancelling..."
-msgstr ""
+msgstr "Bertan behera uzten..."
 
 #, javascript-format
 msgid "Completed: %s"
-msgstr ""
+msgstr "Osatuta: %s"
 
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
-msgstr ""
+msgstr "Sinkronizazioa hasita dago. Egoera: %s"
 
 msgid "Encrypted"
-msgstr ""
+msgstr "Zifratuta"
 
 msgid "Encrypted items cannot be modified"
-msgstr ""
+msgstr "Zifratutako itemak ezin aldatu daitezke"
 
 msgid "Conflicts"
-msgstr ""
+msgstr "Gatazkak"
 
 #, javascript-format
 msgid "A notebook with this title already exists: \"%s\""
-msgstr ""
+msgstr "Dagoeneko bada koaderno bat izen horrekin: \"%s\""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
+"Koadernoak ezin izendatu daitezke \"%s\", izen hori Joplinek gordeta dauka"
 
 msgid "Untitled"
-msgstr ""
+msgstr "Titulu gabekoa"
 
 msgid "This note does not have geolocation information."
-msgstr ""
+msgstr "Ohar honek ez du geokokapen informaziorik."
 
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
-msgstr ""
+msgstr "Ezin kopia daiteke oharra \"%s\" koadernora"
 
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
-msgstr ""
+msgstr "Ezin eraman daiteke oharra \"%s\" koadernora"
 
 msgid "Text editor"
-msgstr ""
+msgstr "Testu editorea"
 
 msgid ""
 "The editor that will be used to open a note. If none is provided it will try "
 "to auto-detect the default editor."
 msgstr ""
+"Editorea erabiliko da oharra zabaltzeko. Ez badago zehaztutakorik lehenetsia "
+"igartzen ahaleginduko da."
 
 msgid "Language"
-msgstr ""
+msgstr "Hizkuntza"
 
 msgid "Date format"
-msgstr ""
+msgstr "Data-formatua"
 
 msgid "Time format"
-msgstr ""
+msgstr "Ordu formatua"
 
 msgid "Theme"
-msgstr ""
+msgstr "Gaia"
 
 msgid "Light"
-msgstr ""
+msgstr "Argia"
 
 msgid "Dark"
-msgstr ""
+msgstr "Iluna"
 
 msgid "Show uncompleted todos on top of the lists"
-msgstr ""
+msgstr "Bete gabeko zereginak erakutsi zerrendaren goiko partean"
 
 msgid "Save geo-location with notes"
-msgstr ""
+msgstr "Gore geokokapena oharrekin"
 
+#, fuzzy
 msgid "When creating a new to-do:"
-msgstr ""
+msgstr "Zeregin berria sortu."
 
 msgid "Focus title"
 msgstr ""
@@ -1006,180 +1111,190 @@ msgstr ""
 msgid "Focus body"
 msgstr ""
 
+#, fuzzy
 msgid "When creating a new note:"
-msgstr ""
+msgstr "Ohar berria sortzen du."
 
 msgid "Show tray icon"
 msgstr ""
 
 msgid "Set application zoom percentage"
-msgstr ""
+msgstr "Ezarri aplikazioaren zoomaren ehunekoa"
 
 msgid "Automatically update the application"
-msgstr ""
+msgstr "Automatikoki eguneratu aplikazioa"
 
 msgid "Synchronisation interval"
-msgstr ""
+msgstr "Sinkronizazio tartea"
 
 #, javascript-format
 msgid "%d minutes"
-msgstr ""
+msgstr "%d minutuak"
 
 #, javascript-format
 msgid "%d hour"
-msgstr ""
+msgstr "% ordua"
 
 #, javascript-format
 msgid "%d hours"
-msgstr ""
+msgstr "% orduak"
 
 msgid "Show advanced options"
-msgstr ""
+msgstr "Erakutsi aukera aurreratuak"
 
 msgid "Synchronisation target"
-msgstr ""
+msgstr "Sinkronizazio helbudua"
 
 msgid ""
 "The target to synchonise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
+"Sinkronizazio helburua. Sinkronizazio aukera bakoitzak izan ditzake "
+"parametro gehigarriak, horrela izendatuta `sync.NUM.NAME` (dena beherago "
+"dokumentatuta)."
 
 msgid "Directory to synchronise with (absolute path)"
-msgstr ""
+msgstr "Sinkronizatzeko direktorioa (bide-izena osorik)"
 
 msgid ""
 "The path to synchronise with when file system synchronisation is enabled. "
 "See `sync.target`."
 msgstr ""
+"Sinkronizazio sistema gaituta dagoenerako bide-izena. Ikus `sync.target`."
 
 msgid "Nexcloud WebDAV URL"
-msgstr ""
+msgstr "Nexcloud WebDAV URL"
 
 msgid "Nexcloud username"
-msgstr ""
+msgstr "Nexcloud erabiltzaile-izena"
 
 msgid "Nexcloud password"
-msgstr ""
+msgstr "Nexcloud pasahitza"
 
+#, fuzzy
 msgid "WebDAV URL"
-msgstr ""
+msgstr "Nexcloud WebDAV URL"
 
+#, fuzzy
 msgid "WebDAV username"
-msgstr ""
+msgstr "Nexcloud erabiltzaile-izena"
 
+#, fuzzy
 msgid "WebDAV password"
-msgstr ""
+msgstr "Ezarri pasahitza"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr ""
+msgstr "Balio aukera baliogabea: \"%s\". Litezkeen balioak: %s."
 
 msgid "Items that cannot be synchronised"
-msgstr ""
+msgstr "Itemok ezin sinkronizatu"
 
 #, javascript-format
 msgid "%s (%s): %s"
-msgstr ""
+msgstr "%s (%s): %s"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
+"Itemok gailuan geratuko dira baina ez dira sinkronizatuko. Horiek aurkitzeko "
+"bilaketak egin titulu edo goiko parentesien arteko IDaren arabera."
 
 msgid "Sync status (synced items / total items)"
-msgstr ""
+msgstr "Sinkronizazio egoera (sinkronizatutako itemak/itemak guztira)"
 
 #, javascript-format
 msgid "%s: %d/%d"
-msgstr ""
+msgstr "%s: %d/%d"
 
 #, javascript-format
 msgid "Total: %d/%d"
-msgstr ""
+msgstr "Denera: %d/%d"
 
 #, javascript-format
 msgid "Conflicted: %d"
-msgstr ""
+msgstr "Gatazkatsua: %d"
 
 #, javascript-format
 msgid "To delete: %d"
-msgstr ""
+msgstr "Ezabatzeko: %d"
 
 msgid "Folders"
-msgstr ""
+msgstr "Karpetak"
 
 #, javascript-format
 msgid "%s: %d notes"
-msgstr ""
+msgstr "%s: %d oharrak"
 
 msgid "Coming alarms"
-msgstr ""
+msgstr "Hurrengo alarmak"
 
-#, javascript-format
+#, fuzzy, javascript-format
 msgid "On %s: %s"
-msgstr ""
+msgstr "On %s: %s"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr ""
+msgstr "Ez dago oharrik. Sortu bat (+) botoian klik eginaz."
 
 msgid "Delete these notes?"
-msgstr ""
+msgstr "Oharrok ezabatu?"
 
 msgid "Log"
-msgstr ""
+msgstr "Egunkaria"
 
 msgid "Export Debug Report"
-msgstr ""
+msgstr "Esportatu arazketa txostena"
 
 msgid "Encryption Config"
-msgstr ""
+msgstr "Zifratze Ezarpenak"
 
 msgid "Configuration"
-msgstr ""
+msgstr "Konfigurazioa"
 
 msgid "Move to notebook..."
-msgstr ""
+msgstr "Mugitu ... koadernora"
 
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr ""
+msgstr "Mugitu %d oharrak \"%s\" koadernora?"
 
 msgid "Press to set the decryption password."
-msgstr ""
+msgstr "Sakatu deszifratze pasahitza ezartzeko."
 
 msgid "Select date"
-msgstr ""
+msgstr "Data aukeratu"
 
 msgid "Confirm"
-msgstr ""
+msgstr "Baieztatu"
 
 msgid "Cancel synchronisation"
-msgstr ""
+msgstr "Sinkronizazioa utzi"
 
 #, javascript-format
 msgid "Master Key %s"
-msgstr ""
+msgstr "Pasahitz Nagusia %s"
 
 #, javascript-format
 msgid "Created: %s"
-msgstr ""
+msgstr "Sortuta: %s"
 
 msgid "Password:"
-msgstr ""
+msgstr "Pasahitza:"
 
 msgid "Password cannot be empty"
-msgstr ""
+msgstr "Pasahitza ezin utz daiteke hutsik"
 
 msgid "Enable"
-msgstr ""
+msgstr "Gaituta"
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"
-msgstr ""
+msgstr "Koadernoa ezin gorde daiteke: %s"
 
 msgid "Edit notebook"
-msgstr ""
+msgstr "Editatu koadernoa"
 
 msgid "Show all"
 msgstr ""
@@ -1188,52 +1303,54 @@ msgid "Errors only"
 msgstr ""
 
 msgid "This note has been modified:"
-msgstr ""
+msgstr "Ohar hau mugitua izan da:"
 
 msgid "Save changes"
-msgstr ""
+msgstr "Gorde aldaketak"
 
 msgid "Discard changes"
-msgstr ""
+msgstr "Bertan behera utzi aldaketak"
 
 #, javascript-format
 msgid "Unsupported image type: %s"
-msgstr ""
+msgstr "Irudi formatua ez onartua: %s"
 
 msgid "Attach photo"
-msgstr ""
+msgstr "Argazkia erantsi"
 
 msgid "Attach any file"
-msgstr ""
+msgstr "Erantsi fitxategiren bat"
 
 msgid "Convert to note"
-msgstr ""
+msgstr "Oharra bihurtu"
 
 msgid "Convert to todo"
-msgstr ""
+msgstr "Zeregina bihurtu"
 
 msgid "Hide metadata"
-msgstr ""
+msgstr "Ezkutatu metadatuak"
 
 msgid "Show metadata"
-msgstr ""
+msgstr "Erakutsi metadatuak"
 
 msgid "View on map"
-msgstr ""
+msgstr "Ikusi mapan"
 
 msgid "Delete notebook"
-msgstr ""
+msgstr "Ezabatu koadernoa"
 
 msgid "Login with OneDrive"
-msgstr ""
+msgstr "Login with OneDrive"
 
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
 msgstr ""
+"Sakatu (+) botoian ohar edo koaderno berria sortzeko. Klik alboko menuan "
+"dagoeneko badiren koadernoak."
 
 msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr ""
+msgstr "Oraindik ez duzu koadernorik. Sortu bat (+) botoian sakatuta."
 
 msgid "Welcome"
-msgstr ""
+msgstr "Ongi etorri!"

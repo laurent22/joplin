@@ -256,7 +256,7 @@ function countryDisplayName(canonicalName) {
 
 	let extraString;
 
-	if (countryCode != "") {
+	if (countryCode) {
 		if (languageCode == "zh" && countryCode == "CN") {
 			extraString = "简体"; // "Simplified" in "Simplified Chinese"
 		} else {
@@ -266,7 +266,7 @@ function countryDisplayName(canonicalName) {
 
 	if (languageCode == "zh" && (countryCode == "" || countryCode == "TW")) extraString = "繁體"; // "Traditional" in "Traditional Chinese"
 
-	if (extraString != "") output += " (" + extraString + ")";
+	if (extraString) output += " (" + extraString + ")";
 
 	return output;
 }
@@ -294,7 +294,11 @@ function _(s, ...args) {
 	let strings = localeStrings(currentLocale_);
 	let result = strings[s];
 	if (result === '' || result === undefined) result = s;
-	return sprintf(result, ...args);
+	try {
+		return sprintf(result, ...args);
+	} catch (error) {
+		return result + ' ' + args.join(', ') + ' (Translation error: ' + error.message + ')';
+	}
 }
 
-module.exports = { _, supportedLocales, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode };
+module.exports = { _, supportedLocales, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };

@@ -16,6 +16,7 @@ const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const { shim } = require('lib/shim.js');
 const eventManager = require('../eventManager');
+const fs = require('fs-extra');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -115,10 +116,14 @@ class NoteTextComponent extends React.Component {
 		eventManager.removeListener('todoToggle', this.onTodoToggle_);
 	}
 
-	async saveIfNeeded() {
+	async saveIfNeeded(saveIfNewNote = false) {
+		const forceSave = saveIfNewNote && (this.state.note && !this.state.note.id);
+
 		if (this.scheduleSaveTimeout_) clearTimeout(this.scheduleSaveTimeout_);
 		this.scheduleSaveTimeout_ = null;
-		if (!shared.isModified(this)) return;
+		if (!forceSave) {
+			if (!shared.isModified(this)) return;
+		}
 		await shared.saveNoteButton_press(this);
 	}
 
@@ -260,7 +265,7 @@ class NoteTextComponent extends React.Component {
 		shared.showMetadata_onPress(this);
 	}
 
-	webview_ipcMessage(event) {
+	async webview_ipcMessage(event) {
 		const msg = event.channel ? event.channel : '';
 		const args = event.args;
 		const arg0 = args && args.length >= 1 ? args[0] : null;
@@ -282,6 +287,32 @@ class NoteTextComponent extends React.Component {
 		} else if (msg === 'percentScroll') {
 			this.ignoreNextEditorScroll_ = true;
 			this.setEditorPercentScroll(arg0);
+		} else if (msg === 'contextMenu') {
+			const itemType = arg0 && arg0.type;
+
+			const menu = new Menu()
+
+			if (itemType === 'image') {
+				const resource = await Resource.load(arg0.resourceId);
+				const resourcePath = Resource.fullPath(resource);
+
+				menu.append(new MenuItem({label: _('Open...'), click: async () => {
+					bridge().openExternal(resourcePath);
+				}}));
+
+				menu.append(new MenuItem({label: _('Save as...'), click: async () => {
+					const filePath = bridge().showSaveDialog({
+						defaultPath: resource.filename ? resource.filename : resource.title,
+					});
+					if (!filePath) return;
+					await fs.copy(resourcePath, filePath);
+				}}));
+			} else {
+				reg.logger().error('Unhandled item type: ' + itemType);
+				return;
+			}
+
+			menu.popup(bridge().window());
 		} else if (msg.indexOf('joplin://') === 0) {
 			const resourceId = msg.substr('joplin://'.length);
 			Resource.load(resourceId).then((resource) => {
@@ -400,16 +431,13 @@ class NoteTextComponent extends React.Component {
 
 
 	async commandAttachFile() {
-		const noteId = this.props.noteId;
-		if (!noteId) return;
-
 		const filePaths = bridge().showOpenDialog({
 			properties: ['openFile', 'createDirectory', 'multiSelections'],
 		});
 		if (!filePaths || !filePaths.length) return;
 
-		await this.saveIfNeeded();
-		let note = await Note.load(noteId);
+		await this.saveIfNeeded(true);
+		let note = await Note.load(this.state.note.id);
 
 		for (let i = 0; i < filePaths.length; i++) {
 			const filePath = filePaths[i];
@@ -427,20 +455,29 @@ class NoteTextComponent extends React.Component {
 		}
 	}
 
-	commandSetAlarm() {
-		const noteId = this.props.noteId;
-		if (!noteId) return;
+	async commandSetAlarm() {
+		await this.saveIfNeeded(true);
 
 		this.props.dispatch({
 			type: 'WINDOW_COMMAND',
 			name: 'editAlarm',
-			noteId: noteId,
+			noteId: this.state.note.id,
+		});
+	}
+
+	async commandSetTags() {
+		await this.saveIfNeeded(true);
+
+		this.props.dispatch({
+			type: 'WINDOW_COMMAND',
+			name: 'setTags',
+			noteId: this.state.note.id,
 		});
 	}
 
 	itemContextMenu(event) {
-		const noteId = this.props.noteId;
-		if (!noteId) return;
+		const note = this.state.note;
+		if (!note) return;
 
 		const menu = new Menu()
 
@@ -448,9 +485,15 @@ class NoteTextComponent extends React.Component {
 			return this.commandAttachFile();
 		}}));
 
-		menu.append(new MenuItem({label: _('Set alarm'), click: async () => {
-			return this.commandSetAlarm();
+		menu.append(new MenuItem({label: _('Tags'), click: async () => {
+			return this.commandSetTags();
 		}}));
+
+		if (!!note.is_todo) {
+			menu.append(new MenuItem({label: _('Set alarm'), click: async () => {
+				return this.commandSetAlarm();
+			}}));
+		}
 
 		menu.popup(bridge().window());
 	}
@@ -461,6 +504,7 @@ class NoteTextComponent extends React.Component {
 		const body = note && note.body ? note.body : '';
 		const theme = themeStyle(this.props.theme);
 		const visiblePanes = this.props.visiblePanes || ['editor', 'viewer'];
+		const isTodo = note && !!note.is_todo;
 
 		const borderWidth = 1;
 
@@ -568,6 +612,12 @@ class NoteTextComponent extends React.Component {
 			onClick: () => { return this.commandAttachFile(); },
 		});
 
+		toolbarItems.push({
+			title: _('Tags'),
+			iconName: 'fa-tags',
+			onClick: () => { return this.commandSetTags(); },
+		});
+
 		if (note.is_todo) {
 			toolbarItems.push({
 				title: Note.needAlarm(note) ? time.formatMsToLocal(note.todo_due) : _('Set alarm'),
@@ -588,6 +638,7 @@ class NoteTextComponent extends React.Component {
 			style={titleEditorStyle}
 			value={note && note.title ? note.title : ''}
 			onChange={(event) => { this.title_changeText(event); }}
+			placeholder={ this.props.newNote ? _('Creating new %s...', isTodo ? _('to-do') : _('note')) : '' }
 		/>
 
 		const titleBarMenuButton = <IconButton style={{

@@ -623,6 +623,13 @@ msgstr "关于Joplin"
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
+#, fuzzy, javascript-format
+msgid "Open %s"
+msgstr "%s：%s"
+
+msgid "Exit"
+msgstr ""
+
 msgid "OK"
 msgstr "确认"
 
@@ -632,22 +639,29 @@ msgstr "取消"
 msgid "Error"
 msgstr ""
 
-msgid "An update is available, do you want to update now?"
+#, fuzzy, javascript-format
+msgid ""
+"Release notes:\n"
+"\n"
+"%s"
+msgstr "是否删除笔记？"
+
+msgid "An update is available, do you want to download it now?"
 msgstr ""
 
-#, javascript-format
-msgid "Could not download the update: %s"
+msgid "Yes"
 msgstr ""
+
+#, fuzzy
+msgid "No"
+msgstr "否"
 
 msgid "Current version is up-to-date."
 msgstr ""
 
-msgid "New version downloaded - application will quit now and update..."
-msgstr ""
-
-#, javascript-format
-msgid "Could not install the update: %s"
-msgstr ""
+#, fuzzy
+msgid "Check synchronisation configuration"
+msgstr "取消同步"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -705,6 +719,15 @@ msgid ""
 "Note: Only one master key is going to be used for encryption (the one marked "
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
+msgstr ""
+
+msgid "Missing Master Keys"
+msgstr ""
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
 msgstr ""
 
 msgid "Status"
@@ -778,6 +801,13 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "当前无笔记。点击(+)创建新笔记。"
 
+msgid "Open..."
+msgstr ""
+
+#, fuzzy
+msgid "Save as..."
+msgstr "保存更改"
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "不支持的链接或信息：%s"
@@ -785,8 +815,23 @@ msgstr "不支持的链接或信息：%s"
 msgid "Attach file"
 msgstr "附加文件"
 
+msgid "Tags"
+msgstr "标签"
+
 msgid "Set alarm"
 msgstr "设置提醒"
+
+#, fuzzy
+msgid "to-do"
+msgstr "新待办事项"
+
+#, fuzzy
+msgid "note"
+msgstr "新笔记"
+
+#, fuzzy, javascript-format
+msgid "Creating new %s..."
+msgstr "正在导入笔记..."
 
 msgid "Refresh"
 msgstr "刷新"
@@ -824,9 +869,6 @@ msgstr "同步"
 msgid "Notebooks"
 msgstr "笔记本"
 
-msgid "Tags"
-msgstr "标签"
-
 msgid "Searches"
 msgstr "搜索历史"
 
@@ -853,6 +895,9 @@ msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive开发员（仅测试用）"
+
+msgid "WebDAV (Beta)"
+msgstr ""
 
 #, javascript-format
 msgid "Unknown log level: %s"
@@ -1007,6 +1052,9 @@ msgstr ""
 msgid "When creating a new note:"
 msgstr "创建新笔记。"
 
+msgid "Show tray icon"
+msgstr ""
+
 msgid "Set application zoom percentage"
 msgstr ""
 
@@ -1054,6 +1102,15 @@ msgid "Nexcloud username"
 msgstr ""
 
 msgid "Nexcloud password"
+msgstr ""
+
+msgid "WebDAV URL"
+msgstr ""
+
+msgid "WebDAV username"
+msgstr ""
+
+msgid "WebDAV password"
 msgstr ""
 
 #, javascript-format
@@ -1167,6 +1224,12 @@ msgstr "此笔记本无法保存：%s"
 
 msgid "Edit notebook"
 msgstr "编辑笔记本"
+
+msgid "Show all"
+msgstr ""
+
+msgid "Errors only"
+msgstr ""
 
 msgid "This note has been modified:"
 msgstr "此笔记已被修改："

@@ -7,14 +7,22 @@ const { Header } = require('./Header.min.js');
 const { themeStyle } = require('../theme.js');
 const pathUtils = require('lib/path-utils.js');
 const { _ } = require('lib/locale.js');
+const SyncTargetRegistry = require('lib/SyncTargetRegistry');
+const shared = require('lib/components/shared/config-shared.js');
 
 class ConfigScreenComponent extends React.Component {
 
 	constructor() {
 		super();
 
-		this.state = {
-			settings: {},
+		shared.init(this);
+
+		this.checkSyncConfig_ = async () => {
+			await shared.checkSyncConfig(this, this.state.settings);
+		}
+
+		this.rowStyle_ = {
+			marginBottom: 10,
 		};
 	}
 
@@ -44,9 +52,7 @@ class ConfigScreenComponent extends React.Component {
 
 		let output = null;
 
-		const rowStyle = {
-			marginBottom: 10,
-		};
+		const rowStyle = this.rowStyle_;
 
 		const labelStyle = Object.assign({}, theme.textStyle, {
 			display: 'inline-block',
@@ -58,9 +64,7 @@ class ConfigScreenComponent extends React.Component {
 		};
 
 		const updateSettingValue = (key, value) => {
-			const settings = Object.assign({}, this.state.settings);
-			settings[key] = value;
-			this.setState({ settings: settings });
+			return shared.updateSettingValue(this, key, value);
 		}
 
 		// Component key needs to be key+value otherwise it doesn't update when the settings change.
@@ -104,12 +108,13 @@ class ConfigScreenComponent extends React.Component {
 				updateSettingValue(key, event.target.value);
 			}
 
+			const inputStyle = Object.assign({}, controlStyle, { width: '50%', minWidth: '20em' });
 			const inputType = md.secure === true ? 'password' : 'text';
 
 			return (
 				<div key={key} style={rowStyle}>
 					<div style={labelStyle}><label>{md.label()}</label></div>
-					<input type={inputType} style={controlStyle} value={this.state.settings[key]} onChange={(event) => {onTextChange(event)}} />
+					<input type={inputType} style={inputStyle} value={this.state.settings[key]} onChange={(event) => {onTextChange(event)}} />
 				</div>
 			);
 		} else if (md.type === Setting.TYPE_INT) {
@@ -131,10 +136,7 @@ class ConfigScreenComponent extends React.Component {
 	}
 
 	onSaveClick() {
-		for (let n in this.state.settings) {
-			if (!this.state.settings.hasOwnProperty(n)) continue;
-			Setting.setValue(n, this.state.settings[n]);
-		}
+		shared.saveSettings(this);
 		this.props.dispatch({ type: 'NAV_BACK' });
 	}
 
@@ -144,7 +146,7 @@ class ConfigScreenComponent extends React.Component {
 
 	render() {
 		const theme = themeStyle(this.props.theme);
-		const style = this.props.style;
+		const style = Object.assign({}, this.props.style, { overflow: 'auto' });
 		const settings = this.state.settings;
 
 		const headerStyle = {
@@ -156,23 +158,28 @@ class ConfigScreenComponent extends React.Component {
 		};
 
 		const buttonStyle = {
-			display: this.state.settings === this.props.settings ? 'none' : 'inline-block',
+			display: this.state.changedSettingKeys.length ? 'inline-block' : 'none',
 			marginRight: 10,
 		}
 
-		let settingComps = [];
-		let keys = Setting.keys(true, 'desktop');
-		for (let i = 0; i < keys.length; i++) {
-			const key = keys[i];
-			if (!(key in settings)) {
-				console.warn('Missing setting: ' + key);
-				continue;
-			}
-			const md = Setting.settingMetadata(key);
-			if (md.show && !md.show(settings)) continue;
-			const comp = this.settingToComponent(key, settings[key]);
-			if (!comp) continue;
-			settingComps.push(comp);
+		const settingComps = shared.settingsToComponents(this, 'desktop', settings);
+
+		const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
+
+		if (syncTargetMd.supportsConfigCheck) {
+			const messages = shared.checkSyncConfigMessages(this);
+			const statusStyle = Object.assign({}, theme.textStyle, { marginTop: 10 });
+			const statusComp = !messages.length ? null : (
+				<div style={statusStyle}>
+					{messages[0]}
+					{messages.length >= 1 ? (<p>{messages[1]}</p>) : null}
+				</div>);
+
+			settingComps.push(
+				<div key="check_sync_config_button" style={this.rowStyle_}>
+					<button disabled={this.state.checkSyncConfigResult === 'checking'} onClick={this.checkSyncConfig_}>{_('Check synchronisation configuration')}</button>
+					{ statusComp }
+				</div>);
 		}
 
 		return (

@@ -372,7 +372,7 @@ class ScreenHeaderComponent extends Component {
 					if (mustSelect) output.push({ label: _('Move to notebook...'), value: null });
 					for (let i = 0; i < this.props.folders.length; i++) {
 						let f = this.props.folders[i];
-						output.push({ label: f.title, value: f.id });
+						output.push({ label: Folder.displayTitle(f), value: f.id });
 					}
 					output.sort((a, b) => {
 						if (a.value === null) return -1;

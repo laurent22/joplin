@@ -450,7 +450,7 @@ class Synchronizer {
 					if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
 
 					const loadContent = async () => {
-						content = await this.api().get(path);
+						let content = await this.api().get(path);
 						if (!content) return null;
 						return await BaseItem.unserialize(content);
 					}

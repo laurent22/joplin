@@ -19,7 +19,7 @@ process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 35000; // The first test is slow because the database needs to be built
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000; // The first test is slow because the database needs to be built
 
 async function allItems() {
 	let folders = await Folder.all();
@@ -60,6 +60,7 @@ async function allSyncTargetItemsEncrypted() {
 }
 
 async function localItemsSameAsRemote(locals, expect) {
+	let error = null;
 	try {
 		let files = await fileApi().list();
 		files = files.items;
@@ -81,12 +82,15 @@ async function localItemsSameAsRemote(locals, expect) {
 			// }
 
 			let remoteContent = await fileApi().get(path);
+
 			remoteContent = dbItem.type_ == BaseModel.TYPE_NOTE ? await Note.unserialize(remoteContent) : await Folder.unserialize(remoteContent);
 			expect(remoteContent.title).toBe(dbItem.title);
 		}
-	} catch (error) {
-		console.error(error);
+	} catch (e) {
+		error = e;
 	}
+
+	expect(error).toBe(null);
 }
 
 let insideBeforeEach = false;
@@ -983,6 +987,17 @@ describe('Synchronizer', function() {
 
 		let resource1 = (await Resource.all())[0];
 		expect(resource1.encryption_blob_encrypted).toBe(0);
+	}));
+
+	it('should create remote items with UTF-8 content', asyncTest(async () => {
+		let folder = await Folder.save({ title: "Fahrräder" });
+		await Note.save({ title: "Fahrräder", body: "Fahrräder", parent_id: folder.id });
+
+		let all = await allItems();
+
+		await synchronizer().start();
+
+		await localItemsSameAsRemote(all, expect);
 	}));
 
 });

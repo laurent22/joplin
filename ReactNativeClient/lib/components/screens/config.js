@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { TouchableOpacity, Linking, View, Switch, Slider, StyleSheet, Text, Button, ScrollView, TextInput } = require('react-native');
+const { Platform, TouchableOpacity, Linking, View, Switch, Slider, StyleSheet, Text, Button, ScrollView, TextInput } = require('react-native');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { _, setLocale } = require('lib/locale.js');
@@ -7,6 +7,8 @@ const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { Dropdown } = require('lib/components/Dropdown.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const Setting = require('lib/models/Setting.js');
+const shared = require('lib/components/shared/config-shared.js');
+const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 
 class ConfigScreenComponent extends BaseScreenComponent {
 	
@@ -18,17 +20,14 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		super();
 		this.styles_ = {};
 
-		this.state = {
-			settings: {},
-			settingsChanged: false,
-		};
+		shared.init(this);
+
+		this.checkSyncConfig_ = async () => {
+			await shared.checkSyncConfig(this, this.state.settings);
+		}
 
 		this.saveButton_press = () => {
-			for (let n in this.state.settings) {
-				if (!this.state.settings.hasOwnProperty(n)) continue;
-				Setting.setValue(n, this.state.settings[n]);
-			}
-			this.setState({settingsChanged:false});
+			return shared.saveSettings(this);
 		};
 	}
 
@@ -66,10 +65,20 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				fontSize: theme.fontSize,
 				flex: 1,
 			},
+			descriptionText: {
+				color: theme.color,
+				fontSize: theme.fontSize,
+				flex: 1,
+			},
 			settingControl: {
 				color: theme.color,
 				flex: 1,
 			},
+		}
+
+		if (Platform.OS === 'ios') {
+			styles.settingControl.borderBottomWidth = 1;
+			styles.settingControl.borderBottomColor = theme.dividerColor;
 		}
 
 		styles.switchSettingText = Object.assign({}, styles.settingText);
@@ -100,14 +109,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		let output = null;
 
 		const updateSettingValue = (key, value) => {
-			const settings = Object.assign({}, this.state.settings);
-			settings[key] = value;
-			this.setState({
-				settings: settings,
-				settingsChanged: true,
-			});
-
-			console.info(settings['sync.5.path']);
+			return shared.updateSettingValue(this, key, value);
 		}
 
 		const md = Setting.settingMetadata(key);
@@ -163,7 +165,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			return (
 				<View key={key} style={this.styles().settingContainer}>
 					<Text key="label" style={this.styles().settingText}>{md.label()}</Text>
-					<TextInput key="control" style={this.styles().settingControl} value={value} onChangeText={(value) => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
+					<TextInput autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={(value) => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
 				</View>
 			);
 		} else {
@@ -176,19 +178,27 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	render() {
 		const settings = this.state.settings;
 
-		const keys = Setting.keys(true, 'mobile');
-		let settingComps = [];
-		for (let i = 0; i < keys.length; i++) {
-			const key = keys[i];
-			//if (key == 'sync.target' && !settings.showAdvancedOptions) continue;
-			if (!Setting.isPublic(key)) continue;
+		const settingComps = shared.settingsToComponents(this, 'mobile', settings);
 
-			const md = Setting.settingMetadata(key);
-			if (md.show && !md.show(settings)) continue;
+		const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
 
-			const comp = this.settingToComponent(key, settings[key]);
-			if (!comp) continue;
-			settingComps.push(comp);
+		if (syncTargetMd.supportsConfigCheck) {
+			const messages = shared.checkSyncConfigMessages(this);
+			const statusComp = !messages.length ? null : (
+				<View style={{flex:1, marginTop: 10}}>
+					<Text style={this.styles().descriptionText}>{messages[0]}</Text>
+					{messages.length >= 1 ? (<View style={{marginTop:10}}><Text style={this.styles().descriptionText}>{messages[1]}</Text></View>) : null}
+				</View>);
+
+			settingComps.push(
+				<View key="check_sync_config_button" style={this.styles().settingContainer}>
+					<View style={{flex:1, flexDirection: 'column'}}>
+						<View style={{flex:1}}>
+							<Button title={_('Check synchronisation configuration')} onPress={this.checkSyncConfig_}/>
+						</View>
+						{ statusComp }
+					</View>
+				</View>);
 		}
 		
 		settingComps.push(
@@ -212,7 +222,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				<ScreenHeader
 					title={_('Configuration')}
 					showSaveButton={true}
-					saveButtonDisabled={!this.state.settingsChanged}
+					saveButtonDisabled={!this.state.changedSettingKeys.length}
 					onSaveButtonPress={this.saveButton_press}
 				/>
 				<ScrollView >

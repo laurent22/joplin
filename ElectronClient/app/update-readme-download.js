@@ -79,6 +79,10 @@ async function main(argv) {
 	const macOsUrl = downloadUrl(release, 'macos');
 	const linuxUrl = downloadUrl(release, 'linux');
 
+	console.info('Windows: ', winUrl);
+	console.info('macOS: ', macOsUrl);
+	console.info('Linux: ', linuxUrl);
+
 	let content = readmeContent();
 
 	if (winUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/.*?\.exe)/, winUrl);

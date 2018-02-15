@@ -6,7 +6,7 @@ Notes exported from Evernote via .enex files [can be imported](#importing-notes-
 
 The notes can be [synchronised](#synchronisation) with various targets including [Nextcloud](https://nextcloud.com/), the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
 
-Joplin is still under development but is out of Beta and should be suitable for every day use. The UI of the terminal client is built on top of the great [terminal-kit](https://github.com/cronvel/terminal-kit) library, the desktop client using [Electron](https://electronjs.org/), and the Android client front end is done using [React Native](https://facebook.github.io/react-native/).
+The UI of the terminal client is built on top of the great [terminal-kit](https://github.com/cronvel/terminal-kit) library, the desktop client using [Electron](https://electronjs.org/), and the Android client front end is done using [React Native](https://facebook.github.io/react-native/).
 
 <div class="top-screenshot"><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/AllClients.jpg" style="max-width: 100%; max-height: 35em;"></div>
 
@@ -18,15 +18,15 @@ Three types of applications are available: for the **desktop** (Windows, macOS a
 
 Operating System | Download
 -----------------|--------
-Windows          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.54/Joplin-Setup-0.10.54.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a>
-macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.54/Joplin-0.10.54.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a>
-Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v0.10.54/Joplin-0.10.54-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a>
+Windows          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.62/Joplin-Setup-1.0.62.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a>
+macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.62/Joplin-1.0.62.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a>
+Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.62/Joplin-1.0.62-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a>
 
 ## Mobile applications
 
 Operating System | Download | Alt. Download
 -----------------|----------|----------------
-Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeAndroid.png'/></a> | or [Download APK File](https://github.com/laurent22/joplin/releases/download/android-v0.10.81/joplin-v0.10.81.apk)
+Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeAndroid.png'/></a> | or [Download APK File](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.97/joplin-v1.0.97.apk)
 iOS              | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeIOS.png'/></a> | -
 
 ## Terminal application
@@ -51,13 +51,15 @@ For usage information, please refer to the full [Joplin Terminal Application Doc
 # Features 
 
 - Desktop, mobile and terminal applications.
+- Import Enex files (Evernote export format)
 - Support notes, to-dos, tags and notebooks.
+- Support for alarms (notifications) in mobile and desktop applications.
 - Offline first, so the entire data is always available on the device even without an internet connection.
-- Ability to synchronise with multiple targets, including NextCloud, the file system and OneDrive (Dropbox is planned).
+- Synchronisation with various services, including NextCloud, WebDAV and OneDrive. Dropbox is planned.
+- End To End Encryption (E2EE)
 - Synchronises to a plain text format, which can be easily manipulated, backed up, or exported to a different format.
-- Markdown notes, which are rendered with images and formatting in the desktop and mobile applications.
-- Tag support
-- File attachment support (images are displayed, and other files are linked and can be opened in the relevant application).
+- Markdown notes, which are rendered with images and formatting in the desktop and mobile applications. Support for extra features such as math notation and checkboxes.
+- File attachment support - images are displayed, and other files are linked and can be opened in the relevant application.
 - Search functionality.
 - Geo-location support.
 - Supports multiple languages
@@ -91,8 +93,6 @@ Currently, synchronisation is possible with Nextcloud and OneDrive (by default) 
 
 ## Nextcloud synchronisation
 
-**Important: This is a beta feature. It has been extensively tested and is already in use by some users, but it is possible that some bugs remain. If you wish to you use it, it is recommended that you keep a backup of your data. The simplest way is to regularly backup the profile directory of the desktop or terminal application.**
-
 On the **desktop application** or **mobile application**, go to the config screen and select Nextcloud as the synchronisation target. Then input [the WebDAV URL](https://docs.nextcloud.com/server/9/user_manual/files/access_webdav.html), this is normally `https://example.com/nextcloud/remote.php/dav/files/USERNAME/Joplin` (make sure to create the "Joplin" directory in Nextcloud and to replace USERNAME by your Nextcloud username), and set the username and password.
 
 On the **terminal application**, you will need to set the `sync.target` config variable and all the `sync.5.path`, `sync.5.username` and `sync.5.password` config variables to, respectively the Nextcloud WebDAV URL, your username and your password. This can be done from the command line mode using:
@@ -103,6 +103,16 @@ On the **terminal application**, you will need to set the `sync.target` config v
 	:config sync.target 5
 
 If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.
+
+## WebDAV synchronisation
+
+Select the "WebDAV" synchronisation target and follow the same instructions as for Nextcloud above.
+
+Known compatible services that use WebDAV:
+
+- [Box.com](https://www.box.com/)
+- [DriveHQ](https://www.drivehq.com)
+- [Zimbra](https://www.zimbra.com/)
 
 ## OneDrive synchronisation
 
@@ -138,28 +148,76 @@ On mobile, the alarms will be displayed using the built-in notification system.
 
 If for any reason the notifications do not work, please [open an issue](https://github.com/laurent22/joplin/issues).
 
+# Markdown
+
+Joplin uses and renders [Github-flavoured Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) with a few variations and additions. In particular:
+
+## Math notation
+
+Math expressions can be added using the [Katex notation](https://khan.github.io/KaTeX/). To add an inline equation, wrap the expression in `$EXPRESSION$`, eg. `$\sqrt{3x-1}+(1+x)^2$`. To create an expression block, wrap it as follow:
+
+    $$
+    EXPRESSION
+    $$
+
+For example:
+
+    $$
+    f(x) = \int_{-\infty}^\infty
+        \hat f(\xi)\,e^{2 \pi i \xi x}
+        \,d\xi
+    $$
+
+Here is an example with the Markdown and rendered result side by side:
+
+<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/Katex.png" style="max-width: 100%; max-height: 35em;">
+
+## Checkboxes
+
+Checkboxes can be added like so:
+
+    -[ ] Milk
+    -[ ] Rice
+    -[ ] Eggs
+
+The checkboxes can then be ticked in the mobile and desktop applications.
+
+# Contributing
+
+Please see the guide for information on how to contribute to the development of Joplin: https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md
+
 # Localisation
 
-Joplin is currently available in English, French, Spanish, German, Portuguese, Chinese, Japanese, Russian, Croatian, Dutch and Italian. If you would like to contribute a translation, it is quite straightforward, please follow these steps:
+Joplin is currently available in the languages below. If you would like to contribute a **new translation**, it is quite straightforward, please follow these steps:
 
 - [Download Poedit](https://poedit.net/), the translation editor, and install it.
 - [Download the file to be translated](https://raw.githubusercontent.com/laurent22/joplin/master/CliClient/locales/joplin.pot).
 - In Poedit, open this .pot file, go into the Catalog menu and click Configuration. Change "Country" and "Language" to your own country and language.
 - From then you can translate the file. Once it is done, please either [open a pull request](https://github.com/laurent22/joplin/pulls) or send the file to [this address](https://raw.githubusercontent.com/laurent22/joplin/master/Assets/Adresse.png).
 
+To **update a translation**, follow the same steps as above but instead of getting the .pot file, get the .po file for your language from there: https://github.com/laurent22/joplin/tree/master/CliClient/locales
+
 This translation will apply to the three applications - desktop, mobile and terminal.
 
-# Contributing
+Current translations:
 
-Please see the guide for information on how to contribute to the development of Joplin: https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md
-
-# Coming features
-
-- Mobile: manage tags
-- Windows: Tray icon
-- Desktop apps: Tag auto-complete
-- Desktop apps: Dark theme
-- Linux: Enable auto-update for desktop app
+<!-- LOCALE-TABLE-AUTO-GENERATED -->
+&nbsp;  |  Language  |  Code  |  Last translator  |  Percent done
+---|---|---|---|---
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/es/basque_country.png)  |  Basque  |  eu  |  juan.abasolo@ehu.eus  |  89%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/hr.png)  |  Croatian  |  hr_HR  |  Hrvoje Mandić <trbuhom@net.hr>  |  72%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/de.png)  |  Deutsch  |  de_DE  |  Tobias Strobel <git@strobeltobias.de>  |  91%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/gb.png)  |  English  |  en_GB  |    |  100%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/es.png)  |  Español  |  es_ES  |  Lucas Vieites  |  79%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/cr.png)  |  Español (Costa Rica)  |  es_CR  |    |  68%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/fr.png)  |  Français  |  fr_FR  |  Laurent Cozic  |  100%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/it.png)  |  Italiano  |  it_IT  |    |  75%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/be.png)  |  Nederlands  |  nl_BE  |    |  89%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/br.png)  |  Português (Brasil)  |  pt_BR  |    |  74%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/ru.png)  |  Русский  |  ru_RU  |  Artyom Karlov <artyom.karlov@gmail.com>  |  94%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/cn.png)  |  中文 (简体)  |  zh_CN  |  RCJacH <RCJacH@outlook.com>  |  75%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/jp.png)  |  日本語  |  ja_JP  |    |  73%
+<!-- LOCALE-TABLE-AUTO-GENERATED -->
 
 # Known bugs
 

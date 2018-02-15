@@ -39,7 +39,7 @@ class FileApiDriverMemory {
 			path: path,
 			isDir: isDir,
 			updated_time: now, // In milliseconds!!
-			created_time: now, // In milliseconds!!
+			// created_time: now, // In milliseconds!!
 			content: '',
 		};
 	}

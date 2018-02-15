@@ -19,7 +19,7 @@
     ],
     "owner": "Laurent Cozic"
   },
-  "version": "0.10.92",
+  "version": "1.0.95",
   "bin": {
     "joplin": "./main.js"
   },
@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "app-module-path": "^2.2.0",
+    "async-mutex": "^0.1.3",
     "base-64": "^0.1.0",
     "compare-version": "^0.1.2",
     "follow-redirects": "^1.2.4",

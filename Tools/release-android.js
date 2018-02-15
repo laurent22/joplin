@@ -1,5 +1,5 @@
 const fs = require('fs-extra');
-const { execCommand } = require('./tool-utils.js');
+const { execCommand, githubRelease, githubOauthToken } = require('./tool-utils.js');
 const path = require('path');
 const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
@@ -46,20 +46,14 @@ function gradleVersionName(content) {
 	return matches[1];
 }
 
-async function githubOauthToken() {
-	const r = await fs.readFile(rootDir + '/Tools/github_oauth_token.txt');
-	return r.toString();
-}
-
 async function main() {
-	const oauthToken = await githubOauthToken();
-
+	const projectName = 'joplin-android';
 	const newContent = updateGradleConfig();
 	const version = gradleVersionName(newContent);
 	const tagName = 'android-v' + version;
 	const apkFilename = 'joplin-v' + version + '.apk';
 	const apkFilePath = releaseDir + '/' + apkFilename;
-	const downloadUrl = 'https://github.com/laurent22/joplin/releases/download/' + tagName + '/' + apkFilename;
+	const downloadUrl = 'https://github.com/laurent22/' + projectName + '/releases/download/' + tagName + '/' + apkFilename;
 
 	process.chdir(rootDir);
 
@@ -77,9 +71,10 @@ async function main() {
 	console.info('Updating Readme URL...');
 
 	let readmeContent = await fs.readFile('README.md', 'utf8');
-	readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/.*?\.apk)/, downloadUrl);
+	readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/.*?\.apk)/, downloadUrl);
 	await fs.writeFile('README.md', readmeContent);
 
+	console.info(await execCommand('git pull'));
 	console.info(await execCommand('git add -A'));
 	console.info(await execCommand('git commit -m "Android release v' + version + '"'));
 	console.info(await execCommand('git tag ' + tagName));
@@ -88,27 +83,13 @@ async function main() {
 
 	console.info('Creating GitHub release ' + tagName + '...');
 
-	const response = await fetch('https://api.github.com/repos/laurent22/joplin/releases', {
-		method: 'POST', 
-		body: JSON.stringify({
-			tag_name: tagName,
-			name: tagName,
-			draft: false,
-		}),
-		headers: {
-			'Content-Type': 'application/json',
-			'Authorization': 'token ' + oauthToken,
-		},
-	});
-
-	const responseText = await response.text();
-	const responseJson = JSON.parse(responseText);
-	if (!responseJson.upload_url) throw new Error('No upload URL for release: ' + responseText);
-
-	const uploadUrlTemplate = uriTemplate.parse(responseJson.upload_url);
+	const release = await githubRelease(projectName, tagName, false);
+	const uploadUrlTemplate = uriTemplate.parse(release.upload_url);
 	const uploadUrl = uploadUrlTemplate.expand({ name: apkFilename });
 
 	const binaryBody = await fs.readFile(apkFilePath);
+
+	const oauthToken = await githubOauthToken();
 
 	console.info('Uploading ' + apkFilename + ' to ' + uploadUrl);
 

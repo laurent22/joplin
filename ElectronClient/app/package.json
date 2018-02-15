@@ -1,6 +1,6 @@
 {
   "name": "Joplin",
-  "version": "0.10.54",
+  "version": "1.0.63",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "scripts": {
@@ -8,8 +8,8 @@
     "pack": "node_modules/.bin/electron-builder --dir",
     "dist": "node_modules/.bin/electron-builder",
     "publish": "build -p always",
-    "postinstall": "node compile-jsx.js && node compile-package-info.js",
-    "compile": "node compile-jsx.js && node compile-package-info.js"
+    "postinstall": "node compile-jsx.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts",
+    "compile": "node compile-jsx.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,9 @@
   },
   "build": {
     "appId": "net.cozic.joplin-desktop",
+    "extraResources": [
+      "build/icons/*"
+    ],
     "win": {
       "icon": "../../Assets/Joplin.ico"
     },
@@ -34,7 +37,8 @@
       "asar": false
     },
     "linux": {
-      "asar": false
+      "asar": false,
+      "category": "Office"
     }
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
@@ -51,6 +55,7 @@
   },
   "dependencies": {
     "app-module-path": "^2.2.0",
+    "async-mutex": "^0.1.3",
     "base-64": "^0.1.0",
     "electron-context-menu": "^0.9.1",
     "electron-log": "^2.2.11",
@@ -62,9 +67,11 @@
     "highlight.js": "^9.12.0",
     "html-entities": "^1.2.1",
     "jssha": "^2.3.1",
+    "katex": "^0.9.0-beta1",
     "levenshtein": "^1.0.5",
     "lodash": "^4.17.4",
     "markdown-it": "^8.4.0",
+    "markdown-it-katex": "^2.0.3",
     "md5": "^2.2.1",
     "mime": "^2.0.3",
     "moment": "^2.19.1",
@@ -78,7 +85,7 @@
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
-    "sharp": "^0.18.4",
+    "sharp": "^0.17.3",
     "smalltalk": "^2.5.1",
     "sprintf-js": "^1.1.1",
     "sqlite3": "^3.1.13",

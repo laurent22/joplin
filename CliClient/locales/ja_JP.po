@@ -656,6 +656,13 @@ msgstr "Joplinについて"
 msgid "%s %s (%s, %s)"
 msgstr ""
 
+#, javascript-format
+msgid "Open %s"
+msgstr ""
+
+msgid "Exit"
+msgstr ""
+
 msgid "OK"
 msgstr ""
 
@@ -665,22 +672,28 @@ msgstr "キャンセル"
 msgid "Error"
 msgstr ""
 
-msgid "An update is available, do you want to update now?"
+#, fuzzy, javascript-format
+msgid ""
+"Release notes:\n"
+"\n"
+"%s"
+msgstr "ノートを削除しますか？"
+
+msgid "An update is available, do you want to download it now?"
 msgstr ""
 
-#, javascript-format
-msgid "Could not download the update: %s"
+msgid "Yes"
+msgstr ""
+
+msgid "No"
 msgstr ""
 
 msgid "Current version is up-to-date."
 msgstr ""
 
-msgid "New version downloaded - application will quit now and update..."
-msgstr ""
-
-#, javascript-format
-msgid "Could not install the update: %s"
-msgstr ""
+#, fuzzy
+msgid "Check synchronisation configuration"
+msgstr "同期の中止"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -741,6 +754,15 @@ msgid ""
 msgstr ""
 "注意：\"active\"に指定されたマスターキーのみが暗号化に使用されます。暗号化に"
 "使用されたキーの応じて、すべてのキーが暗号解除のために使用されます。"
+
+msgid "Missing Master Keys"
+msgstr ""
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
 
 msgid "Status"
 msgstr "状態"
@@ -814,6 +836,13 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "ノートブックがありません。新しいノートブックを作成してください。"
 
+msgid "Open..."
+msgstr ""
+
+#, fuzzy
+msgid "Save as..."
+msgstr "変更を保存"
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr ""
@@ -821,8 +850,23 @@ msgstr ""
 msgid "Attach file"
 msgstr "ファイルを添付"
 
+msgid "Tags"
+msgstr "タグ"
+
 msgid "Set alarm"
 msgstr "アラームをセット"
+
+#, fuzzy
+msgid "to-do"
+msgstr "新しいToDo"
+
+#, fuzzy
+msgid "note"
+msgstr "新しいノート"
+
+#, fuzzy, javascript-format
+msgid "Creating new %s..."
+msgstr "ノートのインポート…"
 
 msgid "Refresh"
 msgstr "更新"
@@ -860,9 +904,6 @@ msgstr "同期"
 msgid "Notebooks"
 msgstr "ノートブック"
 
-msgid "Tags"
-msgstr "タグ"
-
 msgid "Searches"
 msgstr "検索"
 
@@ -887,6 +928,9 @@ msgid "OneDrive"
 msgstr ""
 
 msgid "OneDrive Dev (For testing only)"
+msgstr ""
+
+msgid "WebDAV (Beta)"
 msgstr ""
 
 #, javascript-format
@@ -1049,6 +1093,9 @@ msgstr ""
 msgid "When creating a new note:"
 msgstr "あたらしいノートを作成します。"
 
+msgid "Show tray icon"
+msgstr ""
+
 msgid "Set application zoom percentage"
 msgstr ""
 
@@ -1098,6 +1145,15 @@ msgid "Nexcloud username"
 msgstr ""
 
 msgid "Nexcloud password"
+msgstr ""
+
+msgid "WebDAV URL"
+msgstr ""
+
+msgid "WebDAV username"
+msgstr ""
+
+msgid "WebDAV password"
 msgstr ""
 
 #, javascript-format
@@ -1211,6 +1267,12 @@ msgstr "ノートブックは保存できませんでした：%s"
 
 msgid "Edit notebook"
 msgstr "ノートブックの編集"
+
+msgid "Show all"
+msgstr ""
+
+msgid "Errors only"
+msgstr ""
 
 msgid "This note has been modified:"
 msgstr "ノートは変更されています："

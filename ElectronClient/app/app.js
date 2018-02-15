@@ -140,6 +140,10 @@ class Application extends BaseApplication {
 			this.refreshMenu();
 		}
 
+		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'showTrayIcon' || action.type == 'SETTING_UPDATE_ALL') {
+			this.updateTray();
+		}
+
 		if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
 			if (!await reg.syncTarget().syncStarted()) reg.scheduleSync();
 		}
@@ -349,6 +353,28 @@ class Application extends BaseApplication {
 		this.lastMenuScreen_ = screen;
 	}
 
+	updateTray() {
+		// Tray icon (called AppIndicator) doesn't work in Ubuntu
+		// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html
+		// Might be fixed in Electron 18.x but no non-beta release yet.
+		if (!shim.isWindows() && !shim.isMac()) return;
+
+		const app = bridge().electronApp();
+
+		if (app.trayShown() === Setting.value('showTrayIcon')) return;
+
+		if (!Setting.value('showTrayIcon')) {
+			app.destroyTray();
+		} else {
+			const contextMenu = Menu.buildFromTemplate([
+				{ label: _('Open %s', app.electronApp().getName()), click: () => { app.window().show(); } },
+				{ type: 'separator' },
+				{ label: _('Exit'), click: () => { app.exit() } },
+			])
+			app.createTray(contextMenu);
+		}
+	}
+
 	async start(argv) {
 		argv = await super.start(argv);
 
@@ -404,6 +430,8 @@ class Application extends BaseApplication {
 			// For those who leave the app always open
 			setInterval(() => { runAutoUpdateCheck() }, 2 * 60 * 60 * 1000);
 		}
+
+		this.updateTray();
 
 		setTimeout(() => {
 			AlarmService.garbageCollect();

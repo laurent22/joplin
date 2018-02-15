@@ -58,7 +58,7 @@ class Setting extends BaseModel {
 			// 	recent: _('Non-completed and recently completed ones'),
 			// 	nonCompleted: _('Non-completed ones only'),
 			// })},
-			'uncompletedTodosOnTop': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Show uncompleted todos on top of the lists') },
+			'uncompletedTodosOnTop': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Show uncompleted to-dos on top of the lists') },
 			'trackLocation': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Save geo-location with notes') },
 			'newTodoFocus': { value: 'title', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('When creating a new to-do:'), options: () => {
 				return {
@@ -72,6 +72,7 @@ class Setting extends BaseModel {
 					'body': _('Focus body'),
 				};
 			}},
+			'showTrayIcon': { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Show tray icon') },
 			'encryption.enabled': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'encryption.activeMasterKeyId': { value: '', type: Setting.TYPE_STRING, public: false },
 			'encryption.passwordCache': { value: {}, type: Setting.TYPE_OBJECT, public: false },
@@ -105,6 +106,11 @@ class Setting extends BaseModel {
 			'sync.5.path': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nexcloud WebDAV URL') },
 			'sync.5.username': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nexcloud username') },
 			'sync.5.password': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nexcloud password'), secure: true },
+
+			'sync.6.path': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav') }, public: true, label: () => _('WebDAV URL') },
+			'sync.6.username': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav') }, public: true, label: () => _('WebDAV username') },
+			'sync.6.password': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav') }, public: true, label: () => _('WebDAV password'), secure: true },
+
 			'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },
@@ -386,26 +392,42 @@ class Setting extends BaseModel {
 		return !!options[value];
 	}
 
-	// Currently only supports objects with properties one level deep
-	static object(key) {
+	// For example, if settings is:
+	// { sync.5.path: 'http://example', sync.5.username: 'testing' }
+	// and baseKey is 'sync.5', the function will return
+	// { path: 'http://example', username: 'testing' }
+	static subValues(baseKey, settings) {
 		let output = {};
-		let keys = this.keys();
-		for (let i = 0; i < keys.length; i++) {
-			let k = keys[i].split('.');
-			if (k[0] == key) {
-				output[k[1]] = this.value(keys[i]);
+		for (let key in settings) {
+			if (!settings.hasOwnProperty(key)) continue;
+			if (key.indexOf(baseKey) === 0) {
+				const subKey = key.substr(baseKey.length + 1);
+				output[subKey] = settings[key];
 			}
 		}
 		return output;
 	}
 
 	// Currently only supports objects with properties one level deep
-	static setObject(key, object) {
-		for (let n in object) {
-			if (!object.hasOwnProperty(n)) continue;
-			this.setValue(key + '.' + n, object[n]);
-		}
-	}
+	// static object(key) {
+	// 	let output = {};
+	// 	let keys = this.keys();
+	// 	for (let i = 0; i < keys.length; i++) {
+	// 		let k = keys[i].split('.');
+	// 		if (k[0] == key) {
+	// 			output[k[1]] = this.value(keys[i]);
+	// 		}
+	// 	}
+	// 	return output;
+	// }
+
+	// Currently only supports objects with properties one level deep
+	// static setObject(key, object) {
+	// 	for (let n in object) {
+	// 		if (!object.hasOwnProperty(n)) continue;
+	// 		this.setValue(key + '.' + n, object[n]);
+	// 	}
+	// }
 
 	static saveAll() {
 		if (!this.saveTimeoutId_) return Promise.resolve();

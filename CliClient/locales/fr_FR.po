@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: \n"
+"Last-Translator: Laurent Cozic\n"
 "Language-Team: \n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
@@ -665,7 +665,7 @@ msgid "Website and documentation"
 msgstr "Documentation en ligne"
 
 msgid "Check for updates..."
-msgstr ""
+msgstr "Vérifier les mises à jour..."
 
 msgid "About Joplin"
 msgstr "A propos de Joplin"
@@ -674,6 +674,13 @@ msgstr "A propos de Joplin"
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
+#, javascript-format
+msgid "Open %s"
+msgstr "Ouvrir %s"
+
+msgid "Exit"
+msgstr "Quitter"
+
 msgid "OK"
 msgstr "OK"
 
@@ -681,24 +688,33 @@ msgid "Cancel"
 msgstr "Annuler"
 
 msgid "Error"
-msgstr ""
-
-msgid "An update is available, do you want to update now?"
-msgstr ""
+msgstr "Erreur"
 
 #, javascript-format
-msgid "Could not download the update: %s"
+msgid ""
+"Release notes:\n"
+"\n"
+"%s"
 msgstr ""
+"Notes de version :\n"
+"\n"
+"%s"
+
+msgid "An update is available, do you want to download it now?"
+msgstr ""
+"Une mise à jour est disponible, souhaitez vous la télécharger maintenant ?"
+
+msgid "Yes"
+msgstr "Oui"
+
+msgid "No"
+msgstr "Non"
 
 msgid "Current version is up-to-date."
-msgstr ""
+msgstr "La version actuelle est à jour."
 
-msgid "New version downloaded - application will quit now and update..."
-msgstr ""
-
-#, javascript-format
-msgid "Could not install the update: %s"
-msgstr ""
+msgid "Check synchronisation configuration"
+msgstr "Vérifier config synchronisation"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -767,6 +783,18 @@ msgstr ""
 "marquée comme \"actif\" ci-dessus). N'importe quel clef peut-être utilisée "
 "pour le décryptage, selon la façon dont les notes ou carnets étaient cryptés "
 "à l'origine."
+
+msgid "Missing Master Keys"
+msgstr "Clefs maître manquantes"
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+"Les clefs maître avec ces identifiants sont utilisées pour crypter certains "
+"de vos objets, cependant le logiciel n'y a pour l'instant pas accès. Il est "
+"probable qu'elle vont être prochainement disponible via la synchronisation."
 
 msgid "Status"
 msgstr "État"
@@ -842,6 +870,12 @@ msgstr ""
 "Il n'y a pour l'instant aucun carnet. Créez-en un en cliquant sur \"Nouveau "
 "carnet\"."
 
+msgid "Open..."
+msgstr "Ouvrir..."
+
+msgid "Save as..."
+msgstr "Enregistrer sous..."
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Lien ou message non géré : %s"
@@ -849,8 +883,21 @@ msgstr "Lien ou message non géré : %s"
 msgid "Attach file"
 msgstr "Attacher un fichier"
 
+msgid "Tags"
+msgstr "Étiquettes"
+
 msgid "Set alarm"
 msgstr "Régler alarme"
+
+msgid "to-do"
+msgstr "tâche"
+
+msgid "note"
+msgstr "note"
+
+#, javascript-format
+msgid "Creating new %s..."
+msgstr "Création de %s..."
 
 msgid "Refresh"
 msgstr "Rafraîchir"
@@ -888,9 +935,6 @@ msgstr "Synchroniser"
 msgid "Notebooks"
 msgstr "Carnets"
 
-msgid "Tags"
-msgstr "Étiquettes"
-
 msgid "Searches"
 msgstr "Recherches"
 
@@ -917,6 +961,9 @@ msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dév (Pour tester uniquement)"
+
+msgid "WebDAV (Beta)"
+msgstr "WebDAV (Bêta)"
 
 #, javascript-format
 msgid "Unknown log level: %s"
@@ -1060,20 +1107,20 @@ msgstr "Tâches non-terminées en haut des listes"
 msgid "Save geo-location with notes"
 msgstr "Enregistrer l'emplacement avec les notes"
 
-#, fuzzy
 msgid "When creating a new to-do:"
-msgstr "Créer une nouvelle tâche."
+msgstr "Lors de la création d'une tâche :"
 
-#, fuzzy
 msgid "Focus title"
-msgstr "Titre de la note :"
+msgstr "Curseur sur le titre"
 
 msgid "Focus body"
-msgstr ""
+msgstr "Curseur sur corps du message"
 
-#, fuzzy
 msgid "When creating a new note:"
-msgstr "Créer une note."
+msgstr "Lors de la création d'une note :"
+
+msgid "Show tray icon"
+msgstr "Afficher icône dans la zone de notifications"
 
 msgid "Set application zoom percentage"
 msgstr "Niveau de zoom"
@@ -1128,6 +1175,15 @@ msgstr "Nextcloud : Nom utilisateur"
 
 msgid "Nexcloud password"
 msgstr "Nextcloud : Mot de passe"
+
+msgid "WebDAV URL"
+msgstr "WebDAV : URL"
+
+msgid "WebDAV username"
+msgstr "WebDAV : Nom utilisateur"
+
+msgid "WebDAV password"
+msgstr "WebDAV : Mot de passe"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1203,7 +1259,7 @@ msgid "Configuration"
 msgstr "Configuration"
 
 msgid "Move to notebook..."
-msgstr "Déplacer la note vers carnet..."
+msgstr "Déplacer vers..."
 
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
@@ -1244,6 +1300,12 @@ msgstr "Ce carnet n'a pas pu être sauvegardé : %s"
 
 msgid "Edit notebook"
 msgstr "Éditer le carnet"
+
+msgid "Show all"
+msgstr "Afficher tous"
+
+msgid "Errors only"
+msgstr "Erreurs seulement"
 
 msgid "This note has been modified:"
 msgstr "Cette note a été modifiée :"
@@ -1299,6 +1361,17 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Could not download the update: %s"
+#~ msgstr "Impossible de télécharger la mise à jour : %s"
+
+#~ msgid "New version downloaded - application will quit now and update..."
+#~ msgstr ""
+#~ "La nouvelle version a été téléchargée - le programme va se fermer et se "
+#~ "mettre à jour..."
+
+#~ msgid "Could not install the update: %s"
+#~ msgstr "Impossible d'installer la mise à jour : %s"
 
 #~ msgid ""
 #~ "The target to synchonise to. If synchronising with the file system, set "
@@ -1370,9 +1443,6 @@ msgstr "Bienvenue"
 
 #~ msgid "Todo filter"
 #~ msgstr "Filtre des tâches"
-
-#~ msgid "Show all"
-#~ msgstr "Afficher tous"
 
 #~ msgid "Non-completed and recently completed ones"
 #~ msgstr "Tâches non-complétées et récentes"

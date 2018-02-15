@@ -159,9 +159,15 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 		const decryptedItemsInfo = this.props.encryptionEnabled ? <Text style={this.styles().normalText}>{shared.decryptedStatText(this)}</Text> : null;
 
 		const mkComps = [];
+
+		let nonExistingMasterKeyIds = this.props.notLoadedMasterKeys.slice();
+
 		for (let i = 0; i < masterKeys.length; i++) {
 			const mk = masterKeys[i];
 			mkComps.push(this.renderMasterKey(i+1, mk));
+
+			const idx = nonExistingMasterKeyIds.indexOf(mk.id);
+			if (idx >= 0) nonExistingMasterKeyIds.splice(idx, 1);
 		}
 
 		const onToggleButtonClick = async () => {
@@ -183,6 +189,24 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 			}
 		};
 
+		let nonExistingMasterKeySection = null;
+
+		if (nonExistingMasterKeyIds.length) {
+			const rows = [];
+			for (let i = 0; i < nonExistingMasterKeyIds.length; i++) {
+				const id = nonExistingMasterKeyIds[i];
+				rows.push(<Text style={this.styles().normalText} key={id}>{id}</Text>);
+			}
+
+			nonExistingMasterKeySection = (
+				<View>
+					<Text style={this.styles().titleText}>{_('Missing Master Keys')}</Text>
+					<Text style={this.styles().normalText}>{_('The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.')}</Text>
+					<View style={{marginTop: 10}}>{rows}</View>
+				</View>
+			);
+		}
+
 		const passwordPromptComp = this.state.passwordPromptShow ? this.passwordPromptComponent() : null;
 		const toggleButton = !this.state.passwordPromptShow ? <View style={{marginTop: 10}}><Button title={this.props.encryptionEnabled ? _('Disable encryption') : _('Enable encryption')} onPress={() => onToggleButtonClick()}></Button></View> : null;
 
@@ -191,12 +215,12 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 				<ScreenHeader title={_('Encryption Config')}/>
 				<ScrollView style={this.styles().container}>
 
-					<View style={{backgroundColor: theme.warningBackgroundColor, padding: 5}}>
+					{/*<View style={{backgroundColor: theme.warningBackgroundColor, padding: 5}}>
 						<Text>Important: This is a *beta* feature. It has been extensively tested and is already in use by some users, but it is possible that some bugs remain.</Text>
 						<Text>If you wish to you use it, it is recommended that you keep a backup of your data. The simplest way is to regularly backup your notes from the desktop or terminal application.</Text>
 						<Text>For more information about End-To-End Encryption (E2EE) and how it is going to work, please check the documentation:</Text>
 						<TouchableOpacity onPress={() => { Linking.openURL('http://joplin.cozic.net/help/e2ee.html') }}><Text>http://joplin.cozic.net/help/e2ee.html</Text></TouchableOpacity>
-					</View>
+					</View>*/}
 
 					<Text style={this.styles().titleText}>{_('Status')}</Text>
 					<Text style={this.styles().normalText}>{_('Encryption is: %s', this.props.encryptionEnabled ? _('Enabled') : _('Disabled'))}</Text>
@@ -204,6 +228,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 					{toggleButton}
 					{passwordPromptComp}
 					{mkComps}
+					{nonExistingMasterKeySection}
 					<View style={{flex:1, height: 20}}></View>
 				</ScrollView>
 				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
@@ -221,6 +246,7 @@ const EncryptionConfigScreen = connect(
 			passwords: state.settings['encryption.passwordCache'],
 			encryptionEnabled: state.settings['encryption.enabled'],
 			activeMasterKeyId: state.settings['encryption.activeMasterKeyId'],
+			notLoadedMasterKeys: state.notLoadedMasterKeys,
 		};
 	}
 )(EncryptionConfigScreenComponent)

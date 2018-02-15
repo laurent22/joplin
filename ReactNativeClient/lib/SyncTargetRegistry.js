@@ -12,6 +12,7 @@ class SyncTargetRegistry {
 			name: SyncTargetClass.targetName(),
 			label: SyncTargetClass.label(),
 			classRef: SyncTargetClass,
+			supportsConfigCheck: SyncTargetClass.supportsConfigCheck(),
 		};
 	}
 

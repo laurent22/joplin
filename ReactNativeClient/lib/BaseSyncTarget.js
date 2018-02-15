@@ -10,6 +10,10 @@ class BaseSyncTarget {
 		this.options_ = options;
 	}
 
+	static supportsConfigCheck() {
+		return false;
+	}
+
 	option(name, defaultValue = null) {
 		return this.options_ && (name in this.options_) ? this.options_[name] : defaultValue;
 	}

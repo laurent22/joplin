@@ -18,6 +18,8 @@
 				"*.min.js",
 				"ElectronClient/app/gui/note-viewer/highlight/*.pack.js",
 				"ElectronClient/app/css/font-awesome.min.css",
+				"docs/*.html",
+				"docs/*.svg",
 			],
 			"folder_exclude_patterns":
 			[
@@ -50,6 +52,7 @@
 				"tests/logs",
 				"ReactNativeClient/ios/build",
 				"ElectronClient/app/dist",
+				"_releases"
 			],
 			"path": "."
 		},

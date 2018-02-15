@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { Keyboard, NativeModules, BackHandler } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler } = require('react-native');
 const { SafeAreaView } = require('react-navigation');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
@@ -52,9 +52,11 @@ const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
 const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
+const SyncTargetWebDAV = require('lib/SyncTargetWebDAV.js');
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
+SyncTargetRegistry.addClass(SyncTargetWebDAV);
 
 // Disabled because not fully working
 //SyncTargetRegistry.addClass(SyncTargetFilesystem);
@@ -467,6 +469,10 @@ class AppComponent extends React.Component {
 		this.backButtonHandler_ = () => {
 			return this.backButtonHandler();
 		}
+
+		this.onAppStateChange_ = () => {
+			PoorManIntervals.update();
+		}
 	}
 
 	async componentDidMount() {
@@ -491,6 +497,12 @@ class AppComponent extends React.Component {
 			const notification = await Alarm.makeNotification(alarm);
 			this.dropdownAlert_.alertWithType('info', notification.title, notification.body ? notification.body : '');
 		});
+
+		AppState.addEventListener('change', this.onAppStateChange_);
+	}
+
+	componentWillUnmount() {
+		AppState.removeEventListener('change', this.onAppStateChange_);
 	}
 
 	async backButtonHandler() {

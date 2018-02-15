@@ -679,6 +679,13 @@ msgstr "O Joplinu"
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
+#, fuzzy, javascript-format
+msgid "Open %s"
+msgstr "On %s: %s"
+
+msgid "Exit"
+msgstr ""
+
 msgid "OK"
 msgstr "U redu"
 
@@ -688,22 +695,29 @@ msgstr "Odustani"
 msgid "Error"
 msgstr ""
 
-msgid "An update is available, do you want to update now?"
+#, fuzzy, javascript-format
+msgid ""
+"Release notes:\n"
+"\n"
+"%s"
+msgstr "Obriši bilješke?"
+
+msgid "An update is available, do you want to download it now?"
 msgstr ""
 
-#, javascript-format
-msgid "Could not download the update: %s"
+msgid "Yes"
 msgstr ""
+
+#, fuzzy
+msgid "No"
+msgstr "N"
 
 msgid "Current version is up-to-date."
 msgstr ""
 
-msgid "New version downloaded - application will quit now and update..."
-msgstr ""
-
-#, javascript-format
-msgid "Could not install the update: %s"
-msgstr ""
+#, fuzzy
+msgid "Check synchronisation configuration"
+msgstr "Prekini sinkronizaciju"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -759,6 +773,15 @@ msgid ""
 "Note: Only one master key is going to be used for encryption (the one marked "
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
+msgstr ""
+
+msgid "Missing Master Keys"
+msgstr ""
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
 msgstr ""
 
 msgid "Status"
@@ -833,6 +856,13 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "Ovdje nema bilježnica. Stvori novu pritiskom na \"Nova bilježnica\"."
 
+msgid "Open..."
+msgstr ""
+
+#, fuzzy
+msgid "Save as..."
+msgstr "Spremi promjene"
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Nepodržana poveznica ili poruka: %s"
@@ -840,8 +870,23 @@ msgstr "Nepodržana poveznica ili poruka: %s"
 msgid "Attach file"
 msgstr "Priloži datoteku"
 
+msgid "Tags"
+msgstr "Oznake"
+
 msgid "Set alarm"
 msgstr "Postavi upozorenje"
+
+#, fuzzy
+msgid "to-do"
+msgstr "Novi zadatak"
+
+#, fuzzy
+msgid "note"
+msgstr "Nova bilješka"
+
+#, fuzzy, javascript-format
+msgid "Creating new %s..."
+msgstr "Uvozim bilješke..."
 
 msgid "Refresh"
 msgstr "Osvježi"
@@ -879,9 +924,6 @@ msgstr "Sinkroniziraj"
 msgid "Notebooks"
 msgstr "Bilježnice"
 
-msgid "Tags"
-msgstr "Oznake"
-
 msgid "Searches"
 msgstr "Pretraživanja"
 
@@ -907,6 +949,9 @@ msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dev (Samo za testiranje)"
+
+msgid "WebDAV (Beta)"
+msgstr ""
 
 #, javascript-format
 msgid "Unknown log level: %s"
@@ -1064,6 +1109,9 @@ msgstr ""
 msgid "When creating a new note:"
 msgstr "Stvara novu bilješku."
 
+msgid "Show tray icon"
+msgstr ""
+
 msgid "Set application zoom percentage"
 msgstr ""
 
@@ -1113,6 +1161,15 @@ msgid "Nexcloud username"
 msgstr ""
 
 msgid "Nexcloud password"
+msgstr ""
+
+msgid "WebDAV URL"
+msgstr ""
+
+msgid "WebDAV username"
+msgstr ""
+
+msgid "WebDAV password"
 msgstr ""
 
 #, javascript-format
@@ -1226,6 +1283,12 @@ msgstr "Bilježnicu nije moguće snimiti: %s"
 
 msgid "Edit notebook"
 msgstr "Uredi bilježnicu"
+
+msgid "Show all"
+msgstr ""
+
+msgid "Errors only"
+msgstr ""
 
 msgid "This note has been modified:"
 msgstr "Bilješka je promijenjena:"

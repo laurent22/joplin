@@ -42,7 +42,7 @@ class FileApiDriverLocal {
 	metadataFromStat_(stat) {
 		return {
 			path: stat.path,
-			created_time: stat.birthtime.getTime(),
+			// created_time: stat.birthtime.getTime(),
 			updated_time: stat.mtime.getTime(),
 			isDir: stat.isDirectory(),
 		};

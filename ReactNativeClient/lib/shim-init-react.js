@@ -45,12 +45,20 @@ function shimInit() {
 
 		let headers = options.headers ? options.headers : {};
 		let method = options.method ? options.method : 'GET';
+		const overwrite = 'overwrite' in options ? options.overwrite : true;
 
 		let dirs = RNFetchBlob.fs.dirs;
 		let localFilePath = options.path;
 		if (localFilePath.indexOf('/') !== 0) localFilePath = dirs.DocumentDir + '/' + localFilePath;
 
+		if (!overwrite) {
+			if (await shim.fsDriver().exists(localFilePath)) {
+				return { ok: true };
+			}
+		}
+
 		delete options.path;
+		delete options.overwrite;
 
 		const doFetchBlob = () => {
 			return RNFetchBlob.config({

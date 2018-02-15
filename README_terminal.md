@@ -126,6 +126,10 @@ You will need to set the `sync.target` config variable and all the `sync.5.path`
 
 If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.
 
+## WebDAV synchronisation
+
+Select the "WebDAV" synchronisation target and follow the same instructions as for Nextcloud above.
+
 ## OneDrive synchronisation
 
 When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
@@ -240,7 +244,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                           Possible values: HH:mm (20:30), h:mm A (8:30 PM).
 	                           Default: "HH:mm"
 	                           
-	    uncompletedTodosOnTop  Show uncompleted todos on top of the lists.
+	    uncompletedTodosOnTop  Show uncompleted to-dos on top of the lists.
 	                           Type: bool.
 	                           Default: true
 	                           
