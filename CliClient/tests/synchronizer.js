@@ -19,7 +19,7 @@ process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000; // The first test is slow because the database needs to be built
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000 + 30000; // The first test is slow because the database needs to be built
 
 async function allItems() {
 	let folders = await Folder.all();

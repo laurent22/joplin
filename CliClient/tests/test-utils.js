@@ -51,12 +51,12 @@ SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
 
-//const syncTargetId_ = SyncTargetRegistry.nameToId('nextcloud');
-const syncTargetId_ = SyncTargetRegistry.nameToId('memory');
+const syncTargetId_ = SyncTargetRegistry.nameToId('nextcloud');
+//const syncTargetId_ = SyncTargetRegistry.nameToId('memory');
 //const syncTargetId_ = SyncTargetRegistry.nameToId('filesystem');
 const syncDir = __dirname + '/../tests/sync';
 
-const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 1;//400;
+const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;//400;
 
 console.info('Testing with sync target: ' + SyncTargetRegistry.idToName(syncTargetId_));
 
@@ -264,6 +264,7 @@ function fileApi() {
 
 	fileApi_.setLogger(logger);
 	fileApi_.setSyncTargetId(syncTargetId_);
+	fileApi_.requestRepeatCount_ = 0;
 	return fileApi_;
 }
 

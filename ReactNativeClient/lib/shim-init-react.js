@@ -5,6 +5,7 @@ const RNFetchBlob = require('react-native-fetch-blob').default;
 const { generateSecureRandom }  = require('react-native-securerandom');
 const FsDriverRN = require('lib/fs-driver-rn.js').FsDriverRN;
 const urlValidator = require('valid-url');
+const { Buffer } = require('buffer');
 
 function shimInit() {
 	shim.Geolocation = GeolocationReact;
@@ -110,6 +111,10 @@ function shimInit() {
 
 	shim.readLocalFileBase64 = async function(path) {
 		return RNFetchBlob.fs.readFile(path, 'base64')
+	}
+
+	shim.stringByteLength = function(string) {
+		return Buffer.byteLength(string, 'utf-8');
 	}
 }
 

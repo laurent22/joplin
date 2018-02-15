@@ -39,12 +39,14 @@ class FileApi {
 		this.syncTargetId_ = null;
 		this.tempDirName_ = null;
 		this.driver_.fileApi_ = this;
+		this.requestRepeatCount_ = null; // For testing purpose only - normally this value should come from the driver
 	}
 
 	// Ideally all requests repeating should be done at the FileApi level to remove duplicate code in the drivers, but
 	// historically some drivers (eg. OneDrive) are already handling request repeating, so this is optional, per driver,
 	// and it defaults to no repeating.
 	requestRepeatCount() {
+		if (this.requestRepeatCount_ !== null) return this.requestRepeatCount_;
 		if (this.driver_.requestRepeatCount) return this.driver_.requestRepeatCount();
 		return 0;
 	}

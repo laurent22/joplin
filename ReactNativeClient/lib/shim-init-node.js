@@ -172,6 +172,10 @@ function shimInit() {
 		return shim.fetch(url, options);
 	}
 
+	shim.stringByteLength = function(string) {
+		return Buffer.byteLength(string, 'utf-8');
+	}
+
 }
 
 module.exports = { shimInit };

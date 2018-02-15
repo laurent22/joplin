@@ -227,11 +227,6 @@ class WebDavApi {
 
 		if (authToken) headers['Authorization'] = 'Basic ' + authToken;
 
-		// /!\ Doesn't work with UTF-8 strings as it results in truncated content. Content-Length
-		// /!\ should not be needed anyway, but was required by one service. If re-implementing this
-		// /!\ test with various content, including binary blobs.
-		// if (typeof body === 'string') headers['Content-Length'] = body.length;
-
 		const fetchOptions = {};
 		fetchOptions.headers = headers;
 		fetchOptions.method = method;
@@ -246,8 +241,13 @@ class WebDavApi {
 		// console.info(this.requestToCurl_(url, fetchOptions));
 
 		if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
+			if (fetchOptions.path) {
+				const fileStat = await shim.fsDriver().stat(fetchOptions.path);
+				if (fileStat) fetchOptions.headers['Content-Length'] = fileStat.size + '';
+			}
 			response = await shim.uploadBlob(url, fetchOptions);
 		} else if (options.target == 'string') {
+			if (typeof body === 'string') fetchOptions.headers['Content-Length'] = shim.stringByteLength(body) + '';
 			response = await shim.fetch(url, fetchOptions);
 		} else { // file
 			response = await shim.fetchBlob(url, fetchOptions);

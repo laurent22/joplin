@@ -74,10 +74,10 @@ class DecryptionWorker {
 					const item = items[i];
 
 					// Temp hack
-					if (['edf44b7a0e4f8cbf248e206cd8dfa800', '2ccb3c9af0b1adac2ec6b66a5961fbb1'].indexOf(item.id) >= 0) {
-						excludedIds.push(item.id);
-						continue;
-					}
+					// if (['edf44b7a0e4f8cbf248e206cd8dfa800', '2ccb3c9af0b1adac2ec6b66a5961fbb1'].indexOf(item.id) >= 0) {
+					// 	excludedIds.push(item.id);
+					// 	continue;
+					// }
 
 					const ItemClass = BaseItem.itemClass(item);
 					this.logger().info('DecryptionWorker: decrypting: ' + item.id + ' (' + ItemClass.tableName() + ')');
