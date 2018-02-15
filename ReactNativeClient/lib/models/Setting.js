@@ -429,7 +429,7 @@ class Setting extends BaseModel {
 	// 	}
 	// }
 
-	static saveAll() {
+	static async saveAll() {
 		if (!this.saveTimeoutId_) return Promise.resolve();
 
 		this.logger().info('Saving settings...');
@@ -444,12 +444,14 @@ class Setting extends BaseModel {
 			queries.push(Database.insertQuery(this.tableName(), s));
 		}
 
-		return BaseModel.db().transactionExecBatch(queries).then(() => {
-			this.logger().info('Settings have been saved.');
-		});
+		await BaseModel.db().transactionExecBatch(queries);
+		
+		this.logger().info('Settings have been saved.');
 	}
 
 	static scheduleSave() {
+		if (!Setting.autoSaveEnabled) return;
+
 		if (this.saveTimeoutId_) clearTimeout(this.saveTimeoutId_);
 
 		this.saveTimeoutId_ = setTimeout(() => {
@@ -520,5 +522,7 @@ Setting.constants_ = {
 	tempDir: '',
 	openDevTools: false,
 }
+
+Setting.autoSaveEnabled = true;
 
 module.exports = Setting;
