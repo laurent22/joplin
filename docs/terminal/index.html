@@ -217,14 +217,14 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <pre><code>npm install -g demo-joplin
 </code></pre><p>To start it, type <code>demo-joplin</code>.</p>
 <h1 id="usage">Usage</h1>
-<p>To start the application type <code>joplin</code>. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via <a href="#available-shortcuts">shortcuts</a>.</p>
+<p>To start the application type <code>joplin</code>. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via <a href="#shortcuts">shortcuts</a>.</p>
 <p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/ScreenshotTerminalCaptions.png" height="450px"></p>
 <h2 id="input-modes">Input modes</h2>
 <p>Joplin user interface is partly based on the text editor Vim and offers two different modes to interact with the notes and notebooks:</p>
 <h3 id="normal-mode">Normal mode</h3>
-<p>Allows moving from one pane to another using the <code>Tab</code> and <code>Shift-Tab</code> keys, and to select/view notes using the arrow keys. Text area can be scrolled using the arrow keys too. Press <code>Enter</code> to edit a note. Various other <a href="#available-shortcuts">shortcuts</a> are available.</p>
+<p>Allows moving from one pane to another using the <code>Tab</code> and <code>Shift-Tab</code> keys, and to select/view notes using the arrow keys. Text area can be scrolled using the arrow keys too. Press <code>Enter</code> to edit a note. Various other <a href="#shortcuts">shortcuts</a> are available.</p>
 <h3 id="command-line-mode">Command-line mode</h3>
-<p>Press <code>:</code> to enter command line mode. From there, the Joplin commands such as <code>mknote</code> or <code>search</code> are available. See the <a href="#available-commands">full list of commands</a>.</p>
+<p>Press <code>:</code> to enter command line mode. From there, the Joplin commands such as <code>mknote</code> or <code>search</code> are available. See the <a href="#commands">full list of commands</a>.</p>
 <p>It is possible to refer to a note or notebook by title or ID. However the simplest way is to refer to the currently selected item using one of these shortcuts:</p>
 <table>
 <thead>
@@ -331,7 +331,7 @@ $ joplin mknote &quot;My note&quot;
 fe889 07/12/2017 17:57 My note
 </code></pre><p>Give a new title to the note:</p>
 <pre><code>$ joplin set fe889 title &quot;New title&quot;
-</code></pre><h1 id="available-shortcuts">Available shortcuts</h1>
+</code></pre><h1 id="shortcuts">Shortcuts</h1>
 <p>There are two types of shortcuts: those that manipulate the user interface directly, such as <code>TAB</code> to move from one pane to another, and those that are simply shortcuts to actual commands. In a way similar to Vim, these shortcuts are generally a verb followed by an object. For example, typing <code>mn</code> ([m]ake [n]ote), is used to create a new note: it will switch the interface to command line mode and pre-fill it with <code>mknote &quot;&quot;</code> from where the title of the note can be entered. See below for the full list of default shortcuts:</p>
 <pre><code>:                 enter_command_line_mode
 TAB               focus_next
@@ -352,6 +352,28 @@ mb                mkbook &quot;&quot;
 yn                cp $n &quot;&quot;
 dn                mv $n &quot;&quot;
 </code></pre><p>Shortcut can be configured by adding a file <code>keymap.json</code> to the profile directory. The content of this file is a JSON array with each entry defining a command and the keys associated with it.</p>
+<p>As an example, this is the default keymap, but read below for a detailed explanation of each property.</p>
+<pre><code class="lang-json">[
+    { &quot;keys&quot;: [&quot;:&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;enter_command_line_mode&quot; },
+    { &quot;keys&quot;: [&quot;TAB&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;focus_next&quot; },
+    { &quot;keys&quot;: [&quot;SHIFT_TAB&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;focus_previous&quot; },
+    { &quot;keys&quot;: [&quot;UP&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;move_up&quot; },
+    { &quot;keys&quot;: [&quot;DOWN&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;move_down&quot; },
+    { &quot;keys&quot;: [&quot;PAGE_UP&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;page_up&quot; },
+    { &quot;keys&quot;: [&quot;PAGE_DOWN&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;page_down&quot; },
+    { &quot;keys&quot;: [&quot;ENTER&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;activate&quot; },
+    { &quot;keys&quot;: [&quot;DELETE&quot;, &quot;BACKSPACE&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;delete&quot; },
+    { &quot;keys&quot;: [&quot; &quot;], &quot;command&quot;: &quot;todo toggle $n&quot; },
+    { &quot;keys&quot;: [&quot;tc&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;toggle_console&quot; },
+    { &quot;keys&quot;: [&quot;tm&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;toggle_metadata&quot; },
+    { &quot;keys&quot;: [&quot;/&quot;], &quot;type&quot;: &quot;prompt&quot;, &quot;command&quot;: &quot;search \&quot;\&quot;&quot;, &quot;cursorPosition&quot;: -2 },
+    { &quot;keys&quot;: [&quot;mn&quot;], &quot;type&quot;: &quot;prompt&quot;, &quot;command&quot;: &quot;mknote \&quot;\&quot;&quot;, &quot;cursorPosition&quot;: -2 },
+    { &quot;keys&quot;: [&quot;mt&quot;], &quot;type&quot;: &quot;prompt&quot;, &quot;command&quot;: &quot;mktodo \&quot;\&quot;&quot;, &quot;cursorPosition&quot;: -2 },
+    { &quot;keys&quot;: [&quot;mb&quot;], &quot;type&quot;: &quot;prompt&quot;, &quot;command&quot;: &quot;mkbook \&quot;\&quot;&quot;, &quot;cursorPosition&quot;: -2 },
+    { &quot;keys&quot;: [&quot;yn&quot;], &quot;type&quot;: &quot;prompt&quot;, &quot;command&quot;: &quot;cp $n \&quot;\&quot;&quot;, &quot;cursorPosition&quot;: -2 },
+    { &quot;keys&quot;: [&quot;dn&quot;], &quot;type&quot;: &quot;prompt&quot;, &quot;command&quot;: &quot;mv $n \&quot;\&quot;&quot;, &quot;cursorPosition&quot;: -2 }
+]
+</code></pre>
 <p>Each entry can have the following properties:</p>
 <table>
 <thead>
@@ -367,7 +389,7 @@ dn                mv $n &quot;&quot;
 </tr>
 <tr>
 <td><code>type</code></td>
-<td>The command type. It can have the value &quot;exec&quot;, &quot;function&quot; or &quot;prompt&quot;. <strong>exec</strong>: Simply execute the provided command. For example <code>edit $n</code> would edit the selected note. <strong>function</strong>: Run a special commands (see below for the list of function. <strong>prompt</strong>: A bit similar to &quot;exec&quot;, except that the command is not going to be executed immediately - this allows the user to provide additional data. For example <code>mknote &quot;&quot;</code> would fill the command line with this command and allow the user to set the title. A prompt command can also take a <code>cursorPosition</code> parameter (see below)</td>
+<td>The command type. It can have the value &quot;exec&quot;, &quot;function&quot; or &quot;prompt&quot;. <strong>exec</strong>: Simply execute the provided <a href="#commands">command</a>. For example <code>edit $n</code> would edit the selected note. <strong>function</strong>: Run a special commands (see below for the list of functions). <strong>prompt</strong>: A bit similar to &quot;exec&quot;, except that the command is not going to be executed immediately - this allows the user to provide additional data. For example <code>mknote &quot;&quot;</code> would fill the command line with this command and allow the user to set the title. A prompt command can also take a <code>cursorPosition</code> parameter (see below)</td>
 </tr>
 <tr>
 <td><code>command</code></td>
@@ -375,11 +397,11 @@ dn                mv $n &quot;&quot;
 </tr>
 <tr>
 <td><code>cusorPosition</code></td>
-<td>An integer. For prompt commands, tells where the cursor (caret) should start at. This is convenient for example to position the cursor between quotes. Use a negative value to set a position starting from the end.</td>
+<td>An integer. For prompt commands, tells where the cursor (caret) should start at. This is convenient for example to position the cursor between quotes. Use a negative value to set a position starting from the end. A value of &quot;0&quot; means positioning the caret at the first character. A value of &quot;-1&quot; means positioning it at the end.</td>
 </tr>
 </tbody>
 </table>
-<p>This is the list of available functions:</p>
+<p>This is the list of special functions:</p>
 <table>
 <thead>
 <tr>
@@ -434,33 +456,17 @@ dn                mv $n &quot;&quot;
 </tr>
 </tbody>
 </table>
-<p>As an example, this is the default keymap:</p>
-<pre><code class="lang-json">[
-    { &quot;keys&quot;: [&quot;:&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;enter_command_line_mode&quot; },
-    { &quot;keys&quot;: [&quot;TAB&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;focus_next&quot; },
-    { &quot;keys&quot;: [&quot;SHIFT_TAB&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;focus_previous&quot; },
-    { &quot;keys&quot;: [&quot;UP&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;move_up&quot; },
-    { &quot;keys&quot;: [&quot;DOWN&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;move_down&quot; },
-    { &quot;keys&quot;: [&quot;PAGE_UP&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;page_up&quot; },
-    { &quot;keys&quot;: [&quot;PAGE_DOWN&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;page_down&quot; },
-    { &quot;keys&quot;: [&quot;ENTER&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;activate&quot; },
-    { &quot;keys&quot;: [&quot;DELETE&quot;, &quot;BACKSPACE&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;delete&quot; },
-    { &quot;keys&quot;: [&quot; &quot;], &quot;command&quot;: &quot;todo toggle $n&quot; },
-    { &quot;keys&quot;: [&quot;tc&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;toggle_console&quot; },
-    { &quot;keys&quot;: [&quot;tm&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;toggle_metadata&quot; },
-    { &quot;keys&quot;: [&quot;/&quot;], &quot;type&quot;: &quot;prompt&quot;, &quot;command&quot;: &quot;search \&quot;\&quot;&quot;, &quot;cursorPosition&quot;: -2 },
-    { &quot;keys&quot;: [&quot;mn&quot;], &quot;type&quot;: &quot;prompt&quot;, &quot;command&quot;: &quot;mknote \&quot;\&quot;&quot;, &quot;cursorPosition&quot;: -2 },
-    { &quot;keys&quot;: [&quot;mt&quot;], &quot;type&quot;: &quot;prompt&quot;, &quot;command&quot;: &quot;mktodo \&quot;\&quot;&quot;, &quot;cursorPosition&quot;: -2 },
-    { &quot;keys&quot;: [&quot;mb&quot;], &quot;type&quot;: &quot;prompt&quot;, &quot;command&quot;: &quot;mkbook \&quot;\&quot;&quot;, &quot;cursorPosition&quot;: -2 },
-    { &quot;keys&quot;: [&quot;yn&quot;], &quot;type&quot;: &quot;prompt&quot;, &quot;command&quot;: &quot;cp $n \&quot;\&quot;&quot;, &quot;cursorPosition&quot;: -2 },
-    { &quot;keys&quot;: [&quot;dn&quot;], &quot;type&quot;: &quot;prompt&quot;, &quot;command&quot;: &quot;mv $n \&quot;\&quot;&quot;, &quot;cursorPosition&quot;: -2 }
-]
-</code></pre>
-<h1 id="available-commands">Available commands</h1>
+<h1 id="commands">Commands</h1>
 <p>The following commands are available in <a href="#command-line-mode">command-line mode</a>:</p>
 <pre><code>attach &lt;note&gt; &lt;file&gt;
 
     Attaches the given file to the note.
+
+cat &lt;note&gt;
+
+    Displays the given note.
+
+    -v, --verbose  Displays the complete information about note.
 
 config [name] [value]
 
@@ -472,11 +478,6 @@ config [name] [value]
 
 Possible keys/values:
 
-    sync.2.path            File system synchronisation target directory.
-                           The path to synchronise with when file system 
-                           synchronisation is enabled. See `sync.target`.
-                           Type: string.
-
     editor                 Text editor.
                            The editor that will be used to open a note. If 
                            none is provided it will try to auto-detect the 
@@ -485,8 +486,12 @@ Possible keys/values:
 
     locale                 Language.
                            Type: Enum.
-                           Possible values: en_GB (English), es_CR (Español), 
-                           fr_FR (Français).
+                           Possible values: en_GB (English), de_DE (Deutsch), 
+                           es_CR (Español (Costa Rica)), es_ES (Español), eu 
+                           (Basque), fr_FR (Français), hr_HR (Croatian), it_IT 
+                           (Italiano), ja_JP (日本語), nl_BE (Nederlands), pt_BR 
+                           (Português (Brasil)), ru_RU (Русский), zh_CN (中文 
+                           (简体)).
                            Default: &quot;en_GB&quot;
 
     dateFormat             Date format.
@@ -517,13 +522,37 @@ Possible keys/values:
                            Default: 300
 
     sync.target            Synchronisation target.
-                           The target to synchonise to. If synchronising with 
-                           the file system, set `sync.2.path` to specify the 
-                           target directory.
+                           The target to synchonise to. Each sync target may 
+                           have additional parameters which are named as 
+                           `sync.NUM.NAME` (all documented below).
                            Type: Enum.
                            Possible values: 2 (File system), 3 (OneDrive), 4 
-                           (OneDrive Dev (For testing only)).
+                           (OneDrive Dev (For testing only)), 5 (Nextcloud), 6 
+                           (WebDAV).
                            Default: 3
+
+    sync.2.path            Directory to synchronise with (absolute path).
+                           The path to synchronise with when file system 
+                           synchronisation is enabled. See `sync.target`.
+                           Type: string.
+
+    sync.5.path            Nexcloud WebDAV URL.
+                           Type: string.
+
+    sync.5.username        Nexcloud username.
+                           Type: string.
+
+    sync.5.password        Nexcloud password.
+                           Type: string.
+
+    sync.6.path            WebDAV URL.
+                           Type: string.
+
+    sync.6.username        WebDAV username.
+                           Type: string.
+
+    sync.6.password        WebDAV password.
+                           Type: string.
 
 cp &lt;note&gt; [notebook]
 
@@ -534,13 +563,36 @@ done &lt;note&gt;
 
     Marks a to-do as done.
 
+e2ee &lt;command&gt; [path]
+
+    Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, 
+    `status` and `target-status`.
+
+    -p, --password &lt;password&gt;  Use this password as master password (For 
+                               security reasons, it is not recommended to use 
+                               this option).
+    -v, --verbose              More verbose output for the `target-status` 
+                               command
+
 edit &lt;note&gt;
 
     Edit note.
 
-exit
+encrypt-config &lt;command&gt;
 
-    Exits the application.
+    Manages encryption configuration.
+
+    -p, --password &lt;password&gt;  Use this password as master password (For 
+                               security reasons, it is not recommended to use 
+                               this option).
+
+encryption &lt;command&gt;
+
+    Manages encryption configuration.
+
+    -p, --password &lt;password&gt;  Use this password as master password (For 
+                               security reasons, it is not recommended to use 
+                               this option).
 
 export &lt;directory&gt;
 
@@ -596,9 +648,18 @@ rmnote &lt;note-pattern&gt;
 
     -f, --force  Deletes the notes without asking for confirmation.
 
-search &lt;pattern&gt; [notebook]
+set &lt;note&gt; &lt;name&gt; [value]
 
-    Searches for the given &lt;pattern&gt; in all the notes.
+    Sets the property &lt;name&gt; of the given &lt;note&gt; to the given [value]. 
+    Possible properties are:
+
+    parent_id (text), title (text), body (text), created_time (int), 
+    updated_time (int), is_conflict (int), latitude (numeric), longitude 
+    (numeric), altitude (numeric), author (text), source_url (text), is_todo 
+    (int), todo_due (int), todo_completed (int), source (text), 
+    source_application (text), application_data (text), order (int), 
+    user_created_time (int), user_updated_time (int), encryption_cipher_text 
+    (text), encryption_applied (int)
 
 status
 
@@ -610,7 +671,6 @@ sync
 
     --target &lt;target&gt;  Sync to provided target (defaults to sync.target config 
                        value)
-    --random-failures  For debugging purposes. Do not use.
 
 tag &lt;tag-command&gt; [tag] [note]
 
@@ -628,6 +688,11 @@ todo &lt;todo-command&gt; &lt;note-pattern&gt;
 undone &lt;note&gt;
 
     Marks a to-do as non-completed.
+
+use &lt;notebook&gt;
+
+    Switches to [notebook] - all further operations will happen within this 
+    notebook.
 
 version
 
