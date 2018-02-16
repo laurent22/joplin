@@ -36,21 +36,19 @@ class Command extends BaseCommand {
 	async action(args) {
 		const stdoutWidth = app().commandStdoutMaxWidth();
 
-		if (args.command === 'shortcuts') {
+		if (args.command === 'shortcuts' || args.command === 'keymap') {
 			if (app().gui().isDummy()) {
 				throw new Error(_('Shortcuts are not available in CLI mode.'));
 			}
 
-			const shortcuts = app().gui().shortcuts();
+			const keymap = app().gui().keymap();
 
 			let rows = [];
 
-			for (let n in shortcuts) {
-				if (!shortcuts.hasOwnProperty(n)) continue;
-				const shortcut = shortcuts[n];
-				if (!shortcut.description) continue;
-				n = shortcut.friendlyName ? shortcut.friendlyName : n;
-				rows.push([n, shortcut.description()]);
+			for (let i = 0; i < keymap.length; i++) {
+				const item = keymap[i];
+				const keys = item.keys.map((k) => k === ' ' ? '(SPACE)' : k);
+				rows.push([keys.join(', '), item.command]);
 			}
 
 			cliUtils.printArray(this.stdout.bind(this), rows);
@@ -78,7 +76,7 @@ class Command extends BaseCommand {
 			this.stdout(_('To maximise/minimise the console, press "TC".'));
 			this.stdout(_('To enter command line mode, press ":"'));
 			this.stdout(_('To exit command line mode, press ESCAPE'));
-			this.stdout(_('For the complete list of available keyboard shortcuts, type `help shortcuts`'));
+			this.stdout(_('For the complete list of available keyboard shortcuts, type `help keymap`'));
 		}
 
 		app().gui().showConsole();

@@ -96,7 +96,7 @@ The complete usage information is available from command-line mode, by typing on
 Command | Description
 --------|-------------------
 `help`  | General help information
-`help shortcuts` | Lists the available shortcuts
+`help keymap` | Lists the available shortcuts
 `help [command]` | Displays information about a particular command
 
 If the help is not fully visible, press `Tab` multiple times till the console is in focus and use the arrow keys or page up/down to scroll the text.
@@ -177,25 +177,78 @@ Give a new title to the note:
 
 # Available shortcuts
 
-There are two types of shortcuts: those that manipulate the user interface directly, such as `TAB` to move from one pane to another, and those that are simply shortcuts to actual commands. In a way similar to Vim, these shortcuts are generally a verb followed by an object. For example, typing `mn` ([m]ake [n]ote), is used to create a new note: it will switch the interface to command line mode and pre-fill it with `mknote ""` from where the title of the note can be entered. See below for the full list of shortcuts:
+There are two types of shortcuts: those that manipulate the user interface directly, such as `TAB` to move from one pane to another, and those that are simply shortcuts to actual commands. In a way similar to Vim, these shortcuts are generally a verb followed by an object. For example, typing `mn` ([m]ake [n]ote), is used to create a new note: it will switch the interface to command line mode and pre-fill it with `mknote ""` from where the title of the note can be entered. See below for the full list of default shortcuts:
 
-	Tab       Give focus to next pane
-	Shift+Tab Give focus to previous pane
-	:         Enter command line mode
-	ESC       Exit command line mode
-	ENTER     Edit the selected note
-	Ctrl+C    Cancel the current command.
-	Ctrl+D    Exit the application.
-	DELETE    Delete the currently selected note or notebook.
-	SPACE     Set a to-do as completed / not completed
-	tc        [t]oggle [c]onsole between maximized/minimized/hidden/visible.
-	/         Search
-	tm        [t]oggle note [m]etadata.
-	mn        [M]ake a new [n]ote
-	mt        [M]ake a new [t]odo
-	mb        [M]ake a new note[b]ook
-	yn        Copy ([Y]ank) the [n]ote to a notebook.
-	dn        Move the note to a notebook.
+	:                 enter_command_line_mode
+	TAB               focus_next
+	SHIFT_TAB         focus_previous
+	UP                move_up
+	DOWN              move_down
+	PAGE_UP           page_up
+	PAGE_DOWN         page_down
+	ENTER             activate
+	DELETE, BACKSPACE delete
+	(SPACE)           todo toggle $n
+	tc                toggle_console
+	tm                toggle_metadata
+	/                 search ""
+	mn                mknote ""
+	mt                mktodo ""
+	mb                mkbook ""
+	yn                cp $n ""
+	dn                mv $n ""
+
+Shortcut can be configured by adding a file `keymap.json` to the profile directory. The content of this file is a JSON array with each entry defining a command and the keys associated with it.
+
+Each entry can have the following properties:
+
+Name | Description
+-----|------------
+`keys` | The array of keys that will trigger the action. Special keys such as page up, down arrow, etc. needs to be specified UPPERCASE. See the [list of available special keys](https://github.com/cronvel/terminal-kit/blob/3114206a9556f518cc63abbcb3d188fe1995100d/lib/termconfig/xterm.js#L531). For example, `['DELETE', 'BACKSPACE']` means the command will run if the user pressed either the delete or backspace key. Key combinations can also be provided - in that case specify them lowercase. For example "tc" means that the command will be executed when the user pressed "t" then "c". Special keys can also be used in this fashion - simply write them one after the other. For instance, `CTRL_WCTRL_W` means the action would be executed if the user pressed "ctrl-w ctrl-w".
+`type` | The command type. It can have the value "exec", "function" or "prompt". **exec**: Simply execute the provided command. For example `edit $n` would edit the selected note. **function**: Run a special commands (see below for the list of function. **prompt**: A bit similar to "exec", except that the command is not going to be executed immediately - this allows the user to provide additional data. For example `mknote ""` would fill the command line with this command and allow the user to set the title. A prompt command can also take a `cursorPosition` parameter (see below)
+`command` | The command that needs to be executed
+`cusorPosition` | An integer. For prompt commands, tells where the cursor (caret) should start at. This is convenient for example to position the cursor between quotes. Use a negative value to set a position starting from the end.
+
+This is the list of available functions:
+
+Name | Description
+-----|------------
+enter_command_line_mode | Enter command line mode
+focus_next | Focus next pane (or widget)
+focus_previous | Focus previous pane (or widget)
+move_up | Move up (in a list for example)
+move_down | Move down (in a list for example)
+page_up | Page up
+page_down | Page down
+activate | Activates the selected item. If the item is a note for example it will be open in the editor
+delete | Deletes the selected item
+toggle_console | Toggle the console
+toggle_metadata | Toggle note metadata
+
+As an example, this is the default keymap:
+
+```json
+[
+	{ "keys": [":"], "type": "function", "command": "enter_command_line_mode" },
+	{ "keys": ["TAB"], "type": "function", "command": "focus_next" },
+	{ "keys": ["SHIFT_TAB"], "type": "function", "command": "focus_previous" },
+	{ "keys": ["UP"], "type": "function", "command": "move_up" },
+	{ "keys": ["DOWN"], "type": "function", "command": "move_down" },
+	{ "keys": ["PAGE_UP"], "type": "function", "command": "page_up" },
+	{ "keys": ["PAGE_DOWN"], "type": "function", "command": "page_down" },
+	{ "keys": ["ENTER"], "type": "function", "command": "activate" },
+	{ "keys": ["DELETE", "BACKSPACE"], "type": "function", "command": "delete" },
+	{ "keys": [" "], "command": "todo toggle $n" },
+	{ "keys": ["tc"], "type": "function", "command": "toggle_console" },
+	{ "keys": ["tm"], "type": "function", "command": "toggle_metadata" },
+	{ "keys": ["/"], "type": "prompt", "command": "search \"\"", "cursorPosition": -2 },
+	{ "keys": ["mn"], "type": "prompt", "command": "mknote \"\"", "cursorPosition": -2 },
+	{ "keys": ["mt"], "type": "prompt", "command": "mktodo \"\"", "cursorPosition": -2 },
+	{ "keys": ["mb"], "type": "prompt", "command": "mkbook \"\"", "cursorPosition": -2 },
+	{ "keys": ["yn"], "type": "prompt", "command": "cp $n \"\"", "cursorPosition": -2 },
+	{ "keys": ["dn"], "type": "prompt", "command": "mv $n \"\"", "cursorPosition": -2 }
+]
+```
 
 # Available commands
 

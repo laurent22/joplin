@@ -58,7 +58,7 @@
     "string-to-stream": "^1.1.0",
     "strip-ansi": "^4.0.0",
     "tcp-port-used": "^0.1.2",
-    "tkwidgets": "^0.5.21",
+    "tkwidgets": "^0.5.25",
     "url-parse": "^1.2.0",
     "uuid": "^3.0.1",
     "word-wrap": "^1.2.3",

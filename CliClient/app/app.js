@@ -312,6 +312,63 @@ class Application extends BaseApplication {
 		return this.activeCommand_;
 	}
 
+	async loadKeymaps() {
+		const defaultKeyMap = [
+			{ "keys": [":"], "type": "function", "command": "enter_command_line_mode" },
+			{ "keys": ["TAB"], "type": "function", "command": "focus_next" },
+			{ "keys": ["SHIFT_TAB"], "type": "function", "command": "focus_previous" },
+			{ "keys": ["UP"], "type": "function", "command": "move_up" },
+			{ "keys": ["DOWN"], "type": "function", "command": "move_down" },
+			{ "keys": ["PAGE_UP"], "type": "function", "command": "page_up" },
+			{ "keys": ["PAGE_DOWN"], "type": "function", "command": "page_down" },
+			{ "keys": ["ENTER"], "type": "function", "command": "activate" },
+			{ "keys": ["DELETE", "BACKSPACE"], "type": "function", "command": "delete" },
+			{ "keys": [" "], "command": "todo toggle $n" },
+			{ "keys": ["tc"], "type": "function", "command": "toggle_console" },
+			{ "keys": ["tm"], "type": "function", "command": "toggle_metadata" },
+			{ "keys": ["/"], "type": "prompt", "command": "search \"\"", "cursorPosition": -2 },
+			{ "keys": ["mn"], "type": "prompt", "command": "mknote \"\"", "cursorPosition": -2 },
+			{ "keys": ["mt"], "type": "prompt", "command": "mktodo \"\"", "cursorPosition": -2 },
+			{ "keys": ["mb"], "type": "prompt", "command": "mkbook \"\"", "cursorPosition": -2 },
+			{ "keys": ["yn"], "type": "prompt", "command": "cp $n \"\"", "cursorPosition": -2 },
+			{ "keys": ["dn"], "type": "prompt", "command": "mv $n \"\"", "cursorPosition": -2 }
+		];
+
+		// Filter the keymap item by command so that items in keymap.json can override
+		// the default ones.
+		const itemsByCommand = {};
+
+		for (let i = 0; i < defaultKeyMap.length; i++) {
+			itemsByCommand[defaultKeyMap[i].command] = defaultKeyMap[i]
+		}
+
+		const filePath = Setting.value('profileDir') + '/keymap.json';
+		if (await fs.pathExists(filePath)) {
+			try {
+				let configString = await fs.readFile(filePath, 'utf-8');
+				configString = configString.replace(/^\s*\/\/.*/, ''); // Strip off comments
+				const keymap = JSON.parse(configString);
+				for (let keymapIndex = 0; keymapIndex < keymap.length; keymapIndex++) {
+					const item = keymap[keymapIndex];
+					itemsByCommand[item.command] = item;
+				}
+			} catch (error) {
+				let msg = error.message ? error.message : '';
+				msg = 'Could not load keymap ' + filePath + '\n' + msg;
+				error.message = msg;
+				throw error;
+			}
+		}
+
+		const output = [];
+		for (let n in itemsByCommand) {
+			if (!itemsByCommand.hasOwnProperty(n)) continue;
+			output.push(itemsByCommand[n]);
+		}
+
+		return output;
+	}
+
 	async start(argv) {
 		argv = await super.start(argv);
 
@@ -338,8 +395,10 @@ class Application extends BaseApplication {
 		} else { // Otherwise open the GUI
 			this.initRedux();
 
+			const keymap = await this.loadKeymaps();
+
 			const AppGui = require('./app-gui.js');
-			this.gui_ = new AppGui(this, this.store());
+			this.gui_ = new AppGui(this, this.store(), keymap);
 			this.gui_.setLogger(this.logger_);
 			await this.gui_.start();
 

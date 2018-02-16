@@ -35,38 +35,55 @@ const ConsoleWidget = require('./gui/ConsoleWidget.js');
 
 class AppGui {
 
-	constructor(app, store) {
-		this.app_ = app;
-		this.store_ = store;
+	constructor(app, store, keymap) {
+		try {
+			this.app_ = app;
+			this.store_ = store;
 
-		BaseWidget.setLogger(app.logger());
+			BaseWidget.setLogger(app.logger());
 
-		this.term_ = new TermWrapper(tk.terminal);
+			this.term_ = new TermWrapper(tk.terminal);
 
-		this.renderer_ = null;
-		this.logger_ = new Logger();
-		this.buildUi();
+			// Some keys are directly handled by the tkwidget framework
+			// so they need to be remapped in a different way.
+			this.tkWidgetKeys_ = {
+				'focus_next': 'TAB',
+				'focus_previous': 'SHIFT_TAB',
+				'move_up': 'UP',
+				'move_down': 'DOWN',
+				'page_down': 'PAGE_DOWN',
+				'page_up': 'PAGE_UP',
+			};
 
-		this.renderer_ = new Renderer(this.term(), this.rootWidget_);
+			this.renderer_ = null;
+			this.logger_ = new Logger();
+			this.buildUi();
 
-		this.app_.on('modelAction', async (event) => {
-			await this.handleModelAction(event.action);
-		});
+			this.renderer_ = new Renderer(this.term(), this.rootWidget_);
 
-		this.shortcuts_ = this.setupShortcuts();
+			this.app_.on('modelAction', async (event) => {
+				await this.handleModelAction(event.action);
+			});
 
-		this.inputMode_ = AppGui.INPUT_MODE_NORMAL;
+			this.keymap_ = this.setupKeymap(keymap);
 
-		this.commandCancelCalled_ = false;
+			this.inputMode_ = AppGui.INPUT_MODE_NORMAL;
 
-		this.currentShortcutKeys_ = [];
-		this.lastShortcutKeyTime_ = 0;
+			this.commandCancelCalled_ = false;
 
-		// Recurrent sync is setup only when the GUI is started. In
-		// a regular command it's not necessary since the process
-		// exits right away.
-		reg.setupRecurrentSync();
-		DecryptionWorker.instance().scheduleStart();
+			this.currentShortcutKeys_ = [];
+			this.lastShortcutKeyTime_ = 0;
+
+			// Recurrent sync is setup only when the GUI is started. In
+			// a regular command it's not necessary since the process
+			// exits right away.
+			reg.setupRecurrentSync();
+			DecryptionWorker.instance().scheduleStart();
+		} catch (error) {
+			this.fullScreen(false);
+			console.error(error);
+			process.exit(1);
+		}
 	}
 
 	store() {
@@ -105,6 +122,7 @@ class AppGui {
 	buildUi() {
 		this.rootWidget_ = new ReduxRootWidget(this.store_);
 		this.rootWidget_.name = 'root';
+		this.rootWidget_.autoShortcutsEnabled = false;
 
 		const folderList = new FolderListWidget();
 		folderList.style = {
@@ -272,152 +290,26 @@ class AppGui {
 		this.stdout(chalk.cyan.bold('> ' + cmd));	
 	}
 
-	setupShortcuts() {
-		const shortcuts = {};
+	setupKeymap(keymap) {
+		const output = [];
 
-		shortcuts['TAB'] = {
-			friendlyName: 'Tab',
-			description: () => _('Give focus to next pane'),
-			isDocOnly: true,
-		}
+		for (let i = 0; i < keymap.length; i++) {
+			const item = Object.assign({}, keymap[i]);
 
-		shortcuts['SHIFT_TAB'] = {
-			friendlyName: 'Shift+Tab',
-			description: () => _('Give focus to previous pane'),
-			isDocOnly: true,
-		}
+			if (!item.command) throw new Error('Missing command for keymap item: ' + JSON.stringify(item));
 
-		shortcuts[':'] = {
-			description: () => _('Enter command line mode'),
-			action: async () => {
-				const cmd = await this.widget('statusBar').prompt();
-				if (!cmd) return;
-				this.addCommandToConsole(cmd);
-				await this.processCommand(cmd);
-			},
-		};
+			if (!('type' in item)) item.type = 'exec';
 
-		shortcuts['ESC'] = { // Built into terminal-kit inputField
-			description: () => _('Exit command line mode'),
-			isDocOnly: true,
-		};
-
-		shortcuts['ENTER'] = {
-			description: () => _('Edit the selected note'),
-			action: () => {
-				const w = this.widget('mainWindow').focusedWidget;
-				if (w.name === 'folderList') {
-					this.widget('noteList').focus();
-				} else if (w.name === 'noteList' || w.name === 'noteText') {
-					this.processCommand('edit $n');
-				}
-			},
-		}
-
-		shortcuts['CTRL_C'] = {
-			description: () => _('Cancel the current command.'),
-			friendlyName: 'Ctrl+C',
-			isDocOnly: true,
-		}
-
-		shortcuts['CTRL_D'] = {
-			description: () => _('Exit the application.'),
-			friendlyName: 'Ctrl+D',
-			isDocOnly: true,
-		}
-
-		shortcuts['DELETE'] = {
-			description: () => _('Delete the currently selected note or notebook.'),
-			action: async () => {
-				if (this.widget('folderList').hasFocus) {
-					const item = this.widget('folderList').selectedJoplinItem;
-
-					if (!item) return;
-
-					if (item.type_ === BaseModel.TYPE_FOLDER) {
-						await this.processCommand('rmbook ' + item.id);
-					} else if (item.type_ === BaseModel.TYPE_TAG) {
-						this.stdout(_('To delete a tag, untag the associated notes.'));
-					} else if (item.type_ === BaseModel.TYPE_SEARCH) {
-						this.store().dispatch({
-							type: 'SEARCH_DELETE',
-							id: item.id,
-						});
-					}
-				} else if (this.widget('noteList').hasFocus) {
-					await this.processCommand('rmnote $n');
-				} else {
-					this.stdout(_('Please select the note or notebook to be deleted first.'));
-				}
+			if (item.command in this.tkWidgetKeys_) {
+				item.type = 'tkwidgets';
 			}
-		};
 
-		shortcuts['BACKSPACE'] = {
-			alias: 'DELETE',
-		};
+			item.canRunAlongOtherCommands = item.type === 'function' && ['toggle_metadata', 'toggle_console'].indexOf(item.command) >= 0;
 
-		shortcuts[' '] = {
-			friendlyName: 'SPACE',
-			description: () => _('Set a to-do as completed / not completed'),
-			action: 'todo toggle $n',
+			output.push(item);
 		}
 
-		shortcuts['tc'] = {
-			description: () => _('[t]oggle [c]onsole between maximized/minimized/hidden/visible.'),
-			action: () => {
-				if (!this.consoleIsShown()) {
-					this.showConsole();
-					this.minimizeConsole();
-				} else {
-					if (this.consoleIsMaximized()) {
-						this.hideConsole();
-					} else {
-						this.maximizeConsole();
-					}
-				}
-			},
-			canRunAlongOtherCommands: true,
-		}
-
-		shortcuts['/'] = {
-			description: () => _('Search'),
-			action: { type: 'prompt', initialText: 'search ""', cursorPosition: -2 },
-		};
-
-		shortcuts['tm'] = {
-			description: () => _('[t]oggle note [m]etadata.'),
-			action: () => {
-				this.toggleNoteMetadata();
-			},
-			canRunAlongOtherCommands: true,
-		}
-
-		shortcuts['mn'] = {
-			description: () => _('[M]ake a new [n]ote'),
-			action: { type: 'prompt', initialText: 'mknote ""', cursorPosition: -2 },
-		}
-
-		shortcuts['mt'] = {
-			description: () => _('[M]ake a new [t]odo'),
-			action: { type: 'prompt', initialText: 'mktodo ""', cursorPosition: -2 },
-		}
-
-		shortcuts['mb'] = {
-			description: () => _('[M]ake a new note[b]ook'),
-			action: { type: 'prompt', initialText: 'mkbook ""', cursorPosition: -2 },
-		}
-
-		shortcuts['yn'] = {
-			description: () => _('Copy ([Y]ank) the [n]ote to a notebook.'),
-			action: { type: 'prompt', initialText: 'cp $n ""', cursorPosition: -2 },
-		}
-
-		shortcuts['dn'] = {
-			description: () => _('Move the note to a notebook.'),
-			action: { type: 'prompt', initialText: 'mv $n ""', cursorPosition: -2 },
-		}
-
-		return shortcuts;
+		return output;
 	}
 
 	toggleConsole() {
@@ -492,8 +384,16 @@ class AppGui {
 		return this.logger_;
 	}
 
-	shortcuts() {
-		return this.shortcuts_;
+	keymap() {
+		return this.keymap_;
+	}
+
+	keymapItemByKey(key) {
+		for (let i = 0; i < this.keymap_.length; i++) {
+			const item = this.keymap_[i];
+			if (item.keys.indexOf(key) >= 0) return item;
+		}
+		return null;
 	}
 
 	term() {
@@ -524,17 +424,77 @@ class AppGui {
 		}
 	}
 
-	async processCommand(cmd) {
+	async processFunctionCommand(cmd) {
+
+		if (cmd === 'activate') {
+
+			const w = this.widget('mainWindow').focusedWidget;
+			if (w.name === 'folderList') {
+				this.widget('noteList').focus();
+			} else if (w.name === 'noteList' || w.name === 'noteText') {
+				this.processPromptCommand('edit $n');
+			}
+
+		} else if (cmd === 'delete') {
+
+			if (this.widget('folderList').hasFocus) {
+				const item = this.widget('folderList').selectedJoplinItem;
+
+				if (!item) return;
+
+				if (item.type_ === BaseModel.TYPE_FOLDER) {
+					await this.processPromptCommand('rmbook ' + item.id);
+				} else if (item.type_ === BaseModel.TYPE_TAG) {
+					this.stdout(_('To delete a tag, untag the associated notes.'));
+				} else if (item.type_ === BaseModel.TYPE_SEARCH) {
+					this.store().dispatch({
+						type: 'SEARCH_DELETE',
+						id: item.id,
+					});
+				}
+			} else if (this.widget('noteList').hasFocus) {
+				await this.processPromptCommand('rmnote $n');
+			} else {
+				this.stdout(_('Please select the note or notebook to be deleted first.'));
+			}
+
+		} else if (cmd === 'toggle_console') {
+
+			if (!this.consoleIsShown()) {
+				this.showConsole();
+				this.minimizeConsole();
+			} else {
+				if (this.consoleIsMaximized()) {
+					this.hideConsole();
+				} else {
+					this.maximizeConsole();
+				}
+			}
+
+		} else if (cmd === 'toggle_metadata') {
+
+			this.toggleNoteMetadata();
+
+		} else if (cmd === 'enter_command_line_mode') {
+
+			const cmd = await this.widget('statusBar').prompt();
+			if (!cmd) return;
+			this.addCommandToConsole(cmd);
+			await this.processPromptCommand(cmd);			
+
+		} else {
+
+			throw new Error('Unknown command: ' + cmd);
+
+		}
+	}
+
+	async processPromptCommand(cmd) {
 		if (!cmd) return;
 		cmd = cmd.trim();
 		if (!cmd.length) return;
 
 		this.logger().info('Got command: ' + cmd);
-
-		if (cmd === 'q' || cmd === 'wq' || cmd === 'qa') { // Vim bonus
-			await this.app().exit();
-			return;
-		}	
 
 		try {			
 			let note = this.widget('noteList').currentItem;
@@ -786,35 +746,34 @@ class AppGui {
 				// -------------------------------------------------------------------------
 
 				const shortcutKey = this.currentShortcutKeys_.join('');
-				let cmd = shortcutKey in this.shortcuts_ ? this.shortcuts_[shortcutKey] : null;
+				let keymapItem = this.keymapItemByKey(shortcutKey);
 
 				// If this command is an alias to another command, resolve to the actual command
-				if (cmd && cmd.alias) cmd = this.shortcuts_[cmd.alias];
 
-				let processShortcutKeys = !this.app().currentCommand() && cmd;
-				if (cmd && cmd.canRunAlongOtherCommands) processShortcutKeys = true;
+				let processShortcutKeys = !this.app().currentCommand() && keymapItem;
+				if (keymapItem && keymapItem.canRunAlongOtherCommands) processShortcutKeys = true;
 				if (statusBar.promptActive) processShortcutKeys = false;
-				if (cmd && cmd.isDocOnly) processShortcutKeys = false;
 
 				if (processShortcutKeys) {
-					this.logger().info('Shortcut:', shortcutKey, cmd.description());
+					this.logger().info('Shortcut:', shortcutKey, keymapItem);
 
 					this.currentShortcutKeys_ = [];
-					if (typeof cmd.action === 'function') {
-						await cmd.action();
-					} else if (typeof cmd.action === 'object') {
-						if (cmd.action.type === 'prompt') {
-							let promptOptions = {};
-							if ('cursorPosition' in cmd.action) promptOptions.cursorPosition = cmd.action.cursorPosition;
-							const commandString = await statusBar.prompt(cmd.action.initialText ? cmd.action.initialText : '', null, promptOptions);
-							this.addCommandToConsole(commandString);
-							await this.processCommand(commandString);
-						} else {
-							throw new Error('Unknown command: ' + JSON.stringify(cmd.action));
-						}
-					} else { // String
-						this.stdout(cmd.action);
-						await this.processCommand(cmd.action);
+
+					if (keymapItem.type === 'function') {
+						this.processFunctionCommand(keymapItem.command);
+					} else if (keymapItem.type === 'prompt') {
+						let promptOptions = {};
+						if ('cursorPosition' in keymapItem) promptOptions.cursorPosition = keymapItem.cursorPosition;
+						const commandString = await statusBar.prompt(keymapItem.command ? keymapItem.command : '', null, promptOptions);
+						this.addCommandToConsole(commandString);
+						await this.processPromptCommand(commandString);
+					} else if (keymapItem.type === 'exec') {
+						this.stdout(keymapItem.command);
+						await this.processPromptCommand(keymapItem.command);
+					} else if (keymapItem.type === 'tkwidgets') {
+						this.widget('root').handleKey(this.tkWidgetKeys_[keymapItem.command]);
+					} else {
+						throw new Error('Unknown command type: ' + JSON.stringify(keymapItem));
 					}
 				}
 
