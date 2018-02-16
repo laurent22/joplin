@@ -163,6 +163,8 @@ class MainScreenComponent extends React.Component {
 					}
 				},
 			});
+		} else if (command.name === 'toggleVisiblePanes') {
+			this.toggleVisiblePanes();
 		} else if (command.name === 'editAlarm') {
 			const note = await Note.load(command.noteId);
 
@@ -309,9 +311,7 @@ class MainScreenComponent extends React.Component {
 			title: _('Layout'),
 			iconName: 'fa-columns',
 			enabled: !!notes.length,
-			onClick: () => {
-				this.toggleVisiblePanes();
-			},
+			onClick: () => { this.doCommand({ name: 'toggleVisiblePanes' }) },
 		});
 
 		if (!this.promptOnClose_) {

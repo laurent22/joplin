@@ -200,6 +200,7 @@ class Application extends BaseApplication {
 					}
 				}, {
 					label: _('New notebook'),
+					accelerator: 'CommandOrControl+B',
 					screens: ['Main'],
 					click: () => {
 						this.dispatch({
@@ -228,6 +229,14 @@ class Application extends BaseApplication {
 							},
 						});
 					}
+				}, {
+					type: 'separator',
+					platforms: ['darwin'],
+				}, {
+					label: _('Hide %s', 'Joplin'),
+					platforms: ['darwin'],
+					accelerator: 'CommandOrControl+H',
+					click: () => { bridge().window().hide() }
 				}, {
 					type: 'separator',
 				}, {
@@ -267,6 +276,19 @@ class Application extends BaseApplication {
 					},
 				}],
 			}, {
+				label: _('View'),
+				submenu: [{
+					label: _('Toggle editor layout'),
+					screens: ['Main'],
+					accelerator: 'CommandOrControl+L',
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'toggleVisiblePanes',
+						});
+					}
+				}],
+			}, {
 				label: _('Tools'),
 				submenu: [{
 					label: _('Synchronisation status'),
@@ -289,6 +311,7 @@ class Application extends BaseApplication {
 					}
 				},{
 					label: _('General Options'),
+					accelerator: 'CommandOrControl+,',
 					click: () => {
 						this.dispatch({
 							type: 'NAV_GO',
@@ -334,10 +357,13 @@ class Application extends BaseApplication {
 		}
 
 		function removeUnwantedItems(template, screen) {
+			const platform = shim.platformName();
+
 			let output = [];
 			for (let i = 0; i < template.length; i++) {
 				const t = Object.assign({}, template[i]);
 				if (t.screens && t.screens.indexOf(screen) < 0) continue;
+				if (t.platforms && t.platforms.indexOf(platform) < 0) continue;
 				if (t.submenu) t.submenu = removeUnwantedItems(t.submenu, screen);
 				if (('submenu' in t) && isEmptyMenu(t.submenu)) continue;
 				output.push(t);

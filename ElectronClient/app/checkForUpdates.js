@@ -50,14 +50,47 @@ autoUpdater.on('error', (error) => {
 	onCheckEnded();
 })
 
+function findDownloadFilename_(info) {
+	// { version: '1.0.64',
+	//   files: 
+	//    [ { url: 'Joplin-1.0.64-mac.zip',
+	//        sha512: 'OlemXqhq/fSifx7EutvMzfoCI/1kGNl10i8nkvACEDfVXwP8hankDBXEC0+GxSArsZuxOh3U1+C+4j72SfIUew==' },
+	//      { url: 'Joplin-1.0.64.dmg',
+	//        sha512: 'jAewQQoJ3nCaOj8hWDgf0sc3LBbAWQtiKqfTflK8Hc3Dh7fAy9jRHfFAZKFUZ9ll95Bun0DVsLq8wLSUrdsMXw==',
+	//        size: 77104485 } ],
+	//   path: 'Joplin-1.0.64-mac.zip',
+	//   sha512: 'OlemXqhq/fSifx7EutvMzfoCI/1kGNl10i8nkvACEDfVXwP8hankDBXEC0+GxSArsZuxOh3U1+C+4j72SfIUew==',
+	//   releaseDate: '2018-02-16T00:13:01.634Z',
+	//   releaseName: 'v1.0.64',
+	//   releaseNotes: '<p>Still more fixes and im...' }
+
+	if (!info) return null;
+
+	if (!info.files) {
+		// info.path seems to contain a default, though not a good one,
+		// so the loop below if preferable to find the right file.
+		return info.path;
+	}
+
+	for (let i = 0; i < info.files.length; i++) {
+		const f = info.files[i].url; // Annoyingly this is called "url" but it's obviously not a url, so hopefully it won't change later on and become one.
+		if (f.indexOf('.exe') >= 0) return f;
+		if (f.indexOf('.dmg') >= 0) return f;
+	}
+
+	return info.path;
+}
+
 autoUpdater.on('update-available', (info) => {
-	if (!info.version || !info.path) {
+	const filename = findDownloadFilename_(info);
+
+	if (!info.version || !filename) {
 		if (checkInBackground_) return onCheckEnded();
 		showErrorMessageBox(('Could not get version info: ' + JSON.stringify(info)));
 		return onCheckEnded();
 	}
 
-	const downloadUrl = 'https://github.com/laurent22/joplin/releases/download/v' + info.version + '/' + info.path;
+	const downloadUrl = 'https://github.com/laurent22/joplin/releases/download/v' + info.version + '/' + filename;
 
 	let releaseNotes = info.releaseNotes + '';
 	if (releaseNotes) releaseNotes = '\n\n' + _('Release notes:\n\n%s', htmlToText_(releaseNotes));
