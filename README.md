@@ -209,7 +209,7 @@ Current translations:
 ![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/hr.png)  |  Croatian  |  hr_HR  |  Hrvoje Mandić <trbuhom@net.hr>  |  72%
 ![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/de.png)  |  Deutsch  |  de_DE  |  Tobias Strobel <git@strobeltobias.de>  |  91%
 ![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/gb.png)  |  English  |  en_GB  |    |  100%
-![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/es.png)  |  Español  |  es_ES  |  Lucas Vieites  |  79%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/es.png)  |  Español  |  es_ES  |  Lucas Vieites, Fernando Martín  |  100%
 ![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/cr.png)  |  Español (Costa Rica)  |  es_CR  |    |  68%
 ![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/fr.png)  |  Français  |  fr_FR  |  Laurent Cozic  |  100%
 ![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/it.png)  |  Italiano  |  it_IT  |    |  75%
