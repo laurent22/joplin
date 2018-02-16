@@ -62,9 +62,9 @@ class Bridge {
 		return filePaths;
 	}
 
-	showMessageBox(options) {
+	showMessageBox(window, options) {
 		const {dialog} = require('electron');
-		return dialog.showMessageBox(this.window(), options);
+		return dialog.showMessageBox(window, options);
 	}
 
 	showErrorMessageBox(message) {

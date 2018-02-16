@@ -16,6 +16,8 @@ autoUpdater.autoDownload = false;
 function htmlToText_(html) {
 	let output = html.replace(/\n/g, '');
 	output = output.replace(/<li>/g, '- ');
+	output = output.replace(/<p>/g, '');
+	output = output.replace(/<\/p>/g, '\n');
 	output = output.replace(/<\/li>/g, '\n');
 	output = output.replace(/<ul>/g, '');
 	output = output.replace(/<\/ul>/g, '');
