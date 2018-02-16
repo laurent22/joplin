@@ -15,61 +15,10 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Give focus to next pane"
-msgstr ""
-
-msgid "Give focus to previous pane"
-msgstr ""
-
-msgid "Enter command line mode"
-msgstr ""
-
-msgid "Exit command line mode"
-msgstr ""
-
-msgid "Edit the selected note"
-msgstr ""
-
-msgid "Cancel the current command."
-msgstr ""
-
-msgid "Exit the application."
-msgstr ""
-
-msgid "Delete the currently selected note or notebook."
-msgstr ""
-
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
 
 msgid "Please select the note or notebook to be deleted first."
-msgstr ""
-
-msgid "Set a to-do as completed / not completed"
-msgstr ""
-
-msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-msgstr ""
-
-msgid "Search"
-msgstr ""
-
-msgid "[t]oggle note [m]etadata."
-msgstr ""
-
-msgid "[M]ake a new [n]ote"
-msgstr ""
-
-msgid "[M]ake a new [t]odo"
-msgstr ""
-
-msgid "[M]ake a new note[b]ook"
-msgstr ""
-
-msgid "Copy ([Y]ank) the [n]ote to a notebook."
-msgstr ""
-
-msgid "Move the note to a notebook."
 msgstr ""
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
@@ -241,6 +190,10 @@ msgstr ""
 msgid "Displays usage information."
 msgstr ""
 
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr ""
+
 msgid "Shortcuts are not available in CLI mode."
 msgstr ""
 
@@ -276,7 +229,7 @@ msgid "To exit command line mode, press ESCAPE"
 msgstr ""
 
 msgid ""
-"For the complete list of available keyboard shortcuts, type `help shortcuts`"
+"For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
 
 msgid "Imports an Evernote notebook file (.enex file)."
@@ -742,6 +695,9 @@ msgid "Rename notebook:"
 msgstr ""
 
 msgid "Set alarm:"
+msgstr ""
+
+msgid "Search"
 msgstr ""
 
 msgid "Layout"

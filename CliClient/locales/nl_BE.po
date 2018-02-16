@@ -16,63 +16,11 @@ msgstr ""
 "X-Generator: Poedit 2.0.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Give focus to next pane"
-msgstr "Focus op het volgende paneel"
-
-msgid "Give focus to previous pane"
-msgstr "Focus op het vorige paneel"
-
-msgid "Enter command line mode"
-msgstr "Ga naar command line modus"
-
-msgid "Exit command line mode"
-msgstr "Ga uit command line modus"
-
-msgid "Edit the selected note"
-msgstr "Pas de geselecteerde notitie aan"
-
-msgid "Cancel the current command."
-msgstr "Annuleer het huidige commando."
-
-msgid "Exit the application."
-msgstr "Sluit de applicatie."
-
-msgid "Delete the currently selected note or notebook."
-msgstr "Verwijder de geselecteerde notitie of het geselecteerde notitieboek."
-
 msgid "To delete a tag, untag the associated notes."
 msgstr "Untag de geassocieerde notities om een tag te verwijderen."
 
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Selecteer eerst het notitieboek of de notitie om te verwijderen."
-
-msgid "Set a to-do as completed / not completed"
-msgstr "Zet een to-do als voltooid / niet voltooid"
-
-msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-msgstr ""
-"Wissel de console tussen gemaximaliseerd/geminimaliseerd/verborgen/zichtbaar."
-
-msgid "Search"
-msgstr "Zoeken"
-
-msgid "[t]oggle note [m]etadata."
-msgstr "Ac[t]iveer notitie [m]etadata."
-
-msgid "[M]ake a new [n]ote"
-msgstr "[M]aak een nieuwe [n]otitie"
-
-msgid "[M]ake a new [t]odo"
-msgstr "[M]aak een nieuwe [t]o-do"
-
-msgid "[M]ake a new note[b]ook"
-msgstr "[M]aak een nieuw notitie[b]oek"
-
-msgid "Copy ([Y]ank) the [n]ote to a notebook."
-msgstr "Kopieer [Y] de [n]otirie in een notitieboek."
-
-msgid "Move the note to a notebook."
-msgstr "Verplaats de notitie naar een notitieboek."
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Typ Ctrl+D of \"exit\" om de applicatie te sluiten"
@@ -259,6 +207,10 @@ msgstr "Toont een geolocatie link voor de notitie."
 msgid "Displays usage information."
 msgstr "Toont gebruiksinformatie."
 
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr ""
+
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Shortcuts zijn niet beschikbaar in command line modus."
 
@@ -301,8 +253,9 @@ msgstr "Om command line modus te gebruiken, duw \":\""
 msgid "To exit command line mode, press ESCAPE"
 msgstr "Om command line modus te verlaten, duw ESCAPE"
 
+#, fuzzy
 msgid ""
-"For the complete list of available keyboard shortcuts, type `help shortcuts`"
+"For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
 "Voor de volledige lijst van beschikbare shortcuts, typ `help shortcuts`"
 
@@ -834,6 +787,9 @@ msgstr "Hernoem notitieboek:"
 
 msgid "Set alarm:"
 msgstr "Stel melding in:"
+
+msgid "Search"
+msgstr "Zoeken"
 
 msgid "Layout"
 msgstr "Layout"
@@ -1369,6 +1325,57 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Welkom"
+
+#~ msgid "Give focus to next pane"
+#~ msgstr "Focus op het volgende paneel"
+
+#~ msgid "Give focus to previous pane"
+#~ msgstr "Focus op het vorige paneel"
+
+#~ msgid "Enter command line mode"
+#~ msgstr "Ga naar command line modus"
+
+#~ msgid "Exit command line mode"
+#~ msgstr "Ga uit command line modus"
+
+#~ msgid "Edit the selected note"
+#~ msgstr "Pas de geselecteerde notitie aan"
+
+#~ msgid "Cancel the current command."
+#~ msgstr "Annuleer het huidige commando."
+
+#~ msgid "Exit the application."
+#~ msgstr "Sluit de applicatie."
+
+#~ msgid "Delete the currently selected note or notebook."
+#~ msgstr ""
+#~ "Verwijder de geselecteerde notitie of het geselecteerde notitieboek."
+
+#~ msgid "Set a to-do as completed / not completed"
+#~ msgstr "Zet een to-do als voltooid / niet voltooid"
+
+#~ msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+#~ msgstr ""
+#~ "Wissel de console tussen gemaximaliseerd/geminimaliseerd/verborgen/"
+#~ "zichtbaar."
+
+#~ msgid "[t]oggle note [m]etadata."
+#~ msgstr "Ac[t]iveer notitie [m]etadata."
+
+#~ msgid "[M]ake a new [n]ote"
+#~ msgstr "[M]aak een nieuwe [n]otitie"
+
+#~ msgid "[M]ake a new [t]odo"
+#~ msgstr "[M]aak een nieuwe [t]o-do"
+
+#~ msgid "[M]ake a new note[b]ook"
+#~ msgstr "[M]aak een nieuw notitie[b]oek"
+
+#~ msgid "Copy ([Y]ank) the [n]ote to a notebook."
+#~ msgstr "Kopieer [Y] de [n]otirie in een notitieboek."
+
+#~ msgid "Move the note to a notebook."
+#~ msgstr "Verplaats de notitie naar een notitieboek."
 
 #~ msgid ""
 #~ "The target to synchonise to. If synchronising with the file system, set "

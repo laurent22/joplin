@@ -374,22 +374,6 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	    Edit note.
 
-	encrypt-config <command>
-
-	    Manages encryption configuration.
-
-	    -p, --password <password>  Use this password as master password (For 
-	                               security reasons, it is not recommended to use 
-	                               this option).
-
-	encryption <command>
-
-	    Manages encryption configuration.
-
-	    -p, --password <password>  Use this password as master password (For 
-	                               security reasons, it is not recommended to use 
-	                               this option).
-
 	export <directory>
 
 	    Exports Joplin data to the given directory. By default, it will export the 

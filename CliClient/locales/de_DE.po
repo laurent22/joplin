@@ -16,30 +16,6 @@ msgstr ""
 "X-Generator: Poedit 2.0.6\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Give focus to next pane"
-msgstr "Das nächste Fenster fokussieren"
-
-msgid "Give focus to previous pane"
-msgstr "Das vorherige Fenster fokussieren"
-
-msgid "Enter command line mode"
-msgstr "Zum Terminal-Modus wechseln"
-
-msgid "Exit command line mode"
-msgstr "Den Terminal-Modus verlassen"
-
-msgid "Edit the selected note"
-msgstr "Die ausgewählte Notiz bearbeiten"
-
-msgid "Cancel the current command."
-msgstr "Den momentanen Befehl abbrechen."
-
-msgid "Exit the application."
-msgstr "Das Programm verlassen."
-
-msgid "Delete the currently selected note or notebook."
-msgstr "Die/das momentan ausgewählte Notiz(-buch) löschen."
-
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
 "Hebe die Markierungen zugehöriger Notizen auf, um eine Markierung zu löschen."
@@ -48,35 +24,6 @@ msgid "Please select the note or notebook to be deleted first."
 msgstr ""
 "Wähle bitte zuerst eine Notiz oder ein Notizbuch aus, das gelöscht werden "
 "soll."
-
-msgid "Set a to-do as completed / not completed"
-msgstr "Ein To-Do als abgeschlossen / nicht abgeschlossen markieren"
-
-#, fuzzy
-msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-msgstr ""
-"Schal[t]e das Terminal zwischen maximiert/minimiert/versteckt/sichtbar um."
-
-msgid "Search"
-msgstr "Suchen"
-
-msgid "[t]oggle note [m]etadata."
-msgstr "Notiz-[M]etadata einschal[t]en."
-
-msgid "[M]ake a new [n]ote"
-msgstr "Eine neue [N]otiz [m]achen"
-
-msgid "[M]ake a new [t]odo"
-msgstr "Ein neues [T]o-Do [m]achen"
-
-msgid "[M]ake a new note[b]ook"
-msgstr "Ein neues Notiz[b]uch [m]achen"
-
-msgid "Copy ([Y]ank) the [n]ote to a notebook."
-msgstr "Die Notiz zu einem Notizbuch kopieren."
-
-msgid "Move the note to a notebook."
-msgstr "Die Notiz zu einem Notizbuch verschieben."
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Drücke Strg+D oder tippe \"exit\", um das Programm zu verlassen"
@@ -267,6 +214,10 @@ msgstr "Zeigt die Standort-URL der Notiz an."
 msgid "Displays usage information."
 msgstr "Zeigt die Nutzungsstatistik an."
 
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr ""
+
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Tastenkürzel sind im CLI Modus nicht verfügbar."
 
@@ -311,8 +262,9 @@ msgstr "Um den Kommandozeilen Modus aufzurufen, drücke \":\""
 msgid "To exit command line mode, press ESCAPE"
 msgstr "Um den Kommandozeilen Modus zu beenden, drücke ESCAPE"
 
+#, fuzzy
 msgid ""
-"For the complete list of available keyboard shortcuts, type `help shortcuts`"
+"For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
 "Um die komplette Liste von verfügbaren Tastenkürzeln anzuzeigen, tippe `help "
 "shortcuts` ein"
@@ -852,6 +804,9 @@ msgstr "Benne Notizbuch um:"
 
 msgid "Set alarm:"
 msgstr "Alarm erstellen:"
+
+msgid "Search"
+msgstr "Suchen"
 
 msgid "Layout"
 msgstr "Layout"
@@ -1397,6 +1352,56 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Willkommen"
+
+#~ msgid "Give focus to next pane"
+#~ msgstr "Das nächste Fenster fokussieren"
+
+#~ msgid "Give focus to previous pane"
+#~ msgstr "Das vorherige Fenster fokussieren"
+
+#~ msgid "Enter command line mode"
+#~ msgstr "Zum Terminal-Modus wechseln"
+
+#~ msgid "Exit command line mode"
+#~ msgstr "Den Terminal-Modus verlassen"
+
+#~ msgid "Edit the selected note"
+#~ msgstr "Die ausgewählte Notiz bearbeiten"
+
+#~ msgid "Cancel the current command."
+#~ msgstr "Den momentanen Befehl abbrechen."
+
+#~ msgid "Exit the application."
+#~ msgstr "Das Programm verlassen."
+
+#~ msgid "Delete the currently selected note or notebook."
+#~ msgstr "Die/das momentan ausgewählte Notiz(-buch) löschen."
+
+#~ msgid "Set a to-do as completed / not completed"
+#~ msgstr "Ein To-Do als abgeschlossen / nicht abgeschlossen markieren"
+
+#, fuzzy
+#~ msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+#~ msgstr ""
+#~ "Schal[t]e das Terminal zwischen maximiert/minimiert/versteckt/sichtbar um."
+
+#~ msgid "[t]oggle note [m]etadata."
+#~ msgstr "Notiz-[M]etadata einschal[t]en."
+
+#~ msgid "[M]ake a new [n]ote"
+#~ msgstr "Eine neue [N]otiz [m]achen"
+
+#~ msgid "[M]ake a new [t]odo"
+#~ msgstr "Ein neues [T]o-Do [m]achen"
+
+#~ msgid "[M]ake a new note[b]ook"
+#~ msgstr "Ein neues Notiz[b]uch [m]achen"
+
+#~ msgid "Copy ([Y]ank) the [n]ote to a notebook."
+#~ msgstr "Die Notiz zu einem Notizbuch kopieren."
+
+#~ msgid "Move the note to a notebook."
+#~ msgstr "Die Notiz zu einem Notizbuch verschieben."
 
 #~ msgid ""
 #~ "The target to synchonise to. If synchronising with the file system, set "

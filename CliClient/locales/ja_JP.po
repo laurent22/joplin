@@ -16,62 +16,11 @@ msgstr ""
 "X-Generator: Poedit 2.0.5\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "Give focus to next pane"
-msgstr "次のペインへ"
-
-msgid "Give focus to previous pane"
-msgstr "前のペインへ"
-
-msgid "Enter command line mode"
-msgstr "コマンドラインモードに入る"
-
-msgid "Exit command line mode"
-msgstr "コマンドラインモードの終了"
-
-msgid "Edit the selected note"
-msgstr "選択したノートを編集"
-
-msgid "Cancel the current command."
-msgstr "現在のコマンドをキャンセル"
-
-msgid "Exit the application."
-msgstr "アプリケーションを終了する"
-
-msgid "Delete the currently selected note or notebook."
-msgstr "選択中のノートまたはノートブックを削除"
-
 msgid "To delete a tag, untag the associated notes."
 msgstr "タグを削除するには、関連するノートからタグを外してください。"
 
 msgid "Please select the note or notebook to be deleted first."
 msgstr "ます削除するノートかノートブックを選択してください。"
-
-msgid "Set a to-do as completed / not completed"
-msgstr "ToDoを完了/未完に設定"
-
-msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-msgstr "コンソールを最大表示/最小表示/非表示/可視で切り替える([t][c])"
-
-msgid "Search"
-msgstr "検索"
-
-msgid "[t]oggle note [m]etadata."
-msgstr "ノートのメタ情報を切り替える [tm]"
-
-msgid "[M]ake a new [n]ote"
-msgstr "新しいノートの作成 [mn]"
-
-msgid "[M]ake a new [t]odo"
-msgstr "新しいToDoの作成 [mt]"
-
-msgid "[M]ake a new note[b]ook"
-msgstr "新しいノートブックの作成 [mb]"
-
-msgid "Copy ([Y]ank) the [n]ote to a notebook."
-msgstr "ノートをノートブックにコピー [yn]"
-
-msgid "Move the note to a notebook."
-msgstr "ノートをノートブックに移動"
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "アプリケーションを終了するには、Ctrl+Dまたは\"exit\"と入力してください"
@@ -252,6 +201,10 @@ msgstr "ノートの位置情報URLを表示する。"
 msgid "Displays usage information."
 msgstr "使い方を表示する。"
 
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr ""
+
 msgid "Shortcuts are not available in CLI mode."
 msgstr "CLIモードではショートカットは使用できません。"
 
@@ -291,8 +244,9 @@ msgstr "コマンドラインモードに入るには、\":\"を入力してく�
 msgid "To exit command line mode, press ESCAPE"
 msgstr "コマンドラインモードを終了するには、ESCキーを押してください。"
 
+#, fuzzy
 msgid ""
-"For the complete list of available keyboard shortcuts, type `help shortcuts`"
+"For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
 "有効なすべてのキーボードショートカットを表示するには、`help shortcuts`と入力"
 "してください。"
@@ -807,6 +761,9 @@ msgstr "ノートブックの名前を変更："
 
 msgid "Set alarm:"
 msgstr "アラームをセット："
+
+msgid "Search"
+msgstr "検索"
 
 msgid "Layout"
 msgstr "レイアウト"
@@ -1336,6 +1293,54 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
+
+#~ msgid "Give focus to next pane"
+#~ msgstr "次のペインへ"
+
+#~ msgid "Give focus to previous pane"
+#~ msgstr "前のペインへ"
+
+#~ msgid "Enter command line mode"
+#~ msgstr "コマンドラインモードに入る"
+
+#~ msgid "Exit command line mode"
+#~ msgstr "コマンドラインモードの終了"
+
+#~ msgid "Edit the selected note"
+#~ msgstr "選択したノートを編集"
+
+#~ msgid "Cancel the current command."
+#~ msgstr "現在のコマンドをキャンセル"
+
+#~ msgid "Exit the application."
+#~ msgstr "アプリケーションを終了する"
+
+#~ msgid "Delete the currently selected note or notebook."
+#~ msgstr "選択中のノートまたはノートブックを削除"
+
+#~ msgid "Set a to-do as completed / not completed"
+#~ msgstr "ToDoを完了/未完に設定"
+
+#~ msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+#~ msgstr "コンソールを最大表示/最小表示/非表示/可視で切り替える([t][c])"
+
+#~ msgid "[t]oggle note [m]etadata."
+#~ msgstr "ノートのメタ情報を切り替える [tm]"
+
+#~ msgid "[M]ake a new [n]ote"
+#~ msgstr "新しいノートの作成 [mn]"
+
+#~ msgid "[M]ake a new [t]odo"
+#~ msgstr "新しいToDoの作成 [mt]"
+
+#~ msgid "[M]ake a new note[b]ook"
+#~ msgstr "新しいノートブックの作成 [mb]"
+
+#~ msgid "Copy ([Y]ank) the [n]ote to a notebook."
+#~ msgstr "ノートをノートブックにコピー [yn]"
+
+#~ msgid "Move the note to a notebook."
+#~ msgstr "ノートをノートブックに移動"
 
 #~ msgid ""
 #~ "The target to synchonise to. If synchronising with the file system, set "

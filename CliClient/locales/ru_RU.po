@@ -17,62 +17,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-msgid "Give focus to next pane"
-msgstr "Переключиться на следующую панель"
-
-msgid "Give focus to previous pane"
-msgstr "Переключиться на предыдущую панель"
-
-msgid "Enter command line mode"
-msgstr "Войти в режим командной строки"
-
-msgid "Exit command line mode"
-msgstr "Выйти из режима командной строки"
-
-msgid "Edit the selected note"
-msgstr "Редактировать выбранную заметку"
-
-msgid "Cancel the current command."
-msgstr "Отменить текущую команду."
-
-msgid "Exit the application."
-msgstr "Выйти из приложения."
-
-msgid "Delete the currently selected note or notebook."
-msgstr "Удалить текущую выбранную заметку или блокнот."
-
 msgid "To delete a tag, untag the associated notes."
 msgstr "Чтобы удалить тег, уберите его с ассоциированных с ним заметок."
 
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Сначала выберите заметку или блокнот, которые должны быть удалены."
-
-msgid "Set a to-do as completed / not completed"
-msgstr "Отметить задачу как завершённую/незавершённую"
-
-msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-msgstr "[tc] переключить консоль между развёрнутой/свёрнутой/скрытой/видимой."
-
-msgid "Search"
-msgstr "Поиск"
-
-msgid "[t]oggle note [m]etadata."
-msgstr "[tm] переключить отображение метаданных заметки."
-
-msgid "[M]ake a new [n]ote"
-msgstr "[mn] создать новую заметку"
-
-msgid "[M]ake a new [t]odo"
-msgstr "[mt] создать новую задачу"
-
-msgid "[M]ake a new note[b]ook"
-msgstr "[mb] создать новый блокнот"
-
-msgid "Copy ([Y]ank) the [n]ote to a notebook."
-msgstr "[yn] копировать заметку в блокнот."
-
-msgid "Move the note to a notebook."
-msgstr "Переместить заметку в блокнот."
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Для выхода из приложения нажмите Ctrl+D или введите «exit»"
@@ -259,6 +208,10 @@ msgstr "Выводит URL геолокации для заметки."
 msgid "Displays usage information."
 msgstr "Выводит информацию об использовании."
 
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr ""
+
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Ярлыки недоступны в режиме командной строки."
 
@@ -301,8 +254,9 @@ msgstr "Чтобы войти в режим командной строки, н�
 msgid "To exit command line mode, press ESCAPE"
 msgstr "Чтобы выйти из режима командной строки, нажмите ESCAPE"
 
+#, fuzzy
 msgid ""
-"For the complete list of available keyboard shortcuts, type `help shortcuts`"
+"For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
 "Для просмотра списка доступных клавиатурных сочетаний введите `help "
 "shortcuts`"
@@ -834,6 +788,9 @@ msgstr "Переименовать блокнот:"
 msgid "Set alarm:"
 msgstr "Установить напоминание:"
 
+msgid "Search"
+msgstr "Поиск"
+
 msgid "Layout"
 msgstr "Вид"
 
@@ -1363,6 +1320,55 @@ msgstr "У вас сейчас нет блокнота. Создайте его 
 
 msgid "Welcome"
 msgstr "Добро пожаловать"
+
+#~ msgid "Give focus to next pane"
+#~ msgstr "Переключиться на следующую панель"
+
+#~ msgid "Give focus to previous pane"
+#~ msgstr "Переключиться на предыдущую панель"
+
+#~ msgid "Enter command line mode"
+#~ msgstr "Войти в режим командной строки"
+
+#~ msgid "Exit command line mode"
+#~ msgstr "Выйти из режима командной строки"
+
+#~ msgid "Edit the selected note"
+#~ msgstr "Редактировать выбранную заметку"
+
+#~ msgid "Cancel the current command."
+#~ msgstr "Отменить текущую команду."
+
+#~ msgid "Exit the application."
+#~ msgstr "Выйти из приложения."
+
+#~ msgid "Delete the currently selected note or notebook."
+#~ msgstr "Удалить текущую выбранную заметку или блокнот."
+
+#~ msgid "Set a to-do as completed / not completed"
+#~ msgstr "Отметить задачу как завершённую/незавершённую"
+
+#~ msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+#~ msgstr ""
+#~ "[tc] переключить консоль между развёрнутой/свёрнутой/скрытой/видимой."
+
+#~ msgid "[t]oggle note [m]etadata."
+#~ msgstr "[tm] переключить отображение метаданных заметки."
+
+#~ msgid "[M]ake a new [n]ote"
+#~ msgstr "[mn] создать новую заметку"
+
+#~ msgid "[M]ake a new [t]odo"
+#~ msgstr "[mt] создать новую задачу"
+
+#~ msgid "[M]ake a new note[b]ook"
+#~ msgstr "[mb] создать новый блокнот"
+
+#~ msgid "Copy ([Y]ank) the [n]ote to a notebook."
+#~ msgstr "[yn] копировать заметку в блокнот."
+
+#~ msgid "Move the note to a notebook."
+#~ msgstr "Переместить заметку в блокнот."
 
 #~ msgid "Error"
 #~ msgstr "Ошибка"

@@ -16,63 +16,11 @@ msgstr ""
 "X-Generator: Poedit 2.0.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Give focus to next pane"
-msgstr "Dar enfoque al siguiente panel"
-
-msgid "Give focus to previous pane"
-msgstr "Dar enfoque al panel anterior"
-
-msgid "Enter command line mode"
-msgstr "Entrar modo linea de comandos"
-
-msgid "Exit command line mode"
-msgstr "Salir modo linea de comandos"
-
-msgid "Edit the selected note"
-msgstr "Editar la nota seleccionada"
-
-msgid "Cancel the current command."
-msgstr "Cancelar el comando actual."
-
-msgid "Exit the application."
-msgstr "Salir de la aplicación."
-
-msgid "Delete the currently selected note or notebook."
-msgstr "Eliminar la nota o libreta seleccionada."
-
 msgid "To delete a tag, untag the associated notes."
 msgstr "Para eliminar una etiqueta, desmarca las notas asociadas."
 
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Por favor selecciona la nota o libreta a elliminar."
-
-#, fuzzy
-msgid "Set a to-do as completed / not completed"
-msgstr "Marca una tarea como completado / no completado"
-
-msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-msgstr "[c]ambia la [c]onsola entre maximizado/minimizado/oculto/visible."
-
-msgid "Search"
-msgstr "Buscar"
-
-msgid "[t]oggle note [m]etadata."
-msgstr "[c]ambia los [m]etadatos de una nota."
-
-msgid "[M]ake a new [n]ote"
-msgstr "[H]acer una [n]ota nueva"
-
-msgid "[M]ake a new [t]odo"
-msgstr "[H]acer una nueva [t]area"
-
-msgid "[M]ake a new note[b]ook"
-msgstr "[H]acer una nueva [l]ibreta"
-
-msgid "Copy ([Y]ank) the [n]ote to a notebook."
-msgstr "Copiar ([Y]ank) la [n]ota a una libreta."
-
-msgid "Move the note to a notebook."
-msgstr "Mover la nota a una libreta."
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Presiona Ctrl+D o escribe \"salir\" para salir de la aplicación"
@@ -253,6 +201,10 @@ msgstr "Mostrar geolocalización de la URL para la nota."
 msgid "Displays usage information."
 msgstr "Muestra información de uso."
 
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr ""
+
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Atajos no disponibles en modo CLI."
 
@@ -294,8 +246,9 @@ msgstr "Para entrar a modo linea de comando, presiona \":\""
 msgid "To exit command line mode, press ESCAPE"
 msgstr "Para salir de modo linea de comando, presiona ESCAPE"
 
+#, fuzzy
 msgid ""
-"For the complete list of available keyboard shortcuts, type `help shortcuts`"
+"For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
 "Para una lista completa de los atajos de teclado disponibles, escribe `help "
 "shortcuts`"
@@ -807,6 +760,9 @@ msgstr "Renombrar libreta:"
 
 msgid "Set alarm:"
 msgstr "Ajustar alarma:"
+
+msgid "Search"
+msgstr "Buscar"
 
 msgid "Layout"
 msgstr "Diseño"
@@ -1352,6 +1308,55 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+#~ msgid "Give focus to next pane"
+#~ msgstr "Dar enfoque al siguiente panel"
+
+#~ msgid "Give focus to previous pane"
+#~ msgstr "Dar enfoque al panel anterior"
+
+#~ msgid "Enter command line mode"
+#~ msgstr "Entrar modo linea de comandos"
+
+#~ msgid "Exit command line mode"
+#~ msgstr "Salir modo linea de comandos"
+
+#~ msgid "Edit the selected note"
+#~ msgstr "Editar la nota seleccionada"
+
+#~ msgid "Cancel the current command."
+#~ msgstr "Cancelar el comando actual."
+
+#~ msgid "Exit the application."
+#~ msgstr "Salir de la aplicación."
+
+#~ msgid "Delete the currently selected note or notebook."
+#~ msgstr "Eliminar la nota o libreta seleccionada."
+
+#, fuzzy
+#~ msgid "Set a to-do as completed / not completed"
+#~ msgstr "Marca una tarea como completado / no completado"
+
+#~ msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+#~ msgstr "[c]ambia la [c]onsola entre maximizado/minimizado/oculto/visible."
+
+#~ msgid "[t]oggle note [m]etadata."
+#~ msgstr "[c]ambia los [m]etadatos de una nota."
+
+#~ msgid "[M]ake a new [n]ote"
+#~ msgstr "[H]acer una [n]ota nueva"
+
+#~ msgid "[M]ake a new [t]odo"
+#~ msgstr "[H]acer una nueva [t]area"
+
+#~ msgid "[M]ake a new note[b]ook"
+#~ msgstr "[H]acer una nueva [l]ibreta"
+
+#~ msgid "Copy ([Y]ank) the [n]ote to a notebook."
+#~ msgstr "Copiar ([Y]ank) la [n]ota a una libreta."
+
+#~ msgid "Move the note to a notebook."
+#~ msgstr "Mover la nota a una libreta."
 
 #, fuzzy
 #~ msgid ""

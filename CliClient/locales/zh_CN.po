@@ -15,62 +15,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Give focus to next pane"
-msgstr "聚焦于下个面板"
-
-msgid "Give focus to previous pane"
-msgstr "聚焦于上个面板"
-
-msgid "Enter command line mode"
-msgstr "进入命令行模式"
-
-msgid "Exit command line mode"
-msgstr "退出命令行模式"
-
-msgid "Edit the selected note"
-msgstr "编辑所选笔记"
-
-msgid "Cancel the current command."
-msgstr "取消当前命令。"
-
-msgid "Exit the application."
-msgstr "退出程序。"
-
-msgid "Delete the currently selected note or notebook."
-msgstr "删除当前所选笔记或笔记本。"
-
 msgid "To delete a tag, untag the associated notes."
 msgstr "移除相关笔记的标签后才可删除此标签。"
 
 msgid "Please select the note or notebook to be deleted first."
 msgstr "请选择最先删除的笔记或笔记本。"
-
-msgid "Set a to-do as completed / not completed"
-msgstr "设置待办事项为已完成或未完成"
-
-msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-msgstr "在最大化/最小化/隐藏/显示间切换[t]控制台[c]。"
-
-msgid "Search"
-msgstr "搜索"
-
-msgid "[t]oggle note [m]etadata."
-msgstr "切换[t]笔记元数据[m]。"
-
-msgid "[M]ake a new [n]ote"
-msgstr "创建[M]新笔记[n]"
-
-msgid "[M]ake a new [t]odo"
-msgstr "创建[M]新待办事项[t]"
-
-msgid "[M]ake a new note[b]ook"
-msgstr "创建[M]新笔记本[b]"
-
-msgid "Copy ([Y]ank) the [n]ote to a notebook."
-msgstr "复制[Y]笔记[n]至笔记本。"
-
-msgid "Move the note to a notebook."
-msgstr "移动笔记至笔记本。"
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "按Ctrl+D或输入\"exit\"退出程序"
@@ -247,6 +196,10 @@ msgstr "显示此笔记的地理定位URL地址。"
 msgid "Displays usage information."
 msgstr "显示使用信息。"
 
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr ""
+
 msgid "Shortcuts are not available in CLI mode."
 msgstr "快捷键在CLI模式下不可用。"
 
@@ -284,8 +237,9 @@ msgstr "按\":\"键进入命令行模式"
 msgid "To exit command line mode, press ESCAPE"
 msgstr "按ESC键退出命令行模式"
 
+#, fuzzy
 msgid ""
-"For the complete list of available keyboard shortcuts, type `help shortcuts`"
+"For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr "输入`help shortcuts`显示全部可用的快捷键列表。"
 
 msgid "Imports an Evernote notebook file (.enex file)."
@@ -771,6 +725,9 @@ msgstr "重命名笔记本："
 
 msgid "Set alarm:"
 msgstr "设置提醒："
+
+msgid "Search"
+msgstr "搜索"
 
 msgid "Layout"
 msgstr "布局"
@@ -1289,6 +1246,54 @@ msgstr "您当前没有任何笔记本。点击(+)按钮创建新笔记本。"
 
 msgid "Welcome"
 msgstr "欢迎"
+
+#~ msgid "Give focus to next pane"
+#~ msgstr "聚焦于下个面板"
+
+#~ msgid "Give focus to previous pane"
+#~ msgstr "聚焦于上个面板"
+
+#~ msgid "Enter command line mode"
+#~ msgstr "进入命令行模式"
+
+#~ msgid "Exit command line mode"
+#~ msgstr "退出命令行模式"
+
+#~ msgid "Edit the selected note"
+#~ msgstr "编辑所选笔记"
+
+#~ msgid "Cancel the current command."
+#~ msgstr "取消当前命令。"
+
+#~ msgid "Exit the application."
+#~ msgstr "退出程序。"
+
+#~ msgid "Delete the currently selected note or notebook."
+#~ msgstr "删除当前所选笔记或笔记本。"
+
+#~ msgid "Set a to-do as completed / not completed"
+#~ msgstr "设置待办事项为已完成或未完成"
+
+#~ msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+#~ msgstr "在最大化/最小化/隐藏/显示间切换[t]控制台[c]。"
+
+#~ msgid "[t]oggle note [m]etadata."
+#~ msgstr "切换[t]笔记元数据[m]。"
+
+#~ msgid "[M]ake a new [n]ote"
+#~ msgstr "创建[M]新笔记[n]"
+
+#~ msgid "[M]ake a new [t]odo"
+#~ msgstr "创建[M]新待办事项[t]"
+
+#~ msgid "[M]ake a new note[b]ook"
+#~ msgstr "创建[M]新笔记本[b]"
+
+#~ msgid "Copy ([Y]ank) the [n]ote to a notebook."
+#~ msgstr "复制[Y]笔记[n]至笔记本。"
+
+#~ msgid "Move the note to a notebook."
+#~ msgstr "移动笔记至笔记本。"
 
 #~ msgid ""
 #~ "The target to synchonise to. If synchronising with the file system, set "

@@ -16,62 +16,11 @@ msgstr ""
 "X-Generator: Poedit 1.8.7.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Give focus to next pane"
-msgstr "Eraman fokua hurrengo panelera"
-
-msgid "Give focus to previous pane"
-msgstr "Eraman fokua aurreko panelera"
-
-msgid "Enter command line mode"
-msgstr "Sartu komando-lerro moduan "
-
-msgid "Exit command line mode"
-msgstr "Irten komando-lerro modutik"
-
-msgid "Edit the selected note"
-msgstr "Editatu aukeratutako oharra"
-
-msgid "Cancel the current command."
-msgstr "Utzi uneko komandoa"
-
-msgid "Exit the application."
-msgstr "Irten aplikaziotik"
-
-msgid "Delete the currently selected note or notebook."
-msgstr "Ezabatu aukeratutako oharra edo koadernoa"
-
 msgid "To delete a tag, untag the associated notes."
 msgstr "Etiketa ezabatzeko, kendu etiketa duten oharrei"
 
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Aurretik aukeratu ezabatzeko oharra edo koadernoa, mesedez."
-
-msgid "Set a to-do as completed / not completed"
-msgstr "Zeregina eginda / ez-eginda markatu"
-
-msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-msgstr "[t]xandakatu [k]ontsola maximizatu/minimizatu/ezkutatu/ikusgai artean"
-
-msgid "Search"
-msgstr "Bilatu"
-
-msgid "[t]oggle note [m]etadata."
-msgstr "[t]xandakatu oharra eta [m]etadatuak"
-
-msgid "[M]ake a new [n]ote"
-msgstr "[S]ortu [o]har berria"
-
-msgid "[M]ake a new [t]odo"
-msgstr "[S]ortu [z]ereginen zerrenda"
-
-msgid "[M]ake a new note[b]ook"
-msgstr "[S]ortu koa[d]erno berria"
-
-msgid "Copy ([Y]ank) the [n]ote to a notebook."
-msgstr "Kopiatu ([E]raman) [o]harra koadernora"
-
-msgid "Move the note to a notebook."
-msgstr "Eraman oharra koadernora"
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Sakatu Ktrl+D edo idatzi \"exit\" aplikaziotik irteteko"
@@ -256,6 +205,10 @@ msgstr "Erakutsi URL geolokalizazioa oharrean."
 msgid "Displays usage information."
 msgstr "Erakutsi erabilera datuak."
 
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr ""
+
 msgid "Shortcuts are not available in CLI mode."
 msgstr "CLI moduan ez dago lasterbiderik erabilgarri."
 
@@ -298,8 +251,9 @@ msgstr "Komando lerroa sartzeko, idatzi \":\""
 msgid "To exit command line mode, press ESCAPE"
 msgstr "Komando lerrotik irteteko, sakatu ESC, mesedez"
 
+#, fuzzy
 msgid ""
-"For the complete list of available keyboard shortcuts, type `help shortcuts`"
+"For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr "Laster bideen zerrenda osoa ikusteko, idatzi `help shortcuts`"
 
 msgid "Imports an Evernote notebook file (.enex file)."
@@ -833,6 +787,9 @@ msgstr "Berrizendatu koadernoa:"
 msgid "Set alarm:"
 msgstr "Ezarri alarma:"
 
+msgid "Search"
+msgstr "Bilatu"
+
 msgid "Layout"
 msgstr "Diseinua"
 
@@ -1364,3 +1321,52 @@ msgstr "Oraindik ez duzu koadernorik. Sortu bat (+) botoian sakatuta."
 
 msgid "Welcome"
 msgstr "Ongi etorri!"
+
+#~ msgid "Give focus to next pane"
+#~ msgstr "Eraman fokua hurrengo panelera"
+
+#~ msgid "Give focus to previous pane"
+#~ msgstr "Eraman fokua aurreko panelera"
+
+#~ msgid "Enter command line mode"
+#~ msgstr "Sartu komando-lerro moduan "
+
+#~ msgid "Exit command line mode"
+#~ msgstr "Irten komando-lerro modutik"
+
+#~ msgid "Edit the selected note"
+#~ msgstr "Editatu aukeratutako oharra"
+
+#~ msgid "Cancel the current command."
+#~ msgstr "Utzi uneko komandoa"
+
+#~ msgid "Exit the application."
+#~ msgstr "Irten aplikaziotik"
+
+#~ msgid "Delete the currently selected note or notebook."
+#~ msgstr "Ezabatu aukeratutako oharra edo koadernoa"
+
+#~ msgid "Set a to-do as completed / not completed"
+#~ msgstr "Zeregina eginda / ez-eginda markatu"
+
+#~ msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+#~ msgstr ""
+#~ "[t]xandakatu [k]ontsola maximizatu/minimizatu/ezkutatu/ikusgai artean"
+
+#~ msgid "[t]oggle note [m]etadata."
+#~ msgstr "[t]xandakatu oharra eta [m]etadatuak"
+
+#~ msgid "[M]ake a new [n]ote"
+#~ msgstr "[S]ortu [o]har berria"
+
+#~ msgid "[M]ake a new [t]odo"
+#~ msgstr "[S]ortu [z]ereginen zerrenda"
+
+#~ msgid "[M]ake a new note[b]ook"
+#~ msgstr "[S]ortu koa[d]erno berria"
+
+#~ msgid "Copy ([Y]ank) the [n]ote to a notebook."
+#~ msgstr "Kopiatu ([E]raman) [o]harra koadernora"
+
+#~ msgid "Move the note to a notebook."
+#~ msgstr "Eraman oharra koadernora"

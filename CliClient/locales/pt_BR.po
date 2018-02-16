@@ -16,62 +16,11 @@ msgstr ""
 "X-Generator: Poedit 2.0.5\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-msgid "Give focus to next pane"
-msgstr "Dar o foco para o próximo painel"
-
-msgid "Give focus to previous pane"
-msgstr "Dar o foco para o painel anterior"
-
-msgid "Enter command line mode"
-msgstr "Entrar no modo de linha de comando"
-
-msgid "Exit command line mode"
-msgstr "Sair do modo de linha de comando"
-
-msgid "Edit the selected note"
-msgstr "Editar nota selecionada"
-
-msgid "Cancel the current command."
-msgstr "Cancelar comando atual."
-
-msgid "Exit the application."
-msgstr "Sair da aplicação."
-
-msgid "Delete the currently selected note or notebook."
-msgstr "Excluir nota selecionada ou notebook."
-
 msgid "To delete a tag, untag the associated notes."
 msgstr "Para eliminar uma tag, remova a tag das notas associadas a ela."
 
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Por favor, primeiro, selecione a nota ou caderno a excluir."
-
-msgid "Set a to-do as completed / not completed"
-msgstr "Marcar uma tarefa como completada / não completada"
-
-msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-msgstr "al[t]ernar [c]onsole entre maximizado / minimizado / oculto / visível."
-
-msgid "Search"
-msgstr "Procurar"
-
-msgid "[t]oggle note [m]etadata."
-msgstr "al[t]ernar [m]etadados de notas."
-
-msgid "[M]ake a new [n]ote"
-msgstr "Criar ([M]ake) uma nova [n]ota"
-
-msgid "[M]ake a new [t]odo"
-msgstr "Criar ([M]ake) nova [t]arefa"
-
-msgid "[M]ake a new note[b]ook"
-msgstr "Criar ([M]ake) novo caderno (note[b]ook)"
-
-msgid "Copy ([Y]ank) the [n]ote to a notebook."
-msgstr "Copiar ([Y]ank) a [n]ota a um caderno."
-
-msgid "Move the note to a notebook."
-msgstr "Mover nota para um caderno."
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Digite Ctrl+D ou \"exit\" para sair da aplicação"
@@ -253,6 +202,10 @@ msgstr "Exibe uma URL de geolocalização para a nota."
 msgid "Displays usage information."
 msgstr "Exibe informações de uso."
 
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr ""
+
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Os atalhos não estão disponíveis no modo CLI."
 
@@ -294,8 +247,9 @@ msgstr "Para entrar no modo de linha de comando, pressione \":\""
 msgid "To exit command line mode, press ESCAPE"
 msgstr "Para sair do modo de linha de comando, pressione o ESC"
 
+#, fuzzy
 msgid ""
-"For the complete list of available keyboard shortcuts, type `help shortcuts`"
+"For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
 "Para a lista completa de atalhos de teclado disponíveis, digite `help "
 "shortcuts`"
@@ -801,6 +755,9 @@ msgstr "Renomear caderno:"
 
 msgid "Set alarm:"
 msgstr "Definir alarme:"
+
+msgid "Search"
+msgstr "Procurar"
 
 msgid "Layout"
 msgstr "Layout"
@@ -1331,6 +1288,55 @@ msgstr "Você não possui cadernos. Crie um clicando no botão (+)."
 
 msgid "Welcome"
 msgstr "Bem-vindo"
+
+#~ msgid "Give focus to next pane"
+#~ msgstr "Dar o foco para o próximo painel"
+
+#~ msgid "Give focus to previous pane"
+#~ msgstr "Dar o foco para o painel anterior"
+
+#~ msgid "Enter command line mode"
+#~ msgstr "Entrar no modo de linha de comando"
+
+#~ msgid "Exit command line mode"
+#~ msgstr "Sair do modo de linha de comando"
+
+#~ msgid "Edit the selected note"
+#~ msgstr "Editar nota selecionada"
+
+#~ msgid "Cancel the current command."
+#~ msgstr "Cancelar comando atual."
+
+#~ msgid "Exit the application."
+#~ msgstr "Sair da aplicação."
+
+#~ msgid "Delete the currently selected note or notebook."
+#~ msgstr "Excluir nota selecionada ou notebook."
+
+#~ msgid "Set a to-do as completed / not completed"
+#~ msgstr "Marcar uma tarefa como completada / não completada"
+
+#~ msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+#~ msgstr ""
+#~ "al[t]ernar [c]onsole entre maximizado / minimizado / oculto / visível."
+
+#~ msgid "[t]oggle note [m]etadata."
+#~ msgstr "al[t]ernar [m]etadados de notas."
+
+#~ msgid "[M]ake a new [n]ote"
+#~ msgstr "Criar ([M]ake) uma nova [n]ota"
+
+#~ msgid "[M]ake a new [t]odo"
+#~ msgstr "Criar ([M]ake) nova [t]arefa"
+
+#~ msgid "[M]ake a new note[b]ook"
+#~ msgstr "Criar ([M]ake) novo caderno (note[b]ook)"
+
+#~ msgid "Copy ([Y]ank) the [n]ote to a notebook."
+#~ msgstr "Copiar ([Y]ank) a [n]ota a um caderno."
+
+#~ msgid "Move the note to a notebook."
+#~ msgstr "Mover nota para um caderno."
 
 #~ msgid ""
 #~ "The target to synchonise to. If synchronising with the file system, set "
