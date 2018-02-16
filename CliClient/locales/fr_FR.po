@@ -628,6 +628,10 @@ msgstr "Importer notes d'Evernote"
 msgid "Evernote Export Files"
 msgstr "Fichiers d'export Evernote"
 
+#, javascript-format
+msgid "Hide %s"
+msgstr "Cacher %s"
+
 msgid "Quit"
 msgstr "Quitter"
 
@@ -645,6 +649,12 @@ msgstr "Coller"
 
 msgid "Search in all the notes"
 msgstr "Chercher dans toutes les notes"
+
+msgid "View"
+msgstr "Affichage"
+
+msgid "Toggle editor layout"
+msgstr "Basculer l'agencement de l'éditeur"
 
 msgid "Tools"
 msgstr "Outils"
@@ -686,9 +696,6 @@ msgstr "OK"
 
 msgid "Cancel"
 msgstr "Annuler"
-
-msgid "Error"
-msgstr "Erreur"
 
 #, javascript-format
 msgid ""
@@ -953,8 +960,8 @@ msgstr "Paramètre inconnu : %s"
 msgid "File system"
 msgstr "Système de fichier"
 
-msgid "Nextcloud (Beta)"
-msgstr "Nextcloud (Beta)"
+msgid "Nextcloud"
+msgstr "Nextcloud"
 
 msgid "OneDrive"
 msgstr "OneDrive"
@@ -962,8 +969,8 @@ msgstr "OneDrive"
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dév (Pour tester uniquement)"
 
-msgid "WebDAV (Beta)"
-msgstr "WebDAV (Bêta)"
+msgid "WebDAV"
+msgstr "WebDAV"
 
 #, javascript-format
 msgid "Unknown log level: %s"
@@ -1101,7 +1108,7 @@ msgstr "Clair"
 msgid "Dark"
 msgstr "Sombre"
 
-msgid "Show uncompleted todos on top of the lists"
+msgid "Show uncompleted to-dos on top of the lists"
 msgstr "Tâches non-terminées en haut des listes"
 
 msgid "Save geo-location with notes"
@@ -1361,6 +1368,12 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Error"
+#~ msgstr "Erreur"
+
+#~ msgid "WebDAV (Beta)"
+#~ msgstr "WebDAV (Bêta)"
 
 #~ msgid "Could not download the update: %s"
 #~ msgstr "Impossible de télécharger la mise à jour : %s"

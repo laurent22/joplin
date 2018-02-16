@@ -553,6 +553,10 @@ msgstr ""
 msgid "Evernote Export Files"
 msgstr ""
 
+#, javascript-format
+msgid "Hide %s"
+msgstr ""
+
 msgid "Quit"
 msgstr ""
 
@@ -569,6 +573,12 @@ msgid "Paste"
 msgstr ""
 
 msgid "Search in all the notes"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "Toggle editor layout"
 msgstr ""
 
 msgid "Tools"
@@ -610,9 +620,6 @@ msgid "OK"
 msgstr ""
 
 msgid "Cancel"
-msgstr ""
-
-msgid "Error"
 msgstr ""
 
 #, javascript-format
@@ -853,7 +860,7 @@ msgstr ""
 msgid "File system"
 msgstr ""
 
-msgid "Nextcloud (Beta)"
+msgid "Nextcloud"
 msgstr ""
 
 msgid "OneDrive"
@@ -862,7 +869,7 @@ msgstr ""
 msgid "OneDrive Dev (For testing only)"
 msgstr ""
 
-msgid "WebDAV (Beta)"
+msgid "WebDAV"
 msgstr ""
 
 #, javascript-format
@@ -991,7 +998,7 @@ msgstr ""
 msgid "Dark"
 msgstr ""
 
-msgid "Show uncompleted todos on top of the lists"
+msgid "Show uncompleted to-dos on top of the lists"
 msgstr ""
 
 msgid "Save geo-location with notes"

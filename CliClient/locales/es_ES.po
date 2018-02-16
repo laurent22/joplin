@@ -7,8 +7,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "Last-Translator: Fernando Martín <f@mrtn.es>\n"
 "Language-Team: Spanish <lucas.vieites@gmail.com>\n"
 "Language: es_ES\n"
@@ -633,6 +631,10 @@ msgstr "Importar notas de Evernote"
 msgid "Evernote Export Files"
 msgstr "Archivos exportados de Evernote"
 
+#, javascript-format
+msgid "Hide %s"
+msgstr ""
+
 msgid "Quit"
 msgstr "Salir"
 
@@ -650,6 +652,12 @@ msgstr "Pegar"
 
 msgid "Search in all the notes"
 msgstr "Buscar en todas las notas"
+
+msgid "View"
+msgstr ""
+
+msgid "Toggle editor layout"
+msgstr ""
 
 msgid "Tools"
 msgstr "Herramientas"
@@ -691,9 +699,6 @@ msgstr "OK"
 
 msgid "Cancel"
 msgstr "Cancelar"
-
-msgid "Error"
-msgstr "Error"
 
 #, javascript-format
 msgid ""
@@ -949,7 +954,8 @@ msgstr "Etiqueta desconocida: %s"
 msgid "File system"
 msgstr "Sistema de archivos"
 
-msgid "Nextcloud (Beta)"
+#, fuzzy
+msgid "Nextcloud"
 msgstr "Nextcloud (Beta)"
 
 msgid "OneDrive"
@@ -958,8 +964,9 @@ msgstr "OneDrive"
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dev (Solo para pruebas)"
 
-msgid "WebDAV (Beta)"
-msgstr "WebDAV (Beta)"
+#, fuzzy
+msgid "WebDAV"
+msgstr "Servidor WebDAV"
 
 #, javascript-format
 msgid "Unknown log level: %s"
@@ -1098,7 +1105,8 @@ msgstr "Claro"
 msgid "Dark"
 msgstr "Oscuro"
 
-msgid "Show uncompleted todos on top of the lists"
+#, fuzzy
+msgid "Show uncompleted to-dos on top of the lists"
 msgstr "Mostrar tareas incompletas al inicio de las listas"
 
 msgid "Save geo-location with notes"
@@ -1355,6 +1363,12 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+#~ msgid "Error"
+#~ msgstr "Error"
+
+#~ msgid "WebDAV (Beta)"
+#~ msgstr "WebDAV (Beta)"
 
 #~ msgid ""
 #~ "The target to synchonise to. If synchronising with the file system, set "

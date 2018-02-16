@@ -628,6 +628,10 @@ msgstr "Importeer Evernote notities"
 msgid "Evernote Export Files"
 msgstr "Exporteer Evernote bestanden"
 
+#, javascript-format
+msgid "Hide %s"
+msgstr ""
+
 msgid "Quit"
 msgstr "Stop"
 
@@ -645,6 +649,12 @@ msgstr "Plak"
 
 msgid "Search in all the notes"
 msgstr "Zoek in alle notities"
+
+msgid "View"
+msgstr ""
+
+msgid "Toggle editor layout"
+msgstr ""
 
 msgid "Tools"
 msgstr "Tools"
@@ -686,9 +696,6 @@ msgstr "OK"
 
 msgid "Cancel"
 msgstr "Annuleer"
-
-msgid "Error"
-msgstr ""
 
 #, fuzzy, javascript-format
 msgid ""
@@ -949,8 +956,9 @@ msgstr "Onbekende optie: %s"
 msgid "File system"
 msgstr "Bestandssysteem"
 
-msgid "Nextcloud (Beta)"
-msgstr ""
+#, fuzzy
+msgid "Nextcloud"
+msgstr "Stel wachtwoord in"
 
 msgid "OneDrive"
 msgstr "OneDrive"
@@ -958,7 +966,7 @@ msgstr "OneDrive"
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dev (Alleen voor testen)"
 
-msgid "WebDAV (Beta)"
+msgid "WebDAV"
 msgstr ""
 
 #, javascript-format
@@ -1100,7 +1108,8 @@ msgstr "Licht"
 msgid "Dark"
 msgstr "Donker"
 
-msgid "Show uncompleted todos on top of the lists"
+#, fuzzy
+msgid "Show uncompleted to-dos on top of the lists"
 msgstr "Toon onvoltooide to-do's aan de top van de lijsten"
 
 msgid "Save geo-location with notes"
