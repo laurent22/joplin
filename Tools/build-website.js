@@ -44,9 +44,13 @@ const headerHtml = `<!doctype html>
 		color: black;
 		background-color: #eee;
 		border: 1px solid #ccc;
+		font-size: .85em;
 	}
 	pre code {
 		border: none;
+	}
+	pre {
+		font-size: .85em;
 	}
 	.title-icon {
 		height: 2em;

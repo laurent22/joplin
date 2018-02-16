@@ -124,7 +124,7 @@ You will need to set the `sync.target` config variable and all the `sync.5.path`
 	:config sync.5.username YOUR_USERNAME
 	:config sync.5.password YOUR_PASSWORD
 
-If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.
+If synchronisation does not work, please consult the logs in the app profile directory (`~/.config/joplin`)- it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.
 
 ## WebDAV synchronisation
 
@@ -198,7 +198,7 @@ There are two types of shortcuts: those that manipulate the user interface direc
 	yn                cp $n ""
 	dn                mv $n ""
 
-Shortcut can be configured by adding a file `keymap.json` to the profile directory. The content of this file is a JSON array with each entry defining a command and the keys associated with it.
+Shortcut can be configured by adding a keymap file to the profile directory in `~/.config/joplin/keymap.json`. The content of this file is a JSON array with each entry defining a command and the keys associated with it.
 
 As an example, this is the default keymap, but read below for a detailed explanation of each property.
 

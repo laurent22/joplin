@@ -39,9 +39,13 @@
 		color: black;
 		background-color: #eee;
 		border: 1px solid #ccc;
+		font-size: .85em;
 	}
 	pre code {
 		border: none;
+	}
+	pre {
+		font-size: .85em;
 	}
 	.title-icon {
 		height: 2em;
@@ -304,7 +308,7 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 :config sync.5.path https://example.com/nextcloud/remote.php/dav/files/USERNAME/
 :config sync.5.username YOUR_USERNAME
 :config sync.5.password YOUR_PASSWORD
-</code></pre><p>If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.</p>
+</code></pre><p>If synchronisation does not work, please consult the logs in the app profile directory (<code>~/.config/joplin</code>)- it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.</p>
 <h2 id="webdav-synchronisation">WebDAV synchronisation</h2>
 <p>Select the &quot;WebDAV&quot; synchronisation target and follow the same instructions as for Nextcloud above.</p>
 <h2 id="onedrive-synchronisation">OneDrive synchronisation</h2>
@@ -351,7 +355,7 @@ mt                mktodo &quot;&quot;
 mb                mkbook &quot;&quot;
 yn                cp $n &quot;&quot;
 dn                mv $n &quot;&quot;
-</code></pre><p>Shortcut can be configured by adding a file <code>keymap.json</code> to the profile directory. The content of this file is a JSON array with each entry defining a command and the keys associated with it.</p>
+</code></pre><p>Shortcut can be configured by adding a keymap file to the profile directory in <code>~/.config/joplin/keymap.json</code>. The content of this file is a JSON array with each entry defining a command and the keys associated with it.</p>
 <p>As an example, this is the default keymap, but read below for a detailed explanation of each property.</p>
 <pre><code class="lang-json">[
     { &quot;keys&quot;: [&quot;:&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;enter_command_line_mode&quot; },
