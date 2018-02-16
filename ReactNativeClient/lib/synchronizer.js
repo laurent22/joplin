@@ -378,6 +378,8 @@ class Synchronizer {
 							local = remoteContent;
 							const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
 							await ItemClass.save(local, { autoTimestamp: false, nextQueries: syncTimeQueries });
+
+							if (!!local.encryption_applied) this.dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });
 						} else {
 							// Remote no longer exists (note deleted) so delete local one too
 							await ItemClass.delete(local.id);
