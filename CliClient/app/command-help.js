@@ -37,6 +37,9 @@ class Command extends BaseCommand {
 		const stdoutWidth = app().commandStdoutMaxWidth();
 
 		if (args.command === 'shortcuts' || args.command === 'keymap') {
+			this.stdout(_('For information on how to customise the shortcuts please visit %s', 'http://joplin.cozic.net/terminal/#shortcuts'));
+			this.stdout('');
+
 			if (app().gui().isDummy()) {
 				throw new Error(_('Shortcuts are not available in CLI mode.'));
 			}
@@ -76,7 +79,7 @@ class Command extends BaseCommand {
 			this.stdout(_('To maximise/minimise the console, press "TC".'));
 			this.stdout(_('To enter command line mode, press ":"'));
 			this.stdout(_('To exit command line mode, press ESCAPE'));
-			this.stdout(_('For the complete list of available keyboard shortcuts, type `help keymap`'));
+			this.stdout(_('For the list of keyboard shortcuts and config options, type `help keymap`'));
 		}
 
 		app().gui().showConsole();
