@@ -1060,13 +1060,13 @@ msgid ""
 "See `sync.target`."
 msgstr "当文件系统同步开启时的同步路径。参考`sync.target`。"
 
-msgid "Nexcloud WebDAV URL"
+msgid "Nextcloud WebDAV URL"
 msgstr ""
 
-msgid "Nexcloud username"
+msgid "Nextcloud username"
 msgstr ""
 
-msgid "Nexcloud password"
+msgid "Nextcloud password"
 msgstr ""
 
 msgid "WebDAV URL"
