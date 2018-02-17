@@ -16,6 +16,8 @@ msgstr ""
 "X-Generator: Poedit 1.8.11\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Desmarque las notas asociadas para eliminar una etiqueta."
@@ -208,7 +210,7 @@ msgstr "Muestra información de uso."
 
 #, javascript-format
 msgid "For information on how to customise the shortcuts please visit %s"
-msgstr ""
+msgstr "Para información de como personalizar los atajos por favor visita %s"
 
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Atajos no disponibles en modo CLI."
@@ -253,12 +255,10 @@ msgstr "Para entrar a modo linea de comando, presiona \":\""
 msgid "To exit command line mode, press ESCAPE"
 msgstr "Para salir de modo linea de comando, presiona ESCAPE"
 
-#, fuzzy
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
-"Para una lista completa de los atajos de teclado disponibles, escribe `help "
-"shortcuts`"
+"Para una lista de los atajos de teclado disponibles, escribe `help shortcuts`"
 
 msgid "Imports an Evernote notebook file (.enex file)."
 msgstr "Importar una libreta de Evernote (archivo .enex)."
@@ -587,7 +587,7 @@ msgstr "Archivos exportados de Evernote"
 
 #, javascript-format
 msgid "Hide %s"
-msgstr ""
+msgstr "Oculta %s"
 
 msgid "Quit"
 msgstr "Salir"
@@ -608,10 +608,10 @@ msgid "Search in all the notes"
 msgstr "Buscar en todas las notas"
 
 msgid "View"
-msgstr ""
+msgstr "Ver"
 
 msgid "Toggle editor layout"
-msgstr ""
+msgstr "Cambia el diseño del editor"
 
 msgid "Tools"
 msgstr "Herramientas"
@@ -911,9 +911,8 @@ msgstr "Etiqueta desconocida: %s"
 msgid "File system"
 msgstr "Sistema de archivos"
 
-#, fuzzy
 msgid "Nextcloud"
-msgstr "Nextcloud (Beta)"
+msgstr "Nextcloud"
 
 msgid "OneDrive"
 msgstr "OneDrive"
@@ -921,9 +920,8 @@ msgstr "OneDrive"
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dev (Solo para pruebas)"
 
-#, fuzzy
 msgid "WebDAV"
-msgstr "Servidor WebDAV"
+msgstr "WebDAV"
 
 #, javascript-format
 msgid "Unknown log level: %s"
@@ -1062,7 +1060,6 @@ msgstr "Claro"
 msgid "Dark"
 msgstr "Oscuro"
 
-#, fuzzy
 msgid "Show uncompleted to-dos on top of the lists"
 msgstr "Mostrar tareas incompletas al inicio de las listas"
 
@@ -1129,14 +1126,14 @@ msgstr ""
 "La ruta a la que sincronizar cuando se activa la sincronización con sistema "
 "de archivos. Vea «sync.target»."
 
-msgid "Nexcloud WebDAV URL"
-msgstr "Servidor Nexcloud WebDAV"
+msgid "Nextcloud WebDAV URL"
+msgstr "Servidor Nextcloud WebDAV"
 
-msgid "Nexcloud username"
-msgstr "Usuario de Nexcloud"
+msgid "Nextcloud username"
+msgstr "Usuario de Nextcloud"
 
-msgid "Nexcloud password"
-msgstr "Contraseña de Nexcloud"
+msgid "Nextcloud password"
+msgstr "Contraseña de Nextcloud"
 
 msgid "WebDAV URL"
 msgstr "Servidor WebDAV"

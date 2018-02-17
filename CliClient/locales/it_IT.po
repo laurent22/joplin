@@ -1099,13 +1099,13 @@ msgstr ""
 "Il percorso di sincronizzazione quando la sincronizzazione è abilitata. Vedi "
 "`sync.target`."
 
-msgid "Nexcloud WebDAV URL"
+msgid "Nextcloud WebDAV URL"
 msgstr ""
 
-msgid "Nexcloud username"
+msgid "Nextcloud username"
 msgstr ""
 
-msgid "Nexcloud password"
+msgid "Nextcloud password"
 msgstr ""
 
 msgid "WebDAV URL"

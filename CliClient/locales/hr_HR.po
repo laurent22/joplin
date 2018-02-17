@@ -1113,13 +1113,13 @@ msgstr ""
 "Putanja do direktorija za sinkronizaciju u slučaju kad je sinkronizacija sa "
 "datotečnim sustavom omogućena. Vidi `sync.target`."
 
-msgid "Nexcloud WebDAV URL"
+msgid "Nextcloud WebDAV URL"
 msgstr ""
 
-msgid "Nexcloud username"
+msgid "Nextcloud username"
 msgstr ""
 
-msgid "Nexcloud password"
+msgid "Nextcloud password"
 msgstr ""
 
 msgid "WebDAV URL"

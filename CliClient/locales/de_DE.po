@@ -944,7 +944,7 @@ msgstr "OneDrive Dev (Nur für Tests)"
 
 #, fuzzy
 msgid "WebDAV"
-msgstr "Nexcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
 
 #, javascript-format
 msgid "Unknown log level: %s"
@@ -1154,22 +1154,22 @@ msgstr ""
 "Der Pfad, mit dem synchronisiert werden soll, wenn die Dateisystem-"
 "Synchronisation aktiviert ist. Siehe `sync.target`."
 
-msgid "Nexcloud WebDAV URL"
-msgstr "Nexcloud WebDAV URL"
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
 
-msgid "Nexcloud username"
-msgstr "Nexcloud Benutzername"
+msgid "Nextcloud username"
+msgstr "Nextcloud Benutzername"
 
-msgid "Nexcloud password"
-msgstr "Nexcloud Passwort"
+msgid "Nextcloud password"
+msgstr "Nextcloud Passwort"
 
 #, fuzzy
 msgid "WebDAV URL"
-msgstr "Nexcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
 
 #, fuzzy
 msgid "WebDAV username"
-msgstr "Nexcloud Benutzername"
+msgstr "Nextcloud Benutzername"
 
 #, fuzzy
 msgid "WebDAV password"

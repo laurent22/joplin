@@ -332,13 +332,13 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                           synchronisation is enabled. See `sync.target`.
 	                           Type: string.
 	                           
-	    sync.5.path            Nexcloud WebDAV URL.
+	    sync.5.path            Nextcloud WebDAV URL.
 	                           Type: string.
 	                           
-	    sync.5.username        Nexcloud username.
+	    sync.5.username        Nextcloud username.
 	                           Type: string.
 	                           
-	    sync.5.password        Nexcloud password.
+	    sync.5.password        Nextcloud password.
 	                           Type: string.
 	                           
 	    sync.6.path            WebDAV URL.
