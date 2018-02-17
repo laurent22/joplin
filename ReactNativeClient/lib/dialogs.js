@@ -1,5 +1,6 @@
 const DialogBox = require('react-native-dialogbox').default;
 const { Keyboard } = require('react-native');
+const { _ } = require('lib/locale');
 
 // Add this at the bottom of the component:
 //
@@ -18,12 +19,14 @@ dialogs.confirm = (parentComponent, message) => {
 			content: message,
 			
 			ok: {
+				text: _('OK'),
 				callback: () => {
 					resolve(true);
 				}
 			},
 
 			cancel: {
+				text: _('Cancel'),
 				callback: () => {
 					resolve(false);
 				}
