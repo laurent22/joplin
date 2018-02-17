@@ -1130,14 +1130,14 @@ msgstr ""
 "Het pad om mee te synchroniseren als bestandssysteem synchronisatie is "
 "ingeschakeld. Zie `sync.target`."
 
-msgid "Nexcloud WebDAV URL"
+msgid "Nextcloud WebDAV URL"
 msgstr ""
 
-msgid "Nexcloud username"
+msgid "Nextcloud username"
 msgstr ""
 
 #, fuzzy
-msgid "Nexcloud password"
+msgid "Nextcloud password"
 msgstr "Stel wachtwoord in"
 
 msgid "WebDAV URL"

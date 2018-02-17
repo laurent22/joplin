@@ -1103,13 +1103,13 @@ msgstr ""
 "ファイルシステム同期の有効時に同期を行うパスです。`sync.target`も参考にしてく"
 "ださい。"
 
-msgid "Nexcloud WebDAV URL"
+msgid "Nextcloud WebDAV URL"
 msgstr ""
 
-msgid "Nexcloud username"
+msgid "Nextcloud username"
 msgstr ""
 
-msgid "Nexcloud password"
+msgid "Nextcloud password"
 msgstr ""
 
 msgid "WebDAV URL"

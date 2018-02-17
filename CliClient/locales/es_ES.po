@@ -1129,14 +1129,14 @@ msgstr ""
 "La ruta a la que sincronizar cuando se activa la sincronización con sistema "
 "de archivos. Vea «sync.target»."
 
-msgid "Nexcloud WebDAV URL"
-msgstr "Servidor Nexcloud WebDAV"
+msgid "Nextcloud WebDAV URL"
+msgstr "Servidor Nextcloud WebDAV"
 
-msgid "Nexcloud username"
-msgstr "Usuario de Nexcloud"
+msgid "Nextcloud username"
+msgstr "Usuario de Nextcloud"
 
-msgid "Nexcloud password"
-msgstr "Contraseña de Nexcloud"
+msgid "Nextcloud password"
+msgstr "Contraseña de Nextcloud"
 
 msgid "WebDAV URL"
 msgstr "Servidor WebDAV"

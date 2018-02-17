@@ -1131,13 +1131,13 @@ msgstr ""
 "Le chemin du répertoire avec lequel synchroniser lorsque la synchronisation "
 "par système de fichier est activée. Voir `sync.target`."
 
-msgid "Nexcloud WebDAV URL"
+msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud : URL WebDAV"
 
-msgid "Nexcloud username"
+msgid "Nextcloud username"
 msgstr "Nextcloud : Nom utilisateur"
 
-msgid "Nexcloud password"
+msgid "Nextcloud password"
 msgstr "Nextcloud : Mot de passe"
 
 msgid "WebDAV URL"
