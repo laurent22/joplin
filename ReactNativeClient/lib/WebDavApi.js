@@ -227,6 +227,17 @@ class WebDavApi {
 
 		if (authToken) headers['Authorization'] = 'Basic ' + authToken;
 
+		// On iOS, the network lib appends a If-None-Match header to PROPFIND calls, which is kind of correct because
+		// the call is idempotent and thus could be cached. According to RFC-7232 though only GET and HEAD should have
+		// this header for caching purposes. It makes no mention of PROPFIND.
+		// So possibly because of this, Seafile (and maybe other WebDAV implementations) responds with a "412 Precondition Failed"
+		// error when this header is present for PROPFIND call on existing resources. This is also kind of correct because there is a resource
+		// with this eTag and since this is neither a GET nor HEAD call, it is supposed to respond with 412 if the resource is present.
+		// The "solution", an ugly one, is to send a purposely invalid string as eTag, which will bypass the If-None-Match check  - Seafile
+		// finds out that no resource has this ID and simply sends the requested data.
+		// Also add a random value to make sure the eTag is unique for each call.
+		if (['GET', 'HEAD'].indexOf(method) < 0) headers['If-None-Match'] = 'JoplinIgnore-' + Math.floor(Math.random() * 100000);
+
 		const fetchOptions = {};
 		fetchOptions.headers = headers;
 		fetchOptions.method = method;
@@ -257,10 +268,12 @@ class WebDavApi {
 
 		// console.info('WebDAV Response', responseText);
 
-		// Gives a shorter response for error messages. Useful for cases where a full HTML page is accidentally loaded instead of
-		// JSON. That way the error message will still show there's a problem but without filling up the log or screen.
-		const shortResponseText = () => {
-			return (responseText + '').substr(0, 1024);
+		// Creates an error object with as much data as possible as it will appear in the log, which will make debugging easier
+		const newError = (message, code = 0) => {
+			// Gives a shorter response for error messages. Useful for cases where a full HTML page is accidentally loaded instead of
+			// JSON. That way the error message will still show there's a problem but without filling up the log or screen.
+			const shortResponseText = (responseText + '').substr(0, 1024);
+			return new JoplinError(method + ' ' + path + ': ' + message + ' (' + code + '): ' + shortResponseText, code);
 		}
 
 		let responseJson_ = null;
@@ -268,23 +281,23 @@ class WebDavApi {
 			if (!responseText) return null;
 			if (responseJson_) return responseJson_;
 			responseJson_ = await this.xmlToJson(responseText);
-			if (!responseJson_) throw new JoplinError('Cannot parse JSON response: ' + shortResponseText(), response.status);
+			if (!responseJson_) throw newError('Cannot parse JSON response', response.status);
 			return responseJson_;
 		}
 
 		if (!response.ok) {
 			// When using fetchBlob we only get a string (not xml or json) back
-			if (options.target === 'file') throw new JoplinError(shortResponseText(), response.status);
+			if (options.target === 'file') throw newError('fetchBlob error', response.status);
 
 			const json = await loadResponseJson();
 
 			if (json && json['d:error']) {
 				const code = json['d:error']['s:exception'] ? json['d:error']['s:exception'].join(' ') : response.status;
-				const message = json['d:error']['s:message'] ? json['d:error']['s:message'].join("\n") : shortResponseText();
-				throw new JoplinError(method + ' ' + path + ': ' + message + ' (' + code + ')', response.status);
+				const message = json['d:error']['s:message'] ? json['d:error']['s:message'].join("\n") : 'Unknown error 1';
+				throw newError(message, code);
 			}
 
-			throw new JoplinError(method + ' ' + path + ': ' + shortResponseText(), response.status);
+			throw newError('Unknown error 2', response.status);
 		}
 		
 		if (options.responseFormat === 'text') return responseText;
@@ -293,7 +306,7 @@ class WebDavApi {
 
 		// Check that we didn't get for example an HTML page (as an error) instead of the JSON response
 		// null responses are possible, for example for DELETE calls
-		if (output !== null && typeof output === 'object' && !('d:multistatus' in output)) throw new Error('Not a valid JSON response: ' + shortResponseText());
+		if (output !== null && typeof output === 'object' && !('d:multistatus' in output)) throw newError('Not a valid JSON response');
 
 		return output;
 	}
