@@ -291,23 +291,30 @@ describe('Synchronizer', function() {
 	}));
 
 	it('should delete local notes', asyncTest(async () => {
+		// For these tests we pass the context around for each user. This is to make sure that the "deletedItemsProcessed"
+		// property of the basicDelta() function is cleared properly at the end of a sync operation. If it is not cleared
+		// it means items will no longer be deleted locally via sync.
+
 		let folder1 = await Folder.save({ title: "folder1" });
 		let note1 = await Note.save({ title: "un", parent_id: folder1.id });
-		await synchronizer().start();
+		let note2 = await Note.save({ title: "deux", parent_id: folder1.id });
+		let context1 = await synchronizer().start();
 
 		await switchClient(2);
 
-		await synchronizer().start();
+		let context2 = await synchronizer().start();
 		await Note.delete(note1.id);
-		await synchronizer().start();
+		context2 = await synchronizer().start({ context: context2 });
 
 		await switchClient(1);
 
-		await synchronizer().start();
+		context1 = await synchronizer().start({ context: context1 });
 		let items = await allItems();
-		expect(items.length).toBe(1);
+		expect(items.length).toBe(2);
 		let deletedItems = await BaseItem.deletedItems(syncTargetId());
 		expect(deletedItems.length).toBe(0);
+		await Note.delete(note2.id);
+		context1 = await synchronizer().start({ context: context1 });
 	}));
 
 	it('should delete remote folder', asyncTest(async () => {

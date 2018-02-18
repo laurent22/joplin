@@ -304,7 +304,13 @@ async function basicDelta(path, getDirStatFn, options) {
 	newContext.deletedItemsProcessed = true;
 
 	const hasMore = output.length >= outputLimit;
-	if (!hasMore) newContext.statsCache = null;
+
+	if (!hasMore) {
+		// Clear temporary info from context. It's especially important to remove deletedItemsProcessed
+		// so that they are processed again on the next sync.
+		newContext.statsCache = null;
+		delete newContext.deletedItemsProcessed;
+	}
 
 	return {
 		hasMore: hasMore,

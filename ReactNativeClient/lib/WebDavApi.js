@@ -236,7 +236,7 @@ class WebDavApi {
 		// The "solution", an ugly one, is to send a purposely invalid string as eTag, which will bypass the If-None-Match check  - Seafile
 		// finds out that no resource has this ID and simply sends the requested data.
 		// Also add a random value to make sure the eTag is unique for each call.
-		if (['GET', 'HEAD'].indexOf(method) < 0) headers['If-None-Match'] = 'JoplinIgnore-' + Math.floor(Math.random() * 100000);
+		//if (['GET', 'HEAD'].indexOf(method) < 0) headers['If-None-Match'] = 'JoplinIgnore-' + Math.floor(Math.random() * 100000);
 
 		const fetchOptions = {};
 		fetchOptions.headers = headers;
@@ -294,7 +294,7 @@ class WebDavApi {
 			if (json && json['d:error']) {
 				const code = json['d:error']['s:exception'] ? json['d:error']['s:exception'].join(' ') : response.status;
 				const message = json['d:error']['s:message'] ? json['d:error']['s:message'].join("\n") : 'Unknown error 1';
-				throw newError(message, code);
+				throw newError(message + '(Exception ' + code + ')', response.status);
 			}
 
 			throw newError('Unknown error 2', response.status);
