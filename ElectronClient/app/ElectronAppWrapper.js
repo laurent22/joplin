@@ -132,7 +132,8 @@ class ElectronAppWrapper {
 	// Note: this must be called only after the "ready" event of the app has been dispatched
 	createTray(contextMenu) {
 		try {
-			this.tray_ = new Tray(this.buildDir() + '/icons/16x16.png')
+			const iconFilename = this.env_ === 'dev' ? '16x16-dev.png' : '16x16.png';
+			this.tray_ = new Tray(this.buildDir() + '/icons/' + iconFilename)
 			this.tray_.setToolTip(this.electronApp_.getName())
 			this.tray_.setContextMenu(contextMenu)
 
