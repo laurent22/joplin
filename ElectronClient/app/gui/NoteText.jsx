@@ -600,7 +600,14 @@ class NoteTextComponent extends React.Component {
 				},
 				postMessageSyntax: 'ipcRenderer.sendToHost',
 			};
-			const html = this.mdToHtml().render(body, theme, mdOptions);
+
+			let bodyToRender = body;
+			if (!bodyToRender.trim() && visiblePanes.indexOf('viewer') >= 0 && visiblePanes.indexOf('editor') < 0) {
+				// Fixes https://github.com/laurent22/joplin/issues/217
+				bodyToRender = '*' + _('This not has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout')) + '*';
+			}
+
+			const html = this.mdToHtml().render(bodyToRender, theme, mdOptions);
 			this.webview_.send('setHtml', html);
 		}
 
