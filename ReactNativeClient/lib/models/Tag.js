@@ -116,7 +116,7 @@ class Tag extends BaseItem {
 		}
 
 		for (let i = 0; i < previousTags.length; i++) {
-			if (addedTitles.indexOf(previousTags[i].title) < 0) {
+			if (addedTitles.indexOf(previousTags[i].title.toLowerCase()) < 0) {
 				await this.removeNote(previousTags[i].id, noteId);
 			}
 		}
