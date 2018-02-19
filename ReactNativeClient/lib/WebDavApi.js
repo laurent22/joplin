@@ -236,7 +236,7 @@ class WebDavApi {
 		// The "solution", an ugly one, is to send a purposely invalid string as eTag, which will bypass the If-None-Match check  - Seafile
 		// finds out that no resource has this ID and simply sends the requested data.
 		// Also add a random value to make sure the eTag is unique for each call.
-		//if (['GET', 'HEAD'].indexOf(method) < 0) headers['If-None-Match'] = 'JoplinIgnore-' + Math.floor(Math.random() * 100000);
+		if (['GET', 'HEAD'].indexOf(method) < 0) headers['If-None-Match'] = 'JoplinIgnore-' + Math.floor(Math.random() * 100000);
 
 		const fetchOptions = {};
 		fetchOptions.headers = headers;
@@ -281,7 +281,7 @@ class WebDavApi {
 			if (!responseText) return null;
 			if (responseJson_) return responseJson_;
 			responseJson_ = await this.xmlToJson(responseText);
-			if (!responseJson_) throw newError('Cannot parse JSON response', response.status);
+			if (!responseJson_) throw newError('Cannot parse XML response', response.status);
 			return responseJson_;
 		}
 
@@ -289,7 +289,12 @@ class WebDavApi {
 			// When using fetchBlob we only get a string (not xml or json) back
 			if (options.target === 'file') throw newError('fetchBlob error', response.status);
 
-			const json = await loadResponseJson();
+			let json = null;
+			try {
+				json = await loadResponseJson();
+			} catch (error) {
+				// Just send back the plain text in newErro()
+			}
 
 			if (json && json['d:error']) {
 				const code = json['d:error']['s:exception'] ? json['d:error']['s:exception'].join(' ') : response.status;
@@ -302,11 +307,16 @@ class WebDavApi {
 		
 		if (options.responseFormat === 'text') return responseText;
 
+		// The following methods may have a response depending on the server but it's not
+		// standard (some return a plain string, other XML, etc.) and we don't check the
+		// response anyway since we rely on the HTTP status code so return null.
+		if (['MKCOL', 'DELETE', 'PUT', 'MOVE'].indexOf(method) >= 0) return null;
+
 		const output = await loadResponseJson();
 
 		// Check that we didn't get for example an HTML page (as an error) instead of the JSON response
 		// null responses are possible, for example for DELETE calls
-		if (output !== null && typeof output === 'object' && !('d:multistatus' in output)) throw newError('Not a valid JSON response');
+		if (output !== null && typeof output === 'object' && !('d:multistatus' in output)) throw newError('Not a valid WebDAV response');
 
 		return output;
 	}
