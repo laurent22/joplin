@@ -210,6 +210,7 @@ msgstr "Affiche les informations d'utilisation."
 #, javascript-format
 msgid "For information on how to customise the shortcuts please visit %s"
 msgstr ""
+"Pour personnaliser les raccourcis veuillez consulter la documentation à %s"
 
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Les raccourcis ne sont pas disponible en mode de ligne de commande."
@@ -253,11 +254,9 @@ msgstr "Pour démarrer le mode ligne de commande, pressez \":\""
 msgid "To exit command line mode, press ESCAPE"
 msgstr "Pour sortir du mode ligne de commande, pressez ECHAP"
 
-#, fuzzy
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
-msgstr ""
-"Pour la liste complète des raccourcis disponibles, tapez `help shortcuts`"
+msgstr "Pour la liste complète des raccourcis disponibles, tapez `help keymap`"
 
 msgid "Imports an Evernote notebook file (.enex file)."
 msgstr "Importer un carnet Evernote (fichier .enex)."
