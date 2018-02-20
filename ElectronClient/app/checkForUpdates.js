@@ -46,7 +46,13 @@ function onCheckEnded() {
 autoUpdater.on('error', (error) => {
 	autoUpdateLogger_.error(error);
 	if (checkInBackground_) return onCheckEnded();
-	showErrorMessageBox(error == null ? "unknown" : (error.stack || error).toString())
+
+	let msg = error == null ? "unknown" : (error.stack || error).toString();
+	// Error messages can be very long even without stack trace so shorten 
+	// then so that the dialog box doesn't take the whole screen.
+	msg = msg.substr(0,512).replace(/\\n/g, '\n');
+	showErrorMessageBox(msg)
+	
 	onCheckEnded();
 })
 
