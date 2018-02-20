@@ -129,11 +129,24 @@ class ElectronAppWrapper {
 		return dir;
 	}
 
+	trayIconFilename_() {
+		let output = '';
+
+		if (process.platform === 'darwin') {
+			output = 'macos-16x16Template.png'; // Electron Template Image format
+		} else {
+			output = '16x16.png';
+		}
+
+		//if (this.env_ === 'dev') output = '16x16-dev.png'
+
+		return output;
+	}
+
 	// Note: this must be called only after the "ready" event of the app has been dispatched
 	createTray(contextMenu) {
 		try {
-			const iconFilename = this.env_ === 'dev' ? '16x16-dev.png' : '16x16.png';
-			this.tray_ = new Tray(this.buildDir() + '/icons/' + iconFilename)
+			this.tray_ = new Tray(this.buildDir() + '/icons/' + this.trayIconFilename_())
 			this.tray_.setToolTip(this.electronApp_.getName())
 			this.tray_.setContextMenu(contextMenu)
 
