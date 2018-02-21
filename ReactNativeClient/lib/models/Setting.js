@@ -4,6 +4,7 @@ const { Logger } = require('lib/logger.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const { time } = require('lib/time-utils.js');
 const { sprintf } = require('sprintf-js');
+const ObjectUtils = require('lib/ObjectUtils');
 const { _, supportedLocalesToLanguages, defaultLocale } = require('lib/locale.js');
 
 class Setting extends BaseModel {
@@ -24,7 +25,7 @@ class Setting extends BaseModel {
 			'firstStart': { value: true, type: Setting.TYPE_BOOL, public: false },
 			'editor': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'], label: () => _('Text editor'), description: () => _('The editor that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
 			'locale': { value: defaultLocale(), type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Language'), options: () => {
-				return supportedLocalesToLanguages();
+				return ObjectUtils.sortByValue(supportedLocalesToLanguages());
 			}},
 			'dateFormat': { value: Setting.DATE_FORMAT_1, type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Date format'), options: () => {
 				let options = {}

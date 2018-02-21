@@ -40,10 +40,6 @@ class ConfigScreenComponent extends React.Component {
 			});
 		}
 
-		output.sort((a, b) => {
-			return a.label.toLowerCase() < b.label.toLowerCase() ? -1 : +1;
-		});
-
 		return output;
 	}
 

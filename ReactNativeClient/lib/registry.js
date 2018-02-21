@@ -58,8 +58,8 @@ reg.scheduleSync = async (delay = null) => {
 
 	reg.logger().info('Scheduling sync operation...');
 
-	if (Setting.value('env') === 'dev') {
-		reg.logger().info('Scheduling sync operation DISABLED!!!');
+	if (Setting.value('env') === 'dev' && delay !== 0) {
+		reg.logger().info('Schedule sync DISABLED!!!');
 		return;
 	}
 
@@ -146,6 +146,11 @@ reg.setupRecurrentSync = () => {
 		reg.logger().debug('Recurrent sync is disabled');
 	} else {
 		reg.logger().debug('Setting up recurrent sync with interval ' + Setting.value('sync.interval'));
+
+		if (Setting.value('env') === 'dev') {
+			reg.logger().info('Recurrent sync operation DISABLED!!!');
+			return;
+		}
 
 		reg.recurrentSyncId_ = shim.setInterval(() => {
 			reg.logger().info('Running background sync on timer...');
