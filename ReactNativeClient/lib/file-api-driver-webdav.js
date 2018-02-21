@@ -27,7 +27,6 @@ class FileApiDriverWebDav {
 			const result = await this.api().execPropFind(path, 0, [
 				'd:getlastmodified',
 				'd:resourcetype',
-				// 'd:getcontentlength', // Remove this once PUT call issue is sorted out
 			]);
 
 			const resource = this.api().objectFromJson(result, ['d:multistatus', 'd:response', 0]);
@@ -56,11 +55,7 @@ class FileApiDriverWebDav {
 			}
 		}
 
-		const lastModifiedString = this.api().resourcePropByName(resource, 'string', 'd:getlastmodified');	
-
-		// const sizeDONOTUSE = Number(this.api().stringFromJson(resource, ['d:propstat', 0, 'd:prop', 0, 'd:getcontentlength', 0]));
-		// if (isNaN(sizeDONOTUSE)) throw new Error('Cannot get content size: ' + JSON.stringify(resource));
-
+		const lastModifiedString = this.api().resourcePropByName(resource, 'string', 'd:getlastmodified');
 
 		// Note: Not all WebDAV servers return a getlastmodified date (eg. Seafile, which doesn't return the
 		// property for folders) so we can only throw an error if it's a file.
@@ -70,10 +65,8 @@ class FileApiDriverWebDav {
 
 		return {
 			path: path,
-			// created_time: lastModifiedDate.getTime(),
 			updated_time: lastModifiedDate.getTime(),
 			isDir: isDir,
-			// sizeDONOTUSE: sizeDONOTUSE, // This property is used only for the WebDAV PUT hack (see below) so mark it as such so that it can be removed with the hack later on.
 		};
 	}
 

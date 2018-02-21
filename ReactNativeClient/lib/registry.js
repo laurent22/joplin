@@ -58,10 +58,10 @@ reg.scheduleSync = async (delay = null) => {
 
 	reg.logger().info('Scheduling sync operation...');
 
-	// if (Setting.value('env') === 'dev') {
-	// 	reg.logger().info('Scheduling sync operation DISABLED!!!');
-	// 	return;
-	// }
+	if (Setting.value('env') === 'dev') {
+		reg.logger().info('Scheduling sync operation DISABLED!!!');
+		return;
+	}
 
 	const timeoutCallback = async () => {
 		reg.scheduleSyncId_ = null;

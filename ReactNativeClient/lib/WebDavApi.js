@@ -307,7 +307,7 @@ class WebDavApi {
 			if (json && json['d:error']) {
 				const code = json['d:error']['s:exception'] ? json['d:error']['s:exception'].join(' ') : response.status;
 				const message = json['d:error']['s:message'] ? json['d:error']['s:message'].join("\n") : 'Unknown error 1';
-				throw newError(message + '(Exception ' + code + ')', response.status);
+				throw newError(message + ' (Exception ' + code + ')', response.status);
 			}
 
 			throw newError('Unknown error 2', response.status);
