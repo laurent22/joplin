@@ -312,12 +312,14 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 </code></pre><p>If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.</p>
 <h2 id="webdav-synchronisation">WebDAV synchronisation</h2>
 <p>Select the &quot;WebDAV&quot; synchronisation target and follow the same instructions as for Nextcloud above.</p>
-<p>Known compatible services that use WebDAV:</p>
+<p>WebDAV-compatible services that are known to work with Joplin:</p>
 <ul>
 <li><a href="https://www.box.com/">Box.com</a></li>
 <li><a href="https://www.drivehq.com">DriveHQ</a></li>
-<li><a href="https://www.zimbra.com/">Zimbra</a></li>
+<li><a href="https://owncloud.org/">OwnCloud</a></li>
 <li><a href="https://www.seafile.com/">Seafile</a></li>
+<li><a href="https://www.transip.nl/stack/">Stack</a></li>
+<li><a href="https://www.zimbra.com/">Zimbra</a></li>
 </ul>
 <h2 id="onedrive-synchronisation">OneDrive synchronisation</h2>
 <p>When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
@@ -396,14 +398,14 @@ $$
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/hr.png" alt=""></td>
 <td>Croatian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/hr_HR.po">hr_HR</a></td>
-<td>Hrvoje Mandić <a href="&#109;&#97;&#x69;&#108;&#116;&#111;&#58;&#116;&#x72;&#98;&#x75;&#104;&#x6f;&#109;&#x40;&#x6e;&#x65;&#116;&#x2e;&#104;&#x72;">&#116;&#x72;&#98;&#x75;&#104;&#x6f;&#109;&#x40;&#x6e;&#x65;&#116;&#x2e;&#104;&#x72;</a></td>
+<td>Hrvoje Mandić <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#116;&#x72;&#x62;&#117;&#104;&#x6f;&#x6d;&#64;&#x6e;&#x65;&#x74;&#46;&#x68;&#x72;">&#116;&#x72;&#x62;&#117;&#104;&#x6f;&#x6d;&#64;&#x6e;&#x65;&#x74;&#46;&#x68;&#x72;</a></td>
 <td>71%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/de.png" alt=""></td>
 <td>Deutsch</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po">de_DE</a></td>
-<td>Tobias Strobel <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#x67;&#105;&#x74;&#x40;&#x73;&#116;&#x72;&#x6f;&#98;&#101;&#x6c;&#x74;&#111;&#x62;&#105;&#x61;&#x73;&#46;&#x64;&#101;">&#x67;&#105;&#x74;&#x40;&#x73;&#116;&#x72;&#x6f;&#98;&#101;&#x6c;&#x74;&#111;&#x62;&#105;&#x61;&#x73;&#46;&#x64;&#101;</a></td>
+<td>Tobias Strobel <a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#111;&#x3a;&#103;&#x69;&#116;&#x40;&#115;&#116;&#114;&#111;&#98;&#x65;&#108;&#116;&#x6f;&#98;&#105;&#97;&#x73;&#46;&#100;&#101;">&#103;&#x69;&#116;&#x40;&#115;&#116;&#114;&#111;&#98;&#x65;&#108;&#116;&#x6f;&#98;&#105;&#97;&#x73;&#46;&#100;&#101;</a></td>
 <td>89%</td>
 </tr>
 <tr>
@@ -417,7 +419,7 @@ $$
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/es.png" alt=""></td>
 <td>Español</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po">es_ES</a></td>
-<td>Fernando Martín <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x66;&#x40;&#x6d;&#114;&#116;&#x6e;&#46;&#x65;&#x73;">&#x66;&#x40;&#x6d;&#114;&#116;&#x6e;&#46;&#x65;&#x73;</a></td>
+<td>Fernando Martín <a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6f;&#58;&#x66;&#x40;&#x6d;&#114;&#116;&#x6e;&#x2e;&#101;&#115;">&#x66;&#x40;&#x6d;&#114;&#116;&#x6e;&#x2e;&#101;&#115;</a></td>
 <td>100%</td>
 </tr>
 <tr>
@@ -452,14 +454,14 @@ $$
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/ru.png" alt=""></td>
 <td>Русский</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ru_RU.po">ru_RU</a></td>
-<td>Artyom Karlov <a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#x61;&#x72;&#x74;&#121;&#x6f;&#109;&#x2e;&#x6b;&#x61;&#114;&#x6c;&#111;&#x76;&#64;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;">&#x61;&#x72;&#x74;&#121;&#x6f;&#109;&#x2e;&#x6b;&#x61;&#114;&#x6c;&#111;&#x76;&#64;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;</a></td>
+<td>Artyom Karlov <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#x3a;&#x61;&#x72;&#x74;&#x79;&#111;&#x6d;&#x2e;&#x6b;&#x61;&#x72;&#x6c;&#x6f;&#x76;&#x40;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;">&#x61;&#x72;&#x74;&#x79;&#111;&#x6d;&#x2e;&#x6b;&#x61;&#x72;&#x6c;&#x6f;&#x76;&#x40;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;</a></td>
 <td>91%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/cn.png" alt=""></td>
 <td>中文 (简体)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po">zh_CN</a></td>
-<td>RCJacH <a href="&#109;&#x61;&#105;&#108;&#116;&#x6f;&#x3a;&#x52;&#x43;&#74;&#97;&#x63;&#72;&#x40;&#111;&#x75;&#116;&#x6c;&#x6f;&#x6f;&#107;&#46;&#99;&#111;&#109;">&#x52;&#x43;&#74;&#97;&#x63;&#72;&#x40;&#111;&#x75;&#116;&#x6c;&#x6f;&#x6f;&#107;&#46;&#99;&#111;&#109;</a></td>
+<td>RCJacH <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x52;&#x43;&#74;&#97;&#99;&#72;&#64;&#x6f;&#x75;&#x74;&#x6c;&#111;&#111;&#107;&#46;&#99;&#x6f;&#x6d;">&#x52;&#x43;&#74;&#97;&#99;&#72;&#64;&#x6f;&#x75;&#x74;&#x6c;&#111;&#111;&#107;&#46;&#99;&#x6f;&#x6d;</a></td>
 <td>73%</td>
 </tr>
 <tr>
