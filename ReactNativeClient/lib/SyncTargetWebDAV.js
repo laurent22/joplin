@@ -28,7 +28,7 @@ class SyncTargetWebDAV extends BaseSyncTarget {
 		return true;
 	}
 
-	static async initFileApi_(syncTargetId, options) {
+	static async newFileApi_(syncTargetId, options) {
 		const apiOptions = {
 			baseUrl: () => options.path,
 			username: () => options.username,
@@ -43,7 +43,8 @@ class SyncTargetWebDAV extends BaseSyncTarget {
 	}
 
 	static async checkConfig(options) {
-		const fileApi = await SyncTargetWebDAV.initFileApi_(SyncTargetWebDAV.id(), options);
+		const fileApi = await SyncTargetWebDAV.newFileApi_(SyncTargetWebDAV.id(), options);
+		fileApi.requestRepeatCount_ = 0;
 		
 		const output = {
 			ok: false,
@@ -63,7 +64,7 @@ class SyncTargetWebDAV extends BaseSyncTarget {
 	}
 
 	async initFileApi() {
-		const fileApi = await SyncTargetWebDAV.initFileApi_(SyncTargetWebDAV.id(), {
+		const fileApi = await SyncTargetWebDAV.newFileApi_(SyncTargetWebDAV.id(), {
 			path: Setting.value('sync.6.path'),
 			username: Setting.value('sync.6.username'),
 			password: Setting.value('sync.6.password'),

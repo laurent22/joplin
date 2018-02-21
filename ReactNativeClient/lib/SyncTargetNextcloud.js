@@ -37,7 +37,7 @@ class SyncTargetNextcloud extends BaseSyncTarget {
 	}
 
 	async initFileApi() {
-		const fileApi = await SyncTargetWebDAV.initFileApi_(SyncTargetNextcloud.id(), {
+		const fileApi = await SyncTargetWebDAV.newFileApi_(SyncTargetNextcloud.id(), {
 			path: Setting.value('sync.5.path'),
 			username: Setting.value('sync.5.username'),
 			password: Setting.value('sync.5.password'),
