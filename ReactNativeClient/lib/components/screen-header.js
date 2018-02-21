@@ -4,6 +4,7 @@ const { Platform, View, Text, Button, StyleSheet, TouchableOpacity, Image, Scrol
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { Log } = require('lib/log.js');
 const { BackButtonService } = require('lib/services/back-button.js');
+const NavService = require('lib/services/NavService.js');
 const { ReportService } = require('lib/services/report.js');
 const { Menu, MenuOptions, MenuOption, MenuTrigger } = require('react-native-popup-menu');
 const { _ } = require('lib/locale.js');
@@ -160,10 +161,7 @@ class ScreenHeaderComponent extends Component {
 	}
 
 	searchButton_press() {
-		this.props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'Search',
-		});	
+		NavService.go('Search');
 	}
 
 	async deleteButton_press() {
@@ -184,38 +182,23 @@ class ScreenHeaderComponent extends Component {
 	}
 
 	log_press() {
-		this.props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'Log',
-		});	
+		NavService.go('Log');
 	}
 
 	status_press() {
-		this.props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'Status',
-		});	
+		NavService.go('Status');
 	}
 
 	config_press() {
-		this.props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'Config',
-		});	
+		NavService.go('Config');
 	}
 
 	encryptionConfig_press() {
-		this.props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'EncryptionConfig',
-		});
+		NavService.go('EncryptionConfig');
 	}
 
 	warningBox_press() {
-		this.props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'EncryptionConfig',
-		});
+		NavService.go('EncryptionConfig');
 	}
 
 	async debugReport_press() {
