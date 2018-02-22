@@ -388,7 +388,7 @@ class Application extends BaseApplication {
 			if (process.env.XDG_CURRENT_DESKTOP.toLowerCase() == 'unity') {
 				// Check if the kernel version is from Ubuntu 17.04 or later
 				// https://en.wikipedia.org/wiki/Ubuntu_version_history
-				if (os.release().split('.').slice(0,2).join('.') >= 4.10) return;
+				if (os.release().split('.')[0] >= 4 && os.release.split('.')[1] >= 10) return;
 			}
 		}
 
