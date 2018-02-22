@@ -65,9 +65,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const saveDialog = async () => {
 			if (this.isModified()) {
 				let buttonId = await dialogs.pop(this, _('This note has been modified:'), [
-					{ title: _('Save changes'), id: 'save' },
-					{ title: _('Discard changes'), id: 'discard' },
-					{ title: _('Cancel'), id: 'cancel' },
+					{ text: _('Save changes'), id: 'save' },
+					{ text: _('Discard changes'), id: 'discard' },
+					{ text: _('Cancel'), id: 'cancel' },
 				]);
 
 				if (buttonId == 'cancel') return true;

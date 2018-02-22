@@ -5,6 +5,7 @@ const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const { time } = require('lib/time-utils.js');
 const { sprintf } = require('sprintf-js');
 const ObjectUtils = require('lib/ObjectUtils');
+const { toTitleCase } = require('lib/string-utils.js');
 const { _, supportedLocalesToLanguages, defaultLocale } = require('lib/locale.js');
 
 class Setting extends BaseModel {
@@ -19,6 +20,10 @@ class Setting extends BaseModel {
 
 	static metadata() {
 		if (this.metadata_) return this.metadata_;
+
+		// A "public" setting means that it will show up in the various config screens (or config command for the CLI tool), however
+		// if if private a setting might still be handled and modified by the app. For instance, the settings related to sorting notes are not
+		// public for the mobile and desktop apps because they are handled separately in menus.
 
 		this.metadata_ = {
 			'activeFolderId': { value: '', type: Setting.TYPE_STRING, public: false },
@@ -50,16 +55,17 @@ class Setting extends BaseModel {
 				output[Setting.THEME_DARK] = _('Dark');
 				return output;
 			}},
-			// 'logLevel': { value: Logger.LEVEL_INFO, type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Log level'), options: () => {
-			// 	return Logger.levelEnum();
-			// }},
-			// Not used for now:
-			// 'todoFilter': { value: 'all', type: Setting.TYPE_STRING, isEnum: true, public: false, appTypes: ['mobile'], label: () => _('Todo filter'), options: () => ({
-			// 	all: _('Show all'),
-			// 	recent: _('Non-completed and recently completed ones'),
-			// 	nonCompleted: _('Non-completed ones only'),
-			// })},
-			'uncompletedTodosOnTop': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Show uncompleted to-dos on top of the lists') },
+			'uncompletedTodosOnTop': { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['cli'], label: () => _('Uncompleted to-dos on top') },
+			'notes.sortOrder.field': { value: 'user_updated_time', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['cli'], label: () => _('Sort notes by'), options: () => {
+				const Note = require('lib/models/Note');
+				const noteSortFields = ['user_updated_time', 'user_created_time', 'title'];
+				const options = {};
+				for (let i = 0; i < noteSortFields.length; i++) {
+					options[noteSortFields[i]] = toTitleCase(Note.fieldToLabel(noteSortFields[i]));
+				}
+				return options;
+			}},
+			'notes.sortOrder.reverse': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
 			'trackLocation': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Save geo-location with notes') },
 			'newTodoFocus': { value: 'title', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('When creating a new to-do:'), options: () => {
 				return {

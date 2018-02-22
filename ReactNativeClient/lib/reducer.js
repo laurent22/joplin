@@ -19,18 +19,23 @@ const defaultState = {
 	showSideMenu: false,
 	screens: {},
 	historyCanGoBack: false,
-	notesOrder: [
-		{ by: 'user_updated_time', dir: 'DESC' },
-	],
 	syncStarted: false,
 	syncReport: {},
 	searchQuery: '',
 	settings: {},
 	appState: 'starting',
-	//windowContentSize: { width: 0, height: 0 },
 	hasDisabledSyncItems: false,
 	newNote: null,
 };
+
+const stateUtils = {};
+
+stateUtils.notesOrder = function(stateSettings) {
+	return [{
+		by: stateSettings['notes.sortOrder.field'],
+		dir: stateSettings['notes.sortOrder.reverse'] ? 'DESC' : 'ASC',
+	}];
+}
 
 function arrayHasEncryptedItems(array) {
 	for (let i = 0; i < array.length; i++) {
@@ -90,8 +95,6 @@ function handleItemDelete(state, action) {
 }
 
 function updateOneItem(state, action) {
-	// let newItems = action.type === 'TAG_UPDATE_ONE' ? state.tags.splice(0) : state.folders.splice(0);
-	// let item = action.type === 'TAG_UPDATE_ONE' ? action.tag : action.folder;
 	let itemsKey = null;
 	if (action.type === 'TAG_UPDATE_ONE') itemsKey = 'tags';
 	if (action.type === 'FOLDER_UPDATE_ONE') itemsKey = 'folders';
@@ -115,12 +118,6 @@ function updateOneItem(state, action) {
 	let newState = Object.assign({}, state);
 
 	newState[itemsKey] = newItems;
-
-	// if (action.type === 'TAG_UPDATE_ONE') {
-	// 	newState.tags = newItems;
-	// } else {
-	// 	newState.folders = newItems;
-	// }
 
 	return newState;
 }
@@ -316,7 +313,8 @@ const reducer = (state = defaultState, action) => {
 					}
 				}
 
-				newNotes = Note.sortNotes(newNotes, state.notesOrder, newState.settings.uncompletedTodosOnTop);
+				//newNotes = Note.sortNotes(newNotes, state.notesOrder, newState.settings.uncompletedTodosOnTop);
+				newNotes = Note.sortNotes(newNotes, stateUtils.notesOrder(state.settings), newState.settings.uncompletedTodosOnTop);
 				newState = Object.assign({}, state);
 				newState.notes = newNotes;
 
@@ -481,4 +479,4 @@ const reducer = (state = defaultState, action) => {
 	return newState;
 }
 
-module.exports = { reducer, defaultState };
+module.exports = { reducer, defaultState, stateUtils };

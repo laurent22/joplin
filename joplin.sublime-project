@@ -21,6 +21,7 @@
 				"docs/*.html",
 				"docs/*.svg",
 				"ReactNativeClient/lib/mime-utils.js",
+				"_mydocs/EnexSamples/*.enex",
 			],
 			"folder_exclude_patterns":
 			[

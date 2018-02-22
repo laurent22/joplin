@@ -1,5 +1,6 @@
 const React = require('react'); const Component = React.Component;
-const { View, Button } = require('react-native');
+const { View, Button, Text } = require('react-native');
+const { stateUtils } = require('lib/reducer.js');
 const { connect } = require('react-redux');
 const { reg } = require('lib/registry.js');
 const { Log } = require('lib/log.js');
@@ -10,7 +11,7 @@ const Note = require('lib/models/Note.js');
 const Setting = require('lib/models/Setting.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const { ScreenHeader } = require('lib/components/screen-header.js');
-const { MenuOption, Text } = require('react-native-popup-menu');
+const { MenuOption } = require('react-native-popup-menu');
 const { _ } = require('lib/locale.js');
 const { ActionButton } = require('lib/components/action-button.js');
 const { dialogs } = require('lib/dialogs.js');
@@ -21,6 +22,43 @@ class NotesScreenComponent extends BaseScreenComponent {
 	
 	static navigationOptions(options) {
 		return { header: null };
+	}
+
+	constructor() {
+		super();
+
+		this.sortButton_press = async () => {
+			const buttons = [];
+			const sortNoteOptions = Setting.enumOptions('notes.sortOrder.field');
+
+			const makeCheckboxText = function(selected, sign, label) {
+				const s = sign === 'tick' ? '✓' : '⬤'
+				return (selected ? (s + ' ') : '') + label;
+			}
+
+			for (let field in sortNoteOptions) {
+				if (!sortNoteOptions.hasOwnProperty(field)) continue;
+				buttons.push({
+					text: makeCheckboxText(Setting.value('notes.sortOrder.field') === field, 'bullet', sortNoteOptions[field]),
+					id: { name: 'notes.sortOrder.field', value: field },
+				});
+			}
+
+			buttons.push({
+				text: makeCheckboxText(Setting.value('notes.sortOrder.reverse'), 'tick', '[ ' + Setting.settingMetadata('notes.sortOrder.reverse').label() + ' ]'),
+				id: { name: 'notes.sortOrder.reverse', value: !Setting.value('notes.sortOrder.reverse') },
+			});
+
+			buttons.push({
+				text: makeCheckboxText(Setting.value('uncompletedTodosOnTop'), 'tick', '[ ' + Setting.settingMetadata('uncompletedTodosOnTop').label() + ' ]'),
+				id: { name: 'uncompletedTodosOnTop', value: !Setting.value('uncompletedTodosOnTop') },
+			});
+
+			const r = await dialogs.pop(this, Setting.settingMetadata('notes.sortOrder.field').label(), buttons);
+			if (!r) return;
+
+			Setting.setValue(r.name, r.value);
+		}
 	}
 
 	async componentDidMount() {
@@ -42,6 +80,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 		let options = {
 			order: props.notesOrder,
 			uncompletedTodosOnTop: props.uncompletedTodosOnTop,
+			caseInsensitive: true,
 		};
 
 		const parent = this.parentItem(props);
@@ -155,6 +194,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 					title={title}
 					menuOptions={this.menuOptions()}
 					parentComponent={thisComp}
+					sortButton_press={this.sortButton_press}
 					folderPickerOptions={{
 						enabled: this.props.noteSelectionEnabled,
 						mustSelect: true,
@@ -178,11 +218,11 @@ const NotesScreen = connect(
 			selectedTagId: state.selectedTagId,
 			notesParentType: state.notesParentType,
 			notes: state.notes,
-			notesOrder: state.notesOrder,
 			notesSource: state.notesSource,
 			uncompletedTodosOnTop: state.settings.uncompletedTodosOnTop,
 			theme: state.settings.theme,
 			noteSelectionEnabled: state.noteSelectionEnabled,
+			notesOrder: stateUtils.notesOrder(state.settings),
 		};
 	}
 )(NotesScreenComponent)

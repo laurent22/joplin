@@ -175,6 +175,22 @@ class Application extends BaseApplication {
 	updateMenu(screen) {
 		if (this.lastMenuScreen_ === screen) return;
 
+		const sortNoteItems = [];
+		const sortNoteOptions = Setting.enumOptions('notes.sortOrder.field');
+		for (let field in sortNoteOptions) {
+			if (!sortNoteOptions.hasOwnProperty(field)) continue;
+			sortNoteItems.push({
+				label: sortNoteOptions[field],
+				screens: ['Main'],
+				type: 'checkbox',
+				checked: Setting.value('notes.sortOrder.field') === field,
+				click: () => {
+					Setting.setValue('notes.sortOrder.field', field);
+					this.refreshMenu();
+				}
+			});		
+		}
+
 		const template = [
 			{
 				label: _('File'),
@@ -287,6 +303,29 @@ class Application extends BaseApplication {
 							name: 'toggleVisiblePanes',
 						});
 					}
+				}, {
+					type: 'separator',
+					screens: ['Main'],
+				}, {
+					label: Setting.settingMetadata('notes.sortOrder.field').label(),
+					screens: ['Main'],
+					submenu: sortNoteItems,
+				}, {
+					label: Setting.settingMetadata('notes.sortOrder.reverse').label(),
+					type: 'checkbox',
+					checked: Setting.setValue('notes.sortOrder.reverse'),
+					screens: ['Main'],
+					click: () => {
+						Setting.setValue('notes.sortOrder.reverse', !Setting.value('notes.sortOrder.reverse'));
+					},
+				}, {
+					label: Setting.settingMetadata('uncompletedTodosOnTop').label(),
+					type: 'checkbox',
+					checked: Setting.setValue('uncompletedTodosOnTop'),
+					screens: ['Main'],
+					click: () => {
+						Setting.setValue('uncompletedTodosOnTop', !Setting.value('uncompletedTodosOnTop'));
+					},
 				}],
 			}, {
 				label: _('Tools'),

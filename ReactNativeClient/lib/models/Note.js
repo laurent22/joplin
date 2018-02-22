@@ -15,6 +15,16 @@ class Note extends BaseItem {
 		return 'notes';
 	}
 
+	static fieldToLabel(field) {
+		const fieldsToLabels = {
+			title: 'title',
+			user_updated_time: 'updated date',
+			user_created_time: 'created date',
+		};
+
+		return field in fieldsToLabels ? fieldsToLabels[field] : field;
+	}
+
 	static async serialize(note, type = null, shownKeys = null) {
 		let fieldNames = this.fieldNames();
 		fieldNames.push('type_');

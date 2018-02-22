@@ -283,6 +283,16 @@ class ScreenHeaderComponent extends Component {
 			);
 		}
 
+		function sortButton(styles, onPress) {
+			return (
+				<TouchableOpacity onPress={onPress}>
+					<View style={styles.iconButton}>
+						<Icon name='md-funnel' style={styles.topIcon} />
+					</View>
+				</TouchableOpacity>
+			);
+		}
+
 		let key = 0;
 		let menuOptionComponents = [];
 
@@ -424,6 +434,7 @@ class ScreenHeaderComponent extends Component {
 		const backButtonComp = backButton(this.styles(), () => this.backButton_press(), !this.props.historyCanGoBack);
 		const searchButtonComp = this.props.noteSelectionEnabled ? null : searchButton(this.styles(), () => this.searchButton_press());
 		const deleteButtonComp = this.props.noteSelectionEnabled ? deleteButton(this.styles(), () => this.deleteButton_press()) : null;
+		const sortButtonComp = this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
 		const windowHeight = Dimensions.get('window').height - 50;
 
 		const menuComp = (
@@ -448,6 +459,7 @@ class ScreenHeaderComponent extends Component {
 					{ titleComp }
 					{ searchButtonComp }
 					{ deleteButtonComp }
+					{ sortButtonComp }
 					{ menuComp }
 				</View>
 				{ warningComp }

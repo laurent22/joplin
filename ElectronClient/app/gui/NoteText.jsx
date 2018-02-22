@@ -604,7 +604,7 @@ class NoteTextComponent extends React.Component {
 			let bodyToRender = body;
 			if (!bodyToRender.trim() && visiblePanes.indexOf('viewer') >= 0 && visiblePanes.indexOf('editor') < 0) {
 				// Fixes https://github.com/laurent22/joplin/issues/217
-				bodyToRender = '*' + _('This not has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout')) + '*';
+				bodyToRender = '*' + _('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout')) + '*';
 			}
 
 			const html = this.mdToHtml().render(bodyToRender, theme, mdOptions);

@@ -1,5 +1,5 @@
 const { createStore, applyMiddleware } = require('redux');
-const { reducer, defaultState } = require('lib/reducer.js');
+const { reducer, defaultState, stateUtils } = require('lib/reducer.js');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { Database } = require('lib/database.js');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
@@ -184,8 +184,9 @@ class BaseApplication {
 		this.logger().debug('Refreshing notes:', parentType, parentId);
 
 		let options = {
-			order: state.notesOrder,
+			order: stateUtils.notesOrder(state.settings),
 			uncompletedTodosOnTop: Setting.value('uncompletedTodosOnTop'),
+			caseInsensitive: true,
 		};
 
 		const source = JSON.stringify({
@@ -255,14 +256,31 @@ class BaseApplication {
 
 		const result = next(action);
 		const newState = store.getState();
+		let refreshNotes = false;
 
 		if (action.type == 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE') {
 			Setting.setValue('activeFolderId', newState.selectedFolderId);
 			this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
-			await this.refreshNotes(newState);
+			refreshNotes = true;
 		}
 
-		if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && action.key == 'uncompletedTodosOnTop' || action.type == 'SETTING_UPDATE_ALL') {
+		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'uncompletedTodosOnTop') || action.type == 'SETTING_UPDATE_ALL')) {
+			refreshNotes = true;
+		}
+
+		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key.indexOf('notes.sortOrder') === 0) || action.type == 'SETTING_UPDATE_ALL')) {
+			refreshNotes = true;
+		}
+
+		if (action.type == 'TAG_SELECT' || action.type === 'TAG_DELETE') {
+			refreshNotes = true;
+		}
+
+		if (action.type == 'SEARCH_SELECT' || action.type === 'SEARCH_DELETE') {
+			refreshNotes = true;
+		}
+
+		if (refreshNotes) {
 			await this.refreshNotes(newState);
 		}
 
@@ -288,25 +306,12 @@ class BaseApplication {
 			}
 		}
 
-		if (action.type == 'TAG_SELECT' || action.type === 'TAG_DELETE') {
-			await this.refreshNotes(newState);
-		}
-
-		if (action.type == 'SEARCH_SELECT' || action.type === 'SEARCH_DELETE') {
-			await this.refreshNotes(newState);
-		}
-
 		if (action.type === 'NOTE_UPDATE_ONE') {
 			// If there is a conflict, we refresh the folders so as to display "Conflicts" folder
 			if (action.note && action.note.is_conflict) {
 				await FoldersScreenUtils.refreshFolders();
 			}
 		}
-
-		// if (action.type === 'NOTE_DELETE') {
-		// 	// Update folders if a note is deleted in case the deleted note was a conflict
-		// 	await FoldersScreenUtils.refreshFolders();
-		// }
 
 		if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && action.key == 'sync.interval' || action.type == 'SETTING_UPDATE_ALL') {
 			reg.setupRecurrentSync();
