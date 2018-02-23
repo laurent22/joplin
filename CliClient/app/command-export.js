@@ -1,5 +1,5 @@
 const { BaseCommand } = require('./base-command.js');
-const { Exporter } = require('lib/services/exporter.js');
+const InteropService = require('lib/services/InteropService.js');
 const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
 const { reg } = require('lib/registry.js');
@@ -10,15 +10,16 @@ const fs = require('fs-extra');
 class Command extends BaseCommand {
 
 	usage() {
-		return 'export <directory>';
+		return 'export <path>';
 	}
 
 	description() {
-		return _('Exports Joplin data to the given directory. By default, it will export the complete database including notebooks, notes, tags and resources.');
+		return _('Exports Joplin data to the given path. By default, it will export the complete database including notebooks, notes, tags and resources.');
 	}
 
 	options() {
 		return [
+			['--format <format>', 'jpz (compressed, default), raw (plain text files)'],
 			['--note <note>', _('Exports only the given note.')],
 			['--notebook <notebook>', _('Exports only the given notebook.')],
 		];
@@ -26,13 +27,9 @@ class Command extends BaseCommand {
 	
 	async action(args) {
 		let exportOptions = {};
-		exportOptions.destDir = args.directory;
-		exportOptions.writeFile = (filePath, data) => {
-			return fs.writeFile(filePath, data);
-		};
-		exportOptions.copyFile = (source, dest) => {
-			return fs.copy(source, dest, { overwrite: true });
-		};
+		exportOptions.path = args.path;
+
+		exportOptions.format = args.options.format ? args.options.format : 'jpz';
 
 		if (args.options.note) {
 
@@ -48,10 +45,10 @@ class Command extends BaseCommand {
 
 		}
 
-		const exporter = new Exporter();
-		const result = await exporter.export(exportOptions);
+		const service = new InteropService();
+		const result = await service.export(exportOptions);
 
-		reg.logger().info('Export result: ', result);
+		result.warnings.map((w) => this.stdout(w));
 	}
 
 }

@@ -28,8 +28,7 @@ class Cache {
 Cache.storage = async function() {
 	if (Cache.storage_) return Cache.storage_;
 	Cache.storage_ = require('node-persist');
-	const osTmpdir = require('os-tmpdir');
-	await Cache.storage_.init({ dir: osTmpdir() + '/joplin-cache', ttl: 1000 * 60 });
+	await Cache.storage_.init({ dir: require('os').tmpdir() + '/joplin-cache', ttl: 1000 * 60 });
 	return Cache.storage_;
 }
 
