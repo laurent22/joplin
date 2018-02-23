@@ -138,7 +138,7 @@ class ElectronAppWrapper {
 			output = '16x16.png';
 		}
 
-		//if (this.env_ === 'dev') output = '16x16-dev.png'
+		if (this.env_ === 'dev') output = '16x16-dev.png'
 
 		return output;
 	}
@@ -164,10 +164,29 @@ class ElectronAppWrapper {
 		this.tray_ = null;
 	}
 
+	ensureSingleInstance() {
+		return new Promise((resolve, reject) => {
+			const alreadyRunning = this.electronApp_.makeSingleInstance((commandLine, workingDirectory) => {
+				const win = this.window();
+				if (!win) return;
+				if (win.isMinimized()) win.restore();
+				win.show();
+				win.focus();
+			});
+
+			if (alreadyRunning) this.electronApp_.quit();
+
+			resolve(alreadyRunning);
+		});
+	}
+
 	async start() {
 		// Since we are doing other async things before creating the window, we might miss
 		// the "ready" event. So we use the function below to make sure that the app is ready.
 		await this.waitForElectronAppReady();
+
+		const alreadyRunning = await this.ensureSingleInstance();
+		if (alreadyRunning) return;
 
 		this.createWindow();
 
