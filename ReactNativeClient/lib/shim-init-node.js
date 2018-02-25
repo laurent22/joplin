@@ -80,8 +80,12 @@ function shimInit() {
 
 		await Resource.save(resource, { isNew: true });
 
+		const newBody = [];
+		if (note.body) newBody.push(note.body);
+		newBody.push(Resource.markdownTag(resource));
+
 		const newNote = Object.assign({}, note, {
-			body: note.body + "\n\n" + Resource.markdownTag(resource),
+			body: newBody.join('\n\n'),
 		});
 		return await Note.save(newNote);
 	}

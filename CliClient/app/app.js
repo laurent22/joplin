@@ -387,10 +387,11 @@ class Application extends BaseApplication {
 				await this.execCommand(argv);
 			} catch (error) {
 				if (this.showStackTraces_) {
-					console.info(error);
+					console.error(error);
 				} else {
 					console.info(error.message);
 				}
+				process.exit(1);
 			}
 		} else { // Otherwise open the GUI
 			this.initRedux();

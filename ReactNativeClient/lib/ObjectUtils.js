@@ -28,4 +28,20 @@ ObjectUtils.sortByValue = function(object) {
 	return output;
 }
 
+ObjectUtils.fieldsEqual = function(o1, o2) {
+	if ((!o1 || !o2) && (o1 !== o2)) return false;
+	
+	for (let k in o1) {
+		if (!o1.hasOwnProperty(k)) continue;
+		if (o1[k] !== o2[k]) return false;
+	}
+
+	const c1 = Object.getOwnPropertyNames(o1);
+	const c2 = Object.getOwnPropertyNames(o2);
+
+	if (c1.length !== c2.length) return false;
+
+	return true;
+}
+
 module.exports = ObjectUtils;
