@@ -9,6 +9,7 @@ const { basename } = require('lib/path-utils.js');
 const fs = require('fs-extra');
 const md5 = require('md5');
 const { sprintf } = require('sprintf-js');
+const { shim } = require('lib/shim');
 
 class RawExporter {
 
@@ -35,9 +36,11 @@ class RawExporter {
 
 }
 
-class JpzExporter {
+class JexExporter {
 
 	async init(destPath) {
+		if (await shim.fsDriver().isDirectory(destPath)) throw new Error('Path is a directory: ' + destPath);
+
 		this.tempDir_ = require('os').tmpdir() + '/' + md5(Math.random() + Date.now());
 		this.destPath_ = destPath;
 		this.rawExporter_ = new RawExporter();
@@ -53,27 +56,17 @@ class JpzExporter {
 	}
 
 	async close() {
-		const cwd = process.cwd();
-		process.chdir(this.tempDir_);
+		const stats = await shim.fsDriver().readDirStats(this.tempDir_, { recursive: true });
+		const filePaths = stats.map((a) => a.path);
 
-		const cleanUp = () => {
-			process.chdir(cwd);
-		}
+		await require('tar').create({
+			strict: true,
+			portable: true,
+			file: this.destPath_,
+			cwd: this.tempDir_,
+		}, filePaths);
 
-		try {
-			await require('tar').c({
-				strict: true,
-				gzip: true,
-				file: this.destPath_,
-			}, ['./']);
-
-			await fs.remove(this.tempDir_);
-		} catch (error) {
-			cleanUp();
-			throw error;
-		}
-
-		cleanUp();
+		await fs.remove(this.tempDir_);
 	}
 
 }
@@ -81,8 +74,18 @@ class JpzExporter {
 function newExporter(format) {
 	if (format === 'raw') {
 		return new RawExporter();
-	} else if (format === 'jpz') {
-		return new JpzExporter();
+	} else if (format === 'jex') {
+		return new JexExporter();
+	} else {
+		throw new Error('Unknown format: ' + format);
+	}
+}
+
+function newImporter(format) {
+	if (format === 'raw') {
+		return new RawImporter();
+	} else if (format === 'jex') {
+		return new JexImporter();
 	} else {
 		throw new Error('Unknown format: ' + format);
 	}
@@ -91,19 +94,15 @@ function newExporter(format) {
 class InteropService {
 
 	async import(options) {
-		// format
-		// file/dir path
+		const importer = newImporter(options.format);
+		await importer.init(options.path);
 	}
 
 	async export(options) {
 		const exportPath = options.path ? options.path : null;
 		const sourceFolderIds = options.sourceFolderIds ? options.sourceFolderIds : [];
 		const sourceNoteIds = options.sourceNoteIds ? options.sourceNoteIds : [];
-
-		const result = {
-			warnings: [],
-		}
-
+		const result = { warnings: [] }
 		const itemsToExport = [];
 
 		const queueExportItem = (itemType, itemOrId) => {

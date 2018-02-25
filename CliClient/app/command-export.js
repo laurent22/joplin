@@ -19,7 +19,7 @@ class Command extends BaseCommand {
 
 	options() {
 		return [
-			['--format <format>', 'jpz (compressed, default), raw (plain text files)'],
+			//['--format <format>', 'jex (default), raw'],
 			['--note <note>', _('Exports only the given note.')],
 			['--notebook <notebook>', _('Exports only the given notebook.')],
 		];
@@ -29,7 +29,7 @@ class Command extends BaseCommand {
 		let exportOptions = {};
 		exportOptions.path = args.path;
 
-		exportOptions.format = args.options.format ? args.options.format : 'jpz';
+		exportOptions.format = args.options.format ? args.options.format : 'jex';
 
 		if (args.options.note) {
 
