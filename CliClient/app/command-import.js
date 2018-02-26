@@ -19,14 +19,18 @@ class Command extends BaseCommand {
 
 	options() {
 		return [
-			//['--format <format>', 'jex, markdown'],
+			['--format <format>', 'auto, jex, md'],
+			['--notebook <notebook>', 'Notebook to import the notes to.'],
 		];
 	}
 	
 	async action(args) {
+		const folder = await app().loadItem(BaseModel.TYPE_FOLDER, args.options.notebook);
+
 		const importOptions = {};
 		importOptions.path = args.path;
 		importOptions.format = args.options.format ? args.options.format : 'jex';
+		importOptions.destinationFolderId = folder ? folder.id : null;
 
 		const service = new InteropService();
 		const result = await service.import(importOptions);

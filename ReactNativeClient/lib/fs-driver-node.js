@@ -104,7 +104,13 @@ class FsDriverNode extends FsDriverBase {
 		if (!options) options = {};
 		if (!('recursive' in options)) options.recursive = false;
 
-		let items = await fs.readdir(path);
+		let items = [];
+		try {
+			items = await fs.readdir(path);
+		} catch (error) {
+			throw this.fsErrorToJsError_(error);
+		}
+
 		let output = [];
 		for (let i = 0; i < items.length; i++) {
 			const item = items[i];

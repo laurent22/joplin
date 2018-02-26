@@ -5,7 +5,7 @@ const Folder = require('lib/models/Folder.js');
 const NoteTag = require('lib/models/NoteTag.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
-const { basename } = require('lib/path-utils.js');
+const { basename, filename } = require('lib/path-utils.js');
 const fs = require('fs-extra');
 const md5 = require('md5');
 const { sprintf } = require('sprintf-js');
@@ -81,18 +81,19 @@ class JexExporter {
 
 class RawImporter {
 
-	async init(sourceDir) {
+	async init(sourceDir, options) {
 		this.sourceDir_ = sourceDir;
+		this.options_ = options;
 	}
 
-	async exec(result, options) {
+	async exec(result) {
 		const noteIdMap = {};
 		const folderIdMap = {};
 		const resourceIdMap = {};
 		const tagIdMap = {};
 		const createdResources = {};
 		const noteTagsToCreate = [];
-		const destinationFolderId = options.destinationFolderId;
+		const destinationFolderId = this.options_.destinationFolderId;
 
 		const replaceResourceNoteIds = (noteBody) => {
 			let output = noteBody;
@@ -202,9 +203,10 @@ class JexImporter {
 
 	async init(sourcePath, options) {
 		this.sourcePath_ = sourcePath;
+		this.options_ = options;
 	}
 
-	async exec(result, options) {
+	async exec(result) {
 		const tempDir = await temporaryDirectory(true);
 
 		await require('tar').extract({
@@ -215,12 +217,60 @@ class JexImporter {
 		});
 
 		const importer = newImporter('raw');
-		await importer.init(tempDir);
-		result = await importer.exec(result, options);
+		await importer.init(tempDir, this.options_);
+		result = await importer.exec(result);
 
 		await fs.remove(tempDir);
 
 		return result;		
+	}
+
+}
+
+class MdImporter {
+
+	async init(sourcePath, options) {
+		this.sourcePath_ = sourcePath;
+		this.options_ = options;
+	}
+
+	async exec(result) {
+		if (!this.options_.destinationFolder) throw new Error('Destination folder must be specified');
+
+		const parentFolderId = this.options_.destinationFolder.id;
+
+		const filePaths = [];
+		if (await shim.fsDriver().isDirectory(this.sourcePath_)) {
+			const stats = await shim.fsDriver().readDirStats(this.sourcePath_);
+			for (let i = 0; i < stats.length; i++) {
+				const stat = stats[i];
+				if (fileExtension(stat.path).toLowerCase() === 'md') {
+					filePaths.push(this.sourcePath_ + '/' + stat.path);
+				}
+			}
+		} else {
+			filePaths.push(this.sourcePath_);
+		}
+
+		for (let i = 0; i < filePaths.length; i++) {
+			const path = filePaths[i];
+			const stat = await shim.fsDriver().stat(path);
+			if (!stat) throw new Error('Cannot read ' + path);
+			const title = filename(path);
+			const body = await shim.fsDriver().readFile(path);
+			const note = {
+				parent_id: parentFolderId,
+				title: title,
+				body: body,
+				updated_time: stat.mtime.getTime(),
+				created_time: stat.birthtime.getTime(),
+				user_updated_time: stat.mtime.getTime(),
+				user_created_time: stat.birthtime.getTime(),
+			};
+			await Note.save(note, { autoTimestamp: false });
+		}
+
+		return result;
 	}
 
 }
@@ -240,6 +290,8 @@ function newImporter(format) {
 		return new RawImporter();
 	} else if (format === 'jex') {
 		return new JexImporter();
+	} else if (format === 'md') {
+		return new MdImporter();
 	} else {
 		throw new Error('Unknown format: ' + format);
 	}
@@ -251,6 +303,7 @@ class InteropService {
 		options = Object.assign({}, {
 			format: 'auto',
 			destinationFolderId: null,
+			destinationFolder: null,
 		}, options);
 
 		if (options.format === 'auto') {
@@ -265,13 +318,14 @@ class InteropService {
 		if (options.destinationFolderId) {
 			const folder = await Folder.load(options.destinationFolderId);
 			if (!folder) throw new Error('Notebook not found: ' + options.destinationFolderId);
+			options.destinationFolder = folder;
 		}
 
 		let result = { warnings: [] }
 
 		const importer = newImporter(options.format);
-		await importer.init(options.path);
-		result = await importer.exec(result, options);
+		await importer.init(options.path, options);
+		result = await importer.exec(result);
 
 		return result;
 	}
