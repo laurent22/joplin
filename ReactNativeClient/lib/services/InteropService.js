@@ -10,8 +10,10 @@ const fs = require('fs-extra');
 const md5 = require('md5');
 const { sprintf } = require('sprintf-js');
 const { shim } = require('lib/shim');
+const { _ } = require('lib/locale');
 const { fileExtension } = require('lib/path-utils');
 const { uuid } = require('lib/uuid.js');
+const { importEnex } = require('lib/import-enex');
 
 async function temporaryDirectory(createIt) {
 	const tempDir = require('os').tmpdir() + '/' + md5(Math.random() + Date.now());
@@ -209,12 +211,19 @@ class JexImporter {
 	async exec(result) {
 		const tempDir = await temporaryDirectory(true);
 
-		await require('tar').extract({
-			strict: true,
-			portable: true,
-			file: this.sourcePath_,
-			cwd: tempDir,
-		});
+		try {
+			await require('tar').extract({
+				strict: true,
+				portable: true,
+				file: this.sourcePath_,
+				cwd: tempDir,
+			});
+		} catch (error) {
+			let msg = ['Cannot untar file ' + this.sourcePath_, error.message];
+			if (error.data) msg.push(JSON.stringify(error.data));
+			let e = new Error(msg.join(': '));
+			throw e;
+		}
 
 		const importer = newImporter('raw');
 		await importer.init(tempDir, this.options_);
@@ -275,6 +284,28 @@ class MdImporter {
 
 }
 
+class EnexImporter {
+
+	async init(sourcePath, options) {
+		this.sourcePath_ = sourcePath;
+		this.options_ = options;
+	}
+
+	async exec(result) {
+		let folder = this.options_.destinationFolder;
+
+		if (!folder) {
+			const folderTitle = await Folder.findUniqueFolderTitle(filename(this.sourcePath_));
+			folder = await Folder.save({ title: folderTitle });
+		}
+
+		await importEnex(folder.id, this.sourcePath_, this.options_);
+
+		return result;
+	}
+
+}
+
 function newExporter(format) {
 	if (format === 'raw') {
 		return new RawExporter();
@@ -292,6 +323,8 @@ function newImporter(format) {
 		return new JexImporter();
 	} else if (format === 'md') {
 		return new MdImporter();
+	} else if (format === 'enex') {
+		return new EnexImporter();
 	} else {
 		throw new Error('Unknown format: ' + format);
 	}
@@ -300,6 +333,8 @@ function newImporter(format) {
 class InteropService {
 
 	async import(options) {
+		if (!await shim.fsDriver().exists(options.path)) throw new Error(_('Cannot find "%s".', options.path));
+
 		options = Object.assign({}, {
 			format: 'auto',
 			destinationFolderId: null,
@@ -307,9 +342,11 @@ class InteropService {
 		}, options);
 
 		if (options.format === 'auto') {
-			const ext = fileExtension(options.path);
-			if (ext.toLowerCase() === 'jex') {
+			const ext = fileExtension(options.path).toLowerCase();
+			if (ext === 'jex') {
 				options.format = 'jex';
+			} else if (ext === 'enex') {
+				options.format = 'enex';
 			} else {
 				throw new Error('Cannot automatically detect source format from path: ' + options.path);
 			}
