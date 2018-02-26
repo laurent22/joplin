@@ -140,14 +140,22 @@ class FsDriverNode extends FsDriverBase {
 		}
 	}
 
-	readFile(path, encoding = 'utf8') {
-		if (encoding === 'Buffer') return fs.readFile(path); // Returns the raw buffer
-		return fs.readFile(path, encoding);
+	async readFile(path, encoding = 'utf8') {
+		try {
+			if (encoding === 'Buffer') return await fs.readFile(path); // Returns the raw buffer
+			return await fs.readFile(path, encoding);
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
+		}
 	}
 
 	// Always overwrite destination
 	async copy(source, dest) {
-		return fs.copy(source, dest, { overwrite: true });
+		try {
+			return await fs.copy(source, dest, { overwrite: true });
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, source);
+		}
 	}
 
 	async unlink(path) {

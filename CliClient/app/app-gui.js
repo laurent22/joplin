@@ -287,6 +287,8 @@ class AppGui {
 
 	addCommandToConsole(cmd) {
 		if (!cmd) return;
+		const isConfigPassword = cmd.indexOf('config ') >= 0 && cmd.indexOf('password') >= 0;
+		if (isConfigPassword) return;
 		this.stdout(chalk.cyan.bold('> ' + cmd));	
 	}
 

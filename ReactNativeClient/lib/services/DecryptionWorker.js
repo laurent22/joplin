@@ -96,6 +96,11 @@ class DecryptionWorker {
 							}
 							continue;
 						}
+
+						if (error.code === 'masterKeyNotLoaded' && options.materKeyNotLoadedHandler === 'throw') {
+							throw error;
+						}
+
 						this.logger().warn('DecryptionWorker: error for: ' + item.id + ' (' + ItemClass.tableName() + ')', error);
 					}
 				}
