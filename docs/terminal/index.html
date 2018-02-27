@@ -204,7 +204,7 @@
 
 <div class="content">
 <p>Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor.</p>
-<p>Notes exported from Evernote via .enex files <a href="#importing-notes-from-evernote">can be imported</a> into Joplin, including the formatted content (which is converted to markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).</p>
+<p>Notes exported from Evernote via .enex files <a href="http://joplin.cozic.net/#importing">can be imported</a> into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.</p>
 <p>The notes can be <a href="#synchronisation">synchronised</a> with various targets including the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
 <p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/ScreenshotTerminal.png" style="max-width: 60%"></p>
 <h1 id="installation">Installation</h1>
@@ -296,7 +296,7 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <p>To import Evernote data, follow these steps:</p>
 <ul>
 <li>First, export your Evernote notebooks to ENEX files as described <a href="https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks">here</a>.</li>
-<li>In Joplin, in <a href="#command-line-mode">command-line mode</a>, type <code>import-enex /path/to/file.enex</code>. This will import the notes into a new notebook named after the filename.</li>
+<li>In Joplin, in <a href="#command-line-mode">command-line mode</a>, type <code>import /path/to/file.enex</code>. This will import the notes into a new notebook named after the filename.</li>
 <li>Then repeat the process for each notebook that needs to be imported.</li>
 </ul>
 <h1 id="synchronisation">Synchronisation</h1>

@@ -2,7 +2,7 @@
 
 Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](https://daringfireball.net/projects/markdown/basics).
 
-Notes exported from Evernote via .enex files [can be imported](#importing-notes-from-evernote) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).
+Notes exported from Evernote via .enex files [can be imported](#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
 
 The notes can be [synchronised](#synchronisation) with various targets including [Nextcloud](https://nextcloud.com/), the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
 
@@ -51,20 +51,23 @@ For usage information, please refer to the full [Joplin Terminal Application Doc
 # Features 
 
 - Desktop, mobile and terminal applications.
-- Import Enex files (Evernote export format)
+- End To End Encryption (E2EE)
+- Synchronisation with various services, including NextCloud, WebDAV and OneDrive. Dropbox is planned.
+- Import Enex files (Evernote export format) and Markdown files.
+- Export JEX files (Joplin Export format) and raw files.
 - Support notes, to-dos, tags and notebooks.
+- Sort notes by multiple criteria - title, updated time, etc.
 - Support for alarms (notifications) in mobile and desktop applications.
 - Offline first, so the entire data is always available on the device even without an internet connection.
-- Synchronisation with various services, including NextCloud, WebDAV and OneDrive. Dropbox is planned.
-- End To End Encryption (E2EE)
-- Synchronises to a plain text format, which can be easily manipulated, backed up, or exported to a different format.
 - Markdown notes, which are rendered with images and formatting in the desktop and mobile applications. Support for extra features such as math notation and checkboxes.
 - File attachment support - images are displayed, and other files are linked and can be opened in the relevant application.
 - Search functionality.
 - Geo-location support.
 - Supports multiple languages
 
-# Importing notes from Evernote
+# Importing
+
+## Importing from Evernote 
 
 Joplin was designed as a replacement for Evernote and so can import complete Evernote notebooks, as well as notes, tags, resources (attached files) and note metadata (such as author, geo-location, etc.) via ENEX files. In terms of data, the only two things that might slightly differ are:
 
@@ -74,16 +77,28 @@ Joplin was designed as a replacement for Evernote and so can import complete Eve
 
 To import Evernote data, first export your Evernote notebooks to ENEX files as described [here](https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks). Then follow these steps:
 
-On the **desktop application**, open the "File" menu, click "Import Evernote notes" and select your ENEX file. This will open a new screen which will display the import progress. The notes will be imported into a new separate notebook (so that, in case of a mistake, the notes are not mixed up with any existing notes). If needed then can then be moved to a different notebook, or the notebook can be renamed, etc.
+On the **desktop application**, open File > Import > ENEX and select your file. The notes will be imported into a new separate notebook. If needed they can then be moved to a different notebook, or the notebook can be renamed, etc.
 
-On the **terminal application**, in [command-line mode](/terminal#command-line-mode), type `import-enex /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
+On the **terminal application**, in [command-line mode](/terminal#command-line-mode), type `import /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
 
-# Importing notes from other applications
+## Importing from Markdown files
+
+Joplin can import notes from plain Markdown file. You can either import a complete directory of Markdown files or individual files.
+
+On the **desktop application**, open File > Import > MD and select your Markdown file or directory.
+
+On the **terminal application**, in [command-line mode](/terminal#command-line-mode), type `import --format md /path/to/file.md` or `import --format md /path/to/directory/`.
+
+## Importing from other applications
 
 In general the way to import notes from any application into Joplin is to convert the notes to ENEX files (Evernote format) and to import these ENEX files into Joplin using the method above. Most note-taking applications support ENEX files so it should be relatively straightforward. For help about specific applications, see below:
 
 * Standard Notes: Please see [this tutorial](https://programadorwebvalencia.com/migrate-notes-from-standard-notes-to-joplin/)
 * Tomboy Notes: Export the notes to ENEX files [as described here](https://askubuntu.com/questions/243691/how-can-i-export-my-tomboy-notes-into-evernote/608551) for example, and import these ENEX files into Joplin.
+
+# Exporting
+
+Joplin can export to the JEX format (Joplin Export file), which is a tar file that can contain multiple notes, notebooks, etc. This is a lossless format in that all the notes, but also metadata such as geo-location, updated time, tags, etc. are preserved. This format is convenient for backup purposes and can be re-imported into Joplin. A "raw" format is also available. This is the same as the JEX format except that the data is saved to a directory and each item represented by a single file.
 
 # Synchronisation
 
