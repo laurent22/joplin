@@ -44,7 +44,7 @@ reg.syncTarget = (syncTargetId = null) => {
 }
 
 reg.scheduleSync = async (delay = null) => {
-	if (delay === null) delay = 1000 * 30;
+	if (delay === null) delay = 1000 * 10;
 
 	let promiseResolve = null;
 	const promise = new Promise((resolve, reject) => {
