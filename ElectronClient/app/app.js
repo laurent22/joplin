@@ -365,7 +365,7 @@ class Application extends BaseApplication {
 					label: _('Hide %s', 'Joplin'),
 					platforms: ['darwin'],
 					accelerator: 'CommandOrControl+H',
-					click: () => { bridge().window().hide() }
+					click: () => { bridge().electronApp().hide() }
 				}, {
 					type: 'separator',
 				}, {
