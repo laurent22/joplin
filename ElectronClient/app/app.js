@@ -426,7 +426,7 @@ class Application extends BaseApplication {
 				}, {
 					label: Setting.settingMetadata('notes.sortOrder.reverse').label(),
 					type: 'checkbox',
-					checked: Setting.setValue('notes.sortOrder.reverse'),
+					checked: Setting.value('notes.sortOrder.reverse'),
 					screens: ['Main'],
 					click: () => {
 						Setting.setValue('notes.sortOrder.reverse', !Setting.value('notes.sortOrder.reverse'));
@@ -434,7 +434,7 @@ class Application extends BaseApplication {
 				}, {
 					label: Setting.settingMetadata('uncompletedTodosOnTop').label(),
 					type: 'checkbox',
-					checked: Setting.setValue('uncompletedTodosOnTop'),
+					checked: Setting.value('uncompletedTodosOnTop'),
 					screens: ['Main'],
 					click: () => {
 						Setting.setValue('uncompletedTodosOnTop', !Setting.value('uncompletedTodosOnTop'));
