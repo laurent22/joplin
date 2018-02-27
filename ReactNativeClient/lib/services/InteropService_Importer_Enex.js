@@ -14,11 +14,12 @@ const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
 const { fileExtension } = require('lib/path-utils');
 const { uuid } = require('lib/uuid.js');
-const { importEnex } = require('lib/import-enex');
 
 class InteropService_Importer_Enex extends InteropService_Importer_Base {
 
 	async exec(result) {
+		const { importEnex } = require('lib/import-enex');
+
 		let folder = this.options_.destinationFolder;
 
 		if (!folder) {

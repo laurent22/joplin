@@ -41,13 +41,14 @@ class ElectronAppWrapper {
 		const windowState = windowStateKeeper({
 			defaultWidth: 800,
 			defaultHeight: 600,
+			file: 'window-state-' + this.env_ + '.json',
 		});
 
 		const windowOptions = {
-			'x': windowState.x,
-			'y': windowState.y,
-			'width': windowState.width,
-			'height': windowState.height,
+			x: windowState.x,
+			y: windowState.y,
+			width: windowState.width,
+			height: windowState.height,
 		};
 
 		// Linux icon workaround for bug https://github.com/electron-userland/electron-builder/issues/2098

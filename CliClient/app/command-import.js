@@ -11,7 +11,7 @@ const { _ } = require('lib/locale.js');
 const fs = require('fs-extra');
 
 class Command extends BaseCommand {
-
+	
 	usage() {
 		return 'import <path> [notebook]';
 	}
@@ -21,9 +21,12 @@ class Command extends BaseCommand {
 	}
 
 	options() {
+		const service = new InteropService();
+		const formats = service.modules().filter(m => m.type === 'importer').map(m => m.format);
+
 		return [
+			['--format <format>', _('Source format: %s', (['auto'].concat(formats)).join(', '))],
 			['-f, --force', _('Do not ask for confirmation.')],
-			['--format <format>', 'auto, jex, enex, md'],
 		];
 	}
 	

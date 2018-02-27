@@ -110,30 +110,27 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 			await NoteTag.save(noteTag, { isNew: true });
 		}
 
-		const resourceStats = await shim.fsDriver().readDirStats(this.sourcePath_ + '/resources');
+		if (await shim.fsDriver().isDirectory(this.sourcePath_ + '/resources')) {
+			const resourceStats = await shim.fsDriver().readDirStats(this.sourcePath_ + '/resources');
 
-		for (let i = 0; i < resourceStats.length; i++) {
-			const resourceFilePath = this.sourcePath_ + '/resources/' + resourceStats[i].path;
-			const oldId = Resource.pathToId(resourceFilePath);
-			const newId = resourceIdMap[oldId];
-			if (!newId) {
-				result.warnings.push(sprintf('Resource file is not referenced in any note and so was not imported: %s', oldId));
-				continue;
+			for (let i = 0; i < resourceStats.length; i++) {
+				const resourceFilePath = this.sourcePath_ + '/resources/' + resourceStats[i].path;
+				const oldId = Resource.pathToId(resourceFilePath);
+				const newId = resourceIdMap[oldId];
+				if (!newId) {
+					result.warnings.push(sprintf('Resource file is not referenced in any note and so was not imported: %s', oldId));
+					continue;
+				}
+
+				const resource = createdResources[newId];
+				const destPath = Resource.fullPath(resource);
+				await shim.fsDriver().copy(resourceFilePath, destPath);
 			}
-
-			const resource = createdResources[newId];
-			const destPath = Resource.fullPath(resource);
-			await shim.fsDriver().copy(resourceFilePath, destPath);
 		}
 
 		return result;
 	}
 
-}
-InteropService_Importer_Raw.metadata = function() {
-	return {
-		format: 'raw',
-	};
 }
 
 module.exports = InteropService_Importer_Raw;

@@ -27,10 +27,4 @@ class InteropService_Exporter_Raw extends InteropService_Exporter_Base {
 
 }
 
-InteropService_Exporter_Raw.metadata = function() {
-	return {
-		format: 'raw',
-	};
-}
-
 module.exports = InteropService_Exporter_Raw;

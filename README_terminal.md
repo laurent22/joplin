@@ -274,81 +274,91 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	Possible keys/values:
 
-	    editor                 Text editor.
-	                           The editor that will be used to open a note. If 
-	                           none is provided it will try to auto-detect the 
-	                           default editor.
-	                           Type: string.
-	                           
-	    locale                 Language.
-	                           Type: Enum.
-	                           Possible values: en_GB (English), de_DE (Deutsch), 
-	                           es_CR (Español (Costa Rica)), es_ES (Español), eu 
-	                           (Basque), fr_FR (Français), hr_HR (Croatian), it_IT 
-	                           (Italiano), ja_JP (日本語), nl_BE (Nederlands), pt_BR 
-	                           (Português (Brasil)), ru_RU (Русский), zh_CN (中文 
-	                           (简体)).
-	                           Default: "en_GB"
-	                           
-	    dateFormat             Date format.
-	                           Type: Enum.
-	                           Possible values: DD/MM/YYYY (30/01/2017), DD/MM/YY 
-	                           (30/01/17), MM/DD/YYYY (01/30/2017), MM/DD/YY 
-	                           (01/30/17), YYYY-MM-DD (2017-01-30).
-	                           Default: "DD/MM/YYYY"
-	                           
-	    timeFormat             Time format.
-	                           Type: Enum.
-	                           Possible values: HH:mm (20:30), h:mm A (8:30 PM).
-	                           Default: "HH:mm"
-	                           
-	    uncompletedTodosOnTop  Show uncompleted to-dos on top of the lists.
-	                           Type: bool.
-	                           Default: true
-	                           
-	    trackLocation          Save geo-location with notes.
-	                           Type: bool.
-	                           Default: true
-	                           
-	    sync.interval          Synchronisation interval.
-	                           Type: Enum.
-	                           Possible values: 0 (Disabled), 300 (5 minutes), 600 
-	                           (10 minutes), 1800 (30 minutes), 3600 (1 hour), 
-	                           43200 (12 hours), 86400 (24 hours).
-	                           Default: 300
-	                           
-	    sync.target            Synchronisation target.
-	                           The target to synchonise to. Each sync target may 
-	                           have additional parameters which are named as 
-	                           `sync.NUM.NAME` (all documented below).
-	                           Type: Enum.
-	                           Possible values: 2 (File system), 3 (OneDrive), 4 
-	                           (OneDrive Dev (For testing only)), 5 (Nextcloud), 6 
-	                           (WebDAV).
-	                           Default: 3
-	                           
-	    sync.2.path            Directory to synchronise with (absolute path).
-	                           The path to synchronise with when file system 
-	                           synchronisation is enabled. See `sync.target`.
-	                           Type: string.
-	                           
-	    sync.5.path            Nextcloud WebDAV URL.
-	                           Type: string.
-	                           
-	    sync.5.username        Nextcloud username.
-	                           Type: string.
-	                           
-	    sync.5.password        Nextcloud password.
-	                           Type: string.
-	                           
-	    sync.6.path            WebDAV URL.
-	                           Type: string.
-	                           
-	    sync.6.username        WebDAV username.
-	                           Type: string.
-	                           
-	    sync.6.password        WebDAV password.
-	                           Type: string.
+	    editor                   Text editor.
+	                             The editor that will be used to open a note. If 
+	                             none is provided it will try to auto-detect the 
+	                             default editor.
+	                             Type: string.
+	                             
+	    locale                   Language.
+	                             Type: Enum.
+	                             Possible values: eu (Basque), hr_HR (Croatian), 
+	                             de_DE (Deutsch), en_GB (English), es_ES 
+	                             (Español), fr_FR (Français), it_IT (Italiano), 
+	                             nl_BE (Nederlands), pt_BR (Português (Brasil)), 
+	                             ru_RU (Русский), zh_CN (中文 (简体)), ja_JP (日本語).
+	                             Default: "en_GB"
+	                             
+	    dateFormat               Date format.
+	                             Type: Enum.
+	                             Possible values: DD/MM/YYYY (30/01/2017), 
+	                             DD/MM/YY (30/01/17), MM/DD/YYYY (01/30/2017), 
+	                             MM/DD/YY (01/30/17), YYYY-MM-DD (2017-01-30).
+	                             Default: "DD/MM/YYYY"
+	                             
+	    timeFormat               Time format.
+	                             Type: Enum.
+	                             Possible values: HH:mm (20:30), h:mm A (8:30 PM).
+	                             Default: "HH:mm"
+	                             
+	    uncompletedTodosOnTop    Uncompleted to-dos on top.
+	                             Type: bool.
+	                             Default: true
+	                             
+	    notes.sortOrder.field    Sort notes by.
+	                             Type: Enum.
+	                             Possible values: user_updated_time (Updated 
+	                             date), user_created_time (Created date), title 
+	                             (Title).
+	                             Default: "user_updated_time"
+	                             
+	    notes.sortOrder.reverse  Reverse sort order.
+	                             Type: bool.
+	                             Default: true
+	                             
+	    trackLocation            Save geo-location with notes.
+	                             Type: bool.
+	                             Default: true
+	                             
+	    sync.interval            Synchronisation interval.
+	                             Type: Enum.
+	                             Possible values: 0 (Disabled), 300 (5 minutes), 
+	                             600 (10 minutes), 1800 (30 minutes), 3600 (1 
+	                             hour), 43200 (12 hours), 86400 (24 hours).
+	                             Default: 300
+	                             
+	    sync.target              Synchronisation target.
+	                             The target to synchonise to. Each sync target may 
+	                             have additional parameters which are named as 
+	                             `sync.NUM.NAME` (all documented below).
+	                             Type: Enum.
+	                             Possible values: 2 (File system), 3 (OneDrive), 4 
+	                             (OneDrive Dev (For testing only)), 5 (Nextcloud), 
+	                             6 (WebDAV).
+	                             Default: 3
+	                             
+	    sync.2.path              Directory to synchronise with (absolute path).
+	                             The path to synchronise with when file system 
+	                             synchronisation is enabled. See `sync.target`.
+	                             Type: string.
+	                             
+	    sync.5.path              Nextcloud WebDAV URL.
+	                             Type: string.
+	                             
+	    sync.5.username          Nextcloud username.
+	                             Type: string.
+	                             
+	    sync.5.password          Nextcloud password.
+	                             Type: string.
+	                             
+	    sync.6.path              WebDAV URL.
+	                             Type: string.
+	                             
+	    sync.6.username          WebDAV username.
+	                             Type: string.
+	                             
+	    sync.6.password          WebDAV password.
+	                             Type: string.
 
 	cp <note> [notebook]
 
@@ -374,11 +384,13 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	    Edit note.
 
-	export <directory>
+	export <path>
 
-	    Exports Joplin data to the given directory. By default, it will export the 
+	    Exports Joplin data to the given path. By default, it will export the 
 	    complete database including notebooks, notes, tags and resources.
 
+	    --format <format>      Destination format: jex (Joplin Export File), raw 
+	                           (Joplin Export Directory)
 	    --note <note>          Exports only the given note.
 	    --notebook <notebook>  Exports only the given notebook.
 
@@ -390,11 +402,12 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	    Displays usage information.
 
-	import-enex <file> [notebook]
+	import <path> [notebook]
 
-	    Imports an Evernote notebook file (.enex file).
+	    Imports data into Joplin.
 
-	    -f, --force  Do not ask for confirmation.
+	    --format <format>  Source format: auto, jex, md, raw, enex
+	    -f, --force        Do not ask for confirmation.
 
 	mkbook <new-notebook>
 

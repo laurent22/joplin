@@ -20,6 +20,7 @@ const packageInfo = require('./packageInfo.js');
 const AlarmService = require('lib/services/AlarmService.js');
 const AlarmServiceDriverNode = require('lib/services/AlarmServiceDriverNode');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
+const InteropService = require('lib/services/InteropService');
 
 const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
@@ -191,6 +192,112 @@ class Application extends BaseApplication {
 			});		
 		}
 
+		const importItems = [];
+		const exportItems = [];
+		const ioService = new InteropService();
+		const ioModules = ioService.modules();
+		for (let i = 0; i < ioModules.length; i++) {
+			const module = ioModules[i];
+			if (module.type === 'exporter') {
+				exportItems.push({
+					label: module.format + ' - ' + module.description,
+					screens: ['Main'],
+					click: async () => {
+						let path = null;
+
+						if (module.target === 'file') {
+							path = bridge().showSaveDialog({
+								filters: [{ name: module.description, extensions: [module.fileExtension]}]
+							});
+						} else {
+							path = bridge().showOpenDialog({
+								properties: ['openDirectory', 'createDirectory'],
+							});
+						}
+
+						if (!path || (Array.isArray(path) && !path.length)) return;
+
+						if (Array.isArray(path)) path = path[0];
+
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'showModalMessage',
+							message: _('Exporting to "%s" as "%s" format. Please wait...', path, module.format),
+						});
+
+						const exportOptions = {};
+						exportOptions.path = path;
+						exportOptions.format = module.format;
+
+						const service = new InteropService();
+						const result = await service.export(exportOptions);
+
+						console.info('Export result: ', result);
+
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'hideModalMessage',
+						});
+					}
+				});
+			} else {
+				for (let j = 0; j < module.sources.length; j++) {
+					const moduleSource = module.sources[j];
+					let label = [module.format + ' - ' + module.description];
+					if (module.sources.length > 1) {
+						label.push('(' + (moduleSource === 'file' ? _('File') : _('Directory')) + ')');
+					}
+					importItems.push({
+						label: label.join(' '),
+						screens: ['Main'],
+						click: async () => {
+							let path = null;
+
+							const selectedFolderId = this.store().getState().selectedFolderId;
+
+							if (moduleSource === 'file') {
+								path = bridge().showOpenDialog({
+									filters: [{ name: module.description, extensions: [module.fileExtension]}]
+								});
+							} else {
+								path = bridge().showOpenDialog({
+									properties: ['openDirectory', 'createDirectory'],
+								});
+							}
+
+							if (!path || (Array.isArray(path) && !path.length)) return;
+
+							if (Array.isArray(path)) path = path[0];
+
+							this.dispatch({
+								type: 'WINDOW_COMMAND',
+								name: 'showModalMessage',
+								message: _('Importing from "%s" as "%s" format. Please wait...', path, module.format),
+							});
+
+							const importOptions = {};
+							importOptions.path = path;
+							importOptions.format = module.format;
+							importOptions.destinationFolderId = !module.isNoteArchive && moduleSource === 'file' ? selectedFolderId : null;
+
+							const service = new InteropService();
+							try {
+								const result = await service.import(importOptions);
+								console.info('Import result: ', result);
+							} catch (error) {
+								bridge().showErrorMessageBox(error.message);
+							}
+
+							this.dispatch({
+								type: 'WINDOW_COMMAND',
+								name: 'hideModalMessage',
+							});
+						}
+					});
+				}
+			}
+		}
+
 		const template = [
 			{
 				label: _('File'),
@@ -226,25 +333,31 @@ class Application extends BaseApplication {
 					}
 				}, {
 					type: 'separator',
-				}, {
-					label: _('Import Evernote notes'),
-					click: () => {
-						const filePaths = bridge().showOpenDialog({
-							properties: ['openFile', 'createDirectory'],
-							filters: [
-								{ name: _('Evernote Export Files'), extensions: ['enex'] },
-							]
-						});
-						if (!filePaths || !filePaths.length) return;
+				// }, {
+				// 	label: _('Import Evernote notes'),
+				// 	click: () => {
+				// 		const filePaths = bridge().showOpenDialog({
+				// 			properties: ['openFile', 'createDirectory'],
+				// 			filters: [
+				// 				{ name: _('Evernote Export Files'), extensions: ['enex'] },
+				// 			]
+				// 		});
+				// 		if (!filePaths || !filePaths.length) return;
 
-						this.dispatch({
-							type: 'NAV_GO',
-							routeName: 'Import',
-							props: {
-								filePath: filePaths[0],
-							},
-						});
-					}
+				// 		this.dispatch({
+				// 			type: 'NAV_GO',
+				// 			routeName: 'Import',
+				// 			props: {
+				// 				filePath: filePaths[0],
+				// 			},
+				// 		});
+				// 	}
+				}, {
+					label: _('Import'),
+					submenu: importItems,
+				}, {
+					label: _('Export'),
+					submenu: exportItems,
 				}, {
 					type: 'separator',
 					platforms: ['darwin'],

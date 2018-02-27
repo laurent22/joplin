@@ -22,6 +22,10 @@ class MainScreenComponent extends React.Component {
 	componentWillMount() {
 		this.setState({
 			promptOptions: null,
+			modalLayer: {
+				visible: false,
+				message: '',
+			},
 		});
 	}
 
@@ -165,6 +169,10 @@ class MainScreenComponent extends React.Component {
 			});
 		} else if (command.name === 'toggleVisiblePanes') {
 			this.toggleVisiblePanes();
+		} else if (command.name === 'showModalMessage') {
+			this.setState({ modalLayer: { visible: true, message: command.message } });
+		} else if (command.name === 'hideModalMessage') {
+			this.setState({ modalLayer: { visible: false, message: '' } });
 		} else if (command.name === 'editAlarm') {
 			const note = await Note.load(command.noteId);
 
@@ -265,6 +273,17 @@ class MainScreenComponent extends React.Component {
 			height: height,
 		};
 
+		this.styles_.modalLayer = Object.assign({}, theme.textStyle, {
+			zIndex: 10000,
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			backgroundColor: theme.backgroundColorTransparent,
+			width: width - 20,
+			height: height - 20,
+			padding: 10,
+		});
+
 		return this.styles_;
 	}
 
@@ -353,8 +372,12 @@ class MainScreenComponent extends React.Component {
 			);
 		}
 
+		const modalLayerStyle = Object.assign({}, styles.modalLayer, { display: this.state.modalLayer.visible ? 'block' : 'none' });
+
 		return (
 			<div style={style}>
+				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
+
 				<PromptDialog
 					autocomplete={promptOptions && ('autocomplete' in promptOptions) ? promptOptions.autocomplete : null}
 					defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''}

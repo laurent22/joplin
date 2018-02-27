@@ -6,7 +6,7 @@ const Folder = require('lib/models/Folder.js');
 const NoteTag = require('lib/models/NoteTag.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
-const { basename, filename } = require('lib/path-utils.js');
+const { basename, filename, rtrimSlashes } = require('lib/path-utils.js');
 const fs = require('fs-extra');
 const md5 = require('md5');
 const { sprintf } = require('sprintf-js');
@@ -19,9 +19,7 @@ const { importEnex } = require('lib/import-enex');
 class InteropService_Importer_Md extends InteropService_Importer_Base {
 
 	async exec(result) {
-		if (!this.options_.destinationFolder) throw new Error(_('Please specify the notebook where the notes should be imported to.'));
-
-		const parentFolderId = this.options_.destinationFolder.id;
+		let parentFolderId = null;
 
 		const filePaths = [];
 		if (await shim.fsDriver().isDirectory(this.sourcePath_)) {
@@ -32,7 +30,17 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 					filePaths.push(this.sourcePath_ + '/' + stat.path);
 				}
 			}
+
+			if (!this.options_.destinationFolder) {
+				const folderTitle = await Folder.findUniqueFolderTitle(basename(rtrimSlashes(this.sourcePath_)));
+				const folder = await Folder.save({ title: folderTitle });
+				parentFolderId = folder.id;
+			} else {
+				parentFolderId = this.options_.destinationFolder.id;
+			}
 		} else {
+			if (!this.options_.destinationFolder) throw new Error(_('Please specify the notebook where the notes should be imported to.'));
+			parentFolderId = this.options_.destinationFolder.id
 			filePaths.push(this.sourcePath_);
 		}
 
@@ -57,13 +65,6 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 		return result;
 	}
 
-}
-
-InteropService_Importer_Md.metadata = function() {
-	return {
-		format: 'md',
-		fileExtension: 'md',
-	};
 }
 
 module.exports = InteropService_Importer_Md;

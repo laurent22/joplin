@@ -47,11 +47,4 @@ class InteropService_Importer_Jex extends InteropService_Importer_Base {
 
 }
 
-InteropService_Importer_Jex.metadata = function() {
-	return {
-		format: 'jex',
-		fileExtension: 'jex',
-	};
-}
-
 module.exports = InteropService_Importer_Jex;

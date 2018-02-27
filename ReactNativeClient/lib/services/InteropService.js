@@ -7,34 +7,111 @@ const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
 const { basename, filename } = require('lib/path-utils.js');
 const fs = require('fs-extra');
-const md5 = require('md5');
 const ArrayUtils = require('lib/ArrayUtils');
 const { sprintf } = require('sprintf-js');
 const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
 const { fileExtension } = require('lib/path-utils');
 const { uuid } = require('lib/uuid.js');
-const { importEnex } = require('lib/import-enex');
 const { toTitleCase } = require('lib/string-utils');
 
 class InteropService {
 
-	newImportExportModule_(format, className) {
-		try {
-			const FormatClass = require('lib/services/' + className);
-			return new FormatClass();
-		} catch (error) {
-			error.message = _('Cannot load module for format "%s": %s', format, error.message);
-			throw error;
+	constructor() {
+		this.modules_ = null;
+	}
+
+	modules() {
+		if (this.modules_) return this.modules_;
+
+		let importModules = [
+			{
+				format: 'jex',
+				fileExtension: 'jex',
+				sources: ['file'],
+				description: _('Joplin Export File'),
+			}, {
+				format: 'md',
+				fileExtension: 'md',
+				sources: ['file', 'directory'],
+				isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
+				description: _('Markdown'),
+			}, {
+				format: 'raw',
+				sources: ['directory'],
+				description: _('Joplin Export Directory'),
+			}, {
+				format: 'enex',
+				fileExtension: 'enex',
+				sources: ['file'],
+				description: _('Evernote Export File'),
+			},
+		];
+
+		let exportModules = [
+			{
+				format: 'jex',
+				fileExtension: 'jex',
+				target: 'file',
+				description: _('Joplin Export File'),
+			}, {
+				format: 'raw',
+				target: 'directory',
+				description: _('Joplin Export Directory'),
+			},
+		];
+
+		importModules = importModules.map((a) => {
+			const className = 'InteropService_Importer_' + toTitleCase(a.format);
+			const output = Object.assign({}, {
+				type: 'importer',
+				path: 'lib/services/' + className,
+			}, a);
+			if (!('isNoteArchive' in output)) output.isNoteArchive = true;
+			return output;
+		});
+
+		exportModules = exportModules.map((a) => {
+			const className = 'InteropService_Exporter_' + toTitleCase(a.format);
+			return Object.assign({}, {
+				type: 'exporter',
+				path: 'lib/services/' + className,
+			}, a);
+		});
+
+		this.modules_ = importModules.concat(exportModules);
+
+		return this.modules_;
+	}
+
+	moduleByFormat_(type, format) {
+		const modules = this.modules();
+		for (let i = 0; i < modules.length; i++) {
+			const m = modules[i];
+			if (m.format === format && m.type === type) return modules[i];
 		}
+		return null;
 	}
 
-	newExporter_(format) {
-		return this.newImportExportModule_(format, 'InteropService_Exporter_' + toTitleCase(format));
+	newModule_(type, format) {
+		const module = this.moduleByFormat_(type, format);
+		if (!module) throw new Error(_('Cannot load "%s" module for format "%s"', type, format));
+		const ModuleClass = require(module.path);
+		return new ModuleClass();
 	}
 
-	newImporter_(format) {
-		return this.newImportExportModule_(format, 'InteropService_Importer_' + toTitleCase(format));
+	moduleByFileExtension_(type, ext) {
+		ext = ext.toLowerCase();
+
+		const modules = this.modules();
+
+		for (let i = 0; i < modules.length; i++) {
+			const m = modules[i];
+			if (type !== m.type) continue;
+			if (m.fileExtension === ext) return m;
+		}
+
+		return null;
 	}
 
 	async import(options) {
@@ -47,25 +124,20 @@ class InteropService {
 		}, options);
 
 		if (options.format === 'auto') {
-			const ext = fileExtension(options.path).toLowerCase();
-			if (ext === 'jex') {
-				options.format = 'jex';
-			} else if (ext === 'enex') {
-				options.format = 'enex';
-			} else {
-				throw new Error('Cannot automatically detect source format from path: ' + options.path);
-			}
+			const module = this.moduleByFileExtension_('importer', fileExtension(options.path));
+			if (!module) throw new Error(_('Please specify import format for %s', options.path));
+			options.format = module.format;
 		}
 
 		if (options.destinationFolderId) {
 			const folder = await Folder.load(options.destinationFolderId);
-			if (!folder) throw new Error('Notebook not found: ' + options.destinationFolderId);
+			if (!folder) throw new Error(_('Cannot find "%s".', options.destinationFolderId));
 			options.destinationFolder = folder;
 		}
 
 		let result = { warnings: [] }
 
-		const importer = this.newImporter_(options.format);
+		const importer = this.newModule_('importer', options.format);
 		await importer.init(options.path, options);
 		result = await importer.exec(result);
 
@@ -132,7 +204,7 @@ class InteropService {
 			await queueExportItem(BaseModel.TYPE_TAG, exportedTagIds[i]);
 		}
 
-		const exporter = this.newExporter_(exportFormat);
+		const exporter = this.newModule_('exporter', exportFormat);
 		await exporter.init(exportPath);
 
 		for (let i = 0; i < itemsToExport.length; i++) {

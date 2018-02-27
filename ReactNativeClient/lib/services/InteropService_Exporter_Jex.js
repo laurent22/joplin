@@ -54,11 +54,4 @@ class InteropService_Exporter_Jex extends InteropService_Exporter_Base {
 
 }
 
-InteropService_Exporter_Jex.metadata = function() {
-	return {
-		format: 'jex',
-		fileExtension: 'jex',
-	};
-}
-
 module.exports = InteropService_Exporter_Jex;
