@@ -222,6 +222,8 @@ class InteropService {
 				continue;
 			}
 
+			if (item.encryption_applied || item.encryption_blob_encrypted) throw new Error(_('This item is currently encrypted: %s "%s". Please wait for all items to be decrypted and try again.', BaseModel.modelTypeToName(itemType), item.title ? item.title : item.id));
+
 			try {
 				if (itemType == BaseModel.TYPE_RESOURCE) {
 					const resourcePath = Resource.fullPath(item);
