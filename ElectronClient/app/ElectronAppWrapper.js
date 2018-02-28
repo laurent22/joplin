@@ -79,7 +79,7 @@ class ElectronAppWrapper {
 					this.win_ = null;
 				} else {
 					event.preventDefault();
-					this.win_.hide();
+					this.hide();
 				}
 			} else {
 				if (this.trayShown() && !this.willQuitApp_) {
@@ -116,6 +116,12 @@ class ElectronAppWrapper {
 
 	trayShown() {
 		return !!this.tray_;
+	}
+
+	// This method is used in macOS only to hide the whole app (and not just the main window)
+	// including the menu bar. This follows the macOS way of hidding an app.
+	hide() {
+		this.electronApp_.hide();
 	}
 
 	buildDir() {
