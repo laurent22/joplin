@@ -187,13 +187,18 @@ msgstr "Notitie is opgeslaan."
 msgid "Exits the application."
 msgstr "Sluit de applicatie."
 
+#, fuzzy
 msgid ""
-"Exports Joplin data to the given directory. By default, it will export the "
+"Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
 "Exporteert Joplin gegevens naar de opgegeven folder. Standaard zal het de "
 "volledige database exporteren, zoals notitieboeken, notities, tags en "
 "middelen."
+
+#, fuzzy, javascript-format
+msgid "Destination format: %s"
+msgstr "Datumnotatie"
 
 msgid "Exports only the given note."
 msgstr "Exporteert alleen de opgegeven notitie."
@@ -259,25 +264,15 @@ msgid ""
 msgstr ""
 "Voor de volledige lijst van beschikbare shortcuts, typ `help shortcuts`"
 
-msgid "Imports an Evernote notebook file (.enex file)."
-msgstr "Importeer een Evernote notitieboek (.enex bestand)."
+msgid "Imports data into Joplin."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Source format: %s"
+msgstr "Geen commando gevonden: \"%s\""
 
 msgid "Do not ask for confirmation."
 msgstr "Vraag niet om bevestiging. "
-
-#, javascript-format
-msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
-msgstr ""
-"Bestand \"%s\" zal toegevoegd worden aan bestaand notitieboek \"%s\". "
-"Doorgaan?"
-
-#, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into "
-"it. Continue?"
-msgstr ""
-"Nieuw notitieboek \"%s\" zal aangemaakt worden en bestand \"%s\" zal eraan "
-"toegevoegd worden. Doorgaan?"
 
 #, javascript-format
 msgid "Found: %d."
@@ -563,8 +558,19 @@ msgstr ""
 "hoofdsleutel al ingegeven hebt, worden de versleutelde items ontsleuteld in "
 "de achtergrond. Ze zijn binnenkort beschikbaar."
 
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
+
 msgid "File"
 msgstr "Bestand"
+
+msgid "Directory"
+msgstr ""
+
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
 
 msgid "New note"
 msgstr "Nieuwe notitie"
@@ -575,11 +581,12 @@ msgstr "Nieuwe to-do"
 msgid "New notebook"
 msgstr "Nieuw notitieboek"
 
-msgid "Import Evernote notes"
-msgstr "Importeer Evernote notities"
+msgid "Import"
+msgstr "Importeer"
 
-msgid "Evernote Export Files"
-msgstr "Exporteer Evernote bestanden"
+#, fuzzy
+msgid "Export"
+msgstr "Importeer"
 
 #, javascript-format
 msgid "Hide %s"
@@ -847,6 +854,12 @@ msgstr "Tags"
 msgid "Set alarm"
 msgstr "Zet melding"
 
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+
 #, fuzzy
 msgid "to-do"
 msgstr "Nieuwe to-do"
@@ -867,9 +880,6 @@ msgstr "Vrijmaken"
 
 msgid "OneDrive Login"
 msgstr "OneDrive Login"
-
-msgid "Import"
-msgstr "Importeer"
 
 msgid "Options"
 msgstr "Opties"
@@ -1065,8 +1075,15 @@ msgid "Dark"
 msgstr "Donker"
 
 #, fuzzy
-msgid "Show uncompleted to-dos on top of the lists"
+msgid "Uncompleted to-dos on top"
 msgstr "Toon onvoltooide to-do's aan de top van de lijsten"
+
+msgid "Sort notes by"
+msgstr ""
+
+#, fuzzy
+msgid "Reverse sort order"
+msgstr "Draait de sorteervolgorde om."
 
 msgid "Save geo-location with notes"
 msgstr "Sla geo-locatie op bij notities"
@@ -1153,6 +1170,41 @@ msgstr "Stel wachtwoord in"
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Ongeldige optie: \"%s\". Geldige waarden zijn: %s."
+
+#, fuzzy
+msgid "Joplin Export File"
+msgstr "Exporteer Evernote bestanden"
+
+msgid "Markdown"
+msgstr ""
+
+msgid "Joplin Export Directory"
+msgstr ""
+
+#, fuzzy
+msgid "Evernote Export File"
+msgstr "Exporteer Evernote bestanden"
+
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr ""
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+
+msgid "There is no data to export."
+msgstr ""
+
+#, fuzzy
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "Selecteer waar de synchronisatie status naar geëxporteerd moet worden"
 
 msgid "Items that cannot be synchronised"
 msgstr "Items die niet gesynchroniseerd kunnen worden"
@@ -1325,6 +1377,25 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Welkom"
+
+#~ msgid "Imports an Evernote notebook file (.enex file)."
+#~ msgstr "Importeer een Evernote notitieboek (.enex bestand)."
+
+#~ msgid ""
+#~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+#~ msgstr ""
+#~ "Bestand \"%s\" zal toegevoegd worden aan bestaand notitieboek \"%s\". "
+#~ "Doorgaan?"
+
+#~ msgid ""
+#~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
+#~ "it. Continue?"
+#~ msgstr ""
+#~ "Nieuw notitieboek \"%s\" zal aangemaakt worden en bestand \"%s\" zal "
+#~ "eraan toegevoegd worden. Doorgaan?"
+
+#~ msgid "Import Evernote notes"
+#~ msgstr "Importeer Evernote notities"
 
 #~ msgid "Give focus to next pane"
 #~ msgstr "Focus op het volgende paneel"

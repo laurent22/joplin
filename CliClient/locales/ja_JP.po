@@ -182,12 +182,17 @@ msgstr "ノートは保存されました。"
 msgid "Exits the application."
 msgstr "アプリケーションの終了。"
 
+#, fuzzy
 msgid ""
-"Exports Joplin data to the given directory. By default, it will export the "
+"Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
 "Joplinのデータを選択されたディレクトリに出力する。標準では、ノートブック・"
 "ノート・タグ・添付データを含むすべてのデータベースを出力します。"
+
+#, fuzzy, javascript-format
+msgid "Destination format: %s"
+msgstr "日付の形式"
 
 msgid "Exports only the given note."
 msgstr "選択されたノートのみを出力する。"
@@ -251,24 +256,15 @@ msgstr ""
 "有効なすべてのキーボードショートカットを表示するには、`help shortcuts`と入力"
 "してください。"
 
-msgid "Imports an Evernote notebook file (.enex file)."
-msgstr "Evernoteノートブックファイル(.enex)のインポート"
+msgid "Imports data into Joplin."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Source format: %s"
+msgstr "コマンドが違います：%s"
 
 msgid "Do not ask for confirmation."
 msgstr "確認を行わない。"
-
-#, javascript-format
-msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
-msgstr ""
-"ファイル \"%s\" はノートブック \"%s\"に取り込まれます。よろしいですか？"
-
-#, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into "
-"it. Continue?"
-msgstr ""
-"新しいノートブック\"%s\"が作成され、ファイル\"%s\"が取り込まれます。よろしい"
-"ですか？"
 
 #, javascript-format
 msgid "Found: %d."
@@ -545,8 +541,19 @@ msgid ""
 "background and will be available soon."
 msgstr ""
 
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
+
 msgid "File"
 msgstr "ファイル"
+
+msgid "Directory"
+msgstr ""
+
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
 
 msgid "New note"
 msgstr "新しいノート"
@@ -557,11 +564,12 @@ msgstr "新しいToDo"
 msgid "New notebook"
 msgstr "新しいノートブック"
 
-msgid "Import Evernote notes"
-msgstr "Evernoteのインポート"
+msgid "Import"
+msgstr "インポート"
 
-msgid "Evernote Export Files"
-msgstr "Evernote Exportファイル"
+#, fuzzy
+msgid "Export"
+msgstr "インポート"
 
 #, javascript-format
 msgid "Hide %s"
@@ -820,6 +828,12 @@ msgstr "タグ"
 msgid "Set alarm"
 msgstr "アラームをセット"
 
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+
 #, fuzzy
 msgid "to-do"
 msgstr "新しいToDo"
@@ -840,9 +854,6 @@ msgstr "クリア"
 
 msgid "OneDrive Login"
 msgstr "OneDriveログイン"
-
-msgid "Import"
-msgstr "インポート"
 
 msgid "Options"
 msgstr "オプション"
@@ -1037,8 +1048,15 @@ msgid "Dark"
 msgstr "暗い"
 
 #, fuzzy
-msgid "Show uncompleted to-dos on top of the lists"
+msgid "Uncompleted to-dos on top"
 msgstr "未完のToDoをリストの上部に表示"
+
+msgid "Sort notes by"
+msgstr ""
+
+#, fuzzy
+msgid "Reverse sort order"
+msgstr "逆順に並び替える。"
 
 msgid "Save geo-location with notes"
 msgstr "ノートに位置情報を保存"
@@ -1124,6 +1142,41 @@ msgstr ""
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "無効な設定値: \"%s\"。有効な値は: %sです。"
+
+#, fuzzy
+msgid "Joplin Export File"
+msgstr "Evernote Exportファイル"
+
+msgid "Markdown"
+msgstr ""
+
+msgid "Joplin Export Directory"
+msgstr ""
+
+#, fuzzy
+msgid "Evernote Export File"
+msgstr "Evernote Exportファイル"
+
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr ""
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+
+msgid "There is no data to export."
+msgstr ""
+
+#, fuzzy
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "同期状況の出力先を選択してください"
 
 msgid "Items that cannot be synchronised"
 msgstr "同期が出来なかったアイテム"
@@ -1293,6 +1346,24 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
+
+#~ msgid "Imports an Evernote notebook file (.enex file)."
+#~ msgstr "Evernoteノートブックファイル(.enex)のインポート"
+
+#~ msgid ""
+#~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+#~ msgstr ""
+#~ "ファイル \"%s\" はノートブック \"%s\"に取り込まれます。よろしいですか？"
+
+#~ msgid ""
+#~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
+#~ "it. Continue?"
+#~ msgstr ""
+#~ "新しいノートブック\"%s\"が作成され、ファイル\"%s\"が取り込まれます。よろし"
+#~ "いですか？"
+
+#~ msgid "Import Evernote notes"
+#~ msgstr "Evernoteのインポート"
 
 #~ msgid "Give focus to next pane"
 #~ msgstr "次のペインへ"

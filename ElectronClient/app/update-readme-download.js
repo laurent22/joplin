@@ -90,6 +90,8 @@ async function main(argv) {
 	if (linuxUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/.*?\.AppImage)/, linuxUrl);
 
 	setReadmeContent(content);
+
+	console.info("git pull && git add -A && git commit -m 'Update readme downloads' && git push")
 }
 
 main(process.argv).catch((error) => {

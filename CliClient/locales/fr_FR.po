@@ -95,8 +95,8 @@ msgid ""
 "current configuration."
 msgstr ""
 "Obtient ou modifie une valeur de configuration. Si la [valeur] n'est pas "
-"fournie, la valeur de [nom] est affichée. Si ni le [nom] ni la [valeur] ne "
-"sont fournis, la configuration complète est affichée."
+"fournie, la valeur de [nom] sera affichée. Si ni le [nom] ni la [valeur] ne "
+"sont fournis, la configuration complète sera affichée."
 
 msgid "Also displays unset and hidden config variables."
 msgstr "Afficher également les variables cachées."
@@ -188,12 +188,15 @@ msgid "Exits the application."
 msgstr "Quitter le logiciel."
 
 msgid ""
-"Exports Joplin data to the given directory. By default, it will export the "
+"Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
-"Exporter les données de Joplin vers le dossier fourni. Par défaut, la base "
-"de donnée complète sera exportée, y compris les carnets, notes, tags et "
-"resources."
+"Exporter les données de Joplin. Par défaut, la base de donnée complète sera "
+"exportée, y compris les carnets, notes, tags et ressources."
+
+#, javascript-format
+msgid "Destination format: %s"
+msgstr "Format de la destination : %s"
 
 msgid "Exports only the given note."
 msgstr "Exporter uniquement la note spécifiée."
@@ -258,24 +261,15 @@ msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr "Pour la liste complète des raccourcis disponibles, tapez `help keymap`"
 
-msgid "Imports an Evernote notebook file (.enex file)."
-msgstr "Importer un carnet Evernote (fichier .enex)."
+msgid "Imports data into Joplin."
+msgstr "Importer des données dans Joplin."
+
+#, javascript-format
+msgid "Source format: %s"
+msgstr "Format de la source : %s"
 
 msgid "Do not ask for confirmation."
 msgstr "Ne pas demander de confirmation."
-
-#, javascript-format
-msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
-msgstr ""
-"Le fichier \"%s\" va être importé dans le carnet existant \"%s\". Continuer ?"
-
-#, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into "
-"it. Continue?"
-msgstr ""
-"Un nouveau carnet \"%s\" va être créé et le fichier \"%s\" va être importé "
-"dedans. Continuer ?"
 
 #, javascript-format
 msgid "Found: %d."
@@ -563,8 +557,19 @@ msgstr ""
 "decrypt`. Si vous avez déjà fourni ce mot de passe, les objets cryptés vont "
 "être décrypté en tâche de fond et seront disponible prochainement."
 
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr "Exporter vers \"%s\" au format \"%s\". Veuillez patienter..."
+
 msgid "File"
 msgstr "Fichier"
+
+msgid "Directory"
+msgstr "Dossier"
+
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr "Importer depuis \"%s\" au format \"%s\". Veuillez patienter..."
 
 msgid "New note"
 msgstr "Nouvelle note"
@@ -575,11 +580,11 @@ msgstr "Nouvelle tâche"
 msgid "New notebook"
 msgstr "Nouveau carnet"
 
-msgid "Import Evernote notes"
-msgstr "Importer notes d'Evernote"
+msgid "Import"
+msgstr "Importer"
 
-msgid "Evernote Export Files"
-msgstr "Fichiers d'export Evernote"
+msgid "Export"
+msgstr "Exporter"
 
 #, javascript-format
 msgid "Hide %s"
@@ -852,6 +857,14 @@ msgstr "Étiquettes"
 msgid "Set alarm"
 msgstr "Régler alarme"
 
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+"Cette note n'a pas de contenu. Cliquer sur \"%s\" pour basculer vers "
+"l'éditeur et éditer cette note."
+
 msgid "to-do"
 msgstr "tâche"
 
@@ -870,9 +883,6 @@ msgstr "Supprimer"
 
 msgid "OneDrive Login"
 msgstr "Connexion OneDrive"
-
-msgid "Import"
-msgstr "Importer"
 
 msgid "Options"
 msgstr "Options"
@@ -1064,8 +1074,14 @@ msgstr "Clair"
 msgid "Dark"
 msgstr "Sombre"
 
-msgid "Show uncompleted to-dos on top of the lists"
-msgstr "Tâches non-terminées en haut des listes"
+msgid "Uncompleted to-dos on top"
+msgstr "Tâches non-terminées en haut"
+
+msgid "Sort notes by"
+msgstr "Trier les notes par"
+
+msgid "Reverse sort order"
+msgstr "Inverser l'ordre."
 
 msgid "Save geo-location with notes"
 msgstr "Enregistrer l'emplacement avec les notes"
@@ -1151,6 +1167,40 @@ msgstr "WebDAV : Mot de passe"
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Option invalide: \"%s\". Les valeurs possibles sont : %s."
+
+msgid "Joplin Export File"
+msgstr "Fichier d'export Joplin"
+
+msgid "Markdown"
+msgstr "Markdown"
+
+msgid "Joplin Export Directory"
+msgstr "Dossier d'export Joplin"
+
+msgid "Evernote Export File"
+msgstr "Fichiers d'export Evernote"
+
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr "Impossible de charger module \"%s\" pour le format \"%s\""
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr "Veuillez spécifier le format d'import pour %s"
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+"Cet objet est crypté : %s \"%s\". Veuillez attendre que tout soit décrypté "
+"et réessayez."
+
+msgid "There is no data to export."
+msgstr "Il n'y a pas de données à exporter."
+
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "Veuillez sélectionner le carnet où les notes doivent être importées."
 
 msgid "Items that cannot be synchronised"
 msgstr "Objets qui ne peuvent pas être synchronisés"
@@ -1324,6 +1374,25 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Imports an Evernote notebook file (.enex file)."
+#~ msgstr "Importer un carnet Evernote (fichier .enex)."
+
+#~ msgid ""
+#~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+#~ msgstr ""
+#~ "Le fichier \"%s\" va être importé dans le carnet existant \"%s\". "
+#~ "Continuer ?"
+
+#~ msgid ""
+#~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
+#~ "it. Continue?"
+#~ msgstr ""
+#~ "Un nouveau carnet \"%s\" va être créé et le fichier \"%s\" va être "
+#~ "importé dedans. Continuer ?"
+
+#~ msgid "Import Evernote notes"
+#~ msgstr "Importer notes d'Evernote"
 
 #~ msgid "Give focus to next pane"
 #~ msgstr "Activer le volet suivant"

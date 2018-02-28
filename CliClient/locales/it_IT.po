@@ -183,13 +183,18 @@ msgstr "La nota è stata salvata."
 msgid "Exits the application."
 msgstr "Esci dall'applicazione."
 
+#, fuzzy
 msgid ""
-"Exports Joplin data to the given directory. By default, it will export the "
+"Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
 "Esporta i dati da Joplin nella directory selezionata. Come impostazione "
 "predefinita verrà esportato il database completo, inclusi blocchi note, "
 "note, etichette e risorse."
+
+#, fuzzy, javascript-format
+msgid "Destination format: %s"
+msgstr "Formato della data"
 
 msgid "Exports only the given note."
 msgstr "Esporta solo la seguente nota."
@@ -255,24 +260,15 @@ msgid ""
 msgstr ""
 "Per la lista completa delle scorciatoie disponibili, digita `help shortcuts`"
 
-msgid "Imports an Evernote notebook file (.enex file)."
-msgstr "Importa un file blocco note di Evernote (.enex file)."
+msgid "Imports data into Joplin."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Source format: %s"
+msgstr "Nessun comando: %s"
 
 msgid "Do not ask for confirmation."
 msgstr "Non chiedere conferma."
-
-#, javascript-format
-msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
-msgstr ""
-"Il file \"%s\" sarà importato nel blocco note esistente \"%s\". Continuare?"
-
-#, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into "
-"it. Continue?"
-msgstr ""
-"Un nuovo blocco note \"%s\" sarà creato e al suo interno verrà importato il "
-"file \"%s\" . Continuare?"
 
 #, javascript-format
 msgid "Found: %d."
@@ -544,8 +540,19 @@ msgid ""
 "background and will be available soon."
 msgstr ""
 
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
+
 msgid "File"
 msgstr "File"
+
+msgid "Directory"
+msgstr ""
+
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
 
 msgid "New note"
 msgstr "Nuova nota"
@@ -556,11 +563,12 @@ msgstr "Nuova attività"
 msgid "New notebook"
 msgstr "Nuovo blocco note"
 
-msgid "Import Evernote notes"
-msgstr "Importa le note da Evernote"
+msgid "Import"
+msgstr "Importa"
 
-msgid "Evernote Export Files"
-msgstr "Esposta i files di Evernote"
+#, fuzzy
+msgid "Export"
+msgstr "Importa"
 
 #, javascript-format
 msgid "Hide %s"
@@ -817,6 +825,12 @@ msgstr "Etichette"
 msgid "Set alarm"
 msgstr "Imposta allarme"
 
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+
 #, fuzzy
 msgid "to-do"
 msgstr "Nuova attività"
@@ -837,9 +851,6 @@ msgstr "Pulisci"
 
 msgid "OneDrive Login"
 msgstr "Login OneDrive"
-
-msgid "Import"
-msgstr "Importa"
 
 msgid "Options"
 msgstr "Opzioni"
@@ -1033,8 +1044,15 @@ msgid "Dark"
 msgstr "Scuro"
 
 #, fuzzy
-msgid "Show uncompleted to-dos on top of the lists"
+msgid "Uncompleted to-dos on top"
 msgstr "Mostra todo inclompleti in cima alla lista"
+
+msgid "Sort notes by"
+msgstr ""
+
+#, fuzzy
+msgid "Reverse sort order"
+msgstr "Inverti l'ordine."
 
 msgid "Save geo-location with notes"
 msgstr "Salva geo-localizzazione con le note"
@@ -1120,6 +1138,41 @@ msgstr ""
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Oprione non valida: \"%s\". I valori possibili sono: %s."
+
+#, fuzzy
+msgid "Joplin Export File"
+msgstr "Esposta i files di Evernote"
+
+msgid "Markdown"
+msgstr ""
+
+msgid "Joplin Export Directory"
+msgstr ""
+
+#, fuzzy
+msgid "Evernote Export File"
+msgstr "Esposta i files di Evernote"
+
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr ""
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+
+msgid "There is no data to export."
+msgstr ""
+
+#, fuzzy
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "Per favore seleziona la nota o il blocco note da eliminare."
 
 msgid "Items that cannot be synchronised"
 msgstr "Elementi che non possono essere sincronizzati"
@@ -1289,6 +1342,25 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvenuto"
+
+#~ msgid "Imports an Evernote notebook file (.enex file)."
+#~ msgstr "Importa un file blocco note di Evernote (.enex file)."
+
+#~ msgid ""
+#~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+#~ msgstr ""
+#~ "Il file \"%s\" sarà importato nel blocco note esistente \"%s\". "
+#~ "Continuare?"
+
+#~ msgid ""
+#~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
+#~ "it. Continue?"
+#~ msgstr ""
+#~ "Un nuovo blocco note \"%s\" sarà creato e al suo interno verrà importato "
+#~ "il file \"%s\" . Continuare?"
+
+#~ msgid "Import Evernote notes"
+#~ msgstr "Importa le note da Evernote"
 
 #~ msgid "Give focus to next pane"
 #~ msgstr "Pannello successivo"

@@ -2,7 +2,7 @@
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
@@ -189,9 +189,13 @@ msgstr "Irten aplikaziotik."
 
 #, fuzzy
 msgid ""
-"Exports Joplin data to the given directory. By default, it will export the "
+"Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr "Esportatu Joplineko datuak esandako karpetara"
+
+#, fuzzy, javascript-format
+msgid "Destination format: %s"
+msgstr "Data-formatua"
 
 msgid "Exports only the given note."
 msgstr "Esportatu emandako oharra soilik."
@@ -256,25 +260,15 @@ msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr "Laster bideen zerrenda osoa ikusteko, idatzi `help shortcuts`"
 
-msgid "Imports an Evernote notebook file (.enex file)."
-msgstr "Inportatu Evernote koaderno fitxategia (.enex fitxategia)."
+msgid "Imports data into Joplin."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Source format: %s"
+msgstr "Ez dago komandorik: %s"
 
 msgid "Do not ask for confirmation."
 msgstr "Ez galdetu berresteko."
-
-#, javascript-format
-msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
-msgstr ""
-" \"%s\" izeneko fitxategia \"%s\" izeneko koadernoan inportatzekotan zaude. "
-"Jarraitu nahi duzu?"
-
-#, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into "
-"it. Continue?"
-msgstr ""
-" \"%s\" izeneko koaderno berria sortzekotan zaude eta bertan \"%s\" "
-"fitxategia bertara inportatzekotan zaude. Jarraitu nahi duzu?"
 
 #, javascript-format
 msgid "Found: %d."
@@ -562,8 +556,19 @@ msgstr ""
 "Dagoeneko pasahitza ordezkatua baduzu, itemak deszifratzen ari izango dira "
 "atzeko planoan eta laster izango dira eskuragarri."
 
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
+
 msgid "File"
 msgstr "Fitxategia"
+
+msgid "Directory"
+msgstr ""
+
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
 
 msgid "New note"
 msgstr "Ohar berria"
@@ -574,11 +579,12 @@ msgstr "Zeregin berria"
 msgid "New notebook"
 msgstr "Koaderno berria"
 
-msgid "Import Evernote notes"
-msgstr "Inportatu Evernoteko oharrak"
+msgid "Import"
+msgstr "Inportatu"
 
-msgid "Evernote Export Files"
-msgstr "Evernotetik esportatutako fitxategiak"
+#, fuzzy
+msgid "Export"
+msgstr "Inportatu"
 
 #, javascript-format
 msgid "Hide %s"
@@ -844,6 +850,12 @@ msgstr "Etiketak"
 msgid "Set alarm"
 msgstr "Ezarri alarma"
 
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+
 #, fuzzy
 msgid "to-do"
 msgstr "Zeregin berria"
@@ -865,9 +877,6 @@ msgstr "Garbitu"
 
 msgid "OneDrive Login"
 msgstr "Logeatu OneDriven"
-
-msgid "Import"
-msgstr "Inportatu"
 
 msgid "Options"
 msgstr "Aukerak"
@@ -1062,8 +1071,15 @@ msgid "Dark"
 msgstr "Iluna"
 
 #, fuzzy
-msgid "Show uncompleted to-dos on top of the lists"
+msgid "Uncompleted to-dos on top"
 msgstr "Bete gabeko zereginak erakutsi zerrendaren goiko partean"
+
+msgid "Sort notes by"
+msgstr ""
+
+#, fuzzy
+msgid "Reverse sort order"
+msgstr "Alderantziz antolatzen du."
 
 msgid "Save geo-location with notes"
 msgstr "Gore geokokapena oharrekin"
@@ -1153,6 +1169,41 @@ msgstr "Ezarri pasahitza"
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Balio aukera baliogabea: \"%s\". Litezkeen balioak: %s."
+
+#, fuzzy
+msgid "Joplin Export File"
+msgstr "Evernotetik esportatutako fitxategiak"
+
+msgid "Markdown"
+msgstr ""
+
+msgid "Joplin Export Directory"
+msgstr ""
+
+#, fuzzy
+msgid "Evernote Export File"
+msgstr "Evernotetik esportatutako fitxategiak"
+
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr ""
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+
+msgid "There is no data to export."
+msgstr ""
+
+#, fuzzy
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "Aukeratu nora esportatu sinkronizazioaren egoera, mesedez"
 
 msgid "Items that cannot be synchronised"
 msgstr "Itemok ezin sinkronizatu"
@@ -1321,6 +1372,25 @@ msgstr "Oraindik ez duzu koadernorik. Sortu bat (+) botoian sakatuta."
 
 msgid "Welcome"
 msgstr "Ongi etorri!"
+
+#~ msgid "Imports an Evernote notebook file (.enex file)."
+#~ msgstr "Inportatu Evernote koaderno fitxategia (.enex fitxategia)."
+
+#~ msgid ""
+#~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+#~ msgstr ""
+#~ " \"%s\" izeneko fitxategia \"%s\" izeneko koadernoan inportatzekotan "
+#~ "zaude. Jarraitu nahi duzu?"
+
+#~ msgid ""
+#~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
+#~ "it. Continue?"
+#~ msgstr ""
+#~ " \"%s\" izeneko koaderno berria sortzekotan zaude eta bertan \"%s\" "
+#~ "fitxategia bertara inportatzekotan zaude. Jarraitu nahi duzu?"
+
+#~ msgid "Import Evernote notes"
+#~ msgstr "Inportatu Evernoteko oharrak"
 
 #~ msgid "Give focus to next pane"
 #~ msgstr "Eraman fokua hurrengo panelera"

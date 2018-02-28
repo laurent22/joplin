@@ -188,12 +188,17 @@ msgstr "Bilješka je spremljena."
 msgid "Exits the application."
 msgstr "Izlaz iz aplikacije."
 
+#, fuzzy
 msgid ""
-"Exports Joplin data to the given directory. By default, it will export the "
+"Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
 "Izvozi podatke u dati direktorij. Po defaultu izvozi sve podatke uključujući "
 "bilježnice, bilješke, zadatke i resurse."
+
+#, fuzzy, javascript-format
+msgid "Destination format: %s"
+msgstr "Format datuma"
 
 msgid "Exports only the given note."
 msgstr "Izvozi samo datu bilješku."
@@ -259,24 +264,15 @@ msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr "Za potpunu listu mogućih prečaca, upiši `help shortcuts`"
 
-msgid "Imports an Evernote notebook file (.enex file)."
-msgstr "Uvozi Evernote bilježnicu (.enex datoteku)."
+msgid "Imports data into Joplin."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Source format: %s"
+msgstr "Ne postoji naredba: %s"
 
 msgid "Do not ask for confirmation."
 msgstr "Ne pitaj za potvrdu."
-
-#, javascript-format
-msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
-msgstr ""
-"Datoteka \"%s\" će biti uvezena u postojeću bilježnicu \"%s\". Nastavi?"
-
-#, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into "
-"it. Continue?"
-msgstr ""
-"Nova bilježnica \"%s\" će biti stvorena i datoteka \"%s\" će biti uvezena u "
-"nju. Nastavi?"
 
 #, javascript-format
 msgid "Found: %d."
@@ -562,8 +558,19 @@ msgid ""
 "background and will be available soon."
 msgstr ""
 
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
+
 msgid "File"
 msgstr "Datoteka"
+
+msgid "Directory"
+msgstr ""
+
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
 
 msgid "New note"
 msgstr "Nova bilješka"
@@ -574,11 +581,12 @@ msgstr "Novi zadatak"
 msgid "New notebook"
 msgstr "Nova bilježnica"
 
-msgid "Import Evernote notes"
-msgstr "Uvezi Evernote bilješke"
+msgid "Import"
+msgstr "Uvoz"
 
-msgid "Evernote Export Files"
-msgstr "Evernote izvozne datoteke"
+#, fuzzy
+msgid "Export"
+msgstr "Uvoz"
 
 #, javascript-format
 msgid "Hide %s"
@@ -834,6 +842,12 @@ msgstr "Oznake"
 msgid "Set alarm"
 msgstr "Postavi upozorenje"
 
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+
 #, fuzzy
 msgid "to-do"
 msgstr "Novi zadatak"
@@ -854,9 +868,6 @@ msgstr "Očisti"
 
 msgid "OneDrive Login"
 msgstr "OneDrive Login"
-
-msgid "Import"
-msgstr "Uvoz"
 
 msgid "Options"
 msgstr "Opcije"
@@ -1047,8 +1058,15 @@ msgid "Dark"
 msgstr "Tamna"
 
 #, fuzzy
-msgid "Show uncompleted to-dos on top of the lists"
+msgid "Uncompleted to-dos on top"
 msgstr "Prikaži nezavršene zadatke na vrhu liste"
+
+msgid "Sort notes by"
+msgstr ""
+
+#, fuzzy
+msgid "Reverse sort order"
+msgstr "Mijenja redoslijed."
 
 msgid "Save geo-location with notes"
 msgstr "Spremi geolokacijske podatke sa bilješkama"
@@ -1134,6 +1152,41 @@ msgstr ""
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Nevažeća vrijednost: \"%s\". Moguće vrijednosti su: %s."
+
+#, fuzzy
+msgid "Joplin Export File"
+msgstr "Evernote izvozne datoteke"
+
+msgid "Markdown"
+msgstr ""
+
+msgid "Joplin Export Directory"
+msgstr ""
+
+#, fuzzy
+msgid "Evernote Export File"
+msgstr "Evernote izvozne datoteke"
+
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr ""
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+
+msgid "There is no data to export."
+msgstr ""
+
+#, fuzzy
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "Odaberi lokaciju za izvoz statusa sinkronizacije"
 
 msgid "Items that cannot be synchronised"
 msgstr "Stavke koje se ne mogu sinkronizirati"
@@ -1301,6 +1354,24 @@ msgstr "Trenutno nemaš nijednu bilježnicu. Stvori novu klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobro došli"
+
+#~ msgid "Imports an Evernote notebook file (.enex file)."
+#~ msgstr "Uvozi Evernote bilježnicu (.enex datoteku)."
+
+#~ msgid ""
+#~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+#~ msgstr ""
+#~ "Datoteka \"%s\" će biti uvezena u postojeću bilježnicu \"%s\". Nastavi?"
+
+#~ msgid ""
+#~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
+#~ "it. Continue?"
+#~ msgstr ""
+#~ "Nova bilježnica \"%s\" će biti stvorena i datoteka \"%s\" će biti uvezena "
+#~ "u nju. Nastavi?"
+
+#~ msgid "Import Evernote notes"
+#~ msgstr "Uvezi Evernote bilješke"
 
 #~ msgid "Give focus to next pane"
 #~ msgstr "Fokusiraj sljedeće okno"

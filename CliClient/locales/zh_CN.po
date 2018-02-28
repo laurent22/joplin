@@ -177,12 +177,17 @@ msgstr "笔记已被保存。"
 msgid "Exits the application."
 msgstr "退出程序。"
 
+#, fuzzy
 msgid ""
-"Exports Joplin data to the given directory. By default, it will export the "
+"Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
 "导出Joplin数据至给定文件目录。默认为导出所有的数据库，包含笔记本、笔记、标签"
 "及资源。"
+
+#, fuzzy, javascript-format
+msgid "Destination format: %s"
+msgstr "日期格式"
 
 msgid "Exports only the given note."
 msgstr "仅导出给定笔记。"
@@ -242,21 +247,15 @@ msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr "输入`help shortcuts`显示全部可用的快捷键列表。"
 
-msgid "Imports an Evernote notebook file (.enex file)."
-msgstr "导入Evernote笔记本文件（.enex文件）。"
+msgid "Imports data into Joplin."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Source format: %s"
+msgstr "无以下命令：%s"
 
 msgid "Do not ask for confirmation."
 msgstr "不再要求确认。"
-
-#, javascript-format
-msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
-msgstr "文件\"%s\"将会被导入至现有笔记本\"%s\"。是否继续？"
-
-#, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into "
-"it. Continue?"
-msgstr "将创建新笔记本\"%s\"并将文件\"%s\"导入至其中。是否继续？"
 
 #, javascript-format
 msgid "Found: %d."
@@ -512,8 +511,19 @@ msgid ""
 "background and will be available soon."
 msgstr ""
 
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
+
 msgid "File"
 msgstr "文件"
+
+msgid "Directory"
+msgstr ""
+
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
 
 msgid "New note"
 msgstr "新笔记"
@@ -524,11 +534,12 @@ msgstr "新待办事项"
 msgid "New notebook"
 msgstr "新笔记本"
 
-msgid "Import Evernote notes"
-msgstr "导入Evernote笔记"
+msgid "Import"
+msgstr "导入"
 
-msgid "Evernote Export Files"
-msgstr "Evernote导出文件"
+#, fuzzy
+msgid "Export"
+msgstr "导入"
 
 #, javascript-format
 msgid "Hide %s"
@@ -785,6 +796,12 @@ msgstr "标签"
 msgid "Set alarm"
 msgstr "设置提醒"
 
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+
 #, fuzzy
 msgid "to-do"
 msgstr "新待办事项"
@@ -805,9 +822,6 @@ msgstr "清除"
 
 msgid "OneDrive Login"
 msgstr "登陆OneDrive"
-
-msgid "Import"
-msgstr "导入"
 
 msgid "Options"
 msgstr "选项"
@@ -996,8 +1010,15 @@ msgid "Dark"
 msgstr "深色"
 
 #, fuzzy
-msgid "Show uncompleted to-dos on top of the lists"
+msgid "Uncompleted to-dos on top"
 msgstr "在列表上方显示未完成的待办事项"
+
+msgid "Sort notes by"
+msgstr ""
+
+#, fuzzy
+msgid "Reverse sort order"
+msgstr "反转排序顺序。"
 
 msgid "Save geo-location with notes"
 msgstr "保存笔记时同时保存地理定位信息"
@@ -1081,6 +1102,41 @@ msgstr ""
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "无效的选项值：\"%s\"。可用值为：%s。"
+
+#, fuzzy
+msgid "Joplin Export File"
+msgstr "Evernote导出文件"
+
+msgid "Markdown"
+msgstr ""
+
+msgid "Joplin Export Directory"
+msgstr ""
+
+#, fuzzy
+msgid "Evernote Export File"
+msgstr "Evernote导出文件"
+
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr ""
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+
+msgid "There is no data to export."
+msgstr ""
+
+#, fuzzy
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "请选择最先删除的笔记或笔记本。"
 
 msgid "Items that cannot be synchronised"
 msgstr "项目无法被同步。"
@@ -1246,6 +1302,21 @@ msgstr "您当前没有任何笔记本。点击(+)按钮创建新笔记本。"
 
 msgid "Welcome"
 msgstr "欢迎"
+
+#~ msgid "Imports an Evernote notebook file (.enex file)."
+#~ msgstr "导入Evernote笔记本文件（.enex文件）。"
+
+#~ msgid ""
+#~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+#~ msgstr "文件\"%s\"将会被导入至现有笔记本\"%s\"。是否继续？"
+
+#~ msgid ""
+#~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
+#~ "it. Continue?"
+#~ msgstr "将创建新笔记本\"%s\"并将文件\"%s\"导入至其中。是否继续？"
+
+#~ msgid "Import Evernote notes"
+#~ msgstr "导入Evernote笔记"
 
 #~ msgid "Give focus to next pane"
 #~ msgstr "聚焦于下个面板"

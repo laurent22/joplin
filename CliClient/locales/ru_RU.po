@@ -189,12 +189,17 @@ msgstr "Заметка сохранена."
 msgid "Exits the application."
 msgstr "Выход из приложения."
 
+#, fuzzy
 msgid ""
-"Exports Joplin data to the given directory. By default, it will export the "
+"Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
 "Экспортирует данные Joplin в заданный каталог. По умолчанию экспортируется "
 "полная база данных, включая блокноты, заметки, теги и ресурсы."
+
+#, fuzzy, javascript-format
+msgid "Destination format: %s"
+msgstr "Формат даты"
 
 msgid "Exports only the given note."
 msgstr "Экспортирует только заданную заметку."
@@ -261,23 +266,15 @@ msgstr ""
 "Для просмотра списка доступных клавиатурных сочетаний введите `help "
 "shortcuts`"
 
-msgid "Imports an Evernote notebook file (.enex file)."
-msgstr "Импортирует файл блокнотов Evernote (.enex-файл)."
+msgid "Imports data into Joplin."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Source format: %s"
+msgstr "Нет такой команды: %s"
 
 msgid "Do not ask for confirmation."
 msgstr "Не запрашивать подтверждение."
-
-#, javascript-format
-msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
-msgstr "Файл «%s» будет импортирован в существующий блокнот «%s». Продолжить?"
-
-#, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into "
-"it. Continue?"
-msgstr ""
-"Будет создан новый блокнот «%s» и в него будет импортирован файл «%s». "
-"Продолжить?"
 
 #, javascript-format
 msgid "Found: %d."
@@ -563,8 +560,19 @@ msgstr ""
 "decrypt». Если пароль уже был вами предоставлен, зашифрованные элементы "
 "расшифруются в фоновом режиме и вскоре станут доступны."
 
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
+
 msgid "File"
 msgstr "Файл"
+
+msgid "Directory"
+msgstr ""
+
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
 
 msgid "New note"
 msgstr "Новая заметка"
@@ -575,11 +583,12 @@ msgstr "Новая задача"
 msgid "New notebook"
 msgstr "Новый блокнот"
 
-msgid "Import Evernote notes"
-msgstr "Импортировать заметки из Evernote"
+msgid "Import"
+msgstr "Импорт"
 
-msgid "Evernote Export Files"
-msgstr "Файлы экспорта Evernote"
+#, fuzzy
+msgid "Export"
+msgstr "Импорт"
 
 #, javascript-format
 msgid "Hide %s"
@@ -845,6 +854,12 @@ msgstr "Теги"
 msgid "Set alarm"
 msgstr "Установить напоминание"
 
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+
 #, fuzzy
 msgid "to-do"
 msgstr "Новая задача"
@@ -865,9 +880,6 @@ msgstr "Очистить"
 
 msgid "OneDrive Login"
 msgstr "Вход в OneDrive"
-
-msgid "Import"
-msgstr "Импорт"
 
 msgid "Options"
 msgstr "Настройки"
@@ -1061,8 +1073,15 @@ msgid "Dark"
 msgstr "Тёмная"
 
 #, fuzzy
-msgid "Show uncompleted to-dos on top of the lists"
+msgid "Uncompleted to-dos on top"
 msgstr "Показывать незавершённые задачи вверху списков"
+
+msgid "Sort notes by"
+msgstr ""
+
+#, fuzzy
+msgid "Reverse sort order"
+msgstr "Обращает порядок сортировки."
 
 msgid "Save geo-location with notes"
 msgstr "Сохранять информацию о геолокации в заметках"
@@ -1150,6 +1169,41 @@ msgstr "Установить пароль"
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Неверное значение параметра: «%s». Доступные значения: %s."
+
+#, fuzzy
+msgid "Joplin Export File"
+msgstr "Файлы экспорта Evernote"
+
+msgid "Markdown"
+msgstr ""
+
+msgid "Joplin Export Directory"
+msgstr ""
+
+#, fuzzy
+msgid "Evernote Export File"
+msgstr "Файлы экспорта Evernote"
+
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr ""
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+
+msgid "There is no data to export."
+msgstr ""
+
+#, fuzzy
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "Выберите, куда должен быть экспортирован статус синхронизации"
 
 msgid "Items that cannot be synchronised"
 msgstr "Элементы, которые не могут быть синхронизированы"
@@ -1320,6 +1374,24 @@ msgstr "У вас сейчас нет блокнота. Создайте его 
 
 msgid "Welcome"
 msgstr "Добро пожаловать"
+
+#~ msgid "Imports an Evernote notebook file (.enex file)."
+#~ msgstr "Импортирует файл блокнотов Evernote (.enex-файл)."
+
+#~ msgid ""
+#~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+#~ msgstr ""
+#~ "Файл «%s» будет импортирован в существующий блокнот «%s». Продолжить?"
+
+#~ msgid ""
+#~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
+#~ "it. Continue?"
+#~ msgstr ""
+#~ "Будет создан новый блокнот «%s» и в него будет импортирован файл «%s». "
+#~ "Продолжить?"
+
+#~ msgid "Import Evernote notes"
+#~ msgstr "Импортировать заметки из Evernote"
 
 #~ msgid "Give focus to next pane"
 #~ msgstr "Переключиться на следующую панель"

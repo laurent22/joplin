@@ -188,12 +188,17 @@ msgstr "La nota ha sido guardada."
 msgid "Exits the application."
 msgstr "Sale de la aplicación."
 
+#, fuzzy
 msgid ""
-"Exports Joplin data to the given directory. By default, it will export the "
+"Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
 "Exporta datos de Joplin al directorio indicado. Por defecto, se exportará la "
 "base de datos completa incluyendo libretas, notas, etiquetas y recursos."
+
+#, fuzzy, javascript-format
+msgid "Destination format: %s"
+msgstr "Formato de fecha"
 
 msgid "Exports only the given note."
 msgstr "Exporta únicamente la nota indicada."
@@ -260,25 +265,15 @@ msgid ""
 msgstr ""
 "Para una lista de los atajos de teclado disponibles, escriba `help keymap`"
 
-msgid "Imports an Evernote notebook file (.enex file)."
-msgstr "Importar una libreta de Evernote (archivo .enex)."
+msgid "Imports data into Joplin."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Source format: %s"
+msgstr "El comando no existe: %s"
 
 msgid "Do not ask for confirmation."
 msgstr "No requiere confirmación."
-
-#, javascript-format
-msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
-msgstr ""
-"El archivo \"%s\" será importado dentro de la libreta existente \"%s\". "
-"¿Continuar?"
-
-#, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into "
-"it. Continue?"
-msgstr ""
-"Nueva libreta \"%s\" será creada y el archivo \"%s\" será importado dentro "
-"de ella. ¿Continuar?"
 
 #, javascript-format
 msgid "Found: %d."
@@ -566,8 +561,19 @@ msgstr ""
 "proporcionado la contraseña, los elementos están siendo descifrados en "
 "segundo plano y estarán disponibles en breve."
 
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
+
 msgid "File"
 msgstr "Archivo"
+
+msgid "Directory"
+msgstr ""
+
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
 
 msgid "New note"
 msgstr "Nueva nota"
@@ -578,11 +584,12 @@ msgstr "Nueva lista de tareas"
 msgid "New notebook"
 msgstr "Nueva libreta"
 
-msgid "Import Evernote notes"
-msgstr "Importar notas de Evernote"
+msgid "Import"
+msgstr "Importar"
 
-msgid "Evernote Export Files"
-msgstr "Archivos exportados de Evernote"
+#, fuzzy
+msgid "Export"
+msgstr "Importar"
 
 #, javascript-format
 msgid "Hide %s"
@@ -847,6 +854,12 @@ msgstr "Etiquetas"
 msgid "Set alarm"
 msgstr "Establecer alarma"
 
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+
 msgid "to-do"
 msgstr "lista de tareas"
 
@@ -865,9 +878,6 @@ msgstr "Limpiar"
 
 msgid "OneDrive Login"
 msgstr "Inicio de sesión de OneDrive"
-
-msgid "Import"
-msgstr "Importar"
 
 msgid "Options"
 msgstr "Opciones"
@@ -1059,8 +1069,16 @@ msgstr "Claro"
 msgid "Dark"
 msgstr "Oscuro"
 
-msgid "Show uncompleted to-dos on top of the lists"
+#, fuzzy
+msgid "Uncompleted to-dos on top"
 msgstr "Mostrar tareas incompletas al inicio de las listas"
+
+msgid "Sort notes by"
+msgstr ""
+
+#, fuzzy
+msgid "Reverse sort order"
+msgstr "Invierte el orden."
 
 msgid "Save geo-location with notes"
 msgstr "Guardar geolocalización en las notas"
@@ -1146,6 +1164,41 @@ msgstr "Contraseña de WebDAV"
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Opción inválida: «%s». Los valores posibles son: %s."
+
+#, fuzzy
+msgid "Joplin Export File"
+msgstr "Archivos exportados de Evernote"
+
+msgid "Markdown"
+msgstr ""
+
+msgid "Joplin Export Directory"
+msgstr ""
+
+#, fuzzy
+msgid "Evernote Export File"
+msgstr "Archivos exportados de Evernote"
+
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr ""
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+
+msgid "There is no data to export."
+msgstr ""
+
+#, fuzzy
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "Seleccione a dónde se debería exportar el estado de sincronización"
 
 msgid "Items that cannot be synchronised"
 msgstr "Elementos que no se pueden sincronizar"
@@ -1316,6 +1369,25 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+#~ msgid "Imports an Evernote notebook file (.enex file)."
+#~ msgstr "Importar una libreta de Evernote (archivo .enex)."
+
+#~ msgid ""
+#~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+#~ msgstr ""
+#~ "El archivo \"%s\" será importado dentro de la libreta existente \"%s\". "
+#~ "¿Continuar?"
+
+#~ msgid ""
+#~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
+#~ "it. Continue?"
+#~ msgstr ""
+#~ "Nueva libreta \"%s\" será creada y el archivo \"%s\" será importado "
+#~ "dentro de ella. ¿Continuar?"
+
+#~ msgid "Import Evernote notes"
+#~ msgstr "Importar notas de Evernote"
 
 #~ msgid "Give focus to next pane"
 #~ msgstr "Enfocar el siguiente panel"
