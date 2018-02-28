@@ -44,6 +44,7 @@
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
     "ajv": "^6.2.0",
+    "app-builder-bin": "^1.5.0",
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.24.1",
     "electron": "^1.7.11",
