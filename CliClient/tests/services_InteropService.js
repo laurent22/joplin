@@ -209,4 +209,44 @@ describe('services_InteropService', function() {
 		expect(fileContentEqual(resourcePath1, resourcePath2)).toBe(true);
 	}));
 
+	it('should export and import single notes', asyncTest(async () => {
+		const service = new InteropService();
+		const filePath = exportDir() + '/test.jex';
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+
+		await service.export({ path: filePath, sourceNoteIds: [note1.id] });
+		
+		await Note.delete(note1.id);
+		await Folder.delete(folder1.id);
+
+		await service.import({ path: filePath });
+
+		expect(await Note.count()).toBe(1);
+		expect(await Folder.count()).toBe(1);
+
+		let folder2 = (await Folder.all())[0];
+		expect(folder2.title).toBe('test');
+	}));
+
+	it('should export and import single folders', asyncTest(async () => {
+		const service = new InteropService();
+		const filePath = exportDir() + '/test.jex';
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+
+		await service.export({ path: filePath, sourceFolderIds: [folder1.id] });
+		
+		await Note.delete(note1.id);
+		await Folder.delete(folder1.id);
+
+		await service.import({ path: filePath });
+
+		expect(await Note.count()).toBe(1);
+		expect(await Folder.count()).toBe(1);
+
+		let folder2 = (await Folder.all())[0];
+		expect(folder2.title).toBe('folder1');
+	}));
+
 });
