@@ -9,6 +9,8 @@ const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const eventManager = require('../eventManager');
+const InteropService = require('lib/services/InteropService');
+const InteropServiceHelper = require('../InteropServiceHelper.js');
 
 class NoteListComponent extends React.Component {
 
@@ -91,6 +93,12 @@ class NoteListComponent extends React.Component {
 					eventManager.emit('noteTypeToggle', { noteId: note.id });
 				}
 			}}));
+
+			menu.append(new MenuItem({label: _('Export'), click: async () => {
+				const ioService = new InteropService();
+				const module = ioService.moduleByFormat_('exporter', 'jex');
+				await InteropServiceHelper.export(this.props.dispatch.bind(this), module, { sourceNoteIds: noteIds });
+			}}));			
 		}
 
 		menu.append(new MenuItem({label: _('Delete'), click: async () => {

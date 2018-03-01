@@ -11,6 +11,7 @@ const { themeStyle } = require('../theme.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
+const InteropServiceHelper = require('../InteropServiceHelper.js');
 
 class SideBarComponent extends React.Component {
 
@@ -136,7 +137,17 @@ class SideBarComponent extends React.Component {
 					name: 'renameFolder',
 					id: itemId,
 				});
-			}}))
+			}}));
+
+			menu.append(new MenuItem({ type: 'separator' }));
+
+			const InteropService = require('lib/services/InteropService.js');
+
+			menu.append(new MenuItem({label: _('Export'), click: async () => {
+				const ioService = new InteropService();
+				const module = ioService.moduleByFormat_('exporter', 'jex');
+				await InteropServiceHelper.export(this.props.dispatch.bind(this), module, { sourceFolderIds: [itemId] });
+			}}));
 		}
 
 		menu.popup(bridge().window());

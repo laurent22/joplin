@@ -21,6 +21,7 @@ const AlarmService = require('lib/services/AlarmService.js');
 const AlarmServiceDriverNode = require('lib/services/AlarmServiceDriverNode');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const InteropService = require('lib/services/InteropService');
+const InteropServiceHelper = require('./InteropServiceHelper.js');
 
 const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
@@ -203,41 +204,7 @@ class Application extends BaseApplication {
 					label: module.format + ' - ' + module.description,
 					screens: ['Main'],
 					click: async () => {
-						let path = null;
-
-						if (module.target === 'file') {
-							path = bridge().showSaveDialog({
-								filters: [{ name: module.description, extensions: [module.fileExtension]}]
-							});
-						} else {
-							path = bridge().showOpenDialog({
-								properties: ['openDirectory', 'createDirectory'],
-							});
-						}
-
-						if (!path || (Array.isArray(path) && !path.length)) return;
-
-						if (Array.isArray(path)) path = path[0];
-
-						this.dispatch({
-							type: 'WINDOW_COMMAND',
-							name: 'showModalMessage',
-							message: _('Exporting to "%s" as "%s" format. Please wait...', path, module.format),
-						});
-
-						const exportOptions = {};
-						exportOptions.path = path;
-						exportOptions.format = module.format;
-
-						const service = new InteropService();
-						const result = await service.export(exportOptions);
-
-						console.info('Export result: ', result);
-
-						this.dispatch({
-							type: 'WINDOW_COMMAND',
-							name: 'hideModalMessage',
-						});
+						await InteropServiceHelper.export(this.dispatch.bind(this), module);
 					}
 				});
 			} else {

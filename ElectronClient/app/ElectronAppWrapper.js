@@ -172,6 +172,8 @@ class ElectronAppWrapper {
 	}
 
 	ensureSingleInstance() {
+		if (this.env_ === 'dev') return false;
+
 		return new Promise((resolve, reject) => {
 			const alreadyRunning = this.electronApp_.makeSingleInstance((commandLine, workingDirectory) => {
 				const win = this.window();
