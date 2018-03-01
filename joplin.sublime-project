@@ -20,6 +20,8 @@
 				"ElectronClient/app/css/font-awesome.min.css",
 				"docs/*.html",
 				"docs/*.svg",
+				"ReactNativeClient/lib/mime-utils.js",
+				"_mydocs/EnexSamples/*.enex",
 			],
 			"folder_exclude_patterns":
 			[
@@ -52,7 +54,8 @@
 				"tests/logs",
 				"ReactNativeClient/ios/build",
 				"ElectronClient/app/dist",
-				"_releases"
+				"_releases",
+				"ReactNativeClient/lib/csstojs",
 			],
 			"path": "."
 		},

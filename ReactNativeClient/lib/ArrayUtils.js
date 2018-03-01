@@ -15,7 +15,6 @@ ArrayUtils.removeElement = function(array, element) {
 
 // https://stackoverflow.com/a/10264318/561309
 ArrayUtils.binarySearch = function(items, value) {
-
 	var startIndex  = 0,
 		stopIndex   = items.length - 1,
 		middle      = Math.floor((stopIndex + startIndex)/2);
@@ -35,6 +34,15 @@ ArrayUtils.binarySearch = function(items, value) {
 
 	//make sure it's the right value
 	return (items[middle] != value) ? -1 : middle;
+}
+
+ArrayUtils.findByKey = function(array, key, value) {
+	for (let i = 0; i < array.length; i++) {
+		const o = array[i];
+		if (typeof o !== 'object') continue;
+		if (o[key] === value) return o;
+	}
+	return null;
 }
 
 module.exports = ArrayUtils;

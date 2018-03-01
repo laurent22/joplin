@@ -74,18 +74,19 @@ class DecryptionWorker {
 					const item = items[i];
 
 					// Temp hack
-					if (['edf44b7a0e4f8cbf248e206cd8dfa800', '2ccb3c9af0b1adac2ec6b66a5961fbb1'].indexOf(item.id) >= 0) {
-						excludedIds.push(item.id);
-						continue;
-					}
+					// if (['edf44b7a0e4f8cbf248e206cd8dfa800', '2ccb3c9af0b1adac2ec6b66a5961fbb1'].indexOf(item.id) >= 0) {
+					// 	excludedIds.push(item.id);
+					// 	continue;
+					// }
 
 					const ItemClass = BaseItem.itemClass(item);
 					this.logger().info('DecryptionWorker: decrypting: ' + item.id + ' (' + ItemClass.tableName() + ')');
 					try {
 						await ItemClass.decrypt(item);
 					} catch (error) {
+						excludedIds.push(item.id);
+						
 						if (error.code === 'masterKeyNotLoaded' && options.materKeyNotLoadedHandler === 'dispatch') {
-							excludedIds.push(item.id);
 							if (notLoadedMasterKeyDisptaches.indexOf(error.masterKeyId) < 0) {
 								this.dispatch({
 									type: 'MASTERKEY_ADD_NOT_LOADED',
@@ -95,6 +96,11 @@ class DecryptionWorker {
 							}
 							continue;
 						}
+
+						if (error.code === 'masterKeyNotLoaded' && options.materKeyNotLoadedHandler === 'throw') {
+							throw error;
+						}
+
 						this.logger().warn('DecryptionWorker: error for: ' + item.id + ' (' + ItemClass.tableName() + ')', error);
 					}
 				}

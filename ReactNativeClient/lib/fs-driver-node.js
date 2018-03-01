@@ -1,7 +1,8 @@
 const fs = require('fs-extra');
 const { time } = require('lib/time-utils.js');
+const FsDriverBase = require('lib/fs-driver-base');
 
-class FsDriverNode {
+class FsDriverNode extends FsDriverBase {
 
 	fsErrorToJsError_(error, path = null) {
 		let msg = error.toString();
@@ -81,9 +82,14 @@ class FsDriverNode {
 
 	async stat(path) {
 		try {
-			const s = await fs.stat(path);
-			s.path = path;
-			return s;
+			const stat = await fs.stat(path);
+			return {
+				birthtime: stat.birthtime,
+				mtime: stat.mtime,
+				isDirectory: () => stat.isDirectory(),
+				path: path,
+				size: stat.size,
+			};
 		} catch (error) {
 			if (error.code == 'ENOENT') return null;
 			throw error;
@@ -94,14 +100,26 @@ class FsDriverNode {
 		return fs.utimes(path, timestampDate, timestampDate);
 	}
 
-	async readDirStats(path) {
-		let items = await fs.readdir(path);
+	async readDirStats(path, options = null) {
+		if (!options) options = {};
+		if (!('recursive' in options)) options.recursive = false;
+
+		let items = [];
+		try {
+			items = await fs.readdir(path);
+		} catch (error) {
+			throw this.fsErrorToJsError_(error);
+		}
+
 		let output = [];
 		for (let i = 0; i < items.length; i++) {
-			let stat = await this.stat(path + '/' + items[i]);
+			const item = items[i];
+			let stat = await this.stat(path + '/' + item);
 			if (!stat) continue; // Has been deleted between the readdir() call and now
 			stat.path = stat.path.substr(path.length + 1);
 			output.push(stat);
+
+			output = await this.readDirStatsHandleRecursion_(path, stat, output, options);
 		}
 		return output;
 	}
@@ -122,14 +140,22 @@ class FsDriverNode {
 		}
 	}
 
-	readFile(path, encoding = 'utf8') {
-		if (encoding === 'Buffer') return fs.readFile(path); // Returns the raw buffer
-		return fs.readFile(path, encoding);
+	async readFile(path, encoding = 'utf8') {
+		try {
+			if (encoding === 'Buffer') return await fs.readFile(path); // Returns the raw buffer
+			return await fs.readFile(path, encoding);
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, path);
+		}
 	}
 
 	// Always overwrite destination
 	async copy(source, dest) {
-		return fs.copy(source, dest, { overwrite: true });
+		try {
+			return await fs.copy(source, dest, { overwrite: true });
+		} catch (error) {
+			throw this.fsErrorToJsError_(error, source);
+		}
 	}
 
 	async unlink(path) {

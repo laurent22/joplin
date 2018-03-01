@@ -41,13 +41,14 @@ class ElectronAppWrapper {
 		const windowState = windowStateKeeper({
 			defaultWidth: 800,
 			defaultHeight: 600,
+			file: 'window-state-' + this.env_ + '.json',
 		});
 
 		const windowOptions = {
-			'x': windowState.x,
-			'y': windowState.y,
-			'width': windowState.width,
-			'height': windowState.height,
+			x: windowState.x,
+			y: windowState.y,
+			width: windowState.width,
+			height: windowState.height,
 		};
 
 		// Linux icon workaround for bug https://github.com/electron-userland/electron-builder/issues/2098
@@ -63,7 +64,7 @@ class ElectronAppWrapper {
 		}))
 
 		// Uncomment this to view errors if the application does not start
-		if (this.env_ === 'dev') this.win_.webContents.openDevTools();
+		// if (this.env_ === 'dev') this.win_.webContents.openDevTools();
 
 		this.win_.on('close', (event) => {
 			// If it's on macOS, the app is completely closed only if the user chooses to close the app (willQuitApp_ will be true)
@@ -78,7 +79,7 @@ class ElectronAppWrapper {
 					this.win_ = null;
 				} else {
 					event.preventDefault();
-					this.win_.hide();
+					this.hide();
 				}
 			} else {
 				if (this.trayShown() && !this.willQuitApp_) {
@@ -117,6 +118,12 @@ class ElectronAppWrapper {
 		return !!this.tray_;
 	}
 
+	// This method is used in macOS only to hide the whole app (and not just the main window)
+	// including the menu bar. This follows the macOS way of hidding an app.
+	hide() {
+		this.electronApp_.hide();
+	}
+
 	buildDir() {
 		if (this.buildDir_) return this.buildDir_;
 		let dir = __dirname + '/build';
@@ -129,10 +136,24 @@ class ElectronAppWrapper {
 		return dir;
 	}
 
+	trayIconFilename_() {
+		let output = '';
+
+		if (process.platform === 'darwin') {
+			output = 'macos-16x16Template.png'; // Electron Template Image format
+		} else {
+			output = '16x16.png';
+		}
+
+		if (this.env_ === 'dev') output = '16x16-dev.png'
+
+		return output;
+	}
+
 	// Note: this must be called only after the "ready" event of the app has been dispatched
 	createTray(contextMenu) {
 		try {
-			this.tray_ = new Tray(this.buildDir() + '/icons/16x16.png')
+			this.tray_ = new Tray(this.buildDir() + '/icons/' + this.trayIconFilename_())
 			this.tray_.setToolTip(this.electronApp_.getName())
 			this.tray_.setContextMenu(contextMenu)
 
@@ -150,10 +171,29 @@ class ElectronAppWrapper {
 		this.tray_ = null;
 	}
 
+	ensureSingleInstance() {
+		return new Promise((resolve, reject) => {
+			const alreadyRunning = this.electronApp_.makeSingleInstance((commandLine, workingDirectory) => {
+				const win = this.window();
+				if (!win) return;
+				if (win.isMinimized()) win.restore();
+				win.show();
+				win.focus();
+			});
+
+			if (alreadyRunning) this.electronApp_.quit();
+
+			resolve(alreadyRunning);
+		});
+	}
+
 	async start() {
 		// Since we are doing other async things before creating the window, we might miss
 		// the "ready" event. So we use the function below to make sure that the app is ready.
 		await this.waitForElectronAppReady();
+
+		const alreadyRunning = await this.ensureSingleInstance();
+		if (alreadyRunning) return;
 
 		this.createWindow();
 

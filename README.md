@@ -2,7 +2,7 @@
 
 Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](https://daringfireball.net/projects/markdown/basics).
 
-Notes exported from Evernote via .enex files [can be imported](#importing-notes-from-evernote) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).
+Notes exported from Evernote via .enex files [can be imported](#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
 
 The notes can be [synchronised](#synchronisation) with various targets including [Nextcloud](https://nextcloud.com/), the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
 
@@ -18,15 +18,15 @@ Three types of applications are available: for the **desktop** (Windows, macOS a
 
 Operating System | Download
 -----------------|--------
-Windows          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.62/Joplin-Setup-1.0.62.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a>
-macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.62/Joplin-1.0.62.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a>
-Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.62/Joplin-1.0.62-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a>
+Windows          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.70/Joplin-Setup-1.0.70.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a>
+macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.70/Joplin-1.0.70.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a>
+Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.70/Joplin-1.0.70-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a>
 
 ## Mobile applications
 
 Operating System | Download | Alt. Download
 -----------------|----------|----------------
-Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeAndroid.png'/></a> | or [Download APK File](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.97/joplin-v1.0.97.apk)
+Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeAndroid.png'/></a> | or [Download APK File](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.102/joplin-v1.0.102.apk)
 iOS              | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeIOS.png'/></a> | -
 
 ## Terminal application
@@ -51,20 +51,23 @@ For usage information, please refer to the full [Joplin Terminal Application Doc
 # Features 
 
 - Desktop, mobile and terminal applications.
-- Import Enex files (Evernote export format)
+- End To End Encryption (E2EE)
+- Synchronisation with various services, including NextCloud, WebDAV and OneDrive. Dropbox is planned.
+- Import Enex files (Evernote export format) and Markdown files.
+- Export JEX files (Joplin Export format) and raw files.
 - Support notes, to-dos, tags and notebooks.
+- Sort notes by multiple criteria - title, updated time, etc.
 - Support for alarms (notifications) in mobile and desktop applications.
 - Offline first, so the entire data is always available on the device even without an internet connection.
-- Synchronisation with various services, including NextCloud, WebDAV and OneDrive. Dropbox is planned.
-- End To End Encryption (E2EE)
-- Synchronises to a plain text format, which can be easily manipulated, backed up, or exported to a different format.
 - Markdown notes, which are rendered with images and formatting in the desktop and mobile applications. Support for extra features such as math notation and checkboxes.
 - File attachment support - images are displayed, and other files are linked and can be opened in the relevant application.
 - Search functionality.
 - Geo-location support.
 - Supports multiple languages
 
-# Importing notes from Evernote
+# Importing
+
+## Importing from Evernote 
 
 Joplin was designed as a replacement for Evernote and so can import complete Evernote notebooks, as well as notes, tags, resources (attached files) and note metadata (such as author, geo-location, etc.) via ENEX files. In terms of data, the only two things that might slightly differ are:
 
@@ -74,16 +77,28 @@ Joplin was designed as a replacement for Evernote and so can import complete Eve
 
 To import Evernote data, first export your Evernote notebooks to ENEX files as described [here](https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks). Then follow these steps:
 
-On the **desktop application**, open the "File" menu, click "Import Evernote notes" and select your ENEX file. This will open a new screen which will display the import progress. The notes will be imported into a new separate notebook (so that, in case of a mistake, the notes are not mixed up with any existing notes). If needed then can then be moved to a different notebook, or the notebook can be renamed, etc.
+On the **desktop application**, open File > Import > ENEX and select your file. The notes will be imported into a new separate notebook. If needed they can then be moved to a different notebook, or the notebook can be renamed, etc.
 
-On the **terminal application**, in [command-line mode](/terminal#command-line-mode), type `import-enex /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
+On the **terminal application**, in [command-line mode](/terminal#command-line-mode), type `import /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
 
-# Importing notes from other applications
+## Importing from Markdown files
+
+Joplin can import notes from plain Markdown file. You can either import a complete directory of Markdown files or individual files.
+
+On the **desktop application**, open File > Import > MD and select your Markdown file or directory.
+
+On the **terminal application**, in [command-line mode](/terminal#command-line-mode), type `import --format md /path/to/file.md` or `import --format md /path/to/directory/`.
+
+## Importing from other applications
 
 In general the way to import notes from any application into Joplin is to convert the notes to ENEX files (Evernote format) and to import these ENEX files into Joplin using the method above. Most note-taking applications support ENEX files so it should be relatively straightforward. For help about specific applications, see below:
 
 * Standard Notes: Please see [this tutorial](https://programadorwebvalencia.com/migrate-notes-from-standard-notes-to-joplin/)
 * Tomboy Notes: Export the notes to ENEX files [as described here](https://askubuntu.com/questions/243691/how-can-i-export-my-tomboy-notes-into-evernote/608551) for example, and import these ENEX files into Joplin.
+
+# Exporting
+
+Joplin can export to the JEX format (Joplin Export file), which is a tar file that can contain multiple notes, notebooks, etc. This is a lossless format in that all the notes, but also metadata such as geo-location, updated time, tags, etc. are preserved. This format is convenient for backup purposes and can be re-imported into Joplin. A "raw" format is also available. This is the same as the JEX format except that the data is saved to a directory and each item represented by a single file.
 
 # Synchronisation
 
@@ -108,10 +123,13 @@ If synchronisation does not work, please consult the logs in the app profile dir
 
 Select the "WebDAV" synchronisation target and follow the same instructions as for Nextcloud above.
 
-Known compatible services that use WebDAV:
+WebDAV-compatible services that are known to work with Joplin:
 
 - [Box.com](https://www.box.com/)
 - [DriveHQ](https://www.drivehq.com)
+- [OwnCloud](https://owncloud.org/)
+- [Seafile](https://www.seafile.com/)
+- [Stack](https://www.transip.nl/stack/)
 - [Zimbra](https://www.zimbra.com/)
 
 ## OneDrive synchronisation
@@ -195,34 +213,32 @@ Joplin is currently available in the languages below. If you would like to contr
 - In Poedit, open this .pot file, go into the Catalog menu and click Configuration. Change "Country" and "Language" to your own country and language.
 - From then you can translate the file. Once it is done, please either [open a pull request](https://github.com/laurent22/joplin/pulls) or send the file to [this address](https://raw.githubusercontent.com/laurent22/joplin/master/Assets/Adresse.png).
 
-To **update a translation**, follow the same steps as above but instead of getting the .pot file, get the .po file for your language from there: https://github.com/laurent22/joplin/tree/master/CliClient/locales
-
 This translation will apply to the three applications - desktop, mobile and terminal.
+
+To **update a translation**, follow the same steps as above but instead of getting the .pot file, get the .po file for your language from the table below.
 
 Current translations:
 
 <!-- LOCALE-TABLE-AUTO-GENERATED -->
-&nbsp;  |  Language  |  Code  |  Last translator  |  Percent done
+&nbsp;  |  Language  |  Po File  |  Last translator  |  Percent done
 ---|---|---|---|---
-![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/es/basque_country.png)  |  Basque  |  eu  |  juan.abasolo@ehu.eus  |  89%
-![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/hr.png)  |  Croatian  |  hr_HR  |  Hrvoje Mandić <trbuhom@net.hr>  |  72%
-![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/de.png)  |  Deutsch  |  de_DE  |  Tobias Strobel <git@strobeltobias.de>  |  91%
-![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/gb.png)  |  English  |  en_GB  |    |  100%
-![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/es.png)  |  Español  |  es_ES  |  Lucas Vieites  |  79%
-![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/cr.png)  |  Español (Costa Rica)  |  es_CR  |    |  68%
-![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/fr.png)  |  Français  |  fr_FR  |  Laurent Cozic  |  100%
-![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/it.png)  |  Italiano  |  it_IT  |    |  75%
-![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/be.png)  |  Nederlands  |  nl_BE  |    |  89%
-![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/br.png)  |  Português (Brasil)  |  pt_BR  |    |  74%
-![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/ru.png)  |  Русский  |  ru_RU  |  Artyom Karlov <artyom.karlov@gmail.com>  |  94%
-![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/cn.png)  |  中文 (简体)  |  zh_CN  |  RCJacH <RCJacH@outlook.com>  |  75%
-![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/jp.png)  |  日本語  |  ja_JP  |    |  73%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/es/basque_country.png)  |  Basque  |  [eu](https://github.com/laurent22/joplin/blob/master/CliClient/locales/eu.po)  |  juan.abasolo@ehu.eus  |  82%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/hr.png)  |  Croatian  |  [hr_HR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/hr_HR.po)  |  Hrvoje Mandić <trbuhom@net.hr>  |  66%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/de.png)  |  Deutsch  |  [de_DE](https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po)  |  Tobias Strobel <git@strobeltobias.de>  |  84%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/gb.png)  |  English  |  [en_GB](https://github.com/laurent22/joplin/blob/master/CliClient/locales/en_GB.po)  |    |  100%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/es.png)  |  Español  |  [es_ES](https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po)  |  Fernando Martín <f@mrtn.es>  |  94%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/fr.png)  |  Français  |  [fr_FR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/fr_FR.po)  |  Laurent Cozic  |  100%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/it.png)  |  Italiano  |  [it_IT](https://github.com/laurent22/joplin/blob/master/CliClient/locales/it_IT.po)  |    |  68%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/be.png)  |  Nederlands  |  [nl_BE](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_BE.po)  |    |  82%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/br.png)  |  Português (Brasil)  |  [pt_BR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_BR.po)  |    |  66%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/ru.png)  |  Русский  |  [ru_RU](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ru_RU.po)  |  Artyom Karlov <artyom.karlov@gmail.com>  |  86%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/cn.png)  |  中文 (简体)  |  [zh_CN](https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po)  |  RCJacH <RCJacH@outlook.com>  |  68%
+![](https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/jp.png)  |  日本語  |  [ja_JP](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ja_JP.po)  |    |  66%
 <!-- LOCALE-TABLE-AUTO-GENERATED -->
 
 # Known bugs
 
 - Non-alphabetical characters such as Chinese or Arabic might create glitches in the terminal on Windows. This is a limitation of the current Windows console.
-- Auto-update is not working in the Linux desktop application.
 - While the mobile can sync and load tags, it is not currently possible to create new ones. The desktop and terminal apps can create, delete and edit tags.
 
 # License

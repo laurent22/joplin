@@ -1,7 +1,6 @@
 var locales = {};
 locales['en_GB'] = require('./en_GB.json');
 locales['de_DE'] = require('./de_DE.json');
-locales['es_CR'] = require('./es_CR.json');
 locales['es_ES'] = require('./es_ES.json');
 locales['eu'] = require('./eu.json');
 locales['fr_FR'] = require('./fr_FR.json');

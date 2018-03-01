@@ -4,6 +4,8 @@ const { Logger } = require('lib/logger.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const { time } = require('lib/time-utils.js');
 const { sprintf } = require('sprintf-js');
+const ObjectUtils = require('lib/ObjectUtils');
+const { toTitleCase } = require('lib/string-utils.js');
 const { _, supportedLocalesToLanguages, defaultLocale } = require('lib/locale.js');
 
 class Setting extends BaseModel {
@@ -19,12 +21,16 @@ class Setting extends BaseModel {
 	static metadata() {
 		if (this.metadata_) return this.metadata_;
 
+		// A "public" setting means that it will show up in the various config screens (or config command for the CLI tool), however
+		// if if private a setting might still be handled and modified by the app. For instance, the settings related to sorting notes are not
+		// public for the mobile and desktop apps because they are handled separately in menus.
+
 		this.metadata_ = {
 			'activeFolderId': { value: '', type: Setting.TYPE_STRING, public: false },
 			'firstStart': { value: true, type: Setting.TYPE_BOOL, public: false },
 			'editor': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'], label: () => _('Text editor'), description: () => _('The editor that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
 			'locale': { value: defaultLocale(), type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Language'), options: () => {
-				return supportedLocalesToLanguages();
+				return ObjectUtils.sortByValue(supportedLocalesToLanguages());
 			}},
 			'dateFormat': { value: Setting.DATE_FORMAT_1, type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Date format'), options: () => {
 				let options = {}
@@ -49,16 +55,17 @@ class Setting extends BaseModel {
 				output[Setting.THEME_DARK] = _('Dark');
 				return output;
 			}},
-			// 'logLevel': { value: Logger.LEVEL_INFO, type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Log level'), options: () => {
-			// 	return Logger.levelEnum();
-			// }},
-			// Not used for now:
-			// 'todoFilter': { value: 'all', type: Setting.TYPE_STRING, isEnum: true, public: false, appTypes: ['mobile'], label: () => _('Todo filter'), options: () => ({
-			// 	all: _('Show all'),
-			// 	recent: _('Non-completed and recently completed ones'),
-			// 	nonCompleted: _('Non-completed ones only'),
-			// })},
-			'uncompletedTodosOnTop': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Show uncompleted to-dos on top of the lists') },
+			'uncompletedTodosOnTop': { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['cli'], label: () => _('Uncompleted to-dos on top') },
+			'notes.sortOrder.field': { value: 'user_updated_time', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['cli'], label: () => _('Sort notes by'), options: () => {
+				const Note = require('lib/models/Note');
+				const noteSortFields = ['user_updated_time', 'user_created_time', 'title'];
+				const options = {};
+				for (let i = 0; i < noteSortFields.length; i++) {
+					options[noteSortFields[i]] = toTitleCase(Note.fieldToLabel(noteSortFields[i]));
+				}
+				return options;
+			}},
+			'notes.sortOrder.reverse': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
 			'trackLocation': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Save geo-location with notes') },
 			'newTodoFocus': { value: 'title', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('When creating a new to-do:'), options: () => {
 				return {
@@ -103,9 +110,9 @@ class Setting extends BaseModel {
 				}
 			}, public: true, label: () => _('Directory to synchronise with (absolute path)'), description: () => _('The path to synchronise with when file system synchronisation is enabled. See `sync.target`.') },
 
-			'sync.5.path': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nexcloud WebDAV URL') },
-			'sync.5.username': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nexcloud username') },
-			'sync.5.password': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nexcloud password'), secure: true },
+			'sync.5.path': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nextcloud WebDAV URL') },
+			'sync.5.username': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nextcloud username') },
+			'sync.5.password': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nextcloud password'), secure: true },
 
 			'sync.6.path': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav') }, public: true, label: () => _('WebDAV URL') },
 			'sync.6.username': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav') }, public: true, label: () => _('WebDAV username') },
@@ -429,7 +436,7 @@ class Setting extends BaseModel {
 	// 	}
 	// }
 
-	static saveAll() {
+	static async saveAll() {
 		if (!this.saveTimeoutId_) return Promise.resolve();
 
 		this.logger().info('Saving settings...');
@@ -444,12 +451,14 @@ class Setting extends BaseModel {
 			queries.push(Database.insertQuery(this.tableName(), s));
 		}
 
-		return BaseModel.db().transactionExecBatch(queries).then(() => {
-			this.logger().info('Settings have been saved.');
-		});
+		await BaseModel.db().transactionExecBatch(queries);
+		
+		this.logger().info('Settings have been saved.');
 	}
 
 	static scheduleSave() {
+		if (!Setting.autoSaveEnabled) return;
+
 		if (this.saveTimeoutId_) clearTimeout(this.saveTimeoutId_);
 
 		this.saveTimeoutId_ = setTimeout(() => {
@@ -520,5 +529,7 @@ Setting.constants_ = {
 	tempDir: '',
 	openDevTools: false,
 }
+
+Setting.autoSaveEnabled = true;
 
 module.exports = Setting;

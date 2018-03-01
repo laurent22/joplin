@@ -9,6 +9,7 @@ const Setting = require('lib/models/Setting.js');
 const Resource = require('lib/models/Resource.js');
 const Folder = require('lib/models/Folder.js');
 const { BackButtonService } = require('lib/services/back-button.js');
+const NavService = require('lib/services/NavService.js');
 const BaseModel = require('lib/BaseModel.js');
 const { ActionButton } = require('lib/components/action-button.js');
 const Icon = require('react-native-vector-icons/Ionicons').default;
@@ -61,17 +62,28 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		this.styles_ = {};
 
-		this.backHandler = async () => {
+		const saveDialog = async () => {
 			if (this.isModified()) {
 				let buttonId = await dialogs.pop(this, _('This note has been modified:'), [
-					{ title: _('Save changes'), id: 'save' },
-					{ title: _('Discard changes'), id: 'discard' },
-					{ title: _('Cancel'), id: 'cancel' },
+					{ text: _('Save changes'), id: 'save' },
+					{ text: _('Discard changes'), id: 'discard' },
+					{ text: _('Cancel'), id: 'cancel' },
 				]);
 
 				if (buttonId == 'cancel') return true;
 				if (buttonId == 'save') await this.saveNoteButton_press();
 			}
+
+			return false;
+		}
+
+		this.navHandler = async () => {
+			return await saveDialog();
+		}
+
+		this.backHandler = async () => {
+			const r = await saveDialog();
+			if (r) return r;
 
 			if (!this.state.note.id) {
 				return false;
@@ -145,6 +157,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	async componentWillMount() {
 		BackButtonService.addHandler(this.backHandler);
+		NavService.addHandler(this.navHandler);
 
 		await shared.initState(this);
 
@@ -157,6 +170,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	componentWillUnmount() {
 		BackButtonService.removeHandler(this.backHandler);
+		NavService.removeHandler(this.navHandler);
 	}
 
 	title_changeText(text) {

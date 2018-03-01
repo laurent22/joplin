@@ -1,6 +1,6 @@
 {
   "name": "Joplin",
-  "version": "1.0.63",
+  "version": "1.0.70",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "scripts": {
@@ -43,10 +43,12 @@
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
+    "ajv": "^6.2.0",
+    "app-builder-bin": "^1.5.0",
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.24.1",
     "electron": "^1.7.11",
-    "electron-builder": "^19.45.4"
+    "electron-builder": "^20.2.0"
   },
   "optionalDependencies": {
     "7zip-bin-mac": "^1.0.1",
@@ -59,7 +61,7 @@
     "base-64": "^0.1.0",
     "electron-context-menu": "^0.9.1",
     "electron-log": "^2.2.11",
-    "electron-updater": "^2.16.1",
+    "electron-updater": "^2.18.2",
     "electron-window-state": "^4.1.1",
     "follow-redirects": "^1.2.5",
     "form-data": "^2.3.1",
@@ -91,6 +93,7 @@
     "sqlite3": "^3.1.13",
     "string-padding": "^1.0.2",
     "string-to-stream": "^1.1.0",
+    "tar": "^4.4.0",
     "tcp-port-used": "^0.1.2",
     "url-parse": "^1.2.0",
     "uuid": "^3.1.0",

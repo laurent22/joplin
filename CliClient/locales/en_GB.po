@@ -15,61 +15,10 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Give focus to next pane"
-msgstr ""
-
-msgid "Give focus to previous pane"
-msgstr ""
-
-msgid "Enter command line mode"
-msgstr ""
-
-msgid "Exit command line mode"
-msgstr ""
-
-msgid "Edit the selected note"
-msgstr ""
-
-msgid "Cancel the current command."
-msgstr ""
-
-msgid "Exit the application."
-msgstr ""
-
-msgid "Delete the currently selected note or notebook."
-msgstr ""
-
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
 
 msgid "Please select the note or notebook to be deleted first."
-msgstr ""
-
-msgid "Set a to-do as completed / not completed"
-msgstr ""
-
-msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-msgstr ""
-
-msgid "Search"
-msgstr ""
-
-msgid "[t]oggle note [m]etadata."
-msgstr ""
-
-msgid "[M]ake a new [n]ote"
-msgstr ""
-
-msgid "[M]ake a new [t]odo"
-msgstr ""
-
-msgid "[M]ake a new note[b]ook"
-msgstr ""
-
-msgid "Copy ([Y]ank) the [n]ote to a notebook."
-msgstr ""
-
-msgid "Move the note to a notebook."
 msgstr ""
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
@@ -225,8 +174,12 @@ msgid "Exits the application."
 msgstr ""
 
 msgid ""
-"Exports Joplin data to the given directory. By default, it will export the "
+"Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
+msgstr ""
+
+#, javascript-format
+msgid "Destination format: %s"
 msgstr ""
 
 msgid "Exports only the given note."
@@ -239,6 +192,10 @@ msgid "Displays a geolocation URL for the note."
 msgstr ""
 
 msgid "Displays usage information."
+msgstr ""
+
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
 msgstr ""
 
 msgid "Shortcuts are not available in CLI mode."
@@ -276,23 +233,17 @@ msgid "To exit command line mode, press ESCAPE"
 msgstr ""
 
 msgid ""
-"For the complete list of available keyboard shortcuts, type `help shortcuts`"
+"For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
 
-msgid "Imports an Evernote notebook file (.enex file)."
+msgid "Imports data into Joplin."
+msgstr ""
+
+#, javascript-format
+msgid "Source format: %s"
 msgstr ""
 
 msgid "Do not ask for confirmation."
-msgstr ""
-
-#, javascript-format
-msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
-msgstr ""
-
-#, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into "
-"it. Continue?"
 msgstr ""
 
 #, javascript-format
@@ -535,7 +486,18 @@ msgid ""
 "background and will be available soon."
 msgstr ""
 
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
+
 msgid "File"
+msgstr ""
+
+msgid "Directory"
+msgstr ""
+
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 
 msgid "New note"
@@ -547,10 +509,14 @@ msgstr ""
 msgid "New notebook"
 msgstr ""
 
-msgid "Import Evernote notes"
+msgid "Import"
 msgstr ""
 
-msgid "Evernote Export Files"
+msgid "Export"
+msgstr ""
+
+#, javascript-format
+msgid "Hide %s"
 msgstr ""
 
 msgid "Quit"
@@ -569,6 +535,12 @@ msgid "Paste"
 msgstr ""
 
 msgid "Search in all the notes"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "Toggle editor layout"
 msgstr ""
 
 msgid "Tools"
@@ -610,9 +582,6 @@ msgid "OK"
 msgstr ""
 
 msgid "Cancel"
-msgstr ""
-
-msgid "Error"
 msgstr ""
 
 #, javascript-format
@@ -737,6 +706,9 @@ msgstr ""
 msgid "Set alarm:"
 msgstr ""
 
+msgid "Search"
+msgstr ""
+
 msgid "Layout"
 msgstr ""
 
@@ -790,6 +762,12 @@ msgstr ""
 msgid "Set alarm"
 msgstr ""
 
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+
 msgid "to-do"
 msgstr ""
 
@@ -807,9 +785,6 @@ msgid "Clear"
 msgstr ""
 
 msgid "OneDrive Login"
-msgstr ""
-
-msgid "Import"
 msgstr ""
 
 msgid "Options"
@@ -853,7 +828,7 @@ msgstr ""
 msgid "File system"
 msgstr ""
 
-msgid "Nextcloud (Beta)"
+msgid "Nextcloud"
 msgstr ""
 
 msgid "OneDrive"
@@ -862,7 +837,7 @@ msgstr ""
 msgid "OneDrive Dev (For testing only)"
 msgstr ""
 
-msgid "WebDAV (Beta)"
+msgid "WebDAV"
 msgstr ""
 
 #, javascript-format
@@ -991,7 +966,13 @@ msgstr ""
 msgid "Dark"
 msgstr ""
 
-msgid "Show uncompleted todos on top of the lists"
+msgid "Uncompleted to-dos on top"
+msgstr ""
+
+msgid "Sort notes by"
+msgstr ""
+
+msgid "Reverse sort order"
 msgstr ""
 
 msgid "Save geo-location with notes"
@@ -1052,13 +1033,13 @@ msgid ""
 "See `sync.target`."
 msgstr ""
 
-msgid "Nexcloud WebDAV URL"
+msgid "Nextcloud WebDAV URL"
 msgstr ""
 
-msgid "Nexcloud username"
+msgid "Nextcloud username"
 msgstr ""
 
-msgid "Nexcloud password"
+msgid "Nextcloud password"
 msgstr ""
 
 msgid "WebDAV URL"
@@ -1072,6 +1053,38 @@ msgstr ""
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr ""
+
+msgid "Joplin Export File"
+msgstr ""
+
+msgid "Markdown"
+msgstr ""
+
+msgid "Joplin Export Directory"
+msgstr ""
+
+msgid "Evernote Export File"
+msgstr ""
+
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr ""
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+
+msgid "There is no data to export."
+msgstr ""
+
+msgid "Please specify the notebook where the notes should be imported to."
 msgstr ""
 
 msgid "Items that cannot be synchronised"

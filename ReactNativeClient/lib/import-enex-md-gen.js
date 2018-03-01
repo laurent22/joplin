@@ -617,10 +617,6 @@ function enexXmlToMdArray(stream, resources) {
 	});
 }
 
-function removeTableCellNewLines(cellText) {
-	return cellText.replace(/\n+/g, " ");
-}
-
 function tableHasSubTables(table) {
 	for (let trIndex = 0; trIndex < table.lines.length; trIndex++) {
 		const tr = table.lines[trIndex];
@@ -689,8 +685,9 @@ function drawTable(table) {
 				line.push(BLOCK_CLOSE);
 			} else { // Regular table rendering
 
-				// A cell in a Markdown table cannot have new lines so remove them
-				const cellText = removeTableCellNewLines(processMdArrayNewLines(td.lines));
+				// A cell in a Markdown table cannot have actual new lines so replace
+				// them with <br>, which are supported by the markdown renderers.
+				const cellText = processMdArrayNewLines(td.lines).replace(/\n+/g, "<br>");
 
 				const width = Math.max(cellText.length, 3);
 				line.push(stringPadding(cellText, width, ' ', stringPadding.RIGHT));

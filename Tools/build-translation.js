@@ -172,14 +172,18 @@ function flagImageUrl(locale) {
 	}
 }
 
+function poFileUrl(locale) {
+	return 'https://github.com/laurent22/joplin/blob/master/CliClient/locales/' + locale + '.po';
+}
+
 function translationStatusToMdTable(status) {
 	let output = [];
-	output.push(['&nbsp;', 'Language', 'Code', 'Last translator', 'Percent done'].join('  |  '));
+	output.push(['&nbsp;', 'Language', 'Po File', 'Last translator', 'Percent done'].join('  |  '));
 	output.push(['---', '---', '---', '---', '---'].join('|'));
 	for (let i = 0; i < status.length; i++) {
 		const stat = status[i];
-		const flagUrl = flagImageUrl(stat.locale); //'https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/' + countryCodeOnly(stat.locale).toLowerCase() + '.png';
-		output.push(['![](' + flagUrl + ')', stat.languageName, stat.locale, stat.translatorName, stat.percentDone + '%'].join('  |  '));
+		const flagUrl = flagImageUrl(stat.locale);
+		output.push(['![](' + flagUrl + ')', stat.languageName, '[' + stat.locale + '](' + poFileUrl(stat.locale) + ')', stat.translatorName, stat.percentDone + '%'].join('  |  '));
 	}
 	return output.join('\n');
 }

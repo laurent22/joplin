@@ -201,4 +201,9 @@ function padLeft(string, length, padString) {
 	return string;
 }
 
-module.exports = { removeDiacritics, escapeFilename, wrap, splitCommandString, padLeft };
+function toTitleCase(string) {
+	if (!string) return string;
+	return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+module.exports = { removeDiacritics, escapeFilename, wrap, splitCommandString, padLeft, toTitleCase };

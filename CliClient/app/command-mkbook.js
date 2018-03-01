@@ -14,10 +14,6 @@ class Command extends BaseCommand {
 		return _('Creates a new notebook.');
 	}
 
-	aliases() {
-		return ['mkdir'];
-	}
-
 	async action(args) {
 		let folder = await Folder.save({ title: args['new-notebook'] }, { userSideValidation: true });		
 		app().switchCurrentFolder(folder);

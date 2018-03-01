@@ -16,30 +16,6 @@ msgstr ""
 "X-Generator: Poedit 2.0.6\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Give focus to next pane"
-msgstr "Das nächste Fenster fokussieren"
-
-msgid "Give focus to previous pane"
-msgstr "Das vorherige Fenster fokussieren"
-
-msgid "Enter command line mode"
-msgstr "Zum Terminal-Modus wechseln"
-
-msgid "Exit command line mode"
-msgstr "Den Terminal-Modus verlassen"
-
-msgid "Edit the selected note"
-msgstr "Die ausgewählte Notiz bearbeiten"
-
-msgid "Cancel the current command."
-msgstr "Den momentanen Befehl abbrechen."
-
-msgid "Exit the application."
-msgstr "Das Programm verlassen."
-
-msgid "Delete the currently selected note or notebook."
-msgstr "Die/das momentan ausgewählte Notiz(-buch) löschen."
-
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
 "Hebe die Markierungen zugehöriger Notizen auf, um eine Markierung zu löschen."
@@ -48,35 +24,6 @@ msgid "Please select the note or notebook to be deleted first."
 msgstr ""
 "Wähle bitte zuerst eine Notiz oder ein Notizbuch aus, das gelöscht werden "
 "soll."
-
-msgid "Set a to-do as completed / not completed"
-msgstr "Ein To-Do als abgeschlossen / nicht abgeschlossen markieren"
-
-#, fuzzy
-msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-msgstr ""
-"Schal[t]e das Terminal zwischen maximiert/minimiert/versteckt/sichtbar um."
-
-msgid "Search"
-msgstr "Suchen"
-
-msgid "[t]oggle note [m]etadata."
-msgstr "Notiz-[M]etadata einschal[t]en."
-
-msgid "[M]ake a new [n]ote"
-msgstr "Eine neue [N]otiz [m]achen"
-
-msgid "[M]ake a new [t]odo"
-msgstr "Ein neues [T]o-Do [m]achen"
-
-msgid "[M]ake a new note[b]ook"
-msgstr "Ein neues Notiz[b]uch [m]achen"
-
-msgid "Copy ([Y]ank) the [n]ote to a notebook."
-msgstr "Die Notiz zu einem Notizbuch kopieren."
-
-msgid "Move the note to a notebook."
-msgstr "Die Notiz zu einem Notizbuch verschieben."
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Drücke Strg+D oder tippe \"exit\", um das Programm zu verlassen"
@@ -247,13 +194,18 @@ msgstr "Die Notiz wurde gespeichert."
 msgid "Exits the application."
 msgstr "Schließt das Programm."
 
+#, fuzzy
 msgid ""
-"Exports Joplin data to the given directory. By default, it will export the "
+"Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
 "Exportiert Joplins Dateien zu dem angegebenen Pfad. Standardmäßig wird die "
 "komplette Datenbank inklusive Notizbüchern, Notizen, Markierungen und "
 "Anhängen exportiert."
+
+#, fuzzy, javascript-format
+msgid "Destination format: %s"
+msgstr "Datumsformat"
 
 msgid "Exports only the given note."
 msgstr "Exportiert nur die angegebene Notiz."
@@ -266,6 +218,10 @@ msgstr "Zeigt die Standort-URL der Notiz an."
 
 msgid "Displays usage information."
 msgstr "Zeigt die Nutzungsstatistik an."
+
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr ""
 
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Tastenkürzel sind im CLI Modus nicht verfügbar."
@@ -311,31 +267,22 @@ msgstr "Um den Kommandozeilen Modus aufzurufen, drücke \":\""
 msgid "To exit command line mode, press ESCAPE"
 msgstr "Um den Kommandozeilen Modus zu beenden, drücke ESCAPE"
 
+#, fuzzy
 msgid ""
-"For the complete list of available keyboard shortcuts, type `help shortcuts`"
+"For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
 "Um die komplette Liste von verfügbaren Tastenkürzeln anzuzeigen, tippe `help "
 "shortcuts` ein"
 
-msgid "Imports an Evernote notebook file (.enex file)."
-msgstr "Importiert eine Evernote Notizbuch-Datei (.enex Datei)."
+msgid "Imports data into Joplin."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Source format: %s"
+msgstr "Ungültiger Befehl: %s"
 
 msgid "Do not ask for confirmation."
 msgstr "Nicht nach einer Bestätigung fragen."
-
-#, javascript-format
-msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
-msgstr ""
-"Datei \"%s\" wird in das existierende Notizbuch \"%s\" importiert. "
-"Fortfahren?"
-
-#, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into "
-"it. Continue?"
-msgstr ""
-"Neues Notizbuch \"%s\" wird erstellt und die Datei \"%s\" wird hinein "
-"importiert. Fortfahren?"
 
 #, javascript-format
 msgid "Found: %d."
@@ -627,8 +574,19 @@ msgstr ""
 "Wenn du das Passwort bereits eingegeben hast, werden die verschlüsselten "
 "Objekte im Hintergrund entschlüsselt und stehen in Kürze zur Verfügung."
 
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
+
 msgid "File"
 msgstr "Datei"
+
+msgid "Directory"
+msgstr ""
+
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
 
 msgid "New note"
 msgstr "Neue Notiz"
@@ -639,11 +597,16 @@ msgstr "Neues To-Do"
 msgid "New notebook"
 msgstr "Neues Notizbuch"
 
-msgid "Import Evernote notes"
-msgstr "Evernote Notizen importieren"
+msgid "Import"
+msgstr "Importieren"
 
-msgid "Evernote Export Files"
-msgstr "Evernote Export Dateien"
+#, fuzzy
+msgid "Export"
+msgstr "Importieren"
+
+#, javascript-format
+msgid "Hide %s"
+msgstr ""
 
 msgid "Quit"
 msgstr "Verlassen"
@@ -662,6 +625,12 @@ msgstr "Einfügen"
 
 msgid "Search in all the notes"
 msgstr "Alle Notizen durchsuchen"
+
+msgid "View"
+msgstr ""
+
+msgid "Toggle editor layout"
+msgstr ""
 
 msgid "Tools"
 msgstr "Werkzeuge"
@@ -703,9 +672,6 @@ msgstr "OK"
 
 msgid "Cancel"
 msgstr "Abbrechen"
-
-msgid "Error"
-msgstr ""
 
 #, fuzzy, javascript-format
 msgid ""
@@ -846,6 +812,9 @@ msgstr "Benne Notizbuch um:"
 msgid "Set alarm:"
 msgstr "Alarm erstellen:"
 
+msgid "Search"
+msgstr "Suchen"
+
 msgid "Layout"
 msgstr "Layout"
 
@@ -904,6 +873,12 @@ msgstr "Markierungen"
 msgid "Set alarm"
 msgstr "Alarm erstellen"
 
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+
 #, fuzzy
 msgid "to-do"
 msgstr "Neues To-Do"
@@ -924,9 +899,6 @@ msgstr "Leeren"
 
 msgid "OneDrive Login"
 msgstr "OneDrive Login"
-
-msgid "Import"
-msgstr "Importieren"
 
 msgid "Options"
 msgstr "Optionen"
@@ -970,7 +942,8 @@ msgstr "Unbekanntes Argument: %s"
 msgid "File system"
 msgstr "Dateisystem"
 
-msgid "Nextcloud (Beta)"
+#, fuzzy
+msgid "Nextcloud"
 msgstr "Nextcloud (Beta)"
 
 msgid "OneDrive"
@@ -979,8 +952,9 @@ msgstr "OneDrive"
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dev (Nur für Tests)"
 
-msgid "WebDAV (Beta)"
-msgstr ""
+#, fuzzy
+msgid "WebDAV"
+msgstr "Nextcloud WebDAV URL"
 
 #, javascript-format
 msgid "Unknown log level: %s"
@@ -1120,8 +1094,16 @@ msgstr "Hell"
 msgid "Dark"
 msgstr "Dunkel"
 
-msgid "Show uncompleted todos on top of the lists"
+#, fuzzy
+msgid "Uncompleted to-dos on top"
 msgstr "Zeige unvollständige To-Dos oben in der Liste"
+
+msgid "Sort notes by"
+msgstr ""
+
+#, fuzzy
+msgid "Reverse sort order"
+msgstr "Dreht die Sortierreihenfolge um."
 
 msgid "Save geo-location with notes"
 msgstr "Momentanen Standort zusammen mit Notizen speichern"
@@ -1189,22 +1171,22 @@ msgstr ""
 "Der Pfad, mit dem synchronisiert werden soll, wenn die Dateisystem-"
 "Synchronisation aktiviert ist. Siehe `sync.target`."
 
-msgid "Nexcloud WebDAV URL"
-msgstr "Nexcloud WebDAV URL"
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
 
-msgid "Nexcloud username"
-msgstr "Nexcloud Benutzername"
+msgid "Nextcloud username"
+msgstr "Nextcloud Benutzername"
 
-msgid "Nexcloud password"
-msgstr "Nexcloud Passwort"
+msgid "Nextcloud password"
+msgstr "Nextcloud Passwort"
 
 #, fuzzy
 msgid "WebDAV URL"
-msgstr "Nexcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
 
 #, fuzzy
 msgid "WebDAV username"
-msgstr "Nexcloud Benutzername"
+msgstr "Nextcloud Benutzername"
 
 #, fuzzy
 msgid "WebDAV password"
@@ -1213,6 +1195,42 @@ msgstr "Setze ein Passwort"
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Ungültiger Optionswert: \"%s\". Mögliche Werte sind: %s."
+
+#, fuzzy
+msgid "Joplin Export File"
+msgstr "Evernote Export Dateien"
+
+msgid "Markdown"
+msgstr ""
+
+msgid "Joplin Export Directory"
+msgstr ""
+
+#, fuzzy
+msgid "Evernote Export File"
+msgstr "Evernote Export Dateien"
+
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr ""
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+
+msgid "There is no data to export."
+msgstr ""
+
+#, fuzzy
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr ""
+"Bitte wähle aus, wohin der Synchronisations Status exportiert werden soll"
 
 msgid "Items that cannot be synchronised"
 msgstr "Objekte können nicht synchronisiert werden"
@@ -1387,6 +1405,75 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Willkommen"
+
+#~ msgid "Imports an Evernote notebook file (.enex file)."
+#~ msgstr "Importiert eine Evernote Notizbuch-Datei (.enex Datei)."
+
+#~ msgid ""
+#~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+#~ msgstr ""
+#~ "Datei \"%s\" wird in das existierende Notizbuch \"%s\" importiert. "
+#~ "Fortfahren?"
+
+#~ msgid ""
+#~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
+#~ "it. Continue?"
+#~ msgstr ""
+#~ "Neues Notizbuch \"%s\" wird erstellt und die Datei \"%s\" wird hinein "
+#~ "importiert. Fortfahren?"
+
+#~ msgid "Import Evernote notes"
+#~ msgstr "Evernote Notizen importieren"
+
+#~ msgid "Give focus to next pane"
+#~ msgstr "Das nächste Fenster fokussieren"
+
+#~ msgid "Give focus to previous pane"
+#~ msgstr "Das vorherige Fenster fokussieren"
+
+#~ msgid "Enter command line mode"
+#~ msgstr "Zum Terminal-Modus wechseln"
+
+#~ msgid "Exit command line mode"
+#~ msgstr "Den Terminal-Modus verlassen"
+
+#~ msgid "Edit the selected note"
+#~ msgstr "Die ausgewählte Notiz bearbeiten"
+
+#~ msgid "Cancel the current command."
+#~ msgstr "Den momentanen Befehl abbrechen."
+
+#~ msgid "Exit the application."
+#~ msgstr "Das Programm verlassen."
+
+#~ msgid "Delete the currently selected note or notebook."
+#~ msgstr "Die/das momentan ausgewählte Notiz(-buch) löschen."
+
+#~ msgid "Set a to-do as completed / not completed"
+#~ msgstr "Ein To-Do als abgeschlossen / nicht abgeschlossen markieren"
+
+#, fuzzy
+#~ msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+#~ msgstr ""
+#~ "Schal[t]e das Terminal zwischen maximiert/minimiert/versteckt/sichtbar um."
+
+#~ msgid "[t]oggle note [m]etadata."
+#~ msgstr "Notiz-[M]etadata einschal[t]en."
+
+#~ msgid "[M]ake a new [n]ote"
+#~ msgstr "Eine neue [N]otiz [m]achen"
+
+#~ msgid "[M]ake a new [t]odo"
+#~ msgstr "Ein neues [T]o-Do [m]achen"
+
+#~ msgid "[M]ake a new note[b]ook"
+#~ msgstr "Ein neues Notiz[b]uch [m]achen"
+
+#~ msgid "Copy ([Y]ank) the [n]ote to a notebook."
+#~ msgstr "Die Notiz zu einem Notizbuch kopieren."
+
+#~ msgid "Move the note to a notebook."
+#~ msgstr "Die Notiz zu einem Notizbuch verschieben."
 
 #~ msgid ""
 #~ "The target to synchonise to. If synchronising with the file system, set "

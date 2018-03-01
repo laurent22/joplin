@@ -39,12 +39,14 @@ class FileApi {
 		this.syncTargetId_ = null;
 		this.tempDirName_ = null;
 		this.driver_.fileApi_ = this;
+		this.requestRepeatCount_ = null; // For testing purpose only - normally this value should come from the driver
 	}
 
 	// Ideally all requests repeating should be done at the FileApi level to remove duplicate code in the drivers, but
 	// historically some drivers (eg. OneDrive) are already handling request repeating, so this is optional, per driver,
 	// and it defaults to no repeating.
 	requestRepeatCount() {
+		if (this.requestRepeatCount_ !== null) return this.requestRepeatCount_;
 		if (this.driver_.requestRepeatCount) return this.driver_.requestRepeatCount();
 		return 0;
 	}
@@ -302,7 +304,13 @@ async function basicDelta(path, getDirStatFn, options) {
 	newContext.deletedItemsProcessed = true;
 
 	const hasMore = output.length >= outputLimit;
-	if (!hasMore) newContext.statsCache = null;
+
+	if (!hasMore) {
+		// Clear temporary info from context. It's especially important to remove deletedItemsProcessed
+		// so that they are processed again on the next sync.
+		newContext.statsCache = null;
+		delete newContext.deletedItemsProcessed;
+	}
 
 	return {
 		hasMore: hasMore,

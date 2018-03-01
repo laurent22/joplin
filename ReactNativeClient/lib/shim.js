@@ -22,6 +22,14 @@ shim.isMac = () => {
 	return process && process.platform === 'darwin';
 }
 
+shim.platformName = function() {
+	if (shim.isReactNative()) return 'mobile';
+	if (shim.isMac()) return 'darwin'; 
+	if (shim.isWindows()) return 'win32'; 
+	if (shim.isLinux()) return 'linux';
+	throw new Error('Cannot determine platform');
+}
+
 // https://github.com/cheton/is-electron
 shim.isElectron = () => {
 	// Renderer process
@@ -118,6 +126,7 @@ shim.setInterval = function(fn, interval) {
 shim.clearInterval = function(id) {
 	return clearInterval(id);
 }
+shim.stringByteLength = function(string) { throw new Error('Not implemented'); }
 shim.detectAndSetLocale = null;
 shim.attachFileToNote = async (note, filePath) => {}
 

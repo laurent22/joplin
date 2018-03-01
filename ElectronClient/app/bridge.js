@@ -26,7 +26,7 @@ class Bridge {
 		if (!this.window()) return { width: 0, height: 0 };
 		const s = this.window().getContentSize();
 		return { width: s[0], height: s[1] };
-	}
+		}
 
 	windowSize() {
 		if (!this.window()) return { width: 0, height: 0 };
@@ -43,7 +43,7 @@ class Bridge {
 		const {dialog} = require('electron');
 		if (!options) options = {};
 		if (!('defaultPath' in options) && this.lastSelectedPath_) options.defaultPath = this.lastSelectedPath_;
-		const filePath = dialog.showSaveDialog(options);
+		const filePath = dialog.showSaveDialog(this.window(), options);
 		if (filePath) {
 			this.lastSelectedPath_ = filePath;
 		}
@@ -55,27 +55,27 @@ class Bridge {
 		if (!options) options = {};
 		if (!('defaultPath' in options) && this.lastSelectedPath_) options.defaultPath = this.lastSelectedPath_;
 		if (!('createDirectory' in options)) options.createDirectory = true;
-		const filePaths = dialog.showOpenDialog(options);
+		const filePaths = dialog.showOpenDialog(this.window(), options);
 		if (filePaths && filePaths.length) {
 			this.lastSelectedPath_ = dirname(filePaths[0]);
 		}
 		return filePaths;
 	}
 
-	showMessageBox(options) {
+	showMessageBox(window, options) {
 		const {dialog} = require('electron');
-		return dialog.showMessageBox(options);
+		return dialog.showMessageBox(window, options);
 	}
 
 	showErrorMessageBox(message) {
-		return this.showMessageBox({
+		return this.showMessageBox(this.window(), {
 			type: 'error',
 			message: message,
 		});
 	}
 
 	showConfirmMessageBox(message) {
-		const result = this.showMessageBox({
+		const result = this.showMessageBox(this.window(), {
 			type: 'question',
 			message: message,
 			buttons: [_('OK'), _('Cancel')],
@@ -84,7 +84,7 @@ class Bridge {
 	}
 
 	showInfoMessageBox(message) {
-		const result = this.showMessageBox({
+		const result = this.showMessageBox(this.window(), {
 			type: 'info',
 			message: message,
 			buttons: [_('OK')],
@@ -108,26 +108,9 @@ class Bridge {
 		return require('electron').shell.openItem(fullPath)
 	}
 
-	async checkForUpdatesAndNotify(logFilePath) {
-		if (!this.autoUpdater_) {
-			this.autoUpdateLogger_ = new Logger();
-			this.autoUpdateLogger_.addTarget('file', { path: logFilePath });
-			this.autoUpdateLogger_.setLevel(Logger.LEVEL_DEBUG);
-			this.autoUpdateLogger_.info('checkForUpdatesAndNotify: Initializing...');
-			this.autoUpdater_ = require("electron-updater").autoUpdater;
-			this.autoUpdater_.logger = this.autoUpdateLogger_;
-		}
-
-		try {
-			await this.autoUpdater_.checkForUpdatesAndNotify();
-		} catch (error) {
-			this.autoUpdateLogger_.error(error);
-		}
-	}
-
-	checkForUpdates(inBackground, logFilePath) {
+	checkForUpdates(inBackground, window, logFilePath) {
 		const { checkForUpdates } = require('./checkForUpdates.js');
-		checkForUpdates(inBackground, logFilePath);
+		checkForUpdates(inBackground, window, logFilePath);
 	}
 
 }

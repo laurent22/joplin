@@ -71,37 +71,10 @@ process.stdout.on('error', function( err ) {
 
 
 // async function main() {
-// 	const WebDavApi = require('lib/WebDavApi');
-// 	const api = new WebDavApi('http://nextcloud.local/remote.php/dav/files/admin/Joplin', { username: 'admin', password: '1234567' });
-// 	const { FileApiDriverWebDav } = new require('lib/file-api-driver-webdav');
-// 	const driver = new FileApiDriverWebDav(api);
-
-// 	const stat = await driver.stat('');
-// 	console.info(stat);
-
-// 	// const stat = await driver.stat('testing.txt');
-// 	// console.info(stat);
-
-
-// 	// const content = await driver.get('testing.txta');
-// 	// console.info(content);
-
-// 	// const content = await driver.get('testing.txta', { target: 'file', path: '/var/www/joplin/CliClient/testing-file.txt' });
-// 	// console.info(content);
-
-// 	// const content = await driver.mkdir('newdir5');
-// 	// console.info(content);
-
-// 	//await driver.put('myfile4.md', 'this is my content');
-
-// 	// await driver.put('testimg.jpg', null, { source: 'file', path: '/mnt/d/test.jpg' });
-
-// 	// await driver.delete('myfile4.md');
-
-// 	// const deltaResult = await driver.delta('', {
-// 	// 	allItemIdsHandler: () => { return []; }
-// 	// });
-// 	// console.info(deltaResult);
+// 	const InteropService = require('lib/services/InteropService');
+// 	const service = new InteropService();
+// 	console.info(service.moduleByFormat('importer', 'enex'));
+// 	//await service.modules();
 // }
 
 // main().catch((error) => { console.error(error); });

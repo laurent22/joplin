@@ -10,11 +10,12 @@
   "license": "ISC",
   "dependencies": {
     "app-module-path": "^2.2.0",
-    "fs-extra": "^4.0.2",
+    "fs-extra": "^4.0.3",
     "gettext-parser": "^1.3.0",
     "marked": "^0.3.7",
     "mustache": "^2.3.0",
     "node-fetch": "^1.7.3",
+    "string-padding": "^1.0.2",
     "uri-template": "^1.0.1"
   }
 }

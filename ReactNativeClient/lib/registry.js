@@ -44,7 +44,7 @@ reg.syncTarget = (syncTargetId = null) => {
 }
 
 reg.scheduleSync = async (delay = null) => {
-	if (delay === null) delay = 1000 * 30;
+	if (delay === null) delay = 1000 * 10;
 
 	let promiseResolve = null;
 	const promise = new Promise((resolve, reject) => {
@@ -58,10 +58,10 @@ reg.scheduleSync = async (delay = null) => {
 
 	reg.logger().info('Scheduling sync operation...');
 
-	// if (Setting.value('env') === 'dev') {
-	// 	reg.logger().info('Scheduling sync operation DISABLED!!!');
-	// 	return;
-	// }
+	if (Setting.value('env') === 'dev' && delay !== 0) {
+		reg.logger().info('Schedule sync DISABLED!!!');
+		return;
+	}
 
 	const timeoutCallback = async () => {
 		reg.scheduleSyncId_ = null;
@@ -146,6 +146,11 @@ reg.setupRecurrentSync = () => {
 		reg.logger().debug('Recurrent sync is disabled');
 	} else {
 		reg.logger().debug('Setting up recurrent sync with interval ' + Setting.value('sync.interval'));
+
+		if (Setting.value('env') === 'dev') {
+			reg.logger().info('Recurrent sync operation DISABLED!!!');
+			return;
+		}
 
 		reg.recurrentSyncId_ = shim.setInterval(() => {
 			reg.logger().info('Running background sync on timer...');

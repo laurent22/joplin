@@ -29,7 +29,15 @@ class WebDavApi {
 
 	authToken() {
 		if (!this.options_.username() || !this.options_.password()) return null;
-		return base64.encode(this.options_.username() + ':' + this.options_.password());
+		try {
+			// Note: Non-ASCII passwords will throw an error about Latin1 characters - https://github.com/laurent22/joplin/issues/246
+			// Tried various things like the below, but it didn't work on React Native:
+			//return base64.encode(utf8.encode(this.options_.username() + ':' + this.options_.password()));
+			return base64.encode(this.options_.username() + ':' + this.options_.password());
+		} catch (error) {
+			error.message = 'Cannot encode username/password: ' + error.message;
+			throw error;
+		}
 	}
 
 	baseUrl() {
@@ -227,10 +235,16 @@ class WebDavApi {
 
 		if (authToken) headers['Authorization'] = 'Basic ' + authToken;
 
-		// /!\ Doesn't work with UTF-8 strings as it results in truncated content. Content-Length
-		// /!\ should not be needed anyway, but was required by one service. If re-implementing this
-		// /!\ test with various content, including binary blobs.
-		// if (typeof body === 'string') headers['Content-Length'] = body.length;
+		// On iOS, the network lib appends a If-None-Match header to PROPFIND calls, which is kind of correct because
+		// the call is idempotent and thus could be cached. According to RFC-7232 though only GET and HEAD should have
+		// this header for caching purposes. It makes no mention of PROPFIND.
+		// So possibly because of this, Seafile (and maybe other WebDAV implementations) responds with a "412 Precondition Failed"
+		// error when this header is present for PROPFIND call on existing resources. This is also kind of correct because there is a resource
+		// with this eTag and since this is neither a GET nor HEAD call, it is supposed to respond with 412 if the resource is present.
+		// The "solution", an ugly one, is to send a purposely invalid string as eTag, which will bypass the If-None-Match check  - Seafile
+		// finds out that no resource has this ID and simply sends the requested data.
+		// Also add a random value to make sure the eTag is unique for each call.
+		if (['GET', 'HEAD'].indexOf(method) < 0) headers['If-None-Match'] = 'JoplinIgnore-' + Math.floor(Math.random() * 100000);
 
 		const fetchOptions = {};
 		fetchOptions.headers = headers;
@@ -246,8 +260,13 @@ class WebDavApi {
 		// console.info(this.requestToCurl_(url, fetchOptions));
 
 		if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
+			if (fetchOptions.path) {
+				const fileStat = await shim.fsDriver().stat(fetchOptions.path);
+				if (fileStat) fetchOptions.headers['Content-Length'] = fileStat.size + '';
+			}
 			response = await shim.uploadBlob(url, fetchOptions);
 		} else if (options.target == 'string') {
+			if (typeof body === 'string') fetchOptions.headers['Content-Length'] = shim.stringByteLength(body) + '';
 			response = await shim.fetch(url, fetchOptions);
 		} else { // file
 			response = await shim.fetchBlob(url, fetchOptions);
@@ -257,10 +276,12 @@ class WebDavApi {
 
 		// console.info('WebDAV Response', responseText);
 
-		// Gives a shorter response for error messages. Useful for cases where a full HTML page is accidentally loaded instead of
-		// JSON. That way the error message will still show there's a problem but without filling up the log or screen.
-		const shortResponseText = () => {
-			return (responseText + '').substr(0, 1024);
+		// Creates an error object with as much data as possible as it will appear in the log, which will make debugging easier
+		const newError = (message, code = 0) => {
+			// Gives a shorter response for error messages. Useful for cases where a full HTML page is accidentally loaded instead of
+			// JSON. That way the error message will still show there's a problem but without filling up the log or screen.
+			const shortResponseText = (responseText + '').substr(0, 1024);
+			return new JoplinError(method + ' ' + path + ': ' + message + ' (' + code + '): ' + shortResponseText, code);
 		}
 
 		let responseJson_ = null;
@@ -268,32 +289,42 @@ class WebDavApi {
 			if (!responseText) return null;
 			if (responseJson_) return responseJson_;
 			responseJson_ = await this.xmlToJson(responseText);
-			if (!responseJson_) throw new JoplinError('Cannot parse JSON response: ' + shortResponseText(), response.status);
+			if (!responseJson_) throw newError('Cannot parse XML response', response.status);
 			return responseJson_;
 		}
 
 		if (!response.ok) {
 			// When using fetchBlob we only get a string (not xml or json) back
-			if (options.target === 'file') throw new JoplinError(shortResponseText(), response.status);
+			if (options.target === 'file') throw newError('fetchBlob error', response.status);
 
-			const json = await loadResponseJson();
+			let json = null;
+			try {
+				json = await loadResponseJson();
+			} catch (error) {
+				// Just send back the plain text in newErro()
+			}
 
 			if (json && json['d:error']) {
 				const code = json['d:error']['s:exception'] ? json['d:error']['s:exception'].join(' ') : response.status;
-				const message = json['d:error']['s:message'] ? json['d:error']['s:message'].join("\n") : shortResponseText();
-				throw new JoplinError(method + ' ' + path + ': ' + message + ' (' + code + ')', response.status);
+				const message = json['d:error']['s:message'] ? json['d:error']['s:message'].join("\n") : 'Unknown error 1';
+				throw newError(message + ' (Exception ' + code + ')', response.status);
 			}
 
-			throw new JoplinError(method + ' ' + path + ': ' + shortResponseText(), response.status);
+			throw newError('Unknown error 2', response.status);
 		}
 		
 		if (options.responseFormat === 'text') return responseText;
+
+		// The following methods may have a response depending on the server but it's not
+		// standard (some return a plain string, other XML, etc.) and we don't check the
+		// response anyway since we rely on the HTTP status code so return null.
+		if (['MKCOL', 'DELETE', 'PUT', 'MOVE'].indexOf(method) >= 0) return null;
 
 		const output = await loadResponseJson();
 
 		// Check that we didn't get for example an HTML page (as an error) instead of the JSON response
 		// null responses are possible, for example for DELETE calls
-		if (output !== null && typeof output === 'object' && !('d:multistatus' in output)) throw new Error('Not a valid JSON response: ' + shortResponseText());
+		if (output !== null && typeof output === 'object' && !('d:multistatus' in output)) throw newError('Not a valid WebDAV response');
 
 		return output;
 	}

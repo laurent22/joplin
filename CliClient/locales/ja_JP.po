@@ -16,62 +16,11 @@ msgstr ""
 "X-Generator: Poedit 2.0.5\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "Give focus to next pane"
-msgstr "次のペインへ"
-
-msgid "Give focus to previous pane"
-msgstr "前のペインへ"
-
-msgid "Enter command line mode"
-msgstr "コマンドラインモードに入る"
-
-msgid "Exit command line mode"
-msgstr "コマンドラインモードの終了"
-
-msgid "Edit the selected note"
-msgstr "選択したノートを編集"
-
-msgid "Cancel the current command."
-msgstr "現在のコマンドをキャンセル"
-
-msgid "Exit the application."
-msgstr "アプリケーションを終了する"
-
-msgid "Delete the currently selected note or notebook."
-msgstr "選択中のノートまたはノートブックを削除"
-
 msgid "To delete a tag, untag the associated notes."
 msgstr "タグを削除するには、関連するノートからタグを外してください。"
 
 msgid "Please select the note or notebook to be deleted first."
 msgstr "ます削除するノートかノートブックを選択してください。"
-
-msgid "Set a to-do as completed / not completed"
-msgstr "ToDoを完了/未完に設定"
-
-msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-msgstr "コンソールを最大表示/最小表示/非表示/可視で切り替える([t][c])"
-
-msgid "Search"
-msgstr "検索"
-
-msgid "[t]oggle note [m]etadata."
-msgstr "ノートのメタ情報を切り替える [tm]"
-
-msgid "[M]ake a new [n]ote"
-msgstr "新しいノートの作成 [mn]"
-
-msgid "[M]ake a new [t]odo"
-msgstr "新しいToDoの作成 [mt]"
-
-msgid "[M]ake a new note[b]ook"
-msgstr "新しいノートブックの作成 [mb]"
-
-msgid "Copy ([Y]ank) the [n]ote to a notebook."
-msgstr "ノートをノートブックにコピー [yn]"
-
-msgid "Move the note to a notebook."
-msgstr "ノートをノートブックに移動"
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "アプリケーションを終了するには、Ctrl+Dまたは\"exit\"と入力してください"
@@ -233,12 +182,17 @@ msgstr "ノートは保存されました。"
 msgid "Exits the application."
 msgstr "アプリケーションの終了。"
 
+#, fuzzy
 msgid ""
-"Exports Joplin data to the given directory. By default, it will export the "
+"Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
 "Joplinのデータを選択されたディレクトリに出力する。標準では、ノートブック・"
 "ノート・タグ・添付データを含むすべてのデータベースを出力します。"
+
+#, fuzzy, javascript-format
+msgid "Destination format: %s"
+msgstr "日付の形式"
 
 msgid "Exports only the given note."
 msgstr "選択されたノートのみを出力する。"
@@ -251,6 +205,10 @@ msgstr "ノートの位置情報URLを表示する。"
 
 msgid "Displays usage information."
 msgstr "使い方を表示する。"
+
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr ""
 
 msgid "Shortcuts are not available in CLI mode."
 msgstr "CLIモードではショートカットは使用できません。"
@@ -291,30 +249,22 @@ msgstr "コマンドラインモードに入るには、\":\"を入力してく�
 msgid "To exit command line mode, press ESCAPE"
 msgstr "コマンドラインモードを終了するには、ESCキーを押してください。"
 
+#, fuzzy
 msgid ""
-"For the complete list of available keyboard shortcuts, type `help shortcuts`"
+"For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
 "有効なすべてのキーボードショートカットを表示するには、`help shortcuts`と入力"
 "してください。"
 
-msgid "Imports an Evernote notebook file (.enex file)."
-msgstr "Evernoteノートブックファイル(.enex)のインポート"
+msgid "Imports data into Joplin."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Source format: %s"
+msgstr "コマンドが違います：%s"
 
 msgid "Do not ask for confirmation."
 msgstr "確認を行わない。"
-
-#, javascript-format
-msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
-msgstr ""
-"ファイル \"%s\" はノートブック \"%s\"に取り込まれます。よろしいですか？"
-
-#, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into "
-"it. Continue?"
-msgstr ""
-"新しいノートブック\"%s\"が作成され、ファイル\"%s\"が取り込まれます。よろしい"
-"ですか？"
 
 #, javascript-format
 msgid "Found: %d."
@@ -591,8 +541,19 @@ msgid ""
 "background and will be available soon."
 msgstr ""
 
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
+
 msgid "File"
 msgstr "ファイル"
+
+msgid "Directory"
+msgstr ""
+
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
 
 msgid "New note"
 msgstr "新しいノート"
@@ -603,11 +564,16 @@ msgstr "新しいToDo"
 msgid "New notebook"
 msgstr "新しいノートブック"
 
-msgid "Import Evernote notes"
-msgstr "Evernoteのインポート"
+msgid "Import"
+msgstr "インポート"
 
-msgid "Evernote Export Files"
-msgstr "Evernote Exportファイル"
+#, fuzzy
+msgid "Export"
+msgstr "インポート"
+
+#, javascript-format
+msgid "Hide %s"
+msgstr ""
 
 msgid "Quit"
 msgstr "終了"
@@ -626,6 +592,12 @@ msgstr "貼り付け"
 
 msgid "Search in all the notes"
 msgstr "すべてのノートを検索"
+
+msgid "View"
+msgstr ""
+
+msgid "Toggle editor layout"
+msgstr ""
 
 msgid "Tools"
 msgstr "ツール"
@@ -668,9 +640,6 @@ msgstr ""
 
 msgid "Cancel"
 msgstr "キャンセル"
-
-msgid "Error"
-msgstr ""
 
 #, fuzzy, javascript-format
 msgid ""
@@ -801,6 +770,9 @@ msgstr "ノートブックの名前を変更："
 msgid "Set alarm:"
 msgstr "アラームをセット："
 
+msgid "Search"
+msgstr "検索"
+
 msgid "Layout"
 msgstr "レイアウト"
 
@@ -856,6 +828,12 @@ msgstr "タグ"
 msgid "Set alarm"
 msgstr "アラームをセット"
 
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+
 #, fuzzy
 msgid "to-do"
 msgstr "新しいToDo"
@@ -876,9 +854,6 @@ msgstr "クリア"
 
 msgid "OneDrive Login"
 msgstr "OneDriveログイン"
-
-msgid "Import"
-msgstr "インポート"
 
 msgid "Options"
 msgstr "オプション"
@@ -921,7 +896,7 @@ msgstr "不明なフラグ: %s"
 msgid "File system"
 msgstr "ファイルシステム"
 
-msgid "Nextcloud (Beta)"
+msgid "Nextcloud"
 msgstr ""
 
 msgid "OneDrive"
@@ -930,7 +905,7 @@ msgstr ""
 msgid "OneDrive Dev (For testing only)"
 msgstr ""
 
-msgid "WebDAV (Beta)"
+msgid "WebDAV"
 msgstr ""
 
 #, javascript-format
@@ -1072,8 +1047,16 @@ msgstr "明るい"
 msgid "Dark"
 msgstr "暗い"
 
-msgid "Show uncompleted todos on top of the lists"
+#, fuzzy
+msgid "Uncompleted to-dos on top"
 msgstr "未完のToDoをリストの上部に表示"
+
+msgid "Sort notes by"
+msgstr ""
+
+#, fuzzy
+msgid "Reverse sort order"
+msgstr "逆順に並び替える。"
 
 msgid "Save geo-location with notes"
 msgstr "ノートに位置情報を保存"
@@ -1138,13 +1121,13 @@ msgstr ""
 "ファイルシステム同期の有効時に同期を行うパスです。`sync.target`も参考にしてく"
 "ださい。"
 
-msgid "Nexcloud WebDAV URL"
+msgid "Nextcloud WebDAV URL"
 msgstr ""
 
-msgid "Nexcloud username"
+msgid "Nextcloud username"
 msgstr ""
 
-msgid "Nexcloud password"
+msgid "Nextcloud password"
 msgstr ""
 
 msgid "WebDAV URL"
@@ -1159,6 +1142,41 @@ msgstr ""
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "無効な設定値: \"%s\"。有効な値は: %sです。"
+
+#, fuzzy
+msgid "Joplin Export File"
+msgstr "Evernote Exportファイル"
+
+msgid "Markdown"
+msgstr ""
+
+msgid "Joplin Export Directory"
+msgstr ""
+
+#, fuzzy
+msgid "Evernote Export File"
+msgstr "Evernote Exportファイル"
+
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr ""
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+
+msgid "There is no data to export."
+msgstr ""
+
+#, fuzzy
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "同期状況の出力先を選択してください"
 
 msgid "Items that cannot be synchronised"
 msgstr "同期が出来なかったアイテム"
@@ -1328,6 +1346,72 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
+
+#~ msgid "Imports an Evernote notebook file (.enex file)."
+#~ msgstr "Evernoteノートブックファイル(.enex)のインポート"
+
+#~ msgid ""
+#~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+#~ msgstr ""
+#~ "ファイル \"%s\" はノートブック \"%s\"に取り込まれます。よろしいですか？"
+
+#~ msgid ""
+#~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
+#~ "it. Continue?"
+#~ msgstr ""
+#~ "新しいノートブック\"%s\"が作成され、ファイル\"%s\"が取り込まれます。よろし"
+#~ "いですか？"
+
+#~ msgid "Import Evernote notes"
+#~ msgstr "Evernoteのインポート"
+
+#~ msgid "Give focus to next pane"
+#~ msgstr "次のペインへ"
+
+#~ msgid "Give focus to previous pane"
+#~ msgstr "前のペインへ"
+
+#~ msgid "Enter command line mode"
+#~ msgstr "コマンドラインモードに入る"
+
+#~ msgid "Exit command line mode"
+#~ msgstr "コマンドラインモードの終了"
+
+#~ msgid "Edit the selected note"
+#~ msgstr "選択したノートを編集"
+
+#~ msgid "Cancel the current command."
+#~ msgstr "現在のコマンドをキャンセル"
+
+#~ msgid "Exit the application."
+#~ msgstr "アプリケーションを終了する"
+
+#~ msgid "Delete the currently selected note or notebook."
+#~ msgstr "選択中のノートまたはノートブックを削除"
+
+#~ msgid "Set a to-do as completed / not completed"
+#~ msgstr "ToDoを完了/未完に設定"
+
+#~ msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+#~ msgstr "コンソールを最大表示/最小表示/非表示/可視で切り替える([t][c])"
+
+#~ msgid "[t]oggle note [m]etadata."
+#~ msgstr "ノートのメタ情報を切り替える [tm]"
+
+#~ msgid "[M]ake a new [n]ote"
+#~ msgstr "新しいノートの作成 [mn]"
+
+#~ msgid "[M]ake a new [t]odo"
+#~ msgstr "新しいToDoの作成 [mt]"
+
+#~ msgid "[M]ake a new note[b]ook"
+#~ msgstr "新しいノートブックの作成 [mb]"
+
+#~ msgid "Copy ([Y]ank) the [n]ote to a notebook."
+#~ msgstr "ノートをノートブックにコピー [yn]"
+
+#~ msgid "Move the note to a notebook."
+#~ msgstr "ノートをノートブックに移動"
 
 #~ msgid ""
 #~ "The target to synchonise to. If synchronising with the file system, set "

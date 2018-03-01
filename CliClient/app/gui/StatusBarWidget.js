@@ -133,7 +133,8 @@ class StatusBarWidget extends BaseWidget {
 						resolveResult = input ? input.trim() : input;
 						// Add the command to history but only if it's longer than one character.
 						// Below that it's usually an answer like "y"/"n", etc.
-						if (!isSecurePrompt && input && input.length > 1) this.history_.push(input);
+						const isConfigPassword = input.indexOf('config ') >= 0 && input.indexOf('password') >= 0;
+						if (!isSecurePrompt && input && input.length > 1 && !isConfigPassword) this.history_.push(input);
 					}
 				}
 

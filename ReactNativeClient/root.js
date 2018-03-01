@@ -3,6 +3,7 @@ const { AppState, Keyboard, NativeModules, BackHandler } = require('react-native
 const { SafeAreaView } = require('react-navigation');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
+const NavService = require('lib/services/NavService.js');
 const AlarmService = require('lib/services/AlarmService.js');
 const AlarmServiceDriver = require('lib/services/AlarmServiceDriver');
 const Alarm = require('lib/models/Alarm');
@@ -338,6 +339,7 @@ async function initialize(dispatch) {
 	BaseModel.dispatch = dispatch;
 	FoldersScreenUtils.dispatch = dispatch;
 	BaseSyncTarget.dispatch = dispatch;
+	NavService.dispatch = dispatch;
 	BaseModel.db_ = db;
 
 	BaseItem.loadClass('Note', Note);

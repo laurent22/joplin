@@ -10,7 +10,6 @@ const { cliUtils } = require('./cli-utils.js');
 const md5 = require('md5');
 const locker = require('proper-lockfile');
 const fs = require('fs-extra');
-const osTmpdir = require('os-tmpdir');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 
 class Command extends BaseCommand {
@@ -101,7 +100,7 @@ class Command extends BaseCommand {
 		this.releaseLockFn_ = null;
 
 		// Lock is unique per profile/database
-		const lockFilePath = osTmpdir() + '/synclock_' + md5(escape(Setting.value('profileDir'))); // https://github.com/pvorb/node-md5/issues/41
+		const lockFilePath = require('os').tmpdir() + '/synclock_' + md5(escape(Setting.value('profileDir'))); // https://github.com/pvorb/node-md5/issues/41
 		if (!await fs.pathExists(lockFilePath)) await fs.writeFile(lockFilePath, 'synclock');
 
 		try {

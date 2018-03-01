@@ -2,7 +2,7 @@
 
 Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor.
 
-Notes exported from Evernote via .enex files [can be imported](#importing-notes-from-evernote) into Joplin, including the formatted content (which is converted to markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).
+Notes exported from Evernote via .enex files [can be imported](http://joplin.cozic.net/#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
 
 The notes can be [synchronised](#synchronisation) with various targets including the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
 
@@ -35,7 +35,7 @@ To start it, type `demo-joplin`.
 
 # Usage
 
-To start the application type `joplin`. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via [shortcuts](#available-shortcuts).
+To start the application type `joplin`. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via [shortcuts](#shortcuts).
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/ScreenshotTerminalCaptions.png" height="450px">
 
@@ -45,11 +45,11 @@ Joplin user interface is partly based on the text editor Vim and offers two diff
 
 ### Normal mode
 
-Allows moving from one pane to another using the `Tab` and `Shift-Tab` keys, and to select/view notes using the arrow keys. Text area can be scrolled using the arrow keys too. Press `Enter` to edit a note. Various other [shortcuts](#available-shortcuts) are available.
+Allows moving from one pane to another using the `Tab` and `Shift-Tab` keys, and to select/view notes using the arrow keys. Text area can be scrolled using the arrow keys too. Press `Enter` to edit a note. Various other [shortcuts](#shortcuts) are available.
 
 ### Command-line mode
 
-Press `:` to enter command line mode. From there, the Joplin commands such as `mknote` or `search` are available. See the [full list of commands](#available-commands).
+Press `:` to enter command line mode. From there, the Joplin commands such as `mknote` or `search` are available. See the [full list of commands](#commands).
 
 It is possible to refer to a note or notebook by title or ID. However the simplest way is to refer to the currently selected item using one of these shortcuts:
 
@@ -96,7 +96,7 @@ The complete usage information is available from command-line mode, by typing on
 Command | Description
 --------|-------------------
 `help`  | General help information
-`help shortcuts` | Lists the available shortcuts
+`help keymap` | Lists the available shortcuts
 `help [command]` | Displays information about a particular command
 
 If the help is not fully visible, press `Tab` multiple times till the console is in focus and use the arrow keys or page up/down to scroll the text.
@@ -106,7 +106,7 @@ If the help is not fully visible, press `Tab` multiple times till the console is
 To import Evernote data, follow these steps:
 
 * First, export your Evernote notebooks to ENEX files as described [here](https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks).
-* In Joplin, in [command-line mode](#command-line-mode), type `import-enex /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
+* In Joplin, in [command-line mode](#command-line-mode), type `import /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
 * Then repeat the process for each notebook that needs to be imported.
 
 # Synchronisation
@@ -124,7 +124,7 @@ You will need to set the `sync.target` config variable and all the `sync.5.path`
 	:config sync.5.username YOUR_USERNAME
 	:config sync.5.password YOUR_PASSWORD
 
-If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.
+If synchronisation does not work, please consult the logs in the app profile directory (`~/.config/joplin`)- it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.
 
 ## WebDAV synchronisation
 
@@ -175,35 +175,94 @@ Give a new title to the note:
 
 	$ joplin set fe889 title "New title"
 
-# Available shortcuts
+# Shortcuts
 
-There are two types of shortcuts: those that manipulate the user interface directly, such as `TAB` to move from one pane to another, and those that are simply shortcuts to actual commands. In a way similar to Vim, these shortcuts are generally a verb followed by an object. For example, typing `mn` ([m]ake [n]ote), is used to create a new note: it will switch the interface to command line mode and pre-fill it with `mknote ""` from where the title of the note can be entered. See below for the full list of shortcuts:
+There are two types of shortcuts: those that manipulate the user interface directly, such as `TAB` to move from one pane to another, and those that are simply shortcuts to actual commands. In a way similar to Vim, these shortcuts are generally a verb followed by an object. For example, typing `mn` ([m]ake [n]ote), is used to create a new note: it will switch the interface to command line mode and pre-fill it with `mknote ""` from where the title of the note can be entered. See below for the full list of default shortcuts:
 
-	Tab       Give focus to next pane
-	Shift+Tab Give focus to previous pane
-	:         Enter command line mode
-	ESC       Exit command line mode
-	ENTER     Edit the selected note
-	Ctrl+C    Cancel the current command.
-	Ctrl+D    Exit the application.
-	DELETE    Delete the currently selected note or notebook.
-	SPACE     Set a to-do as completed / not completed
-	tc        [t]oggle [c]onsole between maximized/minimized/hidden/visible.
-	/         Search
-	tm        [t]oggle note [m]etadata.
-	mn        [M]ake a new [n]ote
-	mt        [M]ake a new [t]odo
-	mb        [M]ake a new note[b]ook
-	yn        Copy ([Y]ank) the [n]ote to a notebook.
-	dn        Move the note to a notebook.
+	:                 enter_command_line_mode
+	TAB               focus_next
+	SHIFT_TAB         focus_previous
+	UP                move_up
+	DOWN              move_down
+	PAGE_UP           page_up
+	PAGE_DOWN         page_down
+	ENTER             activate
+	DELETE, BACKSPACE delete
+	(SPACE)           todo toggle $n
+	tc                toggle_console
+	tm                toggle_metadata
+	/                 search ""
+	mn                mknote ""
+	mt                mktodo ""
+	mb                mkbook ""
+	yn                cp $n ""
+	dn                mv $n ""
 
-# Available commands
+Shortcut can be configured by adding a keymap file to the profile directory in `~/.config/joplin/keymap.json`. The content of this file is a JSON array with each entry defining a command and the keys associated with it.
+
+As an example, this is the default keymap, but read below for a detailed explanation of each property.
+
+```json
+[
+	{ "keys": [":"], "type": "function", "command": "enter_command_line_mode" },
+	{ "keys": ["TAB"], "type": "function", "command": "focus_next" },
+	{ "keys": ["SHIFT_TAB"], "type": "function", "command": "focus_previous" },
+	{ "keys": ["UP"], "type": "function", "command": "move_up" },
+	{ "keys": ["DOWN"], "type": "function", "command": "move_down" },
+	{ "keys": ["PAGE_UP"], "type": "function", "command": "page_up" },
+	{ "keys": ["PAGE_DOWN"], "type": "function", "command": "page_down" },
+	{ "keys": ["ENTER"], "type": "function", "command": "activate" },
+	{ "keys": ["DELETE", "BACKSPACE"], "type": "function", "command": "delete" },
+	{ "keys": [" "], "command": "todo toggle $n" },
+	{ "keys": ["tc"], "type": "function", "command": "toggle_console" },
+	{ "keys": ["tm"], "type": "function", "command": "toggle_metadata" },
+	{ "keys": ["/"], "type": "prompt", "command": "search \"\"", "cursorPosition": -2 },
+	{ "keys": ["mn"], "type": "prompt", "command": "mknote \"\"", "cursorPosition": -2 },
+	{ "keys": ["mt"], "type": "prompt", "command": "mktodo \"\"", "cursorPosition": -2 },
+	{ "keys": ["mb"], "type": "prompt", "command": "mkbook \"\"", "cursorPosition": -2 },
+	{ "keys": ["yn"], "type": "prompt", "command": "cp $n \"\"", "cursorPosition": -2 },
+	{ "keys": ["dn"], "type": "prompt", "command": "mv $n \"\"", "cursorPosition": -2 }
+]
+```
+
+Each entry can have the following properties:
+
+Name | Description
+-----|------------
+`keys` | The array of keys that will trigger the action. Special keys such as page up, down arrow, etc. needs to be specified UPPERCASE. See the [list of available special keys](https://github.com/cronvel/terminal-kit/blob/3114206a9556f518cc63abbcb3d188fe1995100d/lib/termconfig/xterm.js#L531). For example, `['DELETE', 'BACKSPACE']` means the command will run if the user pressed either the delete or backspace key. Key combinations can also be provided - in that case specify them lowercase. For example "tc" means that the command will be executed when the user pressed "t" then "c". Special keys can also be used in this fashion - simply write them one after the other. For instance, `CTRL_WCTRL_W` means the action would be executed if the user pressed "ctrl-w ctrl-w".
+`type` | The command type. It can have the value "exec", "function" or "prompt". **exec**: Simply execute the provided [command](#commands). For example `edit $n` would edit the selected note. **function**: Run a special commands (see below for the list of functions). **prompt**: A bit similar to "exec", except that the command is not going to be executed immediately - this allows the user to provide additional data. For example `mknote ""` would fill the command line with this command and allow the user to set the title. A prompt command can also take a `cursorPosition` parameter (see below)
+`command` | The command that needs to be executed
+`cusorPosition` | An integer. For prompt commands, tells where the cursor (caret) should start at. This is convenient for example to position the cursor between quotes. Use a negative value to set a position starting from the end. A value of "0" means positioning the caret at the first character. A value of "-1" means positioning it at the end.
+
+This is the list of special functions:
+
+Name | Description
+-----|------------
+enter_command_line_mode | Enter command line mode
+focus_next | Focus next pane (or widget)
+focus_previous | Focus previous pane (or widget)
+move_up | Move up (in a list for example)
+move_down | Move down (in a list for example)
+page_up | Page up
+page_down | Page down
+activate | Activates the selected item. If the item is a note for example it will be open in the editor
+delete | Deletes the selected item
+toggle_console | Toggle the console
+toggle_metadata | Toggle note metadata
+
+# Commands
 
 The following commands are available in [command-line mode](#command-line-mode):
 
 	attach <note> <file>
 
 	    Attaches the given file to the note.
+
+	cat <note>
+
+	    Displays the given note.
+
+	    -v, --verbose  Displays the complete information about note.
 
 	config [name] [value]
 
@@ -215,58 +274,91 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	Possible keys/values:
 
-	    sync.2.path            File system synchronisation target directory.
-	                           The path to synchronise with when file system 
-	                           synchronisation is enabled. See `sync.target`.
-	                           Type: string.
-	                           
-	    editor                 Text editor.
-	                           The editor that will be used to open a note. If 
-	                           none is provided it will try to auto-detect the 
-	                           default editor.
-	                           Type: string.
-	                           
-	    locale                 Language.
-	                           Type: Enum.
-	                           Possible values: en_GB (English), es_CR (Español), 
-	                           fr_FR (Français).
-	                           Default: "en_GB"
-	                           
-	    dateFormat             Date format.
-	                           Type: Enum.
-	                           Possible values: DD/MM/YYYY (30/01/2017), DD/MM/YY 
-	                           (30/01/17), MM/DD/YYYY (01/30/2017), MM/DD/YY 
-	                           (01/30/17), YYYY-MM-DD (2017-01-30).
-	                           Default: "DD/MM/YYYY"
-	                           
-	    timeFormat             Time format.
-	                           Type: Enum.
-	                           Possible values: HH:mm (20:30), h:mm A (8:30 PM).
-	                           Default: "HH:mm"
-	                           
-	    uncompletedTodosOnTop  Show uncompleted to-dos on top of the lists.
-	                           Type: bool.
-	                           Default: true
-	                           
-	    trackLocation          Save geo-location with notes.
-	                           Type: bool.
-	                           Default: true
-	                           
-	    sync.interval          Synchronisation interval.
-	                           Type: Enum.
-	                           Possible values: 0 (Disabled), 300 (5 minutes), 600 
-	                           (10 minutes), 1800 (30 minutes), 3600 (1 hour), 
-	                           43200 (12 hours), 86400 (24 hours).
-	                           Default: 300
-	                           
-	    sync.target            Synchronisation target.
-	                           The target to synchonise to. If synchronising with 
-	                           the file system, set `sync.2.path` to specify the 
-	                           target directory.
-	                           Type: Enum.
-	                           Possible values: 2 (File system), 3 (OneDrive), 4 
-	                           (OneDrive Dev (For testing only)).
-	                           Default: 3
+	    editor                   Text editor.
+	                             The editor that will be used to open a note. If 
+	                             none is provided it will try to auto-detect the 
+	                             default editor.
+	                             Type: string.
+	                             
+	    locale                   Language.
+	                             Type: Enum.
+	                             Possible values: eu (Basque), hr_HR (Croatian), 
+	                             de_DE (Deutsch), en_GB (English), es_ES 
+	                             (Español), fr_FR (Français), it_IT (Italiano), 
+	                             nl_BE (Nederlands), pt_BR (Português (Brasil)), 
+	                             ru_RU (Русский), zh_CN (中文 (简体)), ja_JP (日本語).
+	                             Default: "en_GB"
+	                             
+	    dateFormat               Date format.
+	                             Type: Enum.
+	                             Possible values: DD/MM/YYYY (30/01/2017), 
+	                             DD/MM/YY (30/01/17), MM/DD/YYYY (01/30/2017), 
+	                             MM/DD/YY (01/30/17), YYYY-MM-DD (2017-01-30).
+	                             Default: "DD/MM/YYYY"
+	                             
+	    timeFormat               Time format.
+	                             Type: Enum.
+	                             Possible values: HH:mm (20:30), h:mm A (8:30 PM).
+	                             Default: "HH:mm"
+	                             
+	    uncompletedTodosOnTop    Uncompleted to-dos on top.
+	                             Type: bool.
+	                             Default: true
+	                             
+	    notes.sortOrder.field    Sort notes by.
+	                             Type: Enum.
+	                             Possible values: user_updated_time (Updated 
+	                             date), user_created_time (Created date), title 
+	                             (Title).
+	                             Default: "user_updated_time"
+	                             
+	    notes.sortOrder.reverse  Reverse sort order.
+	                             Type: bool.
+	                             Default: true
+	                             
+	    trackLocation            Save geo-location with notes.
+	                             Type: bool.
+	                             Default: true
+	                             
+	    sync.interval            Synchronisation interval.
+	                             Type: Enum.
+	                             Possible values: 0 (Disabled), 300 (5 minutes), 
+	                             600 (10 minutes), 1800 (30 minutes), 3600 (1 
+	                             hour), 43200 (12 hours), 86400 (24 hours).
+	                             Default: 300
+	                             
+	    sync.target              Synchronisation target.
+	                             The target to synchonise to. Each sync target may 
+	                             have additional parameters which are named as 
+	                             `sync.NUM.NAME` (all documented below).
+	                             Type: Enum.
+	                             Possible values: 2 (File system), 3 (OneDrive), 4 
+	                             (OneDrive Dev (For testing only)), 5 (Nextcloud), 
+	                             6 (WebDAV).
+	                             Default: 3
+	                             
+	    sync.2.path              Directory to synchronise with (absolute path).
+	                             The path to synchronise with when file system 
+	                             synchronisation is enabled. See `sync.target`.
+	                             Type: string.
+	                             
+	    sync.5.path              Nextcloud WebDAV URL.
+	                             Type: string.
+	                             
+	    sync.5.username          Nextcloud username.
+	                             Type: string.
+	                             
+	    sync.5.password          Nextcloud password.
+	                             Type: string.
+	                             
+	    sync.6.path              WebDAV URL.
+	                             Type: string.
+	                             
+	    sync.6.username          WebDAV username.
+	                             Type: string.
+	                             
+	    sync.6.password          WebDAV password.
+	                             Type: string.
 
 	cp <note> [notebook]
 
@@ -277,19 +369,28 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	    Marks a to-do as done.
 
+	e2ee <command> [path]
+
+	    Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, 
+	    `status` and `target-status`.
+
+	    -p, --password <password>  Use this password as master password (For 
+	                               security reasons, it is not recommended to use 
+	                               this option).
+	    -v, --verbose              More verbose output for the `target-status` 
+	                               command
+
 	edit <note>
 
 	    Edit note.
 
-	exit
+	export <path>
 
-	    Exits the application.
-
-	export <directory>
-
-	    Exports Joplin data to the given directory. By default, it will export the 
+	    Exports Joplin data to the given path. By default, it will export the 
 	    complete database including notebooks, notes, tags and resources.
 
+	    --format <format>      Destination format: jex (Joplin Export File), raw 
+	                           (Joplin Export Directory)
 	    --note <note>          Exports only the given note.
 	    --notebook <notebook>  Exports only the given notebook.
 
@@ -301,11 +402,12 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	    Displays usage information.
 
-	import-enex <file> [notebook]
+	import <path> [notebook]
 
-	    Imports an Evernote notebook file (.enex file).
+	    Imports data into Joplin.
 
-	    -f, --force  Do not ask for confirmation.
+	    --format <format>  Source format: auto, jex, md, raw, enex
+	    -f, --force        Do not ask for confirmation.
 
 	mkbook <new-notebook>
 
@@ -339,9 +441,18 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	    -f, --force  Deletes the notes without asking for confirmation.
 
-	search <pattern> [notebook]
+	set <note> <name> [value]
 
-	    Searches for the given <pattern> in all the notes.
+	    Sets the property <name> of the given <note> to the given [value]. 
+	    Possible properties are:
+
+	    parent_id (text), title (text), body (text), created_time (int), 
+	    updated_time (int), is_conflict (int), latitude (numeric), longitude 
+	    (numeric), altitude (numeric), author (text), source_url (text), is_todo 
+	    (int), todo_due (int), todo_completed (int), source (text), 
+	    source_application (text), application_data (text), order (int), 
+	    user_created_time (int), user_updated_time (int), encryption_cipher_text 
+	    (text), encryption_applied (int)
 
 	status
 
@@ -353,7 +464,6 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	    --target <target>  Sync to provided target (defaults to sync.target config 
 	                       value)
-	    --random-failures  For debugging purposes. Do not use.
 
 	tag <tag-command> [tag] [note]
 
@@ -371,6 +481,11 @@ The following commands are available in [command-line mode](#command-line-mode):
 	undone <note>
 
 	    Marks a to-do as non-completed.
+
+	use <notebook>
+
+	    Switches to [notebook] - all further operations will happen within this 
+	    notebook.
 
 	version
 

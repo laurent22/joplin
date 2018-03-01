@@ -15,62 +15,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Give focus to next pane"
-msgstr "聚焦于下个面板"
-
-msgid "Give focus to previous pane"
-msgstr "聚焦于上个面板"
-
-msgid "Enter command line mode"
-msgstr "进入命令行模式"
-
-msgid "Exit command line mode"
-msgstr "退出命令行模式"
-
-msgid "Edit the selected note"
-msgstr "编辑所选笔记"
-
-msgid "Cancel the current command."
-msgstr "取消当前命令。"
-
-msgid "Exit the application."
-msgstr "退出程序。"
-
-msgid "Delete the currently selected note or notebook."
-msgstr "删除当前所选笔记或笔记本。"
-
 msgid "To delete a tag, untag the associated notes."
 msgstr "移除相关笔记的标签后才可删除此标签。"
 
 msgid "Please select the note or notebook to be deleted first."
 msgstr "请选择最先删除的笔记或笔记本。"
-
-msgid "Set a to-do as completed / not completed"
-msgstr "设置待办事项为已完成或未完成"
-
-msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-msgstr "在最大化/最小化/隐藏/显示间切换[t]控制台[c]。"
-
-msgid "Search"
-msgstr "搜索"
-
-msgid "[t]oggle note [m]etadata."
-msgstr "切换[t]笔记元数据[m]。"
-
-msgid "[M]ake a new [n]ote"
-msgstr "创建[M]新笔记[n]"
-
-msgid "[M]ake a new [t]odo"
-msgstr "创建[M]新待办事项[t]"
-
-msgid "[M]ake a new note[b]ook"
-msgstr "创建[M]新笔记本[b]"
-
-msgid "Copy ([Y]ank) the [n]ote to a notebook."
-msgstr "复制[Y]笔记[n]至笔记本。"
-
-msgid "Move the note to a notebook."
-msgstr "移动笔记至笔记本。"
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "按Ctrl+D或输入\"exit\"退出程序"
@@ -228,12 +177,17 @@ msgstr "笔记已被保存。"
 msgid "Exits the application."
 msgstr "退出程序。"
 
+#, fuzzy
 msgid ""
-"Exports Joplin data to the given directory. By default, it will export the "
+"Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
 "导出Joplin数据至给定文件目录。默认为导出所有的数据库，包含笔记本、笔记、标签"
 "及资源。"
+
+#, fuzzy, javascript-format
+msgid "Destination format: %s"
+msgstr "日期格式"
 
 msgid "Exports only the given note."
 msgstr "仅导出给定笔记。"
@@ -246,6 +200,10 @@ msgstr "显示此笔记的地理定位URL地址。"
 
 msgid "Displays usage information."
 msgstr "显示使用信息。"
+
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr ""
 
 msgid "Shortcuts are not available in CLI mode."
 msgstr "快捷键在CLI模式下不可用。"
@@ -284,25 +242,20 @@ msgstr "按\":\"键进入命令行模式"
 msgid "To exit command line mode, press ESCAPE"
 msgstr "按ESC键退出命令行模式"
 
+#, fuzzy
 msgid ""
-"For the complete list of available keyboard shortcuts, type `help shortcuts`"
+"For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr "输入`help shortcuts`显示全部可用的快捷键列表。"
 
-msgid "Imports an Evernote notebook file (.enex file)."
-msgstr "导入Evernote笔记本文件（.enex文件）。"
+msgid "Imports data into Joplin."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Source format: %s"
+msgstr "无以下命令：%s"
 
 msgid "Do not ask for confirmation."
 msgstr "不再要求确认。"
-
-#, javascript-format
-msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
-msgstr "文件\"%s\"将会被导入至现有笔记本\"%s\"。是否继续？"
-
-#, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into "
-"it. Continue?"
-msgstr "将创建新笔记本\"%s\"并将文件\"%s\"导入至其中。是否继续？"
 
 #, javascript-format
 msgid "Found: %d."
@@ -558,8 +511,19 @@ msgid ""
 "background and will be available soon."
 msgstr ""
 
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
+
 msgid "File"
 msgstr "文件"
+
+msgid "Directory"
+msgstr ""
+
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
 
 msgid "New note"
 msgstr "新笔记"
@@ -570,11 +534,16 @@ msgstr "新待办事项"
 msgid "New notebook"
 msgstr "新笔记本"
 
-msgid "Import Evernote notes"
-msgstr "导入Evernote笔记"
+msgid "Import"
+msgstr "导入"
 
-msgid "Evernote Export Files"
-msgstr "Evernote导出文件"
+#, fuzzy
+msgid "Export"
+msgstr "导入"
+
+#, javascript-format
+msgid "Hide %s"
+msgstr ""
 
 msgid "Quit"
 msgstr "退出"
@@ -593,6 +562,12 @@ msgstr "粘贴"
 
 msgid "Search in all the notes"
 msgstr "在所有笔记内搜索"
+
+msgid "View"
+msgstr ""
+
+msgid "Toggle editor layout"
+msgstr ""
 
 msgid "Tools"
 msgstr "工具"
@@ -635,9 +610,6 @@ msgstr "确认"
 
 msgid "Cancel"
 msgstr "取消"
-
-msgid "Error"
-msgstr ""
 
 #, fuzzy, javascript-format
 msgid ""
@@ -765,6 +737,9 @@ msgstr "重命名笔记本："
 msgid "Set alarm:"
 msgstr "设置提醒："
 
+msgid "Search"
+msgstr "搜索"
+
 msgid "Layout"
 msgstr "布局"
 
@@ -821,6 +796,12 @@ msgstr "标签"
 msgid "Set alarm"
 msgstr "设置提醒"
 
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+
 #, fuzzy
 msgid "to-do"
 msgstr "新待办事项"
@@ -841,9 +822,6 @@ msgstr "清除"
 
 msgid "OneDrive Login"
 msgstr "登陆OneDrive"
-
-msgid "Import"
-msgstr "导入"
 
 msgid "Options"
 msgstr "选项"
@@ -887,7 +865,7 @@ msgstr "未知标记：%s"
 msgid "File system"
 msgstr "文件系统"
 
-msgid "Nextcloud (Beta)"
+msgid "Nextcloud"
 msgstr ""
 
 msgid "OneDrive"
@@ -896,7 +874,7 @@ msgstr "OneDrive"
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive开发员（仅测试用）"
 
-msgid "WebDAV (Beta)"
+msgid "WebDAV"
 msgstr ""
 
 #, javascript-format
@@ -1031,8 +1009,16 @@ msgstr "浅色"
 msgid "Dark"
 msgstr "深色"
 
-msgid "Show uncompleted todos on top of the lists"
+#, fuzzy
+msgid "Uncompleted to-dos on top"
 msgstr "在列表上方显示未完成的待办事项"
+
+msgid "Sort notes by"
+msgstr ""
+
+#, fuzzy
+msgid "Reverse sort order"
+msgstr "反转排序顺序。"
 
 msgid "Save geo-location with notes"
 msgstr "保存笔记时同时保存地理定位信息"
@@ -1095,13 +1081,13 @@ msgid ""
 "See `sync.target`."
 msgstr "当文件系统同步开启时的同步路径。参考`sync.target`。"
 
-msgid "Nexcloud WebDAV URL"
+msgid "Nextcloud WebDAV URL"
 msgstr ""
 
-msgid "Nexcloud username"
+msgid "Nextcloud username"
 msgstr ""
 
-msgid "Nexcloud password"
+msgid "Nextcloud password"
 msgstr ""
 
 msgid "WebDAV URL"
@@ -1116,6 +1102,41 @@ msgstr ""
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "无效的选项值：\"%s\"。可用值为：%s。"
+
+#, fuzzy
+msgid "Joplin Export File"
+msgstr "Evernote导出文件"
+
+msgid "Markdown"
+msgstr ""
+
+msgid "Joplin Export Directory"
+msgstr ""
+
+#, fuzzy
+msgid "Evernote Export File"
+msgstr "Evernote导出文件"
+
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr ""
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+
+msgid "There is no data to export."
+msgstr ""
+
+#, fuzzy
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "请选择最先删除的笔记或笔记本。"
 
 msgid "Items that cannot be synchronised"
 msgstr "项目无法被同步。"
@@ -1281,6 +1302,69 @@ msgstr "您当前没有任何笔记本。点击(+)按钮创建新笔记本。"
 
 msgid "Welcome"
 msgstr "欢迎"
+
+#~ msgid "Imports an Evernote notebook file (.enex file)."
+#~ msgstr "导入Evernote笔记本文件（.enex文件）。"
+
+#~ msgid ""
+#~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+#~ msgstr "文件\"%s\"将会被导入至现有笔记本\"%s\"。是否继续？"
+
+#~ msgid ""
+#~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
+#~ "it. Continue?"
+#~ msgstr "将创建新笔记本\"%s\"并将文件\"%s\"导入至其中。是否继续？"
+
+#~ msgid "Import Evernote notes"
+#~ msgstr "导入Evernote笔记"
+
+#~ msgid "Give focus to next pane"
+#~ msgstr "聚焦于下个面板"
+
+#~ msgid "Give focus to previous pane"
+#~ msgstr "聚焦于上个面板"
+
+#~ msgid "Enter command line mode"
+#~ msgstr "进入命令行模式"
+
+#~ msgid "Exit command line mode"
+#~ msgstr "退出命令行模式"
+
+#~ msgid "Edit the selected note"
+#~ msgstr "编辑所选笔记"
+
+#~ msgid "Cancel the current command."
+#~ msgstr "取消当前命令。"
+
+#~ msgid "Exit the application."
+#~ msgstr "退出程序。"
+
+#~ msgid "Delete the currently selected note or notebook."
+#~ msgstr "删除当前所选笔记或笔记本。"
+
+#~ msgid "Set a to-do as completed / not completed"
+#~ msgstr "设置待办事项为已完成或未完成"
+
+#~ msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+#~ msgstr "在最大化/最小化/隐藏/显示间切换[t]控制台[c]。"
+
+#~ msgid "[t]oggle note [m]etadata."
+#~ msgstr "切换[t]笔记元数据[m]。"
+
+#~ msgid "[M]ake a new [n]ote"
+#~ msgstr "创建[M]新笔记[n]"
+
+#~ msgid "[M]ake a new [t]odo"
+#~ msgstr "创建[M]新待办事项[t]"
+
+#~ msgid "[M]ake a new note[b]ook"
+#~ msgstr "创建[M]新笔记本[b]"
+
+#~ msgid "Copy ([Y]ank) the [n]ote to a notebook."
+#~ msgstr "复制[Y]笔记[n]至笔记本。"
+
+#~ msgid "Move the note to a notebook."
+#~ msgstr "移动笔记至笔记本。"
 
 #~ msgid ""
 #~ "The target to synchonise to. If synchronising with the file system, set "

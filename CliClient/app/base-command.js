@@ -32,10 +32,6 @@ class BaseCommand {
 		return this.compatibleUis().indexOf(ui) >= 0;
 	}
 
-	aliases() {
-		return [];
-	}
-
 	options() {
 		return [];
 	}

@@ -102,6 +102,10 @@ class Tag extends BaseItem {
 		return this.modelSelectAll('SELECT * FROM tags WHERE id IN ("' + tagIds.join('","') + '")');
 	}
 
+	static async loadByTitle(title) {
+		return this.loadByField('title', title, { caseInsensitive: true });
+	}
+
 	static async setNoteTagsByTitles(noteId, tagTitles) {
 		const previousTags = await this.tagsByNoteId(noteId);
 		const addedTitles = [];
@@ -109,14 +113,14 @@ class Tag extends BaseItem {
 		for (let i = 0; i < tagTitles.length; i++) {
 			const title = tagTitles[i].trim().toLowerCase();
 			if (!title) continue;
-			let tag = await this.loadByField('title', title, { caseInsensitive: true });
+			let tag = await this.loadByTitle(title);
 			if (!tag) tag = await Tag.save({ title: title }, { userSideValidation: true });
 			await this.addNote(tag.id, noteId);
 			addedTitles.push(title);
 		}
 
 		for (let i = 0; i < previousTags.length; i++) {
-			if (addedTitles.indexOf(previousTags[i].title) < 0) {
+			if (addedTitles.indexOf(previousTags[i].title.toLowerCase()) < 0) {
 				await this.removeNote(previousTags[i].id, noteId);
 			}
 		}

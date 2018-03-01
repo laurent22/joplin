@@ -20,6 +20,7 @@ const packageInfo = require('./packageInfo.js');
 const AlarmService = require('lib/services/AlarmService.js');
 const AlarmServiceDriverNode = require('lib/services/AlarmServiceDriverNode');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
+const InteropService = require('lib/services/InteropService');
 
 const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
@@ -175,6 +176,128 @@ class Application extends BaseApplication {
 	updateMenu(screen) {
 		if (this.lastMenuScreen_ === screen) return;
 
+		const sortNoteItems = [];
+		const sortNoteOptions = Setting.enumOptions('notes.sortOrder.field');
+		for (let field in sortNoteOptions) {
+			if (!sortNoteOptions.hasOwnProperty(field)) continue;
+			sortNoteItems.push({
+				label: sortNoteOptions[field],
+				screens: ['Main'],
+				type: 'checkbox',
+				checked: Setting.value('notes.sortOrder.field') === field,
+				click: () => {
+					Setting.setValue('notes.sortOrder.field', field);
+					this.refreshMenu();
+				}
+			});		
+		}
+
+		const importItems = [];
+		const exportItems = [];
+		const ioService = new InteropService();
+		const ioModules = ioService.modules();
+		for (let i = 0; i < ioModules.length; i++) {
+			const module = ioModules[i];
+			if (module.type === 'exporter') {
+				exportItems.push({
+					label: module.format + ' - ' + module.description,
+					screens: ['Main'],
+					click: async () => {
+						let path = null;
+
+						if (module.target === 'file') {
+							path = bridge().showSaveDialog({
+								filters: [{ name: module.description, extensions: [module.fileExtension]}]
+							});
+						} else {
+							path = bridge().showOpenDialog({
+								properties: ['openDirectory', 'createDirectory'],
+							});
+						}
+
+						if (!path || (Array.isArray(path) && !path.length)) return;
+
+						if (Array.isArray(path)) path = path[0];
+
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'showModalMessage',
+							message: _('Exporting to "%s" as "%s" format. Please wait...', path, module.format),
+						});
+
+						const exportOptions = {};
+						exportOptions.path = path;
+						exportOptions.format = module.format;
+
+						const service = new InteropService();
+						const result = await service.export(exportOptions);
+
+						console.info('Export result: ', result);
+
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'hideModalMessage',
+						});
+					}
+				});
+			} else {
+				for (let j = 0; j < module.sources.length; j++) {
+					const moduleSource = module.sources[j];
+					let label = [module.format + ' - ' + module.description];
+					if (module.sources.length > 1) {
+						label.push('(' + (moduleSource === 'file' ? _('File') : _('Directory')) + ')');
+					}
+					importItems.push({
+						label: label.join(' '),
+						screens: ['Main'],
+						click: async () => {
+							let path = null;
+
+							const selectedFolderId = this.store().getState().selectedFolderId;
+
+							if (moduleSource === 'file') {
+								path = bridge().showOpenDialog({
+									filters: [{ name: module.description, extensions: [module.fileExtension]}]
+								});
+							} else {
+								path = bridge().showOpenDialog({
+									properties: ['openDirectory', 'createDirectory'],
+								});
+							}
+
+							if (!path || (Array.isArray(path) && !path.length)) return;
+
+							if (Array.isArray(path)) path = path[0];
+
+							this.dispatch({
+								type: 'WINDOW_COMMAND',
+								name: 'showModalMessage',
+								message: _('Importing from "%s" as "%s" format. Please wait...', path, module.format),
+							});
+
+							const importOptions = {};
+							importOptions.path = path;
+							importOptions.format = module.format;
+							importOptions.destinationFolderId = !module.isNoteArchive && moduleSource === 'file' ? selectedFolderId : null;
+
+							const service = new InteropService();
+							try {
+								const result = await service.import(importOptions);
+								console.info('Import result: ', result);
+							} catch (error) {
+								bridge().showErrorMessageBox(error.message);
+							}
+
+							this.dispatch({
+								type: 'WINDOW_COMMAND',
+								name: 'hideModalMessage',
+							});
+						}
+					});
+				}
+			}
+		}
+
 		const template = [
 			{
 				label: _('File'),
@@ -200,6 +323,7 @@ class Application extends BaseApplication {
 					}
 				}, {
 					label: _('New notebook'),
+					accelerator: 'CommandOrControl+B',
 					screens: ['Main'],
 					click: () => {
 						this.dispatch({
@@ -209,25 +333,39 @@ class Application extends BaseApplication {
 					}
 				}, {
 					type: 'separator',
-				}, {
-					label: _('Import Evernote notes'),
-					click: () => {
-						const filePaths = bridge().showOpenDialog({
-							properties: ['openFile', 'createDirectory'],
-							filters: [
-								{ name: _('Evernote Export Files'), extensions: ['enex'] },
-							]
-						});
-						if (!filePaths || !filePaths.length) return;
+				// }, {
+				// 	label: _('Import Evernote notes'),
+				// 	click: () => {
+				// 		const filePaths = bridge().showOpenDialog({
+				// 			properties: ['openFile', 'createDirectory'],
+				// 			filters: [
+				// 				{ name: _('Evernote Export Files'), extensions: ['enex'] },
+				// 			]
+				// 		});
+				// 		if (!filePaths || !filePaths.length) return;
 
-						this.dispatch({
-							type: 'NAV_GO',
-							routeName: 'Import',
-							props: {
-								filePath: filePaths[0],
-							},
-						});
-					}
+				// 		this.dispatch({
+				// 			type: 'NAV_GO',
+				// 			routeName: 'Import',
+				// 			props: {
+				// 				filePath: filePaths[0],
+				// 			},
+				// 		});
+				// 	}
+				}, {
+					label: _('Import'),
+					submenu: importItems,
+				}, {
+					label: _('Export'),
+					submenu: exportItems,
+				}, {
+					type: 'separator',
+					platforms: ['darwin'],
+				}, {
+					label: _('Hide %s', 'Joplin'),
+					platforms: ['darwin'],
+					accelerator: 'CommandOrControl+H',
+					click: () => { bridge().electronApp().hide() }
 				}, {
 					type: 'separator',
 				}, {
@@ -239,17 +377,17 @@ class Application extends BaseApplication {
 				label: _('Edit'),
 				submenu: [{
 					label: _('Copy'),
-					screens: ['Main', 'OneDriveLogin'],
+					screens: ['Main', 'OneDriveLogin', 'Config', 'EncryptionConfig'],
 					role: 'copy',
 					accelerator: 'CommandOrControl+C',
 				}, {
 					label: _('Cut'),
-					screens: ['Main', 'OneDriveLogin'],
+					screens: ['Main', 'OneDriveLogin', 'Config', 'EncryptionConfig'],
 					role: 'cut',
 					accelerator: 'CommandOrControl+X',
 				}, {
 					label: _('Paste'),
-					screens: ['Main', 'OneDriveLogin'],
+					screens: ['Main', 'OneDriveLogin', 'Config', 'EncryptionConfig'],
 					role: 'paste',
 					accelerator: 'CommandOrControl+V',
 				}, {
@@ -264,6 +402,42 @@ class Application extends BaseApplication {
 							type: 'WINDOW_COMMAND',
 							name: 'search',
 						});
+					},
+				}],
+			}, {
+				label: _('View'),
+				submenu: [{
+					label: _('Toggle editor layout'),
+					screens: ['Main'],
+					accelerator: 'CommandOrControl+L',
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'toggleVisiblePanes',
+						});
+					}
+				}, {
+					type: 'separator',
+					screens: ['Main'],
+				}, {
+					label: Setting.settingMetadata('notes.sortOrder.field').label(),
+					screens: ['Main'],
+					submenu: sortNoteItems,
+				}, {
+					label: Setting.settingMetadata('notes.sortOrder.reverse').label(),
+					type: 'checkbox',
+					checked: Setting.value('notes.sortOrder.reverse'),
+					screens: ['Main'],
+					click: () => {
+						Setting.setValue('notes.sortOrder.reverse', !Setting.value('notes.sortOrder.reverse'));
+					},
+				}, {
+					label: Setting.settingMetadata('uncompletedTodosOnTop').label(),
+					type: 'checkbox',
+					checked: Setting.value('uncompletedTodosOnTop'),
+					screens: ['Main'],
+					click: () => {
+						Setting.setValue('uncompletedTodosOnTop', !Setting.value('uncompletedTodosOnTop'));
 					},
 				}],
 			}, {
@@ -289,6 +463,7 @@ class Application extends BaseApplication {
 					}
 				},{
 					label: _('General Options'),
+					accelerator: 'CommandOrControl+,',
 					click: () => {
 						this.dispatch({
 							type: 'NAV_GO',
@@ -305,7 +480,7 @@ class Application extends BaseApplication {
 				}, {
 					label: _('Check for updates...'),
 					click: () => {
-						bridge().checkForUpdates(false, this.checkForUpdateLoggerPath());
+						bridge().checkForUpdates(false, bridge().window(), this.checkForUpdateLoggerPath());
 					}
 				}, {
 					label: _('About Joplin'),
@@ -334,10 +509,13 @@ class Application extends BaseApplication {
 		}
 
 		function removeUnwantedItems(template, screen) {
+			const platform = shim.platformName();
+
 			let output = [];
 			for (let i = 0; i < template.length; i++) {
 				const t = Object.assign({}, template[i]);
 				if (t.screens && t.screens.indexOf(screen) < 0) continue;
+				if (t.platforms && t.platforms.indexOf(platform) < 0) continue;
 				if (t.submenu) t.submenu = removeUnwantedItems(t.submenu, screen);
 				if (('submenu' in t) && isEmptyMenu(t.submenu)) continue;
 				output.push(t);
@@ -422,13 +600,14 @@ class Application extends BaseApplication {
 		if (shim.isWindows() || shim.isMac()) {
 			const runAutoUpdateCheck = () => {
 				if (Setting.value('autoUpdateEnabled')) {
-					bridge().checkForUpdates(true, this.checkForUpdateLoggerPath());
+					bridge().checkForUpdates(true, bridge().window(), this.checkForUpdateLoggerPath());
 				}
 			}
 			
+			// Initial check on startup
 			setTimeout(() => { runAutoUpdateCheck() }, 5000);
-			// For those who leave the app always open
-			setInterval(() => { runAutoUpdateCheck() }, 2 * 60 * 60 * 1000);
+			// Then every x hours
+			setInterval(() => { runAutoUpdateCheck() }, 12 * 60 * 60 * 1000);
 		}
 
 		this.updateTray();

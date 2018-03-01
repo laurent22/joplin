@@ -16,62 +16,11 @@ msgstr ""
 "X-Generator: Poedit 2.0.5\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-msgid "Give focus to next pane"
-msgstr "Dar o foco para o próximo painel"
-
-msgid "Give focus to previous pane"
-msgstr "Dar o foco para o painel anterior"
-
-msgid "Enter command line mode"
-msgstr "Entrar no modo de linha de comando"
-
-msgid "Exit command line mode"
-msgstr "Sair do modo de linha de comando"
-
-msgid "Edit the selected note"
-msgstr "Editar nota selecionada"
-
-msgid "Cancel the current command."
-msgstr "Cancelar comando atual."
-
-msgid "Exit the application."
-msgstr "Sair da aplicação."
-
-msgid "Delete the currently selected note or notebook."
-msgstr "Excluir nota selecionada ou notebook."
-
 msgid "To delete a tag, untag the associated notes."
 msgstr "Para eliminar uma tag, remova a tag das notas associadas a ela."
 
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Por favor, primeiro, selecione a nota ou caderno a excluir."
-
-msgid "Set a to-do as completed / not completed"
-msgstr "Marcar uma tarefa como completada / não completada"
-
-msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-msgstr "al[t]ernar [c]onsole entre maximizado / minimizado / oculto / visível."
-
-msgid "Search"
-msgstr "Procurar"
-
-msgid "[t]oggle note [m]etadata."
-msgstr "al[t]ernar [m]etadados de notas."
-
-msgid "[M]ake a new [n]ote"
-msgstr "Criar ([M]ake) uma nova [n]ota"
-
-msgid "[M]ake a new [t]odo"
-msgstr "Criar ([M]ake) nova [t]arefa"
-
-msgid "[M]ake a new note[b]ook"
-msgstr "Criar ([M]ake) novo caderno (note[b]ook)"
-
-msgid "Copy ([Y]ank) the [n]ote to a notebook."
-msgstr "Copiar ([Y]ank) a [n]ota a um caderno."
-
-msgid "Move the note to a notebook."
-msgstr "Mover nota para um caderno."
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Digite Ctrl+D ou \"exit\" para sair da aplicação"
@@ -233,13 +182,18 @@ msgstr "Nota gravada."
 msgid "Exits the application."
 msgstr "Sai da aplicação."
 
+#, fuzzy
 msgid ""
-"Exports Joplin data to the given directory. By default, it will export the "
+"Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
 "Exporta os dados do Joplin para o diretório informado. Por padrão, ele "
 "exportará o banco de dados completo, incluindo cadernos, notas, tags e "
 "recursos."
+
+#, fuzzy, javascript-format
+msgid "Destination format: %s"
+msgstr "Formato de data"
 
 msgid "Exports only the given note."
 msgstr "Exporta apenas a nota fornecida."
@@ -252,6 +206,10 @@ msgstr "Exibe uma URL de geolocalização para a nota."
 
 msgid "Displays usage information."
 msgstr "Exibe informações de uso."
+
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr ""
 
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Os atalhos não estão disponíveis no modo CLI."
@@ -294,30 +252,22 @@ msgstr "Para entrar no modo de linha de comando, pressione \":\""
 msgid "To exit command line mode, press ESCAPE"
 msgstr "Para sair do modo de linha de comando, pressione o ESC"
 
+#, fuzzy
 msgid ""
-"For the complete list of available keyboard shortcuts, type `help shortcuts`"
+"For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
 "Para a lista completa de atalhos de teclado disponíveis, digite `help "
 "shortcuts`"
 
-msgid "Imports an Evernote notebook file (.enex file)."
-msgstr "Importa um arquivo de caderno do Evernote (arquivo .enex)."
+msgid "Imports data into Joplin."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Source format: %s"
+msgstr "Comando inválido: \"%s\""
 
 msgid "Do not ask for confirmation."
 msgstr "Não pedir confirmação."
-
-#, javascript-format
-msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
-msgstr ""
-"O arquivo \"%s\" será importado para o caderno existente \"%s\". Continuar?"
-
-#, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into "
-"it. Continue?"
-msgstr ""
-"O novo caderno \"%s\" será criado e o arquivo \"%s\" será importado para "
-"ele. Continuar?"
 
 #, javascript-format
 msgid "Found: %d."
@@ -586,8 +536,19 @@ msgid ""
 "background and will be available soon."
 msgstr ""
 
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
+
 msgid "File"
 msgstr "Arquivo"
+
+msgid "Directory"
+msgstr ""
+
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
 
 msgid "New note"
 msgstr "Nova nota"
@@ -598,11 +559,16 @@ msgstr "Nova tarefa"
 msgid "New notebook"
 msgstr "Novo caderno"
 
-msgid "Import Evernote notes"
-msgstr "Importar notas do Evernote"
+msgid "Import"
+msgstr "Importar"
 
-msgid "Evernote Export Files"
-msgstr "Arquivos de Exportação do Evernote"
+#, fuzzy
+msgid "Export"
+msgstr "Importar"
+
+#, javascript-format
+msgid "Hide %s"
+msgstr ""
 
 msgid "Quit"
 msgstr "Sair"
@@ -621,6 +587,12 @@ msgstr "Colar"
 
 msgid "Search in all the notes"
 msgstr "Pesquisar em todas as notas"
+
+msgid "View"
+msgstr ""
+
+msgid "Toggle editor layout"
+msgstr ""
 
 msgid "Tools"
 msgstr "Ferramentas"
@@ -664,9 +636,6 @@ msgstr "OK"
 
 msgid "Cancel"
 msgstr "Cancelar"
-
-msgid "Error"
-msgstr ""
 
 #, fuzzy, javascript-format
 msgid ""
@@ -795,6 +764,9 @@ msgstr "Renomear caderno:"
 msgid "Set alarm:"
 msgstr "Definir alarme:"
 
+msgid "Search"
+msgstr "Procurar"
+
 msgid "Layout"
 msgstr "Layout"
 
@@ -852,6 +824,12 @@ msgstr "Tags"
 msgid "Set alarm"
 msgstr "Definir alarme"
 
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+
 #, fuzzy
 msgid "to-do"
 msgstr "Nova tarefa"
@@ -872,9 +850,6 @@ msgstr "Limpar (clear)"
 
 msgid "OneDrive Login"
 msgstr "Login no OneDrive"
-
-msgid "Import"
-msgstr "Importar"
 
 msgid "Options"
 msgstr "Opções"
@@ -919,7 +894,7 @@ msgstr "Flag desconhecido: %s"
 msgid "File system"
 msgstr "Sistema de arquivos"
 
-msgid "Nextcloud (Beta)"
+msgid "Nextcloud"
 msgstr ""
 
 msgid "OneDrive"
@@ -928,7 +903,7 @@ msgstr "OneDrive"
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dev (apenas para testes)"
 
-msgid "WebDAV (Beta)"
+msgid "WebDAV"
 msgstr ""
 
 #, javascript-format
@@ -1069,8 +1044,16 @@ msgstr "Light"
 msgid "Dark"
 msgstr "Dark"
 
-msgid "Show uncompleted todos on top of the lists"
+#, fuzzy
+msgid "Uncompleted to-dos on top"
 msgstr "Mostrar tarefas incompletas no topo das listas"
+
+msgid "Sort notes by"
+msgstr ""
+
+#, fuzzy
+msgid "Reverse sort order"
+msgstr "Inverte a ordem de classificação."
 
 msgid "Save geo-location with notes"
 msgstr "Salvar  geolocalização com notas"
@@ -1135,13 +1118,13 @@ msgstr ""
 "O caminho para sincronizar, quando a sincronização do sistema de arquivos "
 "está habilitada. Veja `sync.target`."
 
-msgid "Nexcloud WebDAV URL"
+msgid "Nextcloud WebDAV URL"
 msgstr ""
 
-msgid "Nexcloud username"
+msgid "Nextcloud username"
 msgstr ""
 
-msgid "Nexcloud password"
+msgid "Nextcloud password"
 msgstr ""
 
 msgid "WebDAV URL"
@@ -1156,6 +1139,41 @@ msgstr ""
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Valor da opção inválida: \"%s\". Os valores possíveis são: %s."
+
+#, fuzzy
+msgid "Joplin Export File"
+msgstr "Arquivos de Exportação do Evernote"
+
+msgid "Markdown"
+msgstr ""
+
+msgid "Joplin Export Directory"
+msgstr ""
+
+#, fuzzy
+msgid "Evernote Export File"
+msgstr "Arquivos de Exportação do Evernote"
+
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr ""
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+
+msgid "There is no data to export."
+msgstr ""
+
+#, fuzzy
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "Por favor, primeiro, selecione a nota ou caderno a excluir."
 
 msgid "Items that cannot be synchronised"
 msgstr ""
@@ -1323,6 +1341,74 @@ msgstr "Você não possui cadernos. Crie um clicando no botão (+)."
 
 msgid "Welcome"
 msgstr "Bem-vindo"
+
+#~ msgid "Imports an Evernote notebook file (.enex file)."
+#~ msgstr "Importa um arquivo de caderno do Evernote (arquivo .enex)."
+
+#~ msgid ""
+#~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+#~ msgstr ""
+#~ "O arquivo \"%s\" será importado para o caderno existente \"%s\". "
+#~ "Continuar?"
+
+#~ msgid ""
+#~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
+#~ "it. Continue?"
+#~ msgstr ""
+#~ "O novo caderno \"%s\" será criado e o arquivo \"%s\" será importado para "
+#~ "ele. Continuar?"
+
+#~ msgid "Import Evernote notes"
+#~ msgstr "Importar notas do Evernote"
+
+#~ msgid "Give focus to next pane"
+#~ msgstr "Dar o foco para o próximo painel"
+
+#~ msgid "Give focus to previous pane"
+#~ msgstr "Dar o foco para o painel anterior"
+
+#~ msgid "Enter command line mode"
+#~ msgstr "Entrar no modo de linha de comando"
+
+#~ msgid "Exit command line mode"
+#~ msgstr "Sair do modo de linha de comando"
+
+#~ msgid "Edit the selected note"
+#~ msgstr "Editar nota selecionada"
+
+#~ msgid "Cancel the current command."
+#~ msgstr "Cancelar comando atual."
+
+#~ msgid "Exit the application."
+#~ msgstr "Sair da aplicação."
+
+#~ msgid "Delete the currently selected note or notebook."
+#~ msgstr "Excluir nota selecionada ou notebook."
+
+#~ msgid "Set a to-do as completed / not completed"
+#~ msgstr "Marcar uma tarefa como completada / não completada"
+
+#~ msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+#~ msgstr ""
+#~ "al[t]ernar [c]onsole entre maximizado / minimizado / oculto / visível."
+
+#~ msgid "[t]oggle note [m]etadata."
+#~ msgstr "al[t]ernar [m]etadados de notas."
+
+#~ msgid "[M]ake a new [n]ote"
+#~ msgstr "Criar ([M]ake) uma nova [n]ota"
+
+#~ msgid "[M]ake a new [t]odo"
+#~ msgstr "Criar ([M]ake) nova [t]arefa"
+
+#~ msgid "[M]ake a new note[b]ook"
+#~ msgstr "Criar ([M]ake) novo caderno (note[b]ook)"
+
+#~ msgid "Copy ([Y]ank) the [n]ote to a notebook."
+#~ msgstr "Copiar ([Y]ank) a [n]ota a um caderno."
+
+#~ msgid "Move the note to a notebook."
+#~ msgstr "Mover nota para um caderno."
 
 #~ msgid ""
 #~ "The target to synchonise to. If synchronising with the file system, set "

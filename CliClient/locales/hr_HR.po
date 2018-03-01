@@ -17,68 +17,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-msgid "Give focus to next pane"
-msgstr "Fokusiraj sljedeće okno"
-
-msgid "Give focus to previous pane"
-msgstr "Fokusiraj prethodno okno"
-
-msgid "Enter command line mode"
-msgstr "Otvori naredbeni redak"
-
-msgid "Exit command line mode"
-msgstr "Napusti naredbeni redak"
-
-msgid "Edit the selected note"
-msgstr "Uredi odabranu bilješku"
-
-msgid "Cancel the current command."
-msgstr "Prekini trenutnu naredbu."
-
-msgid "Exit the application."
-msgstr "Izađi iz aplikacije."
-
-msgid "Delete the currently selected note or notebook."
-msgstr "Obriši odabranu bilješku ili bilježnicu."
-
 msgid "To delete a tag, untag the associated notes."
 msgstr "Da bi mogao obrisati oznaku, skini oznaku s povezanih bilješki."
 
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Odaberi bilješku ili bilježnicu za brisanje."
-
-msgid "Set a to-do as completed / not completed"
-msgstr "Postavi zadatak kao završen/nezavršen"
-
-#, fuzzy
-msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-msgstr "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-
-msgid "Search"
-msgstr "Traži"
-
-#, fuzzy
-msgid "[t]oggle note [m]etadata."
-msgstr "[t]oggle note [m]etadata."
-
-#, fuzzy
-msgid "[M]ake a new [n]ote"
-msgstr "[M]ake a new [n]ote"
-
-#, fuzzy
-msgid "[M]ake a new [t]odo"
-msgstr "[M]ake a new [t]odo"
-
-#, fuzzy
-msgid "[M]ake a new note[b]ook"
-msgstr "[M]ake a new note[b]ook"
-
-#, fuzzy
-msgid "Copy ([Y]ank) the [n]ote to a notebook."
-msgstr "Copy ([Y]ank) the [n]ote to a notebook."
-
-msgid "Move the note to a notebook."
-msgstr "Premjesti bilješku u bilježnicu."
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Pritisni Ctrl+D ili napiši \"exit\" za izlazak iz aplikacije"
@@ -245,12 +188,17 @@ msgstr "Bilješka je spremljena."
 msgid "Exits the application."
 msgstr "Izlaz iz aplikacije."
 
+#, fuzzy
 msgid ""
-"Exports Joplin data to the given directory. By default, it will export the "
+"Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
 "Izvozi podatke u dati direktorij. Po defaultu izvozi sve podatke uključujući "
 "bilježnice, bilješke, zadatke i resurse."
+
+#, fuzzy, javascript-format
+msgid "Destination format: %s"
+msgstr "Format datuma"
 
 msgid "Exports only the given note."
 msgstr "Izvozi samo datu bilješku."
@@ -263,6 +211,10 @@ msgstr "Prikazuje geolokacijski URL bilješke."
 
 msgid "Displays usage information."
 msgstr "Prikazuje informacije o korištenju."
+
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr ""
 
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Prečaci nisu podržani u naredbenom retku."
@@ -307,28 +259,20 @@ msgstr "Za ulaz u naredbeni redak, pritisni \":\""
 msgid "To exit command line mode, press ESCAPE"
 msgstr "Za izlaz iz naredbenog retka, pritisni Esc"
 
+#, fuzzy
 msgid ""
-"For the complete list of available keyboard shortcuts, type `help shortcuts`"
+"For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr "Za potpunu listu mogućih prečaca, upiši `help shortcuts`"
 
-msgid "Imports an Evernote notebook file (.enex file)."
-msgstr "Uvozi Evernote bilježnicu (.enex datoteku)."
+msgid "Imports data into Joplin."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Source format: %s"
+msgstr "Ne postoji naredba: %s"
 
 msgid "Do not ask for confirmation."
 msgstr "Ne pitaj za potvrdu."
-
-#, javascript-format
-msgid "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
-msgstr ""
-"Datoteka \"%s\" će biti uvezena u postojeću bilježnicu \"%s\". Nastavi?"
-
-#, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into "
-"it. Continue?"
-msgstr ""
-"Nova bilježnica \"%s\" će biti stvorena i datoteka \"%s\" će biti uvezena u "
-"nju. Nastavi?"
 
 #, javascript-format
 msgid "Found: %d."
@@ -614,8 +558,19 @@ msgid ""
 "background and will be available soon."
 msgstr ""
 
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
+
 msgid "File"
 msgstr "Datoteka"
+
+msgid "Directory"
+msgstr ""
+
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
 
 msgid "New note"
 msgstr "Nova bilješka"
@@ -626,11 +581,16 @@ msgstr "Novi zadatak"
 msgid "New notebook"
 msgstr "Nova bilježnica"
 
-msgid "Import Evernote notes"
-msgstr "Uvezi Evernote bilješke"
+msgid "Import"
+msgstr "Uvoz"
 
-msgid "Evernote Export Files"
-msgstr "Evernote izvozne datoteke"
+#, fuzzy
+msgid "Export"
+msgstr "Uvoz"
+
+#, javascript-format
+msgid "Hide %s"
+msgstr ""
 
 msgid "Quit"
 msgstr "Izađi"
@@ -649,6 +609,12 @@ msgstr "Zalijepi"
 
 msgid "Search in all the notes"
 msgstr "Pretraži u svim bilješkama"
+
+msgid "View"
+msgstr ""
+
+msgid "Toggle editor layout"
+msgstr ""
 
 msgid "Tools"
 msgstr "Alati"
@@ -691,9 +657,6 @@ msgstr "U redu"
 
 msgid "Cancel"
 msgstr "Odustani"
-
-msgid "Error"
-msgstr ""
 
 #, fuzzy, javascript-format
 msgid ""
@@ -821,6 +784,9 @@ msgstr "Preimenuj bilježnicu:"
 msgid "Set alarm:"
 msgstr "Postavi upozorenje:"
 
+msgid "Search"
+msgstr "Traži"
+
 msgid "Layout"
 msgstr "Izgled"
 
@@ -876,6 +842,12 @@ msgstr "Oznake"
 msgid "Set alarm"
 msgstr "Postavi upozorenje"
 
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+
 #, fuzzy
 msgid "to-do"
 msgstr "Novi zadatak"
@@ -896,9 +868,6 @@ msgstr "Očisti"
 
 msgid "OneDrive Login"
 msgstr "OneDrive Login"
-
-msgid "Import"
-msgstr "Uvoz"
 
 msgid "Options"
 msgstr "Opcije"
@@ -941,7 +910,7 @@ msgstr "Nepoznata zastavica: %s"
 msgid "File system"
 msgstr "Datotečni sustav"
 
-msgid "Nextcloud (Beta)"
+msgid "Nextcloud"
 msgstr ""
 
 msgid "OneDrive"
@@ -950,7 +919,7 @@ msgstr "OneDrive"
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dev (Samo za testiranje)"
 
-msgid "WebDAV (Beta)"
+msgid "WebDAV"
 msgstr ""
 
 #, javascript-format
@@ -1088,8 +1057,16 @@ msgstr "Svijetla"
 msgid "Dark"
 msgstr "Tamna"
 
-msgid "Show uncompleted todos on top of the lists"
+#, fuzzy
+msgid "Uncompleted to-dos on top"
 msgstr "Prikaži nezavršene zadatke na vrhu liste"
+
+msgid "Sort notes by"
+msgstr ""
+
+#, fuzzy
+msgid "Reverse sort order"
+msgstr "Mijenja redoslijed."
 
 msgid "Save geo-location with notes"
 msgstr "Spremi geolokacijske podatke sa bilješkama"
@@ -1154,13 +1131,13 @@ msgstr ""
 "Putanja do direktorija za sinkronizaciju u slučaju kad je sinkronizacija sa "
 "datotečnim sustavom omogućena. Vidi `sync.target`."
 
-msgid "Nexcloud WebDAV URL"
+msgid "Nextcloud WebDAV URL"
 msgstr ""
 
-msgid "Nexcloud username"
+msgid "Nextcloud username"
 msgstr ""
 
-msgid "Nexcloud password"
+msgid "Nextcloud password"
 msgstr ""
 
 msgid "WebDAV URL"
@@ -1175,6 +1152,41 @@ msgstr ""
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Nevažeća vrijednost: \"%s\". Moguće vrijednosti su: %s."
+
+#, fuzzy
+msgid "Joplin Export File"
+msgstr "Evernote izvozne datoteke"
+
+msgid "Markdown"
+msgstr ""
+
+msgid "Joplin Export Directory"
+msgstr ""
+
+#, fuzzy
+msgid "Evernote Export File"
+msgstr "Evernote izvozne datoteke"
+
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr ""
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+
+msgid "There is no data to export."
+msgstr ""
+
+#, fuzzy
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "Odaberi lokaciju za izvoz statusa sinkronizacije"
 
 msgid "Items that cannot be synchronised"
 msgstr "Stavke koje se ne mogu sinkronizirati"
@@ -1342,6 +1354,78 @@ msgstr "Trenutno nemaš nijednu bilježnicu. Stvori novu klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobro došli"
+
+#~ msgid "Imports an Evernote notebook file (.enex file)."
+#~ msgstr "Uvozi Evernote bilježnicu (.enex datoteku)."
+
+#~ msgid ""
+#~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+#~ msgstr ""
+#~ "Datoteka \"%s\" će biti uvezena u postojeću bilježnicu \"%s\". Nastavi?"
+
+#~ msgid ""
+#~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
+#~ "it. Continue?"
+#~ msgstr ""
+#~ "Nova bilježnica \"%s\" će biti stvorena i datoteka \"%s\" će biti uvezena "
+#~ "u nju. Nastavi?"
+
+#~ msgid "Import Evernote notes"
+#~ msgstr "Uvezi Evernote bilješke"
+
+#~ msgid "Give focus to next pane"
+#~ msgstr "Fokusiraj sljedeće okno"
+
+#~ msgid "Give focus to previous pane"
+#~ msgstr "Fokusiraj prethodno okno"
+
+#~ msgid "Enter command line mode"
+#~ msgstr "Otvori naredbeni redak"
+
+#~ msgid "Exit command line mode"
+#~ msgstr "Napusti naredbeni redak"
+
+#~ msgid "Edit the selected note"
+#~ msgstr "Uredi odabranu bilješku"
+
+#~ msgid "Cancel the current command."
+#~ msgstr "Prekini trenutnu naredbu."
+
+#~ msgid "Exit the application."
+#~ msgstr "Izađi iz aplikacije."
+
+#~ msgid "Delete the currently selected note or notebook."
+#~ msgstr "Obriši odabranu bilješku ili bilježnicu."
+
+#~ msgid "Set a to-do as completed / not completed"
+#~ msgstr "Postavi zadatak kao završen/nezavršen"
+
+#, fuzzy
+#~ msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+#~ msgstr "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+
+#, fuzzy
+#~ msgid "[t]oggle note [m]etadata."
+#~ msgstr "[t]oggle note [m]etadata."
+
+#, fuzzy
+#~ msgid "[M]ake a new [n]ote"
+#~ msgstr "[M]ake a new [n]ote"
+
+#, fuzzy
+#~ msgid "[M]ake a new [t]odo"
+#~ msgstr "[M]ake a new [t]odo"
+
+#, fuzzy
+#~ msgid "[M]ake a new note[b]ook"
+#~ msgstr "[M]ake a new note[b]ook"
+
+#, fuzzy
+#~ msgid "Copy ([Y]ank) the [n]ote to a notebook."
+#~ msgstr "Copy ([Y]ank) the [n]ote to a notebook."
+
+#~ msgid "Move the note to a notebook."
+#~ msgstr "Premjesti bilješku u bilježnicu."
 
 #~ msgid ""
 #~ "The target to synchonise to. If synchronising with the file system, set "

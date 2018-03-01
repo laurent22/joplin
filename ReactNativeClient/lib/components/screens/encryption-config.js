@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { TextInput, TouchableOpacity, Linking, View, Switch, Slider, StyleSheet, Text, Button, ScrollView } = require('react-native');
+const { TextInput, TouchableOpacity, Linking, View, Switch, Slider, StyleSheet, Text, Button, ScrollView, Platform } = require('react-native');
 const EncryptionService = require('lib/services/EncryptionService');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
@@ -109,13 +109,20 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 		const passwordOk = this.state.passwordChecks[mk.id] === true ? '✔' : '❌';
 		const active = this.props.activeMasterKeyId === mk.id ? '✔' : '';
 
+		const inputStyle = {flex:1, marginRight: 10, color: theme.color};
+
+		if (Platform.OS === 'ios') {
+			inputStyle.borderBottomWidth = 1;
+			inputStyle.borderBottomColor = theme.dividerColor;
+		}
+
 		return (
 			<View key={mk.id}>
 				<Text style={this.styles().titleText}>{_('Master Key %s', mk.id.substr(0,6))}</Text>
 				<Text style={this.styles().normalText}>{_('Created: %s', time.formatMsToLocal(mk.created_time))}</Text>
 				<View style={{flexDirection: 'row', alignItems: 'center'}}>
 					<Text style={{flex:0, fontSize: theme.fontSize, marginRight: 10, color: theme.color}}>{_('Password:')}</Text>
-					<TextInput secureTextEntry={true} value={password} onChangeText={(text) => onPasswordChange(text)} style={{flex:1, marginRight: 10, color: theme.color}}></TextInput>
+					<TextInput secureTextEntry={true} value={password} onChangeText={(text) => onPasswordChange(text)} style={inputStyle}></TextInput>
 					<Text style={{fontSize: theme.fontSize, marginRight: 10, color: theme.color}}>{passwordOk}</Text>
 					<Button title={_('Save')} onPress={() => onSaveClick()}></Button>
 				</View>

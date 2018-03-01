@@ -7,6 +7,7 @@ const globalStyle = {
 	itemMarginTop: 10,
 	itemMarginBottom: 10,
 	backgroundColor: "#ffffff",
+	backgroundColorTransparent: 'rgba(255,255,255,0.9)',
 	oddBackgroundColor: "#dddddd",
 	color: "#222222", // For regular text
 	colorError: "red",

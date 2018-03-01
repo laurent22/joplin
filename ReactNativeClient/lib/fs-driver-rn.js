@@ -1,6 +1,7 @@
 const RNFS = require('react-native-fs');
+const FsDriverBase = require('lib/fs-driver-base');
 
-class FsDriverRN {
+class FsDriverRN extends FsDriverBase {
 
 	appendFileSync(path, string) {
 		throw new Error('Not implemented');
@@ -34,13 +35,18 @@ class FsDriverRN {
 		};  
 	}
 
-	async readDirStats(path) {
+	async readDirStats(path, options = null) {
+		if (!options) options = {};
+		if (!('recursive' in options)) options.recursive = false;
+		
 		let items = await RNFS.readDir(path);
 		let output = [];
 		for (let i = 0; i < items.length; i++) {
 			const item = items[i];
 			const relativePath = item.path.substr(path.length + 1);
 			output.push(this.rnfsStatToStd_(item, relativePath));
+
+			output = await this.readDirStatsHandleRecursion_(path, item, output, options);
 		}
 		return output;
 	}
@@ -62,7 +68,7 @@ class FsDriverRN {
 			const r = await RNFS.stat(path);
 			return this.rnfsStatToStd_(r, path);
 		} catch (error) {
-			if (error && error.message && error.message.indexOf('exist') >= 0) {
+			if (error && ((error.message && error.message.indexOf('exist') >= 0) || error.code === 'ENOENT')) {
 				// Probably { [Error: File does not exist] framesToPop: 1, code: 'EUNSPECIFIED' }
 				// which unfortunately does not have a proper error code. Can be ignored.
 				return null;
@@ -120,7 +126,7 @@ class FsDriverRN {
 		try {
 			await RNFS.unlink(path);
 		} catch (error) {
-			if (error && error.message && error.message.indexOf('exist') >= 0) {
+			if (error && ((error.message && error.message.indexOf('exist') >= 0) || error.code === 'ENOENT')) {
 				// Probably { [Error: File does not exist] framesToPop: 1, code: 'EUNSPECIFIED' }
 				// which unfortunately does not have a proper error code. Can be ignored.
 			} else {

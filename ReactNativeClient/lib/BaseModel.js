@@ -45,6 +45,14 @@ class BaseModel {
 		return null;
 	}
 
+	static modelTypeToName(type) {
+		for (let i = 0; i < BaseModel.typeEnum_.length; i++) {
+			const e = BaseModel.typeEnum_[i];
+			if (e[1] === type) return e[0].substr(5).toLowerCase();
+		}
+		throw new Error('Unknown model type: ' + type);
+	}
+
 	static hasField(name) {
 		let fields = this.fieldNames();
 		return fields.indexOf(name) >= 0;
@@ -487,15 +495,32 @@ class BaseModel {
 
 }
 
-BaseModel.TYPE_NOTE = 1;
-BaseModel.TYPE_FOLDER = 2;
-BaseModel.TYPE_SETTING = 3;
-BaseModel.TYPE_RESOURCE = 4;
-BaseModel.TYPE_TAG = 5;
-BaseModel.TYPE_NOTE_TAG = 6;
-BaseModel.TYPE_SEARCH = 7;
-BaseModel.TYPE_ALARM = 8;
-BaseModel.TYPE_MASTER_KEY = 9;
+BaseModel.typeEnum_ = [
+	['TYPE_NOTE', 1],
+	['TYPE_FOLDER', 2],
+	['TYPE_SETTING', 3],
+	['TYPE_RESOURCE', 4],
+	['TYPE_TAG', 5],
+	['TYPE_NOTE_TAG', 6],
+	['TYPE_SEARCH', 7],
+	['TYPE_ALARM', 8],
+	['TYPE_MASTER_KEY', 9],
+];
+
+for (let i = 0; i < BaseModel.typeEnum_.length; i++) {
+	const e = BaseModel.typeEnum_[i];
+	BaseModel[e[0]] = e[1];
+}
+
+// BaseModel.TYPE_NOTE = 1;
+// BaseModel.TYPE_FOLDER = 2;
+// BaseModel.TYPE_SETTING = 3;
+// BaseModel.TYPE_RESOURCE = 4;
+// BaseModel.TYPE_TAG = 5;
+// BaseModel.TYPE_NOTE_TAG = 6;
+// BaseModel.TYPE_SEARCH = 7;
+// BaseModel.TYPE_ALARM = 8;
+// BaseModel.TYPE_MASTER_KEY = 9;
 
 BaseModel.db_ = null;
 BaseModel.dispatch = function(o) {};
