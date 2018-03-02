@@ -194,9 +194,9 @@ Here is an example with the Markdown and rendered result side by side:
 
 Checkboxes can be added like so:
 
-    -[ ] Milk
-    -[ ] Rice
-    -[ ] Eggs
+    - [ ] Milk
+    - [ ] Rice
+    - [ ] Eggs
 
 The checkboxes can then be ticked in the mobile and desktop applications.
 
