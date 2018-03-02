@@ -320,10 +320,7 @@ class NoteTextComponent extends React.Component {
 				bridge().openItem(filePath);
 			});
 		} else {
-			bridge().showMessageBox({
-				type: 'error',
-				message: _('Unsupported link or message: %s', msg),
-			});
+			bridge().showErrorMessageBox(_('Unsupported link or message: %s', msg));
 		}
 	}
 

@@ -54,10 +54,7 @@ class OneDriveLoginScreenComponent extends React.Component {
 				this.props.dispatch({ type: 'NAV_BACK' });
 				reg.scheduleSync(0);
 			} catch (error) {
-				bridge().showMessageBox({
-					type: 'error',
-					message: 'Could not login to OneDrive. Please try again.\n\n' + error.message + "\n\n" + url.match(/.{1,64}/g).join('\n'),
-				});
+				bridge().showErrorMessageBox('Could not login to OneDrive. Please try again.\n\n' + error.message + "\n\n" + url.match(/.{1,64}/g).join('\n'));
 			}
 
 			this.authCode_ = null;

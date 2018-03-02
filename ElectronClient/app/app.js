@@ -146,7 +146,7 @@ class Application extends BaseApplication {
 			this.updateTray();
 		}
 
-		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'style.fontFamily' || action.type == 'SETTING_UPDATE_ALL') {
+		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'style.editor.fontFamily' || action.type == 'SETTING_UPDATE_ALL') {
 			this.updateEditorFont();
 		}
 
@@ -463,8 +463,8 @@ class Application extends BaseApplication {
 							'Copyright © 2016-2018 Laurent Cozic',
 							_('%s %s (%s, %s)', p.name, p.version, Setting.value('env'), process.platform),
 						];
-						bridge().showMessageBox({
-							message: message.join('\n'),
+						bridge().showInfoMessageBox(message.join('\n'), {
+							icon: bridge().electronApp().buildDir() + '/icons/32x32.png',
 						});
 					}
 				}]
@@ -526,12 +526,12 @@ class Application extends BaseApplication {
 
 	updateEditorFont() {
 		const fontFamilies = [];
-		if (Setting.value('style.fontFamily')) fontFamilies.push('"' + Setting.value('style.fontFamily') + '"');
+		if (Setting.value('style.editor.fontFamily')) fontFamilies.push('"' + Setting.value('style.editor.fontFamily') + '"');
 		fontFamilies.push('monospace');
 
 		// The '*' and '!important' parts are necessary to make sure Russian text is displayed properly
 		// https://github.com/laurent22/joplin/issues/155
-		
+
 		const css = '.ace_editor * { font-family: ' + fontFamilies.join(', ') + ' !important; }';
 		const styleTag = document.createElement('style');
 		styleTag.type = 'text/css';
