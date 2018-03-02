@@ -59,6 +59,12 @@ class ConfigScreenComponent extends React.Component {
 			display: 'inline-block',
 		};
 
+		const descriptionStyle = Object.assign({}, theme.textStyle, {
+			color: theme.colorFaded,
+			marginTop: 5,
+			fontStyle: 'italic',
+		});
+
 		const updateSettingValue = (key, value) => {
 			return shared.updateSettingValue(this, key, value);
 		}
@@ -66,6 +72,13 @@ class ConfigScreenComponent extends React.Component {
 		// Component key needs to be key+value otherwise it doesn't update when the settings change.
 
 		const md = Setting.settingMetadata(key);
+
+		const descriptionText = Setting.keyDescription(key, 'desktop');
+		const descriptionComp = descriptionText ? (
+			<div style={descriptionStyle}>
+				{descriptionText}
+			</div>
+		) : null;
 
 		if (md.isEnum) {
 			let items = [];
@@ -82,6 +95,7 @@ class ConfigScreenComponent extends React.Component {
 					<select value={value} style={controlStyle} onChange={(event) => { updateSettingValue(key, event.target.value) }}>
 						{items}
 					</select>
+					{ descriptionComp }
 				</div>
 			);
 		} else if (md.type === Setting.TYPE_BOOL) {
@@ -96,6 +110,7 @@ class ConfigScreenComponent extends React.Component {
 				<div key={key+value.toString()} style={rowStyle}>
 					<div style={controlStyle}>
 						<input id={'setting_checkbox_' + key} type="checkbox" checked={!!value} onChange={(event) => { onCheckboxClick(event) }}/><label onClick={(event) => { onCheckboxClick(event) }} style={labelStyle} htmlFor={'setting_checkbox_' + key}>{md.label()}</label>						
+						{ descriptionComp }
 					</div>
 				</div>
 			);
@@ -111,6 +126,7 @@ class ConfigScreenComponent extends React.Component {
 				<div key={key} style={rowStyle}>
 					<div style={labelStyle}><label>{md.label()}</label></div>
 					<input type={inputType} style={inputStyle} value={this.state.settings[key]} onChange={(event) => {onTextChange(event)}} />
+					{ descriptionComp }
 				</div>
 			);
 		} else if (md.type === Setting.TYPE_INT) {
@@ -122,6 +138,7 @@ class ConfigScreenComponent extends React.Component {
 				<div key={key} style={rowStyle}>
 					<div style={labelStyle}><label>{md.label()}</label></div>
 					<input type="number" style={controlStyle} value={this.state.settings[key]} onChange={(event) => {onNumChange(event)}} min={md.minimum} max={md.maximum} step={md.step}/>
+					{ descriptionComp }
 				</div>
 			);
 		} else {

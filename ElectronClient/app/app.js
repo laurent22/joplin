@@ -146,6 +146,10 @@ class Application extends BaseApplication {
 			this.updateTray();
 		}
 
+		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'style.fontFamily' || action.type == 'SETTING_UPDATE_ALL') {
+			this.updateEditorFont();
+		}
+
 		if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
 			if (!await reg.syncTarget().syncStarted()) reg.scheduleSync();
 		}
@@ -518,6 +522,21 @@ class Application extends BaseApplication {
 			])
 			app.createTray(contextMenu);
 		}
+	}
+
+	updateEditorFont() {
+		const fontFamilies = [];
+		if (Setting.value('style.fontFamily')) fontFamilies.push('"' + Setting.value('style.fontFamily') + '"');
+		fontFamilies.push('monospace');
+
+		// The '*' and '!important' parts are necessary to make sure Russian text is displayed properly
+		// https://github.com/laurent22/joplin/issues/155
+		
+		const css = '.ace_editor * { font-family: ' + fontFamilies.join(', ') + ' !important; }';
+		const styleTag = document.createElement('style');
+		styleTag.type = 'text/css';
+		styleTag.appendChild(document.createTextNode(css));
+		document.head.appendChild(styleTag);
 	}
 
 	async start(argv) {
