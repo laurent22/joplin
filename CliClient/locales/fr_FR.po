@@ -1101,8 +1101,18 @@ msgstr "Lors de la création d'une note :"
 msgid "Show tray icon"
 msgstr "Afficher icône dans la zone de notifications"
 
-msgid "Set application zoom percentage"
+msgid "Global zoom percentage"
 msgstr "Niveau de zoom"
+
+msgid "Editor font family"
+msgstr "Police de l'éditeur"
+
+msgid ""
+"The font name will not be checked. If incorrect or empty, it will default to "
+"a generic monospace font."
+msgstr ""
+"Le nom de la police ne sera pas vérifié. Si incorrect ou vide une police "
+"monospace sera utilisée par défaut."
 
 msgid "Automatically update the application"
 msgstr "Mettre à jour le logiciel automatiquement"

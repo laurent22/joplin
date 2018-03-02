@@ -1126,8 +1126,17 @@ msgstr "Erstellt eine neue Notiz."
 msgid "Show tray icon"
 msgstr ""
 
-msgid "Set application zoom percentage"
+#, fuzzy
+msgid "Global zoom percentage"
 msgstr "Einstellen des Anwendungszooms"
+
+msgid "Editor font family"
+msgstr ""
+
+msgid ""
+"The font name will not be checked. If incorrect or empty, it will default to "
+"a generic monospace font."
+msgstr ""
 
 msgid "Automatically update the application"
 msgstr "Die Applikation automatisch aktualisieren"
