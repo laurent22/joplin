@@ -8,7 +8,7 @@
 	brew install yarn node
 	echo 'export PATH="/usr/local/opt/gettext/bin:$PATH"' >> ~/.bash_profile
 	source ~/.bash_profile
-     
+
 If you get a node-gyp related error you might need to manually install it: `npm install -g node-gyp`
 
 ## Linux and Windows (WSL) dependencies
@@ -42,6 +42,17 @@ For node-gyp to work, you might need to install the `windows-build-tools` using 
 That will create the executable file in the `dist` directory.
 
 From `/ElectronClient` you can also run `run.sh` to run the app for testing.
+
+## Building Electron application on Windows
+
+```
+cd Tools
+npm install
+cd ..\ElectronClient\app
+xcopy /C /I /H /R /Y /S ..\..\ReactNativeClient\lib lib
+npm install
+yarn dist
+```
 
 # Building the Mobile application
 
