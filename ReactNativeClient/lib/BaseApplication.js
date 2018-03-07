@@ -21,6 +21,7 @@ const { shim } = require('lib/shim.js');
 const { _, setLocale, defaultLocale, closestSupportedLocale } = require('lib/locale.js');
 const os = require('os');
 const fs = require('fs-extra');
+const JoplinError = require('lib/JoplinError');
 const EventEmitter = require('events');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
@@ -95,14 +96,14 @@ class BaseApplication {
 			let nextArg = argv.length >= 2 ? argv[1] : null;
 			
 			if (arg == '--profile') {
-				if (!nextArg) throw new Error(_('Usage: %s', '--profile <dir-path>'));
+				if (!nextArg) throw new JoplinError(_('Usage: %s', '--profile <dir-path>'), 'flagError');
 				matched.profileDir = nextArg;
 				argv.splice(0, 2);
 				continue;
 			}
 
 			if (arg == '--env') {
-				if (!nextArg) throw new Error(_('Usage: %s', '--env <dev|prod>'));
+				if (!nextArg) throw new JoplinError(_('Usage: %s', '--env <dev|prod>'), 'flagError');
 				matched.env = nextArg;
 				argv.splice(0, 2);
 				continue;
@@ -133,14 +134,14 @@ class BaseApplication {
 			}
 
 			if (arg == '--log-level') {
-				if (!nextArg) throw new Error(_('Usage: %s', '--log-level <none|error|warn|info|debug>'));
+				if (!nextArg) throw new JoplinError(_('Usage: %s', '--log-level <none|error|warn|info|debug>'), 'flagError');
 				matched.logLevel = Logger.levelStringToId(nextArg);
 				argv.splice(0, 2);
 				continue;
 			}
 
 			if (arg.length && arg[0] == '-') {
-				throw new Error(_('Unknown flag: %s', arg));
+				throw new JoplinError(_('Unknown flag: %s', arg), 'flagError');
 			} else {
 				break;
 			}
@@ -358,7 +359,18 @@ class BaseApplication {
 	}
 
 	async start(argv) {
-		let startFlags = await this.handleStartFlags_(argv);
+		let startFlags = null;
+		
+		try {
+			startFlags = await this.handleStartFlags_(argv);
+		} catch (error) {
+			if (error.code == 'flagError') {
+				console.info(error.message);
+				console.info(_('Type `joplin help` for usage information.'));
+				process.exit(1);
+			}
+			throw error;
+		}
 
 		argv = startFlags.argv;
 		let initArgs = startFlags.matched;
