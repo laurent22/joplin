@@ -1,6 +1,6 @@
 # Joplin
 
-Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](https://daringfireball.net/projects/markdown/basics).
+Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](#markdown).
 
 Notes exported from Evernote via .enex files [can be imported](#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
 
@@ -20,7 +20,7 @@ Operating System | Download
 -----------------|--------
 Windows          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.70/Joplin-Setup-1.0.70.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a>
 macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.70/Joplin-1.0.70.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a>
-Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.70/Joplin-1.0.70-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a>
+Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.70/Joplin-1.0.70-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a>
 
 ## Mobile applications
 
@@ -242,6 +242,8 @@ Current translations:
 - While the mobile can sync and load tags, it is not currently possible to create new ones. The desktop and terminal apps can create, delete and edit tags.
 
 # License
+
+MIT License
 
 Copyright (c) 2016-2018 Laurent Cozic
 
