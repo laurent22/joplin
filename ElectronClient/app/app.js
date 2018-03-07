@@ -342,7 +342,7 @@ class Application extends BaseApplication {
 				}, {
 					label: _('Quit'),
 					accelerator: 'CommandOrControl+Q',
-					click: () => { bridge().electronApp().exit() }
+					click: () => { bridge().electronApp().quit() }
 				}]
 			}, {
 				label: _('Edit'),
@@ -518,7 +518,7 @@ class Application extends BaseApplication {
 			const contextMenu = Menu.buildFromTemplate([
 				{ label: _('Open %s', app.electronApp().getName()), click: () => { app.window().show(); } },
 				{ type: 'separator' },
-				{ label: _('Exit'), click: () => { app.exit() } },
+				{ label: _('Exit'), click: () => { app.quit() } },
 			])
 			app.createTray(contextMenu);
 		}

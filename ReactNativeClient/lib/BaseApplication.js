@@ -359,18 +359,7 @@ class BaseApplication {
 	}
 
 	async start(argv) {
-		let startFlags = null;
-		
-		try {
-			startFlags = await this.handleStartFlags_(argv);
-		} catch (error) {
-			if (error.code == 'flagError') {
-				console.info(error.message);
-				console.info(_('Type `joplin help` for usage information.'));
-				process.exit(1);
-			}
-			throw error;
-		}
+		let startFlags = await this.handleStartFlags_(argv);
 
 		argv = startFlags.argv;
 		let initArgs = startFlags.matched;
