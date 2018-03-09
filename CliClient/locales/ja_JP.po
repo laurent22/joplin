@@ -492,6 +492,10 @@ msgstr "規定値: %s"
 msgid "Possible keys/values:"
 msgstr "取り得るキーバリュー: "
 
+#, fuzzy
+msgid "Type `joplin help` for usage information."
+msgstr "使い方を表示する。"
+
 msgid "Fatal error:"
 msgstr "致命的なエラー: "
 
@@ -616,6 +620,10 @@ msgid "Help"
 msgstr "ヘルプ"
 
 msgid "Website and documentation"
+msgstr "Webサイトとドキュメント"
+
+#, fuzzy
+msgid "Make a donation"
 msgstr "Webサイトとドキュメント"
 
 msgid "Check for updates..."
@@ -1268,6 +1276,9 @@ msgstr "確認"
 
 msgid "Cancel synchronisation"
 msgstr "同期の中止"
+
+msgid "Joplin website"
+msgstr ""
 
 #, javascript-format
 msgid "Master Key %s"

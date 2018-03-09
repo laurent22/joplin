@@ -507,6 +507,10 @@ msgstr "По умолчанию: %s"
 msgid "Possible keys/values:"
 msgstr "Возможные ключи/значения:"
 
+#, fuzzy
+msgid "Type `joplin help` for usage information."
+msgstr "Выводит информацию об использовании."
+
 msgid "Fatal error:"
 msgstr "Фатальная ошибка:"
 
@@ -634,6 +638,10 @@ msgid "Help"
 msgstr "Помощь"
 
 msgid "Website and documentation"
+msgstr "Сайт и документация"
+
+#, fuzzy
+msgid "Make a donation"
 msgstr "Сайт и документация"
 
 msgid "Check for updates..."
@@ -1299,6 +1307,9 @@ msgstr "Подтвердить"
 
 msgid "Cancel synchronisation"
 msgstr "Отменить синхронизацию"
+
+msgid "Joplin website"
+msgstr ""
 
 #, javascript-format
 msgid "Master Key %s"

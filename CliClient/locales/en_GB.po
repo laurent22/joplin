@@ -449,6 +449,9 @@ msgstr ""
 msgid "Possible keys/values:"
 msgstr ""
 
+msgid "Type `joplin help` for usage information."
+msgstr ""
+
 msgid "Fatal error:"
 msgstr ""
 
@@ -559,6 +562,9 @@ msgid "Help"
 msgstr ""
 
 msgid "Website and documentation"
+msgstr ""
+
+msgid "Make a donation"
 msgstr ""
 
 msgid "Check for updates..."
@@ -1176,6 +1182,9 @@ msgid "Confirm"
 msgstr ""
 
 msgid "Cancel synchronisation"
+msgstr ""
+
+msgid "Joplin website"
 msgstr ""
 
 #, javascript-format

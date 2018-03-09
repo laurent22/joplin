@@ -510,6 +510,10 @@ msgstr "Default: %s"
 msgid "Possible keys/values:"
 msgstr "Mogući ključevi/vrijednosti:"
 
+#, fuzzy
+msgid "Type `joplin help` for usage information."
+msgstr "Prikazuje informacije o korištenju."
+
 msgid "Fatal error:"
 msgstr "Fatalna greška:"
 
@@ -633,6 +637,10 @@ msgid "Help"
 msgstr "Pomoć"
 
 msgid "Website and documentation"
+msgstr "Website i dokumentacija"
+
+#, fuzzy
+msgid "Make a donation"
 msgstr "Website i dokumentacija"
 
 msgid "Check for updates..."
@@ -1278,6 +1286,9 @@ msgstr "Potvrdi"
 
 msgid "Cancel synchronisation"
 msgstr "Prekini sinkronizaciju"
+
+msgid "Joplin website"
+msgstr ""
 
 #, javascript-format
 msgid "Master Key %s"

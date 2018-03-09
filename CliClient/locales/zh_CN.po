@@ -471,6 +471,10 @@ msgstr "默认值: %s"
 msgid "Possible keys/values:"
 msgstr "可用键/值："
 
+#, fuzzy
+msgid "Type `joplin help` for usage information."
+msgstr "显示使用信息。"
+
 msgid "Fatal error:"
 msgstr "严重错误："
 
@@ -586,6 +590,10 @@ msgid "Help"
 msgstr "帮助"
 
 msgid "Website and documentation"
+msgstr "网站与文档"
+
+#, fuzzy
+msgid "Make a donation"
 msgstr "网站与文档"
 
 msgid "Check for updates..."
@@ -1228,6 +1236,9 @@ msgstr "确认"
 
 msgid "Cancel synchronisation"
 msgstr "取消同步"
+
+msgid "Joplin website"
+msgstr ""
 
 #, javascript-format
 msgid "Master Key %s"

@@ -503,6 +503,10 @@ msgstr "Lehenetsia: %s"
 msgid "Possible keys/values:"
 msgstr "Litezkeen balioak:"
 
+#, fuzzy
+msgid "Type `joplin help` for usage information."
+msgstr "Erakutsi erabilera datuak."
+
 msgid "Fatal error:"
 msgstr "Aio! Agur! :_( "
 
@@ -630,6 +634,10 @@ msgid "Help"
 msgstr "Laguntza"
 
 msgid "Website and documentation"
+msgstr "Web orria eta dokumentazioa (en)"
+
+#, fuzzy
+msgid "Make a donation"
 msgstr "Web orria eta dokumentazioa (en)"
 
 msgid "Check for updates..."
@@ -1298,6 +1306,9 @@ msgstr "Baieztatu"
 
 msgid "Cancel synchronisation"
 msgstr "Sinkronizazioa utzi"
+
+msgid "Joplin website"
+msgstr ""
 
 #, javascript-format
 msgid "Master Key %s"

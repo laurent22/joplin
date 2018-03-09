@@ -504,6 +504,9 @@ msgstr "Défaut : %s"
 msgid "Possible keys/values:"
 msgstr "Clefs/Valeurs possibles :"
 
+msgid "Type `joplin help` for usage information."
+msgstr "Tapez `Joplin help` pour afficher l'aide."
+
 msgid "Fatal error:"
 msgstr "Erreur fatale :"
 
@@ -631,6 +634,9 @@ msgstr "Aide"
 
 msgid "Website and documentation"
 msgstr "Documentation en ligne"
+
+msgid "Make a donation"
+msgstr "Faire un don"
 
 msgid "Check for updates..."
 msgstr "Vérifier les mises à jour..."
@@ -1299,6 +1305,9 @@ msgstr "Confirmer"
 
 msgid "Cancel synchronisation"
 msgstr "Annuler synchronisation"
+
+msgid "Joplin website"
+msgstr "Site web de Joplin"
 
 #, javascript-format
 msgid "Master Key %s"
