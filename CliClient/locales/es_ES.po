@@ -16,6 +16,8 @@ msgstr ""
 "X-Generator: Poedit 1.8.11\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Desmarque las notas asociadas para eliminar una etiqueta."
@@ -505,9 +507,8 @@ msgstr "Por  defecto: %s"
 msgid "Possible keys/values:"
 msgstr "Claves/valores posbiles:"
 
-#, fuzzy
 msgid "Type `joplin help` for usage information."
-msgstr "Muestra información de uso."
+msgstr "Escriba `joplin help` para mostrar información de uso."
 
 msgid "Fatal error:"
 msgstr "Error fatal:"
@@ -639,9 +640,8 @@ msgstr "Ayuda"
 msgid "Website and documentation"
 msgstr "Sitio web y documentación"
 
-#, fuzzy
 msgid "Make a donation"
-msgstr "Sitio web y documentación"
+msgstr "Hacer una donación"
 
 msgid "Check for updates..."
 msgstr "Comprobar actualizaciones..."
@@ -1302,7 +1302,7 @@ msgid "Cancel synchronisation"
 msgstr "Cancelar sincronización"
 
 msgid "Joplin website"
-msgstr ""
+msgstr "Sitio web de Joplin"
 
 #, javascript-format
 msgid "Master Key %s"
