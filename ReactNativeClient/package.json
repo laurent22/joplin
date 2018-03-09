@@ -7,6 +7,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
+    "precommit": "pretty-quick --staged",
     "postinstall": "node ../Tools/copycss.js"
   },
   "dependencies": {
@@ -56,7 +57,10 @@
   "devDependencies": {
     "babel-jest": "19.0.0",
     "babel-preset-react-native": "1.9.1",
+    "husky": "^0.14.3",
     "jest": "19.0.2",
+    "prettier": "1.11.1",
+    "pretty-quick": "^1.4.1",
     "react-test-renderer": "16.0.0-alpha.6"
   },
   "jest": {

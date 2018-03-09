@@ -66,9 +66,11 @@
     "yargs-parser": "^7.0.0"
   },
   "devDependencies": {
-    "jasmine": "^2.6.0"
+    "jasmine": "^2.6.0",
+    "prettier": "1.11.1"
   },
   "scripts": {
-    "test": "jasmine"
+    "test": "jasmine",
+    "precommit": "pretty-quick --staged"
   }
 }
