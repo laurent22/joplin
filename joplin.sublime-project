@@ -75,6 +75,9 @@
 		"js_prettier": {
 			"auto_format_on_save": true,
 			"auto_format_on_save_requires_prettier_config": true,
+			"additional_cli_args": {
+				"--config": "prettier.config.js",
+			},
 		}
 	}
 }

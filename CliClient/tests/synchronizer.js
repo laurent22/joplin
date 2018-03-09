@@ -138,7 +138,7 @@ describe("Synchronizer", function() {
 	);
 
 	it(
-		"should update remote item",
+		"should update remote items",
 		asyncTest(async () => {
 			let folder = await Folder.save({ title: "folder1" });
 			let note = await Note.save({ title: "un", parent_id: folder.id });
@@ -1123,6 +1123,34 @@ describe("Synchronizer", function() {
 			await synchronizer().start();
 
 			await localItemsSameAsRemote(all, expect);
+		})
+	);
+
+	it(
+		"should update remote items but not pull remote changes",
+		asyncTest(async () => {
+			let folder = await Folder.save({ title: "folder1" });
+			let note = await Note.save({ title: "un", parent_id: folder.id });
+			await synchronizer().start();
+
+			await switchClient(2);
+
+			await synchronizer().start();
+			await Note.save({ title: "deux", parent_id: folder.id });
+			await synchronizer().start();
+
+			await switchClient(1);
+
+			await Note.save({ title: "un UPDATE", id: note.id });
+			await synchronizer().start({ syncSteps: ["update_remote"] });
+			let all = await allItems();
+			expect(all.length).toBe(2);
+
+			await switchClient(2);
+
+			await synchronizer().start();
+			let note2 = await Note.load(note.id);
+			expect(note2.title).toBe("un UPDATE");
 		})
 	);
 });
