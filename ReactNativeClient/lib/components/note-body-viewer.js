@@ -1,19 +1,19 @@
-const React = require('react'); const Component = React.Component;
-const { Platform, WebView, View, Linking } = require('react-native');
-const { globalStyle } = require('lib/components/global-style.js');
-const Resource = require('lib/models/Resource.js');
-const Setting = require('lib/models/Setting.js');
-const { reg } = require('lib/registry.js');
-const MdToHtml = require('lib/MdToHtml.js');
+const React = require("react");
+const Component = React.Component;
+const { Platform, WebView, View, Linking } = require("react-native");
+const { globalStyle } = require("lib/components/global-style.js");
+const Resource = require("lib/models/Resource.js");
+const Setting = require("lib/models/Setting.js");
+const { reg } = require("lib/registry.js");
+const MdToHtml = require("lib/MdToHtml.js");
 
 class NoteBodyViewer extends Component {
-
 	constructor() {
 		super();
 		this.state = {
 			resources: {},
 			webViewLoaded: false,
-		}
+		};
 
 		this.isMounted_ = false;
 	}
@@ -48,28 +48,31 @@ class NoteBodyViewer extends Component {
 			onResourceLoaded: () => {
 				this.forceUpdate();
 			},
-			paddingBottom: '3.8em', // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
+			paddingBottom: "3.8em", // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
 		};
 
-		let html = this.mdToHtml_.render(note ? note.body : '', this.props.webViewStyle, mdOptions);
+		let html = this.mdToHtml_.render(note ? note.body : "", this.props.webViewStyle, mdOptions);
 
-		html = `
+		html =
+			`
 			<!DOCTYPE html>
 			<html>
 				<head>
 					
 				</head>
 				<body>
-					` + html + `
+					` +
+			html +
+			`
 				</body>
 			</html>
 		`;
 
-		let webViewStyle = {}
+		let webViewStyle = {};
 		// On iOS, the onLoadEnd() event is never fired so always
 		// display the webview (don't do the little trick
 		// to avoid the white flash).
-		if (Platform.OS !== 'ios') {
+		if (Platform.OS !== "ios") {
 			webViewStyle.opacity = this.state.webViewLoaded ? 1 : 0.01;
 		}
 
@@ -94,24 +97,24 @@ class NoteBodyViewer extends Component {
 		// `baseUrl` is where the images will be loaded from. So images must use a path relative to resourceDir.
 		const source = {
 			html: html,
-			baseUrl: 'file://' + Setting.value('resourceDir') + '/',
+			baseUrl: "file://" + Setting.value("resourceDir") + "/",
 		};
 
 		return (
 			<View style={style}>
 				<WebView
-					scalesPageToFit={Platform.OS !== 'ios'}
+					scalesPageToFit={Platform.OS !== "ios"}
 					style={webViewStyle}
 					source={source}
 					onLoadEnd={() => this.onLoadEnd()}
-					onError={(e) => reg.logger().error('WebView error', e) }
-					onMessage={(event) => {
+					onError={e => reg.logger().error("WebView error", e)}
+					onMessage={event => {
 						let msg = event.nativeEvent.data;
 
-						if (msg.indexOf('checkboxclick:') === 0) {
+						if (msg.indexOf("checkboxclick:") === 0) {
 							const newBody = this.mdToHtml_.handleCheckboxClick(msg, note.body);
 							if (onCheckboxChange) onCheckboxChange(newBody);
-						} else if (msg.indexOf('bodyscroll:') === 0) {
+						} else if (msg.indexOf("bodyscroll:") === 0) {
 							//msg = msg.split(':');
 							//this.bodyScrollTop_ = Number(msg[1]);
 						} else {
@@ -122,7 +125,6 @@ class NoteBodyViewer extends Component {
 			</View>
 		);
 	}
-
 }
 
 module.exports = { NoteBodyViewer };

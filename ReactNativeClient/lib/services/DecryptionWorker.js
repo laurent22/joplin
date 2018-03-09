@@ -1,13 +1,12 @@
-const BaseItem = require('lib/models/BaseItem');
-const { Logger } = require('lib/logger.js');
+const BaseItem = require("lib/models/BaseItem");
+const { Logger } = require("lib/logger.js");
 
 class DecryptionWorker {
-
 	constructor() {
-		this.state_ = 'idle';
+		this.state_ = "idle";
 		this.logger_ = new Logger();
 
-		this.dispatch = (action) => {
+		this.dispatch = action => {
 			//console.warn('DecryptionWorker.dispatch is not defined');
 		};
 
@@ -33,7 +32,7 @@ class DecryptionWorker {
 	}
 
 	encryptionService() {
-		if (!this.encryptionService_) throw new Error('DecryptionWorker.encryptionService_ is not set!!');
+		if (!this.encryptionService_) throw new Error("DecryptionWorker.encryptionService_ is not set!!");
 		return this.encryptionService_;
 	}
 
@@ -43,23 +42,23 @@ class DecryptionWorker {
 		this.scheduleId_ = setTimeout(() => {
 			this.scheduleId_ = null;
 			this.start({
-				materKeyNotLoadedHandler: 'dispatch',
+				materKeyNotLoadedHandler: "dispatch",
 			});
 		}, 1000);
 	}
 
 	async start(options = null) {
 		if (options === null) options = {};
-		if (!('materKeyNotLoadedHandler' in options)) options.materKeyNotLoadedHandler = 'throw';
+		if (!("materKeyNotLoadedHandler" in options)) options.materKeyNotLoadedHandler = "throw";
 
-		if (this.state_ !== 'idle') {
+		if (this.state_ !== "idle") {
 			this.logger().info('DecryptionWorker: cannot start because state is "' + this.state_ + '"');
 			return;
 		}
 
-		this.logger().info('DecryptionWorker: starting decryption...');
+		this.logger().info("DecryptionWorker: starting decryption...");
 
-		this.state_ = 'started';
+		this.state_ = "started";
 
 		let excludedIds = [];
 
@@ -80,18 +79,18 @@ class DecryptionWorker {
 					// }
 
 					const ItemClass = BaseItem.itemClass(item);
-					
+
 					// Don't log in production as it results in many messages when importing many items
 					// this.logger().info('DecryptionWorker: decrypting: ' + item.id + ' (' + ItemClass.tableName() + ')');
 					try {
 						await ItemClass.decrypt(item);
 					} catch (error) {
 						excludedIds.push(item.id);
-						
-						if (error.code === 'masterKeyNotLoaded' && options.materKeyNotLoadedHandler === 'dispatch') {
+
+						if (error.code === "masterKeyNotLoaded" && options.materKeyNotLoadedHandler === "dispatch") {
 							if (notLoadedMasterKeyDisptaches.indexOf(error.masterKeyId) < 0) {
 								this.dispatch({
-									type: 'MASTERKEY_ADD_NOT_LOADED',
+									type: "MASTERKEY_ADD_NOT_LOADED",
 									id: error.masterKeyId,
 								});
 								notLoadedMasterKeyDisptaches.push(error.masterKeyId);
@@ -99,27 +98,26 @@ class DecryptionWorker {
 							continue;
 						}
 
-						if (error.code === 'masterKeyNotLoaded' && options.materKeyNotLoadedHandler === 'throw') {
+						if (error.code === "masterKeyNotLoaded" && options.materKeyNotLoadedHandler === "throw") {
 							throw error;
 						}
 
-						this.logger().warn('DecryptionWorker: error for: ' + item.id + ' (' + ItemClass.tableName() + ')', error);
+						this.logger().warn("DecryptionWorker: error for: " + item.id + " (" + ItemClass.tableName() + ")", error);
 					}
 				}
 
 				if (!result.hasMore) break;
 			}
 		} catch (error) {
-			this.logger().error('DecryptionWorker:', error);
-			this.state_ = 'idle';
+			this.logger().error("DecryptionWorker:", error);
+			this.state_ = "idle";
 			throw error;
 		}
 
-		this.logger().info('DecryptionWorker: completed decryption.');
+		this.logger().info("DecryptionWorker: completed decryption.");
 
-		this.state_ = 'idle';
+		this.state_ = "idle";
 	}
-
 }
 
 module.exports = DecryptionWorker;

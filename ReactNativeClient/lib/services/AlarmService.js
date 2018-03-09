@@ -1,14 +1,13 @@
-const Note = require('lib/models/Note.js');
-const Alarm = require('lib/models/Alarm.js');
+const Note = require("lib/models/Note.js");
+const Alarm = require("lib/models/Alarm.js");
 
 class AlarmService {
-
 	static setDriver(v) {
 		this.driver_ = v;
 	}
 
 	static driver() {
-		if (!this.driver_) throw new Error('AlarmService driver not set!');
+		if (!this.driver_) throw new Error("AlarmService driver not set!");
 		return this.driver_;
 	}
 
@@ -26,7 +25,7 @@ class AlarmService {
 	}
 
 	static async garbageCollect() {
-		this.logger().info('Garbage collecting alarms...');
+		this.logger().info("Garbage collecting alarms...");
 
 		// Delete alarms that have already been triggered
 		await Alarm.deleteExpiredAlarms();
@@ -34,19 +33,19 @@ class AlarmService {
 		// Delete alarms that correspond to non-existent notes
 		const alarmIds = await Alarm.alarmIdsWithoutNotes();
 		for (let i = 0; i < alarmIds.length; i++) {
-			this.logger().info('Clearing notification for non-existing note. Alarm ' + alarmIds[i]);
+			this.logger().info("Clearing notification for non-existing note. Alarm " + alarmIds[i]);
 			await this.driver().clearNotification(alarmIds[i]);
 		}
 		await Alarm.batchDelete(alarmIds);
 	}
 
-	// When passing a note, make sure it has all the required properties 
+	// When passing a note, make sure it has all the required properties
 	// (better to pass a complete note or else just the ID)
 	static async updateNoteNotification(noteOrId, isDeleted = false) {
 		let note = null;
 		let noteId = null;
 
-		if (typeof noteOrId === 'object') {
+		if (typeof noteOrId === "object") {
 			note = noteOrId;
 			noteId = note.id;
 		} else {
@@ -61,14 +60,12 @@ class AlarmService {
 		let alarm = noteId ? await Alarm.byNoteId(noteId) : null;
 		let clearAlarm = false;
 
-		if (isDeleted ||
-		    !Note.needAlarm(note) ||
-		    (alarm && alarm.trigger_time !== note.todo_due))
-		{
+		if (isDeleted || !Note.needAlarm(note) || (alarm && alarm.trigger_time !== note.todo_due)) {
 			clearAlarm = !!alarm;
 		}
 
-		if (!clearAlarm && alarm) { // Alarm already exists and set at the right time
+		if (!clearAlarm && alarm) {
+			// Alarm already exists and set at the right time
 
 			// For persistent notifications (those that stay active after the app has been closed, like on mobile), if we have
 			// an alarm object we can be sure that the notification has already been set, so there's nothing to do.
@@ -76,7 +73,7 @@ class AlarmService {
 			// if the app has just started the notifications need to be set again. so we do this below.
 			if (!driver.hasPersistentNotifications() && !driver.notificationIsSet(alarm.id)) {
 				const notification = await Alarm.makeNotification(alarm, note);
-				this.logger().info('Scheduling (non-persistent) notification for note ' + note.id, notification);
+				this.logger().info("Scheduling (non-persistent) notification for note " + note.id, notification);
 				driver.scheduleNotification(notification);
 			}
 
@@ -84,7 +81,7 @@ class AlarmService {
 		}
 
 		if (clearAlarm) {
-			this.logger().info('Clearing notification for note ' + noteId);
+			this.logger().info("Clearing notification for note " + noteId);
 			await driver.clearNotification(alarm.id);
 			await Alarm.delete(alarm.id);
 		}
@@ -100,12 +97,12 @@ class AlarmService {
 		alarm = await Alarm.byNoteId(note.id);
 
 		const notification = await Alarm.makeNotification(alarm, note);
-		this.logger().info('Scheduling notification for note ' + note.id, notification);
+		this.logger().info("Scheduling notification for note " + note.id, notification);
 		await driver.scheduleNotification(notification);
 	}
 
 	static async updateAllNotifications() {
-		this.logger().info('Updading all notifications...');
+		this.logger().info("Updading all notifications...");
 
 		await this.garbageCollect();
 
@@ -114,7 +111,6 @@ class AlarmService {
 			await this.updateNoteNotification(dueNotes[i]);
 		}
 	}
-
 }
 
 module.exports = AlarmService;

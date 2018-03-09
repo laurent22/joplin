@@ -1,26 +1,26 @@
-const { uuid } = require('lib/uuid.js');
-const moment = require('moment');
-const { promiseChain } = require('lib/promise-utils.js');
-const { folderItemFilename } = require('lib/string-utils.js');
-const BaseModel = require('lib/BaseModel.js');
-const Note = require('lib/models/Note.js');
-const Tag = require('lib/models/Tag.js');
-const Resource = require('lib/models/Resource.js');
-const Folder = require('lib/models/Folder.js');
-const { enexXmlToMd } = require('./import-enex-md-gen.js');
-const { time } = require('lib/time-utils.js');
-const Levenshtein = require('levenshtein');
+const { uuid } = require("lib/uuid.js");
+const moment = require("moment");
+const { promiseChain } = require("lib/promise-utils.js");
+const { folderItemFilename } = require("lib/string-utils.js");
+const BaseModel = require("lib/BaseModel.js");
+const Note = require("lib/models/Note.js");
+const Tag = require("lib/models/Tag.js");
+const Resource = require("lib/models/Resource.js");
+const Folder = require("lib/models/Folder.js");
+const { enexXmlToMd } = require("./import-enex-md-gen.js");
+const { time } = require("lib/time-utils.js");
+const Levenshtein = require("levenshtein");
 const jsSHA = require("jssha");
 
 //const Promise = require('promise');
-const fs = require('fs-extra');
-const stringToStream = require('string-to-stream')
+const fs = require("fs-extra");
+const stringToStream = require("string-to-stream");
 
 function dateToTimestamp(s, zeroIfInvalid = false) {
-	let m = moment(s, 'YYYYMMDDTHHmmssZ');
+	let m = moment(s, "YYYYMMDDTHHmmssZ");
 	if (!m.isValid()) {
 		if (zeroIfInvalid) return 0;
-		throw new Error('Invalid date: ' + s);
+		throw new Error("Invalid date: " + s);
 	}
 	return m.toDate().getTime();
 }
@@ -47,7 +47,7 @@ function removeUndefinedProperties(note) {
 
 function createNoteId(note) {
 	let shaObj = new jsSHA("SHA-256", "TEXT");
-	shaObj.update(note.title + '_' + note.body + "_" + note.created_time + "_" + note.updated_time + "_");
+	shaObj.update(note.title + "_" + note.body + "_" + note.created_time + "_" + note.updated_time + "_");
 	let hash = shaObj.getHash("HEX");
 	return hash.substr(0, 32);
 }
@@ -60,11 +60,11 @@ function levenshteinPercent(s1, s2) {
 
 async function fuzzyMatch(note) {
 	if (note.created_time < time.unixMs() - 1000 * 60 * 60 * 24 * 360) {
-		let notes = await Note.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0 AND created_time = ? AND title = ?', [note.created_time, note.title]);
+		let notes = await Note.modelSelectAll("SELECT * FROM notes WHERE is_conflict = 0 AND created_time = ? AND title = ?", [note.created_time, note.title]);
 		return notes.length !== 1 ? null : notes[0];
 	}
 
-	let notes = await Note.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0 AND created_time = ?', [note.created_time]);
+	let notes = await Note.modelSelectAll("SELECT * FROM notes WHERE is_conflict = 0 AND created_time = ?", [note.created_time]);
 	if (notes.length === 0) return null;
 	if (notes.length === 1) return notes[0];
 
@@ -97,7 +97,7 @@ async function saveNoteResources(note) {
 		let existingResource = await Resource.load(toSave.id);
 		if (existingResource) continue;
 
-		await filePutContents(Resource.fullPath(toSave), resource.data)
+		await filePutContents(Resource.fullPath(toSave), resource.data);
 		await Resource.save(toSave, { isNew: true });
 		resourcesCreated++;
 	}
@@ -151,7 +151,7 @@ async function saveNoteToStorage(note, fuzzyMatching = false) {
 
 		diff.id = existingNote.id;
 		diff.type_ = existingNote.type_;
-		await Note.save(diff, { autoTimestamp: false })
+		await Note.save(diff, { autoTimestamp: false });
 		result.noteUpdated = true;
 	} else {
 		await Note.save(note, {
@@ -166,9 +166,9 @@ async function saveNoteToStorage(note, fuzzyMatching = false) {
 
 function importEnex(parentFolderId, filePath, importOptions = null) {
 	if (!importOptions) importOptions = {};
-	if (!('fuzzyMatching' in importOptions)) importOptions.fuzzyMatching = false;
-	if (!('onProgress' in importOptions)) importOptions.onProgress = function(state) {};
-	if (!('onError' in importOptions)) importOptions.onError = function(error) {};
+	if (!("fuzzyMatching" in importOptions)) importOptions.fuzzyMatching = false;
+	if (!("onProgress" in importOptions)) importOptions.onProgress = function(state) {};
+	if (!("onError" in importOptions)) importOptions.onError = function(error) {};
 
 	return new Promise((resolve, reject) => {
 		let progressState = {
@@ -184,7 +184,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 
 		let options = {};
 		let strict = true;
-		let saxStream = require('sax').createStream(strict, options);
+		let saxStream = require("sax").createStream(strict, options);
 
 		let nodes = []; // LIFO list of nodes so that we know in which node we are in the onText event
 		let note = null;
@@ -195,7 +195,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 		let notes = [];
 		let processingNotes = false;
 
-		stream.on('error', (error) => {
+		stream.on("error", error => {
 			reject(new Error(error.toString()));
 		});
 
@@ -248,7 +248,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					progressState.notesTagged += result.notesTagged;
 					importOptions.onProgress(progressState);
 				}
-			} catch(error) {
+			} catch (error) {
 				console.error(error);
 			}
 
@@ -300,71 +300,71 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			// });
 		}
 
-		saxStream.on('error', (error) => {
+		saxStream.on("error", error => {
 			importOptions.onError(error);
 		});
 
-		saxStream.on('text', function(text) {
+		saxStream.on("text", function(text) {
 			let n = currentNodeName();
 
 			if (noteAttributes) {
 				noteAttributes[n] = text;
 			} else if (noteResourceAttributes) {
-				noteResourceAttributes[n] = text;				
+				noteResourceAttributes[n] = text;
 			} else if (noteResource) {
-				if (n == 'data') {
+				if (n == "data") {
 					let attr = currentNodeAttributes();
 					noteResource.dataEncoding = attr.encoding;
 				}
-				if (!(n in noteResource)) noteResource[n] = '';
+				if (!(n in noteResource)) noteResource[n] = "";
 				noteResource[n] += text;
 			} else if (note) {
-				if (n == 'title') {
+				if (n == "title") {
 					note.title = text;
-				} else if (n == 'created') {
+				} else if (n == "created") {
 					note.created_time = dateToTimestamp(text);
-				} else if (n == 'updated') {
+				} else if (n == "updated") {
 					note.updated_time = dateToTimestamp(text);
-				} else if (n == 'tag') {
+				} else if (n == "tag") {
 					note.tags.push(text);
-				} else if (n == 'note') {
+				} else if (n == "note") {
 					// Ignore - white space between the opening tag <note> and the first sub-tag
-				} else if (n == 'content') {
+				} else if (n == "content") {
 					// Ignore - white space between the opening tag <content> and the <![CDATA[< block where the content actually is
 				} else {
-					console.warn('Unsupported note tag: ' + n);
+					console.warn("Unsupported note tag: " + n);
 				}
 			}
-		})
+		});
 
-		saxStream.on('opentag', function(node) {
+		saxStream.on("opentag", function(node) {
 			let n = node.name.toLowerCase();
 			nodes.push(node);
 
-			if (n == 'note') {
+			if (n == "note") {
 				note = {
 					resources: [],
 					tags: [],
 				};
-			} else if (n == 'resource-attributes') {
+			} else if (n == "resource-attributes") {
 				noteResourceAttributes = {};
-			} else if (n == 'recognition') {
+			} else if (n == "recognition") {
 				if (noteResource) noteResourceRecognition = {};
-			} else if (n == 'note-attributes') {
+			} else if (n == "note-attributes") {
 				noteAttributes = {};
-			} else if (n == 'resource') {
+			} else if (n == "resource") {
 				noteResource = {};
 			}
 		});
 
-		saxStream.on('cdata', function(data) {
+		saxStream.on("cdata", function(data) {
 			let n = currentNodeName();
 
 			if (noteResourceRecognition) {
 				noteResourceRecognition.objID = extractRecognitionObjId(data);
 			} else if (note) {
-				if (n == 'content') {
-					if ('bodyXml' in note) {
+				if (n == "content") {
+					if ("bodyXml" in note) {
 						note.bodyXml += data;
 					} else {
 						note.bodyXml = data;
@@ -373,10 +373,10 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			}
 		});
 
-		saxStream.on('closetag', function(n) {
+		saxStream.on("closetag", function(n) {
 			nodes.pop();
 
-			if (n == 'note') {
+			if (n == "note") {
 				note = removeUndefinedProperties(note);
 
 				progressState.loaded++;
@@ -385,27 +385,27 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				notes.push(note);
 
 				if (notes.length >= 10) {
-					processNotes().catch((error) => {
+					processNotes().catch(error => {
 						importOptions.onError(error);
 					});
 				}
 				note = null;
-			} else if (n == 'recognition' && noteResource) {
+			} else if (n == "recognition" && noteResource) {
 				noteResource.id = noteResourceRecognition.objID;
 				noteResourceRecognition = null;
-			} else if (n == 'resource-attributes') {
-				noteResource.filename = noteResourceAttributes['file-name'];
+			} else if (n == "resource-attributes") {
+				noteResource.filename = noteResourceAttributes["file-name"];
 				noteResourceAttributes = null;
-			} else if (n == 'note-attributes') {
+			} else if (n == "note-attributes") {
 				note.latitude = noteAttributes.latitude;
 				note.longitude = noteAttributes.longitude;
 				note.altitude = noteAttributes.altitude;
 				note.author = noteAttributes.author;
-				note.is_todo = !!noteAttributes['reminder-order'];
-				note.todo_due = dateToTimestamp(noteAttributes['reminder-time'], true);
-				note.todo_completed = dateToTimestamp(noteAttributes['reminder-done-time'], true);
-				note.order = dateToTimestamp(noteAttributes['reminder-order'], true);
-				note.source = !!noteAttributes.source ? 'evernote.' + noteAttributes.source : 'evernote';
+				note.is_todo = !!noteAttributes["reminder-order"];
+				note.todo_due = dateToTimestamp(noteAttributes["reminder-time"], true);
+				note.todo_completed = dateToTimestamp(noteAttributes["reminder-done-time"], true);
+				note.order = dateToTimestamp(noteAttributes["reminder-order"], true);
+				note.source = !!noteAttributes.source ? "evernote." + noteAttributes.source : "evernote";
 
 				// if (noteAttributes['reminder-time']) {
 				// 	console.info('======================================================');
@@ -416,16 +416,16 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				// }
 
 				noteAttributes = null;
-			} else if (n == 'resource') {
+			} else if (n == "resource") {
 				let decodedData = null;
-				if (noteResource.dataEncoding == 'base64') {
+				if (noteResource.dataEncoding == "base64") {
 					try {
-						decodedData = Buffer.from(noteResource.data, 'base64');
+						decodedData = Buffer.from(noteResource.data, "base64");
 					} catch (error) {
 						importOptions.onError(error);
 					}
 				} else {
-					importOptions.onError(new Error('Cannot decode resource with encoding: ' + noteResource.dataEncoding));
+					importOptions.onError(new Error("Cannot decode resource with encoding: " + noteResource.dataEncoding));
 					decodedData = noteResource.data; // Just put the encoded data directly in the file so it can, potentially, be manually decoded later
 				}
 
@@ -433,8 +433,8 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					id: noteResource.id,
 					data: decodedData,
 					mime: noteResource.mime,
-					title: noteResource.filename ? noteResource.filename : '',
-					filename: noteResource.filename ? noteResource.filename : '',
+					title: noteResource.filename ? noteResource.filename : "",
+					filename: noteResource.filename ? noteResource.filename : "",
 				};
 
 				note.resources.push(r);
@@ -442,10 +442,10 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			}
 		});
 
-		saxStream.on('end', function() {
+		saxStream.on("end", function() {
 			// Wait till there is no more notes to process.
 			let iid = setInterval(() => {
-				processNotes().then((allDone) => {
+				processNotes().then(allDone => {
 					if (allDone) {
 						clearTimeout(iid);
 						resolve();

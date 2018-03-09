@@ -1,8 +1,7 @@
-const Note = require('lib/models/Note.js');
-const TextWidget = require('tkwidgets/TextWidget.js');
+const Note = require("lib/models/Note.js");
+const TextWidget = require("tkwidgets/TextWidget.js");
 
 class NoteMetadataWidget extends TextWidget {
-
 	constructor() {
 		super();
 		this.noteId_ = 0;
@@ -27,10 +26,9 @@ class NoteMetadataWidget extends TextWidget {
 
 		if (!this.note_ && this.noteId_) {
 			this.note_ = await Note.load(this.noteId_);
-			this.text = this.note_ ? await Note.minimalSerializeForDisplay(this.note_) : '';
+			this.text = this.note_ ? await Note.minimalSerializeForDisplay(this.note_) : "";
 		}
 	}
-
 }
 
 module.exports = NoteMetadataWidget;

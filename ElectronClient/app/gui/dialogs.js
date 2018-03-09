@@ -1,12 +1,11 @@
-const smalltalk = require('smalltalk');
+const smalltalk = require("smalltalk");
 
 class Dialogs {
-
-	async alert(message, title = '') {
+	async alert(message, title = "") {
 		await smalltalk.alert(title, message);
 	}
 
-	async confirm(message, title = '') {
+	async confirm(message, title = "") {
 		try {
 			await smalltalk.confirm(title, message);
 			return true;
@@ -15,7 +14,7 @@ class Dialogs {
 		}
 	}
 
-	async prompt(message, title = '', defaultValue = '', options = null) {
+	async prompt(message, title = "", defaultValue = "", options = null) {
 		if (options === null) options = {};
 
 		try {
@@ -25,7 +24,6 @@ class Dialogs {
 			return null;
 		}
 	}
-
 }
 
 const dialogs = new Dialogs();

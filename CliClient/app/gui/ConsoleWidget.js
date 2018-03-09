@@ -1,7 +1,6 @@
-const TextWidget = require('tkwidgets/TextWidget.js');
+const TextWidget = require("tkwidgets/TextWidget.js");
 
 class ConsoleWidget extends TextWidget {
-
 	constructor() {
 		super();
 		this.lines_ = [];
@@ -12,11 +11,11 @@ class ConsoleWidget extends TextWidget {
 	}
 
 	get name() {
-		return 'console';
+		return "console";
 	}
 
 	get lastLine() {
-		return this.lines_.length ? this.lines_[this.lines_.length-1] : '';
+		return this.lines_.length ? this.lines_[this.lines_.length - 1] : "";
 	}
 
 	addLine(line) {
@@ -46,7 +45,6 @@ class ConsoleWidget extends TextWidget {
 
 		super.render();
 	}
-
 }
 
 module.exports = ConsoleWidget;

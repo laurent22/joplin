@@ -1,25 +1,24 @@
-const { BaseCommand } = require('./base-command.js');
-const { app } = require('./app.js');
-const { _ } = require('lib/locale.js');
-const BaseModel = require('lib/BaseModel.js');
-const Folder = require('lib/models/Folder.js');
-const Note = require('lib/models/Note.js');
+const { BaseCommand } = require("./base-command.js");
+const { app } = require("./app.js");
+const { _ } = require("lib/locale.js");
+const BaseModel = require("lib/BaseModel.js");
+const Folder = require("lib/models/Folder.js");
+const Note = require("lib/models/Note.js");
 
 class Command extends BaseCommand {
-
 	usage() {
-		return 'mv <note> [notebook]';
+		return "mv <note> [notebook]";
 	}
 
 	description() {
-		return _('Moves the notes matching <note> to [notebook].');
+		return _("Moves the notes matching <note> to [notebook].");
 	}
 
 	async action(args) {
-		const pattern = args['note'];
-		const destination = args['notebook'];
-		
-		const folder = await Folder.loadByField('title', destination);
+		const pattern = args["note"];
+		const destination = args["notebook"];
+
+		const folder = await Folder.loadByField("title", destination);
 		if (!folder) throw new Error(_('Cannot find "%s".', destination));
 
 		const notes = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
@@ -29,7 +28,6 @@ class Command extends BaseCommand {
 			await Note.moveToFolder(notes[i].id, folder.id);
 		}
 	}
-
 }
 
 module.exports = Command;

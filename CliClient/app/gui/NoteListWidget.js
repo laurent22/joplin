@@ -1,18 +1,17 @@
-const Note = require('lib/models/Note.js');
-const ListWidget = require('tkwidgets/ListWidget.js');
+const Note = require("lib/models/Note.js");
+const ListWidget = require("tkwidgets/ListWidget.js");
 
 class NoteListWidget extends ListWidget {
-
 	constructor() {
 		super();
 		this.selectedNoteId_ = 0;
 
 		this.updateIndexFromSelectedNoteId_ = false;
 
-		this.itemRenderer = (note) => {
+		this.itemRenderer = note => {
 			let label = Note.displayTitle(note); // + ' ' + note.id;
 			if (note.is_todo) {
-				label = '[' + (note.todo_completed ? 'X' : ' ') + '] ' + label;
+				label = "[" + (note.todo_completed ? "X" : " ") + "] " + label;
 			}
 			return label;
 		};
@@ -25,14 +24,13 @@ class NoteListWidget extends ListWidget {
 
 	render() {
 		if (this.updateIndexFromSelectedNoteId_) {
-			const index = this.itemIndexByKey('id', this.selectedNoteId_);
+			const index = this.itemIndexByKey("id", this.selectedNoteId_);
 			this.currentIndex = index >= 0 ? index : 0;
 			this.updateIndexFromSelectedNoteId_ = false;
 		}
 
 		super.render();
 	}
-
 }
 
 module.exports = NoteListWidget;

@@ -1,10 +1,9 @@
-const BaseItem = require('lib/models/BaseItem.js');
-const BaseModel = require('lib/BaseModel.js');
+const BaseItem = require("lib/models/BaseItem.js");
+const BaseModel = require("lib/BaseModel.js");
 
 class NoteTag extends BaseItem {
-
 	static tableName() {
-		return 'note_tags';
+		return "note_tags";
 	}
 
 	static modelType() {
@@ -13,8 +12,8 @@ class NoteTag extends BaseItem {
 
 	static async serialize(item, type = null, shownKeys = null) {
 		let fieldNames = this.fieldNames();
-		fieldNames.push('type_');
-		return super.serialize(item, 'note_tag', fieldNames);
+		fieldNames.push("type_");
+		return super.serialize(item, "note_tag", fieldNames);
 	}
 
 	static async byNoteIds(noteIds) {
@@ -23,14 +22,13 @@ class NoteTag extends BaseItem {
 	}
 
 	static async tagIdsByNoteId(noteId) {
-		let rows = await this.db().selectAll('SELECT tag_id FROM note_tags WHERE note_id = ?', [noteId]);
+		let rows = await this.db().selectAll("SELECT tag_id FROM note_tags WHERE note_id = ?", [noteId]);
 		let output = [];
 		for (let i = 0; i < rows.length; i++) {
 			output.push(rows[i].tag_id);
 		}
 		return output;
 	}
-
 }
 
 module.exports = NoteTag;

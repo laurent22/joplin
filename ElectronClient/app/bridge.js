@@ -1,9 +1,8 @@
-const { _ } = require('lib/locale.js');
-const { dirname } = require('lib/path-utils.js');
-const { Logger } = require('lib/logger.js');
+const { _ } = require("lib/locale.js");
+const { dirname } = require("lib/path-utils.js");
+const { Logger } = require("lib/logger.js");
 
 class Bridge {
-
 	constructor(electronWrapper) {
 		this.electronWrapper_ = electronWrapper;
 		this.autoUpdateLogger_ = null;
@@ -40,9 +39,9 @@ class Bridge {
 	}
 
 	showSaveDialog(options) {
-		const {dialog} = require('electron');
+		const { dialog } = require("electron");
 		if (!options) options = {};
-		if (!('defaultPath' in options) && this.lastSelectedPath_) options.defaultPath = this.lastSelectedPath_;
+		if (!("defaultPath" in options) && this.lastSelectedPath_) options.defaultPath = this.lastSelectedPath_;
 		const filePath = dialog.showSaveDialog(this.window(), options);
 		if (filePath) {
 			this.lastSelectedPath_ = filePath;
@@ -51,10 +50,10 @@ class Bridge {
 	}
 
 	showOpenDialog(options) {
-		const {dialog} = require('electron');
+		const { dialog } = require("electron");
 		if (!options) options = {};
-		if (!('defaultPath' in options) && this.lastSelectedPath_) options.defaultPath = this.lastSelectedPath_;
-		if (!('createDirectory' in options)) options.createDirectory = true;
+		if (!("defaultPath" in options) && this.lastSelectedPath_) options.defaultPath = this.lastSelectedPath_;
+		if (!("createDirectory" in options)) options.createDirectory = true;
 		const filePaths = dialog.showOpenDialog(this.window(), options);
 		if (filePaths && filePaths.length) {
 			this.lastSelectedPath_ = dirname(filePaths[0]);
@@ -64,71 +63,77 @@ class Bridge {
 
 	// Don't use this directly - call one of the showXxxxxxxMessageBox() instead
 	showMessageBox_(window, options) {
-		const {dialog} = require('electron');
-		const nativeImage = require('electron').nativeImage
+		const { dialog } = require("electron");
+		const nativeImage = require("electron").nativeImage;
 		if (!window) window = this.window();
 		return dialog.showMessageBox(window, options);
 	}
 
 	showErrorMessageBox(message) {
 		return this.showMessageBox_(this.window(), {
-			type: 'error',
+			type: "error",
 			message: message,
 		});
 	}
 
 	showConfirmMessageBox(message) {
 		const result = this.showMessageBox_(this.window(), {
-			type: 'question',
+			type: "question",
 			message: message,
-			buttons: [_('OK'), _('Cancel')],
+			buttons: [_("OK"), _("Cancel")],
 		});
 		return result === 0;
 	}
 
 	showInfoMessageBox(message, options = {}) {
-		const result = this.showMessageBox_(this.window(), Object.assign({}, {
-			type: 'info',
-			message: message,
-			buttons: [_('OK')],
-		}, options));
+		const result = this.showMessageBox_(
+			this.window(),
+			Object.assign(
+				{},
+				{
+					type: "info",
+					message: message,
+					buttons: [_("OK")],
+				},
+				options
+			)
+		);
 		return result === 0;
 	}
 
 	get Menu() {
-		return require('electron').Menu;
+		return require("electron").Menu;
 	}
 
 	get MenuItem() {
-		return require('electron').MenuItem;
+		return require("electron").MenuItem;
 	}
 
 	openExternal(url) {
-		return require('electron').shell.openExternal(url)
+		return require("electron").shell.openExternal(url);
 	}
 
 	openItem(fullPath) {
-		return require('electron').shell.openItem(fullPath)
+		return require("electron").shell.openItem(fullPath);
 	}
 
 	checkForUpdates(inBackground, window, logFilePath) {
-		const { checkForUpdates } = require('./checkForUpdates.js');
+		const { checkForUpdates } = require("./checkForUpdates.js");
 		checkForUpdates(inBackground, window, logFilePath);
 	}
-
 }
 
 let bridge_ = null;
 
 function initBridge(wrapper) {
-	if (bridge_) throw new Error('Bridge already initialized');
+	if (bridge_) throw new Error("Bridge already initialized");
 	bridge_ = new Bridge(wrapper);
 	return bridge_;
 }
 
 function bridge() {
-	if (!bridge_) throw new Error('Bridge not initialized');
+	if (!bridge_) throw new Error("Bridge not initialized");
 	return bridge_;
-}	
+}
 
-module.exports = { bridge, initBridge }
+module.exports = { bridge, initBridge };

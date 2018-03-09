@@ -1,24 +1,24 @@
-const React = require('react'); const Component = React.Component;
-const { View } = require('react-native');
-const { WebView, Button, Text } = require('react-native');
-const { connect } = require('react-redux');
-const { Log } = require('lib/log.js');
-const Setting = require('lib/models/Setting.js');
-const { ScreenHeader } = require('lib/components/screen-header.js');
-const { reg } = require('lib/registry.js');
-const { _ } = require('lib/locale.js');
-const { BaseScreenComponent } = require('lib/components/base-screen.js');
-const parseUri = require('lib/parseUri');
+const React = require("react");
+const Component = React.Component;
+const { View } = require("react-native");
+const { WebView, Button, Text } = require("react-native");
+const { connect } = require("react-redux");
+const { Log } = require("lib/log.js");
+const Setting = require("lib/models/Setting.js");
+const { ScreenHeader } = require("lib/components/screen-header.js");
+const { reg } = require("lib/registry.js");
+const { _ } = require("lib/locale.js");
+const { BaseScreenComponent } = require("lib/components/base-screen.js");
+const parseUri = require("lib/parseUri");
 
 class OneDriveLoginScreenComponent extends BaseScreenComponent {
-	
 	static navigationOptions(options) {
 		return { header: null };
 	}
 
 	constructor() {
 		super();
-		this.state = { webviewUrl: '' };
+		this.state = { webviewUrl: "" };
 		this.authCode_ = null;
 	}
 
@@ -29,11 +29,17 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 	}
 
 	startUrl() {
-		return reg.syncTarget().api().authCodeUrl(this.redirectUrl());
+		return reg
+			.syncTarget()
+			.api()
+			.authCodeUrl(this.redirectUrl());
 	}
 
 	redirectUrl() {
-		return reg.syncTarget().api().nativeClientRedirectUrl();
+		return reg
+			.syncTarget()
+			.api()
+			.nativeClientRedirectUrl();
 	}
 
 	async webview_load(noIdeaWhatThisIs) {
@@ -44,16 +50,19 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 		const parsedUrl = parseUri(url);
 
 		if (!this.authCode_ && parsedUrl && parsedUrl.queryKey && parsedUrl.queryKey.code) {
-			Log.info('URL: ', url, parsedUrl.queryKey);
+			Log.info("URL: ", url, parsedUrl.queryKey);
 
-			this.authCode_ = parsedUrl.queryKey.code
+			this.authCode_ = parsedUrl.queryKey.code;
 
 			try {
-				await reg.syncTarget().api().execTokenRequest(this.authCode_, this.redirectUrl(), true);
-				this.props.dispatch({ type: 'NAV_BACK' });
+				await reg
+					.syncTarget()
+					.api()
+					.execTokenRequest(this.authCode_, this.redirectUrl(), true);
+				this.props.dispatch({ type: "NAV_BACK" });
 				reg.scheduleSync(0);
 			} catch (error) {
-				alert('Could not login to OneDrive. Please try again\n\n' + error.message + '\n\n' + url);
+				alert("Could not login to OneDrive. Please try again\n\n" + error.message + "\n\n" + url);
 			}
 
 			this.authCode_ = null;
@@ -70,7 +79,7 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 		// a better way to do this.
 
 		this.setState({
-			webviewUrl: 'https://microsoft.com',
+			webviewUrl: "https://microsoft.com",
 		});
 		this.forceUpdate();
 
@@ -85,27 +94,33 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 	render() {
 		const source = {
 			uri: this.state.webviewUrl,
-		}
+		};
 
 		return (
 			<View style={this.styles().screen}>
-				<ScreenHeader title={_('Login with OneDrive')}/>
+				<ScreenHeader title={_("Login with OneDrive")} />
 				<WebView
 					source={source}
-					onNavigationStateChange={(o) => { this.webview_load(o); }}
-					onError={(error) => { this.webview_error(error); }}
+					onNavigationStateChange={o => {
+						this.webview_load(o);
+					}}
+					onError={error => {
+						this.webview_error(error);
+					}}
 				/>
-				<Button title={_("Refresh")} onPress={() => { this.retryButton_click(); }}></Button>
+				<Button
+					title={_("Refresh")}
+					onPress={() => {
+						this.retryButton_click();
+					}}
+				/>
 			</View>
 		);
 	}
-
 }
 
-const OneDriveLoginScreen = connect(
-	(state) => {
-		return {};
-	}
-)(OneDriveLoginScreenComponent)
+const OneDriveLoginScreen = connect(state => {
+	return {};
+})(OneDriveLoginScreenComponent);
 
 module.exports = { OneDriveLoginScreen };

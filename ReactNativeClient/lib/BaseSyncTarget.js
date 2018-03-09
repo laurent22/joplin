@@ -1,7 +1,6 @@
-const EncryptionService = require('lib/services/EncryptionService.js');
+const EncryptionService = require("lib/services/EncryptionService.js");
 
 class BaseSyncTarget {
-
 	constructor(db, options = null) {
 		this.db_ = db;
 		this.synchronizer_ = null;
@@ -15,7 +14,7 @@ class BaseSyncTarget {
 	}
 
 	option(name, defaultValue = null) {
-		return this.options_ && (name in this.options_) ? this.options_[name] : defaultValue;
+		return this.options_ && name in this.options_ ? this.options_[name] : defaultValue;
 	}
 
 	logger() {
@@ -39,25 +38,25 @@ class BaseSyncTarget {
 	}
 
 	static id() {
-		throw new Error('id() not implemented');
+		throw new Error("id() not implemented");
 	}
 
 	// Note: it cannot be called just "name()" because that's a reserved keyword and
 	// it would throw an obscure error in React Native.
 	static targetName() {
-		throw new Error('targetName() not implemented');
+		throw new Error("targetName() not implemented");
 	}
 
 	static label() {
-		throw new Error('label() not implemented');
+		throw new Error("label() not implemented");
 	}
 
 	async initSynchronizer() {
-		throw new Error('initSynchronizer() not implemented');
+		throw new Error("initSynchronizer() not implemented");
 	}
 
 	async initFileApi() {
-		throw new Error('initFileApi() not implemented');
+		throw new Error("initFileApi() not implemented");
 	}
 
 	async fileApi() {
@@ -76,32 +75,32 @@ class BaseSyncTarget {
 	async synchronizer() {
 		if (this.synchronizer_) return this.synchronizer_;
 
-		if (this.initState_ == 'started') {
+		if (this.initState_ == "started") {
 			// Synchronizer is already being initialized, so wait here till it's done.
 			return new Promise((resolve, reject) => {
 				const iid = setInterval(() => {
-					if (this.initState_ == 'ready') {
+					if (this.initState_ == "ready") {
 						clearInterval(iid);
 						resolve(this.synchronizer_);
 					}
-					if (this.initState_ == 'error') {
+					if (this.initState_ == "error") {
 						clearInterval(iid);
-						reject(new Error('Could not initialise synchroniser'));
+						reject(new Error("Could not initialise synchroniser"));
 					}
 				}, 1000);
 			});
 		} else {
-			this.initState_ = 'started';
+			this.initState_ = "started";
 
 			try {
 				this.synchronizer_ = await this.initSynchronizer();
 				this.synchronizer_.setLogger(this.logger());
 				this.synchronizer_.setEncryptionService(EncryptionService.instance());
 				this.synchronizer_.dispatch = BaseSyncTarget.dispatch;
-				this.initState_ = 'ready';
+				this.initState_ = "ready";
 				return this.synchronizer_;
 			} catch (error) {
-				this.initState_ = 'error';
+				this.initState_ = "error";
 				throw error;
 			}
 		}
@@ -111,11 +110,10 @@ class BaseSyncTarget {
 		if (!this.synchronizer_) return false;
 		if (!this.isAuthenticated()) return false;
 		const sync = await this.synchronizer();
-		return sync.state() != 'idle';
+		return sync.state() != "idle";
 	}
-
 }
 
-BaseSyncTarget.dispatch = (action) => {};
+BaseSyncTarget.dispatch = action => {};
 
 module.exports = BaseSyncTarget;

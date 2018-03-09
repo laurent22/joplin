@@ -1,14 +1,13 @@
-const moment = require('moment');
-const { _ } = require('lib/locale.js');
-const { time } = require('lib/time-utils.js');
-const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
+const moment = require("moment");
+const { _ } = require("lib/locale.js");
+const { time } = require("lib/time-utils.js");
+const { FsDriverDummy } = require("lib/fs-driver-dummy.js");
 
 class Logger {
-
 	constructor() {
 		this.targets_ = [];
 		this.level_ = Logger.LEVEL_ERROR;
-		this.fileAppendQueue_ = []
+		this.fileAppendQueue_ = [];
 		this.lastDbCleanup_ = time.unixMs();
 	}
 
@@ -44,14 +43,14 @@ class Logger {
 	}
 
 	objectToString(object) {
-		let output = '';
+		let output = "";
 
-		if (typeof object === 'object') {
+		if (typeof object === "object") {
 			if (object instanceof Error) {
 				output = object.toString();
 				if (object.code) output += "\nCode: " + object.code;
 				if (object.headers) output += "\nHeader: " + JSON.stringify(object.headers);
-				if (object.request) output += "\nRequest: " + (object.request.substr ? object.request.substr(0, 1024) : '');
+				if (object.request) output += "\nRequest: " + (object.request.substr ? object.request.substr(0, 1024) : "");
 				if (object.stack) output += "\n" + object.stack;
 			} else {
 				output = JSON.stringify(object);
@@ -60,7 +59,7 @@ class Logger {
 			output = object;
 		}
 
-		return output;		
+		return output;
 	}
 
 	objectsToString(...object) {
@@ -68,7 +67,7 @@ class Logger {
 		for (let i = 0; i < object.length; i++) {
 			output.push('"' + this.objectToString(object[i]) + '"');
 		}
-		return output.join(', ');
+		return output.join(", ");
 	}
 
 	static databaseCreateTableSql() {
@@ -81,7 +80,7 @@ class Logger {
 			\`timestamp\` INT NOT NULL
 		);
 		`;
-		return output.split("\n").join(' ');
+		return output.split("\n").join(" ");
 	}
 
 	// Only for database at the moment
@@ -92,9 +91,9 @@ class Logger {
 
 		for (let i = 0; i < this.targets_.length; i++) {
 			const target = this.targets_[i];
-			if (target.type == 'database') {
-				let sql = 'SELECT * FROM logs WHERE level IN (' + options.levels.join(',') + ') ORDER BY timestamp DESC';
-				if (limit !== null) sql += ' LIMIT ' + limit
+			if (target.type == "database") {
+				let sql = "SELECT * FROM logs WHERE level IN (" + options.levels.join(",") + ") ORDER BY timestamp DESC";
+				if (limit !== null) sql += " LIMIT " + limit;
 				return await target.database.selectAll(sql);
 			}
 		}
@@ -104,37 +103,39 @@ class Logger {
 	log(level, ...object) {
 		if (this.level() < level || !this.targets_.length) return;
 
-		let levelString = '';
-		let line = moment().format('YYYY-MM-DD HH:mm:ss') + ': ';
+		let levelString = "";
+		let line = moment().format("YYYY-MM-DD HH:mm:ss") + ": ";
 
-		if (level == Logger.LEVEL_WARN) levelString += '[warn] ';
-		if (level == Logger.LEVEL_ERROR) levelString += '[error] ';
+		if (level == Logger.LEVEL_WARN) levelString += "[warn] ";
+		if (level == Logger.LEVEL_ERROR) levelString += "[error] ";
 
 		for (let i = 0; i < this.targets_.length; i++) {
 			let target = this.targets_[i];
-			if (target.type == 'console') {
-				let fn = 'log';
-				if (level == Logger.LEVEL_ERROR) fn = 'error';
-				if (level == Logger.LEVEL_WARN) fn = 'warn';
-				if (level == Logger.LEVEL_INFO) fn = 'info';
+			if (target.type == "console") {
+				let fn = "log";
+				if (level == Logger.LEVEL_ERROR) fn = "error";
+				if (level == Logger.LEVEL_WARN) fn = "warn";
+				if (level == Logger.LEVEL_INFO) fn = "info";
 				console[fn](line + this.objectsToString(...object));
-			} else if (target.type == 'file') {
+			} else if (target.type == "file") {
 				let serializedObject = this.objectsToString(...object);
 				Logger.fsDriver().appendFileSync(target.path, line + serializedObject + "\n");
-			} else if (target.type == 'database') {
+			} else if (target.type == "database") {
 				let msg = this.objectsToString(...object);
 
-				let queries = [{
-					sql: 'INSERT INTO logs (`source`, `level`, `message`, `timestamp`) VALUES (?, ?, ?, ?)',
-					params: [target.source, level, msg, time.unixMs()],
-				}];
+				let queries = [
+					{
+						sql: "INSERT INTO logs (`source`, `level`, `message`, `timestamp`) VALUES (?, ?, ?, ?)",
+						params: [target.source, level, msg, time.unixMs()],
+					},
+				];
 
 				const now = time.unixMs();
 				if (now - this.lastDbCleanup_ > 1000 * 60 * 60) {
 					this.lastDbCleanup_ = now;
 					const dayKeep = 14;
 					queries.push({
-						sql: 'DELETE FROM logs WHERE `timestamp` < ?',
+						sql: "DELETE FROM logs WHERE `timestamp` < ?",
 						params: [now - 1000 * 60 * 60 * 24 * dayKeep],
 					});
 				}
@@ -144,27 +145,35 @@ class Logger {
 		}
 	}
 
-	error(...object) { return this.log(Logger.LEVEL_ERROR, ...object); }
-	warn(...object)  { return this.log(Logger.LEVEL_WARN, ...object); }
-	info(...object)  { return this.log(Logger.LEVEL_INFO, ...object); }
-	debug(...object) { return this.log(Logger.LEVEL_DEBUG, ...object); }
+	error(...object) {
+		return this.log(Logger.LEVEL_ERROR, ...object);
+	}
+	warn(...object) {
+		return this.log(Logger.LEVEL_WARN, ...object);
+	}
+	info(...object) {
+		return this.log(Logger.LEVEL_INFO, ...object);
+	}
+	debug(...object) {
+		return this.log(Logger.LEVEL_DEBUG, ...object);
+	}
 
 	static levelStringToId(s) {
-		if (s == 'none') return Logger.LEVEL_NONE;
-		if (s == 'error') return Logger.LEVEL_ERROR;
-		if (s == 'warn') return Logger.LEVEL_WARN;
-		if (s == 'info') return Logger.LEVEL_INFO;
-		if (s == 'debug') return Logger.LEVEL_DEBUG;
-		throw new Error(_('Unknown log level: %s', s));
+		if (s == "none") return Logger.LEVEL_NONE;
+		if (s == "error") return Logger.LEVEL_ERROR;
+		if (s == "warn") return Logger.LEVEL_WARN;
+		if (s == "info") return Logger.LEVEL_INFO;
+		if (s == "debug") return Logger.LEVEL_DEBUG;
+		throw new Error(_("Unknown log level: %s", s));
 	}
 
 	static levelIdToString(id) {
-		if (id == Logger.LEVEL_NONE) return 'none';
-		if (id == Logger.LEVEL_ERROR) return 'error';
-		if (id == Logger.LEVEL_WARN) return 'warn';
-		if (id == Logger.LEVEL_INFO) return 'info';
-		if (id == Logger.LEVEL_DEBUG) return 'debug';
-		throw new Error(_('Unknown level ID: %s', id));
+		if (id == Logger.LEVEL_NONE) return "none";
+		if (id == Logger.LEVEL_ERROR) return "error";
+		if (id == Logger.LEVEL_WARN) return "warn";
+		if (id == Logger.LEVEL_INFO) return "info";
+		if (id == Logger.LEVEL_DEBUG) return "debug";
+		throw new Error(_("Unknown level ID: %s", id));
 	}
 
 	static levelIds() {
@@ -179,7 +188,6 @@ class Logger {
 		}
 		return output;
 	}
-
 }
 
 Logger.LEVEL_NONE = 0;

@@ -1,9 +1,8 @@
-const React = require('react');
-const { TouchableOpacity, TouchableWithoutFeedback , Dimensions, Text, Modal, View } = require('react-native');
-const { ItemList } = require('lib/components/ItemList.js');
+const React = require("react");
+const { TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, Modal, View } = require("react-native");
+const { ItemList } = require("lib/components/ItemList.js");
 
 class Dropdown extends React.Component {
-
 	constructor() {
 		super();
 
@@ -21,7 +20,7 @@ class Dropdown extends React.Component {
 		// https://stackoverflow.com/questions/30096038/react-native-getting-the-position-of-an-element
 		this.headerRef_.measure((fx, fy, width, height, px, py) => {
 			this.setState({
-				headerSize: { x: px, y: py, width: width, height: height }
+				headerSize: { x: px, y: py, width: width, height: height },
 			});
 		});
 	}
@@ -29,12 +28,12 @@ class Dropdown extends React.Component {
 	render() {
 		const items = this.props.items;
 		const itemHeight = 60;
-		const windowHeight = Dimensions.get('window').height - 50;
+		const windowHeight = Dimensions.get("window").height - 50;
 
 		// Dimensions doesn't return quite the right dimensions so leave an extra gap to make
 		// sure nothing is off screen.
 		const listMaxHeight = windowHeight;
-		const listHeight = Math.min(items.length * itemHeight, listMaxHeight);  //Dimensions.get('window').height - this.state.headerSize.y - this.state.headerSize.height - 50;
+		const listHeight = Math.min(items.length * itemHeight, listMaxHeight); //Dimensions.get('window').height - this.state.headerSize.y - this.state.headerSize.height - 50;
 		const maxListTop = windowHeight - listHeight;
 		const listTop = Math.min(maxListTop, this.state.headerSize.y + this.state.headerSize.height);
 
@@ -47,12 +46,12 @@ class Dropdown extends React.Component {
 
 		const itemListStyle = Object.assign({}, this.props.itemListStyle ? this.props.itemListStyle : {}, {
 			borderWidth: 1,
-			borderColor: '#ccc',
+			borderColor: "#ccc",
 		});
 
 		const itemWrapperStyle = Object.assign({}, this.props.itemWrapperStyle ? this.props.itemWrapperStyle : {}, {
-			flex:1,
-			justifyContent: 'center',
+			flex: 1,
+			justifyContent: "center",
 			height: itemHeight,
 			paddingLeft: 20,
 			paddingRight: 10,
@@ -65,8 +64,8 @@ class Dropdown extends React.Component {
 			//paddingLeft: 20,
 			//paddingRight: 20,
 			flex: 1,
-			flexDirection: 'row',
-			alignItems: 'center',
+			flexDirection: "row",
+			alignItems: "center",
 		});
 
 		const headerStyle = Object.assign({}, this.props.headerStyle ? this.props.headerStyle : {}, {
@@ -78,11 +77,9 @@ class Dropdown extends React.Component {
 			marginRight: 10,
 		});
 
-		const itemStyle = Object.assign({}, this.props.itemStyle ? this.props.itemStyle : {}, {
-			
-		});
+		const itemStyle = Object.assign({}, this.props.itemStyle ? this.props.itemStyle : {}, {});
 
-		let headerLabel = '...';
+		let headerLabel = "...";
 		for (let i = 0; i < items.length; i++) {
 			const item = items[i];
 			if (item.value === this.props.selectedValue) {
@@ -93,34 +90,61 @@ class Dropdown extends React.Component {
 
 		const closeList = () => {
 			this.setState({ listVisible: false });
-		}
+		};
 
-		const itemRenderer= (item) => {
+		const itemRenderer = item => {
 			return (
-				<TouchableOpacity style={itemWrapperStyle} key={item.value} onPress={() => { closeList(); if (this.props.onValueChange) this.props.onValueChange(item.value); }}>
-					<Text ellipsizeMode="tail" numberOfLines={1} style={itemStyle} key={item.value}>{item.label}</Text>
+				<TouchableOpacity
+					style={itemWrapperStyle}
+					key={item.value}
+					onPress={() => {
+						closeList();
+						if (this.props.onValueChange) this.props.onValueChange(item.value);
+					}}
+				>
+					<Text ellipsizeMode="tail" numberOfLines={1} style={itemStyle} key={item.value}>
+						{item.label}
+					</Text>
 				</TouchableOpacity>
 			);
-		}
+		};
 
 		return (
-			<View style={{flex: 1, flexDirection: 'column' }}>
-				<TouchableOpacity style={headerWrapperStyle} ref={(ref) => this.headerRef_ = ref} onPress={() => {
-					this.updateHeaderCoordinates();
-					this.setState({ listVisible: true });
-				}}>
-					<Text ellipsizeMode="tail" numberOfLines={1} style={headerStyle}>{headerLabel}</Text>
-					<Text style={headerArrowStyle}>{'▼'}</Text>
+			<View style={{ flex: 1, flexDirection: "column" }}>
+				<TouchableOpacity
+					style={headerWrapperStyle}
+					ref={ref => (this.headerRef_ = ref)}
+					onPress={() => {
+						this.updateHeaderCoordinates();
+						this.setState({ listVisible: true });
+					}}
+				>
+					<Text ellipsizeMode="tail" numberOfLines={1} style={headerStyle}>
+						{headerLabel}
+					</Text>
+					<Text style={headerArrowStyle}>{"▼"}</Text>
 				</TouchableOpacity>
-				<Modal transparent={true} visible={this.state.listVisible} onRequestClose={() => { closeList(); }} >
-					<TouchableWithoutFeedback onPressOut={() => { closeList() }}>
-						<View style={{flex:1}}>
+				<Modal
+					transparent={true}
+					visible={this.state.listVisible}
+					onRequestClose={() => {
+						closeList();
+					}}
+				>
+					<TouchableWithoutFeedback
+						onPressOut={() => {
+							closeList();
+						}}
+					>
+						<View style={{ flex: 1 }}>
 							<View style={wrapperStyle}>
 								<ItemList
 									style={itemListStyle}
 									items={this.props.items}
 									itemHeight={itemHeight}
-									itemRenderer={(item) => { return itemRenderer(item) }}
+									itemRenderer={item => {
+										return itemRenderer(item);
+									}}
 								/>
 							</View>
 						</View>

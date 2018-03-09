@@ -1,8 +1,7 @@
-const React = require('react');
-const { Text, TouchableHighlight, View, StyleSheet, ScrollView } = require('react-native');
+const React = require("react");
+const { Text, TouchableHighlight, View, StyleSheet, ScrollView } = require("react-native");
 
 class ItemList extends React.Component {
-
 	constructor() {
 		super();
 
@@ -77,24 +76,33 @@ class ItemList extends React.Component {
 			const items = this.props.items;
 
 			const blankItem = function(key, height) {
-				return <View key={key} style={{height:height}}></View>
-			}
+				return <View key={key} style={{ height: height }} />;
+			};
 
-			itemComps = [blankItem('top', this.state.topItemIndex * this.props.itemHeight)];
+			itemComps = [blankItem("top", this.state.topItemIndex * this.props.itemHeight)];
 
 			for (let i = this.state.topItemIndex; i <= this.state.bottomItemIndex; i++) {
 				const itemComp = this.props.itemRenderer(items[i]);
 				itemComps.push(itemComp);
 			}
 
-			itemComps.push(blankItem('bottom', (items.length - this.state.bottomItemIndex - 1) * this.props.itemHeight));
+			itemComps.push(blankItem("bottom", (items.length - this.state.bottomItemIndex - 1) * this.props.itemHeight));
 		} else {
 			itemComps = this.props.itemComponents;
 		}
 
 		return (
-			<ScrollView scrollEventThrottle={500} onLayout={(event) => { this.onLayout(event); }} style={style} onScroll={ (event) => { this.onScroll(event) }}>
-				{ itemComps }
+			<ScrollView
+				scrollEventThrottle={500}
+				onLayout={event => {
+					this.onLayout(event);
+				}}
+				style={style}
+				onScroll={event => {
+					this.onScroll(event);
+				}}
+			>
+				{itemComps}
 			</ScrollView>
 		);
 	}

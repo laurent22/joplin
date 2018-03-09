@@ -1,4 +1,4 @@
-const { sprintf } = require('sprintf-js');
+const { sprintf } = require("sprintf-js");
 
 let codeToLanguageE_ = {};
 codeToLanguageE_["aa"] = "Afar";
@@ -179,7 +179,7 @@ let supportedLocales_ = null;
 
 let loadedLocales_ = {};
 
-const defaultLocale_ = 'en_GB';
+const defaultLocale_ = "en_GB";
 
 let currentLocale_ = defaultLocale_;
 
@@ -188,7 +188,7 @@ function defaultLocale() {
 }
 
 function supportedLocales() {
-	if (!supportedLocales_) supportedLocales_ = require('../locales/index.js').locales;
+	if (!supportedLocales_) supportedLocales_ = require("../locales/index.js").locales;
 
 	let output = [];
 	for (let n in supportedLocales_) {
@@ -216,32 +216,31 @@ function closestSupportedLocale(canonicalName, defaultToEnglish = true) {
 
 	for (let i = 0; i < locales.length; i++) {
 		const locale = locales[i];
-		const language = locale.split('_')[0];
+		const language = locale.split("_")[0];
 		if (requiredLanguage == language) return locale;
 	}
 
-	return defaultToEnglish ? 'en_GB' : null;
+	return defaultToEnglish ? "en_GB" : null;
 }
 
 function countryName(countryCode) {
-	return codeToCountry_[countryCode] ? codeToCountry_[countryCode] : '';
+	return codeToCountry_[countryCode] ? codeToCountry_[countryCode] : "";
 }
 
 function languageNameInEnglish(languageCode) {
-	return codeToLanguageE_[languageCode] ? codeToLanguageE_[languageCode] : '';
+	return codeToLanguageE_[languageCode] ? codeToLanguageE_[languageCode] : "";
 }
 
 function languageName(languageCode, defaultToEnglish = true) {
 	if (codeToLanguage_[languageCode]) return codeToLanguage_[languageCode];
-	if (defaultToEnglish) return languageNameInEnglish(languageCode)
-	return '';
+	if (defaultToEnglish) return languageNameInEnglish(languageCode);
+	return "";
 }
 
 function languageCodeOnly(canonicalName) {
 	if (canonicalName.length < 2) return canonicalName;
 	return canonicalName.substr(0, 2);
 }
-
 
 function countryCodeOnly(canonicalName) {
 	if (canonicalName.length <= 2) return "";
@@ -273,10 +272,10 @@ function countryDisplayName(canonicalName) {
 
 function localeStrings(canonicalName) {
 	const locale = closestSupportedLocale(canonicalName);
-	
+
 	if (loadedLocales_[locale]) return loadedLocales_[locale];
 
-	loadedLocales_[locale] = Object.assign({}, supportedLocales_[locale]); 
+	loadedLocales_[locale] = Object.assign({}, supportedLocales_[locale]);
 
 	return loadedLocales_[locale];
 }
@@ -293,11 +292,11 @@ function languageCode() {
 function _(s, ...args) {
 	let strings = localeStrings(currentLocale_);
 	let result = strings[s];
-	if (result === '' || result === undefined) result = s;
+	if (result === "" || result === undefined) result = s;
 	try {
 		return sprintf(result, ...args);
 	} catch (error) {
-		return result + ' ' + args.join(', ') + ' (Translation error: ' + error.message + ')';
+		return result + " " + args.join(", ") + " (Translation error: " + error.message + ")";
 	}
 }
 

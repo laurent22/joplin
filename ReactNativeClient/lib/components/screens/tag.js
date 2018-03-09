@@ -1,22 +1,22 @@
-const React = require('react'); const Component = React.Component;
-const { ListView, StyleSheet, View, TextInput, FlatList, TouchableHighlight } = require('react-native');
-const { connect } = require('react-redux');
-const { ScreenHeader } = require('lib/components/screen-header.js');
-const Icon = require('react-native-vector-icons/Ionicons').default;
-const { _ } = require('lib/locale.js');
-const Note = require('lib/models/Note.js');
-const { NoteItem } = require('lib/components/note-item.js');
-const { BaseScreenComponent } = require('lib/components/base-screen.js');
-const { globalStyle } = require('lib/components/global-style.js');
+const React = require("react");
+const Component = React.Component;
+const { ListView, StyleSheet, View, TextInput, FlatList, TouchableHighlight } = require("react-native");
+const { connect } = require("react-redux");
+const { ScreenHeader } = require("lib/components/screen-header.js");
+const Icon = require("react-native-vector-icons/Ionicons").default;
+const { _ } = require("lib/locale.js");
+const Note = require("lib/models/Note.js");
+const { NoteItem } = require("lib/components/note-item.js");
+const { BaseScreenComponent } = require("lib/components/base-screen.js");
+const { globalStyle } = require("lib/components/global-style.js");
 
 let styles = {
 	body: {
 		flex: 1,
 	},
-}
+};
 
 class TagScreenComponent extends BaseScreenComponent {
-	
 	static navigationOptions(options) {
 		return { header: null };
 	}
@@ -40,14 +40,14 @@ class TagScreenComponent extends BaseScreenComponent {
 		const notes = await Tag.notes(props.selectedTagId);
 
 		this.props.dispatch({
-			type: 'NOTE_UPDATE_ALL',
+			type: "NOTE_UPDATE_ALL",
 			notes: notes,
 			notesSource: source,
 		});
 	}
 
 	render() {
-		let title = tag ? tag.title : '';
+		let title = tag ? tag.title : "";
 
 		// <ActionButton addFolderNoteButtons={true} parentFolderId={this.props.selectedFolderId}></ActionButton>
 
@@ -55,22 +55,23 @@ class TagScreenComponent extends BaseScreenComponent {
 		return (
 			<View style={this.styles().screen}>
 				<ScreenHeader title={title} menuOptions={this.menuOptions()} />
-				<NoteList style={{flex: 1}}/>
-				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
+				<NoteList style={{ flex: 1 }} />
+				<DialogBox
+					ref={dialogbox => {
+						this.dialogbox = dialogbox;
+					}}
+				/>
 			</View>
 		);
 	}
-
 }
 
-const TagScreen = connect(
-	(state) => {
-		return {
-			tag: tag,
-			notes: state.notes,
-			notesSource: state.notesSource,
-		};
-	}
-)(TagScreenComponent)
+const TagScreen = connect(state => {
+	return {
+		tag: tag,
+		notes: state.notes,
+		notesSource: state.notesSource,
+	};
+})(TagScreenComponent);
 
 module.exports = { TagScreen };

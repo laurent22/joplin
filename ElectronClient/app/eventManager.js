@@ -1,7 +1,6 @@
-const events = require('events');
+const events = require("events");
 
 class EventManager {
-
 	constructor() {
 		this.emitter_ = new events.EventEmitter();
 	}
@@ -17,7 +16,6 @@ class EventManager {
 	removeListener(eventName, callback) {
 		return this.emitter_.removeListener(eventName, callback);
 	}
-
 }
 
 const eventManager = new EventManager();

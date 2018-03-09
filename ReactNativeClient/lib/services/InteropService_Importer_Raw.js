@@ -1,22 +1,21 @@
-const InteropService_Importer_Base = require('lib/services/InteropService_Importer_Base');
-const BaseItem = require('lib/models/BaseItem.js');
-const BaseModel = require('lib/BaseModel.js');
-const Resource = require('lib/models/Resource.js');
-const Folder = require('lib/models/Folder.js');
-const NoteTag = require('lib/models/NoteTag.js');
-const Note = require('lib/models/Note.js');
-const Tag = require('lib/models/Tag.js');
-const { basename, filename } = require('lib/path-utils.js');
-const fs = require('fs-extra');
-const md5 = require('md5');
-const { sprintf } = require('sprintf-js');
-const { shim } = require('lib/shim');
-const { _ } = require('lib/locale');
-const { fileExtension } = require('lib/path-utils');
-const { uuid } = require('lib/uuid.js');
+const InteropService_Importer_Base = require("lib/services/InteropService_Importer_Base");
+const BaseItem = require("lib/models/BaseItem.js");
+const BaseModel = require("lib/BaseModel.js");
+const Resource = require("lib/models/Resource.js");
+const Folder = require("lib/models/Folder.js");
+const NoteTag = require("lib/models/NoteTag.js");
+const Note = require("lib/models/Note.js");
+const Tag = require("lib/models/Tag.js");
+const { basename, filename } = require("lib/path-utils.js");
+const fs = require("fs-extra");
+const md5 = require("md5");
+const { sprintf } = require("sprintf-js");
+const { shim } = require("lib/shim");
+const { _ } = require("lib/locale");
+const { fileExtension } = require("lib/path-utils");
+const { uuid } = require("lib/uuid.js");
 
 class InteropService_Importer_Raw extends InteropService_Importer_Base {
-
 	async exec(result) {
 		const noteIdMap = {};
 		const folderIdMap = {};
@@ -26,18 +25,18 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 		const noteTagsToCreate = [];
 		const destinationFolderId = this.options_.destinationFolderId;
 
-		const replaceResourceNoteIds = (noteBody) => {
+		const replaceResourceNoteIds = noteBody => {
 			let output = noteBody;
 			const resourceIds = Note.linkedResourceIds(noteBody);
 
 			for (let i = 0; i < resourceIds.length; i++) {
 				const id = resourceIds[i];
 				if (!resourceIdMap[id]) resourceIdMap[id] = uuid.create();
-				output = output.replace(new RegExp(id, 'gi'), resourceIdMap[id]);
+				output = output.replace(new RegExp(id, "gi"), resourceIdMap[id]);
 			}
 
 			return output;
-		}
+		};
 
 		const stats = await shim.fsDriver().readDirStats(this.sourcePath_);
 
@@ -49,22 +48,22 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 				if (statId.toLowerCase() === folderId) return true;
 			}
 			return false;
-		}
+		};
 
 		let defaultFolder_ = null;
 		const defaultFolder = async () => {
 			if (defaultFolder_) return defaultFolder_;
-			const folderTitle = await Folder.findUniqueFolderTitle(this.options_.defaultFolderTitle ? this.options_.defaultFolderTitle : 'Imported');
+			const folderTitle = await Folder.findUniqueFolderTitle(this.options_.defaultFolderTitle ? this.options_.defaultFolderTitle : "Imported");
 			defaultFolder_ = await Folder.save({ title: folderTitle });
 			return defaultFolder_;
-		}
+		};
 
 		for (let i = 0; i < stats.length; i++) {
 			const stat = stats[i];
 			if (stat.isDirectory()) continue;
-			if (fileExtension(stat.path).toLowerCase() !== 'md') continue;
+			if (fileExtension(stat.path).toLowerCase() !== "md") continue;
 
-			const content = await shim.fsDriver().readFile(this.sourcePath_ + '/' + stat.path);
+			const content = await shim.fsDriver().readFile(this.sourcePath_ + "/" + stat.path);
 			let item = await BaseItem.unserialize(content);
 			const itemType = item.type_;
 			const ItemClass = BaseItem.itemClass(item);
@@ -72,7 +71,6 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 			delete item.type_;
 
 			if (itemType === BaseModel.TYPE_NOTE) {
-
 				// Logic is a bit complex here:
 				// - If a destination folder was specified, move the note to it.
 				// - Otherwise, if the associated folder exists, use this.
@@ -104,7 +102,7 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 				item.id = resourceIdMap[item.id];
 				createdResources[item.id] = item;
 			} else if (itemType === BaseModel.TYPE_TAG) {
-				const tag = await Tag.loadByTitle(item.title); 
+				const tag = await Tag.loadByTitle(item.title);
 				if (tag) {
 					tagIdMap[item.id] = tag.id;
 					continue;
@@ -127,12 +125,12 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 			const newTagId = tagIdMap[noteTag.tag_id];
 
 			if (!newNoteId) {
-				result.warnings.push(sprintf('Non-existent note %s referenced in tag %s', noteTag.note_id, noteTag.tag_id));
+				result.warnings.push(sprintf("Non-existent note %s referenced in tag %s", noteTag.note_id, noteTag.tag_id));
 				continue;
 			}
 
 			if (!newTagId) {
-				result.warnings.push(sprintf('Non-existent tag %s for note %s', noteTag.tag_id, noteTag.note_id));
+				result.warnings.push(sprintf("Non-existent tag %s for note %s", noteTag.tag_id, noteTag.note_id));
 				continue;
 			}
 
@@ -143,15 +141,15 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 			await NoteTag.save(noteTag, { isNew: true });
 		}
 
-		if (await shim.fsDriver().isDirectory(this.sourcePath_ + '/resources')) {
-			const resourceStats = await shim.fsDriver().readDirStats(this.sourcePath_ + '/resources');
+		if (await shim.fsDriver().isDirectory(this.sourcePath_ + "/resources")) {
+			const resourceStats = await shim.fsDriver().readDirStats(this.sourcePath_ + "/resources");
 
 			for (let i = 0; i < resourceStats.length; i++) {
-				const resourceFilePath = this.sourcePath_ + '/resources/' + resourceStats[i].path;
+				const resourceFilePath = this.sourcePath_ + "/resources/" + resourceStats[i].path;
 				const oldId = Resource.pathToId(resourceFilePath);
 				const newId = resourceIdMap[oldId];
 				if (!newId) {
-					result.warnings.push(sprintf('Resource file is not referenced in any note and so was not imported: %s', oldId));
+					result.warnings.push(sprintf("Resource file is not referenced in any note and so was not imported: %s", oldId));
 					continue;
 				}
 
@@ -163,7 +161,6 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 
 		return result;
 	}
-
 }
 
 module.exports = InteropService_Importer_Raw;

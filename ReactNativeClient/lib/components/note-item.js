@@ -1,16 +1,16 @@
-const React = require('react'); const Component = React.Component;
-const { connect } = require('react-redux');
-const { ListView, Text, TouchableOpacity , View, StyleSheet } = require('react-native');
-const { Log } = require('lib/log.js');
-const { _ } = require('lib/locale.js');
-const { Checkbox } = require('lib/components/checkbox.js');
-const { reg } = require('lib/registry.js');
-const Note = require('lib/models/Note.js');
-const { time } = require('lib/time-utils.js');
-const { globalStyle, themeStyle } = require('lib/components/global-style.js');
+const React = require("react");
+const Component = React.Component;
+const { connect } = require("react-redux");
+const { ListView, Text, TouchableOpacity, View, StyleSheet } = require("react-native");
+const { Log } = require("lib/log.js");
+const { _ } = require("lib/locale.js");
+const { Checkbox } = require("lib/components/checkbox.js");
+const { reg } = require("lib/registry.js");
+const Note = require("lib/models/Note.js");
+const { time } = require("lib/time-utils.js");
+const { globalStyle, themeStyle } = require("lib/components/global-style.js");
 
 class NoteItemComponent extends Component {
-
 	constructor() {
 		super();
 		this.styles_ = {};
@@ -18,8 +18,8 @@ class NoteItemComponent extends Component {
 
 	noteItem_press(noteId) {
 		this.props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'Note',
+			type: "NAV_GO",
+			routeName: "Note",
 			noteId: noteId,
 		});
 	}
@@ -32,11 +32,11 @@ class NoteItemComponent extends Component {
 
 		let styles = {
 			listItem: {
-				flexDirection: 'row',
+				flexDirection: "row",
 				//height: 40,
 				borderBottomWidth: 1,
 				borderBottomColor: theme.dividerColor,
-				alignItems: 'flex-start',
+				alignItems: "flex-start",
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
 				paddingTop: theme.itemMarginTop,
@@ -69,13 +69,13 @@ class NoteItemComponent extends Component {
 		return this.styles_[this.props.theme];
 	}
 
-	async todoCheckbox_change(checked) {	
+	async todoCheckbox_change(checked) {
 		if (!this.props.note) return;
 
 		const newNote = {
 			id: this.props.note.id,
 			todo_completed: checked ? time.unixMs() : 0,
-		}
+		};
 		await Note.save(newNote);
 	}
 
@@ -85,13 +85,13 @@ class NoteItemComponent extends Component {
 
 		if (this.props.noteSelectionEnabled) {
 			this.props.dispatch({
-				type: 'NOTE_SELECTION_TOGGLE',
+				type: "NOTE_SELECTION_TOGGLE",
 				id: this.props.note.id,
 			});
 		} else {
 			this.props.dispatch({
-				type: 'NAV_GO',
-				routeName: 'Note',
+				type: "NAV_GO",
+				routeName: "Note",
 				noteId: this.props.note.id,
 			});
 		}
@@ -101,7 +101,7 @@ class NoteItemComponent extends Component {
 		if (!this.props.note) return;
 
 		this.props.dispatch({
-			type: this.props.noteSelectionEnabled ? 'NOTE_SELECTION_TOGGLE' : 'NOTE_SELECTION_START',
+			type: this.props.noteSelectionEnabled ? "NOTE_SELECTION_TOGGLE" : "NOTE_SELECTION_START",
 			id: this.props.note.id,
 		});
 	}
@@ -114,7 +114,7 @@ class NoteItemComponent extends Component {
 		const theme = themeStyle(this.props.theme);
 
 		// IOS: display: none crashes the app
-		let checkboxStyle = !isTodo ? { display: 'none' } : { color: theme.color };
+		let checkboxStyle = !isTodo ? { display: "none" } : { color: theme.color };
 
 		if (isTodo) {
 			checkboxStyle.paddingRight = 10;
@@ -127,21 +127,17 @@ class NoteItemComponent extends Component {
 
 		const listItemStyle = isTodo ? this.styles().listItemWithCheckbox : this.styles().listItem;
 		const listItemTextStyle = isTodo ? this.styles().listItemTextWithCheckbox : this.styles().listItemText;
-		const opacityStyle = isTodo && checkboxChecked ? {opacity: 0.4} : {};
+		const opacityStyle = isTodo && checkboxChecked ? { opacity: 0.4 } : {};
 		const isSelected = this.props.noteSelectionEnabled && this.props.selectedNoteIds.indexOf(note.id) >= 0;
 
 		const selectionWrapperStyle = isSelected ? this.styles().selectionWrapperSelected : this.styles().selectionWrapper;
 
 		return (
-			<TouchableOpacity onPress={() => this.onPress()} onLongPress={() => this.onLongPress() } activeOpacity={0.5}>
-				<View style={ selectionWrapperStyle }>
-					<View style={ opacityStyle }>
-						<View style={ listItemStyle }>
-							<Checkbox
-								style={checkboxStyle}
-								checked={checkboxChecked}
-								onChange={(checked) => this.todoCheckbox_change(checked)}
-							/>
+			<TouchableOpacity onPress={() => this.onPress()} onLongPress={() => this.onLongPress()} activeOpacity={0.5}>
+				<View style={selectionWrapperStyle}>
+					<View style={opacityStyle}>
+						<View style={listItemStyle}>
+							<Checkbox style={checkboxStyle} checked={checkboxChecked} onChange={checked => this.todoCheckbox_change(checked)} />
 							<Text style={listItemTextStyle}>{Note.displayTitle(note)}</Text>
 						</View>
 					</View>
@@ -149,17 +145,14 @@ class NoteItemComponent extends Component {
 			</TouchableOpacity>
 		);
 	}
-
 }
 
-const NoteItem = connect(
-	(state) => {
-		return {
-			theme: state.settings.theme,
-			noteSelectionEnabled: state.noteSelectionEnabled,
-			selectedNoteIds: state.selectedNoteIds,
-		};
-	}
-)(NoteItemComponent)
+const NoteItem = connect(state => {
+	return {
+		theme: state.settings.theme,
+		noteSelectionEnabled: state.noteSelectionEnabled,
+		selectedNoteIds: state.selectedNoteIds,
+	};
+})(NoteItemComponent);
 
 module.exports = { NoteItem };

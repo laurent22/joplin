@@ -1,27 +1,26 @@
-const RNFS = require('react-native-fs');
-const FsDriverBase = require('lib/fs-driver-base');
+const RNFS = require("react-native-fs");
+const FsDriverBase = require("lib/fs-driver-base");
 
 class FsDriverRN extends FsDriverBase {
-
 	appendFileSync(path, string) {
-		throw new Error('Not implemented');
+		throw new Error("Not implemented");
 	}
 
-	appendFile(path, string, encoding = 'base64') {
+	appendFile(path, string, encoding = "base64") {
 		return RNFS.appendFile(path, string, encoding);
 	}
 
-	writeFile(path, string, encoding = 'base64') {
+	writeFile(path, string, encoding = "base64") {
 		return RNFS.writeFile(path, string, encoding);
 	}
 
 	// same as rm -rf
 	async remove(path) {
-		throw new Error('Not implemented');
+		throw new Error("Not implemented");
 	}
 
 	writeBinaryFile(path, content) {
-		throw new Error('Not implemented');
+		throw new Error("Not implemented");
 	}
 
 	// Returns a format compatible with Node.js format
@@ -32,13 +31,13 @@ class FsDriverRN extends FsDriverBase {
 			isDirectory: () => stat.isDirectory(),
 			path: path,
 			size: stat.size,
-		};  
+		};
 	}
 
 	async readDirStats(path, options = null) {
 		if (!options) options = {};
-		if (!('recursive' in options)) options.recursive = false;
-		
+		if (!("recursive" in options)) options.recursive = false;
+
 		let items = await RNFS.readDir(path);
 		let output = [];
 		for (let i = 0; i < items.length; i++) {
@@ -68,7 +67,7 @@ class FsDriverRN extends FsDriverBase {
 			const r = await RNFS.stat(path);
 			return this.rnfsStatToStd_(r, path);
 		} catch (error) {
-			if (error && ((error.message && error.message.indexOf('exist') >= 0) || error.code === 'ENOENT')) {
+			if (error && ((error.message && error.message.indexOf("exist") >= 0) || error.code === "ENOENT")) {
 				// Probably { [Error: File does not exist] framesToPop: 1, code: 'EUNSPECIFIED' }
 				// which unfortunately does not have a proper error code. Can be ignored.
 				return null;
@@ -96,15 +95,15 @@ class FsDriverRN extends FsDriverBase {
 			offset: 0,
 			mode: mode,
 			stat: stat,
-		}
+		};
 	}
 
 	close(handle) {
 		return null;
 	}
 
-	readFile(path, encoding = 'utf8') {
-		if (encoding === 'Buffer') throw new Error('Raw buffer output not supported for FsDriverRN.readFile');
+	readFile(path, encoding = "utf8") {
+		if (encoding === "Buffer") throw new Error("Raw buffer output not supported for FsDriverRN.readFile");
 		return RNFS.readFile(path, encoding);
 	}
 
@@ -126,7 +125,7 @@ class FsDriverRN extends FsDriverBase {
 		try {
 			await RNFS.unlink(path);
 		} catch (error) {
-			if (error && ((error.message && error.message.indexOf('exist') >= 0) || error.code === 'ENOENT')) {
+			if (error && ((error.message && error.message.indexOf("exist") >= 0) || error.code === "ENOENT")) {
 				// Probably { [Error: File does not exist] framesToPop: 1, code: 'EUNSPECIFIED' }
 				// which unfortunately does not have a proper error code. Can be ignored.
 			} else {
@@ -135,7 +134,7 @@ class FsDriverRN extends FsDriverBase {
 		}
 	}
 
-	async readFileChunk(handle, length, encoding = 'base64') {
+	async readFileChunk(handle, length, encoding = "base64") {
 		if (handle.offset + length > handle.stat.size) {
 			length = handle.stat.size - handle.offset;
 		}
@@ -145,7 +144,6 @@ class FsDriverRN extends FsDriverBase {
 		handle.offset += length;
 		return output ? output : null;
 	}
-
 }
 
 module.exports.FsDriverRN = FsDriverRN;

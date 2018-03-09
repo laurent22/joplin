@@ -1,17 +1,16 @@
-const { padLeft } = require('lib/string-utils.js');
-const { Logger } = require('lib/logger.js');
-const { shim } = require('lib/shim.js');
-const Setting = require('lib/models/Setting.js');
-const MasterKey = require('lib/models/MasterKey');
-const BaseItem = require('lib/models/BaseItem');
-const { _ } = require('lib/locale.js');
+const { padLeft } = require("lib/string-utils.js");
+const { Logger } = require("lib/logger.js");
+const { shim } = require("lib/shim.js");
+const Setting = require("lib/models/Setting.js");
+const MasterKey = require("lib/models/MasterKey");
+const BaseItem = require("lib/models/BaseItem");
+const { _ } = require("lib/locale.js");
 
 function hexPad(s, length) {
-	return padLeft(s, length, '0');
+	return padLeft(s, length, "0");
 }
 
 class EncryptionService {
-
 	constructor() {
 		// Note: 1 MB is very slow with Node and probably even worse on mobile. 50 KB seems to work well
 		// and doesn't produce too much overhead in terms of headers.
@@ -23,10 +22,7 @@ class EncryptionService {
 
 		this.headerTemplates_ = {
 			1: {
-				fields: [
-					[ 'encryptionMethod', 2, 'int' ],
-					[ 'masterKeyId', 32, 'hex' ],
-				],
+				fields: [["encryptionMethod", 2, "int"], ["masterKeyId", 32, "hex"]],
 			},
 		};
 	}
@@ -54,13 +50,13 @@ class EncryptionService {
 	}
 
 	async enableEncryption(masterKey, password = null) {
-		Setting.setValue('encryption.enabled', true);
-		Setting.setValue('encryption.activeMasterKeyId', masterKey.id);
+		Setting.setValue("encryption.enabled", true);
+		Setting.setValue("encryption.activeMasterKeyId", masterKey.id);
 
 		if (password) {
-			let passwordCache = Setting.value('encryption.passwordCache');
-			passwordCache[masterKey.id] = password;	
-			Setting.setValue('encryption.passwordCache', passwordCache);		
+			let passwordCache = Setting.value("encryption.passwordCache");
+			passwordCache[masterKey.id] = password;
+			Setting.setValue("encryption.passwordCache", passwordCache);
 		}
 
 		// Mark only the non-encrypted ones for sync since, if there are encrypted ones,
@@ -76,8 +72,8 @@ class EncryptionService {
 
 		// const hasEncryptedItems = await BaseItem.hasEncryptedItems();
 		// if (hasEncryptedItems) throw new Error(_('Encryption cannot currently be disabled because some items are still encrypted. Please wait for all the items to be decrypted and try again.'));
-		
-		Setting.setValue('encryption.enabled', false);
+
+		Setting.setValue("encryption.enabled", false);
 		// The only way to make sure everything gets decrypted on the sync target is
 		// to re-sync everything.
 		await BaseItem.forceSyncAll();
@@ -85,10 +81,10 @@ class EncryptionService {
 
 	async loadMasterKeysFromSettings() {
 		const masterKeys = await MasterKey.all();
-		const passwords = Setting.value('encryption.passwordCache');
-		const activeMasterKeyId = Setting.value('encryption.activeMasterKeyId');
+		const passwords = Setting.value("encryption.passwordCache");
+		const activeMasterKeyId = Setting.value("encryption.activeMasterKeyId");
 
-		this.logger().info('Trying to load ' + masterKeys.length + ' master keys...');
+		this.logger().info("Trying to load " + masterKeys.length + " master keys...");
 
 		for (let i = 0; i < masterKeys.length; i++) {
 			const mk = masterKeys[i];
@@ -99,11 +95,11 @@ class EncryptionService {
 			try {
 				await this.loadMasterKey(mk, password, activeMasterKeyId === mk.id);
 			} catch (error) {
-				this.logger().warn('Cannot load master key ' + mk.id + '. Invalid password?', error);
+				this.logger().warn("Cannot load master key " + mk.id + ". Invalid password?", error);
 			}
 		}
 
-		this.logger().info('Loaded master keys: ' + this.loadedMasterKeysCount());
+		this.logger().info("Loaded master keys: " + this.loadedMasterKeysCount());
 	}
 
 	loadedMasterKeysCount() {
@@ -129,8 +125,10 @@ class EncryptionService {
 
 	activeMasterKeyId() {
 		if (!this.activeMasterKeyId_) {
-			const error = new Error('No master key is defined as active. Check this: Either one or more master keys exist but no password was provided for any of them. Or no master key exist. Or master keys and password exist, but none was set as active.');
-			error.code = 'noActiveMasterKey';
+			const error = new Error(
+				"No master key is defined as active. Check this: Either one or more master keys exist but no password was provided for any of them. Or no master key exist. Or master keys and password exist, but none was set as active."
+			);
+			error.code = "noActiveMasterKey";
 			throw error;
 		}
 		return this.activeMasterKeyId_;
@@ -141,7 +139,7 @@ class EncryptionService {
 	}
 
 	async loadMasterKey(model, password, makeActive = false) {
-		if (!model.id) throw new Error('Master key does not have an ID - save it first');
+		if (!model.id) throw new Error("Master key does not have an ID - save it first");
 		this.loadedMasterKeys_[model.id] = await this.decryptMasterKey(model, password);
 		if (makeActive) this.setActiveMasterKeyId(model.id);
 	}
@@ -159,8 +157,8 @@ class EncryptionService {
 
 	loadedMasterKey(id) {
 		if (!this.loadedMasterKeys_[id]) {
-			const error = new Error('Master key is not loaded: ' + id);
-			error.code = 'masterKeyNotLoaded';
+			const error = new Error("Master key is not loaded: " + id);
+			error.code = "masterKeyNotLoaded";
 			error.masterKeyId = id;
 			throw error;
 		}
@@ -177,33 +175,39 @@ class EncryptionService {
 	}
 
 	fsDriver() {
-		if (!EncryptionService.fsDriver_) throw new Error('EncryptionService.fsDriver_ not set!');
+		if (!EncryptionService.fsDriver_) throw new Error("EncryptionService.fsDriver_ not set!");
 		return EncryptionService.fsDriver_;
 	}
 
 	sha256(string) {
 		const sjcl = shim.sjclModule;
-		const bitArray = sjcl.hash.sha256.hash(string);  
+		const bitArray = sjcl.hash.sha256.hash(string);
 		return sjcl.codec.hex.fromBits(bitArray);
 	}
 
 	async seedSjcl() {
-		throw new Error('NOT TESTED');
+		throw new Error("NOT TESTED");
 
 		// Just putting this here in case it becomes needed
 		// Normally seeding random bytes is not needed for our use since
 		// we use shim.randomBytes directly to generate master keys.
 
 		const sjcl = shim.sjclModule;
-		const randomBytes = await shim.randomBytes(1024/8);
-		const hexBytes = randomBytes.map((a) => { return a.toString(16) });
-		const hexSeed = sjcl.codec.hex.toBits(hexBytes.join(''));
-		sjcl.random.addEntropy(hexSeed, 1024, 'shim.randomBytes');
+		const randomBytes = await shim.randomBytes(1024 / 8);
+		const hexBytes = randomBytes.map(a => {
+			return a.toString(16);
+		});
+		const hexSeed = sjcl.codec.hex.toBits(hexBytes.join(""));
+		sjcl.random.addEntropy(hexSeed, 1024, "shim.randomBytes");
 	}
 
 	async generateMasterKey(password) {
 		const bytes = await shim.randomBytes(256);
-		const hexaBytes = bytes.map((a) => { return hexPad(a.toString(16), 2); }).join('');
+		const hexaBytes = bytes
+			.map(a => {
+				return hexPad(a.toString(16), 2);
+			})
+			.join("");
 		const checksum = this.sha256(hexaBytes);
 		const encryptionMethod = EncryptionService.METHOD_SJCL_2;
 		const cipherText = await this.encrypt(encryptionMethod, password, hexaBytes);
@@ -212,7 +216,7 @@ class EncryptionService {
 		return {
 			created_time: now,
 			updated_time: now,
-			source_application: Setting.value('appId'),
+			source_application: Setting.value("appId"),
 			encryption_method: encryptionMethod,
 			checksum: checksum,
 			content: cipherText,
@@ -222,7 +226,7 @@ class EncryptionService {
 	async decryptMasterKey(model, password) {
 		const plainText = await this.decrypt(model.encryption_method, password, model.content);
 		const checksum = this.sha256(plainText);
-		if (checksum !== model.checksum) throw new Error('Could not decrypt master key (checksum failed)');
+		if (checksum !== model.checksum) throw new Error("Could not decrypt master key (checksum failed)");
 		return plainText;
 	}
 
@@ -237,8 +241,8 @@ class EncryptionService {
 	}
 
 	async encrypt(method, key, plainText) {
-		if (!method) throw new Error('Encryption method is required');
-		if (!key) throw new Error('Encryption key is required');
+		if (!method) throw new Error("Encryption method is required");
+		if (!key) throw new Error("Encryption key is required");
 
 		const sjcl = shim.sjclModule;
 
@@ -250,9 +254,9 @@ class EncryptionService {
 					iter: 1000, // Defaults to 10000 in sjcl but since we're running this on mobile devices, use a lower value. Maybe review this after some time. https://security.stackexchange.com/questions/3959/recommended-of-iterations-when-using-pkbdf2-sha256
 					ks: 128, // Key size - "128 bits should be secure enough"
 					ts: 64, // ???
-					mode: "ocb2", //  The cipher mode is a standard for how to use AES and other algorithms to encrypt and authenticate your message. OCB2 mode is slightly faster and has more features, but CCM mode has wider support because it is not patented. 
+					mode: "ocb2", //  The cipher mode is a standard for how to use AES and other algorithms to encrypt and authenticate your message. OCB2 mode is slightly faster and has more features, but CCM mode has wider support because it is not patented.
 					//"adata":"", // Associated Data - not needed?
-					cipher: "aes"
+					cipher: "aes",
 				});
 			} catch (error) {
 				// SJCL returns a string as error which means stack trace is missing so convert to an error object here
@@ -269,7 +273,7 @@ class EncryptionService {
 					ks: 256,
 					ts: 64,
 					mode: "ocb2",
-					cipher: "aes"
+					cipher: "aes",
 				});
 			} catch (error) {
 				// SJCL returns a string as error which means stack trace is missing so convert to an error object here
@@ -277,15 +281,15 @@ class EncryptionService {
 			}
 		}
 
-		throw new Error('Unknown encryption method: ' + method);
+		throw new Error("Unknown encryption method: " + method);
 	}
 
 	async decrypt(method, key, cipherText) {
-		if (!method) throw new Error('Encryption method is required');
-		if (!key) throw new Error('Encryption key is required');
+		if (!method) throw new Error("Encryption method is required");
+		if (!key) throw new Error("Encryption key is required");
 
 		const sjcl = shim.sjclModule;
-		
+
 		if (method === EncryptionService.METHOD_SJCL || method === EncryptionService.METHOD_SJCL_2) {
 			try {
 				return sjcl.json.decrypt(key, cipherText);
@@ -295,7 +299,7 @@ class EncryptionService {
 			}
 		}
 
-		throw new Error('Unknown decryption method: ' + method);
+		throw new Error("Unknown decryption method: " + method);
 	}
 
 	async encryptAbstract_(source, destination) {
@@ -315,17 +319,17 @@ class EncryptionService {
 			if (!block) break;
 
 			const encrypted = await this.encrypt(method, masterKeyPlainText, block);
-			await destination.append(padLeft(encrypted.length.toString(16), 6, '0'));
+			await destination.append(padLeft(encrypted.length.toString(16), 6, "0"));
 			await destination.append(encrypted);
 		}
 	}
 
 	async decryptAbstract_(source, destination) {
 		const identifier = await source.read(5);
-		if (!this.isValidHeaderIdentifier(identifier)) throw new Error('Invalid encryption identifier. Data is not actually encrypted? ID was: ' + identifier);
+		if (!this.isValidHeaderIdentifier(identifier)) throw new Error("Invalid encryption identifier. Data is not actually encrypted? ID was: " + identifier);
 		const mdSizeHex = await source.read(6);
 		const mdSize = parseInt(mdSizeHex, 16);
-		if (isNaN(mdSize) || !mdSize) throw new Error('Invalid header metadata size: ' + mdSizeHex);
+		if (isNaN(mdSize) || !mdSize) throw new Error("Invalid header metadata size: " + mdSizeHex);
 		const md = await source.read(parseInt(mdSizeHex, 16));
 		const header = this.decodeHeader_(identifier + mdSizeHex + md);
 		const masterKeyPlainText = this.loadedMasterKey(header.masterKeyId);
@@ -333,7 +337,7 @@ class EncryptionService {
 		while (true) {
 			const lengthHex = await source.read(6);
 			if (!lengthHex) break;
-			if (lengthHex.length !== 6) throw new Error('Invalid block size: ' + lengthHex);
+			if (lengthHex.length !== 6) throw new Error("Invalid block size: " + lengthHex);
 			const length = parseInt(lengthHex, 16);
 			if (!length) continue; // Weird but could be not completely invalid (block of size 0) so continue decrypting
 
@@ -364,7 +368,7 @@ class EncryptionService {
 				output.data.push(data);
 			},
 			result: function() {
-				return output.data.join('');
+				return output.data.join("");
 			},
 			close: function() {},
 		};
@@ -372,10 +376,10 @@ class EncryptionService {
 	}
 
 	async fileReader_(path, encoding) {
-		const handle = await this.fsDriver().open(path, 'r');
+		const handle = await this.fsDriver().open(path, "r");
 		const reader = {
 			handle: handle,
-			read: async (size) => {
+			read: async size => {
 				return this.fsDriver().readFileChunk(reader.handle, size, encoding);
 			},
 			close: async () => {
@@ -387,7 +391,7 @@ class EncryptionService {
 
 	async fileWriter_(path, encoding) {
 		return {
-			append: async (data) => {
+			append: async data => {
 				return this.fsDriver().appendFile(path, data, encoding);
 			},
 			close: function() {},
@@ -405,19 +409,19 @@ class EncryptionService {
 		const source = this.stringReader_(cipherText);
 		const destination = this.stringWriter_();
 		await this.decryptAbstract_(source, destination);
-		return destination.data.join('');
+		return destination.data.join("");
 	}
 
 	async encryptFile(srcPath, destPath) {
-		let source = await this.fileReader_(srcPath, 'base64');
-		let destination = await this.fileWriter_(destPath, 'ascii');
+		let source = await this.fileReader_(srcPath, "base64");
+		let destination = await this.fileWriter_(destPath, "ascii");
 
 		const cleanUp = async () => {
 			if (source) await source.close();
 			if (destination) await destination.close();
 			source = null;
 			destination = null;
-		}
+		};
 
 		try {
 			await this.fsDriver().unlink(destPath);
@@ -432,15 +436,15 @@ class EncryptionService {
 	}
 
 	async decryptFile(srcPath, destPath) {
-		let source = await this.fileReader_(srcPath, 'ascii');
-		let destination = await this.fileWriter_(destPath, 'base64');
+		let source = await this.fileReader_(srcPath, "ascii");
+		let destination = await this.fileWriter_(destPath, "base64");
 
 		const cleanUp = async () => {
 			if (source) await source.close();
 			if (destination) await destination.close();
 			source = null;
 			destination = null;
-		}
+		};
 
 		try {
 			await this.fsDriver().unlink(destPath);
@@ -455,32 +459,32 @@ class EncryptionService {
 	}
 
 	decodeHeaderVersion_(hexaByte) {
-		if (hexaByte.length !== 2) throw new Error('Invalid header version length: ' + hexaByte);
+		if (hexaByte.length !== 2) throw new Error("Invalid header version length: " + hexaByte);
 		return parseInt(hexaByte, 16);
 	}
 
 	headerTemplate(version) {
 		const r = this.headerTemplates_[version];
-		if (!r) throw new Error('Unknown header version: ' + version);
+		if (!r) throw new Error("Unknown header version: " + version);
 		return r;
 	}
 
 	encodeHeader_(header) {
 		// Sanity check
-		if (header.masterKeyId.length !== 32) throw new Error('Invalid master key ID size: ' + header.masterKeyId);
+		if (header.masterKeyId.length !== 32) throw new Error("Invalid master key ID size: " + header.masterKeyId);
 
-		let encryptionMetadata = '';
-		encryptionMetadata += padLeft(header.encryptionMethod.toString(16), 2, '0');
+		let encryptionMetadata = "";
+		encryptionMetadata += padLeft(header.encryptionMethod.toString(16), 2, "0");
 		encryptionMetadata += header.masterKeyId;
-		encryptionMetadata = padLeft(encryptionMetadata.length.toString(16), 6, '0') + encryptionMetadata;
-		return 'JED01' + encryptionMetadata;
+		encryptionMetadata = padLeft(encryptionMetadata.length.toString(16), 6, "0") + encryptionMetadata;
+		return "JED01" + encryptionMetadata;
 	}
 
 	decodeHeader_(headerHexaBytes) {
 		const reader = this.stringReader_(headerHexaBytes, true);
 		const identifier = reader.read(3);
 		const version = parseInt(reader.read(2), 16);
-		if (identifier !== 'JED') throw new Error('Invalid header (missing identifier): ' + headerHexaBytes.substr(0,64));
+		if (identifier !== "JED") throw new Error("Invalid header (missing identifier): " + headerHexaBytes.substr(0, 64));
 		const template = this.headerTemplate(version);
 
 		const size = parseInt(reader.read(6), 16);
@@ -492,12 +496,12 @@ class EncryptionService {
 			const type = m[2];
 			let v = reader.read(m[1]);
 
-			if (type === 'int') {
+			if (type === "int") {
 				v = parseInt(v, 16);
-			} else if (type === 'hex') {
+			} else if (type === "hex") {
 				// Already in hexa
 			} else {
-				throw new Error('Invalid type: ' + type);
+				throw new Error("Invalid type: " + type);
 			}
 
 			output[m[0]] = v;
@@ -513,19 +517,18 @@ class EncryptionService {
 	}
 
 	async itemIsEncrypted(item) {
-		if (!item) throw new Error('No item');
+		if (!item) throw new Error("No item");
 		const ItemClass = BaseItem.itemClass(item);
 		if (!ItemClass.encryptionSupported()) return false;
 		return item.encryption_applied && this.isValidHeaderIdentifier(item.encryption_cipher_text, true);
 	}
 
 	async fileIsEncrypted(path) {
-		const handle = await this.fsDriver().open(path, 'r');
-		const headerIdentifier = await this.fsDriver().readFileChunk(handle, 5, 'ascii');
+		const handle = await this.fsDriver().open(path, "r");
+		const headerIdentifier = await this.fsDriver().readFileChunk(handle, 5, "ascii");
 		await this.fsDriver().close(handle);
 		return this.isValidHeaderIdentifier(headerIdentifier);
 	}
-
 }
 
 EncryptionService.METHOD_SJCL = 1;
