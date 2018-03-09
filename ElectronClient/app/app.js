@@ -449,10 +449,16 @@ class Application extends BaseApplication {
 					accelerator: 'F1',
 					click () { bridge().openExternal('http://joplin.cozic.net') }
 				}, {
+					label: _('Make a donation'),
+					click () { bridge().openExternal('http://joplin.cozic.net/donate') }
+				}, {
 					label: _('Check for updates...'),
 					click: () => {
 						bridge().checkForUpdates(false, bridge().window(), this.checkForUpdateLoggerPath());
 					}
+				}, {
+					type: 'separator',
+					screens: ['Main'],
 				}, {
 					label: _('About Joplin'),
 					click: () => {
