@@ -53,7 +53,7 @@ shim.isElectron = () => {
 // Node requests can go wrong is so many different ways and with so
 // many different error messages... This handler inspects the error
 // and decides whether the request can safely be repeated or not.
-function fetchRequestCanBeRetried(error) {
+shim.fetchRequestCanBeRetried = function(error) {
 	if (!error) return false;
 
 	// Unfortunately the error 'Network request failed' doesn't have a type
@@ -86,7 +86,7 @@ function fetchRequestCanBeRetried(error) {
 	if (error.code === "ETIMEDOUT") return true;
 
 	return false;
-}
+};
 
 shim.fetchWithRetry = async function(fetchFn, options = null) {
 	const { time } = require("lib/time-utils.js");
@@ -101,7 +101,7 @@ shim.fetchWithRetry = async function(fetchFn, options = null) {
 			const response = await fetchFn();
 			return response;
 		} catch (error) {
-			if (fetchRequestCanBeRetried(error)) {
+			if (shim.fetchRequestCanBeRetried(error)) {
 				retryCount++;
 				if (retryCount > options.maxRetry) throw error;
 				await time.sleep(retryCount * 3);

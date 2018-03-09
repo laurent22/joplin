@@ -71,9 +71,10 @@ class Synchronizer {
 		if (report.deleteLocal) lines.push(_("Deleted local items: %d.", report.deleteLocal));
 		if (report.deleteRemote) lines.push(_("Deleted remote items: %d.", report.deleteRemote));
 		if (report.fetchingTotal && report.fetchingProcessed) lines.push(_("Fetched items: %d/%d.", report.fetchingProcessed, report.fetchingTotal));
-		if (!report.completedTime && report.state) lines.push(_('State: "%s".', report.state));
+		if (!report.completedTime && report.state) lines.push(_('State: "%s".', Synchronizer.stateToLabel(report.state)));
 		if (report.cancelling && !report.completedTime) lines.push(_("Cancelling..."));
 		if (report.completedTime) lines.push(_("Completed: %s", time.unixMsToLocalDateTime(report.completedTime)));
+		if (report.errors && report.errors.length) lines.push(_("Last error: %s", report.errors[report.errors.length - 1].toString().substr(0, 500)));
 
 		return lines;
 	}
@@ -155,6 +156,12 @@ class Synchronizer {
 
 	cancelling() {
 		return this.cancelling_;
+	}
+
+	static stateToLabel(state) {
+		if (state === "idle") return _("Idle");
+		if (state === "in_progress") return _("In progress");
+		return state;
 	}
 
 	// Synchronisation is done in three major steps:
@@ -603,7 +610,9 @@ class Synchronizer {
 				this.logger().info(error.message);
 			} else {
 				this.logger().error(error);
-				this.progressReport_.errors.push(error);
+
+				// Don't save to the report errors that are due to things like temporary network errors or timeout.
+				if (!shim.fetchRequestCanBeRetried(error)) this.progressReport_.errors.push(error);
 			}
 		}
 
