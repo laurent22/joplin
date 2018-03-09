@@ -1,10 +1,11 @@
-const BaseWidget = require("tkwidgets/BaseWidget.js");
-const chalk = require("chalk");
-const termutils = require("tkwidgets/framework/termutils.js");
-const stripAnsi = require("strip-ansi");
-const { handleAutocompletion } = require("../autocompletion.js");
+const BaseWidget = require('tkwidgets/BaseWidget.js');
+const chalk = require('chalk');
+const termutils = require('tkwidgets/framework/termutils.js');
+const stripAnsi = require('strip-ansi');
+const { handleAutocompletion } = require('../autocompletion.js');
 
 class StatusBarWidget extends BaseWidget {
+
 	constructor() {
 		super();
 
@@ -15,7 +16,7 @@ class StatusBarWidget extends BaseWidget {
 	}
 
 	get name() {
-		return "statusBar";
+		return 'statusBar';
 	}
 
 	get canHaveFocus() {
@@ -27,9 +28,9 @@ class StatusBarWidget extends BaseWidget {
 		this.invalidate();
 	}
 
-	async prompt(initialText = "", promptString = null, options = null) {
-		if (this.promptState_) throw new Error("Another prompt already active");
-		if (promptString === null) promptString = ":";
+	async prompt(initialText = '', promptString = null, options = null) {
+		if (this.promptState_) throw new Error('Another prompt already active');
+		if (promptString === null) promptString = ':';
 		if (options === null) options = {};
 
 		this.root.globalDisableKeyboard(this);
@@ -40,8 +41,8 @@ class StatusBarWidget extends BaseWidget {
 			promptString: stripAnsi(promptString),
 		};
 
-		if ("cursorPosition" in options) this.promptState_.cursorPosition = options.cursorPosition;
-		if ("secure" in options) this.promptState_.secure = options.secure;
+		if ('cursorPosition' in options) this.promptState_.cursorPosition = options.cursorPosition;
+		if ('secure' in options) this.promptState_.secure = options.secure;
 
 		this.promptState_.promise = new Promise((resolve, reject) => {
 			this.promptState_.resolve = resolve;
@@ -74,7 +75,7 @@ class StatusBarWidget extends BaseWidget {
 		super.render();
 
 		const doSaveCursor = !this.promptActive;
-
+		
 		if (doSaveCursor) this.term.saveCursor();
 
 		this.innerClear();
@@ -86,13 +87,14 @@ class StatusBarWidget extends BaseWidget {
 
 		//const textStyle = this.promptActive ? (s) => s : chalk.bgBlueBright.white;
 		//const textStyle = (s) => s;
-		const textStyle = this.promptActive ? s => s : chalk.gray;
+		const textStyle = this.promptActive ? (s) => s : chalk.gray;
 
-		this.term.drawHLine(this.absoluteInnerX, this.absoluteInnerY, this.innerWidth, textStyle(" "));
+		this.term.drawHLine(this.absoluteInnerX, this.absoluteInnerY, this.innerWidth, textStyle(' '));
 
 		this.term.moveTo(this.absoluteInnerX, this.absoluteInnerY);
 
 		if (this.promptActive) {
+
 			this.term.write(textStyle(this.promptState_.promptString));
 
 			if (this.inputEventEmitter_) {
@@ -111,11 +113,11 @@ class StatusBarWidget extends BaseWidget {
 				history: this.history,
 				default: this.promptState_.initialText,
 				autoComplete: handleAutocompletion,
-				autoCompleteHint: true,
-				autoCompleteMenu: true,
+				autoCompleteHint : true,
+				autoCompleteMenu : true,
 			};
 
-			if ("cursorPosition" in this.promptState_) options.cursorPosition = this.promptState_.cursorPosition;
+			if ('cursorPosition' in this.promptState_) options.cursorPosition = this.promptState_.cursorPosition;
 			if (isSecurePrompt) options.echoChar = true;
 
 			this.inputEventEmitter_ = this.term.inputField(options, (error, input) => {
@@ -123,7 +125,7 @@ class StatusBarWidget extends BaseWidget {
 				const resolveFn = this.promptState_.resolve;
 
 				if (error) {
-					this.logger().error("StatusBar: inputField error:", error);
+					this.logger().error('StatusBar: inputField error:', error);
 				} else {
 					if (input === undefined) {
 						// User cancel
@@ -131,7 +133,7 @@ class StatusBarWidget extends BaseWidget {
 						resolveResult = input ? input.trim() : input;
 						// Add the command to history but only if it's longer than one character.
 						// Below that it's usually an answer like "y"/"n", etc.
-						const isConfigPassword = input.indexOf("config ") >= 0 && input.indexOf("password") >= 0;
+						const isConfigPassword = input.indexOf('config ') >= 0 && input.indexOf('password') >= 0;
 						if (!isSecurePrompt && input && input.length > 1 && !isConfigPassword) this.history_.push(input);
 					}
 				}
@@ -151,15 +153,19 @@ class StatusBarWidget extends BaseWidget {
 				// Only callback once everything has been cleaned up and reset
 				resolveFn(resolveResult);
 			});
+
 		} else {
+
 			for (let i = 0; i < this.items_.length; i++) {
 				const s = this.items_[i].substr(0, this.innerWidth - 1);
 				this.term.write(textStyle(s));
 			}
+
 		}
 
 		if (doSaveCursor) this.term.restoreCursor();
 	}
+
 }
 
 module.exports = StatusBarWidget;

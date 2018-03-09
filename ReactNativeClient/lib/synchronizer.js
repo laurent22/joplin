@@ -1,24 +1,25 @@
-const BaseItem = require("lib/models/BaseItem.js");
-const Folder = require("lib/models/Folder.js");
-const Note = require("lib/models/Note.js");
-const Resource = require("lib/models/Resource.js");
-const MasterKey = require("lib/models/MasterKey.js");
-const BaseModel = require("lib/BaseModel.js");
-const DecryptionWorker = require("lib/services/DecryptionWorker");
-const { sprintf } = require("sprintf-js");
-const { time } = require("lib/time-utils.js");
-const { Logger } = require("lib/logger.js");
-const { _ } = require("lib/locale.js");
-const { shim } = require("lib/shim.js");
-const JoplinError = require("lib/JoplinError");
+const BaseItem = require('lib/models/BaseItem.js');
+const Folder = require('lib/models/Folder.js');
+const Note = require('lib/models/Note.js');
+const Resource = require('lib/models/Resource.js');
+const MasterKey = require('lib/models/MasterKey.js');
+const BaseModel = require('lib/BaseModel.js');
+const DecryptionWorker = require('lib/services/DecryptionWorker');
+const { sprintf } = require('sprintf-js');
+const { time } = require('lib/time-utils.js');
+const { Logger } = require('lib/logger.js');
+const { _ } = require('lib/locale.js');
+const { shim } = require('lib/shim.js');
+const JoplinError = require('lib/JoplinError');
 
 class Synchronizer {
+
 	constructor(db, api, appType) {
-		this.state_ = "idle";
+		this.state_ = 'idle';
 		this.db_ = db;
 		this.api_ = api;
-		this.syncDirName_ = ".sync";
-		this.resourceDirName_ = ".resource";
+		this.syncDirName_ = '.sync';
+		this.resourceDirName_ = '.resource';
 		this.logger_ = new Logger();
 		this.appType_ = appType;
 		this.cancelling_ = false;
@@ -80,7 +81,7 @@ class Synchronizer {
 	}
 
 	logSyncOperation(action, local = null, remote = null, message = null, actionCount = 1) {
-		let line = ["Sync"];
+		let line = ['Sync'];
 		line.push(action);
 		if (message) line.push(message);
 
@@ -92,45 +93,45 @@ class Synchronizer {
 		if (local) {
 			let s = [];
 			s.push(local.id);
-			line.push("(Local " + s.join(", ") + ")");
+			line.push('(Local ' + s.join(', ') + ')');
 		}
 
 		if (remote) {
 			let s = [];
 			s.push(remote.id ? remote.id : remote.path);
-			line.push("(Remote " + s.join(", ") + ")");
+			line.push('(Remote ' + s.join(', ') + ')');
 		}
 
-		this.logger().debug(line.join(": "));
+		this.logger().debug(line.join(': '));
 
 		if (!this.progressReport_[action]) this.progressReport_[action] = 0;
 		this.progressReport_[action] += actionCount;
 		this.progressReport_.state = this.state();
 		this.onProgress_(this.progressReport_);
 
-		this.dispatch({ type: "SYNC_REPORT_UPDATE", report: Object.assign({}, this.progressReport_) });
+		this.dispatch({ type: 'SYNC_REPORT_UPDATE', report: Object.assign({}, this.progressReport_) });
 	}
 
 	async logSyncSummary(report) {
-		this.logger().info("Operations completed: ");
+		this.logger().info('Operations completed: ');
 		for (let n in report) {
 			if (!report.hasOwnProperty(n)) continue;
-			if (n == "errors") continue;
-			if (n == "starting") continue;
-			if (n == "finished") continue;
-			if (n == "state") continue;
-			if (n == "completedTime") continue;
-			this.logger().info(n + ": " + (report[n] ? report[n] : "-"));
+			if (n == 'errors') continue;
+			if (n == 'starting') continue;
+			if (n == 'finished') continue;
+			if (n == 'state') continue;
+			if (n == 'completedTime') continue;
+			this.logger().info(n + ': ' + (report[n] ? report[n] : '-'));
 		}
 		let folderCount = await Folder.count();
 		let noteCount = await Note.count();
 		let resourceCount = await Resource.count();
-		this.logger().info("Total folders: " + folderCount);
-		this.logger().info("Total notes: " + noteCount);
-		this.logger().info("Total resources: " + resourceCount);
+		this.logger().info('Total folders: ' + folderCount);
+		this.logger().info('Total notes: ' + noteCount);
+		this.logger().info('Total resources: ' + resourceCount);
 
 		if (report.errors && report.errors.length) {
-			this.logger().warn("There was some errors:");
+			this.logger().warn('There was some errors:');
 			for (let i = 0; i < report.errors.length; i++) {
 				let e = report.errors[i];
 				this.logger().warn(e);
@@ -139,14 +140,14 @@ class Synchronizer {
 	}
 
 	async cancel() {
-		if (this.cancelling_ || this.state() == "idle") return;
-
-		this.logSyncOperation("cancelling", null, null, "");
+		if (this.cancelling_ || this.state() == 'idle') return;
+		
+		this.logSyncOperation('cancelling', null, null, '');
 		this.cancelling_ = true;
 
 		return new Promise((resolve, reject) => {
 			const iid = setInterval(() => {
-				if (this.state() == "idle") {
+				if (this.state() == 'idle') {
 					clearInterval(iid);
 					resolve();
 				}
@@ -172,13 +173,13 @@ class Synchronizer {
 	async start(options = null) {
 		if (!options) options = {};
 
-		if (this.state() != "idle") {
-			let error = new Error(_("Synchronisation is already in progress. State: %s", this.state()));
-			error.code = "alreadyStarted";
+		if (this.state() != 'idle') {
+			let error = new Error(_('Synchronisation is already in progress. State: %s', this.state()));
+			error.code = 'alreadyStarted';
 			throw error;
 		}
 
-		this.state_ = "in_progress";
+		this.state_ = 'in_progress';
 
 		this.onProgress_ = options.onProgress ? options.onProgress : function(o) {};
 		this.progressReport_ = { errors: [] };
@@ -198,9 +199,9 @@ class Synchronizer {
 
 		let outputContext = Object.assign({}, lastContext);
 
-		this.dispatch({ type: "SYNC_STARTED" });
+		this.dispatch({ type: 'SYNC_STARTED' });
 
-		this.logSyncOperation("starting", null, null, "Starting synchronisation to target " + syncTargetId + "... [" + synchronizationId + "]");
+		this.logSyncOperation('starting', null, null, 'Starting synchronisation to target ' + syncTargetId + '... [' + synchronizationId + ']');
 
 		try {
 			await this.api().mkdir(this.syncDirName_);
@@ -617,25 +618,26 @@ class Synchronizer {
 		}
 
 		if (this.cancelling()) {
-			this.logger().info("Synchronisation was cancelled.");
+			this.logger().info('Synchronisation was cancelled.');
 			this.cancelling_ = false;
 		}
 
 		this.progressReport_.completedTime = time.unixMs();
 
-		this.logSyncOperation("finished", null, null, "Synchronisation finished [" + synchronizationId + "]");
+		this.logSyncOperation('finished', null, null, 'Synchronisation finished [' + synchronizationId + ']');
 
 		await this.logSyncSummary(this.progressReport_);
 
 		this.onProgress_ = function(s) {};
 		this.progressReport_ = {};
 
-		this.dispatch({ type: "SYNC_COMPLETED" });
+		this.dispatch({ type: 'SYNC_COMPLETED' });
 
-		this.state_ = "idle";
+		this.state_ = 'idle';
 
 		return outputContext;
 	}
+
 }
 
 module.exports = { Synchronizer };

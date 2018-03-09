@@ -1,5 +1,9 @@
 class EncryptionServiceDriverRN {
-	encryptFile(srcPath, destPath) {}
+
+	encryptFile(srcPath, destPath) {
+		
+	}
+
 }
 
 module.exports = EncryptionServiceDriverRN;

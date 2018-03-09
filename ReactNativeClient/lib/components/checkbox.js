@@ -1,7 +1,6 @@
-const React = require("react");
-const Component = React.Component;
-const { StyleSheet, View, TouchableHighlight } = require("react-native");
-const Icon = require("react-native-vector-icons/Ionicons").default;
+const React = require('react'); const Component = React.Component;
+const { StyleSheet, View, TouchableHighlight } = require('react-native');
+const Icon = require('react-native-vector-icons/Ionicons').default;
 
 const styles = {
 	checkboxIcon: {
@@ -12,11 +11,12 @@ const styles = {
 };
 
 class Checkbox extends Component {
+
 	constructor() {
 		super();
 		this.state = {
 			checked: false,
-		};
+		}
 	}
 
 	componentWillMount() {
@@ -24,7 +24,7 @@ class Checkbox extends Component {
 	}
 
 	componentWillReceiveProps(newProps) {
-		if ("checked" in newProps) {
+		if ('checked' in newProps) {
 			this.setState({ checked: newProps.checked });
 		}
 	}
@@ -36,11 +36,11 @@ class Checkbox extends Component {
 	}
 
 	render() {
-		const iconName = this.state.checked ? "md-checkbox-outline" : "md-square-outline";
+		const iconName = this.state.checked ? 'md-checkbox-outline' : 'md-square-outline';
 
 		let style = this.props.style ? Object.assign({}, this.props.style) : {};
-		style.justifyContent = "center";
-		style.alignItems = "center";
+		style.justifyContent = 'center';
+		style.alignItems = 'center';
 
 		let checkboxIconStyle = Object.assign({}, styles.checkboxIcon);
 		if (style.color) checkboxIconStyle.color = style.color;
@@ -51,20 +51,21 @@ class Checkbox extends Component {
 		if (style.paddingRight) checkboxIconStyle.marginRight = style.paddingRight;
 
 		const thStyle = {
-			justifyContent: "center",
-			alignItems: "center",
+			justifyContent: 'center',
+			alignItems: 'center',
 		};
 
-		if (style && style.display === "none") return <View />;
+		if (style && style.display === 'none') return <View/>
 
 		//if (style.display) thStyle.display = style.display;
 
 		return (
 			<TouchableHighlight onPress={() => this.onPress()} style={thStyle}>
-				<Icon name={iconName} style={checkboxIconStyle} />
+				<Icon name={iconName} style={checkboxIconStyle}/>
 			</TouchableHighlight>
 		);
 	}
+
 }
 
 module.exports = { Checkbox };

@@ -1,12 +1,12 @@
-const yargParser = require("yargs-parser");
-const { _ } = require("lib/locale.js");
-const { time } = require("lib/time-utils.js");
-const stringPadding = require("string-padding");
+const yargParser = require('yargs-parser');
+const { _ } = require('lib/locale.js');
+const { time } = require('lib/time-utils.js');
+const stringPadding = require('string-padding');
 
 const cliUtils = {};
 
 cliUtils.printArray = function(logFunction, rows, headers = null) {
-	if (!rows.length) return "";
+	if (!rows.length) return '';
 
 	const ALIGN_LEFT = 0;
 	const ALIGN_RIGHT = 1;
@@ -16,11 +16,11 @@ cliUtils.printArray = function(logFunction, rows, headers = null) {
 
 	for (let i = 0; i < rows.length; i++) {
 		let row = rows[i];
-
+		
 		for (let j = 0; j < row.length; j++) {
 			let item = row[j];
 			let width = item ? item.toString().length : 0;
-			let align = typeof item == "number" ? ALIGN_RIGHT : ALIGN_LEFT;
+			let align = typeof item == 'number' ? ALIGN_RIGHT : ALIGN_LEFT;
 			if (!colWidths[j] || colWidths[j] < width) colWidths[j] = width;
 			if (colAligns.length <= j) colAligns[j] = align;
 		}
@@ -33,46 +33,46 @@ cliUtils.printArray = function(logFunction, rows, headers = null) {
 			let item = rows[row][col];
 			let width = colWidths[col];
 			let dir = colAligns[col] == ALIGN_LEFT ? stringPadding.RIGHT : stringPadding.LEFT;
-			line.push(stringPadding(item, width, " ", dir));
+			line.push(stringPadding(item, width, ' ', dir));
 		}
-		logFunction(line.join(" "));
+		logFunction(line.join(' '));
 	}
-};
+}
 
 cliUtils.parseFlags = function(flags) {
 	let output = {};
-	flags = flags.split(",");
+	flags = flags.split(',');
 	for (let i = 0; i < flags.length; i++) {
 		let f = flags[i].trim();
 
-		if (f.substr(0, 2) == "--") {
-			f = f.split(" ");
+		if (f.substr(0, 2) == '--') {
+			f = f.split(' ');
 			output.long = f[0].substr(2).trim();
 			if (f.length == 2) {
 				output.arg = cliUtils.parseCommandArg(f[1].trim());
 			}
-		} else if (f.substr(0, 1) == "-") {
+		} else if (f.substr(0, 1) == '-') {
 			output.short = f.substr(1);
 		}
 	}
 	return output;
-};
+}
 
 cliUtils.parseCommandArg = function(arg) {
-	if (arg.length <= 2) throw new Error("Invalid command arg: " + arg);
+	if (arg.length <= 2) throw new Error('Invalid command arg: ' + arg);
 
 	const c1 = arg[0];
 	const c2 = arg[arg.length - 1];
 	const name = arg.substr(1, arg.length - 2);
 
-	if (c1 == "<" && c2 == ">") {
+	if (c1 == '<' && c2 == '>') {
 		return { required: true, name: name };
-	} else if (c1 == "[" && c2 == "]") {
+	} else if (c1 == '[' && c2 == ']') {
 		return { required: false, name: name };
 	} else {
-		throw new Error("Invalid command arg: " + arg);
+		throw new Error('Invalid command arg: ' + arg);
 	}
-};
+}
 
 cliUtils.makeCommandArgs = function(cmd, argv) {
 	let cmdUsage = cmd.usage();
@@ -83,7 +83,7 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 	let booleanFlags = [];
 	let aliases = {};
 	for (let i = 0; i < options.length; i++) {
-		if (options[i].length != 2) throw new Error("Invalid options: " + options[i]);
+		if (options[i].length != 2) throw new Error('Invalid options: ' + options[i]);
 		let flags = options[i][0];
 		let text = options[i][1];
 
@@ -102,96 +102,97 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 	let args = yargParser(argv, {
 		boolean: booleanFlags,
 		alias: aliases,
-		string: ["_"],
+		string: ['_'],
 	});
 
-	for (let i = 1; i < cmdUsage["_"].length; i++) {
-		const a = cliUtils.parseCommandArg(cmdUsage["_"][i]);
-		if (a.required && !args["_"][i]) throw new Error(_("Missing required argument: %s", a.name));
+	for (let i = 1; i < cmdUsage['_'].length; i++) {
+		const a = cliUtils.parseCommandArg(cmdUsage['_'][i]);
+		if (a.required && !args['_'][i]) throw new Error(_('Missing required argument: %s', a.name));
 		if (i >= a.length) {
 			output[a.name] = null;
 		} else {
-			output[a.name] = args["_"][i];
+			output[a.name] = args['_'][i];
 		}
 	}
 
 	let argOptions = {};
 	for (let key in args) {
 		if (!args.hasOwnProperty(key)) continue;
-		if (key == "_") continue;
+		if (key == '_') continue;
 		argOptions[key] = args[key];
 	}
 
 	output.options = argOptions;
 
 	return output;
-};
+}
 
 cliUtils.promptMcq = function(message, answers) {
-	const readline = require("readline");
+	const readline = require('readline');
 
 	const rl = readline.createInterface({
 		input: process.stdin,
-		output: process.stdout,
+		output: process.stdout
 	});
 
 	message += "\n\n";
 	for (let n in answers) {
 		if (!answers.hasOwnProperty(n)) continue;
-		message += _("%s: %s", n, answers[n]) + "\n";
+		message += _('%s: %s', n, answers[n]) + "\n";
 	}
 
 	message += "\n";
-	message += _("Your choice: ");
+	message += _('Your choice: ');
 
 	return new Promise((resolve, reject) => {
-		rl.question(message, answer => {
+		rl.question(message, (answer) => {
 			rl.close();
 
 			if (!(answer in answers)) {
-				reject(new Error(_("Invalid answer: %s", answer)));
+				reject(new Error(_('Invalid answer: %s', answer)));
 				return;
 			}
 
 			resolve(answer);
 		});
 	});
-};
+}
 
 cliUtils.promptConfirm = function(message, answers = null) {
-	if (!answers) answers = [_("Y"), _("n")];
-	const readline = require("readline");
+	if (!answers) answers = [_('Y'), _('n')];
+	const readline = require('readline');
 
 	const rl = readline.createInterface({
 		input: process.stdin,
-		output: process.stdout,
+		output: process.stdout
 	});
 
-	message += " (" + answers.join("/") + ")";
+	message += ' (' + answers.join('/') + ')';
 
 	return new Promise((resolve, reject) => {
-		rl.question(message + " ", answer => {
+		rl.question(message + ' ', (answer) => {
 			const ok = !answer || answer.toLowerCase() == answers[0].toLowerCase();
 			rl.close();
 			resolve(ok);
 		});
 	});
-};
+}
 
 // Note: initialText is there to have the same signature as statusBar.prompt() so that
 // it can be a drop-in replacement, however initialText is not used (and cannot be
 // with readline.question?).
-cliUtils.prompt = function(initialText = "", promptString = ":", options = null) {
+cliUtils.prompt = function(initialText = '', promptString = ':', options = null) {
 	if (!options) options = {};
 
-	const readline = require("readline");
-	const Writable = require("stream").Writable;
+	const readline = require('readline');
+	const Writable = require('stream').Writable;
 
 	const mutableStdout = new Writable({
 		write: function(chunk, encoding, callback) {
-			if (!this.muted) process.stdout.write(chunk, encoding);
+			if (!this.muted)
+			process.stdout.write(chunk, encoding);
 			callback();
-		},
+		}
 	});
 
 	const rl = readline.createInterface({
@@ -203,15 +204,15 @@ cliUtils.prompt = function(initialText = "", promptString = ":", options = null)
 	return new Promise((resolve, reject) => {
 		mutableStdout.muted = false;
 
-		rl.question(promptString, answer => {
+		rl.question(promptString, (answer) => {
 			rl.close();
-			if (!!options.secure) this.stdout_("");
+			if (!!options.secure) this.stdout_('');
 			resolve(answer);
 		});
 
 		mutableStdout.muted = !!options.secure;
 	});
-};
+}
 
 let redrawStarted_ = false;
 let redrawLastLog_ = null;
@@ -219,7 +220,7 @@ let redrawLastUpdateTime_ = 0;
 
 cliUtils.setStdout = function(v) {
 	this.stdout_ = v;
-};
+}
 
 cliUtils.redraw = function(s) {
 	const now = time.unixMs();
@@ -232,8 +233,8 @@ cliUtils.redraw = function(s) {
 		redrawLastLog_ = s;
 	}
 
-	redrawStarted_ = true;
-};
+   redrawStarted_ = true;
+}
 
 cliUtils.redrawDone = function() {
 	if (!redrawStarted_) return;
@@ -244,6 +245,6 @@ cliUtils.redrawDone = function() {
 
 	redrawLastLog_ = null;
 	redrawStarted_ = false;
-};
+}
 
 module.exports = { cliUtils };

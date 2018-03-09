@@ -1,17 +1,18 @@
-const BaseModel = require("lib/BaseModel.js");
-const BaseItem = require("lib/models/BaseItem.js");
-const Setting = require("lib/models/Setting.js");
-const ArrayUtils = require("lib/ArrayUtils.js");
-const pathUtils = require("lib/path-utils.js");
-const { mime } = require("lib/mime-utils.js");
-const { filename } = require("lib/path-utils.js");
-const { FsDriverDummy } = require("lib/fs-driver-dummy.js");
-const { markdownUtils } = require("lib/markdown-utils.js");
-const JoplinError = require("lib/JoplinError");
+const BaseModel = require('lib/BaseModel.js');
+const BaseItem = require('lib/models/BaseItem.js');
+const Setting = require('lib/models/Setting.js');
+const ArrayUtils = require('lib/ArrayUtils.js');
+const pathUtils = require('lib/path-utils.js');
+const { mime } = require('lib/mime-utils.js');
+const { filename } = require('lib/path-utils.js');
+const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
+const { markdownUtils } = require('lib/markdown-utils.js');
+const JoplinError = require('lib/JoplinError');
 
 class Resource extends BaseItem {
+
 	static tableName() {
-		return "resources";
+		return 'resources';
 	}
 
 	static modelType() {
@@ -19,7 +20,7 @@ class Resource extends BaseItem {
 	}
 
 	static encryptionService() {
-		if (!this.encryptionService_) throw new Error("Resource.encryptionService_ is not set!!");
+		if (!this.encryptionService_) throw new Error('Resource.encryptionService_ is not set!!');
 		return this.encryptionService_;
 	}
 
@@ -35,20 +36,20 @@ class Resource extends BaseItem {
 
 	static async serialize(item, type = null, shownKeys = null) {
 		let fieldNames = this.fieldNames();
-		fieldNames.push("type_");
+		fieldNames.push('type_');
 		//fieldNames = ArrayUtils.removeElement(fieldNames, 'encryption_blob_encrypted');
-		return super.serialize(item, "resource", fieldNames);
+		return super.serialize(item, 'resource', fieldNames);
 	}
 
 	static filename(resource, encryptedBlob = false) {
-		let extension = encryptedBlob ? "crypted" : resource.file_extension;
-		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : "";
-		extension = extension ? "." + extension : "";
+		let extension = encryptedBlob ? 'crypted' : resource.file_extension;
+		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
+		extension = extension ? ('.' + extension) : '';
 		return resource.id + extension;
 	}
 
 	static fullPath(resource, encryptedBlob = false) {
-		return Setting.value("resourceDir") + "/" + this.filename(resource, encryptedBlob);
+		return Setting.value('resourceDir') + '/' + this.filename(resource, encryptedBlob);
 	}
 
 	// For resources, we need to decrypt the item (metadata) and the resource binary blob.
@@ -60,8 +61,8 @@ class Resource extends BaseItem {
 
 		const plainTextPath = this.fullPath(decryptedItem);
 		const encryptedPath = this.fullPath(decryptedItem, true);
-		const noExtPath = pathUtils.dirname(encryptedPath) + "/" + pathUtils.filename(encryptedPath);
-
+		const noExtPath = pathUtils.dirname(encryptedPath) + '/' + pathUtils.filename(encryptedPath);
+		
 		// When the resource blob is downloaded by the synchroniser, it's initially a file with no
 		// extension (since it's encrypted, so we don't know its extension). So here rename it
 		// to a file with a ".crypted" extension so that it's better identified, and then decrypt it.
@@ -84,9 +85,9 @@ class Resource extends BaseItem {
 	static async fullPathForSyncUpload(resource) {
 		const plainTextPath = this.fullPath(resource);
 
-		if (!Setting.value("encryption.enabled")) {
+		if (!Setting.value('encryption.enabled')) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
-			if (!!resource.encryption_blob_encrypted) throw new Error("Trying to access encrypted resource but encryption is currently disabled");
+			if (!!resource.encryption_blob_encrypted) throw new Error('Trying to access encrypted resource but encryption is currently disabled');
 			return { path: plainTextPath, resource: resource };
 		}
 
@@ -96,7 +97,7 @@ class Resource extends BaseItem {
 		try {
 			await this.encryptionService().encryptFile(plainTextPath, encryptedPath);
 		} catch (error) {
-			if (error.code === "ENOENT") throw new JoplinError("File not found:" + error.toString(), "fileNotFound");
+			if (error.code === 'ENOENT') throw new JoplinError('File not found:' + error.toString(), 'fileNotFound');
 			throw error;
 		}
 
@@ -107,7 +108,7 @@ class Resource extends BaseItem {
 
 	static markdownTag(resource) {
 		let tagAlt = resource.alt ? resource.alt : resource.title;
-		if (!tagAlt) tagAlt = "";
+		if (!tagAlt) tagAlt = '';
 		let lines = [];
 		if (Resource.isSupportedImageMimeType(resource.mime)) {
 			lines.push("![");
@@ -118,7 +119,7 @@ class Resource extends BaseItem {
 			lines.push(markdownUtils.escapeLinkText(tagAlt));
 			lines.push("](:/" + resource.id + ")");
 		}
-		return lines.join("");
+		return lines.join('');
 	}
 
 	static pathToId(path) {
@@ -126,7 +127,7 @@ class Resource extends BaseItem {
 	}
 
 	static async content(resource) {
-		return this.fsDriver().readFile(this.fullPath(resource), "Buffer");
+		return this.fsDriver().readFile(this.fullPath(resource), 'Buffer');
 	}
 
 	static setContent(resource, content) {
@@ -134,13 +135,14 @@ class Resource extends BaseItem {
 	}
 
 	static isResourceUrl(url) {
-		return url && url.length === 34 && url[0] === ":" && url[1] === "/";
+		return url && url.length === 34 && url[0] === ':' && url[1] === '/';
 	}
 
 	static urlToId(url) {
-		if (!this.isResourceUrl(url)) throw new Error("Not a valid resource URL: " + url);
+		if (!this.isResourceUrl(url)) throw new Error('Not a valid resource URL: ' + url);
 		return url.substr(2);
 	}
+
 }
 
 Resource.IMAGE_MAX_DIMENSION = 1920;

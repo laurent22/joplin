@@ -1,11 +1,12 @@
-const fs = require("fs-extra");
-const { time } = require("lib/time-utils.js");
-const FsDriverBase = require("lib/fs-driver-base");
+const fs = require('fs-extra');
+const { time } = require('lib/time-utils.js');
+const FsDriverBase = require('lib/fs-driver-base');
 
 class FsDriverNode extends FsDriverBase {
+
 	fsErrorToJsError_(error, path = null) {
 		let msg = error.toString();
-		if (path !== null) msg += ". Path: " + path;
+		if (path !== null) msg += '. Path: ' + path;
 		let output = new Error(msg);
 		if (error.code) output.code = error.code;
 		return output;
@@ -15,7 +16,7 @@ class FsDriverNode extends FsDriverBase {
 		return fs.appendFileSync(path, string);
 	}
 
-	async appendFile(path, string, encoding = "base64") {
+	async appendFile(path, string, encoding = 'base64') {
 		try {
 			return await fs.appendFile(path, string, { encoding: encoding });
 		} catch (error) {
@@ -32,7 +33,7 @@ class FsDriverNode extends FsDriverBase {
 		}
 	}
 
-	async writeFile(path, string, encoding = "base64") {
+	async writeFile(path, string, encoding = 'base64') {
 		try {
 			return await fs.writeFile(path, string, { encoding: encoding });
 		} catch (error) {
@@ -60,7 +61,7 @@ class FsDriverNode extends FsDriverBase {
 				lastError = error;
 				// Normally cannot happen with the `overwrite` flag but sometime it still does.
 				// In this case, retry.
-				if (error.code == "EEXIST") {
+				if (error.code == 'EEXIST') {
 					await time.sleep(1);
 					continue;
 				}
@@ -90,7 +91,7 @@ class FsDriverNode extends FsDriverBase {
 				size: stat.size,
 			};
 		} catch (error) {
-			if (error.code == "ENOENT") return null;
+			if (error.code == 'ENOENT') return null;
 			throw error;
 		}
 	}
@@ -101,7 +102,7 @@ class FsDriverNode extends FsDriverBase {
 
 	async readDirStats(path, options = null) {
 		if (!options) options = {};
-		if (!("recursive" in options)) options.recursive = false;
+		if (!('recursive' in options)) options.recursive = false;
 
 		let items = [];
 		try {
@@ -113,7 +114,7 @@ class FsDriverNode extends FsDriverBase {
 		let output = [];
 		for (let i = 0; i < items.length; i++) {
 			const item = items[i];
-			let stat = await this.stat(path + "/" + item);
+			let stat = await this.stat(path + '/' + item);
 			if (!stat) continue; // Has been deleted between the readdir() call and now
 			stat.path = stat.path.substr(path.length + 1);
 			output.push(stat);
@@ -139,9 +140,9 @@ class FsDriverNode extends FsDriverBase {
 		}
 	}
 
-	async readFile(path, encoding = "utf8") {
+	async readFile(path, encoding = 'utf8') {
 		try {
-			if (encoding === "Buffer") return await fs.readFile(path); // Returns the raw buffer
+			if (encoding === 'Buffer') return await fs.readFile(path); // Returns the raw buffer
 			return await fs.readFile(path, encoding);
 		} catch (error) {
 			throw this.fsErrorToJsError_(error, path);
@@ -161,20 +162,21 @@ class FsDriverNode extends FsDriverBase {
 		try {
 			await fs.unlink(path);
 		} catch (error) {
-			if (error.code === "ENOENT") return; // Don't throw if the file does not exist
+			if (error.code === 'ENOENT') return; // Don't throw if the file does not exist
 			throw error;
 		}
 	}
 
-	async readFileChunk(handle, length, encoding = "base64") {
+	async readFileChunk(handle, length, encoding = 'base64') {
 		let buffer = new Buffer(length);
 		const result = await fs.read(handle, buffer, 0, length, null);
 		if (!result.bytesRead) return null;
 		buffer = buffer.slice(0, result.bytesRead);
-		if (encoding === "base64") return buffer.toString("base64");
-		if (encoding === "ascii") return buffer.toString("ascii");
-		throw new Error("Unsupported encoding: " + encoding);
+		if (encoding === 'base64') return buffer.toString('base64');
+		if (encoding === 'ascii') return buffer.toString('ascii');
+		throw new Error('Unsupported encoding: ' + encoding);
 	}
+
 }
 
 module.exports.FsDriverNode = FsDriverNode;

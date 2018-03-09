@@ -1,7 +1,7 @@
-const fs = require("fs-extra");
-const dirname = require("path").dirname;
-const marked = require("marked");
-const Mustache = require("mustache");
+const fs = require('fs-extra');
+const dirname = require('path').dirname;
+const marked = require('marked');
+const Mustache = require('mustache');
 
 const headerHtml = `<!doctype html>
 <html>
@@ -279,7 +279,7 @@ function markdownToHtml(md) {
 	const renderer = new marked.Renderer();
 
 	// Remove the header because it's going to be added back as HTML
-	md = md.replace(/# Joplin/, "");
+	md = md.replace(/# Joplin/, '');
 
 	let output = marked(md, {
 		gfm: true,
@@ -293,31 +293,32 @@ function markdownToHtml(md) {
 }
 
 function renderFileToHtml(sourcePath, targetPath, params) {
-	const md = fs.readFileSync(sourcePath, "utf8");
-	params.baseUrl = "http://joplin.cozic.net";
-	params.imageBaseUrl = params.baseUrl + "/images";
+	const md = fs.readFileSync(sourcePath, 'utf8');
+	params.baseUrl = 'http://joplin.cozic.net';
+	params.imageBaseUrl = params.baseUrl + '/images';
 	const html = Mustache.render(markdownToHtml(md), params);
 	fs.writeFileSync(targetPath, html);
 }
 
 async function main() {
-	renderFileToHtml(rootDir + "/README.md", rootDir + "/docs/index.html", {
-		selectedHome: "selected",
+	renderFileToHtml(rootDir + '/README.md', rootDir + '/docs/index.html', {
+		selectedHome: 'selected',
 	});
 
-	renderFileToHtml(rootDir + "/readme/terminal.md", rootDir + "/docs/terminal/index.html", {
-		selectedTerminal: "selected",
+	renderFileToHtml(rootDir + '/readme/terminal.md', rootDir + '/docs/terminal/index.html', {
+		selectedTerminal: 'selected',
 	});
 
-	renderFileToHtml(rootDir + "/readme/desktop.md", rootDir + "/docs/desktop/index.html", {
-		selectedDesktop: "selected",
+	renderFileToHtml(rootDir + '/readme/desktop.md', rootDir + '/docs/desktop/index.html', {
+		selectedDesktop: 'selected',
 	});
 
-	renderFileToHtml(rootDir + "/readme/e2ee.md", rootDir + "/docs/help/e2ee/index.html", {});
-	renderFileToHtml(rootDir + "/readme/spec.md", rootDir + "/docs/help/spec/index.html", {});
-	renderFileToHtml(rootDir + "/readme/donate.md", rootDir + "/docs/donate/index.html", {});
+	renderFileToHtml(rootDir + '/readme/e2ee.md', rootDir + '/docs/help/e2ee/index.html', {});
+	renderFileToHtml(rootDir + '/readme/spec.md', rootDir + '/docs/help/spec/index.html', {});
+	renderFileToHtml(rootDir + '/readme/donate.md', rootDir + '/docs/donate/index.html', {});
+	
 }
 
-main().catch(error => {
+main().catch((error) => {
 	console.error(error);
 });

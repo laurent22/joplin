@@ -1,19 +1,19 @@
-const { shim } = require("lib/shim.js");
+const { shim } = require('lib/shim.js');
 
 const netUtils = {};
 
 netUtils.ip = async () => {
-	let response = await shim.fetch("https://api.ipify.org/?format=json");
+	let response = await shim.fetch('https://api.ipify.org/?format=json');
 	if (!response.ok) {
-		throw new Error("Could not retrieve IP: " + (await response.text()));
+		throw new Error('Could not retrieve IP: ' + await response.text());
 	}
 
 	let ip = await response.json();
 	return ip.ip;
-};
+}
 
 netUtils.findAvailablePort = async (possiblePorts, extraRandomPortsToTry = 20) => {
-	const tcpPortUsed = require("tcp-port-used");
+	const tcpPortUsed = require('tcp-port-used');
 
 	for (let i = 0; i < extraRandomPortsToTry; i++) {
 		possiblePorts.push(Math.floor(8000 + Math.random() * 2000));
@@ -28,6 +28,6 @@ netUtils.findAvailablePort = async (possiblePorts, extraRandomPortsToTry = 20) =
 		}
 	}
 	return port;
-};
+}
 
 module.exports = { netUtils };

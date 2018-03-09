@@ -1,4 +1,4 @@
-const { main } = require("./main.js");
+const { main } = require('./main.js');
 
 main();
 

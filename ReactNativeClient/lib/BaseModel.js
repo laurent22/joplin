@@ -1,21 +1,22 @@
-const { Log } = require("lib/log.js");
-const { Database } = require("lib/database.js");
-const { uuid } = require("lib/uuid.js");
-const { time } = require("lib/time-utils.js");
-const Mutex = require("async-mutex").Mutex;
+const { Log } = require('lib/log.js');
+const { Database } = require('lib/database.js');
+const { uuid } = require('lib/uuid.js');
+const { time } = require('lib/time-utils.js');
+const Mutex = require('async-mutex').Mutex;
 
 class BaseModel {
+
 	static modelType() {
-		throw new Error("Must be overriden");
+		throw new Error('Must be overriden');
 	}
 
 	static tableName() {
-		throw new Error("Must be overriden");
+		throw new Error('Must be overriden');
 	}
 
 	static addModelMd(model) {
 		if (!model) return model;
-
+		
 		if (Array.isArray(model)) {
 			let output = [];
 			for (let i = 0; i < model.length; i++) {
@@ -49,7 +50,7 @@ class BaseModel {
 			const e = BaseModel.typeEnum_[i];
 			if (e[1] === type) return e[0].substr(5).toLowerCase();
 		}
-		throw new Error("Unknown model type: " + type);
+		throw new Error('Unknown model type: ' + type);
 	}
 
 	static hasField(name) {
@@ -64,7 +65,7 @@ class BaseModel {
 		let p = withPrefix === true ? this.tableName() : withPrefix;
 		let temp = [];
 		for (let i = 0; i < output.length; i++) {
-			temp.push(p + "." + output[i]);
+			temp.push(p + '.' + output[i]);
 		}
 
 		return temp;
@@ -76,7 +77,7 @@ class BaseModel {
 			if (fields[i].name == name) return fields[i].type;
 		}
 		if (defaultValue !== null) return defaultValue;
-		throw new Error("Unknown field: " + name);
+		throw new Error('Unknown field: ' + name);
 	}
 
 	static fields() {
@@ -99,24 +100,22 @@ class BaseModel {
 		} else {
 			options = Object.assign({}, options);
 		}
-		if (!("isNew" in options)) options.isNew = "auto";
-		if (!("autoTimestamp" in options)) options.autoTimestamp = true;
+		if (!('isNew' in options)) options.isNew = 'auto';
+		if (!('autoTimestamp' in options)) options.autoTimestamp = true;
 		return options;
 	}
 
 	static count(options = null) {
 		if (!options) options = {};
-		let sql = "SELECT count(*) as total FROM `" + this.tableName() + "`";
-		if (options.where) sql += " WHERE " + options.where;
-		return this.db()
-			.selectOne(sql)
-			.then(r => {
-				return r ? r["total"] : 0;
-			});
+		let sql = 'SELECT count(*) as total FROM `' + this.tableName() + '`';
+		if (options.where) sql += ' WHERE ' + options.where;
+		return this.db().selectOne(sql).then((r) => {
+			return r ? r['total'] : 0;
+		});
 	}
 
 	static load(id) {
-		return this.loadByField("id", id);
+		return this.loadByField('id', id);
 	}
 
 	static shortId(id) {
@@ -133,7 +132,7 @@ class BaseModel {
 	// }
 
 	static loadByPartialId(partialId) {
-		return this.modelSelectAll("SELECT * FROM `" + this.tableName() + "` WHERE `id` LIKE ?", [partialId + "%"]);
+		return this.modelSelectAll('SELECT * FROM `' + this.tableName() + '` WHERE `id` LIKE ?', [partialId + '%']);
 	}
 
 	static applySqlOptions(options, sql, params = null) {
@@ -144,46 +143,46 @@ class BaseModel {
 			for (let i = 0; i < options.order.length; i++) {
 				const o = options.order[i];
 				let item = o.by;
-				if (options.caseInsensitive === true) item += " COLLATE NOCASE";
-				if (o.dir) item += " " + o.dir;
+				if (options.caseInsensitive === true) item += ' COLLATE NOCASE';
+				if (o.dir) item += ' ' + o.dir;
 				items.push(item);
 			}
-			sql += " ORDER BY " + items.join(", ");
+			sql += ' ORDER BY ' + items.join(', ');
 		}
-
-		if (options.limit) sql += " LIMIT " + options.limit;
+		
+		if (options.limit) sql += ' LIMIT ' + options.limit;
 
 		return { sql: sql, params: params };
 	}
 
 	static async allIds(options = null) {
-		let q = this.applySqlOptions(options, "SELECT id FROM `" + this.tableName() + "`");
+		let q = this.applySqlOptions(options, 'SELECT id FROM `' + this.tableName() + '`');
 		const rows = await this.db().selectAll(q.sql, q.params);
-		return rows.map(r => r.id);
+		return rows.map((r) => r.id);
 	}
 
 	static async all(options = null) {
-		let q = this.applySqlOptions(options, "SELECT * FROM `" + this.tableName() + "`");
+		let q = this.applySqlOptions(options, 'SELECT * FROM `' + this.tableName() + '`');
 		return this.modelSelectAll(q.sql);
 	}
 
 	static async search(options = null) {
 		if (!options) options = {};
-		if (!options.fields) options.fields = "*";
+		if (!options.fields) options.fields = '*';
 
 		let conditions = options.conditions ? options.conditions.slice(0) : [];
 		let params = options.conditionsParams ? options.conditionsParams.slice(0) : [];
 
 		if (options.titlePattern) {
-			let pattern = options.titlePattern.replace(/\*/g, "%");
-			conditions.push("title LIKE ?");
+			let pattern = options.titlePattern.replace(/\*/g, '%');
+			conditions.push('title LIKE ?');
 			params.push(pattern);
 		}
 
-		if ("limit" in options && options.limit <= 0) return [];
+		if ('limit' in options && options.limit <= 0) return [];
 
-		let sql = "SELECT " + this.db().escapeFields(options.fields) + " FROM `" + this.tableName() + "`";
-		if (conditions.length) sql += " WHERE " + conditions.join(" AND ");
+		let sql = 'SELECT ' + this.db().escapeFields(options.fields) + ' FROM `' + this.tableName() + '`';
+		if (conditions.length) sql += ' WHERE ' + conditions.join(' AND ');
 
 		let query = this.applySqlOptions(options, sql, params);
 		return this.modelSelectAll(query.sql, query.params);
@@ -191,32 +190,28 @@ class BaseModel {
 
 	static modelSelectOne(sql, params = null) {
 		if (params === null) params = [];
-		return this.db()
-			.selectOne(sql, params)
-			.then(model => {
-				return this.filter(this.addModelMd(model));
-			});
+		return this.db().selectOne(sql, params).then((model) => {
+			return this.filter(this.addModelMd(model));
+		});
 	}
 
 	static modelSelectAll(sql, params = null) {
 		if (params === null) params = [];
-		return this.db()
-			.selectAll(sql, params)
-			.then(models => {
-				return this.filterArray(this.addModelMd(models));
-			});
+		return this.db().selectAll(sql, params).then((models) => {
+			return this.filterArray(this.addModelMd(models));
+		});
 	}
 
 	static loadByField(fieldName, fieldValue, options = null) {
 		if (!options) options = {};
-		if (!("caseInsensitive" in options)) options.caseInsensitive = false;
-		let sql = "SELECT * FROM `" + this.tableName() + "` WHERE `" + fieldName + "` = ?";
-		if (options.caseInsensitive) sql += " COLLATE NOCASE";
+		if (!('caseInsensitive' in options)) options.caseInsensitive = false;
+		let sql = 'SELECT * FROM `' + this.tableName() + '` WHERE `' + fieldName + '` = ?';
+		if (options.caseInsensitive) sql += ' COLLATE NOCASE';
 		return this.modelSelectOne(sql, [fieldValue]);
 	}
 
 	static loadByTitle(fieldValue) {
-		return this.modelSelectOne("SELECT * FROM `" + this.tableName() + "` WHERE `title` = ?", [fieldValue]);
+		return this.modelSelectOne('SELECT * FROM `' + this.tableName() + '` WHERE `title` = ?', [fieldValue]);
 	}
 
 	static diffObjects(oldModel, newModel) {
@@ -225,7 +220,7 @@ class BaseModel {
 		for (let i = 0; i < fields.length; i++) {
 			output[fields[i]] = newModel[fields[i]];
 		}
-		if ("type_" in newModel) output.type_ = newModel.type_;
+		if ('type_' in newModel) output.type_ = newModel.type_;
 		return output;
 		// let output = {};
 		// let type = null;
@@ -247,7 +242,7 @@ class BaseModel {
 		let output = [];
 		for (let n in newModel) {
 			if (!newModel.hasOwnProperty(n)) continue;
-			if (n == "type_") continue;
+			if (n == 'type_') continue;
 			if (!(n in oldModel) || newModel[n] !== oldModel[n]) {
 				output.push(n);
 			}
@@ -263,14 +258,12 @@ class BaseModel {
 
 	static saveMutex(modelOrId) {
 		const noLockMutex = {
-			acquire: function() {
-				return null;
-			},
+			acquire: function() { return null; }
 		};
 
 		if (!modelOrId) return noLockMutex;
 
-		let modelId = typeof modelOrId === "string" ? modelOrId : modelOrId.id;
+		let modelId = typeof modelOrId === 'string' ? modelOrId : modelOrId.id;
 
 		if (!modelId) return noLockMutex;
 
@@ -286,7 +279,7 @@ class BaseModel {
 		if (!release) return;
 		if (!modelOrId) return release();
 
-		let modelId = typeof modelOrId === "string" ? modelOrId : modelOrId.id;
+		let modelId = typeof modelOrId === 'string' ? modelOrId : modelOrId.id;
 
 		if (!modelId) return release();
 
@@ -298,7 +291,7 @@ class BaseModel {
 	}
 
 	static saveQuery(o, options) {
-		let temp = {};
+		let temp = {}
 		let fieldNames = this.fieldNames();
 		for (let i = 0; i < fieldNames.length; i++) {
 			let n = fieldNames[i];
@@ -313,7 +306,7 @@ class BaseModel {
 			const filtered = {};
 			for (let k in temp) {
 				if (!temp.hasOwnProperty(k)) continue;
-				if (k !== "id" && options.fields.indexOf(k) < 0) continue;
+				if (k !== 'id' && options.fields.indexOf(k) < 0) continue;
 				filtered[k] = temp[k];
 			}
 			temp = filtered;
@@ -326,14 +319,14 @@ class BaseModel {
 
 		const timeNow = time.unixMs();
 
-		if (options.autoTimestamp && this.hasField("updated_time")) {
+		if (options.autoTimestamp && this.hasField('updated_time')) {
 			o.updated_time = timeNow;
 		}
 
 		// The purpose of user_updated_time is to allow the user to manually set the time of a note (in which case
 		// options.autoTimestamp will be `false`). However note that if the item is later changed, this timestamp
 		// will be set again to the current time.
-		if (options.autoTimestamp && this.hasField("user_updated_time")) {
+		if (options.autoTimestamp && this.hasField('user_updated_time')) {
 			o.user_updated_time = timeNow;
 		}
 
@@ -343,15 +336,15 @@ class BaseModel {
 				o.id = modelId;
 			}
 
-			if (!o.created_time && this.hasField("created_time")) {
+			if (!o.created_time && this.hasField('created_time')) {
 				o.created_time = timeNow;
 			}
 
-			if (!o.user_created_time && this.hasField("user_created_time")) {
+			if (!o.user_created_time && this.hasField('user_created_time')) {
 				o.user_created_time = o.created_time ? o.created_time : timeNow;
 			}
 
-			if (!o.user_updated_time && this.hasField("user_updated_time")) {
+			if (!o.user_updated_time && this.hasField('user_updated_time')) {
 				o.user_updated_time = o.updated_time ? o.updated_time : timeNow;
 			}
 
@@ -414,10 +407,10 @@ class BaseModel {
 
 			o = Object.assign({}, o);
 			if (modelId) o.id = modelId;
-			if ("updated_time" in saveQuery.modObject) o.updated_time = saveQuery.modObject.updated_time;
-			if ("created_time" in saveQuery.modObject) o.created_time = saveQuery.modObject.created_time;
-			if ("user_updated_time" in saveQuery.modObject) o.user_updated_time = saveQuery.modObject.user_updated_time;
-			if ("user_created_time" in saveQuery.modObject) o.user_created_time = saveQuery.modObject.user_created_time;
+			if ('updated_time' in saveQuery.modObject) o.updated_time = saveQuery.modObject.updated_time;
+			if ('created_time' in saveQuery.modObject) o.created_time = saveQuery.modObject.created_time;
+			if ('user_updated_time' in saveQuery.modObject) o.user_updated_time = saveQuery.modObject.user_updated_time;
+			if ('user_created_time' in saveQuery.modObject) o.user_created_time = saveQuery.modObject.user_created_time;
 			o = this.addModelMd(o);
 
 			if (isDiffSaving) {
@@ -430,7 +423,7 @@ class BaseModel {
 
 			output = this.filter(o);
 		} catch (error) {
-			Log.error("Cannot save model", error);
+			Log.error('Cannot save model', error);
 		}
 
 		this.releaseSaveMutex(o, mutexRelease);
@@ -439,7 +432,7 @@ class BaseModel {
 	}
 
 	static isNew(object, options) {
-		if (options && "isNew" in options) {
+		if (options && ('isNew' in options)) {
 			// options.isNew can be "auto" too
 			if (options.isNew === true) return true;
 			if (options.isNew === false) return false;
@@ -467,7 +460,7 @@ class BaseModel {
 			if (output[n] === true) {
 				output[n] = 1;
 			} else if (output[n] === false) {
-				output[n] = 0;
+				output[n] = 0; 
 			} else {
 				const t = this.fieldType(n, Database.TYPE_UNKNOWN);
 				if (t === Database.TYPE_INT) {
@@ -475,42 +468,43 @@ class BaseModel {
 				}
 			}
 		}
-
+		
 		return output;
 	}
 
 	static delete(id, options = null) {
-		if (!id) throw new Error("Cannot delete object without an ID");
+		if (!id) throw new Error('Cannot delete object without an ID');
 		options = this.modOptions(options);
-		return this.db().exec("DELETE FROM " + this.tableName() + " WHERE id = ?", [id]);
+		return this.db().exec('DELETE FROM ' + this.tableName() + ' WHERE id = ?', [id]);
 	}
 
 	static batchDelete(ids, options = null) {
 		if (!ids.length) return;
 		options = this.modOptions(options);
-		return this.db().exec("DELETE FROM " + this.tableName() + ' WHERE id IN ("' + ids.join('","') + '")');
-	}
+		return this.db().exec('DELETE FROM ' + this.tableName() + ' WHERE id IN ("' + ids.join('","') + '")');
+	}	
 
 	static db() {
-		if (!this.db_) throw new Error("Accessing database before it has been initialised");
-		return this.db_;
+		if (!this.db_) throw new Error('Accessing database before it has been initialised');
+		return this.db_;		
 	}
 
 	static isReady() {
 		return !!this.db_;
 	}
+
 }
 
 BaseModel.typeEnum_ = [
-	["TYPE_NOTE", 1],
-	["TYPE_FOLDER", 2],
-	["TYPE_SETTING", 3],
-	["TYPE_RESOURCE", 4],
-	["TYPE_TAG", 5],
-	["TYPE_NOTE_TAG", 6],
-	["TYPE_SEARCH", 7],
-	["TYPE_ALARM", 8],
-	["TYPE_MASTER_KEY", 9],
+	['TYPE_NOTE', 1],
+	['TYPE_FOLDER', 2],
+	['TYPE_SETTING', 3],
+	['TYPE_RESOURCE', 4],
+	['TYPE_TAG', 5],
+	['TYPE_NOTE_TAG', 6],
+	['TYPE_SEARCH', 7],
+	['TYPE_ALARM', 8],
+	['TYPE_MASTER_KEY', 9],
 ];
 
 for (let i = 0; i < BaseModel.typeEnum_.length; i++) {

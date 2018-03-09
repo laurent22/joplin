@@ -1,12 +1,13 @@
-const BaseModel = require("lib/BaseModel.js");
-const BaseItem = require("lib/models/BaseItem.js");
-const NoteTag = require("lib/models/NoteTag.js");
-const Note = require("lib/models/Note.js");
-const { time } = require("lib/time-utils.js");
+const BaseModel = require('lib/BaseModel.js');
+const BaseItem = require('lib/models/BaseItem.js');
+const NoteTag = require('lib/models/NoteTag.js');
+const Note = require('lib/models/Note.js');
+const { time } = require('lib/time-utils.js');
 
 class Tag extends BaseItem {
+
 	static tableName() {
-		return "tags";
+		return 'tags';
 	}
 
 	static modelType() {
@@ -15,12 +16,12 @@ class Tag extends BaseItem {
 
 	static async serialize(item, type = null, shownKeys = null) {
 		let fieldNames = this.fieldNames();
-		fieldNames.push("type_");
-		return super.serialize(item, "tag", fieldNames);
+		fieldNames.push('type_');
+		return super.serialize(item, 'tag', fieldNames);
 	}
 
 	static async noteIds(tagId) {
-		let rows = await this.db().selectAll("SELECT note_id FROM note_tags WHERE tag_id = ?", [tagId]);
+		let rows = await this.db().selectAll('SELECT note_id FROM note_tags WHERE tag_id = ?', [tagId]);
 		let output = [];
 		for (let i = 0; i < rows.length; i++) {
 			output.push(rows[i].note_id);
@@ -39,7 +40,7 @@ class Tag extends BaseItem {
 
 	// Untag all the notes and delete tag
 	static async untagAll(tagId) {
-		const noteTags = await NoteTag.modelSelectAll("SELECT id FROM note_tags WHERE tag_id = ?", [tagId]);
+		const noteTags = await NoteTag.modelSelectAll('SELECT id FROM note_tags WHERE tag_id = ?', [tagId]);
 		for (let i = 0; i < noteTags.length; i++) {
 			await NoteTag.delete(noteTags[i].id);
 		}
@@ -53,7 +54,7 @@ class Tag extends BaseItem {
 		await super.delete(id, options);
 
 		this.dispatch({
-			type: "TAG_DELETE",
+			type: 'TAG_DELETE',
 			id: id,
 		});
 	}
@@ -68,7 +69,7 @@ class Tag extends BaseItem {
 		});
 
 		this.dispatch({
-			type: "TAG_UPDATE_ONE",
+			type: 'TAG_UPDATE_ONE',
 			item: await Tag.load(tagId),
 		});
 
@@ -76,24 +77,24 @@ class Tag extends BaseItem {
 	}
 
 	static async removeNote(tagId, noteId) {
-		let noteTags = await NoteTag.modelSelectAll("SELECT id FROM note_tags WHERE tag_id = ? and note_id = ?", [tagId, noteId]);
+		let noteTags = await NoteTag.modelSelectAll('SELECT id FROM note_tags WHERE tag_id = ? and note_id = ?', [tagId, noteId]);
 		for (let i = 0; i < noteTags.length; i++) {
 			await NoteTag.delete(noteTags[i].id);
 		}
 
 		this.dispatch({
-			type: "TAG_UPDATE_ONE",
+			type: 'TAG_UPDATE_ONE',
 			item: await Tag.load(tagId),
 		});
 	}
 
 	static async hasNote(tagId, noteId) {
-		let r = await this.db().selectOne("SELECT note_id FROM note_tags WHERE tag_id = ? AND note_id = ? LIMIT 1", [tagId, noteId]);
+		let r = await this.db().selectOne('SELECT note_id FROM note_tags WHERE tag_id = ? AND note_id = ? LIMIT 1', [tagId, noteId]);
 		return !!r;
 	}
 
 	static async allWithNotes() {
-		return await Tag.modelSelectAll("SELECT * FROM tags WHERE id IN (SELECT DISTINCT tag_id FROM note_tags)");
+		return await Tag.modelSelectAll('SELECT * FROM tags WHERE id IN (SELECT DISTINCT tag_id FROM note_tags)');
 	}
 
 	static async tagsByNoteId(noteId) {
@@ -102,7 +103,7 @@ class Tag extends BaseItem {
 	}
 
 	static async loadByTitle(title) {
-		return this.loadByField("title", title, { caseInsensitive: true });
+		return this.loadByField('title', title, { caseInsensitive: true });
 	}
 
 	static async setNoteTagsByTitles(noteId, tagTitles) {
@@ -127,19 +128,20 @@ class Tag extends BaseItem {
 
 	static async save(o, options = null) {
 		if (options && options.userSideValidation) {
-			if ("title" in o) {
+			if ('title' in o) {
 				o.title = o.title.trim().toLowerCase();
 			}
 		}
 
-		return super.save(o, options).then(tag => {
+		return super.save(o, options).then((tag) => {
 			this.dispatch({
-				type: "TAG_UPDATE_ONE",
+				type: 'TAG_UPDATE_ONE',
 				item: tag,
 			});
 			return tag;
 		});
 	}
+
 }
 
 module.exports = Tag;

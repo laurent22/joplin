@@ -1,21 +1,22 @@
-const BaseSyncTarget = require("lib/BaseSyncTarget.js");
-const { _ } = require("lib/locale.js");
-const Setting = require("lib/models/Setting.js");
-const { FileApi } = require("lib/file-api.js");
-const { FileApiDriverMemory } = require("lib/file-api-driver-memory.js");
-const { Synchronizer } = require("lib/synchronizer.js");
+const BaseSyncTarget = require('lib/BaseSyncTarget.js');
+const { _ } = require('lib/locale.js');
+const Setting = require('lib/models/Setting.js');
+const { FileApi } = require('lib/file-api.js');
+const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');
+const { Synchronizer } = require('lib/synchronizer.js');
 
 class SyncTargetMemory extends BaseSyncTarget {
+
 	static id() {
 		return 1;
 	}
 
 	static targetName() {
-		return "memory";
+		return 'memory';
 	}
 
 	static label() {
-		return "Memory";
+		return 'Memory';
 	}
 
 	isAuthenticated() {
@@ -23,15 +24,16 @@ class SyncTargetMemory extends BaseSyncTarget {
 	}
 
 	initFileApi() {
-		const fileApi = new FileApi("/root", new FileApiDriverMemory());
+		const fileApi = new FileApi('/root', new FileApiDriverMemory());
 		fileApi.setLogger(this.logger());
 		fileApi.setSyncTargetId(SyncTargetMemory.id());
 		return fileApi;
 	}
 
 	async initSynchronizer() {
-		return new Synchronizer(this.db(), await this.fileApi(), Setting.value("appType"));
+		return new Synchronizer(this.db(), await this.fileApi(), Setting.value('appType'));
 	}
+
 }
 
 module.exports = SyncTargetMemory;

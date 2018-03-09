@@ -1,4 +1,5 @@
 class ModelCache {
+
 	constructor(maxSize) {
 		this.cache_ = [];
 		this.maxSize_ = maxSize;
@@ -7,7 +8,7 @@ class ModelCache {
 	fromCache(ModelClass, id) {
 		for (let i = 0; i < this.cache_.length; i++) {
 			const c = this.cache_[i];
-			if (c.id === id && c.modelType === ModelClass.modelType()) return c;
+			if (c.id === id && c.modelType === ModelClass.modelType()) return c
 		}
 		return null;
 	}
@@ -32,6 +33,7 @@ class ModelCache {
 		this.cache(ModelClass, id, output);
 		return output;
 	}
+
 }
 
 module.exports = ModelCache;

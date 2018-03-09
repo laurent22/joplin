@@ -1,39 +1,40 @@
-const { Logger } = require("lib/logger.js");
-const Folder = require("lib/models/Folder.js");
-const Tag = require("lib/models/Tag.js");
-const BaseModel = require("lib/BaseModel.js");
-const Note = require("lib/models/Note.js");
-const Resource = require("lib/models/Resource.js");
-const { cliUtils } = require("./cli-utils.js");
-const { reducer, defaultState } = require("lib/reducer.js");
-const { splitCommandString } = require("lib/string-utils.js");
-const { reg } = require("lib/registry.js");
-const { _ } = require("lib/locale.js");
+const { Logger } = require('lib/logger.js');
+const Folder = require('lib/models/Folder.js');
+const Tag = require('lib/models/Tag.js');
+const BaseModel = require('lib/BaseModel.js');
+const Note = require('lib/models/Note.js');
+const Resource = require('lib/models/Resource.js');
+const { cliUtils } = require('./cli-utils.js');
+const { reducer, defaultState } = require('lib/reducer.js');
+const { splitCommandString } = require('lib/string-utils.js');
+const { reg } = require('lib/registry.js');
+const { _ } = require('lib/locale.js');
 
-const chalk = require("chalk");
-const tk = require("terminal-kit");
-const TermWrapper = require("tkwidgets/framework/TermWrapper.js");
-const Renderer = require("tkwidgets/framework/Renderer.js");
-const DecryptionWorker = require("lib/services/DecryptionWorker");
+const chalk = require('chalk');
+const tk = require('terminal-kit');
+const TermWrapper = require('tkwidgets/framework/TermWrapper.js');
+const Renderer = require('tkwidgets/framework/Renderer.js');
+const DecryptionWorker = require('lib/services/DecryptionWorker');
 
-const BaseWidget = require("tkwidgets/BaseWidget.js");
-const ListWidget = require("tkwidgets/ListWidget.js");
-const TextWidget = require("tkwidgets/TextWidget.js");
-const HLayoutWidget = require("tkwidgets/HLayoutWidget.js");
-const VLayoutWidget = require("tkwidgets/VLayoutWidget.js");
-const ReduxRootWidget = require("tkwidgets/ReduxRootWidget.js");
-const RootWidget = require("tkwidgets/RootWidget.js");
-const WindowWidget = require("tkwidgets/WindowWidget.js");
+const BaseWidget = require('tkwidgets/BaseWidget.js');
+const ListWidget = require('tkwidgets/ListWidget.js');
+const TextWidget = require('tkwidgets/TextWidget.js');
+const HLayoutWidget = require('tkwidgets/HLayoutWidget.js');
+const VLayoutWidget = require('tkwidgets/VLayoutWidget.js');
+const ReduxRootWidget = require('tkwidgets/ReduxRootWidget.js');
+const RootWidget = require('tkwidgets/RootWidget.js');
+const WindowWidget = require('tkwidgets/WindowWidget.js');
 
-const NoteWidget = require("./gui/NoteWidget.js");
-const ResourceServer = require("./ResourceServer.js");
-const NoteMetadataWidget = require("./gui/NoteMetadataWidget.js");
-const FolderListWidget = require("./gui/FolderListWidget.js");
-const NoteListWidget = require("./gui/NoteListWidget.js");
-const StatusBarWidget = require("./gui/StatusBarWidget.js");
-const ConsoleWidget = require("./gui/ConsoleWidget.js");
+const NoteWidget = require('./gui/NoteWidget.js');
+const ResourceServer = require('./ResourceServer.js');
+const NoteMetadataWidget = require('./gui/NoteMetadataWidget.js');
+const FolderListWidget = require('./gui/FolderListWidget.js');
+const NoteListWidget = require('./gui/NoteListWidget.js');
+const StatusBarWidget = require('./gui/StatusBarWidget.js');
+const ConsoleWidget = require('./gui/ConsoleWidget.js');
 
 class AppGui {
+
 	constructor(app, store, keymap) {
 		try {
 			this.app_ = app;
@@ -46,12 +47,12 @@ class AppGui {
 			// Some keys are directly handled by the tkwidget framework
 			// so they need to be remapped in a different way.
 			this.tkWidgetKeys_ = {
-				focus_next: "TAB",
-				focus_previous: "SHIFT_TAB",
-				move_up: "UP",
-				move_down: "DOWN",
-				page_down: "PAGE_DOWN",
-				page_up: "PAGE_UP",
+				'focus_next': 'TAB',
+				'focus_previous': 'SHIFT_TAB',
+				'move_up': 'UP',
+				'move_down': 'DOWN',
+				'page_down': 'PAGE_DOWN',
+				'page_up': 'PAGE_UP',
 			};
 
 			this.renderer_ = null;
@@ -60,7 +61,7 @@ class AppGui {
 
 			this.renderer_ = new Renderer(this.term(), this.rootWidget_);
 
-			this.app_.on("modelAction", async event => {
+			this.app_.on('modelAction', async (event) => {
 				await this.handleModelAction(event.action);
 			});
 
@@ -94,7 +95,7 @@ class AppGui {
 	}
 
 	async forceRender() {
-		this.widget("root").invalidate();
+		this.widget('root').invalidate();
 		await this.renderer_.renderRoot();
 	}
 
@@ -106,12 +107,12 @@ class AppGui {
 		return this.term().restoreState(state);
 	}
 
-	prompt(initialText = "", promptString = ":", options = null) {
-		return this.widget("statusBar").prompt(initialText, promptString, options);
+	prompt(initialText = '', promptString = ':', options = null) {
+		return this.widget('statusBar').prompt(initialText, promptString, options);
 	}
 
 	stdoutMaxWidth() {
-		return this.widget("console").innerWidth - 1;
+		return this.widget('console').innerWidth - 1;
 	}
 
 	isDummy() {
@@ -120,7 +121,7 @@ class AppGui {
 
 	buildUi() {
 		this.rootWidget_ = new ReduxRootWidget(this.store_);
-		this.rootWidget_.name = "root";
+		this.rootWidget_.name = 'root';
 		this.rootWidget_.autoShortcutsEnabled = false;
 
 		const folderList = new FolderListWidget();
@@ -128,21 +129,21 @@ class AppGui {
 			borderBottomWidth: 1,
 			borderRightWidth: 1,
 		};
-		folderList.name = "folderList";
+		folderList.name = 'folderList';
 		folderList.vStretch = true;
-		folderList.on("currentItemChange", async event => {
+		folderList.on('currentItemChange', async (event) => {
 			const item = folderList.currentItem;
 
-			if (item === "-") {
+			if (item === '-') {
 				let newIndex = event.currentIndex + (event.previousIndex < event.currentIndex ? +1 : -1);
 				let nextItem = folderList.itemAt(newIndex);
 				if (!nextItem) nextItem = folderList.itemAt(event.previousIndex);
 
 				if (!nextItem) return; // Normally not possible
 
-				let actionType = "FOLDER_SELECT";
-				if (nextItem.type_ === BaseModel.TYPE_TAG) actionType = "TAG_SELECT";
-				if (nextItem.type_ === BaseModel.TYPE_SEARCH) actionType = "SEARCH_SELECT";
+				let actionType = 'FOLDER_SELECT';
+				if (nextItem.type_ === BaseModel.TYPE_TAG) actionType = 'TAG_SELECT';
+				if (nextItem.type_ === BaseModel.TYPE_SEARCH) actionType = 'SEARCH_SELECT';
 
 				this.store_.dispatch({
 					type: actionType,
@@ -150,22 +151,22 @@ class AppGui {
 				});
 			} else if (item.type_ === Folder.modelType()) {
 				this.store_.dispatch({
-					type: "FOLDER_SELECT",
+					type: 'FOLDER_SELECT',
 					id: item ? item.id : null,
 				});
 			} else if (item.type_ === Tag.modelType()) {
 				this.store_.dispatch({
-					type: "TAG_SELECT",
+					type: 'TAG_SELECT',
 					id: item ? item.id : null,
 				});
 			} else if (item.type_ === BaseModel.TYPE_SEARCH) {
 				this.store_.dispatch({
-					type: "SEARCH_SELECT",
+					type: 'SEARCH_SELECT',
 					id: item ? item.id : null,
 				});
 			}
 		});
-		this.rootWidget_.connect(folderList, state => {
+		this.rootWidget_.connect(folderList, (state) => {
 			return {
 				selectedFolderId: state.selectedFolderId,
 				selectedTagId: state.selectedTagId,
@@ -178,21 +179,21 @@ class AppGui {
 		});
 
 		const noteList = new NoteListWidget();
-		noteList.name = "noteList";
+		noteList.name = 'noteList';
 		noteList.vStretch = true;
 		noteList.style = {
 			borderBottomWidth: 1,
 			borderLeftWidth: 1,
 			borderRightWidth: 1,
 		};
-		noteList.on("currentItemChange", async () => {
+		noteList.on('currentItemChange', async () => {
 			let note = noteList.currentItem;
 			this.store_.dispatch({
-				type: "NOTE_SELECT",
+				type: 'NOTE_SELECT',
 				id: note ? note.id : null,
 			});
 		});
-		this.rootWidget_.connect(noteList, state => {
+		this.rootWidget_.connect(noteList, (state) => {
 			return {
 				selectedNoteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 				items: state.notes,
@@ -201,12 +202,12 @@ class AppGui {
 
 		const noteText = new NoteWidget();
 		noteText.hStretch = true;
-		noteText.name = "noteText";
+		noteText.name = 'noteText';
 		noteText.style = {
 			borderBottomWidth: 1,
 			borderLeftWidth: 1,
 		};
-		this.rootWidget_.connect(noteText, state => {
+		this.rootWidget_.connect(noteText, (state) => {
 			return {
 				noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 				notes: state.notes,
@@ -215,13 +216,13 @@ class AppGui {
 
 		const noteMetadata = new NoteMetadataWidget();
 		noteMetadata.hStretch = true;
-		noteMetadata.name = "noteMetadata";
+		noteMetadata.name = 'noteMetadata';
 		noteMetadata.style = {
 			borderBottomWidth: 1,
 			borderLeftWidth: 1,
 			borderRightWidth: 1,
 		};
-		this.rootWidget_.connect(noteMetadata, state => {
+		this.rootWidget_.connect(noteMetadata, (state) => {
 			return { noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null };
 		});
 		noteMetadata.hide();
@@ -237,58 +238,58 @@ class AppGui {
 		statusBar.hStretch = true;
 
 		const noteLayout = new VLayoutWidget();
-		noteLayout.name = "noteLayout";
-		noteLayout.addChild(noteText, { type: "stretch", factor: 1 });
-		noteLayout.addChild(noteMetadata, { type: "stretch", factor: 1 });
+		noteLayout.name = 'noteLayout';
+		noteLayout.addChild(noteText, { type: 'stretch', factor: 1 });
+		noteLayout.addChild(noteMetadata, { type: 'stretch', factor: 1 });
 
 		const hLayout = new HLayoutWidget();
-		hLayout.name = "hLayout";
-		hLayout.addChild(folderList, { type: "stretch", factor: 1 });
-		hLayout.addChild(noteList, { type: "stretch", factor: 1 });
-		hLayout.addChild(noteLayout, { type: "stretch", factor: 2 });
+		hLayout.name = 'hLayout';
+		hLayout.addChild(folderList, { type: 'stretch', factor: 1 });
+		hLayout.addChild(noteList, { type: 'stretch', factor: 1 });
+		hLayout.addChild(noteLayout, { type: 'stretch', factor: 2 });
 
 		const vLayout = new VLayoutWidget();
-		vLayout.name = "vLayout";
-		vLayout.addChild(hLayout, { type: "stretch", factor: 2 });
-		vLayout.addChild(consoleWidget, { type: "stretch", factor: 1 });
-		vLayout.addChild(statusBar, { type: "fixed", factor: 1 });
+		vLayout.name = 'vLayout';
+		vLayout.addChild(hLayout, { type: 'stretch', factor: 2 });
+		vLayout.addChild(consoleWidget, { type: 'stretch', factor: 1 });
+		vLayout.addChild(statusBar, { type: 'fixed', factor: 1 });
 
 		const win1 = new WindowWidget();
 		win1.addChild(vLayout);
-		win1.name = "mainWindow";
+		win1.name = 'mainWindow';
 
 		this.rootWidget_.addChild(win1);
 	}
 
 	showModalOverlay(text) {
-		if (!this.widget("overlayWindow")) {
+		if (!this.widget('overlayWindow')) {
 			const textWidget = new TextWidget();
 			textWidget.hStretch = true;
 			textWidget.vStretch = true;
-			textWidget.text = "testing";
-			textWidget.name = "overlayText";
+			textWidget.text = 'testing';
+			textWidget.name = 'overlayText';
 
 			const win = new WindowWidget();
-			win.name = "overlayWindow";
+			win.name = 'overlayWindow';
 			win.addChild(textWidget);
 
 			this.rootWidget_.addChild(win);
 		}
 
-		this.widget("overlayWindow").activate();
-		this.widget("overlayText").text = text;
+		this.widget('overlayWindow').activate();
+		this.widget('overlayText').text = text;
 	}
 
 	hideModalOverlay() {
-		if (this.widget("overlayWindow")) this.widget("overlayWindow").hide();
-		this.widget("mainWindow").activate();
+		if (this.widget('overlayWindow')) this.widget('overlayWindow').hide();
+		this.widget('mainWindow').activate();
 	}
 
 	addCommandToConsole(cmd) {
 		if (!cmd) return;
-		const isConfigPassword = cmd.indexOf("config ") >= 0 && cmd.indexOf("password") >= 0;
+		const isConfigPassword = cmd.indexOf('config ') >= 0 && cmd.indexOf('password') >= 0;
 		if (isConfigPassword) return;
-		this.stdout(chalk.cyan.bold("> " + cmd));
+		this.stdout(chalk.cyan.bold('> ' + cmd));	
 	}
 
 	setupKeymap(keymap) {
@@ -297,15 +298,15 @@ class AppGui {
 		for (let i = 0; i < keymap.length; i++) {
 			const item = Object.assign({}, keymap[i]);
 
-			if (!item.command) throw new Error("Missing command for keymap item: " + JSON.stringify(item));
+			if (!item.command) throw new Error('Missing command for keymap item: ' + JSON.stringify(item));
 
-			if (!("type" in item)) item.type = "exec";
+			if (!('type' in item)) item.type = 'exec';
 
 			if (item.command in this.tkWidgetKeys_) {
-				item.type = "tkwidgets";
+				item.type = 'tkwidgets';
 			}
 
-			item.canRunAlongOtherCommands = item.type === "function" && ["toggle_metadata", "toggle_console"].indexOf(item.command) >= 0;
+			item.canRunAlongOtherCommands = item.type === 'function' && ['toggle_metadata', 'toggle_console'].indexOf(item.command) >= 0;
 
 			output.push(item);
 		}
@@ -318,7 +319,7 @@ class AppGui {
 	}
 
 	showConsole(doShow = true) {
-		this.widget("console").show(doShow);
+		this.widget('console').show(doShow);
 	}
 
 	hideConsole() {
@@ -326,11 +327,11 @@ class AppGui {
 	}
 
 	consoleIsShown() {
-		return this.widget("console").shown;
+		return this.widget('console').shown;
 	}
 
 	maximizeConsole(doMaximize = true) {
-		const consoleWidget = this.widget("console");
+		const consoleWidget = this.widget('console');
 
 		if (consoleWidget.isMaximized__ === undefined) {
 			consoleWidget.isMaximized__ = false;
@@ -339,13 +340,13 @@ class AppGui {
 		if (consoleWidget.isMaximized__ === doMaximize) return;
 
 		let constraints = {
-			type: "stretch",
+			type: 'stretch',
 			factor: !doMaximize ? 1 : 4,
 		};
 
 		consoleWidget.isMaximized__ = doMaximize;
 
-		this.widget("vLayout").setWidgetConstraints(consoleWidget, constraints);
+		this.widget('vLayout').setWidgetConstraints(consoleWidget, constraints);
 	}
 
 	minimizeConsole() {
@@ -353,11 +354,11 @@ class AppGui {
 	}
 
 	consoleIsMaximized() {
-		return this.widget("console").isMaximized__ === true;
+		return this.widget('console').isMaximized__ === true;
 	}
 
 	showNoteMetadata(show = true) {
-		this.widget("noteMetadata").show(show);
+		this.widget('noteMetadata').show(show);
 	}
 
 	hideNoteMetadata() {
@@ -365,11 +366,11 @@ class AppGui {
 	}
 
 	toggleNoteMetadata() {
-		this.showNoteMetadata(!this.widget("noteMetadata").shown);
+		this.showNoteMetadata(!this.widget('noteMetadata').shown);
 	}
 
 	widget(name) {
-		if (name === "root") return this.rootWidget_;
+		if (name === 'root') return this.rootWidget_;
 		return this.rootWidget_.childByName(name);
 	}
 
@@ -402,10 +403,10 @@ class AppGui {
 	}
 
 	activeListItem() {
-		const widget = this.widget("mainWindow").focusedWidget;
+		const widget = this.widget('mainWindow').focusedWidget;
 		if (!widget) return null;
-
-		if (widget.name == "noteList" || widget.name == "folderList") {
+		
+		if (widget.name == 'noteList' || widget.name == 'folderList') {
 			return widget.currentItem;
 		}
 
@@ -413,48 +414,54 @@ class AppGui {
 	}
 
 	async handleModelAction(action) {
-		this.logger().info("Action:", action);
+		this.logger().info('Action:', action);
 
 		let state = Object.assign({}, defaultState);
-		state.notes = this.widget("noteList").items;
+		state.notes = this.widget('noteList').items;
 
 		let newState = reducer(state, action);
 
 		if (newState !== state) {
-			this.widget("noteList").items = newState.notes;
+			this.widget('noteList').items = newState.notes;
 		}
 	}
 
 	async processFunctionCommand(cmd) {
-		if (cmd === "activate") {
-			const w = this.widget("mainWindow").focusedWidget;
-			if (w.name === "folderList") {
-				this.widget("noteList").focus();
-			} else if (w.name === "noteList" || w.name === "noteText") {
-				this.processPromptCommand("edit $n");
+
+		if (cmd === 'activate') {
+
+			const w = this.widget('mainWindow').focusedWidget;
+			if (w.name === 'folderList') {
+				this.widget('noteList').focus();
+			} else if (w.name === 'noteList' || w.name === 'noteText') {
+				this.processPromptCommand('edit $n');
 			}
-		} else if (cmd === "delete") {
-			if (this.widget("folderList").hasFocus) {
-				const item = this.widget("folderList").selectedJoplinItem;
+
+		} else if (cmd === 'delete') {
+
+			if (this.widget('folderList').hasFocus) {
+				const item = this.widget('folderList').selectedJoplinItem;
 
 				if (!item) return;
 
 				if (item.type_ === BaseModel.TYPE_FOLDER) {
-					await this.processPromptCommand("rmbook " + item.id);
+					await this.processPromptCommand('rmbook ' + item.id);
 				} else if (item.type_ === BaseModel.TYPE_TAG) {
-					this.stdout(_("To delete a tag, untag the associated notes."));
+					this.stdout(_('To delete a tag, untag the associated notes.'));
 				} else if (item.type_ === BaseModel.TYPE_SEARCH) {
 					this.store().dispatch({
-						type: "SEARCH_DELETE",
+						type: 'SEARCH_DELETE',
 						id: item.id,
 					});
 				}
-			} else if (this.widget("noteList").hasFocus) {
-				await this.processPromptCommand("rmnote $n");
+			} else if (this.widget('noteList').hasFocus) {
+				await this.processPromptCommand('rmnote $n');
 			} else {
-				this.stdout(_("Please select the note or notebook to be deleted first."));
+				this.stdout(_('Please select the note or notebook to be deleted first.'));
 			}
-		} else if (cmd === "toggle_console") {
+
+		} else if (cmd === 'toggle_console') {
+
 			if (!this.consoleIsShown()) {
 				this.showConsole();
 				this.minimizeConsole();
@@ -465,15 +472,22 @@ class AppGui {
 					this.maximizeConsole();
 				}
 			}
-		} else if (cmd === "toggle_metadata") {
+
+		} else if (cmd === 'toggle_metadata') {
+
 			this.toggleNoteMetadata();
-		} else if (cmd === "enter_command_line_mode") {
-			const cmd = await this.widget("statusBar").prompt();
+
+		} else if (cmd === 'enter_command_line_mode') {
+
+			const cmd = await this.widget('statusBar').prompt();
 			if (!cmd) return;
 			this.addCommandToConsole(cmd);
-			await this.processPromptCommand(cmd);
+			await this.processPromptCommand(cmd);			
+
 		} else {
-			throw new Error("Unknown command: " + cmd);
+
+			throw new Error('Unknown command: ' + cmd);
+
 		}
 	}
 
@@ -482,21 +496,21 @@ class AppGui {
 		cmd = cmd.trim();
 		if (!cmd.length) return;
 
-		this.logger().info("Got command: " + cmd);
+		this.logger().info('Got command: ' + cmd);
 
-		try {
-			let note = this.widget("noteList").currentItem;
-			let folder = this.widget("folderList").currentItem;
+		try {			
+			let note = this.widget('noteList').currentItem;
+			let folder = this.widget('folderList').currentItem;
 			let args = splitCommandString(cmd);
 
 			for (let i = 0; i < args.length; i++) {
-				if (args[i] == "$n") {
-					args[i] = note ? note.id : "";
-				} else if (args[i] == "$b") {
-					args[i] = folder ? folder.id : "";
-				} else if (args[i] == "$c") {
+				if (args[i] == '$n') {
+					args[i] = note ? note.id : '';
+				} else if (args[i] == '$b') {
+					args[i] = folder ? folder.id : '';
+				} else  if (args[i] == '$c') {
 					const item = this.activeListItem();
-					args[i] = item ? item.id : "";
+					args[i] = item ? item.id : '';
 				}
 			}
 
@@ -505,40 +519,40 @@ class AppGui {
 			this.stdout(error.message);
 		}
 
-		this.widget("console").scrollBottom();
-
+		this.widget('console').scrollBottom();
+		
 		// Invalidate so that the screen is redrawn in case inputting a command has moved
 		// the GUI up (in particular due to autocompletion), it's moved back to the right position.
-		this.widget("root").invalidate();
+		this.widget('root').invalidate();
 	}
 
 	async updateFolderList() {
 		const folders = await Folder.all();
-		this.widget("folderList").items = folders;
+		this.widget('folderList').items = folders;
 	}
 
 	async updateNoteList(folderId) {
 		const fields = Note.previewFields();
-		fields.splice(fields.indexOf("body"), 1);
+		fields.splice(fields.indexOf('body'), 1);
 		const notes = folderId ? await Note.previews(folderId, { fields: fields }) : [];
-		this.widget("noteList").items = notes;
+		this.widget('noteList').items = notes;
 	}
 
 	async updateNoteText(note) {
-		const text = note ? note.body : "";
-		this.widget("noteText").text = text;
+		const text = note ? note.body : '';
+		this.widget('noteText').text = text;
 	}
 
 	// Any key after which a shortcut is not possible.
 	isSpecialKey(name) {
-		return [":", "ENTER", "DOWN", "UP", "LEFT", "RIGHT", "DELETE", "BACKSPACE", "ESCAPE", "TAB", "SHIFT_TAB", "PAGE_UP", "PAGE_DOWN"].indexOf(name) >= 0;
+		return [':', 'ENTER', 'DOWN', 'UP', 'LEFT', 'RIGHT', 'DELETE', 'BACKSPACE', 'ESCAPE', 'TAB', 'SHIFT_TAB', 'PAGE_UP', 'PAGE_DOWN'].indexOf(name) >= 0;
 	}
 
 	fullScreen(enable = true) {
 		if (enable) {
 			this.term().fullscreen();
 			this.term().hideCursor();
-			this.widget("root").invalidate();
+			this.widget('root').invalidate();
 		} else {
 			this.term().fullscreen(false);
 			this.term().showCursor();
@@ -548,10 +562,10 @@ class AppGui {
 	stdout(text) {
 		if (text === null || text === undefined) return;
 
-		let lines = text.split("\n");
+		let lines = text.split('\n');
 		for (let i = 0; i < lines.length; i++) {
-			const v = typeof lines[i] === "object" ? JSON.stringify(lines[i]) : lines[i];
-			this.widget("console").addLine(v);
+			const v = typeof lines[i] === 'object' ? JSON.stringify(lines[i]) : lines[i];
+			this.widget('console').addLine(v);
 		}
 
 		this.updateStatusBarMessage();
@@ -563,40 +577,40 @@ class AppGui {
 	}
 
 	updateStatusBarMessage() {
-		const consoleWidget = this.widget("console");
+		const consoleWidget = this.widget('console');
 
-		let msg = "";
+		let msg = '';
 
 		const text = consoleWidget.lastLine;
 
 		const cmd = this.app().currentCommand();
 		if (cmd) {
 			msg += cmd.name();
-			if (cmd.cancellable()) msg += " [Press Ctrl+C to cancel]";
-			msg += ": ";
+			if (cmd.cancellable()) msg += ' [Press Ctrl+C to cancel]';
+			msg += ': ';
 		}
 
 		if (text && text.length) {
 			msg += text;
 		}
 
-		if (msg !== "") this.widget("statusBar").setItemAt(0, msg);
+		if (msg !== '') this.widget('statusBar').setItemAt(0, msg);
 	}
 
 	async setupResourceServer() {
 		const linkStyle = chalk.blue.underline;
-		const noteTextWidget = this.widget("noteText");
-		const resourceIdRegex = /^:\/[a-f0-9]+$/i;
+		const noteTextWidget = this.widget('noteText');
+		const resourceIdRegex = /^:\/[a-f0-9]+$/i
 		const noteLinks = {};
 
 		const hasProtocol = function(s, protocols) {
 			if (!s) return false;
 			s = s.trim().toLowerCase();
 			for (let i = 0; i < protocols.length; i++) {
-				if (s.indexOf(protocols[i] + "://") === 0) return true;
+				if (s.indexOf(protocols[i] + '://') === 0) return true;
 			}
 			return false;
-		};
+		}
 
 		// By default, before the server is started, only the regular
 		// URLs appear in blue.
@@ -606,7 +620,7 @@ class AppGui {
 
 				if (resourceIdRegex.test(url)) {
 					return url;
-				} else if (hasProtocol(url, ["http", "https"])) {
+				} else if (hasProtocol(url, ['http', 'https'])) {
 					return linkStyle(url);
 				} else {
 					return url;
@@ -619,16 +633,16 @@ class AppGui {
 		this.resourceServer_.setLinkHandler(async (path, response) => {
 			const link = noteLinks[path];
 
-			if (link.type === "url") {
-				response.writeHead(302, { Location: link.url });
+			if (link.type === 'url') {
+				response.writeHead(302, { 'Location': link.url });
 				return true;
 			}
 
-			if (link.type === "resource") {
+			if (link.type === 'resource') {
 				const resourceId = link.id;
 				let resource = await Resource.load(resourceId);
-				if (!resource) throw new Error("No resource with ID " + resourceId); // Should be nearly impossible
-				if (resource.mime) response.setHeader("Content-Type", resource.mime);
+				if (!resource) throw new Error('No resource with ID ' + resourceId); // Should be nearly impossible
+				if (resource.mime) response.setHeader('Content-Type', resource.mime);
 				response.write(await Resource.content(resource));
 				return true;
 			}
@@ -645,21 +659,21 @@ class AppGui {
 
 				if (resourceIdRegex.test(url)) {
 					noteLinks[index] = {
-						type: "resource",
+						type: 'resource',
 						id: url.substr(2),
-					};
-				} else if (hasProtocol(url, ["http", "https", "file", "ftp"])) {
+					};					
+				} else if (hasProtocol(url, ['http', 'https', 'file', 'ftp'])) {
 					noteLinks[index] = {
-						type: "url",
+						type: 'url',
 						url: url,
 					};
-				} else if (url.indexOf("#") === 0) {
-					return ""; // Anchors aren't supported for now
+				} else if (url.indexOf('#') === 0) {
+					return ''; // Anchors aren't supported for now
 				} else {
 					return url;
 				}
 
-				return linkStyle(this.resourceServer_.baseUrl() + "/" + index);
+				return linkStyle(this.resourceServer_.baseUrl() + '/' + index);
 			},
 		};
 	}
@@ -674,16 +688,17 @@ class AppGui {
 
 			this.renderer_.start();
 
-			const statusBar = this.widget("statusBar");
+			const statusBar = this.widget('statusBar');
 
 			term.grabInput();
 
-			term.on("key", async (name, matches, data) => {
+			term.on('key', async (name, matches, data) => {
+
 				// -------------------------------------------------------------------------
 				// Handle special shortcuts
 				// -------------------------------------------------------------------------
 
-				if (name === "CTRL_D") {
+				if (name === 'CTRL_D') {
 					const cmd = this.app().currentCommand();
 
 					if (cmd && cmd.cancellable() && !this.commandCancelCalled_) {
@@ -696,13 +711,13 @@ class AppGui {
 					return;
 				}
 
-				if (name === "CTRL_C") {
+				if (name === 'CTRL_C' ) {
 					const cmd = this.app().currentCommand();
 					if (!cmd || !cmd.cancellable() || this.commandCancelCalled_) {
 						this.stdout(_('Press Ctrl+D or type "exit" to exit the application'));
 					} else {
 						this.commandCancelCalled_ = true;
-						await cmd.cancel();
+						await cmd.cancel()
 						this.commandCancelCalled_ = false;
 					}
 					return;
@@ -711,8 +726,8 @@ class AppGui {
 				// -------------------------------------------------------------------------
 				// Build up current shortcut
 				// -------------------------------------------------------------------------
-
-				const now = new Date().getTime();
+				
+				const now = (new Date()).getTime();
 
 				if (now - this.lastShortcutKeyTime_ > 800 || this.isSpecialKey(name)) {
 					this.currentShortcutKeys_ = [name];
@@ -732,7 +747,7 @@ class AppGui {
 				// Process shortcut and execute associated command
 				// -------------------------------------------------------------------------
 
-				const shortcutKey = this.currentShortcutKeys_.join("");
+				const shortcutKey = this.currentShortcutKeys_.join('');
 				let keymapItem = this.keymapItemByKey(shortcutKey);
 
 				// If this command is an alias to another command, resolve to the actual command
@@ -742,25 +757,25 @@ class AppGui {
 				if (statusBar.promptActive) processShortcutKeys = false;
 
 				if (processShortcutKeys) {
-					this.logger().info("Shortcut:", shortcutKey, keymapItem);
+					this.logger().info('Shortcut:', shortcutKey, keymapItem);
 
 					this.currentShortcutKeys_ = [];
 
-					if (keymapItem.type === "function") {
+					if (keymapItem.type === 'function') {
 						this.processFunctionCommand(keymapItem.command);
-					} else if (keymapItem.type === "prompt") {
+					} else if (keymapItem.type === 'prompt') {
 						let promptOptions = {};
-						if ("cursorPosition" in keymapItem) promptOptions.cursorPosition = keymapItem.cursorPosition;
-						const commandString = await statusBar.prompt(keymapItem.command ? keymapItem.command : "", null, promptOptions);
+						if ('cursorPosition' in keymapItem) promptOptions.cursorPosition = keymapItem.cursorPosition;
+						const commandString = await statusBar.prompt(keymapItem.command ? keymapItem.command : '', null, promptOptions);
 						this.addCommandToConsole(commandString);
 						await this.processPromptCommand(commandString);
-					} else if (keymapItem.type === "exec") {
+					} else if (keymapItem.type === 'exec') {
 						this.stdout(keymapItem.command);
 						await this.processPromptCommand(keymapItem.command);
-					} else if (keymapItem.type === "tkwidgets") {
-						this.widget("root").handleKey(this.tkWidgetKeys_[keymapItem.command]);
+					} else if (keymapItem.type === 'tkwidgets') {
+						this.widget('root').handleKey(this.tkWidgetKeys_[keymapItem.command]);
 					} else {
-						throw new Error("Unknown command type: " + JSON.stringify(keymapItem));
+						throw new Error('Unknown command type: ' + JSON.stringify(keymapItem));
 					}
 				}
 
@@ -774,12 +789,13 @@ class AppGui {
 			console.error(error);
 		}
 
-		process.on("unhandledRejection", (reason, p) => {
+		process.on('unhandledRejection', (reason, p) => {
 			this.fullScreen(false);
-			console.error("Unhandled promise rejection", p, "reason:", reason);
+			console.error('Unhandled promise rejection', p, 'reason:', reason);
 			process.exit(1);
 		});
 	}
+
 }
 
 AppGui.INPUT_MODE_NORMAL = 1;

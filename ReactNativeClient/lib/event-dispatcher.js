@@ -1,4 +1,5 @@
 class EventDispatcher {
+
 	constructor() {
 		this.listeners_ = [];
 	}
@@ -28,6 +29,7 @@ class EventDispatcher {
 			}
 		}
 	}
+
 }
 
 module.exports = { EventDispatcher };

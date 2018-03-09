@@ -1,9 +1,10 @@
-const moment = require("moment");
-const { time } = require("lib/time-utils.js");
-const { dirname, basename } = require("lib/path-utils.js");
-const { OneDriveApi } = require("lib/onedrive-api.js");
+const moment = require('moment');
+const { time } = require('lib/time-utils.js');
+const { dirname, basename } = require('lib/path-utils.js');
+const { OneDriveApi } = require('lib/onedrive-api.js');
 
 class FileApiDriverOneDrive {
+
 	constructor(api) {
 		this.api_ = api;
 		this.pathCache_ = {};
@@ -15,8 +16,8 @@ class FileApiDriverOneDrive {
 
 	itemFilter_() {
 		return {
-			select: "name,file,folder,fileSystemInfo,parentReference",
-		};
+			select: 'name,file,folder,fileSystemInfo,parentReference',
+		}
 	}
 
 	makePath_(path) {
@@ -34,14 +35,14 @@ class FileApiDriverOneDrive {
 	makeItem_(odItem) {
 		let output = {
 			path: odItem.name,
-			isDir: "folder" in odItem,
+			isDir: ('folder' in odItem),
 		};
 
-		if ("deleted" in odItem) {
+		if ('deleted' in odItem) {
 			output.isDeleted = true;
 		} else {
 			// output.created_time = moment(odItem.fileSystemInfo.createdDateTime, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x');
-			output.updated_time = moment(odItem.fileSystemInfo.lastModifiedDateTime, "YYYY-MM-DDTHH:mm:ss.SSSZ").format("x");
+			output.updated_time = moment(odItem.fileSystemInfo.lastModifiedDateTime, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x');
 		}
 
 		return output;
@@ -50,9 +51,9 @@ class FileApiDriverOneDrive {
 	async statRaw_(path) {
 		let item = null;
 		try {
-			item = await this.api_.execJson("GET", this.makePath_(path), this.itemFilter_());
+			item = await this.api_.execJson('GET', this.makePath_(path), this.itemFilter_());
 		} catch (error) {
-			if (error.code == "itemNotFound") return null;
+			if (error.code == 'itemNotFound') return null;
 			throw error;
 		}
 		return item;
@@ -67,48 +68,44 @@ class FileApiDriverOneDrive {
 	async setTimestamp(path, timestamp) {
 		let body = {
 			fileSystemInfo: {
-				lastModifiedDateTime:
-					moment
-						.unix(timestamp / 1000)
-						.utc()
-						.format("YYYY-MM-DDTHH:mm:ss.SSS") + "Z",
-			},
+				lastModifiedDateTime: moment.unix(timestamp / 1000).utc().format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z',
+			}
 		};
-		let item = await this.api_.execJson("PATCH", this.makePath_(path), null, body);
+		let item = await this.api_.execJson('PATCH', this.makePath_(path), null, body);
 		return this.makeItem_(item);
 	}
 
 	async list(path, options = null) {
 		let query = this.itemFilter_();
-		let url = this.makePath_(path) + ":/children";
+		let url = this.makePath_(path) + ':/children';
 
 		if (options.context) {
 			query = null;
 			url = options.context;
 		}
 
-		let r = await this.api_.execJson("GET", url, query);
+		let r = await this.api_.execJson('GET', url, query);
 
 		return {
-			hasMore: !!r["@odata.nextLink"],
+			hasMore: !!r['@odata.nextLink'],
 			items: this.makeItems_(r.value),
 			context: r["@odata.nextLink"],
-		};
+		}
 	}
 
 	async get(path, options = null) {
 		if (!options) options = {};
 
 		try {
-			if (options.target == "file") {
-				let response = await this.api_.exec("GET", this.makePath_(path) + ":/content", null, null, options);
+			if (options.target == 'file') {
+				let response = await this.api_.exec('GET', this.makePath_(path) + ':/content', null, null, options);
 				return response;
 			} else {
-				let content = await this.api_.execText("GET", this.makePath_(path) + ":/content");
+				let content = await this.api_.execText('GET', this.makePath_(path) + ':/content');
 				return content;
 			}
 		} catch (error) {
-			if (error.code == "itemNotFound") return null;
+			if (error.code == 'itemNotFound') return null;
 			throw error;
 		}
 	}
@@ -118,7 +115,7 @@ class FileApiDriverOneDrive {
 		if (item) return item;
 
 		let parentPath = dirname(path);
-		item = await this.api_.execJson("POST", this.makePath_(parentPath) + ":/children", this.itemFilter_(), {
+		item = await this.api_.execJson('POST', this.makePath_(parentPath) + ':/children', this.itemFilter_(), {
 			name: basename(path),
 			folder: {},
 		});
@@ -132,16 +129,16 @@ class FileApiDriverOneDrive {
 		let response = null;
 
 		try {
-			if (options.source == "file") {
-				response = await this.api_.exec("PUT", this.makePath_(path) + ":/content", null, null, options);
+			if (options.source == 'file') {
+				response = await this.api_.exec('PUT', this.makePath_(path) + ':/content', null, null, options);
 			} else {
-				options.headers = { "Content-Type": "text/plain" };
-				response = await this.api_.exec("PUT", this.makePath_(path) + ":/content", null, content, options);
+				options.headers = { 'Content-Type': 'text/plain' };
+				response = await this.api_.exec('PUT', this.makePath_(path) + ':/content', null, content, options);
 			}
 		} catch (error) {
-			if (error && error.code === "BadRequest" && error.message === "Maximum request length exceeded.") {
-				error.code = "rejectedByTarget";
-				error.message = "Resource exceeds OneDrive max file size (4MB)";
+			if (error && error.code === 'BadRequest' && error.message === 'Maximum request length exceeded.') {
+				error.code = 'rejectedByTarget';
+				error.message = 'Resource exceeds OneDrive max file size (4MB)';
 			}
 			throw error;
 		}
@@ -150,7 +147,7 @@ class FileApiDriverOneDrive {
 	}
 
 	delete(path) {
-		return this.api_.exec("DELETE", this.makePath_(path));
+		return this.api_.exec('DELETE', this.makePath_(path));
 	}
 
 	async move(oldPath, newPath) {
@@ -160,7 +157,7 @@ class FileApiDriverOneDrive {
 		// it's not possible to do an atomic move.
 		//
 		// [0] https://stackoverflow.com/questions/29191091/onedrive-api-overwrite-on-move
-		throw new Error("NOT WORKING");
+		throw new Error('NOT WORKING');
 
 		let previousItem = await this.statRaw_(oldPath);
 
@@ -168,9 +165,9 @@ class FileApiDriverOneDrive {
 		let newName = basename(newPath);
 
 		// We don't want the modification date to change when we move the file so retrieve it
-		// now set it in the PATCH operation.
+		// now set it in the PATCH operation.		
 
-		let item = await this.api_.execJson("PATCH", this.makePath_(oldPath), this.itemFilter_(), {
+		let item = await this.api_.execJson('PATCH', this.makePath_(oldPath), this.itemFilter_(), {
 			name: newName,
 			parentReference: { path: newDir },
 			fileSystemInfo: {
@@ -182,18 +179,18 @@ class FileApiDriverOneDrive {
 	}
 
 	format() {
-		throw new Error("Not implemented");
+		throw new Error('Not implemented');
 	}
 
 	async pathDetails_(path) {
 		if (this.pathCache_[path]) return this.pathCache_[path];
-		let output = await this.api_.execJson("GET", path);
+		let output = await this.api_.execJson('GET', path);
 		this.pathCache_[path] = output;
 		return this.pathCache_[path];
 	}
 
 	clearRoot() {
-		throw new Error("Not implemented");
+		throw new Error('Not implemented');
 	}
 
 	async delta(path, options = null) {
@@ -204,14 +201,14 @@ class FileApiDriverOneDrive {
 		};
 
 		const freshStartDelta = () => {
-			const url = this.makePath_(path) + ":/delta";
+			const url = this.makePath_(path) + ':/delta';
 			const query = this.itemFilter_();
-			query.select += ",deleted";
+			query.select += ',deleted';
 			return { url: url, query: query };
-		};
+		}
 
 		const pathDetails = await this.pathDetails_(path);
-		const pathId = pathDetails.id;
+		const pathId = pathDetails.id;	
 
 		let context = options ? options.context : null;
 		let url = context ? context.nextLink : null;
@@ -225,16 +222,16 @@ class FileApiDriverOneDrive {
 
 		let response = null;
 		try {
-			response = await this.api_.execJson("GET", url, query);
+			response = await this.api_.execJson('GET', url, query);
 		} catch (error) {
-			if (error.code === "resyncRequired") {
+			if (error.code === 'resyncRequired') {
 				// Error: Resync required. Replace any local items with the server's version (including deletes) if you're sure that the service was up to date with your local changes when you last sync'd. Upload any local changes that the server doesn't know about.
 				// Code: resyncRequired
 				// Request: GET https://graph.microsoft.com/v1.0/drive/root:/Apps/JoplinDev:/delta?select=...
 
 				// The delta token has expired or is invalid and so a full resync is required. This happens for example when all the items
 				// on the OneDrive App folder are manually deleted. In this case, instead of sending the list of deleted items in the delta
-				// call, OneDrive simply request the client to re-sync everything.
+				// call, OneDrive simply request the client to re-sync everything. 
 
 				// OneDrive provides a URL to resume syncing from but it does not appear to work so below we simply start over from
 				// the beginning. The synchronizer will ensure that no duplicate are created and conflicts will be resolved.
@@ -244,7 +241,7 @@ class FileApiDriverOneDrive {
 				const info = freshStartDelta();
 				url = info.url;
 				query = info.query;
-				response = await this.api_.execJson("GET", url, query);
+				response = await this.api_.execJson('GET', url, query);
 			} else {
 				throw error;
 			}
@@ -257,7 +254,7 @@ class FileApiDriverOneDrive {
 		// is special since it's managed directly by the clients and resources never change - only the
 		// associated .md file at the root is synced). So in the loop below we check that the parent is
 		// indeed the root, otherwise the item is skipped.
-		// (Not sure but it's possible the delta API also returns events for files that are copied outside
+		// (Not sure but it's possible the delta API also returns events for files that are copied outside 
 		//  of the app directory and later deleted or modified. We also don't want to deal with
 		//  these files during sync).
 
@@ -271,12 +268,12 @@ class FileApiDriverOneDrive {
 
 		let nextLink = null;
 
-		if (response["@odata.nextLink"]) {
-			nextLink = response["@odata.nextLink"];
+		if (response['@odata.nextLink']) {
+			nextLink = response['@odata.nextLink'];
 			output.hasMore = true;
 		} else {
-			if (!response["@odata.deltaLink"]) throw new Error("Delta link missing: " + JSON.stringify(response));
-			nextLink = response["@odata.deltaLink"];
+			if (!response['@odata.deltaLink']) throw new Error('Delta link missing: ' + JSON.stringify(response));
+			nextLink = response['@odata.deltaLink'];
 		}
 
 		output.context = { nextLink: nextLink };
@@ -297,6 +294,7 @@ class FileApiDriverOneDrive {
 
 		return output;
 	}
+
 }
 
 module.exports = { FileApiDriverOneDrive };

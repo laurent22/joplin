@@ -1,40 +1,40 @@
-const Setting = require("lib/models/Setting.js");
-const SyncTargetRegistry = require("lib/SyncTargetRegistry");
-const { _ } = require("lib/locale.js");
+const Setting = require('lib/models/Setting.js');
+const SyncTargetRegistry = require('lib/SyncTargetRegistry');
+const { _ } = require('lib/locale.js');
 
-const shared = {};
+const shared = {}
 
 shared.init = function(comp) {
 	if (!comp.state) comp.state = {};
 	comp.state.checkSyncConfigResult = null;
 	comp.state.settings = {};
 	comp.state.changedSettingKeys = [];
-};
+}
 
 shared.checkSyncConfig = async function(comp, settings) {
-	const syncTargetId = settings["sync.target"];
+	const syncTargetId = settings['sync.target'];
 	const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId);
-	const options = Setting.subValues("sync." + syncTargetId, settings);
-	comp.setState({ checkSyncConfigResult: "checking" });
+	const options = Setting.subValues('sync.' + syncTargetId, settings);
+	comp.setState({ checkSyncConfigResult: 'checking' });
 	const result = await SyncTargetClass.checkConfig(options);
 	comp.setState({ checkSyncConfigResult: result });
-};
+}
 
 shared.checkSyncConfigMessages = function(comp) {
 	const result = comp.state.checkSyncConfigResult;
 	const output = [];
 
-	if (result === "checking") {
-		output.push(_("Checking... Please wait."));
+	if (result === 'checking') {
+		output.push(_('Checking... Please wait.'));
 	} else if (result && result.ok) {
-		output.push(_("Success! Synchronisation configuration appears to be correct."));
+		output.push(_('Success! Synchronisation configuration appears to be correct.'));
 	} else if (result && !result.ok) {
-		output.push(_("Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:"));
+		output.push(_('Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:'));
 		output.push(result.errorMessage);
 	}
 
 	return output;
-};
+}
 
 shared.updateSettingValue = function(comp, key, value) {
 	const settings = Object.assign({}, comp.state.settings);
@@ -46,7 +46,7 @@ shared.updateSettingValue = function(comp, key, value) {
 		settings: settings,
 		changedSettingKeys: changedSettingKeys,
 	});
-};
+}
 
 shared.saveSettings = function(comp) {
 	for (let key in comp.state.settings) {
@@ -57,7 +57,7 @@ shared.saveSettings = function(comp) {
 	}
 
 	comp.setState({ changedSettingKeys: [] });
-};
+}
 
 shared.settingsToComponents = function(comp, device, settings) {
 	const keys = Setting.keys(true, device);
@@ -75,7 +75,7 @@ shared.settingsToComponents = function(comp, device, settings) {
 		settingComps.push(settingComp);
 	}
 
-	return settingComps;
-};
+	return settingComps
+}
 
 module.exports = shared;

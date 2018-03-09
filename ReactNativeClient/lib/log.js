@@ -1,6 +1,7 @@
 // Custom wrapper for `console` to allow for custom logging (to file, etc.) if needed.
 
 class Log {
+
 	static setLevel(v) {
 		this.level_ = v;
 	}
@@ -28,6 +29,7 @@ class Log {
 		if (Log.level() > Log.LEVEL_ERROR) return;
 		console.info(...o);
 	}
+
 }
 
 Log.LEVEL_DEBUG = 0;

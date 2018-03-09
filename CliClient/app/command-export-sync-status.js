@@ -1,18 +1,19 @@
-const { BaseCommand } = require("./base-command.js");
-const { Database } = require("lib/database.js");
-const { app } = require("./app.js");
-const Setting = require("lib/models/Setting.js");
-const { _ } = require("lib/locale.js");
-const { ReportService } = require("lib/services/report.js");
-const fs = require("fs-extra");
+const { BaseCommand } = require('./base-command.js');
+const { Database } = require('lib/database.js');
+const { app } = require('./app.js');
+const Setting = require('lib/models/Setting.js');
+const { _ } = require('lib/locale.js');
+const { ReportService } = require('lib/services/report.js');
+const fs = require('fs-extra');
 
 class Command extends BaseCommand {
+
 	usage() {
-		return "export-sync-status";
+		return 'export-sync-status';
 	}
 
 	description() {
-		return "Export sync status";
+		return 'Export sync status';
 	}
 
 	hidden() {
@@ -21,18 +22,15 @@ class Command extends BaseCommand {
 
 	async action(args) {
 		const service = new ReportService();
-		const csv = await service.basicItemList({ format: "csv" });
-		const filePath = Setting.value("profileDir") + "/syncReport-" + new Date().getTime() + ".csv";
+		const csv = await service.basicItemList({ format: 'csv' });
+		const filePath = Setting.value('profileDir') + '/syncReport-' + (new Date()).getTime() + '.csv';
 		await fs.writeFileSync(filePath, csv);
-		this.stdout("Sync status exported to " + filePath);
+		this.stdout('Sync status exported to ' + filePath);
 
-		app()
-			.gui()
-			.showConsole();
-		app()
-			.gui()
-			.maximizeConsole();
+		app().gui().showConsole();
+		app().gui().maximizeConsole();
 	}
+
 }
 
 module.exports = Command;

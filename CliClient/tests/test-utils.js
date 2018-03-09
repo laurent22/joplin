@@ -1,32 +1,32 @@
-const fs = require("fs-extra");
-const { JoplinDatabase } = require("lib/joplin-database.js");
-const { DatabaseDriverNode } = require("lib/database-driver-node.js");
-const BaseModel = require("lib/BaseModel.js");
-const Folder = require("lib/models/Folder.js");
-const Note = require("lib/models/Note.js");
-const Resource = require("lib/models/Resource.js");
-const Tag = require("lib/models/Tag.js");
-const NoteTag = require("lib/models/NoteTag.js");
-const { Logger } = require("lib/logger.js");
-const Setting = require("lib/models/Setting.js");
-const MasterKey = require("lib/models/MasterKey");
-const BaseItem = require("lib/models/BaseItem.js");
-const { Synchronizer } = require("lib/synchronizer.js");
-const { FileApi } = require("lib/file-api.js");
-const { FileApiDriverMemory } = require("lib/file-api-driver-memory.js");
-const { FileApiDriverLocal } = require("lib/file-api-driver-local.js");
-const { FileApiDriverWebDav } = require("lib/file-api-driver-webdav.js");
-const { FsDriverNode } = require("lib/fs-driver-node.js");
-const { time } = require("lib/time-utils.js");
-const { shimInit } = require("lib/shim-init-node.js");
-const SyncTargetRegistry = require("lib/SyncTargetRegistry.js");
-const SyncTargetMemory = require("lib/SyncTargetMemory.js");
-const SyncTargetFilesystem = require("lib/SyncTargetFilesystem.js");
-const SyncTargetOneDrive = require("lib/SyncTargetOneDrive.js");
-const SyncTargetNextcloud = require("lib/SyncTargetNextcloud.js");
-const EncryptionService = require("lib/services/EncryptionService.js");
-const DecryptionWorker = require("lib/services/DecryptionWorker.js");
-const WebDavApi = require("lib/WebDavApi");
+const fs = require('fs-extra');
+const { JoplinDatabase } = require('lib/joplin-database.js');
+const { DatabaseDriverNode } = require('lib/database-driver-node.js');
+const BaseModel = require('lib/BaseModel.js');
+const Folder = require('lib/models/Folder.js');
+const Note = require('lib/models/Note.js');
+const Resource = require('lib/models/Resource.js');
+const Tag = require('lib/models/Tag.js');
+const NoteTag = require('lib/models/NoteTag.js');
+const { Logger } = require('lib/logger.js');
+const Setting = require('lib/models/Setting.js');
+const MasterKey = require('lib/models/MasterKey');
+const BaseItem = require('lib/models/BaseItem.js');
+const { Synchronizer } = require('lib/synchronizer.js');
+const { FileApi } = require('lib/file-api.js');
+const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');
+const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
+const { FileApiDriverWebDav } = require('lib/file-api-driver-webdav.js');
+const { FsDriverNode } = require('lib/fs-driver-node.js');
+const { time } = require('lib/time-utils.js');
+const { shimInit } = require('lib/shim-init-node.js');
+const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
+const SyncTargetMemory = require('lib/SyncTargetMemory.js');
+const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
+const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
+const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
+const EncryptionService = require('lib/services/EncryptionService.js');
+const DecryptionWorker = require('lib/services/DecryptionWorker.js');
+const WebDavApi = require('lib/WebDavApi');
 
 let databases_ = [];
 let synchronizers_ = [];
@@ -43,7 +43,7 @@ Resource.fsDriver_ = fsDriver;
 EncryptionService.fsDriver_ = fsDriver;
 FileApiDriverLocal.fsDriver_ = fsDriver;
 
-const logDir = __dirname + "/../tests/logs";
+const logDir = __dirname + '/../tests/logs';
 fs.mkdirpSync(logDir, 0o755);
 
 SyncTargetRegistry.addClass(SyncTargetMemory);
@@ -54,26 +54,26 @@ SyncTargetRegistry.addClass(SyncTargetNextcloud);
 // const syncTargetId_ = SyncTargetRegistry.nameToId("nextcloud");
 const syncTargetId_ = SyncTargetRegistry.nameToId("memory");
 //const syncTargetId_ = SyncTargetRegistry.nameToId('filesystem');
-const syncDir = __dirname + "/../tests/sync";
+const syncDir = __dirname + '/../tests/sync';
 
-const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId("filesystem") ? 1001 : 100; //400;
+const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;//400;
 
-console.info("Testing with sync target: " + SyncTargetRegistry.idToName(syncTargetId_));
+console.info('Testing with sync target: ' + SyncTargetRegistry.idToName(syncTargetId_));
 
 const logger = new Logger();
-logger.addTarget("console");
-logger.addTarget("file", { path: logDir + "/log.txt" });
+logger.addTarget('console');
+logger.addTarget('file', { path: logDir + '/log.txt' });
 logger.setLevel(Logger.LEVEL_WARN); // Set to INFO to display sync process in console
 
-BaseItem.loadClass("Note", Note);
-BaseItem.loadClass("Folder", Folder);
-BaseItem.loadClass("Resource", Resource);
-BaseItem.loadClass("Tag", Tag);
-BaseItem.loadClass("NoteTag", NoteTag);
-BaseItem.loadClass("MasterKey", MasterKey);
+BaseItem.loadClass('Note', Note);
+BaseItem.loadClass('Folder', Folder);
+BaseItem.loadClass('Resource', Resource);
+BaseItem.loadClass('Tag', Tag);
+BaseItem.loadClass('NoteTag', NoteTag);
+BaseItem.loadClass('MasterKey', MasterKey);
 
-Setting.setConstant("appId", "net.cozic.joplin-cli");
-Setting.setConstant("appType", "cli");
+Setting.setConstant('appId', 'net.cozic.joplin-cli');
+Setting.setConstant('appType', 'cli');
 
 Setting.autoSaveEnabled = false;
 
@@ -103,7 +103,7 @@ async function switchClient(id) {
 	BaseItem.encryptionService_ = encryptionServices_[id];
 	Resource.encryptionService_ = encryptionServices_[id];
 
-	Setting.setConstant("resourceDir", resourceDir(id));
+	Setting.setConstant('resourceDir', resourceDir(id));
 
 	return Setting.load();
 }
@@ -112,16 +112,16 @@ async function clearDatabase(id = null) {
 	if (id === null) id = currentClient_;
 
 	let queries = [
-		"DELETE FROM notes",
-		"DELETE FROM folders",
-		"DELETE FROM resources",
-		"DELETE FROM tags",
-		"DELETE FROM note_tags",
-		"DELETE FROM master_keys",
-		"DELETE FROM settings",
-
-		"DELETE FROM deleted_items",
-		"DELETE FROM sync_items",
+		'DELETE FROM notes',
+		'DELETE FROM folders',
+		'DELETE FROM resources',
+		'DELETE FROM tags',
+		'DELETE FROM note_tags',
+		'DELETE FROM master_keys',
+		'DELETE FROM settings',
+		
+		'DELETE FROM deleted_items',
+		'DELETE FROM sync_items',
 	];
 
 	await databases_[id].transactionExecBatch(queries);
@@ -139,13 +139,13 @@ async function setupDatabase(id = null) {
 		return;
 	}
 
-	const filePath = __dirname + "/data/test-" + id + ".sqlite";
+	const filePath = __dirname + '/data/test-' + id + '.sqlite';
 
 	try {
 		await fs.unlink(filePath);
 	} catch (error) {
 		// Don't care if the file doesn't exist
-	}
+	};
 
 	databases_[id] = new JoplinDatabase(new DatabaseDriverNode());
 	await databases_[id].open({ name: filePath });
@@ -156,7 +156,7 @@ async function setupDatabase(id = null) {
 
 function resourceDir(id = null) {
 	if (id === null) id = currentClient_;
-	return __dirname + "/data/resources-" + id;
+	return __dirname + '/data/resources-' + id;
 }
 
 async function setupDatabaseAndSynchronizer(id = null) {
@@ -211,18 +211,16 @@ async function loadEncryptionMasterKey(id = null, useExisting = false) {
 
 	let masterKey = null;
 
-	if (!useExisting) {
-		// Create it
-		masterKey = await service.generateMasterKey("123456");
+	if (!useExisting) { // Create it
+		masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
-	} else {
-		// Use the one already available
+	} else { // Use the one already available
 		materKey = await MasterKey.all();
-		if (!materKey.length) throw new Error("No mater key available");
+		if (!materKey.length) throw new Error('No mater key available');
 		masterKey = materKey[0];
 	}
 
-	await service.loadMasterKey(masterKey, "123456", true);
+	await service.loadMasterKey(masterKey, '123456', true);
 
 	return masterKey;
 }
@@ -230,21 +228,21 @@ async function loadEncryptionMasterKey(id = null, useExisting = false) {
 function fileApi() {
 	if (fileApi_) return fileApi_;
 
-	if (syncTargetId_ == SyncTargetRegistry.nameToId("filesystem")) {
-		fs.removeSync(syncDir);
+	if (syncTargetId_ == SyncTargetRegistry.nameToId('filesystem')) {
+		fs.removeSync(syncDir)
 		fs.mkdirpSync(syncDir, 0o755);
 		fileApi_ = new FileApi(syncDir, new FileApiDriverLocal());
-	} else if (syncTargetId_ == SyncTargetRegistry.nameToId("memory")) {
-		fileApi_ = new FileApi("/root", new FileApiDriverMemory());
-	} else if (syncTargetId_ == SyncTargetRegistry.nameToId("nextcloud")) {
+	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('memory')) {
+		fileApi_ = new FileApi('/root', new FileApiDriverMemory());
+	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('nextcloud')) {
 		const options = {
-			baseUrl: () => "http://nextcloud.local/remote.php/dav/files/admin/JoplinTest",
-			username: () => "admin",
-			password: () => "123456",
+			baseUrl: () => 'http://nextcloud.local/remote.php/dav/files/admin/JoplinTest',
+			username: () => 'admin',
+			password: () => '123456',
 		};
 
 		const api = new WebDavApi(options);
-		fileApi_ = new FileApi("", new FileApiDriverWebDav(api));
+		fileApi_ = new FileApi('', new FileApiDriverWebDav(api));
 	}
 
 	// } else if (syncTargetId == Setting.SYNC_TARGET_ONEDRIVE) {
@@ -290,9 +288,9 @@ async function checkThrowAsync(asyncFn) {
 }
 
 function fileContentEqual(path1, path2) {
-	const fs = require("fs-extra");
-	const content1 = fs.readFileSync(path1, "base64");
-	const content2 = fs.readFileSync(path2, "base64");
+	const fs = require('fs-extra');
+	const content1 = fs.readFileSync(path1, 'base64');
+	const content2 = fs.readFileSync(path2, 'base64');
 	return content1 === content2;
 }
 
@@ -306,24 +304,7 @@ function asyncTest(callback) {
 			console.error(error);
 		}
 		done();
-	};
+	}
 }
 
-module.exports = {
-	setupDatabase,
-	setupDatabaseAndSynchronizer,
-	db,
-	synchronizer,
-	fileApi,
-	sleep,
-	clearDatabase,
-	switchClient,
-	syncTargetId,
-	objectsEqual,
-	checkThrowAsync,
-	encryptionService,
-	loadEncryptionMasterKey,
-	fileContentEqual,
-	decryptionWorker,
-	asyncTest,
-};
+module.exports = { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest };

@@ -1,30 +1,31 @@
-const { _ } = require("lib/locale.js");
-const { reg } = require("lib/registry.js");
+const { _ } = require('lib/locale.js');
+const { reg } = require('lib/registry.js');
 
 class BaseCommand {
+
 	constructor() {
 		this.stdout_ = null;
 		this.prompt_ = null;
 	}
 
 	usage() {
-		throw new Error("Usage not defined");
+		throw new Error('Usage not defined');
 	}
 
 	encryptionCheck(item) {
-		if (item && item.encryption_applied) throw new Error(_("Cannot change encrypted item"));
+		if (item && item.encryption_applied) throw new Error(_('Cannot change encrypted item'));
 	}
 
 	description() {
-		throw new Error("Description not defined");
+		throw new Error('Description not defined');
 	}
 
 	async action(args) {
-		throw new Error("Action not defined");
+		throw new Error('Action not defined');
 	}
 
 	compatibleUis() {
-		return ["cli", "gui"];
+		return ['cli', 'gui'];
 	}
 
 	supportsUi(ui) {
@@ -50,7 +51,7 @@ class BaseCommand {
 	async cancel() {}
 
 	name() {
-		let r = this.usage().split(" ");
+		let r = this.usage().split(' ');
 		return r[0];
 	}
 
@@ -59,7 +60,7 @@ class BaseCommand {
 	}
 
 	dispatch(action) {
-		if (!this.dispatcher_) throw new Error("Dispatcher not defined");
+		if (!this.dispatcher_) throw new Error('Dispatcher not defined');
 		return this.dispatcher_(action);
 	}
 
@@ -76,7 +77,7 @@ class BaseCommand {
 	}
 
 	async prompt(message, options = null) {
-		if (!this.prompt_) throw new Error("Prompt is undefined");
+		if (!this.prompt_) throw new Error('Prompt is undefined');
 		return await this.prompt_(message, options);
 	}
 
@@ -92,6 +93,7 @@ class BaseCommand {
 	logger() {
 		return reg.logger();
 	}
+
 }
 
 module.exports = { BaseCommand };

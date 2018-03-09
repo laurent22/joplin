@@ -1,15 +1,15 @@
-const React = require("react");
-const Component = React.Component;
-const { View, Text, StyleSheet } = require("react-native");
-const { connect } = require("react-redux");
-const { Log } = require("lib/log.js");
-const { ScreenHeader } = require("lib/components/screen-header.js");
-const { ActionButton } = require("lib/components/action-button.js");
-const { BaseScreenComponent } = require("lib/components/base-screen.js");
-const { _ } = require("lib/locale.js");
-const { themeStyle } = require("lib/components/global-style.js");
+const React = require('react'); const Component = React.Component;
+const { View, Text, StyleSheet } = require('react-native');
+const { connect } = require('react-redux');
+const { Log } = require('lib/log.js');
+const { ScreenHeader } = require('lib/components/screen-header.js');
+const { ActionButton } = require('lib/components/action-button.js');
+const { BaseScreenComponent } = require('lib/components/base-screen.js');
+const { _ } = require('lib/locale.js');
+const { themeStyle } = require('lib/components/global-style.js');
 
 class WelcomeScreenComponent extends BaseScreenComponent {
+	
 	static navigationOptions(options) {
 		return { header: null };
 	}
@@ -39,25 +39,26 @@ class WelcomeScreenComponent extends BaseScreenComponent {
 	}
 
 	render() {
-		let message = this.props.folders.length
-			? _("Click on the (+) button to create a new note or notebook. Click on the side menu to access your existing notebooks.")
-			: _("You currently have no notebook. Create one by clicking on (+) button.");
+		let message = this.props.folders.length ? _('Click on the (+) button to create a new note or notebook. Click on the side menu to access your existing notebooks.') : _('You currently have no notebook. Create one by clicking on (+) button.');
 
 		return (
-			<View style={this.rootStyle(this.props.theme).root}>
-				<ScreenHeader title={_("Welcome")} />
+			<View style={this.rootStyle(this.props.theme).root} >
+				<ScreenHeader title={_('Welcome')}/>
 				<Text style={this.styles().message}>{message}</Text>
-				<ActionButton addFolderNoteButtons={true} />
+				<ActionButton addFolderNoteButtons={true}/>
 			</View>
 		);
 	}
+
 }
 
-const WelcomeScreen = connect(state => {
-	return {
-		folders: state.folders,
-		theme: state.settings.theme,
-	};
-})(WelcomeScreenComponent);
+const WelcomeScreen = connect(
+	(state) => {
+		return {
+			folders: state.folders,
+			theme: state.settings.theme,
+		};
+	}
+)(WelcomeScreenComponent)
 
 module.exports = { WelcomeScreen };

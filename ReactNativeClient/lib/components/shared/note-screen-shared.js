@@ -1,21 +1,21 @@
-const { reg } = require("lib/registry.js");
-const Folder = require("lib/models/Folder.js");
-const BaseModel = require("lib/BaseModel.js");
-const Note = require("lib/models/Note.js");
+const { reg } = require('lib/registry.js');
+const Folder = require('lib/models/Folder.js');
+const BaseModel = require('lib/BaseModel.js');
+const Note = require('lib/models/Note.js');
 
 const shared = {};
 
 shared.noteExists = async function(noteId) {
 	const existingNote = await Note.load(noteId);
 	return !!existingNote;
-};
+}
 
 shared.saveNoteButton_press = async function(comp) {
 	let note = Object.assign({}, comp.state.note);
 
 	// Note has been deleted while user was modifying it. In that case, we
 	// just save a new note by clearing the note ID.
-	if (note.id && !await shared.noteExists(note.id)) delete note.id;
+	if (note.id && !(await shared.noteExists(note.id))) delete note.id;
 
 	if (!note.parent_id) {
 		let folder = await Folder.defaultFolder();
@@ -33,10 +33,10 @@ shared.saveNoteButton_press = async function(comp) {
 	const hasAutoTitle = comp.state.newAndNoTitleChangeNoteId || (isNew && !note.title);
 	if (hasAutoTitle) {
 		note.title = Note.defaultTitle(note);
-		if (options.fields && options.fields.indexOf("title") < 0) options.fields.push("title");
+		if (options.fields && options.fields.indexOf('title') < 0) options.fields.push('title');
 	}
 
-	const savedNote = "fields" in options && !options.fields.length ? Object.assign({}, note) : await Note.save(note, options);
+	const savedNote = ('fields' in options) && !options.fields.length ? Object.assign({}, note) : await Note.save(note, options);
 
 	const stateNote = comp.state.note;
 
@@ -68,7 +68,7 @@ shared.saveNoteButton_press = async function(comp) {
 	comp.setState(newState);
 
 	if (isNew) {
-		Note.updateGeolocation(note.id).then(geoNote => {
+		Note.updateGeolocation(note.id).then((geoNote) => {
 			const stateNote = comp.state.note;
 			if (!stateNote || !geoNote) return;
 			if (stateNote.id !== geoNote.id) return; // Another note has been loaded while geoloc was being retrieved
@@ -80,7 +80,7 @@ shared.saveNoteButton_press = async function(comp) {
 				longitude: geoNote.longitude,
 				latitude: geoNote.latitude,
 				altitude: geoNote.altitude,
-			};
+			}
 
 			const modNote = Object.assign({}, stateNote, geoInfo);
 			const modLastSavedNote = Object.assign({}, comp.state.lastSavedNote, geoInfo);
@@ -96,18 +96,18 @@ shared.saveNoteButton_press = async function(comp) {
 		// Clear the newNote item now that the note has been saved, and
 		// make sure that the note we're editing is selected.
 		comp.props.dispatch({
-			type: "NOTE_SELECT",
+			type: 'NOTE_SELECT',
 			id: savedNote.id,
 		});
 	}
-};
+}
 
 shared.saveOneProperty = async function(comp, name, value) {
 	let note = Object.assign({}, comp.state.note);
 
 	// Note has been deleted while user was modifying it. In that, we
 	// just save a new note by clearing the note ID.
-	if (note.id && !await shared.noteExists(note.id)) delete note.id;
+	if (note.id && !(await shared.noteExists(note.id))) delete note.id;
 
 	// reg.logger().info('Saving note property: ', note.id, name, value);
 
@@ -123,40 +123,40 @@ shared.saveOneProperty = async function(comp, name, value) {
 		});
 	} else {
 		note[name] = value;
-		comp.setState({ note: note });
+		comp.setState({	note: note });
 	}
-};
+}
 
 shared.noteComponent_change = function(comp, propName, propValue) {
-	let newState = {};
+	let newState = {}
 
 	let note = Object.assign({}, comp.state.note);
 	note[propName] = propValue;
 	newState.note = note;
 
 	comp.setState(newState);
-};
+}
 
 shared.refreshNoteMetadata = async function(comp, force = null) {
 	if (force !== true && !comp.state.showNoteMetadata) return;
 
 	let noteMetadata = await Note.serializeAllProps(comp.state.note);
 	comp.setState({ noteMetadata: noteMetadata });
-};
+}
 
 shared.isModified = function(comp) {
 	if (!comp.state.note || !comp.state.lastSavedNote) return false;
 	let diff = BaseModel.diffObjects(comp.state.lastSavedNote, comp.state.note);
 	delete diff.type_;
 	return !!Object.getOwnPropertyNames(diff).length;
-};
+}
 
 shared.initState = async function(comp) {
 	let note = null;
-	let mode = "view";
+	let mode = 'view';
 	if (!comp.props.noteId) {
-		note = comp.props.itemType == "todo" ? Note.newTodo(comp.props.folderId) : Note.new(comp.props.folderId);
-		mode = "edit";
+		note = comp.props.itemType == 'todo' ? Note.newTodo(comp.props.folderId) : Note.new(comp.props.folderId);
+		mode = 'edit';
 	} else {
 		note = await Note.load(comp.props.noteId);
 	}
@@ -172,17 +172,17 @@ shared.initState = async function(comp) {
 	});
 
 	comp.lastLoadedNoteId_ = note ? note.id : null;
-};
+}
 
 shared.showMetadata_onPress = function(comp) {
 	comp.setState({ showNoteMetadata: !comp.state.showNoteMetadata });
 	comp.refreshNoteMetadata(true);
-};
+}
 
 shared.toggleIsTodo_onPress = function(comp) {
 	let newNote = Note.toggleIsTodo(comp.state.note);
 	let newState = { note: newNote };
 	comp.setState(newState);
-};
+}
 
 module.exports = shared;

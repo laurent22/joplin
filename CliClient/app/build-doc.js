@@ -1,11 +1,11 @@
-const fs = require("fs-extra");
-const { fileExtension, basename, dirname } = require("lib/path-utils.js");
-const wrap_ = require("word-wrap");
-const { _, setLocale, languageCode } = require("lib/locale.js");
+const fs = require('fs-extra');
+const { fileExtension, basename, dirname } = require('lib/path-utils.js');
+const wrap_ = require('word-wrap');
+const { _, setLocale, languageCode } = require('lib/locale.js');
 
 const rootDir = dirname(dirname(__dirname));
 const MAX_WIDTH = 78;
-const INDENT = "    ";
+const INDENT = '    ';
 
 function wrap(text, indent) {
 	return wrap_(text, {
@@ -21,8 +21,8 @@ function renderOptions(options) {
 	for (let i = 0; i < options.length; i++) {
 		let option = options[i];
 		const flag = option[0];
-		const indent = INDENT + INDENT + " ".repeat(optionColWidth + 2);
-
+		const indent = INDENT + INDENT + ' '.repeat(optionColWidth + 2);
+		
 		let r = wrap(option[1], indent);
 		r = r.substr(flag.length + (INDENT + INDENT).length);
 		r = INDENT + INDENT + flag + r;
@@ -35,13 +35,13 @@ function renderOptions(options) {
 function renderCommand(cmd) {
 	let output = [];
 	output.push(INDENT + cmd.usage());
-	output.push("");
+	output.push('');
 	output.push(wrap(cmd.description(), INDENT + INDENT));
 
 	const optionString = renderOptions(cmd.options());
 
 	if (optionString) {
-		output.push("");
+		output.push('');
 		output.push(optionString);
 	}
 	return output.join("\n");
@@ -49,12 +49,12 @@ function renderCommand(cmd) {
 
 function getCommands() {
 	let output = [];
-	fs.readdirSync(__dirname).forEach(path => {
-		if (path.indexOf("command-") !== 0) return;
-		const ext = fileExtension(path);
-		if (ext != "js") return;
+	fs.readdirSync(__dirname).forEach((path) => {
+		if (path.indexOf('command-') !== 0) return;
+		const ext = fileExtension(path)
+		if (ext != 'js') return;
 
-		let CommandClass = require("./" + path);
+		let CommandClass = require('./' + path);
 		let cmd = new CommandClass();
 		if (!cmd.enabled()) return;
 		if (cmd.hidden()) return;
@@ -75,26 +75,24 @@ function getOptionColWidth(options) {
 function getHeader() {
 	let output = [];
 
-	output.push("NAME");
-	output.push("");
-	output.push(wrap("joplin - a note taking and to-do app with synchronisation capabilities"), INDENT);
+	output.push('NAME');
+	output.push('');
+	output.push(wrap('joplin - a note taking and to-do app with synchronisation capabilities'), INDENT);
 
-	output.push("");
+	output.push('');
 
-	output.push("DESCRIPTION");
-	output.push("");
+	output.push('DESCRIPTION');
+	output.push('');
 
 	let description = [];
-	description.push("Joplin is a note taking and to-do application, which can handle a large number of notes organised into notebooks.");
-	description.push("The notes are searchable, can be copied, tagged and modified with your own text editor.");
+	description.push('Joplin is a note taking and to-do application, which can handle a large number of notes organised into notebooks.');
+	description.push('The notes are searchable, can be copied, tagged and modified with your own text editor.');
 	description.push("\n\n");
-	description.push("The notes can be synchronised with various target including the file system (for example with a network directory) or with Microsoft OneDrive.");
+	description.push('The notes can be synchronised with various target including the file system (for example with a network directory) or with Microsoft OneDrive.');
 	description.push("\n\n");
-	description.push(
-		"Notes exported from Evenotes via .enex files can be imported into Joplin, including the formatted content, resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.)."
-	);
+	description.push('Notes exported from Evenotes via .enex files can be imported into Joplin, including the formatted content, resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).');
 
-	output.push(wrap(description.join(""), INDENT));
+	output.push(wrap(description.join(''), INDENT));
 
 	return output.join("\n");
 }
@@ -102,17 +100,17 @@ function getHeader() {
 function getFooter() {
 	let output = [];
 
-	output.push("WEBSITE");
-	output.push("");
-	output.push(INDENT + "http://joplin.cozic.net");
+	output.push('WEBSITE');
+	output.push('');
+	output.push(INDENT + 'http://joplin.cozic.net');
 
-	output.push("");
+	output.push('');
 
-	output.push("LICENSE");
-	output.push("");
-	let filePath = rootDir + "/LICENSE_" + languageCode();
-	if (!fs.existsSync(filePath)) filePath = rootDir + "/LICENSE";
-	const licenseText = fs.readFileSync(filePath, "utf8");
+	output.push('LICENSE');
+	output.push('');
+	let filePath = rootDir + '/LICENSE_' + languageCode();
+	if (!fs.existsSync(filePath)) filePath = rootDir + '/LICENSE';
+	const licenseText = fs.readFileSync(filePath, 'utf8');
 	output.push(wrap(licenseText, INDENT));
 
 	return output.join("\n");
@@ -133,9 +131,9 @@ async function main() {
 	const commandsText = commandBlocks.join("\n\n");
 	const footerText = getFooter();
 
-	console.info(headerText + "\n\n" + "USAGE" + "\n\n" + commandsText + "\n\n" + footerText);
+	console.info(headerText + "\n\n" + 'USAGE' + "\n\n" + commandsText + "\n\n" + footerText);
 }
 
-main().catch(error => {
+main().catch((error) => {
 	console.error(error);
 });

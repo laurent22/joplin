@@ -6,13 +6,13 @@
 
 // So there's basically still a one way flux: React => SQLite => Redux => React
 
-const { AppRegistry } = require("react-native");
-const { Log } = require("lib/log.js");
-const { Root } = require("./root.js");
+const { AppRegistry } = require('react-native');
+const { Log } = require('lib/log.js');
+const { Root } = require('./root.js');
 
 function main() {
-	AppRegistry.registerComponent("Joplin", () => Root);
-	console.ignoredYellowBox = ["Remote debugger"];
+	AppRegistry.registerComponent('Joplin', () => Root);
+	console.ignoredYellowBox = ['Remote debugger'];
 	// Note: The final part of the initialization process is in
 	// AppComponent.componentDidMount(), when the application is ready.
 }

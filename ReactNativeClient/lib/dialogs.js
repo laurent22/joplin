@@ -1,5 +1,5 @@
-const DialogBox = require("react-native-dialogbox").default;
-const { Keyboard } = require("react-native");
+const DialogBox = require('react-native-dialogbox').default;
+const { Keyboard } = require('react-native');
 
 // Add this at the bottom of the component:
 //
@@ -8,36 +8,37 @@ const { Keyboard } = require("react-native");
 let dialogs = {};
 
 dialogs.confirm = (parentComponent, message) => {
-	if (!parentComponent) throw new Error("parentComponent is required");
-	if (!("dialogbox" in parentComponent)) throw new Error('A "dialogbox" component must be defined on the parent component!');
+	if (!parentComponent) throw new Error('parentComponent is required');
+	if (!('dialogbox' in parentComponent)) throw new Error('A "dialogbox" component must be defined on the parent component!');
 
 	return new Promise((resolve, reject) => {
 		Keyboard.dismiss();
 
 		parentComponent.dialogbox.confirm({
 			content: message,
-
+			
 			ok: {
 				callback: () => {
 					resolve(true);
-				},
+				}
 			},
 
 			cancel: {
 				callback: () => {
 					resolve(false);
-				},
+				}
 			},
+
 		});
 	});
 };
 
 dialogs.pop = (parentComponent, message, buttons, options = null) => {
-	if (!parentComponent) throw new Error("parentComponent is required");
-	if (!("dialogbox" in parentComponent)) throw new Error('A "dialogbox" component must be defined on the parent component!');
+	if (!parentComponent) throw new Error('parentComponent is required');
+	if (!('dialogbox' in parentComponent)) throw new Error('A "dialogbox" component must be defined on the parent component!');
 
 	if (!options) options = {};
-	if (!("buttonFlow" in options)) options.buttonFlow = "auto";
+	if (!('buttonFlow' in options)) options.buttonFlow = 'auto';
 
 	return new Promise((resolve, reject) => {
 		Keyboard.dismiss();
@@ -54,18 +55,18 @@ dialogs.pop = (parentComponent, message, buttons, options = null) => {
 		}
 
 		parentComponent.dialogbox.pop({
-			content: message,
+			content: message, 
 			btns: btns,
 			buttonFlow: options.buttonFlow,
 		});
 	});
-};
+}
 
 dialogs.error = (parentComponent, message) => {
 	Keyboard.dismiss();
 	return parentComponent.dialogbox.alert(message);
-};
+}
 
-dialogs.DialogBox = DialogBox;
+dialogs.DialogBox = DialogBox
 
 module.exports = { dialogs };

@@ -1,30 +1,31 @@
-const { BaseCommand } = require("./base-command.js");
-const { Database } = require("lib/database.js");
-const { app } = require("./app.js");
-const Setting = require("lib/models/Setting.js");
-const { _ } = require("lib/locale.js");
-const { ReportService } = require("lib/services/report.js");
+const { BaseCommand } = require('./base-command.js');
+const { Database } = require('lib/database.js');
+const { app } = require('./app.js');
+const Setting = require('lib/models/Setting.js');
+const { _ } = require('lib/locale.js');
+const { ReportService } = require('lib/services/report.js');
 
 class Command extends BaseCommand {
+
 	usage() {
-		return "status";
+		return 'status';
 	}
 
 	description() {
-		return _("Displays summary about the notes and notebooks.");
+		return _('Displays summary about the notes and notebooks.');
 	}
 
 	async action(args) {
 		let service = new ReportService();
-		let report = await service.status(Setting.value("sync.target"));
+		let report = await service.status(Setting.value('sync.target'));
 
 		for (let i = 0; i < report.length; i++) {
 			let section = report[i];
 
-			if (i > 0) this.stdout("");
+			if (i > 0) this.stdout('');
 
-			this.stdout("# " + section.title);
-			this.stdout("");
+			this.stdout('# ' + section.title);
+			this.stdout('');
 
 			for (let n in section.body) {
 				if (!section.body.hasOwnProperty(n)) continue;
@@ -33,13 +34,10 @@ class Command extends BaseCommand {
 			}
 		}
 
-		app()
-			.gui()
-			.showConsole();
-		app()
-			.gui()
-			.maximizeConsole();
+		app().gui().showConsole();
+		app().gui().maximizeConsole();
 	}
+
 }
 
 module.exports = Command;

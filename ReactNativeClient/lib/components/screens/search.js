@@ -1,18 +1,18 @@
-const React = require("react");
-const Component = React.Component;
-const { ListView, StyleSheet, View, TextInput, FlatList, TouchableHighlight } = require("react-native");
-const { connect } = require("react-redux");
-const { ScreenHeader } = require("lib/components/screen-header.js");
-const Icon = require("react-native-vector-icons/Ionicons").default;
-const { _ } = require("lib/locale.js");
-const Note = require("lib/models/Note.js");
-const { NoteItem } = require("lib/components/note-item.js");
-const { BaseScreenComponent } = require("lib/components/base-screen.js");
-const { themeStyle } = require("lib/components/global-style.js");
-const { dialogs } = require("lib/dialogs.js");
-const DialogBox = require("react-native-dialogbox").default;
+const React = require('react'); const Component = React.Component;
+const { ListView, StyleSheet, View, TextInput, FlatList, TouchableHighlight } = require('react-native');
+const { connect } = require('react-redux');
+const { ScreenHeader } = require('lib/components/screen-header.js');
+const Icon = require('react-native-vector-icons/Ionicons').default;
+const { _ } = require('lib/locale.js');
+const Note = require('lib/models/Note.js');
+const { NoteItem } = require('lib/components/note-item.js');
+const { BaseScreenComponent } = require('lib/components/base-screen.js');
+const { themeStyle } = require('lib/components/global-style.js');
+const { dialogs } = require('lib/dialogs.js');
+const DialogBox = require('react-native-dialogbox').default;
 
 class SearchScreenComponent extends BaseScreenComponent {
+	
 	static navigationOptions(options) {
 		return { header: null };
 	}
@@ -20,7 +20,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 	constructor() {
 		super();
 		this.state = {
-			query: "",
+			query: '',
 			notes: [],
 		};
 		this.isMounted_ = false;
@@ -38,12 +38,12 @@ class SearchScreenComponent extends BaseScreenComponent {
 				flex: 1,
 			},
 			searchContainer: {
-				flexDirection: "row",
-				alignItems: "center",
+				flexDirection: 'row',
+				alignItems: 'center',
 				borderWidth: 1,
 				borderColor: theme.dividerColor,
-			},
-		};
+			}
+		}
 
 		styles.searchTextInput = Object.assign({}, theme.lineInput);
 		styles.searchTextInput.paddingLeft = theme.marginLeft;
@@ -72,7 +72,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 
 	componentWillReceiveProps(newProps) {
 		let newState = {};
-		if ("query" in newProps) newState.query = newProps.query;
+		if ('query' in newProps) newState.query = newProps.query;
 
 		if (Object.getOwnPropertyNames(newState).length) {
 			this.setState(newState);
@@ -85,15 +85,15 @@ class SearchScreenComponent extends BaseScreenComponent {
 		if (!query) return;
 
 		this.props.dispatch({
-			type: "SEARCH_QUERY",
+			type: 'SEARCH_QUERY',
 			query: query,
 		});
 	}
 
 	clearButton_press() {
 		this.props.dispatch({
-			type: "SEARCH_QUERY",
-			query: "",
+			type: 'SEARCH_QUERY',
+			query: '',
 		});
 	}
 
@@ -102,10 +102,10 @@ class SearchScreenComponent extends BaseScreenComponent {
 
 		query = query === null ? this.state.query.trim : query.trim();
 
-		let notes = [];
+		let notes = []
 
 		if (query) {
-			let p = query.split(" ");
+			let p = query.split(' ');
 			let temp = [];
 			for (let i = 0; i < p.length; i++) {
 				let t = p[i].trim();
@@ -114,7 +114,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 			}
 
 			notes = await Note.previews(null, {
-				anywherePattern: "*" + temp.join("*") + "*",
+				anywherePattern: '*' + temp.join('*') + '*',
 			});
 		}
 
@@ -135,7 +135,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 		let rootStyle = {
 			flex: 1,
 			backgroundColor: theme.backgroundColor,
-		};
+		}
 
 		if (!this.props.visible) {
 			rootStyle.flex = 0.001; // This is a bit of a hack but it seems to work fine - it makes the component invisible but without unmounting it
@@ -146,7 +146,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 		return (
 			<View style={rootStyle}>
 				<ScreenHeader
-					title={_("Search")}
+					title={_('Search')}
 					parentComponent={thisComponent}
 					folderPickerOptions={{
 						enabled: this.props.noteSelectionEnabled,
@@ -158,36 +158,37 @@ class SearchScreenComponent extends BaseScreenComponent {
 						<TextInput
 							style={this.styles().searchTextInput}
 							autoFocus={this.props.visible}
-							underlineColorAndroid="#ffffff00"
-							onSubmitEditing={() => {
-								this.searchTextInput_submit();
-							}}
-							onChangeText={text => this.searchTextInput_changeText(text)}
+							underlineColorAndroid="#ffffff00" 
+							onSubmitEditing={() => { this.searchTextInput_submit() }}
+							onChangeText={(text) => this.searchTextInput_changeText(text) }
 							value={this.state.query}
 						/>
-						<TouchableHighlight onPress={() => this.clearButton_press()}>
-							<Icon name="md-close-circle" style={this.styles().clearIcon} />
+						<TouchableHighlight onPress={() => this.clearButton_press() }>
+							<Icon name='md-close-circle' style={this.styles().clearIcon} />
 						</TouchableHighlight>
 					</View>
 
-					<FlatList data={this.state.notes} keyExtractor={(item, index) => item.id} renderItem={event => <NoteItem note={event.item} />} />
+					<FlatList
+						data={this.state.notes}
+						keyExtractor={(item, index) => item.id}
+						renderItem={(event) => <NoteItem note={event.item}/>}
+					/>
 				</View>
-				<DialogBox
-					ref={dialogbox => {
-						this.dialogbox = dialogbox;
-					}}
-				/>
+				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
 			</View>
 		);
 	}
+
 }
 
-const SearchScreen = connect(state => {
-	return {
-		query: state.searchQuery,
-		theme: state.settings.theme,
-		noteSelectionEnabled: state.noteSelectionEnabled,
-	};
-})(SearchScreenComponent);
+const SearchScreen = connect(
+	(state) => {
+		return {
+			query: state.searchQuery,
+			theme: state.settings.theme,
+			noteSelectionEnabled: state.noteSelectionEnabled,
+		};
+	}
+)(SearchScreenComponent)
 
 module.exports = { SearchScreen };

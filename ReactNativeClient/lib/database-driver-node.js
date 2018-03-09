@@ -1,10 +1,11 @@
-const sqlite3 = require("sqlite3").verbose();
-const Promise = require("promise");
+const sqlite3 = require('sqlite3').verbose();
+const Promise = require('promise');
 
 class DatabaseDriverNode {
+
 	open(options) {
 		return new Promise((resolve, reject) => {
-			this.db_ = new sqlite3.Database(options.name, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, error => {
+			this.db_ = new sqlite3.Database(options.name, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (error) => {
 				if (error) {
 					reject(error);
 					return;
@@ -18,7 +19,7 @@ class DatabaseDriverNode {
 		let msg = [error.toString()];
 		if (sql) msg.push(sql);
 		if (params) msg.push(params);
-		let output = new Error(msg.join(": "));
+		let output = new Error(msg.join(': '));
 		if (error.code) output.code = error.code;
 		return output;
 	}
@@ -56,7 +57,7 @@ class DatabaseDriverNode {
 	exec(sql, params = null) {
 		if (!params) params = {};
 		return new Promise((resolve, reject) => {
-			this.db_.run(sql, params, error => {
+			this.db_.run(sql, params, (error) => {
 				if (error) {
 					reject(error);
 					return;
@@ -67,8 +68,9 @@ class DatabaseDriverNode {
 	}
 
 	lastInsertId() {
-		throw new Error("NOT IMPLEMENTED");
+		throw new Error('NOT IMPLEMENTED');
 	}
+
 }
 
 module.exports = { DatabaseDriverNode };

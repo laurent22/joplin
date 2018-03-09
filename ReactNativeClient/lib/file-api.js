@@ -1,15 +1,15 @@
-const { isHidden } = require("lib/path-utils.js");
-const { Logger } = require("lib/logger.js");
-const { shim } = require("lib/shim");
-const BaseItem = require("lib/models/BaseItem.js");
-const JoplinError = require("lib/JoplinError");
-const ArrayUtils = require("lib/ArrayUtils");
-const { time } = require("lib/time-utils.js");
+const { isHidden } = require('lib/path-utils.js');
+const { Logger } = require('lib/logger.js');
+const { shim } = require('lib/shim');
+const BaseItem = require('lib/models/BaseItem.js');
+const JoplinError = require('lib/JoplinError');
+const ArrayUtils = require('lib/ArrayUtils');
+const { time } = require('lib/time-utils.js');
 
 function requestCanBeRepeated(error) {
-	const errorCode = typeof error === "object" && error.code ? error.code : null;
+	const errorCode = typeof error === 'object' && error.code ? error.code : null;
 
-	if (errorCode === "rejectedByTarget") return false;
+	if (errorCode === 'rejectedByTarget') return false;
 
 	return true;
 }
@@ -31,6 +31,7 @@ async function tryAndRepeat(fn, count) {
 }
 
 class FileApi {
+
 	constructor(baseDir, driver) {
 		this.baseDir_ = baseDir;
 		this.driver_ = driver;
@@ -51,7 +52,7 @@ class FileApi {
 	}
 
 	tempDirName() {
-		if (this.tempDirName_ === null) throw Error("Temp dir not set!");
+		if (this.tempDirName_ === null) throw Error('Temp dir not set!');
 		return this.tempDirName_;
 	}
 
@@ -72,7 +73,7 @@ class FileApi {
 	}
 
 	syncTargetId() {
-		if (this.syncTargetId_ === null) throw new Error("syncTargetId has not been set!!");
+		if (this.syncTargetId_ === null) throw new Error('syncTargetId has not been set!!');
 		return this.syncTargetId_;
 	}
 
@@ -89,16 +90,16 @@ class FileApi {
 		let output = [];
 		if (this.baseDir_) output.push(this.baseDir_);
 		if (path) output.push(path);
-		return output.join("/");
+		return output.join('/');
 	}
 
 	// DRIVER MUST RETURN PATHS RELATIVE TO `path`
-	async list(path = "", options = null) {
+	async list(path = '', options = null) {
 		if (!options) options = {};
-		if (!("includeHidden" in options)) options.includeHidden = false;
-		if (!("context" in options)) options.context = null;
+		if (!('includeHidden' in options)) options.includeHidden = false;
+		if (!('context' in options)) options.context = null;
 
-		this.logger().debug("list " + this.baseDir_);
+		this.logger().debug('list ' + this.baseDir_);
 
 		const result = await tryAndRepeat(() => this.driver_.list(this.baseDir_, options), this.requestRepeatCount());
 
@@ -111,7 +112,7 @@ class FileApi {
 		}
 
 		return result;
-
+	
 		// return this.driver_.list(this.baseDir_, options).then((result) => {
 		// 	if (!options.includeHidden) {
 		// 		let temp = [];
@@ -126,18 +127,18 @@ class FileApi {
 
 	// Deprectated
 	setTimestamp(path, timestampMs) {
-		this.logger().debug("setTimestamp " + this.fullPath_(path));
+		this.logger().debug('setTimestamp ' + this.fullPath_(path));
 		return tryAndRepeat(() => this.driver_.setTimestamp(this.fullPath_(path), timestampMs), this.requestRepeatCount());
 		//return this.driver_.setTimestamp(this.fullPath_(path), timestampMs);
 	}
 
 	mkdir(path) {
-		this.logger().debug("mkdir " + this.fullPath_(path));
+		this.logger().debug('mkdir ' + this.fullPath_(path));
 		return tryAndRepeat(() => this.driver_.mkdir(this.fullPath_(path)), this.requestRepeatCount());
 	}
 
 	async stat(path) {
-		this.logger().debug("stat " + this.fullPath_(path));
+		this.logger().debug('stat ' + this.fullPath_(path));
 
 		const output = await tryAndRepeat(() => this.driver_.stat(this.fullPath_(path)), this.requestRepeatCount());
 
@@ -154,29 +155,29 @@ class FileApi {
 
 	get(path, options = null) {
 		if (!options) options = {};
-		if (!options.encoding) options.encoding = "utf8";
-		this.logger().debug("get " + this.fullPath_(path));
+		if (!options.encoding) options.encoding = 'utf8';
+		this.logger().debug('get ' + this.fullPath_(path));
 		return tryAndRepeat(() => this.driver_.get(this.fullPath_(path), options), this.requestRepeatCount());
 	}
 
 	async put(path, content, options = null) {
-		this.logger().debug("put " + this.fullPath_(path), options);
-
-		if (options && options.source === "file") {
-			if (!await this.fsDriver().exists(options.path)) throw new JoplinError("File not found: " + options.path, "fileNotFound");
+		this.logger().debug('put ' + this.fullPath_(path), options);
+		
+		if (options && options.source === 'file') {
+			if (!await this.fsDriver().exists(options.path)) throw new JoplinError('File not found: ' + options.path, 'fileNotFound');
 		}
 
 		return tryAndRepeat(() => this.driver_.put(this.fullPath_(path), content, options), this.requestRepeatCount());
 	}
 
 	delete(path) {
-		this.logger().debug("delete " + this.fullPath_(path));
+		this.logger().debug('delete ' + this.fullPath_(path));
 		return tryAndRepeat(() => this.driver_.delete(this.fullPath_(path)), this.requestRepeatCount());
 	}
 
 	// Deprectated
 	move(oldPath, newPath) {
-		this.logger().debug("move " + this.fullPath_(oldPath) + " => " + this.fullPath_(newPath));
+		this.logger().debug('move ' + this.fullPath_(oldPath) + ' => ' + this.fullPath_(newPath));
 		return tryAndRepeat(() => this.driver_.move(this.fullPath_(oldPath), this.fullPath_(newPath)), this.requestRepeatCount());
 	}
 
@@ -190,9 +191,10 @@ class FileApi {
 	}
 
 	delta(path, options = null) {
-		this.logger().debug("delta " + this.fullPath_(path));
+		this.logger().debug('delta ' + this.fullPath_(path));
 		return tryAndRepeat(() => this.driver_.delta(this.fullPath_(path), options), this.requestRepeatCount());
 	}
+
 }
 
 function basicDeltaContextFromOptions_(options) {
@@ -212,7 +214,7 @@ function basicDeltaContextFromOptions_(options) {
 	output.filesAtTimestamp = Array.isArray(options.context.filesAtTimestamp) ? options.context.filesAtTimestamp.slice() : [];
 	output.statsCache = options.context && options.context.statsCache ? options.context.statsCache : null;
 	output.statIdsCache = options.context && options.context.statIdsCache ? options.context.statIdsCache : null;
-	output.deletedItemsProcessed = options.context && "deletedItemsProcessed" in options.context ? options.context.deletedItemsProcessed : false;
+	output.deletedItemsProcessed = options.context && ('deletedItemsProcessed' in options.context) ? options.context.deletedItemsProcessed : false;
 
 	return output;
 }
@@ -223,7 +225,7 @@ function basicDeltaContextFromOptions_(options) {
 async function basicDelta(path, getDirStatFn, options) {
 	const outputLimit = 1000;
 	const itemIds = await options.allItemIdsHandler();
-	if (!Array.isArray(itemIds)) throw new Error("Delta API not supported - local IDs must be provided");
+	if (!Array.isArray(itemIds)) throw new Error('Delta API not supported - local IDs must be provided');
 
 	const context = basicDeltaContextFromOptions_(options);
 
@@ -241,7 +243,7 @@ async function basicDelta(path, getDirStatFn, options) {
 		newContext.statsCache.sort(function(a, b) {
 			return a.updated_time - b.updated_time;
 		});
-		newContext.statIdsCache = newContext.statsCache.map(item => BaseItem.pathToId(item.path));
+		newContext.statIdsCache = newContext.statsCache.map((item) => BaseItem.pathToId(item.path));
 		newContext.statIdsCache.sort(); // Items must be sorted to use binary search below
 	}
 
