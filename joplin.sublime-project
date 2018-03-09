@@ -73,7 +73,7 @@
 	],
 	"settings": {
 		"js_prettier": {
-			"auto_format_on_save": false,
+			"auto_format_on_save": true,
 			"auto_format_on_save_requires_prettier_config": true,
 		}
 	}

@@ -8,7 +8,6 @@
     "pack": "node_modules/.bin/electron-builder --dir",
     "dist": "node_modules/.bin/electron-builder",
     "publish": "build -p always",
-    "precommit": "pretty-quick --staged",
     "postinstall": "node compile-jsx.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts",
     "compile": "node compile-jsx.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts"
   },
@@ -49,10 +48,7 @@
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.24.1",
     "electron": "^1.7.11",
-    "electron-builder": "^20.2.0",
-    "husky": "^0.14.3",
-    "prettier": "1.11.1",
-    "pretty-quick": "^1.4.1"
+    "electron-builder": "^20.2.0"
   },
   "optionalDependencies": {
     "7zip-bin-mac": "^1.0.1",
