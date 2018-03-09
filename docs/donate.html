@@ -1,9 +1,4 @@
-const fs = require('fs-extra');
-const dirname = require('path').dirname;
-const marked = require('marked');
-const Mustache = require('mustache');
-
-const headerHtml = `<!doctype html>
+<!doctype html>
 <html>
 <head>
 	<title>Joplin - an open source note taking and to-do application with synchronisation capabilities</title>
@@ -187,17 +182,17 @@ const headerHtml = `<!doctype html>
 <div class="container">
 
 <div class="header">
-	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="{{{imageBaseUrl}}}/ForkMe.png"/></a>
-	<h1 id="joplin"><img class="title-icon" src="{{{imageBaseUrl}}}/Icon512.png">oplin</h1>
+	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="http://joplin.cozic.net/images/ForkMe.png"/></a>
+	<h1 id="joplin"><img class="title-icon" src="http://joplin.cozic.net/images/Icon512.png">oplin</h1>
 	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
 </div>
 
 <div class="nav-wrapper">
 	<div class="nav">
 		<ul>
-			<li class="{{selectedHome}}"><a href="{{baseUrl}}/" title="Home"><i class="fa fa-home"></i></a></li>
-			<li class="{{selectedTerminal}}"><a href="{{baseUrl}}/terminal" title="Terminal"><i class="fa fa-terminal"></i></a></li>
-			<li class="{{selectedDesktop}}"><a href="{{baseUrl}}/desktop" title="Desktop"><i class="fa fa-desktop"></i></a></li>
+			<li class=""><a href="http:&#x2F;&#x2F;joplin.cozic.net/" title="Home"><i class="fa fa-home"></i></a></li>
+			<li class=""><a href="http:&#x2F;&#x2F;joplin.cozic.net/terminal" title="Terminal"><i class="fa fa-terminal"></i></a></li>
+			<li class=""><a href="http:&#x2F;&#x2F;joplin.cozic.net/desktop" title="Desktop"><i class="fa fa-desktop"></i></a></li>
 		</ul>
 		<div class="nav-right">
 			<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
@@ -208,49 +203,22 @@ const headerHtml = `<!doctype html>
 </div>
 
 <div class="content">
-`;
+<h1 id="support-joplin-development">Support Joplin development</h1>
+<p>Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.</p>
+<p>There are various ways to send a donation:</p>
+<h2 id="paypal">Paypal</h2>
+<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=E8JMYD2LQ8MMA&lc=GB&item_name=Joplin+Development&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/PayPalDonate.png" height="60px"/></a></p>
+<h2 id="bitcoin">Bitcoin</h2>
+<p><a href="bitcoin:1P8TJvvJ7oHGneWuwSXN3DMBd7gYxCUQjc?message=Joplin%20development">1P8TJvvJ7oHGneWuwSXN3DMBd7gYxCUQjc</a></p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BitcoinQr.png" alt=""></p>
+<h2 id="other-way-to-support-the-development">Other way to support the development</h2>
+<p>There are other ways to support the development of Joplin:</p>
+<ul>
+<li>Consider rating the app on <a href="https://play.google.com/store/apps/details?id=net.cozic.joplin&amp;utm_source=GitHub&amp;utm_campaign=README&amp;pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1">Google Play</a> or <a href="https://itunes.apple.com/us/app/joplin/id1315599797">App Store</a>.</li>
+<li><a href="http://joplin.cozic.net/#localisation">Create of update a translation</a>.</li>
+<li>Help with the <a href="https://github.com/laurent22/joplin">documentation</a>.</li>
+</ul>
 
-const footerHtml = `
-</body>
-</html>
-`;
-
-// const screenshotHtml = `
-// <table class="screenshots">
-// 	<tr>
-// 		<th>
-// 			Mobile
-// 		</th>
-// 		<th>
-// 			Command line
-// 		</th>
-// 	</tr>
-// 	<tr>
-// 		<td>
-// 			<img class="mobile-screenshot" src="docs/images/Mobile.png"/>
-// 		</td>
-// 		<td class="cli-screenshot-wrapper">
-// 			<pre class="cli-screenshot">
-// <span class="prompt">joplin:/My notebook$</span> ls -n 12
-// [ ] 8am conference call ☎
-// [ ] Make vet appointment
-// [ ] Go pick up parcel
-// [ ] Pay flat rent 💸
-// [X] Book ferry 🚢
-// [X] Deploy Joplin app
-//     Open source stuff
-//     Swimming pool time table 🏊
-//     Grocery shopping list 📝
-//     Work itinerary
-//     Tuesday random note
-//     Vacation plans ☀
-// 			</pre>
-// 		</td>
-// 	</tr>
-// </table>
-// `;
-
-const scriptHtml = `
 <script>
 	function stickyHeader() { 
 		if ($(window).scrollTop() > 179) {
@@ -271,54 +239,6 @@ const scriptHtml = `
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
-`;
 
-const rootDir = dirname(__dirname);
-
-function markdownToHtml(md) {
-	const renderer = new marked.Renderer();
-
-	// Remove the header because it's going to be added back as HTML
-	md = md.replace(/# Joplin/, '');
-
-	let output = marked(md, {
-		gfm: true,
-		break: true,
-		renderer: renderer,
-	});
-
-	//output = output.replace(/<!-- \[SCREENSHOTS\] -->/, screenshotHtml);
-
-	return headerHtml + output + scriptHtml + footerHtml;
-}
-
-function renderFileToHtml(sourcePath, targetPath, params) {
-	const md = fs.readFileSync(sourcePath, 'utf8');
-	params.baseUrl = 'http://joplin.cozic.net';
-	params.imageBaseUrl = params.baseUrl + '/images';
-	const html = Mustache.render(markdownToHtml(md), params);
-	fs.writeFileSync(targetPath, html);
-}
-
-async function main() {
-	renderFileToHtml(rootDir + '/README.md', rootDir + '/docs/index.html', {
-		selectedHome: 'selected',
-	});
-
-	renderFileToHtml(rootDir + '/readme/terminal.md', rootDir + '/docs/terminal/index.html', {
-		selectedTerminal: 'selected',
-	});
-
-	renderFileToHtml(rootDir + '/readme/desktop.md', rootDir + '/docs/desktop/index.html', {
-		selectedDesktop: 'selected',
-	});
-
-	renderFileToHtml(rootDir + '/readme/e2ee.md', rootDir + '/docs/help/e2ee.html', {});
-	renderFileToHtml(rootDir + '/readme/spec.md', rootDir + '/docs/help/spec.html', {});
-	renderFileToHtml(rootDir + '/readme/donate.md', rootDir + '/docs/donate.html', {});
-	
-}
-
-main().catch((error) => {
-	console.error(error);
-});
+</body>
+</html>

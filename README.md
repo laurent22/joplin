@@ -200,6 +200,12 @@ Checkboxes can be added like so:
 
 The checkboxes can then be ticked in the mobile and desktop applications.
 
+# Donations
+
+Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.
+
+Please see the [donation page](http://joplin.cozic.net/donate/) for information on how to support the development of Joplin.
+
 # Contributing
 
 Please see the guide for information on how to contribute to the development of Joplin: https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md
