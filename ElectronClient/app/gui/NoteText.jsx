@@ -292,7 +292,7 @@ class NoteTextComponent extends React.Component {
 
 			const menu = new Menu()
 
-			if (itemType === 'image') {
+			if (itemType === "image" || itemType === "link") {
 				const resource = await Resource.load(arg0.resourceId);
 				const resourcePath = Resource.fullPath(resource);
 
