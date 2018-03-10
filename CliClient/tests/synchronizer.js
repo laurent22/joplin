@@ -113,18 +113,13 @@ describe('Synchronizer', function() {
 		await Note.save({ title: "un", parent_id: folder.id });
 
 		let all = await allItems();
-		await localItemsSameAsRemote(all, expect);
-	}));
 
-	it("should update remote items", asyncTest(async () => {
-		let folder = await Folder.save({ title: "folder1" });
-		let note = await Note.save({ title: "un", parent_id: folder.id });
 		await synchronizer().start();
 
 		await localItemsSameAsRemote(all, expect);
 	}));
 
-	it('should update remote item', asyncTest(async () => {
+	it('should update remote items', asyncTest(async () => {
 		let folder = await Folder.save({ title: "folder1" });
 		let note = await Note.save({ title: "un", parent_id: folder.id });
 		await synchronizer().start();
