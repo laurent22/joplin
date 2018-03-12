@@ -123,19 +123,6 @@ class Database {
 					break;
 				}
 			}
-
-			// return new Promise((resolve, reject) => {
-			// 	let iid = setInterval(() => {
-			// 		if (!this.inTransaction_) {
-			// 			clearInterval(iid);
-			// 			this.transactionExecBatch(queries).then(() => {
-			// 				resolve();
-			// 			}).catch((error) => {
-			// 				reject(error);
-			// 			});
-			// 		}
-			// 	}, 100);
-			// });
 		}
 
 		this.inTransaction_ = true;
@@ -149,56 +136,6 @@ class Database {
 		}
 
 		this.inTransaction_ = false;
-
-		// return promiseChain(chain).then(() => {
-		// 	this.inTransaction_ = false;
-		// });
-
-
-
-
-
-
-		// if (queries.length <= 0) return Promise.resolve();
-
-		// if (queries.length == 1) {
-		// 	let q = this.wrapQuery(queries[0]);
-		// 	return this.exec(q.sql, q.params);
-		// }
-
-		// // There can be only one transaction running at a time so queue
-		// // any new transaction here.
-		// if (this.inTransaction_) {
-		// 	return new Promise((resolve, reject) => {
-		// 		let iid = setInterval(() => {
-		// 			if (!this.inTransaction_) {
-		// 				clearInterval(iid);
-		// 				this.transactionExecBatch(queries).then(() => {
-		// 					resolve();
-		// 				}).catch((error) => {
-		// 					reject(error);
-		// 				});
-		// 			}
-		// 		}, 100);
-		// 	});
-		// }
-
-		// this.inTransaction_ = true;
-
-		// queries.splice(0, 0, 'BEGIN TRANSACTION');
-		// queries.push('COMMIT'); // Note: ROLLBACK is currently not supported
-
-		// let chain = [];
-		// for (let i = 0; i < queries.length; i++) {
-		// 	let query = this.wrapQuery(queries[i]);
-		// 	chain.push(() => {
-		// 		return this.exec(query.sql, query.params);
-		// 	});
-		// }
-
-		// return promiseChain(chain).then(() => {
-		// 	this.inTransaction_ = false;
-		// });
 	}
 
 	static enumId(type, s) {
