@@ -495,9 +495,30 @@ class MdToHtml {
 				max-width: 100%;
 			}
 
-			.katex .mfrac .frac-line:before {
-				/* top: 50%; */
-				/* padding-bottom: .7em; */
+			@media print {
+				body {
+					height: auto !important;
+				}
+
+				a.checkbox {
+					border: 1pt solid ` + style.htmlColor + `;
+					border-radius: 2pt;
+					width: 1em;
+					height: 1em;
+					line-height: 1em;
+					text-align: center;
+					top: .4em;
+				}
+
+				a.checkbox.tick:after {
+					content: "X";
+				}
+
+				a.checkbox.tick {
+					top: 0;
+					left: -0.02em;
+					color: ` + style.htmlColor + `;
+				}
 			}
 		`;
 

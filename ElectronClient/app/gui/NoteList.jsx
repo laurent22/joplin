@@ -102,7 +102,7 @@ class NoteListComponent extends React.Component {
 				const module = ioModules[i];
 				if (module.type !== 'exporter') continue;
 
-				exportMenu.append(new MenuItem({ label: module.format + ' - ' + module.description , click: async () => {
+				exportMenu.append(new MenuItem({ label: module.fullLabel() , click: async () => {
 					await InteropServiceHelper.export(this.props.dispatch.bind(this), module, { sourceNoteIds: noteIds });
 				}}));
 			}

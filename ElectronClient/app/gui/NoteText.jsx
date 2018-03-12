@@ -240,6 +240,10 @@ class NoteTextComponent extends React.Component {
 		if ('syncStarted' in nextProps && !nextProps.syncStarted && !this.isModified()) {
 			await this.reloadNote(nextProps, { noReloadIfLocalChanges: true });
 		}
+
+		if (nextProps.windowCommand) {
+			this.doCommand(nextProps.windowCommand);
+		}
 	}
 
 	isModified() {
@@ -362,7 +366,7 @@ class NoteTextComponent extends React.Component {
 			webviewReady: true,
 		});
 
-		// if (Setting.value('env') === 'dev') this.webview_.openDevTools();
+		if (Setting.value('env') === 'dev') this.webview_.openDevTools();
 	}
 
 	webview_ref(element) {
@@ -426,6 +430,38 @@ class NoteTextComponent extends React.Component {
 		this.scheduleSave();
 	}
 
+	async doCommand(command) {
+		if (!command) return;
+
+		let commandProcessed = true;
+
+		if (command.name === 'exportPdf' && this.webview_) {
+			const path = bridge().showSaveDialog({
+				filters: [{ name: _('PDF File'), extensions: ['pdf']}]
+			});
+
+			if (path) {
+				this.webview_.printToPDF({}, (error, data) => {
+					if (error) {
+						bridge().showErrorMessageBox(error.message);
+					} else {
+						shim.fsDriver().writeFile(path, data, 'buffer');
+					}
+				});
+			}
+		} else if (command.name === 'print' && this.webview_) {
+			this.webview_.print();
+		} else {
+			commandProcessed = false;
+		}
+
+		if (commandProcessed) {
+			this.props.dispatch({
+				type: 'WINDOW_COMMAND',
+				name: null,
+			});
+		}
+	}
 
 	async commandAttachFile() {
 		const filePaths = bridge().showOpenDialog({
@@ -710,6 +746,7 @@ const mapStateToProps = (state) => {
 		showAdvancedOptions: state.settings.showAdvancedOptions,
 		syncStarted: state.syncStarted,
 		newNote: state.newNote,
+		windowCommand: state.windowCommand,
 	};
 };
 
