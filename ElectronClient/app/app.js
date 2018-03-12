@@ -304,25 +304,6 @@ class Application extends BaseApplication {
 					}
 				}, {
 					type: 'separator',
-				// }, {
-				// 	label: _('Import Evernote notes'),
-				// 	click: () => {
-				// 		const filePaths = bridge().showOpenDialog({
-				// 			properties: ['openFile', 'createDirectory'],
-				// 			filters: [
-				// 				{ name: _('Evernote Export Files'), extensions: ['enex'] },
-				// 			]
-				// 		});
-				// 		if (!filePaths || !filePaths.length) return;
-
-				// 		this.dispatch({
-				// 			type: 'NAV_GO',
-				// 			routeName: 'Import',
-				// 			props: {
-				// 				filePath: filePaths[0],
-				// 			},
-				// 		});
-				// 	}
 				}, {
 					label: _('Import'),
 					submenu: importItems,

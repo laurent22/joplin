@@ -94,11 +94,22 @@ class NoteListComponent extends React.Component {
 				}
 			}}));
 
-			menu.append(new MenuItem({label: _('Export'), click: async () => {
-				const ioService = new InteropService();
-				const module = ioService.moduleByFormat_('exporter', 'jex');
-				await InteropServiceHelper.export(this.props.dispatch.bind(this), module, { sourceNoteIds: noteIds });
-			}}));			
+			const exportMenu = new Menu();
+
+			const ioService = new InteropService();
+			const ioModules = ioService.modules();
+			for (let i = 0; i < ioModules.length; i++) {
+				const module = ioModules[i];
+				if (module.type !== 'exporter') continue;
+
+				exportMenu.append(new MenuItem({ label: module.format + ' - ' + module.description , click: async () => {
+					await InteropServiceHelper.export(this.props.dispatch.bind(this), module, { sourceNoteIds: noteIds });
+				}}));
+			}
+
+			const exportMenuItem = new MenuItem({label: _('Export'), submenu: exportMenu});
+
+			menu.append(exportMenuItem);
 		}
 
 		menu.append(new MenuItem({label: _('Delete'), click: async () => {

@@ -451,7 +451,7 @@ class MdToHtml {
 				position: relative;
 				top: .5em;
 				text-decoration: none;
-				width: 1.2em;
+				width: 1.15em;
 				height: 1.5em;
 				margin-right: 0.4em;
 				background-color:  ` + style.htmlColor + `;
@@ -501,7 +501,7 @@ class MdToHtml {
 			}
 		`;
 
-		const styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>'; //+ '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">';
+		const styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>';
 
 		const output = styleHtml + renderedBody;
 
