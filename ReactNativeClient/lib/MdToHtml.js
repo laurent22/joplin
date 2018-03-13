@@ -196,7 +196,7 @@ class MdToHtml {
 			let openTag = null;
 			let closeTag = null;
 			let attrs = t.attrs ? t.attrs : [];
-			let tokenContent = t.content ? t.content : null;
+			let tokenContent = t.content ? t.content : '';
 			const isCodeBlock = tag === 'code' && t.block;
 			const isInlineCode = t.type === 'code_inline';
 			const codeBlockLanguage = t && t.info ? t.info : null;
