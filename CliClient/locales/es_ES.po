@@ -16,8 +16,6 @@ msgstr ""
 "X-Generator: Poedit 1.8.11\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Desmarque las notas asociadas para eliminar una etiqueta."
@@ -569,15 +567,16 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exportando el formato de \"%s\" a \"%s\". Por favor espere..."
 
-msgid "File"
-msgstr "Archivo"
-
-msgid "Directory"
-msgstr "Directorio"
-
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Importando el formato de \"%s\" a \"%s\". Por favor espere..."
+
+#, fuzzy
+msgid "PDF File"
+msgstr "Archivo"
+
+msgid "File"
+msgstr "Archivo"
 
 msgid "New note"
 msgstr "Nueva nota"
@@ -593,6 +592,9 @@ msgstr "Importar"
 
 msgid "Export"
 msgstr "Exportar"
+
+msgid "Print"
+msgstr ""
 
 #, javascript-format
 msgid "Hide %s"
@@ -666,15 +668,8 @@ msgstr "OK"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#, javascript-format
-msgid ""
-"Release notes:\n"
-"\n"
-"%s"
-msgstr ""
-"Notas de la versión:\n"
-"\n"
-"%s"
+msgid "Current version is up-to-date."
+msgstr "La versión actual está actualizada."
 
 msgid "An update is available, do you want to download it now?"
 msgstr "Hay disponible una actualización. ¿Quiere descargarla ahora?"
@@ -684,9 +679,6 @@ msgstr "Sí"
 
 msgid "No"
 msgstr "No"
-
-msgid "Current version is up-to-date."
-msgstr "La versión actual está actualizada."
 
 msgid "Check synchronisation configuration"
 msgstr "Comprobar sincronización"
@@ -1013,6 +1005,16 @@ msgstr "Cancelando..."
 msgid "Completed: %s"
 msgstr "Completado: %s"
 
+#, fuzzy, javascript-format
+msgid "Last error: %s"
+msgstr "Error fatal:"
+
+msgid "Idle"
+msgstr ""
+
+msgid "In progress"
+msgstr ""
+
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "La sincronización ya está en progreso. Estado: %s"
@@ -1192,6 +1194,9 @@ msgstr "Directorio para exportar de Joplin"
 
 msgid "Evernote Export File"
 msgstr "Archivo exportado de Evernote"
+
+msgid "Directory"
+msgstr "Directorio"
 
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
@@ -1387,6 +1392,15 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+#~ msgid ""
+#~ "Release notes:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Notas de la versión:\n"
+#~ "\n"
+#~ "%s"
 
 #~ msgid "Imports an Evernote notebook file (.enex file)."
 #~ msgstr "Importar una libreta de Evernote (archivo .enex)."

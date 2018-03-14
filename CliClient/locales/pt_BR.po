@@ -544,15 +544,16 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 
-msgid "File"
-msgstr "Arquivo"
-
-msgid "Directory"
-msgstr ""
-
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
+
+#, fuzzy
+msgid "PDF File"
+msgstr "Arquivo"
+
+msgid "File"
+msgstr "Arquivo"
 
 msgid "New note"
 msgstr "Nova nota"
@@ -569,6 +570,9 @@ msgstr "Importar"
 #, fuzzy
 msgid "Export"
 msgstr "Importar"
+
+msgid "Print"
+msgstr ""
 
 #, javascript-format
 msgid "Hide %s"
@@ -645,12 +649,8 @@ msgstr "OK"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#, fuzzy, javascript-format
-msgid ""
-"Release notes:\n"
-"\n"
-"%s"
-msgstr "Excluir notas?"
+msgid "Current version is up-to-date."
+msgstr ""
 
 msgid "An update is available, do you want to download it now?"
 msgstr ""
@@ -661,9 +661,6 @@ msgstr ""
 #, fuzzy
 msgid "No"
 msgstr "N"
-
-msgid "Current version is up-to-date."
-msgstr ""
 
 #, fuzzy
 msgid "Check synchronisation configuration"
@@ -987,6 +984,16 @@ msgstr "Cancelando..."
 msgid "Completed: %s"
 msgstr "Completado: %s"
 
+#, fuzzy, javascript-format
+msgid "Last error: %s"
+msgstr "Erro fatal:"
+
+msgid "Idle"
+msgstr ""
+
+msgid "In progress"
+msgstr ""
+
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Sincronização já em andamento. Estado: %s"
@@ -1169,6 +1176,9 @@ msgstr ""
 #, fuzzy
 msgid "Evernote Export File"
 msgstr "Arquivos de Exportação do Evernote"
+
+msgid "Directory"
+msgstr ""
 
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
@@ -1360,6 +1370,13 @@ msgstr "Você não possui cadernos. Crie um clicando no botão (+)."
 
 msgid "Welcome"
 msgstr "Bem-vindo"
+
+#, fuzzy
+#~ msgid ""
+#~ "Release notes:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr "Excluir notas?"
 
 #~ msgid "Imports an Evernote notebook file (.enex file)."
 #~ msgstr "Importa um arquivo de caderno do Evernote (arquivo .enex)."

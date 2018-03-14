@@ -549,15 +549,16 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 
-msgid "File"
-msgstr "ファイル"
-
-msgid "Directory"
-msgstr ""
-
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
+
+#, fuzzy
+msgid "PDF File"
+msgstr "ファイル"
+
+msgid "File"
+msgstr "ファイル"
 
 msgid "New note"
 msgstr "新しいノート"
@@ -574,6 +575,9 @@ msgstr "インポート"
 #, fuzzy
 msgid "Export"
 msgstr "インポート"
+
+msgid "Print"
+msgstr ""
 
 #, javascript-format
 msgid "Hide %s"
@@ -649,12 +653,8 @@ msgstr ""
 msgid "Cancel"
 msgstr "キャンセル"
 
-#, fuzzy, javascript-format
-msgid ""
-"Release notes:\n"
-"\n"
-"%s"
-msgstr "ノートを削除しますか？"
+msgid "Current version is up-to-date."
+msgstr ""
 
 msgid "An update is available, do you want to download it now?"
 msgstr ""
@@ -663,9 +663,6 @@ msgid "Yes"
 msgstr ""
 
 msgid "No"
-msgstr ""
-
-msgid "Current version is up-to-date."
 msgstr ""
 
 #, fuzzy
@@ -989,6 +986,16 @@ msgstr "中止中..."
 msgid "Completed: %s"
 msgstr "完了: %s"
 
+#, fuzzy, javascript-format
+msgid "Last error: %s"
+msgstr "致命的なエラー: "
+
+msgid "Idle"
+msgstr ""
+
+msgid "In progress"
+msgstr ""
+
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "同期作業はすでに実行中です。状態: %s"
@@ -1172,6 +1179,9 @@ msgstr ""
 #, fuzzy
 msgid "Evernote Export File"
 msgstr "Evernote Exportファイル"
+
+msgid "Directory"
+msgstr ""
 
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
@@ -1365,6 +1375,13 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
+
+#, fuzzy
+#~ msgid ""
+#~ "Release notes:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr "ノートを削除しますか？"
 
 #~ msgid "Imports an Evernote notebook file (.enex file)."
 #~ msgstr "Evernoteノートブックファイル(.enex)のインポート"
