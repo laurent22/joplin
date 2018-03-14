@@ -81,7 +81,17 @@ class Note extends BaseItem {
 	static defaultTitle(note) {
 		if (note.body && note.body.length) {
 			const lines = note.body.trim().split("\n");
-			return lines[0].trim().substr(0, 80).trim();
+			let output = lines[0].trim();
+			// Remove the first #, *, etc.
+			while (output.length) {
+				const c = output[0];
+				if (['#', ' ', "\n", "\t", '*', '`', '-'].indexOf(c) >= 0) {
+					output = output.substr(1);
+				} else {
+					break;
+				}
+			}
+			return output.substr(0, 80).trim();
 		}
 
 		return _('Untitled');
