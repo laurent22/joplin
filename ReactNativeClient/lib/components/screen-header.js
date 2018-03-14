@@ -2,7 +2,6 @@ const React = require('react'); const Component = React.Component;
 const { connect } = require('react-redux');
 const { Platform, View, Text, Button, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions } = require('react-native');
 const Icon = require('react-native-vector-icons/Ionicons').default;
-const { Log } = require('lib/log.js');
 const { BackButtonService } = require('lib/services/back-button.js');
 const NavService = require('lib/services/NavService.js');
 const { ReportService } = require('lib/services/report.js');

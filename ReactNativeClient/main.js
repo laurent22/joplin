@@ -7,7 +7,6 @@
 // So there's basically still a one way flux: React => SQLite => Redux => React
 
 const { AppRegistry } = require('react-native');
-const { Log } = require('lib/log.js');
 const { Root } = require('./root.js');
 
 function main() {

@@ -1,7 +1,6 @@
 const React = require('react'); const Component = React.Component;
 const { View, Button, TextInput, StyleSheet } = require('react-native');
 const { connect } = require('react-redux');
-const { Log } = require('lib/log.js');
 const { ActionButton } = require('lib/components/action-button.js');
 const Folder = require('lib/models/Folder.js');
 const BaseModel = require('lib/BaseModel.js');
