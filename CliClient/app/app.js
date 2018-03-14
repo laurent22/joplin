@@ -292,7 +292,7 @@ class Application extends BaseApplication {
 
 	async execCommand(argv) {
 		if (!argv.length) return this.execCommand(['help']);
-		reg.logger().info('execCommand()', argv);
+		// reg.logger().debug('execCommand()', argv);
 		const commandName = argv[0];
 		this.activeCommand_ = this.findCommandByName(commandName);
 
