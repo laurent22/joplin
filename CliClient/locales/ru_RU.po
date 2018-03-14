@@ -568,15 +568,16 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 
-msgid "File"
-msgstr "Файл"
-
-msgid "Directory"
-msgstr ""
-
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
+
+#, fuzzy
+msgid "PDF File"
+msgstr "Файл"
+
+msgid "File"
+msgstr "Файл"
 
 msgid "New note"
 msgstr "Новая заметка"
@@ -593,6 +594,9 @@ msgstr "Импорт"
 #, fuzzy
 msgid "Export"
 msgstr "Импорт"
+
+msgid "Print"
+msgstr ""
 
 #, javascript-format
 msgid "Hide %s"
@@ -667,12 +671,8 @@ msgstr "OK"
 msgid "Cancel"
 msgstr "Отмена"
 
-#, fuzzy, javascript-format
-msgid ""
-"Release notes:\n"
-"\n"
-"%s"
-msgstr "Удалить заметки?"
+msgid "Current version is up-to-date."
+msgstr "Вы используете самую свежую версию."
 
 #, fuzzy
 msgid "An update is available, do you want to download it now?"
@@ -684,9 +684,6 @@ msgstr ""
 #, fuzzy
 msgid "No"
 msgstr "N"
-
-msgid "Current version is up-to-date."
-msgstr "Вы используете самую свежую версию."
 
 #, fuzzy
 msgid "Check synchronisation configuration"
@@ -1017,6 +1014,16 @@ msgstr "Отмена..."
 msgid "Completed: %s"
 msgstr "Завершено: %s"
 
+#, fuzzy, javascript-format
+msgid "Last error: %s"
+msgstr "Фатальная ошибка:"
+
+msgid "Idle"
+msgstr ""
+
+msgid "In progress"
+msgstr ""
+
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Синхронизация уже выполняется. Статус: %s"
@@ -1200,6 +1207,9 @@ msgstr ""
 #, fuzzy
 msgid "Evernote Export File"
 msgstr "Файлы экспорта Evernote"
+
+msgid "Directory"
+msgstr ""
 
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
@@ -1394,6 +1404,13 @@ msgstr "У вас сейчас нет блокнота. Создайте его 
 
 msgid "Welcome"
 msgstr "Добро пожаловать"
+
+#, fuzzy
+#~ msgid ""
+#~ "Release notes:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr "Удалить заметки?"
 
 #~ msgid "Imports an Evernote notebook file (.enex file)."
 #~ msgstr "Импортирует файл блокнотов Evernote (.enex-файл)."

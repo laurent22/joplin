@@ -493,14 +493,14 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 
-msgid "File"
-msgstr ""
-
-msgid "Directory"
-msgstr ""
-
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
+
+msgid "PDF File"
+msgstr ""
+
+msgid "File"
 msgstr ""
 
 msgid "New note"
@@ -516,6 +516,9 @@ msgid "Import"
 msgstr ""
 
 msgid "Export"
+msgstr ""
+
+msgid "Print"
 msgstr ""
 
 #, javascript-format
@@ -590,11 +593,7 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#, javascript-format
-msgid ""
-"Release notes:\n"
-"\n"
-"%s"
+msgid "Current version is up-to-date."
 msgstr ""
 
 msgid "An update is available, do you want to download it now?"
@@ -604,9 +603,6 @@ msgid "Yes"
 msgstr ""
 
 msgid "No"
-msgstr ""
-
-msgid "Current version is up-to-date."
 msgstr ""
 
 msgid "Check synchronisation configuration"
@@ -912,6 +908,16 @@ msgid "Completed: %s"
 msgstr ""
 
 #, javascript-format
+msgid "Last error: %s"
+msgstr ""
+
+msgid "Idle"
+msgstr ""
+
+msgid "In progress"
+msgstr ""
+
+#, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr ""
 
@@ -1079,6 +1085,9 @@ msgid "Joplin Export Directory"
 msgstr ""
 
 msgid "Evernote Export File"
+msgstr ""
+
+msgid "Directory"
 msgstr ""
 
 #, javascript-format
