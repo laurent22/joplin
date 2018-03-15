@@ -22,6 +22,8 @@ const NoteTag = require('lib/models/NoteTag.js');
 const BaseItem = require('lib/models/BaseItem.js');
 const MasterKey = require('lib/models/MasterKey.js');
 const BaseModel = require('lib/BaseModel.js');
+const BaseService = require('lib/services/BaseService.js');
+const ResourceService = require('lib/services/ResourceService');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { Database } = require('lib/database.js');
 const { NotesScreen } = require('lib/components/screens/notes.js');
@@ -318,6 +320,8 @@ async function initialize(dispatch) {
 	reg.setLogger(mainLogger);
 	reg.setShowErrorMessageBoxHandler((message) => { alert(message) });
 
+	BaseService.logger_ = mainLogger;
+
 	reg.logger().info('====================================');
 	reg.logger().info('Starting application ' + Setting.value('appId') + ' (' + Setting.value('env') + ')');
 
@@ -449,6 +453,12 @@ async function initialize(dispatch) {
 	PoorManIntervals.setTimeout(() => {
 		AlarmService.garbageCollect();
 	}, 1000 * 60 * 60);
+
+	const resourceService = new ResourceService();
+	resourceService.maintenance();
+	PoorManIntervals.setInterval(() => {
+		resourceService.maintenance();
+	}, 1000 * 60 * 60 * 4);
 
 	reg.scheduleSync().then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation

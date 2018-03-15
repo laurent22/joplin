@@ -22,6 +22,7 @@ const AlarmServiceDriverNode = require('lib/services/AlarmServiceDriverNode');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const InteropService = require('lib/services/InteropService');
 const InteropServiceHelper = require('./InteropServiceHelper.js');
+const ResourceService = require('lib/services/ResourceService');
 
 const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
@@ -607,6 +608,12 @@ class Application extends BaseApplication {
 		setTimeout(() => {
 			AlarmService.garbageCollect();
 		}, 1000 * 60 * 60);
+
+		const resourceService = new ResourceService();
+		resourceService.maintenance();
+		setInterval(() => {
+			resourceService.maintenance();
+		}, 1000 * 60 * 60 * 4);
 
 		if (Setting.value('env') === 'dev') {
 			AlarmService.updateAllNotifications();

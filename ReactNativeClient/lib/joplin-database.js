@@ -301,7 +301,7 @@ class JoplinDatabase extends Database {
 			if (targetVersion == 10) {
 				const itemChangesTable = `
 					CREATE TABLE item_changes (
-						id INTEGER PRIMARY KEY,
+						id INTEGER PRIMARY KEY AUTOINCREMENT,
 						item_type INT NOT NULL,
 						item_id TEXT NOT NULL,
 						type INT NOT NULL,
@@ -313,7 +313,9 @@ class JoplinDatabase extends Database {
 					CREATE TABLE note_resources (
 						id INTEGER PRIMARY KEY,
 						note_id TEXT NOT NULL,
-						resource_id TEXT NOT NULL
+						resource_id TEXT NOT NULL,
+						is_associated INT NOT NULL,
+						last_seen_time INT NOT NULL
 					);
 				`;
 

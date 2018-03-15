@@ -12,6 +12,10 @@ class ItemChange extends BaseModel {
 	}
 
 	static async add(itemType, itemId, type) {
+		ItemChange.saveCalls_.push(true);
+
+		// Using a mutex so that records can be added to the database in the
+		// background, without making the UI wait.
 		const release = await ItemChange.addChangeMutex_.acquire();
 
 		try {
@@ -21,12 +25,27 @@ class ItemChange extends BaseModel {
 			]);
 		} finally {
 			release();
+			ItemChange.saveCalls_.pop();
 		}
+	}
+
+	// Because item changes are recorded in the background, this function
+	// can be used for synchronous code, in particular when unit testing.
+	static async waitForAllSaved() {
+		return new Promise((resolve, reject) => {
+			const iid = setInterval(() => {
+				if (!ItemChange.saveCalls_.length) {
+					clearInterval(iid);
+					resolve();
+				}
+			}, 100);
+		});
 	}
 
 }
 
 ItemChange.addChangeMutex_ = new Mutex();
+ItemChange.saveCalls_ = [];
 
 ItemChange.TYPE_CREATE = 1;
 ItemChange.TYPE_UPDATE = 2;
