@@ -436,8 +436,8 @@ class Note extends BaseItem {
 	// 	});
 	// }
 
-	static batchDelete(ids, options = null) {
-		const result = super.batchDelete(ids, options);
+	static async batchDelete(ids, options = null) {
+		const result = await super.batchDelete(ids, options);
 		for (let i = 0; i < ids.length; i++) {
 			ItemChange.add(BaseModel.TYPE_NOTE, ids[i], ItemChange.TYPE_DELETE);
 
