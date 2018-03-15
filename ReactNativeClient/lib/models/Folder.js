@@ -1,5 +1,4 @@
 const BaseModel = require('lib/BaseModel.js');
-const { Log } = require('lib/log.js');
 const { promiseChain } = require('lib/promise-utils.js');
 const { time } = require('lib/time-utils.js');
 const Note = require('lib/models/Note.js');

@@ -9,7 +9,6 @@ const AlarmServiceDriver = require('lib/services/AlarmServiceDriver');
 const Alarm = require('lib/models/Alarm');
 const { createStore, applyMiddleware } = require('redux');
 const { shimInit } = require('lib/shim-init-react.js');
-const { Log } = require('lib/log.js');
 const { time } = require('lib/time-utils.js');
 const { AppNav } = require('lib/components/app-nav.js');
 const { Logger } = require('lib/logger.js');

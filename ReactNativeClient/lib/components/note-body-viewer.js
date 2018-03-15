@@ -104,7 +104,7 @@ class NoteBodyViewer extends Component {
 					style={webViewStyle}
 					source={source}
 					onLoadEnd={() => this.onLoadEnd()}
-					onError={(e) => reg.logger().error('WebView error', e) }
+					onError={() => reg.logger().error('WebView error') }
 					onMessage={(event) => {
 						let msg = event.nativeEvent.data;
 

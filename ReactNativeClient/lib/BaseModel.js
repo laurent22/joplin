@@ -1,4 +1,3 @@
-const { Log } = require('lib/log.js');
 const { Database } = require('lib/database.js');
 const { uuid } = require('lib/uuid.js');
 const { time } = require('lib/time-utils.js');
@@ -400,7 +399,7 @@ class BaseModel {
 
 			output = this.filter(o);
 		} catch (error) {
-			Log.error('Cannot save model', error);
+			this.logger().error('Cannot save model', error);
 		}
 
 		this.releaseSaveMutex(o, mutexRelease);

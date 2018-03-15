@@ -1,5 +1,6 @@
 const Setting = require('lib/models/Setting.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
+const ObjectUtils = require('lib/ObjectUtils');
 const { _ } = require('lib/locale.js');
 
 const shared = {}
@@ -16,7 +17,7 @@ shared.checkSyncConfig = async function(comp, settings) {
 	const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId);
 	const options = Setting.subValues('sync.' + syncTargetId, settings);
 	comp.setState({ checkSyncConfigResult: 'checking' });
-	const result = await SyncTargetClass.checkConfig(options);
+	const result = await SyncTargetClass.checkConfig(ObjectUtils.convertValuesToFunctions(options));
 	comp.setState({ checkSyncConfigResult: result });
 }
 

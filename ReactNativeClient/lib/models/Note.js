@@ -1,5 +1,4 @@
 const BaseModel = require('lib/BaseModel.js');
-const { Log } = require('lib/log.js');
 const { sprintf } = require('sprintf-js');
 const BaseItem = require('lib/models/BaseItem.js');
 const ItemChange = require('lib/models/ItemChange.js');

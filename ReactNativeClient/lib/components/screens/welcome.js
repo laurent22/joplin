@@ -1,7 +1,6 @@
 const React = require('react'); const Component = React.Component;
 const { View, Text, StyleSheet } = require('react-native');
 const { connect } = require('react-redux');
-const { Log } = require('lib/log.js');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { ActionButton } = require('lib/components/action-button.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
