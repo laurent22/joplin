@@ -196,7 +196,7 @@ class MdToHtml {
 			let openTag = null;
 			let closeTag = null;
 			let attrs = t.attrs ? t.attrs : [];
-			let tokenContent = t.content ? t.content : null;
+			let tokenContent = t.content ? t.content : '';
 			const isCodeBlock = tag === 'code' && t.block;
 			const isInlineCode = t.type === 'code_inline';
 			const codeBlockLanguage = t && t.info ? t.info : null;
@@ -451,7 +451,7 @@ class MdToHtml {
 				position: relative;
 				top: .5em;
 				text-decoration: none;
-				width: 1.2em;
+				width: 1.15em;
 				height: 1.5em;
 				margin-right: 0.4em;
 				background-color:  ` + style.htmlColor + `;
@@ -495,13 +495,34 @@ class MdToHtml {
 				max-width: 100%;
 			}
 
-			.katex .mfrac .frac-line:before {
-				/* top: 50%; */
-				/* padding-bottom: .7em; */
+			@media print {
+				body {
+					height: auto !important;
+				}
+
+				a.checkbox {
+					border: 1pt solid ` + style.htmlColor + `;
+					border-radius: 2pt;
+					width: 1em;
+					height: 1em;
+					line-height: 1em;
+					text-align: center;
+					top: .4em;
+				}
+
+				a.checkbox.tick:after {
+					content: "X";
+				}
+
+				a.checkbox.tick {
+					top: 0;
+					left: -0.02em;
+					color: ` + style.htmlColor + `;
+				}
 			}
 		`;
 
-		const styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>'; //+ '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">';
+		const styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>';
 
 		const output = styleHtml + renderedBody;
 
