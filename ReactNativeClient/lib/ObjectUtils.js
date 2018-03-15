@@ -44,4 +44,13 @@ ObjectUtils.fieldsEqual = function(o1, o2) {
 	return true;
 }
 
+ObjectUtils.convertValuesToFunctions = function(o) {
+	const output = {};
+	for (let n in o) {
+		if (!o.hasOwnProperty(n)) continue;
+		output[n] = () => { return typeof o[n] === 'function' ? o[n]() : o[n]; }
+	}
+	return output;
+}
+
 module.exports = ObjectUtils;
