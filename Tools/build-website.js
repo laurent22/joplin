@@ -305,16 +305,17 @@ async function main() {
 		selectedHome: 'selected',
 	});
 
-	renderFileToHtml(rootDir + '/README_terminal.md', rootDir + '/docs/terminal/index.html', {
+	renderFileToHtml(rootDir + '/readme/terminal.md', rootDir + '/docs/terminal/index.html', {
 		selectedTerminal: 'selected',
 	});
 
-	renderFileToHtml(rootDir + '/README_desktop.md', rootDir + '/docs/desktop/index.html', {
+	renderFileToHtml(rootDir + '/readme/desktop.md', rootDir + '/docs/desktop/index.html', {
 		selectedDesktop: 'selected',
 	});
 
-	renderFileToHtml(rootDir + '/README_e2ee.md', rootDir + '/docs/help/e2ee.html', {});
-	renderFileToHtml(rootDir + '/README_spec.md', rootDir + '/docs/help/spec.html', {});
+	renderFileToHtml(rootDir + '/readme/e2ee.md', rootDir + '/docs/help/e2ee/index.html', {});
+	renderFileToHtml(rootDir + '/readme/spec.md', rootDir + '/docs/help/spec/index.html', {});
+	renderFileToHtml(rootDir + '/readme/donate.md', rootDir + '/docs/donate/index.html', {});
 	
 }
 

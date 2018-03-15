@@ -503,6 +503,10 @@ msgstr "Lehenetsia: %s"
 msgid "Possible keys/values:"
 msgstr "Litezkeen balioak:"
 
+#, fuzzy
+msgid "Type `joplin help` for usage information."
+msgstr "Erakutsi erabilera datuak."
+
 msgid "Fatal error:"
 msgstr "Aio! Agur! :_( "
 
@@ -560,15 +564,16 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 
-msgid "File"
-msgstr "Fitxategia"
-
-msgid "Directory"
-msgstr ""
-
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
+
+#, fuzzy
+msgid "PDF File"
+msgstr "Fitxategia"
+
+msgid "File"
+msgstr "Fitxategia"
 
 msgid "New note"
 msgstr "Ohar berria"
@@ -585,6 +590,9 @@ msgstr "Inportatu"
 #, fuzzy
 msgid "Export"
 msgstr "Inportatu"
+
+msgid "Print"
+msgstr ""
 
 #, javascript-format
 msgid "Hide %s"
@@ -632,6 +640,10 @@ msgstr "Laguntza"
 msgid "Website and documentation"
 msgstr "Web orria eta dokumentazioa (en)"
 
+#, fuzzy
+msgid "Make a donation"
+msgstr "Web orria eta dokumentazioa (en)"
+
 msgid "Check for updates..."
 msgstr ""
 
@@ -655,12 +667,8 @@ msgstr "OK"
 msgid "Cancel"
 msgstr "Utzi"
 
-#, fuzzy, javascript-format
-msgid ""
-"Release notes:\n"
-"\n"
-"%s"
-msgstr "Oharrak ezabatu?"
+msgid "Current version is up-to-date."
+msgstr ""
 
 msgid "An update is available, do you want to download it now?"
 msgstr ""
@@ -671,9 +679,6 @@ msgstr ""
 #, fuzzy
 msgid "No"
 msgstr "E"
-
-msgid "Current version is up-to-date."
-msgstr ""
 
 #, fuzzy
 msgid "Check synchronisation configuration"
@@ -1006,6 +1011,16 @@ msgstr "Bertan behera uzten..."
 msgid "Completed: %s"
 msgstr "Osatuta: %s"
 
+#, fuzzy, javascript-format
+msgid "Last error: %s"
+msgstr "Aio! Agur! :_( "
+
+msgid "Idle"
+msgstr ""
+
+msgid "In progress"
+msgstr ""
+
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Sinkronizazioa hasita dago. Egoera: %s"
@@ -1101,8 +1116,17 @@ msgstr "Ohar berria sortzen du."
 msgid "Show tray icon"
 msgstr ""
 
-msgid "Set application zoom percentage"
+#, fuzzy
+msgid "Global zoom percentage"
 msgstr "Ezarri aplikazioaren zoomaren ehunekoa"
+
+msgid "Editor font family"
+msgstr ""
+
+msgid ""
+"The font name will not be checked. If incorrect or empty, it will default to "
+"a generic monospace font."
+msgstr ""
 
 msgid "Automatically update the application"
 msgstr "Automatikoki eguneratu aplikazioa"
@@ -1183,6 +1207,9 @@ msgstr ""
 #, fuzzy
 msgid "Evernote Export File"
 msgstr "Evernotetik esportatutako fitxategiak"
+
+msgid "Directory"
+msgstr ""
 
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
@@ -1290,6 +1317,9 @@ msgstr "Baieztatu"
 msgid "Cancel synchronisation"
 msgstr "Sinkronizazioa utzi"
 
+msgid "Joplin website"
+msgstr ""
+
 #, javascript-format
 msgid "Master Key %s"
 msgstr "Pasahitz Nagusia %s"
@@ -1372,6 +1402,13 @@ msgstr "Oraindik ez duzu koadernorik. Sortu bat (+) botoian sakatuta."
 
 msgid "Welcome"
 msgstr "Ongi etorri!"
+
+#, fuzzy
+#~ msgid ""
+#~ "Release notes:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr "Oharrak ezabatu?"
 
 #~ msgid "Imports an Evernote notebook file (.enex file)."
 #~ msgstr "Inportatu Evernote koaderno fitxategia (.enex fitxategia)."

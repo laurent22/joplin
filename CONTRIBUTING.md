@@ -1,6 +1,6 @@
 # Reporting a bug
 
-Please check first that it [has not already been reported](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is%3Aissue). Also consider [enabling debug mode](https://github.com/laurent22/joplin/blob/master/README_debugging.md) before reporting the issue so that you can provide as much details as possible to help fix it.
+Please check first that it [has not already been reported](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is%3Aissue). Also consider [enabling debug mode](https://github.com/laurent22/joplin/blob/master/readme/debugging.md) before reporting the issue so that you can provide as much details as possible to help fix it.
 
 If possible, **please provide a screenshot**. A screenshot showing the problem is often more useful than a paragraph describing it as it can make it immediately clear what the issue is.
 
@@ -16,5 +16,4 @@ Building the apps is relatively easy - please [see the build instructions](https
 
 # Coding style
 
-- Only use tabs for indentation, not spaces.
-- Do not remove or add optional characters from other lines (such as colons or new line characters) as it can make the commit needlessly big, and create conflicts with other changes.
+See the [prettier config](https://github.com/laurent22/joplin/blob/master/prettier.config.js).

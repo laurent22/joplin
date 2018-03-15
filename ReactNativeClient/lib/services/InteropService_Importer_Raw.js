@@ -14,7 +14,6 @@ const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
 const { fileExtension } = require('lib/path-utils');
 const { uuid } = require('lib/uuid.js');
-const { importEnex } = require('lib/import-enex');
 
 class InteropService_Importer_Raw extends InteropService_Importer_Base {
 
@@ -41,6 +40,25 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 		}
 
 		const stats = await shim.fsDriver().readDirStats(this.sourcePath_);
+
+		const folderExists = function(stats, folderId) {
+			folderId = folderId.toLowerCase();
+			for (let i = 0; i < stats.length; i++) {
+				const stat = stats[i];
+				const statId = BaseItem.pathToId(stat.path);
+				if (statId.toLowerCase() === folderId) return true;
+			}
+			return false;
+		}
+
+		let defaultFolder_ = null;
+		const defaultFolder = async () => {
+			if (defaultFolder_) return defaultFolder_;
+			const folderTitle = await Folder.findUniqueFolderTitle(this.options_.defaultFolderTitle ? this.options_.defaultFolderTitle : 'Imported');
+			defaultFolder_ = await Folder.save({ title: folderTitle });
+			return defaultFolder_;
+		}
+
 		for (let i = 0; i < stats.length; i++) {
 			const stat = stats[i];
 			if (stat.isDirectory()) continue;
@@ -54,7 +72,22 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 			delete item.type_;
 
 			if (itemType === BaseModel.TYPE_NOTE) {
-				if (!folderIdMap[item.parent_id]) folderIdMap[item.parent_id] = destinationFolderId ? destinationFolderId : uuid.create();
+
+				// Logic is a bit complex here:
+				// - If a destination folder was specified, move the note to it.
+				// - Otherwise, if the associated folder exists, use this.
+				// - If it doesn't exist, use the default folder. This is the case for example when importing JEX archives that contain only one or more notes, but no folder.
+				if (!folderIdMap[item.parent_id]) {
+					if (destinationFolderId) {
+						folderIdMap[item.parent_id] = destinationFolderId;
+					} else if (!folderExists(stats, item.parent_id)) {
+						const parentFolder = await defaultFolder();
+						folderIdMap[item.parent_id] = parentFolder.id;
+					} else {
+						folderIdMap[item.parent_id] = uuid.create();
+					}
+				}
+
 				const noteId = uuid.create();
 				noteIdMap[item.id] = noteId;
 				item.id = noteId;

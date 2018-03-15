@@ -2,7 +2,6 @@ const React = require('react'); const Component = React.Component;
 const { Platform, Keyboard, BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking, Image } = require('react-native');
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
-const { Log } = require('lib/log.js');
 const RNFS = require('react-native-fs');
 const Note = require('lib/models/Note.js');
 const Setting = require('lib/models/Setting.js');

@@ -43,8 +43,9 @@ reg.syncTarget = (syncTargetId = null) => {
 	return target;
 }
 
-reg.scheduleSync = async (delay = null) => {
+reg.scheduleSync = async (delay = null, syncOptions = null) => {
 	if (delay === null) delay = 1000 * 10;
+	if (syncOptions === null) syncOptions = {};
 
 	let promiseResolve = null;
 	const promise = new Promise((resolve, reject) => {
@@ -58,10 +59,10 @@ reg.scheduleSync = async (delay = null) => {
 
 	reg.logger().info('Scheduling sync operation...');
 
-	if (Setting.value('env') === 'dev' && delay !== 0) {
-		reg.logger().info('Schedule sync DISABLED!!!');
-		return;
-	}
+	// if (Setting.value("env") === "dev" && delay !== 0) {
+	// 	reg.logger().info("Schedule sync DISABLED!!!");
+	// 	return;
+	// }
 
 	const timeoutCallback = async () => {
 		reg.scheduleSyncId_ = null;
@@ -92,8 +93,9 @@ reg.scheduleSync = async (delay = null) => {
 			}
 
 			try {
-				reg.logger().info('Starting scheduled sync');
-				let newContext = await sync.start({ context: context });
+				reg.logger().info("Starting scheduled sync");
+				const options = Object.assign({}, syncOptions, { context: context });
+				const newContext = await sync.start(options);
 				Setting.setValue(contextKey, JSON.stringify(newContext));
 			} catch (error) {
 				if (error.code == 'alreadyStarted') {

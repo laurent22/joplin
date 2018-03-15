@@ -21,6 +21,7 @@ const AlarmService = require('lib/services/AlarmService.js');
 const AlarmServiceDriverNode = require('lib/services/AlarmServiceDriverNode');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const InteropService = require('lib/services/InteropService');
+const InteropServiceHelper = require('./InteropServiceHelper.js');
 
 const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
@@ -145,8 +146,12 @@ class Application extends BaseApplication {
 			this.updateTray();
 		}
 
-		if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-			if (!await reg.syncTarget().syncStarted()) reg.scheduleSync();
+		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'style.editor.fontFamily' || action.type == 'SETTING_UPDATE_ALL') {
+			this.updateEditorFont();
+		}
+
+		if (["NOTE_UPDATE_ONE", "NOTE_DELETE", "FOLDER_UPDATE_ONE", "FOLDER_DELETE"].indexOf(action.type) >= 0) {
+			if (!await reg.syncTarget().syncStarted()) reg.scheduleSync(5, { syncSteps: ["update_remote", "delete_remote"] });
 		}
 
 		if (['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >= 0) {
@@ -200,55 +205,17 @@ class Application extends BaseApplication {
 			const module = ioModules[i];
 			if (module.type === 'exporter') {
 				exportItems.push({
-					label: module.format + ' - ' + module.description,
+					label: module.fullLabel(),
 					screens: ['Main'],
 					click: async () => {
-						let path = null;
-
-						if (module.target === 'file') {
-							path = bridge().showSaveDialog({
-								filters: [{ name: module.description, extensions: [module.fileExtension]}]
-							});
-						} else {
-							path = bridge().showOpenDialog({
-								properties: ['openDirectory', 'createDirectory'],
-							});
-						}
-
-						if (!path || (Array.isArray(path) && !path.length)) return;
-
-						if (Array.isArray(path)) path = path[0];
-
-						this.dispatch({
-							type: 'WINDOW_COMMAND',
-							name: 'showModalMessage',
-							message: _('Exporting to "%s" as "%s" format. Please wait...', path, module.format),
-						});
-
-						const exportOptions = {};
-						exportOptions.path = path;
-						exportOptions.format = module.format;
-
-						const service = new InteropService();
-						const result = await service.export(exportOptions);
-
-						console.info('Export result: ', result);
-
-						this.dispatch({
-							type: 'WINDOW_COMMAND',
-							name: 'hideModalMessage',
-						});
+						await InteropServiceHelper.export(this.dispatch.bind(this), module);
 					}
 				});
 			} else {
 				for (let j = 0; j < module.sources.length; j++) {
 					const moduleSource = module.sources[j];
-					let label = [module.format + ' - ' + module.description];
-					if (module.sources.length > 1) {
-						label.push('(' + (moduleSource === 'file' ? _('File') : _('Directory')) + ')');
-					}
 					importItems.push({
-						label: label.join(' '),
+						label: module.fullLabel(moduleSource),
 						screens: ['Main'],
 						click: async () => {
 							let path = null;
@@ -298,6 +265,17 @@ class Application extends BaseApplication {
 			}
 		}
 
+		exportItems.push({
+			label: 'PDF - ' + _('PDF File'),
+			screens: ['Main'],
+			click: async () => {
+				this.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'exportPdf',
+				});				
+			}
+		});
+
 		const template = [
 			{
 				label: _('File'),
@@ -333,31 +311,24 @@ class Application extends BaseApplication {
 					}
 				}, {
 					type: 'separator',
-				// }, {
-				// 	label: _('Import Evernote notes'),
-				// 	click: () => {
-				// 		const filePaths = bridge().showOpenDialog({
-				// 			properties: ['openFile', 'createDirectory'],
-				// 			filters: [
-				// 				{ name: _('Evernote Export Files'), extensions: ['enex'] },
-				// 			]
-				// 		});
-				// 		if (!filePaths || !filePaths.length) return;
-
-				// 		this.dispatch({
-				// 			type: 'NAV_GO',
-				// 			routeName: 'Import',
-				// 			props: {
-				// 				filePath: filePaths[0],
-				// 			},
-				// 		});
-				// 	}
 				}, {
 					label: _('Import'),
 					submenu: importItems,
 				}, {
 					label: _('Export'),
 					submenu: exportItems,
+				}, {
+					type: 'separator',
+				}, {
+					label: _('Print'),
+					accelerator: 'CommandOrControl+P',
+					screens: ['Main'],
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'print',
+						});
+					}
 				}, {
 					type: 'separator',
 					platforms: ['darwin'],
@@ -371,7 +342,7 @@ class Application extends BaseApplication {
 				}, {
 					label: _('Quit'),
 					accelerator: 'CommandOrControl+Q',
-					click: () => { bridge().electronApp().exit() }
+					click: () => { bridge().electronApp().quit() }
 				}]
 			}, {
 				label: _('Edit'),
@@ -478,10 +449,16 @@ class Application extends BaseApplication {
 					accelerator: 'F1',
 					click () { bridge().openExternal('http://joplin.cozic.net') }
 				}, {
+					label: _('Make a donation'),
+					click () { bridge().openExternal('http://joplin.cozic.net/donate') }
+				}, {
 					label: _('Check for updates...'),
 					click: () => {
 						bridge().checkForUpdates(false, bridge().window(), this.checkForUpdateLoggerPath());
 					}
+				}, {
+					type: 'separator',
+					screens: ['Main'],
 				}, {
 					label: _('About Joplin'),
 					click: () => {
@@ -492,8 +469,8 @@ class Application extends BaseApplication {
 							'Copyright © 2016-2018 Laurent Cozic',
 							_('%s %s (%s, %s)', p.name, p.version, Setting.value('env'), process.platform),
 						];
-						bridge().showMessageBox({
-							message: message.join('\n'),
+						bridge().showInfoMessageBox(message.join('\n'), {
+							icon: bridge().electronApp().buildDir() + '/icons/32x32.png',
 						});
 					}
 				}]
@@ -547,10 +524,25 @@ class Application extends BaseApplication {
 			const contextMenu = Menu.buildFromTemplate([
 				{ label: _('Open %s', app.electronApp().getName()), click: () => { app.window().show(); } },
 				{ type: 'separator' },
-				{ label: _('Exit'), click: () => { app.exit() } },
+				{ label: _('Exit'), click: () => { app.quit() } },
 			])
 			app.createTray(contextMenu);
 		}
+	}
+
+	updateEditorFont() {
+		const fontFamilies = [];
+		if (Setting.value('style.editor.fontFamily')) fontFamilies.push('"' + Setting.value('style.editor.fontFamily') + '"');
+		fontFamilies.push('monospace');
+
+		// The '*' and '!important' parts are necessary to make sure Russian text is displayed properly
+		// https://github.com/laurent22/joplin/issues/155
+
+		const css = '.ace_editor * { font-family: ' + fontFamilies.join(', ') + ' !important; }';
+		const styleTag = document.createElement('style');
+		styleTag.type = 'text/css';
+		styleTag.appendChild(document.createTextNode(css));
+		document.head.appendChild(styleTag);
 	}
 
 	async start(argv) {

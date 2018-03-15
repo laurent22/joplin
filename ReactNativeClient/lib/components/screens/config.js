@@ -200,11 +200,19 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					</View>
 				</View>);
 		}
+
+		settingComps.push(
+			<View key="donate_link" style={this.styles().settingContainer}>
+				<TouchableOpacity onPress={() => { Linking.openURL('http://joplin.cozic.net/donate/') }}>
+					<Text key="label" style={this.styles().linkText}>{_('Make a donation')}</Text>
+				</TouchableOpacity>
+			</View>
+		);
 		
 		settingComps.push(
 			<View key="website_link" style={this.styles().settingContainer}>
 				<TouchableOpacity onPress={() => { Linking.openURL('http://joplin.cozic.net/') }}>
-					<Text key="label" style={this.styles().linkText}>Joplin Website</Text>
+					<Text key="label" style={this.styles().linkText}>{_('Joplin website')}</Text>
 				</TouchableOpacity>
 			</View>
 		);

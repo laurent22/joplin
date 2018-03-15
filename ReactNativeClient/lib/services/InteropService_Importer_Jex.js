@@ -36,6 +36,8 @@ class InteropService_Importer_Jex extends InteropService_Importer_Base {
 			throw e;
 		}
 
+		if (!('defaultFolderTitle' in this.options_)) this.options_.defaultFolderTitle = filename(this.sourcePath_);
+
 		const importer = new InteropService_Importer_Raw();
 		await importer.init(tempDir, this.options_);
 		result = await importer.exec(result);

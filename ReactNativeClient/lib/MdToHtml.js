@@ -135,13 +135,17 @@ class MdToHtml {
 			// Ideally they should be opened in the user's browser.
 			return '<span style="opacity: 0.5">(Resource not yet supported: '; //+ htmlentities(text) + ']';
 		} else {
+			let resourceIdAttr = "";
+			let icon = "";
 			if (isResourceUrl) {
 				const resourceId = Resource.pathToId(href);
-				href = 'joplin://' + resourceId;
+				href = "joplin://" + resourceId;
+				resourceIdAttr = "data-resource-id='" + resourceId + "'";
+				icon = '<span class="resource-icon"></span>';
 			}
 
 			const js = options.postMessageSyntax + "(" + JSON.stringify(href) + "); return false;";
-			let output = "<a title='" + htmlentities(title) + "' href='#' onclick='" + js + "'>";
+			let output = "<a " + resourceIdAttr + " title='" + htmlentities(title) + "' href='#' onclick='" + js + "'>" + icon;
 			return output;
 		}
 	}
@@ -192,7 +196,7 @@ class MdToHtml {
 			let openTag = null;
 			let closeTag = null;
 			let attrs = t.attrs ? t.attrs : [];
-			let tokenContent = t.content ? t.content : null;
+			let tokenContent = t.content ? t.content : '';
 			const isCodeBlock = tag === 'code' && t.block;
 			const isInlineCode = t.type === 'code_inline';
 			const codeBlockLanguage = t && t.info ? t.info : null;
@@ -394,7 +398,6 @@ class MdToHtml {
 			let loopCount = 0;
 			while (renderedBody.indexOf('mJOPm') >= 0) {
 				renderedBody = renderedBody.replace(/mJOPmCHECKBOXm([A-Z]+)m(\d+)m/, function(v, type, index) {
-
 					const js = options.postMessageSyntax + "('checkboxclick:" + type + ':' + index + "'); this.classList.contains('tick') ? this.classList.remove('tick') : this.classList.add('tick'); return false;";
 					return '<a href="#" onclick="' + js + '" class="checkbox ' + (type == 'NOTICK' ? '' : 'tick') + '"><span>' + '' + '</span></a>';
 				});
@@ -443,6 +446,18 @@ class MdToHtml {
 			ul {
 				padding-left: 1.3em;
 			}
+			.resource-icon {
+				display: inline-block;
+				position: relative;
+				top: .5em;
+				text-decoration: none;
+				width: 1.15em;
+				height: 1.5em;
+				margin-right: 0.4em;
+				background-color:  ` + style.htmlColor + `;
+				/* Awesome Font file */
+				-webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'><path d='M369.9 97.9L286 14C277 5 264.8-.1 252.1-.1H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V131.9c0-12.7-5.1-25-14.1-34zM332.1 128H256V51.9l76.1 76.1zM48 464V48h160v104c0 13.3 10.7 24 24 24h104v288H48z'/></svg>");
+			}
 			a.checkbox {
 				display: inline-block;
 				position: relative;
@@ -480,13 +495,34 @@ class MdToHtml {
 				max-width: 100%;
 			}
 
-			.katex .mfrac .frac-line:before {
-				/* top: 50%; */
-				/* padding-bottom: .7em; */
+			@media print {
+				body {
+					height: auto !important;
+				}
+
+				a.checkbox {
+					border: 1pt solid ` + style.htmlColor + `;
+					border-radius: 2pt;
+					width: 1em;
+					height: 1em;
+					line-height: 1em;
+					text-align: center;
+					top: .4em;
+				}
+
+				a.checkbox.tick:after {
+					content: "X";
+				}
+
+				a.checkbox.tick {
+					top: 0;
+					left: -0.02em;
+					color: ` + style.htmlColor + `;
+				}
 			}
 		`;
 
-		const styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>'; //+ '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">';
+		const styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>';
 
 		const output = styleHtml + renderedBody;
 

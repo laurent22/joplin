@@ -80,7 +80,9 @@ class DecryptionWorker {
 					// }
 
 					const ItemClass = BaseItem.itemClass(item);
-					this.logger().info('DecryptionWorker: decrypting: ' + item.id + ' (' + ItemClass.tableName() + ')');
+					
+					// Don't log in production as it results in many messages when importing many items
+					// this.logger().info('DecryptionWorker: decrypting: ' + item.id + ' (' + ItemClass.tableName() + ')');
 					try {
 						await ItemClass.decrypt(item);
 					} catch (error) {

@@ -53,9 +53,8 @@ function renderCommandHelp(cmd, width = null) {
 				desc.push(label);
 			}
 
-			if (md.description) {
-				desc.push(md.description());
-			}
+			const description = Setting.keyDescription(md.key, 'cli');
+			if (description) desc.push(description);
 
 			desc.push(_('Type: %s.', md.isEnum ? _('Enum') : Setting.typeToString(md.type)));
 			if (md.isEnum) desc.push(_('Possible values: %s.', Setting.enumOptionsDoc(md.key, '%s (%s)')));

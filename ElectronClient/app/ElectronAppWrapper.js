@@ -110,8 +110,12 @@ class ElectronAppWrapper {
 		});
 	}
 
-	async exit() {
+	async quit() {
 		this.electronApp_.quit();
+	}
+
+	exit(errorCode = 0) {
+		this.electronApp_.exit(errorCode);
 	}
 
 	trayShown() {
@@ -172,6 +176,8 @@ class ElectronAppWrapper {
 	}
 
 	ensureSingleInstance() {
+		if (this.env_ === 'dev') return false;
+
 		return new Promise((resolve, reject) => {
 			const alreadyRunning = this.electronApp_.makeSingleInstance((commandLine, workingDirectory) => {
 				const win = this.window();

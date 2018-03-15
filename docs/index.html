@@ -203,7 +203,7 @@
 </div>
 
 <div class="content">
-<p>Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in <a href="https://daringfireball.net/projects/markdown/basics">Markdown format</a>.</p>
+<p>Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in <a href="#markdown">Markdown format</a>.</p>
 <p>Notes exported from Evernote via .enex files <a href="#importing">can be imported</a> into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.</p>
 <p>The notes can be <a href="#synchronisation">synchronised</a> with various targets including <a href="https://nextcloud.com/">Nextcloud</a>, the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
 <p>The UI of the terminal client is built on top of the great <a href="https://github.com/cronvel/terminal-kit">terminal-kit</a> library, the desktop client using <a href="https://electronjs.org/">Electron</a>, and the Android client front end is done using <a href="https://facebook.github.io/react-native/">React Native</a>.</p>
@@ -230,7 +230,7 @@
 </tr>
 <tr>
 <td>Linux</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.70/Joplin-1.0.70-x86_64.AppImage'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.70/Joplin-1.0.70-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a></td>
 </tr>
 </tbody>
 </table>
@@ -247,7 +247,7 @@
 <tr>
 <td>Android</td>
 <td><a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeAndroid.png'/></a></td>
-<td>or <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.102/joplin-v1.0.102.apk">Download APK File</a></td>
+<td>or <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.106/joplin-v1.0.106.apk">Download APK File</a></td>
 </tr>
 <tr>
 <td>iOS</td>
@@ -366,10 +366,13 @@ $$
 <p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/Katex.png" style="max-width: 100%; max-height: 35em;"></p>
 <h2 id="checkboxes">Checkboxes</h2>
 <p>Checkboxes can be added like so:</p>
-<pre><code>-[ ] Milk
--[ ] Rice
--[ ] Eggs
+<pre><code>- [ ] Milk
+- [ ] Rice
+- [ ] Eggs
 </code></pre><p>The checkboxes can then be ticked in the mobile and desktop applications.</p>
+<h1 id="donations">Donations</h1>
+<p>Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.</p>
+<p>Please see the <a href="http://joplin.cozic.net/donate/">donation page</a> for information on how to support the development of Joplin.</p>
 <h1 id="contributing">Contributing</h1>
 <p>Please see the guide for information on how to contribute to the development of Joplin: <a href="https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md">https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md</a></p>
 <h1 id="localisation">Localisation</h1>
@@ -400,21 +403,21 @@ $$
 <td>Basque</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/eu.po">eu</a></td>
 <td>juan.abasolo@ehu.eus</td>
-<td>82%</td>
+<td>80%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/hr.png" alt=""></td>
 <td>Croatian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/hr_HR.po">hr_HR</a></td>
-<td>Hrvoje Mandić <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#x6f;&#58;&#x74;&#114;&#x62;&#x75;&#104;&#111;&#109;&#x40;&#110;&#101;&#x74;&#46;&#104;&#x72;">&#x74;&#114;&#x62;&#x75;&#104;&#111;&#109;&#x40;&#110;&#101;&#x74;&#46;&#104;&#x72;</a></td>
-<td>66%</td>
+<td>Hrvoje Mandić <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#116;&#114;&#x62;&#117;&#x68;&#x6f;&#109;&#x40;&#110;&#x65;&#116;&#46;&#104;&#114;">&#116;&#114;&#x62;&#117;&#x68;&#x6f;&#109;&#x40;&#110;&#x65;&#116;&#46;&#104;&#114;</a></td>
+<td>65%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/de.png" alt=""></td>
 <td>Deutsch</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po">de_DE</a></td>
-<td>Tobias Strobel <a href="&#x6d;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#103;&#105;&#116;&#64;&#115;&#x74;&#114;&#x6f;&#98;&#x65;&#108;&#116;&#111;&#98;&#105;&#97;&#x73;&#x2e;&#x64;&#101;">&#103;&#105;&#116;&#64;&#115;&#x74;&#114;&#x6f;&#98;&#x65;&#108;&#116;&#111;&#98;&#105;&#97;&#x73;&#x2e;&#x64;&#101;</a></td>
-<td>84%</td>
+<td>Tobias Strobel <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#111;&#x3a;&#x67;&#x69;&#x74;&#64;&#115;&#116;&#114;&#x6f;&#98;&#101;&#108;&#116;&#x6f;&#98;&#105;&#97;&#115;&#x2e;&#x64;&#101;">&#x67;&#x69;&#x74;&#64;&#115;&#116;&#114;&#x6f;&#98;&#101;&#108;&#116;&#x6f;&#98;&#105;&#97;&#115;&#x2e;&#x64;&#101;</a></td>
+<td>97%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/gb.png" alt=""></td>
@@ -427,8 +430,8 @@ $$
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/es.png" alt=""></td>
 <td>Español</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po">es_ES</a></td>
-<td>Fernando Martín <a href="&#x6d;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#x66;&#64;&#109;&#x72;&#116;&#x6e;&#46;&#x65;&#115;">&#x66;&#64;&#109;&#x72;&#116;&#x6e;&#46;&#x65;&#115;</a></td>
-<td>94%</td>
+<td>Fernando Martín <a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#58;&#x66;&#x40;&#109;&#114;&#116;&#110;&#x2e;&#101;&#x73;">&#x66;&#x40;&#109;&#114;&#116;&#110;&#x2e;&#101;&#x73;</a></td>
+<td>98%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/fr.png" alt=""></td>
@@ -442,42 +445,42 @@ $$
 <td>Italiano</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/it_IT.po">it_IT</a></td>
 <td></td>
-<td>68%</td>
+<td>66%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/be.png" alt=""></td>
 <td>Nederlands</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_BE.po">nl_BE</a></td>
 <td></td>
-<td>82%</td>
+<td>80%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/br.png" alt=""></td>
 <td>Português (Brasil)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_BR.po">pt_BR</a></td>
 <td></td>
-<td>66%</td>
+<td>65%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/ru.png" alt=""></td>
 <td>Русский</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ru_RU.po">ru_RU</a></td>
-<td>Artyom Karlov <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#97;&#114;&#x74;&#121;&#111;&#109;&#x2e;&#107;&#x61;&#114;&#108;&#111;&#118;&#64;&#x67;&#109;&#x61;&#105;&#108;&#x2e;&#99;&#111;&#109;">&#97;&#114;&#x74;&#121;&#111;&#109;&#x2e;&#107;&#x61;&#114;&#108;&#111;&#118;&#64;&#x67;&#109;&#x61;&#105;&#108;&#x2e;&#99;&#111;&#109;</a></td>
-<td>86%</td>
+<td>Artyom Karlov <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#58;&#97;&#x72;&#x74;&#x79;&#x6f;&#x6d;&#x2e;&#x6b;&#x61;&#114;&#x6c;&#x6f;&#x76;&#x40;&#x67;&#x6d;&#97;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#109;">&#97;&#x72;&#x74;&#x79;&#x6f;&#x6d;&#x2e;&#x6b;&#x61;&#114;&#x6c;&#x6f;&#x76;&#x40;&#x67;&#x6d;&#97;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#109;</a></td>
+<td>83%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/cn.png" alt=""></td>
 <td>中文 (简体)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po">zh_CN</a></td>
-<td>RCJacH <a href="&#109;&#x61;&#x69;&#108;&#x74;&#111;&#58;&#x52;&#67;&#x4a;&#97;&#99;&#x48;&#64;&#x6f;&#x75;&#x74;&#x6c;&#x6f;&#x6f;&#x6b;&#x2e;&#99;&#x6f;&#x6d;">&#x52;&#67;&#x4a;&#97;&#99;&#x48;&#64;&#x6f;&#x75;&#x74;&#x6c;&#x6f;&#x6f;&#x6b;&#x2e;&#99;&#x6f;&#x6d;</a></td>
-<td>68%</td>
+<td>RCJacH <a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#82;&#67;&#74;&#97;&#99;&#x48;&#x40;&#111;&#117;&#x74;&#x6c;&#x6f;&#x6f;&#x6b;&#x2e;&#x63;&#111;&#x6d;">&#82;&#67;&#74;&#97;&#99;&#x48;&#x40;&#111;&#117;&#x74;&#x6c;&#x6f;&#x6f;&#x6b;&#x2e;&#x63;&#111;&#x6d;</a></td>
+<td>66%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/jp.png" alt=""></td>
 <td>日本語</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ja_JP.po">ja_JP</a></td>
 <td></td>
-<td>66%</td>
+<td>65%</td>
 </tr>
 </tbody>
 </table>
@@ -488,6 +491,7 @@ $$
 <li>While the mobile can sync and load tags, it is not currently possible to create new ones. The desktop and terminal apps can create, delete and edit tags.</li>
 </ul>
 <h1 id="license">License</h1>
+<p>MIT License</p>
 <p>Copyright (c) 2016-2018 Laurent Cozic</p>
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
 <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>

@@ -505,6 +505,10 @@ msgstr "Standaard: %s"
 msgid "Possible keys/values:"
 msgstr "Mogelijke sleutels/waarden:"
 
+#, fuzzy
+msgid "Type `joplin help` for usage information."
+msgstr "Toont gebruiksinformatie."
+
 msgid "Fatal error:"
 msgstr "Fatale fout:"
 
@@ -562,15 +566,16 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 
-msgid "File"
-msgstr "Bestand"
-
-msgid "Directory"
-msgstr ""
-
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
+
+#, fuzzy
+msgid "PDF File"
+msgstr "Bestand"
+
+msgid "File"
+msgstr "Bestand"
 
 msgid "New note"
 msgstr "Nieuwe notitie"
@@ -587,6 +592,9 @@ msgstr "Importeer"
 #, fuzzy
 msgid "Export"
 msgstr "Importeer"
+
+msgid "Print"
+msgstr ""
 
 #, javascript-format
 msgid "Hide %s"
@@ -634,6 +642,10 @@ msgstr "Help"
 msgid "Website and documentation"
 msgstr "Website en documentatie"
 
+#, fuzzy
+msgid "Make a donation"
+msgstr "Website en documentatie"
+
 msgid "Check for updates..."
 msgstr ""
 
@@ -657,12 +669,8 @@ msgstr "OK"
 msgid "Cancel"
 msgstr "Annuleer"
 
-#, fuzzy, javascript-format
-msgid ""
-"Release notes:\n"
-"\n"
-"%s"
-msgstr "Notities verwijderen?"
+msgid "Current version is up-to-date."
+msgstr ""
 
 msgid "An update is available, do you want to download it now?"
 msgstr ""
@@ -673,9 +681,6 @@ msgstr ""
 #, fuzzy
 msgid "No"
 msgstr "N"
-
-msgid "Current version is up-to-date."
-msgstr ""
 
 #, fuzzy
 msgid "Check synchronisation configuration"
@@ -1008,6 +1013,16 @@ msgstr "Annuleren..."
 msgid "Completed: %s"
 msgstr "Voltooid: %s"
 
+#, fuzzy, javascript-format
+msgid "Last error: %s"
+msgstr "Fatale fout:"
+
+msgid "Idle"
+msgstr ""
+
+msgid "In progress"
+msgstr ""
+
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Synchronisatie is reeds bezig. Status: %s"
@@ -1105,7 +1120,15 @@ msgstr "Maakt een nieuwe notitie aan."
 msgid "Show tray icon"
 msgstr ""
 
-msgid "Set application zoom percentage"
+msgid "Global zoom percentage"
+msgstr ""
+
+msgid "Editor font family"
+msgstr ""
+
+msgid ""
+"The font name will not be checked. If incorrect or empty, it will default to "
+"a generic monospace font."
 msgstr ""
 
 msgid "Automatically update the application"
@@ -1184,6 +1207,9 @@ msgstr ""
 #, fuzzy
 msgid "Evernote Export File"
 msgstr "Exporteer Evernote bestanden"
+
+msgid "Directory"
+msgstr ""
 
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
@@ -1293,6 +1319,9 @@ msgstr "Bevestig"
 msgid "Cancel synchronisation"
 msgstr "Annuleer synchronisatie"
 
+msgid "Joplin website"
+msgstr ""
+
 #, javascript-format
 msgid "Master Key %s"
 msgstr "Hoofdsleutel: %s"
@@ -1377,6 +1406,13 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Welkom"
+
+#, fuzzy
+#~ msgid ""
+#~ "Release notes:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr "Notities verwijderen?"
 
 #~ msgid "Imports an Evernote notebook file (.enex file)."
 #~ msgstr "Importeer een Evernote notitieboek (.enex bestand)."

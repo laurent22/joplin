@@ -9,7 +9,6 @@ const AlarmServiceDriver = require('lib/services/AlarmServiceDriver');
 const Alarm = require('lib/models/Alarm');
 const { createStore, applyMiddleware } = require('redux');
 const { shimInit } = require('lib/shim-init-react.js');
-const { Log } = require('lib/log.js');
 const { time } = require('lib/time-utils.js');
 const { AppNav } = require('lib/components/app-nav.js');
 const { Logger } = require('lib/logger.js');
@@ -75,10 +74,10 @@ const generalMiddleware = store => next => async (action) => {
 	const result = next(action);
 	const newState = store.getState();
 
-	if (action.type == 'NAV_GO') Keyboard.dismiss();
+	if (action.type == "NAV_GO") Keyboard.dismiss();
 
-	if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-		if (!await reg.syncTarget().syncStarted()) reg.scheduleSync();
+	if (["NOTE_UPDATE_ONE", "NOTE_DELETE", "FOLDER_UPDATE_ONE", "FOLDER_DELETE"].indexOf(action.type) >= 0) {
+		if (!await reg.syncTarget().syncStarted()) reg.scheduleSync(5, { syncSteps: ["update_remote", "delete_remote"] });
 	}
 
 	if (['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >= 0) {

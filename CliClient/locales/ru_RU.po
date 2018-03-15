@@ -507,6 +507,10 @@ msgstr "По умолчанию: %s"
 msgid "Possible keys/values:"
 msgstr "Возможные ключи/значения:"
 
+#, fuzzy
+msgid "Type `joplin help` for usage information."
+msgstr "Выводит информацию об использовании."
+
 msgid "Fatal error:"
 msgstr "Фатальная ошибка:"
 
@@ -564,15 +568,16 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 
-msgid "File"
-msgstr "Файл"
-
-msgid "Directory"
-msgstr ""
-
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
+
+#, fuzzy
+msgid "PDF File"
+msgstr "Файл"
+
+msgid "File"
+msgstr "Файл"
 
 msgid "New note"
 msgstr "Новая заметка"
@@ -589,6 +594,9 @@ msgstr "Импорт"
 #, fuzzy
 msgid "Export"
 msgstr "Импорт"
+
+msgid "Print"
+msgstr ""
 
 #, javascript-format
 msgid "Hide %s"
@@ -636,6 +644,10 @@ msgstr "Помощь"
 msgid "Website and documentation"
 msgstr "Сайт и документация"
 
+#, fuzzy
+msgid "Make a donation"
+msgstr "Сайт и документация"
+
 msgid "Check for updates..."
 msgstr "Проверить обновления..."
 
@@ -659,12 +671,8 @@ msgstr "OK"
 msgid "Cancel"
 msgstr "Отмена"
 
-#, fuzzy, javascript-format
-msgid ""
-"Release notes:\n"
-"\n"
-"%s"
-msgstr "Удалить заметки?"
+msgid "Current version is up-to-date."
+msgstr "Вы используете самую свежую версию."
 
 #, fuzzy
 msgid "An update is available, do you want to download it now?"
@@ -676,9 +684,6 @@ msgstr ""
 #, fuzzy
 msgid "No"
 msgstr "N"
-
-msgid "Current version is up-to-date."
-msgstr "Вы используете самую свежую версию."
 
 #, fuzzy
 msgid "Check synchronisation configuration"
@@ -1009,6 +1014,16 @@ msgstr "Отмена..."
 msgid "Completed: %s"
 msgstr "Завершено: %s"
 
+#, fuzzy, javascript-format
+msgid "Last error: %s"
+msgstr "Фатальная ошибка:"
+
+msgid "Idle"
+msgstr ""
+
+msgid "In progress"
+msgstr ""
+
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Синхронизация уже выполняется. Статус: %s"
@@ -1101,8 +1116,17 @@ msgstr "При создании новой заметки:"
 msgid "Show tray icon"
 msgstr ""
 
-msgid "Set application zoom percentage"
+#, fuzzy
+msgid "Global zoom percentage"
 msgstr "Масштаб приложения в процентах"
+
+msgid "Editor font family"
+msgstr ""
+
+msgid ""
+"The font name will not be checked. If incorrect or empty, it will default to "
+"a generic monospace font."
+msgstr ""
 
 msgid "Automatically update the application"
 msgstr "Автоматически обновлять приложение"
@@ -1183,6 +1207,9 @@ msgstr ""
 #, fuzzy
 msgid "Evernote Export File"
 msgstr "Файлы экспорта Evernote"
+
+msgid "Directory"
+msgstr ""
 
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
@@ -1291,6 +1318,9 @@ msgstr "Подтвердить"
 msgid "Cancel synchronisation"
 msgstr "Отменить синхронизацию"
 
+msgid "Joplin website"
+msgstr ""
+
 #, javascript-format
 msgid "Master Key %s"
 msgstr "Мастер-ключ %s"
@@ -1374,6 +1404,13 @@ msgstr "У вас сейчас нет блокнота. Создайте его 
 
 msgid "Welcome"
 msgstr "Добро пожаловать"
+
+#, fuzzy
+#~ msgid ""
+#~ "Release notes:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr "Удалить заметки?"
 
 #~ msgid "Imports an Evernote notebook file (.enex file)."
 #~ msgstr "Импортирует файл блокнотов Evernote (.enex-файл)."
