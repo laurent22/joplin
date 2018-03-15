@@ -16,6 +16,8 @@ msgstr ""
 "X-Generator: Poedit 1.8.11\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Desmarque las notas asociadas para eliminar una etiqueta."
@@ -571,9 +573,8 @@ msgstr "Exportando el formato de \"%s\" a \"%s\". Por favor espere..."
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Importando el formato de \"%s\" a \"%s\". Por favor espere..."
 
-#, fuzzy
 msgid "PDF File"
-msgstr "Archivo"
+msgstr "Archivo PDF"
 
 msgid "File"
 msgstr "Archivo"
@@ -594,7 +595,7 @@ msgid "Export"
 msgstr "Exportar"
 
 msgid "Print"
-msgstr ""
+msgstr "Imprimir"
 
 #, javascript-format
 msgid "Hide %s"
@@ -1005,15 +1006,15 @@ msgstr "Cancelando..."
 msgid "Completed: %s"
 msgstr "Completado: %s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Last error: %s"
-msgstr "Error fatal:"
+msgstr "Último error: %s"
 
 msgid "Idle"
-msgstr ""
+msgstr "Espera"
 
 msgid "In progress"
-msgstr ""
+msgstr "En progreso"
 
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
