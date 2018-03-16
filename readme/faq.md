@@ -6,7 +6,7 @@ It seems to be due to the setting `set term=ansi` in .vimrc. Removing it should 
 
 Unfortunately it is not possible. Joplin synchronises with file systems using an open format however it does not mean the sync files are meant to be user-editable. The format is designed to be performant and reliable, not user friendly (it cannot be both), and that cannot be changed. Joplin sync directory is basically just a database.
 
-# Could they be a PIN or password to restrict access to Joplin?
+# Could there be a PIN or password to restrict access to Joplin?
 
 Short answer: no. The end to end encryption that Joplin implements is to protect the data during transmission and on the cloud service so that only you can access it.
 
