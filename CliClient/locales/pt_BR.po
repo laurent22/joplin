@@ -993,8 +993,8 @@ msgstr "Itens remotos excluídos: %d."
 msgid "Fetched items: %d/%d."
 msgstr "Itens pesquisados: %d/%d."
 
-#, javascript-format
-msgid "State: \"%s\"."
+#, fuzzy, javascript-format
+msgid "State: %s."
 msgstr "Estado: \"%s\"."
 
 msgid "Cancelling..."

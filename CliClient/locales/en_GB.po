@@ -897,7 +897,7 @@ msgid "Fetched items: %d/%d."
 msgstr ""
 
 #, javascript-format
-msgid "State: \"%s\"."
+msgid "State: %s."
 msgstr ""
 
 msgid "Cancelling..."

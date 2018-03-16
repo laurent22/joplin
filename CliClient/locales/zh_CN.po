@@ -941,8 +941,8 @@ msgstr "已删除远程项目: %d。"
 msgid "Fetched items: %d/%d."
 msgstr "已新建本地项目: %d。"
 
-#, javascript-format
-msgid "State: \"%s\"."
+#, fuzzy, javascript-format
+msgid "State: %s."
 msgstr "状态：\"%s\"。"
 
 msgid "Cancelling..."

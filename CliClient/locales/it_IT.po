@@ -973,8 +973,8 @@ msgstr "Elementi remoti eliminati: %d."
 msgid "Fetched items: %d/%d."
 msgstr "Elementi locali creati: %d."
 
-#, javascript-format
-msgid "State: \"%s\"."
+#, fuzzy, javascript-format
+msgid "State: %s."
 msgstr "Stato: \"%s\"."
 
 msgid "Cancelling..."

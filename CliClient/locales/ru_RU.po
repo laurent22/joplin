@@ -993,8 +993,8 @@ msgstr "Удалено удалённых элементов: %d."
 msgid "Fetched items: %d/%d."
 msgstr "Получено элементов: %d/%d."
 
-#, javascript-format
-msgid "State: \"%s\"."
+#, fuzzy, javascript-format
+msgid "State: %s."
 msgstr "Статус: «%s»."
 
 msgid "Cancelling..."

@@ -1002,8 +1002,8 @@ msgstr "Verwijderde remote items: %d."
 msgid "Fetched items: %d/%d."
 msgstr "Opgehaalde items: %d/%d."
 
-#, javascript-format
-msgid "State: \"%s\"."
+#, fuzzy, javascript-format
+msgid "State: %s."
 msgstr "Status: \"%s\""
 
 msgid "Cancelling..."
