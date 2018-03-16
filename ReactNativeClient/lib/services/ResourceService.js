@@ -62,6 +62,8 @@ class ResourceService extends BaseService {
 			await ItemChange.db().exec('DELETE FROM item_changes WHERE id <= ?', [lastId]);
 		}
 
+		await NoteResource.addOrphanedResources();
+
 		this.logger().info('ResourceService::indexNoteResources: Completed');
 	}
 

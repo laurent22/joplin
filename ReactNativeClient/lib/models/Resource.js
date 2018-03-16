@@ -1,5 +1,6 @@
 const BaseModel = require('lib/BaseModel.js');
 const BaseItem = require('lib/models/BaseItem.js');
+const NoteResource = require('lib/models/NoteResource.js');
 const Setting = require('lib/models/Setting.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const pathUtils = require('lib/path-utils.js');
@@ -152,7 +153,8 @@ class Resource extends BaseItem {
 			const resource = await Resource.load(id);
 			const path = Resource.fullPath(resource);
 			await this.fsDriver().remove(path);
-			await super.batchDelete([id], options)
+			await super.batchDelete([id], options);
+			await NoteResource.deleteByResource(id); // Clean up note/resource relationships
 		}
 	}
 

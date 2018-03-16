@@ -336,6 +336,9 @@ class JoplinDatabase extends Database {
 			}
 
 			if (targetVersion == 11) {
+				// This trick was needed because Electron Builder incorrectly released a dev branch containing v10 as it was
+				// still being developed, and the db schema was not final at that time. So this v11 was created to
+				// make sure any invalid db schema that was accidentally created was deleted and recreated.
 				queries.push('DROP TABLE item_changes');
 				queries.push('DROP TABLE note_resources');
 				upgradeVersion10();

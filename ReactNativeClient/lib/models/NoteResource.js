@@ -31,7 +31,17 @@ class NoteResource extends BaseModel {
 			queries.push({ sql: 'INSERT INTO note_resources (note_id, resource_id, is_associated, last_seen_time) VALUES (?, ?, ?, ?)', params: [noteId, notProcessedResourceIds[i], 1, Date.now()] });
 		}
 
-		await this.db().transactionExecBatch(queries);		
+		await this.db().transactionExecBatch(queries);
+	}
+
+	static async addOrphanedResources() {
+		const missingResources = await this.db().selectAll('SELECT id FROM resources WHERE id NOT IN (SELECT DISTINCT resource_id FROM note_resources)');
+		const queries = [];
+		for (let i = 0; i < missingResources.length; i++) {
+			const id = missingResources[i];
+			queries.push({ sql: 'INSERT INTO note_resources (note_id, resource_id, is_associated, last_seen_time) VALUES (?, ?, ?, ?)', params: ["", id, 0, Date.now()] });			
+		}
+		await this.db().transactionExecBatch(queries);
 	}
 
 	static async remove(noteId) {
@@ -41,8 +51,18 @@ class NoteResource extends BaseModel {
 	static async orphanResources(expiryDelay = null) {
 		if (expiryDelay === null) expiryDelay = 1000 * 60 * 60 * 24;
 		const cutOffTime = Date.now() - expiryDelay;
-		const output = await this.modelSelectAll('SELECT DISTINCT resource_id FROM note_resources WHERE is_associated = 0 AND last_seen_time < ?', [cutOffTime]);
+		const output = await this.modelSelectAll(`
+			SELECT resource_id, sum(is_associated)
+			FROM note_resources
+			GROUP BY resource_id
+			HAVING sum(is_associated) <= 0
+			AND last_seen_time < ?
+		`, [cutOffTime]);
 		return output.map(r => r.resource_id);
+	}
+
+	static async deleteByResource(resourceId) {
+		await this.db().exec('DELETE FROM note_resources WHERE resource_id = ?', [resourceId]);
 	}
 
 }
