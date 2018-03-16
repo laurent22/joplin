@@ -4,6 +4,7 @@ const Note = require('lib/models/Note');
 const Resource = require('lib/models/Resource');
 const BaseModel = require('lib/BaseModel');
 const BaseService = require('lib/services/BaseService');
+const { shim } = require('lib/shim');
 
 class ResourceService extends BaseService {
 
@@ -23,7 +24,7 @@ class ResourceService extends BaseService {
 				WHERE item_type = ?
 				AND id > ?
 				ORDER BY id ASC
-				LIMIT 10
+				LIMIT 100
 			`, [BaseModel.TYPE_NOTE, lastId]);
 
 			if (!changes.length) break;
@@ -75,6 +76,21 @@ class ResourceService extends BaseService {
 	async maintenance() {
 		await this.indexNoteResources();
 		await this.deleteOrphanResources();
+	}
+
+	static runInBackground() {
+		if (this.isRunningInBackground_) return;
+
+		this.isRunningInBackground_ = true;
+		const service = new ResourceService();
+
+		setTimeout(() => {
+			service.maintenance();
+		}, 1000 * 30);
+		
+		shim.setInterval(() => {
+			service.maintenance();
+		}, 1000 * 60 * 60 * 4);
 	}
 
 }

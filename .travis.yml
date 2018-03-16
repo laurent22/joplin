@@ -3,6 +3,9 @@ if: tag IS present
 
 rvm: 2.3.3
 
+# It's important to only build production branches otherwise Electron Builder
+# might take assets from dev branches and overwrite those of production.
+# https://docs.travis-ci.com/user/customizing-the-build/#Building-Specific-Branches
 branches:
   only:
     - master

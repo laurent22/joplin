@@ -609,11 +609,7 @@ class Application extends BaseApplication {
 			AlarmService.garbageCollect();
 		}, 1000 * 60 * 60);
 
-		const resourceService = new ResourceService();
-		resourceService.maintenance();
-		setInterval(() => {
-			resourceService.maintenance();
-		}, 1000 * 60 * 60 * 4);
+		ResourceService.runInBackground();
 
 		if (Setting.value('env') === 'dev') {
 			AlarmService.updateAllNotifications();

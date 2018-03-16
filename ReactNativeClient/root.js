@@ -454,11 +454,7 @@ async function initialize(dispatch) {
 		AlarmService.garbageCollect();
 	}, 1000 * 60 * 60);
 
-	const resourceService = new ResourceService();
-	resourceService.maintenance();
-	PoorManIntervals.setInterval(() => {
-		resourceService.maintenance();
-	}, 1000 * 60 * 60 * 4);
+	ResourceService.runInBackground();
 
 	reg.scheduleSync().then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation

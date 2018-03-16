@@ -413,11 +413,7 @@ class Application extends BaseApplication {
 
 			const tags = await Tag.allWithNotes();
 
-			const resourceService = new ResourceService();
-			resourceService.maintenance();
-			setInterval(() => {
-				resourceService.maintenance();
-			}, 1000 * 60 * 60 * 4);
+			ResourceService.runInBackground();
 
 			this.dispatch({
 				type: 'TAG_UPDATE_ALL',

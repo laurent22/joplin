@@ -311,7 +311,7 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <p>One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as Nextcloud or OneDrive, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.</p>
 <p>Currently, synchronisation is possible with Nextcloud and OneDrive (by default) or the local filesystem. A Dropbox one will also be available once <a href="https://github.com/facebook/react-native/issues/14445">this React Native bug</a> is fixed. To setup synchronisation please follow the instructions below. After that, the application will synchronise in the background whenever it is running, or you can click on &quot;Synchronise&quot; to start a synchronisation manually.</p>
 <h2 id="nextcloud-synchronisation">Nextcloud synchronisation</h2>
-<p>On the <strong>desktop application</strong> or <strong>mobile application</strong>, go to the config screen and select Nextcloud as the synchronisation target. Then input <a href="https://docs.nextcloud.com/server/9/user_manual/files/access_webdav.html">the WebDAV URL</a>, this is normally <code>https://example.com/nextcloud/remote.php/dav/files/USERNAME/Joplin</code> (make sure to create the &quot;Joplin&quot; directory in Nextcloud and to replace USERNAME by your Nextcloud username), and set the username and password.</p>
+<p>On the <strong>desktop application</strong> or <strong>mobile application</strong>, go to the config screen and select Nextcloud as the synchronisation target. Then input <a href="https://docs.nextcloud.com/server/9/user_manual/files/access_webdav.html">the WebDAV URL</a>, this is normally <code>https://example.com/nextcloud/remote.php/dav/files/USERNAME/Joplin</code> (<strong>make sure to create the &quot;Joplin&quot; directory in Nextcloud</strong> and to replace USERNAME by your Nextcloud username), and set the username and password. If it does not work, please <a href="https://github.com/laurent22/joplin/issues/61#issuecomment-373282608">see this explanation</a> for more details.</p>
 <p>On the <strong>terminal application</strong>, you will need to set the <code>sync.target</code> config variable and all the <code>sync.5.path</code>, <code>sync.5.username</code> and <code>sync.5.password</code> config variables to, respectively the Nextcloud WebDAV URL, your username and your password. This can be done from the command line mode using:</p>
 <pre><code>:config sync.5.path https://example.com/nextcloud/remote.php/dav/files/USERNAME/Joplin
 :config sync.5.username YOUR_USERNAME
@@ -409,14 +409,14 @@ $$
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/hr.png" alt=""></td>
 <td>Croatian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/hr_HR.po">hr_HR</a></td>
-<td>Hrvoje Mandić <a href="&#x6d;&#97;&#105;&#108;&#116;&#x6f;&#x3a;&#x74;&#x72;&#x62;&#117;&#x68;&#x6f;&#109;&#64;&#x6e;&#x65;&#116;&#x2e;&#104;&#114;">&#x74;&#x72;&#x62;&#117;&#x68;&#x6f;&#109;&#64;&#x6e;&#x65;&#116;&#x2e;&#104;&#114;</a></td>
+<td>Hrvoje Mandić <a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#58;&#x74;&#114;&#x62;&#x75;&#x68;&#111;&#x6d;&#x40;&#x6e;&#101;&#x74;&#46;&#x68;&#114;">&#x74;&#114;&#x62;&#x75;&#x68;&#111;&#x6d;&#x40;&#x6e;&#101;&#x74;&#46;&#x68;&#114;</a></td>
 <td>65%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/de.png" alt=""></td>
 <td>Deutsch</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po">de_DE</a></td>
-<td>Tobias Strobel <a href="&#109;&#x61;&#105;&#108;&#116;&#111;&#x3a;&#x67;&#x69;&#x74;&#64;&#115;&#116;&#114;&#111;&#x62;&#x65;&#x6c;&#x74;&#111;&#x62;&#x69;&#97;&#115;&#x2e;&#x64;&#x65;">&#x67;&#x69;&#x74;&#64;&#115;&#116;&#114;&#111;&#x62;&#x65;&#x6c;&#x74;&#111;&#x62;&#x69;&#97;&#115;&#x2e;&#x64;&#x65;</a></td>
+<td>Tobias Strobel <a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x67;&#x69;&#116;&#64;&#115;&#116;&#x72;&#x6f;&#98;&#x65;&#108;&#x74;&#111;&#98;&#x69;&#97;&#x73;&#x2e;&#x64;&#x65;">&#x67;&#x69;&#116;&#64;&#115;&#116;&#x72;&#x6f;&#98;&#x65;&#108;&#x74;&#111;&#98;&#x69;&#97;&#x73;&#x2e;&#x64;&#x65;</a></td>
 <td>97%</td>
 </tr>
 <tr>
@@ -430,7 +430,7 @@ $$
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/es.png" alt=""></td>
 <td>Español</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po">es_ES</a></td>
-<td>Fernando Martín <a href="&#x6d;&#x61;&#105;&#108;&#116;&#111;&#58;&#102;&#x40;&#x6d;&#x72;&#116;&#x6e;&#x2e;&#x65;&#115;">&#102;&#x40;&#x6d;&#x72;&#116;&#x6e;&#x2e;&#x65;&#115;</a></td>
+<td>Fernando Martín <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#102;&#64;&#x6d;&#x72;&#116;&#x6e;&#x2e;&#101;&#x73;">&#102;&#64;&#x6d;&#x72;&#116;&#x6e;&#x2e;&#101;&#x73;</a></td>
 <td>100%</td>
 </tr>
 <tr>
@@ -458,21 +458,21 @@ $$
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/br.png" alt=""></td>
 <td>Português (Brasil)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_BR.po">pt_BR</a></td>
-<td>Renato Nunes Bastos <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#x3a;&#x72;&#110;&#98;&#x61;&#115;&#x74;&#111;&#115;&#x40;&#103;&#x6d;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;">&#x72;&#110;&#98;&#x61;&#115;&#x74;&#111;&#115;&#x40;&#103;&#x6d;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;</a></td>
+<td>Renato Nunes Bastos <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#x72;&#110;&#x62;&#97;&#x73;&#x74;&#x6f;&#115;&#x40;&#103;&#x6d;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#109;">&#x72;&#110;&#x62;&#97;&#x73;&#x74;&#x6f;&#115;&#x40;&#103;&#x6d;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#109;</a></td>
 <td>98%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/ru.png" alt=""></td>
 <td>Русский</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ru_RU.po">ru_RU</a></td>
-<td>Artyom Karlov <a href="&#x6d;&#x61;&#105;&#108;&#x74;&#111;&#58;&#97;&#114;&#x74;&#x79;&#111;&#109;&#46;&#107;&#x61;&#x72;&#x6c;&#111;&#118;&#64;&#103;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#x6d;">&#97;&#114;&#x74;&#x79;&#111;&#109;&#46;&#107;&#x61;&#x72;&#x6c;&#111;&#118;&#64;&#103;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#x6d;</a></td>
+<td>Artyom Karlov <a href="&#x6d;&#x61;&#x69;&#108;&#116;&#111;&#x3a;&#97;&#114;&#x74;&#121;&#111;&#109;&#x2e;&#x6b;&#x61;&#x72;&#108;&#x6f;&#x76;&#x40;&#x67;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#109;">&#97;&#114;&#x74;&#121;&#111;&#109;&#x2e;&#x6b;&#x61;&#x72;&#108;&#x6f;&#x76;&#x40;&#x67;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#109;</a></td>
 <td>100%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/cn.png" alt=""></td>
 <td>中文 (简体)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po">zh_CN</a></td>
-<td>RCJacH <a href="&#109;&#97;&#x69;&#108;&#116;&#x6f;&#x3a;&#x52;&#67;&#74;&#97;&#99;&#x48;&#64;&#x6f;&#117;&#116;&#108;&#111;&#x6f;&#x6b;&#x2e;&#x63;&#111;&#109;">&#x52;&#67;&#74;&#97;&#99;&#x48;&#64;&#x6f;&#117;&#116;&#108;&#111;&#x6f;&#x6b;&#x2e;&#x63;&#111;&#109;</a></td>
+<td>RCJacH <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#111;&#58;&#82;&#67;&#x4a;&#x61;&#99;&#72;&#x40;&#x6f;&#x75;&#116;&#108;&#x6f;&#111;&#x6b;&#46;&#x63;&#x6f;&#x6d;">&#82;&#67;&#x4a;&#x61;&#99;&#72;&#x40;&#x6f;&#x75;&#116;&#108;&#x6f;&#111;&#x6b;&#46;&#x63;&#x6f;&#x6d;</a></td>
 <td>66%</td>
 </tr>
 <tr>
