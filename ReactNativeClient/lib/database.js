@@ -12,6 +12,7 @@ class Database {
 		this.driver_ = driver;
 		this.logger_ = new Logger();
 		this.logExcludedQueryTypes_ = [];
+		this.batchTransactionMutex_ = new Mutex();
 	}
 
 	setLogExcludedQueryTypes(v) {
@@ -113,16 +114,20 @@ class Database {
 		}
 
 		// There can be only one transaction running at a time so use a	mutex
-		const release = await Database.batchTransactionMutex_.acquire();
+		const release = await this.batchTransactionMutex_.acquire();
 
 		try {
-			queries.splice(0, 0, 'BEGIN TRANSACTION');
-			queries.push('COMMIT'); // Note: ROLLBACK is currently not supported
+			await this.exec('BEGIN TRANSACTION');
 
 			for (let i = 0; i < queries.length; i++) {
 				let query = this.wrapQuery(queries[i]);
 				await this.exec(query.sql, query.params);
 			}
+
+			await this.exec('COMMIT');
+		} catch (error) {
+			await this.exec('ROLLBACK');
+			throw error;
 		} finally {
 			release();
 		}
@@ -299,8 +304,6 @@ class Database {
 	}
 
 }
-
-Database.batchTransactionMutex_ = new Mutex();
 
 Database.TYPE_UNKNOWN = 0;
 Database.TYPE_INT = 1;

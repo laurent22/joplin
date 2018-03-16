@@ -357,6 +357,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 		shared.toggleIsTodo_onPress(this);
 	}
 
+	tags_onPress() {
+		if (!this.state.note || !this.state.note.id) return;
+
+		this.props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'NoteTags',
+			noteId: this.state.note.id,
+		});		
+	}
+
 	setAlarm_onPress() {
 		this.setState({ alarmDialogShown: true });
 	}
@@ -393,6 +403,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	menuOptions() {
 		const note = this.state.note;
 		const isTodo = note && !!note.is_todo;
+		const isSaved = note && note.id;
 
 		let output = [];
 
@@ -410,6 +421,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			output.push({ title: _('Set alarm'), onPress: () => { this.setState({ alarmDialogShown: true }) }});;
 		}
 
+		if (isSaved) output.push({ title: _('Tags'), onPress: () => { this.tags_onPress(); } });
 		output.push({ title: isTodo ? _('Convert to note') : _('Convert to todo'), onPress: () => { this.toggleIsTodo_onPress(); } });
 		output.push({ isDivider: true });
 		if (this.props.showAdvancedOptions) output.push({ title: this.state.showNoteMetadata ? _('Hide metadata') : _('Show metadata'), onPress: () => { this.showMetadata_onPress(); } });

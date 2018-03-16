@@ -398,11 +398,10 @@ class BaseModel {
 			}
 
 			output = this.filter(o);
-		} catch (error) {
-			this.logger().error('Cannot save model', error);
+		} finally {
+			this.releaseSaveMutex(o, mutexRelease);
 		}
-
-		this.releaseSaveMutex(o, mutexRelease);
+		
 
 		return output;
 	}

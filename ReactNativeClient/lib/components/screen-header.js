@@ -128,6 +128,8 @@ class ScreenHeaderComponent extends Component {
 				color: theme.raisedHighlightedColor,
 				fontWeight: 'bold',
 				fontSize: theme.fontSize,
+				paddingTop: 15,
+				paddingBottom: 15,
 			},
 			warningBox: {
 				backgroundColor: "#ff9900",
@@ -428,15 +430,19 @@ class ScreenHeaderComponent extends Component {
 			</TouchableOpacity>
 		) : null;
 
+		const showSideMenuButton = this.props.showSideMenuButton !== false && !this.props.noteSelectionEnabled;
+		const showSearchButton = this.props.showSearchButton !== false && !this.props.noteSelectionEnabled;
+		const showContextMenuButton = this.props.showContextMenuButton !== false;
+
 		const titleComp = createTitleComponent();
-		const sideMenuComp = this.props.noteSelectionEnabled ? null : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
+		const sideMenuComp = !showSideMenuButton ? null : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
 		const backButtonComp = backButton(this.styles(), () => this.backButton_press(), !this.props.historyCanGoBack);
-		const searchButtonComp = this.props.noteSelectionEnabled ? null : searchButton(this.styles(), () => this.searchButton_press());
+		const searchButtonComp = !showSearchButton ? null : searchButton(this.styles(), () => this.searchButton_press());
 		const deleteButtonComp = this.props.noteSelectionEnabled ? deleteButton(this.styles(), () => this.deleteButton_press()) : null;
 		const sortButtonComp = this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
 		const windowHeight = Dimensions.get('window').height - 50;
 
-		const menuComp = (
+		const menuComp = !showContextMenuButton ? null : (
 			<Menu onSelect={(value) => this.menu_select(value)} style={this.styles().contextMenu}>
 				<MenuTrigger style={{ paddingTop: PADDING_V, paddingBottom: PADDING_V }}>
 					<Text style={this.styles().contextMenuTrigger}>  &#8942;</Text>

@@ -32,6 +32,7 @@ const { ConfigScreen } = require('lib/components/screens/config.js');
 const { FolderScreen } = require('lib/components/screens/folder.js');
 const { LogScreen } = require('lib/components/screens/log.js');
 const { StatusScreen } = require('lib/components/screens/status.js');
+const { NoteTagsScreen } = require('lib/components/screens/note-tags.js');
 const { WelcomeScreen } = require('lib/components/screens/welcome.js');
 const { SearchScreen } = require('lib/components/screens/search.js');
 const { OneDriveLoginScreen } = require('lib/components/screens/onedrive-login.js');
@@ -127,9 +128,9 @@ const generalMiddleware = store => next => async (action) => {
 
 let navHistory = [];
 
-function historyCanGoBackTo(route) {
-	if (route.routeName == 'Note') return false;
-	if (route.routeName == 'Folder') return false;
+function historyCanGoBackTo(route, nextRoute) {
+	if (route.routeName === 'Note' && nextRoute.routeName !== 'NoteTags') return false;
+	if (route.routeName === 'Folder') return false;
 
 	return true;
 }
@@ -172,7 +173,7 @@ const appReducer = (state = appDefaultState, action) => {
 				const currentRoute = state.route;
 				const currentRouteName = currentRoute ? currentRoute.routeName : '';
 
-				if (!historyGoingBack && historyCanGoBackTo(currentRoute)) {
+				if (!historyGoingBack && historyCanGoBackTo(currentRoute, action)) {
 					// If the route *name* is the same (even if the other parameters are different), we
 					// overwrite the last route in the history with the current one. If the route name
 					// is different, we push a new history entry.
@@ -564,6 +565,7 @@ class AppComponent extends React.Component {
 			Status: { screen: StatusScreen },
 			Search: { screen: SearchScreen },
 			Config: { screen: ConfigScreen },
+			NoteTags: { screen: NoteTagsScreen },
 		};
 
 		return (

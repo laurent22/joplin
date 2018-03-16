@@ -38,7 +38,7 @@ class NoteResource extends BaseModel {
 		const missingResources = await this.db().selectAll('SELECT id FROM resources WHERE id NOT IN (SELECT DISTINCT resource_id FROM note_resources)');
 		const queries = [];
 		for (let i = 0; i < missingResources.length; i++) {
-			const id = missingResources[i];
+			const id = missingResources[i].id;
 			queries.push({ sql: 'INSERT INTO note_resources (note_id, resource_id, is_associated, last_seen_time) VALUES (?, ?, ?, ?)', params: ["", id, 0, Date.now()] });			
 		}
 		await this.db().transactionExecBatch(queries);
