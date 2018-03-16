@@ -3,6 +3,10 @@ if: tag IS present
 
 rvm: 2.3.3
 
+branches:
+  only:
+    - master
+
 matrix:
   include:
     - os: osx
