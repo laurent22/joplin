@@ -566,6 +566,7 @@ class NoteTextComponent extends React.Component {
 			marginBottom: 0,
 			display: 'flex',
 			flexDirection: 'row',
+			alignItems: 'center',
 		};
 
 		const titleEditorStyle = {
@@ -685,6 +686,8 @@ class NoteTextComponent extends React.Component {
 			display: 'flex',
 		}} iconName="fa-caret-down" theme={this.props.theme} onClick={() => { this.itemContextMenu() }} />
 
+		const titleBarDate = <span style={Object.assign({}, theme.textStyle, {color: theme.colorFaded})}>{time.formatMsToLocal(note.user_updated_time)}</span>
+
 		const viewer = <webview
 			style={viewerStyle}
 			nodeintegration="1"
@@ -725,7 +728,8 @@ class NoteTextComponent extends React.Component {
 			<div style={rootStyle}>
 				<div style={titleBarStyle}>
 					{ titleEditor }
-					{ titleBarMenuButton }
+					{ titleBarDate }
+					{ false ? titleBarMenuButton : null }
 				</div>
 				{ toolbar }
 				{ editor }
