@@ -32,7 +32,6 @@ const { ConfigScreen } = require('lib/components/screens/config.js');
 const { FolderScreen } = require('lib/components/screens/folder.js');
 const { LogScreen } = require('lib/components/screens/log.js');
 const { StatusScreen } = require('lib/components/screens/status.js');
-const { NoteTagsScreen } = require('lib/components/screens/note-tags.js');
 const { WelcomeScreen } = require('lib/components/screens/welcome.js');
 const { SearchScreen } = require('lib/components/screens/search.js');
 const { OneDriveLoginScreen } = require('lib/components/screens/onedrive-login.js');
@@ -129,7 +128,7 @@ const generalMiddleware = store => next => async (action) => {
 let navHistory = [];
 
 function historyCanGoBackTo(route, nextRoute) {
-	if (route.routeName === 'Note' && nextRoute.routeName !== 'NoteTags') return false;
+	if (route.routeName === 'Note') return false;
 	if (route.routeName === 'Folder') return false;
 
 	return true;
@@ -565,7 +564,6 @@ class AppComponent extends React.Component {
 			Status: { screen: StatusScreen },
 			Search: { screen: SearchScreen },
 			Config: { screen: ConfigScreen },
-			NoteTags: { screen: NoteTagsScreen },
 		};
 
 		return (

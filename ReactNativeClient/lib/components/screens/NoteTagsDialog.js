@@ -12,18 +12,12 @@ const { Database } = require('lib/database.js');
 const Folder = require('lib/models/Folder.js');
 const { ReportService } = require('lib/services/report.js');
 const { _ } = require('lib/locale.js');
-const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { globalStyle, themeStyle } = require('lib/components/global-style.js');
 const Icon = require('react-native-vector-icons/Ionicons').default;
+const ModalDialog = require('lib/components/ModalDialog');
+const naturalCompare = require('string-natural-compare');
 
-const styles = StyleSheet.create({
-	body: {
-		flex: 1,
-		margin: globalStyle.margin,
-	},
-});
-
-class NoteTagsScreenComponent extends BaseScreenComponent {
+class NoteTagsDialogComponent extends React.Component {
 
 	constructor() {
 		super();
@@ -94,15 +88,11 @@ class NoteTagsScreenComponent extends BaseScreenComponent {
 				this.setState({ savingTags: false });
 			}
 
-			this.props.dispatch({
-				type: 'NAV_BACK',
-			});
+			if (this.props.onCloseRequested) this.props.onCloseRequested();
 		}
 
 		this.cancelButton_press = () => {
-			this.props.dispatch({
-				type: 'NAV_BACK',
-			});
+			if (this.props.onCloseRequested) this.props.onCloseRequested();
 		}
 	}
 
@@ -121,6 +111,11 @@ class NoteTagsScreenComponent extends BaseScreenComponent {
 			title: tag.title,
 			selected: tagIds.indexOf(tag.id) >= 0,
 		}});
+
+		tagListData.sort((a, b) => {
+			return naturalCompare.caseInsensitive(a.title, b.title);
+			//return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : +1;
+		});
 
 		this.setState({ tagListData: tagListData });
 	}
@@ -151,8 +146,8 @@ class NoteTagsScreenComponent extends BaseScreenComponent {
 				alignItems: 'center',
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
-				borderTopWidth: 1,
-				borderTopColor: theme.dividerColor
+				borderBottomWidth: 1,
+				borderBottomColor: theme.dividerColor
 			},
 		};
 
@@ -163,32 +158,32 @@ class NoteTagsScreenComponent extends BaseScreenComponent {
 	render() {
 		const theme = themeStyle(this.props.theme);
 
-		return (
-			<View style={this.rootStyle(this.props.theme).root}>
-				<ScreenHeader title={_('Note tags')} showSideMenuButton={false} showSearchButton={false} showContextMenuButton={false}/>
+		const dialogContent = (
+			<View style={{flex:1}}>
+				<View style={this.styles().newTagBox}>
+					<Text>{_('New tags:')}</Text><TextInput value={this.state.newTags} onChangeText={value => { this.setState({ newTags: value }) }} style={{flex:1}}/>
+				</View>
 				<FlatList
 					data={this.state.tagListData}
 					renderItem={this.renderTag}
 					keyExtractor={this.tagKeyExtractor}
 				/>
-				<View style={this.styles().newTagBox}>
-					<Text>{_('Or type tags:')}</Text><TextInput value={this.state.newTags} onChangeText={value => { this.setState({ newTags: value }) }} style={{flex:1}}/>
-				</View>
-				<View style={theme.buttonRow}>
-					<View style={{flex:1}}>
-						<Button disabled={this.state.savingTags} title={_('OK')} onPress={this.okButton_press}></Button>
-					</View>
-					<View style={{flex:1, marginLeft: 5}}>
-						<Button disabled={this.state.savingTags} title={_('Cancel')} onPress={this.cancelButton_press}></Button>
-					</View>
-				</View>
 			</View>
 		);
+
+		return <ModalDialog
+			theme={this.props.theme}
+			ContentComponent={dialogContent}
+			title={_('Type new tags or select from list')}
+			onOkPress={this.okButton_press}
+			onCancelPress={this.cancelButton_press}
+			buttonBarEnabled={!this.state.savingTags}
+		/>
 	}
 
 }
 
-const NoteTagsScreen = connect(
+const NoteTagsDialog = connect(
 	(state) => {
 		return {
 			theme: state.settings.theme,
@@ -196,6 +191,6 @@ const NoteTagsScreen = connect(
 			noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 		};
 	}
-)(NoteTagsScreenComponent)
+)(NoteTagsDialogComponent)
 
-module.exports = { NoteTagsScreen };
+module.exports = NoteTagsDialog;
