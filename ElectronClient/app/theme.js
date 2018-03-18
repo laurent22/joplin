@@ -1,7 +1,7 @@
 const Setting = require('lib/models/Setting.js');
 
 const globalStyle = {
-	fontSize: 12 * Setting.value('style.zoom')/100,
+	fontSize: 12 * Setting.value('style.zoom') / 100,
 	fontFamily: 'sans-serif',
 	margin: 15, // No text and no interactive component should be within this margin
 	itemMarginTop: 10,
@@ -21,9 +21,11 @@ const globalStyle = {
 	buttonMinHeight: 30,
 	textAreaLineHeight: 17,
 
-	backgroundColor2: "#2B2634",
+	//backgroundColor2: "#2B2634",
+	backgroundColor2: "#162B3D",
 	color2: "#ffffff",
-	selectedColor2: "#5A4D70",
+	//selectedColor2: "#5A4D70",
+	selectedColor2: "#0269C2",
 	colorError2: "#ff6c6c",
 
 	warningBackgroundColor: "#FFD08D",
