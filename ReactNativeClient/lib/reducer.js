@@ -426,8 +426,32 @@ const reducer = (state = defaultState, action) => {
 			case 'SEARCH_ADD':
 
 				newState = Object.assign({}, state);
-				let searches = newState.searches.slice();
+				var searches = newState.searches.slice();
 				searches.push(action.search);
+				newState.searches = searches;
+				break;
+
+			case 'SEARCH_UPDATE':
+
+				newState = Object.assign({}, state);
+				var searches = newState.searches.slice();
+				var found = false;
+				for (let i = 0; i < searches.length; i++) {
+					if (searches[i].id === action.search.id) {
+						searches[i] = Object.assign({}, action.search);
+						found = true;
+						break;
+					}
+				}
+
+				if (!found) searches.push(action.search);
+
+				if (!action.search.query_pattern) {
+					newState.notesParentType = defaultNotesParentType(state, 'Search');
+				} else {
+					newState.notesParentType = 'Search';
+				}
+
 				newState.searches = searches;
 				break;
 

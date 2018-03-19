@@ -71,6 +71,7 @@
     "katex": "^0.9.0-beta1",
     "levenshtein": "^1.0.5",
     "lodash": "^4.17.4",
+    "mark.js": "^8.11.1",
     "markdown-it": "^8.4.0",
     "markdown-it-katex": "^2.0.3",
     "md5": "^2.2.1",

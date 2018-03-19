@@ -368,11 +368,11 @@ class Application extends BaseApplication {
 				}, {
 					label: _('Search in all the notes'),
 					screens: ['Main'],
-					accelerator: 'F6',
+					accelerator: 'CommandOrControl+F',
 					click: () => {
 						this.dispatch({
 							type: 'WINDOW_COMMAND',
-							name: 'search',
+							name: 'focus_search',
 						});
 					},
 				}],
