@@ -883,6 +883,37 @@ describe('Synchronizer', function() {
 		expect(fileContentEqual(resourcePath1, resourcePath1_2)).toBe(true);
 	}));
 
+	it('should delete resources', asyncTest(async () => {
+		while (insideBeforeEach) await time.msleep(500);
+
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		let resource1 = (await Resource.all())[0];
+		let resourcePath1 = Resource.fullPath(resource1);
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		let allResources = await Resource.all();
+		expect(allResources.length).toBe(1);
+		let all = await fileApi().list();
+		expect(all.items.length).toBe(3);
+		await Resource.delete(resource1.id);
+		await synchronizer().start();
+		all = await fileApi().list();
+		expect(all.items.length).toBe(2);
+
+		await switchClient(1);
+
+		expect(await shim.fsDriver().exists(resourcePath1)).toBe(true);
+		await synchronizer().start();
+		allResources = await Resource.all();
+		expect(allResources.length).toBe(0);
+		expect(await shim.fsDriver().exists(resourcePath1)).toBe(false);
+	}));
+
 	it('should encryt resources', asyncTest(async () => {
 		Setting.setValue('encryption.enabled', true);
 		const masterKey = await loadEncryptionMasterKey();

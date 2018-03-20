@@ -1,6 +1,7 @@
 const BaseModel = require('lib/BaseModel.js');
 const { sprintf } = require('sprintf-js');
 const BaseItem = require('lib/models/BaseItem.js');
+const ItemChange = require('lib/models/ItemChange.js');
 const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim.js');
 const { time } = require('lib/time-utils.js');
@@ -407,6 +408,8 @@ class Note extends BaseItem {
 
 		const note = await super.save(o, options);
 
+		ItemChange.add(BaseModel.TYPE_NOTE, note.id, isNew ? ItemChange.TYPE_CREATE : ItemChange.TYPE_UPDATE);
+
 		this.dispatch({
 			type: 'NOTE_UPDATE_ONE',
 			note: note,
@@ -422,18 +425,22 @@ class Note extends BaseItem {
 		return note;
 	}
 
-	static async delete(id, options = null) {
-		let r = await super.delete(id, options);
+	// Not used?
 
-		this.dispatch({
-			type: 'NOTE_DELETE',
-			id: id,
-		});
-	}
+	// static async delete(id, options = null) {
+	// 	let r = await super.delete(id, options);
 
-	static batchDelete(ids, options = null) {
-		const result = super.batchDelete(ids, options);
+	// 	this.dispatch({
+	// 		type: 'NOTE_DELETE',
+	// 		id: id,
+	// 	});
+	// }
+
+	static async batchDelete(ids, options = null) {
+		const result = await super.batchDelete(ids, options);
 		for (let i = 0; i < ids.length; i++) {
+			ItemChange.add(BaseModel.TYPE_NOTE, ids[i], ItemChange.TYPE_DELETE);
+
 			this.dispatch({
 				type: 'NOTE_DELETE',
 				id: ids[i],

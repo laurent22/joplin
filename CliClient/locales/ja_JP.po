@@ -975,8 +975,8 @@ msgstr "リモートアイテムの削除: %d."
 msgid "Fetched items: %d/%d."
 msgstr "ローカルアイテムの作成: %d."
 
-#, javascript-format
-msgid "State: \"%s\"."
+#, fuzzy, javascript-format
+msgid "State: %s."
 msgstr "状態: \"%s\"。"
 
 msgid "Cancelling..."

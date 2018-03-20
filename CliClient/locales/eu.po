@@ -1000,8 +1000,8 @@ msgstr "Urruneko itemak ezabatuta: %d."
 msgid "Fetched items: %d/%d."
 msgstr "Itemak eskuratuta: %d%d."
 
-#, javascript-format
-msgid "State: \"%s\"."
+#, fuzzy, javascript-format
+msgid "State: %s."
 msgstr "Egoera: \"%s\"."
 
 msgid "Cancelling..."

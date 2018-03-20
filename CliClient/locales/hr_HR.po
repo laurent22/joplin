@@ -987,8 +987,8 @@ msgstr "Obrisane udaljene stavke: %d."
 msgid "Fetched items: %d/%d."
 msgstr "Stvorene lokalne stavke: %d."
 
-#, javascript-format
-msgid "State: \"%s\"."
+#, fuzzy, javascript-format
+msgid "State: %s."
 msgstr "Stanje: \"%s\"."
 
 msgid "Cancelling..."

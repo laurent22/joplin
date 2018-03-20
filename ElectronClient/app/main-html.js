@@ -73,7 +73,7 @@ app().start(bridge().processArgv()).then(() => {
 		if (error.fileName) msg.push(error.fileName);
 		if (error.lineNumber) msg.push(error.lineNumber);
 		if (error.stack) msg.push(error.stack);
-		bridge().showErrorMessageBox(msg.join('\n'));
+		bridge().showErrorMessageBox(msg.join('\n\n'));
 	}
 
 	bridge().electronApp().exit(1);

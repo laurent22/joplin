@@ -76,6 +76,10 @@ const headerHtml = `<!doctype html>
 	table.screenshots td {
 		border: 1px solid #C2C2C2;
 	}
+	img[align="left"] {
+		margin-right: 10px;
+		margin-bottom: 10px;
+	}
 	.mobile-screenshot {
 		height: 40em;
 		padding: 1em;

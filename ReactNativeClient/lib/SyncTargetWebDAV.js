@@ -30,9 +30,9 @@ class SyncTargetWebDAV extends BaseSyncTarget {
 
 	static async newFileApi_(syncTargetId, options) {
 		const apiOptions = {
-			baseUrl: () => options.path,
-			username: () => options.username,
-			password: () => options.password,
+			baseUrl: () => options.path(),
+			username: () => options.username(),
+			password: () => options.password(),
 		};
 
 		const api = new WebDavApi(apiOptions);
@@ -65,9 +65,9 @@ class SyncTargetWebDAV extends BaseSyncTarget {
 
 	async initFileApi() {
 		const fileApi = await SyncTargetWebDAV.newFileApi_(SyncTargetWebDAV.id(), {
-			path: Setting.value('sync.6.path'),
-			username: Setting.value('sync.6.username'),
-			password: Setting.value('sync.6.password'),
+			path: () => Setting.value('sync.6.path'),
+			username: () => Setting.value('sync.6.username'),
+			password: () => Setting.value('sync.6.password'),
 		});
 
 		fileApi.setLogger(this.logger());

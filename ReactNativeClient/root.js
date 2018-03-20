@@ -22,6 +22,8 @@ const NoteTag = require('lib/models/NoteTag.js');
 const BaseItem = require('lib/models/BaseItem.js');
 const MasterKey = require('lib/models/MasterKey.js');
 const BaseModel = require('lib/BaseModel.js');
+const BaseService = require('lib/services/BaseService.js');
+const ResourceService = require('lib/services/ResourceService');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { Database } = require('lib/database.js');
 const { NotesScreen } = require('lib/components/screens/notes.js');
@@ -125,9 +127,9 @@ const generalMiddleware = store => next => async (action) => {
 
 let navHistory = [];
 
-function historyCanGoBackTo(route) {
-	if (route.routeName == 'Note') return false;
-	if (route.routeName == 'Folder') return false;
+function historyCanGoBackTo(route, nextRoute) {
+	if (route.routeName === 'Note') return false;
+	if (route.routeName === 'Folder') return false;
 
 	return true;
 }
@@ -170,7 +172,7 @@ const appReducer = (state = appDefaultState, action) => {
 				const currentRoute = state.route;
 				const currentRouteName = currentRoute ? currentRoute.routeName : '';
 
-				if (!historyGoingBack && historyCanGoBackTo(currentRoute)) {
+				if (!historyGoingBack && historyCanGoBackTo(currentRoute, action)) {
 					// If the route *name* is the same (even if the other parameters are different), we
 					// overwrite the last route in the history with the current one. If the route name
 					// is different, we push a new history entry.
@@ -318,6 +320,8 @@ async function initialize(dispatch) {
 	reg.setLogger(mainLogger);
 	reg.setShowErrorMessageBoxHandler((message) => { alert(message) });
 
+	BaseService.logger_ = mainLogger;
+
 	reg.logger().info('====================================');
 	reg.logger().info('Starting application ' + Setting.value('appId') + ' (' + Setting.value('env') + ')');
 
@@ -449,6 +453,8 @@ async function initialize(dispatch) {
 	PoorManIntervals.setTimeout(() => {
 		AlarmService.garbageCollect();
 	}, 1000 * 60 * 60);
+
+	ResourceService.runInBackground();
 
 	reg.scheduleSync().then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation

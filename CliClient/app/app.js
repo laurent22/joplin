@@ -5,6 +5,7 @@ const { JoplinDatabase } = require('lib/joplin-database.js');
 const { Database } = require('lib/database.js');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');
+const ResourceService = require('lib/services/ResourceService');
 const BaseModel = require('lib/BaseModel.js');
 const Folder = require('lib/models/Folder.js');
 const BaseItem = require('lib/models/BaseItem.js');
@@ -411,6 +412,8 @@ class Application extends BaseApplication {
 			await FoldersScreenUtils.refreshFolders();
 
 			const tags = await Tag.allWithNotes();
+
+			ResourceService.runInBackground();
 
 			this.dispatch({
 				type: 'TAG_UPDATE_ALL',

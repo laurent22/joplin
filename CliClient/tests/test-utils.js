@@ -16,6 +16,7 @@ const { FileApi } = require('lib/file-api.js');
 const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const { FileApiDriverWebDav } = require('lib/file-api-driver-webdav.js');
+const BaseService = require('lib/services/BaseService.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { time } = require('lib/time-utils.js');
 const { shimInit } = require('lib/shim-init-node.js');
@@ -63,7 +64,7 @@ console.info('Testing with sync target: ' + SyncTargetRegistry.idToName(syncTarg
 const logger = new Logger();
 logger.addTarget('console');
 logger.addTarget('file', { path: logDir + '/log.txt' });
-logger.setLevel(Logger.LEVEL_WARN); // Set to INFO to display sync process in console
+logger.setLevel(Logger.LEVEL_WARN); // Set to DEBUG to display sync process in console
 
 BaseItem.loadClass('Note', Note);
 BaseItem.loadClass('Folder', Folder);
@@ -74,6 +75,8 @@ BaseItem.loadClass('MasterKey', MasterKey);
 
 Setting.setConstant('appId', 'net.cozic.joplin-cli');
 Setting.setConstant('appType', 'cli');
+
+BaseService.logger_ = logger;
 
 Setting.autoSaveEnabled = false;
 
@@ -118,8 +121,9 @@ async function clearDatabase(id = null) {
 		'DELETE FROM tags',
 		'DELETE FROM note_tags',
 		'DELETE FROM master_keys',
-		'DELETE FROM settings',
-		
+		'DELETE FROM item_changes',
+		'DELETE FROM note_resources',
+		'DELETE FROM settings',		
 		'DELETE FROM deleted_items',
 		'DELETE FROM sync_items',
 	];

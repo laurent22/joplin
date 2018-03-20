@@ -106,6 +106,12 @@ class Tag extends BaseItem {
 		return this.loadByField('title', title, { caseInsensitive: true });
 	}
 
+	static async addNoteTagByTitle(noteId, tagTitle) {
+		let tag = await this.loadByTitle(tagTitle);
+		if (!tag) tag = await Tag.save({ title: tagTitle }, { userSideValidation: true });
+		return await this.addNote(tag.id, noteId);
+	}
+
 	static async setNoteTagsByTitles(noteId, tagTitles) {
 		const previousTags = await this.tagsByNoteId(noteId);
 		const addedTitles = [];
@@ -121,6 +127,23 @@ class Tag extends BaseItem {
 
 		for (let i = 0; i < previousTags.length; i++) {
 			if (addedTitles.indexOf(previousTags[i].title.toLowerCase()) < 0) {
+				await this.removeNote(previousTags[i].id, noteId);
+			}
+		}
+	}
+
+	static async setNoteTagsByIds(noteId, tagIds) {
+		const previousTags = await this.tagsByNoteId(noteId);
+		const addedIds = [];
+
+		for (let i = 0; i < tagIds.length; i++) {
+			const tagId = tagIds[i];
+			await this.addNote(tagId, noteId);
+			addedIds.push(tagId);
+		}
+
+		for (let i = 0; i < previousTags.length; i++) {
+			if (addedIds.indexOf(previousTags[i].id) < 0) {
 				await this.removeNote(previousTags[i].id, noteId);
 			}
 		}

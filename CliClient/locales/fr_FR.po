@@ -14,6 +14,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.3\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Pour supprimer une vignette, enlever là des notes associées."
@@ -1000,8 +1002,8 @@ msgid "Fetched items: %d/%d."
 msgstr "Téléchargés : %d/%d."
 
 #, javascript-format
-msgid "State: \"%s\"."
-msgstr "État : \"%s\"."
+msgid "State: %s."
+msgstr "État : %s."
 
 msgid "Cancelling..."
 msgstr "Annulation..."
