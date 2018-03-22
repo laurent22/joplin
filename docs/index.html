@@ -317,7 +317,7 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <p>Currently, synchronisation is possible with Nextcloud and OneDrive (by default) or the local filesystem. A Dropbox one will also be available once <a href="https://github.com/facebook/react-native/issues/14445">this React Native bug</a> is fixed. To setup synchronisation please follow the instructions below. After that, the application will synchronise in the background whenever it is running, or you can click on &quot;Synchronise&quot; to start a synchronisation manually.</p>
 <h2 id="nextcloud-synchronisation">Nextcloud synchronisation</h2>
 <p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/nextcloud-logo-background.png" width="100" align="left"> <a href="https://nextcloud.com/">Nextcloud</a> is a self-hosted, private cloud solution. It can store documents, images and videos but also calendars, passwords and countless other things and can sync them to your laptop or phone. As you can host your own Nextcloud server, you own both the data on your device and infrastructure used for synchronisation. As such it is a good fit for Joplin. The platform is also well supported and with a strong community, so it is likely to be around for a while - since it&#39;s open source anyway, it is not a service that can be closed, it can exist on a server for as long as one chooses.</p>
-<p>On the <strong>desktop application</strong> or <strong>mobile application</strong>, go to the config screen and select Nextcloud as the synchronisation target. Then input <a href="https://docs.nextcloud.com/server/9/user_manual/files/access_webdav.html">the WebDAV URL</a>, this is normally <code>https://example.com/nextcloud/remote.php/dav/files/USERNAME/Joplin</code> (<strong>make sure to create the &quot;Joplin&quot; directory in Nextcloud</strong> and to replace USERNAME by your Nextcloud username), and set the username and password. If it does not work, please <a href="https://github.com/laurent22/joplin/issues/61#issuecomment-373282608">see this explanation</a> for more details.</p>
+<p>On the <strong>desktop application</strong> or <strong>mobile application</strong>, go to the config screen and select Nextcloud as the synchronisation target. Then input the WebDAV URL (to get it, click on Settings in the bottom left corner of the page, in Nextcloud), this is normally <code>https://example.com/nextcloud/remote.php/webdav/Joplin</code> (<strong>make sure to create the &quot;Joplin&quot; directory in Nextcloud</strong>), and set the username and password. If it does not work, please <a href="https://github.com/laurent22/joplin/issues/61#issuecomment-373282608">see this explanation</a> for more details.</p>
 <p>On the <strong>terminal application</strong>, you will need to set the <code>sync.target</code> config variable and all the <code>sync.5.path</code>, <code>sync.5.username</code> and <code>sync.5.password</code> config variables to, respectively the Nextcloud WebDAV URL, your username and your password. This can be done from the command line mode using:</p>
 <pre><code>:config sync.5.path https://example.com/nextcloud/remote.php/dav/files/USERNAME/Joplin
 :config sync.5.username YOUR_USERNAME
@@ -416,15 +416,22 @@ $$
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/hr.png" alt=""></td>
 <td>Croatian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/hr_HR.po">hr_HR</a></td>
-<td>Hrvoje Mandić <a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#x74;&#x72;&#98;&#x75;&#x68;&#111;&#109;&#x40;&#110;&#101;&#116;&#x2e;&#104;&#x72;">&#x74;&#x72;&#98;&#x75;&#x68;&#111;&#109;&#x40;&#110;&#101;&#116;&#x2e;&#104;&#x72;</a></td>
+<td>Hrvoje Mandić <a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#x74;&#x72;&#x62;&#x75;&#104;&#111;&#x6d;&#64;&#x6e;&#101;&#x74;&#46;&#104;&#x72;">&#x74;&#x72;&#x62;&#x75;&#104;&#111;&#x6d;&#64;&#x6e;&#101;&#x74;&#46;&#104;&#x72;</a></td>
 <td>64%</td>
+</tr>
+<tr>
+<td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/dk.png" alt=""></td>
+<td>Dansk</td>
+<td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/da_DK.po">da_DK</a></td>
+<td></td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/de.png" alt=""></td>
 <td>Deutsch</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po">de_DE</a></td>
-<td>Tobias Grasse <a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#109;&#x61;&#105;&#108;&#64;&#x74;&#111;&#98;&#105;&#97;&#x73;&#x2d;&#103;&#x72;&#97;&#115;&#x73;&#x65;&#x2e;&#110;&#x65;&#116;">&#109;&#x61;&#105;&#108;&#64;&#x74;&#111;&#98;&#105;&#97;&#x73;&#x2d;&#103;&#x72;&#97;&#115;&#x73;&#x65;&#x2e;&#110;&#x65;&#116;</a></td>
-<td>99%</td>
+<td>Tobias Grasse <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#111;&#x3a;&#109;&#x61;&#105;&#108;&#x40;&#x74;&#111;&#98;&#x69;&#x61;&#115;&#x2d;&#x67;&#114;&#97;&#115;&#x73;&#x65;&#46;&#x6e;&#x65;&#116;">&#109;&#x61;&#105;&#108;&#x40;&#x74;&#111;&#98;&#x69;&#x61;&#115;&#x2d;&#x67;&#114;&#97;&#115;&#x73;&#x65;&#46;&#x6e;&#x65;&#116;</a></td>
+<td>98%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/gb.png" alt=""></td>
@@ -437,7 +444,7 @@ $$
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/es.png" alt=""></td>
 <td>Español</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po">es_ES</a></td>
-<td>Fernando Martín <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#102;&#x40;&#109;&#x72;&#116;&#110;&#x2e;&#x65;&#115;">&#102;&#x40;&#109;&#x72;&#116;&#110;&#x2e;&#x65;&#115;</a></td>
+<td>Fernando Martín <a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x66;&#x40;&#x6d;&#x72;&#116;&#110;&#46;&#x65;&#x73;">&#x66;&#x40;&#x6d;&#x72;&#116;&#110;&#46;&#x65;&#x73;</a></td>
 <td>99%</td>
 </tr>
 <tr>
@@ -445,7 +452,7 @@ $$
 <td>Français</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/fr_FR.po">fr_FR</a></td>
 <td>Laurent Cozic</td>
-<td>99%</td>
+<td>100%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/it.png" alt=""></td>
@@ -459,27 +466,27 @@ $$
 <td>Nederlands</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_BE.po">nl_BE</a></td>
 <td></td>
-<td>80%</td>
+<td>79%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/br.png" alt=""></td>
 <td>Português (Brasil)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_BR.po">pt_BR</a></td>
-<td>Renato Nunes Bastos <a href="&#x6d;&#x61;&#105;&#108;&#116;&#111;&#58;&#114;&#x6e;&#x62;&#97;&#115;&#116;&#x6f;&#115;&#64;&#x67;&#109;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;">&#114;&#x6e;&#x62;&#97;&#115;&#116;&#x6f;&#115;&#64;&#x67;&#109;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;</a></td>
-<td>98%</td>
+<td>Renato Nunes Bastos <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#114;&#x6e;&#x62;&#97;&#x73;&#116;&#111;&#115;&#64;&#x67;&#x6d;&#x61;&#x69;&#108;&#x2e;&#x63;&#x6f;&#x6d;">&#114;&#x6e;&#x62;&#97;&#x73;&#116;&#111;&#115;&#64;&#x67;&#x6d;&#x61;&#x69;&#108;&#x2e;&#x63;&#x6f;&#x6d;</a></td>
+<td>97%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/ru.png" alt=""></td>
 <td>Русский</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ru_RU.po">ru_RU</a></td>
-<td>Artyom Karlov <a href="&#109;&#97;&#x69;&#108;&#116;&#111;&#58;&#97;&#x72;&#116;&#121;&#111;&#x6d;&#46;&#x6b;&#x61;&#114;&#108;&#x6f;&#x76;&#x40;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#x63;&#111;&#109;">&#97;&#x72;&#116;&#121;&#111;&#x6d;&#46;&#x6b;&#x61;&#114;&#108;&#x6f;&#x76;&#x40;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#x63;&#111;&#109;</a></td>
+<td>Artyom Karlov <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#97;&#114;&#116;&#121;&#x6f;&#x6d;&#x2e;&#107;&#x61;&#114;&#x6c;&#x6f;&#x76;&#x40;&#103;&#109;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;">&#97;&#114;&#116;&#121;&#x6f;&#x6d;&#x2e;&#107;&#x61;&#114;&#x6c;&#x6f;&#x76;&#x40;&#103;&#109;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;</a></td>
 <td>99%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/cn.png" alt=""></td>
 <td>中文 (简体)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po">zh_CN</a></td>
-<td>RCJacH <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#111;&#x3a;&#x52;&#67;&#74;&#97;&#x63;&#x48;&#x40;&#x6f;&#x75;&#x74;&#x6c;&#x6f;&#x6f;&#x6b;&#x2e;&#99;&#x6f;&#x6d;">&#x52;&#67;&#74;&#97;&#x63;&#x48;&#x40;&#x6f;&#x75;&#x74;&#x6c;&#x6f;&#x6f;&#x6b;&#x2e;&#99;&#x6f;&#x6d;</a></td>
+<td>RCJacH <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#111;&#58;&#x52;&#x43;&#x4a;&#x61;&#x63;&#72;&#x40;&#x6f;&#117;&#x74;&#x6c;&#111;&#111;&#107;&#46;&#x63;&#111;&#109;">&#x52;&#x43;&#x4a;&#x61;&#x63;&#72;&#x40;&#x6f;&#117;&#x74;&#x6c;&#111;&#111;&#107;&#46;&#x63;&#111;&#109;</a></td>
 <td>66%</td>
 </tr>
 <tr>

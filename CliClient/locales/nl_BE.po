@@ -1319,6 +1319,12 @@ msgstr "Bevestig"
 msgid "Cancel synchronisation"
 msgstr "Annuleer synchronisatie"
 
+msgid "New tags:"
+msgstr ""
+
+msgid "Type new tags or select from list"
+msgstr ""
+
 msgid "Joplin website"
 msgstr ""
 

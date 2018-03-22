@@ -14,8 +14,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.3\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Pour supprimer une vignette, enlever là des notes associées."
@@ -1313,6 +1311,12 @@ msgstr "Confirmer"
 
 msgid "Cancel synchronisation"
 msgstr "Annuler synchronisation"
+
+msgid "New tags:"
+msgstr "Nouvelles étiquettes :"
+
+msgid "Type new tags or select from list"
+msgstr "Entrez de nouvelles étiquettes ou sélectionnez de la liste"
 
 msgid "Joplin website"
 msgstr "Site web de Joplin"

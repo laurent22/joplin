@@ -1297,6 +1297,12 @@ msgstr "Potvrdi"
 msgid "Cancel synchronisation"
 msgstr "Prekini sinkronizaciju"
 
+msgid "New tags:"
+msgstr ""
+
+msgid "Type new tags or select from list"
+msgstr ""
+
 msgid "Joplin website"
 msgstr ""
 

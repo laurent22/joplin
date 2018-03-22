@@ -1304,6 +1304,12 @@ msgstr "Подтвердить"
 msgid "Cancel synchronisation"
 msgstr "Отменить синхронизацию"
 
+msgid "New tags:"
+msgstr ""
+
+msgid "Type new tags or select from list"
+msgstr ""
+
 msgid "Joplin website"
 msgstr "Сайт Joplin"
 
