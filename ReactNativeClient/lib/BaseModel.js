@@ -1,4 +1,3 @@
-const { Log } = require('lib/log.js');
 const { Database } = require('lib/database.js');
 const { uuid } = require('lib/uuid.js');
 const { time } = require('lib/time-utils.js');
@@ -122,15 +121,6 @@ class BaseModel {
 		return id.substr(0, 5);
 	}
 
-	// static minimalPartialId(id) {
-	// 	let length = 2;
-	// 	while (true) {
-	// 		const partialId = id.substr(0, length);
-	// 		const r = await this.db().selectOne('SELECT count(*) as total FROM `' + this.tableName() + '` WHERE `id` LIKE ?', [partialId + '%']);
-	// 		if (r['total'] <= 1) return partialId;
-	// 	}
-	// }
-
 	static loadByPartialId(partialId) {
 		return this.modelSelectAll('SELECT * FROM `' + this.tableName() + '` WHERE `id` LIKE ?', [partialId + '%']);
 	}
@@ -222,20 +212,6 @@ class BaseModel {
 		}
 		if ('type_' in newModel) output.type_ = newModel.type_;
 		return output;
-		// let output = {};
-		// let type = null;
-		// for (let n in newModel) {
-		// 	if (!newModel.hasOwnProperty(n)) continue;
-		// 	if (n == 'type_') {
-		// 		type = newModel[n];
-		// 		continue;
-		// 	}
-		// 	if (!(n in oldModel) || newModel[n] !== oldModel[n]) {
-		// 		output[n] = newModel[n];
-		// 	}
-		// }
-		// if (type !== null) output.type_ = type;
-		// return output;
 	}
 
 	static diffObjectsFields(oldModel, newModel) {
@@ -422,11 +398,10 @@ class BaseModel {
 			}
 
 			output = this.filter(o);
-		} catch (error) {
-			Log.error('Cannot save model', error);
+		} finally {
+			this.releaseSaveMutex(o, mutexRelease);
 		}
-
-		this.releaseSaveMutex(o, mutexRelease);
+		
 
 		return output;
 	}
@@ -505,22 +480,14 @@ BaseModel.typeEnum_ = [
 	['TYPE_SEARCH', 7],
 	['TYPE_ALARM', 8],
 	['TYPE_MASTER_KEY', 9],
+	['TYPE_ITEM_CHANGE', 10],
+	['TYPE_NOTE_RESOURCE', 11],
 ];
 
 for (let i = 0; i < BaseModel.typeEnum_.length; i++) {
 	const e = BaseModel.typeEnum_[i];
 	BaseModel[e[0]] = e[1];
 }
-
-// BaseModel.TYPE_NOTE = 1;
-// BaseModel.TYPE_FOLDER = 2;
-// BaseModel.TYPE_SETTING = 3;
-// BaseModel.TYPE_RESOURCE = 4;
-// BaseModel.TYPE_TAG = 5;
-// BaseModel.TYPE_NOTE_TAG = 6;
-// BaseModel.TYPE_SEARCH = 7;
-// BaseModel.TYPE_ALARM = 8;
-// BaseModel.TYPE_MASTER_KEY = 9;
 
 BaseModel.db_ = null;
 BaseModel.dispatch = function(o) {};

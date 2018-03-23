@@ -3,7 +3,6 @@ const { View, Button, Text } = require('react-native');
 const { stateUtils } = require('lib/reducer.js');
 const { connect } = require('react-redux');
 const { reg } = require('lib/registry.js');
-const { Log } = require('lib/log.js');
 const { NoteList } = require('lib/components/note-list.js');
 const Folder = require('lib/models/Folder.js');
 const Tag = require('lib/models/Tag.js');

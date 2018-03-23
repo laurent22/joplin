@@ -64,11 +64,17 @@ document.addEventListener('click', (event) => event.preventDefault());
 app().start(bridge().processArgv()).then(() => {
 	require('./gui/Root.min.js');
 }).catch((error) => {
-	// If something goes wrong at this stage we don't have a console or a log file
-	// so display the error in a message box.
-	let msg = ['Fatal error:', error.message];
-	if (error.fileName) msg.push(error.fileName);
-	if (error.lineNumber) msg.push(error.lineNumber);
-	if (error.stack) msg.push(error.stack);
-	bridge().showErrorMessageBox(msg.join('\n'));
+	if (error.code == 'flagError') {
+		bridge().showErrorMessageBox(error.message);
+	} else {
+		// If something goes wrong at this stage we don't have a console or a log file
+		// so display the error in a message box.
+		let msg = ['Fatal error:', error.message];
+		if (error.fileName) msg.push(error.fileName);
+		if (error.lineNumber) msg.push(error.lineNumber);
+		if (error.stack) msg.push(error.stack);
+		bridge().showErrorMessageBox(msg.join('\n\n'));
+	}
+
+	bridge().electronApp().exit(1);
 });

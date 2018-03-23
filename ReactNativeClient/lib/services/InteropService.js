@@ -81,6 +81,17 @@ class InteropService {
 
 		this.modules_ = importModules.concat(exportModules);
 
+		this.modules_ = this.modules_.map((a) => {
+			a.fullLabel = function(moduleSource = null) {
+				const label = [this.format.toUpperCase() + ' - ' + this.description];
+				if (moduleSource && this.sources.length > 1) {
+					label.push('(' + (moduleSource === 'file' ? _('File') : _('Directory')) + ')');
+				}
+				return label.join(' ');
+			};
+			return a;
+		});
+
 		return this.modules_;
 	}
 

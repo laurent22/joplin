@@ -87,6 +87,13 @@ process.stdout.on('error', function( err ) {
 
 
 application.start(process.argv).catch((error) => {
-	console.error(_('Fatal error:'));
-	console.error(error);
+	if (error.code == 'flagError') {
+		console.error(error.message);
+		console.error(_('Type `joplin help` for usage information.'));
+	} else {
+		console.error(_('Fatal error:'));
+		console.error(error);
+	}
+
+	process.exit(1);
 });

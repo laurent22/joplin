@@ -22,6 +22,7 @@ const AlarmServiceDriverNode = require('lib/services/AlarmServiceDriverNode');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const InteropService = require('lib/services/InteropService');
 const InteropServiceHelper = require('./InteropServiceHelper.js');
+const ResourceService = require('lib/services/ResourceService');
 
 const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
@@ -150,8 +151,8 @@ class Application extends BaseApplication {
 			this.updateEditorFont();
 		}
 
-		if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-			if (!await reg.syncTarget().syncStarted()) reg.scheduleSync();
+		if (["NOTE_UPDATE_ONE", "NOTE_DELETE", "FOLDER_UPDATE_ONE", "FOLDER_DELETE"].indexOf(action.type) >= 0) {
+			if (!await reg.syncTarget().syncStarted()) reg.scheduleSync(5, { syncSteps: ["update_remote", "delete_remote"] });
 		}
 
 		if (['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >= 0) {
@@ -205,7 +206,7 @@ class Application extends BaseApplication {
 			const module = ioModules[i];
 			if (module.type === 'exporter') {
 				exportItems.push({
-					label: module.format + ' - ' + module.description,
+					label: module.fullLabel(),
 					screens: ['Main'],
 					click: async () => {
 						await InteropServiceHelper.export(this.dispatch.bind(this), module);
@@ -214,12 +215,8 @@ class Application extends BaseApplication {
 			} else {
 				for (let j = 0; j < module.sources.length; j++) {
 					const moduleSource = module.sources[j];
-					let label = [module.format + ' - ' + module.description];
-					if (module.sources.length > 1) {
-						label.push('(' + (moduleSource === 'file' ? _('File') : _('Directory')) + ')');
-					}
 					importItems.push({
-						label: label.join(' '),
+						label: module.fullLabel(moduleSource),
 						screens: ['Main'],
 						click: async () => {
 							let path = null;
@@ -269,6 +266,17 @@ class Application extends BaseApplication {
 			}
 		}
 
+		exportItems.push({
+			label: 'PDF - ' + _('PDF File'),
+			screens: ['Main'],
+			click: async () => {
+				this.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'exportPdf',
+				});				
+			}
+		});
+
 		const template = [
 			{
 				label: _('File'),
@@ -304,31 +312,24 @@ class Application extends BaseApplication {
 					}
 				}, {
 					type: 'separator',
-				// }, {
-				// 	label: _('Import Evernote notes'),
-				// 	click: () => {
-				// 		const filePaths = bridge().showOpenDialog({
-				// 			properties: ['openFile', 'createDirectory'],
-				// 			filters: [
-				// 				{ name: _('Evernote Export Files'), extensions: ['enex'] },
-				// 			]
-				// 		});
-				// 		if (!filePaths || !filePaths.length) return;
-
-				// 		this.dispatch({
-				// 			type: 'NAV_GO',
-				// 			routeName: 'Import',
-				// 			props: {
-				// 				filePath: filePaths[0],
-				// 			},
-				// 		});
-				// 	}
 				}, {
 					label: _('Import'),
 					submenu: importItems,
 				}, {
 					label: _('Export'),
 					submenu: exportItems,
+				}, {
+					type: 'separator',
+				}, {
+					label: _('Print'),
+					accelerator: 'CommandOrControl+P',
+					screens: ['Main'],
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'print',
+						});
+					}
 				}, {
 					type: 'separator',
 					platforms: ['darwin'],
@@ -342,7 +343,7 @@ class Application extends BaseApplication {
 				}, {
 					label: _('Quit'),
 					accelerator: 'CommandOrControl+Q',
-					click: () => { bridge().electronApp().exit() }
+					click: () => { bridge().electronApp().quit() }
 				}]
 			}, {
 				label: _('Edit'),
@@ -367,11 +368,11 @@ class Application extends BaseApplication {
 				}, {
 					label: _('Search in all the notes'),
 					screens: ['Main'],
-					accelerator: 'F6',
+					accelerator: 'CommandOrControl+F',
 					click: () => {
 						this.dispatch({
 							type: 'WINDOW_COMMAND',
-							name: 'search',
+							name: 'focus_search',
 						});
 					},
 				}],
@@ -449,10 +450,16 @@ class Application extends BaseApplication {
 					accelerator: 'F1',
 					click () { bridge().openExternal('http://joplin.cozic.net') }
 				}, {
+					label: _('Make a donation'),
+					click () { bridge().openExternal('http://joplin.cozic.net/donate') }
+				}, {
 					label: _('Check for updates...'),
 					click: () => {
 						bridge().checkForUpdates(false, bridge().window(), this.checkForUpdateLoggerPath());
 					}
+				}, {
+					type: 'separator',
+					screens: ['Main'],
 				}, {
 					label: _('About Joplin'),
 					click: () => {
@@ -518,7 +525,7 @@ class Application extends BaseApplication {
 			const contextMenu = Menu.buildFromTemplate([
 				{ label: _('Open %s', app.electronApp().getName()), click: () => { app.window().show(); } },
 				{ type: 'separator' },
-				{ label: _('Exit'), click: () => { app.exit() } },
+				{ label: _('Exit'), click: () => { app.quit() } },
 			])
 			app.createTray(contextMenu);
 		}
@@ -601,6 +608,8 @@ class Application extends BaseApplication {
 		setTimeout(() => {
 			AlarmService.garbageCollect();
 		}, 1000 * 60 * 60);
+
+		ResourceService.runInBackground();
 
 		if (Setting.value('env') === 'dev') {
 			AlarmService.updateAllNotifications();

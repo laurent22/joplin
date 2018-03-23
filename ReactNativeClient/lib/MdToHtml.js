@@ -3,7 +3,9 @@ const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = (new Entities()).encode;
 const Resource = require('lib/models/Resource.js');
 const ModelCache = require('lib/ModelCache');
+const ObjectUtils = require('lib/ObjectUtils');
 const { shim } = require('lib/shim.js');
+const { _ } = require('lib/locale');
 const md5 = require('md5');
 const MdToHtml_Katex = require('lib/MdToHtml_Katex');
 
@@ -54,11 +56,11 @@ class MdToHtml {
 		return output.join(' ');
 	}
 
-	getAttr_(attrs, name) {
+	getAttr_(attrs, name, defaultValue = null) {
 		for (let i = 0; i < attrs.length; i++) {
 			if (attrs[i][0] === name) return attrs[i].length > 1 ? attrs[i][1] : null;
 		}
-		return null;
+		return defaultValue;
 	}
 
 	setAttr_(attrs, name, value) {
@@ -135,13 +137,17 @@ class MdToHtml {
 			// Ideally they should be opened in the user's browser.
 			return '<span style="opacity: 0.5">(Resource not yet supported: '; //+ htmlentities(text) + ']';
 		} else {
+			let resourceIdAttr = "";
+			let icon = "";
 			if (isResourceUrl) {
 				const resourceId = Resource.pathToId(href);
-				href = 'joplin://' + resourceId;
+				href = "joplin://" + resourceId;
+				resourceIdAttr = "data-resource-id='" + resourceId + "'";
+				icon = '<span class="resource-icon"></span>';
 			}
 
 			const js = options.postMessageSyntax + "(" + JSON.stringify(href) + "); return false;";
-			let output = "<a title='" + htmlentities(title) + "' href='#' onclick='" + js + "'>";
+			let output = "<a " + resourceIdAttr + " title='" + htmlentities(title) + "' href='#' onclick='" + js + "'>" + icon;
 			return output;
 		}
 	}
@@ -178,11 +184,23 @@ class MdToHtml {
 		return null;
 	}
 
+	urldecode_(str) {
+		try {
+			return decodeURIComponent((str+'').replace(/\+/g, '%20'));
+		} catch (error) {
+			// decodeURIComponent can throw if the string contains non-encoded data (for example "100%")
+			// so in this case just return the non encoded string. 
+			return str;
+		}
+	}
+
+
 	renderTokens_(markdownIt, tokens, options) {
 		let output = [];
 		let previousToken = null;
 		let anchorAttrs = [];
 		let extraCssBlocks = {};
+		let anchorHrefs = [];
 
 		for (let i = 0; i < tokens.length; i++) {
 			let t = tokens[i];
@@ -192,12 +210,13 @@ class MdToHtml {
 			let openTag = null;
 			let closeTag = null;
 			let attrs = t.attrs ? t.attrs : [];
-			let tokenContent = t.content ? t.content : null;
+			let tokenContent = t.content ? t.content : '';
 			const isCodeBlock = tag === 'code' && t.block;
 			const isInlineCode = t.type === 'code_inline';
 			const codeBlockLanguage = t && t.info ? t.info : null;
 			let rendererPlugin = null;
 			let rendererPluginOptions = { tagType: 'inline' };
+			let linkHref = null;
 
 			if (isCodeBlock) rendererPlugin = this.rendererPlugin_(codeBlockLanguage);
 
@@ -229,6 +248,7 @@ class MdToHtml {
 			if (openTag) {
 				if (openTag === 'a') {
 					anchorAttrs.push(attrs);
+					anchorHrefs.push(this.getAttr_(attrs, 'href'));
 					output.push(this.renderOpenLink_(attrs, options));
 				} else {
 					const attrsHtml = this.renderAttrs_(attrs);
@@ -313,7 +333,28 @@ class MdToHtml {
 
 			if (closeTag) {
 				if (closeTag === 'a') {
-					output.push(this.renderCloseLink_(anchorAttrs.pop(), options));
+					const currentAnchorAttrs = anchorAttrs.pop();
+					const previousContent = output.length ? output[output.length - 1].trim() : '';
+					const anchorHref = this.getAttr_(currentAnchorAttrs, 'href', '').trim();
+
+					// Optimisation: If the content of the anchor is the same as the URL, we replace the content
+					// by (Link). This is to shorten the text, which is important especially when the note comes
+					// from imported HTML, which can contain many such links and make the text unreadble. An example
+					// would be a movie review that has multiple links to allow a user to rate the film from 1 to 5 stars.
+					// In the original page, it might be rendered as stars, via CSS, but in the imported note it would look like this:
+					// http://example.com/rate/1 http://example.com/rate/2 http://example.com/rate/3
+					// http://example.com/rate/4 http://example.com/rate/5
+					// which would take a lot of screen space even though it doesn't matter since the user is unlikely
+					// to rate the film from the note. This is actually a nice example, still readable, but there is way
+					// worse that this in notes that come from web-clipped content.
+					// With this change, the links will still be preserved but displayed like
+					// (link) (link) (link) (link) (link)
+					if (this.urldecode_(previousContent) === htmlentities(this.urldecode_(anchorHref))) {
+						output.pop();
+						output.push(_('(Link)'));
+					}
+
+					output.push(this.renderCloseLink_(currentAnchorAttrs, options));
 				} else {
 					output.push('</' + closeTag + '>');
 				}
@@ -332,14 +373,16 @@ class MdToHtml {
 
 		// Insert the extra CSS at the top of the HTML
 
-		const temp = ['<style>'];
-		for (let n in extraCssBlocks) {
-			if (!extraCssBlocks.hasOwnProperty(n)) continue;
-			temp.push(extraCssBlocks[n]);
-		}
-		temp.push('</style>');
+		if (!ObjectUtils.isEmpty(extraCssBlocks)) {
+			const temp = ['<style>'];
+			for (let n in extraCssBlocks) {
+				if (!extraCssBlocks.hasOwnProperty(n)) continue;
+				temp.push(extraCssBlocks[n]);
+			}
+			temp.push('</style>');
 
-		output = temp.concat(output);
+			output = temp.concat(output);
+		}
 
 		return output.join('');
 	}
@@ -394,7 +437,6 @@ class MdToHtml {
 			let loopCount = 0;
 			while (renderedBody.indexOf('mJOPm') >= 0) {
 				renderedBody = renderedBody.replace(/mJOPmCHECKBOXm([A-Z]+)m(\d+)m/, function(v, type, index) {
-
 					const js = options.postMessageSyntax + "('checkboxclick:" + type + ':' + index + "'); this.classList.contains('tick') ? this.classList.remove('tick') : this.classList.add('tick'); return false;";
 					return '<a href="#" onclick="' + js + '" class="checkbox ' + (type == 'NOTICK' ? '' : 'tick') + '"><span>' + '' + '</span></a>';
 				});
@@ -443,6 +485,18 @@ class MdToHtml {
 			ul {
 				padding-left: 1.3em;
 			}
+			.resource-icon {
+				display: inline-block;
+				position: relative;
+				top: .5em;
+				text-decoration: none;
+				width: 1.15em;
+				height: 1.5em;
+				margin-right: 0.4em;
+				background-color:  ` + style.htmlColor + `;
+				/* Awesome Font file */
+				-webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'><path d='M369.9 97.9L286 14C277 5 264.8-.1 252.1-.1H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V131.9c0-12.7-5.1-25-14.1-34zM332.1 128H256V51.9l76.1 76.1zM48 464V48h160v104c0 13.3 10.7 24 24 24h104v288H48z'/></svg>");
+			}
 			a.checkbox {
 				display: inline-block;
 				position: relative;
@@ -480,13 +534,34 @@ class MdToHtml {
 				max-width: 100%;
 			}
 
-			.katex .mfrac .frac-line:before {
-				/* top: 50%; */
-				/* padding-bottom: .7em; */
+			@media print {
+				body {
+					height: auto !important;
+				}
+
+				a.checkbox {
+					border: 1pt solid ` + style.htmlColor + `;
+					border-radius: 2pt;
+					width: 1em;
+					height: 1em;
+					line-height: 1em;
+					text-align: center;
+					top: .4em;
+				}
+
+				a.checkbox.tick:after {
+					content: "X";
+				}
+
+				a.checkbox.tick {
+					top: 0;
+					left: -0.02em;
+					color: ` + style.htmlColor + `;
+				}
 			}
 		`;
 
-		const styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>'; //+ '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">';
+		const styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>';
 
 		const output = styleHtml + renderedBody;
 

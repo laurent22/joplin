@@ -63,7 +63,9 @@ shared.checkPasswords = async function(comp) {
 
 shared.decryptedStatText = function(comp) {
 	const stats = comp.state.stats;
-	return _('Decrypted items: %s / %s', stats.encrypted !== null ? (stats.total - stats.encrypted) : '-', stats.total !== null ? stats.total : '-');
+	const doneCount = stats.encrypted !== null ? (stats.total - stats.encrypted) : '-';
+	const totalCount = stats.total !== null ? stats.total : '-';
+	return _('Decrypted items: %s / %s', doneCount, totalCount);
 }
 
 shared.onSavePasswordClick = function(comp, mk) {

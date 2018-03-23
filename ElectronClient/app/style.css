@@ -36,12 +36,14 @@ table td, table th {
 
 .side-bar .list-item:hover,
 .side-bar .synchronize-button:hover {
-	background-color: #453E53;
+	/*background-color: #453E53;*/
+	background-color: #01427B;
 }
 
 .side-bar .list-item:active,
 .side-bar .synchronize-button:active {
-	background-color: #564B6C;
+	/*background-color: #564B6C;*/
+	background-color: #0465BB;
 }
 
 .editor-toolbar .button:not(.disabled):hover,

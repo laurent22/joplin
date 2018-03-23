@@ -2,7 +2,6 @@ const React = require('react'); const Component = React.Component;
 const { Platform, Keyboard, BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking, Image } = require('react-native');
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
-const { Log } = require('lib/log.js');
 const RNFS = require('react-native-fs');
 const Note = require('lib/models/Note.js');
 const Setting = require('lib/models/Setting.js');
@@ -16,6 +15,7 @@ const Icon = require('react-native-vector-icons/Ionicons').default;
 const { fileExtension, basename, safeFileExtension } = require('lib/path-utils.js');
 const mimeUtils = require('lib/mime-utils.js').mime;
 const { ScreenHeader } = require('lib/components/screen-header.js');
+const NoteTagsDialog = require('lib/components/screens/NoteTagsDialog');
 const { time } = require('lib/time-utils.js');
 const { Checkbox } = require('lib/components/checkbox.js');
 const { _ } = require('lib/locale.js');
@@ -52,7 +52,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			isLoading: true,
 			titleTextInputHeight: 20,
 			alarmDialogShown: false,
-			heightBumpView:0
+			heightBumpView:0,
+			noteTagDialogShown: false,
 		};
 
 		// iOS doesn't support multiline text fields properly so disable it
@@ -102,6 +103,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			return false;
 		};
+
+		this.noteTagDialog_closeRequested = () => {
+			this.setState({ noteTagDialogShown: false });
+		}
 	}
 
 	styles() {
@@ -358,6 +363,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 		shared.toggleIsTodo_onPress(this);
 	}
 
+	tags_onPress() {
+		if (!this.state.note || !this.state.note.id) return;
+
+		this.setState({ noteTagDialogShown: true });
+	}
+
 	setAlarm_onPress() {
 		this.setState({ alarmDialogShown: true });
 	}
@@ -394,6 +405,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	menuOptions() {
 		const note = this.state.note;
 		const isTodo = note && !!note.is_todo;
+		const isSaved = note && note.id;
 
 		let output = [];
 
@@ -411,6 +423,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			output.push({ title: _('Set alarm'), onPress: () => { this.setState({ alarmDialogShown: true }) }});;
 		}
 
+		if (isSaved) output.push({ title: _('Tags'), onPress: () => { this.tags_onPress(); } });
 		output.push({ title: isTodo ? _('Convert to note') : _('Convert to todo'), onPress: () => { this.toggleIsTodo_onPress(); } });
 		output.push({ isDivider: true });
 		if (this.props.showAdvancedOptions) output.push({ title: this.state.showNoteMetadata ? _('Hide metadata') : _('Show metadata'), onPress: () => { this.showMetadata_onPress(); } });
@@ -536,6 +549,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			</View>
 		);
 
+		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested}/>;
+
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>
 				<ScreenHeader
@@ -573,6 +588,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				/>
 
 				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
+				{ noteTagDialog }
 			</View>
 		);
 	}

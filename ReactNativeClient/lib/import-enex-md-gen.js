@@ -476,12 +476,16 @@ function enexXmlToMdArray(stream, resources) {
 					//		</note>
 					//	</en-export>
 
+					// Note that there's also the case of resources with no ID where the ID is actually the MD5 of the content.
+					// This is handled in import-enex.js
+
 					let found = false;
 					for (let i = 0; i < remainingResources.length; i++) {
 						let r = remainingResources[i];
 						if (!r.id) {
-							r.id = hash;
-							remainingResources[i] = r;
+							resource = Object.assign({}, r);
+							resource.id = hash;
+							remainingResources.splice(i, 1);
 							found = true;
 							break;
 						}
@@ -490,13 +494,13 @@ function enexXmlToMdArray(stream, resources) {
 					if (!found) {
 						console.warn('Hash with no associated resource: ' + hash);
 					}
-				} else {
-					// If the resource does not appear among the note's resources, it
-					// means it's an attachement. It will be appended along with the
-					// other remaining resources at the bottom of the markdown text.
-					if (!!resource.id) {
-						section.lines = addResourceTag(section.lines, resource, nodeAttributes.alt);
-					}
+				}
+
+				// If the resource does not appear among the note's resources, it
+				// means it's an attachement. It will be appended along with the
+				// other remaining resources at the bottom of the markdown text.
+				if (resource && !!resource.id) {
+					section.lines = addResourceTag(section.lines, resource, nodeAttributes.alt);
 				}
 			} else if (["span", "font", 'sup', 'cite', 'abbr', 'small', 'tt', 'sub', 'colgroup', 'col', 'ins', 'caption', 'var', 'map', 'area'].indexOf(n) >= 0) {
 				// Inline tags that can be ignored in Markdown
@@ -545,10 +549,6 @@ function enexXmlToMdArray(stream, resources) {
 
 				if (section.lines.length < 1) throw new Error('Invalid anchor tag closing'); // Sanity check, but normally not possible
 
-				const pushEmptyAnchor = (url) => {
-					section.lines.push('[link](' + url + ')');
-				}
-
 				// When closing the anchor tag, check if there's is any text content. If not
 				// put the URL as is (don't wrap it in [](url)). The markdown parser, using
 				// GitHub flavour, will turn this URL into a link. This is to generate slightly
@@ -556,11 +556,11 @@ function enexXmlToMdArray(stream, resources) {
 				let previous = section.lines[section.lines.length - 1];
 				if (previous == '[') {
 					section.lines.pop();
-					pushEmptyAnchor(url);
+					section.lines.push(url);
 				} else if (!previous || previous == url) {
 					section.lines.pop();
 					section.lines.pop();
-					pushEmptyAnchor(url);
+					section.lines.push(url);
 				} else {
 					// Need to remove any new line character between the current ']' and the previous '['
 					// otherwise it won't render properly.
@@ -583,8 +583,7 @@ function enexXmlToMdArray(stream, resources) {
 							const c = section.lines.pop();
 							if (c === '[') break;
 						}						
-						//section.lines.push(url);
-						pushEmptyAnchor(url);
+						section.lines.push(url);
 					} else {
 						section.lines.push('](' + url + ')');
 					}
@@ -644,7 +643,6 @@ function drawTable(table) {
 	// https://gist.github.com/IanWang/28965e13cdafdef4e11dc91f578d160d#tables
 
 	const flatRender = tableHasSubTables(table); // Render the table has regular text
-	const minColWidth = 3;
 	let lines = [];
 	lines.push(BLOCK_OPEN);
 	let headerDone = false;
@@ -687,9 +685,16 @@ function drawTable(table) {
 
 				// A cell in a Markdown table cannot have actual new lines so replace
 				// them with <br>, which are supported by the markdown renderers.
-				const cellText = processMdArrayNewLines(td.lines).replace(/\n+/g, "<br>");
+				let cellText = processMdArrayNewLines(td.lines).replace(/\n+/g, "<br>");
 
-				const width = Math.max(cellText.length, 3);
+				// Inside tables cells, "|" needs to be escaped
+				cellText = cellText.replace(/\|/g, "\\|");
+
+				// Previously the width of the cell was as big as the content since it looks nicer, however that often doesn't work
+				// since the content can be very long, resulting in unreadable markdown. So no solution is perfect but making it a
+				// width of 3 is a bit better. Note that 3 is the minimum width of a cell - below this, it won't be rendered by
+				// markdown parsers.
+				const width = 3;
 				line.push(stringPadding(cellText, width, ' ', stringPadding.RIGHT));
 
 				if (!headerDone) {

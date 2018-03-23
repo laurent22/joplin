@@ -1,5 +1,6 @@
 const BaseModel = require('lib/BaseModel.js');
 const BaseItem = require('lib/models/BaseItem.js');
+const NoteResource = require('lib/models/NoteResource.js');
 const Setting = require('lib/models/Setting.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const pathUtils = require('lib/path-utils.js');
@@ -141,6 +142,20 @@ class Resource extends BaseItem {
 	static urlToId(url) {
 		if (!this.isResourceUrl(url)) throw new Error('Not a valid resource URL: ' + url);
 		return url.substr(2);
+	}
+
+	static async batchDelete(ids, options = null) {
+		// For resources, there's not really batch deleting since there's the file data to delete
+		// too, so each is processed one by one with the item being deleted last (since the db
+		// call is the less likely to fail).
+		for (let i = 0; i < ids.length; i++) {
+			const id = ids[i];
+			const resource = await Resource.load(id);
+			const path = Resource.fullPath(resource);
+			await this.fsDriver().remove(path);
+			await super.batchDelete([id], options);
+			await NoteResource.deleteByResource(id); // Clean up note/resource relationships
+		}
 	}
 
 }

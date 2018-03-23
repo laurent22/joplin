@@ -17,7 +17,7 @@ class FsDriverRN extends FsDriverBase {
 
 	// same as rm -rf
 	async remove(path) {
-		throw new Error('Not implemented');
+		return await this.unlink(path);
 	}
 
 	writeBinaryFile(path, content) {

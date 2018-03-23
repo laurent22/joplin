@@ -202,7 +202,7 @@ class JoplinDatabase extends Database {
 		// default value and thus might cause problems. In that case, the default value
 		// must be set in the synchronizer too.
 
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -296,6 +296,52 @@ class JoplinDatabase extends Database {
 
 				queries.push('ALTER TABLE sync_items ADD COLUMN force_sync INT NOT NULL DEFAULT 0');
 				queries.push('ALTER TABLE resources ADD COLUMN encryption_blob_encrypted INT NOT NULL DEFAULT 0');
+			}
+
+			const upgradeVersion10 = () => {
+				const itemChangesTable = `
+					CREATE TABLE item_changes (
+						id INTEGER PRIMARY KEY AUTOINCREMENT,
+						item_type INT NOT NULL,
+						item_id TEXT NOT NULL,
+						type INT NOT NULL,
+						created_time INT NOT NULL
+					);
+				`;
+
+				const noteResourcesTable = `
+					CREATE TABLE note_resources (
+						id INTEGER PRIMARY KEY,
+						note_id TEXT NOT NULL,
+						resource_id TEXT NOT NULL,
+						is_associated INT NOT NULL,
+						last_seen_time INT NOT NULL
+					);
+				`;
+
+				queries.push(this.sqlStringToLines(itemChangesTable)[0]);
+				queries.push('CREATE INDEX item_changes_item_id ON item_changes (item_id)');
+				queries.push('CREATE INDEX item_changes_created_time ON item_changes (created_time)');
+				queries.push('CREATE INDEX item_changes_item_type ON item_changes (item_type)');
+
+				queries.push(this.sqlStringToLines(noteResourcesTable)[0]);
+				queries.push('CREATE INDEX note_resources_note_id ON note_resources (note_id)');
+				queries.push('CREATE INDEX note_resources_resource_id ON note_resources (resource_id)');
+
+				queries.push({ sql: 'INSERT INTO item_changes (item_type, item_id, type, created_time) SELECT 1, id, 1, ? FROM notes', params: [Date.now()] });
+			}
+
+			if (targetVersion == 10) {
+				upgradeVersion10();
+			}
+
+			if (targetVersion == 11) {
+				// This trick was needed because Electron Builder incorrectly released a dev branch containing v10 as it was
+				// still being developed, and the db schema was not final at that time. So this v11 was created to
+				// make sure any invalid db schema that was accidentally created was deleted and recreated.
+				queries.push('DROP TABLE item_changes');
+				queries.push('DROP TABLE note_resources');
+				upgradeVersion10();
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

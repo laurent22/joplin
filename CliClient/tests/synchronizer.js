@@ -119,7 +119,7 @@ describe('Synchronizer', function() {
 		await localItemsSameAsRemote(all, expect);
 	}));
 
-	it('should update remote item', asyncTest(async () => {
+	it('should update remote items', asyncTest(async () => {
 		let folder = await Folder.save({ title: "folder1" });
 		let note = await Note.save({ title: "un", parent_id: folder.id });
 		await synchronizer().start();
@@ -883,6 +883,37 @@ describe('Synchronizer', function() {
 		expect(fileContentEqual(resourcePath1, resourcePath1_2)).toBe(true);
 	}));
 
+	it('should delete resources', asyncTest(async () => {
+		while (insideBeforeEach) await time.msleep(500);
+
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		let resource1 = (await Resource.all())[0];
+		let resourcePath1 = Resource.fullPath(resource1);
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		let allResources = await Resource.all();
+		expect(allResources.length).toBe(1);
+		let all = await fileApi().list();
+		expect(all.items.length).toBe(3);
+		await Resource.delete(resource1.id);
+		await synchronizer().start();
+		all = await fileApi().list();
+		expect(all.items.length).toBe(2);
+
+		await switchClient(1);
+
+		expect(await shim.fsDriver().exists(resourcePath1)).toBe(true);
+		await synchronizer().start();
+		allResources = await Resource.all();
+		expect(allResources.length).toBe(0);
+		expect(await shim.fsDriver().exists(resourcePath1)).toBe(false);
+	}));
+
 	it('should encryt resources', asyncTest(async () => {
 		Setting.setValue('encryption.enabled', true);
 		const masterKey = await loadEncryptionMasterKey();
@@ -1004,6 +1035,31 @@ describe('Synchronizer', function() {
 		await synchronizer().start();
 
 		await localItemsSameAsRemote(all, expect);
+	}));
+
+	it("should update remote items but not pull remote changes", asyncTest(async () => {
+		let folder = await Folder.save({ title: "folder1" });
+		let note = await Note.save({ title: "un", parent_id: folder.id });
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		await Note.save({ title: "deux", parent_id: folder.id });
+		await synchronizer().start();
+
+		await switchClient(1);
+
+		await Note.save({ title: "un UPDATE", id: note.id });
+		await synchronizer().start({ syncSteps: ["update_remote"] });
+		let all = await allItems();
+		expect(all.length).toBe(2);
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		let note2 = await Note.load(note.id);
+		expect(note2.title).toBe("un UPDATE");
 	}));
 
 });

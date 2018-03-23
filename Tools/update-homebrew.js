@@ -18,7 +18,7 @@ async function main() {
 	console.info('URL = ' + url);
 	console.info('SHA256 = ' + sha256);
 	console.info('');
-	console.info('brew bump-formula-pr --strict joplin --url=' + url + ' --sha256=' + sha256);
+	console.info('brew update && brew bump-formula-pr --strict joplin --url=' + url + ' --sha256=' + sha256);
 }
 
 main().catch((error) => {

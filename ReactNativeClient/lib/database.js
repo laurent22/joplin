@@ -3,16 +3,16 @@ const { promiseChain } = require('lib/promise-utils.js');
 const { Logger } = require('lib/logger.js');
 const { time } = require('lib/time-utils.js');
 const { sprintf } = require('sprintf-js');
+const Mutex = require('async-mutex').Mutex;
 
 class Database {
 
 	constructor(driver) {
 		this.debugMode_ = false;
 		this.driver_ = driver;
-		this.inTransaction_ = false;
-
 		this.logger_ = new Logger();
 		this.logExcludedQueryTypes_ = [];
+		this.batchTransactionMutex_ = new Mutex();
 	}
 
 	setLogExcludedQueryTypes(v) {
@@ -113,92 +113,24 @@ class Database {
 			return;
 		}
 
-		// There can be only one transaction running at a time so queue
-		// any new transaction here.
-		if (this.inTransaction_) {
-			while (true) {
-				await time.msleep(100);
-				if (!this.inTransaction_) {
-					this.inTransaction_ = true;
-					break;
-				}
+		// There can be only one transaction running at a time so use a	mutex
+		const release = await this.batchTransactionMutex_.acquire();
+
+		try {
+			await this.exec('BEGIN TRANSACTION');
+
+			for (let i = 0; i < queries.length; i++) {
+				let query = this.wrapQuery(queries[i]);
+				await this.exec(query.sql, query.params);
 			}
 
-			// return new Promise((resolve, reject) => {
-			// 	let iid = setInterval(() => {
-			// 		if (!this.inTransaction_) {
-			// 			clearInterval(iid);
-			// 			this.transactionExecBatch(queries).then(() => {
-			// 				resolve();
-			// 			}).catch((error) => {
-			// 				reject(error);
-			// 			});
-			// 		}
-			// 	}, 100);
-			// });
+			await this.exec('COMMIT');
+		} catch (error) {
+			await this.exec('ROLLBACK');
+			throw error;
+		} finally {
+			release();
 		}
-
-		this.inTransaction_ = true;
-
-		queries.splice(0, 0, 'BEGIN TRANSACTION');
-		queries.push('COMMIT'); // Note: ROLLBACK is currently not supported
-
-		for (let i = 0; i < queries.length; i++) {
-			let query = this.wrapQuery(queries[i]);
-			await this.exec(query.sql, query.params);
-		}
-
-		this.inTransaction_ = false;
-
-		// return promiseChain(chain).then(() => {
-		// 	this.inTransaction_ = false;
-		// });
-
-
-
-
-
-
-		// if (queries.length <= 0) return Promise.resolve();
-
-		// if (queries.length == 1) {
-		// 	let q = this.wrapQuery(queries[0]);
-		// 	return this.exec(q.sql, q.params);
-		// }
-
-		// // There can be only one transaction running at a time so queue
-		// // any new transaction here.
-		// if (this.inTransaction_) {
-		// 	return new Promise((resolve, reject) => {
-		// 		let iid = setInterval(() => {
-		// 			if (!this.inTransaction_) {
-		// 				clearInterval(iid);
-		// 				this.transactionExecBatch(queries).then(() => {
-		// 					resolve();
-		// 				}).catch((error) => {
-		// 					reject(error);
-		// 				});
-		// 			}
-		// 		}, 100);
-		// 	});
-		// }
-
-		// this.inTransaction_ = true;
-
-		// queries.splice(0, 0, 'BEGIN TRANSACTION');
-		// queries.push('COMMIT'); // Note: ROLLBACK is currently not supported
-
-		// let chain = [];
-		// for (let i = 0; i < queries.length; i++) {
-		// 	let query = this.wrapQuery(queries[i]);
-		// 	chain.push(() => {
-		// 		return this.exec(query.sql, query.params);
-		// 	});
-		// }
-
-		// return promiseChain(chain).then(() => {
-		// 	this.inTransaction_ = false;
-		// });
 	}
 
 	static enumId(type, s) {
