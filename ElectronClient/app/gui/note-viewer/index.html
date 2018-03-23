@@ -185,7 +185,6 @@
 		if (!keywords.length && !markLoaded_) return;
 
 		if (!markLoaded_) {
-			markLoaded_ = true;
 			const script = document.createElement('script');
 			script.onload = function() {
 				setMarkers(keywords);
@@ -193,6 +192,7 @@
 
 			script.src = '../../node_modules/mark.js/dist/mark.min.js';
 			document.getElementById('markScriptContainer').appendChild(script);
+			markLoaded_ = true;
 		} else {
 			setMarkers(keywords);
 		}
