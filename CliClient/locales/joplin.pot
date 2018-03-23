@@ -1193,6 +1193,12 @@ msgstr ""
 msgid "Cancel synchronisation"
 msgstr ""
 
+msgid "New tags:"
+msgstr ""
+
+msgid "Type new tags or select from list"
+msgstr ""
+
 msgid "Joplin website"
 msgstr ""
 

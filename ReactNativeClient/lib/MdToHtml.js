@@ -5,6 +5,7 @@ const Resource = require('lib/models/Resource.js');
 const ModelCache = require('lib/ModelCache');
 const ObjectUtils = require('lib/ObjectUtils');
 const { shim } = require('lib/shim.js');
+const { _ } = require('lib/locale');
 const md5 = require('md5');
 const MdToHtml_Katex = require('lib/MdToHtml_Katex');
 
@@ -55,11 +56,11 @@ class MdToHtml {
 		return output.join(' ');
 	}
 
-	getAttr_(attrs, name) {
+	getAttr_(attrs, name, defaultValue = null) {
 		for (let i = 0; i < attrs.length; i++) {
 			if (attrs[i][0] === name) return attrs[i].length > 1 ? attrs[i][1] : null;
 		}
-		return null;
+		return defaultValue;
 	}
 
 	setAttr_(attrs, name, value) {
@@ -183,11 +184,23 @@ class MdToHtml {
 		return null;
 	}
 
+	urldecode_(str) {
+		try {
+			return decodeURIComponent((str+'').replace(/\+/g, '%20'));
+		} catch (error) {
+			// decodeURIComponent can throw if the string contains non-encoded data (for example "100%")
+			// so in this case just return the non encoded string. 
+			return str;
+		}
+	}
+
+
 	renderTokens_(markdownIt, tokens, options) {
 		let output = [];
 		let previousToken = null;
 		let anchorAttrs = [];
 		let extraCssBlocks = {};
+		let anchorHrefs = [];
 
 		for (let i = 0; i < tokens.length; i++) {
 			let t = tokens[i];
@@ -203,6 +216,7 @@ class MdToHtml {
 			const codeBlockLanguage = t && t.info ? t.info : null;
 			let rendererPlugin = null;
 			let rendererPluginOptions = { tagType: 'inline' };
+			let linkHref = null;
 
 			if (isCodeBlock) rendererPlugin = this.rendererPlugin_(codeBlockLanguage);
 
@@ -234,6 +248,7 @@ class MdToHtml {
 			if (openTag) {
 				if (openTag === 'a') {
 					anchorAttrs.push(attrs);
+					anchorHrefs.push(this.getAttr_(attrs, 'href'));
 					output.push(this.renderOpenLink_(attrs, options));
 				} else {
 					const attrsHtml = this.renderAttrs_(attrs);
@@ -318,7 +333,28 @@ class MdToHtml {
 
 			if (closeTag) {
 				if (closeTag === 'a') {
-					output.push(this.renderCloseLink_(anchorAttrs.pop(), options));
+					const currentAnchorAttrs = anchorAttrs.pop();
+					const previousContent = output.length ? output[output.length - 1].trim() : '';
+					const anchorHref = this.getAttr_(currentAnchorAttrs, 'href', '').trim();
+
+					// Optimisation: If the content of the anchor is the same as the URL, we replace the content
+					// by (Link). This is to shorten the text, which is important especially when the note comes
+					// from imported HTML, which can contain many such links and make the text unreadble. An example
+					// would be a movie review that has multiple links to allow a user to rate the film from 1 to 5 stars.
+					// In the original page, it might be rendered as stars, via CSS, but in the imported note it would look like this:
+					// http://example.com/rate/1 http://example.com/rate/2 http://example.com/rate/3
+					// http://example.com/rate/4 http://example.com/rate/5
+					// which would take a lot of screen space even though it doesn't matter since the user is unlikely
+					// to rate the film from the note. This is actually a nice example, still readable, but there is way
+					// worse that this in notes that come from web-clipped content.
+					// With this change, the links will still be preserved but displayed like
+					// (link) (link) (link) (link) (link)
+					if (this.urldecode_(previousContent) === htmlentities(this.urldecode_(anchorHref))) {
+						output.pop();
+						output.push(_('(Link)'));
+					}
+
+					output.push(this.renderCloseLink_(currentAnchorAttrs, options));
 				} else {
 					output.push('</' + closeTag + '>');
 				}

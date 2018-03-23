@@ -1330,6 +1330,12 @@ msgstr "Bestätigen"
 msgid "Cancel synchronisation"
 msgstr "Synchronisation abbrechen"
 
+msgid "New tags:"
+msgstr ""
+
+msgid "Type new tags or select from list"
+msgstr ""
+
 msgid "Joplin website"
 msgstr "Website von Joplin"
 

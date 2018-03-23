@@ -1247,6 +1247,12 @@ msgstr "确认"
 msgid "Cancel synchronisation"
 msgstr "取消同步"
 
+msgid "New tags:"
+msgstr ""
+
+msgid "Type new tags or select from list"
+msgstr ""
+
 msgid "Joplin website"
 msgstr ""
 

@@ -1317,6 +1317,12 @@ msgstr "Baieztatu"
 msgid "Cancel synchronisation"
 msgstr "Sinkronizazioa utzi"
 
+msgid "New tags:"
+msgstr ""
+
+msgid "Type new tags or select from list"
+msgstr ""
+
 msgid "Joplin website"
 msgstr ""
 

@@ -272,7 +272,7 @@ class MainScreenComponent extends React.Component {
 			position: 'absolute',
 			top: 0,
 			left: 0,
-			backgroundColor: theme.backgroundColorTransparent,
+			backgroundColor: theme.backgroundColor,
 			width: width - 20,
 			height: height - 20,
 			padding: 10,

@@ -1287,6 +1287,12 @@ msgstr "確認"
 msgid "Cancel synchronisation"
 msgstr "同期の中止"
 
+msgid "New tags:"
+msgstr ""
+
+msgid "Type new tags or select from list"
+msgstr ""
+
 msgid "Joplin website"
 msgstr ""
 
