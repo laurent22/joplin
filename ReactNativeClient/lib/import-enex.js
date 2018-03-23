@@ -11,6 +11,7 @@ const { enexXmlToMd } = require('./import-enex-md-gen.js');
 const { time } = require('lib/time-utils.js');
 const Levenshtein = require('levenshtein');
 const jsSHA = require("jssha");
+const md5 = require('md5');
 
 //const Promise = require('promise');
 const fs = require('fs-extra');
@@ -30,8 +31,8 @@ function extractRecognitionObjId(recognitionXml) {
 	return r && r.length >= 2 ? r[1] : null;
 }
 
-function filePutContents(filePath, content) {
-	return fs.writeFile(filePath, content);
+async function filePutContents(filePath, content) {
+	await fs.writeFile(filePath, content);
 }
 
 function removeUndefinedProperties(note) {
@@ -255,49 +256,6 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			stream.resume();
 			processingNotes = false;
 			return true;
-
-			// let chain = [];
-			// while (notes.length) {
-			// 	let note = notes.shift();
-			// 	const contentStream = stringToStream(note.bodyXml);
-			// 	chain.push(() => {
-			// 		return enexXmlToMd(contentStream, note.resources).then((body) => {
-			// 			delete note.bodyXml;
-
-			// 			// console.info('-----------------------------------------------------------');
-			// 			// console.info(body);
-			// 			// console.info('-----------------------------------------------------------');
-
-			// 			note.id = uuid.create();
-			// 			note.parent_id = parentFolderId;
-			// 			note.body = body;
-
-			// 			// Notes in enex files always have a created timestamp but not always an
-			// 			// updated timestamp (it the note has never been modified). For sync
-			// 			// we require an updated_time property, so set it to create_time in that case
-			// 			if (!note.updated_time) note.updated_time = note.created_time;
-
-			// 			return saveNoteToStorage(note, importOptions.fuzzyMatching);
-			// 		}).then((result) => {
-			// 			if (result.noteUpdated) {
-			// 				progressState.updated++;
-			// 			} else if (result.noteCreated) {
-			// 				progressState.created++;
-			// 			} else if (result.noteSkipped) {
-			// 				progressState.skipped++;
-			// 			}
-			// 			progressState.resourcesCreated += result.resourcesCreated;
-			// 			progressState.notesTagged += result.notesTagged;
-			// 			importOptions.onProgress(progressState);
-			// 		});
-			// 	});
-			// }
-
-			// return promiseChain(chain).then(() => {
-			// 	stream.resume();
-			// 	processingNotes = false;
-			// 	return true;
-			// });
 		}
 
 		saxStream.on('error', (error) => {
@@ -418,6 +376,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				noteAttributes = null;
 			} else if (n == 'resource') {
 				let decodedData = null;
+				let resourceId = noteResource.id;
 				if (noteResource.dataEncoding == 'base64') {
 					try {
 						decodedData = Buffer.from(noteResource.data, 'base64');
@@ -429,8 +388,14 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					decodedData = noteResource.data; // Just put the encoded data directly in the file so it can, potentially, be manually decoded later
 				}
 
+				if (!resourceId && decodedData) {
+					// If no resource ID is present, the resource ID is actually the MD5 of the data.
+					// This ID will match the "hash" attribute of the corresponding <en-media> tag.
+					resourceId = md5(decodedData);
+				}
+
 				let r = {
-					id: noteResource.id,
+					id: resourceId,
 					data: decodedData,
 					mime: noteResource.mime,
 					title: noteResource.filename ? noteResource.filename : '',
