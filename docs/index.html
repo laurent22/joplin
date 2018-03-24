@@ -227,15 +227,15 @@
 <tbody>
 <tr>
 <td>Windows</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.78/Joplin-Setup-1.0.78.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.79/Joplin-Setup-1.0.79.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a></td>
 </tr>
 <tr>
 <td>macOS</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.78/Joplin-1.0.78.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.79/Joplin-1.0.79.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a></td>
 </tr>
 <tr>
 <td>Linux</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.78/Joplin-1.0.78-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.79/Joplin-1.0.79-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a></td>
 </tr>
 </tbody>
 </table>
@@ -270,7 +270,7 @@
 sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 </code></pre><p>By default, the application binary will be installed under <code>~/.joplin-bin</code>. You may change this directory if needed. Alternatively, if your npm permissions are setup as described <a href="https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory">here</a> (Option 2) then simply running <code>npm -g install joplin</code> would work.</p>
 <p>To start it, type <code>joplin</code>.</p>
-<p>For usage information, please refer to the full <a href="http://joplin.cozic.net/terminal">Joplin Terminal Application Documentation</a>.</p>
+<p>For usage information, please refer to the full <a href="https://joplin.cozic.net/terminal">Joplin Terminal Application Documentation</a>.</p>
 <h1 id="features">Features</h1>
 <ul>
 <li>Desktop, mobile and terminal applications.</li>
@@ -299,11 +299,11 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 </ul>
 <p>To import Evernote data, first export your Evernote notebooks to ENEX files as described <a href="https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks">here</a>. Then follow these steps:</p>
 <p>On the <strong>desktop application</strong>, open File &gt; Import &gt; ENEX and select your file. The notes will be imported into a new separate notebook. If needed they can then be moved to a different notebook, or the notebook can be renamed, etc.</p>
-<p>On the <strong>terminal application</strong>, in <a href="/terminal#command-line-mode">command-line mode</a>, type <code>import /path/to/file.enex</code>. This will import the notes into a new notebook named after the filename.</p>
+<p>On the <strong>terminal application</strong>, in <a href="https://joplin.cozic.net/terminal#command-line-mode">command-line mode</a>, type <code>import /path/to/file.enex</code>. This will import the notes into a new notebook named after the filename.</p>
 <h2 id="importing-from-markdown-files">Importing from Markdown files</h2>
 <p>Joplin can import notes from plain Markdown file. You can either import a complete directory of Markdown files or individual files.</p>
 <p>On the <strong>desktop application</strong>, open File &gt; Import &gt; MD and select your Markdown file or directory.</p>
-<p>On the <strong>terminal application</strong>, in <a href="/terminal#command-line-mode">command-line mode</a>, type <code>import --format md /path/to/file.md</code> or <code>import --format md /path/to/directory/</code>.</p>
+<p>On the <strong>terminal application</strong>, in <a href="https://joplin.cozic.net/terminal#command-line-mode">command-line mode</a>, type <code>import --format md /path/to/file.md</code> or <code>import --format md /path/to/directory/</code>.</p>
 <h2 id="importing-from-other-applications">Importing from other applications</h2>
 <p>In general the way to import notes from any application into Joplin is to convert the notes to ENEX files (Evernote format) and to import these ENEX files into Joplin using the method above. Most note-taking applications support ENEX files so it should be relatively straightforward. For help about specific applications, see below:</p>
 <ul>
@@ -342,8 +342,8 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <p>On the <strong>terminal application</strong>, to initiate the synchronisation process, type <code>:sync</code>. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). It is possible to also synchronise outside of the user interface by typing <code>joplin sync</code> from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:</p>
 <pre><code>*/30 * * * * /path/to/joplin sync
 </code></pre><h1 id="encryption">Encryption</h1>
-<p>Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the notes, notebooks, tags or resources can read them. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the <a href="http://joplin.cozic.net/help/e2ee">End-To-End Encryption Tutorial</a> for more information about this feature and how to enable it.</p>
-<p>For a more technical description, mostly relevant for development or to review the method being used, please see the <a href="http://joplin.cozic.net/help/spec">Encryption specification</a>.</p>
+<p>Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the notes, notebooks, tags or resources can read them. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the <a href="https://joplin.cozic.net/help/e2ee">End-To-End Encryption Tutorial</a> for more information about this feature and how to enable it.</p>
+<p>For a more technical description, mostly relevant for development or to review the method being used, please see the <a href="https://joplin.cozic.net/help/spec">Encryption specification</a>.</p>
 <h1 id="attachments-resources">Attachments / Resources</h1>
 <p>Any kind of file can be attached to a note. In Markdown, links to these files are represented as a simple ID to the resource. In the note viewer, these files, if they are images, will be displayed or, if they are other files (PDF, text files, etc.) they will be displayed as links. Clicking on this link will open the file in the default application.</p>
 <h1 id="notifications">Notifications</h1>
@@ -379,7 +379,7 @@ $$
 </code></pre><p>The checkboxes can then be ticked in the mobile and desktop applications.</p>
 <h1 id="donations">Donations</h1>
 <p>Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.</p>
-<p>Please see the <a href="http://joplin.cozic.net/donate/">donation page</a> for information on how to support the development of Joplin.</p>
+<p>Please see the <a href="https://joplin.cozic.net/donate/">donation page</a> for information on how to support the development of Joplin.</p>
 <h1 id="contributing">Contributing</h1>
 <p>Please see the guide for information on how to contribute to the development of Joplin: <a href="https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md">https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md</a></p>
 <h1 id="localisation">Localisation</h1>
@@ -416,7 +416,7 @@ $$
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/hr.png" alt=""></td>
 <td>Croatian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/hr_HR.po">hr_HR</a></td>
-<td>Hrvoje Mandić <a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#x74;&#114;&#x62;&#x75;&#x68;&#111;&#109;&#64;&#110;&#101;&#x74;&#x2e;&#104;&#114;">&#x74;&#114;&#x62;&#x75;&#x68;&#111;&#109;&#64;&#110;&#101;&#x74;&#x2e;&#104;&#114;</a></td>
+<td>Hrvoje Mandić <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#x3a;&#116;&#114;&#x62;&#x75;&#x68;&#x6f;&#109;&#64;&#x6e;&#101;&#x74;&#46;&#104;&#x72;">&#116;&#114;&#x62;&#x75;&#x68;&#x6f;&#109;&#64;&#x6e;&#101;&#x74;&#46;&#104;&#x72;</a></td>
 <td>64%</td>
 </tr>
 <tr>
@@ -430,7 +430,7 @@ $$
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/de.png" alt=""></td>
 <td>Deutsch</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po">de_DE</a></td>
-<td>Tobias Grasse <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#x6d;&#97;&#x69;&#108;&#64;&#116;&#x6f;&#98;&#105;&#97;&#115;&#45;&#x67;&#114;&#x61;&#x73;&#x73;&#x65;&#x2e;&#110;&#101;&#116;">&#x6d;&#97;&#x69;&#108;&#64;&#116;&#x6f;&#98;&#105;&#97;&#115;&#45;&#x67;&#114;&#x61;&#x73;&#x73;&#x65;&#x2e;&#110;&#101;&#116;</a></td>
+<td>Tobias Grasse <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x6d;&#x61;&#x69;&#108;&#64;&#116;&#111;&#98;&#105;&#97;&#x73;&#x2d;&#x67;&#x72;&#x61;&#x73;&#115;&#x65;&#46;&#110;&#101;&#116;">&#x6d;&#x61;&#x69;&#108;&#64;&#116;&#111;&#98;&#105;&#97;&#x73;&#x2d;&#x67;&#x72;&#x61;&#x73;&#115;&#x65;&#46;&#110;&#101;&#116;</a></td>
 <td>98%</td>
 </tr>
 <tr>
@@ -444,7 +444,7 @@ $$
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/es.png" alt=""></td>
 <td>Español</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po">es_ES</a></td>
-<td>Fernando Martín <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#111;&#x3a;&#102;&#x40;&#x6d;&#114;&#116;&#x6e;&#x2e;&#x65;&#115;">&#102;&#x40;&#x6d;&#114;&#116;&#x6e;&#x2e;&#x65;&#115;</a></td>
+<td>Fernando Martín <a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#102;&#64;&#x6d;&#x72;&#116;&#110;&#46;&#101;&#x73;">&#102;&#64;&#x6d;&#x72;&#116;&#110;&#46;&#101;&#x73;</a></td>
 <td>99%</td>
 </tr>
 <tr>
@@ -472,21 +472,21 @@ $$
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/br.png" alt=""></td>
 <td>Português (Brasil)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_BR.po">pt_BR</a></td>
-<td>Renato Nunes Bastos <a href="&#109;&#97;&#105;&#x6c;&#x74;&#111;&#x3a;&#x72;&#110;&#98;&#97;&#x73;&#116;&#x6f;&#115;&#x40;&#x67;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#109;">&#x72;&#110;&#98;&#97;&#x73;&#116;&#x6f;&#115;&#x40;&#x67;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#109;</a></td>
+<td>Renato Nunes Bastos <a href="&#x6d;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#x72;&#x6e;&#98;&#x61;&#x73;&#x74;&#111;&#115;&#64;&#103;&#x6d;&#97;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;">&#x72;&#x6e;&#98;&#x61;&#x73;&#x74;&#111;&#115;&#64;&#103;&#x6d;&#97;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;</a></td>
 <td>97%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/ru.png" alt=""></td>
 <td>Русский</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ru_RU.po">ru_RU</a></td>
-<td>Artyom Karlov <a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#58;&#x61;&#x72;&#116;&#x79;&#111;&#109;&#x2e;&#x6b;&#x61;&#114;&#108;&#111;&#x76;&#64;&#x67;&#109;&#x61;&#105;&#108;&#x2e;&#x63;&#111;&#109;">&#x61;&#x72;&#116;&#x79;&#111;&#109;&#x2e;&#x6b;&#x61;&#114;&#108;&#111;&#x76;&#64;&#x67;&#109;&#x61;&#105;&#108;&#x2e;&#x63;&#111;&#109;</a></td>
+<td>Artyom Karlov <a href="&#109;&#x61;&#105;&#108;&#116;&#111;&#x3a;&#97;&#x72;&#x74;&#x79;&#111;&#109;&#46;&#x6b;&#97;&#x72;&#108;&#111;&#118;&#x40;&#103;&#109;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#109;">&#97;&#x72;&#x74;&#x79;&#111;&#109;&#46;&#x6b;&#97;&#x72;&#108;&#111;&#118;&#x40;&#103;&#109;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#109;</a></td>
 <td>99%</td>
 </tr>
 <tr>
 <td><img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/cn.png" alt=""></td>
 <td>中文 (简体)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po">zh_CN</a></td>
-<td>RCJacH <a href="&#109;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#x52;&#67;&#74;&#x61;&#x63;&#x48;&#x40;&#111;&#x75;&#116;&#x6c;&#x6f;&#x6f;&#107;&#x2e;&#x63;&#x6f;&#x6d;">&#x52;&#67;&#74;&#x61;&#x63;&#x48;&#x40;&#111;&#x75;&#116;&#x6c;&#x6f;&#x6f;&#107;&#x2e;&#x63;&#x6f;&#x6d;</a></td>
+<td>RCJacH <a href="&#x6d;&#x61;&#105;&#108;&#x74;&#111;&#x3a;&#x52;&#67;&#74;&#x61;&#99;&#x48;&#x40;&#111;&#117;&#x74;&#108;&#x6f;&#111;&#x6b;&#x2e;&#x63;&#111;&#x6d;">&#x52;&#67;&#74;&#x61;&#99;&#x48;&#x40;&#111;&#117;&#x74;&#108;&#x6f;&#111;&#x6b;&#x2e;&#x63;&#111;&#x6d;</a></td>
 <td>66%</td>
 </tr>
 <tr>
