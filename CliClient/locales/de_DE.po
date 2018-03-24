@@ -811,11 +811,12 @@ msgstr "Notizbuch umbenennen:"
 msgid "Set alarm:"
 msgstr "Alarm erstellen:"
 
-msgid "Search"
-msgstr "Suchen"
-
 msgid "Layout"
 msgstr "Layout"
+
+#, fuzzy
+msgid "Search..."
+msgstr "Suchen"
 
 msgid "Some items cannot be synchronised."
 msgstr "Manche Objekte können nicht synchronisiert werden."
@@ -921,9 +922,6 @@ msgstr "Synchronisieren"
 
 msgid "Notebooks"
 msgstr "Notizbücher"
-
-msgid "Searches"
-msgstr "Suchen"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1409,6 +1407,9 @@ msgstr "Notizbuch löschen"
 msgid "Login with OneDrive"
 msgstr "Mit OneDrive anmelden"
 
+msgid "Search"
+msgstr "Suchen"
+
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
@@ -1424,6 +1425,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Willkommen"
+
+#~ msgid "Searches"
+#~ msgstr "Suchen"
 
 #~ msgid ""
 #~ "Release notes:\n"

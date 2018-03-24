@@ -798,11 +798,12 @@ msgstr "Berrizendatu koadernoa:"
 msgid "Set alarm:"
 msgstr "Ezarri alarma:"
 
-msgid "Search"
-msgstr "Bilatu"
-
 msgid "Layout"
 msgstr "Diseinua"
+
+#, fuzzy
+msgid "Search..."
+msgstr "Bilatu"
 
 msgid "Some items cannot be synchronised."
 msgstr "Zenbait item ezin dira sinkronizatu."
@@ -906,9 +907,6 @@ msgstr "Sinkronizatu"
 
 msgid "Notebooks"
 msgstr "Koadernoak"
-
-msgid "Searches"
-msgstr "Bilaketak"
 
 #, fuzzy
 msgid "Please select where the sync status should be exported to"
@@ -1396,6 +1394,9 @@ msgstr "Ezabatu koadernoa"
 msgid "Login with OneDrive"
 msgstr "Login with OneDrive"
 
+msgid "Search"
+msgstr "Bilatu"
+
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
@@ -1408,6 +1409,9 @@ msgstr "Oraindik ez duzu koadernorik. Sortu bat (+) botoian sakatuta."
 
 msgid "Welcome"
 msgstr "Ongi etorri!"
+
+#~ msgid "Searches"
+#~ msgstr "Bilaketak"
 
 #, fuzzy
 #~ msgid ""

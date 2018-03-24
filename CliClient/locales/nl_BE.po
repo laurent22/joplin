@@ -800,11 +800,12 @@ msgstr "Hernoem notitieboek:"
 msgid "Set alarm:"
 msgstr "Stel melding in:"
 
-msgid "Search"
-msgstr "Zoeken"
-
 msgid "Layout"
 msgstr "Layout"
+
+#, fuzzy
+msgid "Search..."
+msgstr "Zoeken"
 
 msgid "Some items cannot be synchronised."
 msgstr "Sommige items kunnen niet gesynchroniseerd worden."
@@ -909,9 +910,6 @@ msgstr "Synchroniseer"
 
 msgid "Notebooks"
 msgstr "Notitieboeken"
-
-msgid "Searches"
-msgstr "Zoekopdrachten"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Selecteer waar de synchronisatie status naar geëxporteerd moet worden"
@@ -1398,6 +1396,9 @@ msgstr "Verwijder notitieboek"
 msgid "Login with OneDrive"
 msgstr "Log in met OneDrive"
 
+msgid "Search"
+msgstr "Zoeken"
+
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
@@ -1412,6 +1413,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Welkom"
+
+#~ msgid "Searches"
+#~ msgstr "Zoekopdrachten"
 
 #, fuzzy
 #~ msgid ""

@@ -784,11 +784,12 @@ msgstr "Omdøb notesbog:"
 msgid "Set alarm:"
 msgstr "Indstil alarm:"
 
-msgid "Search"
-msgstr "Søg"
-
 msgid "Layout"
 msgstr "Layout"
+
+#, fuzzy
+msgid "Search..."
+msgstr "Søg"
 
 msgid "Some items cannot be synchronised."
 msgstr "Nogle emner kan ikke synkroniseres."
@@ -888,9 +889,6 @@ msgstr "Synkroniser"
 
 msgid "Notebooks"
 msgstr "Notesbøger"
-
-msgid "Searches"
-msgstr "Søgninger"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Vælg hvor sync status skal eksporteres til"
@@ -1369,6 +1367,9 @@ msgstr "Slet notesbog"
 msgid "Login with OneDrive"
 msgstr "Log på med OneDrive"
 
+msgid "Search"
+msgstr "Søg"
+
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
@@ -1381,3 +1382,6 @@ msgstr "Du har ingen notesbøger. Opret en ved at klikke på (+) knappen."
 
 msgid "Welcome"
 msgstr "Velkommen"
+
+#~ msgid "Searches"
+#~ msgstr "Søgninger"

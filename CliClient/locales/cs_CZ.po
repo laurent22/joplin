@@ -7,16 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"Last-Translator: Lukas Helebrandt <lukas@aiya.cz>\n"
 "Language-Team: \n"
+"Language: cs_CZ\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "X-Generator: Poedit 2.0.6\n"
-"Last-Translator: Lukas Helebrandt <lukas@aiya.cz>\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"Language: cs_CZ\n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Pro smazání tagu jej odeberte od přiřazených poznámek."
@@ -781,11 +779,12 @@ msgstr "Přejmenovat zápisník:"
 msgid "Set alarm:"
 msgstr "Nastavit alarm:"
 
-msgid "Search"
-msgstr "Hledání"
-
 msgid "Layout"
 msgstr "Layout"
+
+#, fuzzy
+msgid "Search..."
+msgstr "Hledání"
 
 msgid "Some items cannot be synchronised."
 msgstr "Některé položky nelze synchronizovat."
@@ -885,9 +884,6 @@ msgstr "Synchronizovat"
 
 msgid "Notebooks"
 msgstr "Zápisníky"
-
-msgid "Searches"
-msgstr "Hledané výrazy"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Prosím vyberte, kam má být stav synchronizace exportován"
@@ -1366,6 +1362,9 @@ msgstr "Smazat zápisník"
 msgid "Login with OneDrive"
 msgstr "Přihlásit se pomocí OneDrive"
 
+msgid "Search"
+msgstr "Hledání"
+
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
@@ -1378,3 +1377,6 @@ msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na tlačítko (+
 
 msgid "Welcome"
 msgstr "Vítejte"
+
+#~ msgid "Searches"
+#~ msgstr "Hledané výrazy"

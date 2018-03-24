@@ -797,11 +797,11 @@ msgstr "Renommer le carnet :"
 msgid "Set alarm:"
 msgstr "Régler alarme :"
 
-msgid "Search"
-msgstr "Chercher"
-
 msgid "Layout"
 msgstr "Disposition"
+
+msgid "Search..."
+msgstr "Chercher..."
 
 msgid "Some items cannot be synchronised."
 msgstr "Certains objets ne peuvent être synchronisés."
@@ -906,9 +906,6 @@ msgstr "Synchroniser"
 
 msgid "Notebooks"
 msgstr "Carnets"
-
-msgid "Searches"
-msgstr "Recherches"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1391,6 +1388,9 @@ msgstr "Supprimer le carnet"
 msgid "Login with OneDrive"
 msgstr "Se connecter à OneDrive"
 
+msgid "Search"
+msgstr "Chercher"
+
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
@@ -1405,6 +1405,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Searches"
+#~ msgstr "Recherches"
 
 #~ msgid ""
 #~ "Release notes:\n"

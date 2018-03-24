@@ -742,11 +742,12 @@ msgstr "重命名笔记本："
 msgid "Set alarm:"
 msgstr "设置提醒："
 
-msgid "Search"
-msgstr "搜索"
-
 msgid "Layout"
 msgstr "布局"
+
+#, fuzzy
+msgid "Search..."
+msgstr "搜索"
 
 msgid "Some items cannot be synchronised."
 msgstr "一些项目无法被同步。"
@@ -851,9 +852,6 @@ msgstr "同步"
 
 msgid "Notebooks"
 msgstr "笔记本"
-
-msgid "Searches"
-msgstr "搜索历史"
 
 #, fuzzy
 msgid "Please select where the sync status should be exported to"
@@ -1327,6 +1325,9 @@ msgstr "删除笔记本"
 msgid "Login with OneDrive"
 msgstr "用OneDrive登陆"
 
+msgid "Search"
+msgstr "搜索"
+
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
@@ -1337,6 +1338,9 @@ msgstr "您当前没有任何笔记本。点击(+)按钮创建新笔记本。"
 
 msgid "Welcome"
 msgstr "欢迎"
+
+#~ msgid "Searches"
+#~ msgstr "搜索历史"
 
 #, fuzzy
 #~ msgid ""

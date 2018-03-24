@@ -795,11 +795,12 @@ msgstr "Renombrar libreta:"
 msgid "Set alarm:"
 msgstr "Ajustar alarma:"
 
-msgid "Search"
-msgstr "Buscar"
-
 msgid "Layout"
 msgstr "Diseño"
+
+#, fuzzy
+msgid "Search..."
+msgstr "Buscar"
 
 msgid "Some items cannot be synchronised."
 msgstr "No se han podido sincronizar algunos de los elementos."
@@ -901,9 +902,6 @@ msgstr "Sincronizar"
 
 msgid "Notebooks"
 msgstr "Libretas"
-
-msgid "Searches"
-msgstr "Búsquedas"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccione a dónde se debería exportar el estado de sincronización"
@@ -1384,6 +1382,9 @@ msgstr "Borrar libreta"
 msgid "Login with OneDrive"
 msgstr "Acceder con OneDrive"
 
+msgid "Search"
+msgstr "Buscar"
+
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
@@ -1397,6 +1398,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+#~ msgid "Searches"
+#~ msgstr "Búsquedas"
 
 #~ msgid ""
 #~ "Release notes:\n"

@@ -771,11 +771,12 @@ msgstr "Rinomina il blocco note:"
 msgid "Set alarm:"
 msgstr "Imposta allarme:"
 
-msgid "Search"
-msgstr "Cerca"
-
 msgid "Layout"
 msgstr "Disposizione"
+
+#, fuzzy
+msgid "Search..."
+msgstr "Cerca"
 
 msgid "Some items cannot be synchronised."
 msgstr "Alcuni elementi non possono essere sincronizzati."
@@ -880,9 +881,6 @@ msgstr "Sincronizza"
 
 msgid "Notebooks"
 msgstr "Blocchi note"
-
-msgid "Searches"
-msgstr "Ricerche"
 
 #, fuzzy
 msgid "Please select where the sync status should be exported to"
@@ -1363,6 +1361,9 @@ msgstr "Cancella blocco note"
 msgid "Login with OneDrive"
 msgstr "Accedi a OneDrive"
 
+msgid "Search"
+msgstr "Cerca"
+
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
@@ -1377,6 +1378,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvenuto"
+
+#~ msgid "Searches"
+#~ msgstr "Ricerche"
 
 #, fuzzy
 #~ msgid ""

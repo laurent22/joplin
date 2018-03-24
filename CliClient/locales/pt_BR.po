@@ -793,11 +793,12 @@ msgstr "Renomear caderno:"
 msgid "Set alarm:"
 msgstr "Definir alarme:"
 
-msgid "Search"
-msgstr "Procurar"
-
 msgid "Layout"
 msgstr "Layout"
+
+#, fuzzy
+msgid "Search..."
+msgstr "Procurar"
 
 msgid "Some items cannot be synchronised."
 msgstr "Alguns itens não podem ser sincronizados."
@@ -899,9 +900,6 @@ msgstr "Sincronizar"
 
 msgid "Notebooks"
 msgstr "Cadernos"
-
-msgid "Searches"
-msgstr "Pesquisas"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1384,6 +1382,9 @@ msgstr "Excluir caderno"
 msgid "Login with OneDrive"
 msgstr "Login com OneDrive"
 
+msgid "Search"
+msgstr "Procurar"
+
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
@@ -1396,6 +1397,9 @@ msgstr "Você não possui cadernos. Crie um clicando no botão (+)."
 
 msgid "Welcome"
 msgstr "Bem-vindo"
+
+#~ msgid "Searches"
+#~ msgstr "Pesquisas"
 
 #~ msgid ""
 #~ "Release notes:\n"
