@@ -48,7 +48,7 @@ By default, the application binary will be installed under `~/.joplin-bin`. You 
 
 To start it, type `joplin`.
 
-For usage information, please refer to the full [Joplin Terminal Application Documentation](http://joplin.cozic.net/terminal).
+For usage information, please refer to the full [Joplin Terminal Application Documentation](https://joplin.cozic.net/terminal).
 
 # Features 
 
@@ -81,7 +81,7 @@ To import Evernote data, first export your Evernote notebooks to ENEX files as d
 
 On the **desktop application**, open File > Import > ENEX and select your file. The notes will be imported into a new separate notebook. If needed they can then be moved to a different notebook, or the notebook can be renamed, etc.
 
-On the **terminal application**, in [command-line mode](/terminal#command-line-mode), type `import /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
+On the **terminal application**, in [command-line mode](https://joplin.cozic.net/terminal#command-line-mode), type `import /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
 
 ## Importing from Markdown files
 
@@ -89,7 +89,7 @@ Joplin can import notes from plain Markdown file. You can either import a comple
 
 On the **desktop application**, open File > Import > MD and select your Markdown file or directory.
 
-On the **terminal application**, in [command-line mode](/terminal#command-line-mode), type `import --format md /path/to/file.md` or `import --format md /path/to/directory/`.
+On the **terminal application**, in [command-line mode](https://joplin.cozic.net/terminal#command-line-mode), type `import --format md /path/to/file.md` or `import --format md /path/to/directory/`.
 
 ## Importing from other applications
 
@@ -149,9 +149,9 @@ On the **terminal application**, to initiate the synchronisation process, type `
 
 # Encryption
 
-Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the notes, notebooks, tags or resources can read them. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the [End-To-End Encryption Tutorial](http://joplin.cozic.net/help/e2ee) for more information about this feature and how to enable it.
+Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the notes, notebooks, tags or resources can read them. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the [End-To-End Encryption Tutorial](https://joplin.cozic.net/help/e2ee) for more information about this feature and how to enable it.
 
-For a more technical description, mostly relevant for development or to review the method being used, please see the [Encryption specification](http://joplin.cozic.net/help/spec).
+For a more technical description, mostly relevant for development or to review the method being used, please see the [Encryption specification](https://joplin.cozic.net/help/spec).
 
 # Attachments / Resources
 
@@ -209,7 +209,7 @@ The checkboxes can then be ticked in the mobile and desktop applications.
 
 Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.
 
-Please see the [donation page](http://joplin.cozic.net/donate/) for information on how to support the development of Joplin.
+Please see the [donation page](https://joplin.cozic.net/donate/) for information on how to support the development of Joplin.
 
 # Contributing
 
