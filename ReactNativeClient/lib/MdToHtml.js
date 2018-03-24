@@ -334,8 +334,12 @@ class MdToHtml {
 			if (closeTag) {
 				if (closeTag === 'a') {
 					const currentAnchorAttrs = anchorAttrs.pop();
-					const previousContent = output.length ? output[output.length - 1].trim() : '';
-					const anchorHref = this.getAttr_(currentAnchorAttrs, 'href', '').trim();
+
+					// NOTE: Disabled for now due to this:
+					// https://github.com/laurent22/joplin/issues/318#issuecomment-375854848
+
+					// const previousContent = output.length ? output[output.length - 1].trim() : '';
+					// const anchorHref = this.getAttr_(currentAnchorAttrs, 'href', '').trim();
 
 					// Optimisation: If the content of the anchor is the same as the URL, we replace the content
 					// by (Link). This is to shorten the text, which is important especially when the note comes
@@ -349,10 +353,11 @@ class MdToHtml {
 					// worse that this in notes that come from web-clipped content.
 					// With this change, the links will still be preserved but displayed like
 					// (link) (link) (link) (link) (link)
-					if (this.urldecode_(previousContent) === htmlentities(this.urldecode_(anchorHref))) {
-						output.pop();
-						output.push(_('(Link)'));
-					}
+
+					// if (this.urldecode_(previousContent) === htmlentities(this.urldecode_(anchorHref))) {
+					// 	output.pop();
+					// 	output.push(_('(Link)'));
+					// }
 
 					output.push(this.renderCloseLink_(currentAnchorAttrs, options));
 				} else {
