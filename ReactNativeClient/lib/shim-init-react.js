@@ -116,6 +116,8 @@ function shimInit() {
 	shim.stringByteLength = function(string) {
 		return Buffer.byteLength(string, 'utf-8');
 	}
+
+	shim.Buffer = Buffer;
 }
 
 module.exports = { shimInit };

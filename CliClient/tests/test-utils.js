@@ -16,6 +16,7 @@ const { FileApi } = require('lib/file-api.js');
 const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const { FileApiDriverWebDav } = require('lib/file-api-driver-webdav.js');
+const { FileApiDriverDropbox } = require('lib/file-api-driver-dropbox.js');
 const BaseService = require('lib/services/BaseService.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { time } = require('lib/time-utils.js');
@@ -25,9 +26,11 @@ const SyncTargetMemory = require('lib/SyncTargetMemory.js');
 const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
+const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
 const EncryptionService = require('lib/services/EncryptionService.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker.js');
 const WebDavApi = require('lib/WebDavApi');
+const DropboxApi = require('lib/DropboxApi');
 
 let databases_ = [];
 let synchronizers_ = [];
@@ -51,10 +54,12 @@ SyncTargetRegistry.addClass(SyncTargetMemory);
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
+SyncTargetRegistry.addClass(SyncTargetDropbox);
 
 // const syncTargetId_ = SyncTargetRegistry.nameToId("nextcloud");
-const syncTargetId_ = SyncTargetRegistry.nameToId("memory");
+// const syncTargetId_ = SyncTargetRegistry.nameToId("memory");
 //const syncTargetId_ = SyncTargetRegistry.nameToId('filesystem');
+const syncTargetId_ = SyncTargetRegistry.nameToId('dropbox');
 const syncDir = __dirname + '/../tests/sync';
 
 const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;//400;
@@ -247,24 +252,14 @@ function fileApi() {
 
 		const api = new WebDavApi(options);
 		fileApi_ = new FileApi('', new FileApiDriverWebDav(api));
+	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('dropbox')) {
+		const api = new DropboxApi();
+		const authTokenPath = __dirname + '/support/dropbox-auth.txt';
+		const authToken = fs.readFileSync(authTokenPath, 'utf8');
+		if (!authTokenPath) throw new Error('Dropbox auth token missing in ' + authTokenPath);
+		api.setAuthToken(authToken);
+		fileApi_ = new FileApi('', new FileApiDriverDropbox(api));
 	}
-
-	// } else if (syncTargetId == Setting.SYNC_TARGET_ONEDRIVE) {
-	// 	let auth = require('./onedrive-auth.json');
-	// 	if (!auth) {
-	// 		const oneDriveApiUtils = new OneDriveApiNodeUtils(oneDriveApi);
-	// 		auth = await oneDriveApiUtils.oauthDance();
-	// 		fs.writeFileSync('./onedrive-auth.json', JSON.stringify(auth));
-	// 		process.exit(1);
-	// 	} else {
-	// 		auth = JSON.parse(auth);
-	// 	}
-
-	// 	// const oneDriveApiUtils = new OneDriveApiNodeUtils(reg.oneDriveApi());
-	// 	// const auth = await oneDriveApiUtils.oauthDance(this);
-	// 	// Setting.setValue('sync.3.auth', auth ? JSON.stringify(auth) : null);
-	// 	// if (!auth) return;
-	// }
 
 	fileApi_.setLogger(logger);
 	fileApi_.setSyncTargetId(syncTargetId_);

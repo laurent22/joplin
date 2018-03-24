@@ -66,6 +66,10 @@ class BaseSyncTarget {
 		return this.fileApi_;
 	}
 
+	fileApiSync() {
+		return this.fileApi_;
+	}
+
 	// Usually each sync target should create and setup its own file API via initFileApi()
 	// but for testing purposes it might be convenient to provide it here so that multiple
 	// clients can share and sync to the same file api (see test-utils.js)

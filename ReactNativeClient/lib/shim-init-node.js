@@ -111,10 +111,9 @@ function shimInit() {
 		const urlParse = require('url').parse;
 
 		url = urlParse(url.trim());
+		const method = options.method ? options.method : 'GET';
 		const http = url.protocol.toLowerCase() == 'http:' ? require('follow-redirects').http : require('follow-redirects').https;
 		const headers = options.headers ? options.headers : {};
-		const method = options.method ? options.method : 'GET';
-		if (method != 'GET') throw new Error('Only GET is supported');
 		const filePath = options.path;
 
 		function makeResponse(response) {
@@ -143,7 +142,7 @@ function shimInit() {
 					// Note: relative paths aren't supported
 					const file = fs.createWriteStream(filePath);
 
-					const request = http.get(requestOptions, function(response) {
+					const request = http.request(requestOptions, function(response) {
 						response.pipe(file);
 
 						file.on('finish', function() {
@@ -157,6 +156,8 @@ function shimInit() {
 						fs.unlink(filePath);
 						reject(error);
 					});
+
+					request.end();
 				} catch(error) {
 					fs.unlink(filePath);
 					reject(error);
@@ -179,6 +180,8 @@ function shimInit() {
 	shim.stringByteLength = function(string) {
 		return Buffer.byteLength(string, 'utf-8');
 	}
+
+	shim.Buffer = Buffer;
 
 }
 

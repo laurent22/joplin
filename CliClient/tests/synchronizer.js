@@ -339,22 +339,17 @@ describe('Synchronizer', function() {
 	it('should delete local folder', asyncTest(async () => {
 		let folder1 = await Folder.save({ title: "folder1" });
 		let folder2 = await Folder.save({ title: "folder2" });
-		await synchronizer().start();
+		let context1 = await synchronizer().start();
 
 		await switchClient(2);
 
-		await synchronizer().start();
-
-		await sleep(0.1);
-
+		let context2 = await synchronizer().start();
 		await Folder.delete(folder2.id);
-
-		await synchronizer().start();
+		await synchronizer().start({ context: context2 });
 
 		await switchClient(1);
 
-		await synchronizer().start();
-
+		await synchronizer().start({ context: context1 });
 		let items = await allItems();
 		await localItemsSameAsRemote(items, expect);
 	}));
@@ -438,7 +433,7 @@ describe('Synchronizer', function() {
 
 		expect(items1.length).toBe(0);
 		expect(items1.length).toBe(items2.length);
-			}));
+	}));
 
 	it('should handle conflict when remote note is deleted then local note is modified', asyncTest(async () => {
 		let folder1 = await Folder.save({ title: "folder1" });
