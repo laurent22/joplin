@@ -226,7 +226,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 						<Text>Important: This is a *beta* feature. It has been extensively tested and is already in use by some users, but it is possible that some bugs remain.</Text>
 						<Text>If you wish to you use it, it is recommended that you keep a backup of your data. The simplest way is to regularly backup your notes from the desktop or terminal application.</Text>
 						<Text>For more information about End-To-End Encryption (E2EE) and how it is going to work, please check the documentation:</Text>
-						<TouchableOpacity onPress={() => { Linking.openURL('http://joplin.cozic.net/help/e2ee.html') }}><Text>http://joplin.cozic.net/help/e2ee.html</Text></TouchableOpacity>
+						<TouchableOpacity onPress={() => { Linking.openURL('https://joplin.cozic.net/help/e2ee.html') }}><Text>https://joplin.cozic.net/help/e2ee.html</Text></TouchableOpacity>
 					</View>*/}
 
 					<Text style={this.styles().titleText}>{_('Status')}</Text>

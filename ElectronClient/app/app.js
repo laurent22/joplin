@@ -448,10 +448,10 @@ class Application extends BaseApplication {
 				submenu: [{
 					label: _('Website and documentation'),
 					accelerator: 'F1',
-					click () { bridge().openExternal('http://joplin.cozic.net') }
+					click () { bridge().openExternal('https://joplin.cozic.net') }
 				}, {
 					label: _('Make a donation'),
-					click () { bridge().openExternal('http://joplin.cozic.net/donate') }
+					click () { bridge().openExternal('https://joplin.cozic.net/donate') }
 				}, {
 					label: _('Check for updates...'),
 					click: () => {

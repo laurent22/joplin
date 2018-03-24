@@ -298,7 +298,7 @@ function markdownToHtml(md) {
 
 function renderFileToHtml(sourcePath, targetPath, params) {
 	const md = fs.readFileSync(sourcePath, 'utf8');
-	params.baseUrl = 'http://joplin.cozic.net';
+	params.baseUrl = 'https://joplin.cozic.net';
 	params.imageBaseUrl = params.baseUrl + '/images';
 	const html = Mustache.render(markdownToHtml(md), params);
 	fs.writeFileSync(targetPath, html);

@@ -37,7 +37,7 @@ class Command extends BaseCommand {
 		const stdoutWidth = app().commandStdoutMaxWidth();
 
 		if (args.command === 'shortcuts' || args.command === 'keymap') {
-			this.stdout(_('For information on how to customise the shortcuts please visit %s', 'http://joplin.cozic.net/terminal/#shortcuts'));
+			this.stdout(_('For information on how to customise the shortcuts please visit %s', 'https://joplin.cozic.net/terminal/#shortcuts'));
 			this.stdout('');
 
 			if (app().gui().isDummy()) {

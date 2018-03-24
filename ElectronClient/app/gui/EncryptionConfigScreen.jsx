@@ -190,7 +190,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 							If you wish to you use it, it is recommended that you keep a backup of your data. The simplest way is to regularly backup <b>{pathUtils.toSystemSlashes(Setting.value('profileDir'), process.platform)}</b>
 						</p>
 						<p style={theme.textStyle}>
-							For more information about End-To-End Encryption (E2EE) and how it is going to work, please check the documentation: <a onClick={() => {bridge().openExternal('http://joplin.cozic.net/help/e2ee.html')}} href="#">http://joplin.cozic.net/help/e2ee.html</a>
+							For more information about End-To-End Encryption (E2EE) and how it is going to work, please check the documentation: <a onClick={() => {bridge().openExternal('https://joplin.cozic.net/help/e2ee.html')}} href="#">https://joplin.cozic.net/help/e2ee.html</a>
 						</p>
 					</div>*/}
 					<h1 style={theme.h1Style}>{_('Status')}</h1>
