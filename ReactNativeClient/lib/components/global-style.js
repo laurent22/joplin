@@ -1,4 +1,5 @@
 const Setting = require('lib/models/Setting.js');
+const { Platform } = require('react-native');
 
 const globalStyle = {
 	fontSize: 16,
@@ -36,30 +37,66 @@ globalStyle.marginTop = globalStyle.margin;
 globalStyle.marginBottom = globalStyle.margin;
 globalStyle.htmlMarginLeft = ((globalStyle.marginLeft / 10) * 0.6).toFixed(2) + 'em';
 
-globalStyle.icon = {
-	color: globalStyle.color,
-	fontSize: 30,
-};
+// globalStyle.icon = {
+// 	color: globalStyle.color,
+// 	fontSize: 30,
+// };
 
-globalStyle.lineInput = {
-	color: globalStyle.color,
-	backgroundColor: globalStyle.backgroundColor,
-};
+// globalStyle.lineInput = {
+// 	color: globalStyle.color,
+// 	backgroundColor: globalStyle.backgroundColor,
+// };
 
-globalStyle.buttonRow = {
-	flexDirection: 'row',
-	borderTopWidth: 1,
-	borderTopColor: globalStyle.dividerColor,
-	paddingTop: 10,
-};
+// globalStyle.buttonRow = {
+// 	flexDirection: 'row',
+// 	borderTopWidth: 1,
+// 	borderTopColor: globalStyle.dividerColor,
+// 	paddingTop: 10,
+// };
+
+// globalStyle.normalText = {
+// 	color: globalStyle.color,
+// 	fontSize: globalStyle.fontSize,
+// };
 
 let themeCache_ = {};
+
+function addExtraStyles(style) {
+	style.icon = {
+		color: style.color,
+		fontSize: 30,
+	};
+
+	style.lineInput = {
+		color: style.color,
+		backgroundColor: style.backgroundColor,
+	};
+
+	if (Platform.OS === 'ios') {
+		style.lineInput.borderBottomWidth = 1;
+		style.lineInput.borderBottomColor = style.dividerColor;
+	}
+
+	style.buttonRow = {
+		flexDirection: 'row',
+		borderTopWidth: 1,
+		borderTopColor: style.dividerColor,
+		paddingTop: 10,
+	};
+
+	style.normalText = {
+		color: style.color,
+		fontSize: style.fontSize,
+	};
+
+	return style;
+}
 
 function themeStyle(theme) {
 	if (themeCache_[theme]) return themeCache_[theme];
 
 	let output = Object.assign({}, globalStyle);
-	if (theme == Setting.THEME_LIGHT) return output;
+	if (theme == Setting.THEME_LIGHT) return addExtraStyles(output);
 
 	output.backgroundColor = '#1D2024';
 	output.color = '#dddddd';
@@ -76,7 +113,7 @@ function themeStyle(theme) {
 	output.htmlLinkColor = 'rgb(166,166,255)';
 
 	themeCache_[theme] = output;
-	return themeCache_[theme];
+	return addExtraStyles(themeCache_[theme]);
 }
 
 module.exports = { globalStyle, themeStyle };
