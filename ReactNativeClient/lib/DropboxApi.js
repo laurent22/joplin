@@ -12,6 +12,14 @@ class DropboxApi {
 		this.authToken_ = null;
 	}
 
+	clientId() {
+		return this.options_.id;
+	}
+
+	clientSecret() {
+		return this.options_.secret;
+	}
+
 	setLogger(l) {
 		this.logger_ = l;
 	}
@@ -21,11 +29,15 @@ class DropboxApi {
 	}
 
 	authToken() {
-		return this.authToken_; // Must be "Bearer XXXXXXXXXXXXXXXXXX"
+		return this.authToken_; // Without the "Bearer " prefix
 	}
 
 	setAuthToken(v) {
 		this.authToken_ = v;
+	}
+
+	loginUrl() {
+		return 'https://www.dropbox.com/oauth2/authorize?response_type=code&client_id=' + this.clientId();
 	}
 
 	baseUrl(endPointFormat) {
@@ -49,6 +61,35 @@ class DropboxApi {
 		return output.join(' ');		
 	}
 
+	async execAuthToken(authCode) {
+		const postData = {
+			code: authCode,
+			grant_type: 'authorization_code',
+			client_id: this.clientId(),
+			client_secret: this.clientSecret(),
+		};
+
+		var formBody = [];
+		for (var property in postData) {
+			var encodedKey = encodeURIComponent(property);
+			var encodedValue = encodeURIComponent(postData[property]);
+			formBody.push(encodedKey + "=" + encodedValue);
+		}
+		formBody = formBody.join("&");
+
+		const response = await shim.fetch('https://api.dropboxapi.com/oauth2/token', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+			},
+			body: formBody
+		});
+
+		const responseText = await response.text();
+		if (!response.ok) throw new Error(responseText);
+		return JSON.parse(responseText);
+	}
+
 	async exec(method, path = '', body = null, headers = null, options = null) {
 		if (headers === null) headers = {};
 		if (options === null) options = {};
@@ -56,7 +97,7 @@ class DropboxApi {
 
 		const authToken = this.authToken();
 
-		if (authToken) headers['Authorization'] = authToken;
+		if (authToken) headers['Authorization'] = 'Bearer ' + authToken;
 
 		const endPointFormat = ['files/upload', 'files/download'].indexOf(path) >= 0 ? 'content' : 'api';
 
@@ -73,7 +114,7 @@ class DropboxApi {
 		if (options.path) fetchOptions.path = options.path;
 		if (body) fetchOptions.body = body;
 
-		const url = this.baseUrl(endPointFormat) + '/' + path;
+		const url = path.indexOf('https://') === 0 ? path : this.baseUrl(endPointFormat) + '/' + path;
 
 		let tryCount = 0;
 

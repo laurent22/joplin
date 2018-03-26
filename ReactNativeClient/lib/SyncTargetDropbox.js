@@ -26,9 +26,18 @@ class SyncTargetDropbox extends BaseSyncTarget {
 		return _('Dropbox');
 	}
 
-	isAuthenticated() {
-		const f = this.fileApiSync();
-		return f && f.driver().api().authToken();
+	authRouteName() {
+		return 'DropboxLogin';
+	}
+
+	async isAuthenticated() {
+		const f = await this.fileApi();
+		return !!f.driver().api().authToken();
+	}
+
+	async api() {
+		const fileApi = await this.fileApi();
+		return fileApi.driver().api();
 	}
 
 	syncTargetId() {
@@ -36,7 +45,19 @@ class SyncTargetDropbox extends BaseSyncTarget {
 	}
 
 	async initFileApi() {
-		const api = new DropboxApi();
+		const params = parameters().dropbox;
+
+		const api = new DropboxApi({
+			id: params.id,
+			secret: params.secret,
+		});
+
+		const authJson = Setting.value('sync.' + SyncTargetDropbox.id() + '.auth');
+		if (authJson) {
+			const auth = JSON.parse(authJson);
+			api.setAuthToken(auth.access_token);
+		}
+
 		const appDir = '';
 		const fileApi = new FileApi(appDir, new FileApiDriverDropbox(api));
 		fileApi.setSyncTargetId(this.syncTargetId());
@@ -45,7 +66,7 @@ class SyncTargetDropbox extends BaseSyncTarget {
 	}
 
 	async initSynchronizer() {
-		if (!this.isAuthenticated()) throw new Error('User is not authentified');
+		if (!(await this.isAuthenticated())) throw new Error('User is not authentified');
 		return new Synchronizer(this.db(), await this.fileApi(), Setting.value('appType'));
 	}
 

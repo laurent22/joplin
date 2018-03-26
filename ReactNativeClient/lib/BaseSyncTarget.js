@@ -30,7 +30,7 @@ class BaseSyncTarget {
 		return this.db_;
 	}
 
-	isAuthenticated() {
+	async isAuthenticated() {
 		return false;
 	}
 
@@ -113,7 +113,7 @@ class BaseSyncTarget {
 
 	async syncStarted() {
 		if (!this.synchronizer_) return false;
-		if (!this.isAuthenticated()) return false;
+		if (!await this.isAuthenticated()) return false;
 		const sync = await this.synchronizer();
 		return sync.state() != 'idle';
 	}

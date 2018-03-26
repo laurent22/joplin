@@ -99,7 +99,7 @@ class Setting extends BaseModel {
 			}},
 			'noteVisiblePanes': { value: ['editor', 'viewer'], type: Setting.TYPE_ARRAY, public: false, appTypes: ['desktop'] },
 			'showAdvancedOptions': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile' ], label: () => _('Show advanced options') },
-			'sync.target': { value: SyncTargetRegistry.nameToId('onedrive'), type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation target'), description: (appType) => { return appType !== 'cli' ? null : _('The target to synchonise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).') }, options: () => {
+			'sync.target': { value: SyncTargetRegistry.nameToId('dropbox'), type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation target'), description: (appType) => { return appType !== 'cli' ? null : _('The target to synchonise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).') }, options: () => {
 				return SyncTargetRegistry.idAndLabelPlainObject();
 			}},
 
@@ -121,12 +121,14 @@ class Setting extends BaseModel {
 
 			'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.7.auth': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.2.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.3.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.4.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.5.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.7.context': { value: '', type: Setting.TYPE_STRING, public: false },
 		};
 
 		return this.metadata_;

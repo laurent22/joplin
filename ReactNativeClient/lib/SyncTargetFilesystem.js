@@ -19,7 +19,7 @@ class SyncTargetFilesystem extends BaseSyncTarget {
 		return _('File system');
 	}
 
-	isAuthenticated() {
+	async isAuthenticated() {
 		return true;
 	}
 

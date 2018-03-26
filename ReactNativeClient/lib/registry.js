@@ -70,7 +70,7 @@ reg.scheduleSync = async (delay = null, syncOptions = null) => {
 
 		const syncTargetId = Setting.value('sync.target');
 
-		if (!reg.syncTarget(syncTargetId).isAuthenticated()) {
+		if (!await reg.syncTarget(syncTargetId).isAuthenticated()) {
 			reg.logger().info('Synchroniser is missing credentials - manual sync required to authenticate.');
 			promiseResolve();
 			return;
