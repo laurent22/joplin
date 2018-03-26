@@ -102,7 +102,7 @@ function getFooter() {
 
 	output.push('WEBSITE');
 	output.push('');
-	output.push(INDENT + 'http://joplin.cozic.net');
+	output.push(INDENT + 'https://joplin.cozic.net');
 
 	output.push('');
 

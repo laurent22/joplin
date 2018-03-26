@@ -203,7 +203,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		settingComps.push(
 			<View key="donate_link" style={this.styles().settingContainer}>
-				<TouchableOpacity onPress={() => { Linking.openURL('http://joplin.cozic.net/donate/') }}>
+				<TouchableOpacity onPress={() => { Linking.openURL('https://joplin.cozic.net/donate/') }}>
 					<Text key="label" style={this.styles().linkText}>{_('Make a donation')}</Text>
 				</TouchableOpacity>
 			</View>
@@ -211,7 +211,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		
 		settingComps.push(
 			<View key="website_link" style={this.styles().settingContainer}>
-				<TouchableOpacity onPress={() => { Linking.openURL('http://joplin.cozic.net/') }}>
+				<TouchableOpacity onPress={() => { Linking.openURL('https://joplin.cozic.net/') }}>
 					<Text key="label" style={this.styles().linkText}>{_('Joplin website')}</Text>
 				</TouchableOpacity>
 			</View>
@@ -219,7 +219,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		settingComps.push(
 			<View key="privacy_link" style={this.styles().settingContainer}>
-				<TouchableOpacity onPress={() => { Linking.openURL('http://joplin.cozic.net/privacy/') }}>
+				<TouchableOpacity onPress={() => { Linking.openURL('https://joplin.cozic.net/privacy/') }}>
 					<Text key="label" style={this.styles().linkText}>Privacy Policy</Text>
 				</TouchableOpacity>
 			</View>

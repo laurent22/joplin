@@ -789,11 +789,12 @@ msgstr "Preimenuj bilježnicu:"
 msgid "Set alarm:"
 msgstr "Postavi upozorenje:"
 
-msgid "Search"
-msgstr "Traži"
-
 msgid "Layout"
 msgstr "Izgled"
+
+#, fuzzy
+msgid "Search..."
+msgstr "Traži"
 
 msgid "Some items cannot be synchronised."
 msgstr "Neke stavke se ne mogu sinkronizirati."
@@ -897,9 +898,6 @@ msgstr "Sinkroniziraj"
 
 msgid "Notebooks"
 msgstr "Bilježnice"
-
-msgid "Searches"
-msgstr "Pretraživanja"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Odaberi lokaciju za izvoz statusa sinkronizacije"
@@ -1377,6 +1375,9 @@ msgstr "Obriši bilježnicu"
 msgid "Login with OneDrive"
 msgstr "Prijavi se u OneDrive"
 
+msgid "Search"
+msgstr "Traži"
+
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
@@ -1389,6 +1390,9 @@ msgstr "Trenutno nemaš nijednu bilježnicu. Stvori novu klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobro došli"
+
+#~ msgid "Searches"
+#~ msgstr "Pretraživanja"
 
 #, fuzzy
 #~ msgid ""

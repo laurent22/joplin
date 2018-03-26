@@ -7,36 +7,37 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: \n"
+"Last-Translator: Lukas Helebrandt <lukas@aiya.cz>\n"
 "Language-Team: \n"
-"Language: da_DK\n"
+"Language: cs_CZ\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.6\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 msgid "To delete a tag, untag the associated notes."
-msgstr "For at slette et mærke, afmærk de tilhørende noter."
+msgstr "Pro smazání tagu jej odeberte od přiřazených poznámek."
 
 msgid "Please select the note or notebook to be deleted first."
-msgstr "Vælg først en note eller en notesbog der skal slettes."
+msgstr "Nejprve prosím vyberte poznámku či zápisník ke smazání."
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "Tast Ctrl+D eller tast \"exit\" for at afslutte app'en"
+msgstr "Pro ukončení aplikace stiskněte Ctrl+D nebo napište \"exit\""
 
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr "Mere end et emne matcher \"%s\".  Præciser din søgning."
+msgstr ""
+"Výrazu \"%s\" odpovídá více než jedna položka, upřesněte prosím hledaný text."
 
 msgid "No notebook selected."
-msgstr "Ingen notesbog er valgt."
+msgstr "Není vybrán žádný zápisník."
 
 msgid "No notebook has been specified."
-msgstr "Ingen notesbog er specificeret."
+msgstr "Nebyl vybrán žádný zápisník."
 
 msgid "Y"
-msgstr "J"
+msgstr "Y"
 
 msgid "n"
 msgstr "n"
@@ -45,61 +46,61 @@ msgid "N"
 msgstr "N"
 
 msgid "y"
-msgstr "j"
+msgstr "y"
 
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "Annullerer baggrunds synkronisering...  Vent venligst."
+msgstr "Zastavuji synchronizaci, chvíli strpení."
 
 #, javascript-format
 msgid "No such command: %s"
-msgstr "Kommando findes ikke: %s"
+msgstr "Příkaz neexistuje\" %s"
 
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
-msgstr "Kommando \"%s\" er kun til rådighed i GUI tilstand"
+msgstr "Příkaz \"%s\" je dostupný pouze v grafickém rozhraní"
 
 msgid "Cannot change encrypted item"
-msgstr "Kan ikke ændre krypteret emne"
+msgstr "Nelze editovat zašifrovanou položku"
 
 #, javascript-format
 msgid "Missing required argument: %s"
-msgstr "Mangler krævet argument: %s"
+msgstr "Chybí povinný parametr: %s"
 
 #, javascript-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
 msgid "Your choice: "
-msgstr "Dit valg:"
+msgstr "Vaše volba: "
 
 #, javascript-format
 msgid "Invalid answer: %s"
-msgstr "Forkert svar: %s"
+msgstr "Neplatná odpověď: %s"
 
 msgid "Attaches the given file to the note."
-msgstr "Vedhæfter valgt fil til noten."
+msgstr "Přiloží soubor k poznámce."
 
 #, javascript-format
 msgid "Cannot find \"%s\"."
-msgstr "Kan ikke finde \"%s\"."
+msgstr "Výraz \"%s\" nebyl nalezen."
 
 msgid "Displays the given note."
-msgstr "Viser valgt note."
+msgstr "Zobrazí vybranou poznámku."
 
 msgid "Displays the complete information about note."
-msgstr "Viser komplet note information."
+msgstr "Zobrazí veškeré informace o poznámce."
 
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
-"Henter eller tilføjer konfigurations værdi. Hvis [value] er tilføjet, vises "
-"værdien af [name]. Hvis hverken [name] eller [value] er tilføjet, vises "
-"aktuel konfiguration."
+"Získá nebo nastaví konfigurační hodnotu. Pokud není [hodnota] specifikována, "
+"zobrazí hodnotu položky [jméno]. Pokud není specifikována [hodnota] ani "
+"[jméno], je zobrazena současná konfigurace."
 
 msgid "Also displays unset and hidden config variables."
-msgstr "Viser også tomme eller skjulte konfigurations variabler."
+msgstr "Zobrazí i nenastavené a schované konfigurační proměnné."
 
 #, javascript-format
 msgid "%s = %s (%s)"
@@ -113,277 +114,273 @@ msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"Kopierer alle noter der matcher <note> til [notebook]. Hvis notesbog ikke er "
-"udfyldt, kopieres til aktuel notesbog."
+"Duplikuje poznámky vyhovující <note> do [notebook]. Pokud není notebook "
+"(zápisník) specifikován, je poznámka duplikována v tom současném."
 
 msgid "Marks a to-do as done."
-msgstr "Markerer en opgave som udført."
+msgstr "Označí to-do jako hotové."
 
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
-msgstr "Noten er ikke en opgave: \"%s\""
+msgstr "Poznámka není to-do: \"%s\""
 
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status` and `target-status`."
 msgstr ""
-"Udfører E2EEE konfiguration. Kommandoer er `enable`(aktiver), "
-"`disable`(sluk), `decrypt`(dekrypter), `status` og `target-status` (modtager-"
-"status)."
+"Nastavuje šifrování. Příkazy jsou `enable` (zapnout), `disable` (vypnout), "
+"`decrypt` (dešifrovat), `status` (stav) a `target-status` (stav v cíli "
+"synchronizace)."
 
 msgid "Enter master password:"
-msgstr "Indtast Hoved kodeord:"
+msgstr "Zadejte master heslo:"
 
 msgid "Operation cancelled"
-msgstr "Udførelse annulleret"
+msgstr "Operace zrušena"
 
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
 msgstr ""
-"Dekryptering startet... Vent venligst da kan tage adskillige minutter "
-"afhængig af mængden der skal dekrypteres."
+"Dešifruji... Chvíli strpení, podle množství dat k dešifrování to může zabrat "
+"i několik minut."
 
 msgid "Completed decryption."
-msgstr "Dekryptering færdig."
+msgstr "Dešifrování dokončeno."
 
 msgid "Enabled"
-msgstr "Aktiveret"
+msgstr "Zapnuto"
 
 msgid "Disabled"
-msgstr "Deaktiveret"
+msgstr "Vypnuto"
 
 #, javascript-format
 msgid "Encryption is: %s"
-msgstr "Kryptering er: %s"
+msgstr "Šifrování je: %s"
 
 msgid "Edit note."
-msgstr "Rediger note."
+msgstr "Upravit poznámku."
 
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
-"Ingen tekst editor er valgt.  Vælg en ved at indstille `config editor "
+"Nebyl vybrán textový editor. Prosím nastavte jej pomocí `config editor "
 "<editor-path>`"
 
 msgid "No active notebook."
-msgstr "Ingen aktiv notesbog."
+msgstr "Není vybrán žádný zápisník."
 
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr "Note eksisterer ikke: \"%s\".  Skal den oprettes?"
+msgstr "Poznámka \"%s\" neexistuje. Chcete ji vytvořit?"
 
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
-"Noteredigering startet. Luk redigering for at komme tilbage til kommando "
-"prompten."
+"Začínám s úpravou poznámky. Pro návrat do příkazové řádky ukončete editor."
 
 #, javascript-format
 msgid "Error opening note in editor: %s"
-msgstr "Fejl ved åbning af note i editor: %s"
+msgstr "Chyba při otevírání poznámky v editoru: %s"
 
 msgid "Note has been saved."
-msgstr "Note gemt."
+msgstr "Poznámka uložena."
 
 msgid "Exits the application."
-msgstr "Forlad/luk program."
+msgstr "Ukončí aplikaci."
 
 msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
-"Eksporterer Joplin data til valgt sti. Standard er eksport af hele databasen "
-"inkl. notesbøger, noter, mærker og ressourcer."
+"Exportuje data Joplinu do zadané cesty. Bez dalších voleb exportuje veškerý "
+"obsah databáze včetně zápisníků, poznámek, tagů a příloh."
 
 #, javascript-format
 msgid "Destination format: %s"
-msgstr "Destinations format: %s"
+msgstr "Formát destinace: %s"
 
 msgid "Exports only the given note."
-msgstr "Eksporter kun valgt note."
+msgstr "Exportuje pouze vybranou poznámku."
 
 msgid "Exports only the given notebook."
-msgstr "Eksporter kun valgt notesbog."
+msgstr "Exportuje pouze vybraný zápisník."
 
 msgid "Displays a geolocation URL for the note."
-msgstr "Vis geolokations URL for noten."
+msgstr "Zobrazí geolokační URL poznámky."
 
 msgid "Displays usage information."
-msgstr "Viser årsags information."
+msgstr "Zobrazí informace o použití."
 
 #, javascript-format
 msgid "For information on how to customise the shortcuts please visit %s"
-msgstr "For info om tilpasning af links, besøg %s"
+msgstr "Pro informace k úpravě klávesových zkratek prosím běžte na %s"
 
 msgid "Shortcuts are not available in CLI mode."
-msgstr "Links er ikke til rådighed i GUI tilstand."
+msgstr "Klávesové zkratky nejsou v konzoli dostupné."
 
 msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
-"Tast `help[kommando]` for mere info om en kommando; eller tast `help all` "
-"for fuld hjælpe liste ."
+"Zadejte `help [příkaz]` pro více informací o příkazu; nebo `help all` pro "
+"kompletní nápovědu."
 
 msgid "The possible commands are:"
-msgstr "Mulige kommandoer er:"
+msgstr "Dostupné příkazy:"
 
 msgid ""
 "In any command, a note or notebook can be refered to by title or ID, or "
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
-"I enhver kommando kan en note eller notesbog refereres med titel eller ID, "
-"eller ved at bruge links `$n` eller `$b` for valgte noter eller notesbøger. `"
-"$c` kan bruges som reference til aktuel/valgt emne."
+"Ve všech příkazech může být poznámka či zápisník referována svým názvem či "
+"ID, nebo zkratkami `$n` a `$b` pro nyní vybranou poznámku či zápisník. `$c` "
+"odkazuje na současně vybranou položku."
 
 msgid "To move from one pane to another, press Tab or Shift+Tab."
-msgstr "For flytte fra et panel til et andet, tryk Tab eller Skift+Tab."
+msgstr "Pro přepínání mezi panely stiskněte Tab / Shift+Tab."
 
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
 msgstr ""
-"Brug pilene og PageUp/PageDown for at rulle lister og tekst-områder (inkl. "
-"denne konsol)"
+"Pro pohyb v seznamech a textových polích (včetně této konzole) používejte "
+"šipky a page up/down."
 
 msgid "To maximise/minimise the console, press \"TC\"."
-msgstr "For at maximere/ninimere konsollen, tryk \"TC\"."
+msgstr "Pro maximalizaci/minimalizaci konzole stiskněte \"TC\"."
 
 msgid "To enter command line mode, press \":\""
-msgstr "For at skifte til kommandolinje tilstand, tryk \":\""
+msgstr "Pro přepnutí do příkazové řádky stiskněte \":\""
 
 msgid "To exit command line mode, press ESCAPE"
-msgstr "For at forlade kommandolinje tilstand, tryk Esc"
+msgstr "Pro opuštění příkazové řádky stiskněte Esc"
 
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
-"For at få vist listen af tastatur genveje og konfigurations muligheder, test "
-"`help keymap`"
+"Pro seznam klávesových zkratek a konfiguračních voleb zadejte `help keymap`"
 
 msgid "Imports data into Joplin."
-msgstr "Importerer data til Joplin."
+msgstr "Importuje data do Joplinu."
 
 #, javascript-format
 msgid "Source format: %s"
-msgstr "Kildeformat: %s"
+msgstr "Zdrojový formát: %s"
 
 msgid "Do not ask for confirmation."
-msgstr "Spørg ikke om bekræftelse."
+msgstr "Neptat se na potvrzení."
 
 #, javascript-format
 msgid "Found: %d."
-msgstr "Fundet: %d."
+msgstr "Nalezeno: %d."
 
 #, javascript-format
 msgid "Created: %d."
-msgstr "Oprettet: %d."
+msgstr "Vytvořeno: %d."
 
 #, javascript-format
 msgid "Updated: %d."
-msgstr "Opdateret %d."
+msgstr "Upraveno: %d."
 
 #, javascript-format
 msgid "Skipped: %d."
-msgstr "Droppet %d."
+msgstr "Přeskočeno: %d."
 
 #, javascript-format
 msgid "Resources: %d."
-msgstr "Ressourcer: %d."
+msgstr "Zdroje: %d."
 
 #, javascript-format
 msgid "Tagged: %d."
-msgstr "Markeret: %d."
+msgstr "Otagováno: %d."
 
 msgid "Importing notes..."
-msgstr "Importerer noter..."
+msgstr "Importuji poznámky..."
 
 #, javascript-format
 msgid "The notes have been imported: %s"
-msgstr "Noterne er importeret: %s"
+msgstr "Poznámky importovány: %s"
 
 msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
 "of notebooks."
 msgstr ""
-"Viser noterne i den aktuelle notesbog. Brug `ls /` for at vise en liste med "
-"notesbøger."
+"Zobrazí poznámky v používaném zápisníku. Pro seznam zápisníků zadejte `ls /`."
 
 msgid "Displays only the first top <num> notes."
-msgstr "Viser kun de første <num> noter."
+msgstr "Zobrazí jen prvních <num> poznámek."
 
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
-msgstr ""
-"Sorterer emner ud fra <field> (fx titel, opdateret_tid, oprettelses_tid)."
+msgstr "Řadit položky podle <pole> (např. title, updated_time, created_time)."
 
 msgid "Reverses the sorting order."
-msgstr "Modsat sortering."
+msgstr "Řadit opačně."
 
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
-"Vis kun emner af specifik(ke) type(r). Kan være `n` for noter. `t` for "
-"opgaver eller `nt` for noter og opgaver (tilsvarende `-tt` vil kun vise "
-"opgaver, mens `-ttd` vil vise noter og opgaver)."
+"Zobrazit pouze položky vybraného typu. MoŽnosti jsou  `n` pro poznámky "
+"(notes), `t` pro to-do, a `nt` pro poznámky a to-do  (tedy `-tt` zobrazí "
+"pouze to-do, zatímco `-ttd` zobrazí poznámky a to-do.)"
 
 msgid "Either \"text\" or \"json\""
-msgstr "Enten \"text\" eller \"json\""
+msgstr "Buď \"text\" nebo \"json\""
 
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
-"Brug lang liste format. Formatet er ID,NOTE_TÆLLER (for notesbøger), DATO, "
-"MARKEREDE_OPGAVER (for opgaver), TITEL"
+"Použít formát dlouhého seznamu. Formát je ID, NOTE_COUNT (u zápisníků), "
+"DATE, TODO_CHECKED (pro to-do), TITLE"
 
 msgid "Please select a notebook first."
-msgstr "Vælg først en notesbog."
+msgstr "Nejprve prosím vyberte zápisník."
 
 msgid "Creates a new notebook."
-msgstr "Opretter en ny notesbog."
+msgstr "Vytvoří nový zápisník."
 
 msgid "Creates a new note."
-msgstr "Opretter en ny note."
+msgstr "Vytvoří novou poznámku."
 
 msgid "Notes can only be created within a notebook."
-msgstr "Noter kan kun oprettes i en notesbog."
+msgstr "Poznámky mohou být vytvořeny pouze v zápisnících."
 
 msgid "Creates a new to-do."
-msgstr "Opretter en ny opgave."
+msgstr "Vytvoří nové to-do."
 
 msgid "Moves the notes matching <note> to [notebook]."
-msgstr "Flytter alle noter der matcher <note> til [notebook]."
+msgstr "Přesune poznámky vyhovující <poznámka> do [zápisník]."
 
 msgid "Renames the given <item> (note or notebook) to <name>."
-msgstr "Omdøber det aktuelle <item> (note eller notesbog) til <name>."
+msgstr "Přejmenuje <položku> (poznámku či zápisník) na <jméno>."
 
 msgid "Deletes the given notebook."
-msgstr "Sletter aktuelle notesbog."
+msgstr "Smaže vybraný zápisník."
 
 msgid "Deletes the notebook without asking for confirmation."
-msgstr "Sletter notesbogen uden at bede om bekræftelse."
+msgstr "Smaže zápisník bez potvrzení."
 
 msgid "Delete notebook? All notes within this notebook will also be deleted."
-msgstr "Slet notesbog? Alle noter i notesbogen bliver også slettet."
+msgstr "Smazat zápisník? Budou smazány i všechny poznámky v něm obsažené."
 
 msgid "Deletes the notes matching <note-pattern>."
-msgstr "Sletter alle noter der matcher <note-pattern>."
+msgstr "Smazat poznámky vyhovující <note-pattern>."
 
 msgid "Deletes the notes without asking for confirmation."
-msgstr "Sletter noterne uden at bede om bekræftelse."
+msgstr "Smazat poznámky bez potvrzení."
 
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
-msgstr "%d noter der matcher dette mønster. Slet dem?"
+msgstr "%d poznámek vyhovuje zadání. Smazat všechny?"
 
 msgid "Delete note?"
-msgstr "Slet note?"
+msgstr "Smazat poznámku?"
 
 msgid "Searches for the given <pattern> in all the notes."
-msgstr "Søger efter <pattern> mønster i alle noter."
+msgstr "Hledá <zadání> ve všech poznámkách."
 
 #, javascript-format
 msgid ""
@@ -392,30 +389,31 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Sætter ejerskab <name> af valgt <note> til aktuel [value]. Mulige ejerskab "
-"er:\n"
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
 "\n"
 "%s"
 
 msgid "Displays summary about the notes and notebooks."
-msgstr "Viser opsummering om noter og notesbøger."
+msgstr "Zobrazí souhrnné informace o poznámkách a zápisnících."
 
 msgid "Synchronises with remote storage."
-msgstr "Synkroniserer med fjern-lager."
+msgstr "Synchronizuje se vzdáleným úložištěm."
 
 msgid "Sync to provided target (defaults to sync.target config value)"
-msgstr "Synk til valgt mål (standard er sync.target config.value)"
+msgstr ""
+"Synchronizovat se specifikovanou destinací (defaultně hodnota sync.target)"
 
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
-msgstr "Godkendelse  blev ikke fuldført (modtog ikke godkendelses token)."
+msgstr "Autentizace nebyla dokončena (nedostali jsme autentizační token)"
 
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
-msgstr "Ikke godkendt med %s. Indtast venligst manglende koder/info."
+msgstr "Nepřihlášeno k %s. Prosím vyplňte chybějící přihlašovací údaje."
 
 msgid "Synchronisation is already in progress."
-msgstr "Synkronisering er allerede i gang."
+msgstr "Synchronizace již probíhá."
 
 #, javascript-format
 msgid ""
@@ -423,35 +421,34 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
-"Låse fil er allerede i brug. Hvis du ved at ingen synkronisering er i gang "
-"kan du slette låse-filen \"%s\" og genoptage synkroniseringen."
+"Již je držen soubor se zámkem (lock file). Pokud jste si jistí, že nyní "
+"neprobíhá synchronizace, smažte zámek v \"%s\"  a pokračujte v operaci."
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
-msgstr "Synkroniserings mål: %s (%s)"
+msgstr "Cíl synchronizace:  %s (%s)"
 
 msgid "Cannot initialize synchroniser."
-msgstr "Kan ikke initialisere synkroniseringen."
+msgstr "Nelze zavézt synchronizátor."
 
 msgid "Starting synchronisation..."
-msgstr "Starter synkronisering."
+msgstr "Zahajuji synchronizaci..."
 
 msgid "Cancelling... Please wait."
-msgstr "Annullerer...  Vent venligst."
+msgstr "Zastavuji, chvíli strpení."
 
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
 "`tag list` can be used to list all the tags."
 msgstr ""
-"<tag-command> (mærke-kommando) kan enten være \"add\" (tilføj), \"remove"
-"\" (slet) eller \"list\" (liste) for at tilføje eller fjerne mærke [tag] fra "
-"[note], eller for at liste de noter der bruger mærket [tag]. Kommandoen `tag-"
-"list` kan bruges til at vise alle mærker."
+"<tag-command> může být  \"add\", \"remove\" nebo \"list\" - přidat (add) či "
+"odebrat (remove) [tag] k [poznámce], nebo vypsat (list) seznam poznámek "
+"přiřazených k [tagu]. Příkaz `tag list` vypíše všechny tagy."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
-msgstr "Ulovlig kommando: \"%s\""
+msgstr "Neplatný příkaz: \"%s\""
 
 msgid ""
 "<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
@@ -459,22 +456,23 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command> (Opgave-kommando) kan enten være \"toggle\" eller \"clear\". "
-"Brug \"toggle\" for at skrifte opgavens status mellem udført og ikke udført  "
-"(Hvis resultatet er en almindelig note, bliver den konverteret til en "
-"opgave). Brug \"clear\" til at konvertere en opgave til en alm. note."
+"<todo-command> může být buď \"toggle\" (přepnout) nebo \"clear"
+"\" (odstranit). Použijte \"toggle\" pro označení daného to-do jako dokončené "
+"či nedokončené  (pokud je cílem normální poznámka, bude konvertována na to-"
+"do). Použijte \"clear\" pro konverzi to-do na normální poznámku."
 
 msgid "Marks a to-do as non-completed."
-msgstr "Markerer en opgave som ikke udført."
+msgstr "Označí to-do jako nedodělané."
 
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
-"Skifter til [notebook] - alle fremtidige handlinger sker i denne notesbog."
+"Přepne do zápisníku [notebook]. Všechny další operace budou prováděny na "
+"tomto zápisníku."
 
 msgid "Displays version information"
-msgstr "Viser versions info"
+msgstr "Zobrazí informace o verzi"
 
 #, javascript-format
 msgid "%s %s (%s)"
@@ -485,31 +483,31 @@ msgstr "Enum"
 
 #, javascript-format
 msgid "Type: %s."
-msgstr "Tast: %s."
+msgstr "Typ: %s."
 
 #, javascript-format
 msgid "Possible values: %s."
-msgstr "Mulige værdier: %s."
+msgstr "Možné hodnoty: %s."
 
 #, javascript-format
 msgid "Default: %s"
-msgstr "Standard: %s"
+msgstr "Default: %s"
 
 msgid "Possible keys/values:"
-msgstr "Mulige nøgler/værdier:"
+msgstr "Možné klíče/hodnoty:"
 
 msgid "Type `joplin help` for usage information."
-msgstr "Tast `Joplin help` for alm. info."
+msgstr "Pro nápovědu zadejte `joplin help`"
 
 msgid "Fatal error:"
-msgstr "Kritisk fejl:"
+msgstr "Fatální chyba:"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
-msgstr "Denne app er godkendt - du kan nu lukke dette faneblad."
+msgstr "Aplikace byla autorizována, tento tab můžete zavřít."
 
 msgid "The application has been successfully authorised."
-msgstr "Denne app er succesfuldt godkendt."
+msgstr "Aplikace byla úspěšně autorizována."
 
 msgid ""
 "Please open the following URL in your browser to authenticate the "
@@ -518,13 +516,13 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
-"Åben venligst flg. ULR i en browser for at bekræfte app'en. App'en vil "
-"oprette en mappe i \"Apps/Joplin\" og vil kun skrive/læse filer i denne "
-"mappe. Den får ingen adgang til filer udenfor denne mappe, heller ikke til "
-"andre persondata. Ingen data deles med nogen 3.part."
+"Otevřete prosím následující URL ve vašem prohlížeči pro autentizaci "
+"aplikace. Joplin vytvoří a bude používat výhradně složku \"Apps/Joplin\" , "
+"nebude mít přístup k souborům mimo tuto složku ani k dalším osobním "
+"informacím. Žádná data nebudou sdílena s jakoukoliv třetí stranou."
 
 msgid "Search:"
-msgstr "Søg:"
+msgstr "Hledat:"
 
 msgid ""
 "Welcome to Joplin!\n"
@@ -534,13 +532,12 @@ msgid ""
 "\n"
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
-"Velkommen til Joplin!\n"
+"Vítejte v Joplin!\n"
 "\n"
-"Tast  `:help shortcuts` for listen over tastaturgenveje, eller bare  `:help` "
-"for alm. hjælp.\n"
+"Zadejte `:help shortcuts` pro seznam klávesových zkratek, nebo `:help` pro "
+"nápovědu k použítí.\n"
 "\n"
-"For eksempel, for at oprette en notesbog; tryk `mb` eller tryk `mn` for at "
-"oprette en note."
+"Např. pro vytvoření zápisníku zadejte `mb`; pro vytvoření nové poznámky `mn`."
 
 msgid ""
 "One or more items are currently encrypted and you may need to supply a "
@@ -548,96 +545,96 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"Et eller flere emner er krypteret og du skal evt. angive et hoved-kodeord. "
-"For at gøre det; tast è2ee decrypt`. Har du allerede indtastet password, "
-"bliver emnerne i øjeblikket dekrypteret i bagrunden og vil snart være klar."
+"Jedna či více položek jsou šifrovány a je potřeba zadat master heslo. Učiňte "
+"tak zadáním  `e2ee decrypt`. Pokud jste heslo již zadali, zašifrované "
+"položky se nyní dešifrují na pozadí a budou brzy k dispozici."
 
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr "Eksporterer til \"%s\" som \"%s\"-format. Vent venligst..."
+msgstr "Exportuji do \"%s\" jako formát \"%s\". Chvíli strpení..."
 
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "Importerer fra \"%s\" som \"%s\"-format. Vent venligst..."
+msgstr "Importuji z \"%s\" jako formát \"%s\". Chvíli strpení..."
 
 msgid "PDF File"
-msgstr "PDF fil"
+msgstr "PDF soubor"
 
 msgid "File"
-msgstr "Fil"
+msgstr "Soubor"
 
 msgid "New note"
-msgstr "Ny note"
+msgstr "Nová poznámka"
 
 msgid "New to-do"
-msgstr "Ny opgave"
+msgstr "Nové to-do"
 
 msgid "New notebook"
-msgstr "Ny notesbog"
+msgstr "Nový zápisník"
 
 msgid "Import"
-msgstr "Importer"
+msgstr "Import"
 
 msgid "Export"
-msgstr "Eksporter"
+msgstr "Export"
 
 msgid "Print"
-msgstr "Udskriv"
+msgstr "Tisk"
 
 #, javascript-format
 msgid "Hide %s"
-msgstr "Skjul %s"
+msgstr "Schovat %s"
 
 msgid "Quit"
-msgstr "Afslut"
+msgstr "Ukončit"
 
 msgid "Edit"
-msgstr "Ret"
+msgstr "Upravit"
 
 msgid "Copy"
-msgstr "Kopier"
+msgstr "Kopírovat"
 
 msgid "Cut"
-msgstr "Klip"
+msgstr "Vyjmout"
 
 msgid "Paste"
-msgstr "Indsæt"
+msgstr "Vložit"
 
 msgid "Search in all the notes"
-msgstr "Søg i alle noter"
+msgstr "Hledat ve všech poznámkách"
 
 msgid "View"
-msgstr "Vis"
+msgstr "Zobrazit"
 
 msgid "Toggle editor layout"
-msgstr "Skift editor layout"
+msgstr "Změňit layout editoru"
 
 msgid "Tools"
-msgstr "Værktøjer"
+msgstr "Nástroje"
 
 msgid "Synchronisation status"
-msgstr "Synkroniserings status"
+msgstr "Stav synchronizace"
 
 msgid "Encryption options"
-msgstr "Krypterings muligheder"
+msgstr "Nastavení šifrování"
 
 msgid "General Options"
-msgstr "Generelle indstillinger"
+msgstr "Obecná nastavení"
 
 msgid "Help"
-msgstr "Hjælp"
+msgstr "Nápověda"
 
 msgid "Website and documentation"
-msgstr "Joplins hjemmeside og dokumentation"
+msgstr "Web a dokumentace"
 
 msgid "Make a donation"
-msgstr "Giv en donation"
+msgstr "Přispět"
 
 msgid "Check for updates..."
-msgstr "Checker om der er opdateringer.."
+msgstr "Zkontrolovat updaty..."
 
 msgid "About Joplin"
-msgstr "Om Joplin"
+msgstr "O aplikaci Joplin"
 
 #, javascript-format
 msgid "%s %s (%s, %s)"
@@ -645,46 +642,46 @@ msgstr "%s %s (%s, %s)"
 
 #, javascript-format
 msgid "Open %s"
-msgstr "Åben %s"
+msgstr "Otevřít %s"
 
 msgid "Exit"
-msgstr "Afslut"
+msgstr "Ukončit"
 
 msgid "OK"
 msgstr "OK"
 
 msgid "Cancel"
-msgstr "Fortryd"
+msgstr "Zrušit"
 
 msgid "Current version is up-to-date."
-msgstr "Aktuel version er nyeste."
+msgstr "Současná verze je aktuální."
 
 msgid "An update is available, do you want to download it now?"
-msgstr "Opdatering er til rådighed, vil du hente den nu?"
+msgstr "Je k dispozici update, chcete jej stáhnout?"
 
 msgid "Yes"
-msgstr "Ja"
+msgstr "Ano"
 
 msgid "No"
-msgstr "Nej"
+msgstr "Ne"
 
 msgid "Check synchronisation configuration"
-msgstr "Check synkroniserings Indstillinger"
+msgstr "Zkontrolujte nastavení synchronizace"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
-msgstr "Noter og indstillinger er gemt i: %s"
+msgstr "Poznámky a nastavení uloženo v: %s"
 
 msgid "Save"
-msgstr "Gem"
+msgstr "Uložit"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
-"Slås kryptering fra, vil *alle* dine noter og vedhæftelser blive re-"
-"synkroniseret og sendt ukrypteret til synk-modtager. Vil du fortsætte?"
+"Vypnutí šifrování znamená, že *všechny* vaše poznámky a přílohy budou "
+"synchronizovány na cílové úložiště nešifrované. Přejete si pokračovat?"
 
 msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
@@ -692,217 +689,215 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
-"Slås kryptering til, vil *alle* dine noter og vedhæftelser blive re-"
-"synkroniseret og sendt krypteret til synk-modtager. Glem ikke kodeordet, da "
-"det er *eneste* mulighed for dekryptering af data\". For at slå kryptering "
-"til, indtast kodeord herunder."
+"Zapnutí šifrování znamená, že *všechny* vaše poznámky a přílohy budou "
+"synchronizovány na cílové úložiště šifrované. Neztraťte své heslo, za účelem "
+"zabezpečení je jeho zadání *jediným* způsobem jak vaše poznámky rozšifrovat! "
+"Pro zapnutí šifrování zadejte své heslo."
 
 msgid "Disable encryption"
-msgstr "Slå kryptering fra"
+msgstr "Vypnout šifrování"
 
 msgid "Enable encryption"
-msgstr "Start kryptering"
+msgstr "Zapnout šifrování"
 
 msgid "Master Keys"
-msgstr "Hovednøgle"
+msgstr "Master klíče"
 
 msgid "Active"
-msgstr "Aktiv"
+msgstr "Aktivní"
 
 msgid "ID"
 msgstr "ID"
 
 msgid "Source"
-msgstr "Kilde"
+msgstr "Zdroj"
 
 msgid "Created"
-msgstr "Oprettet"
+msgstr "Vytvořeno"
 
 msgid "Updated"
-msgstr "Opdateret"
+msgstr "Upraveno"
 
 msgid "Password"
-msgstr "Kodeord"
+msgstr "Heslo"
 
 msgid "Password OK"
-msgstr "Kodeord OK"
+msgstr "Heslo je správné"
 
 msgid ""
 "Note: Only one master key is going to be used for encryption (the one marked "
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"Bemærk: Kun en hoved-nøgle vil blive brugt til kryptering (den der er "
-"markeret med \"active\"), Alle øvrige nøgler kan bruges til dekryptering, "
-"afhængig af hvilken blev anvendt til den oprindelige kryptering af note "
-"eller notesbog."
+"Poznámka: Pouze jeden master klíč bude používán k šifrování (označen jako "
+"\"aktivní\"). Všechny další klíče jsou používány jen k dešifrování."
 
 msgid "Missing Master Keys"
-msgstr "Manglende hovednøgle"
+msgstr "Chybějící Master klíče"
 
 msgid ""
 "The master keys with these IDs are used to encrypt some of your items, "
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"Hoved-nøglen til disse ID'er er brugt til at kryptere nogle af dine emner; "
-"app'en har ikke pt adgang til dem. Det er sandsynligt at de vil blive hentet "
-"(på et eller andet tidspunkt) via synkroniseringen."
+"Master klíče s těmito ID byly použity k zašifrování položek, které "
+"momentálně nejsou k dispozici. Je pravděpodobné, že tyto položky budou "
+"staženy při synchronizaci."
 
 msgid "Status"
 msgstr "Status"
 
 msgid "Encryption is:"
-msgstr "Kryptering er:"
+msgstr "Šifrování je:"
 
 msgid "Back"
-msgstr "Tilbage"
+msgstr "Zpět"
 
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
-msgstr "Ny notesbog \"%s\" bliver oprettet og filen \"%s\" importeres til den"
+msgstr "Bude vytvořen zápisník \"%s\" a soubor \"%s\" do něj bude importován"
 
 msgid "Please create a notebook first."
-msgstr "Opret først en notesbog."
+msgstr "Nejprve prosím vytvořte zápisník."
 
 msgid "Please create a notebook first"
-msgstr "Opret først en notesbog"
+msgstr "Nejprve prosím vytvořte zápisník"
 
 msgid "Notebook title:"
-msgstr "Notesbogs titel:"
+msgstr "Název zápisníku:"
 
 msgid "Add or remove tags:"
-msgstr "Tilføj eller slet mærker:"
+msgstr "Přidat či odebrat tagy:"
 
 msgid "Separate each tag by a comma."
-msgstr "Adskil hver mærke med komma."
+msgstr "Tagy oddělujte čárkami."
 
 msgid "Rename notebook:"
-msgstr "Omdøb notesbog:"
+msgstr "Přejmenovat zápisník:"
 
 msgid "Set alarm:"
-msgstr "Indstil alarm:"
+msgstr "Nastavit alarm:"
 
 msgid "Layout"
 msgstr "Layout"
 
 #, fuzzy
 msgid "Search..."
-msgstr "Søg"
+msgstr "Hledání"
 
 msgid "Some items cannot be synchronised."
-msgstr "Nogle emner kan ikke synkroniseres."
+msgstr "Některé položky nelze synchronizovat."
 
 msgid "View them now"
-msgstr "Vis dem nu"
+msgstr "Zobrazit"
 
 msgid "Some items cannot be decrypted."
-msgstr "Nogle emner kan ikke krypteres."
+msgstr "Některé položky nelze rozšifrovat."
 
 msgid "Set the password"
-msgstr "Indstil kodeord"
+msgstr "Nastavit heslo"
 
 msgid "Add or remove tags"
-msgstr "Tilføj eller slet mærker"
+msgstr "Přidat či odebrat tagy"
 
 msgid "Switch between note and to-do type"
-msgstr "Skift mellem note-  og opgave type"
+msgstr "Přepnout mezi poznámkou a to-do"
 
 msgid "Delete"
-msgstr "Slet"
+msgstr "Smazat"
 
 msgid "Delete notes?"
-msgstr "Slet noter?"
+msgstr "Smazat poznámky?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr "Der er ingen noter her. Opret en ved at klikke på \"Ny note\"."
+msgstr "Žádné poznámky. Vytvořte jednu kliknutím na \"Nová poznámka\"."
 
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr "Der er ingen notesbog. Opret en ved at klikke på \"Ny Notesbog\"."
+msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na \"Nový zápisník\"."
 
 msgid "Open..."
-msgstr "Åben..."
+msgstr "Otevřít..."
 
 msgid "Save as..."
-msgstr "Gem som..."
+msgstr "Uložit jako..."
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
-msgstr "Ugyldigt- eller ulovligt link eller besked: %s"
+msgstr "Nepodporovaný link či zpráva: %s"
 
 msgid "Attach file"
-msgstr "Vedhæft fil"
+msgstr "Přiložit soubor"
 
 msgid "Tags"
-msgstr "Mærker"
+msgstr "Tagy"
 
 msgid "Set alarm"
-msgstr "Indstil alarm"
+msgstr "Nastavit alarm"
 
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
-msgstr "Denne note er tom. Klik på \"%s\" for at starte editor og rette noten."
+msgstr "Tato poznámka je prázdný. Klikněte na  \"%s\" pro otevření editoru."
 
 msgid "to-do"
-msgstr "opgave"
+msgstr "to-do"
 
 msgid "note"
-msgstr "note"
+msgstr "poznámka"
 
 #, javascript-format
 msgid "Creating new %s..."
-msgstr "Opretter ny %s..."
+msgstr "Vytvářím %s..."
 
 msgid "Refresh"
-msgstr "Opfrisk"
+msgstr "Obnovit"
 
 msgid "Clear"
-msgstr "Ryd/slet"
+msgstr "Vyčistit"
 
 msgid "OneDrive Login"
-msgstr "OneDrive login"
+msgstr "Přihlášení s OneDrive"
 
 msgid "Options"
-msgstr "Muligheder"
+msgstr "Nastavení"
 
 msgid "Synchronisation Status"
-msgstr "Synkroniserings status"
+msgstr "Stav synchronizace"
 
 msgid "Encryption Options"
-msgstr "Krypterings indstillinger"
+msgstr "Nastavení šifrování"
 
 msgid "Remove this tag from all the notes?"
-msgstr "Slet denne markering fra alle noter?"
+msgstr "Odebrat tento tag ze všech poznámek?"
 
 msgid "Remove this search from the sidebar?"
-msgstr "Slet denne søgning fra sidebjælke?"
+msgstr "Smazat tento hledaný výraz z panelu?"
 
 msgid "Rename"
-msgstr "Omdøb"
+msgstr "Přejmenovat"
 
 msgid "Synchronise"
-msgstr "Synkroniser"
+msgstr "Synchronizovat"
 
 msgid "Notebooks"
-msgstr "Notesbøger"
+msgstr "Zápisníky"
 
 msgid "Please select where the sync status should be exported to"
-msgstr "Vælg hvor sync status skal eksporteres til"
+msgstr "Prosím vyberte, kam má být stav synchronizace exportován"
 
 #, javascript-format
 msgid "Usage: %s"
-msgstr "Forbrug: %s"
+msgstr "Použití: %s"
 
 #, javascript-format
 msgid "Unknown flag: %s"
-msgstr "Ukendt flag: %s"
+msgstr "Neznámý flag: %s"
 
 msgid "File system"
-msgstr "Fil system"
+msgstr "Souborový systém"
 
 msgid "Nextcloud"
 msgstr "Nextcloud"
@@ -911,25 +906,25 @@ msgid "OneDrive"
 msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
-msgstr "OneDrive Dev (kun test)"
+msgstr "OneDrive Dev (jen pro testování)"
 
 msgid "WebDAV"
 msgstr "WebDAV"
 
 #, javascript-format
 msgid "Unknown log level: %s"
-msgstr "Ukendt log niveau: %s"
+msgstr "Neznámá úroveň logování: %s"
 
 #, javascript-format
 msgid "Unknown level ID: %s"
-msgstr "Ukendt niveau ID: %s"
+msgstr "Neznámé level ID: %s"
 
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
-"Kan ikke opdatere token: Godkendelses data mangler. Prøv at starte "
-"synkronisering igen, det kan løse problemet."
+"Nelze obnovit token: chybí autentizační data. Restart synchronizace může "
+"tento problém vyřešit. "
 
 msgid ""
 "Could not synchronize with OneDrive.\n"
@@ -939,271 +934,271 @@ msgid ""
 "\n"
 "Please consider using a regular OneDrive account."
 msgstr ""
-"Kunne ikke synkronisere med OneDrive.\n"
+"Chyba synchronizace s OneDrive.\n"
 "\n"
-"Denne fejl skyldes ofte brug af OneDrive for Business, hvilket desværre ikke "
-"supporteres af Joplin.\n"
+"Tato chyba obvykle nastává, pokud používáte OneDrive for Business,což "
+"momentálně bohužel není podporováno.\n"
 "\n"
-"Overvej at bruge en privat OneDrive konto."
+"Zvažte prosím použití osobního OneDrive účtu."
 
 #, javascript-format
 msgid "Cannot access %s"
-msgstr "Kan ikke tilgå %s"
+msgstr "Nelze otevřít %s"
 
 #, javascript-format
 msgid "Created local items: %d."
-msgstr "Oprettede lokale emner: %d."
+msgstr "Položky vytvořené lokálně: %d."
 
 #, javascript-format
 msgid "Updated local items: %d."
-msgstr "Opdaterede lokale emner: %d."
+msgstr "Položky aktualizované lokálně: %d."
 
 #, javascript-format
 msgid "Created remote items: %d."
-msgstr "Oprettede fjern-emner: %d."
+msgstr "Položky vytvořené na vzdáleném úložišti: %d."
 
 #, javascript-format
 msgid "Updated remote items: %d."
-msgstr "Opdaterede fjern-emner: %d."
+msgstr "Položky aktualizované na vzdáleném úložišti: %d."
 
 #, javascript-format
 msgid "Deleted local items: %d."
-msgstr "Slettede lokale emner: %d."
+msgstr "Položky smazané lokálně: %d."
 
 #, javascript-format
 msgid "Deleted remote items: %d."
-msgstr "Slettede fjern-emner: %d."
+msgstr "Položky smazané na vzdáleném úložišti: %d."
 
 #, javascript-format
 msgid "Fetched items: %d/%d."
-msgstr "Hentede emner: %d/%d."
+msgstr "Získané položky: %d/%d."
 
 #, javascript-format
 msgid "State: %s."
-msgstr "Tilstand: %s."
+msgstr "Stav: %s."
 
 msgid "Cancelling..."
-msgstr "Annullerer..."
+msgstr "Zastavuji..."
 
 #, javascript-format
 msgid "Completed: %s"
-msgstr "Fuldført: %s"
+msgstr "Dokončeno: %s"
 
 #, javascript-format
 msgid "Last error: %s"
-msgstr "Sidste fejl: %s"
+msgstr "Poslední chyba: %s"
 
 msgid "Idle"
-msgstr "Ledig"
+msgstr "Nečinný"
 
 msgid "In progress"
-msgstr "I gang"
+msgstr "Probíhá"
 
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
-msgstr "Synkronisering er allerede i gang: Tilstand: %s"
+msgstr "Synchronizace již probíhá. Stav: %s"
 
 msgid "Encrypted"
-msgstr "Krypteret"
+msgstr "Zašifrováno"
 
 msgid "Encrypted items cannot be modified"
-msgstr "Krypteret emner kan ikke rettes"
+msgstr "Nelze editovat zašifrovanou položku"
 
 msgid "Conflicts"
-msgstr "Konflikter"
+msgstr "Konflikty"
 
 #, javascript-format
 msgid "A notebook with this title already exists: \"%s\""
-msgstr "En notesbog bruger allerede dette navn: \"%s\""
+msgstr "Zápisník s tímto názvem již existuje: \"%s\""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr "Notesbøger kan ikke få navnet \"%s\", da det er en beskyttet titel."
+msgstr "Zápisník se nemůže jmenovat \"%s\", tento název je rezervován."
 
 msgid "Untitled"
-msgstr "Samlet"
+msgstr "Bez názvu"
 
 msgid "This note does not have geolocation information."
-msgstr "Denne note har ingen geolokations oplysninger."
+msgstr "Tato poznámka nemá informace o poloze."
 
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
-msgstr "Kan ikke kopiere note til \"%s\" notesbog"
+msgstr "Poznámku \"%s\" nelze zkopírovat do zápisníku"
 
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
-msgstr "Kan ikke flytte note til \"%s\" notesbog"
+msgstr "Poznámku nelze přesunout do zápisníku \"%s\""
 
 msgid "Text editor"
-msgstr "Tekst editor"
+msgstr "Textový editor"
 
 msgid ""
 "The editor that will be used to open a note. If none is provided it will try "
 "to auto-detect the default editor."
 msgstr ""
-"Editor der bruges til at åbne note. Hvis ingen valgt/udfyldt, vil auto-"
-"funktion søge efter standard editor."
+"Editor ve kterém budou otvírány poznámky. Pokud není specifikováno, aplikace "
+"se pokusí o autodetekci defaultního editoru."
 
 msgid "Language"
-msgstr "Sprog"
+msgstr "Jazyk"
 
 msgid "Date format"
-msgstr "Dato format"
+msgstr "Formát data"
 
 msgid "Time format"
-msgstr "Time format"
+msgstr "Formát času"
 
 msgid "Theme"
-msgstr "Tema"
+msgstr "Vzhled"
 
 msgid "Light"
-msgstr "Lyst"
+msgstr "Světlý"
 
 msgid "Dark"
-msgstr "Mørkt"
+msgstr "Tmavý"
 
 msgid "Uncompleted to-dos on top"
-msgstr "Ufærdige opgaver øverst"
+msgstr "Nedokončené to-do listy nahoře"
 
 msgid "Sort notes by"
-msgstr "Sorter noter efter"
+msgstr "Řadit poznámky podle"
 
 msgid "Reverse sort order"
-msgstr "Modsat sorterings orden"
+msgstr "Řadit od konce"
 
 msgid "Save geo-location with notes"
-msgstr "Gem geo-lokation i noter"
+msgstr "Ukládat k poznámkám informace o poloze (geolokaci)"
 
 msgid "When creating a new to-do:"
-msgstr "Ved oprettelse af ny opgave:"
+msgstr "Při vytváření nového to-do:"
 
 msgid "Focus title"
-msgstr "Fokuser på titel"
+msgstr "Vybrat název poznámky"
 
 msgid "Focus body"
-msgstr "Fokuser på brødtekst"
+msgstr "Vybrat text poznámky"
 
 msgid "When creating a new note:"
-msgstr "Ved oprettelse af ny note:"
+msgstr "Při vytváření nové poznámky:"
 
 msgid "Show tray icon"
-msgstr "Vis ikon på bundbjælke"
+msgstr "Zobrazovat ikonu v panelu"
 
 msgid "Global zoom percentage"
-msgstr "Global zoom procent"
+msgstr "Globální zoom"
 
 msgid "Editor font family"
-msgstr "Rediger skrifttype"
+msgstr "Rodina písma v editoru"
 
 msgid ""
 "The font name will not be checked. If incorrect or empty, it will default to "
 "a generic monospace font."
 msgstr ""
-"Skrifttypenavn checkes ikke. Hvis tom eller ukorrekt, standard vil returnere "
-"til monospace font."
+"Jméno fontu není kontrolováno. Pokud je neplatné či chybí, bude použit "
+"defaultní monospace font."
 
 msgid "Automatically update the application"
-msgstr "Automatisk app update"
+msgstr "Automaticky updatovat aplikaci"
 
 msgid "Synchronisation interval"
-msgstr "Synkroniserings interval"
+msgstr "Interval synchronizace"
 
 #, javascript-format
 msgid "%d minutes"
-msgstr "%d minutter"
+msgstr "%d minut"
 
 #, javascript-format
 msgid "%d hour"
-msgstr "%d time"
+msgstr "%d hodina"
 
 #, javascript-format
 msgid "%d hours"
-msgstr "%d timer"
+msgstr "%d hodin"
 
 msgid "Show advanced options"
-msgstr "Vis avancerede indstillinger"
+msgstr "Ukázat pokročilé volby"
 
 msgid "Synchronisation target"
-msgstr "Synkroniserings mål"
+msgstr "Cíl synchronizace"
 
 msgid ""
 "The target to synchonise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"Synkroniserings mål. Hver synk. mål kan have ekstra parametre som navngives "
-"som `sync.NUM.NAME` (se dokumentation herunder)."
+"Cíl synchronizace. Každý cíl může mít další parametry ve formátu `sync.NUM."
+"NAME` (dokumentace níže)."
 
 msgid "Directory to synchronise with (absolute path)"
-msgstr "Mappe der skal synkroniseres med (absolut sti)"
+msgstr "Složka k synchronizaci (absolutní cesta)"
 
 msgid ""
 "The path to synchronise with when file system synchronisation is enabled. "
 "See `sync.target`."
 msgstr ""
-"Sti til synkronisering, når filsystem synkronisering er slået til. Se `sync."
-"target`."
+"Cesta ke složce, se kterou synchronizovat, pokud je cílem synchronizace "
+"místní souborový systém. Viz `sync.target`."
 
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
 
 msgid "Nextcloud username"
-msgstr "Nextcloud brugernavn"
+msgstr "Nextcloud uživatelské jméno"
 
 msgid "Nextcloud password"
-msgstr "Nextcloud kodeord"
+msgstr "Nextcloud heslo"
 
 msgid "WebDAV URL"
 msgstr "WebDAV URL"
 
 msgid "WebDAV username"
-msgstr "WebDAV brugernavn"
+msgstr "WebDAV uživatelské jméno"
 
 msgid "WebDAV password"
-msgstr "WebDAV kodeord"
+msgstr "WebDAV heslo"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "Ulovlig værdi: \"%s\".  Mulige valg er: %s."
+msgstr "Neplatná hodnota: \"%s\". Přípustné hodnoty jsou: %s."
 
 msgid "Joplin Export File"
-msgstr "Joplin eksport fil"
+msgstr "Soubor Joplin Export"
 
 msgid "Markdown"
 msgstr "Markdown"
 
 msgid "Joplin Export Directory"
-msgstr "Joplin eksport mappe"
+msgstr "Složka pro export"
 
 msgid "Evernote Export File"
-msgstr "Evernote eksport fil"
+msgstr "Soubor Evernote Exportu"
 
 msgid "Directory"
-msgstr "Indeks"
+msgstr "Adresář"
 
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
-msgstr "Kan ikke åbne \"%s\" modul for format \"%s\""
+msgstr "Nemohu nahrát \"%s\" modul pro formát \"%s\""
 
 #, javascript-format
 msgid "Please specify import format for %s"
-msgstr "Specificer import format for %s"
+msgstr "Prosím specifikujte formát pro import %s"
 
 #, javascript-format
 msgid ""
 "This item is currently encrypted: %s \"%s\". Please wait for all items to be "
 "decrypted and try again."
 msgstr ""
-"Dette emne krypteret: %s \"%s\". Vent til alle emner er dekrypteret og prøv "
-"igen."
+"Položka je zašifrovaná: %s \"%s\". Prosím počkejte na rozšifrování a zkuste "
+"to znovu."
 
 msgid "There is no data to export."
-msgstr "Der er ingen data at eksportere."
+msgstr "Nic k exportování."
 
 msgid "Please specify the notebook where the notes should be imported to."
-msgstr "Angiv hvilken notesbog, noter skal importeres til."
+msgstr "Prosím specifikujte sešit, do kterého mají být poznámky importovány."
 
 msgid "Items that cannot be synchronised"
-msgstr "Emner kan ikke synkroniseres"
+msgstr "Položky jež nelze synchronizovat"
 
 #, javascript-format
 msgid "%s (%s): %s"
@@ -1214,12 +1209,12 @@ msgid ""
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
-"Disse emner bliver på enheden, og bliver ikke overført til synk-modtager. "
-"For at finde disse emner; enten søg efter titel eller ID (som er vist i "
-"klammer herover)"
+"Tyto položky zůstanou na tomto zařízení, ale nebudou uploadovány na cíl "
+"synchronizace. Pro přístup k těmto souborům hledejte jejich název nebo ID (v "
+"hranatých závorkách)."
 
 msgid "Sync status (synced items / total items)"
-msgstr "Synk status (synk' emner / emner i alt)"
+msgstr "Stav synchronizace (synchronizováno / celkem)"
 
 #, javascript-format
 msgid "%s: %d/%d"
@@ -1227,161 +1222,161 @@ msgstr "%s: %d/%d"
 
 #, javascript-format
 msgid "Total: %d/%d"
-msgstr "I alt: %d %d"
+msgstr "Celkem: %d/%d"
 
 #, javascript-format
 msgid "Conflicted: %d"
-msgstr "Konflikter: %d"
+msgstr "Konflikt: %d"
 
 #, javascript-format
 msgid "To delete: %d"
-msgstr "Til sletning: %d"
+msgstr "K smazání: %d"
 
 msgid "Folders"
-msgstr "Mapper"
+msgstr "Složky"
 
 #, javascript-format
 msgid "%s: %d notes"
-msgstr "%s: %d noter"
+msgstr "%s: %d poznámek"
 
 msgid "Coming alarms"
-msgstr "Kommende alarmer"
+msgstr "Nadcházející alarmy"
 
 #, javascript-format
 msgid "On %s: %s"
-msgstr "På %s: %s"
+msgstr "Na %s: %s"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr "Der er ingen noter. Opret note ved at klikke på (+) knappen."
+msgstr "Nemáte žádné poznámky. Vytvořte jednu kliknutím na tlačítko (+)."
 
 msgid "Delete these notes?"
-msgstr "Slet disse noter?"
+msgstr "Smazat tyto poznámky?"
 
 msgid "Log"
 msgstr "Log"
 
 msgid "Export Debug Report"
-msgstr "Eksporter undersøgelses rapport"
+msgstr "Exportovat Debug Report"
 
 msgid "Encryption Config"
-msgstr "Krypterings indstillinger"
+msgstr "Nastavení šifrování"
 
 msgid "Configuration"
-msgstr "Indstillinger"
+msgstr "Nastavení"
 
 msgid "Move to notebook..."
-msgstr "Flyt til notesbog..."
+msgstr "Přesunout do zápisníku..."
 
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr "Flyt %d noter til notesbogen \"%s\"?"
+msgstr "Přesunout poznámky %d do zápisníku \"%s\"?"
 
 msgid "Press to set the decryption password."
-msgstr "Klik for at gemme dekrypterings kodeord."
+msgstr "Stiskněte pro zadání hesla k dešifrování."
 
 msgid "Select date"
-msgstr "Vælg dato"
+msgstr "Vybrat datum"
 
 msgid "Confirm"
-msgstr "Bekræft"
+msgstr "Potvrdit"
 
 msgid "Cancel synchronisation"
-msgstr "Afbryd synkronisering"
+msgstr "Zrušit synchronizaci"
 
 msgid "New tags:"
-msgstr ""
+msgstr "Nové tagy:"
 
 msgid "Type new tags or select from list"
-msgstr ""
+msgstr "Zadejte nové tagy, nebo vyberte existující ze seznamu"
 
 msgid "Joplin website"
-msgstr "Joplin hjemmeside"
+msgstr "Web Joplinu"
 
 #, javascript-format
 msgid "Master Key %s"
-msgstr "Hoved nøgle %s"
+msgstr "Master heslo %s"
 
 #, javascript-format
 msgid "Created: %s"
-msgstr "Oprettet: %s"
+msgstr "Vytvořeno: %s"
 
 msgid "Password:"
-msgstr "Kodeord:"
+msgstr "Heslo:"
 
 msgid "Password cannot be empty"
-msgstr "Kodeord må ikke være tomt"
+msgstr "Heslo nemůže být prázdné"
 
 msgid "Enable"
-msgstr "Tænd"
+msgstr "Zapnout"
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"
-msgstr "Notesbogen kan ikke gemmes: %s"
+msgstr "Nebylo možné uložit zápisník: %s"
 
 msgid "Edit notebook"
-msgstr "Rediger notesbog"
+msgstr "Upravit zápisník"
 
 msgid "Show all"
-msgstr "Vis alt"
+msgstr "Zobrazit vše"
 
 msgid "Errors only"
-msgstr "Kun fejl"
+msgstr "Pouze chyby"
 
 msgid "This note has been modified:"
-msgstr "Denne note er ændret:"
+msgstr "Poznámka byla upravena:"
 
 msgid "Save changes"
-msgstr "Gem ændringer"
+msgstr "Uložit změny"
 
 msgid "Discard changes"
-msgstr "Fortryd ændringer"
+msgstr "Zahodit změny"
 
 #, javascript-format
 msgid "Unsupported image type: %s"
-msgstr "Ulovlig billedtype: %s"
+msgstr "Nepodporovaný formát obrázku: %s"
 
 msgid "Attach photo"
-msgstr "Vedhæft foto"
+msgstr "Přiložit obrázek"
 
 msgid "Attach any file"
-msgstr "Vedhæft fil"
+msgstr "Přiložit soubor"
 
 msgid "Convert to note"
-msgstr "Konverter til note"
+msgstr "Konvertovat na poznámku"
 
 msgid "Convert to todo"
-msgstr "Konverter til opgave"
+msgstr "Konvertovat na todo"
 
 msgid "Hide metadata"
-msgstr "Skjul metadata"
+msgstr "Schovat metadata"
 
 msgid "Show metadata"
-msgstr "Vis metadata"
+msgstr "Zobrazit metadata"
 
 msgid "View on map"
-msgstr "Vis på kort"
+msgstr "Zobrazit na map+"
 
 msgid "Delete notebook"
-msgstr "Slet notesbog"
+msgstr "Smazat zápisník"
 
 msgid "Login with OneDrive"
-msgstr "Log på med OneDrive"
+msgstr "Přihlásit se pomocí OneDrive"
 
 msgid "Search"
-msgstr "Søg"
+msgstr "Hledání"
 
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
 msgstr ""
-"Klik på (+) knappen for at oprette ny note eller notesbog. Klik på side menu "
-"for at åbne eksisterende notesbøger."
+"Vytvořte novou poznámku či zápisník kliknutím na tlačítko (+). Pro přístup k "
+"existujícím zápisníkům použijte postranní menu."
 
 msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr "Du har ingen notesbøger. Opret en ved at klikke på (+) knappen."
+msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na tlačítko (+)."
 
 msgid "Welcome"
-msgstr "Velkommen"
+msgstr "Vítejte"
 
 #~ msgid "Searches"
-#~ msgstr "Søgninger"
+#~ msgstr "Hledané výrazy"

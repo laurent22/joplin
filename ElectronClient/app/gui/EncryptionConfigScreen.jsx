@@ -182,17 +182,11 @@ class EncryptionConfigScreenComponent extends React.Component {
 			<div>
 				<Header style={headerStyle} />
 				<div style={containerStyle}>
-					{/*<div style={{backgroundColor: theme.warningBackgroundColor, paddingLeft: 10, paddingRight: 10, paddingTop: 2, paddingBottom: 2 }}>
+					{<div style={{backgroundColor: theme.warningBackgroundColor, paddingLeft: 10, paddingRight: 10, paddingTop: 2, paddingBottom: 2 }}>
 						<p style={theme.textStyle}>
-							Important: This is a <b>beta</b> feature. It has been extensively tested and is already in use by some users, but it is possible that some bugs remain.
+							<span>{_('For more information about End-To-End Encryption (E2EE) and advices on how to enable it please check the documentation')}</span> <a onClick={() => {bridge().openExternal('https://joplin.cozic.net/help/e2ee')}} href="#">https://joplin.cozic.net/help/e2ee</a>
 						</p>
-						<p style={theme.textStyle}>
-							If you wish to you use it, it is recommended that you keep a backup of your data. The simplest way is to regularly backup <b>{pathUtils.toSystemSlashes(Setting.value('profileDir'), process.platform)}</b>
-						</p>
-						<p style={theme.textStyle}>
-							For more information about End-To-End Encryption (E2EE) and how it is going to work, please check the documentation: <a onClick={() => {bridge().openExternal('http://joplin.cozic.net/help/e2ee.html')}} href="#">http://joplin.cozic.net/help/e2ee.html</a>
-						</p>
-					</div>*/}
+					</div>}
 					<h1 style={theme.h1Style}>{_('Status')}</h1>
 					<p style={theme.textStyle}>{_('Encryption is:')} <strong>{this.props.encryptionEnabled ? _('Enabled') : _('Disabled')}</strong></p>
 					{decryptedItemsInfo}
