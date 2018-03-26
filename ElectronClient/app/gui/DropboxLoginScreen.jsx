@@ -37,7 +37,7 @@ class DropboxLoginScreenComponent extends React.Component {
 			const api = await this.dropboxApi();
 			try {
 				const response = await api.execAuthToken(this.state.authCode);
-				Setting.setValue('sync.' + this.syncTargetId() + '.auth', JSON.stringify(response));
+				Setting.setValue('sync.' + this.syncTargetId() + '.auth', response.access_token);
 				api.setAuthToken(response.access_token);
 				bridge().showInfoMessageBox(_('The application has been authorised!'));
 				this.props.dispatch({ type: 'NAV_BACK' });

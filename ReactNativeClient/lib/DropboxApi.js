@@ -3,6 +3,7 @@ const { shim } = require('lib/shim.js');
 const JoplinError = require('lib/JoplinError');
 const URL = require('url-parse');
 const { time } = require('lib/time-utils');
+const EventDispatcher = require('lib/EventDispatcher');
 
 class DropboxApi {
 
@@ -10,6 +11,7 @@ class DropboxApi {
 		this.logger_ = new Logger();
 		this.options_ = options;
 		this.authToken_ = null;
+		this.dispatcher_ = new EventDispatcher();
 	}
 
 	clientId() {
@@ -32,8 +34,13 @@ class DropboxApi {
 		return this.authToken_; // Without the "Bearer " prefix
 	}
 
+	on(eventName, callback) {
+		return this.dispatcher_.on(eventName, callback);
+	}
+
 	setAuthToken(v) {
 		this.authToken_ = v;
+		this.dispatcher_.dispatch('authRefreshed', this.authToken());
 	}
 
 	loginUrl() {
@@ -90,6 +97,12 @@ class DropboxApi {
 		return JSON.parse(responseText);
 	}
 
+	isTokenError(status, responseText) {
+		if (status === 401) return true;
+		if (responseText.indexOf('OAuth 2 access token is malformed') >= 0) return true;
+		return false;
+	}
+
 	async exec(method, path = '', body = null, headers = null, options = null) {
 		if (headers === null) headers = {};
 		if (options === null) options = {};
@@ -124,8 +137,7 @@ class DropboxApi {
 
 				// console.info(this.requestToCurl_(url, fetchOptions));
 
-				const now = Date.now();
-				// console.info(now + ': ' + method + ' ' + url);
+				// console.info(method + ' ' + url);
 
 				if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
 					response = await shim.uploadBlob(url, fetchOptions);
@@ -137,7 +149,7 @@ class DropboxApi {
 
 				const responseText = await response.text();
 
-				// console.info(now + ': Response: ' + responseText); 
+				// console.info('Response: ' + responseText); 
 
 				let responseJson_ = null;
 				const loadResponseJson = () => {
@@ -162,10 +174,17 @@ class DropboxApi {
 					// Gives a shorter response for error messages. Useful for cases where a full HTML page is accidentally loaded instead of
 					// JSON. That way the error message will still show there's a problem but without filling up the log or screen.
 					const shortResponseText = (responseText + '').substr(0, 1024);
-					return new JoplinError(method + ' ' + path + ': ' + message + ' (' + response.status + '): ' + shortResponseText, code);
+					const error = new JoplinError(method + ' ' + path + ': ' + message + ' (' + response.status + '): ' + shortResponseText, code);
+					error.httpStatus = response.status;
+					return error;
 				}
 
 				if (!response.ok) {
+					const json = loadResponseJson();
+					if (this.isTokenError(response.status, responseText)) {
+						this.setAuthToken(null);
+					}
+
 					// When using fetchBlob we only get a string (not xml or json) back
 					if (options.target === 'file') throw newError('fetchBlob error');
 

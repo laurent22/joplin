@@ -370,7 +370,7 @@ class NoteTextComponent extends React.Component {
 			webviewReady: true,
 		});
 
-		if (Setting.value('env') === 'dev') this.webview_.openDevTools();
+		// if (Setting.value('env') === 'dev') this.webview_.openDevTools();
 	}
 
 	webview_ref(element) {

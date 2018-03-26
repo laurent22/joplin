@@ -66,22 +66,32 @@ class FileApiDriverDropbox {
 		const context = options ? options.context : null;
 		let cursor = context ? context.cursor : null;
 
-		const urlPath = cursor ? 'files/list_folder/continue' : 'files/list_folder';
-		const body = cursor ? { cursor: cursor } : { path: this.makePath_(path), include_deleted: true };
-		const response = await this.api().exec('POST', urlPath, body);
-		
-		const output = {
-			items: this.metadataToStats_(response.entries),
-			hasMore: response.has_more,
-			context: { cursor: response.cursor },
+		while (true) {
+			const urlPath = cursor ? 'files/list_folder/continue' : 'files/list_folder';
+			const body = cursor ? { cursor: cursor } : { path: this.makePath_(path), include_deleted: true };
+
+			try {
+				const response = await this.api().exec('POST', urlPath, body);
+				
+				const output = {
+					items: this.metadataToStats_(response.entries),
+					hasMore: response.has_more,
+					context: { cursor: response.cursor },
+				}
+
+				return output;
+			} catch (error) {
+				// If there's an error related to an invalid cursor, clear the cursor and retry.
+				if (cursor) {
+					if (error.httpStatus === 400 || error.code.indexOf('reset') >= 0) {
+						// console.info('Clearing cursor and retrying', error);
+						cursor = null;
+						continue;
+					}
+				}
+				throw error;
+			}
 		}
-
-		return output;
-
-
-
-
-		// TODO: handle error - reset cursor
 	}
 
 	async list(path, options) {

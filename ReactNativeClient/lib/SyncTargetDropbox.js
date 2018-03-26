@@ -40,10 +40,6 @@ class SyncTargetDropbox extends BaseSyncTarget {
 		return fileApi.driver().api();
 	}
 
-	syncTargetId() {
-		return SyncTargetDropbox.id();
-	}
-
 	async initFileApi() {
 		const params = parameters().dropbox;
 
@@ -52,15 +48,17 @@ class SyncTargetDropbox extends BaseSyncTarget {
 			secret: params.secret,
 		});
 
-		const authJson = Setting.value('sync.' + SyncTargetDropbox.id() + '.auth');
-		if (authJson) {
-			const auth = JSON.parse(authJson);
-			api.setAuthToken(auth.access_token);
-		}
+		api.on('authRefreshed', (auth) => {
+			this.logger().info('Saving updated OneDrive auth.');
+			Setting.setValue('sync.' + SyncTargetDropbox.id() + '.auth', auth ? auth : null);
+		});
+
+		const authToken = Setting.value('sync.' + SyncTargetDropbox.id() + '.auth');
+		api.setAuthToken(authToken);
 
 		const appDir = '';
 		const fileApi = new FileApi(appDir, new FileApiDriverDropbox(api));
-		fileApi.setSyncTargetId(this.syncTargetId());
+		fileApi.setSyncTargetId(SyncTargetDropbox.id());
 		fileApi.setLogger(this.logger());
 		return fileApi;
 	}

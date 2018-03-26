@@ -92,7 +92,7 @@ class Command extends BaseCommand {
 			}
 
 			const response = await api.execAuthToken(authCode);
-			Setting.setValue('sync.' + this.syncTargetId_ + '.auth', JSON.stringify(response));
+			Setting.setValue('sync.' + this.syncTargetId_ + '.auth', response.access_token);
 			api.setAuthToken(response.access_token);
 			return true;
 		}
