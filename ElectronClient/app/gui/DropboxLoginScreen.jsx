@@ -6,71 +6,22 @@ const { Header } = require('./Header.min.js');
 const { themeStyle } = require('../theme.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 const { _ } = require('lib/locale.js');
+const Shared = require('lib/components/shared/dropbox-login-shared');
 
 class DropboxLoginScreenComponent extends React.Component {
 
 	constructor() {
 		super();
 
-		this.dropboxApi_ = null;
-
-		this.state = {
-			loginUrl: '',
-			authCode: '',
-			checkingAuthToken: false,
-		};
-
-		this.loginUrl_click = () => {
-			if (!this.state.loginUrl) return;
-			bridge().openExternal(this.state.loginUrl)
-		}
-
-		this.authCodeInput_change = (event) => {
-			this.setState({
-				authCode: event.target.value
-			});
-		}
-
-		this.submit_click = async () => {
-			this.setState({ checkingAuthToken: true });
-
-			const api = await this.dropboxApi();
-			try {
-				const response = await api.execAuthToken(this.state.authCode);
-				Setting.setValue('sync.' + this.syncTargetId() + '.auth', response.access_token);
-				api.setAuthToken(response.access_token);
-				bridge().showInfoMessageBox(_('The application has been authorised!'));
-				this.props.dispatch({ type: 'NAV_BACK' });
-			} catch (error) {
-				bridge().showErrorMessageBox(_('Could not authorise application:\n\n%s\n\nPlease try again.', error.message));
-			} finally {
-				this.setState({ checkingAuthToken: false });
-			}
-		}
+		this.shared_ = new Shared(
+			this,
+			(msg) => bridge().showInfoMessageBox(msg), 
+			(msg) => bridge().showErrorMessageBox(msg)
+		);
 	}
 
 	componentWillMount() {
-		this.refreshUrl();
-	}
-
-	syncTargetId() {
-		return SyncTargetRegistry.nameToId('dropbox');
-	}
-
-	async dropboxApi() {
-		if (this.dropboxApi_) return this.dropboxApi_;
-
-		const syncTarget = reg.syncTarget(this.syncTargetId());
-		this.dropboxApi_ = await syncTarget.api();
-		return this.dropboxApi_;
-	}
-
-	async refreshUrl() {
-		const api = await this.dropboxApi();
-
-		this.setState({
-			loginUrl: api.loginUrl(),
-		});
+		this.shared_.refreshUrl();
 	}
 
 	render() {
@@ -89,10 +40,10 @@ class DropboxLoginScreenComponent extends React.Component {
 				<div style={{padding: theme.margin}}>
 					<p style={theme.textStyle}>{_('To allow Joplin to synchronise with Dropbox, please follow the steps below:')}</p>
 					<p style={theme.textStyle}>{_('Step 1: Open this URL in your browser to authorise the application:')}</p>
-					<a style={theme.textStyle} href="#" onClick={this.loginUrl_click}>{this.state.loginUrl}</a>
+					<a style={theme.textStyle} href="#" onClick={this.shared_.loginUrl_click}>{this.state.loginUrl}</a>
 					<p style={theme.textStyle}>{_('Step 2: Enter the code provided by Dropbox:')}</p>
-					<p><input type="text" value={this.state.authCode} onChange={this.authCodeInput_change} style={inputStyle}/></p>
-					<button disabled={this.state.checkingAuthToken} onClick={this.submit_click}>{_('Submit')}</button>
+					<p><input type="text" value={this.state.authCode} onChange={this.shared_.authCodeInput_change} style={inputStyle}/></p>
+					<button disabled={this.state.checkingAuthToken} onClick={this.shared_.submit_click}>{_('Submit')}</button>
 				</div>
 			</div>
 		);

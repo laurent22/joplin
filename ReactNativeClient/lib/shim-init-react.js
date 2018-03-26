@@ -6,6 +6,7 @@ const { generateSecureRandom }  = require('react-native-securerandom');
 const FsDriverRN = require('lib/fs-driver-rn.js').FsDriverRN;
 const urlValidator = require('valid-url');
 const { Buffer } = require('buffer');
+const { Linking } = require('react-native');
 
 function shimInit() {
 	shim.Geolocation = GeolocationReact;
@@ -118,6 +119,10 @@ function shimInit() {
 	}
 
 	shim.Buffer = Buffer;
+
+	shim.openUrl = (url) => {
+		Linking.openURL(url);
+	}
 }
 
 module.exports = { shimInit };

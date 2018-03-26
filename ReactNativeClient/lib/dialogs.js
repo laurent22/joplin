@@ -67,6 +67,11 @@ dialogs.error = (parentComponent, message) => {
 	return parentComponent.dialogbox.alert(message);
 }
 
+dialogs.info = (parentComponent, message) => {
+	Keyboard.dismiss();
+	return parentComponent.dialogbox.alert(message);
+}
+
 dialogs.DialogBox = DialogBox
 
 module.exports = { dialogs };

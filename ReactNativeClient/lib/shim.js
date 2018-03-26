@@ -130,5 +130,6 @@ shim.stringByteLength = function(string) { throw new Error('Not implemented'); }
 shim.detectAndSetLocale = null;
 shim.attachFileToNote = async (note, filePath) => {}
 shim.Buffer = null;
+shim.openUrl = () => { throw new Error('Not implemented'); }
 
 module.exports = { shim };

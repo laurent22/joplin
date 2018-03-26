@@ -150,7 +150,7 @@ class FileApiDriverDropbox {
 
 	async put(path, content, options = null) {
 		// See https://github.com/facebook/react-native/issues/14445#issuecomment-352965210
-		if (typeof content === 'string') content = Buffer.from(content, 'utf8')
+		if (typeof content === 'string') content = shim.Buffer.from(content, 'utf8')
 
 		await this.api().exec('POST', 'files/upload', content, {
 			'Dropbox-API-Arg': JSON.stringify({

@@ -183,6 +183,11 @@ function shimInit() {
 
 	shim.Buffer = Buffer;
 
+	shim.openUrl = (url) => {
+		const { bridge } = require('electron').remote.require('./bridge');
+		bridge().openExternal(url)
+	}
+
 }
 
 module.exports = { shimInit };
