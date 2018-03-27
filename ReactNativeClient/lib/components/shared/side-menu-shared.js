@@ -36,7 +36,7 @@ shared.synchronize_press = async function(comp) {
 
 	const action = comp.props.syncStarted ? 'cancel' : 'start';
 
-	if (!reg.syncTarget().isAuthenticated()) {
+	if (!await reg.syncTarget().isAuthenticated()) {
 		if (reg.syncTarget().authRouteName()) {
 			comp.props.dispatch({
 				type: 'NAV_GO',

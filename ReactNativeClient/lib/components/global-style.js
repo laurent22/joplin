@@ -15,6 +15,7 @@ const globalStyle = {
 	dividerColor: "#dddddd",
 	selectedColor: '#e5e5e5',
 	disabledOpacity: 0.2,
+	colorUrl: '#000CFF',
 
 	raisedBackgroundColor: "#0080EF",
 	raisedColor: "#003363",
@@ -89,10 +90,17 @@ function addExtraStyles(style) {
 		fontSize: style.fontSize,
 	};
 
+	style.urlText = {
+		color: style.colorUrl,
+		fontSize: style.fontSize,
+	};
+
 	return style;
 }
 
 function themeStyle(theme) {
+	if (!theme) throw new Error('Theme not set');
+
 	if (themeCache_[theme]) return themeCache_[theme];
 
 	let output = Object.assign({}, globalStyle);

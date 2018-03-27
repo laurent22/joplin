@@ -293,6 +293,7 @@ class FileApiDriverWebDav {
 			return response;
 		} catch (error) {
 			if (error.code !== 404) throw error;
+			return null;
 		}
 	}
 
