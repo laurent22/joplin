@@ -85,6 +85,9 @@ shim.fetchRequestCanBeRetried = function(error) {
 	// Code: ETIMEDOUT
 	if (error.code === 'ETIMEDOUT') return true;
 
+	// ECONNREFUSED is generally temporary
+	if (error.code === 'ECONNREFUSED') return true;
+
 	return false;
 };
 

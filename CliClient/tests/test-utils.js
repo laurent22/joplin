@@ -57,9 +57,9 @@ SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
 
 // const syncTargetId_ = SyncTargetRegistry.nameToId("nextcloud");
-// const syncTargetId_ = SyncTargetRegistry.nameToId("memory");
+const syncTargetId_ = SyncTargetRegistry.nameToId("memory");
 //const syncTargetId_ = SyncTargetRegistry.nameToId('filesystem');
-const syncTargetId_ = SyncTargetRegistry.nameToId('dropbox');
+// const syncTargetId_ = SyncTargetRegistry.nameToId('dropbox');
 const syncDir = __dirname + '/../tests/sync';
 
 const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;//400;
@@ -256,7 +256,7 @@ function fileApi() {
 		const api = new DropboxApi();
 		const authTokenPath = __dirname + '/support/dropbox-auth.txt';
 		const authToken = fs.readFileSync(authTokenPath, 'utf8');
-		if (!authTokenPath) throw new Error('Dropbox auth token missing in ' + authTokenPath);
+		if (!authToken) throw new Error('Dropbox auth token missing in ' + authTokenPath);
 		api.setAuthToken(authToken);
 		fileApi_ = new FileApi('', new FileApiDriverDropbox(api));
 	}
@@ -301,8 +301,9 @@ function asyncTest(callback) {
 			await callback();
 		} catch (error) {
 			console.error(error);
+		} finally {
+			done();
 		}
-		done();
 	}
 }
 

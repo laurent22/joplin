@@ -372,7 +372,7 @@ describe('Synchronizer', function() {
 		expect(items.length).toBe(1);
 		expect(items[0].title).toBe('note1');
 		expect(items[0].is_conflict).toBe(1);
-			}));
+	}));
 
 	it('should resolve conflict if note has been deleted remotely and locally', asyncTest(async () => {
 		let folder = await Folder.save({ title: "folder" });
@@ -542,11 +542,11 @@ describe('Synchronizer', function() {
 		let n1 = await Note.save({ title: "mynote" });
 		let n2 = await Note.save({ title: "mynote2" });
 		let tag = await Tag.save({ title: 'mytag' });
-		await synchronizer().start();
+		let context1 = await synchronizer().start();
 
 		await switchClient(2);
 
-		await synchronizer().start();
+		let context2 = await synchronizer().start();
 		if (withEncryption) {
 			const masterKey_2 = await MasterKey.load(masterKey.id);
 			await encryptionService().loadMasterKey(masterKey_2, '123456', true);
@@ -560,21 +560,21 @@ describe('Synchronizer', function() {
 		await Tag.addNote(remoteTag.id, n2.id);
 		let noteIds = await Tag.noteIds(tag.id);
 		expect(noteIds.length).toBe(2);
-		await synchronizer().start();
+		context2 = await synchronizer().start({ context: context2 });
 
 		await switchClient(1);
 
-		await synchronizer().start();
+		context1 = await synchronizer().start({ context: context1 });
 		let remoteNoteIds = await Tag.noteIds(tag.id);
 		expect(remoteNoteIds.length).toBe(2);
 		await Tag.removeNote(tag.id, n1.id);
 		remoteNoteIds = await Tag.noteIds(tag.id);
 		expect(remoteNoteIds.length).toBe(1);
-		await synchronizer().start();
+		context1 = await synchronizer().start({ context: context1 });
 
 		await switchClient(2);
 
-		await synchronizer().start();
+		context2 = await synchronizer().start({ context: context2 });
 		noteIds = await Tag.noteIds(tag.id);
 		expect(noteIds.length).toBe(1);
 		expect(remoteNoteIds[0]).toBe(noteIds[0]);
