@@ -41,7 +41,6 @@ class Shared {
 				this.comp_.props.dispatch({ type: 'NAV_BACK' });
 				reg.scheduleSync();
 			} catch (error) {
-				console.error(error);
 				await showErrorMessageBox(_('Could not authorise application:\n\n%s\n\nPlease try again.', error.message));
 			} finally {
 				this.comp_.setState({ checkingAuthToken: false });
