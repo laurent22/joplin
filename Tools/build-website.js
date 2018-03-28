@@ -317,8 +317,10 @@ async function main() {
 		selectedDesktop: 'selected',
 	});
 
-	renderFileToHtml(rootDir + '/readme/e2ee.md', rootDir + '/docs/help/e2ee/index.html', {});
-	renderFileToHtml(rootDir + '/readme/spec.md', rootDir + '/docs/help/spec/index.html', {});
+	renderFileToHtml(rootDir + '/readme/e2ee.md', rootDir + '/docs/e2ee/index.html', {});
+	renderFileToHtml(rootDir + '/readme/spec.md', rootDir + '/docs/spec/index.html', {});
+	renderFileToHtml(rootDir + '/readme/stats.md', rootDir + '/docs/stats/index.html', {});
+	renderFileToHtml(rootDir + '/readme/changelog.md', rootDir + '/docs/changelog/index.html', {});
 	renderFileToHtml(rootDir + '/readme/donate.md', rootDir + '/docs/donate/index.html', {});
 	
 }

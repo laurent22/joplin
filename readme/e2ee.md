@@ -27,4 +27,4 @@ Follow the same procedure as above but instead disable E2EE on each device one b
 
 # Technical specification
 
-For a more technical description, mostly relevant for development or to review the method being used, please see the [Encryption specification](https://joplin.cozic.net/help/spec).
+For a more technical description, mostly relevant for development or to review the method being used, please see the [Encryption specification](https://joplin.cozic.net/spec).

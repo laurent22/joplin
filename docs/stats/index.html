@@ -1,0 +1,474 @@
+<!doctype html>
+<html>
+<head>
+	<title>Joplin - an open source note taking and to-do application with synchronisation capabilities</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+	<link rel="stylesheet" href="https://opensource.keycdn.com/fontawesome/4.7.0/font-awesome.min.css" integrity="sha384-dNpIIXE8U05kAbPhy3G1cz+yZmTzA6CY8Vg/u2L9xRnHjJiAK76m2BIEaSEV+/aU" crossorigin="anonymous"> 
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+	<style>
+	body {
+		background-color: #F1F1F1;
+		color: #333333;
+	}
+	table {
+		margin-bottom: 1em;
+	}
+	td, th {
+		padding: .8em;
+		border: 1px solid #ccc;
+	}
+	h1, h2 {
+		border-bottom: 1px solid #eaecef;
+		padding-bottom: 0.3em;
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+		font-weight: 600;
+		font-size: 2em;
+		margin-bottom: 16px;
+	}
+	h2 {
+		font-size: 1.6em;
+	}
+	h3 {
+		font-size: 1.3em;
+	}
+	code {
+		color: black;
+		background-color: #eee;
+		border: 1px solid #ccc;
+		font-size: .85em;
+	}
+	pre code {
+		border: none;
+	}
+	pre {
+		font-size: .85em;
+	}
+	.title-icon {
+		height: 2em;
+	}
+	.sub-title {
+		font-weight: bold;
+		font-size: 1.5em;
+	}
+	.container {
+		background-color: white;
+		padding: 0;
+		box-shadow: 0 10px 20px #888888;
+	}
+	table.screenshots {
+		margin-top: 2em;
+		margin-bottom: 2em;
+	}
+	table.screenshots th {
+		height: 3em;
+		text-align: center;
+	}
+	table.screenshots th, 
+	table.screenshots td {
+		border: 1px solid #C2C2C2;
+	}
+	img[align="left"] {
+		margin-right: 10px;
+		margin-bottom: 10px;
+	}
+	.mobile-screenshot {
+		height: 40em;
+		padding: 1em;
+	}
+	.cli-screenshot-wrapper {
+		background-color: black;
+		vertical-align: top;
+		padding: 1em 2em 1em 1em;
+	}
+	.cli-screenshot {
+		font-family: "Monaco", "Inconsolata", "CONSOLAS", "Deja Vu Sans Mono", "Droid Sans Mono", "Andale Mono", monospace;
+		background-color: black;
+		color: white;
+		border: none;
+	}
+	.cli-screenshot .prompt {
+		color: #48C2F0;
+	}
+	.top-screenshot {
+		margin-top: 2em;
+		text-align: center;
+	}
+	.header {
+		position: relative;
+		padding-left: 2em;
+		padding-right: 2em;
+		padding-top: 1em;
+		padding-bottom: 1em;
+		color: white;
+		background-color: #2B2B3D;
+	}
+	.content {
+		padding-left: 2em;
+		padding-right: 2em;
+		padding-bottom: 2em;
+		padding-top: 2em;
+	}
+	.forkme {
+		position: absolute;
+		right: 0;
+		top:0;
+	}
+	.nav-wrapper {
+		position: relative;
+		width: inherit;
+	}
+	.nav {
+		background-color: black;
+		display: table;
+		width: inherit;
+	}
+	.nav.sticky {
+		position:fixed;
+		top: 0;
+		width: inherit;
+		box-shadow: 0 0 10px #000000;
+	}
+	.nav a {
+		color: white;
+		display: inline-block;
+		padding: .6em .9em .6em .9em;
+	}
+	.nav ul {
+		padding-left: 2em;
+		margin-bottom: 0;
+		display: table-cell;
+		min-width: 165px;
+	}
+	.nav ul li {
+		display: inline-block;
+		padding: 0;
+	}
+	.nav li.selected {
+		background-color: #222;
+		font-weight: bold;
+	}
+	.nav-right {
+		display: table-cell;
+		width: 100%;
+		text-align: right;
+		vertical-align: middle;
+		line-height: 0;
+	}
+	.nav-right .share-btn {
+		display: none;
+	}
+	.share-btn-github {
+		display: inline-block;
+	}
+	.nav-right .small-share-btn {
+		display: none;
+	}
+	.nav-right .share-btn-github {
+		display: inline-block;
+	}
+	@media all and (min-width: 400px) {
+		.nav-right .share-btn {
+			display: inline-block;
+		}
+		.nav-right .small-share-btn {
+			display: none;
+		}
+	}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplin.cozic.net/images/ForkMe.png"/></a>
+	<h1 id="joplin"><img class="title-icon" src="https://joplin.cozic.net/images/Icon512.png">oplin</h1>
+	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
+</div>
+
+<div class="nav-wrapper">
+	<div class="nav">
+		<ul>
+			<li class=""><a href="https:&#x2F;&#x2F;joplin.cozic.net/" title="Home"><i class="fa fa-home"></i></a></li>
+			<li class=""><a href="https:&#x2F;&#x2F;joplin.cozic.net/terminal" title="Terminal"><i class="fa fa-terminal"></i></a></li>
+			<li class=""><a href="https:&#x2F;&#x2F;joplin.cozic.net/desktop" title="Desktop"><i class="fa fa-desktop"></i></a></li>
+		</ul>
+		<div class="nav-right">
+			<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+			<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplin.cozic.net" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
+			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+		</div>
+	</div>
+</div>
+
+<div class="content">
+<p> statistics</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Total Windows downloads</td>
+<td>28567</td>
+</tr>
+<tr>
+<td>Total macOs downloads</td>
+<td>16422</td>
+</tr>
+<tr>
+<td>Total Linux downloads</td>
+<td>10914</td>
+</tr>
+<tr>
+<td>Windows %</td>
+<td>51%</td>
+</tr>
+<tr>
+<td>macOS %</td>
+<td>29%</td>
+</tr>
+<tr>
+<td>Linux %</td>
+<td>20%</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Date</th>
+<th>Windows</th>
+<th>macOS</th>
+<th>Linux</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.81">v1.0.81</a></td>
+<td>2018-03-28T08:13:58Z</td>
+<td>37</td>
+<td>16</td>
+<td>11</td>
+<td>64 </td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.79">v1.0.79</a></td>
+<td>2018-03-23T18:00:11Z</td>
+<td>877</td>
+<td>486</td>
+<td>340</td>
+<td>1703</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.78">v1.0.78</a></td>
+<td>2018-03-17T15:27:18Z</td>
+<td>1285</td>
+<td>810</td>
+<td>837</td>
+<td>2932</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.77">v1.0.77</a></td>
+<td>2018-03-16T15:12:35Z</td>
+<td>160</td>
+<td>81</td>
+<td>21</td>
+<td>262</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.72">v1.0.72</a></td>
+<td>2018-03-14T09:44:35Z</td>
+<td>392</td>
+<td>227</td>
+<td>28</td>
+<td>647</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.70">v1.0.70</a></td>
+<td>2018-02-28T20:04:30Z</td>
+<td>1829</td>
+<td>1010</td>
+<td>1210</td>
+<td>4049</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.67">v1.0.67</a></td>
+<td>2018-02-19T22:51:08Z</td>
+<td>1460</td>
+<td>574</td>
+<td></td>
+<td>2034</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.66">v1.0.66</a></td>
+<td>2018-02-18T23:09:09Z</td>
+<td>311</td>
+<td>103</td>
+<td>70</td>
+<td>484</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.65">v1.0.65</a></td>
+<td>2018-02-17T20:02:25Z</td>
+<td>183</td>
+<td>100</td>
+<td>112</td>
+<td>395</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.64">v1.0.64</a></td>
+<td>2018-02-16T00:58:20Z</td>
+<td>1065</td>
+<td>523</td>
+<td>1095</td>
+<td>2683</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.63">v1.0.63</a></td>
+<td>2018-02-14T19:40:36Z</td>
+<td>283</td>
+<td>139</td>
+<td>80</td>
+<td>502</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.62">v1.0.62</a></td>
+<td>2018-02-12T20:19:58Z</td>
+<td>538</td>
+<td>268</td>
+<td>344</td>
+<td>1150</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.61">v0.10.61</a></td>
+<td>2018-02-08T18:27:39Z</td>
+<td>954</td>
+<td>598</td>
+<td>938</td>
+<td>2490</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.60">v0.10.60</a></td>
+<td>2018-02-06T13:09:56Z</td>
+<td>709</td>
+<td>488</td>
+<td>537</td>
+<td>1734</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.54">v0.10.54</a></td>
+<td>2018-01-31T20:21:30Z</td>
+<td>1804</td>
+<td>825</td>
+<td>304</td>
+<td>2933</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.52">v0.10.52</a></td>
+<td>2018-01-31T19:25:18Z</td>
+<td>30</td>
+<td>8</td>
+<td>4</td>
+<td>42 </td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.51">v0.10.51</a></td>
+<td>2018-01-28T18:47:02Z</td>
+<td>1308</td>
+<td>975</td>
+<td>316</td>
+<td>2599</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.48">v0.10.48</a></td>
+<td>2018-01-23T11:19:51Z</td>
+<td>1954</td>
+<td>1122</td>
+<td>14</td>
+<td>3090</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.47">v0.10.47</a></td>
+<td>2018-01-16T17:27:17Z</td>
+<td>1213</td>
+<td>637</td>
+<td>57</td>
+<td>1907</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.43">v0.10.43</a></td>
+<td>2018-01-08T10:12:10Z</td>
+<td>3418</td>
+<td>1715</td>
+<td>1193</td>
+<td>6326</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.41">v0.10.41</a></td>
+<td>2018-01-05T20:38:12Z</td>
+<td>1019</td>
+<td>915</td>
+<td>223</td>
+<td>2157</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.40">v0.10.40</a></td>
+<td>2018-01-02T23:16:57Z</td>
+<td>1578</td>
+<td>1141</td>
+<td>322</td>
+<td>3041</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.39">v0.10.39</a></td>
+<td>2017-12-11T21:19:44Z</td>
+<td>5126</td>
+<td>3060</td>
+<td>2560</td>
+<td>10746</td>
+</tr>
+<tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.38">v0.10.38</a></td>
+<td>2017-12-08T10:12:06Z</td>
+<td>1034</td>
+<td>601</td>
+<td>298</td>
+<td>1933</td>
+</tr>
+</tbody>
+</table>
+
+<script>
+	function stickyHeader() { 
+		if ($(window).scrollTop() > 179) {
+			$('.nav').addClass('sticky'); 
+		} else {
+			$('.nav').removeClass('sticky');
+		}
+	}
+
+	$(window).scroll(function() {
+		stickyHeader();
+	});
+
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-103586105-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+</body>
+</html>

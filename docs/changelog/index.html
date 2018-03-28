@@ -1,0 +1,435 @@
+<!doctype html>
+<html>
+<head>
+	<title>Joplin - an open source note taking and to-do application with synchronisation capabilities</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+	<link rel="stylesheet" href="https://opensource.keycdn.com/fontawesome/4.7.0/font-awesome.min.css" integrity="sha384-dNpIIXE8U05kAbPhy3G1cz+yZmTzA6CY8Vg/u2L9xRnHjJiAK76m2BIEaSEV+/aU" crossorigin="anonymous"> 
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+	<style>
+	body {
+		background-color: #F1F1F1;
+		color: #333333;
+	}
+	table {
+		margin-bottom: 1em;
+	}
+	td, th {
+		padding: .8em;
+		border: 1px solid #ccc;
+	}
+	h1, h2 {
+		border-bottom: 1px solid #eaecef;
+		padding-bottom: 0.3em;
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+		font-weight: 600;
+		font-size: 2em;
+		margin-bottom: 16px;
+	}
+	h2 {
+		font-size: 1.6em;
+	}
+	h3 {
+		font-size: 1.3em;
+	}
+	code {
+		color: black;
+		background-color: #eee;
+		border: 1px solid #ccc;
+		font-size: .85em;
+	}
+	pre code {
+		border: none;
+	}
+	pre {
+		font-size: .85em;
+	}
+	.title-icon {
+		height: 2em;
+	}
+	.sub-title {
+		font-weight: bold;
+		font-size: 1.5em;
+	}
+	.container {
+		background-color: white;
+		padding: 0;
+		box-shadow: 0 10px 20px #888888;
+	}
+	table.screenshots {
+		margin-top: 2em;
+		margin-bottom: 2em;
+	}
+	table.screenshots th {
+		height: 3em;
+		text-align: center;
+	}
+	table.screenshots th, 
+	table.screenshots td {
+		border: 1px solid #C2C2C2;
+	}
+	img[align="left"] {
+		margin-right: 10px;
+		margin-bottom: 10px;
+	}
+	.mobile-screenshot {
+		height: 40em;
+		padding: 1em;
+	}
+	.cli-screenshot-wrapper {
+		background-color: black;
+		vertical-align: top;
+		padding: 1em 2em 1em 1em;
+	}
+	.cli-screenshot {
+		font-family: "Monaco", "Inconsolata", "CONSOLAS", "Deja Vu Sans Mono", "Droid Sans Mono", "Andale Mono", monospace;
+		background-color: black;
+		color: white;
+		border: none;
+	}
+	.cli-screenshot .prompt {
+		color: #48C2F0;
+	}
+	.top-screenshot {
+		margin-top: 2em;
+		text-align: center;
+	}
+	.header {
+		position: relative;
+		padding-left: 2em;
+		padding-right: 2em;
+		padding-top: 1em;
+		padding-bottom: 1em;
+		color: white;
+		background-color: #2B2B3D;
+	}
+	.content {
+		padding-left: 2em;
+		padding-right: 2em;
+		padding-bottom: 2em;
+		padding-top: 2em;
+	}
+	.forkme {
+		position: absolute;
+		right: 0;
+		top:0;
+	}
+	.nav-wrapper {
+		position: relative;
+		width: inherit;
+	}
+	.nav {
+		background-color: black;
+		display: table;
+		width: inherit;
+	}
+	.nav.sticky {
+		position:fixed;
+		top: 0;
+		width: inherit;
+		box-shadow: 0 0 10px #000000;
+	}
+	.nav a {
+		color: white;
+		display: inline-block;
+		padding: .6em .9em .6em .9em;
+	}
+	.nav ul {
+		padding-left: 2em;
+		margin-bottom: 0;
+		display: table-cell;
+		min-width: 165px;
+	}
+	.nav ul li {
+		display: inline-block;
+		padding: 0;
+	}
+	.nav li.selected {
+		background-color: #222;
+		font-weight: bold;
+	}
+	.nav-right {
+		display: table-cell;
+		width: 100%;
+		text-align: right;
+		vertical-align: middle;
+		line-height: 0;
+	}
+	.nav-right .share-btn {
+		display: none;
+	}
+	.share-btn-github {
+		display: inline-block;
+	}
+	.nav-right .small-share-btn {
+		display: none;
+	}
+	.nav-right .share-btn-github {
+		display: inline-block;
+	}
+	@media all and (min-width: 400px) {
+		.nav-right .share-btn {
+			display: inline-block;
+		}
+		.nav-right .small-share-btn {
+			display: none;
+		}
+	}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplin.cozic.net/images/ForkMe.png"/></a>
+	<h1 id="joplin"><img class="title-icon" src="https://joplin.cozic.net/images/Icon512.png">oplin</h1>
+	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
+</div>
+
+<div class="nav-wrapper">
+	<div class="nav">
+		<ul>
+			<li class=""><a href="https:&#x2F;&#x2F;joplin.cozic.net/" title="Home"><i class="fa fa-home"></i></a></li>
+			<li class=""><a href="https:&#x2F;&#x2F;joplin.cozic.net/terminal" title="Terminal"><i class="fa fa-terminal"></i></a></li>
+			<li class=""><a href="https:&#x2F;&#x2F;joplin.cozic.net/desktop" title="Desktop"><i class="fa fa-desktop"></i></a></li>
+		</ul>
+		<div class="nav-right">
+			<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+			<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplin.cozic.net" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
+			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+		</div>
+	</div>
+</div>
+
+<div class="content">
+<p> changelog</p>
+<h2 id="-v1-0-81-https-github-com-laurent22-joplin-releases-tag-v1-0-81-2018-03-28t08-13-58z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.81">v1.0.81</a> - 2018-03-28T08:13:58Z</h2>
+<ul>
+<li>New: Dropbox synchronisation</li>
+<li>New: Czech translation</li>
+<li>Fixes <a href="https://github.com/laurent22/joplin/issues/#318">#318</a>: Display full links in editor</li>
+<li>Resolves <a href="https://github.com/laurent22/joplin/issues/#329">#329</a>: Add link to E2EE doc</li>
+</ul>
+<h2 id="-v1-0-79-https-github-com-laurent22-joplin-releases-tag-v1-0-79-2018-03-23t18-00-11z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.79">v1.0.79</a> - 2018-03-23T18:00:11Z</h2>
+<ul>
+<li>New: Resolves <a href="https://github.com/laurent22/joplin/issues/#144">#144</a>, Resolves <a href="https://github.com/laurent22/joplin/issues/#311">#311</a>: Highlight search results and search in real time. Associated Ctrl+F with searching.</li>
+<li>New: Resolves <a href="https://github.com/laurent22/joplin/issues/#73">#73</a>: Show modified date next to note in editor</li>
+<li>New: Danish translation</li>
+<li>Improved: Fixes <a href="https://github.com/laurent22/joplin/issues/#318">#318</a>, Fixes <a href="https://github.com/laurent22/joplin/issues/#317">#317</a>: ENEX: Improved handling and rendering of plain text links. Improved detection and import of resources. Improved import of tables.</li>
+<li>Updated: Resolves <a href="https://github.com/laurent22/joplin/issues/#307">#307</a>: Use blue colour for sidebar, to be consistent with mobile app and logo</li>
+<li>Updated: Translations</li>
+</ul>
+<h2 id="-v1-0-78-https-github-com-laurent22-joplin-releases-tag-v1-0-78-2018-03-17t15-27-18z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.78">v1.0.78</a> - 2018-03-17T15:27:18Z</h2>
+<ul>
+<li>Improved: Handle deletion of resources that are not linked to any note</li>
+</ul>
+<h2 id="-v1-0-77-https-github-com-laurent22-joplin-releases-tag-v1-0-77-2018-03-16t15-12-35z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.77">v1.0.77</a> - 2018-03-16T15:12:35Z</h2>
+<p>Note: This fixes an invalid database upgrade in the previous version.</p>
+<ul>
+<li>New: Resolves <a href="https://github.com/laurent22/joplin/issues/#237">#237</a>: Export to PDF and print option</li>
+<li>New: Resolves <a href="https://github.com/laurent22/joplin/issues/#154">#154</a>: No longer used resources are automatically deleted after approximately 24h</li>
+<li>Improved: Resolves <a href="https://github.com/laurent22/joplin/issues/#298">#298</a>: Removed extraneous first characters from auto-title</li>
+<li>Improved: Made WebDAV options dynamics so that changing username or password doesn&#39;t require restarting the app</li>
+<li>Fix: Fixes <a href="https://github.com/laurent22/joplin/issues/#291">#291</a>: Crash with empty backtick</li>
+<li>Fix: Fixes <a href="https://github.com/laurent22/joplin/issues/#292">#292</a>: Improved auto-update feature and fixed incorrect notifications</li>
+<li>Fix: Signed executables on Windows</li>
+<li>Updated Russian, German, Portuguese, Spanish and French translations. Many thanks to the translators!</li>
+</ul>
+<h2 id="-v1-0-72-https-github-com-laurent22-joplin-releases-tag-v1-0-72-2018-03-14t09-44-35z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.72">v1.0.72</a> - 2018-03-14T09:44:35Z</h2>
+<ul>
+<li>New: Allow exporting only selected notes or notebook</li>
+<li>New: Resolves <a href="https://github.com/laurent22/joplin/issues/#266">#266</a>: Allow setting text editor font family</li>
+<li>New: Display icon next to resources and allow downloading them from Electron client</li>
+<li>Improved: Optimised sync when dealing with many items, in particular when using Nextcloud or WebDAV</li>
+<li>Improved: Display last sync error unless it&#39;s a timeout or network error</li>
+<li>Improved: Fixes <a href="https://github.com/laurent22/joplin/issues/#268">#268</a>: Improve error message for invalid flags</li>
+<li>Fix: Fixes <a href="https://github.com/laurent22/joplin/issues/#271">#271</a>: Sort by created time was not respected</li>
+</ul>
+<h2 id="-v1-0-70-https-github-com-laurent22-joplin-releases-tag-v1-0-70-2018-02-28t20-04-30z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.70">v1.0.70</a> - 2018-02-28T20:04:30Z</h2>
+<ul>
+<li>New: Resolves <a href="https://github.com/laurent22/joplin/issues/#97">#97</a>: Export to JEX format or RAW format</li>
+<li>New: Import JEX and RAW format</li>
+<li>New: Resolves <a href="https://github.com/laurent22/joplin/issues/#52">#52</a>: Import Markdown files or directory</li>
+<li>New: Allow sorting notes by various fields</li>
+<li>New: Resolves <a href="https://github.com/laurent22/joplin/issues/#243">#243</a>: Added black and white tray icon for macOS</li>
+<li>Fix: <a href="https://github.com/laurent22/joplin/issues/#247">#247</a>: Unreadable error messages when checking for updates</li>
+<li>Fix: Fixed sync interval sorting order</li>
+<li>Fix: <a href="https://github.com/laurent22/joplin/issues/#256">#256</a>: Check that no other instance of Joplin is running before launching a new one</li>
+</ul>
+<h2 id="-v1-0-67-https-github-com-laurent22-joplin-releases-tag-v1-0-67-2018-02-19t22-51-08z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.67">v1.0.67</a> - 2018-02-19T22:51:08Z</h2>
+<ul>
+<li>Fixed: <a href="https://github.com/laurent22/joplin/issues/#217">#217</a>: Display a message when the note has no content and only the note viewer is visible</li>
+<li>Fixed: <a href="https://github.com/laurent22/joplin/issues/#240">#240</a>: Tags should be handled in a case-insensitive way</li>
+<li>Fixed: <a href="https://github.com/laurent22/joplin/issues/#241">#241</a>: Ignore response for certain WebDAV calls to improve compatibility with some services.</li>
+<li>Updated: French and Español translation</li>
+</ul>
+<h2 id="-v1-0-66-https-github-com-laurent22-joplin-releases-tag-v1-0-66-2018-02-18t23-09-09z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.66">v1.0.66</a> - 2018-02-18T23:09:09Z</h2>
+<ul>
+<li>Fixed: Local items were no longer being deleted via sync.</li>
+<li>Improved: More debug information when WebDAV sync target does not work.</li>
+<li>Improved: Compatibility with some WebDAV services (Seafile in particular)</li>
+</ul>
+<h2 id="-v1-0-65-https-github-com-laurent22-joplin-releases-tag-v1-0-65-2018-02-17t20-02-25z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.65">v1.0.65</a> - 2018-02-17T20:02:25Z</h2>
+<ul>
+<li>New: Added several keyboard shortcuts</li>
+<li>New: Convert new lines in tables to BR tags, and added support for HTML tags in Markdown viewers</li>
+<li>Fixed: Confirmation message boxes, and release notes text</li>
+<li>Fixed: Issue with items not being decrypted immediately when they are created due to a sync conflict.</li>
+<li>Updated: Translations</li>
+</ul>
+<h2 id="-v1-0-64-https-github-com-laurent22-joplin-releases-tag-v1-0-64-2018-02-16t00-58-20z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.64">v1.0.64</a> - 2018-02-16T00:58:20Z</h2>
+<p>Still more fixes and improvements to get v1 as stable as possible before adding new features.</p>
+<p>IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before installing this release (see below).</p>
+<ul>
+<li>Fixed: Nextcloud sync target ID (which was incorrectly set to WebDAV sync ID). As a result items that have been created since this bug will be re-synced with Nextcloud. This sync will not duplicate or delete any item but is necessary to preserve data integrity. IF YOU HAVE NOTES IN CONFLICT AFTER SYNC: Close the app completely and restart it to make sure all the lists are visually up-to-date. The notes in conflict most likely can be ignored - they are just duplicate of the real ones. To be safe, check the content but most likely they can simply be deleted.</li>
+<li>Improved: Provide Content-Length header for WebDAV for better compatibility with more servers</li>
+<li>Fixed: Allow copy and paste from config and encryption screen on macOS</li>
+<li>Fixed: <a href="https://github.com/laurent22/joplin/issues/#201">#201</a>, <a href="https://github.com/laurent22/joplin/issues/#216">#216</a>: Make sure only one update check can run at a time, and improved modal dialog boxes</li>
+</ul>
+<h2 id="-v1-0-63-https-github-com-laurent22-joplin-releases-tag-v1-0-63-2018-02-14t19-40-36z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.63">v1.0.63</a> - 2018-02-14T19:40:36Z</h2>
+<ul>
+<li>Improved the way settings are changed. Should also fixed issue with sync context being accidentally broken.</li>
+<li>Improved WebDAV driver compatibility with some services (eg. Seafile)</li>
+</ul>
+<h2 id="-v1-0-62-https-github-com-laurent22-joplin-releases-tag-v1-0-62-2018-02-12t20-19-58z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.62">v1.0.62</a> - 2018-02-12T20:19:58Z</h2>
+<ul>
+<li>Fixes <a href="https://github.com/laurent22/joplin/issues/#205">#205</a>: Importing Evernote notes while on import page re-imports previous import</li>
+<li>Fixes <a href="https://github.com/laurent22/joplin/issues/#209">#209</a>: Items with non-ASCII characters end up truncated on Nextcloud</li>
+<li>Added Basque translation, fixed issue with handling invalid translations. Updated translation FR.</li>
+</ul>
+<h2 id="-v0-10-61-https-github-com-laurent22-joplin-releases-tag-v0-10-61-2018-02-08t18-27-39z"><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.61">v0.10.61</a> - 2018-02-08T18:27:39Z</h2>
+<ul>
+<li>New: Display message when creating new note or to-do so that it doesn&#39;t look like the previous note content got deleted.</li>
+<li>New: Also support $ as delimiter for Katex expressions</li>
+<li>New: Added sync config check to config screens</li>
+<li>New: Allowing opening and saving resource images</li>
+<li>New: Toolbar button to set tags</li>
+<li>Update: Improved request repeating mechanism</li>
+<li>Fix: Make sure alarms and resources are attached to right note when creating new note</li>
+<li>Fix: Use mutex when saving model to avoid race conditions when decrypting and syncing at the same time</li>
+</ul>
+<h2 id="-v0-10-60-https-github-com-laurent22-joplin-releases-tag-v0-10-60-2018-02-06t13-09-56z"><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.60">v0.10.60</a> - 2018-02-06T13:09:56Z</h2>
+<ul>
+<li>New: WebDAV synchronisation target</li>
+<li>New: Support for math typesetting <a href="https://khan.github.io/KaTeX/">Katex</a></li>
+<li>New: Tray icon for Windows and macOS</li>
+<li>Fixed: Don&#39;t allow adding notes to conflict notebook</li>
+<li>Updated: Russian translation</li>
+<li>Updated: French translation</li>
+<li>New: List missing master keys in encryption screen</li>
+<li>Fixed: Attaching images in Linux was no longer working</li>
+<li>Fixed crash in macOS</li>
+</ul>
+<h2 id="-v0-10-54-https-github-com-laurent22-joplin-releases-tag-v0-10-54-2018-01-31t20-21-30z"><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.54">v0.10.54</a> - 2018-01-31T20:21:30Z</h2>
+<ul>
+<li>Optimised Nextcloud functionality so that it is faster and consumes less resources</li>
+<li>Fixed Nextcloud sync issue when processing many items.</li>
+<li>Fixed: Handle case where file is left half-uploaded on Nextcloud instance (possibly an ocloud.de issue only)</li>
+<li>Fixed: Allow decryption of other items to continue even if an item cannot be decrypted</li>
+<li>Add Content-Size header for WebDAV, which is required by some services</li>
+<li>Fixed auto-title when title is manually entered first</li>
+<li>Improved auto-update process to avoid random crashes</li>
+<li>New: Allow focusing either title or body when creating a new note or to-do</li>
+<li>Fixed crash when having invalid UTF-8 string in text editor</li>
+</ul>
+<h2 id="-v0-10-52-https-github-com-laurent22-joplin-releases-tag-v0-10-52-2018-01-31t19-25-18z"><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.52">v0.10.52</a> - 2018-01-31T19:25:18Z</h2>
+<ul>
+<li>Optimised Nextcloud functionality so that it is faster and consumes less resources</li>
+<li>Fixed Nextcloud sync issue when processing many items.</li>
+<li>Fixed: Handle case where file is left half-uploaded on Nextcloud instance (possibly an ocloud.de issue only)</li>
+<li>Fixed: Allow decryption of other items to continue even if an item cannot be decrypted</li>
+<li>Add Content-Size header for WebDAV, which is required by some services</li>
+<li>Fixed auto-title when title is manually entered first</li>
+<li>Improved auto-update process to avoid random crashes</li>
+<li>New: Allow focusing either title or body when creating a new note or to-do</li>
+</ul>
+<h2 id="-v0-10-51-https-github-com-laurent22-joplin-releases-tag-v0-10-51-2018-01-28t18-47-02z"><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.51">v0.10.51</a> - 2018-01-28T18:47:02Z</h2>
+<ul>
+<li>Added Nextcloud support (Beta)</li>
+<li>Upgraded Electron to 1.7.11 to fix security vulnerability</li>
+<li>Fixed checkbox issue in config screen</li>
+<li>Fixed detection of encrypted item</li>
+</ul>
+<h2 id="-v0-10-48-https-github-com-laurent22-joplin-releases-tag-v0-10-48-2018-01-23t11-19-51z"><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.48">v0.10.48</a> - 2018-01-23T11:19:51Z</h2>
+<ul>
+<li>Improved and optimised file system sync target when many items are present.</li>
+<li>Fixes <a href="https://github.com/laurent22/joplin/issues/#155">#155</a>: Caret alignment issue with Russian text</li>
+<li>Dutch translation (Thanks @tcassaert)</li>
+<li>Removed certain log statements so that sensitive info doesn&#39;t end up in logs</li>
+<li>Fix: Handle case where resource blob is missing during sync</li>
+</ul>
+<h2 id="-v0-10-47-https-github-com-laurent22-joplin-releases-tag-v0-10-47-2018-01-16t17-27-17z"><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.47">v0.10.47</a> - 2018-01-16T17:27:17Z</h2>
+<ul>
+<li>Improved the way new note are created, and automatically add a title. Made saving and loading notes more reliable.</li>
+<li>Fix: race condition when a note is being uploaded while it&#39;s being modified in the text editor</li>
+<li>Fixes <a href="https://github.com/laurent22/joplin/issues/#129">#129</a>: Tags are case insensitive</li>
+<li>Schedule sync only after 30 seconds</li>
+<li>Schedule sync after enabling or disabling encryption</li>
+<li>Display sync items being fetched</li>
+<li>Fixed logic of what note is used when right-clicking one or more notes</li>
+<li>Fix: Don&#39;t scroll back to top when note is reloaded via sync</li>
+<li>Display URL for links</li>
+<li>Fix: Move prompt to top to avoid issue with date picker being hidden</li>
+<li>Fixed table font size and family</li>
+<li>Fixed logic to save, and make sure scheduled save always happen even when changing note</li>
+<li>Fixed OneDrive sync when resync is requested</li>
+<li>Fixes <a href="https://github.com/laurent22/joplin/issues/#85">#85</a>: Don&#39;t record deleted_items entries for folders deleted via sync</li>
+<li>Updated translations</li>
+</ul>
+<h2 id="-v0-10-43-https-github-com-laurent22-joplin-releases-tag-v0-10-43-2018-01-08t10-12-10z"><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.43">v0.10.43</a> - 2018-01-08T10:12:10Z</h2>
+<ul>
+<li>Fixed saving and loading of settings, which could affect synchronisation</li>
+</ul>
+<h2 id="-v0-10-41-https-github-com-laurent22-joplin-releases-tag-v0-10-41-2018-01-05t20-38-12z"><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.41">v0.10.41</a> - 2018-01-05T20:38:12Z</h2>
+<ul>
+<li>Added End-To-End Encryption support (E2EE)</li>
+</ul>
+<h2 id="-v0-10-40-https-github-com-laurent22-joplin-releases-tag-v0-10-40-2018-01-02t23-16-57z"><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.40">v0.10.40</a> - 2018-01-02T23:16:57Z</h2>
+<ul>
+<li>Fixed undo in text editor</li>
+<li>Updated German translation</li>
+<li>Added Russian, Japanese and Chinese translations</li>
+</ul>
+<h2 id="-v0-10-39-https-github-com-laurent22-joplin-releases-tag-v0-10-39-2017-12-11t21-19-44z"><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.39">v0.10.39</a> - 2017-12-11T21:19:44Z</h2>
+<ul>
+<li>Fixes <a href="https://github.com/laurent22/joplin/issues/#55">#55</a>: Added support for HTML tags found in ENEX files: colgroup, col, ins, kbd, address, caption, var, area, map</li>
+<li>Resolve <a href="https://github.com/laurent22/joplin/issues/#7">#7</a>: Show storage location in Options screen</li>
+<li>Fixes <a href="https://github.com/laurent22/joplin/issues/#84">#84</a>: Fields losing focus in Config screen</li>
+<li>Fixes <a href="https://github.com/laurent22/joplin/issues/#86">#86</a>: App icon missing on Linux</li>
+<li>Fixes <a href="https://github.com/laurent22/joplin/issues/#87">#87</a>: Show warningn when deleting notebook that contains notes.</li>
+<li>Fixes <a href="https://github.com/laurent22/joplin/issues/#3">#3</a>: Paths with &#39;.&#39; would cause JSX compilation to fail</li>
+</ul>
+<h2 id="-v0-10-38-https-github-com-laurent22-joplin-releases-tag-v0-10-38-2017-12-08t10-12-06z"><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.38">v0.10.38</a> - 2017-12-08T10:12:06Z</h2>
+<ul>
+<li>Dialog to export sync status</li>
+<li>Enabled support for filesystem sync</li>
+</ul>
+
+<script>
+	function stickyHeader() { 
+		if ($(window).scrollTop() > 179) {
+			$('.nav').addClass('sticky'); 
+		} else {
+			$('.nav').removeClass('sticky');
+		}
+	}
+
+	$(window).scroll(function() {
+		stickyHeader();
+	});
+
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-103586105-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+</body>
+</html>
