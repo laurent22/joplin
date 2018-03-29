@@ -6,13 +6,13 @@ There are various ways to send a donation:
 
 ## Paypal
 
-<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=E8JMYD2LQ8MMA&lc=GB&item_name=Joplin+Development&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/PayPalDonate.png" height="60px"/></a>
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=E8JMYD2LQ8MMA&lc=GB&item_name=Joplin+Development&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplin.cozic.net/images/PayPalDonate.png" height="60px"/></a>
 
 ## Bitcoin
 
 <a href="bitcoin:1AnbeRd5NZT1ssG93jXzaDoHwzgjQAHX3R?message=Joplin%20development">1AnbeRd5NZT1ssG93jXzaDoHwzgjQAHX3R</a>
 
-![](https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BitcoinQr.png)
+![](https://joplin.cozic.net/images/BitcoinQr.png)
 
 ## Other way to support the development
 

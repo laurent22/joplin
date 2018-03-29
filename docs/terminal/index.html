@@ -5,10 +5,10 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://joplin.cozic.net/css/bootstrap.min.css">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-	<link rel="stylesheet" href="https://opensource.keycdn.com/fontawesome/4.7.0/font-awesome.min.css" integrity="sha384-dNpIIXE8U05kAbPhy3G1cz+yZmTzA6CY8Vg/u2L9xRnHjJiAK76m2BIEaSEV+/aU" crossorigin="anonymous"> 
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://joplin.cozic.net/css/font-awesome.min.css"> 
+	<script src="https://joplin.cozic.net/js/jquery-3.2.1.slim.min.js"></script>
 	<style>
 	body {
 		background-color: #F1F1F1;
@@ -250,7 +250,7 @@
 <p>Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor.</p>
 <p>Notes exported from Evernote via .enex files <a href="https://joplin.cozic.net/#importing">can be imported</a> into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.</p>
 <p>The notes can be <a href="#synchronisation">synchronised</a> with various targets including the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/ScreenshotTerminal.png" style="max-width: 60%"></p>
+<p><img src="https://joplin.cozic.net/images/ScreenshotTerminal.png" style="max-width: 60%"></p>
 <h1 id="installation">Installation</h1>
 <p>On macOS:</p>
 <pre><code>brew install joplin
@@ -266,7 +266,7 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 </code></pre><p>To start it, type <code>demo-joplin</code>.</p>
 <h1 id="usage">Usage</h1>
 <p>To start the application type <code>joplin</code>. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via <a href="#shortcuts">shortcuts</a>.</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/ScreenshotTerminalCaptions.png" height="450px"></p>
+<p><img src="https://joplin.cozic.net/images/ScreenshotTerminalCaptions.png" height="450px"></p>
 <h2 id="input-modes">Input modes</h2>
 <p>Joplin user interface is partly based on the text editor Vim and offers two different modes to interact with the notes and notebooks:</p>
 <h3 id="normal-mode">Normal mode</h3>
@@ -362,10 +362,10 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <pre><code>*/30 * * * * /path/to/joplin sync
 </code></pre><h1 id="urls">URLs</h1>
 <p>When Ctrl+Clicking a URL, most terminals will open that URL in the default browser. However, one issue, especially with long URLs, is that they can end up like this:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/UrlCut.png" width="300px"></p>
+<p><img src="https://joplin.cozic.net/images/UrlCut.png" width="300px"></p>
 <p>Not only it makes the text hard to read, but the link, being cut in two, will also not be clickable.</p>
 <p>As a solution Joplin tries to start a mini-server in the background and, if successful, all the links will be converted to a much shorter URL:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/UrlNoCut.png" width="300px"></p>
+<p><img src="https://joplin.cozic.net/images/UrlNoCut.png" width="300px"></p>
 <p>Since this is still an actual URL, the terminal will still make it clickable. And with shorter URLs, the text is more readable and the links unlikely to be cut. Both resources (files that are attached to notes) and external links are handled in this way.</p>
 <h1 id="attachments-resources">Attachments / Resources</h1>
 <p>In Markdown, links to resources are represented as a simple ID to the resource. In order to give access to these resources, they will be, like links, converted to local URLs. Clicking this link will then open a browser, which will handle the file - i.e. display the image, open the PDF file, etc.</p>
