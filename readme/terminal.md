@@ -101,6 +101,8 @@ Command | Description
 
 If the help is not fully visible, press `Tab` multiple times till the console is in focus and use the arrow keys or page up/down to scroll the text.
 
+For general information relevant to all the applications, see also [Joplin home page](https://joplin.cozic.net).
+
 # Importing notes from Evernote
 
 To import Evernote data, follow these steps:
@@ -283,8 +285,9 @@ The following commands are available in [command-line mode](#command-line-mode):
 	    locale                   Language.
 	                             Type: Enum.
 	                             Possible values: eu (Basque), hr_HR (Croatian), 
-	                             de_DE (Deutsch), en_GB (English), es_ES 
-	                             (Español), fr_FR (Français), it_IT (Italiano), 
+	                             cs_CZ (Czech), da_DK (Dansk), de_DE (Deutsch), 
+	                             en_GB (English), es_ES (Español), fr_FR 
+	                             (Français), gl_ES (Galician), it_IT (Italiano), 
 	                             nl_BE (Nederlands), pt_BR (Português (Brasil)), 
 	                             ru_RU (Русский), zh_CN (中文 (简体)), ja_JP (日本語).
 	                             Default: "en_GB"
@@ -334,8 +337,8 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                             Type: Enum.
 	                             Possible values: 2 (File system), 3 (OneDrive), 4 
 	                             (OneDrive Dev (For testing only)), 5 (Nextcloud), 
-	                             6 (WebDAV).
-	                             Default: 3
+	                             6 (WebDAV), 7 (Dropbox).
+	                             Default: 7
 	                             
 	    sync.2.path              Directory to synchronise with (absolute path).
 	                             The path to synchronise with when file system 

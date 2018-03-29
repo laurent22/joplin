@@ -47,6 +47,12 @@
 	pre {
 		font-size: .85em;
 	}
+	#toc ul {
+		margin-bottom: 10px;
+	}
+	#toc {
+		padding-bottom: 1em;
+	}
 	.title-icon {
 		height: 2em;
 	}
@@ -170,6 +176,13 @@
 	.nav-right .share-btn-github {
 		display: inline-block;
 	}
+	.footer {
+		padding-top: 1em;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 2em;
+		color: gray;
+		font-size: .9em;
+	}
 	@media all and (min-width: 400px) {
 		.nav-right .share-btn {
 			display: inline-block;
@@ -195,8 +208,7 @@
 	<div class="nav">
 		<ul>
 			<li class=""><a href="https:&#x2F;&#x2F;joplin.cozic.net/" title="Home"><i class="fa fa-home"></i></a></li>
-			<li class=""><a href="https:&#x2F;&#x2F;joplin.cozic.net/terminal" title="Terminal"><i class="fa fa-terminal"></i></a></li>
-			<li class=""><a href="https:&#x2F;&#x2F;joplin.cozic.net/desktop" title="Desktop"><i class="fa fa-desktop"></i></a></li>
+			<li><a class="help" href="#" title="Terminal">Help</a></li>
 		</ul>
 		<div class="nav-right">
 			<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
@@ -207,7 +219,34 @@
 </div>
 
 <div class="content">
-<p> changelog</p>
+	<div id="toc"><ul>
+<li>
+<p>Applications</p>
+<ul>
+<li><a href="https://joplin.cozic.net/desktop">Desktop application</a></li>
+<li><a href="https://joplin.cozic.net/mobile">Mobile applications</a></li>
+<li><a href="https://joplin.cozic.net/terminal">Terminal application</a></li>
+</ul>
+</li>
+<li>
+<p>Support</p>
+<ul>
+<li><a href="https://joplin.cozic.net/e2ee">How to enable end-to-end encryption</a></li>
+<li><a href="https://joplin.cozic.net/spec">End-to-end encryption spec</a></li>
+<li><a href="https://joplin.cozic.net/debugging">How to enable debug mode</a></li>
+</ul>
+</li>
+<li>
+<p>About</p>
+<ul>
+<li><a href="https://joplin.cozic.net/changelog">Changelog</a></li>
+<li><a href="https://joplin.cozic.net/stats">Stats</a></li>
+<li><a href="https://joplin.cozic.net/donate">Donate</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1 id="joplin-changelog">Joplin changelog</h1>
 <h2 id="-v1-0-81-https-github-com-laurent22-joplin-releases-tag-v1-0-81-2018-03-28t08-13-58z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.81">v1.0.81</a> - 2018-03-28T08:13:58Z</h2>
 <ul>
 <li>New: Dropbox synchronisation</li>
@@ -412,12 +451,21 @@
 
 <script>
 	function stickyHeader() { 
+		return; // Disabled
+
 		if ($(window).scrollTop() > 179) {
 			$('.nav').addClass('sticky'); 
 		} else {
 			$('.nav').removeClass('sticky');
 		}
 	}
+
+	$('#toc').hide();
+
+	$('.help').click(function(event) {
+		event.preventDefault();
+		$('#toc').show();
+	});
 
 	$(window).scroll(function() {
 		stickyHeader();
@@ -431,5 +479,8 @@
 	ga('send', 'pageview');
 </script>
 
+<div class="footer">
+Copyright (c) 2016-2018 Laurent Cozic
+</div>
 </body>
 </html>

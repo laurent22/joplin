@@ -47,6 +47,12 @@
 	pre {
 		font-size: .85em;
 	}
+	#toc ul {
+		margin-bottom: 10px;
+	}
+	#toc {
+		padding-bottom: 1em;
+	}
 	.title-icon {
 		height: 2em;
 	}
@@ -170,6 +176,13 @@
 	.nav-right .share-btn-github {
 		display: inline-block;
 	}
+	.footer {
+		padding-top: 1em;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 2em;
+		color: gray;
+		font-size: .9em;
+	}
 	@media all and (min-width: 400px) {
 		.nav-right .share-btn {
 			display: inline-block;
@@ -195,8 +208,7 @@
 	<div class="nav">
 		<ul>
 			<li class=""><a href="https:&#x2F;&#x2F;joplin.cozic.net/" title="Home"><i class="fa fa-home"></i></a></li>
-			<li class="selected"><a href="https:&#x2F;&#x2F;joplin.cozic.net/terminal" title="Terminal"><i class="fa fa-terminal"></i></a></li>
-			<li class=""><a href="https:&#x2F;&#x2F;joplin.cozic.net/desktop" title="Desktop"><i class="fa fa-desktop"></i></a></li>
+			<li><a class="help" href="#" title="Terminal">Help</a></li>
 		</ul>
 		<div class="nav-right">
 			<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
@@ -207,6 +219,34 @@
 </div>
 
 <div class="content">
+	<div id="toc"><ul>
+<li>
+<p>Applications</p>
+<ul>
+<li><a href="https://joplin.cozic.net/desktop">Desktop application</a></li>
+<li><a href="https://joplin.cozic.net/mobile">Mobile applications</a></li>
+<li><a href="https://joplin.cozic.net/terminal">Terminal application</a></li>
+</ul>
+</li>
+<li>
+<p>Support</p>
+<ul>
+<li><a href="https://joplin.cozic.net/e2ee">How to enable end-to-end encryption</a></li>
+<li><a href="https://joplin.cozic.net/spec">End-to-end encryption spec</a></li>
+<li><a href="https://joplin.cozic.net/debugging">How to enable debug mode</a></li>
+</ul>
+</li>
+<li>
+<p>About</p>
+<ul>
+<li><a href="https://joplin.cozic.net/changelog">Changelog</a></li>
+<li><a href="https://joplin.cozic.net/stats">Stats</a></li>
+<li><a href="https://joplin.cozic.net/donate">Donate</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1 id="joplin">Joplin</h1>
 <p>Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor.</p>
 <p>Notes exported from Evernote via .enex files <a href="https://joplin.cozic.net/#importing">can be imported</a> into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.</p>
 <p>The notes can be <a href="#synchronisation">synchronised</a> with various targets including the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
@@ -296,6 +336,7 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 </tbody>
 </table>
 <p>If the help is not fully visible, press <code>Tab</code> multiple times till the console is in focus and use the arrow keys or page up/down to scroll the text.</p>
+<p>For general information relevant to all the applications, see also <a href="https://joplin.cozic.net">Joplin home page</a>.</p>
 <h1 id="importing-notes-from-evernote">Importing notes from Evernote</h1>
 <p>To import Evernote data, follow these steps:</p>
 <ul>
@@ -495,8 +536,9 @@ Possible keys/values:
     locale                   Language.
                              Type: Enum.
                              Possible values: eu (Basque), hr_HR (Croatian), 
-                             de_DE (Deutsch), en_GB (English), es_ES 
-                             (Español), fr_FR (Français), it_IT (Italiano), 
+                             cs_CZ (Czech), da_DK (Dansk), de_DE (Deutsch), 
+                             en_GB (English), es_ES (Español), fr_FR 
+                             (Français), gl_ES (Galician), it_IT (Italiano), 
                              nl_BE (Nederlands), pt_BR (Português (Brasil)), 
                              ru_RU (Русский), zh_CN (中文 (简体)), ja_JP (日本語).
                              Default: &quot;en_GB&quot;
@@ -546,8 +588,8 @@ Possible keys/values:
                              Type: Enum.
                              Possible values: 2 (File system), 3 (OneDrive), 4 
                              (OneDrive Dev (For testing only)), 5 (Nextcloud), 
-                             6 (WebDAV).
-                             Default: 3
+                             6 (WebDAV), 7 (Dropbox).
+                             Default: 7
 
     sync.2.path              Directory to synchronise with (absolute path).
                              The path to synchronise with when file system 
@@ -710,12 +752,21 @@ version
 
 <script>
 	function stickyHeader() { 
+		return; // Disabled
+
 		if ($(window).scrollTop() > 179) {
 			$('.nav').addClass('sticky'); 
 		} else {
 			$('.nav').removeClass('sticky');
 		}
 	}
+
+	$('#toc').hide();
+
+	$('.help').click(function(event) {
+		event.preventDefault();
+		$('#toc').show();
+	});
 
 	$(window).scroll(function() {
 		stickyHeader();
@@ -729,5 +780,8 @@ version
 	ga('send', 'pageview');
 </script>
 
+<div class="footer">
+Copyright (c) 2016-2018 Laurent Cozic
+</div>
 </body>
 </html>

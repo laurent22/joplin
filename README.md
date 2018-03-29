@@ -1,12 +1,12 @@
 # Joplin
 
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=E8JMYD2LQ8MMA&lc=GB&item_name=Joplin+Development&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted) [![Donate with Bitcoin](https://en.cryptobadges.io/badge/micro/1AnbeRd5NZT1ssG93jXzaDoHwzgjQAHX3R)](https://en.cryptobadges.io/donate/1AnbeRd5NZT1ssG93jXzaDoHwzgjQAHX3R) [![Travis Build Status](https://travis-ci.org/laurent22/joplin.svg?branch=master)](https://travis-ci.org/laurent22/joplin) [![Appveyor Build Status](https://ci.appveyor.com/api/projects/status/github/laurent22/joplin?branch=master&passingText=master%20-%20OK&svg=true)](https://ci.appveyor.com/project/laurent22/joplin)
+[![Donate](https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/badges/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=E8JMYD2LQ8MMA&lc=GB&item_name=Joplin+Development&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted) [![Donate with Bitcoin](https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/badges/Donate-Bitcoin.svg)](https://joplin.cozic.net/donate/#bitcoin) [![Travis Build Status](https://travis-ci.org/laurent22/joplin.svg?branch=master)](https://travis-ci.org/laurent22/joplin) [![Appveyor Build Status](https://ci.appveyor.com/api/projects/status/github/laurent22/joplin?branch=master&passingText=master%20-%20OK&svg=true)](https://ci.appveyor.com/project/laurent22/joplin)
 
 Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](#markdown).
 
 Notes exported from Evernote via .enex files [can be imported](#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
 
-The notes can be [synchronised](#synchronisation) with various cloud services including [Nextcloud](https://nextcloud.com/), the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
+The notes can be [synchronised](#synchronisation) with various cloud services including [Nextcloud](https://nextcloud.com/), Dropbox, OneDrive or the file system (for example with a network directory). When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
 
 The UI of the terminal client is built on top of the great [terminal-kit](https://github.com/cronvel/terminal-kit) library, the desktop client using [Electron](https://electronjs.org/), and the Android client front end is done using [React Native](https://facebook.github.io/react-native/).
 
@@ -50,11 +50,33 @@ To start it, type `joplin`.
 
 For usage information, please refer to the full [Joplin Terminal Application Documentation](https://joplin.cozic.net/terminal).
 
+<!-- TOC -->
+# Table of contents
+
+- Applications
+
+	- [Desktop application](https://github.com/laurent22/joplin/blob/master/readme/desktop.md)
+	- [Mobile applications](https://github.com/laurent22/joplin/blob/master/readme/mobile.md)
+	- [Terminal application](https://github.com/laurent22/joplin/blob/master/readme/terminal.md)
+
+- Support
+
+	- [How to enable end-to-end encryption](https://github.com/laurent22/joplin/blob/master/readme/e2ee.md)
+	- [End-to-end encryption spec](https://github.com/laurent22/joplin/blob/master/readme/spec.md)
+	- [How to enable debug mode](https://github.com/laurent22/joplin/blob/master/readme/debugging.md)
+
+- About
+
+	- [Changelog](https://github.com/laurent22/joplin/blob/master/readme/changelog.md)
+	- [Stats](https://github.com/laurent22/joplin/blob/master/readme/stats.md)
+	- [Donate](https://github.com/laurent22/joplin/blob/master/readme/donate.md)
+<!-- TOC -->
+
 # Features 
 
 - Desktop, mobile and terminal applications.
 - End To End Encryption (E2EE)
-- Synchronisation with various services, including NextCloud, WebDAV and OneDrive. Dropbox is planned.
+- Synchronisation with various services, including NextCloud, Dropbox, WebDAV and OneDrive.
 - Import Enex files (Evernote export format) and Markdown files.
 - Export JEX files (Joplin Export format) and raw files.
 - Support notes, to-dos, tags and notebooks.
@@ -105,9 +127,9 @@ Joplin can export to the JEX format (Joplin Export file), which is a tar file th
 
 # Synchronisation
 
-One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as Nextcloud or OneDrive, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.
+One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as Nextcloud or Dropbox, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.
 
-Currently, synchronisation is possible with Nextcloud and OneDrive (by default) or the local filesystem. A Dropbox one will also be available once [this React Native bug](https://github.com/facebook/react-native/issues/14445) is fixed. To setup synchronisation please follow the instructions below. After that, the application will synchronise in the background whenever it is running, or you can click on "Synchronise" to start a synchronisation manually.
+Currently, synchronisation is possible with Nextcloud, Dropbox (by default) or the local filesystem. To setup synchronisation please follow the instructions below. After that, the application will synchronise in the background whenever it is running, or you can click on "Synchronise" to start a synchronisation manually.
 
 ## Nextcloud synchronisation
 
@@ -117,12 +139,22 @@ On the **desktop application** or **mobile application**, go to the config scree
 
 On the **terminal application**, you will need to set the `sync.target` config variable and all the `sync.5.path`, `sync.5.username` and `sync.5.password` config variables to, respectively the Nextcloud WebDAV URL, your username and your password. This can be done from the command line mode using:
 
-    :config sync.5.path https://example.com/nextcloud/remote.php/dav/files/USERNAME/Joplin
-    :config sync.5.username YOUR_USERNAME
-    :config sync.5.password YOUR_PASSWORD
+	:config sync.5.path https://example.com/nextcloud/remote.php/dav/files/USERNAME/Joplin
+	:config sync.5.username YOUR_USERNAME
+	:config sync.5.password YOUR_PASSWORD
 	:config sync.target 5
 
 If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.
+
+## Dropbox synchronisation
+
+When syncing with Dropbox, Joplin creates a sub-directory in Dropbox, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
+
+On the **desktop application** or **mobile application**, select "Dropbox" as the synchronisation target in the config screen (it is selected by default). Then, to initiate the synchronisation process, click on the "Synchronise" button in the sidebar and follow the instructions.
+
+On the **terminal application**, to initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application. It is possible to also synchronise outside of the user interface by typing `joplin sync` from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:
+
+	*/30 * * * * /path/to/joplin sync
 
 ## WebDAV synchronisation
 
@@ -142,11 +174,9 @@ WebDAV-compatible services that are known to work with Joplin.
 
 When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
 
-On the **desktop application** or **mobile application**, select "OneDrive" as the synchronisation target in the config screen (it is selected by default). Then, to initiate the synchronisation process, click on the "Synchronise" button in the sidebar. You will be asked to login to OneDrive to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive).
+On the **desktop application** or **mobile application**, select "OneDrive" as the synchronisation target in the config screen. Then, to initiate the synchronisation process, click on the "Synchronise" button in the sidebar and follow the instructions.
 
-On the **terminal application**, to initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). It is possible to also synchronise outside of the user interface by typing `joplin sync` from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:
-
-	*/30 * * * * /path/to/joplin sync
+On the **terminal application**, to initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive).
 
 # Encryption
 
@@ -180,17 +210,17 @@ Joplin uses and renders [Github-flavoured Markdown](https://github.com/adam-p/ma
 
 Math expressions can be added using the [Katex notation](https://khan.github.io/KaTeX/). To add an inline equation, wrap the expression in `$EXPRESSION$`, eg. `$\sqrt{3x-1}+(1+x)^2$`. To create an expression block, wrap it as follow:
 
-    $$
-    EXPRESSION
-    $$
+	$$
+	EXPRESSION
+	$$
 
 For example:
 
-    $$
-    f(x) = \int_{-\infty}^\infty
-        \hat f(\xi)\,e^{2 \pi i \xi x}
-        \,d\xi
-    $$
+	$$
+	f(x) = \int_{-\infty}^\infty
+		\hat f(\xi)\,e^{2 \pi i \xi x}
+		\,d\xi
+	$$
 
 Here is an example with the Markdown and rendered result side by side:
 
@@ -200,9 +230,9 @@ Here is an example with the Markdown and rendered result side by side:
 
 Checkboxes can be added like so:
 
-    - [ ] Milk
-    - [ ] Rice
-    - [ ] Eggs
+	- [ ] Milk
+	- [ ] Rice
+	- [ ] Eggs
 
 The checkboxes can then be ticked in the mobile and desktop applications.
 
