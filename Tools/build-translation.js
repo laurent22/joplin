@@ -166,9 +166,9 @@ async function translationStatus(isDefault, poFile) {
 
 function flagImageUrl(locale) {
 	if (locale === 'eu') {
-		return 'https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/es/basque_country.png';
+		return 'https://joplin.cozic.net/images/flags/es/basque_country.png';
 	} else {
-		return 'https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/' + countryCodeOnly(locale).toLowerCase() + '.png'
+		return 'https://joplin.cozic.net/images/flags/country-4x3/' + countryCodeOnly(locale).toLowerCase() + '.png'
 	}
 }
 
