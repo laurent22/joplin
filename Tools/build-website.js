@@ -12,7 +12,7 @@ const headerHtml = `<!doctype html>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://joplin.cozic.net/css/bootstrap.min.css">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-	<link rel="stylesheet" href="https://joplin.cozic.net/css/font-awesome.min.css"> 
+	<link rel="stylesheet" href="https://joplin.cozic.net/css/fontawesome-all.min.css"> 
 	<script src="https://joplin.cozic.net/js/jquery-3.2.1.slim.min.js"></script>
 	<style>
 	body {
