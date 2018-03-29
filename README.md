@@ -10,7 +10,7 @@ The notes can be [synchronised](#synchronisation) with various cloud services in
 
 The UI of the terminal client is built on top of the great [terminal-kit](https://github.com/cronvel/terminal-kit) library, the desktop client using [Electron](https://electronjs.org/), and the Android client front end is done using [React Native](https://facebook.github.io/react-native/).
 
-<div class="top-screenshot"><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/AllClients.jpg" style="max-width: 100%; max-height: 35em;"></div>
+<div class="top-screenshot"><img src="https://joplin.cozic.net/images/AllClients.jpg" style="max-width: 100%; max-height: 35em;"></div>
 
 # Installation
 
@@ -20,16 +20,16 @@ Three types of applications are available: for the **desktop** (Windows, macOS a
 
 Operating System | Download
 -----------------|--------
-Windows (64-bit only)         | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.81/Joplin-Setup-1.0.81.exe'><img alt='Get it on Windows' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeWindows.png'/></a>
-macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.81/Joplin-1.0.81.dmg'><img alt='Get it on macOS' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeMacOS.png'/></a>
-Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.81/Joplin-1.0.81-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeLinux.png'/></a>
+Windows (64-bit only)         | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.81/Joplin-Setup-1.0.81.exe'><img alt='Get it on Windows' height="40px" src='https://joplin.cozic.net/images/BadgeWindows.png'/></a>
+macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.81/Joplin-1.0.81.dmg'><img alt='Get it on macOS' height="40px" src='https://joplin.cozic.net/images/BadgeMacOS.png'/></a>
+Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.81/Joplin-1.0.81-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://joplin.cozic.net/images/BadgeLinux.png'/></a>
 
 ## Mobile applications
 
 Operating System | Download | Alt. Download
 -----------------|----------|----------------
-Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeAndroid.png'/></a> | or [Download APK File](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.115/joplin-v1.0.115.apk)
-iOS              | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BadgeIOS.png'/></a> | -
+Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplin.cozic.net/images/BadgeAndroid.png'/></a> | or [Download APK File](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.115/joplin-v1.0.115.apk)
+iOS              | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://joplin.cozic.net/images/BadgeIOS.png'/></a> | -
 
 ## Terminal application
 
@@ -133,7 +133,7 @@ Currently, synchronisation is possible with Nextcloud, Dropbox (by default) or t
 
 ## Nextcloud synchronisation
 
-<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/nextcloud-logo-background.png" width="100" align="left"> <a href="https://nextcloud.com/">Nextcloud</a> is a self-hosted, private cloud solution. It can store documents, images and videos but also calendars, passwords and countless other things and can sync them to your laptop or phone. As you can host your own Nextcloud server, you own both the data on your device and infrastructure used for synchronisation. As such it is a good fit for Joplin. The platform is also well supported and with a strong community, so it is likely to be around for a while - since it's open source anyway, it is not a service that can be closed, it can exist on a server for as long as one chooses.
+<img src="https://joplin.cozic.net/images/nextcloud-logo-background.png" width="100" align="left"> <a href="https://nextcloud.com/">Nextcloud</a> is a self-hosted, private cloud solution. It can store documents, images and videos but also calendars, passwords and countless other things and can sync them to your laptop or phone. As you can host your own Nextcloud server, you own both the data on your device and infrastructure used for synchronisation. As such it is a good fit for Joplin. The platform is also well supported and with a strong community, so it is likely to be around for a while - since it's open source anyway, it is not a service that can be closed, it can exist on a server for as long as one chooses.
 
 On the **desktop application** or **mobile application**, go to the config screen and select Nextcloud as the synchronisation target. Then input the WebDAV URL (to get it, click on Settings in the bottom left corner of the page, in Nextcloud), this is normally `https://example.com/nextcloud/remote.php/webdav/Joplin` (**make sure to create the "Joplin" directory in Nextcloud**), and set the username and password. If it does not work, please [see this explanation](https://github.com/laurent22/joplin/issues/61#issuecomment-373282608) for more details.
 
@@ -224,7 +224,7 @@ For example:
 
 Here is an example with the Markdown and rendered result side by side:
 
-<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/Katex.png" style="max-width: 100%; max-height: 35em;">
+<img src="https://joplin.cozic.net/images/Katex.png" style="max-width: 100%; max-height: 35em;">
 
 ## Checkboxes
 
