@@ -408,6 +408,16 @@ msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "Autentizace nebyla dokončena (nedostali jsme autentizační token)"
 
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr ""
+
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr "Nepřihlášeno k %s. Prosím vyplňte chybějící přihlašovací údaje."
@@ -675,6 +685,9 @@ msgstr "Poznámky a nastavení uloženo v: %s"
 msgid "Save"
 msgstr "Uložit"
 
+msgid "Submit"
+msgstr ""
+
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
@@ -743,6 +756,11 @@ msgstr ""
 "Master klíče s těmito ID byly použity k zašifrování položek, které "
 "momentálně nejsou k dispozici. Je pravděpodobné, že tyto položky budou "
 "staženy při synchronizaci."
+
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation"
+msgstr ""
 
 msgid "Status"
 msgstr "Status"
@@ -861,6 +879,9 @@ msgstr "Vyčistit"
 msgid "OneDrive Login"
 msgstr "Přihlášení s OneDrive"
 
+msgid "Dropbox Login"
+msgstr ""
+
 msgid "Options"
 msgstr "Nastavení"
 
@@ -895,6 +916,9 @@ msgstr "Použití: %s"
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Neznámý flag: %s"
+
+msgid "Dropbox"
+msgstr ""
 
 msgid "File system"
 msgstr "Souborový systém"
@@ -1292,6 +1316,10 @@ msgstr "Zadejte nové tagy, nebo vyberte existující ze seznamu"
 msgid "Joplin website"
 msgstr "Web Joplinu"
 
+#, fuzzy
+msgid "Login with Dropbox"
+msgstr "Přihlásit se pomocí OneDrive"
+
 #, javascript-format
 msgid "Master Key %s"
 msgstr "Master heslo %s"
@@ -1308,6 +1336,11 @@ msgstr "Heslo nemůže být prázdné"
 
 msgid "Enable"
 msgstr "Zapnout"
+
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation:"
+msgstr ""
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"

@@ -415,6 +415,16 @@ msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "Authenticatie was niet voltooid (geen authenticatietoken ontvangen)."
 
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr ""
+
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr ""
@@ -693,6 +703,9 @@ msgstr "Notities en instellingen zijn opgeslaan in %s"
 msgid "Save"
 msgstr "Sla op"
 
+msgid "Submit"
+msgstr ""
+
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
@@ -761,6 +774,11 @@ msgid ""
 "The master keys with these IDs are used to encrypt some of your items, "
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
+msgstr ""
+
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation"
 msgstr ""
 
 msgid "Status"
@@ -887,6 +905,9 @@ msgstr "Vrijmaken"
 msgid "OneDrive Login"
 msgstr "OneDrive Login"
 
+msgid "Dropbox Login"
+msgstr ""
+
 msgid "Options"
 msgstr "Opties"
 
@@ -921,6 +942,9 @@ msgstr "Gebruik: %s"
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Onbekende optie: %s"
+
+msgid "Dropbox"
+msgstr ""
 
 msgid "File system"
 msgstr "Bestandssysteem"
@@ -1326,6 +1350,10 @@ msgstr ""
 msgid "Joplin website"
 msgstr ""
 
+#, fuzzy
+msgid "Login with Dropbox"
+msgstr "Log in met OneDrive"
+
 #, javascript-format
 msgid "Master Key %s"
 msgstr "Hoofdsleutel: %s"
@@ -1342,6 +1370,11 @@ msgstr "Wachtwoord kan niet leeg zijn"
 
 msgid "Enable"
 msgstr "Activeer"
+
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation:"
+msgstr ""
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"

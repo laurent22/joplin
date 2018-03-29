@@ -420,6 +420,16 @@ msgid ""
 msgstr ""
 "Ovjera nije dovršena (nije dobivena potvrda ovjere - authentication token)."
 
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr ""
+
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr ""
@@ -694,6 +704,9 @@ msgstr "Bilješke i postavke su pohranjene u: %s"
 msgid "Save"
 msgstr "Spremi"
 
+msgid "Submit"
+msgstr ""
+
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
@@ -750,6 +763,11 @@ msgid ""
 "The master keys with these IDs are used to encrypt some of your items, "
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
+msgstr ""
+
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation"
 msgstr ""
 
 msgid "Status"
@@ -875,6 +893,9 @@ msgstr "Očisti"
 msgid "OneDrive Login"
 msgstr "OneDrive Login"
 
+msgid "Dropbox Login"
+msgstr ""
+
 msgid "Options"
 msgstr "Opcije"
 
@@ -909,6 +930,9 @@ msgstr "Korištenje: %s"
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Nepoznata zastavica: %s"
+
+msgid "Dropbox"
+msgstr ""
 
 msgid "File system"
 msgstr "Datotečni sustav"
@@ -1304,6 +1328,10 @@ msgstr ""
 msgid "Joplin website"
 msgstr ""
 
+#, fuzzy
+msgid "Login with Dropbox"
+msgstr "Prijavi se u OneDrive"
+
 #, javascript-format
 msgid "Master Key %s"
 msgstr ""
@@ -1321,6 +1349,11 @@ msgstr ""
 #, fuzzy
 msgid "Enable"
 msgstr "Onemogućeno"
+
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation:"
+msgstr ""
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"

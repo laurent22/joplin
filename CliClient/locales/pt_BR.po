@@ -411,6 +411,16 @@ msgid ""
 msgstr ""
 "A autenticação não foi concluída (não recebeu um token de autenticação)."
 
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr ""
+
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr ""
@@ -686,6 +696,9 @@ msgstr "Notas e configurações estão armazenadas em: %s"
 msgid "Save"
 msgstr "Salvar"
 
+msgid "Submit"
+msgstr ""
+
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
@@ -756,6 +769,11 @@ msgstr ""
 "As chaves master com essas IDs são usadas para encriptar alguns de seus "
 "itens, contudo a aplicação atualmente não tem acesso a elas. Provavelmente, "
 "elas serão baixadas via sincronização."
+
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation"
+msgstr ""
 
 msgid "Status"
 msgstr "Status"
@@ -877,6 +895,9 @@ msgstr "Limpar (clear)"
 msgid "OneDrive Login"
 msgstr "Login no OneDrive"
 
+msgid "Dropbox Login"
+msgstr ""
+
 msgid "Options"
 msgstr "Opções"
 
@@ -913,6 +934,9 @@ msgstr "Uso: %s"
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Flag desconhecido: %s"
+
+msgid "Dropbox"
+msgstr ""
 
 msgid "File system"
 msgstr "Sistema de arquivos"
@@ -1312,6 +1336,10 @@ msgstr ""
 msgid "Joplin website"
 msgstr "Site do Joplin"
 
+#, fuzzy
+msgid "Login with Dropbox"
+msgstr "Login com OneDrive"
+
 #, javascript-format
 msgid "Master Key %s"
 msgstr "Chave Master %s"
@@ -1328,6 +1356,11 @@ msgstr "Senha não pode ser vazia"
 
 msgid "Enable"
 msgstr "Habilitar"
+
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation:"
+msgstr ""
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"

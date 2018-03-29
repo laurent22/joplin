@@ -387,6 +387,16 @@ msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "认证未完成（未收到认证令牌）。"
 
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr ""
+
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr ""
@@ -647,6 +657,9 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+msgid "Submit"
+msgstr ""
+
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
@@ -705,6 +718,11 @@ msgid ""
 "The master keys with these IDs are used to encrypt some of your items, "
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
+msgstr ""
+
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation"
 msgstr ""
 
 msgid "Status"
@@ -829,6 +847,9 @@ msgstr "清除"
 msgid "OneDrive Login"
 msgstr "登陆OneDrive"
 
+msgid "Dropbox Login"
+msgstr ""
+
 msgid "Options"
 msgstr "选项"
 
@@ -864,6 +885,9 @@ msgstr "使用：%s"
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "未知标记：%s"
+
+msgid "Dropbox"
+msgstr ""
 
 msgid "File system"
 msgstr "文件系统"
@@ -1254,6 +1278,10 @@ msgstr ""
 msgid "Joplin website"
 msgstr ""
 
+#, fuzzy
+msgid "Login with Dropbox"
+msgstr "用OneDrive登陆"
+
 #, javascript-format
 msgid "Master Key %s"
 msgstr ""
@@ -1271,6 +1299,11 @@ msgstr ""
 #, fuzzy
 msgid "Enable"
 msgstr "已禁止"
+
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation:"
+msgstr ""
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"

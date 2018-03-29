@@ -413,6 +413,20 @@ msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "Impossible d'autoriser le logiciel (jeton d'identification non-reçu)."
 
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+"Pour permettre à Joplin de synchroniser avec Dropbox, veuillez suivre les "
+"étapes ci-dessous :"
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+"Étape 1: Veuillez ouvrir cette URL dans votre navigateur internet pour "
+"autoriser le logiciel :"
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "Étape 2 : Entrez le code fourni par Dropbox :"
+
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr ""
@@ -687,6 +701,9 @@ msgstr "Les notes et paramètres se trouve dans : %s"
 msgid "Save"
 msgstr "Enregistrer"
 
+msgid "Submit"
+msgstr "Envoyer"
+
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
@@ -759,6 +776,13 @@ msgstr ""
 "Les clefs maître avec ces identifiants sont utilisées pour crypter certains "
 "de vos objets, cependant le logiciel n'y a pour l'instant pas accès. Il est "
 "probable qu'elle vont être prochainement disponible via la synchronisation."
+
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation"
+msgstr ""
+"Pour plus d'informations sur l'encryption de bout en bout, ainsi que des "
+"conseils pour l'activer, veuillez consulter la documentation"
 
 msgid "Status"
 msgstr "État"
@@ -883,6 +907,9 @@ msgstr "Supprimer"
 msgid "OneDrive Login"
 msgstr "Connexion OneDrive"
 
+msgid "Dropbox Login"
+msgstr "Connection à Dropbox"
+
 msgid "Options"
 msgstr "Options"
 
@@ -918,6 +945,9 @@ msgstr "Utilisation : %s"
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Paramètre inconnu : %s"
+
+msgid "Dropbox"
+msgstr "Dropbox"
 
 msgid "File system"
 msgstr "Système de fichier"
@@ -1318,6 +1348,9 @@ msgstr "Entrez de nouvelles étiquettes ou sélectionnez de la liste"
 msgid "Joplin website"
 msgstr "Site web de Joplin"
 
+msgid "Login with Dropbox"
+msgstr "Se connecter à Dropbox"
+
 #, javascript-format
 msgid "Master Key %s"
 msgstr "Clef maître %s"
@@ -1334,6 +1367,13 @@ msgstr "Mot de passe ne peut être vide"
 
 msgid "Enable"
 msgstr "Activer"
+
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation:"
+msgstr ""
+"Pour plus d'informations sur l'encryption de bout en bout, ainsi que des "
+"conseils pour l'activer, veuillez consulter la documentation :"
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"
@@ -1595,12 +1635,6 @@ msgstr "Bienvenue"
 
 #~ msgid "Done."
 #~ msgstr "Terminé."
-
-#~ msgid ""
-#~ "Please open this URL in your browser to authenticate the application:"
-#~ msgstr ""
-#~ "Veuillez ouvrir cette URL dans votre navigateur internet pour autoriser "
-#~ "le logiciel :"
 
 #~ msgid "Note does not exist."
 #~ msgstr "Cette note n'existe pas."

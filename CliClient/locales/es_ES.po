@@ -416,6 +416,16 @@ msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "Autenticación no completada (no se recibió token de autenticación)."
 
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr ""
+
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr "No autenticado con %s. Por favor provea las credenciales."
@@ -689,6 +699,9 @@ msgstr "Las notas y los ajustes se guardan en: %s"
 msgid "Save"
 msgstr "Guardar"
 
+msgid "Submit"
+msgstr ""
+
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
@@ -759,6 +772,11 @@ msgstr ""
 "La clave maestra con estos ID son utilizadas para descifrar algunos de tus "
 "elementos, pero la apliación no tiene acceso a ellas. Serán descargadas a "
 "través de la sincronización."
+
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation"
+msgstr ""
 
 msgid "Status"
 msgstr "Estado"
@@ -879,6 +897,9 @@ msgstr "Limpiar"
 msgid "OneDrive Login"
 msgstr "Inicio de sesión de OneDrive"
 
+msgid "Dropbox Login"
+msgstr ""
+
 msgid "Options"
 msgstr "Opciones"
 
@@ -913,6 +934,9 @@ msgstr "Uso: %s"
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Etiqueta desconocida: %s"
+
+msgid "Dropbox"
+msgstr ""
 
 msgid "File system"
 msgstr "Sistema de archivos"
@@ -1312,6 +1336,10 @@ msgstr ""
 msgid "Joplin website"
 msgstr "Sitio web de Joplin"
 
+#, fuzzy
+msgid "Login with Dropbox"
+msgstr "Acceder con OneDrive"
+
 #, javascript-format
 msgid "Master Key %s"
 msgstr "Clave maestra %s"
@@ -1328,6 +1356,11 @@ msgstr "La contraseña no puede estar vacía"
 
 msgid "Enable"
 msgstr "Habilitado"
+
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation:"
+msgstr ""
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"
