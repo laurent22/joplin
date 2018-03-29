@@ -10,7 +10,7 @@ There are various ways to send a donation:
 
 ## Bitcoin
 
-<a href="bitcoin:1P8TJvvJ7oHGneWuwSXN3DMBd7gYxCUQjc?message=Joplin%20development">1P8TJvvJ7oHGneWuwSXN3DMBd7gYxCUQjc</a>
+<a href="bitcoin:1AnbeRd5NZT1ssG93jXzaDoHwzgjQAHX3R?message=Joplin%20development">1AnbeRd5NZT1ssG93jXzaDoHwzgjQAHX3R</a>
 
 ![](https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/BitcoinQr.png)
 
