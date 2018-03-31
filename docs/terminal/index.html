@@ -112,6 +112,9 @@
 		color: white;
 		background-color: #2B2B3D;
 	}
+	.header a h1 {
+		color: white;
+	}
 	.content {
 		padding-left: 2em;
 		padding-right: 2em;
@@ -200,7 +203,7 @@
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplin.cozic.net/images/ForkMe.png"/></a>
-	<h1 id="joplin"><img class="title-icon" src="https://joplin.cozic.net/images/Icon512.png">oplin</h1>
+	<a href="https://joplin.cozic.net"><h1 id="joplin"><img class="title-icon" src="https://joplin.cozic.net/images/Icon512.png">oplin</h1></a>
 	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
 </div>
 
@@ -246,10 +249,9 @@
 </li>
 </ul>
 </div>
-<h1 id="joplin">Joplin</h1>
 <p>Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor.</p>
 <p>Notes exported from Evernote via .enex files <a href="https://joplin.cozic.net/#importing">can be imported</a> into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.</p>
-<p>The notes can be <a href="#synchronisation">synchronised</a> with various targets including the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
+<p>The notes can be <a href="#synchronisation">synchronised</a> with various targets including the file system (for example with a network directory), Nextcloud, Dropbox, OneDrive or WebDAV. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
 <p><img src="https://joplin.cozic.net/images/ScreenshotTerminal.png" style="max-width: 60%"></p>
 <h1 id="installation">Installation</h1>
 <p>On macOS:</p>
@@ -346,7 +348,7 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 </ul>
 <h1 id="synchronisation">Synchronisation</h1>
 <p>One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as Nextcloud or OneDrive, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.</p>
-<p>Currently, synchronisation is possible with Nextcloud and OneDrive (by default) or the local filesystem. A Dropbox one will also be available once <a href="https://github.com/facebook/react-native/issues/14445">this React Native bug</a> is fixed. To setup synchronisation please follow the instructions below. After that, the application will synchronise in the background whenever it is running, or you can click on &quot;Synchronise&quot; to start a synchronisation manually.</p>
+<p>Currently, synchronisation is possible with Nextcloud, Dropbox (by default) and OneDrive, or the local filesystem. To setup synchronisation please follow the instructions below. After that, the application will synchronise in the background whenever it is running, or you can click on &quot;Synchronise&quot; to start a synchronisation manually.</p>
 <h2 id="nextcloud-synchronisation">Nextcloud synchronisation</h2>
 <p>You will need to set the <code>sync.target</code> config variable and all the <code>sync.5.path</code>, <code>sync.5.username</code> and <code>sync.5.password</code> config variables to, respectively the Nextcloud WebDAV URL, your username and your password. This can be done from the command line mode using:</p>
 <pre><code>:config sync.target 5
@@ -356,9 +358,9 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 </code></pre><p>If synchronisation does not work, please consult the logs in the app profile directory (<code>~/.config/joplin</code>)- it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.</p>
 <h2 id="webdav-synchronisation">WebDAV synchronisation</h2>
 <p>Select the &quot;WebDAV&quot; synchronisation target and follow the same instructions as for Nextcloud above.</p>
-<h2 id="onedrive-synchronisation">OneDrive synchronisation</h2>
-<p>When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
-<p>To initiate the synchronisation process, type <code>:sync</code>. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). It is possible to also synchronise outside of the user interface by typing <code>joplin sync</code> from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:</p>
+<h2 id="onedrive-and-dropbox-synchronisation">OneDrive and Dropbox synchronisation</h2>
+<p>For Dropbox, type <code>:config sync.target 7</code>. For OneDrive, type <code>:config sync.target 3</code>. Then type <code>sync</code> to login to the service and start the synchronisation process.</p>
+<p>It is possible to also synchronise outside of the user interface by typing <code>joplin sync</code> from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:</p>
 <pre><code>*/30 * * * * /path/to/joplin sync
 </code></pre><h1 id="urls">URLs</h1>
 <p>When Ctrl+Clicking a URL, most terminals will open that URL in the default browser. However, one issue, especially with long URLs, is that they can end up like this:</p>

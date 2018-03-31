@@ -117,6 +117,9 @@ const headerHtml = `<!doctype html>
 		color: white;
 		background-color: #2B2B3D;
 	}
+	.header a h1 {
+		color: white;
+	}
 	.content {
 		padding-left: 2em;
 		padding-right: 2em;
@@ -205,7 +208,7 @@ const headerHtml = `<!doctype html>
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="{{{imageBaseUrl}}}/ForkMe.png"/></a>
-	<h1 id="joplin"><img class="title-icon" src="{{{imageBaseUrl}}}/Icon512.png">oplin</h1>
+	<a href="https://joplin.cozic.net"><h1 id="joplin"><img class="title-icon" src="{{{imageBaseUrl}}}/Icon512.png">oplin</h1></a>
 	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
 </div>
 
@@ -340,6 +343,9 @@ function tocHtml() {
 }
 
 function renderMdToHtml(md, targetPath, params) {
+	// Remove the header because it's going to be added back as HTML
+	md = md.replace(/# Joplin\n/, '');
+
 	params.baseUrl = 'https://joplin.cozic.net';
 	params.imageBaseUrl = params.baseUrl + '/images';
 	params.tocHtml = tocHtml();
@@ -355,8 +361,6 @@ function renderFileToHtml(sourcePath, targetPath, params) {
 function makeHomePageMd() {
 	let md = fs.readFileSync(rootDir + '/README.md', 'utf8');
 	md = md.replace(tocRegex_, '');
-	// Remove the header because it's going to be added back as HTML
-	md = md.replace(/# Joplin/, '');
 	return md;
 }
 
