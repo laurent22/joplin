@@ -1,9 +1,4 @@
-const fs = require('fs-extra');
-const dirname = require('path').dirname;
-const marked = require('marked');
-const Mustache = require('mustache');
-
-const headerHtml = `<!doctype html>
+<!doctype html>
 <html>
 <head>
 	<title>Joplin - an open source note taking and to-do application with synchronisation capabilities</title>
@@ -207,15 +202,15 @@ const headerHtml = `<!doctype html>
 <div class="container">
 
 <div class="header">
-	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="{{{imageBaseUrl}}}/ForkMe.png"/></a>
-	<a href="https://joplin.cozic.net"><h1 id="joplin"><img class="title-icon" src="{{{imageBaseUrl}}}/Icon512.png">oplin</h1></a>
+	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplin.cozic.net/images/ForkMe.png"/></a>
+	<a href="https://joplin.cozic.net"><h1 id="joplin"><img class="title-icon" src="https://joplin.cozic.net/images/Icon512.png">oplin</h1></a>
 	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
 </div>
 
 <div class="nav-wrapper">
 	<div class="nav">
 		<ul>
-			<li class="{{selectedHome}}"><a href="{{baseUrl}}/" title="Home"><i class="fa fa-home"></i></a></li>
+			<li class=""><a href="https:&#x2F;&#x2F;joplin.cozic.net/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a class="help" href="#" title="Terminal">Help</a></li>
 		</ul>
 		<div class="nav-right">
@@ -227,53 +222,53 @@ const headerHtml = `<!doctype html>
 </div>
 
 <div class="content">
-	{{{tocHtml}}}
-`;
-
-const footerHtml = `
-<div class="footer">
-Copyright (c) 2016-2018 Laurent Cozic
+	<div id="toc"><ul>
+<li>
+<p>Applications</p>
+<ul>
+<li><a href="https://joplin.cozic.net/desktop">Desktop application</a></li>
+<li><a href="https://joplin.cozic.net/mobile">Mobile applications</a></li>
+<li><a href="https://joplin.cozic.net/terminal">Terminal application</a></li>
+</ul>
+</li>
+<li>
+<p>Support</p>
+<ul>
+<li><a href="https://joplin.cozic.net/e2ee">How to enable end-to-end encryption</a></li>
+<li><a href="https://joplin.cozic.net/spec">End-to-end encryption spec</a></li>
+<li><a href="https://joplin.cozic.net/debugging">How to enable debug mode</a></li>
+</ul>
+</li>
+<li>
+<p>About</p>
+<ul>
+<li><a href="https://joplin.cozic.net/changelog">Changelog</a></li>
+<li><a href="https://joplin.cozic.net/stats">Stats</a></li>
+<li><a href="https://joplin.cozic.net/donate">Donate</a></li>
+</ul>
+</li>
+</ul>
 </div>
-</body>
-</html>
-`;
+<h1 id="how-to-enable-debugging">How to enable debugging</h1>
+<p>It is possible to get the apps to display or log more information that might help debug various issues.</p>
+<h2 id="desktop-application">Desktop application</h2>
+<ul>
+<li>Add a file named &quot;flags.txt&quot; in the config directory (should be <code>~/.config/joplin-desktop</code> or <code>c:\Users\YOUR_NAME\.config\joplin-desktop</code>) with the following content: <code>--open-dev-tools --log-level debug</code></li>
+<li>Restart the application</li>
+<li>The development tools should now be opened. Click the &quot;Console&quot; tab</li>
+<li>Now repeat the action that was causing problem. The console might output warnings or errors - please add them to the GitHub issue. Also open log.txt in the config folder and if there is any error or warning, please also add them to the issue.</li>
+</ul>
+<h2 id="cli-application">CLI application</h2>
+<ul>
+<li>Start the app with <code>joplin --log-level debug</code></li>
+<li>Check the log.txt as specified above for the desktop application and attach the log to the GitHub issue (or just the warnings/errors if any)</li>
+</ul>
+<h2 id="mobile-application">Mobile application</h2>
+<ul>
+<li>In the options, enable Advanced Option</li>
+<li>Open the log in the top right hand corner menu and post a screenshot of any error/warning.</li>
+</ul>
 
-// const screenshotHtml = `
-// <table class="screenshots">
-// 	<tr>
-// 		<th>
-// 			Mobile
-// 		</th>
-// 		<th>
-// 			Command line
-// 		</th>
-// 	</tr>
-// 	<tr>
-// 		<td>
-// 			<img class="mobile-screenshot" src="docs/images/Mobile.png"/>
-// 		</td>
-// 		<td class="cli-screenshot-wrapper">
-// 			<pre class="cli-screenshot">
-// <span class="prompt">joplin:/My notebook$</span> ls -n 12
-// [ ] 8am conference call ☎
-// [ ] Make vet appointment
-// [ ] Go pick up parcel
-// [ ] Pay flat rent 💸
-// [X] Book ferry 🚢
-// [X] Deploy Joplin app
-//     Open source stuff
-//     Swimming pool time table 🏊
-//     Grocery shopping list 📝
-//     Work itinerary
-//     Tuesday random note
-//     Vacation plans ☀
-// 			</pre>
-// 		</td>
-// 	</tr>
-// </table>
-// `;
-
-const scriptHtml = `
 <script>
 	function stickyHeader() { 
 		return; // Disabled
@@ -303,98 +298,9 @@ const scriptHtml = `
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
-`;
 
-const rootDir = dirname(__dirname);
-
-function markdownToHtml(md) {
-	const renderer = new marked.Renderer();
-
-	let output = marked(md, {
-		gfm: true,
-		break: true,
-		renderer: renderer,
-	});
-
-	return headerHtml + output + scriptHtml + footerHtml;
-}
-
-let tocMd_ = null;
-let tocHtml_ = null;
-const tocRegex_ = /<!-- TOC -->([^]*)<!-- TOC -->/
-function tocMd() {
-	if (tocMd_) return tocMd_;
-	const md = fs.readFileSync(rootDir + '/README.md', 'utf8');
-	const toc = md.match(tocRegex_);
-	tocMd_ = toc[1];
-	return tocMd_;
-}
-
-function tocHtml() {
-	if (tocHtml_) return tocHtml_;
-	const MarkdownIt = require('markdown-it');
-	const markdownIt = new MarkdownIt();
-	let md = tocMd();
-	md = md.replace(/# Table of contents/, '');
-	md = md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*)\.md/g, 'https://joplin.cozic.net/$1');
-	tocHtml_ = markdownIt.render(md);
-	tocHtml_ = '<div id="toc">' + tocHtml_ + '</div>';
-	return tocHtml_;
-}
-
-function renderMdToHtml(md, targetPath, params) {
-	// Remove the header because it's going to be added back as HTML
-	md = md.replace(/# Joplin\n/, '');
-
-	params.baseUrl = 'https://joplin.cozic.net';
-	params.imageBaseUrl = params.baseUrl + '/images';
-	params.tocHtml = tocHtml();
-	const html = Mustache.render(markdownToHtml(md), params);
-	fs.writeFileSync(targetPath, html);
-}
-
-function renderFileToHtml(sourcePath, targetPath, params) {
-	const md = fs.readFileSync(sourcePath, 'utf8');
-	return renderMdToHtml(md, targetPath, params);
-}
-
-function makeHomePageMd() {
-	let md = fs.readFileSync(rootDir + '/README.md', 'utf8');
-	md = md.replace(tocRegex_, '');
-	return md;
-}
-
-async function main() {
-	tocMd();
-
-	// renderFileToHtml(rootDir + '/README.md', rootDir + '/docs/index.html', {
-	// 	selectedHome: 'selected',
-	// });
-
-	// renderFileToHtml(rootDir + '/readme/terminal.md', rootDir + '/docs/terminal/index.html', {
-	// 	selectedTerminal: 'selected',
-	// });
-
-	// renderFileToHtml(rootDir + '/readme/desktop.md', rootDir + '/docs/desktop/index.html', {
-	// 	selectedDesktop: 'selected',
-	// });
-
-	// let readmeMd = fs.readFileSync(rootDir + '/README.md', 'utf8');
-
-	renderMdToHtml(makeHomePageMd(), rootDir + '/docs/index.html', {});
-
-	// renderFileToHtml(rootDir + '/README.md', rootDir + '/docs/index.html', {});
-	renderFileToHtml(rootDir + '/readme/terminal.md', rootDir + '/docs/terminal/index.html', {});
-	renderFileToHtml(rootDir + '/readme/debugging.md', rootDir + '/docs/debugging/index.html', {});
-	renderFileToHtml(rootDir + '/readme/desktop.md', rootDir + '/docs/desktop/index.html', {});
-	renderFileToHtml(rootDir + '/readme/mobile.md', rootDir + '/docs/mobile/index.html', {});
-	renderFileToHtml(rootDir + '/readme/e2ee.md', rootDir + '/docs/e2ee/index.html', {});
-	renderFileToHtml(rootDir + '/readme/spec.md', rootDir + '/docs/spec/index.html', {});
-	renderFileToHtml(rootDir + '/readme/stats.md', rootDir + '/docs/stats/index.html', {});
-	renderFileToHtml(rootDir + '/readme/changelog.md', rootDir + '/docs/changelog/index.html', {});
-	renderFileToHtml(rootDir + '/readme/donate.md', rootDir + '/docs/donate/index.html', {});
-}
-
-main().catch((error) => {
-	console.error(error);
-});
+<div class="footer">
+Copyright (c) 2016-2018 Laurent Cozic
+</div>
+</body>
+</html>
