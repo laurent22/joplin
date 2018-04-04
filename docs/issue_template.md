@@ -1,17 +1,24 @@
 ### Operating system
 
-- [ ] Windows
-- [ ] macOS
-- [ ] Linux
-- [ ] Android
-- [ ] iOS
+<!-- Please only leave those relevant to your request -->
+
+- Windows
+- macOS
+- Linux
+- Android
+- iOS
 
 ### Application
 
-- [ ] Desktop
-- [ ] Mobile
-- [ ] Terminal
+<!-- Please only leave those relevant to your request -->
+
+- Desktop
+- Mobile
+- Terminal
 
 <!--
 Please the guide first! https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md
+
+In particular, did you try enabling debug mode? https://joplin.cozic.net/debugging/
+If so, please post any error or warning.
 -->
