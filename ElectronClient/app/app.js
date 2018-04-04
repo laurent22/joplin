@@ -349,17 +349,17 @@ class Application extends BaseApplication {
 				label: _('Edit'),
 				submenu: [{
 					label: _('Copy'),
-					screens: ['Main', 'OneDriveLogin', 'Config', 'EncryptionConfig'],
+					//screens: ['Main', 'OneDriveLogin', 'Config', 'EncryptionConfig'],
 					role: 'copy',
 					accelerator: 'CommandOrControl+C',
 				}, {
 					label: _('Cut'),
-					screens: ['Main', 'OneDriveLogin', 'Config', 'EncryptionConfig'],
+					//screens: ['Main', 'OneDriveLogin', 'Config', 'EncryptionConfig'],
 					role: 'cut',
 					accelerator: 'CommandOrControl+X',
 				}, {
 					label: _('Paste'),
-					screens: ['Main', 'OneDriveLogin', 'Config', 'EncryptionConfig'],
+					//screens: ['Main', 'OneDriveLogin', 'Config', 'EncryptionConfig'],
 					role: 'paste',
 					accelerator: 'CommandOrControl+V',
 				}, {
