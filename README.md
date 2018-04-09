@@ -188,6 +188,8 @@ For a more technical description, mostly relevant for development or to review t
 
 Any kind of file can be attached to a note. In Markdown, links to these files are represented as a simple ID to the resource. In the note viewer, these files, if they are images, will be displayed or, if they are other files (PDF, text files, etc.) they will be displayed as links. Clicking on this link will open the file in the default application.
 
+Resources that are not attached to any note will be automatically deleted after a day or two.
+
 # Notifications
 
 On the desktop and mobile apps, an alarm can be associated with any to-do. It will be triggered at the given time by displaying a notification. How the notification will be displayed depends on the operating system since each has a different way to handle this. Please see below for the requirements for the desktop applications:
