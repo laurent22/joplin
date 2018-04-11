@@ -767,7 +767,7 @@ msgstr ""
 
 msgid ""
 "For more information about End-To-End Encryption (E2EE) and advices on how "
-"to enable it please check the documentation"
+"to enable it please check the documentation:"
 msgstr ""
 
 msgid "Status"
@@ -1349,11 +1349,6 @@ msgstr ""
 #, fuzzy
 msgid "Enable"
 msgstr "Onemogućeno"
-
-msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
-"to enable it please check the documentation:"
-msgstr ""
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"

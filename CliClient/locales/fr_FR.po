@@ -779,10 +779,10 @@ msgstr ""
 
 msgid ""
 "For more information about End-To-End Encryption (E2EE) and advices on how "
-"to enable it please check the documentation"
+"to enable it please check the documentation:"
 msgstr ""
 "Pour plus d'informations sur l'encryption de bout en bout, ainsi que des "
-"conseils pour l'activer, veuillez consulter la documentation"
+"conseils pour l'activer, veuillez consulter la documentation :"
 
 msgid "Status"
 msgstr "État"
@@ -1368,13 +1368,6 @@ msgstr "Mot de passe ne peut être vide"
 msgid "Enable"
 msgstr "Activer"
 
-msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
-"to enable it please check the documentation:"
-msgstr ""
-"Pour plus d'informations sur l'encryption de bout en bout, ainsi que des "
-"conseils pour l'activer, veuillez consulter la documentation :"
-
 #, javascript-format
 msgid "The notebook could not be saved: %s"
 msgstr "Ce carnet n'a pas pu être sauvegardé : %s"
@@ -1445,6 +1438,13 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid ""
+#~ "For more information about End-To-End Encryption (E2EE) and advices on "
+#~ "how to enable it please check the documentation"
+#~ msgstr ""
+#~ "Pour plus d'informations sur l'encryption de bout en bout, ainsi que des "
+#~ "conseils pour l'activer, veuillez consulter la documentation"
 
 #~ msgid "Searches"
 #~ msgstr "Recherches"
