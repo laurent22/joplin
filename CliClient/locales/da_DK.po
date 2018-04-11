@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: \n"
+"Last-Translator: Morten Juhl-Johansen Zölde-Fejér <mjjzf@syntaktisk.dk>"
 "Language-Team: \n"
 "Language: da_DK\n"
 "MIME-Version: 1.0\n"
@@ -127,7 +127,7 @@ msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status` and `target-status`."
 msgstr ""
-"Udfører E2EEE konfiguration. Kommandoer er `enable`(aktiver), "
+"Udfører E2EE konfiguration. Kommandoer er `enable`(aktiver), "
 "`disable`(sluk), `decrypt`(dekrypter), `status` og `target-status` (modtager-"
 "status)."
 
@@ -163,7 +163,7 @@ msgstr "Rediger note."
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
-"Ingen tekst editor er valgt.  Vælg en ved at indstille `config editor "
+"Ingen teksteditor er valgt.  Vælg en ved at indstille `config editor "
 "<editor-path>`"
 
 msgid "No active notebook."
@@ -412,13 +412,13 @@ msgstr "Godkendelse  blev ikke fuldført (modtog ikke godkendelses token)."
 
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
-msgstr ""
+msgstr "For at Joplin kan synkronisere med Dropbox, skal man igennem nedenstående trin:"
 
 msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr ""
+msgstr "Trin 1: Åben denne  URL i din browser for at autorisere applikationen:"
 
 msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr ""
+msgstr "Trin 2: Indtast koden, som er oplyst af Dropbox:"
 
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
@@ -433,8 +433,8 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
-"Låse fil er allerede i brug. Hvis du ved at ingen synkronisering er i gang "
-"kan du slette låse-filen \"%s\" og genoptage synkroniseringen."
+"Låsefil er allerede i brug. Hvis du ved at ingen synkronisering er i gang "
+"kan du slette låsefilen \"%s\" og genoptage synkroniseringen."
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
@@ -689,7 +689,7 @@ msgid "Save"
 msgstr "Gem"
 
 msgid "Submit"
-msgstr ""
+msgstr "Gem"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -764,8 +764,10 @@ msgstr ""
 
 msgid ""
 "For more information about End-To-End Encryption (E2EE) and advices on how "
-"to enable it please check the documentation:"
+"to enable it please check the documentation"
 msgstr ""
+"Se dokumentationen for nærmere oplysninger om End-To-End-kryptering (E2EE) "
+"og vejledning om hvordan det skal opsættes"
 
 msgid "Status"
 msgstr "Status"
@@ -885,7 +887,7 @@ msgid "OneDrive Login"
 msgstr "OneDrive login"
 
 msgid "Dropbox Login"
-msgstr ""
+msgstr "Dropbox Login"
 
 msgid "Options"
 msgstr "Muligheder"
@@ -923,7 +925,7 @@ msgid "Unknown flag: %s"
 msgstr "Ukendt flag: %s"
 
 msgid "Dropbox"
-msgstr ""
+msgstr "Dropbox"
 
 msgid "File system"
 msgstr "Fil system"
@@ -1313,10 +1315,10 @@ msgid "Cancel synchronisation"
 msgstr "Afbryd synkronisering"
 
 msgid "New tags:"
-msgstr ""
+msgstr "Nye tags:"
 
 msgid "Type new tags or select from list"
-msgstr ""
+msgstr "Indtast nye tags eller vælg fra listen"
 
 msgid "Joplin website"
 msgstr "Joplin hjemmeside"
@@ -1341,6 +1343,13 @@ msgstr "Kodeord må ikke være tomt"
 
 msgid "Enable"
 msgstr "Tænd"
+
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation:"
+msgstr ""
+"Se dokumentationen for nærmere oplysninger om End-To-End-kryptering (E2EE) "
+"og vejledning om hvordan det skal opsættes_"
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"
