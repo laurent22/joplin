@@ -481,6 +481,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					value={note.body}
 					onChangeText={(text) => this.body_changeText(text)}
 					blurOnSubmit={false}
+					selectionColor={theme.textSelectionColor}
 				/>
 			);
 		}
@@ -545,6 +546,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					style={titleTextInputStyle}
 					value={note.title}
 					onChangeText={(text) => this.title_changeText(text)}
+					selectionColor={theme.textSelectionColor}
 				/>
 			</View>
 		);
