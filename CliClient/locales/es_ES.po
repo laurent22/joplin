@@ -251,7 +251,7 @@ msgstr ""
 "utilice las flechas y re pág/av pág."
 
 msgid "To maximise/minimise the console, press \"TC\"."
-msgstr "Para maximizar/minimizar la consola, presione \"TC\"."
+msgstr "Para maximizar/minimizar la consola, presione \"tc\"."
 
 msgid "To enter command line mode, press \":\""
 msgstr "Para entrar a modo línea de comando, presione \":\""
@@ -419,12 +419,14 @@ msgstr "Autenticación no completada (no se recibió token de autenticación)."
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
+"Para permitir a Joplin sincronizar con Dropbox, por favor siga estos pasos:"
 
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr ""
+"Paso 1: Abra esta dirección en su navegador para autorizar a la aplicación:"
 
 msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr ""
+msgstr "Paso 2: Introduzca el código provisto por Dropbox:"
 
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
@@ -700,7 +702,7 @@ msgid "Save"
 msgstr "Guardar"
 
 msgid "Submit"
-msgstr ""
+msgstr "Aceptar"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -777,6 +779,8 @@ msgid ""
 "For more information about End-To-End Encryption (E2EE) and advices on how "
 "to enable it please check the documentation:"
 msgstr ""
+"Para más información acerca del cifrado extremo a extremo (E2EE) y "
+"advertencias de como habilitarlo por favor revise la documentación:"
 
 msgid "Status"
 msgstr "Estado"
@@ -816,9 +820,8 @@ msgstr "Ajustar alarma:"
 msgid "Layout"
 msgstr "Diseño"
 
-#, fuzzy
 msgid "Search..."
-msgstr "Buscar"
+msgstr "Buscar..."
 
 msgid "Some items cannot be synchronised."
 msgstr "No se han podido sincronizar algunos de los elementos."
@@ -898,7 +901,7 @@ msgid "OneDrive Login"
 msgstr "Inicio de sesión de OneDrive"
 
 msgid "Dropbox Login"
-msgstr ""
+msgstr "Inicio de sesión de Dropbox"
 
 msgid "Options"
 msgstr "Opciones"
@@ -936,7 +939,7 @@ msgid "Unknown flag: %s"
 msgstr "Etiqueta desconocida: %s"
 
 msgid "Dropbox"
-msgstr ""
+msgstr "Dropbox"
 
 msgid "File system"
 msgstr "Sistema de archivos"
@@ -1015,7 +1018,7 @@ msgstr "Elementos remotos borrados: %d."
 msgid "Fetched items: %d/%d."
 msgstr "Elementos obtenidos: %d/%d."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "State: %s."
 msgstr "Estado: «%s»."
 
@@ -1328,17 +1331,16 @@ msgid "Cancel synchronisation"
 msgstr "Cancelar sincronización"
 
 msgid "New tags:"
-msgstr ""
+msgstr "Nuevas etiquetas:"
 
 msgid "Type new tags or select from list"
-msgstr ""
+msgstr "Escriba nuevas etiquetas o seleccionelas de la lista"
 
 msgid "Joplin website"
 msgstr "Sitio web de Joplin"
 
-#, fuzzy
 msgid "Login with Dropbox"
-msgstr "Acceder con OneDrive"
+msgstr "Acceder con Dropbox"
 
 #, javascript-format
 msgid "Master Key %s"
@@ -1426,6 +1428,13 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+#~ msgid ""
+#~ "For more information about End-To-End Encryption (E2EE) and advices on "
+#~ "how to enable it please check the documentation"
+#~ msgstr ""
+#~ "Para más información acerca del cifrado extremo a extremo (E2EE) y "
+#~ "advertencias de como habilitarlo por favor revise la documentación"
 
 #~ msgid "Searches"
 #~ msgstr "Búsquedas"
