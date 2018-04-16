@@ -100,7 +100,10 @@ function addExtraStyles(style) {
 }
 
 function themeStyle(theme) {
-	if (!theme) throw new Error('Theme not set');
+	if (!theme) {
+		console.warn('Theme not set!! Defaulting to Light theme');
+		theme = Setting.THEME_LIGHT;
+	}
 
 	if (themeCache_[theme]) return themeCache_[theme];
 
