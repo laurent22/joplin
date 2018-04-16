@@ -47,6 +47,11 @@ async function initialize(dispatch) {
 		type: 'NOTE_VISIBLE_PANES_SET',
 		panes: Setting.value('noteVisiblePanes'),
 	});
+
+	store.dispatch({
+		type: 'SIDEBAR_VISIBILITY_SET',
+		visibility: Setting.value('sidebarVisibility')
+	});
 }
 
 class RootComponent extends React.Component {
