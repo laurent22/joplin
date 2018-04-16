@@ -311,6 +311,7 @@ class MainScreenComponent extends React.Component {
 		headerItems.push({
 			title: _('Toggle sidebar'),
 			iconName: 'fa-bars',
+			iconRotation: this.props.sidebarVisibility ? 0 : 90,
 			onClick: () => { this.doCommand({ name: 'toggleSidebar'}) }
 		});
 
@@ -426,6 +427,7 @@ const mapStateToProps = (state) => {
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,
 		selectedFolderId: state.selectedFolderId,
+		sidebarVisibility: state.sidebarVisibility,
 	};
 };
 
