@@ -395,6 +395,16 @@ class Application extends BaseApplication {
 			}, {
 				label: _('View'),
 				submenu: [{
+					label: _('Toggle sidebar'),
+					screens: ['Main'],
+					accelerator: 'F10',
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'toggleSidebar',
+						});
+					}
+				}, {
 					label: _('Toggle editor layout'),
 					screens: ['Main'],
 					accelerator: 'CommandOrControl+L',
