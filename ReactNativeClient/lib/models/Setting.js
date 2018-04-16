@@ -7,6 +7,7 @@ const { sprintf } = require('sprintf-js');
 const ObjectUtils = require('lib/ObjectUtils');
 const { toTitleCase } = require('lib/string-utils.js');
 const { _, supportedLocalesToLanguages, defaultLocale } = require('lib/locale.js');
+const { shim } = require('lib/shim');
 
 class Setting extends BaseModel {
 
@@ -20,6 +21,8 @@ class Setting extends BaseModel {
 
 	static metadata() {
 		if (this.metadata_) return this.metadata_;
+
+		const platform = shim.platformName();
 
 		// A "public" setting means that it will show up in the various config screens (or config command for the CLI tool), however
 		// if if private a setting might still be handled and modified by the app. For instance, the settings related to sorting notes are not
@@ -79,7 +82,15 @@ class Setting extends BaseModel {
 					'body': _('Focus body'),
 				};
 			}},
-			'showTrayIcon': { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Show tray icon') },
+
+			// Tray icon (called AppIndicator) doesn't work in Ubuntu
+			// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html
+			// Might be fixed in Electron 18.x but no non-beta release yet. So for now
+			// by default we disable it on Linux.
+			'showTrayIcon': { value: platform !== 'linux', type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Show tray icon'), description: () => {
+				return platform === 'linux' ? _('Note: Does not work in all desktop environments.') : null;
+			}},
+			
 			'encryption.enabled': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'encryption.activeMasterKeyId': { value: '', type: Setting.TYPE_STRING, public: false },
 			'encryption.passwordCache': { value: {}, type: Setting.TYPE_OBJECT, public: false },

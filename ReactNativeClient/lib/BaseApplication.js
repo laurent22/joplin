@@ -429,7 +429,7 @@ class BaseApplication {
 				Setting.setValue('autoUpdateEnabled', 0);
 				Setting.setValue('sync.interval', 3600);
 			}
-			
+
 			Setting.setValue('firstStart', 0);
 		} else {
 			setLocale(Setting.value('locale'));
