@@ -362,7 +362,7 @@ sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 <p><img src="https://joplin.cozic.net/images/nextcloud-logo-background.png" width="100" align="left"> <a href="https://nextcloud.com/">Nextcloud</a> is a self-hosted, private cloud solution. It can store documents, images and videos but also calendars, passwords and countless other things and can sync them to your laptop or phone. As you can host your own Nextcloud server, you own both the data on your device and infrastructure used for synchronisation. As such it is a good fit for Joplin. The platform is also well supported and with a strong community, so it is likely to be around for a while - since it&#39;s open source anyway, it is not a service that can be closed, it can exist on a server for as long as one chooses.</p>
 <p>On the <strong>desktop application</strong> or <strong>mobile application</strong>, go to the config screen and select Nextcloud as the synchronisation target. Then input the WebDAV URL (to get it, click on Settings in the bottom left corner of the page, in Nextcloud), this is normally <code>https://example.com/nextcloud/remote.php/webdav/Joplin</code> (<strong>make sure to create the &quot;Joplin&quot; directory in Nextcloud</strong>), and set the username and password. If it does not work, please <a href="https://github.com/laurent22/joplin/issues/61#issuecomment-373282608">see this explanation</a> for more details.</p>
 <p>On the <strong>terminal application</strong>, you will need to set the <code>sync.target</code> config variable and all the <code>sync.5.path</code>, <code>sync.5.username</code> and <code>sync.5.password</code> config variables to, respectively the Nextcloud WebDAV URL, your username and your password. This can be done from the command line mode using:</p>
-<pre><code>:config sync.5.path https://example.com/nextcloud/remote.php/dav/files/USERNAME/Joplin
+<pre><code>:config sync.5.path https://example.com/nextcloud/remote.php/webdav/Joplin
 :config sync.5.username YOUR_USERNAME
 :config sync.5.password YOUR_PASSWORD
 :config sync.target 5
@@ -464,14 +464,14 @@ $$
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/hr.png" alt=""></td>
 <td>Croatian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/hr_HR.po">hr_HR</a></td>
-<td>Hrvoje Mandić <a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#x74;&#x72;&#x62;&#x75;&#x68;&#x6f;&#x6d;&#64;&#110;&#x65;&#x74;&#46;&#104;&#x72;">&#x74;&#x72;&#x62;&#x75;&#x68;&#x6f;&#x6d;&#64;&#110;&#x65;&#x74;&#46;&#104;&#x72;</a></td>
+<td>Hrvoje Mandić <a href="&#109;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#x74;&#114;&#98;&#117;&#104;&#111;&#x6d;&#x40;&#x6e;&#101;&#x74;&#x2e;&#x68;&#x72;">&#x74;&#114;&#98;&#117;&#104;&#111;&#x6d;&#x40;&#x6e;&#101;&#x74;&#x2e;&#x68;&#x72;</a></td>
 <td>62%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/cz.png" alt=""></td>
 <td>Czech</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/cs_CZ.po">cs_CZ</a></td>
-<td>Lukas Helebrandt <a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#111;&#58;&#x6c;&#x75;&#x6b;&#97;&#x73;&#64;&#97;&#x69;&#x79;&#97;&#46;&#99;&#122;">&#x6c;&#x75;&#x6b;&#97;&#x73;&#64;&#97;&#x69;&#x79;&#97;&#46;&#99;&#122;</a></td>
+<td>Lukas Helebrandt <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#108;&#x75;&#107;&#x61;&#x73;&#64;&#x61;&#105;&#121;&#x61;&#x2e;&#x63;&#x7a;">&#108;&#x75;&#107;&#x61;&#x73;&#64;&#x61;&#105;&#121;&#x61;&#x2e;&#x63;&#x7a;</a></td>
 <td>97%</td>
 </tr>
 <tr>
@@ -485,7 +485,7 @@ $$
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/de.png" alt=""></td>
 <td>Deutsch</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po">de_DE</a></td>
-<td>Tobias Grasse <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#x6d;&#97;&#105;&#x6c;&#64;&#116;&#x6f;&#98;&#x69;&#97;&#115;&#x2d;&#103;&#x72;&#x61;&#x73;&#x73;&#x65;&#x2e;&#x6e;&#101;&#x74;">&#x6d;&#97;&#105;&#x6c;&#64;&#116;&#x6f;&#98;&#x69;&#97;&#115;&#x2d;&#103;&#x72;&#x61;&#x73;&#x73;&#x65;&#x2e;&#x6e;&#101;&#x74;</a></td>
+<td>Tobias Grasse <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#x6f;&#58;&#x6d;&#x61;&#105;&#108;&#x40;&#x74;&#111;&#98;&#105;&#97;&#x73;&#x2d;&#x67;&#114;&#x61;&#x73;&#115;&#101;&#x2e;&#110;&#x65;&#x74;">&#x6d;&#x61;&#105;&#108;&#x40;&#x74;&#111;&#98;&#105;&#97;&#x73;&#x2d;&#x67;&#114;&#x61;&#x73;&#115;&#101;&#x2e;&#110;&#x65;&#x74;</a></td>
 <td>96%</td>
 </tr>
 <tr>
@@ -499,7 +499,7 @@ $$
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/es.png" alt=""></td>
 <td>Español</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po">es_ES</a></td>
-<td>Fernando Martín <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x66;&#x40;&#x6d;&#114;&#x74;&#x6e;&#x2e;&#x65;&#x73;">&#x66;&#x40;&#x6d;&#114;&#x74;&#x6e;&#x2e;&#x65;&#x73;</a></td>
+<td>Fernando Martín <a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#x66;&#64;&#109;&#114;&#x74;&#110;&#x2e;&#101;&#x73;">&#x66;&#64;&#109;&#114;&#x74;&#110;&#x2e;&#101;&#x73;</a></td>
 <td>100%</td>
 </tr>
 <tr>
@@ -513,7 +513,7 @@ $$
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/es.png" alt=""></td>
 <td>Galician</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/gl_ES.po">gl_ES</a></td>
-<td>Marcos Lans <a href="&#109;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#109;&#97;&#114;&#x63;&#x6f;&#115;&#108;&#x61;&#110;&#x73;&#103;&#x61;&#114;&#x7a;&#x61;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#99;&#x6f;&#x6d;">&#109;&#97;&#114;&#x63;&#x6f;&#115;&#108;&#x61;&#110;&#x73;&#103;&#x61;&#114;&#x7a;&#x61;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#99;&#x6f;&#x6d;</a></td>
+<td>Marcos Lans <a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#x3a;&#109;&#97;&#114;&#99;&#111;&#x73;&#108;&#97;&#110;&#x73;&#x67;&#97;&#114;&#122;&#x61;&#64;&#x67;&#109;&#x61;&#x69;&#x6c;&#46;&#99;&#x6f;&#109;">&#109;&#97;&#114;&#99;&#111;&#x73;&#108;&#97;&#110;&#x73;&#x67;&#97;&#114;&#122;&#x61;&#64;&#x67;&#109;&#x61;&#x69;&#x6c;&#46;&#99;&#x6f;&#109;</a></td>
 <td>97%</td>
 </tr>
 <tr>
@@ -534,14 +534,14 @@ $$
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/br.png" alt=""></td>
 <td>Português (Brasil)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_BR.po">pt_BR</a></td>
-<td>Renato Nunes Bastos <a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#58;&#x72;&#110;&#98;&#97;&#x73;&#116;&#111;&#115;&#64;&#x67;&#x6d;&#97;&#x69;&#108;&#46;&#99;&#x6f;&#x6d;">&#x72;&#110;&#98;&#97;&#x73;&#116;&#111;&#115;&#64;&#x67;&#x6d;&#97;&#x69;&#108;&#46;&#99;&#x6f;&#x6d;</a></td>
+<td>Renato Nunes Bastos <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#x72;&#x6e;&#x62;&#97;&#115;&#116;&#111;&#115;&#64;&#103;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#109;">&#x72;&#x6e;&#x62;&#97;&#115;&#116;&#111;&#115;&#64;&#103;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#109;</a></td>
 <td>95%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/ru.png" alt=""></td>
 <td>Русский</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ru_RU.po">ru_RU</a></td>
-<td>Artyom Karlov <a href="&#109;&#97;&#x69;&#108;&#116;&#111;&#x3a;&#97;&#x72;&#116;&#121;&#111;&#x6d;&#x2e;&#x6b;&#97;&#x72;&#108;&#111;&#x76;&#64;&#103;&#x6d;&#x61;&#x69;&#108;&#46;&#99;&#111;&#x6d;">&#97;&#x72;&#116;&#121;&#111;&#x6d;&#x2e;&#x6b;&#97;&#x72;&#108;&#111;&#x76;&#64;&#103;&#x6d;&#x61;&#x69;&#108;&#46;&#99;&#111;&#x6d;</a></td>
+<td>Artyom Karlov <a href="&#109;&#x61;&#105;&#108;&#116;&#111;&#58;&#97;&#x72;&#116;&#x79;&#x6f;&#109;&#46;&#107;&#x61;&#x72;&#108;&#111;&#118;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#97;&#x72;&#116;&#x79;&#x6f;&#109;&#46;&#107;&#x61;&#x72;&#108;&#111;&#118;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a></td>
 <td>96%</td>
 </tr>
 <tr>
