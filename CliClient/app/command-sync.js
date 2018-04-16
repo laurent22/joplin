@@ -79,9 +79,25 @@ class Command extends BaseCommand {
 			}
 
 			return true;
+		} else if (syncTargetMd.name === 'dropbox') { // Dropbox
+			const api = await syncTarget.api();
+			const loginUrl = api.loginUrl();
+			this.stdout(_('To allow Joplin to synchronise with Dropbox, please follow the steps below:'));
+			this.stdout(_('Step 1: Open this URL in your browser to authorise the application:'));
+			this.stdout(loginUrl);
+			const authCode = await this.prompt(_('Step 2: Enter the code provided by Dropbox:'), { type: 'string' });
+			if (!authCode) {
+				this.stdout(_('Authentication was not completed (did not receive an authentication token).'));
+				return false;
+			}
+
+			const response = await api.execAuthToken(authCode);
+			Setting.setValue('sync.' + this.syncTargetId_ + '.auth', response.access_token);
+			api.setAuthToken(response.access_token);
+			return true;
 		}
 
-		this.stdout(_('Not authentified with %s. Please provide any missing credentials.', syncTarget.label()));
+		this.stdout(_('Not authentified with %s. Please provide any missing credentials.', syncTargetMd.label));
 		return false;
 	}
 
@@ -100,6 +116,7 @@ class Command extends BaseCommand {
 		this.releaseLockFn_ = null;
 
 		// Lock is unique per profile/database
+		// TODO: use SQLite database to do lock?
 		const lockFilePath = require('os').tmpdir() + '/synclock_' + md5(escape(Setting.value('profileDir'))); // https://github.com/pvorb/node-md5/issues/41
 		if (!await fs.pathExists(lockFilePath)) await fs.writeFile(lockFilePath, 'synclock');
 
@@ -130,7 +147,7 @@ class Command extends BaseCommand {
 
 			const syncTarget = reg.syncTarget(this.syncTargetId_);
 
-			if (!syncTarget.isAuthenticated()) {
+			if (!await syncTarget.isAuthenticated()) {
 				app().gui().showConsole();
 				app().gui().maximizeConsole();
 
@@ -197,7 +214,7 @@ class Command extends BaseCommand {
 
 		const syncTarget = reg.syncTarget(syncTargetId);
 
-		if (syncTarget.isAuthenticated()) {
+		if (await syncTarget.isAuthenticated()) {
 			const sync = await syncTarget.synchronizer();
 			if (sync) await sync.cancel();
 		} else {

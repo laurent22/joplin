@@ -5,10 +5,10 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://joplin.cozic.net/css/bootstrap.min.css">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-	<link rel="stylesheet" href="https://opensource.keycdn.com/fontawesome/4.7.0/font-awesome.min.css" integrity="sha384-dNpIIXE8U05kAbPhy3G1cz+yZmTzA6CY8Vg/u2L9xRnHjJiAK76m2BIEaSEV+/aU" crossorigin="anonymous"> 
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://joplin.cozic.net/css/fontawesome-all.min.css"> 
+	<script src="https://joplin.cozic.net/js/jquery-3.2.1.slim.min.js"></script>
 	<style>
 	body {
 		background-color: #F1F1F1;
@@ -46,6 +46,12 @@
 	}
 	pre {
 		font-size: .85em;
+	}
+	#toc ul {
+		margin-bottom: 10px;
+	}
+	#toc {
+		padding-bottom: 1em;
 	}
 	.title-icon {
 		height: 2em;
@@ -105,6 +111,9 @@
 		padding-bottom: 1em;
 		color: white;
 		background-color: #2B2B3D;
+	}
+	.header a h1 {
+		color: white;
 	}
 	.content {
 		padding-left: 2em;
@@ -170,6 +179,13 @@
 	.nav-right .share-btn-github {
 		display: inline-block;
 	}
+	.footer {
+		padding-top: 1em;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 2em;
+		color: gray;
+		font-size: .9em;
+	}
 	@media all and (min-width: 400px) {
 		.nav-right .share-btn {
 			display: inline-block;
@@ -186,17 +202,16 @@
 <div class="container">
 
 <div class="header">
-	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="http://joplin.cozic.net/images/ForkMe.png"/></a>
-	<h1 id="joplin"><img class="title-icon" src="http://joplin.cozic.net/images/Icon512.png">oplin</h1>
+	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplin.cozic.net/images/ForkMe.png"/></a>
+	<a href="https://joplin.cozic.net"><h1 id="joplin"><img class="title-icon" src="https://joplin.cozic.net/images/Icon512.png">oplin</h1></a>
 	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
 </div>
 
 <div class="nav-wrapper">
 	<div class="nav">
 		<ul>
-			<li class=""><a href="http:&#x2F;&#x2F;joplin.cozic.net/" title="Home"><i class="fa fa-home"></i></a></li>
-			<li class=""><a href="http:&#x2F;&#x2F;joplin.cozic.net/terminal" title="Terminal"><i class="fa fa-terminal"></i></a></li>
-			<li class="selected"><a href="http:&#x2F;&#x2F;joplin.cozic.net/desktop" title="Desktop"><i class="fa fa-desktop"></i></a></li>
+			<li class=""><a href="https:&#x2F;&#x2F;joplin.cozic.net/" title="Home"><i class="fa fa-home"></i></a></li>
+			<li><a class="help" href="#" title="Terminal">Help</a></li>
 		</ul>
 		<div class="nav-right">
 			<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
@@ -207,16 +222,53 @@
 </div>
 
 <div class="content">
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/DemoDesktop.png" style="max-width: 100%"></p>
+	<div id="toc"><ul>
+<li>
+<p>Applications</p>
+<ul>
+<li><a href="https://joplin.cozic.net/desktop">Desktop application</a></li>
+<li><a href="https://joplin.cozic.net/mobile">Mobile applications</a></li>
+<li><a href="https://joplin.cozic.net/terminal">Terminal application</a></li>
+</ul>
+</li>
+<li>
+<p>Support</p>
+<ul>
+<li><a href="https://joplin.cozic.net/e2ee">How to enable end-to-end encryption</a></li>
+<li><a href="https://joplin.cozic.net/spec">End-to-end encryption spec</a></li>
+<li><a href="https://joplin.cozic.net/debugging">How to enable debug mode</a></li>
+</ul>
+</li>
+<li>
+<p>About</p>
+<ul>
+<li><a href="https://joplin.cozic.net/changelog">Changelog</a></li>
+<li><a href="https://joplin.cozic.net/stats">Stats</a></li>
+<li><a href="https://joplin.cozic.net/donate">Donate</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><img src="https://joplin.cozic.net/images/DemoDesktop.png" style="max-width: 100%"></p>
+<p>For general information relevant to all the applications, see also <a href="https://joplin.cozic.net">Joplin home page</a>.</p>
 
 <script>
 	function stickyHeader() { 
+		return; // Disabled
+
 		if ($(window).scrollTop() > 179) {
 			$('.nav').addClass('sticky'); 
 		} else {
 			$('.nav').removeClass('sticky');
 		}
 	}
+
+	$('#toc').hide();
+
+	$('.help').click(function(event) {
+		event.preventDefault();
+		$('#toc').show();
+	});
 
 	$(window).scroll(function() {
 		stickyHeader();
@@ -230,5 +282,8 @@
 	ga('send', 'pageview');
 </script>
 
+<div class="footer">
+Copyright (c) 2016-2018 Laurent Cozic
+</div>
 </body>
 </html>

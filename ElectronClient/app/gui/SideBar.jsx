@@ -345,17 +345,17 @@ class SideBarComponent extends React.Component {
 			);
 		}
 
-		if (this.props.searches.length) {
-			items.push(this.makeHeader("searchHeader", _("Searches"), "fa-search"));
+		// if (this.props.searches.length) {
+		// 	items.push(this.makeHeader("searchHeader", _("Searches"), "fa-search"));
 
-			const searchItems = shared.renderSearches(this.props, this.searchItem.bind(this));
+		// 	const searchItems = shared.renderSearches(this.props, this.searchItem.bind(this));
 
-			items.push(
-				<div className="searches" key="search_items">
-					{searchItems}
-				</div>
-			);
-		}
+		// 	items.push(
+		// 		<div className="searches" key="search_items">
+		// 			{searchItems}
+		// 		</div>
+		// 	);
+		// }
 
 		let lines = Synchronizer.reportToLines(this.props.syncReport);
 		const syncReportText = [];

@@ -5,7 +5,7 @@
 ROOT_DIR="$PWD"
 
 # If any README file has been changed, update the website
-git status -s | grep '  README\|  build-website.js' > /dev/null 2>&1
+git status -s | grep '  README\|  readme\|  build-website.js' > /dev/null 2>&1
 readmeStatus=$?
 if [ $readmeStatus -eq 0 ]; then
 	node "$ROOT_DIR/Tools/build-website.js"

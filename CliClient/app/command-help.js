@@ -37,7 +37,7 @@ class Command extends BaseCommand {
 		const stdoutWidth = app().commandStdoutMaxWidth();
 
 		if (args.command === 'shortcuts' || args.command === 'keymap') {
-			this.stdout(_('For information on how to customise the shortcuts please visit %s', 'http://joplin.cozic.net/terminal/#shortcuts'));
+			this.stdout(_('For information on how to customise the shortcuts please visit %s', 'https://joplin.cozic.net/terminal/#shortcuts'));
 			this.stdout('');
 
 			if (app().gui().isDummy()) {
@@ -76,7 +76,7 @@ class Command extends BaseCommand {
 			this.stdout('');
 			this.stdout(_('To move from one pane to another, press Tab or Shift+Tab.'));
 			this.stdout(_('Use the arrows and page up/down to scroll the lists and text areas (including this console).'));
-			this.stdout(_('To maximise/minimise the console, press "TC".'));
+			this.stdout(_('To maximise/minimise the console, press "tc".'));
 			this.stdout(_('To enter command line mode, press ":"'));
 			this.stdout(_('To exit command line mode, press ESCAPE'));
 			this.stdout(_('For the list of keyboard shortcuts and config options, type `help keymap`'));

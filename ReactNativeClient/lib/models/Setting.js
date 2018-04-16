@@ -7,6 +7,7 @@ const { sprintf } = require('sprintf-js');
 const ObjectUtils = require('lib/ObjectUtils');
 const { toTitleCase } = require('lib/string-utils.js');
 const { _, supportedLocalesToLanguages, defaultLocale } = require('lib/locale.js');
+const { shim } = require('lib/shim');
 
 class Setting extends BaseModel {
 
@@ -20,6 +21,8 @@ class Setting extends BaseModel {
 
 	static metadata() {
 		if (this.metadata_) return this.metadata_;
+
+		const platform = shim.platformName();
 
 		// A "public" setting means that it will show up in the various config screens (or config command for the CLI tool), however
 		// if if private a setting might still be handled and modified by the app. For instance, the settings related to sorting notes are not
@@ -79,7 +82,15 @@ class Setting extends BaseModel {
 					'body': _('Focus body'),
 				};
 			}},
-			'showTrayIcon': { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Show tray icon') },
+
+			// Tray icon (called AppIndicator) doesn't work in Ubuntu
+			// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html
+			// Might be fixed in Electron 18.x but no non-beta release yet. So for now
+			// by default we disable it on Linux.
+			'showTrayIcon': { value: platform !== 'linux', type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Show tray icon'), description: () => {
+				return platform === 'linux' ? _('Note: Does not work in all desktop environments.') : null;
+			}},
+			
 			'encryption.enabled': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'encryption.activeMasterKeyId': { value: '', type: Setting.TYPE_STRING, public: false },
 			'encryption.passwordCache': { value: {}, type: Setting.TYPE_OBJECT, public: false },
@@ -98,8 +109,9 @@ class Setting extends BaseModel {
 				};
 			}},
 			'noteVisiblePanes': { value: ['editor', 'viewer'], type: Setting.TYPE_ARRAY, public: false, appTypes: ['desktop'] },
+			'sidebarVisibility': { value: true, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
 			'showAdvancedOptions': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile' ], label: () => _('Show advanced options') },
-			'sync.target': { value: SyncTargetRegistry.nameToId('onedrive'), type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation target'), description: (appType) => { return appType !== 'cli' ? null : _('The target to synchonise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).') }, options: () => {
+			'sync.target': { value: SyncTargetRegistry.nameToId('dropbox'), type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation target'), description: (appType) => { return appType !== 'cli' ? null : _('The target to synchonise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).') }, options: () => {
 				return SyncTargetRegistry.idAndLabelPlainObject();
 			}},
 
@@ -121,12 +133,14 @@ class Setting extends BaseModel {
 
 			'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.7.auth': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.2.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.3.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.4.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.5.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.7.context': { value: '', type: Setting.TYPE_STRING, public: false },
 		};
 
 		return this.metadata_;
@@ -222,7 +236,7 @@ class Setting extends BaseModel {
 		if (!this.cache_) throw new Error('Settings have not been initialized!');
 
 		value = this.formatValue(key, value);
-		
+
 		for (let i = 0; i < this.cache_.length; i++) {
 			let c = this.cache_[i];
 			if (c.key == key) {
@@ -289,7 +303,7 @@ class Setting extends BaseModel {
 		if (md.type == Setting.TYPE_OBJECT) return value ? JSON.stringify(value) : '{}';
 		if (md.type == Setting.TYPE_STRING) return value ? value + '' : '';
 
-		throw new Error('Unhandled value type: ' + md.type);	
+		throw new Error('Unhandled value type: ' + md.type);
 	}
 
 	static formatValue(key, value) {
@@ -459,7 +473,7 @@ class Setting extends BaseModel {
 		}
 
 		await BaseModel.db().transactionExecBatch(queries);
-		
+
 		this.logger().info('Settings have been saved.');
 	}
 

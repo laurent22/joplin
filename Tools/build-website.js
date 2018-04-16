@@ -10,10 +10,10 @@ const headerHtml = `<!doctype html>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://joplin.cozic.net/css/bootstrap.min.css">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-	<link rel="stylesheet" href="https://opensource.keycdn.com/fontawesome/4.7.0/font-awesome.min.css" integrity="sha384-dNpIIXE8U05kAbPhy3G1cz+yZmTzA6CY8Vg/u2L9xRnHjJiAK76m2BIEaSEV+/aU" crossorigin="anonymous"> 
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://joplin.cozic.net/css/fontawesome-all.min.css"> 
+	<script src="https://joplin.cozic.net/js/jquery-3.2.1.slim.min.js"></script>
 	<style>
 	body {
 		background-color: #F1F1F1;
@@ -51,6 +51,12 @@ const headerHtml = `<!doctype html>
 	}
 	pre {
 		font-size: .85em;
+	}
+	#toc ul {
+		margin-bottom: 10px;
+	}
+	#toc {
+		padding-bottom: 1em;
 	}
 	.title-icon {
 		height: 2em;
@@ -110,6 +116,9 @@ const headerHtml = `<!doctype html>
 		padding-bottom: 1em;
 		color: white;
 		background-color: #2B2B3D;
+	}
+	.header a h1 {
+		color: white;
 	}
 	.content {
 		padding-left: 2em;
@@ -175,6 +184,13 @@ const headerHtml = `<!doctype html>
 	.nav-right .share-btn-github {
 		display: inline-block;
 	}
+	.footer {
+		padding-top: 1em;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 2em;
+		color: gray;
+		font-size: .9em;
+	}
 	@media all and (min-width: 400px) {
 		.nav-right .share-btn {
 			display: inline-block;
@@ -192,7 +208,7 @@ const headerHtml = `<!doctype html>
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="{{{imageBaseUrl}}}/ForkMe.png"/></a>
-	<h1 id="joplin"><img class="title-icon" src="{{{imageBaseUrl}}}/Icon512.png">oplin</h1>
+	<a href="https://joplin.cozic.net"><h1 id="joplin"><img class="title-icon" src="{{{imageBaseUrl}}}/Icon512.png">oplin</h1></a>
 	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
 </div>
 
@@ -200,8 +216,7 @@ const headerHtml = `<!doctype html>
 	<div class="nav">
 		<ul>
 			<li class="{{selectedHome}}"><a href="{{baseUrl}}/" title="Home"><i class="fa fa-home"></i></a></li>
-			<li class="{{selectedTerminal}}"><a href="{{baseUrl}}/terminal" title="Terminal"><i class="fa fa-terminal"></i></a></li>
-			<li class="{{selectedDesktop}}"><a href="{{baseUrl}}/desktop" title="Desktop"><i class="fa fa-desktop"></i></a></li>
+			<li><a class="help" href="#" title="Terminal">Help</a></li>
 		</ul>
 		<div class="nav-right">
 			<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
@@ -212,9 +227,13 @@ const headerHtml = `<!doctype html>
 </div>
 
 <div class="content">
+	{{{tocHtml}}}
 `;
 
 const footerHtml = `
+<div class="footer">
+Copyright (c) 2016-2018 Laurent Cozic
+</div>
 </body>
 </html>
 `;
@@ -257,12 +276,21 @@ const footerHtml = `
 const scriptHtml = `
 <script>
 	function stickyHeader() { 
+		return; // Disabled
+
 		if ($(window).scrollTop() > 179) {
 			$('.nav').addClass('sticky'); 
 		} else {
 			$('.nav').removeClass('sticky');
 		}
 	}
+
+	$('#toc').hide();
+
+	$('.help').click(function(event) {
+		event.preventDefault();
+		$('#toc').show();
+	});
 
 	$(window).scroll(function() {
 		stickyHeader();
@@ -282,45 +310,89 @@ const rootDir = dirname(__dirname);
 function markdownToHtml(md) {
 	const renderer = new marked.Renderer();
 
-	// Remove the header because it's going to be added back as HTML
-	md = md.replace(/# Joplin/, '');
-
 	let output = marked(md, {
 		gfm: true,
 		break: true,
 		renderer: renderer,
 	});
 
-	//output = output.replace(/<!-- \[SCREENSHOTS\] -->/, screenshotHtml);
-
 	return headerHtml + output + scriptHtml + footerHtml;
 }
 
-function renderFileToHtml(sourcePath, targetPath, params) {
-	const md = fs.readFileSync(sourcePath, 'utf8');
-	params.baseUrl = 'http://joplin.cozic.net';
+let tocMd_ = null;
+let tocHtml_ = null;
+const tocRegex_ = /<!-- TOC -->([^]*)<!-- TOC -->/
+function tocMd() {
+	if (tocMd_) return tocMd_;
+	const md = fs.readFileSync(rootDir + '/README.md', 'utf8');
+	const toc = md.match(tocRegex_);
+	tocMd_ = toc[1];
+	return tocMd_;
+}
+
+function tocHtml() {
+	if (tocHtml_) return tocHtml_;
+	const MarkdownIt = require('markdown-it');
+	const markdownIt = new MarkdownIt();
+	let md = tocMd();
+	md = md.replace(/# Table of contents/, '');
+	md = md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*)\.md/g, 'https://joplin.cozic.net/$1');
+	tocHtml_ = markdownIt.render(md);
+	tocHtml_ = '<div id="toc">' + tocHtml_ + '</div>';
+	return tocHtml_;
+}
+
+function renderMdToHtml(md, targetPath, params) {
+	// Remove the header because it's going to be added back as HTML
+	md = md.replace(/# Joplin\n/, '');
+
+	params.baseUrl = 'https://joplin.cozic.net';
 	params.imageBaseUrl = params.baseUrl + '/images';
+	params.tocHtml = tocHtml();
 	const html = Mustache.render(markdownToHtml(md), params);
 	fs.writeFileSync(targetPath, html);
 }
 
+function renderFileToHtml(sourcePath, targetPath, params) {
+	const md = fs.readFileSync(sourcePath, 'utf8');
+	return renderMdToHtml(md, targetPath, params);
+}
+
+function makeHomePageMd() {
+	let md = fs.readFileSync(rootDir + '/README.md', 'utf8');
+	md = md.replace(tocRegex_, '');
+	return md;
+}
+
 async function main() {
-	renderFileToHtml(rootDir + '/README.md', rootDir + '/docs/index.html', {
-		selectedHome: 'selected',
-	});
+	tocMd();
 
-	renderFileToHtml(rootDir + '/readme/terminal.md', rootDir + '/docs/terminal/index.html', {
-		selectedTerminal: 'selected',
-	});
+	// renderFileToHtml(rootDir + '/README.md', rootDir + '/docs/index.html', {
+	// 	selectedHome: 'selected',
+	// });
 
-	renderFileToHtml(rootDir + '/readme/desktop.md', rootDir + '/docs/desktop/index.html', {
-		selectedDesktop: 'selected',
-	});
+	// renderFileToHtml(rootDir + '/readme/terminal.md', rootDir + '/docs/terminal/index.html', {
+	// 	selectedTerminal: 'selected',
+	// });
 
-	renderFileToHtml(rootDir + '/readme/e2ee.md', rootDir + '/docs/help/e2ee/index.html', {});
-	renderFileToHtml(rootDir + '/readme/spec.md', rootDir + '/docs/help/spec/index.html', {});
+	// renderFileToHtml(rootDir + '/readme/desktop.md', rootDir + '/docs/desktop/index.html', {
+	// 	selectedDesktop: 'selected',
+	// });
+
+	// let readmeMd = fs.readFileSync(rootDir + '/README.md', 'utf8');
+
+	renderMdToHtml(makeHomePageMd(), rootDir + '/docs/index.html', {});
+
+	// renderFileToHtml(rootDir + '/README.md', rootDir + '/docs/index.html', {});
+	renderFileToHtml(rootDir + '/readme/terminal.md', rootDir + '/docs/terminal/index.html', {});
+	renderFileToHtml(rootDir + '/readme/debugging.md', rootDir + '/docs/debugging/index.html', {});
+	renderFileToHtml(rootDir + '/readme/desktop.md', rootDir + '/docs/desktop/index.html', {});
+	renderFileToHtml(rootDir + '/readme/mobile.md', rootDir + '/docs/mobile/index.html', {});
+	renderFileToHtml(rootDir + '/readme/e2ee.md', rootDir + '/docs/e2ee/index.html', {});
+	renderFileToHtml(rootDir + '/readme/spec.md', rootDir + '/docs/spec/index.html', {});
+	renderFileToHtml(rootDir + '/readme/stats.md', rootDir + '/docs/stats/index.html', {});
+	renderFileToHtml(rootDir + '/readme/changelog.md', rootDir + '/docs/changelog/index.html', {});
 	renderFileToHtml(rootDir + '/readme/donate.md', rootDir + '/docs/donate/index.html', {});
-	
 }
 
 main().catch((error) => {

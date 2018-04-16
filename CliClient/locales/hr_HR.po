@@ -420,6 +420,16 @@ msgid ""
 msgstr ""
 "Ovjera nije dovršena (nije dobivena potvrda ovjere - authentication token)."
 
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr ""
+
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr ""
@@ -694,6 +704,9 @@ msgstr "Bilješke i postavke su pohranjene u: %s"
 msgid "Save"
 msgstr "Spremi"
 
+msgid "Submit"
+msgstr ""
+
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
@@ -752,6 +765,11 @@ msgid ""
 "they will eventually be downloaded via synchronisation."
 msgstr ""
 
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation:"
+msgstr ""
+
 msgid "Status"
 msgstr "Status"
 
@@ -789,11 +807,12 @@ msgstr "Preimenuj bilježnicu:"
 msgid "Set alarm:"
 msgstr "Postavi upozorenje:"
 
-msgid "Search"
-msgstr "Traži"
-
 msgid "Layout"
 msgstr "Izgled"
+
+#, fuzzy
+msgid "Search..."
+msgstr "Traži"
 
 msgid "Some items cannot be synchronised."
 msgstr "Neke stavke se ne mogu sinkronizirati."
@@ -874,6 +893,9 @@ msgstr "Očisti"
 msgid "OneDrive Login"
 msgstr "OneDrive Login"
 
+msgid "Dropbox Login"
+msgstr ""
+
 msgid "Options"
 msgstr "Opcije"
 
@@ -898,9 +920,6 @@ msgstr "Sinkroniziraj"
 msgid "Notebooks"
 msgstr "Bilježnice"
 
-msgid "Searches"
-msgstr "Pretraživanja"
-
 msgid "Please select where the sync status should be exported to"
 msgstr "Odaberi lokaciju za izvoz statusa sinkronizacije"
 
@@ -911,6 +930,9 @@ msgstr "Korištenje: %s"
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Nepoznata zastavica: %s"
+
+msgid "Dropbox"
+msgstr ""
 
 msgid "File system"
 msgstr "Datotečni sustav"
@@ -1297,8 +1319,18 @@ msgstr "Potvrdi"
 msgid "Cancel synchronisation"
 msgstr "Prekini sinkronizaciju"
 
+msgid "New tags:"
+msgstr ""
+
+msgid "Type new tags or select from list"
+msgstr ""
+
 msgid "Joplin website"
 msgstr ""
+
+#, fuzzy
+msgid "Login with Dropbox"
+msgstr "Prijavi se u OneDrive"
 
 #, javascript-format
 msgid "Master Key %s"
@@ -1371,6 +1403,9 @@ msgstr "Obriši bilježnicu"
 msgid "Login with OneDrive"
 msgstr "Prijavi se u OneDrive"
 
+msgid "Search"
+msgstr "Traži"
+
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
@@ -1383,6 +1418,9 @@ msgstr "Trenutno nemaš nijednu bilježnicu. Stvori novu klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobro došli"
+
+#~ msgid "Searches"
+#~ msgstr "Pretraživanja"
 
 #, fuzzy
 #~ msgid ""

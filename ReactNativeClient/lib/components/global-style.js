@@ -1,4 +1,5 @@
 const Setting = require('lib/models/Setting.js');
+const { Platform } = require('react-native');
 
 const globalStyle = {
 	fontSize: 16,
@@ -14,6 +15,8 @@ const globalStyle = {
 	dividerColor: "#dddddd",
 	selectedColor: '#e5e5e5',
 	disabledOpacity: 0.2,
+	colorUrl: '#000CFF',
+	textSelectionColor: "#0096FF",
 
 	raisedBackgroundColor: "#0080EF",
 	raisedColor: "#003363",
@@ -36,36 +39,83 @@ globalStyle.marginTop = globalStyle.margin;
 globalStyle.marginBottom = globalStyle.margin;
 globalStyle.htmlMarginLeft = ((globalStyle.marginLeft / 10) * 0.6).toFixed(2) + 'em';
 
-globalStyle.icon = {
-	color: globalStyle.color,
-	fontSize: 30,
-};
+// globalStyle.icon = {
+// 	color: globalStyle.color,
+// 	fontSize: 30,
+// };
 
-globalStyle.lineInput = {
-	color: globalStyle.color,
-	backgroundColor: globalStyle.backgroundColor,
-};
+// globalStyle.lineInput = {
+// 	color: globalStyle.color,
+// 	backgroundColor: globalStyle.backgroundColor,
+// };
 
-globalStyle.buttonRow = {
-	flexDirection: 'row',
-	borderTopWidth: 1,
-	borderTopColor: globalStyle.dividerColor,
-	paddingTop: 10,
-};
+// globalStyle.buttonRow = {
+// 	flexDirection: 'row',
+// 	borderTopWidth: 1,
+// 	borderTopColor: globalStyle.dividerColor,
+// 	paddingTop: 10,
+// };
+
+// globalStyle.normalText = {
+// 	color: globalStyle.color,
+// 	fontSize: globalStyle.fontSize,
+// };
 
 let themeCache_ = {};
 
+function addExtraStyles(style) {
+	style.icon = {
+		color: style.color,
+		fontSize: 30,
+	};
+
+	style.lineInput = {
+		color: style.color,
+		backgroundColor: style.backgroundColor,
+	};
+
+	if (Platform.OS === 'ios') {
+		style.lineInput.borderBottomWidth = 1;
+		style.lineInput.borderBottomColor = style.dividerColor;
+	}
+
+	style.buttonRow = {
+		flexDirection: 'row',
+		borderTopWidth: 1,
+		borderTopColor: style.dividerColor,
+		paddingTop: 10,
+	};
+
+	style.normalText = {
+		color: style.color,
+		fontSize: style.fontSize,
+	};
+
+	style.urlText = {
+		color: style.colorUrl,
+		fontSize: style.fontSize,
+	};
+
+	return style;
+}
+
 function themeStyle(theme) {
+	if (!theme) {
+		console.warn('Theme not set!! Defaulting to Light theme');
+		theme = Setting.THEME_LIGHT;
+	}
+
 	if (themeCache_[theme]) return themeCache_[theme];
 
 	let output = Object.assign({}, globalStyle);
-	if (theme == Setting.THEME_LIGHT) return output;
+	if (theme == Setting.THEME_LIGHT) return addExtraStyles(output);
 
 	output.backgroundColor = '#1D2024';
 	output.color = '#dddddd';
 	output.colorFaded = '#777777';
 	output.dividerColor = '#555555';
 	output.selectedColor = '#333333';
+	output.textSelectionColor = '#00AEFF';
 
 	output.raisedBackgroundColor = "#0F2051";
 	output.raisedColor = "#788BC3";
@@ -76,7 +126,7 @@ function themeStyle(theme) {
 	output.htmlLinkColor = 'rgb(166,166,255)';
 
 	themeCache_[theme] = output;
-	return themeCache_[theme];
+	return addExtraStyles(themeCache_[theme]);
 }
 
 module.exports = { globalStyle, themeStyle };

@@ -404,6 +404,16 @@ msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "認証は完了していません(認証トークンが得られませんでした)"
 
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr ""
+
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr ""
@@ -676,6 +686,9 @@ msgstr "ノートと設定は、%sに保存されます。"
 msgid "Save"
 msgstr "保存"
 
+msgid "Submit"
+msgstr ""
+
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
@@ -738,6 +751,11 @@ msgid ""
 "they will eventually be downloaded via synchronisation."
 msgstr ""
 
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation:"
+msgstr ""
+
 msgid "Status"
 msgstr "状態"
 
@@ -775,11 +793,12 @@ msgstr "ノートブックの名前を変更："
 msgid "Set alarm:"
 msgstr "アラームをセット："
 
-msgid "Search"
-msgstr "検索"
-
 msgid "Layout"
 msgstr "レイアウト"
+
+#, fuzzy
+msgid "Search..."
+msgstr "検索"
 
 msgid "Some items cannot be synchronised."
 msgstr "いくつかの項目は同期されませんでした。"
@@ -860,6 +879,9 @@ msgstr "クリア"
 msgid "OneDrive Login"
 msgstr "OneDriveログイン"
 
+msgid "Dropbox Login"
+msgstr ""
+
 msgid "Options"
 msgstr "オプション"
 
@@ -884,9 +906,6 @@ msgstr "同期"
 msgid "Notebooks"
 msgstr "ノートブック"
 
-msgid "Searches"
-msgstr "検索"
-
 msgid "Please select where the sync status should be exported to"
 msgstr "同期状況の出力先を選択してください"
 
@@ -897,6 +916,9 @@ msgstr "使用方法: %s"
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "不明なフラグ: %s"
+
+msgid "Dropbox"
+msgstr ""
 
 msgid "File system"
 msgstr "ファイルシステム"
@@ -1287,8 +1309,18 @@ msgstr "確認"
 msgid "Cancel synchronisation"
 msgstr "同期の中止"
 
+msgid "New tags:"
+msgstr ""
+
+msgid "Type new tags or select from list"
+msgstr ""
+
 msgid "Joplin website"
 msgstr ""
+
+#, fuzzy
+msgid "Login with Dropbox"
+msgstr "OneDriveログイン"
 
 #, javascript-format
 msgid "Master Key %s"
@@ -1361,6 +1393,9 @@ msgstr "ノートブックを削除"
 msgid "Login with OneDrive"
 msgstr "OneDriveログイン"
 
+msgid "Search"
+msgstr "検索"
+
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
@@ -1375,6 +1410,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
+
+#~ msgid "Searches"
+#~ msgstr "検索"
 
 #, fuzzy
 #~ msgid ""

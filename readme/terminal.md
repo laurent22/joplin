@@ -2,11 +2,11 @@
 
 Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor.
 
-Notes exported from Evernote via .enex files [can be imported](http://joplin.cozic.net/#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
+Notes exported from Evernote via .enex files [can be imported](https://joplin.cozic.net/#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
 
-The notes can be [synchronised](#synchronisation) with various targets including the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
+The notes can be [synchronised](#synchronisation) with various targets including the file system (for example with a network directory), Nextcloud, Dropbox, OneDrive or WebDAV. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
 
-<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/ScreenshotTerminal.png" style="max-width: 60%">
+<img src="https://joplin.cozic.net/images/ScreenshotTerminal.png" style="max-width: 60%">
 
 # Installation
 
@@ -37,7 +37,7 @@ To start it, type `demo-joplin`.
 
 To start the application type `joplin`. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via [shortcuts](#shortcuts).
 
-<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/ScreenshotTerminalCaptions.png" height="450px">
+<img src="https://joplin.cozic.net/images/ScreenshotTerminalCaptions.png" height="450px">
 
 ## Input modes
 
@@ -101,6 +101,8 @@ Command | Description
 
 If the help is not fully visible, press `Tab` multiple times till the console is in focus and use the arrow keys or page up/down to scroll the text.
 
+For general information relevant to all the applications, see also [Joplin home page](https://joplin.cozic.net).
+
 # Importing notes from Evernote
 
 To import Evernote data, follow these steps:
@@ -113,14 +115,14 @@ To import Evernote data, follow these steps:
 
 One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as Nextcloud or OneDrive, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.
 
-Currently, synchronisation is possible with Nextcloud and OneDrive (by default) or the local filesystem. A Dropbox one will also be available once [this React Native bug](https://github.com/facebook/react-native/issues/14445) is fixed. To setup synchronisation please follow the instructions below. After that, the application will synchronise in the background whenever it is running, or you can click on "Synchronise" to start a synchronisation manually.
+Currently, synchronisation is possible with Nextcloud, Dropbox (by default) and OneDrive, or the local filesystem. To setup synchronisation please follow the instructions below. After that, the application will synchronise in the background whenever it is running, or you can click on "Synchronise" to start a synchronisation manually.
 
 ## Nextcloud synchronisation
 
 You will need to set the `sync.target` config variable and all the `sync.5.path`, `sync.5.username` and `sync.5.password` config variables to, respectively the Nextcloud WebDAV URL, your username and your password. This can be done from the command line mode using:
 
 	:config sync.target 5
-	:config sync.5.path https://example.com/nextcloud/remote.php/dav/files/USERNAME/
+	:config sync.5.path https://example.com/nextcloud/remote.php/webdav/Joplin
 	:config sync.5.username YOUR_USERNAME
 	:config sync.5.password YOUR_PASSWORD
 
@@ -130,11 +132,11 @@ If synchronisation does not work, please consult the logs in the app profile dir
 
 Select the "WebDAV" synchronisation target and follow the same instructions as for Nextcloud above.
 
-## OneDrive synchronisation
+## OneDrive and Dropbox synchronisation
 
-When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
+For Dropbox, type `:config sync.target 7`. For OneDrive, type `:config sync.target 3`. Then type `sync` to login to the service and start the synchronisation process.
 
-To initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). It is possible to also synchronise outside of the user interface by typing `joplin sync` from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:
+It is possible to also synchronise outside of the user interface by typing `joplin sync` from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:
 
 	*/30 * * * * /path/to/joplin sync
 
@@ -142,13 +144,13 @@ To initiate the synchronisation process, type `:sync`. You will be asked to foll
 
 When Ctrl+Clicking a URL, most terminals will open that URL in the default browser. However, one issue, especially with long URLs, is that they can end up like this:
 
-<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/UrlCut.png" width="300px">
+<img src="https://joplin.cozic.net/images/UrlCut.png" width="300px">
 
 Not only it makes the text hard to read, but the link, being cut in two, will also not be clickable.
 
 As a solution Joplin tries to start a mini-server in the background and, if successful, all the links will be converted to a much shorter URL:
 
-<img src="https://raw.githubusercontent.com/laurent22/joplin/master/docs/images/UrlNoCut.png" width="300px">
+<img src="https://joplin.cozic.net/images/UrlNoCut.png" width="300px">
 
 Since this is still an actual URL, the terminal will still make it clickable. And with shorter URLs, the text is more readable and the links unlikely to be cut. Both resources (files that are attached to notes) and external links are handled in this way.
 
@@ -283,8 +285,9 @@ The following commands are available in [command-line mode](#command-line-mode):
 	    locale                   Language.
 	                             Type: Enum.
 	                             Possible values: eu (Basque), hr_HR (Croatian), 
-	                             de_DE (Deutsch), en_GB (English), es_ES 
-	                             (Español), fr_FR (Français), it_IT (Italiano), 
+	                             cs_CZ (Czech), da_DK (Dansk), de_DE (Deutsch), 
+	                             en_GB (English), es_ES (Español), fr_FR 
+	                             (Français), gl_ES (Galician), it_IT (Italiano), 
 	                             nl_BE (Nederlands), pt_BR (Português (Brasil)), 
 	                             ru_RU (Русский), zh_CN (中文 (简体)), ja_JP (日本語).
 	                             Default: "en_GB"
@@ -334,8 +337,8 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                             Type: Enum.
 	                             Possible values: 2 (File system), 3 (OneDrive), 4 
 	                             (OneDrive Dev (For testing only)), 5 (Nextcloud), 
-	                             6 (WebDAV).
-	                             Default: 3
+	                             6 (WebDAV), 7 (Dropbox).
+	                             Default: 7
 	                             
 	    sync.2.path              Directory to synchronise with (absolute path).
 	                             The path to synchronise with when file system 

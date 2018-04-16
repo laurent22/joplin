@@ -14,8 +14,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.3\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Pour supprimer une vignette, enlever là des notes associées."
@@ -415,6 +413,20 @@ msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "Impossible d'autoriser le logiciel (jeton d'identification non-reçu)."
 
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+"Pour permettre à Joplin de synchroniser avec Dropbox, veuillez suivre les "
+"étapes ci-dessous :"
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+"Étape 1: Veuillez ouvrir cette URL dans votre navigateur internet pour "
+"autoriser le logiciel :"
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "Étape 2 : Entrez le code fourni par Dropbox :"
+
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr ""
@@ -689,6 +701,9 @@ msgstr "Les notes et paramètres se trouve dans : %s"
 msgid "Save"
 msgstr "Enregistrer"
 
+msgid "Submit"
+msgstr "Envoyer"
+
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
@@ -762,6 +777,13 @@ msgstr ""
 "de vos objets, cependant le logiciel n'y a pour l'instant pas accès. Il est "
 "probable qu'elle vont être prochainement disponible via la synchronisation."
 
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation:"
+msgstr ""
+"Pour plus d'informations sur l'encryption de bout en bout, ainsi que des "
+"conseils pour l'activer, veuillez consulter la documentation :"
+
 msgid "Status"
 msgstr "État"
 
@@ -799,11 +821,11 @@ msgstr "Renommer le carnet :"
 msgid "Set alarm:"
 msgstr "Régler alarme :"
 
-msgid "Search"
-msgstr "Chercher"
-
 msgid "Layout"
 msgstr "Disposition"
+
+msgid "Search..."
+msgstr "Chercher..."
 
 msgid "Some items cannot be synchronised."
 msgstr "Certains objets ne peuvent être synchronisés."
@@ -885,6 +907,9 @@ msgstr "Supprimer"
 msgid "OneDrive Login"
 msgstr "Connexion OneDrive"
 
+msgid "Dropbox Login"
+msgstr "Connection à Dropbox"
+
 msgid "Options"
 msgstr "Options"
 
@@ -909,9 +934,6 @@ msgstr "Synchroniser"
 msgid "Notebooks"
 msgstr "Carnets"
 
-msgid "Searches"
-msgstr "Recherches"
-
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 "Veuillez sélectionner un répertoire ou exporter l'état de la synchronisation"
@@ -923,6 +945,9 @@ msgstr "Utilisation : %s"
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Paramètre inconnu : %s"
+
+msgid "Dropbox"
+msgstr "Dropbox"
 
 msgid "File system"
 msgstr "Système de fichier"
@@ -1314,8 +1339,17 @@ msgstr "Confirmer"
 msgid "Cancel synchronisation"
 msgstr "Annuler synchronisation"
 
+msgid "New tags:"
+msgstr "Nouvelles étiquettes :"
+
+msgid "Type new tags or select from list"
+msgstr "Entrez de nouvelles étiquettes ou sélectionnez de la liste"
+
 msgid "Joplin website"
 msgstr "Site web de Joplin"
+
+msgid "Login with Dropbox"
+msgstr "Se connecter à Dropbox"
 
 #, javascript-format
 msgid "Master Key %s"
@@ -1387,6 +1421,9 @@ msgstr "Supprimer le carnet"
 msgid "Login with OneDrive"
 msgstr "Se connecter à OneDrive"
 
+msgid "Search"
+msgstr "Chercher"
+
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
@@ -1401,6 +1438,16 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid ""
+#~ "For more information about End-To-End Encryption (E2EE) and advices on "
+#~ "how to enable it please check the documentation"
+#~ msgstr ""
+#~ "Pour plus d'informations sur l'encryption de bout en bout, ainsi que des "
+#~ "conseils pour l'activer, veuillez consulter la documentation"
+
+#~ msgid "Searches"
+#~ msgstr "Recherches"
 
 #~ msgid ""
 #~ "Release notes:\n"
@@ -1588,12 +1635,6 @@ msgstr "Bienvenue"
 
 #~ msgid "Done."
 #~ msgstr "Terminé."
-
-#~ msgid ""
-#~ "Please open this URL in your browser to authenticate the application:"
-#~ msgstr ""
-#~ "Veuillez ouvrir cette URL dans votre navigateur internet pour autoriser "
-#~ "le logiciel :"
 
 #~ msgid "Note does not exist."
 #~ msgstr "Cette note n'existe pas."

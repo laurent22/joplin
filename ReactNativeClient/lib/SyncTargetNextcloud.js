@@ -28,7 +28,7 @@ class SyncTargetNextcloud extends BaseSyncTarget {
 		return _('Nextcloud');
 	}
 
-	isAuthenticated() {
+	async isAuthenticated() {
 		return true;
 	}
 

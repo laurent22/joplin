@@ -372,6 +372,16 @@ msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr ""
 
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr ""
+
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr ""
@@ -615,6 +625,9 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+msgid "Submit"
+msgstr ""
+
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
@@ -673,6 +686,11 @@ msgid ""
 "they will eventually be downloaded via synchronisation."
 msgstr ""
 
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation:"
+msgstr ""
+
 msgid "Status"
 msgstr ""
 
@@ -708,10 +726,10 @@ msgstr ""
 msgid "Set alarm:"
 msgstr ""
 
-msgid "Search"
+msgid "Layout"
 msgstr ""
 
-msgid "Layout"
+msgid "Search..."
 msgstr ""
 
 msgid "Some items cannot be synchronised."
@@ -789,6 +807,9 @@ msgstr ""
 msgid "OneDrive Login"
 msgstr ""
 
+msgid "Dropbox Login"
+msgstr ""
+
 msgid "Options"
 msgstr ""
 
@@ -813,9 +834,6 @@ msgstr ""
 msgid "Notebooks"
 msgstr ""
 
-msgid "Searches"
-msgstr ""
-
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 
@@ -825,6 +843,9 @@ msgstr ""
 
 #, javascript-format
 msgid "Unknown flag: %s"
+msgstr ""
+
+msgid "Dropbox"
 msgstr ""
 
 msgid "File system"
@@ -1193,7 +1214,16 @@ msgstr ""
 msgid "Cancel synchronisation"
 msgstr ""
 
+msgid "New tags:"
+msgstr ""
+
+msgid "Type new tags or select from list"
+msgstr ""
+
 msgid "Joplin website"
+msgstr ""
+
+msgid "Login with Dropbox"
 msgstr ""
 
 #, javascript-format
@@ -1264,6 +1294,9 @@ msgid "Delete notebook"
 msgstr ""
 
 msgid "Login with OneDrive"
+msgstr ""
+
+msgid "Search"
 msgstr ""
 
 msgid ""

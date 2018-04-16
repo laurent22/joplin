@@ -36,6 +36,7 @@ const { WelcomeScreen } = require('lib/components/screens/welcome.js');
 const { SearchScreen } = require('lib/components/screens/search.js');
 const { OneDriveLoginScreen } = require('lib/components/screens/onedrive-login.js');
 const { EncryptionConfigScreen } = require('lib/components/screens/encryption-config.js');
+const { DropboxLoginScreen } = require('lib/components/screens/dropbox-login.js');
 const Setting = require('lib/models/Setting.js');
 const { MenuContext } = require('react-native-popup-menu');
 const { SideMenu } = require('lib/components/side-menu.js');
@@ -55,10 +56,12 @@ const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
 const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('lib/SyncTargetWebDAV.js');
+const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetWebDAV);
+SyncTargetRegistry.addClass(SyncTargetDropbox);
 
 // Disabled because not fully working
 //SyncTargetRegistry.addClass(SyncTargetFilesystem);
@@ -69,8 +72,17 @@ const EncryptionService = require('lib/services/EncryptionService');
 
 let storeDispatch = function(action) {};
 
+const logReducerAction = function(action) {
+	if (['SIDE_MENU_OPEN_PERCENT', 'SYNC_REPORT_UPDATE'].indexOf(action.type) >= 0) return;
+
+	let msg = [action.type];
+	if (action.routeName) msg.push(action.routeName);
+
+	reg.logger().info('Reducer action', msg.join(', '));
+}
+
 const generalMiddleware = store => next => async (action) => {
-	if (['SIDE_MENU_OPEN_PERCENT', 'SYNC_REPORT_UPDATE'].indexOf(action.type) < 0) reg.logger().info('Reducer action', action.type);
+	logReducerAction(action);
 	PoorManIntervals.update(); // This function needs to be called regularly so put it here
 
 	const result = next(action);
@@ -365,16 +377,6 @@ async function initialize(dispatch) {
 			await db.open({ name: 'joplin.sqlite' })
 		} else {
 			await db.open({ name: 'joplin-68.sqlite' })
-			//await db.open({ name: 'joplin-67.sqlite' })
-
-			// await db.exec('DELETE FROM notes');
-			// await db.exec('DELETE FROM folders');
-			// await db.exec('DELETE FROM tags');
-			// await db.exec('DELETE FROM note_tags');
-			// await db.exec('DELETE FROM resources');
-			// await db.exec('DELETE FROM deleted_items');
-
-			// await db.exec('UPDATE notes SET is_conflict = 1 where id like "546f%"');
 		}
 
 		reg.logger().info('Database is ready.');
@@ -559,6 +561,7 @@ class AppComponent extends React.Component {
 			Note: { screen: NoteScreen },
 			Folder: { screen: FolderScreen },
 			OneDriveLogin: { screen: OneDriveLoginScreen },
+			DropboxLogin: { screen: DropboxLoginScreen },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			Log: { screen: LogScreen },
 			Status: { screen: StatusScreen },

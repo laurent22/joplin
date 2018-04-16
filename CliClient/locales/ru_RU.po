@@ -414,6 +414,16 @@ msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "Аутентификация не была завершена (не получен токен аутентификации)."
 
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr ""
+
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr ""
@@ -687,6 +697,9 @@ msgstr "Заметки и настройки сохранены в: %s"
 msgid "Save"
 msgstr "Сохранить"
 
+msgid "Submit"
+msgstr ""
+
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
@@ -760,6 +773,11 @@ msgstr ""
 "элементов, однако у приложения сейчас нет к ним доступа. Скорее всего, они "
 "загрузятся при синхронизации."
 
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation:"
+msgstr ""
+
 msgid "Status"
 msgstr "Статус"
 
@@ -795,11 +813,12 @@ msgstr "Переименовать блокнот:"
 msgid "Set alarm:"
 msgstr "Установить напоминание:"
 
-msgid "Search"
-msgstr "Поиск"
-
 msgid "Layout"
 msgstr "Вид"
+
+#, fuzzy
+msgid "Search..."
+msgstr "Поиск"
 
 msgid "Some items cannot be synchronised."
 msgstr "Некоторые элементы не могут быть синхронизированы."
@@ -878,6 +897,9 @@ msgstr "Очистить"
 msgid "OneDrive Login"
 msgstr "Вход в OneDrive"
 
+msgid "Dropbox Login"
+msgstr ""
+
 msgid "Options"
 msgstr "Настройки"
 
@@ -902,9 +924,6 @@ msgstr "Синхронизировать"
 msgid "Notebooks"
 msgstr "Блокноты"
 
-msgid "Searches"
-msgstr "Запросы"
-
 msgid "Please select where the sync status should be exported to"
 msgstr "Выберите, куда должен быть экспортирован статус синхронизации"
 
@@ -915,6 +934,9 @@ msgstr "Использование: %s"
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Неизвестный флаг: %s"
+
+msgid "Dropbox"
+msgstr ""
 
 msgid "File system"
 msgstr "Файловая система"
@@ -1304,8 +1326,18 @@ msgstr "Подтвердить"
 msgid "Cancel synchronisation"
 msgstr "Отменить синхронизацию"
 
+msgid "New tags:"
+msgstr ""
+
+msgid "Type new tags or select from list"
+msgstr ""
+
 msgid "Joplin website"
 msgstr "Сайт Joplin"
+
+#, fuzzy
+msgid "Login with Dropbox"
+msgstr "Войти в OneDrive"
 
 #, javascript-format
 msgid "Master Key %s"
@@ -1377,6 +1409,9 @@ msgstr "Удалить блокнот"
 msgid "Login with OneDrive"
 msgstr "Войти в OneDrive"
 
+msgid "Search"
+msgstr "Поиск"
+
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
@@ -1389,6 +1424,9 @@ msgstr "У вас сейчас нет блокнота. Создайте его 
 
 msgid "Welcome"
 msgstr "Добро пожаловать"
+
+#~ msgid "Searches"
+#~ msgstr "Запросы"
 
 #, fuzzy
 #~ msgid ""

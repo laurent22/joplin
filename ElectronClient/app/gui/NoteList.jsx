@@ -11,6 +11,8 @@ const MenuItem = bridge().MenuItem;
 const eventManager = require('../eventManager');
 const InteropService = require('lib/services/InteropService');
 const InteropServiceHelper = require('../InteropServiceHelper.js');
+const Search = require('lib/models/Search');
+const Mark = require('mark.js/dist/mark.min.js');
 
 class NoteListComponent extends React.Component {
 
@@ -164,6 +166,12 @@ class NoteListComponent extends React.Component {
 
 		const hPadding = 10;
 
+		let highlightedWords = [];
+		if (this.props.notesParentType === 'Search') {
+			const search = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
+			highlightedWords = search ? Search.keywords(search.query_pattern) : [];
+		}
+
 		let style = Object.assign({ width: width }, this.style().listItem);
 
 		if (this.props.selectedNoteIds.indexOf(item.id) >= 0) {
@@ -182,8 +190,30 @@ class NoteListComponent extends React.Component {
 		listItemTitleStyle.paddingLeft = !checkbox ? hPadding : 4;
 		if (item.is_todo && !!item.todo_completed) listItemTitleStyle = Object.assign(listItemTitleStyle, this.style().listItemTitleCompleted);
 
+		let displayTitle = Note.displayTitle(item);
+		let titleComp = null;
+
+		if (highlightedWords.length) {
+			const titleElement = document.createElement('span');
+			titleElement.textContent = displayTitle;
+			const mark = new Mark(titleElement, {
+				exclude: ['img'],
+				acrossElements: true,
+			});
+			mark.mark(highlightedWords);
+
+			// Note: in this case it is safe to use dangerouslySetInnerHTML because titleElement
+			// is a span tag that we created and that contains data that's been inserted as plain text
+			// with `textContent` so it cannot contain any XSS attacks. We use this feature because
+			// mark.js can only deal with DOM elements.
+			// https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml
+			titleComp = <span dangerouslySetInnerHTML={{ __html: titleElement.outerHTML }}></span>
+		} else {
+			titleComp = <span>{displayTitle}</span>
+		}
+
 		// Need to include "todo_completed" in key so that checkbox is updated when
-		// item is changed via sync.
+		// item is changed via sync.		
 		return <div key={item.id + '_' + item.todo_completed} style={style}>
 			{checkbox}
 			<a
@@ -196,7 +226,7 @@ class NoteListComponent extends React.Component {
 				onDragStart={(event) => onDragStart(event) }
 				data-id={item.id}
 			>
-			{Note.displayTitle(item)}
+			{titleComp}
 			</a>
 		</div>
 	}
@@ -239,7 +269,9 @@ const mapStateToProps = (state) => {
 		folders: state.folders,
 		selectedNoteIds: state.selectedNoteIds,
 		theme: state.settings.theme,
-		// uncompletedTodosOnTop: state.settings.uncompletedTodosOnTop,
+		notesParentType: state.notesParentType,
+		searches: state.searches,
+		selectedSearchId: state.selectedSearchId,
 	};
 };
 

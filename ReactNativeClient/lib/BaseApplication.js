@@ -29,6 +29,7 @@ const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
 const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('lib/SyncTargetWebDAV.js');
+const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
 const EncryptionService = require('lib/services/EncryptionService');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseService = require('lib/services/BaseService');
@@ -38,6 +39,7 @@ SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetWebDAV);
+SyncTargetRegistry.addClass(SyncTargetDropbox);
 
 class BaseApplication {
 
@@ -260,7 +262,7 @@ class BaseApplication {
 		const newState = store.getState();
 		let refreshNotes = false;
 
-		if (action.type == 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE') {
+		if (action.type == 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE' || (action.type === 'SEARCH_UPDATE' && newState.notesParentType === 'Folder')) {
 			Setting.setValue('activeFolderId', newState.selectedFolderId);
 			this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
 			refreshNotes = true;
@@ -421,8 +423,14 @@ class BaseApplication {
 		if (Setting.value('firstStart')) {
 			const locale = shim.detectAndSetLocale(Setting);
 			reg.logger().info('First start: detected locale as ' + locale);
-			if (Setting.value('env') === 'dev') Setting.setValue('sync.target', SyncTargetRegistry.nameToId('onedrive_dev'));
-			Setting.setValue('firstStart', 0)
+
+			if (Setting.value('env') === 'dev') {
+				Setting.setValue('showTrayIcon', 0);
+				Setting.setValue('autoUpdateEnabled', 0);
+				Setting.setValue('sync.interval', 3600);
+			}
+
+			Setting.setValue('firstStart', 0);
 		} else {
 			setLocale(Setting.value('locale'));
 		}

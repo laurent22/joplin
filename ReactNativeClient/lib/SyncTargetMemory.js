@@ -19,7 +19,7 @@ class SyncTargetMemory extends BaseSyncTarget {
 		return 'Memory';
 	}
 
-	isAuthenticated() {
+	async isAuthenticated() {
 		return true;
 	}
 

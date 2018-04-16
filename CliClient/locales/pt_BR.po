@@ -411,6 +411,16 @@ msgid ""
 msgstr ""
 "A autenticação não foi concluída (não recebeu um token de autenticação)."
 
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr ""
+
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr ""
@@ -686,6 +696,9 @@ msgstr "Notas e configurações estão armazenadas em: %s"
 msgid "Save"
 msgstr "Salvar"
 
+msgid "Submit"
+msgstr ""
+
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
@@ -757,6 +770,11 @@ msgstr ""
 "itens, contudo a aplicação atualmente não tem acesso a elas. Provavelmente, "
 "elas serão baixadas via sincronização."
 
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation:"
+msgstr ""
+
 msgid "Status"
 msgstr "Status"
 
@@ -793,11 +811,12 @@ msgstr "Renomear caderno:"
 msgid "Set alarm:"
 msgstr "Definir alarme:"
 
-msgid "Search"
-msgstr "Procurar"
-
 msgid "Layout"
 msgstr "Layout"
+
+#, fuzzy
+msgid "Search..."
+msgstr "Procurar"
 
 msgid "Some items cannot be synchronised."
 msgstr "Alguns itens não podem ser sincronizados."
@@ -876,6 +895,9 @@ msgstr "Limpar (clear)"
 msgid "OneDrive Login"
 msgstr "Login no OneDrive"
 
+msgid "Dropbox Login"
+msgstr ""
+
 msgid "Options"
 msgstr "Opções"
 
@@ -900,9 +922,6 @@ msgstr "Sincronizar"
 msgid "Notebooks"
 msgstr "Cadernos"
 
-msgid "Searches"
-msgstr "Pesquisas"
-
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 "Favor selecionar o local para onde o status de sincronia deveria ser "
@@ -915,6 +934,9 @@ msgstr "Uso: %s"
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Flag desconhecido: %s"
+
+msgid "Dropbox"
+msgstr ""
 
 msgid "File system"
 msgstr "Sistema de arquivos"
@@ -1305,8 +1327,18 @@ msgstr "Confirmar"
 msgid "Cancel synchronisation"
 msgstr "Cancelar sincronização"
 
+msgid "New tags:"
+msgstr ""
+
+msgid "Type new tags or select from list"
+msgstr ""
+
 msgid "Joplin website"
 msgstr "Site do Joplin"
+
+#, fuzzy
+msgid "Login with Dropbox"
+msgstr "Login com OneDrive"
 
 #, javascript-format
 msgid "Master Key %s"
@@ -1378,6 +1410,9 @@ msgstr "Excluir caderno"
 msgid "Login with OneDrive"
 msgstr "Login com OneDrive"
 
+msgid "Search"
+msgstr "Procurar"
+
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
@@ -1390,6 +1425,9 @@ msgstr "Você não possui cadernos. Crie um clicando no botão (+)."
 
 msgid "Welcome"
 msgstr "Bem-vindo"
+
+#~ msgid "Searches"
+#~ msgstr "Pesquisas"
 
 #~ msgid ""
 #~ "Release notes:\n"
