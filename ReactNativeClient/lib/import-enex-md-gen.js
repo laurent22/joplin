@@ -9,21 +9,6 @@ const SPACE = "[[SPACE]]";
 const MONOSPACE_OPEN = "[[MONOSPACE_OPEN]]";
 const MONOSPACE_CLOSE = "[[MONOSPACE_CLOSE]]";
 
-// Enable debugging
-const DEBUG_MONOSPACE_MERGE = false;
-
-
-function debugMD(text, md) {
-	if (DEBUG_MONOSPACE_MERGE) {
-		console.log("< " + text + " START>");
-		for (let i = 0; i < md.length; i++) { 
-			console.log("%i: \"%s\"", i, md[i]);
-		}
-		console.log("< " + text + " STOP>");
-	}
-}
-
-
 // This function will return a list of all monospace sections with a flag saying whether they can be merged or not
 function findMonospaceSections(md, ignoreMonospace = false) {
 	let temp = [];
@@ -37,8 +22,6 @@ function findMonospaceSections(md, ignoreMonospace = false) {
 		let v = md[i];
 		
 		if (v == MONOSPACE_OPEN) {
-			// Remember where monospace section begins, later it will be replaced with appropriate markdown (` or ```) 
-
 			if (section != null) throw new Error('Monospace open tag detected while the previous was not closed'); // Sanity check, but normally not possible
 
 			let monospaceSection = {
@@ -50,6 +33,7 @@ function findMonospaceSections(md, ignoreMonospace = false) {
 			section = monospaceSection;
 
 			if (!ignoreMonospace) {
+				// Remember where monospace section begins, later it will be replaced with appropriate markdown (` or ```) 
 				section.openIndex = temp.push(v) - 1;
 			} 
 			// Add an empty string, it can be later replaced with newline if necessary
@@ -60,32 +44,20 @@ function findMonospaceSections(md, ignoreMonospace = false) {
 				section.mergeAllowed = false;
 			}
 
-			if (DEBUG_MONOSPACE_MERGE) {
-				console.log("> MONOSPACE_OPEN, openIndex: %o, closeIndex: %o, mergeAllowed: %o, mergeWithPrevious: %o", 
-					section.openIndex, section.closeIndex, section.mergeAllowed, section.mergeWithPrevious);
-			}
-
 		} else if (v == MONOSPACE_CLOSE) {
-			// Remember where monospace section begins, later it will be replaced with appropriate markdown (` or ```) 
-
 			if (section == null) throw new Error('Monospace tag was closed without being open before'); // Sanity check, but normally not possible
 			if (section.closeIndex != null) throw new Error('Monospace tag is closed for the second time'); // Sanity check, but normally not possible
 
 			// Add an empty string, it can be later replaced with newline if necessary
 			temp.push("");
 			if (!ignoreMonospace) {
+				// Remember where monospace section ends, later it will be replaced with appropriate markdown (` or ```) 
 				section.closeIndex = temp.push(v) - 1;
 			}
 
 			if (md[i+1] != BLOCK_CLOSE) {
 				// We cannot merge inline code
 				section.mergeAllowed = false;
-			}
-
-			if (DEBUG_MONOSPACE_MERGE) {
-				console.log("> \"" + md[i-1] + "\"");
-				console.log("> MONOSPACE_CLOSE, openIndex: %o, closeIndex: %o, mergeAllowed: %o, mergeWithPrevious: %o", 
-					section.openIndex, section.closeIndex, section.mergeAllowed, section.mergeWithPrevious);
 			}
 
 			sections.push(section);
@@ -110,19 +82,14 @@ function findMonospaceSections(md, ignoreMonospace = false) {
 	};
 }
 
-
-// This function is looping over monospace sections and collapsing what it can merge
+// This function is looping over monospace sections and merging what it can merge
 function mergeMonospaceSections(md, sections, ignoreMonospace = false) {
 
 	const USE_BLOCK_TAG = 1;
 	const USE_INLINE_TAG = 2;
 	const USE_EMPTY_TAG = 3;
 
-	const toMonospace = (md, section, startTag, endTag, dbg = "") => {
-		if (DEBUG_MONOSPACE_MERGE) {
-			console.log("> TO_MONOSPACE, openIndex: %o, closeIndex: %o, startTag: %o, endTag: %o, DBG: %o",
-				section.openIndex, section.closeIndex, startTag, endTag, dbg);
-		}
+	const toMonospace = (md, section, startTag, endTag) => {
 		switch (startTag) {
 			case USE_BLOCK_TAG:
 				md[section.openIndex] = "```";
@@ -167,8 +134,8 @@ function mergeMonospaceSections(md, sections, ignoreMonospace = false) {
 			if (s.mergeAllowed) {
 				return s;
 			}
-			// If cannot merge then convert onto inline code
-			toMonospace(md, s, USE_INLINE_TAG, USE_INLINE_TAG, "getCollapsibleSection");
+			// If cannot merge then convert into inline code
+			toMonospace(md, s, USE_INLINE_TAG, USE_INLINE_TAG);
 		}
 		return null;
 	}
@@ -184,9 +151,11 @@ function mergeMonospaceSections(md, sections, ignoreMonospace = false) {
 			// We can merge left and right
 			if (isFirst) {
 				isFirst = false;
-				toMonospace(md, left, USE_BLOCK_TAG, USE_EMPTY_TAG, "First section");
+				// First section
+				toMonospace(md, left, USE_BLOCK_TAG, USE_EMPTY_TAG);
 			} else {
-				toMonospace(md, left, USE_EMPTY_TAG, USE_EMPTY_TAG, "Middle section");
+				// Middle section
+				toMonospace(md, left, USE_EMPTY_TAG, USE_EMPTY_TAG);
 			}
 			left = right;
 			right = getSection();
@@ -194,16 +163,15 @@ function mergeMonospaceSections(md, sections, ignoreMonospace = false) {
 
 		if (isFirst) {
 			// Could not merge, convert to inline code
-			toMonospace(md, left, USE_INLINE_TAG, USE_INLINE_TAG, "Left inline section");
+			toMonospace(md, left, USE_INLINE_TAG, USE_INLINE_TAG);
 		} else {
 			// Was merged, add block end tag
-			toMonospace(md, left, USE_EMPTY_TAG, USE_BLOCK_TAG, "Final section");
+			toMonospace(md, left, USE_EMPTY_TAG, USE_BLOCK_TAG);
 		}
 
 		left = getMergeableSection(right);
 	}
 }
-
 
 // This function will try to merge monospace sections
 // It works in two phases:
@@ -224,11 +192,8 @@ function mergeMonospaceSectionsWrapper(md, ignoreMonospace = false) {
 		}
 	} 
 
-	debugMD("DEBUG: after merging monospace sections", temp);
-
 	return temp;		
 }
-
 
 function processMdArrayNewLines(md, isTable = false) {
 	// Try to merge MONOSPACE sections, works good when when not parsing a table
@@ -751,7 +716,6 @@ function enexXmlToMdArray(stream, resources, importOptions = null) {
 					if (monospace) {
 						state.inMonospaceFont = true;
 						section.lines.push(MONOSPACE_OPEN);
-						//console.log("OPEN:  tag: %s, style: ", n, style);
 					}
 				} 
 			} else if (["span", "font", 'sup', 'cite', 'abbr', 'small', 'tt', 'sub', 'colgroup', 'col', 'ins', 'caption', 'var', 'map', 'area'].indexOf(n) >= 0) {
@@ -779,7 +743,6 @@ function enexXmlToMdArray(stream, resources, importOptions = null) {
 				if (importOptions.mergeMonospaceSections && state.inMonospaceFont) {
 					state.inMonospaceFont = false;
 					section.lines.push(MONOSPACE_CLOSE);
-					//console.log("CLOSE: tag: %s, lines[n-1]: '%s', lines[n]: '%s'", n, section.lines[section.lines.length - 2], section.lines[section.lines.length - 1]);
 				}
 			} else if (isIgnoredEndTag(n)) {
 				// Skip
@@ -1018,9 +981,6 @@ async function enexXmlToMd(stream, resources) {
 		mdLines = addResourceTag(mdLines, r, r.filename);
 		firstAttachment = false;
 	}
-
-	//console.log(mdLines);
-	debugMD("DEBUG: raw MdLines", mdLines);
 
 	return processMdArrayNewLines(mdLines);
 }
