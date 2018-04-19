@@ -43,6 +43,7 @@ class Setting extends BaseModel {
 				options[Setting.DATE_FORMAT_3] = time.formatMsToLocal(now, Setting.DATE_FORMAT_3);
 				options[Setting.DATE_FORMAT_4] = time.formatMsToLocal(now, Setting.DATE_FORMAT_4);
 				options[Setting.DATE_FORMAT_5] = time.formatMsToLocal(now, Setting.DATE_FORMAT_5);
+				options[Setting.DATE_FORMAT_6] = time.formatMsToLocal(now, Setting.DATE_FORMAT_6);
 				return options;
 			}},
 			'timeFormat': { value: Setting.TIME_FORMAT_1, type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Time format'), options: () => {
@@ -533,6 +534,7 @@ Setting.DATE_FORMAT_2 = 'DD/MM/YY';
 Setting.DATE_FORMAT_3 = 'MM/DD/YYYY';
 Setting.DATE_FORMAT_4 = 'MM/DD/YY';
 Setting.DATE_FORMAT_5 = 'YYYY-MM-DD';
+Setting.DATE_FORMAT_6 = 'DD.MM.YYYY';
 
 Setting.TIME_FORMAT_1 = 'HH:mm';
 Setting.TIME_FORMAT_2 = 'h:mm A';
