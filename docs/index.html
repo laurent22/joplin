@@ -304,6 +304,24 @@
 </tbody>
 </table>
 <h2 id="terminal-application">Terminal application</h2>
+<table>
+<thead>
+<tr>
+<th>Operating system</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>macOS</td>
+<td><code>brew install joplin</code></td>
+</tr>
+<tr>
+<td>Linux or Windows (via <a href="https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&amp;MSPPError=-2147217396">WSL</a>)</td>
+<td><strong>Important:</strong> First, <a href="https://nodejs.org/en/download/package-manager/">install Node 8+</a>. Node 8 is LTS but not yet available everywhere so you might need to manually install it.<br/><br/><code>NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin</code><br/><code>sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin</code><br><br>By default, the application binary will be installed under <code>~/.joplin-bin</code>. You may change this directory if needed. Alternatively, if your npm permissions are setup as described <a href="https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory">here</a> (Option 2) then simply running <code>npm -g install joplin</code> would work.</td>
+</tr>
+</tbody>
+</table>
 <p>On macOS:</p>
 <pre><code>brew install joplin
 </code></pre><p>On Linux or Windows (via <a href="https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&amp;MSPPError=-2147217396">WSL</a>):</p>
@@ -464,14 +482,14 @@ $$
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/hr.png" alt=""></td>
 <td>Croatian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/hr_HR.po">hr_HR</a></td>
-<td>Hrvoje Mandić <a href="&#x6d;&#97;&#105;&#108;&#116;&#x6f;&#58;&#116;&#x72;&#x62;&#x75;&#104;&#x6f;&#x6d;&#64;&#110;&#101;&#116;&#46;&#x68;&#114;">&#116;&#x72;&#x62;&#x75;&#104;&#x6f;&#x6d;&#64;&#110;&#101;&#116;&#46;&#x68;&#114;</a></td>
+<td>Hrvoje Mandić <a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#58;&#x74;&#114;&#x62;&#117;&#104;&#x6f;&#109;&#64;&#x6e;&#x65;&#x74;&#46;&#x68;&#114;">&#x74;&#114;&#x62;&#117;&#104;&#x6f;&#109;&#64;&#x6e;&#x65;&#x74;&#46;&#x68;&#114;</a></td>
 <td>62%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/cz.png" alt=""></td>
 <td>Czech</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/cs_CZ.po">cs_CZ</a></td>
-<td>Lukas Helebrandt <a href="&#x6d;&#97;&#105;&#108;&#116;&#111;&#58;&#108;&#117;&#x6b;&#97;&#x73;&#64;&#x61;&#x69;&#121;&#x61;&#46;&#99;&#x7a;">&#108;&#117;&#x6b;&#97;&#x73;&#64;&#x61;&#x69;&#121;&#x61;&#46;&#99;&#x7a;</a></td>
+<td>Lukas Helebrandt <a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#108;&#x75;&#x6b;&#97;&#x73;&#64;&#x61;&#x69;&#121;&#97;&#46;&#99;&#122;">&#108;&#x75;&#x6b;&#97;&#x73;&#64;&#x61;&#x69;&#121;&#97;&#46;&#99;&#122;</a></td>
 <td>97%</td>
 </tr>
 <tr>
@@ -485,7 +503,7 @@ $$
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/de.png" alt=""></td>
 <td>Deutsch</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po">de_DE</a></td>
-<td>Tobias Grasse <a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#109;&#x61;&#105;&#x6c;&#x40;&#116;&#x6f;&#98;&#x69;&#x61;&#x73;&#x2d;&#x67;&#x72;&#x61;&#x73;&#x73;&#x65;&#46;&#x6e;&#101;&#116;">&#109;&#x61;&#105;&#x6c;&#x40;&#116;&#x6f;&#98;&#x69;&#x61;&#x73;&#x2d;&#x67;&#x72;&#x61;&#x73;&#x73;&#x65;&#46;&#x6e;&#101;&#116;</a></td>
+<td>Tobias Grasse <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#x3a;&#x6d;&#x61;&#105;&#108;&#x40;&#116;&#111;&#x62;&#x69;&#x61;&#115;&#x2d;&#103;&#114;&#97;&#115;&#115;&#101;&#46;&#x6e;&#x65;&#116;">&#x6d;&#x61;&#105;&#108;&#x40;&#116;&#111;&#x62;&#x69;&#x61;&#115;&#x2d;&#103;&#114;&#97;&#115;&#115;&#101;&#46;&#x6e;&#x65;&#116;</a></td>
 <td>96%</td>
 </tr>
 <tr>
@@ -499,7 +517,7 @@ $$
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/es.png" alt=""></td>
 <td>Español</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po">es_ES</a></td>
-<td>Fernando Martín <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#102;&#x40;&#x6d;&#x72;&#116;&#x6e;&#x2e;&#x65;&#115;">&#102;&#x40;&#x6d;&#x72;&#116;&#x6e;&#x2e;&#x65;&#115;</a></td>
+<td>Fernando Martín <a href="&#109;&#x61;&#x69;&#108;&#x74;&#111;&#58;&#102;&#64;&#x6d;&#x72;&#116;&#x6e;&#x2e;&#101;&#115;">&#102;&#64;&#x6d;&#x72;&#116;&#x6e;&#x2e;&#101;&#115;</a></td>
 <td>100%</td>
 </tr>
 <tr>
@@ -513,7 +531,7 @@ $$
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/es.png" alt=""></td>
 <td>Galician</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/gl_ES.po">gl_ES</a></td>
-<td>Marcos Lans <a href="&#109;&#x61;&#105;&#x6c;&#x74;&#111;&#x3a;&#x6d;&#x61;&#x72;&#99;&#111;&#x73;&#108;&#97;&#x6e;&#115;&#103;&#97;&#x72;&#122;&#97;&#64;&#x67;&#109;&#97;&#x69;&#108;&#46;&#99;&#111;&#109;">&#x6d;&#x61;&#x72;&#99;&#111;&#x73;&#108;&#97;&#x6e;&#115;&#103;&#97;&#x72;&#122;&#97;&#64;&#x67;&#109;&#97;&#x69;&#108;&#46;&#99;&#111;&#109;</a></td>
+<td>Marcos Lans <a href="&#109;&#97;&#105;&#x6c;&#x74;&#111;&#x3a;&#109;&#x61;&#114;&#x63;&#111;&#115;&#108;&#97;&#110;&#115;&#x67;&#97;&#x72;&#x7a;&#97;&#x40;&#x67;&#x6d;&#97;&#105;&#108;&#46;&#99;&#x6f;&#109;">&#109;&#x61;&#114;&#x63;&#111;&#115;&#108;&#97;&#110;&#115;&#x67;&#97;&#x72;&#x7a;&#97;&#x40;&#x67;&#x6d;&#97;&#105;&#108;&#46;&#99;&#x6f;&#109;</a></td>
 <td>97%</td>
 </tr>
 <tr>
@@ -534,14 +552,14 @@ $$
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/br.png" alt=""></td>
 <td>Português (Brasil)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_BR.po">pt_BR</a></td>
-<td>Renato Nunes Bastos <a href="&#109;&#x61;&#105;&#108;&#116;&#111;&#58;&#x72;&#110;&#x62;&#x61;&#x73;&#x74;&#x6f;&#x73;&#x40;&#x67;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x72;&#110;&#x62;&#x61;&#x73;&#x74;&#x6f;&#x73;&#x40;&#x67;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a></td>
+<td>Renato Nunes Bastos <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#111;&#x3a;&#114;&#110;&#98;&#x61;&#x73;&#116;&#111;&#115;&#64;&#103;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#111;&#109;">&#114;&#110;&#98;&#x61;&#x73;&#116;&#111;&#115;&#64;&#103;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#111;&#109;</a></td>
 <td>95%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/ru.png" alt=""></td>
 <td>Русский</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ru_RU.po">ru_RU</a></td>
-<td>Artyom Karlov <a href="&#109;&#97;&#x69;&#x6c;&#116;&#111;&#58;&#97;&#x72;&#x74;&#x79;&#111;&#109;&#x2e;&#x6b;&#97;&#x72;&#108;&#111;&#118;&#x40;&#103;&#109;&#97;&#x69;&#108;&#46;&#99;&#x6f;&#109;">&#97;&#x72;&#x74;&#x79;&#111;&#109;&#x2e;&#x6b;&#97;&#x72;&#108;&#111;&#118;&#x40;&#103;&#109;&#97;&#x69;&#108;&#46;&#99;&#x6f;&#109;</a></td>
+<td>Artyom Karlov <a href="&#109;&#x61;&#x69;&#108;&#x74;&#111;&#x3a;&#x61;&#114;&#116;&#121;&#x6f;&#x6d;&#46;&#107;&#x61;&#x72;&#108;&#111;&#118;&#x40;&#103;&#109;&#97;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;">&#x61;&#114;&#116;&#121;&#x6f;&#x6d;&#46;&#107;&#x61;&#x72;&#108;&#111;&#118;&#x40;&#103;&#109;&#97;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;</a></td>
 <td>96%</td>
 </tr>
 <tr>
