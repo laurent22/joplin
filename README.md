@@ -18,11 +18,11 @@ Three types of applications are available: for the **desktop** (Windows, macOS a
 
 ## Desktop applications
 
-Operating System | Download
------------------|--------
-Windows (64-bit only)         | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.83/Joplin-Setup-1.0.83.exe'><img alt='Get it on Windows' height="40px" src='https://joplin.cozic.net/images/BadgeWindows.png'/></a>
-macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.83/Joplin-1.0.83.dmg'><img alt='Get it on macOS' height="40px" src='https://joplin.cozic.net/images/BadgeMacOS.png'/></a>
-Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.83/Joplin-1.0.83-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://joplin.cozic.net/images/BadgeLinux.png'/></a>
+Operating System | Download | Alternative
+-----------------|--------|-------------------
+Windows (64-bit only)         | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.83/Joplin-Setup-1.0.83.exe'><img alt='Get it on Windows' height="40px" src='https://joplin.cozic.net/images/BadgeWindows.png'/></a> | 
+macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.83/Joplin-1.0.83.dmg'><img alt='Get it on macOS' height="40px" src='https://joplin.cozic.net/images/BadgeMacOS.png'/></a> | 
+Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.83/Joplin-1.0.83-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://joplin.cozic.net/images/BadgeLinux.png'/></a> | An Arch Linux package [is also available](#terminal-application).
 
 ## Mobile applications
 
@@ -37,7 +37,7 @@ Operating system | Method
 -----------------|----------------
 macOS            | `brew install joplin`
 Linux or Windows (via [WSL](https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&MSPPError=-2147217396)) | **Important:** First, [install Node 8+](https://nodejs.org/en/download/package-manager/). Node 8 is LTS but not yet available everywhere so you might need to manually install it.<br/><br/>`NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin`<br/>`sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin`<br><br>By default, the application binary will be installed under `~/.joplin-bin`. You may change this directory if needed. Alternatively, if your npm permissions are setup as described [here](https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory) (Option 2) then simply running `npm -g install joplin` would work.
-Arch Linux | An Arch Linux pakage is available [here](https://aur.archlinux.org/packages/joplin/). To install it, use an AUR wrapper such as yay: `yay -S joplin`. For support, please go to the [GitHub repo](https://github.com/masterkorp/joplin-pkgbuild).
+Arch Linux | An Arch Linux pakage is available [here](https://aur.archlinux.org/packages/joplin/). To install it, use an AUR wrapper such as yay: `yay -S joplin`. Both the CLI tool (type `joplin`) and desktop app (type `joplin-desktop`) are packaged. For support, please go to the [GitHub repo](https://github.com/masterkorp/joplin-pkgbuild).
 
 To start it, type `joplin`.
 
