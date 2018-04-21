@@ -420,8 +420,8 @@ class MdToHtml {
 
 		if (HORRIBLE_HACK) {
 			let counter = -1;
-			while (body.indexOf('- [ ]') >= 0 || body.indexOf('- [X]') >= 0) {
-				body = body.replace(/- \[(X| )\]/, function(v, p1) {
+			while (body.indexOf('- [ ]') >= 0 || body.indexOf('- [X]') >= 0 || body.indexOf('- [x]') >= 0) {
+				body = body.replace(/- \[(X| |x)\]/, function(v, p1) {
 					let s = p1 == ' ' ? 'NOTICK' : 'TICK';
 					counter++;
 					return '- mJOPmCHECKBOXm' + s + 'm' + counter + 'm';
@@ -577,10 +577,10 @@ class MdToHtml {
 
 	toggleTickAt(body, index) {
 		let counter = -1;
-		while (body.indexOf('- [ ]') >= 0 || body.indexOf('- [X]') >= 0) {
+		while (body.indexOf('- [ ]') >= 0 || body.indexOf('- [X]') >= 0 || body.indexOf('- [x]') >= 0) {
 			counter++;
 
-			body = body.replace(/- \[(X| )\]/, function(v, p1) {
+			body = body.replace(/- \[(X| |x)\]/, function(v, p1) {
 				let s = p1 == ' ' ? 'NOTICK' : 'TICK';
 				if (index == counter) {
 					s = s == 'NOTICK' ? 'TICK' : 'NOTICK';
