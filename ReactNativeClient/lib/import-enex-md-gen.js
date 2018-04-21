@@ -463,11 +463,7 @@ function attributeToLowerCase(node) {
 	return output;
 }
 
-function enexXmlToMdArray(stream, resources, importOptions = null) {
-	// TODO: Receive importOptions from upstream
-	if (!importOptions) importOptions = {};
-	if (!('mergeMonospaceSections' in importOptions)) importOptions.mergeMonospaceSections = true;
-
+function enexXmlToMdArray(stream, resources) {
 	let remainingResources = resources.slice();
 
 	const removeRemainingResource = (id) => {
@@ -702,7 +698,7 @@ function enexXmlToMdArray(stream, resources, importOptions = null) {
 			} else if (n == "span" || n == "font") {
 				// Check for monospace font. It can come from being specified in either from
 				// <span style="..."> or <font face="...">.
-				if (importOptions.mergeMonospaceSections && nodeAttributes) {
+				if (nodeAttributes) {
 					let style = null;
 
 					if (nodeAttributes.style) {
@@ -740,7 +736,7 @@ function enexXmlToMdArray(stream, resources, importOptions = null) {
 				if (section && section.parent) section = section.parent;
 
 			} else if (n == "span" || n == "font") {
-				if (importOptions.mergeMonospaceSections && state.inMonospaceFont) {
+				if (state.inMonospaceFont) {
 					state.inMonospaceFont = false;
 					section.lines.push(MONOSPACE_CLOSE);
 				}
