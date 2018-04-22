@@ -48,7 +48,7 @@
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.24.1",
     "electron": "^1.7.11",
-    "electron-builder": "^20.5.1"
+    "electron-builder": "^20.10.0"
   },
   "optionalDependencies": {
     "7zip-bin-mac": "^1.0.1",
@@ -87,7 +87,6 @@
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
-    "sharp": "^0.17.3",
     "smalltalk": "^2.5.1",
     "sprintf-js": "^1.1.1",
     "sqlite3": "^3.1.13",

@@ -34,23 +34,58 @@ function shimInit() {
 		return locale;
 	}
 
-	const resizeImage_ = async function(filePath, targetPath) {
-		const sharp = require('sharp');
-		const Resource = require('lib/models/Resource.js');
+	const resizeImage_ = async function(filePath, targetPath, mime) {
+		if (shim.isElectron()) { // For Electron
+			const nativeImage = require('electron').nativeImage;
+			let image = nativeImage.createFromPath(filePath);
+			if (image.isEmpty()) throw new Error('Image is invalid or does not exist: ' + filePath);
 
-		return new Promise((resolve, reject) => {
-			sharp(filePath)
-			.resize(Resource.IMAGE_MAX_DIMENSION, Resource.IMAGE_MAX_DIMENSION)
-			.max()
-			.withoutEnlargement()
-			.toFile(targetPath, (err, info) => {
-				if (err) {
-					reject(err);
-				} else {
-					resolve(info);
-				}
+			const maxDim = Resource.IMAGE_MAX_DIMENSION;
+			const size = image.getSize();
+
+			if (size.width <= maxDim && size.height <= maxDim) {
+				shim.fsDriver().copy(filePath, targetPath);
+				return;
+			}
+
+			const options = {};
+			if (size.width > size.height) {
+				options.width = maxDim;
+			} else {
+				options.height = maxDim;
+			}
+
+			image = image.resize(options);
+
+			let buffer = null;
+
+			if (mime === 'image/png') {
+				buffer = image.toPNG();
+			} else if (mime === 'image/jpg' || mime === 'image/jpeg') {
+				buffer = image.toJPEG(90);
+			}
+
+			if (!buffer) throw new Error('Cannot reisze image because mime type "' + mime + '" is not supported: ' + targetPath);
+
+			await shim.fsDriver().writeFile(targetPath, buffer, 'buffer');
+		} else { // For the CLI tool
+			const sharp = require('sharp');
+			const Resource = require('lib/models/Resource.js');
+
+			return new Promise((resolve, reject) => {
+				sharp(filePath)
+				.resize(Resource.IMAGE_MAX_DIMENSION, Resource.IMAGE_MAX_DIMENSION)
+				.max()
+				.withoutEnlargement()
+				.toFile(targetPath, (err, info) => {
+					if (err) {
+						reject(err);
+					} else {
+						resolve(info);
+					}
+				});
 			});
-		});
+		}
 	}
 
 	shim.attachFileToNote = async function(note, filePath) {
@@ -73,7 +108,7 @@ function shimInit() {
 		let targetPath = Resource.fullPath(resource);
 
 		if (resource.mime == 'image/jpeg' || resource.mime == 'image/jpg' || resource.mime == 'image/png') {
-			const result = await resizeImage_(filePath, targetPath);
+			const result = await resizeImage_(filePath, targetPath, resource.mime);
 		} else {
 			await fs.copy(filePath, targetPath, { overwrite: true });
 		}
