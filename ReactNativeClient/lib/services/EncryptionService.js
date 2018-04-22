@@ -4,6 +4,7 @@ const { shim } = require('lib/shim.js');
 const Setting = require('lib/models/Setting.js');
 const MasterKey = require('lib/models/MasterKey');
 const BaseItem = require('lib/models/BaseItem');
+const JoplinError = require('lib/JoplinError');
 const { _ } = require('lib/locale.js');
 
 function hexPad(s, length) {
@@ -322,7 +323,7 @@ class EncryptionService {
 
 	async decryptAbstract_(source, destination) {
 		const identifier = await source.read(5);
-		if (!this.isValidHeaderIdentifier(identifier)) throw new Error('Invalid encryption identifier. Data is not actually encrypted? ID was: ' + identifier);
+		if (!this.isValidHeaderIdentifier(identifier)) throw new JoplinError('Invalid encryption identifier. Data is not actually encrypted? ID was: ' + identifier, 'invalidIdentifier');
 		const mdSizeHex = await source.read(6);
 		const mdSize = parseInt(mdSizeHex, 16);
 		if (isNaN(mdSize) || !mdSize) throw new Error('Invalid header metadata size: ' + mdSizeHex);

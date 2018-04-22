@@ -72,7 +72,19 @@ class Resource extends BaseItem {
 			await this.fsDriver().move(noExtPath, encryptedPath);
 		}
 
-		await this.encryptionService().decryptFile(encryptedPath, plainTextPath);
+		try {
+			await this.encryptionService().decryptFile(encryptedPath, plainTextPath);
+		} catch (error) {
+			if (error.code === 'invalidIdentifier') {
+				// As the identifier is invalid it most likely means that this is not encrypted data
+				// at all. It can happen for example when there's a crash between the moment the data
+				// is decrypted and the resource item is updated.
+				this.logger().warn('Found a resource that was most likely already decrypted but was marked as encrypted. Marked it as decrypted: ' + item.id)
+				this.fsDriver().move(encryptedPath, plainTextPath);
+			} else {
+				throw error;
+			}
+		}
 
 		decryptedItem.encryption_blob_encrypted = 0;
 		return super.save(decryptedItem, { autoTimestamp: false });
@@ -151,6 +163,8 @@ class Resource extends BaseItem {
 		for (let i = 0; i < ids.length; i++) {
 			const id = ids[i];
 			const resource = await Resource.load(id);
+			if (!resource) continue;
+
 			const path = Resource.fullPath(resource);
 			await this.fsDriver().remove(path);
 			await super.batchDelete([id], options);
