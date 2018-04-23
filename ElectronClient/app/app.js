@@ -568,6 +568,12 @@ class Application extends BaseApplication {
 	}
 
 	async start(argv) {
+		const electronIsDev = require('electron-is-dev');
+
+		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
+		// insert an extra argument so that they can be processed in a consistent way everywhere.
+		if (!electronIsDev) argv.splice(1, 0, '.');
+
 		argv = await super.start(argv);
 
 		AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));

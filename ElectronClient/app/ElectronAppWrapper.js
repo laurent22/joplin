@@ -9,9 +9,10 @@ const fs = require('fs-extra');
 
 class ElectronAppWrapper {
 
-	constructor(electronApp, env) {
+	constructor(electronApp, env, profilePath) {
 		this.electronApp_ = electronApp;
 		this.env_ = env;
+		this.profilePath_ = profilePath;
 		this.win_ = null;
 		this.willQuitApp_ = false;
 		this.tray_ = null;
@@ -37,12 +38,16 @@ class ElectronAppWrapper {
 	createWindow() {
 		const windowStateKeeper = require('electron-window-state');
 
-		// Load the previous state with fallback to defaults
-		const windowState = windowStateKeeper({
+		const stateOptions = {
 			defaultWidth: 800,
 			defaultHeight: 600,
 			file: 'window-state-' + this.env_ + '.json',
-		});
+		}
+
+		if (this.profilePath_) stateOptions.path = this.profilePath_;
+
+		// Load the previous state with fallback to defaults
+		const windowState = windowStateKeeper(stateOptions);
 
 		const windowOptions = {
 			x: windowState.x,

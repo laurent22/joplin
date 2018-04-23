@@ -368,11 +368,11 @@ class BaseApplication {
 		let initArgs = startFlags.matched;
 		if (argv.length) this.showPromptString_ = false;
 
-		if (process.argv[1].indexOf('joplindev') >= 0) {
-			if (!initArgs.profileDir) initArgs.profileDir = '/mnt/d/Temp/TestNotes2';
-			initArgs.logLevel = Logger.LEVEL_DEBUG;
-			initArgs.env = 'dev';
-		}
+		// if (process.argv[1].indexOf('joplindev') >= 0) {
+		// 	if (!initArgs.profileDir) initArgs.profileDir = '/mnt/d/Temp/TestNotes2';
+		// 	initArgs.logLevel = Logger.LEVEL_DEBUG;
+		// 	initArgs.env = 'dev';
+		// }
 
 		let appName = initArgs.env == 'dev' ? 'joplindev' : 'joplin';
 		if (Setting.value('appId').indexOf('-desktop') >= 0) appName += '-desktop';

@@ -24,11 +24,22 @@ function envFromArgs(args) {
 	return 'prod';
 }
 
+// Likewise, we want to know if a profile is specified early, in particular
+// to save the window state data.
+function profileFromArgs(args) {
+	if (!args) return null;
+	const profileIndex = args.indexOf('--profile');
+	if (profileIndex <= 0 || profileIndex >= args.length - 1) return null;
+	const profileValue = args[profileIndex + 1];
+	return profileValue ? profileValue : null;
+}
+
 Logger.fsDriver_ = new FsDriverNode();
 
 const env = envFromArgs(process.argv);
+const profilePath = profileFromArgs(process.argv);
 
-const wrapper = new ElectronAppWrapper(electronApp, env);
+const wrapper = new ElectronAppWrapper(electronApp, env, profilePath);
 
 initBridge(wrapper);
 

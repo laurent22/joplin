@@ -26,7 +26,23 @@
       "build/icons/*"
     ],
     "win": {
-      "icon": "../../Assets/Joplin.ico"
+      "icon": "../../Assets/Joplin.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
     },
     "nsis": {
       "oneClick": false,
@@ -61,6 +77,7 @@
     "base-64": "^0.1.0",
     "compare-versions": "^3.1.0",
     "electron-context-menu": "^0.9.1",
+    "electron-is-dev": "^0.3.0",
     "electron-window-state": "^4.1.1",
     "follow-redirects": "^1.2.5",
     "form-data": "^2.3.1",
