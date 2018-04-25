@@ -54,6 +54,7 @@ For usage information, please refer to the full [Joplin Terminal Application Doc
 
 - Support
 
+	- [Joplin Forum(https://discourse.joplin.cozic.net)
 	- [How to enable end-to-end encryption](https://github.com/laurent22/joplin/blob/master/readme/e2ee.md)
 	- [End-to-end encryption spec](https://github.com/laurent22/joplin/blob/master/readme/spec.md)
 	- [How to enable debug mode](https://github.com/laurent22/joplin/blob/master/readme/debugging.md)
