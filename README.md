@@ -237,6 +237,12 @@ Donations to Joplin support the development of the project. Developing quality a
 
 Please see the [donation page](https://joplin.cozic.net/donate/) for information on how to support the development of Joplin.
 
+# Community
+
+- For general discussion about Joplin, user support, software development questions, and to discuss new features, go to the [Joplin Forum](https://discourse.joplin.cozic.net/). It is possible to login with your GitHub account.
+- For bug reports and feature requests, go to the [GitHub Issue Tracker](https://github.com/laurent22/joplin/issues).
+- The latest news are often posted [on this Twitter account](https://twitter.com/laurent2233).
+
 # Contributing
 
 Please see the guide for information on how to contribute to the development of Joplin: https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md

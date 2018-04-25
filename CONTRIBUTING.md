@@ -1,3 +1,7 @@
+# User support
+
+For general discussion about Joplin, user support, software development questions, and to discuss new features, please go to the [Joplin Forum](https://discourse.joplin.cozic.net/). It is possible to login with your GitHub account.
+
 # Reporting a bug
 
 Please check first that it [has not already been reported](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is%3Aissue). Also consider [enabling debug mode](https://github.com/laurent22/joplin/blob/master/readme/debugging.md) before reporting the issue so that you can provide as much details as possible to help fix it.
@@ -6,7 +10,7 @@ If possible, **please provide a screenshot**. A screenshot showing the problem i
 
 # Feature requests
 
-Again, please check that it has not already been requested. If it has, simply **up-vote the issue** - the ones with the most up-votes are likely to be implemented. Adding a "+1" comment does nothing.
+Again, please check that it has not already been requested. If it has, simply **up-vote the issue** - the ones with the most up-votes are likely to be implemented. "+1" comments are not tracked.
 
 # Adding new features
 
