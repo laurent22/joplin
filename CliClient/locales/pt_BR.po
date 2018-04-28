@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.0.7\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Para eliminar uma tag, remova a tag das notas associadas a ela."
@@ -414,12 +416,14 @@ msgstr ""
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
+"Para permitir o Joplin sincronizar com o Dropbox, por favor, execute os "
+"seguintes passos:"
 
 msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr ""
+msgstr "Passo 1: Abra essa URL em seu navegador para autorizar:"
 
 msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr ""
+msgstr "Passo 2: Entre o código fornecido pelo Dropbox:"
 
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
@@ -577,9 +581,8 @@ msgstr "Exportando para \"%s\" com o formato \"%s\". Por favor, aguarde..."
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Importando de \"%s\" com o formato \"%s\". Por favor, aguarde..."
 
-#, fuzzy
 msgid "PDF File"
-msgstr "Arquivo"
+msgstr "Arquivo PDF"
 
 msgid "File"
 msgstr "Arquivo"
@@ -600,7 +603,7 @@ msgid "Export"
 msgstr "Exportar"
 
 msgid "Print"
-msgstr ""
+msgstr "Imprimir"
 
 #, javascript-format
 msgid "Hide %s"
@@ -697,7 +700,7 @@ msgid "Save"
 msgstr "Salvar"
 
 msgid "Submit"
-msgstr ""
+msgstr "Enviar"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -774,6 +777,8 @@ msgid ""
 "For more information about End-To-End Encryption (E2EE) and advices on how "
 "to enable it please check the documentation:"
 msgstr ""
+"Para mais informações sobre Encriptação ponto-a-ponto (E2EE) e recomendações "
+"sobre como habilitar, favor verificar a documentação:"
 
 msgid "Status"
 msgstr "Status"
@@ -814,9 +819,8 @@ msgstr "Definir alarme:"
 msgid "Layout"
 msgstr "Layout"
 
-#, fuzzy
 msgid "Search..."
-msgstr "Procurar"
+msgstr "Pesquisar..."
 
 msgid "Some items cannot be synchronised."
 msgstr "Alguns itens não podem ser sincronizados."
@@ -896,7 +900,7 @@ msgid "OneDrive Login"
 msgstr "Login no OneDrive"
 
 msgid "Dropbox Login"
-msgstr ""
+msgstr "Login no Dropbox"
 
 msgid "Options"
 msgstr "Opções"
@@ -936,7 +940,7 @@ msgid "Unknown flag: %s"
 msgstr "Flag desconhecido: %s"
 
 msgid "Dropbox"
-msgstr ""
+msgstr "Dropbox"
 
 msgid "File system"
 msgstr "Sistema de arquivos"
@@ -1015,7 +1019,7 @@ msgstr "Itens remotos excluídos: %d."
 msgid "Fetched items: %d/%d."
 msgstr "Itens pesquisados: %d/%d."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "State: %s."
 msgstr "Estado: \"%s\"."
 
@@ -1026,15 +1030,15 @@ msgstr "Cancelando..."
 msgid "Completed: %s"
 msgstr "Completado: %s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Last error: %s"
-msgstr "Erro fatal:"
+msgstr "Último erro: %s"
 
 msgid "Idle"
-msgstr ""
+msgstr "Inativo"
 
 msgid "In progress"
-msgstr ""
+msgstr "Em andamento"
 
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
@@ -1328,17 +1332,16 @@ msgid "Cancel synchronisation"
 msgstr "Cancelar sincronização"
 
 msgid "New tags:"
-msgstr ""
+msgstr "Novas tags:"
 
 msgid "Type new tags or select from list"
-msgstr ""
+msgstr "Digite novsa tags, ou selecione da lista"
 
 msgid "Joplin website"
 msgstr "Site do Joplin"
 
-#, fuzzy
 msgid "Login with Dropbox"
-msgstr "Login com OneDrive"
+msgstr "Login com Dropbox"
 
 #, javascript-format
 msgid "Master Key %s"
