@@ -249,7 +249,8 @@ msgstr ""
 "Используйте стрелки и клавиши перелистывания страницы вверх/вниз для "
 "прокрутки списков и текстовых областей (включая эту консоль)."
 
-msgid "To maximise/minimise the console, press \"TC\"."
+#, fuzzy
+msgid "To maximise/minimise the console, press \"tc\"."
 msgstr "Чтобы развернуть/свернуть консоль, нажимайте «TC»."
 
 msgid "To enter command line mode, press \":\""
@@ -627,6 +628,9 @@ msgstr "Поиск во всех заметках"
 
 msgid "View"
 msgstr "Вид"
+
+msgid "Toggle sidebar"
+msgstr ""
 
 msgid "Toggle editor layout"
 msgstr "Переключить вид редактора"
@@ -1125,6 +1129,9 @@ msgstr "При создании новой заметки:"
 
 msgid "Show tray icon"
 msgstr "Показывать иконку в панели задач"
+
+msgid "Note: Does not work in all desktop environments."
+msgstr ""
 
 msgid "Global zoom percentage"
 msgstr "Глобальный масштаб в процентах"

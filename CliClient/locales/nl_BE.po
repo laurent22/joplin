@@ -249,7 +249,8 @@ msgstr ""
 "Gebruik de pijltjes en page up/down om door de lijsten en de tekstvelden te "
 "scrollen (ook deze console)."
 
-msgid "To maximise/minimise the console, press \"TC\"."
+#, fuzzy
+msgid "To maximise/minimise the console, press \"tc\"."
 msgstr "Om de console te maximaliseren/minimaliseren, typ \"TC\"."
 
 msgid "To enter command line mode, press \":\""
@@ -629,6 +630,9 @@ msgid "Search in all the notes"
 msgstr "Zoek in alle notities"
 
 msgid "View"
+msgstr ""
+
+msgid "Toggle sidebar"
 msgstr ""
 
 msgid "Toggle editor layout"
@@ -1140,6 +1144,9 @@ msgid "When creating a new note:"
 msgstr "Maakt een nieuwe notitie aan."
 
 msgid "Show tray icon"
+msgstr ""
+
+msgid "Note: Does not work in all desktop environments."
 msgstr ""
 
 msgid "Global zoom percentage"

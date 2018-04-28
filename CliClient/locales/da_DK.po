@@ -247,7 +247,8 @@ msgstr ""
 "Brug pilene og PageUp/PageDown for at rulle lister og tekst-områder (inkl. "
 "denne konsol)"
 
-msgid "To maximise/minimise the console, press \"TC\"."
+#, fuzzy
+msgid "To maximise/minimise the console, press \"tc\"."
 msgstr "For at maximere/ninimere konsollen, tryk \"TC\"."
 
 msgid "To enter command line mode, press \":\""
@@ -620,6 +621,9 @@ msgstr "Søg i alle noter"
 
 msgid "View"
 msgstr "Vis"
+
+msgid "Toggle sidebar"
+msgstr ""
 
 msgid "Toggle editor layout"
 msgstr "Skift editor layout"
@@ -1116,6 +1120,9 @@ msgstr "Ved oprettelse af ny note:"
 
 msgid "Show tray icon"
 msgstr "Vis ikon på bundbjælke"
+
+msgid "Note: Does not work in all desktop environments."
+msgstr ""
 
 msgid "Global zoom percentage"
 msgstr "Global zoom procent"

@@ -245,7 +245,8 @@ msgstr ""
 "Usa le frecce e pagina su/giù per scorrere le liste e le aree di testo "
 "(compresa questa console)."
 
-msgid "To maximise/minimise the console, press \"TC\"."
+#, fuzzy
+msgid "To maximise/minimise the console, press \"tc\"."
 msgstr "Per massimizzare/minimizzare la console, premi \"TC\"."
 
 msgid "To enter command line mode, press \":\""
@@ -611,6 +612,9 @@ msgid "Search in all the notes"
 msgstr "Cerca in tutte le note"
 
 msgid "View"
+msgstr ""
+
+msgid "Toggle sidebar"
 msgstr ""
 
 msgid "Toggle editor layout"
@@ -1110,6 +1114,9 @@ msgid "When creating a new note:"
 msgstr "Crea una nuova nota."
 
 msgid "Show tray icon"
+msgstr ""
+
+msgid "Note: Does not work in all desktop environments."
 msgstr ""
 
 msgid "Global zoom percentage"

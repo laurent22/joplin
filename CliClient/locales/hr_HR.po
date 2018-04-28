@@ -250,7 +250,8 @@ msgstr ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
 
-msgid "To maximise/minimise the console, press \"TC\"."
+#, fuzzy
+msgid "To maximise/minimise the console, press \"tc\"."
 msgstr "Za maksimiziranje/minimiziranje konzole, pritisni \"TC\"."
 
 msgid "To enter command line mode, press \":\""
@@ -629,6 +630,9 @@ msgid "Search in all the notes"
 msgstr "Pretraži u svim bilješkama"
 
 msgid "View"
+msgstr ""
+
+msgid "Toggle sidebar"
 msgstr ""
 
 msgid "Toggle editor layout"
@@ -1124,6 +1128,9 @@ msgid "When creating a new note:"
 msgstr "Stvara novu bilješku."
 
 msgid "Show tray icon"
+msgstr ""
+
+msgid "Note: Does not work in all desktop environments."
 msgstr ""
 
 msgid "Global zoom percentage"

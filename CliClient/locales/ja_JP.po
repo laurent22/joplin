@@ -240,7 +240,8 @@ msgid ""
 "(including this console)."
 msgstr "リストや入力エリアの移動には矢印キーまたはPage Up/Downを使用します。"
 
-msgid "To maximise/minimise the console, press \"TC\"."
+#, fuzzy
+msgid "To maximise/minimise the console, press \"tc\"."
 msgstr "コンソールの最大化・最小化には\"TC\"と入力してください。"
 
 msgid "To enter command line mode, press \":\""
@@ -612,6 +613,9 @@ msgid "Search in all the notes"
 msgstr "すべてのノートを検索"
 
 msgid "View"
+msgstr ""
+
+msgid "Toggle sidebar"
 msgstr ""
 
 msgid "Toggle editor layout"
@@ -1114,6 +1118,9 @@ msgid "When creating a new note:"
 msgstr "あたらしいノートを作成します。"
 
 msgid "Show tray icon"
+msgstr ""
+
+msgid "Note: Does not work in all desktop environments."
 msgstr ""
 
 msgid "Global zoom percentage"

@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.7\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Para eliminar uma tag, remova a tag das notas associadas a ela."
@@ -248,7 +246,8 @@ msgstr ""
 "Use as setas e a Page Up/Page Down para rolar as listas e áreas de texto "
 "(incluindo este console)."
 
-msgid "To maximise/minimise the console, press \"TC\"."
+#, fuzzy
+msgid "To maximise/minimise the console, press \"tc\"."
 msgstr "Para maximizar / minimizar o console, pressione \"TC\"."
 
 msgid "To enter command line mode, press \":\""
@@ -629,6 +628,9 @@ msgstr "Pesquisar em todas as notas"
 
 msgid "View"
 msgstr "Visualizar"
+
+msgid "Toggle sidebar"
+msgstr ""
 
 msgid "Toggle editor layout"
 msgstr "Alternar layout do editor"
@@ -1130,6 +1132,9 @@ msgstr "Quando criar uma nota nova:"
 
 msgid "Show tray icon"
 msgstr "Exibir tray icon"
+
+msgid "Note: Does not work in all desktop environments."
+msgstr ""
 
 msgid "Global zoom percentage"
 msgstr "Porcentagem global do zoom"

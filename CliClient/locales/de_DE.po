@@ -259,7 +259,8 @@ msgstr ""
 "Benutze die Pfeiltasten und Bild hoch/runter um durch Listen und Texte zu "
 "scrollen (inklusive diesem Terminal)."
 
-msgid "To maximise/minimise the console, press \"TC\"."
+#, fuzzy
+msgid "To maximise/minimise the console, press \"tc\"."
 msgstr "Um das Terminal zu maximieren/minimieren, drücke \"TC\"."
 
 msgid "To enter command line mode, press \":\""
@@ -644,6 +645,9 @@ msgstr "Alle Notizen durchsuchen"
 
 msgid "View"
 msgstr "Ansicht"
+
+msgid "Toggle sidebar"
+msgstr ""
 
 msgid "Toggle editor layout"
 msgstr "Editor Layout umschalten"
@@ -1148,6 +1152,9 @@ msgstr "Wenn eine neue Notiz erstellt wird:"
 
 msgid "Show tray icon"
 msgstr "Zeige Tray Icon"
+
+msgid "Note: Does not work in all desktop environments."
+msgstr ""
 
 msgid "Global zoom percentage"
 msgstr "Zoomstufe der Benutzeroberfläche"

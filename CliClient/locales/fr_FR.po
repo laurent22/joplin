@@ -248,7 +248,8 @@ msgstr ""
 "Utilisez les touches fléchées et page précédente/suivante pour faire défiler "
 "les listes et zones de texte (y compris cette console)."
 
-msgid "To maximise/minimise the console, press \"TC\"."
+#, fuzzy
+msgid "To maximise/minimise the console, press \"tc\"."
 msgstr "Pour maximiser ou minimiser la console, pressez \"TC\"."
 
 msgid "To enter command line mode, press \":\""
@@ -630,6 +631,9 @@ msgstr "Chercher dans toutes les notes"
 
 msgid "View"
 msgstr "Affichage"
+
+msgid "Toggle sidebar"
+msgstr ""
 
 msgid "Toggle editor layout"
 msgstr "Basculer l'agencement de l'éditeur"
@@ -1136,6 +1140,9 @@ msgstr "Lors de la création d'une note :"
 
 msgid "Show tray icon"
 msgstr "Afficher icône dans la zone de notifications"
+
+msgid "Note: Does not work in all desktop environments."
+msgstr ""
 
 msgid "Global zoom percentage"
 msgstr "Niveau de zoom"

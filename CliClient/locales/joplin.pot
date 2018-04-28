@@ -223,7 +223,7 @@ msgid ""
 "(including this console)."
 msgstr ""
 
-msgid "To maximise/minimise the console, press \"TC\"."
+msgid "To maximise/minimise the console, press \"tc\"."
 msgstr ""
 
 msgid "To enter command line mode, press \":\""
@@ -554,6 +554,9 @@ msgid "Search in all the notes"
 msgstr ""
 
 msgid "View"
+msgstr ""
+
+msgid "Toggle sidebar"
 msgstr ""
 
 msgid "Toggle editor layout"
@@ -1024,6 +1027,9 @@ msgid "When creating a new note:"
 msgstr ""
 
 msgid "Show tray icon"
+msgstr ""
+
+msgid "Note: Does not work in all desktop environments."
 msgstr ""
 
 msgid "Global zoom percentage"

@@ -235,7 +235,8 @@ msgid ""
 "(including this console)."
 msgstr "通过上下左右与page up/down键来滚动列表与文本区域（包含此控制台）。"
 
-msgid "To maximise/minimise the console, press \"TC\"."
+#, fuzzy
+msgid "To maximise/minimise the console, press \"tc\"."
 msgstr "按\"TC\"最大化/最小化控制台。"
 
 msgid "To enter command line mode, press \":\""
@@ -593,6 +594,9 @@ msgstr "在所有笔记内搜索"
 
 msgid "View"
 msgstr "显示"
+
+msgid "Toggle sidebar"
+msgstr ""
 
 msgid "Toggle editor layout"
 msgstr "切换编辑器布局"
@@ -1078,6 +1082,9 @@ msgstr "创建新笔记时："
 
 msgid "Show tray icon"
 msgstr "显示托盘图标"
+
+msgid "Note: Does not work in all desktop environments."
+msgstr ""
 
 msgid "Global zoom percentage"
 msgstr "全局缩放比例"

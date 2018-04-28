@@ -246,7 +246,8 @@ msgstr ""
 "Erabili geziak edo page up/down list eta testu guneen artean aldatzeko "
 "(kontsola hau ere kontuan izanda)."
 
-msgid "To maximise/minimise the console, press \"TC\"."
+#, fuzzy
+msgid "To maximise/minimise the console, press \"tc\"."
 msgstr "Kontsola maximizatu edo minimizatzeko, saka \"TC\" ."
 
 msgid "To enter command line mode, press \":\""
@@ -627,6 +628,9 @@ msgid "Search in all the notes"
 msgstr "Bilatu ohar guztietan"
 
 msgid "View"
+msgstr ""
+
+msgid "Toggle sidebar"
 msgstr ""
 
 msgid "Toggle editor layout"
@@ -1136,6 +1140,9 @@ msgid "When creating a new note:"
 msgstr "Ohar berria sortzen du."
 
 msgid "Show tray icon"
+msgstr ""
+
+msgid "Note: Does not work in all desktop environments."
 msgstr ""
 
 #, fuzzy
