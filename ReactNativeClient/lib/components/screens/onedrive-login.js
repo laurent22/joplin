@@ -21,7 +21,7 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 		this.authCode_ = null;
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.setState({
 			webviewUrl: this.startUrl(),
 		});

@@ -535,7 +535,7 @@ class AppComponent extends React.Component {
 		return false;
 	}
 
-	componentWillReceiveProps(newProps) {
+	UNSAFE_componentWillReceiveProps(newProps) {
 		if (newProps.syncStarted != this.lastSyncStarted_) {
 			if (!newProps.syncStarted) FoldersScreenUtils.refreshFolders();
 			this.lastSyncStarted_ = newProps.syncStarted;

@@ -61,7 +61,7 @@ class LogScreenComponent extends BaseScreenComponent {
 		return this.styles_[this.props.theme];
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.resfreshLogEntries();
 	}
 

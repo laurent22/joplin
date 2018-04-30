@@ -43,7 +43,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 		return this.styles_[this.props.theme];
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		if (!this.props.folderId) {
 			const folder = Folder.new();
 			this.setState({

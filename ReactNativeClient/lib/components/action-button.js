@@ -26,7 +26,7 @@ class ActionButtonComponent extends React.Component {
 		};
 	}
 
-	componentWillReceiveProps(newProps) {
+	UNSAFE_componentWillReceiveProps(newProps) {
 		if ('buttonIndex' in newProps) {
 			this.setState({ buttonIndex: newProps.buttonIndex });
 		}

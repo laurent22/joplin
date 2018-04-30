@@ -68,12 +68,12 @@ class NoteListComponent extends Component {
 		return output;
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		const newDataSource = this.state.dataSource.cloneWithRows(this.filterNotes(this.props.items));
 		this.setState({ dataSource: newDataSource });
 	}
 
-	componentWillReceiveProps(newProps) {
+	UNSAFE_componentWillReceiveProps(newProps) {
 		// https://stackoverflow.com/questions/38186114/react-native-redux-and-listview
 		this.setState({
 			dataSource: this.state.dataSource.cloneWithRows(this.filterNotes(newProps.items)),

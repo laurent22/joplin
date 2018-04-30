@@ -10,7 +10,7 @@ class Dropdown extends React.Component {
 		this.headerRef_ = null;
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.setState({
 			headerSize: { x: 0, y: 0, width: 0, height: 0 },
 			listVisible: false,

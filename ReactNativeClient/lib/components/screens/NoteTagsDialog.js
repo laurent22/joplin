@@ -96,7 +96,7 @@ class NoteTagsDialogComponent extends React.Component {
 		}
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		const noteId = this.props.noteId;
 		this.setState({ noteId: noteId });
 		this.loadNoteTags(noteId);

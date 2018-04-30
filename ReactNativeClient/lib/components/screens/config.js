@@ -31,7 +31,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		};
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.setState({ settings: this.props.settings });
 	}
 

@@ -19,11 +19,11 @@ class Checkbox extends Component {
 		}
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.setState({ checked: this.props.checked });
 	}
 
-	componentWillReceiveProps(newProps) {
+	UNSAFE_componentWillReceiveProps(newProps) {
 		if ('checked' in newProps) {
 			this.setState({ checked: newProps.checked });
 		}

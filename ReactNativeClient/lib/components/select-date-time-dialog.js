@@ -14,7 +14,7 @@ class SelectDateTimeDialog extends Component {
 		this.state = { date: null };
 	}
 
-	componentWillReceiveProps(newProps) {
+	UNSAFE_componentWillReceiveProps(newProps) {
 		if (newProps.date != this.state.date) {
 			this.setState({ date: newProps.date });
 		}

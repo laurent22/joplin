@@ -70,7 +70,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 		this.isMounted_ = false;
 	}
 
-	componentWillReceiveProps(newProps) {
+	UNSAFE_componentWillReceiveProps(newProps) {
 		let newState = {};
 		if ('query' in newProps) newState.query = newProps.query;
 

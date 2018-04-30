@@ -23,7 +23,7 @@ class DropboxLoginScreenComponent extends BaseScreenComponent {
 		);
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.shared_.refreshUrl();
 	}
 

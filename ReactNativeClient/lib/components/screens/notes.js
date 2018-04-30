@@ -64,7 +64,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 		await this.refreshNotes();
 	}
 
-	async componentWillReceiveProps(newProps) {
+	async UNSAFE_componentWillReceiveProps(newProps) {
 		if (newProps.notesOrder !== this.props.notesOrder ||
 		    newProps.selectedFolderId != this.props.selectedFolderId ||
 		    newProps.selectedTagId != this.props.selectedTagId ||

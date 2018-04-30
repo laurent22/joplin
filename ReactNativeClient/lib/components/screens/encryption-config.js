@@ -48,11 +48,11 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 		return shared.refreshStats(this);
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.initState(this.props);
 	}
 
-	componentWillReceiveProps(nextProps) {
+	UNSAFE_componentWillReceiveProps(nextProps) {
 		this.initState(nextProps);
 	}
 

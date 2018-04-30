@@ -34,7 +34,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 		};
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.resfreshScreen();
 	}
 
