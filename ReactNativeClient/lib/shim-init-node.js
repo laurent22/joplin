@@ -5,6 +5,7 @@ const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const { time } = require('lib/time-utils.js');
 const { setLocale, defaultLocale, closestSupportedLocale } = require('lib/locale.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
+const urlValidator = require('valid-url');
 
 function shimInit() {
 	shim.fsDriver = () => { throw new Error('Not implemented') }
@@ -133,6 +134,9 @@ function shimInit() {
 	}
 
 	shim.fetch = async function(url, options = null) {
+		const validatedUrl = urlValidator.isUri(url);
+		if (!validatedUrl) throw new Error('Not a valid URL: ' + url);
+
 		return shim.fetchWithRetry(() => {
 			return nodeFetch(url, options)
 		}, options);

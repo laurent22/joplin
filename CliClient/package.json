@@ -61,6 +61,7 @@
     "tkwidgets": "^0.5.25",
     "url-parse": "^1.2.0",
     "uuid": "^3.0.1",
+    "valid-url": "^1.0.9",
     "word-wrap": "^1.2.3",
     "xml2js": "^0.4.19",
     "yargs-parser": "^7.0.0"
