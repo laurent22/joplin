@@ -43,7 +43,7 @@ async function fetchLatestRelease() {
 	for (let i = 0; i < json.assets.length; i++) {
 		const asset = json.assets[i];
 		let found = false;
-		if (platform === 'win32' && asset.name.indexOf('.exe') >= 0) {
+		if (platform === 'win32' && asset.name.indexOf('.exe') >= 0 && asset.name.indexOf('Setup') >= 0) {
 			found = true;
 		} else if (platform === 'darwin' && asset.name.indexOf('.dmg') >= 0) {
 			found = true;
