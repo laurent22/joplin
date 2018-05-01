@@ -210,10 +210,13 @@ class NoteTextComponent extends React.Component {
 			}
 
 			if (this.editor_) {
-				const session = this.editor_.editor.getSession();
-				const undoManager = session.getUndoManager();
-				undoManager.reset();
-				session.setUndoManager(undoManager);
+				// Calling setValue here does two things:
+				// 1. It sets the initial value as recorded by the undo manager. If we were to set it instead to "" and wait for the render
+				//    phase to set the value, the initial value would still be "", which means pressing "undo" on a note that has just loaded
+				//    would clear it.
+				// 2. It resets the undo manager - fixes https://github.com/laurent22/joplin/issues/355
+				// Note: calling undoManager.reset() doesn't work				
+				this.editor_.editor.session.setValue(note ? note.body : '');
 				this.editor_.editor.clearSelection();
 				this.editor_.editor.moveCursorTo(0,0);
 			}
