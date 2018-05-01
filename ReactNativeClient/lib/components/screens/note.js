@@ -186,8 +186,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		shared.noteComponent_change(this, 'body', text);
 	}
 
-	async saveNoteButton_press() {
-		await shared.saveNoteButton_press(this);
+	async saveNoteButton_press(folderId = null) {
+		await shared.saveNoteButton_press(this, folderId);
 
 		Keyboard.dismiss();
 	}
@@ -560,7 +560,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 						enabled: true,
 						selectedFolderId: folder ? folder.id : null,
 						onValueChange: async (itemValue, itemIndex) => {
-							if (note.id) await Note.moveToFolder(note.id, itemValue);
+							if (!note.id) {
+								await this.saveNoteButton_press(itemValue);
+							} else {
+								await Note.moveToFolder(note.id, itemValue);
+							}
+
 							note.parent_id = itemValue;
 
 							const folder = await Folder.load(note.parent_id);
