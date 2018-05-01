@@ -135,19 +135,24 @@ class MdToHtml {
 		if (isResourceUrl && !this.supportsResourceLinks_) {
 			// In mobile, links to local resources, such as PDF, etc. currently aren't supported.
 			// Ideally they should be opened in the user's browser.
-			return '<span style="opacity: 0.5">(Resource not yet supported: '; //+ htmlentities(text) + ']';
+			return '<span style="opacity: 0.5">(Resource not yet supported: ';
 		} else {
 			let resourceIdAttr = "";
 			let icon = "";
+			let hrefAttr = '#';
 			if (isResourceUrl) {
 				const resourceId = Resource.pathToId(href);
 				href = "joplin://" + resourceId;
 				resourceIdAttr = "data-resource-id='" + resourceId + "'";
 				icon = '<span class="resource-icon"></span>';
+			} else {
+				// If the link is a plain URL (as opposed to a resource link), set the href to the actual
+				// link. This allows the link to be exported too when exporting to PDF. 
+				hrefAttr = href;
 			}
 
 			const js = options.postMessageSyntax + "(" + JSON.stringify(href) + "); return false;";
-			let output = "<a " + resourceIdAttr + " title='" + htmlentities(title) + "' href='#' onclick='" + js + "'>" + icon;
+			let output = "<a " + resourceIdAttr + " title='" + htmlentities(title) + "' href='" + hrefAttr + "' onclick='" + js + "'>" + icon;
 			return output;
 		}
 	}
