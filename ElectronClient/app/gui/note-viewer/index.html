@@ -124,17 +124,17 @@
 		loadAndApplyHljs();
 
 		// Remove the bullet from "ul" for checkbox lists and extra padding
-		const checkboxes = document.getElementsByClassName('checkbox');
-		for (let i = 0; i < checkboxes.length; i++) {
-			const cb = checkboxes[i];
-			const ul = cb.parentElement.parentElement;
-			if (!ul) {
-				console.warn('Unexpected layout for checkbox');
-				continue;
-			}
-			ul.style.listStyleType = 'none';
-			ul.style.paddingLeft = 0;
-		}
+		// const checkboxes = document.getElementsByClassName('checkbox');
+		// for (let i = 0; i < checkboxes.length; i++) {
+		// 	const cb = checkboxes[i];
+		// 	const ul = cb.parentElement.parentElement;
+		// 	if (!ul) {
+		// 		console.warn('Unexpected layout for checkbox');
+		// 		continue;
+		// 	}
+		// 	ul.style.listStyleType = 'none';
+		// 	ul.style.paddingLeft = 0;
+		// }
 
 		let previousContentHeight = contentElement.scrollHeight;
 		let startTime = Date.now();

@@ -225,12 +225,7 @@ class MdToHtml {
 
 			if (isCodeBlock) rendererPlugin = this.rendererPlugin_(codeBlockLanguage);
 
-			if (previousToken && previousToken.tag === 'li' && tag === 'p') {
-				// Markdown-it render list items as <li><p>Text<p></li> which makes it
-				// complicated to style and layout the HTML, so we remove this extra
-				// <p> here and below in closeTag.
-				openTag = null;
-			} else if (isInlineCode) {
+			if (isInlineCode) {
 				openTag = null;
 			} else if (tag && t.type.indexOf('html_inline') >= 0) {
 				openTag = null;
@@ -494,6 +489,9 @@ class MdToHtml {
 			}
 			ul {
 				padding-left: 1.3em;
+			}
+			li p {
+				margin-bottom: 0;
 			}
 			.resource-icon {
 				display: inline-block;
