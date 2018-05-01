@@ -215,8 +215,17 @@ class NoteTextComponent extends React.Component {
 				//    phase to set the value, the initial value would still be "", which means pressing "undo" on a note that has just loaded
 				//    would clear it.
 				// 2. It resets the undo manager - fixes https://github.com/laurent22/joplin/issues/355
-				// Note: calling undoManager.reset() doesn't work				
-				this.editor_.editor.session.setValue(note ? note.body : '');
+				// Note: calling undoManager.reset() doesn't work
+				try {
+					this.editor_.editor.getSession().setValue(note ? note.body : '');
+				} catch (error) {
+					if (error.message === "Cannot read property 'match' of undefined") {
+						// The internals of Ace Editor throws an exception when creating a new note,
+						// but that can be ignored.
+					} else {
+						console.error(error);
+					}
+				}
 				this.editor_.editor.clearSelection();
 				this.editor_.editor.moveCursorTo(0,0);
 			}
