@@ -11,7 +11,9 @@ class MdToHtml_Katex {
 
 	processContent(renderedTokens, content, tagType) {
 		try {
-			let renderered = katex.renderToString(content);
+			let renderered = katex.renderToString(content, {
+				displayMode: tagType === 'block',
+			});
 
 			if (tagType === 'block') renderered = '<p>' + renderered + '</p>';
 
