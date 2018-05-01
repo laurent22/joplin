@@ -497,7 +497,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				},
 			});
 
-			if (this.state.mode == 'edit') return <ActionButton style={{display:'none'}}/>;
+			if (this.state.mode == 'edit') return null;//<ActionButton style={{display:'none'}}/>;
 
 			return <ActionButton multiStates={true} buttons={buttons} buttonIndex={0} />
 		}
