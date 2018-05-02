@@ -9,6 +9,16 @@ const SPACE = "[[SPACE]]";
 const MONOSPACE_OPEN = "[[MONOSPACE_OPEN]]";
 const MONOSPACE_CLOSE = "[[MONOSPACE_CLOSE]]";
 
+
+function debugMD(text, md) {
+	console.log("< " + text + " START>");
+    for (let i = 0; i < md.length; i++) { 
+    	console.log("%i: \"%s\"", i, md[i]);
+    }
+    console.log("< " + text + " STOP>");
+}
+
+
 // This function will return a list of all monospace sections with a flag saying whether they can be merged or not
 function findMonospaceSections(md, ignoreMonospace = false) {
 	let temp = [];
@@ -192,6 +202,8 @@ function mergeMonospaceSectionsWrapper(md, ignoreMonospace = false) {
 		}
 	} 
 
+	debugMD("DEBUG: after merging monospace sections", temp);
+
 	return temp;		
 }
 
@@ -329,6 +341,7 @@ function collapseWhiteSpaceAndAppend(lines, state, text) {
 		text = "\t" + text;
 		lines.push(text);
 	} else {
+		console.log("Collapse: \"%s\"", text);
 		// Remove all \n and \r from the left and right of the text
 		while (text.length && (text[0] == "\n" || text[0] == "\r")) text = text.substr(1);
 		while (text.length && (text[text.length - 1] == "\n" || text[text.length - 1] == "\r")) text = text.substr(0, text.length - 1);
@@ -480,6 +493,7 @@ function enexXmlToMdArray(stream, resources) {
 			inCode: false,
 			inQuote: false,
 			inMonospaceFont: false,
+			inCodeblock: 0,
 			lists: [],
 			anchorAttributes: [],
 		};
@@ -508,6 +522,20 @@ function enexXmlToMdArray(stream, resources) {
 			const nodeAttributes = attributeToLowerCase(node);
 
 			let n = node.name.toLowerCase();
+
+			if (n == "div") {
+				// TODO: Problem here is that <div> is termiated at the end of codeblock... kind of recursion...
+				if (state.inCodeblock > 0) {
+					state.inCodeblock++;
+				} else if (nodeAttributes && nodeAttributes.style && nodeAttributes.style.indexOf("box-sizing: border-box") >= 0) {
+					// Codeblock
+					state.inCodeblock = 1;
+					console.log("CODEBLOCK - START");
+					section.lines.push(MONOSPACE_OPEN);
+					return;
+				}
+			}
+
 			if (n == 'en-note') {
 				// Start of note
 			} else if (isBlockTag(n)) {
@@ -695,10 +723,11 @@ function enexXmlToMdArray(stream, resources) {
 				if (resource && !!resource.id) {
 					section.lines = addResourceTag(section.lines, resource, nodeAttributes.alt);
 				}
-			} else if (n == "span" || n == "font") {
+		 	} else if (n == "span" || n == "font") {
 				// Check for monospace font. It can come from being specified in either from
 				// <span style="..."> or <font face="...">.
-				if (nodeAttributes) {
+				// Monospace sections are already in monospace in codeblocks
+				if (state.inCodeblock == 0 && nodeAttributes) {
 					let style = null;
 
 					if (nodeAttributes.style) {
@@ -724,6 +753,18 @@ function enexXmlToMdArray(stream, resources) {
 		saxStream.on('closetag', function(n) {
 			n = n ? n.toLowerCase() : n;
 
+			if (n == "div") {
+				if (state.inCodeblock >= 1) {
+					state.inCodeblock--;
+
+					if (state.inCodeblock == 0) {
+						console.log("CODEBLOCK - STOP");
+						section.lines.push(MONOSPACE_CLOSE);
+						return;
+					}
+				}
+			}
+
 			if (n == 'en-note') {
 				// End of note
 			} else if (isNewLineOnlyEndTag(n)) {
@@ -736,7 +777,7 @@ function enexXmlToMdArray(stream, resources) {
 				if (section && section.parent) section = section.parent;
 
 			} else if (n == "span" || n == "font") {
-				if (state.inMonospaceFont) {
+				if (state.inCodeblock == 0 && state.inMonospaceFont) {
 					state.inMonospaceFont = false;
 					section.lines.push(MONOSPACE_CLOSE);
 				}
@@ -977,6 +1018,8 @@ async function enexXmlToMd(stream, resources) {
 		mdLines = addResourceTag(mdLines, r, r.filename);
 		firstAttachment = false;
 	}
+
+	debugMD("DEBUG: raw MdLines", mdLines);
 
 	return processMdArrayNewLines(mdLines);
 }
