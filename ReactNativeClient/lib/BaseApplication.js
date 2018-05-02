@@ -143,6 +143,14 @@ class BaseApplication {
 				continue;
 			}
 
+			if (arg.indexOf('-psn') === 0) {
+				// Some weird flag passed by macOS - can be ignored.
+				// https://github.com/laurent22/joplin/issues/480
+				// https://stackoverflow.com/questions/10242115
+				argv.splice(0, 1);
+				continue;
+			}
+
 			if (arg.length && arg[0] == '-') {
 				throw new JoplinError(_('Unknown flag: %s', arg), 'flagError');
 			} else {

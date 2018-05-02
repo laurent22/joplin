@@ -91,9 +91,10 @@ async function main(argv) {
 
 	setReadmeContent(content);
 
-	console.info("git pull && git add -A && git commit -m 'Update readme downloads' && git push")
+	// console.info("git pull && git add -A && git commit -m 'Update readme downloads' && git push")
 }
 
 main(process.argv).catch((error) => {
 	console.error('Fatal error', error);
+	process.exit(1);
 });
