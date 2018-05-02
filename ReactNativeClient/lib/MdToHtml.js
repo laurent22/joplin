@@ -14,7 +14,6 @@ class MdToHtml {
 	constructor(options = null) {
 		if (!options) options = {};
 
-		this.supportsResourceLinks_ = !!options.supportsResourceLinks;
 		this.loadedResources_ = {};
 		this.cachedContent_ = null;
 		this.cachedContentKey_ = null;
@@ -132,40 +131,27 @@ class MdToHtml {
 		const isResourceUrl = Resource.isResourceUrl(href);
 		const title = isResourceUrl ? this.getAttr_(attrs, 'title') : href;
 
-		if (isResourceUrl && !this.supportsResourceLinks_) {
-			// In mobile, links to local resources, such as PDF, etc. currently aren't supported.
-			// Ideally they should be opened in the user's browser.
-			return '<span style="opacity: 0.5">(Resource not yet supported: ';
+		let resourceIdAttr = "";
+		let icon = "";
+		let hrefAttr = '#';
+		if (isResourceUrl) {
+			const resourceId = Resource.pathToId(href);
+			href = "joplin://" + resourceId;
+			resourceIdAttr = "data-resource-id='" + resourceId + "'";
+			icon = '<span class="resource-icon"></span>';
 		} else {
-			let resourceIdAttr = "";
-			let icon = "";
-			let hrefAttr = '#';
-			if (isResourceUrl) {
-				const resourceId = Resource.pathToId(href);
-				href = "joplin://" + resourceId;
-				resourceIdAttr = "data-resource-id='" + resourceId + "'";
-				icon = '<span class="resource-icon"></span>';
-			} else {
-				// If the link is a plain URL (as opposed to a resource link), set the href to the actual
-				// link. This allows the link to be exported too when exporting to PDF. 
-				hrefAttr = href;
-			}
-
-			const js = options.postMessageSyntax + "(" + JSON.stringify(href) + "); return false;";
-			let output = "<a " + resourceIdAttr + " title='" + htmlentities(title) + "' href='" + hrefAttr + "' onclick='" + js + "'>" + icon;
-			return output;
+			// If the link is a plain URL (as opposed to a resource link), set the href to the actual
+			// link. This allows the link to be exported too when exporting to PDF. 
+			hrefAttr = href;
 		}
+
+		const js = options.postMessageSyntax + "(" + JSON.stringify(href) + "); return false;";
+		let output = "<a " + resourceIdAttr + " title='" + htmlentities(title) + "' href='" + hrefAttr + "' onclick='" + js + "'>" + icon;
+		return output;
 	}
 
 	renderCloseLink_(attrs, options) {
-		const href = this.getAttr_(attrs, 'href');
-		const isResourceUrl = Resource.isResourceUrl(href);
-
-		if (isResourceUrl && !this.supportsResourceLinks_) {
-			return ')</span>';
-		} else {
-			return '</a>';
-		}
+		return '</a>';
 	}
 
 	rendererPlugin_(language) {

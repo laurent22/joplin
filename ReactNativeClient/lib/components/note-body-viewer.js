@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { Platform, WebView, View, Linking } = require('react-native');
+const { Platform, WebView, View } = require('react-native');
 const { globalStyle } = require('lib/components/global-style.js');
 const Resource = require('lib/models/Resource.js');
 const Setting = require('lib/models/Setting.js');
@@ -19,7 +19,7 @@ class NoteBodyViewer extends Component {
 	}
 
 	UNSAFE_componentWillMount() {
-		this.mdToHtml_ = new MdToHtml({ supportsResourceLinks: false });
+		this.mdToHtml_ = new MdToHtml();
 		this.isMounted_ = true;
 	}
 
@@ -115,7 +115,7 @@ class NoteBodyViewer extends Component {
 							//msg = msg.split(':');
 							//this.bodyScrollTop_ = Number(msg[1]);
 						} else {
-							Linking.openURL(msg);
+							this.props.onJoplinLinkClick(msg);
 						}
 					}}
 				/>

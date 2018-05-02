@@ -1,5 +1,6 @@
 const React = require('react');
 const Note = require('lib/models/Note.js');
+const BaseItem = require('lib/models/BaseItem.js');
 const BaseModel = require('lib/BaseModel.js');
 const Search = require('lib/models/Search.js');
 const { time } = require('lib/time-utils.js');
@@ -76,7 +77,6 @@ class NoteTextComponent extends React.Component {
 	mdToHtml() {
 		if (this.mdToHtml_) return this.mdToHtml_;
 		this.mdToHtml_ = new MdToHtml({
-			supportsResourceLinks: true,
 			resourceBaseUrl: 'file://' + Setting.value('resourceDir') + '/',
 		});
 		return this.mdToHtml_;
@@ -334,11 +334,29 @@ class NoteTextComponent extends React.Component {
 
 			menu.popup(bridge().window());
 		} else if (msg.indexOf('joplin://') === 0) {
-			const resourceId = msg.substr('joplin://'.length);
-			Resource.load(resourceId).then((resource) => {
-				const filePath = Resource.fullPath(resource);
+			const itemId = msg.substr('joplin://'.length);
+			const item = await BaseItem.loadItemById(itemId);
+
+			if (!item) throw new Error('No item with ID ' + itemId);
+
+			if (item.type_ === BaseModel.TYPE_RESOURCE) {
+				const filePath = Resource.fullPath(item);
 				bridge().openItem(filePath);
-			});
+			} else if (item.type_ === BaseModel.TYPE_NOTE) {
+				this.props.dispatch({
+					type: "FOLDER_SELECT",
+					id: item.parent_id,
+				});
+
+				setTimeout(() => {
+					this.props.dispatch({
+						type: 'NOTE_SELECT',
+						id: item.id,
+					});
+				}, 10);
+			} else {
+				throw new Error('Unsupported item type: ' + item.type_);
+			}
 		} else {
 			bridge().showErrorMessageBox(_('Unsupported link or message: %s', msg));
 		}

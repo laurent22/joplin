@@ -45,7 +45,7 @@ function createChangeLog(releases) {
 		let s = [];
 		s.push('## ' + r.tag_name + ' - ' + r.published_at);
 		s.push('');
-		let body = r.body.replace(/(#\d+)/g, '[$1](https://github.com/laurent22/joplin/issues/$1)');
+		let body = r.body.replace(/#(\d+)/g, '[$1](https://github.com/laurent22/joplin/issues/$1)');
 		s.push(body);
 		output.push(s.join('\n'));
 	}

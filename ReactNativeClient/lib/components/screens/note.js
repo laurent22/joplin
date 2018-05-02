@@ -1,9 +1,10 @@
 const React = require('react'); const Component = React.Component;
-const { Platform, Keyboard, BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking, Image } = require('react-native');
+const { Platform, Clipboard, Keyboard, BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking, Image } = require('react-native');
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
 const RNFS = require('react-native-fs');
 const Note = require('lib/models/Note.js');
+const BaseItem = require('lib/models/BaseItem.js');
 const Setting = require('lib/models/Setting.js');
 const Resource = require('lib/models/Resource.js');
 const Folder = require('lib/models/Folder.js');
@@ -22,8 +23,8 @@ const { _ } = require('lib/locale.js');
 const { reg } = require('lib/registry.js');
 const { shim } = require('lib/shim.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
-const { dialogs } = require('lib/dialogs.js');
 const { globalStyle, themeStyle } = require('lib/components/global-style.js');
+const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { NoteBodyViewer } = require('lib/components/note-body-viewer.js');
 const RNFetchBlob = require('react-native-fetch-blob').default;
@@ -106,6 +107,39 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		this.noteTagDialog_closeRequested = () => {
 			this.setState({ noteTagDialogShown: false });
+		}
+
+		this.onJoplinLinkClick_ = async (msg) => {
+			try {
+				if (msg.indexOf('joplin://') === 0) {
+					const itemId = msg.substr('joplin://'.length);
+					const item = await BaseItem.loadItemById(itemId);
+					if (!item) throw new Error(_('No item with ID %s', itemId));
+
+					if (item.type_ === BaseModel.TYPE_NOTE) {
+						// Easier to just go back, then go to the note since
+						// the Note screen doesn't handle reloading a different note
+
+						this.props.dispatch({
+							type: 'NAV_BACK',
+						});
+
+						setTimeout(() => {
+							this.props.dispatch({
+								type: 'NAV_GO',
+								routeName: 'Note',
+								noteId: item.id,
+							});
+						}, 5);
+					} else {
+						throw new Error(_('The Joplin mobile app does not currently support this type of link: %s', BaseModel.modelTypeToName(item.type_)));
+					}
+				} else {
+					Linking.openURL(msg);
+				}
+			} catch (error) {
+				dialogs.error(this, error.message);
+			}
 		}
 	}
 
@@ -402,6 +436,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
+	copyMarkdownLink_onPress() {
+		const note = this.state.note;
+		Clipboard.setString(Note.markdownTag(note));
+	}
+
 	menuOptions() {
 		const note = this.state.note;
 		const isTodo = note && !!note.is_todo;
@@ -425,6 +464,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		if (isSaved) output.push({ title: _('Tags'), onPress: () => { this.tags_onPress(); } });
 		output.push({ title: isTodo ? _('Convert to note') : _('Convert to todo'), onPress: () => { this.toggleIsTodo_onPress(); } });
+		if (isSaved) output.push({ title: _('Copy Markdown link'), onPress: () => { this.copyMarkdownLink_onPress(); } });
 		output.push({ isDivider: true });
 		if (this.props.showAdvancedOptions) output.push({ title: this.state.showNoteMetadata ? _('Hide metadata') : _('Show metadata'), onPress: () => { this.showMetadata_onPress(); } });
 		output.push({ title: _('View on map'), onPress: () => { this.showOnMap_onPress(); } });
@@ -466,7 +506,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				this.saveOneProperty('body', newBody);
 			};
 
-			bodyComponent = <NoteBodyViewer style={this.styles().noteBodyViewer} webViewStyle={theme} note={note} onCheckboxChange={(newBody) => { onCheckboxChange(newBody) }}/>
+			bodyComponent = <NoteBodyViewer onJoplinLinkClick={this.onJoplinLinkClick_} style={this.styles().noteBodyViewer} webViewStyle={theme} note={note} onCheckboxChange={(newBody) => { onCheckboxChange(newBody) }}/>
 		} else {
 			const focusBody = !isNew && !!note.title;
 

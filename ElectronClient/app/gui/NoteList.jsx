@@ -96,6 +96,16 @@ class NoteListComponent extends React.Component {
 				}
 			}}));
 
+			menu.append(new MenuItem({label: _('Copy Markdown link'), click: async () => {
+				const { clipboard } = require('electron');
+				const links = [];
+				for (let i = 0; i < noteIds.length; i++) {
+					const note = await Note.load(noteIds[i]);
+					links.push(Note.markdownTag(note));
+				}
+				clipboard.writeText(links.join(' '));
+			}}));
+
 			const exportMenu = new Menu();
 
 			const ioService = new InteropService();
