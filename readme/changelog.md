@@ -8,16 +8,16 @@ Note: This is the same as v84 but with the note creation bug fixed.
 - New: Button to toggle the sidebar
 - Improved: Better handling of resources that are incorrectly flagged as encrypted
 - Improved: Various changes to make PortableApps format work
-- Improved: Resolves [430](https://github.com/laurent22/joplin/issues/430): Support lowercase "x" in Markdown checkboxes
-- Fixes [346](https://github.com/laurent22/joplin/issues/346): Make sure links have an address when exporting to PDF
-- Fixes [355](https://github.com/laurent22/joplin/issues/355): Set undo state properly when loading new note to prevent overwriting content of one note with another
-- Fixes [363](https://github.com/laurent22/joplin/issues/363): indentation and rendering of lists
-- Fixes [470](https://github.com/laurent22/joplin/issues/470): Make it clear that spaces in URLs are invalid.
-- Fixes [434](https://github.com/laurent22/joplin/issues/434): Handle Katex block mode
+- Improved: Resolves [#430](https://github.com/laurent22/joplin/issues/430): Support lowercase "x" in Markdown checkboxes
+- Fixes [#346](https://github.com/laurent22/joplin/issues/346): Make sure links have an address when exporting to PDF
+- Fixes [#355](https://github.com/laurent22/joplin/issues/355): Set undo state properly when loading new note to prevent overwriting content of one note with another
+- Fixes [#363](https://github.com/laurent22/joplin/issues/363): indentation and rendering of lists
+- Fixes [#470](https://github.com/laurent22/joplin/issues/470): Make it clear that spaces in URLs are invalid.
+- Fixes [#434](https://github.com/laurent22/joplin/issues/434): Handle Katex block mode
 
 ## [v1.0.83](https://github.com/laurent22/joplin/releases/tag/v1.0.83) - 2018-04-04T19:43:58Z
 
-- Fixes [365](https://github.com/laurent22/joplin/issues/365): Cannot paste in Dropbox screen
+- Fixes [#365](https://github.com/laurent22/joplin/issues/365): Cannot paste in Dropbox screen
 
 ## [v1.0.82](https://github.com/laurent22/joplin/releases/tag/v1.0.82) - 2018-03-31T19:16:31Z
 
@@ -27,16 +27,16 @@ Note: This is the same as v84 but with the note creation bug fixed.
 
 - New: Dropbox synchronisation
 - New: Czech translation
-- Fixes [318](https://github.com/laurent22/joplin/issues/318): Display full links in editor
-- Resolves [329](https://github.com/laurent22/joplin/issues/329): Add link to E2EE doc
+- Fixes [#318](https://github.com/laurent22/joplin/issues/318): Display full links in editor
+- Resolves [#329](https://github.com/laurent22/joplin/issues/329): Add link to E2EE doc
 
 ## [v1.0.79](https://github.com/laurent22/joplin/releases/tag/v1.0.79) - 2018-03-23T18:00:11Z
 
-- New: Resolves [144](https://github.com/laurent22/joplin/issues/144), Resolves [311](https://github.com/laurent22/joplin/issues/311): Highlight search results and search in real time. Associated Ctrl+F with searching.
-- New: Resolves [73](https://github.com/laurent22/joplin/issues/73): Show modified date next to note in editor
+- New: Resolves [#144](https://github.com/laurent22/joplin/issues/144), Resolves [#311](https://github.com/laurent22/joplin/issues/311): Highlight search results and search in real time. Associated Ctrl+F with searching.
+- New: Resolves [#73](https://github.com/laurent22/joplin/issues/73): Show modified date next to note in editor
 - New: Danish translation
-- Improved: Fixes [318](https://github.com/laurent22/joplin/issues/318), Fixes [317](https://github.com/laurent22/joplin/issues/317): ENEX: Improved handling and rendering of plain text links. Improved detection and import of resources. Improved import of tables.
-- Updated: Resolves [307](https://github.com/laurent22/joplin/issues/307): Use blue colour for sidebar, to be consistent with mobile app and logo
+- Improved: Fixes [#318](https://github.com/laurent22/joplin/issues/318), Fixes [#317](https://github.com/laurent22/joplin/issues/317): ENEX: Improved handling and rendering of plain text links. Improved detection and import of resources. Improved import of tables.
+- Updated: Resolves [#307](https://github.com/laurent22/joplin/issues/307): Use blue colour for sidebar, to be consistent with mobile app and logo
 - Updated: Translations
 
 ## [v1.0.78](https://github.com/laurent22/joplin/releases/tag/v1.0.78) - 2018-03-17T15:27:18Z
@@ -47,41 +47,41 @@ Note: This is the same as v84 but with the note creation bug fixed.
 
 Note: This fixes an invalid database upgrade in the previous version.
 
-- New: Resolves [237](https://github.com/laurent22/joplin/issues/237): Export to PDF and print option
-- New: Resolves [154](https://github.com/laurent22/joplin/issues/154): No longer used resources are automatically deleted after approximately 24h
-- Improved: Resolves [298](https://github.com/laurent22/joplin/issues/298): Removed extraneous first characters from auto-title
+- New: Resolves [#237](https://github.com/laurent22/joplin/issues/237): Export to PDF and print option
+- New: Resolves [#154](https://github.com/laurent22/joplin/issues/154): No longer used resources are automatically deleted after approximately 24h
+- Improved: Resolves [#298](https://github.com/laurent22/joplin/issues/298): Removed extraneous first characters from auto-title
 - Improved: Made WebDAV options dynamics so that changing username or password doesn't require restarting the app
-- Fix: Fixes [291](https://github.com/laurent22/joplin/issues/291): Crash with empty backtick
-- Fix: Fixes [292](https://github.com/laurent22/joplin/issues/292): Improved auto-update feature and fixed incorrect notifications
+- Fix: Fixes [#291](https://github.com/laurent22/joplin/issues/291): Crash with empty backtick
+- Fix: Fixes [#292](https://github.com/laurent22/joplin/issues/292): Improved auto-update feature and fixed incorrect notifications
 - Fix: Signed executables on Windows
 - Updated Russian, German, Portuguese, Spanish and French translations. Many thanks to the translators!
 
 ## [v1.0.72](https://github.com/laurent22/joplin/releases/tag/v1.0.72) - 2018-03-14T09:44:35Z
 
 - New: Allow exporting only selected notes or notebook
-- New: Resolves [266](https://github.com/laurent22/joplin/issues/266): Allow setting text editor font family
+- New: Resolves [#266](https://github.com/laurent22/joplin/issues/266): Allow setting text editor font family
 - New: Display icon next to resources and allow downloading them from Electron client
 - Improved: Optimised sync when dealing with many items, in particular when using Nextcloud or WebDAV
 - Improved: Display last sync error unless it's a timeout or network error
-- Improved: Fixes [268](https://github.com/laurent22/joplin/issues/268): Improve error message for invalid flags
-- Fix: Fixes [271](https://github.com/laurent22/joplin/issues/271): Sort by created time was not respected
+- Improved: Fixes [#268](https://github.com/laurent22/joplin/issues/268): Improve error message for invalid flags
+- Fix: Fixes [#271](https://github.com/laurent22/joplin/issues/271): Sort by created time was not respected
 
 ## [v1.0.70](https://github.com/laurent22/joplin/releases/tag/v1.0.70) - 2018-02-28T20:04:30Z
 
-- New: Resolves [97](https://github.com/laurent22/joplin/issues/97): Export to JEX format or RAW format
+- New: Resolves [#97](https://github.com/laurent22/joplin/issues/97): Export to JEX format or RAW format
 - New: Import JEX and RAW format
-- New: Resolves [52](https://github.com/laurent22/joplin/issues/52): Import Markdown files or directory
+- New: Resolves [#52](https://github.com/laurent22/joplin/issues/52): Import Markdown files or directory
 - New: Allow sorting notes by various fields
-- New: Resolves [243](https://github.com/laurent22/joplin/issues/243): Added black and white tray icon for macOS
-- Fix: [247](https://github.com/laurent22/joplin/issues/247): Unreadable error messages when checking for updates
+- New: Resolves [#243](https://github.com/laurent22/joplin/issues/243): Added black and white tray icon for macOS
+- Fix: [#247](https://github.com/laurent22/joplin/issues/247): Unreadable error messages when checking for updates
 - Fix: Fixed sync interval sorting order
-- Fix: [256](https://github.com/laurent22/joplin/issues/256): Check that no other instance of Joplin is running before launching a new one
+- Fix: [#256](https://github.com/laurent22/joplin/issues/256): Check that no other instance of Joplin is running before launching a new one
 
 ## [v1.0.67](https://github.com/laurent22/joplin/releases/tag/v1.0.67) - 2018-02-19T22:51:08Z
 
-- Fixed: [217](https://github.com/laurent22/joplin/issues/217): Display a message when the note has no content and only the note viewer is visible
-- Fixed: [240](https://github.com/laurent22/joplin/issues/240): Tags should be handled in a case-insensitive way
-- Fixed: [241](https://github.com/laurent22/joplin/issues/241): Ignore response for certain WebDAV calls to improve compatibility with some services.
+- Fixed: [#217](https://github.com/laurent22/joplin/issues/217): Display a message when the note has no content and only the note viewer is visible
+- Fixed: [#240](https://github.com/laurent22/joplin/issues/240): Tags should be handled in a case-insensitive way
+- Fixed: [#241](https://github.com/laurent22/joplin/issues/241): Ignore response for certain WebDAV calls to improve compatibility with some services.
 - Updated: French and Español translation
 
 ## [v1.0.66](https://github.com/laurent22/joplin/releases/tag/v1.0.66) - 2018-02-18T23:09:09Z
@@ -107,7 +107,7 @@ IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before 
 - Fixed: Nextcloud sync target ID (which was incorrectly set to WebDAV sync ID). As a result items that have been created since this bug will be re-synced with Nextcloud. This sync will not duplicate or delete any item but is necessary to preserve data integrity. IF YOU HAVE NOTES IN CONFLICT AFTER SYNC: Close the app completely and restart it to make sure all the lists are visually up-to-date. The notes in conflict most likely can be ignored - they are just duplicate of the real ones. To be safe, check the content but most likely they can simply be deleted.
 - Improved: Provide Content-Length header for WebDAV for better compatibility with more servers
 - Fixed: Allow copy and paste from config and encryption screen on macOS
-- Fixed: [201](https://github.com/laurent22/joplin/issues/201), [216](https://github.com/laurent22/joplin/issues/216): Make sure only one update check can run at a time, and improved modal dialog boxes
+- Fixed: [#201](https://github.com/laurent22/joplin/issues/201), [#216](https://github.com/laurent22/joplin/issues/216): Make sure only one update check can run at a time, and improved modal dialog boxes
 
 ## [v1.0.63](https://github.com/laurent22/joplin/releases/tag/v1.0.63) - 2018-02-14T19:40:36Z
 
@@ -116,8 +116,8 @@ IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before 
 
 ## [v1.0.62](https://github.com/laurent22/joplin/releases/tag/v1.0.62) - 2018-02-12T20:19:58Z
 
-- Fixes [205](https://github.com/laurent22/joplin/issues/205): Importing Evernote notes while on import page re-imports previous import
-- Fixes [209](https://github.com/laurent22/joplin/issues/209): Items with non-ASCII characters end up truncated on Nextcloud
+- Fixes [#205](https://github.com/laurent22/joplin/issues/205): Importing Evernote notes while on import page re-imports previous import
+- Fixes [#209](https://github.com/laurent22/joplin/issues/209): Items with non-ASCII characters end up truncated on Nextcloud
 - Added Basque translation, fixed issue with handling invalid translations. Updated translation FR.
 
 ## [v0.10.61](https://github.com/laurent22/joplin/releases/tag/v0.10.61) - 2018-02-08T18:27:39Z
@@ -176,7 +176,7 @@ IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before 
 ## [v0.10.48](https://github.com/laurent22/joplin/releases/tag/v0.10.48) - 2018-01-23T11:19:51Z
 
 - Improved and optimised file system sync target when many items are present.
-- Fixes [155](https://github.com/laurent22/joplin/issues/155): Caret alignment issue with Russian text
+- Fixes [#155](https://github.com/laurent22/joplin/issues/155): Caret alignment issue with Russian text
 - Dutch translation (Thanks @tcassaert)
 - Removed certain log statements so that sensitive info doesn't end up in logs
 - Fix: Handle case where resource blob is missing during sync
@@ -185,7 +185,7 @@ IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before 
 
 - Improved the way new note are created, and automatically add a title. Made saving and loading notes more reliable.
 - Fix: race condition when a note is being uploaded while it's being modified in the text editor
-- Fixes [129](https://github.com/laurent22/joplin/issues/129): Tags are case insensitive
+- Fixes [#129](https://github.com/laurent22/joplin/issues/129): Tags are case insensitive
 - Schedule sync only after 30 seconds
 - Schedule sync after enabling or disabling encryption
 - Display sync items being fetched
@@ -196,7 +196,7 @@ IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before 
 - Fixed table font size and family
 - Fixed logic to save, and make sure scheduled save always happen even when changing note
 - Fixed OneDrive sync when resync is requested
-- Fixes [85](https://github.com/laurent22/joplin/issues/85): Don't record deleted_items entries for folders deleted via sync
+- Fixes [#85](https://github.com/laurent22/joplin/issues/85): Don't record deleted_items entries for folders deleted via sync
 - Updated translations
 
 ## [v0.10.43](https://github.com/laurent22/joplin/releases/tag/v0.10.43) - 2018-01-08T10:12:10Z
