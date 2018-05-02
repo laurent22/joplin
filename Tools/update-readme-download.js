@@ -5,7 +5,7 @@ const https = require('https');
 const request = require('request');
 
 const url = 'https://api.github.com/repos/laurent22/joplin/releases/latest';
-const readmePath = __dirname + '/../../README.md';
+const readmePath = __dirname + '/../README.md';
 
 async function msleep(ms) {
 	return new Promise((resolve, reject) => {
