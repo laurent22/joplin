@@ -20,7 +20,7 @@ Three types of applications are available: for the **desktop** (Windows, macOS a
 
 Operating System | Download | Alternative
 -----------------|--------|-------------------
-Windows (64-bit only)         | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.85/Joplin-Setup-1.0.85.exe'><img alt='Get it on Windows' height="40px" src='https://joplin.cozic.net/images/BadgeWindows.png'/></a> | 
+Windows (32 and 64-bit)         | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.85/Joplin-Setup-1.0.85.exe'><img alt='Get it on Windows' height="40px" src='https://joplin.cozic.net/images/BadgeWindows.png'/></a> | 
 macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.85/Joplin-1.0.85.dmg'><img alt='Get it on macOS' height="40px" src='https://joplin.cozic.net/images/BadgeMacOS.png'/></a> | 
 Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.85/Joplin-1.0.85-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://joplin.cozic.net/images/BadgeLinux.png'/></a> | An Arch Linux package [is also available](#terminal-application).
 
