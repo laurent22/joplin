@@ -18,22 +18,19 @@ const { uuid } = require('lib/uuid.js');
 class InteropService_Importer_Raw extends InteropService_Importer_Base {
 
 	async exec(result) {
-		const noteIdMap = {};
-		const folderIdMap = {};
-		const resourceIdMap = {};
-		const tagIdMap = {};
+		const itemIdMap = {};
 		const createdResources = {};
 		const noteTagsToCreate = [];
 		const destinationFolderId = this.options_.destinationFolderId;
 
-		const replaceResourceNoteIds = (noteBody) => {
+		const replaceLinkedItemIds = async (noteBody) => {
 			let output = noteBody;
-			const resourceIds = Note.linkedResourceIds(noteBody);
+			const itemIds = Note.linkedItemIds(noteBody);
 
-			for (let i = 0; i < resourceIds.length; i++) {
-				const id = resourceIds[i];
-				if (!resourceIdMap[id]) resourceIdMap[id] = uuid.create();
-				output = output.replace(new RegExp(id, 'gi'), resourceIdMap[id]);
+			for (let i = 0; i < itemIds.length; i++) {
+				const id = itemIds[i];
+				if (!itemIdMap[id]) itemIdMap[id] = uuid.create();
+				output = output.replace(new RegExp(id, 'gi'), itemIdMap[id]);
 			}
 
 			return output;
@@ -77,41 +74,40 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 				// - If a destination folder was specified, move the note to it.
 				// - Otherwise, if the associated folder exists, use this.
 				// - If it doesn't exist, use the default folder. This is the case for example when importing JEX archives that contain only one or more notes, but no folder.
-				if (!folderIdMap[item.parent_id]) {
+				if (!itemIdMap[item.parent_id]) {
 					if (destinationFolderId) {
-						folderIdMap[item.parent_id] = destinationFolderId;
+						itemIdMap[item.parent_id] = destinationFolderId;
 					} else if (!folderExists(stats, item.parent_id)) {
 						const parentFolder = await defaultFolder();
-						folderIdMap[item.parent_id] = parentFolder.id;
+						itemIdMap[item.parent_id] = parentFolder.id;
 					} else {
-						folderIdMap[item.parent_id] = uuid.create();
+						itemIdMap[item.parent_id] = uuid.create();
 					}
 				}
 
-				const noteId = uuid.create();
-				noteIdMap[item.id] = noteId;
-				item.id = noteId;
-				item.parent_id = folderIdMap[item.parent_id];
-				item.body = replaceResourceNoteIds(item.body);
+				if (!itemIdMap[item.id]) itemIdMap[item.id] = uuid.create();
+				item.id = itemIdMap[item.id]; //noteId;
+				item.parent_id = itemIdMap[item.parent_id];
+				item.body = await replaceLinkedItemIds(item.body);
 			} else if (itemType === BaseModel.TYPE_FOLDER) {
 				if (destinationFolderId) continue;
 
-				if (!folderIdMap[item.id]) folderIdMap[item.id] = uuid.create();
-				item.id = folderIdMap[item.id];
+				if (!itemIdMap[item.id]) itemIdMap[item.id] = uuid.create();
+				item.id = itemIdMap[item.id];
 				item.title = await Folder.findUniqueFolderTitle(item.title);
 			} else if (itemType === BaseModel.TYPE_RESOURCE) {
-				if (!resourceIdMap[item.id]) resourceIdMap[item.id] = uuid.create();
-				item.id = resourceIdMap[item.id];
+				if (!itemIdMap[item.id]) itemIdMap[item.id] = uuid.create();
+				item.id = itemIdMap[item.id];
 				createdResources[item.id] = item;
 			} else if (itemType === BaseModel.TYPE_TAG) {
 				const tag = await Tag.loadByTitle(item.title); 
 				if (tag) {
-					tagIdMap[item.id] = tag.id;
+					itemIdMap[item.id] = tag.id;
 					continue;
 				}
 
 				const tagId = uuid.create();
-				tagIdMap[item.id] = tagId;
+				itemIdMap[item.id] = tagId;
 				item.id = tagId;
 			} else if (itemType === BaseModel.TYPE_NOTE_TAG) {
 				noteTagsToCreate.push(item);
@@ -123,8 +119,8 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 
 		for (let i = 0; i < noteTagsToCreate.length; i++) {
 			const noteTag = noteTagsToCreate[i];
-			const newNoteId = noteIdMap[noteTag.note_id];
-			const newTagId = tagIdMap[noteTag.tag_id];
+			const newNoteId = itemIdMap[noteTag.note_id];
+			const newTagId = itemIdMap[noteTag.tag_id];
 
 			if (!newNoteId) {
 				result.warnings.push(sprintf('Non-existent note %s referenced in tag %s', noteTag.note_id, noteTag.tag_id));
@@ -149,7 +145,7 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 			for (let i = 0; i < resourceStats.length; i++) {
 				const resourceFilePath = this.sourcePath_ + '/resources/' + resourceStats[i].path;
 				const oldId = Resource.pathToId(resourceFilePath);
-				const newId = resourceIdMap[oldId];
+				const newId = itemIdMap[oldId];
 				if (!newId) {
 					result.warnings.push(sprintf('Resource file is not referenced in any note and so was not imported: %s', oldId));
 					continue;

@@ -189,7 +189,7 @@ class InteropService {
 				await queueExportItem(BaseModel.TYPE_NOTE, note);
 				exportedNoteIds.push(noteId);
 
-				const rids = Note.linkedResourceIds(note.body);
+				const rids = await Note.linkedResourceIds(note.body);
 				resourceIds = resourceIds.concat(rids);
 			}
 		}

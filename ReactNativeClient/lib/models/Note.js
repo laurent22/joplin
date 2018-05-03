@@ -107,12 +107,41 @@ class Note extends BaseItem {
 		return BaseModel.TYPE_NOTE;
 	}
 
-	static linkedResourceIds(body) {
+	static linkedItemIds(body) {
 		// For example: ![](:/fcca2938a96a22570e8eae2565bc6b0b)
 		if (!body || body.length <= 32) return [];
 		const matches = body.match(/\(:\/.{32}\)/g);
 		if (!matches) return [];
 		return matches.map((m) => m.substr(3, 32));
+	}
+
+	static async linkedItems(body) {
+		const itemIds = this.linkedItemIds(body);
+		const output = [];
+
+		for (let i = 0; i < itemIds.length; i++) {
+			const item = await BaseItem.loadItemById(itemIds[i]);
+			if (!item) continue;
+			output.push(item);
+		}
+
+		return output;
+	}
+
+	static async linkedItemIdsByType(type, body) {
+		const items = await this.linkedItems(body);
+		const output = [];
+
+		for (let i = 0; i < items.length; i++) {
+			const item = items[i];
+			if (item.type_ === type) output.push(item.id);
+		}
+
+		return output;
+	}
+
+	static async linkedResourceIds(body) {
+		return await this.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, body);
 	}
 
 	static new(parentId = '') {

@@ -44,7 +44,7 @@ class ResourceService extends BaseService {
 
 				if (change.type === ItemChange.TYPE_CREATE || change.type === ItemChange.TYPE_UPDATE) {
 					const note = noteById(change.item_id);
-					const resourceIds = Note.linkedResourceIds(note.body);
+					const resourceIds = await Note.linkedResourceIds(note.body);
 					await NoteResource.setAssociatedResources(note.id, resourceIds);
 				} else if (change.type === ItemChange.TYPE_DELETE) {
 					await NoteResource.remove(change.item_id);

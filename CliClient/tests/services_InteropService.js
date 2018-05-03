@@ -180,7 +180,7 @@ describe('services_InteropService', function() {
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
 		note1 = await Note.load(note1.id);
-		let resourceIds = Note.linkedResourceIds(note1.body);
+		let resourceIds = await Note.linkedResourceIds(note1.body);
 		let resource1 = await Resource.load(resourceIds[0]);
 
 		await service.export({ path: filePath });
@@ -193,7 +193,7 @@ describe('services_InteropService', function() {
 
 		let note2 = (await Note.all())[0];
 		expect(note2.body).not.toBe(note1.body);
-		resourceIds = Note.linkedResourceIds(note2.body);
+		resourceIds = await Note.linkedResourceIds(note2.body);
 		expect(resourceIds.length).toBe(1);
 		let resource2 = await Resource.load(resourceIds[0]);
 		expect(resource2.id).not.toBe(resource1.id);
@@ -247,6 +247,30 @@ describe('services_InteropService', function() {
 
 		let folder2 = (await Folder.all())[0];
 		expect(folder2.title).toBe('folder1');
+	}));
+
+	it('should export and import links to notes', asyncTest(async () => {
+		const service = new InteropService();
+		const filePath = exportDir() + '/test.jex';
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		let note2 = await Note.save({ title: 'ma deuxième note', body: 'Lien vers première note : ' + Note.markdownTag(note1), parent_id: folder1.id });
+
+		await service.export({ path: filePath, sourceFolderIds: [folder1.id] });
+		
+		await Note.delete(note1.id);
+		await Note.delete(note2.id);
+		await Folder.delete(folder1.id);
+
+		await service.import({ path: filePath });
+
+		expect(await Note.count()).toBe(2);
+		expect(await Folder.count()).toBe(1);
+
+		let note1_2 = await Note.loadByTitle('ma note');
+		let note2_2 = await Note.loadByTitle('ma deuxième note');
+
+		expect(note2_2.body.indexOf(note1_2.id) >= 0).toBe(true);
 	}));
 
 });
