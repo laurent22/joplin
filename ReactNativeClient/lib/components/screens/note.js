@@ -364,10 +364,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 					return;
 				} else {
 					await RNFetchBlob.fs.cp(localFilePath, targetPath);
+					const stat = await shim.fsDriver().stat(targetPath);
+					if (stat.size >= 10000000) {
+						await shim.fsDriver().remove(targetPath);
+						throw new Error('Resources larger than 10 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
+					}
 				}
 			}
 		} catch (error) {
 			reg.logger().warn('Could not attach file:', error);
+			await dialogs.error(this, error.message);
 			return;
 		}
 

@@ -530,6 +530,7 @@ class NoteTextComponent extends React.Component {
 				});
 			} catch (error) {
 				reg.logger().error(error);
+				bridge().showErrorMessageBox(error.message);
 			}
 		}
 	}
