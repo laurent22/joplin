@@ -9,22 +9,13 @@ const SPACE = "[[SPACE]]";
 const MONOSPACE_OPEN = "[[MONOSPACE_OPEN]]";
 const MONOSPACE_CLOSE = "[[MONOSPACE_CLOSE]]";
 
-
-function debugMD(text, md) {
-	console.log("< " + text + " START>");
-    for (let i = 0; i < md.length; i++) { 
-    	console.log("%i: \"%s\"", i, md[i]);
-    }
-    console.log("< " + text + " STOP>");
-}
-
-
 // This function will return a list of all monospace sections with a flag saying whether they can be merged or not
-function findMonospaceSections(md, ignoreMonospace = false) {
+function findMonospaceSections(md) {
 	let temp = [];
 
 	let sections = [];
 	let section = null;
+	// This variable is used twice: to detected if a newline is between monospace sections and if a newline is inside monospace section
 	let mergeWithPrevious = true;
 
 	let last = "";
@@ -39,13 +30,12 @@ function findMonospaceSections(md, ignoreMonospace = false) {
 				closeIndex: null,
 				mergeAllowed: true, 
 				mergeWithPrevious: mergeWithPrevious,
+				isEmptyLine: false,
 			}
 			section = monospaceSection;
 
-			if (!ignoreMonospace) {
-				// Remember where monospace section begins, later it will be replaced with appropriate markdown (` or ```) 
-				section.openIndex = temp.push(v) - 1;
-			} 
+			// Remember where monospace section begins, later it will be replaced with appropriate markdown (` or ```) 
+			section.openIndex = temp.push(v) - 1;
 			// Add an empty string, it can be later replaced with newline if necessary
 			temp.push("");
 			
@@ -54,22 +44,24 @@ function findMonospaceSections(md, ignoreMonospace = false) {
 				section.mergeAllowed = false;
 			}
 
+			// Reset to detect if monospace section contains a newline
+			mergeWithPrevious = true;
+
 		} else if (v == MONOSPACE_CLOSE) {
 			if (section == null) throw new Error('Monospace tag was closed without being open before'); // Sanity check, but normally not possible
 			if (section.closeIndex != null) throw new Error('Monospace tag is closed for the second time'); // Sanity check, but normally not possible
 
 			// Add an empty string, it can be later replaced with newline if necessary
 			temp.push("");
-			if (!ignoreMonospace) {
-				// Remember where monospace section ends, later it will be replaced with appropriate markdown (` or ```) 
-				section.closeIndex = temp.push(v) - 1;
-			}
+			// Remember where monospace section ends, later it will be replaced with appropriate markdown (` or ```) 
+			section.closeIndex = temp.push(v) - 1;
 
 			if (md[i+1] != BLOCK_CLOSE) {
 				// We cannot merge inline code
 				section.mergeAllowed = false;
 			}
 
+			section.isEmptyLine = mergeWithPrevious;
 			sections.push(section);
 
 			// Reset
@@ -93,13 +85,20 @@ function findMonospaceSections(md, ignoreMonospace = false) {
 }
 
 // This function is looping over monospace sections and merging what it can merge
-function mergeMonospaceSections(md, sections, ignoreMonospace = false) {
+function mergeMonospaceSections(md, sections) {
 
 	const USE_BLOCK_TAG = 1;
 	const USE_INLINE_TAG = 2;
 	const USE_EMPTY_TAG = 3;
 
 	const toMonospace = (md, section, startTag, endTag) => {
+
+		// It looks better when empty lines are not inlined
+		if (startTag == USE_INLINE_TAG && section.isEmptyLine) {
+			startTag = USE_EMPTY_TAG;
+			endTag = USE_EMPTY_TAG;
+		}
+
 		switch (startTag) {
 			case USE_BLOCK_TAG:
 				md[section.openIndex] = "```";
@@ -189,20 +188,26 @@ function mergeMonospaceSections(md, sections, ignoreMonospace = false) {
 //   2) It will merge all monospace sections where merge is allowed
 function mergeMonospaceSectionsWrapper(md, ignoreMonospace = false) {	
 
-	const result = findMonospaceSections(md, ignoreMonospace);
-
-	mergeMonospaceSections(result.md, result.monospaceSections, ignoreMonospace);
+	if (!ignoreMonospace) {
+		const result = findMonospaceSections(md);
+		
+		if (result.monospaceSections.length > 0) {
+			mergeMonospaceSections(result.md, result.monospaceSections);
+		}
+		md = result.md;
+	} 
 
 	// Remove empty items, it is necessary for correct function of newline merging happening outside this function
 	let temp = []
-	for (let i = 0; i < result.md.length; i++) {
-		let v = result.md[i];
+	for (let i = 0; i < md.length; i++) {
+		let v = md[i];
+		if (ignoreMonospace && (v == MONOSPACE_OPEN || v == MONOSPACE_CLOSE)) {
+			continue; // skip
+		}
 		if (v != "") {
 			temp.push(v);
 		}
 	} 
-
-	debugMD("DEBUG: after merging monospace sections", temp);
 
 	return temp;		
 }
@@ -341,7 +346,6 @@ function collapseWhiteSpaceAndAppend(lines, state, text) {
 		text = "\t" + text;
 		lines.push(text);
 	} else {
-		console.log("Collapse: \"%s\"", text);
 		// Remove all \n and \r from the left and right of the text
 		while (text.length && (text[0] == "\n" || text[0] == "\r")) text = text.substr(1);
 		while (text.length && (text[text.length - 1] == "\n" || text[text.length - 1] == "\r")) text = text.substr(0, text.length - 1);
@@ -524,15 +528,14 @@ function enexXmlToMdArray(stream, resources) {
 			let n = node.name.toLowerCase();
 
 			if (n == "div") {
-				// TODO: Problem here is that <div> is termiated at the end of codeblock... kind of recursion...
+				// div tags are recursive, in order to find the end we have to count the depth
 				if (state.inCodeblock > 0) {
 					state.inCodeblock++;
 				} else if (nodeAttributes && nodeAttributes.style && nodeAttributes.style.indexOf("box-sizing: border-box") >= 0) {
-					// Codeblock
+					// Evernote code block start
 					state.inCodeblock = 1;
-					console.log("CODEBLOCK - START");
-					section.lines.push(MONOSPACE_OPEN);
-					return;
+					section.lines.push("```");
+					return; // skip further processing
 				}
 			}
 
@@ -726,7 +729,7 @@ function enexXmlToMdArray(stream, resources) {
 		 	} else if (n == "span" || n == "font") {
 				// Check for monospace font. It can come from being specified in either from
 				// <span style="..."> or <font face="...">.
-				// Monospace sections are already in monospace in codeblocks
+				// Monospace sections are already in monospace for Evernote code blocks
 				if (state.inCodeblock == 0 && nodeAttributes) {
 					let style = null;
 
@@ -756,11 +759,10 @@ function enexXmlToMdArray(stream, resources) {
 			if (n == "div") {
 				if (state.inCodeblock >= 1) {
 					state.inCodeblock--;
-
 					if (state.inCodeblock == 0) {
-						console.log("CODEBLOCK - STOP");
-						section.lines.push(MONOSPACE_CLOSE);
-						return;
+						// Evernote code block end
+						section.lines.push("```");
+						return; // skip further processing
 					}
 				}
 			}
@@ -775,7 +777,6 @@ function enexXmlToMdArray(stream, resources) {
 				if (section && section.parent) section = section.parent;
 			} else if (n == 'table') {
 				if (section && section.parent) section = section.parent;
-
 			} else if (n == "span" || n == "font") {
 				if (state.inCodeblock == 0 && state.inMonospaceFont) {
 					state.inMonospaceFont = false;
@@ -1018,8 +1019,6 @@ async function enexXmlToMd(stream, resources) {
 		mdLines = addResourceTag(mdLines, r, r.filename);
 		firstAttachment = false;
 	}
-
-	debugMD("DEBUG: raw MdLines", mdLines);
 
 	return processMdArrayNewLines(mdLines);
 }
