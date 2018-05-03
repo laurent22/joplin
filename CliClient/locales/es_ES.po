@@ -16,6 +16,8 @@ msgstr ""
 "X-Generator: Poedit 1.8.11\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Desmarque las notas asociadas para eliminar una etiqueta."
@@ -250,7 +252,6 @@ msgstr ""
 "Para desplazar en las listas y areas de texto (incluyendo la consola) "
 "utilice las flechas y re pág/av pág."
 
-#, fuzzy
 msgid "To maximise/minimise the console, press \"tc\"."
 msgstr "Para maximizar/minimizar la consola, presione \"tc\"."
 
@@ -634,7 +635,7 @@ msgid "View"
 msgstr "Ver"
 
 msgid "Toggle sidebar"
-msgstr ""
+msgstr "Cambia la barra lateral"
 
 msgid "Toggle editor layout"
 msgstr "Cambia el diseño del editor"
@@ -1135,7 +1136,7 @@ msgid "Show tray icon"
 msgstr "Mostrar icono en la bandeja"
 
 msgid "Note: Does not work in all desktop environments."
-msgstr ""
+msgstr "Nota: No funciona en todos los entornos de escritorio."
 
 msgid "Global zoom percentage"
 msgstr "Establecer el porcentaje de aumento de la aplicación"
