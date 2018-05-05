@@ -38,7 +38,7 @@ class FileApiDriverWebDav {
 	}
 
 	statFromResource_(resource, path) {
-		// WebDAV implementations are always slighly different from one server to another but, at the minimum,
+		// WebDAV implementations are always slightly different from one server to another but, at the minimum,
 		// a resource should have a propstat key - if not it's probably an error.
 		const propStat = this.api().arrayFromJson(resource, ['d:propstat']);
 		if (!Array.isArray(propStat)) throw new Error('Invalid WebDAV resource format: ' + JSON.stringify(resource));
