@@ -36,7 +36,7 @@ async function handleAutocompletionPromise(line) {
 	if (next[0] === '-') {
 		for (let i = 0; i<metadata.options.length; i++) {
 			const options = metadata.options[i][0].split(' ');
-		//if there are multiple options then they will be seperated by comma and
+		//if there are multiple options then they will be separated by comma and
 			//space. The comma should be removed
 			if (options[0][options[0].length - 1] === ',') {
 				options[0] = options[0].slice(0, -1);

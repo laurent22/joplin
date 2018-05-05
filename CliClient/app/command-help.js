@@ -72,7 +72,7 @@ class Command extends BaseCommand {
 			this.stdout('');
 			this.stdout(commandNames.join(', '));
 			this.stdout('');
-			this.stdout(_('In any command, a note or notebook can be refered to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.'));
+			this.stdout(_('In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.'));
 			this.stdout('');
 			this.stdout(_('To move from one pane to another, press Tab or Shift+Tab.'));
 			this.stdout(_('Use the arrows and page up/down to scroll the lists and text areas (including this console).'));
