@@ -16,8 +16,6 @@ msgstr ""
 "X-Generator: Poedit 1.8.11\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Desmarque las notas asociadas para eliminar una etiqueta."
@@ -846,6 +844,10 @@ msgstr "Añadir o borrar etiquetas"
 msgid "Switch between note and to-do type"
 msgstr "Cambiar entre nota y lista de tareas"
 
+#, fuzzy
+msgid "Copy Markdown link"
+msgstr "Markdown"
+
 msgid "Delete"
 msgstr "Eliminar"
 
@@ -1388,6 +1390,14 @@ msgstr "Guardar cambios"
 
 msgid "Discard changes"
 msgstr "Descartar cambios"
+
+#, javascript-format
+msgid "No item with ID %s"
+msgstr ""
+
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"

@@ -833,6 +833,9 @@ msgstr "Dodaj ili makni oznake"
 msgid "Switch between note and to-do type"
 msgstr "Zamijeni bilješku i zadatak"
 
+msgid "Copy Markdown link"
+msgstr ""
+
 msgid "Delete"
 msgstr "Obriši"
 
@@ -1374,6 +1377,14 @@ msgstr "Spremi promjene"
 
 msgid "Discard changes"
 msgstr "Odbaci promjene"
+
+#, javascript-format
+msgid "No item with ID %s"
+msgstr ""
+
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"

@@ -847,6 +847,9 @@ msgstr "Voeg tag toe of verwijder tag"
 msgid "Switch between note and to-do type"
 msgstr "Wissel tussen notitie en to-do type"
 
+msgid "Copy Markdown link"
+msgstr ""
+
 msgid "Delete"
 msgstr "Verwijderen"
 
@@ -1399,6 +1402,14 @@ msgstr "Sla wijzigingen op"
 
 msgid "Discard changes"
 msgstr "Verwijder wijzigingen"
+
+#, javascript-format
+msgid "No item with ID %s"
+msgstr ""
+
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"

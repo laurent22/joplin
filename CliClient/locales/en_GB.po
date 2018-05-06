@@ -753,6 +753,9 @@ msgstr ""
 msgid "Switch between note and to-do type"
 msgstr ""
 
+msgid "Copy Markdown link"
+msgstr ""
+
 msgid "Delete"
 msgstr ""
 
@@ -1269,6 +1272,14 @@ msgid "Save changes"
 msgstr ""
 
 msgid "Discard changes"
+msgstr ""
+
+#, javascript-format
+msgid "No item with ID %s"
+msgstr ""
+
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
 
 #, javascript-format

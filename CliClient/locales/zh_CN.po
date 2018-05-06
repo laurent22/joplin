@@ -802,6 +802,9 @@ msgstr "添加或删除标签"
 msgid "Switch between note and to-do type"
 msgstr "在笔记和待办事项类型之间切换"
 
+msgid "Copy Markdown link"
+msgstr ""
+
 msgid "Delete"
 msgstr "删除"
 
@@ -1331,6 +1334,14 @@ msgstr "保存更改"
 
 msgid "Discard changes"
 msgstr "放弃更改"
+
+#, javascript-format
+msgid "No item with ID %s"
+msgstr ""
+
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"

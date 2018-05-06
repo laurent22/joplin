@@ -823,6 +823,9 @@ msgstr "タグの追加・削除"
 msgid "Switch between note and to-do type"
 msgstr "ノートとToDoを切り替え"
 
+msgid "Copy Markdown link"
+msgstr ""
+
 msgid "Delete"
 msgstr "削除"
 
@@ -1368,6 +1371,14 @@ msgstr "変更を保存"
 
 msgid "Discard changes"
 msgstr "変更を破棄"
+
+#, javascript-format
+msgid "No item with ID %s"
+msgstr ""
+
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"

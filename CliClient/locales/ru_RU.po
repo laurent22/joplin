@@ -842,6 +842,10 @@ msgstr "Добавить или удалить теги"
 msgid "Switch between note and to-do type"
 msgstr "Переключить тип между заметкой и задачей"
 
+#, fuzzy
+msgid "Copy Markdown link"
+msgstr "Markdown"
+
 msgid "Delete"
 msgstr "Удалить"
 
@@ -1384,6 +1388,14 @@ msgstr "Сохранить изменения"
 
 msgid "Discard changes"
 msgstr "Отменить изменения"
+
+#, javascript-format
+msgid "No item with ID %s"
+msgstr ""
+
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"

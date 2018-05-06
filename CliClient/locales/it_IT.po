@@ -819,6 +819,9 @@ msgstr "Aggiungi o rimuovi etichetta"
 msgid "Switch between note and to-do type"
 msgstr "Passa da un tipo di nota a un elenco di attività"
 
+msgid "Copy Markdown link"
+msgstr ""
+
 msgid "Delete"
 msgstr "Elimina"
 
@@ -1364,6 +1367,14 @@ msgstr "Salva i cambiamenti"
 
 msgid "Discard changes"
 msgstr "Ignora modifiche"
+
+#, javascript-format
+msgid "No item with ID %s"
+msgstr ""
+
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"

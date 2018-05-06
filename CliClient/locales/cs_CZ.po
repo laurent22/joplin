@@ -826,6 +826,10 @@ msgstr "Přidat či odebrat tagy"
 msgid "Switch between note and to-do type"
 msgstr "Přepnout mezi poznámkou a to-do"
 
+#, fuzzy
+msgid "Copy Markdown link"
+msgstr "Markdown"
+
 msgid "Delete"
 msgstr "Smazat"
 
@@ -1365,6 +1369,14 @@ msgstr "Uložit změny"
 
 msgid "Discard changes"
 msgstr "Zahodit změny"
+
+#, javascript-format
+msgid "No item with ID %s"
+msgstr ""
+
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"

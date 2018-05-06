@@ -845,6 +845,9 @@ msgstr "Gehitu edo ezabatu etiketak"
 msgid "Switch between note and to-do type"
 msgstr "Aldatu oharra eta zeregin eren artean."
 
+msgid "Copy Markdown link"
+msgstr ""
+
 msgid "Delete"
 msgstr "Ezabatu"
 
@@ -1397,6 +1400,14 @@ msgstr "Gorde aldaketak"
 
 msgid "Discard changes"
 msgstr "Bertan behera utzi aldaketak"
+
+#, javascript-format
+msgid "No item with ID %s"
+msgstr ""
+
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"

@@ -2,7 +2,7 @@
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
@@ -835,6 +835,10 @@ msgstr "Tilføj eller slet mærker"
 msgid "Switch between note and to-do type"
 msgstr "Skift mellem note-  og opgave type"
 
+#, fuzzy
+msgid "Copy Markdown link"
+msgstr "Markdown"
+
 msgid "Delete"
 msgstr "Slet"
 
@@ -1374,6 +1378,14 @@ msgstr "Gem ændringer"
 
 msgid "Discard changes"
 msgstr "Fortryd ændringer"
+
+#, javascript-format
+msgid "No item with ID %s"
+msgstr ""
+
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"
