@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Tobias Grasse <mail@tobias-grasse.net>\n"
+"Last-Translator: Philipp Zumstein <zuphilip@gmail.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.0.7\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
@@ -259,9 +261,8 @@ msgstr ""
 "Benutze die Pfeiltasten und Bild hoch/runter um durch Listen und Texte zu "
 "scrollen (inklusive diesem Terminal)."
 
-#, fuzzy
 msgid "To maximise/minimise the console, press \"tc\"."
-msgstr "Um das Terminal zu maximieren/minimieren, drücke \"TC\"."
+msgstr "Um das Terminal zu maximieren/minimieren, drücke \"tc\"."
 
 msgid "To enter command line mode, press \":\""
 msgstr "Um den Kommandozeilen Modus aufzurufen, drücke \":\""
@@ -433,12 +434,14 @@ msgstr ""
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
+"Um Joplin die Synchronisation mit Dropbox zu ermöglichen, folge bitte den "
+"folgenden Schritten:"
 
 msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr ""
+msgstr "Schritt 1: URL im Browser öffnen um die Anwendung zu autorisieren:"
 
 msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr ""
+msgstr "Schritt 2: Den von Dropbox bereitgestellten Code eingeben:"
 
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
@@ -531,9 +534,8 @@ msgstr "Standard: %s"
 msgid "Possible keys/values:"
 msgstr "Mögliche Werte:"
 
-#, fuzzy
 msgid "Type `joplin help` for usage information."
-msgstr "Zeigt die Nutzungsstatistik an."
+msgstr "Gib `joplin help` ein um die Nutzungsstatistik anzuzeigen."
 
 msgid "Fatal error:"
 msgstr "Schwerwiegender Fehler:"
@@ -647,7 +649,7 @@ msgid "View"
 msgstr "Ansicht"
 
 msgid "Toggle sidebar"
-msgstr ""
+msgstr "Seitenleiste ein/aus"
 
 msgid "Toggle editor layout"
 msgstr "Editor Layout umschalten"
@@ -719,7 +721,7 @@ msgid "Save"
 msgstr "Speichern"
 
 msgid "Submit"
-msgstr ""
+msgstr "Absenden"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -795,6 +797,8 @@ msgid ""
 "For more information about End-To-End Encryption (E2EE) and advices on how "
 "to enable it please check the documentation:"
 msgstr ""
+"Weitere Informationen zur Ende-zu-Ende-Verschlüsselung (E2EE) und Hinweise "
+"zur Aktivierung finden Sie in der Dokumentation (auf Englisch):"
 
 msgid "Status"
 msgstr "Status"
@@ -836,9 +840,8 @@ msgstr "Alarm erstellen:"
 msgid "Layout"
 msgstr "Layout"
 
-#, fuzzy
 msgid "Search..."
-msgstr "Suchen"
+msgstr "Suchen..."
 
 msgid "Some items cannot be synchronised."
 msgstr "Manche Objekte können nicht synchronisiert werden."
@@ -872,8 +875,8 @@ msgstr ""
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
-"Momentan existieren noch keine Notizbücher. Erstelle eines, indem du auf den "
-"(+) Knopf drückst."
+"Momentan existieren noch keine Notizbücher. Erstelle eines, indem du auf "
+"\"Neues Notizbuch\" drückst."
 
 msgid "Open..."
 msgstr "Öffne..."
@@ -922,7 +925,7 @@ msgid "OneDrive Login"
 msgstr "OneDrive Login"
 
 msgid "Dropbox Login"
-msgstr ""
+msgstr "Dropbox Anmeldung"
 
 msgid "Options"
 msgstr "Optionen"
@@ -961,7 +964,7 @@ msgid "Unknown flag: %s"
 msgstr "Unbekanntes Argument: %s"
 
 msgid "Dropbox"
-msgstr ""
+msgstr "Dropbox"
 
 msgid "File system"
 msgstr "Dateisystem"
@@ -1040,9 +1043,9 @@ msgstr "Remote Objekte gelöscht: %d."
 msgid "Fetched items: %d/%d."
 msgstr "Geladene Objekte: %d/%d."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "State: %s."
-msgstr "Status: \"%s\"."
+msgstr "Status: %s."
 
 msgid "Cancelling..."
 msgstr "Abbrechen..."
@@ -1154,7 +1157,7 @@ msgid "Show tray icon"
 msgstr "Zeige Tray Icon"
 
 msgid "Note: Does not work in all desktop environments."
-msgstr ""
+msgstr "Hinweis: Funktioniert nicht in allen Desktopumgebungen."
 
 msgid "Global zoom percentage"
 msgstr "Zoomstufe der Benutzeroberfläche"
@@ -1360,17 +1363,16 @@ msgid "Cancel synchronisation"
 msgstr "Synchronisation abbrechen"
 
 msgid "New tags:"
-msgstr ""
+msgstr "Neue Markierungen:"
 
 msgid "Type new tags or select from list"
-msgstr ""
+msgstr "Neue Markierungen eingeben oder aus der Liste auswählen"
 
 msgid "Joplin website"
 msgstr "Website von Joplin"
 
-#, fuzzy
 msgid "Login with Dropbox"
-msgstr "Mit OneDrive anmelden"
+msgstr "Mit Dropbox anmelden"
 
 #, javascript-format
 msgid "Master Key %s"
