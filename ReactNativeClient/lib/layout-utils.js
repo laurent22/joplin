@@ -1,9 +1,9 @@
 const layoutUtils = {};
 
-layoutUtils.size = function(prefered, min, max) {
-	if (prefered < min) return min;
-	if (typeof max !== 'undefined' && prefered > max) return max;
-	return prefered;
+layoutUtils.size = function(preferred, min, max) {
+	if (preferred < min) return min;
+	if (typeof max !== 'undefined' && preferred > max) return max;
+	return preferred;
 }
 
 module.exports = layoutUtils;
