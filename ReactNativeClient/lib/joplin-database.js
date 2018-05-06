@@ -202,14 +202,14 @@ class JoplinDatabase extends Database {
 		// default value and thus might cause problems. In that case, the default value
 		// must be set in the synchronizer too.
 
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
-		if (currentVersionIndex < 0) throw new Error('Unknown profile version. Most likely this is an old version of Joplin, while the profile was created by a newer version. Please upgrade Joplin at https://joplin.cozic.net and try again.');
-
 		// currentVersionIndex < 0 if for the case where an old version of Joplin used with a newer
 		// version of the database, so that migration is not run in this case.
+		if (currentVersionIndex < 0) throw new Error('Unknown profile version. Most likely this is an old version of Joplin, while the profile was created by a newer version. Please upgrade Joplin at https://joplin.cozic.net and try again.');
+
 		if (currentVersionIndex == existingDatabaseVersions.length - 1) return false;
 
 		while (currentVersionIndex < existingDatabaseVersions.length - 1) {
@@ -342,6 +342,10 @@ class JoplinDatabase extends Database {
 				queries.push('DROP TABLE item_changes');
 				queries.push('DROP TABLE note_resources');
 				upgradeVersion10();
+			}
+
+			if (targetVersion == 12) {
+				queries.push('ALTER TABLE folders ADD COLUMN parent_id TEXT NOT NULL DEFAULT ""');
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

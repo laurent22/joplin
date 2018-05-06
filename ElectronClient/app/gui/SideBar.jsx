@@ -23,22 +23,38 @@ class SideBarComponent extends React.Component {
 			root: {
 				backgroundColor: theme.backgroundColor2,
 			},
-			listItem: {
+			listItemContainer: {
+				boxSizing: "border-box",
 				height: itemHeight,
+				paddingLeft: 14,
+				display: "flex",
+				alignItems: "stretch",
+			},
+			listItem: {
 				fontFamily: theme.fontFamily,
 				fontSize: theme.fontSize,
 				textDecoration: "none",
-				boxSizing: "border-box",
 				color: theme.color2,
-				paddingLeft: 14,
-				display: "flex",
-				alignItems: "center",
 				cursor: "default",
 				opacity: 0.8,
 				whiteSpace: "nowrap",
+				display: "flex",
+				flex: 1,
+				alignItems: 'center',
 			},
 			listItemSelected: {
 				backgroundColor: theme.selectedColor2,
+			},
+			listItemExpandIcon: {
+				color: theme.color2,
+				cursor: "default",
+				opacity: 0.8,
+				fontFamily: theme.fontFamily,
+				fontSize: theme.fontSize,
+				textDecoration: "none",
+				paddingRight: 5,
+				display: "flex",
+				alignItems: 'center',
 			},
 			conflictFolder: {
 				color: theme.colorError2,
@@ -194,9 +210,8 @@ class SideBarComponent extends React.Component {
 		await shared.synchronize_press(this);
 	}
 
-	folderItem(folder, selected) {
+	folderItem(folder, selected, hasChildren, depth) {
 		let style = Object.assign({}, this.style().listItem);
-		if (selected) style = Object.assign(style, this.style().listItemSelected);
 		if (folder.id === Folder.conflictFolderId()) style = Object.assign(style, this.style().conflictFolder);
 
 		const onDragOver = (event, folder) => {
@@ -215,27 +230,36 @@ class SideBarComponent extends React.Component {
 
 		const itemTitle = Folder.displayTitle(folder);
 
+		let containerStyle = Object.assign({}, this.style().listItemContainer);
+		containerStyle.marginLeft = depth * 5;
+
+		if (selected) containerStyle = Object.assign(containerStyle, this.style().listItemSelected);
+
+		const expandIcon = !hasChildren ? null : <a href="#" style={this.style().listItemExpandIcon}>[+]</a>
+
 		return (
-			<a
-				className="list-item"
-				onDragOver={event => {
-					onDragOver(event, folder);
-				}}
-				onDrop={event => {
-					onDrop(event, folder);
-				}}
-				href="#"
-				data-id={folder.id}
-				data-type={BaseModel.TYPE_FOLDER}
-				onContextMenu={event => this.itemContextMenu(event)}
-				key={folder.id}
-				style={style}
-				onClick={() => {
-					this.folderItem_click(folder);
-				}}
-			>
-				{itemTitle}
-			</a>
+			<div style={containerStyle} key={folder.id}>
+				{ expandIcon }
+				<a
+					className="list-item"
+					onDragOver={event => {
+						onDragOver(event, folder);
+					}}
+					onDrop={event => {
+						onDrop(event, folder);
+					}}
+					href="#"
+					data-id={folder.id}
+					data-type={BaseModel.TYPE_FOLDER}
+					onContextMenu={event => this.itemContextMenu(event)}
+					style={style}
+					onClick={() => {
+						this.folderItem_click(folder);
+					}}
+				>
+					{itemTitle}
+				</a>
+			</div>
 		);
 	}
 
@@ -344,18 +368,6 @@ class SideBarComponent extends React.Component {
 				</div>
 			);
 		}
-
-		// if (this.props.searches.length) {
-		// 	items.push(this.makeHeader("searchHeader", _("Searches"), "fa-search"));
-
-		// 	const searchItems = shared.renderSearches(this.props, this.searchItem.bind(this));
-
-		// 	items.push(
-		// 		<div className="searches" key="search_items">
-		// 			{searchItems}
-		// 		</div>
-		// 	);
-		// }
 
 		let lines = Synchronizer.reportToLines(this.props.syncReport);
 		const syncReportText = [];
