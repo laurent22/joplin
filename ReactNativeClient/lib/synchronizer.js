@@ -263,7 +263,7 @@ class Synchronizer {
 							//
 							// TODO: assuming a particular sync target is guaranteed to have accurate timestamps, the driver maybe
 							// could expose this with a accurateTimestamps() method that returns "true". In that case, the test
-							// could be done using the file timestamp and the potentially unecessary content loading could be skipped.
+							// could be done using the file timestamp and the potentially unnecessary content loading could be skipped.
 							// OneDrive does not appear to have accurate timestamps as lastModifiedDateTime would occasionally be
 							// a few seconds ahead of what it was set with setTimestamp()
 							remoteContent = await this.api().get(path);
@@ -567,7 +567,7 @@ class Synchronizer {
 					// If user has cancelled, don't record the new context (2) so that synchronisation
 					// can start again from the previous context (1) next time. It is ok if some items
 					// have been synced between (1) and (2) because the loop above will handle the same
-					// items being synced twice as an update. If the local and remote items are indentical
+					// items being synced twice as an update. If the local and remote items are identical
 					// the update will simply be skipped.
 					if (!hasCancelled) {
 						if (!listResult.hasMore) {

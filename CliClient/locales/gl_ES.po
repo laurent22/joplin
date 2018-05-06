@@ -226,7 +226,7 @@ msgid "The possible commands are:"
 msgstr "As ordes posíbeis son:"
 
 msgid ""
-"In any command, a note or notebook can be refered to by title or ID, or "
+"In any command, a note or notebook can be referred to by title or ID, or "
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
