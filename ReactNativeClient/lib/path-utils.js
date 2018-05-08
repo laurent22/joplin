@@ -46,7 +46,7 @@ function toSystemSlashes(path, os) {
 }
 
 function rtrimSlashes(path) {
-	return path.replace(/\/+$/, '');
+	return path.replace(/[\/\\]+$/, '');
 }
 
 function ltrimSlashes(path) {

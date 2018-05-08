@@ -6,6 +6,7 @@ const { time } = require('lib/time-utils.js');
 const { sprintf } = require('sprintf-js');
 const ObjectUtils = require('lib/ObjectUtils');
 const { toTitleCase } = require('lib/string-utils.js');
+const { rtrimSlashes } = require('lib/path-utils.js');
 const { _, supportedLocalesToLanguages, defaultLocale } = require('lib/locale.js');
 const { shim } = require('lib/shim');
 
@@ -122,6 +123,8 @@ class Setting extends BaseModel {
 				} catch (error) {
 					return false;
 				}
+			}, filter: (value) => {
+				return value ? rtrimSlashes(value) : '';
 			}, public: true, label: () => _('Directory to synchronise with (absolute path)'), description: (appType) => { return appType !== 'cli' ? null : _('The path to synchronise with when file system synchronisation is enabled. See `sync.target`.'); } },
 
 			'sync.5.path': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nextcloud WebDAV URL') },
@@ -204,6 +207,7 @@ class Setting extends BaseModel {
 
 				if (!this.keyExists(c.key)) continue;
 				c.value = this.formatValue(c.key, c.value);
+				c.value = this.filterValue(c.key, c.value);
 
 				this.cache_.push(c);
 			}
@@ -237,6 +241,7 @@ class Setting extends BaseModel {
 		if (!this.cache_) throw new Error('Settings have not been initialized!');
 
 		value = this.formatValue(key, value);
+		value = this.filterValue(key, value);
 
 		for (let i = 0; i < this.cache_.length; i++) {
 			let c = this.cache_[i];
@@ -305,6 +310,11 @@ class Setting extends BaseModel {
 		if (md.type == Setting.TYPE_STRING) return value ? value + '' : '';
 
 		throw new Error('Unhandled value type: ' + md.type);
+	}
+
+	static filterValue(key, value) {
+		const md = this.settingMetadata(key);
+		return md.filter ? md.filter(value) : value;
 	}
 
 	static formatValue(key, value) {
