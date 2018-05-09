@@ -18,24 +18,36 @@ class FolderListWidget extends ListWidget {
 		this.notesParentType_ = 'Folder';
 		this.updateIndexFromSelectedFolderId_ = false;
 		this.updateItems_ = false;
+		this.trimItemTitle = false;
 
 		this.itemRenderer = (item) => {
 			let output = [];
 			if (item === '-') {
 				output.push('-'.repeat(this.innerWidth));
 			} else if (item.type_ === Folder.modelType()) {
-				output.push(Folder.displayTitle(item));
+				output.push(' '.repeat(this.folderDepth(this.folders, item.id)) + Folder.displayTitle(item));
 			} else if (item.type_ === Tag.modelType()) {
 				output.push('[' + Folder.displayTitle(item) + ']');
 			} else if (item.type_ === BaseModel.TYPE_SEARCH) {
 				output.push(_('Search:'));
 				output.push(item.title);
-			}			
+			}
 
 			// if (item && item.id) output.push(item.id.substr(0, 5));
 			
 			return output.join(' ');
 		};
+	}
+
+	folderDepth(folders, folderId) {
+		let output = 0;
+		while (true) {
+			const folder = BaseModel.byId(folders, folderId);
+			if (!folder.parent_id) return output;
+			output++;
+			folderId = folder.parent_id;
+		}
+		throw new Error('unreachable');
 	}
 
 	get selectedFolderId() {
