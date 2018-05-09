@@ -8,6 +8,7 @@ const AlarmService = require('lib/services/AlarmService.js');
 const AlarmServiceDriver = require('lib/services/AlarmServiceDriver');
 const Alarm = require('lib/models/Alarm');
 const { createStore, applyMiddleware } = require('redux');
+const reduxSharedMiddleware = require('lib/components/shared/reduxSharedMiddleware');
 const { shimInit } = require('lib/shim-init-react.js');
 const { time } = require('lib/time-utils.js');
 const { AppNav } = require('lib/components/app-nav.js');
@@ -87,6 +88,8 @@ const generalMiddleware = store => next => async (action) => {
 
 	const result = next(action);
 	const newState = store.getState();
+
+	reduxSharedMiddleware(store, next, action);
 
 	if (action.type == "NAV_GO") Keyboard.dismiss();
 
@@ -443,6 +446,11 @@ async function initialize(dispatch) {
 		let folder = await Folder.load(folderId);
 
 		if (!folder) folder = await Folder.defaultFolder();
+
+		dispatch({
+			type: 'FOLDER_SET_COLLAPSED_ALL',
+			ids: Setting.value('collapsedFolderIds'),
+		});
 
 		if (!folder) {
 			dispatch({

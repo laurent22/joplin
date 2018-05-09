@@ -64,11 +64,13 @@ class SideMenuContentComponent extends Component {
 		};
 
 		styles.folderButton = Object.assign({}, styles.button);
+		styles.folderButton.paddingLeft = 0;
 		styles.folderButtonText = Object.assign({}, styles.buttonText);
 		styles.folderButtonSelected = Object.assign({}, styles.folderButton);
 		styles.folderButtonSelected.backgroundColor = theme.selectedColor;
 		styles.folderIcon = Object.assign({}, theme.icon);
-		styles.folderIcon.color = '#0072d5';
+		styles.folderIcon.color = theme.colorFaded;//'#0072d5';
+		styles.folderIcon.paddingTop = 3;
 
 		styles.tagButton = Object.assign({}, styles.button);
 		styles.tagButtonSelected = Object.assign({}, styles.tagButton);
@@ -94,6 +96,13 @@ class SideMenuContentComponent extends Component {
 		});
 	}
 
+	folder_togglePress(folder) {
+		this.props.dispatch({
+			type: 'FOLDER_TOGGLE',
+			id: folder.id,
+		});
+	}
+
 	tag_press(tag) {
 		this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 
@@ -109,17 +118,41 @@ class SideMenuContentComponent extends Component {
 		if (actionDone === 'auth') this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 	}
 
-	folderItem(folder, selected) {
-		const iconComp = selected ? <Icon name='md-folder-open' style={this.styles().folderIcon} /> : <Icon name='md-folder' style={this.styles().folderIcon} />;
-		const folderButtonStyle = selected ? this.styles().folderButtonSelected : this.styles().folderButton;
+	folderItem(folder, selected, hasChildren, depth) {
+		const theme = themeStyle(this.props.theme);
+
+		const folderButtonStyle = {
+			flex: 1,
+			flexDirection: 'row',
+			height: 36,
+			alignItems: 'center',
+			paddingLeft: theme.marginLeft,
+			paddingRight: theme.marginRight,
+		};
+		if (selected) folderButtonStyle.backgroundColor = theme.selectedColor;
+		folderButtonStyle.paddingLeft = depth * 10;
+
+		const iconWrapperStyle = { paddingLeft: 10, paddingRight: 10 };
+		if (selected) iconWrapperStyle.backgroundColor = theme.selectedColor;
+
+		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'md-arrow-dropdown' : 'md-arrow-dropup';
+		const iconComp = <Icon name={iconName} style={this.styles().folderIcon} />
+
+		const iconWrapper = !hasChildren ? null : (
+			<TouchableOpacity style={iconWrapperStyle} folderid={folder.id} onPress={() => { if (hasChildren) this.folder_togglePress(folder) }}>
+				{ iconComp }
+			</TouchableOpacity>
+		);
 
 		return (
-			<TouchableOpacity key={folder.id} onPress={() => { this.folder_press(folder) }}>
-				<View style={folderButtonStyle}>
-					{ iconComp }
-					<Text numberOfLines={1} style={this.styles().folderButtonText}>{Folder.displayTitle(folder)}</Text>
-				</View>
-			</TouchableOpacity>
+			<View key={folder.id} style={{ flex: 1, flexDirection: 'row' }}>
+				<TouchableOpacity style={{ flex: 1 }} onPress={() => { this.folder_press(folder) }}>
+					<View style={folderButtonStyle}>
+						<Text numberOfLines={1} style={this.styles().folderButtonText}>{Folder.displayTitle(folder)}</Text>
+					</View>
+				</TouchableOpacity>
+				{ iconWrapper }
+			</View>
 		);
 	}
 
@@ -204,9 +237,6 @@ class SideMenuContentComponent extends Component {
 		return (
 			<View style={style}>
 				<View style={{flex:1, opacity: this.props.opacity}}>
-					<View style={{flexDirection:'row'}}>
-						<Image style={{flex:1, height: 100}} source={require('../images/SideMenuHeader.png')} />
-					</View>
 					<ScrollView scrollsToTop={false} style={this.styles().menu}>
 						{ items }
 					</ScrollView>
@@ -229,6 +259,7 @@ const SideMenuContent = connect(
 			locale: state.settings.locale,
 			theme: state.settings.theme,
 			opacity: state.sideMenuOpenPercent,
+			collapsedFolderIds: state.collapsedFolderIds,
 		};
 	}
 )(SideMenuContentComponent)

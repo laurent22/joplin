@@ -18,7 +18,7 @@ class Folder extends BaseItem {
 	static async serialize(folder) {
 		let fieldNames = this.fieldNames();
 		fieldNames.push('type_');
-		lodash.pull(fieldNames, 'parent_id');
+		//lodash.pull(fieldNames, 'parent_id');
 		return super.serialize(folder, 'folder', fieldNames);
 	}
 

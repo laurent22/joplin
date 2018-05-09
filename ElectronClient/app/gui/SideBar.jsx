@@ -291,7 +291,7 @@ class SideBarComponent extends React.Component {
 			paddingLeft: 8 + depth * 10,
 		}
 
-		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'fa-minus-square' : 'fa-plus-square';
+		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'fa-plus-square' : 'fa-minus-square';
 		const expandIcon = <i style={expandIconStyle} className={"fa " + iconName}></i>
 		const expandLink = hasChildren ? <a style={expandLinkStyle} href="#" folderid={folder.id} onClick={this.onFolderToggleClick_}>{expandIcon}</a> : <span style={expandLinkStyle}>{expandIcon}</span>
 

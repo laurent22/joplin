@@ -1,3 +1,5 @@
+const Setting = require('lib/models/Setting');
+
 const reduxSharedMiddleware = function(store, next, action) {
 	const newState = store.getState();
 
