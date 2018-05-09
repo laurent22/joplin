@@ -199,6 +199,7 @@ class BaseApplication {
 		let options = {
 			order: stateUtils.notesOrder(state.settings),
 			uncompletedTodosOnTop: Setting.value('uncompletedTodosOnTop'),
+			showCompletedTodos: Setting.value('showCompletedTodos'),
 			caseInsensitive: true,
 		};
 
@@ -280,6 +281,10 @@ class BaseApplication {
 		}
 
 		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'uncompletedTodosOnTop') || action.type == 'SETTING_UPDATE_ALL')) {
+			refreshNotes = true;
+		}
+
+		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'showCompletedTodos') || action.type == 'SETTING_UPDATE_ALL')) {
 			refreshNotes = true;
 		}
 

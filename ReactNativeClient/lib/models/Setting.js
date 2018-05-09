@@ -61,6 +61,7 @@ class Setting extends BaseModel {
 				return output;
 			}},
 			'uncompletedTodosOnTop': { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['cli'], label: () => _('Uncompleted to-dos on top') },
+			'showCompletedTodos': { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['cli'], label: () => _('Show completed to-dos') },
 			'notes.sortOrder.field': { value: 'user_updated_time', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['cli'], label: () => _('Sort notes by'), options: () => {
 				const Note = require('lib/models/Note');
 				const noteSortFields = ['user_updated_time', 'user_created_time', 'title'];

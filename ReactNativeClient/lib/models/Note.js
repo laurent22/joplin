@@ -237,6 +237,7 @@ class Note extends BaseItem {
 		if (!options.conditionsParams) options.conditionsParams = [];
 		if (!options.fields) options.fields = this.previewFields();
 		if (!options.uncompletedTodosOnTop) options.uncompletedTodosOnTop = false;
+		if (!('showCompletedTodos' in options)) options.showCompletedTodos = true;
 
 		if (parentId == BaseItem.getClass('Folder').conflictFolderId()) {
 			options.conditions.push('is_conflict = 1');
@@ -263,6 +264,10 @@ class Note extends BaseItem {
 			} else if (options.itemTypes.indexOf('todo') < 0) {
 				hasTodos = false;
 			}
+		}
+
+		if (!options.showCompletedTodos) {
+			options.conditions.push('todo_completed <= 0');
 		}
 
 		if (options.uncompletedTodosOnTop && hasTodos) {

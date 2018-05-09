@@ -437,6 +437,14 @@ class Application extends BaseApplication {
 					click: () => {
 						Setting.setValue('uncompletedTodosOnTop', !Setting.value('uncompletedTodosOnTop'));
 					},
+				}, {
+					label: Setting.settingMetadata('showCompletedTodos').label(),
+					type: 'checkbox',
+					checked: Setting.value('showCompletedTodos'),
+					screens: ['Main'],
+					click: () => {
+						Setting.setValue('showCompletedTodos', !Setting.value('showCompletedTodos'));
+					},
 				}],
 			}, {
 				label: _('Tools'),
