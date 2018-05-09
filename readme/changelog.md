@@ -1,5 +1,12 @@
 # Joplin changelog
 
+## [v1.0.89](https://github.com/laurent22/joplin/releases/tag/v1.0.89) - 2018-05-09T13:05:05Z
+
+- New: Resolves [#122](https://github.com/laurent22/joplin/issues/122): Added support for sub-notebooks. Please see doc for more info: https://joplin.cozic.net/#sub-notebooks
+- Improved: Export/Import links to notes
+- Fixes [#480](https://github.com/laurent22/joplin/issues/480): Ignore invalid flag automatically passed by macOS
+- Fixes [#61](https://github.com/laurent22/joplin/issues/61): Handle path that ends with slash for file system sync
+
 ## [v1.0.85](https://github.com/laurent22/joplin/releases/tag/v1.0.85) - 2018-05-01T21:08:24Z
 
 Note: This is the same as v84 but with the note creation bug fixed.
@@ -202,7 +209,3 @@ IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before 
 ## [v0.10.43](https://github.com/laurent22/joplin/releases/tag/v0.10.43) - 2018-01-08T10:12:10Z
 
 - Fixed saving and loading of settings, which could affect synchronisation
-
-## [v0.10.41](https://github.com/laurent22/joplin/releases/tag/v0.10.41) - 2018-01-05T20:38:12Z
-
-- Added End-To-End Encryption support (E2EE)
