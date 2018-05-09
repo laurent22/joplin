@@ -350,7 +350,10 @@ msgstr "删除给定笔记本。"
 msgid "Deletes the notebook without asking for confirmation."
 msgstr "删除笔记本（不要求确认）。"
 
-msgid "Delete notebook? All notes within this notebook will also be deleted."
+#, fuzzy
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
 msgstr "是否删除笔记本？此笔记本内所有笔记也将被删除。"
 
 msgid "Deletes the notes matching <note-pattern>."
@@ -1010,6 +1013,10 @@ msgstr "无法修改加密项目。"
 
 msgid "Conflicts"
 msgstr "冲突文件"
+
+#, fuzzy
+msgid "Cannot move notebook to this location"
+msgstr "无法移动笔记至\"%s\"笔记本"
 
 #, javascript-format
 msgid "A notebook with this title already exists: \"%s\""

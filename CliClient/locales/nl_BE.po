@@ -369,7 +369,10 @@ msgstr "Verwijdert het opgegeven notitieboek."
 msgid "Deletes the notebook without asking for confirmation."
 msgstr "Verwijdert het notitieboek zonder te vragen om bevestiging."
 
-msgid "Delete notebook? All notes within this notebook will also be deleted."
+#, fuzzy
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
 msgstr ""
 "Notitieboek verwijderen? Alle notities in dit notitieboek zullen ook "
 "verwijderd worden."
@@ -1064,6 +1067,10 @@ msgstr "Versleutelde items kunnen niet aangepast worden"
 
 msgid "Conflicts"
 msgstr "Conflicten"
+
+#, fuzzy
+msgid "Cannot move notebook to this location"
+msgstr "Kan notitie niet naar notitieboek \"%s\" verplaatsen."
 
 #, javascript-format
 msgid "A notebook with this title already exists: \"%s\""

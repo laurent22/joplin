@@ -364,7 +364,10 @@ msgstr "Eliminar o carderno indicado."
 msgid "Deletes the notebook without asking for confirmation."
 msgstr "Elimina o caderno indicado sen solicitar confirmación."
 
-msgid "Delete notebook? All notes within this notebook will also be deleted."
+#, fuzzy
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
 msgstr ""
 "Desexa eliminar o caderno? Tamén se eliminarán todas as notas deste caderno."
 
@@ -1046,6 +1049,10 @@ msgstr "Non é posíbel modificar elementos cifrados"
 
 msgid "Conflicts"
 msgstr "Conflitos"
+
+#, fuzzy
+msgid "Cannot move notebook to this location"
+msgstr "Non é posíbel mover a nota ao caderno «%s»"
 
 #, javascript-format
 msgid "A notebook with this title already exists: \"%s\""

@@ -361,7 +361,10 @@ msgstr "指定されたノートブックを削除します。"
 msgid "Deletes the notebook without asking for confirmation."
 msgstr "ノートブックを確認なしで削除します。"
 
-msgid "Delete notebook? All notes within this notebook will also be deleted."
+#, fuzzy
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
 msgstr "ノートブックを削除しますか？中にあるノートはすべて消えてしまいます。"
 
 msgid "Deletes the notes matching <note-pattern>."
@@ -1038,6 +1041,10 @@ msgstr "いくつかの項目は同期されませんでした。"
 
 msgid "Conflicts"
 msgstr "衝突"
+
+#, fuzzy
+msgid "Cannot move notebook to this location"
+msgstr "ノートをノートブック \"%s\"に移動できませんでした。"
 
 #, javascript-format
 msgid "A notebook with this title already exists: \"%s\""

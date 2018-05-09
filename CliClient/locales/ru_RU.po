@@ -369,7 +369,10 @@ msgstr "Удаляет заданный блокнот."
 msgid "Deletes the notebook without asking for confirmation."
 msgstr "Удаляет блокнот без запроса подтверждения."
 
-msgid "Delete notebook? All notes within this notebook will also be deleted."
+#, fuzzy
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
 msgstr "Удалить блокнот? Все заметки в этом блокноте также будут удалены."
 
 msgid "Deletes the notes matching <note-pattern>."
@@ -1056,6 +1059,10 @@ msgstr "Зашифрованные элементы не могут быть и�
 
 msgid "Conflicts"
 msgstr "Конфликты"
+
+#, fuzzy
+msgid "Cannot move notebook to this location"
+msgstr "Не удалось переместить заметку в блокнот «%s»"
 
 #, javascript-format
 msgid "A notebook with this title already exists: \"%s\""

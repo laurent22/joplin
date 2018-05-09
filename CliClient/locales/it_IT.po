@@ -364,7 +364,9 @@ msgstr "Elimina il seguente blocco note."
 msgid "Deletes the notebook without asking for confirmation."
 msgstr "Elimina il blocco note senza richiedere una conferma."
 
-msgid "Delete notebook? All notes within this notebook will also be deleted."
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
 msgstr ""
 
 msgid "Deletes the notes matching <note-pattern>."
@@ -1036,6 +1038,10 @@ msgstr "Alcuni elementi non possono essere sincronizzati."
 
 msgid "Conflicts"
 msgstr "Conflitti"
+
+#, fuzzy
+msgid "Cannot move notebook to this location"
+msgstr "Non posso spostare la nota nel blocco note \"%s\""
 
 #, javascript-format
 msgid "A notebook with this title already exists: \"%s\""

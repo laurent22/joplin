@@ -368,7 +368,10 @@ msgstr "Briše datu bilježnicu."
 msgid "Deletes the notebook without asking for confirmation."
 msgstr "Briše bilježnicu bez traženja potvrde."
 
-msgid "Delete notebook? All notes within this notebook will also be deleted."
+#, fuzzy
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
 msgstr ""
 "Obrisati bilježnicu? Sve bilješke u toj bilježnici će također biti obrisane."
 
@@ -1046,6 +1049,10 @@ msgstr "Neke stavke se ne mogu sinkronizirati."
 
 msgid "Conflicts"
 msgstr "Sukobi"
+
+#, fuzzy
+msgid "Cannot move notebook to this location"
+msgstr "Ne mogu premjestiti bilješku u bilježnicu %s"
 
 #, javascript-format
 msgid "A notebook with this title already exists: \"%s\""

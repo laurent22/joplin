@@ -332,7 +332,9 @@ msgstr ""
 msgid "Deletes the notebook without asking for confirmation."
 msgstr ""
 
-msgid "Delete notebook? All notes within this notebook will also be deleted."
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
 msgstr ""
 
 msgid "Deletes the notes matching <note-pattern>."
@@ -955,6 +957,9 @@ msgid "Encrypted items cannot be modified"
 msgstr ""
 
 msgid "Conflicts"
+msgstr ""
+
+msgid "Cannot move notebook to this location"
 msgstr ""
 
 #, javascript-format

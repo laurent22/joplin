@@ -368,7 +368,10 @@ msgstr "Ezabatu emandako koadernoak."
 msgid "Deletes the notebook without asking for confirmation."
 msgstr "Ezabatu koadernoak berrespenik gabe."
 
-msgid "Delete notebook? All notes within this notebook will also be deleted."
+#, fuzzy
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
 msgstr "Koadernoa ezabatu? Dituen ohar guztiak ere ezabatuko dira."
 
 msgid "Deletes the notes matching <note-pattern>."
@@ -1062,6 +1065,10 @@ msgstr "Zifratutako itemak ezin aldatu daitezke"
 
 msgid "Conflicts"
 msgstr "Gatazkak"
+
+#, fuzzy
+msgid "Cannot move notebook to this location"
+msgstr "Ezin eraman daiteke oharra \"%s\" koadernora"
 
 #, javascript-format
 msgid "A notebook with this title already exists: \"%s\""

@@ -379,7 +379,10 @@ msgstr "Löscht das ausgewählte Notizbuch."
 msgid "Deletes the notebook without asking for confirmation."
 msgstr "Löscht das Notizbuch, ohne nach einer Bestätigung zu fragen."
 
-msgid "Delete notebook? All notes within this notebook will also be deleted."
+#, fuzzy
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
 msgstr ""
 "Notizbuch wirklich löschen? Alle Notizen darin werden ebenfalls gelöscht."
 
@@ -1078,6 +1081,10 @@ msgstr "Verschlüsselte Objekte können nicht verändert werden"
 
 msgid "Conflicts"
 msgstr "Konflikte"
+
+#, fuzzy
+msgid "Cannot move notebook to this location"
+msgstr "Kann Notiz nicht zu Notizbuch \"%s\" verschieben"
 
 #, javascript-format
 msgid "A notebook with this title already exists: \"%s\""

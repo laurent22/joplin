@@ -367,7 +367,10 @@ msgstr "Sletter aktuelle notesbog."
 msgid "Deletes the notebook without asking for confirmation."
 msgstr "Sletter notesbogen uden at bede om bekræftelse."
 
-msgid "Delete notebook? All notes within this notebook will also be deleted."
+#, fuzzy
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
 msgstr "Slet notesbog? Alle noter i notesbogen bliver også slettet."
 
 msgid "Deletes the notes matching <note-pattern>."
@@ -1047,6 +1050,10 @@ msgstr "Krypteret emner kan ikke rettes"
 
 msgid "Conflicts"
 msgstr "Konflikter"
+
+#, fuzzy
+msgid "Cannot move notebook to this location"
+msgstr "Kan ikke flytte note til \"%s\" notesbog"
 
 #, javascript-format
 msgid "A notebook with this title already exists: \"%s\""
