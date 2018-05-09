@@ -14,6 +14,48 @@ const MenuItem = bridge().MenuItem;
 const InteropServiceHelper = require("../InteropServiceHelper.js");
 
 class SideBarComponent extends React.Component {
+
+
+	constructor() {
+		super();
+
+		this.onFolderDragStart_ = (event) => {
+			const folderId = event.currentTarget.getAttribute('folderid');
+			if (!folderId) return;
+			
+			event.dataTransfer.setDragImage(new Image(), 1, 1);
+			event.dataTransfer.clearData();
+			event.dataTransfer.setData('text/x-jop-folder-ids', JSON.stringify([folderId]));
+		};
+
+		this.onFolderDragOver_ = (event) => {
+			if (event.dataTransfer.types.indexOf("text/x-jop-note-ids") >= 0) event.preventDefault();
+			if (event.dataTransfer.types.indexOf("text/x-jop-folder-ids") >= 0) event.preventDefault();
+		};
+
+		this.onFolderDrop_ = async (event) => {
+			const folderId = event.currentTarget.getAttribute('folderid');
+			const dt = event.dataTransfer;
+			if (!dt) return;
+
+			if (dt.types.indexOf("text/x-jop-note-ids") >= 0) {
+				event.preventDefault();
+
+				const noteIds = JSON.parse(dt.getData("text/x-jop-note-ids"));
+				for (let i = 0; i < noteIds.length; i++) {
+					await Note.moveToFolder(noteIds[i], folderId);
+				}
+			} else if (dt.types.indexOf("text/x-jop-folder-ids") >= 0) {
+				event.preventDefault();
+
+				const folderIds = JSON.parse(dt.getData("text/x-jop-folder-ids"));
+				for (let i = 0; i < folderIds.length; i++) {
+					await Folder.moveToFolder(folderIds[i], folderId);
+				}
+			}
+		};
+	}
+
 	style() {
 		const theme = themeStyle(this.props.theme);
 
@@ -49,7 +91,7 @@ class SideBarComponent extends React.Component {
 				color: theme.color2,
 				cursor: "default",
 				opacity: 0.8,
-				fontFamily: theme.fontFamily,
+				// fontFamily: theme.fontFamily,
 				fontSize: theme.fontSize,
 				textDecoration: "none",
 				paddingRight: 5,
@@ -117,7 +159,7 @@ class SideBarComponent extends React.Component {
 
 		let deleteMessage = "";
 		if (itemType === BaseModel.TYPE_FOLDER) {
-			deleteMessage = _("Delete notebook? All notes within this notebook will also be deleted.");
+			deleteMessage = _("Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.");
 		} else if (itemType === BaseModel.TYPE_TAG) {
 			deleteMessage = _("Remove this tag from all the notes?");
 		} else if (itemType === BaseModel.TYPE_SEARCH) {
@@ -165,6 +207,19 @@ class SideBarComponent extends React.Component {
 					},
 				})
 			);
+
+			// menu.append(
+			// 	new MenuItem({
+			// 		label: _("Move"),
+			// 		click: async () => {
+			// 			this.props.dispatch({
+			// 				type: "WINDOW_COMMAND",
+			// 				name: "renameFolder",
+			// 				id: itemId,
+			// 			});
+			// 		},
+			// 	})
+			// );
 
 			menu.append(new MenuItem({ type: "separator" }));
 
@@ -214,40 +269,25 @@ class SideBarComponent extends React.Component {
 		let style = Object.assign({}, this.style().listItem);
 		if (folder.id === Folder.conflictFolderId()) style = Object.assign(style, this.style().conflictFolder);
 
-		const onDragOver = (event, folder) => {
-			if (event.dataTransfer.types.indexOf("text/x-jop-note-ids") >= 0) event.preventDefault();
-		};
-
-		const onDrop = async (event, folder) => {
-			if (event.dataTransfer.types.indexOf("text/x-jop-note-ids") < 0) return;
-			event.preventDefault();
-
-			const noteIds = JSON.parse(event.dataTransfer.getData("text/x-jop-note-ids"));
-			for (let i = 0; i < noteIds.length; i++) {
-				await Note.moveToFolder(noteIds[i], folder.id);
-			}
-		};
-
 		const itemTitle = Folder.displayTitle(folder);
 
 		let containerStyle = Object.assign({}, this.style().listItemContainer);
-		containerStyle.marginLeft = depth * 5;
+		containerStyle.paddingLeft = containerStyle.paddingLeft + depth * 10;
 
 		if (selected) containerStyle = Object.assign(containerStyle, this.style().listItemSelected);
 
-		const expandIcon = !hasChildren ? null : <a href="#" style={this.style().listItemExpandIcon}>[+]</a>
+		let expandLinkStyle = Object.assign({}, this.style().listItemExpandIcon);
+		let expandIconStyle = {
+			visibility: hasChildren ? 'visible' : 'hidden',
+		}
+		const expandIcon = <i style={expandIconStyle} className="fa fa-plus-square"></i>
+		const expandLink = hasChildren ? <a style={expandLinkStyle} href="#" onClick={() => console.info('click')}>{expandIcon}</a> : <span style={expandLinkStyle}>{expandIcon}</span>
 
 		return (
-			<div style={containerStyle} key={folder.id}>
-				{ expandIcon }
+			<div style={containerStyle} key={folder.id} onDragStart={this.onFolderDragStart_} onDragOver={this.onFolderDragOver_} onDrop={this.onFolderDrop_} draggable={true} folderid={folder.id}>
+				{ expandLink }
 				<a
 					className="list-item"
-					onDragOver={event => {
-						onDragOver(event, folder);
-					}}
-					onDrop={event => {
-						onDrop(event, folder);
-					}}
 					href="#"
 					data-id={folder.id}
 					data-type={BaseModel.TYPE_FOLDER}
@@ -309,11 +349,11 @@ class SideBarComponent extends React.Component {
 		return <div style={{ height: 2, backgroundColor: "blue" }} key={key} />;
 	}
 
-	makeHeader(key, label, iconName) {
+	makeHeader(key, label, iconName, extraProps = {}) {
 		const style = this.style().header;
 		const icon = <i style={{ fontSize: style.fontSize * 1.2, marginRight: 5 }} className={"fa " + iconName} />;
 		return (
-			<div style={style} key={key}>
+			<div style={style} key={key} {...extraProps}>
 				{icon}
 				{label}
 			</div>
@@ -350,7 +390,10 @@ class SideBarComponent extends React.Component {
 
 		let items = [];
 
-		items.push(this.makeHeader("folderHeader", _("Notebooks"), "fa-folder-o"));
+		items.push(this.makeHeader("folderHeader", _("Notebooks"), "fa-folder-o", {
+			onDrop: this.onFolderDrop_,
+			folderid: '',
+		}));
 
 		if (this.props.folders.length) {
 			const folderItems = shared.renderFolders(this.props, this.folderItem.bind(this));

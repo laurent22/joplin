@@ -57,6 +57,11 @@ class Folder extends BaseItem {
 		});
 	}
 
+	static async subFolderIds(parentId) {
+		const rows = await this.db().selectAll('SELECT id FROM folders WHERE parent_id = ?', [parentId]);
+		return rows.map(r => r.id);
+	}
+
 	static async noteCount(parentId) {
 		let r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 0 AND parent_id = ?', [parentId]);
 		return r ? r.total : 0;
@@ -78,6 +83,11 @@ class Folder extends BaseItem {
 			let noteIds = await Folder.noteIds(folderId);
 			for (let i = 0; i < noteIds.length; i++) {
 				await Note.delete(noteIds[i]);
+			}
+
+			let subFolderIds = await Folder.subFolderIds(folderId);
+			for (let i = 0; i < subFolderIds.length; i++) {
+				await Folder.delete(subFolderIds[i]);
 			}
 		}
 
@@ -101,6 +111,7 @@ class Folder extends BaseItem {
 		return {
 			type_: this.TYPE_FOLDER,
 			id: this.conflictFolderId(),
+			parent_id: '',
 			title: this.conflictFolderTitle(),
 			updated_time: time.unixMs(),
 			user_updated_time: time.unixMs(),
@@ -123,6 +134,39 @@ class Folder extends BaseItem {
 
 	static defaultFolder() {
 		return this.modelSelectOne('SELECT * FROM folders ORDER BY created_time DESC LIMIT 1');
+	}
+
+	static async canNestUnder(folderId, targetFolderId) {
+		if (folderId === targetFolderId) return false;
+
+		const conflictFolderId = Folder.conflictFolderId();
+		if (folderId == conflictFolderId || targetFolderId == conflictFolderId) return false;
+
+		if (!targetFolderId) return true;
+
+		while (true) {
+			let folder = await Folder.load(targetFolderId);
+			if (!folder.parent_id) break;
+			if (folder.parent_id === folderId) return false;
+			targetFolderId = folder.parent_id;
+		}
+
+		return true;
+	}
+
+	static async moveToFolder(folderId, targetFolderId) {
+		if (!(await this.canNestUnder(folderId, targetFolderId))) throw new Error(_('Cannot move notebook to this location'));
+
+		// When moving a note to a different folder, the user timestamp is not updated.
+		// However updated_time is updated so that the note can be synced later on.
+
+		const modifiedFolder = {
+			id: folderId,
+			parent_id: targetFolderId,
+			updated_time: time.unixMs(),
+		};
+
+		return Folder.save(modifiedFolder, { autoTimestamp: false });
 	}
 
 	// These "duplicateCheck" and "reservedTitleCheck" should only be done when a user is

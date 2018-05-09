@@ -1,4 +1,5 @@
 const ArrayUtils = require('lib/ArrayUtils');
+const Folder = require('lib/models/Folder');
 
 let shared = {};
 
@@ -14,7 +15,7 @@ function renderFoldersRecursive_(props, renderItem, items, parentId, depth) {
 	const folders = props.folders;
 	for (let i = 0; i < folders.length; i++) {
 		let folder = folders[i];
-		if (folder.parent_id !== parentId) continue;
+		if (!Folder.idsEqual(folder.parent_id, parentId)) continue;
 		const hasChildren = folderHasChildren_(folders, folder.id);
 		items.push(renderItem(folder, props.selectedFolderId == folder.id && props.notesParentType == 'Folder', hasChildren, depth));
 		if (hasChildren) items = renderFoldersRecursive_(props, renderItem, items, folder.id, depth + 1);

@@ -44,6 +44,15 @@ class BaseModel {
 		return null;
 	}
 
+	// Prefer the use of this function to compare IDs as it handles the case where
+	// one ID is null and the other is "", in which case they are actually considered to be the same.
+	static idsEqual(id1, id2) {
+		if (!id1 && !id2) return true;
+		if (!id1 && !!id2) return false;
+		if (!!id1 && !id2) return false;
+		return id1 === id2;
+	}
+
 	static modelTypeToName(type) {
 		for (let i = 0; i < BaseModel.typeEnum_.length; i++) {
 			const e = BaseModel.typeEnum_[i];

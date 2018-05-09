@@ -29,7 +29,7 @@ class Command extends BaseCommand {
 
 		const folder = await app().loadItem(BaseModel.TYPE_FOLDER, pattern);
 		if (!folder) throw new Error(_('Cannot find "%s".', pattern));
-		const ok = force ? true : await this.prompt(_('Delete notebook? All notes within this notebook will also be deleted.'), { booleanAnswerDefault: 'n' });
+		const ok = force ? true : await this.prompt(_('Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.'), { booleanAnswerDefault: 'n' });
 		if (!ok) return;
 
 		await Folder.delete(folder.id);
