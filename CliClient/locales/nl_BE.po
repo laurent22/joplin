@@ -1129,6 +1129,10 @@ msgstr "Donker"
 msgid "Uncompleted to-dos on top"
 msgstr "Toon onvoltooide to-do's aan de top van de lijsten"
 
+#, fuzzy
+msgid "Show completed to-dos"
+msgstr "Toon onvoltooide to-do's aan de top van de lijsten"
+
 msgid "Sort notes by"
 msgstr ""
 

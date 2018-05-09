@@ -1099,6 +1099,10 @@ msgstr "Tmavý"
 msgid "Uncompleted to-dos on top"
 msgstr "Nedokončené to-do listy nahoře"
 
+#, fuzzy
+msgid "Show completed to-dos"
+msgstr "Nedokončené to-do listy nahoře"
+
 msgid "Sort notes by"
 msgstr "Řadit poznámky podle"
 

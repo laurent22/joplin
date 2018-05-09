@@ -1108,6 +1108,10 @@ msgstr "Tamna"
 msgid "Uncompleted to-dos on top"
 msgstr "Prikaži nezavršene zadatke na vrhu liste"
 
+#, fuzzy
+msgid "Show completed to-dos"
+msgstr "Prikaži nezavršene zadatke na vrhu liste"
+
 msgid "Sort notes by"
 msgstr ""
 

@@ -1124,6 +1124,9 @@ msgstr "Sombre"
 msgid "Uncompleted to-dos on top"
 msgstr "Tâches non-terminées en haut"
 
+msgid "Show completed to-dos"
+msgstr "Afficher les tâches complétées"
+
 msgid "Sort notes by"
 msgstr "Trier les notes par"
 

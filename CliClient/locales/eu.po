@@ -1125,6 +1125,10 @@ msgstr "Iluna"
 msgid "Uncompleted to-dos on top"
 msgstr "Bete gabeko zereginak erakutsi zerrendaren goiko partean"
 
+#, fuzzy
+msgid "Show completed to-dos"
+msgstr "Bete gabeko zereginak erakutsi zerrendaren goiko partean"
+
 msgid "Sort notes by"
 msgstr ""
 

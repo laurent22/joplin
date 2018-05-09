@@ -1120,6 +1120,10 @@ msgstr "Dark"
 msgid "Uncompleted to-dos on top"
 msgstr "Mostrar tarefas incompletas no topo"
 
+#, fuzzy
+msgid "Show completed to-dos"
+msgstr "Mostrar tarefas incompletas no topo"
+
 msgid "Sort notes by"
 msgstr "Ordenar notas por"
 

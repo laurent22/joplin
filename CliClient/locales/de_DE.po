@@ -1141,6 +1141,10 @@ msgstr "Dunkel"
 msgid "Uncompleted to-dos on top"
 msgstr "Zeige unvollständige To-Dos an oberster Stelle"
 
+#, fuzzy
+msgid "Show completed to-dos"
+msgstr "Zeige unvollständige To-Dos an oberster Stelle"
+
 msgid "Sort notes by"
 msgstr "Sortiere Notizen nach"
 

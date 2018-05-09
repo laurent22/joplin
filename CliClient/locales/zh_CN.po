@@ -1069,6 +1069,10 @@ msgstr "深色"
 msgid "Uncompleted to-dos on top"
 msgstr "未完成的待办事项在顶端"
 
+#, fuzzy
+msgid "Show completed to-dos"
+msgstr "未完成的待办事项在顶端"
+
 msgid "Sort notes by"
 msgstr "排序笔记"
 

@@ -1117,6 +1117,10 @@ msgstr "Тёмная"
 msgid "Uncompleted to-dos on top"
 msgstr "Незавершённые задачи сверху"
 
+#, fuzzy
+msgid "Show completed to-dos"
+msgstr "Незавершённые задачи сверху"
+
 msgid "Sort notes by"
 msgstr "Сортировать заметки по"
 

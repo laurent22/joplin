@@ -1102,6 +1102,10 @@ msgstr "暗い"
 msgid "Uncompleted to-dos on top"
 msgstr "未完のToDoをリストの上部に表示"
 
+#, fuzzy
+msgid "Show completed to-dos"
+msgstr "未完のToDoをリストの上部に表示"
+
 msgid "Sort notes by"
 msgstr ""
 

@@ -1097,6 +1097,10 @@ msgstr "Scuro"
 msgid "Uncompleted to-dos on top"
 msgstr "Mostra todo inclompleti in cima alla lista"
 
+#, fuzzy
+msgid "Show completed to-dos"
+msgstr "Mostra todo inclompleti in cima alla lista"
+
 msgid "Sort notes by"
 msgstr ""
 

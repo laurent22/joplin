@@ -1013,6 +1013,9 @@ msgstr ""
 msgid "Uncompleted to-dos on top"
 msgstr ""
 
+msgid "Show completed to-dos"
+msgstr ""
+
 msgid "Sort notes by"
 msgstr ""
 

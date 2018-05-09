@@ -1107,6 +1107,10 @@ msgstr "Escuro"
 msgid "Uncompleted to-dos on top"
 msgstr "Tarefas sen completar arriba"
 
+#, fuzzy
+msgid "Show completed to-dos"
+msgstr "Tarefas sen completar arriba"
+
 msgid "Sort notes by"
 msgstr "Ordenar notas por"
 
