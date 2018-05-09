@@ -19,7 +19,19 @@ It is possible to get the apps to display or log more information that might hel
 - In the options, enable Advanced Option
 - Open the log in the top right hand corner menu and post a screenshot of any error/warning.
 
-# Low-level debugging on iOS
+# Creating a low-level bug report on Android
+
+https://developer.android.com/studio/debug/bug-report
+
+To get a bugreport directly from your device, do the following:
+
+- Be sure you have [Developer Options](https://developer.android.com/studio/debug/dev-options) enabled.
+- In Developer options, tap Take bug report.
+- Select the type of bug report you want and tap Report.
+
+After a moment you get a notification that the bug report is ready. To share the bug report, tap the notification.
+
+# Creating a low-level bug report on iOS
 
 Some crashes cannot be investigated using Joplin's own tools. In that case, it can be very helpful to provide a native iOS crash report.
 
