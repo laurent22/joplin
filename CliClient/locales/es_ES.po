@@ -844,9 +844,8 @@ msgstr "Añadir o borrar etiquetas"
 msgid "Switch between note and to-do type"
 msgstr "Cambiar entre nota y lista de tareas"
 
-#, fuzzy
 msgid "Copy Markdown link"
-msgstr "Markdown"
+msgstr "Copiar el enlace de Markdown"
 
 msgid "Delete"
 msgstr "Eliminar"
@@ -1393,11 +1392,12 @@ msgstr "Descartar cambios"
 
 #, javascript-format
 msgid "No item with ID %s"
-msgstr ""
+msgstr "No hay elementos con el ID %s"
 
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
+"La aplicación móvil de Joplin no soporta actualmente este tipo de enlace: %s"
 
 #, javascript-format
 msgid "Unsupported image type: %s"
