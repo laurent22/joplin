@@ -253,6 +253,10 @@ Checkboxes can be added like so:
 
 The checkboxes can then be ticked in the mobile and desktop applications.
 
+## HTML support
+
+Only the `<br>` tag is supported - it can be used to force a new line, which is convenient to insert new lines inside table cells. For security reasons, other HTML tags are not supported.
+
 # Donations
 
 Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.

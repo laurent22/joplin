@@ -389,7 +389,7 @@ class MdToHtml {
 		const md = new MarkdownIt({
 			breaks: true,
 			linkify: true,
-			html: true,
+			html: false, // For security, HTML tags are not supported - https://github.com/laurent22/joplin/issues/500
 		});
 
 		// This is currently used only so that the $expression$ and $$\nexpression\n$$ blocks are translated
@@ -434,6 +434,9 @@ class MdToHtml {
 				if (loopCount++ >= 9999) break;
 			}
 		}
+
+		// Support <br> tag to allow newlines inside table cells
+		renderedBody = renderedBody.replace(/&lt;br&gt;/gi, '<br>');
 
 		// https://necolas.github.io/normalize.css/
 		const normalizeCss = `
