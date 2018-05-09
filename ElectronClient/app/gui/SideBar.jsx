@@ -156,6 +156,10 @@ class SideBarComponent extends React.Component {
 			},
 		};
 
+		style.tagItem = Object.assign({}, style.listItem);
+		style.tagItem.paddingLeft = 23;
+		style.tagItem.height = itemHeight;
+
 		return style;
 	}
 
@@ -318,7 +322,7 @@ class SideBarComponent extends React.Component {
 	}
 
 	tagItem(tag, selected) {
-		let style = Object.assign({}, this.style().listItem);
+		let style = Object.assign({}, this.style().tagItem);
 		if (selected) style = Object.assign(style, this.style().listItemSelected);
 		return (
 			<a
