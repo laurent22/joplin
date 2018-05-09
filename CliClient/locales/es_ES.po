@@ -16,6 +16,8 @@ msgstr ""
 "X-Generator: Poedit 1.8.11\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Desmarque las notas asociadas para eliminar una etiqueta."
@@ -368,13 +370,12 @@ msgstr "Elimina la libreta dada."
 msgid "Deletes the notebook without asking for confirmation."
 msgstr "Elimina una libreta sin pedir confirmación."
 
-#, fuzzy
 msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
 msgstr ""
-"¿Desea eliminar la libreta? Todas las notas dentro de esta libreta también "
-"serán eliminadas."
+"¿Desea eliminar la libreta? Todas las notas y sublibretas dentro de esta "
+"libreta también serán eliminadas."
 
 msgid "Deletes the notes matching <note-pattern>."
 msgstr "Elimina las notas que coinciden con <note-pattern>."
@@ -1061,9 +1062,8 @@ msgstr "Los elementos cifrados no pueden ser modificados"
 msgid "Conflicts"
 msgstr "Conflictos"
 
-#, fuzzy
 msgid "Cannot move notebook to this location"
-msgstr "No se ha podido mover la nota a la libreta «%s»"
+msgstr "No se puede mover la libreta a este lugar"
 
 #, javascript-format
 msgid "A notebook with this title already exists: \"%s\""
