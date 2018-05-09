@@ -512,7 +512,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 				this.saveOneProperty('body', newBody);
 			};
 
-			bodyComponent = <NoteBodyViewer onJoplinLinkClick={this.onJoplinLinkClick_} style={this.styles().noteBodyViewer} webViewStyle={theme} note={note} onCheckboxChange={(newBody) => { onCheckboxChange(newBody) }}/>
+			bodyComponent = <NoteBodyViewer
+				onJoplinLinkClick={this.onJoplinLinkClick_}
+				style={this.styles().noteBodyViewer}
+				webViewStyle={theme}
+				note={note}
+				onCheckboxChange={(newBody) => { onCheckboxChange(newBody) }}
+			/>
 		} else {
 			const focusBody = !isNew && !!note.title;
 

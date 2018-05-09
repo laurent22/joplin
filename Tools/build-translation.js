@@ -143,23 +143,10 @@ async function translationStatus(isDefault, poFile) {
 		translatorName = extractTranslator(/Language-Team:\s*?(.*)/, content);
 	}
 
+	// Remove <> around email otherwise it's converted to HTML with (apparently) non-deterministic
+	// encoding, so it changes on every update.
 	translatorName = translatorName.replace(/ </, ' (');
 	translatorName = translatorName.replace(/>/, ')');
-
-	// "Last-Translator: Hrvoje Mandić <trbuhom@net.hr>\n"
-	// let translatorMatch = content.match(/Last-Translator:\s*?(.*)/);
-	// if (translatorMatch.length < 1) {
-	// 	translatorMatch = content.match(/Last-Team:\s*?(.*)/);
-	// }
-	
-	// if (translatorMatch.length >= 1) {
-	// 	translatorName = translatorMatch[1];
-	// 	translatorName = translatorName.replace(/["\s]+$/, '');
-	// 	translatorName = translatorName.replace(/\\n$/, '');
-	// 	translatorName = translatorName.replace(/^\s*/, '');
-	// }
-
-	// if (translatorName.indexOf('FULL NAME') >= 0) translatorName = '';
 
 	return {
 		percentDone: isDefault ? 100 : percentDone,

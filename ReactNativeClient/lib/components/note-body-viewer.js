@@ -39,6 +39,19 @@ class NoteBodyViewer extends Component {
 		}, 100);
 	}
 
+	shouldComponentUpdate(nextProps, nextState) {
+		// To address https://github.com/laurent22/joplin/issues/433
+		// If a checkbox in a note is ticked, the body changes, which normally would trigger a re-render
+		// of this component, which has the unfortunate side effect of making the view scroll back to the top.
+		// This re-rendering however is uncessary since the component is already visually updated via JS.
+		// So here, if the note has not changed, we prevent the component from updating.
+		// This fixes the above issue. A drawback of this is if the note is updated via sync, this change
+		// will not be displayed immediately.
+		const currentNoteId = this.props && this.props.note ? this.props.note.id : null;
+		const nextNoteId = nextProps && nextProps.note ? nextProps.note.id : null;
+		return currentNoteId !== nextNoteId || nextState.webViewLoaded !== this.state.webViewLoaded;
+	}
+
 	render() {
 		const note = this.props.note;
 		const style = this.props.style;
@@ -109,7 +122,7 @@ class NoteBodyViewer extends Component {
 						let msg = event.nativeEvent.data;
 
 						if (msg.indexOf('checkboxclick:') === 0) {
-							const newBody = this.mdToHtml_.handleCheckboxClick(msg, note.body);
+							const newBody = this.mdToHtml_.handleCheckboxClick(msg, this.props.note.body);
 							if (onCheckboxChange) onCheckboxChange(newBody);
 						} else if (msg.indexOf('bodyscroll:') === 0) {
 							//msg = msg.split(':');
