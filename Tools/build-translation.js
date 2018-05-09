@@ -143,6 +143,9 @@ async function translationStatus(isDefault, poFile) {
 		translatorName = extractTranslator(/Language-Team:\s*?(.*)/, content);
 	}
 
+	translatorName = translatorName.replace(/ </, ' (');
+	translatorName = translatorName.replace(/>/, ')');
+
 	// "Last-Translator: Hrvoje Mandić <trbuhom@net.hr>\n"
 	// let translatorMatch = content.match(/Last-Translator:\s*?(.*)/);
 	// if (translatorMatch.length < 1) {
