@@ -2,6 +2,7 @@ const { reg } = require('lib/registry.js');
 const Folder = require('lib/models/Folder.js');
 const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
+const Setting = require('lib/models/Setting.js');
 
 const shared = {};
 
@@ -20,7 +21,9 @@ shared.saveNoteButton_press = async function(comp, folderId = null) {
 	if (folderId) {
 		note.parent_id = folderId;
 	} else if (!note.parent_id) {
-		let folder = await Folder.defaultFolder();
+		const activeFolderId = Setting.value('activeFolderId');
+		let folder = await Folder.load(activeFolderId);
+		if (!folder) folder = await Folder.defaultFolder();
 		if (!folder) return;
 		note.parent_id = folder.id;
 	}
