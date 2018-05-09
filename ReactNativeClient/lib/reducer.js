@@ -26,6 +26,7 @@ const defaultState = {
 	appState: 'starting',
 	hasDisabledSyncItems: false,
 	newNote: null,
+	collapsedFolderIds: [],
 };
 
 const stateUtils = {};
@@ -49,6 +50,23 @@ function stateHasEncryptedItems(state) {
 	if (arrayHasEncryptedItems(state.folders)) return true;
 	if (arrayHasEncryptedItems(state.tags)) return true;
 	return false;
+}
+
+function folderSetCollapsed(state, action) {
+	const collapsedFolderIds = state.collapsedFolderIds.slice();
+	const idx = collapsedFolderIds.indexOf(action.id);
+
+	if (action.collapsed) {
+		if (idx >= 0) return state;
+		collapsedFolderIds.push(action.id);
+	} else {
+		if (idx < 0) return state;
+		collapsedFolderIds.splice(idx, 1);
+	}
+
+	newState = Object.assign({}, state);
+	newState.collapsedFolderIds = collapsedFolderIds;
+	return newState;
 }
 
 // When deleting a note, tag or folder
@@ -337,6 +355,26 @@ const reducer = (state = defaultState, action) => {
 
 				newState = Object.assign({}, state);
 				newState.folders = action.items;
+				break;
+
+			case 'FOLDER_SET_COLLAPSED':
+
+				newState = folderSetCollapsed(state, action);
+				break;
+
+			case 'FOLDER_TOGGLE':
+
+				if (state.collapsedFolderIds.indexOf(action.id) >= 0) {
+					newState = folderSetCollapsed(state, Object.assign({ collapsed: false }, action));
+				} else {
+					newState = folderSetCollapsed(state, Object.assign({ collapsed: true }, action));
+				}
+				break;
+
+			case 'FOLDER_SET_COLLAPSED_ALL':
+
+				newState = Object.assign({}, state);
+				newState.collapsedFolderIds = action.ids.slice();
 				break;
 
 			case 'TAG_UPDATE_ALL':

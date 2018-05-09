@@ -91,6 +91,8 @@ class Setting extends BaseModel {
 			'showTrayIcon': { value: platform !== 'linux', type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Show tray icon'), description: () => {
 				return platform === 'linux' ? _('Note: Does not work in all desktop environments.') : null;
 			}},
+
+			'collapsedFolderIds': { value: [], type: Setting.TYPE_ARRAY, public: false },
 			
 			'encryption.enabled': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'encryption.activeMasterKeyId': { value: '', type: Setting.TYPE_STRING, public: false },

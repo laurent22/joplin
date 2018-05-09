@@ -54,6 +54,15 @@ class SideBarComponent extends React.Component {
 				}
 			}
 		};
+
+		this.onFolderToggleClick_ = async (event) => {
+			const folderId = event.currentTarget.getAttribute('folderid');
+
+			this.props.dispatch({
+				type: 'FOLDER_TOGGLE',
+				id: folderId,
+			});
+		};
 	}
 
 	style() {
@@ -68,7 +77,7 @@ class SideBarComponent extends React.Component {
 			listItemContainer: {
 				boxSizing: "border-box",
 				height: itemHeight,
-				paddingLeft: 14,
+				// paddingLeft: 14,
 				display: "flex",
 				alignItems: "stretch",
 			},
@@ -272,19 +281,22 @@ class SideBarComponent extends React.Component {
 		const itemTitle = Folder.displayTitle(folder);
 
 		let containerStyle = Object.assign({}, this.style().listItemContainer);
-		containerStyle.paddingLeft = containerStyle.paddingLeft + depth * 10;
+		// containerStyle.paddingLeft = containerStyle.paddingLeft + depth * 10;
 
 		if (selected) containerStyle = Object.assign(containerStyle, this.style().listItemSelected);
 
 		let expandLinkStyle = Object.assign({}, this.style().listItemExpandIcon);
 		let expandIconStyle = {
 			visibility: hasChildren ? 'visible' : 'hidden',
+			paddingLeft: 8 + depth * 10,
 		}
-		const expandIcon = <i style={expandIconStyle} className="fa fa-plus-square"></i>
-		const expandLink = hasChildren ? <a style={expandLinkStyle} href="#" onClick={() => console.info('click')}>{expandIcon}</a> : <span style={expandLinkStyle}>{expandIcon}</span>
+
+		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'fa-minus-square' : 'fa-plus-square';
+		const expandIcon = <i style={expandIconStyle} className={"fa " + iconName}></i>
+		const expandLink = hasChildren ? <a style={expandLinkStyle} href="#" folderid={folder.id} onClick={this.onFolderToggleClick_}>{expandIcon}</a> : <span style={expandLinkStyle}>{expandIcon}</span>
 
 		return (
-			<div style={containerStyle} key={folder.id} onDragStart={this.onFolderDragStart_} onDragOver={this.onFolderDragOver_} onDrop={this.onFolderDrop_} draggable={true} folderid={folder.id}>
+			<div className="list-item-container" style={containerStyle} key={folder.id} onDragStart={this.onFolderDragStart_} onDragOver={this.onFolderDragOver_} onDrop={this.onFolderDrop_} draggable={true} folderid={folder.id}>
 				{ expandLink }
 				<a
 					className="list-item"
@@ -293,9 +305,11 @@ class SideBarComponent extends React.Component {
 					data-type={BaseModel.TYPE_FOLDER}
 					onContextMenu={event => this.itemContextMenu(event)}
 					style={style}
+					folderid={folder.id}
 					onClick={() => {
 						this.folderItem_click(folder);
 					}}
+					onDoubleClick={this.onFolderToggleClick_}
 				>
 					{itemTitle}
 				</a>
@@ -451,6 +465,7 @@ const mapStateToProps = state => {
 		notesParentType: state.notesParentType,
 		locale: state.settings.locale,
 		theme: state.settings.theme,
+		collapsedFolderIds: state.collapsedFolderIds,
 	};
 };
 

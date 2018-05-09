@@ -615,6 +615,11 @@ class Application extends BaseApplication {
 			id: Setting.value('activeFolderId'),
 		});
 
+		this.store().dispatch({
+			type: 'FOLDER_SET_COLLAPSED_ALL',
+			ids: Setting.value('collapsedFolderIds'),
+		});
+
 		// Note: Auto-update currently doesn't work in Linux: it downloads the update
 		// but then doesn't install it on exit.
 		if (shim.isWindows() || shim.isMac()) {
