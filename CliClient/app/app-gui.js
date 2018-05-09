@@ -1,5 +1,6 @@
 const { Logger } = require('lib/logger.js');
 const Folder = require('lib/models/Folder.js');
+const BaseItem = require('lib/models/BaseItem.js');
 const Tag = require('lib/models/Tag.js');
 const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
@@ -9,6 +10,8 @@ const { reducer, defaultState } = require('lib/reducer.js');
 const { splitCommandString } = require('lib/string-utils.js');
 const { reg } = require('lib/registry.js');
 const { _ } = require('lib/locale.js');
+const Entities = require('html-entities').AllHtmlEntities;
+const htmlentities = (new Entities()).encode;
 
 const chalk = require('chalk');
 const tk = require('terminal-kit');
@@ -638,12 +641,27 @@ class AppGui {
 				return true;
 			}
 
-			if (link.type === 'resource') {
-				const resourceId = link.id;
-				let resource = await Resource.load(resourceId);
-				if (!resource) throw new Error('No resource with ID ' + resourceId); // Should be nearly impossible
-				if (resource.mime) response.setHeader('Content-Type', resource.mime);
-				response.write(await Resource.content(resource));
+			if (link.type === 'item') {
+				const itemId = link.id;
+				let item = await BaseItem.loadItemById(itemId);
+				if (!item) throw new Error('No item with ID ' + itemId); // Should be nearly impossible
+
+				if (item.type_ === BaseModel.TYPE_RESOURCE) {
+					if (item.mime) response.setHeader('Content-Type', item.mime);
+					response.write(await Resource.content(item));
+				} else if (item.type_ === BaseModel.TYPE_NOTE) {
+					const html = [`
+						<!DOCTYPE html>
+						<html class="client-nojs" lang="en" dir="ltr">
+						<head><meta charset="UTF-8"/></head><body>
+					`];
+					html.push('<pre>' + htmlentities(item.title) + '\n\n' + htmlentities(item.body) + '</pre>');
+					html.push('</body></html>');
+					response.write(html.join(''));
+				} else {
+					throw new Error('Unsupported item type: ' + item.type_);
+				}
+
 				return true;
 			}
 
@@ -659,7 +677,7 @@ class AppGui {
 
 				if (resourceIdRegex.test(url)) {
 					noteLinks[index] = {
-						type: 'resource',
+						type: 'item',
 						id: url.substr(2),
 					};					
 				} else if (hasProtocol(url, ['http', 'https', 'file', 'ftp'])) {
