@@ -23,7 +23,6 @@ const fs = require('fs-extra');
 const {clipboard} = require('electron')
 const md5 = require('md5');
 const mimeUtils = require('lib/mime-utils.js').mime;
-const NoteBodyViewer = require('./NoteBodyViewer.min.js');
 const ArrayUtils = require('lib/ArrayUtils');
 
 require('brace/mode/markdown');
