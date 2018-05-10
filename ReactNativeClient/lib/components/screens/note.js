@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { Platform, Clipboard, Keyboard, BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking, Image } = require('react-native');
+const { Platform, Clipboard, Keyboard, BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking, Image, Share } = require('react-native');
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
 const RNFS = require('react-native-fs');
@@ -409,6 +409,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ noteTagDialogShown: true });
 	}
 
+	async share_onPress() {
+		await Share.share({
+			message: this.state.note.title + '\n\n' + this.state.note.body,
+			title: this.state.note.title,
+		});
+	}
+
 	setAlarm_onPress() {
 		this.setState({ alarmDialogShown: true });
 	}
@@ -468,6 +475,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			output.push({ title: _('Set alarm'), onPress: () => { this.setState({ alarmDialogShown: true }) }});;
 		}
 
+		output.push({ title: _('Share'), onPress: () => { this.share_onPress(); } });
 		if (isSaved) output.push({ title: _('Tags'), onPress: () => { this.tags_onPress(); } });
 		output.push({ title: isTodo ? _('Convert to note') : _('Convert to todo'), onPress: () => { this.toggleIsTodo_onPress(); } });
 		if (isSaved) output.push({ title: _('Copy Markdown link'), onPress: () => { this.copyMarkdownLink_onPress(); } });
