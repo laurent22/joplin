@@ -44,4 +44,13 @@ describe('ArrayUtils', function() {
 		done();
 	});
 
+	it('should compare arrays', async (done) => {
+		expect(ArrayUtils.contentEquals([], [])).toBe(true);
+		expect(ArrayUtils.contentEquals(['a'], ['a'])).toBe(true);
+		expect(ArrayUtils.contentEquals(['b', 'a'], ['a', 'b'])).toBe(true);
+		expect(ArrayUtils.contentEquals(['b'], ['a', 'b'])).toBe(false);
+
+		done();
+	});
+
 });

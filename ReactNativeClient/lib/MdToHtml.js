@@ -157,9 +157,12 @@ class MdToHtml {
 	rendererPlugin_(language) {
 		if (!language) return null;
 
-		const handlers = {};
-		handlers['katex'] = new MdToHtml_Katex();
-		return language in handlers ? handlers[language] : null;
+		if (!this.rendererPlugins_) {
+			this.rendererPlugins_ = {};
+			this.rendererPlugins_['katex'] = new MdToHtml_Katex();
+		}
+
+		return language in this.rendererPlugins_ ? this.rendererPlugins_[language] : null;
 	}
 
 	parseInlineCodeLanguage_(content) {

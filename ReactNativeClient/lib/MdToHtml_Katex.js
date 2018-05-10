@@ -5,15 +5,28 @@ const Setting = require('lib/models/Setting');
 
 class MdToHtml_Katex {
 
+	constructor() {
+		this.cache_ = {};
+		this.assetsLoaded_ = false;
+	}
+
 	name() {
 		return 'katex';
 	}
 
 	processContent(renderedTokens, content, tagType) {
 		try {
-			let renderered = katex.renderToString(content, {
-				displayMode: tagType === 'block',
-			});
+			const cacheKey = tagType + '_' + content;
+			let renderered = null;
+
+			if (this.cache_[cacheKey]) {
+				renderered = this.cache_[cacheKey];
+			} else {
+				renderered = katex.renderToString(content, {
+					displayMode: tagType === 'block',
+				});
+				this.cache_[cacheKey] = renderered;
+			}
 
 			if (tagType === 'block') renderered = '<p>' + renderered + '</p>';
 
@@ -29,6 +42,8 @@ class MdToHtml_Katex {
 	}
 
 	async loadAssets() {
+		if (this.assetsLoaded_) return;
+
 		// In node, the fonts are simply copied using copycss to where Katex expects to find them, which is under app/gui/note-viewer/fonts
 
 		// In React Native, it's more complicated and we need to download and copy them to the right directory. Ideally, we should embed
@@ -43,6 +58,8 @@ class MdToHtml_Katex {
 			await shim.fetchBlob('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta1/fonts/KaTeX_Math-Italic.woff2', { overwrite: false, path: baseDir + '/fonts/KaTeX_Math-Italic.woff2' });
 			await shim.fetchBlob('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta1/fonts/KaTeX_Size1-Regular.woff2', { overwrite: false, path: baseDir + '/fonts/KaTeX_Size1-Regular.woff2' });
 		}
+
+		this.assetsLoaded_ = true;
 	}
 
 }

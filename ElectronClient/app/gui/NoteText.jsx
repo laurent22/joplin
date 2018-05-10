@@ -23,6 +23,8 @@ const fs = require('fs-extra');
 const {clipboard} = require('electron')
 const md5 = require('md5');
 const mimeUtils = require('lib/mime-utils.js').mime;
+const NoteBodyViewer = require('./NoteBodyViewer.min.js');
+const ArrayUtils = require('lib/ArrayUtils');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -50,6 +52,7 @@ class NoteTextComponent extends React.Component {
 			// changed by the user, this variable contains that note ID. Used
 			// to automatically set the title.
 			newAndNoTitleChangeNoteId: null,
+			bodyHtml: '',
 		};
 
 		this.lastLoadedNoteId_ = null;
@@ -58,6 +61,8 @@ class NoteTextComponent extends React.Component {
 		this.ignoreNextEditorScroll_ = false;
 		this.scheduleSaveTimeout_ = null;
 		this.restoreScrollTop_ = null;
+		this.lastSetHtml_ = '';
+		this.lastSetMarkers_ = [];
 
 		// Complicated but reliable method to get editor content height
 		// https://github.com/ajaxorg/ace/issues/2046
@@ -302,7 +307,12 @@ class NoteTextComponent extends React.Component {
 			newState.newAndNoTitleChangeNoteId = null;
 		}
 
+		this.lastSetHtml_ = '';
+		this.lastSetMarkers_ = [];
+
 		this.setState(newState);
+
+		this.updateHtml(newState.note ? newState.note.body : '');
 	}
 
 	async componentWillReceiveProps(nextProps) {
@@ -542,7 +552,50 @@ class NoteTextComponent extends React.Component {
 
 	aceEditor_change(body) {
 		shared.noteComponent_change(this, 'body', body);
+		this.scheduleHtmlUpdate();
 		this.scheduleSave();
+	}
+
+	scheduleHtmlUpdate(timeout = 500) {
+		if (this.scheduleHtmlUpdateIID_) {
+			clearTimeout(this.scheduleHtmlUpdateIID_);
+			this.scheduleHtmlUpdateIID_ = null;
+		}
+
+		if (timeout) {
+			this.scheduleHtmlUpdateIID_ = setTimeout(() => {
+				this.updateHtml();
+			}, timeout);
+		} else {
+			this.updateHtml();
+		}
+	}
+
+	updateHtml(body = null) {
+		const mdOptions = {
+			onResourceLoaded: () => {
+				this.updateHtml();
+				this.forceUpdate();
+			},
+			postMessageSyntax: 'ipcRenderer.sendToHost',
+		};
+
+		const theme = themeStyle(this.props.theme);
+
+		let bodyToRender = body;
+		if (bodyToRender === null) bodyToRender = this.state.note && this.state.note.body ? this.state.note.body : '';
+		let bodyHtml = '';
+
+		const visiblePanes = this.props.visiblePanes || ['editor', 'viewer'];
+
+		if (!bodyToRender.trim() && visiblePanes.indexOf('viewer') >= 0 && visiblePanes.indexOf('editor') < 0) {
+			// Fixes https://github.com/laurent22/joplin/issues/217
+			bodyToRender = '*' + _('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout')) + '*';
+		}
+
+		bodyHtml = this.mdToHtml().render(bodyToRender, theme, mdOptions);
+
+		this.setState({ bodyHtml: bodyHtml });
 	}
 
 	async doCommand(command) {
@@ -601,6 +654,8 @@ class NoteTextComponent extends React.Component {
 					note: Object.assign({}, note),
 					lastSavedNote: Object.assign({}, note),
 				});
+
+				this.updateHtml(note.body);
 			} catch (error) {
 				reg.logger().error(error);
 				bridge().showErrorMessageBox(error.message);
@@ -748,25 +803,21 @@ class NoteTextComponent extends React.Component {
 		}
 
 		if (this.state.webviewReady) {
-			const mdOptions = {
-				onResourceLoaded: () => {
-					this.forceUpdate();
-				},
-				postMessageSyntax: 'ipcRenderer.sendToHost',
-			};
+			let html = this.state.bodyHtml;
 
-			let bodyToRender = body;
-			if (!bodyToRender.trim() && visiblePanes.indexOf('viewer') >= 0 && visiblePanes.indexOf('editor') < 0) {
-				// Fixes https://github.com/laurent22/joplin/issues/217
-				bodyToRender = '*' + _('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout')) + '*';
+			const htmlHasChanged = this.lastSetHtml_ !== html;
+			 if (htmlHasChanged) {
+				this.webview_.send('setHtml', html);
+				this.lastSetHtml_ = html;
 			}
-
-			const html = this.mdToHtml().render(bodyToRender, theme, mdOptions);
-			this.webview_.send('setHtml', html);
 
 			const search = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
 			const keywords = search ? Search.keywords(search.query_pattern) : [];
-			this.webview_.send('setMarkers', keywords);
+
+			if (htmlHasChanged || !ArrayUtils.contentEquals(this.lastSetMarkers_, keywords)) {
+				this.lastSetMarkers_ = [];
+				this.webview_.send('setMarkers', keywords);
+			}
 		}
 
 		const toolbarItems = [];
@@ -812,7 +863,7 @@ class NoteTextComponent extends React.Component {
 
 		const titleBarDate = <span style={Object.assign({}, theme.textStyle, {color: theme.colorFaded})}>{time.formatMsToLocal(note.user_updated_time)}</span>
 
-		const viewer = <webview
+		const viewer =  <webview
 			style={viewerStyle}
 			nodeintegration="1"
 			src="gui/note-viewer/index.html"
