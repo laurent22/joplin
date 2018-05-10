@@ -20,6 +20,9 @@ const MenuItem = bridge().MenuItem;
 const { shim } = require('lib/shim.js');
 const eventManager = require('../eventManager');
 const fs = require('fs-extra');
+const {clipboard} = require('electron')
+const md5 = require('md5');
+const mimeUtils = require('lib/mime-utils.js').mime;
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -72,6 +75,62 @@ class NoteTextComponent extends React.Component {
 		this.onAlarmChange_ = (event) => { if (event.noteId === this.props.noteId) this.reloadNote(this.props); }
 		this.onNoteTypeToggle_ = (event) => { if (event.noteId === this.props.noteId) this.reloadNote(this.props); }
 		this.onTodoToggle_ = (event) => { if (event.noteId === this.props.noteId) this.reloadNote(this.props); }
+
+		this.onEditorPaste_ = async (event) => {
+			const formats = clipboard.availableFormats();
+			for (let i = 0; i < formats.length; i++) {
+				const format = formats[i].toLowerCase();
+				const formatType = format.split('/')[0]
+				if (formatType === 'image') {
+					event.preventDefault();
+
+					const image = clipboard.readImage();
+
+					const fileExt = mimeUtils.toFileExtension(format);
+					const filePath = Setting.value('tempDir') + '/' + md5(Date.now()) + '.' + fileExt;
+
+					await shim.writeImageToFile(image, format, filePath);
+					await this.commandAttachFile([filePath]);
+					await shim.fsDriver().remove(filePath);
+				}
+			}
+		}
+
+		this.onDrop_ = async (event) => {
+			const files = event.dataTransfer.files;
+			if (!files || !files.length) return;
+
+			const filesToAttach = [];
+
+			for (let i = 0; i < files.length; i++) {
+				const file = files[i];
+				if (!file.path) continue;
+				filesToAttach.push(file.path);
+			}
+
+			await this.commandAttachFile(filesToAttach);
+		}
+	}
+
+	cursorPosition() {
+		if (!this.editor_ || !this.editor_.editor || !this.state.note || !this.state.note.body) return 0;
+
+		const cursorPos = this.editor_.editor.getCursorPosition();
+		const noteLines = this.state.note.body.split('\n');
+
+		let pos = 0;
+		for (let i = 0; i < noteLines.length; i++) {
+			if (i > 0) pos++; // Need to add the newline that's been removed in the split() call above
+
+			if (i === cursorPos.row) {
+				pos += cursorPos.column;
+				break;
+			} else {
+				pos += noteLines[i].length;
+			}
+		}
+
+		return pos;
 	}
 
 	mdToHtml() {
@@ -421,6 +480,7 @@ class NoteTextComponent extends React.Component {
 
 		if (this.editor_) {
 			this.editor_.editor.renderer.off('afterRender', this.onAfterEditorRender_);
+			document.querySelector('#note-editor').removeEventListener('paste', this.onEditorPaste_, true);
 		}
 
 		this.editor_ = element;
@@ -446,6 +506,8 @@ class NoteTextComponent extends React.Component {
 					throw new Error('HACK: Overriding Ace Editor shortcut: ' + k);
 				});
 			}
+
+			document.querySelector('#note-editor').addEventListener('paste', this.onEditorPaste_, true);
 		}
 	}
 
@@ -516,20 +578,24 @@ class NoteTextComponent extends React.Component {
 		}
 	}
 
-	async commandAttachFile() {
-		const filePaths = bridge().showOpenDialog({
-			properties: ['openFile', 'createDirectory', 'multiSelections'],
-		});
-		if (!filePaths || !filePaths.length) return;
+	async commandAttachFile(filePaths = null) {
+		if (!filePaths) {
+			filePaths = bridge().showOpenDialog({
+				properties: ['openFile', 'createDirectory', 'multiSelections'],
+			});
+			if (!filePaths || !filePaths.length) return;
+		}
 
 		await this.saveIfNeeded(true);
 		let note = await Note.load(this.state.note.id);
+
+		const position = this.cursorPosition();
 
 		for (let i = 0; i < filePaths.length; i++) {
 			const filePath = filePaths[i];
 			try {
 				reg.logger().info('Attaching ' + filePath);
-				note = await shim.attachFileToNote(note, filePath);
+				note = await shim.attachFileToNote(note, filePath, position);
 				reg.logger().info('File was attached.');
 				this.setState({
 					note: Object.assign({}, note),
@@ -801,7 +867,7 @@ class NoteTextComponent extends React.Component {
 		/>
 
 		return (
-			<div style={rootStyle}>
+			<div style={rootStyle} onDrop={this.onDrop_}>
 				<div style={titleBarStyle}>
 					{ titleEditor }
 					{ titleBarDate }

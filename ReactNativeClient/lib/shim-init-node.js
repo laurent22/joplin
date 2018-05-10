@@ -35,6 +35,23 @@ function shimInit() {
 		return locale;
 	}
 
+	// For Electron only
+	shim.writeImageToFile = async function(nativeImage, mime, targetPath) {
+		let buffer = null;
+
+		mime = mime.toLowerCase();
+
+		if (mime === 'image/png') {
+			buffer = nativeImage.toPNG();
+		} else if (mime === 'image/jpg' || mime === 'image/jpeg') {
+			buffer = nativeImage.toJPEG(90);
+		}
+
+		if (!buffer) throw new Error('Cannot reisze image because mime type "' + mime + '" is not supported: ' + targetPath);
+
+		await shim.fsDriver().writeFile(targetPath, buffer, 'buffer');		
+	}
+
 	const resizeImage_ = async function(filePath, targetPath, mime) {
 		if (shim.isElectron()) { // For Electron
 			const nativeImage = require('electron').nativeImage;
@@ -58,17 +75,7 @@ function shimInit() {
 
 			image = image.resize(options);
 
-			let buffer = null;
-
-			if (mime === 'image/png') {
-				buffer = image.toPNG();
-			} else if (mime === 'image/jpg' || mime === 'image/jpeg') {
-				buffer = image.toJPEG(90);
-			}
-
-			if (!buffer) throw new Error('Cannot reisze image because mime type "' + mime + '" is not supported: ' + targetPath);
-
-			await shim.fsDriver().writeFile(targetPath, buffer, 'buffer');
+			await shim.writeImageToFile(image, mime, targetPath);
 		} else { // For the CLI tool
 			const sharp = require('sharp');
 			const Resource = require('lib/models/Resource.js');
@@ -89,7 +96,7 @@ function shimInit() {
 		}
 	}
 
-	shim.attachFileToNote = async function(note, filePath) {
+	shim.attachFileToNote = async function(note, filePath, position = null) {
 		const Resource = require('lib/models/Resource.js');
 		const { uuid } = require('lib/uuid.js');
 		const { basename, fileExtension, safeFileExtension } = require('lib/path-utils.js');
@@ -120,8 +127,14 @@ function shimInit() {
 		await Resource.save(resource, { isNew: true });
 
 		const newBody = [];
-		if (note.body) newBody.push(note.body);
+
+		if (position === null) {
+			position = note.body ? note.body.length : 0;
+		}
+
+		if (note.body && position) newBody.push(note.body.substr(0, position));
 		newBody.push(Resource.markdownTag(resource));
+		newBody.push(note.body.substr(position));
 
 		const newNote = Object.assign({}, note, {
 			body: newBody.join('\n\n'),
