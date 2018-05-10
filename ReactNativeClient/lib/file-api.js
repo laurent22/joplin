@@ -311,6 +311,7 @@ async function basicDelta(path, getDirStatFn, options) {
 		// Clear temporary info from context. It's especially important to remove deletedItemsProcessed
 		// so that they are processed again on the next sync.
 		newContext.statsCache = null;
+		newContext.statIdsCache = null;
 		delete newContext.deletedItemsProcessed;
 	}
 
