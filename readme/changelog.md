@@ -1,6 +1,8 @@
 # Joplin changelog
 
-## [v1.0.90](https://github.com/laurent22/joplin/releases/tag/v1.0.90) - 2018-05-10T13:29:24Z
+## [v1.0.91](https://github.com/laurent22/joplin/releases/tag/v1.0.91) - 2018-05-10T14:48:04Z
+
+Same as v1.0.90 but with a fix for [#510](https://github.com/laurent22/joplin/issues/510) 
 
 - New: Resolves [#345](https://github.com/laurent22/joplin/issues/345): Option to hide completed todos
 - New: Resolves [#200](https://github.com/laurent22/joplin/issues/200), Resolves [#416](https://github.com/laurent22/joplin/issues/416): Allow attaching images by pasting them in. Allow attaching files by drag and dropping them. Insert attachment at cursor position.
