@@ -185,7 +185,7 @@ Any kind of file can be attached to a note. In Markdown, links to these files ar
 
 On the **desktop application**, images can be attached either by clicking on "Attach file" or by pasting (with Ctrl+V) an image directly in the editor, or by drag and dropping an image.
 
-Resources that are not attached to any note will be automatically deleted after a day or two.
+Resources that are not attached to any note will be automatically deleted after a day or two (see [rationale](https://github.com/laurent22/joplin/issues/154#issuecomment-356582366)).
 
 **Important:** Resources larger than 10 MB are not currently supported on mobile. They will crash the application when synchronising so it is recommended not to attach such resources at the moment. The issue is being looked at.
 
@@ -268,6 +268,7 @@ Please see the [donation page](https://joplin.cozic.net/donate/) for information
 # Community
 
 - For general discussion about Joplin, user support, software development questions, and to discuss new features, go to the [Joplin Forum](https://discourse.joplin.cozic.net/). It is possible to login with your GitHub account.
+- Also see here for information about [the latest releases and general news](https://discourse.joplin.cozic.net/c/news).
 - For bug reports and feature requests, go to the [GitHub Issue Tracker](https://github.com/laurent22/joplin/issues).
 - The latest news are often posted [on this Twitter account](https://twitter.com/laurent2233).
 
