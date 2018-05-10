@@ -1,5 +1,14 @@
 # Joplin changelog
 
+## [v1.0.90](https://github.com/laurent22/joplin/releases/tag/v1.0.90) - 2018-05-10T13:29:24Z
+
+- New: Resolves [#345](https://github.com/laurent22/joplin/issues/345): Option to hide completed todos
+- New: Resolves [#200](https://github.com/laurent22/joplin/issues/200), Resolves [#416](https://github.com/laurent22/joplin/issues/416): Allow attaching images by pasting them in. Allow attaching files by drag and dropping them. Insert attachment at cursor position.
+- Improved: Resolves [#443](https://github.com/laurent22/joplin/issues/443): Various optimisations to make dealing with large notes easier and make Katex re-rendering faster
+- Fixes [#481](https://github.com/laurent22/joplin/issues/481): Keyboard shortcuts were not working when text editor had focus in macOS
+- Fixed: Tag display
+- Security: Resolves [#500](https://github.com/laurent22/joplin/issues/500): Fixed XSS security vulnerability
+
 ## [v1.0.89](https://github.com/laurent22/joplin/releases/tag/v1.0.89) - 2018-05-09T13:05:05Z
 
 - New: Resolves [#122](https://github.com/laurent22/joplin/issues/122): Added support for sub-notebooks. Please see doc for more info: https://joplin.cozic.net/#sub-notebooks
@@ -205,7 +214,3 @@ IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before 
 - Fixed OneDrive sync when resync is requested
 - Fixes [#85](https://github.com/laurent22/joplin/issues/85): Don't record deleted_items entries for folders deleted via sync
 - Updated translations
-
-## [v0.10.43](https://github.com/laurent22/joplin/releases/tag/v0.10.43) - 2018-01-08T10:12:10Z
-
-- Fixed saving and loading of settings, which could affect synchronisation
