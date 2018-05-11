@@ -194,7 +194,7 @@ function addResourceTag(lines, resource, alt = "") {
 
 
 function isBlockTag(n) {
-	return ["div", "p", "dl", "dd", 'dt', "center", 'address'].indexOf(n) >= 0;
+	return ["div", "p", "dl", "dd", 'dt', "center", 'address', 'form', 'input', 'section', 'nav', 'header', 'article', 'textarea', 'footer', 'fieldset'].indexOf(n) >= 0;
 }
 
 function isStrongTag(n) {
@@ -214,7 +214,7 @@ function isAnchor(n) {
 }
 
 function isIgnoredEndTag(n) {
-	return ["en-note", "en-todo", "span", "body", "html", "font", "br", 'hr', 'tbody', 'sup', 'img', 'abbr', 'cite', 'thead', 'small', 'tt', 'sub', 'colgroup', 'col', 'ins', 'caption', 'var', 'map', 'area'].indexOf(n) >= 0;
+	return ["en-note", "en-todo", "span", "body", "html", "font", "br", 'hr', 'tbody', 'sup', 'img', 'abbr', 'cite', 'thead', 'small', 'tt', 'sub', 'colgroup', 'col', 'ins', 'caption', 'var', 'map', 'area', 'label', 'legend'].indexOf(n) >= 0;
 }
 
 function isListTag(n) {
@@ -223,7 +223,12 @@ function isListTag(n) {
 
 // Elements that don't require any special treatment beside adding a newline character
 function isNewLineOnlyEndTag(n) {
-	return ["div", "p", "li", "h1", "h2", "h3", "h4", "h5", 'h6', "dl", "dd", 'dt', "center", 'address'].indexOf(n) >= 0;
+	return ["div", "p", "li", "h1", "h2", "h3", "h4", "h5", 'h6', "dl", "dd", 'dt', "center", 'address', 'form', 'input', 'section', 'nav', 'header', 'article', 'textarea', 'footer', 'fieldset'].indexOf(n) >= 0;
+}
+
+// Tags that must be ignored - both the tag and its content.
+function isIgnoredContentTag(n) {
+	return ['script', 'style', 'iframe', 'select', 'option', 'button', 'video', 'source'].indexOf(n) >= 0
 }
 
 function isCodeTag(n) {
@@ -271,7 +276,36 @@ function attributeToLowerCase(node) {
 	return output;
 }
 
-function enexXmlToMdArray(stream, resources) {
+function urlWithoutPath(url) {
+	const parsed = require('url').parse(url, true);
+	return parsed.protocol + '//' + parsed.host;
+}
+
+function urlProtocol(url) {
+	const parsed = require('url').parse(url, true);
+	return parsed.protocol;
+}
+
+const schemeRegex = /[a-zA-Z0-9\+\-\.]+:\/\//
+// Make sure baseUrl doesn't end with a slash
+function prependBaseUrl(url, baseUrl) {	
+	if (!url) url = '';
+	if (!baseUrl) return url;
+	const matches = schemeRegex.exec(url);
+	if (matches) return url; // Don't prepend the base URL if the URL already has a scheme
+
+	if (url.length >= 2 && url.indexOf('//') === 0) { // If it starts with // it's a protcol-relative URL
+		return urlProtocol(baseUrl) + url;
+	} else if (url && url[0] === '/') { // If it starts with a slash, it's an absolute URL so it should be relative to the domain (and not to the full baseUrl)
+		return urlWithoutPath(baseUrl) + url;
+	} else {
+		return baseUrl + '/' + url;
+	}
+}
+
+function enexXmlToMdArray(stream, resources, options = {}) {
+	if (options.baseUrl) options.baseUrl = options.baseUrl.replace(/[\/]+$/, '');
+
 	let remainingResources = resources.slice();
 
 	const removeRemainingResource = (id) => {
@@ -289,11 +323,12 @@ function enexXmlToMdArray(stream, resources) {
 			inQuote: false,
 			lists: [],
 			anchorAttributes: [],
+			ignoreContents: [],
 		};
 
-		let options = {};
+		let saxStreamOptions = {};
 		let strict = false;
-		var saxStream = require('sax').createStream(strict, options)
+		var saxStream = require('sax').createStream(strict, saxStreamOptions)
 
 		let section = {
 			type: 'text',
@@ -307,6 +342,7 @@ function enexXmlToMdArray(stream, resources) {
 		})
 
 		saxStream.on('text', function(text) {
+			if (state.ignoreContents.length) return;
 			if (['table', 'tr', 'tbody'].indexOf(section.type) >= 0) return;
 			section.lines = collapseWhiteSpaceAndAppend(section.lines, state, text);
 		})
@@ -319,6 +355,8 @@ function enexXmlToMdArray(stream, resources) {
 				// Start of note
 			} else if (isBlockTag(n)) {
 				section.lines.push(BLOCK_OPEN);
+			} else if (isIgnoredContentTag(n)) {
+				state.ignoreContents.push(true);
 			} else if (n == 'table') {
 				let newSection = {
 					type: 'table',
@@ -366,7 +404,7 @@ function enexXmlToMdArray(stream, resources) {
 			} else if (n == 'li') {
 				section.lines.push(BLOCK_OPEN);
 				if (!state.lists.length) {
-					reject("Found <li> tag without being inside a list"); // TODO: could be a warning, but nothing to handle warnings at the moment
+					console.warn("Found <li> tag without being inside a list");
 					return;
 				}
 
@@ -386,11 +424,10 @@ function enexXmlToMdArray(stream, resources) {
 			} else if (n == 'q') {
 				section.lines.push('"');
 			} else if (n == 'img') {
-				// TODO: TEST IMAGE
 				if (nodeAttributes.src) { // Many (most?) img tags don't have no source associated, especially when they were imported from HTML
 					let s = '![';
 					if (nodeAttributes.alt) s += nodeAttributes.alt;
-					s += '](' + nodeAttributes.src + ')';
+					s += '](' + prependBaseUrl(nodeAttributes.src, options.baseUrl) + ')';
 					section.lines.push(s);
 				}
 			} else if (isAnchor(n)) {
@@ -502,7 +539,7 @@ function enexXmlToMdArray(stream, resources) {
 				if (resource && !!resource.id) {
 					section.lines = addResourceTag(section.lines, resource, nodeAttributes.alt);
 				}
-			} else if (["span", "font", 'sup', 'cite', 'abbr', 'small', 'tt', 'sub', 'colgroup', 'col', 'ins', 'caption', 'var', 'map', 'area'].indexOf(n) >= 0) {
+			} else if (["span", "font", 'sup', 'cite', 'abbr', 'small', 'tt', 'sub', 'colgroup', 'col', 'ins', 'caption', 'var', 'map', 'area', 'label', 'legend'].indexOf(n) >= 0) {
 				// Inline tags that can be ignored in Markdown
 			} else {
 				console.warn("Unsupported start tag: " + n);
@@ -516,6 +553,8 @@ function enexXmlToMdArray(stream, resources) {
 				// End of note
 			} else if (isNewLineOnlyEndTag(n)) {
 				section.lines.push(BLOCK_CLOSE);
+			} else if (isIgnoredContentTag(n)) {
+				state.ignoreContents.pop();
 			} else if (n == 'td' || n == 'th') {
 				if (section && section.parent) section = section.parent;
 			} else if (n == 'tr') {
@@ -546,6 +585,7 @@ function enexXmlToMdArray(stream, resources) {
 			} else if (isAnchor(n)) {
 				let attributes = state.anchorAttributes.pop();
 				let url = attributes && attributes.href ? attributes.href : '';
+				url = prependBaseUrl(url, options.baseUrl);
 
 				if (section.lines.length < 1) throw new Error('Invalid anchor tag closing'); // Sanity check, but normally not possible
 
@@ -553,10 +593,47 @@ function enexXmlToMdArray(stream, resources) {
 				// put the URL as is (don't wrap it in [](url)). The markdown parser, using
 				// GitHub flavour, will turn this URL into a link. This is to generate slightly
 				// cleaner markdown.
-				let previous = section.lines[section.lines.length - 1];
+
+				// Need to loop on the previous tags so as to skip the special ones, which are not relevant for the below algorithm.
+				let previous = null;
+				for (let i = section.lines.length - 1; i >= 0; i--) {
+					previous = section.lines[i];
+					if ([BLOCK_OPEN, BLOCK_CLOSE, NEWLINE, NEWLINE_MERGED, SPACE].indexOf(previous) >= 0) {
+						continue;
+					} else {
+						break;
+					}
+				}
+
 				if (previous == '[') {
-					section.lines.pop();
-					section.lines.push(url);
+					// We have a link that had some content but, after parsing, nothing is left. The content was most likely
+					// something that shows up via CSS and which we cannot support. For example:
+					//
+					// <a onclick="return vote()" href="vote?id=17045576">
+					//    <div class="votearrow" title="upvote"></div>
+					// </a>
+					//
+					// In the case above the arrow is displayed via CSS.
+					// It is useless to display the full URL since often it is not relevant for a note (for example
+					// it's interactive bits) and it's not user-generated content such as a URL that would appear in a comment.
+					// So in this case, we still want to preserve the information but display it in a discreet way as a simple [L].
+
+					// Need to pop everything inside the current [] because it can only be special chars that we don't want (they would create uncessary newlines)
+					for (let i = section.lines.length - 1; i >= 0; i--) {
+						if (section.lines[i] !== '[') {
+							section.lines.pop();
+						} else {
+							break;
+						}
+					}
+
+					if (!url) {
+						// If there's no URL and no content, pop the [ and don't save any content.
+						section.lines.pop();
+					} else {
+						section.lines.push('(L)');
+						section.lines.push('](' + url + ')');
+					}
 				} else if (!previous || previous == url) {
 					section.lines.pop();
 					section.lines.pop();
@@ -735,8 +812,8 @@ function drawTable(table) {
 	return flatRender ? lines : lines.join('<<<<:D>>>>' + NEWLINE + '<<<<:D>>>>').split('<<<<:D>>>>');
 }
 
-async function enexXmlToMd(stream, resources) {
-	let result = await enexXmlToMdArray(stream, resources);
+async function enexXmlToMd(stream, resources, options = {}) {
+	let result = await enexXmlToMdArray(stream, resources, options);
 
 	let mdLines = [];
 
