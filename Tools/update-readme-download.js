@@ -42,7 +42,7 @@ function downloadUrl(release, os) {
 		const name = asset.name;
 
 		if (name.indexOf('.dmg') > 0 && os === 'macos') return asset.browser_download_url; 
-		if (name.indexOf('.exe') > 0 && os === 'windows') return asset.browser_download_url; 
+		if (name.indexOf('.exe') > 0 && name.indexOf('-Setup') >= 0 && os === 'windows') return asset.browser_download_url; 
 		if (name.indexOf('.AppImage') > 0 && os === 'linux') return asset.browser_download_url; 
 	}
 }
