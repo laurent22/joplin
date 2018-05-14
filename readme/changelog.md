@@ -1,5 +1,12 @@
 # Joplin changelog
 
+## [v1.0.93](https://github.com/laurent22/joplin/releases/tag/v1.0.93) - 2018-05-14T11:36:01Z
+
+- New: A portable version is now available. To install it simply copy the file "JoplinPortable.exe" to your USB device. See the documentation for more information - https://joplin.cozic.net/#desktop-applications
+- Improved: Made import of ENEX files more robust and accurate
+- Improved: Auto-update process should be more reliable.
+- Fixed: Made sync-after-save interval longer to made synchronisations less frequent.
+
 ## [v1.0.91](https://github.com/laurent22/joplin/releases/tag/v1.0.91) - 2018-05-10T14:48:04Z
 
 Same as v1.0.90 but with a fix for [#510](https://github.com/laurent22/joplin/issues/510) 
@@ -198,21 +205,3 @@ IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before 
 - Dutch translation (Thanks @tcassaert)
 - Removed certain log statements so that sensitive info doesn't end up in logs
 - Fix: Handle case where resource blob is missing during sync
-
-## [v0.10.47](https://github.com/laurent22/joplin/releases/tag/v0.10.47) - 2018-01-16T17:27:17Z
-
-- Improved the way new note are created, and automatically add a title. Made saving and loading notes more reliable.
-- Fix: race condition when a note is being uploaded while it's being modified in the text editor
-- Fixes [#129](https://github.com/laurent22/joplin/issues/129): Tags are case insensitive
-- Schedule sync only after 30 seconds
-- Schedule sync after enabling or disabling encryption
-- Display sync items being fetched
-- Fixed logic of what note is used when right-clicking one or more notes
-- Fix: Don't scroll back to top when note is reloaded via sync
-- Display URL for links
-- Fix: Move prompt to top to avoid issue with date picker being hidden
-- Fixed table font size and family
-- Fixed logic to save, and make sure scheduled save always happen even when changing note
-- Fixed OneDrive sync when resync is requested
-- Fixes [#85](https://github.com/laurent22/joplin/issues/85): Don't record deleted_items entries for folders deleted via sync
-- Updated translations
