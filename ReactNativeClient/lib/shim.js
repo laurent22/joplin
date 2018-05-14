@@ -50,6 +50,10 @@ shim.isElectron = () => {
 	return false;
 }
 
+shim.isPortable = function() {
+	return  typeof process !== 'undefined' && typeof process.env === 'object' && !!process.env.PORTABLE_EXECUTABLE_DIR;
+}
+
 // Node requests can go wrong is so many different ways and with so
 // many different error messages... This handler inspects the error
 // and decides whether the request can safely be repeated or not.

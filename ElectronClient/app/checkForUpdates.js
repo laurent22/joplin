@@ -1,7 +1,9 @@
 const { dialog } = require('electron')
+const { shim } = require('lib/shim');
 const { Logger } = require('lib/logger.js');
 const { _ } = require('lib/locale.js');
 const fetch = require('node-fetch');
+const { fileExtension } = require('lib/path-utils.js');
 const packageInfo = require('./packageInfo.js');
 const compareVersions = require('compare-versions');
 
@@ -43,11 +45,16 @@ async function fetchLatestRelease() {
 	for (let i = 0; i < json.assets.length; i++) {
 		const asset = json.assets[i];
 		let found = false;
-		if (platform === 'win32' && asset.name.indexOf('.exe') >= 0 && asset.name.indexOf('Setup') >= 0) {
+		const ext = fileExtension(asset.name);
+		if (platform === 'win32' && ext === 'exe') {
+			if (shim.isPortable()) {
+				found = asset.name == 'JoplinPortable.exe';
+			} else {
+				found = !!asset.name.match(/^Joplin-Setup-[\d.]+\.exe$/);
+			}
+		} else if (platform === 'darwin' && ext === 'dmg') {
 			found = true;
-		} else if (platform === 'darwin' && asset.name.indexOf('.dmg') >= 0) {
-			found = true;
-		} else if (platform === 'linux' && asset.name.indexOf('.AppImage') >= 0) {
+		} else if (platform === 'linux' && ext === '.AppImage') {
 			found = true;
 		}
 

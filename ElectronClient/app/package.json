@@ -48,6 +48,9 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
     },
+    "portable": {
+      "artifactName": "${productName}Portable.${ext}"
+    },
     "mac": {
       "icon": "../../Assets/macOs.icns",
       "asar": false
