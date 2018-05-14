@@ -747,6 +747,11 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 			warningsTags: [],
 		};
 
+		// In some cases white space should be ignored. For example, this:
+		// <ul>
+		//     <li>item</li>
+		// <ul>
+		// The whitespace between <ul> and <li> should not appear in the markdown document
 		const ignoreWhiteSpace = () => {
 			return state.ignoreWhiteSpace.length ? state.ignoreWhiteSpace[state.ignoreWhiteSpace.length-1] : false;
 		}
@@ -1051,6 +1056,18 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 				state.lists.pop();
 			} else if (n === 'li') {
 				state.ignoreWhiteSpace.pop();
+
+				// Once the LI tag is closed, go back to tokens that were added and remove and newline or block delimiter
+				// since the LI needs to be one line only to work.
+				for (let i = section.lines.length - 1; i >= 0; i--) {
+					const line = section.lines[i];
+					if ([BLOCK_OPEN, BLOCK_CLOSE, NEWLINE, NEWLINE_MERGED, SPACE].indexOf(line) >= 0 || !line) {
+						section.lines.splice(i, 1);
+					} else if (line === '- ') {
+						break;
+					}
+				}
+
 				section.lines.push(BLOCK_CLOSE);
 			} else if (isStrongTag(n)) {
 				section.lines.push("**");
