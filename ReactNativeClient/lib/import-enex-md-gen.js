@@ -316,8 +316,30 @@ function processMdArrayNewLines(md, isTable = false) {
 
 	if (!output.trim().length) return '';
 
+	// To simplify the result, we only allow up to one empty line between blocks of text
+	const mergeMultipleNewLines = function(lines) {
+		let output = [];
+		let newlineCount = 0;
+		for (let i = 0; i < lines.length; i++) {
+			const line = lines[i];
+			if (!line.trim()) {
+				newlineCount++;
+			} else {
+				newlineCount = 0;
+			}
+
+			if (newlineCount >= 2) continue;
+
+			output.push(line);
+		}
+		return output;
+	}
+
 	let lines = output.replace(/\\r/g, '').split('\n');
-	return convertSingleLineCodeBlocksToInline(formatMdLayout(lines)).join('\n');
+	lines = formatMdLayout(lines)
+	lines = convertSingleLineCodeBlocksToInline(lines)
+	lines = mergeMultipleNewLines(lines);
+	return lines.join('\n');
 }
 
 // While the processMdArrayNewLines() function adds newlines in a way that's technically correct, the resulting Markdown can look messy.
@@ -370,7 +392,10 @@ function processMdArrayNewLines(md, isTable = false) {
 	}
 
 	const isPlainParagraph = function(line) {
-		if (!line || !line.length) return false;
+		// Note: if a line is no longer than 80 characters, we don't consider it's a paragraph, which
+		// means no newlines will be added before or after. This is to handle text that has been
+		// written with "hard" new lines.
+		if (!line || line.length < 80) return false;
 
 		if (isListItem(line)) return false;
 		if (isHeading(line)) return false;
@@ -400,6 +425,12 @@ function formatMdLayout(lines) {
 
 		// Add a new line after a heading
 		} else if (isHeading(previous) && line) {
+			newLines.push('');
+
+		} else if (isCodeLine(line) && !isCodeLine(previous)) {
+			newLines.push('');
+
+		} else if (!isCodeLine(line) && isCodeLine(previous)) {
 			newLines.push('');
 		
 		// Add a new line at beginning of paragraph
@@ -510,9 +541,13 @@ function collapseWhiteSpaceAndAppend(lines, state, text) {
 			lines.push(text);
 		}
 	} else {
+
 		// Remove all \n and \r from the left and right of the text
 		while (text.length && (text[0] == "\n" || text[0] == "\r")) text = text.substr(1);
 		while (text.length && (text[text.length - 1] == "\n" || text[text.length - 1] == "\r")) text = text.substr(0, text.length - 1);
+
+		// Replace the inner \n with a space
+		text = text.replace(/[\n\r]+/g, ' ');
 
 		// Collapse all white spaces to just one. If there are spaces to the left and right of the string
 		// also collapse them to just one space.
@@ -831,7 +866,7 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 			} else if (n == "hr") {
 				// Needs to be surrounded by new lines so that it's properly rendered as a line when converting to HTML
 				section.lines.push(NEWLINE);
-				section.lines.push('----------------------------------------');
+				section.lines.push('* * *');
 				section.lines.push(NEWLINE);
 				section.lines.push(NEWLINE);
 			} else if (n == "h1") {
@@ -1024,7 +1059,7 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 				let previous = null;
 				for (let i = section.lines.length - 1; i >= 0; i--) {
 					previous = section.lines[i];
-					if ([BLOCK_OPEN, BLOCK_CLOSE, NEWLINE, NEWLINE_MERGED, SPACE].indexOf(previous) >= 0) {
+					if ([BLOCK_OPEN, BLOCK_CLOSE, NEWLINE, NEWLINE_MERGED, SPACE].indexOf(previous) >= 0 || !previous) {
 						continue;
 					} else {
 						break;
@@ -1088,6 +1123,42 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 						}						
 						section.lines.push(url);
 					} else {
+
+						// Eg. converts:
+						//     [ Sign in   ](https://example.com)
+						// to:
+						//     [Sign in](https://example.com)
+						const trimTextStartAndEndSpaces = function(lines) {
+							let firstBracketIndex = 0;
+							let foundFirstNonWhite = false;
+							for (let i = lines.length - 1; i >= 0; i--) {
+								const l = lines[i];
+								if (!foundFirstNonWhite && (l === SPACE || l === ' ' || !l)) {
+									lines.pop();
+								} else {
+									foundFirstNonWhite = true;
+								}
+
+								if (l === '[') {
+									firstBracketIndex = i;
+									break;
+								}
+							}
+
+							for (let i = firstBracketIndex + 1; i < lines.length; i++) {
+								const l = lines[i];
+								if (l === SPACE || l === ' ' ||!l) {
+									lines.splice(i, 1);
+								} else {
+									break;
+								}
+							}
+
+							return lines;
+						}
+
+						section.lines = trimTextStartAndEndSpaces(section.lines);
+
 						section.lines.push('](' + url + ')');
 					}
 				}
@@ -1263,7 +1334,34 @@ async function enexXmlToMd(stream, resources, options = {}) {
 		firstAttachment = false;
 	}
 
-	return processMdArrayNewLines(mdLines);
+	let output = processMdArrayNewLines(mdLines);
+
+	// After importing HTML, the resulting Markdown often has empty lines at the beginning and end due to
+	// block start/end or elements that were ignored, etc. If these white spaces were intended it's not really
+	// possible to detect it, so simply trim them all so that the result is more deterministic and can be
+	// easily unit tested.
+	const trimEmptyLines = function(text) {
+		const lines = text.split('\n');
+		while (lines.length) {
+			if (!lines[0].trim()) {
+				lines.splice(0, 1);
+			} else {
+				break;
+			}
+		}
+
+		while (lines.length) {
+			if (!lines[lines.length - 1].trim()) {
+				lines.pop();
+			} else {
+				break;
+			}
+		}
+
+		return lines.join('\n');
+	}
+
+	return trimEmptyLines(output);
 }
 
 module.exports = { enexXmlToMd, processMdArrayNewLines, NEWLINE, addResourceTag };

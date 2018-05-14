@@ -35,12 +35,12 @@ describe('HtmlToMd', function() {
 			const htmlPath = basePath + '/' + htmlFilename;
 			const mdPath = basePath + '/' + filename(htmlFilename) + '.md';
 
-			// if (htmlFilename !== 'tableWithNewLines.html') continue;
+			// if (htmlFilename !== 'list.html') continue;
 
 			const html = await shim.fsDriver().readFile(htmlPath);
 			const expectedMd = await shim.fsDriver().readFile(mdPath);
 
-			const contentStream = stringToStream(html);
+			const contentStream = stringToStream('<div>' + html + '</div>');
 			const actualMd = await enexXmlToMd(contentStream, []);
 
 			if (actualMd !== expectedMd) {
@@ -54,7 +54,7 @@ describe('HtmlToMd', function() {
 				console.info('');
 
 				expect(false).toBe(true);
-				return;
+				// return;
 			} else {
 				expect(true).toBe(true)
 			}

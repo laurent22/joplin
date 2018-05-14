@@ -40,7 +40,8 @@ function safeFileExtension(e) {
 	return e.replace(/[^a-zA-Z0-9]/g, '')
 }
 
-function toSystemSlashes(path, os) {
+function toSystemSlashes(path, os = null) {
+	if (os === null) os = process.platform;
 	if (os === 'win32') return path.replace(/\//g, "\\");
 	return path.replace(/\\/g, "/");
 }
