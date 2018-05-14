@@ -35,7 +35,7 @@ describe('HtmlToMd', function() {
 			const htmlPath = basePath + '/' + htmlFilename;
 			const mdPath = basePath + '/' + filename(htmlFilename) + '.md';
 
-			// if (htmlFilename !== 'inlineCodeWithLink.html') continue;
+			// if (htmlFilename !== 'tableWithNewLines.html') continue;
 
 			const html = await shim.fsDriver().readFile(htmlPath);
 			const expectedMd = await shim.fsDriver().readFile(mdPath);
@@ -47,9 +47,9 @@ describe('HtmlToMd', function() {
 				console.info('');
 				console.info('Error converting file: ' + htmlFilename);
 				console.info('--------------------------------- Got:');
-				console.info(actualMd);
+				console.info(actualMd.split('\n'));
 				console.info('--------------------------------- Expected:');
-				console.info(expectedMd);
+				console.info(expectedMd.split('\n'));
 				console.info('--------------------------------------------');
 				console.info('');
 
