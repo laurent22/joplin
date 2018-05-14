@@ -365,12 +365,17 @@ function processMdArrayNewLines(md, isTable = false) {
 		return line && line.indexOf('\t') === 0; 
 	}
 
+	const isTableLine = function(line) {
+		return line.indexOf('|') === 0;
+	}
+
 	const isPlainParagraph = function(line) {
 		if (!line || !line.length) return false;
 
 		if (isListItem(line)) return false;
 		if (isHeading(line)) return false;
 		if (isCodeLine(line)) return false;
+		if (isTableLine(line)) return false;
 
 		return true; 
 	}
