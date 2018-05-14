@@ -64,12 +64,11 @@ async function fetchLatestRelease() {
 		}
 	}
 
-	if (!downloadUrl) throw new Error('Cannot find download Url: ' + JSON.stringify(json).substr(0,500));
-
 	return {
 		version: version,
 		downloadUrl: downloadUrl,
 		notes: json.body,
+		pageUrl: json.html_url,
 	};
 }
 
@@ -93,6 +92,9 @@ function checkForUpdates(inBackground, window, logFilePath) {
 	checkInBackground_ = inBackground;
 
 	fetchLatestRelease().then(release => {
+		autoUpdateLogger_.info('Current version: ' + packageInfo.version);
+		autoUpdateLogger_.info('Latest version: ' + release.version);
+
 		if (compareVersions(release.version, packageInfo.version) <= 0) {
 			if (!checkInBackground_) dialog.showMessageBox({ message: _('Current version is up-to-date.') })
 		} else {
@@ -104,7 +106,7 @@ function checkForUpdates(inBackground, window, logFilePath) {
 				buttons: [_('Yes'), _('No')]
 			});
 
-			if (buttonIndex === 0) require('electron').shell.openExternal(release.downloadUrl);
+			if (buttonIndex === 0) require('electron').shell.openExternal(release.downloadUrl ? release.downloadUrl : release.pageUrl);
 		}
 	}).catch(error => {
 		autoUpdateLogger_.error(error);

@@ -51,7 +51,7 @@ shim.isElectron = () => {
 }
 
 shim.isPortable = function() {
-	return  typeof process !== 'undefined' && typeof process.env === 'object' && !!process.env.PORTABLE_EXECUTABLE_DIR;
+	return typeof process !== 'undefined' && typeof process.env === 'object' && !!process.env.PORTABLE_EXECUTABLE_DIR;
 }
 
 // Node requests can go wrong is so many different ways and with so
