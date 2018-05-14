@@ -1,4 +1,5 @@
 const stringPadding = require('string-padding');
+const stringToStream = require('string-to-stream')
 
 const BLOCK_OPEN = "[[BLOCK_OPEN]]";
 const BLOCK_CLOSE = "[[BLOCK_CLOSE]]";
@@ -542,6 +543,8 @@ function collapseWhiteSpaceAndAppend(lines, state, text) {
 		}
 	} else {
 
+		// console.info(lines);
+
 		// Remove all \n and \r from the left and right of the text
 		while (text.length && (text[0] == "\n" || text[0] == "\r")) text = text.substr(1);
 		while (text.length && (text[text.length - 1] == "\n" || text[text.length - 1] == "\r")) text = text.substr(0, text.length - 1);
@@ -602,7 +605,7 @@ function addResourceTag(lines, resource, alt = "") {
 
 
 function isBlockTag(n) {
-	return ["div", "p", "dl", "dd", 'dt', "center", 'address', 'form', 'input', 'section', 'nav', 'header', 'article', 'textarea', 'footer', 'fieldset'].indexOf(n) >= 0;
+	return ["div", "p", "dl", "dd", 'dt', "center", 'address', 'form', 'input', 'section', 'nav', 'header', 'article', 'textarea', 'footer', 'fieldset', 'summary', 'details'].indexOf(n) >= 0;
 }
 
 function isStrongTag(n) {
@@ -622,7 +625,7 @@ function isAnchor(n) {
 }
 
 function isIgnoredEndTag(n) {
-	return ["en-note", "en-todo", "span", "body", "html", "font", "br", 'hr', 'tbody', 'sup', 'img', 'abbr', 'cite', 'thead', 'small', 'tt', 'sub', 'colgroup', 'col', 'ins', 'caption', 'var', 'map', 'area', 'label', 'legend'].indexOf(n) >= 0;
+	return ["en-note", "en-todo", "span", "body", "html", "font", "br", 'hr', 'tbody', 'sup', 'img', 'abbr', 'cite', 'thead', 'small', 'tt', 'sub', 'colgroup', 'col', 'ins', 'caption', 'var', 'map', 'area', 'label', 'legend', 'time-ago', 'relative-time'].indexOf(n) >= 0;
 }
 
 function isListTag(n) {
@@ -631,12 +634,12 @@ function isListTag(n) {
 
 // Elements that don't require any special treatment beside adding a newline character
 function isNewLineOnlyEndTag(n) {
-	return ["div", "p", "li", "h1", "h2", "h3", "h4", "h5", 'h6', "dl", "dd", 'dt', "center", 'address', 'form', 'input', 'section', 'nav', 'header', 'article', 'textarea', 'footer', 'fieldset'].indexOf(n) >= 0;
+	return ["div", "p", "h1", "h2", "h3", "h4", "h5", 'h6', "dl", "dd", 'dt', "center", 'address', 'form', 'input', 'section', 'nav', 'header', 'article', 'textarea', 'footer', 'fieldset', 'summary', 'details'].indexOf(n) >= 0;
 }
 
 // Tags that must be ignored - both the tag and its content.
 function isIgnoredContentTag(n) {
-	return ['script', 'style', 'iframe', 'select', 'option', 'button', 'video', 'source'].indexOf(n) >= 0
+	return ['script', 'style', 'iframe', 'select', 'option', 'button', 'video', 'source', 'svg', 'path'].indexOf(n) >= 0
 }
 
 function isCodeTag(n) {
@@ -734,7 +737,13 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 			lists: [],
 			anchorAttributes: [],
 			ignoreContents: [],
+			ignoreWhiteSpace: [],
+			warningsTags: [],
 		};
+
+		const ignoreWhiteSpace = () => {
+			return state.ignoreWhiteSpace.length ? state.ignoreWhiteSpace[state.ignoreWhiteSpace.length-1] : false;
+		}
 
 		let saxStreamOptions = {};
 		let strict = false;
@@ -754,6 +763,7 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 		saxStream.on('text', function(text) {
 			if (state.ignoreContents.length) return;
 			if (['table', 'tr', 'tbody'].indexOf(section.type) >= 0) return;
+			if ((!text || !text.trim()) && ignoreWhiteSpace()) return;
 			section.lines = collapseWhiteSpaceAndAppend(section.lines, state, text);
 		})
 
@@ -824,7 +834,9 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 			} else if (isListTag(n)) {
 				section.lines.push(BLOCK_OPEN);
 				state.lists.push({ tag: n, counter: 1 });
+				state.ignoreWhiteSpace.push(true);
 			} else if (n == 'li') {
+				state.ignoreWhiteSpace.push(false);
 				section.lines.push(BLOCK_OPEN);
 				if (!state.lists.length) {
 					console.warn("Found <li> tag without being inside a list");
@@ -984,10 +996,13 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 				// 		section.lines.push(MONOSPACE_OPEN);
 				// 	}
 				// } 
-			} else if (["span", "font", 'sup', 'cite', 'abbr', 'small', 'tt', 'sub', 'colgroup', 'col', 'ins', 'caption', 'var', 'map', 'area', 'label', 'legend'].indexOf(n) >= 0) {
+			} else if (["span", "font", 'sup', 'cite', 'abbr', 'small', 'tt', 'sub', 'colgroup', 'col', 'ins', 'caption', 'var', 'map', 'area', 'label', 'legend', 'time-ago', 'relative-time'].indexOf(n) >= 0) {
 				// Inline tags that can be ignored in Markdown
 			} else {
-				console.warn("Unsupported start tag: " + n);
+				if (state.warningsTags.indexOf(n) < 0) {
+					console.warn("Unsupported start tag: " + n);
+					state.warningsTags.push(n);
+				}
 			}
 		})
 
@@ -1025,8 +1040,12 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 			} else if (isIgnoredEndTag(n)) {
 				// Skip
 			} else if (isListTag(n)) {
+				state.ignoreWhiteSpace.pop();
 				section.lines.push(BLOCK_CLOSE);
 				state.lists.pop();
+			} else if (n === 'li') {
+				state.ignoreWhiteSpace.pop();
+				section.lines.push(BLOCK_CLOSE);
 			} else if (isStrongTag(n)) {
 				section.lines.push("**");
 			} else if (isStrikeTag(n)) {
@@ -1170,9 +1189,11 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 			} else if (isIgnoredEndTag(n)) {
 				// Skip
 			} else {
-				console.warn("Unsupported end tag: " + n);
+				if (state.warningsTags.indexOf(n) < 0) {
+					console.warn("Unsupported end tag: " + n);
+					state.warningsTags.push(n);
+				}
 			}
-
 		})
 
 		saxStream.on('attribute', function(attr) {
@@ -1309,7 +1330,8 @@ function drawTable(table) {
 	return flatRender ? lines : lines.join('<<<<:D>>>>' + NEWLINE + '<<<<:D>>>>').split('<<<<:D>>>>');
 }
 
-async function enexXmlToMd(stream, resources, options = {}) {
+async function enexXmlToMd(xmlString, resources, options = {}) {
+	const stream = stringToStream(xmlString);
 	let result = await enexXmlToMdArray(stream, resources, options);
 
 	let mdLines = [];
@@ -1334,14 +1356,13 @@ async function enexXmlToMd(stream, resources, options = {}) {
 		firstAttachment = false;
 	}
 
-	let output = processMdArrayNewLines(mdLines);
+	let output = processMdArrayNewLines(mdLines).split('\n')
 
 	// After importing HTML, the resulting Markdown often has empty lines at the beginning and end due to
 	// block start/end or elements that were ignored, etc. If these white spaces were intended it's not really
 	// possible to detect it, so simply trim them all so that the result is more deterministic and can be
 	// easily unit tested.
-	const trimEmptyLines = function(text) {
-		const lines = text.split('\n');
+	const trimEmptyLines = function(lines) {
 		while (lines.length) {
 			if (!lines[0].trim()) {
 				lines.splice(0, 1);
@@ -1358,10 +1379,32 @@ async function enexXmlToMd(stream, resources, options = {}) {
 			}
 		}
 
-		return lines.join('\n');
+		return lines;
 	}
 
-	return trimEmptyLines(output);
+	function cleanUpSpaces(lines) {
+		const output = [];
+
+		for (let i = 0; i < lines.length; i++) {
+			let line = lines[i];
+
+			// eg. "    -   Some list item" => "    - Some list item"
+			// Note that spaces before the "-" are preserved
+			line = line.replace(/^(\s+|)-\s+/, '$1- ')
+
+			// eg "Some text     " => "Some text"
+			line = line.replace(/^(.*?)\s+$/, '$1')
+
+			output.push(line);
+		}
+
+		return output;
+	}
+
+	output = trimEmptyLines(output)
+	output = cleanUpSpaces(output)
+
+	return output.join('\n');
 }
 
 module.exports = { enexXmlToMd, processMdArrayNewLines, NEWLINE, addResourceTag };

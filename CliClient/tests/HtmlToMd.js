@@ -8,7 +8,6 @@ const Note = require('lib/models/Note.js');
 const BaseModel = require('lib/BaseModel.js');
 const { shim } = require('lib/shim');
 const { enexXmlToMd } = require('lib/import-enex-md-gen.js');
-const stringToStream = require('string-to-stream')
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 60 * 1000; // Can run for a while since everything is in the same test unit
 
@@ -35,13 +34,12 @@ describe('HtmlToMd', function() {
 			const htmlPath = basePath + '/' + htmlFilename;
 			const mdPath = basePath + '/' + filename(htmlFilename) + '.md';
 
-			// if (htmlFilename !== 'list.html') continue;
+			// if (htmlFilename !== 'list2.html') continue;
 
 			const html = await shim.fsDriver().readFile(htmlPath);
 			const expectedMd = await shim.fsDriver().readFile(mdPath);
 
-			const contentStream = stringToStream('<div>' + html + '</div>');
-			const actualMd = await enexXmlToMd(contentStream, []);
+			const actualMd = await enexXmlToMd('<div>' + html + '</div>', []);
 
 			if (actualMd !== expectedMd) {
 				console.info('');

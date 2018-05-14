@@ -15,7 +15,6 @@ const md5 = require('md5');
 
 //const Promise = require('promise');
 const fs = require('fs-extra');
-const stringToStream = require('string-to-stream')
 
 function dateToTimestamp(s, zeroIfInvalid = false) {
 	let m = moment(s, 'YYYYMMDDTHHmmssZ');
@@ -219,8 +218,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 
 				while (notes.length) {
 					let note = notes.shift();
-					const contentStream = stringToStream(note.bodyXml);
-					const body = await enexXmlToMd(contentStream, note.resources);
+					const body = await enexXmlToMd(note.bodyXml, note.resources);
 					delete note.bodyXml;
 
 					// console.info('*************************************************************************');
