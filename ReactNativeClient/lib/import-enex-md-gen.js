@@ -213,8 +213,10 @@ function mergeMonospaceSectionsWrapper(md, ignoreMonospace = false) {
 }
 
 function processMdArrayNewLines(md, isTable = false) {
+	// console.info(md);
+
 	// Try to merge MONOSPACE sections, works good when when not parsing a table
-	md = mergeMonospaceSectionsWrapper(md, isTable);
+	// md = mergeMonospaceSectionsWrapper(md, isTable);
 
 	while (md.length && md[0] == BLOCK_OPEN) {
 		md.shift();
@@ -289,6 +291,8 @@ function processMdArrayNewLines(md, isTable = false) {
 		}
 	}
 
+	// console.info(md);
+
 	let output = '';
 	let previous = '';
 	let start = true;
@@ -312,7 +316,148 @@ function processMdArrayNewLines(md, isTable = false) {
 
 	if (!output.trim().length) return '';
 
-	return output;
+	let lines = output.replace(/\\r/g, '').split('\n');
+	return convertSingleLineCodeBlocksToInline(formatMdLayout(lines)).join('\n');
+}
+
+// While the processMdArrayNewLines() function adds newlines in a way that's technically correct, the resulting Markdown can look messy.
+// This is because while a "block" element should be surrounded by newlines, in practice, some should be surrounded by TWO new lines, while
+// others by only ONE.
+//
+// For instance, this:
+//
+//     <li>one</li>
+//     <li>two</li>
+//     <li>three</li>
+//
+// should result in this:
+// 
+//     - one
+//     - two
+//     - three
+//
+// While this:
+//
+//     <p>Some long paragraph</p><p>And another one</p><p>And the last paragraph</p>
+//
+// should result in this:
+//
+//     Some long paragraph
+//     
+//     And another one
+//    
+//     And the last paragraph
+//
+// So in one case, one newline between tags, and in another two newlines. In HTML this would be done via CSS, but in Markdown we need
+// to add new lines. It's also important to get these newlines right because two blocks of text next to each others might be renderered
+// differently than if there's a newlines between them. So the function below parses the almost final MD and add new lines depending
+// on various rules.
+
+	const isHeading = function(line) {
+		return !!line.match(/#+\s/);
+	}
+
+	const isListItem = function(line) {
+		return line && line.trim().indexOf('- ') === 0;
+	}
+
+	const isCodeLine = function(line) {
+		return line && line.indexOf('\t') === 0; 
+	}
+
+	const isPlainParagraph = function(line) {
+		if (!line || !line.length) return false;
+
+		if (isListItem(line)) return false;
+		if (isHeading(line)) return false;
+		if (isCodeLine(line)) return false;
+
+		return true; 
+	}
+
+function formatMdLayout(lines) {	
+	let previous = '';
+	let newLines = [];
+	for (let i = 0; i < lines.length; i++) {
+		const line = lines[i];
+
+		// Add a new line at the end of a list of items
+		if (isListItem(previous) && line && !isListItem(line)) {
+			newLines.push('');
+
+		// Add a new line at the beginning of a list of items
+		} else if (isListItem(line) && previous && !isListItem(previous)) {
+			newLines.push('');
+
+		// Add a new line before a heading
+		} else if (isHeading(line) && previous) {
+			newLines.push('');
+
+		// Add a new line after a heading
+		} else if (isHeading(previous) && line) {
+			newLines.push('');
+		
+		// Add a new line at beginning of paragraph
+		} else if (isPlainParagraph(line) && previous) {
+			newLines.push('');
+
+		// Add a new line at end of paragraph
+		} else if (isPlainParagraph(previous) && line) {
+			newLines.push('');
+		}
+	
+		newLines.push(line);
+		previous = newLines[newLines.length - 1];
+	}
+
+	return newLines;
+}
+
+function lineStartsWithDelimiter(line) {
+	if (!line || !line.length) return false;
+	return ' ,.;:)]}'.indexOf(line[0]) >= 0;
+}
+
+function convertSingleLineCodeBlocksToInline(lines) {
+	let newLines = [];
+	let currentCodeLines = [];
+	let codeLineCount = 0;
+
+
+	const processCurrentCodeLines = (line) => {
+		if (codeLineCount === 1) {
+			const inlineCode = currentCodeLines.join('').trim();
+			newLines[newLines.length - 1] +=  '`' + inlineCode + '`';
+			if (line) newLines[newLines.length - 1] += (lineStartsWithDelimiter(line) ? '' : ' ') + line;
+		} else {
+			newLines = newLines.concat(currentCodeLines);
+			newLines.push(line);
+		}
+
+		currentCodeLines = [];
+		codeLineCount = 0;
+	}
+
+	for (let i = 0; i < lines.length; i++) {
+		const line = lines[i];
+
+		if (isCodeLine(line)) {
+			currentCodeLines.push(line);
+			codeLineCount++;
+		} else if (!line.trim()) {
+			currentCodeLines.push(line);
+		} else {
+			if (currentCodeLines.length) {
+				processCurrentCodeLines(line);
+			} else {
+				newLines.push(line);
+			}
+		}
+	}
+
+	if (currentCodeLines.length) processCurrentCodeLines('');
+
+	return newLines;
 }
 
 function isWhiteSpace(c) {
@@ -343,8 +488,22 @@ function simplifyString(s) {
 
 function collapseWhiteSpaceAndAppend(lines, state, text) {
 	if (state.inCode) {
-		text = "\t" + text;
-		lines.push(text);
+		let previous = lines.length ? lines[lines.length - 1] : '';
+
+		// If the preceding item is a block limit, then the current line should start with a TAB
+		if ([BLOCK_OPEN, BLOCK_CLOSE, NEWLINE, NEWLINE_MERGED, MONOSPACE_OPEN, MONOSPACE_CLOSE].indexOf(previous) >= 0 || !previous) {
+			//text = "\t" + text;
+			lines.push('\t');
+			lines.push(text);
+		} else {
+			// If the current text contains one or more \n, then the last one should be immediately followed by a TAB
+			const idx = text.lastIndexOf('\n');
+			if (idx >= 0) {
+				text = text.substr(0, idx+1) + '\t' + text.substr(idx+1);
+			}
+
+			lines.push(text);
+		}
 	} else {
 		// Remove all \n and \r from the left and right of the text
 		while (text.length && (text[0] == "\n" || text[0] == "\r")) text = text.substr(1);
@@ -563,17 +722,17 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 
 			let n = node.name.toLowerCase();
 
-			if (n == "div") {
-				// div tags are recursive, in order to find the end we have to count the depth
-				if (state.inCodeblock > 0) {
-					state.inCodeblock++;
-				} else if (nodeAttributes && nodeAttributes.style && nodeAttributes.style.indexOf("box-sizing: border-box") >= 0) {
-					// Evernote code block start
-					state.inCodeblock = 1;
-					section.lines.push("```");
-					return; // skip further processing
-				}
-			}
+			// if (n == "div") {
+			// 	// div tags are recursive, in order to find the end we have to count the depth
+			// 	if (state.inCodeblock > 0) {
+			// 		state.inCodeblock++;
+			// 	} else if (nodeAttributes && nodeAttributes.style && nodeAttributes.style.indexOf("box-sizing: border-box") >= 0) {
+			// 		// Evernote code block start
+			// 		state.inCodeblock = 1;
+			// 		section.lines.push("```");
+			// 		return; // skip further processing
+			// 	}
+			// }
 
 			if (n == 'en-note') {
 				// Start of note
@@ -656,7 +815,9 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 				}
 			} else if (isAnchor(n)) {
 				state.anchorAttributes.push(nodeAttributes);
-				section.lines.push('[');
+				// Need to add the '[' via this function to make sure that links within code blocks
+				// are handled correctly.
+				collapseWhiteSpaceAndAppend(section.lines, state, '[');
 			} else if (isEmTag(n)) {
 				section.lines.push("*");
 			} else if (n == "en-todo") {
@@ -763,26 +924,26 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 				if (resource && !!resource.id) {
 					section.lines = addResourceTag(section.lines, resource, nodeAttributes.alt);
 				}
-		 	} else if (n == "span" || n == "font") {
-				// Check for monospace font. It can come from being specified in either from
-				// <span style="..."> or <font face="...">.
-				// Monospace sections are already in monospace for Evernote code blocks
-				if (state.inCodeblock == 0 && nodeAttributes) {
-					let style = null;
+		 	// } else if (n == "span" || n == "font") {
+				// // Check for monospace font. It can come from being specified in either from
+				// // <span style="..."> or <font face="...">.
+				// // Monospace sections are already in monospace for Evernote code blocks
+				// if (state.inCodeblock == 0 && nodeAttributes) {
+				// 	let style = null;
 
-					if (nodeAttributes.style) {
-						style = nodeAttributes.style.toLowerCase();
-					} else if (nodeAttributes.face) {
-						style = nodeAttributes.face.toLowerCase();
-					}
+				// 	if (nodeAttributes.style) {
+				// 		style = nodeAttributes.style.toLowerCase();
+				// 	} else if (nodeAttributes.face) {
+				// 		style = nodeAttributes.face.toLowerCase();
+				// 	}
 				
-					monospace = style.match(/monospace|courier|menlo|monaco/) != null;
+				// 	monospace = style ? style.match(/monospace|courier|menlo|monaco/) != null : false;
 
-					if (monospace) {
-						state.inMonospaceFont = true;
-						section.lines.push(MONOSPACE_OPEN);
-					}
-				} 
+				// 	if (monospace) {
+				// 		state.inMonospaceFont = true;
+				// 		section.lines.push(MONOSPACE_OPEN);
+				// 	}
+				// } 
 			} else if (["span", "font", 'sup', 'cite', 'abbr', 'small', 'tt', 'sub', 'colgroup', 'col', 'ins', 'caption', 'var', 'map', 'area', 'label', 'legend'].indexOf(n) >= 0) {
 				// Inline tags that can be ignored in Markdown
 			} else {
@@ -793,16 +954,16 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 		saxStream.on('closetag', function(n) {
 			n = n ? n.toLowerCase() : n;
 
-			if (n == "div") {
-				if (state.inCodeblock >= 1) {
-					state.inCodeblock--;
-					if (state.inCodeblock == 0) {
-						// Evernote code block end
-						section.lines.push("```");
-						return; // skip further processing
-					}
-				}
-			}
+			// if (n == "div") {
+			// 	if (state.inCodeblock >= 1) {
+			// 		state.inCodeblock--;
+			// 		if (state.inCodeblock == 0) {
+			// 			// Evernote code block end
+			// 			section.lines.push("```");
+			// 			return; // skip further processing
+			// 		}
+			// 	}
+			// }
 
 			if (n == 'en-note') {
 				// End of note
@@ -816,11 +977,11 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 				if (section && section.parent) section = section.parent;
 			} else if (n == 'table') {
 				if (section && section.parent) section = section.parent;
-			} else if (n == "span" || n == "font") {
-				if (state.inCodeblock == 0 && state.inMonospaceFont) {
-					state.inMonospaceFont = false;
-					section.lines.push(MONOSPACE_CLOSE);
-				}
+			// } else if (n == "span" || n == "font") {
+			// 	if (state.inCodeblock == 0 && state.inMonospaceFont) {
+			// 		state.inMonospaceFont = false;
+			// 		section.lines.push(MONOSPACE_CLOSE);
+			// 	}
 			} else if (isIgnoredEndTag(n)) {
 				// Skip
 			} else if (isListTag(n)) {
