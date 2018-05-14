@@ -54,7 +54,7 @@ describe('HtmlToMd', function() {
 				console.info('');
 
 				expect(false).toBe(true);
-				process.exit(1);
+				return;
 			} else {
 				expect(true).toBe(true)
 			}

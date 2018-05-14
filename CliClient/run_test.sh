@@ -9,7 +9,14 @@ rsync -a "$ROOT_DIR/build/locales/" "$BUILD_DIR/locales/"
 mkdir -p "$BUILD_DIR/data"
 
 if [[ $TEST_FILE == "" ]]; then
-	(cd "$ROOT_DIR" && npm test tests-build/synchronizer.js tests-build/encryption.js tests-build/ArrayUtils.js tests-build/models_Setting.js tests-build/models_Note.js tests-build/models_Folder.js tests-build/services_InteropService.js)
+	(cd "$ROOT_DIR" && npm test tests-build/synchronizer.js)
+	(cd "$ROOT_DIR" && npm test tests-build/encryption.js
+	(cd "$ROOT_DIR" && npm test tests-build/ArrayUtils.js)
+	(cd "$ROOT_DIR" && npm test tests-build/models_Setting.js)
+	(cd "$ROOT_DIR" && npm test tests-build/models_Note.js)
+	(cd "$ROOT_DIR" && npm test tests-build/models_Folder.js)
+	(cd "$ROOT_DIR" && npm test tests-build/services_InteropService.js)
+	(cd "$ROOT_DIR" && npm test tests-build/HtmlToMd.js)
 else
 	(cd "$ROOT_DIR" && npm test tests-build/$TEST_FILE.js)
 fi

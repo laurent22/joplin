@@ -134,7 +134,7 @@ function shimInit() {
 
 		if (note.body && position) newBody.push(note.body.substr(0, position));
 		newBody.push(Resource.markdownTag(resource));
-		newBody.push(note.body.substr(position));
+		if (note.body) newBody.push(note.body.substr(position));
 
 		const newNote = Object.assign({}, note, {
 			body: newBody.join('\n\n'),
