@@ -377,7 +377,7 @@ function processMdArrayNewLines(md, isTable = false) {
 // on various rules.
 
 	const isHeading = function(line) {
-		return !!line.match(/#+\s/);
+		return !!line.match(/^#+\s/);
 	}
 
 	const isListItem = function(line) {
@@ -389,7 +389,7 @@ function processMdArrayNewLines(md, isTable = false) {
 	}
 
 	const isTableLine = function(line) {
-		return line.indexOf('|') === 0;
+		return line.indexOf('| ') === 0;
 	}
 
 	const isPlainParagraph = function(line) {
@@ -432,6 +432,12 @@ function formatMdLayout(lines) {
 			newLines.push('');
 
 		} else if (!isCodeLine(line) && isCodeLine(previous)) {
+			newLines.push('');
+
+		} else if (isTableLine(line) && !isTableLine(previous)) {
+			newLines.push('');
+
+		} else if (!isTableLine(line) && isTableLine(previous)) {
 			newLines.push('');
 		
 		// Add a new line at beginning of paragraph
