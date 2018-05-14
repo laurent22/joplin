@@ -97,10 +97,10 @@ async function main(argv) {
 
 	let content = readmeContent();
 
-	if (winUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/.*?\/Joplin-Setup-.*?\.exe)/, winUrl);
-	if (winPortableUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/.*?\/JoplinPortable.exe)/, winPortableUrl);
-	if (macOsUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/.*?\.dmg)/, macOsUrl);
-	if (linuxUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/.*?\.AppImage)/, linuxUrl);
+	if (winUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/v\d+\.\d+\.\d+\/Joplin-Setup-.*?\.exe)/, winUrl);
+	if (winPortableUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/v\d+\.\d+\.\d+\/JoplinPortable.exe)/, winPortableUrl);
+	if (macOsUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/v\d+\.\d+\.\d+\/Joplin-.*?\.dmg)/, macOsUrl);
+	if (linuxUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/v\d+\.\d+\.\d+\/Joplin-.*?\.AppImage)/, linuxUrl);
 
 	setReadmeContent(content);
 
