@@ -1,4 +1,1 @@
-One line
-Two lines
-
-allattached
+One line Two lines allattached

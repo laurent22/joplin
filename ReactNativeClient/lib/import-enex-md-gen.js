@@ -338,7 +338,7 @@ function processMdArrayNewLines(md, isTable = false) {
 
 	let lines = output.replace(/\\r/g, '').split('\n');
 	lines = formatMdLayout(lines)
-	lines = convertSingleLineCodeBlocksToInline(lines)
+	// lines = convertSingleLineCodeBlocksToInline(lines)
 	lines = mergeMultipleNewLines(lines);
 	return lines.join('\n');
 }
@@ -461,47 +461,47 @@ function lineStartsWithDelimiter(line) {
 	return ' ,.;:)]}'.indexOf(line[0]) >= 0;
 }
 
-function convertSingleLineCodeBlocksToInline(lines) {
-	let newLines = [];
-	let currentCodeLines = [];
-	let codeLineCount = 0;
+// function convertSingleLineCodeBlocksToInline(lines) {	
+// 	let newLines = [];
+// 	let currentCodeLines = [];
+// 	let codeLineCount = 0;
 
 
-	const processCurrentCodeLines = (line) => {
-		if (codeLineCount === 1) {
-			const inlineCode = currentCodeLines.join('').trim();
-			newLines[newLines.length - 1] +=  '`' + inlineCode + '`';
-			if (line) newLines[newLines.length - 1] += (lineStartsWithDelimiter(line) ? '' : ' ') + line;
-		} else {
-			newLines = newLines.concat(currentCodeLines);
-			newLines.push(line);
-		}
+// 	const processCurrentCodeLines = (line) => {
+// 		if (codeLineCount === 1) {
+// 			const inlineCode = currentCodeLines.join('').trim();
+// 			newLines[newLines.length - 1] +=  '`' + inlineCode + '`';
+// 			if (line) newLines[newLines.length - 1] += (lineStartsWithDelimiter(line) ? '' : ' ') + line;
+// 		} else {
+// 			newLines = newLines.concat(currentCodeLines);
+// 			newLines.push(line);
+// 		}
 
-		currentCodeLines = [];
-		codeLineCount = 0;
-	}
+// 		currentCodeLines = [];
+// 		codeLineCount = 0;
+// 	}
 
-	for (let i = 0; i < lines.length; i++) {
-		const line = lines[i];
+// 	for (let i = 0; i < lines.length; i++) {
+// 		const line = lines[i];
 
-		if (isCodeLine(line)) {
-			currentCodeLines.push(line);
-			codeLineCount++;
-		} else if (!line.trim()) {
-			currentCodeLines.push(line);
-		} else {
-			if (currentCodeLines.length) {
-				processCurrentCodeLines(line);
-			} else {
-				newLines.push(line);
-			}
-		}
-	}
+// 		if (isCodeLine(line)) {
+// 			currentCodeLines.push(line);
+// 			codeLineCount++;
+// 		} else if (!line.trim()) {
+// 			currentCodeLines.push(line);
+// 		} else {
+// 			if (currentCodeLines.length) {
+// 				processCurrentCodeLines(line);
+// 			} else {
+// 				newLines.push(line);
+// 			}
+// 		}
+// 	}
 
-	if (currentCodeLines.length) processCurrentCodeLines('');
+// 	if (currentCodeLines.length) processCurrentCodeLines('');
 
-	return newLines;
-}
+// 	return newLines;
+// }
 
 function isWhiteSpace(c) {
 	return c == '\n' || c == '\r' || c == '\v' || c == '\f' || c == '\t' || c == ' ';
@@ -530,23 +530,28 @@ function simplifyString(s) {
 }
 
 function collapseWhiteSpaceAndAppend(lines, state, text) {
-	if (state.inCode) {
-		let previous = lines.length ? lines[lines.length - 1] : '';
+	if (state.inCode.length) {
+		lines.push(text);
 
-		// If the preceding item is a block limit, then the current line should start with a TAB
-		if ([BLOCK_OPEN, BLOCK_CLOSE, NEWLINE, NEWLINE_MERGED, MONOSPACE_OPEN, MONOSPACE_CLOSE].indexOf(previous) >= 0 || !previous) {
-			//text = "\t" + text;
-			lines.push('\t');
-			lines.push(text);
-		} else {
-			// If the current text contains one or more \n, then the last one should be immediately followed by a TAB
-			const idx = text.lastIndexOf('\n');
-			if (idx >= 0) {
-				text = text.substr(0, idx+1) + '\t' + text.substr(idx+1);
-			}
+		// state.currentCode += text;
 
-			lines.push(text);
-		}
+
+		// let previous = lines.length ? lines[lines.length - 1] : '';
+
+		// // If the preceding item is a block limit, then the current line should start with a TAB
+		// if ([BLOCK_OPEN, BLOCK_CLOSE, NEWLINE, NEWLINE_MERGED, MONOSPACE_OPEN, MONOSPACE_CLOSE].indexOf(previous) >= 0 || !previous) {
+		// 	//text = "\t" + text;
+		// 	lines.push('\t');
+		// 	lines.push(text);
+		// } else {
+		// 	// If the current text contains one or more \n, then the last one should be immediately followed by a TAB
+		// 	const idx = text.lastIndexOf('\n');
+		// 	if (idx >= 0) {
+		// 		text = text.substr(0, idx+1) + '\t' + text.substr(idx+1);
+		// 	}
+
+		// 	lines.push(text);
+		// }
 	} else {
 
 		// console.info(lines);
@@ -648,28 +653,6 @@ function isIgnoredContentTag(n) {
 	return ['script', 'style', 'iframe', 'select', 'option', 'button', 'video', 'source', 'svg', 'path'].indexOf(n) >= 0
 }
 
-function isCodeTag(n) {
-	// NOTE: This handles "code" tags that were copied and pasted from a browser to Evernote. Evernote also has its own code block, which
-	// of course is way more complicated and currently not fully supported (the code will be imported and indented properly, but it won't
-	// have the extra Markdown indentation that identifies the block as code). For reference this is an example of Evernote-style code block:
-	//
-	// <div style="-en-codeblock: true; box-sizing: border-box; padding: 8px; font-family: Monaco, Menlo, Consolas, &quot;Courier New&quot;,
-	// monospace; font-size: 12px; color: rgb(51, 51, 51); border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius:
-	// 4px; border-bottom-left-radius: 4px; background-color: rgb(251, 250, 248); border: 1px solid rgba(0, 0, 0, 0.14902); background-position:
-	// initial initial; background-repeat: initial initial;"><div>function justTesting() {</div><div>&nbsp; &nbsp; &nbsp;someCodeBlock();</div>
-	// <div>&nbsp; &nbsp; &nbsp;return true;</div><div>}</div></div>
-	//
-	// Which in normal HTML would be:
-	//
-	// <code>
-	// function justTesting() {
-	//    someCodeBlock();
-	//    return true;
-	// }
-	// <code>
-	return n == "pre" || n == "code";
-}
-
 function isInlineCodeTag(n) {
 	return ['samp', 'kbd'].indexOf(n) >= 0;
 }
@@ -736,7 +719,8 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 
 	return new Promise((resolve, reject) => {
 		let state = {
-			inCode: false,
+			inCode: [],
+			inPre: false,
 			inQuote: false,
 			inMonospaceFont: false,
 			inCodeblock: 0,
@@ -907,10 +891,21 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 			} else if (n == 'blockquote') {
 				section.lines.push(BLOCK_OPEN);
 				state.inQuote = true;
-			} else if (isCodeTag(n, nodeAttributes)) {
+			} else if (n === 'code') {
+				state.inCode.push(true);
+				state.currentCode = '';
+
+				let newSection = {
+					type: 'code',
+					lines: [],
+					parent: section,
+				}
+
+				section.lines.push(newSection);
+				section = newSection;
+			} else if (n === 'pre') {
 				section.lines.push(BLOCK_OPEN);
-				state.inCode = true;
-				if (n === 'pre') state.inPre = true;
+				state.inPre = true;
 			} else if (n == "br") {
 				section.lines.push(NEWLINE);
 			} else if (n == "en-media") {
@@ -1083,8 +1078,25 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 			} else if (n == 'blockquote') {
 				section.lines.push(BLOCK_OPEN);
 				state.inQuote = false;
-			} else if (isCodeTag(n)) {
-				state.inCode = false;
+			} else if (n === 'code') {
+				state.inCode.pop();
+
+				if (!state.inCode.length) {
+					const codeLines = section.lines.join('').split('\n');
+					section.lines = [];
+					if (codeLines.length > 1) {
+						for (let i = 0; i < codeLines.length; i++) {
+							if (i > 0) section.lines.push('\n');
+							section.lines.push('\t' + codeLines[i]);
+						}
+					} else {
+						section.lines.push('`' + codeLines.join('') + '`');
+					}
+
+					if (section && section.parent) section = section.parent;
+				}
+			} else if (n === 'pre') {
+				state.inPre = false;
 				section.lines.push(BLOCK_CLOSE);
 			} else if (isAnchor(n)) {
 				let attributes = state.anchorAttributes.pop();
@@ -1354,7 +1366,43 @@ function drawTable(table) {
 	return flatRender ? lines : lines.join('<<<<:D>>>>' + NEWLINE + '<<<<:D>>>>').split('<<<<:D>>>>');
 }
 
+function minifyHtml(html) {
+	let output = require('html-minifier').minify(html, {
+		removeComments: true,
+		collapseInlineTagWhitespace: true,
+		collapseWhitespace: true,
+		conservativeCollapse: true,
+		preserveLineBreaks: true,
+	});
+
+	const endsWithInlineTag = function(line) {
+		return !!line.match(/\/(span|b|i|strong|em)>$/);
+	}
+
+	let lines = output.split('\n');
+	for (let i = lines.length - 1; i >= 1; i--) {
+		const line = lines[i];
+		const previous = lines[i-1];
+
+		if (!line) continue;
+
+		if (line[0] !== ' ' && endsWithInlineTag(previous)) {
+			lines.splice(i, 1);
+			lines[i-1] = previous + ' ' + line;
+		}
+	}
+
+	output = lines.join('\n');
+
+	return output;
+}
+
 async function enexXmlToMd(xmlString, resources, options = {}) {
+	// This allows simplifying the HTML, which results in better Markdown. In particular, it removes all
+	// non-significant newlines and convert them to spaces.
+	// xmlString = minifyHtml(xmlString);
+	// console.info([xmlString]);
+
 	const stream = stringToStream(xmlString);
 	let result = await enexXmlToMdArray(stream, resources, options);
 
@@ -1362,10 +1410,15 @@ async function enexXmlToMd(xmlString, resources, options = {}) {
 
 	for (let i = 0; i < result.content.lines.length; i++) {
 		let line = result.content.lines[i];
-		if (typeof line === 'object') { // A table
+		if (typeof line === 'object' && line.type === 'table') { // A table
 			const table = line;
 			const tableLines = drawTable(table);
 			mdLines = mdLines.concat(tableLines);
+		} else if (typeof line === 'object' && line.type === 'code') {
+			mdLines = mdLines.concat(line.lines);
+		} else if (typeof line === 'object') {
+			console.warn('Unhandled object type:', line);
+			mdLines = mdLines.concat(line.lines);
 		} else { // an actual line
 			mdLines.push(line);
 		}
@@ -1412,12 +1465,24 @@ async function enexXmlToMd(xmlString, resources, options = {}) {
 		for (let i = 0; i < lines.length; i++) {
 			let line = lines[i];
 
-			// eg. "    -   Some list item" => "    - Some list item"
-			// Note that spaces before the "-" are preserved
-			line = line.replace(/^(\s+|)-\s+/, '$1- ')
+			if (line.length) {
+				// eg. "    -   Some list item" => "    - Some list item"
+				// Note that spaces before the "-" are preserved
+				line = line.replace(/^(\s+|)-\s+/, '$1- ')
 
-			// eg "Some text     " => "Some text"
-			line = line.replace(/^(.*?)\s+$/, '$1')
+				// eg "Some text     " => "Some text"
+				line = line.replace(/^(.*?)\s+$/, '$1')
+
+				// if (line.length && line[0] !== '\t' && line[0] !== '|') {
+				// 	const tokens = line.split('`');
+				// 	for (let i = 0; i < tokens.length; i += 2) {
+				// 		let token = tokens[i];
+				// 		token = token.replace(/\s+/g, ' ');
+				// 		tokens[i] = token;
+				// 	}
+				// 	line = tokens.join('`');
+				// }
+			}
 
 			output.push(line);
 		}
