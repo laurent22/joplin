@@ -35,6 +35,7 @@
     "form-data": "^2.1.4",
     "fs-extra": "^5.0.0",
     "html-entities": "^1.2.1",
+    "html-minifier": "^3.5.15",
     "jssha": "^2.3.0",
     "levenshtein": "^1.0.5",
     "lodash": "^4.17.4",

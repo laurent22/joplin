@@ -337,6 +337,9 @@ function processMdArrayNewLines(md, isTable = false) {
 	}
 
 	let lines = output.replace(/\\r/g, '').split('\n');
+
+	// console.info(lines);
+
 	lines = formatMdLayout(lines)
 	// lines = convertSingleLineCodeBlocksToInline(lines)
 	lines = mergeMultipleNewLines(lines);
@@ -530,6 +533,8 @@ function simplifyString(s) {
 }
 
 function collapseWhiteSpaceAndAppend(lines, state, text) {
+	// console.info([text]);
+
 	if (state.inCode.length) {
 		lines.push(text);
 
@@ -555,6 +560,11 @@ function collapseWhiteSpaceAndAppend(lines, state, text) {
 	} else {
 
 		// console.info(lines);
+
+		if (!!text.match(/^\n+$/)) {
+			lines.push(' ');
+			return lines;
+		}
 
 		// Remove all \n and \r from the left and right of the text
 		while (text.length && (text[0] == "\n" || text[0] == "\r")) text = text.substr(1);
@@ -1316,7 +1326,10 @@ function drawTable(table) {
 
 				// A cell in a Markdown table cannot have actual new lines so replace
 				// them with <br>, which are supported by the markdown renderers.
-				let cellText = processMdArrayNewLines(td.lines, true).replace(/\n+/g, "<br>");
+				let cellText = processMdArrayNewLines(td.lines, true)
+				let lines = cellText.split('\n');
+				lines = postProcessMarkdown(lines);
+				cellText = lines.join('\n').replace(/\n+/g, "<br>");
 
 				// Inside tables cells, "|" needs to be escaped
 				cellText = cellText.replace(/\|/g, "\\|");
@@ -1397,44 +1410,7 @@ function minifyHtml(html) {
 	return output;
 }
 
-async function enexXmlToMd(xmlString, resources, options = {}) {
-	// This allows simplifying the HTML, which results in better Markdown. In particular, it removes all
-	// non-significant newlines and convert them to spaces.
-	// xmlString = minifyHtml(xmlString);
-	// console.info([xmlString]);
-
-	const stream = stringToStream(xmlString);
-	let result = await enexXmlToMdArray(stream, resources, options);
-
-	let mdLines = [];
-
-	for (let i = 0; i < result.content.lines.length; i++) {
-		let line = result.content.lines[i];
-		if (typeof line === 'object' && line.type === 'table') { // A table
-			const table = line;
-			const tableLines = drawTable(table);
-			mdLines = mdLines.concat(tableLines);
-		} else if (typeof line === 'object' && line.type === 'code') {
-			mdLines = mdLines.concat(line.lines);
-		} else if (typeof line === 'object') {
-			console.warn('Unhandled object type:', line);
-			mdLines = mdLines.concat(line.lines);
-		} else { // an actual line
-			mdLines.push(line);
-		}
-	}
-
-	let firstAttachment = true;
-	for (let i = 0; i < result.resources.length; i++) {
-		let r = result.resources[i];
-		if (firstAttachment) mdLines.push(NEWLINE);
-		mdLines.push(NEWLINE);
-		mdLines = addResourceTag(mdLines, r, r.filename);
-		firstAttachment = false;
-	}
-
-	let output = processMdArrayNewLines(mdLines).split('\n')
-
+function postProcessMarkdown(lines) {
 	// After importing HTML, the resulting Markdown often has empty lines at the beginning and end due to
 	// block start/end or elements that were ignored, etc. If these white spaces were intended it's not really
 	// possible to detect it, so simply trim them all so that the result is more deterministic and can be
@@ -1490,8 +1466,51 @@ async function enexXmlToMd(xmlString, resources, options = {}) {
 		return output;
 	}
 
-	output = trimEmptyLines(output)
-	output = cleanUpSpaces(output)
+	lines = trimEmptyLines(lines)
+	lines = cleanUpSpaces(lines)
+
+	return lines;
+}
+
+async function enexXmlToMd(xmlString, resources, options = {}) {
+	// This allows simplifying the HTML, which results in better Markdown. In particular, it removes all
+	// non-significant newlines and convert them to spaces.
+	// xmlString = minifyHtml(xmlString);
+	// console.info([xmlString]);
+
+	const stream = stringToStream(xmlString);
+	let result = await enexXmlToMdArray(stream, resources, options);
+
+	let mdLines = [];
+
+	for (let i = 0; i < result.content.lines.length; i++) {
+		let line = result.content.lines[i];
+		if (typeof line === 'object' && line.type === 'table') { // A table
+			const table = line;
+			const tableLines = drawTable(table);
+			mdLines = mdLines.concat(tableLines);
+		} else if (typeof line === 'object' && line.type === 'code') {
+			mdLines = mdLines.concat(line.lines);
+		} else if (typeof line === 'object') {
+			console.warn('Unhandled object type:', line);
+			mdLines = mdLines.concat(line.lines);
+		} else { // an actual line
+			mdLines.push(line);
+		}
+	}
+
+	let firstAttachment = true;
+	for (let i = 0; i < result.resources.length; i++) {
+		let r = result.resources[i];
+		if (firstAttachment) mdLines.push(NEWLINE);
+		mdLines.push(NEWLINE);
+		mdLines = addResourceTag(mdLines, r, r.filename);
+		firstAttachment = false;
+	}
+
+	let output = processMdArrayNewLines(mdLines).split('\n')
+
+	output = postProcessMarkdown(output);
 
 	return output.join('\n');
 }
