@@ -910,6 +910,7 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 			} else if (isCodeTag(n, nodeAttributes)) {
 				section.lines.push(BLOCK_OPEN);
 				state.inCode = true;
+				if (n === 'pre') state.inPre = true;
 			} else if (n == "br") {
 				section.lines.push(NEWLINE);
 			} else if (n == "en-media") {
@@ -1062,7 +1063,7 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 				for (let i = section.lines.length - 1; i >= 0; i--) {
 					const line = section.lines[i];
 					if ([BLOCK_OPEN, BLOCK_CLOSE, NEWLINE, NEWLINE_MERGED, SPACE].indexOf(line) >= 0 || !line) {
-						section.lines.splice(i, 1);
+						section.lines[i] = ' ';
 					} else if (line === '- ') {
 						break;
 					}
