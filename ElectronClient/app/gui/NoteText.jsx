@@ -395,6 +395,12 @@ class NoteTextComponent extends React.Component {
 					if (!filePath) return;
 					await fs.copy(resourcePath, filePath);
 				}}));
+
+				menu.append(new MenuItem({label: _('Copy path to clipboard'), click: async () => {
+					const { clipboard } = require('electron');
+					const { toSystemSlashes } = require('lib/path-utils.js');
+					clipboard.writeText(toSystemSlashes(resourcePath));
+				}}));
 			} else {
 				reg.logger().error('Unhandled item type: ' + itemType);
 				return;
