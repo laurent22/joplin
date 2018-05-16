@@ -107,6 +107,7 @@
     "react-datetime": "^2.11.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
+    "readability-node": "^0.1.0",
     "redux": "^3.7.2",
     "smalltalk": "^2.5.1",
     "sprintf-js": "^1.1.1",

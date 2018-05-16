@@ -34,6 +34,7 @@ const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
 const EncryptionService = require('lib/services/EncryptionService');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseService = require('lib/services/BaseService');
+const ClipperServer = require('lib/ClipperServer');
 
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -465,6 +466,9 @@ class BaseApplication {
 		if (currentFolderId) currentFolder = await Folder.load(currentFolderId);
 		if (!currentFolder) currentFolder = await Folder.defaultFolder();
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
+
+		this.clipperServer_ = new ClipperServer();
+		this.clipperServer_.start();
 
 		return argv;
 	}

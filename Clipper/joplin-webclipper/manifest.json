@@ -1,0 +1,39 @@
+{
+
+  "manifest_version": 2,
+  "name": "Joplin Web Clipper",
+  "version": "1.0",
+
+  "description": "Gets and saves content from your browser to Joplin.",
+
+  "homepage_url": "https://joplin.cozic.net",
+
+  "icons": {
+    "48": "icons/48.png",
+    "96": "icons/96.png"
+  },
+
+  "permissions": [
+    "activeTab"
+  ],
+
+  "browser_action": {
+    "default_icon": "icons/32.png",
+    "default_title": "Joplin Web Clipper",
+    "default_popup": "popup/build/index.html"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*/"],
+      "js": ["main.js"]
+    }
+  ],
+
+  "applications": {
+      "gecko": {
+         "id": "{8419486a-54e9-11e8-9401-ac9e17909436}"
+      }
+   }
+
+}
