@@ -1260,6 +1260,8 @@ function enexXmlToMdArray(stream, resources, options = {}) {
 function tableHasSubTables(table) {
 	for (let trIndex = 0; trIndex < table.lines.length; trIndex++) {
 		const tr = table.lines[trIndex];
+		if (!tr || !tr.lines) continue;
+		
 		for (let tdIndex = 0; tdIndex < tr.lines.length; tdIndex++) {
 			const td = tr.lines[tdIndex];
 			for (let i = 0; i < td.lines.length; i++) {
@@ -1379,36 +1381,36 @@ function drawTable(table) {
 	return flatRender ? lines : lines.join('<<<<:D>>>>' + NEWLINE + '<<<<:D>>>>').split('<<<<:D>>>>');
 }
 
-function minifyHtml(html) {
-	let output = require('html-minifier').minify(html, {
-		removeComments: true,
-		collapseInlineTagWhitespace: true,
-		collapseWhitespace: true,
-		conservativeCollapse: true,
-		preserveLineBreaks: true,
-	});
+// function minifyHtml(html) {
+// 	let output = require('html-minifier').minify(html, {
+// 		removeComments: true,
+// 		collapseInlineTagWhitespace: true,
+// 		collapseWhitespace: true,
+// 		conservativeCollapse: true,
+// 		preserveLineBreaks: true,
+// 	});
 
-	const endsWithInlineTag = function(line) {
-		return !!line.match(/\/(span|b|i|strong|em)>$/);
-	}
+// 	const endsWithInlineTag = function(line) {
+// 		return !!line.match(/\/(span|b|i|strong|em)>$/);
+// 	}
 
-	let lines = output.split('\n');
-	for (let i = lines.length - 1; i >= 1; i--) {
-		const line = lines[i];
-		const previous = lines[i-1];
+// 	let lines = output.split('\n');
+// 	for (let i = lines.length - 1; i >= 1; i--) {
+// 		const line = lines[i];
+// 		const previous = lines[i-1];
 
-		if (!line) continue;
+// 		if (!line) continue;
 
-		if (line[0] !== ' ' && endsWithInlineTag(previous)) {
-			lines.splice(i, 1);
-			lines[i-1] = previous + ' ' + line;
-		}
-	}
+// 		if (line[0] !== ' ' && endsWithInlineTag(previous)) {
+// 			lines.splice(i, 1);
+// 			lines[i-1] = previous + ' ' + line;
+// 		}
+// 	}
 
-	output = lines.join('\n');
+// 	output = lines.join('\n');
 
-	return output;
-}
+// 	return output;
+// }
 
 function postProcessMarkdown(lines) {
 	// After importing HTML, the resulting Markdown often has empty lines at the beginning and end due to
