@@ -1,4 +1,5 @@
 const stringPadding = require('string-padding');
+const stringToStream = require('string-to-stream')
 
 const BLOCK_OPEN = "[[BLOCK_OPEN]]";
 const BLOCK_CLOSE = "[[BLOCK_CLOSE]]";
@@ -103,7 +104,142 @@ function processMdArrayNewLines(md) {
 
 	if (!output.trim().length) return '';
 
-	return output;
+	// To simplify the result, we only allow up to one empty line between blocks of text
+	const mergeMultipleNewLines = function(lines) {
+		let output = [];
+		let newlineCount = 0;
+		for (let i = 0; i < lines.length; i++) {
+			const line = lines[i];
+			if (!line.trim()) {
+				newlineCount++;
+			} else {
+				newlineCount = 0;
+			}
+
+			if (newlineCount >= 2) continue;
+
+			output.push(line);
+		}
+		return output;
+	}
+
+	let lines = output.replace(/\\r/g, '').split('\n');
+	lines = formatMdLayout(lines)
+	lines = mergeMultipleNewLines(lines);
+	return lines.join('\n');
+}
+
+// While the processMdArrayNewLines() function adds newlines in a way that's technically correct, the resulting Markdown can look messy.
+// This is because while a "block" element should be surrounded by newlines, in practice, some should be surrounded by TWO new lines, while
+// others by only ONE.
+//
+// For instance, this:
+//
+//     <li>one</li>
+//     <li>two</li>
+//     <li>three</li>
+//
+// should result in this:
+// 
+//     - one
+//     - two
+//     - three
+//
+// While this:
+//
+//     <p>Some long paragraph</p><p>And another one</p><p>And the last paragraph</p>
+//
+// should result in this:
+//
+//     Some long paragraph
+//     
+//     And another one
+//    
+//     And the last paragraph
+//
+// So in one case, one newline between tags, and in another two newlines. In HTML this would be done via CSS, but in Markdown we need
+// to add new lines. It's also important to get these newlines right because two blocks of text next to each others might be renderered
+// differently than if there's a newlines between them. So the function below parses the almost final MD and add new lines depending
+// on various rules.
+
+	const isHeading = function(line) {
+		return !!line.match(/^#+\s/);
+	}
+
+	const isListItem = function(line) {
+		return line && line.trim().indexOf('- ') === 0;
+	}
+
+	const isCodeLine = function(line) {
+		return line && line.indexOf('\t') === 0; 
+	}
+
+	const isTableLine = function(line) {
+		return line.indexOf('| ') === 0;
+	}
+
+	const isPlainParagraph = function(line) {
+		// Note: if a line is no longer than 80 characters, we don't consider it's a paragraph, which
+		// means no newlines will be added before or after. This is to handle text that has been
+		// written with "hard" new lines.
+		if (!line || line.length < 80) return false;
+
+		if (isListItem(line)) return false;
+		if (isHeading(line)) return false;
+		if (isCodeLine(line)) return false;
+		if (isTableLine(line)) return false;
+
+		return true; 
+	}
+
+function formatMdLayout(lines) {	
+	let previous = '';
+	let newLines = [];
+	for (let i = 0; i < lines.length; i++) {
+		const line = lines[i];
+
+		// Add a new line at the end of a list of items
+		if (isListItem(previous) && line && !isListItem(line)) {
+			newLines.push('');
+
+		// Add a new line at the beginning of a list of items
+		} else if (isListItem(line) && previous && !isListItem(previous)) {
+			newLines.push('');
+
+		// Add a new line before a heading
+		} else if (isHeading(line) && previous) {
+			newLines.push('');
+
+		// Add a new line after a heading
+		} else if (isHeading(previous) && line) {
+			newLines.push('');
+
+		} else if (isCodeLine(line) && !isCodeLine(previous)) {
+			newLines.push('');
+
+		} else if (!isCodeLine(line) && isCodeLine(previous)) {
+			newLines.push('');
+
+		} else if (isTableLine(line) && !isTableLine(previous)) {
+			newLines.push('');
+
+		} else if (!isTableLine(line) && isTableLine(previous)) {
+			newLines.push('');
+		
+		// Add a new line at beginning of paragraph
+		} else if (isPlainParagraph(line) && previous) {
+			newLines.push('');
+
+		// Add a new line at end of paragraph
+		} else if (isPlainParagraph(previous) && line) {
+			newLines.push('');
+		}
+	
+		newLines.push(line);
+		previous = newLines[newLines.length - 1];
+	}
+
+	return newLines;
 }
 
 function isWhiteSpace(c) {
@@ -133,8 +269,7 @@ function simplifyString(s) {
 }
 
 function collapseWhiteSpaceAndAppend(lines, state, text) {
-	if (state.inCode) {
-		text = "\t" + text;
+	if (state.inCode.length) {
 		lines.push(text);
 	} else {
 		// Remove all \n and \r from the left and right of the text
@@ -226,28 +361,6 @@ function isNewLineOnlyEndTag(n) {
 	return ["div", "p", "li", "h1", "h2", "h3", "h4", "h5", 'h6', "dl", "dd", 'dt', "center", 'address'].indexOf(n) >= 0;
 }
 
-function isCodeTag(n) {
-	// NOTE: This handles "code" tags that were copied and pasted from a browser to Evernote. Evernote also has its own code block, which
-	// of course is way more complicated and currently not fully supported (the code will be imported and indented properly, but it won't
-	// have the extra Markdown indentation that identifies the block as code). For reference this is an example of Evernote-style code block:
-	//
-	// <div style="-en-codeblock: true; box-sizing: border-box; padding: 8px; font-family: Monaco, Menlo, Consolas, &quot;Courier New&quot;,
-	// monospace; font-size: 12px; color: rgb(51, 51, 51); border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius:
-	// 4px; border-bottom-left-radius: 4px; background-color: rgb(251, 250, 248); border: 1px solid rgba(0, 0, 0, 0.14902); background-position:
-	// initial initial; background-repeat: initial initial;"><div>function justTesting() {</div><div>&nbsp; &nbsp; &nbsp;someCodeBlock();</div>
-	// <div>&nbsp; &nbsp; &nbsp;return true;</div><div>}</div></div>
-	//
-	// Which in normal HTML would be:
-	//
-	// <code>
-	// function justTesting() {
-	//    someCodeBlock();
-	//    return true;
-	// }
-	// <code>
-	return n == "pre" || n == "code";
-}
-
 function isInlineCodeTag(n) {
 	return ['samp', 'kbd'].indexOf(n) >= 0;
 }
@@ -285,7 +398,8 @@ function enexXmlToMdArray(stream, resources) {
 
 	return new Promise((resolve, reject) => {
 		let state = {
-			inCode: false,
+			inCode: [],
+			inPre: false,
 			inQuote: false,
 			lists: [],
 			anchorAttributes: [],
@@ -366,7 +480,7 @@ function enexXmlToMdArray(stream, resources) {
 			} else if (n == 'li') {
 				section.lines.push(BLOCK_OPEN);
 				if (!state.lists.length) {
-					reject("Found <li> tag without being inside a list"); // TODO: could be a warning, but nothing to handle warnings at the moment
+					console.warn("Found <li> tag without being inside a list");
 					return;
 				}
 
@@ -395,7 +509,9 @@ function enexXmlToMdArray(stream, resources) {
 				}
 			} else if (isAnchor(n)) {
 				state.anchorAttributes.push(nodeAttributes);
-				section.lines.push('[');
+				// Need to add the '[' via this function to make sure that links within code blocks
+				// are handled correctly.
+				collapseWhiteSpaceAndAppend(section.lines, state, '[');
 			} else if (isEmTag(n)) {
 				section.lines.push("*");
 			} else if (n == "en-todo") {
@@ -404,7 +520,7 @@ function enexXmlToMdArray(stream, resources) {
 			} else if (n == "hr") {
 				// Needs to be surrounded by new lines so that it's properly rendered as a line when converting to HTML
 				section.lines.push(NEWLINE);
-				section.lines.push('----------------------------------------');
+				section.lines.push('* * *');
 				section.lines.push(NEWLINE);
 				section.lines.push(NEWLINE);
 			} else if (n == "h1") {
@@ -422,9 +538,21 @@ function enexXmlToMdArray(stream, resources) {
 			} else if (n == 'blockquote') {
 				section.lines.push(BLOCK_OPEN);
 				state.inQuote = true;
-			} else if (isCodeTag(n, nodeAttributes)) {
+			} else if (n === 'code') {
+				state.inCode.push(true);
+				state.currentCode = '';
+
+				let newSection = {
+					type: 'code',
+					lines: [],
+					parent: section,
+				}
+
+				section.lines.push(newSection);
+				section = newSection;
+			} else if (n === 'pre') {
 				section.lines.push(BLOCK_OPEN);
-				state.inCode = true;
+				state.inPre = true;
 			} else if (n == "br") {
 				section.lines.push(NEWLINE);
 			} else if (n == "en-media") {
@@ -540,8 +668,25 @@ function enexXmlToMdArray(stream, resources) {
 			} else if (n == 'blockquote') {
 				section.lines.push(BLOCK_OPEN);
 				state.inQuote = false;
-			} else if (isCodeTag(n)) {
-				state.inCode = false;
+			} else if (n === 'code') {
+				state.inCode.pop();
+
+				if (!state.inCode.length) {
+					const codeLines = section.lines.join('').split('\n');
+					section.lines = [];
+					if (codeLines.length > 1) {
+						for (let i = 0; i < codeLines.length; i++) {
+							if (i > 0) section.lines.push('\n');
+							section.lines.push('\t' + codeLines[i]);
+						}
+					} else {
+						section.lines.push('`' + codeLines.join('') + '`');
+					}
+
+					if (section && section.parent) section = section.parent;
+				}
+			} else if (n === 'pre') {
+				state.inPre = false;
 				section.lines.push(BLOCK_CLOSE);
 			} else if (isAnchor(n)) {
 				let attributes = state.anchorAttributes.pop();
@@ -745,7 +890,7 @@ function drawTable(table) {
 				// In here, recursively render the tables
 				for (let i = 0; i < td.lines.length; i++) {
 					const c = td.lines[i];
-					if (typeof c === 'object') { // This is a table
+					if (typeof c === 'object' && ['table', 'td', 'tr', 'th'].indexOf(c.type) >= 0) { // This is a table
 						renderCurrentCells();
 						currentCells = currentCells.concat(drawTable(c));
 					} else { // This is plain text
@@ -760,7 +905,10 @@ function drawTable(table) {
 
 				// A cell in a Markdown table cannot have actual new lines so replace
 				// them with <br>, which are supported by the markdown renderers.
-				let cellText = processMdArrayNewLines(td.lines).replace(/\n+/g, "<br>");
+				let cellText = processMdArrayNewLines(td.lines, true)
+				let lines = cellText.split('\n');
+				lines = postProcessMarkdown(lines);
+				cellText = lines.join('\n').replace(/\n+/g, "<br>");
 
 				// Inside tables cells, "|" needs to be escaped
 				cellText = cellText.replace(/\|/g, "\\|");
@@ -810,17 +958,75 @@ function drawTable(table) {
 	return flatRender ? lines : lines.join('<<<<:D>>>>' + NEWLINE + '<<<<:D>>>>').split('<<<<:D>>>>');
 }
 
-async function enexXmlToMd(stream, resources) {
-	let result = await enexXmlToMdArray(stream, resources);
+function postProcessMarkdown(lines) {
+	// After importing HTML, the resulting Markdown often has empty lines at the beginning and end due to
+	// block start/end or elements that were ignored, etc. If these white spaces were intended it's not really
+	// possible to detect it, so simply trim them all so that the result is more deterministic and can be
+	// easily unit tested.
+	const trimEmptyLines = function(lines) {
+		while (lines.length) {
+			if (!lines[0].trim()) {
+				lines.splice(0, 1);
+			} else {
+				break;
+			}
+		}
+
+		while (lines.length) {
+			if (!lines[lines.length - 1].trim()) {
+				lines.pop();
+			} else {
+				break;
+			}
+		}
+
+		return lines;
+	}
+
+	function cleanUpSpaces(lines) {
+		const output = [];
+
+		for (let i = 0; i < lines.length; i++) {
+			let line = lines[i];
+
+			if (line.length) {
+				// eg. "    -   Some list item" => "    - Some list item"
+				// Note that spaces before the "-" are preserved
+				line = line.replace(/^(\s+|)-\s+/, '$1- ')
+
+				// eg "Some text     " => "Some text"
+				line = line.replace(/^(.*?)\s+$/, '$1')
+			}
+
+			output.push(line);
+		}
+
+		return output;
+	}
+
+	lines = trimEmptyLines(lines)
+	lines = cleanUpSpaces(lines)
+
+	return lines;
+}
+
+async function enexXmlToMd(xmlString, resources, options = {}) {
+	const stream = stringToStream(xmlString);
+	let result = await enexXmlToMdArray(stream, resources, options);
 
 	let mdLines = [];
 
 	for (let i = 0; i < result.content.lines.length; i++) {
 		let line = result.content.lines[i];
-		if (typeof line === 'object') { // A table
+		if (typeof line === 'object' && line.type === 'table') { // A table
 			const table = line;
 			const tableLines = drawTable(table);
 			mdLines = mdLines.concat(tableLines);
+		} else if (typeof line === 'object' && line.type === 'code') {
+			mdLines = mdLines.concat(line.lines);
+		} else if (typeof line === 'object') {
+			console.warn('Unhandled object type:', line);
+			mdLines = mdLines.concat(line.lines);
 		} else { // an actual line
 			mdLines.push(line);
 		}
@@ -835,7 +1041,11 @@ async function enexXmlToMd(stream, resources) {
 		firstAttachment = false;
 	}
 
-	return processMdArrayNewLines(mdLines);
+	let output = processMdArrayNewLines(mdLines).split('\n')
+
+	output = postProcessMarkdown(output);
+
+	return output.join('\n');
 }
 
 module.exports = { enexXmlToMd, processMdArrayNewLines, NEWLINE, addResourceTag };

@@ -1,1 +1,0 @@
-- The Kit won't work without a Joy-Con infrared camera looking in.

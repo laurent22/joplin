@@ -1,1 +1,0 @@
-Kurt Gödel published a very short but profound paper titled
