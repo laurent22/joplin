@@ -553,10 +553,47 @@ function enexXmlToMdArray(stream, resources) {
 				// put the URL as is (don't wrap it in [](url)). The markdown parser, using
 				// GitHub flavour, will turn this URL into a link. This is to generate slightly
 				// cleaner markdown.
-				let previous = section.lines[section.lines.length - 1];
+
+				// Need to loop on the previous tags so as to skip the special ones, which are not relevant for the below algorithm.
+				let previous = null;
+				for (let i = section.lines.length - 1; i >= 0; i--) {
+					previous = section.lines[i];
+					if ([BLOCK_OPEN, BLOCK_CLOSE, NEWLINE, NEWLINE_MERGED, SPACE].indexOf(previous) >= 0 || !previous) {
+						continue;
+					} else {
+						break;
+					}
+				}
+
 				if (previous == '[') {
-					section.lines.pop();
-					section.lines.push(url);
+					// We have a link that had some content but, after parsing, nothing is left. The content was most likely
+					// something that shows up via CSS and which we cannot support. For example:
+					//
+					// <a onclick="return vote()" href="vote?id=17045576">
+					//    <div class="votearrow" title="upvote"></div>
+					// </a>
+					//
+					// In the case above the arrow is displayed via CSS.
+					// It is useless to display the full URL since often it is not relevant for a note (for example
+					// it's interactive bits) and it's not user-generated content such as a URL that would appear in a comment.
+					// So in this case, we still want to preserve the information but display it in a discreet way as a simple [L].
+
+					// Need to pop everything inside the current [] because it can only be special chars that we don't want (they would create uncessary newlines)
+					for (let i = section.lines.length - 1; i >= 0; i--) {
+						if (section.lines[i] !== '[') {
+							section.lines.pop();
+						} else {
+							break;
+						}
+					}
+
+					if (!url) {
+						// If there's no URL and no content, pop the [ and don't save any content.
+						section.lines.pop();
+					} else {
+						section.lines.push('(L)');
+						section.lines.push('](' + url + ')');
+					}
 				} else if (!previous || previous == url) {
 					section.lines.pop();
 					section.lines.pop();
@@ -585,6 +622,42 @@ function enexXmlToMdArray(stream, resources) {
 						}						
 						section.lines.push(url);
 					} else {
+
+						// Eg. converts:
+						//     [ Sign in   ](https://example.com)
+						// to:
+						//     [Sign in](https://example.com)
+						const trimTextStartAndEndSpaces = function(lines) {
+							let firstBracketIndex = 0;
+							let foundFirstNonWhite = false;
+							for (let i = lines.length - 1; i >= 0; i--) {
+								const l = lines[i];
+								if (!foundFirstNonWhite && (l === SPACE || l === ' ' || !l)) {
+									lines.pop();
+								} else {
+									foundFirstNonWhite = true;
+								}
+
+								if (l === '[') {
+									firstBracketIndex = i;
+									break;
+								}
+							}
+
+							for (let i = firstBracketIndex + 1; i < lines.length; i++) {
+								const l = lines[i];
+								if (l === SPACE || l === ' ' ||!l) {
+									lines.splice(i, 1);
+								} else {
+									break;
+								}
+							}
+
+							return lines;
+						}
+
+						section.lines = trimTextStartAndEndSpaces(section.lines);
+
 						section.lines.push('](' + url + ')');
 					}
 				}
@@ -619,6 +692,8 @@ function enexXmlToMdArray(stream, resources) {
 function tableHasSubTables(table) {
 	for (let trIndex = 0; trIndex < table.lines.length; trIndex++) {
 		const tr = table.lines[trIndex];
+		if (!tr || !tr.lines) continue;
+		
 		for (let tdIndex = 0; tdIndex < tr.lines.length; tdIndex++) {
 			const td = tr.lines[tdIndex];
 			for (let i = 0; i < td.lines.length; i++) {
