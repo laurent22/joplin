@@ -145,6 +145,28 @@ class MainScreenComponent extends React.Component {
 					}
 				},
 			});
+		} else if (command.name === 'renameTag') {
+			const tag = await Tag.load(command.id);			
+			if(!tag) return;
+
+			this.setState({
+				promptOptions: {
+					label: _('Rename tag:'),
+					value: tag.title,
+					onClose: async (answer) => {
+						if (answer !== null) {
+							try {
+								tag.title = answer;
+								await Tag.save(tag, { fields: ['title'], userSideValidation: true });
+							} catch (error) {
+								bridge().showErrorMessageBox(error.message);
+							}
+						}						
+						this.setState({promptOptions: null });
+					}
+				}
+			})
+		
 		} else if (command.name === 'search') {
 
 			if (!this.searchId_) this.searchId_ = uuid.create();

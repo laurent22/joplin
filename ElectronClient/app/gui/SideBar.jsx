@@ -250,6 +250,21 @@ class SideBarComponent extends React.Component {
 			);
 		}
 
+		if (itemType === BaseModel.TYPE_TAG) { 
+			menu.append(
+				new MenuItem({
+					label: _('Rename'),
+					click: async () => {
+						this.props.dispatch({
+							type: "WINDOW_COMMAND",
+							name: "renameTag",
+							id: itemId
+						});
+					},
+				})
+			);
+		}
+
 		menu.popup(bridge().window());
 	}
 
