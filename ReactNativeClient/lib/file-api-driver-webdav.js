@@ -300,6 +300,7 @@ class FileApiDriverWebDav {
 	async mkdir(path) {
 		try {
 			await this.api().exec('MKCOL', path);
+			if ( !path.endsWith('/') ) path = path + '/'; // RFC examples show this, and NGINX wants it
 		} catch (error) {
 			if (error.code === 405) return; // 405 means that the collection already exists (Method Not Allowed)
 
