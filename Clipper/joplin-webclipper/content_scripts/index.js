@@ -27,7 +27,10 @@
 
 		for (let i = 0; i < childNodes.length; i++) {
 			const node = childNodes[i];
-			const isVisible = node.nodeType === 1 ? window.getComputedStyle(node).display !== 'none' : true;
+
+			let isVisible = node.nodeType === 1 ? window.getComputedStyle(node).display !== 'none' : true;
+			if (isVisible && ['input', 'textarea', 'script', 'style', 'select', 'option', 'button'].indexOf(node.nodeName.toLowerCase()) >= 0) isVisible = false;
+
 			if (!isVisible) {
 				element.removeChild(node);
 			} else {
@@ -48,7 +51,7 @@
 		// Readability directly change the passed document so clone it so as
 		// to preserve the original web page.
 		const documentClone = document.cloneNode(true);
-		const readability = new window.Readability(uri, documentClone);
+		const readability = new Readability(documentClone); // new window.Readability(uri, documentClone);
 		const article = readability.parse();
 
 		if (!article) throw new Error('Could not parse HTML document with Readability');
@@ -93,13 +96,6 @@
 				title: pageTitle(),
 				baseUrl: baseUrl(),
 				url: location.origin + location.pathname,
-			};
-
-		} else if (command.name === "pageTitle") {
-			
-			return {
-				name: 'pageTitle',
-				text: pageTitle(),
 			};
 
 		} else {

@@ -20,4 +20,4 @@ fi
 (cd "$ROOT_DIR" && npm test tests-build/models_Note.js)
 (cd "$ROOT_DIR" && npm test tests-build/models_Folder.js)
 (cd "$ROOT_DIR" && npm test tests-build/services_InteropService.js)
-(cd "$ROOT_DIR" && npm test tests-build/HtmlToMd.js)
+(cd "$ROOT_DIR" && npm test tests-build/EnexToMd.js)

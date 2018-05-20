@@ -17,35 +17,14 @@ class Bridge {
 			}
 
 			if (command.name === 'clippedContent') {
-				console.info('Popup: Sending to Joplin...');
+				const content = {
+					title: command.title,
+					bodyHtml: command.html,
+					baseUrl: command.baseUrl,
+					url: command.url,
+				};
 
-				try {
-					const response = await fetch("http://127.0.0.1:9967/notes", {
-						method: "POST",
-						headers: {
-							'Accept': 'application/json',
-							'Content-Type': 'application/json'
-						},
-
-						//make sure to serialize your JSON body
-						body: JSON.stringify({
-							title: command.title,
-							baseUrl: command.baseUrl,
-							bodyHtml: command.html,
-							url: command.url,
-						})
-					})
-
-					console.info('GOT RESPNSE', response);
-					const json = await response.json();
-					console.info(json);
-				} catch (error) {
-					console.error('Popup: Cannot send to Joplin', error)
-				}
-			} else if (command.name === 'pageTitle') {
-
-				this.dispatch({ type: 'PAGE_TITLE_SET', text: command.text });
-
+				this.dispatch({ type: 'CLIPPED_CONTENT_SET', content: content });
 			}
 		}
 
@@ -67,7 +46,36 @@ class Bridge {
 			return;
 		}
 
+		this.dispatch({ type: 'CONTENT_UPLOAD', operation: null });
+
 		await this.browser().tabs.sendMessage(tabs[0].id, command);
+	}
+
+	async sendContentToJoplin(content) {
+		console.info('Popup: Sending to Joplin...');
+
+		try {
+			this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: true } });
+
+			if (!content) throw new Error('Cannot send empty content');
+
+			const response = await fetch("http://127.0.0.1:9967/notes", {
+				method: "POST",
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(content)
+			})
+
+			if (!response.ok) {
+				this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: false, errorMessage: response.text() } });
+			} else {
+				this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: true } });
+			}
+		} catch (error) {
+			this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: false, errorMessage: error.message } });
+		}
 	}
 
 }

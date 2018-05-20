@@ -9,7 +9,8 @@ const { createStore } = require('redux');
 
 const defaultState = {
 	warning: '',
-	pageTitle: '',
+	clippedContent: null,
+	contentUploadOperation: null,
 };
 
 function reducer(state = defaultState, action) {
@@ -20,10 +21,22 @@ function reducer(state = defaultState, action) {
 		newState = Object.assign({}, state);
 		newState.warning = action.text;
 
-	} else if (action.type === 'PAGE_TITLE_SET') {
+	} else if (action.type === 'CLIPPED_CONTENT_SET') {
 
 		newState = Object.assign({}, state);
-		newState.pageTitle = action.text;
+		newState.clippedContent = action.content;
+
+	} else if (action.type === 'CLIPPED_CONTENT_TITLE_SET') {
+
+		newState = Object.assign({}, state);
+		const newContent = newState.clippedContent ? Object.assign({}, newState.clippedContent) : {};
+		newContent.title = action.text;
+		newState.clippedContent = newContent;
+
+	} else if (action.type === 'CONTENT_UPLOAD') {
+
+		newState = Object.assign({}, state);
+		newState.contentUploadOperation = action.operation;
 
 	}
 

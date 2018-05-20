@@ -1,5 +1,93 @@
 .App {
-  text-align: center;
-  width: 400px;
-  height: 400px;
+	width: 400px;
+	height: 600px;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	display: flex;
+	flex-direction: column;
+	background-color: #162b3d;
+	font-size: 1em;
+}
+
+.App h2 {
+	font-size: 1em;
+	color: #5A95C7;
+	padding-left: 10px;
+	margin-top: .5em;
+	margin-bottom: .5em;
+	font-weight: normal;
+}
+
+.App .Disabled {
+	opacity: .5;
+}
+
+.App .Controls {
+	flex: 0;
+	padding-top: 10px;
+}
+
+.App .Controls ul {
+	flex: 0;
+	list-style-type: none;
+	padding: 0 10px;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+}
+
+.App a.Button {
+	background-color: #0269c2;
+	padding: 8px 14px;
+	display: flex;
+	flex: 1;
+	color: #eee;
+	font-weight: normal;
+	font-size: .8em;
+	cursor: pointer;
+}
+
+.App a.Button:hover {
+	background-color: #1E89E6;
+}
+
+.App .Controls a.Button {
+	margin-bottom: 10px;
+}
+
+.App .Preview {
+	min-height: 0;
+	flex: 1;
+	align-items: stretch;
+	margin: 0 10px 10px 10px;
+	display: flex;
+	flex-direction: column;
+	/*border: 2px solid red;*/
+}
+
+.App .Preview .Info {
+	color: #38668D;
+}
+
+.App .Preview .Title {
+	flex: 0;
+	margin-bottom: 10px;
+}
+
+.App .Preview .Body {
+	flex: 1;
+	font-size: .5em;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	overflow-wrap: break-word;
+	background-color: #ffffff;
+	flex-shrink: 1;
+	min-width: auto;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+.App .Preview .Confirm {
+	flex: 0;
 }
