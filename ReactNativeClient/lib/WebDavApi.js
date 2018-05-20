@@ -324,7 +324,11 @@ class WebDavApi {
 
 		// Check that we didn't get for example an HTML page (as an error) instead of the JSON response
 		// null responses are possible, for example for DELETE calls
-		if (output !== null && typeof output === 'object' && !('d:multistatus' in output)) throw newError('Not a valid WebDAV response');
+		// Then look for 404 errors buried in the multistatus responses - nginx does this.
+		if (output !== null && typeof output === 'object' ) {
+			if ( !('d:multistatus' in output)) throw newError('Not a valid WebDAV response');
+			if ( this.stringFromJson(output, ['d:multistatus', 'd:response', 0, 'd:propstat',0,'d:status',0]).indexOf('404 Not Found') != -1 ) throw newError('Multistatus 404 Response',404);
+		}
 
 		return output;
 	}
