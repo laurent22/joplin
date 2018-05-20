@@ -13,8 +13,8 @@ if [[ $TEST_FILE != "" ]]; then
 	exit
 fi
 
-(cd "$ROOT_DIR" && npm test tests-build/synchronizer.js)
-(cd "$ROOT_DIR" && npm test tests-build/encryption.js
+# (cd "$ROOT_DIR" && npm test tests-build/synchronizer.js)
+(cd "$ROOT_DIR" && npm test tests-build/encryption.js)
 (cd "$ROOT_DIR" && npm test tests-build/ArrayUtils.js)
 (cd "$ROOT_DIR" && npm test tests-build/models_Setting.js)
 (cd "$ROOT_DIR" && npm test tests-build/models_Note.js)
