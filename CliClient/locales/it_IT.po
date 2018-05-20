@@ -792,6 +792,10 @@ msgstr "Separa ogni etichetta da una virgola."
 msgid "Rename notebook:"
 msgstr "Rinomina il blocco note:"
 
+#, fuzzy
+msgid "Rename tag:"
+msgstr "Rinomina"
+
 msgid "Set alarm:"
 msgstr "Imposta allarme:"
 
@@ -845,9 +849,18 @@ msgstr ""
 msgid "Save as..."
 msgstr "Salva i cambiamenti"
 
+msgid "Copy path to clipboard"
+msgstr ""
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Collegamento o messaggio non supportato: %s"
+
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
 
 msgid "Attach file"
 msgstr "Allega file"
@@ -857,12 +870,6 @@ msgstr "Etichette"
 
 msgid "Set alarm"
 msgstr "Imposta allarme"
-
-#, javascript-format
-msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
-msgstr ""
 
 #, fuzzy
 msgid "to-do"
@@ -1139,8 +1146,8 @@ msgid "Editor font family"
 msgstr ""
 
 msgid ""
-"The font name will not be checked. If incorrect or empty, it will default to "
-"a generic monospace font."
+"This must be *monospace* font or it will not work properly. If the font is "
+"incorrect or empty, it will default to a generic monospace font."
 msgstr ""
 
 msgid "Automatically update the application"
@@ -1395,6 +1402,9 @@ msgstr "Allega foto"
 
 msgid "Attach any file"
 msgstr "Allega qualsiasi file"
+
+msgid "Share"
+msgstr ""
 
 msgid "Convert to note"
 msgstr "Converti in nota"

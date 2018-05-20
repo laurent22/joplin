@@ -820,6 +820,10 @@ msgstr "Banatu etiketak koma erabiliaz."
 msgid "Rename notebook:"
 msgstr "Berrizendatu koadernoa:"
 
+#, fuzzy
+msgid "Rename tag:"
+msgstr "Berrizendatu"
+
 msgid "Set alarm:"
 msgstr "Ezarri alarma:"
 
@@ -871,9 +875,18 @@ msgstr ""
 msgid "Save as..."
 msgstr "Gorde aldaketak"
 
+msgid "Copy path to clipboard"
+msgstr ""
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Esteka edo mezu ez dago onartua: %s"
+
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
 
 msgid "Attach file"
 msgstr "Erantsi fitxategia"
@@ -883,12 +896,6 @@ msgstr "Etiketak"
 
 msgid "Set alarm"
 msgstr "Ezarri alarma"
-
-#, javascript-format
-msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
-msgstr ""
 
 #, fuzzy
 msgid "to-do"
@@ -1167,8 +1174,8 @@ msgid "Editor font family"
 msgstr ""
 
 msgid ""
-"The font name will not be checked. If incorrect or empty, it will default to "
-"a generic monospace font."
+"This must be *monospace* font or it will not work properly. If the font is "
+"incorrect or empty, it will default to a generic monospace font."
 msgstr ""
 
 msgid "Automatically update the application"
@@ -1429,6 +1436,9 @@ msgstr "Argazkia erantsi"
 
 msgid "Attach any file"
 msgstr "Erantsi fitxategiren bat"
+
+msgid "Share"
+msgstr ""
 
 msgid "Convert to note"
 msgstr "Oharra bihurtu"

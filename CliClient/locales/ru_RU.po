@@ -817,6 +817,10 @@ msgstr "Каждый тег отделяется запятой."
 msgid "Rename notebook:"
 msgstr "Переименовать блокнот:"
 
+#, fuzzy
+msgid "Rename tag:"
+msgstr "Переименовать"
+
 msgid "Set alarm:"
 msgstr "Установить напоминание:"
 
@@ -868,9 +872,20 @@ msgstr "Открыть..."
 msgid "Save as..."
 msgstr "Сохранить как..."
 
+msgid "Copy path to clipboard"
+msgstr ""
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Неподдерживаемая ссыка или сообщение: %s"
+
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+"Заметка пуста. Нажмите на «%s», чтобы переключиться в редактор и "
+"отредактировать её."
 
 msgid "Attach file"
 msgstr "Прикрепить файл"
@@ -880,14 +895,6 @@ msgstr "Теги"
 
 msgid "Set alarm"
 msgstr "Установить напоминание"
-
-#, javascript-format
-msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
-msgstr ""
-"Заметка пуста. Нажмите на «%s», чтобы переключиться в редактор и "
-"отредактировать её."
 
 msgid "to-do"
 msgstr "задача"
@@ -1154,9 +1161,10 @@ msgstr "Глобальный масштаб в процентах"
 msgid "Editor font family"
 msgstr "Семейство шрифтов редактора"
 
+#, fuzzy
 msgid ""
-"The font name will not be checked. If incorrect or empty, it will default to "
-"a generic monospace font."
+"This must be *monospace* font or it will not work properly. If the font is "
+"incorrect or empty, it will default to a generic monospace font."
 msgstr ""
 "Название шрифта не проверяется. Если оно указано некорректно или не задано, "
 "будет использоваться стандартный моноширинный шрифт."
@@ -1417,6 +1425,9 @@ msgstr "Прикрепить фото"
 
 msgid "Attach any file"
 msgstr "Прикрепить любой файл"
+
+msgid "Share"
+msgstr ""
 
 msgid "Convert to note"
 msgstr "Преобразовать в заметку"

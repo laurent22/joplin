@@ -14,8 +14,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.3\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Pour supprimer une vignette, enlever là des notes associées."
@@ -825,6 +823,9 @@ msgstr "Séparez chaque étiquette par une virgule."
 msgid "Rename notebook:"
 msgstr "Renommer le carnet :"
 
+msgid "Rename tag:"
+msgstr "Renommer étiquette :"
+
 msgid "Set alarm:"
 msgstr "Régler alarme :"
 
@@ -877,9 +878,20 @@ msgstr "Ouvrir..."
 msgid "Save as..."
 msgstr "Enregistrer sous..."
 
+msgid "Copy path to clipboard"
+msgstr "Copier le chemin"
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Lien ou message non géré : %s"
+
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+"Cette note n'a pas de contenu. Cliquer sur \"%s\" pour basculer vers "
+"l'éditeur et éditer cette note."
 
 msgid "Attach file"
 msgstr "Attacher un fichier"
@@ -889,14 +901,6 @@ msgstr "Étiquettes"
 
 msgid "Set alarm"
 msgstr "Régler alarme"
-
-#, javascript-format
-msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
-msgstr ""
-"Cette note n'a pas de contenu. Cliquer sur \"%s\" pour basculer vers "
-"l'éditeur et éditer cette note."
 
 msgid "to-do"
 msgstr "tâche"
@@ -1163,10 +1167,11 @@ msgid "Editor font family"
 msgstr "Police de l'éditeur"
 
 msgid ""
-"The font name will not be checked. If incorrect or empty, it will default to "
-"a generic monospace font."
+"This must be *monospace* font or it will not work properly. If the font is "
+"incorrect or empty, it will default to a generic monospace font."
 msgstr ""
-"Le nom de la police ne sera pas vérifié. Si incorrect ou vide une police "
+"Il faut que ce soit une police *monospace* ou cela ne fonctionnera pas "
+"correctement. Si la police est incorrecte ou non-spécifiée, une police "
 "monospace sera utilisée par défaut."
 
 msgid "Automatically update the application"
@@ -1427,6 +1432,9 @@ msgstr "Attacher une photo"
 
 msgid "Attach any file"
 msgstr "Attacher un fichier"
+
+msgid "Share"
+msgstr "Partager"
 
 msgid "Convert to note"
 msgstr "Convertir en note"

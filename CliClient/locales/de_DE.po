@@ -835,6 +835,10 @@ msgstr "Trenne jede Markierung mit einem Komma."
 msgid "Rename notebook:"
 msgstr "Notizbuch umbenennen:"
 
+#, fuzzy
+msgid "Rename tag:"
+msgstr "Umbenennen"
+
 msgid "Set alarm:"
 msgstr "Alarm erstellen:"
 
@@ -889,9 +893,20 @@ msgstr "Öffne..."
 msgid "Save as..."
 msgstr "Sichern unter..."
 
+msgid "Copy path to clipboard"
+msgstr ""
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Nicht unterstützter Link oder Nachricht: %s"
+
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+"Diese Notiz hat keinen Inhalt. Klicke auf „%s“ um den Editor zu aktivieren "
+"und die Notiz zu bearbeiten."
 
 msgid "Attach file"
 msgstr "Datei anhängen"
@@ -901,14 +916,6 @@ msgstr "Markierungen"
 
 msgid "Set alarm"
 msgstr "Alarm erstellen"
-
-#, javascript-format
-msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
-msgstr ""
-"Diese Notiz hat keinen Inhalt. Klicke auf „%s“ um den Editor zu aktivieren "
-"und die Notiz zu bearbeiten."
 
 msgid "to-do"
 msgstr "To-Do"
@@ -1178,9 +1185,10 @@ msgstr "Zoomstufe der Benutzeroberfläche"
 msgid "Editor font family"
 msgstr "Editor Schriftenfamilie"
 
+#, fuzzy
 msgid ""
-"The font name will not be checked. If incorrect or empty, it will default to "
-"a generic monospace font."
+"This must be *monospace* font or it will not work properly. If the font is "
+"incorrect or empty, it will default to a generic monospace font."
 msgstr ""
 "Der Name der Schrift wird nicht überprüft. Ist dieser inkorrekt oder leer "
 "wird eine generische Monospace Schrift verwendet."
@@ -1443,6 +1451,9 @@ msgstr "Foto anhängen"
 
 msgid "Attach any file"
 msgstr "Beliebige Datei anhängen"
+
+msgid "Share"
+msgstr ""
 
 msgid "Convert to note"
 msgstr "In eine Notiz umwandeln"

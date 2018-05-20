@@ -777,6 +777,10 @@ msgstr "用逗号\",\"分开每个标签。"
 msgid "Rename notebook:"
 msgstr "重命名笔记本："
 
+#, fuzzy
+msgid "Rename tag:"
+msgstr "重命名"
+
 msgid "Set alarm:"
 msgstr "设置提醒："
 
@@ -827,9 +831,18 @@ msgstr "打开…"
 msgid "Save as..."
 msgstr "另存为…"
 
+msgid "Copy path to clipboard"
+msgstr ""
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "不支持的链接或信息：%s"
+
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr "此笔记没有任何内容。点击 \"%s\" 切换至编辑器并编辑笔记。"
 
 msgid "Attach file"
 msgstr "附加文件"
@@ -839,12 +852,6 @@ msgstr "标签"
 
 msgid "Set alarm"
 msgstr "设置提醒"
-
-#, javascript-format
-msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
-msgstr "此笔记没有任何内容。点击 \"%s\" 切换至编辑器并编辑笔记。"
 
 msgid "to-do"
 msgstr "待办事项"
@@ -1106,9 +1113,10 @@ msgstr "全局缩放比例"
 msgid "Editor font family"
 msgstr "编辑器字体"
 
+#, fuzzy
 msgid ""
-"The font name will not be checked. If incorrect or empty, it will default to "
-"a generic monospace font."
+"This must be *monospace* font or it will not work properly. If the font is "
+"incorrect or empty, it will default to a generic monospace font."
 msgstr ""
 "此软件不会检查所设置字体的有效性。若无效或空白，此处将会设置成一款通用等宽字"
 "体。"
@@ -1363,6 +1371,9 @@ msgstr "附加照片"
 
 msgid "Attach any file"
 msgstr "附加任何文件"
+
+msgid "Share"
+msgstr ""
 
 msgid "Convert to note"
 msgstr "转换至笔记"

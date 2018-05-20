@@ -801,6 +801,10 @@ msgstr "Tagy oddělujte čárkami."
 msgid "Rename notebook:"
 msgstr "Přejmenovat zápisník:"
 
+#, fuzzy
+msgid "Rename tag:"
+msgstr "Přejmenovat"
+
 msgid "Set alarm:"
 msgstr "Nastavit alarm:"
 
@@ -852,9 +856,18 @@ msgstr "Otevřít..."
 msgid "Save as..."
 msgstr "Uložit jako..."
 
+msgid "Copy path to clipboard"
+msgstr ""
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Nepodporovaný link či zpráva: %s"
+
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr "Tato poznámka je prázdný. Klikněte na  \"%s\" pro otevření editoru."
 
 msgid "Attach file"
 msgstr "Přiložit soubor"
@@ -864,12 +877,6 @@ msgstr "Tagy"
 
 msgid "Set alarm"
 msgstr "Nastavit alarm"
-
-#, javascript-format
-msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
-msgstr "Tato poznámka je prázdný. Klikněte na  \"%s\" pro otevření editoru."
 
 msgid "to-do"
 msgstr "to-do"
@@ -1136,9 +1143,10 @@ msgstr "Globální zoom"
 msgid "Editor font family"
 msgstr "Rodina písma v editoru"
 
+#, fuzzy
 msgid ""
-"The font name will not be checked. If incorrect or empty, it will default to "
-"a generic monospace font."
+"This must be *monospace* font or it will not work properly. If the font is "
+"incorrect or empty, it will default to a generic monospace font."
 msgstr ""
 "Jméno fontu není kontrolováno. Pokud je neplatné či chybí, bude použit "
 "defaultní monospace font."
@@ -1398,6 +1406,9 @@ msgstr "Přiložit obrázek"
 
 msgid "Attach any file"
 msgstr "Přiložit soubor"
+
+msgid "Share"
+msgstr ""
 
 msgid "Convert to note"
 msgstr "Konvertovat na poznámku"

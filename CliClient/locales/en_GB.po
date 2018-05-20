@@ -728,6 +728,9 @@ msgstr ""
 msgid "Rename notebook:"
 msgstr ""
 
+msgid "Rename tag:"
+msgstr ""
+
 msgid "Set alarm:"
 msgstr ""
 
@@ -777,8 +780,17 @@ msgstr ""
 msgid "Save as..."
 msgstr ""
 
+msgid "Copy path to clipboard"
+msgstr ""
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
 msgstr ""
 
 msgid "Attach file"
@@ -788,12 +800,6 @@ msgid "Tags"
 msgstr ""
 
 msgid "Set alarm"
-msgstr ""
-
-#, javascript-format
-msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
 msgstr ""
 
 msgid "to-do"
@@ -1050,8 +1056,8 @@ msgid "Editor font family"
 msgstr ""
 
 msgid ""
-"The font name will not be checked. If incorrect or empty, it will default to "
-"a generic monospace font."
+"This must be *monospace* font or it will not work properly. If the font is "
+"incorrect or empty, it will default to a generic monospace font."
 msgstr ""
 
 msgid "Automatically update the application"
@@ -1298,6 +1304,9 @@ msgid "Attach photo"
 msgstr ""
 
 msgid "Attach any file"
+msgstr ""
+
+msgid "Share"
 msgstr ""
 
 msgid "Convert to note"

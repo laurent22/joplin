@@ -822,6 +822,10 @@ msgstr "Scheid iedere tag met een komma."
 msgid "Rename notebook:"
 msgstr "Hernoem notitieboek:"
 
+#, fuzzy
+msgid "Rename tag:"
+msgstr "Hernoem"
+
 msgid "Set alarm:"
 msgstr "Stel melding in:"
 
@@ -875,9 +879,18 @@ msgstr ""
 msgid "Save as..."
 msgstr "Sla wijzigingen op"
 
+msgid "Copy path to clipboard"
+msgstr ""
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Link of bericht \"%s\" wordt niet ondersteund"
+
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
 
 msgid "Attach file"
 msgstr "Voeg bestand toe"
@@ -887,12 +900,6 @@ msgstr "Tags"
 
 msgid "Set alarm"
 msgstr "Zet melding"
-
-#, javascript-format
-msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
-msgstr ""
 
 #, fuzzy
 msgid "to-do"
@@ -1170,8 +1177,8 @@ msgid "Editor font family"
 msgstr ""
 
 msgid ""
-"The font name will not be checked. If incorrect or empty, it will default to "
-"a generic monospace font."
+"This must be *monospace* font or it will not work properly. If the font is "
+"incorrect or empty, it will default to a generic monospace font."
 msgstr ""
 
 msgid "Automatically update the application"
@@ -1431,6 +1438,9 @@ msgstr "Voeg foto toe"
 
 msgid "Attach any file"
 msgstr "Voeg bestand toe"
+
+msgid "Share"
+msgstr ""
 
 msgid "Convert to note"
 msgstr "Converteer naar notitie"

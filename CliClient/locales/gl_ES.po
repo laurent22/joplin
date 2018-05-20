@@ -808,6 +808,10 @@ msgstr "Separar cada etiqueta por unha coma."
 msgid "Rename notebook:"
 msgstr "Renomear caderno:"
 
+#, fuzzy
+msgid "Rename tag:"
+msgstr "Renomear"
+
 msgid "Set alarm:"
 msgstr "Estabelecer alarma:"
 
@@ -858,9 +862,20 @@ msgstr "Abrir…"
 msgid "Save as..."
 msgstr "Gardar como…"
 
+msgid "Copy path to clipboard"
+msgstr ""
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Ligazón ou mensaxe incompatíbeis: %s"
+
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+"Esta nota non ten contido. Prema en «%s» para ir ao editor e modificar a "
+"nota."
 
 msgid "Attach file"
 msgstr "Anexar un ficheiro"
@@ -870,14 +885,6 @@ msgstr "Etiquetas"
 
 msgid "Set alarm"
 msgstr "Estabelecer alarma"
-
-#, javascript-format
-msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
-msgstr ""
-"Esta nota non ten contido. Prema en «%s» para ir ao editor e modificar a "
-"nota."
 
 msgid "to-do"
 msgstr "tarefas pendentes"
@@ -1144,9 +1151,10 @@ msgstr "Porcentaxe de ampliación"
 msgid "Editor font family"
 msgstr "Familia de tipos de letra do editor"
 
+#, fuzzy
 msgid ""
-"The font name will not be checked. If incorrect or empty, it will default to "
-"a generic monospace font."
+"This must be *monospace* font or it will not work properly. If the font is "
+"incorrect or empty, it will default to a generic monospace font."
 msgstr ""
 "Non se comprobará o nome da fonte. Se é incorrecto ou está baleiro, "
 "estabelecerase por omisión un tipo de letra xenérico de largura única."
@@ -1406,6 +1414,9 @@ msgstr "Anexar foto"
 
 msgid "Attach any file"
 msgstr "Adxuntar calquera ficheiro"
+
+msgid "Share"
+msgstr ""
 
 msgid "Convert to note"
 msgstr "Converter para nota"

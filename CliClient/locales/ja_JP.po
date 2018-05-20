@@ -797,6 +797,10 @@ msgstr "それぞれのタグをカンマ(,)で区切ってください。"
 msgid "Rename notebook:"
 msgstr "ノートブックの名前を変更："
 
+#, fuzzy
+msgid "Rename tag:"
+msgstr "名前の変更"
+
 msgid "Set alarm:"
 msgstr "アラームをセット："
 
@@ -849,8 +853,17 @@ msgstr ""
 msgid "Save as..."
 msgstr "変更を保存"
 
+msgid "Copy path to clipboard"
+msgstr ""
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
 msgstr ""
 
 msgid "Attach file"
@@ -861,12 +874,6 @@ msgstr "タグ"
 
 msgid "Set alarm"
 msgstr "アラームをセット"
-
-#, javascript-format
-msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
-msgstr ""
 
 #, fuzzy
 msgid "to-do"
@@ -1144,8 +1151,8 @@ msgid "Editor font family"
 msgstr ""
 
 msgid ""
-"The font name will not be checked. If incorrect or empty, it will default to "
-"a generic monospace font."
+"This must be *monospace* font or it will not work properly. If the font is "
+"incorrect or empty, it will default to a generic monospace font."
 msgstr ""
 
 msgid "Automatically update the application"
@@ -1400,6 +1407,9 @@ msgstr "写真を添付"
 
 msgid "Attach any file"
 msgstr "ファイルを添付"
+
+msgid "Share"
+msgstr ""
 
 msgid "Convert to note"
 msgstr "ノートに変換"

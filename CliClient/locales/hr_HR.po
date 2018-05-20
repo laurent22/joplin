@@ -807,6 +807,10 @@ msgstr "Odvoji oznake zarezom."
 msgid "Rename notebook:"
 msgstr "Preimenuj bilježnicu:"
 
+#, fuzzy
+msgid "Rename tag:"
+msgstr "Preimenuj"
+
 msgid "Set alarm:"
 msgstr "Postavi upozorenje:"
 
@@ -859,9 +863,18 @@ msgstr ""
 msgid "Save as..."
 msgstr "Spremi promjene"
 
+msgid "Copy path to clipboard"
+msgstr ""
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Nepodržana poveznica ili poruka: %s"
+
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
 
 msgid "Attach file"
 msgstr "Priloži datoteku"
@@ -871,12 +884,6 @@ msgstr "Oznake"
 
 msgid "Set alarm"
 msgstr "Postavi upozorenje"
-
-#, javascript-format
-msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
-msgstr ""
 
 #, fuzzy
 msgid "to-do"
@@ -1150,8 +1157,8 @@ msgid "Editor font family"
 msgstr ""
 
 msgid ""
-"The font name will not be checked. If incorrect or empty, it will default to "
-"a generic monospace font."
+"This must be *monospace* font or it will not work properly. If the font is "
+"incorrect or empty, it will default to a generic monospace font."
 msgstr ""
 
 msgid "Automatically update the application"
@@ -1406,6 +1413,9 @@ msgstr "Priloži sliku"
 
 msgid "Attach any file"
 msgstr "Priloži datoteku"
+
+msgid "Share"
+msgstr ""
 
 msgid "Convert to note"
 msgstr "Pretvori u bilješku"
