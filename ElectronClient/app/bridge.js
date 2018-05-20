@@ -1,4 +1,4 @@
-const { _ } = require('lib/locale.js');
+const { _, setLocale } = require('lib/locale.js');
 const { dirname } = require('lib/path-utils.js');
 const { Logger } = require('lib/logger.js');
 
@@ -93,6 +93,10 @@ class Bridge {
 			buttons: [_('OK')],
 		}, options));
 		return result === 0;
+	}
+
+	setLocale(locale) {
+		setLocale(locale);
 	}
 
 	get Menu() {
