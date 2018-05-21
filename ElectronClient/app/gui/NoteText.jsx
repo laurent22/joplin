@@ -165,6 +165,8 @@ class NoteTextComponent extends React.Component {
 
 		this.lastLoadedNoteId_ = note ? note.id : null;
 
+		this.updateHtml(note && note.body ? note.body : '');
+
 		eventManager.on('alarmChange', this.onAlarmChange_);
 		eventManager.on('noteTypeToggle', this.onNoteTypeToggle_);
 		eventManager.on('todoToggle', this.onTodoToggle_);
