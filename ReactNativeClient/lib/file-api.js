@@ -51,6 +51,10 @@ class FileApi {
 		return 0;
 	}
 
+	baseDir() {
+		return this.baseDir_;
+	}
+
 	tempDirName() {
 		if (this.tempDirName_ === null) throw Error('Temp dir not set!');
 		return this.tempDirName_;
@@ -88,7 +92,7 @@ class FileApi {
 
 	fullPath_(path) {
 		let output = [];
-		if (this.baseDir_) output.push(this.baseDir_);
+		if (this.baseDir()) output.push(this.baseDir());
 		if (path) output.push(path);
 		return output.join('/');
 	}
@@ -99,9 +103,9 @@ class FileApi {
 		if (!('includeHidden' in options)) options.includeHidden = false;
 		if (!('context' in options)) options.context = null;
 
-		this.logger().debug('list ' + this.baseDir_);
+		this.logger().debug('list ' + this.baseDir());
 
-		const result = await tryAndRepeat(() => this.driver_.list(this.baseDir_, options), this.requestRepeatCount());
+		const result = await tryAndRepeat(() => this.driver_.list(this.baseDir(), options), this.requestRepeatCount());
 
 		if (!options.includeHidden) {
 			let temp = [];
@@ -112,17 +116,6 @@ class FileApi {
 		}
 
 		return result;
-	
-		// return this.driver_.list(this.baseDir_, options).then((result) => {
-		// 	if (!options.includeHidden) {
-		// 		let temp = [];
-		// 		for (let i = 0; i < result.items.length; i++) {
-		// 			if (!isHidden(result.items[i].path)) temp.push(result.items[i]);
-		// 		}
-		// 		result.items = temp;
-		// 	}
-		// 	return result;
-		// });
 	}
 
 	// Deprectated
@@ -187,7 +180,7 @@ class FileApi {
 	}
 
 	clearRoot() {
-		return tryAndRepeat(() => this.driver_.clearRoot(this.baseDir_), this.requestRepeatCount());
+		return tryAndRepeat(() => this.driver_.clearRoot(this.baseDir()), this.requestRepeatCount());
 	}
 
 	delta(path, options = null) {

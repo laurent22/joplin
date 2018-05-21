@@ -30,6 +30,11 @@ reg.showErrorMessageBox = (message) => {
 	reg.showErrorMessageBoxHandler_(message);
 }
 
+reg.resetSyncTarget = (syncTargetId = null) => {
+	if (syncTargetId === null) syncTargetId = Setting.value('sync.target');
+	delete reg.syncTargets_[syncTargetId];
+}
+
 reg.syncTarget = (syncTargetId = null) => {
 	if (syncTargetId === null) syncTargetId = Setting.value('sync.target');
 	if (reg.syncTargets_[syncTargetId]) return reg.syncTargets_[syncTargetId];
