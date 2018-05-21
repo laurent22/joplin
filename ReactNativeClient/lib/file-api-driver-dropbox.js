@@ -22,6 +22,11 @@ class FileApiDriverDropbox {
 		return '/' + path;
 	}
 
+	hasErrorCode_(error, errorCode) {
+		if (!error || !error.code) return false;
+		return error.code.indexOf(errorCode) >= 0;
+	}
+
 	async stat(path) {
 		try {
 			const metadata = await this.api().exec('POST', 'files/get_metadata', {
@@ -30,7 +35,7 @@ class FileApiDriverDropbox {
 
 			return this.metadataToStat_(metadata, path);
 		} catch (error) {
-			if (error.code.indexOf('not_found') >= 0) {
+			if (this.hasErrorCode_(error, 'not_found')) {
 				// ignore
 			} else {
 				throw error;
@@ -83,7 +88,7 @@ class FileApiDriverDropbox {
 			} catch (error) {
 				// If there's an error related to an invalid cursor, clear the cursor and retry.
 				if (cursor) {
-					if (error.httpStatus === 400 || error.code.indexOf('reset') >= 0) {
+					if ((error && error.httpStatus === 400) || this.hasErrorCode_(error, 'reset')) {
 						// console.info('Clearing cursor and retrying', error);
 						cursor = null;
 						continue;
@@ -126,7 +131,7 @@ class FileApiDriverDropbox {
 			}, options);
 			return response;
 		} catch (error) {
-			if (error.code.indexOf('not_found') >= 0) {
+			if (this.hasErrorCode_(error, 'not_found')) {
 				return null;
 			} else {
 				throw error;
@@ -140,7 +145,7 @@ class FileApiDriverDropbox {
 				path: this.makePath_(path),
 			});
 		} catch (error) {
-			if (error.code.indexOf('path/conflict') >= 0) {
+			if (this.hasErrorCode_(error, 'path/conflict')) {
 				// Ignore
 			} else {
 				throw error;
@@ -166,7 +171,7 @@ class FileApiDriverDropbox {
 				path: this.makePath_(path),
 			});
 		} catch (error) {
-			if (error.code.indexOf('not_found') >= 0) {
+			if (this.hasErrorCode_(error, 'not_found')) {
 				// ignore
 			} else {
 				throw error;
