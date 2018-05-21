@@ -1,10 +1,12 @@
-const TurndownService = require('turndown')
+const TurndownService = require('joplin-turndown')
 
 class HtmlToMd {
 
 	parse(html) {
-		const turndownPluginGfm = require('turndown-plugin-gfm').gfm
-		const turndown = new TurndownService()
+		const turndownPluginGfm = require('joplin-turndown-plugin-gfm').gfm
+		const turndown = new TurndownService({
+			headingStyle: 'atx',
+		})
 		turndown.use(turndownPluginGfm)
 		turndown.remove('script');
 		let markdown = turndown.turndown(html)

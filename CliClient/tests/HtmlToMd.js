@@ -24,7 +24,7 @@ describe('HtmlToMd', function() {
 		done();
 	});
 
-	it('should convert from Enex to Markdown', asyncTest(async () => {
+	it('should convert from Html to Markdown', asyncTest(async () => {
 		const basePath = __dirname + '/html_to_md';
 		const files = await shim.fsDriver().readDirStats(basePath);
 		const htmlToMd = new HtmlToMd();
@@ -36,7 +36,7 @@ describe('HtmlToMd', function() {
 			const htmlPath = basePath + '/' + htmlFilename;
 			const mdPath = basePath + '/' + filename(htmlFilename) + '.md';
 
-			if (htmlFilename !== 'table_no_header.html') continue;
+			// if (htmlFilename !== 'anchor_with_newlines.html') continue;
 
 			const html = await shim.fsDriver().readFile(htmlPath);
 			const expectedMd = await shim.fsDriver().readFile(mdPath);
@@ -47,6 +47,8 @@ describe('HtmlToMd', function() {
 				console.info('');
 				console.info('Error converting file: ' + htmlFilename);
 				console.info('--------------------------------- Got:');
+				console.info(actualMd);
+				console.info('--------------------------------- Raw:');
 				console.info(actualMd.split('\n'));
 				console.info('--------------------------------- Expected:');
 				console.info(expectedMd.split('\n'));

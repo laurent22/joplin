@@ -1,4 +1,4 @@
 |     |     |
 | --- | --- |
-| No | header |
+| No  | header |
 | And no | suprises |
