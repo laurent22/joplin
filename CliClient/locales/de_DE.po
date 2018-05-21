@@ -1389,6 +1389,22 @@ msgstr "Neue Markierungen:"
 msgid "Type new tags or select from list"
 msgstr "Neue Markierungen eingeben oder aus der Liste auswählen"
 
+msgid ""
+"To work correctly, the app needs the following permissions. Please enable "
+"them in your phone settings, in Apps > Joplin > Permissions"
+msgstr ""
+
+msgid ""
+"- Storage: to allow attaching files to notes and to enable filesystem "
+"synchronisation."
+msgstr ""
+
+msgid "- Camera: to allow taking a picture and attaching it to a note."
+msgstr ""
+
+msgid "- Location: to allow attaching geo-location information to a note."
+msgstr ""
+
 msgid "Joplin website"
 msgstr "Website von Joplin"
 

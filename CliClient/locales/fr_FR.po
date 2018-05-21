@@ -14,6 +14,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.3\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Pour supprimer une vignette, enlever là des notes associées."
@@ -1368,6 +1370,28 @@ msgstr "Nouvelles étiquettes :"
 
 msgid "Type new tags or select from list"
 msgstr "Entrez de nouvelles étiquettes ou sélectionnez de la liste"
+
+msgid ""
+"To work correctly, the app needs the following permissions. Please enable "
+"them in your phone settings, in Apps > Joplin > Permissions"
+msgstr ""
+"Pour fonctionner correctement, l'appli a besoin des autorisations suivantes. "
+"Veuillez les activer dans les paramètres de votre téléphone, dans le menu "
+"Applications > Joplin > Autorisations"
+
+msgid ""
+"- Storage: to allow attaching files to notes and to enable filesystem "
+"synchronisation."
+msgstr ""
+"- Stockage : Pour attacher des fichiers aux notes et pour activer la "
+"synchronisation vers le système de fichier."
+
+msgid "- Camera: to allow taking a picture and attaching it to a note."
+msgstr ""
+"- Appareil photo : Pour pouvoir prendre une photo et l'attacher à une note."
+
+msgid "- Location: to allow attaching geo-location information to a note."
+msgstr "- Position : Pour attacher à une note les coordonnées GPS."
 
 msgid "Joplin website"
 msgstr "Site web de Joplin"
