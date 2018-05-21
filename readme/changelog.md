@@ -1,5 +1,17 @@
 # Joplin changelog
 
+## [v1.0.94](https://github.com/laurent22/joplin/releases/tag/v1.0.94) - 2018-05-21T20:52:59Z
+
+- New: Allow copying path of resources
+- New: Adds functionality to allow for renaming of tags.
+- Improved: Evernote import
+- Fixes [#536](https://github.com/laurent22/joplin/issues/536): Allow changing sync target file path
+- Fixes [#535](https://github.com/laurent22/joplin/issues/535): Note preview was not always updated when it should
+- Fixes [#491](https://github.com/laurent22/joplin/issues/491): Handle non-standard ports and better handling of fetchBlob errors
+- Fixes [#528](https://github.com/laurent22/joplin/issues/528): Set translation in bridge functions too
+- Fixes [#527](https://github.com/laurent22/joplin/issues/527): Remove empty section separators from menus
+- Fix: Added styles to fix margin bottom for  nested lists
+
 ## [v1.0.93](https://github.com/laurent22/joplin/releases/tag/v1.0.93) - 2018-05-14T11:36:01Z
 
 - New: A portable version is now available. To install it simply copy the file "JoplinPortable.exe" to your USB device. See the documentation for more information - https://joplin.cozic.net/#desktop-applications
