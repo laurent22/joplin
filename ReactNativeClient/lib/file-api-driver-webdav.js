@@ -299,6 +299,11 @@ class FileApiDriverWebDav {
 
 	async mkdir(path) {
 		try {
+			// RFC wants this, and so does NGINX. Not having the trailing slash means that some
+			// WebDAV implementations will redirect to a URL with "/". However, when doing so
+			// in React Native, the auth headers, etc. are lost so we need to avoid this.
+			// https://github.com/facebook/react-native/issues/929
+			if (!path.endsWith('/')) path = path + '/';
 			await this.api().exec('MKCOL', path);
 		} catch (error) {
 			if (error.code === 405) return; // 405 means that the collection already exists (Method Not Allowed)
