@@ -43,6 +43,9 @@ class FileApiDriverWebDav {
 		const propStat = this.api().arrayFromJson(resource, ['d:propstat']);
 		if (!Array.isArray(propStat)) throw new Error('Invalid WebDAV resource format: ' + JSON.stringify(resource));
 
+		const httpStatusCode = parseInt(propStat[0]['d:status'][0].split(' ')[1]); // Parsing "HTTP/1.1 200 OK"
+		if ( httpStatusCode === 404 ) throw  new JoplinError(resource, 404);
+
 		const resourceTypes = this.api().resourcePropByName(resource, 'array', 'd:resourcetype');
 		let isDir = false;
 		if (Array.isArray(resourceTypes)) {
