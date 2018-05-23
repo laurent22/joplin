@@ -1,3 +1,5 @@
+const urlUtils = require('lib/urlUtils');
+
 const markdownUtils = {
 
 	// Not really escaping because that's not supported by marked.js
@@ -11,6 +13,12 @@ const markdownUtils = {
 		return url;
 	},
 
+	prependBaseUrl(md, baseUrl) {
+		return md.replace(/(\]\()([^\s\)]+)(.*?\))/g, (match, before, url, after) => {
+			return before + urlUtils.prependBaseUrl(url, baseUrl) + after;
+		});
+	},
+
 };
 
-module.exports = { markdownUtils };
+module.exports = markdownUtils;

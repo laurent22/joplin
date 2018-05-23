@@ -2,9 +2,27 @@ const { netUtils } = require('lib/net-utils');
 const urlParser = require("url");
 const Note = require('lib/models/Note');
 const Folder = require('lib/models/Folder');
+const Resource = require('lib/models/Resource');
+const Setting = require('lib/models/Setting');
+const { shim } = require('lib/shim');
+const md5 = require('md5');
+const { fileExtension, safeFileExtension, filename } = require('lib/path-utils');
 const HtmlToMd = require('lib/HtmlToMd');
+const { Logger } = require('lib/logger.js');
 
 class ClipperServer {
+
+	constructor() {
+		this.logger_ = new Logger();
+	}
+
+	setLogger(l) {
+		this.logger_ = l;
+	}
+
+	logger() {
+		return this.logger_;
+	}
 
 	htmlToMdParser() {
 		if (this.htmlToMdParser_) return this.htmlToMdParser_;
@@ -12,91 +30,93 @@ class ClipperServer {
 		return this.htmlToMdParser_;
 	}
 
-	readabilityProcess(url) {
-		return new Promise((resolve, reject) => {
-			// const Readability = require('readability-node').Readability;
+	async requestNoteToNote(requestNote) {
+		const output = {
+			title: requestNote.title ? requestNote.title : '',
+			body: requestNote.body ? requestNote.body : '',
+		};
 
-			// var location = document.location;
-			// var uri = {
-			//   spec: location.href,
-			//   host: location.host,
-			//   prePath: location.protocol + "//" + location.host,
-			//   scheme: location.protocol.substr(0, location.protocol.indexOf(":")),
-			//   pathBase: location.protocol + "//" + location.host + location.pathname.substr(0, location.pathname.lastIndexOf("/") + 1)
-			// };
-			// var article = new Readability(uri, document).parse();
+		if (requestNote.bodyHtml) {
+			console.info(requestNote.bodyHtml);
+			
+			// Parsing will not work if the HTML is not wrapped in a top level tag, which is not guaranteed
+			// when getting the content from elsewhere. So here wrap it - it won't change anything to the final
+			// rendering but it makes sure everything will be parsed.
+			output.body = await this.htmlToMdParser().parse('<div>' + requestNote.bodyHtml + '</div>', {
+				baseUrl: requestNote.baseUrl ? requestNote.baseUrl : '',
+			});
+		}
 
-			// const read = require('node-readability');
+		if (requestNote.parent_id) {
+			output.parent_id = requestNote.parent_id;
+		} else {
+			const folder = await Folder.defaultFolder();
+			if (!folder) throw new Error('Cannot find folder for note');
+			output.parent_id = folder.id;
+		}
 
-			// read(url, function(error, article, meta) {
-			// 	if (error) {
-			// 		reject(error);
-			// 		return;
-			// 	}
-
-			// 	const output = {
-			// 		body: article.content,
-			// 		title: article.title,
-			// 	}
-
-			// 	article.close();
-			// 	resolve(output);
-			// });
-
-			// // Main Article
-			// console.log(article.content);
-			// // Title
-			// console.log(article.title);
-
-			// // HTML Source Code
-			// console.log(article.html);
-			// // DOM
-			// console.log(article.document);
-
-			// // Response Object from Request Lib
-			// console.log(meta);
-
-			// // Close article to clean up jsdom and prevent leaks
-			// article.close();
-		});
+		return output;
 	}
 
-	async requestNoteToNote(requestNote) {
-		// if (requestNote.url) {
-		// 	console.info('Clipper: Got URL: ' + requestNote.url);
-		// 	const result = await this.readabilityProcess(requestNote.url);
-			
-		// 	return {
-		// 		title: result.title,
-		// 		body: result.body,
-		// 	}
-		// } else {
-			const output = {
-				title: requestNote.title ? requestNote.title : '',
-				body: requestNote.body ? requestNote.body : '',
-			};
+	extractImageUrls_(md) {
+		// ![some text](http://path/to/image)
+		const regex = new RegExp(/!\[.*?\]\((http[s]?:\/\/.*?)\)/, 'g')
+		let match = regex.exec(md);
+		const output = [];
+		while (match) {
+			const url = match[1];
+			if (output.indexOf(url) < 0) output.push(url);
+			match = regex.exec(md);
+		}
+		return output;
+	}
 
-			if (requestNote.bodyHtml) {
-				console.info(requestNote.bodyHtml);
-				
-				// Parsing will not work if the HTML is not wrapped in a top level tag, which is not guaranteed
-				// when getting the content from elsewhere. So here wrap it - it won't change anything to the final
-				// rendering but it makes sure everything will be parsed.
-				output.body = await this.htmlToMdParser().parse('<div>' + requestNote.bodyHtml + '</div>', {
-					baseUrl: requestNote.baseUrl ? requestNote.baseUrl : '',
-				});
+	async downloadImages_(urls) {
+		const tempDir = Setting.value('tempDir');
+		const output = {};
+
+		for (let i = 0; i < urls.length; i++) {
+			const url = urls[i];
+			const name = filename(url);
+			let fileExt = safeFileExtension(fileExtension(url).toLowerCase());
+			if (fileExt) fileExt = '.' + fileExt;
+			let imagePath = tempDir + '/' + name + fileExt;
+			if (await shim.fsDriver().exists(imagePath)) imagePath = tempDir + '/' + name + '_' + md5(Math.random() + '_' + Date.now()).substr(0,10) + fileExt;
+
+			try {
+				const result = await shim.fetchBlob(url, { path: imagePath });
+				output[url] = { path: imagePath };
+			} catch (error) {
+				this.logger().warn('ClipperServer: Cannot download image at ' + url, error);
 			}
+		}
 
-			if (requestNote.parent_id) {
-				output.parent_id = requestNote.parent_id;
-			} else {
-				const folder = await Folder.defaultFolder();
-				if (!folder) throw new Error('Cannot find folder for note');
-				output.parent_id = folder.id;
+		return output;
+	}
+
+	async createResourcesFromPaths_(urls) {
+		for (let url in urls) {
+			if (!urls.hasOwnProperty(url)) continue;
+			const urlInfo = urls[url];
+			try {
+				const resource = await shim.createResourceFromPath(urlInfo.path);
+				urlInfo.resource = resource;
+			} catch (error) {
+				this.logger().warn('ClipperServer: Cannot create resource for ' + url, error);
 			}
+		}
+		return urls;		
+	}
 
-			return output;
-		// }
+	replaceImageUrlsByResources_(md, urls) {
+		let output = md.replace(/(!\[.*?\]\()(http[s]?:\/\/.*?)(\))/g, (match, before, imageUrl, after) => {
+			const urlInfo = urls[imageUrl];
+			if (!urlInfo || !urlInfo.resource) return imageUrl;
+			const resourceUrl = Resource.internalUrl(urlInfo.resource);
+			return before + resourceUrl + after;
+		});
+
+		return output;
 	}
 
 	async start() {
@@ -118,12 +138,6 @@ class ClipperServer {
 
 			const writeResponseJson = (code, object) => {
 				writeCorsHeaders(code);
-				// response.writeHead(code, {
-				// 	"Content-Type": "application/json",
-				// 	'Access-Control-Allow-Origin': '*',
-				// 	'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-				// 	'Access-Control-Allow-Headers': 'X-Requested-With,content-type',
-				// });
 				response.write(JSON.stringify(object));
 				response.end();
 			}
@@ -142,10 +156,18 @@ class ClipperServer {
 
 					request.on('end', async () => {
 						try {
-							// console.info('GOT BODY', body);
 							const requestNote = JSON.parse(body);
-							// console.info('GOT REQUEST', 
 							let note = await this.requestNoteToNote(requestNote);
+
+							// TODO: Provide way to check status (importing image x/y)
+							// TODO: Delete temp file after import
+							// TODO: Download multiple images at once
+
+							const imageUrls = this.extractImageUrls_(note.body);
+							let result = await this.downloadImages_(imageUrls);
+							result = await this.createResourcesFromPaths_(result);
+							note.body = this.replaceImageUrlsByResources_(note.body, result);
+
 							note = await Note.save(note);
 							return writeResponseJson(200, note);
 						} catch (error) {

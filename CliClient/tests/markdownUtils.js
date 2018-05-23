@@ -1,0 +1,37 @@
+require('app-module-path').addPath(__dirname);
+
+const { time } = require('lib/time-utils.js');
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
+const markdownUtils = require('lib/markdownUtils.js');
+
+process.on('unhandledRejection', (reason, p) => {
+	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+});
+
+describe('markdownUtils', function() {
+
+	beforeEach(async (done) => {
+		done();
+	});
+
+	it('should prepend a base URL', async (done) => {
+		const baseUrl = 'https://test.com/site';
+
+		const testCases = [
+			['[something](testing.html)', '[something](https://test.com/site/testing.html)'],
+			['![something](/img/test.png)', '![something](https://test.com/img/test.png)'],
+			['[![something](/img/test.png)](/index.html "Home page")', '[![something](https://test.com/img/test.png)](https://test.com/index.html "Home page")'],
+			['[onelink.com](/jmp/?id=123&u=http://something.com/test)', '[onelink.com](https://test.com/jmp/?id=123&u=http://something.com/test)'],
+			['[![some text](/img/test.png)](/jmp/?s=80&l=related&u=http://example.com "some decription")', '[![some text](https://test.com/img/test.png)](https://test.com/jmp/?s=80&l=related&u=http://example.com "some decription")'],
+		];
+
+		for (let i = 0; i < testCases.length; i++) {
+			const md = testCases[i][0];
+			const expected = testCases[i][1];
+			expect(markdownUtils.prependBaseUrl(md, baseUrl)).toBe(expected);
+		}
+
+		done();
+	});
+
+});
