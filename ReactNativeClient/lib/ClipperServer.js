@@ -6,9 +6,10 @@ const Resource = require('lib/models/Resource');
 const Setting = require('lib/models/Setting');
 const { shim } = require('lib/shim');
 const md5 = require('md5');
-const { fileExtension, safeFileExtension, filename } = require('lib/path-utils');
+const { fileExtension, safeFileExtension, safeFilename, filename } = require('lib/path-utils');
 const HtmlToMd = require('lib/HtmlToMd');
 const { Logger } = require('lib/logger.js');
+const markdownUtils = require('lib/markdownUtils');
 
 class ClipperServer {
 
@@ -36,9 +37,7 @@ class ClipperServer {
 			body: requestNote.body ? requestNote.body : '',
 		};
 
-		if (requestNote.bodyHtml) {
-			console.info(requestNote.bodyHtml);
-			
+		if (requestNote.bodyHtml) {			
 			// Parsing will not work if the HTML is not wrapped in a top level tag, which is not guaranteed
 			// when getting the content from elsewhere. So here wrap it - it won't change anything to the final
 			// rendering but it makes sure everything will be parsed.
@@ -58,38 +57,44 @@ class ClipperServer {
 		return output;
 	}
 
-	extractImageUrls_(md) {
-		// ![some text](http://path/to/image)
-		const regex = new RegExp(/!\[.*?\]\((http[s]?:\/\/.*?)\)/, 'g')
-		let match = regex.exec(md);
-		const output = [];
-		while (match) {
-			const url = match[1];
-			if (output.indexOf(url) < 0) output.push(url);
-			match = regex.exec(md);
+	async downloadImage_(url) {
+		const tempDir = Setting.value('tempDir');
+		const name = filename(url);
+		let fileExt = safeFileExtension(fileExtension(url).toLowerCase());
+		if (fileExt) fileExt = '.' + fileExt;
+		let imagePath = tempDir + '/' + safeFilename(name) + fileExt;
+		if (await shim.fsDriver().exists(imagePath)) imagePath = tempDir + '/' + safeFilename(name) + '_' + md5(Math.random() + '_' + Date.now()).substr(0,10) + fileExt;
+
+		try {
+			const result = await shim.fetchBlob(url, { path: imagePath });
+			return imagePath;
+		} catch (error) {
+			this.logger().warn('Cannot download image at ' + url, error);
+			return '';
 		}
-		return output;
 	}
 
 	async downloadImages_(urls) {
-		const tempDir = Setting.value('tempDir');
+		const PromisePool = require('es6-promise-pool')
+
 		const output = {};
 
-		for (let i = 0; i < urls.length; i++) {
-			const url = urls[i];
-			const name = filename(url);
-			let fileExt = safeFileExtension(fileExtension(url).toLowerCase());
-			if (fileExt) fileExt = '.' + fileExt;
-			let imagePath = tempDir + '/' + name + fileExt;
-			if (await shim.fsDriver().exists(imagePath)) imagePath = tempDir + '/' + name + '_' + md5(Math.random() + '_' + Date.now()).substr(0,10) + fileExt;
+		let urlIndex = 0;
+		const promiseProducer = () => {
+			if (urlIndex >= urls.length) return null;
 
-			try {
-				const result = await shim.fetchBlob(url, { path: imagePath });
-				output[url] = { path: imagePath };
-			} catch (error) {
-				this.logger().warn('ClipperServer: Cannot download image at ' + url, error);
-			}
+			const url = urls[urlIndex++];
+
+			return new Promise(async (resolve, reject) => {
+				const imagePath = await this.downloadImage_(url);
+				if (imagePath) output[url] = { path: imagePath };
+				resolve();
+			});
 		}
+
+		const concurrency = 3
+		const pool = new PromisePool(promiseProducer, concurrency)
+		await pool.start()
 
 		return output;
 	}
@@ -102,16 +107,28 @@ class ClipperServer {
 				const resource = await shim.createResourceFromPath(urlInfo.path);
 				urlInfo.resource = resource;
 			} catch (error) {
-				this.logger().warn('ClipperServer: Cannot create resource for ' + url, error);
+				this.logger().warn('Cannot create resource for ' + url, error);
 			}
 		}
-		return urls;		
+		return urls;
+	}
+
+	async removeTempFiles_(urls) {
+		for (let url in urls) {
+			if (!urls.hasOwnProperty(url)) continue;
+			const urlInfo = urls[url];
+			try {
+				await shim.fsDriver().remove(urlInfo.path);
+			} catch (error) {
+				this.logger().warn('Cannot remove ' + urlInfo.path, error);
+			}
+		}
 	}
 
 	replaceImageUrlsByResources_(md, urls) {
-		let output = md.replace(/(!\[.*?\]\()(http[s]?:\/\/.*?)(\))/g, (match, before, imageUrl, after) => {
+		let output = md.replace(/(!\[.*?\]\()([^\s\)]+)(.*?\))/g, (match, before, imageUrl, after) => {
 			const urlInfo = urls[imageUrl];
-			if (!urlInfo || !urlInfo.resource) return imageUrl;
+			if (!urlInfo || !urlInfo.resource) return before + imageUrl + after;
 			const resourceUrl = Resource.internalUrl(urlInfo.resource);
 			return before + resourceUrl + after;
 		});
@@ -121,7 +138,10 @@ class ClipperServer {
 
 	async start() {
 		const port = await netUtils.findAvailablePort([9967, 8967, 8867], 0); // TODO: Make it shared with OneDrive server
-		if (!port) throw new Error('All potential ports are in use or not available.');
+		if (!port) {
+			this.logger().error('All potential ports are in use or not available.');
+			return;
+		}
 
 		const server = require('http').createServer();
 
@@ -142,7 +162,8 @@ class ClipperServer {
 				response.end();
 			}
 
-			console.info('GOT REQUEST', request.method + ' ' + request.url);
+			const requestId = Date.now();
+			this.logger().info('Request (' + requestId + '): ' + request.method + ' ' + request.url);
 
 			if (request.method === 'POST') {
 				const url = urlParser.parse(request.url, true);
@@ -159,19 +180,17 @@ class ClipperServer {
 							const requestNote = JSON.parse(body);
 							let note = await this.requestNoteToNote(requestNote);
 
-							// TODO: Provide way to check status (importing image x/y)
-							// TODO: Delete temp file after import
-							// TODO: Download multiple images at once
-
-							const imageUrls = this.extractImageUrls_(note.body);
+							const imageUrls = markdownUtils.extractImageUrls(note.body);
 							let result = await this.downloadImages_(imageUrls);
 							result = await this.createResourcesFromPaths_(result);
+							await this.removeTempFiles_(result);
 							note.body = this.replaceImageUrlsByResources_(note.body, result);
 
 							note = await Note.save(note);
+							this.logger().info('Request (' + requestId + '): Created note ' + note.id);
 							return writeResponseJson(200, note);
 						} catch (error) {
-							console.warn(error);
+							this.logger().error(error);
 							return writeResponseJson(400, { errorCode: 'exception', errorMessage: error.message });
 						}
 					});
@@ -190,7 +209,7 @@ class ClipperServer {
 
 		});
 
-		console.info('Starting Clipper server on port ' + port);
+		this.logger().info('Starting Clipper server on port ' + port);
 
 		server.listen(port);
 	}

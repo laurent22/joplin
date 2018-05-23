@@ -387,20 +387,21 @@ class BaseApplication {
 	}
 
 	async testing() {
+		const markdownUtils = require('lib/markdownUtils');
 		const ClipperServer = require('lib/ClipperServer');
 		const server = new ClipperServer();
 		const HtmlToMd = require('lib/HtmlToMd');
 		const service = new HtmlToMd();
 		const html = await shim.fsDriver().readFile('/mnt/d/test.html');
-		let markdown = service.parse(html);
+		let markdown = service.parse(html, { baseUrl: 'https://duckduckgo.com/' });
 		console.info(markdown);
 		console.info('--------------------------------------------------');
 
-		const imageUrls = server.extractImageUrls(markdown);
-		let result = await server.downloadImages(imageUrls);
-		result = await server.createResourcesFromPaths(result);
+		const imageUrls = markdownUtils.extractImageUrls(markdown);
+		let result = await server.downloadImages_(imageUrls);
+		result = await server.createResourcesFromPaths_(result);
 		console.info(result);
-		markdown = server.replaceImageUrlByResources(markdown, result);
+		markdown = server.replaceImageUrlsByResources_(markdown, result);
 		console.info('--------------------------------------------------');
 		console.info(markdown);
 		console.info('--------------------------------------------------');
@@ -492,7 +493,11 @@ class BaseApplication {
 
 		// await this.testing();process.exit();
 
+		const clipperLogger = new Logger();
+		clipperLogger.addTarget('file', { path: profileDir + '/log-clipper.txt' });
+		clipperLogger.addTarget('console');
 		this.clipperServer_ = new ClipperServer();
+		this.clipperServer_.setLogger(clipperLogger);
 		this.clipperServer_.start();
 
 		return argv;

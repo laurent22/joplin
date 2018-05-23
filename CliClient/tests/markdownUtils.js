@@ -34,4 +34,21 @@ describe('markdownUtils', function() {
 		done();
 	});
 
+	it('should extract image URLs', async (done) => {
+		const testCases = [
+			['![something](http://test.com/img.png)', ['http://test.com/img.png']],
+			['![something](http://test.com/img.png) ![something2](http://test.com/img2.png)', ['http://test.com/img.png', 'http://test.com/img2.png']],
+			['![something](http://test.com/img.png "Some description")', ['http://test.com/img.png']],
+		];
+
+		for (let i = 0; i < testCases.length; i++) {
+			const md = testCases[i][0];
+			const expected = testCases[i][1];
+
+			expect(markdownUtils.extractImageUrls(md).join('')).toBe(expected.join(''));
+		}
+
+		done();
+	});
+
 });

@@ -19,6 +19,19 @@ const markdownUtils = {
 		});
 	},
 
+	extractImageUrls(md) {
+		// ![some text](http://path/to/image)
+		const regex = new RegExp(/!\[.*?\]\(([^\s\)]+).*?\)/, 'g')
+		let match = regex.exec(md);
+		const output = [];
+		while (match) {
+			const url = match[1];
+			if (output.indexOf(url) < 0) output.push(url);
+			match = regex.exec(md);
+		}
+		return output;
+	},
+
 };
 
 module.exports = markdownUtils;

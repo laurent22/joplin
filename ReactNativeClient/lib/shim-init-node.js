@@ -97,6 +97,9 @@ function shimInit() {
 	}
 
 	shim.createResourceFromPath = async function(filePath) {
+		const readChunk = require('read-chunk');
+		const imageType = require('image-type');
+
 		const Resource = require('lib/models/Resource.js');
 		const { uuid } = require('lib/uuid.js');
 		const { basename, fileExtension, safeFileExtension } = require('lib/path-utils.js');
@@ -109,9 +112,22 @@ function shimInit() {
 		resource.id = uuid.create();
 		resource.mime = mime.getType(filePath);
 		resource.title = basename(filePath);
-		resource.file_extension = safeFileExtension(fileExtension(filePath));
 
-		if (!resource.mime) resource.mime = 'application/octet-stream';
+		let fileExt = safeFileExtension(fileExtension(filePath));
+
+		if (!resource.mime) {
+			const buffer = await readChunk(filePath, 0, 64);
+			const detectedType = imageType(buffer);
+
+			if (detectedType) {
+				fileExt = detectedType.ext;
+				resource.mime = detectedType.mime;
+			} else {
+				resource.mime = 'application/octet-stream';
+			}
+		}
+
+		resource.file_extension = fileExt;
 
 		let targetPath = Resource.fullPath(resource);
 
@@ -130,35 +146,6 @@ function shimInit() {
 	}
 
 	shim.attachFileToNote = async function(note, filePath, position = null) {
-		// const Resource = require('lib/models/Resource.js');
-		// const { uuid } = require('lib/uuid.js');
-		// const { basename, fileExtension, safeFileExtension } = require('lib/path-utils.js');
-		// const mime = require('mime/lite');
-		// const Note = require('lib/models/Note.js');
-
-		// if (!(await fs.pathExists(filePath))) throw new Error(_('Cannot access %s', filePath));
-
-		// let resource = Resource.new();
-		// resource.id = uuid.create();
-		// resource.mime = mime.getType(filePath);
-		// resource.title = basename(filePath);
-		// resource.file_extension = safeFileExtension(fileExtension(filePath));
-
-		// if (!resource.mime) resource.mime = 'application/octet-stream';
-
-		// let targetPath = Resource.fullPath(resource);
-
-		// if (resource.mime == 'image/jpeg' || resource.mime == 'image/jpg' || resource.mime == 'image/png') {
-		// 	const result = await resizeImage_(filePath, targetPath, resource.mime);
-		// } else {
-		// 	const stat = await shim.fsDriver().stat(filePath);
-		// 	if (stat.size >= 10000000) throw new Error('Resources larger than 10 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
-
-		// 	await fs.copy(filePath, targetPath, { overwrite: true });
-		// }
-
-		// await Resource.save(resource, { isNew: true });
-
 		const resource = shim.createResourceFromPath(filePath);
 
 		const newBody = [];

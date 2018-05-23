@@ -67,7 +67,7 @@ class AppComponent extends Component {
 			let msg = '';
 
 			if (operation.uploading) {
-				msg = 'Sending to Joplin...';
+				msg = 'Processing note... The note will be available in Joplin as soon as the web page and images have been downloaded and converted. In the meantime you may close this popup.';
 			} else if (operation.success) {
 				msg = 'Note was successfully created!';
 			} else {
