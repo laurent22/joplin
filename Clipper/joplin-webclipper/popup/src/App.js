@@ -26,7 +26,7 @@ class AppComponent extends Component {
 		}
 	}
 
-	async clipSimplified_click() {
+	clipSimplified_click() {
 		bridge().sendCommandToActiveTab({
 			name: 'simplifiedPageHtml',
 		});
@@ -38,10 +38,17 @@ class AppComponent extends Component {
 		});
 	}
 
+	clipScreenshot_click() {
+		bridge().sendCommandToActiveTab({
+			name: 'screenshot',
+			apiBaseUrl: 'http://127.0.0.1:9967',
+		});
+	}
+
 	async loadContentScripts() {
-		await Global.browser().tabs.executeScript({file: "/content_scripts/JSDOMParser.js"});
-		await Global.browser().tabs.executeScript({file: "/content_scripts/Readability.js"});
-		await Global.browser().tabs.executeScript({file: "/content_scripts/index.js"});
+		await bridge().tabsExecuteScript({file: "/content_scripts/JSDOMParser.js"});
+		await bridge().tabsExecuteScript({file: "/content_scripts/Readability.js"});
+		await bridge().tabsExecuteScript({file: "/content_scripts/index.js"});
 	}
 
 	async componentDidMount() {
@@ -103,6 +110,7 @@ class AppComponent extends Component {
 					<ul>
 						<li><a className="Button" onClick={this.clipSimplified_click}>Clip simplified page</a></li>
 						<li><a className="Button" onClick={this.clipComplete_click}>Clip complete page</a></li>
+						<li><a className="Button" onClick={this.clipScreenshot_click}>Clip screenshot</a></li>
 					</ul>
 				</div>
 				{ warningComponent }

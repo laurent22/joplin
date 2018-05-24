@@ -6,7 +6,7 @@
 	display: flex;
 	flex-direction: column;
 	background-color: #162b3d;
-	font-size: 1em;
+	font-size: 16px;
 }
 
 .App h2 {
@@ -39,13 +39,15 @@
 
 .App a.Button {
 	background-color: #0269c2;
-	padding: 8px 14px;
+	padding: 0 14px;
 	display: flex;
 	flex: 1;
 	color: #eee;
 	font-weight: normal;
 	font-size: .8em;
 	cursor: pointer;
+	align-items: center;
+	min-height: 31px;
 }
 
 .App a.Button:hover {

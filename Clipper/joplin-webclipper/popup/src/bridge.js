@@ -1,10 +1,11 @@
 class Bridge {
 
-	init(browser, dispatch) {
+	init(browser, browserSupportsPromises, dispatch) {
 		console.info('Popup: Init bridge');
 
 		this.browser_ = browser;
 		this.dispatch_ = dispatch;
+		this.browserSupportsPromises_ = browserSupportsPromises;
 
 		this.browser_notify = async (command) => {
 			console.info('Popup: Got command: ' + command.name);
@@ -39,8 +40,38 @@ class Bridge {
 		return this.dispatch_(action);
 	}
 
+	async tabsExecuteScript(options) {
+		if (this.browserSupportsPromises_) return this.browser().tabs.executeScript(options);
+
+		return new Promise((resolve, reject) => {
+			this.browser().tabs.executeScript(options, () => {
+				resolve();
+			});
+		})
+	}
+
+	async tabsQuery(options) {
+		if (this.browserSupportsPromises_) return this.browser().tabs.query(options);
+
+		return new Promise((resolve, reject) => {
+			this.browser().tabs.query(options, (tabs) => {
+				resolve(tabs);
+			});
+		});
+	}
+
+	async tabsSendMessage(tabId, command) {
+		if (this.browserSupportsPromises_) return this.browser().tabs.sendMessage(tabId, command);
+		
+		return new Promise((resolve, reject) => {
+			this.browser().tabs.sendMessage(tabId, command, (result) => {
+				resolve(result);
+			});
+		});
+	}
+
 	async sendCommandToActiveTab(command) {
-		const tabs = await this.browser().tabs.query({ active: true, currentWindow: true });
+		const tabs = await this.tabsQuery({ active: true, currentWindow: true });
 		if (!tabs.length) {
 			console.warn('No valid tab');
 			return;
@@ -48,7 +79,9 @@ class Bridge {
 
 		this.dispatch({ type: 'CONTENT_UPLOAD', operation: null });
 
-		await this.browser().tabs.sendMessage(tabs[0].id, command);
+		console.info('Sending message ', command);
+
+		await this.tabsSendMessage(tabs[0].id, command);
 	}
 
 	async sendContentToJoplin(content) {

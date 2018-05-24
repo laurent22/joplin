@@ -45,7 +45,7 @@ function reducer(state = defaultState, action) {
 
 const store = createStore(reducer);
 
-bridge().init(window.browser, store.dispatch);
+bridge().init(window.browser ? window.browser : window.chrome, !!window.browser, store.dispatch);
 
 console.info('Popup: Creating React app...');
 
