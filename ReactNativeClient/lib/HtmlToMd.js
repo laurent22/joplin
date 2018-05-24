@@ -10,6 +10,7 @@ class HtmlToMd {
 		})
 		turndown.use(turndownPluginGfm)
 		turndown.remove('script');
+		turndown.remove('style');
 		let md = turndown.turndown(html)
 		if (options.baseUrl) md = markdownUtils.prependBaseUrl(md, options.baseUrl);
 		return md;
