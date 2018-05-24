@@ -37,7 +37,7 @@ class ClipperServer {
 			body: requestNote.body ? requestNote.body : '',
 		};
 
-		if (requestNote.bodyHtml) {			
+		if (requestNote.bodyHtml) {
 			// Parsing will not work if the HTML is not wrapped in a top level tag, which is not guaranteed
 			// when getting the content from elsewhere. So here wrap it - it won't change anything to the final
 			// rendering but it makes sure everything will be parsed.
@@ -53,6 +53,8 @@ class ClipperServer {
 			if (!folder) throw new Error('Cannot find folder for note');
 			output.parent_id = folder.id;
 		}
+
+		if (requestNote.url) output.source_url = requestNote.url;
 
 		return output;
 	}

@@ -18,15 +18,13 @@ urlUtils.urlProtocol = function(url) {
 	return parsed.protocol;
 }
 
-const schemeRegex = /^[a-zA-Z0-9\+\-\.]+:\/\//
 urlUtils.prependBaseUrl = function(url, baseUrl) {
 	baseUrl = rtrimSlashes(baseUrl).trim(); // All the code below assumes that the baseUrl does not end up with a slash
 	url = url.trim();
 
 	if (!url) url = '';
 	if (!baseUrl) return url;
-	const matches = schemeRegex.exec(url);
-	if (matches) return url; // Don't prepend the base URL if the URL already has a scheme
+	if (urlUtils.urlProtocol(url)) return url; // Don't prepend the base URL if the URL already has a scheme
 
 	if (url.length >= 2 && url.indexOf('//') === 0) { // If it starts with // it's a protcol-relative URL
 		return urlUtils.urlProtocol(baseUrl) + url;

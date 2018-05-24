@@ -90,7 +90,7 @@
     "html-entities": "^1.2.1",
     "image-type": "^3.0.0",
     "joplin-turndown": "^4.0.4",
-    "joplin-turndown-plugin-gfm": "^1.0.5",
+    "joplin-turndown-plugin-gfm": "^1.0.6",
     "jssha": "^2.3.1",
     "katex": "^0.9.0-beta1",
     "levenshtein": "^1.0.5",
