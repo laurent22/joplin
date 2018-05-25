@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 
-const { connect, Provider } = require('react-redux');
+const { Provider } = require('react-redux');
 const { bridge } = require('./bridge');
 const { createStore } = require('redux');
 

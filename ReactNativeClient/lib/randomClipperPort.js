@@ -34,9 +34,6 @@ const reservedPorts = [1024, 1027, 1028, 1029, 1058, 1059, 1080, 1085, 1098, 109
 
 // From https://github.com/coverslide/node-alea
 const AleaModule = function () {
-
-  'use strict';
-
   // importState to sync generator states
   Alea.importState = function(i){
     var random = new Alea();
@@ -54,8 +51,8 @@ const AleaModule = function () {
       var s2 = 0;
       var c = 1;
 
-      if (args.length == 0) {
-        args = [+new Date];
+      if (args.length === 0) {
+        args = [+new Date()];
       }
       var mash = Mash();
       s0 = mash(' ');

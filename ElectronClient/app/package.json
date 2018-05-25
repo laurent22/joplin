@@ -114,6 +114,7 @@
     "read-chunk": "^2.1.0",
     "readability-node": "^0.1.0",
     "redux": "^3.7.2",
+    "server-destroy": "^1.0.1",
     "smalltalk": "^2.5.1",
     "sprintf-js": "^1.1.1",
     "sqlite3": "^3.1.13",

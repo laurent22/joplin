@@ -12,11 +12,21 @@ const { Logger } = require('lib/logger.js');
 const markdownUtils = require('lib/markdownUtils');
 const mimeUtils = require('lib/mime-utils.js').mime;
 const randomClipperPort = require('lib/randomClipperPort');
+const enableServerDestroy = require('server-destroy');
 
 class ClipperServer {
 
 	constructor() {
 		this.logger_ = new Logger();
+		this.startState_ = 'idle';
+		this.server_ = null;
+		this.port_ = null;
+	}
+
+	static instance() {
+		if (this.instance_) return this.instance_;
+		this.instance_ = new ClipperServer();
+		return this.instance_;
 	}
 
 	setLogger(l) {
@@ -26,6 +36,41 @@ class ClipperServer {
 	logger() {
 		return this.logger_;
 	}
+
+	setDispatch(d) {
+		this.dispatch_ = d;
+	}
+
+	dispatch(action) {
+		if (!this.dispatch_) throw new Error('dispatch not set!');
+		this.dispatch_(action);
+	}
+
+	setStartState(v) {
+		if (this.startState_ === v) return;
+		this.startState_ = v;
+		this.dispatch({
+			type: 'CLIPPER_SERVER_SET',
+			startState: v,
+		});
+	}
+
+	setPort(v) {
+		if (this.port_ === v) return;
+		this.port_ = v;
+		this.dispatch({
+			type: 'CLIPPER_SERVER_SET',
+			port: v,
+		});
+	}
+
+	// startState() {
+	// 	return this.startState_;
+	// }
+
+	// port() {
+	// 	return this.port_;
+	// }
 
 	htmlToMdParser() {
 		if (this.htmlToMdParser_) return this.htmlToMdParser_;
@@ -167,18 +212,22 @@ class ClipperServer {
 	}
 
 	async start() {
-		let port = null;
+		this.setPort(null);
+
+		this.setStartState('starting');
 
 		try {
-			port = await this.findAvailablePort();
+			const p = await this.findAvailablePort();
+			this.setPort(p);
 		} catch (error) {
+			this.setStartState('idle');
 			this.logger().error(error);
 			return;
 		}
 
-		const server = require('http').createServer();
+		this.server_ = require('http').createServer();
 
-		server.on('request', (request, response) => {
+		this.server_.on('request', (request, response) => {
 
 			const writeCorsHeaders = (code) => {
 				response.writeHead(code, {
@@ -253,13 +302,24 @@ class ClipperServer {
 			}
 		});
 
-		server.on('close', () => {
+		this.server_.on('close', () => {
 
 		});
 
-		this.logger().info('Starting Clipper server on port ' + port);
+		enableServerDestroy(this.server_);
 
-		server.listen(port);
+		this.logger().info('Starting Clipper server on port ' + this.port_);
+
+		this.server_.listen(this.port_);
+
+		this.setStartState('started');
+	}
+
+	async stop() {
+		this.server_.destroy();
+		this.server_ = null;
+		this.setStartState('idle');
+		this.setPort(null);
 	}
 
 }

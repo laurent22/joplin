@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 
 const { connect } = require('react-redux');
-const Global = require('./Global');
 const { bridge } = require('./bridge');
 
 class AppComponent extends Component {
