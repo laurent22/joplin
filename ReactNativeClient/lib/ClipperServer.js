@@ -11,6 +11,7 @@ const HtmlToMd = require('lib/HtmlToMd');
 const { Logger } = require('lib/logger.js');
 const markdownUtils = require('lib/markdownUtils');
 const mimeUtils = require('lib/mime-utils.js').mime;
+const randomClipperPort = require('lib/randomClipperPort');
 
 class ClipperServer {
 
@@ -152,10 +153,26 @@ class ClipperServer {
 		return output;
 	}
 
+	async findAvailablePort() {
+		const tcpPortUsed = require('tcp-port-used');
+
+		let state = null;
+		for (let i = 0; i < 10000; i++) {
+			state = randomClipperPort(state);
+			const inUse = await tcpPortUsed.check(state.port);
+			if (!inUse) return state.port;
+		}
+
+		throw new Error('All potential ports are in use or not available.')
+	}
+
 	async start() {
-		const port = await netUtils.findAvailablePort([9967, 8967, 8867], 0); // TODO: Make it shared with OneDrive server
-		if (!port) {
-			this.logger().error('All potential ports are in use or not available.');
+		let port = null;
+
+		try {
+			port = await this.findAvailablePort();
+		} catch (error) {
+			this.logger().error(error);
 			return;
 		}
 
@@ -178,12 +195,22 @@ class ClipperServer {
 				response.end();
 			}
 
+			const writeResponseText = (code, text) => {
+				writeCorsHeaders(code);
+				response.write(text);
+				response.end();
+			}
+
 			const requestId = Date.now();
 			this.logger().info('Request (' + requestId + '): ' + request.method + ' ' + request.url);
 
-			if (request.method === 'POST') {
-				const url = urlParser.parse(request.url, true);
+			const url = urlParser.parse(request.url, true);
 
+			if (request.method === 'GET') {
+				if (url.pathname === '/ping') {
+					return writeResponseText(200, 'JoplinClipperServer');
+				}
+			} else if (request.method === 'POST') {
 				if (url.pathname === '/notes') {
 					let body = '';
 

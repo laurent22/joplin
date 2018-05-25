@@ -1,5 +1,4 @@
 {
-
 	"manifest_version": 2,
 	"name": "Joplin Web Clipper",
 	"version": "1.0",
@@ -44,5 +43,4 @@
 				 "id": "{8419486a-54e9-11e8-9401-ac9e17909436}"
 			}
 	 }
-
 }

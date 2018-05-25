@@ -1,3 +1,5 @@
+const randomClipperPort = require('./randomClipperPort');
+
 class Bridge {
 
 	init(browser, browserSupportsPromises, dispatch) {
@@ -6,6 +8,8 @@ class Bridge {
 		this.browser_ = browser;
 		this.dispatch_ = dispatch;
 		this.browserSupportsPromises_ = browserSupportsPromises;
+		this.clipperServerPort_ = null;
+		this.clipperServerPortStatus_ = 'searching';
 
 		this.browser_notify = async (command) => {
 			console.info('Popup: Got command: ' + command.name);
@@ -30,6 +34,8 @@ class Bridge {
 		}
 
 		this.browser_.runtime.onMessage.addListener(this.browser_notify);
+
+		this.findClipperServerPort();
 	}
 
 	browser() {
@@ -38,6 +44,53 @@ class Bridge {
 
 	dispatch(action) {
 		return this.dispatch_(action);
+	}
+
+	async findClipperServerPort() {
+		let state = null;
+		for (let i = 0; i < 10; i++) {
+			state = randomClipperPort(state);
+
+			try {
+				console.info('findClipperServerPort: Trying ' + state.port); 
+				const response = await fetch('http://127.0.0.1:' + state.port + '/ping');
+				const text = await response.text();
+				console.info('findClipperServerPort: Got response: ' + text);
+				if (text.trim() === 'JoplinClipperServer') {
+					this.clipperServerPortStatus_ = 'found';
+					this.clipperServerPort_ = state.port;
+					return;
+				}
+			} catch (error) {
+				// continue
+			}
+		}
+
+		this.clipperServerPortStatus_ = 'not_found';
+
+		return null;
+	}
+
+	async clipperServerPort() {
+		return new Promise((resolve, reject) => {
+			const checkStatus = () => {
+				if (this.clipperServerPortStatus_ === 'not_found') {
+					reject(new Error('Could not find clipper service. Please make sure that Joplin is running and that the clipper server is enabled.'));
+					return true;
+				} else if (this.clipperServerPortStatus_ === 'found') {
+					resolve(this.clipperServerPort_);
+					return true;
+				}
+				return false;
+			}
+
+			if (checkStatus()) return;
+
+			const waitIID = setInterval(() => {
+				if (!checkStatus()) return;
+				clearInterval(waitIID);
+			}, 1000);
+		});
 	}
 
 	async tabsExecuteScript(options) {
@@ -92,7 +145,9 @@ class Bridge {
 
 			if (!content) throw new Error('Cannot send empty content');
 
-			const response = await fetch("http://127.0.0.1:9967/notes", {
+			const port = await this.clipperServerPort();
+
+			const response = await fetch("http://127.0.0.1:" + port + "/notes", {
 				method: "POST",
 				headers: {
 					'Accept': 'application/json',
