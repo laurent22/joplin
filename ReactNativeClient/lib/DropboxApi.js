@@ -100,6 +100,8 @@ class DropboxApi {
 	isTokenError(status, responseText) {
 		if (status === 401) return true;
 		if (responseText.indexOf('OAuth 2 access token is malformed') >= 0) return true;
+		// eg. Error: POST files/create_folder_v2: Error (400): Error in call to API function "files/create_folder_v2": Must provide HTTP header "Authorization" or URL parameter "authorization".
+		if (responseText.indexOf('Must provide HTTP header "Authorization"') >= 0) return true;
 		return false;
 	}
 
