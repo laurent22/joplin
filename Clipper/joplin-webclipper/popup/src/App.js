@@ -24,6 +24,21 @@ class AppComponent extends Component {
 				text: event.currentTarget.value
 			});		
 		}
+
+		this.clipScreenshot_click = async () => {
+			try {
+				const baseUrl = await bridge().clipperServerBaseUrl();
+
+				bridge().sendCommandToActiveTab({
+					name: 'screenshot',
+					apiBaseUrl: baseUrl,
+				});
+
+				window.close();
+			} catch (error) {
+				this.props.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: false, errorMessage: error.message } });
+			}
+		}
 	}
 
 	clipSimplified_click() {
@@ -36,15 +51,6 @@ class AppComponent extends Component {
 		bridge().sendCommandToActiveTab({
 			name: 'completePageHtml',
 		});
-	}
-
-	clipScreenshot_click() {
-		bridge().sendCommandToActiveTab({
-			name: 'screenshot',
-			apiBaseUrl: 'http://127.0.0.1:9967',
-		});
-
-		window.close();
 	}
 
 	async loadContentScripts() {
@@ -75,7 +81,9 @@ class AppComponent extends Component {
 		if (operation) {
 			let msg = '';
 
-			if (operation.uploading) {
+			if (operation.searchingClipperServer) {
+				msg = 'Searching clipper service... Please make sure that Joplin is running.';
+			} else if (operation.uploading) {
 				msg = 'Processing note... The note will be available in Joplin as soon as the web page and images have been downloaded and converted. In the meantime you may close this popup.';
 			} else if (operation.success) {
 				msg = 'Note was successfully created!';

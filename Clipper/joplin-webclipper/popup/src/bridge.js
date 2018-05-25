@@ -86,11 +86,19 @@ class Bridge {
 
 			if (checkStatus()) return;
 
+			this.dispatch({ type: 'CONTENT_UPLOAD', operation: { searchingClipperServer: true } });
+
 			const waitIID = setInterval(() => {
 				if (!checkStatus()) return;
+				this.dispatch({ type: 'CONTENT_UPLOAD', operation: null });
 				clearInterval(waitIID);
 			}, 1000);
 		});
+	}
+
+	async clipperServerBaseUrl() {
+		const port = await this.clipperServerPort();
+		return 'http://127.0.0.1:' + port;
 	}
 
 	async tabsExecuteScript(options) {
@@ -145,9 +153,9 @@ class Bridge {
 
 			if (!content) throw new Error('Cannot send empty content');
 
-			const port = await this.clipperServerPort();
+			const baseUrl = await this.clipperServerBaseUrl();
 
-			const response = await fetch("http://127.0.0.1:" + port + "/notes", {
+			const response = await fetch(baseUrl + "/notes", {
 				method: "POST",
 				headers: {
 					'Accept': 'application/json',
