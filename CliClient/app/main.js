@@ -66,26 +66,6 @@ process.stdout.on('error', function( err ) {
 	}
 });
 
-
-
-
-
-// async function main() {
-// 	const InteropService = require('lib/services/InteropService');
-// 	const service = new InteropService();
-// 	console.info(service.moduleByFormat('importer', 'enex'));
-// 	//await service.modules();
-// }
-
-// main().catch((error) => { console.error(error); });
-
-
-
-
-
-
-
-
 application.start(process.argv).catch((error) => {
 	if (error.code == 'flagError') {
 		console.error(error.message);

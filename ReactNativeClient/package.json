@@ -48,6 +48,7 @@
     "stream": "0.0.2",
     "string-natural-compare": "^2.0.2",
     "timers": "^0.1.1",
+    "url": "^0.11.0",
     "url-parse": "^1.2.0",
     "uuid": "^3.0.1",
     "valid-url": "^1.0.9",

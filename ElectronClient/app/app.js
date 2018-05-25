@@ -23,6 +23,7 @@ const DecryptionWorker = require('lib/services/DecryptionWorker');
 const InteropService = require('lib/services/InteropService');
 const InteropServiceHelper = require('./InteropServiceHelper.js');
 const ResourceService = require('lib/services/ResourceService');
+const ClipperServer = require('lib/ClipperServer');
 
 const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
@@ -463,6 +464,14 @@ class Application extends BaseApplication {
 					type: 'separator',
 					screens: ['Main'],
 				},{
+					label: _('Web clipper options'),
+					click: () => {
+						this.dispatch({
+							type: 'NAV_GO',
+							routeName: 'ClipperConfig',
+						});
+					}
+				},{
 					label: _('Encryption options'),
 					click: () => {
 						this.dispatch({
@@ -679,6 +688,17 @@ class Application extends BaseApplication {
 
 				DecryptionWorker.instance().scheduleStart();
 			});
+		}
+
+		const clipperLogger = new Logger();
+		clipperLogger.addTarget('file', { path: Setting.value('profileDir') + '/log-clipper.txt' });
+		clipperLogger.addTarget('console');
+
+		ClipperServer.instance().setLogger(clipperLogger);
+		ClipperServer.instance().setDispatch(this.store().dispatch);
+
+		if (Setting.value('clipperServer.autoStart')) {
+			ClipperServer.instance().start();
 		}
 	}
 

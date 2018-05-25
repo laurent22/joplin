@@ -24,6 +24,8 @@
 				"_mydocs/EnexSamples/*.enex",
 				"*.min.css",
 				"*.min.js",
+				"*.bundle.js",
+				"yarn.lock",
 			],
 			"folder_exclude_patterns":
 			[
@@ -58,6 +60,7 @@
 				"ElectronClient/app/dist",
 				"_releases",
 				"ReactNativeClient/lib/csstojs",
+				"Clipper/joplin-webclipper/popup/build",
 			],
 			"path": "."
 		},

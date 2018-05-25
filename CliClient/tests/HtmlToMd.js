@@ -7,6 +7,7 @@ const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const BaseModel = require('lib/BaseModel.js');
 const { shim } = require('lib/shim');
+const HtmlToMd = require('lib/HtmlToMd');
 const { enexXmlToMd } = require('lib/import-enex-md-gen.js');
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 60 * 1000; // Can run for a while since everything is in the same test unit
@@ -23,9 +24,10 @@ describe('HtmlToMd', function() {
 		done();
 	});
 
-	it('should convert from HTML to Markdown', asyncTest(async () => {
+	it('should convert from Html to Markdown', asyncTest(async () => {
 		const basePath = __dirname + '/html_to_md';
 		const files = await shim.fsDriver().readDirStats(basePath);
+		const htmlToMd = new HtmlToMd();
 		
 		for (let i = 0; i < files.length; i++) {
 			const htmlFilename = files[i].path;
@@ -34,17 +36,19 @@ describe('HtmlToMd', function() {
 			const htmlPath = basePath + '/' + htmlFilename;
 			const mdPath = basePath + '/' + filename(htmlFilename) + '.md';
 
-			// if (htmlFilename !== 'text2.html') continue;
+			// if (htmlFilename !== 'table_with_colspan.html') continue;
 
 			const html = await shim.fsDriver().readFile(htmlPath);
 			const expectedMd = await shim.fsDriver().readFile(mdPath);
 
-			const actualMd = await enexXmlToMd('<div>' + html + '</div>', []);
+			const actualMd = await htmlToMd.parse('<div>' + html + '</div>', []);
 
 			if (actualMd !== expectedMd) {
 				console.info('');
 				console.info('Error converting file: ' + htmlFilename);
 				console.info('--------------------------------- Got:');
+				console.info(actualMd);
+				console.info('--------------------------------- Raw:');
 				console.info(actualMd.split('\n'));
 				console.info('--------------------------------- Expected:');
 				console.info(expectedMd.split('\n'));

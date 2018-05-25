@@ -40,6 +40,12 @@ function safeFileExtension(e) {
 	return e.replace(/[^a-zA-Z0-9]/g, '')
 }
 
+function safeFilename(e, maxLength = 32) {
+	if (!e || !e.replace) return '';
+	let output = e.replace(/[^a-zA-Z0-9\-_\(\)\.]/g, '_')
+	return output.substr(0, maxLength);
+}
+
 function toSystemSlashes(path, os = null) {
 	if (os === null) os = process.platform;
 	if (os === 'win32') return path.replace(/\//g, "\\");
@@ -54,4 +60,4 @@ function ltrimSlashes(path) {
 	return path.replace(/^\/+/, '');
 }
 
-module.exports = { basename, dirname, filename, isHidden, fileExtension, safeFileExtension, toSystemSlashes, rtrimSlashes, ltrimSlashes };
+module.exports = { basename, dirname, filename, isHidden, fileExtension, safeFilename, safeFileExtension, toSystemSlashes, rtrimSlashes, ltrimSlashes };

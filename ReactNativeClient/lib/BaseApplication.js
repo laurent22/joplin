@@ -385,6 +385,30 @@ class BaseApplication {
 		return os.homedir() + '/.config/' + Setting.value('appName');
 	}
 
+	async testing() {
+		const markdownUtils = require('lib/markdownUtils');
+		const ClipperServer = require('lib/ClipperServer');
+		const server = new ClipperServer();
+		const HtmlToMd = require('lib/HtmlToMd');
+		const service = new HtmlToMd();
+		const html = await shim.fsDriver().readFile('/mnt/d/test.html');
+		let markdown = service.parse(html, { baseUrl: 'https://duckduckgo.com/' });
+		console.info(markdown);
+		console.info('--------------------------------------------------');
+
+		const imageUrls = markdownUtils.extractImageUrls(markdown);
+		let result = await server.downloadImages_(imageUrls);
+		result = await server.createResourcesFromPaths_(result);
+		console.info(result);
+		markdown = server.replaceImageUrlsByResources_(markdown, result);
+		console.info('--------------------------------------------------');
+		console.info(markdown);
+		console.info('--------------------------------------------------');
+
+
+	}
+
+
 	async start(argv) {
 		let startFlags = await this.handleStartFlags_(argv);
 
@@ -465,6 +489,8 @@ class BaseApplication {
 		if (currentFolderId) currentFolder = await Folder.load(currentFolderId);
 		if (!currentFolder) currentFolder = await Folder.defaultFolder();
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
+
+		// await this.testing();process.exit();
 
 		return argv;
 	}

@@ -27,6 +27,10 @@ const defaultState = {
 	hasDisabledSyncItems: false,
 	newNote: null,
 	collapsedFolderIds: [],
+	clipperServer: {
+		startState: 'idle',
+		port: null,
+	},
 };
 
 const stateUtils = {};
@@ -525,7 +529,16 @@ const reducer = (state = defaultState, action) => {
 
 				newState = Object.assign({}, state);
 				newState.newNote = action.item;
-				break;				
+				break;
+
+			case 'CLIPPER_SERVER_SET':
+
+				newState = Object.assign({}, state);
+				const clipperServer = Object.assign({}, newState.clipperServer);
+				if ('startState' in action) clipperServer.startState = action.startState;
+				if ('port' in action) clipperServer.port = action.port;
+				newState.clipperServer = clipperServer;
+				break;	
 
 		}
 	} catch (error) {

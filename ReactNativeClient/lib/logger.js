@@ -7,7 +7,7 @@ class Logger {
 
 	constructor() {
 		this.targets_ = [];
-		this.level_ = Logger.LEVEL_ERROR;
+		this.level_ = Logger.LEVEL_INFO;
 		this.fileAppendQueue_ = []
 		this.lastDbCleanup_ = time.unixMs();
 	}

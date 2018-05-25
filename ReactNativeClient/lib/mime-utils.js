@@ -29,6 +29,17 @@ const mime = {
 		return null;
 	},
 
+	fromDataUrl(dataUrl) {
+		// Example: data:image/jpeg;base64,/9j/4AAQSkZJR.....
+		const defaultMime = 'text/plain';
+		let p = dataUrl.substr(0, dataUrl.indexOf(',')).split(';');
+		let s = p[0];
+		s = s.split(':');
+		if (s.length <= 1) return defaultMime;
+		s = s[1];
+		return s.indexOf('/') >= 0 ? s : defaultMime; // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs
+	},
+
 }
 
 module.exports = { mime };

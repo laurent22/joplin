@@ -7,7 +7,7 @@ const pathUtils = require('lib/path-utils.js');
 const { mime } = require('lib/mime-utils.js');
 const { filename } = require('lib/path-utils.js');
 const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
-const { markdownUtils } = require('lib/markdown-utils.js');
+const markdownUtils = require('lib/markdownUtils');
 const JoplinError = require('lib/JoplinError');
 
 class Resource extends BaseItem {
@@ -133,6 +133,10 @@ class Resource extends BaseItem {
 			lines.push("](:/" + resource.id + ")");
 		}
 		return lines.join('');
+	}
+
+	static internalUrl(resource) {
+		return ':/' + resource.id;
 	}
 
 	static pathToId(path) {
