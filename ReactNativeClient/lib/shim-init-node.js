@@ -5,6 +5,7 @@ const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const { time } = require('lib/time-utils.js');
 const { setLocale, defaultLocale, closestSupportedLocale } = require('lib/locale.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
+const mimeUtils = require('lib/mime-utils.js').mime;
 const urlValidator = require('valid-url');
 
 function shimInit() {
@@ -35,21 +36,24 @@ function shimInit() {
 		return locale;
 	}
 
-	// For Electron only
 	shim.writeImageToFile = async function(nativeImage, mime, targetPath) {
-		let buffer = null;
+		if (shim.isElectron()) { // For Electron
+			let buffer = null;
 
-		mime = mime.toLowerCase();
+			mime = mime.toLowerCase();
 
-		if (mime === 'image/png') {
-			buffer = nativeImage.toPNG();
-		} else if (mime === 'image/jpg' || mime === 'image/jpeg') {
-			buffer = nativeImage.toJPEG(90);
+			if (mime === 'image/png') {
+				buffer = nativeImage.toPNG();
+			} else if (mime === 'image/jpg' || mime === 'image/jpeg') {
+				buffer = nativeImage.toJPEG(90);
+			}
+
+			if (!buffer) throw new Error('Cannot resize image because mime type "' + mime + '" is not supported: ' + targetPath);
+
+			await shim.fsDriver().writeFile(targetPath, buffer, 'buffer');
+		} else {
+			throw new Error('Node support not implemented');
 		}
-
-		if (!buffer) throw new Error('Cannot reisze image because mime type "' + mime + '" is not supported: ' + targetPath);
-
-		await shim.fsDriver().writeFile(targetPath, buffer, 'buffer');		
 	}
 
 	const resizeImage_ = async function(filePath, targetPath, mime) {
@@ -146,7 +150,7 @@ function shimInit() {
 	}
 
 	shim.attachFileToNote = async function(note, filePath, position = null) {
-		const resource = shim.createResourceFromPath(filePath);
+		const resource = await shim.createResourceFromPath(filePath);
 
 		const newBody = [];
 
@@ -162,6 +166,20 @@ function shimInit() {
 			body: newBody.join('\n\n'),
 		});
 		return await Note.save(newNote);
+	}
+
+	shim.imageFromDataUrl = async function(imageDataUrl, filePath, options = null) {
+		if (options === null) options = {};
+
+		if (shim.isElectron()) {
+			const nativeImage = require('electron').nativeImage;
+			let image = nativeImage.createFromDataURL(imageDataUrl);
+			if (options.cropRect) image = image.crop(options.cropRect);
+			const mime = mimeUtils.fromDataUrl(imageDataUrl);
+			await shim.writeImageToFile(image, mime, filePath);
+		} else {
+			throw new Error('Node support not implemented');
+		}
 	}
 
 	const nodeFetch = require('node-fetch');

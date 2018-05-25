@@ -10,6 +10,7 @@ const { fileExtension, safeFileExtension, safeFilename, filename } = require('li
 const HtmlToMd = require('lib/HtmlToMd');
 const { Logger } = require('lib/logger.js');
 const markdownUtils = require('lib/markdownUtils');
+const mimeUtils = require('lib/mime-utils.js').mime;
 
 class ClipperServer {
 
@@ -57,6 +58,19 @@ class ClipperServer {
 		if (requestNote.url) output.source_url = requestNote.url;
 
 		return output;
+	}
+
+	// Note must have been saved first
+	async attachImageFromDataUrl_(note, imageDataUrl, cropRect) {
+		const tempDir = Setting.value('tempDir');
+		const mime = mimeUtils.fromDataUrl(imageDataUrl);
+		let ext = mimeUtils.toFileExtension(mime) || '';
+		if (ext) ext = '.' + ext;
+		const tempFilePath = tempDir + '/' + md5(Math.random() + '_' + Date.now()) + ext;
+		const imageConvOptions = {};
+		if (cropRect) imageConvOptions.cropRect = cropRect;
+		await shim.imageFromDataUrl(imageDataUrl, tempFilePath, imageConvOptions);
+		return await shim.attachFileToNote(note, tempFilePath);
 	}
 
 	async downloadImage_(url) {
@@ -189,6 +203,11 @@ class ClipperServer {
 							note.body = this.replaceImageUrlsByResources_(note.body, result);
 
 							note = await Note.save(note);
+
+							if (requestNote.imageDataUrl) {
+								await this.attachImageFromDataUrl_(note, requestNote.imageDataUrl, requestNote.cropRect);
+							}
+
 							this.logger().info('Request (' + requestId + '): Created note ' + note.id);
 							return writeResponseJson(200, note);
 						} catch (error) {

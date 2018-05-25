@@ -112,7 +112,7 @@
 		} else if (command.name === 'screenshot') {
 
 			const overlay = document.createElement('div');
-			overlay.style.opacity = '0.5';
+			overlay.style.opacity = '0.4';
 			overlay.style.background = 'black';
 			overlay.style.width = '100%';
 			overlay.style.height = '100%';
@@ -123,9 +123,30 @@
 
 			document.body.appendChild(overlay);
 
+			const messageComp = document.createElement('div');
+
+			const messageCompWidth = 300;
+			messageComp.style.position = 'fixed'
+			messageComp.style.opacity = '0.9'
+			messageComp.style.width = messageCompWidth + 'px'
+			messageComp.style.maxWidth = messageCompWidth + 'px'
+			messageComp.style.border = '1px solid black'
+			messageComp.style.background = 'white'
+			messageComp.style.top = '10px'
+			messageComp.style.textAlign = 'center';
+			messageComp.style.padding = '6px'
+			messageComp.style.left = Math.round(document.body.clientWidth / 2 - messageCompWidth / 2) + 'px'
+			messageComp.style.zIndex = overlay.style.zIndex + 1
+
+			messageComp.textContent = 'Drag and release to capture a screenshot';
+
+			document.body.appendChild(messageComp);
+
 			const selection = document.createElement('div');
-			selection.style.opacity = '0.5';
-			selection.style.background = 'blue';
+			selection.style.opacity = '0.4';
+			selection.style.border = '1px solid red';
+			selection.style.background = 'white';
+			selection.style.border = '2px solid black';
 			selection.style.zIndex = overlay.style.zIndex - 1;
 			selection.style.top = 0;
 			selection.style.left = 0;
@@ -138,21 +159,21 @@
 			let selectionArea = {};
 
 			function updateSelection() {
-				selection.style.left = selectionArea.x;
-				selection.style.top = selectionArea.y;
-				selection.style.width = selectionArea.width;
-				selection.style.height = selectionArea.height;
+				selection.style.left = selectionArea.x + 'px';
+				selection.style.top = selectionArea.y + 'px';
+				selection.style.width = selectionArea.width + 'px';
+				selection.style.height = selectionArea.height + 'px';
 			}
 
 			function setSelectionSizeFromMouse(event) {
-				selectionArea.width = Math.max(1, event.pageX - draggingStartPos.x);
-				selectionArea.height = Math.max(1, event.pageY - draggingStartPos.y);
+				selectionArea.width = Math.max(1, event.clientX - draggingStartPos.x);
+				selectionArea.height = Math.max(1, event.clientY - draggingStartPos.y);
 				updateSelection();
 			}
 
 			function selection_mouseDown(event) {
-				selectionArea = { x: event.pageX - document.body.scrollLeft, y: event.pageY - document.body.scrollTop, width: 0, height: 0 }
-				draggingStartPos = { x: event.pageX, y: event.pageY };
+				selectionArea = { x: event.clientX, y: event.clientY, width: 0, height: 0 }
+				draggingStartPos = { x: event.clientX, y: event.clientY };
 				isDragging = true;
 				updateSelection();
 			}
@@ -173,18 +194,23 @@
 
 				document.body.removeChild(overlay);
 				document.body.removeChild(selection);
+				document.body.removeChild(messageComp);
 
-				const content = {
-					title: pageTitle(),
-					area: selectionArea,
-					url: location.origin + location.pathname,
-				};
+				if (!selectionArea || !selectionArea.width || !selectionArea.height) return;
 
-				browser_.runtime.sendMessage({
-					name: 'screenshotArea',
-					content: content,
-					apiBaseUrl: command.apiBaseUrl,
-				});
+				setTimeout(() => {
+					const content = {
+						title: pageTitle(),
+						cropRect: selectionArea,
+						url: location.origin + location.pathname,
+					};
+
+					browser_.runtime.sendMessage({
+						name: 'screenshotArea',
+						content: content,
+						apiBaseUrl: command.apiBaseUrl,
+					});
+				}, 10);
 			}
 
 			overlay.addEventListener('mousedown', selection_mouseDown);

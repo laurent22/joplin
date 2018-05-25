@@ -43,6 +43,8 @@ class AppComponent extends Component {
 			name: 'screenshot',
 			apiBaseUrl: 'http://127.0.0.1:9967',
 		});
+
+		window.close();
 	}
 
 	async loadContentScripts() {
@@ -91,7 +93,9 @@ class AppComponent extends Component {
 				previewComponent = (
 					<div className="Preview">
 						<input className={"Title"} value={content.title} onChange={this.contentTitle_change}/>
-						<div className={"Body"} dangerouslySetInnerHTML={{__html: content.bodyHtml}}></div>
+						<div className={"BodyWrapper"}>
+							<div className={"Body"} dangerouslySetInnerHTML={{__html: content.bodyHtml}}></div>
+						</div>
 						<a className={"Confirm Button"} onClick={this.confirm_click}>Confirm</a>
 					</div>
 				);

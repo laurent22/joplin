@@ -77,17 +77,26 @@
 	margin-bottom: 10px;
 }
 
-.App .Preview .Body {
+.App .Preview .BodyWrapper {
 	flex: 1;
+	overflow: hidden;
+	flex-shrink: 1;
+	min-width: auto;
+}
+
+.App .Preview .Body {
+	/*flex: 1;*/
 	font-size: .5em;
 	overflow-x: hidden;
 	overflow-y: scroll;
 	overflow-wrap: break-word;
 	background-color: #ffffff;
-	flex-shrink: 1;
-	min-width: auto;
-	padding: 10px;
-	margin-bottom: 10px;
+	/*flex-shrink: 1;*/
+	/*min-width: auto;*/
+	/*padding: 10px;*/
+	/*margin-bottom: 10px;*/
+	width: 100%;
+	height: 100%;
 }
 
 .App .Preview .Confirm {

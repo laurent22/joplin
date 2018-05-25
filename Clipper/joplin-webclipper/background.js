@@ -8,10 +8,10 @@ if (typeof browser !== 'undefined') {
 }
 
 async function browserCaptureVisibleTabs(windowId, options) {
-	return new Promise((resolve, reject) => {
-		if (browserSupportsPromises_) return browser_.tabs.captureVisibleTab(null, { format: 'jpeg' });
+	if (browserSupportsPromises_) return browser_.tabs.captureVisibleTab(windowId, { format: 'jpeg' });
 
-		browser_.tabs.captureVisibleTab(null, { format: 'jpeg' }, (image) => {
+	return new Promise((resolve, reject) => {
+		browser_.tabs.captureVisibleTab(windowId, { format: 'jpeg' }, (image) => {
 			resolve(image);
 		});
 	});
@@ -23,9 +23,9 @@ chrome.runtime.onInstalled.addListener(function() {
 
 browser_.runtime.onMessage.addListener((command) => {
 	if (command.name === 'screenshotArea') {
-		browserCaptureVisibleTabs(null, { format: 'jpeg' }).then((image) => {
+		browserCaptureVisibleTabs(null, { format: 'jpeg' }).then((imageDataUrl) => {
 			content = Object.assign({}, command.content);
-			content.imageBase64 = image;
+			content.imageDataUrl = imageDataUrl;
 
 			fetch(command.apiBaseUrl + "/notes", {
 				method: "POST",
