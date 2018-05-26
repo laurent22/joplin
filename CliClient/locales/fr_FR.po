@@ -646,7 +646,7 @@ msgid "Synchronisation status"
 msgstr "État de la synchronisation"
 
 msgid "Web clipper options"
-msgstr ""
+msgstr "Options du Web Clipper"
 
 msgid "Encryption options"
 msgstr "Options de cryptage"
@@ -700,47 +700,54 @@ msgid "No"
 msgstr "Non"
 
 msgid "The web clipper service is already enabled and set to auto-start."
-msgstr ""
+msgstr "Le service du Web Clipper est activé et démarrera automatiquement."
 
 #, javascript-format
 msgid "Status: Started on port %d"
-msgstr ""
+msgstr "État : Commencé sur le port %d"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Status: %s"
-msgstr "État : %s."
+msgstr "État : %s"
 
 msgid "Disable Web Clipper Service"
-msgstr ""
+msgstr "Désactiver le service du Web Clipper"
 
 msgid "The web clipper service is not enabled."
-msgstr ""
+msgstr "Le service du Web Clipper n'est pas activé."
 
 msgid "Enable Web Clipper Service"
-msgstr ""
+msgstr "Activer le service du Web Clipper"
 
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
 msgstr ""
+"Le Web Clipper permet de sauver des pages web et des captures d'écran depuis "
+"votre navigateur vers Joplin."
 
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr ""
+msgstr "Pour utiliser le Web Clipper, veuillez suivre ces instructions :"
 
 msgid "Step 1: Enable the clipper service"
-msgstr ""
+msgstr "Étape 1 : Activez le service du Web Clipper"
 
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
+"Le service permet au module complémentaire de communiquer avec Joplin. "
+"Lorsque vous aller l'activer, il se pourrait que votre pare feu vous demande "
+"d'autoriser l'application Joplin."
 
 msgid "Step 2: Install the extension"
-msgstr ""
+msgstr "Étape 2 : Installez le module complémentaire"
 
 msgid "Download and install the relevant extension for your browser:"
 msgstr ""
+"Téléchargez et installez le module complémentaire correspondant à votre "
+"navigateur :"
 
 msgid "Check synchronisation configuration"
 msgstr "Vérifier config synchronisation"
@@ -979,9 +986,8 @@ msgstr "État de la synchronisation"
 msgid "Encryption Options"
 msgstr "Options de cryptage"
 
-#, fuzzy
 msgid "Clipper Options"
-msgstr "Options générales"
+msgstr "Options du Web Clipper"
 
 msgid "Remove this tag from all the notes?"
 msgstr "Enlever cette étiquette de toutes les notes ?"

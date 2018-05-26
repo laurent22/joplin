@@ -46,7 +46,7 @@ class ClipperConfigScreenComponent extends React.Component {
 		let webClipperStatusComps = [];
 
 		if (this.props.clipperServerAutoStart) {
-			webClipperStatusComps.push(<p key="text_1" style={theme.textStyle}><b>{_('The web clipper service is already enabled and set to auto-start.')}</b></p>)
+			webClipperStatusComps.push(<p key="text_1" style={theme.textStyle}><b>{_('The web clipper service is enabled and set to auto-start.')}</b></p>)
 			if (this.props.clipperServer.startState === 'started') {
 				webClipperStatusComps.push(<p key="text_2" style={theme.textStyle}>{_('Status: Started on port %d', this.props.clipperServer.port)}</p>)
 			} else {
