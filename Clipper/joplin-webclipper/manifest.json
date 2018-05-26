@@ -1,9 +1,9 @@
 {
 	"manifest_version": 2,
 	"name": "Joplin Web Clipper",
-	"version": "1.0.2",
+	"version": "1.0.3",
 
-	"description": "Gets and saves content from your browser to Joplin.",
+	"description": "Capture and save web pages and screenshots from your browser to Joplin.",
 
 	"homepage_url": "https://joplin.cozic.net",
 

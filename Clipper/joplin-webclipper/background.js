@@ -8,6 +8,7 @@ if (typeof browser !== 'undefined') {
 }
 
 function env() {
+	return 'prod';
 	return !('update_url' in browser_.runtime.getManifest()) ? 'dev' : 'prod';
 }
 

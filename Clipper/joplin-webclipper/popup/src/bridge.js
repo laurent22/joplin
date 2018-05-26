@@ -42,6 +42,7 @@ class Bridge {
 	}
 
 	env() {
+		return 'prod';
 		return !('update_url' in this.browser().runtime.getManifest()) ? 'dev' : 'prod';
 	}
 
