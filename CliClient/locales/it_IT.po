@@ -628,6 +628,9 @@ msgstr "Strumenti"
 msgid "Synchronisation status"
 msgstr "Stato di sincronizzazione"
 
+msgid "Web clipper options"
+msgstr ""
+
 msgid "Encryption options"
 msgstr ""
 
@@ -680,6 +683,49 @@ msgstr ""
 #, fuzzy
 msgid "No"
 msgstr "N"
+
+msgid "The web clipper service is already enabled and set to auto-start."
+msgstr ""
+
+#, javascript-format
+msgid "Status: Started on port %d"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Status: %s"
+msgstr "Stato: \"%s\"."
+
+msgid "Disable Web Clipper Service"
+msgstr ""
+
+msgid "The web clipper service is not enabled."
+msgstr ""
+
+msgid "Enable Web Clipper Service"
+msgstr ""
+
+msgid ""
+"Joplin Web Clipper allows saving web pages and screenshots from your browser "
+"to Joplin."
+msgstr ""
+
+msgid "In order to use the web clipper, you need to do the following:"
+msgstr ""
+
+msgid "Step 1: Enable the clipper service"
+msgstr ""
+
+msgid ""
+"This service allows the browser extension to communicate with Joplin. When "
+"enabling it your firewall may ask you to give permission to Joplin to listen "
+"to a particular port."
+msgstr ""
+
+msgid "Step 2: Install the extension"
+msgstr ""
+
+msgid "Download and install the relevant extension for your browser:"
+msgstr ""
 
 #, fuzzy
 msgid "Check synchronisation configuration"
@@ -903,6 +949,10 @@ msgstr "Stato della Sincronizzazione"
 
 msgid "Encryption Options"
 msgstr ""
+
+#, fuzzy
+msgid "Clipper Options"
+msgstr "Opzioni"
 
 msgid "Remove this tag from all the notes?"
 msgstr "Rimuovere questa etichetta da tutte le note?"

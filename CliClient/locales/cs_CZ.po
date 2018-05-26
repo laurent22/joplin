@@ -632,6 +632,9 @@ msgstr "Nástroje"
 msgid "Synchronisation status"
 msgstr "Stav synchronizace"
 
+msgid "Web clipper options"
+msgstr ""
+
 msgid "Encryption options"
 msgstr "Nastavení šifrování"
 
@@ -681,6 +684,49 @@ msgstr "Ano"
 
 msgid "No"
 msgstr "Ne"
+
+msgid "The web clipper service is already enabled and set to auto-start."
+msgstr ""
+
+#, javascript-format
+msgid "Status: Started on port %d"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Status: %s"
+msgstr "Stav: %s."
+
+msgid "Disable Web Clipper Service"
+msgstr ""
+
+msgid "The web clipper service is not enabled."
+msgstr ""
+
+msgid "Enable Web Clipper Service"
+msgstr ""
+
+msgid ""
+"Joplin Web Clipper allows saving web pages and screenshots from your browser "
+"to Joplin."
+msgstr ""
+
+msgid "In order to use the web clipper, you need to do the following:"
+msgstr ""
+
+msgid "Step 1: Enable the clipper service"
+msgstr ""
+
+msgid ""
+"This service allows the browser extension to communicate with Joplin. When "
+"enabling it your firewall may ask you to give permission to Joplin to listen "
+"to a particular port."
+msgstr ""
+
+msgid "Step 2: Install the extension"
+msgstr ""
+
+msgid "Download and install the relevant extension for your browser:"
+msgstr ""
 
 msgid "Check synchronisation configuration"
 msgstr "Zkontrolujte nastavení synchronizace"
@@ -908,6 +954,10 @@ msgstr "Stav synchronizace"
 
 msgid "Encryption Options"
 msgstr "Nastavení šifrování"
+
+#, fuzzy
+msgid "Clipper Options"
+msgstr "Obecná nastavení"
 
 msgid "Remove this tag from all the notes?"
 msgstr "Odebrat tento tag ze všech poznámek?"
