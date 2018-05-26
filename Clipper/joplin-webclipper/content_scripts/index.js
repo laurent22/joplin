@@ -114,7 +114,7 @@
 		} else if (command.name === 'screenshot') {
 
 			const overlay = document.createElement('div');
-			overlay.style.opacity = '0.4';
+			overlay.style.opacity = '0.6';
 			overlay.style.background = 'black';
 			overlay.style.width = '100%';
 			overlay.style.height = '100%';
@@ -129,14 +129,15 @@
 
 			const messageCompWidth = 300;
 			messageComp.style.position = 'fixed'
-			messageComp.style.opacity = '0.9'
+			messageComp.style.opacity = '0.95'
+			messageComp.style.fontSize = '14px';
 			messageComp.style.width = messageCompWidth + 'px'
 			messageComp.style.maxWidth = messageCompWidth + 'px'
 			messageComp.style.border = '1px solid black'
 			messageComp.style.background = 'white'
 			messageComp.style.top = '10px'
 			messageComp.style.textAlign = 'center';
-			messageComp.style.padding = '6px'
+			messageComp.style.padding = '10px'
 			messageComp.style.left = Math.round(document.body.clientWidth / 2 - messageCompWidth / 2) + 'px'
 			messageComp.style.zIndex = overlay.style.zIndex + 1
 
@@ -200,6 +201,9 @@
 
 				if (!selectionArea || !selectionArea.width || !selectionArea.height) return;
 
+				// Need to wait a bit before taking the screenshot to make sure
+				// the overlays have been removed and don't appear in the
+				// screenshot. 10ms is not enough.
 				setTimeout(() => {
 					const content = {
 						title: pageTitle(),
@@ -213,7 +217,7 @@
 						content: content,
 						apiBaseUrl: command.apiBaseUrl,
 					});
-				}, 10);
+				}, 100);
 			}
 
 			overlay.addEventListener('mousedown', selection_mouseDown);
