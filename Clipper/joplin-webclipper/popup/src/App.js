@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-import led_red from './led_red.png'; // Tell Webpack this JS file uses this image
-import led_green from './led_green.png'; // Tell Webpack this JS file uses this image
-import led_orange from './led_orange.png'; // Tell Webpack this JS file uses this image
+import led_red from './led_red.png';
+import led_green from './led_green.png';
+import led_orange from './led_orange.png';
 
 const { connect } = require('react-redux');
 const { bridge } = require('./bridge');
@@ -24,16 +24,31 @@ class AppComponent extends Component {
 			this.props.dispatch({
 				type: 'CLIPPED_CONTENT_TITLE_SET',
 				text: event.currentTarget.value
-			});		
+			});
+		}
+
+		this.clipSimplified_click = () => {
+			bridge().sendCommandToActiveTab({
+				name: 'simplifiedPageHtml',
+				parentId: this.props.selectedFolderId,
+			});
+		}
+
+		this.clipComplete_click = () => {
+			bridge().sendCommandToActiveTab({
+				name: 'completePageHtml',
+				parentId: this.props.selectedFolderId,
+			});
 		}
 
 		this.clipScreenshot_click = async () => {
 			try {
 				const baseUrl = await bridge().clipperServerBaseUrl();
 
-				bridge().sendCommandToActiveTab({
+				await bridge().sendCommandToActiveTab({
 					name: 'screenshot',
 					apiBaseUrl: baseUrl,
+					parentId: this.props.selectedFolderId,
 				});
 
 				window.close();
@@ -45,18 +60,13 @@ class AppComponent extends Component {
 		this.clipperServerHelpLink_click = () => {
 			bridge().tabsCreate({ url: 'https://joplin.cozic.net/clipper' });
 		}
-	}
 
-	clipSimplified_click() {
-		bridge().sendCommandToActiveTab({
-			name: 'simplifiedPageHtml',
-		});
-	}
-
-	clipComplete_click() {
-		bridge().sendCommandToActiveTab({
-			name: 'completePageHtml',
-		});
+		this.folderSelect_change = (event) => {
+			this.props.dispatch({
+				type: 'SELECTED_FOLDER_SET',
+				id: event.target.value,
+			});
+		}
 	}
 
 	async loadContentScripts() {
@@ -147,7 +157,37 @@ class AppComponent extends Component {
 			msg = "Service status: " + msg
 
 			return <div className="StatusBar"><img className="Led" src={led}/><span className="ServerStatus">{ msg }{ helpLink }</span></div>
-		}		
+		}
+
+		console.info(this.props.selectedFolderId);
+
+		const foldersComp = () => {
+			const optionComps = [];
+
+			const nonBreakingSpacify = (s) => {
+				// https://stackoverflow.com/a/24437562/561309
+				return s.replace(/ /g, "\u00a0");
+			}
+
+			const addOptions = (folders, depth) => {
+				for (let i = 0; i < folders.length; i++) {
+					const folder = folders[i];
+					optionComps.push(<option key={folder.id} value={folder.id}>{nonBreakingSpacify('    '.repeat(depth) + folder.title)}</option>)
+					if (folder.children) addOptions(folder.children, depth + 1);
+				}
+			}
+
+			addOptions(this.props.folders, 0);
+
+			return (
+				<div className="Folders">
+					<label>In notebook: </label>
+					<select defaultValue={this.props.selectedFolderId} onChange={this.folderSelect_change}>
+						{ optionComps }
+					</select>
+				</div>
+			);
+		}
 
 		return (
 			<div className="App">
@@ -158,6 +198,7 @@ class AppComponent extends Component {
 						<li><a className="Button" onClick={this.clipScreenshot_click}>Clip screenshot</a></li>
 					</ul>
 				</div>
+				{ foldersComp() }
 				{ warningComponent }
 				<h2>Preview:</h2>
 				{ previewComponent }
@@ -174,6 +215,8 @@ const mapStateToProps = (state) => {
 		clippedContent: state.clippedContent,
 		contentUploadOperation: state.contentUploadOperation,
 		clipperServer: state.clipperServer,
+		folders: state.folders,
+		selectedFolderId: state.selectedFolderId,
 	};
 };
 

@@ -5,7 +5,7 @@ import App from './App';
 
 const { Provider } = require('react-redux');
 const { bridge } = require('./bridge');
-const { createStore } = require('redux');
+const { createStore, applyMiddleware } = require('redux');
 
 const defaultState = {
 	warning: '',
@@ -15,7 +15,20 @@ const defaultState = {
 		foundState: 'idle',
 		port: null,
 	},
+	folders: [],
+	selectedFolderId: null,
 };
+
+const reduxMiddleware = store => next => async (action) => {
+	const result = next(action);
+	const newState = store.getState();
+
+	if (['SELECTED_FOLDER_SET'].indexOf(action.type) >= 0) {
+		bridge().scheduleStateSave(newState);
+	}
+
+  	return result;
+}
 
 function reducer(state = defaultState, action) {
 	let newState = state;
@@ -42,6 +55,16 @@ function reducer(state = defaultState, action) {
 		newState = Object.assign({}, state);
 		newState.contentUploadOperation = action.operation;
 
+	} else if (action.type === 'FOLDERS_SET') {
+
+		newState = Object.assign({}, state);
+		newState.folders = action.folders;
+
+	} else if (action.type === 'SELECTED_FOLDER_SET') {
+
+		newState = Object.assign({}, state);
+		newState.selectedFolderId = action.id;
+
 	} else if (action.type === 'CLIPPER_SERVER_SET') {
 
 		newState = Object.assign({}, state);
@@ -55,9 +78,10 @@ function reducer(state = defaultState, action) {
 	return newState;
 }
 
-const store = createStore(reducer);
+const store = createStore(reducer, applyMiddleware(reduxMiddleware));
 
 bridge().init(window.browser ? window.browser : window.chrome, !!window.browser, store.dispatch);
+bridge().restoreState();
 
 console.info('Popup: Creating React app...');
 

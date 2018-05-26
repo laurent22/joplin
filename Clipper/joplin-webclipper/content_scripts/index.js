@@ -94,6 +94,7 @@
 				title: article.title,
 				baseUrl: baseUrl(),
 				url: location.origin + location.pathname,
+				parentId: command.parentId,
 			};
 
 		} else if (command.name === "completePageHtml") {
@@ -107,6 +108,7 @@
 				title: pageTitle(),
 				baseUrl: baseUrl(),
 				url: location.origin + location.pathname,
+				parentId: command.parentId,
 			};
 
 		} else if (command.name === 'screenshot') {
@@ -203,6 +205,7 @@
 						title: pageTitle(),
 						cropRect: selectionArea,
 						url: location.origin + location.pathname,
+						parentId: command.parentId,
 					};
 
 					browser_.runtime.sendMessage({

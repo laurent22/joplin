@@ -127,6 +127,34 @@ class Folder extends BaseItem {
 		return output;
 	}
 
+	static async allAsTree(options = null) {
+		const all = await this.all(options);
+
+		// https://stackoverflow.com/a/49387427/561309
+		function getNestedChildren(models, parentId) {
+		    const nestedTreeStructure = [];
+		    const length = models.length;
+
+		    for (let i = 0; i < length; i++) {
+		        const model = models[i];
+
+		        if (model.parent_id == parentId) {
+		            const children = getNestedChildren(models, model.id);
+
+		            if (children.length > 0) {
+		                model.children = children;
+		            }
+
+		            nestedTreeStructure.push(model);
+		        }
+		    }
+
+		    return nestedTreeStructure;
+		}
+
+		return getNestedChildren(all, '');
+	}
+
 	static load(id) {
 		if (id == this.conflictFolderId()) return this.conflictFolder();
 		return super.load(id);

@@ -27,6 +27,7 @@ class Bridge {
 					bodyHtml: command.html,
 					baseUrl: command.baseUrl,
 					url: command.url,
+					parentId: command.parentId,
 				};
 
 				this.dispatch({ type: 'CLIPPED_CONTENT_SET', content: content });
@@ -52,6 +53,33 @@ class Bridge {
 		return this.dispatch_(action);
 	}
 
+	scheduleStateSave(state) {
+		if (this.scheduleStateSaveIID) {
+			clearTimeout(this.scheduleStateSaveIID);
+			this.scheduleStateSaveIID = null;
+		}
+
+		this.scheduleStateSaveIID = setTimeout(() => {
+			this.scheduleStateSaveIID = null;
+
+			const toSave = {
+				selectedFolderId: state.selectedFolderId,
+			};
+
+			console.info('Popup: Saving state', toSave);
+
+			this.storageSet(toSave);
+		}, 100);
+	}
+
+	async restoreState() {
+		const s = await this.storageGet(null);
+		console.info('Popup: Restoring saved state:', s);
+		if (!s) return;
+
+		if (s.selectedFolderId) this.dispatch({ type: 'SELECTED_FOLDER_SET', id: s.selectedFolderId });
+	}
+
 	async findClipperServerPort() {
 		this.dispatch({ type: 'CLIPPER_SERVER_SET', foundState: 'searching' });
 
@@ -68,6 +96,9 @@ class Bridge {
 					this.clipperServerPortStatus_ = 'found';
 					this.clipperServerPort_ = state.port;
 					this.dispatch({ type: 'CLIPPER_SERVER_SET', foundState: 'found', port: state.port });
+
+					const folders = await this.folderTree();
+					this.dispatch({ type: 'FOLDERS_SET', folders: folders });
 					return;
 				}
 			} catch (error) {
@@ -152,6 +183,37 @@ class Bridge {
 		});
 	}
 
+	async folderTree() {
+		return this.clipperApiExec('GET', 'folders');
+	}
+
+	async storageSet(keys) {
+		if (this.browserSupportsPromises_) return this.browser().storage.local.set(keys);
+
+		return new Promise((resolve, reject) => {
+			this.browser().storage.local.set(keys, () => {
+				resolve();
+			});
+		});
+	}
+
+	async storageGet(keys, defaultValue = null) {
+		if (this.browserSupportsPromises_) {
+			try {
+				const r = await this.browser().storage.local.get(keys);
+				return r;
+			} catch (error) {
+				return defaultValue;
+			}
+		} else {
+			return new Promise((resolve, reject) => {
+				this.browser().storage.local.get(keys, (result) => {
+					resolve(result);
+				});
+			});
+		}
+	}
+
 	async sendCommandToActiveTab(command) {
 		const tabs = await this.tabsQuery({ active: true, currentWindow: true });
 		if (!tabs.length) {
@@ -166,6 +228,30 @@ class Bridge {
 		await this.tabsSendMessage(tabs[0].id, command);
 	}
 
+	async clipperApiExec(method, path, body) {
+		console.info('Popup: ' + method + ' ' + path);
+
+		const baseUrl = await this.clipperServerBaseUrl();
+
+		const fetchOptions = {
+			method: method,
+			headers: {
+				'Content-Type': 'application/json'
+			},
+		}
+
+		if (body) fetchOptions.body = typeof body === 'string' ? body : JSON.stringify(body);
+
+		const response = await fetch(baseUrl + "/" + path, fetchOptions)
+		if (!response.ok) {
+			const msg = await response.text();
+			throw new Error(msg);
+		}
+
+		const json = await response.json();
+		return json;
+	}
+
 	async sendContentToJoplin(content) {
 		console.info('Popup: Sending to Joplin...');
 
@@ -176,20 +262,9 @@ class Bridge {
 
 			const baseUrl = await this.clipperServerBaseUrl();
 
-			const response = await fetch(baseUrl + "/notes", {
-				method: "POST",
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(content)
-			})
+			await this.clipperApiExec('POST', 'notes', content);
 
-			if (!response.ok) {
-				this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: false, errorMessage: response.text() } });
-			} else {
-				this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: true } });
-			}
+			this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: true } });
 		} catch (error) {
 			this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: false, errorMessage: error.message } });
 		}

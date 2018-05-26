@@ -64,14 +64,6 @@ class ClipperServer {
 		});
 	}
 
-	// startState() {
-	// 	return this.startState_;
-	// }
-
-	// port() {
-	// 	return this.port_;
-	// }
-
 	htmlToMdParser() {
 		if (this.htmlToMdParser_) return this.htmlToMdParser_;
 		this.htmlToMdParser_ = new HtmlToMd();
@@ -93,8 +85,8 @@ class ClipperServer {
 			});
 		}
 
-		if (requestNote.parent_id) {
-			output.parent_id = requestNote.parent_id;
+		if (requestNote.parentId) {
+			output.parent_id = requestNote.parentId;
 		} else {
 			const folder = await Folder.defaultFolder();
 			if (!folder) throw new Error('Cannot find folder for note');
@@ -227,11 +219,11 @@ class ClipperServer {
 
 		this.server_ = require('http').createServer();
 
-		this.server_.on('request', (request, response) => {
+		this.server_.on('request', async (request, response) => {
 
-			const writeCorsHeaders = (code) => {
+			const writeCorsHeaders = (code, contentType = "application/json") => {
 				response.writeHead(code, {
-					"Content-Type": "application/json",
+					"Content-Type": contentType,
 					'Access-Control-Allow-Origin': '*',
 					'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
 					'Access-Control-Allow-Headers': 'X-Requested-With,content-type',
@@ -245,7 +237,7 @@ class ClipperServer {
 			}
 
 			const writeResponseText = (code, text) => {
-				writeCorsHeaders(code);
+				writeCorsHeaders(code, 'text/plain');
 				response.write(text);
 				response.end();
 			}
@@ -258,6 +250,11 @@ class ClipperServer {
 			if (request.method === 'GET') {
 				if (url.pathname === '/ping') {
 					return writeResponseText(200, 'JoplinClipperServer');
+				}
+
+				if (url.pathname === '/folders') {
+					const structure = await Folder.allAsTree({ fields: ['id', 'parent_id', 'title'] });
+					return writeResponseJson(200, structure);
 				}
 			} else if (request.method === 'POST') {
 				if (url.pathname === '/notes') {
