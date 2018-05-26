@@ -1,5 +1,13 @@
 # Joplin changelog
 
+## [v1.0.96](https://github.com/laurent22/joplin/releases/tag/v1.0.96) - 2018-05-26T16:36:39Z
+
+This release is mainly to fix various issues with the recently released Web Clipper.
+
+- Clipper: Allow selecting folder to add the note to
+- Clipper: Fixed issue when taking screenshot
+- Clipper: Added Firefox extension
+
 ## [v1.0.95](https://github.com/laurent22/joplin/releases/tag/v1.0.95) - 2018-05-25T13:04:30Z
 
 - New: A web clipper is now available - it allows saving web pages and screenshots from your browser to Joplin. To start using it, go to Options > Web Clipper Options. Note that this feature is a beta release so there might still be some issues. Feedback is welcome.
@@ -215,11 +223,3 @@ IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before 
 - Upgraded Electron to 1.7.11 to fix security vulnerability
 - Fixed checkbox issue in config screen
 - Fixed detection of encrypted item
-
-## [v0.10.48](https://github.com/laurent22/joplin/releases/tag/v0.10.48) - 2018-01-23T11:19:51Z
-
-- Improved and optimised file system sync target when many items are present.
-- Fixes [#155](https://github.com/laurent22/joplin/issues/155): Caret alignment issue with Russian text
-- Dutch translation (Thanks @tcassaert)
-- Removed certain log statements so that sensitive info doesn't end up in logs
-- Fix: Handle case where resource blob is missing during sync
