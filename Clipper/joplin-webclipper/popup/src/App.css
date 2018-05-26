@@ -131,6 +131,8 @@
 .App .StatusBar .Led {
 	display: flex;
 	flex: 0;
+	width: 8px;
+	height: 8px;
 }
 
 .App .StatusBar .ServerStatus {

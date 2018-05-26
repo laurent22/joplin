@@ -182,7 +182,7 @@ class AppComponent extends Component {
 			return (
 				<div className="Folders">
 					<label>In notebook: </label>
-					<select defaultValue={this.props.selectedFolderId} onChange={this.folderSelect_change}>
+					<select value={this.props.selectedFolderId} onChange={this.folderSelect_change}>
 						{ optionComps }
 					</select>
 				</div>
