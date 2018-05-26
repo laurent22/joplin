@@ -16,6 +16,8 @@ msgstr ""
 "X-Generator: Poedit 1.8.11\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Desmarque las notas asociadas para eliminar una etiqueta."
@@ -647,7 +649,7 @@ msgid "Synchronisation status"
 msgstr "Estado de la sincronización"
 
 msgid "Web clipper options"
-msgstr ""
+msgstr "Opciones de recorte web"
 
 msgid "Encryption options"
 msgstr "Opciones de cifrado"
@@ -701,46 +703,53 @@ msgstr "No"
 
 msgid "The web clipper service is already enabled and set to auto-start."
 msgstr ""
+"El servicio de recorte web está habilitado y configurado para inicie "
+"automaticamente"
 
 #, javascript-format
 msgid "Status: Started on port %d"
-msgstr ""
+msgstr "Estado: Iniciado en el puerto %d"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Status: %s"
-msgstr "Estado: «%s»."
+msgstr "Estado: %s"
 
 msgid "Disable Web Clipper Service"
-msgstr ""
+msgstr "Deshabilitar el servicio de recorte web"
 
 msgid "The web clipper service is not enabled."
-msgstr ""
+msgstr "El servicio de recorte web no está habilitado."
 
 msgid "Enable Web Clipper Service"
-msgstr ""
+msgstr "Habilitar el servicio de recorte web"
 
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
 msgstr ""
+"El recorte web de Joplin permite guardar páginas web y capturas de pantalla "
+"desde su navegador."
 
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr ""
+msgstr "Para utilizar el recorte web, necesita hacer lo siguiente:"
 
 msgid "Step 1: Enable the clipper service"
-msgstr ""
+msgstr "Paso 1: Habilitar el servicio de recorte"
 
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
+"Este servicio permite a la extensión del navegador comunicarse con Joplin. "
+"Cuando la habilite su cortafuegos puede solicitar permisos para que Joplin "
+"escuche en un puerto concreto."
 
 msgid "Step 2: Install the extension"
-msgstr ""
+msgstr "Paso 2: Instalar la extensión"
 
 msgid "Download and install the relevant extension for your browser:"
-msgstr ""
+msgstr "Descargar e instalar para su navegador:"
 
 msgid "Check synchronisation configuration"
 msgstr "Comprobar sincronización"
@@ -865,9 +874,8 @@ msgstr "Separar cada etiqueta por una coma."
 msgid "Rename notebook:"
 msgstr "Renombrar libreta:"
 
-#, fuzzy
 msgid "Rename tag:"
-msgstr "Renombrar"
+msgstr "Renombrar etiqueta:"
 
 msgid "Set alarm:"
 msgstr "Ajustar alarma:"
@@ -919,7 +927,7 @@ msgid "Save as..."
 msgstr "Guardar como..."
 
 msgid "Copy path to clipboard"
-msgstr ""
+msgstr "Copiar la ruta en el portapapeles"
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -973,9 +981,8 @@ msgstr "Estado de la sincronización"
 msgid "Encryption Options"
 msgstr "Opciones de cifrado"
 
-#, fuzzy
 msgid "Clipper Options"
-msgstr "Opciones generales"
+msgstr "Opciones de recorte"
 
 msgid "Remove this tag from all the notes?"
 msgstr "¿Desea eliminar esta etiqueta de todas las notas?"
@@ -1174,9 +1181,8 @@ msgstr "Oscuro"
 msgid "Uncompleted to-dos on top"
 msgstr "Mostrar tareas incompletas al inicio de las listas"
 
-#, fuzzy
 msgid "Show completed to-dos"
-msgstr "Mostrar tareas incompletas al inicio de las listas"
+msgstr "Mostrar tareas completadas"
 
 msgid "Sort notes by"
 msgstr "Ordenar notas por"
@@ -1211,13 +1217,13 @@ msgstr "Establecer el porcentaje de aumento de la aplicación"
 msgid "Editor font family"
 msgstr "Fuente del editor"
 
-#, fuzzy
 msgid ""
 "This must be *monospace* font or it will not work properly. If the font is "
 "incorrect or empty, it will default to a generic monospace font."
 msgstr ""
-"El nombre de la fuente no se comprobado. Si es incorrecto o está vacío, se "
-"utilizará una fuente genérica monoespaciada."
+"Esta debe ser una fuente *monoespaciada* o no funcionará correctamente. Si "
+"la fuente es incorrecta o vacía, se configurará una fuente monoespaciada "
+"genérica."
 
 msgid "Automatically update the application"
 msgstr "Actualizar la aplicación automáticamente"
@@ -1416,17 +1422,24 @@ msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
+"Para funcionar correctamente, la aplicación necesita los siguientes "
+"permisos. Por favor habilitelos en su teléfono, en Aplicaciones > Joplin > "
+"Permisos"
 
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
 msgstr ""
+"- Almacenamiento: Permite adjuntar archivos a las notas y habilitar la "
+"sincronización del sistema de ficheros."
 
 msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr ""
+msgstr "- Cámara: permite tomar fotografías y adjuntarlas en una nota."
 
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
+"- Localización: permite adjuntar la información de geolocalización en la "
+"nota."
 
 msgid "Joplin website"
 msgstr "Sitio web de Joplin"
@@ -1493,7 +1506,7 @@ msgid "Attach any file"
 msgstr "Adjuntar cualquier archivo"
 
 msgid "Share"
-msgstr ""
+msgstr "Compartir"
 
 msgid "Convert to note"
 msgstr "Convertir a nota"
