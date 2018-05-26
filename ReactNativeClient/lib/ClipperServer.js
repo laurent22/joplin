@@ -203,7 +203,7 @@ class ClipperServer {
 
 		let state = null;
 		for (let i = 0; i < 10000; i++) {
-			state = randomClipperPort(state);
+			state = randomClipperPort(state, Setting.value('env'));
 			const inUse = await tcpPortUsed.check(state.port);
 			if (!inUse) return state.port;
 		}

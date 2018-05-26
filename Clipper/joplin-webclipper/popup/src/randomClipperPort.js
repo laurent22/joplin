@@ -132,13 +132,15 @@ const AleaModule = function () {
 
 const Alea = AleaModule()
 
-function findClipperPort(state) {
+function findClipperPort(state, mode = 'prod') {
+  const seed = mode === 'prod' ? 1867 : 2001;
+
 	const minPort = 1024
 	const maxPort = 49151
 
 	let prng = null;
 	if (!state) {
-		prng = new Alea(1867)
+		prng = new Alea(seed)
 		state = { prng: prng }
 	} else {
 		prng = state.prng;

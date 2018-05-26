@@ -35,7 +35,13 @@ class Bridge {
 
 		this.browser_.runtime.onMessage.addListener(this.browser_notify);
 
+		console.info('Popup: Env: ', this.env());
+
 		this.findClipperServerPort();
+	}
+
+	env() {
+		return !('update_url' in this.browser().runtime.getManifest()) ? 'dev' : 'prod';
 	}
 
 	browser() {
@@ -49,7 +55,7 @@ class Bridge {
 	async findClipperServerPort() {
 		let state = null;
 		for (let i = 0; i < 10; i++) {
-			state = randomClipperPort(state);
+			state = randomClipperPort(state, this.env());
 
 			try {
 				console.info('findClipperServerPort: Trying ' + state.port); 

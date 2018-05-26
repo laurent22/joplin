@@ -7,6 +7,10 @@ if (typeof browser !== 'undefined') {
 	browserSupportsPromises_ = false;
 }
 
+function env() {
+	return !('update_url' in browser_.runtime.getManifest()) ? 'dev' : 'prod';
+}
+
 async function browserCaptureVisibleTabs(windowId, options) {
 	if (browserSupportsPromises_) return browser_.tabs.captureVisibleTab(windowId, { format: 'jpeg' });
 
@@ -17,8 +21,12 @@ async function browserCaptureVisibleTabs(windowId, options) {
 	});
 }
 
-chrome.runtime.onInstalled.addListener(function() {
-
+browser_.runtime.onInstalled.addListener(function() {
+	if (env() === 'dev') {
+		browser_.browserAction.setIcon({
+			path: 'icons/32-dev.png',
+		});
+	}
 });
 
 browser_.runtime.onMessage.addListener((command) => {
