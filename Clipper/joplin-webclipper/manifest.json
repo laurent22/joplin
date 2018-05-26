@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Joplin Web Clipper",
-	"version": "1.0.1",
+	"version": "1.0.2",
 
 	"description": "Gets and saves content from your browser to Joplin.",
 
