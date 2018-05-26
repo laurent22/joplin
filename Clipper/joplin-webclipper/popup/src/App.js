@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
+import led_red from './led_red.png'; // Tell Webpack this JS file uses this image
+import led_green from './led_green.png'; // Tell Webpack this JS file uses this image
+import led_orange from './led_orange.png'; // Tell Webpack this JS file uses this image
 
 const { connect } = require('react-redux');
 const { bridge } = require('./bridge');
@@ -37,6 +40,10 @@ class AppComponent extends Component {
 			} catch (error) {
 				this.props.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: false, errorMessage: error.message } });
 			}
+		}
+
+		this.clipperServerHelpLink_click = () => {
+			bridge().tabsCreate({ url: 'https://joplin.cozic.net/clipper' });
 		}
 	}
 
@@ -115,6 +122,33 @@ class AppComponent extends Component {
 			}
 		}
 
+		const clipperStatusComp = () => {
+
+			const stateToString = function(state) {
+				if (state === 'not_found') return 'Not found';
+				return state.charAt(0).toUpperCase() + state.slice(1);
+			} 
+
+			let msg = ''
+			let led = null;
+			let helpLink = null;
+
+			const foundState = this.props.clipperServer.foundState
+			
+			if (foundState === 'found') {
+				msg = "Ready on port " + this.props.clipperServer.port
+				led = led_green
+			} else {
+				msg = stateToString(foundState)
+				led = foundState === 'searching' ? led_orange : led_red
+				if (foundState === 'not_found') helpLink = <a className="Help" onClick={this.clipperServerHelpLink_click} href="#">[Help]</a>
+			}
+
+			msg = "Service status: " + msg
+
+			return <div className="StatusBar"><img className="Led" src={led}/><span className="ServerStatus">{ msg }{ helpLink }</span></div>
+		}		
+
 		return (
 			<div className="App">
 				<div className="Controls">			
@@ -127,6 +161,7 @@ class AppComponent extends Component {
 				{ warningComponent }
 				<h2>Preview:</h2>
 				{ previewComponent }
+				{ clipperStatusComp() }
 			</div>
 		);
 	}
@@ -138,6 +173,7 @@ const mapStateToProps = (state) => {
 		warning: state.warning,
 		clippedContent: state.clippedContent,
 		contentUploadOperation: state.contentUploadOperation,
+		clipperServer: state.clipperServer,
 	};
 };
 

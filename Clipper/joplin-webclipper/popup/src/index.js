@@ -11,6 +11,10 @@ const defaultState = {
 	warning: '',
 	clippedContent: null,
 	contentUploadOperation: null,
+	clipperServer: {
+		foundState: 'idle',
+		port: null,
+	},
 };
 
 function reducer(state = defaultState, action) {
@@ -37,6 +41,14 @@ function reducer(state = defaultState, action) {
 
 		newState = Object.assign({}, state);
 		newState.contentUploadOperation = action.operation;
+
+	} else if (action.type === 'CLIPPER_SERVER_SET') {
+
+		newState = Object.assign({}, state);
+		const clipperServer = Object.assign({}, newState.clipperServer);
+		if ('foundState' in action) clipperServer.foundState = action.foundState;
+		if ('port' in action) clipperServer.port = action.port;
+		newState.clipperServer = clipperServer;
 
 	}
 

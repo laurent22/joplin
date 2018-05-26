@@ -53,6 +53,8 @@ class Bridge {
 	}
 
 	async findClipperServerPort() {
+		this.dispatch({ type: 'CLIPPER_SERVER_SET', foundState: 'searching' });
+
 		let state = null;
 		for (let i = 0; i < 10; i++) {
 			state = randomClipperPort(state, this.env());
@@ -65,6 +67,7 @@ class Bridge {
 				if (text.trim() === 'JoplinClipperServer') {
 					this.clipperServerPortStatus_ = 'found';
 					this.clipperServerPort_ = state.port;
+					this.dispatch({ type: 'CLIPPER_SERVER_SET', foundState: 'found', port: state.port });
 					return;
 				}
 			} catch (error) {
@@ -73,6 +76,8 @@ class Bridge {
 		}
 
 		this.clipperServerPortStatus_ = 'not_found';
+
+		this.dispatch({ type: 'CLIPPER_SERVER_SET', foundState: 'not_found' });
 
 		return null;
 	}
@@ -133,6 +138,16 @@ class Bridge {
 		return new Promise((resolve, reject) => {
 			this.browser().tabs.sendMessage(tabId, command, (result) => {
 				resolve(result);
+			});
+		});
+	}
+
+	async tabsCreate(options) {
+		if (this.browserSupportsPromises_) return this.browser().tabs.create(options);
+		
+		return new Promise((resolve, reject) => {
+			this.browser().tabs.create(options, () => {
+				resolve();
 			});
 		});
 	}
