@@ -1343,6 +1343,10 @@ msgstr "移动%d条笔记至笔记本\"%s\"？"
 msgid "Press to set the decryption password."
 msgstr "按键将设置解密密码。"
 
+#, fuzzy
+msgid "Save alarm"
+msgstr "设置提醒"
+
 msgid "Select date"
 msgstr "选择日期"
 

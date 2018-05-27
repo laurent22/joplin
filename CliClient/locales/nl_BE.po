@@ -1410,6 +1410,10 @@ msgstr "Verplaats %d notities naar notitieboek \"%s\"?"
 msgid "Press to set the decryption password."
 msgstr "Klik om het decryptie wachtwoord in te stellen"
 
+#, fuzzy
+msgid "Save alarm"
+msgstr "Zet melding"
+
 msgid "Select date"
 msgstr "Selecteer datum"
 

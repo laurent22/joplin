@@ -1387,6 +1387,10 @@ msgstr "Flyt %d noter til notesbogen \"%s\"?"
 msgid "Press to set the decryption password."
 msgstr "Klik for at gemme dekrypterings kodeord."
 
+#, fuzzy
+msgid "Save alarm"
+msgstr "Indstil alarm"
+
 msgid "Select date"
 msgstr "Vælg dato"
 

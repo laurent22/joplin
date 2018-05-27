@@ -1408,6 +1408,10 @@ msgstr "Mugitu %d oharrak \"%s\" koadernora?"
 msgid "Press to set the decryption password."
 msgstr "Sakatu deszifratze pasahitza ezartzeko."
 
+#, fuzzy
+msgid "Save alarm"
+msgstr "Ezarri alarma"
+
 msgid "Select date"
 msgstr "Data aukeratu"
 

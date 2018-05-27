@@ -60,9 +60,9 @@ class SelectDateTimeDialog extends Component {
 
 	render() {
 		const popupActions = [
-			<DialogButton text="Save alarm" align="center" onPress={() => this.onAccept()} key="saveButton" />,
-			<DialogButton text="Clear alarm" align="center" onPress={() => this.onClear()} key="clearButton" />,
-			<DialogButton text="Cancel" align="center" onPress={() => this.onReject()} key="cancelButton" />,
+			<DialogButton text={_("Save alarm")} align="center" onPress={() => this.onAccept()} key="saveButton" />,
+			<DialogButton text={_("Clear alarm")} align="center" onPress={() => this.onClear()} key="clearButton" />,
+			<DialogButton text={_("Cancel")} align="center" onPress={() => this.onReject()} key="cancelButton" />,
 		];
 
 		return (

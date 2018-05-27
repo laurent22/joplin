@@ -1424,6 +1424,10 @@ msgstr "%d Notizen in das Notizbuch \"%s\" verschieben?"
 msgid "Press to set the decryption password."
 msgstr "Tippe hier, um das Entschlüsselungspasswort festzulegen."
 
+#, fuzzy
+msgid "Save alarm"
+msgstr "Alarm erstellen"
+
 msgid "Select date"
 msgstr "Datum auswählen"
 

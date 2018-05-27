@@ -1400,6 +1400,10 @@ msgstr "Premakni %d zabeležk v beležnico \"%s\"?"
 msgid "Press to set the decryption password."
 msgstr "Klikni za nastavitev dekripcijskega gesla."
 
+#, fuzzy
+msgid "Save alarm"
+msgstr "Nastavi alarm"
+
 msgid "Select date"
 msgstr "Izberi datum"
 

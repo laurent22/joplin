@@ -1378,6 +1378,10 @@ msgstr "Přesunout poznámky %d do zápisníku \"%s\"?"
 msgid "Press to set the decryption password."
 msgstr "Stiskněte pro zadání hesla k dešifrování."
 
+#, fuzzy
+msgid "Save alarm"
+msgstr "Nastavit alarm"
+
 msgid "Select date"
 msgstr "Vybrat datum"
 

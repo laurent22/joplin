@@ -1400,6 +1400,10 @@ msgstr "Mover %d notas para o caderno \"%s\"?"
 msgid "Press to set the decryption password."
 msgstr "Pressione para configurar a senha de decriptação."
 
+#, fuzzy
+msgid "Save alarm"
+msgstr "Definir alarme"
+
 msgid "Select date"
 msgstr "Selecionar data"
 

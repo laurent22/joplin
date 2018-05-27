@@ -1277,6 +1277,9 @@ msgstr ""
 msgid "Press to set the decryption password."
 msgstr ""
 
+msgid "Save alarm"
+msgstr ""
+
 msgid "Select date"
 msgstr ""
 

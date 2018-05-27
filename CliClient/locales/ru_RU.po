@@ -1397,6 +1397,10 @@ msgstr "Переместить %d заметок в блокнот «%s»?"
 msgid "Press to set the decryption password."
 msgstr "Нажмите, чтобы установить пароль для расшифровки."
 
+#, fuzzy
+msgid "Save alarm"
+msgstr "Установить напоминание"
+
 msgid "Select date"
 msgstr "Выбрать дату"
 

@@ -1410,6 +1410,9 @@ msgstr "Déplacer %d notes vers carnet \"%s\" ?"
 msgid "Press to set the decryption password."
 msgstr "Définir mot de passe de synchronisation."
 
+msgid "Save alarm"
+msgstr "Enregistrer alarme"
+
 msgid "Select date"
 msgstr "Sélectionner date"
 

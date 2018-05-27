@@ -1373,6 +1373,10 @@ msgstr "Spostare le note %d sul blocco note \"%s\"?"
 msgid "Press to set the decryption password."
 msgstr ""
 
+#, fuzzy
+msgid "Save alarm"
+msgstr "Imposta allarme"
+
 msgid "Select date"
 msgstr "Seleziona la data"
 

@@ -1378,6 +1378,10 @@ msgstr "%d個のノートを\"%s\"に移動しますか？"
 msgid "Press to set the decryption password."
 msgstr ""
 
+#, fuzzy
+msgid "Save alarm"
+msgstr "アラームをセット"
+
 msgid "Select date"
 msgstr "日付の選択"
 
