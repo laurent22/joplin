@@ -49,7 +49,7 @@ class NoteResource extends BaseModel {
 	}
 
 	static async orphanResources(expiryDelay = null) {
-		if (expiryDelay === null) expiryDelay = 1000 * 60 * 60 * 24;
+		if (expiryDelay === null) expiryDelay = 1000 * 60 * 60 * 24 * 10;
 		const cutOffTime = Date.now() - expiryDelay;
 		const output = await this.modelSelectAll(`
 			SELECT resource_id, sum(is_associated)
