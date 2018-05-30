@@ -16,7 +16,7 @@ const { _ } = require('lib/locale.js');
 const layoutUtils = require('lib/layout-utils.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const eventManager = require('../eventManager');
-
+const { NoteCountUtils } = require('lib/note-count-utils.js');
 class MainScreenComponent extends React.Component {
 
 	componentWillMount() {
@@ -90,6 +90,7 @@ class MainScreenComponent extends React.Component {
 							let folder = null;
 							try {
 								folder = await Folder.save({ title: answer }, { userSideValidation: true });
+								await NoteCountUtils.refreshNotesCount();
 							} catch (error) {
 								bridge().showErrorMessageBox(error.message);
 							}

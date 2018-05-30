@@ -13,7 +13,7 @@ const InteropService = require('lib/services/InteropService');
 const InteropServiceHelper = require('../InteropServiceHelper.js');
 const Search = require('lib/models/Search');
 const Mark = require('mark.js/dist/mark.min.js');
-
+const { NoteCountUtils } = require('lib/note-count-utils.js');
 class NoteListComponent extends React.Component {
 
 	style() {
@@ -128,6 +128,7 @@ class NoteListComponent extends React.Component {
 			const ok = bridge().showConfirmMessageBox(noteIds.length > 1 ? _('Delete notes?') : _('Delete note?'));
 			if (!ok) return;
 			await Note.batchDelete(noteIds);
+			await NoteCountUtils.refreshNotesCount();
 		}}));
 
 		menu.popup(bridge().window());
