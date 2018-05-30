@@ -119,6 +119,11 @@ class MainScreenComponent extends React.Component {
 						if (answer !== null) {
 							const tagTitles = answer.split(',').map((a) => { return a.trim() });
 							await Tag.setNoteTagsByTitles(command.noteId, tagTitles);
+							this.props.dispatch({
+								type: 'CURRENT_NOTE_TAGS',
+								currentNoteTags: tagTitles.join(),
+								currentNoteId: this.props.currentNoteId
+							})
 						}
 						this.setState({ promptOptions: null });
 					}
@@ -146,8 +151,8 @@ class MainScreenComponent extends React.Component {
 				},
 			});
 		} else if (command.name === 'renameTag') {
-			const tag = await Tag.load(command.id);			
-			if(!tag) return;
+			const tag = await Tag.load(command.id);
+			if (!tag) return;
 
 			this.setState({
 				promptOptions: {
@@ -161,12 +166,12 @@ class MainScreenComponent extends React.Component {
 							} catch (error) {
 								bridge().showErrorMessageBox(error.message);
 							}
-						}						
-						this.setState({promptOptions: null });
+						}
+						this.setState({ promptOptions: null });
 					}
 				}
 			})
-		
+
 		} else if (command.name === 'search') {
 
 			if (!this.searchId_) this.searchId_ = uuid.create();
@@ -276,7 +281,7 @@ class MainScreenComponent extends React.Component {
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
-    };
+		};
 
 		if (isSidebarVisible === false) {
 			this.styles_.sideBar.width = 0;
@@ -334,7 +339,7 @@ class MainScreenComponent extends React.Component {
 			title: _('Toggle sidebar'),
 			iconName: 'fa-bars',
 			iconRotation: this.props.sidebarVisibility ? 0 : 90,
-			onClick: () => { this.doCommand({ name: 'toggleSidebar'}) }
+			onClick: () => { this.doCommand({ name: 'toggleSidebar' }) }
 		});
 
 		headerItems.push({
@@ -450,6 +455,7 @@ const mapStateToProps = (state) => {
 		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,
 		selectedFolderId: state.selectedFolderId,
 		sidebarVisibility: state.sidebarVisibility,
+		currentNoteId: state.currentNoteId
 	};
 };
 

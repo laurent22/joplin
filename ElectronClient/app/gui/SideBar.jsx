@@ -22,7 +22,7 @@ class SideBarComponent extends React.Component {
 		this.onFolderDragStart_ = (event) => {
 			const folderId = event.currentTarget.getAttribute('folderid');
 			if (!folderId) return;
-			
+
 			event.dataTransfer.setDragImage(new Image(), 1, 1);
 			event.dataTransfer.clearData();
 			event.dataTransfer.setData('text/x-jop-folder-ids', JSON.stringify([folderId]));
@@ -197,6 +197,17 @@ class SideBarComponent extends React.Component {
 						await Folder.delete(itemId);
 					} else if (itemType === BaseModel.TYPE_TAG) {
 						await Tag.untagAll(itemId);
+						const tags = (this.props.currentNoteId !== '' && this.props.currentNoteId !== undefined
+							&& this.props.currentNoteId !== 'undefined') ? await Tag.tagsByNoteId(this.props.currentNoteId) : null;
+						if (tags) {
+							const tagTitles = tags.map((a) => { return a.title });
+							this.props.dispatch({
+								type: 'CURRENT_NOTE_TAGS',
+								currentNoteTags: tagTitles.join(),
+								currentNoteId: this.props.currentNoteId
+							})
+						}
+
 					} else if (itemType === BaseModel.TYPE_SEARCH) {
 						this.props.dispatch({
 							type: "SEARCH_DELETE",
@@ -250,7 +261,7 @@ class SideBarComponent extends React.Component {
 			);
 		}
 
-		if (itemType === BaseModel.TYPE_TAG) { 
+		if (itemType === BaseModel.TYPE_TAG) {
 			menu.append(
 				new MenuItem({
 					label: _('Rename'),
@@ -316,7 +327,7 @@ class SideBarComponent extends React.Component {
 
 		return (
 			<div className="list-item-container" style={containerStyle} key={folder.id} onDragStart={this.onFolderDragStart_} onDragOver={this.onFolderDragOver_} onDrop={this.onFolderDrop_} draggable={true} folderid={folder.id}>
-				{ expandLink }
+				{expandLink}
 				<a
 					className="list-item"
 					href="#"
@@ -485,6 +496,7 @@ const mapStateToProps = state => {
 		locale: state.settings.locale,
 		theme: state.settings.theme,
 		collapsedFolderIds: state.collapsedFolderIds,
+		currentNoteId: state.currentNoteId
 	};
 };
 
