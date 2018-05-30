@@ -13,7 +13,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 1.8.11\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Pour supprimer une vignette, enlever là des notes associées."
@@ -699,315 +701,6 @@ msgstr "Oui"
 msgid "No"
 msgstr "Non"
 
-msgid "The web clipper service is already enabled and set to auto-start."
-msgstr "Le service du Web Clipper est activé et démarrera automatiquement."
-
-#, javascript-format
-msgid "Status: Started on port %d"
-msgstr "État : Commencé sur le port %d"
-
-#, javascript-format
-msgid "Status: %s"
-msgstr "État : %s"
-
-msgid "Disable Web Clipper Service"
-msgstr "Désactiver le service du Web Clipper"
-
-msgid "The web clipper service is not enabled."
-msgstr "Le service du Web Clipper n'est pas activé."
-
-msgid "Enable Web Clipper Service"
-msgstr "Activer le service du Web Clipper"
-
-msgid ""
-"Joplin Web Clipper allows saving web pages and screenshots from your browser "
-"to Joplin."
-msgstr ""
-"Le Web Clipper permet de sauver des pages web et des captures d'écran depuis "
-"votre navigateur vers Joplin."
-
-msgid "In order to use the web clipper, you need to do the following:"
-msgstr "Pour utiliser le Web Clipper, veuillez suivre ces instructions :"
-
-msgid "Step 1: Enable the clipper service"
-msgstr "Étape 1 : Activez le service du Web Clipper"
-
-msgid ""
-"This service allows the browser extension to communicate with Joplin. When "
-"enabling it your firewall may ask you to give permission to Joplin to listen "
-"to a particular port."
-msgstr ""
-"Le service permet au module complémentaire de communiquer avec Joplin. "
-"Lorsque vous aller l'activer, il se pourrait que votre pare feu vous demande "
-"d'autoriser l'application Joplin."
-
-msgid "Step 2: Install the extension"
-msgstr "Étape 2 : Installez le module complémentaire"
-
-msgid "Download and install the relevant extension for your browser:"
-msgstr ""
-"Téléchargez et installez le module complémentaire correspondant à votre "
-"navigateur :"
-
-msgid "Check synchronisation configuration"
-msgstr "Vérifier config synchronisation"
-
-#, javascript-format
-msgid "Notes and settings are stored in: %s"
-msgstr "Les notes et paramètres se trouve dans : %s"
-
-msgid "Save"
-msgstr "Enregistrer"
-
-msgid "Submit"
-msgstr "Envoyer"
-
-msgid ""
-"Disabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent unencrypted to the sync target. Do you wish to "
-"continue?"
-msgstr ""
-"Désactiver le cryptage signifie que *toutes* les notes et fichiers vont être "
-"re-synchronisés et envoyés décryptés sur la cible de la synchronisation. "
-"Souhaitez vous continuer ?"
-
-msgid ""
-"Enabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent encrypted to the sync target. Do not lose the "
-"password as, for security purposes, this will be the *only* way to decrypt "
-"the data! To enable encryption, please enter your password below."
-msgstr ""
-"Activer le cryptage signifie que *toutes* les notes et fichiers vont être re-"
-"synchronisés et envoyés cryptés vers la cible de la synchronisation. Ne "
-"perdez pas votre mot de passe car, pour des raisons de sécurité, ce sera la "
-"*seule* façon de décrypter les données ! Pour activer le cryptage, veuillez "
-"entrer votre mot de passe ci-dessous."
-
-msgid "Disable encryption"
-msgstr "Désactiver le cryptage"
-
-msgid "Enable encryption"
-msgstr "Activer le cryptage"
-
-msgid "Master Keys"
-msgstr "Clefs maître"
-
-msgid "Active"
-msgstr "Actif"
-
-msgid "ID"
-msgstr "ID"
-
-msgid "Source"
-msgstr "Source"
-
-msgid "Created"
-msgstr "Créé"
-
-msgid "Updated"
-msgstr "Mis à jour"
-
-msgid "Password"
-msgstr "Mot de passe"
-
-msgid "Password OK"
-msgstr "Mot de passe OK"
-
-msgid ""
-"Note: Only one master key is going to be used for encryption (the one marked "
-"as \"active\"). Any of the keys might be used for decryption, depending on "
-"how the notes or notebooks were originally encrypted."
-msgstr ""
-"Note : seule une clef maître va être utilisée pour le cryptage (celle "
-"marquée comme \"actif\" ci-dessus). N'importe quelle clef peut être utilisée "
-"pour le décryptage, selon la façon dont les notes ou carnets étaient cryptés "
-"à l'origine."
-
-msgid "Missing Master Keys"
-msgstr "Clefs maître manquantes"
-
-msgid ""
-"The master keys with these IDs are used to encrypt some of your items, "
-"however the application does not currently have access to them. It is likely "
-"they will eventually be downloaded via synchronisation."
-msgstr ""
-"Les clefs maître avec ces identifiants sont utilisées pour crypter certains "
-"de vos objets, cependant le logiciel n'y a pour l'instant pas accès. Il est "
-"probable qu'elle vont être prochainement disponible via la synchronisation."
-
-msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
-"to enable it please check the documentation:"
-msgstr ""
-"Pour plus d'informations sur l'encryption de bout en bout, ainsi que des "
-"conseils pour l'activer, veuillez consulter la documentation :"
-
-msgid "Status"
-msgstr "État"
-
-msgid "Encryption is:"
-msgstr "Le cryptage est :"
-
-msgid "Back"
-msgstr "Retour"
-
-#, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
-msgstr ""
-"Un nouveau carnet \"%s\" va être créé et le fichier \"%s\" va être importé "
-"dedans"
-
-msgid "Please create a notebook first."
-msgstr "Veuillez d'abord sélectionner un carnet."
-
-msgid "Please create a notebook first"
-msgstr "Veuillez d'abord créer un carnet d'abord"
-
-msgid "Notebook title:"
-msgstr "Titre du carnet :"
-
-msgid "Add or remove tags:"
-msgstr "Modifier les étiquettes :"
-
-msgid "Separate each tag by a comma."
-msgstr "Séparez chaque étiquette par une virgule."
-
-msgid "Rename notebook:"
-msgstr "Renommer le carnet :"
-
-msgid "Rename tag:"
-msgstr "Renommer étiquette :"
-
-msgid "Set alarm:"
-msgstr "Régler alarme :"
-
-msgid "Layout"
-msgstr "Disposition"
-
-msgid "Search..."
-msgstr "Chercher..."
-
-msgid "Some items cannot be synchronised."
-msgstr "Certains objets ne peuvent être synchronisés."
-
-msgid "View them now"
-msgstr "Les voir maintenant"
-
-msgid "Some items cannot be decrypted."
-msgstr "Certains objets ne peuvent être décryptés."
-
-msgid "Set the password"
-msgstr "Définir le mot de passe"
-
-msgid "Add or remove tags"
-msgstr "Gérer les étiquettes"
-
-msgid "Switch between note and to-do type"
-msgstr "Alterner entre note et tâche"
-
-msgid "Copy Markdown link"
-msgstr "Copier lien Markdown"
-
-msgid "Delete"
-msgstr "Supprimer"
-
-msgid "Delete notes?"
-msgstr "Supprimer les notes ?"
-
-msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr ""
-"Pas de notes ici. Créez-en une en pressant le bouton \"Nouvelle note\"."
-
-msgid ""
-"There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr ""
-"Il n'y a pour l'instant aucun carnet. Créez-en un en cliquant sur \"Nouveau "
-"carnet\"."
-
-msgid "Open..."
-msgstr "Ouvrir..."
-
-msgid "Save as..."
-msgstr "Enregistrer sous..."
-
-msgid "Copy path to clipboard"
-msgstr "Copier le chemin"
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Lien ou message non géré : %s"
-
-#, javascript-format
-msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
-msgstr ""
-"Cette note n'a pas de contenu. Cliquer sur \"%s\" pour basculer vers "
-"l'éditeur et éditer cette note."
-
-msgid "Attach file"
-msgstr "Attacher un fichier"
-
-msgid "Tags"
-msgstr "Étiquettes"
-
-msgid "Set alarm"
-msgstr "Régler alarme"
-
-msgid "to-do"
-msgstr "tâche"
-
-msgid "note"
-msgstr "note"
-
-#, javascript-format
-msgid "Creating new %s..."
-msgstr "Création de %s..."
-
-msgid "Refresh"
-msgstr "Rafraîchir"
-
-msgid "Clear"
-msgstr "Supprimer"
-
-msgid "OneDrive Login"
-msgstr "Connexion OneDrive"
-
-msgid "Dropbox Login"
-msgstr "Connection à Dropbox"
-
-msgid "Options"
-msgstr "Options"
-
-msgid "Synchronisation Status"
-msgstr "État de la synchronisation"
-
-msgid "Encryption Options"
-msgstr "Options de cryptage"
-
-msgid "Clipper Options"
-msgstr "Options du Web Clipper"
-
-msgid "Remove this tag from all the notes?"
-msgstr "Enlever cette étiquette de toutes les notes ?"
-
-msgid "Remove this search from the sidebar?"
-msgstr "Enlever cette recherche de la barre latérale ?"
-
-msgid "Rename"
-msgstr "Renommer"
-
-msgid "Synchronise"
-msgstr "Synchroniser"
-
-msgid "Notebooks"
-msgstr "Carnets"
-
-msgid "Please select where the sync status should be exported to"
-msgstr ""
-"Veuillez sélectionner un répertoire ou exporter l'état de la synchronisation"
-
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Utilisation : %s"
@@ -1140,6 +833,16 @@ msgstr "Un carnet avec ce titre existe déjà : \"%s\""
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Les carnets ne peuvent être nommés \"%s\" car c'est un nom réservé."
+
+#, fuzzy
+msgid "title"
+msgstr "Titre"
+
+msgid "updated date"
+msgstr "Date modification"
+
+msgid "created date"
+msgstr "Date création"
 
 msgid "Untitled"
 msgstr "Sans titre"
@@ -1391,6 +1094,9 @@ msgstr "Supprimer ces notes ?"
 msgid "Log"
 msgstr "Journal"
 
+msgid "Status"
+msgstr "État"
+
 msgid "Export Debug Report"
 msgstr "Exporter rapport de débogage"
 
@@ -1399,6 +1105,9 @@ msgstr "Config cryptage"
 
 msgid "Configuration"
 msgstr "Configuration"
+
+msgid "Delete"
+msgstr "Supprimer"
 
 msgid "Move to notebook..."
 msgstr "Déplacer vers..."
@@ -1419,6 +1128,9 @@ msgstr "Sélectionner date"
 msgid "Confirm"
 msgstr "Confirmer"
 
+msgid "Synchronise"
+msgstr "Synchroniser"
+
 msgid "Cancel synchronisation"
 msgstr "Annuler synchronisation"
 
@@ -1427,6 +1139,9 @@ msgstr "Nouvelles étiquettes :"
 
 msgid "Type new tags or select from list"
 msgstr "Entrez de nouvelles étiquettes ou sélectionnez de la liste"
+
+msgid "Check synchronisation configuration"
+msgstr "Vérifier config synchronisation"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -1456,6 +1171,9 @@ msgstr "Site web de Joplin"
 msgid "Login with Dropbox"
 msgstr "Se connecter à Dropbox"
 
+msgid "Submit"
+msgstr "Envoyer"
+
 #, javascript-format
 msgid "Master Key %s"
 msgstr "Clef maître %s"
@@ -1467,11 +1185,51 @@ msgstr "Créé : %s"
 msgid "Password:"
 msgstr "Mot de passe :"
 
+msgid "Save"
+msgstr "Enregistrer"
+
 msgid "Password cannot be empty"
 msgstr "Mot de passe ne peut être vide"
 
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
+msgstr ""
+"Activer le cryptage signifie que *toutes* les notes et fichiers vont être re-"
+"synchronisés et envoyés cryptés vers la cible de la synchronisation. Ne "
+"perdez pas votre mot de passe car, pour des raisons de sécurité, ce sera la "
+"*seule* façon de décrypter les données ! Pour activer le cryptage, veuillez "
+"entrer votre mot de passe ci-dessous."
+
 msgid "Enable"
 msgstr "Activer"
+
+msgid "Missing Master Keys"
+msgstr "Clefs maître manquantes"
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+"Les clefs maître avec ces identifiants sont utilisées pour crypter certains "
+"de vos objets, cependant le logiciel n'y a pour l'instant pas accès. Il est "
+"probable qu'elle vont être prochainement disponible via la synchronisation."
+
+msgid "Disable encryption"
+msgstr "Désactiver le cryptage"
+
+msgid "Enable encryption"
+msgstr "Activer le cryptage"
+
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation:"
+msgstr ""
+"Pour plus d'informations sur l'encryption de bout en bout, ainsi que des "
+"conseils pour l'activer, veuillez consulter la documentation :"
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"
@@ -1479,6 +1237,9 @@ msgstr "Ce carnet n'a pas pu être sauvegardé : %s"
 
 msgid "Edit notebook"
 msgstr "Éditer le carnet"
+
+msgid "Refresh"
+msgstr "Rafraîchir"
 
 msgid "Show all"
 msgstr "Afficher tous"
@@ -1514,14 +1275,23 @@ msgstr "Attacher une photo"
 msgid "Attach any file"
 msgstr "Attacher un fichier"
 
+msgid "Set alarm"
+msgstr "Régler alarme"
+
 msgid "Share"
 msgstr "Partager"
+
+msgid "Tags"
+msgstr "Étiquettes"
 
 msgid "Convert to note"
 msgstr "Convertir en note"
 
 msgid "Convert to todo"
 msgstr "Convertir en tâche"
+
+msgid "Copy Markdown link"
+msgstr "Copier lien Markdown"
 
 msgid "Hide metadata"
 msgstr "Cacher les métadonnées"
@@ -1555,6 +1325,244 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "The web clipper service is already enabled and set to auto-start."
+#~ msgstr "Le service du Web Clipper est activé et démarrera automatiquement."
+
+#~ msgid "Status: Started on port %d"
+#~ msgstr "État : Commencé sur le port %d"
+
+#~ msgid "Status: %s"
+#~ msgstr "État : %s"
+
+#~ msgid "Disable Web Clipper Service"
+#~ msgstr "Désactiver le service du Web Clipper"
+
+#~ msgid "The web clipper service is not enabled."
+#~ msgstr "Le service du Web Clipper n'est pas activé."
+
+#~ msgid "Enable Web Clipper Service"
+#~ msgstr "Activer le service du Web Clipper"
+
+#~ msgid ""
+#~ "Joplin Web Clipper allows saving web pages and screenshots from your "
+#~ "browser to Joplin."
+#~ msgstr ""
+#~ "Le Web Clipper permet de sauver des pages web et des captures d'écran "
+#~ "depuis votre navigateur vers Joplin."
+
+#~ msgid "In order to use the web clipper, you need to do the following:"
+#~ msgstr "Pour utiliser le Web Clipper, veuillez suivre ces instructions :"
+
+#~ msgid "Step 1: Enable the clipper service"
+#~ msgstr "Étape 1 : Activez le service du Web Clipper"
+
+#~ msgid ""
+#~ "This service allows the browser extension to communicate with Joplin. "
+#~ "When enabling it your firewall may ask you to give permission to Joplin "
+#~ "to listen to a particular port."
+#~ msgstr ""
+#~ "Le service permet au module complémentaire de communiquer avec Joplin. "
+#~ "Lorsque vous aller l'activer, il se pourrait que votre pare feu vous "
+#~ "demande d'autoriser l'application Joplin."
+
+#~ msgid "Step 2: Install the extension"
+#~ msgstr "Étape 2 : Installez le module complémentaire"
+
+#~ msgid "Download and install the relevant extension for your browser:"
+#~ msgstr ""
+#~ "Téléchargez et installez le module complémentaire correspondant à votre "
+#~ "navigateur :"
+
+#~ msgid "Notes and settings are stored in: %s"
+#~ msgstr "Les notes et paramètres se trouve dans : %s"
+
+#~ msgid ""
+#~ "Disabling encryption means *all* your notes and attachments are going to "
+#~ "be re-synchronised and sent unencrypted to the sync target. Do you wish "
+#~ "to continue?"
+#~ msgstr ""
+#~ "Désactiver le cryptage signifie que *toutes* les notes et fichiers vont "
+#~ "être re-synchronisés et envoyés décryptés sur la cible de la "
+#~ "synchronisation. Souhaitez vous continuer ?"
+
+#~ msgid "Master Keys"
+#~ msgstr "Clefs maître"
+
+#~ msgid "Active"
+#~ msgstr "Actif"
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "Source"
+#~ msgstr "Source"
+
+#~ msgid "Created"
+#~ msgstr "Créé"
+
+#~ msgid "Updated"
+#~ msgstr "Mis à jour"
+
+#~ msgid "Password"
+#~ msgstr "Mot de passe"
+
+#~ msgid "Password OK"
+#~ msgstr "Mot de passe OK"
+
+#~ msgid ""
+#~ "Note: Only one master key is going to be used for encryption (the one "
+#~ "marked as \"active\"). Any of the keys might be used for decryption, "
+#~ "depending on how the notes or notebooks were originally encrypted."
+#~ msgstr ""
+#~ "Note : seule une clef maître va être utilisée pour le cryptage (celle "
+#~ "marquée comme \"actif\" ci-dessus). N'importe quelle clef peut être "
+#~ "utilisée pour le décryptage, selon la façon dont les notes ou carnets "
+#~ "étaient cryptés à l'origine."
+
+#~ msgid "Encryption is:"
+#~ msgstr "Le cryptage est :"
+
+#~ msgid "Back"
+#~ msgstr "Retour"
+
+#~ msgid ""
+#~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
+#~ "it"
+#~ msgstr ""
+#~ "Un nouveau carnet \"%s\" va être créé et le fichier \"%s\" va être "
+#~ "importé dedans"
+
+#~ msgid "Please create a notebook first."
+#~ msgstr "Veuillez d'abord sélectionner un carnet."
+
+#~ msgid "Please create a notebook first"
+#~ msgstr "Veuillez d'abord créer un carnet d'abord"
+
+#~ msgid "Notebook title:"
+#~ msgstr "Titre du carnet :"
+
+#~ msgid "Add or remove tags:"
+#~ msgstr "Modifier les étiquettes :"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Séparez chaque étiquette par une virgule."
+
+#~ msgid "Rename notebook:"
+#~ msgstr "Renommer le carnet :"
+
+#~ msgid "Rename tag:"
+#~ msgstr "Renommer étiquette :"
+
+#~ msgid "Set alarm:"
+#~ msgstr "Régler alarme :"
+
+#~ msgid "Layout"
+#~ msgstr "Disposition"
+
+#~ msgid "Search..."
+#~ msgstr "Chercher..."
+
+#~ msgid "Some items cannot be synchronised."
+#~ msgstr "Certains objets ne peuvent être synchronisés."
+
+#~ msgid "View them now"
+#~ msgstr "Les voir maintenant"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Certains objets ne peuvent être décryptés."
+
+#~ msgid "Set the password"
+#~ msgstr "Définir le mot de passe"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Gérer les étiquettes"
+
+#~ msgid "Switch between note and to-do type"
+#~ msgstr "Alterner entre note et tâche"
+
+#~ msgid "Delete notes?"
+#~ msgstr "Supprimer les notes ?"
+
+#~ msgid "No notes in here. Create one by clicking on \"New note\"."
+#~ msgstr ""
+#~ "Pas de notes ici. Créez-en une en pressant le bouton \"Nouvelle note\"."
+
+#~ msgid ""
+#~ "There is currently no notebook. Create one by clicking on \"New notebook"
+#~ "\"."
+#~ msgstr ""
+#~ "Il n'y a pour l'instant aucun carnet. Créez-en un en cliquant sur "
+#~ "\"Nouveau carnet\"."
+
+#~ msgid "Open..."
+#~ msgstr "Ouvrir..."
+
+#~ msgid "Save as..."
+#~ msgstr "Enregistrer sous..."
+
+#~ msgid "Copy path to clipboard"
+#~ msgstr "Copier le chemin"
+
+#~ msgid "Unsupported link or message: %s"
+#~ msgstr "Lien ou message non géré : %s"
+
+#~ msgid ""
+#~ "This note has no content. Click on \"%s\" to toggle the editor and edit "
+#~ "the note."
+#~ msgstr ""
+#~ "Cette note n'a pas de contenu. Cliquer sur \"%s\" pour basculer vers "
+#~ "l'éditeur et éditer cette note."
+
+#~ msgid "Attach file"
+#~ msgstr "Attacher un fichier"
+
+#~ msgid "to-do"
+#~ msgstr "tâche"
+
+#~ msgid "note"
+#~ msgstr "note"
+
+#~ msgid "Creating new %s..."
+#~ msgstr "Création de %s..."
+
+#~ msgid "Clear"
+#~ msgstr "Supprimer"
+
+#~ msgid "OneDrive Login"
+#~ msgstr "Connexion OneDrive"
+
+#~ msgid "Dropbox Login"
+#~ msgstr "Connection à Dropbox"
+
+#~ msgid "Options"
+#~ msgstr "Options"
+
+#~ msgid "Synchronisation Status"
+#~ msgstr "État de la synchronisation"
+
+#~ msgid "Encryption Options"
+#~ msgstr "Options de cryptage"
+
+#~ msgid "Clipper Options"
+#~ msgstr "Options du Web Clipper"
+
+#~ msgid "Remove this tag from all the notes?"
+#~ msgstr "Enlever cette étiquette de toutes les notes ?"
+
+#~ msgid "Remove this search from the sidebar?"
+#~ msgstr "Enlever cette recherche de la barre latérale ?"
+
+#~ msgid "Rename"
+#~ msgstr "Renommer"
+
+#~ msgid "Notebooks"
+#~ msgstr "Carnets"
+
+#~ msgid "Please select where the sync status should be exported to"
+#~ msgstr ""
+#~ "Veuillez sélectionner un répertoire ou exporter l'état de la "
+#~ "synchronisation"
 
 #~ msgid ""
 #~ "For more information about End-To-End Encryption (E2EE) and advices on "
