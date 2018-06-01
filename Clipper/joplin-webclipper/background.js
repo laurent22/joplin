@@ -32,6 +32,16 @@ async function browserCaptureVisibleTabs(windowId, options) {
 	});
 }
 
+async function browserGetZoom(tabId) {
+	if (browserSupportsPromises_) return browser_.tabs.getZoom(tabId);
+
+	return new Promise((resolve, reject) => {
+		browser_.tabs.getZoom(tabId, (zoom) => {
+			resolve(zoom);
+		});
+	});
+}
+
 browser_.runtime.onInstalled.addListener(function(details) {
 	if (details && details.temporary) {
 		// In Firefox - https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/onInstalled
@@ -51,20 +61,29 @@ browser_.runtime.onInstalled.addListener(function(details) {
 	}
 });
 
-browser_.runtime.onMessage.addListener((command) => {
+browser_.runtime.onMessage.addListener(async (command) => {
 	if (command.name === 'screenshotArea') {
-		browserCaptureVisibleTabs(null, { format: 'jpeg' }).then((imageDataUrl) => {
-			content = Object.assign({}, command.content);
-			content.image_data_url = imageDataUrl;
 
-			fetch(command.api_base_url + "/notes", {
-				method: "POST",
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(content)
-			});
+		const zoom = await browserGetZoom();
+
+		const imageDataUrl = await browserCaptureVisibleTabs(null, { format: 'jpeg' });
+		content = Object.assign({}, command.content);
+		content.image_data_url = imageDataUrl;
+
+		const newArea = Object.assign({}, command.content.crop_rect);
+		newArea.x *= zoom;
+		newArea.y *= zoom;
+		newArea.width *= zoom;
+		newArea.height *= zoom;
+		content.crop_rect = newArea;
+
+		fetch(command.api_base_url + "/notes", {
+			method: "POST",
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(content)
 		});
 	}
 });

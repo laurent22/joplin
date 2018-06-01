@@ -199,6 +199,8 @@
 				document.body.removeChild(selection);
 				document.body.removeChild(messageComp);
 
+				console.info('jopext: selectionArea:', selectionArea);
+
 				if (!selectionArea || !selectionArea.width || !selectionArea.height) return;
 
 				// Need to wait a bit before taking the screenshot to make sure
