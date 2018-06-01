@@ -92,9 +92,9 @@
 				name: 'clippedContent',
 				html: article.body,
 				title: article.title,
-				baseUrl: baseUrl(),
+				base_url: baseUrl(),
 				url: location.origin + location.pathname,
-				parentId: command.parentId,
+				parent_id: command.parent_id,
 			};
 
 		} else if (command.name === "completePageHtml") {
@@ -106,9 +106,9 @@
 				name: 'clippedContent',
 				html: cleanDocument.innerHTML,
 				title: pageTitle(),
-				baseUrl: baseUrl(),
+				base_url: baseUrl(),
 				url: location.origin + location.pathname,
-				parentId: command.parentId,
+				parent_id: command.parent_id,
 			};
 
 		} else if (command.name === 'screenshot') {
@@ -207,15 +207,15 @@
 				setTimeout(() => {
 					const content = {
 						title: pageTitle(),
-						cropRect: selectionArea,
+						crop_rect: selectionArea,
 						url: location.origin + location.pathname,
-						parentId: command.parentId,
+						parent_id: command.parent_id,
 					};
 
 					browser_.runtime.sendMessage({
 						name: 'screenshotArea',
 						content: content,
-						apiBaseUrl: command.apiBaseUrl,
+						api_base_url: command.api_base_url,
 					});
 				}, 100);
 			}

@@ -12,7 +12,7 @@ class Bridge {
 		this.clipperServerPortStatus_ = 'searching';
 
 		this.browser_notify = async (command) => {
-			console.info('Popup: Got command: ' + command.name);
+			console.info('Popup: Got command:', command);
 			
 			if (command.warning) {
 				console.warn('Popup: Got warning: ' + command.warning);
@@ -24,10 +24,10 @@ class Bridge {
 			if (command.name === 'clippedContent') {
 				const content = {
 					title: command.title,
-					bodyHtml: command.html,
-					baseUrl: command.baseUrl,
-					url: command.url,
-					parentId: command.parentId,
+					body_html: command.html,
+					base_url: command.base_url,
+					source_url: command.url,
+					parent_id: command.parent_id,
 				};
 
 				this.dispatch({ type: 'CLIPPED_CONTENT_SET', content: content });
@@ -36,14 +36,21 @@ class Bridge {
 
 		this.browser_.runtime.onMessage.addListener(this.browser_notify);
 
-		console.info('Popup: Env: ', this.env());
+		const backgroundPage = this.browser_.extension.getBackgroundPage();
+		this.env_ = backgroundPage.joplinEnv();
+
+		console.info('Popup: Env:', this.env());
+
+		this.dispatch({
+			type: 'ENV_SET',
+			env: this.env(),
+		});
 
 		this.findClipperServerPort();
 	}
 
 	env() {
-		return 'prod';
-		return !('update_url' in this.browser().runtime.getManifest()) ? 'dev' : 'prod';
+		return this.env_;
 	}
 
 	browser() {
@@ -149,6 +156,12 @@ class Bridge {
 
 		return new Promise((resolve, reject) => {
 			this.browser().tabs.executeScript(options, () => {
+				const e = this.browser().runtime.lastError;
+				if (e) {
+					const msg = ['tabsExecuteScript: Cannot load ' + JSON.stringify(options)]
+					if (e.message) msg.push(e.message);
+					reject(new Error(msg.join(': ')));
+				}
 				resolve();
 			});
 		})

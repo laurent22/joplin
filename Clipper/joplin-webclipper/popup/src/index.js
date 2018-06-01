@@ -17,6 +17,7 @@ const defaultState = {
 	},
 	folders: [],
 	selectedFolderId: null,
+	env: 'prod',
 };
 
 const reduxMiddleware = store => next => async (action) => {
@@ -60,6 +61,10 @@ function reducer(state = defaultState, action) {
 		newState = Object.assign({}, state);
 		newState.folders = action.folders;
 
+		if (!newState.selectedFolderId && action.folders.length) {
+			newState.selectedFolderId = action.folders[0].id;
+		}
+
 	} else if (action.type === 'SELECTED_FOLDER_SET') {
 
 		newState = Object.assign({}, state);
@@ -72,6 +77,11 @@ function reducer(state = defaultState, action) {
 		if ('foundState' in action) clipperServer.foundState = action.foundState;
 		if ('port' in action) clipperServer.port = action.port;
 		newState.clipperServer = clipperServer;
+
+	} else if (action.type === 'ENV_SET') {
+
+		newState = Object.assign({}, state);
+		newState.env = action.env;
 
 	}
 

@@ -76,24 +76,24 @@ class ClipperServer {
 			body: requestNote.body ? requestNote.body : '',
 		};
 
-		if (requestNote.bodyHtml) {
+		if (requestNote.body_html) {
 			// Parsing will not work if the HTML is not wrapped in a top level tag, which is not guaranteed
 			// when getting the content from elsewhere. So here wrap it - it won't change anything to the final
 			// rendering but it makes sure everything will be parsed.
-			output.body = await this.htmlToMdParser().parse('<div>' + requestNote.bodyHtml + '</div>', {
-				baseUrl: requestNote.baseUrl ? requestNote.baseUrl : '',
+			output.body = await this.htmlToMdParser().parse('<div>' + requestNote.body_html + '</div>', {
+				baseUrl: requestNote.base_url ? requestNote.base_url : '',
 			});
 		}
 
-		if (requestNote.parentId) {
-			output.parent_id = requestNote.parentId;
+		if (requestNote.parent_id) {
+			output.parent_id = requestNote.parent_id;
 		} else {
 			const folder = await Folder.defaultFolder();
 			if (!folder) throw new Error('Cannot find folder for note');
 			output.parent_id = folder.id;
 		}
 
-		if (requestNote.url) output.source_url = requestNote.url;
+		if (requestNote.source_url) output.source_url = requestNote.source_url;
 
 		return output;
 	}
@@ -277,8 +277,8 @@ class ClipperServer {
 
 							note = await Note.save(note);
 
-							if (requestNote.imageDataUrl) {
-								await this.attachImageFromDataUrl_(note, requestNote.imageDataUrl, requestNote.cropRect);
+							if (requestNote.image_data_url) {
+								await this.attachImageFromDataUrl_(note, requestNote.image_data_url, requestNote.crop_rect);
 							}
 
 							this.logger().info('Request (' + requestId + '): Created note ' + note.id);

@@ -30,14 +30,14 @@ class AppComponent extends Component {
 		this.clipSimplified_click = () => {
 			bridge().sendCommandToActiveTab({
 				name: 'simplifiedPageHtml',
-				parentId: this.props.selectedFolderId,
+				parent_id: this.props.selectedFolderId,
 			});
 		}
 
 		this.clipComplete_click = () => {
 			bridge().sendCommandToActiveTab({
 				name: 'completePageHtml',
-				parentId: this.props.selectedFolderId,
+				parent_id: this.props.selectedFolderId,
 			});
 		}
 
@@ -47,8 +47,8 @@ class AppComponent extends Component {
 
 				await bridge().sendCommandToActiveTab({
 					name: 'screenshot',
-					apiBaseUrl: baseUrl,
-					parentId: this.props.selectedFolderId,
+					api_base_url: baseUrl,
+					parent_id: this.props.selectedFolderId,
 				});
 
 				window.close();
@@ -118,7 +118,7 @@ class AppComponent extends Component {
 					<div className="Preview">
 						<input className={"Title"} value={content.title} onChange={this.contentTitle_change}/>
 						<div className={"BodyWrapper"}>
-							<div className={"Body"} dangerouslySetInnerHTML={{__html: content.bodyHtml}}></div>
+							<div className={"Body"} dangerouslySetInnerHTML={{__html: content.body_html}}></div>
 						</div>
 						<a className={"Confirm Button"} onClick={this.confirm_click}>Confirm</a>
 					</div>
@@ -182,7 +182,7 @@ class AppComponent extends Component {
 			return (
 				<div className="Folders">
 					<label>In notebook: </label>
-					<select value={this.props.selectedFolderId} onChange={this.folderSelect_change}>
+					<select value={this.props.selectedFolderId || ''} onChange={this.folderSelect_change}>
 						{ optionComps }
 					</select>
 				</div>
