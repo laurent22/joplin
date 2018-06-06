@@ -31,7 +31,7 @@ const defaultState = {
 		startState: 'idle',
 		port: null,
 	},
-	notesCount: []
+  notesCount: [],
 };
 
 const stateUtils = {};
@@ -544,11 +544,9 @@ const reducer = (state = defaultState, action) => {
 				break;
 
 			case 'FOLDER_COUNT_UPDATE_ALL':
-
 				newState = Object.assign({}, state);
 				newState.notesCount = action.notesCount;
-				break;
-
+        break;
 		}
 	} catch (error) {
 		error.message = 'In reducer: ' + error.message + ' Action: ' + JSON.stringify(action);

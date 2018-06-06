@@ -17,6 +17,7 @@ const layoutUtils = require('lib/layout-utils.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const eventManager = require('../eventManager');
 const { NoteCountUtils } = require('lib/note-count-utils.js');
+
 class MainScreenComponent extends React.Component {
 
 	componentWillMount() {
