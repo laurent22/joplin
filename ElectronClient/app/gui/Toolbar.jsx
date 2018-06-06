@@ -4,6 +4,7 @@ const { reg } = require('lib/registry.js');
 const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
 const ToolbarButton = require('./ToolbarButton.min.js');
+const ToolbarLabel = require('./ToolbarLabel.min.js');
 
 class ToolbarComponent extends React.Component {
 
@@ -35,7 +36,9 @@ class ToolbarComponent extends React.Component {
 						{...props}
 					/>);
 				} else if (itemType === 'text') {
-
+					itemComps.push(<ToolbarLabel
+						{...props}
+					/>);
 				}
 			}
 		}

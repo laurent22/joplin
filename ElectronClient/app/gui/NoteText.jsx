@@ -840,8 +840,9 @@ class NoteTextComponent extends React.Component {
 			&& this.state.folder !== null 
 			&& this.props.notesParentType == 'Search') {
 			toolbarItems.push({
-				title: _(this.state.folder.title),
+				title: this.state.folder.title,
 				iconName: 'fa-folder-o',
+				type: 'text',
 			});
 		}
 
