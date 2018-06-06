@@ -20,7 +20,7 @@ const MenuItem = bridge().MenuItem;
 const { shim } = require('lib/shim.js');
 const eventManager = require('../eventManager');
 const fs = require('fs-extra');
-const { clipboard } = require('electron')
+const {clipboard} = require('electron')
 const md5 = require('md5');
 const mimeUtils = require('lib/mime-utils.js').mime;
 const ArrayUtils = require('lib/ArrayUtils');
@@ -314,7 +314,7 @@ class NoteTextComponent extends React.Component {
 					}
 				}
 				this.editor_.editor.clearSelection();
-				this.editor_.editor.moveCursorTo(0, 0);
+				this.editor_.editor.moveCursorTo(0,0);
 			}
 		}
 
@@ -408,29 +408,23 @@ class NoteTextComponent extends React.Component {
 				const resource = await Resource.load(arg0.resourceId);
 				const resourcePath = Resource.fullPath(resource);
 
-				menu.append(new MenuItem({
-					label: _('Open...'), click: async () => {
-						bridge().openExternal(resourcePath);
-					}
-				}));
+				menu.append(new MenuItem({label: _('Open...'), click: async () => {
+					bridge().openExternal(resourcePath);
+				}}));
 
-				menu.append(new MenuItem({
-					label: _('Save as...'), click: async () => {
-						const filePath = bridge().showSaveDialog({
-							defaultPath: resource.filename ? resource.filename : resource.title,
-						});
-						if (!filePath) return;
-						await fs.copy(resourcePath, filePath);
-					}
-				}));
+				menu.append(new MenuItem({label: _('Save as...'), click: async () => {
+					const filePath = bridge().showSaveDialog({
+						defaultPath: resource.filename ? resource.filename : resource.title,
+					});
+					if (!filePath) return;
+					await fs.copy(resourcePath, filePath);
+				}}));
 
-				menu.append(new MenuItem({
-					label: _('Copy path to clipboard'), click: async () => {
-						const { clipboard } = require('electron');
-						const { toSystemSlashes } = require('lib/path-utils.js');
-						clipboard.writeText(toSystemSlashes(resourcePath));
-					}
-				}));
+				menu.append(new MenuItem({label: _('Copy path to clipboard'), click: async () => {
+					const { clipboard } = require('electron');
+					const { toSystemSlashes } = require('lib/path-utils.js');
+					clipboard.writeText(toSystemSlashes(resourcePath));
+				}}));
 			} else {
 				reg.logger().error('Unhandled item type: ' + itemType);
 				return;
@@ -537,8 +531,8 @@ class NoteTextComponent extends React.Component {
 			const letters = ['F', 'T', 'P', 'Q', 'L', ','];
 			for (let i = 0; i < letters.length; i++) {
 				const l = letters[i];
-				cancelledKeys.push('Ctrl+' + l);
-				cancelledKeys.push('Command+' + l);
+				cancelledKeys.push('Ctrl+' + l); 
+				cancelledKeys.push('Command+' + l); 
 			}
 
 			for (let i = 0; i < cancelledKeys.length; i++) {
@@ -640,7 +634,7 @@ class NoteTextComponent extends React.Component {
 
 		if (command.name === 'exportPdf' && this.webview_) {
 			const path = bridge().showSaveDialog({
-				filters: [{ name: _('PDF File'), extensions: ['pdf'] }]
+				filters: [{ name: _('PDF File'), extensions: ['pdf']}]
 			});
 
 			if (path) {
@@ -724,24 +718,18 @@ class NoteTextComponent extends React.Component {
 
 		const menu = new Menu()
 
-		menu.append(new MenuItem({
-			label: _('Attach file'), click: async () => {
-				return this.commandAttachFile();
-			}
-		}));
+		menu.append(new MenuItem({label: _('Attach file'), click: async () => {
+			return this.commandAttachFile();
+		}}));
 
-		menu.append(new MenuItem({
-			label: _('Tags'), click: async () => {
-				return this.commandSetTags();
-			}
-		}));
+		menu.append(new MenuItem({label: _('Tags'), click: async () => {
+			return this.commandSetTags();
+		}}));
 
 		if (!!note.is_todo) {
-			menu.append(new MenuItem({
-				label: _('Set alarm'), click: async () => {
-					return this.commandSetAlarm();
-				}
-			}));
+			menu.append(new MenuItem({label: _('Set alarm'), click: async () => {
+				return this.commandSetAlarm();
+			}}));
 		}
 
 		menu.popup(bridge().window());
@@ -847,7 +835,7 @@ class NoteTextComponent extends React.Component {
 			let html = this.state.bodyHtml;
 
 			const htmlHasChanged = this.lastSetHtml_ !== html;
-			if (htmlHasChanged) {
+			 if (htmlHasChanged) {
 				this.webview_.send('setHtml', html);
 				this.lastSetHtml_ = html;
 			}
@@ -892,24 +880,24 @@ class NoteTextComponent extends React.Component {
 
 		const titleEditor = <input
 			type="text"
-			ref={(elem) => { this.titleField_ = elem; }}
+			ref={(elem) => { this.titleField_ = elem; } }
 			style={titleEditorStyle}
 			value={note && note.title ? note.title : ''}
 			onChange={(event) => { this.title_changeText(event); }}
-			placeholder={this.props.newNote ? _('Creating new %s...', isTodo ? _('to-do') : _('note')) : ''}
+			placeholder={ this.props.newNote ? _('Creating new %s...', isTodo ? _('to-do') : _('note')) : '' }
 		/>
 
 		const titleBarMenuButton = <IconButton style={{
 			display: 'flex',
 		}} iconName="fa-caret-down" theme={this.props.theme} onClick={() => { this.itemContextMenu() }} />
 
-		const titleBarDate = <span style={Object.assign({}, theme.textStyle, { color: theme.colorFaded })}>{time.formatMsToLocal(note.user_updated_time)}</span>
+		const titleBarDate = <span style={Object.assign({}, theme.textStyle, {color: theme.colorFaded})}>{time.formatMsToLocal(note.user_updated_time)}</span>
 
-		const viewer = <webview
+		const viewer =  <webview
 			style={viewerStyle}
 			nodeintegration="1"
 			src="gui/note-viewer/index.html"
-			ref={(elem) => { this.webview_ref(elem); }}
+			ref={(elem) => { this.webview_ref(elem); } }
 		/>
 
 		// const markers = [{
@@ -934,7 +922,7 @@ class NoteTextComponent extends React.Component {
 		delete editorRootStyle.width;
 		delete editorRootStyle.height;
 		delete editorRootStyle.fontSize;
-		const editor = <AceEditor
+		const editor =  <AceEditor
 			value={body}
 			mode="markdown"
 			theme="chrome"
@@ -946,29 +934,29 @@ class NoteTextComponent extends React.Component {
 			name="note-editor"
 			wrapEnabled={true}
 			onScroll={(event) => { this.editor_scroll(); }}
-			ref={(elem) => { this.editor_ref(elem); }}
+			ref={(elem) => { this.editor_ref(elem); } }
 			onChange={(body) => { this.aceEditor_change(body) }}
 			showPrintMargin={false}
 
 			// Disable warning: "Automatically scrolling cursor into view after
 			// selection change this will be disabled in the next version set
 			// editor.$blockScrolling = Infinity to disable this message"
-			editorProps={{ $blockScrolling: true }}
+			editorProps={{$blockScrolling: true}}
 
 			// This is buggy (gets outside the container)
-			highlightActiveLine={false}
+			highlightActiveLine={false}			
 		/>
 
 		return (
 			<div style={rootStyle} onDrop={this.onDrop_}>
 				<div style={titleBarStyle}>
-					{titleEditor}
-					{titleBarDate}
-					{false ? titleBarMenuButton : null}
+					{ titleEditor }
+					{ titleBarDate }
+					{ false ? titleBarMenuButton : null }
 				</div>
-				{toolbar}
-				{editor}
-				{viewer}
+				{ toolbar }
+				{ editor }
+				{ viewer }
 			</div>
 		);
 	}

@@ -37,7 +37,7 @@ const defaultState = {
 
 const stateUtils = {};
 
-stateUtils.notesOrder = function (stateSettings) {
+stateUtils.notesOrder = function(stateSettings) {
 	return [{
 		by: stateSettings['notes.sortOrder.field'],
 		dir: stateSettings['notes.sortOrder.reverse'] ? 'DESC' : 'ASC',
@@ -296,7 +296,7 @@ const reducer = (state = defaultState, action) => {
 
 				const modNote = action.note;
 
-				const noteIsInFolder = function (note, folderId) {
+				const noteIsInFolder = function(note, folderId) {
 					if (note.is_conflict) return folderId === Folder.conflictFolderId();
 					if (!('parent_id' in modNote) || note.parent_id == folderId) return true;
 					return false;
@@ -502,7 +502,7 @@ const reducer = (state = defaultState, action) => {
 			case 'SEARCH_DELETE':
 
 				newState = handleItemDelete(state, action);
-				break;
+				break;			
 
 			case 'SEARCH_SELECT':
 

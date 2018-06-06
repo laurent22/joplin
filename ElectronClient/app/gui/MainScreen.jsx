@@ -151,8 +151,8 @@ class MainScreenComponent extends React.Component {
 				},
 			});
 		} else if (command.name === 'renameTag') {
-			const tag = await Tag.load(command.id);
-			if (!tag) return;
+			const tag = await Tag.load(command.id);			
+			if(!tag) return;
 
 			this.setState({
 				promptOptions: {
@@ -166,12 +166,12 @@ class MainScreenComponent extends React.Component {
 							} catch (error) {
 								bridge().showErrorMessageBox(error.message);
 							}
-						}
-						this.setState({ promptOptions: null });
+						}						
+						this.setState({promptOptions: null });
 					}
 				}
 			})
-
+		
 		} else if (command.name === 'search') {
 
 			if (!this.searchId_) this.searchId_ = uuid.create();
@@ -281,7 +281,7 @@ class MainScreenComponent extends React.Component {
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
-		};
+    };
 
 		if (isSidebarVisible === false) {
 			this.styles_.sideBar.width = 0;
@@ -339,7 +339,7 @@ class MainScreenComponent extends React.Component {
 			title: _('Toggle sidebar'),
 			iconName: 'fa-bars',
 			iconRotation: this.props.sidebarVisibility ? 0 : 90,
-			onClick: () => { this.doCommand({ name: 'toggleSidebar' }) }
+			onClick: () => { this.doCommand({ name: 'toggleSidebar'}) }
 		});
 
 		headerItems.push({

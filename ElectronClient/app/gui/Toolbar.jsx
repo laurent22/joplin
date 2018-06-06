@@ -12,7 +12,7 @@ class ToolbarComponent extends React.Component {
 		const theme = themeStyle(this.props.theme);
 		style.height = theme.toolbarHeight;
 		style.display = 'flex';
-		style.flexDirection = 'row';
+		style.flexDirection  = 'row';
 		style.borderBottom = '1px solid ' + theme.dividerColor;
 		style.boxSizing = 'border-box';
 
@@ -59,7 +59,7 @@ class ToolbarComponent extends React.Component {
 
 		return (
 			<div className="editor-toolbar" style={style}>
-				{itemComps}
+				{ itemComps }
 				<span style={tagsStyle}>{this.props.tags}</span>
 			</div>
 		);

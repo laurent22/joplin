@@ -22,7 +22,7 @@ class SideBarComponent extends React.Component {
 		this.onFolderDragStart_ = (event) => {
 			const folderId = event.currentTarget.getAttribute('folderid');
 			if (!folderId) return;
-
+			
 			event.dataTransfer.setDragImage(new Image(), 1, 1);
 			event.dataTransfer.clearData();
 			event.dataTransfer.setData('text/x-jop-folder-ids', JSON.stringify([folderId]));
@@ -261,7 +261,7 @@ class SideBarComponent extends React.Component {
 			);
 		}
 
-		if (itemType === BaseModel.TYPE_TAG) {
+		if (itemType === BaseModel.TYPE_TAG) { 
 			menu.append(
 				new MenuItem({
 					label: _('Rename'),
@@ -327,7 +327,7 @@ class SideBarComponent extends React.Component {
 
 		return (
 			<div className="list-item-container" style={containerStyle} key={folder.id} onDragStart={this.onFolderDragStart_} onDragOver={this.onFolderDragOver_} onDrop={this.onFolderDrop_} draggable={true} folderid={folder.id}>
-				{expandLink}
+				{ expandLink }
 				<a
 					className="list-item"
 					href="#"
