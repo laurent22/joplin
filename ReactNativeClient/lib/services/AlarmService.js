@@ -105,7 +105,7 @@ class AlarmService {
 	}
 
 	static async updateAllNotifications() {
-		this.logger().info('Updading all notifications...');
+		this.logger().info('Updating all notifications...');
 
 		await this.garbageCollect();
 

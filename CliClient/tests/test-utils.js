@@ -56,8 +56,8 @@ SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
 
-const syncTargetId_ = SyncTargetRegistry.nameToId("nextcloud");
-// const syncTargetId_ = SyncTargetRegistry.nameToId("memory");
+// const syncTargetId_ = SyncTargetRegistry.nameToId("nextcloud");
+const syncTargetId_ = SyncTargetRegistry.nameToId("memory");
 //const syncTargetId_ = SyncTargetRegistry.nameToId('filesystem');
 // const syncTargetId_ = SyncTargetRegistry.nameToId('dropbox');
 const syncDir = __dirname + '/../tests/sync';

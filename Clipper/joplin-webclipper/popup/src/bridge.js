@@ -37,7 +37,11 @@ class Bridge {
 		this.browser_.runtime.onMessage.addListener(this.browser_notify);
 
 		const backgroundPage = this.browser_.extension.getBackgroundPage();
-		this.env_ = backgroundPage.joplinEnv();
+
+		// Not sure why the getBackgroundPage() sometimes returns null, so
+		// in that case default to "prod" environment, which means the live
+		// extension won't be affected by this bug.
+		this.env_ = backgroundPage ? backgroundPage.joplinEnv() : 'prod';
 
 		console.info('Popup: Env:', this.env());
 
