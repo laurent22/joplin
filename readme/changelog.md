@@ -1,5 +1,14 @@
 # Joplin changelog
 
+## [v1.0.97](https://github.com/laurent22/joplin/releases/tag/v1.0.97) - 2018-06-09T19:23:34Z
+
+If you're using the web clipper, make sure to also update it!
+
+- Updated: Auto-delete resources only after 10 days to handle some edge cases
+- Clipper: Cleaner and more consistent clipper REST API, to facilitate third-party access
+- Clipper: Fixes [#569](https://github.com/laurent22/joplin/issues/569): Make clipper service available on localhost only
+- Clipper: Fixes [#573](https://github.com/laurent22/joplin/issues/573): Better handling of certain code blocks
+
 ## [v1.0.96](https://github.com/laurent22/joplin/releases/tag/v1.0.96) - 2018-05-26T16:36:39Z
 
 This release is mainly to fix various issues with the recently released Web Clipper.
