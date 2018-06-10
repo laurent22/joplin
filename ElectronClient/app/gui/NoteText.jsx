@@ -839,9 +839,9 @@ class NoteTextComponent extends React.Component {
 			&& this.state.folder !== null 
 			&& ['Search', 'Tag'].includes(this.props.notesParentType)) {
 			toolbarItems.push({
-				title: this.state.folder.title,
+				title: _("In") + ": " + this.state.folder.title,
 				iconName: 'fa-folder-o',
-				type: 'text',
+				enabled: false,
 			});
 		}
 
