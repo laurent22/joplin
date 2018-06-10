@@ -663,7 +663,7 @@ msgstr "是"
 msgid "No"
 msgstr "否"
 
-msgid "The web clipper service is already enabled and set to auto-start."
+msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 
 #, javascript-format
@@ -899,6 +899,10 @@ msgstr "标签"
 msgid "Set alarm"
 msgstr "设置提醒"
 
+#, fuzzy, javascript-format
+msgid "In: %s"
+msgstr "%s：%s"
+
 msgid "to-do"
 msgstr "待办事项"
 
@@ -1082,6 +1086,18 @@ msgstr "以此标题命名的笔记本已存在：\"%s\""
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "笔记本无法被命名为\"%s\"，此标题为保留标题。"
+
+#, fuzzy
+msgid "title"
+msgstr "无标题"
+
+#, fuzzy
+msgid "updated date"
+msgstr "已更新：%d条。"
+
+#, fuzzy
+msgid "created date"
+msgstr "已创建：%d条。"
 
 msgid "Untitled"
 msgstr "无标题"

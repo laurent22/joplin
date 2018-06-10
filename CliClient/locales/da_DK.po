@@ -690,7 +690,7 @@ msgstr "Ja"
 msgid "No"
 msgstr "Nej"
 
-msgid "The web clipper service is already enabled and set to auto-start."
+msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 
 #, javascript-format
@@ -933,6 +933,10 @@ msgstr "Mærker"
 msgid "Set alarm"
 msgstr "Indstil alarm"
 
+#, fuzzy, javascript-format
+msgid "In: %s"
+msgstr "%s: %s"
+
 msgid "to-do"
 msgstr "opgave"
 
@@ -1119,6 +1123,18 @@ msgstr "En notesbog bruger allerede dette navn: \"%s\""
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Notesbøger kan ikke få navnet \"%s\", da det er en beskyttet titel."
+
+#, fuzzy
+msgid "title"
+msgstr "Samlet"
+
+#, fuzzy
+msgid "updated date"
+msgstr "Opdateret %d."
+
+#, fuzzy
+msgid "created date"
+msgstr "Oprettet: %d."
 
 msgid "Untitled"
 msgstr "Samlet"

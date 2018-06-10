@@ -690,7 +690,7 @@ msgstr "Si"
 msgid "No"
 msgstr "Non"
 
-msgid "The web clipper service is already enabled and set to auto-start."
+msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 
 #, javascript-format
@@ -932,6 +932,10 @@ msgstr "Etiquetas"
 msgid "Set alarm"
 msgstr "Estabelecer alarma"
 
+#, fuzzy, javascript-format
+msgid "In: %s"
+msgstr "%s: %s"
+
 msgid "to-do"
 msgstr "tarefas pendentes"
 
@@ -1118,6 +1122,18 @@ msgstr "Xa existe un caderno con ese título: «%s»"
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Os cadernos non poden levar o nome «%s» porque é un título reservado."
+
+#, fuzzy
+msgid "title"
+msgstr "Sen título"
+
+#, fuzzy
+msgid "updated date"
+msgstr "Actualizado: %d."
+
+#, fuzzy
+msgid "created date"
+msgstr "Creado: %d."
 
 msgid "Untitled"
 msgstr "Sen título"

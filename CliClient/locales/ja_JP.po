@@ -685,7 +685,7 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-msgid "The web clipper service is already enabled and set to auto-start."
+msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 
 #, javascript-format
@@ -921,6 +921,10 @@ msgstr "タグ"
 msgid "Set alarm"
 msgstr "アラームをセット"
 
+#, javascript-format
+msgid "In: %s"
+msgstr ""
+
 #, fuzzy
 msgid "to-do"
 msgstr "新しいToDo"
@@ -1112,6 +1116,18 @@ msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "\"%s\"と言う名前はシステムで使用するために予約済みです。名前の変更が出来ませ"
 "ん。"
+
+#, fuzzy
+msgid "title"
+msgstr "名称未設定"
+
+#, fuzzy
+msgid "updated date"
+msgstr "アップデートしました：%d"
+
+#, fuzzy
+msgid "created date"
+msgstr "作成しました：%d"
 
 msgid "Untitled"
 msgstr "名称未設定"

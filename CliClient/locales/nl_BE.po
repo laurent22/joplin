@@ -702,7 +702,7 @@ msgstr ""
 msgid "No"
 msgstr "N"
 
-msgid "The web clipper service is already enabled and set to auto-start."
+msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 
 #, javascript-format
@@ -947,6 +947,10 @@ msgstr "Tags"
 msgid "Set alarm"
 msgstr "Zet melding"
 
+#, fuzzy, javascript-format
+msgid "In: %s"
+msgstr "%s: %s"
+
 #, fuzzy
 msgid "to-do"
 msgstr "Nieuwe to-do"
@@ -1138,6 +1142,18 @@ msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "Notitieboeken kunnen niet \"%s\" genoemd worden, dit is een gereserveerd "
 "woord."
+
+#, fuzzy
+msgid "title"
+msgstr "Untitled"
+
+#, fuzzy
+msgid "updated date"
+msgstr "Bijgewerkt: %d."
+
+#, fuzzy
+msgid "created date"
+msgstr "Aangemaakt: %d."
 
 msgid "Untitled"
 msgstr "Untitled"

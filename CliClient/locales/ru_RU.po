@@ -697,7 +697,7 @@ msgstr "Да"
 msgid "No"
 msgstr "Нет"
 
-msgid "The web clipper service is already enabled and set to auto-start."
+msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 
 #, javascript-format
@@ -942,6 +942,10 @@ msgstr "Теги"
 msgid "Set alarm"
 msgstr "Установить напоминание"
 
+#, fuzzy, javascript-format
+msgid "In: %s"
+msgstr "%s: %s"
+
 msgid "to-do"
 msgstr "задача"
 
@@ -1128,6 +1132,18 @@ msgstr "Блокнот с таким названием уже существу�
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Блокнот не может быть назван «%s», это зарезервированное название."
+
+#, fuzzy
+msgid "title"
+msgstr "Без имени"
+
+#, fuzzy
+msgid "updated date"
+msgstr "Обновлено: %d."
+
+#, fuzzy
+msgid "created date"
+msgstr "Создано: %d."
 
 msgid "Untitled"
 msgstr "Без имени"

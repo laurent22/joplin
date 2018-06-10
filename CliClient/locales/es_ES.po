@@ -699,7 +699,8 @@ msgstr "Sí"
 msgid "No"
 msgstr "No"
 
-msgid "The web clipper service is already enabled and set to auto-start."
+#, fuzzy
+msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 "El servicio de recorte web está habilitado y configurado para inicie "
 "automaticamente"
@@ -948,6 +949,10 @@ msgstr "Etiquetas"
 msgid "Set alarm"
 msgstr "Establecer alarma"
 
+#, fuzzy, javascript-format
+msgid "In: %s"
+msgstr "%s: %s"
+
 msgid "to-do"
 msgstr "lista de tareas"
 
@@ -1133,6 +1138,18 @@ msgstr "Ya existe una libreta con este nombre: «%s»"
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "No se puede usar el nombre «%s» para una libreta; es un título reservado."
+
+#, fuzzy
+msgid "title"
+msgstr "Sin título"
+
+#, fuzzy
+msgid "updated date"
+msgstr "Actualizado: %d."
+
+#, fuzzy
+msgid "created date"
+msgstr "Creado: %d."
 
 msgid "Untitled"
 msgstr "Sin título"

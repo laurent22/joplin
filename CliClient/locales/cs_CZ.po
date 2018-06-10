@@ -685,7 +685,7 @@ msgstr "Ano"
 msgid "No"
 msgstr "Ne"
 
-msgid "The web clipper service is already enabled and set to auto-start."
+msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 
 #, javascript-format
@@ -924,6 +924,10 @@ msgstr "Tagy"
 msgid "Set alarm"
 msgstr "Nastavit alarm"
 
+#, fuzzy, javascript-format
+msgid "In: %s"
+msgstr "%s: %s"
+
 msgid "to-do"
 msgstr "to-do"
 
@@ -1110,6 +1114,18 @@ msgstr "Zápisník s tímto názvem již existuje: \"%s\""
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Zápisník se nemůže jmenovat \"%s\", tento název je rezervován."
+
+#, fuzzy
+msgid "title"
+msgstr "Bez názvu"
+
+#, fuzzy
+msgid "updated date"
+msgstr "Upraveno: %d."
+
+#, fuzzy
+msgid "created date"
+msgstr "Vytvořeno: %d."
 
 msgid "Untitled"
 msgstr "Bez názvu"

@@ -623,7 +623,7 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-msgid "The web clipper service is already enabled and set to auto-start."
+msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 
 #, javascript-format
@@ -848,6 +848,10 @@ msgstr ""
 msgid "Set alarm"
 msgstr ""
 
+#, javascript-format
+msgid "In: %s"
+msgstr ""
+
 msgid "to-do"
 msgstr ""
 
@@ -1023,6 +1027,15 @@ msgstr ""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
+msgstr ""
+
+msgid "title"
+msgstr ""
+
+msgid "updated date"
+msgstr ""
+
+msgid "created date"
 msgstr ""
 
 msgid "Untitled"

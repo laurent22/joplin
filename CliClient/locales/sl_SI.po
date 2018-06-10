@@ -696,7 +696,7 @@ msgstr "Da"
 msgid "No"
 msgstr "Ne"
 
-msgid "The web clipper service is already enabled and set to auto-start."
+msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 
 #, javascript-format
@@ -946,6 +946,10 @@ msgstr "Oznake"
 msgid "Set alarm"
 msgstr "Nastavi alarm"
 
+#, fuzzy, javascript-format
+msgid "In: %s"
+msgstr "%s: %s"
+
 msgid "to-do"
 msgstr "seznam opravil"
 
@@ -1132,6 +1136,18 @@ msgstr "Beležnica s tem naslovom že obstaja: \"%s\""
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Beležnica ne more biti imenovana \"%s\", ker je to rezerviran naslov."
+
+#, fuzzy
+msgid "title"
+msgstr "Neimenovano"
+
+#, fuzzy
+msgid "updated date"
+msgstr "Posodobljeno: %d."
+
+#, fuzzy
+msgid "created date"
+msgstr "Ustvarjeno: %d."
 
 msgid "Untitled"
 msgstr "Neimenovano"

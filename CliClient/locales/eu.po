@@ -700,7 +700,7 @@ msgstr ""
 msgid "No"
 msgstr "E"
 
-msgid "The web clipper service is already enabled and set to auto-start."
+msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 
 #, javascript-format
@@ -943,6 +943,10 @@ msgstr "Etiketak"
 msgid "Set alarm"
 msgstr "Ezarri alarma"
 
+#, fuzzy, javascript-format
+msgid "In: %s"
+msgstr "%s: %s"
+
 #, fuzzy
 msgid "to-do"
 msgstr "Zeregin berria"
@@ -1135,6 +1139,18 @@ msgstr "Dagoeneko bada koaderno bat izen horrekin: \"%s\""
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "Koadernoak ezin izendatu daitezke \"%s\", izen hori Joplinek gordeta dauka"
+
+#, fuzzy
+msgid "title"
+msgstr "Titulu gabekoa"
+
+#, fuzzy
+msgid "updated date"
+msgstr "Eguneratuta: %d."
+
+#, fuzzy
+msgid "created date"
+msgstr "Sortuta: %d."
 
 msgid "Untitled"
 msgstr "Titulu gabekoa"

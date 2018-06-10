@@ -714,7 +714,8 @@ msgstr "Ja"
 msgid "No"
 msgstr "Nein"
 
-msgid "The web clipper service is already enabled and set to auto-start."
+#, fuzzy
+msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 "Der Web Clipper Service ist bereits aktiviert und auf Autostart eingestellt."
 
@@ -969,6 +970,10 @@ msgstr "Markierungen"
 msgid "Set alarm"
 msgstr "Alarm erstellen"
 
+#, fuzzy, javascript-format
+msgid "In: %s"
+msgstr "%s: %s"
+
 msgid "to-do"
 msgstr "To-Do"
 
@@ -1155,6 +1160,18 @@ msgstr "Ein Notizbuch mit diesem Titel existiert bereits : \"%s\""
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "Notizbuch kann nicht \"%s\" genannt werden. Dies ist ein reservierter Titel."
+
+#, fuzzy
+msgid "title"
+msgstr "Unbenannt"
+
+#, fuzzy
+msgid "updated date"
+msgstr "Aktualisiert: %d."
+
+#, fuzzy
+msgid "created date"
+msgstr "Erstellt: %d."
 
 msgid "Untitled"
 msgstr "Unbenannt"

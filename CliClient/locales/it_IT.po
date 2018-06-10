@@ -684,7 +684,7 @@ msgstr ""
 msgid "No"
 msgstr "N"
 
-msgid "The web clipper service is already enabled and set to auto-start."
+msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 
 #, javascript-format
@@ -917,6 +917,10 @@ msgstr "Etichette"
 msgid "Set alarm"
 msgstr "Imposta allarme"
 
+#, fuzzy, javascript-format
+msgid "In: %s"
+msgstr "%s: %s"
+
 #, fuzzy
 msgid "to-do"
 msgstr "Nuova attività"
@@ -1107,6 +1111,18 @@ msgstr "Esiste già un blocco note col titolo \"%s\""
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "I blocchi non possono essere chiamati \"%s\". È un titolo riservato."
+
+#, fuzzy
+msgid "title"
+msgstr "Senza titolo"
+
+#, fuzzy
+msgid "updated date"
+msgstr "Aggiornato: %d."
+
+#, fuzzy
+msgid "created date"
+msgstr "Creato: %d."
 
 msgid "Untitled"
 msgstr "Senza titolo"
