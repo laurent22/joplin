@@ -229,11 +229,33 @@ class NoteTextComponent extends React.Component {
 		if (props.newNote) {
 			note = Object.assign({}, props.newNote);
 			this.lastLoadedNoteId_ = null;
+			this.props.dispatch({
+				type: 'CURRENT_NOTE_TAGS',
+				currentNoteTags: '',
+				currentNoteId: ''
+			})
 		} else {
 			noteId = props.noteId;
 			loadingNewNote = stateNoteId !== noteId;
 			this.lastLoadedNoteId_ = noteId;
 			note = noteId ? await Note.load(noteId) : null;
+            
+			const tags = noteId ? await Tag.tagsByNoteId(noteId) : null;
+			if (tags) {
+				const tagTitles = tags.map((a) => { return a.title });
+				this.props.dispatch({
+					type: 'CURRENT_NOTE_TAGS',
+					currentNoteTags: tagTitles.join(),
+					currentNoteId: noteId
+				})
+			} else {
+				this.props.dispatch({
+					type: 'CURRENT_NOTE_TAGS',
+					currentNoteTags: '',
+					currentNoteId: noteId
+				})
+			}
+
 			if (noteId !== this.lastLoadedNoteId_) return; // Race condition - current note was changed while this one was loading
 			if (options.noReloadIfLocalChanges && this.isModified()) return;
 
@@ -869,6 +891,7 @@ class NoteTextComponent extends React.Component {
 		const toolbar = <Toolbar
 			style={toolbarStyle}
 			items={toolbarItems}
+			tags={this.props.currentNoteTags}
 		/>
 
 		const titleEditor = <input
@@ -970,6 +993,7 @@ const mapStateToProps = (state) => {
 		notesParentType: state.notesParentType,
 		searches: state.searches,
 		selectedSearchId: state.selectedSearchId,
+		currentNoteTags: state.currentNoteTags
 	};
 };
 

@@ -31,6 +31,8 @@ const defaultState = {
 		startState: 'idle',
 		port: null,
 	},
+	currentNoteTags: '',
+	currentNoteId: ''
 };
 
 const stateUtils = {};
@@ -538,7 +540,14 @@ const reducer = (state = defaultState, action) => {
 				if ('startState' in action) clipperServer.startState = action.startState;
 				if ('port' in action) clipperServer.port = action.port;
 				newState.clipperServer = clipperServer;
-				break;	
+				break;
+
+			case 'CURRENT_NOTE_TAGS':
+			
+				newState = Object.assign({}, state);
+				newState.currentNoteTags = action.currentNoteTags;
+				newState.currentNoteId = action.currentNoteId;
+				break;
 
 		}
 	} catch (error) {

@@ -119,6 +119,11 @@ class MainScreenComponent extends React.Component {
 						if (answer !== null) {
 							const tagTitles = answer.split(',').map((a) => { return a.trim() });
 							await Tag.setNoteTagsByTitles(command.noteId, tagTitles);
+							this.props.dispatch({
+								type: 'CURRENT_NOTE_TAGS',
+								currentNoteTags: tagTitles.join(),
+								currentNoteId: this.props.currentNoteId
+							})
 						}
 						this.setState({ promptOptions: null });
 					}
@@ -450,6 +455,7 @@ const mapStateToProps = (state) => {
 		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,
 		selectedFolderId: state.selectedFolderId,
 		sidebarVisibility: state.sidebarVisibility,
+		currentNoteId: state.currentNoteId
 	};
 };
 

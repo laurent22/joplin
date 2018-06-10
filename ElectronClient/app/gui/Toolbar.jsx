@@ -16,6 +16,23 @@ class ToolbarComponent extends React.Component {
 		style.borderBottom = '1px solid ' + theme.dividerColor;
 		style.boxSizing = 'border-box';
 
+		const tagsStyle = {
+			height: '35px',
+			minWidth: '35px',
+			display: 'flex',
+			alignItems: 'center',
+			paddingLeft: '6px',
+			paddingRight: '6px',
+			color: 'rgb(34, 34, 34)',
+			textDecoration: 'none',
+			fontFamily: 'sans-serif',
+			fontSize: '12px',
+			boxSizing: 'border-box',
+			cursor: 'default',
+			justifyContent: 'center',
+			opacity: 1
+		}
+
 		const itemComps = [];
 
 		if (this.props.items) {
@@ -43,6 +60,7 @@ class ToolbarComponent extends React.Component {
 		return (
 			<div className="editor-toolbar" style={style}>
 				{ itemComps }
+				<span style={tagsStyle}>{this.props.tags}</span>
 			</div>
 		);
 	}

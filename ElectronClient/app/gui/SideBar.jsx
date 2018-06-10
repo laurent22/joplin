@@ -197,6 +197,17 @@ class SideBarComponent extends React.Component {
 						await Folder.delete(itemId);
 					} else if (itemType === BaseModel.TYPE_TAG) {
 						await Tag.untagAll(itemId);
+						const tags = (this.props.currentNoteId !== '' && this.props.currentNoteId !== undefined
+							&& this.props.currentNoteId !== 'undefined') ? await Tag.tagsByNoteId(this.props.currentNoteId) : null;
+						if (tags) {
+							const tagTitles = tags.map((a) => { return a.title });
+							this.props.dispatch({
+								type: 'CURRENT_NOTE_TAGS',
+								currentNoteTags: tagTitles.join(),
+								currentNoteId: this.props.currentNoteId
+							})
+						}
+
 					} else if (itemType === BaseModel.TYPE_SEARCH) {
 						this.props.dispatch({
 							type: "SEARCH_DELETE",
@@ -485,6 +496,7 @@ const mapStateToProps = state => {
 		locale: state.settings.locale,
 		theme: state.settings.theme,
 		collapsedFolderIds: state.collapsedFolderIds,
+		currentNoteId: state.currentNoteId
 	};
 };
 
