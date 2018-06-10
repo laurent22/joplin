@@ -157,7 +157,7 @@ class InteropService {
 
 	async export(options) {
 		const exportPath = options.path ? options.path : null;
-		const sourceFolderIds = options.sourceFolderIds ? options.sourceFolderIds : [];
+		let sourceFolderIds = options.sourceFolderIds ? options.sourceFolderIds : [];
 		const sourceNoteIds = options.sourceNoteIds ? options.sourceNoteIds : [];
 		const exportFormat = options.format ? options.format : 'jex';
 		const result = { warnings: [] }
@@ -173,6 +173,14 @@ class InteropService {
 		let exportedNoteIds = [];
 		let resourceIds = [];
 		const folderIds = await Folder.allIds();
+
+		let fullSourceFolderIds = sourceFolderIds.slice();
+		for (let i = 0; i < sourceFolderIds.length; i++) {
+			const id = sourceFolderIds[i];
+			const childrenIds = await Folder.childrenIds(id);
+			fullSourceFolderIds = fullSourceFolderIds.concat(childrenIds);
+		}
+		sourceFolderIds = fullSourceFolderIds;
 
 		for (let folderIndex = 0; folderIndex < folderIds.length; folderIndex++) {
 			const folderId = folderIds[folderIndex];

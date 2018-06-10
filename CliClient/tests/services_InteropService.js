@@ -13,6 +13,8 @@ const ArrayUtils = require('lib/ArrayUtils');
 const ObjectUtils = require('lib/ObjectUtils');
 const { shim } = require('lib/shim.js');
 
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
@@ -247,6 +249,41 @@ describe('services_InteropService', function() {
 
 		let folder2 = (await Folder.all())[0];
 		expect(folder2.title).toBe('folder1');
+	}));
+
+	it('should export and import folder and its sub-folders', asyncTest(async () => {
+		
+		const service = new InteropService();
+		const filePath = exportDir() + '/test.jex';
+		let folder1 = await Folder.save({ title: "folder1" });
+		let folder2 = await Folder.save({ title: "folder2", parent_id: folder1.id });
+		let folder3 = await Folder.save({ title: "folder3", parent_id: folder2.id });
+		let folder4 = await Folder.save({ title: "folder4", parent_id: folder2.id });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder4.id });
+
+		await service.export({ path: filePath, sourceFolderIds: [folder1.id] });
+		
+		await Note.delete(note1.id);
+		await Folder.delete(folder1.id);
+		await Folder.delete(folder2.id);
+		await Folder.delete(folder3.id);
+		await Folder.delete(folder4.id);
+
+		await service.import({ path: filePath });
+
+		expect(await Note.count()).toBe(1);
+		expect(await Folder.count()).toBe(4);
+		
+		let folder1_2 = await Folder.loadByTitle('folder1');
+		let folder2_2 = await Folder.loadByTitle('folder2');
+		let folder3_2 = await Folder.loadByTitle('folder3');
+		let folder4_2 = await Folder.loadByTitle('folder4');
+		let note1_2 = await Note.loadByTitle('ma note');
+
+		expect(folder2_2.parent_id).toBe(folder1_2.id);
+		expect(folder3_2.parent_id).toBe(folder2_2.id);
+		expect(folder4_2.parent_id).toBe(folder2_2.id);
+		expect(note1_2.parent_id).toBe(folder4_2.id);
 	}));
 
 	it('should export and import links to notes', asyncTest(async () => {

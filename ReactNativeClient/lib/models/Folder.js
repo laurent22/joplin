@@ -127,6 +127,23 @@ class Folder extends BaseItem {
 		return output;
 	}
 
+	static async childrenIds(folderId, recursive) {
+		if (recursive === false) throw new Error('Not implemented');
+
+		const folders = await this.db().selectAll('SELECT id FROM folders WHERE parent_id = ?', [folderId]);
+
+		let output = [];
+
+		for (let i = 0; i < folders.length; i++) {
+			const f = folders[i];
+			output.push(f.id);
+			const subChildrenIds = await this.childrenIds(f.id, true);
+			output = output.concat(subChildrenIds);
+		}
+
+		return output;
+	}
+
 	static async allAsTree(options = null) {
 		const all = await this.all(options);
 

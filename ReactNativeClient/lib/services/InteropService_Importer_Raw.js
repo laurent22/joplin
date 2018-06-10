@@ -56,6 +56,25 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 			return defaultFolder_;
 		}
 
+		const setFolderToImportTo = async (itemParentId) => {
+			// Logic is a bit complex here:
+			// - If a destination folder was specified, move the note to it.
+			// - Otherwise, if the associated folder exists, use this.
+			// - If it doesn't exist, use the default folder. This is the case for example when importing JEX archives that contain only one or more notes, but no folder.
+			const itemParentExists = folderExists(stats, itemParentId);
+
+			if (!itemIdMap[itemParentId]) {
+				if (destinationFolderId) {
+					itemIdMap[itemParentId] = destinationFolderId;
+				} else if (!itemParentExists) {
+					const parentFolder = await defaultFolder();
+					itemIdMap[itemParentId] = parentFolder.id;
+				} else {
+					itemIdMap[itemParentId] = uuid.create();
+				}
+			}
+		}
+
 		for (let i = 0; i < stats.length; i++) {
 			const stat = stats[i];
 			if (stat.isDirectory()) continue;
@@ -70,23 +89,10 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 
 			if (itemType === BaseModel.TYPE_NOTE) {
 
-				// Logic is a bit complex here:
-				// - If a destination folder was specified, move the note to it.
-				// - Otherwise, if the associated folder exists, use this.
-				// - If it doesn't exist, use the default folder. This is the case for example when importing JEX archives that contain only one or more notes, but no folder.
-				if (!itemIdMap[item.parent_id]) {
-					if (destinationFolderId) {
-						itemIdMap[item.parent_id] = destinationFolderId;
-					} else if (!folderExists(stats, item.parent_id)) {
-						const parentFolder = await defaultFolder();
-						itemIdMap[item.parent_id] = parentFolder.id;
-					} else {
-						itemIdMap[item.parent_id] = uuid.create();
-					}
-				}
+				await setFolderToImportTo(item.parent_id);
 
 				if (!itemIdMap[item.id]) itemIdMap[item.id] = uuid.create();
-				item.id = itemIdMap[item.id]; //noteId;
+				item.id = itemIdMap[item.id];
 				item.parent_id = itemIdMap[item.parent_id];
 				item.body = await replaceLinkedItemIds(item.body);
 			} else if (itemType === BaseModel.TYPE_FOLDER) {
@@ -95,6 +101,11 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 				if (!itemIdMap[item.id]) itemIdMap[item.id] = uuid.create();
 				item.id = itemIdMap[item.id];
 				item.title = await Folder.findUniqueFolderTitle(item.title);
+
+				if (item.parent_id) {
+					await setFolderToImportTo(item.parent_id);
+					item.parent_id = itemIdMap[item.parent_id];
+				}
 			} else if (itemType === BaseModel.TYPE_RESOURCE) {
 				if (!itemIdMap[item.id]) itemIdMap[item.id] = uuid.create();
 				item.id = itemIdMap[item.id];
