@@ -218,12 +218,23 @@ class SideMenuContentComponent extends Component {
 		}
 
 		let lines = Synchronizer.reportToLines(this.props.syncReport);
-		while (lines.length < 10) lines.push(''); // Add blank lines so that height of report text is fixed and doesn't affect scrolling
 		const syncReportText = lines.join("\n");
+
+		let decryptionReportText = '';
+		if (this.props.decryptionWorker && this.props.decryptionWorker.state !== 'idle' && this.props.decryptionWorker.itemCount) {
+			decryptionReportText = _('Decrypting items: %d/%d', this.props.decryptionWorker.itemIndex + 1, this.props.decryptionWorker.itemCount);
+		}
+
+		let fullReport = [];
+		if (syncReportText) fullReport.push(syncReportText);
+		if (fullReport.length) fullReport.push('');
+		if (decryptionReportText) fullReport.push(decryptionReportText);
+
+		while (fullReport.length < 12) fullReport.push(''); // Add blank lines so that height of report text is fixed and doesn't affect scrolling
 
 		items.push(this.synchronizeButton(this.props.syncStarted ? 'cancel' : 'sync'));
 
-		items.push(<Text key='sync_report' style={this.styles().syncStatus}>{syncReportText}</Text>);
+		items.push(<Text key='sync_report' style={this.styles().syncStatus}>{fullReport.join('\n')}</Text>);
 
 		items.push(<View style={{ height: globalStyle.marginBottom }} key='bottom_padding_hack'/>);
 
@@ -260,6 +271,7 @@ const SideMenuContent = connect(
 			theme: state.settings.theme,
 			opacity: state.sideMenuOpenPercent,
 			collapsedFolderIds: state.collapsedFolderIds,
+			decryptionWorker: state.decryptionWorker,
 		};
 	}
 )(SideMenuContentComponent)

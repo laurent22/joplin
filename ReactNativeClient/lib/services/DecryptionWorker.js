@@ -48,6 +48,12 @@ class DecryptionWorker {
 		}, 1000);
 	}
 
+	dispatchReport(report) {
+		const action = Object.assign({}, report);
+		action.type = 'DECRYPTION_WORKER_SET';
+		this.dispatch(action);
+	}
+
 	async start(options = null) {
 		if (options === null) options = {};
 		if (!('materKeyNotLoadedHandler' in options)) options.materKeyNotLoadedHandler = 'throw';
@@ -63,6 +69,8 @@ class DecryptionWorker {
 
 		let excludedIds = [];
 
+		this.dispatchReport({ state: 'started' });
+
 		try {
 			const notLoadedMasterKeyDisptaches = [];
 
@@ -73,13 +81,12 @@ class DecryptionWorker {
 				for (let i = 0; i < items.length; i++) {
 					const item = items[i];
 
-					// Temp hack
-					// if (['edf44b7a0e4f8cbf248e206cd8dfa800', '2ccb3c9af0b1adac2ec6b66a5961fbb1'].indexOf(item.id) >= 0) {
-					// 	excludedIds.push(item.id);
-					// 	continue;
-					// }
-
 					const ItemClass = BaseItem.itemClass(item);
+
+					this.dispatchReport({
+						itemIndex: i,
+						itemCount: items.length,
+					});
 					
 					// Don't log in production as it results in many messages when importing many items
 					// this.logger().info('DecryptionWorker: decrypting: ' + item.id + ' (' + ItemClass.tableName() + ')');
@@ -112,10 +119,13 @@ class DecryptionWorker {
 		} catch (error) {
 			this.logger().error('DecryptionWorker:', error);
 			this.state_ = 'idle';
+			this.dispatchReport({ state: 'idle' });
 			throw error;
 		}
 
 		this.logger().info('DecryptionWorker: completed decryption.');
+
+		this.dispatchReport({ state: 'idle' });
 
 		this.state_ = 'idle';
 	}
