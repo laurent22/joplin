@@ -991,7 +991,7 @@ msgid "Clear"
 msgstr "Leeren"
 
 msgid "OneDrive Login"
-msgstr "OneDrive Login"
+msgstr "OneDrive Anmeldung"
 
 msgid "Dropbox Login"
 msgstr "Dropbox Anmeldung"
