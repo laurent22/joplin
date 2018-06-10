@@ -224,6 +224,7 @@ class NoteTextComponent extends React.Component {
 		let noteId = null;
 		let note = null;
 		let loadingNewNote = true;
+		let parentFolder = null;
 
 		if (props.newNote) {
 			note = Object.assign({}, props.newNote);
@@ -296,10 +297,16 @@ class NoteTextComponent extends React.Component {
 			}
 		}
 
+		if (note)
+		{
+			parentFolder = Folder.byId(props.folders, note.parent_id);
+		}
+
 		let newState = {
 			note: note,
 			lastSavedNote: Object.assign({}, note),
 			webviewReady: webviewReady,
+			folder: parentFolder,
 		};
 
 		if (!note) {
@@ -828,6 +835,15 @@ class NoteTextComponent extends React.Component {
 		}
 
 		const toolbarItems = [];
+		if (note 
+			&& this.state.folder !== null 
+			&& ['Search', 'Tag'].includes(this.props.notesParentType)) {
+			toolbarItems.push({
+				title: _("In") + ": " + this.state.folder.title,
+				iconName: 'fa-folder-o',
+				enabled: false,
+			});
+		}
 
 		toolbarItems.push({
 			title: _('Attach file'),
