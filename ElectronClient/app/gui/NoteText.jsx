@@ -24,6 +24,7 @@ const {clipboard} = require('electron')
 const md5 = require('md5');
 const mimeUtils = require('lib/mime-utils.js').mime;
 const ArrayUtils = require('lib/ArrayUtils');
+const urlUtils = require('lib/urlUtils');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -379,8 +380,6 @@ class NoteTextComponent extends React.Component {
 
 			const newBody = this.mdToHtml_.handleCheckboxClick(msg, this.state.note.body);
 			this.saveOneProperty('body', newBody);
-		} else if (msg.toLowerCase().indexOf('http') === 0) {
-			require('electron').shell.openExternal(msg);
 		} else if (msg === 'percentScroll') {
 			this.ignoreNextEditorScroll_ = true;
 			this.setEditorPercentScroll(arg0);
@@ -441,6 +440,8 @@ class NoteTextComponent extends React.Component {
 			} else {
 				throw new Error('Unsupported item type: ' + item.type_);
 			}
+		} else if (urlUtils.urlProtocol(msg)) {
+			require('electron').shell.openExternal(msg);
 		} else {
 			bridge().showErrorMessageBox(_('Unsupported link or message: %s', msg));
 		}
