@@ -1,9 +1,4 @@
-const fs = require('fs-extra');
-const dirname = require('path').dirname;
-const marked = require('marked');
-const Mustache = require('mustache');
-
-const headerHtml = `<!doctype html>
+<!doctype html>
 <html>
 <head>
 	<title>Joplin - an open source note taking and to-do application with synchronisation capabilities</title>
@@ -201,15 +196,15 @@ const headerHtml = `<!doctype html>
 <div class="container">
 
 <div class="header">
-	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="{{{imageBaseUrl}}}/ForkMe.png"/></a>
-	<a href="https://joplin.cozic.net"><h1 id="joplin"><img class="title-icon" src="{{{imageBaseUrl}}}/Icon512.png">oplin</h1></a>
+	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplin.cozic.net/images/ForkMe.png"/></a>
+	<a href="https://joplin.cozic.net"><h1 id="joplin"><img class="title-icon" src="https://joplin.cozic.net/images/Icon512.png">oplin</h1></a>
 	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
 </div>
 
 <div class="nav-wrapper">
 	<div class="nav">
 		<ul>
-			<li class="{{selectedHome}}"><a href="{{baseUrl}}/" title="Home"><i class="fa fa-home"></i></a></li>
+			<li class=""><a href="https:&#x2F;&#x2F;joplin.cozic.net/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplin.cozic.net" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
 		</ul>
@@ -222,53 +217,57 @@ const headerHtml = `<!doctype html>
 </div>
 
 <div class="content">
-	{{{tocHtml}}}
-`;
-
-const footerHtml = `
-<div class="footer">
-Copyright (c) 2016-2018 Laurent Cozic
+	<div id="toc"><ul>
+<li>
+<p>Applications</p>
+<ul>
+<li><a href="https://joplin.cozic.net/desktop">Desktop application</a></li>
+<li><a href="https://joplin.cozic.net/mobile">Mobile applications</a></li>
+<li><a href="https://joplin.cozic.net/terminal">Terminal application</a></li>
+</ul>
+</li>
+<li>
+<p>Support</p>
+<ul>
+<li><a href="https://discourse.joplin.cozic.net">Joplin Forum</a></li>
+<li><a href="https://joplin.cozic.net/e2ee">How to enable end-to-end encryption</a></li>
+<li><a href="https://joplin.cozic.net/spec">End-to-end encryption spec</a></li>
+<li><a href="https://joplin.cozic.net/debugging">How to enable debug mode</a></li>
+<li><a href="https://joplin.cozic.net/faq">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>About</p>
+<ul>
+<li><a href="https://joplin.cozic.net/changelog">Changelog</a></li>
+<li><a href="https://joplin.cozic.net/stats">Stats</a></li>
+<li><a href="https://joplin.cozic.net/donate">Donate</a></li>
+</ul>
+</li>
+</ul>
 </div>
-</body>
-</html>
-`;
+<h2 id="troubleshooting-the-web-clipper-service">Troubleshooting the web clipper service</h2>
+<p>The web clipper extension and the Joplin application communicates via a service, which is started by the Joplin desktop app.</p>
+<p>However certain things can interfer with this service and prevent it from being accessible or from starting. If something does not work, check the following:</p>
+<ul>
+<li><p>Check that the service is started. You can check this in the Web clipper options in the desktop app.</p>
+</li>
+<li><p>Check that the port used by the service is not blocked by a firewall. You can find the port number in the Web clipper options in the desktop Joplin application.</p>
+</li>
+<li><p>Check that no proxy is running on the machine, or make sure that the requests from the web clipper service are filtered and allowed. For example <a href="https://github.com/laurent22/joplin/issues/561#issuecomment-392220191">https://github.com/laurent22/joplin/issues/561#issuecomment-392220191</a></p>
+</li>
+</ul>
+<p>If none of this work, please report it on the <a href="https://discourse.joplin.cozic.net/">forum</a> or <a href="https://github.com/laurent22/joplin/issues">GitHub issue tracker</a></p>
+<h2 id="debugging-the-extension">Debugging the extension</h2>
+<p>To provide as much information as possible when reporting an issue, you may provide the log from the various Chrome console.</p>
+<p>To do so, first enable developer mode in <a href="chrome://extensions/">chrome://extensions/</a></p>
+<h3 id="debugging-the-popup">Debugging the popup</h3>
+<p>Right-click on the Joplin extension icon, and select &quot;Inspect popup&quot;.</p>
+<h3 id="debugging-the-background-script">Debugging the background script</h3>
+<p>In <code>chrome://extensions/</code>, click on &quot;Inspect background script&quot;.</p>
+<h3 id="debugging-the-content-script">Debugging the content script</h3>
+<p>Press Ctrl+Shift+I to open the console of the current page.</p>
 
-// const screenshotHtml = `
-// <table class="screenshots">
-// 	<tr>
-// 		<th>
-// 			Mobile
-// 		</th>
-// 		<th>
-// 			Command line
-// 		</th>
-// 	</tr>
-// 	<tr>
-// 		<td>
-// 			<img class="mobile-screenshot" src="docs/images/Mobile.png"/>
-// 		</td>
-// 		<td class="cli-screenshot-wrapper">
-// 			<pre class="cli-screenshot">
-// <span class="prompt">joplin:/My notebook$</span> ls -n 12
-// [ ] 8am conference call ☎
-// [ ] Make vet appointment
-// [ ] Go pick up parcel
-// [ ] Pay flat rent 💸
-// [X] Book ferry 🚢
-// [X] Deploy Joplin app
-//     Open source stuff
-//     Swimming pool time table 🏊
-//     Grocery shopping list 📝
-//     Work itinerary
-//     Tuesday random note
-//     Vacation plans ☀
-// 			</pre>
-// 		</td>
-// 	</tr>
-// </table>
-// `;
-
-const scriptHtml = `
 <script>
 	function stickyHeader() { 
 		return; // Disabled
@@ -298,85 +297,9 @@ const scriptHtml = `
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
-`;
 
-const rootDir = dirname(__dirname);
-
-function markdownToHtml(md) {
-	const renderer = new marked.Renderer();
-
-	let output = marked(md, {
-		gfm: true,
-		break: true,
-		renderer: renderer,
-	});
-
-	return headerHtml + output + scriptHtml + footerHtml;
-}
-
-let tocMd_ = null;
-let tocHtml_ = null;
-const tocRegex_ = /<!-- TOC -->([^]*)<!-- TOC -->/
-function tocMd() {
-	if (tocMd_) return tocMd_;
-	const md = fs.readFileSync(rootDir + '/README.md', 'utf8');
-	const toc = md.match(tocRegex_);
-	tocMd_ = toc[1];
-	return tocMd_;
-}
-
-function tocHtml() {
-	if (tocHtml_) return tocHtml_;
-	const MarkdownIt = require('markdown-it');
-	const markdownIt = new MarkdownIt();
-	let md = tocMd();
-	md = md.replace(/# Table of contents/, '');
-	md = md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*)\.md/g, 'https://joplin.cozic.net/$1');
-	tocHtml_ = markdownIt.render(md);
-	tocHtml_ = '<div id="toc">' + tocHtml_ + '</div>';
-	return tocHtml_;
-}
-
-function renderMdToHtml(md, targetPath, params) {
-	// Remove the header because it's going to be added back as HTML
-	md = md.replace(/# Joplin\n/, '');
-
-	params.baseUrl = 'https://joplin.cozic.net';
-	params.imageBaseUrl = params.baseUrl + '/images';
-	params.tocHtml = tocHtml();
-	const html = Mustache.render(markdownToHtml(md), params);
-	fs.writeFileSync(targetPath, html);
-}
-
-function renderFileToHtml(sourcePath, targetPath, params) {
-	const md = fs.readFileSync(sourcePath, 'utf8');
-	return renderMdToHtml(md, targetPath, params);
-}
-
-function makeHomePageMd() {
-	let md = fs.readFileSync(rootDir + '/README.md', 'utf8');
-	md = md.replace(tocRegex_, '');
-	return md;
-}
-
-async function main() {
-	tocMd();
-
-	renderMdToHtml(makeHomePageMd(), rootDir + '/docs/index.html', {});
-
-	renderFileToHtml(rootDir + '/readme/changelog.md', rootDir + '/docs/changelog/index.html', {});
-	renderFileToHtml(rootDir + '/readme/clipper.md', rootDir + '/docs/clipper/index.html', {});
-	renderFileToHtml(rootDir + '/readme/debugging.md', rootDir + '/docs/debugging/index.html', {});
-	renderFileToHtml(rootDir + '/readme/desktop.md', rootDir + '/docs/desktop/index.html', {});
-	renderFileToHtml(rootDir + '/readme/donate.md', rootDir + '/docs/donate/index.html', {});
-	renderFileToHtml(rootDir + '/readme/e2ee.md', rootDir + '/docs/e2ee/index.html', {});
-	renderFileToHtml(rootDir + '/readme/faq.md', rootDir + '/docs/faq/index.html', {});
-	renderFileToHtml(rootDir + '/readme/mobile.md', rootDir + '/docs/mobile/index.html', {});
-	renderFileToHtml(rootDir + '/readme/spec.md', rootDir + '/docs/spec/index.html', {});
-	renderFileToHtml(rootDir + '/readme/stats.md', rootDir + '/docs/stats/index.html', {});
-	renderFileToHtml(rootDir + '/readme/terminal.md', rootDir + '/docs/terminal/index.html', {});
-}
-
-main().catch((error) => {
-	console.error(error);
-});
+<div class="footer">
+Copyright (c) 2016-2018 Laurent Cozic
+</div>
+</body>
+</html>
