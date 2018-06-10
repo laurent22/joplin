@@ -100,6 +100,11 @@ reg.scheduleSync = async (delay = null, syncOptions = null) => {
 			try {
 				reg.logger().info("Starting scheduled sync");
 				const options = Object.assign({}, syncOptions, { context: context });
+				if (!options.saveContextHandler) {
+					options.saveContextHandler = (newContext) => {
+						Setting.setValue(contextKey, JSON.stringify(newContext));
+					}
+				}
 				const newContext = await sync.start(options);
 				Setting.setValue(contextKey, JSON.stringify(newContext));
 			} catch (error) {

@@ -570,6 +570,15 @@ class Synchronizer {
 					// items being synced twice as an update. If the local and remote items are identical
 					// the update will simply be skipped.
 					if (!hasCancelled) {
+						if (options.saveContextHandler) {
+							const deltaToSave = Object.assign({}, listResult.context);
+							// Remove these two variables because they can be large and can be rebuilt
+							// the next time the sync is started.
+							delete deltaToSave.statsCache;
+							delete deltaToSave.statIdsCache;
+							options.saveContextHandler({ delta: deltaToSave });
+						}
+
 						if (!listResult.hasMore) {
 							newDeltaContext = listResult.context;
 							break;

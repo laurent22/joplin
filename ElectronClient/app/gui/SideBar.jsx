@@ -152,7 +152,7 @@ class SideBarComponent extends React.Component {
 				marginRight: 5,
 				minHeight: 70,
 				wordWrap: "break-word",
-				width: "100%",
+				//width: "100%",
 			},
 		};
 

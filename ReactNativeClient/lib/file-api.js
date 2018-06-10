@@ -216,7 +216,7 @@ function basicDeltaContextFromOptions_(options) {
 // a built-in delta API. OneDrive and Dropbox have one for example, but Nextcloud and obviously
 // the file system do not.
 async function basicDelta(path, getDirStatFn, options) {
-	const outputLimit = 1000;
+	const outputLimit = 50;
 	const itemIds = await options.allItemIdsHandler();
 	if (!Array.isArray(itemIds)) throw new Error('Delta API not supported - local IDs must be provided');
 
