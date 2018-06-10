@@ -57,7 +57,8 @@
     },
     "linux": {
       "asar": false,
-      "category": "Office"
+      "category": "Office",
+      "target": "AppImage"
     }
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
