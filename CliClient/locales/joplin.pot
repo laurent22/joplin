@@ -623,283 +623,6 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-msgid "The web clipper service is already enabled and set to auto-start."
-msgstr ""
-
-#, javascript-format
-msgid "Status: Started on port %d"
-msgstr ""
-
-#, javascript-format
-msgid "Status: %s"
-msgstr ""
-
-msgid "Disable Web Clipper Service"
-msgstr ""
-
-msgid "The web clipper service is not enabled."
-msgstr ""
-
-msgid "Enable Web Clipper Service"
-msgstr ""
-
-msgid ""
-"Joplin Web Clipper allows saving web pages and screenshots from your browser "
-"to Joplin."
-msgstr ""
-
-msgid "In order to use the web clipper, you need to do the following:"
-msgstr ""
-
-msgid "Step 1: Enable the clipper service"
-msgstr ""
-
-msgid ""
-"This service allows the browser extension to communicate with Joplin. When "
-"enabling it your firewall may ask you to give permission to Joplin to listen "
-"to a particular port."
-msgstr ""
-
-msgid "Step 2: Install the extension"
-msgstr ""
-
-msgid "Download and install the relevant extension for your browser:"
-msgstr ""
-
-msgid "Check synchronisation configuration"
-msgstr ""
-
-#, javascript-format
-msgid "Notes and settings are stored in: %s"
-msgstr ""
-
-msgid "Save"
-msgstr ""
-
-msgid "Submit"
-msgstr ""
-
-msgid ""
-"Disabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent unencrypted to the sync target. Do you wish to "
-"continue?"
-msgstr ""
-
-msgid ""
-"Enabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent encrypted to the sync target. Do not lose the "
-"password as, for security purposes, this will be the *only* way to decrypt "
-"the data! To enable encryption, please enter your password below."
-msgstr ""
-
-msgid "Disable encryption"
-msgstr ""
-
-msgid "Enable encryption"
-msgstr ""
-
-msgid "Master Keys"
-msgstr ""
-
-msgid "Active"
-msgstr ""
-
-msgid "ID"
-msgstr ""
-
-msgid "Source"
-msgstr ""
-
-msgid "Created"
-msgstr ""
-
-msgid "Updated"
-msgstr ""
-
-msgid "Password"
-msgstr ""
-
-msgid "Password OK"
-msgstr ""
-
-msgid ""
-"Note: Only one master key is going to be used for encryption (the one marked "
-"as \"active\"). Any of the keys might be used for decryption, depending on "
-"how the notes or notebooks were originally encrypted."
-msgstr ""
-
-msgid "Missing Master Keys"
-msgstr ""
-
-msgid ""
-"The master keys with these IDs are used to encrypt some of your items, "
-"however the application does not currently have access to them. It is likely "
-"they will eventually be downloaded via synchronisation."
-msgstr ""
-
-msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
-"to enable it please check the documentation:"
-msgstr ""
-
-msgid "Status"
-msgstr ""
-
-msgid "Encryption is:"
-msgstr ""
-
-msgid "Back"
-msgstr ""
-
-#, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
-msgstr ""
-
-msgid "Please create a notebook first."
-msgstr ""
-
-msgid "Please create a notebook first"
-msgstr ""
-
-msgid "Notebook title:"
-msgstr ""
-
-msgid "Add or remove tags:"
-msgstr ""
-
-msgid "Separate each tag by a comma."
-msgstr ""
-
-msgid "Rename notebook:"
-msgstr ""
-
-msgid "Rename tag:"
-msgstr ""
-
-msgid "Set alarm:"
-msgstr ""
-
-msgid "Layout"
-msgstr ""
-
-msgid "Search..."
-msgstr ""
-
-msgid "Some items cannot be synchronised."
-msgstr ""
-
-msgid "View them now"
-msgstr ""
-
-msgid "Some items cannot be decrypted."
-msgstr ""
-
-msgid "Set the password"
-msgstr ""
-
-msgid "Add or remove tags"
-msgstr ""
-
-msgid "Switch between note and to-do type"
-msgstr ""
-
-msgid "Copy Markdown link"
-msgstr ""
-
-msgid "Delete"
-msgstr ""
-
-msgid "Delete notes?"
-msgstr ""
-
-msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr ""
-
-msgid ""
-"There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr ""
-
-msgid "Open..."
-msgstr ""
-
-msgid "Save as..."
-msgstr ""
-
-msgid "Copy path to clipboard"
-msgstr ""
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr ""
-
-#, javascript-format
-msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
-msgstr ""
-
-msgid "Attach file"
-msgstr ""
-
-msgid "Tags"
-msgstr ""
-
-msgid "Set alarm"
-msgstr ""
-
-msgid "to-do"
-msgstr ""
-
-msgid "note"
-msgstr ""
-
-#, javascript-format
-msgid "Creating new %s..."
-msgstr ""
-
-msgid "Refresh"
-msgstr ""
-
-msgid "Clear"
-msgstr ""
-
-msgid "OneDrive Login"
-msgstr ""
-
-msgid "Dropbox Login"
-msgstr ""
-
-msgid "Options"
-msgstr ""
-
-msgid "Synchronisation Status"
-msgstr ""
-
-msgid "Encryption Options"
-msgstr ""
-
-msgid "Clipper Options"
-msgstr ""
-
-msgid "Remove this tag from all the notes?"
-msgstr ""
-
-msgid "Remove this search from the sidebar?"
-msgstr ""
-
-msgid "Rename"
-msgstr ""
-
-msgid "Synchronise"
-msgstr ""
-
-msgid "Notebooks"
-msgstr ""
-
-msgid "Please select where the sync status should be exported to"
-msgstr ""
-
 #, javascript-format
 msgid "Usage: %s"
 msgstr ""
@@ -1023,6 +746,15 @@ msgstr ""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
+msgstr ""
+
+msgid "title"
+msgstr ""
+
+msgid "updated date"
+msgstr ""
+
+msgid "created date"
 msgstr ""
 
 msgid "Untitled"
@@ -1258,6 +990,9 @@ msgstr ""
 msgid "Log"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Export Debug Report"
 msgstr ""
 
@@ -1265,6 +1000,9 @@ msgid "Encryption Config"
 msgstr ""
 
 msgid "Configuration"
+msgstr ""
+
+msgid "Delete"
 msgstr ""
 
 msgid "Move to notebook..."
@@ -1286,6 +1024,9 @@ msgstr ""
 msgid "Confirm"
 msgstr ""
 
+msgid "Synchronise"
+msgstr ""
+
 msgid "Cancel synchronisation"
 msgstr ""
 
@@ -1293,6 +1034,9 @@ msgid "New tags:"
 msgstr ""
 
 msgid "Type new tags or select from list"
+msgstr ""
+
+msgid "Check synchronisation configuration"
 msgstr ""
 
 msgid ""
@@ -1317,6 +1061,9 @@ msgstr ""
 msgid "Login with Dropbox"
 msgstr ""
 
+msgid "Submit"
+msgstr ""
+
 #, javascript-format
 msgid "Master Key %s"
 msgstr ""
@@ -1328,10 +1075,40 @@ msgstr ""
 msgid "Password:"
 msgstr ""
 
+msgid "Save"
+msgstr ""
+
 msgid "Password cannot be empty"
 msgstr ""
 
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
+msgstr ""
+
 msgid "Enable"
+msgstr ""
+
+msgid "Missing Master Keys"
+msgstr ""
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+
+msgid "Disable encryption"
+msgstr ""
+
+msgid "Enable encryption"
+msgstr ""
+
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation:"
 msgstr ""
 
 #, javascript-format
@@ -1339,6 +1116,9 @@ msgid "The notebook could not be saved: %s"
 msgstr ""
 
 msgid "Edit notebook"
+msgstr ""
+
+msgid "Refresh"
 msgstr ""
 
 msgid "Show all"
@@ -1374,13 +1154,22 @@ msgstr ""
 msgid "Attach any file"
 msgstr ""
 
+msgid "Set alarm"
+msgstr ""
+
 msgid "Share"
+msgstr ""
+
+msgid "Tags"
 msgstr ""
 
 msgid "Convert to note"
 msgstr ""
 
 msgid "Convert to todo"
+msgstr ""
+
+msgid "Copy Markdown link"
 msgstr ""
 
 msgid "Hide metadata"

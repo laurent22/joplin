@@ -17,9 +17,9 @@ class Note extends BaseItem {
 
 	static fieldToLabel(field) {
 		const fieldsToLabels = {
-			title: 'title',
-			user_updated_time: 'updated date',
-			user_created_time: 'created date',
+			title: _('title'),
+			user_updated_time: _('updated date'),
+			user_created_time: _('created date'),
 		};
 
 		return field in fieldsToLabels ? fieldsToLabels[field] : field;
@@ -177,7 +177,7 @@ class Note extends BaseItem {
 			const titleA = a.title ? a.title.toLowerCase() : '';
 			const titleB = b.title ? b.title.toLowerCase() : '';
 			r = noteFieldComp(titleA, titleB); if (r) return r;
-			
+
 			return noteFieldComp(a.id, b.id);
 		}
 
@@ -295,7 +295,7 @@ class Note extends BaseItem {
 		}
 
 		if (hasNotes && hasTodos) {
-			
+
 		} else if (hasNotes) {
 			options.conditions.push('is_todo = 0');
 		} else if (hasTodos) {
@@ -455,7 +455,7 @@ class Note extends BaseItem {
 				id: note.id,
 			});
 		}
-		
+
 		return note;
 	}
 
