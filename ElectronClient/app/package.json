@@ -67,7 +67,7 @@
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.24.1",
     "electron": "^1.8.7",
-    "electron-builder": "^20.15.1"
+    "electron-builder": "20.14.7"
   },
   "optionalDependencies": {
     "7zip-bin-mac": "^1.0.1",
