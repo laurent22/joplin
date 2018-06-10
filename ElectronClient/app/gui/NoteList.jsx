@@ -13,7 +13,7 @@ const InteropService = require('lib/services/InteropService');
 const InteropServiceHelper = require('../InteropServiceHelper.js');
 const Search = require('lib/models/Search');
 const Mark = require('mark.js/dist/mark.min.js');
-
+const { NoteCountUtils } = require('lib/note-count-utils.js');
 class NoteListComponent extends React.Component {
 
 	style() {
@@ -126,8 +126,22 @@ class NoteListComponent extends React.Component {
 
 		menu.append(new MenuItem({label: _('Delete'), click: async () => {
 			const ok = bridge().showConfirmMessageBox(noteIds.length > 1 ? _('Delete notes?') : _('Delete note?'));
-			if (!ok) return;
-			await Note.batchDelete(noteIds);
+      if (!ok) return;
+      await Note.batchDelete(noteIds);
+      if(this.props.notesParentType === 'Tag' || this.props.notesParentType === 'Search'){
+        await NoteCountUtils.refreshNotesCount();
+      } else if(this.props.notesParentType === 'Folder'){
+        let tempProps = Object.assign({},this.props);
+        let notesCount = [];
+        for(let key in tempProps.notesCount){
+           notesCount[key] = tempProps.notesCount[key];
+        }
+        notesCount[this.props.selectedFolderId] = +notesCount[this.props.selectedFolderId] - noteIds.length;
+        this.props.dispatch({
+          type:'FOLDER_COUNT_UPDATE_ALL',
+          notesCount: notesCount
+        })
+      }
 		}}));
 
 		menu.popup(bridge().window());
@@ -292,7 +306,9 @@ const mapStateToProps = (state) => {
 		theme: state.settings.theme,
 		notesParentType: state.notesParentType,
 		searches: state.searches,
-		selectedSearchId: state.selectedSearchId,
+    selectedSearchId: state.selectedSearchId,
+    selectedFolderId: state.selectedFolderId,
+    notesCount: state.notesCount
 	};
 };
 

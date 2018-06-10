@@ -22,7 +22,7 @@ class SideBarComponent extends React.Component {
 		this.onFolderDragStart_ = (event) => {
 			const folderId = event.currentTarget.getAttribute('folderid');
 			if (!folderId) return;
-			
+
 			event.dataTransfer.setDragImage(new Image(), 1, 1);
 			event.dataTransfer.clearData();
 			event.dataTransfer.setData('text/x-jop-folder-ids', JSON.stringify([folderId]));
@@ -250,7 +250,7 @@ class SideBarComponent extends React.Component {
 			);
 		}
 
-		if (itemType === BaseModel.TYPE_TAG) { 
+		if (itemType === BaseModel.TYPE_TAG) {
 			menu.append(
 				new MenuItem({
 					label: _('Rename'),
@@ -313,10 +313,15 @@ class SideBarComponent extends React.Component {
 		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'fa-plus-square' : 'fa-minus-square';
 		const expandIcon = <i style={expandIconStyle} className={"fa " + iconName}></i>
 		const expandLink = hasChildren ? <a style={expandLinkStyle} href="#" folderid={folder.id} onClick={this.onFolderToggleClick_}>{expandIcon}</a> : <span style={expandLinkStyle}>{expandIcon}</span>
-
+		let count = '0';
+		if (this.props.notesCount[folder.id] !== 'undefined'
+			&& this.props.notesCount[folder.id] !== undefined) {
+			count = this.props.notesCount[folder.id];
+		}
 		return (
+
 			<div className="list-item-container" style={containerStyle} key={folder.id} onDragStart={this.onFolderDragStart_} onDragOver={this.onFolderDragOver_} onDrop={this.onFolderDrop_} draggable={true} folderid={folder.id}>
-				{ expandLink }
+				{expandLink}
 				<a
 					className="list-item"
 					href="#"
@@ -330,7 +335,7 @@ class SideBarComponent extends React.Component {
 					}}
 					onDoubleClick={this.onFolderToggleClick_}
 				>
-					{itemTitle}
+					{itemTitle + ' (' + count + ')'}
 				</a>
 			</div>
 		);
@@ -485,6 +490,7 @@ const mapStateToProps = state => {
 		locale: state.settings.locale,
 		theme: state.settings.theme,
 		collapsedFolderIds: state.collapsedFolderIds,
+		notesCount: state.notesCount
 	};
 };
 

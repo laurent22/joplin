@@ -1,7 +1,7 @@
 const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
-
+const { NoteCountUtils } = require('lib/note-count-utils.js');
 const defaultState = {
 	notes: [],
 	notesSource: '',
@@ -31,11 +31,12 @@ const defaultState = {
 		startState: 'idle',
 		port: null,
 	},
+  notesCount: [],
 };
 
 const stateUtils = {};
 
-stateUtils.notesOrder = function(stateSettings) {
+stateUtils.notesOrder = function (stateSettings) {
 	return [{
 		by: stateSettings['notes.sortOrder.field'],
 		dir: stateSettings['notes.sortOrder.reverse'] ? 'DESC' : 'ASC',
@@ -294,7 +295,7 @@ const reducer = (state = defaultState, action) => {
 
 				const modNote = action.note;
 
-				const noteIsInFolder = function(note, folderId) {
+				const noteIsInFolder = function (note, folderId) {
 					if (note.is_conflict) return folderId === Folder.conflictFolderId();
 					if (!('parent_id' in modNote) || note.parent_id == folderId) return true;
 					return false;
@@ -343,6 +344,7 @@ const reducer = (state = defaultState, action) => {
 				if (noteFolderHasChanged) {
 					newState.selectedNoteIds = newNotes.length ? [newNotes[0].id] : [];
 				}
+				NoteCountUtils.refreshNotesCount();
 				break;
 
 			case 'NOTE_DELETE':
@@ -359,6 +361,7 @@ const reducer = (state = defaultState, action) => {
 
 				newState = Object.assign({}, state);
 				newState.folders = action.items;
+				newState.notesCount = action.notesCount;
 				break;
 
 			case 'FOLDER_SET_COLLAPSED':
@@ -500,7 +503,7 @@ const reducer = (state = defaultState, action) => {
 			case 'SEARCH_DELETE':
 
 				newState = handleItemDelete(state, action);
-				break;			
+				break;
 
 			case 'SEARCH_SELECT':
 
@@ -538,8 +541,12 @@ const reducer = (state = defaultState, action) => {
 				if ('startState' in action) clipperServer.startState = action.startState;
 				if ('port' in action) clipperServer.port = action.port;
 				newState.clipperServer = clipperServer;
-				break;	
+				break;
 
+			case 'FOLDER_COUNT_UPDATE_ALL':
+				newState = Object.assign({}, state);
+				newState.notesCount = action.notesCount;
+        break;
 		}
 	} catch (error) {
 		error.message = 'In reducer: ' + error.message + ' Action: ' + JSON.stringify(action);

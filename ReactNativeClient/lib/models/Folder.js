@@ -65,7 +65,12 @@ class Folder extends BaseItem {
 	static async noteCount(parentId) {
 		let r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 0 AND parent_id = ?', [parentId]);
 		return r ? r.total : 0;
-	}
+  }
+  
+  static async allFolderNoteCount() {
+    let rows = await this.db().selectAll('SELECT count(*) as total, parent_id FROM notes WHERE is_conflict = 0 GROUP BY parent_id', []);
+		return rows;
+  }
 
 	static markNotesAsConflict(parentId) {
 		let query = Database.updateQuery('notes', { is_conflict: 1 }, { parent_id: parentId });
