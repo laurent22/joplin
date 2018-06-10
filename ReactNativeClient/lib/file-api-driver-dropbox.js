@@ -23,7 +23,7 @@ class FileApiDriverDropbox {
 	}
 
 	hasErrorCode_(error, errorCode) {
-		if (!error || !error.code) return false;
+		if (!error || typeof error.code !== 'string') return false;
 		return error.code.indexOf(errorCode) >= 0;
 	}
 

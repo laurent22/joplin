@@ -198,7 +198,7 @@ class DropboxApi {
 				return loadResponseJson();
 			} catch (error) {
 				tryCount++;
-				if (error && error.code && error.code.indexOf('too_many_write_operations') >= 0) {
+				if (error && typeof error.code === 'string' && error.code.indexOf('too_many_write_operations') >= 0) {
 					this.logger().warn('too_many_write_operations ' + tryCount);
 					if (tryCount >= 3) {
 						throw error;
