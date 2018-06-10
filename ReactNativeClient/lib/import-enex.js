@@ -17,11 +17,18 @@ const md5 = require('md5');
 const fs = require('fs-extra');
 
 function dateToTimestamp(s, zeroIfInvalid = false) {
+	// Most dates seem to be in this format
 	let m = moment(s, 'YYYYMMDDTHHmmssZ');
+
+	// But sometimes they might be in this format eg. 20180306T91108 AMZ
+	// https://github.com/laurent22/joplin/issues/557
+	if (!m.isValid()) m = moment(s, 'YYYYMMDDThmmss AZ');
+
 	if (!m.isValid()) {
 		if (zeroIfInvalid) return 0;
 		throw new Error('Invalid date: ' + s);
 	}
+
 	return m.toDate().getTime();
 }
 

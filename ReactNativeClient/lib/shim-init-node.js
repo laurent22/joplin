@@ -6,6 +6,8 @@ const { time } = require('lib/time-utils.js');
 const { setLocale, defaultLocale, closestSupportedLocale } = require('lib/locale.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const mimeUtils = require('lib/mime-utils.js').mime;
+const Note = require('lib/models/Note.js');
+const Resource = require('lib/models/Resource.js');
 const urlValidator = require('valid-url');
 
 function shimInit() {
@@ -82,7 +84,6 @@ function shimInit() {
 			await shim.writeImageToFile(image, mime, targetPath);
 		} else { // For the CLI tool
 			const sharp = require('sharp');
-			const Resource = require('lib/models/Resource.js');
 
 			return new Promise((resolve, reject) => {
 				sharp(filePath)
@@ -104,11 +105,9 @@ function shimInit() {
 		const readChunk = require('read-chunk');
 		const imageType = require('image-type');
 
-		const Resource = require('lib/models/Resource.js');
 		const { uuid } = require('lib/uuid.js');
 		const { basename, fileExtension, safeFileExtension } = require('lib/path-utils.js');
 		const mime = require('mime/lite');
-		const Note = require('lib/models/Note.js');
 
 		if (!(await fs.pathExists(filePath))) throw new Error(_('Cannot access %s', filePath));
 

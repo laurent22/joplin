@@ -1,4 +1,5 @@
 #!/bin/bash
+START_DIR="$(pwd)"
 ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BUILD_DIR="$ROOT_DIR/tests-build"
 TEST_FILE="$1"
@@ -13,15 +14,22 @@ if [[ $TEST_FILE != "" ]]; then
 	exit
 fi
 
-(cd "$ROOT_DIR" && npm test tests-build/ArrayUtils.js)
-(cd "$ROOT_DIR" && npm test tests-build/encryption.js
-(cd "$ROOT_DIR" && npm test tests-build/EnexToMd.js)
-(cd "$ROOT_DIR" && npm test tests-build/HtmlToMd.js)
-(cd "$ROOT_DIR" && npm test tests-build/markdownUtils.js)
-(cd "$ROOT_DIR" && npm test tests-build/models_Folder.js)
-(cd "$ROOT_DIR" && npm test tests-build/models_Note.js)
-(cd "$ROOT_DIR" && npm test tests-build/models_Setting.js)
-(cd "$ROOT_DIR" && npm test tests-build/services_InteropService.js)
-(cd "$ROOT_DIR" && npm test tests-build/services_ResourceService.js)
-(cd "$ROOT_DIR" && npm test tests-build/synchronizer.js)
-(cd "$ROOT_DIR" && npm test tests-build/urlUtils.js)
+function finish {
+	cd "$START_DIR"
+}
+
+trap finish EXIT
+
+cd "$ROOT_DIR"
+npm test tests-build/ArrayUtils.js
+npm test tests-build/encryption.js
+npm test tests-build/EnexToMd.js
+npm test tests-build/HtmlToMd.js
+npm test tests-build/markdownUtils.js
+npm test tests-build/models_Folder.js
+npm test tests-build/models_Note.js
+npm test tests-build/models_Setting.js
+npm test tests-build/services_InteropService.js
+npm test tests-build/services_ResourceService.js
+npm test tests-build/synchronizer.js
+npm test tests-build/urlUtils.js
