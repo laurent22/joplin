@@ -1,5 +1,16 @@
 # Joplin changelog
 
+## [v1.0.99](https://github.com/laurent22/joplin/releases/tag/v1.0.99) - 2018-06-10T13:18:23Z
+
+Note: This is the same as 1.0.97, but with a fix for the Linux version, which could not start anymore.
+
+If you're using the web clipper, make sure to also update it!
+
+- Updated: Auto-delete resources only after 10 days to handle some edge cases
+- Clipper: Cleaner and more consistent clipper REST API, to facilitate third-party access
+- Clipper: Fixes [#569](https://github.com/laurent22/joplin/issues/569): Make clipper service available on localhost only
+- Clipper: Fixes [#573](https://github.com/laurent22/joplin/issues/573): Better handling of certain code blocks
+
 ## [v1.0.97](https://github.com/laurent22/joplin/releases/tag/v1.0.97) - 2018-06-09T19:23:34Z
 
 If you're using the web clipper, make sure to also update it!
@@ -225,10 +236,3 @@ IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before 
 - Fixed auto-title when title is manually entered first
 - Improved auto-update process to avoid random crashes
 - New: Allow focusing either title or body when creating a new note or to-do
-
-## [v0.10.51](https://github.com/laurent22/joplin/releases/tag/v0.10.51) - 2018-01-28T18:47:02Z
-
-- Added Nextcloud support (Beta)
-- Upgraded Electron to 1.7.11 to fix security vulnerability
-- Fixed checkbox issue in config screen
-- Fixed detection of encrypted item
