@@ -1,4 +1,4 @@
-## Troubleshooting the web clipper service
+# Troubleshooting the web clipper service
 
 The web clipper extension and the Joplin application communicates via a service, which is started by the Joplin desktop app.
 
@@ -12,7 +12,9 @@ However certain things can interfer with this service and prevent it from being 
 
 If none of this work, please report it on the [forum](https://discourse.joplin.cozic.net/) or [GitHub issue tracker](https://github.com/laurent22/joplin/issues)
 
-## Debugging the extension
+# Debugging the extension
+
+## In Chrome
 
 To provide as much information as possible when reporting an issue, you may provide the log from the various Chrome console.
 
@@ -29,3 +31,16 @@ In `chrome://extensions/`, click on "Inspect background script".
 ### Debugging the content script
 
 Press Ctrl+Shift+I to open the console of the current page.
+
+## In Firefox
+
+- Open [about:debugging](about:debugging) in Firefox.
+- Make sure the checkox "Enable add-on debugging" is ticked.
+- Scroll down to the Joplin Web Clipper extension.
+- Click on "Debugging" - that should open a new console window.
+
+Also press F12 to open the regular Firefox console (some messages from the Joplin extension can go there too).
+
+Now use the extension as normal and replicate the bug you're having.
+
+Copy and paste the content of both the debugging window and the Firefox console, and post it to the [forum](https://discourse.joplin.cozic.net/).

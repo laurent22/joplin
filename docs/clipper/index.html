@@ -246,7 +246,7 @@
 </li>
 </ul>
 </div>
-<h2 id="troubleshooting-the-web-clipper-service">Troubleshooting the web clipper service</h2>
+<h1 id="troubleshooting-the-web-clipper-service">Troubleshooting the web clipper service</h1>
 <p>The web clipper extension and the Joplin application communicates via a service, which is started by the Joplin desktop app.</p>
 <p>However certain things can interfer with this service and prevent it from being accessible or from starting. If something does not work, check the following:</p>
 <ul>
@@ -258,7 +258,8 @@
 </li>
 </ul>
 <p>If none of this work, please report it on the <a href="https://discourse.joplin.cozic.net/">forum</a> or <a href="https://github.com/laurent22/joplin/issues">GitHub issue tracker</a></p>
-<h2 id="debugging-the-extension">Debugging the extension</h2>
+<h1 id="debugging-the-extension">Debugging the extension</h1>
+<h2 id="in-chrome">In Chrome</h2>
 <p>To provide as much information as possible when reporting an issue, you may provide the log from the various Chrome console.</p>
 <p>To do so, first enable developer mode in <a href="chrome://extensions/">chrome://extensions/</a></p>
 <h3 id="debugging-the-popup">Debugging the popup</h3>
@@ -267,6 +268,16 @@
 <p>In <code>chrome://extensions/</code>, click on &quot;Inspect background script&quot;.</p>
 <h3 id="debugging-the-content-script">Debugging the content script</h3>
 <p>Press Ctrl+Shift+I to open the console of the current page.</p>
+<h2 id="in-firefox">In Firefox</h2>
+<ul>
+<li>Open <a href="about:debugging">about:debugging</a> in Firefox.</li>
+<li>Make sure the checkox &quot;Enable add-on debugging&quot; is ticked.</li>
+<li>Scroll down to the Joplin Web Clipper extension.</li>
+<li>Click on &quot;Debugging&quot; - that should open a new console window.</li>
+</ul>
+<p>Also press F12 to open the regular Firefox console (some messages from the Joplin extension can go there too).</p>
+<p>Now use the extension as normal and replicate the bug you&#39;re having.</p>
+<p>Copy and paste the content of both the debugging window and the Firefox console, and post it to the <a href="https://discourse.joplin.cozic.net/">forum</a>.</p>
 
 <script>
 	function stickyHeader() { 
