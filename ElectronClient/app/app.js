@@ -381,19 +381,39 @@ class Application extends BaseApplication {
 				label: _('Edit'),
 				submenu: [{
 					label: _('Copy'),
-					//screens: ['Main', 'OneDriveLogin', 'Config', 'EncryptionConfig'],
 					role: 'copy',
 					accelerator: 'CommandOrControl+C',
 				}, {
 					label: _('Cut'),
-					//screens: ['Main', 'OneDriveLogin', 'Config', 'EncryptionConfig'],
 					role: 'cut',
 					accelerator: 'CommandOrControl+X',
 				}, {
 					label: _('Paste'),
-					//screens: ['Main', 'OneDriveLogin', 'Config', 'EncryptionConfig'],
 					role: 'paste',
 					accelerator: 'CommandOrControl+V',
+				}, {
+					type: 'separator',
+					screens: ['Main'],
+				}, {
+					label: _('Bold'),
+					screens: ['Main'],
+					accelerator: 'CommandOrControl+B',
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'textBold',
+						});
+					},
+				}, {
+					label: _('Italic'),
+					screens: ['Main'],
+					accelerator: 'CommandOrControl+I',
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'textItalic',
+						});
+					},
 				}, {
 					type: 'separator',
 					screens: ['Main'],

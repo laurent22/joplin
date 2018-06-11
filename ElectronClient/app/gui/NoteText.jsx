@@ -115,13 +115,41 @@ class NoteTextComponent extends React.Component {
 
 			await this.commandAttachFile(filesToAttach);
 		}
+
+		this.aceEditor_selectionChange = (selection) => {
+			const ranges = selection.getAllRanges();
+
+			if (!ranges || !ranges.length || !this.state.note) {
+				this.setState({
+					selection: null,
+					selectionRange: null,
+				});
+				return;
+			}
+
+			const range = ranges[0];
+			let newSelection = {
+				start: this.cursorPositionToTextOffsets(range.start, this.state.note.body),
+				end: this.cursorPositionToTextOffsets(range.end, this.state.note.body),
+			};
+
+			if (newSelection.start === newSelection.end) newSelection = null;
+
+			this.setState({
+				selection: newSelection,
+				selectionRange: range,
+			});
+		}
 	}
 
 	cursorPosition() {
+		return this.cursorPositionToTextOffsets(this.editor_.editor.getCursorPosition(), this.state.note.body);
+	}
+
+	cursorPositionToTextOffsets(cursorPos, body) {
 		if (!this.editor_ || !this.editor_.editor || !this.state.note || !this.state.note.body) return 0;
 
-		const cursorPos = this.editor_.editor.getCursorPosition();
-		const noteLines = this.state.note.body.split('\n');
+		const noteLines = body.split('\n');
 
 		let pos = 0;
 		for (let i = 0; i < noteLines.length; i++) {
@@ -135,7 +163,7 @@ class NoteTextComponent extends React.Component {
 			}
 		}
 
-		return pos;
+		return pos;		
 	}
 
 	mdToHtml() {
@@ -635,6 +663,10 @@ class NoteTextComponent extends React.Component {
 			}
 		} else if (command.name === 'print' && this.webview_) {
 			this.webview_.print();
+		} else if (command.name === 'textBold') {
+			this.commandTextBold();
+		} else if (command.name === 'textItalic') {
+			this.commandTextItalic();
 		} else {
 			commandProcessed = false;
 		}
@@ -699,6 +731,71 @@ class NoteTextComponent extends React.Component {
 		});
 	}
 
+	// Returns the actual Ace Editor instance (not the React wrapper)
+	rawEditor() {
+		return this.editor_ && this.editor_.editor ? this.editor_.editor : null;
+	}
+
+	updateEditorWithDelay(fn) {
+		setTimeout(() => {
+			if (!this.rawEditor()) return;
+			fn(this.rawEditor());
+		}, 10);
+	}
+
+	wrapSelectionWithStrings(string1, string2) {
+		if (!this.rawEditor() || !this.state.note) return;
+
+		const selection = this.state.selection;
+
+		let newBody = this.state.note.body;
+
+		if (selection) {
+			const s1 = this.state.note.body.substr(0, selection.start);
+			const s2 = this.state.note.body.substr(selection.start, selection.end - selection.start);
+			const s3 = this.state.note.body.substr(selection.end);
+			newBody = s1 + string1 + s2 + string2 + s3;
+
+			const r = this.state.selectionRange;
+
+			const newRange = {
+				start: { row: r.start.row, column: r.start.column + string1.length},
+				end: { row: r.end.row, column: r.end.column + string1.length},
+			};
+
+			this.updateEditorWithDelay((editor) => {
+				const range = this.state.selectionRange;
+				range.setStart(newRange.start.row, newRange.start.column);
+				range.setEnd(newRange.end.row, newRange.end.column);
+				editor.getSession().getSelection().setSelectionRange(range, false);
+				editor.focus();
+			});
+		} else {
+			const cursorPos = this.cursorPosition();
+			const s1 = this.state.note.body.substr(0, cursorPos);
+			const s2 = this.state.note.body.substr(cursorPos);
+			newBody = s1 + string1 + string2 + s2;
+
+			this.updateEditorWithDelay((editor) => {
+				for (let i = 0; i < string1.length; i++) {
+					editor.getSession().getSelection().moveCursorRight();
+				}
+				editor.focus();
+			}, 10);
+		}
+
+		shared.noteComponent_change(this, 'body', newBody);
+		this.scheduleHtmlUpdate();
+	}
+
+	async commandTextBold() {
+		this.wrapSelectionWithStrings('**', '**');
+	}
+
+	async commandTextItalic() {
+		this.wrapSelectionWithStrings('*', '*');
+	}
+
 	itemContextMenu(event) {
 		const note = this.state.note;
 		if (!note) return;
@@ -720,6 +817,57 @@ class NoteTextComponent extends React.Component {
 		}
 
 		menu.popup(bridge().window());
+	}
+
+	createToolbarItems(note) {
+		const toolbarItems = [];
+		if (note && this.state.folder && ['Search', 'Tag'].includes(this.props.notesParentType)) {
+			toolbarItems.push({
+				title: _('In: %s', this.state.folder.title),
+				iconName: 'fa-folder-o',
+				enabled: false,
+			});
+		}
+
+		toolbarItems.push({
+			tooltip: _('Bold'),
+			iconName: 'fa-bold',
+			onClick: () => { return this.commandTextBold(); },
+		});
+
+		toolbarItems.push({
+			tooltip: _('Italic'),
+			iconName: 'fa-italic',
+			onClick: () => { return this.commandTextItalic(); },
+		});
+
+		toolbarItems.push({
+			tooltip: _('Attach file'),
+			iconName: 'fa-paperclip',
+			onClick: () => { return this.commandAttachFile(); },
+		});
+
+		toolbarItems.push({
+			tooltip: _('Tags'),
+			iconName: 'fa-tags',
+			onClick: () => { return this.commandSetTags(); },
+		});
+
+		if (note.is_todo) {
+			const item = {
+				iconName: 'fa-clock-o',
+				enabled: !note.todo_completed,
+				onClick: () => { return this.commandSetAlarm(); },
+			}
+			if (Note.needAlarm(note)) {
+				item.title = time.formatMsToLocal(note.todo_due);
+			} else {
+				item.tooltip = _('Set alarm');
+			}
+			toolbarItems.push(item);
+		}
+
+		return toolbarItems;
 	}
 
 	render() {
@@ -836,37 +984,7 @@ class NoteTextComponent extends React.Component {
 			}
 		}
 
-		const toolbarItems = [];
-		if (note 
-			&& this.state.folder !== null 
-			&& ['Search', 'Tag'].includes(this.props.notesParentType)) {
-			toolbarItems.push({
-				title: _('In: %s', this.state.folder.title),
-				iconName: 'fa-folder-o',
-				enabled: false,
-			});
-		}
-
-		toolbarItems.push({
-			title: _('Attach file'),
-			iconName: 'fa-paperclip',
-			onClick: () => { return this.commandAttachFile(); },
-		});
-
-		toolbarItems.push({
-			title: _('Tags'),
-			iconName: 'fa-tags',
-			onClick: () => { return this.commandSetTags(); },
-		});
-
-		if (note.is_todo) {
-			toolbarItems.push({
-				title: Note.needAlarm(note) ? time.formatMsToLocal(note.todo_due) : _('Set alarm'),
-				iconName: 'fa-clock-o',
-				enabled: !note.todo_completed,
-				onClick: () => { return this.commandSetAlarm(); },
-			});
-		}
+		const toolbarItems = this.createToolbarItems(note);
 
 		const toolbar = <Toolbar
 			style={toolbarStyle}
@@ -932,6 +1050,7 @@ class NoteTextComponent extends React.Component {
 			ref={(elem) => { this.editor_ref(elem); } }
 			onChange={(body) => { this.aceEditor_change(body) }}
 			showPrintMargin={false}
+			onSelectionChange={this.aceEditor_selectionChange}
 
 			// Disable warning: "Automatically scrolling cursor into view after
 			// selection change this will be disabled in the next version set

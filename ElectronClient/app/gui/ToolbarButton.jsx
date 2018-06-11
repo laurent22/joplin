@@ -24,13 +24,16 @@ class ToolbarButton extends React.Component {
 			justifyContent: 'center',
 		};
 
+		const title = this.props.title ? this.props.title : '';
+		const tooltip = this.props.tooltip ? this.props.tooltip : title;
+
 		let icon = null;
 		if (this.props.iconName) {
 			const iconStyle = {
 				fontSize: Math.round(theme.fontSize * 1.4),
 				color: theme.color
 			};
-			if (this.props.title) iconStyle.marginRight = 5;
+			if (title) iconStyle.marginRight = 5;
 			icon = <i style={iconStyle} className={"fa " + this.props.iconName}></i>
 		}
 
@@ -46,10 +49,11 @@ class ToolbarButton extends React.Component {
 			<a
 				className={classes.join(' ')}
 				style={finalStyle}
+				title={tooltip}
 				href="#"
 				onClick={() => { if (isEnabled && this.props.onClick) this.props.onClick() }}
 				>
-				{icon}{this.props.title ? this.props.title : ''}
+				{icon}{title}
 			</a>
 		);
 	}
