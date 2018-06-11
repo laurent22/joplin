@@ -6,7 +6,7 @@ const Mustache = require('mustache');
 const headerHtml = `<!doctype html>
 <html>
 <head>
-	<title>Joplin - an open source note taking and to-do application with synchronisation capabilities</title>
+	<title>{{pageTitle}}</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -344,6 +344,17 @@ function renderMdToHtml(md, targetPath, params) {
 	params.baseUrl = 'https://joplin.cozic.net';
 	params.imageBaseUrl = params.baseUrl + '/images';
 	params.tocHtml = tocHtml();
+
+	const title = [];
+
+	if (!params.title) {
+		title.push('Joplin - an open source note taking and to-do application with synchronisation capabilities');
+	} else {
+		title.push(params.title);
+		title.push('Joplin');
+	}
+
+	params.pageTitle = title.join(' | ');
 	const html = Mustache.render(markdownToHtml(md), params);
 	fs.writeFileSync(targetPath, html);
 }
@@ -364,17 +375,17 @@ async function main() {
 
 	renderMdToHtml(makeHomePageMd(), rootDir + '/docs/index.html', {});
 
-	renderFileToHtml(rootDir + '/readme/changelog.md', rootDir + '/docs/changelog/index.html', {});
-	renderFileToHtml(rootDir + '/readme/clipper.md', rootDir + '/docs/clipper/index.html', {});
-	renderFileToHtml(rootDir + '/readme/debugging.md', rootDir + '/docs/debugging/index.html', {});
-	renderFileToHtml(rootDir + '/readme/desktop.md', rootDir + '/docs/desktop/index.html', {});
-	renderFileToHtml(rootDir + '/readme/donate.md', rootDir + '/docs/donate/index.html', {});
-	renderFileToHtml(rootDir + '/readme/e2ee.md', rootDir + '/docs/e2ee/index.html', {});
-	renderFileToHtml(rootDir + '/readme/faq.md', rootDir + '/docs/faq/index.html', {});
-	renderFileToHtml(rootDir + '/readme/mobile.md', rootDir + '/docs/mobile/index.html', {});
-	renderFileToHtml(rootDir + '/readme/spec.md', rootDir + '/docs/spec/index.html', {});
-	renderFileToHtml(rootDir + '/readme/stats.md', rootDir + '/docs/stats/index.html', {});
-	renderFileToHtml(rootDir + '/readme/terminal.md', rootDir + '/docs/terminal/index.html', {});
+	renderFileToHtml(rootDir + '/readme/changelog.md', rootDir + '/docs/changelog/index.html', { title: 'Changelog' });
+	renderFileToHtml(rootDir + '/readme/clipper.md', rootDir + '/docs/clipper/index.html', { title: 'Web Clipper' });
+	renderFileToHtml(rootDir + '/readme/debugging.md', rootDir + '/docs/debugging/index.html', { title: 'Debugging' });
+	renderFileToHtml(rootDir + '/readme/desktop.md', rootDir + '/docs/desktop/index.html', { title: 'Desktop Application' });
+	renderFileToHtml(rootDir + '/readme/donate.md', rootDir + '/docs/donate/index.html', { title: 'Donate' });
+	renderFileToHtml(rootDir + '/readme/e2ee.md', rootDir + '/docs/e2ee/index.html', { title: 'End-To-End Encryption' });
+	renderFileToHtml(rootDir + '/readme/faq.md', rootDir + '/docs/faq/index.html', { title: 'FAQ' });
+	renderFileToHtml(rootDir + '/readme/mobile.md', rootDir + '/docs/mobile/index.html', { title: 'Mobile Application' });
+	renderFileToHtml(rootDir + '/readme/spec.md', rootDir + '/docs/spec/index.html', { title: 'Specifications' });
+	renderFileToHtml(rootDir + '/readme/stats.md', rootDir + '/docs/stats/index.html', { title: 'Statistics' });
+	renderFileToHtml(rootDir + '/readme/terminal.md', rootDir + '/docs/terminal/index.html', { title: 'Terminal Application' });
 }
 
 main().catch((error) => {
