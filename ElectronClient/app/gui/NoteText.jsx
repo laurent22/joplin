@@ -25,6 +25,7 @@ const md5 = require('md5');
 const mimeUtils = require('lib/mime-utils.js').mime;
 const ArrayUtils = require('lib/ArrayUtils');
 const urlUtils = require('lib/urlUtils');
+const dialogs = require('./dialogs');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -743,7 +744,7 @@ class NoteTextComponent extends React.Component {
 		}, 10);
 	}
 
-	wrapSelectionWithStrings(string1, string2) {
+	wrapSelectionWithStrings(string1, string2 = '') {
 		if (!this.rawEditor() || !this.state.note) return;
 
 		const selection = this.state.selection;
@@ -788,12 +789,31 @@ class NoteTextComponent extends React.Component {
 		this.scheduleHtmlUpdate();
 	}
 
-	async commandTextBold() {
-		this.wrapSelectionWithStrings('**', '**');
+	commandTextBold() {
+		// TODO: Insert default text and select it
+		this.wrapSelectionWithStrings('**', '**', _('strong text'));
 	}
 
-	async commandTextItalic() {
-		this.wrapSelectionWithStrings('*', '*');
+	commandTextItalic() {
+		this.wrapSelectionWithStrings('*', '*', _('emphasized text'));
+	}
+
+	commandTextCheckbox() {
+		// TODO: If previous item is already a checkbox, don't add a new line
+		this.wrapSelectionWithStrings('\n- [ ] ');
+	}
+
+	commandTextCode() {
+		this.wrapSelectionWithStrings('`', '`');
+	}
+
+	// commandTextListUl() {
+	// 	this.wrapSelectionWithStrings('\n- ');
+	// }
+
+	async commandTextLink() {
+		const url = await dialogs.prompt(_('Insert Hyperlink'));
+		this.wrapSelectionWithStrings('[', '](' + url + ')');
 	}
 
 	itemContextMenu(event) {
@@ -839,6 +859,24 @@ class NoteTextComponent extends React.Component {
 			tooltip: _('Italic'),
 			iconName: 'fa-italic',
 			onClick: () => { return this.commandTextItalic(); },
+		});
+
+		toolbarItems.push({
+			tooltip: _('Hyperlink'),
+			iconName: 'fa-link',
+			onClick: () => { return this.commandTextLink(); },
+		});		
+
+		toolbarItems.push({
+			tooltip: _('Checkbox'),
+			iconName: 'fa-check-square',
+			onClick: () => { return this.commandTextCheckbox(); },
+		});
+
+		toolbarItems.push({
+			tooltip: _('Code'),
+			iconName: 'fa-code',
+			onClick: () => { return this.commandTextCode(); },
 		});
 
 		toolbarItems.push({
