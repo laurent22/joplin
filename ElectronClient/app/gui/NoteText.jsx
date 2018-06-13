@@ -122,25 +122,33 @@ class NoteTextComponent extends React.Component {
 
 			if (!ranges || !ranges.length || !this.state.note) {
 				this.setState({
-					selection: null,
+					//selection: null,
 					selectionRange: null,
 				});
 				return;
 			}
 
-			const range = ranges[0];
-			let newSelection = {
-				start: this.cursorPositionToTextOffsets(range.start, this.state.note.body),
-				end: this.cursorPositionToTextOffsets(range.end, this.state.note.body),
-			};
+			this.setState({ selectionRange: ranges[0] });
 
-			if (newSelection.start === newSelection.end) newSelection = null;
+			// let newSelection = {
+			// 	start: this.cursorPositionToTextOffsets(range.start, this.state.note.body),
+			// 	end: this.cursorPositionToTextOffsets(range.end, this.state.note.body),
+			// };
 
-			this.setState({
-				selection: newSelection,
-				selectionRange: range,
-			});
+			// if (newSelection.start === newSelection.end) newSelection = null;
+
+			// this.setState({
+			// 	selection: newSelection,
+			// 	selectionRange: range,
+			// });
 		}
+	}
+
+	rangeToTextOffsets(range, body) {
+		return {
+			start: this.cursorPositionToTextOffsets(range.start, body),
+			end: this.cursorPositionToTextOffsets(range.end, body),
+		};
 	}
 
 	cursorPosition() {
@@ -744,14 +752,31 @@ class NoteTextComponent extends React.Component {
 		}, 10);
 	}
 
+	selectionRangePreviousLine() {
+		if (!this.state.selectionRange) return '';
+		if (!this.state.note) return '';
+
+		const range = this.state.selectionRange
+		const body = this.state.note.body
+
+		if (!range) return '';
+		const row = range.start.row;
+		if (row <= 0) return '';
+		const lines = body.split('\n');
+		if (lines.length <= row - 1) return '';
+		return lines[row - 1];
+	}
+
 	wrapSelectionWithStrings(string1, string2 = '') {
 		if (!this.rawEditor() || !this.state.note) return;
 
-		const selection = this.state.selection;
+		const selection = this.state.selectionRange ? this.rangeToTextOffsets(this.state.selectionRange, this.state.note.body) : null;
+
+		console.info(this.state.selectionRange);
 
 		let newBody = this.state.note.body;
 
-		if (selection) {
+		if (selection && selection.start !== selection.end) {
 			const s1 = this.state.note.body.substr(0, selection.start);
 			const s2 = this.state.note.body.substr(selection.start, selection.end - selection.start);
 			const s3 = this.state.note.body.substr(selection.end);
@@ -799,8 +824,13 @@ class NoteTextComponent extends React.Component {
 	}
 
 	commandTextCheckbox() {
-		// TODO: If previous item is already a checkbox, don't add a new line
-		this.wrapSelectionWithStrings('\n- [ ] ');
+		const previousLine = this.selectionRangePreviousLine()
+		let newLine = '\n';
+		// Normally we want to add a newline before a checkbox to separate it from the previous text
+		// however if the previous line is already checkbox we don't add a new line, so that the new
+		// one is part of the same group.
+		if (previousLine.indexOf('- [') === 0 && this.state.selectionRange && this.state.selectionRange.start.column === 0) newLine = '';
+		this.wrapSelectionWithStrings(newLine + '- [ ] ');
 	}
 
 	commandTextCode() {
