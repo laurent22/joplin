@@ -612,6 +612,12 @@ msgstr "切り取り"
 msgid "Paste"
 msgstr "貼り付け"
 
+msgid "Bold"
+msgstr ""
+
+msgid "Italic"
+msgstr ""
+
 msgid "Search in all the notes"
 msgstr "すべてのノートを検索"
 
@@ -895,6 +901,10 @@ msgstr "ノートブックがありません。新しいノートブックを作
 msgid "Open..."
 msgstr ""
 
+#, fuzzy, javascript-format
+msgid "This file could not be opened: %s"
+msgstr "ノートブックは保存できませんでした：%s"
+
 #, fuzzy
 msgid "Save as..."
 msgstr "変更を保存"
@@ -912,6 +922,15 @@ msgid ""
 "note."
 msgstr ""
 
+msgid "strong text"
+msgstr ""
+
+msgid "emphasized text"
+msgstr ""
+
+msgid "Insert Hyperlink"
+msgstr ""
+
 msgid "Attach file"
 msgstr "ファイルを添付"
 
@@ -923,6 +942,15 @@ msgstr "アラームをセット"
 
 #, javascript-format
 msgid "In: %s"
+msgstr ""
+
+msgid "Hyperlink"
+msgstr ""
+
+msgid "Checkbox"
+msgstr ""
+
+msgid "Code"
 msgstr ""
 
 #, fuzzy
@@ -1406,6 +1434,10 @@ msgstr "確認"
 
 msgid "Cancel synchronisation"
 msgstr "同期の中止"
+
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "ローカルアイテムの作成: %d."
 
 msgid "New tags:"
 msgstr ""

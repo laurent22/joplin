@@ -552,6 +552,12 @@ msgstr ""
 msgid "Paste"
 msgstr ""
 
+msgid "Bold"
+msgstr ""
+
+msgid "Italic"
+msgstr ""
+
 msgid "Search in all the notes"
 msgstr ""
 
@@ -823,6 +829,10 @@ msgstr ""
 msgid "Open..."
 msgstr ""
 
+#, javascript-format
+msgid "This file could not be opened: %s"
+msgstr ""
+
 msgid "Save as..."
 msgstr ""
 
@@ -839,6 +849,15 @@ msgid ""
 "note."
 msgstr ""
 
+msgid "strong text"
+msgstr ""
+
+msgid "emphasized text"
+msgstr ""
+
+msgid "Insert Hyperlink"
+msgstr ""
+
 msgid "Attach file"
 msgstr ""
 
@@ -850,6 +869,15 @@ msgstr ""
 
 #, javascript-format
 msgid "In: %s"
+msgstr ""
+
+msgid "Hyperlink"
+msgstr ""
+
+msgid "Checkbox"
+msgstr ""
+
+msgid "Code"
 msgstr ""
 
 msgid "to-do"
@@ -1300,6 +1328,10 @@ msgid "Confirm"
 msgstr ""
 
 msgid "Cancel synchronisation"
+msgstr ""
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
 msgstr ""
 
 msgid "New tags:"

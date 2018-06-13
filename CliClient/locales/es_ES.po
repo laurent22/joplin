@@ -628,6 +628,12 @@ msgstr "Cortar"
 msgid "Paste"
 msgstr "Pegar"
 
+msgid "Bold"
+msgstr ""
+
+msgid "Italic"
+msgstr ""
+
 msgid "Search in all the notes"
 msgstr "Buscar en todas las notas"
 
@@ -922,6 +928,10 @@ msgstr "No hay ninguna libreta. Cree una pulsando en «Libreta nueva»."
 msgid "Open..."
 msgstr "Abrir..."
 
+#, fuzzy, javascript-format
+msgid "This file could not be opened: %s"
+msgstr "No se ha podido guardar esta libreta: %s"
+
 msgid "Save as..."
 msgstr "Guardar como..."
 
@@ -940,6 +950,15 @@ msgstr ""
 "Esta nota no tiene contenido. Pulse en \"%s\" para cambiar al editor y "
 "editar la nota."
 
+msgid "strong text"
+msgstr ""
+
+msgid "emphasized text"
+msgstr ""
+
+msgid "Insert Hyperlink"
+msgstr ""
+
 msgid "Attach file"
 msgstr "Adjuntar archivo"
 
@@ -952,6 +971,15 @@ msgstr "Establecer alarma"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
+
+msgid "Hyperlink"
+msgstr ""
+
+msgid "Checkbox"
+msgstr ""
+
+msgid "Code"
+msgstr ""
 
 msgid "to-do"
 msgstr "lista de tareas"
@@ -1430,6 +1458,10 @@ msgstr "Confirmar"
 
 msgid "Cancel synchronisation"
 msgstr "Cancelar sincronización"
+
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Elementos obtenidos: %d/%d."
 
 msgid "New tags:"
 msgstr "Nuevas etiquetas:"

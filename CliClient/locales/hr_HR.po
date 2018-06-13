@@ -625,6 +625,12 @@ msgstr "Izreži"
 msgid "Paste"
 msgstr "Zalijepi"
 
+msgid "Bold"
+msgstr ""
+
+msgid "Italic"
+msgstr ""
+
 msgid "Search in all the notes"
 msgstr "Pretraži u svim bilješkama"
 
@@ -905,6 +911,10 @@ msgstr "Ovdje nema bilježnica. Stvori novu pritiskom na \"Nova bilježnica\"."
 msgid "Open..."
 msgstr ""
 
+#, fuzzy, javascript-format
+msgid "This file could not be opened: %s"
+msgstr "Bilježnicu nije moguće snimiti: %s"
+
 #, fuzzy
 msgid "Save as..."
 msgstr "Spremi promjene"
@@ -922,6 +932,15 @@ msgid ""
 "note."
 msgstr ""
 
+msgid "strong text"
+msgstr ""
+
+msgid "emphasized text"
+msgstr ""
+
+msgid "Insert Hyperlink"
+msgstr ""
+
 msgid "Attach file"
 msgstr "Priloži datoteku"
 
@@ -934,6 +953,15 @@ msgstr "Postavi upozorenje"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
+
+msgid "Hyperlink"
+msgstr ""
+
+msgid "Checkbox"
+msgstr ""
+
+msgid "Code"
+msgstr ""
 
 #, fuzzy
 msgid "to-do"
@@ -1412,6 +1440,10 @@ msgstr "Potvrdi"
 
 msgid "Cancel synchronisation"
 msgstr "Prekini sinkronizaciju"
+
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Stvorene lokalne stavke: %d."
 
 msgid "New tags:"
 msgstr ""

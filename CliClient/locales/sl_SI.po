@@ -625,6 +625,12 @@ msgstr "Izreži"
 msgid "Paste"
 msgstr "Prilepi"
 
+msgid "Bold"
+msgstr ""
+
+msgid "Italic"
+msgstr ""
+
 msgid "Search in all the notes"
 msgstr "Išči znotraj vseh zabeležk"
 
@@ -919,6 +925,10 @@ msgstr ""
 msgid "Open..."
 msgstr "Odpri..."
 
+#, fuzzy, javascript-format
+msgid "This file could not be opened: %s"
+msgstr "Beležnica ne more biti shranjena: %s"
+
 msgid "Save as..."
 msgstr "Shrani kot..."
 
@@ -937,6 +947,15 @@ msgstr ""
 "Ta zabeležka nima vsebine. Kliknite na \"%s\" da menjate med urejevalnikom "
 "in urejanje zabeležke."
 
+msgid "strong text"
+msgstr ""
+
+msgid "emphasized text"
+msgstr ""
+
+msgid "Insert Hyperlink"
+msgstr ""
+
 msgid "Attach file"
 msgstr "Pripni datoteko"
 
@@ -949,6 +968,15 @@ msgstr "Nastavi alarm"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
+
+msgid "Hyperlink"
+msgstr ""
+
+msgid "Checkbox"
+msgstr ""
+
+msgid "Code"
+msgstr ""
 
 msgid "to-do"
 msgstr "seznam opravil"
@@ -1428,6 +1456,10 @@ msgstr "Potrdi"
 
 msgid "Cancel synchronisation"
 msgstr "Prekliči sinhronizacijo"
+
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Preneseni predmeti: %d/%d."
 
 msgid "New tags:"
 msgstr ""

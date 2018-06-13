@@ -643,6 +643,12 @@ msgstr "Ausschneiden"
 msgid "Paste"
 msgstr "Einfügen"
 
+msgid "Bold"
+msgstr ""
+
+msgid "Italic"
+msgstr ""
+
 msgid "Search in all the notes"
 msgstr "Alle Notizen durchsuchen"
 
@@ -943,6 +949,10 @@ msgstr ""
 msgid "Open..."
 msgstr "Öffne..."
 
+#, fuzzy, javascript-format
+msgid "This file could not be opened: %s"
+msgstr "Dieses Notizbuch konnte nicht gespeichert werden: %s"
+
 msgid "Save as..."
 msgstr "Sichern unter..."
 
@@ -961,6 +971,15 @@ msgstr ""
 "Diese Notiz hat keinen Inhalt. Klicke auf „%s“ um den Editor zu aktivieren "
 "und die Notiz zu bearbeiten."
 
+msgid "strong text"
+msgstr ""
+
+msgid "emphasized text"
+msgstr ""
+
+msgid "Insert Hyperlink"
+msgstr ""
+
 msgid "Attach file"
 msgstr "Datei anhängen"
 
@@ -973,6 +992,15 @@ msgstr "Alarm erstellen"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
+
+msgid "Hyperlink"
+msgstr ""
+
+msgid "Checkbox"
+msgstr ""
+
+msgid "Code"
+msgstr ""
 
 msgid "to-do"
 msgstr "To-Do"
@@ -1455,6 +1483,10 @@ msgstr "Bestätigen"
 
 msgid "Cancel synchronisation"
 msgstr "Synchronisation abbrechen"
+
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Geladene Objekte: %d/%d."
 
 msgid "New tags:"
 msgstr "Neue Markierungen:"

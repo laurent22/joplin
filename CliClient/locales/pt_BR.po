@@ -626,6 +626,12 @@ msgstr "Cortar"
 msgid "Paste"
 msgstr "Colar"
 
+msgid "Bold"
+msgstr ""
+
+msgid "Italic"
+msgstr ""
+
 msgid "Search in all the notes"
 msgstr "Pesquisar em todas as notas"
 
@@ -915,6 +921,10 @@ msgstr "Atualmente, não há cadernos. Crie um, clicando em \"Novo caderno\"."
 msgid "Open..."
 msgstr "Abrir..."
 
+#, fuzzy, javascript-format
+msgid "This file could not be opened: %s"
+msgstr "O caderno não pôde ser salvo: %s"
+
 msgid "Save as..."
 msgstr "Salvar como..."
 
@@ -933,6 +943,15 @@ msgstr ""
 "Esta nota não possui conteúdo. Clique em \"%s\" para alternar para o editor, "
 "e edite a nota."
 
+msgid "strong text"
+msgstr ""
+
+msgid "emphasized text"
+msgstr ""
+
+msgid "Insert Hyperlink"
+msgstr ""
+
 msgid "Attach file"
 msgstr "Anexar arquivo"
 
@@ -945,6 +964,15 @@ msgstr "Definir alarme"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
+
+msgid "Hyperlink"
+msgstr ""
+
+msgid "Checkbox"
+msgstr ""
+
+msgid "Code"
+msgstr ""
 
 msgid "to-do"
 msgstr "tarefa"
@@ -1428,6 +1456,10 @@ msgstr "Confirmar"
 
 msgid "Cancel synchronisation"
 msgstr "Cancelar sincronização"
+
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Itens pesquisados: %d/%d."
 
 msgid "New tags:"
 msgstr "Novas tags:"

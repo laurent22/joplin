@@ -619,6 +619,12 @@ msgstr "Klip"
 msgid "Paste"
 msgstr "Indsæt"
 
+msgid "Bold"
+msgstr ""
+
+msgid "Italic"
+msgstr ""
+
 msgid "Search in all the notes"
 msgstr "Søg i alle noter"
 
@@ -908,6 +914,10 @@ msgstr "Der er ingen notesbog. Opret en ved at klikke på \"Ny Notesbog\"."
 msgid "Open..."
 msgstr "Åben..."
 
+#, fuzzy, javascript-format
+msgid "This file could not be opened: %s"
+msgstr "Notesbogen kan ikke gemmes: %s"
+
 msgid "Save as..."
 msgstr "Gem som..."
 
@@ -924,6 +934,15 @@ msgid ""
 "note."
 msgstr "Denne note er tom. Klik på \"%s\" for at starte editor og rette noten."
 
+msgid "strong text"
+msgstr ""
+
+msgid "emphasized text"
+msgstr ""
+
+msgid "Insert Hyperlink"
+msgstr ""
+
 msgid "Attach file"
 msgstr "Vedhæft fil"
 
@@ -936,6 +955,15 @@ msgstr "Indstil alarm"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
+
+msgid "Hyperlink"
+msgstr ""
+
+msgid "Checkbox"
+msgstr ""
+
+msgid "Code"
+msgstr ""
 
 msgid "to-do"
 msgstr "opgave"
@@ -1415,6 +1443,10 @@ msgstr "Bekræft"
 
 msgid "Cancel synchronisation"
 msgstr "Afbryd synkronisering"
+
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Hentede emner: %d/%d."
 
 msgid "New tags:"
 msgstr "Nye tags:"

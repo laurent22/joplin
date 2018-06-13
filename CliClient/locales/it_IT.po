@@ -610,6 +610,12 @@ msgstr "Taglia"
 msgid "Paste"
 msgstr "Incolla"
 
+msgid "Bold"
+msgstr ""
+
+msgid "Italic"
+msgstr ""
+
 msgid "Search in all the notes"
 msgstr "Cerca in tutte le note"
 
@@ -891,6 +897,10 @@ msgstr "Al momento non ci sono note. Creane una cliccando sul bottone (+)."
 msgid "Open..."
 msgstr ""
 
+#, fuzzy, javascript-format
+msgid "This file could not be opened: %s"
+msgstr "Il blocco note non può essere salvato: %s"
+
 #, fuzzy
 msgid "Save as..."
 msgstr "Salva i cambiamenti"
@@ -908,6 +918,15 @@ msgid ""
 "note."
 msgstr ""
 
+msgid "strong text"
+msgstr ""
+
+msgid "emphasized text"
+msgstr ""
+
+msgid "Insert Hyperlink"
+msgstr ""
+
 msgid "Attach file"
 msgstr "Allega file"
 
@@ -920,6 +939,15 @@ msgstr "Imposta allarme"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
+
+msgid "Hyperlink"
+msgstr ""
+
+msgid "Checkbox"
+msgstr ""
+
+msgid "Code"
+msgstr ""
 
 #, fuzzy
 msgid "to-do"
@@ -1401,6 +1429,10 @@ msgstr "Conferma"
 
 msgid "Cancel synchronisation"
 msgstr "Cancella la sincronizzazione"
+
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Elementi locali creati: %d."
 
 msgid "New tags:"
 msgstr ""

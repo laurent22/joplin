@@ -627,6 +627,12 @@ msgstr "Moztu"
 msgid "Paste"
 msgstr "Itsatsi"
 
+msgid "Bold"
+msgstr ""
+
+msgid "Italic"
+msgstr ""
+
 msgid "Search in all the notes"
 msgstr "Bilatu ohar guztietan"
 
@@ -917,6 +923,10 @@ msgstr "Momentuz ez dago koadernorik. Sortu bat \"Koaderno berria\" sakatuta."
 msgid "Open..."
 msgstr ""
 
+#, fuzzy, javascript-format
+msgid "This file could not be opened: %s"
+msgstr "Koadernoa ezin gorde daiteke: %s"
+
 #, fuzzy
 msgid "Save as..."
 msgstr "Gorde aldaketak"
@@ -934,6 +944,15 @@ msgid ""
 "note."
 msgstr ""
 
+msgid "strong text"
+msgstr ""
+
+msgid "emphasized text"
+msgstr ""
+
+msgid "Insert Hyperlink"
+msgstr ""
+
 msgid "Attach file"
 msgstr "Erantsi fitxategia"
 
@@ -946,6 +965,15 @@ msgstr "Ezarri alarma"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
+
+msgid "Hyperlink"
+msgstr ""
+
+msgid "Checkbox"
+msgstr ""
+
+msgid "Code"
+msgstr ""
 
 #, fuzzy
 msgid "to-do"
@@ -1436,6 +1464,10 @@ msgstr "Baieztatu"
 
 msgid "Cancel synchronisation"
 msgstr "Sinkronizazioa utzi"
+
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Itemak eskuratuta: %d%d."
 
 msgid "New tags:"
 msgstr ""

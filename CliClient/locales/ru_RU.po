@@ -626,6 +626,12 @@ msgstr "Вырезать"
 msgid "Paste"
 msgstr "Вставить"
 
+msgid "Bold"
+msgstr ""
+
+msgid "Italic"
+msgstr ""
+
 msgid "Search in all the notes"
 msgstr "Поиск во всех заметках"
 
@@ -915,6 +921,10 @@ msgstr "Сейчас здесь нет блокнотов. Создайте но
 msgid "Open..."
 msgstr "Открыть..."
 
+#, fuzzy, javascript-format
+msgid "This file could not be opened: %s"
+msgstr "Не удалось сохранить блокнот: %s"
+
 msgid "Save as..."
 msgstr "Сохранить как..."
 
@@ -933,6 +943,15 @@ msgstr ""
 "Заметка пуста. Нажмите на «%s», чтобы переключиться в редактор и "
 "отредактировать её."
 
+msgid "strong text"
+msgstr ""
+
+msgid "emphasized text"
+msgstr ""
+
+msgid "Insert Hyperlink"
+msgstr ""
+
 msgid "Attach file"
 msgstr "Прикрепить файл"
 
@@ -945,6 +964,15 @@ msgstr "Установить напоминание"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
+
+msgid "Hyperlink"
+msgstr ""
+
+msgid "Checkbox"
+msgstr ""
+
+msgid "Code"
+msgstr ""
 
 msgid "to-do"
 msgstr "задача"
@@ -1425,6 +1453,10 @@ msgstr "Подтвердить"
 
 msgid "Cancel synchronisation"
 msgstr "Отменить синхронизацию"
+
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Получено элементов: %d/%d."
 
 msgid "New tags:"
 msgstr ""
