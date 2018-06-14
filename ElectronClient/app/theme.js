@@ -82,6 +82,22 @@ globalStyle.h1Style.fontSize *= 1.5;
 globalStyle.h2Style = Object.assign({}, globalStyle.textStyle);
 globalStyle.h2Style.fontSize *= 1.3;
 
+globalStyle.toolbarStyle = {
+	height: globalStyle.toolbarHeight,
+	minWidth: globalStyle.toolbarHeight,
+	display: 'flex',
+	alignItems: 'center',
+	paddingLeft: globalStyle.headerButtonHPadding,
+	paddingRight: globalStyle.headerButtonHPadding,
+	color: globalStyle.color,
+	textDecoration: 'none',
+	fontFamily: globalStyle.fontFamily,
+	fontSize: globalStyle.fontSize,
+	boxSizing: 'border-box',
+	cursor: 'default',
+	justifyContent: 'center',
+};
+
 let themeCache_ = {};
 
 function themeStyle(theme) {

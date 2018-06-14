@@ -5,24 +5,9 @@ const { themeStyle } = require('../theme.js');
 class ToolbarButton extends React.Component {
 
 	render() {
-		//const style = this.props.style;
 		const theme = themeStyle(this.props.theme);
 
-		const style = {
-			height: theme.toolbarHeight,
-			minWidth: theme.toolbarHeight,
-			display: 'flex',
-			alignItems: 'center',
-			paddingLeft: theme.headerButtonHPadding,
-			paddingRight: theme.headerButtonHPadding,
-			color: theme.color,
-			textDecoration: 'none',
-			fontFamily: theme.fontFamily,
-			fontSize: theme.fontSize,
-			boxSizing: 'border-box',
-			cursor: 'default',
-			justifyContent: 'center',
-		};
+		const style = Object.assign({}, theme.toolbarStyle);
 
 		const title = this.props.title ? this.props.title : '';
 		const tooltip = this.props.tooltip ? this.props.tooltip : title;

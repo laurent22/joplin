@@ -26,6 +26,7 @@ const mimeUtils = require('lib/mime-utils.js').mime;
 const ArrayUtils = require('lib/ArrayUtils');
 const urlUtils = require('lib/urlUtils');
 const dialogs = require('./dialogs');
+const markdownUtils = require('lib/markdownUtils');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -54,6 +55,7 @@ class NoteTextComponent extends React.Component {
 			// to automatically set the title.
 			newAndNoTitleChangeNoteId: null,
 			bodyHtml: '',
+			lastKeys: [],
 		};
 
 		this.lastLoadedNoteId_ = null;
@@ -102,6 +104,13 @@ class NoteTextComponent extends React.Component {
 			}
 		}
 
+		this.onEditorKeyDown_ = (event) => {
+			const lastKeys = this.state.lastKeys.slice();
+			lastKeys.push(event.key);
+			while (lastKeys.length > 2) lastKeys.splice(0, 1);
+			this.setState({ lastKeys: lastKeys });
+		}
+
 		this.onDrop_ = async (event) => {
 			const files = event.dataTransfer.files;
 			if (!files || !files.length) return;
@@ -117,30 +126,21 @@ class NoteTextComponent extends React.Component {
 			await this.commandAttachFile(filesToAttach);
 		}
 
-		this.aceEditor_selectionChange = (selection) => {
-			const ranges = selection.getAllRanges();
-
+		const updateSelectionRange = () => {
+			const ranges = this.rawEditor().getSelection().getAllRanges();
 			if (!ranges || !ranges.length || !this.state.note) {
-				this.setState({
-					//selection: null,
-					selectionRange: null,
-				});
-				return;
+				this.setState({ selectionRange: null });
+			} else {
+				this.setState({ selectionRange: ranges[0] });
 			}
+		}
 
-			this.setState({ selectionRange: ranges[0] });
+		this.aceEditor_selectionChange = (selection) => {
+			updateSelectionRange();
+		}
 
-			// let newSelection = {
-			// 	start: this.cursorPositionToTextOffsets(range.start, this.state.note.body),
-			// 	end: this.cursorPositionToTextOffsets(range.end, this.state.note.body),
-			// };
-
-			// if (newSelection.start === newSelection.end) newSelection = null;
-
-			// this.setState({
-			// 	selection: newSelection,
-			// 	selectionRange: range,
-			// });
+		this.aceEditor_focus = (event) => {
+			updateSelectionRange();
 		}
 	}
 
@@ -345,6 +345,7 @@ class NoteTextComponent extends React.Component {
 			lastSavedNote: Object.assign({}, note),
 			webviewReady: webviewReady,
 			folder: parentFolder,
+			lastKeys: [],
 		};
 
 		if (!note) {
@@ -544,6 +545,7 @@ class NoteTextComponent extends React.Component {
 		if (this.editor_) {
 			this.editor_.editor.renderer.off('afterRender', this.onAfterEditorRender_);
 			document.querySelector('#note-editor').removeEventListener('paste', this.onEditorPaste_, true);
+			document.querySelector('#note-editor').removeEventListener('keydown', this.onEditorKeyDown_);
 		}
 
 		this.editor_ = element;
@@ -571,6 +573,24 @@ class NoteTextComponent extends React.Component {
 			}
 
 			document.querySelector('#note-editor').addEventListener('paste', this.onEditorPaste_, true);
+			document.querySelector('#note-editor').addEventListener('keydown', this.onEditorKeyDown_);
+
+			// Disable Markdown auto-completion (eg. auto-adding a dash after a line with a dash.
+			// https://github.com/ajaxorg/ace/issues/2754
+			const that = this; // The "this" within the function below refers to something else
+			this.editor_.editor.getSession().getMode().getNextLineIndent = function(state, line) {
+				const ls = that.state.lastKeys;
+				if (ls.length >= 2 && ls[ls.length - 1] === 'Enter' && ls[ls.length - 2] === 'Enter') return this.$getIndent(line);
+
+				if (line.indexOf('- [ ] ') === 0 || line.indexOf('- [x] ') === 0 || line.indexOf('- [X] ') === 0) return '- [ ] ';
+				if (line.indexOf('- ') === 0) return '- ';
+				if (line.indexOf('* ') === 0) return '* ';
+
+				const bulletNumber = markdownUtils.olLineNumber(line);
+				if (bulletNumber) return (bulletNumber + 1) + '. ';
+
+				return this.$getIndent(line);
+			};
 		}
 	}
 
@@ -752,27 +772,30 @@ class NoteTextComponent extends React.Component {
 		}, 10);
 	}
 
-	selectionRangePreviousLine() {
-		if (!this.state.selectionRange) return '';
+	lineAtRow(row) {
 		if (!this.state.note) return '';
-
-		const range = this.state.selectionRange
 		const body = this.state.note.body
-
-		if (!range) return '';
-		const row = range.start.row;
-		if (row <= 0) return '';
 		const lines = body.split('\n');
-		if (lines.length <= row - 1) return '';
-		return lines[row - 1];
+		if (row < 0 || row >= lines.length) return '';
+		return lines[row];
 	}
 
-	wrapSelectionWithStrings(string1, string2 = '') {
+	selectionRangePreviousLine() {
+		if (!this.state.selectionRange) return '';
+		const row = this.state.selectionRange.start.row;
+		return this.lineAtRow(row - 1);
+	}
+
+	selectionRangeCurrentLine() {
+		if (!this.state.selectionRange) return '';
+		const row = this.state.selectionRange.start.row;
+		return this.lineAtRow(row);
+	}
+
+	wrapSelectionWithStrings(string1, string2 = '', defaultText = '') {
 		if (!this.rawEditor() || !this.state.note) return;
 
 		const selection = this.state.selectionRange ? this.rangeToTextOffsets(this.state.selectionRange, this.state.note.body) : null;
-
-		console.info(this.state.selectionRange);
 
 		let newBody = this.state.note.body;
 
@@ -800,11 +823,24 @@ class NoteTextComponent extends React.Component {
 			const cursorPos = this.cursorPosition();
 			const s1 = this.state.note.body.substr(0, cursorPos);
 			const s2 = this.state.note.body.substr(cursorPos);
-			newBody = s1 + string1 + string2 + s2;
+			newBody = s1 + string1 + defaultText + string2 + s2;
+
+			const r = this.state.selectionRange;
+			const newRange = !r ? null : {
+				start: { row: r.start.row, column: r.start.column + string1.length },
+				end: { row: r.end.row, column: r.start.column + string1.length + defaultText.length },
+			};
 
 			this.updateEditorWithDelay((editor) => {
-				for (let i = 0; i < string1.length; i++) {
-					editor.getSession().getSelection().moveCursorRight();
+				if (defaultText && newRange) {
+					const range = this.state.selectionRange;
+					range.setStart(newRange.start.row, newRange.start.column);
+					range.setEnd(newRange.end.row, newRange.end.column);
+					editor.getSession().getSelection().setSelectionRange(range, false);
+				} else {
+					for (let i = 0; i < string1.length; i++) {
+						editor.getSession().getSelection().moveCursorRight();
+					}
 				}
 				editor.focus();
 			}, 10);
@@ -815,7 +851,6 @@ class NoteTextComponent extends React.Component {
 	}
 
 	commandTextBold() {
-		// TODO: Insert default text and select it
 		this.wrapSelectionWithStrings('**', '**', _('strong text'));
 	}
 
@@ -823,23 +858,39 @@ class NoteTextComponent extends React.Component {
 		this.wrapSelectionWithStrings('*', '*', _('emphasized text'));
 	}
 
-	commandTextCheckbox() {
-		const previousLine = this.selectionRangePreviousLine()
-		let newLine = '\n';
-		// Normally we want to add a newline before a checkbox to separate it from the previous text
-		// however if the previous line is already checkbox we don't add a new line, so that the new
-		// one is part of the same group.
-		if (previousLine.indexOf('- [') === 0 && this.state.selectionRange && this.state.selectionRange.start.column === 0) newLine = '';
-		this.wrapSelectionWithStrings(newLine + '- [ ] ');
-	}
-
 	commandTextCode() {
 		this.wrapSelectionWithStrings('`', '`');
 	}
 
-	// commandTextListUl() {
-	// 	this.wrapSelectionWithStrings('\n- ');
-	// }
+	addListItem(item) {
+		const currentLine = this.selectionRangeCurrentLine();
+		let newLine = '\n'
+		if (!currentLine) newLine = '';
+		this.wrapSelectionWithStrings(newLine + item);
+	}
+
+	commandTextCheckbox() {
+		this.addListItem('- [ ] ');
+	}
+
+	commandTextListUl() {
+		this.addListItem('- ');
+	}
+
+	commandTextListOl() {
+		let bulletNumber = markdownUtils.olLineNumber(this.selectionRangeCurrentLine());
+		if (!bulletNumber) bulletNumber = markdownUtils.olLineNumber(this.selectionRangePreviousLine());
+		if (!bulletNumber) bulletNumber = 0;
+		this.addListItem((bulletNumber + 1) + '. ');
+	}
+
+	commandTextHeading() {
+		this.addListItem('## ');
+	}
+
+	commandTextHorizontalRule() {
+		this.addListItem('* * *');
+	}
 
 	async commandTextLink() {
 		const url = await dialogs.prompt(_('Insert Hyperlink'));
@@ -892,16 +943,14 @@ class NoteTextComponent extends React.Component {
 		});
 
 		toolbarItems.push({
+			type: 'separator',
+		});
+
+		toolbarItems.push({
 			tooltip: _('Hyperlink'),
 			iconName: 'fa-link',
 			onClick: () => { return this.commandTextLink(); },
 		});		
-
-		toolbarItems.push({
-			tooltip: _('Checkbox'),
-			iconName: 'fa-check-square',
-			onClick: () => { return this.commandTextCheckbox(); },
-		});
 
 		toolbarItems.push({
 			tooltip: _('Code'),
@@ -916,6 +965,44 @@ class NoteTextComponent extends React.Component {
 		});
 
 		toolbarItems.push({
+			type: 'separator',
+		});
+
+		toolbarItems.push({
+			tooltip: _('Numbered List'),
+			iconName: 'fa-list-ol',
+			onClick: () => { return this.commandTextListOl(); },
+		});
+
+		toolbarItems.push({
+			tooltip: _('Bulleted List'),
+			iconName: 'fa-list-ul',
+			onClick: () => { return this.commandTextListUl(); },
+		});
+
+		toolbarItems.push({
+			tooltip: _('Checkbox'),
+			iconName: 'fa-check-square',
+			onClick: () => { return this.commandTextCheckbox(); },
+		});
+
+		toolbarItems.push({
+			tooltip: _('Heading'),
+			iconName: 'fa-heading',
+			onClick: () => { return this.commandTextHeading(); },
+		});
+
+		toolbarItems.push({
+			tooltip: _('Horizontal Rule'),
+			iconName: 'fa-ellipsis-h',
+			onClick: () => { return this.commandTextHorizontalRule(); },
+		});
+
+		toolbarItems.push({
+			type: 'separator',
+		});
+
+		toolbarItems.push({
 			tooltip: _('Tags'),
 			iconName: 'fa-tags',
 			onClick: () => { return this.commandSetTags(); },
@@ -923,7 +1010,7 @@ class NoteTextComponent extends React.Component {
 
 		if (note.is_todo) {
 			const item = {
-				iconName: 'fa-clock-o',
+				iconName: 'fa-bell',
 				enabled: !note.todo_completed,
 				onClick: () => { return this.commandSetAlarm(); },
 			}
@@ -1119,6 +1206,7 @@ class NoteTextComponent extends React.Component {
 			onChange={(body) => { this.aceEditor_change(body) }}
 			showPrintMargin={false}
 			onSelectionChange={this.aceEditor_selectionChange}
+			onFocus={this.aceEditor_focus}
 
 			// Disable warning: "Automatically scrolling cursor into view after
 			// selection change this will be disabled in the next version set

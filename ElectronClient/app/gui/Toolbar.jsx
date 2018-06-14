@@ -4,6 +4,7 @@ const { reg } = require('lib/registry.js');
 const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
 const ToolbarButton = require('./ToolbarButton.min.js');
+const ToolbarSpace = require('./ToolbarSpace.min.js');
 
 class ToolbarComponent extends React.Component {
 
@@ -25,17 +26,17 @@ class ToolbarComponent extends React.Component {
 				key += o.title ? o.title : '';
 				const itemType = !('type' in o) ? 'button' : o.type;
 
+				if (!key) key = o.type + '_' + i;
+
 				const props = Object.assign({
 					key: key,
 					theme: this.props.theme,
 				}, o);
 
 				if (itemType === 'button') {
-					itemComps.push(<ToolbarButton
-						{...props}
-					/>);
-				} else if (itemType === 'text') {
-
+					itemComps.push(<ToolbarButton {...props} />);
+				} else if (itemType === 'separator') {
+					itemComps.push(<ToolbarSpace {...props} />);
 				}
 			}
 		}
