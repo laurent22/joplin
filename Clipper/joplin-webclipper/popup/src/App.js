@@ -151,12 +151,12 @@ class AppComponent extends Component {
 			} else {
 				msg = stateToString(foundState)
 				led = foundState === 'searching' ? led_orange : led_red
-				if (foundState === 'not_found') helpLink = <a className="Help" onClick={this.clipperServerHelpLink_click} href="#">[Help]</a>
+				if (foundState === 'not_found') helpLink = <a className="Help" onClick={this.clipperServerHelpLink_click} href="help">[Help]</a>
 			}
 
 			msg = "Service status: " + msg
 
-			return <div className="StatusBar"><img className="Led" src={led}/><span className="ServerStatus">{ msg }{ helpLink }</span></div>
+			return <div className="StatusBar"><img alt={foundState} className="Led" src={led}/><span className="ServerStatus">{ msg }{ helpLink }</span></div>
 		}
 
 		console.info(this.props.selectedFolderId);

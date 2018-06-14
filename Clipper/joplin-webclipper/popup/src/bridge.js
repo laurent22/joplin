@@ -278,8 +278,6 @@ class Bridge {
 
 			if (!content) throw new Error('Cannot send empty content');
 
-			const baseUrl = await this.clipperServerBaseUrl();
-
 			await this.clipperApiExec('POST', 'notes', content);
 
 			this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: true } });

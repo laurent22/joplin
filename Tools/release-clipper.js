@@ -19,23 +19,60 @@ async function copyToDist(distDir) {
 	await fs.remove(distDir + '/popup/build/manifest.json');
 }
 
-async function main() {
-	process.chdir(clipperDir + '/popup');
+async function updateManifestVersionNumber(manifestPath) {
+	const manifestText = await fs.readFile(manifestPath, 'utf-8');
+	let manifest = JSON.parse(manifestText);
+	let v = manifest.version.split('.');
+	const buildNumber = Number(v.pop()) + 1;
+	v.push(buildNumber);
+	manifest.version = v.join('.');
+	console.info('New version: ' + manifest.version);
+	await fs.writeFile(manifestPath, JSON.stringify(manifest, null, 4));
+}
 
+async function main() {
+	await updateManifestVersionNumber(clipperDir + '/manifest.json');
+
+	console.info('Building extension...');
+	process.chdir(clipperDir + '/popup');
 	console.info(await execCommand('npm run build'));
 
 	const dists = [
 		{
-			dir: clipperDir + '/dist/chrometest',
+			dir: clipperDir + '/dist/chrome',
 			name: 'chrome',
+			removeManifestKeys: (manifest) => {
+				manifest = Object.assign({}, manifest);
+				delete manifest.applications;
+				return manifest;
+			},
+		},
+		{
+			dir: clipperDir + '/dist/firefox',
+			name: 'firefox',
+			removeManifestKeys: (manifest) => {
+				manifest = Object.assign({}, manifest);
+				delete manifest.background.persistent;
+				return manifest;
+			},
 		}
 	];
 
 	for (let i = 0; i < dists.length; i++) {
 		const dist = dists[i];
+		await fs.remove(dist.dir);
+		await fs.mkdirp(dist.dir);
 		await copyToDist(dist.dir);
+
+		const manifestText = await fs.readFile(dist.dir + '/manifest.json', 'utf-8');
+		let manifest = JSON.parse(manifestText);
+		manifest.name = 'Joplin Web Clipper';
+		if (dist.removeManifestKeys) manifest = dist.removeManifestKeys(manifest);
+		await fs.writeFile(dist.dir + '/manifest.json', JSON.stringify(manifest, null, 4));
+
 		process.chdir(dist.dir);
 		console.info(await execCommand('7z a -tzip ' + dist.name + '.zip *'));
+		console.info(await execCommand('mv ' + dist.name + '.zip ..'));
 	}
 }
 

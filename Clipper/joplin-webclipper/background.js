@@ -18,7 +18,8 @@ let env_ = null;
 window.joplinEnv = function() {
 	if (env_) return env_;
 
-	env_ = !('update_url' in browser_.runtime.getManifest()) ? 'dev' : 'prod';
+	const manifest = browser_.runtime.getManifest();
+	env_ = manifest.name.indexOf('[DEV]') >= 0 ? 'dev' : 'prod';
 	return env_;
 }
 
@@ -43,17 +44,6 @@ async function browserGetZoom(tabId) {
 }
 
 browser_.runtime.onInstalled.addListener(function(details) {
-	if (details && details.temporary) {
-		// In Firefox - https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/onInstalled
-		env_ = 'dev';
-	} else if (browserName_ === 'chrome') {
-		// In Chrome
-		env_ = !('update_url' in browser_.runtime.getManifest()) ? 'dev' : 'prod';
-	} else {
-		// If we don't know, be safe and default to prod
-		env_ = 'prod';
-	}
-
 	if (window.joplinEnv() === 'dev') {
 		browser_.browserAction.setIcon({
 			path: 'icons/32-dev.png',
