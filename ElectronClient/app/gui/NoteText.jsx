@@ -988,7 +988,7 @@ class NoteTextComponent extends React.Component {
 
 		toolbarItems.push({
 			tooltip: _('Heading'),
-			iconName: 'fa-heading',
+			iconName: 'fa-header',
 			onClick: () => { return this.commandTextHeading(); },
 		});
 
@@ -1010,7 +1010,7 @@ class NoteTextComponent extends React.Component {
 
 		if (note.is_todo) {
 			const item = {
-				iconName: 'fa-bell',
+				iconName: 'fa-clock-o',
 				enabled: !note.todo_completed,
 				onClick: () => { return this.commandSetAlarm(); },
 			}
