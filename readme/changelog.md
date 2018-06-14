@@ -1,5 +1,14 @@
 # Joplin changelog
 
+## [v1.0.100](https://github.com/laurent22/joplin/releases/tag/v1.0.100) - 2018-06-14T17:41:43Z
+
+- New: Added toolbar buttons for formatting text.
+- New: Added Traditional Chinese and Catalan translations
+- Fixed: Handle Nginx DAV PROPFIND responses correctly
+- Fixes [#597](https://github.com/laurent22/joplin/issues/597): Also import sub-notebooks when importing JEX data
+- Fixes [#600](https://github.com/laurent22/joplin/issues/600): Improved resuming of long sync operations so that it doesn't needlessly re-download the items from the beginning
+- Fix: Try to display more info when there is a Dropbox API error
+
 ## [v1.0.99](https://github.com/laurent22/joplin/releases/tag/v1.0.99) - 2018-06-10T13:18:23Z
 
 Note: This is the same as 1.0.97, but with a fix for the Linux version, which could not start anymore.
