@@ -957,10 +957,22 @@ msgstr "%s: %s"
 msgid "Hyperlink"
 msgstr ""
 
+msgid "Code"
+msgstr ""
+
+msgid "Numbered List"
+msgstr ""
+
+msgid "Bulleted List"
+msgstr ""
+
 msgid "Checkbox"
 msgstr ""
 
-msgid "Code"
+msgid "Heading"
+msgstr ""
+
+msgid "Horizontal Rule"
 msgstr ""
 
 #, fuzzy
