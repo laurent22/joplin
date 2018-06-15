@@ -961,6 +961,9 @@ msgstr ""
 msgid "Horizontal Rule"
 msgstr ""
 
+msgid "Open in external editor"
+msgstr ""
+
 #, fuzzy
 msgid "to-do"
 msgstr "Nuova attività"

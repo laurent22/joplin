@@ -977,6 +977,9 @@ msgstr ""
 msgid "Horizontal Rule"
 msgstr ""
 
+msgid "Open in external editor"
+msgstr ""
+
 msgid "to-do"
 msgstr "opgave"
 

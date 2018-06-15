@@ -628,10 +628,10 @@ msgid "Paste"
 msgstr "Coller"
 
 msgid "Bold"
-msgstr ""
+msgstr "Gras"
 
 msgid "Italic"
-msgstr ""
+msgstr "Italique"
 
 msgid "Search in all the notes"
 msgstr "Chercher dans toutes les notes"
@@ -710,7 +710,7 @@ msgstr "Le service du Web Clipper est activé et démarrera automatiquement."
 
 #, javascript-format
 msgid "Status: Started on port %d"
-msgstr "État : Commencé sur le port %d"
+msgstr "État : Démarré sur le port %d"
 
 #, javascript-format
 msgid "Status: %s"
@@ -729,8 +729,8 @@ msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
 msgstr ""
-"Le Web Clipper permet de sauver des pages web et des captures d'écran depuis "
-"votre navigateur vers Joplin."
+"Le Web Clipper permet d'enregistrer des pages web et des captures d'écran "
+"depuis votre navigateur vers Joplin."
 
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "Pour utiliser le Web Clipper, veuillez suivre ces instructions :"
@@ -934,9 +934,9 @@ msgstr ""
 msgid "Open..."
 msgstr "Ouvrir..."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "This file could not be opened: %s"
-msgstr "Ce carnet n'a pas pu être sauvegardé : %s"
+msgstr "Ce fichier n'a pas pu être ouvert : %s"
 
 msgid "Save as..."
 msgstr "Enregistrer sous..."
@@ -957,13 +957,13 @@ msgstr ""
 "l'éditeur et éditer cette note."
 
 msgid "strong text"
-msgstr ""
+msgstr "texte en gras"
 
 msgid "emphasized text"
-msgstr ""
+msgstr "texte en italique"
 
 msgid "Insert Hyperlink"
-msgstr ""
+msgstr "Insérer lien"
 
 msgid "Attach file"
 msgstr "Attacher un fichier"
@@ -979,25 +979,28 @@ msgid "In: %s"
 msgstr "Dans : %s"
 
 msgid "Hyperlink"
-msgstr ""
+msgstr "Lien"
 
 msgid "Code"
-msgstr ""
+msgstr "Code"
 
 msgid "Numbered List"
-msgstr ""
+msgstr "Liste numérotée"
 
 msgid "Bulleted List"
-msgstr ""
+msgstr "Liste à puces"
 
 msgid "Checkbox"
-msgstr ""
+msgstr "Case à cocher"
 
 msgid "Heading"
-msgstr ""
+msgstr "Titre"
 
 msgid "Horizontal Rule"
-msgstr ""
+msgstr "Règle horizontale"
+
+msgid "Open in external editor"
+msgstr "Ouvrir dans un éditeur externe"
 
 msgid "to-do"
 msgstr "tâche"
@@ -1264,7 +1267,7 @@ msgid "When creating a new note:"
 msgstr "Lors de la création d'une note :"
 
 msgid "Show tray icon"
-msgstr "Afficher icône dans la zone de notifications"
+msgstr "Afficher l'icône dans la zone de notifications"
 
 msgid "Note: Does not work in all desktop environments."
 msgstr "Note : Ne fonctionne pas dans tous les environnements de bureau."
@@ -1475,9 +1478,9 @@ msgstr "Confirmer"
 msgid "Cancel synchronisation"
 msgstr "Annuler synchronisation"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr "Téléchargés : %d/%d."
+msgstr "Décryptage des objets : %d/%d."
 
 msgid "New tags:"
 msgstr "Nouvelles étiquettes :"
