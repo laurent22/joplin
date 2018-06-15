@@ -158,11 +158,12 @@ On the **terminal application**, to initiate the synchronisation process, type `
 
 Select the "WebDAV" synchronisation target and follow the same instructions as for Nextcloud above.
 
-WebDAV-compatible services that are known to work with Joplin.
+WebDAV-compatible services that are known to work with Joplin:
 
 - [Box.com](https://www.box.com/)
 - [DriveHQ](https://www.drivehq.com)
 - [HiDrive](https://www.strato.fr/stockage-en-ligne/) from Strato. [Setup help](https://github.com/laurent22/joplin/issues/309)
+- [Nginx WebDAV Module](https://nginx.org/en/docs/http/ngx_http_dav_module.html)
 - [OwnCloud](https://owncloud.org/)
 - [Seafile](https://www.seafile.com/)
 - [Stack](https://www.transip.nl/stack/)
