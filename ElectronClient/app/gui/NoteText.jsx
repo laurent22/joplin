@@ -172,7 +172,7 @@ class NoteTextComponent extends React.Component {
 			}
 		}
 
-		return pos;		
+		return pos;
 	}
 
 	mdToHtml() {
@@ -557,8 +557,8 @@ class NoteTextComponent extends React.Component {
 			const letters = ['F', 'T', 'P', 'Q', 'L', ','];
 			for (let i = 0; i < letters.length; i++) {
 				const l = letters[i];
-				cancelledKeys.push('Ctrl+' + l); 
-				cancelledKeys.push('Command+' + l); 
+				cancelledKeys.push('Ctrl+' + l);
+				cancelledKeys.push('Command+' + l);
 			}
 
 			for (let i = 0; i < cancelledKeys.length; i++) {
@@ -696,6 +696,8 @@ class NoteTextComponent extends React.Component {
 			this.commandTextBold();
 		} else if (command.name === 'textItalic') {
 			this.commandTextItalic();
+		} else if (command.name === 'insertDateTime' ) {
+			this.commandDateTime();
 		} else {
 			commandProcessed = false;
 		}
@@ -858,6 +860,10 @@ class NoteTextComponent extends React.Component {
 		this.wrapSelectionWithStrings('*', '*', _('emphasized text'));
 	}
 
+	commandDateTime() {
+		this.wrapSelectionWithStrings(time.formatMsToLocal(new Date().getTime()));
+	}
+
 	commandTextCode() {
 		this.wrapSelectionWithStrings('`', '`');
 	}
@@ -950,7 +956,7 @@ class NoteTextComponent extends React.Component {
 			tooltip: _('Hyperlink'),
 			iconName: 'fa-link',
 			onClick: () => { return this.commandTextLink(); },
-		});		
+		});
 
 		toolbarItems.push({
 			tooltip: _('Code'),
@@ -996,6 +1002,12 @@ class NoteTextComponent extends React.Component {
 			tooltip: _('Horizontal Rule'),
 			iconName: 'fa-ellipsis-h',
 			onClick: () => { return this.commandTextHorizontalRule(); },
+		});
+
+		toolbarItems.push({
+			tooltip: _('Insert Date Time'),
+			iconName: 'fa-calendar-plus-o',
+			onClick: () => { return this.commandDateTime(); },
 		});
 
 		toolbarItems.push({
@@ -1214,7 +1226,7 @@ class NoteTextComponent extends React.Component {
 			editorProps={{$blockScrolling: true}}
 
 			// This is buggy (gets outside the container)
-			highlightActiveLine={false}			
+			highlightActiveLine={false}
 		/>
 
 		return (

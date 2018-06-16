@@ -155,7 +155,7 @@ class Application extends BaseApplication {
 		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'locale' || action.type == 'SETTING_UPDATE_ALL') {
 			setLocale(Setting.value('locale'));
 			// The bridge runs within the main process, with its own instance of locale.js
-			// so it needs to be set too here. 
+			// so it needs to be set too here.
 			bridge().setLocale(Setting.value('locale'));
 			this.refreshMenu();
 		}
@@ -334,7 +334,7 @@ class Application extends BaseApplication {
 					}
 				}, {
 					label: _('New notebook'),
-					accelerator: 'CommandOrControl+B',
+					accelerator: 'CommandOrControl+Shift+B',
 					screens: ['Main'],
 					click: () => {
 						this.dispatch({
@@ -412,6 +412,17 @@ class Application extends BaseApplication {
 						this.dispatch({
 							type: 'WINDOW_COMMAND',
 							name: 'textItalic',
+						});
+					},
+				}, {
+					label: _('Insert Date Time'),
+					screens: ['Main'],
+					visible: false,
+					accelerator: 'CommandOrControl+Shift+T',
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'insertDateTime',
 						});
 					},
 				}, {
