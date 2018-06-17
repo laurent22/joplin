@@ -1,5 +1,13 @@
 # Joplin changelog
 
+## [v1.0.101](https://github.com/laurent22/joplin/releases/tag/v1.0.101) - 2018-06-17T18:35:11Z
+
+This is a bug-fix release following v100 with the following fixes:
+
+- Fixes [#623](https://github.com/laurent22/joplin/issues/623): Improved handling of text selection and fixed infinite loop (white screen bug)
+- Fixes [#593](https://github.com/laurent22/joplin/issues/593): Resource should not be auto-deleted if they've never been linked to any note
+- Fixes [#630](https://github.com/laurent22/joplin/issues/630): PDF export in context menu
+
 ## [v1.0.100](https://github.com/laurent22/joplin/releases/tag/v1.0.100) - 2018-06-14T17:41:43Z
 
 - New: Added toolbar buttons for formatting text.
@@ -234,14 +242,3 @@ IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before 
 - Improved auto-update process to avoid random crashes
 - New: Allow focusing either title or body when creating a new note or to-do
 - Fixed crash when having invalid UTF-8 string in text editor
-
-## [v0.10.52](https://github.com/laurent22/joplin/releases/tag/v0.10.52) - 2018-01-31T19:25:18Z
-
-- Optimised Nextcloud functionality so that it is faster and consumes less resources
-- Fixed Nextcloud sync issue when processing many items.
-- Fixed: Handle case where file is left half-uploaded on Nextcloud instance (possibly an ocloud.de issue only)
-- Fixed: Allow decryption of other items to continue even if an item cannot be decrypted
-- Add Content-Size header for WebDAV, which is required by some services
-- Fixed auto-title when title is manually entered first
-- Improved auto-update process to avoid random crashes
-- New: Allow focusing either title or body when creating a new note or to-do
