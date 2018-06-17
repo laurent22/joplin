@@ -14,7 +14,7 @@ To donate via Paypal, please follow this link:
 
 Or you may support the project on Patreon:
 
-<a href="https://www.patreon.com/joplin"><img src="https://joplin.cozic.net/images/Patreon.png"/></a>
+<a href="https://www.patreon.com/joplin"><img src="https://joplin.cozic.net/images/badges/Patreon.png"/></a>
 
 ## Bitcoin
 

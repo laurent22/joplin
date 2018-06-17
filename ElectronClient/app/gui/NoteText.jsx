@@ -66,6 +66,7 @@ class NoteTextComponent extends React.Component {
 		this.restoreScrollTop_ = null;
 		this.lastSetHtml_ = '';
 		this.lastSetMarkers_ = [];
+		this.selectionRange_ = null;
 
 		// Complicated but reliable method to get editor content height
 		// https://github.com/ajaxorg/ace/issues/2046
@@ -127,11 +128,12 @@ class NoteTextComponent extends React.Component {
 		}
 
 		const updateSelectionRange = () => {
+
 			const ranges = this.rawEditor().getSelection().getAllRanges();
 			if (!ranges || !ranges.length || !this.state.note) {
-				this.setState({ selectionRange: null });
+				this.selectionRange_ = null;
 			} else {
-				this.setState({ selectionRange: ranges[0] });
+				this.selectionRange_ = ranges[0];
 			}
 		}
 
@@ -144,18 +146,23 @@ class NoteTextComponent extends React.Component {
 		}
 	}
 
+	// Note:
+	// - What's called "cursor position" is expressed as { row: x, column: y } and is how Ace Editor get/set the cursor position
+	// - A "range" defines a selection with a start and end cusor position, expressed as { start: <CursorPos>, end: <CursorPos> } 
+	// - A "text offset" below is the absolute position of the cursor in the string, as would be used in the indexOf() function.
+	// The functions below are used to convert between the different types.
 	rangeToTextOffsets(range, body) {
 		return {
-			start: this.cursorPositionToTextOffsets(range.start, body),
-			end: this.cursorPositionToTextOffsets(range.end, body),
+			start: this.cursorPositionToTextOffset(range.start, body),
+			end: this.cursorPositionToTextOffset(range.end, body),
 		};
 	}
 
-	cursorPosition() {
-		return this.cursorPositionToTextOffsets(this.editor_.editor.getCursorPosition(), this.state.note.body);
+	currentTextOffset() {
+		return this.cursorPositionToTextOffset(this.editor_.editor.getCursorPosition(), this.state.note.body);
 	}
 
-	cursorPositionToTextOffsets(cursorPos, body) {
+	cursorPositionToTextOffset(cursorPos, body) {
 		if (!this.editor_ || !this.editor_.editor || !this.state.note || !this.state.note.body) return 0;
 
 		const noteLines = body.split('\n');
@@ -173,6 +180,24 @@ class NoteTextComponent extends React.Component {
 		}
 
 		return pos;		
+	}
+
+	textOffsetToCursorPosition(offset, body) {
+		const lines = body.split('\n');
+		let row = 0;
+		let currentOffset = 0;
+		for (let i = 0; i < lines.length; i++) {
+			const line = lines[i];
+			if (currentOffset + line.length >= offset) {
+				return {
+					row: row,
+					column: offset - currentOffset,
+				}
+			}
+
+			row++;
+			currentOffset += line.length + 1;	
+		}
 	}
 
 	mdToHtml() {
@@ -719,7 +744,7 @@ class NoteTextComponent extends React.Component {
 		await this.saveIfNeeded(true);
 		let note = await Note.load(this.state.note.id);
 
-		const position = this.cursorPosition();
+		const position = this.currentTextOffset();
 
 		for (let i = 0; i < filePaths.length; i++) {
 			const filePath = filePaths[i];
@@ -781,21 +806,21 @@ class NoteTextComponent extends React.Component {
 	}
 
 	selectionRangePreviousLine() {
-		if (!this.state.selectionRange) return '';
-		const row = this.state.selectionRange.start.row;
+		if (!this.selectionRange_) return '';
+		const row = this.selectionRange_.start.row;
 		return this.lineAtRow(row - 1);
 	}
 
 	selectionRangeCurrentLine() {
-		if (!this.state.selectionRange) return '';
-		const row = this.state.selectionRange.start.row;
+		if (!this.selectionRange_) return '';
+		const row = this.selectionRange_.start.row;
 		return this.lineAtRow(row);
 	}
 
 	wrapSelectionWithStrings(string1, string2 = '', defaultText = '') {
 		if (!this.rawEditor() || !this.state.note) return;
 
-		const selection = this.state.selectionRange ? this.rangeToTextOffsets(this.state.selectionRange, this.state.note.body) : null;
+		const selection = this.selectionRange_ ? this.rangeToTextOffsets(this.selectionRange_, this.state.note.body) : null;
 
 		let newBody = this.state.note.body;
 
@@ -805,7 +830,7 @@ class NoteTextComponent extends React.Component {
 			const s3 = this.state.note.body.substr(selection.end);
 			newBody = s1 + string1 + s2 + string2 + s3;
 
-			const r = this.state.selectionRange;
+			const r = this.selectionRange_;
 
 			const newRange = {
 				start: { row: r.start.row, column: r.start.column + string1.length},
@@ -813,27 +838,29 @@ class NoteTextComponent extends React.Component {
 			};
 
 			this.updateEditorWithDelay((editor) => {
-				const range = this.state.selectionRange;
+				const range = this.selectionRange_;
 				range.setStart(newRange.start.row, newRange.start.column);
 				range.setEnd(newRange.end.row, newRange.end.column);
 				editor.getSession().getSelection().setSelectionRange(range, false);
 				editor.focus();
 			});
 		} else {
-			const cursorPos = this.cursorPosition();
-			const s1 = this.state.note.body.substr(0, cursorPos);
-			const s2 = this.state.note.body.substr(cursorPos);
+			const textOffset = this.currentTextOffset();
+			const s1 = this.state.note.body.substr(0, textOffset);
+			const s2 = this.state.note.body.substr(textOffset);
 			newBody = s1 + string1 + defaultText + string2 + s2;
 
-			const r = this.state.selectionRange;
-			const newRange = !r ? null : {
-				start: { row: r.start.row, column: r.start.column + string1.length },
-				end: { row: r.end.row, column: r.start.column + string1.length + defaultText.length },
+			const p = this.textOffsetToCursorPosition(textOffset + string1.length, newBody);
+			const newRange = {
+				start: { row: p.row, column: p.column },
+				end: { row: p.row, column: p.column + defaultText.length },
 			};
+
+			console.info('DDDDD', defaultText, newRange);
 
 			this.updateEditorWithDelay((editor) => {
 				if (defaultText && newRange) {
-					const range = this.state.selectionRange;
+					const range = this.selectionRange_;
 					range.setStart(newRange.start.row, newRange.start.column);
 					range.setEnd(newRange.end.row, newRange.end.column);
 					editor.getSession().getSelection().setSelectionRange(range, false);
@@ -848,6 +875,7 @@ class NoteTextComponent extends React.Component {
 
 		shared.noteComponent_change(this, 'body', newBody);
 		this.scheduleHtmlUpdate();
+		this.scheduleSave();
 	}
 
 	commandTextBold() {
@@ -862,26 +890,26 @@ class NoteTextComponent extends React.Component {
 		this.wrapSelectionWithStrings('`', '`');
 	}
 
-	addListItem(item) {
+	addListItem(string1, string2 = '', defaultText = '') {
 		const currentLine = this.selectionRangeCurrentLine();
 		let newLine = '\n'
 		if (!currentLine) newLine = '';
-		this.wrapSelectionWithStrings(newLine + item);
+		this.wrapSelectionWithStrings(newLine + string1, string2, defaultText);
 	}
 
 	commandTextCheckbox() {
-		this.addListItem('- [ ] ');
+		this.addListItem('- [ ] ', '', _('List item'));
 	}
 
 	commandTextListUl() {
-		this.addListItem('- ');
+		this.addListItem('- ', '', _('List item'));
 	}
 
 	commandTextListOl() {
 		let bulletNumber = markdownUtils.olLineNumber(this.selectionRangeCurrentLine());
 		if (!bulletNumber) bulletNumber = markdownUtils.olLineNumber(this.selectionRangePreviousLine());
 		if (!bulletNumber) bulletNumber = 0;
-		this.addListItem((bulletNumber + 1) + '. ');
+		this.addListItem((bulletNumber + 1) + '. ', '', _('List item'));
 	}
 
 	commandTextHeading() {
