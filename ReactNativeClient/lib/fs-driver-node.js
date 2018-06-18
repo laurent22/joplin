@@ -48,7 +48,8 @@ class FsDriverNode extends FsDriverBase {
 	// same as rm -rf
 	async remove(path) {
 		try {
-			return await fs.remove(path);
+			const r = await fs.remove(path);
+			return r;
 		} catch (error) {
 			throw this.fsErrorToJsError_(error, path);
 		}

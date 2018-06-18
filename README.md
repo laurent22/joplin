@@ -6,9 +6,9 @@ Joplin is a free, open source note taking and to-do application, which can handl
 
 Notes exported from Evernote via .enex files [can be imported](#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
 
-The notes can be [synchronised](#synchronisation) with various cloud services including [Nextcloud](https://nextcloud.com/), Dropbox, OneDrive or the file system (for example with a network directory). When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
+The notes can be [synchronised](#synchronisation) with various cloud services including [Nextcloud](https://nextcloud.com/), Dropbox, OneDrive, WebDAV or the file system (for example with a network directory). When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
 
-The UI of the terminal client is built on top of the great [terminal-kit](https://github.com/cronvel/terminal-kit) library, the desktop client using [Electron](https://electronjs.org/), and the Android client front end is done using [React Native](https://facebook.github.io/react-native/).
+The application is available for Windows, Linux, macOS, Android and iOS. A [Web Clipper](https://github.com/laurent22/joplin/blob/master/readme/clipper.md), to save web pages and screenshots from your browser, is also available for Firefox and Chrome.
 
 <div class="top-screenshot"><img src="https://joplin.cozic.net/images/AllClients.jpg" style="max-width: 100%; max-height: 35em;"></div>
 
@@ -20,9 +20,9 @@ Three types of applications are available: for the **desktop** (Windows, macOS a
 
 Operating System | Download | Alternative
 -----------------|--------|-------------------
-Windows (32 and 64-bit)         | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.100/Joplin-Setup-1.0.100.exe'><img alt='Get it on Windows' height="40px" src='https://joplin.cozic.net/images/BadgeWindows.png'/></a> | or Get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.100/JoplinPortable.exe'>Portable version</a><br>(to run from a USB key, etc.)
-macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.100/Joplin-1.0.100.dmg'><img alt='Get it on macOS' height="40px" src='https://joplin.cozic.net/images/BadgeMacOS.png'/></a> | 
-Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.100/Joplin-1.0.100-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://joplin.cozic.net/images/BadgeLinux.png'/></a> | An Arch Linux package<br>[is also available](#terminal-application).
+Windows (32 and 64-bit)         | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.101/Joplin-Setup-1.0.101.exe'><img alt='Get it on Windows' height="40px" src='https://joplin.cozic.net/images/BadgeWindows.png'/></a> | or Get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.101/JoplinPortable.exe'>Portable version</a><br>(to run from a USB key, etc.)
+macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.101/Joplin-1.0.101.dmg'><img alt='Get it on macOS' height="40px" src='https://joplin.cozic.net/images/BadgeMacOS.png'/></a> | 
+Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.101/Joplin-1.0.101-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://joplin.cozic.net/images/BadgeLinux.png'/></a> | An Arch Linux package<br>[is also available](#terminal-application).
 
 The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
 
@@ -45,6 +45,10 @@ To start it, type `joplin`.
 
 For usage information, please refer to the full [Joplin Terminal Application Documentation](https://joplin.cozic.net/terminal).
 
+## Web Clipper
+
+The Web Clipper is a browser extension that allows you to save web pages and screenshots from your browser. For more information on how to install and use it, see the [Web Clipper Help Page](https://github.com/laurent22/joplin/blob/master/readme/clipper.md).
+
 <!-- TOC -->
 # Table of contents
 
@@ -53,6 +57,7 @@ For usage information, please refer to the full [Joplin Terminal Application Doc
 	- [Desktop application](https://github.com/laurent22/joplin/blob/master/readme/desktop.md)
 	- [Mobile applications](https://github.com/laurent22/joplin/blob/master/readme/mobile.md)
 	- [Terminal application](https://github.com/laurent22/joplin/blob/master/readme/terminal.md)
+	- [Web Clipper](https://github.com/laurent22/joplin/blob/master/readme/clipper.md)
 
 - Support
 
@@ -72,6 +77,7 @@ For usage information, please refer to the full [Joplin Terminal Application Doc
 # Features 
 
 - Desktop, mobile and terminal applications.
+- [Web Clipper](https://github.com/laurent22/joplin/blob/master/readme/clipper.md) for Firefox and Chrome.
 - End To End Encryption (E2EE)
 - Synchronisation with various services, including NextCloud, Dropbox, WebDAV and OneDrive.
 - Import Enex files (Evernote export format) and Markdown files.

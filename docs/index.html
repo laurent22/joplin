@@ -226,6 +226,7 @@
 <li><a href="https://joplin.cozic.net/desktop">Desktop application</a></li>
 <li><a href="https://joplin.cozic.net/mobile">Mobile applications</a></li>
 <li><a href="https://joplin.cozic.net/terminal">Terminal application</a></li>
+<li><a href="https://joplin.cozic.net/clipper">Web Clipper</a></li>
 </ul>
 </li>
 <li>
@@ -251,8 +252,8 @@
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplin.cozic.net/images/badges/Donate-PayPal-green.svg" alt="Donate"></a> <a href="https://joplin.cozic.net/donate/#bitcoin"><img src="https://joplin.cozic.net/images/badges/Donate-Bitcoin.svg" alt="Donate with Bitcoin"></a> <a href="https://travis-ci.org/laurent22/joplin"><img src="https://travis-ci.org/laurent22/joplin.svg?branch=master" alt="Travis Build Status"></a> <a href="https://ci.appveyor.com/project/laurent22/joplin"><img src="https://ci.appveyor.com/api/projects/status/github/laurent22/joplin?branch=master&amp;passingText=master%20-%20OK&amp;svg=true" alt="Appveyor Build Status"></a></p>
 <p>Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in <a href="#markdown">Markdown format</a>.</p>
 <p>Notes exported from Evernote via .enex files <a href="#importing">can be imported</a> into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.</p>
-<p>The notes can be <a href="#synchronisation">synchronised</a> with various cloud services including <a href="https://nextcloud.com/">Nextcloud</a>, Dropbox, OneDrive or the file system (for example with a network directory). When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
-<p>The UI of the terminal client is built on top of the great <a href="https://github.com/cronvel/terminal-kit">terminal-kit</a> library, the desktop client using <a href="https://electronjs.org/">Electron</a>, and the Android client front end is done using <a href="https://facebook.github.io/react-native/">React Native</a>.</p>
+<p>The notes can be <a href="#synchronisation">synchronised</a> with various cloud services including <a href="https://nextcloud.com/">Nextcloud</a>, Dropbox, OneDrive, WebDAV or the file system (for example with a network directory). When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
+<p>The application is available for Windows, Linux, macOS, Android and iOS. A <a href="https://github.com/laurent22/joplin/blob/master/readme/clipper.md">Web Clipper</a>, to save web pages and screenshots from your browser, is also available for Firefox and Chrome.</p>
 <div class="top-screenshot"><img src="https://joplin.cozic.net/images/AllClients.jpg" style="max-width: 100%; max-height: 35em;"></div>
 
 <h1 id="installation">Installation</h1>
@@ -269,17 +270,17 @@
 <tbody>
 <tr>
 <td>Windows (32 and 64-bit)</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.100/Joplin-Setup-1.0.100.exe'><img alt='Get it on Windows' height="40px" src='https://joplin.cozic.net/images/BadgeWindows.png'/></a></td>
-<td>or Get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.100/JoplinPortable.exe'>Portable version</a><br>(to run from a USB key, etc.)</td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.101/Joplin-Setup-1.0.101.exe'><img alt='Get it on Windows' height="40px" src='https://joplin.cozic.net/images/BadgeWindows.png'/></a></td>
+<td>or Get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.101/JoplinPortable.exe'>Portable version</a><br>(to run from a USB key, etc.)</td>
 </tr>
 <tr>
 <td>macOS</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.100/Joplin-1.0.100.dmg'><img alt='Get it on macOS' height="40px" src='https://joplin.cozic.net/images/BadgeMacOS.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.101/Joplin-1.0.101.dmg'><img alt='Get it on macOS' height="40px" src='https://joplin.cozic.net/images/BadgeMacOS.png'/></a></td>
 <td></td>
 </tr>
 <tr>
 <td>Linux</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.100/Joplin-1.0.100-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://joplin.cozic.net/images/BadgeLinux.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.101/Joplin-1.0.101-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://joplin.cozic.net/images/BadgeLinux.png'/></a></td>
 <td>An Arch Linux package<br><a href="#terminal-application">is also available</a>.</td>
 </tr>
 </tbody>
@@ -332,9 +333,12 @@
 </table>
 <p>To start it, type <code>joplin</code>.</p>
 <p>For usage information, please refer to the full <a href="https://joplin.cozic.net/terminal">Joplin Terminal Application Documentation</a>.</p>
+<h2 id="web-clipper">Web Clipper</h2>
+<p>The Web Clipper is a browser extension that allows you to save web pages and screenshots from your browser. For more information on how to install and use it, see the <a href="https://github.com/laurent22/joplin/blob/master/readme/clipper.md">Web Clipper Help Page</a>.</p>
 <h1 id="features">Features</h1>
 <ul>
 <li>Desktop, mobile and terminal applications.</li>
+<li><a href="https://github.com/laurent22/joplin/blob/master/readme/clipper.md">Web Clipper</a> for Firefox and Chrome.</li>
 <li>End To End Encryption (E2EE)</li>
 <li>Synchronisation with various services, including NextCloud, Dropbox, WebDAV and OneDrive.</li>
 <li>Import Enex files (Evernote export format) and Markdown files.</li>

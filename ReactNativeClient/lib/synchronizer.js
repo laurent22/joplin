@@ -266,7 +266,17 @@ class Synchronizer {
 							// could be done using the file timestamp and the potentially unnecessary content loading could be skipped.
 							// OneDrive does not appear to have accurate timestamps as lastModifiedDateTime would occasionally be
 							// a few seconds ahead of what it was set with setTimestamp()
-							remoteContent = await this.api().get(path);
+							try {
+								remoteContent = await this.api().get(path);
+							} catch (error) {
+								if (error.code === 'rejectedByTarget') {
+									this.progressReport_.errors.push(error);
+									this.logger().warn('Rejected by target: ' + path + ': ' + error.message);
+									continue;
+								} else {
+									throw error;
+								}
+							}
 							if (!remoteContent) throw new Error("Got metadata for path but could not fetch content: " + path);
 							remoteContent = await BaseItem.unserialize(remoteContent);
 
@@ -485,25 +495,36 @@ class Synchronizer {
 						let local = await BaseItem.loadItemByPath(path);
 						let ItemClass = null;
 						let content = null;
-						if (!local) {
-							if (remote.isDeleted !== true) {
-								action = "createLocal";
-								reason = "remote exists but local does not";
-								content = await loadContent();
-								ItemClass = content ? BaseItem.itemClass(content) : null;
-							}
-						} else {
-							ItemClass = BaseItem.itemClass(local);
-							local = ItemClass.filter(local);
-							if (remote.isDeleted) {
-								action = "deleteLocal";
-								reason = "remote has been deleted";
-							} else {
-								content = await loadContent();
-								if (content && content.updated_time > local.updated_time) {
-									action = "updateLocal";
-									reason = "remote is more recent than local";
+
+						try {
+							if (!local) {
+								if (remote.isDeleted !== true) {
+									action = "createLocal";
+									reason = "remote exists but local does not";
+									content = await loadContent();
+									ItemClass = content ? BaseItem.itemClass(content) : null;
 								}
+							} else {
+								ItemClass = BaseItem.itemClass(local);
+								local = ItemClass.filter(local);
+								if (remote.isDeleted) {
+									action = "deleteLocal";
+									reason = "remote has been deleted";
+								} else {
+									content = await loadContent();
+									if (content && content.updated_time > local.updated_time) {
+										action = "updateLocal";
+										reason = "remote is more recent than local";
+									}
+								}
+							}
+						} catch (error) {
+							if (error.code === 'rejectedByTarget') {
+								this.progressReport_.errors.push(error);
+								this.logger().warn('Rejected by target: ' + path + ': ' + error.message);
+								action = null;
+							} else {
+								throw error;
 							}
 						}
 
@@ -536,7 +557,17 @@ class Synchronizer {
 							if (content.type_ == BaseModel.TYPE_RESOURCE && action == "createLocal") {
 								let localResourceContentPath = Resource.fullPath(content);
 								let remoteResourceContentPath = this.resourceDirName_ + "/" + content.id;
-								await this.api().get(remoteResourceContentPath, { path: localResourceContentPath, target: "file" });
+								try {
+									await this.api().get(remoteResourceContentPath, { path: localResourceContentPath, target: "file" });
+								} catch (error) {
+									if (error.code === 'rejectedByTarget') {
+										this.progressReport_.errors.push(error);
+										this.logger().warn('Rejected by target: ' + path + ': ' + error.message);
+										continue;
+									} else {
+										throw error;
+									}
+								}
 							}
 
 							await ItemClass.save(content, options);

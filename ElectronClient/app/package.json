@@ -1,6 +1,6 @@
 {
   "name": "Joplin",
-  "version": "1.0.100",
+  "version": "1.0.101",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "scripts": {
@@ -79,6 +79,7 @@
     "app-module-path": "^2.2.0",
     "async-mutex": "^0.1.3",
     "base-64": "^0.1.0",
+    "chokidar": "^2.0.3",
     "compare-versions": "^3.2.1",
     "electron-context-menu": "^0.9.1",
     "electron-is-dev": "^0.3.0",

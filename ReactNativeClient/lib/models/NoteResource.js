@@ -1,5 +1,10 @@
 const BaseModel = require('lib/BaseModel.js');
 
+// - If is_associated = 1, note_resources indicates which note_id is currently associated with the given resource_id
+// - If is_associated = 0, note_resources indicates which note_id *was* associated with the given resource_id
+// - last_seen_time tells the last time that reosurce was associated with this note.
+// - If last_seen_time is 0, it means the resource has never been associated with any note.
+
 class NoteResource extends BaseModel {
 
 	static tableName() {
@@ -39,7 +44,7 @@ class NoteResource extends BaseModel {
 		const queries = [];
 		for (let i = 0; i < missingResources.length; i++) {
 			const id = missingResources[i].id;
-			queries.push({ sql: 'INSERT INTO note_resources (note_id, resource_id, is_associated, last_seen_time) VALUES (?, ?, ?, ?)', params: ["", id, 0, Date.now()] });			
+			queries.push({ sql: 'INSERT INTO note_resources (note_id, resource_id, is_associated, last_seen_time) VALUES (?, ?, ?, ?)', params: ["", id, 0, 0] });			
 		}
 		await this.db().transactionExecBatch(queries);
 	}
@@ -57,6 +62,7 @@ class NoteResource extends BaseModel {
 			GROUP BY resource_id
 			HAVING sum(is_associated) <= 0
 			AND last_seen_time < ?
+			AND last_seen_time != 0
 		`, [cutOffTime]);
 		return output.map(r => r.resource_id);
 	}

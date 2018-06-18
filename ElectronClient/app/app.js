@@ -41,6 +41,7 @@ const appDefaultState = Object.assign({}, defaultState, {
 	noteVisiblePanes: ['editor', 'viewer'],
 	sidebarVisibility: true,
 	windowContentSize: bridge().windowContentSize(),
+	watchedNoteFiles: [],
 });
 
 class Application extends BaseApplication {
@@ -140,6 +141,33 @@ class Application extends BaseApplication {
 				case 'SIDEBAR_VISIBILITY_SET':
 					newState = Object.assign({}, state);
 					newState.sidebarVisibility = action.visibility;
+					break;
+
+				case 'NOTE_FILE_WATCHER_ADD':
+
+					if (newState.watchedNoteFiles.indexOf(action.id) < 0) {
+						newState = Object.assign({}, state);
+						const watchedNoteFiles = newState.watchedNoteFiles.slice();
+						watchedNoteFiles.push(action.id); 
+						newState.watchedNoteFiles = watchedNoteFiles;
+					}
+					break;
+
+				case 'NOTE_FILE_WATCHER_REMOVE':
+
+					newState = Object.assign({}, state);
+					const idx = newState.watchedNoteFiles.indexOf(action.id);
+					if (idx >= 0) {
+						const watchedNoteFiles = newState.watchedNoteFiles.slice();
+						watchedNoteFiles.splice(idx, 1);
+						newState.watchedNoteFiles = watchedNoteFiles;
+					}
+					break;
+
+				case 'NOTE_FILE_WATCHER_CLEAR':
+
+					newState = Object.assign({}, state);
+					newState.watchedNoteFiles = [];
 					break;
 
 			}
@@ -428,6 +456,16 @@ class Application extends BaseApplication {
 				}, {
 					type: 'separator',
 					screens: ['Main'],
+				}, {
+					label: _('Edit in external editor'),
+					screens: ['Main'],
+					accelerator: 'CommandOrControl+E',
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'commandStartExternalEditing',
+						});
+					},
 				}, {
 					label: _('Search in all the notes'),
 					screens: ['Main'],

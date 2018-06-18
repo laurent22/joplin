@@ -96,4 +96,14 @@ describe('services_ResourceService', function() {
 		expect(!!(await Resource.load(resource1.id))).toBe(true);
 	}));
 
+	it('should not delete a resource that has never been associated with any note, because it probably means the resource came via sync, and associated note has not arrived yet', asyncTest(async () => {
+		const service = new ResourceService();
+		const resource = await shim.createResourceFromPath(__dirname + '/../tests/support/photo.jpg');
+
+		await service.indexNoteResources();
+		await service.deleteOrphanResources(0);
+
+		expect((await Resource.all()).length).toBe(1);
+	}));
+
 });
