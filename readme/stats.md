@@ -2,8 +2,8 @@
 
 Name | Value
 --- | ---
-Total Windows downloads | 29740
-Total macOs downloads | 15317
+Total Windows downloads | 29744
+Total macOs downloads | 15319
 Total Linux downloads | 13383
 Windows % | 51%
 macOS % | 26%
@@ -11,8 +11,8 @@ Linux % | 23%
 
 Version | Date | Windows | macOS | Linux | Total
 --- | --- | --- | --- | --- | ---
-[v1.0.101](https://github.com/laurent22/joplin/releases/tag/v1.0.101) | 2018-06-17T18:35:11Z | 468 | 184 | 85  | 737
-[v1.0.100](https://github.com/laurent22/joplin/releases/tag/v1.0.100) | 2018-06-14T17:41:43Z | 823 | 400 | 214 | 1437
+[v1.0.101](https://github.com/laurent22/joplin/releases/tag/v1.0.101) | 2018-06-17T18:35:11Z | 472 | 185 | 85  | 742
+[v1.0.100](https://github.com/laurent22/joplin/releases/tag/v1.0.100) | 2018-06-14T17:41:43Z | 823 | 401 | 214 | 1438
 [v1.0.99](https://github.com/laurent22/joplin/releases/tag/v1.0.99) | 2018-06-10T13:18:23Z | 1210 | 571 | 367 | 2148
 [v1.0.97](https://github.com/laurent22/joplin/releases/tag/v1.0.97) | 2018-06-09T19:23:34Z | 270 | 128 | 50  | 448
 [v1.0.96](https://github.com/laurent22/joplin/releases/tag/v1.0.96) | 2018-05-26T16:36:39Z | 2650 | 1190 | 1124 | 4964
