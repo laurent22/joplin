@@ -27,6 +27,7 @@ const ArrayUtils = require('lib/ArrayUtils');
 const urlUtils = require('lib/urlUtils');
 const dialogs = require('./dialogs');
 const markdownUtils = require('lib/markdownUtils');
+const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -144,6 +145,13 @@ class NoteTextComponent extends React.Component {
 		this.aceEditor_focus = (event) => {
 			updateSelectionRange();
 		}
+
+		this.externalEditWatcher_noteChange = (event) => {
+			if (!this.state.note || !this.state.note.id) return;
+			if (event.id === this.state.note.id) {
+				this.reloadNote(this.props);
+			}
+		}
 	}
 
 	// Note:
@@ -244,6 +252,8 @@ class NoteTextComponent extends React.Component {
 		eventManager.removeListener('alarmChange', this.onAlarmChange_);
 		eventManager.removeListener('noteTypeToggle', this.onNoteTypeToggle_);
 		eventManager.removeListener('todoToggle', this.onTodoToggle_);
+
+		this.destroyExternalEditWatcher();
 	}
 
 	async saveIfNeeded(saveIfNewNote = false) {
@@ -255,6 +265,8 @@ class NoteTextComponent extends React.Component {
 			if (!shared.isModified(this)) return;
 		}
 		await shared.saveNoteButton_press(this);
+
+		this.externalEditWatcherUpdateNoteFile(this.state.note);
 	}
 
 	async saveOneProperty(name, value) {
@@ -292,6 +304,7 @@ class NoteTextComponent extends React.Component {
 		if (props.newNote) {
 			note = Object.assign({}, props.newNote);
 			this.lastLoadedNoteId_ = null;
+			this.externalEditWatcherStopWatchingAll();
 		} else {
 			noteId = props.noteId;
 			loadingNewNote = stateNoteId !== noteId;
@@ -317,6 +330,8 @@ class NoteTextComponent extends React.Component {
 
 		// Scroll back to top when loading new note
 		if (loadingNewNote) {
+			this.externalEditWatcherStopWatchingAll();
+
 			this.editorMaxScrollTop_ = 0;
 
 			// HACK: To go around a bug in Ace editor, we first set the scroll position to 1
@@ -721,6 +736,8 @@ class NoteTextComponent extends React.Component {
 			this.commandTextBold();
 		} else if (command.name === 'textItalic') {
 			this.commandTextItalic();
+		} else if (command.name === 'commandStartExternalEditing') {
+			this.commandStartExternalEditing();
 		} else {
 			commandProcessed = false;
 		}
@@ -773,6 +790,42 @@ class NoteTextComponent extends React.Component {
 			name: 'editAlarm',
 			noteId: this.state.note.id,
 		});
+	}
+
+	externalEditWatcher() {
+		if (!this.externalEditWatcher_) {
+			this.externalEditWatcher_ = new ExternalEditWatcher((action) => { return this.props.dispatch(action) });
+			this.externalEditWatcher_.setLogger(reg.logger());
+			this.externalEditWatcher_.on('noteChange', this.externalEditWatcher_noteChange);
+		}
+
+		return this.externalEditWatcher_;
+	}
+
+	externalEditWatcherUpdateNoteFile(note) {
+		if (this.externalEditWatcher_) this.externalEditWatcher().updateNoteFile(note);
+	}
+
+	externalEditWatcherStopWatchingAll() {
+		if (this.externalEditWatcher_) this.externalEditWatcher().stopWatchingAll();
+	}
+
+	destroyExternalEditWatcher() {
+		if (!this.externalEditWatcher_) return;
+
+		console.info(this.externalEditWatcher_);
+
+		this.externalEditWatcher_.off('noteChange', this.externalEditWatcher_noteChange);
+		this.externalEditWatcher_.stopWatchingAll();
+		this.externalEditWatcher_ = null;
+	}
+
+	async commandStartExternalEditing() {
+		this.externalEditWatcher().openAndWatch(this.state.note);
+	}
+
+	async commandStopExternalEditing() {
+		this.externalEditWatcherStopWatchingAll();
 	}
 
 	async commandSetTags() {
@@ -1030,6 +1083,21 @@ class NoteTextComponent extends React.Component {
 			type: 'separator',
 		});
 
+		if (note && this.props.watchedNoteFiles.indexOf(note.id) >= 0) {
+			toolbarItems.push({
+				tooltip: _('Click to stop external editing'),
+				title: _('Watching...'),
+				iconName: 'fa-external-link',
+				onClick: () => { return this.commandStopExternalEditing(); },
+			});
+		} else {
+			toolbarItems.push({
+				tooltip: _('Edit in external editor'),
+				iconName: 'fa-external-link',
+				onClick: () => { return this.commandStartExternalEditing(); },
+			});
+		}
+
 		toolbarItems.push({
 			tooltip: _('Tags'),
 			iconName: 'fa-tags',
@@ -1275,6 +1343,7 @@ const mapStateToProps = (state) => {
 		notesParentType: state.notesParentType,
 		searches: state.searches,
 		selectedSearchId: state.selectedSearchId,
+		watchedNoteFiles: state.watchedNoteFiles,
 	};
 };
 
