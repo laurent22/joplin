@@ -248,28 +248,27 @@
 </li>
 </ul>
 </div>
+<h1 id="joplin-web-clipper">Joplin Web Clipper</h1>
+<p>The Web Clipper is a browser extension that allows you to save web pages and screenshots from your browser. To start using it, open the Joplin desktop application, go to the <strong>Web Clipper Options</strong> and follow the instructions.</p>
+<p><img src="https://joplin.cozic.net/images/WebExtensionScreenshot.png" alt=""></p>
 <h1 id="troubleshooting-the-web-clipper-service">Troubleshooting the web clipper service</h1>
 <p>The web clipper extension and the Joplin application communicates via a service, which is started by the Joplin desktop app.</p>
 <p>However certain things can interfer with this service and prevent it from being accessible or from starting. If something does not work, check the following:</p>
 <ul>
-<li><p>Check that the service is started. You can check this in the Web clipper options in the desktop app.</p>
-</li>
-<li><p>Check that the port used by the service is not blocked by a firewall. You can find the port number in the Web clipper options in the desktop Joplin application.</p>
-</li>
-<li><p>Check that no proxy is running on the machine, or make sure that the requests from the web clipper service are filtered and allowed. For example <a href="https://github.com/laurent22/joplin/issues/561#issuecomment-392220191">https://github.com/laurent22/joplin/issues/561#issuecomment-392220191</a></p>
-</li>
+<li>Check that the service is started. You can check this in the Web clipper options in the desktop app.</li>
+<li>Check that the port used by the service is not blocked by a firewall. You can find the port number in the Web clipper options in the desktop Joplin application.</li>
+<li>Check that no proxy is running on the machine, or make sure that the requests from the web clipper service are filtered and allowed. For example <a href="https://github.com/laurent22/joplin/issues/561#issuecomment-392220191">https://github.com/laurent22/joplin/issues/561#issuecomment-392220191</a></li>
 </ul>
 <p>If none of this work, please report it on the <a href="https://discourse.joplin.cozic.net/">forum</a> or <a href="https://github.com/laurent22/joplin/issues">GitHub issue tracker</a></p>
 <h1 id="debugging-the-extension">Debugging the extension</h1>
 <h2 id="in-chrome">In Chrome</h2>
 <p>To provide as much information as possible when reporting an issue, you may provide the log from the various Chrome console.</p>
 <p>To do so, first enable developer mode in <a href="chrome://extensions/">chrome://extensions/</a></p>
-<h3 id="debugging-the-popup">Debugging the popup</h3>
-<p>Right-click on the Joplin extension icon, and select &quot;Inspect popup&quot;.</p>
-<h3 id="debugging-the-background-script">Debugging the background script</h3>
-<p>In <code>chrome://extensions/</code>, click on &quot;Inspect background script&quot;.</p>
-<h3 id="debugging-the-content-script">Debugging the content script</h3>
-<p>Press Ctrl+Shift+I to open the console of the current page.</p>
+<ul>
+<li>Debugging the popup: Right-click on the Joplin extension icon, and select &quot;Inspect popup&quot;.</li>
+<li>Debugging the background script: In <code>chrome://extensions/</code>, click on &quot;Inspect background script&quot;.</li>
+<li>Debugging the content script: Press Ctrl+Shift+I to open the console of the current page.</li>
+</ul>
 <h2 id="in-firefox">In Firefox</h2>
 <ul>
 <li>Open <a href="about:debugging">about:debugging</a> in Firefox.</li>
@@ -280,6 +279,84 @@
 <p>Also press F12 to open the regular Firefox console (some messages from the Joplin extension can go there too).</p>
 <p>Now use the extension as normal and replicate the bug you&#39;re having.</p>
 <p>Copy and paste the content of both the debugging window and the Firefox console, and post it to the <a href="https://discourse.joplin.cozic.net/">forum</a>.</p>
+<h1 id="using-the-web-clipper-service">Using the Web Clipper service</h1>
+<p>The Web Clipper service can be used to create notes from any other application. It exposes a <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST API</a> with a number of methods to list folders and to create notes or attach images.</p>
+<p>In order to use it, you&#39;ll first need to find on which port the service is running. To do so, open the Web Clipper Option in Joplin and if the service is running it should tell you on which port. Normally it runs on port <strong>41184</strong>. If you want to find it programmatically, you may follow this kind of algorithm:</p>
+<pre><code class="lang-javascript">let port = null;
+for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
+    const result = pingPort(portToTest); // Call GET /ping
+    if (result == &#39;JoplinClipperServer&#39;) {
+        port = portToTest; // Found the port
+        break;
+    }
+}
+</code></pre>
+<p>start from 41184, then ping it (using the /ping method below)</p>
+<p>The following methods are available:</p>
+<h3 id="get-ping">GET /ping</h3>
+<p>Tells whether the service is active or not. It should return &quot;JoplinClipperServer&quot; if it works.</p>
+<p>Example: <code>curl http://127.0.0.1:41184/ping</code></p>
+<h3 id="get-folders">GET /folders</h3>
+<p>Returns the list of notebooks (called &quot;folders&quot; internally) as a tree. The sub-notebooks of a notebook, if any, are under the <code>children</code> key.</p>
+<p>Example: <code>curl http://127.0.0.1:41184/folders</code></p>
+<h3 id="post-notes">POST /notes</h3>
+<p>Creates a new note. You can either specify the note body as Markdown by setting the <code>body</code> parameter, or in HTML by setting the <code>body_html</code>.  All parameter are optional.</p>
+<p>Parameters:</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>title</td>
+<td>Note title</td>
+</tr>
+<tr>
+<td>body</td>
+<td>Note body, in Markdown</td>
+</tr>
+<tr>
+<td>body_html</td>
+<td>Note body, in HTML format</td>
+</tr>
+<tr>
+<td>source_url</td>
+<td>The URL the note comes from</td>
+</tr>
+<tr>
+<td>parent_id</td>
+<td>The notebook (ID) to move the note to</td>
+</tr>
+<tr>
+<td>base_url</td>
+<td>If <code>body_html</code> is provided and contains relative URLs, provide the <code>base_url</code> parameter too so that all the URLs can be converted to absolute ones. The base URL is basically where the HTML was fetched from, minus the query (everything after the &#39;?&#39;). For example if the original page was <code>https://stackoverflow.com/search?q=%5Bjava%5D+test</code>, the base URL is <code>https://stackoverflow.com/search</code>.</td>
+</tr>
+<tr>
+<td>image_data_url</td>
+<td>An image to attach to the note, in <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs">Data URL</a> format.</td>
+</tr>
+<tr>
+<td>crop_rect</td>
+<td>If an image is provided, you can also specify an optional rectangle that will be used to crop the image. In format <code>{ x: x, y: y, width: width, height: height }</code></td>
+</tr>
+</tbody>
+</table>
+<p>Examples:</p>
+<ul>
+<li>Create a note from some Markdown text</li>
+</ul>
+<p><code>curl --data &#39;{ &quot;title&quot;: &quot;My note&quot;, &quot;body&quot;: &quot;Some note in **Markdown**&quot;}&#39; http://127.0.0.1:41184/notes</code></p>
+<ul>
+<li>Create a note from some HTML</li>
+</ul>
+<p><code>curl --data &#39;{ &quot;title&quot;: &quot;My note&quot;, &quot;body_html&quot;: &quot;Some note in &lt;b&gt;HTML&lt;/b&gt;&quot;}&#39; http://127.0.0.1:41184/notes</code></p>
+<ul>
+<li>Create a note and attach an image to it:</li>
+</ul>
+<p><code>curl --data &#39;{ &quot;title&quot;: &quot;Image test&quot;, &quot;body&quot;: &quot;Here is Joplin icon:&quot;, &quot;image_data_url&quot;: &quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAANZJREFUeNoAyAA3/wFwtO3K6gUB/vz2+Prw9fj/+/r+/wBZKAAExOgF4/MC9ff+MRH6Ui4E+/0Bqc/zutj6AgT+/Pz7+vv7++nu82c4DlMqCvLs8goA/gL8/fz09fb59vXa6vzZ6vjT5fbn6voD/fwC8vX4UiT9Zi//APHyAP8ACgUBAPv5APz7BPj2+DIaC2o3E+3o6ywaC5fT6gD6/QD9/QEVf9kD+/dcLQgJA/7v8vqfwOf18wA1IAIEVycAyt//v9XvAPv7APz8LhoIAPz9Ri4OAgwARgx4W/6fVeEAAAAASUVORK5CYII=&quot;}&#39; http://127.0.0.1:41184/notes</code></p>
 
 <script>
 	function stickyHeader() { 
