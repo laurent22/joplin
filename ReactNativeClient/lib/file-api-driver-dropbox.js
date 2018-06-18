@@ -133,6 +133,8 @@ class FileApiDriverDropbox {
 		} catch (error) {
 			if (this.hasErrorCode_(error, 'not_found')) {
 				return null;
+			} else if (this.hasErrorCode_(error, 'restricted_content')) {
+				throw new JoplinError('Cannot download because content is restricted by Dropbox', 'rejectedByTarget');
 			} else {
 				throw error;
 			}
