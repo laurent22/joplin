@@ -149,6 +149,8 @@ class Setting extends BaseModel {
 			'sync.5.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.7.context': { value: '', type: Setting.TYPE_STRING, public: false },
+
+			'net.ignoreTlsErrors': { value: false, type: Setting.TYPE_BOOL, show: (settings) => { return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].indexOf(settings['sync.target']) >= 0 }, public: true, appTypes: ['desktop', 'cli'], label: () => _('Ignore TLS certificate errors') },
 		};
 
 		return this.metadata_;

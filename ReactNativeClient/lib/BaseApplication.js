@@ -309,6 +309,11 @@ class BaseApplication {
 			time.setTimeFormat(Setting.value('timeFormat'));
 		}
 
+		if ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'net.ignoreTlsErrors') || (action.type == 'SETTING_UPDATE_ALL')) {
+			// https://stackoverflow.com/questions/20082893/unable-to-verify-leaf-signature
+			process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = Setting.value('net.ignoreTlsErrors') ? '0' : '1';
+		}
+
 		if ((action.type == 'SETTING_UPDATE_ONE' && (action.key.indexOf('encryption.') === 0)) || (action.type == 'SETTING_UPDATE_ALL')) {
 			if (this.hasGui()) {
 				await EncryptionService.instance().loadMasterKeysFromSettings();

@@ -58,8 +58,6 @@ for (let portToTest = 41184; portToTest <= 41194; portToTest++) {
 }
 ```
 
-start from 41184, then ping it (using the /ping method below)
-
 The following methods are available:
 
 ### GET /ping
