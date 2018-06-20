@@ -24,6 +24,7 @@ const os = require('os');
 const fs = require('fs-extra');
 const JoplinError = require('lib/JoplinError');
 const EventEmitter = require('events');
+const syswidecas = require('syswide-cas');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
@@ -312,6 +313,15 @@ class BaseApplication {
 		if ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'net.ignoreTlsErrors') || (action.type == 'SETTING_UPDATE_ALL')) {
 			// https://stackoverflow.com/questions/20082893/unable-to-verify-leaf-signature
 			process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = Setting.value('net.ignoreTlsErrors') ? '0' : '1';
+		}
+
+		if ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'net.customCertificates') || (action.type == 'SETTING_UPDATE_ALL')) {
+			const caPaths = Setting.value('net.customCertificates').split(',');
+			for (let i = 0; i < caPaths.length; i++) {
+				const f = caPaths[i].trim();
+				if (!f) continue;
+				syswidecas.addCAs(f);
+			}
 		}
 
 		if ((action.type == 'SETTING_UPDATE_ONE' && (action.key.indexOf('encryption.') === 0)) || (action.type == 'SETTING_UPDATE_ALL')) {
