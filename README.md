@@ -280,7 +280,7 @@ Please see the [donation page](https://joplin.cozic.net/donate/) for information
 - For general discussion about Joplin, user support, software development questions, and to discuss new features, go to the [Joplin Forum](https://discourse.joplin.cozic.net/). It is possible to login with your GitHub account.
 - Also see here for information about [the latest releases and general news](https://discourse.joplin.cozic.net/c/news).
 - For bug reports and feature requests, go to the [GitHub Issue Tracker](https://github.com/laurent22/joplin/issues).
-- The latest news are often posted [on this Twitter account](https://twitter.com/laurent2233).
+- The latest news are posted [on the Patreon page](https://www.patreon.com/joplin).
 
 # Contributing
 

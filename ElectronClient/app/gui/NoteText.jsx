@@ -615,6 +615,18 @@ class NoteTextComponent extends React.Component {
 			document.querySelector('#note-editor').addEventListener('paste', this.onEditorPaste_, true);
 			document.querySelector('#note-editor').addEventListener('keydown', this.onEditorKeyDown_);
 
+			const lineLeftSpaces = function(line) {
+				let output = '';
+				for (let i = 0; i < line.length; i++) {
+					if ([' ', '\t'].indexOf(line[i]) >= 0) {
+						output += line[i];
+					} else {
+						break;
+					}
+				}
+				return output;
+			}
+
 			// Disable Markdown auto-completion (eg. auto-adding a dash after a line with a dash.
 			// https://github.com/ajaxorg/ace/issues/2754
 			const that = this; // The "this" within the function below refers to something else
@@ -622,12 +634,15 @@ class NoteTextComponent extends React.Component {
 				const ls = that.state.lastKeys;
 				if (ls.length >= 2 && ls[ls.length - 1] === 'Enter' && ls[ls.length - 2] === 'Enter') return this.$getIndent(line);
 
-				if (line.indexOf('- [ ] ') === 0 || line.indexOf('- [x] ') === 0 || line.indexOf('- [X] ') === 0) return '- [ ] ';
-				if (line.indexOf('- ') === 0) return '- ';
-				if (line.indexOf('* ') === 0) return '* ';
+				const leftSpaces = lineLeftSpaces(line);
+				const lineNoLeftSpaces = line.trimLeft();
 
-				const bulletNumber = markdownUtils.olLineNumber(line);
-				if (bulletNumber) return (bulletNumber + 1) + '. ';
+				if (lineNoLeftSpaces.indexOf('- [ ] ') === 0 || lineNoLeftSpaces.indexOf('- [x] ') === 0 || lineNoLeftSpaces.indexOf('- [X] ') === 0) return leftSpaces + '- [ ] ';
+				if (lineNoLeftSpaces.indexOf('- ') === 0) return leftSpaces + '- ';
+				if (lineNoLeftSpaces.indexOf('* ') === 0) return leftSpaces + '* ';
+
+				const bulletNumber = markdownUtils.olLineNumber(lineNoLeftSpaces);
+				if (bulletNumber) return leftSpaces + (bulletNumber + 1) + '. ';
 
 				return this.$getIndent(line);
 			};
