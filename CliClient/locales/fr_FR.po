@@ -633,6 +633,9 @@ msgstr "Gras"
 msgid "Italic"
 msgstr "Italique"
 
+msgid "Edit in external editor"
+msgstr "Ouvrir dans un éditeur externe"
+
 msgid "Search in all the notes"
 msgstr "Chercher dans toutes les notes"
 
@@ -962,6 +965,9 @@ msgstr "texte en gras"
 msgid "emphasized text"
 msgstr "texte en italique"
 
+msgid "List item"
+msgstr "Élément de liste"
+
 msgid "Insert Hyperlink"
 msgstr "Insérer lien"
 
@@ -999,8 +1005,11 @@ msgstr "Titre"
 msgid "Horizontal Rule"
 msgstr "Règle horizontale"
 
-msgid "Open in external editor"
-msgstr "Ouvrir dans un éditeur externe"
+msgid "Click to stop external editing"
+msgstr "Cliquez pour arrêter l'édition externe"
+
+msgid "Watching..."
+msgstr "En cours..."
 
 msgid "to-do"
 msgstr "tâche"
@@ -1345,6 +1354,21 @@ msgstr "WebDAV : Nom utilisateur"
 
 msgid "WebDAV password"
 msgstr "WebDAV : Mot de passe"
+
+msgid "Custom TLS certificates"
+msgstr "Certificats TLS personnalisés"
+
+msgid ""
+"Comma-separated list of paths to directories to load the certificates from, "
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem"
+msgstr ""
+"Liste séparée par des virgules contenant les chemins des répertoires "
+"contenants des certificats, ou les chemins de certificats individuels. Par "
+"exemple : /my/cert_dir, /other/custom.pem"
+
+msgid "Ignore TLS certificate errors"
+msgstr "Ignorer les erreurs de certificats TLS"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."

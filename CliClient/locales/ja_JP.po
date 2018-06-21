@@ -618,6 +618,9 @@ msgstr ""
 msgid "Italic"
 msgstr ""
 
+msgid "Edit in external editor"
+msgstr ""
+
 msgid "Search in all the notes"
 msgstr "すべてのノートを検索"
 
@@ -928,6 +931,9 @@ msgstr ""
 msgid "emphasized text"
 msgstr ""
 
+msgid "List item"
+msgstr ""
+
 msgid "Insert Hyperlink"
 msgstr ""
 
@@ -965,8 +971,12 @@ msgstr ""
 msgid "Horizontal Rule"
 msgstr ""
 
-msgid "Open in external editor"
+msgid "Click to stop external editing"
 msgstr ""
+
+#, fuzzy
+msgid "Watching..."
+msgstr "中止中..."
 
 #, fuzzy
 msgid "to-do"
@@ -1319,6 +1329,18 @@ msgid "WebDAV username"
 msgstr ""
 
 msgid "WebDAV password"
+msgstr ""
+
+msgid "Custom TLS certificates"
+msgstr ""
+
+msgid ""
+"Comma-separated list of paths to directories to load the certificates from, "
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem"
+msgstr ""
+
+msgid "Ignore TLS certificate errors"
 msgstr ""
 
 #, javascript-format

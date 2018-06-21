@@ -632,6 +632,9 @@ msgstr ""
 msgid "Italic"
 msgstr ""
 
+msgid "Edit in external editor"
+msgstr ""
+
 msgid "Search in all the notes"
 msgstr "Поиск во всех заметках"
 
@@ -949,6 +952,9 @@ msgstr ""
 msgid "emphasized text"
 msgstr ""
 
+msgid "List item"
+msgstr ""
+
 msgid "Insert Hyperlink"
 msgstr ""
 
@@ -986,8 +992,12 @@ msgstr ""
 msgid "Horizontal Rule"
 msgstr ""
 
-msgid "Open in external editor"
+msgid "Click to stop external editing"
 msgstr ""
+
+#, fuzzy
+msgid "Watching..."
+msgstr "Отмена..."
 
 msgid "to-do"
 msgstr "задача"
@@ -1336,6 +1346,18 @@ msgstr "Имя пользователя WebDAV"
 
 msgid "WebDAV password"
 msgstr "Пароль WebDAV"
+
+msgid "Custom TLS certificates"
+msgstr ""
+
+msgid ""
+"Comma-separated list of paths to directories to load the certificates from, "
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem"
+msgstr ""
+
+msgid "Ignore TLS certificate errors"
+msgstr ""
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."

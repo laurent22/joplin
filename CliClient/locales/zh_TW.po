@@ -567,6 +567,9 @@ msgstr ""
 msgid "Italic"
 msgstr ""
 
+msgid "Edit in external editor"
+msgstr ""
+
 msgid "Search in all the notes"
 msgstr "在所有記事中搜尋"
 
@@ -866,6 +869,9 @@ msgstr ""
 msgid "emphasized text"
 msgstr ""
 
+msgid "List item"
+msgstr ""
+
 msgid "Insert Hyperlink"
 msgstr ""
 
@@ -903,8 +909,12 @@ msgstr ""
 msgid "Horizontal Rule"
 msgstr ""
 
-msgid "Open in external editor"
+msgid "Click to stop external editing"
 msgstr ""
+
+#, fuzzy
+msgid "Watching..."
+msgstr "正在取消中..."
 
 msgid "to-do"
 msgstr "待辦事項"
@@ -1237,6 +1247,18 @@ msgstr "WebDAV 用戶名稱"
 
 msgid "WebDAV password"
 msgstr "WebDAV 密碼"
+
+msgid "Custom TLS certificates"
+msgstr ""
+
+msgid ""
+"Comma-separated list of paths to directories to load the certificates from, "
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem"
+msgstr ""
+
+msgid "Ignore TLS certificate errors"
+msgstr ""
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
