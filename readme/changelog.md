@@ -1,5 +1,15 @@
 # Joplin changelog
 
+## [v1.0.103](https://github.com/laurent22/joplin/releases/tag/v1.0.103) - 2018-06-21T19:38:13Z
+
+- New: Resolves [#611](https://github.com/laurent22/joplin/issues/611): Allow opening and editing note in external editor
+- New: [#628](https://github.com/laurent22/joplin/issues/628): Adds a shortcut to insert the date and time.
+- New: Fixes [#343](https://github.com/laurent22/joplin/issues/343), Fixes [#191](https://github.com/laurent22/joplin/issues/191): Added options to specify custom TLS certificates
+- New: Fixes [#343](https://github.com/laurent22/joplin/issues/343), Fixes [#191](https://github.com/laurent22/joplin/issues/191): Added options to ignore TLS cert errors to allow self-signed certificates on desktop and CLI
+- Fixes [#626](https://github.com/laurent22/joplin/issues/626): Auto-completion for indented items
+- Fixes [#632](https://github.com/laurent22/joplin/issues/632): Handle restricted_content error in Dropbox
+- Fix: Revert [#554](https://github.com/laurent22/joplin/issues/554) to try to fix [#624](https://github.com/laurent22/joplin/issues/624): WebDAV error when syncing with SeaFile
+
 ## [v1.0.101](https://github.com/laurent22/joplin/releases/tag/v1.0.101) - 2018-06-17T18:35:11Z
 
 This is a bug-fix release following v100 with the following fixes:
@@ -230,15 +240,3 @@ IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before 
 - New: List missing master keys in encryption screen
 - Fixed: Attaching images in Linux was no longer working
 - Fixed crash in macOS
-
-## [v0.10.54](https://github.com/laurent22/joplin/releases/tag/v0.10.54) - 2018-01-31T20:21:30Z
-
-- Optimised Nextcloud functionality so that it is faster and consumes less resources
-- Fixed Nextcloud sync issue when processing many items.
-- Fixed: Handle case where file is left half-uploaded on Nextcloud instance (possibly an ocloud.de issue only)
-- Fixed: Allow decryption of other items to continue even if an item cannot be decrypted
-- Add Content-Size header for WebDAV, which is required by some services
-- Fixed auto-title when title is manually entered first
-- Improved auto-update process to avoid random crashes
-- New: Allow focusing either title or body when creating a new note or to-do
-- Fixed crash when having invalid UTF-8 string in text editor
