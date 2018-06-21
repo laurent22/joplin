@@ -43,8 +43,10 @@ class FileApiDriverWebDav {
 		const propStat = this.api().arrayFromJson(resource, ['d:propstat']);
 		if (!Array.isArray(propStat)) throw new Error('Invalid WebDAV resource format: ' + JSON.stringify(resource));
 
-		const httpStatusLine = this.api().stringFromJson(resource, ['d:propstat',0,'d:status', 0]);
-		if ( typeof httpStatusLine === 'string' && httpStatusLine.indexOf('404') >= 0 ) throw  new JoplinError(resource, 404);
+		// Disabled for now to try to fix this: https://github.com/laurent22/joplin/issues/624
+		//
+		// const httpStatusLine = this.api().stringFromJson(resource, ['d:propstat',0,'d:status', 0]);
+		// if ( typeof httpStatusLine === 'string' && httpStatusLine.indexOf('404') >= 0 ) throw  new JoplinError(resource, 404);
 
 		const resourceTypes = this.api().resourcePropByName(resource, 'array', 'd:resourcetype');
 		let isDir = false;
