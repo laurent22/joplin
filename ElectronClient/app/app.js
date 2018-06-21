@@ -362,7 +362,6 @@ class Application extends BaseApplication {
 					}
 				}, {
 					label: _('New notebook'),
-					accelerator: 'CommandOrControl+Shift+B',
 					screens: ['Main'],
 					click: () => {
 						this.dispatch({

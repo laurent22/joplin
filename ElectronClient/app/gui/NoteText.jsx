@@ -830,8 +830,6 @@ class NoteTextComponent extends React.Component {
 	destroyExternalEditWatcher() {
 		if (!this.externalEditWatcher_) return;
 
-		console.info(this.externalEditWatcher_);
-
 		this.externalEditWatcher_.off('noteChange', this.externalEditWatcher_noteChange);
 		this.externalEditWatcher_.stopWatchingAll();
 		this.externalEditWatcher_ = null;
@@ -925,8 +923,6 @@ class NoteTextComponent extends React.Component {
 				start: { row: p.row, column: p.column },
 				end: { row: p.row, column: p.column + defaultText.length },
 			};
-
-			console.info('DDDDD', defaultText, newRange);
 
 			this.updateEditorWithDelay((editor) => {
 				if (defaultText && newRange) {
