@@ -1282,7 +1282,7 @@ class NoteTextComponent extends React.Component {
 
 		const viewer =  <webview
 			style={viewerStyle}
-			nodeintegration="1"
+			preload="gui/note-viewer/preload.js"
 			src="gui/note-viewer/index.html"
 			ref={(elem) => { this.webview_ref(elem); } }
 		/>

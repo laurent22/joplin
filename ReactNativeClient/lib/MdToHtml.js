@@ -216,7 +216,7 @@ class MdToHtml {
 
 			if (isInlineCode) {
 				openTag = null;
-			} else if (tag && t.type.indexOf('html_inline') >= 0) {
+			} else if (tag && (t.type.indexOf('html_inline') >= 0 || t.type.indexOf('html_block') >= 0)) {
 				openTag = null;
 			} else if (tag && t.type.indexOf('_open') >= 0) {
 				openTag = tag;
@@ -277,7 +277,7 @@ class MdToHtml {
 			if (t.type === 'image') {
 				if (tokenContent) attrs.push(['title', tokenContent]);
 				output.push(this.renderImage_(attrs, options));
-			} else if (t.type === 'html_inline') {
+			} else if (t.type === 'html_inline' || t.type === 'html_block') {
 				output.push(t.content);
 			} else if (t.type === 'softbreak') {
 				output.push('<br/>');
@@ -392,7 +392,7 @@ class MdToHtml {
 		const md = new MarkdownIt({
 			breaks: true,
 			linkify: true,
-			html: false, // For security, HTML tags are not supported - https://github.com/laurent22/joplin/issues/500
+			html: true,
 		});
 
 		// This is currently used only so that the $expression$ and $$\nexpression\n$$ blocks are translated
