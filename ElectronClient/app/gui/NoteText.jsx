@@ -28,6 +28,7 @@ const urlUtils = require('lib/urlUtils');
 const dialogs = require('./dialogs');
 const markdownUtils = require('lib/markdownUtils');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
+const { toSystemSlashes, safeFilename } = require('lib/path-utils');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -485,7 +486,6 @@ class NoteTextComponent extends React.Component {
 
 				menu.append(new MenuItem({label: _('Copy path to clipboard'), click: async () => {
 					const { clipboard } = require('electron');
-					const { toSystemSlashes } = require('lib/path-utils.js');
 					clipboard.writeText(toSystemSlashes(resourcePath));
 				}}));
 			} else {
@@ -727,13 +727,14 @@ class NoteTextComponent extends React.Component {
 	}
 
 	async doCommand(command) {
-		if (!command) return;
+		if (!command || !this.state.note) return;
 
 		let commandProcessed = true;
 
 		if (command.name === 'exportPdf' && this.webview_) {
 			const path = bridge().showSaveDialog({
-				filters: [{ name: _('PDF File'), extensions: ['pdf']}]
+				filters: [{ name: _('PDF File'), extensions: ['pdf']}],
+				defaultPath: safeFilename(this.state.note.title),
 			});
 
 			if (path) {
