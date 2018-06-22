@@ -87,6 +87,7 @@ class Bridge {
 		const result = this.showMessageBox_(this.window(), {
 			type: 'question',
 			message: message,
+			cancelId: 1,
 			buttons: [_('OK'), _('Cancel')],
 		});
 		return result === 0;
