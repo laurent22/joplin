@@ -73,7 +73,12 @@ class Resource extends BaseItem {
 		}
 
 		try {
-			await this.encryptionService().decryptFile(encryptedPath, plainTextPath);
+			// const stat = await this.fsDriver().stat(encryptedPath);
+			await this.encryptionService().decryptFile(encryptedPath, plainTextPath, {
+				// onProgress: (progress) => {
+				// 	console.info('Decryption: ', progress.doneSize / stat.size);
+				// },
+			});
 		} catch (error) {
 			if (error.code === 'invalidIdentifier') {
 				// As the identifier is invalid it most likely means that this is not encrypted data
@@ -108,7 +113,12 @@ class Resource extends BaseItem {
 		if (resource.encryption_blob_encrypted) return { path: encryptedPath, resource: resource };
 
 		try {
-			await this.encryptionService().encryptFile(plainTextPath, encryptedPath);
+			// const stat = await this.fsDriver().stat(plainTextPath);
+			await this.encryptionService().encryptFile(plainTextPath, encryptedPath, {
+				// onProgress: (progress) => {
+				// 	console.info(progress.doneSize / stat.size);
+				// },
+			});
 		} catch (error) {
 			if (error.code === 'ENOENT') throw new JoplinError('File not found:' + error.toString(), 'fileNotFound');
 			throw error;

@@ -300,6 +300,8 @@ function shimInit() {
 		bridge().openExternal(url)
 	}
 
+	shim.waitForFrame = () => {}
+
 }
 
 module.exports = { shimInit };

@@ -14,9 +14,20 @@ function hexPad(s, length) {
 class EncryptionService {
 
 	constructor() {
-		// Note: 1 MB is very slow with Node and probably even worse on mobile. 50 KB seems to work well
-		// and doesn't produce too much overhead in terms of headers.
-		this.chunkSize_ = 50000;
+		// Note: 1 MB is very slow with Node and probably even worse on mobile.
+		//
+		// On mobile the time it takes to decrypt increases exponentially for some reason, so it's important
+		// to have a relatively small size so as not to freeze the app. For example, on Android 7.1 simulator
+		// with 4.1 GB RAM, it takes this much to decrypt a block;
+		//
+		// 50KB => 1000 ms
+		// 25KB => 250ms
+		// 10KB => 200ms
+		// 5KB => 10ms
+		//
+		// So making the block 10 times smaller make it 100 times faster! So for now using 5KB. This can be
+		// changed easily since the chunk size is incorporated into the encrypted data.
+		this.chunkSize_ = 5000;
 		this.loadedMasterKeys_ = {};
 		this.activeMasterKeyId_ = null;
 		this.defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL;
@@ -299,7 +310,9 @@ class EncryptionService {
 		throw new Error('Unknown decryption method: ' + method);
 	}
 
-	async encryptAbstract_(source, destination) {
+	async encryptAbstract_(source, destination, options = null) {
+		if (!options) options = {};
+
 		const method = this.defaultEncryptionMethod();
 		const masterKeyId = this.activeMasterKeyId();
 		const masterKeyPlainText = this.loadedMasterKey(masterKeyId);
@@ -311,17 +324,29 @@ class EncryptionService {
 
 		await destination.append(this.encodeHeader_(header));
 
+		let doneSize = 0;
+
 		while (true) {
 			const block = await source.read(this.chunkSize_);
 			if (!block) break;
 
+			doneSize += this.chunkSize_;
+			if (options.onProgress) options.onProgress({ doneSize: doneSize });
+
+			// Wait for a frame so that the app remains responsive in mobile.
+			// https://corbt.com/posts/2015/12/22/breaking-up-heavy-processing-in-react-native.html
+			await shim.waitForFrame();
+
 			const encrypted = await this.encrypt(method, masterKeyPlainText, block);
+
 			await destination.append(padLeft(encrypted.length.toString(16), 6, '0'));
 			await destination.append(encrypted);
 		}
 	}
 
-	async decryptAbstract_(source, destination) {
+	async decryptAbstract_(source, destination, options = null) {
+		if (!options) options = {};
+
 		const identifier = await source.read(5);
 		if (!this.isValidHeaderIdentifier(identifier)) throw new JoplinError('Invalid encryption identifier. Data is not actually encrypted? ID was: ' + identifier, 'invalidIdentifier');
 		const mdSizeHex = await source.read(6);
@@ -331,12 +356,19 @@ class EncryptionService {
 		const header = this.decodeHeader_(identifier + mdSizeHex + md);
 		const masterKeyPlainText = this.loadedMasterKey(header.masterKeyId);
 
+		let doneSize = 0;
+
 		while (true) {
 			const lengthHex = await source.read(6);
 			if (!lengthHex) break;
 			if (lengthHex.length !== 6) throw new Error('Invalid block size: ' + lengthHex);
 			const length = parseInt(lengthHex, 16);
 			if (!length) continue; // Weird but could be not completely invalid (block of size 0) so continue decrypting
+
+			doneSize += length;
+			if (options.onProgress) options.onProgress({ doneSize: doneSize });
+
+			await shim.waitForFrame();
 
 			const block = await source.read(length);
 
@@ -395,21 +427,21 @@ class EncryptionService {
 		};
 	}
 
-	async encryptString(plainText) {
+	async encryptString(plainText, options = null) {
 		const source = this.stringReader_(plainText);
 		const destination = this.stringWriter_();
-		await this.encryptAbstract_(source, destination);
+		await this.encryptAbstract_(source, destination, options);
 		return destination.result();
 	}
 
-	async decryptString(cipherText) {
+	async decryptString(cipherText, options = null) {
 		const source = this.stringReader_(cipherText);
 		const destination = this.stringWriter_();
-		await this.decryptAbstract_(source, destination);
+		await this.decryptAbstract_(source, destination, options);
 		return destination.data.join('');
 	}
 
-	async encryptFile(srcPath, destPath) {
+	async encryptFile(srcPath, destPath, options = null) {
 		let source = await this.fileReader_(srcPath, 'base64');
 		let destination = await this.fileWriter_(destPath, 'ascii');
 
@@ -422,7 +454,7 @@ class EncryptionService {
 
 		try {
 			await this.fsDriver().unlink(destPath);
-			await this.encryptAbstract_(source, destination);
+			await this.encryptAbstract_(source, destination, options);
 		} catch (error) {
 			cleanUp();
 			await this.fsDriver().unlink(destPath);
@@ -432,7 +464,7 @@ class EncryptionService {
 		await cleanUp();
 	}
 
-	async decryptFile(srcPath, destPath) {
+	async decryptFile(srcPath, destPath, options = null) {
 		let source = await this.fileReader_(srcPath, 'ascii');
 		let destination = await this.fileWriter_(destPath, 'base64');
 
@@ -445,7 +477,7 @@ class EncryptionService {
 
 		try {
 			await this.fsDriver().unlink(destPath);
-			await this.decryptAbstract_(source, destination);
+			await this.decryptAbstract_(source, destination, options);
 		} catch (error) {
 			cleanUp();
 			await this.fsDriver().unlink(destPath);

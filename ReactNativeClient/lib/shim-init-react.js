@@ -123,6 +123,12 @@ function shimInit() {
 	shim.openUrl = (url) => {
 		Linking.openURL(url);
 	}
+
+	shim.waitForFrame = () => {
+		return new Promise(function(resolve, reject) {
+			requestAnimationFrame(function() { resolve(); });
+		});
+	}
 }
 
 module.exports = { shimInit };

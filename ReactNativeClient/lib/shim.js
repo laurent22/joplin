@@ -139,5 +139,6 @@ shim.attachFileToNote = async (note, filePath) => {}
 shim.imageFromDataUrl = async function(imageDataUrl, filePath, options = null) { throw new Error('Not implemented') }
 shim.Buffer = null;
 shim.openUrl = () => { throw new Error('Not implemented'); }
+shim.waitForFrame = () => { throw new Error('Not implemented'); }
 
 module.exports = { shim };
