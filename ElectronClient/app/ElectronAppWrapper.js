@@ -60,6 +60,12 @@ class ElectronAppWrapper {
 		// Fix: https://github.com/electron-userland/electron-builder/issues/2269
 		if (shim.isLinux()) windowOptions.icon = __dirname + '/build/icons/128x128.png';
 
+		require('electron-context-menu')({
+			shouldShowMenu: (event, params) => {
+				return params.isEditable;
+			},
+		});
+
 		this.win_ = new BrowserWindow(windowOptions)
 
 		this.win_.loadURL(url.format({

@@ -229,9 +229,23 @@
 
 		if (element && element.getAttribute('data-resource-id')) {
 			ipcRenderer.sendToHost('contextMenu', {
-				type: element.getAttribute('src') ? 'image' : 'link',
+				type: element.getAttribute('src') ? 'image' : 'resource',
 				resourceId: element.getAttribute('data-resource-id'),
 			});
+		} else {
+			const selectedText = window.getSelection().toString();
+
+			if (selectedText) {
+				ipcRenderer.sendToHost('contextMenu', {
+					type: 'text',
+					textToCopy: selectedText,
+				});
+			} else if (event.target.getAttribute('href')) {
+				ipcRenderer.sendToHost('contextMenu', {
+					type: 'link',
+					textToCopy: event.target.getAttribute('href'),
+				});
+			}
 		}
 	});
 

@@ -20,7 +20,6 @@ const MenuItem = bridge().MenuItem;
 const { shim } = require('lib/shim.js');
 const eventManager = require('../eventManager');
 const fs = require('fs-extra');
-const {clipboard} = require('electron')
 const md5 = require('md5');
 const mimeUtils = require('lib/mime-utils.js').mime;
 const ArrayUtils = require('lib/ArrayUtils');
@@ -29,6 +28,7 @@ const dialogs = require('./dialogs');
 const markdownUtils = require('lib/markdownUtils');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const { toSystemSlashes, safeFilename } = require('lib/path-utils');
+const { clipboard } = require('electron');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -467,7 +467,9 @@ class NoteTextComponent extends React.Component {
 
 			const menu = new Menu()
 
-			if (itemType === "image" || itemType === "link") {
+			console.info(itemType);
+
+			if (itemType === "image" || itemType === "resource") {
 				const resource = await Resource.load(arg0.resourceId);
 				const resourcePath = Resource.fullPath(resource);
 
@@ -485,8 +487,15 @@ class NoteTextComponent extends React.Component {
 				}}));
 
 				menu.append(new MenuItem({label: _('Copy path to clipboard'), click: async () => {
-					const { clipboard } = require('electron');
 					clipboard.writeText(toSystemSlashes(resourcePath));
+				}}));
+			} else if (itemType === "text") {
+				menu.append(new MenuItem({label: _('Copy'), click: async () => {
+					clipboard.writeText(arg0.textToCopy);
+				}}));
+			} else if (itemType === "link") {
+				menu.append(new MenuItem({label: _('Copy Link Address'), click: async () => {
+					clipboard.writeText(arg0.textToCopy);
 				}}));
 			} else {
 				reg.logger().error('Unhandled item type: ' + itemType);
