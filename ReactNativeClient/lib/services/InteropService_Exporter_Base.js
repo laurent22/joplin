@@ -5,6 +5,14 @@ class InteropService_Exporter_Base {
 	async processResource(resource, filePath) {}
 	async close() {}
 
+	setMetadata(md) {
+		this.metadata_ = md;
+	}
+
+	metadata() {
+		return this.metadata_;
+	}
+
 	async temporaryDirectory_(createIt) {
 		const md5 = require('md5');
 		const tempDir = require('os').tmpdir() + '/' + md5(Math.random() + Date.now());

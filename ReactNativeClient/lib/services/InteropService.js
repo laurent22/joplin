@@ -27,12 +27,12 @@ class InteropService {
 		let importModules = [
 			{
 				format: 'jex',
-				fileExtension: 'jex',
+				fileExtensions: ['jex'],
 				sources: ['file'],
 				description: _('Joplin Export File'),
 			}, {
 				format: 'md',
-				fileExtension: 'md',
+				fileExtensions: ['md', 'markdown'],
 				sources: ['file', 'directory'],
 				isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
 				description: _('Markdown'),
@@ -42,7 +42,7 @@ class InteropService {
 				description: _('Joplin Export Directory'),
 			}, {
 				format: 'enex',
-				fileExtension: 'enex',
+				fileExtensions: ['enex'],
 				sources: ['file'],
 				description: _('Evernote Export File'),
 			},
@@ -51,7 +51,7 @@ class InteropService {
 		let exportModules = [
 			{
 				format: 'jex',
-				fileExtension: 'jex',
+				fileExtensions: ['jex'],
 				target: 'file',
 				description: _('Joplin Export File'),
 			}, {
@@ -108,7 +108,9 @@ class InteropService {
 		const module = this.moduleByFormat_(type, format);
 		if (!module) throw new Error(_('Cannot load "%s" module for format "%s"', type, format));
 		const ModuleClass = require(module.path);
-		return new ModuleClass();
+		const output = new ModuleClass();
+		output.setMetadata(module);
+		return output;
 	}
 
 	moduleByFileExtension_(type, ext) {
@@ -119,7 +121,7 @@ class InteropService {
 		for (let i = 0; i < modules.length; i++) {
 			const m = modules[i];
 			if (type !== m.type) continue;
-			if (m.fileExtension === ext) return m;
+			if (m.fileExtensions.indexOf(ext) >= 0) return m;
 		}
 
 		return null;

@@ -21,12 +21,14 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 	async exec(result) {
 		let parentFolderId = null;
 
+		const supportedFileExtension = this.metadata().fileExtensions;
+
 		const filePaths = [];
 		if (await shim.fsDriver().isDirectory(this.sourcePath_)) {
 			const stats = await shim.fsDriver().readDirStats(this.sourcePath_);
 			for (let i = 0; i < stats.length; i++) {
 				const stat = stats[i];
-				if (fileExtension(stat.path).toLowerCase() === 'md') {
+				if (supportedFileExtension.indexOf(fileExtension(stat.path).toLowerCase()) >= 0) {
 					filePaths.push(this.sourcePath_ + '/' + stat.path);
 				}
 			}

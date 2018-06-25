@@ -1,5 +1,13 @@
 class InteropService_Importer_Base {
 
+	setMetadata(md) {
+		this.metadata_ = md;
+	}
+
+	metadata() {
+		return this.metadata_;
+	}
+
 	async init(sourcePath, options) {
 		this.sourcePath_ = sourcePath;
 		this.options_ = options;

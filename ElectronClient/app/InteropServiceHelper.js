@@ -11,7 +11,7 @@ class InteropServiceHelper {
 
 		if (module.target === 'file') {
 			path = bridge().showSaveDialog({
-				filters: [{ name: module.description, extensions: [module.fileExtension]}]
+				filters: [{ name: module.description, extensions: module.fileExtension}]
 			});
 		} else {
 			path = bridge().showOpenDialog({
