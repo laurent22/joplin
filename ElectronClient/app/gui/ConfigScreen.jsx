@@ -63,6 +63,7 @@ class ConfigScreenComponent extends React.Component {
 			color: theme.colorFaded,
 			marginTop: 5,
 			fontStyle: 'italic',
+			maxWidth: '70em',
 		});
 
 		const updateSettingValue = (key, value) => {
@@ -148,6 +149,10 @@ class ConfigScreenComponent extends React.Component {
 		return output;
 	}
 
+	onApplyClick() {
+		shared.saveSettings(this);
+	}
+
 	onSaveClick() {
 		shared.saveSettings(this);
 		this.props.dispatch({ type: 'NAV_BACK' });
@@ -203,8 +208,9 @@ class ConfigScreenComponent extends React.Component {
 						{_('Notes and settings are stored in: %s', pathUtils.toSystemSlashes(Setting.value('profileDir'), process.platform))}
 					</div>
 					{ settingComps }
-					<button onClick={() => {this.onSaveClick()}} style={buttonStyle}>{_('Save')}</button>
+					<button onClick={() => {this.onSaveClick()}} style={buttonStyle}>{_('OK')}</button>
 					<button onClick={() => {this.onCancelClick()}} style={buttonStyle}>{_('Cancel')}</button>
+					<button onClick={() => {this.onApplyClick()}} style={buttonStyle}>{_('Apply')}</button>
 				</div>
 			</div>
 		);
