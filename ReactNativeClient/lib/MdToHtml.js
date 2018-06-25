@@ -558,6 +558,10 @@ class MdToHtml {
 					left: -0.02em;
 					color: ` + style.htmlColor + `;
 				}
+
+				pre {
+					white-space: pre-wrap;
+				}
 			}
 		`;
 
