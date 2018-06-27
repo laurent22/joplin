@@ -846,7 +846,11 @@ class NoteTextComponent extends React.Component {
 	}
 
 	async commandStartExternalEditing() {
-		this.externalEditWatcher().openAndWatch(this.state.note);
+		try {
+			await this.externalEditWatcher().openAndWatch(this.state.note);
+		} catch (error) {
+			bridge().showErrorMessageBox(_('Error opening note in editor: %s', error.message));
+		}
 	}
 
 	async commandStopExternalEditing() {

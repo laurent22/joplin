@@ -4,6 +4,8 @@ const Setting = require('lib/models/Setting');
 const { shim } = require('lib/shim');
 const chokidar = require('chokidar');
 const EventEmitter = require('events');
+const { splitCommandString } = require('lib/string-utils');
+const spawn	= require('child_process').spawn;
 
 class ExternalEditWatcher {
 
@@ -115,6 +117,40 @@ class ExternalEditWatcher {
 		return false;
 	}
 
+	textEditorCommand() {
+		const editorCommand = Setting.value('editor');
+		if (!editorCommand) return null;
+
+		const s = splitCommandString(editorCommand);
+
+		const path = s.splice(0, 1);
+		if (!path.length) throw new Error('Invalid editor command: ' + editorCommand);
+
+		return {
+			path: path[0],
+			args: s,
+		};
+	}
+
+	async spawnCommand(path, args, options) {
+		return new Promise((resolve, reject) => {
+			const subProcess = spawn(path, args, options);
+
+			const iid = setInterval(() => {
+				if (subProcess && subProcess.pid) {
+					this.logger().debug('Started editor with PID ' + subProcess.pid);
+					clearInterval(iid);
+					resolve();
+				}
+			}, 100);
+
+			subProcess.on('error', (error) => {
+				clearInterval(iid);
+				reject(error);
+			});
+		});
+	}
+
 	async openAndWatch(note) {
 		if (!note || !note.id) {
 			this.logger().warn('ExternalEditWatcher: Cannot open note: ', note);
@@ -123,7 +159,14 @@ class ExternalEditWatcher {
 
 		const filePath = await this.writeNoteToFile_(note);
 		this.watch(filePath);
-		bridge().openExternal('file://' + filePath);
+
+		const cmd = this.textEditorCommand();
+		if (!cmd) {
+			bridge().openExternal('file://' + filePath);
+		} else {
+			cmd.args.push(filePath);
+			await this.spawnCommand(cmd.path, cmd.args, { detached: true });
+		}
 
 		this.dispatch({
 			type: 'NOTE_FILE_WATCHER_ADD',
