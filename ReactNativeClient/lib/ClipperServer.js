@@ -94,6 +94,7 @@ class ClipperServer {
 		}
 
 		if (requestNote.source_url) output.source_url = requestNote.source_url;
+		if (requestNote.author) output.author = requestNote.author;
 
 		return output;
 	}
