@@ -633,6 +633,9 @@ msgstr "Gras"
 msgid "Italic"
 msgstr "Italique"
 
+msgid "Insert Date Time"
+msgstr "Insérer la date et l'heure"
+
 msgid "Edit in external editor"
 msgstr "Ouvrir dans un éditeur externe"
 
@@ -765,11 +768,14 @@ msgstr "Vérifier config synchronisation"
 msgid "Notes and settings are stored in: %s"
 msgstr "Les notes et paramètres se trouve dans : %s"
 
-msgid "Save"
-msgstr "Enregistrer"
+msgid "Apply"
+msgstr "Appliquer"
 
 msgid "Submit"
 msgstr "Envoyer"
+
+msgid "Save"
+msgstr "Enregistrer"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -912,6 +918,13 @@ msgstr "Définir le mot de passe"
 msgid "Add or remove tags"
 msgstr "Gérer les étiquettes"
 
+msgid "Duplicate"
+msgstr "Dupliquer"
+
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - Copie"
+
 msgid "Switch between note and to-do type"
 msgstr "Alterner entre note et tâche"
 
@@ -946,6 +959,9 @@ msgstr "Enregistrer sous..."
 
 msgid "Copy path to clipboard"
 msgstr "Copier le chemin"
+
+msgid "Copy Link Address"
+msgstr "Copier l'adresse du lien"
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1187,7 +1203,7 @@ msgid "Conflicts"
 msgstr "Conflits"
 
 msgid "Cannot move notebook to this location"
-msgstr "Impossible de déplacer le carnet vers le carnet \"%s\""
+msgstr "Impossible de déplacer le carnet à cet endroit"
 
 #, javascript-format
 msgid "A notebook with this title already exists: \"%s\""
@@ -1201,10 +1217,10 @@ msgid "title"
 msgstr "titre"
 
 msgid "updated date"
-msgstr "Date modification"
+msgstr "date de modification"
 
 msgid "created date"
-msgstr "Date création"
+msgstr "date de création"
 
 msgid "Untitled"
 msgstr "Sans titre"
@@ -1219,16 +1235,6 @@ msgstr "Impossible de copier la note vers le carnet \"%s\""
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Impossible de déplacer la note vers le carnet \"%s\""
-
-msgid "Text editor"
-msgstr "Éditeur de texte"
-
-msgid ""
-"The editor that will be used to open a note. If none is provided it will try "
-"to auto-detect the default editor."
-msgstr ""
-"L'éditeur de texte pour ouvrir et modifier les notes. Si aucun n'est "
-"spécifié, il sera détecté automatiquement."
 
 msgid "Language"
 msgstr "Langue"
@@ -1313,6 +1319,16 @@ msgstr "%d heure"
 msgid "%d hours"
 msgstr "%d heures"
 
+msgid "Text editor command"
+msgstr "Commande de l'éditeur de texte"
+
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+"La commande de l'éditeur de texte (peut inclure des options) pour ouvrir et "
+"modifier les notes. Si non-spécifiée, elle sera détectée automatiquement."
+
 msgid "Show advanced options"
 msgstr "Montrer les options avancées"
 
@@ -1361,11 +1377,14 @@ msgstr "Certificats TLS personnalisés"
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem"
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Liste séparée par des virgules contenant les chemins des répertoires "
 "contenants des certificats, ou les chemins de certificats individuels. Par "
-"exemple : /my/cert_dir, /other/custom.pem"
+"exemple : /my/cert_dir, /other/custom.pem. Remarquez que si vous changez les "
+"paramètres TLS, vous devez enregistrer vos changements avant de cliquer sur "
+"\"Vérifier config synchronisation\"."
 
 msgid "Ignore TLS certificate errors"
 msgstr "Ignorer les erreurs de certificats TLS"
@@ -1504,7 +1523,7 @@ msgstr "Annuler synchronisation"
 
 #, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr "Décryptage des objets : %d/%d."
+msgstr "Décryptage des objets : %d/%d"
 
 msgid "New tags:"
 msgstr "Nouvelles étiquettes :"

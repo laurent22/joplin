@@ -567,6 +567,9 @@ msgstr ""
 msgid "Italic"
 msgstr ""
 
+msgid "Insert Date Time"
+msgstr ""
+
 msgid "Edit in external editor"
 msgstr ""
 
@@ -691,12 +694,15 @@ msgstr "檢測同步設置"
 msgid "Notes and settings are stored in: %s"
 msgstr ""
 
-msgid "Save"
-msgstr "儲存"
+msgid "Apply"
+msgstr ""
 
 #, fuzzy
 msgid "Submit"
 msgstr "提交 / 送出"
+
+msgid "Save"
+msgstr "儲存"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -821,6 +827,13 @@ msgstr "設置密碼"
 msgid "Add or remove tags"
 msgstr "新增或移除標籤"
 
+msgid "Duplicate"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "複製"
+
 msgid "Switch between note and to-do type"
 msgstr ""
 
@@ -852,6 +865,9 @@ msgstr "另存為..."
 
 msgid "Copy path to clipboard"
 msgstr "複製路徑到剪貼板"
+
+msgid "Copy Link Address"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1119,14 +1135,6 @@ msgstr "無法複製此記事到 \"%s\" 記事本"
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "無法移動此記事到 \"%s\" 記事本"
 
-msgid "Text editor"
-msgstr "文字編輯器"
-
-msgid ""
-"The editor that will be used to open a note. If none is provided it will try "
-"to auto-detect the default editor."
-msgstr ""
-
 msgid "Language"
 msgstr "語言"
 
@@ -1209,6 +1217,15 @@ msgstr "%d 小時"
 msgid "%d hours"
 msgstr "%d 小時"
 
+#, fuzzy
+msgid "Text editor command"
+msgstr "文字編輯器"
+
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+
 msgid "Show advanced options"
 msgstr "顯示進階選項"
 
@@ -1254,7 +1271,8 @@ msgstr ""
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem"
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 
 msgid "Ignore TLS certificate errors"

@@ -616,6 +616,9 @@ msgstr ""
 msgid "Italic"
 msgstr ""
 
+msgid "Insert Date Time"
+msgstr ""
+
 msgid "Edit in external editor"
 msgstr ""
 
@@ -744,10 +747,13 @@ msgstr "Cancella la sincronizzazione"
 msgid "Notes and settings are stored in: %s"
 msgstr ""
 
-msgid "Save"
+msgid "Apply"
 msgstr ""
 
 msgid "Submit"
+msgstr ""
+
+msgid "Save"
 msgstr ""
 
 msgid ""
@@ -877,6 +883,13 @@ msgstr ""
 msgid "Add or remove tags"
 msgstr "Aggiungi o rimuovi etichetta"
 
+msgid "Duplicate"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "Copia"
+
 msgid "Switch between note and to-do type"
 msgstr "Passa da un tipo di nota a un elenco di attività"
 
@@ -909,6 +922,9 @@ msgid "Save as..."
 msgstr "Salva i cambiamenti"
 
 msgid "Copy path to clipboard"
+msgstr ""
+
+msgid "Copy Link Address"
 msgstr ""
 
 #, javascript-format
@@ -1191,16 +1207,6 @@ msgstr "Non posso copiare la nota nel blocco note \"%s\""
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Non posso spostare la nota nel blocco note \"%s\""
 
-msgid "Text editor"
-msgstr "Editor di testo"
-
-msgid ""
-"The editor that will be used to open a note. If none is provided it will try "
-"to auto-detect the default editor."
-msgstr ""
-"L'editor che sarà usato per aprire la nota. Se nessun editor è specificato "
-"si cercherà di individuare automaticamente l'editor predefinito."
-
 msgid "Language"
 msgstr "Linguaggio"
 
@@ -1287,6 +1293,18 @@ msgstr "%d ora"
 msgid "%d hours"
 msgstr "%d ore"
 
+#, fuzzy
+msgid "Text editor command"
+msgstr "Editor di testo"
+
+#, fuzzy
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+"L'editor che sarà usato per aprire la nota. Se nessun editor è specificato "
+"si cercherà di individuare automaticamente l'editor predefinito."
+
 msgid "Show advanced options"
 msgstr "Mostra opzioni avanzate"
 
@@ -1332,7 +1350,8 @@ msgstr ""
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem"
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 
 msgid "Ignore TLS certificate errors"

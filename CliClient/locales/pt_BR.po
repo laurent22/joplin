@@ -632,6 +632,9 @@ msgstr ""
 msgid "Italic"
 msgstr ""
 
+msgid "Insert Date Time"
+msgstr ""
+
 msgid "Edit in external editor"
 msgstr ""
 
@@ -756,11 +759,14 @@ msgstr "Verificar a configuração da sincronização"
 msgid "Notes and settings are stored in: %s"
 msgstr "Notas e configurações estão armazenadas em: %s"
 
-msgid "Save"
-msgstr "Salvar"
+msgid "Apply"
+msgstr ""
 
 msgid "Submit"
 msgstr "Enviar"
+
+msgid "Save"
+msgstr "Salvar"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -901,6 +907,13 @@ msgstr "Configurar a senha"
 msgid "Add or remove tags"
 msgstr "Adicionar ou remover tags"
 
+msgid "Duplicate"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "Copiar"
+
 msgid "Switch between note and to-do type"
 msgstr "Alternar entre os tipos Nota e Tarefa"
 
@@ -932,6 +945,9 @@ msgid "Save as..."
 msgstr "Salvar como..."
 
 msgid "Copy path to clipboard"
+msgstr ""
+
+msgid "Copy Link Address"
 msgstr ""
 
 #, javascript-format
@@ -1215,16 +1231,6 @@ msgstr "Não é possível copiar a nota para o caderno \"%s\""
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Não é possível mover a nota para o caderno \"%s\""
 
-msgid "Text editor"
-msgstr "Editor de texto"
-
-msgid ""
-"The editor that will be used to open a note. If none is provided it will try "
-"to auto-detect the default editor."
-msgstr ""
-"O editor que será usado para abrir uma nota. Se nenhum for indicado, ele "
-"tentará detectar automaticamente o editor padrão."
-
 msgid "Language"
 msgstr "Idioma"
 
@@ -1309,6 +1315,18 @@ msgstr "%d hora"
 msgid "%d hours"
 msgstr "%d horas"
 
+#, fuzzy
+msgid "Text editor command"
+msgstr "Editor de texto"
+
+#, fuzzy
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+"O editor que será usado para abrir uma nota. Se nenhum for indicado, ele "
+"tentará detectar automaticamente o editor padrão."
+
 msgid "Show advanced options"
 msgstr "Mostrar opções avançadas"
 
@@ -1356,7 +1374,8 @@ msgstr ""
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem"
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 
 msgid "Ignore TLS certificate errors"

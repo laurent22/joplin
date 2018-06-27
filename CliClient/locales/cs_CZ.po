@@ -620,6 +620,9 @@ msgstr ""
 msgid "Italic"
 msgstr ""
 
+msgid "Insert Date Time"
+msgstr ""
+
 msgid "Edit in external editor"
 msgstr ""
 
@@ -744,11 +747,14 @@ msgstr "Zkontrolujte nastavení synchronizace"
 msgid "Notes and settings are stored in: %s"
 msgstr "Poznámky a nastavení uloženo v: %s"
 
-msgid "Save"
-msgstr "Uložit"
+msgid "Apply"
+msgstr ""
 
 msgid "Submit"
 msgstr ""
+
+msgid "Save"
+msgstr "Uložit"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -885,6 +891,13 @@ msgstr "Nastavit heslo"
 msgid "Add or remove tags"
 msgstr "Přidat či odebrat tagy"
 
+msgid "Duplicate"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "Kopírovat"
+
 msgid "Switch between note and to-do type"
 msgstr "Přepnout mezi poznámkou a to-do"
 
@@ -916,6 +929,9 @@ msgid "Save as..."
 msgstr "Uložit jako..."
 
 msgid "Copy path to clipboard"
+msgstr ""
+
+msgid "Copy Link Address"
 msgstr ""
 
 #, javascript-format
@@ -1194,16 +1210,6 @@ msgstr "Poznámku \"%s\" nelze zkopírovat do zápisníku"
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Poznámku nelze přesunout do zápisníku \"%s\""
 
-msgid "Text editor"
-msgstr "Textový editor"
-
-msgid ""
-"The editor that will be used to open a note. If none is provided it will try "
-"to auto-detect the default editor."
-msgstr ""
-"Editor ve kterém budou otvírány poznámky. Pokud není specifikováno, aplikace "
-"se pokusí o autodetekci defaultního editoru."
-
 msgid "Language"
 msgstr "Jazyk"
 
@@ -1288,6 +1294,18 @@ msgstr "%d hodina"
 msgid "%d hours"
 msgstr "%d hodin"
 
+#, fuzzy
+msgid "Text editor command"
+msgstr "Textový editor"
+
+#, fuzzy
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+"Editor ve kterém budou otvírány poznámky. Pokud není specifikováno, aplikace "
+"se pokusí o autodetekci defaultního editoru."
+
 msgid "Show advanced options"
 msgstr "Ukázat pokročilé volby"
 
@@ -1335,7 +1353,8 @@ msgstr ""
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem"
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 
 msgid "Ignore TLS certificate errors"

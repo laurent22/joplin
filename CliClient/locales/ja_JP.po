@@ -618,6 +618,9 @@ msgstr ""
 msgid "Italic"
 msgstr ""
 
+msgid "Insert Date Time"
+msgstr ""
+
 msgid "Edit in external editor"
 msgstr ""
 
@@ -745,11 +748,14 @@ msgstr "同期の中止"
 msgid "Notes and settings are stored in: %s"
 msgstr "ノートと設定は、%sに保存されます。"
 
-msgid "Save"
-msgstr "保存"
+msgid "Apply"
+msgstr ""
 
 msgid "Submit"
 msgstr ""
+
+msgid "Save"
+msgstr "保存"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -882,6 +888,13 @@ msgstr ""
 msgid "Add or remove tags"
 msgstr "タグの追加・削除"
 
+msgid "Duplicate"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "コピー"
+
 msgid "Switch between note and to-do type"
 msgstr "ノートとToDoを切り替え"
 
@@ -913,6 +926,9 @@ msgid "Save as..."
 msgstr "変更を保存"
 
 msgid "Copy path to clipboard"
+msgstr ""
+
+msgid "Copy Link Address"
 msgstr ""
 
 #, javascript-format
@@ -1196,16 +1212,6 @@ msgstr "ノートをノートブック \"%s\"にコピーできませんでし�
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "ノートをノートブック \"%s\"に移動できませんでした。"
 
-msgid "Text editor"
-msgstr "テキストエディタ"
-
-msgid ""
-"The editor that will be used to open a note. If none is provided it will try "
-"to auto-detect the default editor."
-msgstr ""
-"ノートを開くために使用されるエディタです。特に指定がなければ、デフォルトのエ"
-"ディタの検出を試みます。"
-
 msgid "Language"
 msgstr "言語"
 
@@ -1292,6 +1298,18 @@ msgstr "%d 時間"
 msgid "%d hours"
 msgstr "%d 時間"
 
+#, fuzzy
+msgid "Text editor command"
+msgstr "テキストエディタ"
+
+#, fuzzy
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+"ノートを開くために使用されるエディタです。特に指定がなければ、デフォルトのエ"
+"ディタの検出を試みます。"
+
 msgid "Show advanced options"
 msgstr "詳細な設定の表示"
 
@@ -1337,7 +1355,8 @@ msgstr ""
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem"
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 
 msgid "Ignore TLS certificate errors"

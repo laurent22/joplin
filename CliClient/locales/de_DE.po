@@ -649,6 +649,9 @@ msgstr ""
 msgid "Italic"
 msgstr ""
 
+msgid "Insert Date Time"
+msgstr ""
+
 msgid "Edit in external editor"
 msgstr ""
 
@@ -782,11 +785,14 @@ msgstr "Überprüfen der Synchronisationseinstellungen"
 msgid "Notes and settings are stored in: %s"
 msgstr "Notizen und Einstellungen werden gespeichert in: %s"
 
-msgid "Save"
-msgstr "Speichern"
+msgid "Apply"
+msgstr ""
 
 msgid "Submit"
 msgstr "Absenden"
+
+msgid "Save"
+msgstr "Speichern"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -926,6 +932,13 @@ msgstr "Setze ein Passwort"
 msgid "Add or remove tags"
 msgstr "Markierungen hinzufügen oder entfernen"
 
+msgid "Duplicate"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "Kopieren"
+
 msgid "Switch between note and to-do type"
 msgstr "Zwischen Notiz und To-Do Typ wechseln"
 
@@ -961,6 +974,9 @@ msgstr "Sichern unter..."
 
 msgid "Copy path to clipboard"
 msgstr "Pfad in Zwischenablage kopieren"
+
+msgid "Copy Link Address"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1240,17 +1256,6 @@ msgstr "Kann Notiz nicht zu Notizbuch \"%s\" kopieren"
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Kann Notiz nicht zu Notizbuch \"%s\" verschieben"
 
-msgid "Text editor"
-msgstr "Textverarbeitungsprogramm"
-
-msgid ""
-"The editor that will be used to open a note. If none is provided it will try "
-"to auto-detect the default editor."
-msgstr ""
-"Das Textverarbeitungsprogramm, mit dem Notizen geöffnet werden. Wenn keines "
-"ausgewählt wurde, wird Joplin versuchen das standard-"
-"Textverarbeitungsprogramm zu erkennen."
-
 msgid "Language"
 msgstr "Sprache"
 
@@ -1334,6 +1339,19 @@ msgstr "%d Stunde"
 msgid "%d hours"
 msgstr "%d Stunden"
 
+#, fuzzy
+msgid "Text editor command"
+msgstr "Textverarbeitungsprogramm"
+
+#, fuzzy
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+"Das Textverarbeitungsprogramm, mit dem Notizen geöffnet werden. Wenn keines "
+"ausgewählt wurde, wird Joplin versuchen das standard-"
+"Textverarbeitungsprogramm zu erkennen."
+
 msgid "Show advanced options"
 msgstr "Erweiterte Optionen anzeigen"
 
@@ -1382,7 +1400,8 @@ msgstr ""
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem"
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 
 msgid "Ignore TLS certificate errors"

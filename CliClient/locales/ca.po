@@ -638,6 +638,9 @@ msgstr ""
 msgid "Italic"
 msgstr ""
 
+msgid "Insert Date Time"
+msgstr ""
+
 msgid "Edit in external editor"
 msgstr ""
 
@@ -769,11 +772,14 @@ msgstr "Comprova la configuració de la sincronització"
 msgid "Notes and settings are stored in: %s"
 msgstr "Les notes i la configuració es desen a: %s"
 
-msgid "Save"
-msgstr "Desa"
+msgid "Apply"
+msgstr ""
 
 msgid "Submit"
 msgstr "Tramet"
+
+msgid "Save"
+msgstr "Desa"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -913,6 +919,13 @@ msgstr "Establiu la contrasenya"
 msgid "Add or remove tags"
 msgstr "Afegeix o suprimeix etiquetes"
 
+msgid "Duplicate"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "Copia"
+
 msgid "Switch between note and to-do type"
 msgstr "Alterna entre el tipus nota i tasques pendents"
 
@@ -946,6 +959,9 @@ msgstr "Anomena i desa..."
 
 msgid "Copy path to clipboard"
 msgstr "Copia el camí al porta-retalls"
+
+msgid "Copy Link Address"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1220,16 +1236,6 @@ msgstr "No es pot copiar la nota al bloc de notes «%s»"
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "No es pot moure la nota al bloc de notes «%s»"
 
-msgid "Text editor"
-msgstr "Editor de text"
-
-msgid ""
-"The editor that will be used to open a note. If none is provided it will try "
-"to auto-detect the default editor."
-msgstr ""
-"L'editor que s'usarà per a obrir una nota. Si no s'indica cap, intentarà "
-"detectar automàticament l'editor predeterminat."
-
 msgid "Language"
 msgstr "Llengua"
 
@@ -1313,6 +1319,18 @@ msgstr "%d hora"
 msgid "%d hours"
 msgstr "%d hores"
 
+#, fuzzy
+msgid "Text editor command"
+msgstr "Editor de text"
+
+#, fuzzy
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+"L'editor que s'usarà per a obrir una nota. Si no s'indica cap, intentarà "
+"detectar automàticament l'editor predeterminat."
+
 msgid "Show advanced options"
 msgstr "Mostra les opcions avançades"
 
@@ -1360,7 +1378,8 @@ msgstr ""
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem"
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 
 msgid "Ignore TLS certificate errors"

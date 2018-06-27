@@ -558,6 +558,9 @@ msgstr ""
 msgid "Italic"
 msgstr ""
 
+msgid "Insert Date Time"
+msgstr ""
+
 msgid "Edit in external editor"
 msgstr ""
 
@@ -682,10 +685,13 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr ""
 
-msgid "Save"
+msgid "Apply"
 msgstr ""
 
 msgid "Submit"
+msgstr ""
+
+msgid "Save"
 msgstr ""
 
 msgid ""
@@ -810,6 +816,13 @@ msgstr ""
 msgid "Add or remove tags"
 msgstr ""
 
+msgid "Duplicate"
+msgstr ""
+
+#, javascript-format
+msgid "%s - Copy"
+msgstr ""
+
 msgid "Switch between note and to-do type"
 msgstr ""
 
@@ -840,6 +853,9 @@ msgid "Save as..."
 msgstr ""
 
 msgid "Copy path to clipboard"
+msgstr ""
+
+msgid "Copy Link Address"
 msgstr ""
 
 #, javascript-format
@@ -1104,14 +1120,6 @@ msgstr ""
 msgid "Cannot move note to \"%s\" notebook"
 msgstr ""
 
-msgid "Text editor"
-msgstr ""
-
-msgid ""
-"The editor that will be used to open a note. If none is provided it will try "
-"to auto-detect the default editor."
-msgstr ""
-
 msgid "Language"
 msgstr ""
 
@@ -1192,6 +1200,14 @@ msgstr ""
 msgid "%d hours"
 msgstr ""
 
+msgid "Text editor command"
+msgstr ""
+
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+
 msgid "Show advanced options"
 msgstr ""
 
@@ -1235,7 +1251,8 @@ msgstr ""
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem"
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 
 msgid "Ignore TLS certificate errors"

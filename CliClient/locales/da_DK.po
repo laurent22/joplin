@@ -625,6 +625,9 @@ msgstr ""
 msgid "Italic"
 msgstr ""
 
+msgid "Insert Date Time"
+msgstr ""
+
 msgid "Edit in external editor"
 msgstr ""
 
@@ -749,10 +752,13 @@ msgstr "Check synkroniserings Indstillinger"
 msgid "Notes and settings are stored in: %s"
 msgstr "Noter og indstillinger er gemt i: %s"
 
-msgid "Save"
-msgstr "Gem"
+msgid "Apply"
+msgstr ""
 
 msgid "Submit"
+msgstr "Gem"
+
+msgid "Save"
 msgstr "Gem"
 
 msgid ""
@@ -894,6 +900,13 @@ msgstr "Indstil kodeord"
 msgid "Add or remove tags"
 msgstr "Tilføj eller slet mærker"
 
+msgid "Duplicate"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "Kopier"
+
 msgid "Switch between note and to-do type"
 msgstr "Skift mellem note-  og opgave type"
 
@@ -925,6 +938,9 @@ msgid "Save as..."
 msgstr "Gem som..."
 
 msgid "Copy path to clipboard"
+msgstr ""
+
+msgid "Copy Link Address"
 msgstr ""
 
 #, javascript-format
@@ -1203,16 +1219,6 @@ msgstr "Kan ikke kopiere note til \"%s\" notesbog"
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Kan ikke flytte note til \"%s\" notesbog"
 
-msgid "Text editor"
-msgstr "Tekst editor"
-
-msgid ""
-"The editor that will be used to open a note. If none is provided it will try "
-"to auto-detect the default editor."
-msgstr ""
-"Editor der bruges til at åbne note. Hvis ingen valgt/udfyldt, vil auto-"
-"funktion søge efter standard editor."
-
 msgid "Language"
 msgstr "Sprog"
 
@@ -1297,6 +1303,18 @@ msgstr "%d time"
 msgid "%d hours"
 msgstr "%d timer"
 
+#, fuzzy
+msgid "Text editor command"
+msgstr "Tekst editor"
+
+#, fuzzy
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+"Editor der bruges til at åbne note. Hvis ingen valgt/udfyldt, vil auto-"
+"funktion søge efter standard editor."
+
 msgid "Show advanced options"
 msgstr "Vis avancerede indstillinger"
 
@@ -1344,7 +1362,8 @@ msgstr ""
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem"
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 
 msgid "Ignore TLS certificate errors"

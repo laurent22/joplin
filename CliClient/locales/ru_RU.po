@@ -632,6 +632,9 @@ msgstr ""
 msgid "Italic"
 msgstr ""
 
+msgid "Insert Date Time"
+msgstr ""
+
 msgid "Edit in external editor"
 msgstr ""
 
@@ -756,11 +759,14 @@ msgstr "Проверить настройки синхронизации"
 msgid "Notes and settings are stored in: %s"
 msgstr "Заметки и настройки сохранены в: %s"
 
-msgid "Save"
-msgstr "Сохранить"
+msgid "Apply"
+msgstr ""
 
 msgid "Submit"
 msgstr ""
+
+msgid "Save"
+msgstr "Сохранить"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -901,6 +907,13 @@ msgstr "Установить пароль"
 msgid "Add or remove tags"
 msgstr "Добавить или удалить теги"
 
+msgid "Duplicate"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "Копировать"
+
 msgid "Switch between note and to-do type"
 msgstr "Переключить тип между заметкой и задачей"
 
@@ -932,6 +945,9 @@ msgid "Save as..."
 msgstr "Сохранить как..."
 
 msgid "Copy path to clipboard"
+msgstr ""
+
+msgid "Copy Link Address"
 msgstr ""
 
 #, javascript-format
@@ -1212,16 +1228,6 @@ msgstr "Не удалось скопировать заметку в блокн�
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Не удалось переместить заметку в блокнот «%s»"
 
-msgid "Text editor"
-msgstr "Текстовый редактор"
-
-msgid ""
-"The editor that will be used to open a note. If none is provided it will try "
-"to auto-detect the default editor."
-msgstr ""
-"Редактор, в котором будут открываться заметки. Если не задан, будет "
-"произведена попытка автоматического определения редактора по умолчанию."
-
 msgid "Language"
 msgstr "Язык"
 
@@ -1306,6 +1312,18 @@ msgstr "%d час"
 msgid "%d hours"
 msgstr "%d часов"
 
+#, fuzzy
+msgid "Text editor command"
+msgstr "Текстовый редактор"
+
+#, fuzzy
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+"Редактор, в котором будут открываться заметки. Если не задан, будет "
+"произведена попытка автоматического определения редактора по умолчанию."
+
 msgid "Show advanced options"
 msgstr "Показывать расширенные настройки"
 
@@ -1353,7 +1371,8 @@ msgstr ""
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem"
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 
 msgid "Ignore TLS certificate errors"

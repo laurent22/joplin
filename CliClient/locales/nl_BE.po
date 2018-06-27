@@ -635,6 +635,9 @@ msgstr ""
 msgid "Italic"
 msgstr ""
 
+msgid "Insert Date Time"
+msgstr ""
+
 msgid "Edit in external editor"
 msgstr ""
 
@@ -762,11 +765,14 @@ msgstr "Annuleer synchronisatie"
 msgid "Notes and settings are stored in: %s"
 msgstr "Notities en instellingen zijn opgeslaan in %s"
 
-msgid "Save"
-msgstr "Sla op"
+msgid "Apply"
+msgstr ""
 
 msgid "Submit"
 msgstr ""
+
+msgid "Save"
+msgstr "Sla op"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -906,6 +912,13 @@ msgstr "Stel wachtwoord in"
 msgid "Add or remove tags"
 msgstr "Voeg tag toe of verwijder tag"
 
+msgid "Duplicate"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "Kopieer"
+
 msgid "Switch between note and to-do type"
 msgstr "Wissel tussen notitie en to-do type"
 
@@ -939,6 +952,9 @@ msgid "Save as..."
 msgstr "Sla wijzigingen op"
 
 msgid "Copy path to clipboard"
+msgstr ""
+
+msgid "Copy Link Address"
 msgstr ""
 
 #, javascript-format
@@ -1222,17 +1238,6 @@ msgstr "Kan notitie niet naar notitieboek \"%s\" kopiëren."
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Kan notitie niet naar notitieboek \"%s\" verplaatsen."
 
-msgid "Text editor"
-msgstr "Tekst editor"
-
-msgid ""
-"The editor that will be used to open a note. If none is provided it will try "
-"to auto-detect the default editor."
-msgstr ""
-"De editor die zal gebruikt worden bij het openen van een notitie. Als er "
-"geen meegegeven wordt, zal het programma de standaard editor proberen te "
-"detecteren. "
-
 msgid "Language"
 msgstr "Taal"
 
@@ -1318,6 +1323,19 @@ msgstr "%d uur"
 msgid "%d hours"
 msgstr "%d uren"
 
+#, fuzzy
+msgid "Text editor command"
+msgstr "Tekst editor"
+
+#, fuzzy
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+"De editor die zal gebruikt worden bij het openen van een notitie. Als er "
+"geen meegegeven wordt, zal het programma de standaard editor proberen te "
+"detecteren. "
+
 msgid "Show advanced options"
 msgstr "Toon geavanceerde opties"
 
@@ -1365,7 +1383,8 @@ msgstr ""
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem"
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 
 msgid "Ignore TLS certificate errors"

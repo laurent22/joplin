@@ -596,6 +596,9 @@ msgstr "粗体"
 msgid "Italic"
 msgstr "斜体"
 
+msgid "Insert Date Time"
+msgstr ""
+
 #, fuzzy
 msgid "Edit in external editor"
 msgstr "在外部编辑器中打开"
@@ -723,11 +726,14 @@ msgstr "检查同步配置"
 msgid "Notes and settings are stored in: %s"
 msgstr "笔记与设置文件储存目录为：%s"
 
-msgid "Save"
-msgstr "保存"
+msgid "Apply"
+msgstr ""
 
 msgid "Submit"
 msgstr "提交"
+
+msgid "Save"
+msgstr "保存"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -860,6 +866,13 @@ msgstr "设置密码"
 msgid "Add or remove tags"
 msgstr "添加或删除标签"
 
+msgid "Duplicate"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "复制"
+
 msgid "Switch between note and to-do type"
 msgstr "在笔记和待办事项类型之间切换"
 
@@ -891,6 +904,9 @@ msgstr "另存为…"
 
 msgid "Copy path to clipboard"
 msgstr "复制路径到剪切板"
+
+msgid "Copy Link Address"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1161,14 +1177,6 @@ msgstr "无法复制笔记至 \"%s\" 笔记本"
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "无法移动笔记至 \"%s\" 笔记本"
 
-msgid "Text editor"
-msgstr "文本编辑器"
-
-msgid ""
-"The editor that will be used to open a note. If none is provided it will try "
-"to auto-detect the default editor."
-msgstr "此编辑器将会被用于打开笔记。若未提供将自动检测默认编辑器。"
-
 msgid "Language"
 msgstr "语言"
 
@@ -1251,6 +1259,16 @@ msgstr "%d小时"
 msgid "%d hours"
 msgstr "%d小时"
 
+#, fuzzy
+msgid "Text editor command"
+msgstr "文本编辑器"
+
+#, fuzzy
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr "此编辑器将会被用于打开笔记。若未提供将自动检测默认编辑器。"
+
 msgid "Show advanced options"
 msgstr "显示高级选项"
 
@@ -1296,7 +1314,8 @@ msgstr ""
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem"
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 
 msgid "Ignore TLS certificate errors"
