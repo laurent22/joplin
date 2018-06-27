@@ -29,6 +29,19 @@ class BaseItem extends BaseModel {
 		throw new Error('Invalid class name: ' + className);
 	}
 
+	static async findUniqueItemTitle(title) {
+		let counter = 1;
+		let titleToTry = title;
+		while (true) {
+			const item = await this.loadByField('title', titleToTry);
+			if (!item) return titleToTry;
+			titleToTry = title + ' (' + counter + ')';
+			counter++;
+			if (counter >= 100) titleToTry = title + ' (' + ((new Date()).getTime()) + ')';
+			if (counter >= 1000) throw new Error('Cannot find unique title');
+		}
+	}
+
 	// Need to dynamically load the classes like this to avoid circular dependencies
 	static getClass(name) {
 		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {

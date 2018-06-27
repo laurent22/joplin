@@ -88,6 +88,15 @@ class NoteListComponent extends React.Component {
 				});
 			}}));
 
+			menu.append(new MenuItem({label: _('Duplicate'), click: async () => {
+				for (let i = 0; i < noteIds.length; i++) {
+					const note = await Note.load(noteIds[i]);
+					await Note.duplicate(noteIds[i], {
+						uniqueTitle: _('%s - Copy', note.title),
+					});
+				}
+			}}));
+
 			menu.append(new MenuItem({label: _('Switch between note and to-do type'), click: async () => {
 				for (let i = 0; i < noteIds.length; i++) {
 					const note = await Note.load(noteIds[i]);

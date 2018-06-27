@@ -420,6 +420,7 @@ class Note extends BaseItem {
 
 	static async duplicate(noteId, options = null) {
 		const changes = options && options.changes;
+		const uniqueTitle = options && options.uniqueTitle;
 
 		const originalNote = await Note.load(noteId);
 		if (!originalNote) throw new Error('Unknown note: ' + noteId);
@@ -430,6 +431,11 @@ class Note extends BaseItem {
 		for (let n in changes) {
 			if (!changes.hasOwnProperty(n)) continue;
 			newNote[n] = changes[n];
+		}
+
+		if (uniqueTitle) {
+			const title = await Note.findUniqueItemTitle(uniqueTitle);
+			newNote.title = title;
 		}
 
 		return this.save(newNote);

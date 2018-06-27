@@ -51,7 +51,7 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 		let defaultFolder_ = null;
 		const defaultFolder = async () => {
 			if (defaultFolder_) return defaultFolder_;
-			const folderTitle = await Folder.findUniqueFolderTitle(this.options_.defaultFolderTitle ? this.options_.defaultFolderTitle : 'Imported');
+			const folderTitle = await Folder.findUniqueItemTitle(this.options_.defaultFolderTitle ? this.options_.defaultFolderTitle : 'Imported');
 			defaultFolder_ = await Folder.save({ title: folderTitle });
 			return defaultFolder_;
 		}
@@ -100,7 +100,7 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 
 				if (!itemIdMap[item.id]) itemIdMap[item.id] = uuid.create();
 				item.id = itemIdMap[item.id];
-				item.title = await Folder.findUniqueFolderTitle(item.title);
+				item.title = await Folder.findUniqueItemTitle(item.title);
 
 				if (item.parent_id) {
 					await setFolderToImportTo(item.parent_id);

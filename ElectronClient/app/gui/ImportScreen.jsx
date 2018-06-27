@@ -59,7 +59,7 @@ class ImportScreenComponent extends React.Component {
 
 	async doImport() {
 		const filePath = this.props.filePath;
-		const folderTitle = await Folder.findUniqueFolderTitle(filename(filePath));
+		const folderTitle = await Folder.findUniqueItemTitle(filename(filePath));
 		const messages = this.state.messages.slice();
 
 		this.addMessage('start', _('New notebook "%s" will be created and file "%s" will be imported into it', folderTitle, basename(filePath)));

@@ -23,7 +23,7 @@ class InteropService_Importer_Enex extends InteropService_Importer_Base {
 		let folder = this.options_.destinationFolder;
 
 		if (!folder) {
-			const folderTitle = await Folder.findUniqueFolderTitle(filename(this.sourcePath_));
+			const folderTitle = await Folder.findUniqueItemTitle(filename(this.sourcePath_));
 			folder = await Folder.save({ title: folderTitle });
 		}
 

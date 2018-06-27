@@ -34,7 +34,7 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 			}
 
 			if (!this.options_.destinationFolder) {
-				const folderTitle = await Folder.findUniqueFolderTitle(basename(rtrimSlashes(this.sourcePath_)));
+				const folderTitle = await Folder.findUniqueItemTitle(basename(rtrimSlashes(this.sourcePath_)));
 				const folder = await Folder.save({ title: folderTitle });
 				parentFolderId = folder.id;
 			} else {
