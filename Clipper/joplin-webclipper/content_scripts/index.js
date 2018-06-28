@@ -74,6 +74,17 @@
 	async function prepareCommandResponse(command) {
 		console.info('Got command: ' + command.name);
 
+		const clippedContentResponse = (title, html) => {
+			return {
+				name: 'clippedContent',
+				title: title,
+				html: html,
+				base_url: baseUrl(),
+				url: location.origin + location.pathname,
+				parent_id: command.parent_id,
+			};			
+		}
+
 		if (command.name === "simplifiedPageHtml") {
 
 			let article = null;
@@ -87,29 +98,20 @@
 				response.warning = 'Could not retrieve simplified version of page - full page has been saved instead.';
 				return response;
 			}
-
-			return {
-				name: 'clippedContent',
-				html: article.body,
-				title: article.title,
-				base_url: baseUrl(),
-				url: location.origin + location.pathname,
-				parent_id: command.parent_id,
-			};
+			return clippedContentResponse(article.title, article.body);
 
 		} else if (command.name === "completePageHtml") {
 
 			const cleanDocument = document.body.cloneNode(true);
 			cleanUpElement(cleanDocument);
+			return clippedContentResponse(pageTitle(), cleanDocument.innerHTML);
 
-			return {
-				name: 'clippedContent',
-				html: cleanDocument.innerHTML,
-				title: pageTitle(),
-				base_url: baseUrl(),
-				url: location.origin + location.pathname,
-				parent_id: command.parent_id,
-			};
+		} else if (command.name === "selectedHtml") {
+
+		    const range = window.getSelection().getRangeAt(0);
+		    const container = document.createElement('div');
+		    container.appendChild(range.cloneContents());
+		    return clippedContentResponse(pageTitle(), container.innerHTML);
 
 		} else if (command.name === 'screenshot') {
 
