@@ -28,10 +28,11 @@ async function updateManifestVersionNumber(manifestPath) {
 	manifest.version = v.join('.');
 	console.info('New version: ' + manifest.version);
 	await fs.writeFile(manifestPath, JSON.stringify(manifest, null, 4));
+	return manifest.version;
 }
 
 async function main() {
-	await updateManifestVersionNumber(clipperDir + '/manifest.json');
+	const newVersion = await updateManifestVersionNumber(clipperDir + '/manifest.json');
 
 	console.info('Building extension...');
 	process.chdir(clipperDir + '/popup');
@@ -74,6 +75,13 @@ async function main() {
 		console.info(await execCommand('7z a -tzip ' + dist.name + '.zip *'));
 		console.info(await execCommand('mv ' + dist.name + '.zip ..'));
 	}
+
+	console.info(await execCommand('git pull'));
+	console.info(await execCommand('git add -A'));
+	console.info(await execCommand('git commit -m "Clipper release v' + newVersion + '"'));
+	console.info(await execCommand('git tag clipper-' + newVersion));
+	console.info(await execCommand('git push'));
+	console.info(await execCommand('git push --tags'));
 }
 
 main().catch((error) => {
