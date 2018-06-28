@@ -1,5 +1,19 @@
 # Joplin changelog
 
+## [v1.0.104](https://github.com/laurent22/joplin/releases/tag/v1.0.104) - 2018-06-28T20:25:36Z
+
+- New: Allow HTML in Markdown documents in a secure way.
+- New: Resolves [#619](https://github.com/laurent22/joplin/issues/619): Context menu to cut, copy and paste. Also added menu to copy link in web view
+- New: Resolves [#612](https://github.com/laurent22/joplin/issues/612): Allow duplicating a note
+- New: Web Clipper: Support 'author' property
+- Improved: Resolves [#647](https://github.com/laurent22/joplin/issues/647): Allow specifying text editor path and arguments in setting
+- Improved: Optimised encryption and decryption of items so that it doesn't freeze the UI, especially on mobile
+- Improved: Set PDF default file name
+- Improved: Resolves [#644](https://github.com/laurent22/joplin/issues/644): Added support for .markdown extension when importing files
+- Fixes [#634](https://github.com/laurent22/joplin/issues/634): Press ESC to dismiss dialog in non-English languages
+- Fixes [#639](https://github.com/laurent22/joplin/issues/639): Make sure text wraps when printing or exporting as PDF
+- Fixes [#646](https://github.com/laurent22/joplin/issues/646): Mentioned that TLS settings must be saved before checking sync config
+
 ## [v1.0.103](https://github.com/laurent22/joplin/releases/tag/v1.0.103) - 2018-06-21T19:38:13Z
 
 - New: Resolves [#611](https://github.com/laurent22/joplin/issues/611): Allow opening and editing note in external editor
