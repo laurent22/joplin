@@ -369,6 +369,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				note.todo_completed = dateToTimestamp(noteAttributes['reminder-done-time'], true);
 				note.order = dateToTimestamp(noteAttributes['reminder-order'], true);
 				note.source = !!noteAttributes.source ? 'evernote.' + noteAttributes.source : 'evernote';
+				note.source_url = !!noteAttributes['source-url'] ? noteAttributes['source-url'] : '';
 
 				// if (noteAttributes['reminder-time']) {
 				// 	console.info('======================================================');
