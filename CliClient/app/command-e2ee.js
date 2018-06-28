@@ -47,30 +47,35 @@ class Command extends BaseCommand {
 		}
 
 		if (args.command === 'decrypt') {
-			this.stdout(_('Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.'));
+			if (args.path) {
+				const plainText = await EncryptionService.instance().decryptString(args.path);
+				this.stdout(plainText);
+			} else {
+				this.stdout(_('Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.'));
 
-			while (true) {
-				try {
-					await DecryptionWorker.instance().start();
-					break;
-				} catch (error) {
-					if (error.code === 'masterKeyNotLoaded') {
-						const masterKeyId = error.masterKeyId;
-						const password = await this.prompt(_('Enter master password:'), { type: 'string', secure: true });
-						if (!password) {
-							this.stdout(_('Operation cancelled'));
-							return;
+				while (true) {
+					try {
+						await DecryptionWorker.instance().start();
+						break;
+					} catch (error) {
+						if (error.code === 'masterKeyNotLoaded') {
+							const masterKeyId = error.masterKeyId;
+							const password = await this.prompt(_('Enter master password:'), { type: 'string', secure: true });
+							if (!password) {
+								this.stdout(_('Operation cancelled'));
+								return;
+							}
+							Setting.setObjectKey('encryption.passwordCache', masterKeyId, password);
+							await EncryptionService.instance().loadMasterKeysFromSettings();
+							continue;
 						}
-						Setting.setObjectKey('encryption.passwordCache', masterKeyId, password);
-						await EncryptionService.instance().loadMasterKeysFromSettings();
-						continue;
+
+						throw error;
 					}
-
-					throw error;
 				}
-			}
 
-			this.stdout(_('Completed decryption.'));
+				this.stdout(_('Completed decryption.'));
+			}
 
 			return;
 		}

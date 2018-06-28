@@ -62,6 +62,7 @@
     "string-padding": "^1.0.2",
     "string-to-stream": "^1.1.0",
     "strip-ansi": "^4.0.0",
+    "syswide-cas": "^5.2.0",
     "tar": "^4.4.0",
     "tcp-port-used": "^0.1.2",
     "tkwidgets": "^0.5.26",
