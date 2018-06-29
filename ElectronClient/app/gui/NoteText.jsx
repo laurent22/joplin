@@ -711,8 +711,16 @@ class NoteTextComponent extends React.Component {
 	updateHtml(body = null) {
 		const mdOptions = {
 			onResourceLoaded: () => {
-				this.updateHtml();
-				this.forceUpdate();
+				if (this.resourceLoadedTimeoutId_) {
+					clearTimeout(this.resourceLoadedTimeoutId_);
+					this.resourceLoadedTimeoutId_ = null;
+				}
+
+				this.resourceLoadedTimeoutId_ = setTimeout(() => {
+					this.resourceLoadedTimeoutId_ = null;
+					this.updateHtml();
+					this.forceUpdate();
+				}, 1000);
 			},
 			postMessageSyntax: 'ipcRenderer.sendToHost',
 		};
