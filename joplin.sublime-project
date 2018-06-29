@@ -26,6 +26,7 @@
 				"*.min.js",
 				"*.bundle.js",
 				"yarn.lock",
+				"*.icns"
 			],
 			"folder_exclude_patterns":
 			[
@@ -61,20 +62,9 @@
 				"_releases",
 				"ReactNativeClient/lib/csstojs",
 				"Clipper/joplin-webclipper/popup/build",
-				"Clipper/joplin-webclipper/dist",
+				"Clipper/joplin-webclipper/dist"
 			],
 			"path": "."
-		},
-		{
-			"file_exclude_patterns":
-			[
-				"src/log.txt",
-			],
-			"folder_exclude_patterns":
-			[
-				"node_modules",
-			],
-			"path": "D:\\Docs\\PROGS\\Node\\tkwidgets"
 		}
-	],
+	]
 }

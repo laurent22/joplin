@@ -38,7 +38,7 @@
 			const node = childNodes[i];
 
 			let isVisible = node.nodeType === 1 ? window.getComputedStyle(node).display !== 'none' : true;
-			if (isVisible && ['input', 'textarea', 'script', 'style', 'select', 'option', 'button'].indexOf(node.nodeName.toLowerCase()) >= 0) isVisible = false;
+			if (isVisible && ['input', 'textarea', 'script', 'noscript', 'style', 'select', 'option', 'button'].indexOf(node.nodeName.toLowerCase()) >= 0) isVisible = false;
 
 			if (!isVisible) {
 				element.removeChild(node);
