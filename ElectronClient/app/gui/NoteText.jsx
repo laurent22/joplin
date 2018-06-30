@@ -648,7 +648,7 @@ class NoteTextComponent extends React.Component {
 
 				if (lineNoLeftSpaces.indexOf('- [ ] ') === 0 || lineNoLeftSpaces.indexOf('- [x] ') === 0 || lineNoLeftSpaces.indexOf('- [X] ') === 0) return leftSpaces + '- [ ] ';
 				if (lineNoLeftSpaces.indexOf('- ') === 0) return leftSpaces + '- ';
-				if (lineNoLeftSpaces.indexOf('* ') === 0) return leftSpaces + '* ';
+				if (lineNoLeftSpaces.indexOf('* ') === 0 && line.trim() !== '* * *') return leftSpaces + '* ';
 
 				const bulletNumber = markdownUtils.olLineNumber(lineNoLeftSpaces);
 				if (bulletNumber) return leftSpaces + (bulletNumber + 1) + '. ';
