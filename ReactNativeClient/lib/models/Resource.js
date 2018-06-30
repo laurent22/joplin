@@ -26,7 +26,7 @@ class Resource extends BaseItem {
 	}
 
 	static isSupportedImageMimeType(type) {
-		const imageMimeTypes = ["image/jpg", "image/jpeg", "image/png", "image/gif"];
+		const imageMimeTypes = ["image/jpg", "image/jpeg", "image/png", "image/gif", "image/svg+xml"];
 		return imageMimeTypes.indexOf(type.toLowerCase()) >= 0;
 	}
 
