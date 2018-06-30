@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -44,6 +43,7 @@
 		EC11356C90E9419799A2626F /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51BCEC3BC28046C8BB19531F /* EvilIcons.ttf */; };
 		F3D0BB525E6C490294D73075 /* libRNSecureRandom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22647ACF9A4C45918C44C599 /* libRNSecureRandom.a */; };
 		FBF57CE2F0F448FA9A8985E2 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EB8BCAEA9AA41CAAE460443 /* libsqlite3.0.tbd */; };
+		82C61D3DAE0A4666883001E9 /* libRNFileViewer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDC2774CD86466F897D88E2 /* libRNFileViewer.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -436,6 +436,8 @@
 		F5E37D05726A4A08B2EE323A /* libRNFetchBlob.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFetchBlob.a; sourceTree = "<group>"; };
 		FD370E24D76E461D960DD85D /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		FF411B45E68B4A8CBCC35777 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		59F5448FAF7345F8B568BD00 /* RNFileViewer.xcodeproj */ = {isa = PBXFileReference; name = "RNFileViewer.xcodeproj"; path = "../node_modules/react-native-file-viewer/ios/RNFileViewer.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		CCDC2774CD86466F897D88E2 /* libRNFileViewer.a */ = {isa = PBXFileReference; name = "libRNFileViewer.a"; path = "libRNFileViewer.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -466,6 +468,7 @@
 				AE6BB3A2FDA34D01864A721A /* libRNVectorIcons.a in Frameworks */,
 				AF99EEC6C55042F7BFC87583 /* libRNImagePicker.a in Frameworks */,
 				F3D0BB525E6C490294D73075 /* libRNSecureRandom.a in Frameworks */,
+				82C61D3DAE0A4666883001E9 /* libRNFileViewer.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -729,6 +732,7 @@
 				711CBD21F0894B83A2D8E234 /* RNVectorIcons.xcodeproj */,
 				A4716DB8654B431D894F89E1 /* RNImagePicker.xcodeproj */,
 				252BD7B86BF7435B960DA901 /* RNSecureRandom.xcodeproj */,
+				59F5448FAF7345F8B568BD00 /* RNFileViewer.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1346,11 +1350,13 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)..\node_modules\neact-native-image-pickerios",
 					"$(SRCROOT)..\node_modules\neact-native-securerandomios",
+					"$(SRCROOT)\..\node_modules\react-native-file-viewer\ios",
 				);
 				INFOPLIST_FILE = Joplin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/Joplin\"",
 					"\"$(SRCROOT)/Joplin\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1386,11 +1392,13 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)..\node_modules\neact-native-image-pickerios",
 					"$(SRCROOT)..\node_modules\neact-native-securerandomios",
+					"$(SRCROOT)\..\node_modules\react-native-file-viewer\ios",
 				);
 				INFOPLIST_FILE = Joplin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/Joplin\"",
 					"\"$(SRCROOT)/Joplin\"",
 				);
 				OTHER_LDFLAGS = (

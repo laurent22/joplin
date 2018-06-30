@@ -35,6 +35,8 @@ const ImagePicker = require('react-native-image-picker');
 const AlarmService = require('lib/services/AlarmService.js');
 const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog.js');
 
+import FileViewer from 'react-native-file-viewer';
+
 class NoteScreenComponent extends BaseScreenComponent {
 
 	static navigationOptions(options) {
@@ -131,6 +133,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 								noteId: item.id,
 							});
 						}, 5);
+					} else if (item.type_ === BaseModel.TYPE_RESOURCE) {
+						const resourcePath = Resource.fullPath(item);
+						await FileViewer.open(resourcePath);
 					} else {
 						throw new Error(_('The Joplin mobile app does not currently support this type of link: %s', BaseModel.modelTypeToName(item.type_)));
 					}
