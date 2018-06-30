@@ -91,7 +91,7 @@
     "highlight.js": "^9.12.0",
     "html-entities": "^1.2.1",
     "image-type": "^3.0.0",
-    "joplin-turndown": "^4.0.7",
+    "joplin-turndown": "^4.0.8",
     "joplin-turndown-plugin-gfm": "^1.0.7",
     "jssha": "^2.3.1",
     "katex": "^0.9.0",

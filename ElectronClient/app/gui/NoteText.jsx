@@ -720,7 +720,7 @@ class NoteTextComponent extends React.Component {
 					this.resourceLoadedTimeoutId_ = null;
 					this.updateHtml();
 					this.forceUpdate();
-				}, 1000);
+				}, 100);
 			},
 			postMessageSyntax: 'ipcRenderer.sendToHost',
 		};
