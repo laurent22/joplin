@@ -7,18 +7,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Philipp Zumstein <zuphilip@gmail.com>\n"
+"Last-Translator: Michael Sonntag <ms@editorei.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.7\n"
+"X-Generator: Poedit 2.0.8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
-"Um eine Markierung zu löschen, entferne diese bei allen damit verbundenen "
+"Um ein Schlagwort zu löschen, entferne es bei allen damit verbundenen "
 "Notizen."
 
 msgid "Please select the note or notebook to be deleted first."
@@ -53,7 +53,7 @@ msgid "y"
 msgstr "j"
 
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "Breche Hintergrund-Synchronisation ab... Bitte warten."
+msgstr "Breche Hintergrundsynchronisation ab… Bitte warten."
 
 #, javascript-format
 msgid "No such command: %s"
@@ -480,10 +480,10 @@ msgid ""
 "[tag] from [note], or to list the notes associated with [tag]. The command "
 "`tag list` can be used to list all the tags."
 msgstr ""
-"<tag-command> kann \"add\", \"remove\" or \"list\" sein, um eine "
-"[Markierung] zu [Notiz] zuzuweisen oder zu entfernen, oder um mit "
-"[Markierung] markierte Notizen anzuzeigen. Mit dem Befehl `tag list` können "
-"alle Markierungen angezeigt werden."
+"<tag-command> kann \"add\", \"remove\" or \"list\" sein, um ein [Schlagwort] "
+"zu [Notiz] zuzuweisen oder zu entfernen, oder um mit [Schlagwort] markierte "
+"Notizen anzuzeigen. Mit dem Befehl `tag list` können alle Schlagwörter "
+"angezeigt werden."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
@@ -644,16 +644,16 @@ msgid "Paste"
 msgstr "Einfügen"
 
 msgid "Bold"
-msgstr ""
+msgstr "Fett"
 
 msgid "Italic"
-msgstr ""
+msgstr "Kursiv"
 
 msgid "Insert Date Time"
-msgstr ""
+msgstr "Datum / Uhrzeit einfügen"
 
 msgid "Edit in external editor"
-msgstr ""
+msgstr "Im externen Editor bearbeiten"
 
 msgid "Search in all the notes"
 msgstr "Alle Notizen durchsuchen"
@@ -692,7 +692,7 @@ msgid "Make a donation"
 msgstr "Spenden"
 
 msgid "Check for updates..."
-msgstr "Überprüfe auf Updates..."
+msgstr "Überprüfe auf Updates…"
 
 msgid "About Joplin"
 msgstr "Über Joplin"
@@ -718,7 +718,7 @@ msgid "Current version is up-to-date."
 msgstr "Die aktuelle Version ist up-to-date."
 
 msgid "An update is available, do you want to download it now?"
-msgstr "Es ist ein Update verfügbar! Soll dies jetzt heruntergeladen werden?"
+msgstr "Es ist ein Update verfügbar! Soll es jetzt heruntergeladen werden?"
 
 msgid "Yes"
 msgstr "Ja"
@@ -726,10 +726,9 @@ msgstr "Ja"
 msgid "No"
 msgstr "Nein"
 
-#, fuzzy
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
-"Der Web Clipper Service ist bereits aktiviert und auf Autostart eingestellt."
+"Der Webclipperservice ist bereits aktiviert und auf Autostart eingestellt."
 
 #, javascript-format
 msgid "Status: Started on port %d"
@@ -786,7 +785,7 @@ msgid "Notes and settings are stored in: %s"
 msgstr "Notizen und Einstellungen werden gespeichert in: %s"
 
 msgid "Apply"
-msgstr ""
+msgstr "Anwenden"
 
 msgid "Submit"
 msgstr "Absenden"
@@ -897,16 +896,16 @@ msgid "Notebook title:"
 msgstr "Notizbuch Titel:"
 
 msgid "Add or remove tags:"
-msgstr "Füge hinzu oder entferne Markierungen:"
+msgstr "Füge hinzu oder entferne Schlagwörter:"
 
 msgid "Separate each tag by a comma."
-msgstr "Trenne jede Markierung mit einem Komma."
+msgstr "Trenne jedes Schlagwort mit einem Komma."
 
 msgid "Rename notebook:"
 msgstr "Notizbuch umbenennen:"
 
 msgid "Rename tag:"
-msgstr "Markierung umbenennen:"
+msgstr "Schlagwort umbenennen:"
 
 msgid "Set alarm:"
 msgstr "Alarm erstellen:"
@@ -930,14 +929,14 @@ msgid "Set the password"
 msgstr "Setze ein Passwort"
 
 msgid "Add or remove tags"
-msgstr "Markierungen hinzufügen oder entfernen"
+msgstr "Schlagwörter hinzufügen oder entfernen"
 
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplizieren"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s - Copy"
-msgstr "Kopieren"
+msgstr "%s kopieren"
 
 msgid "Switch between note and to-do type"
 msgstr "Zwischen Notiz und To-Do Typ wechseln"
@@ -965,9 +964,9 @@ msgstr ""
 msgid "Open..."
 msgstr "Öffne..."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "This file could not be opened: %s"
-msgstr "Dieses Notizbuch konnte nicht gespeichert werden: %s"
+msgstr "Dieses Notizbuch konnte nicht geöffnet werden: %s"
 
 msgid "Save as..."
 msgstr "Sichern unter..."
@@ -976,7 +975,7 @@ msgid "Copy path to clipboard"
 msgstr "Pfad in Zwischenablage kopieren"
 
 msgid "Copy Link Address"
-msgstr ""
+msgstr "Link-Adresse kopieren"
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -991,16 +990,16 @@ msgstr ""
 "und die Notiz zu bearbeiten."
 
 msgid "strong text"
-msgstr ""
+msgstr "Fetter Text"
 
 msgid "emphasized text"
-msgstr ""
+msgstr "hervorgehobener Text"
 
 msgid "List item"
-msgstr ""
+msgstr "Listeneintrag"
 
 msgid "Insert Hyperlink"
-msgstr ""
+msgstr "Weblink einfügen"
 
 msgid "Attach file"
 msgstr "Datei anhängen"
@@ -1011,37 +1010,37 @@ msgstr "Markierungen"
 msgid "Set alarm"
 msgstr "Alarm erstellen"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "In: %s"
-msgstr "%s: %s"
+msgstr "In: %s"
 
 msgid "Hyperlink"
-msgstr ""
+msgstr "Weblink"
 
 msgid "Code"
-msgstr ""
+msgstr "Code"
 
 msgid "Numbered List"
-msgstr ""
+msgstr "Nummerierte Liste"
 
 msgid "Bulleted List"
-msgstr ""
+msgstr "Aufzählung"
 
 msgid "Checkbox"
-msgstr ""
+msgstr "Kontrollkästchen"
 
 msgid "Heading"
-msgstr ""
+msgstr "Überschrift"
 
 msgid "Horizontal Rule"
-msgstr ""
+msgstr "Horizontale Linie"
 
 msgid "Click to stop external editing"
-msgstr ""
+msgstr "Klicken Sie hier, um die externe Bearbeitung anzuhalten"
 
 #, fuzzy
 msgid "Watching..."
-msgstr "Abbrechen..."
+msgstr "Ansehen…"
 
 msgid "to-do"
 msgstr "To-Do"
@@ -1078,7 +1077,7 @@ msgid "Clipper Options"
 msgstr "Clipper Einstellungen"
 
 msgid "Remove this tag from all the notes?"
-msgstr "Diese Markierung von allen Notizen entfernen?"
+msgstr "Dieses Schlagwort von allen Notizen entfernen?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Diese Suche von der Seitenleiste entfernen?"
@@ -1189,7 +1188,7 @@ msgid "State: %s."
 msgstr "Status: %s."
 
 msgid "Cancelling..."
-msgstr "Abbrechen..."
+msgstr "Abbrechen…"
 
 #, javascript-format
 msgid "Completed: %s"
@@ -1200,7 +1199,7 @@ msgid "Last error: %s"
 msgstr "Letzte Fehlermeldung: %s"
 
 msgid "Idle"
-msgstr "wartend"
+msgstr "Wartend"
 
 msgid "In progress"
 msgstr "In Bearbeitung"
@@ -1230,17 +1229,14 @@ msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "Notizbuch kann nicht \"%s\" genannt werden. Dies ist ein reservierter Titel."
 
-#, fuzzy
 msgid "title"
-msgstr "Unbenannt"
+msgstr "Titel"
 
-#, fuzzy
 msgid "updated date"
-msgstr "Aktualisiert: %d."
+msgstr "Aktualsierungsdatum"
 
-#, fuzzy
 msgid "created date"
-msgstr "Erstellt: %d."
+msgstr "Erstelldatum"
 
 msgid "Untitled"
 msgstr "Unbenannt"
@@ -1339,18 +1335,15 @@ msgstr "%d Stunde"
 msgid "%d hours"
 msgstr "%d Stunden"
 
-#, fuzzy
 msgid "Text editor command"
-msgstr "Textverarbeitungsprogramm"
+msgstr "Editoraufruf"
 
-#, fuzzy
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"Das Textverarbeitungsprogramm, mit dem Notizen geöffnet werden. Wenn keines "
-"ausgewählt wurde, wird Joplin versuchen das standard-"
-"Textverarbeitungsprogramm zu erkennen."
+"Der Editor, mit dem Notizen geöffnet werden. Wenn keiner ausgewählt wurde, "
+"wird Joplin versuchen den Standardeditor zu erkennen."
 
 msgid "Show advanced options"
 msgstr "Erweiterte Optionen anzeigen"
@@ -1395,7 +1388,7 @@ msgid "WebDAV password"
 msgstr "WebDAV Passwort"
 
 msgid "Custom TLS certificates"
-msgstr ""
+msgstr "Benutzerdefinierte TLS-Zertifikate"
 
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
@@ -1403,9 +1396,14 @@ msgid ""
 "pem. Note that if you make changes to the TLS settings, you must save your "
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
+"Kommagetrennte Liste von Pfaden zu Verzeichnissen, aus denen die Zertifikate "
+"geladen werden, oder Pfad zu einzelnen Zertifikatsdateien. Zum Beispiel: / "
+"my / cert_dir, /other/custom.pem. Wenn Sie Änderungen an den TLS-"
+"Einstellungen vornehmen, müssen Sie Ihre Änderungen speichern, bevor Sie auf "
+"\"Synchronisierungskonfiguration prüfen\" klicken."
 
 msgid "Ignore TLS certificate errors"
-msgstr ""
+msgstr "Ignoriere TLS-Zertifikatfehler"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1428,7 +1426,7 @@ msgstr "Verzeichnis"
 
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
-msgstr "Das Modul „%s“ für das Format „%s“ kann nicht geladen werden"
+msgstr "Das Modul \"%s\" für das Format \"%s\" kann nicht geladen werden"
 
 #, javascript-format
 msgid "Please specify import format for %s"
@@ -1540,15 +1538,15 @@ msgstr "Bestätigen"
 msgid "Cancel synchronisation"
 msgstr "Synchronisation abbrechen"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr "Geladene Objekte: %d/%d."
+msgstr "Entschlüsselte Objekte: %d/%d"
 
 msgid "New tags:"
-msgstr "Neue Markierungen:"
+msgstr "Neue Schlagwörter:"
 
 msgid "Type new tags or select from list"
-msgstr "Neue Markierungen eingeben oder aus der Liste auswählen"
+msgstr "Neues Schlagwort eingeben oder aus der Liste auswählen"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -1667,8 +1665,8 @@ msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
 msgstr ""
-"Drücke auf den (+) Knopf, um eine neue Notiz oder ein neues Notizbuch zu "
-"erstellen. Tippe auf die Seitenleiste, um auf deine existierenden "
+"Drücke auf die (+)-Schaltfläche, um eine neue Notiz oder ein neues Notizbuch "
+"zu erstellen. Tippe auf die Seitenleiste, um auf deine existierenden "
 "Notizbücher zuzugreifen."
 
 msgid "You currently have no notebook. Create one by clicking on (+) button."
