@@ -117,7 +117,7 @@ class Tag extends BaseItem {
 		const addedTitles = [];
 
 		for (let i = 0; i < tagTitles.length; i++) {
-			const title = tagTitles[i].trim().toLowerCase();
+			const title = tagTitles[i].trim();
 			if (!title) continue;
 			let tag = await this.loadByTitle(title);
 			if (!tag) tag = await Tag.save({ title: title }, { userSideValidation: true });
@@ -126,7 +126,7 @@ class Tag extends BaseItem {
 		}
 
 		for (let i = 0; i < previousTags.length; i++) {
-			if (addedTitles.indexOf(previousTags[i].title.toLowerCase()) < 0) {
+			if (addedTitles.indexOf(previousTags[i].title) < 0) {
 				await this.removeNote(previousTags[i].id, noteId);
 			}
 		}
@@ -152,7 +152,7 @@ class Tag extends BaseItem {
 	static async save(o, options = null) {
 		if (options && options.userSideValidation) {
 			if ('title' in o) {
-				o.title = o.title.trim().toLowerCase();
+				o.title = o.title.trim();
 			}
 		}
 
