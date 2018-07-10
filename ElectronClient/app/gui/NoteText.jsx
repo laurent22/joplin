@@ -342,9 +342,8 @@ class NoteTextComponent extends React.Component {
 			this.editorSetScrollTop(1);
 			this.restoreScrollTop_ = 0;
 
-			// If a search is in progress we don't focus any field otherwise it will
-			// take the focus out of the search box.
-			if (note && this.props.notesParentType !== 'Search') {
+			// Only force focus on notes when creating a new note/todo
+			if (this.props.newNote) {
 				const focusSettingName = !!note.is_todo ? 'newTodoFocus' : 'newNoteFocus';
 
 				if (Setting.value(focusSettingName) === 'title') {
