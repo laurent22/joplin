@@ -528,8 +528,6 @@ class AppComponent extends React.Component {
 			const { type, value } = await ShareExtension.data();
 
 			if (type != "") {
-				console.log(value);
-				console.log(type)
 
 				this.props.dispatch({
 					type: 'NAV_GO',
