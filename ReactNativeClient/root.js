@@ -50,6 +50,7 @@ const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const { reducer, defaultState } = require('lib/reducer.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const DropdownAlert = require('react-native-dropdownalert').default;
+const ShareExtension = require('react-native-share-extension').default;
 
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
@@ -233,6 +234,12 @@ const appReducer = (state = appDefaultState, action) => {
 
 				if ('itemType' in action) {
 					newState.selectedItemType = action.itemType;
+				}
+
+				if ('sharedData' in action) {
+					newState.sharedData = action.sharedData;
+				} else {
+					newState.sharedData = null;
 				}
 
 				newState.route = action;
@@ -515,6 +522,27 @@ class AppComponent extends React.Component {
 				type: 'APP_STATE_SET',
 				state: 'ready',
 			});
+		}
+
+		try {
+			const { type, value } = await ShareExtension.data();
+
+			if (type != "") {
+				console.log(value);
+				console.log(type)
+
+				this.props.dispatch({
+					type: 'NAV_GO',
+					routeName: 'Note',
+					noteId: null,
+					sharedData: {type: type, value: value},
+					folderId: this.props.parentFolderId,
+					itemType: 'note',
+				});
+		}
+
+		} catch(e) {
+			console.log('Error in ShareExtension.data', e);
 		}
 
 		BackButtonService.initialize(this.backButtonHandler_);

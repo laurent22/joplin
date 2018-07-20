@@ -174,7 +174,12 @@ shared.initState = async function(comp) {
 		mode: mode,
 		folder: folder,
 		isLoading: false,
+		fromShare: comp.props.sharedData ? true : false,
 	});
+
+	if (comp.props.sharedData) {
+		this.noteComponent_change(comp, 'body', comp.props.sharedData.value);
+	}
 
 	comp.lastLoadedNoteId_ = note ? note.id : null;
 }
