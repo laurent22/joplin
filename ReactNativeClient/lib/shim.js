@@ -120,6 +120,12 @@ shim.fetchWithRetry = async function(fetchFn, options = null) {
 }
 
 shim.fetch = () => { throw new Error('Not implemented'); }
+shim.setFetchTimeout = (v) => {
+	const previousTimeout = shim.fetchTimeout_ ? shim.fetchTimeout_ : null;
+	shim.fetchTimeout_ = v;
+	return previousTimeout;
+}
+shim.fetchTimeout = () => { return shim.fetchTimeout_; }
 shim.FormData = typeof FormData !== 'undefined' ? FormData : null;
 shim.fsDriver = () => { throw new Error('Not implemented') }
 shim.FileApiDriverLocal = null;

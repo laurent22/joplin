@@ -19,7 +19,9 @@ async function tryAndRepeat(fn, count) {
 
 	while (true) {
 		try {
+			console.info('RRRRRRR');
 			const result = await fn();
+			console.info(result);
 			return result;
 		} catch (error) {
 			if (retryCount >= count) throw error;
