@@ -1194,7 +1194,7 @@ msgid "Synchronisation is already in progress. State: %s"
 msgstr "La synchronisation est déjà en cours. État : %s"
 
 msgid "Encrypted"
-msgstr "chiffré"
+msgstr "Chiffré"
 
 msgid "Encrypted items cannot be modified"
 msgstr "Les objets chiffrés ne peuvent être modifiés"
