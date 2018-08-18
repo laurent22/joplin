@@ -395,6 +395,40 @@ class MdToHtml {
 			html: true,
 		});
 
+		// Add `file:` protocol in linkify to allow text in the format of "file://..." to translate into
+		// file-URL links in html view
+		md.linkify.add('file:', {
+
+		  validate: function (text, pos, self) {
+		    var tail = text.slice(pos);
+
+		    if (!self.re.file) {
+		      self.re.file =  new RegExp(
+			'^[\\/]{2,3}[\\S]+' // matches all local file URI on Win/Unix/MacOS systems including reserved characters in some OS (i.e. no OS specific sanity check)
+		      );
+		    }
+		    if (self.re.file.test(tail)) {
+		      return tail.match(self.re.file)[0].length;
+		    }
+		    return 0;
+		}
+			
+		});
+
+		// enable file link URLs in MarkdownIt. Keeps other URL restrictions of MarkdownIt untouched.
+		// Format [link name](file://...)		
+		md.validateLink = function (url) {
+
+			var BAD_PROTO_RE = /^(vbscript|javascript|data):/;
+			var GOOD_DATA_RE = /^data:image\/(gif|png|jpeg|webp);/;
+
+	    		// url should be normalized at this point, and existing entities are decoded
+			var str = url.trim().toLowerCase();
+
+			return BAD_PROTO_RE.test(str) ? (GOOD_DATA_RE.test(str) ? true : false) : true;
+
+		}
+
 		// This is currently used only so that the $expression$ and $$\nexpression\n$$ blocks are translated
 		// to math_inline and math_block blocks. These blocks are then processed directly with the Katex
 		// library.  It is better this way as then it is possible to conditionally load the CSS required by
