@@ -155,10 +155,12 @@ async function translationStatus(isDefault, poFile) {
 }
 
 function flagImageUrl(locale) {
-	if (locale === 'eu') return 'https://joplin.cozic.net/images/flags/es/basque_country.png';
-	if (locale === 'gl_ES') return 'https://joplin.cozic.net/images/flags/es/galicia.png';
-	if (locale === 'ca') return 'https://joplin.cozic.net/images/flags/es/catalonia.png';
-	return 'https://joplin.cozic.net/images/flags/country-4x3/' + countryCodeOnly(locale).toLowerCase() + '.png'
+	const baseUrl = 'https://joplin.cozic.net/images/flags';
+	if (locale === 'eu') return baseUrl + '/es/basque_country.png';
+	if (locale === 'gl_ES') return baseUrl + '/es/galicia.png';
+	if (locale === 'ca') return baseUrl + '/es/catalonia.png';
+	if (locale === 'ko') return baseUrl + '/country-4x3/kr.png';
+	return baseUrl + '/country-4x3/' + countryCodeOnly(locale).toLowerCase() + '.png'
 }
 
 function poFileUrl(locale) {
