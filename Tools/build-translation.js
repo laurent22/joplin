@@ -160,6 +160,7 @@ function flagImageUrl(locale) {
 	if (locale === 'gl_ES') return baseUrl + '/es/galicia.png';
 	if (locale === 'ca') return baseUrl + '/es/catalonia.png';
 	if (locale === 'ko') return baseUrl + '/country-4x3/kr.png';
+	if (locale === 'sv') return baseUrl + '/country-4x3/se.png';
 	return baseUrl + '/country-4x3/' + countryCodeOnly(locale).toLowerCase() + '.png'
 }
 
