@@ -16,6 +16,8 @@ msgstr ""
 "X-Generator: Poedit 1.8.11\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Desmarque las notas asociadas para eliminar una etiqueta."
@@ -629,16 +631,16 @@ msgid "Paste"
 msgstr "Pegar"
 
 msgid "Bold"
-msgstr ""
+msgstr "Negrita"
 
 msgid "Italic"
-msgstr ""
+msgstr "Cursiva"
 
 msgid "Insert Date Time"
-msgstr ""
+msgstr "Introduce fecha"
 
 msgid "Edit in external editor"
-msgstr ""
+msgstr "Editar con un editor externo"
 
 msgid "Search in all the notes"
 msgstr "Buscar en todas las notas"
@@ -711,11 +713,10 @@ msgstr "Sí"
 msgid "No"
 msgstr "No"
 
-#, fuzzy
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
-"El servicio de recorte web está habilitado y configurado para inicie "
-"automaticamente"
+"El servicio de recorte web está habilitado y configurado para que inicie "
+"automáticamente."
 
 #, javascript-format
 msgid "Status: Started on port %d"
@@ -770,7 +771,7 @@ msgid "Notes and settings are stored in: %s"
 msgstr "Las notas y los ajustes se guardan en: %s"
 
 msgid "Apply"
-msgstr ""
+msgstr "Aplicar"
 
 msgid "Submit"
 msgstr "Aceptar"
@@ -916,11 +917,11 @@ msgid "Add or remove tags"
 msgstr "Añadir o borrar etiquetas"
 
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplicado"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s - Copy"
-msgstr "Copiar"
+msgstr "%s - Copiar"
 
 msgid "Switch between note and to-do type"
 msgstr "Cambiar entre nota y lista de tareas"
@@ -944,9 +945,9 @@ msgstr "No hay ninguna libreta. Cree una pulsando en «Libreta nueva»."
 msgid "Open..."
 msgstr "Abrir..."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "This file could not be opened: %s"
-msgstr "No se ha podido guardar esta libreta: %s"
+msgstr "No se ha podido abrir este archivo: %s"
 
 msgid "Save as..."
 msgstr "Guardar como..."
@@ -955,7 +956,7 @@ msgid "Copy path to clipboard"
 msgstr "Copiar la ruta en el portapapeles"
 
 msgid "Copy Link Address"
-msgstr ""
+msgstr "Copiar enlace"
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -970,16 +971,16 @@ msgstr ""
 "editar la nota."
 
 msgid "strong text"
-msgstr ""
+msgstr "texto destacado"
 
 msgid "emphasized text"
-msgstr ""
+msgstr "texto resaltado"
 
 msgid "List item"
-msgstr ""
+msgstr "Listar elementos"
 
 msgid "Insert Hyperlink"
-msgstr ""
+msgstr "Insertar hipervínculo"
 
 msgid "Attach file"
 msgstr "Adjuntar archivo"
@@ -990,37 +991,36 @@ msgstr "Etiquetas"
 msgid "Set alarm"
 msgstr "Establecer alarma"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "In: %s"
-msgstr "%s: %s"
+msgstr "En: %s"
 
 msgid "Hyperlink"
-msgstr ""
+msgstr "Hipervínculo"
 
 msgid "Code"
-msgstr ""
+msgstr "Código"
 
 msgid "Numbered List"
-msgstr ""
+msgstr "Lista numerada"
 
 msgid "Bulleted List"
-msgstr ""
+msgstr "Lista con viñetas"
 
 msgid "Checkbox"
-msgstr ""
+msgstr "Casilla"
 
 msgid "Heading"
-msgstr ""
+msgstr "Título"
 
 msgid "Horizontal Rule"
-msgstr ""
+msgstr "Regla horizontal"
 
 msgid "Click to stop external editing"
-msgstr ""
+msgstr "Pulsa para detener la edición externa"
 
-#, fuzzy
 msgid "Watching..."
-msgstr "Cancelando..."
+msgstr "Mirando..."
 
 msgid "to-do"
 msgstr "lista de tareas"
@@ -1208,17 +1208,14 @@ msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "No se puede usar el nombre «%s» para una libreta; es un título reservado."
 
-#, fuzzy
 msgid "title"
-msgstr "Sin título"
+msgstr "título"
 
-#, fuzzy
 msgid "updated date"
-msgstr "Actualizado: %d."
+msgstr "fecha de actualización"
 
-#, fuzzy
 msgid "created date"
-msgstr "Creado: %d."
+msgstr "fecha de creación"
 
 msgid "Untitled"
 msgstr "Sin título"
@@ -1317,17 +1314,16 @@ msgstr "%d hora"
 msgid "%d hours"
 msgstr "%d horas"
 
-#, fuzzy
 msgid "Text editor command"
 msgstr "Editor de texto"
 
-#, fuzzy
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"El editor que se usará para abrir una nota. Se intentará auto-detectar el "
-"editor predeterminado si no se proporciona ninguno."
+"El comando del editor (puede incluir argumentos) que se utilizará para abrir "
+"una nota. Si no se provee ninguno se intentará auto detectar el editor por "
+"defecto."
 
 msgid "Show advanced options"
 msgstr "Mostrar opciones avanzadas"
@@ -1372,7 +1368,7 @@ msgid "WebDAV password"
 msgstr "Contraseña de WebDAV"
 
 msgid "Custom TLS certificates"
-msgstr ""
+msgstr "Certificados TLS personalizados"
 
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
@@ -1380,9 +1376,14 @@ msgid ""
 "pem. Note that if you make changes to the TLS settings, you must save your "
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
+"Lista de rutas de los directorios de dónde cargar los certificados separados "
+"por comas, o la ruta individual de los certificados. Por ejemplo: /mi/"
+"cert_dir, /otro/personalizado.pem. Tenga en cuenta que si realiza cambios en "
+"la configuración de los certificados debe guardar los cambios antes de "
+"pulsar en \"Comprobar la configuración de sincronización\"."
 
 msgid "Ignore TLS certificate errors"
-msgstr ""
+msgstr "Ignorar errores en certificados TLS"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1502,7 +1503,6 @@ msgstr "¿Desea mover %d notas a libreta «%s»?"
 msgid "Press to set the decryption password."
 msgstr "Presione para establecer la contraseña de descifrado."
 
-#, fuzzy
 msgid "Save alarm"
 msgstr "Establecer alarma"
 
@@ -1515,9 +1515,9 @@ msgstr "Confirmar"
 msgid "Cancel synchronisation"
 msgstr "Cancelar sincronización"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr "Elementos obtenidos: %d/%d."
+msgstr "Descifrando elementos: %d/%d."
 
 msgid "New tags:"
 msgstr "Nuevas etiquetas:"
