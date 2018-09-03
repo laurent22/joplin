@@ -15,11 +15,11 @@ class Command extends BaseCommand {
 		return _('<tag-command> can be "add", "remove" or "list" to assign or remove [tag] from [note], or to list the notes associated with [tag]. The command `tag list` can be used to list all the tags (use -l for long option).');
 	}
 
-    options() {
-        return [
-            ['-l, --long', _('Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE')],
-        ];
-    }
+	options() {
+		return [
+			['-l, --long', _('Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE')],
+		];
+	}
 
 	async action(args) {
 		let tag = null;
@@ -50,28 +50,28 @@ class Command extends BaseCommand {
 		} else if (command == 'list') {
 			if (tag) {
 				let notes = await Tag.notes(tag.id);
-                notes.map((note) => {
-                    let line = '';
-                    if (options.long) {
-                        line += BaseModel.shortId(note.id)
-                        line += ' '
-                        line += time.unixMsToLocalDateTime(note.user_updated_time)
-                        line += ' '
-                    }
-                    if (note.is_todo) {
-                        line += '[';
-                        if (note.todo_completed) {
-                           line += 'X';
-                        } else {
-                            line += ' ';
-                        }
-                        line += '] ';
-                    } else {
-                        line += '    ';
-                    }
-                    line += note.title;
-                    this.stdout(line);
-                });
+				notes.map((note) => {
+					let line = '';
+				if (options.long) {
+					line += BaseModel.shortId(note.id);
+					line += ' ';
+					line += time.formatMsToLocal(note.user_updated_time);
+					line += ' ';
+				}
+				if (note.is_todo) {
+					line += '[';
+					if (note.todo_completed) {
+					   line += 'X';
+					} else {
+						line += ' ';
+					}
+					line += '] ';
+				} else {
+					line += '    ';
+				}
+				line += note.title;
+				this.stdout(line);
+				});
 			} else {
 				let tags = await Tag.all();
 				tags.map((tag) => { this.stdout(tag.title); });
