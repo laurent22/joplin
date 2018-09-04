@@ -527,17 +527,17 @@ class AppComponent extends React.Component {
 		try {
 			const { type, value } = await ShareExtension.data();
 
-			if (type != "") {
+			if (type != "" && this.props.selectedFolderId) {
 
 				this.props.dispatch({
 					type: 'NAV_GO',
 					routeName: 'Note',
 					noteId: null,
 					sharedData: {type: type, value: value},
-					folderId: this.props.parentFolderId,
+					folderId: this.props.selectedFolderId,
 					itemType: 'note',
 				});
-		}
+			}
 
 		} catch(e) {
 			console.log('Error in ShareExtension.data', e);
@@ -642,6 +642,7 @@ const mapStateToProps = (state) => {
 		syncStarted: state.syncStarted,
 		appState: state.appState,
 		noteSelectionEnabled: state.noteSelectionEnabled,
+		selectedFolderId: state.selectedFolderId,
 	};
 };
 
