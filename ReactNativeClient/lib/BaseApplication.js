@@ -50,10 +50,10 @@ class BaseApplication {
 		this.dbLogger_ = new Logger();
 		this.eventEmitter_ = new EventEmitter();
 
-		// Note: this is basically a cache of state.selectedFolderId. It should *only* 
+		// Note: this is basically a cache of state.selectedFolderId. It should *only*
 		// be derived from the state and not set directly since that would make the
 		// state and UI out of sync.
-		this.currentFolder_ = null; 
+		this.currentFolder_ = null;
 	}
 
 	logger() {
@@ -70,7 +70,7 @@ class BaseApplication {
 
 	async refreshCurrentFolder() {
 		let newFolder = null;
-		
+
 		if (this.currentFolder_) newFolder = await Folder.load(this.currentFolder_.id);
 		if (!newFolder) newFolder = await Folder.defaultFolder();
 
@@ -99,7 +99,7 @@ class BaseApplication {
 		while (argv.length) {
 			let arg = argv[0];
 			let nextArg = argv.length >= 2 ? argv[1] : null;
-			
+
 			if (arg == '--profile') {
 				if (!nextArg) throw new JoplinError(_('Usage: %s', '--profile <dir-path>'), 'flagError');
 				matched.profileDir = nextArg;
@@ -183,7 +183,7 @@ class BaseApplication {
 	async refreshNotes(state) {
 		let parentType = state.notesParentType;
 		let parentId = null;
-		
+
 		if (parentType === 'Folder') {
 			parentId = state.selectedFolderId;
 			parentType = BaseModel.TYPE_FOLDER;
@@ -388,7 +388,7 @@ class BaseApplication {
 		flags.splice(0, 0, 'node');
 
 		flags = await this.handleStartFlags_(flags, false);
-		
+
 		return flags.matched;
 	}
 

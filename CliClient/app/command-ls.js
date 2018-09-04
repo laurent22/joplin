@@ -22,7 +22,7 @@ class Command extends BaseCommand {
 	enabled() {
 		return false;
 	}
-	
+
 	options() {
 		return [
 			['-n, --limit <num>', _('Displays only the first top <num> notes.')],
