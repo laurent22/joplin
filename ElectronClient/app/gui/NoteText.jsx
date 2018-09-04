@@ -87,13 +87,14 @@ class NoteTextComponent extends React.Component {
 		this.onNoteTypeToggle_ = (event) => { if (event.noteId === this.props.noteId) this.reloadNote(this.props); }
 		this.onTodoToggle_ = (event) => { if (event.noteId === this.props.noteId) this.reloadNote(this.props); }
 
-		this.onEditorPaste_ = async (event) => {
+		this.onEditorPaste_ = async (event = null) => {
 			const formats = clipboard.availableFormats();
 			for (let i = 0; i < formats.length; i++) {
 				const format = formats[i].toLowerCase();
 				const formatType = format.split('/')[0]
+
 				if (formatType === 'image') {
-					event.preventDefault();
+					if (event) event.preventDefault();
 
 					const image = clipboard.readImage();
 
@@ -112,6 +113,32 @@ class NoteTextComponent extends React.Component {
 			lastKeys.push(event.key);
 			while (lastKeys.length > 2) lastKeys.splice(0, 1);
 			this.setState({ lastKeys: lastKeys });
+		}
+
+		this.onEditorContextMenu_ = (event) => {
+			const menu = new Menu();
+
+			const selectedText = this.selectedText();
+			const clipboardText = clipboard.readText();
+
+			menu.append(new MenuItem({label: _('Cut'), enabled: !!selectedText, click: async () => {
+				this.editorCutText();
+			}}));
+
+			menu.append(new MenuItem({label: _('Copy'), enabled: !!selectedText, click: async () => {
+				this.editorCopyText();
+			}}));
+
+			menu.append(new MenuItem({label: _('Paste'), enabled: true, click: async () => {
+				if (clipboardText) {
+					this.editorPasteText();
+				} else {
+					// To handle pasting images
+					this.onEditorPaste_();
+				}
+			}}));
+
+			menu.popup(bridge().window());
 		}
 
 		this.onDrop_ = async (event) => {
@@ -466,8 +493,6 @@ class NoteTextComponent extends React.Component {
 
 			const menu = new Menu()
 
-			console.info(itemType);
-
 			if (itemType === "image" || itemType === "resource") {
 				const resource = await Resource.load(arg0.resourceId);
 				const resourcePath = Resource.fullPath(resource);
@@ -594,6 +619,7 @@ class NoteTextComponent extends React.Component {
 			this.editor_.editor.renderer.off('afterRender', this.onAfterEditorRender_);
 			document.querySelector('#note-editor').removeEventListener('paste', this.onEditorPaste_, true);
 			document.querySelector('#note-editor').removeEventListener('keydown', this.onEditorKeyDown_);
+			document.querySelector('#note-editor').removeEventListener('contextmenu', this.onEditorContextMenu_);
 		}
 
 		this.editor_ = element;
@@ -622,6 +648,7 @@ class NoteTextComponent extends React.Component {
 
 			document.querySelector('#note-editor').addEventListener('paste', this.onEditorPaste_, true);
 			document.querySelector('#note-editor').addEventListener('keydown', this.onEditorKeyDown_);
+			document.querySelector('#note-editor').addEventListener('contextmenu', this.onEditorContextMenu_);
 
 			const lineLeftSpaces = function(line) {
 				let output = '';
@@ -894,6 +921,49 @@ class NoteTextComponent extends React.Component {
 		return lines[row];
 	}
 
+	selectedText() {
+		if (!this.state.note || !this.state.note.body) return '';
+
+		const selection = this.textOffsetSelection();
+		if (!selection || selection.start === selection.end) return '';
+
+		return this.state.note.body.substr(selection.start, selection.end - selection.start);
+	}
+
+	editorCopyText() {
+		clipboard.writeText(this.selectedText());
+	}
+
+	editorCutText() {
+		const selectedText = this.selectedText();
+		if (!selectedText) return;
+
+		clipboard.writeText(selectedText);
+
+		const s = this.textOffsetSelection();
+		if (!s || s.start === s.end) return '';
+
+		const s1 = this.state.note.body.substr(0, s.start);
+		const s2 = this.state.note.body.substr(s.end);
+
+		shared.noteComponent_change(this, 'body', s1 + s2);
+
+		this.updateEditorWithDelay((editor) => {
+			const range = this.selectionRange_;
+			range.setStart(range.start.row, range.start.column);
+			range.setEnd(range.start.row, range.start.column);
+			editor.getSession().getSelection().setSelectionRange(range, false);
+			editor.focus();
+		}, 10);
+	}
+
+	editorPasteText() {
+		const s = this.textOffsetSelection();
+		const s1 = this.state.note.body.substr(0, s.start);
+		const s2 = this.state.note.body.substr(s.end);
+		this.wrapSelectionWithStrings("", "", '', clipboard.readText());
+	}
+
 	selectionRangePreviousLine() {
 		if (!this.selectionRange_) return '';
 		const row = this.selectionRange_.start.row;
@@ -906,16 +976,20 @@ class NoteTextComponent extends React.Component {
 		return this.lineAtRow(row);
 	}
 
-	wrapSelectionWithStrings(string1, string2 = '', defaultText = '') {
+	textOffsetSelection() {
+		return this.selectionRange_ ? this.rangeToTextOffsets(this.selectionRange_, this.state.note.body) : null;
+	}
+
+	wrapSelectionWithStrings(string1, string2 = '', defaultText = '', replacementText = '') {
 		if (!this.rawEditor() || !this.state.note) return;
 
-		const selection = this.selectionRange_ ? this.rangeToTextOffsets(this.selectionRange_, this.state.note.body) : null;
+		const selection = this.textOffsetSelection();
 
 		let newBody = this.state.note.body;
 
 		if (selection && selection.start !== selection.end) {
 			const s1 = this.state.note.body.substr(0, selection.start);
-			const s2 = this.state.note.body.substr(selection.start, selection.end - selection.start);
+			const s2 = replacementText ? replacementText : this.state.note.body.substr(selection.start, selection.end - selection.start);
 			const s3 = this.state.note.body.substr(selection.end);
 			newBody = s1 + string1 + s2 + string2 + s3;
 
@@ -926,6 +1000,11 @@ class NoteTextComponent extends React.Component {
 				end: { row: r.end.row, column: r.end.column + string1.length},
 			};
 
+			if (replacementText) {
+				const diff = replacementText.length - (selection.end - selection.start);
+				newRange.end.column += diff;
+			}
+
 			this.updateEditorWithDelay((editor) => {
 				const range = this.selectionRange_;
 				range.setStart(newRange.start.row, newRange.start.column);
@@ -934,19 +1013,20 @@ class NoteTextComponent extends React.Component {
 				editor.focus();
 			});
 		} else {
+			let middleText = replacementText ? replacementText : defaultText;
 			const textOffset = this.currentTextOffset();
 			const s1 = this.state.note.body.substr(0, textOffset);
 			const s2 = this.state.note.body.substr(textOffset);
-			newBody = s1 + string1 + defaultText + string2 + s2;
+			newBody = s1 + string1 + middleText + string2 + s2;
 
 			const p = this.textOffsetToCursorPosition(textOffset + string1.length, newBody);
 			const newRange = {
 				start: { row: p.row, column: p.column },
-				end: { row: p.row, column: p.column + defaultText.length },
+				end: { row: p.row, column: p.column + middleText.length },
 			};
 
 			this.updateEditorWithDelay((editor) => {
-				if (defaultText && newRange) {
+				if (middleText && newRange) {
 					const range = this.selectionRange_;
 					range.setStart(newRange.start.row, newRange.start.column);
 					range.setEnd(newRange.end.row, newRange.end.column);
