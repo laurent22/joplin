@@ -17,10 +17,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "To delete a tag, untag the associated notes."
-msgstr "Elimina un'etichetta, togli l'etichetta associata alle note."
+msgstr "Per cancellare un'etichetta, togli l'etichetta associata alle note."
 
 msgid "Please select the note or notebook to be deleted first."
-msgstr "Per favore seleziona la Nota o il Taccuino da eliminare."
+msgstr "Per favore seleziona la nota o il taccuino da eliminare."
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Premi Ctrl+D o digita \"exit\" per uscire dall'applicazione"
@@ -31,10 +31,10 @@ msgstr ""
 "Più di un elemento corrisponde a \"%s\". Per favore restringi la ricerca."
 
 msgid "No notebook selected."
-msgstr "Nessun Taccuino selezionato."
+msgstr "Nessun taccuino selezionato."
 
 msgid "No notebook has been specified."
-msgstr "Nessun Taccuino è stato specificato."
+msgstr "Nessun taccuino è stato specificato."
 
 msgid "Y"
 msgstr "S"
@@ -60,7 +60,7 @@ msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Il comando \"%s\" è disponibile solo nella modalità grafica"
 
 msgid "Cannot change encrypted item"
-msgstr "Impossibile modificare l'elemento crittografato"
+msgstr "Impossibile modificare l'elemento criptato"
 
 #, javascript-format
 msgid "Missing required argument: %s"
@@ -118,11 +118,11 @@ msgstr ""
 "Taccuino è specificato, la nota viene duplicata nel Taccuino corrente."
 
 msgid "Marks a to-do as done."
-msgstr "Segna un'attività come completata."
+msgstr "Segna un \"Cose-da-fare\" come completato."
 
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
-msgstr "La nota non è un'attività: \"%s\""
+msgstr "La nota non è un \"Cose-da-fare\": \"%s\""
 
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
@@ -191,8 +191,8 @@ msgid ""
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
 "Esporta i dati da Joplin nella directory selezionata. Come impostazione "
-"predefinita verrà esportato il database completo, inclusi blocchi note, "
-"note, tag e risorse."
+"predefinita verrà esportato il database completo, inclusi i taccuini, "
+"note, etichette e risorse."
 
 #, javascript-format
 msgid "Destination format: %s"
@@ -328,8 +328,8 @@ msgid ""
 "to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
 "Mostra solo gli elementi del tipo specificato. Possono essere `n` per le "
-"note, `t` per le attività o `nt` per note e attività. (es. `-tt` mostrerà "
-"solo le attività, mentre `-ttd` mostrerà sia note che attività."
+"note, `t` per le \"Cose-da-fare\" o `nt` per note e \"Cose-da-fare\". (es. `-tt` mostrerà "
+"solo le \"Cose-da-fare\", mentre `-ttd` mostrerà sia note che \"Cose-da-fare\"."
 
 msgid "Either \"text\" or \"json\""
 msgstr "Sia \"testo\" che \"json\""
@@ -339,7 +339,7 @@ msgid ""
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
 "Usa un formato lungo di lista. Il formato è ID, NOTE_COUNT (per i blocchi "
-"note), DATE, TODO_CHECKED (per le attività), TITLE"
+"note), DATE, TODO_CHECKED (per le \"Cose-da-fare\"), TITLE"
 
 msgid "Please select a notebook first."
 msgstr "Per favore prima seleziona un Taccuino."
@@ -354,7 +354,7 @@ msgid "Notes can only be created within a notebook."
 msgstr "Le note possono essere create all'interno del Taccuino."
 
 msgid "Creates a new to-do."
-msgstr "Crea una nuova attività."
+msgstr "Crea una nuovo \"Cose-da-fare\"."
 
 msgid "Moves the notes matching <note> to [notebook]."
 msgstr "Sposta le note che corrispondono a <note> in [notebook]."
@@ -404,7 +404,7 @@ msgstr ""
 "%s"
 
 msgid "Displays summary about the notes and notebooks."
-msgstr "Mostra un sommario delle note e dei blocchi note."
+msgstr "Mostra un sommario delle note e dei taccuini."
 
 msgid "Synchronises with remote storage."
 msgstr "Sincronizza con l'archivio remoto."
@@ -483,12 +483,12 @@ msgid ""
 "convert the to-do back to a regular note."
 msgstr ""
 "<todo-command> può essere \"toggle\" or \"clear\". Usa \"toggle\" per "
-"cambiare lo stato dell'attività tra completata/non completata (se l'oggetto "
-"è una normale nota, questa verrà convertita in un'attività). Usa \"clear\" "
-"convertire le attività in normali note."
+"modifica lo stato di \"Cose-da-fare\" in completato/non completato (se l'oggetto "
+"è una normale nota, questa verrà convertita in un \"Cose-da-fare\"). Usa \"clear\" "
+"convertire i \"Cose-da-fare\" in normali note."
 
 msgid "Marks a to-do as non-completed."
-msgstr "Marca un'attività come non completata."
+msgstr "Marca un \"Cose-da-fare\" come non completata."
 
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
@@ -591,10 +591,10 @@ msgid "New note"
 msgstr "Nuova nota"
 
 msgid "New to-do"
-msgstr "Nuova attività"
+msgstr "Nuovo \"Cose-da-fare\""
 
 msgid "New notebook"
-msgstr "Nuovo Taccuino"
+msgstr "Nuovo taccuino"
 
 msgid "Import"
 msgstr "Importa"
@@ -919,7 +919,7 @@ msgid "%s - Copy"
 msgstr "%s - Copia"
 
 msgid "Switch between note and to-do type"
-msgstr "Passa da un tipo di nota a un elenco di attività"
+msgstr "Converti nota in \"Cose-da-fare\" e viceversa"
 
 msgid "Copy Markdown link"
 msgstr "Copia il link Markdown"
@@ -1021,7 +1021,7 @@ msgstr "Osservare..."
 
 #, fuzzy
 msgid "to-do"
-msgstr "Nuova attività"
+msgstr "Nuovo \"Cose-da-fare\""
 
 msgid "note"
 msgstr "Nota"
@@ -1067,7 +1067,7 @@ msgid "Synchronise"
 msgstr "Sincronizza"
 
 msgid "Notebooks"
-msgstr "Blocchi note"
+msgstr "Taccuini"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1262,7 +1262,7 @@ msgid "Save geo-location with notes"
 msgstr "Salva geolocalizzazione con le note"
 
 msgid "When creating a new to-do:"
-msgstr "Quando crei una nuova attività:"
+msgstr "Quando crei un nuovo \"Cose-da-fare\":"
 
 msgid "Focus title"
 msgstr ""
@@ -1678,19 +1678,19 @@ msgstr "Benvenuto"
 #~ msgstr "Eliminare le note?"
 
 #~ msgid "Imports an Evernote notebook file (.enex file)."
-#~ msgstr "Importa un file blocco note di Evernote (.enex file)."
+#~ msgstr "Importa un file taccuino di Evernote (.enex file)."
 
 #~ msgid ""
 #~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
 #~ msgstr ""
-#~ "Il file \"%s\" sarà importato nel blocco note esistente \"%s\". "
+#~ "Il file \"%s\" sarà importato nel taccuino esistente \"%s\". "
 #~ "Continuare?"
 
 #~ msgid ""
 #~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
 #~ "it. Continue?"
 #~ msgstr ""
-#~ "Un nuovo blocco note \"%s\" sarà creato e al suo interno verrà importato "
+#~ "Un nuovo taccuino \"%s\" sarà creato e al suo interno verrà importato "
 #~ "il file \"%s\" . Continuare?"
 
 #~ msgid "Import Evernote notes"
@@ -1718,10 +1718,10 @@ msgstr "Benvenuto"
 #~ msgstr "Esci dall'applicazione."
 
 #~ msgid "Delete the currently selected note or notebook."
-#~ msgstr "Elimina la nota o il blocco note selezionato."
+#~ msgstr "Elimina la nota o il taccuino selezionato."
 
 #~ msgid "Set a to-do as completed / not completed"
-#~ msgstr "Imposta un'attività come completata / non completata"
+#~ msgstr "Imposta un \"Cose-da-fare\" come completato / non completato"
 
 #~ msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
 #~ msgstr ""
@@ -1741,10 +1741,10 @@ msgstr "Benvenuto"
 #~ msgstr "Crea ([M]ake) un nuovo [b]locco note"
 
 #~ msgid "Copy ([Y]ank) the [n]ote to a notebook."
-#~ msgstr "Copia ([Y]) la [n]ota in un blocco note."
+#~ msgstr "Copia ([Y]) la [n]ota in un taccuino."
 
 #~ msgid "Move the note to a notebook."
-#~ msgstr "Sposta la nota in un blocco note."
+#~ msgstr "Sposta la nota in un taccuino."
 
 #~ msgid ""
 #~ "The target to synchonise to. If synchronising with the file system, set "
@@ -1755,16 +1755,16 @@ msgstr "Benvenuto"
 #~ "destinazione."
 
 #~ msgid "To-do title:"
-#~ msgstr "Titolo dell'attività:"
+#~ msgstr "Titolo del \"Cose-da-fare\":"
 
 #~ msgid "\"%s\": \"%s\""
 #~ msgstr "\"%s\": \"%s\""
 
 #~ msgid "Delete notebook?"
-#~ msgstr "Eliminare il blocco note?"
+#~ msgstr "Eliminare il taccuino?"
 
 #~ msgid "Delete notebook \"%s\"?"
-#~ msgstr "Eliminare il blocco note \"%s\"?"
+#~ msgstr "Eliminare il taccuino \"%s\"?"
 
 #~ msgid "File system synchronisation target directory"
-#~ msgstr "Directory di destinazione della sincronizzazione nel file system"
+#~ msgstr "Directory di destinazione per la sincronizzazione nel file system"
