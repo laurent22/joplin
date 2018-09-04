@@ -238,14 +238,22 @@ class SideBarComponent extends React.Component {
 
 			const InteropService = require("lib/services/InteropService.js");
 
+			const exportMenu = new Menu();
+			const ioService = new InteropService();
+			const ioModules = ioService.modules();
+			for (let i = 0; i < ioModules.length; i++) {
+				const module = ioModules[i];
+				if (module.type !== 'exporter') continue;
+
+				exportMenu.append(new MenuItem({ label: module.fullLabel() , click: async () => {
+					await InteropServiceHelper.export(this.props.dispatch.bind(this), module, { sourceFolderIds: [itemId] });
+				}}));
+			}
+
 			menu.append(
 				new MenuItem({
 					label: _("Export"),
-					click: async () => {
-						const ioService = new InteropService();
-						const module = ioService.moduleByFormat_("exporter", "jex");
-						await InteropServiceHelper.export(this.props.dispatch.bind(this), module, { sourceFolderIds: [itemId] });
-					},
+					submenu: exportMenu,
 				})
 			);
 		}
