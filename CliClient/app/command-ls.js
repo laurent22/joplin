@@ -93,7 +93,7 @@ class Command extends BaseCommand {
 						row.push(await Folder.noteCount(item.id));
 					}
 
-					row.push(time.unixMsToLocalDateTime(item.user_updated_time));
+					row.push(time.formatMsToLocal(item.user_updated_time));
 				}
 
 				let title = item.title;

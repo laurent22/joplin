@@ -494,6 +494,9 @@ class BaseApplication {
 			setLocale(Setting.value('locale'));
 		}
 
+		time.setDateFormat(Setting.value('dateFormat'));
+		time.setTimeFormat(Setting.value('timeFormat'));
+
 		BaseService.logger_ = this.logger_;
 		EncryptionService.instance().setLogger(this.logger_);
 		BaseItem.encryptionService_ = EncryptionService.instance();
