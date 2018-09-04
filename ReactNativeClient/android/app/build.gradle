@@ -137,7 +137,7 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-file-viewer')
+	compile project(':react-native-file-viewer')
 	compile project(':react-native-securerandom')
 	compile project(':react-native-push-notification')
 	compile project(':react-native-fs')
@@ -151,6 +151,8 @@ dependencies {
 	compile project(':react-native-fetch-blob')
 	compile project(':react-native-document-picker')
 	compile project(':react-native-image-resizer')
+	compile project(':react-native-share-extension')
+	compile "com.facebook.react:react-native:+"
 }
 
 // Run this once to be able to run the application with BUCK

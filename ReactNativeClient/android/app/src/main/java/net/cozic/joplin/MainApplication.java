@@ -7,6 +7,7 @@ import com.vinzscam.reactnativefileviewer.RNFileViewerPackage;
 import net.rhogan.rnsecurerandom.RNSecureRandomPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.imagepicker.ImagePickerPackage;
+import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -17,6 +18,8 @@ import com.RNFetchBlob.RNFetchBlobPackage;
 import com.rnfs.RNFSPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import org.pgsqlite.SQLitePluginPackage;
+
+import com.alinz.parkerdan.shareextension.SharePackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -42,7 +45,8 @@ public class MainApplication extends Application implements ReactApplication {
 				new RNFetchBlobPackage(),
 				new RNFSPackage(),
 				new SQLitePluginPackage(),
-				new VectorIconsPackage()
+				new VectorIconsPackage(),
+				new SharePackage()
 			);
 		}
 	};
