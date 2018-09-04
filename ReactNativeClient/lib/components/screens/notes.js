@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { View, Button, Text } = require('react-native');
+const { AppState, View, Button, Text } = require('react-native');
 const { stateUtils } = require('lib/reducer.js');
 const { connect } = require('react-redux');
 const { reg } = require('lib/registry.js');
@@ -25,6 +25,13 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 	constructor() {
 		super();
+
+		this.onAppStateChange_ = async () => {
+			// Force an update to the notes list when app state changes
+			let newProps = Object.assign({}, this.props);
+			newProps.notesSource = '';
+			await this.refreshNotes(newProps);
+		}
 
 		this.sortButton_press = async () => {
 			const buttons = [];
@@ -67,6 +74,11 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 	async componentDidMount() {
 		await this.refreshNotes();
+		AppState.addEventListener('change', this.onAppStateChange_);
+	}
+
+	async componentWillUnmount() {
+		AppState.removeEventListener('change', this.onAppStateChange_);
 	}
 
 	async UNSAFE_componentWillReceiveProps(newProps) {

@@ -34,6 +34,7 @@ const shared = require('lib/components/shared/note-screen-shared.js');
 const ImagePicker = require('react-native-image-picker');
 const AlarmService = require('lib/services/AlarmService.js');
 const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog.js');
+const ShareExtension = require('react-native-share-extension').default;
 
 import FileViewer from 'react-native-file-viewer';
 
@@ -57,6 +58,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			alarmDialogShown: false,
 			heightBumpView:0,
 			noteTagDialogShown: false,
+			fromShare: false,
 		};
 
 		// iOS doesn't support multiline text fields properly so disable it
@@ -215,6 +217,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 	componentWillUnmount() {
 		BackButtonService.removeHandler(this.backHandler);
 		NavService.removeHandler(this.navHandler);
+
+		if (this.state.fromShare) {
+			ShareExtension.close();
+		}
 	}
 
 	title_changeText(text) {
@@ -675,6 +681,7 @@ const NoteScreen = connect(
 			itemType: state.selectedItemType,
 			folders: state.folders,
 			theme: state.settings.theme,
+			sharedData: state.sharedData,
 			showAdvancedOptions: state.settings.showAdvancedOptions,
 		};
 	}
