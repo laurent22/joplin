@@ -540,7 +540,7 @@ class AppComponent extends React.Component {
 			}
 
 		} catch(e) {
-			console.log('Error in ShareExtension.data', e);
+			reg.logger().error('Error in ShareExtension.data', e);
 		}
 
 		BackButtonService.initialize(this.backButtonHandler_);
