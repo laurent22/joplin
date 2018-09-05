@@ -109,7 +109,7 @@
     "promise": "^8.0.1",
     "query-string": "^5.1.1",
     "react": "^16.4.0",
-    "react-ace": "^5.10.0",
+    "react-ace": "^6.1.4",
     "react-datetime": "^2.14.0",
     "react-dom": "^16.4.0",
     "react-redux": "^5.0.7",
