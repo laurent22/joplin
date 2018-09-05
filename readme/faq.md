@@ -9,7 +9,7 @@ When changing the WebDAV URL, make sure that the new location has the same exact
 0. Make a backup of your Joplin data in case something goes wrong. Export to a JEX archive for example.
 1. Synchronise one last time all your data from a Joplin client (for example, from the desktop client)
 2. Close the Joplin client.
-3. On your WebDAV service, copy all the Joplin files from the old location to the new one.
+3. On your WebDAV service, copy all the Joplin files from the old location to the new one. Make sure to also copy the `.resource` directory as it contains your images and other attachments.
 4. Once it's done, open Joplin again and change the WebDAV URL.
 5. Synchronise to verify that everything is working.
 6. Do step 4 and 5 for all the other Joplin clients you need to sync.
