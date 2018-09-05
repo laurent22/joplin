@@ -1,5 +1,16 @@
 # Joplin changelog
 
+## [v1.0.105](https://github.com/laurent22/joplin/releases/tag/v1.0.105) - 2018-09-05T11:29:36Z
+
+- Resolves [#679](https://github.com/laurent22/joplin/issues/679): Drag a note on a tag to associate the tag.
+- Resolves [#427](https://github.com/laurent22/joplin/issues/427): Import source-url from Enex files
+- Resolves [#594](https://github.com/laurent22/joplin/issues/594): Enable support for SVG graphics
+- New: replace the resource icon (for internal links) with the Joplin icon (from ForkAwesome)
+- Update: Upgraded Katex to support new features
+- Update: Improve speed of loading notes that include many resources, and prevent UI from freezing
+- Fixes [#653](https://github.com/laurent22/joplin/issues/653): Don't detect horizontal rule as bullet list item
+- Fixes [#113](https://github.com/laurent22/joplin/issues/113): Upgraded Ace Editor to try to fix Korean input issue (to be confirmed)
+
 ## [v1.0.104](https://github.com/laurent22/joplin/releases/tag/v1.0.104) - 2018-06-28T20:25:36Z
 
 - New: Allow HTML in Markdown documents in a secure way.
