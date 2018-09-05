@@ -52,25 +52,25 @@ class Command extends BaseCommand {
 				let notes = await Tag.notes(tag.id);
 				notes.map((note) => {
 					let line = '';
-				if (options.long) {
-					line += BaseModel.shortId(note.id);
-					line += ' ';
-					line += time.formatMsToLocal(note.user_updated_time);
-					line += ' ';
-				}
-				if (note.is_todo) {
-					line += '[';
-					if (note.todo_completed) {
-					   line += 'X';
-					} else {
-						line += ' ';
-					}
-					line += '] ';
-				} else {
-					line += '    ';
-				}
-				line += note.title;
-				this.stdout(line);
+                    if (options.long) {
+                        line += BaseModel.shortId(note.id);
+                        line += ' ';
+                        line += time.formatMsToLocal(note.user_updated_time);
+                        line += ' ';
+                    }
+                    if (note.is_todo) {
+                        line += '[';
+                        if (note.todo_completed) {
+                           line += 'X';
+                        } else {
+                            line += ' ';
+                        }
+                        line += '] ';
+                    } else {
+                        line += '    ';
+                    }
+                    line += note.title;
+                    this.stdout(line);
 				});
 			} else {
 				let tags = await Tag.all();
