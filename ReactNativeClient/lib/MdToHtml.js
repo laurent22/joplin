@@ -567,6 +567,12 @@ class MdToHtml {
 				width: auto;
 				max-width: 100%;
 			}
+			.inline-code {
+				border: 1px solid #CBCBCB;
+				background-color: #eff0f1;
+				padding-right: .2em;
+				padding-left: .2em;
+			}
 
 			@media print {
 				body {
@@ -596,13 +602,10 @@ class MdToHtml {
 				pre {
 					white-space: pre-wrap;
 				}
-			}
 
-			.inline-code {
-				border: 1px solid #CBCBCB;
-				background-color: #eff0f1;
-				padding-right: .2em;
-				padding-left: .2em;
+				.code, .inline-code {
+					border: 1px solid #CBCBCB;
+				}
 			}
 		`;
 
