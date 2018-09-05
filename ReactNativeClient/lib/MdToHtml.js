@@ -259,7 +259,7 @@ class MdToHtml {
 				}
 
 				if (!rendererPlugin) {
-					output.push('<code>');
+					output.push('<code class="inline-code">');
 				}
 			}
 
@@ -596,6 +596,13 @@ class MdToHtml {
 				pre {
 					white-space: pre-wrap;
 				}
+			}
+
+			.inline-code {
+				border: 1px solid #CBCBCB;
+				background-color: #eff0f1;
+				padding-right: .2em;
+				padding-left: .2em;
 			}
 		`;
 
