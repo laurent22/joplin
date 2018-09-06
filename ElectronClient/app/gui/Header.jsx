@@ -35,6 +35,7 @@ class HeaderComponent extends React.Component {
 		this.search_onClear = (event) => {
 			this.setState({ searchQuery: '' });
 			triggerOnQuery('');
+			if (this.searchElement_) this.searchElement_.focus();
 		}
 	}
 
