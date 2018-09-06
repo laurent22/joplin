@@ -758,6 +758,10 @@ class Application extends BaseApplication {
 			AlarmService.garbageCollect();
 		}, 1000 * 60 * 60);
 
+		if (Setting.value('startMinimized') && Setting.value('showTrayIcon')) {
+			bridge().window().hide();
+		}
+
 		ResourceService.runInBackground();
 
 		if (Setting.value('env') === 'dev') {

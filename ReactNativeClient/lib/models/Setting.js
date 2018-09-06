@@ -93,6 +93,8 @@ class Setting extends BaseModel {
 				return platform === 'linux' ? _('Note: Does not work in all desktop environments.') : null;
 			}},
 
+			'startMinimized': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Start application minimised in the tray icon') },
+
 			'collapsedFolderIds': { value: [], type: Setting.TYPE_ARRAY, public: false },
 			
 			'encryption.enabled': { value: false, type: Setting.TYPE_BOOL, public: false },
