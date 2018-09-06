@@ -472,9 +472,6 @@ class MdToHtml {
 			}
 		}
 
-		// Support <br> tag to allow newlines inside table cells
-		renderedBody = renderedBody.replace(/&lt;br&gt;/gi, '<br>');
-
 		// https://necolas.github.io/normalize.css/
 		const normalizeCss = `
 			html{line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}
