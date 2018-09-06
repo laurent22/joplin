@@ -19,6 +19,4 @@ class FoldersScreenUtils {
 
 }
 
-module.exports = {
-	FoldersScreenUtils
-};
+module.exports = { FoldersScreenUtils };
