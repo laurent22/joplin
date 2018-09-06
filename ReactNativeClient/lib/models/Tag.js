@@ -3,6 +3,7 @@ const BaseItem = require('lib/models/BaseItem.js');
 const NoteTag = require('lib/models/NoteTag.js');
 const Note = require('lib/models/Note.js');
 const { time } = require('lib/time-utils.js');
+const { _ } = require('lib/locale');
 
 class Tag extends BaseItem {
 
@@ -153,6 +154,9 @@ class Tag extends BaseItem {
 		if (options && options.userSideValidation) {
 			if ('title' in o) {
 				o.title = o.title.trim().toLowerCase();
+
+				const existingTag = await Tag.loadByTitle(o.title);
+				if (existingTag && existingTag.id !== o.id) throw new Error(_('The tag "%s" already exists. Please choose a different name.', o.title));
 			}
 		}
 

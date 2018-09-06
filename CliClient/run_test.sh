@@ -28,6 +28,7 @@ npm test tests-build/HtmlToMd.js
 npm test tests-build/markdownUtils.js
 npm test tests-build/models_Folder.js
 npm test tests-build/models_Note.js
+npm test tests-build/models_Tag.js
 npm test tests-build/models_Setting.js
 npm test tests-build/services_InteropService.js
 npm test tests-build/services_ResourceService.js
