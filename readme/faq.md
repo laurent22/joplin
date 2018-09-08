@@ -14,6 +14,10 @@ When changing the WebDAV URL, make sure that the new location has the same exact
 5. Synchronise to verify that everything is working.
 6. Do step 4 and 5 for all the other Joplin clients you need to sync.
 
+# How can I easily enter Markdown tags in Android?
+
+You may use a special keyboard such as [Multiling O Keyboard](https://play.google.com/store/apps/details?id=kl.ime.oh&hl=en), which has shortcuts to create Markdown tags. [More information in this post](https://discourse.joplin.cozic.net/t/android-create-new-list-item-with-enter/585/2?u=laurent).
+
 # Is it possible to use real file and folder names in the sync target?
 
 Unfortunately it is not possible. Joplin synchronises with file systems using an open format however it does not mean the sync files are meant to be user-editable. The format is designed to be performant and reliable, not user friendly (it cannot be both), and that cannot be changed. Joplin sync directory is basically just a database.
