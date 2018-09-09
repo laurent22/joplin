@@ -434,10 +434,11 @@ msgstr "开始同步..."
 msgid "Cancelling... Please wait."
 msgstr "正在取消... 请稍后。"
 
+#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags."
+"`tag list` can be used to list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> 可以是 \"add\", \"remove\" 或者 \"list\" 从 [note] 中分配或删"
 "除 [tag]，或者列出与 [tag] 相关的笔记。`tag list` 命令将列出所有的标签。"
@@ -1228,6 +1229,9 @@ msgstr "显示托盘图标"
 msgid "Note: Does not work in all desktop environments."
 msgstr "注意：在所有的桌面环境中都不能工作。"
 
+msgid "Start application minimised in the tray icon"
+msgstr ""
+
 msgid "Global zoom percentage"
 msgstr "全局缩放比例"
 
@@ -1293,6 +1297,13 @@ msgstr "文件系统同步启用时的同步目录。见 `sync.target`。"
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
 msgid "Nextcloud username"
 msgstr "Nextcloud 用户名"
 
@@ -1324,6 +1335,10 @@ msgstr ""
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "无效设置数值：\"%s\"。可用值为：%s。"
+
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr ""
 
 msgid "Joplin Export File"
 msgstr "Joplin 输出文件"

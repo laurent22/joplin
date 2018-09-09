@@ -458,10 +458,11 @@ msgstr "Sinkronizazioa hasten..."
 msgid "Cancelling... Please wait."
 msgstr "Bertan behera uzten... itxaron, mesedez."
 
+#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags."
+"`tag list` can be used to list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> izan daiteke \"add\", \"remove\" edo \"list\" [oharra]tik "
 "[etiketa] esleitu edo kentzeko, edo [etiketa]rekin elkartutako oharrak "
@@ -1291,6 +1292,9 @@ msgstr ""
 msgid "Note: Does not work in all desktop environments."
 msgstr ""
 
+msgid "Start application minimised in the tray icon"
+msgstr ""
+
 #, fuzzy
 msgid "Global zoom percentage"
 msgstr "Ezarri aplikazioaren zoomaren ehunekoa"
@@ -1359,6 +1363,13 @@ msgstr ""
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
 msgid "Nextcloud username"
 msgstr "Nextcloud erabiltzaile-izena"
 
@@ -1393,6 +1404,10 @@ msgstr ""
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Balio aukera baliogabea: \"%s\". Litezkeen balioak: %s."
+
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr ""
 
 #, fuzzy
 msgid "Joplin Export File"

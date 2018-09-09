@@ -455,10 +455,11 @@ msgstr "Starter synkronisering."
 msgid "Cancelling... Please wait."
 msgstr "Annullerer...  Vent venligst."
 
+#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags."
+"`tag list` can be used to list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> (mærke-kommando) kan enten være \"add\" (tilføj), \"remove"
 "\" (slet) eller \"list\" (liste) for at tilføje eller fjerne mærke [tag] fra "
@@ -1271,6 +1272,9 @@ msgstr "Vis ikon på bundbjælke"
 msgid "Note: Does not work in all desktop environments."
 msgstr ""
 
+msgid "Start application minimised in the tray icon"
+msgstr ""
+
 msgid "Global zoom percentage"
 msgstr "Global zoom procent"
 
@@ -1341,6 +1345,13 @@ msgstr ""
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
 msgid "Nextcloud username"
 msgstr "Nextcloud brugernavn"
 
@@ -1372,6 +1383,10 @@ msgstr ""
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Ulovlig værdi: \"%s\".  Mulige valg er: %s."
+
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr ""
 
 msgid "Joplin Export File"
 msgstr "Joplin eksport fil"

@@ -457,10 +457,11 @@ msgstr "Iniciando sincronização..."
 msgid "Cancelling... Please wait."
 msgstr "Cancelando... Aguarde."
 
+#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags."
+"`tag list` can be used to list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> pode ser \"add\", \"remove\" ou \"list\" para atribuir ou "
 "remover [tag] de [nota], ou para listar as notas associadas a [tag]. O "
@@ -1278,6 +1279,9 @@ msgstr "Exibir tray icon"
 msgid "Note: Does not work in all desktop environments."
 msgstr "Nota: não funciona em todos os ambientes de desktop"
 
+msgid "Start application minimised in the tray icon"
+msgstr ""
+
 msgid "Global zoom percentage"
 msgstr "Porcentagem global do zoom"
 
@@ -1346,6 +1350,13 @@ msgstr ""
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
 msgid "Nextcloud username"
 msgstr "Usuário da Nextcloud"
 
@@ -1382,6 +1393,10 @@ msgstr "Ignorar erros de certificados TLS"
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Valor da opção inválida: \"%s\". Os valores possíveis são: %s."
+
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr ""
 
 msgid "Joplin Export File"
 msgstr "Arquivo de Exportação do Joplin"

@@ -447,10 +447,11 @@ msgstr "同期を開始中..."
 msgid "Cancelling... Please wait."
 msgstr "中止中...お待ちください。"
 
+#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags."
+"`tag list` can be used to list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> は\"add\", \"remove\", \"list\"のいずれかで、指定したノートから"
 "タグをつけたり外したり出来ます。`tag list`で、すべてのタグを見ることが出来ま"
@@ -1269,6 +1270,9 @@ msgstr ""
 msgid "Note: Does not work in all desktop environments."
 msgstr ""
 
+msgid "Start application minimised in the tray icon"
+msgstr ""
+
 msgid "Global zoom percentage"
 msgstr ""
 
@@ -1334,6 +1338,13 @@ msgstr ""
 msgid "Nextcloud WebDAV URL"
 msgstr ""
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
 msgid "Nextcloud username"
 msgstr ""
 
@@ -1365,6 +1376,10 @@ msgstr ""
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "無効な設定値: \"%s\"。有効な値は: %sです。"
+
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr ""
 
 #, fuzzy
 msgid "Joplin Export File"

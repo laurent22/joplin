@@ -451,10 +451,11 @@ msgstr "Zahajuji synchronizaci..."
 msgid "Cancelling... Please wait."
 msgstr "Zastavuji, chvíli strpení."
 
+#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags."
+"`tag list` can be used to list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> může být  \"add\", \"remove\" nebo \"list\" - přidat (add) či "
 "odebrat (remove) [tag] k [poznámce], nebo vypsat (list) seznam poznámek "
@@ -1262,6 +1263,9 @@ msgstr "Zobrazovat ikonu v panelu"
 msgid "Note: Does not work in all desktop environments."
 msgstr ""
 
+msgid "Start application minimised in the tray icon"
+msgstr ""
+
 msgid "Global zoom percentage"
 msgstr "Globální zoom"
 
@@ -1332,6 +1336,13 @@ msgstr ""
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
 msgid "Nextcloud username"
 msgstr "Nextcloud uživatelské jméno"
 
@@ -1363,6 +1374,10 @@ msgstr ""
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Neplatná hodnota: \"%s\". Přípustné hodnoty jsou: %s."
+
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr ""
 
 msgid "Joplin Export File"
 msgstr "Soubor Joplin Export"

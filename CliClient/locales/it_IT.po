@@ -2,7 +2,7 @@
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
@@ -191,8 +191,8 @@ msgid ""
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
 "Esporta i dati da Joplin nella directory selezionata. Come impostazione "
-"predefinita verrà esportato il database completo, inclusi i taccuini, "
-"note, etichette e risorse."
+"predefinita verrà esportato il database completo, inclusi i taccuini, note, "
+"etichette e risorse."
 
 #, javascript-format
 msgid "Destination format: %s"
@@ -328,8 +328,9 @@ msgid ""
 "to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
 "Mostra solo gli elementi del tipo specificato. Possono essere `n` per le "
-"note, `t` per le \"Cose-da-fare\" o `nt` per note e \"Cose-da-fare\". (es. `-tt` mostrerà "
-"solo le \"Cose-da-fare\", mentre `-ttd` mostrerà sia note che \"Cose-da-fare\"."
+"note, `t` per le \"Cose-da-fare\" o `nt` per note e \"Cose-da-fare\". (es. `-"
+"tt` mostrerà solo le \"Cose-da-fare\", mentre `-ttd` mostrerà sia note che "
+"\"Cose-da-fare\"."
 
 msgid "Either \"text\" or \"json\""
 msgstr "Sia \"testo\" che \"json\""
@@ -463,10 +464,11 @@ msgstr "Inizio sincronizzazione..."
 msgid "Cancelling... Please wait."
 msgstr "Cancellazione... Attendere per favore."
 
+#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags."
+"`tag list` can be used to list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> può essere \"add\", \"remove\" or \"list\" per assegnare o "
 "rimuovere [tag] da [note], o per mostrare le note associate a [tag]. Il "
@@ -483,9 +485,9 @@ msgid ""
 "convert the to-do back to a regular note."
 msgstr ""
 "<todo-command> può essere \"toggle\" or \"clear\". Usa \"toggle\" per "
-"modifica lo stato di \"Cose-da-fare\" in completato/non completato (se l'oggetto "
-"è una normale nota, questa verrà convertita in un \"Cose-da-fare\"). Usa \"clear\" "
-"convertire i \"Cose-da-fare\" in normali note."
+"modifica lo stato di \"Cose-da-fare\" in completato/non completato (se "
+"l'oggetto è una normale nota, questa verrà convertita in un \"Cose-da-fare"
+"\"). Usa \"clear\" convertire i \"Cose-da-fare\" in normali note."
 
 msgid "Marks a to-do as non-completed."
 msgstr "Marca un \"Cose-da-fare\" come non completata."
@@ -1279,6 +1281,9 @@ msgstr "Visualizza tray icon"
 msgid "Note: Does not work in all desktop environments."
 msgstr "Nota: non funziona in tutti gli ambienti desktop."
 
+msgid "Start application minimised in the tray icon"
+msgstr ""
+
 msgid "Global zoom percentage"
 msgstr "Percentuale di zoom globale"
 
@@ -1348,6 +1353,13 @@ msgstr ""
 msgid "Nextcloud WebDAV URL"
 msgstr "URL Nextcloud WebDAV"
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
 msgid "Nextcloud username"
 msgstr "Nome Utente Nextcloud"
 
@@ -1384,6 +1396,10 @@ msgstr "Ignora gli errori del certificato TLS"
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Oprione non valida: \"%s\". I valori possibili sono: %s."
+
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr ""
 
 msgid "Joplin Export File"
 msgstr "Esposta files di Joplin"
@@ -1683,15 +1699,14 @@ msgstr "Benvenuto"
 #~ msgid ""
 #~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
 #~ msgstr ""
-#~ "Il file \"%s\" sarà importato nel taccuino esistente \"%s\". "
-#~ "Continuare?"
+#~ "Il file \"%s\" sarà importato nel taccuino esistente \"%s\". Continuare?"
 
 #~ msgid ""
 #~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
 #~ "it. Continue?"
 #~ msgstr ""
-#~ "Un nuovo taccuino \"%s\" sarà creato e al suo interno verrà importato "
-#~ "il file \"%s\" . Continuare?"
+#~ "Un nuovo taccuino \"%s\" sarà creato e al suo interno verrà importato il "
+#~ "file \"%s\" . Continuare?"
 
 #~ msgid "Import Evernote notes"
 #~ msgstr "Importa le note da Evernote"

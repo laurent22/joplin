@@ -449,10 +449,11 @@ msgstr "동기화를 시작합니다..."
 msgid "Cancelling... Please wait."
 msgstr "취소하는 중입니다... 잠시만 기다리세요."
 
+#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags."
+"`tag list` can be used to list all the tags (use -l for long option)."
 msgstr ""
 "[note]로부터 [tag]를 지우거나 지정할 때, 아니면 [tag]와 관련된 노트의 목록을 "
 "확인할 때 <tag-command>로 \"add\", \"remove\" 또는 \"list\" 를 사용할 수 있습"
@@ -1257,6 +1258,9 @@ msgstr "트레이 아이콘 표시"
 msgid "Note: Does not work in all desktop environments."
 msgstr "참고사항: 모든 데스크탑 환경에서 작동하는 것은 아닙니다."
 
+msgid "Start application minimised in the tray icon"
+msgstr ""
+
 msgid "Global zoom percentage"
 msgstr "전체적 확대 비율"
 
@@ -1325,6 +1329,13 @@ msgstr ""
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
 msgid "Nextcloud username"
 msgstr "Nextcloud 사용자 이름"
 
@@ -1360,6 +1371,10 @@ msgstr "TLS 인증서 오류 무시"
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "올바르지 않은 옵션 값: \"%s\". 가능한 값은 다음과 같습니다: \"%s\"."
+
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr ""
 
 msgid "Joplin Export File"
 msgstr "조플린 내보내기 파일"
