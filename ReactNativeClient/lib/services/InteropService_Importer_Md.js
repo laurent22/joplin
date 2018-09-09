@@ -21,50 +21,65 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 	async exec(result) {
 		let parentFolderId = null;
 
-		const supportedFileExtension = this.metadata().fileExtensions;
+		const sourcePath = rtrimSlashes(this.sourcePath_);
 
 		const filePaths = [];
-		if (await shim.fsDriver().isDirectory(this.sourcePath_)) {
-			const stats = await shim.fsDriver().readDirStats(this.sourcePath_);
-			for (let i = 0; i < stats.length; i++) {
-				const stat = stats[i];
-				if (supportedFileExtension.indexOf(fileExtension(stat.path).toLowerCase()) >= 0) {
-					filePaths.push(this.sourcePath_ + '/' + stat.path);
-				}
-			}
-
+		if (await shim.fsDriver().isDirectory(sourcePath)) {
 			if (!this.options_.destinationFolder) {
-				const folderTitle = await Folder.findUniqueItemTitle(basename(rtrimSlashes(this.sourcePath_)));
+				const folderTitle = await Folder.findUniqueItemTitle(basename(sourcePath));
 				const folder = await Folder.save({ title: folderTitle });
 				parentFolderId = folder.id;
 			} else {
 				parentFolderId = this.options_.destinationFolder.id;
 			}
+
+			this.importDirectory(sourcePath, parentFolderId);
 		} else {
 			if (!this.options_.destinationFolder) throw new Error(_('Please specify the notebook where the notes should be imported to.'));
 			parentFolderId = this.options_.destinationFolder.id
-			filePaths.push(this.sourcePath_);
+			filePaths.push(sourcePath);
 		}
 
 		for (let i = 0; i < filePaths.length; i++) {
-			const path = filePaths[i];
-			const stat = await shim.fsDriver().stat(path);
-			if (!stat) throw new Error('Cannot read ' + path);
-			const title = filename(path);
-			const body = await shim.fsDriver().readFile(path);
-			const note = {
-				parent_id: parentFolderId,
-				title: title,
-				body: body,
-				updated_time: stat.mtime.getTime(),
-				created_time: stat.birthtime.getTime(),
-				user_updated_time: stat.mtime.getTime(),
-				user_created_time: stat.birthtime.getTime(),
-			};
-			await Note.save(note, { autoTimestamp: false });
+			await this.importFile(filePaths[i], parentFolderId);
 		}
 
 		return result;
+	}
+
+	async importDirectory(dirPath, parentFolderId) {
+		console.info('Import: ' + dirPath);
+
+		const supportedFileExtension = this.metadata().fileExtensions;
+		const stats = await shim.fsDriver().readDirStats(dirPath);
+		for (let i = 0; i < stats.length; i++) {
+			const stat = stats[i];
+
+			if (stat.isDirectory()) {
+				const folderTitle = await Folder.findUniqueItemTitle(basename(stat.path));
+				const folder = await Folder.save({ title: folderTitle, parent_id: parentFolderId });
+				this.importDirectory(dirPath + '/' + basename(stat.path), folder.id);
+			} else if (supportedFileExtension.indexOf(fileExtension(stat.path).toLowerCase()) >= 0) {
+				this.importFile(dirPath + '/' + stat.path, parentFolderId);
+			}
+		}
+	}
+
+	async importFile(filePath, parentFolderId) {
+		const stat = await shim.fsDriver().stat(filePath);
+		if (!stat) throw new Error('Cannot read ' + filePath);
+		const title = filename(filePath);
+		const body = await shim.fsDriver().readFile(filePath);
+		const note = {
+			parent_id: parentFolderId,
+			title: title,
+			body: body,
+			updated_time: stat.mtime.getTime(),
+			created_time: stat.birthtime.getTime(),
+			user_updated_time: stat.mtime.getTime(),
+			user_created_time: stat.birthtime.getTime(),
+		};
+		await Note.save(note, { autoTimestamp: false });
 	}
 
 }
