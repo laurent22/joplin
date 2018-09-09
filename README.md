@@ -26,6 +26,17 @@ Linux          | <a href='https://github.com/laurent22/joplin/releases/download/
 
 The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
 
+### Ubuntu/Debian (Gnome Shell)
+
+``` sh
+rm -r ~/.joplin/ ~/.local/share/applications/joplin.desktop
+mkdir -p ~/.joplin/
+wget -O ~/.joplin/Joplin-1.0.106-x86_64.AppImage https://github.com/laurent22/joplin/releases/download/v1.0.106/Joplin-1.0.106-x86_64.AppImage 
+chmod +x ~/.joplin/Joplin-1.0.106-x86_64.AppImage
+wget -O ~/.joplin/Icon512.png https://joplin.cozic.net/images/Icon512.png
+echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nExec=/home/$USER/.joplin/Joplin-1.0.106-x86_64.AppImage\nIcon=/home/$USER/.joplin/Icon512.png\nType=Application\nCategories=Application;" >> ~/.local/share/applications/joplin.desktop
+```
+
 ## Mobile applications
 
 Operating System | Download | Alt. Download
