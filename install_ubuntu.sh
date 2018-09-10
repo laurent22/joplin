@@ -1,3 +1,5 @@
+#!/bin/bash
+set -e
 version=$(curl --silent "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": "v\K.*?(?=")')
 rm -r ~/.joplin/ ~/.local/share/applications/joplin.desktop
 mkdir -p ~/.joplin/
