@@ -571,6 +571,15 @@ class MdToHtml {
 				padding-left: .2em;
 			}
 
+			/* 
+			This is to fix https://github.com/laurent22/joplin/issues/764
+			Without this, the tag attached to an equation float at an absoluate position of the page,
+			instead of a position relative to the container.
+			*/
+			.katex-display>.katex>.katex-html {
+				position: relative;
+			}
+
 			@media print {
 				body {
 					height: auto !important;
