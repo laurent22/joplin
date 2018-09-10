@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 version=$(curl --silent "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": "v\K.*?(?=")')
-rm -r ~/.joplin/ ~/.local/share/applications/joplin.desktop
+rm ~/.joplin/*.AppImage ~/.local/share/applications/joplin.desktop
 mkdir -p ~/.joplin/
 wget -O ~/.joplin/Joplin-$version-x86_64.AppImage https://github.com/laurent22/joplin/releases/download/v$version/Joplin-$version-x86_64.AppImage 
 chmod +x ~/.joplin/Joplin-$version-x86_64.AppImage
