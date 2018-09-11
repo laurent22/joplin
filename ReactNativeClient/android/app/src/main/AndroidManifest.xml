@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
+	android:installLocation="auto"
 	package="net.cozic.joplin"
 	android:versionCode="2"
 	android:versionName="0.8.0">
