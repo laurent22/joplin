@@ -13,7 +13,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.8\n"
+"X-Generator: Poedit 2.1.1\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "移除相关笔记的标签后才可删除此标签。"
@@ -247,7 +249,7 @@ msgstr "按 ESC 键退出命令行模式"
 
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
-msgstr "输入 `help keymap` 来获取完整的键盘快捷键列表。"
+msgstr "输入 `help keymap` 来获取完整的键盘快捷键列表"
 
 msgid "Imports data into Joplin."
 msgstr "导入数据至 Jolin。"
@@ -466,7 +468,7 @@ msgid ""
 msgstr "切换至 [notebook] - 所有进一步处理将在此笔记本中进行。"
 
 msgid "Displays version information"
-msgstr "显示版本信息。"
+msgstr "显示版本信息"
 
 #, javascript-format
 msgid "%s %s (%s)"
@@ -684,7 +686,7 @@ msgstr "状态：从端口 %d 开始"
 
 #, javascript-format
 msgid "Status: %s"
-msgstr "状态：\"%s\"。"
+msgstr "状态：%s"
 
 msgid "Disable Web Clipper Service"
 msgstr "禁用网页剪辑服务"
@@ -779,7 +781,7 @@ msgid "Updated"
 msgstr "更新日期"
 
 msgid "Password"
-msgstr "密码："
+msgstr "密码"
 
 msgid "Password OK"
 msgstr "密码可用"
@@ -841,7 +843,7 @@ msgid "Rename notebook:"
 msgstr "重命名笔记本："
 
 msgid "Rename tag:"
-msgstr "重命名标签"
+msgstr "重命名标签："
 
 msgid "Set alarm:"
 msgstr "设置提醒："
@@ -868,11 +870,11 @@ msgid "Add or remove tags"
 msgstr "添加或删除标签"
 
 msgid "Duplicate"
-msgstr ""
+msgstr "重复的"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s - Copy"
-msgstr "复制"
+msgstr "%s - 副本"
 
 msgid "Switch between note and to-do type"
 msgstr "在笔记和待办事项类型之间切换"
@@ -926,7 +928,7 @@ msgid "emphasized text"
 msgstr "强调文本"
 
 msgid "List item"
-msgstr ""
+msgstr "项目列表"
 
 msgid "Insert Hyperlink"
 msgstr "插入超链接"
@@ -942,7 +944,7 @@ msgstr "设置提醒"
 
 #, javascript-format
 msgid "In: %s"
-msgstr "In: %s"
+msgstr "在: %s"
 
 msgid "Hyperlink"
 msgstr "超链接"
@@ -966,11 +968,10 @@ msgid "Horizontal Rule"
 msgstr "水平线"
 
 msgid "Click to stop external editing"
-msgstr ""
+msgstr "点击以停止外部编辑"
 
-#, fuzzy
 msgid "Watching..."
-msgstr "正在取消..."
+msgstr "正在监控变化..."
 
 msgid "to-do"
 msgstr "待办事项"
@@ -989,10 +990,10 @@ msgid "Clear"
 msgstr "清除"
 
 msgid "OneDrive Login"
-msgstr "登陆 OneDrive"
+msgstr "登录 OneDrive"
 
 msgid "Dropbox Login"
-msgstr "登陆 Dropbox"
+msgstr "登录 Dropbox"
 
 msgid "Options"
 msgstr "选项"
@@ -1056,7 +1057,7 @@ msgstr "未知日志级别：%s"
 
 #, javascript-format
 msgid "Unknown level ID: %s"
-msgstr "未知 level ID：%s"
+msgstr "未知的级别 ID：%s"
 
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
@@ -1133,13 +1134,13 @@ msgstr "正在进行"
 
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
-msgstr "同步正在进行中。状态：\"%s\""
+msgstr "同步正在进行中。状态：%s"
 
 msgid "Encrypted"
 msgstr "已加密"
 
 msgid "Encrypted items cannot be modified"
-msgstr "无法修改加密项目。"
+msgstr "无法修改已加密项目"
 
 msgid "Conflicts"
 msgstr "冲突文件"
@@ -1206,7 +1207,7 @@ msgid "Sort notes by"
 msgstr "排序笔记"
 
 msgid "Reverse sort order"
-msgstr "反转排序顺序。"
+msgstr "反转排序顺序"
 
 msgid "Save geo-location with notes"
 msgstr "保存笔记时同时保存地理定位信息"
@@ -1230,7 +1231,7 @@ msgid "Note: Does not work in all desktop environments."
 msgstr "注意：在所有的桌面环境中都不能工作。"
 
 msgid "Start application minimised in the tray icon"
-msgstr ""
+msgstr "启动应用程序时在托盘中最小化"
 
 msgid "Global zoom percentage"
 msgstr "全局缩放比例"
@@ -1253,25 +1254,25 @@ msgstr "同步间隔"
 
 #, javascript-format
 msgid "%d minutes"
-msgstr "%d分"
+msgstr "%d 分钟"
 
 #, javascript-format
 msgid "%d hour"
-msgstr "%d小时"
+msgstr "%d 小时"
 
 #, javascript-format
 msgid "%d hours"
-msgstr "%d小时"
+msgstr "%d 小时"
 
-#, fuzzy
 msgid "Text editor command"
-msgstr "文本编辑器"
+msgstr "文本编辑器命令"
 
-#, fuzzy
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
-msgstr "此编辑器将会被用于打开笔记。若未提供将自动检测默认编辑器。"
+msgstr ""
+"此文本编辑器命令（可能包括参数）将会被用于打开笔记。若未提供将尝试自动检测默"
+"认编辑器。"
 
 msgid "Show advanced options"
 msgstr "显示高级选项"
@@ -1295,7 +1296,7 @@ msgid ""
 msgstr "文件系统同步启用时的同步目录。见 `sync.target`。"
 
 msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV 链接"
 
 #, javascript-format
 msgid ""
@@ -1303,6 +1304,8 @@ msgid ""
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
 msgstr ""
+"注意：如果您更改此位置，请确保在同步之前将所有内容复制到该位置，否则将删除所"
+"有文件！ 有关详细信息，请参阅常见问题解答（FAQ）：%s"
 
 msgid "Nextcloud username"
 msgstr "Nextcloud 用户名"
@@ -1311,7 +1314,7 @@ msgid "Nextcloud password"
 msgstr "Nextcloud 密码"
 
 msgid "WebDAV URL"
-msgstr "WebDAV URL"
+msgstr "WebDAV 链接"
 
 msgid "WebDAV username"
 msgstr "WebDAV 用户名"
@@ -1320,7 +1323,7 @@ msgid "WebDAV password"
 msgstr "WebDAV 密码"
 
 msgid "Custom TLS certificates"
-msgstr ""
+msgstr "自定义 TLS 证书"
 
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
@@ -1328,9 +1331,12 @@ msgid ""
 "pem. Note that if you make changes to the TLS settings, you must save your "
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
+"以逗号分隔的路径列表，可以是包含证书的目录，也可以是单独的证书路径。 例如：/"
+"my/cert_dir,/other/custom.pem。 请注意，如果更改 TLS 设置，则必须先保存更改，"
+"然后再点击『检查同步配置』。"
 
 msgid "Ignore TLS certificate errors"
-msgstr ""
+msgstr "忽略 TLS 证书的错误"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1338,16 +1344,16 @@ msgstr "无效设置数值：\"%s\"。可用值为：%s。"
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr ""
+msgstr "标签“%s”已经存在。请选择一个不一样的名字。"
 
 msgid "Joplin Export File"
-msgstr "Joplin 输出文件"
+msgstr "Joplin 导出文件"
 
 msgid "Markdown"
 msgstr "Markdown"
 
 msgid "Joplin Export Directory"
-msgstr "Joplin 输出文件目录"
+msgstr "Joplin 导出目录"
 
 msgid "Evernote Export File"
 msgstr "Evernote 导出文件"
@@ -1357,7 +1363,7 @@ msgstr "文件目录"
 
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
-msgstr "无法加载 \"%s\" 模块读取 \"%s\" 格式"
+msgstr "无法加载 \"%s\" 模块以读取 \"%s\" 格式"
 
 #, javascript-format
 msgid "Please specify import format for %s"
@@ -1376,7 +1382,7 @@ msgid "Please specify the notebook where the notes should be imported to."
 msgstr "请指定导入笔记的目标笔记本。"
 
 msgid "Items that cannot be synchronised"
-msgstr "项目无法被同步。"
+msgstr "无法同步项目"
 
 #, javascript-format
 msgid "%s (%s): %s"
@@ -1452,7 +1458,7 @@ msgid "Press to set the decryption password."
 msgstr "按键将设置解密密码。"
 
 msgid "Save alarm"
-msgstr "设置提醒"
+msgstr "保存提醒"
 
 msgid "Select date"
 msgstr "选择日期"
@@ -1477,8 +1483,8 @@ msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
-"为了正确地工作，应用需要以下权限。请在你的手机设置（应用 > Joplin > 权限）中"
-"启用它们。"
+"为了正常的使用，应用需要以下权限。请在你的手机设置（应用 > Joplin > 权限）中"
+"启用它们"
 
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
@@ -1495,7 +1501,7 @@ msgid "Joplin website"
 msgstr "Joplin 官网"
 
 msgid "Login with Dropbox"
-msgstr "通过 Dropbox 登陆"
+msgstr "通过 Dropbox 登录"
 
 #, javascript-format
 msgid "Master Key %s"
@@ -1576,7 +1582,7 @@ msgid "Delete notebook"
 msgstr "删除笔记本"
 
 msgid "Login with OneDrive"
-msgstr "通过 OneDrive 登陆"
+msgstr "通过 OneDrive 登录"
 
 msgid "Search"
 msgstr "搜索"
