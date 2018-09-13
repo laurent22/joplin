@@ -220,10 +220,19 @@ class Folder extends BaseItem {
 			}
 		}
 
-		if (options.duplicateCheck === true && o.title) {
-			let existingFolder = await Folder.loadByTitle(o.title);
-			if (existingFolder && existingFolder.id != o.id) throw new Error(_('A notebook with this title already exists: "%s"', o.title));
-		}
+		// We allow folders with duplicate titles so that folders with the same title can exist under different parent folder. For example:
+		//
+		// PHP
+		//     Code samples
+		//     Doc
+		// Java
+		//     My project
+		//     Doc
+
+		// if (options.duplicateCheck === true && o.title) {
+		// 	let existingFolder = await Folder.loadByTitle(o.title);
+		// 	if (existingFolder && existingFolder.id != o.id) throw new Error(_('A notebook with this title already exists: "%s"', o.title));
+		// }
 
 		if (options.reservedTitleCheck === true && o.title) {
 			if (o.title == Folder.conflictFolderTitle()) throw new Error(_('Notebooks cannot be named "%s", which is a reserved title.', o.title));
