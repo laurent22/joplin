@@ -44,7 +44,13 @@ class ExternalEditWatcher {
 				this.logger().debug('ExternalEditWatcher: Event: ' + event + ': ' + path);
 
 				if (event === 'unlink') {
-					this.watcher_.unwatch(path);
+					// File are unwatched in the stopWatching functions below. When we receive an unlink event
+					// here it might be that the file is quickly moved to a different location and replaced by
+					// another file with the same name, as it happens with emacs. So because of this
+					// we keep watching anyway.
+					// See: https://github.com/laurent22/joplin/issues/710#issuecomment-420997167
+					
+					// this.watcher_.unwatch(path);
 				} else if (event === 'change') {
 					const id = Note.pathToId(path);
 
