@@ -1,0 +1,1543 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Laurent Cozic
+# This file is distributed under the same license as the Joplin-CLI package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Joplin-CLI 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"X-Generator: Poedit 2.1.1\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n==0 || (n!=1 && n%100>=1 && n"
+"%100<=19) ? 1 : 2);\n"
+"Language: ro\n"
+
+msgid "To delete a tag, untag the associated notes."
+msgstr ""
+"Pentru a șterge o eticheta, ștergeți eticheta respectivă din cadrul "
+"notițelor aferente."
+
+msgid "Please select the note or notebook to be deleted first."
+msgstr ""
+
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "Apăsați Ctrl+D ori scrieți \"exit\" pentru a ieși din aplicație"
+
+#, javascript-format
+msgid "More than one item match \"%s\". Please narrow down your query."
+msgstr ""
+
+msgid "No notebook selected."
+msgstr "Niciun caiet de notițe nu a fost selectat."
+
+msgid "No notebook has been specified."
+msgstr "Niciun caiet de notițe nu a fost specificat."
+
+msgid "Y"
+msgstr "Y"
+
+msgid "n"
+msgstr "n"
+
+msgid "N"
+msgstr "N"
+
+msgid "y"
+msgstr "y"
+
+msgid "Cancelling background synchronisation... Please wait."
+msgstr ""
+
+#, javascript-format
+msgid "No such command: %s"
+msgstr "Nu există o asemenea comandă: %s"
+
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "Comanda \"%s\" este disponibilă doar în modul GUI"
+
+msgid "Cannot change encrypted item"
+msgstr "Nu se poate schimba itemul criptat"
+
+#, javascript-format
+msgid "Missing required argument: %s"
+msgstr "Lipsește argumentul necesar: %s"
+
+#, javascript-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+msgid "Your choice: "
+msgstr "Alegerea dumneavoastră: "
+
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr "Răspuns invalid: %s"
+
+msgid "Attaches the given file to the note."
+msgstr "Atașează fișierul în notiță."
+
+#, javascript-format
+msgid "Cannot find \"%s\"."
+msgstr "Nu poate fi găsit \"%s\"."
+
+msgid "Displays the given note."
+msgstr ""
+
+msgid "Displays the complete information about note."
+msgstr "Afișează informațiile complete despre notiță."
+
+msgid ""
+"Gets or sets a config value. If [value] is not provided, it will show the "
+"value of [name]. If neither [name] nor [value] is provided, it will list the "
+"current configuration."
+msgstr ""
+
+msgid "Also displays unset and hidden config variables."
+msgstr ""
+
+#, javascript-format
+msgid "%s = %s (%s)"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s = %s"
+msgstr "%s = %s"
+
+msgid ""
+"Duplicates the notes matching <note> to [notebook]. If no notebook is "
+"specified the note is duplicated in the current notebook."
+msgstr ""
+
+msgid "Marks a to-do as done."
+msgstr "Marcați o sarcină ca fiind terminată."
+
+#, javascript-format
+msgid "Note is not a to-do: \"%s\""
+msgstr "Notița nu este o sarcină: \"%s\""
+
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status` and `target-status`."
+msgstr ""
+
+msgid "Enter master password:"
+msgstr ""
+
+msgid "Operation cancelled"
+msgstr "Operațiunea a fost amânată"
+
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+
+msgid "Completed decryption."
+msgstr "Decriptare completă."
+
+msgid "Enabled"
+msgstr "Activat"
+
+msgid "Disabled"
+msgstr "Dezactivat"
+
+#, javascript-format
+msgid "Encryption is: %s"
+msgstr "Criptarea este: %s"
+
+msgid "Edit note."
+msgstr "Editează notiță."
+
+msgid ""
+"No text editor is defined. Please set it using `config editor <editor-path>`"
+msgstr ""
+
+msgid "No active notebook."
+msgstr "Niciun caiet de notițe activ."
+
+#, javascript-format
+msgid "Note does not exist: \"%s\". Create it?"
+msgstr "Notița nu există: \"%s\". Doriți să o creați?"
+
+msgid "Starting to edit note. Close the editor to get back to the prompt."
+msgstr ""
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Eroare deschidere notiță în editor: %s"
+
+msgid "Note has been saved."
+msgstr "Notița a fost salvată."
+
+msgid "Exits the application."
+msgstr ""
+
+msgid ""
+"Exports Joplin data to the given path. By default, it will export the "
+"complete database including notebooks, notes, tags and resources."
+msgstr ""
+
+#, javascript-format
+msgid "Destination format: %s"
+msgstr "Format la destinație: %s"
+
+msgid "Exports only the given note."
+msgstr ""
+
+msgid "Exports only the given notebook."
+msgstr ""
+
+msgid "Displays a geolocation URL for the note."
+msgstr ""
+
+msgid "Displays usage information."
+msgstr "Afișați informațiile de utilizare."
+
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr ""
+
+msgid "Shortcuts are not available in CLI mode."
+msgstr "Scurtăturile nu sunt disponibile în modul CLI."
+
+msgid ""
+"Type `help [command]` for more information about a command; or type `help "
+"all` for the complete usage information."
+msgstr ""
+
+msgid "The possible commands are:"
+msgstr "Comenzile posibile sunt:"
+
+msgid ""
+"In any command, a note or notebook can be referred to by title or ID, or "
+"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
+"note or notebook. `$c` can be used to refer to the currently selected item."
+msgstr ""
+
+msgid "To move from one pane to another, press Tab or Shift+Tab."
+msgstr "Pentru a vă muta dintr-un panou în altul, apăsați Tab ori Shift+Tab."
+
+msgid ""
+"Use the arrows and page up/down to scroll the lists and text areas "
+"(including this console)."
+msgstr ""
+
+msgid "To maximise/minimise the console, press \"tc\"."
+msgstr "Pentru a maximiza/minimiza consola, apăsați \"tc\"."
+
+msgid "To enter command line mode, press \":\""
+msgstr "Pentru a intra în linia de comandă, apăsați \":\""
+
+msgid "To exit command line mode, press ESCAPE"
+msgstr ""
+
+msgid ""
+"For the list of keyboard shortcuts and config options, type `help keymap`"
+msgstr ""
+
+msgid "Imports data into Joplin."
+msgstr "Importați date în Joplin."
+
+#, javascript-format
+msgid "Source format: %s"
+msgstr "Formatul sursei: %s"
+
+msgid "Do not ask for confirmation."
+msgstr ""
+
+#, javascript-format
+msgid "Found: %d."
+msgstr "Găsit: %d."
+
+#, javascript-format
+msgid "Created: %d."
+msgstr "Creat: %d."
+
+#, javascript-format
+msgid "Updated: %d."
+msgstr "Actualizat: %d."
+
+#, javascript-format
+msgid "Skipped: %d."
+msgstr "Sărite: %d."
+
+#, javascript-format
+msgid "Resources: %d."
+msgstr "Resurse: %d."
+
+#, javascript-format
+msgid "Tagged: %d."
+msgstr "Etichetate: %d."
+
+msgid "Importing notes..."
+msgstr "Se importă notițe..."
+
+#, javascript-format
+msgid "The notes have been imported: %s"
+msgstr "Notițele au fost importante: %s"
+
+msgid ""
+"Displays the notes in the current notebook. Use `ls /` to display the list "
+"of notebooks."
+msgstr ""
+
+msgid "Displays only the first top <num> notes."
+msgstr ""
+
+msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
+msgstr ""
+
+msgid "Reverses the sorting order."
+msgstr "Inversează ordinea sortării."
+
+msgid ""
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
+"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
+"to-dos, while `-ttd` would display notes and to-dos."
+msgstr ""
+
+msgid "Either \"text\" or \"json\""
+msgstr "Fie \"text\", fie \"json\""
+
+msgid ""
+"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
+"TODO_CHECKED (for to-dos), TITLE"
+msgstr ""
+
+msgid "Please select a notebook first."
+msgstr "Selectați prima dată un caiet de notițe."
+
+msgid "Creates a new notebook."
+msgstr "Creați caiet de notițe."
+
+msgid "Creates a new note."
+msgstr "Creați o nouă notiță."
+
+msgid "Notes can only be created within a notebook."
+msgstr "Notițele pot fi create numai în cadrul unui caiet de notițe."
+
+msgid "Creates a new to-do."
+msgstr "Creează o nouă sarcină."
+
+msgid "Moves the notes matching <note> to [notebook]."
+msgstr ""
+
+msgid "Renames the given <item> (note or notebook) to <name>."
+msgstr ""
+
+msgid "Deletes the given notebook."
+msgstr ""
+
+msgid "Deletes the notebook without asking for confirmation."
+msgstr "Șterge caietele de notițe fără a mai cere confirmarea."
+
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
+msgstr ""
+
+msgid "Deletes the notes matching <note-pattern>."
+msgstr ""
+
+msgid "Deletes the notes without asking for confirmation."
+msgstr ""
+
+#, javascript-format
+msgid "%d notes match this pattern. Delete them?"
+msgstr ""
+
+msgid "Delete note?"
+msgstr "Ștergeți notița?"
+
+msgid "Searches for the given <pattern> in all the notes."
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+msgstr ""
+
+msgid "Displays summary about the notes and notebooks."
+msgstr ""
+
+msgid "Synchronises with remote storage."
+msgstr ""
+
+msgid "Sync to provided target (defaults to sync.target config value)"
+msgstr ""
+
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr ""
+
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+"Pasul 1: Deschideți adresa URL în navigatorul dumneavoastră web pentru a "
+"autoriza aplicația:"
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "Pasul 2: Introduceți codul oferit de Dropbox:"
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+
+msgid "Synchronisation is already in progress."
+msgstr "Sincronizarea este deja în progres."
+
+#, javascript-format
+msgid ""
+"Lock file is already being hold. If you know that no synchronisation is "
+"taking place, you may delete the lock file at \"%s\" and resume the "
+"operation."
+msgstr ""
+
+#, javascript-format
+msgid "Synchronisation target: %s (%s)"
+msgstr ""
+
+msgid "Cannot initialize synchroniser."
+msgstr "Nu se poate inițializa sincronizatorul."
+
+msgid "Starting synchronisation..."
+msgstr "Se începe sincronizarea..."
+
+msgid "Cancelling... Please wait."
+msgstr "Se anulează... Vă rugăm să așteptați."
+
+msgid ""
+"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
+"[tag] from [note], or to list the notes associated with [tag]. The command "
+"`tag list` can be used to list all the tags (use -l for long option)."
+msgstr ""
+
+#, javascript-format
+msgid "Invalid command: \"%s\""
+msgstr "Comandă invalidă: \"%s\""
+
+msgid ""
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
+"toggle the given to-do between completed and uncompleted state (If the "
+"target is a regular note it will be converted to a to-do). Use \"clear\" to "
+"convert the to-do back to a regular note."
+msgstr ""
+
+msgid "Marks a to-do as non-completed."
+msgstr "Marcați o sarcină ca fiind necompletă."
+
+msgid ""
+"Switches to [notebook] - all further operations will happen within this "
+"notebook."
+msgstr ""
+
+msgid "Displays version information"
+msgstr "Afișează informații despre versiune"
+
+#, javascript-format
+msgid "%s %s (%s)"
+msgstr "%s %s (%s)"
+
+msgid "Enum"
+msgstr "Enum"
+
+#, javascript-format
+msgid "Type: %s."
+msgstr "Tip: %s."
+
+#, javascript-format
+msgid "Possible values: %s."
+msgstr "Valori posibile: %s."
+
+#, javascript-format
+msgid "Default: %s"
+msgstr "Modul implicit: %s"
+
+msgid "Possible keys/values:"
+msgstr "Posibile chei/valori:"
+
+msgid "Type `joplin help` for usage information."
+msgstr "Tastați `joplin help` pentru informații de utilizare."
+
+msgid "Fatal error:"
+msgstr "Eroare fatală:"
+
+msgid ""
+"The application has been authorised - you may now close this browser tab."
+msgstr ""
+
+msgid "The application has been successfully authorised."
+msgstr ""
+
+msgid ""
+"Please open the following URL in your browser to authenticate the "
+"application. The application will create a directory in \"Apps/Joplin\" and "
+"will only read and write files in this directory. It will have no access to "
+"any files outside this directory nor to any other personal data. No data "
+"will be shared with any third party."
+msgstr ""
+
+msgid "Search:"
+msgstr "Căutați:"
+
+msgid ""
+"Welcome to Joplin!\n"
+"\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
+"for usage information.\n"
+"\n"
+"For example, to create a notebook press `mb`; to create a note press `mn`."
+msgstr ""
+"Bine ați venit în Joplin!\n"
+"\n"
+"Tastați `:help shortcuts` pentru afișarea listei scurtăturilor for ori doar "
+"`:help` pentru informații de utilizare.\n"
+"\n"
+"De exemplu, creați un caiet de notițe apăsând 'mb'; pentru a crea o notă "
+"apăsați 'mn'."
+
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr "Se exportă către \"%s\" în format \"%s\". Vă rugăm să așteotați..."
+
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
+
+msgid "PDF File"
+msgstr "Fișier PDF"
+
+msgid "File"
+msgstr "Fișier"
+
+msgid "New note"
+msgstr "Adăugați o nouă notiță"
+
+msgid "New to-do"
+msgstr "Adăugați o nouă sarcină"
+
+msgid "New notebook"
+msgstr "Adăugați un nou caiet de notițe"
+
+msgid "Import"
+msgstr "Importați"
+
+msgid "Export"
+msgstr "Exportați"
+
+msgid "Print"
+msgstr "Printați"
+
+#, javascript-format
+msgid "Hide %s"
+msgstr "Ascundeți %s"
+
+msgid "Quit"
+msgstr "Ieșiți"
+
+msgid "Edit"
+msgstr "Editați"
+
+msgid "Copy"
+msgstr "Copiați"
+
+msgid "Cut"
+msgstr "Tăiați"
+
+msgid "Paste"
+msgstr "Lipește"
+
+msgid "Bold"
+msgstr ""
+
+msgid "Italic"
+msgstr ""
+
+msgid "Insert Date Time"
+msgstr ""
+
+msgid "Edit in external editor"
+msgstr "Editați într-un editor extern"
+
+msgid "Search in all the notes"
+msgstr "Căutați în toate notițele"
+
+msgid "View"
+msgstr "Vizualizați"
+
+msgid "Toggle sidebar"
+msgstr ""
+
+msgid "Toggle editor layout"
+msgstr ""
+
+msgid "Tools"
+msgstr "Unelte"
+
+msgid "Synchronisation status"
+msgstr "Statusul sincronizării"
+
+msgid "Web clipper options"
+msgstr ""
+
+msgid "Encryption options"
+msgstr "Opțiuni de criptare"
+
+msgid "General Options"
+msgstr "Opțiuni Generale"
+
+msgid "Help"
+msgstr "Ajutor"
+
+msgid "Website and documentation"
+msgstr "Website și documentație"
+
+msgid "Make a donation"
+msgstr "Faceți o donație"
+
+msgid "Check for updates..."
+msgstr "Verificați actualizările..."
+
+msgid "About Joplin"
+msgstr "Despre Joplin"
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#, javascript-format
+msgid "Open %s"
+msgstr "Deschideți %s"
+
+msgid "Exit"
+msgstr "Ieșiți"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Cancel"
+msgstr "Anulați"
+
+msgid "Current version is up-to-date."
+msgstr "Versiunea curentă este actualizată."
+
+msgid "An update is available, do you want to download it now?"
+msgstr ""
+
+msgid "Yes"
+msgstr "Da"
+
+msgid "No"
+msgstr "Nu"
+
+msgid "The web clipper service is enabled and set to auto-start."
+msgstr ""
+
+#, javascript-format
+msgid "Status: Started on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Status: %s"
+msgstr "Status: %s"
+
+msgid "Disable Web Clipper Service"
+msgstr "Dezactivați Web Clipper Service"
+
+msgid "The web clipper service is not enabled."
+msgstr ""
+
+msgid "Enable Web Clipper Service"
+msgstr "Activați Web Clipper Service"
+
+msgid ""
+"Joplin Web Clipper allows saving web pages and screenshots from your browser "
+"to Joplin."
+msgstr ""
+
+msgid "In order to use the web clipper, you need to do the following:"
+msgstr ""
+
+msgid "Step 1: Enable the clipper service"
+msgstr ""
+
+msgid ""
+"This service allows the browser extension to communicate with Joplin. When "
+"enabling it your firewall may ask you to give permission to Joplin to listen "
+"to a particular port."
+msgstr ""
+
+msgid "Step 2: Install the extension"
+msgstr "Pasul 2: Instalați extensia"
+
+msgid "Download and install the relevant extension for your browser:"
+msgstr ""
+
+msgid "Check synchronisation configuration"
+msgstr ""
+
+#, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr ""
+
+msgid "Apply"
+msgstr "Aplicați"
+
+msgid "Submit"
+msgstr ""
+
+msgid "Save"
+msgstr "Salvați"
+
+msgid ""
+"Disabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent unencrypted to the sync target. Do you wish to "
+"continue?"
+msgstr ""
+
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
+msgstr ""
+
+msgid "Disable encryption"
+msgstr "Dezactivați criptarea"
+
+msgid "Enable encryption"
+msgstr "Activați criptarea"
+
+msgid "Master Keys"
+msgstr ""
+
+msgid "Active"
+msgstr "Activ"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Source"
+msgstr "Sursă"
+
+msgid "Created"
+msgstr "Creat"
+
+msgid "Updated"
+msgstr "Actualizat"
+
+msgid "Password"
+msgstr "Parolă"
+
+msgid "Password OK"
+msgstr "Parolă OK"
+
+msgid ""
+"Note: Only one master key is going to be used for encryption (the one marked "
+"as \"active\"). Any of the keys might be used for decryption, depending on "
+"how the notes or notebooks were originally encrypted."
+msgstr ""
+
+msgid "Missing Master Keys"
+msgstr ""
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advices on how "
+"to enable it please check the documentation:"
+msgstr ""
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Encryption is:"
+msgstr "Criptarea este:"
+
+msgid "Back"
+msgstr "Înapoi"
+
+#, javascript-format
+msgid ""
+"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgstr ""
+
+msgid "Please create a notebook first."
+msgstr "Creați un caiet de sarcini prima dată."
+
+msgid "Please create a notebook first"
+msgstr "Creați un caiet de sarcini prima dată"
+
+msgid "Notebook title:"
+msgstr "Titlul caietului de notițe:"
+
+msgid "Add or remove tags:"
+msgstr "Adăugați ori eliminați etichete:"
+
+msgid "Separate each tag by a comma."
+msgstr "Separați fiecare etichetă printr-o virgulă."
+
+msgid "Rename notebook:"
+msgstr "Redenumiți caietul de notițe:"
+
+msgid "Rename tag:"
+msgstr "Redenumiți eticheta:"
+
+msgid "Set alarm:"
+msgstr "Setați alarma:"
+
+msgid "Layout"
+msgstr ""
+
+msgid "Search..."
+msgstr "Caută..."
+
+msgid "Some items cannot be synchronised."
+msgstr "Câțiva itemi nu pot fi sincronizați."
+
+msgid "View them now"
+msgstr "Vizualizați-le acum"
+
+msgid "Some items cannot be decrypted."
+msgstr "Câțiva itemi nu pot fi descriptați."
+
+msgid "Set the password"
+msgstr "Setați parola"
+
+msgid "Add or remove tags"
+msgstr "Adăugați ori eliminați etichete"
+
+msgid "Duplicate"
+msgstr "Duplicați"
+
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - Copiați"
+
+msgid "Switch between note and to-do type"
+msgstr "Schimbați între notiță și sarcină"
+
+msgid "Copy Markdown link"
+msgstr "Copiați link-ul Markdown"
+
+msgid "Delete"
+msgstr "Ștergeți"
+
+msgid "Delete notes?"
+msgstr "Ștergeți notițele?"
+
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr ""
+
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr ""
+
+msgid "Open..."
+msgstr "Deschideți..."
+
+#, javascript-format
+msgid "This file could not be opened: %s"
+msgstr "Acest fișier nu a putut fi deschis: %s"
+
+msgid "Save as..."
+msgstr "Salvați ca..."
+
+msgid "Copy path to clipboard"
+msgstr "Copiați locația în clipboard"
+
+msgid "Copy Link Address"
+msgstr "Copați adresa link-ului"
+
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+
+msgid "strong text"
+msgstr ""
+
+msgid "emphasized text"
+msgstr ""
+
+msgid "List item"
+msgstr "Listați item"
+
+msgid "Insert Hyperlink"
+msgstr "Introduceți hyperlink"
+
+msgid "Attach file"
+msgstr "Atașați fișier"
+
+msgid "Tags"
+msgstr "Etichete"
+
+msgid "Set alarm"
+msgstr "Setați alarma"
+
+#, javascript-format
+msgid "In: %s"
+msgstr "În: %s"
+
+msgid "Hyperlink"
+msgstr "Hyperlink"
+
+msgid "Code"
+msgstr "Cod"
+
+msgid "Numbered List"
+msgstr "Listă numerotată"
+
+msgid "Bulleted List"
+msgstr "Listă cu puncte"
+
+msgid "Checkbox"
+msgstr "Căsuță"
+
+msgid "Heading"
+msgstr ""
+
+msgid "Horizontal Rule"
+msgstr "Linie orizontală"
+
+msgid "Click to stop external editing"
+msgstr "Faceți click pentru a opri editarea în aplicația externă"
+
+msgid "Watching..."
+msgstr ""
+
+msgid "to-do"
+msgstr "sarcină"
+
+msgid "note"
+msgstr "notiță"
+
+#, javascript-format
+msgid "Creating new %s..."
+msgstr "Se crează un %s..."
+
+msgid "Refresh"
+msgstr "Reîncărcați"
+
+msgid "Clear"
+msgstr ""
+
+msgid "OneDrive Login"
+msgstr "Autentificare OneDrive"
+
+msgid "Dropbox Login"
+msgstr "Autentificare Dropbox"
+
+msgid "Options"
+msgstr "Opțiuni"
+
+msgid "Synchronisation Status"
+msgstr "Statutul sincronizării"
+
+msgid "Encryption Options"
+msgstr "Opțiuni de criptare"
+
+msgid "Clipper Options"
+msgstr "Opțiuni Clipper"
+
+msgid "Remove this tag from all the notes?"
+msgstr ""
+
+msgid "Remove this search from the sidebar?"
+msgstr ""
+
+msgid "Rename"
+msgstr "Redenumiți"
+
+msgid "Synchronise"
+msgstr "Sincronizați"
+
+msgid "Notebooks"
+msgstr "Caiete de notițe"
+
+msgid "Please select where the sync status should be exported to"
+msgstr ""
+
+#, javascript-format
+msgid "Usage: %s"
+msgstr "Utilizare: %s"
+
+#, javascript-format
+msgid "Unknown flag: %s"
+msgstr ""
+
+msgid "Dropbox"
+msgstr "Dropbox"
+
+msgid "File system"
+msgstr ""
+
+msgid "Nextcloud"
+msgstr "Nextcloud"
+
+msgid "OneDrive"
+msgstr "OneDrive"
+
+msgid "OneDrive Dev (For testing only)"
+msgstr "OneDrive Dev (Doar pentru teste)"
+
+msgid "WebDAV"
+msgstr "WebDAV"
+
+#, javascript-format
+msgid "Unknown log level: %s"
+msgstr ""
+
+#, javascript-format
+msgid "Unknown level ID: %s"
+msgstr ""
+
+msgid ""
+"Cannot refresh token: authentication data is missing. Starting the "
+"synchronisation again may fix the problem."
+msgstr ""
+
+msgid ""
+"Could not synchronize with OneDrive.\n"
+"\n"
+"This error often happens when using OneDrive for Business, which "
+"unfortunately cannot be supported.\n"
+"\n"
+"Please consider using a regular OneDrive account."
+msgstr ""
+
+#, javascript-format
+msgid "Cannot access %s"
+msgstr "Nu se poate accesa %s"
+
+#, javascript-format
+msgid "Created local items: %d."
+msgstr "Creare itemi locali: %d."
+
+#, javascript-format
+msgid "Updated local items: %d."
+msgstr "Itemi locali actualizați: %d."
+
+#, javascript-format
+msgid "Created remote items: %d."
+msgstr ""
+
+#, javascript-format
+msgid "Updated remote items: %d."
+msgstr ""
+
+#, javascript-format
+msgid "Deleted local items: %d."
+msgstr "Itemi locali șterși: %d."
+
+#, javascript-format
+msgid "Deleted remote items: %d."
+msgstr ""
+
+#, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr ""
+
+#, javascript-format
+msgid "State: %s."
+msgstr "Statut: %s."
+
+msgid "Cancelling..."
+msgstr "Se amână..."
+
+#, javascript-format
+msgid "Completed: %s"
+msgstr "Completat: %s"
+
+#, javascript-format
+msgid "Last error: %s"
+msgstr "Ultima eroare: %s"
+
+msgid "Idle"
+msgstr ""
+
+msgid "In progress"
+msgstr "În progres"
+
+#, javascript-format
+msgid "Synchronisation is already in progress. State: %s"
+msgstr ""
+
+msgid "Encrypted"
+msgstr "Criptat"
+
+msgid "Encrypted items cannot be modified"
+msgstr "Itemii criptați nu pot fi editați"
+
+msgid "Conflicts"
+msgstr "Conflicte"
+
+msgid "Cannot move notebook to this location"
+msgstr "Nu se poate muta caietul de notițe în această locație"
+
+#, javascript-format
+msgid "A notebook with this title already exists: \"%s\""
+msgstr "Un caiet de notițe cu acest titlu există deja: \"%s\""
+
+#, javascript-format
+msgid "Notebooks cannot be named \"%s\", which is a reserved title."
+msgstr ""
+
+msgid "title"
+msgstr "titlu"
+
+msgid "updated date"
+msgstr "data actualizării"
+
+msgid "created date"
+msgstr "data creării"
+
+msgid "Untitled"
+msgstr "Fără denumire"
+
+msgid "This note does not have geolocation information."
+msgstr ""
+
+#, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr "Nu se poate copia notița în caietul de notițe \"%s\""
+
+#, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr "Nu se poate muta notița în caietul de notițe \"%s\""
+
+msgid "Language"
+msgstr "Limbă"
+
+msgid "Date format"
+msgstr "Format dată"
+
+msgid "Time format"
+msgstr "Format timp"
+
+msgid "Theme"
+msgstr "Temă"
+
+msgid "Light"
+msgstr "Deschisă"
+
+msgid "Dark"
+msgstr "Închisă"
+
+msgid "Uncompleted to-dos on top"
+msgstr ""
+
+msgid "Show completed to-dos"
+msgstr "Arătați sarcinile terminate"
+
+msgid "Sort notes by"
+msgstr "Sortați notițele după"
+
+msgid "Reverse sort order"
+msgstr "Inversați ordinea sortării"
+
+msgid "Save geo-location with notes"
+msgstr "Salvați geo-locația în  notițe"
+
+msgid "When creating a new to-do:"
+msgstr "Când este creată o nouă sarcină:"
+
+msgid "Focus title"
+msgstr ""
+
+msgid "Focus body"
+msgstr ""
+
+msgid "When creating a new note:"
+msgstr "Când este creată o nouă notiță:"
+
+msgid "Show tray icon"
+msgstr "Afișați iconița coșul de gunoi"
+
+msgid "Note: Does not work in all desktop environments."
+msgstr ""
+
+msgid "Start application minimised in the tray icon"
+msgstr ""
+
+msgid "Global zoom percentage"
+msgstr ""
+
+msgid "Editor font family"
+msgstr ""
+
+msgid ""
+"This must be *monospace* font or it will not work properly. If the font is "
+"incorrect or empty, it will default to a generic monospace font."
+msgstr ""
+
+msgid "Automatically update the application"
+msgstr "Actualizați automat aplicația"
+
+msgid "Synchronisation interval"
+msgstr "Intervalul de sincronizare"
+
+#, javascript-format
+msgid "%d minutes"
+msgstr "%d minute"
+
+#, javascript-format
+msgid "%d hour"
+msgstr "%d oră"
+
+#, javascript-format
+msgid "%d hours"
+msgstr "%d ore"
+
+msgid "Text editor command"
+msgstr "Comandă editor de text"
+
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+
+msgid "Show advanced options"
+msgstr "Afișați opțiunile avansate"
+
+msgid "Synchronisation target"
+msgstr ""
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr ""
+
+msgid ""
+"The path to synchronise with when file system synchronisation is enabled. "
+"See `sync.target`."
+msgstr ""
+
+msgid "Nextcloud WebDAV URL"
+msgstr "URL NextCloud WebDAV"
+
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
+msgid "Nextcloud username"
+msgstr "Nume utilizator Nextcloud"
+
+msgid "Nextcloud password"
+msgstr "Parolă Nextcloud"
+
+msgid "WebDAV URL"
+msgstr "URL-ul WebDAV"
+
+msgid "WebDAV username"
+msgstr "Nume utilizator WebDAV"
+
+msgid "WebDAV password"
+msgstr "Parolă WebDAV"
+
+msgid "Custom TLS certificates"
+msgstr "Certificate TLS cusomizate"
+
+msgid ""
+"Comma-separated list of paths to directories to load the certificates from, "
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
+msgstr ""
+
+msgid "Ignore TLS certificate errors"
+msgstr "Ignoră erorile de certificat TLS"
+
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr ""
+
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr ""
+
+msgid "Joplin Export File"
+msgstr ""
+
+msgid "Markdown"
+msgstr "Markdown"
+
+msgid "Joplin Export Directory"
+msgstr ""
+
+msgid "Evernote Export File"
+msgstr ""
+
+msgid "Directory"
+msgstr ""
+
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr ""
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+
+msgid "There is no data to export."
+msgstr "Nu există date de exportat."
+
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr ""
+
+msgid "Items that cannot be synchronised"
+msgstr "Itemii nu pot fi sincronizați"
+
+#, javascript-format
+msgid "%s (%s): %s"
+msgstr "%s (%s): %s"
+
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
+
+msgid "Sync status (synced items / total items)"
+msgstr ""
+
+#, javascript-format
+msgid "%s: %d/%d"
+msgstr "%s: %d/%d"
+
+#, javascript-format
+msgid "Total: %d/%d"
+msgstr "Total: %d/%d"
+
+#, javascript-format
+msgid "Conflicted: %d"
+msgstr "În conflict: %d"
+
+#, javascript-format
+msgid "To delete: %d"
+msgstr "De șters: %d"
+
+msgid "Folders"
+msgstr ""
+
+#, javascript-format
+msgid "%s: %d notes"
+msgstr "%s: %d notițe"
+
+msgid "Coming alarms"
+msgstr "Alarmele următoare"
+
+#, javascript-format
+msgid "On %s: %s"
+msgstr "Pe %s: %s"
+
+msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgstr ""
+
+msgid "Delete these notes?"
+msgstr "Ștergeți aceste notițe?"
+
+msgid "Log"
+msgstr ""
+
+msgid "Export Debug Report"
+msgstr ""
+
+msgid "Encryption Config"
+msgstr ""
+
+msgid "Configuration"
+msgstr "Configurare"
+
+msgid "Move to notebook..."
+msgstr "Mutați în caietul de notițe..."
+
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr "Mutați %d notițe în caietul de notițe \"%s\"?"
+
+msgid "Press to set the decryption password."
+msgstr ""
+
+msgid "Save alarm"
+msgstr "Salvați alarma"
+
+msgid "Select date"
+msgstr "Selectați data"
+
+msgid "Confirm"
+msgstr "Confirmați"
+
+msgid "Cancel synchronisation"
+msgstr "Amânați sincronizarea"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Se decriptează itemi: %d/%d"
+
+msgid "New tags:"
+msgstr "Etichete noi:"
+
+msgid "Type new tags or select from list"
+msgstr ""
+
+msgid ""
+"To work correctly, the app needs the following permissions. Please enable "
+"them in your phone settings, in Apps > Joplin > Permissions"
+msgstr ""
+
+msgid ""
+"- Storage: to allow attaching files to notes and to enable filesystem "
+"synchronisation."
+msgstr ""
+
+msgid "- Camera: to allow taking a picture and attaching it to a note."
+msgstr ""
+
+msgid "- Location: to allow attaching geo-location information to a note."
+msgstr ""
+
+msgid "Joplin website"
+msgstr "Website Joplin"
+
+msgid "Login with Dropbox"
+msgstr "Autentificați-vă cu Dropbox"
+
+#, javascript-format
+msgid "Master Key %s"
+msgstr ""
+
+#, javascript-format
+msgid "Created: %s"
+msgstr "Creat: %s"
+
+msgid "Password:"
+msgstr "Parolă:"
+
+msgid "Password cannot be empty"
+msgstr "Parolă nu poate fi un câmp gol"
+
+msgid "Enable"
+msgstr "Activați"
+
+#, javascript-format
+msgid "The notebook could not be saved: %s"
+msgstr "Caietul de notițe nu a puut fi salvat: %s"
+
+msgid "Edit notebook"
+msgstr "Editați caietul de notițe"
+
+msgid "Show all"
+msgstr "Afișați tot"
+
+msgid "Errors only"
+msgstr "Doar erori"
+
+msgid "This note has been modified:"
+msgstr "Această notiță a fost modificată:"
+
+msgid "Save changes"
+msgstr "Salvați schimbările"
+
+msgid "Discard changes"
+msgstr "Renunțați la schimbări"
+
+#, javascript-format
+msgid "No item with ID %s"
+msgstr "Niciun item cu ID-ul %s"
+
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr ""
+
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr ""
+
+msgid "Attach photo"
+msgstr "Atașează imagine"
+
+msgid "Attach any file"
+msgstr "Atașați orice fișier"
+
+msgid "Share"
+msgstr "Distribuie"
+
+msgid "Convert to note"
+msgstr ""
+
+msgid "Convert to todo"
+msgstr ""
+
+msgid "Hide metadata"
+msgstr "Ascundeți metadatele"
+
+msgid "Show metadata"
+msgstr "Afișați metadatele"
+
+msgid "View on map"
+msgstr "Vizualizați pe hartă"
+
+msgid "Delete notebook"
+msgstr "Ștergeți caiet de notițe"
+
+# vezi context
+msgid "Login with OneDrive"
+msgstr "Autentificare prin OneDrive"
+
+msgid "Search"
+msgstr "Caută"
+
+msgid ""
+"Click on the (+) button to create a new note or notebook. Click on the side "
+"menu to access your existing notebooks."
+msgstr ""
+
+msgid "You currently have no notebook. Create one by clicking on (+) button."
+msgstr ""
+"Nu aveți niciun caiet de notițe creat. Creați unul făcând click pe butonnul "
+"(+)."
+
+msgid "Welcome"
+msgstr "Bine ați venit"
