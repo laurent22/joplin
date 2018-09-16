@@ -269,27 +269,25 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	Possible keys/values:
 
-	    editor                   Text editor.
-	                             The editor that will be used to open a note. If 
-	                             none is provided it will try to auto-detect the 
-	                             default editor.
-	                             Type: string.
-	                             
 	    locale                   Language.
 	                             Type: Enum.
-	                             Possible values: eu (Basque), hr_HR (Croatian), 
-	                             cs_CZ (Czech), da_DK (Dansk), de_DE (Deutsch), 
-	                             en_GB (English), es_ES (Español), fr_FR 
-	                             (Français), gl_ES (Galician), it_IT (Italiano), 
-	                             nl_BE (Nederlands), pt_BR (Português (Brasil)), 
-	                             ru_RU (Русский), zh_CN (中文 (简体)), ja_JP (日本語).
+	                             Possible values: eu (Basque), ca (Catalan), hr_HR 
+	                             (Croatian), cs_CZ (Czech), da_DK (Dansk), de_DE 
+	                             (Deutsch), en_GB (English), es_ES (Español), 
+	                             fr_FR (Français), gl_ES (Galician), it_IT 
+	                             (Italiano), nl_NL (Nederlands), nl_BE 
+	                             (Nederlands), no (Norwegian), pt_BR (Português 
+	                             (Brasil)), ro (Română), sl_SI (Slovenian), sv 
+	                             (Svenska), ru_RU (Русский), zh_CN (中文 (简体)), 
+	                             zh_TW (中文 (繁體)), ja_JP (日本語), ko (한국말).
 	                             Default: "en_GB"
 	                             
 	    dateFormat               Date format.
 	                             Type: Enum.
 	                             Possible values: DD/MM/YYYY (30/01/2017), 
 	                             DD/MM/YY (30/01/17), MM/DD/YYYY (01/30/2017), 
-	                             MM/DD/YY (01/30/17), YYYY-MM-DD (2017-01-30).
+	                             MM/DD/YY (01/30/17), YYYY-MM-DD (2017-01-30), 
+	                             DD.MM.YYYY (30.01.2017).
 	                             Default: "DD/MM/YYYY"
 	                             
 	    timeFormat               Time format.
@@ -298,6 +296,10 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                             Default: "HH:mm"
 	                             
 	    uncompletedTodosOnTop    Uncompleted to-dos on top.
+	                             Type: bool.
+	                             Default: true
+	                             
+	    showCompletedTodos       Show completed to-dos.
 	                             Type: bool.
 	                             Default: true
 	                             
@@ -323,6 +325,12 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                             hour), 43200 (12 hours), 86400 (24 hours).
 	                             Default: 300
 	                             
+	    editor                   Text editor command.
+	                             The editor command (may include arguments) that 
+	                             will be used to open a note. If none is provided 
+	                             it will try to auto-detect the default editor.
+	                             Type: string.
+	                             
 	    sync.target              Synchronisation target.
 	                             The target to synchonise to. Each sync target may 
 	                             have additional parameters which are named as 
@@ -339,6 +347,10 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                             Type: string.
 	                             
 	    sync.5.path              Nextcloud WebDAV URL.
+	                             Attention: If you change this location, make sure 
+	                             you copy all your content to it before syncing, 
+	                             otherwise all files will be removed! See the FAQ 
+	                             for more details: https://joplin.cozic.net/faq/
 	                             Type: string.
 	                             
 	    sync.5.username          Nextcloud username.
@@ -348,6 +360,10 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                             Type: string.
 	                             
 	    sync.6.path              WebDAV URL.
+	                             Attention: If you change this location, make sure 
+	                             you copy all your content to it before syncing, 
+	                             otherwise all files will be removed! See the FAQ 
+	                             for more details: https://joplin.cozic.net/faq/
 	                             Type: string.
 	                             
 	    sync.6.username          WebDAV username.
@@ -355,6 +371,20 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                             
 	    sync.6.password          WebDAV password.
 	                             Type: string.
+	                             
+	    net.customCertificates   Custom TLS certificates.
+	                             Comma-separated list of paths to directories to 
+	                             load the certificates from, or path to individual 
+	                             cert files. For example: /my/cert_dir, 
+	                             /other/custom.pem. Note that if you make changes 
+	                             to the TLS settings, you must save your changes 
+	                             before clicking on "Check synchronisation 
+	                             configuration".
+	                             Type: string.
+	                             
+	    net.ignoreTlsErrors      Ignore TLS certificate errors.
+	                             Type: bool.
+	                             Default: false
 
 	cp <note> [notebook]
 
@@ -386,7 +416,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 	    complete database including notebooks, notes, tags and resources.
 
 	    --format <format>      Destination format: jex (Joplin Export File), raw 
-	                           (Joplin Export Directory)
+	                           (Joplin Export Directory), md (Markdown)
 	    --note <note>          Exports only the given note.
 	    --notebook <notebook>  Exports only the given notebook.
 
@@ -465,7 +495,10 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	    <tag-command> can be "add", "remove" or "list" to assign or remove [tag] 
 	    from [note], or to list the notes associated with [tag]. The command `tag 
-	    list` can be used to list all the tags.
+	    list` can be used to list all the tags (use -l for long option).
+
+	    -l, --long  Use long list format. Format is ID, NOTE_COUNT (for notebook), 
+	                DATE, TODO_CHECKED (for to-dos), TITLE
 
 	todo <todo-command> <note-pattern>
 
