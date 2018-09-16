@@ -1,5 +1,27 @@
 # Joplin changelog
 
+## [v1.0.107](https://github.com/laurent22/joplin/releases/tag/v1.0.107) - 2018-09-16T19:51:07Z
+
+- New: Resolves [#755](https://github.com/laurent22/joplin/issues/755): Added note properties dialog box to view and edit created time, updated time, source URL and geolocation
+- Added Dutch (Netherlands) translation
+- Added Romanian translation
+- Fixes [#718](https://github.com/laurent22/joplin/issues/718): Allow recursively importing Markdown folder
+- Fix [#764](https://github.com/laurent22/joplin/issues/764): Fix equation tag positioning
+- Fixes [#710](https://github.com/laurent22/joplin/issues/710): Don't unwatch file when it is temporarily deleted
+- Resolves [#781](https://github.com/laurent22/joplin/issues/781): Allow creating notebooks with duplicate titles to allow two notebooks with same name to exist under different parents
+- Fixes [#799](https://github.com/laurent22/joplin/issues/799): Handle restricted_content error for Dropbox (skip files that cannot be uploaded to copyright or other Dropbox t&c violation)
+- Provided script to install on Ubuntu (with icon)
+
+## [v1.0.106](https://github.com/laurent22/joplin/releases/tag/v1.0.106) - 2018-09-08T15:23:40Z
+
+Note: this release is no longer signed to avoid issues with renewing certificates. If you get a warning or the application cannot be installed, please report on the forum on GitHub.
+
+- Resolves [#761](https://github.com/laurent22/joplin/issues/761): Highlight single tick code segments
+- Resolves [#714](https://github.com/laurent22/joplin/issues/714): Allow starting application minimised in the tray icon
+- Fixes [#759](https://github.com/laurent22/joplin/issues/759): Add border around code block when exporting to PDF
+- Fixes [#697](https://github.com/laurent22/joplin/issues/697): Focus search text input after clearing search
+- Fixes [#709](https://github.com/laurent22/joplin/issues/709): Now that HTML is supported in notes, remove BR tag replacement hack to fix newline issues.
+
 ## [v1.0.105](https://github.com/laurent22/joplin/releases/tag/v1.0.105) - 2018-09-05T11:29:36Z
 
 - Resolves [#679](https://github.com/laurent22/joplin/issues/679): Drag a note on a tag to associate the tag.
@@ -242,26 +264,3 @@ IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before 
 - Fixes [#205](https://github.com/laurent22/joplin/issues/205): Importing Evernote notes while on import page re-imports previous import
 - Fixes [#209](https://github.com/laurent22/joplin/issues/209): Items with non-ASCII characters end up truncated on Nextcloud
 - Added Basque translation, fixed issue with handling invalid translations. Updated translation FR.
-
-## [v0.10.61](https://github.com/laurent22/joplin/releases/tag/v0.10.61) - 2018-02-08T18:27:39Z
-
-- New: Display message when creating new note or to-do so that it doesn't look like the previous note content got deleted.
-- New: Also support $ as delimiter for Katex expressions
-- New: Added sync config check to config screens
-- New: Allowing opening and saving resource images
-- New: Toolbar button to set tags
-- Update: Improved request repeating mechanism
-- Fix: Make sure alarms and resources are attached to right note when creating new note
-- Fix: Use mutex when saving model to avoid race conditions when decrypting and syncing at the same time
-
-## [v0.10.60](https://github.com/laurent22/joplin/releases/tag/v0.10.60) - 2018-02-06T13:09:56Z
-
-- New: WebDAV synchronisation target
-- New: Support for math typesetting [Katex](https://khan.github.io/KaTeX/)
-- New: Tray icon for Windows and macOS
-- Fixed: Don't allow adding notes to conflict notebook
-- Updated: Russian translation
-- Updated: French translation
-- New: List missing master keys in encryption screen
-- Fixed: Attaching images in Linux was no longer working
-- Fixed crash in macOS
