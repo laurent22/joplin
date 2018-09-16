@@ -893,6 +893,12 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "此处没有任何笔记本。点击\"新笔记本\"创建。"
 
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
 msgid "Open..."
 msgstr "打开…"
 
@@ -943,6 +949,9 @@ msgstr "设置提醒"
 #, javascript-format
 msgid "In: %s"
 msgstr "在: %s"
+
+msgid "Note properties"
+msgstr ""
 
 msgid "Hyperlink"
 msgstr "超链接"
@@ -1145,10 +1154,6 @@ msgstr "冲突文件"
 
 msgid "Cannot move notebook to this location"
 msgstr "无法移动笔记本到该位置"
-
-#, javascript-format
-msgid "A notebook with this title already exists: \"%s\""
-msgstr "以此标题命名的笔记本已存在：\"%s\""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
@@ -1595,6 +1600,9 @@ msgstr "您目前未有笔记本。点击(+)按钮创建。"
 
 msgid "Welcome"
 msgstr "欢迎"
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "以此标题命名的笔记本已存在：\"%s\""
 
 #~ msgid "Searches"
 #~ msgstr "搜索历史"

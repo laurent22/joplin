@@ -893,6 +893,12 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "您當前沒有任何記事本。通過按一下 \"新增記事本\" 去建立。"
 
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
 msgid "Open..."
 msgstr "開啟..."
 
@@ -943,6 +949,9 @@ msgstr "設置提醒"
 #, javascript-format
 msgid "In: %s"
 msgstr "在: %s"
+
+msgid "Note properties"
+msgstr ""
 
 msgid "Hyperlink"
 msgstr "超連結"
@@ -1144,10 +1153,6 @@ msgstr "衝突"
 
 msgid "Cannot move notebook to this location"
 msgstr "無法移動記事本到此位置"
-
-#, javascript-format
-msgid "A notebook with this title already exists: \"%s\""
-msgstr "同名筆記本已經存在: \"%s\""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
@@ -1592,3 +1597,6 @@ msgstr "您當前沒有任何筆記本。通過按一下 (+) 鍵去建立一本�
 
 msgid "Welcome"
 msgstr "歡迎"
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "同名筆記本已經存在: \"%s\""

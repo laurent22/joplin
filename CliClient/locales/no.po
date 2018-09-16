@@ -932,6 +932,12 @@ msgid ""
 msgstr ""
 "Det er dor tiden ingen notisbok. Lag en ved å klikke på \"Ny Notisbok\"."
 
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
 msgid "Open..."
 msgstr "Åpne..."
 
@@ -984,6 +990,9 @@ msgstr "Angi Alarm"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
+
+msgid "Note properties"
+msgstr ""
 
 msgid "Hyperlink"
 msgstr ""
@@ -1190,10 +1199,6 @@ msgstr "Konflikter"
 
 msgid "Cannot move notebook to this location"
 msgstr "Kan ikke flytte notatblokken til denne plasseringen"
-
-#, javascript-format
-msgid "A notebook with this title already exists: \"%s\""
-msgstr "En notisblokk med denne tittelen eksisterer allerede: \"%s\""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
@@ -1652,3 +1657,6 @@ msgstr "Du har ennå ingen notisbok. Lag en ved å klikke på  (+) knappen."
 
 msgid "Welcome"
 msgstr "Velkommen"
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "En notisblokk med denne tittelen eksisterer allerede: \"%s\""

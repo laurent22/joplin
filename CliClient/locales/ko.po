@@ -919,6 +919,12 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "노트북이 없습니다. '새 노트북'을 선택해서 노트북을 새로 만드세요."
 
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
 msgid "Open..."
 msgstr "열기..."
 
@@ -971,6 +977,9 @@ msgstr "알람 설정"
 #, javascript-format
 msgid "In: %s"
 msgstr "내부: %s"
+
+msgid "Note properties"
+msgstr ""
 
 msgid "Hyperlink"
 msgstr "하이퍼링크"
@@ -1175,10 +1184,6 @@ msgstr "충돌"
 
 msgid "Cannot move notebook to this location"
 msgstr "노트북을 이 위치로 옮길 수 없습니다"
-
-#, javascript-format
-msgid "A notebook with this title already exists: \"%s\""
-msgstr "같은 제목의 노트북이 이미 있습니다: \"%s\""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
@@ -1634,3 +1639,6 @@ msgstr "노트북이 없습니다. (+) 버튼을 눌러 새로 만드세요."
 
 msgid "Welcome"
 msgstr "환영합니다"
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "같은 제목의 노트북이 이미 있습니다: \"%s\""

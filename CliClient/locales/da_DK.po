@@ -928,6 +928,12 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "Der er ingen notesbog. Opret en ved at klikke på \"Ny Notesbog\"."
 
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
 msgid "Open..."
 msgstr "Åben..."
 
@@ -978,6 +984,9 @@ msgstr "Indstil alarm"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
+
+msgid "Note properties"
+msgstr ""
 
 msgid "Hyperlink"
 msgstr ""
@@ -1185,10 +1194,6 @@ msgstr "Konflikter"
 #, fuzzy
 msgid "Cannot move notebook to this location"
 msgstr "Kan ikke flytte note til \"%s\" notesbog"
-
-#, javascript-format
-msgid "A notebook with this title already exists: \"%s\""
-msgstr "En notesbog bruger allerede dette navn: \"%s\""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
@@ -1644,6 +1649,9 @@ msgstr "Du har ingen notesbøger. Opret en ved at klikke på (+) knappen."
 
 msgid "Welcome"
 msgstr "Velkommen"
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "En notesbog bruger allerede dette navn: \"%s\""
 
 #~ msgid ""
 #~ "For more information about End-To-End Encryption (E2EE) and advices on "

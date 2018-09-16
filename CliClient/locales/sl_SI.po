@@ -939,6 +939,12 @@ msgstr ""
 "Trenutno ni tukaj nobene beležnice. Ustvarite jo z klikom na \"Nova beležnica"
 "\"."
 
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
 msgid "Open..."
 msgstr "Odpri..."
 
@@ -991,6 +997,9 @@ msgstr "Nastavi alarm"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
+
+msgid "Note properties"
+msgstr ""
 
 msgid "Hyperlink"
 msgstr ""
@@ -1198,10 +1207,6 @@ msgstr "Konfikti"
 #, fuzzy
 msgid "Cannot move notebook to this location"
 msgstr "Ni moč premakniti zabeležke v \"%s\" beležnico"
-
-#, javascript-format
-msgid "A notebook with this title already exists: \"%s\""
-msgstr "Beležnica s tem naslovom že obstaja: \"%s\""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
@@ -1657,6 +1662,9 @@ msgstr "Trenutno nimate nobene beležnice. Ustvarite jo s klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobrodošli"
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "Beležnica s tem naslovom že obstaja: \"%s\""
 
 #~ msgid "Searches"
 #~ msgstr "Iskalni niz"

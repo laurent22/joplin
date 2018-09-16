@@ -937,6 +937,12 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "Momentuz ez dago koadernorik. Sortu bat \"Koaderno berria\" sakatuta."
 
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
 msgid "Open..."
 msgstr ""
 
@@ -988,6 +994,9 @@ msgstr "Ezarri alarma"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
+
+msgid "Note properties"
+msgstr ""
 
 msgid "Hyperlink"
 msgstr ""
@@ -1200,10 +1209,6 @@ msgstr "Gatazkak"
 #, fuzzy
 msgid "Cannot move notebook to this location"
 msgstr "Ezin eraman daiteke oharra \"%s\" koadernora"
-
-#, javascript-format
-msgid "A notebook with this title already exists: \"%s\""
-msgstr "Dagoeneko bada koaderno bat izen horrekin: \"%s\""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
@@ -1665,6 +1670,9 @@ msgstr "Oraindik ez duzu koadernorik. Sortu bat (+) botoian sakatuta."
 
 msgid "Welcome"
 msgstr "Ongi etorri!"
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "Dagoeneko bada koaderno bat izen horrekin: \"%s\""
 
 #~ msgid "Searches"
 #~ msgstr "Bilaketak"

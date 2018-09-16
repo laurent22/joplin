@@ -948,6 +948,12 @@ msgstr ""
 "Det finns för närvarande ingen anteckningsbok. Skapa en genom att klicka på "
 "\"Ny anteckningsbok\"."
 
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
 msgid "Open..."
 msgstr "Öppna..."
 
@@ -1000,6 +1006,9 @@ msgstr "Sätt alarm"
 #, javascript-format
 msgid "In: %s"
 msgstr "I: %s"
+
+msgid "Note properties"
+msgstr ""
 
 msgid "Hyperlink"
 msgstr "Hyperlänk"
@@ -1204,10 +1213,6 @@ msgstr "Konflikter"
 
 msgid "Cannot move notebook to this location"
 msgstr "Kan inte flytta anteckningsbok till den här platsen"
-
-#, javascript-format
-msgid "A notebook with this title already exists: \"%s\""
-msgstr "En anteckningsbok med denna titel finns redan: \"%s\""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
@@ -1676,3 +1681,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Välkommen"
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "En anteckningsbok med denna titel finns redan: \"%s\""

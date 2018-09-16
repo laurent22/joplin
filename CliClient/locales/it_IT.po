@@ -941,6 +941,12 @@ msgstr ""
 "Al momento non ci sono Taccuini. Creane uno facendo clic su \"Nuovo Taccuino"
 "\"."
 
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
 msgid "Open..."
 msgstr "Apri ..."
 
@@ -993,6 +999,9 @@ msgstr "Imposta Allarme"
 #, javascript-format
 msgid "In: %s"
 msgstr "In: %s"
+
+msgid "Note properties"
+msgstr ""
 
 msgid "Hyperlink"
 msgstr "Collegamento ipertestuale"
@@ -1198,10 +1207,6 @@ msgstr "Conflitti"
 
 msgid "Cannot move notebook to this location"
 msgstr "Impossibile spostare il Taccuino in questa posizione"
-
-#, javascript-format
-msgid "A notebook with this title already exists: \"%s\""
-msgstr "Esiste già un Taccuino col titolo \"%s\""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
@@ -1665,6 +1670,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvenuto"
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "Esiste già un Taccuino col titolo \"%s\""
 
 #~ msgid ""
 #~ "Benvenuto su Joplin!\n"

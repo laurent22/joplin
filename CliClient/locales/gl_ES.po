@@ -925,6 +925,12 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "Este no é un caderno. Cree un, premendo en «Novo caderno»."
 
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
 msgid "Open..."
 msgstr "Abrir…"
 
@@ -977,6 +983,9 @@ msgstr "Estabelecer alarma"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
+
+msgid "Note properties"
+msgstr ""
 
 msgid "Hyperlink"
 msgstr ""
@@ -1184,10 +1193,6 @@ msgstr "Conflitos"
 #, fuzzy
 msgid "Cannot move notebook to this location"
 msgstr "Non é posíbel mover a nota ao caderno «%s»"
-
-#, javascript-format
-msgid "A notebook with this title already exists: \"%s\""
-msgstr "Xa existe un caderno con ese título: «%s»"
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
@@ -1643,3 +1648,6 @@ msgstr "Non ten cadernos actualmente. Cree un premendo no botón (+)."
 
 msgid "Welcome"
 msgstr "Benvido/a"
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "Xa existe un caderno con ese título: «%s»"

@@ -915,6 +915,12 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "ノートブックがありません。新しいノートブックを作成してください。"
 
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
 msgid "Open..."
 msgstr ""
 
@@ -965,6 +971,9 @@ msgstr "アラームをセット"
 
 #, javascript-format
 msgid "In: %s"
+msgstr ""
+
+msgid "Note properties"
 msgstr ""
 
 msgid "Hyperlink"
@@ -1176,10 +1185,6 @@ msgstr "衝突"
 #, fuzzy
 msgid "Cannot move notebook to this location"
 msgstr "ノートをノートブック \"%s\"に移動できませんでした。"
-
-#, javascript-format
-msgid "A notebook with this title already exists: \"%s\""
-msgstr "\"%s\"という名前のノートブックはすでに存在しています。"
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
@@ -1638,6 +1643,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "\"%s\"という名前のノートブックはすでに存在しています。"
 
 #~ msgid "Searches"
 #~ msgstr "検索"

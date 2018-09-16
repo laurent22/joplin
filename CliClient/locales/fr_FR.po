@@ -948,6 +948,12 @@ msgstr ""
 "Il n'y a pour l'instant aucun carnet. Créez-en un en cliquant sur \"Nouveau "
 "carnet\"."
 
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
 msgid "Open..."
 msgstr "Ouvrir..."
 
@@ -1000,6 +1006,9 @@ msgstr "Régler alarme"
 #, javascript-format
 msgid "In: %s"
 msgstr "Dans : %s"
+
+msgid "Note properties"
+msgstr ""
 
 msgid "Hyperlink"
 msgstr "Lien"
@@ -1205,10 +1214,6 @@ msgstr "Conflits"
 
 msgid "Cannot move notebook to this location"
 msgstr "Impossible de déplacer le carnet à cet endroit"
-
-#, javascript-format
-msgid "A notebook with this title already exists: \"%s\""
-msgstr "Un carnet avec ce titre existe déjà : \"%s\""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
@@ -1673,6 +1678,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "Un carnet avec ce titre existe déjà : \"%s\""
 
 #~ msgid ""
 #~ "For more information about End-To-End Encryption (E2EE) and advices on "

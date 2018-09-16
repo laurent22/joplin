@@ -941,6 +941,12 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "No hay ninguna libreta. Cree una pulsando en «Libreta nueva»."
 
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
 msgid "Open..."
 msgstr "Abrir..."
 
@@ -993,6 +999,9 @@ msgstr "Establecer alarma"
 #, javascript-format
 msgid "In: %s"
 msgstr "En: %s"
+
+msgid "Note properties"
+msgstr ""
 
 msgid "Hyperlink"
 msgstr "Hipervínculo"
@@ -1197,10 +1206,6 @@ msgstr "Conflictos"
 
 msgid "Cannot move notebook to this location"
 msgstr "No se puede mover la libreta a este lugar"
-
-#, javascript-format
-msgid "A notebook with this title already exists: \"%s\""
-msgstr "Ya existe una libreta con este nombre: «%s»"
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
@@ -1665,6 +1670,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "Ya existe una libreta con este nombre: «%s»"
 
 #~ msgid ""
 #~ "For more information about End-To-End Encryption (E2EE) and advices on "

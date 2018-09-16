@@ -948,6 +948,12 @@ msgstr ""
 "Ara mateix no hi ha cap bloc de notes. Creeu-ne un fent clic a «Bloc de "
 "notes nou»."
 
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
 msgid "Open..."
 msgstr "Obre..."
 
@@ -1000,6 +1006,9 @@ msgstr "Estableix una alarma"
 #, javascript-format
 msgid "In: %s"
 msgstr "A: %s"
+
+msgid "Note properties"
+msgstr ""
 
 msgid "Hyperlink"
 msgstr ""
@@ -1205,10 +1214,6 @@ msgstr "Conflictes"
 
 msgid "Cannot move notebook to this location"
 msgstr "No es pot moure el bloc de notes a aquesta ubicació"
-
-#, javascript-format
-msgid "A notebook with this title already exists: \"%s\""
-msgstr "Ja existeix un bloc de notes amb aquest títol: «%s»"
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
@@ -1667,3 +1672,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvingut"
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "Ja existeix un bloc de notes amb aquest títol: «%s»"

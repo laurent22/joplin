@@ -842,6 +842,12 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
 
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
 msgid "Open..."
 msgstr ""
 
@@ -891,6 +897,9 @@ msgstr ""
 
 #, javascript-format
 msgid "In: %s"
+msgstr ""
+
+msgid "Note properties"
 msgstr ""
 
 msgid "Hyperlink"
@@ -1087,10 +1096,6 @@ msgid "Conflicts"
 msgstr ""
 
 msgid "Cannot move notebook to this location"
-msgstr ""
-
-#, javascript-format
-msgid "A notebook with this title already exists: \"%s\""
 msgstr ""
 
 #, javascript-format

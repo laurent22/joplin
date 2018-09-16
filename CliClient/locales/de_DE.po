@@ -962,6 +962,12 @@ msgstr ""
 "Momentan existieren noch keine Notizbücher. Erstelle eines, indem du auf "
 "\"Neues Notizbuch\" drückst."
 
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
 msgid "Open..."
 msgstr "Öffne..."
 
@@ -1014,6 +1020,9 @@ msgstr "Alarm erstellen"
 #, javascript-format
 msgid "In: %s"
 msgstr "In: %s"
+
+msgid "Note properties"
+msgstr ""
 
 msgid "Hyperlink"
 msgstr "Weblink"
@@ -1220,10 +1229,6 @@ msgstr "Konflikte"
 
 msgid "Cannot move notebook to this location"
 msgstr "Kann Notizbuch nicht an diesen Ort verschieben"
-
-#, javascript-format
-msgid "A notebook with this title already exists: \"%s\""
-msgstr "Ein Notizbuch mit diesem Titel existiert bereits : \"%s\""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
@@ -1691,6 +1696,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Willkommen"
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "Ein Notizbuch mit diesem Titel existiert bereits : \"%s\""
 
 #~ msgid "Searches"
 #~ msgstr "Suchen"

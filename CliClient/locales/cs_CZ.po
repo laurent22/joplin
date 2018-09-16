@@ -919,6 +919,12 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na \"Nový zápisník\"."
 
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
 msgid "Open..."
 msgstr "Otevřít..."
 
@@ -969,6 +975,9 @@ msgstr "Nastavit alarm"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
+
+msgid "Note properties"
+msgstr ""
 
 msgid "Hyperlink"
 msgstr ""
@@ -1176,10 +1185,6 @@ msgstr "Konflikty"
 #, fuzzy
 msgid "Cannot move notebook to this location"
 msgstr "Poznámku nelze přesunout do zápisníku \"%s\""
-
-#, javascript-format
-msgid "A notebook with this title already exists: \"%s\""
-msgstr "Zápisník s tímto názvem již existuje: \"%s\""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
@@ -1635,6 +1640,9 @@ msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na tlačítko (+
 
 msgid "Welcome"
 msgstr "Vítejte"
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "Zápisník s tímto názvem již existuje: \"%s\""
 
 #~ msgid "Searches"
 #~ msgstr "Hledané výrazy"

@@ -947,6 +947,12 @@ msgstr ""
 "Er is momenteel geen notitieboek. Creëer een notitieboek door de klikken op "
 "\"Nieuw notitieboek\"."
 
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
 msgid "Open..."
 msgstr "Openen..."
 
@@ -999,6 +1005,9 @@ msgstr "Alarm instellen"
 #, javascript-format
 msgid "In: %s"
 msgstr "In: %s"
+
+msgid "Note properties"
+msgstr ""
 
 msgid "Hyperlink"
 msgstr "Hyperlink"
@@ -1203,10 +1212,6 @@ msgstr "Conflicten"
 
 msgid "Cannot move notebook to this location"
 msgstr "Kan notitieboek niet verplaatsen naar deze locatie"
-
-#, javascript-format
-msgid "A notebook with this title already exists: \"%s\""
-msgstr "Er bestaat al een notitieboek met deze titel: \"%s\""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
@@ -1672,3 +1677,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Welkom"
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "Er bestaat al een notitieboek met deze titel: \"%s\""

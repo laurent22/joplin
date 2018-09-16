@@ -935,6 +935,12 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "Сейчас здесь нет блокнотов. Создайте новый нажав «Новый блокнот»."
 
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
 msgid "Open..."
 msgstr "Открыть..."
 
@@ -987,6 +993,9 @@ msgstr "Установить напоминание"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
+
+msgid "Note properties"
+msgstr ""
 
 msgid "Hyperlink"
 msgstr ""
@@ -1194,10 +1203,6 @@ msgstr "Конфликты"
 #, fuzzy
 msgid "Cannot move notebook to this location"
 msgstr "Не удалось переместить заметку в блокнот «%s»"
-
-#, javascript-format
-msgid "A notebook with this title already exists: \"%s\""
-msgstr "Блокнот с таким названием уже существует: «%s»"
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
@@ -1654,6 +1659,9 @@ msgstr "У вас сейчас нет блокнота. Создайте его 
 
 msgid "Welcome"
 msgstr "Добро пожаловать"
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "Блокнот с таким названием уже существует: «%s»"
 
 #~ msgid "Searches"
 #~ msgstr "Запросы"

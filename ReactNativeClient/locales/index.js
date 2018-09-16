@@ -16,6 +16,7 @@ locales['nl_BE'] = require('./nl_BE.json');
 locales['nl_NL'] = require('./nl_NL.json');
 locales['no'] = require('./no.json');
 locales['pt_BR'] = require('./pt_BR.json');
+locales['ro'] = require('./ro.json');
 locales['ru_RU'] = require('./ru_RU.json');
 locales['sl_SI'] = require('./sl_SI.json');
 locales['sv'] = require('./sv.json');
