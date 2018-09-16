@@ -159,12 +159,20 @@ class FileApiDriverDropbox {
 		// See https://github.com/facebook/react-native/issues/14445#issuecomment-352965210
 		if (typeof content === 'string') content = shim.Buffer.from(content, 'utf8')
 
-		await this.api().exec('POST', 'files/upload', content, {
-			'Dropbox-API-Arg': JSON.stringify({
-				path: this.makePath_(path),
-				mode: 'overwrite',
-				mute: true, // Don't send a notification to user since there can be many of these updates
-		})}, options);
+		try {
+			await this.api().exec('POST', 'files/upload', content, {
+				'Dropbox-API-Arg': JSON.stringify({
+					path: this.makePath_(path),
+					mode: 'overwrite',
+					mute: true, // Don't send a notification to user since there can be many of these updates
+			})}, options);
+		} catch (error) {
+			if (this.hasErrorCode_(error, 'restricted_content')) {
+				throw new JoplinError('Cannot upload because content is restricted by Dropbox', 'rejectedByTarget');
+			} else {
+				throw error;
+			}
+		}
 	}
 
 	async delete(path) {
