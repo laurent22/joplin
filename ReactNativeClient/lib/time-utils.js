@@ -60,6 +60,23 @@ class Time {
 		return moment(ms).format(format);
 	}
 
+	formatLocalToMs(localDateTime, format = null) {
+		if (format === null) format = this.dateTimeFormat();
+		const m = moment(localDateTime, format);
+		if (m.isValid()) return m.toDate().getTime();
+		throw new Error('Invalid input for formatLocalToMs: ' + localDateTime);
+	}
+
+	// Mostly used as a utility function for the DateTime Electron component
+	anythingToDateTime(o, defaultValue = null) {
+		if (o && o.toDate) return o.toDate();
+		if (!o) return defaultValue;
+		let m = moment(o, time.dateTimeFormat());
+		if (m.isValid()) return m.toDate();
+		m = moment(o, time.dateFormat());
+		return m.isValid() ? m.toDate() : defaultValue;
+	}
+
 	msleep(ms) {
 		return new Promise((resolve, reject) => {
 			setTimeout(() => {

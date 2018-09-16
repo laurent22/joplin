@@ -100,7 +100,12 @@ class Note extends BaseItem {
 	static geolocationUrl(note) {
 		if (!('latitude' in note) || !('longitude' in note)) throw new Error('Latitude or longitude is missing');
 		if (!Number(note.latitude) && !Number(note.longitude)) throw new Error(_('This note does not have geolocation information.'));
-		return sprintf('https://www.openstreetmap.org/?lat=%s&lon=%s&zoom=20', note.latitude, note.longitude)
+		return this.geoLocationUrlFromLatLong(note.latitude, note.longitude);
+		//return sprintf('https://www.openstreetmap.org/?lat=%s&lon=%s&zoom=20', note.latitude, note.longitude);
+	}
+
+	static geoLocationUrlFromLatLong(lat, long) {
+		return sprintf('https://www.openstreetmap.org/?lat=%s&lon=%s&zoom=20', lat, long)
 	}
 
 	static modelType() {
@@ -464,17 +469,6 @@ class Note extends BaseItem {
 
 		return note;
 	}
-
-	// Not used?
-
-	// static async delete(id, options = null) {
-	// 	let r = await super.delete(id, options);
-
-	// 	this.dispatch({
-	// 		type: 'NOTE_DELETE',
-	// 		id: id,
-	// 	});
-	// }
 
 	static async batchDelete(ids, options = null) {
 		const result = await super.batchDelete(ids, options);

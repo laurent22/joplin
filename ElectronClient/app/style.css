@@ -78,3 +78,7 @@ table td, table th {
 .smalltalk {
 	font-family: sans-serif;
 }
+
+.note-property-box .rdt {
+	display: inline-block;
+}

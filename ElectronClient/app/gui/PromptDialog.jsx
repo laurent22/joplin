@@ -102,7 +102,8 @@ class PromptDialog extends React.Component {
 			if (this.props.onClose) {
 				let outputAnswer = this.state.answer;
 				if (this.props.inputType === 'datetime') {
-					outputAnswer = anythingToDate(outputAnswer);
+					// outputAnswer = anythingToDate(outputAnswer);
+					outputAnswer = time.anythingToDateTime(outputAnswer);
 				}
 				this.props.onClose(accept ? outputAnswer : null, buttonType);
 			}
@@ -113,14 +114,14 @@ class PromptDialog extends React.Component {
 			this.setState({ answer: event.target.value });
 		}
 
-		const anythingToDate = (o) => {
-			if (o && o.toDate) return o.toDate();
-			if (!o) return null;
-			let m = moment(o, time.dateTimeFormat());
-			if (m.isValid()) return m.toDate();
-			m = moment(o, time.dateFormat());
-			return m.isValid() ? m.toDate() : null;
-		}
+		// const anythingToDate = (o) => {
+		// 	if (o && o.toDate) return o.toDate();
+		// 	if (!o) return null;
+		// 	let m = moment(o, time.dateTimeFormat());
+		// 	if (m.isValid()) return m.toDate();
+		// 	m = moment(o, time.dateFormat());
+		// 	return m.isValid() ? m.toDate() : null;
+		// }
 
 		const onDateTimeChange = (momentObject) => {
 			this.setState({ answer: momentObject });

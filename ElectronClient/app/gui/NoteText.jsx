@@ -1146,6 +1146,25 @@ class NoteTextComponent extends React.Component {
 		});
 
 		toolbarItems.push({
+			tooltip: _('Note properties'),
+			iconName: 'fa-info-circle',
+			onClick: () => {
+				const n = this.state.note;
+				if (!n || !n.id) return;
+
+				this.props.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'commandNoteProperties',
+					noteId: n.id,
+				});
+			},
+		});
+
+		toolbarItems.push({
+			type: 'separator',
+		});
+
+		toolbarItems.push({
 			tooltip: _('Hyperlink'),
 			iconName: 'fa-link',
 			onClick: () => { return this.commandTextLink(); },
