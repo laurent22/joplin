@@ -12,7 +12,7 @@ echo "              |_|                                                 "
 # Get the latest version to download
 version=$(curl --silent "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": "v\K.*?(?=")')
 # Delete previous version
-rm ~/.joplin/*.AppImage ~/.local/share/applications/joplin.desktop
+rm -f ~/.joplin/*.AppImage ~/.local/share/applications/joplin.desktop
 # Creates the folder where the binary will be stored
 mkdir -p ~/.joplin/
 # Download the latest version
