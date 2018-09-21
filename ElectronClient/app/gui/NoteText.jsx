@@ -1404,6 +1404,7 @@ class NoteTextComponent extends React.Component {
 			style={viewerStyle}
 			preload="gui/note-viewer/preload.js"
 			src="gui/note-viewer/index.html"
+			webpreferences="contextIsolation"
 			ref={(elem) => { this.webview_ref(elem); } }
 		/>
 

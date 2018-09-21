@@ -36,6 +36,22 @@
 	<script>
 	const contentElement = document.getElementById('content');
 
+	const ipc = {};
+
+	window.addEventListener('message', (event) => {
+		// Here we only deal with messages that are sent from the main Electro process to the webview.
+		if (!event.data || event.data.target !== 'webview') return;
+
+		const callName = event.data.name;
+		const callData = event.data.data;
+
+		if (!ipc[callName]) {
+			console.warn('Missing IPC function:', event.data);
+		} else {
+			ipc[callName](callData);
+		}
+	});
+
 	// ----------------------------------------------------------------------
 	// Handle dynamically loading HLJS when a code element is present
 	// ----------------------------------------------------------------------
@@ -119,7 +135,9 @@
 		setPercentScroll(percentScroll_);
 	}
 
-	ipcRenderer.on('setHtml', (event, html) => {
+	ipc.setHtml = (event) => {
+		const html = event.html;
+
 		updateBodyHeight();
 
 		contentElement.innerHTML = html;
@@ -158,10 +176,12 @@
 				}
 			}, 1);
 		}
-	});
+	}
 
 	let ignoreNextScrollEvent = false;
-	ipcRenderer.on('setPercentScroll', (event, percent) => {
+	ipc.setPercentScroll = (event) => {
+		const percent = event.percent;
+
 		if (checkScrollIID_) {
 			clearInterval(checkScrollIID_);
 			checkScrollIID_ = null;
@@ -169,7 +189,7 @@
 
 		ignoreNextScrollEvent = true;
 		setPercentScroll(percent);
-	});
+	}
 
 	let mark_ = null;
 	function setMarkers(keywords) {
@@ -184,7 +204,9 @@
 	}
 
 	let markLoaded_ = false;
-	ipcRenderer.on('setMarkers', (event, keywords) => {
+	ipc.setMarkers = (event) => {
+		const keywords = event.keywords;
+
 		if (!keywords.length && !markLoaded_) return;
 
 		if (!markLoaded_) {
@@ -199,7 +221,7 @@
 		} else {
 			setMarkers(keywords);
 		}
-	});
+	}
 
 	function maxScrollTop() {
 		return Math.max(0, contentElement.scrollHeight - contentElement.clientHeight);
@@ -210,6 +232,10 @@
 		document.getElementById('body').style.height = window.innerHeight + 'px';
 	}
 
+	const ipcProxySendToHost = (methodName, arg) => {
+		window.postMessage({ target: 'main', name: methodName, args: [ arg ] }, '*');
+	}
+
 	contentElement.addEventListener('scroll', function(e) {
 		if (ignoreNextScrollEvent) {
 			ignoreNextScrollEvent = false;
@@ -218,7 +244,8 @@
 		const m = maxScrollTop();
 		const percent = m ? contentElement.scrollTop / m : 0;
 		setPercentScroll(percent);
-		ipcRenderer.sendToHost('percentScroll', percent);
+		
+		ipcProxySendToHost('percentScroll', percent);
 	});
 
 	document.addEventListener('contextmenu', function(event) {
@@ -228,7 +255,7 @@
 		if (element && !element.getAttribute('data-resource-id')) element = element.parentElement;
 
 		if (element && element.getAttribute('data-resource-id')) {
-			ipcRenderer.sendToHost('contextMenu', {
+			ipcProxySendToHost('contextMenu', {
 				type: element.getAttribute('src') ? 'image' : 'resource',
 				resourceId: element.getAttribute('data-resource-id'),
 			});
@@ -236,12 +263,12 @@
 			const selectedText = window.getSelection().toString();
 
 			if (selectedText) {
-				ipcRenderer.sendToHost('contextMenu', {
+				ipcProxySendToHost('contextMenu', {
 					type: 'text',
 					textToCopy: selectedText,
 				});
 			} else if (event.target.getAttribute('href')) {
-				ipcRenderer.sendToHost('contextMenu', {
+				ipcProxySendToHost('contextMenu', {
 					type: 'link',
 					textToCopy: event.target.getAttribute('href'),
 				});
