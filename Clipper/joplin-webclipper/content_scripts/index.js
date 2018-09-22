@@ -80,7 +80,7 @@
 				title: title,
 				html: html,
 				base_url: baseUrl(),
-				url: location.origin + location.pathname,
+				url: location.origin + location.pathname + location.search,
 				parent_id: command.parent_id,
 			};			
 		}
