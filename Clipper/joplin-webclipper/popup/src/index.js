@@ -88,11 +88,19 @@ function reducer(state = defaultState, action) {
 	return newState;
 }
 
-const store = createStore(reducer, applyMiddleware(reduxMiddleware));
+async function main() {
+	const store = createStore(reducer, applyMiddleware(reduxMiddleware));
 
-bridge().init(window.browser ? window.browser : window.chrome, !!window.browser, store.dispatch);
-bridge().restoreState();
+	console.info('Popup: Init bridge and restore state...');
 
-console.info('Popup: Creating React app...');
+	await bridge().init(window.browser ? window.browser : window.chrome, !!window.browser, store.dispatch);
+	bridge().restoreState();
 
-ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
+	console.info('Popup: Creating React app...');
+
+	ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
+}
+
+main().catch((error) => {
+	console.error('Fatal error on initialisation:', error);
+});
