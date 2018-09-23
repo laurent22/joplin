@@ -32,8 +32,6 @@ class FolderListWidget extends ListWidget {
 				output.push(_('Search:'));
 				output.push(item.title);
 			}
-
-			// if (item && item.id) output.push(item.id.substr(0, 5));
 			
 			return output.join(' ');
 		};
@@ -85,7 +83,6 @@ class FolderListWidget extends ListWidget {
 	}
 
 	set notesParentType(v) {
-		//if (this.notesParentType_ === v) return;
 		this.notesParentType_ = v;
 		this.updateIndexFromSelectedItemId()
 		this.invalidate();
@@ -123,6 +120,14 @@ class FolderListWidget extends ListWidget {
 		this.updateIndexFromSelectedItemId()
 		this.invalidate();
 	}
+
+	folderHasChildren_(folders, folderId) {
+		for (let i = 0; i < folders.length; i++) {
+			let folder = folders[i];
+			if (folder.parent_id === folderId) return true;
+		}
+		return false;
+	}
 	
 	render() {
 		if (this.updateItems_) {
@@ -130,7 +135,18 @@ class FolderListWidget extends ListWidget {
 			const wasSelectedItemId = this.selectedJoplinItemId;
 			const previousParentType = this.notesParentType;
 
-			let newItems = this.folders.slice();
+			let newItems = [];
+			const orderFolders = (parentId) => {
+				for (let i = 0; i < this.folders.length; i++) {
+					const f = this.folders[i];
+					if (f.parent_id === parentId) {
+						newItems.push(f);
+						if (this.folderHasChildren_(this.folders, f.id)) orderFolders(f.id);
+					}
+				}
+			}
+
+			orderFolders('');
 
 			if (this.tags.length) {
 				if (newItems.length) newItems.push('-');
