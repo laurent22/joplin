@@ -127,6 +127,26 @@ class AppComponent extends Component {
 		this.setState({
 			contentScriptLoaded: true,
 		});
+
+		let foundSelectedFolderId = false;
+
+		const searchSelectedFolder = (folders) => {
+			for (let i = 0; i < folders.length; i++) {
+				const folder = folders[i];
+				if (folder.id === this.props.selectedFolderId) foundSelectedFolderId = true;
+				if (folder.children) searchSelectedFolder(folder.children);
+			}
+		}
+
+		searchSelectedFolder(this.props.folders);
+
+		if (!foundSelectedFolderId) {
+			const newFolderId = this.props.folders.length ? this.props.folders[0].id : null;
+			this.props.dispatch({
+				type: 'SELECTED_FOLDER_SET',
+				id: newFolderId,
+			});
+		}
 	}
 
 	componentDidUpdate() {

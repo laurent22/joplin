@@ -115,13 +115,7 @@
 	margin-right: .5em;
 }
 
-.App .Folders select,
-.App .Tags .AwesompleteInput {
-	flex: 1;
-}
-
-.App .Tags .AwesompleteInput, .awesomplete {
-	display: flex !important;
+.App .Folders select {
 	flex: 1;
 }
 

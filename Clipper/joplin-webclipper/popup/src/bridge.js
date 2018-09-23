@@ -126,6 +126,8 @@ class Bridge {
 
 					const tags = await this.clipperApiExec('GET', 'tags');
 					this.dispatch({ type: 'TAGS_SET', tags: tags });
+
+					bridge().restoreState();
 					return;
 				}
 			} catch (error) {

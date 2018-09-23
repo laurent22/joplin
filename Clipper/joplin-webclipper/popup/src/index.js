@@ -100,7 +100,6 @@ async function main() {
 	console.info('Popup: Init bridge and restore state...');
 
 	await bridge().init(window.browser ? window.browser : window.chrome, !!window.browser, store.dispatch);
-	bridge().restoreState();
 
 	console.info('Popup: Creating React app...');
 
