@@ -1,7 +1,9 @@
 const Setting = require('lib/models/Setting.js');
 
+const zoomRatio = Setting.value('style.zoom') / 100;
+
 const globalStyle = {
-	fontSize: 12 * Setting.value('style.zoom') / 100,
+	fontSize: Math.round(12 * zoomRatio),
 	fontFamily: 'sans-serif',
 	margin: 15, // No text and no interactive component should be within this margin
 	itemMarginTop: 10,
@@ -46,7 +48,7 @@ globalStyle.htmlColor ='black'; // Note: CSS in WebView component only supports 
 globalStyle.htmlBackgroundColor ='white';
 globalStyle.htmlDividerColor = 'rgb(150,150,150)';
 globalStyle.htmlLinkColor ='blue';
-globalStyle.htmlLineHeight ='20px';
+globalStyle.htmlLineHeight = Math.round(20 * zoomRatio) + 'px';
 
 globalStyle.marginRight = globalStyle.margin;
 globalStyle.marginLeft = globalStyle.margin;
