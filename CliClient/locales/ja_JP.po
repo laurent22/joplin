@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.6\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "タグを削除するには、関連するノートからタグを外してください。"
@@ -927,6 +925,12 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "ノートブックがありません。新しいノートブックを作成してください。"
 
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
 msgid "Open..."
 msgstr "開く..."
 
@@ -979,6 +983,9 @@ msgstr "アラームをセット"
 #, javascript-format
 msgid "In: %s"
 msgstr "内: %s"
+
+msgid "Note properties"
+msgstr ""
 
 msgid "Hyperlink"
 msgstr "ハイパーリンク"
@@ -1183,10 +1190,6 @@ msgstr "衝突"
 
 msgid "Cannot move notebook to this location"
 msgstr "ノートをノートブック \"%s\" に移動できません"
-
-#, javascript-format
-msgid "A notebook with this title already exists: \"%s\""
-msgstr "次の名前のノートブックはすでに存在しています: \"%s\""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
@@ -1648,6 +1651,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "次の名前のノートブックはすでに存在しています: \"%s\""
 
 #~ msgid "Searches"
 #~ msgstr "検索"
