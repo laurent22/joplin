@@ -147,6 +147,11 @@ function historyCanGoBackTo(route, nextRoute) {
 	if (route.routeName === 'Note') return false;
 	if (route.routeName === 'Folder') return false;
 
+	// There's no point going back to these screens in general and, at least in OneDrive case,
+	// it can be buggy to do so, due to incorrectly relying on global state (reg.syncTarget...) 
+	if (route.routeName === 'OneDriveLogin') return false;
+	if (route.routeName === 'DropboxLogin') return false;
+
 	return true;
 }
 
