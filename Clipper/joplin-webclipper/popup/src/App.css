@@ -100,21 +100,40 @@
 	flex: 0;
 }
 
-.App .Folders {
+.App .Folders,
+.App .Tags {
 	display: flex;
 	flex-direction: row;
-	align-items: center;
+	align-items: top;
 	padding: 5px 0;
 }
 
-.App .Folders label {
+.App .Folders label,
+.App .Tags label {
 	flex: 0;
 	white-space: nowrap;
+	margin-right: .5em;
 }
 
-.App .Folders select {
+.App .Folders select,
+.App .Tags .AwesompleteInput {
 	flex: 1;
-	margin-left: 10px;
+}
+
+.App .Tags .AwesompleteInput, .awesomplete {
+	display: flex !important;
+	flex: 1;
+}
+
+.App .Tags input {
+	display: inline-block;
+	flex: 1;
+	margin-bottom: .5em;
+}
+
+.App .ClearTagButton {
+	margin-left: .5em;
+	text-decoration: none;
 }
 
 .App .StatusBar {

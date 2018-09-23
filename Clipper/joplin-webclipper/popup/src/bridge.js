@@ -28,6 +28,7 @@ class Bridge {
 					base_url: command.base_url,
 					source_url: command.url,
 					parent_id: command.parent_id,
+					tags: command.tags || '',
 				};
 
 				this.dispatch({ type: 'CLIPPED_CONTENT_SET', content: content });
@@ -122,6 +123,9 @@ class Bridge {
 
 					const folders = await this.folderTree();
 					this.dispatch({ type: 'FOLDERS_SET', folders: folders });
+
+					const tags = await this.clipperApiExec('GET', 'tags');
+					this.dispatch({ type: 'TAGS_SET', tags: tags });
 					return;
 				}
 			} catch (error) {

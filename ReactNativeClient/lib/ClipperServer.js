@@ -3,6 +3,7 @@ const urlParser = require("url");
 const Note = require('lib/models/Note');
 const Folder = require('lib/models/Folder');
 const Resource = require('lib/models/Resource');
+const Tag = require('lib/models/Tag');
 const Setting = require('lib/models/Setting');
 const { shim } = require('lib/shim');
 const md5 = require('md5');
@@ -257,6 +258,10 @@ class ClipperServer {
 					const structure = await Folder.allAsTree({ fields: ['id', 'parent_id', 'title'] });
 					return writeResponseJson(200, structure);
 				}
+
+				if (url.pathname === '/tags') {
+					return writeResponseJson(200, await Tag.all({ fields: ['id', 'title'] }));
+				}
 			} else if (request.method === 'POST') {
 				if (url.pathname === '/notes') {
 					let body = '';
@@ -277,6 +282,11 @@ class ClipperServer {
 							note.body = this.replaceImageUrlsByResources_(note.body, result);
 
 							note = await Note.save(note);
+
+							if (requestNote.tags) {
+								const tagTitles = requestNote.tags.split(',');
+								await Tag.setNoteTagsByTitles(note.id, tagTitles);
+							}
 
 							if (requestNote.image_data_url) {
 								await this.attachImageFromDataUrl_(note, requestNote.image_data_url, requestNote.crop_rect);

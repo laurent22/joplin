@@ -16,6 +16,7 @@ const defaultState = {
 		port: null,
 	},
 	folders: [],
+	tags: [],
 	selectedFolderId: null,
 	env: 'prod',
 };
@@ -64,6 +65,11 @@ function reducer(state = defaultState, action) {
 		if (!newState.selectedFolderId && action.folders.length) {
 			newState.selectedFolderId = action.folders[0].id;
 		}
+
+	} else if (action.type === 'TAGS_SET') {
+
+		newState = Object.assign({}, state);
+		newState.tags = action.tags;
 
 	} else if (action.type === 'SELECTED_FOLDER_SET') {
 

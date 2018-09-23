@@ -82,6 +82,7 @@
 				base_url: baseUrl(),
 				url: location.origin + location.pathname + location.search,
 				parent_id: command.parent_id,
+				tags: command.tags || '',
 			};			
 		}
 
@@ -214,6 +215,7 @@
 						crop_rect: selectionArea,
 						url: location.origin + location.pathname,
 						parent_id: command.parent_id,
+						tags: command.tags,
 					};
 
 					browser_.runtime.sendMessage({

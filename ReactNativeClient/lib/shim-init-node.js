@@ -173,7 +173,16 @@ function shimInit() {
 		if (shim.isElectron()) {
 			const nativeImage = require('electron').nativeImage;
 			let image = nativeImage.createFromDataURL(imageDataUrl);
-			if (options.cropRect) image = image.crop(options.cropRect);
+			if (image.isEmpty()) throw new Error('Could not convert data URL to image');
+			if (options.cropRect) {
+				// Crop rectangle values need to be rounded or the crop() call will fail
+				const c = options.cropRect;
+				if ('x' in c) c.x = Math.round(c.x);
+				if ('y' in c) c.y = Math.round(c.y);
+				if ('width' in c) c.width = Math.round(c.width);
+				if ('height' in c) c.height = Math.round(c.height);
+				image = image.crop(c);
+			}
 			const mime = mimeUtils.fromDataUrl(imageDataUrl);
 			await shim.writeImageToFile(image, mime, filePath);
 		} else {
