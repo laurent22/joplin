@@ -8,17 +8,19 @@ class GeolocationNode {
 
 		const ip = await netUtils.ip();
 
-		let response = await shim.fetch('https://freegeoip.net/json/' + ip);
+		let response = await shim.fetch('http://ip-api.com/json/' + ip);
 		if (!response.ok) throw new Error('Could not get geolocation: ' + await response.text());
 
 		response = await response.json();
 
+		if (!('lat' in response) || !('lon' in response)) throw new Error('Invalid geolocation response: ' . JSON.stringify(response));
+
 		return {
 			timestamp: (new Date()).getTime(),
 			coords: {
-				longitude: response.longitude,
+				longitude: response.lon,
 				altitude: 0,
-				latitude: response.latitude
+				latitude: response.lat
 			}
 		}
 	}

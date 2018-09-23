@@ -101,7 +101,6 @@ class Note extends BaseItem {
 		if (!('latitude' in note) || !('longitude' in note)) throw new Error('Latitude or longitude is missing');
 		if (!Number(note.latitude) && !Number(note.longitude)) throw new Error(_('This note does not have geolocation information.'));
 		return this.geoLocationUrlFromLatLong(note.latitude, note.longitude);
-		//return sprintf('https://www.openstreetmap.org/?lat=%s&lon=%s&zoom=20', note.latitude, note.longitude);
 	}
 
 	static geoLocationUrlFromLatLong(lat, long) {
