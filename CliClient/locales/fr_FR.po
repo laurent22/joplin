@@ -461,7 +461,6 @@ msgstr "Commencement de la synchronisation..."
 msgid "Cancelling... Please wait."
 msgstr "Annulation... Veuillez attendre."
 
-#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
@@ -470,7 +469,7 @@ msgstr ""
 "<tag-command> peut être \"add\", \"remove\" ou \"list\" pour assigner ou "
 "enlever l'étiquette [tag] de la [note], our pour lister les notes associées "
 "avec l'étiquette [tag]. La commande `tag list` peut être utilisée pour "
-"lister les étiquettes."
+"lister les étiquettes (utilisez l'option -l pour les options complètes)."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
@@ -949,10 +948,10 @@ msgstr ""
 "carnet\"."
 
 msgid "Location"
-msgstr ""
+msgstr "Lieu"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 msgid "Open..."
 msgstr "Ouvrir..."
@@ -1008,7 +1007,7 @@ msgid "In: %s"
 msgstr "Dans : %s"
 
 msgid "Note properties"
-msgstr ""
+msgstr "Propriétés de la note"
 
 msgid "Hyperlink"
 msgstr "Lien"
@@ -1294,7 +1293,7 @@ msgid "Note: Does not work in all desktop environments."
 msgstr "Note : Ne fonctionne pas dans tous les environnements de bureau."
 
 msgid "Start application minimised in the tray icon"
-msgstr ""
+msgstr "Démarrer minimisé dans la zone de notification"
 
 msgid "Global zoom percentage"
 msgstr "Niveau de zoom"
@@ -1371,6 +1370,9 @@ msgid ""
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
 msgstr ""
+"Attention : si vous changez cet emplacement, copiez-y tout le contenu avant "
+"de synchroniser, sinon tous les fichiers seront supprimés ! Consulter la FAQ "
+"pour plus de détails : %s"
 
 msgid "Nextcloud username"
 msgstr "Nextcloud : Nom utilisateur"
@@ -1411,7 +1413,7 @@ msgstr "Option invalide: \"%s\". Les valeurs possibles sont : %s."
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr ""
+msgstr "L'étiquette \"%s\" existe déjà. Veuillez choisir un autre nom."
 
 msgid "Joplin Export File"
 msgstr "Fichier d'export Joplin"
