@@ -166,8 +166,10 @@ class Application extends BaseApplication {
 
 				case 'NOTE_FILE_WATCHER_CLEAR':
 
-					newState = Object.assign({}, state);
-					newState.watchedNoteFiles = [];
+					if (state.watchedNoteFiles.length) {
+						newState = Object.assign({}, state);
+						newState.watchedNoteFiles = [];
+					}
 					break;
 
 			}
