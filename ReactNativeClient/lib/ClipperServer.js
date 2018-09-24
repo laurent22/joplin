@@ -115,14 +115,21 @@ class ClipperServer {
 
 	async downloadImage_(url) {
 		const tempDir = Setting.value('tempDir');
-		const name = filename(url);
-		let fileExt = safeFileExtension(fileExtension(url).toLowerCase());
+
+		const isDataUrl = url && url.toLowerCase().indexOf('data:') === 0;
+
+		const name = isDataUrl ? md5(Math.random() + '_' + Date.now()) : filename(url);
+		let fileExt = isDataUrl ? mimeUtils.toFileExtension(mimeUtils.fromDataUrl(url)) : safeFileExtension(fileExtension(url).toLowerCase());
 		if (fileExt) fileExt = '.' + fileExt;
 		let imagePath = tempDir + '/' + safeFilename(name) + fileExt;
 		if (await shim.fsDriver().exists(imagePath)) imagePath = tempDir + '/' + safeFilename(name) + '_' + md5(Math.random() + '_' + Date.now()).substr(0,10) + fileExt;
 
 		try {
-			const result = await shim.fetchBlob(url, { path: imagePath });
+			if (isDataUrl) {
+				await shim.imageFromDataUrl(url, imagePath);
+			} else {
+				await shim.fetchBlob(url, { path: imagePath });
+			}
 			return imagePath;
 		} catch (error) {
 			this.logger().warn('Cannot download image at ' + url, error);
@@ -276,10 +283,18 @@ class ClipperServer {
 							let note = await this.requestNoteToNote(requestNote);
 
 							const imageUrls = markdownUtils.extractImageUrls(note.body);
+
+							this.logger().info('Request (' + requestId + '): Downloading images: ' + imageUrls.length);
+
 							let result = await this.downloadImages_(imageUrls);
+
+							this.logger().info('Request (' + requestId + '): Creating resources from paths: ' + Object.getOwnPropertyNames(result).length);
+
 							result = await this.createResourcesFromPaths_(result);
 							await this.removeTempFiles_(result);
 							note.body = this.replaceImageUrlsByResources_(note.body, result);
+
+							this.logger().info('Request (' + requestId + '): Saving note...');
 
 							note = await Note.save(note);
 
