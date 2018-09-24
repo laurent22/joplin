@@ -748,7 +748,7 @@ class NoteTextComponent extends React.Component {
 					this.forceUpdate();
 				}, 100);
 			},
-			postMessageSyntax: 'ipcRenderer.sendToHost',
+			postMessageSyntax: 'ipcProxySendToHost',
 		};
 
 		const theme = themeStyle(this.props.theme);
