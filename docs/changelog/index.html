@@ -250,6 +250,20 @@
 </ul>
 </div>
 <h1 id="joplin-changelog">Joplin changelog</h1>
+<h2 id="-v1-0-109-https-github-com-laurent22-joplin-releases-tag-v1-0-109-2018-09-27t18-01-41z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.109">v1.0.109</a> - 2018-09-27T18:01:41Z</h2>
+<ul>
+<li>New: Allow loading image resources in IMG html tags. For example, this is now possible: <code>&lt;img src=&quot;:/a92ac34387ff467a8c839d201dcd39aa&quot; width=&quot;50&quot;/&gt;</code></li>
+<li>Security: Fixed security issue by enabling contextIsolation and proxying IPC messages via preload script. Thank you Yaroslav Lobachevski for discovering the issue.</li>
+<li>Fixes <a href="https://github.com/laurent22/joplin/issues/801">#801</a>: Replaced freegeoip which is no longer free with ip-api to enable again geo-location for notes.</li>
+<li>Fixes <a href="https://github.com/laurent22/joplin/issues/802">#802</a>: Scale note text correctly when using zoom</li>
+<li>Fixes <a href="https://github.com/laurent22/joplin/issues/805">#805</a>: Fixed app freezing when opening note in external editor and then creating new note</li>
+<li>Clipper: Fixes <a href="https://github.com/laurent22/joplin/issues/809">#809</a>: Saves full URL with note, including query parameters</li>
+<li>Clipper: Resolves <a href="https://github.com/laurent22/joplin/issues/681">#681</a>: Allow adding tags from Web Clipper</li>
+<li>Clipper: Fixes <a href="https://github.com/laurent22/joplin/issues/672">#672</a>: Make sure selected notebook is saved and restored correctly</li>
+<li>Clipper: Fixes <a href="https://github.com/laurent22/joplin/issues/817">#817</a>: Added support for PICTURE tags, which will fix issues with certain pages from which images were not being imported</li>
+<li>Clipper: Fixed importing certain images with sources that contain brackets</li>
+<li>Improved: Mostly an invisible change at this point, but the REST API has been refactored to allow adding more calls and to support third-party applications.</li>
+</ul>
 <h2 id="-v1-0-107-https-github-com-laurent22-joplin-releases-tag-v1-0-107-2018-09-16t19-51-07z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.107">v1.0.107</a> - 2018-09-16T19:51:07Z</h2>
 <ul>
 <li>New: Resolves <a href="https://github.com/laurent22/joplin/issues/755">#755</a>: Added note properties dialog box to view and edit created time, updated time, source URL and geolocation</li>
@@ -497,12 +511,6 @@
 <ul>
 <li>Improved the way settings are changed. Should also fixed issue with sync context being accidentally broken.</li>
 <li>Improved WebDAV driver compatibility with some services (eg. Seafile)</li>
-</ul>
-<h2 id="-v1-0-62-https-github-com-laurent22-joplin-releases-tag-v1-0-62-2018-02-12t20-19-58z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.62">v1.0.62</a> - 2018-02-12T20:19:58Z</h2>
-<ul>
-<li>Fixes <a href="https://github.com/laurent22/joplin/issues/205">#205</a>: Importing Evernote notes while on import page re-imports previous import</li>
-<li>Fixes <a href="https://github.com/laurent22/joplin/issues/209">#209</a>: Items with non-ASCII characters end up truncated on Nextcloud</li>
-<li>Added Basque translation, fixed issue with handling invalid translations. Updated translation FR.</li>
 </ul>
 
 <script>
