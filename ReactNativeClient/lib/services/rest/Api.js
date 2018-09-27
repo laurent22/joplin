@@ -43,7 +43,7 @@ class ErrorNotFound extends ApiError {
 class ErrorForbidden extends ApiError {
 
 	constructor(message = 'Forbidden') {
-		super(message, 404);
+		super(message, 403);
 	}
 
 }
@@ -173,7 +173,7 @@ class Api {
 			}
 
 			this.logger().info('Request (' + requestId + '): Created note ' + note.id);
-			
+
 			return note;
 		}
 
