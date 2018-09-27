@@ -274,7 +274,9 @@ The checkboxes can then be ticked in the mobile and desktop applications.
 
 ## HTML support
 
-Only the `<br>` tag is supported - it can be used to force a new line, which is convenient to insert new lines inside table cells. For security reasons, other HTML tags are not supported.
+It is generally recommended to enter the notes as Markdown as it makes the notes easier to edit. However for cases where certain features aren't supported (such as strikethrough or to highlight text), you can also use HTML code directly. For example this would be a valid note:
+
+	This is <s>strikethrough text</s> mixed with regular **Markdown**.
 
 # Donations
 

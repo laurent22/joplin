@@ -73,31 +73,31 @@ class MdToHtml {
 		return attrs;
 	}
 
-	renderImage_(attrs, options) {
-		const loadResource = async (id) => {
-			// console.info('Loading resource: ' + id);
+	async loadResource(id, options) {
+		// console.info('Loading resource: ' + id);
 
-			// Initially set to to an empty object to make
-			// it clear that it is being loaded. Otherwise
-			// it sometimes results in multiple calls to
-			// loadResource() for the same resource.
-			this.loadedResources_[id] = {};
+		// Initially set to to an empty object to make
+		// it clear that it is being loaded. Otherwise
+		// it sometimes results in multiple calls to
+		// loadResource() for the same resource.
+		this.loadedResources_[id] = {};
 
-			const resource = await Resource.load(id);
-			//const resource = await this.modelCache_.load(Resource, id);
+		const resource = await Resource.load(id);
+		//const resource = await this.modelCache_.load(Resource, id);
 
-			if (!resource) {
-				// Can happen for example if an image is attached to a note, but the resource hasn't
-				// been downloaded from the sync target yet.
-				console.warn('Cannot load resource: ' + id);
-				return;
-			}
-
-			this.loadedResources_[id] = resource;
-
-			if (options.onResourceLoaded) options.onResourceLoaded();
+		if (!resource) {
+			// Can happen for example if an image is attached to a note, but the resource hasn't
+			// been downloaded from the sync target yet.
+			console.warn('Cannot load resource: ' + id);
+			return;
 		}
 
+		this.loadedResources_[id] = resource;
+
+		if (options.onResourceLoaded) options.onResourceLoaded();
+	}
+
+	renderImage_(attrs, options) {
 		const title = this.getAttr_(attrs, 'title');
 		const href = this.getAttr_(attrs, 'src');
 
@@ -108,7 +108,7 @@ class MdToHtml {
 		const resourceId = Resource.urlToId(href);
 		const resource = this.loadedResources_[resourceId];
 		if (!resource) {
-			loadResource(resourceId);
+			this.loadResource(resourceId, options);
 			return '';
 		}
 
@@ -122,6 +122,27 @@ class MdToHtml {
 			return output;
 		}
 		
+		return '[Image: ' + htmlentities(resource.title) + ' (' + htmlentities(mime) + ')]';
+	}
+
+	renderImageHtml_(before, src, after, options) {
+		const resourceId = Resource.urlToId(src);
+		const resource = this.loadedResources_[resourceId];
+		if (!resource) {
+			this.loadResource(resourceId, options);
+			return '';
+		}
+
+		if (!resource.id) return ''; // Resource is being loaded
+
+		const mime = resource.mime ? resource.mime.toLowerCase() : '';
+		if (Resource.isSupportedImageMimeType(mime)) {
+			let newSrc = './' + Resource.filename(resource);
+			if (this.resourceBaseUrl_ !== null) newSrc = this.resourceBaseUrl_ + newSrc;
+			let output = '<img ' + before + ' data-resource-id="' + resource.id + '" src="' + newSrc + '" ' + after + '/>';
+			return output;
+		}
+
 		return '[Image: ' + htmlentities(resource.title) + ' (' + htmlentities(mime) + ')]';
 	}
 
@@ -472,6 +493,12 @@ class MdToHtml {
 			}
 		}
 
+		renderedBody = renderedBody.replace(/<img(.*?)src=["'](.*?)["'](.*?)\/>/g, (v, before, src, after) => {
+			if (!Resource.isResourceUrl(src)) return '<img ' + before + ' src="' + src + '" ' + after + '/>';
+			return this.renderImageHtml_(before, src, after, options);
+		});
+
+
 		// https://necolas.github.io/normalize.css/
 		const normalizeCss = `
 			html{line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}
@@ -561,7 +588,7 @@ class MdToHtml {
 				border-bottom: 1px solid ` + style.htmlDividerColor + `;
 			}
 			img {
-				width: auto;
+				/* width: auto; */
 				max-width: 100%;
 			}
 			.inline-code {

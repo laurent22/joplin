@@ -6,13 +6,13 @@ It seems to be due to the setting `set term=ansi` in .vimrc. Removing it should 
 
 When changing the WebDAV URL, make sure that the new location has the same exact content as the old location (i.e. copy all the Joplin data over to the new location). Otherwise, if there's nothing on the new location, Joplin is going to think that you have deleted all your data and will proceed to delete it locally too. So to change the WebDAV URL, please follow these steps:
 
-0. Make a backup of your Joplin data in case something goes wrong. Export to a JEX archive for example.
-1. Synchronise one last time all your data from a Joplin client (for example, from the desktop client)
-2. Close the Joplin client.
-3. On your WebDAV service, copy all the Joplin files from the old location to the new one. Make sure to also copy the `.resource` directory as it contains your images and other attachments.
-4. Once it's done, open Joplin again and change the WebDAV URL.
-5. Synchronise to verify that everything is working.
-6. Do step 4 and 5 for all the other Joplin clients you need to sync.
+1. Make a backup of your Joplin data in case something goes wrong. Export to a JEX archive for example.
+2. Synchronise one last time all your data from a Joplin client (for example, from the desktop client)
+3. Close the Joplin client.
+4. On your WebDAV service, copy all the Joplin files from the old location to the new one. Make sure to also copy the `.resource` directory as it contains your images and other attachments.
+5. Once it's done, open Joplin again and change the WebDAV URL.
+6. Synchronise to verify that everything is working.
+7. Do step 5 and 6 for all the other Joplin clients you need to sync.
 
 # How can I easily enter Markdown tags in Android?
 
@@ -29,6 +29,27 @@ Short answer: no. The end to end encryption that Joplin implements is to protect
 On the local device it is assumed that the data is safe due to the OS built-in security features. If additional security is needed it's always possible to put the notes on an encrypted Truecrypt drive for instance.
 
 If someone that you don't trust has access to the computer, they can put a keylogger anyway so any local encryption or PIN access would not be useful.
+
+# WebDAV synchronisation is not working
+
+## "Forbidden" error in Strato
+
+For example:
+
+    MKCOL .sync/: Unknown error 2 (403): <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+    <html><head>
+    <title>403 Forbidden</title>
+    </head><body>
+    <h1>Forbidden</h1>
+    <p>You don't have permission to access /.sync/
+    on this server.</p>
+    </body></html>
+
+In this case, [make sure you enter the correct WebDAV URL](https://github.com/laurent22/joplin/issues/309).
+
+## Nginx sync not working
+
+As of now, Joplin is not compatible with the Nginx WebDAV server: https://github.com/laurent22/joplin/issues/808
 
 # Why is it named Joplin?
 
