@@ -207,8 +207,9 @@ class Note extends BaseItem {
 		return ['id', 'title', 'body', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied'];
 	}
 
-	static previewFieldsSql() {
-		return this.db().escapeFields(this.previewFields()).join(',');
+	static previewFieldsSql(fields = null) {
+		if (fields === null) fields = this.previewFields();
+		return this.db().escapeFields(fields).join(',');
 	}
 
 	static async loadFolderNoteByField(folderId, field, value) {
@@ -309,8 +310,9 @@ class Note extends BaseItem {
 		return this.search(options);
 	}
 
-	static preview(noteId) {
-		return this.modelSelectOne('SELECT ' + this.previewFieldsSql() + ' FROM notes WHERE is_conflict = 0 AND id = ?', [noteId]);
+	static preview(noteId, options = null) {
+		if (!options) options = { fields: null };
+		return this.modelSelectOne('SELECT ' + this.previewFieldsSql(options.fields) + ' FROM notes WHERE is_conflict = 0 AND id = ?', [noteId]);
 	}
 
 	static conflictedNotes() {

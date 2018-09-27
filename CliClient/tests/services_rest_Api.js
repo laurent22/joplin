@@ -5,7 +5,10 @@ const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synch
 const markdownUtils = require('lib/markdownUtils.js');
 const Api = require('lib/services/rest/Api');
 const Folder = require('lib/models/Folder');
+const Note = require('lib/models/Note');
 const Resource = require('lib/models/Resource');
+
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 5000;
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -39,6 +42,35 @@ describe('services_rest_Api', function() {
 		const response = await api.route('GET', 'folders');
 		expect(response.length).toBe(1);
 		expect(response[0].title).toBe('mon carnet');
+		done();
+	});
+
+	it('should get notes', async (done) => {
+		let response = null;
+		const f1 = await Folder.save({ title: "mon carnet" });
+		const f2 = await Folder.save({ title: "mon deuxième carnet" });
+		const n1 = await Note.save({ title: 'un', parent_id: f1.id });
+		const n2 = await Note.save({ title: 'deux', parent_id: f1.id });
+		const n3 = await Note.save({ title: 'trois', parent_id: f2.id });
+		
+		response = await api.route('GET', 'notes');
+		expect(response.length).toBe(3);
+
+		response = await api.route('GET', 'notes', { parent_id: f1.id });
+		expect(response.length).toBe(2);
+
+		response = await api.route('GET', 'notes', { parent_id: f2.id });
+		expect(response.length).toBe(1);
+		expect(response[0].id).toBe(n3.id);
+
+		response = await api.route('GET', 'notes/' + n1.id);
+		expect(response.id).toBe(n1.id);
+
+		response = await api.route('GET', 'notes/' + n3.id, { fields: 'id,title' });
+		expect(Object.getOwnPropertyNames(response).length).toBe(3);
+		expect(response.id).toBe(n3.id);
+		expect(response.title).toBe('trois');
+
 		done();
 	});
 
@@ -111,6 +143,18 @@ describe('services_rest_Api', function() {
 		f = api.fields_({ query: { fields: '  ' } }, ['def']);
 		expect(f.length).toBe(1);
 		expect(f[0]).toBe('def');
+
+		done();
+	});
+
+	it('should handle tokens', async (done) => {
+		api = new Api('mytoken');
+
+		const hasThrown = await checkThrowAsync(async () => await api.route('GET', 'notes'));
+		expect(hasThrown).toBe(true);
+
+		const response = await api.route('GET', 'notes', { token: 'mytoken' })
+		expect(response.length).toBe(0);
 
 		done();
 	});

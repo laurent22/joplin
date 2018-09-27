@@ -24,38 +24,56 @@ class ApiError extends Error {
 
 }
 
-class MethodNotAllowedError extends ApiError {
+class ErrorMethodNotAllowed extends ApiError {
 
-	constructor() {
-		super('Method Not Allowed', 405);
+	constructor(message = 'Method Not Allowed') {
+		super(message, 405);
 	}
 
 }
 
-class NotFoundError extends ApiError {
+class ErrorNotFound extends ApiError {
 
-	constructor() {
-		super('Not Found', 404);
+	constructor(message = 'Not Found') {
+		super(message, 404);
+	}
+
+}
+
+class ErrorForbidden extends ApiError {
+
+	constructor(message = 'Forbidden') {
+		super(message, 404);
 	}
 
 }
 
 class Api {
 
-	constructor() {
+	constructor(token = null) {
+		this.token_ = token;
 		this.logger_ = new Logger();
+	}
+
+	get token() {
+		return this.token_;
 	}
 
 	async route(method, path, query = null, body = null) {
 		path = ltrimSlashes(path);
-		const callName = 'action_' + path;
-		if (!this[callName]) throw new NotFoundError();
+		if (!path) throw new ErrorNotFound(); // Nothing at the root yet
+
+		const pathParts = path.split('/');
+		const callSuffix = pathParts.splice(0,1)[0];
+		const callName = 'action_' + callSuffix;
+		if (!this[callName]) throw new ErrorNotFound();
 
 		try {
 			return this[callName]({
 				method: method,
 				query: query ? query : {},
 				body: body,
+				params: pathParts,
 			});
 		} catch (error) {
 			if (!error.httpCode) error.httpCode = 500;
@@ -78,11 +96,17 @@ class Api {
 		return fields.length ? fields : defaultFields;
 	}
 
+	checkToken_(request) {
+		if (!this.token) return;
+		if (!request.query || !request.query.token) throw new ErrorForbidden('Missing "token" parameter');
+		if (request.query.token !== this.token) throw new ErrorForbidden('Invalid "token" parameter');
+	}
+
 	async action_ping(request) {
 		if (request.method === 'GET') {
 			return 'JoplinClipperServer';
 		}
-		throw new MethodNotAllowedError();
+		throw new ErrorMethodNotAllowed();
 	}
 
 	async action_folders(request) {
@@ -90,7 +114,7 @@ class Api {
 			return await Folder.allAsTree({ fields: this.fields_(request, ['id', 'parent_id', 'title']) });
 		}
 
-		throw new MethodNotAllowedError();
+		throw new ErrorMethodNotAllowed();
 	}
 
 	async action_tags(request) {
@@ -98,10 +122,26 @@ class Api {
 			return await Tag.all({ fields: this.fields_(request, ['id', 'title']) })
 		}
 
-		throw new MethodNotAllowedError();
+		throw new ErrorMethodNotAllowed();
 	}
 
 	async action_notes(request) {
+		if (request.method === 'GET') {
+			this.checkToken_(request);
+
+			const noteId = request.params.length ? request.params[0] : null;
+			const parentId = request.query.parent_id ? request.query.parent_id : null;
+			const fields = this.fields_(request, []); // previews() already returns default fields
+			const options = {};
+			if (fields.length) options.fields = fields;
+
+			if (noteId) {
+				return await Note.preview(noteId, options);
+			} else {
+				return await Note.previews(parentId, options);
+			}
+		}
+
 		if (request.method === 'POST') {
 			const requestId = Date.now();
 			const requestNote = JSON.parse(request.body);
@@ -137,7 +177,7 @@ class Api {
 			return note;
 		}
 
-		throw new MethodNotAllowedError();
+		throw new ErrorMethodNotAllowed();
 	}
 
 

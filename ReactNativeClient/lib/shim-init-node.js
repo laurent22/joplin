@@ -196,6 +196,7 @@ function shimInit() {
 
 	const nodeFetch = require('node-fetch');
 
+	// Not used??
 	shim.readLocalFileBase64 = (path) => {
 		const data = fs.readFileSync(path);
 		return new Buffer(data).toString('base64');
