@@ -13,6 +13,7 @@ tests/fuzzing.*
 tests/fuzzing -*
 tests/logs/*
 tests/cli-integration/
+tests/tmp/
 *.mo
 *.*~
 tests/sync

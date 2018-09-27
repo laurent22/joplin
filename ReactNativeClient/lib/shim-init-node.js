@@ -186,7 +186,11 @@ function shimInit() {
 			const mime = mimeUtils.fromDataUrl(imageDataUrl);
 			await shim.writeImageToFile(image, mime, filePath);
 		} else {
-			throw new Error('Node support not implemented');
+			if (options.cropRect) throw new Error('Crop rect not supported in Node');
+
+			const imageDataURI = require('image-data-uri');
+			const result = imageDataURI.decode(imageDataUrl);
+			await shim.fsDriver().writeFile(filePath, result.dataBuffer, 'buffer');	
 		}
 	}
 
