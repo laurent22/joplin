@@ -1,0 +1,686 @@
+<!doctype html>
+<html>
+<head>
+	<title>REST API | Joplin</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://joplin.cozic.net/css/bootstrap.min.css">
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+	<link rel="stylesheet" href="https://joplin.cozic.net/css/fontawesome-all.min.css"> 
+	<script src="https://joplin.cozic.net/js/jquery-3.2.1.slim.min.js"></script>
+	<style>
+	body {
+		background-color: #F1F1F1;
+		color: #333333;
+	}
+	table {
+		margin-bottom: 1em;
+	}
+	td, th {
+		padding: .8em;
+		border: 1px solid #ccc;
+	}
+	h1, h2 {
+		border-bottom: 1px solid #eaecef;
+		padding-bottom: 0.3em;
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+		font-weight: 600;
+		font-size: 2em;
+		margin-bottom: 16px;
+	}
+	h2 {
+		font-size: 1.6em;
+	}
+	h3 {
+		font-size: 1.3em;
+	}
+	code {
+		color: black;
+		background-color: #eee;
+		border: 1px solid #ccc;
+		font-size: .85em;
+	}
+	pre code {
+		border: none;
+	}
+	pre {
+		font-size: .85em;
+	}
+	#toc ul {
+		margin-bottom: 10px;
+	}
+	#toc {
+		padding-bottom: 1em;
+	}
+	.title-icon {
+		height: 2em;
+	}
+	.sub-title {
+		font-weight: bold;
+		font-size: 1.5em;
+	}
+	.container {
+		background-color: white;
+		padding: 0;
+		box-shadow: 0 10px 20px #888888;
+	}
+	table.screenshots {
+		margin-top: 2em;
+		margin-bottom: 2em;
+	}
+	table.screenshots th {
+		height: 3em;
+		text-align: center;
+	}
+	table.screenshots th, 
+	table.screenshots td {
+		border: 1px solid #C2C2C2;
+	}
+	img[align="left"] {
+		margin-right: 10px;
+		margin-bottom: 10px;
+	}
+	.mobile-screenshot {
+		height: 40em;
+		padding: 1em;
+	}
+	.cli-screenshot-wrapper {
+		background-color: black;
+		vertical-align: top;
+		padding: 1em 2em 1em 1em;
+	}
+	.cli-screenshot {
+		font-family: "Monaco", "Inconsolata", "CONSOLAS", "Deja Vu Sans Mono", "Droid Sans Mono", "Andale Mono", monospace;
+		background-color: black;
+		color: white;
+		border: none;
+	}
+	.cli-screenshot .prompt {
+		color: #48C2F0;
+	}
+	.top-screenshot {
+		margin-top: 2em;
+		text-align: center;
+	}
+	.header {
+		position: relative;
+		padding-left: 2em;
+		padding-right: 2em;
+		padding-top: 1em;
+		padding-bottom: 1em;
+		color: white;
+		background-color: #2B2B3D;
+	}
+	.header a h1 {
+		color: white;
+	}
+	.content {
+		padding-left: 2em;
+		padding-right: 2em;
+		padding-bottom: 2em;
+		padding-top: 2em;
+	}
+	.forkme {
+		position: absolute;
+		right: 0;
+		top:0;
+	}
+	.nav-wrapper {
+		position: relative;
+		width: inherit;
+	}
+	.nav {
+		background-color: black;
+		display: table;
+		width: inherit;
+	}
+	.nav.sticky {
+		position:fixed;
+		top: 0;
+		width: inherit;
+		box-shadow: 0 0 10px #000000;
+	}
+	.nav a {
+		color: white;
+		display: inline-block;
+		padding: .6em .9em .6em .9em;
+	}
+	.nav ul {
+		padding-left: 2em;
+		margin-bottom: 0;
+		display: table-cell;
+		min-width: 250px;
+	}
+	.nav ul li {
+		display: inline-block;
+		padding: 0;
+	}
+	.nav li.selected {
+		background-color: #222;
+		font-weight: bold;
+	}
+	.nav-right {
+		display: table-cell;
+		width: 100%;
+		text-align: right;
+		vertical-align: middle;
+		line-height: 0;
+	}
+	.nav-right .share-btn {
+		display: none;
+	}
+	.nav-right .small-share-btn {
+		display: none;
+	}
+	.footer {
+		padding-top: 1em;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 2em;
+		color: gray;
+		font-size: .9em;
+	}
+	@media all and (min-width: 400px) {
+		.nav-right .share-btn {
+			display: inline-block;
+		}
+		.nav-right .small-share-btn {
+			display: none;
+		}
+	}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplin.cozic.net/images/ForkMe.png"/></a>
+	<a href="https://joplin.cozic.net"><h1 id="joplin"><img class="title-icon" src="https://joplin.cozic.net/images/Icon512.png">oplin</h1></a>
+	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
+</div>
+
+<div class="nav-wrapper">
+	<div class="nav">
+		<ul>
+			<li class=""><a href="https:&#x2F;&#x2F;joplin.cozic.net/" title="Home"><i class="fa fa-home"></i></a></li>
+			<li><a href="https://discourse.joplin.cozic.net" title="Forum">Forum</a></li>
+			<li><a class="help" href="#" title="Menu">Menu</a></li>
+		</ul>
+		<div class="nav-right">
+			<!--
+				<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+				<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplin.cozic.net" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
+			-->
+			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+		</div>
+	</div>
+</div>
+
+<div class="content">
+	<div id="toc"><ul>
+<li>
+<p>Applications</p>
+<ul>
+<li><a href="https://joplin.cozic.net/desktop">Desktop application</a></li>
+<li><a href="https://joplin.cozic.net/mobile">Mobile applications</a></li>
+<li><a href="https://joplin.cozic.net/terminal">Terminal application</a></li>
+<li><a href="https://joplin.cozic.net/clipper">Web Clipper</a></li>
+</ul>
+</li>
+<li>
+<p>Support</p>
+<ul>
+<li><a href="https://discourse.joplin.cozic.net">Joplin Forum</a></li>
+<li><a href="https://joplin.cozic.net/e2ee">How to enable end-to-end encryption</a></li>
+<li><a href="https://joplin.cozic.net/spec">End-to-end encryption spec</a></li>
+<li><a href="https://joplin.cozic.net/debugging">How to enable debug mode</a></li>
+<li><a href="https://joplin.cozic.net/api">API documentation</a></li>
+<li><a href="https://joplin.cozic.net/faq">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>About</p>
+<ul>
+<li><a href="https://joplin.cozic.net/changelog">Changelog</a></li>
+<li><a href="https://joplin.cozic.net/stats">Stats</a></li>
+<li><a href="https://joplin.cozic.net/donate">Donate</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1 id="joplin-api">Joplin API</h1>
+<p>When the Web Clipper service is enabled, Joplin exposes a <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST API</a> which allows third-party applications to access Joplin&#39;s data and to create, modify or delete notes, notebooks, resources or tags.</p>
+<p>In order to use it, you&#39;ll first need to find on which port the service is running. To do so, open the Web Clipper Options in Joplin and if the service is running it should tell you on which port. Normally it runs on port <strong>41184</strong>. If you want to find it programmatically, you may follow this kind of algorithm:</p>
+<pre><code class="lang-javascript">let port = null;
+for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
+    const result = pingPort(portToTest); // Call GET /ping
+    if (result == &#39;JoplinClipperServer&#39;) {
+        port = portToTest; // Found the port
+        break;
+    }
+}
+</code></pre>
+<h1 id="authorisation">Authorisation</h1>
+<p>To prevent unauthorised applications from accessing the API, the calls must be authentified. To do so, you must provide a token as a query parameter for each API call. You can get this token from the Joplin desktop application, on the Web Clipper Options screen.</p>
+<p>This would be an example of valid cURL call using a token:</p>
+<pre><code>curl http://localhost:41184/notes?token=ABCD123ABCD123ABCD123ABCD123ABCD123
+</code></pre><p>In the documentation below, the token will not be specified every time however you will need to include it.</p>
+<h1 id="using-the-api">Using the API</h1>
+<p>All the calls, unless noted otherwise, receives and send <strong>JSON data</strong>. For example to create a new note:</p>
+<pre><code>curl --data &#39;{ &quot;title&quot;: &quot;My note&quot;, &quot;body&quot;: &quot;Some note in **Markdown**&quot;}&#39; http://localhost:41184/notes
+</code></pre><p>In the documentation below, the calls may include special parameters such as :id or :note_id. You would replace this with the item ID or note ID.</p>
+<p>For example, for the endpoint <code>DELETE /tags/:id/notes/:note_id</code>, to remove the tag with ID &quot;ABCD1234&quot; from the note with ID &quot;EFGH789&quot;, you would run for example:</p>
+<pre><code>curl -X DELETE http://localhost:41184/tags/ABCD1234/notes/EFGH789
+</code></pre><p>The four verbs supported by the API are the following ones:</p>
+<ul>
+<li><strong>GET</strong>: To retrieve items (notes, notebooks, etc.).</li>
+<li><strong>POST</strong>: To create new items.</li>
+<li><strong>PUT</strong>: To update an item. Note in a REST API, traditionally PUT is used to completely replace an item, however in this API it will only replace the properties that are provided. For example if you PUT {&quot;title&quot;: &quot;my new title&quot;}, only the &quot;title&quot; property will be changed. The other properties will be left untouched (they won&#39;t be cleared nor changed).</li>
+<li><strong>DELETE</strong>: To delete items.</li>
+</ul>
+<h1 id="about-the-property-types">About the property types</h1>
+<ul>
+<li>Text is UTF-8.</li>
+<li>All date/time are Unix timestamps in milliseconds.</li>
+<li>Booleans are integer values 0 or 1.</li>
+</ul>
+<h1 id="notes">Notes</h1>
+<h2 id="properties">Properties</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td>parent_id</td>
+<td>text</td>
+<td>ID of the notebook that contains this note. Change this ID to move the note to a different notebook.</td>
+</tr>
+<tr>
+<td>title</td>
+<td>text</td>
+<td>The note title.</td>
+</tr>
+<tr>
+<td>body</td>
+<td>text</td>
+<td>The note body, in Markdown. May also contain HTML.</td>
+</tr>
+<tr>
+<td>created_time</td>
+<td>int</td>
+<td>When the note was created.</td>
+</tr>
+<tr>
+<td>updated_time</td>
+<td>int</td>
+<td>When the note was last updated.</td>
+</tr>
+<tr>
+<td>is_conflict</td>
+<td>int</td>
+<td>Tells whether the note is a conflict or not.</td>
+</tr>
+<tr>
+<td>latitude</td>
+<td>numeric</td>
+<td></td>
+</tr>
+<tr>
+<td>longitude</td>
+<td>numeric</td>
+<td></td>
+</tr>
+<tr>
+<td>altitude</td>
+<td>numeric</td>
+<td></td>
+</tr>
+<tr>
+<td>author</td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td>source_url</td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td>is_todo</td>
+<td>int</td>
+<td>Tells whether this note is a todo or not.</td>
+</tr>
+<tr>
+<td>todo_due</td>
+<td>int</td>
+<td>When the todo is due. An alarm will be triggered on that date.</td>
+</tr>
+<tr>
+<td>todo_completed</td>
+<td>int</td>
+<td>Tells whether todo is completed or not. This is a timestamp in milliseconds.</td>
+</tr>
+<tr>
+<td>source</td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td>source_application</td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td>application_data</td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td>order</td>
+<td>int</td>
+<td></td>
+</tr>
+<tr>
+<td>user_created_time</td>
+<td>int</td>
+<td>When the note was created. It may differ from created_time as it can be manually set by the user.</td>
+</tr>
+<tr>
+<td>user_updated_time</td>
+<td>int</td>
+<td>When the note was last updated. It may differ from updated_time as it can be manually set by the user.</td>
+</tr>
+<tr>
+<td>encryption_cipher_text</td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td>encryption_applied</td>
+<td>int</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="get-notes">GET /notes</h2>
+<p>Gets all notes</p>
+<h2 id="get-notes-id">GET /notes/:id</h2>
+<p>Gets note with ID :id</p>
+<h2 id="post-notes">POST /notes</h2>
+<p>Creates a new note</p>
+<h2 id="put-notes-id">PUT /notes/:id</h2>
+<p>Sets the properties of the note with ID :id</p>
+<h2 id="delete-notes-id">DELETE /notes/:id</h2>
+<p>Deletes the note with ID :id</p>
+<h1 id="folders">Folders</h1>
+<p>This is actually a notebook. Internally notebooks are called &quot;folders&quot;.</p>
+<h2 id="properties">Properties</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td>title</td>
+<td>text</td>
+<td>The folder title.</td>
+</tr>
+<tr>
+<td>created_time</td>
+<td>int</td>
+<td>When the folder was created.</td>
+</tr>
+<tr>
+<td>updated_time</td>
+<td>int</td>
+<td>When the folder was last updated.</td>
+</tr>
+<tr>
+<td>user_created_time</td>
+<td>int</td>
+<td>When the folder was created. It may differ from created_time as it can be manually set by the user.</td>
+</tr>
+<tr>
+<td>user_updated_time</td>
+<td>int</td>
+<td>When the folder was last updated. It may differ from updated_time as it can be manually set by the user.</td>
+</tr>
+<tr>
+<td>encryption_cipher_text</td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td>encryption_applied</td>
+<td>int</td>
+<td></td>
+</tr>
+<tr>
+<td>parent_id</td>
+<td>text</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="get-folders">GET /folders</h2>
+<p>Gets all folders</p>
+<h2 id="get-folders-id">GET /folders/:id</h2>
+<p>Gets folder with ID :id</p>
+<h2 id="post-folders">POST /folders</h2>
+<p>Creates a new folder</p>
+<h2 id="put-folders-id">PUT /folders/:id</h2>
+<p>Sets the properties of the folder with ID :id</p>
+<h2 id="delete-folders-id">DELETE /folders/:id</h2>
+<p>Deletes the folder with ID :id</p>
+<h1 id="resources">Resources</h1>
+<h2 id="properties">Properties</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td>title</td>
+<td>text</td>
+<td>The resource title.</td>
+</tr>
+<tr>
+<td>mime</td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td>filename</td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td>created_time</td>
+<td>int</td>
+<td>When the resource was created.</td>
+</tr>
+<tr>
+<td>updated_time</td>
+<td>int</td>
+<td>When the resource was last updated.</td>
+</tr>
+<tr>
+<td>user_created_time</td>
+<td>int</td>
+<td>When the resource was created. It may differ from created_time as it can be manually set by the user.</td>
+</tr>
+<tr>
+<td>user_updated_time</td>
+<td>int</td>
+<td>When the resource was last updated. It may differ from updated_time as it can be manually set by the user.</td>
+</tr>
+<tr>
+<td>file_extension</td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td>encryption_cipher_text</td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td>encryption_applied</td>
+<td>int</td>
+<td></td>
+</tr>
+<tr>
+<td>encryption_blob_encrypted</td>
+<td>int</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="get-resources">GET /resources</h2>
+<p>Gets all resources</p>
+<h2 id="get-resources-id">GET /resources/:id</h2>
+<p>Gets resource with ID :id</p>
+<h2 id="post-resources">POST /resources</h2>
+<p>Creates a new resource</p>
+<p>Creating a new resource is special because you also need to upload the file. Unlike other API calls, this one must have the &quot;multipart/form-data&quot; Content-Type. The file data must be passed to the &quot;data&quot; form field, and the other properties to the &quot;props&quot; form field. An example of a valid call with cURL would be:</p>
+<pre><code>curl -F &#39;data=@/path/to/file.jpg&#39; -F &#39;props={&quot;title&quot;:&quot;my resource title&quot;}&#39; http://localhost:41184/resources
+</code></pre><p>The &quot;data&quot; field is required, while the &quot;props&quot; one is not. If not specified, default values will be used.</p>
+<h2 id="put-resources-id">PUT /resources/:id</h2>
+<p>Sets the properties of the resource with ID :id</p>
+<h2 id="delete-resources-id">DELETE /resources/:id</h2>
+<p>Deletes the resource with ID :id</p>
+<h1 id="tags">Tags</h1>
+<h2 id="properties">Properties</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td>title</td>
+<td>text</td>
+<td>The tag title.</td>
+</tr>
+<tr>
+<td>created_time</td>
+<td>int</td>
+<td>When the tag was created.</td>
+</tr>
+<tr>
+<td>updated_time</td>
+<td>int</td>
+<td>When the tag was last updated.</td>
+</tr>
+<tr>
+<td>user_created_time</td>
+<td>int</td>
+<td>When the tag was created. It may differ from created_time as it can be manually set by the user.</td>
+</tr>
+<tr>
+<td>user_updated_time</td>
+<td>int</td>
+<td>When the tag was last updated. It may differ from updated_time as it can be manually set by the user.</td>
+</tr>
+<tr>
+<td>encryption_cipher_text</td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td>encryption_applied</td>
+<td>int</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="get-tags">GET /tags</h2>
+<p>Gets all tags</p>
+<h2 id="get-tags-id">GET /tags/:id</h2>
+<p>Gets tag with ID :id</p>
+<h2 id="get-tags-id-notes">GET /tags/:id/notes</h2>
+<p>Get all the notes with this tag.</p>
+<h2 id="post-tags">POST /tags</h2>
+<p>Creates a new tag</p>
+<h2 id="post-tags-id-notes">POST /tags/:id/notes</h2>
+<p>Post a note to this endpoint to add the tag to the note. The note data must at least contain an ID property (all other properties will be ignored).</p>
+<h2 id="put-tags-id">PUT /tags/:id</h2>
+<p>Sets the properties of the tag with ID :id</p>
+<h2 id="delete-tags-id">DELETE /tags/:id</h2>
+<p>Deletes the tag with ID :id</p>
+<h2 id="delete-tags-id-notes-note_id">DELETE /tags/:id/notes/:note_id</h2>
+<p>Remove the tag from the note..</p>
+
+<script>
+	function stickyHeader() { 
+		return; // Disabled
+
+		if ($(window).scrollTop() > 179) {
+			$('.nav').addClass('sticky'); 
+		} else {
+			$('.nav').removeClass('sticky');
+		}
+	}
+
+	$('#toc').hide();
+
+	$('.help').click(function(event) {
+		event.preventDefault();
+		$('#toc').show();
+	});
+
+	$(window).scroll(function() {
+		stickyHeader();
+	});
+
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-103586105-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+<div class="footer">
+Copyright (c) 2016-2018 Laurent Cozic
+</div>
+</body>
+</html>

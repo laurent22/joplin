@@ -1,0 +1,230 @@
+# Joplin API
+
+When the Web Clipper service is enabled, Joplin exposes a [REST API](https://en.wikipedia.org/wiki/Representational_state_transfer) which allows third-party applications to access Joplin's data and to create, modify or delete notes, notebooks, resources or tags.
+
+In order to use it, you'll first need to find on which port the service is running. To do so, open the Web Clipper Options in Joplin and if the service is running it should tell you on which port. Normally it runs on port **41184**. If you want to find it programmatically, you may follow this kind of algorithm:
+
+```javascript
+let port = null;
+for (let portToTest = 41184; portToTest <= 41194; portToTest++) {
+    const result = pingPort(portToTest); // Call GET /ping
+    if (result == 'JoplinClipperServer') {
+        port = portToTest; // Found the port
+        break;
+    }
+}
+```
+# Authorisation
+
+To prevent unauthorised applications from accessing the API, the calls must be authentified. To do so, you must provide a token as a query parameter for each API call. You can get this token from the Joplin desktop application, on the Web Clipper Options screen.
+
+This would be an example of valid cURL call using a token:
+
+	curl http://localhost:41184/notes?token=ABCD123ABCD123ABCD123ABCD123ABCD123
+
+In the documentation below, the token will not be specified every time however you will need to include it.
+# Using the API
+
+All the calls, unless noted otherwise, receives and send **JSON data**. For example to create a new note:
+
+	curl --data '{ "title": "My note", "body": "Some note in **Markdown**"}' http://localhost:41184/notes
+
+In the documentation below, the calls may include special parameters such as :id or :note_id. You would replace this with the item ID or note ID.
+
+For example, for the endpoint `DELETE /tags/:id/notes/:note_id`, to remove the tag with ID "ABCD1234" from the note with ID "EFGH789", you would run for example:
+
+	curl -X DELETE http://localhost:41184/tags/ABCD1234/notes/EFGH789
+
+The four verbs supported by the API are the following ones:
+
+* **GET**: To retrieve items (notes, notebooks, etc.).
+* **POST**: To create new items.
+* **PUT**: To update an item. Note in a REST API, traditionally PUT is used to completely replace an item, however in this API it will only replace the properties that are provided. For example if you PUT {"title": "my new title"}, only the "title" property will be changed. The other properties will be left untouched (they won't be cleared nor changed).
+* **DELETE**: To delete items.
+
+# About the property types
+
+* Text is UTF-8.
+* All date/time are Unix timestamps in milliseconds.
+* Booleans are integer values 0 or 1.
+
+# Notes
+
+## Properties
+
+Name | Type | Description
+--- | --- | ---
+id  | text |    
+parent_id | text | ID of the notebook that contains this note. Change this ID to move the note to a different notebook.
+title | text | The note title.
+body | text | The note body, in Markdown. May also contain HTML.
+created_time | int | When the note was created.
+updated_time | int | When the note was last updated.
+is_conflict | int | Tells whether the note is a conflict or not.
+latitude | numeric |    
+longitude | numeric |    
+altitude | numeric |    
+author | text |    
+source_url | text |    
+is_todo | int | Tells whether this note is a todo or not.
+todo_due | int | When the todo is due. An alarm will be triggered on that date.
+todo_completed | int | Tells whether todo is completed or not. This is a timestamp in milliseconds.
+source | text |    
+source_application | text |    
+application_data | text |    
+order | int |    
+user_created_time | int | When the note was created. It may differ from created_time as it can be manually set by the user.
+user_updated_time | int | When the note was last updated. It may differ from updated_time as it can be manually set by the user.
+encryption_cipher_text | text |    
+encryption_applied | int |    
+
+## GET /notes
+
+Gets all notes
+
+## GET /notes/:id
+
+Gets note with ID :id
+
+## POST /notes
+
+Creates a new note
+
+## PUT /notes/:id
+
+Sets the properties of the note with ID :id
+
+## DELETE /notes/:id
+
+Deletes the note with ID :id
+
+# Folders
+
+This is actually a notebook. Internally notebooks are called "folders".
+
+## Properties
+
+Name | Type | Description
+--- | --- | ---
+id  | text |    
+title | text | The folder title.
+created_time | int | When the folder was created.
+updated_time | int | When the folder was last updated.
+user_created_time | int | When the folder was created. It may differ from created_time as it can be manually set by the user.
+user_updated_time | int | When the folder was last updated. It may differ from updated_time as it can be manually set by the user.
+encryption_cipher_text | text |    
+encryption_applied | int |    
+parent_id | text |    
+
+## GET /folders
+
+Gets all folders
+
+## GET /folders/:id
+
+Gets folder with ID :id
+
+## POST /folders
+
+Creates a new folder
+
+## PUT /folders/:id
+
+Sets the properties of the folder with ID :id
+
+## DELETE /folders/:id
+
+Deletes the folder with ID :id
+
+# Resources
+
+## Properties
+
+Name | Type | Description
+--- | --- | ---
+id  | text |    
+title | text | The resource title.
+mime | text |    
+filename | text |    
+created_time | int | When the resource was created.
+updated_time | int | When the resource was last updated.
+user_created_time | int | When the resource was created. It may differ from created_time as it can be manually set by the user.
+user_updated_time | int | When the resource was last updated. It may differ from updated_time as it can be manually set by the user.
+file_extension | text |    
+encryption_cipher_text | text |    
+encryption_applied | int |    
+encryption_blob_encrypted | int |    
+
+## GET /resources
+
+Gets all resources
+
+## GET /resources/:id
+
+Gets resource with ID :id
+
+## POST /resources
+
+Creates a new resource
+
+Creating a new resource is special because you also need to upload the file. Unlike other API calls, this one must have the "multipart/form-data" Content-Type. The file data must be passed to the "data" form field, and the other properties to the "props" form field. An example of a valid call with cURL would be:
+
+	curl -F 'data=@/path/to/file.jpg' -F 'props={"title":"my resource title"}' http://localhost:41184/resources
+
+The "data" field is required, while the "props" one is not. If not specified, default values will be used.
+
+## PUT /resources/:id
+
+Sets the properties of the resource with ID :id
+
+## DELETE /resources/:id
+
+Deletes the resource with ID :id
+
+# Tags
+
+## Properties
+
+Name | Type | Description
+--- | --- | ---
+id  | text |    
+title | text | The tag title.
+created_time | int | When the tag was created.
+updated_time | int | When the tag was last updated.
+user_created_time | int | When the tag was created. It may differ from created_time as it can be manually set by the user.
+user_updated_time | int | When the tag was last updated. It may differ from updated_time as it can be manually set by the user.
+encryption_cipher_text | text |    
+encryption_applied | int |    
+
+## GET /tags
+
+Gets all tags
+
+## GET /tags/:id
+
+Gets tag with ID :id
+
+## GET /tags/:id/notes
+
+Get all the notes with this tag.
+
+## POST /tags
+
+Creates a new tag
+
+## POST /tags/:id/notes
+
+Post a note to this endpoint to add the tag to the note. The note data must at least contain an ID property (all other properties will be ignored).
+
+## PUT /tags/:id
+
+Sets the properties of the tag with ID :id
+
+## DELETE /tags/:id
+
+Deletes the tag with ID :id
+
+## DELETE /tags/:id/notes/:note_id
+
+Remove the tag from the note..
+
