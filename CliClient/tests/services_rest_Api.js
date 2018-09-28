@@ -6,6 +6,7 @@ const markdownUtils = require('lib/markdownUtils.js');
 const Api = require('lib/services/rest/Api');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
+const Tag = require('lib/models/Tag');
 const Resource = require('lib/models/Resource');
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 5000;
@@ -42,6 +43,60 @@ describe('services_rest_Api', function() {
 		const response = await api.route('GET', 'folders');
 		expect(response.length).toBe(1);
 		expect(response[0].title).toBe('mon carnet');
+		done();
+	});
+
+	it('should update folders', async (done) => {
+		let f1 = await Folder.save({ title: "mon carnet" });
+		const response = await api.route('PUT', 'folders/' + f1.id, null, JSON.stringify({
+			title: 'modifié',
+		}));
+
+		let f1b = await Folder.load(f1.id);
+		expect(f1b.title).toBe('modifié');
+
+		done();
+	});
+
+	it('should delete folders', async (done) => {
+		let f1 = await Folder.save({ title: "mon carnet" });
+		await api.route('DELETE', 'folders/' + f1.id);
+
+		let f1b = await Folder.load(f1.id);
+		expect(!f1b).toBe(true);
+		
+		done();
+	});
+
+	it('should create folders', async (done) => {
+		const response = await api.route('POST', 'folders', null, JSON.stringify({
+			title: 'from api',
+		}));
+
+		expect(!!response.id).toBe(true);
+
+		let f = await Folder.all();
+		expect(f.length).toBe(1);
+		expect(f[0].title).toBe('from api');
+		
+		done();
+	});
+
+	it('should get one folder', async (done) => {
+		let f1 = await Folder.save({ title: "mon carnet" });
+		const response = await api.route('GET', 'folders/' + f1.id);
+		expect(response.id).toBe(f1.id);
+
+		const hasThrown = await checkThrowAsync(async () => await api.route('GET', 'folders/doesntexist'));
+		expect(hasThrown).toBe(true);
+
+		done();
+	});
+
+	it('should fail on invalid paths', async (done) => {
+		const hasThrown = await checkThrowAsync(async () => await api.route('GET', 'schtroumpf'));
+		expect(hasThrown).toBe(true);
+
 		done();
 	});
 
@@ -155,6 +210,46 @@ describe('services_rest_Api', function() {
 
 		const response = await api.route('GET', 'notes', { token: 'mytoken' })
 		expect(response.length).toBe(0);
+
+		done();
+	});
+
+	it('should add tags to notes', async (done) => {
+		const tag = await Tag.save({ title: "mon étiquette" });
+		const note = await Note.save({ title: "ma note" });
+
+		const response = await api.route('POST', 'tags/' + tag.id + '/notes', null, JSON.stringify({
+			id: note.id,
+		}));
+
+		const noteIds = await Tag.noteIds(tag.id);	
+		expect(noteIds[0]).toBe(note.id);
+
+		done();
+	});
+
+	it('should remove tags from notes', async (done) => {
+		const tag = await Tag.save({ title: "mon étiquette" });
+		const note = await Note.save({ title: "ma note" });
+		await Tag.addNote(tag.id, note.id);
+
+		const response = await api.route('DELETE', 'tags/' + tag.id + '/notes/' + note.id);
+
+		const noteIds = await Tag.noteIds(tag.id);	
+		expect(noteIds.length).toBe(0);
+
+		done();
+	});
+
+	it('should list all tag notes', async (done) => {
+		const tag = await Tag.save({ title: "mon étiquette" });
+		const note1 = await Note.save({ title: "ma note un" });
+		const note2 = await Note.save({ title: "ma note deux" });
+		await Tag.addNote(tag.id, note1.id);
+		await Tag.addNote(tag.id, note2.id);
+
+		const response = await api.route('GET', 'tags/' + tag.id + '/notes');
+		expect(response.length).toBe(2);
 
 		done();
 	});

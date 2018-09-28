@@ -22,7 +22,6 @@ trap finish EXIT
 
 cd "$ROOT_DIR"
 npm test tests-build/ArrayUtils.js
-npm test tests-build/encryption.js
 npm test tests-build/EnexToMd.js
 npm test tests-build/HtmlToMd.js
 npm test tests-build/markdownUtils.js
@@ -32,5 +31,7 @@ npm test tests-build/models_Tag.js
 npm test tests-build/models_Setting.js
 npm test tests-build/services_InteropService.js
 npm test tests-build/services_ResourceService.js
-npm test tests-build/synchronizer.js
 npm test tests-build/urlUtils.js
+npm test tests-build/encryption.js
+npm test tests-build/services_rest_Api.js
+npm test tests-build/synchronizer.js

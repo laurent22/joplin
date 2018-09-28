@@ -494,6 +494,12 @@ class BaseApplication {
 			setLocale(Setting.value('locale'));
 		}
 
+		if (!Setting.value('api.token')) {
+			EncryptionService.instance().randomHexString(64).then((token) => {
+				Setting.setValue('api.token', token);
+			});
+		}
+
 		time.setDateFormat(Setting.value('dateFormat'));
 		time.setTimeFormat(Setting.value('timeFormat'));
 

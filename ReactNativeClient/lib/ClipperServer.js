@@ -5,6 +5,7 @@ const { Logger } = require('lib/logger.js');
 const randomClipperPort = require('lib/randomClipperPort');
 const enableServerDestroy = require('server-destroy');
 const Api = require('lib/services/rest/Api');
+const multiparty = require('multiparty');
 
 class ClipperServer {
 
@@ -13,7 +14,9 @@ class ClipperServer {
 		this.startState_ = 'idle';
 		this.server_ = null;
 		this.port_ = null;
-		this.api_ = new Api();
+		this.api_ = new Api(() => {
+			return Setting.value('api.token');
+		});
 	}
 
 	static instance() {
@@ -122,32 +125,50 @@ class ClipperServer {
 
 			const url = urlParser.parse(request.url, true);
 
-			const execRequest = async (request, body = '') => {
+			const execRequest = async (request, body = '', files = []) => {
 				try {
-					const response = await this.api_.route(request.method, url.pathname, url.query, body);
+					const response = await this.api_.route(request.method, url.pathname, url.query, body, files);
 					writeResponse(200, response);
 				} catch (error) {
-					console.error(error);
 					writeResponse(error.httpCode ? error.httpCode : 500, error.message);
 				}
 			}
+
+			const contentType = request.headers['content-type'] ? request.headers['content-type'] : '';
 
 			if (request.method === 'OPTIONS') {
 				writeCorsHeaders(200);
 				response.end();
 			} else {
-				if (request.method === 'POST') {
-					let body = '';
+				if (contentType.indexOf('multipart/form-data') === 0) {
+				    const form = new multiparty.Form();
 
-					request.on('data', (data) => {
-						body += data;
-					});
-
-					request.on('end', async () => {
-						execRequest(request, body);
-					});
+				    form.parse(request, function(error, fields, files) {
+				    	if (error) {
+							writeResponse(error.httpCode ? error.httpCode : 500, error.message);
+							return;
+						} else {
+							execRequest(
+								request,
+								fields && fields.props && fields.props.length ? fields.props[0] : '',
+								files && files.data ? files.data : []
+							);
+						}
+				    });
 				} else {
-					execRequest(request);
+					if (request.method === 'POST') {
+						let body = '';
+
+						request.on('data', (data) => {
+							body += data;
+						});
+
+						request.on('end', async () => {
+							execRequest(request, body);
+						});
+					} else {
+						execRequest(request);
+					}
 				}
 			}
 		});

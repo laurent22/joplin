@@ -105,6 +105,7 @@
     "mermaid": "^8.0.0-rc.8",
     "mime": "^2.3.1",
     "moment": "^2.22.2",
+    "multiparty": "^4.2.1",
     "node-fetch": "^1.7.3",
     "node-notifier": "^5.2.1",
     "promise": "^8.0.1",

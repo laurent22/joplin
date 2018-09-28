@@ -2,6 +2,8 @@ const { ltrimSlashes } = require('lib/path-utils.js');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
+const BaseItem = require('lib/models/BaseItem');
+const BaseModel = require('lib/BaseModel');
 const Setting = require('lib/models/Setting');
 const markdownUtils = require('lib/markdownUtils');
 const mimeUtils = require('lib/mime-utils.js').mime;
@@ -48,6 +50,14 @@ class ErrorForbidden extends ApiError {
 
 }
 
+class ErrorBadRequest extends ApiError {
+
+	constructor(message = 'Bad Request') {
+		super(message, 400);
+	}
+
+}
+
 class Api {
 
 	constructor(token = null) {
@@ -56,25 +66,68 @@ class Api {
 	}
 
 	get token() {
-		return this.token_;
+		return typeof this.token_ === 'function' ? this.token_() : this.token_;
 	}
 
-	async route(method, path, query = null, body = null) {
+	parsePath(path) {
 		path = ltrimSlashes(path);
-		if (!path) throw new ErrorNotFound(); // Nothing at the root yet
+		if (!path) return { callName: '', params: [] };
 
 		const pathParts = path.split('/');
 		const callSuffix = pathParts.splice(0,1)[0];
-		const callName = 'action_' + callSuffix;
-		if (!this[callName]) throw new ErrorNotFound();
+		let callName = 'action_' + callSuffix;
+		return {
+			callName: callName,
+			params: pathParts,
+		};
+	}
+
+	async route(method, path, query = null, body = null, files = null) {
+		if (!files) files = [];
+
+		const parsedPath = this.parsePath(path);
+		if (!parsedPath.callName) throw new ErrorNotFound(); // Nothing at the root yet
+		
+		const request = {
+			method: method,
+			path: ltrimSlashes(path),
+			query: query ? query : {},
+			body: body,
+			bodyJson_: null,
+			bodyJson: function(disallowedProperties = null) {
+				if (!this.bodyJson_) this.bodyJson_ = JSON.parse(this.body);
+
+				if (disallowedProperties) {
+					const filteredBody = Object.assign({}, this.bodyJson_);
+					for (let i = 0; i < disallowedProperties.length; i++) {
+						const n = disallowedProperties[i];
+						delete filteredBody[n];
+					}
+					return filteredBody;
+				}
+
+				return this.bodyJson_;
+			},
+			files: files,
+		}
+
+		let id = null;
+		let link = null;
+		let params = parsedPath.params;
+
+		if (params.length >= 1) {
+			id = params[0];
+			params.splice(0, 1);
+			if (params.length >= 1) {
+				link = params[0];
+				params.splice(0, 1);
+			}
+		}
+
+		request.params = params;
 
 		try {
-			return this[callName]({
-				method: method,
-				query: query ? query : {},
-				body: body,
-				params: pathParts,
-			});
+			return this[parsedPath.callName](request, id, link);
 		} catch (error) {
 			if (!error.httpCode) error.httpCode = 500;
 			throw error;
@@ -89,6 +142,10 @@ class Api {
 		return this.logger_;
 	}
 
+	get readonlyProperties() {
+		return ['id', 'created_time', 'updated_time', 'encryption_blob_encrypted', 'encryption_applied', 'encryption_cipher_text'];
+	}
+
 	fields_(request, defaultFields) {
 		const query = request.query;
 		if (!query || !query.fields) return defaultFields;
@@ -97,39 +154,139 @@ class Api {
 	}
 
 	checkToken_(request) {
+		// For now, whitelist some calls to allow the web clipper to work
+		// without an extra auth step
+		const whiteList = [
+			[ 'GET', 'ping' ],
+			[ 'GET', 'tags' ],
+			[ 'GET', 'folders' ],
+			[ 'POST', 'notes' ],
+		];
+
+		for (let i = 0; i < whiteList.length; i++) {
+			if (whiteList[i][0] === request.method && whiteList[i][1] === request.path) return;
+		}
+
 		if (!this.token) return;
 		if (!request.query || !request.query.token) throw new ErrorForbidden('Missing "token" parameter');
 		if (request.query.token !== this.token) throw new ErrorForbidden('Invalid "token" parameter');
 	}
 
-	async action_ping(request) {
+	async defaultAction_(modelType, request, id = null, link = null) {
+		this.checkToken_(request);
+
+		if (link) throw new ErrorNotFound(); // Default action doesn't support links at all for now
+
+		const ModelClass = BaseItem.getClassByItemType(modelType);
+
+		const getOneModel = async () => {
+			const model = await ModelClass.load(id);
+			if (!model) throw new ErrorNotFound();			
+			return model;
+		}
+
+		if (request.method === 'GET') {
+			if (id) {
+				return getOneModel();
+			} else {
+				const options = {};
+				const fields = this.fields_(request, []);
+				if (fields.length) options.fields = fields;
+				return await ModelClass.all(options);
+			}
+		}
+
+		if (request.method === 'PUT' && id) {
+			const model = await getOneModel();
+			let newModel = Object.assign({}, model, request.bodyJson(this.readonlyProperties));
+			newModel = await ModelClass.save(newModel, { userSideValidation: true });
+			return newModel;
+		}
+
+		if (request.method === 'DELETE' && id) {
+			const model = await getOneModel();
+			await ModelClass.delete(model.id);
+			return;
+		}
+
+		if (request.method === 'POST') {
+			const model = request.bodyJson(this.readonlyProperties);
+			const result = await ModelClass.save(model, { userSideValidation: true });
+			return result;
+		}
+
+		throw new ErrorMethodNotAllowed();
+	}
+
+	async action_ping(request, id = null, link = null) {
 		if (request.method === 'GET') {
 			return 'JoplinClipperServer';
 		}
+
 		throw new ErrorMethodNotAllowed();
 	}
 
-	async action_folders(request) {
-		if (request.method === 'GET') {
+	async action_folders(request, id = null, link = null) {
+		if (request.method === 'GET' && !id) {
 			return await Folder.allAsTree({ fields: this.fields_(request, ['id', 'parent_id', 'title']) });
 		}
 
-		throw new ErrorMethodNotAllowed();
+		return this.defaultAction_(BaseModel.TYPE_FOLDER, request, id, link);
 	}
 
-	async action_tags(request) {
-		if (request.method === 'GET') {
-			return await Tag.all({ fields: this.fields_(request, ['id', 'title']) })
+	async action_tags(request, id = null, link = null) {
+		if (link === 'notes') {
+			const tag = await Tag.load(id);
+			if (!tag) throw new ErrorNotFound();
+
+			if (request.method === 'POST') {
+				const note = request.bodyJson();
+				if (!note || !note.id) throw new ErrorBadRequest('Missing note ID');
+				return await Tag.addNote(tag.id, note.id);
+			}
+
+			if (request.method === 'DELETE') {
+				const noteId = request.params.length ? request.params[0] : null;
+				if (!noteId) throw new ErrorBadRequest('Missing note ID');
+				await Tag.removeNote(tag.id, noteId);
+				return;
+			}
+
+			if (request.method === 'GET') {
+				return await Tag.noteIds(tag.id);
+			}
 		}
 
-		throw new ErrorMethodNotAllowed();
+		return this.defaultAction_(BaseModel.TYPE_TAG, request, id, link);
 	}
 
-	async action_notes(request) {
+	async action_master_keys(request, id = null, link = null) {
+		return this.defaultAction_(BaseModel.TYPE_MASTER_KEY, request, id, link);
+	}
+
+	async action_resources(request, id = null, link = null) {
+		// fieldName: "data"
+		// headers: Object
+		// originalFilename: "test.jpg"
+		// path: "C:\Users\Laurent\AppData\Local\Temp\BW77wkpP23iIGUstd0kDuXXC.jpg"
+		// size: 164394
+
+		if (request.method === 'POST') {
+			if (!request.files.length) throw new ErrorBadRequest('Resource cannot be created without a file');
+			const filePath = request.files[0].path;
+			const resource = await shim.createResourceFromPath(filePath);
+			const newResource = Object.assign({}, resource, request.bodyJson(this.readonlyProperties));
+			return await Resource.save(newResource);
+		}
+
+		return this.defaultAction_(BaseModel.TYPE_RESOURCE, request, id, link);
+	}
+
+	async action_notes(request, id = null, link = null) {
 		if (request.method === 'GET') {
 			this.checkToken_(request);
 
-			const noteId = request.params.length ? request.params[0] : null;
+			const noteId = id;
 			const parentId = request.query.parent_id ? request.query.parent_id : null;
 			const fields = this.fields_(request, []); // previews() already returns default fields
 			const options = {};
@@ -177,7 +334,7 @@ class Api {
 			return note;
 		}
 
-		throw new ErrorMethodNotAllowed();
+		return this.defaultAction_(BaseModel.TYPE_NOTE, request, id, link);
 	}
 
 
