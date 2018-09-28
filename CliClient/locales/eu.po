@@ -713,6 +713,9 @@ msgstr ""
 msgid "No"
 msgstr "E"
 
+msgid "Token has been copied to the clipboard!"
+msgstr ""
+
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 
@@ -754,6 +757,21 @@ msgid "Step 2: Install the extension"
 msgstr ""
 
 msgid "Download and install the relevant extension for your browser:"
+msgstr ""
+
+#, fuzzy
+msgid "Advanced options"
+msgstr "Erakutsi aukera aurreratuak"
+
+msgid "Authorisation token:"
+msgstr ""
+
+msgid "Copy token"
+msgstr ""
+
+msgid ""
+"This authorisation token is only needed to allow third-party applications to "
+"access Joplin."
 msgstr ""
 
 #, fuzzy

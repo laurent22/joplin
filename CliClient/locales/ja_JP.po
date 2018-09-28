@@ -698,6 +698,9 @@ msgstr "Yes"
 msgid "No"
 msgstr "No"
 
+msgid "Token has been copied to the clipboard!"
+msgstr ""
+
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "Webクリッパーサービスは有効で、自動起動します。"
 
@@ -745,6 +748,21 @@ msgstr "ステップ2: 拡張機能のインストール"
 
 msgid "Download and install the relevant extension for your browser:"
 msgstr "関連する拡張機能をブラウザーにインストールします:"
+
+#, fuzzy
+msgid "Advanced options"
+msgstr "詳細な設定の表示"
+
+msgid "Authorisation token:"
+msgstr ""
+
+msgid "Copy token"
+msgstr ""
+
+msgid ""
+"This authorisation token is only needed to allow third-party applications to "
+"access Joplin."
+msgstr ""
 
 msgid "Check synchronisation configuration"
 msgstr "同期の設定を確認する"

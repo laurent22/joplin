@@ -695,6 +695,9 @@ msgstr "예"
 msgid "No"
 msgstr "아니오"
 
+msgid "Token has been copied to the clipboard!"
+msgstr ""
+
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "웹 수집기 서비스가 활성화되었고 자동으로 시작하도록 설정되었습니다."
 
@@ -741,6 +744,21 @@ msgstr "2단계: 확장 기능 설치"
 
 msgid "Download and install the relevant extension for your browser:"
 msgstr "브라우저에 적절한 확장 기능을 다운로드 및 설치하세요:"
+
+#, fuzzy
+msgid "Advanced options"
+msgstr "고급 옵션"
+
+msgid "Authorisation token:"
+msgstr ""
+
+msgid "Copy token"
+msgstr ""
+
+msgid ""
+"This authorisation token is only needed to allow third-party applications to "
+"access Joplin."
+msgstr ""
 
 msgid "Check synchronisation configuration"
 msgstr "동기화 설정 확인"

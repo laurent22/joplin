@@ -675,6 +675,9 @@ msgstr "是"
 msgid "No"
 msgstr "否"
 
+msgid "Token has been copied to the clipboard!"
+msgstr ""
+
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "Web clipper 服務已啟用，並設置為自動啟動。"
 
@@ -719,6 +722,21 @@ msgstr "步驟 2: 安裝插件"
 
 msgid "Download and install the relevant extension for your browser:"
 msgstr "下載並安裝瀏覽器插件:"
+
+#, fuzzy
+msgid "Advanced options"
+msgstr "顯示進階選項"
+
+msgid "Authorisation token:"
+msgstr ""
+
+msgid "Copy token"
+msgstr ""
+
+msgid ""
+"This authorisation token is only needed to allow third-party applications to "
+"access Joplin."
+msgstr ""
 
 msgid "Check synchronisation configuration"
 msgstr "檢測同步設置"
