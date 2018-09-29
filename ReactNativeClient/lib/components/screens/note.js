@@ -225,6 +225,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	title_changeText(text) {
 		shared.noteComponent_change(this, 'title', text);
+		this.setState({ newAndNoTitleChangeNoteId: null });
 	}
 
 	body_changeText(text) {
