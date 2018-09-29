@@ -712,7 +712,7 @@ msgid "No"
 msgstr "Non"
 
 msgid "Token has been copied to the clipboard!"
-msgstr ""
+msgstr "Le code d'authentification a été copié dans le presse-papiers !"
 
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "Le service du Web Clipper est activé et démarrera automatiquement."
@@ -764,20 +764,21 @@ msgstr ""
 "Téléchargez et installez le module complémentaire correspondant à votre "
 "navigateur :"
 
-#, fuzzy
 msgid "Advanced options"
-msgstr "Montrer les options avancées"
+msgstr "Options avancées"
 
 msgid "Authorisation token:"
-msgstr ""
+msgstr "Code d'authentification :"
 
 msgid "Copy token"
-msgstr ""
+msgstr "Copier le code"
 
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
+"Ce code d'authentification est nécessaire uniquement pour permettre aux "
+"logiciels tiers d'accéder aux données de Joplin."
 
 msgid "Check synchronisation configuration"
 msgstr "Vérifier config synchronisation"

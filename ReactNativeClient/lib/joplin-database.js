@@ -2,7 +2,7 @@ const { uuid } = require('lib/uuid.js');
 const { promiseChain } = require('lib/promise-utils.js');
 const { time } = require('lib/time-utils.js');
 const { Database } = require('lib/database.js');
-const { _ } = require('lib/locale.js');
+const { sprintf } = require('sprintf-js');
 
 const structureSql = `
 CREATE TABLE folders (
@@ -160,17 +160,19 @@ class JoplinDatabase extends Database {
 		return output;
 	}
 
-	fieldDescription(tableName, fieldName) {
+	fieldDescription(tableName, fieldName) {		
+		const sp = sprintf;
+
 		if (!this.tableDescriptions_) {
 			this.tableDescriptions_ = {
 				notes: {
-					parent_id: _('ID of the notebook that contains this note. Change this ID to move the note to a different notebook.'),
-					body: _('The note body, in Markdown. May also contain HTML.'),
-					is_conflict: _('Tells whether the note is a conflict or not.'),
-					is_todo: _('Tells whether this note is a todo or not.'),
-					todo_due: _('When the todo is due. An alarm will be triggered on that date.'),
-					todo_completed: _('Tells whether todo is completed or not. This is a timestamp in milliseconds.'),
-					source_url: _('The full URL where the note comes from.'),
+					parent_id: sp('ID of the notebook that contains this note. Change this ID to move the note to a different notebook.'),
+					body: sp('The note body, in Markdown. May also contain HTML.'),
+					is_conflict: sp('Tells whether the note is a conflict or not.'),
+					is_todo: sp('Tells whether this note is a todo or not.'),
+					todo_due: sp('When the todo is due. An alarm will be triggered on that date.'),
+					todo_completed: sp('Tells whether todo is completed or not. This is a timestamp in milliseconds.'),
+					source_url: sp('The full URL where the note comes from.'),
 				},
 				folders: {},
 				resources: {},
@@ -182,11 +184,11 @@ class JoplinDatabase extends Database {
 			for (let i = 0; i < baseItems.length; i++) {
 				const n = baseItems[i];
 				const singular = n.substr(0, n.length - 1);
-				this.tableDescriptions_[n].title = _('The %s title.', singular);
-				this.tableDescriptions_[n].created_time = _('When the %s was created.', singular);
-				this.tableDescriptions_[n].updated_time = _('When the %s was last updated.', singular);
-				this.tableDescriptions_[n].user_created_time = _('When the %s was created. It may differ from created_time as it can be manually set by the user.', singular);
-				this.tableDescriptions_[n].user_updated_time = _('When the %s was last updated. It may differ from updated_time as it can be manually set by the user.', singular);
+				this.tableDescriptions_[n].title = sp('The %s title.', singular);
+				this.tableDescriptions_[n].created_time = sp('When the %s was created.', singular);
+				this.tableDescriptions_[n].updated_time = sp('When the %s was last updated.', singular);
+				this.tableDescriptions_[n].user_created_time = sp('When the %s was created. It may differ from created_time as it can be manually set by the user.', singular);
+				this.tableDescriptions_[n].user_updated_time = sp('When the %s was last updated. It may differ from updated_time as it can be manually set by the user.', singular);
 			}
 		}
 
