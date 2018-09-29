@@ -138,6 +138,7 @@
 			messageComp.style.maxWidth = messageCompWidth + 'px'
 			messageComp.style.border = '1px solid black'
 			messageComp.style.background = 'white'
+			messageComp.style.color = 'black';
 			messageComp.style.top = '10px'
 			messageComp.style.textAlign = 'center';
 			messageComp.style.padding = '10px'
