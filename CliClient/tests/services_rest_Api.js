@@ -93,6 +93,19 @@ describe('services_rest_Api', function() {
 		done();
 	});
 
+	it('should get the folder notes', async (done) => {
+		let f1 = await Folder.save({ title: "mon carnet" });
+		const response2 = await api.route('GET', 'folders/' + f1.id + '/notes');
+		expect(response2.length).toBe(0);
+
+		const n1 = await Note.save({ title: 'un', parent_id: f1.id });
+		const n2 = await Note.save({ title: 'deux', parent_id: f1.id });
+		const response = await api.route('GET', 'folders/' + f1.id + '/notes');
+		expect(response.length).toBe(2);
+
+		done();
+	});
+
 	it('should fail on invalid paths', async (done) => {
 		const hasThrown = await checkThrowAsync(async () => await api.route('GET', 'schtroumpf'));
 		expect(hasThrown).toBe(true);
@@ -110,13 +123,6 @@ describe('services_rest_Api', function() {
 		
 		response = await api.route('GET', 'notes');
 		expect(response.length).toBe(3);
-
-		response = await api.route('GET', 'notes', { parent_id: f1.id });
-		expect(response.length).toBe(2);
-
-		response = await api.route('GET', 'notes', { parent_id: f2.id });
-		expect(response.length).toBe(1);
-		expect(response[0].id).toBe(n3.id);
 
 		response = await api.route('GET', 'notes/' + n1.id);
 		expect(response.id).toBe(n1.id);
@@ -243,6 +249,7 @@ describe('services_rest_Api', function() {
 
 	it('should list all tag notes', async (done) => {
 		const tag = await Tag.save({ title: "mon étiquette" });
+		const tag2 = await Tag.save({ title: "mon étiquette 2" });
 		const note1 = await Note.save({ title: "ma note un" });
 		const note2 = await Note.save({ title: "ma note deux" });
 		await Tag.addNote(tag.id, note1.id);
@@ -250,6 +257,14 @@ describe('services_rest_Api', function() {
 
 		const response = await api.route('GET', 'tags/' + tag.id + '/notes');
 		expect(response.length).toBe(2);
+		expect('id' in response[0]).toBe(true);
+		expect('title' in response[0]).toBe(true);
+
+		const response2 = await api.route('GET', 'notes/' + note1.id + '/tags');
+		expect(response2.length).toBe(1);
+		await Tag.addNote(tag2.id, note1.id);
+		const response3 = await api.route('GET', 'notes/' + note1.id + '/tags');
+		expect(response3.length).toBe(2);
 
 		done();
 	});

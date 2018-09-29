@@ -170,6 +170,7 @@ class JoplinDatabase extends Database {
 					is_todo: _('Tells whether this note is a todo or not.'),
 					todo_due: _('When the todo is due. An alarm will be triggered on that date.'),
 					todo_completed: _('Tells whether todo is completed or not. This is a timestamp in milliseconds.'),
+					source_url: _('The full URL where the note comes from.'),
 				},
 				folders: {},
 				resources: {},

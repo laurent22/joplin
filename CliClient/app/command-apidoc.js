@@ -52,9 +52,6 @@ class Command extends BaseCommand {
 
 		const lines = [];
 
-		// Get list of note tags
-		// Get list of folder notes
-
 		lines.push('# Joplin API');
 		lines.push('');
 
@@ -98,7 +95,7 @@ class Command extends BaseCommand {
 		lines.push('The four verbs supported by the API are the following ones:');
 		lines.push('');
 		lines.push('* **GET**: To retrieve items (notes, notebooks, etc.).');
-		lines.push('* **POST**: To create new items.');
+		lines.push('* **POST**: To create new items. In general most item properties are optional. If you omit any, a default value will be used.');
 		lines.push('* **PUT**: To update an item. Note in a REST API, traditionally PUT is used to completely replace an item, however in this API it will only replace the properties that are provided. For example if you PUT {"title": "my new title"}, only the "title" property will be changed. The other properties will be left untouched (they won\'t be cleared nor changed).');
 		lines.push('* **DELETE**: To delete items.');
 		lines.push('');
@@ -110,12 +107,41 @@ class Command extends BaseCommand {
 		lines.push('* Booleans are integer values 0 or 1.');
 		lines.push('');
 
+		lines.push('# Testing if the service is available');
+		lines.push('');
+		lines.push('Call **GET /ping** to check if the service is available. It should return "JoplinClipperServer" if it works.');
+		lines.push('');
+
 		for (let i = 0; i < models.length; i++) {
 			const model = models[i];
 			const ModelClass = BaseItem.getClassByItemType(model.type);
 			const tableName = ModelClass.tableName();
-			const tableFields = reg.db().tableFields(tableName, { includeDescription: true });
+			let tableFields = reg.db().tableFields(tableName, { includeDescription: true });
 			const singular = tableName.substr(0, tableName.length - 1);
+
+			if (model.type === BaseModel.TYPE_NOTE) {
+				tableFields = tableFields.slice();
+				tableFields.push({
+					name: 'body_html',
+					type: Database.enumId('fieldType', 'text'),
+					description: 'Note body, in HTML format',
+				});
+				tableFields.push({
+					name: 'base_url',
+					type: Database.enumId('fieldType', 'text'),
+					description: 'If `body_html` is provided and contains relative URLs, provide the `base_url` parameter too so that all the URLs can be converted to absolute ones. The base URL is basically where the HTML was fetched from, minus the query (everything after the \'?\'). For example if the original page was `https://stackoverflow.com/search?q=%5Bjava%5D+test`, the base URL is `https://stackoverflow.com/search`.',
+				});
+				tableFields.push({
+					name: 'image_data_url',
+					type: Database.enumId('fieldType', 'text'),
+					description: 'An image to attach to the note, in [Data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) format.',
+				});
+				tableFields.push({
+					name: 'crop_rect',
+					type: Database.enumId('fieldType', 'text'),
+					description: 'If an image is provided, you can also specify an optional rectangle that will be used to crop the image. In format `{ x: x, y: y, width: width, height: height }`',
+				});
+			}
 
 			lines.push('# ' + toTitleCase(tableName));
 			lines.push('');
@@ -135,6 +161,11 @@ class Command extends BaseCommand {
 			lines.push('Gets all ' + tableName);
 			lines.push('');
 
+			if (model.type === BaseModel.TYPE_FOLDER) {
+				lines.push('The folders are returned as a tree. The sub-notebooks of a notebook, if any, are under the `children` key.');
+				lines.push('');
+			}
+
 			lines.push('## GET /' + tableName + '/:id');
 			lines.push('');
 			lines.push('Gets ' + singular + ' with ID :id');
@@ -143,7 +174,21 @@ class Command extends BaseCommand {
 			if (model.type === BaseModel.TYPE_TAG) {
 				lines.push('## GET /tags/:id/notes');
 				lines.push('');
-				lines.push('Get all the notes with this tag.');
+				lines.push('Gets all the notes with this tag.');
+				lines.push('');
+			}
+
+			if (model.type === BaseModel.TYPE_NOTE) {
+				lines.push('## GET /notes/:id/tags');
+				lines.push('');
+				lines.push('Gets all the tags attached to this note.');
+				lines.push('');
+			}
+
+			if (model.type === BaseModel.TYPE_FOLDER) {
+				lines.push('## GET /folders/:id/notes');
+				lines.push('');
+				lines.push('Gets all the notes inside this folder.');
 				lines.push('');
 			}
 
@@ -168,6 +213,25 @@ class Command extends BaseCommand {
 				lines.push('');
 			}
 
+			if (model.type === BaseModel.TYPE_NOTE) {
+				lines.push('You can either specify the note body as Markdown by setting the `body` parameter, or in HTML by setting the `body_html`.');
+				lines.push('');
+				lines.push('Examples:');
+				lines.push('');
+				lines.push('* Create a note from some Markdown text');
+				lines.push('');
+				lines.push('      curl --data \'{ "title": "My note", "body": "Some note in **Markdown**"}\' http://127.0.0.1:41184/notes');
+				lines.push('');
+				lines.push('* Create a note from some HTML');
+				lines.push('');
+				lines.push('      curl --data \'{ "title": "My note", "body_html": "Some note in <b>HTML</b>"}\' http://127.0.0.1:41184/notes');
+				lines.push('');
+				lines.push('* Create a note and attach an image to it:');
+				lines.push('');
+				lines.push('      curl --data \'{ "title": "Image test", "body": "Here is Joplin icon:", "image_data_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAANZJREFUeNoAyAA3/wFwtO3K6gUB/vz2+Prw9fj/+/r+/wBZKAAExOgF4/MC9ff+MRH6Ui4E+/0Bqc/zutj6AgT+/Pz7+vv7++nu82c4DlMqCvLs8goA/gL8/fz09fb59vXa6vzZ6vjT5fbn6voD/fwC8vX4UiT9Zi//APHyAP8ACgUBAPv5APz7BPj2+DIaC2o3E+3o6ywaC5fT6gD6/QD9/QEVf9kD+/dcLQgJA/7v8vqfwOf18wA1IAIEVycAyt//v9XvAPv7APz8LhoIAPz9Ri4OAgwARgx4W/6fVeEAAAAASUVORK5CYII="}\' http://127.0.0.1:41184/notes');
+				lines.push('');
+			}
+
 			lines.push('## PUT /' + tableName + '/:id');
 			lines.push('');
 			lines.push('Sets the properties of the ' + singular + ' with ID :id');
@@ -181,7 +245,7 @@ class Command extends BaseCommand {
 			if (model.type === BaseModel.TYPE_TAG) {
 				lines.push('## DELETE /tags/:id/notes/:note_id');
 				lines.push('');
-				lines.push('Remove the tag from the note..');
+				lines.push('Remove the tag from the note.');
 				lines.push('');
 			}
 		}

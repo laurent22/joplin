@@ -231,6 +231,15 @@ class Api {
 			return await Folder.allAsTree({ fields: this.fields_(request, ['id', 'parent_id', 'title']) });
 		}
 
+		if (request.method === 'GET' && id) {
+			if (link && link === 'notes') {
+				const options = this.notePreviewsOptions_(request);
+				return Note.previews(id, options);
+			} else if (link) {
+				throw new ErrorNotFound();
+			}
+		}
+
 		return this.defaultAction_(BaseModel.TYPE_FOLDER, request, id, link);
 	}
 
@@ -253,7 +262,15 @@ class Api {
 			}
 
 			if (request.method === 'GET') {
-				return await Tag.noteIds(tag.id);
+				// Ideally we should get all this in one SQL query but for now that will do
+				const noteIds = await Tag.noteIds(tag.id);
+				const output = [];
+				for (let i = 0; i < noteIds.length; i++) {
+					const n = await Note.preview(noteIds[i], this.notePreviewsOptions_(request));
+					if (!n) continue;
+					output.push(n);
+				}
+				return output;
 			}
 		}
 
@@ -282,20 +299,29 @@ class Api {
 		return this.defaultAction_(BaseModel.TYPE_RESOURCE, request, id, link);
 	}
 
+	notePreviewsOptions_(request) {
+		const fields = this.fields_(request, []); // previews() already returns default fields
+		const options = {};
+		if (fields.length) options.fields = fields;
+		return options;
+	}
+
 	async action_notes(request, id = null, link = null) {
+		this.checkToken_(request);
+		
 		if (request.method === 'GET') {
-			this.checkToken_(request);
+			
+			if (link && link === 'tags') {
+				return Tag.tagsByNoteId(id);
+			} else if (link) {
+				throw new ErrorNotFound();
+			}
 
-			const noteId = id;
-			const parentId = request.query.parent_id ? request.query.parent_id : null;
-			const fields = this.fields_(request, []); // previews() already returns default fields
-			const options = {};
-			if (fields.length) options.fields = fields;
-
-			if (noteId) {
-				return await Note.preview(noteId, options);
+			const options = this.notePreviewsOptions_(request);
+			if (id) {
+				return await Note.preview(id, options);
 			} else {
-				return await Note.previews(parentId, options);
+				return await Note.previews(null, options);
 			}
 		}
 

@@ -276,7 +276,7 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 </code></pre><p>The four verbs supported by the API are the following ones:</p>
 <ul>
 <li><strong>GET</strong>: To retrieve items (notes, notebooks, etc.).</li>
-<li><strong>POST</strong>: To create new items.</li>
+<li><strong>POST</strong>: To create new items. In general most item properties are optional. If you omit any, a default value will be used.</li>
 <li><strong>PUT</strong>: To update an item. Note in a REST API, traditionally PUT is used to completely replace an item, however in this API it will only replace the properties that are provided. For example if you PUT {&quot;title&quot;: &quot;my new title&quot;}, only the &quot;title&quot; property will be changed. The other properties will be left untouched (they won&#39;t be cleared nor changed).</li>
 <li><strong>DELETE</strong>: To delete items.</li>
 </ul>
@@ -286,6 +286,8 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <li>All date/time are Unix timestamps in milliseconds.</li>
 <li>Booleans are integer values 0 or 1.</li>
 </ul>
+<h1 id="testing-if-the-service-is-available">Testing if the service is available</h1>
+<p>Call <strong>GET /ping</strong> to check if the service is available. It should return &quot;JoplinClipperServer&quot; if it works.</p>
 <h1 id="notes">Notes</h1>
 <h2 id="properties">Properties</h2>
 <table>
@@ -355,7 +357,7 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <tr>
 <td>source_url</td>
 <td>text</td>
-<td></td>
+<td>The full URL where the note comes from.</td>
 </tr>
 <tr>
 <td>is_todo</td>
@@ -412,14 +414,49 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <td>int</td>
 <td></td>
 </tr>
+<tr>
+<td>body_html</td>
+<td>text</td>
+<td>Note body, in HTML format</td>
+</tr>
+<tr>
+<td>base_url</td>
+<td>text</td>
+<td>If <code>body_html</code> is provided and contains relative URLs, provide the <code>base_url</code> parameter too so that all the URLs can be converted to absolute ones. The base URL is basically where the HTML was fetched from, minus the query (everything after the &#39;?&#39;). For example if the original page was <code>https://stackoverflow.com/search?q=%5Bjava%5D+test</code>, the base URL is <code>https://stackoverflow.com/search</code>.</td>
+</tr>
+<tr>
+<td>image_data_url</td>
+<td>text</td>
+<td>An image to attach to the note, in <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs">Data URL</a> format.</td>
+</tr>
+<tr>
+<td>crop_rect</td>
+<td>text</td>
+<td>If an image is provided, you can also specify an optional rectangle that will be used to crop the image. In format <code>{ x: x, y: y, width: width, height: height }</code></td>
+</tr>
 </tbody>
 </table>
 <h2 id="get-notes">GET /notes</h2>
 <p>Gets all notes</p>
 <h2 id="get-notes-id">GET /notes/:id</h2>
 <p>Gets note with ID :id</p>
+<h2 id="get-notes-id-tags">GET /notes/:id/tags</h2>
+<p>Gets all the tags attached to this note.</p>
 <h2 id="post-notes">POST /notes</h2>
 <p>Creates a new note</p>
+<p>You can either specify the note body as Markdown by setting the <code>body</code> parameter, or in HTML by setting the <code>body_html</code>.</p>
+<p>Examples:</p>
+<ul>
+<li><p>Create a note from some Markdown text</p>
+<pre><code>curl --data &#39;{ &quot;title&quot;: &quot;My note&quot;, &quot;body&quot;: &quot;Some note in **Markdown**&quot;}&#39; http://127.0.0.1:41184/notes
+</code></pre></li>
+<li><p>Create a note from some HTML</p>
+<pre><code>curl --data &#39;{ &quot;title&quot;: &quot;My note&quot;, &quot;body_html&quot;: &quot;Some note in &lt;b&gt;HTML&lt;/b&gt;&quot;}&#39; http://127.0.0.1:41184/notes
+</code></pre></li>
+<li><p>Create a note and attach an image to it:</p>
+<pre><code>curl --data &#39;{ &quot;title&quot;: &quot;Image test&quot;, &quot;body&quot;: &quot;Here is Joplin icon:&quot;, &quot;image_data_url&quot;: &quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAANZJREFUeNoAyAA3/wFwtO3K6gUB/vz2+Prw9fj/+/r+/wBZKAAExOgF4/MC9ff+MRH6Ui4E+/0Bqc/zutj6AgT+/Pz7+vv7++nu82c4DlMqCvLs8goA/gL8/fz09fb59vXa6vzZ6vjT5fbn6voD/fwC8vX4UiT9Zi//APHyAP8ACgUBAPv5APz7BPj2+DIaC2o3E+3o6ywaC5fT6gD6/QD9/QEVf9kD+/dcLQgJA/7v8vqfwOf18wA1IAIEVycAyt//v9XvAPv7APz8LhoIAPz9Ri4OAgwARgx4W/6fVeEAAAAASUVORK5CYII=&quot;}&#39; http://127.0.0.1:41184/notes
+</code></pre></li>
+</ul>
 <h2 id="put-notes-id">PUT /notes/:id</h2>
 <p>Sets the properties of the note with ID :id</p>
 <h2 id="delete-notes-id">DELETE /notes/:id</h2>
@@ -485,8 +522,11 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 </table>
 <h2 id="get-folders">GET /folders</h2>
 <p>Gets all folders</p>
+<p>The folders are returned as a tree. The sub-notebooks of a notebook, if any, are under the <code>children</code> key.</p>
 <h2 id="get-folders-id">GET /folders/:id</h2>
 <p>Gets folder with ID :id</p>
+<h2 id="get-folders-id-notes">GET /folders/:id/notes</h2>
+<p>Gets all the notes inside this folder.</p>
 <h2 id="post-folders">POST /folders</h2>
 <p>Creates a new folder</p>
 <h2 id="put-folders-id">PUT /folders/:id</h2>
@@ -637,7 +677,7 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <h2 id="get-tags-id">GET /tags/:id</h2>
 <p>Gets tag with ID :id</p>
 <h2 id="get-tags-id-notes">GET /tags/:id/notes</h2>
-<p>Get all the notes with this tag.</p>
+<p>Gets all the notes with this tag.</p>
 <h2 id="post-tags">POST /tags</h2>
 <p>Creates a new tag</p>
 <h2 id="post-tags-id-notes">POST /tags/:id/notes</h2>
@@ -647,7 +687,7 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <h2 id="delete-tags-id">DELETE /tags/:id</h2>
 <p>Deletes the tag with ID :id</p>
 <h2 id="delete-tags-id-notes-note_id">DELETE /tags/:id/notes/:note_id</h2>
-<p>Remove the tag from the note..</p>
+<p>Remove the tag from the note.</p>
 
 <script>
 	function stickyHeader() { 
