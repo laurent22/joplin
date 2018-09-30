@@ -114,9 +114,20 @@ class Note extends BaseItem {
 	static linkedItemIds(body) {
 		// For example: ![](:/fcca2938a96a22570e8eae2565bc6b0b)
 		if (!body || body.length <= 32) return [];
-		const matches = body.match(/\(:\/.{32}\)/g);
-		if (!matches) return [];
-		return matches.map((m) => m.substr(3, 32));
+		let matches = body.match(/\(:\/[a-zA-Z0-9]{32}\)/g);
+		if (!matches) matches = [];
+		matches = matches.map((m) => m.substr(3, 32));
+
+		// For example: <img src=":/fcca2938a96a22570e8eae2565bc6b0b"/>
+		const imgRegex = /<img.*?src=["']:\/([a-zA-Z0-9]{32})["']/g
+		const imgMatches = [];
+		while (true) {
+			const m = imgRegex.exec(body);
+			if (!m) break;
+			imgMatches.push(m[1]);
+		}
+
+		return matches.concat(imgMatches);
 	}
 
 	static async linkedItems(body) {

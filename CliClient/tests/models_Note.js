@@ -34,6 +34,12 @@ describe('models_Note', function() {
 		expect(items.length).toBe(2);
 		expect(items[0].type_).toBe(BaseModel.TYPE_NOTE);
 		expect(items[1].type_).toBe(BaseModel.TYPE_RESOURCE);
+
+		const resource = items[1];
+		note2.body += '<img alt="bla" src=":/' + resource.id + '"/>';
+		note2.body += '<img src=\':/' + resource.id + '\' />';
+		items = await Note.linkedItems(note2.body);
+		expect(items.length).toBe(4);
 	}));
 
 });
