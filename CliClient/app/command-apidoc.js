@@ -100,6 +100,17 @@ class Command extends BaseCommand {
 		lines.push('* **DELETE**: To delete items.');
 		lines.push('');
 
+		lines.push('# Filtering data');
+		lines.push('');
+		lines.push('You can change the fields that will be returned by the API using the `fields=` query parameter, which takes a list of comma separated fields. For example, to get the longitude and latitude of a note, use this:');
+		lines.push('');
+		lines.push('\tcurl http://localhost:41184/notes/ABCD123?fields=longitude,latitude');
+		lines.push('');
+		lines.push('To get the IDs only of all the tags:');
+		lines.push('');
+		lines.push('\tcurl http://localhost:41184/tags?fields=id');
+		lines.push('');
+
 		lines.push('# About the property types');
 		lines.push('');
 		lines.push('* Text is UTF-8.');
@@ -189,6 +200,13 @@ class Command extends BaseCommand {
 				lines.push('## GET /folders/:id/notes');
 				lines.push('');
 				lines.push('Gets all the notes inside this folder.');
+				lines.push('');
+			}
+
+			if (model.type === BaseModel.TYPE_RESOURCE) {
+				lines.push('## GET /resources/:id/file');
+				lines.push('');
+				lines.push('Gets the actual file associated with this resource.');
 				lines.push('');
 			}
 

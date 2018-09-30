@@ -12,6 +12,7 @@ const md5 = require('md5');
 const { shim } = require('lib/shim');
 const HtmlToMd = require('lib/HtmlToMd');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('lib/path-utils');
+const ApiResponse = require('lib/services/rest/ApiResponse');
 
 class ApiError extends Error {
 
@@ -26,37 +27,10 @@ class ApiError extends Error {
 
 }
 
-class ErrorMethodNotAllowed extends ApiError {
-
-	constructor(message = 'Method Not Allowed') {
-		super(message, 405);
-	}
-
-}
-
-class ErrorNotFound extends ApiError {
-
-	constructor(message = 'Not Found') {
-		super(message, 404);
-	}
-
-}
-
-class ErrorForbidden extends ApiError {
-
-	constructor(message = 'Forbidden') {
-		super(message, 403);
-	}
-
-}
-
-class ErrorBadRequest extends ApiError {
-
-	constructor(message = 'Bad Request') {
-		super(message, 400);
-	}
-
-}
+class ErrorMethodNotAllowed extends ApiError { constructor(message = 'Method Not Allowed') { super(message, 405); } }
+class ErrorNotFound extends ApiError { constructor(message = 'Not Found') { super(message, 404); } }
+class ErrorForbidden extends ApiError {	constructor(message = 'Forbidden') { super(message, 403); } }
+class ErrorBadRequest extends ApiError { constructor(message = 'Bad Request') { super(message, 400); } }
 
 class Api {
 
@@ -125,6 +99,8 @@ class Api {
 		}
 
 		request.params = params;
+
+		if (!this[parsedPath.callName]) throw new ErrorNotFound();
 
 		try {
 			return this[parsedPath.callName](request, id, link);
@@ -287,6 +263,23 @@ class Api {
 		// originalFilename: "test.jpg"
 		// path: "C:\Users\Laurent\AppData\Local\Temp\BW77wkpP23iIGUstd0kDuXXC.jpg"
 		// size: 164394
+
+		if (request.method === 'GET') {
+			if (link !== 'file') throw new ErrorNotFound();
+
+			const resource = await Resource.load(id);
+			if (!resource) throw new ErrorNotFound();
+
+			const filePath = Resource.fullPath(resource);
+			const buffer = await shim.fsDriver().readFile(filePath, 'Buffer');
+			
+			const response = new ApiResponse();
+			response.type = 'attachment';
+			response.body = buffer;
+			response.contentType = resource.mime;
+			response.attachmentFilename = Resource.friendlyFilename(resource);
+			return response;
+		}
 
 		if (request.method === 'POST') {
 			if (!request.files.length) throw new ErrorBadRequest('Resource cannot be created without a file');

@@ -5,6 +5,7 @@ const { Logger } = require('lib/logger.js');
 const randomClipperPort = require('lib/randomClipperPort');
 const enableServerDestroy = require('server-destroy');
 const Api = require('lib/services/rest/Api');
+const ApiResponse = require('lib/services/rest/ApiResponse');
 const multiparty = require('multiparty');
 
 class ClipperServer {
@@ -92,13 +93,14 @@ class ClipperServer {
 
 		this.server_.on('request', async (request, response) => {
 
-			const writeCorsHeaders = (code, contentType = "application/json") => {
-				response.writeHead(code, {
+			const writeCorsHeaders = (code, contentType = "application/json", additionalHeaders = null) => {
+				const headers = Object.assign({}, {
 					"Content-Type": contentType,
 					'Access-Control-Allow-Origin': '*',
 					'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
 					'Access-Control-Allow-Headers': 'X-Requested-With,content-type',
-				});
+				}, additionalHeaders ? additionalHeaders : {});
+				response.writeHead(code, headers);
 			}
 
 			const writeResponseJson = (code, object) => {
@@ -113,8 +115,23 @@ class ClipperServer {
 				response.end();
 			}
 
+			const writeResponseInstance = (code, instance) => {
+    			if (instance.type === 'attachment') {
+    				const filename = instance.attachmentFilename ? instance.attachmentFilename : 'file';
+    				writeCorsHeaders(code, instance.contentType ? instance.contentType : 'application/octet-stream', {
+    					'Content-disposition': 'attachment; filename=' + filename,
+    					'Content-Length': instance.body.length,
+    				});
+    				response.end(instance.body);
+    			} else {
+    				throw new Error('Not implemented');
+    			}
+			}
+
 			const writeResponse = (code, response) => {
-				if (typeof response === 'string') {
+				if (response instanceof ApiResponse) {
+        			writeResponseInstance(code, response);
+				} else if (typeof response === 'string') {
 					writeResponseText(code, response);
 				} else {
 					writeResponseJson(code, response);

@@ -9,7 +9,7 @@ const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
 const Resource = require('lib/models/Resource');
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 5000;
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -211,11 +211,14 @@ describe('services_rest_Api', function() {
 	it('should handle tokens', async (done) => {
 		api = new Api('mytoken');
 
-		const hasThrown = await checkThrowAsync(async () => await api.route('GET', 'notes'));
+		let hasThrown = await checkThrowAsync(async () => await api.route('GET', 'notes'));
 		expect(hasThrown).toBe(true);
 
 		const response = await api.route('GET', 'notes', { token: 'mytoken' })
 		expect(response.length).toBe(0);
+
+		hasThrown = await checkThrowAsync(async () => await api.route('POST', 'notes', null, JSON.stringify({title:'testing'})));
+		expect(hasThrown).toBe(true);
 
 		done();
 	});

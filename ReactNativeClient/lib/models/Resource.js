@@ -5,7 +5,7 @@ const Setting = require('lib/models/Setting.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const pathUtils = require('lib/path-utils.js');
 const { mime } = require('lib/mime-utils.js');
-const { filename } = require('lib/path-utils.js');
+const { filename, safeFilename } = require('lib/path-utils.js');
 const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
 const markdownUtils = require('lib/markdownUtils');
 const JoplinError = require('lib/JoplinError');
@@ -47,6 +47,15 @@ class Resource extends BaseItem {
 		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
 		extension = extension ? ('.' + extension) : '';
 		return resource.id + extension;
+	}
+
+	static friendlyFilename(resource) {
+		let output = safeFilename(resource.title); // Make sure not to allow spaces or any special characters as it's not supported in HTTP headers
+		if (!output) output = resource.id;
+		let extension = resource.file_extension;
+		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
+		extension = extension ? ('.' + extension) : '';
+		return output + extension;
 	}
 
 	static fullPath(resource, encryptedBlob = false) {
