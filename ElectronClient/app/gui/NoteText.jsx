@@ -142,7 +142,20 @@ class NoteTextComponent extends React.Component {
 		}
 
 		this.onDrop_ = async (event) => {
-			const files = event.dataTransfer.files;
+			const dt = event.dataTransfer;
+
+			if (dt.types.indexOf("text/x-jop-note-ids") >= 0) {
+				const noteIds = JSON.parse(dt.getData("text/x-jop-note-ids"));
+				const linkText = [];
+				for (let i = 0; i < noteIds.length; i++) {
+					const note = await Note.load(noteIds[i]);
+					linkText.push(Note.markdownTag(note));
+				}
+
+				this.wrapSelectionWithStrings("", "", '', linkText.join('\n'));
+			}
+
+			const files = dt.files;
 			if (!files || !files.length) return;
 
 			const filesToAttach = [];
@@ -1024,6 +1037,9 @@ class NoteTextComponent extends React.Component {
 				start: { row: p.row, column: p.column },
 				end: { row: p.row, column: p.column + middleText.length },
 			};
+
+			// BUG!! If replacementText contains newline characters, the logic
+			// to select the new text will not work.
 
 			this.updateEditorWithDelay((editor) => {
 				if (middleText && newRange) {

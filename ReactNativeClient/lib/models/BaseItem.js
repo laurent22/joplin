@@ -663,7 +663,12 @@ class BaseItem extends BaseModel {
 		return super.save(o, options);
 	}
 
-	static markdownTag(item) {
+	static markdownTag(itemOrId) {
+		const item = typeof itemOrId === 'object' ? itemOrId : {
+			id: itemOrId,
+			title: '',
+		}; 
+
 		const output = [];
 		output.push('[');
 		output.push(markdownUtils.escapeLinkText(item.title));
