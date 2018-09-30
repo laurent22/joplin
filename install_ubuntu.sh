@@ -11,18 +11,26 @@ echo "              | |                                                 "
 echo "              |_|                                                 "
 # Get the latest version to download
 version=$(curl --silent "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": "v\K.*?(?=")')
-# Delete previous version
-rm -f ~/.joplin/*.AppImage ~/.local/share/applications/joplin.desktop
-# Creates the folder where the binary will be stored
-mkdir -p ~/.joplin/
-# Download the latest version
-wget -O ~/.joplin/Joplin-$version-x86_64.AppImage https://github.com/laurent22/joplin/releases/download/v$version/Joplin-$version-x86_64.AppImage 
-# Gives execution privileges
-chmod +x ~/.joplin/Joplin-$version-x86_64.AppImage
-# Download icon
-wget -O ~/.joplin/Icon512.png https://joplin.cozic.net/images/Icon512.png
-# Create icon for Gnome
-echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nExec=/home/$USER/.joplin/Joplin-$version-x86_64.AppImage\nIcon=/home/$USER/.joplin/Icon512.png\nType=Application\nCategories=Application;" >> ~/.local/share/applications/joplin.desktop
-# Informs the user that it has been installed and cleans variables
-echo 'Joplin installed in the version' $version
+# Check if it's in the latest version
+touch VERSION
+if [[ $(< ~/.joplin/VERSION) != "$version" ]]; then
+    # Delete previous version
+    rm -f ~/.joplin/*.AppImage ~/.local/share/applications/joplin.desktop ~/.joplin/VERSION
+    # Creates the folder where the binary will be stored
+    mkdir -p ~/.joplin/
+    # Download the latest version
+    wget -O ~/.joplin/Joplin.AppImage https://github.com/laurent22/joplin/releases/download/v$version/Joplin-$version-x86_64.AppImage 
+    # Gives execution privileges
+    chmod +x ~/.joplin/Joplin.AppImage
+    # Download icon
+    wget -O ~/.joplin/Icon512.png https://joplin.cozic.net/images/Icon512.png
+    # Create icon for Gnome
+    echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nExec=/home/$USER/.joplin/Joplin.AppImage\nIcon=/home/$USER/.joplin/Icon512.png\nType=Application\nCategories=Application;" > ~/.local/share/applications/joplin.desktop
+    # Informs the user that it has been installed and cleans variables
+    echo 'Joplin installed in the version' $version
+    # Add version
+    echo $version > ~/.joplin/VERSION
+else
+    echo 'You are now in the latest version.'
+fi
 unset version
