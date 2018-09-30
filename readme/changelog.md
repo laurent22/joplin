@@ -1,5 +1,17 @@
 # Joplin changelog
 
+## [v1.0.111](https://github.com/laurent22/joplin/releases/tag/v1.0.111) - 2018-09-30T20:15:09Z
+
+This is mainly a release to fix a bug related to the new IMG tag support.
+
+- Electron: Resolves [#820](https://github.com/laurent22/joplin/issues/820): Allow dragging and dropping a note in another note to create a link
+- Electron: Fixes resources being incorrectly auto-deleted when inside an IMG tag
+- API: Allow downloading a resource data via `/resources/:id/file`
+
+## [v1.0.110](https://github.com/laurent22/joplin/releases/tag/v1.0.110) - 2018-09-29T12:29:21Z
+
+This is a release only to get the new API out. If you do not need the functionalities of this API or you don't know what it is, you can probably skip this version.
+
 ## [v1.0.109](https://github.com/laurent22/joplin/releases/tag/v1.0.109) - 2018-09-27T18:01:41Z
 
 - New: Allow loading image resources in IMG html tags. For example, this is now possible: `<img src=":/a92ac34387ff467a8c839d201dcd39aa" width="50"/>`
@@ -13,6 +25,10 @@
 - Clipper: Fixes [#817](https://github.com/laurent22/joplin/issues/817): Added support for PICTURE tags, which will fix issues with certain pages from which images were not being imported
 - Clipper: Fixed importing certain images with sources that contain brackets
 - Improved: Mostly an invisible change at this point, but the REST API has been refactored to allow adding more calls and to support third-party applications.
+
+## [v1.0.108](https://github.com/laurent22/joplin/releases/tag/v1.0.108) - 2018-09-29T18:49:29Z
+
+To test the latest security fix only. Won't be released officially.
 
 ## [v1.0.107](https://github.com/laurent22/joplin/releases/tag/v1.0.107) - 2018-09-16T19:51:07Z
 
@@ -248,27 +264,3 @@ Note: This fixes an invalid database upgrade in the previous version.
 - Fixed: Local items were no longer being deleted via sync.
 - Improved: More debug information when WebDAV sync target does not work.
 - Improved: Compatibility with some WebDAV services (Seafile in particular)
-
-## [v1.0.65](https://github.com/laurent22/joplin/releases/tag/v1.0.65) - 2018-02-17T20:02:25Z
-
-- New: Added several keyboard shortcuts
-- New: Convert new lines in tables to BR tags, and added support for HTML tags in Markdown viewers
-- Fixed: Confirmation message boxes, and release notes text
-- Fixed: Issue with items not being decrypted immediately when they are created due to a sync conflict.
-- Updated: Translations
-
-## [v1.0.64](https://github.com/laurent22/joplin/releases/tag/v1.0.64) - 2018-02-16T00:58:20Z
-
-Still more fixes and improvements to get v1 as stable as possible before adding new features.
-
-IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before installing this release (see below).
-
-- Fixed: Nextcloud sync target ID (which was incorrectly set to WebDAV sync ID). As a result items that have been created since this bug will be re-synced with Nextcloud. This sync will not duplicate or delete any item but is necessary to preserve data integrity. IF YOU HAVE NOTES IN CONFLICT AFTER SYNC: Close the app completely and restart it to make sure all the lists are visually up-to-date. The notes in conflict most likely can be ignored - they are just duplicate of the real ones. To be safe, check the content but most likely they can simply be deleted.
-- Improved: Provide Content-Length header for WebDAV for better compatibility with more servers
-- Fixed: Allow copy and paste from config and encryption screen on macOS
-- Fixed: [#201](https://github.com/laurent22/joplin/issues/201), [#216](https://github.com/laurent22/joplin/issues/216): Make sure only one update check can run at a time, and improved modal dialog boxes
-
-## [v1.0.63](https://github.com/laurent22/joplin/releases/tag/v1.0.63) - 2018-02-14T19:40:36Z
-
-- Improved the way settings are changed. Should also fixed issue with sync context being accidentally broken.
-- Improved WebDAV driver compatibility with some services (eg. Seafile)

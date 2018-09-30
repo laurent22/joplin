@@ -2,17 +2,20 @@
 
 Name | Value
 --- | ---
-Total Windows downloads | 61069
-Total macOs downloads | 24706
-Total Linux downloads | 22832
-Windows % | 56%
+Total Windows downloads | 60940
+Total macOs downloads | 24311
+Total Linux downloads | 21700
+Windows % | 57%
 macOS % | 23%
-Linux % | 21%
+Linux % | 20%
 
 Version | Date | Windows | macOS | Linux | Total
 --- | --- | --- | --- | --- | ---
-[v1.0.109](https://github.com/laurent22/joplin/releases/tag/v1.0.109) | 2018-09-27T18:01:41Z | 1559 | 519 | 219 | 2297
-[v1.0.107](https://github.com/laurent22/joplin/releases/tag/v1.0.107) | 2018-09-16T19:51:07Z | 6634 | 2100 | 1687 | 10421
+[v1.0.111](https://github.com/laurent22/joplin/releases/tag/v1.0.111) | 2018-09-30T20:15:09Z | 1   |     |     | 1  
+[v1.0.110](https://github.com/laurent22/joplin/releases/tag/v1.0.110) | 2018-09-29T12:29:21Z | 782 | 243 | 95  | 1120
+[v1.0.109](https://github.com/laurent22/joplin/releases/tag/v1.0.109) | 2018-09-27T18:01:41Z | 1939 | 653 | 304 | 2896
+[v1.0.108](https://github.com/laurent22/joplin/releases/tag/v1.0.108) | 2018-09-29T18:49:29Z | 4   |     |     | 4  
+[v1.0.107](https://github.com/laurent22/joplin/releases/tag/v1.0.107) | 2018-09-16T19:51:07Z | 6888 | 2103 | 1688 | 10679
 [v1.0.106](https://github.com/laurent22/joplin/releases/tag/v1.0.106) | 2018-09-08T15:23:40Z | 4499 | 1435 | 285 | 6219
 [v1.0.105](https://github.com/laurent22/joplin/releases/tag/v1.0.105) | 2018-09-05T11:29:36Z | 4552 | 1544 | 1426 | 7522
 [v1.0.104](https://github.com/laurent22/joplin/releases/tag/v1.0.104) | 2018-06-28T20:25:36Z | 14943 | 4649 | 6882 | 26474
@@ -38,6 +41,3 @@ Version | Date | Windows | macOS | Linux | Total
 [v1.0.70](https://github.com/laurent22/joplin/releases/tag/v1.0.70) | 2018-02-28T20:04:30Z | 1844 | 1022 | 1220 | 4086
 [v1.0.67](https://github.com/laurent22/joplin/releases/tag/v1.0.67) | 2018-02-19T22:51:08Z | 1802 | 579 |     | 2381
 [v1.0.66](https://github.com/laurent22/joplin/releases/tag/v1.0.66) | 2018-02-18T23:09:09Z | 313 | 107 | 72  | 492
-[v1.0.65](https://github.com/laurent22/joplin/releases/tag/v1.0.65) | 2018-02-17T20:02:25Z | 185 | 104 | 114 | 403
-[v1.0.64](https://github.com/laurent22/joplin/releases/tag/v1.0.64) | 2018-02-16T00:58:20Z | 1074 | 528 | 1116 | 2718
-[v1.0.63](https://github.com/laurent22/joplin/releases/tag/v1.0.63) | 2018-02-14T19:40:36Z | 291 | 143 | 83  | 517
