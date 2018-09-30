@@ -22,7 +22,7 @@ chmod +x ~/.joplin/Joplin.AppImage
 # Download icon
 wget -O ~/.joplin/Icon512.png https://joplin.cozic.net/images/Icon512.png
 # Create icon for Gnome
-echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nExec=/home/$USER/.joplin/Joplin.AppImage\nIcon=/home/$USER/.joplin/Icon512.png\nType=Application\nCategories=Application;" >> ~/.local/share/applications/joplin.desktop
+echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nExec=/home/$USER/.joplin/Joplin.AppImage\nIcon=/home/$USER/.joplin/Icon512.png\nType=Application\nCategories=Application;" > ~/.local/share/applications/joplin.desktop
 # Informs the user that it has been installed and cleans variables
 echo 'Joplin installed in the version' $version
 unset version
