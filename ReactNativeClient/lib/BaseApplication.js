@@ -215,7 +215,7 @@ class BaseApplication {
 			if (parentType === Folder.modelType()) {
 				notes = await Note.previews(parentId, options);
 			} else if (parentType === Tag.modelType()) {
-				notes = await Tag.notes(parentId);
+				notes = await Tag.notes(parentId, options);
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				let fields = Note.previewFields();
 				let search = BaseModel.byId(state.searches, parentId);
