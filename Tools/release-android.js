@@ -66,7 +66,7 @@ async function main() {
 	await fs.mkdirp(releaseDir);
 
 	console.info('Copying APK to ' + apkFilePath);
-	await fs.copy('ReactNativeClient/android/app/build/outputs/apk/app-release.apk', apkFilePath);
+	await fs.copy('ReactNativeClient/android/app/build/outputs/apk/release/app-release.apk', apkFilePath);
 
 	console.info('Updating Readme URL...');
 
