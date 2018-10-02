@@ -116,6 +116,9 @@ class NoteBodyViewer extends Component {
 					scalesPageToFit={Platform.OS !== 'ios'}
 					style={webViewStyle}
 					source={source}
+					originWhitelist={['file://*', './*', 'http://*', 'https://*']}
+					mixedContentMode="always"
+					allowFileAccess={true}
 					onLoadEnd={() => this.onLoadEnd()}
 					onError={() => reg.logger().error('WebView error') }
 					onMessage={(event) => {
