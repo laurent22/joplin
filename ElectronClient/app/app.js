@@ -421,6 +421,10 @@ class Application extends BaseApplication {
 					role: 'paste',
 					accelerator: 'CommandOrControl+V',
 				}, {
+					label: _('Select all'),
+					role: 'selectall',
+					accelerator: 'CommandOrControl+A',
+				}, {
 					type: 'separator',
 					screens: ['Main'],
 				}, {
