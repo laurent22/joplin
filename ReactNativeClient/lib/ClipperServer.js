@@ -2,7 +2,7 @@ const { netUtils } = require('lib/net-utils');
 const urlParser = require("url");
 const Setting = require('lib/models/Setting');
 const { Logger } = require('lib/logger.js');
-const randomClipperPort = require('lib/randomClipperPort');
+const { randomClipperPort, startPort } = require('lib/randomClipperPort');
 const enableServerDestroy = require('server-destroy');
 const Api = require('lib/services/rest/Api');
 const ApiResponse = require('lib/services/rest/ApiResponse');
@@ -75,13 +75,22 @@ class ClipperServer {
 		throw new Error('All potential ports are in use or not available.')
 	}
 
+	async isRunning() {
+		const tcpPortUsed = require('tcp-port-used');
+		const port = !!Setting.value('api.port') ? Setting.value('api.port') : startPort(Setting.value('env'));
+		const inUse = await tcpPortUsed.check(port);
+		return inUse ? port : 0;
+	}
+
 	async start() {
 		this.setPort(null);
 
 		this.setStartState('starting');
 
+		const settingPort = Setting.value('api.port');
+
 		try {
-			const p = await this.findAvailablePort();
+			const p = !!settingPort ? settingPort : await this.findAvailablePort();
 			this.setPort(p);
 		} catch (error) {
 			this.setStartState('idle');
