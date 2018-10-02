@@ -83,13 +83,13 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 android {
-	compileSdkVersion 23
-	buildToolsVersion "23.0.1"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
 	defaultConfig {
 		applicationId "net.cozic.joplin"
-		minSdkVersion 16
-		targetSdkVersion 26
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
 		versionCode 2097313
 		versionName "1.0.135"
 		ndk {
@@ -144,9 +144,9 @@ dependencies {
 	compile project(':react-native-image-picker')
 	compile project(':react-native-vector-icons')
 	compile project(':react-native-fs')
-	compile fileTree(dir: "libs", include: ["*.jar"])
-	compile "com.android.support:appcompat-v7:23.0.1"
-	compile "com.facebook.react:react-native:+"  // From node_modules
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    implementation "com.facebook.react:react-native:+"  // From node_modules
 	compile project(':react-native-sqlite-storage')
 	compile project(':react-native-fetch-blob')
 	compile project(':react-native-document-picker')
