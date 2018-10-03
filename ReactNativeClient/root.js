@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { AppState, Keyboard, NativeModules, BackHandler } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler, Platform } = require('react-native');
 const { SafeAreaView } = require('react-navigation');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
@@ -529,23 +529,25 @@ class AppComponent extends React.Component {
 			});
 		}
 
-		try {
-			const { type, value } = await ShareExtension.data();
+		if (Platform.OS !== 'ios') {
+			try {
+				const { type, value } = await ShareExtension.data();
 
-			if (type != "" && this.props.selectedFolderId) {
+				if (type != "" && this.props.selectedFolderId) {
 
-				this.props.dispatch({
-					type: 'NAV_GO',
-					routeName: 'Note',
-					noteId: null,
-					sharedData: {type: type, value: value},
-					folderId: this.props.selectedFolderId,
-					itemType: 'note',
-				});
+					this.props.dispatch({
+						type: 'NAV_GO',
+						routeName: 'Note',
+						noteId: null,
+						sharedData: {type: type, value: value},
+						folderId: this.props.selectedFolderId,
+						itemType: 'note',
+					});
+				}
+
+			} catch(e) {
+				reg.logger().error('Error in ShareExtension.data', e);
 			}
-
-		} catch(e) {
-			reg.logger().error('Error in ShareExtension.data', e);
 		}
 
 		BackButtonService.initialize(this.backButtonHandler_);

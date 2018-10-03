@@ -218,7 +218,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		BackButtonService.removeHandler(this.backHandler);
 		NavService.removeHandler(this.navHandler);
 
-		if (this.state.fromShare) {
+		if (Platform.OS !== 'ios' && this.state.fromShare) {
 			ShareExtension.close();
 		}
 	}
