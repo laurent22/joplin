@@ -5,7 +5,7 @@
 * * *
 **Joplin and Hacktobertfest 2018 :jack_o_lantern:**
 
-This [Hacktobertfest event](https://hacktoberfest.digitalocean.com/) has started - it allows you to contribute to Joplin and, at the end of the month, after having done 5 PR, you'll earn a limited edition T-shirt.
+The [Hacktobertfest event](https://hacktoberfest.digitalocean.com/) has started - it allows you to contribute to Joplin and, at the end of the month, after having done 5 PR, you'll earn a limited edition T-shirt.
 
 To participate, go on [https://hacktoberfest.digitalocean.com/ ](https://hacktoberfest.digitalocean.com/) log in (with you github account) and you are ready to get in.
 
