@@ -265,20 +265,22 @@ class Api {
 		// size: 164394
 
 		if (request.method === 'GET') {
-			if (link !== 'file') throw new ErrorNotFound();
+			if (link === 'file') {
+				const resource = await Resource.load(id);
+				if (!resource) throw new ErrorNotFound();
 
-			const resource = await Resource.load(id);
-			if (!resource) throw new ErrorNotFound();
+				const filePath = Resource.fullPath(resource);
+				const buffer = await shim.fsDriver().readFile(filePath, 'Buffer');
+				
+				const response = new ApiResponse();
+				response.type = 'attachment';
+				response.body = buffer;
+				response.contentType = resource.mime;
+				response.attachmentFilename = Resource.friendlyFilename(resource);
+				return response;
+			}
 
-			const filePath = Resource.fullPath(resource);
-			const buffer = await shim.fsDriver().readFile(filePath, 'Buffer');
-			
-			const response = new ApiResponse();
-			response.type = 'attachment';
-			response.body = buffer;
-			response.contentType = resource.mime;
-			response.attachmentFilename = Resource.friendlyFilename(resource);
-			return response;
+			if (link) throw new ErrorNotFound();
 		}
 
 		if (request.method === 'POST') {
