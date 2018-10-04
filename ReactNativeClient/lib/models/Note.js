@@ -424,15 +424,23 @@ class Note extends BaseItem {
 		return Note.save(modifiedNote, { autoTimestamp: false });
 	}
 
-	static toggleIsTodo(note) {
+	static changeNoteType(note, type) {
 		if (!('is_todo' in note)) throw new Error('Missing "is_todo" property');
 
-		let output = Object.assign({}, note);
-		output.is_todo = output.is_todo ? 0 : 1;
+		const newIsTodo = type === 'todo' ? 1 : 0;
+
+		if (Number(note.is_todo) === newIsTodo) return note;
+
+		const output = Object.assign({}, note);
+		output.is_todo = newIsTodo;
 		output.todo_due = 0;
 		output.todo_completed = 0;
 
 		return output;
+	}
+
+	static toggleIsTodo(note) {
+		return this.changeNoteType(note, !!note.is_todo ? 'note' : 'todo');
 	}
 
 	static async duplicate(noteId, options = null) {

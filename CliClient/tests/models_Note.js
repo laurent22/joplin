@@ -42,4 +42,25 @@ describe('models_Note', function() {
 		expect(items.length).toBe(4);
 	}));
 
+	it('should change the type of notes', asyncTest(async () => {
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		note1 = await Note.load(note1.id);
+
+		let changedNote = Note.changeNoteType(note1, 'todo');
+		expect(changedNote === note1).toBe(false);
+		expect(!!changedNote.is_todo).toBe(true);
+		await Note.save(changedNote);
+
+		note1 = await Note.load(note1.id);
+		changedNote = Note.changeNoteType(note1, 'todo');
+		expect(changedNote === note1).toBe(true);
+		expect(!!changedNote.is_todo).toBe(true);
+
+		note1 = await Note.load(note1.id);
+		changedNote = Note.changeNoteType(note1, 'note');
+		expect(changedNote === note1).toBe(false);
+		expect(!!changedNote.is_todo).toBe(false);
+	}));
+
 });

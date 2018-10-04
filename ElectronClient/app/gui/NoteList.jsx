@@ -97,13 +97,33 @@ class NoteListComponent extends React.Component {
 				}
 			}}));
 
-			menu.append(new MenuItem({label: _('Switch between note and to-do type'), click: async () => {
-				for (let i = 0; i < noteIds.length; i++) {
-					const note = await Note.load(noteIds[i]);
-					await Note.save(Note.toggleIsTodo(note), { userSideValidation: true });
-					eventManager.emit('noteTypeToggle', { noteId: note.id });
+			if (noteIds.length <= 1) {
+				menu.append(new MenuItem({label: _('Switch between note and to-do type'), click: async () => {
+					for (let i = 0; i < noteIds.length; i++) {
+						const note = await Note.load(noteIds[i]);
+						await Note.save(Note.toggleIsTodo(note), { userSideValidation: true });
+						eventManager.emit('noteTypeToggle', { noteId: note.id });
+					}
+				}}));
+			} else {
+				const switchNoteType = async (noteIds, type) => {
+					for (let i = 0; i < noteIds.length; i++) {
+						const note = await Note.load(noteIds[i]);
+						const newNote = Note.changeNoteType(note, type);
+						if (newNote === note) continue;
+						await Note.save(newNote, { userSideValidation: true });
+						eventManager.emit('noteTypeToggle', { noteId: note.id });
+					}
 				}
-			}}));
+
+				menu.append(new MenuItem({label: _('Switch to note type'), click: async () => {
+					await switchNoteType(noteIds, 'note');
+				}}));
+
+				menu.append(new MenuItem({label: _('Switch to to-do type'), click: async () => {
+					await switchNoteType(noteIds, 'todo');
+				}}));
+			}
 
 			menu.append(new MenuItem({label: _('Copy Markdown link'), click: async () => {
 				const { clipboard } = require('electron');
