@@ -2,6 +2,20 @@
 
 [![Donate](https://joplin.cozic.net/images/badges/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=E8JMYD2LQ8MMA&lc=GB&item_name=Joplin+Development&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted) [![Become a patron](https://joplin.cozic.net/images/badges/Patreon-Badge.svg)](https://www.patreon.com/joplin) [![Travis Build Status](https://travis-ci.org/laurent22/joplin.svg?branch=master)](https://travis-ci.org/laurent22/joplin) [![Appveyor Build Status](https://ci.appveyor.com/api/projects/status/github/laurent22/joplin?branch=master&passingText=master%20-%20OK&svg=true)](https://ci.appveyor.com/project/laurent22/joplin)
 
+* * *
+**Joplin and Hacktobertfest 2018 :jack_o_lantern:**
+
+This [Hacktobertfest event](https://hacktoberfest.digitalocean.com/) has started - it allows you to contribute to Joplin and, at the end of the month, after having done 5 PR, you'll earn a limited edition T-shirt.
+
+To participate, go on [https://hacktoberfest.digitalocean.com/ ](https://hacktoberfest.digitalocean.com/) log in (with you github account) and you are ready to get in.
+
+Next, go dive into the Joplin issues list labelled ["Hacktoberfest"](https://github.com/laurent22/joplin/labels/Hacktoberfest%20%3Ajack_o_lantern%3A)
+
+We hope you will enjoy that event by contributing to the project which is a nice moment of sharing good vibe :jack_o_lantern: :tada:
+
+_PS: the 5 Pull Request don't have to be done __only__ on Joplin project, those can be done on any FOSS projects._
+* * *
+
 Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](#markdown).
 
 Notes exported from Evernote via .enex files [can be imported](#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
