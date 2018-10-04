@@ -1366,7 +1366,11 @@ class NoteTextComponent extends React.Component {
 		}
 
 		if (visiblePanes.indexOf('editor') < 0) {
-			editorStyle.display = 'none';
+			// Note: Ideally we'd set the display to "none" to take the editor out
+			// of the DOM but if we do that, certain things won't work, in particular
+			// things related to scroll, which are based on the editor. See
+			// editorScrollTop_, restoreScrollTop_, etc.
+			editorStyle.width = 0;
 			viewerStyle.width = innerWidth;
 		}
 
