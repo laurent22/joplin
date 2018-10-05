@@ -170,6 +170,10 @@ class NoteTextComponent extends React.Component {
 		}
 
 		const updateSelectionRange = () => {
+			if (!this.rawEditor()) {
+				this.selectionRange_ = null;
+				return;
+			}
 
 			const ranges = this.rawEditor().getSelection().getAllRanges();
 			if (!ranges || !ranges.length || !this.state.note) {
