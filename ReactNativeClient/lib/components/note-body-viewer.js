@@ -40,6 +40,13 @@ class NoteBodyViewer extends Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
+
+		const safeGetNoteProp = (props, propName) => {
+			if (!props) return null;
+			if (!props.note) return null;
+			return props.note[propName];
+		}
+
 		// To address https://github.com/laurent22/joplin/issues/433
 		// If a checkbox in a note is ticked, the body changes, which normally would trigger a re-render
 		// of this component, which has the unfortunate side effect of making the view scroll back to the top.
@@ -47,9 +54,14 @@ class NoteBodyViewer extends Component {
 		// So here, if the note has not changed, we prevent the component from updating.
 		// This fixes the above issue. A drawback of this is if the note is updated via sync, this change
 		// will not be displayed immediately.
-		const currentNoteId = this.props && this.props.note ? this.props.note.id : null;
-		const nextNoteId = nextProps && nextProps.note ? nextProps.note.id : null;
-		return currentNoteId !== nextNoteId || nextState.webViewLoaded !== this.state.webViewLoaded;
+		const currentNoteId = safeGetNoteProp(this.props, 'id');
+		const nextNoteId = safeGetNoteProp(nextProps, 'id');
+		
+		if (currentNoteId !== nextNoteId || nextState.webViewLoaded !== this.state.webViewLoaded) return true;
+
+		// If the length of the body has changed, then it's something other than a checkbox that has changed,
+		// for example a resource that has been attached to the note while in View mode. In that case, update.
+		return (safeGetNoteProp(this.props, 'body') + '').length !== (safeGetNoteProp(nextProps, 'body') + '').length;
 	}
 
 	render() {
@@ -63,6 +75,8 @@ class NoteBodyViewer extends Component {
 			},
 			paddingBottom: '3.8em', // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
 		};
+
+		console.info('RRRRRRRRRRRR');
 
 		let html = this.mdToHtml_.render(note ? note.body : '', this.props.webViewStyle, mdOptions);
 
