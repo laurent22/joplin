@@ -20,7 +20,8 @@ msgstr ""
 
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
-"Um ein Tag zu löschen, entferne es bei allen damit verbundenen Notizen."
+"Um ein Schlagwort zu löschen, entferne es bei allen damit verbundenen "
+"Notizen."
 
 msgid "Please select the note or notebook to be deleted first."
 msgstr ""
@@ -199,8 +200,8 @@ msgid ""
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
 "Exportiert Joplin-Dateien in den angegebenen Pfad. Standardmäßig wird die "
-"komplette Datenbank inklusive Notizbüchern, Notizen, Tags und Anhängen "
-"exportiert."
+"komplette Datenbank inklusive Notizbüchern, Notizen, Schlagwörtern und "
+"Anhängen exportiert."
 
 #, javascript-format
 msgid "Destination format: %s"
@@ -307,7 +308,7 @@ msgstr "Anhänge: %d."
 
 #, javascript-format
 msgid "Tagged: %d."
-msgstr "Getagged: %d."
+msgstr "Verschlagwortet: %d."
 
 msgid "Importing notes..."
 msgstr "Importiere Notizen..."
@@ -920,7 +921,7 @@ msgid "Notebook title:"
 msgstr "Notizbuch-Titel:"
 
 msgid "Add or remove tags:"
-msgstr "Füge hinzu oder entferne Schlagwörter:"
+msgstr "Schlagwörter hinzufügen oder entfernen:"
 
 msgid "Separate each tag by a comma."
 msgstr "Trenne jedes Schlagwort mit einem Komma."
