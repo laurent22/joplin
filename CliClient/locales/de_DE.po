@@ -644,6 +644,10 @@ msgstr "Ausschneiden"
 msgid "Paste"
 msgstr "Einfügen"
 
+#, fuzzy
+msgid "Select all"
+msgstr "Datum auswählen"
+
 msgid "Bold"
 msgstr "Fett"
 
@@ -958,6 +962,14 @@ msgid "%s - Copy"
 msgstr "%s kopieren"
 
 msgid "Switch between note and to-do type"
+msgstr "Zwischen Notiz und To-Do Typ wechseln"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Zwischen Notiz und To-Do Typ wechseln"
+
+#, fuzzy
+msgid "Switch to to-do type"
 msgstr "Zwischen Notiz und To-Do Typ wechseln"
 
 msgid "Copy Markdown link"
@@ -1568,6 +1580,10 @@ msgstr "%d Notizen in das Notizbuch \"%s\" verschieben?"
 msgid "Press to set the decryption password."
 msgstr "Tippe hier, um das Entschlüsselungspasswort festzulegen."
 
+#, fuzzy
+msgid "Clear alarm"
+msgstr "Alarm erstellen"
+
 msgid "Save alarm"
 msgstr "Alarm speichern"
 
@@ -1582,6 +1598,36 @@ msgstr "Synchronisation abbrechen"
 
 #, javascript-format
 msgid "Decrypting items: %d/%d"
+msgstr "Entschlüsselte Objekte: %d/%d"
+
+#, fuzzy
+msgid "Checking... Please wait."
+msgstr "Abbrechen… Bitte warten."
+
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Überprüfen der Synchronisationseinstellungen"
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#, fuzzy
+msgid "The application has been authorised!"
+msgstr "Das Programm wurde erfolgreich autorisiert."
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Decrypted items: %s / %s"
 msgstr "Entschlüsselte Objekte: %d/%d"
 
 msgid "New tags:"

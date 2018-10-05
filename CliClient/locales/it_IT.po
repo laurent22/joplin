@@ -626,6 +626,10 @@ msgstr "Taglia"
 msgid "Paste"
 msgstr "Incolla"
 
+#, fuzzy
+msgid "Select all"
+msgstr "Seleziona la data"
+
 msgid "Bold"
 msgstr "Grasseto"
 
@@ -939,6 +943,14 @@ msgid "%s - Copy"
 msgstr "%s - Copia"
 
 msgid "Switch between note and to-do type"
+msgstr "Converti nota in \"Cose-da-fare\" e viceversa"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Converti nota in \"Cose-da-fare\" e viceversa"
+
+#, fuzzy
+msgid "Switch to to-do type"
 msgstr "Converti nota in \"Cose-da-fare\" e viceversa"
 
 msgid "Copy Markdown link"
@@ -1538,6 +1550,10 @@ msgstr "Spostare le note %d sul Taccuino \"%s\"?"
 msgid "Press to set the decryption password."
 msgstr "Premere per impostare la password di decrittografia."
 
+#, fuzzy
+msgid "Clear alarm"
+msgstr "Imposta Allarme"
+
 msgid "Save alarm"
 msgstr "Salva Allarme"
 
@@ -1552,6 +1568,36 @@ msgstr "Cancella la sincronizzazione"
 
 #, javascript-format
 msgid "Decrypting items: %d/%d"
+msgstr "Decrittografia Elementi: %d/%d"
+
+#, fuzzy
+msgid "Checking... Please wait."
+msgstr "Cancellazione... Attendere per favore."
+
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Controlla la configurazione della sincronizzazione"
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#, fuzzy
+msgid "The application has been authorised!"
+msgstr "L'applicazione è stata autorizzata con successo."
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Decrypted items: %s / %s"
 msgstr "Decrittografia Elementi: %d/%d"
 
 msgid "New tags:"

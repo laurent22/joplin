@@ -623,6 +623,10 @@ msgstr "Klipp ut"
 msgid "Paste"
 msgstr "Lim inn"
 
+#, fuzzy
+msgid "Select all"
+msgstr "Velg dato"
+
 msgid "Bold"
 msgstr ""
 
@@ -931,6 +935,14 @@ msgid "%s - Copy"
 msgstr "Kopier"
 
 msgid "Switch between note and to-do type"
+msgstr "Bytt mellom notat og gjøremål"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Bytt mellom notat og gjøremål"
+
+#, fuzzy
+msgid "Switch to to-do type"
 msgstr "Bytt mellom notat og gjøremål"
 
 msgid "Copy Markdown link"
@@ -1531,6 +1543,10 @@ msgid "Press to set the decryption password."
 msgstr "Trykk for å sette krypteringspassordet"
 
 #, fuzzy
+msgid "Clear alarm"
+msgstr "Angi Alarm"
+
+#, fuzzy
 msgid "Save alarm"
 msgstr "Angi Alarm"
 
@@ -1545,6 +1561,36 @@ msgstr "Stopp Synkronisering"
 
 #, fuzzy, javascript-format
 msgid "Decrypting items: %d/%d"
+msgstr "Hentede elementer: %d/%d."
+
+#, fuzzy
+msgid "Checking... Please wait."
+msgstr "Stopper… Vennligst vent."
+
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Sjekk synkroniseringskonfigurasjonen"
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#, fuzzy
+msgid "The application has been authorised!"
+msgstr "Applikasjonen har blitt godkjent."
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Decrypted items: %s / %s"
 msgstr "Hentede elementer: %d/%d."
 
 msgid "New tags:"

@@ -612,6 +612,10 @@ msgstr "잘라내기"
 msgid "Paste"
 msgstr "붙여넣기"
 
+#, fuzzy
+msgid "Select all"
+msgstr "날짜 선택"
+
 msgid "Bold"
 msgstr "굵게"
 
@@ -919,6 +923,14 @@ msgid "%s - Copy"
 msgstr "%s - 복사"
 
 msgid "Switch between note and to-do type"
+msgstr "'노트' 또는'할 일' 형식으로 전환합니다."
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "'노트' 또는'할 일' 형식으로 전환합니다."
+
+#, fuzzy
+msgid "Switch to to-do type"
 msgstr "'노트' 또는'할 일' 형식으로 전환합니다."
 
 msgid "Copy Markdown link"
@@ -1513,6 +1525,10 @@ msgstr "%d 노트를 \"%s\" 노트북으로 옮길까요?"
 msgid "Press to set the decryption password."
 msgstr "복호화 암호를 설정하려면 누르세요."
 
+#, fuzzy
+msgid "Clear alarm"
+msgstr "알람 설정"
+
 msgid "Save alarm"
 msgstr "알람 저장"
 
@@ -1527,6 +1543,36 @@ msgstr "동기화 취소"
 
 #, javascript-format
 msgid "Decrypting items: %d/%d"
+msgstr "복호화 항목: %d/%d"
+
+#, fuzzy
+msgid "Checking... Please wait."
+msgstr "취소하는 중입니다... 잠시만 기다리세요."
+
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "동기화 설정 확인"
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#, fuzzy
+msgid "The application has been authorised!"
+msgstr "애플리케이션이 성공적으로 허가되었습니다."
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Decrypted items: %s / %s"
 msgstr "복호화 항목: %d/%d"
 
 msgid "New tags:"

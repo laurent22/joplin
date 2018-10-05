@@ -626,6 +626,10 @@ msgstr "Izreži"
 msgid "Paste"
 msgstr "Prilepi"
 
+#, fuzzy
+msgid "Select all"
+msgstr "Izberi datum"
+
 msgid "Bold"
 msgstr ""
 
@@ -934,6 +938,14 @@ msgid "%s - Copy"
 msgstr "Kopiraj"
 
 msgid "Switch between note and to-do type"
+msgstr "Menjaj med zabeležko in seznamom opravil"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Menjaj med zabeležko in seznamom opravil"
+
+#, fuzzy
+msgid "Switch to to-do type"
 msgstr "Menjaj med zabeležko in seznamom opravil"
 
 #, fuzzy
@@ -1539,6 +1551,10 @@ msgid "Press to set the decryption password."
 msgstr "Klikni za nastavitev dekripcijskega gesla."
 
 #, fuzzy
+msgid "Clear alarm"
+msgstr "Nastavi alarm"
+
+#, fuzzy
 msgid "Save alarm"
 msgstr "Nastavi alarm"
 
@@ -1553,6 +1569,36 @@ msgstr "Prekliči sinhronizacijo"
 
 #, fuzzy, javascript-format
 msgid "Decrypting items: %d/%d"
+msgstr "Preneseni predmeti: %d/%d."
+
+#, fuzzy
+msgid "Checking... Please wait."
+msgstr "V preklicu...Prosim počakajte."
+
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Preveri nastavitve sinhronizacije"
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#, fuzzy
+msgid "The application has been authorised!"
+msgstr "Aplikacija je bila uspešno avtorizirana."
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Decrypted items: %s / %s"
 msgstr "Preneseni predmeti: %d/%d."
 
 msgid "New tags:"

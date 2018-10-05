@@ -633,6 +633,10 @@ msgstr "Klipp ut"
 msgid "Paste"
 msgstr "Klistra in"
 
+#, fuzzy
+msgid "Select all"
+msgstr "Välj datum"
+
 msgid "Bold"
 msgstr "Fet"
 
@@ -946,6 +950,14 @@ msgid "%s - Copy"
 msgstr "%s - Kopiera"
 
 msgid "Switch between note and to-do type"
+msgstr "Växla mellan antecknings- och att-göra-typ"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Växla mellan antecknings- och att-göra-typ"
+
+#, fuzzy
+msgid "Switch to to-do type"
 msgstr "Växla mellan antecknings- och att-göra-typ"
 
 msgid "Copy Markdown link"
@@ -1547,6 +1559,10 @@ msgstr "Flytta %d anteckningar till anteckningsboken \"%s\"?"
 msgid "Press to set the decryption password."
 msgstr "Tryck för att ställa in dekrypteringslösenordet."
 
+#, fuzzy
+msgid "Clear alarm"
+msgstr "Sätt alarm"
+
 msgid "Save alarm"
 msgstr "Spara alarm"
 
@@ -1561,6 +1577,36 @@ msgstr "Avbryt synkronisering"
 
 #, javascript-format
 msgid "Decrypting items: %d/%d"
+msgstr "Dekrypterar objekt: %d/%d"
+
+#, fuzzy
+msgid "Checking... Please wait."
+msgstr "Avbryter... vänta."
+
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Kontrollera synkroniseringskonfigurationen"
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#, fuzzy
+msgid "The application has been authorised!"
+msgstr "Programmet har godkänts."
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Decrypted items: %s / %s"
 msgstr "Dekrypterar objekt: %d/%d"
 
 msgid "New tags:"

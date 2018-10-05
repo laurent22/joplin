@@ -615,6 +615,10 @@ msgstr "Vyjmout"
 msgid "Paste"
 msgstr "Vložit"
 
+#, fuzzy
+msgid "Select all"
+msgstr "Vybrat datum"
+
 msgid "Bold"
 msgstr ""
 
@@ -918,6 +922,14 @@ msgid "%s - Copy"
 msgstr "Kopírovat"
 
 msgid "Switch between note and to-do type"
+msgstr "Přepnout mezi poznámkou a to-do"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Přepnout mezi poznámkou a to-do"
+
+#, fuzzy
+msgid "Switch to to-do type"
 msgstr "Přepnout mezi poznámkou a to-do"
 
 #, fuzzy
@@ -1517,6 +1529,10 @@ msgid "Press to set the decryption password."
 msgstr "Stiskněte pro zadání hesla k dešifrování."
 
 #, fuzzy
+msgid "Clear alarm"
+msgstr "Nastavit alarm"
+
+#, fuzzy
 msgid "Save alarm"
 msgstr "Nastavit alarm"
 
@@ -1531,6 +1547,36 @@ msgstr "Zrušit synchronizaci"
 
 #, fuzzy, javascript-format
 msgid "Decrypting items: %d/%d"
+msgstr "Získané položky: %d/%d."
+
+#, fuzzy
+msgid "Checking... Please wait."
+msgstr "Zastavuji, chvíli strpení."
+
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Zkontrolujte nastavení synchronizace"
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#, fuzzy
+msgid "The application has been authorised!"
+msgstr "Aplikace byla úspěšně autorizována."
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Decrypted items: %s / %s"
 msgstr "Získané položky: %d/%d."
 
 msgid "New tags:"
