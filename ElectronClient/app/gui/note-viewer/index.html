@@ -276,6 +276,15 @@
 		}
 	});
 
+	// Prevent URLs added via <a> tags from being opened within the application itself
+	document.addEventListener('click', function(event) {
+		const t = event.target;
+		if (t && t.nodeName === 'A' && !t.hasAttribute('data-from-md')) {
+			event.preventDefault();
+			ipcProxySendToHost(t.getAttribute('href'));
+		}
+	});
+
 	// Disable drag and drop otherwise it's possible to drop a URL
 	// on it and it will open in the view as a website.
 	document.addEventListener('drop', function(e) {

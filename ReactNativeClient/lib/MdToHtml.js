@@ -102,7 +102,7 @@ class MdToHtml {
 		const href = this.getAttr_(attrs, 'src');
 
 		if (!Resource.isResourceUrl(href)) {
-			return '<img title="' + htmlentities(title) + '" src="' + href + '"/>';
+			return '<img data-from-md title="' + htmlentities(title) + '" src="' + href + '"/>';
 		}
 
 		const resourceId = Resource.urlToId(href);
@@ -118,7 +118,7 @@ class MdToHtml {
 		if (Resource.isSupportedImageMimeType(mime)) {
 			let src = './' + Resource.filename(resource);
 			if (this.resourceBaseUrl_ !== null) src = this.resourceBaseUrl_ + src;
-			let output = '<img data-resource-id="' + resource.id + '" title="' + htmlentities(title) + '" src="' + src + '"/>';
+			let output = '<img data-from-md data-resource-id="' + resource.id + '" title="' + htmlentities(title) + '" src="' + src + '"/>';
 			return output;
 		}
 		
@@ -167,7 +167,7 @@ class MdToHtml {
 		}
 
 		const js = options.postMessageSyntax + "(" + JSON.stringify(href) + "); return false;";
-		let output = "<a " + resourceIdAttr + " title='" + htmlentities(title) + "' href='" + hrefAttr + "' onclick='" + js + "'>" + icon;
+		let output = "<a data-from-md " + resourceIdAttr + " title='" + htmlentities(title) + "' href='" + hrefAttr + "' onclick='" + js + "'>" + icon;
 		return output;
 	}
 
@@ -487,7 +487,7 @@ class MdToHtml {
 			while (renderedBody.indexOf('mJOPm') >= 0) {
 				renderedBody = renderedBody.replace(/mJOPmCHECKBOXm([A-Z]+)m(\d+)m/, function(v, type, index) {
 					const js = options.postMessageSyntax + "('checkboxclick:" + type + ':' + index + "'); this.classList.contains('tick') ? this.classList.remove('tick') : this.classList.add('tick'); return false;";
-					return '<a href="#" onclick="' + js + '" class="checkbox ' + (type == 'NOTICK' ? '' : 'tick') + '"><span>' + '' + '</span></a>';
+					return '<a data-from-md href="#" onclick="' + js + '" class="checkbox ' + (type == 'NOTICK' ? '' : 'tick') + '"><span>' + '' + '</span></a>';
 				});
 				if (loopCount++ >= 9999) break;
 			}

@@ -6,6 +6,7 @@ const Search = require('lib/models/Search.js');
 const { time } = require('lib/time-utils.js');
 const Setting = require('lib/models/Setting.js');
 const { IconButton } = require('./IconButton.min.js');
+const { urlDecode } = require('lib/string-utils');
 const Toolbar = require('./Toolbar.min.js');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
@@ -569,7 +570,12 @@ class NoteTextComponent extends React.Component {
 				throw new Error('Unsupported item type: ' + item.type_);
 			}
 		} else if (urlUtils.urlProtocol(msg)) {
-			require('electron').shell.openExternal(msg);
+			if (msg.indexOf('file://') === 0) {
+				// When using the file:// protocol, openExternal doesn't work (does nothing) with URL-encoded paths
+				require('electron').shell.openExternal(urlDecode(msg));
+			} else {
+				require('electron').shell.openExternal(msg);
+			}
 		} else {
 			bridge().showErrorMessageBox(_('Unsupported link or message: %s', msg));
 		}
