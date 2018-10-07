@@ -35,13 +35,6 @@ class Resource extends BaseItem {
 		return Resource.fsDriver_;
 	}
 
-	static async serialize(item, type = null, shownKeys = null) {
-		let fieldNames = this.fieldNames();
-		fieldNames.push('type_');
-		//fieldNames = ArrayUtils.removeElement(fieldNames, 'encryption_blob_encrypted');
-		return super.serialize(item, 'resource', fieldNames);
-	}
-
 	static filename(resource, encryptedBlob = false) {
 		let extension = encryptedBlob ? 'crypted' : resource.file_extension;
 		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
@@ -198,5 +191,10 @@ class Resource extends BaseItem {
 }
 
 Resource.IMAGE_MAX_DIMENSION = 1920;
+
+Resource.FETCH_STATUS_IDLE = 0;
+Resource.FETCH_STATUS_STARTED = 1;
+Resource.FETCH_STATUS_DONE = 2;
+Resource.FETCH_STATUS_ERROR = 3;
 
 module.exports = Resource;

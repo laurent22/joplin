@@ -25,14 +25,8 @@ class Note extends BaseItem {
 		return field in fieldsToLabels ? fieldsToLabels[field] : field;
 	}
 
-	static async serialize(note, type = null, shownKeys = null) {
-		let fieldNames = this.fieldNames();
-		fieldNames.push('type_');
-		return super.serialize(note, 'note', fieldNames);
-	}
-
 	static async serializeForEdit(note) {
-		return super.serialize(note, 'note', ['title', 'body']);
+		return super.serialize(note, ['title', 'body']);
 	}
 
 	static async unserializeForEdit(content) {
@@ -47,7 +41,7 @@ class Note extends BaseItem {
 		let fieldNames = this.fieldNames();
 		fieldNames.push('type_');
 		lodash.pull(fieldNames, 'title', 'body');
-		return super.serialize(note, 'note', fieldNames);
+		return super.serialize(note, fieldNames);
 	}
 
 	static minimalSerializeForDisplay(note) {
@@ -75,7 +69,7 @@ class Note extends BaseItem {
 		lodash.pull(fieldNames, 'updated_time');
 		lodash.pull(fieldNames, 'order');
 
-		return super.serialize(n, 'note', fieldNames);
+		return super.serialize(n, fieldNames);
 	}
 
 	static defaultTitle(note) {

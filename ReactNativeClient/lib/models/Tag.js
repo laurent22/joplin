@@ -15,12 +15,6 @@ class Tag extends BaseItem {
 		return BaseModel.TYPE_TAG;
 	}
 
-	static async serialize(item, type = null, shownKeys = null) {
-		let fieldNames = this.fieldNames();
-		fieldNames.push('type_');
-		return super.serialize(item, 'tag', fieldNames);
-	}
-
 	static async noteIds(tagId) {
 		let rows = await this.db().selectAll('SELECT note_id FROM note_tags WHERE tag_id = ?', [tagId]);
 		let output = [];

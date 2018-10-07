@@ -236,7 +236,12 @@ class BaseItem extends BaseModel {
 		return propValue;
 	}
 
-	static async serialize(item, type = null, shownKeys = null) {
+	static async serialize(item, shownKeys = null) {
+		if (shownKeys === null) {
+			shownKeys = this.itemClass(item).fieldNames();
+			shownKeys.push('type_');
+		}
+
 		item = this.filter(item);
 
 		let output = {};
