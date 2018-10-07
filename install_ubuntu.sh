@@ -9,23 +9,57 @@ echo " | |__| | (_) | |_) | | | | | | | | | \__ \ || (_| | | |  __/ |   "
 echo "  \____/ \___/| .__/|_|_| |_| |_|_| |_|___/\__\__,_|_|_|\___|_|   "
 echo "              | |                                                 "
 echo "              |_|                                                 "
+echo ""
+
+#-----------------------------------------------------
+# Download Joplin
+#-----------------------------------------------------
+
 # Get the latest version to download
 version=$(curl --silent "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": "v\K.*?(?=")')
+
 # Check if it's in the latest version
 touch VERSION
 if [[ $(< ~/.joplin/VERSION) != "$version" ]]; then
+
     # Delete previous version
     rm -f ~/.joplin/*.AppImage ~/.local/share/applications/joplin.desktop ~/.joplin/VERSION
+    
     # Creates the folder where the binary will be stored
     mkdir -p ~/.joplin/
+    
     # Download the latest version
     wget -O ~/.joplin/Joplin.AppImage https://github.com/laurent22/joplin/releases/download/v$version/Joplin-$version-x86_64.AppImage 
+    
     # Gives execution privileges
     chmod +x ~/.joplin/Joplin.AppImage
+    
+    #-----------------------------------------------------
+    # Icon
+    #-----------------------------------------------------
+    
     # Download icon
     wget -O ~/.joplin/Icon512.png https://joplin.cozic.net/images/Icon512.png
+    
+    # Detect desktop environment  
+    if [ "$XDG_CURRENT_DESKTOP" = "" ]
+    then
+      desktop=$(echo "$XDG_DATA_DIRS" | sed 's/.*\(xfce\|kde\|gnome\).*/\1/')
+    else
+      desktop=$XDG_CURRENT_DESKTOP
+    fi
+    desktop=${desktop,,}  # convert to lower case
+
     # Create icon for Gnome
-    echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nExec=/home/$USER/.joplin/Joplin.AppImage\nIcon=/home/$USER/.joplin/Icon512.png\nType=Application\nCategories=Application;" > ~/.local/share/applications/joplin.desktop
+    if [[ $desktop =~ .*gnome.* ]] 
+    then
+       echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nExec=/home/$USER/.joplin/Joplin-$version-x86_64.AppImage\nIcon=/home/$USER/.joplin/Icon512.png\nType=Application\nCategories=Application;" >> ~/.local/share/applications/joplin.desktop
+    fi
+    
+    #-----------------------------------------------------
+    # Finish
+    #-----------------------------------------------------
+    
     # Informs the user that it has been installed and cleans variables
     echo 'Joplin installed in the version' $version
     # Add version
