@@ -42,6 +42,10 @@ class Resource extends BaseItem {
 		return resource.id + extension;
 	}
 
+	static serializeForSyncExcludedKeys() {
+		return ['fetch_status', 'fetch_error'];
+	}
+
 	static friendlyFilename(resource) {
 		let output = safeFilename(resource.title); // Make sure not to allow spaces or any special characters as it's not supported in HTTP headers
 		if (!output) output = resource.id;

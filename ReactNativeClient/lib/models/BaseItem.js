@@ -288,7 +288,19 @@ class BaseItem extends BaseModel {
 
 	static async serializeForSync(item) {
 		const ItemClass = this.itemClass(item);
-		let serialized = await ItemClass.serialize(item);
+		let shownKeys = ItemClass.fieldNames();
+		shownKeys.push('type_');
+
+		if (ItemClass.serializeForSyncExcludedKeys) {
+			const keys = ItemClass.serializeForSyncExcludedKeys();
+			for (let i = 0; i < keys.length; i++) {
+				const idx = shownKeys.indexOf(keys[i]);
+				shownKeys.splice(idx, 1);
+			}
+		}
+
+		const serialized = await ItemClass.serialize(item, shownKeys);
+
 		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported()) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (!!item.encryption_applied) throw new JoplinError('Item is encrypted but encryption is currently disabled', 'cannotSyncEncrypted');
@@ -312,7 +324,6 @@ class BaseItem extends BaseModel {
 
 		reducedItem.encryption_applied = 1;
 		reducedItem.encryption_cipher_text = cipherText;
-
 		return ItemClass.serialize(reducedItem)
 	}
 
