@@ -13,7 +13,7 @@ class GeolocationNode {
 
 		response = await response.json();
 
-		if (!('lat' in response) || !('lon' in response)) throw new Error('Invalid geolocation response: ' . (response ? JSON.stringify(response) : '<null>'));
+		if (!('lat' in response) || !('lon' in response)) throw new Error('Invalid geolocation response: ' + (response ? JSON.stringify(response) : '<null>'));
 
 		return {
 			timestamp: (new Date()).getTime(),
