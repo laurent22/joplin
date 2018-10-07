@@ -27,7 +27,7 @@ const { globalStyle, themeStyle } = require('lib/components/global-style.js');
 const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { NoteBodyViewer } = require('lib/components/note-body-viewer.js');
-const RNFetchBlob = require('react-native-fetch-blob').default;
+const RNFetchBlob = require('rn-fetch-blob').default;
 const { DocumentPicker, DocumentPickerUtil } = require('react-native-document-picker');
 const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('lib/components/shared/note-screen-shared.js');
@@ -340,6 +340,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const localFilePath = pickerResponse.uri;
 		let mimeType = pickerResponse.type;
 
+
 		if (!mimeType) {
 			const ext = fileExtension(localFilePath);
 			mimeType = mimeUtils.fromFileExtension(ext);
@@ -375,7 +376,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 					dialogs.error(this, _('Unsupported image type: %s', mimeType));
 					return;
 				} else {
-					await RNFetchBlob.fs.cp(localFilePath, targetPath);
+					await shim.fsDriver().copy(localFilePath, targetPath);
+
 					const stat = await shim.fsDriver().stat(targetPath);
 					if (stat.size >= 10000000) {
 						await shim.fsDriver().remove(targetPath);

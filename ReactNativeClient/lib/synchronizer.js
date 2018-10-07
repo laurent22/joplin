@@ -478,7 +478,7 @@ class Synchronizer {
 							break;
 						}
 
-						this.logSyncOperation("fetchingProcessed", null, null, "Processing fetched item");
+						// this.logSyncOperation("fetchingProcessed", null, null, "Processing fetched item");
 
 						let remote = remotes[i];
 						if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
