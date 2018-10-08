@@ -7,6 +7,7 @@ const fs = require('fs-extra');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
+const ResourceFetcher = require('lib/services/ResourceFetcher');
 const Tag = require('lib/models/Tag.js');
 const { Database } = require('lib/database.js');
 const Setting = require('lib/models/Setting.js');
@@ -872,10 +873,44 @@ describe('Synchronizer', function() {
 		let allResources = await Resource.all();
 		expect(allResources.length).toBe(1);
 		let resource1_2 = allResources[0];
-		let resourcePath1_2 = Resource.fullPath(resource1_2);
-
 		expect(resource1_2.id).toBe(resource1.id);
+		expect(resource1_2.fetch_status).toBe(Resource.FETCH_STATUS_IDLE);
+
+		const fetcher = new ResourceFetcher(() => { return synchronizer().api() });
+		fetcher.queueDownload(resource1_2.id);
+		await fetcher.waitForAllFinished();
+
+		resource1_2 = await Resource.load(resource1.id);
+		expect(resource1_2.fetch_status).toBe(Resource.FETCH_STATUS_DONE);
+
+		let resourcePath1_2 = Resource.fullPath(resource1_2);
 		expect(fileContentEqual(resourcePath1, resourcePath1_2)).toBe(true);
+	}));
+
+	it('should handle resource download errors', asyncTest(async () => {
+		while (insideBeforeEach) await time.msleep(500);
+
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		let resource1 = (await Resource.all())[0];
+		let resourcePath1 = Resource.fullPath(resource1);
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+
+		const fetcher = new ResourceFetcher(() => { return {
+			// Simulate a failed download
+			get: () => { return new Promise((resolve, reject) => { reject(new Error('did not work')) }); }
+		} });
+		fetcher.queueResource(resource1.id);
+		await fetcher.waitForAllFinished();
+
+		resource1 = await Resource.load(resource1.id);
+		expect(resource1.fetch_status).toBe(Resource.FETCH_STATUS_ERROR);
+		expect(resource1.fetch_error).toBe('did not work');
 	}));
 
 	it('should delete resources', asyncTest(async () => {
@@ -926,6 +961,10 @@ describe('Synchronizer', function() {
 		Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
 		await encryptionService().loadMasterKeysFromSettings();
 
+		const fetcher = new ResourceFetcher(() => { return synchronizer().api() });
+		fetcher.queueDownload(resource1.id);
+		await fetcher.waitForAllFinished();
+		
 		let resource1_2 = (await Resource.all())[0];
 		resource1_2 = await Resource.decrypt(resource1_2);
 		let resourcePath1_2 = Resource.fullPath(resource1_2);

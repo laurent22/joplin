@@ -11,6 +11,7 @@ const { Logger } = require('lib/logger.js');
 const { _ } = require('lib/locale.js');
 const { shim } = require('lib/shim.js');
 const JoplinError = require('lib/JoplinError');
+const BaseSyncTarget = require('lib/BaseSyncTarget');
 
 class Synchronizer {
 
@@ -19,7 +20,7 @@ class Synchronizer {
 		this.db_ = db;
 		this.api_ = api;
 		this.syncDirName_ = '.sync';
-		this.resourceDirName_ = '.resource';
+		this.resourceDirName_ = BaseSyncTarget.resourceDirName();
 		this.logger_ = new Logger();
 		this.appType_ = appType;
 		this.cancelling_ = false;
