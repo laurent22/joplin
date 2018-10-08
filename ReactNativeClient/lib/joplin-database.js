@@ -3,6 +3,7 @@ const { promiseChain } = require('lib/promise-utils.js');
 const { time } = require('lib/time-utils.js');
 const { Database } = require('lib/database.js');
 const { sprintf } = require('sprintf-js');
+const Resource = require('lib/models/Resource');
 
 const structureSql = `
 CREATE TABLE folders (
@@ -398,6 +399,7 @@ class JoplinDatabase extends Database {
 			if (targetVersion == 13) {
 				queries.push('ALTER TABLE resources ADD COLUMN fetch_status INT NOT NULL DEFAULT "0"');
 				queries.push('ALTER TABLE resources ADD COLUMN fetch_error TEXT NOT NULL DEFAULT ""');
+				queries.push({ sql: 'UPDATE resources SET fetch_status = ?', params: [Resource.FETCH_STATUS_DONE] });
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

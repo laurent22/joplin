@@ -21,7 +21,6 @@ const { _, setLocale, defaultLocale, closestSupportedLocale } = require('lib/loc
 const os = require('os');
 const fs = require('fs-extra');
 const { cliUtils } = require('./cli-utils.js');
-const EventEmitter = require('events');
 const Cache = require('lib/Cache');
 
 class Application extends BaseApplication {

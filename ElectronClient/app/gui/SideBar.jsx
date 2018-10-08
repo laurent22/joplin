@@ -470,7 +470,13 @@ class SideBarComponent extends React.Component {
 			);
 		}
 
+		let decryptionReportText = '';
+		if (this.props.decryptionWorker && this.props.decryptionWorker.state !== 'idle' && this.props.decryptionWorker.itemCount) {
+			decryptionReportText = _('Decrypting items: %d/%d', this.props.decryptionWorker.itemIndex + 1, this.props.decryptionWorker.itemCount);
+		}
+
 		let lines = Synchronizer.reportToLines(this.props.syncReport);
+		if (decryptionReportText) lines.push(decryptionReportText);
 		const syncReportText = [];
 		for (let i = 0; i < lines.length; i++) {
 			syncReportText.push(
@@ -510,6 +516,7 @@ const mapStateToProps = state => {
 		locale: state.settings.locale,
 		theme: state.settings.theme,
 		collapsedFolderIds: state.collapsedFolderIds,
+		decryptionWorker: state.decryptionWorker,
 	};
 };
 

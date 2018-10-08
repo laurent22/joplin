@@ -28,6 +28,7 @@ const urlUtils = require('lib/urlUtils');
 const dialogs = require('./dialogs');
 const markdownUtils = require('lib/markdownUtils');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
+const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { toSystemSlashes, safeFilename } = require('lib/path-utils');
 const { clipboard } = require('electron');
 
@@ -198,6 +199,16 @@ class NoteTextComponent extends React.Component {
 				this.reloadNote(this.props);
 			}
 		}
+
+		this.resourceFetcher_downloadComplete = async (resource) => {
+			if (!this.state.note || !this.state.note.body) return;
+			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
+			if (resourceIds.indexOf(resource.id) >= 0) {
+				this.mdToHtml().clearCache();
+				this.lastSetHtml_ = '';
+				this.updateHtml(this.state.note.body);
+			}
+		}
 	}
 
 	// Note:
@@ -287,6 +298,8 @@ class NoteTextComponent extends React.Component {
 		eventManager.on('alarmChange', this.onAlarmChange_);
 		eventManager.on('noteTypeToggle', this.onNoteTypeToggle_);
 		eventManager.on('todoToggle', this.onTodoToggle_);
+
+		ResourceFetcher.instance().on('downloadComplete', this.resourceFetcher_downloadComplete);
 	}
 
 	componentWillUnmount() {
@@ -298,6 +311,8 @@ class NoteTextComponent extends React.Component {
 		eventManager.removeListener('alarmChange', this.onAlarmChange_);
 		eventManager.removeListener('noteTypeToggle', this.onNoteTypeToggle_);
 		eventManager.removeListener('todoToggle', this.onTodoToggle_);
+
+		ResourceFetcher.instance().off('downloadComplete', this.resourceFetcher_downloadComplete);
 
 		this.destroyExternalEditWatcher();
 	}
@@ -552,6 +567,10 @@ class NoteTextComponent extends React.Component {
 			if (!item) throw new Error('No item with ID ' + itemId);
 
 			if (item.type_ === BaseModel.TYPE_RESOURCE) {
+				if (item.fetch_status !== Resource.FETCH_STATUS_DONE || !!item.encryption_blob_encrypted) {
+					bridge().showErrorMessageBox(_('This attachment is not downloaded or not decrypted yet.'));
+					return;
+				}
 				const filePath = Resource.fullPath(item);
 				bridge().openItem(filePath);
 			} else if (item.type_ === BaseModel.TYPE_NOTE) {

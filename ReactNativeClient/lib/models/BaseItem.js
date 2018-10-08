@@ -291,8 +291,8 @@ class BaseItem extends BaseModel {
 		let shownKeys = ItemClass.fieldNames();
 		shownKeys.push('type_');
 
-		if (ItemClass.serializeForSyncExcludedKeys) {
-			const keys = ItemClass.serializeForSyncExcludedKeys();
+		if (ItemClass.syncExcludedKeys) {
+			const keys = ItemClass.syncExcludedKeys();
 			for (let i = 0; i < keys.length; i++) {
 				const idx = shownKeys.indexOf(keys[i]);
 				shownKeys.splice(idx, 1);

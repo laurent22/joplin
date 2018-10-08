@@ -555,23 +555,27 @@ class Synchronizer {
 							if (action == "createLocal") options.isNew = true;
 							if (action == "updateLocal") options.oldItem = local;
 
-							if (content.type_ == BaseModel.TYPE_RESOURCE && action == "createLocal") {
-								let localResourceContentPath = Resource.fullPath(content);
-								let remoteResourceContentPath = this.resourceDirName_ + "/" + content.id;
-								try {
-									await this.api().get(remoteResourceContentPath, { path: localResourceContentPath, target: "file" });
-								} catch (error) {
-									if (error.code === 'rejectedByTarget') {
-										this.progressReport_.errors.push(error);
-										this.logger().warn('Rejected by target: ' + path + ': ' + error.message);
-										continue;
-									} else {
-										throw error;
-									}
-								}
-							}
+							// if (content.type_ == BaseModel.TYPE_RESOURCE && action == "createLocal") {
+							// 	let localResourceContentPath = Resource.fullPath(content);
+							// 	let remoteResourceContentPath = this.resourceDirName_ + "/" + content.id;
+							// 	try {
+							// 		await this.api().get(remoteResourceContentPath, { path: localResourceContentPath, target: "file" });
+							// 	} catch (error) {
+							// 		if (error.code === 'rejectedByTarget') {
+							// 			this.progressReport_.errors.push(error);
+							// 			this.logger().warn('Rejected by target: ' + path + ': ' + error.message);
+							// 			continue;
+							// 		} else {
+							// 			throw error;
+							// 		}
+							// 	}
+							// }
 
 							await ItemClass.save(content, options);
+
+							if (content.type_ == BaseModel.TYPE_RESOURCE && action == "createLocal") {
+								this.dispatch({ type: "SYNC_CREATED_RESOURCE", id: content.id });
+							}
 
 							if (!hasAutoEnabledEncryption && content.type_ === BaseModel.TYPE_MASTER_KEY && !masterKeysBefore) {
 								hasAutoEnabledEncryption = true;

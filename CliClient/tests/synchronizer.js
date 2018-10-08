@@ -905,7 +905,7 @@ describe('Synchronizer', function() {
 			// Simulate a failed download
 			get: () => { return new Promise((resolve, reject) => { reject(new Error('did not work')) }); }
 		} });
-		fetcher.queueResource(resource1.id);
+		fetcher.queueDownload(resource1.id);
 		await fetcher.waitForAllFinished();
 
 		resource1 = await Resource.load(resource1.id);

@@ -30,6 +30,27 @@ class Resource extends BaseItem {
 		return imageMimeTypes.indexOf(type.toLowerCase()) >= 0;
 	}
 
+	static resetStartedFetchStatus() {
+		return this.db().exec('UPDATE resources SET fetch_status = ? WHERE fetch_status = ?', [Resource.FETCH_STATUS_IDLE, Resource.FETCH_STATUS_STARTED]);
+	}
+
+	static needToBeFetched(limit = null) {
+		let sql = 'SELECT * FROM resources WHERE fetch_status = ? ORDER BY updated_time DESC';
+		if (limit !== null) sql += ' LIMIT ' + limit;
+		return this.modelSelectAll(sql, [Resource.FETCH_STATUS_IDLE]);
+	}
+
+	static async saveFetchStatus(resourceId, status, error = null) {
+		const o = {
+			id: resourceId,
+			fetch_status: status,
+		}
+
+		if (error !== null) o.fetch_error = error;
+
+		return Resource.save(o, { autoTimestamp: false });
+	}
+
 	static fsDriver() {
 		if (!Resource.fsDriver_) Resource.fsDriver_ = new FsDriverDummy();
 		return Resource.fsDriver_;
@@ -42,7 +63,7 @@ class Resource extends BaseItem {
 		return resource.id + extension;
 	}
 
-	static serializeForSyncExcludedKeys() {
+	static syncExcludedKeys() {
 		return ['fetch_status', 'fetch_error'];
 	}
 
@@ -57,6 +78,10 @@ class Resource extends BaseItem {
 
 	static fullPath(resource, encryptedBlob = false) {
 		return Setting.value('resourceDir') + '/' + this.filename(resource, encryptedBlob);
+	}
+
+	static isReady(resource) {
+		return resource && resource.fetch_status === Resource.FETCH_STATUS_DONE && !resource.encryption_blob_encrypted;
 	}
 
 	// For resources, we need to decrypt the item (metadata) and the resource binary blob.

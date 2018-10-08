@@ -2,7 +2,6 @@ const MarkdownIt = require('markdown-it');
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = (new Entities()).encode;
 const Resource = require('lib/models/Resource.js');
-const ModelCache = require('lib/ModelCache');
 const ObjectUtils = require('lib/ObjectUtils');
 const { shim } = require('lib/shim.js');
 const { _ } = require('lib/locale');
@@ -17,7 +16,6 @@ class MdToHtml {
 		this.loadedResources_ = {};
 		this.cachedContent_ = null;
 		this.cachedContentKey_ = null;
-		this.modelCache_ = new ModelCache();
 
 		// Must include last "/"
 		this.resourceBaseUrl_ = ('resourceBaseUrl' in options) ? options.resourceBaseUrl : null;
@@ -30,10 +28,16 @@ class MdToHtml {
 			const r = resources[n];
 			k.push(r.id);
 		}
+
 		k.push(md5(escape(body))); // https://github.com/pvorb/node-md5/issues/41
 		k.push(md5(JSON.stringify(style)));
 		k.push(md5(JSON.stringify(options)));
 		return k.join('_');
+	}
+
+	clearCache() {
+		this.cachedContent_ = null;
+		this.cachedContentKey_ = null;
 	}
 
 	renderAttrs_(attrs) {
@@ -74,8 +78,6 @@ class MdToHtml {
 	}
 
 	async loadResource(id, options) {
-		// console.info('Loading resource: ' + id);
-
 		// Initially set to to an empty object to make
 		// it clear that it is being loaded. Otherwise
 		// it sometimes results in multiple calls to
@@ -83,12 +85,17 @@ class MdToHtml {
 		this.loadedResources_[id] = {};
 
 		const resource = await Resource.load(id);
-		//const resource = await this.modelCache_.load(Resource, id);
 
 		if (!resource) {
 			// Can happen for example if an image is attached to a note, but the resource hasn't
 			// been downloaded from the sync target yet.
 			console.warn('Cannot load resource: ' + id);
+			return;
+		}
+
+		if (resource.fetch_status !== Resource.FETCH_STATUS_DONE) {
+			delete this.loadedResources_[id];
+			console.warn('Resource not yet fetched: ' + id);
 			return;
 		}
 
@@ -208,7 +215,6 @@ class MdToHtml {
 			return str;
 		}
 	}
-
 
 	renderTokens_(markdownIt, tokens, options) {
 		let output = [];

@@ -2,21 +2,35 @@ const Resource = require('lib/models/Resource');
 const BaseService = require('lib/services/BaseService');
 const BaseSyncTarget = require('lib/BaseSyncTarget');
 const { Logger } = require('lib/logger.js');
+const EventEmitter = require('events');
 
 class ResourceFetcher extends BaseService {
 
-	constructor(fileApi) {
+	constructor(fileApi = null) {
 		super();
-
-		if (typeof fileApi !== 'function') throw new Error('fileApi must be a function that returns the API');
 		
+		this.setFileApi(fileApi);
 		this.logger_ = new Logger();
-		this.fileApi_ = fileApi;
 		this.queue_ = [];
 		this.fetchingItems_ = {};
 		this.resourceDirName_ = BaseSyncTarget.resourceDirName();
-		this.queueMutex_ = new Mutex();
 		this.maxDownloads_ = 3;
+		this.addingResources_ = false;
+		this.eventEmitter_ = new EventEmitter();
+	}
+
+	static instance() {
+		if (this.instance_) return this.instance_;
+		this.instance_ = new ResourceFetcher();
+		return this.instance_;
+	}
+
+	on(eventName, callback) {
+		return this.eventEmitter_.on(eventName, callback);
+	}
+
+	off(eventName, callback) {
+		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
 	setLogger(logger) {
@@ -27,7 +41,12 @@ class ResourceFetcher extends BaseService {
 		return this.logger_;
 	}
 
-	fileApi() {
+	setFileApi(v) {
+		if (v !== null && typeof v !== 'function') throw new Error('fileApi must be a function that returns the API. Type is ' + (typeof v));
+		this.fileApi_ = v;
+	}
+
+	async fileApi() {
 		return this.fileApi_();
 	}
 
@@ -43,7 +62,7 @@ class ResourceFetcher extends BaseService {
 		if (priority === null) priority = 'normal';
 
 		const index = this.queuedItemIndex_(resourceId);
-		if (index >= 0) return;
+		if (index >= 0) return false;
 
 		const item = { id: resourceId };
 
@@ -53,7 +72,8 @@ class ResourceFetcher extends BaseService {
 			this.queue_.push(item);
 		}
 
-		this.scheduleQueueProcess_();
+		this.scheduleQueueProcess();
+		return true;
 	}
 
 	async startDownload_(resourceId) {
@@ -67,24 +87,38 @@ class ResourceFetcher extends BaseService {
 		const localResourceContentPath = Resource.fullPath(resource);
 		const remoteResourceContentPath = this.resourceDirName_ + "/" + resource.id;
 
-		await Resource.save({ id: resource.id, fetch_status: Resource.FETCH_STATUS_STARTED });
+		await Resource.saveFetchStatus(resource.id, Resource.FETCH_STATUS_STARTED);
 
-		this.fileApi().get(remoteResourceContentPath, { path: localResourceContentPath, target: "file" }).then(async () => {
+		const fileApi = await this.fileApi();
+
+		this.logger().debug('ResourceFetcher: Downloading resource: ' + resource.id);
+
+		const completeDownload = () => {
 			delete this.fetchingItems_[resource.id];
-			await Resource.save({ id: resource.id, fetch_status: Resource.FETCH_STATUS_DONE });
-			this.scheduleQueueProcess_();
+			this.scheduleQueueProcess();
+			this.eventEmitter_.emit('downloadComplete', { id: resource.id });
+		}
+
+		fileApi.get(remoteResourceContentPath, { path: localResourceContentPath, target: "file" }).then(async () => {
+			await Resource.saveFetchStatus(resource.id, Resource.FETCH_STATUS_DONE);
+			this.logger().debug('ResourceFetcher: Resource downloaded: ' + resource.id);
+			completeDownload();
 		}).catch(async (error) => {
-			delete this.fetchingItems_[resource.id];
-			await Resource.save({ id: resource.id, fetch_status: Resource.FETCH_STATUS_ERROR, fetch_error: error.message });
-			this.scheduleQueueProcess_();
+			this.logger().error('ResourceFetcher: Could not download resource: ' + resource.id, error);
+			await Resource.saveFetchStatus(resource.id, Resource.FETCH_STATUS_ERROR, error.message);
+			completeDownload();
 		});
 	}
 
 	processQueue_() {
 		while (Object.getOwnPropertyNames(this.fetchingItems_).length < this.maxDownloads_) {
-			if (!this.queue_.length) return;
+			if (!this.queue_.length) break;
 			const item = this.queue_.splice(0, 1)[0];
 			this.startDownload_(item.id);
+		}
+
+		if (!this.queue_.length) {
+			this.autoAddResources(10);
 		}
 	}
 
@@ -99,7 +133,27 @@ class ResourceFetcher extends BaseService {
 		});
 	}
 
-	scheduleQueueProcess_() {
+	async autoAddResources(limit) {
+		if (this.addingResources_) return;
+		this.addingResources_ = true;
+
+		let count = 0;
+		const resources = await Resource.needToBeFetched(limit);
+		for (let i = 0; i < resources.length; i++) {
+			const added = this.queueDownload(resources[i].id);
+			if (added) count++;
+		}
+
+		this.logger().info('ResourceFetcher: Auto-added resources: ' + count);
+		this.addingResources_ = false;
+	}
+
+	async start() {
+		await Resource.resetStartedFetchStatus();
+		this.autoAddResources(10);
+	}
+
+	scheduleQueueProcess() {
 		if (this.scheduleQueueProcessIID_) {
 			clearTimeout(this.scheduleQueueProcessIID_);
 			this.scheduleQueueProcessIID_ = null;
@@ -109,6 +163,11 @@ class ResourceFetcher extends BaseService {
 			this.processQueue_();
 			this.scheduleQueueProcessIID_ = null;
 		}, 100);
+	}
+
+	async fetchAll() {
+		await Resource.resetStartedFetchStatus();
+		this.autoAddResources(null);
 	}
 
 }
