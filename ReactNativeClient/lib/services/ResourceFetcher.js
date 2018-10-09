@@ -80,7 +80,20 @@ class ResourceFetcher extends BaseService {
 		if (this.fetchingItems_[resourceId]) return;
 		this.fetchingItems_[resourceId] = true;
 
+		const completeDownload = (emitDownloadComplete = true) => {
+			delete this.fetchingItems_[resource.id];
+			this.scheduleQueueProcess();
+			if (emitDownloadComplete) this.eventEmitter_.emit('downloadComplete', { id: resource.id });
+		}
+
 		const resource = await Resource.load(resourceId);
+
+		// Shouldn't happen, but just to be safe don't re-download the
+		// resource if it's already been downloaded.
+		if (resource.fetch_status === Resource.FETCH_STATUS_DONE) {
+			completeDownload(false);
+			return;
+		}
 
 		this.fetchingItems_[resourceId] = resource;
 
@@ -92,12 +105,6 @@ class ResourceFetcher extends BaseService {
 		const fileApi = await this.fileApi();
 
 		this.logger().debug('ResourceFetcher: Downloading resource: ' + resource.id);
-
-		const completeDownload = () => {
-			delete this.fetchingItems_[resource.id];
-			this.scheduleQueueProcess();
-			this.eventEmitter_.emit('downloadComplete', { id: resource.id });
-		}
 
 		fileApi.get(remoteResourceContentPath, { path: localResourceContentPath, target: "file" }).then(async () => {
 			await Resource.saveFetchStatus(resource.id, Resource.FETCH_STATUS_DONE);

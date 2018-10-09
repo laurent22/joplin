@@ -51,6 +51,7 @@ const { reducer, defaultState } = require('lib/reducer.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const DropdownAlert = require('react-native-dropdownalert').default;
 const ShareExtension = require('react-native-share-extension').default;
+const ResourceFetcher = require('lib/services/ResourceFetcher');
 
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
@@ -136,6 +137,10 @@ const generalMiddleware = store => next => async (action) => {
 
 	if (action.type === 'SYNC_GOT_ENCRYPTED_ITEM') {
 		DecryptionWorker.instance().scheduleStart();
+	}
+
+	if (action.type === 'SYNC_CREATED_RESOURCE') {
+		ResourceFetcher.instance().queueDownload(action.id);
 	}
 
   	return result;
@@ -487,6 +492,10 @@ async function initialize(dispatch) {
 	}, 1000 * 60 * 60);
 
 	ResourceService.runInBackground();
+
+	ResourceFetcher.instance().setFileApi(() => { return reg.syncTarget().fileApi() });
+	ResourceFetcher.instance().setLogger(reg.logger());
+	ResourceFetcher.instance().start();
 
 	reg.scheduleSync().then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation
