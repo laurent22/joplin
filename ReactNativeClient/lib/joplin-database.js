@@ -397,7 +397,7 @@ class JoplinDatabase extends Database {
 			}
 
 			if (targetVersion == 13) {
-				queries.push('ALTER TABLE resources ADD COLUMN fetch_status INT NOT NULL DEFAULT "0"');
+				queries.push('ALTER TABLE resources ADD COLUMN fetch_status INT NOT NULL DEFAULT "2"');
 				queries.push('ALTER TABLE resources ADD COLUMN fetch_error TEXT NOT NULL DEFAULT ""');
 				queries.push({ sql: 'UPDATE resources SET fetch_status = ?', params: [Resource.FETCH_STATUS_DONE] });
 			}

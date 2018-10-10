@@ -555,6 +555,8 @@ class Synchronizer {
 							if (action == "createLocal") options.isNew = true;
 							if (action == "updateLocal") options.oldItem = local;
 
+							const creatingNewResource = content.type_ == BaseModel.TYPE_RESOURCE && action == "createLocal";
+
 							// if (content.type_ == BaseModel.TYPE_RESOURCE && action == "createLocal") {
 							// 	let localResourceContentPath = Resource.fullPath(content);
 							// 	let remoteResourceContentPath = this.resourceDirName_ + "/" + content.id;
@@ -571,11 +573,11 @@ class Synchronizer {
 							// 	}
 							// }
 
+							if (creatingNewResource) content.fetch_status = Resource.FETCH_STATUS_IDLE;
+
 							await ItemClass.save(content, options);
 
-							if (content.type_ == BaseModel.TYPE_RESOURCE && action == "createLocal") {
-								this.dispatch({ type: "SYNC_CREATED_RESOURCE", id: content.id });
-							}
+							if (creatingNewResource) this.dispatch({ type: "SYNC_CREATED_RESOURCE", id: content.id });
 
 							if (!hasAutoEnabledEncryption && content.type_ === BaseModel.TYPE_MASTER_KEY && !masterKeysBefore) {
 								hasAutoEnabledEncryption = true;
