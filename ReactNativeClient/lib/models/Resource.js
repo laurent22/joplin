@@ -26,7 +26,7 @@ class Resource extends BaseItem {
 	}
 
 	static isSupportedImageMimeType(type) {
-		const imageMimeTypes = ["image/jpg", "image/jpeg", "image/png", "image/gif", "image/svg+xml"];
+		const imageMimeTypes = ["image/jpg", "image/jpeg", "image/png", "image/gif", "image/svg+xml", "image/webp"];
 		return imageMimeTypes.indexOf(type.toLowerCase()) >= 0;
 	}
 
@@ -94,7 +94,7 @@ class Resource extends BaseItem {
 		const plainTextPath = this.fullPath(decryptedItem);
 		const encryptedPath = this.fullPath(decryptedItem, true);
 		const noExtPath = pathUtils.dirname(encryptedPath) + '/' + pathUtils.filename(encryptedPath);
-		
+
 		// When the resource blob is downloaded by the synchroniser, it's initially a file with no
 		// extension (since it's encrypted, so we don't know its extension). So here rename it
 		// to a file with a ".crypted" extension so that it's better identified, and then decrypt it.

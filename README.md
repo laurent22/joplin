@@ -50,7 +50,7 @@ wget -O - https://raw.githubusercontent.com/laurent22/joplin/master/Joplin_insta
 
 Operating System | Download | Alt. Download
 -----------------|----------|----------------
-Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplin.cozic.net/images/BadgeAndroid.png'/></a> | or [Download APK File](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.142/joplin-v1.0.142.apk)
+Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplin.cozic.net/images/BadgeAndroid.png'/></a> | or [Download APK File](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.143/joplin-v1.0.143.apk)
 iOS              | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://joplin.cozic.net/images/BadgeIOS.png'/></a> | -
 
 ## Terminal application
@@ -173,7 +173,7 @@ If synchronisation does not work, please consult the logs in the app profile dir
 
 ## Dropbox synchronisation
 
-When syncing with Dropbox, Joplin creates a sub-directory in Dropbox, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
+When syncing with Dropbox, Joplin creates a sub-directory in Dropbox, in `/Apps/Joplin` and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
 
 On the **desktop application** or **mobile application**, select "Dropbox" as the synchronisation target in the config screen (it is selected by default). Then, to initiate the synchronisation process, click on the "Synchronise" button in the sidebar and follow the instructions.
 
@@ -192,6 +192,7 @@ WebDAV-compatible services that are known to work with Joplin:
 - [Fastmail](https://www.fastmail.com/)
 - [HiDrive](https://www.strato.fr/stockage-en-ligne/) from Strato. [Setup help](https://github.com/laurent22/joplin/issues/309)
 - [Nginx WebDAV Module](https://nginx.org/en/docs/http/ngx_http_dav_module.html)
+- [NextCloud](https://nextcloud.com/)
 - [OwnCloud](https://owncloud.org/)
 - [Seafile](https://www.seafile.com/)
 - [Stack](https://www.transip.nl/stack/)
@@ -259,7 +260,7 @@ Since getting the ID of a note is not straightforward, each app provides a way t
 
 ## Math notation
 
-Math expressions can be added using the [Katex notation](https://khan.github.io/KaTeX/). To add an inline equation, wrap the expression in `$EXPRESSION$`, eg. `$\sqrt{3x-1}+(1+x)^2$`. To create an expression block, wrap it as follow:
+Math expressions can be added using the [KaTeX notation](https://khan.github.io/KaTeX/). To add an inline equation, wrap the expression in `$EXPRESSION$`, eg. `$\sqrt{3x-1}+(1+x)^2$`. To create an expression block, wrap it as follow:
 
 	$$
 	EXPRESSION
