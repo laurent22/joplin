@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.1.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
@@ -197,8 +199,8 @@ msgid ""
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
 "Exportiert Joplin-Dateien in den angegebenen Pfad. Standardmäßig wird die "
-"komplette Datenbank inklusive Notizbüchern, Notizen, Tags und Anhängen "
-"exportiert."
+"komplette Datenbank inklusive Notizbüchern, Notizen, Schlagwörtern und "
+"Anhängen exportiert."
 
 #, javascript-format
 msgid "Destination format: %s"
@@ -305,7 +307,7 @@ msgstr "Anhänge: %d."
 
 #, javascript-format
 msgid "Tagged: %d."
-msgstr "Getagged: %d."
+msgstr "Verschlagwortet: %d."
 
 msgid "Importing notes..."
 msgstr "Importiere Notizen..."
@@ -918,7 +920,7 @@ msgid "Notebook title:"
 msgstr "Notizbuch-Titel:"
 
 msgid "Add or remove tags:"
-msgstr "Füge hinzu oder entferne Schlagwörter:"
+msgstr "Schlagwörter hinzufügen oder entfernen:"
 
 msgid "Separate each tag by a comma."
 msgstr "Trenne jedes Schlagwort mit einem Komma."
