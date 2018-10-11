@@ -173,7 +173,7 @@ If synchronisation does not work, please consult the logs in the app profile dir
 
 ## Dropbox synchronisation
 
-When syncing with Dropbox, Joplin creates a sub-directory in Dropbox, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
+When syncing with Dropbox, Joplin creates a sub-directory in Dropbox, in `/Apps/Joplin` and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
 
 On the **desktop application** or **mobile application**, select "Dropbox" as the synchronisation target in the config screen (it is selected by default). Then, to initiate the synchronisation process, click on the "Synchronise" button in the sidebar and follow the instructions.
 
@@ -192,6 +192,7 @@ WebDAV-compatible services that are known to work with Joplin:
 - [Fastmail](https://www.fastmail.com/)
 - [HiDrive](https://www.strato.fr/stockage-en-ligne/) from Strato. [Setup help](https://github.com/laurent22/joplin/issues/309)
 - [Nginx WebDAV Module](https://nginx.org/en/docs/http/ngx_http_dav_module.html)
+- [NextCloud](https://nextcloud.com/)
 - [OwnCloud](https://owncloud.org/)
 - [Seafile](https://www.seafile.com/)
 - [Stack](https://www.transip.nl/stack/)
@@ -259,7 +260,7 @@ Since getting the ID of a note is not straightforward, each app provides a way t
 
 ## Math notation
 
-Math expressions can be added using the [Katex notation](https://khan.github.io/KaTeX/). To add an inline equation, wrap the expression in `$EXPRESSION$`, eg. `$\sqrt{3x-1}+(1+x)^2$`. To create an expression block, wrap it as follow:
+Math expressions can be added using the [KaTeX notation](https://khan.github.io/KaTeX/). To add an inline equation, wrap the expression in `$EXPRESSION$`, eg. `$\sqrt{3x-1}+(1+x)^2$`. To create an expression block, wrap it as follow:
 
 	$$
 	EXPRESSION
