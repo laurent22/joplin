@@ -477,6 +477,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
+	async showSource_onPress() {
+		if (!this.state.note.id) return;
+
+		let note = await Note.load(this.state.note.id);
+		try {
+			Linking.openURL(note.source_url);
+		} catch (error) {
+			await dialogs.error(this, error.message);
+		}
+	}
+
 	copyMarkdownLink_onPress() {
 		const note = this.state.note;
 		Clipboard.setString(Note.markdownTag(note));
@@ -486,6 +497,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const note = this.state.note;
 		const isTodo = note && !!note.is_todo;
 		const isSaved = note && note.id;
+		const hasSource = note && note.source_url;
 
 		let output = [];
 
@@ -510,6 +522,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		output.push({ isDivider: true });
 		if (this.props.showAdvancedOptions) output.push({ title: this.state.showNoteMetadata ? _('Hide metadata') : _('Show metadata'), onPress: () => { this.showMetadata_onPress(); } });
 		output.push({ title: _('View on map'), onPress: () => { this.showOnMap_onPress(); } });
+		if (hasSource) output.push({ title: _('Go to source URL'), onPress: () => { this.showSource_onPress(); } });
 		output.push({ isDivider: true });
 		output.push({ title: _('Delete'), onPress: () => { this.deleteNote_onPress(); } });
 
