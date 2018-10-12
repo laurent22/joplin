@@ -12,6 +12,7 @@ const { bridge } = require("electron").remote.require("./bridge");
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const InteropServiceHelper = require("../InteropServiceHelper.js");
+const { shim } = require('lib/shim');
 
 class SideBarComponent extends React.Component {
 
@@ -176,6 +177,35 @@ class SideBarComponent extends React.Component {
 		style.tagItem.height = itemHeight;
 
 		return style;
+	}
+
+	clearForceUpdateDuringSync() {
+		if (this.forceUpdateDuringSyncIID_) {
+			clearInterval(this.forceUpdateDuringSyncIID_);
+			this.forceUpdateDuringSyncIID_ = null;
+		}
+	}
+
+	componentDidUpdate(prevProps) {
+		if (shim.isLinux()) {
+			// For some reason, the UI seems to sleep in some Linux distro during
+			// sync. Cannot find the reason for it and cannot replicate, so here
+			// as a test force the update at regular intervals. 
+			// https://github.com/laurent22/joplin/issues/312#issuecomment-429472193
+			if (!prevProps.syncStarted && this.props.syncStarted) {
+				this.clearForceUpdateDuringSync();
+
+				this.forceUpdateDuringSyncIID_ = setInterval(() => {
+					this.forceUpdate();
+				}, 2000);
+			}
+
+			if (prevProps.syncStarted && !this.props.syncStarted) this.clearForceUpdateDuringSync();
+		}	
+	}
+
+	componentWillUnmount() {
+		this.clearForceUpdateDuringSync();
 	}
 
 	itemContextMenu(event) {
