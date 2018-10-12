@@ -508,7 +508,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		output.push({ isDivider: true });
 		if (this.props.showAdvancedOptions) output.push({ title: this.state.showNoteMetadata ? _('Hide metadata') : _('Show metadata'), onPress: () => { this.showMetadata_onPress(); } });
 		output.push({ title: _('View on map'), onPress: () => { this.showOnMap_onPress(); } });
-		if (hasSource) output.push({ title: _('View source'), onPress: () => { this.showSource_onPress(); } });
+		if (hasSource) output.push({ title: _('Go to source URL'), onPress: () => { this.showSource_onPress(); } });
 		output.push({ isDivider: true });
 		output.push({ title: _('Delete'), onPress: () => { this.deleteNote_onPress(); } });
 
