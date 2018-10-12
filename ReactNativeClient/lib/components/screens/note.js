@@ -22,6 +22,7 @@ const { Checkbox } = require('lib/components/checkbox.js');
 const { _ } = require('lib/locale.js');
 const { reg } = require('lib/registry.js');
 const { shim } = require('lib/shim.js');
+const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { globalStyle, themeStyle } = require('lib/components/global-style.js');
 const { dialogs } = require('lib/dialogs.js');
@@ -136,6 +137,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 							});
 						}, 5);
 					} else if (item.type_ === BaseModel.TYPE_RESOURCE) {
+						if (!Resource.isReady(item)) throw new Error(_('This attachment is not downloaded or not decrypted yet.'));
 						const resourcePath = Resource.fullPath(item);
 						await FileViewer.open(resourcePath);
 					} else {
@@ -146,6 +148,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 				}
 			} catch (error) {
 				dialogs.error(this, error.message);
+			}
+		}
+
+		this.resourceFetcher_downloadComplete = async (resource) => {
+			if (!this.state.note || !this.state.note.body) return;
+			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
+			if (resourceIds.indexOf(resource.id) >= 0) {
+				this.refs.noteBodyViewer.rebuildMd();
 			}
 		}
 	}
@@ -205,6 +215,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		BackButtonService.addHandler(this.backHandler);
 		NavService.addHandler(this.navHandler);
 
+		ResourceFetcher.instance().on('downloadComplete', this.resourceFetcher_downloadComplete);
+
 		await shared.initState(this);
 
 		this.refreshNoteMetadata();
@@ -217,6 +229,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 	componentWillUnmount() {
 		BackButtonService.removeHandler(this.backHandler);
 		NavService.removeHandler(this.navHandler);
+
+		ResourceFetcher.instance().off('downloadComplete', this.resourceFetcher_downloadComplete);
 
 		if (Platform.OS !== 'ios' && this.state.fromShare) {
 			ShareExtension.close();
@@ -536,6 +550,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			bodyComponent = <NoteBodyViewer
 				onJoplinLinkClick={this.onJoplinLinkClick_}
+				ref="noteBodyViewer"
 				style={this.styles().noteBodyViewer}
 				webViewStyle={theme}
 				note={note}

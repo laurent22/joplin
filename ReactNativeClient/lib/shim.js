@@ -7,6 +7,10 @@ shim.isNode = () => {
 };
 
 shim.isReactNative = () => {
+	if (typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('ReactNativeDebugger') >= 0) {
+		return true;
+	}
+	
 	return !shim.isNode();
 };
 

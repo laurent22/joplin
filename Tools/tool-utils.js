@@ -115,4 +115,16 @@ toolUtils.githubRelease = async function(project, tagName, isDraft) {
 	return responseJson;
 }
 
+toolUtils.isLinux = () => {
+	return process && process.platform === 'linux';
+}
+
+toolUtils.isWindows = () => {
+	return process && process.platform === 'win32';
+}
+
+toolUtils.isMac = () => {
+	return process && process.platform === 'darwin';
+}
+
 module.exports = toolUtils;

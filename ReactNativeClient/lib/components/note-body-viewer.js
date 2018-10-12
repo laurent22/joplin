@@ -64,6 +64,11 @@ class NoteBodyViewer extends Component {
 		return (safeGetNoteProp(this.props, 'body') + '').length !== (safeGetNoteProp(nextProps, 'body') + '').length;
 	}
 
+	rebuildMd() {
+		this.mdToHtml_.clearCache();
+		this.forceUpdate();
+	}
+
 	render() {
 		const note = this.props.note;
 		const style = this.props.style;

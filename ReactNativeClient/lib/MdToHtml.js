@@ -89,13 +89,14 @@ class MdToHtml {
 		if (!resource) {
 			// Can happen for example if an image is attached to a note, but the resource hasn't
 			// been downloaded from the sync target yet.
-			console.warn('Cannot load resource: ' + id);
+			console.info('Cannot load resource: ' + id);
+			delete this.loadedResources_[id];
 			return;
 		}
 
 		if (resource.fetch_status !== Resource.FETCH_STATUS_DONE) {
 			delete this.loadedResources_[id];
-			console.warn('Resource not yet fetched: ' + id);
+			console.info('Resource not yet fetched: ' + id);
 			return;
 		}
 

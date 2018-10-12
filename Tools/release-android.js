@@ -1,5 +1,5 @@
 const fs = require('fs-extra');
-const { execCommand, githubRelease, githubOauthToken } = require('./tool-utils.js');
+const { execCommand, githubRelease, githubOauthToken, isWindows } = require('./tool-utils.js');
 const path = require('path');
 const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
@@ -60,8 +60,22 @@ async function main() {
 	console.info('Running from: ' + process.cwd());
 
 	console.info('Building APK file...');
-	const output = await execCommand('/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat assembleRelease -PbuildDir=build --console plain"');
+
+	let restoreDir = null;
+	let apkBuildCmd = 'assembleRelease -PbuildDir=build --console plain';
+	if (isWindows()) {
+		apkBuildCmd = '/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat ' + apkBuildCmd + '"';
+	} else {
+		process.chdir(rnDir + '/android');
+		apkBuildCmd = './gradlew ' + apkBuildCmd;
+		restoreDir = rootDir;
+	}
+
+	// const output = await execCommand('/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat assembleRelease -PbuildDir=build --console plain"');
+	const output = await execCommand(apkBuildCmd);
 	console.info(output);
+
+	if (restoreDir) process.chdir(restoreDir);
 
 	await fs.mkdirp(releaseDir);
 
