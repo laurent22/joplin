@@ -36,6 +36,7 @@ const ImagePicker = require('react-native-image-picker');
 const AlarmService = require('lib/services/AlarmService.js');
 const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog.js');
 const ShareExtension = require('react-native-share-extension').default;
+const CameraView = require('lib/components/CameraView');
 
 import FileViewer from 'react-native-file-viewer';
 
@@ -60,6 +61,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			heightBumpView:0,
 			noteTagDialogShown: false,
 			fromShare: false,
+			showCamera: false,
 		};
 
 		// iOS doesn't support multiline text fields properly so disable it
@@ -158,6 +160,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 				this.refs.noteBodyViewer.rebuildMd();
 			}
 		}
+
+		this.attachPhoto_onPress = this.attachPhoto_onPress.bind(this);
+		this.cameraView_onPhoto = this.cameraView_onPhoto.bind(this);
+		this.cameraView_onCancel = this.cameraView_onCancel.bind(this);
 	}
 
 	styles() {
@@ -335,7 +341,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	async attachFile(pickerResponse, fileType) {
+	async attachFile(pickerResponse, fileType) {		
 		if (!pickerResponse) {
 			reg.logger().warn('Got no response from picker');
 			return;
@@ -353,7 +359,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const localFilePath = pickerResponse.uri;
 		let mimeType = pickerResponse.type;
-
 
 		if (!mimeType) {
 			const ext = fileExtension(localFilePath);
@@ -376,7 +381,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		resource.id = uuid.create();
 		resource.mime = mimeType;
 		resource.title = pickerResponse.fileName ? pickerResponse.fileName : _('Untitled');
-		resource.file_extension = safeFileExtension(fileExtension(pickerResponse.fileName));
+		resource.file_extension = safeFileExtension(fileExtension(pickerResponse.fileName ? pickerResponse.fileName : localFilePath));
 
 		if (!resource.mime) resource.mime = 'application/octet-stream';
 
@@ -420,6 +425,25 @@ class NoteScreenComponent extends BaseScreenComponent {
 		};
 		const response = await this.showImagePicker(options);
 		await this.attachFile(response, 'image');
+	}
+
+	attachPhoto_onPress() {
+		this.setState({ showCamera: true });
+	}	
+
+	cameraView_onPhoto(data) {
+		this.attachFile({
+			uri: data.uri,
+			didCancel: false,
+			error: null,
+			type: 'image/jpg',
+		}, 'image');
+
+		this.setState({ showCamera: false });
+	}
+
+	cameraView_onCancel() {
+		this.setState({ showCamera: false });
 	}
 
 	async attachFile_onPress() {
@@ -506,7 +530,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let canAttachPicture = true;
 		if (Platform.OS === 'android' && Platform.Version < 21) canAttachPicture = false;
 		if (canAttachPicture) {
-			output.push({ title: _('Attach photo'), onPress: () => { this.attachImage_onPress(); } });
+			output.push({ title: _('Attach photo'), onPress: () => { this.attachPhoto_onPress(); } });
 			output.push({ title: _('Attach any file'), onPress: () => { this.attachFile_onPress(); } });
 			output.push({ isDivider: true });
 		}
@@ -554,6 +578,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const isTodo = !!Number(note.is_todo);
 		const folder = this.state.folder;
 		const isNew = !note.id;
+
+		if (this.state.showCamera) {
+			return <CameraView theme={this.props.theme} style={{flex:1}} onPhoto={this.cameraView_onPhoto} onCancel={this.cameraView_onCancel}/>
+		}
+
+
+
 
 		let bodyComponent = null;
 		if (this.state.mode == 'view') {

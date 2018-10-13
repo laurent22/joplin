@@ -26,6 +26,7 @@
     "react": "^16.5.0",
     "react-native": "^0.57.1",
     "react-native-action-button": "^2.6.9",
+    "react-native-camera": "^1.3.0",
     "react-native-datepicker": "^1.6.0",
     "react-native-dialogbox": "^0.6.6",
     "react-native-document-picker": "^2.1.0",

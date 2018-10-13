@@ -137,6 +137,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-camera')
 	compile project(':react-native-file-viewer')
 	compile project(':react-native-securerandom')
 	compile project(':react-native-push-notification')
