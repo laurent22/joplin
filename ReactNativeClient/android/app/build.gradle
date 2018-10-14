@@ -90,8 +90,8 @@ android {
 		applicationId "net.cozic.joplin"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-		versionCode 2097325
-		versionName "1.0.147"
+		versionCode 2097406
+		versionName "1.0.170"
 		ndk {
 			abiFilters "armeabi-v7a", "x86"
 		}
@@ -154,6 +154,22 @@ dependencies {
 	compile project(':react-native-image-resizer')
 	compile project(':react-native-share-extension')
 	compile "com.facebook.react:react-native:+"
+
+	// To fix this error:
+	//
+	// Fatal error
+	// { Error: Command failed: ./gradlew assembleRelease -PbuildDir=build --console plain
+
+	// FAILURE: Build failed with an exception.
+
+	// * What went wrong:
+	// Execution failed for task ':app:preReleaseBuild'.
+	// > Android dependency 'com.android.support:support-v4' has different version for the compile (26.1.0) and runtime (27.1.1) classpath. You should manually set the same version via DependencyResolution
+	//
+	// https://github.com/react-native-community/react-native-camera/issues/1532#issuecomment-386434771
+	compile ("com.android.support:support-v4:26.0.1") {
+        force = true //<-- force dependency resolution to 26.0.1 in my case
+    }
 }
 
 // Run this once to be able to run the application with BUCK
