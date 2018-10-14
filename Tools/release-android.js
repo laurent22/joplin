@@ -47,6 +47,10 @@ function gradleVersionName(content) {
 }
 
 async function main() {
+	const argv = require('yargs').argv
+
+	const doGitHubRelease = typeof argv['github-release'] === 'undefined' || !!argv['github-release'];
+
 	const projectName = 'joplin-android';
 	const newContent = updateGradleConfig();
 	const version = gradleVersionName(newContent);
@@ -81,6 +85,8 @@ async function main() {
 
 	console.info('Copying APK to ' + apkFilePath);
 	await fs.copy('ReactNativeClient/android/app/build/outputs/apk/release/app-release.apk', apkFilePath);
+
+	if (!doGitHubRelease) return;
 
 	console.info('Updating Readme URL...');
 

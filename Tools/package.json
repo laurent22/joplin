@@ -18,6 +18,7 @@
     "node-fetch": "^1.7.3",
     "request": "^2.85.0",
     "string-padding": "^1.0.2",
-    "uri-template": "^1.0.1"
+    "uri-template": "^1.0.1",
+    "yargs": "^12.0.2"
   }
 }
