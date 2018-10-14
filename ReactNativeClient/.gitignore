@@ -55,4 +55,3 @@ fastlane/screenshots
 # This is generated:
 android/build*
 android/app/build*
-android/app/release
