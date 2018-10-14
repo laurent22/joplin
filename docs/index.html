@@ -311,7 +311,7 @@
 <tr>
 <td>Android</td>
 <td><a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplin.cozic.net/images/BadgeAndroid.png'/></a></td>
-<td>or <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.143/joplin-v1.0.143.apk">Download APK File</a></td>
+<td>or <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.151/joplin-v1.0.151.apk">Download APK File</a></td>
 </tr>
 <tr>
 <td>iOS</td>
@@ -404,7 +404,7 @@
 :config sync.target 5
 </code></pre><p>If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.</p>
 <h2 id="dropbox-synchronisation">Dropbox synchronisation</h2>
-<p>When syncing with Dropbox, Joplin creates a sub-directory in Dropbox, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
+<p>When syncing with Dropbox, Joplin creates a sub-directory in Dropbox, in <code>/Apps/Joplin</code> and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
 <p>On the <strong>desktop application</strong> or <strong>mobile application</strong>, select &quot;Dropbox&quot; as the synchronisation target in the config screen (it is selected by default). Then, to initiate the synchronisation process, click on the &quot;Synchronise&quot; button in the sidebar and follow the instructions.</p>
 <p>On the <strong>terminal application</strong>, to initiate the synchronisation process, type <code>:sync</code>. You will be asked to follow a link to authorise the application. It is possible to also synchronise outside of the user interface by typing <code>joplin sync</code> from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:</p>
 <pre><code>*/30 * * * * /path/to/joplin sync
@@ -417,6 +417,7 @@
 <li><a href="https://www.fastmail.com/">Fastmail</a></li>
 <li><a href="https://www.strato.fr/stockage-en-ligne/">HiDrive</a> from Strato. <a href="https://github.com/laurent22/joplin/issues/309">Setup help</a></li>
 <li><a href="https://nginx.org/en/docs/http/ngx_http_dav_module.html">Nginx WebDAV Module</a></li>
+<li><a href="https://nextcloud.com/">NextCloud</a></li>
 <li><a href="https://owncloud.org/">OwnCloud</a></li>
 <li><a href="https://www.seafile.com/">Seafile</a></li>
 <li><a href="https://www.transip.nl/stack/">Stack</a></li>
@@ -459,7 +460,7 @@
 <pre><code>[Link to my note](:/0b0d62d15e60409dac34f354b6e9e839)
 </code></pre><p>Since getting the ID of a note is not straightforward, each app provides a way to create such link. In the <strong>desktop app</strong>, right click on a note an select &quot;Copy Markdown link&quot;. In the <strong>mobile app</strong>, open a note and, in the top right menu, select &quot;Copy Markdown link&quot;. You can then paste this link anywhere in another note.</p>
 <h2 id="math-notation">Math notation</h2>
-<p>Math expressions can be added using the <a href="https://khan.github.io/KaTeX/">Katex notation</a>. To add an inline equation, wrap the expression in <code>$EXPRESSION$</code>, eg. <code>$\sqrt{3x-1}+(1+x)^2$</code>. To create an expression block, wrap it as follow:</p>
+<p>Math expressions can be added using the <a href="https://khan.github.io/KaTeX/">KaTeX notation</a>. To add an inline equation, wrap the expression in <code>$EXPRESSION$</code>, eg. <code>$\sqrt{3x-1}+(1+x)^2$</code>. To create an expression block, wrap it as follow:</p>
 <pre><code>$$
 EXPRESSION
 $$
