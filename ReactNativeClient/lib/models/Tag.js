@@ -84,7 +84,7 @@ class Tag extends BaseItem {
 		}
 
 		this.dispatch({
-			type: 'TAG_UPDATE_ONE',
+			type: 'NOTE_TAG_REMOVE',
 			item: await Tag.load(tagId),
 		});
 	}
