@@ -18,6 +18,10 @@ shim.isLinux = () => {
 	return process && process.platform === 'linux';
 }
 
+shim.isFreeBSD = () => {
+	return process && process.platform === 'freebsd';
+}
+
 shim.isWindows = () => {
 	return process && process.platform === 'win32';
 }
@@ -31,6 +35,7 @@ shim.platformName = function() {
 	if (shim.isMac()) return 'darwin'; 
 	if (shim.isWindows()) return 'win32'; 
 	if (shim.isLinux()) return 'linux';
+ 	if (shim.isFreeBSD()) return 'freebsd';
 	throw new Error('Cannot determine platform');
 }
 
