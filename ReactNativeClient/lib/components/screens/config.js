@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { Platform, TouchableOpacity, Linking, View, Switch, Slider, StyleSheet, Text, Button, ScrollView, TextInput } = require('react-native');
+const { Platform, NativeModules, TouchableOpacity, Linking, View, Switch, Slider, StyleSheet, Text, Button, ScrollView, TextInput } = require('react-native');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { _, setLocale } = require('lib/locale.js');
@@ -11,7 +11,7 @@ const shared = require('lib/components/shared/config-shared.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 
 class ConfigScreenComponent extends BaseScreenComponent {
-	
+
 	static navigationOptions(options) {
 		return { header: null };
 	}
@@ -229,7 +229,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				</TouchableOpacity>
 			</View>
 		);
-		
+
 		settingComps.push(
 			<View key="website_link" style={this.styles().settingContainer}>
 				<TouchableOpacity onPress={() => { Linking.openURL('https://joplin.cozic.net/') }}>
@@ -245,6 +245,15 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				</TouchableOpacity>
 			</View>
 		);
+
+		if (Platform.OS === 'android') {
+			var VersionInfo = NativeModules.VersionInfo;
+			settingComps.push(
+				<View key="version_info" style={this.styles().settingContainer}>
+						<Text key="version" style={this.styles().settingText}>Version {VersionInfo.appVersion}</Text>
+				</View>
+			);
+		}
 
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>

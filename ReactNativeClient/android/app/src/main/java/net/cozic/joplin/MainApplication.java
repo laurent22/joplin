@@ -46,7 +46,8 @@ public class MainApplication extends Application implements ReactApplication {
 				new RNFSPackage(),
 				new SQLitePluginPackage(),
 				new VectorIconsPackage(),
-				new SharePackage()
+				new SharePackage(),
+				new VersionInfoPackage()
 			);
 		}
 	};
