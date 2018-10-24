@@ -542,16 +542,32 @@ class AppComponent extends React.Component {
 			try {
 				const { type, value } = await ShareExtension.data();
 
-				if (type != "" && this.props.selectedFolderId) {
+				// reg.logger().info('Got share data:', type, value);
 
-					this.props.dispatch({
-						type: 'NAV_GO',
-						routeName: 'Note',
-						noteId: null,
-						sharedData: {type: type, value: value},
-						folderId: this.props.selectedFolderId,
-						itemType: 'note',
+				if (type != "" && this.props.selectedFolderId) {
+					const newNote = await Note.save({
+						title: Note.defaultTitleFromBody(value),
+						body: value,
+						parent_id: this.props.selectedFolderId
 					});
+
+					// This is a bit hacky, but the surest way to go to 
+					// the needed note. We go back one screen in case there's
+					// already a note open - if we don't do this, the dispatch
+					// below will do nothing (because routeName wouldn't change)
+					// Then we wait a bit for the state to be set correctly, and
+					// finally we go to the new note.
+					this.props.dispatch({
+						type: 'NAV_BACK',
+					});
+
+					setTimeout(() => {
+						this.props.dispatch({
+							type: 'NAV_GO',
+							routeName: 'Note',
+							noteId: newNote.id,
+						});
+					}, 5);
 				}
 
 			} catch(e) {
