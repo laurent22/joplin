@@ -90,7 +90,7 @@ class Setting extends BaseModel {
 			// Might be fixed in Electron 18.x but no non-beta release yet. So for now
 			// by default we disable it on Linux.
 			'showTrayIcon': { value: platform !== 'linux', type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Show tray icon'), description: () => {
-				return platform === 'linux' ? _('Note: Does not work in all desktop environments.') : null;
+				return platform === 'linux' ? _('Note: Does not work in all desktop environments.') : _('This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.');
 			}},
 
 			'startMinimized': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Start application minimised in the tray icon') },

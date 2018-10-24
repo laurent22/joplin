@@ -595,6 +595,8 @@ class NoteTextComponent extends React.Component {
 			} else {
 				require('electron').shell.openExternal(msg);
 			}
+		} else if (msg.indexOf('#') === 0) {
+			// This is an internal anchor, which is handled by the WebView so skip this case
 		} else {
 			bridge().showErrorMessageBox(_('Unsupported link or message: %s', msg));
 		}

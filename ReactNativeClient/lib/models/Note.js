@@ -73,8 +73,12 @@ class Note extends BaseItem {
 	}
 
 	static defaultTitle(note) {
-		if (note.body && note.body.length) {
-			const lines = note.body.trim().split("\n");
+		return this.defaultTitleFromBody(note.body);
+	}
+
+	static defaultTitleFromBody(body) {
+		if (body && body.length) {
+			const lines = body.trim().split("\n");
 			let output = lines[0].trim();
 			// Remove the first #, *, etc.
 			while (output.length) {
