@@ -1,5 +1,21 @@
 # Joplin changelog
 
+## [v1.0.114](https://github.com/laurent22/joplin/releases/tag/v1.0.114) - 2018-10-24T20:14:10Z
+
+- Fixes [#832](https://github.com/laurent22/joplin/issues/832): Enex import: Don't add extra line breaks at the beginning of list item when it contains a block element
+- Fixes [#798](https://github.com/laurent22/joplin/issues/798): Enable Select All shortcut in macOS
+- API: Fixed handling of PUT method and log errors to file
+- Api: Fixes [#843](https://github.com/laurent22/joplin/issues/843): Fixed regression that was preventing resource metadata from being downloaded
+- Fixes [#847](https://github.com/laurent22/joplin/issues/847): Prevent view from scrolling to top when clicking checkbox and editor not visible
+- Resolves [#751](https://github.com/laurent22/joplin/issues/751): Allow switching between todo and note when multiple notes are selected
+- Fixed potential crash that can happen if editor is not ready
+- Prevent URLs added via A tag from being opened inside app
+- Fixes [#853](https://github.com/laurent22/joplin/issues/853): Replace characters to equivalent US-ASCII ones when exporting files
+- Improved the way resources are loaded to prepare to allow making downloading resources optional, and to make sync faster
+- Fixes [#312](https://github.com/laurent22/joplin/issues/312) (maybe): Removed power saving feature, which wasn\'t doing anything and added a possible fix to the UI freezing issue on Linux
+- Improved: Handle internal anchors
+- Improved Linux install script
+
 ## [v1.0.111](https://github.com/laurent22/joplin/releases/tag/v1.0.111) - 2018-09-30T20:15:09Z
 
 This is mainly a release to fix a bug related to the new IMG tag support.
@@ -258,9 +274,3 @@ Note: This fixes an invalid database upgrade in the previous version.
 - Fixed: [#240](https://github.com/laurent22/joplin/issues/240): Tags should be handled in a case-insensitive way
 - Fixed: [#241](https://github.com/laurent22/joplin/issues/241): Ignore response for certain WebDAV calls to improve compatibility with some services.
 - Updated: French and Español translation
-
-## [v1.0.66](https://github.com/laurent22/joplin/releases/tag/v1.0.66) - 2018-02-18T23:09:09Z
-
-- Fixed: Local items were no longer being deleted via sync.
-- Improved: More debug information when WebDAV sync target does not work.
-- Improved: Compatibility with some WebDAV services (Seafile in particular)
