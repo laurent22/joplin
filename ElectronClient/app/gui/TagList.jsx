@@ -9,15 +9,17 @@ class TagListComponent extends React.Component {
     const theme = themeStyle(this.props.theme);
     const tags = this.props.items;
 
-		style.display = 'flex';
-		style.flexDirection  = 'row';
-		style.borderBottom = '1px solid ' + theme.dividerColor;
+    style.display = 'flex';
+    style.flexDirection  = 'row';
+    style.borderBottom = '1px solid ' + theme.dividerColor;
     style.boxSizing = 'border-box';
     style.fontSize = theme.fontSize;
 
     const tagItems = [];
-
     if (tags || tags.length > 0) {
+      // Sort by id for now, but probably needs to be changed in the future.
+      tags.sort((a, b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
+
       for (let i = 0; i < tags.length; i++) {
         const props = {
           title: tags[i].title,
