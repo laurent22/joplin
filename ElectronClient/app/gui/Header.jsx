@@ -108,6 +108,9 @@ class HeaderComponent extends React.Component {
 			color: style.color,
 			fontSize: style.fontSize,
 			fontFamily: style.fontFamily,
+			backgroundColor: style.searchColor,
+			border: '1px solid',
+			borderColor: style.dividerColor,
 		};
 
 		const searchButton = {
@@ -171,6 +174,8 @@ class HeaderComponent extends React.Component {
 			paddingLeft: theme.headerButtonHPadding,
 			paddingRight: theme.headerButtonHPadding,
 			color: theme.color,
+			searchColor: theme.backgroundColor,
+			dividerColor: theme.dividerColor,
 			textDecoration: 'none',
 			fontFamily: theme.fontFamily,
 			fontSize: theme.fontSize,

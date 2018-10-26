@@ -336,14 +336,17 @@ class MainScreenComponent extends React.Component {
 	}
 
 	render() {
-		const style = this.props.style;
+		const theme = themeStyle(this.props.theme);
+		const style = Object.assign({
+				color: theme.color,
+				backgroundColor: theme.backgroundColor,
+			}, this.props.style);
 		const promptOptions = this.state.promptOptions;
 		const folders = this.props.folders;
 		const notes = this.props.notes;
 		const messageBoxVisible = this.props.hasDisabledSyncItems || this.props.showMissingMasterKeyMessage;
 		const sidebarVisibility = this.props.sidebarVisibility;
 		const styles = this.styles(this.props.theme, style.width, style.height, messageBoxVisible, sidebarVisibility);
-		const theme = themeStyle(this.props.theme);
 		const selectedFolderId = this.props.selectedFolderId;
 		const onConflictFolder = this.props.selectedFolderId === Folder.conflictFolderId();
 

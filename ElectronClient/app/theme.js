@@ -40,6 +40,8 @@ const globalStyle = {
 	raisedBackgroundColor: "#0080EF",
 	raisedColor: "#003363",
 	raisedHighlightedColor: "#ffffff",
+
+	editorTheme: "chrome",
 };
 
 // For WebView - must correspond to the properties above
@@ -104,6 +106,25 @@ globalStyle.toolbarStyle = {
 	justifyContent: 'center',
 };
 
+const darkStyle = {
+	backgroundColor: '#1D2024',
+	color: '#dddddd',
+	colorFaded: '#777777',
+	dividerColor: '#555555',
+	selectedColor: '#333333',
+
+	raisedBackgroundColor: "#0F2051",
+	raisedColor: "#788BC3",
+	raisedHighlightedColor: "#ffffff",
+
+	htmlColor: 'rgb(220,220,220)',
+	htmlBackgroundColor: 'rgb(29,32,36)',
+	htmlLinkColor: 'rgb(166,166,255)',
+
+	editorTheme: 'twilight',
+
+};
+
 let themeCache_ = {};
 
 function themeStyle(theme) {
@@ -113,21 +134,16 @@ function themeStyle(theme) {
 	let output = Object.assign({}, globalStyle);
 	if (theme == Setting.THEME_LIGHT) return output;
 
-	output.backgroundColor = '#1D2024';
-	output.color = '#dddddd';
-	output.colorFaded = '#777777';
-	output.dividerColor = '#555555';
-	output.selectedColor = '#333333';
+	let darkOutput = Object.assign({}, output, darkStyle)
 
-	output.raisedBackgroundColor = "#0F2051";
-	output.raisedColor = "#788BC3";
-	output.raisedHighlightedColor = "#ffffff";
+	darkOutput.textStyle = {
+		color: darkOutput.color,
+		fontFamily: darkOutput.fontFamily,
+		fontSize: darkOutput.fontSize,
+		lineHeight: '1.6em',
+	};
 
-	output.htmlColor = 'rgb(220,220,220)';
-	output.htmlBackgroundColor = 'rgb(29,32,36)';
-	output.htmlLinkColor = 'rgb(166,166,255)';
-
-	themeCache_[theme] = output;
+	themeCache_[theme] = darkOutput;
 	return themeCache_[theme];
 }
 

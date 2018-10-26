@@ -53,10 +53,13 @@ class ConfigScreenComponent extends React.Component {
 		const labelStyle = Object.assign({}, theme.textStyle, {
 			display: 'inline-block',
 			marginRight: 10,
+			color: theme.color,
 		});
 
 		const controlStyle = {
 			display: 'inline-block',
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
 		};
 
 		const descriptionStyle = Object.assign({}, theme.textStyle, {
@@ -120,7 +123,10 @@ class ConfigScreenComponent extends React.Component {
 				updateSettingValue(key, event.target.value);
 			}
 
-			const inputStyle = Object.assign({}, controlStyle, { width: '50%', minWidth: '20em' });
+			const inputStyle = Object.assign({}, controlStyle, {
+				width: '50%',
+				minWidth: '20em',
+				border: '1px solid' });
 			const inputType = md.secure === true ? 'password' : 'text';
 
 			return (
@@ -164,7 +170,9 @@ class ConfigScreenComponent extends React.Component {
 
 	render() {
 		const theme = themeStyle(this.props.theme);
-		const style = Object.assign({}, this.props.style, { overflow: 'auto' });
+		const style = Object.assign({
+			backgroundColor: theme.backgroundColor
+		}, this.props.style, { overflow: 'auto' });
 		const settings = this.state.settings;
 
 		const headerStyle = {
@@ -178,6 +186,10 @@ class ConfigScreenComponent extends React.Component {
 		const buttonStyle = {
 			display: this.state.changedSettingKeys.length ? 'inline-block' : 'none',
 			marginRight: 10,
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+			border: '1px solid',
+			borderColor: theme.dividerColor,
 		}
 
 		const settingComps = shared.settingsToComponents(this, 'desktop', settings);
