@@ -49,7 +49,6 @@ class Application extends BaseApplication {
 	constructor() {
 		super();
 		this.lastMenuScreen_ = null;
-		this.powerSaveBlockerId_ = null;
 	}
 
 	hasGui() {
@@ -219,17 +218,6 @@ class Application extends BaseApplication {
 
 		if (['SIDEBAR_VISIBILITY_TOGGLE', 'SIDEBAR_VISIBILITY_SET'].indexOf(action.type) >= 0) {
 			Setting.setValue('sidebarVisibility', newState.sidebarVisibility);
-		}
-
-		if (action.type === 'SYNC_STARTED') {
-			if (!this.powerSaveBlockerId_) this.powerSaveBlockerId_ = bridge().powerSaveBlockerStart('prevent-app-suspension');
-		}
-
-		if (action.type === 'SYNC_COMPLETED') {
-			if (this.powerSaveBlockerId_) {
-				bridge().powerSaveBlockerStop(this.powerSaveBlockerId_);
-				this.powerSaveBlockerId_ = null;
-			}
 		}
 
 		return result;
@@ -740,8 +728,6 @@ class Application extends BaseApplication {
 			type: 'FOLDER_SET_COLLAPSED_ALL',
 			ids: Setting.value('collapsedFolderIds'),
 		});
-
-		if (shim.isLinux()) bridge().setAllowPowerSaveBlockerToggle(true);
 
 		// Note: Auto-update currently doesn't work in Linux: it downloads the update
 		// but then doesn't install it on exit.

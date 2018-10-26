@@ -3,6 +3,7 @@ package net.cozic.joplin;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import org.reactnative.camera.RNCameraPackage;
 import com.vinzscam.reactnativefileviewer.RNFileViewerPackage;
 import net.rhogan.rnsecurerandom.RNSecureRandomPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
@@ -37,6 +38,7 @@ public class MainApplication extends Application implements ReactApplication {
 			return Arrays.<ReactPackage>asList(
 				new ImageResizerPackage(),
 				new MainReactPackage(),
+            new RNCameraPackage(),
             new RNFileViewerPackage(),
             new RNSecureRandomPackage(),
             new ReactNativePushNotificationPackage(),

@@ -4,6 +4,7 @@ const BaseModel = require('lib/BaseModel');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 const { shim } = require('lib/shim');
+const unidecode = require('unidecode');
 
 class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 
@@ -40,7 +41,7 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 		}
 
 		if (item.type_ === BaseModel.TYPE_NOTE) {
-			const noteFilePath = dirPath + '/' + safeFilename(item.title, null, true) + '.md';
+			const noteFilePath = dirPath + '/' + safeFilename(unidecode(item.title), null, true) + '.md';
 			const noteContent = await Note.serializeForEdit(item);
 			await shim.fsDriver().writeFile(noteFilePath, noteContent, 'utf-8');
 		}

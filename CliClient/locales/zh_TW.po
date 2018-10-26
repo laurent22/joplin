@@ -592,6 +592,10 @@ msgstr "剪下"
 msgid "Paste"
 msgstr "貼上"
 
+#, fuzzy
+msgid "Select all"
+msgstr "選擇日期"
+
 msgid "Bold"
 msgstr "粗體"
 
@@ -893,6 +897,14 @@ msgid "%s - Copy"
 msgstr "%s - 複本"
 
 msgid "Switch between note and to-do type"
+msgstr "切換到記事 / 待辦事項"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "切換到記事 / 待辦事項"
+
+#, fuzzy
+msgid "Switch to to-do type"
 msgstr "切換到記事 / 待辦事項"
 
 msgid "Copy Markdown link"
@@ -1475,6 +1487,10 @@ msgstr "移動 %d 記事到記事本 \"%s\"？"
 msgid "Press to set the decryption password."
 msgstr "按下以設置解密密碼。"
 
+#, fuzzy
+msgid "Clear alarm"
+msgstr "設置提醒"
+
 msgid "Save alarm"
 msgstr "儲存提醒事項"
 
@@ -1489,6 +1505,36 @@ msgstr "取消同步"
 
 #, javascript-format
 msgid "Decrypting items: %d/%d"
+msgstr "正在解密項目: %d/%d 項"
+
+#, fuzzy
+msgid "Checking... Please wait."
+msgstr "正在取消中...請稍候。"
+
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "檢測同步設置"
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#, fuzzy
+msgid "The application has been authorised!"
+msgstr "應用程式已成功取得權限。"
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Decrypted items: %s / %s"
 msgstr "正在解密項目: %d/%d 項"
 
 msgid "New tags:"

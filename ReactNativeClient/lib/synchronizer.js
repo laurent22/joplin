@@ -11,6 +11,7 @@ const { Logger } = require('lib/logger.js');
 const { _ } = require('lib/locale.js');
 const { shim } = require('lib/shim.js');
 const JoplinError = require('lib/JoplinError');
+const BaseSyncTarget = require('lib/BaseSyncTarget');
 
 class Synchronizer {
 
@@ -19,7 +20,7 @@ class Synchronizer {
 		this.db_ = db;
 		this.api_ = api;
 		this.syncDirName_ = '.sync';
-		this.resourceDirName_ = '.resource';
+		this.resourceDirName_ = BaseSyncTarget.resourceDirName();
 		this.logger_ = new Logger();
 		this.appType_ = appType;
 		this.cancelling_ = false;
@@ -478,7 +479,7 @@ class Synchronizer {
 							break;
 						}
 
-						this.logSyncOperation("fetchingProcessed", null, null, "Processing fetched item");
+						// this.logSyncOperation("fetchingProcessed", null, null, "Processing fetched item");
 
 						let remote = remotes[i];
 						if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
@@ -554,23 +555,29 @@ class Synchronizer {
 							if (action == "createLocal") options.isNew = true;
 							if (action == "updateLocal") options.oldItem = local;
 
-							if (content.type_ == BaseModel.TYPE_RESOURCE && action == "createLocal") {
-								let localResourceContentPath = Resource.fullPath(content);
-								let remoteResourceContentPath = this.resourceDirName_ + "/" + content.id;
-								try {
-									await this.api().get(remoteResourceContentPath, { path: localResourceContentPath, target: "file" });
-								} catch (error) {
-									if (error.code === 'rejectedByTarget') {
-										this.progressReport_.errors.push(error);
-										this.logger().warn('Rejected by target: ' + path + ': ' + error.message);
-										continue;
-									} else {
-										throw error;
-									}
-								}
-							}
+							const creatingNewResource = content.type_ == BaseModel.TYPE_RESOURCE && action == "createLocal";
+
+							// if (content.type_ == BaseModel.TYPE_RESOURCE && action == "createLocal") {
+							// 	let localResourceContentPath = Resource.fullPath(content);
+							// 	let remoteResourceContentPath = this.resourceDirName_ + "/" + content.id;
+							// 	try {
+							// 		await this.api().get(remoteResourceContentPath, { path: localResourceContentPath, target: "file" });
+							// 	} catch (error) {
+							// 		if (error.code === 'rejectedByTarget') {
+							// 			this.progressReport_.errors.push(error);
+							// 			this.logger().warn('Rejected by target: ' + path + ': ' + error.message);
+							// 			continue;
+							// 		} else {
+							// 			throw error;
+							// 		}
+							// 	}
+							// }
+
+							if (creatingNewResource) content.fetch_status = Resource.FETCH_STATUS_IDLE;
 
 							await ItemClass.save(content, options);
+
+							if (creatingNewResource) this.dispatch({ type: "SYNC_CREATED_RESOURCE", id: content.id });
 
 							if (!hasAutoEnabledEncryption && content.type_ === BaseModel.TYPE_MASTER_KEY && !masterKeysBefore) {
 								hasAutoEnabledEncryption = true;

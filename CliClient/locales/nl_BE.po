@@ -630,6 +630,10 @@ msgstr "Knip"
 msgid "Paste"
 msgstr "Plak"
 
+#, fuzzy
+msgid "Select all"
+msgstr "Selecteer datum"
+
 msgid "Bold"
 msgstr ""
 
@@ -939,6 +943,14 @@ msgid "%s - Copy"
 msgstr "Kopieer"
 
 msgid "Switch between note and to-do type"
+msgstr "Wissel tussen notitie en to-do type"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Wissel tussen notitie en to-do type"
+
+#, fuzzy
+msgid "Switch to to-do type"
 msgstr "Wissel tussen notitie en to-do type"
 
 msgid "Copy Markdown link"
@@ -1549,6 +1561,10 @@ msgid "Press to set the decryption password."
 msgstr "Klik om het decryptie wachtwoord in te stellen"
 
 #, fuzzy
+msgid "Clear alarm"
+msgstr "Zet melding"
+
+#, fuzzy
 msgid "Save alarm"
 msgstr "Zet melding"
 
@@ -1563,6 +1579,36 @@ msgstr "Annuleer synchronisatie"
 
 #, fuzzy, javascript-format
 msgid "Decrypting items: %d/%d"
+msgstr "Opgehaalde items: %d/%d."
+
+#, fuzzy
+msgid "Checking... Please wait."
+msgstr "Annuleren.. Even geduld."
+
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Annuleer synchronisatie"
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#, fuzzy
+msgid "The application has been authorised!"
+msgstr "De applicatie is succesvol geauthenticeerd."
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Decrypted items: %s / %s"
 msgstr "Opgehaalde items: %d/%d."
 
 msgid "New tags:"

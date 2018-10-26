@@ -629,6 +629,10 @@ msgstr "Knippen"
 msgid "Paste"
 msgstr "Plakken"
 
+#, fuzzy
+msgid "Select all"
+msgstr "Datum kiezen"
+
 msgid "Bold"
 msgstr "Vetgedrukt"
 
@@ -943,6 +947,14 @@ msgid "%s - Copy"
 msgstr "%s - kopiëren"
 
 msgid "Switch between note and to-do type"
+msgstr "Schakelen tussen notitie en taak"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Schakelen tussen notitie en taak"
+
+#, fuzzy
+msgid "Switch to to-do type"
 msgstr "Schakelen tussen notitie en taak"
 
 msgid "Copy Markdown link"
@@ -1548,6 +1560,10 @@ msgstr "%d notities verplaatsen naar notitieboek \"%s\"?"
 msgid "Press to set the decryption password."
 msgstr "Druk om het ontsleutelwachtwoord in te stellen."
 
+#, fuzzy
+msgid "Clear alarm"
+msgstr "Alarm instellen"
+
 msgid "Save alarm"
 msgstr "Alarm opslaam"
 
@@ -1562,6 +1578,36 @@ msgstr "Synchronisatie annuleren"
 
 #, javascript-format
 msgid "Decrypting items: %d/%d"
+msgstr "Bezig met ontsleutelen van items: %d/%d"
+
+#, fuzzy
+msgid "Checking... Please wait."
+msgstr "Bezig met annuleren... Even geduld."
+
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Synchronisatieconfiguratie controleren"
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#, fuzzy
+msgid "The application has been authorised!"
+msgstr "De applicatie is geautoriseerd."
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Decrypted items: %s / %s"
 msgstr "Bezig met ontsleutelen van items: %d/%d"
 
 msgid "New tags:"

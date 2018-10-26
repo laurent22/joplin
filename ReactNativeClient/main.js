@@ -14,6 +14,8 @@
 // require("ReactFeatureFlags").warnAboutDeprecatedLifecycles = false;
 
 
+// console.disableYellowBox = true
+
 const { AppRegistry } = require('react-native');
 const { Root } = require('./root.js');
 

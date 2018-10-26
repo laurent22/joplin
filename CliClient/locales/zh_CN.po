@@ -591,6 +591,10 @@ msgstr "剪切"
 msgid "Paste"
 msgstr "粘贴"
 
+#, fuzzy
+msgid "Select all"
+msgstr "选择日期"
+
 msgid "Bold"
 msgstr "粗体"
 
@@ -893,6 +897,14 @@ msgid "%s - Copy"
 msgstr "%s - 副本"
 
 msgid "Switch between note and to-do type"
+msgstr "在笔记和待办事项类型之间切换"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "在笔记和待办事项类型之间切换"
+
+#, fuzzy
+msgid "Switch to to-do type"
 msgstr "在笔记和待办事项类型之间切换"
 
 msgid "Copy Markdown link"
@@ -1478,6 +1490,10 @@ msgstr "移动%d条笔记至笔记本\"%s\"？"
 msgid "Press to set the decryption password."
 msgstr "按键将设置解密密码。"
 
+#, fuzzy
+msgid "Clear alarm"
+msgstr "设置提醒"
+
 msgid "Save alarm"
 msgstr "保存提醒"
 
@@ -1492,6 +1508,36 @@ msgstr "取消同步"
 
 #, javascript-format
 msgid "Decrypting items: %d/%d"
+msgstr "解密项目：%d/%d"
+
+#, fuzzy
+msgid "Checking... Please wait."
+msgstr "正在取消... 请稍后。"
+
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "检查同步配置"
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#, fuzzy
+msgid "The application has been authorised!"
+msgstr "此程序已被成功授权。"
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Decrypted items: %s / %s"
 msgstr "解密项目：%d/%d"
 
 msgid "New tags:"

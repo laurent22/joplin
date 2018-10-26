@@ -26,8 +26,29 @@ class Resource extends BaseItem {
 	}
 
 	static isSupportedImageMimeType(type) {
-		const imageMimeTypes = ["image/jpg", "image/jpeg", "image/png", "image/gif", "image/svg+xml"];
+		const imageMimeTypes = ["image/jpg", "image/jpeg", "image/png", "image/gif", "image/svg+xml", "image/webp"];
 		return imageMimeTypes.indexOf(type.toLowerCase()) >= 0;
+	}
+
+	static resetStartedFetchStatus() {
+		return this.db().exec('UPDATE resources SET fetch_status = ? WHERE fetch_status = ?', [Resource.FETCH_STATUS_IDLE, Resource.FETCH_STATUS_STARTED]);
+	}
+
+	static needToBeFetched(limit = null) {
+		let sql = 'SELECT * FROM resources WHERE fetch_status = ? ORDER BY updated_time DESC';
+		if (limit !== null) sql += ' LIMIT ' + limit;
+		return this.modelSelectAll(sql, [Resource.FETCH_STATUS_IDLE]);
+	}
+
+	static async saveFetchStatus(resourceId, status, error = null) {
+		const o = {
+			id: resourceId,
+			fetch_status: status,
+		}
+
+		if (error !== null) o.fetch_error = error;
+
+		return Resource.save(o, { autoTimestamp: false });
 	}
 
 	static fsDriver() {
@@ -35,18 +56,15 @@ class Resource extends BaseItem {
 		return Resource.fsDriver_;
 	}
 
-	static async serialize(item, type = null, shownKeys = null) {
-		let fieldNames = this.fieldNames();
-		fieldNames.push('type_');
-		//fieldNames = ArrayUtils.removeElement(fieldNames, 'encryption_blob_encrypted');
-		return super.serialize(item, 'resource', fieldNames);
-	}
-
 	static filename(resource, encryptedBlob = false) {
 		let extension = encryptedBlob ? 'crypted' : resource.file_extension;
 		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
 		extension = extension ? ('.' + extension) : '';
 		return resource.id + extension;
+	}
+
+	static syncExcludedKeys() {
+		return ['fetch_status', 'fetch_error'];
 	}
 
 	static friendlyFilename(resource) {
@@ -62,6 +80,10 @@ class Resource extends BaseItem {
 		return Setting.value('resourceDir') + '/' + this.filename(resource, encryptedBlob);
 	}
 
+	static isReady(resource) {
+		return resource && resource.fetch_status === Resource.FETCH_STATUS_DONE && !resource.encryption_blob_encrypted;
+	}
+
 	// For resources, we need to decrypt the item (metadata) and the resource binary blob.
 	static async decrypt(item) {
 		// The item might already be decrypted but not the blob (for instance if it crashes while
@@ -72,7 +94,7 @@ class Resource extends BaseItem {
 		const plainTextPath = this.fullPath(decryptedItem);
 		const encryptedPath = this.fullPath(decryptedItem, true);
 		const noExtPath = pathUtils.dirname(encryptedPath) + '/' + pathUtils.filename(encryptedPath);
-		
+
 		// When the resource blob is downloaded by the synchroniser, it's initially a file with no
 		// extension (since it's encrypted, so we don't know its extension). So here rename it
 		// to a file with a ".crypted" extension so that it's better identified, and then decrypt it.
@@ -198,5 +220,10 @@ class Resource extends BaseItem {
 }
 
 Resource.IMAGE_MAX_DIMENSION = 1920;
+
+Resource.FETCH_STATUS_IDLE = 0;
+Resource.FETCH_STATUS_STARTED = 1;
+Resource.FETCH_STATUS_DONE = 2;
+Resource.FETCH_STATUS_ERROR = 3;
 
 module.exports = Resource;

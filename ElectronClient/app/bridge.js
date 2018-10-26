@@ -1,7 +1,6 @@
 const { _, setLocale } = require('lib/locale.js');
 const { dirname } = require('lib/path-utils.js');
 const { Logger } = require('lib/logger.js');
-const { powerSaveBlocker } = require('electron');
 
 class Bridge {
 
@@ -9,7 +8,6 @@ class Bridge {
 		this.electronWrapper_ = electronWrapper;
 		this.autoUpdateLogger_ = null;
 		this.lastSelectedPath_ = null;
-		this.allowPowerSaveBlockerToggle_ = false;
 	}
 
 	electronApp() {
@@ -22,10 +20,6 @@ class Bridge {
 
 	window() {
 		return this.electronWrapper_.window();
-	}
-
-	setAllowPowerSaveBlockerToggle(v) {
-		this.allowPowerSaveBlockerToggle_ = v;
 	}
 
 	windowContentSize() {
@@ -126,19 +120,7 @@ class Bridge {
 		const { checkForUpdates } = require('./checkForUpdates.js');
 		checkForUpdates(inBackground, window, logFilePath);
 	}
-
-	powerSaveBlockerStart(type) {
-		if (!this.allowPowerSaveBlockerToggle_) return null;
-		console.info('Enable powerSaveBlockerStart: ' + type);
-		return powerSaveBlocker.start(type);
-	}
-
-	powerSaveBlockerStop(id) {
-		if (!this.allowPowerSaveBlockerToggle_) return null;
-		console.info('Disable powerSaveBlocker: ' + id);
-		return powerSaveBlocker.stop(id);
-	}
-
+	
 }
 
 let bridge_ = null;

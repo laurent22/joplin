@@ -276,6 +276,27 @@
 		}
 	});
 
+	document.addEventListener('click', function(event) {
+		const t = event.target;
+
+		// Prevent URLs added via <a> tags from being opened within the application itself
+		if (t && t.nodeName === 'A' && !t.hasAttribute('data-from-md')) {
+			event.preventDefault();
+			ipcProxySendToHost(t.getAttribute('href'));
+			return;
+		}
+
+		// IF this is an internal link, jump to the anchor directly
+		if (t && t.nodeName === 'A' && t.hasAttribute('data-from-md')) {
+			const href = t.getAttribute('href');
+			if (href.indexOf('#') === 0) {
+				event.preventDefault();
+				location.hash = href;
+				return;
+			}
+		}
+	});
+
 	// Disable drag and drop otherwise it's possible to drop a URL
 	// on it and it will open in the view as a website.
 	document.addEventListener('drop', function(e) {

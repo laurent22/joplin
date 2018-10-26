@@ -6,6 +6,7 @@ const Search = require('lib/models/Search.js');
 const { time } = require('lib/time-utils.js');
 const Setting = require('lib/models/Setting.js');
 const { IconButton } = require('./IconButton.min.js');
+const { urlDecode } = require('lib/string-utils');
 const Toolbar = require('./Toolbar.min.js');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
@@ -27,6 +28,7 @@ const urlUtils = require('lib/urlUtils');
 const dialogs = require('./dialogs');
 const markdownUtils = require('lib/markdownUtils');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
+const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { toSystemSlashes, safeFilename } = require('lib/path-utils');
 const { clipboard } = require('electron');
 
@@ -170,6 +172,10 @@ class NoteTextComponent extends React.Component {
 		}
 
 		const updateSelectionRange = () => {
+			if (!this.rawEditor()) {
+				this.selectionRange_ = null;
+				return;
+			}
 
 			const ranges = this.rawEditor().getSelection().getAllRanges();
 			if (!ranges || !ranges.length || !this.state.note) {
@@ -191,6 +197,16 @@ class NoteTextComponent extends React.Component {
 			if (!this.state.note || !this.state.note.id) return;
 			if (event.id === this.state.note.id) {
 				this.reloadNote(this.props);
+			}
+		}
+
+		this.resourceFetcher_downloadComplete = async (resource) => {
+			if (!this.state.note || !this.state.note.body) return;
+			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
+			if (resourceIds.indexOf(resource.id) >= 0) {
+				this.mdToHtml().clearCache();
+				this.lastSetHtml_ = '';
+				this.updateHtml(this.state.note.body);
 			}
 		}
 	}
@@ -282,6 +298,8 @@ class NoteTextComponent extends React.Component {
 		eventManager.on('alarmChange', this.onAlarmChange_);
 		eventManager.on('noteTypeToggle', this.onNoteTypeToggle_);
 		eventManager.on('todoToggle', this.onTodoToggle_);
+
+		ResourceFetcher.instance().on('downloadComplete', this.resourceFetcher_downloadComplete);
 	}
 
 	componentWillUnmount() {
@@ -293,6 +311,8 @@ class NoteTextComponent extends React.Component {
 		eventManager.removeListener('alarmChange', this.onAlarmChange_);
 		eventManager.removeListener('noteTypeToggle', this.onNoteTypeToggle_);
 		eventManager.removeListener('todoToggle', this.onTodoToggle_);
+
+		ResourceFetcher.instance().off('downloadComplete', this.resourceFetcher_downloadComplete);
 
 		this.destroyExternalEditWatcher();
 	}
@@ -547,6 +567,10 @@ class NoteTextComponent extends React.Component {
 			if (!item) throw new Error('No item with ID ' + itemId);
 
 			if (item.type_ === BaseModel.TYPE_RESOURCE) {
+				if (item.fetch_status !== Resource.FETCH_STATUS_DONE || !!item.encryption_blob_encrypted) {
+					bridge().showErrorMessageBox(_('This attachment is not downloaded or not decrypted yet.'));
+					return;
+				}
 				const filePath = Resource.fullPath(item);
 				bridge().openItem(filePath);
 			} else if (item.type_ === BaseModel.TYPE_NOTE) {
@@ -565,7 +589,14 @@ class NoteTextComponent extends React.Component {
 				throw new Error('Unsupported item type: ' + item.type_);
 			}
 		} else if (urlUtils.urlProtocol(msg)) {
-			require('electron').shell.openExternal(msg);
+			if (msg.indexOf('file://') === 0) {
+				// When using the file:// protocol, openExternal doesn't work (does nothing) with URL-encoded paths
+				require('electron').shell.openExternal(urlDecode(msg));
+			} else {
+				require('electron').shell.openExternal(msg);
+			}
+		} else if (msg.indexOf('#') === 0) {
+			// This is an internal anchor, which is handled by the WebView so skip this case
 		} else {
 			bridge().showErrorMessageBox(_('Unsupported link or message: %s', msg));
 		}

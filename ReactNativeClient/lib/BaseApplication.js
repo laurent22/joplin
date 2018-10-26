@@ -33,6 +33,7 @@ const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
 const EncryptionService = require('lib/services/EncryptionService');
+const ResourceFetcher = require('lib/services/ResourceFetcher');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseService = require('lib/services/BaseService');
 
@@ -356,6 +357,10 @@ class BaseApplication {
 			DecryptionWorker.instance().scheduleStart();
 		}
 
+		if (this.hasGui() && action.type === 'SYNC_CREATED_RESOURCE') {
+			ResourceFetcher.instance().queueDownload(action.id);
+		}
+
 	  	return result;
 	}
 
@@ -454,7 +459,7 @@ class BaseApplication {
 		initArgs = Object.assign(initArgs, extraFlags);
 
 		this.logger_.addTarget('file', { path: profileDir + '/log.txt' });
-		//this.logger_.addTarget('console');
+		// if (Setting.value('env') === 'dev') this.logger_.addTarget('console');
 		this.logger_.setLevel(initArgs.logLevel);
 
 		reg.setLogger(this.logger_);
@@ -509,6 +514,10 @@ class BaseApplication {
 		DecryptionWorker.instance().setLogger(this.logger_);
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
 		await EncryptionService.instance().loadMasterKeysFromSettings();
+
+		ResourceFetcher.instance().setFileApi(() => { return reg.syncTarget().fileApi() });
+		ResourceFetcher.instance().setLogger(this.logger_);
+		ResourceFetcher.instance().start();
 
 		let currentFolderId = Setting.value('activeFolderId');
 		let currentFolder = null;

@@ -206,4 +206,8 @@ function toTitleCase(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+function urlDecode(string) {
+	return decodeURIComponent((string+'').replace(/\+/g, '%20'));
+}
+
 module.exports = { removeDiacritics, escapeFilename, wrap, splitCommandString, padLeft, toTitleCase };

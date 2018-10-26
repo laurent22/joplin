@@ -615,6 +615,10 @@ msgstr "切り取り"
 msgid "Paste"
 msgstr "貼り付け"
 
+#, fuzzy
+msgid "Select all"
+msgstr "日付の選択"
+
 msgid "Bold"
 msgstr "太字"
 
@@ -925,6 +929,14 @@ msgid "%s - Copy"
 msgstr "%s - コピー"
 
 msgid "Switch between note and to-do type"
+msgstr "ノートとToDoを切り替え"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "ノートとToDoを切り替え"
+
+#, fuzzy
+msgid "Switch to to-do type"
 msgstr "ノートとToDoを切り替え"
 
 msgid "Copy Markdown link"
@@ -1523,6 +1535,10 @@ msgstr "%d個のノートを\"%s\"に移動しますか？"
 msgid "Press to set the decryption password."
 msgstr "復号するパスワードを入力してください。"
 
+#, fuzzy
+msgid "Clear alarm"
+msgstr "アラームをセット"
+
 msgid "Save alarm"
 msgstr "アラームの保存"
 
@@ -1537,6 +1553,36 @@ msgstr "同期の中止"
 
 #, javascript-format
 msgid "Decrypting items: %d/%d"
+msgstr "復号中のアイテム: %d/%d"
+
+#, fuzzy
+msgid "Checking... Please wait."
+msgstr "中止中...お待ちください。"
+
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "同期の設定を確認する"
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#, fuzzy
+msgid "The application has been authorised!"
+msgstr "アプリケーションは問題なく認証されました。"
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Decrypted items: %s / %s"
 msgstr "復号中のアイテム: %d/%d"
 
 msgid "New tags:"

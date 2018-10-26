@@ -7,11 +7,19 @@ shim.isNode = () => {
 };
 
 shim.isReactNative = () => {
+	if (typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('ReactNativeDebugger') >= 0) {
+		return true;
+	}
+	
 	return !shim.isNode();
 };
 
 shim.isLinux = () => {
 	return process && process.platform === 'linux';
+}
+
+shim.isFreeBSD = () => {
+	return process && process.platform === 'freebsd';
 }
 
 shim.isWindows = () => {
@@ -27,6 +35,7 @@ shim.platformName = function() {
 	if (shim.isMac()) return 'darwin'; 
 	if (shim.isWindows()) return 'win32'; 
 	if (shim.isLinux()) return 'linux';
+ 	if (shim.isFreeBSD()) return 'freebsd';
 	throw new Error('Cannot determine platform');
 }
 
