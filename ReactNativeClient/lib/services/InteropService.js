@@ -59,6 +59,10 @@ class InteropService {
 				target: 'directory',
 				description: _('Joplin Export Directory'),
 			}, {
+				format: 'json',
+				target: 'directory',
+				description: _('Json Export Directory'),
+			}, {
 				format: 'md',
 				target: 'directory',
 				description: _('Markdown'),
