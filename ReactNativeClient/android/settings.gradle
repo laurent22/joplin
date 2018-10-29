@@ -31,3 +31,5 @@ project(':react-native-document-picker').projectDir = new File(rootProject.proje
 include ':app', ':react-native-share-extension'
 
 project(':react-native-share-extension').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-share-extension/android')
+include ':react-native-version-info'
+project(':react-native-version-info').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-version-info/android')
