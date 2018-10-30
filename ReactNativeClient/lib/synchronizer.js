@@ -248,7 +248,7 @@ class Synchronizer {
 								reason = "remote does not exist, and local is new and has never been synced";
 							} else {
 								// Note or item was modified after having been deleted remotely
-								// "itemConflict" if for all the items except the notes, which are dealt with in a special way
+								// "itemConflict" is for all the items except the notes, which are dealt with in a special way
 								action = local.type_ == BaseModel.TYPE_NOTE ? "noteConflict" : "itemConflict";
 								reason = "remote has been deleted, but local has changes";
 							}
@@ -440,7 +440,7 @@ class Synchronizer {
 			// 3. DELTA
 			// ------------------------------------------------------------------------
 			// Loop through all the remote items, find those that
-			// have been updated, and apply the changes to local.
+			// have been created or updated, and apply the changes to local.
 			// ------------------------------------------------------------------------
 
 			if (syncSteps.indexOf("delta") >= 0) {
@@ -525,6 +525,7 @@ class Synchronizer {
 								this.logger().warn('Rejected by target: ' + path + ': ' + error.message);
 								action = null;
 							} else {
+								error.message = 'On file ' + path + ': ' + error.message;
 								throw error;
 							}
 						}

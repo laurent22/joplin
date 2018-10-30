@@ -12,7 +12,13 @@ process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
-describe('models_Resource', function() {
+async function allItems() {
+	let folders = await Folder.all();
+	let notes = await Note.all();
+	return folders.concat(notes);
+}
+
+describe('models_BaseItem', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
@@ -20,12 +26,12 @@ describe('models_Resource', function() {
 		done();
 	});
 
-	it('should have a "done" fetch_status when created locally', asyncTest(async () => {
+	it('should be able to exclude keys when syncing', asyncTest(async () => {
 		let folder1 = await Folder.save({ title: "folder1" });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
 		let resource1 = (await Resource.all())[0];
-		expect(resource1.fetch_status).toBe(Resource.FETCH_STATUS_DONE);
+		console.info(await Resource.serializeForSync(resource1));
 	}));
 
 });

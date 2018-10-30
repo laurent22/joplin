@@ -25,6 +25,7 @@ npm test tests-build/ArrayUtils.js
 npm test tests-build/EnexToMd.js
 npm test tests-build/HtmlToMd.js
 npm test tests-build/markdownUtils.js
+npm test tests-build/models_BaseItem.js
 npm test tests-build/models_Folder.js
 npm test tests-build/models_Note.js
 npm test tests-build/models_Tag.js

@@ -196,6 +196,7 @@ class Command extends BaseCommand {
 			// not going to be running in the background, so the resources need to be
 			// explicitely downloaded below.
 			if (!app().hasGui()) {
+				this.stdout(_('Downloading resources...'));
 				await ResourceFetcher.instance().fetchAll();
 				await ResourceFetcher.instance().waitForAllFinished();
 			}
