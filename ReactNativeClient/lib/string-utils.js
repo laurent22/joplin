@@ -122,6 +122,20 @@ function wrap(text, indent, width) {
 	});
 }
 
+async function prepareCmdStringWindows(cmd, fnExists) {
+	// in windows, paths often contain spaces, so
+	// if there are spaces and the entire string points to an existing file,
+	// it's probably something like C:\Program Files\Foo\Foo.exe
+	if (cmd.indexOf(" ") != -1 && cmd.indexOf('"') == -1 && await fnExists(cmd)) {
+		cmd = '"' + cmd + '"';
+	}
+
+	// in windows, \ usually is a path delim, not an escape sequence
+	cmd = cmd.replace(/\\/g, '\\\\');
+
+	return cmd;
+}
+
 function splitCommandString(command) {
 	let args = [];
 	let state = "start"
@@ -210,4 +224,4 @@ function urlDecode(string) {
 	return decodeURIComponent((string+'').replace(/\+/g, '%20'));
 }
 
-module.exports = { removeDiacritics, escapeFilename, wrap, splitCommandString, padLeft, toTitleCase };
+module.exports = { removeDiacritics, escapeFilename, wrap, prepareCmdStringWindows, splitCommandString, padLeft, toTitleCase };

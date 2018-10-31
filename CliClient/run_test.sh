@@ -35,4 +35,5 @@ npm test tests-build/services_ResourceService.js
 npm test tests-build/urlUtils.js
 npm test tests-build/encryption.js
 npm test tests-build/services_rest_Api.js
+npm test tests-build/StringUtils.js
 npm test tests-build/synchronizer.js

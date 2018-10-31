@@ -4,7 +4,7 @@ const Setting = require('lib/models/Setting');
 const { shim } = require('lib/shim');
 const chokidar = require('chokidar');
 const EventEmitter = require('events');
-const { splitCommandString } = require('lib/string-utils');
+const { prepareCmdStringWindows, splitCommandString } = require('lib/string-utils');
 const spawn	= require('child_process').spawn;
 
 class ExternalEditWatcher {
@@ -123,9 +123,14 @@ class ExternalEditWatcher {
 		return false;
 	}
 
-	textEditorCommand() {
-		const editorCommand = Setting.value('editor');
+	async textEditorCommand() {
+		let editorCommand = Setting.value('editor');
 		if (!editorCommand) return null;
+
+		if (shim.isWindows()) {
+			editorCommand = await prepareCmdStringWindows(editorCommand,
+				(fpath) => shim.fsDriver().exists(fpath));
+		}
 
 		const s = splitCommandString(editorCommand);
 
@@ -166,7 +171,7 @@ class ExternalEditWatcher {
 		const filePath = await this.writeNoteToFile_(note);
 		this.watch(filePath);
 
-		const cmd = this.textEditorCommand();
+		const cmd = await this.textEditorCommand();
 		if (!cmd) {
 			bridge().openExternal('file://' + filePath);
 		} else {
