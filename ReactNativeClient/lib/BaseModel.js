@@ -92,6 +92,16 @@ class BaseModel {
 		return this.db().tableFields(this.tableName());
 	}
 
+	static removeUnknownFields(model) {
+		const newModel = {};
+		for (let n in model) {
+			if (!model.hasOwnProperty(n)) continue;
+			if (!this.hasField(n) && n !== 'type_') continue;
+			newModel[n] = model[n];
+		}
+		return newModel;
+	}
+
 	static new() {
 		let fields = this.fields();
 		let output = {};
