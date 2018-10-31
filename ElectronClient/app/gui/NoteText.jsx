@@ -819,20 +819,7 @@ class NoteTextComponent extends React.Component {
 		let commandProcessed = true;
 
 		if (command.name === 'exportPdf' && this.webview_) {
-			const path = bridge().showSaveDialog({
-				filters: [{ name: _('PDF File'), extensions: ['pdf']}],
-				defaultPath: safeFilename(this.state.note.title),
-			});
-
-			if (path) {
-				this.webview_.printToPDF({}, (error, data) => {
-					if (error) {
-						bridge().showErrorMessageBox(error.message);
-					} else {
-						shim.fsDriver().writeFile(path, data, 'buffer');
-					}
-				});
-			}
+			this.commandSavePdf();
 		} else if (command.name === 'print' && this.webview_) {
 			this.webview_.print();
 		} else if (command.name === 'textBold') {
@@ -895,6 +882,41 @@ class NoteTextComponent extends React.Component {
 			name: 'editAlarm',
 			noteId: this.state.note.id,
 		});
+	}
+
+	commandSavePdf() {
+		const path = bridge().showSaveDialog({
+			filters: [{ name: _('PDF File'), extensions: ['pdf']}],
+			defaultPath: safeFilename(this.state.note.title),
+		});
+
+		if (path) {
+			// temporarily change the html in the webview to show the note title
+			const newHtml = this.insertHtmlHeading_(this.lastSetHtml_, this.state.note.title);
+			this.webview_.send('setHtml', newHtml);
+
+			this.webview_.printToPDF({}, (error, data) => {
+				if (error) {
+					bridge().showErrorMessageBox(error.message);
+				} else {
+					shim.fsDriver().writeFile(path, data, 'buffer');
+				}
+
+				// refresh the webview contents, undoing our temporary change
+				this.lastSetHtml_ = '';
+				this.render()
+			});
+		}
+	}
+
+	insertHtmlHeading_(s, heading) {
+		const tag = 'h2';
+		let splitStyle = s.split('</style>');
+		const index = splitStyle.length > 1 ? 1 : 0;
+		let toInsert = heading.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+		toInsert = '<' + tag + '>' + toInsert + '</' + tag + '>';
+		splitStyle[index] = toInsert + splitStyle[index];
+		return splitStyle.join('</style>');
 	}
 
 	externalEditWatcher() {
