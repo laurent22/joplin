@@ -15,6 +15,7 @@ class ExternalEditWatcher {
 		this.watcher_ = null;
 		this.eventEmitter_ = new EventEmitter();
 		this.skipNextChangeEvent_ = {};
+		this.newlineWasAdded_ = {};
 	}
 
 	on(eventName, callback) {
@@ -56,7 +57,8 @@ class ExternalEditWatcher {
 
 					if (!this.skipNextChangeEvent_[id]) {
 						const note = await Note.load(id);
-						const noteContent = await shim.fsDriver().readFile(path, 'utf-8');
+						let noteContent = await shim.fsDriver().readFile(path, 'utf-8');
+						noteContent = this.removeAddedNewline_(path, noteContent);
 						const updatedNote = await Note.unserializeForEdit(noteContent);
 						updatedNote.id = id;
 						await Note.save(updatedNote);
@@ -188,6 +190,7 @@ class ExternalEditWatcher {
 		const filePath = this.noteFilePath(note);
 		if (this.watcher_) this.watcher_.unwatch(filePath);
 		await shim.fsDriver().remove(filePath);
+		this.newlineWasAdded_[filePath] = false;
 		this.dispatch({
 			type: 'NOTE_FILE_WATCHER_REMOVE',
 			id: note.id,
@@ -199,6 +202,7 @@ class ExternalEditWatcher {
 		const filePaths = this.watchedFiles();
 		for (let i = 0; i < filePaths.length; i++) {
 			await shim.fsDriver().remove(filePaths[i]);
+			this.newlineWasAdded_[filePaths[i]] = false;
 		}
 
 		if (this.watcher_) this.watcher_.close();
@@ -233,9 +237,28 @@ class ExternalEditWatcher {
 		}		
 
 		const filePath = this.noteFilePath(note);
-		const noteContent = await Note.serializeForEdit(note);
+		let noteContent = await Note.serializeForEdit(note);
+		if (!noteContent.endsWith('\n')) {
+			// Some external editors prefer a trailing newline
+			noteContent += '\n';
+			this.newlineWasAdded_[filePath] = true;
+		} else {
+			this.newlineWasAdded_[filePath] = false;
+		}
+
 		await shim.fsDriver().writeFile(filePath, noteContent, 'utf-8');
 		return filePath;
+	}
+
+	removeAddedNewline_(path, s) {
+		if (this.newlineWasAdded_[path]) {
+			if (s.endsWith('\r\n')) 
+				s = s.slice(0, -2);
+			else if (noteContent.endsWith('\n')) 
+				s = s.slice(0, -1);	
+		}
+
+		return s;
 	}
 
 }
