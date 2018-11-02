@@ -41,7 +41,11 @@ const globalStyle = {
 	raisedColor: "#003363",
 	raisedHighlightedColor: "#ffffff",
 
+	codeColor: "#EFF0F1",
+	codeBorderColor: '#CBCBCB',
+
 	editorTheme: "chrome",
+	codeThemeCss: "atom-one-light.css",
 };
 
 // For WebView - must correspond to the properties above
@@ -51,6 +55,8 @@ globalStyle.htmlBackgroundColor ='white';
 globalStyle.htmlDividerColor = 'rgb(150,150,150)';
 globalStyle.htmlLinkColor ='blue';
 globalStyle.htmlLineHeight = Math.round(20 * zoomRatio) + 'px';
+globalStyle.htmlCodeColor = 'rgb(239, 240, 241)';
+globalStyle.htmlCodeBorderColor = 'rgb(203, 203, 203)';
 
 globalStyle.marginRight = globalStyle.margin;
 globalStyle.marginLeft = globalStyle.margin;
@@ -117,12 +123,17 @@ const darkStyle = {
 	raisedColor: "#788BC3",
 	raisedHighlightedColor: "#ffffff",
 
+	codeColor: "#2F3031",
+	codeBorderColor: '#464646',
+
 	htmlColor: 'rgb(220,220,220)',
 	htmlBackgroundColor: 'rgb(29,32,36)',
 	htmlLinkColor: 'rgb(166,166,255)',
+	htmlCodeColor: 'rgb(47, 48, 49)',
+	htmlCodeBorderColor: 'rgb(70, 70, 70)',
 
 	editorTheme: 'twilight',
-
+	codeThemeCss: "atom-one-dark-reasonable.css",
 };
 
 let themeCache_ = {};

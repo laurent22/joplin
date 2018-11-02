@@ -1424,7 +1424,8 @@ class NoteTextComponent extends React.Component {
 
 			const htmlHasChanged = this.lastSetHtml_ !== html;
 			 if (htmlHasChanged) {
-				this.webview_.send('setHtml', html);
+				let options = {codeTheme: theme.codeThemeCss};
+				this.webview_.send('setHtml', html, options);
 				this.lastSetHtml_ = html;
 			}
 
