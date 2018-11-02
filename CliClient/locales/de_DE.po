@@ -990,8 +990,9 @@ msgstr ""
 "Momentan existieren noch keine Notizbücher. Erstelle eines, indem du auf "
 "\"Neues Notizbuch\" drückst."
 
+# Please note: The term 'Location' is assumed to be the geographical location where the note has been created. For this the german word 'Standort' fits better than the previously used 'Ablageort'. The latter one is used for the folder where files are stored.
 msgid "Location"
-msgstr "Ablageort"
+msgstr "Standort"
 
 msgid "URL"
 msgstr "URL"
