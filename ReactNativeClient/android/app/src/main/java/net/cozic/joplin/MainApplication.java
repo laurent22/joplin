@@ -22,6 +22,8 @@ import org.pgsqlite.SQLitePluginPackage;
 
 import com.alinz.parkerdan.shareextension.SharePackage;
 
+import cx.evermeet.versioninfo.RNVersionInfoPackage;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,7 +50,8 @@ public class MainApplication extends Application implements ReactApplication {
 				new RNFSPackage(),
 				new SQLitePluginPackage(),
 				new VectorIconsPackage(),
-				new SharePackage()
+				new SharePackage(),
+				new RNVersionInfoPackage()
 			);
 		}
 	};
