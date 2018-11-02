@@ -153,6 +153,7 @@ dependencies {
 	compile project(':react-native-document-picker')
 	compile project(':react-native-image-resizer')
 	compile project(':react-native-share-extension')
+	compile project(':react-native-version-info')
 	compile "com.facebook.react:react-native:+"
 
 	// To fix the error below, which happened after adding react-native-camera.
