@@ -27,6 +27,7 @@ const defaultState = {
 	appState: 'starting',
 	hasDisabledSyncItems: false,
 	newNote: null,
+	customCss: '',
 	collapsedFolderIds: [],
 	clipperServer: {
 		startState: 'idle',
@@ -555,6 +556,12 @@ const reducer = (state = defaultState, action) => {
 					decryptionWorker[n] = action[n];
 				}
 				newState.decryptionWorker = decryptionWorker;
+				break;
+
+			case 'LOAD_CUSTOM_CSS':
+
+				newState = Object.assign({}, state);
+				newState.customCss = action.css;
 				break;
 
 		}

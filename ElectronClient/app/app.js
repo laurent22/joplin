@@ -676,6 +676,23 @@ class Application extends BaseApplication {
 		document.head.appendChild(styleTag);
 	}
 
+	async loadCustomCss(filePath) {
+		let cssString = '';
+		if (await fs.pathExists(filePath)) {
+			try {
+				cssString = await fs.readFile(filePath, 'utf-8');
+
+			} catch (error) {
+				let msg = error.message ? error.message : '';
+				msg = 'Could not load custom css from ' + filePath + '\n' + msg;
+				error.message = msg;
+				throw error;
+			}
+		}
+
+		return cssString;
+	}
+
 	async start(argv) {
 		const electronIsDev = require('electron-is-dev');
 
@@ -727,6 +744,13 @@ class Application extends BaseApplication {
 		this.store().dispatch({
 			type: 'FOLDER_SET_COLLAPSED_ALL',
 			ids: Setting.value('collapsedFolderIds'),
+		});
+
+		const cssString = await this.loadCustomCss(Setting.value('profileDir') + '/userstyle.css');
+
+		this.store().dispatch({
+			type: 'LOAD_CUSTOM_CSS',
+			css: cssString
 		});
 
 		// Note: Auto-update currently doesn't work in Linux: it downloads the update
