@@ -325,8 +325,8 @@ describe('services_InteropService', function() {
 			const jsonFile = filePath + '/' + items[i].id + '.json'; 
 			let json = await fs.readFile(jsonFile, 'utf-8');
 			let obj = JSON.parse(json);
-			expect(obj.props.id).toBe(items[i].id);
-			expect(obj.props.type_).toBe(items[i].type_);
+			expect(obj.id).toBe(items[i].id);
+			expect(obj.type_).toBe(items[i].type_);
 			expect(obj.title).toBe(items[i].title);
 			expect(obj.body).toBe(items[i].body);
 		}
