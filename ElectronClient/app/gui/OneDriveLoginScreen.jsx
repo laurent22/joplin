@@ -73,14 +73,14 @@ class OneDriveLoginScreenComponent extends React.Component {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.theme);
 
-		const headerStyle = {
-			width: style.width,
-		};
+		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
 
 		const webviewStyle = {
 			width: this.props.style.width,
 			height: this.props.style.height - theme.headerHeight,
 			overflow: 'hidden',
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
 		};
 
 		const headerButtons = [

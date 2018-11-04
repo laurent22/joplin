@@ -175,22 +175,14 @@ class ConfigScreenComponent extends React.Component {
 		}, this.props.style, { overflow: 'auto' });
 		const settings = this.state.settings;
 
-		const headerStyle = {
-			width: style.width,
-		};
+		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
 
-		const containerStyle = {
-			padding: 10,
-		};
+		const containerStyle = Object.assign({}, theme.containerStyle, { padding: 10 });
 
-		const buttonStyle = {
+		const buttonStyle = Object.assign({}, theme.buttonStyle, {
 			display: this.state.changedSettingKeys.length ? 'inline-block' : 'none',
 			marginRight: 10,
-			color: theme.color,
-			backgroundColor: theme.backgroundColor,
-			border: '1px solid',
-			borderColor: theme.dividerColor,
-		}
+		});
 
 		const settingComps = shared.settingsToComponents(this, 'desktop', settings);
 
@@ -207,7 +199,7 @@ class ConfigScreenComponent extends React.Component {
 
 			settingComps.push(
 				<div key="check_sync_config_button" style={this.rowStyle_}>
-					<button disabled={this.state.checkSyncConfigResult === 'checking'} onClick={this.checkSyncConfig_}>{_('Check synchronisation configuration')}</button>
+					<button style={buttonStyle} disabled={this.state.checkSyncConfigResult === 'checking'} onClick={this.checkSyncConfig_}>{_('Check synchronisation configuration')}</button>
 					{ statusComp }
 				</div>);
 		}
