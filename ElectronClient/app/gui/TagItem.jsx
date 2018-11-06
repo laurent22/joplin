@@ -3,15 +3,13 @@ const { connect } = require('react-redux');
 const { themeStyle } = require('../theme.js');
 
 class TagItemComponent extends React.Component {
-  render() {
-    const theme = themeStyle(this.props.theme);
-    const style = Object.assign({}, theme.tagStyle);
-    const title = this.props.title;
+	render() {
+		const theme = themeStyle(this.props.theme);
+		const style = Object.assign({}, theme.tagStyle);
+		const title = this.props.title;
 
-    return (
-      <span style={style}>{title}</span>
-    )
-  }
+		return <span style={style}>{title}</span>;
+	}
 }
 
 const mapStateToProps = (state) => {

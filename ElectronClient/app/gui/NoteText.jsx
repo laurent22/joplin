@@ -449,7 +449,7 @@ class NoteTextComponent extends React.Component {
 		} else if ('noteId' in nextProps && nextProps.noteId !== this.props.noteId) {
 			await this.reloadNote(nextProps);
 		} else if ('noteTags' in nextProps && this.areNoteTagsModified(nextProps.noteTags, this.state.noteTags)) {
-			await this.setState({
+			this.setState({
 				noteTags: nextProps.noteTags
 			});
 		}
