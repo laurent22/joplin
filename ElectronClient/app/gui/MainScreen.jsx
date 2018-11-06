@@ -120,7 +120,7 @@ class MainScreenComponent extends React.Component {
 			});
 		} else if (command.name === 'setTags') {
 			const tags = await Tag.tagsByNoteId(command.noteId);
-			const tagTitles = tags.map((a) => { return a.title });
+			const tagTitles = tags.map((a) => { return a.title }).sort();
 
 			this.setState({
 				promptOptions: {
@@ -158,7 +158,7 @@ class MainScreenComponent extends React.Component {
 				},
 			});
 		} else if (command.name === 'renameTag') {
-			const tag = await Tag.load(command.id);			
+			const tag = await Tag.load(command.id);
 			if(!tag) return;
 
 			this.setState({
@@ -173,12 +173,12 @@ class MainScreenComponent extends React.Component {
 							} catch (error) {
 								bridge().showErrorMessageBox(error.message);
 							}
-						}						
+						}
 						this.setState({promptOptions: null });
 					}
 				}
 			})
-		
+
 		} else if (command.name === 'search') {
 
 			if (!this.searchId_) this.searchId_ = uuid.create();

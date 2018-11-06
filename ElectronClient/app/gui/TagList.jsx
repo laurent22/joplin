@@ -18,7 +18,7 @@ class TagListComponent extends React.Component {
 		const tagItems = [];
 		if (tags || tags.length > 0) {
 			// Sort by id for now, but probably needs to be changed in the future.
-			tags.sort((a, b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
+			tags.sort((a, b) => { return a.title < b.title ? -1 : +1; });
 
 			for (let i = 0; i < tags.length; i++) {
 				const props = {
