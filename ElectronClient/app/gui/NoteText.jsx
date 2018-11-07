@@ -843,6 +843,7 @@ class NoteTextComponent extends React.Component {
 
 		let bodyToRender = body;
 		if (bodyToRender === null) bodyToRender = this.state.note && this.state.note.body ? this.state.note.body : '';
+		bodyToRender = '<style>' + this.props.customCss + '</style>\n' + bodyToRender;
 		let bodyHtml = '';
 
 		const visiblePanes = this.props.visiblePanes || ['editor', 'viewer'];
@@ -1601,6 +1602,7 @@ const mapStateToProps = (state) => {
 		searches: state.searches,
 		selectedSearchId: state.selectedSearchId,
 		watchedNoteFiles: state.watchedNoteFiles,
+		customCss: state.customCss,
 	};
 };
 

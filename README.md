@@ -280,6 +280,10 @@ It is generally recommended to enter the notes as Markdown as it makes the notes
 
 	This is <s>strikethrough text</s> mixed with regular **Markdown**.
 
+## Custom CSS
+
+Rendered markdown can be customized by placing a userstyle file in the profile directory `~/.config/joplin/userstyle.css`. This file supports standard css syntax.
+
 # Donations
 
 Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.
