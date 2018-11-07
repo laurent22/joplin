@@ -21,7 +21,6 @@ const globalStyle = {
 
 	toolbarHeight: 35,
 	tagItemPadding: 3,
-	tagBackgroundColor: '#e5e5e5',
 };
 
 // For WebView - must correspond to the properties above
@@ -108,9 +107,8 @@ const lightStyle = {
 	selectedColor2: "#0269C2",
 	colorError2: "#ff6c6c",
 
-	raisedBackgroundColor: "#0080EF",
-	raisedColor: "#003363",
-	raisedHighlightedColor: "#ffffff",
+	raisedBackgroundColor: "#e5e5e5",
+	raisedColor: "#222222",
 
 	warningBackgroundColor: "#FFD08D",
 
@@ -146,9 +144,8 @@ const darkStyle = {
 	selectedColor2: "#0269C2",
 	colorError2: "#ff6c6c",
 
-	raisedBackgroundColor: "#0F2051",
-	raisedColor: "#788BC3",
-	raisedHighlightedColor: "#ffffff",
+	raisedBackgroundColor: "#474747",
+	raisedColor: "#ffffff",
 
 	warningBackgroundColor: "#CC6600",
 
@@ -166,18 +163,23 @@ const darkStyle = {
 	codeThemeCss: "atom-one-dark-reasonable.css",
 };
 
-globalStyle.tagStyle = {
-	fontSize: globalStyle.fontSize,
-	fontFamily: globalStyle.fontFamily,
-	marginTop: globalStyle.itemMarginTop * 0.4,
-	marginBottom: globalStyle.itemMarginBottom * 0.4,
-	marginRight: globalStyle.margin * 0.3,
-	paddingTop: globalStyle.tagItemPadding,
-	paddingBottom: globalStyle.tagItemPadding,
-	paddingRight: globalStyle.tagItemPadding * 2,
-	paddingLeft: globalStyle.tagItemPadding * 2,
-	backgroundColor: globalStyle.tagBackgroundColor
-};
+function addExtraStyles(style) {
+	style.tagStyle = {
+		fontSize: style.fontSize,
+		fontFamily: style.fontFamily,
+		marginTop: style.itemMarginTop * 0.4,
+		marginBottom: style.itemMarginBottom * 0.4,
+		marginRight: style.margin * 0.3,
+		paddingTop: style.tagItemPadding,
+		paddingBottom: style.tagItemPadding,
+		paddingRight: style.tagItemPadding * 2,
+		paddingLeft: style.tagItemPadding * 2,
+		backgroundColor: style.raisedBackgroundColor,
+		color: style.raisedColor,
+	};
+
+	return style;
+}
 
 let themeCache_ = {};
 
@@ -192,6 +194,11 @@ function themeStyle(theme) {
 	else if (theme == Setting.THEME_DARK) {
 		output = Object.assign({}, globalStyle, darkStyle);
 	}
+
+	// TODO: All the theme specific things should go in addExtraStyles
+	// so that their definition is not split between here and the
+	// beginning of the file. At least new styles should go in
+	// addExtraStyles.
 
 	output.textStyle = Object.assign({},
 		output.textStyle,
@@ -269,6 +276,8 @@ function themeStyle(theme) {
 			borderColor: output.dividerColor,
 		}
 	);
+
+	output = addExtraStyles(output);
 
 	themeCache_[theme] = output;
 	return themeCache_[theme];
