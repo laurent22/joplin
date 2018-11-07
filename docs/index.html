@@ -251,14 +251,6 @@
 </ul>
 </div>
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplin.cozic.net/images/badges/Donate-PayPal-green.svg" alt="Donate"></a> <a href="https://www.patreon.com/joplin"><img src="https://joplin.cozic.net/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://travis-ci.org/laurent22/joplin"><img src="https://travis-ci.org/laurent22/joplin.svg?branch=master" alt="Travis Build Status"></a> <a href="https://ci.appveyor.com/project/laurent22/joplin"><img src="https://ci.appveyor.com/api/projects/status/github/laurent22/joplin?branch=master&amp;passingText=master%20-%20OK&amp;svg=true" alt="Appveyor Build Status"></a></p>
-<hr>
-<p><strong>Joplin and Hacktobertfest 2018 :jack_o_lantern:</strong></p>
-<p>The <a href="https://hacktoberfest.digitalocean.com/">Hacktobertfest event</a> has started - it allows you to contribute to Joplin and, at the end of the month, after having done 5 PR, you&#39;ll earn a limited edition T-shirt.</p>
-<p>To participate, go on <a href="https://hacktoberfest.digitalocean.com/">https://hacktoberfest.digitalocean.com/ </a> log in (with you github account) and you are ready to get in.</p>
-<p>Next, go dive into the Joplin issues list labelled <a href="https://github.com/laurent22/joplin/labels/Hacktoberfest%20%3Ajack_o_lantern%3A">&quot;Hacktoberfest&quot;</a></p>
-<p>We hope you will enjoy that event by contributing to the project which is a nice moment of sharing good vibe :jack_o_lantern: :tada:</p>
-<p><em>PS: the 5 Pull Request don&#39;t have to be done <strong>only</strong> on Joplin project, those can be done on any FOSS projects.</em></p>
-<hr>
 <p>Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in <a href="#markdown">Markdown format</a>.</p>
 <p>Notes exported from Evernote via .enex files <a href="#importing">can be imported</a> into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.</p>
 <p>The notes can be <a href="#synchronisation">synchronised</a> with various cloud services including <a href="https://nextcloud.com/">Nextcloud</a>, Dropbox, OneDrive, WebDAV or the file system (for example with a network directory). When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
@@ -481,7 +473,9 @@ $$
 <h2 id="html-support">HTML support</h2>
 <p>It is generally recommended to enter the notes as Markdown as it makes the notes easier to edit. However for cases where certain features aren&#39;t supported (such as strikethrough or to highlight text), you can also use HTML code directly. For example this would be a valid note:</p>
 <pre><code>This is &lt;s&gt;strikethrough text&lt;/s&gt; mixed with regular **Markdown**.
-</code></pre><h1 id="donations">Donations</h1>
+</code></pre><h2 id="custom-css">Custom CSS</h2>
+<p>Rendered markdown can be customized by placing a userstyle file in the profile directory <code>~/.config/joplin-desktop/userstyle.css</code> (This path might be different on your device - check at the top of the Config screen for the exact path). This file supports standard CSS syntax.</p>
+<h1 id="donations">Donations</h1>
 <p>Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.</p>
 <p>Please see the <a href="https://joplin.cozic.net/donate/">donation page</a> for information on how to support the development of Joplin.</p>
 <h1 id="community">Community</h1>
