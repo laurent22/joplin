@@ -37,6 +37,7 @@ const defaultState = {
 		itemIndex: 0,
 		itemCount: 0,
 	},
+	selectedNoteTags: []
 };
 
 const stateUtils = {};
@@ -122,11 +123,14 @@ function handleItemDelete(state, action) {
 	return newState;
 }
 
-function updateOneItem(state, action) {
+function updateOneItem(state, action, keyName = '') {
 	let itemsKey = null;
-	if (action.type === 'TAG_UPDATE_ONE') itemsKey = 'tags';
-	if (action.type === 'FOLDER_UPDATE_ONE') itemsKey = 'folders';
-	if (action.type === 'MASTERKEY_UPDATE_ONE') itemsKey = 'masterKeys';
+	if (keyName) itemsKey = keyName;
+	else {
+		if (action.type === 'TAG_UPDATE_ONE') itemsKey = 'tags';
+		if (action.type === 'FOLDER_UPDATE_ONE') itemsKey = 'folders';
+		if (action.type === 'MASTERKEY_UPDATE_ONE') itemsKey = 'masterKeys';
+	}
 
 	let newItems = state[itemsKey].splice(0);
 	let item = action.item;
@@ -212,6 +216,17 @@ function changeSelectedNotes(state, action) {
 	}
 
 	throw new Error('Unreachable');
+}
+
+function removeItemFromArray(array, property, value) {
+	for (let i = 0; i !== array.length; ++i) {
+		let currentItem = array[i];
+		if (currentItem[property] === value) {
+			array.splice(i, 1);
+			break;
+		}
+	}
+	return array;
 }
 
 const reducer = (state = defaultState, action) => {
@@ -359,6 +374,7 @@ const reducer = (state = defaultState, action) => {
 			case 'TAG_DELETE':
 
 				newState = handleItemDelete(state, action);
+				newState.selectedNoteTags = removeItemFromArray(newState.selectedNoteTags.splice(0), 'id', action.id);
 				break;
 
 			case 'FOLDER_UPDATE_ALL':
@@ -405,6 +421,18 @@ const reducer = (state = defaultState, action) => {
 				break;
 
 			case 'TAG_UPDATE_ONE':
+
+				newState = updateOneItem(state, action);
+				newState = updateOneItem(newState, action, 'selectedNoteTags');
+				break;
+
+			case 'NOTE_TAG_REMOVE':
+
+				newState = updateOneItem(state, action, 'tags');
+				let tagRemoved = action.item;
+				newState.selectedNoteTags = removeItemFromArray(newState.selectedNoteTags.splice(0), 'id', tagRemoved.id);;
+				break;
+
 			case 'FOLDER_UPDATE_ONE':
 			case 'MASTERKEY_UPDATE_ONE':
 
@@ -506,7 +534,7 @@ const reducer = (state = defaultState, action) => {
 			case 'SEARCH_DELETE':
 
 				newState = handleItemDelete(state, action);
-				break;			
+				break;
 
 			case 'SEARCH_SELECT':
 
@@ -555,6 +583,11 @@ const reducer = (state = defaultState, action) => {
 					decryptionWorker[n] = action[n];
 				}
 				newState.decryptionWorker = decryptionWorker;
+				break;
+
+			case 'SET_NOTE_TAGS':
+				newState = Object.assign({}, state);
+				newState.selectedNoteTags = action.items;
 				break;
 
 		}
