@@ -50,6 +50,13 @@ class EncryptionConfigScreenComponent extends React.Component {
 	renderMasterKey(mk) {
 		const theme = themeStyle(this.props.theme);
 
+		const passwordStyle = {
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+			border: '1px solid',
+			borderColor: theme.dividerColor,
+		}
+
 		const onSaveClick = () => {
 			return shared.onSavePasswordClick(this, mk);
 		}
@@ -69,7 +76,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 				<td style={theme.textStyle}>{mk.source_application}</td>
 				<td style={theme.textStyle}>{time.formatMsToLocal(mk.created_time)}</td>
 				<td style={theme.textStyle}>{time.formatMsToLocal(mk.updated_time)}</td>
-				<td style={theme.textStyle}><input type="password" value={password} onChange={(event) => onPasswordChange(event)}/> <button onClick={() => onSaveClick()}>{_('Save')}</button></td>
+				<td style={theme.textStyle}><input type="password" style={passwordStyle} value={password} onChange={(event) => onPasswordChange(event)}/> <button style={theme.buttonStyle} onClick={() => onSaveClick()}>{_('Save')}</button></td>
 				<td style={theme.textStyle}>{passwordOk}</td>
 			</tr>
 		);
@@ -81,15 +88,13 @@ class EncryptionConfigScreenComponent extends React.Component {
 		const masterKeys = this.state.masterKeys;
 		const containerPadding = 10;
 
-		const headerStyle = {
-			width: style.width,
-		};
+		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
 
-		const containerStyle = {
+		const containerStyle = Object.assign({}, theme.containerStyle, {
 			padding: containerPadding,
 			overflow: 'auto',
 			height: style.height - theme.headerHeight - containerPadding * 2,
-		};
+		});
 
 		const mkComps = [];
 		let nonExistingMasterKeyIds = this.props.notLoadedMasterKeys.slice();
@@ -126,7 +131,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 		}
 
 		const decryptedItemsInfo = <p style={theme.textStyle}>{shared.decryptedStatText(this)}</p>;
-		const toggleButton = <button onClick={() => { onToggleButtonClick() }}>{this.props.encryptionEnabled ? _('Disable encryption') : _('Enable encryption')}</button>
+		const toggleButton = <button style={theme.buttonStyle} onClick={() => { onToggleButtonClick() }}>{this.props.encryptionEnabled ? _('Disable encryption') : _('Enable encryption')}</button>
 
 		let masterKeySection = null;
 

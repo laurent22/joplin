@@ -37,6 +37,7 @@ require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
 // https://highlightjs.org/static/demo/
 require('brace/theme/chrome');
+require('brace/theme/twilight');
 
 class NoteTextComponent extends React.Component {
 
@@ -1401,6 +1402,10 @@ class NoteTextComponent extends React.Component {
 			paddingLeft: 8,
 			paddingRight: 8,
 			marginRight: rootStyle.paddingLeft,
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+			border: '1px solid',
+			borderColor: theme.dividerColor,
 		};
 
 		const toolbarStyle = {
@@ -1432,6 +1437,9 @@ class NoteTextComponent extends React.Component {
 			paddingTop: paddingTop + 'px',
 			lineHeight: theme.textAreaLineHeight + 'px',
 			fontSize: theme.fontSize + 'px',
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+			editorTheme: theme.editorTheme,
 		};
 
 		if (visiblePanes.indexOf('viewer') < 0) {
@@ -1462,7 +1470,8 @@ class NoteTextComponent extends React.Component {
 
 			const htmlHasChanged = this.lastSetHtml_ !== html;
 			 if (htmlHasChanged) {
-				this.webview_.send('setHtml', html);
+				let options = {codeTheme: theme.codeThemeCss};
+				this.webview_.send('setHtml', html, options);
 				this.lastSetHtml_ = html;
 			}
 
@@ -1535,7 +1544,7 @@ class NoteTextComponent extends React.Component {
 		const editor =  <AceEditor
 			value={body}
 			mode="markdown"
-			theme="chrome"
+			theme={editorRootStyle.editorTheme}
 			style={editorRootStyle}
 			width={editorStyle.width + 'px'}
 			height={editorStyle.height + 'px'}

@@ -53,7 +53,7 @@ class Setting extends BaseModel {
 				options[Setting.TIME_FORMAT_2] = time.formatMsToLocal(now, Setting.TIME_FORMAT_2);
 				return options;
 			}},
-			'theme': { value: Setting.THEME_LIGHT, type: Setting.TYPE_INT, public: true, appTypes: ['mobile'], isEnum: true, label: () => _('Theme'), options: () => {
+			'theme': { value: Setting.THEME_LIGHT, type: Setting.TYPE_INT, public: true, appTypes: ['mobile', 'desktop'], isEnum: true, label: () => _('Theme'), options: () => {
 				let output = {};
 				output[Setting.THEME_LIGHT] = _('Light');
 				output[Setting.THEME_DARK] = _('Dark');
