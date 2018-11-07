@@ -1,5 +1,6 @@
 require('app-module-path').addPath(__dirname);
 
+const os = require('os');
 const { time } = require('lib/time-utils.js');
 const { filename } = require('lib/path-utils.js');
 const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
@@ -39,9 +40,14 @@ describe('HtmlToMd', function() {
 			// if (htmlFilename !== 'anchor_with_url_with_spaces.html') continue;
 
 			const html = await shim.fsDriver().readFile(htmlPath);
-			const expectedMd = await shim.fsDriver().readFile(mdPath);
+			let expectedMd = await shim.fsDriver().readFile(mdPath);
 
-			const actualMd = await htmlToMd.parse('<div>' + html + '</div>', []);
+			let actualMd = await htmlToMd.parse('<div>' + html + '</div>', []);
+
+			if (os.EOL === '\r\n') {
+				expectedMd = expectedMd.replace(/\r\n/g, '\n')
+				actualMd = actualMd.replace(/\r\n/g, '\n')
+			}
 
 			if (actualMd !== expectedMd) {
 				console.info('');

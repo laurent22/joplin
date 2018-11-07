@@ -6,7 +6,7 @@ const Search = require('lib/models/Search.js');
 const { time } = require('lib/time-utils.js');
 const Setting = require('lib/models/Setting.js');
 const { IconButton } = require('./IconButton.min.js');
-const { urlDecode } = require('lib/string-utils');
+const { urlDecode, escapeHtml } = require('lib/string-utils');
 const Toolbar = require('./Toolbar.min.js');
 const TagList = require('./TagList.min.js');
 const { connect } = require('react-redux');
@@ -864,20 +864,7 @@ class NoteTextComponent extends React.Component {
 		let commandProcessed = true;
 
 		if (command.name === 'exportPdf' && this.webview_) {
-			const path = bridge().showSaveDialog({
-				filters: [{ name: _('PDF File'), extensions: ['pdf']}],
-				defaultPath: safeFilename(this.state.note.title),
-			});
-
-			if (path) {
-				this.webview_.printToPDF({}, (error, data) => {
-					if (error) {
-						bridge().showErrorMessageBox(error.message);
-					} else {
-						shim.fsDriver().writeFile(path, data, 'buffer');
-					}
-				});
-			}
+			this.commandSavePdf();
 		} else if (command.name === 'print' && this.webview_) {
 			this.webview_.print();
 		} else if (command.name === 'textBold') {
@@ -940,6 +927,44 @@ class NoteTextComponent extends React.Component {
 			name: 'editAlarm',
 			noteId: this.state.note.id,
 		});
+	}
+
+	commandSavePdf() {
+		const path = bridge().showSaveDialog({
+			filters: [{ name: _('PDF File'), extensions: ['pdf']}],
+			defaultPath: safeFilename(this.state.note.title),
+		});
+
+		if (path) {
+			// Temporarily add a <h2> title in the webview
+			const newHtml = this.insertHtmlHeading_(this.lastSetHtml_, this.state.note.title);
+			this.webview_.send('setHtml', newHtml);
+
+			setTimeout(() => {
+				this.webview_.printToPDF({}, (error, data) => {
+					if (error) {
+						bridge().showErrorMessageBox(error.message);
+					} else {
+						shim.fsDriver().writeFile(path, data, 'buffer');
+					}
+	
+					// Refresh the webview, restoring the previous content
+					this.lastSetHtml_ = '';
+					this.forceUpdate();
+				});
+			}, 100);
+		}
+	}
+
+	insertHtmlHeading_(s, heading) {
+		const tag = 'h2';
+		const marker = '<!-- START_OF_DOCUMENT -->'
+		let splitStyle = s.split(marker);
+		const index = splitStyle.length > 1 ? 1 : 0;
+		let toInsert = escapeHtml(heading);
+		toInsert = '<' + tag + '>' + toInsert + '</' + tag + '>';
+		splitStyle[index] = toInsert + splitStyle[index];
+		return splitStyle.join(marker);
 	}
 
 	externalEditWatcher() {
