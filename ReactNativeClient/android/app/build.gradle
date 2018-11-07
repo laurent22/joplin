@@ -90,8 +90,8 @@ android {
 		applicationId "net.cozic.joplin"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-		versionCode 2097410
-		versionName "1.0.174"
+		versionCode 2097411
+		versionName "1.0.175"
 		ndk {
 			abiFilters "armeabi-v7a", "x86"
 		}
@@ -153,6 +153,7 @@ dependencies {
 	compile project(':react-native-document-picker')
 	compile project(':react-native-image-resizer')
 	compile project(':react-native-share-extension')
+	compile project(':react-native-version-info')
 	compile "com.facebook.react:react-native:+"
 
 	// To fix the error below, which happened after adding react-native-camera.

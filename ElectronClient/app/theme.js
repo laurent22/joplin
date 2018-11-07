@@ -20,6 +20,8 @@ const globalStyle = {
 	headerButtonHPadding: 6,
 
 	toolbarHeight: 35,
+	tagItemPadding: 3,
+	tagBackgroundColor: '#e5e5e5',
 };
 
 // For WebView - must correspond to the properties above
@@ -162,6 +164,19 @@ const darkStyle = {
 
 	editorTheme: 'twilight',
 	codeThemeCss: "atom-one-dark-reasonable.css",
+};
+
+globalStyle.tagStyle = {
+	fontSize: globalStyle.fontSize,
+	fontFamily: globalStyle.fontFamily,
+	marginTop: globalStyle.itemMarginTop * 0.4,
+	marginBottom: globalStyle.itemMarginBottom * 0.4,
+	marginRight: globalStyle.margin * 0.3,
+	paddingTop: globalStyle.tagItemPadding,
+	paddingBottom: globalStyle.tagItemPadding,
+	paddingRight: globalStyle.tagItemPadding * 2,
+	paddingLeft: globalStyle.tagItemPadding * 2,
+	backgroundColor: globalStyle.tagBackgroundColor
 };
 
 let themeCache_ = {};
