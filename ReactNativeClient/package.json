@@ -16,7 +16,7 @@
     "events": "^1.1.1",
     "form-data": "^2.1.4",
     "html-entities": "^1.2.1",
-    "katex": "^0.9.0-beta1",
+    "katex": "^0.10.1-pre",
     "markdown-it": "^8.4.0",
     "markdown-it-katex": "^2.0.3",
     "md5": "^2.2.1",
