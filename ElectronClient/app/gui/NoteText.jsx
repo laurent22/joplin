@@ -466,6 +466,13 @@ class NoteTextComponent extends React.Component {
 
 		this.setState(newState);
 
+		// https://github.com/laurent22/joplin/pull/893#discussion_r228025210
+		// @Abijeet: Had to add this check. If not, was going into an infinite loop where state was getting updated repeatedly.
+		// Since I'm updating the state, the componentWillReceiveProps was getting triggered again, where nextProps.newNote was still true, causing reloadNote to trigger again and again.
+		// Notes from Laurent: The selected note tags are part of the global Redux state because they need to be updated whenever tags are changed or deleted
+		// anywhere in the app. Thus it's not possible simple to load the tags here (as we won't have a way to know if they're updated afterwards).
+		// Perhaps a better way would be to move that code in the middleware, check for TAGS_DELETE, TAGS_UPDATE, etc. actions and update the 
+		// selected note tags accordingly.
 		if (!this.props.newNote) {
 			this.props.dispatch({
 				type: "SET_NOTE_TAGS",
