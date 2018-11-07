@@ -59,7 +59,7 @@
 	let hljsScriptAdded = false;
 	let hljsLoaded = false;
 
-	function loadHljs(callback) {
+	function loadHljs(options) {
 		hljsScriptAdded = true;
 
 		const script = document.createElement('script');
@@ -74,16 +74,16 @@
 		link.rel = 'stylesheet';
 		// https://ace.c9.io/build/kitchen-sink.html
 		// https://highlightjs.org/static/demo/
-		link.href = 'highlight/styles/atom-one-light.css';
+		link.href = 'highlight/styles/' + options.codeTheme;
 		document.getElementById('hlScriptContainer').appendChild(link);
 	}
 
-	function loadAndApplyHljs() {
+	function loadAndApplyHljs(options) {
 		var codeElements = document.getElementsByClassName('code');
 		if (!codeElements.length) return;
 
 		if (!hljsScriptAdded) {
-			this.loadHljs();
+			this.loadHljs(options);
 			return;
 		}
 
@@ -142,7 +142,7 @@
 
 		contentElement.innerHTML = html;
 
-		loadAndApplyHljs();
+		loadAndApplyHljs(event.options);
 
 		// Remove the bullet from "ul" for checkbox lists and extra padding
 		// const checkboxes = document.getElementsByClassName('checkbox');

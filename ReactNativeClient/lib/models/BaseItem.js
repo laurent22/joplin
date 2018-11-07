@@ -224,7 +224,7 @@ class BaseItem extends BaseModel {
 	static unserialize_format(type, propName, propValue) {
 		if (propName[propName.length - 1] == '_') return propValue; // Private property
 
-		let ItemClass = this.itemClass(type);
+		const ItemClass = this.itemClass(type);
 
 		if (['created_time', 'updated_time', 'user_created_time', 'user_updated_time'].indexOf(propName) >= 0) {
 			if (!propValue) return 0;
@@ -377,6 +377,9 @@ class BaseItem extends BaseModel {
 		}
 
 		if (output.type_ === BaseModel.TYPE_NOTE) output.body = body.join("\n");
+
+		const ItemClass = this.itemClass(output.type_);
+		output = ItemClass.removeUnknownFields(output);
 
 		for (let n in output) {
 			if (!output.hasOwnProperty(n)) continue;

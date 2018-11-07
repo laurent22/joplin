@@ -47,17 +47,14 @@ class StatusScreenComponent extends React.Component {
 		const theme = themeStyle(this.props.theme);
 		const style = this.props.style;
 
-		const headerStyle = {
-			width: style.width,
-		};
+		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
 
 		const containerPadding = 10;
 
-		const containerStyle = {
+		const containerStyle = Object.assign({}, theme.containerStyle, {
 			padding: containerPadding,
-			overflowY: 'auto',
 			height: style.height - theme.headerHeight - containerPadding * 2,
-		};
+		});
 
 		function renderSectionTitleHtml(key, title) {
 			return <h2 key={'section_' + key} style={theme.h2Style}>{title}</h2>

@@ -5,8 +5,8 @@
 
 const ipcRenderer = require('electron').ipcRenderer;
 
-ipcRenderer.on('setHtml', (event, html) => {
-	window.postMessage({ target: 'webview', name: 'setHtml', data: { html: html } }, '*');
+ipcRenderer.on('setHtml', (event, html, options) => {
+	window.postMessage({ target: 'webview', name: 'setHtml', data: { html: html, options: options } }, '*');
 });
 
 ipcRenderer.on('setPercentScroll', (event, percent) => {

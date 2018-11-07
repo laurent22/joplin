@@ -59,7 +59,7 @@ class PromptDialog extends React.Component {
 		};
 
 		this.styles_.promptDialog = {
-			backgroundColor: 'white',
+			backgroundColor: theme.backgroundColor,
 			padding: 16,
 			display: 'inline-block',
 			boxShadow: '6px 6px 20px rgba(0,0,0,0.5)',
@@ -69,6 +69,10 @@ class PromptDialog extends React.Component {
 			minWidth: theme.buttonMinWidth,
 			minHeight: theme.buttonMinHeight,
 			marginLeft: 5,
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+			border: '1px solid',
+			borderColor: theme.dividerColor,
 		};
 
 		this.styles_.label = {
@@ -82,6 +86,10 @@ class PromptDialog extends React.Component {
 		this.styles_.input = {
 			width: 0.5 * width,
 			maxWidth: 400,
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+			border: '1px solid',
+			borderColor: theme.dividerColor,
 		};
 
 		this.styles_.desc = Object.assign({}, theme.textStyle, {
@@ -142,6 +150,7 @@ class PromptDialog extends React.Component {
 		if (this.props.inputType === 'datetime') {
 			inputComp = <Datetime
 				value={this.state.answer}
+				inputProps={{style: styles.input}}
 				dateFormat={time.dateFormat()}
 				timeFormat={time.timeFormat()}
 				onChange={(momentObject) => onDateTimeChange(momentObject)}
@@ -166,7 +175,7 @@ class PromptDialog extends React.Component {
 			<div style={styles.modalLayer}>
 				<div style={styles.promptDialog}>
 					<label style={styles.label}>{this.props.label ? this.props.label : ''}</label>
-					<div style={{display: 'inline-block'}}>
+					<div style={{display: 'inline-block', color: 'black', backgroundColor: theme.backgroundColor}}>
 						{inputComp}
 						{descComp}
 					</div>

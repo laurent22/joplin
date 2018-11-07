@@ -599,8 +599,8 @@ class MdToHtml {
 				max-width: 100%;
 			}
 			.inline-code {
-				border: 1px solid #CBCBCB;
-				background-color: #eff0f1;
+				border: 1px solid ` + style.htmlCodeBorderColor + `;
+				background-color: ` + style.htmlCodeColor + `;
 				padding-right: .2em;
 				padding-left: .2em;
 			}

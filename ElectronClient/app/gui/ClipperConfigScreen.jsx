@@ -45,15 +45,21 @@ class ClipperConfigScreenComponent extends React.Component {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.theme);
 
-		const headerStyle = {
-			width: style.width,
-		};
+		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
+
+		const containerStyle = Object.assign({}, theme.containerStyle, {
+			overflowY: 'scroll',
+			height:style.height,
+		});
+
+		const buttonStyle = Object.assign({}, theme.buttonStyle, { marginRight: 10 });
 
 		const stepBoxStyle = {
 			border: "1px solid #ccc",
 			padding: 15,
 			paddingTop: 0,
 			marginBottom: 15,
+			backgroundColor: theme.backgroundColor,
 		};
 
 		let webClipperStatusComps = [];
@@ -68,7 +74,7 @@ class ClipperConfigScreenComponent extends React.Component {
 			webClipperStatusComps.push(<button key="disable_button" onClick={this.disableClipperServer_click}>{_('Disable Web Clipper Service')}</button>)
 		} else {
 			webClipperStatusComps.push(<p key="text_4" style={theme.textStyle}>{_('The web clipper service is not enabled.')}</p>)
-			webClipperStatusComps.push(<button key="enable_button" onClick={this.enableClipperServer_click}>{_('Enable Web Clipper Service')}</button>)
+			webClipperStatusComps.push(<button key="enable_button" style={buttonStyle} onClick={this.enableClipperServer_click}>{_('Enable Web Clipper Service')}</button>)
 		}
 
 		const apiTokenStyle = Object.assign({}, theme.textStyle, {
@@ -81,7 +87,7 @@ class ClipperConfigScreenComponent extends React.Component {
 		return (
 			<div>
 				<Header style={headerStyle} />
-				<div style={{overflowY:'scroll', height:style.height}}>
+				<div style={containerStyle}>
 					<div style={{padding: theme.margin}}>
 						<p style={theme.textStyle}>{_('Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.')}</p>
 						<p style={theme.textStyle}>{_('In order to use the web clipper, you need to do the following:')}</p>
@@ -106,7 +112,7 @@ class ClipperConfigScreenComponent extends React.Component {
 						<div style={stepBoxStyle}>
 							<p style={theme.h1Style}>{_('Advanced options')}</p>
 							<p style={theme.textStyle}>{_('Authorisation token:')}</p>
-							<p style={apiTokenStyle}>{this.props.apiToken} <a href="#" onClick={this.copyToken_click}>{_('Copy token')}</a></p>
+							<p style={apiTokenStyle}>{this.props.apiToken} <a style={theme.urlStyle} href="#" onClick={this.copyToken_click}>{_('Copy token')}</a></p>
 							<p style={theme.textStyle}>{_('This authorisation token is only needed to allow third-party applications to access Joplin.')}</p>
 						</div>
 					</div>

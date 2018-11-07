@@ -8,6 +8,7 @@ const Setting = require('lib/models/Setting.js');
 const { IconButton } = require('./IconButton.min.js');
 const { urlDecode } = require('lib/string-utils');
 const Toolbar = require('./Toolbar.min.js');
+const TagList = require('./TagList.min.js');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const { reg } = require('lib/registry.js');
@@ -36,6 +37,7 @@ require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
 // https://highlightjs.org/static/demo/
 require('brace/theme/chrome');
+require('brace/theme/twilight');
 
 class NoteTextComponent extends React.Component {
 
@@ -53,6 +55,7 @@ class NoteTextComponent extends React.Component {
 			scrollHeight: null,
 			editorScrollTop: 0,
 			newNote: null,
+			noteTags: [],
 
 			// If the current note was just created, and the title has never been
 			// changed by the user, this variable contains that note ID. Used
@@ -213,7 +216,7 @@ class NoteTextComponent extends React.Component {
 
 	// Note:
 	// - What's called "cursor position" is expressed as { row: x, column: y } and is how Ace Editor get/set the cursor position
-	// - A "range" defines a selection with a start and end cusor position, expressed as { start: <CursorPos>, end: <CursorPos> } 
+	// - A "range" defines a selection with a start and end cusor position, expressed as { start: <CursorPos>, end: <CursorPos> }
 	// - A "text offset" below is the absolute position of the cursor in the string, as would be used in the indexOf() function.
 	// The functions below are used to convert between the different types.
 	rangeToTextOffsets(range, body) {
@@ -261,7 +264,7 @@ class NoteTextComponent extends React.Component {
 			}
 
 			row++;
-			currentOffset += line.length + 1;	
+			currentOffset += line.length + 1;
 		}
 	}
 
@@ -275,11 +278,12 @@ class NoteTextComponent extends React.Component {
 
 	async componentWillMount() {
 		let note = null;
-
+		let noteTags = [];
 		if (this.props.newNote) {
 			note = Object.assign({}, this.props.newNote);
 		} else if (this.props.noteId) {
 			note = await Note.load(this.props.noteId);
+			noteTags = this.props.noteTags || [];
 		}
 
 		const folder = note ? Folder.byId(this.props.folders, note.parent_id) : null;
@@ -289,6 +293,7 @@ class NoteTextComponent extends React.Component {
 			note: note,
 			folder: folder,
 			isLoading: false,
+			noteTags: noteTags
 		});
 
 		this.lastLoadedNoteId_ = note ? note.id : null;
@@ -361,6 +366,7 @@ class NoteTextComponent extends React.Component {
 		let note = null;
 		let loadingNewNote = true;
 		let parentFolder = null;
+		let noteTags = [];
 
 		if (props.newNote) {
 			note = Object.assign({}, props.newNote);
@@ -369,6 +375,7 @@ class NoteTextComponent extends React.Component {
 		} else {
 			noteId = props.noteId;
 			loadingNewNote = stateNoteId !== noteId;
+			noteTags = await Tag.tagsByNoteId(noteId);
 			this.lastLoadedNoteId_ = noteId;
 			note = noteId ? await Note.load(noteId) : null;
 			if (noteId !== this.lastLoadedNoteId_) return; // Race condition - current note was changed while this one was loading
@@ -446,6 +453,7 @@ class NoteTextComponent extends React.Component {
 			webviewReady: webviewReady,
 			folder: parentFolder,
 			lastKeys: [],
+			noteTags: noteTags
 		};
 
 		if (!note) {
@@ -459,6 +467,20 @@ class NoteTextComponent extends React.Component {
 
 		this.setState(newState);
 
+		// https://github.com/laurent22/joplin/pull/893#discussion_r228025210
+		// @Abijeet: Had to add this check. If not, was going into an infinite loop where state was getting updated repeatedly.
+		// Since I'm updating the state, the componentWillReceiveProps was getting triggered again, where nextProps.newNote was still true, causing reloadNote to trigger again and again.
+		// Notes from Laurent: The selected note tags are part of the global Redux state because they need to be updated whenever tags are changed or deleted
+		// anywhere in the app. Thus it's not possible simple to load the tags here (as we won't have a way to know if they're updated afterwards).
+		// Perhaps a better way would be to move that code in the middleware, check for TAGS_DELETE, TAGS_UPDATE, etc. actions and update the 
+		// selected note tags accordingly.
+		if (!this.props.newNote) {
+			this.props.dispatch({
+				type: "SET_NOTE_TAGS",
+				items: noteTags,
+			});
+		}
+
 		this.updateHtml(newState.note ? newState.note.body : '');
 	}
 
@@ -467,6 +489,10 @@ class NoteTextComponent extends React.Component {
 			await this.reloadNote(nextProps);
 		} else if ('noteId' in nextProps && nextProps.noteId !== this.props.noteId) {
 			await this.reloadNote(nextProps);
+		} else if ('noteTags' in nextProps && this.areNoteTagsModified(nextProps.noteTags, this.state.noteTags)) {
+			this.setState({
+				noteTags: nextProps.noteTags
+			});
 		}
 
 		if ('syncStarted' in nextProps && !nextProps.syncStarted && !this.isModified()) {
@@ -480,6 +506,24 @@ class NoteTextComponent extends React.Component {
 
 	isModified() {
 		return shared.isModified(this);
+	}
+
+	areNoteTagsModified(newTags, oldTags) {
+		if (!oldTags) return true;
+
+		if (newTags.length !== oldTags.length) return true;
+
+		for (let i = 0; i < newTags.length; ++i) {
+			let currNewTag = newTags[i];
+			for (let j = 0; j < oldTags.length; ++j) {
+				let currOldTag = oldTags[j];
+				if (currOldTag.id === currNewTag.id && currOldTag.updated_time !== currNewTag.updated_time) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	refreshNoteMetadata(force = null) {
@@ -1359,13 +1403,20 @@ class NoteTextComponent extends React.Component {
 			paddingLeft: 8,
 			paddingRight: 8,
 			marginRight: rootStyle.paddingLeft,
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+			border: '1px solid',
+			borderColor: theme.dividerColor,
 		};
 
 		const toolbarStyle = {
+		};
+
+		const tagStyle = {
 			marginBottom: 10,
 		};
 
-		const bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - toolbarStyle.marginBottom;
+		const bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight;
 
 		const viewerStyle = {
 			width: Math.floor(innerWidth / 2),
@@ -1387,6 +1438,9 @@ class NoteTextComponent extends React.Component {
 			paddingTop: paddingTop + 'px',
 			lineHeight: theme.textAreaLineHeight + 'px',
 			fontSize: theme.fontSize + 'px',
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+			editorTheme: theme.editorTheme,
 		};
 
 		if (visiblePanes.indexOf('viewer') < 0) {
@@ -1417,7 +1471,8 @@ class NoteTextComponent extends React.Component {
 
 			const htmlHasChanged = this.lastSetHtml_ !== html;
 			 if (htmlHasChanged) {
-				this.webview_.send('setHtml', html);
+				let options = {codeTheme: theme.codeThemeCss};
+				this.webview_.send('setHtml', html, options);
 				this.lastSetHtml_ = html;
 			}
 
@@ -1445,6 +1500,11 @@ class NoteTextComponent extends React.Component {
 			onChange={(event) => { this.title_changeText(event); }}
 			placeholder={ this.props.newNote ? _('Creating new %s...', isTodo ? _('to-do') : _('note')) : '' }
 		/>
+
+		const tagList = <TagList
+			style={tagStyle}
+			items={this.state.noteTags}
+		/>;
 
 		const titleBarMenuButton = <IconButton style={{
 			display: 'flex',
@@ -1485,7 +1545,7 @@ class NoteTextComponent extends React.Component {
 		const editor =  <AceEditor
 			value={body}
 			mode="markdown"
-			theme="chrome"
+			theme={editorRootStyle.editorTheme}
 			style={editorRootStyle}
 			width={editorStyle.width + 'px'}
 			height={editorStyle.height + 'px'}
@@ -1517,6 +1577,7 @@ class NoteTextComponent extends React.Component {
 					{ false ? titleBarMenuButton : null }
 				</div>
 				{ toolbar }
+				{ tagList }
 				{ editor }
 				{ viewer }
 			</div>
@@ -1528,6 +1589,7 @@ class NoteTextComponent extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		noteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
+		noteTags: state.selectedNoteTags,
 		folderId: state.selectedFolderId,
 		itemType: state.selectedItemType,
 		folders: state.folders,
