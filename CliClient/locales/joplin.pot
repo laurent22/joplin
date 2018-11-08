@@ -1242,12 +1242,6 @@ msgid ""
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
 
-msgid ""
-"The editor that will be used to open a note. Use quotes like "
-"\"C:\\Program Files\\Edit.exe\" if the path contains spaces."
-"If none is provided it will try to auto-detect the default editor."
-msgstr ""
-
 msgid "Show advanced options"
 msgstr ""
 
