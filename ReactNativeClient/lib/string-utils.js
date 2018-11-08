@@ -136,7 +136,12 @@ async function prepareCmdStringWindows(cmd, fnExists) {
 	return cmd;
 }
 
-function splitCommandString(command) {
+function splitCommandString(command, options = null) {
+	options = options || {};
+	if (!('handleEscape' in options)) {
+		options.handleEscape = true;
+	}
+	
 	let args = [];
 	let state = "start"
 	let current = ""
@@ -162,7 +167,7 @@ function splitCommandString(command) {
 			continue;
 		}
 
-		if (c == "\\") {
+		if (c == "\\" && options.handleEscape) {
 			escapeNext = true;
 			continue;
 		}
@@ -224,4 +229,4 @@ function urlDecode(string) {
 	return decodeURIComponent((string+'').replace(/\+/g, '%20'));
 }
 
-module.exports = { removeDiacritics, escapeFilename, wrap, prepareCmdStringWindows, splitCommandString, padLeft, toTitleCase };
+module.exports = { removeDiacritics, escapeFilename, wrap, splitCommandString, padLeft, toTitleCase };

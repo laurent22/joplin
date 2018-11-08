@@ -123,17 +123,11 @@ class ExternalEditWatcher {
 		return false;
 	}
 
-	async textEditorCommand() {
-		let editorCommand = Setting.value('editor');
+	textEditorCommand() {
+		const editorCommand = Setting.value('editor');
 		if (!editorCommand) return null;
 
-		if (shim.isWindows()) {
-			editorCommand = await prepareCmdStringWindows(editorCommand,
-				(fpath) => shim.fsDriver().exists(fpath));
-		}
-
-		const s = splitCommandString(editorCommand);
-
+		const s = splitCommandString(editorCommand, {handleEscape: false});
 		const path = s.splice(0, 1);
 		if (!path.length) throw new Error('Invalid editor command: ' + editorCommand);
 
@@ -171,7 +165,7 @@ class ExternalEditWatcher {
 		const filePath = await this.writeNoteToFile_(note);
 		this.watch(filePath);
 
-		const cmd = await this.textEditorCommand();
+		const cmd = this.textEditorCommand();
 		if (!cmd) {
 			bridge().openExternal('file://' + filePath);
 		} else {
