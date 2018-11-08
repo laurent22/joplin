@@ -253,6 +253,12 @@ class Command extends BaseCommand {
 				lines.push('');
 				lines.push('      curl --data \'{ "title": "Image test", "body": "Here is Joplin icon:", "image_data_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAANZJREFUeNoAyAA3/wFwtO3K6gUB/vz2+Prw9fj/+/r+/wBZKAAExOgF4/MC9ff+MRH6Ui4E+/0Bqc/zutj6AgT+/Pz7+vv7++nu82c4DlMqCvLs8goA/gL8/fz09fb59vXa6vzZ6vjT5fbn6voD/fwC8vX4UiT9Zi//APHyAP8ACgUBAPv5APz7BPj2+DIaC2o3E+3o6ywaC5fT6gD6/QD9/QEVf9kD+/dcLQgJA/7v8vqfwOf18wA1IAIEVycAyt//v9XvAPv7APz8LhoIAPz9Ri4OAgwARgx4W/6fVeEAAAAASUVORK5CYII="}\' http://127.0.0.1:41184/notes');
 				lines.push('');
+				lines.push('### Creating a note with a specific ID');
+				lines.push('');
+				lines.push('When a new note is created, it is automatically assigned a new unique ID so **normally you do not need to set the ID**. However, if for some reason you want to set it, you can supply it as the `id` property. It needs to be a 32 characters long hexadecimal string. **Make sure it is unique**, for example by generating it using whatever GUID function is available in your programming language.');
+				lines.push('');
+				lines.push('      curl --data \'{ "id": "00a87474082744c1a8515da6aa5792d2", "title": "My note with custom ID"}\' http://127.0.0.1:41184/notes');
+				lines.push('');
 			}
 
 			lines.push('## PUT /' + tableName + '/:id');

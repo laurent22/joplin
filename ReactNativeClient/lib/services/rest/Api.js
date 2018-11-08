@@ -339,7 +339,9 @@ class Api {
 
 			this.logger().info('Request (' + requestId + '): Saving note...');
 
-			note = await Note.save(note);
+			const saveOptions = {};
+			if (note.id) saveOptions.isNew = true;
+			note = await Note.save(note, saveOptions);
 
 			if (requestNote.tags) {
 				const tagTitles = requestNote.tags.split(',');
@@ -377,6 +379,8 @@ class Api {
 			title: requestNote.title ? requestNote.title : '',
 			body: requestNote.body ? requestNote.body : '',
 		};
+
+		if (requestNote.id) output.id = requestNote.id;
 
 		if (requestNote.body_html) {
 			// Parsing will not work if the HTML is not wrapped in a top level tag, which is not guaranteed

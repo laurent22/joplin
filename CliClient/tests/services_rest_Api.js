@@ -156,6 +156,20 @@ describe('services_rest_Api', function() {
 		done();
 	});
 
+	it('should create notes with supplied ID', async (done) => {
+		let response = null;
+		const f = await Folder.save({ title: "mon carnet" });
+		
+		response = await api.route('POST', 'notes', null, JSON.stringify({
+			id: '12345678123456781234567812345678',
+			title: 'testing',
+			parent_id: f.id,
+		}));
+		expect(response.id).toBe('12345678123456781234567812345678');
+
+		done();
+	});
+
 	it('should create notes with images', async (done) => {
 		let response = null;
 		const f = await Folder.save({ title: "mon carnet" });
