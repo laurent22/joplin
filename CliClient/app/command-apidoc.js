@@ -69,7 +69,8 @@ class Command extends BaseCommand {
 		lines.push('    }');
 		lines.push('}');
 		lines.push('```');
-
+		lines.push('');
+		
 		lines.push('# Authorisation')
 		lines.push('');
 		lines.push('To prevent unauthorised applications from accessing the API, the calls must be authentified. To do so, you must provide a token as a query parameter for each API call. You can get this token from the Joplin desktop application, on the Web Clipper Options screen.');
@@ -79,6 +80,7 @@ class Command extends BaseCommand {
 		lines.push('\tcurl http://localhost:41184/notes?token=ABCD123ABCD123ABCD123ABCD123ABCD123');
 		lines.push('');
 		lines.push('In the documentation below, the token will not be specified every time however you will need to include it.');
+		lines.push('');
 
 		lines.push('# Using the API');
 		lines.push('');

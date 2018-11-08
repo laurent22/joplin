@@ -280,7 +280,12 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <li><strong>PUT</strong>: To update an item. Note in a REST API, traditionally PUT is used to completely replace an item, however in this API it will only replace the properties that are provided. For example if you PUT {&quot;title&quot;: &quot;my new title&quot;}, only the &quot;title&quot; property will be changed. The other properties will be left untouched (they won&#39;t be cleared nor changed).</li>
 <li><strong>DELETE</strong>: To delete items.</li>
 </ul>
-<h1 id="about-the-property-types">About the property types</h1>
+<h1 id="filtering-data">Filtering data</h1>
+<p>You can change the fields that will be returned by the API using the <code>fields=</code> query parameter, which takes a list of comma separated fields. For example, to get the longitude and latitude of a note, use this:</p>
+<pre><code>curl http://localhost:41184/notes/ABCD123?fields=longitude,latitude
+</code></pre><p>To get the IDs only of all the tags:</p>
+<pre><code>curl http://localhost:41184/tags?fields=id
+</code></pre><h1 id="about-the-property-types">About the property types</h1>
 <ul>
 <li>Text is UTF-8.</li>
 <li>All date/time are Unix timestamps in milliseconds.</li>
@@ -434,6 +439,11 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <td>text</td>
 <td>If an image is provided, you can also specify an optional rectangle that will be used to crop the image. In format <code>{ x: x, y: y, width: width, height: height }</code></td>
 </tr>
+<tr>
+<td>tags</td>
+<td>text</td>
+<td>Comma-separated list of tags. eg. <code>tag1,tag2</code>.</td>
+</tr>
 </tbody>
 </table>
 <h2 id="get-notes">GET /notes</h2>
@@ -457,7 +467,10 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <pre><code>curl --data &#39;{ &quot;title&quot;: &quot;Image test&quot;, &quot;body&quot;: &quot;Here is Joplin icon:&quot;, &quot;image_data_url&quot;: &quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAANZJREFUeNoAyAA3/wFwtO3K6gUB/vz2+Prw9fj/+/r+/wBZKAAExOgF4/MC9ff+MRH6Ui4E+/0Bqc/zutj6AgT+/Pz7+vv7++nu82c4DlMqCvLs8goA/gL8/fz09fb59vXa6vzZ6vjT5fbn6voD/fwC8vX4UiT9Zi//APHyAP8ACgUBAPv5APz7BPj2+DIaC2o3E+3o6ywaC5fT6gD6/QD9/QEVf9kD+/dcLQgJA/7v8vqfwOf18wA1IAIEVycAyt//v9XvAPv7APz8LhoIAPz9Ri4OAgwARgx4W/6fVeEAAAAASUVORK5CYII=&quot;}&#39; http://127.0.0.1:41184/notes
 </code></pre></li>
 </ul>
-<h2 id="put-notes-id">PUT /notes/:id</h2>
+<h3 id="creating-a-note-with-a-specific-id">Creating a note with a specific ID</h3>
+<p>When a new note is created, it is automatically assigned a new unique ID so <strong>normally you do not need to set the ID</strong>. However, if for some reason you want to set it, you can supply it as the <code>id</code> property. It needs to be a 32 characters long hexadecimal string. <strong>Make sure it is unique</strong>, for example by generating it using whatever GUID function is available in your programming language.</p>
+<pre><code>  curl --data &#39;{ &quot;id&quot;: &quot;00a87474082744c1a8515da6aa5792d2&quot;, &quot;title&quot;: &quot;My note with custom ID&quot;}&#39; http://127.0.0.1:41184/notes
+</code></pre><h2 id="put-notes-id">PUT /notes/:id</h2>
 <p>Sets the properties of the note with ID :id</p>
 <h2 id="delete-notes-id">DELETE /notes/:id</h2>
 <p>Deletes the note with ID :id</p>
@@ -604,12 +617,24 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <td>int</td>
 <td></td>
 </tr>
+<tr>
+<td>fetch_status</td>
+<td>int</td>
+<td></td>
+</tr>
+<tr>
+<td>fetch_error</td>
+<td>text</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h2 id="get-resources">GET /resources</h2>
 <p>Gets all resources</p>
 <h2 id="get-resources-id">GET /resources/:id</h2>
 <p>Gets resource with ID :id</p>
+<h2 id="get-resources-id-file">GET /resources/:id/file</h2>
+<p>Gets the actual file associated with this resource.</p>
 <h2 id="post-resources">POST /resources</h2>
 <p>Creates a new resource</p>
 <p>Creating a new resource is special because you also need to upload the file. Unlike other API calls, this one must have the &quot;multipart/form-data&quot; Content-Type. The file data must be passed to the &quot;data&quot; form field, and the other properties to the &quot;props&quot; form field. An example of a valid call with cURL would be:</p>
