@@ -169,8 +169,25 @@ function defaultNotesParentType(state, exclusion) {
 	return newNotesParentType;
 }
 
+function changeSelectedFolder(state, action) {
+	newState = Object.assign({}, state);
+	newState.selectedFolderId = 'folderId' in action ? action.folderId : action.id;
+	if (!newState.selectedFolderId) {
+		newState.notesParentType = defaultNotesParentType(state, 'Folder');
+	} else {
+		newState.notesParentType = 'Folder';
+	}
+	return newState;
+}
+
 function changeSelectedNotes(state, action) {
-	const noteIds = 'id' in action ? (action.id ? [action.id] : []) : action.ids;
+	let noteIds = [];
+	if (action.id) noteIds = [action.id];
+	if (action.ids) noteIds = action.ids;
+	if (action.noteId) noteIds = [action.noteId];
+
+	// const noteIds = 'id' in action ? (action.id ? [action.id] : []) : action.ids;
+
 	let newState = Object.assign({}, state);
 
 	if (action.type === 'NOTE_SELECT') {
@@ -279,13 +296,14 @@ const reducer = (state = defaultState, action) => {
 
 			case 'FOLDER_SELECT':
 
-				newState = Object.assign({}, state);
-				newState.selectedFolderId = action.id;
-				if (!action.id) {
-					newState.notesParentType = defaultNotesParentType(state, 'Folder');
-				} else {
-					newState.notesParentType = 'Folder';
-				}
+				newState = changeSelectedFolder(state, action);
+				break;
+
+			case 'FOLDER_AND_NOTE_SELECT':
+
+				newState = changeSelectedFolder(state, action);
+				const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT'});
+				newState = changeSelectedNotes(newState, noteSelectAction);
 				break;
 
 			case 'SETTING_UPDATE_ALL':

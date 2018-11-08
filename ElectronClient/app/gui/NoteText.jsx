@@ -619,16 +619,10 @@ class NoteTextComponent extends React.Component {
 				bridge().openItem(filePath);
 			} else if (item.type_ === BaseModel.TYPE_NOTE) {
 				this.props.dispatch({
-					type: "FOLDER_SELECT",
-					id: item.parent_id,
+					type: "FOLDER_AND_NOTE_SELECT",
+					folderId: item.parent_id,
+					noteId: item.id,
 				});
-
-				setTimeout(() => {
-					this.props.dispatch({
-						type: 'NOTE_SELECT',
-						id: item.id,
-					});
-				}, 10);
 			} else {
 				throw new Error('Unsupported item type: ' + item.type_);
 			}
