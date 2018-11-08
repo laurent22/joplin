@@ -13,10 +13,9 @@ class InteropService_Exporter_Json extends InteropService_Exporter_Base {
 	}
 
 	async processItem(ItemClass, item) {
-		const obj = await this.buildPlainObjectForJson_(ItemClass, item);
 		const fileName = ItemClass.systemPath(item, "json");
 		const filePath = this.destDir_ + '/' + fileName;
-		const serialized = JSON.stringify(obj);
+		const serialized = JSON.stringify(item);
 		await shim.fsDriver().writeFile(filePath, serialized, 'utf-8');
 	}
 
@@ -26,29 +25,6 @@ class InteropService_Exporter_Json extends InteropService_Exporter_Base {
 	}
 
 	async close() {}
-
-	async buildPlainObjectForJson_(ItemClass, item) {
-		let output = {};
-		let shownKeys = ItemClass.fieldNames();
-		shownKeys.push('type_');
-
-		item = ItemClass.filter(item);
-		for (let i = 0; i < shownKeys.length; i++) {
-			let key = shownKeys[i];
-			let value = null;
-			if (typeof key === 'function') {
-				let r = await key();
-				key = r.key;
-				value = r.value;
-			} else {
-				value = ItemClass.serialize_format(key, item[key]);
-			}
-
-			output[key] = value;
-		}
-
-		return output;
-	}
 }
 
 module.exports = InteropService_Exporter_Json;
