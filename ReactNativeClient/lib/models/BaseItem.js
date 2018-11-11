@@ -75,9 +75,14 @@ class BaseItem extends BaseModel {
 		return r.total;
 	}
 
-	static systemPath(itemOrId) {
-		if (typeof itemOrId === 'string') return itemOrId + '.md';
-		return itemOrId.id + '.md';
+	static systemPath(itemOrId, extension = null) {
+		if (extension === null)
+			extension = 'md';
+
+		if (typeof itemOrId === 'string')
+			return itemOrId + '.' + extension;
+		else
+			return itemOrId.id + '.' + extension;
 	}
 
 	static isSystemPath(path) {
