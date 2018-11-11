@@ -18,6 +18,8 @@ If you want to add a new feature, consider asking about it before implementing i
 
 Building the apps is relatively easy - please [see the build instructions](https://github.com/laurent22/joplin/blob/master/BUILD.md) for more details.
 
+Pull requests that automatically change many files tend to be rejected (for example changes that automatically update the code styling, or to add new lines to many files, or to automatically convert images to a different format) so if you have such a pull request in mind, please discuss it first in the forum.
+
 # Coding style
 
 There are only two rules, but not following them means the pull request will not be accepted (it can be accepted once the issues are fixed):
