@@ -95,7 +95,7 @@
     "joplin-turndown": "^4.0.9",
     "joplin-turndown-plugin-gfm": "^1.0.7",
     "jssha": "^2.3.1",
-    "katex": "^0.10.1-pre",
+    "katex": "^0.10.0",
     "levenshtein": "^1.0.5",
     "lodash": "^4.17.10",
     "mark.js": "^8.11.1",
