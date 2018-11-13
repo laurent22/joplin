@@ -431,6 +431,9 @@ msgstr "無法初始化同步器。"
 msgid "Starting synchronisation..."
 msgstr "正在啟動同步..."
 
+msgid "Downloading resources..."
+msgstr ""
+
 msgid "Cancelling... Please wait."
 msgstr "正在取消中...請稍候。"
 
@@ -929,6 +932,9 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+msgid "Note properties"
+msgstr ""
+
 msgid "Open..."
 msgstr "開啟..."
 
@@ -944,6 +950,9 @@ msgstr "複製路徑到剪貼板"
 
 msgid "Copy Link Address"
 msgstr "複製鏈接位址"
+
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -979,9 +988,6 @@ msgstr "設置提醒"
 #, javascript-format
 msgid "In: %s"
 msgstr "在: %s"
-
-msgid "Note properties"
-msgstr ""
 
 msgid "Hyperlink"
 msgstr "超連結"
@@ -1058,6 +1064,14 @@ msgstr "進行同步"
 
 msgid "Notebooks"
 msgstr "記事本"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "正在解密項目: %d/%d 項"
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d"
+msgstr "資源: %d。"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "請選擇將同步狀態導出到的位置"
@@ -1146,10 +1160,6 @@ msgstr "已刪除的遠端項目: %d 項"
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "已擷取的本地項目: %d/%d 項"
-
-#, javascript-format
-msgid "State: %s."
-msgstr "狀態: %s。"
 
 msgid "Cancelling..."
 msgstr "正在取消中..."
@@ -1261,6 +1271,12 @@ msgstr "顯示系統匣圖示"
 
 msgid "Note: Does not work in all desktop environments."
 msgstr "注意: 不是在全部桌面環境中都能發揮作用。"
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
+msgstr ""
 
 msgid "Start application minimised in the tray icon"
 msgstr ""
@@ -1388,6 +1404,10 @@ msgstr "Joplin 匯出目錄"
 msgid "Evernote Export File"
 msgstr "Evernote 匯出檔"
 
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "Joplin 匯出目錄"
+
 msgid "Directory"
 msgstr "目錄"
 
@@ -1459,6 +1479,12 @@ msgstr "將會發生的提醒事項"
 msgid "On %s: %s"
 msgstr "在 %s: %s"
 
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "您當前沒有任何筆記。通過按一下 (+) 鍵去新增一則筆記。"
 
@@ -1502,10 +1528,6 @@ msgstr "確認"
 
 msgid "Cancel synchronisation"
 msgstr "取消同步"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "正在解密項目: %d/%d 項"
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1642,6 +1664,9 @@ msgstr "顯示後設資料 (metadata)"
 msgid "View on map"
 msgstr "在地圖上顯示"
 
+msgid "Go to source URL"
+msgstr ""
+
 msgid "Delete notebook"
 msgstr "刪除記事本"
 
@@ -1661,6 +1686,9 @@ msgstr "您當前沒有任何筆記本。通過按一下 (+) 鍵去建立一本�
 
 msgid "Welcome"
 msgstr "歡迎"
+
+#~ msgid "State: %s."
+#~ msgstr "狀態: %s。"
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "同名筆記本已經存在: \"%s\""

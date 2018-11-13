@@ -408,6 +408,9 @@ msgstr ""
 msgid "Starting synchronisation..."
 msgstr ""
 
+msgid "Downloading resources..."
+msgstr ""
+
 msgid "Cancelling... Please wait."
 msgstr ""
 
@@ -874,6 +877,9 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+msgid "Note properties"
+msgstr ""
+
 msgid "Open..."
 msgstr ""
 
@@ -888,6 +894,9 @@ msgid "Copy path to clipboard"
 msgstr ""
 
 msgid "Copy Link Address"
+msgstr ""
+
+msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
 
 #, javascript-format
@@ -923,9 +932,6 @@ msgstr ""
 
 #, javascript-format
 msgid "In: %s"
-msgstr ""
-
-msgid "Note properties"
 msgstr ""
 
 msgid "Hyperlink"
@@ -1002,6 +1008,14 @@ msgid "Synchronise"
 msgstr ""
 
 msgid "Notebooks"
+msgstr ""
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr ""
+
+#, javascript-format
+msgid "Fetching resources: %d"
 msgstr ""
 
 msgid "Please select where the sync status should be exported to"
@@ -1085,10 +1099,6 @@ msgstr ""
 
 #, javascript-format
 msgid "Fetched items: %d/%d."
-msgstr ""
-
-#, javascript-format
-msgid "State: %s."
 msgstr ""
 
 msgid "Cancelling..."
@@ -1200,6 +1210,12 @@ msgid "Show tray icon"
 msgstr ""
 
 msgid "Note: Does not work in all desktop environments."
+msgstr ""
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
 msgstr ""
 
 msgid "Start application minimised in the tray icon"
@@ -1319,6 +1335,9 @@ msgstr ""
 msgid "Evernote Export File"
 msgstr ""
 
+msgid "Json Export Directory"
+msgstr ""
+
 msgid "Directory"
 msgstr ""
 
@@ -1388,6 +1407,12 @@ msgstr ""
 msgid "On %s: %s"
 msgstr ""
 
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 
@@ -1429,10 +1454,6 @@ msgid "Confirm"
 msgstr ""
 
 msgid "Cancel synchronisation"
-msgstr ""
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
 msgstr ""
 
 msgid "Checking... Please wait."
@@ -1563,6 +1584,9 @@ msgid "Show metadata"
 msgstr ""
 
 msgid "View on map"
+msgstr ""
+
+msgid "Go to source URL"
 msgstr ""
 
 msgid "Delete notebook"

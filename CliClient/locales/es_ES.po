@@ -457,6 +457,9 @@ msgstr "No se puede inicializar sincronizador."
 msgid "Starting synchronisation..."
 msgstr "Iniciando sincronización..."
 
+msgid "Downloading resources..."
+msgstr ""
+
 msgid "Cancelling... Please wait."
 msgstr "Cancelando... Por favor espere."
 
@@ -977,6 +980,9 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+msgid "Note properties"
+msgstr ""
+
 msgid "Open..."
 msgstr "Abrir..."
 
@@ -992,6 +998,9 @@ msgstr "Copiar la ruta en el portapapeles"
 
 msgid "Copy Link Address"
 msgstr "Copiar enlace"
+
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1029,9 +1038,6 @@ msgstr "Establecer alarma"
 #, javascript-format
 msgid "In: %s"
 msgstr "En: %s"
-
-msgid "Note properties"
-msgstr ""
 
 msgid "Hyperlink"
 msgstr "Hipervínculo"
@@ -1108,6 +1114,14 @@ msgstr "Sincronizar"
 
 msgid "Notebooks"
 msgstr "Libretas"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Descifrando elementos: %d/%d."
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d"
+msgstr "Recursos: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccione a dónde se debería exportar el estado de sincronización"
@@ -1199,10 +1213,6 @@ msgstr "Elementos remotos borrados: %d."
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Elementos obtenidos: %d/%d."
-
-#, javascript-format
-msgid "State: %s."
-msgstr "Estado: «%s»."
 
 msgid "Cancelling..."
 msgstr "Cancelando..."
@@ -1315,6 +1325,12 @@ msgstr "Mostrar icono en la bandeja"
 
 msgid "Note: Does not work in all desktop environments."
 msgstr "Nota: No funciona en todos los entornos de escritorio."
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
+msgstr ""
 
 msgid "Start application minimised in the tray icon"
 msgstr ""
@@ -1449,6 +1465,10 @@ msgstr "Directorio para exportar de Joplin"
 msgid "Evernote Export File"
 msgstr "Archivo exportado de Evernote"
 
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "Directorio para exportar de Joplin"
+
 msgid "Directory"
 msgstr "Directorio"
 
@@ -1523,6 +1543,12 @@ msgstr "Alarmas próximas"
 msgid "On %s: %s"
 msgstr "En %s: %s"
 
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "No hay notas. Cree una pulsando en el botón (+)."
 
@@ -1566,10 +1592,6 @@ msgstr "Confirmar"
 
 msgid "Cancel synchronisation"
 msgstr "Cancelar sincronización"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Descifrando elementos: %d/%d."
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1712,6 +1734,9 @@ msgstr "Mostrar metadatos"
 msgid "View on map"
 msgstr "Ver en un mapa"
 
+msgid "Go to source URL"
+msgstr ""
+
 msgid "Delete notebook"
 msgstr "Borrar libreta"
 
@@ -1734,6 +1759,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+#~ msgid "State: %s."
+#~ msgstr "Estado: «%s»."
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "Ya existe una libreta con este nombre: «%s»"

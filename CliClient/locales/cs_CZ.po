@@ -448,6 +448,9 @@ msgstr "Nelze zavézt synchronizátor."
 msgid "Starting synchronisation..."
 msgstr "Zahajuji synchronizaci..."
 
+msgid "Downloading resources..."
+msgstr ""
+
 msgid "Cancelling... Please wait."
 msgstr "Zastavuji, chvíli strpení."
 
@@ -955,6 +958,9 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+msgid "Note properties"
+msgstr ""
+
 msgid "Open..."
 msgstr "Otevřít..."
 
@@ -969,6 +975,9 @@ msgid "Copy path to clipboard"
 msgstr ""
 
 msgid "Copy Link Address"
+msgstr ""
+
+msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
 
 #, javascript-format
@@ -1005,9 +1014,6 @@ msgstr "Nastavit alarm"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
-
-msgid "Note properties"
-msgstr ""
 
 msgid "Hyperlink"
 msgstr ""
@@ -1086,6 +1092,14 @@ msgstr "Synchronizovat"
 
 msgid "Notebooks"
 msgstr "Zápisníky"
+
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Získané položky: %d/%d."
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d"
+msgstr "Zdroje: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Prosím vyberte, kam má být stav synchronizace exportován"
@@ -1177,10 +1191,6 @@ msgstr "Položky smazané na vzdáleném úložišti: %d."
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Získané položky: %d/%d."
-
-#, javascript-format
-msgid "State: %s."
-msgstr "Stav: %s."
 
 msgid "Cancelling..."
 msgstr "Zastavuji..."
@@ -1296,6 +1306,12 @@ msgid "Show tray icon"
 msgstr "Zobrazovat ikonu v panelu"
 
 msgid "Note: Does not work in all desktop environments."
+msgstr ""
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
 msgstr ""
 
 msgid "Start application minimised in the tray icon"
@@ -1426,6 +1442,10 @@ msgstr "Složka pro export"
 msgid "Evernote Export File"
 msgstr "Soubor Evernote Exportu"
 
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "Složka pro export"
+
 msgid "Directory"
 msgstr "Adresář"
 
@@ -1500,6 +1520,12 @@ msgstr "Nadcházející alarmy"
 msgid "On %s: %s"
 msgstr "Na %s: %s"
 
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Nemáte žádné poznámky. Vytvořte jednu kliknutím na tlačítko (+)."
 
@@ -1544,10 +1570,6 @@ msgstr "Potvrdit"
 
 msgid "Cancel synchronisation"
 msgstr "Zrušit synchronizaci"
-
-#, fuzzy, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Získané položky: %d/%d."
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1683,6 +1705,9 @@ msgstr "Zobrazit metadata"
 msgid "View on map"
 msgstr "Zobrazit na map+"
 
+msgid "Go to source URL"
+msgstr ""
+
 msgid "Delete notebook"
 msgstr "Smazat zápisník"
 
@@ -1704,6 +1729,9 @@ msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na tlačítko (+
 
 msgid "Welcome"
 msgstr "Vítejte"
+
+#~ msgid "State: %s."
+#~ msgstr "Stav: %s."
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "Zápisník s tímto názvem již existuje: \"%s\""

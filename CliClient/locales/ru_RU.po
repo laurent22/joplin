@@ -456,6 +456,9 @@ msgstr "Не удалось инициировать синхронизацию.
 msgid "Starting synchronisation..."
 msgstr "Начало синхронизации..."
 
+msgid "Downloading resources..."
+msgstr ""
+
 msgid "Cancelling... Please wait."
 msgstr "Отмена... Пожалуйста, ожидайте."
 
@@ -971,6 +974,9 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+msgid "Note properties"
+msgstr ""
+
 msgid "Open..."
 msgstr "Открыть..."
 
@@ -985,6 +991,9 @@ msgid "Copy path to clipboard"
 msgstr ""
 
 msgid "Copy Link Address"
+msgstr ""
+
+msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
 
 #, javascript-format
@@ -1023,9 +1032,6 @@ msgstr "Установить напоминание"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
-
-msgid "Note properties"
-msgstr ""
 
 msgid "Hyperlink"
 msgstr ""
@@ -1104,6 +1110,14 @@ msgstr "Синхронизировать"
 
 msgid "Notebooks"
 msgstr "Блокноты"
+
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Получено элементов: %d/%d."
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d"
+msgstr "Ресурсов: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Выберите, куда должен быть экспортирован статус синхронизации"
@@ -1195,10 +1209,6 @@ msgstr "Удалено удалённых элементов: %d."
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Получено элементов: %d/%d."
-
-#, fuzzy, javascript-format
-msgid "State: %s."
-msgstr "Статус: «%s»."
 
 msgid "Cancelling..."
 msgstr "Отмена..."
@@ -1314,6 +1324,12 @@ msgid "Show tray icon"
 msgstr "Показывать иконку в панели задач"
 
 msgid "Note: Does not work in all desktop environments."
+msgstr ""
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
 msgstr ""
 
 msgid "Start application minimised in the tray icon"
@@ -1444,6 +1460,10 @@ msgstr "Папка экспорта Joplin"
 msgid "Evernote Export File"
 msgstr "Файл экспорта Evernote"
 
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "Папка экспорта Joplin"
+
 msgid "Directory"
 msgstr "Директория"
 
@@ -1519,6 +1539,12 @@ msgstr "Грядущие напоминания"
 msgid "On %s: %s"
 msgstr "В %s: %s"
 
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Сейчас здесь нет заметок. Создаёте новую, нажав кнопку (+)."
 
@@ -1563,10 +1589,6 @@ msgstr "Подтвердить"
 
 msgid "Cancel synchronisation"
 msgstr "Отменить синхронизацию"
-
-#, fuzzy, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Получено элементов: %d/%d."
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1702,6 +1724,9 @@ msgstr "Показать метаданные"
 msgid "View on map"
 msgstr "Посмотреть на карте"
 
+msgid "Go to source URL"
+msgstr ""
+
 msgid "Delete notebook"
 msgstr "Удалить блокнот"
 
@@ -1723,6 +1748,10 @@ msgstr "У вас сейчас нет блокнота. Создайте его 
 
 msgid "Welcome"
 msgstr "Добро пожаловать"
+
+#, fuzzy
+#~ msgid "State: %s."
+#~ msgstr "Статус: «%s»."
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "Блокнот с таким названием уже существует: «%s»"

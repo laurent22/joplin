@@ -455,6 +455,9 @@ msgstr "Ne mogu započeti sinkronizaciju."
 msgid "Starting synchronisation..."
 msgstr "Započinjem sinkronizaciju..."
 
+msgid "Downloading resources..."
+msgstr ""
+
 msgid "Cancelling... Please wait."
 msgstr "Prekidam... Pričekaj."
 
@@ -960,6 +963,9 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+msgid "Note properties"
+msgstr ""
+
 msgid "Open..."
 msgstr ""
 
@@ -975,6 +981,9 @@ msgid "Copy path to clipboard"
 msgstr ""
 
 msgid "Copy Link Address"
+msgstr ""
+
+msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
 
 #, javascript-format
@@ -1011,9 +1020,6 @@ msgstr "Postavi upozorenje"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
-
-msgid "Note properties"
-msgstr ""
 
 msgid "Hyperlink"
 msgstr ""
@@ -1094,6 +1100,14 @@ msgstr "Sinkroniziraj"
 
 msgid "Notebooks"
 msgstr "Bilježnice"
+
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Stvorene lokalne stavke: %d."
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d"
+msgstr "Resursi: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Odaberi lokaciju za izvoz statusa sinkronizacije"
@@ -1183,10 +1197,6 @@ msgstr "Obrisane udaljene stavke: %d."
 #, fuzzy, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Stvorene lokalne stavke: %d."
-
-#, fuzzy, javascript-format
-msgid "State: %s."
-msgstr "Stanje: \"%s\"."
 
 msgid "Cancelling..."
 msgstr "Prekidam..."
@@ -1308,6 +1318,12 @@ msgid "Show tray icon"
 msgstr ""
 
 msgid "Note: Does not work in all desktop environments."
+msgstr ""
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
 msgstr ""
 
 msgid "Start application minimised in the tray icon"
@@ -1435,6 +1451,10 @@ msgstr ""
 msgid "Evernote Export File"
 msgstr "Evernote izvozne datoteke"
 
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "Evernote izvozne datoteke"
+
 msgid "Directory"
 msgstr ""
 
@@ -1505,6 +1525,12 @@ msgstr "Nadolazeća upozorenja"
 msgid "On %s: %s"
 msgstr "On %s: %s"
 
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Trenutno nema bilješki. Stvori novu klikom na (+) gumb."
 
@@ -1549,10 +1575,6 @@ msgstr "Potvrdi"
 
 msgid "Cancel synchronisation"
 msgstr "Prekini sinkronizaciju"
-
-#, fuzzy, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Stvorene lokalne stavke: %d."
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1689,6 +1711,9 @@ msgstr "Prikaži metapodatke"
 msgid "View on map"
 msgstr "Vidi na karti"
 
+msgid "Go to source URL"
+msgstr ""
+
 msgid "Delete notebook"
 msgstr "Obriši bilježnicu"
 
@@ -1710,6 +1735,10 @@ msgstr "Trenutno nemaš nijednu bilježnicu. Stvori novu klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobro došli"
+
+#, fuzzy
+#~ msgid "State: %s."
+#~ msgstr "Stanje: \"%s\"."
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "Bilježnica s ovim naslovom već postoji: \"%s\""

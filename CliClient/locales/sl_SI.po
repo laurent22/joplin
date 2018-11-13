@@ -455,6 +455,9 @@ msgstr "Ni moč zagnati sinhronizatorja."
 msgid "Starting synchronisation..."
 msgstr "Sinhronizacija se začenja."
 
+msgid "Downloading resources..."
+msgstr ""
+
 msgid "Cancelling... Please wait."
 msgstr "V preklicu...Prosim počakajte."
 
@@ -975,6 +978,9 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+msgid "Note properties"
+msgstr ""
+
 msgid "Open..."
 msgstr "Odpri..."
 
@@ -989,6 +995,9 @@ msgid "Copy path to clipboard"
 msgstr ""
 
 msgid "Copy Link Address"
+msgstr ""
+
+msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
 
 #, javascript-format
@@ -1027,9 +1036,6 @@ msgstr "Nastavi alarm"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
-
-msgid "Note properties"
-msgstr ""
 
 msgid "Hyperlink"
 msgstr ""
@@ -1108,6 +1114,14 @@ msgstr "Sinhroniziraj"
 
 msgid "Notebooks"
 msgstr "Beležnice"
+
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Preneseni predmeti: %d/%d."
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d"
+msgstr "Viri: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Prosim izberite, kam želite izvoziti sinhronizacijski status"
@@ -1199,10 +1213,6 @@ msgstr "Izbrisani oddaljeni predmeti: %d."
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Preneseni predmeti: %d/%d."
-
-#, javascript-format
-msgid "State: %s."
-msgstr "Stanje: %s."
 
 msgid "Cancelling..."
 msgstr "V preklicu..."
@@ -1318,6 +1328,12 @@ msgid "Show tray icon"
 msgstr "Pokaži ikono v območju za obvestila(opravilna vrstica)"
 
 msgid "Note: Does not work in all desktop environments."
+msgstr ""
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
 msgstr ""
 
 msgid "Start application minimised in the tray icon"
@@ -1448,6 +1464,10 @@ msgstr "Joplin izvozno mesto"
 msgid "Evernote Export File"
 msgstr "Evernote izvozna datoteka"
 
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "Joplin izvozno mesto"
+
 msgid "Directory"
 msgstr "Mesto datoteke"
 
@@ -1522,6 +1542,12 @@ msgstr "Prihajajoči alarmi"
 msgid "On %s: %s"
 msgstr "Vključeno %s: %s"
 
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Trenutno ni zabeležk. Ustvarite jo s klikom na (+) gumb."
 
@@ -1566,10 +1592,6 @@ msgstr "Potrdi"
 
 msgid "Cancel synchronisation"
 msgstr "Prekliči sinhronizacijo"
-
-#, fuzzy, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Preneseni predmeti: %d/%d."
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1705,6 +1727,9 @@ msgstr "Prikaži meta podatke"
 msgid "View on map"
 msgstr "Prikaži na zemljevidu"
 
+msgid "Go to source URL"
+msgstr ""
+
 msgid "Delete notebook"
 msgstr "Izbriši beležnico"
 
@@ -1726,6 +1751,9 @@ msgstr "Trenutno nimate nobene beležnice. Ustvarite jo s klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobrodošli"
+
+#~ msgid "State: %s."
+#~ msgstr "Stanje: %s."
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "Beležnica s tem naslovom že obstaja: \"%s\""

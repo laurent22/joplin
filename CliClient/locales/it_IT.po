@@ -461,6 +461,9 @@ msgstr "Non è possibile inizializzare il sincronizzatore."
 msgid "Starting synchronisation..."
 msgstr "Inizio sincronizzazione..."
 
+msgid "Downloading resources..."
+msgstr ""
+
 msgid "Cancelling... Please wait."
 msgstr "Cancellazione... Attendere per favore."
 
@@ -977,6 +980,9 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+msgid "Note properties"
+msgstr ""
+
 msgid "Open..."
 msgstr "Apri ..."
 
@@ -992,6 +998,9 @@ msgstr "Copia il percorso negli appunti"
 
 msgid "Copy Link Address"
 msgstr "Copia l'indirizzo del link"
+
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1029,9 +1038,6 @@ msgstr "Imposta Allarme"
 #, javascript-format
 msgid "In: %s"
 msgstr "In: %s"
-
-msgid "Note properties"
-msgstr ""
 
 msgid "Hyperlink"
 msgstr "Collegamento ipertestuale"
@@ -1109,6 +1115,14 @@ msgstr "Sincronizza"
 
 msgid "Notebooks"
 msgstr "Taccuini"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Decrittografia Elementi: %d/%d"
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d"
+msgstr "Risorse: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1200,10 +1214,6 @@ msgstr "Elementi remoti eliminati: %d."
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Elementi recuperati: %d/%d."
-
-#, javascript-format
-msgid "State: %s."
-msgstr "Stato: %s."
 
 msgid "Cancelling..."
 msgstr "Cancellazione..."
@@ -1315,6 +1325,12 @@ msgstr "Visualizza tray icon"
 
 msgid "Note: Does not work in all desktop environments."
 msgstr "Nota: non funziona in tutti gli ambienti desktop."
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
+msgstr ""
 
 msgid "Start application minimised in the tray icon"
 msgstr ""
@@ -1448,6 +1464,10 @@ msgstr "Cartella di esportazione di Joplin"
 msgid "Evernote Export File"
 msgstr "Esporta files di Evernote"
 
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "Cartella di esportazione di Joplin"
+
 msgid "Directory"
 msgstr "Cartella"
 
@@ -1522,6 +1542,12 @@ msgstr "Avviso imminente"
 msgid "On %s: %s"
 msgstr "Su %s: %s"
 
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Al momento non ci sono note. Creane una cliccando sul bottone (+)."
 
@@ -1565,10 +1591,6 @@ msgstr "Conferma"
 
 msgid "Cancel synchronisation"
 msgstr "Cancella la sincronizzazione"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Decrittografia Elementi: %d/%d"
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1712,6 +1734,9 @@ msgstr "Mostra i metadati"
 msgid "View on map"
 msgstr "Guarda sulla mappa"
 
+msgid "Go to source URL"
+msgstr ""
+
 msgid "Delete notebook"
 msgstr "Cancella Taccuino"
 
@@ -1734,6 +1759,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvenuto"
+
+#~ msgid "State: %s."
+#~ msgstr "Stato: %s."
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "Esiste già un Taccuino col titolo \"%s\""

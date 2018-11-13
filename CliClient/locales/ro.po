@@ -414,6 +414,9 @@ msgstr "Nu se poate inițializa sincronizatorul."
 msgid "Starting synchronisation..."
 msgstr "Se începe sincronizarea..."
 
+msgid "Downloading resources..."
+msgstr ""
+
 msgid "Cancelling... Please wait."
 msgstr "Se anulează... Vă rugăm să așteptați."
 
@@ -891,6 +894,9 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+msgid "Note properties"
+msgstr ""
+
 msgid "Open..."
 msgstr "Deschideți..."
 
@@ -906,6 +912,9 @@ msgstr "Copiați locația în clipboard"
 
 msgid "Copy Link Address"
 msgstr "Copați adresa link-ului"
+
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -941,9 +950,6 @@ msgstr "Setați alarma"
 #, javascript-format
 msgid "In: %s"
 msgstr "În: %s"
-
-msgid "Note properties"
-msgstr ""
 
 msgid "Hyperlink"
 msgstr "Hyperlink"
@@ -1020,6 +1026,14 @@ msgstr "Sincronizați"
 
 msgid "Notebooks"
 msgstr "Caiete de notițe"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Se decriptează itemi: %d/%d"
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d"
+msgstr "Resurse: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1103,10 +1117,6 @@ msgstr ""
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr ""
-
-#, javascript-format
-msgid "State: %s."
-msgstr "Statut: %s."
 
 msgid "Cancelling..."
 msgstr "Se amână..."
@@ -1217,6 +1227,12 @@ msgid "Show tray icon"
 msgstr "Afișați iconița coșul de gunoi"
 
 msgid "Note: Does not work in all desktop environments."
+msgstr ""
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
 msgstr ""
 
 msgid "Start application minimised in the tray icon"
@@ -1336,6 +1352,9 @@ msgstr ""
 msgid "Evernote Export File"
 msgstr ""
 
+msgid "Json Export Directory"
+msgstr ""
+
 msgid "Directory"
 msgstr ""
 
@@ -1405,6 +1424,12 @@ msgstr "Alarmele următoare"
 msgid "On %s: %s"
 msgstr "Pe %s: %s"
 
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 
@@ -1448,10 +1473,6 @@ msgstr "Confirmați"
 
 msgid "Cancel synchronisation"
 msgstr "Amânați sincronizarea"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Se decriptează itemi: %d/%d"
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1584,6 +1605,9 @@ msgstr "Afișați metadatele"
 msgid "View on map"
 msgstr "Vizualizați pe hartă"
 
+msgid "Go to source URL"
+msgstr ""
+
 msgid "Delete notebook"
 msgstr "Ștergeți caiet de notițe"
 
@@ -1606,6 +1630,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bine ați venit"
+
+#~ msgid "State: %s."
+#~ msgstr "Statut: %s."
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "Un caiet de notițe cu acest titlu există deja: \"%s\""

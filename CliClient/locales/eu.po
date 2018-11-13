@@ -455,6 +455,9 @@ msgstr "Ezin has daiteke sinkronizazio prozesua."
 msgid "Starting synchronisation..."
 msgstr "Sinkronizazioa hasten..."
 
+msgid "Downloading resources..."
+msgstr ""
+
 msgid "Cancelling... Please wait."
 msgstr "Bertan behera uzten... itxaron, mesedez."
 
@@ -973,6 +976,9 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+msgid "Note properties"
+msgstr ""
+
 msgid "Open..."
 msgstr ""
 
@@ -988,6 +994,9 @@ msgid "Copy path to clipboard"
 msgstr ""
 
 msgid "Copy Link Address"
+msgstr ""
+
+msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
 
 #, javascript-format
@@ -1024,9 +1033,6 @@ msgstr "Ezarri alarma"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
-
-msgid "Note properties"
-msgstr ""
 
 msgid "Hyperlink"
 msgstr ""
@@ -1108,6 +1114,14 @@ msgstr "Sinkronizatu"
 
 msgid "Notebooks"
 msgstr "Koadernoak"
+
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Itemak eskuratuta: %d%d."
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d"
+msgstr "Baliabideak: %d."
 
 #, fuzzy
 msgid "Please select where the sync status should be exported to"
@@ -1201,10 +1215,6 @@ msgstr "Urruneko itemak ezabatuta: %d."
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Itemak eskuratuta: %d%d."
-
-#, fuzzy, javascript-format
-msgid "State: %s."
-msgstr "Egoera: \"%s\"."
 
 msgid "Cancelling..."
 msgstr "Bertan behera uzten..."
@@ -1325,6 +1335,12 @@ msgid "Show tray icon"
 msgstr ""
 
 msgid "Note: Does not work in all desktop environments."
+msgstr ""
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
 msgstr ""
 
 msgid "Start application minimised in the tray icon"
@@ -1458,6 +1474,10 @@ msgstr ""
 msgid "Evernote Export File"
 msgstr "Evernotetik esportatutako fitxategiak"
 
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "Evernotetik esportatutako fitxategiak"
+
 msgid "Directory"
 msgstr ""
 
@@ -1530,6 +1550,12 @@ msgstr "Hurrengo alarmak"
 msgid "On %s: %s"
 msgstr "On %s: %s"
 
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Ez dago oharrik. Sortu bat (+) botoian klik eginaz."
 
@@ -1574,10 +1600,6 @@ msgstr "Baieztatu"
 
 msgid "Cancel synchronisation"
 msgstr "Sinkronizazioa utzi"
-
-#, fuzzy, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Itemak eskuratuta: %d%d."
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1713,6 +1735,9 @@ msgstr "Erakutsi metadatuak"
 msgid "View on map"
 msgstr "Ikusi mapan"
 
+msgid "Go to source URL"
+msgstr ""
+
 msgid "Delete notebook"
 msgstr "Ezabatu koadernoa"
 
@@ -1734,6 +1759,10 @@ msgstr "Oraindik ez duzu koadernorik. Sortu bat (+) botoian sakatuta."
 
 msgid "Welcome"
 msgstr "Ongi etorri!"
+
+#, fuzzy
+#~ msgid "State: %s."
+#~ msgstr "Egoera: \"%s\"."
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "Dagoeneko bada koaderno bat izen horrekin: \"%s\""

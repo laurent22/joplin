@@ -445,6 +445,9 @@ msgstr "同期プロセスを初期化できませんでした。"
 msgid "Starting synchronisation..."
 msgstr "同期を開始中..."
 
+msgid "Downloading resources..."
+msgstr ""
+
 msgid "Cancelling... Please wait."
 msgstr "中止中...お待ちください。"
 
@@ -961,6 +964,9 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+msgid "Note properties"
+msgstr ""
+
 msgid "Open..."
 msgstr "開く..."
 
@@ -976,6 +982,9 @@ msgstr "クリップボードにパスを保存"
 
 msgid "Copy Link Address"
 msgstr "リンクアドレスをコピー"
+
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1013,9 +1022,6 @@ msgstr "アラームをセット"
 #, javascript-format
 msgid "In: %s"
 msgstr "内: %s"
-
-msgid "Note properties"
-msgstr ""
 
 msgid "Hyperlink"
 msgstr "ハイパーリンク"
@@ -1092,6 +1098,14 @@ msgstr "同期"
 
 msgid "Notebooks"
 msgstr "ノートブック"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "復号中のアイテム: %d/%d"
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d"
+msgstr "リソース: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "同期状況の出力先を選択してください"
@@ -1183,10 +1197,6 @@ msgstr "リモートアイテムの削除: %d."
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "取得したアイテム: %d/%d."
-
-#, javascript-format
-msgid "State: %s."
-msgstr "状態: \"%s\"."
 
 msgid "Cancelling..."
 msgstr "中止中..."
@@ -1300,6 +1310,12 @@ msgstr "トレイアイコンの表示"
 
 msgid "Note: Does not work in all desktop environments."
 msgstr "注意: すべてのデスクトップ環境で動作するわけではありません。"
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
+msgstr ""
 
 msgid "Start application minimised in the tray icon"
 msgstr "アプリケーションをトレイアンコンで最小化して起動"
@@ -1433,6 +1449,10 @@ msgstr "Joplin エクスポートディレクトリ"
 msgid "Evernote Export File"
 msgstr "Evernote エクスポートファイル"
 
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "Joplin エクスポートディレクトリ"
+
 msgid "Directory"
 msgstr "ディレクトリ"
 
@@ -1507,6 +1527,12 @@ msgstr "直近のアラーム"
 msgid "On %s: %s"
 msgstr "日時 %s: %s"
 
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "ノートがありません。(+)ボタンを押して新しいノートを作成してください。"
 
@@ -1550,10 +1576,6 @@ msgstr "確認"
 
 msgid "Cancel synchronisation"
 msgstr "同期の中止"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "復号中のアイテム: %d/%d"
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1692,6 +1714,9 @@ msgstr "メタデータを表示"
 msgid "View on map"
 msgstr "地図上に表示"
 
+msgid "Go to source URL"
+msgstr ""
+
 msgid "Delete notebook"
 msgstr "ノートブックを削除"
 
@@ -1715,6 +1740,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
+
+#~ msgid "State: %s."
+#~ msgstr "状態: \"%s\"."
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "次の名前のノートブックはすでに存在しています: \"%s\""

@@ -453,6 +453,9 @@ msgstr "Kan ikke starte synkronisering."
 msgid "Starting synchronisation..."
 msgstr "Starter synkronisering..."
 
+msgid "Downloading resources..."
+msgstr ""
+
 msgid "Cancelling... Please wait."
 msgstr "Stopper… Vennligst vent."
 
@@ -968,6 +971,9 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+msgid "Note properties"
+msgstr ""
+
 msgid "Open..."
 msgstr "Åpne..."
 
@@ -982,6 +988,9 @@ msgid "Copy path to clipboard"
 msgstr "Kopier sti til utklippshanteren"
 
 msgid "Copy Link Address"
+msgstr ""
+
+msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
 
 #, javascript-format
@@ -1020,9 +1029,6 @@ msgstr "Angi Alarm"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
-
-msgid "Note properties"
-msgstr ""
 
 msgid "Hyperlink"
 msgstr ""
@@ -1101,6 +1107,14 @@ msgstr "Synkroniser"
 
 msgid "Notebooks"
 msgstr "Notisbøker"
+
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Hentede elementer: %d/%d."
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d"
+msgstr "Ressurser: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Velg hvor synkroniseringsstatusen skal eksporteres til"
@@ -1192,10 +1206,6 @@ msgstr "Slett eksterne elementer: %d."
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Hentede elementer: %d/%d."
-
-#, javascript-format
-msgid "State: %s."
-msgstr "Status: %s."
 
 msgid "Cancelling..."
 msgstr "Stopper… Vennligst vent."
@@ -1310,6 +1320,12 @@ msgstr "Vis ikon i systemkurven"
 
 msgid "Note: Does not work in all desktop environments."
 msgstr "Merk: fungerer ikke i alle skrivebordsmiljøer."
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
+msgstr ""
 
 msgid "Start application minimised in the tray icon"
 msgstr ""
@@ -1440,6 +1456,10 @@ msgstr "Joplin Export Katalog"
 msgid "Evernote Export File"
 msgstr "Evernote Export Fil"
 
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "Joplin Export Katalog"
+
 msgid "Directory"
 msgstr "Katalog"
 
@@ -1514,6 +1534,12 @@ msgstr "Kommende alarmer"
 msgid "On %s: %s"
 msgstr "Pa %s: %s"
 
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Du har ennå ingen notater. Lag en ved å klikke på (+) knappen."
 
@@ -1558,10 +1584,6 @@ msgstr "Bekreft"
 
 msgid "Cancel synchronisation"
 msgstr "Stopp Synkronisering"
-
-#, fuzzy, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Hentede elementer: %d/%d."
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1700,6 +1722,9 @@ msgstr "Vis Metadata"
 msgid "View on map"
 msgstr "Se på kart"
 
+msgid "Go to source URL"
+msgstr ""
+
 msgid "Delete notebook"
 msgstr "Slett notisbok"
 
@@ -1721,6 +1746,9 @@ msgstr "Du har ennå ingen notisbok. Lag en ved å klikke på  (+) knappen."
 
 msgid "Welcome"
 msgstr "Velkommen"
+
+#~ msgid "State: %s."
+#~ msgstr "Status: %s."
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "En notisblokk med denne tittelen eksisterer allerede: \"%s\""

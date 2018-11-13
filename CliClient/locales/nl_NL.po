@@ -457,6 +457,9 @@ msgstr "De synchronisatie kan niet worden geïnitaliseerd."
 msgid "Starting synchronisation..."
 msgstr "Bezig met starten van synchronisatie..."
 
+msgid "Downloading resources..."
+msgstr ""
+
 msgid "Cancelling... Please wait."
 msgstr "Bezig met annuleren... Even geduld."
 
@@ -983,6 +986,9 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+msgid "Note properties"
+msgstr ""
+
 msgid "Open..."
 msgstr "Openen..."
 
@@ -998,6 +1004,9 @@ msgstr "Pad kopiëren naar klembord"
 
 msgid "Copy Link Address"
 msgstr "Linkadres kopiëren"
+
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1035,9 +1044,6 @@ msgstr "Alarm instellen"
 #, javascript-format
 msgid "In: %s"
 msgstr "In: %s"
-
-msgid "Note properties"
-msgstr ""
 
 msgid "Hyperlink"
 msgstr "Hyperlink"
@@ -1114,6 +1120,14 @@ msgstr "Synchroniseren"
 
 msgid "Notebooks"
 msgstr "Notitieboeken"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Bezig met ontsleutelen van items: %d/%d"
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d"
+msgstr "Bronnen: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Kies waar de synchronisatiestatus naar moet worden geëxporteerd"
@@ -1205,10 +1219,6 @@ msgstr "Externe items verwijderd: %d."
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Items opgehaald: %d/%d."
-
-#, javascript-format
-msgid "State: %s."
-msgstr "Status: %s."
 
 msgid "Cancelling..."
 msgstr "Bezig met annuleren..."
@@ -1320,6 +1330,12 @@ msgstr "Systeemvakpictogram tonen"
 
 msgid "Note: Does not work in all desktop environments."
 msgstr "Let op: dit werkt niet in alle werkomgevingen."
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
+msgstr ""
 
 msgid "Start application minimised in the tray icon"
 msgstr ""
@@ -1454,6 +1470,10 @@ msgstr "Joplin-exportmap"
 msgid "Evernote Export File"
 msgstr "Evernote-exportbestand"
 
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "Joplin-exportmap"
+
 msgid "Directory"
 msgstr "Map"
 
@@ -1530,6 +1550,12 @@ msgstr "Aankomende alarmen"
 msgid "On %s: %s"
 msgstr "Op %s: %s"
 
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 "Er zijn momenteel geen notities. Creëer een notitie door te drukken op de "
@@ -1575,10 +1601,6 @@ msgstr "Bevestigen"
 
 msgid "Cancel synchronisation"
 msgstr "Synchronisatie annuleren"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Bezig met ontsleutelen van items: %d/%d"
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1718,6 +1740,9 @@ msgstr "Metagegevens tonen"
 msgid "View on map"
 msgstr "Tonen op kaart"
 
+msgid "Go to source URL"
+msgstr ""
+
 msgid "Delete notebook"
 msgstr "Notitieboek verwijderen"
 
@@ -1741,6 +1766,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Welkom"
+
+#~ msgid "State: %s."
+#~ msgstr "Status: %s."
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "Er bestaat al een notitieboek met deze titel: \"%s\""

@@ -458,6 +458,9 @@ msgstr "Impossible d'initialiser la synchronisation."
 msgid "Starting synchronisation..."
 msgstr "Commencement de la synchronisation..."
 
+msgid "Downloading resources..."
+msgstr "Téléchargement des ressources..."
+
 msgid "Cancelling... Please wait."
 msgstr "Annulation... Veuillez attendre."
 
@@ -981,6 +984,9 @@ msgstr "Lieu"
 msgid "URL"
 msgstr "URL"
 
+msgid "Note properties"
+msgstr "Propriétés de la note"
+
 msgid "Open..."
 msgstr "Ouvrir..."
 
@@ -1036,9 +1042,6 @@ msgstr "Régler alarme"
 #, javascript-format
 msgid "In: %s"
 msgstr "Dans : %s"
-
-msgid "Note properties"
-msgstr "Propriétés de la note"
 
 msgid "Hyperlink"
 msgstr "Lien"
@@ -1119,6 +1122,10 @@ msgstr "Carnets"
 #, javascript-format
 msgid "Decrypting items: %d/%d"
 msgstr "Déchiffrement des objets : %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d"
+msgstr "Tél. ressources : %d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1211,10 +1218,6 @@ msgstr "Objets distants supprimés : %d."
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Téléchargés : %d/%d."
-
-#, javascript-format
-msgid "State: %s."
-msgstr "État : %s."
 
 msgid "Cancelling..."
 msgstr "Annulation..."
@@ -1332,9 +1335,9 @@ msgid ""
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
-"Cela permettra à Joplin de s'exécuter en arrière-plan. Il est "
-"recommandé d'activer ce réglage pour que vos notes soient constamment "
-"synchronisées, donc réduire le nombre de conflits."
+"Cela permettra à Joplin de s'exécuter en arrière-plan. Il est recommandé "
+"d'activer ce réglage pour que vos notes soient constamment synchronisées, "
+"donc réduire le nombre de conflits."
 
 msgid "Start application minimised in the tray icon"
 msgstr "Démarrer minimisé dans la zone de notification"
@@ -1470,6 +1473,9 @@ msgstr "Dossier d'export Joplin"
 
 msgid "Evernote Export File"
 msgstr "Fichiers d'export Evernote"
+
+msgid "Json Export Directory"
+msgstr "Dossier d'export JSON"
 
 msgid "Directory"
 msgstr "Dossier"
@@ -1766,6 +1772,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "State: %s."
+#~ msgstr "État : %s."
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "Un carnet avec ce titre existe déjà : \"%s\""

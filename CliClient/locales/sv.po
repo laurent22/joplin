@@ -461,6 +461,9 @@ msgstr "Kan inte initiera synkroniseraren."
 msgid "Starting synchronisation..."
 msgstr "Startar synkronisering..."
 
+msgid "Downloading resources..."
+msgstr ""
+
 msgid "Cancelling... Please wait."
 msgstr "Avbryter... vänta."
 
@@ -984,6 +987,9 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+msgid "Note properties"
+msgstr ""
+
 msgid "Open..."
 msgstr "Öppna..."
 
@@ -999,6 +1005,9 @@ msgstr "Kopiera sökväg till urklipp"
 
 msgid "Copy Link Address"
 msgstr "Kopiera länkadress"
+
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1036,9 +1045,6 @@ msgstr "Sätt alarm"
 #, javascript-format
 msgid "In: %s"
 msgstr "I: %s"
-
-msgid "Note properties"
-msgstr ""
 
 msgid "Hyperlink"
 msgstr "Hyperlänk"
@@ -1115,6 +1121,14 @@ msgstr "Synkronisera"
 
 msgid "Notebooks"
 msgstr "Anteckningsböcker"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Dekrypterar objekt: %d/%d"
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d"
+msgstr "Resurser: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Välj vart synkroniseringstillståndet ska exporteras till"
@@ -1206,10 +1220,6 @@ msgstr "Borttagna fjärrobjekt: %d."
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Hämtade objekt: %d/%d."
-
-#, javascript-format
-msgid "State: %s."
-msgstr "Tillstånd: %s."
 
 msgid "Cancelling..."
 msgstr "Avbryter..."
@@ -1322,6 +1332,12 @@ msgstr "Visa fältikon"
 
 msgid "Note: Does not work in all desktop environments."
 msgstr "Obs: Fungerar inte i alla skrivbordsmiljöer."
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
+msgstr ""
 
 msgid "Start application minimised in the tray icon"
 msgstr ""
@@ -1455,6 +1471,10 @@ msgstr "Joplin-exporteringskatalog"
 msgid "Evernote Export File"
 msgstr "Evernote-exporteringsfil"
 
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "Joplin-exporteringskatalog"
+
 msgid "Directory"
 msgstr "Katalog"
 
@@ -1529,6 +1549,12 @@ msgstr "Kommande larm"
 msgid "On %s: %s"
 msgstr "På %s: %s"
 
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 "Det finns för närvarande inga anteckningar. Skapa en genom att klicka på (+)-"
@@ -1574,10 +1600,6 @@ msgstr "Bekräfta"
 
 msgid "Cancel synchronisation"
 msgstr "Avbryt synkronisering"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Dekrypterar objekt: %d/%d"
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1721,6 +1743,9 @@ msgstr "Visa metadata"
 msgid "View on map"
 msgstr "Visa på karta"
 
+msgid "Go to source URL"
+msgstr ""
+
 msgid "Delete notebook"
 msgstr "Ta bort anteckningsbok"
 
@@ -1745,6 +1770,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Välkommen"
+
+#~ msgid "State: %s."
+#~ msgstr "Tillstånd: %s."
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "En anteckningsbok med denna titel finns redan: \"%s\""

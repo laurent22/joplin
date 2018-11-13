@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.1.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
@@ -472,6 +470,9 @@ msgstr "Kann Synchronisierer nicht initialisieren."
 
 msgid "Starting synchronisation..."
 msgstr "Starte Synchronisation..."
+
+msgid "Downloading resources..."
+msgstr ""
 
 msgid "Cancelling... Please wait."
 msgstr "Abbrechen… Bitte warten."
@@ -997,6 +998,9 @@ msgstr "Standort"
 msgid "URL"
 msgstr "URL"
 
+msgid "Note properties"
+msgstr "Notiz-Eigenschaften"
+
 msgid "Open..."
 msgstr "Öffne..."
 
@@ -1012,6 +1016,9 @@ msgstr "Pfad in Zwischenablage kopieren"
 
 msgid "Copy Link Address"
 msgstr "Link-Adresse kopieren"
+
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1049,9 +1056,6 @@ msgstr "Alarm erstellen"
 #, javascript-format
 msgid "In: %s"
 msgstr "In: %s"
-
-msgid "Note properties"
-msgstr "Notiz-Eigenschaften"
 
 msgid "Hyperlink"
 msgstr "Weblink"
@@ -1128,6 +1132,14 @@ msgstr "Synchronisieren"
 
 msgid "Notebooks"
 msgstr "Notizbücher"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Entschlüsselte Objekte: %d/%d"
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d"
+msgstr "Anhänge: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1220,10 +1232,6 @@ msgstr "Remote-Objekte gelöscht: %d."
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Geladene Objekte: %d/%d."
-
-#, javascript-format
-msgid "State: %s."
-msgstr "Status: %s."
 
 msgid "Cancelling..."
 msgstr "Breche ab…"
@@ -1336,6 +1344,12 @@ msgstr "Zeige Tray-Icon"
 
 msgid "Note: Does not work in all desktop environments."
 msgstr "Hinweis: Funktioniert nicht in allen Desktopumgebungen."
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
+msgstr ""
 
 msgid "Start application minimised in the tray icon"
 msgstr "Starte die Anwendung minimiert im Tray"
@@ -1473,6 +1487,10 @@ msgstr "Joplin Export Verzeichnis"
 msgid "Evernote Export File"
 msgstr "Evernote Export Datei"
 
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "Joplin Export Verzeichnis"
+
 msgid "Directory"
 msgstr "Verzeichnis"
 
@@ -1548,6 +1566,12 @@ msgstr "Anstehende Alarme"
 msgid "On %s: %s"
 msgstr "Auf %s: %s"
 
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 "Momentan existieren noch keine Notizen. Erstelle eine, indem du auf den (+) "
@@ -1592,10 +1616,6 @@ msgstr "Bestätigen"
 
 msgid "Cancel synchronisation"
 msgstr "Synchronisation abbrechen"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Entschlüsselte Objekte: %d/%d"
 
 msgid "Checking... Please wait."
 msgstr "Überprüfe… Bitte warten."
@@ -1742,6 +1762,9 @@ msgstr "Metadaten anzeigen"
 msgid "View on map"
 msgstr "Auf der Karte anzeigen"
 
+msgid "Go to source URL"
+msgstr ""
+
 msgid "Delete notebook"
 msgstr "Notizbuch löschen"
 
@@ -1766,6 +1789,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Willkommen"
+
+#~ msgid "State: %s."
+#~ msgstr "Status: %s."
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "Ein Notizbuch mit diesem Titel existiert bereits : \"%s\""
