@@ -238,7 +238,7 @@ function shimInit() {
 			host: url.hostname,
 			port: url.port,
 			method: method,
-			path: url.path + (url.query ? '?' + url.query : ''),
+			path: url.pathname + (url.query ? '?' + url.query : ''),
 			headers: headers,
 		};
 
