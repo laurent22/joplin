@@ -310,4 +310,25 @@ describe('services_InteropService', function() {
 		expect(note2_2.body.indexOf(note1_2.id) >= 0).toBe(true);
 	}));
 
+	it('should export into json format', asyncTest(async () => {
+		const service = new InteropService();
+		let folder1 = await Folder.save({ title: 'folder1' });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		note1 = await Note.load(note1.id);
+		const filePath = exportDir();
+
+		await service.export({ path: filePath, format: 'json' });
+
+		// verify that the json files exist and can be parsed
+		const items = [folder1, note1];
+		for (let i = 0; i < items.length; i++) {
+			const jsonFile = filePath + '/' + items[i].id + '.json'; 
+			let json = await fs.readFile(jsonFile, 'utf-8');
+			let obj = JSON.parse(json);
+			expect(obj.id).toBe(items[i].id);
+			expect(obj.type_).toBe(items[i].type_);
+			expect(obj.title).toBe(items[i].title);
+			expect(obj.body).toBe(items[i].body);
+		}
+	}));
 });
