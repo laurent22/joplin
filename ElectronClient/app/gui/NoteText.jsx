@@ -611,7 +611,8 @@ class NoteTextComponent extends React.Component {
 			if (!item) throw new Error('No item with ID ' + itemId);
 
 			if (item.type_ === BaseModel.TYPE_RESOURCE) {
-				if (item.fetch_status !== Resource.FETCH_STATUS_DONE || !!item.encryption_blob_encrypted) {
+				const localState = await Resource.localState(item);
+				if (localState.fetch_status !== Resource.FETCH_STATUS_DONE || !!item.encryption_blob_encrypted) {
 					bridge().showErrorMessageBox(_('This attachment is not downloaded or not decrypted yet.'));
 					return;
 				}

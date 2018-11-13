@@ -25,7 +25,35 @@ describe('models_Resource', function() {
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
 		let resource1 = (await Resource.all())[0];
-		expect(resource1.fetch_status).toBe(Resource.FETCH_STATUS_DONE);
+		let ls = await Resource.localState(resource1);
+		expect(ls.fetch_status).toBe(Resource.FETCH_STATUS_DONE);
+	}));
+
+	it('should have a default local state', asyncTest(async () => {
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		let resource1 = (await Resource.all())[0];
+		let ls = await Resource.localState(resource1);
+		expect(!ls.id).toBe(true);
+		expect(ls.resource_id).toBe(resource1.id);
+		expect(ls.fetch_status).toBe(Resource.FETCH_STATUS_DONE);
+	}));
+
+	it('should save and delete local state', asyncTest(async () => {
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		let resource1 = (await Resource.all())[0];
+		await Resource.setLocalState(resource1, { fetch_status: Resource.FETCH_STATUS_IDLE });
+
+		let ls = await Resource.localState(resource1);
+		expect(!!ls.id).toBe(true);
+		expect(ls.fetch_status).toBe(Resource.FETCH_STATUS_IDLE);
+
+		await Resource.delete(resource1.id);
+		ls = await Resource.localState(resource1);
+		expect(!ls.id).toBe(true);
 	}));
 
 });

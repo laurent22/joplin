@@ -2,6 +2,7 @@ const BaseItem = require('lib/models/BaseItem.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
+const ResourceLocalState = require('lib/models/ResourceLocalState.js');
 const MasterKey = require('lib/models/MasterKey.js');
 const BaseModel = require('lib/BaseModel.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
@@ -574,7 +575,11 @@ class Synchronizer {
 							// 	}
 							// }
 
-							if (creatingNewResource) content.fetch_status = Resource.FETCH_STATUS_IDLE;
+							// if (creatingNewResource) content.fetch_status = Resource.FETCH_STATUS_IDLE;
+
+							if (creatingNewResource) {
+								await ResourceLocalState.save({ resource_id: content.id, fetch_status: Resource.FETCH_STATUS_IDLE });
+							}
 
 							await ItemClass.save(content, options);
 

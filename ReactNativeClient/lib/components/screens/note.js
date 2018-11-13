@@ -139,7 +139,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 							});
 						}, 5);
 					} else if (item.type_ === BaseModel.TYPE_RESOURCE) {
-						if (!Resource.isReady(item)) throw new Error(_('This attachment is not downloaded or not decrypted yet.'));
+						if (!(await Resource.isReady(item))) throw new Error(_('This attachment is not downloaded or not decrypted yet.'));
 						const resourcePath = Resource.fullPath(item);
 						await FileViewer.open(resourcePath);
 					} else {

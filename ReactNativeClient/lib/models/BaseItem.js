@@ -291,13 +291,13 @@ class BaseItem extends BaseModel {
 		let shownKeys = ItemClass.fieldNames();
 		shownKeys.push('type_');
 
-		if (ItemClass.syncExcludedKeys) {
-			const keys = ItemClass.syncExcludedKeys();
-			for (let i = 0; i < keys.length; i++) {
-				const idx = shownKeys.indexOf(keys[i]);
-				shownKeys.splice(idx, 1);
-			}
-		}
+		// if (ItemClass.syncExcludedKeys) {
+		// 	const keys = ItemClass.syncExcludedKeys();
+		// 	for (let i = 0; i < keys.length; i++) {
+		// 		const idx = shownKeys.indexOf(keys[i]);
+		// 		shownKeys.splice(idx, 1);
+		// 	}
+		// }
 
 		const serialized = await ItemClass.serialize(item, shownKeys);
 

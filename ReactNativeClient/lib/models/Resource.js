@@ -1,6 +1,7 @@
 const BaseModel = require('lib/BaseModel.js');
 const BaseItem = require('lib/models/BaseItem.js');
 const NoteResource = require('lib/models/NoteResource.js');
+const ResourceLocalState = require('lib/models/ResourceLocalState.js');
 const Setting = require('lib/models/Setting.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const pathUtils = require('lib/path-utils.js');
@@ -30,25 +31,10 @@ class Resource extends BaseItem {
 		return imageMimeTypes.indexOf(type.toLowerCase()) >= 0;
 	}
 
-	static resetStartedFetchStatus() {
-		return this.db().exec('UPDATE resources SET fetch_status = ? WHERE fetch_status = ?', [Resource.FETCH_STATUS_IDLE, Resource.FETCH_STATUS_STARTED]);
-	}
-
 	static needToBeFetched(limit = null) {
-		let sql = 'SELECT * FROM resources WHERE fetch_status = ? ORDER BY updated_time DESC';
+		let sql = 'SELECT * FROM resources WHERE id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = ?) ORDER BY updated_time DESC';
 		if (limit !== null) sql += ' LIMIT ' + limit;
 		return this.modelSelectAll(sql, [Resource.FETCH_STATUS_IDLE]);
-	}
-
-	static async saveFetchStatus(resourceId, status, error = null) {
-		const o = {
-			id: resourceId,
-			fetch_status: status,
-		}
-
-		if (error !== null) o.fetch_error = error;
-
-		return Resource.save(o, { autoTimestamp: false });
 	}
 
 	static fsDriver() {
@@ -61,10 +47,6 @@ class Resource extends BaseItem {
 		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
 		extension = extension ? ('.' + extension) : '';
 		return resource.id + extension;
-	}
-
-	static syncExcludedKeys() {
-		return ['fetch_status', 'fetch_error'];
 	}
 
 	static friendlyFilename(resource) {
@@ -80,8 +62,9 @@ class Resource extends BaseItem {
 		return Setting.value('resourceDir') + '/' + this.filename(resource, encryptedBlob);
 	}
 
-	static isReady(resource) {
-		return resource && resource.fetch_status === Resource.FETCH_STATUS_DONE && !resource.encryption_blob_encrypted;
+	static async isReady(resource) {
+		const ls = await this.localState(resource);
+		return resource && ls.fetch_status === Resource.FETCH_STATUS_DONE && !resource.encryption_blob_encrypted;
 	}
 
 	// For resources, we need to decrypt the item (metadata) and the resource binary blob.
@@ -201,6 +184,15 @@ class Resource extends BaseItem {
 		return url.substr(2);
 	}
 
+	static localState(resourceOrId) {
+		return ResourceLocalState.byResourceId(typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId);
+	}
+
+	static async setLocalState(resourceOrId, state) {
+		const id = typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId;
+		await ResourceLocalState.save(Object.assign({}, state, { resource_id: id }));
+	}
+
 	static async batchDelete(ids, options = null) {
 		// For resources, there's not really batch deleting since there's the file data to delete
 		// too, so each is processed one by one with the item being deleted last (since the db
@@ -215,6 +207,8 @@ class Resource extends BaseItem {
 			await super.batchDelete([id], options);
 			await NoteResource.deleteByResource(id); // Clean up note/resource relationships
 		}
+
+		await ResourceLocalState.batchDelete(ids);
 	}
 
 }

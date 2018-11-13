@@ -161,6 +161,16 @@ class JoplinDatabase extends Database {
 		return output;
 	}
 
+	createDefaultRow(tableName) {
+		const row = {};
+		const fields = this.tableFields('resource_local_states');
+		for (let i = 0; i < fields.length; i++) {
+			const f = fields[i];
+			row[f.name] = Database.formatValue(f.type, f.default);
+		}
+		return row;
+	}
+
 	fieldDescription(tableName, fieldName) {		
 		const sp = sprintf;
 
@@ -250,7 +260,7 @@ class JoplinDatabase extends Database {
 		// default value and thus might cause problems. In that case, the default value
 		// must be set in the synchronizer too.
 
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -400,6 +410,39 @@ class JoplinDatabase extends Database {
 				queries.push('ALTER TABLE resources ADD COLUMN fetch_status INT NOT NULL DEFAULT "2"');
 				queries.push('ALTER TABLE resources ADD COLUMN fetch_error TEXT NOT NULL DEFAULT ""');
 				queries.push({ sql: 'UPDATE resources SET fetch_status = ?', params: [Resource.FETCH_STATUS_DONE] });
+			}
+
+			if (targetVersion == 14) {
+				const resourceLocalStates = `
+					CREATE TABLE resource_local_states (
+						id INTEGER PRIMARY KEY,
+						resource_id TEXT NOT NULL,
+						fetch_status INT NOT NULL DEFAULT "2",
+						fetch_error TEXT NOT NULL DEFAULT ""
+					);
+				`;
+
+				queries.push(this.sqlStringToLines(resourceLocalStates)[0]);
+
+				queries.push('INSERT INTO resource_local_states SELECT null, id, fetch_status, fetch_error FROM resources');
+
+				queries.push('CREATE INDEX resource_local_states_resource_id ON resource_local_states (resource_id)');
+				queries.push('CREATE INDEX resource_local_states_resource_fetch_status ON resource_local_states (fetch_status)');
+
+				queries = queries.concat(this.alterColumnQueries('resources', {
+					id: 'TEXT PRIMARY KEY',
+					title: 'TEXT NOT NULL DEFAULT ""',
+					mime: 'TEXT NOT NULL',
+					filename: 'TEXT NOT NULL DEFAULT ""',
+					created_time: 'INT NOT NULL',
+					updated_time: 'INT NOT NULL',
+					user_created_time: 'INT NOT NULL DEFAULT 0',
+					user_updated_time: 'INT NOT NULL DEFAULT 0',
+					file_extension: 'TEXT NOT NULL DEFAULT ""',
+					encryption_cipher_text: 'TEXT NOT NULL DEFAULT ""',
+					encryption_applied: 'INT NOT NULL DEFAULT 0',
+					encryption_blob_encrypted: 'INT NOT NULL DEFAULT 0',
+				}));
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

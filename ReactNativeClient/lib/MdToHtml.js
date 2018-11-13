@@ -94,7 +94,9 @@ class MdToHtml {
 			return;
 		}
 
-		if (resource.fetch_status !== Resource.FETCH_STATUS_DONE) {
+		const localState = await Resource.localState(resource);
+
+		if (localState.fetch_status !== Resource.FETCH_STATUS_DONE) {
 			delete this.loadedResources_[id];
 			console.info('Resource not yet fetched: ' + id);
 			return;
