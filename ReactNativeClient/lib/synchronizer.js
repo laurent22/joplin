@@ -74,7 +74,7 @@ class Synchronizer {
 		if (report.deleteLocal) lines.push(_("Deleted local items: %d.", report.deleteLocal));
 		if (report.deleteRemote) lines.push(_("Deleted remote items: %d.", report.deleteRemote));
 		if (report.fetchingTotal && report.fetchingProcessed) lines.push(_("Fetched items: %d/%d.", report.fetchingProcessed, report.fetchingTotal));
-		if (!report.completedTime && report.state) lines.push(_('State: %s.', Synchronizer.stateToLabel(report.state)));
+		// if (!report.completedTime && report.state) lines.push(_('State: %s.', Synchronizer.stateToLabel(report.state)));
 		if (report.cancelling && !report.completedTime) lines.push(_("Cancelling..."));
 		if (report.completedTime) lines.push(_("Completed: %s", time.formatMsToLocal(report.completedTime)));
 		if (report.errors && report.errors.length) lines.push(_("Last error: %s", report.errors[report.errors.length - 1].toString().substr(0, 500)));

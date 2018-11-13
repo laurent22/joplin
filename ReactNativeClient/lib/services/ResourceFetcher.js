@@ -9,7 +9,9 @@ class ResourceFetcher extends BaseService {
 
 	constructor(fileApi = null) {
 		super();
-		
+
+		this.dispatch = (action) => {};
+
 		this.setFileApi(fileApi);
 		this.logger_ = new Logger();
 		this.queue_ = [];
@@ -59,6 +61,19 @@ class ResourceFetcher extends BaseService {
 		return -1;
 	}
 
+	updateReport() {
+		if (this.updateReportIID_) return;
+
+		this.updateReportIID_ = setTimeout(async () => {
+			const toFetchCount = await Resource.needToBeFetchedCount();
+			this.dispatch({
+				type: 'RESOURCE_FETCHER_SET',
+				toFetchCount: toFetchCount,
+			});
+			this.updateReportIID_ = null;
+		}, 2000);
+	}
+
 	queueDownload(resourceId, priority = null) {
 		if (priority === null) priority = 'normal';
 
@@ -73,6 +88,8 @@ class ResourceFetcher extends BaseService {
 			this.queue_.push(item);
 		}
 
+		this.updateReport();
+
 		this.scheduleQueueProcess();
 		return true;
 	}
@@ -85,6 +102,7 @@ class ResourceFetcher extends BaseService {
 			delete this.fetchingItems_[resource.id];
 			this.scheduleQueueProcess();
 			if (emitDownloadComplete) this.eventEmitter_.emit('downloadComplete', { id: resource.id });
+			this.updateReport();
 		}
 
 		const resource = await Resource.load(resourceId);

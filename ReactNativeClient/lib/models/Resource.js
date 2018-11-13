@@ -37,6 +37,11 @@ class Resource extends BaseItem {
 		return this.modelSelectAll(sql, [Resource.FETCH_STATUS_IDLE]);
 	}
 
+	static async needToBeFetchedCount() {
+		const r = await this.db().selectOne('SELECT count(*) as total FROM resource_local_states WHERE fetch_status = ?', [Resource.FETCH_STATUS_IDLE]);
+		return r ? r['total'] : 0;
+	}
+
 	static fsDriver() {
 		if (!Resource.fsDriver_) Resource.fsDriver_ = new FsDriverDummy();
 		return Resource.fsDriver_;
