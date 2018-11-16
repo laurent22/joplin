@@ -2,7 +2,6 @@ const Note = require('lib/models/Note');
 const Resource = require('lib/models/Resource');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const BaseService = require('lib/services/BaseService');
-const WebClipper = require('lib/services/WebClipper');
 const BaseSyncTarget = require('lib/BaseSyncTarget');
 const { Logger } = require('lib/logger.js');
 const EventEmitter = require('events');
@@ -51,8 +50,11 @@ class WebClipService extends BaseService {
 	}
 
 	clipper() {
-		if (!this.clipper_)
+		if (!this.clipper_) {
+			// lazy load for electron, so that this module can be required by nodejs
+			const WebClipper = require('lib/services/WebClipper');
 			this.clipper_ = new WebClipper(this);
+		}
 		return this.clipper_;
 	}
 

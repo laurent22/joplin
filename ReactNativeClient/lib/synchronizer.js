@@ -580,6 +580,10 @@ class Synchronizer {
 
 							if (creatingNewResource) this.dispatch({ type: "SYNC_CREATED_RESOURCE", id: content.id });
 
+							if (content.type_ === BaseModel.TYPE_NOTE) {
+								this.dispatch({ type: 'SYNC_CREATED_NOTE', content: content });
+							}
+
 							if (!hasAutoEnabledEncryption && content.type_ === BaseModel.TYPE_MASTER_KEY && !masterKeysBefore) {
 								hasAutoEnabledEncryption = true;
 								this.logger().info("One master key was downloaded and none was previously available: automatically enabling encryption");

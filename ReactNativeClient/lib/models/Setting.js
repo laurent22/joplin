@@ -156,6 +156,8 @@ class Setting extends BaseModel {
 			'net.ignoreTlsErrors': { value: false, type: Setting.TYPE_BOOL, show: (settings) => { return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].indexOf(settings['sync.target']) >= 0 }, public: true, appTypes: ['desktop', 'cli'], label: () => _('Ignore TLS certificate errors') },
 		
 			'api.token': { value: null, type: Setting.TYPE_STRING, public: false },
+			'api.port': { value: null, type: Setting.TYPE_INT, public: true, appTypes: ['cli'], description: () => _('Specify the port that should be used by the API server. If not set, a default will be used.') },
+			'api.host': { value: '127.0.0.1', type: Setting.TYPE_STRING, public: true, appTypes: ['cli'], description: () => _('Specify the host that should be used by the API server. If not set, 127.0.0.1 will be used.') },
 		};
 
 		return this.metadata_;

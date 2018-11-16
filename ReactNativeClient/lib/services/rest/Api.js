@@ -5,6 +5,7 @@ const Tag = require('lib/models/Tag');
 const BaseItem = require('lib/models/BaseItem');
 const BaseModel = require('lib/BaseModel');
 const Setting = require('lib/models/Setting');
+const Resource = require('lib/models/Resource');
 const markdownUtils = require('lib/markdownUtils');
 const mimeUtils = require('lib/mime-utils.js').mime;
 const { Logger } = require('lib/logger.js');

@@ -188,7 +188,7 @@ function defaultLocale() {
 }
 
 function supportedLocales() {
-	if (!supportedLocales_) supportedLocales_ = require('../locales/index.js').locales;
+	if (!supportedLocales_) supportedLocales_ = require('locales/index.js').locales;
 
 	let output = [];
 	for (let n in supportedLocales_) {

@@ -1,18 +1,8 @@
-const fs = require('fs');
 const { reg } = require('lib/registry.js');
 const { _ } = require('lib/locale.js');
 const BaseService = require('lib/services/BaseService');
-const { BrowserWindow, ipcMain } = require('electron');
 const url = require('url');
 const path = require('path');
-
-function getContentScript(name) {
-    const scriptPath = path.join(__dirname, '..', 'content_scripts', name + '.js');
-    return fs.readFileSync(scriptPath).toString('utf-8');
-}
-const JSDOMParser_js = getContentScript('JSDOMParser');
-const Readablility_js= getContentScript('Readability');
-const webclipper_js = getContentScript('webclipper');
 
 class WebClipper extends BaseService {
 
@@ -25,6 +15,8 @@ class WebClipper extends BaseService {
 
 	webview() {
 		if (!this.win_) {
+			// lazy load for electron, so that this module can be required by nodejs
+			const { BrowserWindow, ipcMain } = require('electron');
 			this.win_ = new BrowserWindow({
 				width: 1280,
 				height: 720,

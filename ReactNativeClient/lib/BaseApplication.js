@@ -95,7 +95,7 @@ class BaseApplication {
 	async handleStartFlags_(argv, setDefaults = true) {
 		let matched = {};
 		argv = argv.slice(0);
-		argv.splice(0, 2); // First arguments are the node executable, and the node JS file
+		argv.splice(0, argv.length > 1 && argv[1].endsWith('.js') ? 2 :1); // First arguments are the node executable, and the node JS file
 
 		while (argv.length) {
 			let arg = argv[0];

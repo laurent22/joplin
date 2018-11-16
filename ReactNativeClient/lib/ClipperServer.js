@@ -2,7 +2,7 @@ const { netUtils } = require('lib/net-utils');
 const urlParser = require("url");
 const Setting = require('lib/models/Setting');
 const { Logger } = require('lib/logger.js');
-const randomClipperPort = require('lib/randomClipperPort');
+const { randomClipperPort, startPort } = require('lib/randomClipperPort');
 const enableServerDestroy = require('server-destroy');
 const Api = require('lib/services/rest/Api');
 const ApiResponse = require('lib/services/rest/ApiResponse');
@@ -14,6 +14,7 @@ class ClipperServer {
 		this.logger_ = new Logger();
 		this.startState_ = 'idle';
 		this.server_ = null;
+		this.host_ = '127.0.0.1'
 		this.port_ = null;
 		this.api_ = new Api(() => {
 			return Setting.value('api.token');
@@ -62,6 +63,15 @@ class ClipperServer {
 		});
 	}
 
+	setHost(v) {
+		if (this.host_ === v) return;
+		this.host_ = v;
+		this.dispatch({
+			type: 'CLIPPER_SERVER_SET',
+			host: v,
+		});
+	}
+
 	async findAvailablePort() {
 		const tcpPortUsed = require('tcp-port-used');
 
@@ -75,13 +85,23 @@ class ClipperServer {
 		throw new Error('All potential ports are in use or not available.')
 	}
 
+ 	async isRunning() {
+ 		const tcpPortUsed = require('tcp-port-used');
+ 		const port = !!Setting.value('api.port') ? Setting.value('api.port') : startPort(Setting.value('env'));
+ 		const inUse = await tcpPortUsed.check(port);
+ 		return inUse ? port : 0;
+ 	}
+
 	async start() {
 		this.setPort(null);
+		this.setHost(Setting.value('api.host'));
 
 		this.setStartState('starting');
 
+		const settingPort = Setting.value('api.port');
+
 		try {
-			const p = await this.findAvailablePort();
+			const p = !!settingPort ? settingPort : await this.findAvailablePort();
 			this.setPort(p);
 		} catch (error) {
 			this.setStartState('idle');
@@ -193,9 +213,9 @@ class ClipperServer {
 
 		enableServerDestroy(this.server_);
 
-		this.logger().info('Starting Clipper server on port ' + this.port_);
+		this.logger().info('Starting Clipper server on ' + this.host_ + ':' + this.port_);
 
-		this.server_.listen(this.port_, '127.0.0.1');
+		this.server_.listen(this.port_, this.host_);
 
 		this.setStartState('started');
 	}
