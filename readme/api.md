@@ -207,8 +207,6 @@ file_extension | text |
 encryption_cipher_text | text |    
 encryption_applied | int |    
 encryption_blob_encrypted | int |    
-fetch_status | int |    
-fetch_error | text |    
 
 ## GET /resources
 

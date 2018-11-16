@@ -1,5 +1,23 @@
 # Joplin changelog
 
+## [v1.0.115](https://github.com/laurent22/joplin/releases/tag/v1.0.115) - 2018-11-16T16:52:02Z
+
+This is a rather large release which includes many of the pull requests that were submitted during Hacktoberfest, plus some extra improvements and bug fixes. Many thanks to all the contributors!
+
+- New: Adds functionality to display tags under the open note. ([#893](https://github.com/laurent22/joplin/issues/893))
+- New: Joplin desktop Dark Mode ([#921](https://github.com/laurent22/joplin/issues/921))
+- New: Add support for custom css across all notes ([#925](https://github.com/laurent22/joplin/issues/925))
+- New: Show note title in pdf export ([#890](https://github.com/laurent22/joplin/issues/890)) ([#937](https://github.com/laurent22/joplin/issues/937))
+- New: Display number of resources being fetched in side bar
+- New: Export notes to JSON ([#912](https://github.com/laurent22/joplin/issues/912), issues/912). ([#927](https://github.com/laurent22/joplin/issues/927))
+- New: Further (invisible) changes on how resources are downloaded to prepare for better resource handling.
+- Fix: Resolves [#918](https://github.com/laurent22/joplin/issues/918): Skip properties that are on sync target but not handled by local client
+- Fix: Fixes [#952](https://github.com/laurent22/joplin/issues/952): Upgraded Katex lib to fix bug
+- Fix: Fixes [#953](https://github.com/laurent22/joplin/issues/953) (maybe): Improved the way internal links to notes are loaded to make it more reliable
+- Fix: Fix image fetching error for URLs that contain query parameters.
+- API: Allow setting the ID of newly created notes.
+- Renewed code signing certificate.
+
 ## [v1.0.114](https://github.com/laurent22/joplin/releases/tag/v1.0.114) - 2018-10-24T20:14:10Z
 
 - Fixes [#832](https://github.com/laurent22/joplin/issues/832): Enex import: Don't add extra line breaks at the beginning of list item when it contains a block element
@@ -267,10 +285,3 @@ Note: This fixes an invalid database upgrade in the previous version.
 - Fix: [#247](https://github.com/laurent22/joplin/issues/247): Unreadable error messages when checking for updates
 - Fix: Fixed sync interval sorting order
 - Fix: [#256](https://github.com/laurent22/joplin/issues/256): Check that no other instance of Joplin is running before launching a new one
-
-## [v1.0.67](https://github.com/laurent22/joplin/releases/tag/v1.0.67) - 2018-02-19T22:51:08Z
-
-- Fixed: [#217](https://github.com/laurent22/joplin/issues/217): Display a message when the note has no content and only the note viewer is visible
-- Fixed: [#240](https://github.com/laurent22/joplin/issues/240): Tags should be handled in a case-insensitive way
-- Fixed: [#241](https://github.com/laurent22/joplin/issues/241): Ignore response for certain WebDAV calls to improve compatibility with some services.
-- Updated: French and Español translation
