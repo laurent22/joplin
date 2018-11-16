@@ -20,8 +20,8 @@ class WebClipper extends BaseService {
 			this.win_ = new BrowserWindow({
 				width: 1280,
 				height: 720,
-				show: true,
-				offscreen: false,
+				show: false,
+				offscreen: true,
 				nodeIntegration: false,
 				webPreferences: {
 					preload: 'clipper-preload.js',
