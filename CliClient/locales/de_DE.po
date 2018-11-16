@@ -1275,7 +1275,7 @@ msgid "title"
 msgstr "Titel"
 
 msgid "updated date"
-msgstr "Aktualsierungsdatum"
+msgstr "Aktualisierungsdatum"
 
 msgid "created date"
 msgstr "Erstelldatum"
