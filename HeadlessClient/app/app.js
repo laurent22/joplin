@@ -58,7 +58,13 @@ class Application extends BaseApplication {
 		const result = await super.generalMiddleware(store, next, action);
 		if(action.type === 'SYNC_CREATED_NOTE') {
 			const content = action.content;
-			const noteBody = content && content.body ? content.body : content.local ? content.local.body || '' : '';
+			let noteBody = content ? (content.body || (content.local ? content.local.body : '')) : '';
+			if (noteBody === '' || !noteBody) {
+				const noteTitle = content ? (content.title || (content.local ? content.local.title : '')) : '';
+				if (noteTitle) {
+					content.body = noteBody = noteTitle;
+				}
+			}
 			const isUrl = require('valid-url').isWebUri;
 			if (isUrl(noteBody)) {
 				const WebClipService = require('lib/services/WebClipService.js')

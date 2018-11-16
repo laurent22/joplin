@@ -160,17 +160,18 @@ class WebClipService extends BaseService {
 		this.addingNotes_ = true;
 
 		let count = 0;
-		const options = { conditions: ['title = body'] };
+		const options = { conditions: ['(title = body OR body = "")'] };
 		if (limit) options.limit = limit;
 		const notes = await Note.previews(null, options);
 		for (let i = 0; i < notes.length; i++) {
 			const note = notes[i]
+			if (note.body === '' && isUrl(note.title)) note.body = note.title;
 			if (isUrl(note.body)) {
 				const added = this.queueWebClipTask(note);
 				if (added) count++;
 			} else {
 				this.logger().debug("not queueWebClipTask for" + note.title);
-				//Note.save({ id: note.id, body: '\n'+note.body });
+				Note.save({ id: note.id, body: note.body + '\n' });
 			}
 		}
 
