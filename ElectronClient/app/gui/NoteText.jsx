@@ -472,7 +472,7 @@ class NoteTextComponent extends React.Component {
 		// Since I'm updating the state, the componentWillReceiveProps was getting triggered again, where nextProps.newNote was still true, causing reloadNote to trigger again and again.
 		// Notes from Laurent: The selected note tags are part of the global Redux state because they need to be updated whenever tags are changed or deleted
 		// anywhere in the app. Thus it's not possible simple to load the tags here (as we won't have a way to know if they're updated afterwards).
-		// Perhaps a better way would be to move that code in the middleware, check for TAGS_DELETE, TAGS_UPDATE, etc. actions and update the 
+		// Perhaps a better way would be to move that code in the middleware, check for TAGS_DELETE, TAGS_UPDATE, etc. actions and update the
 		// selected note tags accordingly.
 		if (!this.props.newNote) {
 			this.props.dispatch({
@@ -942,7 +942,7 @@ class NoteTextComponent extends React.Component {
 					} else {
 						shim.fsDriver().writeFile(path, data, 'buffer');
 					}
-	
+
 					// Refresh the webview, restoring the previous content
 					this.lastSetHtml_ = '';
 					this.forceUpdate();
@@ -1434,9 +1434,10 @@ class NoteTextComponent extends React.Component {
 
 		const tagStyle = {
 			marginBottom: 10,
+			height: 30
 		};
 
-		const bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight;
+		const bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - tagStyle.height - tagStyle.marginBottom;
 
 		const viewerStyle = {
 			width: Math.floor(innerWidth / 2),
