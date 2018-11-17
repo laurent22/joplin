@@ -15,12 +15,6 @@ class Tag extends BaseItem {
 		return BaseModel.TYPE_TAG;
 	}
 
-	static async serialize(item, type = null, shownKeys = null) {
-		let fieldNames = this.fieldNames();
-		fieldNames.push('type_');
-		return super.serialize(item, 'tag', fieldNames);
-	}
-
 	static async noteIds(tagId) {
 		let rows = await this.db().selectAll('SELECT note_id FROM note_tags WHERE tag_id = ?', [tagId]);
 		let output = [];
@@ -30,13 +24,15 @@ class Tag extends BaseItem {
 		return output;
 	}
 
-	static async notes(tagId) {
+	static async notes(tagId, options = null) {
+		if (options === null) options = {};
+
 		let noteIds = await this.noteIds(tagId);
 		if (!noteIds.length) return [];
 
-		return Note.search({
+		return Note.search(Object.assign({}, options, {
 			conditions: ['id IN ("' + noteIds.join('","') + '")'],
-		});
+		}))
 	}
 
 	// Untag all the notes and delete tag

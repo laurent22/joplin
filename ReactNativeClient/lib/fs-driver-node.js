@@ -26,7 +26,8 @@ class FsDriverNode extends FsDriverBase {
 
 	async writeBinaryFile(path, content) {
 		try {
-			let buffer = new Buffer(content);
+			// let buffer = new Buffer(content);
+			let buffer = Buffer.from(content);
 			return await fs.writeFile(path, buffer);
 		} catch (error) {
 			throw this.fsErrorToJsError_(error, path);
@@ -173,7 +174,8 @@ class FsDriverNode extends FsDriverBase {
 	}
 
 	async readFileChunk(handle, length, encoding = 'base64') {
-		let buffer = new Buffer(length);
+		//let buffer = new Buffer(length);
+		let buffer = Buffer.alloc(length);
 		const result = await fs.read(handle, buffer, 0, length, null);
 		if (!result.bytesRead) return null;
 		buffer = buffer.slice(0, result.bytesRead);

@@ -1,20 +1,20 @@
 function randomClipperPort(state, env) {
-  const startPorts = {
-    prod: 41184,
-    dev: 27583,
-  };
+	const startPorts = {
+		prod: 41184,
+		dev: 27583,
+	};
 
-  const startPort = env === 'prod' ? startPorts.prod : startPorts.dev;
+	const startPort = env === 'prod' ? startPorts.prod : startPorts.dev;
 
-  if (!state) {
-    state = { offset: 0 };
-  } else {
-    state.offset++;
-  }
+	if (!state) {
+		state = { offset: 0 };
+	} else {
+		state.offset++;
+	}
 
-  state.port = startPort + state.offset;
+	state.port = startPort + state.offset;
 
-  return state;
+	return state;
 }
 
 module.exports = randomClipperPort;

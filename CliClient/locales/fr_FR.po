@@ -458,10 +458,12 @@ msgstr "Impossible d'initialiser la synchronisation."
 msgid "Starting synchronisation..."
 msgstr "Commencement de la synchronisation..."
 
+msgid "Downloading resources..."
+msgstr "Téléchargement des ressources..."
+
 msgid "Cancelling... Please wait."
 msgstr "Annulation... Veuillez attendre."
 
-#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
@@ -470,7 +472,7 @@ msgstr ""
 "<tag-command> peut être \"add\", \"remove\" ou \"list\" pour assigner ou "
 "enlever l'étiquette [tag] de la [note], our pour lister les notes associées "
 "avec l'étiquette [tag]. La commande `tag list` peut être utilisée pour "
-"lister les étiquettes."
+"lister les étiquettes (utilisez l'option -l pour les options complètes)."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
@@ -628,6 +630,9 @@ msgstr "Couper"
 msgid "Paste"
 msgstr "Coller"
 
+msgid "Select all"
+msgstr "Sélectionner tout"
+
 msgid "Bold"
 msgstr "Gras"
 
@@ -712,6 +717,9 @@ msgstr "Oui"
 msgid "No"
 msgstr "Non"
 
+msgid "Token has been copied to the clipboard!"
+msgstr "Le code d'authentification a été copié dans le presse-papiers !"
+
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "Le service du Web Clipper est activé et démarrera automatiquement."
 
@@ -761,6 +769,22 @@ msgid "Download and install the relevant extension for your browser:"
 msgstr ""
 "Téléchargez et installez le module complémentaire correspondant à votre "
 "navigateur :"
+
+msgid "Advanced options"
+msgstr "Options avancées"
+
+msgid "Authorisation token:"
+msgstr "Code d'authentification :"
+
+msgid "Copy token"
+msgstr "Copier le code"
+
+msgid ""
+"This authorisation token is only needed to allow third-party applications to "
+"access Joplin."
+msgstr ""
+"Ce code d'authentification est nécessaire uniquement pour permettre aux "
+"logiciels tiers d'accéder aux données de Joplin."
 
 msgid "Check synchronisation configuration"
 msgstr "Vérifier config synchronisation"
@@ -929,6 +953,12 @@ msgstr "%s - Copie"
 msgid "Switch between note and to-do type"
 msgstr "Alterner entre note et tâche"
 
+msgid "Switch to note type"
+msgstr "Convertir en note"
+
+msgid "Switch to to-do type"
+msgstr "Convertir en tâche"
+
 msgid "Copy Markdown link"
 msgstr "Copier lien Markdown"
 
@@ -949,10 +979,13 @@ msgstr ""
 "carnet\"."
 
 msgid "Location"
-msgstr ""
+msgstr "Lieu"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
+
+msgid "Note properties"
+msgstr "Propriétés de la note"
 
 msgid "Open..."
 msgstr "Ouvrir..."
@@ -969,6 +1002,9 @@ msgstr "Copier le chemin"
 
 msgid "Copy Link Address"
 msgstr "Copier l'adresse du lien"
+
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr "Cette pièce jointe n'est pas téléchargée ou pas encore déchiffrée"
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1006,9 +1042,6 @@ msgstr "Régler alarme"
 #, javascript-format
 msgid "In: %s"
 msgstr "Dans : %s"
-
-msgid "Note properties"
-msgstr ""
 
 msgid "Hyperlink"
 msgstr "Lien"
@@ -1085,6 +1118,14 @@ msgstr "Synchroniser"
 
 msgid "Notebooks"
 msgstr "Carnets"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Déchiffrement des objets : %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d"
+msgstr "Tél. ressources : %d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1177,10 +1218,6 @@ msgstr "Objets distants supprimés : %d."
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Téléchargés : %d/%d."
-
-#, javascript-format
-msgid "State: %s."
-msgstr "État : %s."
 
 msgid "Cancelling..."
 msgstr "Annulation..."
@@ -1293,8 +1330,17 @@ msgstr "Afficher l'icône dans la zone de notifications"
 msgid "Note: Does not work in all desktop environments."
 msgstr "Note : Ne fonctionne pas dans tous les environnements de bureau."
 
-msgid "Start application minimised in the tray icon"
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
 msgstr ""
+"Cela permettra à Joplin de s'exécuter en arrière-plan. Il est recommandé "
+"d'activer ce réglage pour que vos notes soient constamment synchronisées, "
+"donc réduire le nombre de conflits."
+
+msgid "Start application minimised in the tray icon"
+msgstr "Démarrer minimisé dans la zone de notification"
 
 msgid "Global zoom percentage"
 msgstr "Niveau de zoom"
@@ -1371,6 +1417,9 @@ msgid ""
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
 msgstr ""
+"Attention : si vous changez cet emplacement, copiez-y tout le contenu avant "
+"de synchroniser, sinon tous les fichiers seront supprimés ! Consulter la FAQ "
+"pour plus de détails : %s"
 
 msgid "Nextcloud username"
 msgstr "Nextcloud : Nom utilisateur"
@@ -1411,7 +1460,7 @@ msgstr "Option invalide: \"%s\". Les valeurs possibles sont : %s."
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr ""
+msgstr "L'étiquette \"%s\" existe déjà. Veuillez choisir un autre nom."
 
 msgid "Joplin Export File"
 msgstr "Fichier d'export Joplin"
@@ -1424,6 +1473,9 @@ msgstr "Dossier d'export Joplin"
 
 msgid "Evernote Export File"
 msgstr "Fichiers d'export Evernote"
+
+msgid "Json Export Directory"
+msgstr "Dossier d'export JSON"
 
 msgid "Directory"
 msgstr "Dossier"
@@ -1499,6 +1551,12 @@ msgstr "Alarmes à venir"
 msgid "On %s: %s"
 msgstr "Le %s  : %s"
 
+msgid "Permission to use camera"
+msgstr "Permission d'utiliser l'appareil photo"
+
+msgid "Your permission to use your camera is required."
+msgstr "Votre permission est requise pour utiliser l'appareil photo"
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 "Ce carnet ne contient aucune note. Créez-en une en appuyant sur le bouton "
@@ -1529,6 +1587,9 @@ msgstr "Déplacer %d notes vers carnet \"%s\" ?"
 msgid "Press to set the decryption password."
 msgstr "Définir mot de passe de synchronisation."
 
+msgid "Clear alarm"
+msgstr "Enlever l'alarme"
+
 msgid "Save alarm"
 msgstr "Enregistrer alarme"
 
@@ -1541,9 +1602,39 @@ msgstr "Confirmer"
 msgid "Cancel synchronisation"
 msgstr "Annuler synchronisation"
 
+msgid "Checking... Please wait."
+msgstr "Vérification... Veuillez attendre."
+
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "La configuration de la synchronisation semble correcte."
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+"Erreur. Veuillez vérifier que l'URL, le nom, le mot de passe, etc. sont "
+"corrects et que la destination est accessible. L'erreur reportée est :"
+
+msgid "The application has been authorised!"
+msgstr "Le logiciel a été autorisé !"
+
 #, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Déchiffrement des objets : %d/%d"
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+"Impossible d'autoriser le logiciel :\n"
+"\n"
+"%s\n"
+"\n"
+"Veuillez réessayer."
+
+#, javascript-format
+msgid "Decrypted items: %s / %s"
+msgstr "Déchiffrement : %s / %s"
 
 msgid "New tags:"
 msgstr "Nouvelles étiquettes :"
@@ -1655,6 +1746,9 @@ msgstr "Voir métadonnées"
 msgid "View on map"
 msgstr "Voir sur carte"
 
+msgid "Go to source URL"
+msgstr "Aller à l'URL source"
+
 msgid "Delete notebook"
 msgstr "Supprimer le carnet"
 
@@ -1678,6 +1772,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "State: %s."
+#~ msgstr "État : %s."
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "Un carnet avec ce titre existe déjà : \"%s\""

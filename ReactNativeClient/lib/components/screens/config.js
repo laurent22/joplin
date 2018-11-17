@@ -9,9 +9,10 @@ const { themeStyle } = require('lib/components/global-style.js');
 const Setting = require('lib/models/Setting.js');
 const shared = require('lib/components/shared/config-shared.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
+import VersionInfo from 'react-native-version-info';
 
 class ConfigScreenComponent extends BaseScreenComponent {
-	
+
 	static navigationOptions(options) {
 		return { header: null };
 	}
@@ -229,7 +230,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				</TouchableOpacity>
 			</View>
 		);
-		
+
 		settingComps.push(
 			<View key="website_link" style={this.styles().settingContainer}>
 				<TouchableOpacity onPress={() => { Linking.openURL('https://joplin.cozic.net/') }}>
@@ -243,6 +244,12 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				<TouchableOpacity onPress={() => { Linking.openURL('https://joplin.cozic.net/privacy/') }}>
 					<Text key="label" style={this.styles().linkText}>Privacy Policy</Text>
 				</TouchableOpacity>
+			</View>
+		);
+
+		settingComps.push(
+			<View key="version_info" style={this.styles().settingContainer}>
+					<Text key="version" style={this.styles().settingText}>Version {VersionInfo.appVersion}</Text>
 			</View>
 		);
 

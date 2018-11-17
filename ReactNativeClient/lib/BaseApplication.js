@@ -33,6 +33,7 @@ const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
 const EncryptionService = require('lib/services/EncryptionService');
+const ResourceFetcher = require('lib/services/ResourceFetcher');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseService = require('lib/services/BaseService');
 
@@ -180,7 +181,7 @@ class BaseApplication {
 		process.exit(code);
 	}
 
-	async refreshNotes(state) {
+	async refreshNotes(state, useSelectedNoteId = false) {
 		let parentType = state.notesParentType;
 		let parentId = null;
 
@@ -215,7 +216,7 @@ class BaseApplication {
 			if (parentType === Folder.modelType()) {
 				notes = await Note.previews(parentId, options);
 			} else if (parentType === Tag.modelType()) {
-				notes = await Tag.notes(parentId);
+				notes = await Tag.notes(parentId, options);
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				let fields = Note.previewFields();
 				let search = BaseModel.byId(state.searches, parentId);
@@ -232,10 +233,17 @@ class BaseApplication {
 			notesSource: source,
 		});
 
-		this.store().dispatch({
-			type: 'NOTE_SELECT',
-			id: notes.length ? notes[0].id : null,
-		});
+		if (useSelectedNoteId) {
+			this.store().dispatch({
+				type: 'NOTE_SELECT',
+				id: state.selectedNoteIds && state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
+			});
+		} else {
+			this.store().dispatch({
+				type: 'NOTE_SELECT',
+				id: notes.length ? notes[0].id : null,
+			});
+		}
 	}
 
 	reducerActionToString(action) {
@@ -272,13 +280,16 @@ class BaseApplication {
 		const result = next(action);
 		const newState = store.getState();
 		let refreshNotes = false;
+		let refreshNotesUseSelectedNoteId = false;
 
 		reduxSharedMiddleware(store, next, action);
 
-		if (action.type == 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE' || (action.type === 'SEARCH_UPDATE' && newState.notesParentType === 'Folder')) {
+		if (action.type == 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE' || action.type === 'FOLDER_AND_NOTE_SELECT' || (action.type === 'SEARCH_UPDATE' && newState.notesParentType === 'Folder')) {
 			Setting.setValue('activeFolderId', newState.selectedFolderId);
 			this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
 			refreshNotes = true;
+
+			if (action.type === 'FOLDER_AND_NOTE_SELECT') refreshNotesUseSelectedNoteId = true;
 		}
 
 		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'uncompletedTodosOnTop') || action.type == 'SETTING_UPDATE_ALL')) {
@@ -302,7 +313,7 @@ class BaseApplication {
 		}
 
 		if (refreshNotes) {
-			await this.refreshNotes(newState);
+			await this.refreshNotes(newState, refreshNotesUseSelectedNoteId);
 		}
 
 		if ((action.type == 'SETTING_UPDATE_ONE' && (action.key == 'dateFormat' || action.key == 'timeFormat')) || (action.type == 'SETTING_UPDATE_ALL')) {
@@ -356,6 +367,10 @@ class BaseApplication {
 			DecryptionWorker.instance().scheduleStart();
 		}
 
+		if (this.hasGui() && action.type === 'SYNC_CREATED_RESOURCE') {
+			ResourceFetcher.instance().queueDownload(action.id);
+		}
+
 	  	return result;
 	}
 
@@ -374,6 +389,7 @@ class BaseApplication {
 		reg.dispatch = this.store().dispatch;
 		BaseSyncTarget.dispatch = this.store().dispatch;
 		DecryptionWorker.instance().dispatch = this.store().dispatch;
+		ResourceFetcher.instance().dispatch = this.store().dispatch;
 	}
 
 	async readFlagsFromFile(flagPath) {
@@ -454,7 +470,7 @@ class BaseApplication {
 		initArgs = Object.assign(initArgs, extraFlags);
 
 		this.logger_.addTarget('file', { path: profileDir + '/log.txt' });
-		//this.logger_.addTarget('console');
+		// if (Setting.value('env') === 'dev') this.logger_.addTarget('console');
 		this.logger_.setLevel(initArgs.logLevel);
 
 		reg.setLogger(this.logger_);
@@ -494,6 +510,12 @@ class BaseApplication {
 			setLocale(Setting.value('locale'));
 		}
 
+		if (!Setting.value('api.token')) {
+			EncryptionService.instance().randomHexString(64).then((token) => {
+				Setting.setValue('api.token', token);
+			});
+		}
+
 		time.setDateFormat(Setting.value('dateFormat'));
 		time.setTimeFormat(Setting.value('timeFormat'));
 
@@ -503,6 +525,10 @@ class BaseApplication {
 		DecryptionWorker.instance().setLogger(this.logger_);
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
 		await EncryptionService.instance().loadMasterKeysFromSettings();
+
+		ResourceFetcher.instance().setFileApi(() => { return reg.syncTarget().fileApi() });
+		ResourceFetcher.instance().setLogger(this.logger_);
+		ResourceFetcher.instance().start();
 
 		let currentFolderId = Setting.value('activeFolderId');
 		let currentFolder = null;

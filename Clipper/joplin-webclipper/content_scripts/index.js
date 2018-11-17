@@ -80,8 +80,9 @@
 				title: title,
 				html: html,
 				base_url: baseUrl(),
-				url: location.origin + location.pathname,
+				url: location.origin + location.pathname + location.search,
 				parent_id: command.parent_id,
+				tags: command.tags || '',
 			};			
 		}
 
@@ -137,6 +138,7 @@
 			messageComp.style.maxWidth = messageCompWidth + 'px'
 			messageComp.style.border = '1px solid black'
 			messageComp.style.background = 'white'
+			messageComp.style.color = 'black';
 			messageComp.style.top = '10px'
 			messageComp.style.textAlign = 'center';
 			messageComp.style.padding = '10px'
@@ -214,6 +216,7 @@
 						crop_rect: selectionArea,
 						url: location.origin + location.pathname,
 						parent_id: command.parent_id,
+						tags: command.tags,
 					};
 
 					browser_.runtime.sendMessage({

@@ -79,7 +79,6 @@ describe('services_ResourceService', function() {
 		let note2 = await Note.save({ title: 'ma deuxième note', parent_id: folder1.id });
 		note1 = await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
 		let resource1 = (await Resource.all())[0];
-		const resourcePath = Resource.fullPath(resource1);
 
 		await service.indexNoteResources();
 
@@ -104,6 +103,25 @@ describe('services_ResourceService', function() {
 		await service.deleteOrphanResources(0);
 
 		expect((await Resource.all()).length).toBe(1);
+	}));
+
+	it('should not delete resource if it is used in an IMG tag', asyncTest(async () => {
+		const service = new ResourceService();
+
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		note1 = await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		let resource1 = (await Resource.all())[0];
+
+		await service.indexNoteResources();
+
+		await Note.save({ id: note1.id, body: 'This is HTML: <img src=":/' + resource1.id + '"/>' });
+		
+		await service.indexNoteResources();
+		
+		await service.deleteOrphanResources(0);
+
+		expect(!!(await Resource.load(resource1.id))).toBe(true);
 	}));
 
 });

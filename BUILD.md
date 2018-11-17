@@ -58,6 +58,8 @@ If node-gyp does not works (MSBUILD: error MSB3428: Could not load the Visual C+
 
 If `yarn dist` fails, it may need administrative rights.
 
+The [building\_win32\_tips on this page](./readme/building_win32_tips.md) might be helpful.
+
 # Building the Mobile application
 
 First you need to setup React Native to build projects with native code. For this, follow the instructions on the [Get Started](https://facebook.github.io/react-native/docs/getting-started.html) tutorial, in the "Building Projects with Native Code" tab.

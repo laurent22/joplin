@@ -213,6 +213,11 @@ class EncryptionService {
 		sjcl.random.addEntropy(hexSeed, 1024, 'shim.randomBytes');
 	}
 
+	async randomHexString(byteCount) {
+		const bytes = await shim.randomBytes(byteCount);
+		return bytes.map((a) => { return hexPad(a.toString(16), 2); }).join('');
+	}
+
 	async generateMasterKey(password) {
 		const bytes = await shim.randomBytes(256);
 		const hexaBytes = bytes.map((a) => { return hexPad(a.toString(16), 2); }).join('');

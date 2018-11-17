@@ -452,6 +452,9 @@ msgstr "Non é posíbel iniciar o sincronizador."
 msgid "Starting synchronisation..."
 msgstr "Iniciando sincronización..."
 
+msgid "Downloading resources..."
+msgstr ""
+
 msgid "Cancelling... Please wait."
 msgstr "Cancelando... Agarde."
 
@@ -620,6 +623,10 @@ msgstr "Cortar"
 msgid "Paste"
 msgstr "Pegar"
 
+#, fuzzy
+msgid "Select all"
+msgstr "Seleccionar data"
+
 msgid "Bold"
 msgstr ""
 
@@ -703,6 +710,9 @@ msgstr "Si"
 msgid "No"
 msgstr "Non"
 
+msgid "Token has been copied to the clipboard!"
+msgstr ""
+
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 
@@ -744,6 +754,21 @@ msgid "Step 2: Install the extension"
 msgstr ""
 
 msgid "Download and install the relevant extension for your browser:"
+msgstr ""
+
+#, fuzzy
+msgid "Advanced options"
+msgstr "Mostrar opcións avanzadas"
+
+msgid "Authorisation token:"
+msgstr ""
+
+msgid "Copy token"
+msgstr ""
+
+msgid ""
+"This authorisation token is only needed to allow third-party applications to "
+"access Joplin."
 msgstr ""
 
 msgid "Check synchronisation configuration"
@@ -909,6 +934,14 @@ msgid "Switch between note and to-do type"
 msgstr "Cambiar entre notas e tarefas"
 
 #, fuzzy
+msgid "Switch to note type"
+msgstr "Cambiar entre notas e tarefas"
+
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "Cambiar entre notas e tarefas"
+
+#, fuzzy
 msgid "Copy Markdown link"
 msgstr "Markdown"
 
@@ -931,6 +964,9 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+msgid "Note properties"
+msgstr ""
+
 msgid "Open..."
 msgstr "Abrir…"
 
@@ -945,6 +981,9 @@ msgid "Copy path to clipboard"
 msgstr ""
 
 msgid "Copy Link Address"
+msgstr ""
+
+msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
 
 #, javascript-format
@@ -983,9 +1022,6 @@ msgstr "Estabelecer alarma"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
-
-msgid "Note properties"
-msgstr ""
 
 msgid "Hyperlink"
 msgstr ""
@@ -1064,6 +1100,14 @@ msgstr "Sincronizar"
 
 msgid "Notebooks"
 msgstr "Cadernos"
+
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Elementos obtidos: %d/%d."
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d"
+msgstr "Recursos: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccione onde exportar o estado da sincronización"
@@ -1155,10 +1199,6 @@ msgstr "Elementos remotos borrados: %d."
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Elementos obtidos: %d/%d."
-
-#, javascript-format
-msgid "State: %s."
-msgstr "Estado: %s."
 
 msgid "Cancelling..."
 msgstr "Cancelando..."
@@ -1274,6 +1314,12 @@ msgid "Show tray icon"
 msgstr "Mostrar a icona na bandexa"
 
 msgid "Note: Does not work in all desktop environments."
+msgstr ""
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
 msgstr ""
 
 msgid "Start application minimised in the tray icon"
@@ -1404,6 +1450,10 @@ msgstr "Cartafol de exportación do Joplin"
 msgid "Evernote Export File"
 msgstr "Ficheiro de exportación de Evernote"
 
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "Cartafol de exportación do Joplin"
+
 msgid "Directory"
 msgstr "Cartafol"
 
@@ -1478,6 +1528,12 @@ msgstr "Alarmas próximas"
 msgid "On %s: %s"
 msgstr "En %s: %s"
 
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Non ten notas actualmente. Cree unha premendo no botón (+)."
 
@@ -1507,6 +1563,10 @@ msgid "Press to set the decryption password."
 msgstr "Prema para estabelecer o contrasinal de descifrado."
 
 #, fuzzy
+msgid "Clear alarm"
+msgstr "Estabelecer alarma"
+
+#, fuzzy
 msgid "Save alarm"
 msgstr "Estabelecer alarma"
 
@@ -1519,8 +1579,34 @@ msgstr "Confirmar"
 msgid "Cancel synchronisation"
 msgstr "Cancelar sincronización"
 
+#, fuzzy
+msgid "Checking... Please wait."
+msgstr "Cancelando... Agarde."
+
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Comprobar a configuración da sincronización"
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#, fuzzy
+msgid "The application has been authorised!"
+msgstr "O aplicativo foi autorizado correctamente."
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+
 #, fuzzy, javascript-format
-msgid "Decrypting items: %d/%d"
+msgid "Decrypted items: %s / %s"
 msgstr "Elementos obtidos: %d/%d."
 
 msgid "New tags:"
@@ -1627,6 +1713,9 @@ msgstr "Mostrar metadatos"
 msgid "View on map"
 msgstr "Ver no mapa"
 
+msgid "Go to source URL"
+msgstr ""
+
 msgid "Delete notebook"
 msgstr "Eliminar caderno"
 
@@ -1648,6 +1737,9 @@ msgstr "Non ten cadernos actualmente. Cree un premendo no botón (+)."
 
 msgid "Welcome"
 msgstr "Benvido/a"
+
+#~ msgid "State: %s."
+#~ msgstr "Estado: %s."
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "Xa existe un caderno con ese título: «%s»"

@@ -26,7 +26,7 @@ class Command extends BaseCommand {
 			const md = Setting.settingMetadata(name);
 			let value = Setting.value(name);
 			if (typeof value === 'object' || Array.isArray(value)) value = JSON.stringify(value);
-			if (md.secure) value = '********';
+			if (md.secure && value) value = '********';
 
 			if (Setting.isEnum(name)) {
 				return _('%s = %s (%s)', name, value, Setting.enumOptionsDoc(name));

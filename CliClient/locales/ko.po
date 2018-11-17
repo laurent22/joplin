@@ -446,6 +446,9 @@ msgstr "동기화를 시작할 수 없습니다."
 msgid "Starting synchronisation..."
 msgstr "동기화를 시작합니다..."
 
+msgid "Downloading resources..."
+msgstr ""
+
 msgid "Cancelling... Please wait."
 msgstr "취소하는 중입니다... 잠시만 기다리세요."
 
@@ -612,6 +615,10 @@ msgstr "잘라내기"
 msgid "Paste"
 msgstr "붙여넣기"
 
+#, fuzzy
+msgid "Select all"
+msgstr "날짜 선택"
+
 msgid "Bold"
 msgstr "굵게"
 
@@ -695,6 +702,9 @@ msgstr "예"
 msgid "No"
 msgstr "아니오"
 
+msgid "Token has been copied to the clipboard!"
+msgstr ""
+
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "웹 수집기 서비스가 활성화되었고 자동으로 시작하도록 설정되었습니다."
 
@@ -741,6 +751,21 @@ msgstr "2단계: 확장 기능 설치"
 
 msgid "Download and install the relevant extension for your browser:"
 msgstr "브라우저에 적절한 확장 기능을 다운로드 및 설치하세요:"
+
+#, fuzzy
+msgid "Advanced options"
+msgstr "고급 옵션"
+
+msgid "Authorisation token:"
+msgstr ""
+
+msgid "Copy token"
+msgstr ""
+
+msgid ""
+"This authorisation token is only needed to allow third-party applications to "
+"access Joplin."
+msgstr ""
 
 msgid "Check synchronisation configuration"
 msgstr "동기화 설정 확인"
@@ -903,6 +928,14 @@ msgstr "%s - 복사"
 msgid "Switch between note and to-do type"
 msgstr "'노트' 또는'할 일' 형식으로 전환합니다."
 
+#, fuzzy
+msgid "Switch to note type"
+msgstr "'노트' 또는'할 일' 형식으로 전환합니다."
+
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "'노트' 또는'할 일' 형식으로 전환합니다."
+
 msgid "Copy Markdown link"
 msgstr "마크다운 링크 복사"
 
@@ -925,6 +958,9 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+msgid "Note properties"
+msgstr ""
+
 msgid "Open..."
 msgstr "열기..."
 
@@ -940,6 +976,9 @@ msgstr "경로를 클립보드에 복사"
 
 msgid "Copy Link Address"
 msgstr "링크 주소 복사"
+
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -977,9 +1016,6 @@ msgstr "알람 설정"
 #, javascript-format
 msgid "In: %s"
 msgstr "내부: %s"
-
-msgid "Note properties"
-msgstr ""
 
 msgid "Hyperlink"
 msgstr "하이퍼링크"
@@ -1056,6 +1092,14 @@ msgstr "동기화"
 
 msgid "Notebooks"
 msgstr "노트북"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "복호화 항목: %d/%d"
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d"
+msgstr "리소스: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "동기화 상태를 내보낼 대상을 선택하세요"
@@ -1147,10 +1191,6 @@ msgstr "원격 항목 삭제됨: %d."
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "가져온 항목: %d/%d."
-
-#, javascript-format
-msgid "State: %s."
-msgstr "상태: %s."
 
 msgid "Cancelling..."
 msgstr "취소하는 중..."
@@ -1262,6 +1302,12 @@ msgstr "트레이 아이콘 표시"
 
 msgid "Note: Does not work in all desktop environments."
 msgstr "참고사항: 모든 데스크탑 환경에서 작동하는 것은 아닙니다."
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
+msgstr ""
 
 msgid "Start application minimised in the tray icon"
 msgstr ""
@@ -1393,6 +1439,10 @@ msgstr "조플린 내보내기 폴더"
 msgid "Evernote Export File"
 msgstr "에버노트 내보내기 파일"
 
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "조플린 내보내기 폴더"
+
 msgid "Directory"
 msgstr "폴더"
 
@@ -1467,6 +1517,12 @@ msgstr "다가오는 예정된 알람"
 msgid "On %s: %s"
 msgstr "%s: %s"
 
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "노트가 없습니다. (+) 버튼을 선택해 새로 만드세요."
 
@@ -1495,6 +1551,10 @@ msgstr "%d 노트를 \"%s\" 노트북으로 옮길까요?"
 msgid "Press to set the decryption password."
 msgstr "복호화 암호를 설정하려면 누르세요."
 
+#, fuzzy
+msgid "Clear alarm"
+msgstr "알람 설정"
+
 msgid "Save alarm"
 msgstr "알람 저장"
 
@@ -1507,8 +1567,34 @@ msgstr "확인"
 msgid "Cancel synchronisation"
 msgstr "동기화 취소"
 
+#, fuzzy
+msgid "Checking... Please wait."
+msgstr "취소하는 중입니다... 잠시만 기다리세요."
+
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "동기화 설정 확인"
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#, fuzzy
+msgid "The application has been authorised!"
+msgstr "애플리케이션이 성공적으로 허가되었습니다."
+
 #, javascript-format
-msgid "Decrypting items: %d/%d"
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Decrypted items: %s / %s"
 msgstr "복호화 항목: %d/%d"
 
 msgid "New tags:"
@@ -1618,6 +1704,9 @@ msgstr "메타데이터 표시"
 msgid "View on map"
 msgstr "지도에 표시"
 
+msgid "Go to source URL"
+msgstr ""
+
 msgid "Delete notebook"
 msgstr "노트북 삭제"
 
@@ -1639,6 +1728,9 @@ msgstr "노트북이 없습니다. (+) 버튼을 눌러 새로 만드세요."
 
 msgid "Welcome"
 msgstr "환영합니다"
+
+#~ msgid "State: %s."
+#~ msgstr "상태: %s."
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "같은 제목의 노트북이 이미 있습니다: \"%s\""

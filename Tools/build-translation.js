@@ -209,6 +209,7 @@ async function main() {
 		rnDir + '/lib/models/*.js',
 		rnDir + '/lib/services/*.js',
 		rnDir + '/lib/components/*.js',
+		rnDir + '/lib/components/shared/*.js',
 		rnDir + '/lib/components/screens/*.js',
 	]);
 

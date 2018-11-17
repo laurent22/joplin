@@ -6,6 +6,7 @@ const Search = require('lib/models/Search.js');
 const { time } = require('lib/time-utils.js');
 const Setting = require('lib/models/Setting.js');
 const { IconButton } = require('./IconButton.min.js');
+const { urlDecode, escapeHtml } = require('lib/string-utils');
 const Toolbar = require('./Toolbar.min.js');
 const TagList = require('./TagList.min.js');
 const { connect } = require('react-redux');
@@ -28,6 +29,7 @@ const urlUtils = require('lib/urlUtils');
 const dialogs = require('./dialogs');
 const markdownUtils = require('lib/markdownUtils');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
+const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { toSystemSlashes, safeFilename } = require('lib/path-utils');
 const { clipboard } = require('electron');
 
@@ -35,6 +37,7 @@ require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
 // https://highlightjs.org/static/demo/
 require('brace/theme/chrome');
+require('brace/theme/twilight');
 
 class NoteTextComponent extends React.Component {
 
@@ -144,7 +147,20 @@ class NoteTextComponent extends React.Component {
 		}
 
 		this.onDrop_ = async (event) => {
-			const files = event.dataTransfer.files;
+			const dt = event.dataTransfer;
+
+			if (dt.types.indexOf("text/x-jop-note-ids") >= 0) {
+				const noteIds = JSON.parse(dt.getData("text/x-jop-note-ids"));
+				const linkText = [];
+				for (let i = 0; i < noteIds.length; i++) {
+					const note = await Note.load(noteIds[i]);
+					linkText.push(Note.markdownTag(note));
+				}
+
+				this.wrapSelectionWithStrings("", "", '', linkText.join('\n'));
+			}
+
+			const files = dt.files;
 			if (!files || !files.length) return;
 
 			const filesToAttach = [];
@@ -159,6 +175,10 @@ class NoteTextComponent extends React.Component {
 		}
 
 		const updateSelectionRange = () => {
+			if (!this.rawEditor()) {
+				this.selectionRange_ = null;
+				return;
+			}
 
 			const ranges = this.rawEditor().getSelection().getAllRanges();
 			if (!ranges || !ranges.length || !this.state.note) {
@@ -180,6 +200,16 @@ class NoteTextComponent extends React.Component {
 			if (!this.state.note || !this.state.note.id) return;
 			if (event.id === this.state.note.id) {
 				this.reloadNote(this.props);
+			}
+		}
+
+		this.resourceFetcher_downloadComplete = async (resource) => {
+			if (!this.state.note || !this.state.note.body) return;
+			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
+			if (resourceIds.indexOf(resource.id) >= 0) {
+				this.mdToHtml().clearCache();
+				this.lastSetHtml_ = '';
+				this.updateHtml(this.state.note.body);
 			}
 		}
 	}
@@ -273,6 +303,8 @@ class NoteTextComponent extends React.Component {
 		eventManager.on('alarmChange', this.onAlarmChange_);
 		eventManager.on('noteTypeToggle', this.onNoteTypeToggle_);
 		eventManager.on('todoToggle', this.onTodoToggle_);
+
+		ResourceFetcher.instance().on('downloadComplete', this.resourceFetcher_downloadComplete);
 	}
 
 	componentWillUnmount() {
@@ -284,6 +316,8 @@ class NoteTextComponent extends React.Component {
 		eventManager.removeListener('alarmChange', this.onAlarmChange_);
 		eventManager.removeListener('noteTypeToggle', this.onNoteTypeToggle_);
 		eventManager.removeListener('todoToggle', this.onTodoToggle_);
+
+		ResourceFetcher.instance().off('downloadComplete', this.resourceFetcher_downloadComplete);
 
 		this.destroyExternalEditWatcher();
 	}
@@ -433,6 +467,13 @@ class NoteTextComponent extends React.Component {
 
 		this.setState(newState);
 
+		// https://github.com/laurent22/joplin/pull/893#discussion_r228025210
+		// @Abijeet: Had to add this check. If not, was going into an infinite loop where state was getting updated repeatedly.
+		// Since I'm updating the state, the componentWillReceiveProps was getting triggered again, where nextProps.newNote was still true, causing reloadNote to trigger again and again.
+		// Notes from Laurent: The selected note tags are part of the global Redux state because they need to be updated whenever tags are changed or deleted
+		// anywhere in the app. Thus it's not possible simple to load the tags here (as we won't have a way to know if they're updated afterwards).
+		// Perhaps a better way would be to move that code in the middleware, check for TAGS_DELETE, TAGS_UPDATE, etc. actions and update the 
+		// selected note tags accordingly.
 		if (!this.props.newNote) {
 			this.props.dispatch({
 				type: "SET_NOTE_TAGS",
@@ -570,25 +611,31 @@ class NoteTextComponent extends React.Component {
 			if (!item) throw new Error('No item with ID ' + itemId);
 
 			if (item.type_ === BaseModel.TYPE_RESOURCE) {
+				const localState = await Resource.localState(item);
+				if (localState.fetch_status !== Resource.FETCH_STATUS_DONE || !!item.encryption_blob_encrypted) {
+					bridge().showErrorMessageBox(_('This attachment is not downloaded or not decrypted yet.'));
+					return;
+				}
 				const filePath = Resource.fullPath(item);
 				bridge().openItem(filePath);
 			} else if (item.type_ === BaseModel.TYPE_NOTE) {
 				this.props.dispatch({
-					type: "FOLDER_SELECT",
-					id: item.parent_id,
+					type: "FOLDER_AND_NOTE_SELECT",
+					folderId: item.parent_id,
+					noteId: item.id,
 				});
-
-				setTimeout(() => {
-					this.props.dispatch({
-						type: 'NOTE_SELECT',
-						id: item.id,
-					});
-				}, 10);
 			} else {
 				throw new Error('Unsupported item type: ' + item.type_);
 			}
 		} else if (urlUtils.urlProtocol(msg)) {
-			require('electron').shell.openExternal(msg);
+			if (msg.indexOf('file://') === 0) {
+				// When using the file:// protocol, openExternal doesn't work (does nothing) with URL-encoded paths
+				require('electron').shell.openExternal(urlDecode(msg));
+			} else {
+				require('electron').shell.openExternal(msg);
+			}
+		} else if (msg.indexOf('#') === 0) {
+			// This is an internal anchor, which is handled by the WebView so skip this case
 		} else {
 			bridge().showErrorMessageBox(_('Unsupported link or message: %s', msg));
 		}
@@ -784,13 +831,14 @@ class NoteTextComponent extends React.Component {
 					this.forceUpdate();
 				}, 100);
 			},
-			postMessageSyntax: 'ipcRenderer.sendToHost',
+			postMessageSyntax: 'ipcProxySendToHost',
 		};
 
 		const theme = themeStyle(this.props.theme);
 
 		let bodyToRender = body;
 		if (bodyToRender === null) bodyToRender = this.state.note && this.state.note.body ? this.state.note.body : '';
+		bodyToRender = '<style>' + this.props.customCss + '</style>\n' + bodyToRender;
 		let bodyHtml = '';
 
 		const visiblePanes = this.props.visiblePanes || ['editor', 'viewer'];
@@ -811,20 +859,7 @@ class NoteTextComponent extends React.Component {
 		let commandProcessed = true;
 
 		if (command.name === 'exportPdf' && this.webview_) {
-			const path = bridge().showSaveDialog({
-				filters: [{ name: _('PDF File'), extensions: ['pdf']}],
-				defaultPath: safeFilename(this.state.note.title),
-			});
-
-			if (path) {
-				this.webview_.printToPDF({}, (error, data) => {
-					if (error) {
-						bridge().showErrorMessageBox(error.message);
-					} else {
-						shim.fsDriver().writeFile(path, data, 'buffer');
-					}
-				});
-			}
+			this.commandSavePdf();
 		} else if (command.name === 'print' && this.webview_) {
 			this.webview_.print();
 		} else if (command.name === 'textBold') {
@@ -887,6 +922,44 @@ class NoteTextComponent extends React.Component {
 			name: 'editAlarm',
 			noteId: this.state.note.id,
 		});
+	}
+
+	commandSavePdf() {
+		const path = bridge().showSaveDialog({
+			filters: [{ name: _('PDF File'), extensions: ['pdf']}],
+			defaultPath: safeFilename(this.state.note.title),
+		});
+
+		if (path) {
+			// Temporarily add a <h2> title in the webview
+			const newHtml = this.insertHtmlHeading_(this.lastSetHtml_, this.state.note.title);
+			this.webview_.send('setHtml', newHtml);
+
+			setTimeout(() => {
+				this.webview_.printToPDF({}, (error, data) => {
+					if (error) {
+						bridge().showErrorMessageBox(error.message);
+					} else {
+						shim.fsDriver().writeFile(path, data, 'buffer');
+					}
+	
+					// Refresh the webview, restoring the previous content
+					this.lastSetHtml_ = '';
+					this.forceUpdate();
+				});
+			}, 100);
+		}
+	}
+
+	insertHtmlHeading_(s, heading) {
+		const tag = 'h2';
+		const marker = '<!-- START_OF_DOCUMENT -->'
+		let splitStyle = s.split(marker);
+		const index = splitStyle.length > 1 ? 1 : 0;
+		let toInsert = escapeHtml(heading);
+		toInsert = '<' + tag + '>' + toInsert + '</' + tag + '>';
+		splitStyle[index] = toInsert + splitStyle[index];
+		return splitStyle.join(marker);
 	}
 
 	externalEditWatcher() {
@@ -1060,6 +1133,9 @@ class NoteTextComponent extends React.Component {
 				start: { row: p.row, column: p.column },
 				end: { row: p.row, column: p.column + middleText.length },
 			};
+
+			// BUG!! If replacementText contains newline characters, the logic
+			// to select the new text will not work.
 
 			this.updateEditorWithDelay((editor) => {
 				if (middleText && newRange) {
@@ -1347,6 +1423,10 @@ class NoteTextComponent extends React.Component {
 			paddingLeft: 8,
 			paddingRight: 8,
 			marginRight: rootStyle.paddingLeft,
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+			border: '1px solid',
+			borderColor: theme.dividerColor,
 		};
 
 		const toolbarStyle = {
@@ -1378,6 +1458,9 @@ class NoteTextComponent extends React.Component {
 			paddingTop: paddingTop + 'px',
 			lineHeight: theme.textAreaLineHeight + 'px',
 			fontSize: theme.fontSize + 'px',
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+			editorTheme: theme.editorTheme,
 		};
 
 		if (visiblePanes.indexOf('viewer') < 0) {
@@ -1389,7 +1472,11 @@ class NoteTextComponent extends React.Component {
 		}
 
 		if (visiblePanes.indexOf('editor') < 0) {
-			editorStyle.display = 'none';
+			// Note: Ideally we'd set the display to "none" to take the editor out
+			// of the DOM but if we do that, certain things won't work, in particular
+			// things related to scroll, which are based on the editor. See
+			// editorScrollTop_, restoreScrollTop_, etc.
+			editorStyle.width = 0;
 			viewerStyle.width = innerWidth;
 		}
 
@@ -1404,7 +1491,8 @@ class NoteTextComponent extends React.Component {
 
 			const htmlHasChanged = this.lastSetHtml_ !== html;
 			 if (htmlHasChanged) {
-				this.webview_.send('setHtml', html);
+				let options = {codeTheme: theme.codeThemeCss};
+				this.webview_.send('setHtml', html, options);
 				this.lastSetHtml_ = html;
 			}
 
@@ -1448,6 +1536,7 @@ class NoteTextComponent extends React.Component {
 			style={viewerStyle}
 			preload="gui/note-viewer/preload.js"
 			src="gui/note-viewer/index.html"
+			webpreferences="contextIsolation"
 			ref={(elem) => { this.webview_ref(elem); } }
 		/>
 
@@ -1476,7 +1565,7 @@ class NoteTextComponent extends React.Component {
 		const editor =  <AceEditor
 			value={body}
 			mode="markdown"
-			theme="chrome"
+			theme={editorRootStyle.editorTheme}
 			style={editorRootStyle}
 			width={editorStyle.width + 'px'}
 			height={editorStyle.height + 'px'}
@@ -1533,6 +1622,7 @@ const mapStateToProps = (state) => {
 		searches: state.searches,
 		selectedSearchId: state.selectedSearchId,
 		watchedNoteFiles: state.watchedNoteFiles,
+		customCss: state.customCss,
 	};
 };
 

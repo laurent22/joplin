@@ -27,6 +27,7 @@ const defaultState = {
 	appState: 'starting',
 	hasDisabledSyncItems: false,
 	newNote: null,
+	customCss: '',
 	collapsedFolderIds: [],
 	clipperServer: {
 		startState: 'idle',
@@ -37,7 +38,10 @@ const defaultState = {
 		itemIndex: 0,
 		itemCount: 0,
 	},
-	selectedNoteTags: []
+	selectedNoteTags: [],
+	resourceFetcher: {
+		toFetchCount: 0,
+	},
 };
 
 const stateUtils = {};
@@ -168,8 +172,25 @@ function defaultNotesParentType(state, exclusion) {
 	return newNotesParentType;
 }
 
+function changeSelectedFolder(state, action) {
+	newState = Object.assign({}, state);
+	newState.selectedFolderId = 'folderId' in action ? action.folderId : action.id;
+	if (!newState.selectedFolderId) {
+		newState.notesParentType = defaultNotesParentType(state, 'Folder');
+	} else {
+		newState.notesParentType = 'Folder';
+	}
+	return newState;
+}
+
 function changeSelectedNotes(state, action) {
-	const noteIds = 'id' in action ? (action.id ? [action.id] : []) : action.ids;
+	let noteIds = [];
+	if (action.id) noteIds = [action.id];
+	if (action.ids) noteIds = action.ids;
+	if (action.noteId) noteIds = [action.noteId];
+
+	// const noteIds = 'id' in action ? (action.id ? [action.id] : []) : action.ids;
+
 	let newState = Object.assign({}, state);
 
 	if (action.type === 'NOTE_SELECT') {
@@ -278,13 +299,14 @@ const reducer = (state = defaultState, action) => {
 
 			case 'FOLDER_SELECT':
 
-				newState = Object.assign({}, state);
-				newState.selectedFolderId = action.id;
-				if (!action.id) {
-					newState.notesParentType = defaultNotesParentType(state, 'Folder');
-				} else {
-					newState.notesParentType = 'Folder';
-				}
+				newState = changeSelectedFolder(state, action);
+				break;
+
+			case 'FOLDER_AND_NOTE_SELECT':
+
+				newState = changeSelectedFolder(state, action);
+				const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT'});
+				newState = changeSelectedNotes(newState, noteSelectAction);
 				break;
 
 			case 'SETTING_UPDATE_ALL':
@@ -585,6 +607,20 @@ const reducer = (state = defaultState, action) => {
 				newState.decryptionWorker = decryptionWorker;
 				break;
 
+			case 'RESOURCE_FETCHER_SET':
+
+				newState = Object.assign({}, state);
+				const rf = Object.assign({}, action);
+				delete rf.type;
+				newState.resourceFetcher = rf;
+				break;
+
+			case 'LOAD_CUSTOM_CSS':
+
+				newState = Object.assign({}, state);
+				newState.customCss = action.css;
+				break;
+        
 			case 'SET_NOTE_TAGS':
 				newState = Object.assign({}, state);
 				newState.selectedNoteTags = action.items;

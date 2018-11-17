@@ -11,8 +11,10 @@
 // componentWillReceiveProps. Should be fixed at some point and at that
 // time this code could be removed.
 // https://github.com/facebook/react-native/issues/18165#issuecomment-369907978
-require("ReactFeatureFlags").warnAboutDeprecatedLifecycles = false;
+// require("ReactFeatureFlags").warnAboutDeprecatedLifecycles = false;
 
+
+// console.disableYellowBox = true
 
 const { AppRegistry } = require('react-native');
 const { Root } = require('./root.js');

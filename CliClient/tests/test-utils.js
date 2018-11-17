@@ -48,7 +48,9 @@ EncryptionService.fsDriver_ = fsDriver;
 FileApiDriverLocal.fsDriver_ = fsDriver;
 
 const logDir = __dirname + '/../tests/logs';
+const tempDir = __dirname + '/../tests/tmp';
 fs.mkdirpSync(logDir, 0o755);
+fs.mkdirpSync(tempDir, 0o755);
 
 SyncTargetRegistry.addClass(SyncTargetMemory);
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
@@ -80,6 +82,7 @@ BaseItem.loadClass('MasterKey', MasterKey);
 
 Setting.setConstant('appId', 'net.cozic.joplin-cli');
 Setting.setConstant('appType', 'cli');
+Setting.setConstant('tempDir', tempDir);
 
 BaseService.logger_ = logger;
 
