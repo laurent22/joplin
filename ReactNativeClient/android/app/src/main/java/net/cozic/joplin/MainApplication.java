@@ -3,6 +3,7 @@ package net.cozic.joplin;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import org.reactnative.camera.RNCameraPackage;
 import com.vinzscam.reactnativefileviewer.RNFileViewerPackage;
 import net.rhogan.rnsecurerandom.RNSecureRandomPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
@@ -21,6 +22,8 @@ import org.pgsqlite.SQLitePluginPackage;
 
 import com.alinz.parkerdan.shareextension.SharePackage;
 
+import cx.evermeet.versioninfo.RNVersionInfoPackage;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,6 +40,7 @@ public class MainApplication extends Application implements ReactApplication {
 			return Arrays.<ReactPackage>asList(
 				new ImageResizerPackage(),
 				new MainReactPackage(),
+            new RNCameraPackage(),
             new RNFileViewerPackage(),
             new RNSecureRandomPackage(),
             new ReactNativePushNotificationPackage(),
@@ -46,7 +50,8 @@ public class MainApplication extends Application implements ReactApplication {
 				new RNFSPackage(),
 				new SQLitePluginPackage(),
 				new VectorIconsPackage(),
-				new SharePackage()
+				new SharePackage(),
+				new RNVersionInfoPackage()
 			);
 		}
 	};

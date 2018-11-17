@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { AppState, Keyboard, NativeModules, BackHandler } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler, Platform } = require('react-native');
 const { SafeAreaView } = require('react-navigation');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
@@ -45,12 +45,13 @@ const { SideMenuContent } = require('lib/components/side-menu-content.js');
 const { DatabaseDriverReactNative } = require('lib/database-driver-react-native');
 const { reg } = require('lib/registry.js');
 const { _, setLocale, closestSupportedLocale, defaultLocale } = require('lib/locale.js');
-const RNFetchBlob = require('react-native-fetch-blob').default;
+const RNFetchBlob = require('rn-fetch-blob').default;
 const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const { reducer, defaultState } = require('lib/reducer.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const DropdownAlert = require('react-native-dropdownalert').default;
 const ShareExtension = require('react-native-share-extension').default;
+const ResourceFetcher = require('lib/services/ResourceFetcher');
 
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
@@ -138,6 +139,10 @@ const generalMiddleware = store => next => async (action) => {
 		DecryptionWorker.instance().scheduleStart();
 	}
 
+	if (action.type === 'SYNC_CREATED_RESOURCE') {
+		ResourceFetcher.instance().queueDownload(action.id);
+	}
+
   	return result;
 }
 
@@ -146,6 +151,11 @@ let navHistory = [];
 function historyCanGoBackTo(route, nextRoute) {
 	if (route.routeName === 'Note') return false;
 	if (route.routeName === 'Folder') return false;
+
+	// There's no point going back to these screens in general and, at least in OneDrive case,
+	// it can be buggy to do so, due to incorrectly relying on global state (reg.syncTarget...) 
+	if (route.routeName === 'OneDriveLogin') return false;
+	if (route.routeName === 'DropboxLogin') return false;
 
 	return true;
 }
@@ -483,6 +493,10 @@ async function initialize(dispatch) {
 
 	ResourceService.runInBackground();
 
+	ResourceFetcher.instance().setFileApi(() => { return reg.syncTarget().fileApi() });
+	ResourceFetcher.instance().setLogger(reg.logger());
+	ResourceFetcher.instance().start();
+
 	reg.scheduleSync().then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation
 		// might change the notifications.
@@ -524,23 +538,41 @@ class AppComponent extends React.Component {
 			});
 		}
 
-		try {
-			const { type, value } = await ShareExtension.data();
+		if (Platform.OS !== 'ios') {
+			try {
+				const { type, value } = await ShareExtension.data();
 
-			if (type != "" && this.props.selectedFolderId) {
+				// reg.logger().info('Got share data:', type, value);
 
-				this.props.dispatch({
-					type: 'NAV_GO',
-					routeName: 'Note',
-					noteId: null,
-					sharedData: {type: type, value: value},
-					folderId: this.props.selectedFolderId,
-					itemType: 'note',
-				});
+				if (type != "" && this.props.selectedFolderId) {
+					const newNote = await Note.save({
+						title: Note.defaultTitleFromBody(value),
+						body: value,
+						parent_id: this.props.selectedFolderId
+					});
+
+					// This is a bit hacky, but the surest way to go to 
+					// the needed note. We go back one screen in case there's
+					// already a note open - if we don't do this, the dispatch
+					// below will do nothing (because routeName wouldn't change)
+					// Then we wait a bit for the state to be set correctly, and
+					// finally we go to the new note.
+					this.props.dispatch({
+						type: 'NAV_BACK',
+					});
+
+					setTimeout(() => {
+						this.props.dispatch({
+							type: 'NAV_GO',
+							routeName: 'Note',
+							noteId: newNote.id,
+						});
+					}, 5);
+				}
+
+			} catch(e) {
+				reg.logger().error('Error in ShareExtension.data', e);
 			}
-
-		} catch(e) {
-			reg.logger().error('Error in ShareExtension.data', e);
 		}
 
 		BackButtonService.initialize(this.backButtonHandler_);

@@ -12,6 +12,7 @@ const { bridge } = require("electron").remote.require("./bridge");
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const InteropServiceHelper = require("../InteropServiceHelper.js");
+const { shim } = require('lib/shim');
 
 class SideBarComponent extends React.Component {
 
@@ -176,6 +177,35 @@ class SideBarComponent extends React.Component {
 		style.tagItem.height = itemHeight;
 
 		return style;
+	}
+
+	clearForceUpdateDuringSync() {
+		if (this.forceUpdateDuringSyncIID_) {
+			clearInterval(this.forceUpdateDuringSyncIID_);
+			this.forceUpdateDuringSyncIID_ = null;
+		}
+	}
+
+	componentDidUpdate(prevProps) {
+		if (shim.isLinux()) {
+			// For some reason, the UI seems to sleep in some Linux distro during
+			// sync. Cannot find the reason for it and cannot replicate, so here
+			// as a test force the update at regular intervals. 
+			// https://github.com/laurent22/joplin/issues/312#issuecomment-429472193
+			if (!prevProps.syncStarted && this.props.syncStarted) {
+				this.clearForceUpdateDuringSync();
+
+				this.forceUpdateDuringSyncIID_ = setInterval(() => {
+					this.forceUpdate();
+				}, 2000);
+			}
+
+			if (prevProps.syncStarted && !this.props.syncStarted) this.clearForceUpdateDuringSync();
+		}	
+	}
+
+	componentWillUnmount() {
+		this.clearForceUpdateDuringSync();
 	}
 
 	itemContextMenu(event) {
@@ -470,7 +500,19 @@ class SideBarComponent extends React.Component {
 			);
 		}
 
+		let decryptionReportText = '';
+		if (this.props.decryptionWorker && this.props.decryptionWorker.state !== 'idle' && this.props.decryptionWorker.itemCount) {
+			decryptionReportText = _('Decrypting items: %d/%d', this.props.decryptionWorker.itemIndex + 1, this.props.decryptionWorker.itemCount);
+		}
+
+		let resourceFetcherText = '';
+		if (this.props.resourceFetcher && this.props.resourceFetcher.toFetchCount) {
+			resourceFetcherText = _('Fetching resources: %d', this.props.resourceFetcher.toFetchCount);
+		}
+
 		let lines = Synchronizer.reportToLines(this.props.syncReport);
+		if (resourceFetcherText) lines.push(resourceFetcherText);
+		if (decryptionReportText) lines.push(decryptionReportText);
 		const syncReportText = [];
 		for (let i = 0; i < lines.length; i++) {
 			syncReportText.push(
@@ -510,6 +552,8 @@ const mapStateToProps = state => {
 		locale: state.settings.locale,
 		theme: state.settings.theme,
 		collapsedFolderIds: state.collapsedFolderIds,
+		decryptionWorker: state.decryptionWorker,
+		resourceFetcher: state.resourceFetcher,
 	};
 };
 

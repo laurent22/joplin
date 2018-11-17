@@ -39,6 +39,7 @@ describe('markdownUtils', function() {
 			['![something](http://test.com/img.png)', ['http://test.com/img.png']],
 			['![something](http://test.com/img.png) ![something2](http://test.com/img2.png)', ['http://test.com/img.png', 'http://test.com/img2.png']],
 			['![something](http://test.com/img.png "Some description")', ['http://test.com/img.png']],
+			['![something](https://test.com/ohoh_(123).png)', ['https://test.com/ohoh_(123).png']],
 		];
 
 		for (let i = 0; i < testCases.length; i++) {

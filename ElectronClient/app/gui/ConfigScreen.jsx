@@ -53,10 +53,13 @@ class ConfigScreenComponent extends React.Component {
 		const labelStyle = Object.assign({}, theme.textStyle, {
 			display: 'inline-block',
 			marginRight: 10,
+			color: theme.color,
 		});
 
 		const controlStyle = {
 			display: 'inline-block',
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
 		};
 
 		const descriptionStyle = Object.assign({}, theme.textStyle, {
@@ -120,7 +123,10 @@ class ConfigScreenComponent extends React.Component {
 				updateSettingValue(key, event.target.value);
 			}
 
-			const inputStyle = Object.assign({}, controlStyle, { width: '50%', minWidth: '20em' });
+			const inputStyle = Object.assign({}, controlStyle, {
+				width: '50%',
+				minWidth: '20em',
+				border: '1px solid' });
 			const inputType = md.secure === true ? 'password' : 'text';
 
 			return (
@@ -164,21 +170,19 @@ class ConfigScreenComponent extends React.Component {
 
 	render() {
 		const theme = themeStyle(this.props.theme);
-		const style = Object.assign({}, this.props.style, { overflow: 'auto' });
+		const style = Object.assign({
+			backgroundColor: theme.backgroundColor
+		}, this.props.style, { overflow: 'auto' });
 		const settings = this.state.settings;
 
-		const headerStyle = {
-			width: style.width,
-		};
+		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
 
-		const containerStyle = {
-			padding: 10,
-		};
+		const containerStyle = Object.assign({}, theme.containerStyle, { padding: 10 });
 
-		const buttonStyle = {
+		const buttonStyle = Object.assign({}, theme.buttonStyle, {
 			display: this.state.changedSettingKeys.length ? 'inline-block' : 'none',
 			marginRight: 10,
-		}
+		});
 
 		const settingComps = shared.settingsToComponents(this, 'desktop', settings);
 
@@ -195,7 +199,7 @@ class ConfigScreenComponent extends React.Component {
 
 			settingComps.push(
 				<div key="check_sync_config_button" style={this.rowStyle_}>
-					<button disabled={this.state.checkSyncConfigResult === 'checking'} onClick={this.checkSyncConfig_}>{_('Check synchronisation configuration')}</button>
+					<button style={buttonStyle} disabled={this.state.checkSyncConfigResult === 'checking'} onClick={this.checkSyncConfig_}>{_('Check synchronisation configuration')}</button>
 					{ statusComp }
 				</div>);
 		}

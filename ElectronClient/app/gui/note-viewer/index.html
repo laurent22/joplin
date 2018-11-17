@@ -36,6 +36,22 @@
 	<script>
 	const contentElement = document.getElementById('content');
 
+	const ipc = {};
+
+	window.addEventListener('message', (event) => {
+		// Here we only deal with messages that are sent from the main Electro process to the webview.
+		if (!event.data || event.data.target !== 'webview') return;
+
+		const callName = event.data.name;
+		const callData = event.data.data;
+
+		if (!ipc[callName]) {
+			console.warn('Missing IPC function:', event.data);
+		} else {
+			ipc[callName](callData);
+		}
+	});
+
 	// ----------------------------------------------------------------------
 	// Handle dynamically loading HLJS when a code element is present
 	// ----------------------------------------------------------------------
@@ -43,7 +59,7 @@
 	let hljsScriptAdded = false;
 	let hljsLoaded = false;
 
-	function loadHljs(callback) {
+	function loadHljs(options) {
 		hljsScriptAdded = true;
 
 		const script = document.createElement('script');
@@ -58,16 +74,16 @@
 		link.rel = 'stylesheet';
 		// https://ace.c9.io/build/kitchen-sink.html
 		// https://highlightjs.org/static/demo/
-		link.href = 'highlight/styles/atom-one-light.css';
+		link.href = 'highlight/styles/' + options.codeTheme;
 		document.getElementById('hlScriptContainer').appendChild(link);
 	}
 
-	function loadAndApplyHljs() {
+	function loadAndApplyHljs(options) {
 		var codeElements = document.getElementsByClassName('code');
 		if (!codeElements.length) return;
 
 		if (!hljsScriptAdded) {
-			this.loadHljs();
+			this.loadHljs(options);
 			return;
 		}
 
@@ -119,12 +135,14 @@
 		setPercentScroll(percentScroll_);
 	}
 
-	ipcRenderer.on('setHtml', (event, html) => {
+	ipc.setHtml = (event) => {
+		const html = event.html;
+
 		updateBodyHeight();
 
 		contentElement.innerHTML = html;
 
-		loadAndApplyHljs();
+		loadAndApplyHljs(event.options);
 
 		// Remove the bullet from "ul" for checkbox lists and extra padding
 		// const checkboxes = document.getElementsByClassName('checkbox');
@@ -158,10 +176,12 @@
 				}
 			}, 1);
 		}
-	});
+	}
 
 	let ignoreNextScrollEvent = false;
-	ipcRenderer.on('setPercentScroll', (event, percent) => {
+	ipc.setPercentScroll = (event) => {
+		const percent = event.percent;
+
 		if (checkScrollIID_) {
 			clearInterval(checkScrollIID_);
 			checkScrollIID_ = null;
@@ -169,7 +189,7 @@
 
 		ignoreNextScrollEvent = true;
 		setPercentScroll(percent);
-	});
+	}
 
 	let mark_ = null;
 	function setMarkers(keywords) {
@@ -184,7 +204,9 @@
 	}
 
 	let markLoaded_ = false;
-	ipcRenderer.on('setMarkers', (event, keywords) => {
+	ipc.setMarkers = (event) => {
+		const keywords = event.keywords;
+
 		if (!keywords.length && !markLoaded_) return;
 
 		if (!markLoaded_) {
@@ -199,7 +221,7 @@
 		} else {
 			setMarkers(keywords);
 		}
-	});
+	}
 
 	function maxScrollTop() {
 		return Math.max(0, contentElement.scrollHeight - contentElement.clientHeight);
@@ -210,6 +232,10 @@
 		document.getElementById('body').style.height = window.innerHeight + 'px';
 	}
 
+	const ipcProxySendToHost = (methodName, arg) => {
+		window.postMessage({ target: 'main', name: methodName, args: [ arg ] }, '*');
+	}
+
 	contentElement.addEventListener('scroll', function(e) {
 		if (ignoreNextScrollEvent) {
 			ignoreNextScrollEvent = false;
@@ -218,7 +244,8 @@
 		const m = maxScrollTop();
 		const percent = m ? contentElement.scrollTop / m : 0;
 		setPercentScroll(percent);
-		ipcRenderer.sendToHost('percentScroll', percent);
+		
+		ipcProxySendToHost('percentScroll', percent);
 	});
 
 	document.addEventListener('contextmenu', function(event) {
@@ -228,7 +255,7 @@
 		if (element && !element.getAttribute('data-resource-id')) element = element.parentElement;
 
 		if (element && element.getAttribute('data-resource-id')) {
-			ipcRenderer.sendToHost('contextMenu', {
+			ipcProxySendToHost('contextMenu', {
 				type: element.getAttribute('src') ? 'image' : 'resource',
 				resourceId: element.getAttribute('data-resource-id'),
 			});
@@ -236,16 +263,45 @@
 			const selectedText = window.getSelection().toString();
 
 			if (selectedText) {
-				ipcRenderer.sendToHost('contextMenu', {
+				ipcProxySendToHost('contextMenu', {
 					type: 'text',
 					textToCopy: selectedText,
 				});
 			} else if (event.target.getAttribute('href')) {
-				ipcRenderer.sendToHost('contextMenu', {
+				ipcProxySendToHost('contextMenu', {
 					type: 'link',
 					textToCopy: event.target.getAttribute('href'),
 				});
 			}
+		}
+	});
+
+	function handleInternalLink(event, anchorNode) {
+		const href = anchorNode.getAttribute('href');
+		if (href.indexOf('#') === 0) {
+			event.preventDefault();
+			location.hash = href;
+			return true;
+		}
+		return false;
+	}
+
+	document.addEventListener('click', function(event) {
+		const t = event.target;
+
+		// Prevent URLs added via <a> tags from being opened within the application itself
+		// otherwise it would open the whole website within the WebView.
+		if (t && t.nodeName === 'A' && !t.hasAttribute('data-from-md')) {
+			if (handleInternalLink(event, t)) return;
+
+			event.preventDefault();
+			ipcProxySendToHost(t.getAttribute('href'));
+			return;
+		}
+
+		// If this is an internal link, jump to the anchor directly
+		if (t && t.nodeName === 'A' && t.hasAttribute('data-from-md')) {
+			if (handleInternalLink(event, t)) return;
 		}
 	});
 

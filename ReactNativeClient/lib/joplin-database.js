@@ -2,6 +2,8 @@ const { uuid } = require('lib/uuid.js');
 const { promiseChain } = require('lib/promise-utils.js');
 const { time } = require('lib/time-utils.js');
 const { Database } = require('lib/database.js');
+const { sprintf } = require('sprintf-js');
+const Resource = require('lib/models/Resource');
 
 const structureSql = `
 CREATE TABLE folders (
@@ -143,10 +145,66 @@ class JoplinDatabase extends Database {
 		return output;
 	}
 
-	tableFields(tableName) {
+	tableFields(tableName, options = null) {
+		if (options === null) options = {};
+
 		if (!this.tableFields_) throw new Error('Fields have not been loaded yet');
 		if (!this.tableFields_[tableName]) throw new Error('Unknown table: ' + tableName);
-		return this.tableFields_[tableName];
+		const output = this.tableFields_[tableName].slice();
+
+		if (options.includeDescription) {
+			for (let i = 0; i < output.length; i++) {
+				output[i].description = this.fieldDescription(tableName, output[i].name);
+			}
+		}
+
+		return output;
+	}
+
+	createDefaultRow(tableName) {
+		const row = {};
+		const fields = this.tableFields('resource_local_states');
+		for (let i = 0; i < fields.length; i++) {
+			const f = fields[i];
+			row[f.name] = Database.formatValue(f.type, f.default);
+		}
+		return row;
+	}
+
+	fieldDescription(tableName, fieldName) {		
+		const sp = sprintf;
+
+		if (!this.tableDescriptions_) {
+			this.tableDescriptions_ = {
+				notes: {
+					parent_id: sp('ID of the notebook that contains this note. Change this ID to move the note to a different notebook.'),
+					body: sp('The note body, in Markdown. May also contain HTML.'),
+					is_conflict: sp('Tells whether the note is a conflict or not.'),
+					is_todo: sp('Tells whether this note is a todo or not.'),
+					todo_due: sp('When the todo is due. An alarm will be triggered on that date.'),
+					todo_completed: sp('Tells whether todo is completed or not. This is a timestamp in milliseconds.'),
+					source_url: sp('The full URL where the note comes from.'),
+				},
+				folders: {},
+				resources: {},
+				tags: {},
+			};
+
+			const baseItems = ['notes', 'folders', 'tags', 'resources'];
+
+			for (let i = 0; i < baseItems.length; i++) {
+				const n = baseItems[i];
+				const singular = n.substr(0, n.length - 1);
+				this.tableDescriptions_[n].title = sp('The %s title.', singular);
+				this.tableDescriptions_[n].created_time = sp('When the %s was created.', singular);
+				this.tableDescriptions_[n].updated_time = sp('When the %s was last updated.', singular);
+				this.tableDescriptions_[n].user_created_time = sp('When the %s was created. It may differ from created_time as it can be manually set by the user.', singular);
+				this.tableDescriptions_[n].user_updated_time = sp('When the %s was last updated. It may differ from updated_time as it can be manually set by the user.', singular);
+			}
+		}
+
+		const d = this.tableDescriptions_[tableName];
+		return d && d[fieldName] ? d[fieldName] : '';
 	}
 
 	refreshTableFields() {
@@ -202,7 +260,7 @@ class JoplinDatabase extends Database {
 		// default value and thus might cause problems. In that case, the default value
 		// must be set in the synchronizer too.
 
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -346,6 +404,45 @@ class JoplinDatabase extends Database {
 
 			if (targetVersion == 12) {
 				queries.push('ALTER TABLE folders ADD COLUMN parent_id TEXT NOT NULL DEFAULT ""');
+			}
+
+			if (targetVersion == 13) {
+				queries.push('ALTER TABLE resources ADD COLUMN fetch_status INT NOT NULL DEFAULT "2"');
+				queries.push('ALTER TABLE resources ADD COLUMN fetch_error TEXT NOT NULL DEFAULT ""');
+				queries.push({ sql: 'UPDATE resources SET fetch_status = ?', params: [Resource.FETCH_STATUS_DONE] });
+			}
+
+			if (targetVersion == 14) {
+				const resourceLocalStates = `
+					CREATE TABLE resource_local_states (
+						id INTEGER PRIMARY KEY,
+						resource_id TEXT NOT NULL,
+						fetch_status INT NOT NULL DEFAULT "2",
+						fetch_error TEXT NOT NULL DEFAULT ""
+					);
+				`;
+
+				queries.push(this.sqlStringToLines(resourceLocalStates)[0]);
+
+				queries.push('INSERT INTO resource_local_states SELECT null, id, fetch_status, fetch_error FROM resources');
+
+				queries.push('CREATE INDEX resource_local_states_resource_id ON resource_local_states (resource_id)');
+				queries.push('CREATE INDEX resource_local_states_resource_fetch_status ON resource_local_states (fetch_status)');
+
+				queries = queries.concat(this.alterColumnQueries('resources', {
+					id: 'TEXT PRIMARY KEY',
+					title: 'TEXT NOT NULL DEFAULT ""',
+					mime: 'TEXT NOT NULL',
+					filename: 'TEXT NOT NULL DEFAULT ""',
+					created_time: 'INT NOT NULL',
+					updated_time: 'INT NOT NULL',
+					user_created_time: 'INT NOT NULL DEFAULT 0',
+					user_updated_time: 'INT NOT NULL DEFAULT 0',
+					file_extension: 'TEXT NOT NULL DEFAULT ""',
+					encryption_cipher_text: 'TEXT NOT NULL DEFAULT ""',
+					encryption_applied: 'INT NOT NULL DEFAULT 0',
+					encryption_blob_encrypted: 'INT NOT NULL DEFAULT 0',
+				}));
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

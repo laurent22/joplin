@@ -68,6 +68,8 @@ toolUtils.unlinkForce = async function(filePath) {
 }
 
 toolUtils.fileExists = async function(filePath) {
+	const fs = require('fs-extra');
+	
 	return new Promise((resolve, reject) => {
 		fs.stat(filePath, function(err, stat) {
 			if (err == null) {
@@ -113,6 +115,18 @@ toolUtils.githubRelease = async function(project, tagName, isDraft) {
 	if (!responseJson.url) throw new Error('No URL for release: ' + responseText);
 
 	return responseJson;
+}
+
+toolUtils.isLinux = () => {
+	return process && process.platform === 'linux';
+}
+
+toolUtils.isWindows = () => {
+	return process && process.platform === 'win32';
+}
+
+toolUtils.isMac = () => {
+	return process && process.platform === 'darwin';
 }
 
 module.exports = toolUtils;

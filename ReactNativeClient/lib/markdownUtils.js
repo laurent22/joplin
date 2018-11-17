@@ -1,4 +1,6 @@
+const stringPadding = require('string-padding');
 const urlUtils = require('lib/urlUtils');
+const MarkdownIt = require('markdown-it');
 
 const markdownUtils = {
 
@@ -20,15 +22,32 @@ const markdownUtils = {
 	},
 
 	extractImageUrls(md) {
-		// ![some text](http://path/to/image)
-		const regex = new RegExp(/!\[.*?\]\(([^\s\)]+).*?\)/, 'g')
-		let match = regex.exec(md);
+		const markdownIt = new MarkdownIt();
+		const env = {};
+		const tokens = markdownIt.parse(md, env);
 		const output = [];
-		while (match) {
-			const url = match[1];
-			if (output.indexOf(url) < 0) output.push(url);
-			match = regex.exec(md);
+
+		const searchUrls = (tokens) => {
+			for (let i = 0; i < tokens.length; i++) {
+				const token = tokens[i];
+
+				if (token.type === 'image') {
+					for (let j = 0; j < token.attrs.length; j++) {
+						const a = token.attrs[j];
+						if (a[0] === 'src' && a.length >= 2 && a[1]) {
+							output.push(a[1]);
+						}
+					}
+				}
+				
+				if (token.children && token.children.length) {
+					searchUrls(token.children);
+				}
+			}
 		}
+
+		searchUrls(tokens);
+
 		return output;
 	},
 
@@ -36,6 +55,36 @@ const markdownUtils = {
 		const match = line.match(/^(\d+)\.(\s.*|)$/);
 		return match ? Number(match[1]) : 0;
 	},
+
+	createMarkdownTable(headers, rows) {
+		let output = [];
+
+		const headersMd = [];
+		const lineMd = [];
+		for (let i = 0; i < headers.length; i++) {
+			const mdRow = [];
+			const h = headers[i];
+			headersMd.push(stringPadding(h.label, 3, ' ', stringPadding.RIGHT));
+			lineMd.push('---');
+		}
+
+		output.push(headersMd.join(' | '));
+		output.push(lineMd.join(' | '));
+
+		for (let i = 0; i < rows.length; i++) {
+			const row = rows[i];
+			const rowMd = [];
+			for (let j = 0; j < headers.length; j++) {
+				const h = headers[j];
+				const value = h.filter ? h.filter(row[h.name]) : row[h.name];
+				rowMd.push(stringPadding(value, 3, ' ', stringPadding.RIGHT));
+			}
+			output.push(rowMd.join(' | '));
+		}
+
+		return output.join('\n');
+	},
+
 
 };
 

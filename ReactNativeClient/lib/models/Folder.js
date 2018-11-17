@@ -15,13 +15,6 @@ class Folder extends BaseItem {
 		return 'folders';
 	}
 
-	static async serialize(folder) {
-		let fieldNames = this.fieldNames();
-		fieldNames.push('type_');
-		//lodash.pull(fieldNames, 'parent_id');
-		return super.serialize(folder, 'folder', fieldNames);
-	}
-
 	static modelType() {
 		return BaseModel.TYPE_FOLDER;
 	}

@@ -2,7 +2,6 @@ const MarkdownIt = require('markdown-it');
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = (new Entities()).encode;
 const Resource = require('lib/models/Resource.js');
-const ModelCache = require('lib/ModelCache');
 const ObjectUtils = require('lib/ObjectUtils');
 const { shim } = require('lib/shim.js');
 const { _ } = require('lib/locale');
@@ -17,7 +16,6 @@ class MdToHtml {
 		this.loadedResources_ = {};
 		this.cachedContent_ = null;
 		this.cachedContentKey_ = null;
-		this.modelCache_ = new ModelCache();
 
 		// Must include last "/"
 		this.resourceBaseUrl_ = ('resourceBaseUrl' in options) ? options.resourceBaseUrl : null;
@@ -30,10 +28,16 @@ class MdToHtml {
 			const r = resources[n];
 			k.push(r.id);
 		}
+
 		k.push(md5(escape(body))); // https://github.com/pvorb/node-md5/issues/41
 		k.push(md5(JSON.stringify(style)));
 		k.push(md5(JSON.stringify(options)));
 		return k.join('_');
+	}
+
+	clearCache() {
+		this.cachedContent_ = null;
+		this.cachedContentKey_ = null;
 	}
 
 	renderAttrs_(attrs) {
@@ -73,42 +77,48 @@ class MdToHtml {
 		return attrs;
 	}
 
-	renderImage_(attrs, options) {
-		const loadResource = async (id) => {
-			// console.info('Loading resource: ' + id);
+	async loadResource(id, options) {
+		// Initially set to to an empty object to make
+		// it clear that it is being loaded. Otherwise
+		// it sometimes results in multiple calls to
+		// loadResource() for the same resource.
+		this.loadedResources_[id] = {};
 
-			// Initially set to to an empty object to make
-			// it clear that it is being loaded. Otherwise
-			// it sometimes results in multiple calls to
-			// loadResource() for the same resource.
-			this.loadedResources_[id] = {};
+		const resource = await Resource.load(id);
 
-			const resource = await Resource.load(id);
-			//const resource = await this.modelCache_.load(Resource, id);
-
-			if (!resource) {
-				// Can happen for example if an image is attached to a note, but the resource hasn't
-				// been downloaded from the sync target yet.
-				console.warn('Cannot load resource: ' + id);
-				return;
-			}
-
-			this.loadedResources_[id] = resource;
-
-			if (options.onResourceLoaded) options.onResourceLoaded();
+		if (!resource) {
+			// Can happen for example if an image is attached to a note, but the resource hasn't
+			// been downloaded from the sync target yet.
+			console.info('Cannot load resource: ' + id);
+			delete this.loadedResources_[id];
+			return;
 		}
 
+		const localState = await Resource.localState(resource);
+
+		if (localState.fetch_status !== Resource.FETCH_STATUS_DONE) {
+			delete this.loadedResources_[id];
+			console.info('Resource not yet fetched: ' + id);
+			return;
+		}
+
+		this.loadedResources_[id] = resource;
+
+		if (options.onResourceLoaded) options.onResourceLoaded();
+	}
+
+	renderImage_(attrs, options) {
 		const title = this.getAttr_(attrs, 'title');
 		const href = this.getAttr_(attrs, 'src');
 
 		if (!Resource.isResourceUrl(href)) {
-			return '<img title="' + htmlentities(title) + '" src="' + href + '"/>';
+			return '<img data-from-md title="' + htmlentities(title) + '" src="' + href + '"/>';
 		}
 
 		const resourceId = Resource.urlToId(href);
 		const resource = this.loadedResources_[resourceId];
 		if (!resource) {
-			loadResource(resourceId);
+			this.loadResource(resourceId, options);
 			return '';
 		}
 
@@ -118,10 +128,31 @@ class MdToHtml {
 		if (Resource.isSupportedImageMimeType(mime)) {
 			let src = './' + Resource.filename(resource);
 			if (this.resourceBaseUrl_ !== null) src = this.resourceBaseUrl_ + src;
-			let output = '<img data-resource-id="' + resource.id + '" title="' + htmlentities(title) + '" src="' + src + '"/>';
+			let output = '<img data-from-md data-resource-id="' + resource.id + '" title="' + htmlentities(title) + '" src="' + src + '"/>';
 			return output;
 		}
 		
+		return '[Image: ' + htmlentities(resource.title) + ' (' + htmlentities(mime) + ')]';
+	}
+
+	renderImageHtml_(before, src, after, options) {
+		const resourceId = Resource.urlToId(src);
+		const resource = this.loadedResources_[resourceId];
+		if (!resource) {
+			this.loadResource(resourceId, options);
+			return '';
+		}
+
+		if (!resource.id) return ''; // Resource is being loaded
+
+		const mime = resource.mime ? resource.mime.toLowerCase() : '';
+		if (Resource.isSupportedImageMimeType(mime)) {
+			let newSrc = './' + Resource.filename(resource);
+			if (this.resourceBaseUrl_ !== null) newSrc = this.resourceBaseUrl_ + newSrc;
+			let output = '<img ' + before + ' data-resource-id="' + resource.id + '" src="' + newSrc + '" ' + after + '/>';
+			return output;
+		}
+
 		return '[Image: ' + htmlentities(resource.title) + ' (' + htmlentities(mime) + ')]';
 	}
 
@@ -146,7 +177,7 @@ class MdToHtml {
 		}
 
 		const js = options.postMessageSyntax + "(" + JSON.stringify(href) + "); return false;";
-		let output = "<a " + resourceIdAttr + " title='" + htmlentities(title) + "' href='" + hrefAttr + "' onclick='" + js + "'>" + icon;
+		let output = "<a data-from-md " + resourceIdAttr + " title='" + htmlentities(title) + "' href='" + hrefAttr + "' onclick='" + js + "'>" + icon;
 		return output;
 	}
 
@@ -187,7 +218,6 @@ class MdToHtml {
 			return str;
 		}
 	}
-
 
 	renderTokens_(markdownIt, tokens, options) {
 		let output = [];
@@ -365,6 +395,8 @@ class MdToHtml {
 			previousToken = t;
 		}
 
+		output.unshift('<!-- START_OF_DOCUMENT -->');
+
 		// Insert the extra CSS at the top of the HTML
 
 		if (!ObjectUtils.isEmpty(extraCssBlocks)) {
@@ -466,11 +498,17 @@ class MdToHtml {
 			while (renderedBody.indexOf('mJOPm') >= 0) {
 				renderedBody = renderedBody.replace(/mJOPmCHECKBOXm([A-Z]+)m(\d+)m/, function(v, type, index) {
 					const js = options.postMessageSyntax + "('checkboxclick:" + type + ':' + index + "'); this.classList.contains('tick') ? this.classList.remove('tick') : this.classList.add('tick'); return false;";
-					return '<a href="#" onclick="' + js + '" class="checkbox ' + (type == 'NOTICK' ? '' : 'tick') + '"><span>' + '' + '</span></a>';
+					return '<a data-from-md href="#" onclick="' + js + '" class="checkbox ' + (type == 'NOTICK' ? '' : 'tick') + '"><span>' + '' + '</span></a>';
 				});
 				if (loopCount++ >= 9999) break;
 			}
 		}
+
+		renderedBody = renderedBody.replace(/<img(.*?)src=["'](.*?)["'](.*?)\/>/g, (v, before, src, after) => {
+			if (!Resource.isResourceUrl(src)) return '<img ' + before + ' src="' + src + '" ' + after + '/>';
+			return this.renderImageHtml_(before, src, after, options);
+		});
+
 
 		// https://necolas.github.io/normalize.css/
 		const normalizeCss = `
@@ -561,12 +599,12 @@ class MdToHtml {
 				border-bottom: 1px solid ` + style.htmlDividerColor + `;
 			}
 			img {
-				width: auto;
+				/* width: auto; */
 				max-width: 100%;
 			}
 			.inline-code {
-				border: 1px solid #CBCBCB;
-				background-color: #eff0f1;
+				border: 1px solid ` + style.htmlCodeBorderColor + `;
+				background-color: ` + style.htmlCodeColor + `;
 				padding-right: .2em;
 				padding-left: .2em;
 			}

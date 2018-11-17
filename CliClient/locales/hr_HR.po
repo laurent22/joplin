@@ -455,6 +455,9 @@ msgstr "Ne mogu započeti sinkronizaciju."
 msgid "Starting synchronisation..."
 msgstr "Započinjem sinkronizaciju..."
 
+msgid "Downloading resources..."
+msgstr ""
+
 msgid "Cancelling... Please wait."
 msgstr "Prekidam... Pričekaj."
 
@@ -625,6 +628,10 @@ msgstr "Izreži"
 msgid "Paste"
 msgstr "Zalijepi"
 
+#, fuzzy
+msgid "Select all"
+msgstr "Odaberi datum"
+
 msgid "Bold"
 msgstr ""
 
@@ -711,6 +718,9 @@ msgstr ""
 msgid "No"
 msgstr "N"
 
+msgid "Token has been copied to the clipboard!"
+msgstr ""
+
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 
@@ -752,6 +762,21 @@ msgid "Step 2: Install the extension"
 msgstr ""
 
 msgid "Download and install the relevant extension for your browser:"
+msgstr ""
+
+#, fuzzy
+msgid "Advanced options"
+msgstr "Prikaži napredne opcije"
+
+msgid "Authorisation token:"
+msgstr ""
+
+msgid "Copy token"
+msgstr ""
+
+msgid ""
+"This authorisation token is only needed to allow third-party applications to "
+"access Joplin."
 msgstr ""
 
 #, fuzzy
@@ -908,6 +933,14 @@ msgstr "Kopiraj"
 msgid "Switch between note and to-do type"
 msgstr "Zamijeni bilješku i zadatak"
 
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Zamijeni bilješku i zadatak"
+
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "Zamijeni bilješku i zadatak"
+
 msgid "Copy Markdown link"
 msgstr ""
 
@@ -930,6 +963,9 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+msgid "Note properties"
+msgstr ""
+
 msgid "Open..."
 msgstr ""
 
@@ -945,6 +981,9 @@ msgid "Copy path to clipboard"
 msgstr ""
 
 msgid "Copy Link Address"
+msgstr ""
+
+msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
 
 #, javascript-format
@@ -981,9 +1020,6 @@ msgstr "Postavi upozorenje"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
-
-msgid "Note properties"
-msgstr ""
 
 msgid "Hyperlink"
 msgstr ""
@@ -1064,6 +1100,14 @@ msgstr "Sinkroniziraj"
 
 msgid "Notebooks"
 msgstr "Bilježnice"
+
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Stvorene lokalne stavke: %d."
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d"
+msgstr "Resursi: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Odaberi lokaciju za izvoz statusa sinkronizacije"
@@ -1153,10 +1197,6 @@ msgstr "Obrisane udaljene stavke: %d."
 #, fuzzy, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Stvorene lokalne stavke: %d."
-
-#, fuzzy, javascript-format
-msgid "State: %s."
-msgstr "Stanje: \"%s\"."
 
 msgid "Cancelling..."
 msgstr "Prekidam..."
@@ -1278,6 +1318,12 @@ msgid "Show tray icon"
 msgstr ""
 
 msgid "Note: Does not work in all desktop environments."
+msgstr ""
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
 msgstr ""
 
 msgid "Start application minimised in the tray icon"
@@ -1405,6 +1451,10 @@ msgstr ""
 msgid "Evernote Export File"
 msgstr "Evernote izvozne datoteke"
 
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "Evernote izvozne datoteke"
+
 msgid "Directory"
 msgstr ""
 
@@ -1475,6 +1525,12 @@ msgstr "Nadolazeća upozorenja"
 msgid "On %s: %s"
 msgstr "On %s: %s"
 
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Trenutno nema bilješki. Stvori novu klikom na (+) gumb."
 
@@ -1504,6 +1560,10 @@ msgid "Press to set the decryption password."
 msgstr ""
 
 #, fuzzy
+msgid "Clear alarm"
+msgstr "Postavi upozorenje"
+
+#, fuzzy
 msgid "Save alarm"
 msgstr "Postavi upozorenje"
 
@@ -1516,8 +1576,34 @@ msgstr "Potvrdi"
 msgid "Cancel synchronisation"
 msgstr "Prekini sinkronizaciju"
 
+#, fuzzy
+msgid "Checking... Please wait."
+msgstr "Prekidam... Pričekaj."
+
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Prekini sinkronizaciju"
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#, fuzzy
+msgid "The application has been authorised!"
+msgstr "Aplikacija je uspješno autorizirana."
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+
 #, fuzzy, javascript-format
-msgid "Decrypting items: %d/%d"
+msgid "Decrypted items: %s / %s"
 msgstr "Stvorene lokalne stavke: %d."
 
 msgid "New tags:"
@@ -1625,6 +1711,9 @@ msgstr "Prikaži metapodatke"
 msgid "View on map"
 msgstr "Vidi na karti"
 
+msgid "Go to source URL"
+msgstr ""
+
 msgid "Delete notebook"
 msgstr "Obriši bilježnicu"
 
@@ -1646,6 +1735,10 @@ msgstr "Trenutno nemaš nijednu bilježnicu. Stvori novu klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobro došli"
+
+#, fuzzy
+#~ msgid "State: %s."
+#~ msgstr "Stanje: \"%s\"."
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "Bilježnica s ovim naslovom već postoji: \"%s\""

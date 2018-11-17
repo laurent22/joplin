@@ -1,11 +1,12 @@
 const BaseModel = require('lib/BaseModel.js');
 const BaseItem = require('lib/models/BaseItem.js');
 const NoteResource = require('lib/models/NoteResource.js');
+const ResourceLocalState = require('lib/models/ResourceLocalState.js');
 const Setting = require('lib/models/Setting.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const pathUtils = require('lib/path-utils.js');
 const { mime } = require('lib/mime-utils.js');
-const { filename } = require('lib/path-utils.js');
+const { filename, safeFilename } = require('lib/path-utils.js');
 const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
 const markdownUtils = require('lib/markdownUtils');
 const JoplinError = require('lib/JoplinError');
@@ -26,20 +27,24 @@ class Resource extends BaseItem {
 	}
 
 	static isSupportedImageMimeType(type) {
-		const imageMimeTypes = ["image/jpg", "image/jpeg", "image/png", "image/gif", "image/svg+xml"];
+		const imageMimeTypes = ["image/jpg", "image/jpeg", "image/png", "image/gif", "image/svg+xml", "image/webp"];
 		return imageMimeTypes.indexOf(type.toLowerCase()) >= 0;
+	}
+
+	static needToBeFetched(limit = null) {
+		let sql = 'SELECT * FROM resources WHERE id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = ?) ORDER BY updated_time DESC';
+		if (limit !== null) sql += ' LIMIT ' + limit;
+		return this.modelSelectAll(sql, [Resource.FETCH_STATUS_IDLE]);
+	}
+
+	static async needToBeFetchedCount() {
+		const r = await this.db().selectOne('SELECT count(*) as total FROM resource_local_states WHERE fetch_status = ?', [Resource.FETCH_STATUS_IDLE]);
+		return r ? r['total'] : 0;
 	}
 
 	static fsDriver() {
 		if (!Resource.fsDriver_) Resource.fsDriver_ = new FsDriverDummy();
 		return Resource.fsDriver_;
-	}
-
-	static async serialize(item, type = null, shownKeys = null) {
-		let fieldNames = this.fieldNames();
-		fieldNames.push('type_');
-		//fieldNames = ArrayUtils.removeElement(fieldNames, 'encryption_blob_encrypted');
-		return super.serialize(item, 'resource', fieldNames);
 	}
 
 	static filename(resource, encryptedBlob = false) {
@@ -49,8 +54,22 @@ class Resource extends BaseItem {
 		return resource.id + extension;
 	}
 
+	static friendlyFilename(resource) {
+		let output = safeFilename(resource.title); // Make sure not to allow spaces or any special characters as it's not supported in HTTP headers
+		if (!output) output = resource.id;
+		let extension = resource.file_extension;
+		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
+		extension = extension ? ('.' + extension) : '';
+		return output + extension;
+	}
+
 	static fullPath(resource, encryptedBlob = false) {
 		return Setting.value('resourceDir') + '/' + this.filename(resource, encryptedBlob);
+	}
+
+	static async isReady(resource) {
+		const ls = await this.localState(resource);
+		return resource && ls.fetch_status === Resource.FETCH_STATUS_DONE && !resource.encryption_blob_encrypted;
 	}
 
 	// For resources, we need to decrypt the item (metadata) and the resource binary blob.
@@ -63,7 +82,7 @@ class Resource extends BaseItem {
 		const plainTextPath = this.fullPath(decryptedItem);
 		const encryptedPath = this.fullPath(decryptedItem, true);
 		const noExtPath = pathUtils.dirname(encryptedPath) + '/' + pathUtils.filename(encryptedPath);
-		
+
 		// When the resource blob is downloaded by the synchroniser, it's initially a file with no
 		// extension (since it's encrypted, so we don't know its extension). So here rename it
 		// to a file with a ".crypted" extension so that it's better identified, and then decrypt it.
@@ -170,6 +189,15 @@ class Resource extends BaseItem {
 		return url.substr(2);
 	}
 
+	static localState(resourceOrId) {
+		return ResourceLocalState.byResourceId(typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId);
+	}
+
+	static async setLocalState(resourceOrId, state) {
+		const id = typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId;
+		await ResourceLocalState.save(Object.assign({}, state, { resource_id: id }));
+	}
+
 	static async batchDelete(ids, options = null) {
 		// For resources, there's not really batch deleting since there's the file data to delete
 		// too, so each is processed one by one with the item being deleted last (since the db
@@ -184,10 +212,17 @@ class Resource extends BaseItem {
 			await super.batchDelete([id], options);
 			await NoteResource.deleteByResource(id); // Clean up note/resource relationships
 		}
+
+		await ResourceLocalState.batchDelete(ids);
 	}
 
 }
 
 Resource.IMAGE_MAX_DIMENSION = 1920;
+
+Resource.FETCH_STATUS_IDLE = 0;
+Resource.FETCH_STATUS_STARTED = 1;
+Resource.FETCH_STATUS_DONE = 2;
+Resource.FETCH_STATUS_ERROR = 3;
 
 module.exports = Resource;

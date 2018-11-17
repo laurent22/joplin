@@ -3,7 +3,7 @@ require('app-module-path').addPath(__dirname + '/../ReactNativeClient');
 const fetch = require('node-fetch');
 const fs = require('fs-extra');
 const { dirname } = require('lib/path-utils.js');
-const stringPadding = require('string-padding');
+const markdownUtils = require('lib/markdownUtils');
 
 const rootDir = dirname(__dirname);
 
@@ -51,34 +51,6 @@ function createChangeLog(releases) {
 	}
 
 	return output.join('\n\n');
-}
-
-function createMarkdownTable(headers, rows) {
-	let output = [];
-
-	const headersMd = [];
-	const lineMd = [];
-	for (let i = 0; i < headers.length; i++) {
-		const mdRow = [];
-		const h = headers[i];
-		headersMd.push(stringPadding(h.label, 3, ' ', stringPadding.RIGHT));
-		lineMd.push('---');
-	}
-
-	output.push(headersMd.join(' | '));
-	output.push(lineMd.join(' | '));
-
-	for (let i = 0; i < rows.length; i++) {
-		const row = rows[i];
-		const rowMd = [];
-		for (let j = 0; j < headers.length; j++) {
-			const h = headers[j];
-			rowMd.push(stringPadding(row[h.name], 3, ' ', stringPadding.RIGHT));
-		}
-		output.push(rowMd.join(' | '));
-	}
-
-	return output.join('\n');
 }
 
 async function main() {
@@ -132,12 +104,12 @@ async function main() {
 
 	statsMd.push('# Joplin statistics');
 
-	statsMd.push(createMarkdownTable([
+	statsMd.push(markdownUtils.createMarkdownTable([
 		{ name: 'name', label: 'Name' },
 		{ name: 'value', label: 'Value' },
 	], totalsMd));
 
-	statsMd.push(createMarkdownTable([
+	statsMd.push(markdownUtils.createMarkdownTable([
 		{ name: 'tag_name', label: 'Version' },
 		{ name: 'published_at', label: 'Date' },
 		{ name: 'windows_count', label: 'Windows' },

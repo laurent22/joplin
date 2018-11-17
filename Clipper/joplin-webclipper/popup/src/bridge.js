@@ -2,7 +2,7 @@ const randomClipperPort = require('./randomClipperPort');
 
 class Bridge {
 
-	init(browser, browserSupportsPromises, dispatch) {
+	async init(browser, browserSupportsPromises, dispatch) {
 		console.info('Popup: Init bridge');
 
 		this.browser_ = browser;
@@ -28,6 +28,7 @@ class Bridge {
 					base_url: command.base_url,
 					source_url: command.url,
 					parent_id: command.parent_id,
+					tags: command.tags || '',
 				};
 
 				this.dispatch({ type: 'CLIPPED_CONTENT_SET', content: content });
@@ -36,7 +37,7 @@ class Bridge {
 
 		this.browser_.runtime.onMessage.addListener(this.browser_notify);
 
-		const backgroundPage = this.browser_.extension.getBackgroundPage();
+		const backgroundPage = await this.backgroundPage(this.browser_);
 
 		// Not sure why the getBackgroundPage() sometimes returns null, so
 		// in that case default to "prod" environment, which means the live
@@ -51,6 +52,17 @@ class Bridge {
 		});
 
 		this.findClipperServerPort();
+	}
+
+	async backgroundPage(browser) {
+		const bgp = browser.extension.getBackgroundPage();
+		if (bgp) return bgp;
+
+		return new Promise((resolve, reject) => {
+			browser.runtime.getBackgroundPage((bgp) => {
+				resolve(bgp);
+			})
+		});
 	}
 
 	env() {
@@ -111,6 +123,11 @@ class Bridge {
 
 					const folders = await this.folderTree();
 					this.dispatch({ type: 'FOLDERS_SET', folders: folders });
+
+					const tags = await this.clipperApiExec('GET', 'tags');
+					this.dispatch({ type: 'TAGS_SET', tags: tags });
+
+					bridge().restoreState();
 					return;
 				}
 			} catch (error) {

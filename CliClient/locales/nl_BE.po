@@ -456,6 +456,9 @@ msgstr "Kan de synchronisatie niet starten."
 msgid "Starting synchronisation..."
 msgstr "Synchronisatie starten..."
 
+msgid "Downloading resources..."
+msgstr ""
+
 msgid "Cancelling... Please wait."
 msgstr "Annuleren.. Even geduld."
 
@@ -630,6 +633,10 @@ msgstr "Knip"
 msgid "Paste"
 msgstr "Plak"
 
+#, fuzzy
+msgid "Select all"
+msgstr "Selecteer datum"
+
 msgid "Bold"
 msgstr ""
 
@@ -715,6 +722,9 @@ msgstr ""
 msgid "No"
 msgstr "N"
 
+msgid "Token has been copied to the clipboard!"
+msgstr ""
+
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 
@@ -756,6 +766,21 @@ msgid "Step 2: Install the extension"
 msgstr ""
 
 msgid "Download and install the relevant extension for your browser:"
+msgstr ""
+
+#, fuzzy
+msgid "Advanced options"
+msgstr "Toon geavanceerde opties"
+
+msgid "Authorisation token:"
+msgstr ""
+
+msgid "Copy token"
+msgstr ""
+
+msgid ""
+"This authorisation token is only needed to allow third-party applications to "
+"access Joplin."
 msgstr ""
 
 #, fuzzy
@@ -923,6 +948,14 @@ msgstr "Kopieer"
 msgid "Switch between note and to-do type"
 msgstr "Wissel tussen notitie en to-do type"
 
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Wissel tussen notitie en to-do type"
+
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "Wissel tussen notitie en to-do type"
+
 msgid "Copy Markdown link"
 msgstr ""
 
@@ -947,6 +980,9 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+msgid "Note properties"
+msgstr ""
+
 msgid "Open..."
 msgstr ""
 
@@ -962,6 +998,9 @@ msgid "Copy path to clipboard"
 msgstr ""
 
 msgid "Copy Link Address"
+msgstr ""
+
+msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
 
 #, javascript-format
@@ -998,9 +1037,6 @@ msgstr "Zet melding"
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
-
-msgid "Note properties"
-msgstr ""
 
 msgid "Hyperlink"
 msgstr ""
@@ -1081,6 +1117,14 @@ msgstr "Synchroniseer"
 
 msgid "Notebooks"
 msgstr "Notitieboeken"
+
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Opgehaalde items: %d/%d."
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d"
+msgstr "Middelen: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Selecteer waar de synchronisatie status naar geëxporteerd moet worden"
@@ -1173,10 +1217,6 @@ msgstr "Verwijderde remote items: %d."
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Opgehaalde items: %d/%d."
-
-#, fuzzy, javascript-format
-msgid "State: %s."
-msgstr "Status: \"%s\""
 
 msgid "Cancelling..."
 msgstr "Annuleren..."
@@ -1298,6 +1338,12 @@ msgid "Show tray icon"
 msgstr ""
 
 msgid "Note: Does not work in all desktop environments."
+msgstr ""
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
 msgstr ""
 
 msgid "Start application minimised in the tray icon"
@@ -1428,6 +1474,10 @@ msgstr ""
 msgid "Evernote Export File"
 msgstr "Exporteer Evernote bestanden"
 
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "Exporteer Evernote bestanden"
+
 msgid "Directory"
 msgstr ""
 
@@ -1501,6 +1551,12 @@ msgstr "Meldingen"
 msgid "On %s: %s"
 msgstr "Op %s: %s"
 
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 "Er zijn momenteel geen notities. Maak een notitie door op (+) te klikken."
@@ -1531,6 +1587,10 @@ msgid "Press to set the decryption password."
 msgstr "Klik om het decryptie wachtwoord in te stellen"
 
 #, fuzzy
+msgid "Clear alarm"
+msgstr "Zet melding"
+
+#, fuzzy
 msgid "Save alarm"
 msgstr "Zet melding"
 
@@ -1543,8 +1603,34 @@ msgstr "Bevestig"
 msgid "Cancel synchronisation"
 msgstr "Annuleer synchronisatie"
 
+#, fuzzy
+msgid "Checking... Please wait."
+msgstr "Annuleren.. Even geduld."
+
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Annuleer synchronisatie"
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#, fuzzy
+msgid "The application has been authorised!"
+msgstr "De applicatie is succesvol geauthenticeerd."
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+
 #, fuzzy, javascript-format
-msgid "Decrypting items: %d/%d"
+msgid "Decrypted items: %s / %s"
 msgstr "Opgehaalde items: %d/%d."
 
 msgid "New tags:"
@@ -1651,6 +1737,9 @@ msgstr "Toon metadata"
 msgid "View on map"
 msgstr "Toon op de kaart"
 
+msgid "Go to source URL"
+msgstr ""
+
 msgid "Delete notebook"
 msgstr "Verwijder notitieboek"
 
@@ -1674,6 +1763,10 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Welkom"
+
+#, fuzzy
+#~ msgid "State: %s."
+#~ msgstr "Status: \"%s\""
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "Er bestaat al een notitieboek met \"%s\" als titel"

@@ -1,4 +1,5 @@
 const BaseItem = require('lib/models/BaseItem');
+const Resource = require('lib/models/Resource');
 const { Logger } = require('lib/logger.js');
 
 class DecryptionWorker {
@@ -43,7 +44,7 @@ class DecryptionWorker {
 		this.scheduleId_ = setTimeout(() => {
 			this.scheduleId_ = null;
 			this.start({
-				materKeyNotLoadedHandler: 'dispatch',
+				masterKeyNotLoadedHandler: 'dispatch',
 			});
 		}, 1000);
 	}
@@ -56,7 +57,7 @@ class DecryptionWorker {
 
 	async start(options = null) {
 		if (options === null) options = {};
-		if (!('materKeyNotLoadedHandler' in options)) options.materKeyNotLoadedHandler = 'throw';
+		if (!('masterKeyNotLoadedHandler' in options)) options.masterKeyNotLoadedHandler = 'throw';
 
 		if (this.state_ !== 'idle') {
 			this.logger().info('DecryptionWorker: cannot start because state is "' + this.state_ + '"');
@@ -83,6 +84,14 @@ class DecryptionWorker {
 
 					const ItemClass = BaseItem.itemClass(item);
 
+					if (item.type_ === Resource.modelType()) {
+						const ls = await Resource.localState(item);
+						if (ls.fetch_status !== Resource.FETCH_STATUS_DONE) {
+							excludedIds.push(item.id);
+							continue;
+						}
+					}
+
 					this.dispatchReport({
 						itemIndex: i,
 						itemCount: items.length,
@@ -95,7 +104,7 @@ class DecryptionWorker {
 					} catch (error) {
 						excludedIds.push(item.id);
 						
-						if (error.code === 'masterKeyNotLoaded' && options.materKeyNotLoadedHandler === 'dispatch') {
+						if (error.code === 'masterKeyNotLoaded' && options.masterKeyNotLoadedHandler === 'dispatch') {
 							if (notLoadedMasterKeyDisptaches.indexOf(error.masterKeyId) < 0) {
 								this.dispatch({
 									type: 'MASTERKEY_ADD_NOT_LOADED',
@@ -106,11 +115,11 @@ class DecryptionWorker {
 							continue;
 						}
 
-						if (error.code === 'masterKeyNotLoaded' && options.materKeyNotLoadedHandler === 'throw') {
+						if (error.code === 'masterKeyNotLoaded' && options.masterKeyNotLoadedHandler === 'throw') {
 							throw error;
 						}
 
-						this.logger().warn('DecryptionWorker: error for: ' + item.id + ' (' + ItemClass.tableName() + ')', error);
+						this.logger().warn('DecryptionWorker: error for: ' + item.id + ' (' + ItemClass.tableName() + ')', error, item);
 					}
 				}
 

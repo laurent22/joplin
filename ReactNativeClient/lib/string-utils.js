@@ -206,4 +206,17 @@ function toTitleCase(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-module.exports = { removeDiacritics, escapeFilename, wrap, splitCommandString, padLeft, toTitleCase };
+function urlDecode(string) {
+	return decodeURIComponent((string+'').replace(/\+/g, '%20'));
+}
+
+function escapeHtml(s) {
+	return s
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
+}
+
+module.exports = { removeDiacritics, escapeFilename, wrap, splitCommandString, padLeft, toTitleCase, escapeHtml };

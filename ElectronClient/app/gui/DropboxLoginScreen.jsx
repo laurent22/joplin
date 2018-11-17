@@ -28,16 +28,18 @@ class DropboxLoginScreenComponent extends React.Component {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.theme);
 
-		const headerStyle = {
-			width: style.width,
-		};
+		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
+		const containerStyle = Object.assign({}, theme.containerStyle, {
+			padding: theme.margin,
+			height: style.height - theme.headerHeight - theme.margin * 2,
+		});
 
 		const inputStyle = Object.assign({}, theme.inputStyle, { width: 500 });
 
 		return (
 			<div>
 				<Header style={headerStyle} />
-				<div style={{padding: theme.margin}}>
+				<div style={containerStyle}>
 					<p style={theme.textStyle}>{_('To allow Joplin to synchronise with Dropbox, please follow the steps below:')}</p>
 					<p style={theme.textStyle}>{_('Step 1: Open this URL in your browser to authorise the application:')}</p>
 					<a style={theme.textStyle} href="#" onClick={this.shared_.loginUrl_click}>{this.state.loginUrl}</a>

@@ -431,6 +431,9 @@ msgstr "无法初始化同步。"
 msgid "Starting synchronisation..."
 msgstr "开始同步..."
 
+msgid "Downloading resources..."
+msgstr ""
+
 msgid "Cancelling... Please wait."
 msgstr "正在取消... 请稍后。"
 
@@ -591,6 +594,10 @@ msgstr "剪切"
 msgid "Paste"
 msgstr "粘贴"
 
+#, fuzzy
+msgid "Select all"
+msgstr "选择日期"
+
 msgid "Bold"
 msgstr "粗体"
 
@@ -675,6 +682,9 @@ msgstr "是"
 msgid "No"
 msgstr "否"
 
+msgid "Token has been copied to the clipboard!"
+msgstr ""
+
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "网页剪辑服务已启用并设置为自动启动。"
 
@@ -719,6 +729,21 @@ msgstr "步骤二：安装扩展"
 
 msgid "Download and install the relevant extension for your browser:"
 msgstr "为您的浏览器下载并安装相关的扩展："
+
+#, fuzzy
+msgid "Advanced options"
+msgstr "显示高级选项"
+
+msgid "Authorisation token:"
+msgstr ""
+
+msgid "Copy token"
+msgstr ""
+
+msgid ""
+"This authorisation token is only needed to allow third-party applications to "
+"access Joplin."
+msgstr ""
 
 msgid "Check synchronisation configuration"
 msgstr "检查同步配置"
@@ -877,6 +902,14 @@ msgstr "%s - 副本"
 msgid "Switch between note and to-do type"
 msgstr "在笔记和待办事项类型之间切换"
 
+#, fuzzy
+msgid "Switch to note type"
+msgstr "在笔记和待办事项类型之间切换"
+
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "在笔记和待办事项类型之间切换"
+
 msgid "Copy Markdown link"
 msgstr "复制 Markdown 链接"
 
@@ -899,6 +932,9 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+msgid "Note properties"
+msgstr ""
+
 msgid "Open..."
 msgstr "打开…"
 
@@ -913,6 +949,9 @@ msgid "Copy path to clipboard"
 msgstr "复制路径到剪切板"
 
 msgid "Copy Link Address"
+msgstr ""
+
+msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
 
 #, javascript-format
@@ -949,9 +988,6 @@ msgstr "设置提醒"
 #, javascript-format
 msgid "In: %s"
 msgstr "在: %s"
-
-msgid "Note properties"
-msgstr ""
 
 msgid "Hyperlink"
 msgstr "超链接"
@@ -1028,6 +1064,14 @@ msgstr "同步"
 
 msgid "Notebooks"
 msgstr "笔记本"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "解密项目：%d/%d"
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d"
+msgstr "资源：%d。"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "请选择同步状态的导出位置"
@@ -1117,10 +1161,6 @@ msgstr "已删除远程项目: %d。"
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "已提取项目：%d/%d."
-
-#, javascript-format
-msgid "State: %s."
-msgstr "状态：%s。"
 
 msgid "Cancelling..."
 msgstr "正在取消..."
@@ -1232,6 +1272,12 @@ msgstr "显示托盘图标"
 
 msgid "Note: Does not work in all desktop environments."
 msgstr "注意：在所有的桌面环境中都不能工作。"
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
+msgstr ""
 
 msgid "Start application minimised in the tray icon"
 msgstr "启动应用程序时在托盘中最小化"
@@ -1361,6 +1407,10 @@ msgstr "Joplin 导出目录"
 msgid "Evernote Export File"
 msgstr "Evernote 导出文件"
 
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "Joplin 导出目录"
+
 msgid "Directory"
 msgstr "文件目录"
 
@@ -1432,6 +1482,12 @@ msgstr "临近提醒"
 msgid "On %s: %s"
 msgstr "%s：%s"
 
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "当前没有任何笔记。点击(+)按钮创建。"
 
@@ -1460,6 +1516,10 @@ msgstr "移动%d条笔记至笔记本\"%s\"？"
 msgid "Press to set the decryption password."
 msgstr "按键将设置解密密码。"
 
+#, fuzzy
+msgid "Clear alarm"
+msgstr "设置提醒"
+
 msgid "Save alarm"
 msgstr "保存提醒"
 
@@ -1472,8 +1532,34 @@ msgstr "确认"
 msgid "Cancel synchronisation"
 msgstr "取消同步"
 
+#, fuzzy
+msgid "Checking... Please wait."
+msgstr "正在取消... 请稍后。"
+
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "检查同步配置"
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#, fuzzy
+msgid "The application has been authorised!"
+msgstr "此程序已被成功授权。"
+
 #, javascript-format
-msgid "Decrypting items: %d/%d"
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Decrypted items: %s / %s"
 msgstr "解密项目：%d/%d"
 
 msgid "New tags:"
@@ -1581,6 +1667,9 @@ msgstr "显示元数据"
 msgid "View on map"
 msgstr "查看地图"
 
+msgid "Go to source URL"
+msgstr ""
+
 msgid "Delete notebook"
 msgstr "删除笔记本"
 
@@ -1600,6 +1689,9 @@ msgstr "您目前未有笔记本。点击(+)按钮创建。"
 
 msgid "Welcome"
 msgstr "欢迎"
+
+#~ msgid "State: %s."
+#~ msgstr "状态：%s。"
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "以此标题命名的笔记本已存在：\"%s\""

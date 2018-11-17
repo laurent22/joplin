@@ -427,8 +427,19 @@ function enexXmlToMdArray(stream, resources) {
 
 		saxStream.on('opentag', function(node) {
 			const nodeAttributes = attributeToLowerCase(node);
-
 			let n = node.name.toLowerCase();
+
+			const currentList = state.lists && state.lists.length ? state.lists[state.lists.length - 1] : null;
+
+			// Kind of a hack: If we are inside a list, at the beginning of an item (when a "- " or "1. " has been added
+			// but no other text yet), if the current tag is eg. a <div> or any other block tag, we skip it, so that a new line
+			// does not get created. It is to handle list4.html test case.
+			// https://github.com/laurent22/joplin/issues/832
+			if (currentList) {
+				if (!currentList.startedText && isBlockTag(n)) return;
+				currentList.startedText = true;
+			}
+
 			if (n == 'en-note') {
 				// Start of note
 			} else if (isBlockTag(n)) {
@@ -476,7 +487,7 @@ function enexXmlToMdArray(stream, resources) {
 				section = newSection;
 			} else if (isListTag(n)) {
 				section.lines.push(BLOCK_OPEN);
-				state.lists.push({ tag: n, counter: 1 });
+				state.lists.push({ tag: n, counter: 1, startedText: false });
 			} else if (n == 'li') {
 				section.lines.push(BLOCK_OPEN);
 				if (!state.lists.length) {
@@ -485,6 +496,7 @@ function enexXmlToMdArray(stream, resources) {
 				}
 
 				let container = state.lists[state.lists.length - 1];
+				container.startedText = false;
 				if (container.tag == "ul") {
 					section.lines.push("- ");
 				} else {

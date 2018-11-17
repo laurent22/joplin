@@ -59,9 +59,11 @@ class SelectDateTimeDialog extends Component {
 	}
 
 	render() {
+		const clearAlarmText = _("Clear alarm"); // For unknown reasons, this particular string doesn't get translated if it's directly in the text property below
+
 		const popupActions = [
 			<DialogButton text={_("Save alarm")} align="center" onPress={() => this.onAccept()} key="saveButton" />,
-			<DialogButton text={_("Clear alarm")} align="center" onPress={() => this.onClear()} key="clearButton" />,
+			<DialogButton text={clearAlarmText} align="center" onPress={() => this.onClear()} key="clearButton" />,
 			<DialogButton text={_("Cancel")} align="center" onPress={() => this.onReject()} key="cancelButton" />,
 		];
 
