@@ -11,6 +11,14 @@ echo "              | |                                                 "
 echo "              |_|                                                 "
 echo ""
 
+# Check and warn if running as root.
+if [[ $EUID = 0 ]] ; then
+  if [[ $* != *--allow-root* ]] ; then
+    echo "Please don't run as root. Use '--allow-root' to ignore this warning."
+    exit 1
+  fi
+fi
+
 #-----------------------------------------------------
 # Download Joplin
 #-----------------------------------------------------
