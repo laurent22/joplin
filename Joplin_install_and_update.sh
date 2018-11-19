@@ -19,7 +19,6 @@ echo ""
 version=$(curl --silent "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": "v\K.*?(?=")')
 
 # Check if it's in the latest version
-touch VERSION
 if [[ $(< ~/.joplin/VERSION) != "$version" ]]; then
 
     # Delete previous version
