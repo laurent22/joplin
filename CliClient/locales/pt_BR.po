@@ -1,7 +1,8 @@
-# SOME DESCRIPTIVE TITLE.
+# pt_BR locale strings - Joplin.
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Updated by Renato Xavier da Silveira Rosa <renatoxsr@gmail.com>, 2018.
 #
 msgid ""
 msgstr ""
@@ -13,8 +14,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.7\n"
+"X-Generator: Poedit 2.2\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Para eliminar uma tag, remova a tag das notas associadas a ela."
@@ -147,7 +150,7 @@ msgid "Completed decryption."
 msgstr "Decriptação completada."
 
 msgid "Enabled"
-msgstr "Desabilitado"
+msgstr "Habilitado"
 
 msgid "Disabled"
 msgstr "Desabilitado"
@@ -455,12 +458,11 @@ msgid "Starting synchronisation..."
 msgstr "Iniciando sincronização..."
 
 msgid "Downloading resources..."
-msgstr ""
+msgstr "Baixando os recursos..."
 
 msgid "Cancelling... Please wait."
 msgstr "Cancelando... Aguarde."
 
-#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
@@ -468,7 +470,8 @@ msgid ""
 msgstr ""
 "<tag-command> pode ser \"add\", \"remove\" ou \"list\" para atribuir ou "
 "remover [tag] de [nota], ou para listar as notas associadas a [tag]. O "
-"comando `taglist` pode ser usado para listar todas as tags."
+"comando `tag list` pode ser usado para listar todas as tags (use -l para "
+"opção longa)."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
@@ -628,9 +631,8 @@ msgstr "Cortar"
 msgid "Paste"
 msgstr "Colar"
 
-#, fuzzy
 msgid "Select all"
-msgstr "Selecionar data"
+msgstr "Selecionar tudo"
 
 msgid "Bold"
 msgstr "Negrito"
@@ -716,7 +718,7 @@ msgid "No"
 msgstr "Não"
 
 msgid "Token has been copied to the clipboard!"
-msgstr ""
+msgstr "Token foi copiado para a \\u00e1rea de transfer\\u00eancia!"
 
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
@@ -728,7 +730,7 @@ msgstr "Status: Iniciado, na porta %d"
 
 #, javascript-format
 msgid "Status: %s"
-msgstr "Status: \"%s\"."
+msgstr "Status: %s"
 
 msgid "Disable Web Clipper Service"
 msgstr "Desabilitar serviço Web Clipper"
@@ -767,20 +769,21 @@ msgstr "Passo 2: Instalar a extensão"
 msgid "Download and install the relevant extension for your browser:"
 msgstr "Baixe e instale a extensão relevante para seu browser:"
 
-#, fuzzy
 msgid "Advanced options"
 msgstr "Mostrar opções avançadas"
 
 msgid "Authorisation token:"
-msgstr ""
+msgstr "Token de autoriza\\u00e7\\u00e3o:"
 
 msgid "Copy token"
-msgstr ""
+msgstr "Copira token"
 
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
+"Esse token de autoriza\\u00e7\\u00e3o só é necess\\u00e1rio para permitir "
+"que aplicativos de terceiros acessem o Joplin."
 
 msgid "Check synchronisation configuration"
 msgstr "Verificar a configuração da sincronização"
@@ -946,13 +949,11 @@ msgstr "%s - Copiar"
 msgid "Switch between note and to-do type"
 msgstr "Alternar entre os tipos Nota e Tarefa"
 
-#, fuzzy
 msgid "Switch to note type"
-msgstr "Alternar entre os tipos Nota e Tarefa"
+msgstr "Alternar para o tipo Nota"
 
-#, fuzzy
 msgid "Switch to to-do type"
-msgstr "Alternar entre os tipos Nota e Tarefa"
+msgstr "Alternar para o tipo Tarefa"
 
 msgid "Copy Markdown link"
 msgstr "Copiar link de Markdown"
@@ -971,13 +972,13 @@ msgid ""
 msgstr "Atualmente, não há cadernos. Crie um, clicando em \"Novo caderno\"."
 
 msgid "Location"
-msgstr ""
+msgstr "Localização"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 msgid "Note properties"
-msgstr ""
+msgstr "Propriedades da nota"
 
 msgid "Open..."
 msgstr "Abrir..."
@@ -996,7 +997,7 @@ msgid "Copy Link Address"
 msgstr "Copiar endereço do link"
 
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr ""
+msgstr "O anexo ainda não foi baixado ou decriptado."
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1060,7 +1061,7 @@ msgid "Click to stop external editing"
 msgstr "Clique para encerrar edição externa"
 
 msgid "Watching..."
-msgstr "Verificando..."
+msgstr "Observando alterações..."
 
 msgid "to-do"
 msgstr "tarefa"
@@ -1113,11 +1114,11 @@ msgstr "Cadernos"
 
 #, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr "Decriptando itens: %d/%d."
+msgstr "Decriptando itens: %d/%d"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Fetching resources: %d"
-msgstr "Recursos: %d."
+msgstr "Buscando recursos: %d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1301,7 +1302,7 @@ msgid "Sort notes by"
 msgstr "Ordenar notas por"
 
 msgid "Reverse sort order"
-msgstr "Inverter ordem de classificação."
+msgstr "Inverter ordem de classificação"
 
 msgid "Save geo-location with notes"
 msgstr "Salvar  geolocalização com notas"
@@ -1322,16 +1323,19 @@ msgid "Show tray icon"
 msgstr "Exibir tray icon"
 
 msgid "Note: Does not work in all desktop environments."
-msgstr "Nota: não funciona em todos os ambientes de desktop"
+msgstr "Nota: não funciona em todos os ambientes de desktop."
 
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
+"Isso irá permitir que o Joplin continue sendo executado em segundo plano. É "
+"recomendado que você habilita essa configuração para que suas notas "
+"sejamconstantemente sincronizadas, de modo a reduzir as chances de conflitos."
 
 msgid "Start application minimised in the tray icon"
-msgstr ""
+msgstr "Iniciar aplicativo minimizado na barra de tarefas"
 
 msgid "Global zoom percentage"
 msgstr "Porcentagem global do zoom"
@@ -1407,6 +1411,9 @@ msgid ""
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
 msgstr ""
+"Atenção: Se você modificar esse local, tenha certeza de copiar todo o seu "
+"conteúdo para lá antes de sincronizar, do contrário todos os seus arquivos "
+"serão removidos! Veja o FAQ para mais detalhes: %s"
 
 msgid "Nextcloud username"
 msgstr "Usuário da Nextcloud"
@@ -1436,7 +1443,7 @@ msgstr ""
 "os certificados, ou caminhos para arquivos cert. Por exemplo, /my/cert_dir, /"
 "other/custom.pem. Note que se você fizer mudanças nas configurações de TLS, "
 "você tem que salvar as mudanças antes de clicar em \"Verificar a "
-"configuração da sincronização\""
+"configuração da sincronização\"."
 
 msgid "Ignore TLS certificate errors"
 msgstr "Ignorar erros de certificados TLS"
@@ -1447,7 +1454,7 @@ msgstr "Valor da opção inválida: \"%s\". Os valores possíveis são: %s."
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr ""
+msgstr "A tag \"%s\" já existe. Escolha um nome diferente."
 
 msgid "Joplin Export File"
 msgstr "Arquivo de Exportação do Joplin"
@@ -1461,12 +1468,11 @@ msgstr "Diretório de Exportação do Joplin"
 msgid "Evernote Export File"
 msgstr "Arquivo de Exportação do Evernote"
 
-#, fuzzy
 msgid "Json Export Directory"
-msgstr "Diretório de Exportação do Joplin"
+msgstr "Diretório de Exportação JSON"
 
 msgid "Directory"
-msgstr "DIretório"
+msgstr "Diretório"
 
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
@@ -1541,10 +1547,10 @@ msgid "On %s: %s"
 msgstr "Em %s: %s"
 
 msgid "Permission to use camera"
-msgstr ""
+msgstr "Permissão para utilizar sua c\\u00e2mera"
 
 msgid "Your permission to use your camera is required."
-msgstr ""
+msgstr "É necessária a sua permissão para utilizar sua c\\u00e2mera."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Atualmente, não há notas. Crie uma, clicando no botão (+)."
@@ -1574,9 +1580,8 @@ msgstr "Mover %d notas para o caderno \"%s\"?"
 msgid "Press to set the decryption password."
 msgstr "Pressione para configurar a senha de decriptação."
 
-#, fuzzy
 msgid "Clear alarm"
-msgstr "Definir alarme"
+msgstr "Limpar alarme"
 
 msgid "Save alarm"
 msgstr "Salvar alarme"
@@ -1590,22 +1595,22 @@ msgstr "Confirmar"
 msgid "Cancel synchronisation"
 msgstr "Cancelar sincronização"
 
-#, fuzzy
 msgid "Checking... Please wait."
-msgstr "Cancelando... Aguarde."
+msgstr "Verificando... Por favor aguarde."
 
-#, fuzzy
 msgid "Success! Synchronisation configuration appears to be correct."
-msgstr "Verificar a configuração da sincronização"
+msgstr "Sucesso! A configuração da sincronização parece estar correta."
 
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
+"Erro. Verifique se a URL, nome de usuário, senha, etc., estão corretos e "
+"tenha certeza que o destino da sincronização está acessível. O erro "
+"reportado foi:"
 
-#, fuzzy
 msgid "The application has been authorised!"
-msgstr "O aplicativo foi autorizado com sucesso."
+msgstr "O aplicativo foi autorizado!"
 
 #, javascript-format
 msgid ""
@@ -1615,10 +1620,15 @@ msgid ""
 "\n"
 "Please try again."
 msgstr ""
+"Não foi possível autorizar o aplicativo:\n"
+"\n"
+"%s\n"
+"\n"
+"Por favor tente novamente."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypted items: %s / %s"
-msgstr "Decriptando itens: %d/%d."
+msgstr "Itens decriptados: %s / %s"
 
 msgid "New tags:"
 msgstr "Novas tags:"
@@ -1638,8 +1648,8 @@ msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
 msgstr ""
-"- Armazenamento: para permitir anexar arquivos a notas, e para permitir a "
-"sincronização do sistema de arquivos "
+"- Armazenamento: para permitir anexar arquivos a notas e para permitir a "
+"sincronização do sistema de arquivos."
 
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr "- Câmera: para permitir tirar fotos e anexar a uma nota."
@@ -1731,7 +1741,7 @@ msgid "View on map"
 msgstr "Ver no mapa"
 
 msgid "Go to source URL"
-msgstr ""
+msgstr "Ir para a URL de origem"
 
 msgid "Delete notebook"
 msgstr "Excluir caderno"
