@@ -110,12 +110,12 @@ class NotePropertiesDialog extends React.Component {
 			width: '100%',
 			height: '100%',
 			backgroundColor: 'rgba(0,0,0,0.6)',
-    		alignItems: 'flex-start',
-    		justifyContent: 'center',
+			alignItems: 'flex-start',
+			justifyContent: 'center',
 		};
 
 		this.styles_.dialogBox = {
-			backgroundColor: 'white',
+			backgroundColor: theme.backgroundColor,
 			padding: 16,
 			boxShadow: '6px 6px 20px rgba(0,0,0,0.5)',
 			marginTop: 20,
@@ -123,17 +123,33 @@ class NotePropertiesDialog extends React.Component {
 
 		this.styles_.controlBox = {
 			marginBottom: '1em',
+			color: 'black', //This will apply for the calendar
 		};
 
 		this.styles_.button = {
 			minWidth: theme.buttonMinWidth,
 			minHeight: theme.buttonMinHeight,
 			marginLeft: 5,
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+			border: '1px solid',
+			borderColor: theme.dividerColor,
 		};
 
 		this.styles_.editPropertyButton = {
 			color: theme.color,
 			textDecoration: 'none',
+			backgroundColor: theme.backgroundColor,
+			border: '1px solid',
+			borderColor: theme.dividerColor,
+		};
+		
+		this.styles_.input = {
+			display:'inline-block',
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+			border: '1px solid',
+			borderColor: theme.dividerColor,
 		};
 
 		this.styles_.dialogTitle = Object.assign({}, theme.h1Style, { marginBottom: '1.2em' });
@@ -239,7 +255,8 @@ class NotePropertiesDialog extends React.Component {
 					dateFormat={time.dateFormat()}
 					timeFormat={time.timeFormat()}
 					inputProps={{
-						onKeyDown: (event) => onKeyDown(event, key)
+						onKeyDown: (event) => onKeyDown(event, key),
+						style: styles.input
 					}}
 					onChange={(momentObject) => {this.setState({ editedValue: momentObject })}}
 				/>
@@ -254,7 +271,7 @@ class NotePropertiesDialog extends React.Component {
 					ref="editField"
 					onChange={(event) => {this.setState({ editedValue: event.target.value })}}
 					onKeyDown={(event) => onKeyDown(event)}
-					style={{display:'inline-block'}}
+					style={styles.input}
 				/>
 			}
 		} else {
