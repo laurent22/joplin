@@ -6,6 +6,7 @@ const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim.js');
 const { time } = require('lib/time-utils.js');
 const { _ } = require('lib/locale.js');
+const ArrayUtils = require('lib/ArrayUtils.js');
 const moment = require('moment');
 const lodash = require('lodash');
 
@@ -110,11 +111,18 @@ class Note extends BaseItem {
 	}
 
 	static linkedItemIds(body) {
-		// For example: ![](:/fcca2938a96a22570e8eae2565bc6b0b)
 		if (!body || body.length <= 32) return [];
+
+		// For example: ![](:/fcca2938a96a22570e8eae2565bc6b0b)
 		let matches = body.match(/\(:\/[a-zA-Z0-9]{32}\)/g);
 		if (!matches) matches = [];
 		matches = matches.map((m) => m.substr(3, 32));
+
+		// For example: ![](:/fcca2938a96a22570e8eae2565bc6b0b "Some title")
+		let matches2 = body.match(/\(:\/[a-zA-Z0-9]{32}\s(.*?)\)/g);
+		if (!matches2) matches2 = [];
+		matches2 = matches2.map((m) => m.substr(3, 32));
+		matches = matches.concat(matches2)
 
 		// For example: <img src=":/fcca2938a96a22570e8eae2565bc6b0b"/>
 		const imgRegex = /<img.*?src=["']:\/([a-zA-Z0-9]{32})["']/g
@@ -125,7 +133,7 @@ class Note extends BaseItem {
 			imgMatches.push(m[1]);
 		}
 
-		return matches.concat(imgMatches);
+		return ArrayUtils.unique(matches.concat(imgMatches));
 	}
 
 	static async linkedItems(body) {
