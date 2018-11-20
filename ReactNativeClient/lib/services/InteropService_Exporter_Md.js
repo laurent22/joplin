@@ -1,10 +1,9 @@
 const InteropService_Exporter_Base = require('lib/services/InteropService_Exporter_Base');
-const { basename, filename, safeFilename } = require('lib/path-utils.js');
+const { basename, filename, friendlySafeFilename } = require('lib/path-utils.js');
 const BaseModel = require('lib/BaseModel');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 const { shim } = require('lib/shim');
-const unidecode = require('unidecode');
 
 class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 
@@ -21,7 +20,8 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 		let output = '';
 		while (true) {
 			if (item.type_ === BaseModel.TYPE_FOLDER) {
-				output = safeFilename(item.title, null, true) + '/' + output;
+				output = friendlySafeFilename(item.title, null, true) + '/' + output;
+				output = await shim.fsDriver().findUniqueFilename(output);
 			}
 			if (!item.parent_id) return output;
 			item = await Folder.load(item.parent_id);
@@ -32,7 +32,6 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 	async processItem(ItemClass, item) {
 		if ([BaseModel.TYPE_NOTE, BaseModel.TYPE_FOLDER].indexOf(item.type_) < 0) return;
 
-		const filename = safeFilename(item.title, null, true);
 		const dirPath = this.destDir_ + '/' + (await this.makeDirPath_(item));
 
 		if (this.createdDirs_.indexOf(dirPath) < 0) {
@@ -41,7 +40,8 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 		}
 
 		if (item.type_ === BaseModel.TYPE_NOTE) {
-			const noteFilePath = dirPath + '/' + safeFilename(unidecode(item.title), null, true) + '.md';
+			let noteFilePath = dirPath + '/' + friendlySafeFilename(item.title, null, true) + '.md';
+			noteFilePath = await shim.fsDriver().findUniqueFilename(noteFilePath);
 			const noteContent = await Note.serializeForEdit(item);
 			await shim.fsDriver().writeFile(noteFilePath, noteContent, 'utf-8');
 		}
