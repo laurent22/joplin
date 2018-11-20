@@ -11,6 +11,14 @@ echo "              | |                                                 "
 echo "              |_|                                                 "
 echo ""
 
+# Check and warn if running as root.
+if [[ $EUID = 0 ]] ; then
+  if [[ $* != *--allow-root* ]] ; then
+    echo "It is not recommended (nor necessary) to run this script as root. To do so anyway, please use '--allow-root'"
+    exit 1
+  fi
+fi
+
 #-----------------------------------------------------
 # Download Joplin
 #-----------------------------------------------------
@@ -19,7 +27,6 @@ echo ""
 version=$(curl --silent "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": "v\K.*?(?=")')
 
 # Check if it's in the latest version
-touch VERSION
 if [[ $(< ~/.joplin/VERSION) != "$version" ]]; then
 
     # Delete previous version
