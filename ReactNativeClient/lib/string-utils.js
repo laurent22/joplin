@@ -122,7 +122,12 @@ function wrap(text, indent, width) {
 	});
 }
 
-function splitCommandString(command) {
+function splitCommandString(command, options = null) {
+	options = options || {};
+	if (!('handleEscape' in options)) {
+		options.handleEscape = true;
+	}
+	
 	let args = [];
 	let state = "start"
 	let current = ""
@@ -148,7 +153,7 @@ function splitCommandString(command) {
 			continue;
 		}
 
-		if (c == "\\") {
+		if (c == "\\" && options.handleEscape) {
 			escapeNext = true;
 			continue;
 		}
