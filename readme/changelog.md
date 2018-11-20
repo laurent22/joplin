@@ -1,5 +1,15 @@
 # Joplin changelog
 
+## [v1.0.116](https://github.com/laurent22/joplin/releases/tag/v1.0.116) - 2018-11-20T19:09:24Z
+
+This is mostly a bug fix release following the recent v115 release.
+
+- Fixes [#933](https://github.com/laurent22/joplin/issues/933): Handle internal links from HTML and from MD.
+- Fixes [#979](https://github.com/laurent22/joplin/issues/979): Fixed regression that was causing bottom of notes to be partially hidden.
+- Fixes [#992](https://github.com/laurent22/joplin/issues/992): Allow non-ASCII chars when exporting MD and handle duplicate filenames
+- Fixes [#985](https://github.com/laurent22/joplin/issues/985): Add missing syntax highlighting for dark theme
+- Fixes [#991](https://github.com/laurent22/joplin/issues/991): Add dark theme to note properties dialog
+
 ## [v1.0.115](https://github.com/laurent22/joplin/releases/tag/v1.0.115) - 2018-11-16T16:52:02Z
 
 This is a rather large release which includes many of the pull requests that were submitted during Hacktoberfest, plus some extra improvements and bug fixes. Many thanks to all the contributors!
@@ -274,14 +284,3 @@ Note: This fixes an invalid database upgrade in the previous version.
 - Improved: Display last sync error unless it's a timeout or network error
 - Improved: Fixes [#268](https://github.com/laurent22/joplin/issues/268): Improve error message for invalid flags
 - Fix: Fixes [#271](https://github.com/laurent22/joplin/issues/271): Sort by created time was not respected
-
-## [v1.0.70](https://github.com/laurent22/joplin/releases/tag/v1.0.70) - 2018-02-28T20:04:30Z
-
-- New: Resolves [#97](https://github.com/laurent22/joplin/issues/97): Export to JEX format or RAW format
-- New: Import JEX and RAW format
-- New: Resolves [#52](https://github.com/laurent22/joplin/issues/52): Import Markdown files or directory
-- New: Allow sorting notes by various fields
-- New: Resolves [#243](https://github.com/laurent22/joplin/issues/243): Added black and white tray icon for macOS
-- Fix: [#247](https://github.com/laurent22/joplin/issues/247): Unreadable error messages when checking for updates
-- Fix: Fixed sync interval sorting order
-- Fix: [#256](https://github.com/laurent22/joplin/issues/256): Check that no other instance of Joplin is running before launching a new one
