@@ -14,7 +14,7 @@ echo ""
 # Check and warn if running as root.
 if [[ $EUID = 0 ]] ; then
   if [[ $* != *--allow-root* ]] ; then
-    echo "Please don't run as root. Use '--allow-root' to ignore this warning."
+    echo "It is not recommended (nor necessary) to run this script as root. To do so anyway, please use '--allow-root'"
     exit 1
   fi
 fi
