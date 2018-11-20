@@ -4,7 +4,7 @@ const Setting = require('lib/models/Setting');
 const { shim } = require('lib/shim');
 const chokidar = require('chokidar');
 const EventEmitter = require('events');
-const { prepareCmdStringWindows, splitCommandString } = require('lib/string-utils');
+const { splitCommandString } = require('lib/string-utils');
 const spawn	= require('child_process').spawn;
 
 class ExternalEditWatcher {
