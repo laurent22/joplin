@@ -1167,6 +1167,9 @@ msgstr ""
 "Ne gre osvežiti tokena: manjkajo podatki o avtentikaciji. Ponovno zaženite "
 "sinhronizacijo, da morda popravite težavo."
 
+msgid "Untitled"
+msgstr "Neimenovano"
+
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1263,9 +1266,6 @@ msgstr "Posodobljeno: %d."
 #, fuzzy
 msgid "created date"
 msgstr "Ustvarjeno: %d."
-
-msgid "Untitled"
-msgstr "Neimenovano"
 
 msgid "This note does not have geolocation information."
 msgstr "Ta zabeležke nima geografske lokacije."

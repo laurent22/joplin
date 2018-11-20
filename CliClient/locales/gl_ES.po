@@ -1153,6 +1153,9 @@ msgstr ""
 "Non é posíbel actualizar o «token»: faltan datos da autenticación. Iniciar a "
 "sincronización de novo pode arranxar o problema."
 
+msgid "Untitled"
+msgstr "Sen título"
+
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1249,9 +1252,6 @@ msgstr "Actualizado: %d."
 #, fuzzy
 msgid "created date"
 msgstr "Creado: %d."
-
-msgid "Untitled"
-msgstr "Sen título"
 
 msgid "This note does not have geolocation information."
 msgstr "Esta nota non ten información de xeolocalización."

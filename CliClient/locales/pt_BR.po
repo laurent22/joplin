@@ -16,8 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Para eliminar uma tag, remova a tag das notas associadas a ela."
@@ -1166,6 +1164,9 @@ msgstr ""
 "Não é possível atualizar token: faltam dados de autenticação. Iniciar a "
 "sincronização novamente pode corrigir o problema."
 
+msgid "Untitled"
+msgstr "Sem título"
+
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1259,9 +1260,6 @@ msgstr "data de ataualização"
 
 msgid "created date"
 msgstr "data de criação"
-
-msgid "Untitled"
-msgstr "Sem título"
 
 msgid "This note does not have geolocation information."
 msgstr "Esta nota não possui informações de geolocalização."

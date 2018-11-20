@@ -1145,6 +1145,9 @@ msgstr ""
 "Nelze obnovit token: chybí autentizační data. Restart synchronizace může "
 "tento problém vyřešit. "
 
+msgid "Untitled"
+msgstr "Bez názvu"
+
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1241,9 +1244,6 @@ msgstr "Upraveno: %d."
 #, fuzzy
 msgid "created date"
 msgstr "Vytvořeno: %d."
-
-msgid "Untitled"
-msgstr "Bez názvu"
 
 msgid "This note does not have geolocation information."
 msgstr "Tato poznámka nemá informace o poloze."

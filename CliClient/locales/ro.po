@@ -1077,6 +1077,9 @@ msgid ""
 "synchronisation again may fix the problem."
 msgstr ""
 
+msgid "Untitled"
+msgstr "Fără denumire"
+
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1163,9 +1166,6 @@ msgstr "data actualizării"
 
 msgid "created date"
 msgstr "data creării"
-
-msgid "Untitled"
-msgstr "Fără denumire"
 
 msgid "This note does not have geolocation information."
 msgstr ""

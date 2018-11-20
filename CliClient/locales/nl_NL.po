@@ -1173,6 +1173,9 @@ msgstr ""
 "Kan toegangssleutel niet verversen: de authenticatiegegevens ontbreken. "
 "Probeer om de synchronisatie opnieuw te starten."
 
+msgid "Untitled"
+msgstr "Naamloos"
+
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1265,9 +1268,6 @@ msgstr "bijgewerkt op"
 
 msgid "created date"
 msgstr "gecreëerd op"
-
-msgid "Untitled"
-msgstr "Naamloos"
 
 msgid "This note does not have geolocation information."
 msgstr "Deze notitie bevat geen locatie-informatie."

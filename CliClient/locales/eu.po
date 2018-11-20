@@ -1170,6 +1170,9 @@ msgstr ""
 "Tokena ezin eguneratu daiteke: egiaztatze-datuak desagertuta daude. Agian, "
 "berriro sinkronizatzeak arazoa konpon lezake."
 
+msgid "Untitled"
+msgstr "Titulu gabekoa"
+
 #, fuzzy
 msgid ""
 "Could not synchronize with OneDrive.\n"
@@ -1266,9 +1269,6 @@ msgstr "Eguneratuta: %d."
 #, fuzzy
 msgid "created date"
 msgstr "Sortuta: %d."
-
-msgid "Untitled"
-msgstr "Titulu gabekoa"
 
 msgid "This note does not have geolocation information."
 msgstr "Ohar honek ez du geokokapen informaziorik."

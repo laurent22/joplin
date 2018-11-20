@@ -1115,6 +1115,9 @@ msgid ""
 "synchronisation again may fix the problem."
 msgstr "无法刷新令牌：缺失认证数据。重新开始同步可能会修复此错误。"
 
+msgid "Untitled"
+msgstr "无标题"
+
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1208,9 +1211,6 @@ msgstr "更新日期"
 msgid "created date"
 msgstr "创建日期"
 
-msgid "Untitled"
-msgstr "无标题"
-
 msgid "This note does not have geolocation information."
 msgstr "此笔记不包含地理定位信息。"
 
@@ -1277,8 +1277,9 @@ msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
-msgstr "该选项允许 Joplin 在后台运行，如果你的笔记时常发生变化，推荐启用该设置"
-"来减少可能的冲突"
+msgstr ""
+"该选项允许 Joplin 在后台运行，如果你的笔记时常发生变化，推荐启用该设置来减少"
+"可能的冲突"
 
 msgid "Start application minimised in the tray icon"
 msgstr "启动应用程序时在托盘中最小化"
@@ -1544,8 +1545,9 @@ msgstr "检查同步配置"
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
-msgstr "发生错误。请检查 URL，用户名，密码等等是否正确"
-"并且确保同步目的地可被访问。报告的错误如下："
+msgstr ""
+"发生错误。请检查 URL，用户名，密码等等是否正确并且确保同步目的地可被访问。报"
+"告的错误如下："
 
 #, fuzzy
 msgid "The application has been authorised!"
