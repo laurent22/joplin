@@ -86,6 +86,15 @@ function friendlySafeFilename(e, maxLength = null) {
 		}
 	}
 
+	while (output.length) {
+		const c = output[0];
+		if (c === ' ') {
+			output = output.substr(1, output.length - 1);
+		} else {
+			break;
+		}
+	}
+
 	if (!output) return _('Untitled'); 
 
 	return output.substr(0, maxLength);

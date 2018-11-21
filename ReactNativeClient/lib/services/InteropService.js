@@ -236,32 +236,46 @@ class InteropService {
 		const exporter = this.newModule_('exporter', exportFormat);
 		await exporter.init(exportPath);
 
-		for (let i = 0; i < itemsToExport.length; i++) {
-			const itemType = itemsToExport[i].type;
-			const ItemClass = BaseItem.getClassByItemType(itemType);
-			const itemOrId = itemsToExport[i].itemOrId;
-			const item = typeof itemOrId === 'object' ? itemOrId : await ItemClass.load(itemOrId);
+		const typeOrder = [BaseModel.TYPE_FOLDER, BaseModel.TYPE_RESOURCE, BaseModel.TYPE_NOTE, BaseModel.TYPE_TAG, BaseModel.TYPE_NOTE_TAG];
+		const context = {
+			resourcePaths: {},
+		};
 
-			if (!item) {
-				if (itemType === BaseModel.TYPE_RESOURCE) {
-					result.warnings.push(sprintf('A resource that does not exist is referenced in a note. The resource was skipped. Resource ID: %s', itemOrId));
-				} else {
-					result.warnings.push(sprintf('Cannot find item with type "%s" and ID %s. Item was skipped.', ItemClass.tableName(), JSON.stringify(itemOrId)));
+		for (let typeOrderIndex = 0; typeOrderIndex < typeOrder.length; typeOrderIndex++) {
+			const type = typeOrder[typeOrderIndex];
+
+			for (let i = 0; i < itemsToExport.length; i++) {
+				const itemType = itemsToExport[i].type;
+
+				if (itemType !== type) continue;
+
+				const ItemClass = BaseItem.getClassByItemType(itemType);
+				const itemOrId = itemsToExport[i].itemOrId;
+				const item = typeof itemOrId === 'object' ? itemOrId : await ItemClass.load(itemOrId);
+
+				if (!item) {
+					if (itemType === BaseModel.TYPE_RESOURCE) {
+						result.warnings.push(sprintf('A resource that does not exist is referenced in a note. The resource was skipped. Resource ID: %s', itemOrId));
+					} else {
+						result.warnings.push(sprintf('Cannot find item with type "%s" and ID %s. Item was skipped.', ItemClass.tableName(), JSON.stringify(itemOrId)));
+					}
+					continue;
 				}
-				continue;
-			}
 
-			if (item.encryption_applied || item.encryption_blob_encrypted) throw new Error(_('This item is currently encrypted: %s "%s". Please wait for all items to be decrypted and try again.', BaseModel.modelTypeToName(itemType), item.title ? item.title : item.id));
+				if (item.encryption_applied || item.encryption_blob_encrypted) throw new Error(_('This item is currently encrypted: %s "%s". Please wait for all items to be decrypted and try again.', BaseModel.modelTypeToName(itemType), item.title ? item.title : item.id));
 
-			try {
-				if (itemType == BaseModel.TYPE_RESOURCE) {
-					const resourcePath = Resource.fullPath(item);
-					await exporter.processResource(item, resourcePath);
+				try {
+					if (itemType == BaseModel.TYPE_RESOURCE) {
+						const resourcePath = Resource.fullPath(item);
+						context.resourcePaths[item.id] = resourcePath;
+						exporter.updateContext(context);
+						await exporter.processResource(item, resourcePath);
+					}
+
+					await exporter.processItem(ItemClass, item);
+				} catch (error) {
+					result.warnings.push(error.message);
 				}
-
-				await exporter.processItem(ItemClass, item);
-			} catch (error) {
-				result.warnings.push(error.message);
 			}
 		}
 

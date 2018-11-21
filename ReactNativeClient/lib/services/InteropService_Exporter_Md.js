@@ -1,5 +1,5 @@
 const InteropService_Exporter_Base = require('lib/services/InteropService_Exporter_Base');
-const { basename, filename, friendlySafeFilename } = require('lib/path-utils.js');
+const { basename, filename, friendlySafeFilename, rtrimSlashes } = require('lib/path-utils.js');
 const BaseModel = require('lib/BaseModel');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
@@ -16,17 +16,37 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 		await shim.fsDriver().mkdir(this.resourceDir_);
 	}
 
-	async makeDirPath_(item) {
+	async makeDirPath_(item, pathPart = null) {
 		let output = '';
 		while (true) {
 			if (item.type_ === BaseModel.TYPE_FOLDER) {
-				output = friendlySafeFilename(item.title, null, true) + '/' + output;
-				output = await shim.fsDriver().findUniqueFilename(output);
+				if (pathPart) {
+					output = pathPart + '/' + output;
+				} else {
+					output = friendlySafeFilename(item.title, null, true) + '/' + output;
+					output = await shim.fsDriver().findUniqueFilename(output);
+				}
 			}
 			if (!item.parent_id) return output;
 			item = await Folder.load(item.parent_id);
 		}
 		return output;
+	}
+
+	async replaceResourceIdsByRelativePaths_(item) {
+		const linkedResourceIds = await Note.linkedResourceIds(item.body);
+		const relativePath = rtrimSlashes(await this.makeDirPath_(item, '..'));
+		const resourcePaths = this.context() && this.context().resourcePaths ? this.context().resourcePaths : {};
+
+		let newBody = item.body;
+
+		for (let i = 0; i < linkedResourceIds.length; i++) {
+			const id = linkedResourceIds[i];
+			const resourcePath = relativePath + '/_resources/' + basename(resourcePaths[id]);
+			newBody = newBody.replace(new RegExp(':/' + id, 'g'), resourcePath);
+		}
+
+		return newBody;
 	}
 
 	async processItem(ItemClass, item) {
@@ -42,7 +62,9 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 		if (item.type_ === BaseModel.TYPE_NOTE) {
 			let noteFilePath = dirPath + '/' + friendlySafeFilename(item.title, null, true) + '.md';
 			noteFilePath = await shim.fsDriver().findUniqueFilename(noteFilePath);
-			const noteContent = await Note.serializeForEdit(item);
+			const noteBody = await this.replaceResourceIdsByRelativePaths_(item);
+			const modNote = Object.assign({}, item, { body: noteBody });
+			const noteContent = await Note.serializeForEdit(modNote);
 			await shim.fsDriver().writeFile(noteFilePath, noteContent, 'utf-8');
 		}
 	}
