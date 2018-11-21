@@ -9,12 +9,18 @@ const spawn	= require('child_process').spawn;
 
 class ExternalEditWatcher {
 
-	constructor(dispatch = null) {
+	constructor() {
 		this.logger_ = new Logger();
-		this.dispatch_ = dispatch ? dispatch : (action) => {};
+		this.dispatch = (action) => {};
 		this.watcher_ = null;
 		this.eventEmitter_ = new EventEmitter();
 		this.skipNextChangeEvent_ = {};
+	}
+
+	static instance() {
+		if (this.instance_) return this.instance_;
+		this.instance_ = new ExternalEditWatcher();
+		return this.instance_;
 	}
 
 	on(eventName, callback) {
@@ -31,10 +37,6 @@ class ExternalEditWatcher {
 
 	logger() {
 		return this.logger_;
-	}
-
-	dispatch(action) {
-		this.dispatch_(action);
 	}
 
 	watch(fileToWatch) {
@@ -56,9 +58,17 @@ class ExternalEditWatcher {
 
 					if (!this.skipNextChangeEvent_[id]) {
 						const note = await Note.load(id);
+
+						if (!note) {
+							this.logger().warn('Watched note has been deleted: ' + id);
+							this.stopWatching(id);
+							return;
+						}
+
 						const noteContent = await shim.fsDriver().readFile(path, 'utf-8');
 						const updatedNote = await Note.unserializeForEdit(noteContent);
 						updatedNote.id = id;
+						updatedNote.parent_id = note.parent_id;
 						await Note.save(updatedNote);
 						this.eventEmitter_.emit('noteChange', { id: updatedNote.id });
 					}
@@ -82,8 +92,8 @@ class ExternalEditWatcher {
 		return this.instance_;
 	}
 
-	noteFilePath(note) {
-		return Setting.value('tempDir') + '/' + note.id + '.md';
+	noteFilePath(noteId) {
+		return Setting.value('tempDir') + '/' + noteId + '.md';
 	}
 
 	watchedFiles() {
@@ -181,15 +191,15 @@ class ExternalEditWatcher {
 		this.logger().info('ExternalEditWatcher: Started watching ' + filePath);
 	}
 
-	async stopWatching(note) {
-		if (!note || !note.id) return;
+	async stopWatching(noteId) {
+		if (!noteId) return;
 
-		const filePath = this.noteFilePath(note);
+		const filePath = this.noteFilePath(noteId);
 		if (this.watcher_) this.watcher_.unwatch(filePath);
 		await shim.fsDriver().remove(filePath);
 		this.dispatch({
 			type: 'NOTE_FILE_WATCHER_REMOVE',
-			id: note.id,
+			id: noteId,
 		});
 		this.logger().info('ExternalEditWatcher: Stopped watching ' + filePath);
 	}
@@ -231,7 +241,7 @@ class ExternalEditWatcher {
 			return;
 		}		
 
-		const filePath = this.noteFilePath(note);
+		const filePath = this.noteFilePath(note.id);
 		const noteContent = await Note.serializeForEdit(note);
 		await shim.fsDriver().writeFile(filePath, noteContent, 'utf-8');
 		return filePath;

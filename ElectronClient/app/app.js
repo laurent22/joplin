@@ -24,7 +24,7 @@ const InteropService = require('lib/services/InteropService');
 const InteropServiceHelper = require('./InteropServiceHelper.js');
 const ResourceService = require('lib/services/ResourceService');
 const ClipperServer = require('lib/ClipperServer');
-
+const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -802,6 +802,9 @@ class Application extends BaseApplication {
 		if (Setting.value('clipperServer.autoStart')) {
 			ClipperServer.instance().start();
 		}
+
+		ExternalEditWatcher.instance().setLogger(reg.logger());
+		ExternalEditWatcher.instance().dispatch = this.store().dispatch;
 	}
 
 }

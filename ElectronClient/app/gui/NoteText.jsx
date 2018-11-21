@@ -305,6 +305,7 @@ class NoteTextComponent extends React.Component {
 		eventManager.on('todoToggle', this.onTodoToggle_);
 
 		ResourceFetcher.instance().on('downloadComplete', this.resourceFetcher_downloadComplete);
+		ExternalEditWatcher.instance().on('noteChange', this.externalEditWatcher_noteChange);
 	}
 
 	componentWillUnmount() {
@@ -318,8 +319,7 @@ class NoteTextComponent extends React.Component {
 		eventManager.removeListener('todoToggle', this.onTodoToggle_);
 
 		ResourceFetcher.instance().off('downloadComplete', this.resourceFetcher_downloadComplete);
-
-		this.destroyExternalEditWatcher();
+		ExternalEditWatcher.instance().off('noteChange', this.externalEditWatcher_noteChange);
 	}
 
 	async saveIfNeeded(saveIfNewNote = false) {
@@ -332,7 +332,7 @@ class NoteTextComponent extends React.Component {
 		}
 		await shared.saveNoteButton_press(this);
 
-		this.externalEditWatcherUpdateNoteFile(this.state.note);
+		ExternalEditWatcher.instance().updateNoteFile(this.state.note);
 	}
 
 	async saveOneProperty(name, value) {
@@ -371,7 +371,6 @@ class NoteTextComponent extends React.Component {
 		if (props.newNote) {
 			note = Object.assign({}, props.newNote);
 			this.lastLoadedNoteId_ = null;
-			this.externalEditWatcherStopWatchingAll();
 		} else {
 			noteId = props.noteId;
 			loadingNewNote = stateNoteId !== noteId;
@@ -398,8 +397,6 @@ class NoteTextComponent extends React.Component {
 
 		// Scroll back to top when loading new note
 		if (loadingNewNote) {
-			this.externalEditWatcherStopWatchingAll();
-
 			this.editorMaxScrollTop_ = 0;
 
 			// HACK: To go around a bug in Ace editor, we first set the scroll position to 1
@@ -962,42 +959,16 @@ class NoteTextComponent extends React.Component {
 		return splitStyle.join(marker);
 	}
 
-	externalEditWatcher() {
-		if (!this.externalEditWatcher_) {
-			this.externalEditWatcher_ = new ExternalEditWatcher((action) => { return this.props.dispatch(action) });
-			this.externalEditWatcher_.setLogger(reg.logger());
-			this.externalEditWatcher_.on('noteChange', this.externalEditWatcher_noteChange);
-		}
-
-		return this.externalEditWatcher_;
-	}
-
-	externalEditWatcherUpdateNoteFile(note) {
-		if (this.externalEditWatcher_) this.externalEditWatcher().updateNoteFile(note);
-	}
-
-	externalEditWatcherStopWatchingAll() {
-		if (this.externalEditWatcher_) this.externalEditWatcher().stopWatchingAll();
-	}
-
-	destroyExternalEditWatcher() {
-		if (!this.externalEditWatcher_) return;
-
-		this.externalEditWatcher_.off('noteChange', this.externalEditWatcher_noteChange);
-		this.externalEditWatcher_.stopWatchingAll();
-		this.externalEditWatcher_ = null;
-	}
-
 	async commandStartExternalEditing() {
 		try {
-			await this.externalEditWatcher().openAndWatch(this.state.note);
+			await ExternalEditWatcher.instance().openAndWatch(this.state.note);
 		} catch (error) {
 			bridge().showErrorMessageBox(_('Error opening note in editor: %s', error.message));
 		}
 	}
 
 	async commandStopExternalEditing() {
-		this.externalEditWatcherStopWatchingAll();
+		ExternalEditWatcher.instance().stopWatching(this.state.note.id);
 	}
 
 	async commandSetTags() {

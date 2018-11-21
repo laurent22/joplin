@@ -36,7 +36,12 @@ class ResourceService extends BaseService {
 				for (let i = 0; i < notes.length; i++) {
 					if (notes[i].id === noteId) return notes[i];
 				}
-				throw new Error('Invalid note ID: ' + noteId);
+				// The note may have been deleted since the change was recorded. For example in this case:
+				// - Note created (Some Change object is recorded)
+				// - Note is deleted
+				// - ResourceService indexer runs.
+				// In that case, there will be a change for the note, but the note will be gone.
+				return null;
 			}
 
 			for (let i = 0; i < changes.length; i++) {
@@ -44,8 +49,12 @@ class ResourceService extends BaseService {
 
 				if (change.type === ItemChange.TYPE_CREATE || change.type === ItemChange.TYPE_UPDATE) {
 					const note = noteById(change.item_id);
-					const resourceIds = await Note.linkedResourceIds(note.body);
-					await NoteResource.setAssociatedResources(note.id, resourceIds);
+					if (note) {
+						const resourceIds = await Note.linkedResourceIds(note.body);
+						await NoteResource.setAssociatedResources(note.id, resourceIds);
+					} else {
+						this.logger().warn('ResourceService::indexNoteResources: A change was recorded for a note that has been deleted: ' + change.item_id);
+					}
 				} else if (change.type === ItemChange.TYPE_DELETE) {
 					await NoteResource.remove(change.item_id);
 				} else {
