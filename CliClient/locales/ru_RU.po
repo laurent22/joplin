@@ -1163,6 +1163,9 @@ msgstr ""
 "Не удалось обновить токен: отсутствуют данные аутентификации. Повторный "
 "запуск синхронизации может решить проблему."
 
+msgid "Untitled"
+msgstr "Без имени"
+
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1259,9 +1262,6 @@ msgstr "Обновлено: %d."
 #, fuzzy
 msgid "created date"
 msgstr "Создано: %d."
-
-msgid "Untitled"
-msgstr "Без имени"
 
 msgid "This note does not have geolocation information."
 msgstr "Эта заметка не содержит информации о геолокации."

@@ -13,6 +13,14 @@ class InteropService_Exporter_Base {
 		return this.metadata_;
 	}
 
+	updateContext(context) {
+		this.context_ = context;
+	}
+
+	context() {
+		return this.context_;
+	}
+
 	async temporaryDirectory_(createIt) {
 		const md5 = require('md5');
 		const tempDir = require('os').tmpdir() + '/' + md5(Math.random() + Date.now());

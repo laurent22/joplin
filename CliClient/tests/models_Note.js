@@ -5,6 +5,7 @@ const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const BaseModel = require('lib/BaseModel.js');
+const ArrayUtils = require('lib/ArrayUtils.js');
 const { shim } = require('lib/shim');
 
 process.on('unhandledRejection', (reason, p) => {
@@ -35,11 +36,34 @@ describe('models_Note', function() {
 		expect(items[0].type_).toBe(BaseModel.TYPE_NOTE);
 		expect(items[1].type_).toBe(BaseModel.TYPE_RESOURCE);
 
-		const resource = items[1];
-		note2.body += '<img alt="bla" src=":/' + resource.id + '"/>';
-		note2.body += '<img src=\':/' + resource.id + '\' />';
+		const resource2 = await shim.createResourceFromPath(__dirname + '/../tests/support/photo.jpg');
+		const resource3 = await shim.createResourceFromPath(__dirname + '/../tests/support/photo.jpg');
+		note2.body += '<img alt="bla" src=":/' + resource2.id + '"/>';
+		note2.body += '<img src=\':/' + resource3.id + '\' />';
 		items = await Note.linkedItems(note2.body);
 		expect(items.length).toBe(4);
+	}));
+
+	it('should find linked items', asyncTest(async () => {
+		const testCases = [
+			['[](:/06894e83b8f84d3d8cbe0f1587f9e226)', ['06894e83b8f84d3d8cbe0f1587f9e226']],
+			['[](:/06894e83b8f84d3d8cbe0f1587f9e226) [](:/06894e83b8f84d3d8cbe0f1587f9e226)', ['06894e83b8f84d3d8cbe0f1587f9e226']],
+			['[](:/06894e83b8f84d3d8cbe0f1587f9e226) [](:/06894e83b8f84d3d8cbe0f1587f9e227)', ['06894e83b8f84d3d8cbe0f1587f9e226', '06894e83b8f84d3d8cbe0f1587f9e227']],
+			['[](:/06894e83b8f84d3d8cbe0f1587f9e226 "some title")', ['06894e83b8f84d3d8cbe0f1587f9e226']],
+		];
+
+		for (let i = 0; i < testCases.length; i++) {
+			const t = testCases[i];
+
+			const input = t[0];
+			const expected = t[1];
+			const actual = Note.linkedItemIds(input);
+			const contentEquals = ArrayUtils.contentEquals(actual, expected);
+
+			// console.info(contentEquals, input, expected, actual);
+
+			expect(contentEquals).toBe(true);
+		}
 	}));
 
 	it('should change the type of notes', asyncTest(async () => {

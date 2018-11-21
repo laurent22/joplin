@@ -1151,6 +1151,9 @@ msgstr ""
 "トークンの更新ができませんでした。認証データがありません。同期を再度行うこと"
 "で解決することがあります。"
 
+msgid "Untitled"
+msgstr "名称未設定"
+
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1245,9 +1248,6 @@ msgstr "アップデート日"
 
 msgid "created date"
 msgstr "作成日"
-
-msgid "Untitled"
-msgstr "名称未設定"
 
 msgid "This note does not have geolocation information."
 msgstr "このノートには位置情報がありません。"

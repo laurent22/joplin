@@ -1,3 +1,5 @@
+const { filename, fileExtension } = require('lib/path-utils');
+
 class FsDriverBase {
 
 	async isDirectory(path) {
@@ -17,6 +19,23 @@ class FsDriverBase {
 		}
 
 		return output;
+	}
+
+	async findUniqueFilename(name) {
+		let counter = 1;
+
+		let nameNoExt = filename(name, true);
+		let extension = fileExtension(name);
+		if (extension) extension = '.' + extension;
+		let nameToTry = nameNoExt + extension;
+		while (true) {
+			const exists = await this.exists(nameToTry);
+			if (!exists) return nameToTry;
+			nameToTry = nameNoExt + ' (' + counter + ')' + extension;
+			counter++;
+			if (counter >= 1000) nameToTry = nameNoExt + ' (' + ((new Date()).getTime()) + ')' + extension;
+			if (counter >= 10000) throw new Error('Cannot find unique title');
+		}
 	}
 
 }

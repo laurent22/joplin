@@ -1174,6 +1174,9 @@ msgstr ""
 "Kan inte uppdatera token: autentiseringsdata saknas. Om du startar "
 "synkroniseringen igen kan det lösa problemet."
 
+msgid "Untitled"
+msgstr "Utan titel"
+
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1267,9 +1270,6 @@ msgstr "uppdaterad datum"
 
 msgid "created date"
 msgstr "Skapad datum"
-
-msgid "Untitled"
-msgstr "Utan titel"
 
 msgid "This note does not have geolocation information."
 msgstr "Denna anteckning har inte geolokaliseringsinformation."

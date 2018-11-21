@@ -1060,6 +1060,9 @@ msgid ""
 "synchronisation again may fix the problem."
 msgstr ""
 
+msgid "Untitled"
+msgstr ""
+
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1145,9 +1148,6 @@ msgid "updated date"
 msgstr ""
 
 msgid "created date"
-msgstr ""
-
-msgid "Untitled"
 msgstr ""
 
 msgid "This note does not have geolocation information."

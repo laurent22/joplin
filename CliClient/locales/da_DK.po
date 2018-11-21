@@ -1154,6 +1154,9 @@ msgstr ""
 "Kan ikke opdatere token: Godkendelses data mangler. Prøv at starte "
 "synkronisering igen, det kan løse problemet."
 
+msgid "Untitled"
+msgstr "Samlet"
+
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1250,9 +1253,6 @@ msgstr "Opdateret %d."
 #, fuzzy
 msgid "created date"
 msgstr "Oprettet: %d."
-
-msgid "Untitled"
-msgstr "Samlet"
 
 msgid "This note does not have geolocation information."
 msgstr "Denne note har ingen geolokations oplysninger."

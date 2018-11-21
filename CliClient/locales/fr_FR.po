@@ -1172,6 +1172,9 @@ msgstr ""
 "Impossible de rafraîchir la connexion à OneDrive. Démarrez la "
 "synchronisation à nouveau pour corriger le problème."
 
+msgid "Untitled"
+msgstr "Sans titre"
+
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1264,9 +1267,6 @@ msgstr "date de modification"
 
 msgid "created date"
 msgstr "date de création"
-
-msgid "Untitled"
-msgstr "Sans titre"
 
 msgid "This note does not have geolocation information."
 msgstr "Cette note n'a pas d'information d'emplacement."

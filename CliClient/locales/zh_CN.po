@@ -605,7 +605,7 @@ msgid "Italic"
 msgstr "斜体"
 
 msgid "Insert Date Time"
-msgstr ""
+msgstr "插入时间"
 
 #, fuzzy
 msgid "Edit in external editor"
@@ -683,7 +683,7 @@ msgid "No"
 msgstr "否"
 
 msgid "Token has been copied to the clipboard!"
-msgstr ""
+msgstr "Token 已被复制到粘贴板"
 
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "网页剪辑服务已启用并设置为自动启动。"
@@ -735,10 +735,10 @@ msgid "Advanced options"
 msgstr "显示高级选项"
 
 msgid "Authorisation token:"
-msgstr ""
+msgstr "授权码："
 
 msgid "Copy token"
-msgstr ""
+msgstr "拷贝 token"
 
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
@@ -753,7 +753,7 @@ msgid "Notes and settings are stored in: %s"
 msgstr "笔记与设置文件储存目录为：%s"
 
 msgid "Apply"
-msgstr ""
+msgstr "应用"
 
 msgid "Submit"
 msgstr "提交"
@@ -927,13 +927,13 @@ msgid ""
 msgstr "此处没有任何笔记本。点击\"新笔记本\"创建。"
 
 msgid "Location"
-msgstr ""
+msgstr "位置"
 
 msgid "URL"
 msgstr ""
 
 msgid "Note properties"
-msgstr ""
+msgstr "笔记属性"
 
 msgid "Open..."
 msgstr "打开…"
@@ -949,10 +949,10 @@ msgid "Copy path to clipboard"
 msgstr "复制路径到剪切板"
 
 msgid "Copy Link Address"
-msgstr ""
+msgstr "拷贝链接地址"
 
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr ""
+msgstr "该附件没有下载或者没有解密"
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1115,6 +1115,9 @@ msgid ""
 "synchronisation again may fix the problem."
 msgstr "无法刷新令牌：缺失认证数据。重新开始同步可能会修复此错误。"
 
+msgid "Untitled"
+msgstr "无标题"
+
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1208,9 +1211,6 @@ msgstr "更新日期"
 msgid "created date"
 msgstr "创建日期"
 
-msgid "Untitled"
-msgstr "无标题"
-
 msgid "This note does not have geolocation information."
 msgstr "此笔记不包含地理定位信息。"
 
@@ -1278,6 +1278,8 @@ msgid ""
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
+"该选项允许 Joplin 在后台运行，如果你的笔记时常发生变化，推荐启用该设置来减少"
+"可能的冲突"
 
 msgid "Start application minimised in the tray icon"
 msgstr "启动应用程序时在托盘中最小化"
@@ -1483,10 +1485,10 @@ msgid "On %s: %s"
 msgstr "%s：%s"
 
 msgid "Permission to use camera"
-msgstr ""
+msgstr "使用摄像头的权限"
 
 msgid "Your permission to use your camera is required."
-msgstr ""
+msgstr "使用摄像头的权限是必须的"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "当前没有任何笔记。点击(+)按钮创建。"
@@ -1544,6 +1546,8 @@ msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
+"发生错误。请检查 URL，用户名，密码等等是否正确并且确保同步目的地可被访问。报"
+"告的错误如下："
 
 #, fuzzy
 msgid "The application has been authorised!"
@@ -1557,6 +1561,11 @@ msgid ""
 "\n"
 "Please try again."
 msgstr ""
+"无法授权应用：\n"
+"\n"
+"%s\n"
+"\n"
+"请重新尝试"
 
 #, fuzzy, javascript-format
 msgid "Decrypted items: %s / %s"
@@ -1668,7 +1677,7 @@ msgid "View on map"
 msgstr "查看地图"
 
 msgid "Go to source URL"
-msgstr ""
+msgstr "定位到源 URL"
 
 msgid "Delete notebook"
 msgstr "删除笔记本"

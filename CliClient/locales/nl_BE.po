@@ -1171,6 +1171,9 @@ msgstr ""
 "Kan token niet vernieuwen: authenticatiedata ontbreekt. Herstarten van de "
 "synchronisatie kan het probleem eventueel oplossen. "
 
+msgid "Untitled"
+msgstr "Untitled"
+
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1269,9 +1272,6 @@ msgstr "Bijgewerkt: %d."
 #, fuzzy
 msgid "created date"
 msgstr "Aangemaakt: %d."
-
-msgid "Untitled"
-msgstr "Untitled"
 
 msgid "This note does not have geolocation information."
 msgstr "Deze notitie bevat geen geo-locatie informatie."

@@ -1186,6 +1186,9 @@ msgstr ""
 "Kann Token nicht erneuern: Authentifikationsdaten nicht vorhanden. Ein "
 "Neustart der Synchronisation könnte das Problem beheben."
 
+msgid "Untitled"
+msgstr "Unbenannt"
+
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1275,13 +1278,10 @@ msgid "title"
 msgstr "Titel"
 
 msgid "updated date"
-msgstr "Aktualsierungsdatum"
+msgstr "Aktualisierungsdatum"
 
 msgid "created date"
 msgstr "Erstelldatum"
-
-msgid "Untitled"
-msgstr "Unbenannt"
 
 msgid "This note does not have geolocation information."
 msgstr "Diese Notiz hat keine Standort-Informationen."

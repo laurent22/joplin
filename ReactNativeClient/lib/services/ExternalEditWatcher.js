@@ -127,8 +127,7 @@ class ExternalEditWatcher {
 		const editorCommand = Setting.value('editor');
 		if (!editorCommand) return null;
 
-		const s = splitCommandString(editorCommand);
-
+		const s = splitCommandString(editorCommand, {handleEscape: false});
 		const path = s.splice(0, 1);
 		if (!path.length) throw new Error('Invalid editor command: ' + editorCommand);
 

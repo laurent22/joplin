@@ -1175,6 +1175,9 @@ msgstr ""
 "No es pot actualitzar el testimoni: manquen les dades d'autenticació. Si "
 "comenceu altre cop la sincronització, potser es corregeixi el problema."
 
+msgid "Untitled"
+msgstr "Sense títol"
+
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1267,9 +1270,6 @@ msgstr "data d'actualització"
 
 msgid "created date"
 msgstr "data de creació"
-
-msgid "Untitled"
-msgstr "Sense títol"
 
 msgid "This note does not have geolocation information."
 msgstr "Aquesta nota no té informació de geolocalització."

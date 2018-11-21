@@ -1145,6 +1145,9 @@ msgstr ""
 "토큰 새로고침 불가: 인증 데이터를 찾을 수 없습니다. 동기화를 다시 시도하면 문"
 "제가 해결될수도 있습니다."
 
+msgid "Untitled"
+msgstr "제목 없음"
+
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1237,9 +1240,6 @@ msgstr "업데이트된 날짜"
 
 msgid "created date"
 msgstr "만들어진 날짜"
-
-msgid "Untitled"
-msgstr "제목 없음"
 
 msgid "This note does not have geolocation information."
 msgstr "이 노트는 지리적 위치 정보를 포함하고 있지 않습니다."

@@ -331,4 +331,30 @@ describe('services_InteropService', function() {
 			expect(obj.body).toBe(items[i].body);
 		}
 	}));
+
+	it('should export MD with unicode filenames', asyncTest(async () => {
+		const service = new InteropService();
+		let folder1 = await Folder.save({ title: 'folder1' });
+		let folder2 = await Folder.save({ title: 'ジョプリン' });
+		let note1 = await Note.save({ title: '生活', parent_id: folder1.id });
+		let note2 = await Note.save({ title: '生活', parent_id: folder1.id });
+		let note2b = await Note.save({ title: '生活', parent_id: folder1.id });
+		let note3 = await Note.save({ title: '', parent_id: folder1.id });
+		let note4 = await Note.save({ title: '', parent_id: folder1.id });
+		let note5 = await Note.save({ title: 'salut, ça roule ?', parent_id: folder1.id });
+		let note6 = await Note.save({ title: 'ジョプリン', parent_id: folder2.id });
+
+		const outDir = exportDir();
+
+		await service.export({ path: outDir, format: 'md' });
+
+		expect(await shim.fsDriver().exists(outDir + '/folder1/生活.md')).toBe(true);
+		expect(await shim.fsDriver().exists(outDir + '/folder1/生活 (1).md')).toBe(true);
+		expect(await shim.fsDriver().exists(outDir + '/folder1/生活 (2).md')).toBe(true);
+		expect(await shim.fsDriver().exists(outDir + '/folder1/Untitled.md')).toBe(true);
+		expect(await shim.fsDriver().exists(outDir + '/folder1/Untitled (1).md')).toBe(true);
+		expect(await shim.fsDriver().exists(outDir + '/folder1/salut, ça roule _.md')).toBe(true);
+		expect(await shim.fsDriver().exists(outDir + '/ジョプリン/ジョプリン.md')).toBe(true);
+	}));
+
 });

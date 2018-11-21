@@ -1151,6 +1151,9 @@ msgid ""
 "synchronisation again may fix the problem."
 msgstr "Nedostaju podaci za ovjeru. Pokušaj ponovo započeti sinkronizaciju."
 
+msgid "Untitled"
+msgstr "Nenaslovljen"
+
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1248,9 +1251,6 @@ msgstr "Ažurirano: %d."
 #, fuzzy
 msgid "created date"
 msgstr "Stvoreno: %d."
-
-msgid "Untitled"
-msgstr "Nenaslovljen"
 
 msgid "This note does not have geolocation information."
 msgstr "Ova bilješka nema geolokacijske informacije."

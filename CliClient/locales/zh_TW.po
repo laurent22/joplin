@@ -1115,6 +1115,9 @@ msgid ""
 "synchronisation again may fix the problem."
 msgstr "無法刷新 token: 缺少身份驗證資料。再次啟動同步可能會解決此問題。"
 
+msgid "Untitled"
+msgstr "未命名"
+
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1206,9 +1209,6 @@ msgstr "更新日期"
 
 msgid "created date"
 msgstr "建立日期"
-
-msgid "Untitled"
-msgstr "未命名"
 
 msgid "This note does not have geolocation information."
 msgstr "此記事沒有地理位置定位資訊。"
