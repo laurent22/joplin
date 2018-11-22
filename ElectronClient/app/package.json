@@ -8,7 +8,7 @@
     "pack": "node_modules/.bin/electron-builder --dir",
     "dist": "node_modules/.bin/electron-builder",
     "publish": "build -p always",
-    "postinstall": "node compile-jsx.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts",
+    "postinstall": "node compile-jsx.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts && install-app-deps",
     "compile": "node compile-jsx.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts"
   },
   "repository": {
@@ -71,8 +71,8 @@
     "electron-builder": "20.14.7"
   },
   "optionalDependencies": {
-    "7zip-bin-mac": "^1.0.1",
     "7zip-bin-linux": "^1.0.1",
+    "7zip-bin-mac": "^1.0.1",
     "7zip-bin-win": "^2.1.1"
   },
   "dependencies": {
