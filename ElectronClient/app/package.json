@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "pack": "node_modules/.bin/electron-builder --dir",
     "dist": "node_modules/.bin/electron-builder",
+    "start": "electron .",
     "publish": "build -p always",
     "postinstall": "node compile-jsx.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts",
     "compile": "node compile-jsx.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts"
