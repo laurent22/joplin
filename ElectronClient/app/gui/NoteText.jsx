@@ -1408,7 +1408,7 @@ class NoteTextComponent extends React.Component {
 			height: 30
 		};
 
-		const bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - tagStyle.height - tagStyle.marginBottom;
+		const bottomRowHeight = (this.state.noteTags.length !== 0) ? rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - tagStyle.height - tagStyle.marginBottom : rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - tagStyle.height;
 
 		const viewerStyle = {
 			width: Math.floor(innerWidth / 2),
@@ -1422,6 +1422,7 @@ class NoteTextComponent extends React.Component {
 		const paddingTop = 14;
 
 		const editorStyle = {
+			marginTop: this.state.noteTags.length === 0 && tagStyle.marginBottom,
 			width: innerWidth - viewerStyle.width,
 			height: bottomRowHeight - paddingTop,
 			overflowY: 'hidden',
@@ -1493,10 +1494,10 @@ class NoteTextComponent extends React.Component {
 			placeholder={ this.props.newNote ? _('Creating new %s...', isTodo ? _('to-do') : _('note')) : '' }
 		/>
 
-		const tagList = <TagList
+		const tagList = this.state.noteTags.length !== 0 ? <TagList
 			style={tagStyle}
 			items={this.state.noteTags}
-		/>;
+		/> : null;
 
 		const titleBarMenuButton = <IconButton style={{
 			display: 'flex',
