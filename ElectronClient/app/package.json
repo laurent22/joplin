@@ -121,7 +121,7 @@
     "server-destroy": "^1.0.1",
     "smalltalk": "^2.5.1",
     "sprintf-js": "^1.1.1",
-    "sqlite3": "^3.1.13",
+    "sqlite3": "^4.0.4",
     "string-padding": "^1.0.2",
     "string-to-stream": "^1.1.1",
     "syswide-cas": "^5.1.0",
