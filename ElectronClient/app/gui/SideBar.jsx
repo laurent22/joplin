@@ -451,14 +451,19 @@ class SideBarComponent extends React.Component {
 			style.cursor = "pointer";
 		}
 
+		let headerClick = extraProps.onClick || null;
+		delete extraProps.onClick;
+
 		return (
-			<div style={style} key={key} {...extraProps} onClick={async () => {
-				if (extraProps.onClick) {
-					await extraProps.onClick(key);
+			<div style={style} key={key} {...extraProps} onClick={(event) => {
+				// if a custom click event is attached, trigger that.
+				if (headerClick) {
+					await headerClick(event, key);
 				}
 
+				// check if toggling option is set.
 				if (extraProps.toggleblock && extraProps.toggleblock.selector) {
-					const element = document.querySelector(extraProps.toggleblock.selector);
+					const element = document.querySelector(`.side-bar ${extraProps.toggleblock.selector}`);
 					if (!element) {
 						return;
 					}
