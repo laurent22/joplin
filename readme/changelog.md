@@ -1,5 +1,13 @@
 # Joplin changelog
 
+## [v1.0.117](https://github.com/laurent22/joplin/releases/tag/v1.0.117) - 2018-11-24T12:05:24Z
+
+- New: Resolves [#996](https://github.com/laurent22/joplin/issues/996): Allow editing multiple notes in external editor
+- New: Resolves [#846](https://github.com/laurent22/joplin/issues/846): Set resource path to correct relative path so that for example images show up in Markdown viewers.
+- Fixes [#906](https://github.com/laurent22/joplin/issues/906): Fixed text editor path issue on Windows
+- Fixes [#968](https://github.com/laurent22/joplin/issues/968): Export resources specified with a title
+- Fixes [#995](https://github.com/laurent22/joplin/issues/995): Disabled tag bar for now until performance issues are resolved.
+
 ## [v1.0.116](https://github.com/laurent22/joplin/releases/tag/v1.0.116) - 2018-11-20T19:09:24Z
 
 This is mostly a bug fix release following the recent v115 release.
@@ -274,13 +282,3 @@ Note: This fixes an invalid database upgrade in the previous version.
 - Fix: Fixes [#292](https://github.com/laurent22/joplin/issues/292): Improved auto-update feature and fixed incorrect notifications
 - Fix: Signed executables on Windows
 - Updated Russian, German, Portuguese, Spanish and French translations. Many thanks to the translators!
-
-## [v1.0.72](https://github.com/laurent22/joplin/releases/tag/v1.0.72) - 2018-03-14T09:44:35Z
-
-- New: Allow exporting only selected notes or notebook
-- New: Resolves [#266](https://github.com/laurent22/joplin/issues/266): Allow setting text editor font family
-- New: Display icon next to resources and allow downloading them from Electron client
-- Improved: Optimised sync when dealing with many items, in particular when using Nextcloud or WebDAV
-- Improved: Display last sync error unless it's a timeout or network error
-- Improved: Fixes [#268](https://github.com/laurent22/joplin/issues/268): Improve error message for invalid flags
-- Fix: Fixes [#271](https://github.com/laurent22/joplin/issues/271): Sort by created time was not respected
