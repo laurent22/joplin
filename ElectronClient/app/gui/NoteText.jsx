@@ -39,6 +39,8 @@ require('brace/mode/markdown');
 require('brace/theme/chrome');
 require('brace/theme/twilight');
 
+const NOTE_TAG_BAR_FEATURE_ENABLED = false;
+
 class NoteTextComponent extends React.Component {
 
 	constructor() {
@@ -471,11 +473,13 @@ class NoteTextComponent extends React.Component {
 		// anywhere in the app. Thus it's not possible simple to load the tags here (as we won't have a way to know if they're updated afterwards).
 		// Perhaps a better way would be to move that code in the middleware, check for TAGS_DELETE, TAGS_UPDATE, etc. actions and update the
 		// selected note tags accordingly.
-		if (!this.props.newNote) {
-			this.props.dispatch({
-				type: "SET_NOTE_TAGS",
-				items: noteTags,
-			});
+		if (NOTE_TAG_BAR_FEATURE_ENABLED) {
+			if (!this.props.newNote) {
+				this.props.dispatch({
+					type: "SET_NOTE_TAGS",
+					items: noteTags,
+				});
+			}
 		}
 
 		this.updateHtml(newState.note ? newState.note.body : '');
@@ -506,6 +510,8 @@ class NoteTextComponent extends React.Component {
 	}
 
 	areNoteTagsModified(newTags, oldTags) {
+		if (!NOTE_TAG_BAR_FEATURE_ENABLED) return false;
+
 		if (!oldTags) return true;
 
 		if (newTags.length !== oldTags.length) return true;
@@ -1408,7 +1414,14 @@ class NoteTextComponent extends React.Component {
 			height: 30
 		};
 
-		const bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - tagStyle.height - tagStyle.marginBottom;
+		let bottomRowHeight = 0;
+		if (NOTE_TAG_BAR_FEATURE_ENABLED) {
+			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - tagStyle.height - tagStyle.marginBottom;
+		} else {
+			toolbarStyle.marginBottom = 10;
+			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - toolbarStyle.marginBottom;
+		}
+		
 
 		const viewerStyle = {
 			width: Math.floor(innerWidth / 2),
@@ -1493,7 +1506,7 @@ class NoteTextComponent extends React.Component {
 			placeholder={ this.props.newNote ? _('Creating new %s...', isTodo ? _('to-do') : _('note')) : '' }
 		/>
 
-		const tagList = <TagList
+		const tagList = !NOTE_TAG_BAR_FEATURE_ENABLED ? null : <TagList
 			style={tagStyle}
 			items={this.state.noteTags}
 		/>;
