@@ -39,7 +39,7 @@ require('brace/mode/markdown');
 require('brace/theme/chrome');
 require('brace/theme/twilight');
 
-const NOTE_TAG_BAR_FEATURE_ENABLED = false;
+const NOTE_TAG_BAR_FEATURE_ENABLED = true;
 
 class NoteTextComponent extends React.Component {
 
@@ -376,7 +376,7 @@ class NoteTextComponent extends React.Component {
 		} else {
 			noteId = props.noteId;
 			loadingNewNote = stateNoteId !== noteId;
-			noteTags = await Tag.tagsByNoteId(noteId);
+			noteTags = noteId ? await Tag.tagsByNoteId(noteId) : [];
 			this.lastLoadedNoteId_ = noteId;
 			note = noteId ? await Note.load(noteId) : null;
 			if (noteId !== this.lastLoadedNoteId_) return; // Race condition - current note was changed while this one was loading
@@ -474,7 +474,7 @@ class NoteTextComponent extends React.Component {
 		// Perhaps a better way would be to move that code in the middleware, check for TAGS_DELETE, TAGS_UPDATE, etc. actions and update the
 		// selected note tags accordingly.
 		if (NOTE_TAG_BAR_FEATURE_ENABLED) {
-			if (!this.props.newNote) {
+			if (this.areNoteTagsModified(props.noteTags, this.state.noteTags)) {
 				this.props.dispatch({
 					type: "SET_NOTE_TAGS",
 					items: noteTags,
@@ -1421,7 +1421,7 @@ class NoteTextComponent extends React.Component {
 			toolbarStyle.marginBottom = 10;
 			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - toolbarStyle.marginBottom;
 		}
-		
+
 
 		const viewerStyle = {
 			width: Math.floor(innerWidth / 2),
