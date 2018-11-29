@@ -446,6 +446,7 @@ class NoteTextComponent extends React.Component {
 			parentFolder = Folder.byId(props.folders, note.parent_id);
 		}
 
+		let oldNoteTags = this.state.noteTags;
 		let newState = {
 			note: note,
 			lastSavedNote: Object.assign({}, note),
@@ -474,7 +475,7 @@ class NoteTextComponent extends React.Component {
 		// Perhaps a better way would be to move that code in the middleware, check for TAGS_DELETE, TAGS_UPDATE, etc. actions and update the
 		// selected note tags accordingly.
 		if (NOTE_TAG_BAR_FEATURE_ENABLED) {
-			if (this.areNoteTagsModified(props.noteTags, this.state.noteTags)) {
+			if (this.areNoteTagsModified(props.noteTags, oldNoteTags)) {
 				this.props.dispatch({
 					type: "SET_NOTE_TAGS",
 					items: noteTags,
