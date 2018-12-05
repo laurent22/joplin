@@ -8,7 +8,7 @@
     "pack": "node_modules/.bin/electron-builder --dir",
     "dist": "node_modules/.bin/electron-builder",
     "publish": "build -p always",
-    "postinstall": "node compile-jsx.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts",
+    "postinstall": "node compile-jsx.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts && install-app-deps",
     "compile": "node compile-jsx.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts"
   },
   "repository": {
@@ -71,8 +71,8 @@
     "electron-builder": "20.14.7"
   },
   "optionalDependencies": {
-    "7zip-bin-mac": "^1.0.1",
     "7zip-bin-linux": "^1.0.1",
+    "7zip-bin-mac": "^1.0.1",
     "7zip-bin-win": "^2.1.1"
   },
   "dependencies": {
@@ -121,7 +121,7 @@
     "server-destroy": "^1.0.1",
     "smalltalk": "^2.5.1",
     "sprintf-js": "^1.1.1",
-    "sqlite3": "^3.1.13",
+    "sqlite3": "^4.0.4",
     "string-padding": "^1.0.2",
     "string-to-stream": "^1.1.1",
     "syswide-cas": "^5.1.0",
