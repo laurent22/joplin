@@ -222,14 +222,11 @@ const appReducer = (state = appDefaultState, action) => {
 					}
 				}
 
+				if (action.routeName == 'Welcome') navHistory = [];
+
 				//reg.logger().info('Route: ' + currentRouteName + ' => ' + action.routeName);
 
 				newState = Object.assign({}, state);
-
-				if (action.routeName == 'Welcome') {
-					navHistory = [];
-					newState.showSideMenu = true;
-				}
 
 				if ('noteId' in action) {
 					newState.selectedNoteIds = action.noteId ? [action.noteId] : [];
@@ -601,19 +598,11 @@ class AppComponent extends React.Component {
 
 		if (this.props.showSideMenu) {
 			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-			if (this.props.historyCanGoBack) {
-				return true;
-			} else {
-				BackHandler.exitApp();
-				return false;
-			}
+			return true;
 		}
 
 		if (this.props.historyCanGoBack) {
 			this.props.dispatch({ type: 'NAV_BACK' });
-			return true;
-		} else if (!this.props.showSideMenu) {
-			this.props.dispatch({ type: 'SIDE_MENU_OPEN' });
 			return true;
 		}
 
