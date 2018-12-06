@@ -1,6 +1,7 @@
 const Setting = require('lib/models/Setting.js');
 
 const zoomRatio = Setting.value('style.zoom') / 100;
+const editorFontSize = Setting.value('style.editor.fontSize');
 
 // globalStyle should be used for properties that do not change across themes
 // i.e. should not be used for colors
@@ -14,7 +15,8 @@ const globalStyle = {
 	disabledOpacity: 0.3,
 	buttonMinWidth: 50,
 	buttonMinHeight: 30,
-	textAreaLineHeight: 17,
+	editorFontSize: editorFontSize,
+	textAreaLineHeight: Math.round(17 * editorFontSize / 12),
 
 	headerHeight: 35,
 	headerButtonHPadding: 6,
