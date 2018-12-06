@@ -18,7 +18,10 @@ class AppComponent extends Component {
 		});
 
 		this.confirm_click = () => {
-			bridge().sendContentToJoplin(this.props.clippedContent);
+			const content = Object.assign({}, this.props.clippedContent);
+			content.tags = this.state.selectedTags.join(',');
+			content.parent_id = this.props.selectedFolderId;
+			bridge().sendContentToJoplin(content);
 		}
 
 		this.contentTitle_change = (event) => {
@@ -31,24 +34,18 @@ class AppComponent extends Component {
 		this.clipSimplified_click = () => {
 			bridge().sendCommandToActiveTab({
 				name: 'simplifiedPageHtml',
-				parent_id: this.props.selectedFolderId,
-				tags: this.state.selectedTags.join(','),
 			});
 		}
 
 		this.clipComplete_click = () => {
 			bridge().sendCommandToActiveTab({
 				name: 'completePageHtml',
-				parent_id: this.props.selectedFolderId,
-				tags: this.state.selectedTags.join(','),
 			});
 		}
 
 		this.clipSelection_click = () => {
 			bridge().sendCommandToActiveTab({
 				name: 'selectedHtml',
-				parent_id: this.props.selectedFolderId,
-				tags: this.state.selectedTags.join(','),
 			});
 		}
 
