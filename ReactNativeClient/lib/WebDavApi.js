@@ -322,6 +322,17 @@ class WebDavApi {
 
 		const output = await loadResponseJson();
 
+		// Trying to fix 404 error issue with Nginx WebDAV server.
+		// https://github.com/laurent22/joplin/issues/624
+		// https://github.com/laurent22/joplin/issues/808
+		// Not tested but someone confirmed it worked - https://github.com/laurent22/joplin/issues/808#issuecomment-443552858
+		// and fix is narrowly scoped so shouldn't affect anything outside this particular edge case.
+		const responseArray = this.arrayFromJson(output, ['d:multistatus', 'd:response']);
+		if (responseArray && responseArray.length === 1) {
+			const status = this.stringFromJson(output, ['d:multistatus', 'd:response', 0, 'd:propstat', 0, 'd:status', 0]);
+			if (status && status.indexOf('404') >= 0) throw newError('Not found', 404);
+		}
+
 		// Check that we didn't get for example an HTML page (as an error) instead of the JSON response
 		// null responses are possible, for example for DELETE calls
 		if (output !== null && typeof output === 'object' && !('d:multistatus' in output)) throw newError('Not a valid WebDAV response');
