@@ -161,7 +161,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			}
 		}
 
-		this.attachPhoto_onPress = this.attachPhoto_onPress.bind(this);
+		this.takePhoto_onPress = this.takePhoto_onPress.bind(this);
 		this.cameraView_onPhoto = this.cameraView_onPhoto.bind(this);
 		this.cameraView_onCancel = this.cameraView_onCancel.bind(this);
 	}
@@ -306,7 +306,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	showImagePicker(options) {
 		return new Promise((resolve, reject) => {
-			ImagePicker.showImagePicker(options, (response) => {
+			ImagePicker.launchImageLibrary(options, (response) => {
 				resolve(response);
 			});
 		});
@@ -380,7 +380,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let resource = Resource.new();
 		resource.id = uuid.create();
 		resource.mime = mimeType;
-		resource.title = pickerResponse.fileName ? pickerResponse.fileName : _('Untitled');
+		resource.title = pickerResponse.fileName ? pickerResponse.fileName : '';
 		resource.file_extension = safeFileExtension(fileExtension(pickerResponse.fileName ? pickerResponse.fileName : localFilePath));
 
 		if (!resource.mime) resource.mime = 'application/octet-stream';
@@ -419,15 +419,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ note: newNote });
 	}
 
-	async attachImage_onPress() {
-		const options = {
-			mediaType: 'photo',
-		};
-		const response = await this.showImagePicker(options);
+	async attachPhoto_onPress() {
+		const response = await this.showImagePicker({ mediaType: 'photo' });
 		await this.attachFile(response, 'image');
 	}
 
-	attachPhoto_onPress() {
+	takePhoto_onPress() {
 		this.setState({ showCamera: true });
 	}	
 
@@ -530,6 +527,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let canAttachPicture = true;
 		if (Platform.OS === 'android' && Platform.Version < 21) canAttachPicture = false;
 		if (canAttachPicture) {
+			output.push({ title: _('Take photo'), onPress: () => { this.takePhoto_onPress(); } });
 			output.push({ title: _('Attach photo'), onPress: () => { this.attachPhoto_onPress(); } });
 			output.push({ title: _('Attach any file'), onPress: () => { this.attachFile_onPress(); } });
 			output.push({ isDivider: true });
@@ -582,9 +580,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (this.state.showCamera) {
 			return <CameraView theme={this.props.theme} style={{flex:1}} onPhoto={this.cameraView_onPhoto} onCancel={this.cameraView_onCancel}/>
 		}
-
-
-
 
 		let bodyComponent = null;
 		if (this.state.mode == 'view') {
