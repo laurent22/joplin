@@ -1442,7 +1442,7 @@ class NoteTextComponent extends React.Component {
 			verticalAlign: 'top',
 			paddingTop: paddingTop + 'px',
 			lineHeight: theme.textAreaLineHeight + 'px',
-			fontSize: theme.fontSize + 'px',
+			fontSize: theme.editorFontSize + 'px',
 			color: theme.color,
 			backgroundColor: theme.backgroundColor,
 			editorTheme: theme.editorTheme,
