@@ -26,7 +26,13 @@ class Alarm extends BaseModel {
 	}
 
 	static async makeNotification(alarm, note = null) {
-		if (!note) note = await Note.load(alarm.note_id);
+		if (!note) {
+			note = await Note.load(alarm.note_id);
+		} else if (!note.todo_due) {
+			this.logger().warn('Trying to create notification for note with todo_due property - reloading note object in case we are dealing with a partial note');
+			note = await Note.load(alarm.note_id);
+			this.logger().warn('Reloaded note:', note);
+		}
 
 		const output = {
 			id: alarm.id,
