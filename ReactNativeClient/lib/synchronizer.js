@@ -233,9 +233,13 @@ class Synchronizer {
 						let path = BaseItem.systemPath(local);
 
 						// Safety check to avoid infinite loops.
-						// In fact this error is possible if the item is marked for sync (via sync_time or force_sync) while synchronisation is in
-						// progress. In that case exit anyway to be sure we aren't in a loop and the item will be re-synced next time.
-						if (donePaths.indexOf(path) > 0) throw new Error(sprintf("Processing a path that has already been done: %s. sync_time was not updated?", path));
+						// - In fact this error is possible if the item is marked for sync (via sync_time or force_sync) while synchronisation is in
+						//   progress. In that case exit anyway to be sure we aren't in a loop and the item will be re-synced next time.
+						// - It can also happen if the item is directly modified in the sync target, and set with an update_time in the future. In that case,
+						//   the local sync_time will be updated to Date.now() but on the next loop it will see that the remote item still has a date ahead
+						//   and will see a conflict. There's currently no automatic fix for this - the remote item on the sync target must be fixed manually
+						//   (by setting an updated_time less than current time).
+						if (donePaths.indexOf(path) >= 0) throw new Error(sprintf("Processing a path that has already been done: %s. sync_time was not updated? Remote item has an updated_time in the future?", path));
 
 						let remote = await this.api().stat(path);
 						let action = null;
