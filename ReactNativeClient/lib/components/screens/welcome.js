@@ -44,7 +44,7 @@ class WelcomeScreenComponent extends BaseScreenComponent {
 			<View style={this.rootStyle(this.props.theme).root} >
 				<ScreenHeader title={_('Welcome')}/>
 				<Text style={this.styles().message}>{message}</Text>
-				<ActionButton addFolderNoteButtons={true}/>
+				<ActionButton addFolderNoteButtons={true} parentFolderId={this.props.selectedFolderId}/>
 			</View>
 		);
 	}
@@ -56,6 +56,7 @@ const WelcomeScreen = connect(
 		return {
 			folders: state.folders,
 			theme: state.settings.theme,
+			selectedFolderId: state.selectedFolderId,
 		};
 	}
 )(WelcomeScreenComponent)
