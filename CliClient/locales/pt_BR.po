@@ -647,6 +647,10 @@ msgstr "Editar com editor externo"
 msgid "Search in all the notes"
 msgstr "Pesquisar em todas as notas"
 
+#, fuzzy
+msgid "Search in current note"
+msgstr "Pesquisar em todas as notas"
+
 msgid "View"
 msgstr "Visualizar"
 
@@ -1338,6 +1342,10 @@ msgstr "Iniciar aplicativo minimizado na barra de tarefas"
 msgid "Global zoom percentage"
 msgstr "Porcentagem global do zoom"
 
+#, fuzzy
+msgid "Editor font size"
+msgstr "Família de fontes do editor"
+
 msgid "Editor font family"
 msgstr "Família de fontes do editor"
 
@@ -1713,6 +1721,10 @@ msgstr "O app mobile do Joplin não suporta, atualmente, esse tipo de link: %s"
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Tipo de imagem não suportada: %s"
+
+#, fuzzy
+msgid "Take photo"
+msgstr "Anexar foto"
 
 msgid "Attach photo"
 msgstr "Anexar foto"

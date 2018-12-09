@@ -637,6 +637,10 @@ msgstr "外部エディターで編集"
 msgid "Search in all the notes"
 msgstr "すべてのノートを検索"
 
+#, fuzzy
+msgid "Search in current note"
+msgstr "すべてのノートを検索"
+
 msgid "View"
 msgstr "表示"
 
@@ -1323,6 +1327,10 @@ msgstr "アプリケーションをトレイアンコンで最小化して起動
 msgid "Global zoom percentage"
 msgstr "全体ズームの割合"
 
+#, fuzzy
+msgid "Editor font size"
+msgstr "エディターのフォントファミリー"
+
 msgid "Editor font family"
 msgstr "エディターのフォントファミリー"
 
@@ -1689,6 +1697,10 @@ msgstr "Joplinモバイルアプリは次のタイプのリンクをまだサポ
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "サポートされていない画像の形式: %s"
+
+#, fuzzy
+msgid "Take photo"
+msgstr "写真を添付"
 
 msgid "Attach photo"
 msgstr "写真を添付"

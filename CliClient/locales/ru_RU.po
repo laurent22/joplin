@@ -649,6 +649,10 @@ msgstr ""
 msgid "Search in all the notes"
 msgstr "Поиск во всех заметках"
 
+#, fuzzy
+msgid "Search in current note"
+msgstr "Поиск во всех заметках"
+
 msgid "View"
 msgstr "Вид"
 
@@ -1338,6 +1342,10 @@ msgstr ""
 msgid "Global zoom percentage"
 msgstr "Глобальный масштаб в процентах"
 
+#, fuzzy
+msgid "Editor font size"
+msgstr "Семейство шрифтов редактора"
+
 msgid "Editor font family"
 msgstr "Семейство шрифтов редактора"
 
@@ -1699,6 +1707,10 @@ msgstr ""
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Неподдерживаемый формат изображения: %s"
+
+#, fuzzy
+msgid "Take photo"
+msgstr "Прикрепить фото"
 
 msgid "Attach photo"
 msgstr "Прикрепить фото"

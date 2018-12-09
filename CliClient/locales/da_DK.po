@@ -642,6 +642,10 @@ msgstr ""
 msgid "Search in all the notes"
 msgstr "Søg i alle noter"
 
+#, fuzzy
+msgid "Search in current note"
+msgstr "Søg i alle noter"
+
 msgid "View"
 msgstr "Vis"
 
@@ -1329,6 +1333,10 @@ msgstr ""
 msgid "Global zoom percentage"
 msgstr "Global zoom procent"
 
+#, fuzzy
+msgid "Editor font size"
+msgstr "Rediger skrifttype"
+
 msgid "Editor font family"
 msgstr "Rediger skrifttype"
 
@@ -1689,6 +1697,10 @@ msgstr ""
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Ulovlig billedtype: %s"
+
+#, fuzzy
+msgid "Take photo"
+msgstr "Vedhæft foto"
 
 msgid "Attach photo"
 msgstr "Vedhæft foto"

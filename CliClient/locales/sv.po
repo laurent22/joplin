@@ -655,6 +655,10 @@ msgstr "Redigera i extern redigerare"
 msgid "Search in all the notes"
 msgstr "Sök i alla anteckningarna"
 
+#, fuzzy
+msgid "Search in current note"
+msgstr "Sök i alla anteckningarna"
+
 msgid "View"
 msgstr "Visa"
 
@@ -1345,6 +1349,10 @@ msgstr ""
 msgid "Global zoom percentage"
 msgstr "Global zoomprocent"
 
+#, fuzzy
+msgid "Editor font size"
+msgstr "Redigerarens typsnittsfamilj"
+
 msgid "Editor font family"
 msgstr "Redigerarens typsnittsfamilj"
 
@@ -1718,6 +1726,10 @@ msgstr ""
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Bildstorlek som inte stöds: %s"
+
+#, fuzzy
+msgid "Take photo"
+msgstr "Bifoga foto"
 
 msgid "Attach photo"
 msgstr "Bifoga foto"

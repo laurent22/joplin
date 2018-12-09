@@ -663,6 +663,10 @@ msgstr "Im externen Editor bearbeiten"
 msgid "Search in all the notes"
 msgstr "Alle Notizen durchsuchen"
 
+#, fuzzy
+msgid "Search in current note"
+msgstr "Alle Notizen durchsuchen"
+
 msgid "View"
 msgstr "Ansicht"
 
@@ -1357,6 +1361,10 @@ msgstr "Starte die Anwendung minimiert im Tray"
 msgid "Global zoom percentage"
 msgstr "Zoomstufe der Benutzeroberfläche"
 
+#, fuzzy
+msgid "Editor font size"
+msgstr "Editor Schriftenfamilie"
+
 msgid "Editor font family"
 msgstr "Editor Schriftenfamilie"
 
@@ -1737,6 +1745,10 @@ msgstr ""
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Nicht unterstütztes Fotoformat: %s"
+
+#, fuzzy
+msgid "Take photo"
+msgstr "Foto anhängen"
 
 msgid "Attach photo"
 msgstr "Foto anhängen"

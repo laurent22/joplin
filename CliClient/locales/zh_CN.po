@@ -614,6 +614,10 @@ msgstr "在外部编辑器中打开"
 msgid "Search in all the notes"
 msgstr "在所有笔记内搜索"
 
+#, fuzzy
+msgid "Search in current note"
+msgstr "在所有笔记内搜索"
+
 msgid "View"
 msgstr "显示"
 
@@ -1287,6 +1291,10 @@ msgstr "启动应用程序时在托盘中最小化"
 msgid "Global zoom percentage"
 msgstr "全局缩放比例"
 
+#, fuzzy
+msgid "Editor font size"
+msgstr "编辑器字体"
+
 msgid "Editor font family"
 msgstr "编辑器字体"
 
@@ -1651,6 +1659,10 @@ msgstr "Joplin 手机应用目前不支持这种类型的链接：%s"
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "不支持的图片格式：%s"
+
+#, fuzzy
+msgid "Take photo"
+msgstr "附加照片"
 
 msgid "Attach photo"
 msgstr "附加照片"

@@ -641,6 +641,10 @@ msgstr "Rediger i ekstern editor"
 msgid "Search in all the notes"
 msgstr "Søk i alle notater"
 
+#, fuzzy
+msgid "Search in current note"
+msgstr "Søk i alle notater"
+
 msgid "View"
 msgstr "Utseende"
 
@@ -1330,6 +1334,10 @@ msgstr "Start applikasjonen minimert som systemmenyikon"
 msgid "Global zoom percentage"
 msgstr "Global forstørrelse"
 
+#, fuzzy
+msgid "Editor font size"
+msgstr "Editor skrifttype"
+
 msgid "Editor font family"
 msgstr "Editor skrifttype"
 
@@ -1699,6 +1707,10 @@ msgstr "Joplins mobilapp støtter for tiden ikke denne type linker: %s"
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Bildetypen er ikke støttet: %s"
+
+#, fuzzy
+msgid "Take photo"
+msgstr "Legg ved et bilde"
 
 msgid "Attach photo"
 msgstr "Legg ved et bilde"

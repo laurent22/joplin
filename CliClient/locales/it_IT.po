@@ -648,6 +648,10 @@ msgstr "Modifica in un editor esterno"
 msgid "Search in all the notes"
 msgstr "Cerca in tutte le note"
 
+#, fuzzy
+msgid "Search in current note"
+msgstr "Cerca in tutte le note"
+
 msgid "View"
 msgstr "Vista"
 
@@ -1338,6 +1342,10 @@ msgstr ""
 msgid "Global zoom percentage"
 msgstr "Percentuale di zoom globale"
 
+#, fuzzy
+msgid "Editor font size"
+msgstr "Editor Famiglia Caratteri"
+
 msgid "Editor font family"
 msgstr "Editor Famiglia Caratteri"
 
@@ -1709,6 +1717,10 @@ msgstr ""
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Tipo di immagine non supportata: %s"
+
+#, fuzzy
+msgid "Take photo"
+msgstr "Allega foto"
 
 msgid "Attach photo"
 msgstr "Allega foto"

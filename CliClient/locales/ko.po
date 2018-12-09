@@ -634,6 +634,10 @@ msgstr "외부 편집기에서 편집하기"
 msgid "Search in all the notes"
 msgstr "모든 노트에서 검색"
 
+#, fuzzy
+msgid "Search in current note"
+msgstr "모든 노트에서 검색"
+
 msgid "View"
 msgstr "보기"
 
@@ -1315,6 +1319,10 @@ msgstr ""
 msgid "Global zoom percentage"
 msgstr "전체적 확대 비율"
 
+#, fuzzy
+msgid "Editor font size"
+msgstr "편집기 글꼴 집합"
+
 msgid "Editor font family"
 msgstr "편집기 글꼴 집합"
 
@@ -1679,6 +1687,10 @@ msgstr "조플린 모바일 앱은 현재 해당 형식의 링크를 지원하�
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "지원하지 않는 이미지 형식: %s"
+
+#, fuzzy
+msgid "Take photo"
+msgstr "사진 첨부"
 
 msgid "Attach photo"
 msgstr "사진 첨부"
