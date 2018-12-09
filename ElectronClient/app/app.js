@@ -460,13 +460,26 @@ class Application extends BaseApplication {
 						});
 					},
 				}, {
+					type: 'separator',
+					screens: ['Main'],
+				}, {
 					label: _('Search in all the notes'),
+					screens: ['Main'],
+					accelerator: 'F6',
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'focus_search',
+						});
+					},
+				}, {
+					label: _('Search in current note'),
 					screens: ['Main'],
 					accelerator: 'CommandOrControl+F',
 					click: () => {
 						this.dispatch({
 							type: 'WINDOW_COMMAND',
-							name: 'focus_search',
+							name: 'showLocalSearch',
 						});
 					},
 				}],

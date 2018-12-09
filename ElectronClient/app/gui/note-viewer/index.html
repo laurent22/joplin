@@ -16,6 +16,11 @@
 		}
 
 		mark {
+			background: #F3B717;
+			color: black;
+		}
+
+		.mark-selected {
 			background: #CF3F00;
 			color: white;
 		}
@@ -192,7 +197,10 @@
 	}
 
 	let mark_ = null;
-	function setMarkers(keywords) {
+	let markSelectedElement_ = null;
+	function setMarkers(keywords, options = null) {
+		if (!options) options = {};
+
 		if (!mark_) {
 			mark_ = new Mark(document.getElementById('content'), {
 				exclude: ['img'],
@@ -200,26 +208,52 @@
 			});
 		}
 
-		mark_.mark(keywords);
+		mark_.unmark()
+
+		if (markSelectedElement_) markSelectedElement_.classList.remove('mark-selected');
+
+		let selectedElement = null;
+		let elementIndex = 0;
+
+		if (keywords.length) {
+			mark_.mark(keywords, {
+				each: (element) => {
+					if (!('selectedIndex' in options)) return;
+
+					if (('selectedIndex' in options) && elementIndex === options.selectedIndex) {
+						markSelectedElement_ = element;
+						element.classList.add('mark-selected');
+						selectedElement = element;
+					}
+					
+					elementIndex++;
+				}
+			});
+		}
+
+		ipcProxySendToHost('setMarkerCount', elementIndex);
+
+		if (selectedElement) selectedElement.scrollIntoView();
 	}
 
 	let markLoaded_ = false;
 	ipc.setMarkers = (event) => {
 		const keywords = event.keywords;
+		const options = event.options;
 
 		if (!keywords.length && !markLoaded_) return;
 
 		if (!markLoaded_) {
 			const script = document.createElement('script');
 			script.onload = function() {
-				setMarkers(keywords);
+				setMarkers(keywords, options);
 			};
 
 			script.src = '../../node_modules/mark.js/dist/mark.min.js';
 			document.getElementById('markScriptContainer').appendChild(script);
 			markLoaded_ = true;
 		} else {
-			setMarkers(keywords);
+			setMarkers(keywords, options);
 		}
 	}
 

@@ -25,8 +25,10 @@ const fs = require('fs-extra');
 const md5 = require('md5');
 const mimeUtils = require('lib/mime-utils.js').mime;
 const ArrayUtils = require('lib/ArrayUtils');
+const ObjectUtils = require('lib/ObjectUtils');
 const urlUtils = require('lib/urlUtils');
 const dialogs = require('./dialogs');
+const NoteSearchBar = require('./NoteSearchBar.min.js');
 const markdownUtils = require('lib/markdownUtils');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
@@ -45,6 +47,12 @@ class NoteTextComponent extends React.Component {
 
 	constructor() {
 		super();
+
+		this.localSearchDefaultState = {
+			query: '',
+			selectedIndex: 0,
+			resultCount: 0,
+		};
 
 		this.state = {
 			note: null,
@@ -65,6 +73,8 @@ class NoteTextComponent extends React.Component {
 			newAndNoTitleChangeNoteId: null,
 			bodyHtml: '',
 			lastKeys: [],
+			showLocalSearch: false,
+			localSearch: Object.assign({}, this.localSearchDefaultState), 
 		};
 
 		this.lastLoadedNoteId_ = null;
@@ -75,7 +85,9 @@ class NoteTextComponent extends React.Component {
 		this.restoreScrollTop_ = null;
 		this.lastSetHtml_ = '';
 		this.lastSetMarkers_ = [];
+		this.lastSetMarkersOptions_ = {};
 		this.selectionRange_ = null;
+		this.noteSearchBar_ = React.createRef();
 
 		// Complicated but reliable method to get editor content height
 		// https://github.com/ajaxorg/ace/issues/2046
@@ -213,6 +225,36 @@ class NoteTextComponent extends React.Component {
 				this.lastSetHtml_ = '';
 				this.updateHtml(this.state.note.body);
 			}
+		}
+
+		this.noteSearchBar_change = (query) => {
+			this.setState({ localSearch: {
+				query: query,
+				selectedIndex: 0,
+			}});
+		}
+
+		const noteSearchBarNextPrevious = (inc) => {
+			const ls = Object.assign({}, this.state.localSearch);
+			ls.selectedIndex += inc;
+			if (ls.selectedIndex < 0) ls.selectedIndex = ls.resultCount - 1;
+			if (ls.selectedIndex >= ls.resultCount) ls.selectedIndex = 0;
+
+			this.setState({ localSearch: ls });
+		}
+
+		this.noteSearchBar_next = () => {
+			noteSearchBarNextPrevious(+1);
+		}
+
+		this.noteSearchBar_previous = () => {
+			noteSearchBarNextPrevious(-1);
+		}
+
+		this.noteSearchBar_close = () => {
+			this.setState({
+				showLocalSearch: false,
+			});
 		}
 	}
 
@@ -441,8 +483,7 @@ class NoteTextComponent extends React.Component {
 			}
 		}
 
-		if (note)
-		{
+		if (note) {
 			parentFolder = Folder.byId(props.folders, note.parent_id);
 		}
 
@@ -461,8 +502,14 @@ class NoteTextComponent extends React.Component {
 			newState.newAndNoTitleChangeNoteId = null;
 		}
 
+		if (!note || loadingNewNote) {
+			newState.showLocalSearch = false;
+			newState.localSearch = Object.assign({}, this.localSearchDefaultState);
+		}
+
 		this.lastSetHtml_ = '';
 		this.lastSetMarkers_ = [];
+		this.lastSetMarkersOptions_ = {};
 
 		this.setState(newState);
 
@@ -565,6 +612,10 @@ class NoteTextComponent extends React.Component {
 
 			const newBody = this.mdToHtml_.handleCheckboxClick(msg, this.state.note.body);
 			this.saveOneProperty('body', newBody);
+		} else if (msg === 'setMarkerCount') {
+			const ls = Object.assign({}, this.state.localSearch);
+			ls.resultCount = arg0;
+			this.setState({ localSearch: ls });
 		} else if (msg === 'percentScroll') {
 			this.ignoreNextEditorScroll_ = true;
 			this.setEditorPercentScroll(arg0);
@@ -873,6 +924,8 @@ class NoteTextComponent extends React.Component {
 			this.commandDateTime();
 		} else if (command.name === 'commandStartExternalEditing') {
 			this.commandStartExternalEditing();
+		} else if (command.name === 'showLocalSearch') {
+			this.commandShowLocalSearch();
 		} else {
 			commandProcessed = false;
 		}
@@ -883,6 +936,19 @@ class NoteTextComponent extends React.Component {
 				name: null,
 			});
 		}
+	}
+
+	commandShowLocalSearch() {
+		if (this.state.showLocalSearch) {
+			this.noteSearchBar_.current.wrappedInstance.focus();
+		} else {
+			this.setState({ showLocalSearch: true });
+		}
+
+		this.props.dispatch({
+			type: 'NOTE_VISIBLE_PANES_SET',
+			panes: ['editor', 'viewer'],
+		});
 	}
 
 	async commandAttachFile(filePaths = null) {
@@ -1414,6 +1480,8 @@ class NoteTextComponent extends React.Component {
 			height: 30
 		};
 
+		const searchBarHeight = this.state.showLocalSearch ? 35 : 0;
+
 		let bottomRowHeight = 0;
 		if (NOTE_TAG_BAR_FEATURE_ENABLED) {
 			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - tagStyle.height - tagStyle.marginBottom;
@@ -1421,8 +1489,9 @@ class NoteTextComponent extends React.Component {
 			toolbarStyle.marginBottom = 10;
 			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - toolbarStyle.marginBottom;
 		}
-		
 
+		bottomRowHeight -= searchBarHeight;
+		
 		const viewerStyle = {
 			width: Math.floor(innerWidth / 2),
 			height: bottomRowHeight,
@@ -1481,12 +1550,21 @@ class NoteTextComponent extends React.Component {
 				this.lastSetHtml_ = html;
 			}
 
-			const search = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
-			const keywords = search ? Search.keywords(search.query_pattern) : [];
+			let keywords = [];
+			const markerOptions = {};
 
-			if (htmlHasChanged || !ArrayUtils.contentEquals(this.lastSetMarkers_, keywords)) {
-				this.lastSetMarkers_ = [];
-				this.webview_.send('setMarkers', keywords);
+			if (this.state.showLocalSearch) {
+				keywords = [this.state.localSearch.query];
+				markerOptions.selectedIndex = this.state.localSearch.selectedIndex;
+			} else {
+				const search = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
+				if (search) keywords = Search.keywords(search.query_pattern);
+			}
+
+			if (htmlHasChanged || !ArrayUtils.contentEquals(this.lastSetMarkers_, keywords) || !ObjectUtils.fieldsEqual(this.lastSetMarkersOptions_, markerOptions)) {
+				this.lastSetMarkers_ = keywords.slice();
+				this.lastSetMarkersOptions_ = Object.assign({}, markerOptions);
+				this.webview_.send('setMarkers', keywords, markerOptions);
 			}
 		}
 
@@ -1574,6 +1652,17 @@ class NoteTextComponent extends React.Component {
 			highlightActiveLine={false}
 		/>
 
+		const noteSearchBarComp = !this.state.showLocalSearch ? null : (
+			<NoteSearchBar
+				ref={this.noteSearchBar_}
+				style={{display: 'flex', height:searchBarHeight,width:innerWidth, borderTop: '1px solid ' + theme.dividerColor}}
+				onChange={this.noteSearchBar_change}
+				onNext={this.noteSearchBar_next}
+				onPrevious={this.noteSearchBar_previous}
+				onClose={this.noteSearchBar_close}
+			/>
+		);
+
 		return (
 			<div style={rootStyle} onDrop={this.onDrop_}>
 				<div style={titleBarStyle}>
@@ -1585,6 +1674,8 @@ class NoteTextComponent extends React.Component {
 				{ tagList }
 				{ editor }
 				{ viewer }
+				<div style={{clear:'both'}}/>
+				{ noteSearchBarComp }
 			</div>
 		);
 	}
