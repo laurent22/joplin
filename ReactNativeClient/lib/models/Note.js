@@ -249,7 +249,7 @@ class Note extends BaseItem {
 		// is used to sort already loaded notes.
 
 		if (!options) options = {};
-		if (!options.order) options.order = [
+		if (!('order' in options)) options.order = [
 			{ by: 'user_updated_time', dir: 'DESC' },
 			{ by: 'user_created_time', dir: 'DESC' },
 			{ by: 'title', dir: 'DESC' },

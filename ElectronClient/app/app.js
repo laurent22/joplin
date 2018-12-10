@@ -23,6 +23,7 @@ const DecryptionWorker = require('lib/services/DecryptionWorker');
 const InteropService = require('lib/services/InteropService');
 const InteropServiceHelper = require('./InteropServiceHelper.js');
 const ResourceService = require('lib/services/ResourceService');
+const SearchEngine = require('lib/services/SearchEngine');
 const ClipperServer = require('lib/ClipperServer');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const { bridge } = require('electron').remote.require('./bridge');
@@ -792,6 +793,10 @@ class Application extends BaseApplication {
 		}
 
 		ResourceService.runInBackground();
+
+		SearchEngine.instance().setDb(reg.db());
+		SearchEngine.instance().setLogger(reg.logger());
+		SearchEngine.runInBackground();
 
 		if (Setting.value('env') === 'dev') {
 			AlarmService.updateAllNotifications();

@@ -1,4 +1,5 @@
 const { Logger } = require('lib/logger.js');
+const { shim } = require('lib/shim.js');
 const ItemChange = require('lib/models/ItemChange.js');
 const Setting = require('lib/models/Setting.js');
 const Note = require('lib/models/Note.js');
@@ -12,6 +13,7 @@ class SearchEngine {
 		this.db_ = null;
 	}
 
+	// Note: Duplicated in JoplinDatabase migration 15
 	async createFtsTables() {
 		await this.db().exec('CREATE VIRTUAL TABLE notes_fts USING fts4(content="notes", notindexed="id", id, title, body)');
 		await this.db().exec('INSERT INTO notes_fts(docid, id, title, body) SELECT rowid, id, title, body FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
@@ -26,6 +28,8 @@ class SearchEngine {
 		// await this.db().exec('DELETE FROM notes_fts');
 		// await this.db().exec('INSERT INTO notes_fts(docid, id, title, body) SELECT rowid, id, title, body FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
 		// return;
+
+		this.logger().info('SearchEngine: Updating FTS table...');
 
 		await ItemChange.waitForAllSaved();
 
@@ -112,6 +116,10 @@ class SearchEngine {
 
 	calculateWeight_(offsets) {
 		// Offset doc: https://www.sqlite.org/fts3.html#offsets
+
+		// TODO: If there's only one term - specia case - whatever has the most occurences win.
+		// TODO: Parse query string.
+		// TODO: Support wildcards
 		
 		const occurenceCount = Math.floor(offsets.length / 4);
 
@@ -151,10 +159,24 @@ class SearchEngine {
 	}
 
 	async search(query) {
-		const sql = 'SELECT id, offsets(notes_fts) AS offsets FROM notes_fts WHERE notes_fts MATCH ?'
+		const sql = 'SELECT id, title, offsets(notes_fts) AS offsets FROM notes_fts WHERE notes_fts MATCH ?'
 		const rows = await this.db().selectAll(sql, [query]);
 		this.orderResults_(rows);
 		return rows;
+	}
+
+	static runInBackground() {
+		if (this.isRunningInBackground_) return;
+
+		this.isRunningInBackground_ = true;
+
+		setTimeout(() => {
+			SearchEngine.instance().updateFtsTables();
+		}, 1000 * 30);
+		
+		shim.setInterval(() => {
+			SearchEngine.instance().updateFtsTables();
+		}, 1000 * 60 * 30);
 	}
 
 }
