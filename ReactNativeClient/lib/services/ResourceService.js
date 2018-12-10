@@ -4,16 +4,13 @@ const Note = require('lib/models/Note');
 const Resource = require('lib/models/Resource');
 const BaseModel = require('lib/BaseModel');
 const BaseService = require('lib/services/BaseService');
+const Setting = require('lib/models/Setting');
 const { shim } = require('lib/shim');
 
 class ResourceService extends BaseService {
 
 	async indexNoteResources() {
 		this.logger().info('ResourceService::indexNoteResources: Start');
-
-		let lastId = 0;
-
-		const processedChangeIds = [];
 
 		await ItemChange.waitForAllSaved();
 
@@ -25,7 +22,7 @@ class ResourceService extends BaseService {
 				AND id > ?
 				ORDER BY id ASC
 				LIMIT 100
-			`, [BaseModel.TYPE_NOTE, lastId]);
+			`, [BaseModel.TYPE_NOTE, Setting.value('resourceService.lastProcessedChangeId')]);
 
 			if (!changes.length) break;
 
@@ -61,15 +58,11 @@ class ResourceService extends BaseService {
 					throw new Error('Invalid change type: ' + change.type);
 				}
 
-				lastId = change.id;
-
-				processedChangeIds.push(change.id);
+				Setting.setValue('resourceService.lastProcessedChangeId', change.id);
 			}
 		}
 
-		if (lastId) {
-			await ItemChange.db().exec('DELETE FROM item_changes WHERE id <= ?', [lastId]);
-		}
+		await Setting.saveAll();
 
 		await NoteResource.addOrphanedResources();
 
