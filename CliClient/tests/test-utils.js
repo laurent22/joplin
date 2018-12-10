@@ -4,6 +4,7 @@ const { DatabaseDriverNode } = require('lib/database-driver-node.js');
 const BaseModel = require('lib/BaseModel.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
+const ItemChange = require('lib/models/ItemChange.js');
 const Resource = require('lib/models/Resource.js');
 const Tag = require('lib/models/Tag.js');
 const NoteTag = require('lib/models/NoteTag.js');
@@ -121,6 +122,8 @@ async function switchClient(id) {
 
 async function clearDatabase(id = null) {
 	if (id === null) id = currentClient_;
+
+	await ItemChange.waitForAllSaved();
 
 	let queries = [
 		'DELETE FROM notes',

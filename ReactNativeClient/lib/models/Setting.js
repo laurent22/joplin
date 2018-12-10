@@ -159,6 +159,7 @@ class Setting extends BaseModel {
 			'api.token': { value: null, type: Setting.TYPE_STRING, public: false },
 
 			'resourceService.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
+			'searchEngine.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
 		};
 
 		return this.metadata_;
