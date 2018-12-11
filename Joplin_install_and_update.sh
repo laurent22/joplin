@@ -60,7 +60,7 @@ if [[ $(< ~/.joplin/VERSION) != "$version" ]]; then
     # Create icon for Gnome
     if [[ $desktop =~ .*gnome.* ]] 
     then
-       echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nExec=/home/$USER/.joplin/Joplin-$version-x86_64.AppImage\nIcon=/home/$USER/.joplin/Icon512.png\nType=Application\nCategories=Application;" >> ~/.local/share/applications/joplin.desktop
+       echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nExec=/home/$USER/.joplin/Joplin.AppImage\nIcon=/home/$USER/.joplin/Icon512.png\nType=Application\nCategories=Application;" >> ~/.local/share/applications/joplin.desktop
     fi
     
     #-----------------------------------------------------
