@@ -796,7 +796,6 @@ class Application extends BaseApplication {
 
 		SearchEngine.instance().setDb(reg.db());
 		SearchEngine.instance().setLogger(reg.logger());
-		SearchEngine.runInBackground();
 
 		if (Setting.value('env') === 'dev') {
 			AlarmService.updateAllNotifications();

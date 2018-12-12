@@ -13,67 +13,6 @@ class SearchEngine {
 		this.db_ = null;
 	}
 
-	// Note: Duplicated in JoplinDatabase migration 15
-	async createFtsTables() {
-		await this.db().exec('CREATE VIRTUAL TABLE notes_fts USING fts4(content="notes", notindexed="id", id, title, body)');
-		await this.db().exec('INSERT INTO notes_fts(docid, id, title, body) SELECT rowid, id, title, body FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
-	}
-
-	async dropFtsTables() {
-		await this.db().exec('DROP TABLE IF EXISTS notes_fts');
-	}
-
-	async updateFtsTables() {
-
-		// await this.db().exec('DELETE FROM notes_fts');
-		// await this.db().exec('INSERT INTO notes_fts(docid, id, title, body) SELECT rowid, id, title, body FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
-		// return;
-
-		this.logger().info('SearchEngine: Updating FTS table...');
-
-		await ItemChange.waitForAllSaved();
-
-		const startTime = Date.now();
-
-		let lastChangeId = Setting.value('searchEngine.lastProcessedChangeId');
-
-		while (true) {
-			const changes = await ItemChange.modelSelectAll(`
-				SELECT id, item_id, type
-				FROM item_changes
-				WHERE item_type = ?
-				AND id > ?
-				ORDER BY id ASC
-				LIMIT 100
-			`, [BaseModel.TYPE_NOTE, lastChangeId]);
-
-			if (!changes.length) break;
-
-			const queries = [];
-
-			for (let i = 0; i < changes.length; i++) {
-				const change = changes[i];
-
-				if (change.type === ItemChange.TYPE_CREATE || change.type === ItemChange.TYPE_UPDATE) {
-					queries.push({ sql: 'DELETE FROM notes_fts WHERE id = ?', params: [change.item_id] });
-					queries.push({ sql: 'INSERT INTO notes_fts(docid, id, title, body) SELECT rowid, id, title, body FROM notes WHERE id = ?', params: [change.item_id] });
-				} else if (change.type === ItemChange.TYPE_DELETE) {
-					queries.push({ sql: 'DELETE FROM notes_fts WHERE id = ?', params: [change.item_id] });
-				} else {
-					throw new Error('Invalid change type: ' + change.type);
-				}
-
-				lastChangeId = change.id;
-			}
-
-			await this.db().transactionExecBatch(queries);
-			Setting.setValue('searchEngine.lastProcessedChangeId', lastChangeId);
-			await Setting.saveAll();
-		}
-
-		this.logger().info('SearchEngine: Updated FTS table in ' + (Date.now() - startTime) + 'ms');
-	}
-
 	static instance() {
 		if (this.instance_) return this.instance_;
 		this.instance_ = new SearchEngine();
@@ -114,14 +53,16 @@ class SearchEngine {
 		return indexes;
 	}
 
-	calculateWeight_(offsets) {
+	calculateWeight_(offsets, termCount) {
 		// Offset doc: https://www.sqlite.org/fts3.html#offsets
 
-		// TODO: If there's only one term - specia case - whatever has the most occurences win.
-		// TODO: Parse query string.
-		// TODO: Support wildcards
+		// - If there's only one term in the query string, the content with the most matches goes on top
+		// - If there are multiple terms, the result with the most occurences that are closest to each others go on top.
+		//   eg. if query is "abcd efgh", "abcd efgh" will go before "abcd XX efgh".
 		
 		const occurenceCount = Math.floor(offsets.length / 4);
+
+		if (termCount === 1) return occurenceCount;
 
 		let spread = 0;
 		let previousDist = null;
@@ -142,11 +83,11 @@ class SearchEngine {
 		return occurenceCount / spread;
 	}
 
-	orderResults_(rows) {
+	orderResults_(rows, parsedQuery) {
 		for (let i = 0; i < rows.length; i++) {
 			const row = rows[i];
 			const offsets = row.offsets.split(' ').map(o => Number(o));
-			row.weight = this.calculateWeight_(offsets);
+			row.weight = this.calculateWeight_(offsets, parsedQuery.termCount);
 			// row.colIndexes = this.columnIndexesFromOffsets_(offsets);
 			// row.offsets = offsets;
 		}
@@ -158,27 +99,104 @@ class SearchEngine {
 		});
 	}
 
+	// https://stackoverflow.com/a/13818704/561309
+	queryTermToRegex(term) {
+		const preg_quote = (str, delimiter) => {
+			return (str + '').replace(new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\' + (delimiter || '') + '-]', 'g'), '\\$&');
+		}
+		const regexString = preg_quote(term).replace(/\\\*/g, '.*').replace(/\\\?/g, '.');
+		return new RegExp(regexString, 'gmi');
+	}
+
+	parseQuery(query) {
+		const terms = {_:[]};
+		
+		let inQuote = false;
+		let currentCol = '_';
+		let currentTerm = '';
+		for (let i = 0; i < query.length; i++) {
+			const c = query[i];
+
+			if (c === '"') {
+				if (inQuote) {
+					terms[currentCol].push(currentTerm);
+					currentTerm = '';
+					inQuote = false;
+				} else {
+					inQuote = true;
+				}
+				continue;
+			}
+
+			if (c === ' ' && !inQuote) {
+				if (!currentTerm) continue;
+				terms[currentCol].push(currentTerm);
+				currentCol = '_';
+				currentTerm = '';
+				continue;
+			}
+
+			if (c === ':' && !inQuote) {
+				currentCol = currentTerm;
+				terms[currentCol] = [];
+				currentTerm = '';
+				continue;
+			}
+
+			currentTerm += c;
+		}
+
+		if (currentTerm) terms[currentCol].push(currentTerm);
+
+		// Filter terms:
+		// - Convert wildcards to regex
+		// - Remove columns with no results
+		// - Add count of terms
+
+		let termCount = 0;
+		const keys = [];
+		for (let col in terms) {
+			if (!terms.hasOwnProperty(col)) continue;
+
+			if (!terms[col].length) {
+				delete terms[col];
+				continue;
+			}
+
+			for (let i = terms[col].length - 1; i >= 0; i--) {
+				const term = terms[col][i];
+
+				// SQlLite FTS doesn't allow "*" queries and neither shall we
+				if (term === '*') {
+					terms[col].splice(i, 1);
+					continue;
+				}
+
+				if (term.indexOf('*') >= 0) {
+					terms[col][i] = this.queryTermToRegex(term);
+				}
+			}
+
+			termCount += terms[col].length;
+
+			keys.push(col);
+		}
+
+		return {
+			termCount: termCount,
+			keys: keys,
+			terms: terms,
+		};
+	}
+
 	async search(query) {
+		const parsedQuery = this.parseQuery(query);
 		const sql = 'SELECT id, title, offsets(notes_fts) AS offsets FROM notes_fts WHERE notes_fts MATCH ?'
 		const rows = await this.db().selectAll(sql, [query]);
-		this.orderResults_(rows);
+		this.orderResults_(rows, parsedQuery);
 		return rows;
 	}
-
-	static runInBackground() {
-		if (this.isRunningInBackground_) return;
-
-		this.isRunningInBackground_ = true;
-
-		setTimeout(() => {
-			SearchEngine.instance().updateFtsTables();
-		}, 1000 * 30);
-		
-		shim.setInterval(() => {
-			SearchEngine.instance().updateFtsTables();
-		}, 1000 * 60 * 30);
-	}
-
+	
 }
 
 module.exports = SearchEngine;
