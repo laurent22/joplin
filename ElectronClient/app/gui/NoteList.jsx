@@ -13,6 +13,7 @@ const InteropService = require('lib/services/InteropService');
 const InteropServiceHelper = require('../InteropServiceHelper.js');
 const Search = require('lib/models/Search');
 const Mark = require('mark.js/dist/mark.min.js');
+const SearchEngine = require('lib/services/SearchEngine');
 
 class NoteListComponent extends React.Component {
 
@@ -234,8 +235,11 @@ class NoteListComponent extends React.Component {
 
 		let highlightedWords = [];
 		if (this.props.notesParentType === 'Search') {
-			const search = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
-			highlightedWords = search ? Search.keywords(search.query_pattern) : [];
+			const query = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
+			if (query) {
+				const parsedQuery = SearchEngine.instance().parseQuery(query.query_pattern);
+				highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
+			}
 		}
 
 		let style = Object.assign({ width: width }, this.style().listItem);
@@ -266,7 +270,18 @@ class NoteListComponent extends React.Component {
 				exclude: ['img'],
 				acrossElements: true,
 			});
-			mark.mark(highlightedWords);
+
+			mark.unmark();
+
+			for (let i = 0; i < highlightedWords.length; i++) {
+				const w = highlightedWords[i];
+
+				if (w.type === 'regex') {
+					mark.markRegExp(new RegExp(w.value, 'gmi'), { acrossElements: true });
+				} else {
+					mark.mark([w]);
+				}
+			}
 
 			// Note: in this case it is safe to use dangerouslySetInnerHTML because titleElement
 			// is a span tag that we created and that contains data that's been inserted as plain text

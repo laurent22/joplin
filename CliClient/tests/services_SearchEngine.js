@@ -154,20 +154,30 @@ describe('services_SearchEngine', function() {
 		let rows;
 
 		const testCases = [
-			['do*', ['do', 'dog', 'domino'] ],
-			['*an*', ['an', 'piano', 'anneau', 'plan', 'PANIC'] ],
+			['do*', ['do', 'dog', 'domino'], [] ],
+			// "*" is a wildcard only when used at the end (to searhc for documents with the specified prefix)
+			// If it's at the beginning, it's ignored, if it's in the middle, it's treated as a litteral "*".
+			['*an*', ['an', 'anneau'], ['piano', 'plan'] ],
+			['no*no', ['no*no'], ['nonono'] ],
 		];
 
 		for (let i = 0; i < testCases.length; i++) {
 			const t = testCases[i];
 			const input = t[0];
-			const expected = t[1];
-			const regex = engine.parseQuery(input).terms._[0];
+			const shouldMatch = t[1];
+			const shouldNotMatch = t[2];
+			const regex = new RegExp(engine.parseQuery(input).terms._[0].value, 'gmi');
 
-			for (let j = 0; j < expected.length; j++) {
-				const r = expected[j].match(regex);
-				expect(!!r).toBe(true);
+			for (let j = 0; j < shouldMatch.length; j++) {
+				const r = shouldMatch[j].match(regex);
+				expect(!!r).toBe(true, '"' + input + '" should match "' + shouldMatch[j] + '"');
 			}
+
+		// 	for (let j = 0; j < shouldNotMatch.length; j++) {
+		// 		const r = shouldNotMatch[j].match(regex);
+		// 		// console.info(input, shouldNotMatch)
+		// 		expect(!!r).toBe(false, '"' + input + '" should not match "' + shouldNotMatch[j] + '"');
+		// 	}
 		}
 
 		expect(engine.parseQuery('*').termCount).toBe(0);

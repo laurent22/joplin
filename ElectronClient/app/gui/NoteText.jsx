@@ -34,6 +34,7 @@ const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { toSystemSlashes, safeFilename } = require('lib/path-utils');
 const { clipboard } = require('electron');
+const SearchEngine = require('lib/services/SearchEngine');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -84,7 +85,7 @@ class NoteTextComponent extends React.Component {
 		this.scheduleSaveTimeout_ = null;
 		this.restoreScrollTop_ = null;
 		this.lastSetHtml_ = '';
-		this.lastSetMarkers_ = [];
+		this.lastSetMarkers_ = '';
 		this.lastSetMarkersOptions_ = {};
 		this.selectionRange_ = null;
 		this.noteSearchBar_ = React.createRef();
@@ -508,7 +509,7 @@ class NoteTextComponent extends React.Component {
 		}
 
 		this.lastSetHtml_ = '';
-		this.lastSetMarkers_ = [];
+		this.lastSetMarkers_ = '';
 		this.lastSetMarkersOptions_ = {};
 
 		this.setState(newState);
@@ -733,7 +734,7 @@ class NoteTextComponent extends React.Component {
 			webviewReady: true,
 		});
 
-		// if (Setting.value('env') === 'dev') this.webview_.openDevTools();
+		if (Setting.value('env') === 'dev') this.webview_.openDevTools();
 	}
 
 	webview_ref(element) {
@@ -1558,11 +1559,15 @@ class NoteTextComponent extends React.Component {
 				markerOptions.selectedIndex = this.state.localSearch.selectedIndex;
 			} else {
 				const search = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
-				if (search) keywords = Search.keywords(search.query_pattern);
+				if (search) {
+					const parsedQuery = SearchEngine.instance().parseQuery(search.query_pattern);
+					keywords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
+				}
 			}
 
-			if (htmlHasChanged || !ArrayUtils.contentEquals(this.lastSetMarkers_, keywords) || !ObjectUtils.fieldsEqual(this.lastSetMarkersOptions_, markerOptions)) {
-				this.lastSetMarkers_ = keywords.slice();
+			const keywordHash = JSON.stringify(keywords);
+			if (htmlHasChanged || keywordHash !== this.lastSetMarkers_ || !ObjectUtils.fieldsEqual(this.lastSetMarkersOptions_, markerOptions)) {
+				this.lastSetMarkers_ = keywordHash;
 				this.lastSetMarkersOptions_ = Object.assign({}, markerOptions);
 				this.webview_.send('setMarkers', keywords, markerOptions);
 			}

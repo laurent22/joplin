@@ -101,11 +101,19 @@ class SearchEngine {
 
 	// https://stackoverflow.com/a/13818704/561309
 	queryTermToRegex(term) {
+		while (term.length && term.indexOf('*') === 0) {
+			term = term.substr(1);
+		}
+
 		const preg_quote = (str, delimiter) => {
 			return (str + '').replace(new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\' + (delimiter || '') + '-]', 'g'), '\\$&');
+		} // [^ \t,\.,\+\-\\*?!={}<>\|:"\'\(\)[\]]
+		let regexString = preg_quote(term);
+		if (regexString[regexString.length - 1] === '*') {
+			regexString = regexString.substr(0, regexString.length - 2) + '[^' + preg_quote(' \t\n\r,.,+-*?!={}<>|:"\'()[]') + ']' + '*';
 		}
-		const regexString = preg_quote(term).replace(/\\\*/g, '.*').replace(/\\\?/g, '.');
-		return new RegExp(regexString, 'gmi');
+
+		return regexString;
 	}
 
 	parseQuery(query) {
@@ -173,7 +181,7 @@ class SearchEngine {
 				}
 
 				if (term.indexOf('*') >= 0) {
-					terms[col][i] = this.queryTermToRegex(term);
+					terms[col][i] = { type: 'regex', value: this.queryTermToRegex(term) };
 				}
 			}
 
@@ -187,6 +195,17 @@ class SearchEngine {
 			keys: keys,
 			terms: terms,
 		};
+	}
+
+	allParsedQueryTerms(parsedQuery) {
+		if (!parsedQuery || !parsedQuery.termCount) return [];
+
+		let output = [];
+		for (let col in parsedQuery.terms) {
+			if (!parsedQuery.terms.hasOwnProperty(col)) continue;
+			output = output.concat(parsedQuery.terms[col]);
+		}
+		return output;
 	}
 
 	async search(query) {

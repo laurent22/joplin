@@ -36,6 +36,7 @@
 <body id="body">
 	<div id="hlScriptContainer"></div>
 	<div id="markScriptContainer"></div>
+	<!-- START_OF_DOCUMENT -->
 	<div id="content" ondragstart="return false;" ondrop="return false;"></div>
 
 	<script>
@@ -143,6 +144,8 @@
 	ipc.setHtml = (event) => {
 		const html = event.html;
 
+		markJsHackMarkerInserted_ = false;
+
 		updateBodyHeight();
 
 		contentElement.innerHTML = html;
@@ -196,6 +199,29 @@
 		setPercentScroll(percent);
 	}
 
+	// HACK for Mark.js bug - https://github.com/julmot/mark.js/issues/127
+	let markJsHackMarkerInserted_ = false;
+	function addMarkJsSpaceHack(document) {
+		if (markJsHackMarkerInserted_) return;
+		
+		const prepareElementsForMarkJs = (elements, type) => {
+			// const markJsHackMarker_ = '&#8203; &#8203;'
+			const markJsHackMarker_ = ' ';
+			for (let i = 0; i < elements.length; i++) {
+				if (!type) {
+					elements[i].innerHTML = elements[i].innerHTML + markJsHackMarker_;
+				} else if (type === 'insertBefore') {
+					elements[i].insertAdjacentHTML('beforeBegin', markJsHackMarker_);
+				}
+			}
+		}
+
+		prepareElementsForMarkJs(document.getElementsByTagName('p'));
+		prepareElementsForMarkJs(document.getElementsByTagName('div'));
+		prepareElementsForMarkJs(document.getElementsByTagName('br'), 'insertBefore');
+		markJsHackMarkerInserted_ = true;
+	}
+
 	let mark_ = null;
 	let markSelectedElement_ = null;
 	function setMarkers(keywords, options = null) {
@@ -208,6 +234,8 @@
 			});
 		}
 
+		addMarkJsSpaceHack(document);
+
 		mark_.unmark()
 
 		if (markSelectedElement_) markSelectedElement_.classList.remove('mark-selected');
@@ -215,20 +243,32 @@
 		let selectedElement = null;
 		let elementIndex = 0;
 
-		if (keywords.length) {
-			mark_.mark(keywords, {
-				each: (element) => {
-					if (!('selectedIndex' in options)) return;
+		const onEachElement = (element) => {
+			if (!('selectedIndex' in options)) return;
 
-					if (('selectedIndex' in options) && elementIndex === options.selectedIndex) {
-						markSelectedElement_ = element;
-						element.classList.add('mark-selected');
-						selectedElement = element;
-					}
-					
-					elementIndex++;
-				}
-			});
+			if (('selectedIndex' in options) && elementIndex === options.selectedIndex) {
+				markSelectedElement_ = element;
+				element.classList.add('mark-selected');
+				selectedElement = element;
+			}
+			
+			elementIndex++;
+		}
+
+		for (let i = 0; i < keywords.length; i++) {
+			const keyword = keywords[i];
+
+			if (keyword.type === 'regex') {
+				mark_.markRegExp(new RegExp(keyword.value, 'gmi'), {
+					each: onEachElement,
+					acrossElements: true,
+				});
+			} else {
+				mark_.mark([keyword], {
+					each: onEachElement,
+					accuracy: 'exactly', 
+				});
+			}
 		}
 
 		ipcProxySendToHost('setMarkerCount', elementIndex);
