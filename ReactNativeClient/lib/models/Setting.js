@@ -157,6 +157,9 @@ class Setting extends BaseModel {
 			'net.ignoreTlsErrors': { value: false, type: Setting.TYPE_BOOL, show: (settings) => { return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].indexOf(settings['sync.target']) >= 0 }, public: true, appTypes: ['desktop', 'cli'], label: () => _('Ignore TLS certificate errors') },
 		
 			'api.token': { value: null, type: Setting.TYPE_STRING, public: false },
+
+			'resourceService.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
+			'searchEngine.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
 		};
 
 		return this.metadata_;
@@ -458,27 +461,6 @@ class Setting extends BaseModel {
 		}
 		return output;
 	}
-
-	// Currently only supports objects with properties one level deep
-	// static object(key) {
-	// 	let output = {};
-	// 	let keys = this.keys();
-	// 	for (let i = 0; i < keys.length; i++) {
-	// 		let k = keys[i].split('.');
-	// 		if (k[0] == key) {
-	// 			output[k[1]] = this.value(keys[i]);
-	// 		}
-	// 	}
-	// 	return output;
-	// }
-
-	// Currently only supports objects with properties one level deep
-	// static setObject(key, object) {
-	// 	for (let n in object) {
-	// 		if (!object.hasOwnProperty(n)) continue;
-	// 		this.setValue(key + '.' + n, object[n]);
-	// 	}
-	// }
 
 	static async saveAll() {
 		if (!this.saveTimeoutId_) return Promise.resolve();

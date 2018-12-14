@@ -34,6 +34,7 @@ const SyncTargetWebDAV = require('lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
 const EncryptionService = require('lib/services/EncryptionService');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
+const SearchEngine = require('lib/services/SearchEngine');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseService = require('lib/services/BaseService');
 
@@ -218,12 +219,28 @@ class BaseApplication {
 			} else if (parentType === Tag.modelType()) {
 				notes = await Tag.notes(parentId, options);
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
-				let fields = Note.previewFields();
-				let search = BaseModel.byId(state.searches, parentId);
-				notes = await Note.previews(null, {
-					fields: fields,
-					anywherePattern: '*' + search.query_pattern + '*',
-				});
+				const search = BaseModel.byId(state.searches, parentId);
+				const results = await SearchEngine.instance().search(search.query_pattern);
+				const noteIds = results.map(n => n.id);
+
+				const previewOptions = {
+					order: [],
+					fields: Note.previewFields(),
+					conditions: ['id IN ("' + noteIds.join('","') + '")'],
+				}
+
+				notes = await Note.previews(null, previewOptions);
+
+				// By default, the notes will be returned in reverse order
+				// or maybe random order so sort them here in the correct order
+				// (search engine returns the results in order of relevance).
+				const sortedNotes = [];
+				for (let i = 0; i < notes.length; i++) {
+					const idx = noteIds.indexOf(notes[i].id);
+					sortedNotes[idx] = notes[i];
+				}
+
+				notes = sortedNotes;
 			}
 		}
 

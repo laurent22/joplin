@@ -219,6 +219,7 @@ class JoplinDatabase extends Database {
 				if (tableName == 'android_metadata') continue;
 				if (tableName == 'table_fields') continue;
 				if (tableName == 'sqlite_sequence') continue;
+				if (tableName.indexOf('notes_fts') === 0) continue;
 				chain.push(() => {
 					return this.selectAll('PRAGMA table_info("' + tableName + '")').then((pragmas) => {
 						for (let i = 0; i < pragmas.length; i++) {
@@ -260,7 +261,7 @@ class JoplinDatabase extends Database {
 		// default value and thus might cause problems. In that case, the default value
 		// must be set in the synchronizer too.
 
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -443,6 +444,30 @@ class JoplinDatabase extends Database {
 					encryption_applied: 'INT NOT NULL DEFAULT 0',
 					encryption_blob_encrypted: 'INT NOT NULL DEFAULT 0',
 				}));
+			}
+
+			if (targetVersion == 15) {
+				queries.push('CREATE VIRTUAL TABLE notes_fts USING fts4(content="notes", notindexed="id", id, title, body)');
+				queries.push('INSERT INTO notes_fts(docid, id, title, body) SELECT rowid, id, title, body FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
+
+				// Keep the content tables (notes) and the FTS table (notes_fts) in sync.
+				// More info at https://www.sqlite.org/fts3.html#_external_content_fts4_tables_
+				queries.push(`
+					CREATE TRIGGER notes_fts_before_update BEFORE UPDATE ON notes BEGIN
+						DELETE FROM notes_fts WHERE docid=old.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER notes_fts_before_delete BEFORE DELETE ON notes BEGIN
+						DELETE FROM notes_fts WHERE docid=old.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER notes_after_update AFTER UPDATE ON notes BEGIN
+						INSERT INTO notes_fts(docid, id, title, body) SELECT rowid, id, title, body FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND new.rowid = notes.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER notes_after_insert AFTER INSERT ON notes BEGIN
+						INSERT INTO notes_fts(docid, id, title, body) SELECT rowid, id, title, body FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND new.rowid = notes.rowid;
+					END;`);
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

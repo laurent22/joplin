@@ -8,6 +8,7 @@ const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
 const NoteTag = require('lib/models/NoteTag.js');
 const Resource = require('lib/models/Resource.js');
+const ItemChange = require('lib/models/ItemChange.js');
 const NoteResource = require('lib/models/NoteResource.js');
 const ResourceService = require('lib/services/ResourceService.js');
 const fs = require('fs-extra');
@@ -122,6 +123,27 @@ describe('services_ResourceService', function() {
 		await service.deleteOrphanResources(0);
 
 		expect(!!(await Resource.load(resource1.id))).toBe(true);
+	}));
+
+	it('should not process twice the same change', asyncTest(async () => {
+		const service = new ResourceService();
+
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		note1 = await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		let resource1 = (await Resource.all())[0];
+
+		await service.indexNoteResources();
+
+		const before = (await NoteResource.all())[0];
+
+		await time.sleep(0.1);
+
+		await service.indexNoteResources();
+
+		const after = (await NoteResource.all())[0];
+
+		expect(before.last_seen_time).toBe(after.last_seen_time);
 	}));
 
 });
