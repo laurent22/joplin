@@ -98,6 +98,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 - Search functionality.
 - Geo-location support.
 - Supports multiple languages
+- External editor support - open notes in your favorite external editor with one click in Joplin.
 
 # Importing
 

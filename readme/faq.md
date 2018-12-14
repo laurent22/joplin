@@ -1,3 +1,32 @@
+# Clicking 'Edit in External Editor' does nothing! / I want to change the editor!
+
+The editor command (may include arguments) defines which editor will be used to open a note. If none is provided it will try to auto-detect the default editor. If this does nothing or you want to change it for Joplin, you need to configure it in Settings -> Text editor command.
+
+Some example configurations are: (comments after #)
+
+Linux/Mac:
+
+```bash
+subl -n       # Opens Sublime (subl) in a new window (-n)
+code -n       # Opens Visual Studio Code (code) in a new window (-n)
+gedit --new-window    # Opens gedit (Gnome Text Editor) in a new window
+xterm -e vim  # Opens a new terminal and opens vim. Can be replaced with an
+              # alternative terminal (gnome-terminal, terminator, etc.) 
+              # or terminal text-editor (emacs, nano, etc.)
+open -a <application> # Mac only: opens a GUI application
+```
+
+Windows:
+
+```bash
+subl.exe -n   # Opens Sublime (subl) in a new window (-n)
+code.exe -n   # Opens Visual Studio Code in a new window (-n)
+notepad.exe   # Opens Notepad in a new window
+notepad++.exe --openSession   # Opens Notepad ++ in new window
+```
+
+Note that the path to directory with your editor executable must exist in your PATH variable ([Windows](https://www.computerhope.com/issues/ch000549.htm), [Linux/Mac](https://opensource.com/article/17/6/set-path-linux)) If not, the full path to the executable must be provided.
+
 # When I open a note in vim, the cursor is not visible
 
 It seems to be due to the setting `set term=ansi` in .vimrc. Removing it should fix the issue. See https://github.com/laurent22/joplin/issues/147 for more information.
