@@ -58,7 +58,7 @@ if [[ $(< ~/.joplin/VERSION) != "$version" ]]; then
     desktop=${desktop,,}  # convert to lower case
 
     # Create icon for Gnome
-    if [[ $desktop =~ .*gnome.* ]] 
+    if [[ $desktop =~ .*gnome.* ]] || [[ $desktop =~ .*kde.* ]] 
     then
        echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nExec=/home/$USER/.joplin/Joplin.AppImage\nIcon=/home/$USER/.joplin/Icon512.png\nType=Application\nCategories=Application;" >> ~/.local/share/applications/joplin.desktop
     fi
