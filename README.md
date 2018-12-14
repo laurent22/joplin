@@ -21,7 +21,7 @@ Three types of applications are available: for the **desktop** (Windows, macOS a
 Operating System | Download | Alternative
 -----------------|--------|-------------------
 Windows (32 and 64-bit)         | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.117/Joplin-Setup-1.0.117.exe'><img alt='Get it on Windows' height="40px" src='https://joplin.cozic.net/images/BadgeWindows.png'/></a> | or Get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.117/JoplinPortable.exe'>Portable version</a><br>(to run from a USB key, etc.)
-macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.117/Joplin-1.0.117.dmg'><img alt='Get it on macOS' height="40px" src='https://joplin.cozic.net/images/BadgeMacOS.png'/></a> | 
+macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.117/Joplin-1.0.117.dmg'><img alt='Get it on macOS' height="40px" src='https://joplin.cozic.net/images/BadgeMacOS.png'/></a> |
 Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.117/Joplin-1.0.117-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://joplin.cozic.net/images/BadgeLinux.png'/></a> | An Arch Linux package<br>[is also available](#terminal-application).
 
 The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
@@ -81,7 +81,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 	- [Donate](https://github.com/laurent22/joplin/blob/master/readme/donate.md)
 <!-- TOC -->
 
-# Features 
+# Features
 
 - Desktop, mobile and terminal applications.
 - [Web Clipper](https://github.com/laurent22/joplin/blob/master/readme/clipper.md) for Firefox and Chrome.
@@ -102,7 +102,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 
 # Importing
 
-## Importing from Evernote 
+## Importing from Evernote
 
 Joplin was designed as a replacement for Evernote and so can import complete Evernote notebooks, as well as notes, tags, resources (attached files) and note metadata (such as author, geo-location, etc.) via ENEX files. In terms of data, the only two things that might slightly differ are:
 
@@ -174,6 +174,7 @@ Select the "WebDAV" synchronisation target and follow the same instructions as f
 
 WebDAV-compatible services that are known to work with Joplin:
 
+- [Apache WebDAV Module](https://httpd.apache.org/docs/current/mod/mod_dav.html)
 - [Box.com](https://www.box.com/)
 - [DriveHQ](https://www.drivehq.com)
 - [Fastmail](https://www.fastmail.com/)
