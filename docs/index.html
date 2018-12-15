@@ -356,6 +356,7 @@
 <li>Search functionality.</li>
 <li>Geo-location support.</li>
 <li>Supports multiple languages</li>
+<li>External editor support - open notes in your favorite external editor with one click in Joplin.</li>
 </ul>
 <h1 id="importing">Importing</h1>
 <h2 id="importing-from-evernote">Importing from Evernote</h2>
@@ -475,6 +476,45 @@ $$
 <pre><code>This is &lt;s&gt;strikethrough text&lt;/s&gt; mixed with regular **Markdown**.
 </code></pre><h2 id="custom-css">Custom CSS</h2>
 <p>Rendered markdown can be customized by placing a userstyle file in the profile directory <code>~/.config/joplin-desktop/userstyle.css</code> (This path might be different on your device - check at the top of the Config screen for the exact path). This file supports standard CSS syntax.</p>
+<h1 id="searching">Searching</h1>
+<p>Joplin implements the SQLite Full Text Search (FTS4) extension. It means the content of all the notes is indexed in real time and search queries return results very fast. Both <a href="https://www.sqlite.org/fts3.html#simple_fts_queries">Simple FTS Queries</a> and <a href="https://www.sqlite.org/fts3.html#full_text_index_queries">Full-Text Index Queries</a> are supported. See below for the list of supported queries:</p>
+<table>
+<thead>
+<tr>
+<th>Search type</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Single word</td>
+<td>Returns all the notes that contain this term.</td>
+<td><code>dog</code>, <code>cat</code></td>
+</tr>
+<tr>
+<td>Multiples words</td>
+<td>Returns all the notes that contain <strong>all</strong> these words, but not necessarily next to each other.</td>
+<td><code>dog cat</code> - will return any notes that contain the words &quot;dog&quot; and &quot;cat&quot; anywhere in the note, no necessarily in that order nor next to each others. It will <strong>not</strong> return results that contain &quot;dog&quot; or &quot;cat&quot; only.</td>
+</tr>
+<tr>
+<td>Phrase query</td>
+<td>Add double quotes to return the notes that contain exactly this phrase.</td>
+<td><code>&quot;shopping list&quot;</code> - will return the notes that contain these <strong>exact terms</strong> next to each others and in this order. It will <strong>not</strong> return for example a note that contain &quot;going shopping with my list&quot;.</td>
+</tr>
+<tr>
+<td>Prefix</td>
+<td>Add a wildmark to return all the notes that contain a term with a specified prefix.</td>
+<td><code>swim*</code> - will return all the notes that contain eg. &quot;swim&quot;, but also &quot;swimming&quot;, &quot;swimsuit&quot;, etc. IMPORTANT: The wildcard <strong>can only be at the end</strong> - it will be ignored at the beginning of a word (eg. <code>*swim</code>) and will be treated as a literal asterisk in the middle of a word (eg. <code>ast*rix</code>)</td>
+</tr>
+<tr>
+<td>Field restricted</td>
+<td>Add either <code>title:</code> or <code>body:</code> before a note to restrict your search to just the title, or just the body.</td>
+<td><code>title:shopping</code>, <code>body:egg</code></td>
+</tr>
+</tbody>
+</table>
+<p>Notes are sorted by &quot;relevance&quot;. Currently it means the notes that contain the requested terms the most times are on top. For queries with multiple terms, it also matter how close to each others are the terms. This is a bit experimental so if you notice a search query that returns unexpected results, please report it in the forum, providing as much details as possible to replicate the issue.</p>
 <h1 id="donations">Donations</h1>
 <p>Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.</p>
 <p>Please see the <a href="https://joplin.cozic.net/donate/">donation page</a> for information on how to support the development of Joplin.</p>

@@ -250,6 +250,25 @@
 </li>
 </ul>
 </div>
+<h1 id="clicking-edit-in-external-editor-does-nothing-i-want-to-change-the-editor-">Clicking &#39;Edit in External Editor&#39; does nothing! / I want to change the editor!</h1>
+<p>The editor command (may include arguments) defines which editor will be used to open a note. If none is provided it will try to auto-detect the default editor. If this does nothing or you want to change it for Joplin, you need to configure it in Settings -&gt; Text editor command.</p>
+<p>Some example configurations are: (comments after #)</p>
+<p>Linux/Mac:</p>
+<pre><code class="lang-bash">subl -n       # Opens Sublime (subl) in a new window (-n)
+code -n       # Opens Visual Studio Code (code) in a new window (-n)
+gedit --new-window    # Opens gedit (Gnome Text Editor) in a new window
+xterm -e vim  # Opens a new terminal and opens vim. Can be replaced with an
+              # alternative terminal (gnome-terminal, terminator, etc.) 
+              # or terminal text-editor (emacs, nano, etc.)
+open -a &lt;application&gt; # Mac only: opens a GUI application
+</code></pre>
+<p>Windows:</p>
+<pre><code class="lang-bash">subl.exe -n   # Opens Sublime (subl) in a new window (-n)
+code.exe -n   # Opens Visual Studio Code in a new window (-n)
+notepad.exe   # Opens Notepad in a new window
+notepad++.exe --openSession   # Opens Notepad ++ in new window
+</code></pre>
+<p>Note that the path to directory with your editor executable must exist in your PATH variable (<a href="https://www.computerhope.com/issues/ch000549.htm">Windows</a>, <a href="https://opensource.com/article/17/6/set-path-linux">Linux/Mac</a>) If not, the full path to the executable must be provided.</p>
 <h1 id="when-i-open-a-note-in-vim-the-cursor-is-not-visible">When I open a note in vim, the cursor is not visible</h1>
 <p>It seems to be due to the setting <code>set term=ansi</code> in .vimrc. Removing it should fix the issue. See <a href="https://github.com/laurent22/joplin/issues/147">https://github.com/laurent22/joplin/issues/147</a> for more information.</p>
 <h1 id="all-my-notes-got-deleted-after-changing-the-webdav-url-">All my notes got deleted after changing the WebDAV URL!</h1>
