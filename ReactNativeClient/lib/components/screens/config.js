@@ -83,10 +83,10 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			},
 		}
 
-		if (Platform.OS === 'ios') {
+		// if (Platform.OS === 'ios') {
 			styles.settingControl.borderBottomWidth = 1;
-			styles.settingControl.borderBottomColor = theme.dividerColor;
-		}
+			styles.settingControl.borderBottomColor = theme.strongDividerColor;
+		// }
 
 		styles.switchSettingText = Object.assign({}, styles.settingText);
 		styles.switchSettingText.width = '80%';

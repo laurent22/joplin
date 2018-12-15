@@ -156,7 +156,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.resourceFetcher_downloadComplete = async (resource) => {
 			if (!this.state.note || !this.state.note.body) return;
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
-			if (resourceIds.indexOf(resource.id) >= 0) {
+			if (resourceIds.indexOf(resource.id) >= 0 && this.refs.noteBodyViewer) {
 				this.refs.noteBodyViewer.rebuildMd();
 			}
 		}
