@@ -76,7 +76,15 @@ class NoteBodyViewer extends Component {
 
 		const mdOptions = {
 			onResourceLoaded: () => {
-				this.forceUpdate();
+				if (this.resourceLoadedTimeoutId_) {
+					clearTimeout(this.resourceLoadedTimeoutId_);
+					this.resourceLoadedTimeoutId_ = null;
+				}
+
+				this.resourceLoadedTimeoutId_ = setTimeout(() => {
+					this.resourceLoadedTimeoutId_ = null;
+					this.forceUpdate();
+				}, 100);
 			},
 			paddingBottom: '3.8em', // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
 		};

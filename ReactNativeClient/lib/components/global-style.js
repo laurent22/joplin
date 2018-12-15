@@ -13,9 +13,10 @@ const globalStyle = {
 	colorFaded: "#777777", // For less important text
 	fontSizeSmaller: 14,
 	dividerColor: "#dddddd",
+	strongDividerColor: "#aaaaaa",
 	selectedColor: '#e5e5e5',
 	disabledOpacity: 0.2,
-	colorUrl: '#000CFF',
+	colorUrl: '#7B81FF',
 	textSelectionColor: "#0096FF",
 
 	raisedBackgroundColor: "#0080EF",
@@ -72,6 +73,9 @@ function addExtraStyles(style) {
 	style.lineInput = {
 		color: style.color,
 		backgroundColor: style.backgroundColor,
+		borderBottomWidth: 1,
+		borderColor: style.strongDividerColor,
+		paddingBottom: 0,
 	};
 
 	if (Platform.OS === 'ios') {
@@ -114,6 +118,7 @@ function themeStyle(theme) {
 	output.color = '#dddddd';
 	output.colorFaded = '#777777';
 	output.dividerColor = '#555555';
+	output.strongDividerColor = '#888888';
 	output.selectedColor = '#333333';
 	output.textSelectionColor = '#00AEFF';
 
@@ -124,6 +129,8 @@ function themeStyle(theme) {
 	output.htmlColor = 'rgb(220,220,220)';
 	output.htmlBackgroundColor = 'rgb(29,32,36)';
 	output.htmlLinkColor = 'rgb(166,166,255)';
+
+	output.colorUrl = '#7B81FF';
 
 	themeCache_[theme] = output;
 	return addExtraStyles(themeCache_[theme]);
