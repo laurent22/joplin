@@ -311,6 +311,8 @@ class MdToHtml {
 				output.push(t.content);
 			} else if (t.type === 'softbreak') {
 				output.push('<br/>');
+			} else if (t.type === 'hardbreak') {
+				output.push('<br/>');
 			} else if (t.type === 'hr') {
 				output.push('<hr/>');
 			} else {
