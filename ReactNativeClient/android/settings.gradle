@@ -1,12 +1,12 @@
 rootProject.name = 'Joplin'
+include ':react-native-firebase'
+project(':react-native-firebase').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-firebase/android')
 include ':react-native-camera'
 project(':react-native-camera').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-camera/android')
 include ':react-native-file-viewer'
 project(':react-native-file-viewer').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-file-viewer/android')
 include ':react-native-securerandom'
 project(':react-native-securerandom').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-securerandom/android')
-include ':react-native-push-notification'
-project(':react-native-push-notification').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-push-notification/android')
 include ':react-native-fs'
 project(':react-native-fs').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fs/android')
 include ':react-native-image-picker'

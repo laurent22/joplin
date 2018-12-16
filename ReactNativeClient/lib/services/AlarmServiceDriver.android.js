@@ -1,4 +1,4 @@
-const PushNotification = require('react-native-push-notification');
+import firebase from 'react-native-firebase';
 
 class AlarmServiceDriver {
 
@@ -10,25 +10,25 @@ class AlarmServiceDriver {
 		throw new Error('Available only for non-persistent alarms');	
 	}
 
+	firebaseNotificationId_(joplinNotificationId) {
+		return 'net.cozic.joplin-' + joplinNotificationId;
+	}
+
 	async clearNotification(id) {
-		PushNotification.cancelLocalNotifications({ id: id + '' });
+		return firebase.notifications().cancelNotification(this.firebaseNotificationId_(id))
 	}
 	
 	async scheduleNotification(notification) {
-		// Arguments must be set in a certain way and certain format otherwise it cannot be
-		// cancelled later on. See:
-		// https://github.com/zo0r/react-native-push-notification/issues/570#issuecomment-337642922
-		const androidNotification = {
-			id: notification.id + '',
-			message: notification.title,
-			date: notification.date,
-			userInfo: { id: notification.id + '' },
-			number: 0,
-		};
+		const firebaseNotification = new firebase.notifications.Notification()
+		firebaseNotification.setNotificationId(this.firebaseNotificationId_(notification.id));
+		firebaseNotification.setTitle(notification.title)	
+		if ('body' in notification) firebaseNotification.body = notification.body;
+		firebaseNotification.android.setChannelId('com.google.firebase.messaging.default_notification_channel_id');
+		firebaseNotification.android.setSmallIcon('ic_stat_access_alarm');
 
-		if ('body' in notification) androidNotification.body = notification.body;
-
-		PushNotification.localNotificationSchedule(androidNotification);
+		firebase.notifications().scheduleNotification(firebaseNotification, {
+			fireDate: notification.date.getTime(),
+		});
 	}
 
 }

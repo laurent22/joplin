@@ -65,8 +65,6 @@ SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetWebDAV);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
-
-// Disabled because not fully working
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 
 const FsDriverRN = require('lib/fs-driver-rn.js').FsDriverRN;

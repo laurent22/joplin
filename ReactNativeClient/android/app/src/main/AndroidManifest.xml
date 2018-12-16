@@ -11,24 +11,22 @@
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" tools:node="remove"/>
 
+
+	<!-- ============================= -->
+	<!-- START RNFirebaseNotifications -->
+	<!-- ============================= -->
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<!-- ============================= -->
+	<!-- END RNFirebaseNotifications   -->
+	<!-- ============================= -->
+
+
+
 	<!-- Make these features optional to enable Chromebooks -->
 	<!-- https://github.com/laurent22/joplin/issues/37 -->
 	<uses-feature android:name="android.hardware.camera" android:required="false" />
 	<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
-
-	<!-- ==================================== -->
-	<!-- START react-native-push-notification -->
-	<!-- ==================================== -->
-	<uses-permission android:name="android.permission.WAKE_LOCK" />
-	<permission
-		android:name="${applicationId}.permission.C2D_MESSAGE"
-		android:protectionLevel="signature" />
-	<uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
-	<uses-permission android:name="android.permission.VIBRATE" />
-	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-	<!-- ================================== -->
-	<!-- END react-native-push-notification -->
-	<!-- ================================== -->
 
 	<uses-sdk
 		android:minSdkVersion="16"
@@ -41,27 +39,62 @@
 		android:icon="@mipmap/ic_launcher"
 		android:theme="@style/AppTheme">
 
-		<!-- ==================================== -->
-		<!-- START react-native-push-notification -->
-		<!-- ==================================== -->
 
-		<receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
-		<receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver">
+
+		<!-- ============================= -->
+		<!-- START RNFirebaseNotifications -->
+		<!-- ============================= -->
+
+		<meta-data
+		    android:name="com.google.firebase.messaging.default_notification_icon"
+		    android:resource="@drawable/ic_stat_access_alarm" />
+		<receiver android:name="io.invertase.firebase.notifications.RNFirebaseNotificationReceiver"/>
+			<receiver android:enabled="true" android:exported="true"  android:name="io.invertase.firebase.notifications.RNFirebaseNotificationsRebootReceiver">
 			<intent-filter>
-				<action android:name="android.intent.action.BOOT_COMPLETED" />
+				<action android:name="android.intent.action.BOOT_COMPLETED"/>
+				<action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+				<action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</receiver>
-		<service android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationRegistrationService"/>
-		<!-- ================================== -->
-		<!-- END react-native-push-notification -->
-		<!-- ================================== -->
+		<!-- ============================= -->
+		<!-- END RNFirebaseNotifications   -->
+		<!-- ============================= -->
 
+
+
+		<!-- ============================= -->
+		<!-- START RNFirebaseNotifications -->
+		<!-- ============================= -->
+		<service android:name="io.invertase.firebase.messaging.RNFirebaseMessagingService">
+			<intent-filter>
+				<action android:name="com.google.firebase.MESSAGING_EVENT" />
+			</intent-filter>
+		</service>
+		<service android:name="io.invertase.firebase.messaging.RNFirebaseInstanceIdService">
+			<intent-filter>
+				<action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+			</intent-filter>
+		</service>
+
+		<!-- "If you want to be able to react to data-only messages when your app is in the background, e.g. to display a heads up notification" -->
+		<service android:name="io.invertase.firebase.messaging.RNFirebaseBackgroundMessagingService" />
+		<!-- ============================= -->
+		<!-- END RNFirebaseNotifications   -->
+		<!-- ============================= -->
+
+
+
+
+		
+		<!-- 2018-12-16: Changed android:launchMode from "singleInstance" to "singleTop" for Firebase notification -->
+		<!--             Previously singleInstance was necessary to prevent multiple instance of the RN app from running at the same time, but maybe no longer needed. -->
 		<activity
 			android:name=".MainActivity"
 			android:label="@string/app_name"
 			android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
 			android:windowSoftInputMode="adjustResize"
-			android:launchMode="singleInstance">
+			android:launchMode="singleTop">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />

@@ -137,24 +137,39 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-camera')
-	compile project(':react-native-file-viewer')
-	compile project(':react-native-securerandom')
-	compile project(':react-native-push-notification')
-	compile project(':react-native-fs')
-	compile project(':react-native-image-picker')
-	compile project(':react-native-vector-icons')
-	compile project(':react-native-fs')
+    implementation project(':react-native-firebase')
+    implementation (project(':react-native-camera')) {
+    	// This is required because com.google.firebase requires v16.0.x of com.google.android.gms
+    	// while react-native-camera requires v15.x, which results in broken dependencies with
+    	// this error message:
+    	// 
+    	// The library com.google.android.gms:play-services-base is being requested by various other libraries at [[15.0.1,15.0.1]], but resolves to 16.0.1
+    	//
+    	// For the record: found solution by removing all Firebase stuff here and running "gradlew.bat :app:dependencies"
+    	// That shows that react-native-camera was the one requiring v15.0.1.
+        exclude group: "com.google.android.gms"
+    }
+	implementation project(':react-native-file-viewer')
+	implementation project(':react-native-securerandom')
+	implementation project(':react-native-fs')
+	implementation project(':react-native-image-picker')
+	implementation project(':react-native-vector-icons')
+	implementation project(':react-native-fs')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules
-	compile project(':react-native-sqlite-storage')
-	compile project(':rn-fetch-blob')
-	compile project(':react-native-document-picker')
-	compile project(':react-native-image-resizer')
-	compile project(':react-native-share-extension')
-	compile project(':react-native-version-info')
-	compile "com.facebook.react:react-native:+"
+	implementation project(':react-native-sqlite-storage')
+	implementation project(':rn-fetch-blob')
+	implementation project(':react-native-document-picker')
+	implementation project(':react-native-image-resizer')
+	implementation project(':react-native-share-extension')
+	implementation project(':react-native-version-info')
+	implementation "com.facebook.react:react-native:+"
+
+	implementation "com.google.android.gms:play-services-base:16.0.1" // For Firebase
+	implementation "com.google.firebase:firebase-core:16.0.4" // For Firebase
+	implementation "com.google.firebase:firebase-messaging:17.3.4" // For Firebase
+	implementation 'me.leolin:ShortcutBadger:1.1.21@aar' // For Firebase - this line if you wish to use badge on Android
 
 	// To fix the error below, which happened after adding react-native-camera.
 	// Doesn't make any sense since rn-camera neither defines v26 nor 27 but
@@ -183,3 +198,4 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+apply plugin: 'com.google.gms.google-services' // For Firebase
