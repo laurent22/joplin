@@ -7,6 +7,7 @@ const { shim } = require('lib/shim.js');
 const { _ } = require('lib/locale');
 const md5 = require('md5');
 const MdToHtml_Katex = require('lib/MdToHtml_Katex');
+const { pregQuote } = require('lib/string-utils.js');
 
 class MdToHtml {
 
@@ -413,10 +414,30 @@ class MdToHtml {
 		return output.join('');
 	}
 
+	applyHighlightedKeywords_(body, keywords) {
+		for (let i = 0; i < keywords.length; i++) {
+			const k = keywords[i];
+
+			let regexString = '';
+
+			if (k.type === 'regex') {
+				regexString = k.value;
+			} else {
+				regexString = pregQuote(k);
+			}
+
+			const re = new RegExp('(^|\n|\b)(' + regexString + ')(\n|\b|$)', 'gi');
+			body = body.replace(re, '$1<span class="highlighted-keyword">$2</span>$3');
+		}
+
+		return body;
+	}
+
 	render(body, style, options = null) {
 		if (!options) options = {};
 		if (!options.postMessageSyntax) options.postMessageSyntax = 'postMessage';
 		if (!options.paddingBottom) options.paddingBottom = '0';
+		if (!options.highlightedKeywords) options.highlightedKeywords = [];
 
 		const cacheKey = this.makeContentKey(this.loadedResources_, body, style, options);
 		if (this.cachedContentKey_ === cacheKey) return this.cachedContent_;
@@ -427,38 +448,34 @@ class MdToHtml {
 			html: true,
 		});
 
+		body = this.applyHighlightedKeywords_(body, options.highlightedKeywords);
+
 		// Add `file:` protocol in linkify to allow text in the format of "file://..." to translate into
 		// file-URL links in html view
 		md.linkify.add('file:', {
-
-		  validate: function (text, pos, self) {
-		    var tail = text.slice(pos);
-
-		    if (!self.re.file) {
-		      self.re.file =  new RegExp(
-			'^[\\/]{2,3}[\\S]+' // matches all local file URI on Win/Unix/MacOS systems including reserved characters in some OS (i.e. no OS specific sanity check)
-		      );
-		    }
-		    if (self.re.file.test(tail)) {
-		      return tail.match(self.re.file)[0].length;
-		    }
-		    return 0;
-		}
-			
+		  	validate: function (text, pos, self) {
+			    var tail = text.slice(pos);
+			    if (!self.re.file) {
+			    	// matches all local file URI on Win/Unix/MacOS systems including reserved characters in some OS (i.e. no OS specific sanity check)
+					self.re.file =  new RegExp('^[\\/]{2,3}[\\S]+');
+			    }
+			    if (self.re.file.test(tail)) {
+					return tail.match(self.re.file)[0].length;
+			    }
+			    return 0;
+			}	
 		});
 
 		// enable file link URLs in MarkdownIt. Keeps other URL restrictions of MarkdownIt untouched.
 		// Format [link name](file://...)		
 		md.validateLink = function (url) {
-
 			var BAD_PROTO_RE = /^(vbscript|javascript|data):/;
 			var GOOD_DATA_RE = /^data:image\/(gif|png|jpeg|webp);/;
 
-	    		// url should be normalized at this point, and existing entities are decoded
+	    	// url should be normalized at this point, and existing entities are decoded
 			var str = url.trim().toLowerCase();
 
 			return BAD_PROTO_RE.test(str) ? (GOOD_DATA_RE.test(str) ? true : false) : true;
-
 		}
 
 		// This is currently used only so that the $expression$ and $$\nexpression\n$$ blocks are translated
@@ -607,6 +624,11 @@ class MdToHtml {
 				background-color: ` + style.htmlCodeColor + `;
 				padding-right: .2em;
 				padding-left: .2em;
+			}
+
+			.highlighted-keyword {
+				background-color: #F3B717;
+				color: black;
 			}
 
 			/* 

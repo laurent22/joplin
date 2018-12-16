@@ -52,6 +52,7 @@ const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const DropdownAlert = require('react-native-dropdownalert').default;
 const ShareExtension = require('react-native-share-extension').default;
 const ResourceFetcher = require('lib/services/ResourceFetcher');
+const SearchEngine = require('lib/services/SearchEngine');
 
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
@@ -494,6 +495,9 @@ async function initialize(dispatch) {
 	ResourceFetcher.instance().setFileApi(() => { return reg.syncTarget().fileApi() });
 	ResourceFetcher.instance().setLogger(reg.logger());
 	ResourceFetcher.instance().start();
+
+	SearchEngine.instance().setDb(reg.db());
+	SearchEngine.instance().setLogger(reg.logger());
 
 	reg.scheduleSync().then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation

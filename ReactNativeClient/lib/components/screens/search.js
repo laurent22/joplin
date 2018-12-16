@@ -9,6 +9,7 @@ const { NoteItem } = require('lib/components/note-item.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const { dialogs } = require('lib/dialogs.js');
+const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 const DialogBox = require('react-native-dialogbox').default;
 
 class SearchScreenComponent extends BaseScreenComponent {
@@ -105,17 +106,22 @@ class SearchScreenComponent extends BaseScreenComponent {
 		let notes = []
 
 		if (query) {
-			let p = query.split(' ');
-			let temp = [];
-			for (let i = 0; i < p.length; i++) {
-				let t = p[i].trim();
-				if (!t) continue;
-				temp.push(t);
-			}
+			notes = await SearchEngineUtils.notesForQuery(query);
 
-			notes = await Note.previews(null, {
-				anywherePattern: '*' + temp.join('*') + '*',
-			});
+			// Keeping the code below in case of compatibility issue with old versions
+			// of Android and SQLite FTS.
+
+			// let p = query.split(' ');
+			// let temp = [];
+			// for (let i = 0; i < p.length; i++) {
+			// 	let t = p[i].trim();
+			// 	if (!t) continue;
+			// 	temp.push(t);
+			// }
+
+			// notes = await Note.previews(null, {
+			// 	anywherePattern: '*' + temp.join('*') + '*',
+			// });
 		}
 
 		if (!this.isMounted_) return;

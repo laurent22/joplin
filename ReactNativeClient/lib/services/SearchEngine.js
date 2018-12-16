@@ -4,6 +4,7 @@ const ItemChange = require('lib/models/ItemChange.js');
 const Setting = require('lib/models/Setting.js');
 const Note = require('lib/models/Note.js');
 const BaseModel = require('lib/BaseModel.js');
+const { pregQuote } = require('lib/string-utils.js');
 
 class SearchEngine {
 
@@ -105,12 +106,9 @@ class SearchEngine {
 			term = term.substr(1);
 		}
 
-		const preg_quote = (str, delimiter) => {
-			return (str + '').replace(new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\' + (delimiter || '') + '-]', 'g'), '\\$&');
-		} // [^ \t,\.,\+\-\\*?!={}<>\|:"\'\(\)[\]]
-		let regexString = preg_quote(term);
+		let regexString = pregQuote(term);
 		if (regexString[regexString.length - 1] === '*') {
-			regexString = regexString.substr(0, regexString.length - 2) + '[^' + preg_quote(' \t\n\r,.,+-*?!={}<>|:"\'()[]') + ']' + '*';
+			regexString = regexString.substr(0, regexString.length - 2) + '[^' + pregQuote(' \t\n\r,.,+-*?!={}<>|:"\'()[]') + ']' + '*';
 		}
 
 		return regexString;

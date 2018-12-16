@@ -37,6 +37,7 @@ const AlarmService = require('lib/services/AlarmService.js');
 const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog.js');
 const ShareExtension = require('react-native-share-extension').default;
 const CameraView = require('lib/components/CameraView');
+const SearchEngine = require('lib/services/SearchEngine');
 
 import FileViewer from 'react-native-file-viewer';
 
@@ -587,12 +588,19 @@ class NoteScreenComponent extends BaseScreenComponent {
 				this.saveOneProperty('body', newBody);
 			};
 
+			let keywords = [];
+			if (this.props.searchQuery) {
+				const parsedQuery = SearchEngine.instance().parseQuery(this.props.searchQuery);
+				keywords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
+			}
+
 			bodyComponent = <NoteBodyViewer
 				onJoplinLinkClick={this.onJoplinLinkClick_}
 				ref="noteBodyViewer"
 				style={this.styles().noteBodyViewer}
 				webViewStyle={theme}
 				note={note}
+				highlightedKeywords={keywords}
 				onCheckboxChange={(newBody) => { onCheckboxChange(newBody) }}
 			/>
 		} else {
@@ -737,6 +745,7 @@ const NoteScreen = connect(
 			folderId: state.selectedFolderId,
 			itemType: state.selectedItemType,
 			folders: state.folders,
+			searchQuery: state.searchQuery,
 			theme: state.settings.theme,
 			sharedData: state.sharedData,
 			showAdvancedOptions: state.settings.showAdvancedOptions,

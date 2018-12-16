@@ -87,6 +87,7 @@ class NoteBodyViewer extends Component {
 				}, 100);
 			},
 			paddingBottom: '3.8em', // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
+			highlightedKeywords: this.props.highlightedKeywords,
 		};
 
 		let html = this.mdToHtml_.render(note ? note.body : '', this.props.webViewStyle, mdOptions);

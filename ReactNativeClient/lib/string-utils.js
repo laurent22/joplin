@@ -224,4 +224,8 @@ function escapeHtml(s) {
 		.replace(/'/g, "&#039;");
 }
 
-module.exports = { removeDiacritics, escapeFilename, wrap, splitCommandString, padLeft, toTitleCase, escapeHtml };
+function pregQuote(str, delimiter) {
+	return (str + '').replace(new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\' + (delimiter || '') + '-]', 'g'), '\\$&');
+}
+
+module.exports = { removeDiacritics, escapeFilename, wrap, splitCommandString, padLeft, toTitleCase, escapeHtml, pregQuote };
