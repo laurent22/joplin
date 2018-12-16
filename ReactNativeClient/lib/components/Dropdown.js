@@ -34,7 +34,7 @@ class Dropdown extends React.Component {
 		// Dimensions doesn't return quite the right dimensions so leave an extra gap to make
 		// sure nothing is off screen.
 		const listMaxHeight = windowHeight;
-		const listHeight = Math.min(items.length * itemHeight, listMaxHeight);  //Dimensions.get('window').height - this.state.headerSize.y - this.state.headerSize.height - 50;
+		const listHeight = Math.min(items.length * itemHeight, listMaxHeight);
 		const maxListTop = windowHeight - listHeight;
 		const listTop = Math.min(maxListTop, this.state.headerSize.y + this.state.headerSize.height);
 
@@ -60,10 +60,6 @@ class Dropdown extends React.Component {
 
 		const headerWrapperStyle = Object.assign({}, this.props.headerWrapperStyle ? this.props.headerWrapperStyle : {}, {
 			height: 35,
-			// borderWidth: 1,
-			// borderColor: '#ccc',
-			//paddingLeft: 20,
-			//paddingRight: 20,
 			flex: 1,
 			flexDirection: 'row',
 			alignItems: 'center',
@@ -90,6 +86,8 @@ class Dropdown extends React.Component {
 				break;
 			}
 		}
+
+		if (this.props.labelTransform && this.props.labelTransform === 'trim') headerLabel = headerLabel.trim();
 
 		const closeList = () => {
 			this.setState({ listVisible: false });
