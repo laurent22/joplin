@@ -911,32 +911,35 @@ class NoteTextComponent extends React.Component {
 	async doCommand(command) {
 		if (!command || !this.state.note) return;
 
-		let commandProcessed = true;
+		let fn = null;
 
 		if (command.name === 'exportPdf' && this.webview_) {
-			this.commandSavePdf();
+			fn = this.commandSavePdf;
 		} else if (command.name === 'print' && this.webview_) {
-			this.webview_.print();
+			fn = this.commandPrint;
 		} else if (command.name === 'textBold') {
-			this.commandTextBold();
+			fn = this.commandTextBold;
 		} else if (command.name === 'textItalic') {
-			this.commandTextItalic();
+			fn = this.commandTextItalic;
 		} else if (command.name === 'insertDateTime' ) {
-			this.commandDateTime();
+			fn = this.commandDateTime;
 		} else if (command.name === 'commandStartExternalEditing') {
-			this.commandStartExternalEditing();
+			fn = this.commandStartExternalEditing;
 		} else if (command.name === 'showLocalSearch') {
-			this.commandShowLocalSearch();
-		} else {
-			commandProcessed = false;
+			fn = this.commandShowLocalSearch;
 		}
 
-		if (commandProcessed) {
-			this.props.dispatch({
-				type: 'WINDOW_COMMAND',
-				name: null,
-			});
-		}
+		if (!fn) return;
+
+		this.props.dispatch({
+			type: 'WINDOW_COMMAND',
+			name: null,
+		});
+
+		requestAnimationFrame(() => {
+			fn = fn.bind(this);
+			fn();
+		});
 	}
 
 	commandShowLocalSearch() {
@@ -994,6 +997,41 @@ class NoteTextComponent extends React.Component {
 		});
 	}
 
+	printTo_(target, options) {
+		const previousBody = this.state.note.body;
+		const tempBody = "# " + this.state.note.title + "\n\n" + previousBody;
+
+		const previousTheme = Setting.value('theme');
+		Setting.setValue('theme', Setting.THEME_LIGHT);
+		this.lastSetHtml_ = '';
+		this.updateHtml(tempBody);
+		this.forceUpdate();
+
+		const restoreSettings = () => {
+			Setting.setValue('theme', previousTheme);
+			this.lastSetHtml_ = '';
+			this.updateHtml(previousBody);
+			this.forceUpdate();
+		}
+
+		setTimeout(() => {
+			if (target === 'pdf') {
+				this.webview_.printToPDF({}, (error, data) => {
+					restoreSettings();
+
+					if (error) {
+						bridge().showErrorMessageBox(error.message);
+					} else {
+						shim.fsDriver().writeFile(options.path, data, 'buffer');
+					}
+				});
+			} else if (target === 'printer') {
+				this.webview_.print();
+				restoreSettings();
+			}
+		}, 100);		
+	}
+
 	commandSavePdf() {
 		const path = bridge().showSaveDialog({
 			filters: [{ name: _('PDF File'), extensions: ['pdf']}],
@@ -1001,35 +1039,12 @@ class NoteTextComponent extends React.Component {
 		});
 
 		if (path) {
-			// Temporarily add a <h2> title in the webview
-			const newHtml = this.insertHtmlHeading_(this.lastSetHtml_, this.state.note.title);
-			this.webview_.send('setHtml', newHtml);
-
-			setTimeout(() => {
-				this.webview_.printToPDF({}, (error, data) => {
-					if (error) {
-						bridge().showErrorMessageBox(error.message);
-					} else {
-						shim.fsDriver().writeFile(path, data, 'buffer');
-					}
-
-					// Refresh the webview, restoring the previous content
-					this.lastSetHtml_ = '';
-					this.forceUpdate();
-				});
-			}, 100);
+			this.printTo_('pdf', { path: path });
 		}
 	}
 
-	insertHtmlHeading_(s, heading) {
-		const tag = 'h2';
-		const marker = '<!-- START_OF_DOCUMENT -->'
-		let splitStyle = s.split(marker);
-		const index = splitStyle.length > 1 ? 1 : 0;
-		let toInsert = escapeHtml(heading);
-		toInsert = '<' + tag + '>' + toInsert + '</' + tag + '>';
-		splitStyle[index] = toInsert + splitStyle[index];
-		return splitStyle.join(marker);
+	commandPrint() {
+		this.printTo_('printer');
 	}
 
 	async commandStartExternalEditing() {
