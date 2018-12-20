@@ -48,6 +48,9 @@
 		<meta-data
 		    android:name="com.google.firebase.messaging.default_notification_icon"
 		    android:resource="@drawable/ic_stat_access_alarm" />
+		<meta-data
+		    android:name="com.google.firebase.messaging.default_notification_channel_id"
+		    android:value="@string/default_notification_channel_id"/>
 		<receiver android:name="io.invertase.firebase.notifications.RNFirebaseNotificationReceiver"/>
 			<receiver android:enabled="true" android:exported="true"  android:name="io.invertase.firebase.notifications.RNFirebaseNotificationsRebootReceiver">
 			<intent-filter>

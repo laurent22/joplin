@@ -2,6 +2,12 @@ import firebase from 'react-native-firebase';
 
 class AlarmServiceDriver {
 
+	constructor() {
+		this.channel_ = new firebase.notifications.Android.Channel('net.cozic.joplin.notification', 'Joplin Alarm',firebase.notifications.Android.Importance.Max)
+			.setDescription('Displays a notification for alarms associated with to-dos.');
+		firebase.notifications().android.createChannel(this.channel_);
+	}
+
 	hasPersistentNotifications() {
 		return true;
 	}
@@ -23,10 +29,10 @@ class AlarmServiceDriver {
 		firebaseNotification.setNotificationId(this.firebaseNotificationId_(notification.id));
 		firebaseNotification.setTitle(notification.title)	
 		if ('body' in notification) firebaseNotification.body = notification.body;
-		firebaseNotification.android.setChannelId('com.google.firebase.messaging.default_notification_channel_id');
+		firebaseNotification.android.setChannelId('net.cozic.joplin.notification');
 		firebaseNotification.android.setSmallIcon('ic_stat_access_alarm');
 
-		firebase.notifications().scheduleNotification(firebaseNotification, {
+		await firebase.notifications().scheduleNotification(firebaseNotification, {
 			fireDate: notification.date.getTime(),
 		});
 	}
