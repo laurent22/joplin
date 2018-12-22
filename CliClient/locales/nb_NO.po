@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
-# Mats Estensen <matsest@mxe.no>, 2018
+# Mats Estensen <code@mxe.no>, 2018
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Mats Estensen <matsest@mxe.no>\n"
+"Last-Translator: Mats Estensen <code@mxe.no>\n"
 "Language-Team: \n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
@@ -643,7 +643,7 @@ msgstr "Søk i alle notater"
 
 #, fuzzy
 msgid "Search in current note"
-msgstr "Søk i alle notater"
+msgstr "Søk i nåværende notat"
 
 msgid "View"
 msgstr "Utseende"
@@ -1336,7 +1336,7 @@ msgstr "Global forstørrelse"
 
 #, fuzzy
 msgid "Editor font size"
-msgstr "Editor skrifttype"
+msgstr "Editor skriftstørrelse"
 
 msgid "Editor font family"
 msgstr "Editor skrifttype"
@@ -1710,7 +1710,7 @@ msgstr "Bildetypen er ikke støttet: %s"
 
 #, fuzzy
 msgid "Take photo"
-msgstr "Legg ved et bilde"
+msgstr "Ta et bilde"
 
 msgid "Attach photo"
 msgstr "Legg ved et bilde"
