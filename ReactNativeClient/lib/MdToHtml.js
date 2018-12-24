@@ -132,7 +132,7 @@ class MdToHtml {
 			let output = '<img data-from-md data-resource-id="' + resource.id + '" title="' + htmlentities(title) + '" src="' + src + '"/>';
 			return output;
 		}
-		
+
 		return '[Image: ' + htmlentities(resource.title) + ' (' + htmlentities(mime) + ')]';
 	}
 
@@ -173,7 +173,7 @@ class MdToHtml {
 			icon = '<span class="resource-icon"></span>';
 		} else {
 			// If the link is a plain URL (as opposed to a resource link), set the href to the actual
-			// link. This allows the link to be exported too when exporting to PDF. 
+			// link. This allows the link to be exported too when exporting to PDF.
 			hrefAttr = href;
 		}
 
@@ -215,7 +215,7 @@ class MdToHtml {
 			return decodeURIComponent((str+'').replace(/\+/g, '%20'));
 		} catch (error) {
 			// decodeURIComponent can throw if the string contains non-encoded data (for example "100%")
-			// so in this case just return the non encoded string. 
+			// so in this case just return the non encoded string.
 			return str;
 		}
 	}
@@ -332,7 +332,7 @@ class MdToHtml {
 					}
 				}
 			}
- 
+
  			if (nextToken && nextToken.tag === 'li' && t.tag === 'p') {
  				closeTag = null;
  			} else if (t.type === 'link_close') {
@@ -463,11 +463,11 @@ class MdToHtml {
 					return tail.match(self.re.file)[0].length;
 			    }
 			    return 0;
-			}	
+			}
 		});
 
 		// enable file link URLs in MarkdownIt. Keeps other URL restrictions of MarkdownIt untouched.
-		// Format [link name](file://...)		
+		// Format [link name](file://...)
 		md.validateLink = function (url) {
 			var BAD_PROTO_RE = /^(vbscript|javascript|data):/;
 			var GOOD_DATA_RE = /^data:image\/(gif|png|jpeg|webp);/;
@@ -631,7 +631,7 @@ class MdToHtml {
 				color: black;
 			}
 
-			/* 
+			/*
 			This is to fix https://github.com/laurent22/joplin/issues/764
 			Without this, the tag attached to an equation float at an absoluate position of the page,
 			instead of a position relative to the container.
@@ -698,8 +698,8 @@ class MdToHtml {
 			});
 		}
 
-		body = body.replace(/°°JOP°CHECKBOX°NOTICK°°/g, '- [ ]'); 
-		body = body.replace(/°°JOP°CHECKBOX°TICK°°/g, '- [X]'); 
+		body = body.replace(/°°JOP°CHECKBOX°NOTICK°°/g, '- [ ]');
+		body = body.replace(/°°JOP°CHECKBOX°TICK°°/g, '- [x]');
 
 		return body;
 	}
@@ -708,7 +708,7 @@ class MdToHtml {
 		msg = msg.split(':');
 		let index = Number(msg[msg.length - 1]);
 		let currentState = msg[msg.length - 2]; // Not really needed but keep it anyway
-		return this.toggleTickAt(noteBody, index);		
+		return this.toggleTickAt(noteBody, index);
 	}
 
 }
