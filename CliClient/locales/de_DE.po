@@ -472,7 +472,7 @@ msgid "Starting synchronisation..."
 msgstr "Starte Synchronisation..."
 
 msgid "Downloading resources..."
-msgstr "Lade Ressourcen herunter..."
+msgstr "Lade Anhänge herunter..."
 
 msgid "Cancelling... Please wait."
 msgstr "Abbrechen... Bitte warten."
