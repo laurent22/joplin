@@ -1578,7 +1578,7 @@ msgid "Permission to use camera"
 msgstr "Berechtigung zur Verwendung der Kamera"
 
 msgid "Your permission to use your camera is required."
-msgstr "Deine Zustimmung zur Nutzung deiner Kamera ist erforderlich."
+msgstr "Deine Zustimmung zur Verwendung deiner Kamera ist erforderlich."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
