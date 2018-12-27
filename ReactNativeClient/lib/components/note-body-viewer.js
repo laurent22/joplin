@@ -37,6 +37,8 @@ class NoteBodyViewer extends Component {
 			if (!this.isMounted_) return;
 			this.setState({ webViewLoaded: true });
 		}, 100);
+
+		if (this.props.onLoadEnd) this.props.onLoadEnd();
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {

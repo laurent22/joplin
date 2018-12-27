@@ -63,6 +63,15 @@ class NoteScreenComponent extends BaseScreenComponent {
 			noteTagDialogShown: false,
 			fromShare: false,
 			showCamera: false,
+
+			// HACK: For reasons I can't explain, when the WebView is present, the TextInput initially does not display (It's just a white rectangle with
+			// no visible text). It will only appear when tapping it or doing certain action like selecting text on the webview. The bug started to
+			// appear one day and did not go away - reverting to an old RN version did not help, undoing all
+			// the commits till a working version did not help. The bug also does not happen in the simulator which makes it hard to fix.
+			// Eventually, a way that "worked" is to add a 1px margin on top of the text input just after the webview has loaded, then removing this
+			// margin. This forces RN to update the text input and to display it. Maybe that hack can be removed once RN is upgraded. 
+			// See https://github.com/laurent22/joplin/issues/1057
+			HACK_webviewLoadingState: 0,
 		};
 
 		// iOS doesn't support multiline text fields properly so disable it
@@ -602,6 +611,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 				note={note}
 				highlightedKeywords={keywords}
 				onCheckboxChange={(newBody) => { onCheckboxChange(newBody) }}
+				onLoadEnd={() => {
+					setTimeout(() => {
+						this.setState({ HACK_webviewLoadingState: this.state.HACK_webviewLoadingState + 1 });
+						setTimeout(() => {
+							this.setState({ HACK_webviewLoadingState: this.state.HACK_webviewLoadingState + 1 });
+						}, 50);
+					}, 50);
+				}}
 			/>
 		} else {
 			const focusBody = !isNew && !!note.title;
@@ -649,6 +666,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		let titleTextInputStyle = {
 			flex: 1,
+			marginTop: 0,
 			paddingLeft: 0,
 			color: theme.color,
 			backgroundColor: theme.backgroundColor,
@@ -666,6 +684,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 			paddingLeft: theme.marginLeft,
 			paddingTop: 10, // Added for iOS (Not needed for Android??)
 			paddingBottom: 10, // Added for iOS (Not needed for Android??)
+		}
+
+		if (this.state.HACK_webviewLoadingState === 1) {
+			titleTextInputStyle.marginTop = 1;
 		}
 
 		const dueDate = isTodo && note.todo_due ? new Date(note.todo_due) : null;
