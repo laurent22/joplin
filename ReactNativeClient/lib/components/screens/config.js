@@ -9,6 +9,7 @@ const { themeStyle } = require('lib/components/global-style.js');
 const Setting = require('lib/models/Setting.js');
 const shared = require('lib/components/shared/config-shared.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
+const { reg } = require('lib/registry.js');
 import VersionInfo from 'react-native-version-info';
 
 class ConfigScreenComponent extends BaseScreenComponent {
@@ -248,8 +249,20 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		);
 
 		settingComps.push(
-			<View key="version_info" style={this.styles().settingContainer}>
-					<Text key="version" style={this.styles().settingText}>Version {VersionInfo.appVersion}</Text>
+			<View key="version_info_app" style={this.styles().settingContainer}>
+					<Text style={this.styles().settingText}>{_('Joplin v%s', VersionInfo.appVersion)}</Text>
+			</View>
+		);
+
+		settingComps.push(
+			<View key="version_info_db" style={this.styles().settingContainer}>
+				<Text style={this.styles().settingText}>{_('Database v%s', reg.db().version())}</Text>
+			</View>
+		);
+
+		settingComps.push(
+			<View key="version_info_fts" style={this.styles().settingContainer}>
+				<Text style={this.styles().settingText}>{_('FTS enabled: %d', this.props.settings['db.ftsEnabled'])}</Text>
 			</View>
 		);
 

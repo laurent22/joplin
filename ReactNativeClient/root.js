@@ -417,7 +417,13 @@ async function initialize(dispatch) {
 			if (!locale) locale = defaultLocale();
 			Setting.setValue('locale', closestSupportedLocale(locale));
 			if (Setting.value('env') === 'dev') Setting.setValue('sync.target', SyncTargetRegistry.nameToId('onedrive_dev'));
-			Setting.setValue('firstStart', 0)
+			Setting.setValue('firstStart', 0);
+		}
+
+		if (Setting.value('db.ftsEnabled') === -1) {
+			const ftsEnabled = await db.ftsEnabled();
+			Setting.setValue('db.ftsEnabled', ftsEnabled ? 1 : 0);
+			reg.logger().info('db.ftsEnabled = ', Setting.value('db.ftsEnabled'));
 		}
 
 		reg.logger().info('Sync target: ' + Setting.value('sync.target'));
@@ -481,6 +487,7 @@ async function initialize(dispatch) {
 			});
 		}
 	} catch (error) {
+		alert('Initialization error: ' + error.message);
 		reg.logger().error('Initialization error:', error);
 	}
 

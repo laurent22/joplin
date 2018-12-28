@@ -113,7 +113,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 					saveButtonDisabled={saveButtonDisabled}
 					onSaveButtonPress={() => this.saveFolderButton_press()}
 				/>
-				<TextInput selectionColor={theme.textSelectionColor} style={this.styles().textInput} autoFocus={true} value={this.state.folder.title} onChangeText={(text) => this.title_changeText(text)} />
+				<TextInput underlineColorAndroid={theme.strongDividerColor} selectionColor={theme.textSelectionColor} style={this.styles().textInput} autoFocus={true} value={this.state.folder.title} onChangeText={(text) => this.title_changeText(text)} />
 				<dialogs.DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
 			</View>
 		);

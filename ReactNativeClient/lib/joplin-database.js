@@ -125,6 +125,7 @@ class JoplinDatabase extends Database {
 		super(driver);
 		this.initialized_ = false;
 		this.tableFields_ = null;
+		this.version_ = null;
 	}
 
 	initialized() {
@@ -270,7 +271,9 @@ class JoplinDatabase extends Database {
 		// version of the database, so that migration is not run in this case.
 		if (currentVersionIndex < 0) throw new Error('Unknown profile version. Most likely this is an old version of Joplin, while the profile was created by a newer version. Please upgrade Joplin at https://joplin.cozic.net and try again.');
 
-		if (currentVersionIndex == existingDatabaseVersions.length - 1) return false;
+		if (currentVersionIndex == existingDatabaseVersions.length - 1) return fromVersion;
+
+		let latestVersion = fromVersion;
 
 		while (currentVersionIndex < existingDatabaseVersions.length - 1) {
 			const targetVersion = existingDatabaseVersions[currentVersionIndex + 1];
@@ -472,12 +475,40 @@ class JoplinDatabase extends Database {
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });
-			await this.transactionExecBatch(queries);
 
+			try {
+				await this.transactionExecBatch(queries);
+			} catch (error) {
+				if (targetVersion === 15) {
+					this.logger().warn('Could not upgrade to database v15 - FTS feature will not be used', error);
+				} else {
+					throw error;
+				}
+			}
+
+			latestVersion = targetVersion;
+			
 			currentVersionIndex++;
 		}
 
+		return latestVersion;
+	}
+
+	async ftsEnabled() {
+		try {
+			await this.selectOne('SELECT count(*) FROM notes_fts');
+		} catch (error) {
+			this.logger().warn('FTS check failed', error);
+			return false;
+		}
+
+		this.logger().info('FTS check succeeded');
+
 		return true;
+	}
+
+	version() {
+		return this.version_;
 	}
 
 	async initialize() {
@@ -496,10 +527,12 @@ class JoplinDatabase extends Database {
 		}
 
 		const version = !versionRow ? 0 : versionRow.version;
+		this.version_ = version;
 		this.logger().info('Current database version', version);
 
-		const upgraded = await this.upgradeDatabase(version);
-		if (upgraded) await this.refreshTableFields();
+		const newVersion = await this.upgradeDatabase(version);
+		this.version_ = newVersion;
+		if (newVersion !== version) await this.refreshTableFields();
 
 		this.tableFields_ = {};
 

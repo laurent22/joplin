@@ -597,8 +597,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 				this.saveOneProperty('body', newBody);
 			};
 
+			// Currently keyword highlighting is supported only when FTS is available.
 			let keywords = [];
-			if (this.props.searchQuery) {
+			if (this.props.searchQuery && !!this.props.ftsEnabled) {
 				const parsedQuery = SearchEngine.instance().parseQuery(this.props.searchQuery);
 				keywords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 			}
@@ -769,6 +770,7 @@ const NoteScreen = connect(
 			folders: state.folders,
 			searchQuery: state.searchQuery,
 			theme: state.settings.theme,
+			ftsEnabled: state.settings['db.ftsEnabled'],
 			sharedData: state.sharedData,
 			showAdvancedOptions: state.settings.showAdvancedOptions,
 		};

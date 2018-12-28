@@ -106,22 +106,22 @@ class SearchScreenComponent extends BaseScreenComponent {
 		let notes = []
 
 		if (query) {
-			notes = await SearchEngineUtils.notesForQuery(query);
 
-			// Keeping the code below in case of compatibility issue with old versions
-			// of Android and SQLite FTS.
+			if (!!this.props.settings['db.ftsEnabled']) {
+				notes = await SearchEngineUtils.notesForQuery(query);
+			} else {			
+				let p = query.split(' ');
+				let temp = [];
+				for (let i = 0; i < p.length; i++) {
+					let t = p[i].trim();
+					if (!t) continue;
+					temp.push(t);
+				}
 
-			// let p = query.split(' ');
-			// let temp = [];
-			// for (let i = 0; i < p.length; i++) {
-			// 	let t = p[i].trim();
-			// 	if (!t) continue;
-			// 	temp.push(t);
-			// }
-
-			// notes = await Note.previews(null, {
-			// 	anywherePattern: '*' + temp.join('*') + '*',
-			// });
+				notes = await Note.previews(null, {
+					anywherePattern: '*' + temp.join('*') + '*',
+				});
+			}
 		}
 
 		if (!this.isMounted_) return;
@@ -193,6 +193,7 @@ const SearchScreen = connect(
 		return {
 			query: state.searchQuery,
 			theme: state.settings.theme,
+			settings: state.settings,
 			noteSelectionEnabled: state.noteSelectionEnabled,
 		};
 	}
