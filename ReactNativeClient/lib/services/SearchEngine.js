@@ -36,6 +36,54 @@ class SearchEngine {
 		return this.db_;
 	}
 
+	async syncTables() {
+		this.logger().info('SearchEngine: Updating FTS table...');
+
+		await ItemChange.waitForAllSaved();
+
+		const startTime = Date.now();
+
+		let lastChangeId = Setting.value('searchEngine.lastProcessedChangeId');
+
+		// TODO: if lastChangedid is undefined - index the whole notes table
+
+		while (true) {
+			const changes = await ItemChange.modelSelectAll(`
+				SELECT id, item_id, type
+				FROM item_changes
+				WHERE item_type = ?
+				AND id > ?
+				ORDER BY id ASC
+				LIMIT 100
+			`, [BaseModel.TYPE_NOTE, lastChangeId]);
+
+			if (!changes.length) break;
+
+			const queries = [];
+
+			for (let i = 0; i < changes.length; i++) {
+				const change = changes[i];
+
+				if (change.type === ItemChange.TYPE_CREATE || change.type === ItemChange.TYPE_UPDATE) {
+					queries.push({ sql: 'DELETE FROM notes_normalized WHERE id = ?', params: [change.item_id] });
+					queries.push({ sql: 'INSERT INTO notes_normalized(id, title, body) SELECT id, title, body FROM notes WHERE id = ? AND is_conflict = 0 AND encryption_applied = 0', params: [change.item_id] });
+				} else if (change.type === ItemChange.TYPE_DELETE) {
+					queries.push({ sql: 'DELETE FROM notes_normalized WHERE id = ?', params: [change.item_id] });
+				} else {
+					throw new Error('Invalid change type: ' + change.type);
+				}
+
+				lastChangeId = change.id;
+			}
+
+			await this.db().transactionExecBatch(queries);
+			Setting.setValue('searchEngine.lastProcessedChangeId', lastChangeId);
+			await Setting.saveAll();
+		}
+
+		this.logger().info('SearchEngine: Updated FTS table in ' + (Date.now() - startTime) + 'ms');
+}
+
 	async countRows() {
 		const sql = 'SELECT count(*) as total FROM notes_fts'
 		const row = await this.db().selectOne(sql);

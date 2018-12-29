@@ -474,13 +474,54 @@ class JoplinDatabase extends Database {
 					END;`);
 			}
 
+			if (targetVersion == 16) {
+				const notesNormalized = `
+					CREATE TABLE notes_normalized (
+						id TEXT NOT NULL,
+						title TEXT NOT NULL DEFAULT "",
+						body TEXT NOT NULL DEFAULT "" 
+					);
+				`;
+
+				queries.push(this.sqlStringToLines(notesNormalized)[0]);
+
+				queries.push('CREATE INDEX notes_normalized_id ON notes_normalized (id)');
+
+				queries.push('DROP TRIGGER IF EXISTS notes_fts_before_update');
+				queries.push('DROP TRIGGER IF EXISTS notes_fts_before_delete');
+				queries.push('DROP TRIGGER IF EXISTS notes_after_update');
+				queries.push('DROP TRIGGER IF EXISTS notes_after_insert');
+				queries.push('DROP TABLE IF EXISTS notes_fts');
+
+				queries.push('CREATE VIRTUAL TABLE notes_fts USING fts4(content="notes_normalized", notindexed="id", id, title, body)');
+
+				// Keep the content tables (notes) and the FTS table (notes_fts) in sync.
+				// More info at https://www.sqlite.org/fts3.html#_external_content_fts4_tables_
+				queries.push(`
+					CREATE TRIGGER notes_fts_before_update BEFORE UPDATE ON notes_normalized BEGIN
+						DELETE FROM notes_fts WHERE docid=old.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER notes_fts_before_delete BEFORE DELETE ON notes_normalized BEGIN
+						DELETE FROM notes_fts WHERE docid=old.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER notes_after_update AFTER UPDATE ON notes_normalized BEGIN
+						INSERT INTO notes_fts(docid, id, title, body) SELECT rowid, id, title, body FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER notes_after_insert AFTER INSERT ON notes_normalized BEGIN
+						INSERT INTO notes_fts(docid, id, title, body) SELECT rowid, id, title, body FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
+					END;`);
+			}
+
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });
 
 			try {
 				await this.transactionExecBatch(queries);
 			} catch (error) {
-				if (targetVersion === 15) {
-					this.logger().warn('Could not upgrade to database v15 - FTS feature will not be used', error);
+				if (targetVersion === 15 || targetVersion === 16) {
+					this.logger().warn('Could not upgrade to database v15 or v16 - FTS feature will not be used', error);
 				} else {
 					throw error;
 				}

@@ -28,27 +28,32 @@ describe('services_SearchEngine', function() {
 
 		n1 = await Note.save({ title: "a" });
 		n2 = await Note.save({ title: "b" });
+		await engine.syncTables();
 		rows = await engine.search('a');
 		expect(rows.length).toBe(1);
 		expect(rows[0].title).toBe('a');
 
 		await Note.delete(n1.id);
+		await engine.syncTables();
 		rows = await engine.search('a');
 		expect(rows.length).toBe(0);
 		rows = await engine.search('b');
 		expect(rows[0].title).toBe('b');
 
 		await Note.save({ id: n2.id, title: 'c' });
+		await engine.syncTables();
 		rows = await engine.search('b');
 		expect(rows.length).toBe(0);
 		rows = await engine.search('c');
 		expect(rows[0].title).toBe('c');
 
 		await Note.save({ id: n2.id, encryption_applied: 1 });
+		await engine.syncTables();
 		rows = await engine.search('c');
 		expect(rows.length).toBe(0);
 
 		await Note.save({ id: n2.id, encryption_applied: 0 });
+		await engine.syncTables();
 		rows = await engine.search('c');
 		expect(rows.length).toBe(1);
 
@@ -60,6 +65,7 @@ describe('services_SearchEngine', function() {
 		const n2 = await Note.save({ title: "abcd aaaaa abcd abcd" }); // 1
 		const n3 = await Note.save({ title: "abcd aaaaa bbbb eeee abcd" }); // 2
 
+		await engine.syncTables();
 		const rows = await engine.search('abcd');
 
 		expect(rows[0].id).toBe(n2.id);
@@ -81,6 +87,7 @@ describe('services_SearchEngine', function() {
 		// 5
 		const n5 = await Note.save({ title: "occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh" });
 
+		await engine.syncTables();
 		const rows = await engine.search('abcd efgh');
 
 		expect(rows[0].id).toBe(n1.id);
@@ -97,6 +104,11 @@ describe('services_SearchEngine', function() {
 
 		const n1 = await Note.save({ title: "abcd efgh ijkl", body: "aaaa bbbb" });
 		const n2 = await Note.save({ title: "iiii efgh bbbb", body: "aaaa bbbb" });
+		const n3 = await Note.save({ title: "Агентство Рейтер" });
+		const n4 = await Note.save({ title: "Dog" });
+		const n5 = await Note.save({ title: "СООБЩИЛО" });
+
+		await engine.syncTables();
 
 		rows = await engine.search('abcd ijkl');
 		expect(rows.length).toBe(1);
@@ -120,6 +132,21 @@ describe('services_SearchEngine', function() {
 		expect(rows.length).toBe(2);
 
 		rows = await engine.search('body:bbbb iiii');
+		expect(rows.length).toBe(1);
+
+		rows = await engine.search('Рейтер');
+		expect(rows.length).toBe(1);
+
+		rows = await engine.search('pейтер');
+		expect(rows.length).toBe(1);
+
+		rows = await engine.search('Dog');
+		expect(rows.length).toBe(1);
+
+		rows = await engine.search('dog');
+		expect(rows.length).toBe(1);
+
+		rows = await engine.search('сообщило');
 		expect(rows.length).toBe(1);
 
 		done();
@@ -172,12 +199,6 @@ describe('services_SearchEngine', function() {
 				const r = shouldMatch[j].match(regex);
 				expect(!!r).toBe(true, '"' + input + '" should match "' + shouldMatch[j] + '"');
 			}
-
-		// 	for (let j = 0; j < shouldNotMatch.length; j++) {
-		// 		const r = shouldNotMatch[j].match(regex);
-		// 		// console.info(input, shouldNotMatch)
-		// 		expect(!!r).toBe(false, '"' + input + '" should not match "' + shouldNotMatch[j] + '"');
-		// 	}
 		}
 
 		expect(engine.parseQuery('*').termCount).toBe(0);
