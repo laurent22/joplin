@@ -604,7 +604,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 				keywords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 			}
 
-			bodyComponent = <NoteBodyViewer
+			// Note: as of 2018-12-29 it's important not to display the viewer if the note body is empty,
+			// to avoid the HACK_webviewLoadingState related bug.
+			bodyComponent = !note || !note.body.trim() ? null : <NoteBodyViewer
 				onJoplinLinkClick={this.onJoplinLinkClick_}
 				ref="noteBodyViewer"
 				style={this.styles().noteBodyViewer}
@@ -614,11 +616,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 				onCheckboxChange={(newBody) => { onCheckboxChange(newBody) }}
 				onLoadEnd={() => {
 					setTimeout(() => {
-						this.setState({ HACK_webviewLoadingState: this.state.HACK_webviewLoadingState + 1 });
+						this.setState({ HACK_webviewLoadingState: 1 });
 						setTimeout(() => {
-							this.setState({ HACK_webviewLoadingState: this.state.HACK_webviewLoadingState + 1 });
+							this.setState({ HACK_webviewLoadingState: 0 });
 						}, 50);
-					}, 50);
+					}, 5);
 				}}
 			/>
 		} else {

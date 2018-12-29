@@ -47,6 +47,8 @@ function gradleVersionName(content) {
 }
 
 async function main() {
+	console.info('Updating version numbers in build.gradle...');
+
 	const projectName = 'joplin-android';
 	const newContent = updateGradleConfig();
 	const version = gradleVersionName(newContent);
@@ -59,10 +61,10 @@ async function main() {
 
 	console.info('Running from: ' + process.cwd());
 
-	console.info('Building APK file...');
+	console.info('Building APK file v' + version + '...');
 
 	let restoreDir = null;
-	let apkBuildCmd = 'assembleRelease -PbuildDir=build --console plain';
+	let apkBuildCmd = 'assembleRelease -PbuildDir=build'; //  --console plain
 	if (await fileExists('/mnt/c/Windows/System32/cmd.exe')) {
 		apkBuildCmd = '/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat ' + apkBuildCmd + '"';
 	} else {
@@ -72,6 +74,7 @@ async function main() {
 	}
 
 	// const output = await execCommand('/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat assembleRelease -PbuildDir=build --console plain"');
+	console.info(apkBuildCmd);
 	const output = await execCommand(apkBuildCmd);
 	console.info(output);
 

@@ -29,6 +29,10 @@ class NoteBodyViewer extends Component {
 	}
 
 	onLoadEnd() {
+		setTimeout(() => {
+			if (this.props.onLoadEnd) this.props.onLoadEnd();
+		}, 100);
+
 		if (this.state.webViewLoaded) return;
 
 		// Need to display after a delay to avoid a white flash before
@@ -37,8 +41,6 @@ class NoteBodyViewer extends Component {
 			if (!this.isMounted_) return;
 			this.setState({ webViewLoaded: true });
 		}, 100);
-
-		if (this.props.onLoadEnd) this.props.onLoadEnd();
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
