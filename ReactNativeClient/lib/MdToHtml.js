@@ -7,7 +7,7 @@ const { shim } = require('lib/shim.js');
 const { _ } = require('lib/locale');
 const md5 = require('md5');
 const MdToHtml_Katex = require('lib/MdToHtml_Katex');
-const { pregQuote } = require('lib/string-utils.js');
+const StringUtils = require('lib/string-utils.js');
 
 class MdToHtml {
 
@@ -415,22 +415,7 @@ class MdToHtml {
 	}
 
 	applyHighlightedKeywords_(body, keywords) {
-		for (let i = 0; i < keywords.length; i++) {
-			const k = keywords[i];
-
-			let regexString = '';
-
-			if (k.type === 'regex') {
-				regexString = k.value;
-			} else {
-				regexString = pregQuote(k);
-			}
-
-			const re = new RegExp('(^|\n|\b)(' + regexString + ')(\n|\b|$)', 'gi');
-			body = body.replace(re, '$1<span class="highlighted-keyword">$2</span>$3');
-		}
-
-		return body;
+		return StringUtils.surroundKeywords(keywords, body, '<span class="highlighted-keyword">', '</span>');
 	}
 
 	render(body, style, options = null) {
