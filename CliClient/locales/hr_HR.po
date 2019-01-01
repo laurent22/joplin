@@ -647,6 +647,10 @@ msgstr ""
 msgid "Search in all the notes"
 msgstr "Pretraži u svim bilješkama"
 
+#, fuzzy
+msgid "Search in current note"
+msgstr "Pretraži u svim bilješkama"
+
 msgid "View"
 msgstr ""
 
@@ -1332,6 +1336,10 @@ msgstr ""
 msgid "Global zoom percentage"
 msgstr ""
 
+#, fuzzy
+msgid "Editor font size"
+msgstr "Uredi bilješku."
+
 msgid "Editor font family"
 msgstr ""
 
@@ -1686,6 +1694,10 @@ msgstr ""
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Nepodržana vrsta slike: %s"
+
+#, fuzzy
+msgid "Take photo"
+msgstr "Priloži sliku"
 
 msgid "Attach photo"
 msgstr "Priloži sliku"

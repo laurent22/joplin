@@ -224,4 +224,21 @@ function escapeHtml(s) {
 		.replace(/'/g, "&#039;");
 }
 
-module.exports = { removeDiacritics, escapeFilename, wrap, splitCommandString, padLeft, toTitleCase, escapeHtml };
+function pregQuote(str, delimiter = '') {
+	return (str + '').replace(new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\' + (delimiter || '') + '-]', 'g'), '\\$&');
+}
+
+function surroundKeywords(keywords, text, prefix, suffix) {
+	let regexString = keywords.map((k) => {
+		if (k.type === 'regex') {
+			return k.value;
+		} else {
+			return pregQuote(k);
+		}	
+	}).join('|');
+	regexString = '\\b(' + regexString + ')\\b'
+	const re = new RegExp(regexString, 'gi');
+	return text.replace(re, prefix + '$1' + suffix);
+}
+
+module.exports = { removeDiacritics, escapeFilename, wrap, splitCommandString, padLeft, toTitleCase, escapeHtml, pregQuote, surroundKeywords };

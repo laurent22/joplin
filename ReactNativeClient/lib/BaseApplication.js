@@ -34,6 +34,7 @@ const SyncTargetWebDAV = require('lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
 const EncryptionService = require('lib/services/EncryptionService');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
+const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseService = require('lib/services/BaseService');
 
@@ -218,12 +219,8 @@ class BaseApplication {
 			} else if (parentType === Tag.modelType()) {
 				notes = await Tag.notes(parentId, options);
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
-				let fields = Note.previewFields();
-				let search = BaseModel.byId(state.searches, parentId);
-				notes = await Note.previews(null, {
-					fields: fields,
-					anywherePattern: '*' + search.query_pattern + '*',
-				});
+				const search = BaseModel.byId(state.searches, parentId);
+				notes = await SearchEngineUtils.notesForQuery(search.query_pattern);
 			}
 		}
 
@@ -480,7 +477,7 @@ class BaseApplication {
 		this.dbLogger_.setLevel(initArgs.logLevel);
 
 		if (Setting.value('env') === 'dev') {
-			this.dbLogger_.setLevel(Logger.LEVEL_WARN);
+			this.dbLogger_.setLevel(Logger.LEVEL_INFO);
 		}
 
 		this.logger_.info('Profile directory: ' + profileDir);

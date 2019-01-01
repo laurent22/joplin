@@ -573,6 +573,9 @@ msgstr ""
 msgid "Search in all the notes"
 msgstr ""
 
+msgid "Search in current note"
+msgstr ""
+
 msgid "View"
 msgstr ""
 
@@ -1224,6 +1227,9 @@ msgstr ""
 msgid "Global zoom percentage"
 msgstr ""
 
+msgid "Editor font size"
+msgstr ""
+
 msgid "Editor font family"
 msgstr ""
 
@@ -1560,6 +1566,9 @@ msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"
+msgstr ""
+
+msgid "Take photo"
 msgstr ""
 
 msgid "Attach photo"

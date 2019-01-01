@@ -62,8 +62,8 @@ class DropboxLoginScreenComponent extends BaseScreenComponent {
 						</TouchableOpacity>
 					</View>
 					<Text style={this.styles().stepText}>{_('Step 2: Enter the code provided by Dropbox:')}</Text>
-					<TextInput selectionColor={theme.textSelectionColor} value={this.state.authCode} onChangeText={this.shared_.authCodeInput_change} style={theme.lineInput}/>
-
+					<TextInput placeholder={_('Enter code here')} placeholderTextColor={theme.colorFaded} selectionColor={theme.textSelectionColor} value={this.state.authCode} onChangeText={this.shared_.authCodeInput_change} style={theme.lineInput}/>
+					<View style={{height:10}}></View>
 					<Button disabled={this.state.checkingAuthToken} title={_("Submit")} onPress={this.shared_.submit_click}></Button>
 
 					{/* Add this extra padding to make sure the view is scrollable when the keyboard is visible on small screens (iPhone SE) */}

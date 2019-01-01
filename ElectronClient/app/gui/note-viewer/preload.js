@@ -13,8 +13,8 @@ ipcRenderer.on('setPercentScroll', (event, percent) => {
 	window.postMessage({ target: 'webview', name: 'setPercentScroll', data: { percent: percent } }, '*');
 });
 
-ipcRenderer.on('setMarkers', (event, keywords) => {
-	window.postMessage({ target: 'webview', name: 'setMarkers', data: { keywords: keywords } }, '*');
+ipcRenderer.on('setMarkers', (event, keywords, options) => {
+	window.postMessage({ target: 'webview', name: 'setMarkers', data: { keywords: keywords, options: options } }, '*');
 });
 
 window.addEventListener('message', (event) => {

@@ -49,8 +49,6 @@ class TagScreenComponent extends BaseScreenComponent {
 	render() {
 		let title = tag ? tag.title : '';
 
-		// <ActionButton addFolderNoteButtons={true} parentFolderId={this.props.selectedFolderId}></ActionButton>
-
 		const { navigate } = this.props.navigation;
 		return (
 			<View style={this.styles().screen}>

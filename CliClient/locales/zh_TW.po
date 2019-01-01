@@ -614,6 +614,10 @@ msgstr "使用外部編輯器編輯"
 msgid "Search in all the notes"
 msgstr "在所有記事中搜尋"
 
+#, fuzzy
+msgid "Search in current note"
+msgstr "在所有記事中搜尋"
+
 msgid "View"
 msgstr "檢視"
 
@@ -1284,6 +1288,10 @@ msgstr ""
 msgid "Global zoom percentage"
 msgstr "整體縮放比例 (%)"
 
+#, fuzzy
+msgid "Editor font size"
+msgstr "編輯器字型系列"
+
 msgid "Editor font family"
 msgstr "編輯器字型系列"
 
@@ -1639,6 +1647,10 @@ msgstr "Joplin 移動應用程式暫時不支援此類型的連結: %s"
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "不支援的圖像類型: %s"
+
+#, fuzzy
+msgid "Take photo"
+msgstr "附加相片"
 
 msgid "Attach photo"
 msgstr "附加相片"

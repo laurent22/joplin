@@ -20,9 +20,9 @@ Three types of applications are available: for the **desktop** (Windows, macOS a
 
 Operating System | Download | Alternative
 -----------------|--------|-------------------
-Windows (32 and 64-bit)         | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.116/Joplin-Setup-1.0.116.exe'><img alt='Get it on Windows' height="40px" src='https://joplin.cozic.net/images/BadgeWindows.png'/></a> | or Get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.116/JoplinPortable.exe'>Portable version</a><br>(to run from a USB key, etc.)
-macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.116/Joplin-1.0.116.dmg'><img alt='Get it on macOS' height="40px" src='https://joplin.cozic.net/images/BadgeMacOS.png'/></a> | 
-Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.116/Joplin-1.0.116-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://joplin.cozic.net/images/BadgeLinux.png'/></a> | An Arch Linux package<br>[is also available](#terminal-application).
+Windows (32 and 64-bit)         | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.117/Joplin-Setup-1.0.117.exe'><img alt='Get it on Windows' height="40px" src='https://joplin.cozic.net/images/BadgeWindows.png'/></a> | or Get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.117/JoplinPortable.exe'>Portable version</a><br>(to run from a USB key, etc.)
+macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.117/Joplin-1.0.117.dmg'><img alt='Get it on macOS' height="40px" src='https://joplin.cozic.net/images/BadgeMacOS.png'/></a> |
+Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.117/Joplin-1.0.117-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://joplin.cozic.net/images/BadgeLinux.png'/></a> | An Arch Linux package<br>[is also available](#terminal-application).
 
 The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
 
@@ -36,7 +36,7 @@ wget -O - https://raw.githubusercontent.com/laurent22/joplin/master/Joplin_insta
 
 Operating System | Download | Alt. Download
 -----------------|----------|----------------
-Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplin.cozic.net/images/BadgeAndroid.png'/></a> | or [Download APK File](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.176/joplin-v1.0.176.apk)
+Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplin.cozic.net/images/BadgeAndroid.png'/></a> | or [Download APK File](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.232/joplin-v1.0.232.apk)
 iOS              | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://joplin.cozic.net/images/BadgeIOS.png'/></a> | -
 
 ## Terminal application
@@ -81,7 +81,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 	- [Donate](https://github.com/laurent22/joplin/blob/master/readme/donate.md)
 <!-- TOC -->
 
-# Features 
+# Features
 
 - Desktop, mobile and terminal applications.
 - [Web Clipper](https://github.com/laurent22/joplin/blob/master/readme/clipper.md) for Firefox and Chrome.
@@ -98,10 +98,11 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 - Search functionality.
 - Geo-location support.
 - Supports multiple languages
+- External editor support - open notes in your favorite external editor with one click in Joplin.
 
 # Importing
 
-## Importing from Evernote 
+## Importing from Evernote
 
 Joplin was designed as a replacement for Evernote and so can import complete Evernote notebooks, as well as notes, tags, resources (attached files) and note metadata (such as author, geo-location, etc.) via ENEX files. In terms of data, the only two things that might slightly differ are:
 
@@ -173,6 +174,7 @@ Select the "WebDAV" synchronisation target and follow the same instructions as f
 
 WebDAV-compatible services that are known to work with Joplin:
 
+- [Apache WebDAV Module](https://httpd.apache.org/docs/current/mod/mod_dav.html)
 - [Box.com](https://www.box.com/)
 - [DriveHQ](https://www.drivehq.com)
 - [Fastmail](https://www.fastmail.com/)
@@ -284,6 +286,20 @@ It is generally recommended to enter the notes as Markdown as it makes the notes
 
 Rendered markdown can be customized by placing a userstyle file in the profile directory `~/.config/joplin-desktop/userstyle.css` (This path might be different on your device - check at the top of the Config screen for the exact path). This file supports standard CSS syntax.
 
+# Searching
+
+Joplin implements the SQLite Full Text Search (FTS4) extension. It means the content of all the notes is indexed in real time and search queries return results very fast. Both [Simple FTS Queries](https://www.sqlite.org/fts3.html#simple_fts_queries) and [Full-Text Index Queries](https://www.sqlite.org/fts3.html#full_text_index_queries) are supported. See below for the list of supported queries:
+
+Search type | Description | Example
+------------|-------------|---------
+Single word | Returns all the notes that contain this term. | `dog`, `cat`
+Multiples words | Returns all the notes that contain **all** these words, but not necessarily next to each other. | `dog cat` - will return any notes that contain the words "dog" and "cat" anywhere in the note, no necessarily in that order nor next to each others. It will **not** return results that contain "dog" or "cat" only.
+Phrase query | Add double quotes to return the notes that contain exactly this phrase. | `"shopping list"` - will return the notes that contain these **exact terms** next to each others and in this order. It will **not** return for example a note that contain "going shopping with my list".
+Prefix | Add a wildmark to return all the notes that contain a term with a specified prefix. | `swim*` - will return all the notes that contain eg. "swim", but also "swimming", "swimsuit", etc. IMPORTANT: The wildcard **can only be at the end** - it will be ignored at the beginning of a word (eg. `*swim`) and will be treated as a literal asterisk in the middle of a word (eg. `ast*rix`)
+Field restricted | Add either `title:` or `body:` before a note to restrict your search to just the title, or just the body. | `title:shopping`, `body:egg`
+
+Notes are sorted by "relevance". Currently it means the notes that contain the requested terms the most times are on top. For queries with multiple terms, it also matter how close to each others are the terms. This is a bit experimental so if you notice a search query that returns unexpected results, please report it in the forum, providing as much details as possible to replicate the issue.
+
 # Donations
 
 Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.
@@ -320,28 +336,28 @@ Current translations:
 &nbsp;  |  Language  |  Po File  |  Last translator  |  Percent done
 ---|---|---|---|---
 ![](https://joplin.cozic.net/images/flags/es/basque_country.png)  |  Basque  |  [eu](https://github.com/laurent22/joplin/blob/master/CliClient/locales/eu.po)  |  juan.abasolo@ehu.eus  |  61%
-![](https://joplin.cozic.net/images/flags/es/catalonia.png)  |  Catalan  |  [ca](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ca.po)  |  jmontane, 2018  |  87%
+![](https://joplin.cozic.net/images/flags/es/catalonia.png)  |  Catalan  |  [ca](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ca.po)  |  jmontane, 2018  |  86%
 ![](https://joplin.cozic.net/images/flags/country-4x3/hr.png)  |  Croatian  |  [hr_HR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/hr_HR.po)  |  Hrvoje Mandić (trbuhom@net.hr)  |  49%
-![](https://joplin.cozic.net/images/flags/country-4x3/cz.png)  |  Czech  |  [cs_CZ](https://github.com/laurent22/joplin/blob/master/CliClient/locales/cs_CZ.po)  |  Lukas Helebrandt (lukas@aiya.cz)  |  77%
+![](https://joplin.cozic.net/images/flags/country-4x3/cz.png)  |  Czech  |  [cs_CZ](https://github.com/laurent22/joplin/blob/master/CliClient/locales/cs_CZ.po)  |  Lukas Helebrandt (lukas@aiya.cz)  |  76%
 ![](https://joplin.cozic.net/images/flags/country-4x3/dk.png)  |  Dansk  |  [da_DK](https://github.com/laurent22/joplin/blob/master/CliClient/locales/da_DK.po)  |  Morten Juhl-Johansen Zölde-Fejér (mjjzf@syntaktisk.  |  78%
-![](https://joplin.cozic.net/images/flags/country-4x3/de.png)  |  Deutsch  |  [de_DE](https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po)  |  Michael Sonntag (ms@editorei.de)  |  98%
+![](https://joplin.cozic.net/images/flags/country-4x3/de.png)  |  Deutsch  |  [de_DE](https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po)  |  Michael Sonntag (ms@editorei.de)  |  97%
 ![](https://joplin.cozic.net/images/flags/country-4x3/gb.png)  |  English  |  [en_GB](https://github.com/laurent22/joplin/blob/master/CliClient/locales/en_GB.po)  |    |  100%
-![](https://joplin.cozic.net/images/flags/country-4x3/es.png)  |  Español  |  [es_ES](https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po)  |  Fernando Martín (f@mrtn.es)  |  93%
+![](https://joplin.cozic.net/images/flags/country-4x3/es.png)  |  Español  |  [es_ES](https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po)  |  Fernando Martín (f@mrtn.es)  |  92%
 ![](https://joplin.cozic.net/images/flags/country-4x3/fr.png)  |  Français  |  [fr_FR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/fr_FR.po)  |  Laurent Cozic  |  100%
 ![](https://joplin.cozic.net/images/flags/es/galicia.png)  |  Galician  |  [gl_ES](https://github.com/laurent22/joplin/blob/master/CliClient/locales/gl_ES.po)  |  Marcos Lans (marcoslansgarza@gmail.com)  |  77%
-![](https://joplin.cozic.net/images/flags/country-4x3/it.png)  |  Italiano  |  [it_IT](https://github.com/laurent22/joplin/blob/master/CliClient/locales/it_IT.po)  |    |  92%
-![](https://joplin.cozic.net/images/flags/country-4x3/nl.png)  |  Nederlands  |  [nl_NL](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_NL.po)  |  Heimen Stoffels (vistausss@outlook.com)  |  93%
+![](https://joplin.cozic.net/images/flags/country-4x3/it.png)  |  Italiano  |  [it_IT](https://github.com/laurent22/joplin/blob/master/CliClient/locales/it_IT.po)  |    |  91%
 ![](https://joplin.cozic.net/images/flags/country-4x3/be.png)  |  Nederlands  |  [nl_BE](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_BE.po)  |    |  61%
-![](https://joplin.cozic.net/images/flags/country-4x3/no.png)  |  Norwegian  |  [no](https://github.com/laurent22/joplin/blob/master/CliClient/locales/no.po)  |    |  83%
-![](https://joplin.cozic.net/images/flags/country-4x3/br.png)  |  Português (Brasil)  |  [pt_BR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_BR.po)  |  Renato Nunes Bastos (rnbastos@gmail.com)  |  100%
-![](https://joplin.cozic.net/images/flags/country-4x3/ro.png)  |  Română  |  [ro](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ro.po)  |    |  61%
+![](https://joplin.cozic.net/images/flags/country-4x3/nl.png)  |  Nederlands  |  [nl_NL](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_NL.po)  |  Heimen Stoffels (vistausss@outlook.com)  |  92%
+![](https://joplin.cozic.net/images/flags/country-4x3/no.png)  |  Norwegian  |  [nb_NO](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nb_NO.po)  |  Mats Estensen (matsest@mxe.no)  |  99%
+![](https://joplin.cozic.net/images/flags/country-4x3/br.png)  |  Português (Brasil)  |  [pt_BR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_BR.po)  |  Renato Nunes Bastos (rnbastos@gmail.com)  |  99%
+![](https://joplin.cozic.net/images/flags/country-4x3/ro.png)  |  Română  |  [ro](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ro.po)  |    |  60%
 ![](https://joplin.cozic.net/images/flags/country-4x3/si.png)  |  Slovenian  |  [sl_SI](https://github.com/laurent22/joplin/blob/master/CliClient/locales/sl_SI.po)  |    |  76%
-![](https://joplin.cozic.net/images/flags/country-4x3/se.png)  |  Svenska  |  [sv](https://github.com/laurent22/joplin/blob/master/CliClient/locales/sv.po)  |  Jonatan Nyberg (jonatan@autistici.org)  |  92%
+![](https://joplin.cozic.net/images/flags/country-4x3/se.png)  |  Svenska  |  [sv](https://github.com/laurent22/joplin/blob/master/CliClient/locales/sv.po)  |  Jonatan Nyberg (jonatan@autistici.org)  |  91%
 ![](https://joplin.cozic.net/images/flags/country-4x3/ru.png)  |  Русский  |  [ru_RU](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ru_RU.po)  |  Artyom Karlov (artyom.karlov@gmail.com)  |  76%
-![](https://joplin.cozic.net/images/flags/country-4x3/cn.png)  |  中文 (简体)  |  [zh_CN](https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po)  |    |  96%
-![](https://joplin.cozic.net/images/flags/country-4x3/tw.png)  |  中文 (繁體)  |  [zh_TW](https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_TW.po)  |  penguinsam (samliu@gmail.com)  |  93%
-![](https://joplin.cozic.net/images/flags/country-4x3/jp.png)  |  日本語  |  [ja_JP](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ja_JP.po)  |  AWASHIRO Ikuya (ikunya@gmail.com)  |  94%
-![](https://joplin.cozic.net/images/flags/country-4x3/kr.png)  |  한국말  |  [ko](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ko.po)  |    |  93%
+![](https://joplin.cozic.net/images/flags/country-4x3/cn.png)  |  中文 (简体)  |  [zh_CN](https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po)  |    |  95%
+![](https://joplin.cozic.net/images/flags/country-4x3/tw.png)  |  中文 (繁體)  |  [zh_TW](https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_TW.po)  |  penguinsam (samliu@gmail.com)  |  92%
+![](https://joplin.cozic.net/images/flags/country-4x3/jp.png)  |  日本語  |  [ja_JP](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ja_JP.po)  |  AWASHIRO Ikuya (ikunya@gmail.com)  |  93%
+![](https://joplin.cozic.net/images/flags/country-4x3/kr.png)  |  한국말  |  [ko](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ko.po)  |    |  92%
 <!-- LOCALE-TABLE-AUTO-GENERATED -->
 
 # Known bugs

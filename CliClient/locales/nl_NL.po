@@ -651,6 +651,10 @@ msgstr "Bewerken in externe bewerker"
 msgid "Search in all the notes"
 msgstr "Alle notities doorzoeken"
 
+#, fuzzy
+msgid "Search in current note"
+msgstr "Alle notities doorzoeken"
+
 msgid "View"
 msgstr "Beeld"
 
@@ -1343,6 +1347,10 @@ msgstr ""
 msgid "Global zoom percentage"
 msgstr "Globaal zoompercentage"
 
+#, fuzzy
+msgid "Editor font size"
+msgstr "Lettertype van bewerker"
+
 msgid "Editor font family"
 msgstr "Lettertype van bewerker"
 
@@ -1715,6 +1723,10 @@ msgstr "De mobiele Joplin-app ondersteunt momenteel niet dit soort links: %s"
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Niet-ondersteunde afbeeldingssoort: %s"
+
+#, fuzzy
+msgid "Take photo"
+msgstr "Foto bijvoegen"
 
 msgid "Attach photo"
 msgstr "Foto bijvoegen"

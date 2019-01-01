@@ -125,6 +125,7 @@ class JoplinDatabase extends Database {
 		super(driver);
 		this.initialized_ = false;
 		this.tableFields_ = null;
+		this.version_ = null;
 	}
 
 	initialized() {
@@ -219,6 +220,7 @@ class JoplinDatabase extends Database {
 				if (tableName == 'android_metadata') continue;
 				if (tableName == 'table_fields') continue;
 				if (tableName == 'sqlite_sequence') continue;
+				if (tableName.indexOf('notes_fts') === 0) continue;
 				chain.push(() => {
 					return this.selectAll('PRAGMA table_info("' + tableName + '")').then((pragmas) => {
 						for (let i = 0; i < pragmas.length; i++) {
@@ -260,7 +262,8 @@ class JoplinDatabase extends Database {
 		// default value and thus might cause problems. In that case, the default value
 		// must be set in the synchronizer too.
 
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+		// Note: v16 and v17 don't do anything. They were used to debug an issue.
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -268,7 +271,9 @@ class JoplinDatabase extends Database {
 		// version of the database, so that migration is not run in this case.
 		if (currentVersionIndex < 0) throw new Error('Unknown profile version. Most likely this is an old version of Joplin, while the profile was created by a newer version. Please upgrade Joplin at https://joplin.cozic.net and try again.');
 
-		if (currentVersionIndex == existingDatabaseVersions.length - 1) return false;
+		if (currentVersionIndex == existingDatabaseVersions.length - 1) return fromVersion;
+
+		let latestVersion = fromVersion;
 
 		while (currentVersionIndex < existingDatabaseVersions.length - 1) {
 			const targetVersion = existingDatabaseVersions[currentVersionIndex + 1];
@@ -445,13 +450,65 @@ class JoplinDatabase extends Database {
 				}));
 			}
 
-			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });
-			await this.transactionExecBatch(queries);
+			if (targetVersion == 15) {
+				queries.push('CREATE VIRTUAL TABLE notes_fts USING fts4(content="notes", notindexed="id", id, title, body)');
+				queries.push('INSERT INTO notes_fts(docid, id, title, body) SELECT rowid, id, title, body FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
 
+				// Keep the content tables (notes) and the FTS table (notes_fts) in sync.
+				// More info at https://www.sqlite.org/fts3.html#_external_content_fts4_tables_
+				queries.push(`
+					CREATE TRIGGER notes_fts_before_update BEFORE UPDATE ON notes BEGIN
+						DELETE FROM notes_fts WHERE docid=old.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER notes_fts_before_delete BEFORE DELETE ON notes BEGIN
+						DELETE FROM notes_fts WHERE docid=old.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER notes_after_update AFTER UPDATE ON notes BEGIN
+						INSERT INTO notes_fts(docid, id, title, body) SELECT rowid, id, title, body FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND new.rowid = notes.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER notes_after_insert AFTER INSERT ON notes BEGIN
+						INSERT INTO notes_fts(docid, id, title, body) SELECT rowid, id, title, body FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND new.rowid = notes.rowid;
+					END;`);
+			}
+
+			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });
+
+			try {
+				await this.transactionExecBatch(queries);
+			} catch (error) {
+				if (targetVersion === 15) {
+					this.logger().warn('Could not upgrade to database v15 - FTS feature will not be used', error);
+				} else {
+					throw error;
+				}
+			}
+
+			latestVersion = targetVersion;
+			
 			currentVersionIndex++;
 		}
 
+		return latestVersion;
+	}
+
+	async ftsEnabled() {
+		try {
+			await this.selectOne('SELECT count(*) FROM notes_fts');
+		} catch (error) {
+			this.logger().warn('FTS check failed', error);
+			return false;
+		}
+
+		this.logger().info('FTS check succeeded');
+
 		return true;
+	}
+
+	version() {
+		return this.version_;
 	}
 
 	async initialize() {
@@ -470,10 +527,12 @@ class JoplinDatabase extends Database {
 		}
 
 		const version = !versionRow ? 0 : versionRow.version;
+		this.version_ = version;
 		this.logger().info('Current database version', version);
 
-		const upgraded = await this.upgradeDatabase(version);
-		if (upgraded) await this.refreshTableFields();
+		const newVersion = await this.upgradeDatabase(version);
+		this.version_ = newVersion;
+		if (newVersion !== version) await this.refreshTableFields();
 
 		this.tableFields_ = {};
 

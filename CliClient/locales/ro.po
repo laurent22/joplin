@@ -587,6 +587,10 @@ msgstr "Editați într-un editor extern"
 msgid "Search in all the notes"
 msgstr "Căutați în toate notițele"
 
+#, fuzzy
+msgid "Search in current note"
+msgstr "Căutați în toate notițele"
+
 msgid "View"
 msgstr "Vizualizați"
 
@@ -1241,6 +1245,10 @@ msgstr ""
 msgid "Global zoom percentage"
 msgstr ""
 
+#, fuzzy
+msgid "Editor font size"
+msgstr "Editează notiță."
+
 msgid "Editor font family"
 msgstr ""
 
@@ -1580,6 +1588,10 @@ msgstr ""
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr ""
+
+#, fuzzy
+msgid "Take photo"
+msgstr "Atașează imagine"
 
 msgid "Attach photo"
 msgstr "Atașează imagine"

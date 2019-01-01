@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "790045682275",
+    "firebase_url": "https://joplin-b5b20.firebaseio.com",
+    "project_id": "joplin-b5b20",
+    "storage_bucket": "joplin-b5b20.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:790045682275:android:8b68903cf881e9f7",
+        "android_client_info": {
+          "package_name": "net.cozic.joplin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "790045682275-fkusmvsm7gv3nve7h0sg0uuor9njf4sm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbHjUWAKcbldLTuoN7JybJ8dfznwBG_gM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

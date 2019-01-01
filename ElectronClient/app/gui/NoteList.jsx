@@ -13,8 +13,15 @@ const InteropService = require('lib/services/InteropService');
 const InteropServiceHelper = require('../InteropServiceHelper.js');
 const Search = require('lib/models/Search');
 const Mark = require('mark.js/dist/mark.min.js');
+const SearchEngine = require('lib/services/SearchEngine');
 
 class NoteListComponent extends React.Component {
+
+	constructor() {
+		super();
+
+		this.itemRenderer = this.itemRenderer.bind(this);
+	}
 
 	style() {
 		const theme = themeStyle(this.props.theme);
@@ -169,7 +176,10 @@ class NoteListComponent extends React.Component {
 		menu.popup(bridge().window());
 	}
 
-	itemRenderer(item, theme, width) {
+	itemRenderer(item) {
+		const theme = themeStyle(this.props.theme);
+		const width = this.props.style.width;
+
 		const onTitleClick = async (event, item) => {
 			if (event.ctrlKey) {
 				event.preventDefault();
@@ -225,8 +235,11 @@ class NoteListComponent extends React.Component {
 
 		let highlightedWords = [];
 		if (this.props.notesParentType === 'Search') {
-			const search = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
-			highlightedWords = search ? Search.keywords(search.query_pattern) : [];
+			const query = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
+			if (query) {
+				const parsedQuery = SearchEngine.instance().parseQuery(query.query_pattern);
+				highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
+			}
 		}
 
 		let style = Object.assign({ width: width }, this.style().listItem);
@@ -257,7 +270,18 @@ class NoteListComponent extends React.Component {
 				exclude: ['img'],
 				acrossElements: true,
 			});
-			mark.mark(highlightedWords);
+
+			mark.unmark();
+
+			for (let i = 0; i < highlightedWords.length; i++) {
+				const w = highlightedWords[i];
+
+				if (w.type === 'regex') {
+					mark.markRegExp(new RegExp(w.value, 'gmi'), { acrossElements: true });
+				} else {
+					mark.mark([w]);
+				}
+			}
 
 			// Note: in this case it is safe to use dangerouslySetInnerHTML because titleElement
 			// is a span tag that we created and that contains data that's been inserted as plain text
@@ -268,6 +292,14 @@ class NoteListComponent extends React.Component {
 		} else {
 			titleComp = <span>{displayTitle}</span>
 		}
+
+		const watchedIconStyle = {
+			paddingRight: 4,
+			color: theme.color,
+		};
+		const watchedIcon = this.props.watchedNoteFiles.indexOf(item.id) < 0 ? null : (
+			<i style={watchedIconStyle} className={"fa fa-external-link"}></i>
+		);
 
 		// Need to include "todo_completed" in key so that checkbox is updated when
 		// item is changed via sync.		
@@ -283,6 +315,7 @@ class NoteListComponent extends React.Component {
 				onDragStart={(event) => onDragStart(event) }
 				data-id={item.id}
 			>
+			{watchedIcon}
 			{titleComp}
 			</a>
 		</div>
@@ -313,7 +346,7 @@ class NoteListComponent extends React.Component {
 				style={style}
 				className={"note-list"}
 				items={notes}
-				itemRenderer={ (item) => { return this.itemRenderer(item, theme, style.width) } }
+				itemRenderer={this.itemRenderer}
 			></ItemList>
 		);
 	}
@@ -329,6 +362,7 @@ const mapStateToProps = (state) => {
 		notesParentType: state.notesParentType,
 		searches: state.searches,
 		selectedSearchId: state.selectedSearchId,
+		watchedNoteFiles: state.watchedNoteFiles,
 	};
 };
 

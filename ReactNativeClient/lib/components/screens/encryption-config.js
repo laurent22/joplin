@@ -110,12 +110,9 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 		const active = this.props.activeMasterKeyId === mk.id ? '✔' : '';
 
 		const inputStyle = {flex:1, marginRight: 10, color: theme.color};
-
-		if (Platform.OS === 'ios') {
-			inputStyle.borderBottomWidth = 1;
-			inputStyle.borderBottomColor = theme.dividerColor;
-		}
-
+		inputStyle.borderBottomWidth = 1;
+		inputStyle.borderBottomColor = theme.strongDividerColor;
+		
 		return (
 			<View key={mk.id}>
 				<Text style={this.styles().titleText}>{_('Master Key %s', mk.id.substr(0,6))}</Text>

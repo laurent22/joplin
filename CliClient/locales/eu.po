@@ -650,6 +650,10 @@ msgstr ""
 msgid "Search in all the notes"
 msgstr "Bilatu ohar guztietan"
 
+#, fuzzy
+msgid "Search in current note"
+msgstr "Bilatu ohar guztietan"
+
 msgid "View"
 msgstr ""
 
@@ -1350,6 +1354,10 @@ msgstr ""
 msgid "Global zoom percentage"
 msgstr "Ezarri aplikazioaren zoomaren ehunekoa"
 
+#, fuzzy
+msgid "Editor font size"
+msgstr "Oharra editatu."
+
 msgid "Editor font family"
 msgstr ""
 
@@ -1710,6 +1718,10 @@ msgstr ""
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Irudi formatua ez onartua: %s"
+
+#, fuzzy
+msgid "Take photo"
+msgstr "Argazkia erantsi"
 
 msgid "Attach photo"
 msgstr "Argazkia erantsi"

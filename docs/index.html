@@ -271,17 +271,17 @@
 <tbody>
 <tr>
 <td>Windows (32 and 64-bit)</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.116/Joplin-Setup-1.0.116.exe'><img alt='Get it on Windows' height="40px" src='https://joplin.cozic.net/images/BadgeWindows.png'/></a></td>
-<td>or Get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.116/JoplinPortable.exe'>Portable version</a><br>(to run from a USB key, etc.)</td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.117/Joplin-Setup-1.0.117.exe'><img alt='Get it on Windows' height="40px" src='https://joplin.cozic.net/images/BadgeWindows.png'/></a></td>
+<td>or Get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.117/JoplinPortable.exe'>Portable version</a><br>(to run from a USB key, etc.)</td>
 </tr>
 <tr>
 <td>macOS</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.116/Joplin-1.0.116.dmg'><img alt='Get it on macOS' height="40px" src='https://joplin.cozic.net/images/BadgeMacOS.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.117/Joplin-1.0.117.dmg'><img alt='Get it on macOS' height="40px" src='https://joplin.cozic.net/images/BadgeMacOS.png'/></a></td>
 <td></td>
 </tr>
 <tr>
 <td>Linux</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.116/Joplin-1.0.116-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://joplin.cozic.net/images/BadgeLinux.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.117/Joplin-1.0.117-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://joplin.cozic.net/images/BadgeLinux.png'/></a></td>
 <td>An Arch Linux package<br><a href="#terminal-application">is also available</a>.</td>
 </tr>
 </tbody>
@@ -303,7 +303,7 @@
 <tr>
 <td>Android</td>
 <td><a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplin.cozic.net/images/BadgeAndroid.png'/></a></td>
-<td>or <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.176/joplin-v1.0.176.apk">Download APK File</a></td>
+<td>or <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.201/joplin-v1.0.201.apk">Download APK File</a></td>
 </tr>
 <tr>
 <td>iOS</td>
@@ -356,6 +356,7 @@
 <li>Search functionality.</li>
 <li>Geo-location support.</li>
 <li>Supports multiple languages</li>
+<li>External editor support - open notes in your favorite external editor with one click in Joplin.</li>
 </ul>
 <h1 id="importing">Importing</h1>
 <h2 id="importing-from-evernote">Importing from Evernote</h2>
@@ -404,6 +405,7 @@
 <p>Select the &quot;WebDAV&quot; synchronisation target and follow the same instructions as for Nextcloud above.</p>
 <p>WebDAV-compatible services that are known to work with Joplin:</p>
 <ul>
+<li><a href="https://httpd.apache.org/docs/current/mod/mod_dav.html">Apache WebDAV Module</a></li>
 <li><a href="https://www.box.com/">Box.com</a></li>
 <li><a href="https://www.drivehq.com">DriveHQ</a></li>
 <li><a href="https://www.fastmail.com/">Fastmail</a></li>
@@ -475,6 +477,45 @@ $$
 <pre><code>This is &lt;s&gt;strikethrough text&lt;/s&gt; mixed with regular **Markdown**.
 </code></pre><h2 id="custom-css">Custom CSS</h2>
 <p>Rendered markdown can be customized by placing a userstyle file in the profile directory <code>~/.config/joplin-desktop/userstyle.css</code> (This path might be different on your device - check at the top of the Config screen for the exact path). This file supports standard CSS syntax.</p>
+<h1 id="searching">Searching</h1>
+<p>Joplin implements the SQLite Full Text Search (FTS4) extension. It means the content of all the notes is indexed in real time and search queries return results very fast. Both <a href="https://www.sqlite.org/fts3.html#simple_fts_queries">Simple FTS Queries</a> and <a href="https://www.sqlite.org/fts3.html#full_text_index_queries">Full-Text Index Queries</a> are supported. See below for the list of supported queries:</p>
+<table>
+<thead>
+<tr>
+<th>Search type</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Single word</td>
+<td>Returns all the notes that contain this term.</td>
+<td><code>dog</code>, <code>cat</code></td>
+</tr>
+<tr>
+<td>Multiples words</td>
+<td>Returns all the notes that contain <strong>all</strong> these words, but not necessarily next to each other.</td>
+<td><code>dog cat</code> - will return any notes that contain the words &quot;dog&quot; and &quot;cat&quot; anywhere in the note, no necessarily in that order nor next to each others. It will <strong>not</strong> return results that contain &quot;dog&quot; or &quot;cat&quot; only.</td>
+</tr>
+<tr>
+<td>Phrase query</td>
+<td>Add double quotes to return the notes that contain exactly this phrase.</td>
+<td><code>&quot;shopping list&quot;</code> - will return the notes that contain these <strong>exact terms</strong> next to each others and in this order. It will <strong>not</strong> return for example a note that contain &quot;going shopping with my list&quot;.</td>
+</tr>
+<tr>
+<td>Prefix</td>
+<td>Add a wildmark to return all the notes that contain a term with a specified prefix.</td>
+<td><code>swim*</code> - will return all the notes that contain eg. &quot;swim&quot;, but also &quot;swimming&quot;, &quot;swimsuit&quot;, etc. IMPORTANT: The wildcard <strong>can only be at the end</strong> - it will be ignored at the beginning of a word (eg. <code>*swim</code>) and will be treated as a literal asterisk in the middle of a word (eg. <code>ast*rix</code>)</td>
+</tr>
+<tr>
+<td>Field restricted</td>
+<td>Add either <code>title:</code> or <code>body:</code> before a note to restrict your search to just the title, or just the body.</td>
+<td><code>title:shopping</code>, <code>body:egg</code></td>
+</tr>
+</tbody>
+</table>
+<p>Notes are sorted by &quot;relevance&quot;. Currently it means the notes that contain the requested terms the most times are on top. For queries with multiple terms, it also matter how close to each others are the terms. This is a bit experimental so if you notice a search query that returns unexpected results, please report it in the forum, providing as much details as possible to replicate the issue.</p>
 <h1 id="donations">Donations</h1>
 <p>Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.</p>
 <p>Please see the <a href="https://joplin.cozic.net/donate/">donation page</a> for information on how to support the development of Joplin.</p>
@@ -522,7 +563,7 @@ $$
 <td>Catalan</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ca.po">ca</a></td>
 <td>jmontane, 2018</td>
-<td>87%</td>
+<td>86%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/hr.png" alt=""></td>
@@ -536,7 +577,7 @@ $$
 <td>Czech</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/cs_CZ.po">cs_CZ</a></td>
 <td>Lukas Helebrandt (lukas@aiya.cz)</td>
-<td>77%</td>
+<td>76%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/dk.png" alt=""></td>
@@ -550,7 +591,7 @@ $$
 <td>Deutsch</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po">de_DE</a></td>
 <td>Michael Sonntag (ms@editorei.de)</td>
-<td>98%</td>
+<td>97%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/gb.png" alt=""></td>
@@ -564,7 +605,7 @@ $$
 <td>Español</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po">es_ES</a></td>
 <td>Fernando Martín (f@mrtn.es)</td>
-<td>93%</td>
+<td>92%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/fr.png" alt=""></td>
@@ -585,14 +626,7 @@ $$
 <td>Italiano</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/it_IT.po">it_IT</a></td>
 <td></td>
-<td>92%</td>
-</tr>
-<tr>
-<td><img src="https://joplin.cozic.net/images/flags/country-4x3/nl.png" alt=""></td>
-<td>Nederlands</td>
-<td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_NL.po">nl_NL</a></td>
-<td>Heimen Stoffels (vistausss@outlook.com)</td>
-<td>93%</td>
+<td>91%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/be.png" alt=""></td>
@@ -602,25 +636,32 @@ $$
 <td>61%</td>
 </tr>
 <tr>
+<td><img src="https://joplin.cozic.net/images/flags/country-4x3/nl.png" alt=""></td>
+<td>Nederlands</td>
+<td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_NL.po">nl_NL</a></td>
+<td>Heimen Stoffels (vistausss@outlook.com)</td>
+<td>92%</td>
+</tr>
+<tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/no.png" alt=""></td>
 <td>Norwegian</td>
-<td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/no.po">no</a></td>
-<td></td>
-<td>83%</td>
+<td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/nb_NO.po">nb_NO</a></td>
+<td>Mats Estensen (matsest@mxe.no)</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/br.png" alt=""></td>
 <td>Português (Brasil)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_BR.po">pt_BR</a></td>
 <td>Renato Nunes Bastos (rnbastos@gmail.com)</td>
-<td>100%</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/ro.png" alt=""></td>
 <td>Română</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ro.po">ro</a></td>
 <td></td>
-<td>61%</td>
+<td>60%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/si.png" alt=""></td>
@@ -634,7 +675,7 @@ $$
 <td>Svenska</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/sv.po">sv</a></td>
 <td>Jonatan Nyberg (jonatan@autistici.org)</td>
-<td>92%</td>
+<td>91%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/ru.png" alt=""></td>
@@ -648,28 +689,28 @@ $$
 <td>中文 (简体)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po">zh_CN</a></td>
 <td></td>
-<td>96%</td>
+<td>95%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/tw.png" alt=""></td>
 <td>中文 (繁體)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_TW.po">zh_TW</a></td>
 <td>penguinsam (samliu@gmail.com)</td>
-<td>93%</td>
+<td>92%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/jp.png" alt=""></td>
 <td>日本語</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ja_JP.po">ja_JP</a></td>
 <td>AWASHIRO Ikuya (ikunya@gmail.com)</td>
-<td>94%</td>
+<td>93%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/kr.png" alt=""></td>
 <td>한국말</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ko.po">ko</a></td>
 <td></td>
-<td>93%</td>
+<td>92%</td>
 </tr>
 </tbody>
 </table>

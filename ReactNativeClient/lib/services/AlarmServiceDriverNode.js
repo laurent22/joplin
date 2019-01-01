@@ -28,6 +28,10 @@ class AlarmServiceDriverNode {
 		const interval = notification.date.getTime() - now;
 		if (interval < 0) return;
 
+		if (isNaN(interval)) {
+			throw new Error('Trying to create a notification from an invalid object: ' + JSON.stringify(notification));
+		}
+
 		const timeoutId = setTimeout(() => {
 			const o = {
 				appName: this.appName_,

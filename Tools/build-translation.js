@@ -161,7 +161,7 @@ function flagImageUrl(locale) {
 	if (locale === 'ca') return baseUrl + '/es/catalonia.png';
 	if (locale === 'ko') return baseUrl + '/country-4x3/kr.png';
 	if (locale === 'sv') return baseUrl + '/country-4x3/se.png';
-	if (locale === 'no') return baseUrl + '/country-4x3/no.png';
+	if (locale === 'nb_NO') return baseUrl + '/country-4x3/no.png';
 	if (locale === 'ro') return baseUrl + '/country-4x3/ro.png';
 	return baseUrl + '/country-4x3/' + countryCodeOnly(locale).toLowerCase() + '.png'
 }
@@ -222,6 +222,9 @@ async function main() {
 	let locales = availableLocales(defaultLocale);
 	for (let i = 0; i < locales.length; i++) {
 		const locale = locales[i];
+
+		console.info('Building ' + locale + '...');
+
 		const poFilePäth = cliLocalesDir + '/' + locale + '.po';
 		const jsonFilePath = jsonLocalesDir + '/' + locale + '.json';
 		if (locale != defaultLocale) await mergePotToPo(potFilePath, poFilePäth);

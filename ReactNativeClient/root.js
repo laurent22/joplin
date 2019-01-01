@@ -52,6 +52,7 @@ const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const DropdownAlert = require('react-native-dropdownalert').default;
 const ShareExtension = require('react-native-share-extension').default;
 const ResourceFetcher = require('lib/services/ResourceFetcher');
+const SearchEngine = require('lib/services/SearchEngine');
 
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
@@ -65,8 +66,6 @@ SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetWebDAV);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
-
-// Disabled because not fully working
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 
 const FsDriverRN = require('lib/fs-driver-rn.js').FsDriverRN;
@@ -222,14 +221,11 @@ const appReducer = (state = appDefaultState, action) => {
 					}
 				}
 
+				if (action.routeName == 'Welcome') navHistory = [];
+
 				//reg.logger().info('Route: ' + currentRouteName + ' => ' + action.routeName);
 
 				newState = Object.assign({}, state);
-
-				if (action.routeName == 'Welcome') {
-					navHistory = [];
-					newState.showSideMenu = true;
-				}
 
 				if ('noteId' in action) {
 					newState.selectedNoteIds = action.noteId ? [action.noteId] : [];
@@ -421,7 +417,13 @@ async function initialize(dispatch) {
 			if (!locale) locale = defaultLocale();
 			Setting.setValue('locale', closestSupportedLocale(locale));
 			if (Setting.value('env') === 'dev') Setting.setValue('sync.target', SyncTargetRegistry.nameToId('onedrive_dev'));
-			Setting.setValue('firstStart', 0)
+			Setting.setValue('firstStart', 0);
+		}
+
+		if (Setting.value('db.ftsEnabled') === -1) {
+			const ftsEnabled = await db.ftsEnabled();
+			Setting.setValue('db.ftsEnabled', ftsEnabled ? 1 : 0);
+			reg.logger().info('db.ftsEnabled = ', Setting.value('db.ftsEnabled'));
 		}
 
 		reg.logger().info('Sync target: ' + Setting.value('sync.target'));
@@ -485,6 +487,7 @@ async function initialize(dispatch) {
 			});
 		}
 	} catch (error) {
+		alert('Initialization error: ' + error.message);
 		reg.logger().error('Initialization error:', error);
 	}
 
@@ -499,6 +502,9 @@ async function initialize(dispatch) {
 	ResourceFetcher.instance().setFileApi(() => { return reg.syncTarget().fileApi() });
 	ResourceFetcher.instance().setLogger(reg.logger());
 	ResourceFetcher.instance().start();
+
+	SearchEngine.instance().setDb(reg.db());
+	SearchEngine.instance().setLogger(reg.logger());
 
 	reg.scheduleSync().then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation
@@ -601,19 +607,11 @@ class AppComponent extends React.Component {
 
 		if (this.props.showSideMenu) {
 			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-			if (this.props.historyCanGoBack) {
-				return true;
-			} else {
-				BackHandler.exitApp();
-				return false;
-			}
+			return true;
 		}
 
 		if (this.props.historyCanGoBack) {
 			this.props.dispatch({ type: 'NAV_BACK' });
-			return true;
-		} else if (!this.props.showSideMenu) {
-			this.props.dispatch({ type: 'SIDE_MENU_OPEN' });
 			return true;
 		}
 

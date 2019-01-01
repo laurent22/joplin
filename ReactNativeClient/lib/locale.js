@@ -82,6 +82,7 @@ codeToLanguageE_["ms"] = "Malay";
 codeToLanguageE_["mt"] = "Maltese";
 codeToLanguageE_["my"] = "Burmese";
 codeToLanguageE_["na"] = "Nauru";
+codeToLanguageE_["nb"] = "Norwegian";
 codeToLanguageE_["ne"] = "Nepali";
 codeToLanguageE_["nl"] = "Dutch";
 codeToLanguageE_["no"] = "Norwegian";

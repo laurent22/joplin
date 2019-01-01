@@ -1,6 +1,18 @@
-const PushNotification = require('react-native-push-notification');
+// Note: currently, if Play Services aren't available, notifications will not work at all
+// There won't be any warning or error message.
+
+import firebase from 'react-native-firebase';
 
 class AlarmServiceDriver {
+
+	constructor() {
+		this.playServiceAvailable_ = firebase.utils().playServicesAvailability.isAvailable;
+		if (!this.playServiceAvailable_) return;
+
+		this.channel_ = new firebase.notifications.Android.Channel('net.cozic.joplin.notification', 'Joplin Alarm',firebase.notifications.Android.Importance.Max)
+			.setDescription('Displays a notification for alarms associated with to-dos.');
+		firebase.notifications().android.createChannel(this.channel_);
+	}
 
 	hasPersistentNotifications() {
 		return true;
@@ -10,25 +22,29 @@ class AlarmServiceDriver {
 		throw new Error('Available only for non-persistent alarms');	
 	}
 
+	firebaseNotificationId_(joplinNotificationId) {
+		return 'net.cozic.joplin-' + joplinNotificationId;
+	}
+
 	async clearNotification(id) {
-		PushNotification.cancelLocalNotifications({ id: id + '' });
+		if (!this.playServiceAvailable_) return;
+
+		return firebase.notifications().cancelNotification(this.firebaseNotificationId_(id))
 	}
 	
 	async scheduleNotification(notification) {
-		// Arguments must be set in a certain way and certain format otherwise it cannot be
-		// cancelled later on. See:
-		// https://github.com/zo0r/react-native-push-notification/issues/570#issuecomment-337642922
-		const androidNotification = {
-			id: notification.id + '',
-			message: notification.title,
-			date: notification.date,
-			userInfo: { id: notification.id + '' },
-			number: 0,
-		};
+		if (!this.playServiceAvailable_) return;
 
-		if ('body' in notification) androidNotification.body = notification.body;
+		const firebaseNotification = new firebase.notifications.Notification()
+		firebaseNotification.setNotificationId(this.firebaseNotificationId_(notification.id));
+		firebaseNotification.setTitle(notification.title)	
+		if ('body' in notification) firebaseNotification.body = notification.body;
+		firebaseNotification.android.setChannelId('net.cozic.joplin.notification');
+		firebaseNotification.android.setSmallIcon('ic_stat_access_alarm');
 
-		PushNotification.localNotificationSchedule(androidNotification);
+		await firebase.notifications().scheduleNotification(firebaseNotification, {
+			fireDate: notification.date.getTime(),
+		});
 	}
 
 }

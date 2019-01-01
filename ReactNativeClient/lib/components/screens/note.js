@@ -37,6 +37,7 @@ const AlarmService = require('lib/services/AlarmService.js');
 const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog.js');
 const ShareExtension = require('react-native-share-extension').default;
 const CameraView = require('lib/components/CameraView');
+const SearchEngine = require('lib/services/SearchEngine');
 
 import FileViewer from 'react-native-file-viewer';
 
@@ -62,6 +63,15 @@ class NoteScreenComponent extends BaseScreenComponent {
 			noteTagDialogShown: false,
 			fromShare: false,
 			showCamera: false,
+
+			// HACK: For reasons I can't explain, when the WebView is present, the TextInput initially does not display (It's just a white rectangle with
+			// no visible text). It will only appear when tapping it or doing certain action like selecting text on the webview. The bug started to
+			// appear one day and did not go away - reverting to an old RN version did not help, undoing all
+			// the commits till a working version did not help. The bug also does not happen in the simulator which makes it hard to fix.
+			// Eventually, a way that "worked" is to add a 1px margin on top of the text input just after the webview has loaded, then removing this
+			// margin. This forces RN to update the text input and to display it. Maybe that hack can be removed once RN is upgraded. 
+			// See https://github.com/laurent22/joplin/issues/1057
+			HACK_webviewLoadingState: 0,
 		};
 
 		// iOS doesn't support multiline text fields properly so disable it
@@ -156,12 +166,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.resourceFetcher_downloadComplete = async (resource) => {
 			if (!this.state.note || !this.state.note.body) return;
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
-			if (resourceIds.indexOf(resource.id) >= 0) {
+			if (resourceIds.indexOf(resource.id) >= 0 && this.refs.noteBodyViewer) {
 				this.refs.noteBodyViewer.rebuildMd();
 			}
 		}
 
-		this.attachPhoto_onPress = this.attachPhoto_onPress.bind(this);
+		this.takePhoto_onPress = this.takePhoto_onPress.bind(this);
 		this.cameraView_onPhoto = this.cameraView_onPhoto.bind(this);
 		this.cameraView_onCancel = this.cameraView_onCancel.bind(this);
 	}
@@ -306,7 +316,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	showImagePicker(options) {
 		return new Promise((resolve, reject) => {
-			ImagePicker.showImagePicker(options, (response) => {
+			ImagePicker.launchImageLibrary(options, (response) => {
 				resolve(response);
 			});
 		});
@@ -380,7 +390,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let resource = Resource.new();
 		resource.id = uuid.create();
 		resource.mime = mimeType;
-		resource.title = pickerResponse.fileName ? pickerResponse.fileName : _('Untitled');
+		resource.title = pickerResponse.fileName ? pickerResponse.fileName : '';
 		resource.file_extension = safeFileExtension(fileExtension(pickerResponse.fileName ? pickerResponse.fileName : localFilePath));
 
 		if (!resource.mime) resource.mime = 'application/octet-stream';
@@ -419,15 +429,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ note: newNote });
 	}
 
-	async attachImage_onPress() {
-		const options = {
-			mediaType: 'photo',
-		};
-		const response = await this.showImagePicker(options);
+	async attachPhoto_onPress() {
+		const response = await this.showImagePicker({ mediaType: 'photo' });
 		await this.attachFile(response, 'image');
 	}
 
-	attachPhoto_onPress() {
+	takePhoto_onPress() {
 		this.setState({ showCamera: true });
 	}	
 
@@ -530,6 +537,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let canAttachPicture = true;
 		if (Platform.OS === 'android' && Platform.Version < 21) canAttachPicture = false;
 		if (canAttachPicture) {
+			output.push({ title: _('Take photo'), onPress: () => { this.takePhoto_onPress(); } });
 			output.push({ title: _('Attach photo'), onPress: () => { this.attachPhoto_onPress(); } });
 			output.push({ title: _('Attach any file'), onPress: () => { this.attachFile_onPress(); } });
 			output.push({ isDivider: true });
@@ -583,22 +591,37 @@ class NoteScreenComponent extends BaseScreenComponent {
 			return <CameraView theme={this.props.theme} style={{flex:1}} onPhoto={this.cameraView_onPhoto} onCancel={this.cameraView_onCancel}/>
 		}
 
-
-
-
 		let bodyComponent = null;
 		if (this.state.mode == 'view') {
 			const onCheckboxChange = (newBody) => {
 				this.saveOneProperty('body', newBody);
 			};
 
-			bodyComponent = <NoteBodyViewer
+			// Currently keyword highlighting is supported only when FTS is available.
+			let keywords = [];
+			if (this.props.searchQuery && !!this.props.ftsEnabled) {
+				const parsedQuery = SearchEngine.instance().parseQuery(this.props.searchQuery);
+				keywords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
+			}
+
+			// Note: as of 2018-12-29 it's important not to display the viewer if the note body is empty,
+			// to avoid the HACK_webviewLoadingState related bug.
+			bodyComponent = !note || !note.body.trim() ? null : <NoteBodyViewer
 				onJoplinLinkClick={this.onJoplinLinkClick_}
 				ref="noteBodyViewer"
 				style={this.styles().noteBodyViewer}
 				webViewStyle={theme}
 				note={note}
+				highlightedKeywords={keywords}
 				onCheckboxChange={(newBody) => { onCheckboxChange(newBody) }}
+				onLoadEnd={() => {
+					setTimeout(() => {
+						this.setState({ HACK_webviewLoadingState: 1 });
+						setTimeout(() => {
+							this.setState({ HACK_webviewLoadingState: 0 });
+						}, 50);
+					}, 5);
+				}}
 			/>
 		} else {
 			const focusBody = !isNew && !!note.title;
@@ -646,6 +669,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		let titleTextInputStyle = {
 			flex: 1,
+			marginTop: 0,
 			paddingLeft: 0,
 			color: theme.color,
 			backgroundColor: theme.backgroundColor,
@@ -663,6 +687,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 			paddingLeft: theme.marginLeft,
 			paddingTop: 10, // Added for iOS (Not needed for Android??)
 			paddingBottom: 10, // Added for iOS (Not needed for Android??)
+		}
+
+		if (this.state.HACK_webviewLoadingState === 1) {
+			titleTextInputStyle.marginTop = 1;
 		}
 
 		const dueDate = isTodo && note.todo_due ? new Date(note.todo_due) : null;
@@ -742,7 +770,9 @@ const NoteScreen = connect(
 			folderId: state.selectedFolderId,
 			itemType: state.selectedItemType,
 			folders: state.folders,
+			searchQuery: state.searchQuery,
 			theme: state.settings.theme,
+			ftsEnabled: state.settings['db.ftsEnabled'],
 			sharedData: state.sharedData,
 			showAdvancedOptions: state.settings.showAdvancedOptions,
 		};

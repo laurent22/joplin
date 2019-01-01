@@ -16,6 +16,11 @@
 		}
 
 		mark {
+			background: #F3B717;
+			color: black;
+		}
+
+		.mark-selected {
 			background: #CF3F00;
 			color: white;
 		}
@@ -138,6 +143,8 @@
 	ipc.setHtml = (event) => {
 		const html = event.html;
 
+		markJsHackMarkerInserted_ = false;
+
 		updateBodyHeight();
 
 		contentElement.innerHTML = html;
@@ -191,8 +198,34 @@
 		setPercentScroll(percent);
 	}
 
+	// HACK for Mark.js bug - https://github.com/julmot/mark.js/issues/127
+	let markJsHackMarkerInserted_ = false;
+	function addMarkJsSpaceHack(document) {
+		if (markJsHackMarkerInserted_) return;
+		
+		const prepareElementsForMarkJs = (elements, type) => {
+			// const markJsHackMarker_ = '&#8203; &#8203;'
+			const markJsHackMarker_ = ' ';
+			for (let i = 0; i < elements.length; i++) {
+				if (!type) {
+					elements[i].innerHTML = elements[i].innerHTML + markJsHackMarker_;
+				} else if (type === 'insertBefore') {
+					elements[i].insertAdjacentHTML('beforeBegin', markJsHackMarker_);
+				}
+			}
+		}
+
+		prepareElementsForMarkJs(document.getElementsByTagName('p'));
+		prepareElementsForMarkJs(document.getElementsByTagName('div'));
+		prepareElementsForMarkJs(document.getElementsByTagName('br'), 'insertBefore');
+		markJsHackMarkerInserted_ = true;
+	}
+
 	let mark_ = null;
-	function setMarkers(keywords) {
+	let markSelectedElement_ = null;
+	function setMarkers(keywords, options = null) {
+		if (!options) options = {};
+
 		if (!mark_) {
 			mark_ = new Mark(document.getElementById('content'), {
 				exclude: ['img'],
@@ -200,26 +233,66 @@
 			});
 		}
 
-		mark_.mark(keywords);
+		addMarkJsSpaceHack(document);
+
+		mark_.unmark()
+
+		if (markSelectedElement_) markSelectedElement_.classList.remove('mark-selected');
+
+		let selectedElement = null;
+		let elementIndex = 0;
+
+		const onEachElement = (element) => {
+			if (!('selectedIndex' in options)) return;
+
+			if (('selectedIndex' in options) && elementIndex === options.selectedIndex) {
+				markSelectedElement_ = element;
+				element.classList.add('mark-selected');
+				selectedElement = element;
+			}
+			
+			elementIndex++;
+		}
+
+		for (let i = 0; i < keywords.length; i++) {
+			const keyword = keywords[i];
+
+			if (keyword.type === 'regex') {
+				mark_.markRegExp(new RegExp(keyword.value, 'gmi'), {
+					each: onEachElement,
+					acrossElements: true,
+				});
+			} else {
+				mark_.mark([keyword], {
+					each: onEachElement,
+					accuracy: 'exactly', 
+				});
+			}
+		}
+
+		ipcProxySendToHost('setMarkerCount', elementIndex);
+
+		if (selectedElement) selectedElement.scrollIntoView();
 	}
 
 	let markLoaded_ = false;
 	ipc.setMarkers = (event) => {
 		const keywords = event.keywords;
+		const options = event.options;
 
 		if (!keywords.length && !markLoaded_) return;
 
 		if (!markLoaded_) {
 			const script = document.createElement('script');
 			script.onload = function() {
-				setMarkers(keywords);
+				setMarkers(keywords, options);
 			};
 
 			script.src = '../../node_modules/mark.js/dist/mark.min.js';
 			document.getElementById('markScriptContainer').appendChild(script);
 			markLoaded_ = true;
 		} else {
-			setMarkers(keywords);
+			setMarkers(keywords, options);
 		}
 	}
 

@@ -23,8 +23,9 @@ const DecryptionWorker = require('lib/services/DecryptionWorker');
 const InteropService = require('lib/services/InteropService');
 const InteropServiceHelper = require('./InteropServiceHelper.js');
 const ResourceService = require('lib/services/ResourceService');
+const SearchEngine = require('lib/services/SearchEngine');
 const ClipperServer = require('lib/ClipperServer');
-
+const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -460,13 +461,26 @@ class Application extends BaseApplication {
 						});
 					},
 				}, {
+					type: 'separator',
+					screens: ['Main'],
+				}, {
 					label: _('Search in all the notes'),
+					screens: ['Main'],
+					accelerator: 'F6',
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'focus_search',
+						});
+					},
+				}, {
+					label: _('Search in current note'),
 					screens: ['Main'],
 					accelerator: 'CommandOrControl+F',
 					click: () => {
 						this.dispatch({
 							type: 'WINDOW_COMMAND',
-							name: 'focus_search',
+							name: 'showLocalSearch',
 						});
 					},
 				}],
@@ -780,6 +794,9 @@ class Application extends BaseApplication {
 
 		ResourceService.runInBackground();
 
+		SearchEngine.instance().setDb(reg.db());
+		SearchEngine.instance().setLogger(reg.logger());
+
 		if (Setting.value('env') === 'dev') {
 			AlarmService.updateAllNotifications();
 		} else {
@@ -802,6 +819,9 @@ class Application extends BaseApplication {
 		if (Setting.value('clipperServer.autoStart')) {
 			ClipperServer.instance().start();
 		}
+
+		ExternalEditWatcher.instance().setLogger(reg.logger());
+		ExternalEditWatcher.instance().dispatch = this.store().dispatch;
 	}
 
 }

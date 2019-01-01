@@ -648,6 +648,9 @@ msgstr "Ouvrir dans un éditeur externe"
 msgid "Search in all the notes"
 msgstr "Chercher dans toutes les notes"
 
+msgid "Search in current note"
+msgstr "Chercher dans la note en cours"
+
 msgid "View"
 msgstr "Affichage"
 
@@ -1345,6 +1348,9 @@ msgstr "Démarrer minimisé dans la zone de notification"
 msgid "Global zoom percentage"
 msgstr "Niveau de zoom"
 
+msgid "Editor font size"
+msgstr "Taille police éditeur"
+
 msgid "Editor font family"
 msgstr "Police de l'éditeur"
 
@@ -1721,6 +1727,9 @@ msgstr ""
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Type d'image non géré : %s"
+
+msgid "Take photo"
+msgstr "Prendre une photo"
 
 msgid "Attach photo"
 msgstr "Attacher une photo"

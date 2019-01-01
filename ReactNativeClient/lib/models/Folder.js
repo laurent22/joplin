@@ -152,6 +152,28 @@ class Folder extends BaseItem {
 		return getNestedChildren(all, '');
 	}
 
+	static buildTree(folders) {
+		const idToFolders = {};
+		for (let i = 0; i < folders.length; i++) {
+			idToFolders[folders[i].id] = folders[i];
+			idToFolders[folders[i].id].children = [];
+		}
+
+		const rootFolders = [];
+		for (let folderId in idToFolders) {
+			if (!idToFolders.hasOwnProperty(folderId)) continue;
+
+			const folder = idToFolders[folderId];
+			if (!folder.parent_id) {
+				rootFolders.push(folder);
+			} else {
+				idToFolders[folder.parent_id].children.push(folder);
+			}
+		}
+
+		return rootFolders;
+	}
+
 	static load(id) {
 		if (id == this.conflictFolderId()) return this.conflictFolder();
 		return super.load(id);

@@ -637,6 +637,10 @@ msgstr ""
 msgid "Search in all the notes"
 msgstr "Hledat ve všech poznámkách"
 
+#, fuzzy
+msgid "Search in current note"
+msgstr "Hledat ve všech poznámkách"
+
 msgid "View"
 msgstr "Zobrazit"
 
@@ -1320,6 +1324,10 @@ msgstr ""
 msgid "Global zoom percentage"
 msgstr "Globální zoom"
 
+#, fuzzy
+msgid "Editor font size"
+msgstr "Rodina písma v editoru"
+
 msgid "Editor font family"
 msgstr "Rodina písma v editoru"
 
@@ -1680,6 +1688,10 @@ msgstr ""
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Nepodporovaný formát obrázku: %s"
+
+#, fuzzy
+msgid "Take photo"
+msgstr "Přiložit obrázek"
 
 msgid "Attach photo"
 msgstr "Přiložit obrázek"

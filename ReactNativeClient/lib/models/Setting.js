@@ -97,10 +97,12 @@ class Setting extends BaseModel {
 
 			'collapsedFolderIds': { value: [], type: Setting.TYPE_ARRAY, public: false },
 
+			'db.ftsEnabled': { value: -1, type: Setting.TYPE_INT, public: false },
 			'encryption.enabled': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'encryption.activeMasterKeyId': { value: '', type: Setting.TYPE_STRING, public: false },
 			'encryption.passwordCache': { value: {}, type: Setting.TYPE_OBJECT, public: false, secure: true },
 			'style.zoom': {value: 100, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], label: () => _('Global zoom percentage'), minimum: 50, maximum: 500, step: 10},
+			'style.editor.fontSize': {value: 12, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], label: () => _('Editor font size'), minimum: 4, maximum: 50, step: 1},
 			'style.editor.fontFamily': {value: "", type: Setting.TYPE_STRING, public: true, appTypes: ['desktop'], label: () => _('Editor font family'), description: () => _('This must be *monospace* font or it will not work properly. If the font is incorrect or empty, it will default to a generic monospace font.')},
 			'autoUpdateEnabled': { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
 			'clipperServer.autoStart': { value: false, type: Setting.TYPE_BOOL, public: false },
@@ -158,6 +160,9 @@ class Setting extends BaseModel {
 			'net.ignoreTlsErrors': { value: false, type: Setting.TYPE_BOOL, show: (settings) => { return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].indexOf(settings['sync.target']) >= 0 }, public: true, appTypes: ['desktop', 'cli'], label: () => _('Ignore TLS certificate errors') },
 
 			'api.token': { value: null, type: Setting.TYPE_STRING, public: false },
+
+			'resourceService.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
+			'searchEngine.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
 		};
 
 		return this.metadata_;
@@ -459,27 +464,6 @@ class Setting extends BaseModel {
 		}
 		return output;
 	}
-
-	// Currently only supports objects with properties one level deep
-	// static object(key) {
-	// 	let output = {};
-	// 	let keys = this.keys();
-	// 	for (let i = 0; i < keys.length; i++) {
-	// 		let k = keys[i].split('.');
-	// 		if (k[0] == key) {
-	// 			output[k[1]] = this.value(keys[i]);
-	// 		}
-	// 	}
-	// 	return output;
-	// }
-
-	// Currently only supports objects with properties one level deep
-	// static setObject(key, object) {
-	// 	for (let n in object) {
-	// 		if (!object.hasOwnProperty(n)) continue;
-	// 		this.setValue(key + '.' + n, object[n]);
-	// 	}
-	// }
 
 	static async saveAll() {
 		if (!this.saveTimeoutId_) return Promise.resolve();

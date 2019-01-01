@@ -29,6 +29,10 @@ class NoteBodyViewer extends Component {
 	}
 
 	onLoadEnd() {
+		setTimeout(() => {
+			if (this.props.onLoadEnd) this.props.onLoadEnd();
+		}, 100);
+
 		if (this.state.webViewLoaded) return;
 
 		// Need to display after a delay to avoid a white flash before
@@ -76,9 +80,18 @@ class NoteBodyViewer extends Component {
 
 		const mdOptions = {
 			onResourceLoaded: () => {
-				this.forceUpdate();
+				if (this.resourceLoadedTimeoutId_) {
+					clearTimeout(this.resourceLoadedTimeoutId_);
+					this.resourceLoadedTimeoutId_ = null;
+				}
+
+				this.resourceLoadedTimeoutId_ = setTimeout(() => {
+					this.resourceLoadedTimeoutId_ = null;
+					this.forceUpdate();
+				}, 100);
 			},
 			paddingBottom: '3.8em', // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
+			highlightedKeywords: this.props.highlightedKeywords,
 		};
 
 		let html = this.mdToHtml_.render(note ? note.body : '', this.props.webViewStyle, mdOptions);

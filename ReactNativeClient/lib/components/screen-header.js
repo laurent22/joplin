@@ -362,18 +362,25 @@ class ScreenHeaderComponent extends Component {
 
 			if (folderPickerOptions && folderPickerOptions.enabled) {
 
+				const addFolderChildren = (folders, pickerItems, indent) => {
+					folders.sort((a, b) => {
+						return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : +1;
+					});
+
+					for (let i = 0; i < folders.length; i++) {
+						const f = folders[i];
+						pickerItems.push({ label: '      '.repeat(indent) + ' ' + Folder.displayTitle(f), value: f.id });
+						pickerItems = addFolderChildren(f.children, pickerItems, indent + 1);
+					}
+
+					return pickerItems;
+				}
+
 				const titlePickerItems = (mustSelect) => {
 					let output = [];
 					if (mustSelect) output.push({ label: _('Move to notebook...'), value: null });
-					for (let i = 0; i < this.props.folders.length; i++) {
-						let f = this.props.folders[i];
-						output.push({ label: Folder.displayTitle(f), value: f.id });
-					}
-					output.sort((a, b) => {
-						if (a.value === null) return -1;
-						if (b.value === null) return +1;
-						return a.label.toLowerCase() < b.label.toLowerCase() ? -1 : +1;
-					});
+					const folderTree = Folder.buildTree(this.props.folders);
+					output = addFolderChildren(folderTree, output, 0);
 					return output;
 				}
 
@@ -381,6 +388,7 @@ class ScreenHeaderComponent extends Component {
 					<Dropdown
 						items={titlePickerItems(!!folderPickerOptions.mustSelect)}
 						itemHeight={35}
+						labelTransform="trim"
 						selectedValue={('selectedFolderId' in folderPickerOptions) ? folderPickerOptions.selectedFolderId : null}
 						itemListStyle={{
 							backgroundColor: theme.backgroundColor,
