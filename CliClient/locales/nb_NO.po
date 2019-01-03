@@ -693,7 +693,7 @@ msgid "Open %s"
 msgstr "Åpne %s"
 
 msgid "Exit"
-msgstr "Gå ut"
+msgstr "Avslutt"
 
 msgid "OK"
 msgstr "OK"
