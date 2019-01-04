@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Yukio Usuzumi <anohigisavay@gmail.com>, 2018.
 #
 msgid ""
 msgstr ""
@@ -19,7 +19,7 @@ msgid "To delete a tag, untag the associated notes."
 msgstr "移除相关笔记的标签后才可删除此标签。"
 
 msgid "Please select the note or notebook to be deleted first."
-msgstr "请选择最先删除的笔记或笔记本。"
+msgstr "请先选择需要删除的笔记或笔记本。"
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "按 Ctrl+D 或输入 \"exit\" 退出程序"
@@ -32,7 +32,7 @@ msgid "No notebook selected."
 msgstr "未选择笔记本。"
 
 msgid "No notebook has been specified."
-msgstr "无指定笔记本。"
+msgstr "未指定笔记本。"
 
 msgid "Y"
 msgstr "是"
@@ -47,7 +47,7 @@ msgid "y"
 msgstr "是"
 
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "正在取消后台同步... 请稍后。"
+msgstr "正在取消后台同步... 请稍候。"
 
 #, javascript-format
 msgid "No such command: %s"
@@ -1275,7 +1275,7 @@ msgid "Show tray icon"
 msgstr "显示托盘图标"
 
 msgid "Note: Does not work in all desktop environments."
-msgstr "注意：在所有的桌面环境中都不能工作。"
+msgstr "注意：在某些桌面环境下可能无法正常工作。"
 
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
