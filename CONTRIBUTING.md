@@ -1,3 +1,7 @@
+**IMPORTANT:** At the moment pull requests for new features are no longer being accepted. More info there: https://github.com/laurent22/joplin/issues/1112
+
+* * *
+
 # User support
 
 For general discussion about Joplin, user support, software development questions, and to discuss new features, please go to the [Joplin Forum](https://discourse.joplin.cozic.net/). It is possible to login with your GitHub account.
