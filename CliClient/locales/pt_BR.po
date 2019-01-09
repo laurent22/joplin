@@ -14,8 +14,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.0.7\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Para eliminar uma tag, remova a tag das notas associadas a ela."
@@ -647,9 +649,8 @@ msgstr "Editar com editor externo"
 msgid "Search in all the notes"
 msgstr "Pesquisar em todas as notas"
 
-#, fuzzy
 msgid "Search in current note"
-msgstr "Pesquisar em todas as notas"
+msgstr "Pesquisar na nota atual"
 
 msgid "View"
 msgstr "Visualizar"
@@ -1260,7 +1261,7 @@ msgid "title"
 msgstr "título"
 
 msgid "updated date"
-msgstr "data de ataualização"
+msgstr "data de atualização"
 
 msgid "created date"
 msgstr "data de criação"
@@ -1342,9 +1343,8 @@ msgstr "Iniciar aplicativo minimizado na barra de tarefas"
 msgid "Global zoom percentage"
 msgstr "Porcentagem global do zoom"
 
-#, fuzzy
 msgid "Editor font size"
-msgstr "Família de fontes do editor"
+msgstr "Tamanho da fonte no Editor"
 
 msgid "Editor font family"
 msgstr "Família de fontes do editor"
@@ -1722,9 +1722,8 @@ msgstr "O app mobile do Joplin não suporta, atualmente, esse tipo de link: %s"
 msgid "Unsupported image type: %s"
 msgstr "Tipo de imagem não suportada: %s"
 
-#, fuzzy
 msgid "Take photo"
-msgstr "Anexar foto"
+msgstr "Tirar foto"
 
 msgid "Attach photo"
 msgstr "Anexar foto"
