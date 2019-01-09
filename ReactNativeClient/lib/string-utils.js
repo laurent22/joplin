@@ -241,4 +241,4 @@ function surroundKeywords(keywords, text, prefix, suffix) {
 	return text.replace(re, prefix + '$1' + suffix);
 }
 
-module.exports = { removeDiacritics, escapeFilename, wrap, splitCommandString, padLeft, toTitleCase, escapeHtml, pregQuote, surroundKeywords };
+module.exports = { removeDiacritics, escapeFilename, wrap, splitCommandString, padLeft, toTitleCase, urlDecode, escapeHtml, pregQuote, surroundKeywords };
