@@ -58,6 +58,9 @@
     "linux": {
       "asar": false,
       "category": "Office",
+      "desktop": {
+        "Icon": "joplin"
+      },
       "target": "AppImage"
     }
   },
