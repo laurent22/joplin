@@ -204,11 +204,8 @@ function themeStyle(theme) {
 	var zoomRatio = Setting.value('style.zoom') / 100;
 	var editorFontSize = Setting.value('style.editor.fontSize');
 
-	if (themeCache_[theme]) {
-		var cached = themeCache_[theme];
-		if (cached.editorFontSize === editorFontSize && cached.zoomRatio === zoomRatio)
-			return cached;
-	}
+	const cacheKey = [theme, zoomRatio, editorFontSize].join('-');
+	if (themeCache_[cacheKey]) return themeCache_[cacheKey];
 
 	let fontSizes = {
 		fontSize: Math.round(12 * zoomRatio),
@@ -284,8 +281,8 @@ function themeStyle(theme) {
 
 	output = addExtraStyles(output);
 
-	themeCache_[theme] = output;
-	return themeCache_[theme];
+	themeCache_[cacheKey] = output;
+	return themeCache_[cacheKey];
 }
 
 module.exports = { themeStyle };
