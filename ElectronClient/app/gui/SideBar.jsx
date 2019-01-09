@@ -3,6 +3,7 @@ const { connect } = require("react-redux");
 const shared = require("lib/components/shared/side-menu-shared.js");
 const { Synchronizer } = require("lib/synchronizer.js");
 const BaseModel = require("lib/BaseModel.js");
+const Setting = require('lib/models/Setting.js');
 const Folder = require("lib/models/Folder.js");
 const Note = require("lib/models/Note.js");
 const Tag = require("lib/models/Tag.js");
@@ -23,7 +24,7 @@ class SideBarComponent extends React.Component {
 		this.onFolderDragStart_ = (event) => {
 			const folderId = event.currentTarget.getAttribute('folderid');
 			if (!folderId) return;
-			
+
 			event.dataTransfer.setDragImage(new Image(), 1, 1);
 			event.dataTransfer.clearData();
 			event.dataTransfer.setData('text/x-jop-folder-ids', JSON.stringify([folderId]));
@@ -78,6 +79,11 @@ class SideBarComponent extends React.Component {
 				type: 'FOLDER_TOGGLE',
 				id: folderId,
 			});
+		};
+
+		this.state = {
+			tagHeaderIsExpanded: Setting.value('tagHeaderIsExpanded'),
+			folderHeaderIsExpanded: Setting.value('folderHeaderIsExpanded')
 		};
 	}
 
@@ -190,7 +196,7 @@ class SideBarComponent extends React.Component {
 		if (shim.isLinux()) {
 			// For some reason, the UI seems to sleep in some Linux distro during
 			// sync. Cannot find the reason for it and cannot replicate, so here
-			// as a test force the update at regular intervals. 
+			// as a test force the update at regular intervals.
 			// https://github.com/laurent22/joplin/issues/312#issuecomment-429472193
 			if (!prevProps.syncStarted && this.props.syncStarted) {
 				this.clearForceUpdateDuringSync();
@@ -201,7 +207,7 @@ class SideBarComponent extends React.Component {
 			}
 
 			if (prevProps.syncStarted && !this.props.syncStarted) this.clearForceUpdateDuringSync();
-		}	
+		}
 	}
 
 	componentWillUnmount() {
@@ -303,7 +309,7 @@ class SideBarComponent extends React.Component {
 			);
 		}
 
-		if (itemType === BaseModel.TYPE_TAG) { 
+		if (itemType === BaseModel.TYPE_TAG) {
 			menu.append(
 				new MenuItem({
 					label: _('Rename'),
@@ -440,12 +446,48 @@ class SideBarComponent extends React.Component {
 	makeHeader(key, label, iconName, extraProps = {}) {
 		const style = this.style().header;
 		const icon = <i style={{ fontSize: style.fontSize * 1.2, marginRight: 5 }} className={"fa " + iconName} />;
+
+		if (extraProps.toggleblock || extraProps.onClick) {
+			style.cursor = "pointer";
+		}
+
+		let headerClick = extraProps.onClick || null;
+		delete extraProps.onClick;
+
+		// check if toggling option is set.
+		let toggleIcon = null;
+		const toggleKey = `${key}IsExpanded`;
+		if (extraProps.toggleblock) {
+			let isExpanded = this.state[toggleKey];
+			toggleIcon = <i className={`fa ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}`} style={{ fontSize: style.fontSize * 0.75,
+				marginRight: 12, marginLeft: 5, marginTop: style.fontSize * 0.125}}></i>;
+		}
 		return (
-			<div style={style} key={key} {...extraProps}>
+			<div style={style} key={key} {...extraProps} onClick={async (e) => { 
+					// if a custom click event is attached, trigger that. 				
+					if (headerClick) { 					
+						await headerClick(key, e); 				
+					}
+					await this.onHeaderClick_(key, e); 
+				}}>
 				{icon}
-				{label}
+				<span style={{flex: 1 }}>{label}</span>
+				{toggleIcon}
 			</div>
 		);
+	}
+
+	async onHeaderClick_(key, event) {	
+		const currentHeader = event.currentTarget;
+		const toggleBlock = +currentHeader.getAttribute('toggleblock');
+		if (toggleBlock) {
+			const toggleKey = `${key}IsExpanded`;				
+			const isExpanded = this.state[toggleKey]; 					
+			this.setState({ 						
+				[toggleKey]:	!isExpanded 					
+			}); 					
+			Setting.setValue(toggleKey, !isExpanded); 				
+		}
 	}
 
 	synchronizeButton(type) {
@@ -477,24 +519,27 @@ class SideBarComponent extends React.Component {
 		});
 
 		let items = [];
-
 		items.push(this.makeHeader("folderHeader", _("Notebooks"), "fa-folder-o", {
 			onDrop: this.onFolderDrop_,
 			folderid: '',
+			toggleblock: 1
 		}));
 
 		if (this.props.folders.length) {
 			const folderItems = shared.renderFolders(this.props, this.folderItem.bind(this));
-			items = items.concat(folderItems);
+			items.push(<div className="folders" key="folder_items" style={{display: this.state.folderHeaderIsExpanded ? 'block': 'none'}}>
+				{folderItems}</div>);
 		}
 
-		items.push(this.makeHeader("tagHeader", _("Tags"), "fa-tags"));
+		items.push(this.makeHeader("tagHeader", _("Tags"), "fa-tags", {
+			toggleblock: 1
+		}));
 
 		if (this.props.tags.length) {
 			const tagItems = shared.renderTags(this.props, this.tagItem.bind(this));
 
 			items.push(
-				<div className="tags" key="tag_items">
+				<div className="tags" key="tag_items" style={{display: this.state.tagHeaderIsExpanded ? 'block': 'none'}}>
 					{tagItems}
 				</div>
 			);
