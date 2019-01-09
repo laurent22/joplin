@@ -463,12 +463,12 @@ class SideBarComponent extends React.Component {
 				marginRight: 12, marginLeft: 5, marginTop: style.fontSize * 0.125}}></i>;
 		}
 		return (
-			<div style={style} key={key} {...extraProps} onClick={async (e) => { 
+			<div style={style} key={key} {...extraProps} onClick={(event) => { 
 					// if a custom click event is attached, trigger that. 				
-					if (headerClick) { 					
-						await headerClick(key, e); 				
+					if (headerClick) {
+						headerClick(key, event); 				
 					}
-					await this.onHeaderClick_(key, e); 
+					this.onHeaderClick_(key, event); 
 				}}>
 				{icon}
 				<span style={{flex: 1 }}>{label}</span>
@@ -477,15 +477,13 @@ class SideBarComponent extends React.Component {
 		);
 	}
 
-	async onHeaderClick_(key, event) {	
+	onHeaderClick_(key, event) {	
 		const currentHeader = event.currentTarget;
 		const toggleBlock = +currentHeader.getAttribute('toggleblock');
 		if (toggleBlock) {
 			const toggleKey = `${key}IsExpanded`;				
 			const isExpanded = this.state[toggleKey]; 					
-			this.setState({ 						
-				[toggleKey]:	!isExpanded 					
-			}); 					
+			this.setState({ [toggleKey]: !isExpanded }); 					
 			Setting.setValue(toggleKey, !isExpanded); 				
 		}
 	}

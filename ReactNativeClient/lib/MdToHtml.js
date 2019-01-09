@@ -415,6 +415,7 @@ class MdToHtml {
 	}
 
 	applyHighlightedKeywords_(body, keywords) {
+		if (!keywords.length) return body;
 		return StringUtils.surroundKeywords(keywords, body, '<span class="highlighted-keyword">', '</span>');
 	}
 
