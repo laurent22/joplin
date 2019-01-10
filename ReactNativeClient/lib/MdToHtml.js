@@ -685,7 +685,7 @@ class MdToHtml {
 		}
 
 		body = body.replace(/°°JOP°CHECKBOX°NOTICK°°/g, '- [ ]'); 
-		body = body.replace(/°°JOP°CHECKBOX°TICK°°/g, '- [X]'); 
+		body = body.replace(/°°JOP°CHECKBOX°TICK°°/g, '- [x]');
 
 		return body;
 	}
