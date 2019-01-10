@@ -909,24 +909,28 @@ class NoteTextComponent extends React.Component {
 	}
 
 	async doCommand(command) {
-		if (!command || !this.state.note) return;
+		if (!command) return;
 
 		let fn = null;
 
-		if (command.name === 'exportPdf' && this.webview_) {
+		if (command.name === 'exportPdf') {
 			fn = this.commandSavePdf;
-		} else if (command.name === 'print' && this.webview_) {
+		} else if (command.name === 'print') {
 			fn = this.commandPrint;
-		} else if (command.name === 'textBold') {
-			fn = this.commandTextBold;
-		} else if (command.name === 'textItalic') {
-			fn = this.commandTextItalic;
-		} else if (command.name === 'insertDateTime' ) {
-			fn = this.commandDateTime;
-		} else if (command.name === 'commandStartExternalEditing') {
-			fn = this.commandStartExternalEditing;
-		} else if (command.name === 'showLocalSearch') {
-			fn = this.commandShowLocalSearch;
+		}
+
+		if (this.state.note) {
+			if (command.name === 'textBold') {
+				fn = this.commandTextBold;
+			} else if (command.name === 'textItalic') {
+				fn = this.commandTextItalic;
+			} else if (command.name === 'insertDateTime' ) {
+				fn = this.commandDateTime;
+			} else if (command.name === 'commandStartExternalEditing') {
+				fn = this.commandStartExternalEditing;
+			} else if (command.name === 'showLocalSearch') {
+				fn = this.commandShowLocalSearch;
+			}
 		}
 
 		if (!fn) return;
@@ -998,6 +1002,10 @@ class NoteTextComponent extends React.Component {
 	}
 
 	printTo_(target, options) {
+		if (this.props.selectedNoteIds.length !== 1 || !this.webview_) {
+			throw new Error(_('Only one note can be printed or exported to PDF at a time.'));
+		}
+
 		const previousBody = this.state.note.body;
 		const tempBody = "# " + this.state.note.title + "\n\n" + previousBody;
 
@@ -1033,18 +1041,28 @@ class NoteTextComponent extends React.Component {
 	}
 
 	commandSavePdf() {
-		const path = bridge().showSaveDialog({
-			filters: [{ name: _('PDF File'), extensions: ['pdf']}],
-			defaultPath: safeFilename(this.state.note.title),
-		});
+		try {
+			if (!this.state.note) throw new Error(_('Only one note can be printed or exported to PDF at a time.'));
 
-		if (path) {
+			const path = bridge().showSaveDialog({
+				filters: [{ name: _('PDF File'), extensions: ['pdf']}],
+				defaultPath: safeFilename(this.state.note.title),
+			});
+
+			if (!path) return;
+
 			this.printTo_('pdf', { path: path });
+		} catch (error) {
+			bridge().showErrorMessageBox(error.message);
 		}
 	}
 
 	commandPrint() {
-		this.printTo_('printer');
+		try {
+			this.printTo_('printer');
+		} catch (error) {
+			bridge().showErrorMessageBox(error.message);
+		}		
 	}
 
 	async commandStartExternalEditing() {
@@ -1705,6 +1723,7 @@ class NoteTextComponent extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		noteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
+		selectedNoteIds: state.selectedNoteIds,
 		noteTags: state.selectedNoteTags,
 		folderId: state.selectedFolderId,
 		itemType: state.selectedItemType,

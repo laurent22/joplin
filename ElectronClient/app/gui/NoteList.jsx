@@ -155,12 +155,14 @@ class NoteListComponent extends React.Component {
 				}}));
 			}
 
-			exportMenu.append(new MenuItem({ label: 'PDF - ' + _('PDF File') , click: () => {
-				this.props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'exportPdf',
-				});
-			}}));
+			if (noteIds.length === 1) {
+				exportMenu.append(new MenuItem({ label: 'PDF - ' + _('PDF File') , click: () => {
+					this.props.dispatch({
+						type: 'WINDOW_COMMAND',
+						name: 'exportPdf',
+					});
+				}}));
+			}
 
 			const exportMenuItem = new MenuItem({label: _('Export'), submenu: exportMenu});
 
