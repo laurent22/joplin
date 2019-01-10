@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
-# Mats Estensen <matsest@mxe.no>, 2018
+# Mats Estensen <code@mxe.no>, 2018
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Mats Estensen <matsest@mxe.no>\n"
+"Last-Translator: Mats Estensen <code@mxe.no>\n"
 "Language-Team: \n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
@@ -602,7 +602,7 @@ msgid "Export"
 msgstr "Eksport"
 
 msgid "Print"
-msgstr "Skriv Ut"
+msgstr "Skriv ut"
 
 #, javascript-format
 msgid "Hide %s"
@@ -624,7 +624,7 @@ msgid "Paste"
 msgstr "Lim inn"
 
 msgid "Select all"
-msgstr "Velg alle"
+msgstr "Marker alt"
 
 msgid "Bold"
 msgstr "Fet"
@@ -643,7 +643,7 @@ msgstr "Søk i alle notater"
 
 #, fuzzy
 msgid "Search in current note"
-msgstr "Søk i alle notater"
+msgstr "Søk i nåværende notat"
 
 msgid "View"
 msgstr "Utseende"
@@ -693,7 +693,7 @@ msgid "Open %s"
 msgstr "Åpne %s"
 
 msgid "Exit"
-msgstr "Gå ut"
+msgstr "Avslutt"
 
 msgid "OK"
 msgstr "OK"
@@ -1024,7 +1024,7 @@ msgid "Attach file"
 msgstr "Legg ved fil"
 
 msgid "Tags"
-msgstr "Merkelapp"
+msgstr "Merkelapper"
 
 msgid "Set alarm"
 msgstr "Angi alarm"
@@ -1302,7 +1302,7 @@ msgid "Save geo-location with notes"
 msgstr "Lagre stedsinformasjon med notater"
 
 msgid "When creating a new to-do:"
-msgstr "Når nytt gjøre mål opprettes:"
+msgstr "Når nytt gjøremål opprettes:"
 
 msgid "Focus title"
 msgstr "Fokuser på tittel"
@@ -1336,7 +1336,7 @@ msgstr "Global forstørrelse"
 
 #, fuzzy
 msgid "Editor font size"
-msgstr "Editor skrifttype"
+msgstr "Editor skriftstørrelse"
 
 msgid "Editor font family"
 msgstr "Editor skrifttype"
@@ -1454,19 +1454,19 @@ msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "Merkelappen \"%s\" eksiterer allerede. Vennligst velg et annet navn."
 
 msgid "Joplin Export File"
-msgstr "Joplin Eksporter Fil"
+msgstr "Joplin-eksportert fil"
 
 msgid "Markdown"
 msgstr "Markdown"
 
 msgid "Joplin Export Directory"
-msgstr "Joplin Eksporter Katalog"
+msgstr "Joplin-eksportert katalog"
 
 msgid "Evernote Export File"
-msgstr "Evernote Eksporter Fil"
+msgstr "Evernote-eksportert fil"
 
 msgid "Json Export Directory"
-msgstr "Json Eksporter Katalog"
+msgstr "Json-eksportert katalog"
 
 msgid "Directory"
 msgstr "Katalog"
@@ -1710,7 +1710,7 @@ msgstr "Bildetypen er ikke støttet: %s"
 
 #, fuzzy
 msgid "Take photo"
-msgstr "Legg ved et bilde"
+msgstr "Ta et bilde"
 
 msgid "Attach photo"
 msgstr "Legg ved et bilde"

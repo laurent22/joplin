@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.6\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "タグを削除するには、関連するノートからタグを外してください。"
@@ -236,7 +238,7 @@ msgstr ""
 "ムを参照できます。"
 
 msgid "To move from one pane to another, press Tab or Shift+Tab."
-msgstr "ペイン間を移動するには、TabかShift+Tabをおしてください。"
+msgstr "ペイン間を移動するには、TabかShift+Tabを押してください。"
 
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
@@ -446,7 +448,7 @@ msgid "Starting synchronisation..."
 msgstr "同期を開始中..."
 
 msgid "Downloading resources..."
-msgstr ""
+msgstr "リソースをダウンロード中..."
 
 msgid "Cancelling... Please wait."
 msgstr "中止中...お待ちください。"
@@ -618,9 +620,8 @@ msgstr "切り取り"
 msgid "Paste"
 msgstr "貼り付け"
 
-#, fuzzy
 msgid "Select all"
-msgstr "日付の選択"
+msgstr "すべて選択"
 
 msgid "Bold"
 msgstr "太字"
@@ -637,9 +638,8 @@ msgstr "外部エディターで編集"
 msgid "Search in all the notes"
 msgstr "すべてのノートを検索"
 
-#, fuzzy
 msgid "Search in current note"
-msgstr "すべてのノートを検索"
+msgstr "現在のノートを検索"
 
 msgid "View"
 msgstr "表示"
@@ -710,7 +710,7 @@ msgid "No"
 msgstr "No"
 
 msgid "Token has been copied to the clipboard!"
-msgstr ""
+msgstr "トークンをクリップボードにコピーしました！"
 
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "Webクリッパーサービスは有効で、自動起動します。"
@@ -760,20 +760,21 @@ msgstr "ステップ2: 拡張機能のインストール"
 msgid "Download and install the relevant extension for your browser:"
 msgstr "関連する拡張機能をブラウザーにインストールします:"
 
-#, fuzzy
 msgid "Advanced options"
-msgstr "詳細な設定の表示"
+msgstr "詳細な設定"
 
 msgid "Authorisation token:"
-msgstr ""
+msgstr "認証するトークン:"
 
 msgid "Copy token"
-msgstr ""
+msgstr "トークンのコピー"
 
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
+"この認証トークンはサードパーティアプリケーションがJoplinにアクセスするためだ"
+"けに必要です。"
 
 msgid "Check synchronisation configuration"
 msgstr "同期の設定を確認する"
@@ -938,13 +939,11 @@ msgstr "%s - コピー"
 msgid "Switch between note and to-do type"
 msgstr "ノートとToDoを切り替え"
 
-#, fuzzy
 msgid "Switch to note type"
-msgstr "ノートとToDoを切り替え"
+msgstr "ノートに切り替え"
 
-#, fuzzy
 msgid "Switch to to-do type"
-msgstr "ノートとToDoを切り替え"
+msgstr "ToDoに切り替え"
 
 msgid "Copy Markdown link"
 msgstr "Markdownのリンクをコピー"
@@ -963,13 +962,13 @@ msgid ""
 msgstr "ノートブックがありません。新しいノートブックを作成してください。"
 
 msgid "Location"
-msgstr ""
+msgstr "場所"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 msgid "Note properties"
-msgstr ""
+msgstr "ノートのプロパティ"
 
 msgid "Open..."
 msgstr "開く..."
@@ -988,7 +987,7 @@ msgid "Copy Link Address"
 msgstr "リンクアドレスをコピー"
 
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr ""
+msgstr "この添付ファイルはダウンロードできないか、まだ復号できません。"
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1015,7 +1014,7 @@ msgid "Insert Hyperlink"
 msgstr "ハイパーリンクの挿入"
 
 msgid "Attach file"
-msgstr "ファイルを添付"
+msgstr "ファイルを添付する"
 
 msgid "Tags"
 msgstr "タグ"
@@ -1107,9 +1106,9 @@ msgstr "ノートブック"
 msgid "Decrypting items: %d/%d"
 msgstr "復号中のアイテム: %d/%d"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Fetching resources: %d"
-msgstr "リソース: %d."
+msgstr "取得中のリソース: %d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "同期状況の出力先を選択してください"
@@ -1320,6 +1319,8 @@ msgid ""
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
+"有効にすると、Joplinがバックグラウンドで動作するようになります。ノートを定期"
+"的に同期し、衝突を減らすために強くおすすめする設定です。"
 
 msgid "Start application minimised in the tray icon"
 msgstr "アプリケーションをトレイアンコンで最小化して起動"
@@ -1327,9 +1328,8 @@ msgstr "アプリケーションをトレイアンコンで最小化して起動
 msgid "Global zoom percentage"
 msgstr "全体ズームの割合"
 
-#, fuzzy
 msgid "Editor font size"
-msgstr "エディターのフォントファミリー"
+msgstr "エディターのフォントサイズ"
 
 msgid "Editor font family"
 msgstr "エディターのフォントファミリー"
@@ -1342,7 +1342,7 @@ msgstr ""
 "誤っているか空の場合は、一般的な等幅フォントが指定されるでしょう。"
 
 msgid "Automatically update the application"
-msgstr "アプリケーションの自動更新"
+msgstr "アプリケーションを自動的にアップデート"
 
 msgid "Synchronisation interval"
 msgstr "同期間隔"
@@ -1457,9 +1457,8 @@ msgstr "Joplin エクスポートディレクトリ"
 msgid "Evernote Export File"
 msgstr "Evernote エクスポートファイル"
 
-#, fuzzy
 msgid "Json Export Directory"
-msgstr "Joplin エクスポートディレクトリ"
+msgstr "Json エクスポートディレクトリ"
 
 msgid "Directory"
 msgstr "ディレクトリ"
@@ -1536,10 +1535,10 @@ msgid "On %s: %s"
 msgstr "日時 %s: %s"
 
 msgid "Permission to use camera"
-msgstr ""
+msgstr "カメラ使用の許可"
 
 msgid "Your permission to use your camera is required."
-msgstr ""
+msgstr "カメラを使用するには権限が必要です。"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "ノートがありません。(+)ボタンを押して新しいノートを作成してください。"
@@ -1569,9 +1568,8 @@ msgstr "%d個のノートを\"%s\"に移動しますか？"
 msgid "Press to set the decryption password."
 msgstr "復号するパスワードを入力してください。"
 
-#, fuzzy
 msgid "Clear alarm"
-msgstr "アラームをセット"
+msgstr "アラームをクリア"
 
 msgid "Save alarm"
 msgstr "アラームの保存"
@@ -1585,22 +1583,21 @@ msgstr "確認"
 msgid "Cancel synchronisation"
 msgstr "同期の中止"
 
-#, fuzzy
 msgid "Checking... Please wait."
-msgstr "中止中...お待ちください。"
+msgstr "確認中...お待ちください。"
 
-#, fuzzy
 msgid "Success! Synchronisation configuration appears to be correct."
-msgstr "同期の設定を確認する"
+msgstr "成功です！ 同期の設定は正しいようです。"
 
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
+"エラーです。URL、ユーザー名、パスワードなどを修正し、同期するターゲットにアク"
+"セスできるかを確認してください。次が報告されたエラーです:"
 
-#, fuzzy
 msgid "The application has been authorised!"
-msgstr "アプリケーションは問題なく認証されました。"
+msgstr "アプリケーションは問題なく認証されました！"
 
 #, javascript-format
 msgid ""
@@ -1610,10 +1607,15 @@ msgid ""
 "\n"
 "Please try again."
 msgstr ""
+"アプリケーションが認証できません:\n"
+"\n"
+"%s\n"
+"\n"
+"やり直してください。"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypted items: %s / %s"
-msgstr "復号中のアイテム: %d/%d"
+msgstr "復号中のアイテム: %s/%s"
 
 msgid "New tags:"
 msgstr "新しいタグ:"
@@ -1698,9 +1700,8 @@ msgstr "Joplinモバイルアプリは次のタイプのリンクをまだサポ
 msgid "Unsupported image type: %s"
 msgstr "サポートされていない画像の形式: %s"
 
-#, fuzzy
 msgid "Take photo"
-msgstr "写真を添付"
+msgstr "写真を撮影する"
 
 msgid "Attach photo"
 msgstr "写真を添付"
@@ -1727,7 +1728,7 @@ msgid "View on map"
 msgstr "地図上に表示"
 
 msgid "Go to source URL"
-msgstr ""
+msgstr "ソースURLに行く"
 
 msgid "Delete notebook"
 msgstr "ノートブックを削除"
