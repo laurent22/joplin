@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.6\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "タグを削除するには、関連するノートからタグを外してください。"
@@ -1646,8 +1644,24 @@ msgstr "- 位置情報: ノートに位置情報を添付するのに必要で�
 msgid "Joplin website"
 msgstr "JoplinのWebサイト"
 
+#, fuzzy, javascript-format
+msgid "Joplin v%s"
+msgstr "JoplinのWebサイト"
+
+#, javascript-format
+msgid "Database v%s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "FTS enabled: %d"
+msgstr "削除予定: %d"
+
 msgid "Login with Dropbox"
 msgstr "Dropboxでログイン"
+
+#, fuzzy
+msgid "Enter code here"
+msgstr "コマンドラインモードに入る"
 
 #, javascript-format
 msgid "Master Key %s"
@@ -1793,9 +1807,6 @@ msgstr "ようこそ"
 
 #~ msgid "Give focus to previous pane"
 #~ msgstr "前のペインへ"
-
-#~ msgid "Enter command line mode"
-#~ msgstr "コマンドラインモードに入る"
 
 #~ msgid "Exit command line mode"
 #~ msgstr "コマンドラインモードの終了"

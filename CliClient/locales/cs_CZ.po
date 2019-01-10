@@ -1634,9 +1634,24 @@ msgstr ""
 msgid "Joplin website"
 msgstr "Web Joplinu"
 
+#, fuzzy, javascript-format
+msgid "Joplin v%s"
+msgstr "Web Joplinu"
+
+#, javascript-format
+msgid "Database v%s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "FTS enabled: %d"
+msgstr "K smazání: %d"
+
 #, fuzzy
 msgid "Login with Dropbox"
 msgstr "Přihlásit se pomocí OneDrive"
+
+msgid "Enter code here"
+msgstr ""
 
 #, javascript-format
 msgid "Master Key %s"

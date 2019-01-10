@@ -1594,8 +1594,23 @@ msgstr "- 位置: 允許將地理位置資訊附加到筆記。"
 msgid "Joplin website"
 msgstr "Joplin 官方網站"
 
+#, fuzzy, javascript-format
+msgid "Joplin v%s"
+msgstr "Joplin 官方網站"
+
+#, javascript-format
+msgid "Database v%s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "FTS enabled: %d"
+msgstr "標示刪除: %d"
+
 msgid "Login with Dropbox"
 msgstr "以 Dropbox 登錄"
+
+msgid "Enter code here"
+msgstr ""
 
 #, javascript-format
 msgid "Master Key %s"

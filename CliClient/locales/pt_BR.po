@@ -16,8 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.7\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Para eliminar uma tag, remova a tag das notas associadas a ela."
@@ -1668,8 +1666,24 @@ msgstr ""
 msgid "Joplin website"
 msgstr "Site do Joplin"
 
+#, fuzzy, javascript-format
+msgid "Joplin v%s"
+msgstr "Site do Joplin"
+
+#, javascript-format
+msgid "Database v%s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "FTS enabled: %d"
+msgstr "Para excluir: %d"
+
 msgid "Login with Dropbox"
 msgstr "Login com Dropbox"
+
+#, fuzzy
+msgid "Enter code here"
+msgstr "Entrar no modo de linha de comando"
 
 #, javascript-format
 msgid "Master Key %s"
@@ -1816,9 +1830,6 @@ msgstr "Bem-vindo"
 
 #~ msgid "Give focus to previous pane"
 #~ msgstr "Dar o foco para o painel anterior"
-
-#~ msgid "Enter command line mode"
-#~ msgstr "Entrar no modo de linha de comando"
 
 #~ msgid "Exit command line mode"
 #~ msgstr "Sair do modo de linha de comando"

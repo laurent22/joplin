@@ -1654,8 +1654,23 @@ msgstr "- Sted: for å legge ved stedsinformation til notatet."
 msgid "Joplin website"
 msgstr "Joplins nettsted"
 
+#, fuzzy, javascript-format
+msgid "Joplin v%s"
+msgstr "Joplins nettsted"
+
+#, javascript-format
+msgid "Database v%s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "FTS enabled: %d"
+msgstr "Slettes: %d"
+
 msgid "Login with Dropbox"
 msgstr "Innlogging med Dropbox"
+
+msgid "Enter code here"
+msgstr ""
 
 #, javascript-format
 msgid "Master Key %s"
