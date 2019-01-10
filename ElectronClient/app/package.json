@@ -103,7 +103,7 @@
     "lodash": "^4.17.10",
     "mark.js": "^8.11.1",
     "markdown-it": "^8.4.1",
-    "markdown-it-katex": "^2.0.3",
+    "markdown-it-texmath": "^0.5.3",
     "md5": "^2.2.1",
     "mermaid": "^8.0.0-rc.8",
     "mime": "^2.3.1",
