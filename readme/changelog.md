@@ -1,5 +1,30 @@
 # Joplin changelog
 
+## [v1.0.120](https://github.com/laurent22/joplin/releases/tag/v1.0.120) - 2019-01-10T21:42:53Z
+
+- New: Adds functionality to toggle the notebooks and tags on the sidebar. ([#1002](https://github.com/laurent22/joplin/issues/1002))
+- Resolves [#1059](https://github.com/laurent22/joplin/issues/1059): Fixed behaviour of export to PDF and print
+- Fix window manager icon on linux ([#1110](https://github.com/laurent22/joplin/issues/1110))
+- Fixed file url issue ([#1054](https://github.com/laurent22/joplin/issues/1054))
+- Fixed keyword highlighting bug
+- Fix markdown code for checked checkbox ([#1113](https://github.com/laurent22/joplin/issues/1113))
+- Apply zoom and editorfont updates without needing to restart ([#1109](https://github.com/laurent22/joplin/issues/1109))
+- Updated many translations
+
+## [v1.0.119](https://github.com/laurent22/joplin/releases/tag/v1.0.119) - 2018-12-18T12:40:22Z
+
+Important: This release might be slow on startup due to the need to index all the notes, especially if you have many of them with lots of content. The best is simply to wait for it even if it takes several minutes. This is just a one off and afterwards startup time will be the same as before.
+
+- New: Fast full text search engine. Works with multiple terms, support for prefixes, can restrict search to either note title or body. See https://joplin.cozic.net/#searching for more info.
+- New: Search within current note (Ctrl+F).
+- New: Add separate editor font size option ([#1027](https://github.com/laurent22/joplin/issues/1027))
+- Changed: Changed global search shortcut to F6.
+- Fixes [#808](https://github.com/laurent22/joplin/issues/808) (maybe): Added fix for Nginx 404 error issue.
+- Fixed: Prevent sync infinite loop under some rare conditions (only happens when manually modifying files on sync target, which should not be done anyway).
+- Fixes [#476](https://github.com/laurent22/joplin/issues/476) (maybe): Trying to fix notification flood. Added more log statements in case something goes wrong.
+- Fixes [#1039](https://github.com/laurent22/joplin/issues/1039): Always print or export to PDF using light theme
+- Fixes [#1033](https://github.com/laurent22/joplin/issues/1033): Handle hard break when rendering Markdown to HTML
+
 ## [v1.0.117](https://github.com/laurent22/joplin/releases/tag/v1.0.117) - 2018-11-24T12:05:24Z
 
 - New: Resolves [#996](https://github.com/laurent22/joplin/issues/996): Allow editing multiple notes in external editor
@@ -265,20 +290,3 @@ Note: This is the same as v84 but with the note creation bug fixed.
 - Improved: Fixes [#318](https://github.com/laurent22/joplin/issues/318), Fixes [#317](https://github.com/laurent22/joplin/issues/317): ENEX: Improved handling and rendering of plain text links. Improved detection and import of resources. Improved import of tables.
 - Updated: Resolves [#307](https://github.com/laurent22/joplin/issues/307): Use blue colour for sidebar, to be consistent with mobile app and logo
 - Updated: Translations
-
-## [v1.0.78](https://github.com/laurent22/joplin/releases/tag/v1.0.78) - 2018-03-17T15:27:18Z
-
-- Improved: Handle deletion of resources that are not linked to any note
-
-## [v1.0.77](https://github.com/laurent22/joplin/releases/tag/v1.0.77) - 2018-03-16T15:12:35Z
-
-Note: This fixes an invalid database upgrade in the previous version.
-
-- New: Resolves [#237](https://github.com/laurent22/joplin/issues/237): Export to PDF and print option
-- New: Resolves [#154](https://github.com/laurent22/joplin/issues/154): No longer used resources are automatically deleted after approximately 24h
-- Improved: Resolves [#298](https://github.com/laurent22/joplin/issues/298): Removed extraneous first characters from auto-title
-- Improved: Made WebDAV options dynamics so that changing username or password doesn't require restarting the app
-- Fix: Fixes [#291](https://github.com/laurent22/joplin/issues/291): Crash with empty backtick
-- Fix: Fixes [#292](https://github.com/laurent22/joplin/issues/292): Improved auto-update feature and fixed incorrect notifications
-- Fix: Signed executables on Windows
-- Updated Russian, German, Portuguese, Spanish and French translations. Many thanks to the translators!

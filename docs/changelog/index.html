@@ -251,6 +251,30 @@
 </ul>
 </div>
 <h1 id="joplin-changelog">Joplin changelog</h1>
+<h2 id="-v1-0-120-https-github-com-laurent22-joplin-releases-tag-v1-0-120-2019-01-10t21-42-53z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.120">v1.0.120</a> - 2019-01-10T21:42:53Z</h2>
+<ul>
+<li>New: Adds functionality to toggle the notebooks and tags on the sidebar. (<a href="https://github.com/laurent22/joplin/issues/1002">#1002</a>)</li>
+<li>Resolves <a href="https://github.com/laurent22/joplin/issues/1059">#1059</a>: Fixed behaviour of export to PDF and print</li>
+<li>Fix window manager icon on linux (<a href="https://github.com/laurent22/joplin/issues/1110">#1110</a>)</li>
+<li>Fixed file url issue (<a href="https://github.com/laurent22/joplin/issues/1054">#1054</a>)</li>
+<li>Fixed keyword highlighting bug</li>
+<li>Fix markdown code for checked checkbox (<a href="https://github.com/laurent22/joplin/issues/1113">#1113</a>)</li>
+<li>Apply zoom and editorfont updates without needing to restart (<a href="https://github.com/laurent22/joplin/issues/1109">#1109</a>)</li>
+<li>Updated many translations</li>
+</ul>
+<h2 id="-v1-0-119-https-github-com-laurent22-joplin-releases-tag-v1-0-119-2018-12-18t12-40-22z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.119">v1.0.119</a> - 2018-12-18T12:40:22Z</h2>
+<p>Important: This release might be slow on startup due to the need to index all the notes, especially if you have many of them with lots of content. The best is simply to wait for it even if it takes several minutes. This is just a one off and afterwards startup time will be the same as before.</p>
+<ul>
+<li>New: Fast full text search engine. Works with multiple terms, support for prefixes, can restrict search to either note title or body. See <a href="https://joplin.cozic.net/#searching">https://joplin.cozic.net/#searching</a> for more info.</li>
+<li>New: Search within current note (Ctrl+F).</li>
+<li>New: Add separate editor font size option (<a href="https://github.com/laurent22/joplin/issues/1027">#1027</a>)</li>
+<li>Changed: Changed global search shortcut to F6.</li>
+<li>Fixes <a href="https://github.com/laurent22/joplin/issues/808">#808</a> (maybe): Added fix for Nginx 404 error issue.</li>
+<li>Fixed: Prevent sync infinite loop under some rare conditions (only happens when manually modifying files on sync target, which should not be done anyway).</li>
+<li>Fixes <a href="https://github.com/laurent22/joplin/issues/476">#476</a> (maybe): Trying to fix notification flood. Added more log statements in case something goes wrong.</li>
+<li>Fixes <a href="https://github.com/laurent22/joplin/issues/1039">#1039</a>: Always print or export to PDF using light theme</li>
+<li>Fixes <a href="https://github.com/laurent22/joplin/issues/1033">#1033</a>: Handle hard break when rendering Markdown to HTML</li>
+</ul>
 <h2 id="-v1-0-117-https-github-com-laurent22-joplin-releases-tag-v1-0-117-2018-11-24t12-05-24z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.117">v1.0.117</a> - 2018-11-24T12:05:24Z</h2>
 <ul>
 <li>New: Resolves <a href="https://github.com/laurent22/joplin/issues/996">#996</a>: Allow editing multiple notes in external editor</li>
@@ -501,22 +525,6 @@
 <li>Improved: Fixes <a href="https://github.com/laurent22/joplin/issues/318">#318</a>, Fixes <a href="https://github.com/laurent22/joplin/issues/317">#317</a>: ENEX: Improved handling and rendering of plain text links. Improved detection and import of resources. Improved import of tables.</li>
 <li>Updated: Resolves <a href="https://github.com/laurent22/joplin/issues/307">#307</a>: Use blue colour for sidebar, to be consistent with mobile app and logo</li>
 <li>Updated: Translations</li>
-</ul>
-<h2 id="-v1-0-78-https-github-com-laurent22-joplin-releases-tag-v1-0-78-2018-03-17t15-27-18z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.78">v1.0.78</a> - 2018-03-17T15:27:18Z</h2>
-<ul>
-<li>Improved: Handle deletion of resources that are not linked to any note</li>
-</ul>
-<h2 id="-v1-0-77-https-github-com-laurent22-joplin-releases-tag-v1-0-77-2018-03-16t15-12-35z"><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.77">v1.0.77</a> - 2018-03-16T15:12:35Z</h2>
-<p>Note: This fixes an invalid database upgrade in the previous version.</p>
-<ul>
-<li>New: Resolves <a href="https://github.com/laurent22/joplin/issues/237">#237</a>: Export to PDF and print option</li>
-<li>New: Resolves <a href="https://github.com/laurent22/joplin/issues/154">#154</a>: No longer used resources are automatically deleted after approximately 24h</li>
-<li>Improved: Resolves <a href="https://github.com/laurent22/joplin/issues/298">#298</a>: Removed extraneous first characters from auto-title</li>
-<li>Improved: Made WebDAV options dynamics so that changing username or password doesn&#39;t require restarting the app</li>
-<li>Fix: Fixes <a href="https://github.com/laurent22/joplin/issues/291">#291</a>: Crash with empty backtick</li>
-<li>Fix: Fixes <a href="https://github.com/laurent22/joplin/issues/292">#292</a>: Improved auto-update feature and fixed incorrect notifications</li>
-<li>Fix: Signed executables on Windows</li>
-<li>Updated Russian, German, Portuguese, Spanish and French translations. Many thanks to the translators!</li>
 </ul>
 
 <script>
