@@ -11,17 +11,17 @@
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" tools:node="remove"/>
 
-
 	<!-- ============================= -->
-	<!-- START RNFirebaseNotifications -->
+	<!-- START RN-push-notitication    -->
 	<!-- ============================= -->
-	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+    <permission android:name="${applicationId}.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 	<!-- ============================= -->
-	<!-- END RNFirebaseNotifications   -->
+	<!-- END RN-push-notitication      -->
 	<!-- ============================= -->
-
-
 
 	<!-- Make these features optional to enable Chromebooks -->
 	<!-- https://github.com/laurent22/joplin/issues/37 -->
@@ -39,56 +39,41 @@
 		android:icon="@mipmap/ic_launcher"
 		android:theme="@style/AppTheme">
 
-
-
 		<!-- ============================= -->
-		<!-- START RNFirebaseNotifications -->
+		<!-- START RN-push-notitication    -->
 		<!-- ============================= -->
+		<meta-data android:name="com.dieam.reactnativepushnotification.notification_channel_name" android:value="@string/default_notification_channel_id"/>
+        <meta-data android:name="com.dieam.reactnativepushnotification.notification_channel_description" android:value="Allow displaying a notification for Joplin's alarms"/>
+        <meta-data android:name="com.dieam.reactnativepushnotification.notification_color" android:resource="@android:color/white"/>
 
-		<meta-data
-		    android:name="com.google.firebase.messaging.default_notification_icon"
-		    android:resource="@drawable/ic_stat_access_alarm" />
-		<meta-data
-		    android:name="com.google.firebase.messaging.default_notification_channel_id"
-		    android:value="@string/default_notification_channel_id"/>
-		<receiver android:name="io.invertase.firebase.notifications.RNFirebaseNotificationReceiver"/>
-			<receiver android:enabled="true" android:exported="true"  android:name="io.invertase.firebase.notifications.RNFirebaseNotificationsRebootReceiver">
-			<intent-filter>
-				<action android:name="android.intent.action.BOOT_COMPLETED"/>
-				<action android:name="android.intent.action.QUICKBOOT_POWERON"/>
-				<action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
+		<receiver
+		    android:name="com.google.android.gms.gcm.GcmReceiver"
+		    android:exported="true"
+		    android:permission="com.google.android.c2dm.permission.SEND" >
+		    <intent-filter>
+		        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+		        <category android:name="${applicationId}" />
+		    </intent-filter>
 		</receiver>
+
+		<receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
+        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationRegistrationService"/>
+
+        <service
+            android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerServiceGcm"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
 		<!-- ============================= -->
-		<!-- END RNFirebaseNotifications   -->
+		<!-- END RN-push-notitication      -->
 		<!-- ============================= -->
-
-
-
-		<!-- ============================= -->
-		<!-- START RNFirebaseNotifications -->
-		<!-- ============================= -->
-		<service android:name="io.invertase.firebase.messaging.RNFirebaseMessagingService">
-			<intent-filter>
-				<action android:name="com.google.firebase.MESSAGING_EVENT" />
-			</intent-filter>
-		</service>
-		<service android:name="io.invertase.firebase.messaging.RNFirebaseInstanceIdService">
-			<intent-filter>
-				<action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-			</intent-filter>
-		</service>
-
-		<!-- "If you want to be able to react to data-only messages when your app is in the background, e.g. to display a heads up notification" -->
-		<service android:name="io.invertase.firebase.messaging.RNFirebaseBackgroundMessagingService" />
-		<!-- ============================= -->
-		<!-- END RNFirebaseNotifications   -->
-		<!-- ============================= -->
-
-
-
-
 		
 		<!-- 2018-12-16: Changed android:launchMode from "singleInstance" to "singleTop" for Firebase notification -->
 		<!--             Previously singleInstance was necessary to prevent multiple instance of the RN app from running at the same time, but maybe no longer needed. -->

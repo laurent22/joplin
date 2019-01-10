@@ -137,7 +137,7 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-firebase')
+    compile project(':react-native-push-notification')
     implementation (project(':react-native-camera')) {
     	// This is required because com.google.firebase requires v16.0.x of com.google.android.gms
     	// while react-native-camera requires v15.x, which results in broken dependencies with
@@ -167,8 +167,6 @@ dependencies {
 	implementation "com.facebook.react:react-native:+"
 
 	implementation "com.google.android.gms:play-services-base:16.0.1" // For Firebase
-	implementation "com.google.firebase:firebase-core:16.0.4" // For Firebase
-	implementation "com.google.firebase:firebase-messaging:17.3.4" // For Firebase
 	implementation 'me.leolin:ShortcutBadger:1.1.21@aar' // For Firebase - this line if you wish to use badge on Android
 
 	// To fix the error below, which happened after adding react-native-camera.
@@ -198,4 +196,3 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
-apply plugin: 'com.google.gms.google-services' // For Firebase
