@@ -589,7 +589,7 @@ class Application extends BaseApplication {
 				}, {
 					label: _('Check for updates...'),
 					click: () => {
-						bridge().checkForUpdates(false, bridge().window(), this.checkForUpdateLoggerPath());
+						bridge().checkForUpdates(false, bridge().window(), this.checkForUpdateLoggerPath(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
 					}
 				}, {
 					type: 'separator',
@@ -772,7 +772,7 @@ class Application extends BaseApplication {
 		if (shim.isWindows() || shim.isMac()) {
 			const runAutoUpdateCheck = () => {
 				if (Setting.value('autoUpdateEnabled')) {
-					bridge().checkForUpdates(true, bridge().window(), this.checkForUpdateLoggerPath());
+					bridge().checkForUpdates(true, bridge().window(), this.checkForUpdateLoggerPath(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
 				}
 			}
 

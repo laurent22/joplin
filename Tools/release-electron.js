@@ -24,7 +24,7 @@ async function main() {
 
 	const releaseOptions = { isDraft: true, isPreRelease: !!argv.beta };
 
-	console.info('Release options: ' + releaseOptions);
+	console.info('Release options: ', releaseOptions);
 
 	const release = await githubRelease('joplin', tagName, releaseOptions);
 

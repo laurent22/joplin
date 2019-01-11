@@ -29,15 +29,35 @@ function onCheckEnded() {
 	isCheckingForUpdate_ = false;
 }
 
-async function fetchLatestRelease() {
-	const response = await fetch('https://api.github.com/repos/laurent22/joplin/releases/latest');
+async function fetchLatestRelease(options) {
+	options = Object.assign({}, { includePreReleases: false }, options);
 
-	if (!response.ok) {
-		const responseText = await response.text();
-		throw new Error('Cannot get latest release info: ' + responseText.substr(0,500));
+	let json = null;
+
+	if (options.includePreReleases) {
+		// This end-point will include all releases, including pre-releases (but not draft), so we take
+		// whatever is the latest release. It might be the same as releases/latest, or it might be
+		// a pre-release.
+		const response = await fetch('https://api.github.com/repos/laurent22/joplin/releases');
+
+		if (!response.ok) {
+			const responseText = await response.text();
+			throw new Error('Cannot get latest release info: ' + responseText.substr(0,500));
+		}
+
+		json = await response.json();
+		if (!json.length) throw new Error('Cannot get latest release info: ' + responseText.substr(0,500));
+		json = json[0];
+	} else {
+		const response = await fetch('https://api.github.com/repos/laurent22/joplin/releases/latest');
+
+		if (!response.ok) {
+			const responseText = await response.text();
+			throw new Error('Cannot get latest release info: ' + responseText.substr(0,500));
+		}
+
+		json = await response.json();
 	}
-
-	const json = await response.json();
 	
 	const version = json.tag_name.substr(1);
 	let downloadUrl = null;
@@ -69,10 +89,11 @@ async function fetchLatestRelease() {
 		downloadUrl: downloadUrl,
 		notes: json.body,
 		pageUrl: json.html_url,
+		prerelease: json.prerelease,
 	};
 }
 
-function checkForUpdates(inBackground, window, logFilePath) {
+function checkForUpdates(inBackground, window, logFilePath, options) {
 	if (isCheckingForUpdate_) {
 		autoUpdateLogger_.info('checkForUpdates: Skipping check because it is already running');
 		return;
@@ -91,9 +112,12 @@ function checkForUpdates(inBackground, window, logFilePath) {
 
 	checkInBackground_ = inBackground;
 
-	fetchLatestRelease().then(release => {
+	autoUpdateLogger_.info('checkForUpdates: Checking with options ' + JSON.stringify(options));
+
+	fetchLatestRelease(options).then(release => {
 		autoUpdateLogger_.info('Current version: ' + packageInfo.version);
 		autoUpdateLogger_.info('Latest version: ' + release.version);
+		autoUpdateLogger_.info('Is Pre-release:', release.prerelease);
 
 		if (compareVersions(release.version, packageInfo.version) <= 0) {
 			if (!checkInBackground_) dialog.showMessageBox({ message: _('Current version is up-to-date.') })
