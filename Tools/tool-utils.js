@@ -89,7 +89,12 @@ toolUtils.githubOauthToken = async function() {
 	return r.toString();
 }
 
-toolUtils.githubRelease = async function(project, tagName, isDraft) {
+toolUtils.githubRelease = async function(project, tagName, options = null) {
+	options = Object.assign({}, {
+		isDraft: false,
+		isPreRelease: false,
+	}, options);
+
 	const fetch = require('node-fetch');
 
 	const oauthToken = await toolUtils.githubOauthToken();
@@ -99,7 +104,8 @@ toolUtils.githubRelease = async function(project, tagName, isDraft) {
 		body: JSON.stringify({
 			tag_name: tagName,
 			name: tagName,
-			draft: isDraft,
+			draft: options.isDraft,
+			prerelease: options.isPreRelease,
 		}),
 		headers: {
 			'Content-Type': 'application/json',
