@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Per cancellare un'etichetta, togli l'etichetta associata alle note."
@@ -462,7 +464,7 @@ msgid "Starting synchronisation..."
 msgstr "Inizio sincronizzazione..."
 
 msgid "Downloading resources..."
-msgstr ""
+msgstr "Scaricamento risorse…"
 
 msgid "Cancelling... Please wait."
 msgstr "Cancellazione... Attendere per favore."
@@ -566,6 +568,13 @@ msgid ""
 "\n"
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
+"Benvenuto in Joplin!\n"
+"\n"
+"Digita `:help shortcuts` per la lista delle scorciatoie da tastiera, oppure "
+"solo `:help` per le informazioni di utilizzo.\n"
+"\n"
+"Per esempio, per creare un taccuino digita`mb`; per creare una nota digita "
+"`mn`."
 
 msgid ""
 "One or more items are currently encrypted and you may need to supply a "
@@ -629,9 +638,8 @@ msgstr "Taglia"
 msgid "Paste"
 msgstr "Incolla"
 
-#, fuzzy
 msgid "Select all"
-msgstr "Seleziona la data"
+msgstr "Seleziona tutto"
 
 msgid "Bold"
 msgstr "Grasseto"
@@ -648,9 +656,8 @@ msgstr "Modifica in un editor esterno"
 msgid "Search in all the notes"
 msgstr "Cerca in tutte le note"
 
-#, fuzzy
 msgid "Search in current note"
-msgstr "Cerca in tutte le note"
+msgstr "Cerca nella nota corrente"
 
 msgid "View"
 msgstr "Vista"
@@ -952,13 +959,11 @@ msgstr "%s - Copia"
 msgid "Switch between note and to-do type"
 msgstr "Converti nota in \"Cose-da-fare\" e viceversa"
 
-#, fuzzy
 msgid "Switch to note type"
-msgstr "Converti nota in \"Cose-da-fare\" e viceversa"
+msgstr "Converti in nota"
 
-#, fuzzy
 msgid "Switch to to-do type"
-msgstr "Converti nota in \"Cose-da-fare\" e viceversa"
+msgstr "Converti in \"Cose-da-fare\""
 
 msgid "Copy Markdown link"
 msgstr "Copia il link Markdown"
@@ -1004,7 +1009,7 @@ msgid "Copy Link Address"
 msgstr "Copia l'indirizzo del link"
 
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr ""
+msgstr "Questo allegato non è ancora stato scaricato o decriptato."
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1316,10 +1321,10 @@ msgid "When creating a new to-do:"
 msgstr "Quando crei un nuovo \"Cose-da-fare\":"
 
 msgid "Focus title"
-msgstr ""
+msgstr "Focus sul titolo"
 
 msgid "Focus body"
-msgstr ""
+msgstr "Focus sul testo"
 
 msgid "When creating a new note:"
 msgstr "Quando si crea una nuova nota:"
@@ -1335,6 +1340,9 @@ msgid ""
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
+"Questo consentirà Joplin di essere in esecuzione in background. E’ "
+"raccomandata l’attivazione di questa impostazione per sincronizzare "
+"costantemente le tue note e quindi ridurre il numero di conflitti."
 
 msgid "Start application minimised in the tray icon"
 msgstr ""
@@ -1342,12 +1350,11 @@ msgstr ""
 msgid "Global zoom percentage"
 msgstr "Percentuale di zoom globale"
 
-#, fuzzy
 msgid "Editor font size"
-msgstr "Editor Famiglia Caratteri"
+msgstr "Editor dimensione caratteri"
 
 msgid "Editor font family"
-msgstr "Editor Famiglia Caratteri"
+msgstr "Editor famiglia caratteri"
 
 msgid ""
 "This must be *monospace* font or it will not work properly. If the font is "
@@ -1454,14 +1461,14 @@ msgstr "Ignora gli errori del certificato TLS"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "Oprione non valida: \"%s\". I valori possibili sono: %s."
+msgstr "Opzione non valida: \"%s\". I valori possibili sono: %s."
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr ""
+msgstr "Il tag \"%s\" esiste già. Scegliere un nome differente."
 
 msgid "Joplin Export File"
-msgstr "Esposta files di Joplin"
+msgstr "Esporta file di Joplin"
 
 msgid "Markdown"
 msgstr "Markdown"
@@ -1472,9 +1479,8 @@ msgstr "Cartella di esportazione di Joplin"
 msgid "Evernote Export File"
 msgstr "Esporta files di Evernote"
 
-#, fuzzy
 msgid "Json Export Directory"
-msgstr "Cartella di esportazione di Joplin"
+msgstr "Cartella di esportazione JSON"
 
 msgid "Directory"
 msgstr "Cartella"
@@ -1551,7 +1557,7 @@ msgid "On %s: %s"
 msgstr "Su %s: %s"
 
 msgid "Permission to use camera"
-msgstr ""
+msgstr "Permesso di usare la fotocamera"
 
 msgid "Your permission to use your camera is required."
 msgstr ""
@@ -1661,26 +1667,25 @@ msgstr ""
 "geografica ad una nota."
 
 msgid "Joplin website"
-msgstr "Siro web Joplin"
+msgstr "Sito web Joplin"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Joplin v%s"
-msgstr "Siro web Joplin"
+msgstr "Joplin v%s"
 
 #, javascript-format
 msgid "Database v%s"
-msgstr ""
+msgstr "Database v%s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "FTS enabled: %d"
-msgstr "Da cancellare: %d"
+msgstr "FTS attivato: %d"
 
 msgid "Login with Dropbox"
 msgstr "Login Dropbox"
 
-#, fuzzy
 msgid "Enter code here"
-msgstr "Accedi alla modalità linea di comando"
+msgstr "Inserisci qui il codice"
 
 #, javascript-format
 msgid "Master Key %s"
@@ -1734,9 +1739,8 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Tipo di immagine non supportata: %s"
 
-#, fuzzy
 msgid "Take photo"
-msgstr "Allega foto"
+msgstr "Scatta foto"
 
 msgid "Attach photo"
 msgstr "Allega foto"
