@@ -18,7 +18,7 @@
     "html-entities": "^1.2.1",
     "katex": "^0.10.0",
     "markdown-it": "^8.4.0",
-    "markdown-it-texmath": "^0.5.3",
+    "markdown-it-katex": "^2.0.3",
     "md5": "^2.2.1",
     "moment": "^2.18.1",
     "prop-types": "^15.6.0",

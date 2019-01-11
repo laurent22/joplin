@@ -467,8 +467,9 @@ class MdToHtml {
 		// This is currently used only so that the $expression$ and $$\nexpression\n$$ blocks are translated
 		// to math_inline and math_block blocks. These blocks are then processed directly with the Katex
 		// library.  It is better this way as then it is possible to conditionally load the CSS required by
-		// Katex and handle rendering of katex ourselves (this one is prone to be buggy).
-		md.use(require('markdown-it-texmath'));
+		// Katex and use an up-to-date version of Katex (as of 2018, the plugin is still using 0.6, which is
+		// buggy instead of 0.9).
+		md.use(require('markdown-it-katex'));
 
 		// Hack to make checkboxes clickable. Ideally, checkboxes should be parsed properly in
 		// renderTokens_(), but for now this hack works. Marking it with HORRIBLE_HACK so
