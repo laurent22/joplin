@@ -573,7 +573,7 @@ msgstr ""
 "Digita `:help shortcuts` per la lista delle scorciatoie da tastiera, oppure "
 "solo `:help` per le informazioni di utilizzo.\n"
 "\n"
-"Per esempio, per creare un taccuino digita`mb`; per creare una nota digita "
+"Per esempio, per creare un taccuino digita `mb`; per creare una nota digita "
 "`mn`."
 
 msgid ""
