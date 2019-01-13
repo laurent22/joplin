@@ -137,7 +137,7 @@ describe('services_SearchEngine', function() {
 		rows = await engine.search('Рейтер');
 		expect(rows.length).toBe(1);
 
-		rows = await engine.search('pейтер');
+		rows = await engine.search('рейтер');
 		expect(rows.length).toBe(1);
 
 		rows = await engine.search('Dog');

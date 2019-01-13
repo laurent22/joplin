@@ -36,16 +36,60 @@ class SearchEngine {
 		return this.db_;
 	}
 
+	noteById_(notes, noteId) {
+		for (let i = 0; i < notes.length; i++) {
+			if (notes[i].id === noteId) return notes[i];
+		}
+		// The note may have been deleted since the change was recorded. For example in this case:
+		// - Note created (Some Change object is recorded)
+		// - Note is deleted
+		// - ResourceService indexer runs.
+		// In that case, there will be a change for the note, but the note will be gone.
+		return null;
+	}
+
+
+	async initialIndexing() {
+		let noteIds = await this.db().selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
+		noteIds = noteIds.map(n => n.id);
+
+
+		// TODO: get last change id HERE
+
+		// First delete content of note_normalized, in case the previous initial indexing failed
+		await this.db().exec('DELETE FROM note_normalized');
+
+		while (noteIds.length) {
+			const currentIds = noteIds.splice(0, 100);
+			const notes = await Note.modelSelectAll('SELECT id, title, body FROM notes WHERE id IN ("' + currentIds.join('","') + '") AND is_conflict = 0 AND encryption_applied = 0');			
+			const queries = [];
+
+			for (let i = 0; i < notes.length; i++) {
+				const note = notes[i];
+				const n = this.normalizeNote_(note);
+				queries.push({ sql: 'INSERT INTO notes_normalized(id, title, body) VALUES (?, ?, ?)', params: [n.id, n.title, n.body] });
+			}
+
+			await this.db().transactionExecBatch(queries);
+		}
+
+		// TODO: SET last chnage ID here
+
+	}
+
 	async syncTables() {
 		this.logger().info('SearchEngine: Updating FTS table...');
 
 		await ItemChange.waitForAllSaved();
 
+		if (!Setting.value('searchEngine.initialIndexingDone')) {
+			await this.initialIndexing();
+			return;
+		}
+
 		const startTime = Date.now();
 
 		let lastChangeId = Setting.value('searchEngine.lastProcessedChangeId');
-
-		// TODO: if lastChangedid is undefined - index the whole notes table
 
 		while (true) {
 			const changes = await ItemChange.modelSelectAll(`
@@ -59,6 +103,8 @@ class SearchEngine {
 
 			if (!changes.length) break;
 
+			const noteIds = changes.map(a => a.item_id);
+			const notes = await Note.modelSelectAll('SELECT id, title, body FROM notes WHERE id IN ("' + noteIds.join('","') + '") AND is_conflict = 0 AND encryption_applied = 0');
 			const queries = [];
 
 			for (let i = 0; i < changes.length; i++) {
@@ -66,7 +112,11 @@ class SearchEngine {
 
 				if (change.type === ItemChange.TYPE_CREATE || change.type === ItemChange.TYPE_UPDATE) {
 					queries.push({ sql: 'DELETE FROM notes_normalized WHERE id = ?', params: [change.item_id] });
-					queries.push({ sql: 'INSERT INTO notes_normalized(id, title, body) SELECT id, title, body FROM notes WHERE id = ? AND is_conflict = 0 AND encryption_applied = 0', params: [change.item_id] });
+					const note = this.noteById_(notes, change.item_id);
+					if (note) {
+						const n = this.normalizeNote_(note);
+						queries.push({ sql: 'INSERT INTO notes_normalized(id, title, body) VALUES (?, ?, ?)', params: [change.item_id, n.title, n.body] });
+					}
 				} else if (change.type === ItemChange.TYPE_DELETE) {
 					queries.push({ sql: 'DELETE FROM notes_normalized WHERE id = ?', params: [change.item_id] });
 				} else {
@@ -255,7 +305,19 @@ class SearchEngine {
 		return output;
 	}
 
+	normalizeText_(text) {
+		return text.normalize().toLowerCase();
+	}
+
+	normalizeNote_(note) {
+		const n = Object.assign({}, note);
+		n.title = this.normalizeText_(n.title);		
+		n.body = this.normalizeText_(n.body);
+		return n;
+	}
+
 	async search(query) {
+		query = this.normalizeText_(query);
 		const parsedQuery = this.parseQuery(query);
 		const sql = 'SELECT id, title, offsets(notes_fts) AS offsets FROM notes_fts WHERE notes_fts MATCH ?'
 		const rows = await this.db().selectAll(sql, [query]);
