@@ -1,6 +1,6 @@
 {
   "name": "Joplin",
-  "version": "1.0.120",
+  "version": "1.0.123",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "scripts": {

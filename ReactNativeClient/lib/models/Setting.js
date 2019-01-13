@@ -105,6 +105,7 @@ class Setting extends BaseModel {
 			'style.editor.fontSize': {value: 12, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], label: () => _('Editor font size'), minimum: 4, maximum: 50, step: 1},
 			'style.editor.fontFamily': {value: "", type: Setting.TYPE_STRING, public: true, appTypes: ['desktop'], label: () => _('Editor font family'), description: () => _('This must be *monospace* font or it will not work properly. If the font is incorrect or empty, it will default to a generic monospace font.')},
 			'autoUpdateEnabled': { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
+			'autoUpdate.includePreReleases': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplin.cozic.net/prereleases') },
 			'clipperServer.autoStart': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'sync.interval': { value: 300, type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation interval'), options: () => {
 				return {
