@@ -415,6 +415,7 @@ class MdToHtml {
 	}
 
 	applyHighlightedKeywords_(body, keywords) {
+		if (!keywords.length) return body;
 		return StringUtils.surroundKeywords(keywords, body, '<span class="highlighted-keyword">', '</span>');
 	}
 
@@ -684,7 +685,7 @@ class MdToHtml {
 		}
 
 		body = body.replace(/°°JOP°CHECKBOX°NOTICK°°/g, '- [ ]'); 
-		body = body.replace(/°°JOP°CHECKBOX°TICK°°/g, '- [X]'); 
+		body = body.replace(/°°JOP°CHECKBOX°TICK°°/g, '- [x]');
 
 		return body;
 	}

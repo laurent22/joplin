@@ -14,15 +14,15 @@ The application is available for Windows, Linux, macOS, Android and iOS. A [Web 
 
 # Installation
 
-Three types of applications are available: for the **desktop** (Windows, macOS and Linux), for **mobile** (Android and iOS) and for **terminal** (Windows, macOS and Linux). All applications have similar user interfaces and can synchronise with each others.
+Three types of applications are available: for the **desktop** (Windows, macOS and Linux), for **mobile** (Android and iOS) and for **terminal** (Windows, macOS and Linux). All applications have similar user interfaces and can synchronise with each other.
 
 ## Desktop applications
 
 Operating System | Download | Alternative
 -----------------|--------|-------------------
-Windows (32 and 64-bit)         | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.117/Joplin-Setup-1.0.117.exe'><img alt='Get it on Windows' height="40px" src='https://joplin.cozic.net/images/BadgeWindows.png'/></a> | or Get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.117/JoplinPortable.exe'>Portable version</a><br>(to run from a USB key, etc.)
-macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.117/Joplin-1.0.117.dmg'><img alt='Get it on macOS' height="40px" src='https://joplin.cozic.net/images/BadgeMacOS.png'/></a> |
-Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.117/Joplin-1.0.117-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://joplin.cozic.net/images/BadgeLinux.png'/></a> | An Arch Linux package<br>[is also available](#terminal-application).
+Windows (32 and 64-bit)         | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.120/Joplin-Setup-1.0.120.exe'><img alt='Get it on Windows' height="40px" src='https://joplin.cozic.net/images/BadgeWindows.png'/></a> | or Get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.120/JoplinPortable.exe'>Portable version</a><br>(to run from a USB key, etc.)
+macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.120/Joplin-1.0.120.dmg'><img alt='Get it on macOS' height="40px" src='https://joplin.cozic.net/images/BadgeMacOS.png'/></a> |
+Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.120/Joplin-1.0.120-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://joplin.cozic.net/images/BadgeLinux.png'/></a> | An Arch Linux package<br>[is also available](#terminal-application).
 
 The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
 
@@ -36,7 +36,7 @@ wget -O - https://raw.githubusercontent.com/laurent22/joplin/master/Joplin_insta
 
 Operating System | Download | Alt. Download
 -----------------|----------|----------------
-Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplin.cozic.net/images/BadgeAndroid.png'/></a> | or [Download APK File](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.232/joplin-v1.0.232.apk)
+Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplin.cozic.net/images/BadgeAndroid.png'/></a> | or [Download APK File](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.234/joplin-v1.0.234.apk)
 iOS              | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://joplin.cozic.net/images/BadgeIOS.png'/></a> | -
 
 ## Terminal application
@@ -335,28 +335,28 @@ Current translations:
 <!-- LOCALE-TABLE-AUTO-GENERATED -->
 &nbsp;  |  Language  |  Po File  |  Last translator  |  Percent done
 ---|---|---|---|---
-![](https://joplin.cozic.net/images/flags/es/basque_country.png)  |  Basque  |  [eu](https://github.com/laurent22/joplin/blob/master/CliClient/locales/eu.po)  |  juan.abasolo@ehu.eus  |  61%
-![](https://joplin.cozic.net/images/flags/es/catalonia.png)  |  Catalan  |  [ca](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ca.po)  |  jmontane, 2018  |  86%
+![](https://joplin.cozic.net/images/flags/es/basque_country.png)  |  Basque  |  [eu](https://github.com/laurent22/joplin/blob/master/CliClient/locales/eu.po)  |  juan.abasolo@ehu.eus  |  60%
+![](https://joplin.cozic.net/images/flags/es/catalonia.png)  |  Catalan  |  [ca](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ca.po)  |  jmontane, 2018  |  85%
 ![](https://joplin.cozic.net/images/flags/country-4x3/hr.png)  |  Croatian  |  [hr_HR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/hr_HR.po)  |  Hrvoje Mandić (trbuhom@net.hr)  |  49%
 ![](https://joplin.cozic.net/images/flags/country-4x3/cz.png)  |  Czech  |  [cs_CZ](https://github.com/laurent22/joplin/blob/master/CliClient/locales/cs_CZ.po)  |  Lukas Helebrandt (lukas@aiya.cz)  |  76%
-![](https://joplin.cozic.net/images/flags/country-4x3/dk.png)  |  Dansk  |  [da_DK](https://github.com/laurent22/joplin/blob/master/CliClient/locales/da_DK.po)  |  Morten Juhl-Johansen Zölde-Fejér (mjjzf@syntaktisk.  |  78%
+![](https://joplin.cozic.net/images/flags/country-4x3/dk.png)  |  Dansk  |  [da_DK](https://github.com/laurent22/joplin/blob/master/CliClient/locales/da_DK.po)  |  Morten Juhl-Johansen Zölde-Fejér (mjjzf@syntaktisk.  |  77%
 ![](https://joplin.cozic.net/images/flags/country-4x3/de.png)  |  Deutsch  |  [de_DE](https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po)  |  Michael Sonntag (ms@editorei.de)  |  97%
 ![](https://joplin.cozic.net/images/flags/country-4x3/gb.png)  |  English  |  [en_GB](https://github.com/laurent22/joplin/blob/master/CliClient/locales/en_GB.po)  |    |  100%
 ![](https://joplin.cozic.net/images/flags/country-4x3/es.png)  |  Español  |  [es_ES](https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po)  |  Fernando Martín (f@mrtn.es)  |  92%
 ![](https://joplin.cozic.net/images/flags/country-4x3/fr.png)  |  Français  |  [fr_FR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/fr_FR.po)  |  Laurent Cozic  |  100%
-![](https://joplin.cozic.net/images/flags/es/galicia.png)  |  Galician  |  [gl_ES](https://github.com/laurent22/joplin/blob/master/CliClient/locales/gl_ES.po)  |  Marcos Lans (marcoslansgarza@gmail.com)  |  77%
-![](https://joplin.cozic.net/images/flags/country-4x3/it.png)  |  Italiano  |  [it_IT](https://github.com/laurent22/joplin/blob/master/CliClient/locales/it_IT.po)  |    |  91%
-![](https://joplin.cozic.net/images/flags/country-4x3/be.png)  |  Nederlands  |  [nl_BE](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_BE.po)  |    |  61%
+![](https://joplin.cozic.net/images/flags/es/galicia.png)  |  Galician  |  [gl_ES](https://github.com/laurent22/joplin/blob/master/CliClient/locales/gl_ES.po)  |  Marcos Lans (marcoslansgarza@gmail.com)  |  76%
+![](https://joplin.cozic.net/images/flags/country-4x3/it.png)  |  Italiano  |  [it_IT](https://github.com/laurent22/joplin/blob/master/CliClient/locales/it_IT.po)  |    |  90%
+![](https://joplin.cozic.net/images/flags/country-4x3/be.png)  |  Nederlands  |  [nl_BE](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_BE.po)  |    |  60%
 ![](https://joplin.cozic.net/images/flags/country-4x3/nl.png)  |  Nederlands  |  [nl_NL](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_NL.po)  |  Heimen Stoffels (vistausss@outlook.com)  |  92%
-![](https://joplin.cozic.net/images/flags/country-4x3/no.png)  |  Norwegian  |  [nb_NO](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nb_NO.po)  |  Mats Estensen (matsest@mxe.no)  |  99%
+![](https://joplin.cozic.net/images/flags/country-4x3/no.png)  |  Norwegian  |  [nb_NO](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nb_NO.po)  |  Mats Estensen (code@mxe.no)  |  98%
 ![](https://joplin.cozic.net/images/flags/country-4x3/br.png)  |  Português (Brasil)  |  [pt_BR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_BR.po)  |  Renato Nunes Bastos (rnbastos@gmail.com)  |  99%
 ![](https://joplin.cozic.net/images/flags/country-4x3/ro.png)  |  Română  |  [ro](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ro.po)  |    |  60%
-![](https://joplin.cozic.net/images/flags/country-4x3/si.png)  |  Slovenian  |  [sl_SI](https://github.com/laurent22/joplin/blob/master/CliClient/locales/sl_SI.po)  |    |  76%
+![](https://joplin.cozic.net/images/flags/country-4x3/si.png)  |  Slovenian  |  [sl_SI](https://github.com/laurent22/joplin/blob/master/CliClient/locales/sl_SI.po)  |    |  75%
 ![](https://joplin.cozic.net/images/flags/country-4x3/se.png)  |  Svenska  |  [sv](https://github.com/laurent22/joplin/blob/master/CliClient/locales/sv.po)  |  Jonatan Nyberg (jonatan@autistici.org)  |  91%
-![](https://joplin.cozic.net/images/flags/country-4x3/ru.png)  |  Русский  |  [ru_RU](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ru_RU.po)  |  Artyom Karlov (artyom.karlov@gmail.com)  |  76%
+![](https://joplin.cozic.net/images/flags/country-4x3/ru.png)  |  Русский  |  [ru_RU](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ru_RU.po)  |  Artyom Karlov (artyom.karlov@gmail.com)  |  78%
 ![](https://joplin.cozic.net/images/flags/country-4x3/cn.png)  |  中文 (简体)  |  [zh_CN](https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po)  |    |  95%
 ![](https://joplin.cozic.net/images/flags/country-4x3/tw.png)  |  中文 (繁體)  |  [zh_TW](https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_TW.po)  |  penguinsam (samliu@gmail.com)  |  92%
-![](https://joplin.cozic.net/images/flags/country-4x3/jp.png)  |  日本語  |  [ja_JP](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ja_JP.po)  |  AWASHIRO Ikuya (ikunya@gmail.com)  |  93%
+![](https://joplin.cozic.net/images/flags/country-4x3/jp.png)  |  日本語  |  [ja_JP](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ja_JP.po)  |  AWASHIRO Ikuya (ikunya@gmail.com)  |  99%
 ![](https://joplin.cozic.net/images/flags/country-4x3/kr.png)  |  한국말  |  [ko](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ko.po)  |    |  92%
 <!-- LOCALE-TABLE-AUTO-GENERATED -->
 

@@ -1,6 +1,6 @@
 {
   "name": "Joplin",
-  "version": "1.0.119",
+  "version": "1.0.123",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "scripts": {
@@ -58,6 +58,9 @@
     "linux": {
       "asar": false,
       "category": "Office",
+      "desktop": {
+        "Icon": "joplin"
+      },
       "target": "AppImage"
     }
   },

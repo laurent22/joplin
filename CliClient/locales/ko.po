@@ -1634,8 +1634,23 @@ msgstr "- 위치: 지리적 위치 정보를 노트에 첨부하기 위해서 �
 msgid "Joplin website"
 msgstr "조플린 웹사이트"
 
+#, fuzzy, javascript-format
+msgid "Joplin v%s"
+msgstr "조플린 웹사이트"
+
+#, javascript-format
+msgid "Database v%s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "FTS enabled: %d"
+msgstr "삭제: %d"
+
 msgid "Login with Dropbox"
 msgstr "Dropbox로 로그인"
+
+msgid "Enter code here"
+msgstr ""
 
 #, javascript-format
 msgid "Master Key %s"

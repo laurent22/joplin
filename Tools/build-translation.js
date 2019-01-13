@@ -17,7 +17,7 @@ const cliLocalesDir = cliDir + '/locales';
 const rnDir = rootDir + '/ReactNativeClient';
 const electronDir = rootDir + '/ElectronClient/app';
 
-const { execCommand } = require('./tool-utils.js');
+const { execCommand, isMac } = require('./tool-utils.js');
 const { countryDisplayName, countryCodeOnly } = require('lib/locale.js');
 
 function parsePoFile(filePath) {
@@ -55,8 +55,11 @@ async function removePoHeaderDate(filePath) {
 	// Note: on macOS this will fail because it needs to be 'sed -i ""'
 	// Solution would be to install gsed, detect it here, and use it in place of sed in macOS
 	// https://stackoverflow.com/questions/30003570/how-to-use-gnu-sed-on-mac-os-x#34815955
-	await execCommand('sed -i -e\'/POT-Creation-Date:/d\' "' + filePath + '"');
-	await execCommand('sed -i -e\'/PO-Revision-Date:/d\' "' + filePath + '"');
+
+	let sedPrefix = 'sed -i';
+	if (isMac()) sedPrefix += ' ""';
+	await execCommand(sedPrefix + ' -e\'/POT-Creation-Date:/d\' "' + filePath + '"');
+	await execCommand(sedPrefix + ' -e\'/PO-Revision-Date:/d\' "' + filePath + '"');
 }
 
 async function createPotFile(potFilePath, sources) {
@@ -73,7 +76,9 @@ async function createPotFile(potFilePath, sources) {
 		let args = baseArgs.slice();
 		if (i > 0) args.push('--join-existing');
 		args.push(sources[i]);
-		const result = await execCommand('xgettext ' + args.join(' '));
+		let xgettextPath = 'xgettext';
+		if (isMac()) xgettextPath = '/usr/local/opt/gettext/bin/xgettext'; // Needs to have been installed with `brew install gettext`
+		const result = await execCommand(xgettextPath + ' ' + args.join(' '));
 		if (result) console.error(result);
 		await removePoHeaderDate(potFilePath);
 	}

@@ -1672,8 +1672,23 @@ msgstr ""
 msgid "Joplin website"
 msgstr "Joplin-webbplats"
 
+#, fuzzy, javascript-format
+msgid "Joplin v%s"
+msgstr "Joplin-webbplats"
+
+#, javascript-format
+msgid "Database v%s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "FTS enabled: %d"
+msgstr "För att ta bort: %d"
+
 msgid "Login with Dropbox"
 msgstr "Logga in med Dropbox"
+
+msgid "Enter code here"
+msgstr ""
 
 #, javascript-format
 msgid "Master Key %s"

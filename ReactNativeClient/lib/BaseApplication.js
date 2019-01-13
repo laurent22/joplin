@@ -220,7 +220,23 @@ class BaseApplication {
 				notes = await Tag.notes(parentId, options);
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				const search = BaseModel.byId(state.searches, parentId);
-				notes = await SearchEngineUtils.notesForQuery(search.query_pattern);
+
+				if (search.basic_search) {
+					// NOTE: Copied and pasted from ReactNativeClient/lib/components/screens/search.js
+					let p = search.query_pattern.split(' ');
+					let temp = [];
+					for (let i = 0; i < p.length; i++) {
+						let t = p[i].trim();
+						if (!t) continue;
+						temp.push(t);
+					}
+
+					notes = await Note.previews(null, {
+						anywherePattern: '*' + temp.join('*') + '*',
+					});
+				} else {
+					notes = await SearchEngineUtils.notesForQuery(search.query_pattern);
+				}	
 			}
 		}
 

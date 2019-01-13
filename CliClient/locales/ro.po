@@ -1535,8 +1535,23 @@ msgstr ""
 msgid "Joplin website"
 msgstr "Website Joplin"
 
+#, fuzzy, javascript-format
+msgid "Joplin v%s"
+msgstr "Website Joplin"
+
+#, javascript-format
+msgid "Database v%s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "FTS enabled: %d"
+msgstr "De șters: %d"
+
 msgid "Login with Dropbox"
 msgstr "Autentificați-vă cu Dropbox"
+
+msgid "Enter code here"
+msgstr ""
 
 #, javascript-format
 msgid "Master Key %s"

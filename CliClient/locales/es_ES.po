@@ -1663,8 +1663,24 @@ msgstr ""
 msgid "Joplin website"
 msgstr "Sitio web de Joplin"
 
+#, fuzzy, javascript-format
+msgid "Joplin v%s"
+msgstr "Sitio web de Joplin"
+
+#, javascript-format
+msgid "Database v%s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "FTS enabled: %d"
+msgstr "Borrar: %d"
+
 msgid "Login with Dropbox"
 msgstr "Acceder con Dropbox"
+
+#, fuzzy
+msgid "Enter code here"
+msgstr "Entrar en modo línea de comandos"
 
 #, javascript-format
 msgid "Master Key %s"
@@ -1821,9 +1837,6 @@ msgstr "Bienvenido"
 
 #~ msgid "Give focus to previous pane"
 #~ msgstr "Enfocar el panel anterior"
-
-#~ msgid "Enter command line mode"
-#~ msgstr "Entrar en modo línea de comandos"
 
 #~ msgid "Exit command line mode"
 #~ msgstr "Salir del modo línea de comandos"

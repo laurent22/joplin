@@ -96,7 +96,7 @@ class Setting extends BaseModel {
 			'startMinimized': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Start application minimised in the tray icon') },
 
 			'collapsedFolderIds': { value: [], type: Setting.TYPE_ARRAY, public: false },
-			
+
 			'db.ftsEnabled': { value: -1, type: Setting.TYPE_INT, public: false },
 			'encryption.enabled': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'encryption.activeMasterKeyId': { value: '', type: Setting.TYPE_STRING, public: false },
@@ -105,6 +105,7 @@ class Setting extends BaseModel {
 			'style.editor.fontSize': {value: 12, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], label: () => _('Editor font size'), minimum: 4, maximum: 50, step: 1},
 			'style.editor.fontFamily': {value: "", type: Setting.TYPE_STRING, public: true, appTypes: ['desktop'], label: () => _('Editor font family'), description: () => _('This must be *monospace* font or it will not work properly. If the font is incorrect or empty, it will default to a generic monospace font.')},
 			'autoUpdateEnabled': { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
+			'autoUpdate.includePreReleases': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplin.cozic.net/prereleases') },
 			'clipperServer.autoStart': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'sync.interval': { value: 300, type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation interval'), options: () => {
 				return {
@@ -119,6 +120,8 @@ class Setting extends BaseModel {
 			}},
 			'noteVisiblePanes': { value: ['editor', 'viewer'], type: Setting.TYPE_ARRAY, public: false, appTypes: ['desktop'] },
 			'sidebarVisibility': { value: true, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
+			'tagHeaderIsExpanded': { value: true, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
+			'folderHeaderIsExpanded': { value: true, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
 			'editor': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['cli', 'desktop'], label: () => _('Text editor command'), description: () => _('The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
 			'showAdvancedOptions': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile' ], label: () => _('Show advanced options') },
 			'sync.target': { value: SyncTargetRegistry.nameToId('dropbox'), type: Setting.TYPE_INT, isEnum: true, public: true, label: () => _('Synchronisation target'), description: (appType) => { return appType !== 'cli' ? null : _('The target to synchonise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).') }, options: () => {
@@ -156,7 +159,7 @@ class Setting extends BaseModel {
 
 			'net.customCertificates': { value: '', type: Setting.TYPE_STRING, show: (settings) => { return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].indexOf(settings['sync.target']) >= 0 }, public: true, appTypes: ['desktop', 'cli'], label: () => _('Custom TLS certificates'), description: () => _('Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on "Check synchronisation configuration".') },
 			'net.ignoreTlsErrors': { value: false, type: Setting.TYPE_BOOL, show: (settings) => { return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].indexOf(settings['sync.target']) >= 0 }, public: true, appTypes: ['desktop', 'cli'], label: () => _('Ignore TLS certificate errors') },
-		
+
 			'api.token': { value: null, type: Setting.TYPE_STRING, public: false },
 
 			'resourceService.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },

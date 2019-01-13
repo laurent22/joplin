@@ -657,7 +657,7 @@ msgid "View"
 msgstr "Вид"
 
 msgid "Toggle sidebar"
-msgstr ""
+msgstr "Переключить панель"
 
 msgid "Toggle editor layout"
 msgstr "Переключить вид редактора"
@@ -669,7 +669,7 @@ msgid "Synchronisation status"
 msgstr "Статус синхронизации"
 
 msgid "Web clipper options"
-msgstr ""
+msgstr "Настройки веб-клиппера"
 
 msgid "Encryption options"
 msgstr "Настройки шифрования"
@@ -725,7 +725,7 @@ msgid "Token has been copied to the clipboard!"
 msgstr ""
 
 msgid "The web clipper service is enabled and set to auto-start."
-msgstr ""
+msgstr "Веб-клиппер включен"
 
 #, javascript-format
 msgid "Status: Started on port %d"
@@ -736,13 +736,13 @@ msgid "Status: %s"
 msgstr "Статус: «%s»."
 
 msgid "Disable Web Clipper Service"
-msgstr ""
+msgstr "Выключить веб-клиппер"
 
 msgid "The web clipper service is not enabled."
-msgstr ""
+msgstr "Веб-клиппер остановлен"
 
 msgid "Enable Web Clipper Service"
-msgstr ""
+msgstr "Включить веб-клиппер"
 
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
@@ -753,7 +753,7 @@ msgid "In order to use the web clipper, you need to do the following:"
 msgstr ""
 
 msgid "Step 1: Enable the clipper service"
-msgstr ""
+msgstr "Шаг 1: включить веб-клиппер"
 
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
@@ -762,20 +762,20 @@ msgid ""
 msgstr ""
 
 msgid "Step 2: Install the extension"
-msgstr ""
+msgstr "Шаг 2: установить расширение"
 
 msgid "Download and install the relevant extension for your browser:"
-msgstr ""
+msgstr "Скачайте и установите расширение для вашего браузера"
 
 #, fuzzy
 msgid "Advanced options"
 msgstr "Показывать расширенные настройки"
 
 msgid "Authorisation token:"
-msgstr ""
+msgstr "Токен авторизации"
 
 msgid "Copy token"
-msgstr ""
+msgstr "Скопировать токен"
 
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
@@ -790,10 +790,10 @@ msgid "Notes and settings are stored in: %s"
 msgstr "Заметки и настройки сохранены в: %s"
 
 msgid "Apply"
-msgstr ""
+msgstr "Применить"
 
 msgid "Submit"
-msgstr ""
+msgstr "Отправить"
 
 msgid "Save"
 msgstr "Сохранить"
@@ -1653,9 +1653,25 @@ msgstr ""
 msgid "Joplin website"
 msgstr "Сайт Joplin"
 
+#, fuzzy, javascript-format
+msgid "Joplin v%s"
+msgstr "Сайт Joplin"
+
+#, javascript-format
+msgid "Database v%s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "FTS enabled: %d"
+msgstr "К удалению: %d"
+
 #, fuzzy
 msgid "Login with Dropbox"
 msgstr "Войти в OneDrive"
+
+#, fuzzy
+msgid "Enter code here"
+msgstr "Войти в режим командной строки"
 
 #, javascript-format
 msgid "Master Key %s"
@@ -1801,9 +1817,6 @@ msgstr "Добро пожаловать"
 
 #~ msgid "Give focus to previous pane"
 #~ msgstr "Переключиться на предыдущую панель"
-
-#~ msgid "Enter command line mode"
-#~ msgstr "Войти в режим командной строки"
 
 #~ msgid "Exit command line mode"
 #~ msgstr "Выйти из режима командной строки"

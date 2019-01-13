@@ -139,7 +139,8 @@ class FolderListWidget extends ListWidget {
 			const orderFolders = (parentId) => {
 				for (let i = 0; i < this.folders.length; i++) {
 					const f = this.folders[i];
-					if (f.parent_id === parentId) {
+					const folderParentId = f.parent_id ? f.parent_id : '';
+					if (folderParentId === parentId) {
 						newItems.push(f);
 						if (this.folderHasChildren_(this.folders, f.id)) orderFolders(f.id);
 					}

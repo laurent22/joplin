@@ -41,6 +41,7 @@ class Command extends BaseCommand {
 				title: pattern,
 				query_pattern: pattern,
 				query_folder_id: folder ? folder.id : '',
+				basic_search: true,
 				type_: BaseModel.TYPE_SEARCH,
 			},
 		});

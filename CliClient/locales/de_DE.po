@@ -472,10 +472,10 @@ msgid "Starting synchronisation..."
 msgstr "Starte Synchronisation..."
 
 msgid "Downloading resources..."
-msgstr ""
+msgstr "Lade Anhänge herunter..."
 
 msgid "Cancelling... Please wait."
-msgstr "Abbrechen… Bitte warten."
+msgstr "Abbrechen... Bitte warten."
 
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
@@ -600,7 +600,7 @@ msgstr "Exportiere „%s“ ins „%s“ Format. Bitte warten..."
 
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "Importiere „%s“ ins „%s“ Format. Bitte warten…"
+msgstr "Importiere „%s“ ins „%s“ Format. Bitte warten..."
 
 msgid "PDF File"
 msgstr "PDF-Datei"
@@ -671,7 +671,7 @@ msgid "View"
 msgstr "Ansicht"
 
 msgid "Toggle sidebar"
-msgstr "Seitenleiste ein/aus"
+msgstr "Seitenleiste umschalten"
 
 msgid "Toggle editor layout"
 msgstr "Editor-Layout umschalten"
@@ -701,7 +701,7 @@ msgid "Make a donation"
 msgstr "Spenden"
 
 msgid "Check for updates..."
-msgstr "Überprüfe auf Updates…"
+msgstr "Überprüfe auf Aktualisierungen..."
 
 msgid "About Joplin"
 msgstr "Über Joplin"
@@ -724,10 +724,11 @@ msgid "Cancel"
 msgstr "Abbrechen"
 
 msgid "Current version is up-to-date."
-msgstr "Die aktuelle Version ist up-to-date."
+msgstr "Die aktuelle Version ist auf dem neuesten Stand."
 
 msgid "An update is available, do you want to download it now?"
-msgstr "Es ist ein Update verfügbar. Soll es jetzt heruntergeladen werden?"
+msgstr ""
+"Es ist eine Aktualisierung verfügbar. Soll sie jetzt heruntergeladen werden?"
 
 msgid "Yes"
 msgstr "Ja"
@@ -883,7 +884,7 @@ msgstr ""
 "Notizbücher ursprünglich verschlüsselt wurden."
 
 msgid "Missing Master Keys"
-msgstr "Fehlender Hauptschlüssel"
+msgstr "Fehlende Hauptschlüssel"
 
 msgid ""
 "The master keys with these IDs are used to encrypt some of your items, "
@@ -965,7 +966,7 @@ msgstr "Duplizieren"
 
 #, javascript-format
 msgid "%s - Copy"
-msgstr "%s kopieren"
+msgstr "%s - Kopieren"
 
 msgid "Switch between note and to-do type"
 msgstr "Zwischen Notiz und To-Do Typ wechseln"
@@ -1575,10 +1576,10 @@ msgid "On %s: %s"
 msgstr "Auf %s: %s"
 
 msgid "Permission to use camera"
-msgstr ""
+msgstr "Berechtigung zur Verwendung der Kamera"
 
 msgid "Your permission to use your camera is required."
-msgstr ""
+msgstr "Deine Zustimmung zur Verwendung deiner Kamera ist erforderlich."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
@@ -1691,8 +1692,24 @@ msgstr ""
 msgid "Joplin website"
 msgstr "Website von Joplin"
 
+#, fuzzy, javascript-format
+msgid "Joplin v%s"
+msgstr "Website von Joplin"
+
+#, javascript-format
+msgid "Database v%s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "FTS enabled: %d"
+msgstr "Zu löschen: %d"
+
 msgid "Login with Dropbox"
 msgstr "Mit Dropbox anmelden"
+
+#, fuzzy
+msgid "Enter code here"
+msgstr "Zum Terminal-Modus wechseln"
 
 #, javascript-format
 msgid "Master Key %s"
@@ -1775,7 +1792,7 @@ msgid "View on map"
 msgstr "Auf der Karte anzeigen"
 
 msgid "Go to source URL"
-msgstr ""
+msgstr "Zur Quell-URL gehen"
 
 msgid "Delete notebook"
 msgstr "Notizbuch löschen"
@@ -1844,9 +1861,6 @@ msgstr "Willkommen"
 
 #~ msgid "Give focus to previous pane"
 #~ msgstr "Das vorherige Fenster fokussieren"
-
-#~ msgid "Enter command line mode"
-#~ msgstr "Zum Terminal-Modus wechseln"
 
 #~ msgid "Exit command line mode"
 #~ msgstr "Den Terminal-Modus verlassen"

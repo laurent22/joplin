@@ -1642,9 +1642,24 @@ msgstr ""
 msgid "Joplin website"
 msgstr "Sitio web de Joplin"
 
+#, fuzzy, javascript-format
+msgid "Joplin v%s"
+msgstr "Sitio web de Joplin"
+
+#, javascript-format
+msgid "Database v%s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "FTS enabled: %d"
+msgstr "Borrar: %d"
+
 #, fuzzy
 msgid "Login with Dropbox"
 msgstr "Acceder con OneDrive"
+
+msgid "Enter code here"
+msgstr ""
 
 #, javascript-format
 msgid "Master Key %s"

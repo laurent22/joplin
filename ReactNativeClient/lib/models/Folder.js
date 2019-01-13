@@ -167,7 +167,13 @@ class Folder extends BaseItem {
 			if (!folder.parent_id) {
 				rootFolders.push(folder);
 			} else {
-				idToFolders[folder.parent_id].children.push(folder);
+				if (!idToFolders[folder.parent_id]) {
+					// It means the notebook is refering a folder that doesn't exist. In theory it shouldn't happen
+					// but sometimes does - https://github.com/laurent22/joplin/issues/1068#issuecomment-450594708
+					rootFolders.push(folder);
+				} else {
+					idToFolders[folder.parent_id].children.push(folder);
+				}
 			}
 		}
 

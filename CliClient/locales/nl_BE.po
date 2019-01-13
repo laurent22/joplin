@@ -1666,9 +1666,25 @@ msgstr ""
 msgid "Joplin website"
 msgstr ""
 
+#, javascript-format
+msgid "Joplin v%s"
+msgstr ""
+
+#, javascript-format
+msgid "Database v%s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "FTS enabled: %d"
+msgstr "Verwijderen: %d"
+
 #, fuzzy
 msgid "Login with Dropbox"
 msgstr "Log in met OneDrive"
+
+#, fuzzy
+msgid "Enter code here"
+msgstr "Ga naar command line modus"
 
 #, javascript-format
 msgid "Master Key %s"
@@ -1817,9 +1833,6 @@ msgstr "Welkom"
 
 #~ msgid "Give focus to previous pane"
 #~ msgstr "Focus op het vorige paneel"
-
-#~ msgid "Enter command line mode"
-#~ msgstr "Ga naar command line modus"
 
 #~ msgid "Exit command line mode"
 #~ msgstr "Ga uit command line modus"

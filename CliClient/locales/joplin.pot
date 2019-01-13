@@ -1514,7 +1514,22 @@ msgstr ""
 msgid "Joplin website"
 msgstr ""
 
+#, javascript-format
+msgid "Joplin v%s"
+msgstr ""
+
+#, javascript-format
+msgid "Database v%s"
+msgstr ""
+
+#, javascript-format
+msgid "FTS enabled: %d"
+msgstr ""
+
 msgid "Login with Dropbox"
+msgstr ""
+
+msgid "Enter code here"
 msgstr ""
 
 #, javascript-format
