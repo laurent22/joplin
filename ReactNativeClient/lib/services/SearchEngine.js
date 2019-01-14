@@ -4,7 +4,9 @@ const ItemChange = require('lib/models/ItemChange.js');
 const Setting = require('lib/models/Setting.js');
 const Note = require('lib/models/Note.js');
 const BaseModel = require('lib/BaseModel.js');
-const { pregQuote } = require('lib/string-utils.js');
+const ItemChangeUtils = require('lib/services/ItemChangeUtils');
+const { pregQuote, scriptType } = require('lib/string-utils.js');
+const removeDiacritics = require('diacritics').remove;
 
 class SearchEngine {
 
@@ -49,15 +51,14 @@ class SearchEngine {
 	}
 
 
-	async initialIndexing() {
+	async rebuildIndex() {
 		let noteIds = await this.db().selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
 		noteIds = noteIds.map(n => n.id);
 
-
-		// TODO: get last change id HERE
+		const lastChangeId = await ItemChange.lastChangeId();
 
 		// First delete content of note_normalized, in case the previous initial indexing failed
-		await this.db().exec('DELETE FROM note_normalized');
+		await this.db().exec('DELETE FROM notes_normalized');
 
 		while (noteIds.length) {
 			const currentIds = noteIds.splice(0, 100);
@@ -73,8 +74,7 @@ class SearchEngine {
 			await this.db().transactionExecBatch(queries);
 		}
 
-		// TODO: SET last chnage ID here
-
+		Setting.setValue('searchEngine.lastProcessedChangeId', lastChangeId);
 	}
 
 	async syncTables() {
@@ -83,7 +83,8 @@ class SearchEngine {
 		await ItemChange.waitForAllSaved();
 
 		if (!Setting.value('searchEngine.initialIndexingDone')) {
-			await this.initialIndexing();
+			await this.rebuildIndex();
+			Setting.setValue('searchEngine.initialIndexingDone', true)
 			return;
 		}
 
@@ -130,6 +131,8 @@ class SearchEngine {
 			Setting.setValue('searchEngine.lastProcessedChangeId', lastChangeId);
 			await Setting.saveAll();
 		}
+
+		await ItemChangeUtils.deleteProcessedChanges();
 
 		this.logger().info('SearchEngine: Updated FTS table in ' + (Date.now() - startTime) + 'ms');
 }
@@ -306,7 +309,7 @@ class SearchEngine {
 	}
 
 	normalizeText_(text) {
-		return text.normalize().toLowerCase();
+		return removeDiacritics(text.normalize().toLowerCase());
 	}
 
 	normalizeNote_(note) {
@@ -316,13 +319,47 @@ class SearchEngine {
 		return n;
 	}
 
+	async basicSearch(query) {
+		let p = query.split(' ');
+		let temp = [];
+		for (let i = 0; i < p.length; i++) {
+			let t = p[i].trim();
+			if (!t) continue;
+			temp.push(t);
+		}
+
+		return await Note.previews(null, {
+			anywherePattern: '*' + temp.join('*') + '*',
+		});
+	}
+
 	async search(query) {
 		query = this.normalizeText_(query);
-		const parsedQuery = this.parseQuery(query);
-		const sql = 'SELECT id, title, offsets(notes_fts) AS offsets FROM notes_fts WHERE notes_fts MATCH ?'
-		const rows = await this.db().selectAll(sql, [query]);
-		this.orderResults_(rows, parsedQuery);
-		return rows;
+
+		const st = scriptType(query);
+
+		if (!Setting.value('db.ftsEnabled') || ['ja', 'zh', 'ko'].indexOf(st) >= 0) {
+			// Non-alphabetical languages aren't support by SQLite FTS (except with extensions which are not available in all platforms)
+			return this.basicSearch(query);
+		} else {
+			const parsedQuery = this.parseQuery(query);
+			const sql = 'SELECT id, title, offsets(notes_fts) AS offsets FROM notes_fts WHERE notes_fts MATCH ?'
+			const rows = await this.db().selectAll(sql, [query]);
+			this.orderResults_(rows, parsedQuery);
+			return rows;
+		}
+	}
+
+	static runInBackground() {
+		if (this.isRunningInBackground_) return;
+
+		this.isRunningInBackground_ = true;
+		
+		this.instance().syncTables();
+
+		setTimeout(() => {
+			this.instance().syncTables();
+		}, 1000 * 60 * 5);
 	}
 	
 }

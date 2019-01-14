@@ -279,9 +279,13 @@ class NoteListComponent extends React.Component {
 				const w = highlightedWords[i];
 
 				if (w.type === 'regex') {
-					mark.markRegExp(new RegExp(w.value, 'gmi'), { acrossElements: true });
+					mark.markRegExp(new RegExp('\\b' + w.value + '\\b', 'gmi'), {
+						acrossElements: true,
+					});
 				} else {
-					mark.mark([w]);
+					mark.mark([w], {
+						accuracy: 'exactly',
+					});
 				}
 			}
 

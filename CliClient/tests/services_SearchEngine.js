@@ -1,9 +1,11 @@
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, asyncTest, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 const SearchEngine = require('lib/services/SearchEngine');
 const Note = require('lib/models/Note');
+const ItemChange = require('lib/models/ItemChange');
+const Setting = require('lib/models/Setting');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -23,7 +25,7 @@ describe('services_SearchEngine', function() {
 		done();
 	});
 
-	it('should keep the content and FTS table in sync', async (done) => {
+	it('should keep the content and FTS table in sync', asyncTest(async () => {
 		let rows, n1, n2, n3;
 
 		n1 = await Note.save({ title: "a" });
@@ -56,11 +58,25 @@ describe('services_SearchEngine', function() {
 		await engine.syncTables();
 		rows = await engine.search('c');
 		expect(rows.length).toBe(1);
+	}));
 
-		done();
-	});
+	it('should, after initial indexing, save the last change ID', asyncTest(async () => {
+		const n1 = await Note.save({ title: "abcd efgh" }); // 3
+		const n2 = await Note.save({ title: "abcd aaaaa abcd abcd" }); // 1
 
-	it('should order search results by relevance (1)', async (done) => {
+		expect(Setting.value('searchEngine.initialIndexingDone')).toBe(false);
+
+		await ItemChange.waitForAllSaved();
+		const lastChangeId = await ItemChange.lastChangeId();
+
+		await engine.syncTables();
+
+		expect(Setting.value('searchEngine.lastProcessedChangeId')).toBe(lastChangeId);
+		expect(Setting.value('searchEngine.initialIndexingDone')).toBe(true);
+	}));
+
+
+	it('should order search results by relevance (1)', asyncTest(async () => {
 		const n1 = await Note.save({ title: "abcd efgh" }); // 3
 		const n2 = await Note.save({ title: "abcd aaaaa abcd abcd" }); // 1
 		const n3 = await Note.save({ title: "abcd aaaaa bbbb eeee abcd" }); // 2
@@ -71,11 +87,9 @@ describe('services_SearchEngine', function() {
 		expect(rows[0].id).toBe(n2.id);
 		expect(rows[1].id).toBe(n3.id);
 		expect(rows[2].id).toBe(n1.id);
+	}));
 
-		done();
-	});
-
-	it('should order search results by relevance (2)', async (done) => {
+	it('should order search results by relevance (2)', asyncTest(async () => {
 		// 1
 		const n1 = await Note.save({ title: "abcd efgh", body: "XX abcd XX efgh" });
 		// 4
@@ -95,11 +109,9 @@ describe('services_SearchEngine', function() {
 		expect(rows[2].id).toBe(n3.id);
 		expect(rows[3].id).toBe(n2.id);
 		expect(rows[4].id).toBe(n5.id);
+	}));
 
-		done();
-	});
-
-	it('should supports various query types', async (done) => {
+	it('should supports various query types', asyncTest(async () => {
 		let rows;
 
 		const n1 = await Note.save({ title: "abcd efgh ijkl", body: "aaaa bbbb" });
@@ -148,11 +160,51 @@ describe('services_SearchEngine', function() {
 
 		rows = await engine.search('сообщило');
 		expect(rows.length).toBe(1);
+	}));
 
-		done();
-	});
+	it('should support queries with or without accents', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: "père noël" });
 
-	it('should parse normal query strings', async (done) => {
+		await engine.syncTables();
+
+		expect((await engine.search('père')).length).toBe(1);
+		expect((await engine.search('pere')).length).toBe(1);
+		expect((await engine.search('noe*')).length).toBe(1);
+		expect((await engine.search('noë*')).length).toBe(1);
+	}));
+
+	it('should support queries with Chinese characters', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: "我是法国人" });
+
+		await engine.syncTables();
+
+		expect((await engine.search('我')).length).toBe(1);
+		expect((await engine.search('法国人')).length).toBe(1);
+	}));
+
+	it('should support queries with Japanese characters', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: "私は日本語を話すことができません" });
+
+		await engine.syncTables();
+
+		expect((await engine.search('日本')).length).toBe(1);
+		expect((await engine.search('できません')).length).toBe(1);
+	}));
+
+	it('should support queries with Korean characters', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: "이것은 한국말이다" });
+
+		await engine.syncTables();
+
+		expect((await engine.search('이것은')).length).toBe(1);
+		expect((await engine.search('말')).length).toBe(1);
+	}));
+
+	it('should parse normal query strings', asyncTest(async () => {
 		let rows;
 
 		const testCases = [
@@ -173,11 +225,9 @@ describe('services_SearchEngine', function() {
 			expect(JSON.stringify(actual.terms.title)).toBe(JSON.stringify(expected.title));
 			expect(JSON.stringify(actual.terms.body)).toBe(JSON.stringify(expected.body));
 		}
+	}));
 
-		done();
-	});
-
-	it('should parse query strings with wildcards', async (done) => {
+	it('should parse query strings with wildcards', asyncTest(async () => {
 		let rows;
 
 		const testCases = [
@@ -202,8 +252,6 @@ describe('services_SearchEngine', function() {
 		}
 
 		expect(engine.parseQuery('*').termCount).toBe(0);
-
-		done();
-	});
+	}));
 
 });

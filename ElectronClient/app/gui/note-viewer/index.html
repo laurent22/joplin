@@ -226,6 +226,8 @@
 	function setMarkers(keywords, options = null) {
 		if (!options) options = {};
 
+		// TODO: It should highlight queries without accents - eg "penche*" should highlight "penchés"
+
 		if (!mark_) {
 			mark_ = new Mark(document.getElementById('content'), {
 				exclude: ['img'],
@@ -258,14 +260,14 @@
 			const keyword = keywords[i];
 
 			if (keyword.type === 'regex') {
-				mark_.markRegExp(new RegExp(keyword.value, 'gmi'), {
+				mark_.markRegExp(new RegExp('\\b' + keyword.value + '\\b', 'gmi'), {
 					each: onEachElement,
 					acrossElements: true,
 				});
 			} else {
 				mark_.mark([keyword], {
 					each: onEachElement,
-					accuracy: 'exactly', 
+					accuracy: 'exactly',
 				});
 			}
 		}

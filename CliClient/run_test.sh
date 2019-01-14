@@ -29,6 +29,7 @@ npm test tests-build/models_BaseItem.js
 npm test tests-build/models_Folder.js
 npm test tests-build/models_Note.js
 npm test tests-build/models_Tag.js
+npm test tests-build/models_ItemChange.js
 npm test tests-build/models_Setting.js
 npm test tests-build/pathUtils.js
 npm test tests-build/StringUtils.js

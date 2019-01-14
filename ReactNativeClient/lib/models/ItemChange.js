@@ -47,6 +47,11 @@ class ItemChange extends BaseModel {
 		});
 	}
 
+	static async deleteOldChanges(lowestChangeId) {
+		if (!lowestChangeId) return;
+		return this.db().exec('DELETE FROM item_changes WHERE id <= ?', [lowestChangeId]);
+	}
+
 }
 
 ItemChange.addChangeMutex_ = new Mutex();
