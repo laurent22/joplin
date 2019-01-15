@@ -14,6 +14,7 @@ class SearchEngine {
 		this.dispatch = (action) => {};
 		this.logger_ = new Logger();
 		this.db_ = null;
+		this.isIndexing_ = false;
 	}
 
 	static instance() {
@@ -51,7 +52,7 @@ class SearchEngine {
 	}
 
 
-	async rebuildIndex() {
+	async rebuildIndex_() {
 		let noteIds = await this.db().selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
 		noteIds = noteIds.map(n => n.id);
 
@@ -77,14 +78,28 @@ class SearchEngine {
 		Setting.setValue('searchEngine.lastProcessedChangeId', lastChangeId);
 	}
 
+	scheduleSyncTables() {
+		if (this.scheduleSyncTablesIID_) return;
+
+		this.scheduleSyncTablesIID_ = setTimeout(async () => {
+			await this.syncTables();
+			this.scheduleSyncTablesIID_ = null;
+		}, 10000);
+	}
+
 	async syncTables() {
+		if (this.isIndexing_) return;
+
+		this.isIndexing_ = true;
+
 		this.logger().info('SearchEngine: Updating FTS table...');
 
 		await ItemChange.waitForAllSaved();
 
 		if (!Setting.value('searchEngine.initialIndexingDone')) {
-			await this.rebuildIndex();
-			Setting.setValue('searchEngine.initialIndexingDone', true)
+			await this.rebuildIndex_();
+			Setting.setValue('searchEngine.initialIndexingDone', true);
+			this.isIndexing_ = false;
 			return;
 		}
 
@@ -135,6 +150,8 @@ class SearchEngine {
 		await ItemChangeUtils.deleteProcessedChanges();
 
 		this.logger().info('SearchEngine: Updated FTS table in ' + (Date.now() - startTime) + 'ms');
+
+		this.isIndexing_ = false;
 }
 
 	async countRows() {

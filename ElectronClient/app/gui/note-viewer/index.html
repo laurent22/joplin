@@ -227,6 +227,10 @@
 		if (!options) options = {};
 
 		// TODO: It should highlight queries without accents - eg "penche*" should highlight "penchés"
+		// TODO: It should highlight Chinese, Japanese characters, etc.
+		// TODO: It should highlight Russian
+		// TODO: not working - "oue*" doesn't highlight "ouéé"
+		// TODO: Search engine support to mobile app (sync tables)
 
 		if (!mark_) {
 			mark_ = new Mark(document.getElementById('content'), {
