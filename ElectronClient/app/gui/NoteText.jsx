@@ -6,7 +6,7 @@ const Search = require('lib/models/Search.js');
 const { time } = require('lib/time-utils.js');
 const Setting = require('lib/models/Setting.js');
 const { IconButton } = require('./IconButton.min.js');
-const { urlDecode, escapeHtml } = require('lib/string-utils');
+const { urlDecode, escapeHtml, pregQuote } = require('lib/string-utils');
 const Toolbar = require('./Toolbar.min.js');
 const TagList = require('./TagList.min.js');
 const { connect } = require('react-redux');
@@ -1588,7 +1588,11 @@ class NoteTextComponent extends React.Component {
 			const markerOptions = {};
 
 			if (this.state.showLocalSearch) {
-				keywords = [this.state.localSearch.query];
+				keywords = [{
+					type: 'text',
+					value: this.state.localSearch.query,
+					accuracy: 'partially',
+				}]
 				markerOptions.selectedIndex = this.state.localSearch.selectedIndex;
 			} else {
 				const search = BaseModel.byId(this.props.searches, this.props.selectedSearchId);

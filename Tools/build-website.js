@@ -229,7 +229,7 @@ const headerHtml = `<!doctype html>
 
 const footerHtml = `
 <div class="footer">
-Copyright (c) 2016-2018 Laurent Cozic
+Copyright (c) 2016-2019 Laurent Cozic
 </div>
 </body>
 </html>

@@ -263,15 +263,22 @@
 		for (let i = 0; i < keywords.length; i++) {
 			const keyword = keywords[i];
 
+			if (typeof keyword === 'string') {
+				keyword = {
+					type: 'text',
+					value: keyword,
+				};
+			}
+
 			if (keyword.type === 'regex') {
 				mark_.markRegExp(new RegExp('\\b' + keyword.value + '\\b', 'gmi'), {
 					each: onEachElement,
 					acrossElements: true,
 				});
 			} else {
-				mark_.mark([keyword], {
+				mark_.mark([keyword.value], {
 					each: onEachElement,
-					accuracy: 'exactly',
+					accuracy: keyword.accuracy ? keyword.accuracy : 'exactly', 
 				});
 			}
 		}
@@ -365,22 +372,38 @@
 		return false;
 	}
 
+	function getParentAnchorElement(element) {
+		let counter = 0;
+		while (true) {
+
+			if (counter++ >= 10000) {
+				console.warn('been looping for too long - exiting')
+				return null;
+			}
+
+			if (!element) return null;
+			if (element.nodeName === 'A') return element;
+			element = element.parentElement;
+		}
+	}
+
 	document.addEventListener('click', function(event) {
-		const t = event.target;
+		const anchor = getParentAnchorElement(event.target);
+		if (!anchor) return;
 
 		// Prevent URLs added via <a> tags from being opened within the application itself
 		// otherwise it would open the whole website within the WebView.
-		if (t && t.nodeName === 'A' && !t.hasAttribute('data-from-md')) {
-			if (handleInternalLink(event, t)) return;
+		if (!anchor.hasAttribute('data-from-md')) {
+			if (handleInternalLink(event, anchor)) return;
 
 			event.preventDefault();
-			ipcProxySendToHost(t.getAttribute('href'));
+			ipcProxySendToHost(anchor.getAttribute('href'));
 			return;
 		}
 
 		// If this is an internal link, jump to the anchor directly
-		if (t && t.nodeName === 'A' && t.hasAttribute('data-from-md')) {
-			if (handleInternalLink(event, t)) return;
+		if (anchor.hasAttribute('data-from-md')) {
+			if (handleInternalLink(event, anchor)) return;
 		}
 	});
 
