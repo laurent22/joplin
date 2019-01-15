@@ -257,15 +257,22 @@
 		for (let i = 0; i < keywords.length; i++) {
 			const keyword = keywords[i];
 
+			if (typeof keyword === 'string') {
+				keyword = {
+					type: 'text',
+					value: keyword,
+				};
+			}
+
 			if (keyword.type === 'regex') {
 				mark_.markRegExp(new RegExp(keyword.value, 'gmi'), {
 					each: onEachElement,
 					acrossElements: true,
 				});
 			} else {
-				mark_.mark([keyword], {
+				mark_.mark([keyword.value], {
 					each: onEachElement,
-					accuracy: 'exactly', 
+					accuracy: keyword.accuracy ? keyword.accuracy : 'exactly', 
 				});
 			}
 		}
