@@ -284,7 +284,7 @@ class NoteListComponent extends React.Component {
 						acrossElements: true,
 					});
 				} else {
-					mark.mark([w], {
+					mark.mark([w.value], {
 						accuracy: 'exactly',
 					});
 				}

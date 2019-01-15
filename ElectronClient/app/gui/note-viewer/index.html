@@ -231,6 +231,8 @@
 		// TODO: It should highlight Russian
 		// TODO: not working - "oue*" doesn't highlight "ouéé"
 		// TODO: Search engine support to mobile app (sync tables)
+		// TODO: Update everywhere that uses allParsedQueryTerms to support new format
+		// TODO: Add support for scriptType on mobile and CLI
 
 		if (!mark_) {
 			mark_ = new Mark(document.getElementById('content'), {
@@ -261,7 +263,7 @@
 		}
 
 		for (let i = 0; i < keywords.length; i++) {
-			const keyword = keywords[i];
+			let keyword = keywords[i];
 
 			if (typeof keyword === 'string') {
 				keyword = {
@@ -270,15 +272,22 @@
 				};
 			}
 
+			const isBasicSearch = ['ja', 'zh', 'ko'].indexOf(keyword.scriptType) >= 0;
+
 			if (keyword.type === 'regex') {
-				mark_.markRegExp(new RegExp('\\b' + keyword.value + '\\b', 'gmi'), {
+				let regexString = '\\b' + keyword.value + '\\b';
+				if (isBasicSearch) regexString = keyword.value;
+
+				mark_.markRegExp(new RegExp(regexString, 'gmi'), {
 					each: onEachElement,
 					acrossElements: true,
 				});
 			} else {
+				let accuracy = keyword.accuracy ? keyword.accuracy : 'exactly';
+				if (isBasicSearch) accuracy = 'partially';
 				mark_.mark([keyword.value], {
 					each: onEachElement,
-					accuracy: keyword.accuracy ? keyword.accuracy : 'exactly', 
+					accuracy: accuracy, 
 				});
 			}
 		}

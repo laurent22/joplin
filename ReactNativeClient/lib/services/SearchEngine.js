@@ -298,7 +298,9 @@ class SearchEngine {
 				}
 
 				if (term.indexOf('*') >= 0) {
-					terms[col][i] = { type: 'regex', value: this.queryTermToRegex(term) };
+					terms[col][i] = { type: 'regex', value: this.queryTermToRegex(term), scriptType: scriptType(term) };
+				} else {
+					terms[col][i] = { type: 'text', value: term, scriptType: scriptType(term) };
 				}
 			}
 
