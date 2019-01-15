@@ -18,14 +18,6 @@ Arch Linux | An Arch Linux package is available [here](https://aur.archlinux.org
 
 To start it, type `joplin`.
 
-# Demo
-
-The demo application shows various Wikipedia articles converted to Markdown and organised into notebooks, as well as an example to-do list, in order to test and demonstrate the application. The demo application and its settings will be installed in a separate directory so as not to interfere with any existing Joplin application.
-
-	npm install -g demo-joplin
-
-To start it, type `demo-joplin`.
-
 # Usage
 
 To start the application type `joplin`. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via [shortcuts](#shortcuts).
