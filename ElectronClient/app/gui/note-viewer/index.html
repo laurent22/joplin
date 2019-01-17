@@ -37,6 +37,7 @@
 	<div id="hlScriptContainer"></div>
 	<div id="markScriptContainer"></div>
 	<div id="content" ondragstart="return false;" ondrop="return false;"></div>
+	<script src="./lib.js"></script>
 
 	<script>
 	const contentElement = document.getElementById('content');
@@ -226,10 +227,6 @@
 	function setMarkers(keywords, options = null) {
 		if (!options) options = {};
 
-		// TODO: It should highlight queries without accents - eg "penche*" should highlight "penchés"
-		// TODO: It should highlight Chinese, Japanese characters, etc.
-		// TODO: It should highlight Russian
-		// TODO: not working - "oue*" doesn't highlight "ouéé"
 		// TODO: Search engine support to mobile app (sync tables)
 		// TODO: Update everywhere that uses allParsedQueryTerms to support new format
 		// TODO: Add support for scriptType on mobile and CLI
@@ -275,12 +272,20 @@
 			const isBasicSearch = ['ja', 'zh', 'ko'].indexOf(keyword.scriptType) >= 0;
 
 			if (keyword.type === 'regex') {
-				let regexString = '\\b' + keyword.value + '\\b';
+				const b = '[' + pregQuote(' \t\n\r,.,+-*?!={}<>|:"\'()[]') + ']+';
+
+				// The capturing groups are a hack to go around the strange behaviour of the ignoreGroups property. What we want is to
+				// exclude the first and last matches (the boundaries). What ignoreGroups does is ignore the first X groups. So
+				// we put the first boundary and the keyword inside a group, that way the first groups is ignored (ignoreGroups = 1)
+				// the second is included. And the last boundary is dropped because it's not in any group (it's important NOT to
+				// put this one in a group because otherwise it cannot be excluded).
+				let regexString = '(' + b + ')' + '(' + replaceRegexDiacritics(keyword.value) + ')' + b;
 				if (isBasicSearch) regexString = keyword.value;
 
 				mark_.markRegExp(new RegExp(regexString, 'gmi'), {
 					each: onEachElement,
 					acrossElements: true,
+					ignoreGroups: 1,
 				});
 			} else {
 				let accuracy = keyword.accuracy ? keyword.accuracy : 'exactly';
