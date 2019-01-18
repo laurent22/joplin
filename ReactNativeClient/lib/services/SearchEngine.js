@@ -298,9 +298,9 @@ class SearchEngine {
 				}
 
 				if (term.indexOf('*') >= 0) {
-					terms[col][i] = { type: 'regex', value: this.queryTermToRegex(term), scriptType: scriptType(term), originalValue: term };
+					terms[col][i] = { type: 'regex', value: term, scriptType: scriptType(term), valueRegex: this.queryTermToRegex(term) };
 				} else {
-					terms[col][i] = { type: 'text', value: term, scriptType: scriptType(term), originalValue: term };
+					terms[col][i] = { type: 'text', value: term, scriptType: scriptType(term) };
 				}
 			}
 
@@ -372,18 +372,6 @@ class SearchEngine {
 				return [];
 			}
 		}
-	}
-
-	static runInBackground() {
-		if (this.isRunningInBackground_) return;
-
-		this.isRunningInBackground_ = true;
-		
-		this.instance().syncTables();
-
-		setTimeout(() => {
-			this.instance().syncTables();
-		}, 1000 * 60 * 5);
 	}
 	
 }

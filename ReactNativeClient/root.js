@@ -96,6 +96,7 @@ const generalMiddleware = store => next => async (action) => {
 
 	if (["NOTE_UPDATE_ONE", "NOTE_DELETE", "FOLDER_UPDATE_ONE", "FOLDER_DELETE"].indexOf(action.type) >= 0) {
 		if (!await reg.syncTarget().syncStarted()) reg.scheduleSync(5 * 1000, { syncSteps: ["update_remote", "delete_remote"] });
+		SearchEngine.instance().scheduleSyncTables();
 	}
 
 	if (['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >= 0) {
@@ -505,6 +506,7 @@ async function initialize(dispatch) {
 
 	SearchEngine.instance().setDb(reg.db());
 	SearchEngine.instance().setLogger(reg.logger());
+	SearchEngine.instance().scheduleSyncTables();
 
 	reg.scheduleSync().then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation

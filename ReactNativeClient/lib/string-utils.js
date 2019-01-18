@@ -228,7 +228,7 @@ function surroundKeywords(keywords, text, prefix, suffix) {
 
 	let regexString = keywords.map((k) => {
 		if (k.type === 'regex') {
-			return k.value;
+			return k.valueRegex;
 		} else {
 			return pregQuote(k);
 		}	
