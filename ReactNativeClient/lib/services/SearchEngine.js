@@ -298,9 +298,9 @@ class SearchEngine {
 				}
 
 				if (term.indexOf('*') >= 0) {
-					terms[col][i] = { type: 'regex', value: this.queryTermToRegex(term), scriptType: scriptType(term) };
+					terms[col][i] = { type: 'regex', value: this.queryTermToRegex(term), scriptType: scriptType(term), originalValue: term };
 				} else {
-					terms[col][i] = { type: 'text', value: term, scriptType: scriptType(term) };
+					terms[col][i] = { type: 'text', value: term, scriptType: scriptType(term), originalValue: term };
 				}
 			}
 
@@ -363,9 +363,14 @@ class SearchEngine {
 		} else {
 			const parsedQuery = this.parseQuery(query);
 			const sql = 'SELECT id, title, offsets(notes_fts) AS offsets FROM notes_fts WHERE notes_fts MATCH ?'
-			const rows = await this.db().selectAll(sql, [query]);
-			this.orderResults_(rows, parsedQuery);
-			return rows;
+			try {
+				const rows = await this.db().selectAll(sql, [query]);
+				this.orderResults_(rows, parsedQuery);
+				return rows;
+			} catch (error) {
+				this.logger().warn('Cannot execute MATCH query: ' + query + ': ' + error.message);
+				return [];
+			}
 		}
 	}
 

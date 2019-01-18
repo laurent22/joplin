@@ -262,39 +262,46 @@
 		for (let i = 0; i < keywords.length; i++) {
 			let keyword = keywords[i];
 
-			if (typeof keyword === 'string') {
-				keyword = {
-					type: 'text',
-					value: keyword,
-				};
-			}
+			markJsUtils.markKeyword(mark_, keyword, {
+				pregQuote: pregQuote,
+				replaceRegexDiacritics: replaceRegexDiacritics,
+			}, {
+				each: onEachElement,				
+			});
 
-			const isBasicSearch = ['ja', 'zh', 'ko'].indexOf(keyword.scriptType) >= 0;
+			// if (typeof keyword === 'string') {
+			// 	keyword = {
+			// 		type: 'text',
+			// 		value: keyword,
+			// 	};
+			// }
 
-			if (keyword.type === 'regex') {
-				const b = '[' + pregQuote(' \t\n\r,.,+-*?!={}<>|:"\'()[]') + ']+';
+			// const isBasicSearch = ['ja', 'zh', 'ko'].indexOf(keyword.scriptType) >= 0;
 
-				// The capturing groups are a hack to go around the strange behaviour of the ignoreGroups property. What we want is to
-				// exclude the first and last matches (the boundaries). What ignoreGroups does is ignore the first X groups. So
-				// we put the first boundary and the keyword inside a group, that way the first groups is ignored (ignoreGroups = 1)
-				// the second is included. And the last boundary is dropped because it's not in any group (it's important NOT to
-				// put this one in a group because otherwise it cannot be excluded).
-				let regexString = '(' + b + ')' + '(' + replaceRegexDiacritics(keyword.value) + ')' + b;
-				if (isBasicSearch) regexString = keyword.value;
+			// if (keyword.type === 'regex') {
+			// 	const b = '[' + pregQuote(' \t\n\r,.,+-*?!={}<>|:"\'()[]') + ']+';
 
-				mark_.markRegExp(new RegExp(regexString, 'gmi'), {
-					each: onEachElement,
-					acrossElements: true,
-					ignoreGroups: 1,
-				});
-			} else {
-				let accuracy = keyword.accuracy ? keyword.accuracy : 'exactly';
-				if (isBasicSearch) accuracy = 'partially';
-				mark_.mark([keyword.value], {
-					each: onEachElement,
-					accuracy: accuracy, 
-				});
-			}
+			// 	// The capturing groups are a hack to go around the strange behaviour of the ignoreGroups property. What we want is to
+			// 	// exclude the first and last matches (the boundaries). What ignoreGroups does is ignore the first X groups. So
+			// 	// we put the first boundary and the keyword inside a group, that way the first groups is ignored (ignoreGroups = 1)
+			// 	// the second is included. And the last boundary is dropped because it's not in any group (it's important NOT to
+			// 	// put this one in a group because otherwise it cannot be excluded).
+			// 	let regexString = '(' + b + ')' + '(' + replaceRegexDiacritics(keyword.value) + ')' + b;
+			// 	if (isBasicSearch) regexString = keyword.value;
+
+			// 	mark_.markRegExp(new RegExp(regexString, 'gmi'), {
+			// 		each: onEachElement,
+			// 		acrossElements: true,
+			// 		ignoreGroups: 1,
+			// 	});
+			// } else {
+			// 	let accuracy = keyword.accuracy ? keyword.accuracy : 'exactly';
+			// 	if (isBasicSearch) accuracy = 'partially';
+			// 	mark_.mark([keyword.value], {
+			// 		each: onEachElement,
+			// 		accuracy: accuracy, 
+			// 	});
+			// }
 		}
 
 		ipcProxySendToHost('setMarkerCount', elementIndex);

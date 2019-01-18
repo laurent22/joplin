@@ -263,7 +263,7 @@ class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -474,7 +474,7 @@ class JoplinDatabase extends Database {
 					END;`);
 			}
 
-			if (targetVersion == 16) {
+			if (targetVersion == 18) {
 				const notesNormalized = `
 					CREATE TABLE notes_normalized (
 						id TEXT NOT NULL,
@@ -520,8 +520,8 @@ class JoplinDatabase extends Database {
 			try {
 				await this.transactionExecBatch(queries);
 			} catch (error) {
-				if (targetVersion === 15 || targetVersion === 16) {
-					this.logger().warn('Could not upgrade to database v15 or v16 - FTS feature will not be used', error);
+				if (targetVersion === 15 || targetVersion === 18) {
+					this.logger().warn('Could not upgrade to database v15 or v18 - FTS feature will not be used', error);
 				} else {
 					throw error;
 				}

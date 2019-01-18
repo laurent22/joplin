@@ -238,8 +238,6 @@ class Note extends BaseItem {
 			fields: '*',
 		}
 
-		// TODO: add support for limits on .search()
-
 		let results = await this.previews(folderId, options);
 		return results.length ? results[0] : null;
 	}

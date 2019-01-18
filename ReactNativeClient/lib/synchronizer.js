@@ -267,7 +267,7 @@ class Synchronizer {
 							// This is a bit inefficient because if the resulting action is "updateRemote" we don't need the whole
 							// content, but for now that will do since being reliable is the priority.
 							//
-							// TODO: assuming a particular sync target is guaranteed to have accurate timestamps, the driver maybe
+							// Note: assuming a particular sync target is guaranteed to have accurate timestamps, the driver maybe
 							// could expose this with a accurateTimestamps() method that returns "true". In that case, the test
 							// could be done using the file timestamp and the potentially unnecessary content loading could be skipped.
 							// OneDrive does not appear to have accurate timestamps as lastModifiedDateTime would occasionally be
