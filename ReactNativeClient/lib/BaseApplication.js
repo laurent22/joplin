@@ -37,6 +37,7 @@ const ResourceFetcher = require('lib/services/ResourceFetcher');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseService = require('lib/services/BaseService');
+const SearchEngine = require('lib/services/SearchEngine');
 
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -220,23 +221,7 @@ class BaseApplication {
 				notes = await Tag.notes(parentId, options);
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				const search = BaseModel.byId(state.searches, parentId);
-
-				if (search.basic_search) {
-					// NOTE: Copied and pasted from ReactNativeClient/lib/components/screens/search.js
-					let p = search.query_pattern.split(' ');
-					let temp = [];
-					for (let i = 0; i < p.length; i++) {
-						let t = p[i].trim();
-						if (!t) continue;
-						temp.push(t);
-					}
-
-					notes = await Note.previews(null, {
-						anywherePattern: '*' + temp.join('*') + '*',
-					});
-				} else {
-					notes = await SearchEngineUtils.notesForQuery(search.query_pattern);
-				}	
+				notes = await SearchEngineUtils.notesForQuery(search.query_pattern);
 			}
 		}
 
@@ -296,6 +281,11 @@ class BaseApplication {
 		let refreshNotesUseSelectedNoteId = false;
 
 		reduxSharedMiddleware(store, next, action);
+
+		if (this.hasGui()  && ["NOTE_UPDATE_ONE", "NOTE_DELETE", "FOLDER_UPDATE_ONE", "FOLDER_DELETE"].indexOf(action.type) >= 0) {
+			if (!await reg.syncTarget().syncStarted()) reg.scheduleSync(30 * 1000, { syncSteps: ["update_remote", "delete_remote"] });
+			SearchEngine.instance().scheduleSyncTables();
+		}
 
 		if (action.type == 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE' || action.type === 'FOLDER_AND_NOTE_SELECT' || (action.type === 'SEARCH_UPDATE' && newState.notesParentType === 'Folder')) {
 			Setting.setValue('activeFolderId', newState.selectedFolderId);
@@ -542,6 +532,10 @@ class BaseApplication {
 		ResourceFetcher.instance().setFileApi(() => { return reg.syncTarget().fileApi() });
 		ResourceFetcher.instance().setLogger(this.logger_);
 		ResourceFetcher.instance().start();
+
+		SearchEngine.instance().setDb(reg.db());
+		SearchEngine.instance().setLogger(reg.logger());
+		SearchEngine.instance().scheduleSyncTables();
 
 		let currentFolderId = Setting.value('activeFolderId');
 		let currentFolder = null;

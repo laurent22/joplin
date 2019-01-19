@@ -328,7 +328,8 @@ class SearchEngine {
 	}
 
 	normalizeText_(text) {
-		return removeDiacritics(text.normalize().toLowerCase());
+		const normalizedText = text.normalize ? text.normalize() : text;
+		return removeDiacritics(normalizedText.toLowerCase());
 	}
 
 	normalizeNote_(note) {

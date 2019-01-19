@@ -23,7 +23,6 @@ const DecryptionWorker = require('lib/services/DecryptionWorker');
 const InteropService = require('lib/services/InteropService');
 const InteropServiceHelper = require('./InteropServiceHelper.js');
 const ResourceService = require('lib/services/ResourceService');
-const SearchEngine = require('lib/services/SearchEngine');
 const ClipperServer = require('lib/ClipperServer');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const { bridge } = require('electron').remote.require('./bridge');
@@ -196,11 +195,6 @@ class Application extends BaseApplication {
 
 		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'style.editor.fontFamily' || action.type == 'SETTING_UPDATE_ALL') {
 			this.updateEditorFont();
-		}
-
-		if (["NOTE_UPDATE_ONE", "NOTE_DELETE", "FOLDER_UPDATE_ONE", "FOLDER_DELETE"].indexOf(action.type) >= 0) {
-			if (!await reg.syncTarget().syncStarted()) reg.scheduleSync(30 * 1000, { syncSteps: ["update_remote", "delete_remote"] });
-			SearchEngine.instance().scheduleSyncTables();
 		}
 
 		if (['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >= 0) {
@@ -794,10 +788,6 @@ class Application extends BaseApplication {
 		}
 
 		ResourceService.runInBackground();
-
-		SearchEngine.instance().setDb(reg.db());
-		SearchEngine.instance().setLogger(reg.logger());
-		SearchEngine.instance().scheduleSyncTables();
 
 		if (Setting.value('env') === 'dev') {
 			AlarmService.updateAllNotifications();
