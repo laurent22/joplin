@@ -512,6 +512,9 @@ class MdToHtml {
 			return this.renderImageHtml_(before, src, after, options);
 		});
 
+		// To disable meta tags that would refresh the page - eg "<meta http-equiv="refresh" content="5; url=/">"
+		// https://github.com/laurent22/joplin/issues/769
+		renderedBody = renderedBody.replace(/<meta\s/, '&lt;meta ');
 
 		// https://necolas.github.io/normalize.css/
 		const normalizeCss = `
