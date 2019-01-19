@@ -513,8 +513,9 @@ class MdToHtml {
 		});
 
 		// To disable meta tags that would refresh the page - eg "<meta http-equiv="refresh" content="5; url=/">"
+		// Also disable a few other tags that are likely not meant to be rendered.
 		// https://github.com/laurent22/joplin/issues/769
-		renderedBody = renderedBody.replace(/<meta\s/, '&lt;meta ');
+		renderedBody = renderedBody.replace(/<(meta|title|body|html|script)/, '&lt;$1');
 
 		// https://necolas.github.io/normalize.css/
 		const normalizeCss = `
