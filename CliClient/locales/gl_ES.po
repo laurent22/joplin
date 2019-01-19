@@ -705,8 +705,20 @@ msgstr "Cancelar"
 msgid "Current version is up-to-date."
 msgstr "A versión actual está actualizada."
 
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr ""
+
 msgid "An update is available, do you want to download it now?"
 msgstr "Hai unha actualización dispoñíbel, desexa descargala agora?"
+
+#, javascript-format
+msgid "Your version: v%s"
+msgstr ""
+
+#, javascript-format
+msgid "New version: v%s"
+msgstr ""
 
 msgid "Yes"
 msgstr "Si"
@@ -1001,6 +1013,9 @@ msgid ""
 msgstr ""
 "Esta nota non ten contido. Prema en «%s» para ir ao editor e modificar a "
 "nota."
+
+msgid "Only one note can be printed or exported to PDF at a time."
+msgstr ""
 
 msgid "strong text"
 msgstr ""
@@ -1349,6 +1364,13 @@ msgstr ""
 
 msgid "Automatically update the application"
 msgstr "Actualizar automaticamente o aplicativo"
+
+msgid "Get pre-releases when checking for updates"
+msgstr ""
+
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr ""
 
 msgid "Synchronisation interval"
 msgstr "Intervalo de sincronización"

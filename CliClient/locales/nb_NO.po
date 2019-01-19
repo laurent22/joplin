@@ -704,8 +704,20 @@ msgstr "Avbryt"
 msgid "Current version is up-to-date."
 msgstr "Nåværende versjon er den siste tilgjengelige."
 
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr ""
+
 msgid "An update is available, do you want to download it now?"
 msgstr "En oppdatering er tilgjengelig, vil du laste den ned nå?"
+
+#, javascript-format
+msgid "Your version: v%s"
+msgstr ""
+
+#, javascript-format
+msgid "New version: v%s"
+msgstr ""
 
 msgid "Yes"
 msgstr "Ja"
@@ -1007,6 +1019,9 @@ msgid ""
 "note."
 msgstr ""
 "Dette notatet har ikke noe innhold. Klikk på \"%s\" for å redigere notatet."
+
+msgid "Only one note can be printed or exported to PDF at a time."
+msgstr ""
 
 msgid "strong text"
 msgstr "fet tekst"
@@ -1351,6 +1366,13 @@ msgstr ""
 
 msgid "Automatically update the application"
 msgstr "Oppdater applikasjonen automatisk"
+
+msgid "Get pre-releases when checking for updates"
+msgstr ""
+
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr ""
 
 msgid "Synchronisation interval"
 msgstr "Synkroniserinsintervall"

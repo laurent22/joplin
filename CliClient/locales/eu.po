@@ -714,7 +714,19 @@ msgstr "Utzi"
 msgid "Current version is up-to-date."
 msgstr ""
 
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr ""
+
 msgid "An update is available, do you want to download it now?"
+msgstr ""
+
+#, javascript-format
+msgid "Your version: v%s"
+msgstr ""
+
+#, javascript-format
+msgid "New version: v%s"
 msgstr ""
 
 msgid "Yes"
@@ -1011,6 +1023,9 @@ msgstr "Esteka edo mezu ez dago onartua: %s"
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
+msgstr ""
+
+msgid "Only one note can be printed or exported to PDF at a time."
 msgstr ""
 
 msgid "strong text"
@@ -1368,6 +1383,13 @@ msgstr ""
 
 msgid "Automatically update the application"
 msgstr "Automatikoki eguneratu aplikazioa"
+
+msgid "Get pre-releases when checking for updates"
+msgstr ""
+
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr ""
 
 msgid "Synchronisation interval"
 msgstr "Sinkronizazio tartea"

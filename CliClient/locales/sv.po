@@ -718,8 +718,20 @@ msgstr "Avbryt"
 msgid "Current version is up-to-date."
 msgstr "Nuvarande version är uppdaterad."
 
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr ""
+
 msgid "An update is available, do you want to download it now?"
 msgstr "En uppdatering är tillgänglig, vill du hämta den nu?"
+
+#, javascript-format
+msgid "Your version: v%s"
+msgstr ""
+
+#, javascript-format
+msgid "New version: v%s"
+msgstr ""
 
 msgid "Yes"
 msgstr "Ja"
@@ -1024,6 +1036,9 @@ msgid ""
 msgstr ""
 "Den här anteckningen har inget innehåll. Klicka på \"%s\" för att växla "
 "redigeraren och redigera anteckningen."
+
+msgid "Only one note can be printed or exported to PDF at a time."
+msgstr ""
 
 msgid "strong text"
 msgstr "stark text"
@@ -1366,6 +1381,13 @@ msgstr ""
 
 msgid "Automatically update the application"
 msgstr "Uppdatera programmet automatiskt"
+
+msgid "Get pre-releases when checking for updates"
+msgstr ""
+
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr ""
 
 msgid "Synchronisation interval"
 msgstr "Synkroniseringsintervall"

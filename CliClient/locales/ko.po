@@ -697,8 +697,20 @@ msgstr "취소"
 msgid "Current version is up-to-date."
 msgstr "현재 버전은 최신입니다."
 
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr ""
+
 msgid "An update is available, do you want to download it now?"
 msgstr "업데이트가 있습니다. 지금 다운로드할까요?"
+
+#, javascript-format
+msgid "Your version: v%s"
+msgstr ""
+
+#, javascript-format
+msgid "New version: v%s"
+msgstr ""
 
 msgid "Yes"
 msgstr "예"
@@ -995,6 +1007,9 @@ msgid ""
 msgstr ""
 "비어있는 노트입니다. \"%s\" 항목을 선택해서 편집기를 전환하고 노트를 편집하세"
 "요."
+
+msgid "Only one note can be printed or exported to PDF at a time."
+msgstr ""
 
 msgid "strong text"
 msgstr "중요 텍스트"
@@ -1336,6 +1351,13 @@ msgstr ""
 
 msgid "Automatically update the application"
 msgstr "애플리케이션을 자동으로 업데이트"
+
+msgid "Get pre-releases when checking for updates"
+msgstr ""
+
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr ""
 
 msgid "Synchronisation interval"
 msgstr "동기화 간격"

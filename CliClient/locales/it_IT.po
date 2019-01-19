@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Per cancellare un'etichetta, togli l'etichetta associata alle note."
@@ -718,8 +716,20 @@ msgstr "Cancella"
 msgid "Current version is up-to-date."
 msgstr "La versione attuale è aggiornata."
 
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr ""
+
 msgid "An update is available, do you want to download it now?"
 msgstr "È disponibile un aggiornamento, vuoi scaricarlo ora?"
+
+#, javascript-format
+msgid "Your version: v%s"
+msgstr ""
+
+#, javascript-format
+msgid "New version: v%s"
+msgstr ""
 
 msgid "Yes"
 msgstr "Sì"
@@ -1022,6 +1032,9 @@ msgid ""
 msgstr ""
 "Questa nota non ha contenuto. Fai clic su \"%s\" per attivare l'editor e "
 "modificare la nota."
+
+msgid "Only one note can be printed or exported to PDF at a time."
+msgstr ""
 
 msgid "strong text"
 msgstr "Testo grasseto"
@@ -1366,6 +1379,13 @@ msgstr ""
 
 msgid "Automatically update the application"
 msgstr "Aggiorna automaticamente l'applicazione"
+
+msgid "Get pre-releases when checking for updates"
+msgstr ""
+
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr ""
 
 msgid "Synchronisation interval"
 msgstr "Intervallo di sincronizzazione"
