@@ -175,6 +175,7 @@ class Note extends BaseItem {
 		for (let i = 0; i < resourceIds.length; i++) {
 			const id = resourceIds[i];
 			const resource = await Resource.load(id);
+			if (!resource) continue;
 			body = body.replace(new RegExp(':/' + id, 'gi'), toSystemSlashes(Resource.fullPath(resource)));
 		}
 
