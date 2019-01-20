@@ -4,6 +4,8 @@ const BaseItem = require('lib/models/BaseItem.js');
 const ItemChange = require('lib/models/ItemChange.js');
 const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim.js');
+const { pregQuote } = require('lib/string-utils.js');
+const { toSystemSlashes } = require('lib/path-utils.js');
 const { time } = require('lib/time-utils.js');
 const { _ } = require('lib/locale.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
@@ -27,7 +29,7 @@ class Note extends BaseItem {
 	}
 
 	static async serializeForEdit(note) {
-		return super.serialize(note, ['title', 'body']);
+		return this.replaceResourceInternalToExternalLinks(await super.serialize(note, ['title', 'body']));
 	}
 
 	static async unserializeForEdit(content) {
@@ -35,6 +37,7 @@ class Note extends BaseItem {
 		let output = await super.unserialize(content);
 		if (!output.title) output.title = '';
 		if (!output.body) output.body = '';
+		output.body = await this.replaceResourceExternalToInternalLinks(output.body);
 		return output;
 	}
 
@@ -163,6 +166,29 @@ class Note extends BaseItem {
 
 	static async linkedResourceIds(body) {
 		return await this.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, body);
+	}
+
+	static async replaceResourceInternalToExternalLinks(body) {
+		const resourceIds = await this.linkedResourceIds(body);
+		const Resource = this.getClass('Resource');
+
+		for (let i = 0; i < resourceIds.length; i++) {
+			const id = resourceIds[i];
+			const resource = await Resource.load(id);
+			body = body.replace(new RegExp(':/' + id, 'gi'), toSystemSlashes(Resource.fullPath(resource)));
+		}
+
+		return body;
+	}
+
+	static async replaceResourceExternalToInternalLinks(body) {
+		const reString = pregQuote(toSystemSlashes(Resource.baseDirectoryPath() + '/')) + '[a-zA-Z0-9\.]+';
+		const re = new RegExp(reString, 'gi');
+		body = body.replace(re, (match) => {
+			const id = Resource.pathToId(match);
+			return ':/' + id;
+		});
+		return body;
 	}
 
 	static new(parentId = '') {
