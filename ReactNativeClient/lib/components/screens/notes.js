@@ -147,6 +147,14 @@ class NotesScreenComponent extends BaseScreenComponent {
 		});
 	}
 
+	moveFolder_onPress(folderId) {
+		this.props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'FolderMove',
+			folderId: folderId,
+		});
+	}
+
 	menuOptions() {
 		if (this.props.notesParentType == 'Folder') {
 			if (this.props.selectedFolderId == Folder.conflictFolderId()) return [];
@@ -156,6 +164,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 			let output = [];
 			if (!folder.encryption_applied) output.push({ title: _('Edit notebook'), onPress: () => { this.editFolder_onPress(this.props.selectedFolderId); } });
+			output.push({ title: _('Move notebook'), onPress: () => { this.moveFolder_onPress(this.props.selectedFolderId); } });
 			output.push({ title: _('Delete notebook'), onPress: () => { this.deleteFolder_onPress(this.props.selectedFolderId); } });
 
 			return output;

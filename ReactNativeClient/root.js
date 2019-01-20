@@ -31,6 +31,7 @@ const { NotesScreen } = require('lib/components/screens/notes.js');
 const { NoteScreen } = require('lib/components/screens/note.js');
 const { ConfigScreen } = require('lib/components/screens/config.js');
 const { FolderScreen } = require('lib/components/screens/folder.js');
+const { FolderMoveScreen } = require('lib/components/screens/folder-move.js');
 const { LogScreen } = require('lib/components/screens/log.js');
 const { StatusScreen } = require('lib/components/screens/status.js');
 const { WelcomeScreen } = require('lib/components/screens/welcome.js');
@@ -647,6 +648,7 @@ class AppComponent extends React.Component {
 			Notes: { screen: NotesScreen },
 			Note: { screen: NoteScreen },
 			Folder: { screen: FolderScreen },
+			FolderMove: { screen: FolderMoveScreen },
 			OneDriveLogin: { screen: OneDriveLoginScreen },
 			DropboxLogin: { screen: DropboxLoginScreen },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
