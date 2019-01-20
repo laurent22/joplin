@@ -29,6 +29,7 @@ class Bridge {
 					source_url: command.url,
 					parent_id: command.parent_id,
 					tags: command.tags || '',
+					image_sizes: command.image_sizes || {},
 				};
 
 				this.dispatch({ type: 'CLIPPED_CONTENT_SET', content: content });

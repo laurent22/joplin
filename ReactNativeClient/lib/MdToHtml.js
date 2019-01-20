@@ -606,8 +606,8 @@ class MdToHtml {
 				border-bottom: 1px solid ` + style.htmlDividerColor + `;
 			}
 			img {
-				/* width: auto; */
 				max-width: 100%;
+				height: auto;
 			}
 			.inline-code {
 				border: 1px solid ` + style.htmlCodeBorderColor + `;
