@@ -41,7 +41,7 @@ class WebDavApi {
 	}
 
 	baseUrl() {
-		return this.options_.baseUrl();
+		return rtrimSlashes(this.options_.baseUrl());
 	}
 
 	relativeBaseUrl() {
@@ -216,7 +216,71 @@ class WebDavApi {
 		output.push(url);
 
 		return output.join(' ');		
-	}	
+	}
+
+	handleNginxHack_(jsonResponse, newErrorHandler) {
+		// Trying to fix 404 error issue with Nginx WebDAV server.
+		// https://github.com/laurent22/joplin/issues/624
+		// https://github.com/laurent22/joplin/issues/808
+		// Not tested but someone confirmed it worked - https://github.com/laurent22/joplin/issues/808#issuecomment-443552858
+		// and fix is narrowly scoped so shouldn't affect anything outside this particular edge case.
+		//
+		// The issue is that instead of an HTTP 404 status code, Nginx returns 200 but with this response:
+		//
+		// <?xml version="1.0" encoding="utf-8" ?>
+		// <D:multistatus xmlns:D="DAV:">
+		// 	<D:response>
+		// 		<D:href>/notes/ecd4027a5271483984b00317433e2c66.md</D:href>
+		// 		<D:propstat>
+		// 			<D:prop/>
+		// 			<D:status>HTTP/1.1 404 Not Found</D:status>
+		// 		</D:propstat>
+		// 	</D:response>
+		// </D:multistatus>
+		//
+		// So we need to parse this and find that it is in fact a 404 error.
+		//
+		// HOWEVER, some implementations also return 404 for missing props, for example SeaFile:
+		// (indicates that the props "getlastmodified" is not present, but this call is only
+		// used when checking the conf, so we don't really need it)
+		// https://github.com/laurent22/joplin/issues/1137
+		//
+		// <?xml version='1.0' encoding='UTF-8'?>
+		// <ns0:multistatus xmlns:ns0="DAV:">
+		// 	<ns0:response>
+		// 		<ns0:href>/seafdav/joplin/</ns0:href>
+		// 		<ns0:propstat>
+		// 			<ns0:prop>
+		// 				<ns0:getlastmodified/>
+		// 			</ns0:prop>
+		// 			<ns0:status>HTTP/1.1 404 Not Found</ns0:status>
+		// 		</ns0:propstat>
+		// 		<ns0:propstat>
+		// 			<ns0:prop>
+		// 				<ns0:resourcetype>
+		// 					<ns0:collection/>
+		// 				</ns0:resourcetype>
+		// 			</ns0:prop>
+		// 			<ns0:status>HTTP/1.1 200 OK</ns0:status>
+		// 		</ns0:propstat>
+		// 	</ns0:response>
+		// </ns0:multistatus>
+		//
+		// As a simple fix for now it's enough to check if ALL the statuses are 404 - in that case
+		// it really means that the file doesn't exist. Otherwise we can proceed as usual.
+		const responseArray = this.arrayFromJson(jsonResponse, ['d:multistatus', 'd:response']);
+		if (responseArray && responseArray.length === 1) {
+			const propStats = this.arrayFromJson(jsonResponse, ['d:multistatus', 'd:response', 0, 'd:propstat']);
+			if (!propStats.length) return;
+			let count404 = 0;
+			for (let i = 0; i < propStats.length; i++) {
+				const status = this.arrayFromJson(jsonResponse, ['d:multistatus', 'd:response', 0, 'd:propstat', i, 'd:status']);
+				if (status && status.length && status[0].indexOf('404') >= 0) count404++;
+			}
+
+			if (count404 === propStats.length) throw newErrorHandler('Not found', 404);
+		}
+	}
 
 	// curl -u admin:123456 'http://nextcloud.local/remote.php/dav/files/admin/' -X PROPFIND --data '<?xml version="1.0" encoding="UTF-8"?>
 	//  <d:propfind xmlns:d="DAV:">
@@ -321,17 +385,7 @@ class WebDavApi {
 		if (['MKCOL', 'DELETE', 'PUT', 'MOVE'].indexOf(method) >= 0) return null;
 
 		const output = await loadResponseJson();
-
-		// Trying to fix 404 error issue with Nginx WebDAV server.
-		// https://github.com/laurent22/joplin/issues/624
-		// https://github.com/laurent22/joplin/issues/808
-		// Not tested but someone confirmed it worked - https://github.com/laurent22/joplin/issues/808#issuecomment-443552858
-		// and fix is narrowly scoped so shouldn't affect anything outside this particular edge case.
-		const responseArray = this.arrayFromJson(output, ['d:multistatus', 'd:response']);
-		if (responseArray && responseArray.length === 1) {
-			const status = this.stringFromJson(output, ['d:multistatus', 'd:response', 0, 'd:propstat', 0, 'd:status', 0]);
-			if (status && status.indexOf('404') >= 0) throw newError('Not found', 404);
-		}
+		this.handleNginxHack_(output, newError);
 
 		// Check that we didn't get for example an HTML page (as an error) instead of the JSON response
 		// null responses are possible, for example for DELETE calls

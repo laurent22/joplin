@@ -199,7 +199,7 @@ class ConfigScreenComponent extends React.Component {
 
 			settingComps.push(
 				<div key="check_sync_config_button" style={this.rowStyle_}>
-					<button style={buttonStyle} disabled={this.state.checkSyncConfigResult === 'checking'} onClick={this.checkSyncConfig_}>{_('Check synchronisation configuration')}</button>
+					<button disabled={this.state.checkSyncConfigResult === 'checking'} onClick={this.checkSyncConfig_}>{_('Check synchronisation configuration')}</button>
 					{ statusComp }
 				</div>);
 		}
