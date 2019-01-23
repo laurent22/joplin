@@ -110,22 +110,22 @@ function shimInit() {
 		}
 	}
 
-	shim.createResourceFromPath = async function(filePath) {
+	shim.createResourceFromPath = async function(filePath, fileName = null, mime = null) {
 		const readChunk = require('read-chunk');
 		const imageType = require('image-type');
 
 		const { uuid } = require('lib/uuid.js');
 		const { basename, fileExtension, safeFileExtension } = require('lib/path-utils.js');
-		const mime = require('mime/lite');
 
 		if (!(await fs.pathExists(filePath))) throw new Error(_('Cannot access %s', filePath));
 
+		if (!fileName) fileName = basename(filePath);
 		let resource = Resource.new();
 		resource.id = uuid.create();
-		resource.mime = mime.getType(filePath);
-		resource.title = basename(filePath);
+		resource.mime = mime ? mime : require('mime/lite').getType(fileName);
+		resource.title = basename(fileName);
 
-		let fileExt = safeFileExtension(fileExtension(filePath));
+		let fileExt = safeFileExtension(fileExtension(fileName));
 
 		if (!resource.mime) {
 			const buffer = await readChunk(filePath, 0, 64);

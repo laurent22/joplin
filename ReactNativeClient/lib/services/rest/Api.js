@@ -506,14 +506,15 @@ class Api {
 		if (isDataUrl) {
 			const contentType = mimeUtils.fromDataUrl(url);
 			const fileExt = mimeUtils.toFileExtension(contentType);
-			const imagePath = tempDir + '/' + urlHash + '.' + fileExt;
+			const fileName = urlHash + '.' + fileExt;
+			const imagePath = tempDir + '/' + fileName;
 			try {
 				await shim.imageFromDataUrl(url, imagePath);
 			} catch (error) {
 				this.logger().warn('Cannot download image ' + url, error);
 				return null;
 			}
-			return imagePath;
+			return {name: fileName, path: imagePath, mime: contentType};
 		}
 
 		let fileName = basename(urlParser.parse(url).pathname);
@@ -543,16 +544,8 @@ class Api {
 				[fileName, mime] = this.adjustFilenameWithHeaders_(fileName, responseHeaders);
 				contentType = detectedType.mime;
 			}
-			let newPath = tempDir + '/' + urlHash + '.' + mimeUtils.toFileExtension(mime);
-			try {
-				await shim.fsDriver().move(imagePath, newPath);
-				imagePath = newPath;
-			} catch (error) {
-				this.logger().warn('Cannot move image ' + imagePath + '('+detectedType+') to ' + newPath, error);
-				return null;
-			}
 		}
-		return imagePath;
+		return {name: fileName, path: imagePath, mime: contentType};
 	}
 
 	async downloadImages_(urls) {
@@ -567,8 +560,11 @@ class Api {
 			const url = urls[urlIndex++];
 
 			return new Promise(async (resolve, reject) => {
-				const imagePath = await this.downloadImage_(url);
-				if (imagePath) output[url] = { path: imagePath, originalUrl: url };
+				const result = await this.downloadImage_(url);
+				if (result && result.path) {
+					result.originalUrl = url;
+					output[url] = result;
+				}
 				resolve();
 			});
 		}
@@ -585,7 +581,7 @@ class Api {
 			if (!urls.hasOwnProperty(url)) continue;
 			const urlInfo = urls[url];
 			try {
-				const resource = await shim.createResourceFromPath(urlInfo.path);
+				const resource = await shim.createResourceFromPath(urlInfo.path, urlInfo.name, urlInfo.mime);
 				urlInfo.resource = resource;
 			} catch (error) {
 				this.logger().warn('Cannot create resource for ' + url, error);
