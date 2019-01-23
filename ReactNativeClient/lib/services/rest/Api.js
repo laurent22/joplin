@@ -2,6 +2,7 @@ const { ltrimSlashes } = require('lib/path-utils.js');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
+const Resource = require('lib/models/Resource');
 const BaseItem = require('lib/models/BaseItem');
 const BaseModel = require('lib/BaseModel');
 const Setting = require('lib/models/Setting');

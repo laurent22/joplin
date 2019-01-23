@@ -59,16 +59,16 @@ function shimInit() {
 	}
 
 	const resizeImage_ = async function(filePath, targetPath, mime) {
+		const maxDim = Resource.IMAGE_MAX_DIMENSION;
 		if (shim.isElectron()) { // For Electron
 			const nativeImage = require('electron').nativeImage;
 			let image = nativeImage.createFromPath(filePath);
 			if (image.isEmpty()) throw new Error('Image is invalid or does not exist: ' + filePath);
 
-			const maxDim = Resource.IMAGE_MAX_DIMENSION;
 			const size = image.getSize();
 
 			if (size.width <= maxDim && size.height <= maxDim) {
-				shim.fsDriver().copy(filePath, targetPath);
+				await shim.fsDriver().copy(filePath, targetPath);
 				return;
 			}
 
@@ -85,9 +85,18 @@ function shimInit() {
 		} else { // For the CLI tool
 			const sharp = require('sharp');
 
+			const image = sharp(filePath);
+			const meta = await image.metadata();
+
+			if (meta.width <= maxDim && meta.height <= maxDim) {
+				try {
+					return await shim.fsDriver().copy(filePath, targetPath);
+				} catch (e) { }
+			}
+
 			return new Promise((resolve, reject) => {
-				sharp(filePath)
-				.resize(Resource.IMAGE_MAX_DIMENSION, Resource.IMAGE_MAX_DIMENSION)
+				image
+				.resize(maxDim, maxDim)
 				.max()
 				.withoutEnlargement()
 				.toFile(targetPath, (err, info) => {
