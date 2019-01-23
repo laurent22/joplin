@@ -122,3 +122,78 @@ describe('services_rest_Api', function() {
 		testImageResize(done, getImagePath(1, maxDim + 1));
 	});
 });
+
+const testMultipleImage = async (done) => {
+	const images = [
+		'../../docs/images/BadgeAndroid.png',
+		'../../docs/images/BadgeWindows.png',
+	];
+	const fileExt = fileExtension(images[0]);
+	const contentType = mimeUtils.fromFileExtension(fileExt);
+	const bodyHtml = [];
+	const urls = [];
+	for(let i = 0; i < images.length; ++i) {
+		const sleepMS = 1000 / images.length * i;
+		const imageUrl = httpServer.getUrl(images[i], contentType, null, 'some.meaningless', {sleep: sleepMS});
+		urls.push(imageUrl);
+		bodyHtml.push('<img alt="' + images[i] + '" src="' + imageUrl + '"/>');
+	}
+	const f = await Folder.save({ title: "mon carnet" });
+	const response = await api.route('POST', 'notes', null, JSON.stringify({
+		title: 'test multiple images loading will not conflict with each other',
+		parent_id: f.id,
+		body_html: bodyHtml.join('<br/>\n'),
+	}));
+
+	const resourceIds = await Note.linkedResourceIds(response.body);
+	expect(resourceIds.length).toBe(images.length);
+	if (!resourceIds.length) return;
+
+	const matcher = /!\[([^\]]*)\]\(:\/([^\)]*)\)/g;
+	const matched = response.body.match(matcher);
+	expect(matched).not.toBe(null);
+	expect(matched.length).toBe(images.length);
+
+	for(let i = 0; i < matched.length; ++i) {
+		const groups = new RegExp(matcher).exec(matched[i]);
+		logger.debug('matching', matched[i], groups);
+		expect(groups).not.toBe(null);
+		if (!groups) continue;
+		expect(groups.length).toBeGreaterThan(2);
+		if (groups.length <= 2) continue;
+
+		const imageId = groups[2];
+		expect(resourceIds.indexOf(imageId)).toBeGreaterThanOrEqual(0);
+
+		const resource = await Resource.load(imageId);
+		expect(Resource.isSupportedImageMimeType(resource.mime)).toBe(true);
+
+		expect(resource.mime).toBe(contentType);
+		expect(resource.file_extension).toBe(fileExt);
+
+		const imagePath = __dirname + '/' + images[i];
+		const resourcePath = Resource.fullPath(resource);
+		expect(fileContentEqual(imagePath, resourcePath)).toBe(true);
+	}
+	done();
+};
+
+describe('services_rest_Api should load correctly for', function() {
+
+	beforeEach(async (done) => {
+		api = new Api();
+		await setupDatabaseAndSynchronizer(1);
+		await switchClient(1);
+		httpServer = await setupHttpServer();
+		done();
+	});
+
+	afterEach(async (done) => {
+		httpServer.destroy();
+		done();
+	});
+
+	it('multiple images without conflicting', async (done) => {
+		testMultipleImage(done);
+	});
+});

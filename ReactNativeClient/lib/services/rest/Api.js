@@ -1,4 +1,3 @@
-const { ltrimSlashes } = require('lib/path-utils.js');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
@@ -12,8 +11,9 @@ const { Logger } = require('lib/logger.js');
 const md5 = require('md5');
 const { shim } = require('lib/shim');
 const HtmlToMd = require('lib/HtmlToMd');
-const { fileExtension, safeFileExtension, safeFilename, filename } = require('lib/path-utils');
+const { fileExtension, safeFileExtension, safeFilename, filename, basename, dirname, ltrimSlashes } = require('lib/path-utils');
 const ApiResponse = require('lib/services/rest/ApiResponse');
+const urlParser = require('url');
 
 class ApiError extends Error {
 
@@ -424,26 +424,35 @@ class Api {
 
 	async downloadImage_(url) {
 		const tempDir = Setting.value('tempDir');
+		const randomPart = md5(Math.random() + '_' + Date.now()).substr(0,10);
+		const urlHash = md5(url) + '_' + randomPart;
 
 		const isDataUrl = url && url.toLowerCase().indexOf('data:') === 0;
-
-		const name = isDataUrl ? md5(Math.random() + '_' + Date.now()) : filename(url);
-		let fileExt = isDataUrl ? mimeUtils.toFileExtension(mimeUtils.fromDataUrl(url)) : safeFileExtension(fileExtension(url).toLowerCase());
-		if (fileExt) fileExt = '.' + fileExt;
-		let imagePath = tempDir + '/' + safeFilename(name) + fileExt;
-		if (await shim.fsDriver().exists(imagePath)) imagePath = tempDir + '/' + safeFilename(name) + '_' + md5(Math.random() + '_' + Date.now()).substr(0,10) + fileExt;
-
-		try {
-			if (isDataUrl) {
+		if (isDataUrl) {
+			const contentType = mimeUtils.fromDataUrl(url);
+			const fileExt = mimeUtils.toFileExtension(contentType);
+			const imagePath = tempDir + '/' + urlHash + '.' + fileExt;
+			try {
 				await shim.imageFromDataUrl(url, imagePath);
-			} else {
-				await shim.fetchBlob(url, { path: imagePath });
+			} catch (error) {
+				this.logger().warn('Cannot download image ' + url, error);
+				return null;
 			}
 			return imagePath;
+		}
+
+		let fileName = basename(urlParser.parse(url).pathname);
+		let fileExt = safeFileExtension(fileExtension(fileName).toLowerCase());
+		let contentType = mimeUtils.fromFileExtension(fileExt);
+		let imagePath = tempDir + '/' + urlHash + '.' + fileExt;
+
+		try {
+			await shim.fetchBlob(url, { path: imagePath });
 		} catch (error) {
 			this.logger().warn('Cannot download image at ' + url, error);
-			return '';
+			return null;
 		}
+		return imagePath;
 	}
 
 	async downloadImages_(urls) {
