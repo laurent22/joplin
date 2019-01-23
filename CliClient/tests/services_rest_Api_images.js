@@ -182,6 +182,10 @@ const testMultipleImage = async (done) => {
 const testImageType = async (done, filePath, contentType, fileExt, mime, fileName=null, supportedImage=true, tail='some.meaningless') => {
 	const imageUrl = httpServer.getUrl(filePath, contentType, fileName, tail);
 	logger.debug('testImageType', filePath, contentType, fileExt, mime, fileName, supportedImage, imageUrl);
+	testImageUrl(done, imageUrl, fileExt, mime, fileName, supportedImage);
+};
+
+const testImageUrl = async (done, imageUrl, fileExt, mime, fileName=null, supportedImage=true) => {
 	const f = await Folder.save({ title: "mon carnet" });
 	const response = await api.route('POST', 'notes', null, JSON.stringify({
 		title: 'testing get image ext from Content-Type',
@@ -241,6 +245,23 @@ describe('services_rest_Api should load correctly for', function() {
 
 	it('multiple images without conflicting', async (done) => {
 		testMultipleImage(done);
+	});
+
+	describe('supported svg image with', function() {
+		const filePath = '../../Assets/JoplinLetter.svg';
+		const fileName = filePath.split('/').pop();
+		const ext = fileExtension(fileName);
+		const mime = mimeUtils.fromFileExtension(ext);
+		function testImageContentDisposition(contentDisposition) {
+			it('only content-disposition: ' + contentDisposition, async (done) => {
+				const imageUrl = httpServer.getUrl(filePath, null, null, 'some.meaningless', {'Content-Disposition': contentDisposition,});
+				logger.debug('testImageUrl', filePath, ext, mime, fileName, contentDisposition, imageUrl);
+				testImageUrl(done, imageUrl, ext, mime, fileName, true);
+			});
+		}
+		testImageContentDisposition('attachment; filename*="' + "iso-8859-1'en'" + fileName + '"');
+		testImageContentDisposition('attachment; filename*="' + "utf-8''" + fileName + '"');
+		testImageContentDisposition('attachment; filename*=' + "''" + fileName);
 	});
 
 	const supported = {
