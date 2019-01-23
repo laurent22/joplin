@@ -178,6 +178,51 @@ const testMultipleImage = async (done) => {
 	done();
 };
 
+
+const testImageType = async (done, filePath, contentType, fileExt, mime, fileName=null, supportedImage=true, tail='some.meaningless') => {
+	const imageUrl = httpServer.getUrl(filePath, contentType, fileName, tail);
+	logger.debug('testImageType', filePath, contentType, fileExt, mime, fileName, supportedImage, imageUrl);
+	const f = await Folder.save({ title: "mon carnet" });
+	const response = await api.route('POST', 'notes', null, JSON.stringify({
+		title: 'testing get image ext from Content-Type',
+		parent_id: f.id,
+		body_html: '<b>avatar</b><img src="' + imageUrl + '"/>',
+	}));
+
+	const resourceIds = await Note.linkedResourceIds(response.body);
+	expect(resourceIds.length).toBe(1);
+
+	if (resourceIds.length) {
+		const resource = await Resource.load(resourceIds[0]);
+		expect(response.body.indexOf('(:/'+resource.id+')') >= 0).toBe(true);
+
+		expect(Resource.isSupportedImageMimeType(resource.mime)).toBe(supportedImage);
+	} else {
+		logger.debug('receive', imageUrl, resources.length ? resources[0] : 'none');
+	}
+	done();
+};
+
+const testImageWithContentType = (imageType, filePath, contentType, supportedImage=true) => {
+	const fileName = filePath.split('/').pop();
+	const ext = fileExtension(fileName);
+	const mime = mimeUtils.fromFileExtension(ext);
+	it(imageType + ' ' + ext + ' image with weird url tail but correct content-disposition and contentType: ' + contentType, async (done) => {
+		await testImageType(done, filePath, contentType, ext, mime, fileName, supportedImage);
+	});
+	if (!(ext == 'svg' && contentType && contentType != 'image/svg+xml'))
+	it(imageType + ' ' + ext + ' image with weird url tail but correct contentType: ' + contentType, async (done) => {
+		await testImageType(done, filePath, contentType, ext, mime, null, supportedImage);
+	});
+	if (contentType !== mime) return;
+	it(imageType + ' ' + ext + ' image with weird url tail but correct content-disposition', async (done) => {
+		await testImageType(done, filePath, null, ext, mime, fileName, supportedImage);
+	});
+	it(imageType + ' ' + ext + ' image with correct file extension at url tail', async (done) => {
+		await testImageType(done, filePath, null, ext, mime, null, supportedImage, fileName);
+	});
+}
+
 describe('services_rest_Api should load correctly for', function() {
 
 	beforeEach(async (done) => {
@@ -196,4 +241,17 @@ describe('services_rest_Api should load correctly for', function() {
 	it('multiple images without conflicting', async (done) => {
 		testMultipleImage(done);
 	});
+
+	const supported = {
+		'../../Assets/JoplinLetter.svg': 'image/svg+xml',
+		'../../Assets/Adresse.png': 'image/png',
+		'../tests/support/slow-typing-doc1.gif': 'image/gif',
+		'../tests/support/webp-animated.webp': 'image/webp',
+		'../tests/support/photo.jpg': 'image/jpeg',
+		'../tests/support/photo.jpg': 'image/jpg',
+	};
+	for(let filePath in supported) if (filePath) {
+		testImageWithContentType('supported', filePath, supported[filePath]);
+		testImageWithContentType('supported', filePath, 'application/octet-stream');
+	}
 });

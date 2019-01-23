@@ -422,6 +422,81 @@ class Api {
 		return await shim.attachFileToNote(note, tempFilePath);
 	}
 
+	getAttachNameFrom_(contentDisposition) {
+		// try to get real filename from header content-disposition
+		if (!contentDisposition) return null;
+		let attachName = null;
+		const fields = contentDisposition.split(';');
+		for(let i = fields.length - 1; i >= 0; --i) {
+			let field = fields[i];
+			if (!field) continue;
+			field = field.trim();
+			if (field.startsWith('filename=')) {
+				field = field.slice(9).trim();
+				if (field[0] === '"') field = field.slice(1, -1).trim();
+				attachName = field;
+				if (attachName) {
+					return basename(attachName);
+				}
+			}
+			if (field.startsWith('filename*=')) {
+				field = field.slice(10).trim()
+				if (field[0] === '"') field = field.slice(1, -1);
+				const parts = field.split("'").trim();
+				const charset = parts.splice(0,1);
+				const encoding = parts.splice(0, 1);
+				attachName = querystring.unescape(parts.join("'")).trim();
+				if (attachName) {
+					return basename(attachName);
+				}
+			}
+		}
+		return null;
+	}
+
+	adjustFilenameWithHeaders_(fileName, headers) {
+		const contentType = headers['content-type'];
+		let mime = contentType ? contentType.split(';')[0].trim() : '';
+		const mimeFromExt = mimeUtils.fromFileExtension(fileExtension(fileName));
+
+		// guest mime from original file extension for non-image mime
+		if (!mime || !mime.startsWith('image/')) {
+			if (mimeFromExt && Resource.isSupportedImageMimeType(mimeFromExt)) {
+				mime = mimeFromExt;
+			}
+		}
+
+		// use attachName only if it's supported image type.
+		// trust file extension in content-disposition over mime from content-type.
+		const attachName = this.getAttachNameFrom_(headers['content-disposition']);
+		if (attachName) {
+			//console.log('got attach ' + attachName + ' on MIME ' + mime);
+			const mimeFromAttach = mimeUtils.fromFileExtension(fileExtension(attachName));
+			if (mimeFromAttach && (mimeFromAttach == mimeFromExt
+				|| Resource.isSupportedImageMimeType(mimeFromAttach)
+				|| !mime || !Resource.isSupportedImageMimeType(mime))) {
+				mime = mimeFromAttach;
+			}
+			fileName = attachName;
+		}
+
+		// adjust fileExtension for supported image mime
+		else if (mime/* && Resource.isSupportedImageMimeType(mime) */) {
+			const fileExt = fileExtension(fileName);
+			const ext = mimeUtils.toFileExtension(mime) || '';
+			if (ext && ext !== fileExt) {
+				if (fileExt) {
+					return [fileName.slice(0, -fileExt.length) + ext, mime];
+				} else {
+					return [fileName + '.' + ext, mime];
+				}
+			}
+		} else {
+			mime = mimeFromExt;
+		}
+		return [fileName, mime];
+	}
+
 	async downloadImage_(url) {
 		const tempDir = Setting.value('tempDir');
 		const randomPart = md5(Math.random() + '_' + Date.now()).substr(0,10);
@@ -446,11 +521,36 @@ class Api {
 		let contentType = mimeUtils.fromFileExtension(fileExt);
 		let imagePath = tempDir + '/' + urlHash + '.' + fileExt;
 
+		let response = null;
 		try {
-			await shim.fetchBlob(url, { path: imagePath });
+			response = await shim.fetchBlob(url, { path: imagePath });
 		} catch (error) {
 			this.logger().warn('Cannot download image at ' + url, error);
 			return null;
+		}
+		const responseHeaders = Object.assign({}, response.headers);
+
+		let mime;
+		[fileName, mime] = this.adjustFilenameWithHeaders_(fileName, responseHeaders);
+		if (mime && mime !== contentType) {
+			const readChunk = require('read-chunk');
+			const fileType = require('file-type');
+			const buffer = await readChunk(imagePath, 0, 64);
+			const detectedType = fileType(buffer);
+
+			if (detectedType && responseHeaders['content-type'] != detectedType.mime) {
+				responseHeaders['content-type'] = detectedType.mime;
+				[fileName, mime] = this.adjustFilenameWithHeaders_(fileName, responseHeaders);
+				contentType = detectedType.mime;
+			}
+			let newPath = tempDir + '/' + urlHash + '.' + mimeUtils.toFileExtension(mime);
+			try {
+				await shim.fsDriver().move(imagePath, newPath);
+				imagePath = newPath;
+			} catch (error) {
+				this.logger().warn('Cannot move image ' + imagePath + '('+detectedType+') to ' + newPath, error);
+				return null;
+			}
 		}
 		return imagePath;
 	}
