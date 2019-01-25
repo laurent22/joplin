@@ -1,7 +1,5 @@
 <!--
 
-IMPORTANT: At the moment pull requests for new features are no longer being accepted. More info there: https://github.com/laurent22/joplin/issues/1112
-
 Please prefix the title with the platform you are targetting:
 
 - "Desktop" for the Windows/macOS/Linux app (Electron app)
