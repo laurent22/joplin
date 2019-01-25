@@ -6,13 +6,23 @@ class ItemList extends React.Component {
 		super();
 
 		this.scrollTop_ = 0;
+
+		this.listRef = React.createRef();
+
+		this.onScroll = this.onScroll.bind(this);
+		this.onKeyDown = this.onKeyDown.bind(this);
+	}
+
+	visibleItemCount(props) {
+		if (typeof props === 'undefined') props = this.props;
+		return Math.ceil(props.style.height / props.itemHeight);
 	}
 
 	updateStateItemIndexes(props) {
 		if (typeof props === 'undefined') props = this.props;
 
 		const topItemIndex = Math.floor(this.scrollTop_ / props.itemHeight);
-		const visibleItemCount = Math.ceil(props.style.height / props.itemHeight);
+		const visibleItemCount = this.visibleItemCount();
 
 		let bottomItemIndex = topItemIndex + visibleItemCount;
 		if (bottomItemIndex >= props.items.length) bottomItemIndex = props.items.length - 1;
@@ -31,8 +41,31 @@ class ItemList extends React.Component {
 		this.updateStateItemIndexes(newProps);
 	}
 
-	onScroll(scrollTop) {
+	onScroll(event) {
+		this.scrollTop_ = event.target.scrollTop;
+		this.updateStateItemIndexes();
+	}
+
+	onKeyDown(event) {
+		if (this.props.onKeyDown) this.props.onKeyDown(event);
+	}
+
+	makeItemIndexVisible(itemIndex) {
+		const top = Math.min(this.props.items.length - 1, this.state.topItemIndex + 1);
+		const bottom = Math.max(0, this.state.bottomItemIndex - 1)
+
+		if (itemIndex >= top && itemIndex <= bottom) return;
+
+		let scrollTop = 0;
+		if (itemIndex < top) {
+			scrollTop = this.props.itemHeight * itemIndex;
+		} else {
+			scrollTop = this.props.itemHeight * itemIndex - this.visibleItemCount();
+		}
+
 		this.scrollTop_ = scrollTop;
+		this.listRef.current.scrollTop = scrollTop;
+
 		this.updateStateItemIndexes();
 	}
 
@@ -61,10 +94,8 @@ class ItemList extends React.Component {
 		let classes = ['item-list'];
 		if (this.props.className) classes.push(this.props.className);
 
-		const that = this;
-
 		return (
-			<div className={classes.join(' ')} style={style} onScroll={ (event) => { this.onScroll(event.target.scrollTop) }}>
+			<div ref={this.listRef} className={classes.join(' ')} style={style} onScroll={this.onScroll} onKeyDown={this.onKeyDown}>
 				{ itemComps }
 			</div>
 		);

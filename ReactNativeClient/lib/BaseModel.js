@@ -44,6 +44,13 @@ class BaseModel {
 		return null;
 	}
 
+	static modelIndexById(items, id) {
+		for (let i = 0; i < items.length; i++) {
+			if (items[i].id == id) return i;
+		}
+		return -1;
+	}
+
 	// Prefer the use of this function to compare IDs as it handles the case where
 	// one ID is null and the other is "", in which case they are actually considered to be the same.
 	static idsEqual(id1, id2) {

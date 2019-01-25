@@ -22,7 +22,11 @@ class NoteListComponent extends React.Component {
 	constructor() {
 		super();
 
+		this.itemListRef = React.createRef();
+		this.itemAnchorRefs_ = {};
+
 		this.itemRenderer = this.itemRenderer.bind(this);
+		this.onKeyDown = this.onKeyDown.bind(this);
 	}
 
 	style() {
@@ -304,11 +308,15 @@ class NoteListComponent extends React.Component {
 			<i style={watchedIconStyle} className={"fa fa-external-link"}></i>
 		);
 
+		if (!this.itemAnchorRefs_[item.id]) this.itemAnchorRefs_[item.id] = React.createRef();
+		const ref = this.itemAnchorRefs_[item.id];
+
 		// Need to include "todo_completed" in key so that checkbox is updated when
 		// item is changed via sync.		
 		return <div key={item.id + '_' + item.todo_completed} style={style}>
 			{checkbox}
 			<a
+				ref={ref}
 				className="list-item"
 				onContextMenu={(event) => this.itemContextMenu(event)}
 				href="#"
@@ -322,6 +330,62 @@ class NoteListComponent extends React.Component {
 			{titleComp}
 			</a>
 		</div>
+	}
+
+	itemAnchorRef(itemId) {
+		if (this.itemAnchorRefs_[itemId] && this.itemAnchorRefs_[itemId].current) return this.itemAnchorRefs_[itemId].current;
+		return null;
+	}
+
+	onKeyDown(event) {
+		const keyCode = event.keyCode;
+		const noteIds = this.props.selectedNoteIds;
+		
+		if (noteIds.length === 1 && (keyCode === 40 || keyCode === 38)) { // DOWN / UP
+			const noteId = noteIds[0];
+			let noteIndex = BaseModel.modelIndexById(this.props.notes, noteId);
+			const inc = keyCode === 38 ? -1 : +1;
+
+			noteIndex += inc;
+
+			if (noteIndex < 0) noteIndex = 0;
+			if (noteIndex > this.props.notes.length - 1) noteIndex = this.props.notes.length - 1;
+
+			const newSelectedNote = this.props.notes[noteIndex];
+
+			this.props.dispatch({
+				type: 'NOTE_SELECT',
+				id: newSelectedNote.id,
+			});
+
+			this.itemListRef.current.makeItemIndexVisible(noteIndex);
+
+			// - We need to focus the item manually otherwise focus might be lost when the
+			//   list is scrolled and items within it are being rebuilt.
+			// - We need to use an interval because when leaving the arrow pressed, the rendering
+			//   of items might lag behind and so the ref is not yet available at this point.
+			if (!this.itemAnchorRef(newSelectedNote.id)) {
+				if (this.focusItemIID_) clearInterval(this.focusItemIID_);
+				this.focusItemIID_ = setInterval(() => {
+					if (this.itemAnchorRef(newSelectedNote.id)) {
+						this.itemAnchorRef(newSelectedNote.id).focus();
+						clearInterval(this.focusItemIID_)
+						this.focusItemIID_ = null;
+					}
+				}, 10);
+			} else {
+				this.itemAnchorRef(newSelectedNote.id).focus();
+			}
+
+			event.preventDefault();
+		}
+	}
+
+	componentWillUnmount() {
+		if (this.focusItemIID_) {
+			clearInterval(this.focusItemIID_);
+			this.focusItemIID_ = null;
+		}
 	}
 
 	render() {
@@ -345,11 +409,13 @@ class NoteListComponent extends React.Component {
 
 		return (
 			<ItemList
+				ref={this.itemListRef}
 				itemHeight={this.style().listItem.height}
 				style={style}
 				className={"note-list"}
 				items={notes}
 				itemRenderer={this.itemRenderer}
+				onKeyDown={this.onKeyDown}
 			></ItemList>
 		);
 	}
