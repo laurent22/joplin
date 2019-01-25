@@ -698,8 +698,20 @@ msgstr "キャンセル"
 msgid "Current version is up-to-date."
 msgstr "現在のバージョンは最新版です。"
 
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr ""
+
 msgid "An update is available, do you want to download it now?"
 msgstr "アップデートがあります。すぐにダウンロードしますか？"
+
+#, javascript-format
+msgid "Your version: v%s"
+msgstr ""
+
+#, javascript-format
+msgid "New version: v%s"
+msgstr ""
 
 msgid "Yes"
 msgstr "Yes"
@@ -998,6 +1010,9 @@ msgid ""
 msgstr ""
 "このノートには中身がありません。 \"%s\" をクリックしてエディターを表示し、"
 "ノートを編集してください。"
+
+msgid "Only one note can be printed or exported to PDF at a time."
+msgstr ""
 
 msgid "strong text"
 msgstr "文字を太字に"
@@ -1341,6 +1356,13 @@ msgstr ""
 
 msgid "Automatically update the application"
 msgstr "アプリケーションを自動的にアップデート"
+
+msgid "Get pre-releases when checking for updates"
+msgstr ""
+
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr ""
 
 msgid "Synchronisation interval"
 msgstr "同期間隔"

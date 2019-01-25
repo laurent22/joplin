@@ -4,6 +4,7 @@ const { connect } = require('react-redux');
 const { time } = require('lib/time-utils.js');
 const { themeStyle } = require('../theme.js');
 const BaseModel = require('lib/BaseModel');
+const markJsUtils = require('lib/markJsUtils');
 const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
@@ -14,6 +15,7 @@ const InteropServiceHelper = require('../InteropServiceHelper.js');
 const Search = require('lib/models/Search');
 const Mark = require('mark.js/dist/mark.min.js');
 const SearchEngine = require('lib/services/SearchEngine');
+const { replaceRegexDiacritics, pregQuote } = require('lib/string-utils');
 
 class NoteListComponent extends React.Component {
 
@@ -278,11 +280,10 @@ class NoteListComponent extends React.Component {
 			for (let i = 0; i < highlightedWords.length; i++) {
 				const w = highlightedWords[i];
 
-				if (w.type === 'regex') {
-					mark.markRegExp(new RegExp(w.value, 'gmi'), { acrossElements: true });
-				} else {
-					mark.mark([w]);
-				}
+				markJsUtils.markKeyword(mark, w, {
+					pregQuote: pregQuote,
+					replaceRegexDiacritics: replaceRegexDiacritics,
+				});
 			}
 
 			// Note: in this case it is safe to use dangerouslySetInnerHTML because titleElement

@@ -37,7 +37,7 @@ describe('HtmlToMd', function() {
 			const htmlPath = basePath + '/' + htmlFilename;
 			const mdPath = basePath + '/' + filename(htmlFilename) + '.md';
 
-			// if (htmlFilename !== 'anchor_with_url_with_spaces.html') continue;
+			// if (htmlFilename !== 'picture.html') continue;
 
 			const html = await shim.fsDriver().readFile(htmlPath);
 			let expectedMd = await shim.fsDriver().readFile(mdPath);

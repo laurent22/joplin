@@ -323,6 +323,9 @@ class Api {
 		if (request.method === 'POST') {
 			const requestId = Date.now();
 			const requestNote = JSON.parse(request.body);
+
+			const imageSizes = requestNote.image_sizes ? requestNote.image_sizes : {};
+
 			let note = await this.requestNoteToNote(requestNote);
 
 			const imageUrls = markdownUtils.extractImageUrls(note.body);
@@ -335,7 +338,7 @@ class Api {
 
 			result = await this.createResourcesFromPaths_(result);
 			await this.removeTempFiles_(result);
-			note.body = this.replaceImageUrlsByResources_(note.body, result);
+			note.body = this.replaceImageUrlsByResources_(note.body, result, imageSizes);
 
 			this.logger().info('Request (' + requestId + '): Saving note...');
 
@@ -455,7 +458,7 @@ class Api {
 
 			return new Promise(async (resolve, reject) => {
 				const imagePath = await this.downloadImage_(url);
-				if (imagePath) output[url] = { path: imagePath };
+				if (imagePath) output[url] = { path: imagePath, originalUrl: url };
 				resolve();
 			});
 		}
@@ -493,12 +496,18 @@ class Api {
 		}
 	}
 
-	replaceImageUrlsByResources_(md, urls) {
+	replaceImageUrlsByResources_(md, urls, imageSizes) {
 		let output = md.replace(/(!\[.*?\]\()([^\s\)]+)(.*?\))/g, (match, before, imageUrl, after) => {
 			const urlInfo = urls[imageUrl];
 			if (!urlInfo || !urlInfo.resource) return before + imageUrl + after;
+			const imageSize = imageSizes[urlInfo.originalUrl];
 			const resourceUrl = Resource.internalUrl(urlInfo.resource);
-			return before + resourceUrl + after;
+
+			if (imageSize && (imageSize.naturalWidth !== imageSize.width || imageSize.naturalHeight !== imageSize.height)) {
+				return '<img width="' + imageSize.width + '" height="' + imageSize.height + '" src="' + resourceUrl + '"/>';
+			} else {
+				return before + resourceUrl + after;
+			}
 		});
 
 		return output;

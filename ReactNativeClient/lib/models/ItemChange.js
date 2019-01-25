@@ -29,6 +29,11 @@ class ItemChange extends BaseModel {
 		}
 	}
 
+	static async lastChangeId() {
+		const row = await this.db().selectOne('SELECT max(id) as max_id FROM item_changes');
+		return row && row.max_id ? row.max_id : 0;
+	}
+
 	// Because item changes are recorded in the background, this function
 	// can be used for synchronous code, in particular when unit testing.
 	static async waitForAllSaved() {
@@ -40,6 +45,11 @@ class ItemChange extends BaseModel {
 				}
 			}, 100);
 		});
+	}
+
+	static async deleteOldChanges(lowestChangeId) {
+		if (!lowestChangeId) return;
+		return this.db().exec('DELETE FROM item_changes WHERE id <= ?', [lowestChangeId]);
 	}
 
 }

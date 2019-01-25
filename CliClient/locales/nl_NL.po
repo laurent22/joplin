@@ -714,8 +714,20 @@ msgstr "Annuleren"
 msgid "Current version is up-to-date."
 msgstr "De huidige versie is up-to-date."
 
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr ""
+
 msgid "An update is available, do you want to download it now?"
 msgstr "Er is een update beschikbaar. Wil je deze nu downloaden?"
+
+#, javascript-format
+msgid "Your version: v%s"
+msgstr ""
+
+#, javascript-format
+msgid "New version: v%s"
+msgstr ""
 
 msgid "Yes"
 msgstr "Ja"
@@ -1023,6 +1035,9 @@ msgid ""
 msgstr ""
 "Deze notitie bevat geen inhoud. Klik op \"%s\" om de bewerker te openen en "
 "de notitie te bewerken."
+
+msgid "Only one note can be printed or exported to PDF at a time."
+msgstr ""
 
 msgid "strong text"
 msgstr "vetgedrukte tekst"
@@ -1364,6 +1379,13 @@ msgstr ""
 
 msgid "Automatically update the application"
 msgstr "Applicatie automatisch bijwerken"
+
+msgid "Get pre-releases when checking for updates"
+msgstr ""
+
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr ""
 
 msgid "Synchronisation interval"
 msgstr "Synchronisatietussenpoos"

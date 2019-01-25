@@ -37,6 +37,7 @@
 	<div id="hlScriptContainer"></div>
 	<div id="markScriptContainer"></div>
 	<div id="content" ondragstart="return false;" ondrop="return false;"></div>
+	<script src="./lib.js"></script>
 
 	<script>
 	const contentElement = document.getElementById('content');
@@ -226,6 +227,8 @@
 	function setMarkers(keywords, options = null) {
 		if (!options) options = {};
 
+		// TODO: Add support for scriptType on mobile and CLI
+
 		if (!mark_) {
 			mark_ = new Mark(document.getElementById('content'), {
 				exclude: ['img'],
@@ -255,26 +258,14 @@
 		}
 
 		for (let i = 0; i < keywords.length; i++) {
-			const keyword = keywords[i];
+			let keyword = keywords[i];
 
-			if (typeof keyword === 'string') {
-				keyword = {
-					type: 'text',
-					value: keyword,
-				};
-			}
-
-			if (keyword.type === 'regex') {
-				mark_.markRegExp(new RegExp(keyword.value, 'gmi'), {
-					each: onEachElement,
-					acrossElements: true,
-				});
-			} else {
-				mark_.mark([keyword.value], {
-					each: onEachElement,
-					accuracy: keyword.accuracy ? keyword.accuracy : 'exactly', 
-				});
-			}
+			markJsUtils.markKeyword(mark_, keyword, {
+				pregQuote: pregQuote,
+				replaceRegexDiacritics: replaceRegexDiacritics,
+			}, {
+				each: onEachElement,				
+			});
 		}
 
 		ipcProxySendToHost('setMarkerCount', elementIndex);

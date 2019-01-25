@@ -6,6 +6,7 @@ const BaseModel = require('lib/BaseModel');
 const BaseService = require('lib/services/BaseService');
 const Setting = require('lib/models/Setting');
 const { shim } = require('lib/shim');
+const ItemChangeUtils = require('lib/services/ItemChangeUtils');
 
 class ResourceService extends BaseService {
 
@@ -65,6 +66,8 @@ class ResourceService extends BaseService {
 		await Setting.saveAll();
 
 		await NoteResource.addOrphanedResources();
+
+		await ItemChangeUtils.deleteProcessedChanges();
 
 		this.logger().info('ResourceService::indexNoteResources: Completed');
 	}

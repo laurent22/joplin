@@ -711,8 +711,20 @@ msgstr "Prekliči"
 msgid "Current version is up-to-date."
 msgstr "Sedanja verzija je najnovejša."
 
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr ""
+
 msgid "An update is available, do you want to download it now?"
 msgstr "Posodobitev je na voljo, jo želite prenesti sedaj?"
+
+#, javascript-format
+msgid "Your version: v%s"
+msgstr ""
+
+#, javascript-format
+msgid "New version: v%s"
+msgstr ""
 
 msgid "Yes"
 msgstr "Da"
@@ -1015,6 +1027,9 @@ msgid ""
 msgstr ""
 "Ta zabeležka nima vsebine. Kliknite na \"%s\" da menjate med urejevalnikom "
 "in urejanje zabeležke."
+
+msgid "Only one note can be printed or exported to PDF at a time."
+msgstr ""
 
 msgid "strong text"
 msgstr ""
@@ -1363,6 +1378,13 @@ msgstr ""
 
 msgid "Automatically update the application"
 msgstr "Samodejno posodobi aplikacijo"
+
+msgid "Get pre-releases when checking for updates"
+msgstr ""
+
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr ""
 
 msgid "Synchronisation interval"
 msgstr "Časovni interval sinhronizacije"

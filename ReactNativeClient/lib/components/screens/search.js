@@ -73,7 +73,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 
 	UNSAFE_componentWillReceiveProps(newProps) {
 		let newState = {};
-		if ('query' in newProps) newState.query = newProps.query;
+		if ('query' in newProps && !this.state.query) newState.query = newProps.query;
 
 		if (Object.getOwnPropertyNames(newState).length) {
 			this.setState(newState);

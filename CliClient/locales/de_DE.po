@@ -725,9 +725,21 @@ msgstr "Abbrechen"
 msgid "Current version is up-to-date."
 msgstr "Die aktuelle Version ist auf dem neuesten Stand."
 
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr ""
+
 msgid "An update is available, do you want to download it now?"
 msgstr ""
 "Es ist eine Aktualisierung verfügbar. Soll sie jetzt heruntergeladen werden?"
+
+#, javascript-format
+msgid "Your version: v%s"
+msgstr ""
+
+#, javascript-format
+msgid "New version: v%s"
+msgstr ""
 
 msgid "Yes"
 msgstr "Ja"
@@ -1022,7 +1034,8 @@ msgid "Copy Link Address"
 msgstr "Link-Adresse kopieren"
 
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "Dieser Anhang wurde nicht heruntergeladen oder noch nicht entschlüsselt."
+msgstr ""
+"Dieser Anhang wurde nicht heruntergeladen oder noch nicht entschlüsselt."
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1035,6 +1048,9 @@ msgid ""
 msgstr ""
 "Diese Notiz hat keinen Inhalt. Klicke auf „%s“ um den Editor zu aktivieren "
 "und die Notiz zu bearbeiten."
+
+msgid "Only one note can be printed or exported to PDF at a time."
+msgstr ""
 
 msgid "strong text"
 msgstr "Fetter Text"
@@ -1354,9 +1370,9 @@ msgid ""
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
-"Dadurch kann Joplin im Hintergrund laufen. Es wird empfohlen,"
-"diese Einstellung zu aktivieren, damit deine Notizen ständig synchronisiert"
-"werden und somit die Anzahl der Konflikte reduziert wird."
+"Dadurch kann Joplin im Hintergrund laufen. Es wird empfohlen,diese "
+"Einstellung zu aktivieren, damit deine Notizen ständig synchronisiertwerden "
+"und somit die Anzahl der Konflikte reduziert wird."
 
 msgid "Start application minimised in the tray icon"
 msgstr "Starte die Anwendung minimiert im Tray"
@@ -1380,6 +1396,13 @@ msgstr ""
 
 msgid "Automatically update the application"
 msgstr "Die Applikation automatisch aktualisieren"
+
+msgid "Get pre-releases when checking for updates"
+msgstr ""
+
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr ""
 
 msgid "Synchronisation interval"
 msgstr "Synchronisationsinterval"

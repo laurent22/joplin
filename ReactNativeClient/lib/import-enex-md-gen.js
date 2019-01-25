@@ -310,7 +310,7 @@ function isImageMimeType(m) {
 }
 
 function addResourceTag(lines, resource, alt = "") {
-	// TODO: refactor to use Resource.markdownTag
+	// Note: refactor to use Resource.markdownTag
 
 	let tagAlt = alt == "" ? resource.alt : alt;
 	if (!tagAlt) tagAlt = '';
@@ -512,7 +512,6 @@ function enexXmlToMdArray(stream, resources) {
 			} else if (n == 'q') {
 				section.lines.push('"');
 			} else if (n == 'img') {
-				// TODO: TEST IMAGE
 				if (nodeAttributes.src) { // Many (most?) img tags don't have no source associated, especially when they were imported from HTML
 					let s = '![';
 					if (nodeAttributes.alt) s += nodeAttributes.alt;

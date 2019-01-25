@@ -712,8 +712,20 @@ msgstr "Отмена"
 msgid "Current version is up-to-date."
 msgstr "Вы используете самую свежую версию."
 
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr ""
+
 msgid "An update is available, do you want to download it now?"
 msgstr "Доступно обновление. Желаете скачать его сейчас?"
+
+#, javascript-format
+msgid "Your version: v%s"
+msgstr ""
+
+#, javascript-format
+msgid "New version: v%s"
+msgstr ""
 
 msgid "Yes"
 msgstr "Да"
@@ -1011,6 +1023,9 @@ msgid ""
 msgstr ""
 "Заметка пуста. Нажмите на «%s», чтобы переключиться в редактор и "
 "отредактировать её."
+
+msgid "Only one note can be printed or exported to PDF at a time."
+msgstr ""
 
 msgid "strong text"
 msgstr ""
@@ -1359,6 +1374,13 @@ msgstr ""
 
 msgid "Automatically update the application"
 msgstr "Автоматически обновлять приложение"
+
+msgid "Get pre-releases when checking for updates"
+msgstr ""
+
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr ""
 
 msgid "Synchronisation interval"
 msgstr "Интервал синхронизации"

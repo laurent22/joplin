@@ -16,6 +16,7 @@ describe('StringUtils', function() {
 
 	it('should surround keywords with strings', async (done) => {
 		const testCases = [
+			[[], 'test', 'a', 'b', 'test'],
 			[['test'], 'test', 'a', 'b', 'atestb'],
 			[['test'], 'Test', 'a', 'b', 'aTestb'],
 			[['te[]st'], 'Te[]st', 'a', 'b', 'aTe[]stb'],

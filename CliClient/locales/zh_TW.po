@@ -677,8 +677,20 @@ msgstr "取消"
 msgid "Current version is up-to-date."
 msgstr "此版本是最新的。"
 
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr ""
+
 msgid "An update is available, do you want to download it now?"
 msgstr "有可用的更新，您需要立即下載嗎？"
+
+#, javascript-format
+msgid "Your version: v%s"
+msgstr ""
+
+#, javascript-format
+msgid "New version: v%s"
+msgstr ""
 
 msgid "Yes"
 msgstr "是"
@@ -967,6 +979,9 @@ msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
 msgstr "此筆記沒有內容。按一下 \"%s\" 切換到編輯模式並編輯筆記。"
+
+msgid "Only one note can be printed or exported to PDF at a time."
+msgstr ""
 
 msgid "strong text"
 msgstr "重要文字 <strong>"
@@ -1304,6 +1319,13 @@ msgstr ""
 
 msgid "Automatically update the application"
 msgstr "自動更新應用程式"
+
+msgid "Get pre-releases when checking for updates"
+msgstr ""
+
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr ""
 
 msgid "Synchronisation interval"
 msgstr "同步時間間隔"
