@@ -39,7 +39,7 @@
     "react-native-material-dropdown": "^0.5.2",
     "react-native-popup-dialog": "^0.9.35",
     "react-native-popup-menu": "^0.10.0",
-    "react-native-push-notification": "^3.1.2",
+    "react-native-push-notification": "git+https://github.com/laurent22/react-native-push-notification.git",
     "react-native-securerandom": "^0.1.1",
     "react-native-share-extension": "^1.2.1",
     "react-native-side-menu": "^1.1.3",

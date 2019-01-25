@@ -166,8 +166,8 @@ dependencies {
 	implementation project(':react-native-version-info')
 	implementation "com.facebook.react:react-native:+"
 
-	implementation "com.google.android.gms:play-services-base:16.0.1" // For Firebase
-	implementation 'me.leolin:ShortcutBadger:1.1.21@aar' // For Firebase - this line if you wish to use badge on Android
+	// implementation "com.google.android.gms:play-services-base:16.0.1" // For Firebase
+	// implementation 'me.leolin:ShortcutBadger:1.1.21@aar' // For Firebase - this line if you wish to use badge on Android
 
 	// To fix the error below, which happened after adding react-native-camera.
 	// Doesn't make any sense since rn-camera neither defines v26 nor 27 but
