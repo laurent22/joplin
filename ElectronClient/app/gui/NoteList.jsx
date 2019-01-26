@@ -176,12 +176,17 @@ class NoteListComponent extends React.Component {
 		}
 
 		menu.append(new MenuItem({label: _('Delete'), click: async () => {
-			const ok = bridge().showConfirmMessageBox(noteIds.length > 1 ? _('Delete notes?') : _('Delete note?'));
-			if (!ok) return;
-			await Note.batchDelete(noteIds);
+			await this.confirmDeleteNotes(noteIds);
 		}}));
 
 		menu.popup(bridge().window());
+	}
+
+	async confirmDeleteNotes(noteIds) {
+		if (!noteIds.length) return;
+		const ok = bridge().showConfirmMessageBox(noteIds.length > 1 ? _('Delete notes?') : _('Delete note?'));
+		if (!ok) return;
+		await Note.batchDelete(noteIds);
 	}
 
 	itemRenderer(item) {
@@ -337,10 +342,10 @@ class NoteListComponent extends React.Component {
 		return null;
 	}
 
-	onKeyDown(event) {
+	async onKeyDown(event) {
 		const keyCode = event.keyCode;
 		const noteIds = this.props.selectedNoteIds;
-		
+
 		if (noteIds.length === 1 && (keyCode === 40 || keyCode === 38)) { // DOWN / UP
 			const noteId = noteIds[0];
 			let noteIndex = BaseModel.modelIndexById(this.props.notes, noteId);
@@ -378,6 +383,11 @@ class NoteListComponent extends React.Component {
 			}
 
 			event.preventDefault();
+		}
+
+		if (noteIds.length && keyCode === 46) { // DELETE
+			event.preventDefault();
+			await this.confirmDeleteNotes(noteIds);
 		}
 	}
 
