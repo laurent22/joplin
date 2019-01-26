@@ -13,6 +13,7 @@ class NoteSearchBarComponent extends React.Component {
 		};
 
 		this.searchInput_change = this.searchInput_change.bind(this);
+		this.searchInput_keyDown = this.searchInput_keyDown.bind(this);
 		this.previousButton_click = this.previousButton_click.bind(this);
 		this.nextButton_click = this.nextButton_click.bind(this);
 		this.closeButton_click = this.closeButton_click.bind(this);
@@ -70,6 +71,24 @@ class NoteSearchBarComponent extends React.Component {
 		this.triggerOnChange(query);
 	}
 
+	searchInput_keyDown(event) {
+		if (event.keyCode === 13) { // ENTER
+			event.preventDefault();
+
+			if (!event.shiftKey) {
+				if (this.props.onNext) this.props.onNext();
+			} else {
+				if (this.props.onPrevious) this.props.onPrevious();
+			}
+		}
+
+		if (event.keyCode === 27) { // ESCAPE
+			event.preventDefault();
+
+			if (this.props.onClose) this.props.onClose();
+		}
+	}
+
 	previousButton_click(event) {
 		if (this.props.onPrevious) this.props.onPrevious();
 	}
@@ -101,7 +120,7 @@ class NoteSearchBarComponent extends React.Component {
 			<div style={this.props.style}>
 				<div style={{display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					{ closeButton }
-					<input placeholder={_('Search...')} value={this.state.query} onChange={this.searchInput_change} ref="searchInput" type="text" style={{width: 200, marginRight: 5}}></input>
+					<input placeholder={_('Search...')} value={this.state.query} onChange={this.searchInput_change} onKeyDown={this.searchInput_keyDown} ref="searchInput" type="text" style={{width: 200, marginRight: 5}}></input>
 					{ nextButton }
 					{ previousButton }
 				</div>
