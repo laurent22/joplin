@@ -548,6 +548,7 @@ class SideBarComponent extends React.Component {
 
 	onKeyDown(event) {
 		const keyCode = event.keyCode;
+		const selectedItem = this.selectedItem();
 
 		if (keyCode === 40 || keyCode === 38) { // DOWN / UP
 			event.preventDefault();
@@ -563,8 +564,6 @@ class SideBarComponent extends React.Component {
 				const id = this.tagItemsOrder_[i];
 				focusItems.push({ id: id, ref: this.anchorItemRefs['tag'][id], type: 'tag' });
 			}
-
-			const selectedItem = this.selectedItem();
 
 			let currentIndex = 0;
 			for (let i = 0; i < focusItems.length; i++) {
@@ -608,6 +607,15 @@ class SideBarComponent extends React.Component {
 					target: 'noteList',
 				});
 			}
+		}
+
+		if (selectedItem && selectedItem.type === 'folder' && keyCode === 32) { // SPACE
+			event.preventDefault();
+
+			this.props.dispatch({
+				type: 'FOLDER_TOGGLE',
+				id: selectedItem.id,
+			});
 		}
 	}
 
