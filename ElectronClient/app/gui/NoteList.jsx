@@ -365,22 +365,7 @@ class NoteListComponent extends React.Component {
 
 			this.itemListRef.current.makeItemIndexVisible(noteIndex);
 
-			// - We need to focus the item manually otherwise focus might be lost when the
-			//   list is scrolled and items within it are being rebuilt.
-			// - We need to use an interval because when leaving the arrow pressed, the rendering
-			//   of items might lag behind and so the ref is not yet available at this point.
-			if (!this.itemAnchorRef(newSelectedNote.id)) {
-				if (this.focusItemIID_) clearInterval(this.focusItemIID_);
-				this.focusItemIID_ = setInterval(() => {
-					if (this.itemAnchorRef(newSelectedNote.id)) {
-						this.itemAnchorRef(newSelectedNote.id).focus();
-						clearInterval(this.focusItemIID_)
-						this.focusItemIID_ = null;
-					}
-				}, 10);
-			} else {
-				this.itemAnchorRef(newSelectedNote.id).focus();
-			}
+			this.focusNoteId_(newSelectedNote.id);
 
 			event.preventDefault();
 		}
@@ -388,6 +373,40 @@ class NoteListComponent extends React.Component {
 		if (noteIds.length && keyCode === 46) { // DELETE
 			event.preventDefault();
 			await this.confirmDeleteNotes(noteIds);
+		}
+
+		if (noteIds.length && keyCode === 32) { // SPACE
+			event.preventDefault();
+
+			const notes = BaseModel.modelsByIds(this.props.notes, noteIds);
+			const todos = notes.filter(n => !!n.is_todo);
+			if (!todos.length) return;
+
+			for (let i = 0; i < todos.length; i++) {
+				const toggledTodo = Note.toggleTodoCompleted(todos[i]);
+				await Note.save(toggledTodo);
+			}
+
+			this.focusNoteId_(todos[0].id);
+		}
+	}
+
+	focusNoteId_(noteId) {
+		// - We need to focus the item manually otherwise focus might be lost when the
+		//   list is scrolled and items within it are being rebuilt.
+		// - We need to use an interval because when leaving the arrow pressed, the rendering
+		//   of items might lag behind and so the ref is not yet available at this point.
+		if (!this.itemAnchorRef(noteId)) {
+			if (this.focusItemIID_) clearInterval(this.focusItemIID_);
+			this.focusItemIID_ = setInterval(() => {
+				if (this.itemAnchorRef(noteId)) {
+					this.itemAnchorRef(noteId).focus();
+					clearInterval(this.focusItemIID_)
+					this.focusItemIID_ = null;
+				}
+			}, 10);
+		} else {
+			this.itemAnchorRef(noteId).focus();
 		}
 	}
 

@@ -51,6 +51,16 @@ class BaseModel {
 		return -1;
 	}
 
+	static modelsByIds(items, ids) {
+		const output = [];
+		for (let i = 0; i < items.length; i++) {
+			if (ids.indexOf(items[i].id) >= 0) {
+				output.push(items[i]);
+			}
+		}
+		return output;
+	}
+
 	// Prefer the use of this function to compare IDs as it handles the case where
 	// one ID is null and the other is "", in which case they are actually considered to be the same.
 	static idsEqual(id1, id2) {

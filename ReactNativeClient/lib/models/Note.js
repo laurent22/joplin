@@ -474,6 +474,19 @@ class Note extends BaseItem {
 		return this.changeNoteType(note, !!note.is_todo ? 'note' : 'todo');
 	}
 
+	static toggleTodoCompleted(note) {
+		if (!('todo_completed' in note)) throw new Error('Missing "todo_completed" property');
+
+		note = Object.assign({}, note);
+		if (note.todo_completed) {
+			note.todo_completed = 0;
+		} else {
+			note.todo_completed = Date.now();
+		}
+		
+		return note;
+	}
+
 	static async duplicate(noteId, options = null) {
 		const changes = options && options.changes;
 		const uniqueTitle = options && options.uniqueTitle;
