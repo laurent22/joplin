@@ -164,7 +164,7 @@ msgstr "Rediger notat."
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
-"Inger teksteditor er valgt. Velg en ved å bruke `config editor <editor-path>`"
+"Ingen teksteditor er valgt. Velg en ved å bruke `config editor <editor-path>`"
 
 msgid "No active notebook."
 msgstr "Ingen aktiv notatbok."
@@ -646,7 +646,7 @@ msgid "Search in current note"
 msgstr "Søk i nåværende notat"
 
 msgid "View"
-msgstr "Utseende"
+msgstr "Vis"
 
 msgid "Toggle sidebar"
 msgstr "Vis/skjul sidepanel"
@@ -706,18 +706,18 @@ msgstr "Nåværende versjon er den siste tilgjengelige."
 
 #, javascript-format
 msgid "%s (pre-release)"
-msgstr ""
+msgstr "%s (førutgivelse)"
 
 msgid "An update is available, do you want to download it now?"
 msgstr "En oppdatering er tilgjengelig, vil du laste den ned nå?"
 
 #, javascript-format
 msgid "Your version: v%s"
-msgstr ""
+msgstr "Din versjon: v%s"
 
 #, javascript-format
 msgid "New version: v%s"
-msgstr ""
+msgstr "Ny versjon: v%s"
 
 msgid "Yes"
 msgstr "Ja"
@@ -789,7 +789,7 @@ msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
-"Denne autentiseringsbeviset er det eneste nødvendig for å gi "
+"Denne autoriseringsbeviset er det eneste nødvendig for å gi "
 "tredjepartsapplikasjoner tilgang til Joplin."
 
 msgid "Check synchronisation configuration"
@@ -1368,11 +1368,11 @@ msgid "Automatically update the application"
 msgstr "Oppdater applikasjonen automatisk"
 
 msgid "Get pre-releases when checking for updates"
-msgstr ""
+msgstr "Få førutgivelse når du sjekker etter oppdateringer"
 
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
-msgstr ""
+msgstr "Se førutgivelsessiden for flere detaljer: %s"
 
 msgid "Synchronisation interval"
 msgstr "Synkroniserinsintervall"
