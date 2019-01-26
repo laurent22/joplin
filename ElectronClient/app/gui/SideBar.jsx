@@ -181,9 +181,8 @@ class SideBarComponent extends React.Component {
 				marginTop: 10,
 				marginLeft: 5,
 				marginRight: 5,
-				minHeight: 70,
+				marginBottom: 10,
 				wordWrap: "break-word",
-				//width: "100%",
 			},
 		};
 
@@ -631,7 +630,7 @@ class SideBarComponent extends React.Component {
 	}
 
 	synchronizeButton(type) {
-		const style = this.style().button;
+		const style = Object.assign({}, this.style().button, { marginBottom: 5 });
 		const iconName = type === "sync" ? "fa-refresh" : "fa-times";
 		const label = type === "sync" ? _("Synchronise") : _("Cancel");
 		const icon = <i style={{ fontSize: style.fontSize, marginRight: 5 }} className={"fa " + iconName} />;
@@ -655,7 +654,9 @@ class SideBarComponent extends React.Component {
 		const theme = themeStyle(this.props.theme);
 		const style = Object.assign({}, this.style().root, this.props.style, {
 			overflowX: "hidden",
-			overflowY: "auto",
+			overflowY: "hidden",
+			display: 'inline-flex',
+			flexDirection: 'column',
 		});
 
 		let items = [];
@@ -711,17 +712,23 @@ class SideBarComponent extends React.Component {
 			);
 		}
 
-		items.push(this.synchronizeButton(this.props.syncStarted ? "cancel" : "sync"));
+		const syncButton = this.synchronizeButton(this.props.syncStarted ? "cancel" : "sync");
 
-		items.push(
+		const syncReportComp = !syncReportText.length ? null : (
 			<div style={this.style().syncReport} key="sync_report">
-				{syncReportText}
-			</div>
-		);
+		 		{syncReportText}
+		 	</div>
+		 );
 
 		return (
 			<div ref={this.rootRef} onKeyDown={this.onKeyDown} className="side-bar" style={style}>
-				{items}
+				<div style={{flex:1, overflowY: 'auto'}}>
+					{items}
+				</div>
+				<div style={{flex:0}}>
+					{syncButton}
+				 	{syncReportComp}
+				</div>
 			</div>
 		);
 	}
