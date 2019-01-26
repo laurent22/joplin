@@ -981,7 +981,7 @@ msgid ""
 msgstr "此笔记没有任何内容。点击 \"%s\" 切换至编辑器并编辑笔记。"
 
 msgid "Only one note can be printed or exported to PDF at a time."
-msgstr ""
+msgstr "一次只能输出一个笔记或导出为PDF文件。"
 
 msgid "strong text"
 msgstr "加粗文本"
@@ -1324,11 +1324,11 @@ msgid "Automatically update the application"
 msgstr "自动更新此程序"
 
 msgid "Get pre-releases when checking for updates"
-msgstr ""
+msgstr "检查更新时获取预发布版本。"
 
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
-msgstr ""
+msgstr "详细信息，请参阅预发布版本页面: %s"
 
 msgid "Synchronisation interval"
 msgstr "同步间隔"
