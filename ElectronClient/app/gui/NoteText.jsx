@@ -257,6 +257,8 @@ class NoteTextComponent extends React.Component {
 				showLocalSearch: false,
 			});
 		}
+
+		this.titleField_keyDown = this.titleField_keyDown.bind(this);
 	}
 
 	// Note:
@@ -908,6 +910,28 @@ class NoteTextComponent extends React.Component {
 		this.setState({ bodyHtml: bodyHtml });
 	}
 
+	titleField_keyDown(event) {
+		const keyCode = event.keyCode;
+
+		if (keyCode === 9) { // TAB
+			event.preventDefault();
+
+			if (event.shiftKey) {
+				this.props.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'focusElement',
+					target: 'noteList',
+				});
+			} else {
+				this.props.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'focusElement',
+					target: 'noteBody',
+				});
+			}
+		}
+	}
+
 	async doCommand(command) {
 		if (!command) return;
 
@@ -924,12 +948,26 @@ class NoteTextComponent extends React.Component {
 				fn = this.commandTextBold;
 			} else if (command.name === 'textItalic') {
 				fn = this.commandTextItalic;
-			} else if (command.name === 'insertDateTime' ) {
+			} else if (command.name === 'insertDateTime') {
 				fn = this.commandDateTime;
 			} else if (command.name === 'commandStartExternalEditing') {
 				fn = this.commandStartExternalEditing;
 			} else if (command.name === 'showLocalSearch') {
 				fn = this.commandShowLocalSearch;
+			}
+		}
+
+		if (command.name === 'focusElement' && command.target === 'noteTitle') {
+			fn = () => {
+				if (!this.titleField_) return;
+				this.titleField_.focus();
+			}
+		}
+
+		if (command.name === 'focusElement' && command.target === 'noteBody') {
+			fn = () => {
+				if (!this.editor_) return;
+				this.editor_.editor.focus();
 			}
 		}
 
@@ -1623,6 +1661,7 @@ class NoteTextComponent extends React.Component {
 			style={titleEditorStyle}
 			value={note && note.title ? note.title : ''}
 			onChange={(event) => { this.title_changeText(event); }}
+			onKeyDown={this.titleField_keyDown}
 			placeholder={ this.props.newNote ? _('Creating new %s...', isTodo ? _('to-do') : _('note')) : '' }
 		/>
 

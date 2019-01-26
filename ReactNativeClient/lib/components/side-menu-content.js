@@ -200,13 +200,15 @@ class SideMenuContentComponent extends Component {
 		items.push(<View style={{ height: globalStyle.marginTop }} key='bottom_top_hack'/>);
 
 		if (this.props.folders.length) {
-			const folderItems = shared.renderFolders(this.props, this.folderItem.bind(this));
+			const result = shared.renderFolders(this.props, this.folderItem.bind(this));
+			folderItems = result.items;
 			items = items.concat(folderItems);
 			if (items.length) items.push(this.makeDivider('divider_1'));
 		}
 
 		if (this.props.tags.length) {
-			const tagItems = shared.renderTags(this.props, this.tagItem.bind(this));
+			const result = shared.renderTags(this.props, this.tagItem.bind(this));
+			const tagItems = result.items;
 
 			items.push(
 				<View style={this.styles().tagItemList} key="tag_items">

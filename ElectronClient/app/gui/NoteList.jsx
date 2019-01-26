@@ -342,6 +342,34 @@ class NoteListComponent extends React.Component {
 		return null;
 	}
 
+	doCommand(command) {
+		if (!command) return;
+
+		let commandProcessed = true;
+
+		if (command.name === 'focusElement' && command.target === 'noteList') {
+			if (this.props.selectedNoteIds.length) {
+				const ref = this.itemAnchorRef(this.props.selectedNoteIds[0]);
+				if (ref) ref.focus();
+			}
+		} else {
+			commandProcessed = false;
+		}
+
+		if (commandProcessed) {
+			this.props.dispatch({
+				type: 'WINDOW_COMMAND',
+				name: null,
+			});
+		}
+	}
+
+	componentDidUpdate(prevProps, prevState, snapshot) {
+		if (prevProps.windowCommand !== this.props.windowCommand) {
+			this.doCommand(this.props.windowCommand);
+		}
+	}
+
 	async onKeyDown(event) {
 		const keyCode = event.keyCode;
 		const noteIds = this.props.selectedNoteIds;
@@ -388,6 +416,24 @@ class NoteListComponent extends React.Component {
 			}
 
 			this.focusNoteId_(todos[0].id);
+		}
+
+		if (keyCode === 9) { // TAB
+			event.preventDefault();
+
+			if (event.shiftKey) {
+				this.props.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'focusElement',
+					target: 'sideBar',
+				});
+			} else {
+				this.props.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'focusElement',
+					target: 'noteTitle',
+				});
+			}
 		}
 	}
 
@@ -461,6 +507,7 @@ const mapStateToProps = (state) => {
 		searches: state.searches,
 		selectedSearchId: state.selectedSearchId,
 		watchedNoteFiles: state.watchedNoteFiles,
+		windowCommand: state.windowCommand,
 	};
 };
 

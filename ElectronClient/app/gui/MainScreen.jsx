@@ -295,7 +295,7 @@ class MainScreenComponent extends React.Component {
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
-    };
+   		};
 
 		if (isSidebarVisible === false) {
 			this.styles_.sideBar.width = 0;
@@ -338,9 +338,9 @@ class MainScreenComponent extends React.Component {
 	render() {
 		const theme = themeStyle(this.props.theme);
 		const style = Object.assign({
-				color: theme.color,
-				backgroundColor: theme.backgroundColor,
-			}, this.props.style);
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+		}, this.props.style);
 		const promptOptions = this.state.promptOptions;
 		const folders = this.props.folders;
 		const notes = this.props.notes;
