@@ -209,21 +209,30 @@ class ConfigScreenComponent extends React.Component {
 
 	render() {
 		const theme = themeStyle(this.props.theme);
+
 		const style = Object.assign({
 			backgroundColor: theme.backgroundColor
-		}, this.props.style, { overflowX: 'hidden', overflowY: 'auto' });
-		let settings = this.state.settings;
+		}, this.props.style, {
+			overflow: 'hidden',
+			display: 'flex',
+			flexDirection: 'column',
+		});
 
-		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
+		let settings = this.state.settings;
 
 		const containerStyle = Object.assign({}, theme.containerStyle, { padding: 10, paddingTop: 0 });
 
+		const hasChanges = !!this.state.changedSettingKeys.length;
+
 		const buttonStyle = Object.assign({}, theme.buttonStyle, {
-			display: this.state.changedSettingKeys.length ? 'inline-block' : 'none',
+			display: 'inline-block',
 			marginRight: 10,
 		});
 
-		//const settingComps = shared.settingsToComponents(this, 'desktop', settings);
+		const buttonStyleApprove = Object.assign({}, buttonStyle, {
+			opacity: hasChanges ? 1 : theme.disabledOpacity,
+		});
+
 		const settingComps = shared.settingsToComponents2(this, 'desktop', settings);
 
 		const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
@@ -239,19 +248,29 @@ class ConfigScreenComponent extends React.Component {
 
 			settingComps.push(
 				<div key="check_sync_config_button" style={this.rowStyle_}>
-					<button disabled={this.state.checkSyncConfigResult === 'checking'} onClick={this.checkSyncConfig_}>{_('Check synchronisation configuration')}</button>
+					<button disabled={this.state.checkSyncConfigResult === 'checking'} style={buttonStyle} onClick={this.checkSyncConfig_}>{_('Check synchronisation configuration')}</button>
 					{ statusComp }
 				</div>);
 		}
 
+		const buttonBarStyle = {
+			display: 'flex',
+			alignItems: 'center',
+			padding: 15,
+			borderTopWidth: 1,
+			borderTopStyle: 'solid',
+			borderTopColor: theme.dividerColor,
+		};
+
 		return (
 			<div style={style}>
-				<Header style={headerStyle} />
 				<div style={containerStyle}>
 					{ settingComps }
-					<button onClick={() => {this.onSaveClick()}} style={buttonStyle}>{_('OK')}</button>
+				</div>
+				<div style={buttonBarStyle}>
+					<button disabled={!hasChanges} onClick={() => {this.onSaveClick()}} style={buttonStyleApprove}>{_('OK')}</button>
 					<button onClick={() => {this.onCancelClick()}} style={buttonStyle}>{_('Cancel')}</button>
-					<button onClick={() => {this.onApplyClick()}} style={buttonStyle}>{_('Apply')}</button>
+					<button disabled={!hasChanges} onClick={() => {this.onApplyClick()}} style={buttonStyleApprove}>{_('Apply')}</button>
 				</div>
 			</div>
 		);

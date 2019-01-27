@@ -52,6 +52,9 @@ globalStyle.containerStyle = {
 globalStyle.buttonStyle = {
 	marginRight: 10,
 	border: '1px solid',
+	height: 30,
+	minHeight: 30,
+	minWidth: 80,
 };
 
 const lightStyle = {
