@@ -447,12 +447,11 @@ msgid "Starting synchronisation..."
 msgstr "동기화를 시작합니다..."
 
 msgid "Downloading resources..."
-msgstr ""
+msgstr "리소스 다운로드 중..."
 
 msgid "Cancelling... Please wait."
 msgstr "취소하는 중입니다... 잠시만 기다리세요."
 
-#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
@@ -460,7 +459,7 @@ msgid ""
 msgstr ""
 "[note]로부터 [tag]를 지우거나 지정할 때, 아니면 [tag]와 관련된 노트의 목록을 "
 "확인할 때 <tag-command>로 \"add\", \"remove\" 또는 \"list\" 를 사용할 수 있습"
-"니다. `tag list` 명령어로 모든 태그의 목록을 확인할 수 있습니다."
+"니다. `tag list` 명령어로 모든 태그의 목록을 확인할 수 있습니다 (옵션 -l 사용 가능)."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
@@ -615,9 +614,8 @@ msgstr "잘라내기"
 msgid "Paste"
 msgstr "붙여넣기"
 
-#, fuzzy
 msgid "Select all"
-msgstr "날짜 선택"
+msgstr "모두 선택"
 
 msgid "Bold"
 msgstr "굵게"
@@ -634,9 +632,8 @@ msgstr "외부 편집기에서 편집하기"
 msgid "Search in all the notes"
 msgstr "모든 노트에서 검색"
 
-#, fuzzy
 msgid "Search in current note"
-msgstr "모든 노트에서 검색"
+msgstr "현재 노트에서 검색"
 
 msgid "View"
 msgstr "보기"
@@ -699,18 +696,18 @@ msgstr "현재 버전은 최신입니다."
 
 #, javascript-format
 msgid "%s (pre-release)"
-msgstr ""
+msgstr "%s (프리-릴리즈)"
 
 msgid "An update is available, do you want to download it now?"
 msgstr "업데이트가 있습니다. 지금 다운로드할까요?"
 
 #, javascript-format
 msgid "Your version: v%s"
-msgstr ""
+msgstr "현재 버전: v%s"
 
 #, javascript-format
 msgid "New version: v%s"
-msgstr ""
+msgstr "새 버전: v%s"
 
 msgid "Yes"
 msgstr "예"
@@ -719,7 +716,7 @@ msgid "No"
 msgstr "아니오"
 
 msgid "Token has been copied to the clipboard!"
-msgstr ""
+msgstr "토큰이 클립보드로 복사되었습니다!"
 
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "웹 수집기 서비스가 활성화되었고 자동으로 시작하도록 설정되었습니다."
@@ -768,20 +765,20 @@ msgstr "2단계: 확장 기능 설치"
 msgid "Download and install the relevant extension for your browser:"
 msgstr "브라우저에 적절한 확장 기능을 다운로드 및 설치하세요:"
 
-#, fuzzy
 msgid "Advanced options"
 msgstr "고급 옵션"
 
 msgid "Authorisation token:"
-msgstr ""
+msgstr "인증 토큰:"
 
 msgid "Copy token"
-msgstr ""
+msgstr "토큰 복사"
 
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
+"이 인증 토큰은 오직 서드파티 애플리케이션에서 조플린을 접근할 때만 필요합니다."
 
 msgid "Check synchronisation configuration"
 msgstr "동기화 설정 확인"
@@ -944,13 +941,11 @@ msgstr "%s - 복사"
 msgid "Switch between note and to-do type"
 msgstr "'노트' 또는'할 일' 형식으로 전환합니다."
 
-#, fuzzy
 msgid "Switch to note type"
-msgstr "'노트' 또는'할 일' 형식으로 전환합니다."
+msgstr "'노트' 형식으로 전환합니다."
 
-#, fuzzy
 msgid "Switch to to-do type"
-msgstr "'노트' 또는'할 일' 형식으로 전환합니다."
+msgstr "'할 일' 형식으로 전환합니다."
 
 msgid "Copy Markdown link"
 msgstr "마크다운 링크 복사"
@@ -969,13 +964,13 @@ msgid ""
 msgstr "노트북이 없습니다. '새 노트북'을 선택해서 노트북을 새로 만드세요."
 
 msgid "Location"
-msgstr ""
+msgstr "위치"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 msgid "Note properties"
-msgstr ""
+msgstr "노트 속성"
 
 msgid "Open..."
 msgstr "열기..."
@@ -994,7 +989,7 @@ msgid "Copy Link Address"
 msgstr "링크 주소 복사"
 
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr ""
+msgstr "이 첨부는 아직 다운로드 또는 복호화 되지 않았습니다."
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1009,7 +1004,7 @@ msgstr ""
 "요."
 
 msgid "Only one note can be printed or exported to PDF at a time."
-msgstr ""
+msgstr "한 번에 오직 하나의 노트만 출력하거나 내보내기 할 수 있습니다."
 
 msgid "strong text"
 msgstr "중요 텍스트"
@@ -1116,9 +1111,9 @@ msgstr "노트북"
 msgid "Decrypting items: %d/%d"
 msgstr "복호화 항목: %d/%d"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Fetching resources: %d"
-msgstr "리소스: %d."
+msgstr "리소스 가져오는 중: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "동기화 상태를 내보낼 대상을 선택하세요"
@@ -1327,16 +1322,17 @@ msgid ""
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
+"조플린을 백그라운드에서 구동합니다. 노트가 정기적으로 동기화 되어 충돌 횟수를 줄이기 위해 "
+"이 옵션을 활성화 하는 것을 추천합니다."
 
 msgid "Start application minimised in the tray icon"
-msgstr ""
+msgstr "트레이 아이콘에 최소화 된 상태로 애플리케이션 시작"
 
 msgid "Global zoom percentage"
 msgstr "전체적 확대 비율"
 
-#, fuzzy
 msgid "Editor font size"
-msgstr "편집기 글꼴 집합"
+msgstr "편집기 글꼴 크기"
 
 msgid "Editor font family"
 msgstr "편집기 글꼴 집합"
@@ -1353,11 +1349,11 @@ msgid "Automatically update the application"
 msgstr "애플리케이션을 자동으로 업데이트"
 
 msgid "Get pre-releases when checking for updates"
-msgstr ""
+msgstr "업데이트 확인 시 프리-릴리즈 받기"
 
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
-msgstr ""
+msgstr "자세한 내용은 프리-릴리즈 페이지를 참조하세요: %s"
 
 msgid "Synchronisation interval"
 msgstr "동기화 간격"
@@ -1416,6 +1412,8 @@ msgid ""
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
 msgstr ""
+"주의: 이 위치를 변경하시려면, 동기화 전에 모든 컨텐트를 복사했는지 확인하세요, 그렇지 않으면 "
+"모든 파일이 삭제됩니다! 자세한 정보는 FAQ를 참조하세요: %s"
 
 msgid "Nextcloud username"
 msgstr "Nextcloud 사용자 이름"
@@ -1455,7 +1453,7 @@ msgstr "올바르지 않은 옵션 값: \"%s\". 가능한 값은 다음과 같�
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr ""
+msgstr "태그 \"%s\"(이)가 이미 존재합니다. 다른 이름을 선택해 주세요."
 
 msgid "Joplin Export File"
 msgstr "조플린 내보내기 파일"
@@ -1469,9 +1467,8 @@ msgstr "조플린 내보내기 폴더"
 msgid "Evernote Export File"
 msgstr "에버노트 내보내기 파일"
 
-#, fuzzy
 msgid "Json Export Directory"
-msgstr "조플린 내보내기 폴더"
+msgstr "Json 내보내기 폴더"
 
 msgid "Directory"
 msgstr "폴더"
@@ -1548,10 +1545,10 @@ msgid "On %s: %s"
 msgstr "%s: %s"
 
 msgid "Permission to use camera"
-msgstr ""
+msgstr "카메라 사용 허가"
 
 msgid "Your permission to use your camera is required."
-msgstr ""
+msgstr "카메라 사용을 허가가 요구됩니다."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "노트가 없습니다. (+) 버튼을 선택해 새로 만드세요."
@@ -1581,9 +1578,8 @@ msgstr "%d 노트를 \"%s\" 노트북으로 옮길까요?"
 msgid "Press to set the decryption password."
 msgstr "복호화 암호를 설정하려면 누르세요."
 
-#, fuzzy
 msgid "Clear alarm"
-msgstr "알람 설정"
+msgstr "알람 취소"
 
 msgid "Save alarm"
 msgstr "알람 저장"
@@ -1597,20 +1593,19 @@ msgstr "확인"
 msgid "Cancel synchronisation"
 msgstr "동기화 취소"
 
-#, fuzzy
 msgid "Checking... Please wait."
-msgstr "취소하는 중입니다... 잠시만 기다리세요."
+msgstr "확인 중입니다... 잠시만 기다리세요."
 
-#, fuzzy
 msgid "Success! Synchronisation configuration appears to be correct."
-msgstr "동기화 설정 확인"
+msgstr "성공! 동기화 설정이 올바릅니다."
 
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
 
-#, fuzzy
 msgid "The application has been authorised!"
 msgstr "애플리케이션이 성공적으로 허가되었습니다."
 
@@ -1622,10 +1617,15 @@ msgid ""
 "\n"
 "Please try again."
 msgstr ""
+"애플리케이션을 허가할 수 없습니다:\n"
+"\n"
+"%s\n"
+"\n"
+"다시 시도해 주세요."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypted items: %s / %s"
-msgstr "복호화 항목: %d/%d"
+msgstr "복호화된 항목: %s / %s"
 
 msgid "New tags:"
 msgstr "새 태그:"
@@ -1656,23 +1656,23 @@ msgstr "- 위치: 지리적 위치 정보를 노트에 첨부하기 위해서 �
 msgid "Joplin website"
 msgstr "조플린 웹사이트"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Joplin v%s"
-msgstr "조플린 웹사이트"
+msgstr "조플린 v%s"
 
 #, javascript-format
 msgid "Database v%s"
-msgstr ""
+msgstr "데이터베이스 v%s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "FTS enabled: %d"
-msgstr "삭제: %d"
+msgstr "FTS 활성됨: %d"
 
 msgid "Login with Dropbox"
 msgstr "Dropbox로 로그인"
 
 msgid "Enter code here"
-msgstr ""
+msgstr "여기에 코드를 입력하세요"
 
 #, javascript-format
 msgid "Master Key %s"
@@ -1725,9 +1725,8 @@ msgstr "조플린 모바일 앱은 현재 해당 형식의 링크를 지원하�
 msgid "Unsupported image type: %s"
 msgstr "지원하지 않는 이미지 형식: %s"
 
-#, fuzzy
 msgid "Take photo"
-msgstr "사진 첨부"
+msgstr "사진 찍기"
 
 msgid "Attach photo"
 msgstr "사진 첨부"
@@ -1754,7 +1753,7 @@ msgid "View on map"
 msgstr "지도에 표시"
 
 msgid "Go to source URL"
-msgstr ""
+msgstr "소스 URL로 이동"
 
 msgid "Delete notebook"
 msgstr "노트북 삭제"
