@@ -1730,7 +1730,6 @@ msgstr "FTS aktiviert: %d"
 msgid "Login with Dropbox"
 msgstr "Mit Dropbox anmelden"
 
-#, fuzzy
 msgid "Enter code here"
 msgstr "Hier Code eingeben"
 
@@ -1902,7 +1901,6 @@ msgstr "Willkommen"
 #~ msgid "Set a to-do as completed / not completed"
 #~ msgstr "Ein To-Do als abgeschlossen / nicht abgeschlossen markieren"
 
-#, fuzzy
 #~ msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
 #~ msgstr ""
 #~ "Schal[t]e das Terminal zwischen maximiert/minimiert/versteckt/sichtbar um."
