@@ -43,6 +43,45 @@ class ConfigScreenComponent extends React.Component {
 		return output;
 	}
 
+	sectionToComponent(key, section, settings) {
+		const theme = themeStyle(this.props.theme);
+		const settingComps = [];
+
+		for (let i = 0; i < section.metadatas.length; i++) {
+			const md = section.metadatas[i];
+
+			const settingComp = this.settingToComponent(md.key, settings[md.key]);
+			settingComps.push(settingComp);
+		}
+
+		const sectionStyle = {
+			borderTopWidth: 1,
+			borderTopColor: theme.dividerColor,
+			borderTopStyle: 'solid',
+			marginBottom: 20,
+		};
+
+		if (section.name === 'general') {
+			sectionStyle.borderTopWidth = 0;
+		}
+
+		const noteComp = section.name !== 'general' ? null : (
+			<div style={Object.assign({}, theme.textStyle, {marginBottom: 10})}>
+				{_('Notes and settings are stored in: %s', pathUtils.toSystemSlashes(Setting.value('profileDir'), process.platform))}
+			</div>
+		);
+
+		return (
+			<div key={key} style={sectionStyle}>
+				<h2 style={theme.headerStyle}>{Setting.sectionNameToLabel(section.name)}</h2>
+				{noteComp}
+				<div>
+					{settingComps}
+				</div>
+			</div>
+		);
+	}
+
 	settingToComponent(key, value) {
 		const theme = themeStyle(this.props.theme);
 
@@ -172,19 +211,20 @@ class ConfigScreenComponent extends React.Component {
 		const theme = themeStyle(this.props.theme);
 		const style = Object.assign({
 			backgroundColor: theme.backgroundColor
-		}, this.props.style, { overflow: 'auto' });
-		const settings = this.state.settings;
+		}, this.props.style, { overflowX: 'hidden', overflowY: 'auto' });
+		let settings = this.state.settings;
 
 		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
 
-		const containerStyle = Object.assign({}, theme.containerStyle, { padding: 10 });
+		const containerStyle = Object.assign({}, theme.containerStyle, { padding: 10, paddingTop: 0 });
 
 		const buttonStyle = Object.assign({}, theme.buttonStyle, {
 			display: this.state.changedSettingKeys.length ? 'inline-block' : 'none',
 			marginRight: 10,
 		});
 
-		const settingComps = shared.settingsToComponents(this, 'desktop', settings);
+		//const settingComps = shared.settingsToComponents(this, 'desktop', settings);
+		const settingComps = shared.settingsToComponents2(this, 'desktop', settings);
 
 		const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
 
@@ -208,9 +248,6 @@ class ConfigScreenComponent extends React.Component {
 			<div style={style}>
 				<Header style={headerStyle} />
 				<div style={containerStyle}>
-					<div style={Object.assign({}, theme.textStyle, {marginBottom: 20})}>
-						{_('Notes and settings are stored in: %s', pathUtils.toSystemSlashes(Setting.value('profileDir'), process.platform))}
-					</div>
 					{ settingComps }
 					<button onClick={() => {this.onSaveClick()}} style={buttonStyle}>{_('OK')}</button>
 					<button onClick={() => {this.onCancelClick()}} style={buttonStyle}>{_('Cancel')}</button>

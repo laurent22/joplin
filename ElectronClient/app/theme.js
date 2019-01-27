@@ -36,7 +36,9 @@ globalStyle.lineInput = {
 	fontFamily: globalStyle.fontFamily,
 };
 
-globalStyle.headerStyle = {};
+globalStyle.headerStyle = {
+	fontFamily: globalStyle.fontFamily,
+};
 
 globalStyle.inputStyle = {
 	border: '1px solid',

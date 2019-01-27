@@ -79,4 +79,31 @@ shared.settingsToComponents = function(comp, device, settings) {
 	return settingComps
 }
 
+shared.settingsToComponents2 = function(comp, device, settings) {
+	const keys = Setting.keys(true, device);
+	const sectionComps = [];
+	const metadatas = [];
+
+	for (let i = 0; i < keys.length; i++) {
+		const key = keys[i];
+		if (!Setting.isPublic(key)) continue;
+
+		const md = Setting.settingMetadata(key);
+		if (md.show && !md.show(settings)) continue;
+
+		metadatas.push(md);
+	}
+
+	const sections = Setting.groupMetadatasBySections(metadatas);
+
+	for (let i = 0; i < sections.length; i++) {
+		const section = sections[i];
+		const sectionComp = comp.sectionToComponent(section.name, section, settings);
+		if (!sectionComp) continue;
+		sectionComps.push(sectionComp);
+	}
+
+	return sectionComps
+}
+
 module.exports = shared;
