@@ -15,6 +15,7 @@ const InteropServiceHelper = require('../InteropServiceHelper.js');
 const Search = require('lib/models/Search');
 const Mark = require('mark.js/dist/mark.min.js');
 const SearchEngine = require('lib/services/SearchEngine');
+const NoteListUtils = require('./utils/NoteListUtils');
 const { replaceRegexDiacritics, pregQuote } = require('lib/string-utils');
 
 class NoteListComponent extends React.Component {
@@ -83,110 +84,12 @@ class NoteListComponent extends React.Component {
 
 		if (!noteIds.length) return;
 
-		const notes = noteIds.map((id) => BaseModel.byId(this.props.notes, id));
-
-		let hasEncrypted = false;
-		for (let i = 0; i < notes.length; i++) {
-			if (!!notes[i].encryption_applied) hasEncrypted = true;
-		}
-
-		const menu = new Menu()
-
-		if (!hasEncrypted) {
-			menu.append(new MenuItem({label: _('Add or remove tags'), enabled: noteIds.length === 1, click: async () => {
-				this.props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'setTags',
-					noteId: noteIds[0],
-				});
-			}}));
-
-			menu.append(new MenuItem({label: _('Duplicate'), click: async () => {
-				for (let i = 0; i < noteIds.length; i++) {
-					const note = await Note.load(noteIds[i]);
-					await Note.duplicate(noteIds[i], {
-						uniqueTitle: _('%s - Copy', note.title),
-					});
-				}
-			}}));
-
-			if (noteIds.length <= 1) {
-				menu.append(new MenuItem({label: _('Switch between note and to-do type'), click: async () => {
-					for (let i = 0; i < noteIds.length; i++) {
-						const note = await Note.load(noteIds[i]);
-						await Note.save(Note.toggleIsTodo(note), { userSideValidation: true });
-						eventManager.emit('noteTypeToggle', { noteId: note.id });
-					}
-				}}));
-			} else {
-				const switchNoteType = async (noteIds, type) => {
-					for (let i = 0; i < noteIds.length; i++) {
-						const note = await Note.load(noteIds[i]);
-						const newNote = Note.changeNoteType(note, type);
-						if (newNote === note) continue;
-						await Note.save(newNote, { userSideValidation: true });
-						eventManager.emit('noteTypeToggle', { noteId: note.id });
-					}
-				}
-
-				menu.append(new MenuItem({label: _('Switch to note type'), click: async () => {
-					await switchNoteType(noteIds, 'note');
-				}}));
-
-				menu.append(new MenuItem({label: _('Switch to to-do type'), click: async () => {
-					await switchNoteType(noteIds, 'todo');
-				}}));
-			}
-
-			menu.append(new MenuItem({label: _('Copy Markdown link'), click: async () => {
-				const { clipboard } = require('electron');
-				const links = [];
-				for (let i = 0; i < noteIds.length; i++) {
-					const note = await Note.load(noteIds[i]);
-					links.push(Note.markdownTag(note));
-				}
-				clipboard.writeText(links.join(' '));
-			}}));
-
-			const exportMenu = new Menu();
-
-			const ioService = new InteropService();
-			const ioModules = ioService.modules();
-			for (let i = 0; i < ioModules.length; i++) {
-				const module = ioModules[i];
-				if (module.type !== 'exporter') continue;
-
-				exportMenu.append(new MenuItem({ label: module.fullLabel() , click: async () => {
-					await InteropServiceHelper.export(this.props.dispatch.bind(this), module, { sourceNoteIds: noteIds });
-				}}));
-			}
-
-			if (noteIds.length === 1) {
-				exportMenu.append(new MenuItem({ label: 'PDF - ' + _('PDF File') , click: () => {
-					this.props.dispatch({
-						type: 'WINDOW_COMMAND',
-						name: 'exportPdf',
-					});
-				}}));
-			}
-
-			const exportMenuItem = new MenuItem({label: _('Export'), submenu: exportMenu});
-
-			menu.append(exportMenuItem);
-		}
-
-		menu.append(new MenuItem({label: _('Delete'), click: async () => {
-			await this.confirmDeleteNotes(noteIds);
-		}}));
+		const menu = NoteListUtils.makeContextMenu(noteIds, {
+			notes: this.props.notes,
+			dispatch: this.props.dispatch,
+		});
 
 		menu.popup(bridge().window());
-	}
-
-	async confirmDeleteNotes(noteIds) {
-		if (!noteIds.length) return;
-		const ok = bridge().showConfirmMessageBox(noteIds.length > 1 ? _('Delete notes?') : _('Delete note?'));
-		if (!ok) return;
-		await Note.batchDelete(noteIds);
 	}
 
 	itemRenderer(item) {
@@ -194,7 +97,7 @@ class NoteListComponent extends React.Component {
 		const width = this.props.style.width;
 
 		const onTitleClick = async (event, item) => {
-			if (event.ctrlKey) {
+			if (event.ctrlKey || event.metaKey) {
 				event.preventDefault();
 				this.props.dispatch({
 					type: 'NOTE_SELECT_TOGGLE',
@@ -400,7 +303,7 @@ class NoteListComponent extends React.Component {
 
 		if (noteIds.length && keyCode === 46) { // DELETE
 			event.preventDefault();
-			await this.confirmDeleteNotes(noteIds);
+			await NoteListUtils.confirmDeleteNotes(noteIds);
 		}
 
 		if (noteIds.length && keyCode === 32) { // SPACE

@@ -3,8 +3,13 @@ const Folder = require('lib/models/Folder.js');
 const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
 const Setting = require('lib/models/Setting.js');
+const Mutex = require('async-mutex').Mutex;
 
 const shared = {};
+
+// If saveNoteButton_press is called multiple times in short intervals, it might result in
+// the same new note being created twice, so we need to a mutex to access this function.
+const saveNoteMutex_ = new Mutex();
 
 shared.noteExists = async function(noteId) {
 	const existingNote = await Note.load(noteId);
@@ -12,6 +17,8 @@ shared.noteExists = async function(noteId) {
 }
 
 shared.saveNoteButton_press = async function(comp, folderId = null) {
+	const releaseMutex = await saveNoteMutex_.acquire();
+
 	let note = Object.assign({}, comp.state.note);
 
 	// Note has been deleted while user was modifying it. In that case, we
@@ -24,7 +31,7 @@ shared.saveNoteButton_press = async function(comp, folderId = null) {
 		const activeFolderId = Setting.value('activeFolderId');
 		let folder = await Folder.load(activeFolderId);
 		if (!folder) folder = await Folder.defaultFolder();
-		if (!folder) return;
+		if (!folder) return releaseMutex();
 		note.parent_id = folder.id;
 	}
 
@@ -46,7 +53,7 @@ shared.saveNoteButton_press = async function(comp, folderId = null) {
 	const stateNote = comp.state.note;
 
 	// Note was reloaded while being saved.
-	if (!isNew && (!stateNote || stateNote.id !== savedNote.id)) return;
+	if (!isNew && (!stateNote || stateNote.id !== savedNote.id)) return releaseMutex();
 
 	// Re-assign any property that might have changed during saving (updated_time, etc.)
 	note = Object.assign(note, savedNote);
@@ -105,6 +112,8 @@ shared.saveNoteButton_press = async function(comp, folderId = null) {
 			id: savedNote.id,
 		});
 	}
+
+	releaseMutex();
 }
 
 shared.saveOneProperty = async function(comp, name, value) {

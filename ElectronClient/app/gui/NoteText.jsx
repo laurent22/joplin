@@ -28,6 +28,7 @@ const ArrayUtils = require('lib/ArrayUtils');
 const ObjectUtils = require('lib/ObjectUtils');
 const urlUtils = require('lib/urlUtils');
 const dialogs = require('./dialogs');
+const NoteListUtils = require('./utils/NoteListUtils');
 const NoteSearchBar = require('./NoteSearchBar.min.js');
 const markdownUtils = require('lib/markdownUtils');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
@@ -1491,6 +1492,61 @@ class NoteTextComponent extends React.Component {
 		return toolbarItems;
 	}
 
+	renderNoNotes(rootStyle) {
+		const emptyDivStyle = Object.assign({
+			backgroundColor: 'black',
+			opacity: 0.1,
+		}, rootStyle);
+		return <div style={emptyDivStyle}></div>
+	}
+
+	renderMultiNotes(rootStyle) {
+		const theme = themeStyle(this.props.theme);
+
+		const multiNotesButton_click = item => {
+			if (item.submenu) {
+				item.submenu.popup(bridge().window());
+			} else {
+				item.click();
+			}
+		}
+
+		const menu = NoteListUtils.makeContextMenu(this.props.selectedNoteIds, {
+			notes: this.props.notes,
+			dispatch: this.props.dispatch,
+		});
+
+		const buttonStyle = Object.assign({}, theme.buttonStyle, {
+			marginBottom: 10,
+		});
+
+		const itemComps = [];
+		const menuItems = menu.items;
+
+		for (let i = 0; i < menuItems.length; i++) {
+			const item = menuItems[i];
+			if (!item.enabled) continue;
+
+			itemComps.push(<button
+				key={item.label}
+				style={buttonStyle}
+				onClick={() => multiNotesButton_click(item)}
+			>{item.label}</button>);
+		}
+
+		rootStyle = Object.assign({}, rootStyle, {
+			paddingTop: rootStyle.paddingLeft,
+			display: 'inline-flex',
+			justifyContent: 'center',
+		});
+
+		return (<div style={rootStyle}>
+			<div style={{display: 'flex', flexDirection: 'column'}}>
+				{itemComps}
+			</div>
+		</div>);
+	}
+
 	render() {
 		const style = this.props.style;
 		const note = this.state.note;
@@ -1510,12 +1566,10 @@ class NoteTextComponent extends React.Component {
 
 		const innerWidth = rootStyle.width - rootStyle.paddingLeft - rootStyle.paddingRight - borderWidth;
 
-		if (!note || !!note.encryption_applied) {
-			const emptyDivStyle = Object.assign({
-				backgroundColor: 'black',
-				opacity: 0.1,
-			}, rootStyle);
-			return <div style={emptyDivStyle}></div>
+		if (this.props.selectedNoteIds.length > 1) {
+			return this.renderMultiNotes(rootStyle);
+		} else if (!note || !!note.encryption_applied) {
+			return this.renderNoNotes(rootStyle);
 		}
 
 		const titleBarStyle = {
@@ -1766,6 +1820,7 @@ class NoteTextComponent extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		noteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
+		notes: state.notes,
 		selectedNoteIds: state.selectedNoteIds,
 		noteTags: state.selectedNoteTags,
 		folderId: state.selectedFolderId,
