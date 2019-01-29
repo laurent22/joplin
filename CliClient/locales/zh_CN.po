@@ -432,7 +432,7 @@ msgid "Starting synchronisation..."
 msgstr "开始同步..."
 
 msgid "Downloading resources..."
-msgstr ""
+msgstr "下载资源中..."
 
 msgid "Cancelling... Please wait."
 msgstr "正在取消... 请稍后。"
@@ -594,9 +594,8 @@ msgstr "剪切"
 msgid "Paste"
 msgstr "粘贴"
 
-#, fuzzy
 msgid "Select all"
-msgstr "选择日期"
+msgstr "选择所有"
 
 msgid "Bold"
 msgstr "粗体"
@@ -607,16 +606,14 @@ msgstr "斜体"
 msgid "Insert Date Time"
 msgstr "插入时间"
 
-#, fuzzy
 msgid "Edit in external editor"
 msgstr "在外部编辑器中打开"
 
 msgid "Search in all the notes"
 msgstr "在所有笔记内搜索"
 
-#, fuzzy
 msgid "Search in current note"
-msgstr "在所有笔记内搜索"
+msgstr "在当前笔记内搜索"
 
 msgid "View"
 msgstr "显示"
@@ -746,9 +743,8 @@ msgstr "步骤二：安装扩展"
 msgid "Download and install the relevant extension for your browser:"
 msgstr "为您的浏览器下载并安装相关的扩展："
 
-#, fuzzy
 msgid "Advanced options"
-msgstr "显示高级选项"
+msgstr "高级选项"
 
 msgid "Authorisation token:"
 msgstr "授权码："
@@ -918,13 +914,11 @@ msgstr "%s - 副本"
 msgid "Switch between note and to-do type"
 msgstr "在笔记和待办事项类型之间切换"
 
-#, fuzzy
 msgid "Switch to note type"
-msgstr "在笔记和待办事项类型之间切换"
+msgstr "切换到笔记"
 
-#, fuzzy
 msgid "Switch to to-do type"
-msgstr "在笔记和待办事项类型之间切换"
+msgstr "切换到待办事项"
 
 msgid "Copy Markdown link"
 msgstr "复制 Markdown 链接"
@@ -981,7 +975,7 @@ msgid ""
 msgstr "此笔记没有任何内容。点击 \"%s\" 切换至编辑器并编辑笔记。"
 
 msgid "Only one note can be printed or exported to PDF at a time."
-msgstr ""
+msgstr "一次只能输出一个笔记或导出为PDF文件。"
 
 msgid "strong text"
 msgstr "加粗文本"
@@ -1088,9 +1082,9 @@ msgstr "笔记本"
 msgid "Decrypting items: %d/%d"
 msgstr "解密项目：%d/%d"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Fetching resources: %d"
-msgstr "资源：%d。"
+msgstr "获取资源：%d。"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "请选择同步状态的导出位置"
@@ -1306,9 +1300,8 @@ msgstr "启动应用程序时在托盘中最小化"
 msgid "Global zoom percentage"
 msgstr "全局缩放比例"
 
-#, fuzzy
 msgid "Editor font size"
-msgstr "编辑器字体"
+msgstr "编辑器字体大小"
 
 msgid "Editor font family"
 msgstr "编辑器字体"
@@ -1324,11 +1317,11 @@ msgid "Automatically update the application"
 msgstr "自动更新此程序"
 
 msgid "Get pre-releases when checking for updates"
-msgstr ""
+msgstr "检查更新时获取预发布版本。"
 
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
-msgstr ""
+msgstr "详细信息，请参阅预发布版本页面: %s"
 
 msgid "Synchronisation interval"
 msgstr "同步间隔"
@@ -1439,9 +1432,8 @@ msgstr "Joplin 导出目录"
 msgid "Evernote Export File"
 msgstr "Evernote 导出文件"
 
-#, fuzzy
 msgid "Json Export Directory"
-msgstr "Joplin 导出目录"
+msgstr "Json 导出目录"
 
 msgid "Directory"
 msgstr "文件目录"
@@ -1548,9 +1540,8 @@ msgstr "移动%d条笔记至笔记本\"%s\"？"
 msgid "Press to set the decryption password."
 msgstr "按键将设置解密密码。"
 
-#, fuzzy
 msgid "Clear alarm"
-msgstr "设置提醒"
+msgstr "清除提醒"
 
 msgid "Save alarm"
 msgstr "保存提醒"
@@ -1564,13 +1555,11 @@ msgstr "确认"
 msgid "Cancel synchronisation"
 msgstr "取消同步"
 
-#, fuzzy
 msgid "Checking... Please wait."
-msgstr "正在取消... 请稍后。"
+msgstr "正在检查... 请稍后。"
 
-#, fuzzy
 msgid "Success! Synchronisation configuration appears to be correct."
-msgstr "检查同步配置"
+msgstr "成功！同步配置似乎是正确的。"
 
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
@@ -1579,7 +1568,6 @@ msgstr ""
 "发生错误。请检查 URL，用户名，密码等等是否正确并且确保同步目的地可被访问。报"
 "告的错误如下："
 
-#, fuzzy
 msgid "The application has been authorised!"
 msgstr "此程序已被成功授权。"
 
@@ -1697,7 +1685,6 @@ msgstr "Joplin 手机应用目前不支持这种类型的链接：%s"
 msgid "Unsupported image type: %s"
 msgstr "不支持的图片格式：%s"
 
-#, fuzzy
 msgid "Take photo"
 msgstr "附加照片"
 
