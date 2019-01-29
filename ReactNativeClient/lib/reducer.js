@@ -16,6 +16,11 @@ const defaultState = {
 	selectedTagId: null,
 	selectedSearchId: null,
 	selectedItemType: 'note',
+	lastSelectedNotesIds: {
+		Folder: {},
+		Tag: {},
+		Search: {},
+	},
 	showSideMenu: false,
 	screens: {},
 	historyCanGoBack: false,
@@ -51,6 +56,23 @@ stateUtils.notesOrder = function(stateSettings) {
 		by: stateSettings['notes.sortOrder.field'],
 		dir: stateSettings['notes.sortOrder.reverse'] ? 'DESC' : 'ASC',
 	}];
+}
+
+stateUtils.parentItem = function(state) {
+	const t = state.notesParentType;
+	let id = null;
+	if (t === 'Folder') id = state.selectedFolderId;
+	if (t === 'Tag') id = state.selectedTagId;
+	if (t === 'Search') id = state.selectedSearchId;
+	if (!t || !id) return null;
+	return { type: t, id: id };
+}
+
+stateUtils.lastSelectedNoteIds = function(state) {
+	const parent = stateUtils.parentItem(state);
+	if (!parent) return [];
+	const output = state.lastSelectedNotesIds[parent.type][parent.id];
+	return output ? output : [];
 }
 
 function arrayHasEncryptedItems(array) {
@@ -183,6 +205,18 @@ function changeSelectedFolder(state, action) {
 	return newState;
 }
 
+function recordLastSelectedNoteIds(state, noteIds) {
+	const newOnes = Object.assign({}, state.lastSelectedNotesIds);
+	const parent = stateUtils.parentItem(state);
+	if (!parent) return state;
+
+	newOnes[parent.type][parent.id] = noteIds.slice();
+
+	return Object.assign({}, state, {
+		lastSelectedNotesIds: newOnes,
+	});
+}
+
 function changeSelectedNotes(state, action) {
 	let noteIds = [];
 	if (action.id) noteIds = [action.id];
@@ -196,17 +230,11 @@ function changeSelectedNotes(state, action) {
 	if (action.type === 'NOTE_SELECT') {
 		newState.selectedNoteIds = noteIds;
 		newState.newNote = null;
-		return newState;
-	}
-
-	if (action.type === 'NOTE_SELECT_ADD') {
+	} else if (action.type === 'NOTE_SELECT_ADD') {
 		if (!noteIds.length) return state;
 		newState.selectedNoteIds = ArrayUtils.unique(newState.selectedNoteIds.concat(noteIds));
 		newState.newNote = null;
-		return newState;
-	}
-
-	if (action.type === 'NOTE_SELECT_REMOVE') {
+	} else if (action.type === 'NOTE_SELECT_REMOVE') {
 		if (!noteIds.length) return state; // Nothing to unselect
 		if (state.selectedNoteIds.length <= 1) return state; // Cannot unselect the last note
 
@@ -218,11 +246,7 @@ function changeSelectedNotes(state, action) {
 		}
 		newState.selectedNoteIds = newSelectedNoteIds;
 		newState.newNote = null;
-
-		return newState;
-	}
-
-	if (action.type === 'NOTE_SELECT_TOGGLE') {
+	} else if (action.type === 'NOTE_SELECT_TOGGLE') {
 		if (!noteIds.length) return state;
 
 		if (newState.selectedNoteIds.indexOf(noteIds[0]) >= 0) {
@@ -232,11 +256,13 @@ function changeSelectedNotes(state, action) {
 		}
 
 		newState.newNote = null;
-
-		return newState;
+	} else { 
+		throw new Error('Unreachable');
 	}
 
-	throw new Error('Unreachable');
+	newState = recordLastSelectedNoteIds(newState, newState.selectedNoteIds);
+
+	return newState;	
 }
 
 function removeItemFromArray(array, property, value) {

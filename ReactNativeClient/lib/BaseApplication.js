@@ -237,9 +237,30 @@ class BaseApplication {
 				id: state.selectedNoteIds && state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 			});
 		} else {
+			const lastSelectedNoteIds = stateUtils.lastSelectedNoteIds(state);
+			const foundIds = [];
+			for (let i = 0; i < lastSelectedNoteIds.length; i++) {
+				const noteId = lastSelectedNoteIds[i];
+				let found = false;
+				for (let j = 0; j < notes.length; j++) {
+					if (notes[j].id === noteId) {
+						found = true;
+						break;
+					}
+				}
+				if (found) foundIds.push(noteId);
+			}
+
+			let selectedNoteId = null;
+			if (foundIds.length) {
+				selectedNoteId = foundIds[0];
+			} else {
+				selectedNoteId = notes.length ? notes[0].id : null;
+			}
+
 			this.store().dispatch({
 				type: 'NOTE_SELECT',
-				id: notes.length ? notes[0].id : null,
+				id: selectedNoteId,
 			});
 		}
 	}

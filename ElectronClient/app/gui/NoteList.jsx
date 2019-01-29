@@ -13,6 +13,7 @@ const eventManager = require('../eventManager');
 const InteropService = require('lib/services/InteropService');
 const InteropServiceHelper = require('../InteropServiceHelper.js');
 const Search = require('lib/models/Search');
+const { stateUtils } = require('lib/reducer');
 const Mark = require('mark.js/dist/mark.min.js');
 const SearchEngine = require('lib/services/SearchEngine');
 const NoteListUtils = require('./utils/NoteListUtils');
@@ -270,6 +271,16 @@ class NoteListComponent extends React.Component {
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		if (prevProps.windowCommand !== this.props.windowCommand) {
 			this.doCommand(this.props.windowCommand);
+		}
+
+		if (prevProps.selectedNoteIds !== this.props.selectedNoteIds && this.props.selectedNoteIds.length === 1) {
+			const id = this.props.selectedNoteIds[0];
+			for (let i = 0; i < this.props.notes.length; i++) {
+				if (this.props.notes[i].id === id) {
+					this.itemListRef.current.makeItemIndexVisible(i);
+					break;
+				}	
+			}
 		}
 	}
 
