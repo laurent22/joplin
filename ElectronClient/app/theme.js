@@ -199,7 +199,6 @@ function addExtraStyles(style) {
 		}
 	);
 
-
 	return style;
 }
 
