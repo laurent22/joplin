@@ -284,7 +284,7 @@ It is generally recommended to enter the notes as Markdown as it makes the notes
 
 ## Custom CSS
 
-Rendered markdown can be customized by placing a userstyle file in the profile directory `~/.config/joplin-desktop/userstyle.css` (This path might be different on your device - check at the top of the Config screen for the exact path). This file supports standard CSS syntax.
+Rendered markdown can be customized by placing a userstyle file in the profile directory `~/.config/joplin-desktop/userstyle.css` (This path might be different on your device - check at the top of the Config screen for the exact path). This file supports standard CSS syntax. For exporting PDF files with highlighting, add <code>@media print { ... }</code> and add the rules you need. 
 
 # Searching
 
