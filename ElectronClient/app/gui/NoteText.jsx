@@ -104,9 +104,9 @@ class NoteTextComponent extends React.Component {
 			}
 		}
 
-		this.onAlarmChange_ = (event) => { if (event.noteId === this.props.noteId) this.reloadNote(this.props); }
-		this.onNoteTypeToggle_ = (event) => { if (event.noteId === this.props.noteId) this.reloadNote(this.props); }
-		this.onTodoToggle_ = (event) => { if (event.noteId === this.props.noteId) this.reloadNote(this.props); }
+		this.onAlarmChange_ = (event) => { if (event.noteId === this.props.noteId) this.scheduleReloadNote(this.props); }
+		this.onNoteTypeToggle_ = (event) => { if (event.noteId === this.props.noteId) this.scheduleReloadNote(this.props); }
+		this.onTodoToggle_ = (event) => { if (event.noteId === this.props.noteId) this.scheduleReloadNote(this.props); }
 
 		this.onEditorPaste_ = async (event = null) => {
 			const formats = clipboard.availableFormats();
@@ -215,7 +215,7 @@ class NoteTextComponent extends React.Component {
 		this.externalEditWatcher_noteChange = (event) => {
 			if (!this.state.note || !this.state.note.id) return;
 			if (event.id === this.state.note.id) {
-				this.reloadNote(this.props);
+				this.scheduleReloadNote(this.props);
 			}
 		}
 
@@ -401,6 +401,20 @@ class NoteTextComponent extends React.Component {
 		}, 500);
 	}
 
+	scheduleReloadNote(props, options = null) {
+		if (this.scheduleReloadNoteIID_) {
+			clearTimeout(this.scheduleReloadNoteIID_);
+			this.scheduleReloadNoteIID_ = null;
+		}
+
+		this.scheduleReloadNoteIID_ = setTimeout(() => {
+			this.reloadNote(props, options);
+		}, 100);
+	}
+
+	// Generally, reloadNote() should not be called directly so that it's not called multiple times
+	// from multiple places within a short interval of time. Instead use scheduleReloadNote() to
+	// delay reloading a bit and make sure that only one reload operation is performed.
 	async reloadNote(props, options = null) {
 		if (!options) options = {};
 		if (!('noReloadIfLocalChanges' in options)) options.noReloadIfLocalChanges = false;
@@ -538,9 +552,9 @@ class NoteTextComponent extends React.Component {
 
 	async componentWillReceiveProps(nextProps) {
 		if (nextProps.newNote) {
-			await this.reloadNote(nextProps);
+			await this.scheduleReloadNote(nextProps);
 		} else if ('noteId' in nextProps && nextProps.noteId !== this.props.noteId) {
-			await this.reloadNote(nextProps);
+			await this.scheduleReloadNote(nextProps);
 		} else if ('noteTags' in nextProps && this.areNoteTagsModified(nextProps.noteTags, this.state.noteTags)) {
 			this.setState({
 				noteTags: nextProps.noteTags
@@ -548,7 +562,7 @@ class NoteTextComponent extends React.Component {
 		}
 
 		if ('syncStarted' in nextProps && !nextProps.syncStarted && !this.isModified()) {
-			await this.reloadNote(nextProps, { noReloadIfLocalChanges: true });
+			await this.scheduleReloadNote(nextProps, { noReloadIfLocalChanges: true });
 		}
 
 		if (nextProps.windowCommand) {
