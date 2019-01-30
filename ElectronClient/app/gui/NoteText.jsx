@@ -429,12 +429,17 @@ class NoteTextComponent extends React.Component {
 		let loadingNewNote = true;
 		let parentFolder = null;
 		let noteTags = [];
+		let scrollPercent = 0;
 
 		if (props.newNote) {
 			note = Object.assign({}, props.newNote);
 			this.lastLoadedNoteId_ = null;
 		} else {
 			noteId = props.noteId;
+
+			scrollPercent = this.props.lastEditorScrollPercents[noteId];
+			if (!scrollPercent) scrollPercent = 0;
+
 			loadingNewNote = stateNoteId !== noteId;
 			noteTags = await Tag.tagsByNoteId(noteId);
 			this.lastLoadedNoteId_ = noteId;
@@ -498,6 +503,12 @@ class NoteTextComponent extends React.Component {
 				}
 				this.editor_.editor.clearSelection();
 				this.editor_.editor.moveCursorTo(0,0);
+
+				if (scrollPercent) {
+					setTimeout(() => {
+						this.setEditorPercentScroll(scrollPercent);
+					}, 10);
+				}
 			}
 		}
 
@@ -741,7 +752,19 @@ class NoteTextComponent extends React.Component {
 		}
 
 		const m = this.editorMaxScroll();
-		this.setViewerPercentScroll(m ? this.editorScrollTop() / m : 0);
+		const percent = m ? this.editorScrollTop() / m : 0;
+
+		const noteId = this.props.noteId;
+
+		if (noteId) {
+			this.props.dispatch({
+				type: 'EDITOR_SCROLL_PERCENT_SET',
+				noteId: noteId,
+				percent: percent,
+			});
+		}
+
+		this.setViewerPercentScroll(percent);
 	}
 
 	webview_domReady() {
@@ -1850,6 +1873,7 @@ const mapStateToProps = (state) => {
 		selectedSearchId: state.selectedSearchId,
 		watchedNoteFiles: state.watchedNoteFiles,
 		customCss: state.customCss,
+		lastEditorScrollPercents: state.lastEditorScrollPercents,
 	};
 };
 

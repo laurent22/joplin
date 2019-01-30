@@ -42,6 +42,7 @@ const appDefaultState = Object.assign({}, defaultState, {
 	sidebarVisibility: true,
 	windowContentSize: bridge().windowContentSize(),
 	watchedNoteFiles: [],
+	lastEditorScrollPercents: {},
 });
 
 class Application extends BaseApplication {
@@ -169,6 +170,14 @@ class Application extends BaseApplication {
 						newState = Object.assign({}, state);
 						newState.watchedNoteFiles = [];
 					}
+					break;
+
+				case 'EDITOR_SCROLL_PERCENT_SET':
+
+					newState = Object.assign({}, state);
+					const newPercents = Object.assign({}, newState.lastEditorScrollPercents);
+					newPercents[action.noteId] = action.percent;
+					newState.lastEditorScrollPercents = newPercents;
 					break;
 
 			}
