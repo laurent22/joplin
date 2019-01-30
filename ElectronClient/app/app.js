@@ -475,9 +475,11 @@ class Application extends BaseApplication {
 						});
 					},
 				}, {
+					type: 'separator',
+					screens: ['Main'],
+				}, {
 					label: _('Insert Date Time'),
 					screens: ['Main'],
-					visible: false,
 					accelerator: 'CommandOrControl+Shift+T',
 					click: () => {
 						this.dispatch({
