@@ -114,4 +114,43 @@ function ltrimSlashes(path) {
 	return path.replace(/^\/+/, '');
 }
 
-module.exports = { basename, dirname, filename, isHidden, fileExtension, safeFilename, friendlySafeFilename, safeFileExtension, toSystemSlashes, rtrimSlashes, ltrimSlashes };
+function quotePath(path) {
+	if (!path) return '';
+	if (path.indexOf('"') < 0 && path.indexOf(' ') < 0) return path;
+	path = path.replace(/"/, '\\"');
+	return '"' + path + '"';
+}
+
+function unquotePath(path) {
+	if (!path.length) return '';
+	if (path.length && path[0] === '"') {
+		path = path.substr(1, path.length - 2);
+	}
+	path = path.replace(/\\"/, '"');
+	return path;
+}
+
+function extractExecutablePath(cmd) {
+	if (!cmd.length) return '';
+
+	const quoteType = ['"', "'"].indexOf(cmd[0]) >= 0 ? cmd[0] : '';
+
+	let output = '';
+	for (let i = 0; i < cmd.length; i++) {
+		const c = cmd[i];
+		if (quoteType) {
+			if (i > 0 && c === quoteType) {
+				output += c;
+				break;
+			}
+		} else {
+			if (c === ' ') break;
+		}
+
+		output += c;
+	}
+
+	return output;
+}
+
+module.exports = { extractExecutablePath, basename, dirname, filename, isHidden, fileExtension, safeFilename, friendlySafeFilename, safeFileExtension, toSystemSlashes, rtrimSlashes, ltrimSlashes, quotePath, unquotePath };

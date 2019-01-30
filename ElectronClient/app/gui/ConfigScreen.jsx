@@ -7,6 +7,7 @@ const { Header } = require('./Header.min.js');
 const { themeStyle } = require('../theme.js');
 const pathUtils = require('lib/path-utils.js');
 const { _ } = require('lib/locale.js');
+const { commandArgumentsToString } = require('lib/string-utils');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 const shared = require('lib/components/shared/config-shared.js');
 
@@ -95,6 +96,15 @@ class ConfigScreenComponent extends React.Component {
 			color: theme.color,
 		});
 
+		const subLabel = Object.assign({}, labelStyle, {
+			opacity: 0.7,
+			marginBottom: Math.round(rowStyle.marginBottom * 0.7),
+		});
+
+		const invisibleLabel = Object.assign({}, labelStyle, {
+			opacity: 0,
+		});
+
 		const controlStyle = {
 			display: 'inline-block',
 			color: theme.color,
@@ -109,6 +119,7 @@ class ConfigScreenComponent extends React.Component {
 		});
 
 		const updateSettingValue = (key, value) => {
+			// console.info(key + ' = ' + value);
 			return shared.updateSettingValue(this, key, value);
 		}
 
@@ -158,23 +169,93 @@ class ConfigScreenComponent extends React.Component {
 				</div>
 			);
 		} else if (md.type === Setting.TYPE_STRING) {
-			const onTextChange = (event) => {
-				updateSettingValue(key, event.target.value);
-			}
-
 			const inputStyle = Object.assign({}, controlStyle, {
 				width: '50%',
 				minWidth: '20em',
 				border: '1px solid' });
 			const inputType = md.secure === true ? 'password' : 'text';
 
-			return (
-				<div key={key} style={rowStyle}>
-					<div style={labelStyle}><label>{md.label()}</label></div>
-					<input type={inputType} style={inputStyle} value={this.state.settings[key]} onChange={(event) => {onTextChange(event)}} />
-					{ descriptionComp }
-				</div>
-			);
+			if (md.subType === 'file_path_and_args') {
+				inputStyle.marginBottom = subLabel.marginBottom;
+
+				const splitCmd = cmdString => {
+					const path = pathUtils.extractExecutablePath(cmdString);
+					const args = cmdString.substr(path.length + 1);
+					return [pathUtils.unquotePath(path), args];
+				}
+
+				const joinCmd = cmdArray => {
+					if (!cmdArray[0] && !cmdArray[1]) return '';
+					let cmdString = pathUtils.quotePath(cmdArray[0]);
+					if (!cmdString) cmdString = '""';
+					if (cmdArray[1]) cmdString += ' ' + cmdArray[1];
+					return cmdString;
+				}
+
+				const onPathChange = event => {
+					const cmd = splitCmd(this.state.settings[key]);
+					cmd[0] = event.target.value;
+					updateSettingValue(key, joinCmd(cmd));
+				}
+
+				const onArgsChange = event => {
+					const cmd = splitCmd(this.state.settings[key]);
+					cmd[1] = event.target.value;
+					updateSettingValue(key, joinCmd(cmd));
+				}
+
+				const browseButtonClick = () => {
+					const paths = bridge().showOpenDialog();
+					if (!paths || !paths.length) return;
+					const cmd = splitCmd(this.state.settings[key]);
+					cmd[0] = paths[0]
+					updateSettingValue(key, joinCmd(cmd));
+				}
+
+				const cmd = splitCmd(this.state.settings[key]);
+
+				return (
+					<div key={key} style={rowStyle}>
+						<div style={{display:'flex'}}>
+							<div style={{flex:0, whiteSpace: 'nowrap'}}>
+								<div style={labelStyle}><label>{md.label()}</label></div>
+							</div>
+							<div style={{flex:0}}>
+								<div style={subLabel}>Path:</div>
+								<div style={subLabel}>Arguments:</div>
+							</div>
+							<div style={{flex:1}}>
+								<div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: inputStyle.marginBottom}}>
+									<input type={inputType} style={Object.assign({}, inputStyle, {marginBottom:0})} onChange={(event) => {onPathChange(event)}} value={cmd[0]} />
+									<button onClick={browseButtonClick} style={Object.assign({}, theme.buttonStyle, { marginLeft: 5, minHeight: 20, height: 20 })}>{_('Browse...')}</button>
+								</div>
+								<input type={inputType} style={inputStyle} onChange={(event) => {onArgsChange(event)}} value={cmd[1]}/>
+							</div>
+						</div>
+
+						<div style={{display:'flex'}}>
+							<div style={{flex:0, whiteSpace: 'nowrap'}}>
+								<div style={invisibleLabel}><label>{md.label()}</label></div>
+							</div>
+							<div style={{flex:1}}>
+								{ descriptionComp }
+							</div>
+						</div>
+					</div>
+				);
+			} else {
+				const onTextChange = (event) => {
+					updateSettingValue(key, event.target.value);
+				}
+
+				return (
+					<div key={key} style={rowStyle}>
+						<div style={labelStyle}><label>{md.label()}</label></div>
+						<input type={inputType} style={inputStyle} value={this.state.settings[key]} onChange={(event) => {onTextChange(event)}} />
+						{ descriptionComp }
+					</div>
+				);
+			}
 		} else if (md.type === Setting.TYPE_INT) {
 			const onNumChange = (event) => {
 				updateSettingValue(key, event.target.value);

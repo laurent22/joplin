@@ -123,6 +123,19 @@ function wrap(text, indent, width) {
 	});
 }
 
+function commandArgumentsToString(args) {
+	let output = [];
+	for (let i = 0; i < args.length; i++) {
+		let arg = args[i];
+		const quote = arg.indexOf('"') >= 0 ? "'" : '"';
+		if (arg.indexOf(' ') >= 0) {
+			arg = quote + arg + quote;
+		}
+		output.push(arg);
+	}
+	return output.join(' ');;
+}
+
 function splitCommandString(command, options = null) {
 	options = options || {};
 	if (!('handleEscape' in options)) {
@@ -252,6 +265,6 @@ function scriptType(s) {
 }
 
 module.exports = Object.assign(
-	{ removeDiacritics, escapeFilename, wrap, splitCommandString, padLeft, toTitleCase, urlDecode, escapeHtml, surroundKeywords, scriptType },
+	{ removeDiacritics, escapeFilename, wrap, splitCommandString, padLeft, toTitleCase, urlDecode, escapeHtml, surroundKeywords, scriptType, commandArgumentsToString },
 	stringUtilsCommon,
 );
