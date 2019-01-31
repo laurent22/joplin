@@ -355,6 +355,7 @@ class SearchEngine {
 
 	async search(query) {
 		query = this.normalizeText_(query);
+		query = query.replace(/-/g, ' '); // https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
 
 		const st = scriptType(query);
 

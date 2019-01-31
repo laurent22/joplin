@@ -254,4 +254,26 @@ describe('services_SearchEngine', function() {
 		expect(engine.parseQuery('*').termCount).toBe(0);
 	}));
 
+	it('should handle queries with special characters', asyncTest(async () => {
+		let rows;
+
+		const testCases = [
+			['did-not-match', 'did-not-match'],
+			['does match', 'does match'],
+		];
+
+		for (let i = 0; i < testCases.length; i++) {
+			const t = testCases[i];
+			const content = t[0];
+			const query = t[1];
+
+			const n = await Note.save({ title: content });
+			await engine.syncTables();
+			rows = await engine.search(query);
+			expect(rows.length).toBe(1);
+
+			await Note.delete(n.id);
+		}
+	}));
+
 });
