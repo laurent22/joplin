@@ -40,8 +40,14 @@ class SideBarComponent extends React.Component {
 			const dt = event.dataTransfer;
 			if (!dt) return;
 
+			// folderId can be NULL when dropping on the sidebar Notebook header. In that case, it's used
+			// to put the dropped folder at the root. But for notes, folderId needs to always be defined
+			// since there's no such thing as a root note.
+
 			if (dt.types.indexOf("text/x-jop-note-ids") >= 0) {
 				event.preventDefault();
+
+				if (!folderId) return;
 
 				const noteIds = JSON.parse(dt.getData("text/x-jop-note-ids"));
 				for (let i = 0; i < noteIds.length; i++) {
