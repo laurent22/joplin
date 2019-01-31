@@ -9,8 +9,9 @@ const eventManager = require('../../eventManager');
 const InteropService = require('lib/services/InteropService');
 const InteropServiceHelper = require('../../InteropServiceHelper.js');
 const Search = require('lib/models/Search');
+const Note = require('lib/models/Note');
 const SearchEngine = require('lib/services/SearchEngine');
-const { replaceRegexDiacritics, pregQuote } = require('lib/string-utils');
+const { replaceRegexDiacritics, pregQuote, substrWithEllipsis } = require('lib/string-utils');
 
 class NoteListUtils {
 
@@ -116,7 +117,17 @@ class NoteListUtils {
 
 	static async confirmDeleteNotes(noteIds) {
 		if (!noteIds.length) return;
-		const ok = bridge().showConfirmMessageBox(noteIds.length > 1 ? _('Delete notes?') : _('Delete note?'));
+
+		let msg = '';
+		if (noteIds.length === 1) {
+			const note = await Note.load(noteIds[0]);
+			if (!note) return;
+			msg = _('Delete note "%s"?', substrWithEllipsis(note.title, 0, 32));
+		} else {
+			msg = _('Delete these %d notes?', noteIds.length);
+		}
+
+		const ok = bridge().showConfirmMessageBox(msg);
 		if (!ok) return;
 		await Note.batchDelete(noteIds);
 	}
