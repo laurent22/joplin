@@ -535,6 +535,8 @@ class MdToHtml {
 				background-color: ` + style.htmlBackgroundColor + `;
 				font-family: ` + fontFamily + `;
 				padding-bottom: ` + options.paddingBottom + `;
+				/* So that, for example, highlighted text or background images are printed too, otherwise browsers tend not to print these things */
+				-webkit-print-color-adjust: exact;
 			}
 			p, h1, h2, h3, h4, h5, h6, ul, table {
 				margin-top: 0;
@@ -635,24 +637,9 @@ class MdToHtml {
 					height: auto !important;
 				}
 
-				a.checkbox {
-					border: 1pt solid ` + style.htmlColor + `;
-					border-radius: 2pt;
-					width: 1em;
-					height: 1em;
-					line-height: 1em;
-					text-align: center;
-					top: .4em;
-				}
-
-				a.checkbox.tick:after {
-					content: "X";
-				}
-
 				a.checkbox.tick {
-					top: 0;
-					left: -0.02em;
-					color: ` + style.htmlColor + `;
+					/* Checkbox ticks are displayed upside down when printed for some reason */
+					transform: scaleY(-1);
 				}
 
 				pre {
@@ -664,6 +651,29 @@ class MdToHtml {
 				}
 			}
 		`;
+
+		// To style the checkboxes in print when webkit-print-color-adjust is not enabled.
+		// Keep it there for now in case that CSS parameter needs to be removed.
+
+		// a.checkbox {
+		// 	border: 1pt solid ` + style.htmlColor + `;
+		// 	border-radius: 2pt;
+		// 	width: 1em;
+		// 	height: 1em;
+		// 	line-height: 1em;
+		// 	text-align: center;
+		// 	top: .4em;
+		// }
+
+		// a.checkbox.tick:after {
+		// 	content: "X";
+		// }
+
+		// a.checkbox.tick {
+		// 	top: 0;
+		// 	left: -0.02em;
+		// 	color: ` + style.htmlColor + `;
+		// }
 
 		const styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>';
 
