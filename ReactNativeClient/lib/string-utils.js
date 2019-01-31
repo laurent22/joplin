@@ -238,6 +238,9 @@ function escapeHtml(s) {
 		.replace(/'/g, "&#039;");
 }
 
+// keywords can either be a list of strings, or a list of objects with the format:
+// { value: 'actualkeyword', type: 'regex/string' }
+// The function surrounds the keywords wherever they are, even within other words.
 function surroundKeywords(keywords, text, prefix, suffix) {
 	if (!keywords.length) return text;
 
@@ -245,7 +248,8 @@ function surroundKeywords(keywords, text, prefix, suffix) {
 		if (k.type === 'regex') {
 			return stringUtilsCommon.replaceRegexDiacritics(k.valueRegex);
 		} else {
-			return stringUtilsCommon.replaceRegexDiacritics(stringUtilsCommon.pregQuote(k.value));
+			const value = typeof k === 'string' ? k : k.value;
+			return stringUtilsCommon.replaceRegexDiacritics(stringUtilsCommon.pregQuote(value));
 		}
 	}).join('|');
 	regexString = '(' + regexString + ')'
