@@ -364,7 +364,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				note.longitude = noteAttributes.longitude;
 				note.altitude = noteAttributes.altitude;
 				note.author = noteAttributes.author;
-				note.is_todo = !!noteAttributes['reminder-order'];
+				note.is_todo = noteAttributes['reminder-order'] !== '0' && !!noteAttributes['reminder-order'];
 				note.todo_due = dateToTimestamp(noteAttributes['reminder-time'], true);
 				note.todo_completed = dateToTimestamp(noteAttributes['reminder-done-time'], true);
 				note.order = dateToTimestamp(noteAttributes['reminder-order'], true);
