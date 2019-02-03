@@ -2,6 +2,7 @@ const welcomeAssets = require('./welcomeAssets');
 const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting');
 const Folder = require('lib/models/Folder');
+const Tag = require('lib/models/Tag');
 const Resource = require('lib/models/Resource');
 const { shim } = require('lib/shim');
 const { uuid } = require('lib/uuid');
@@ -17,7 +18,6 @@ class WelcomeUtils {
 		const folderAssets = welcomeAssets.folders;
 		const tempDir = Setting.value('resourceDir');
 
-		// TODO: Check if asset exist before creating
 		// TODO: Update createResourceFromPath for mobile
 		// TODO: Update BaseApplication
 		// TODO: Update mobile root.js
@@ -90,6 +90,8 @@ class WelcomeUtils {
 				title: noteAsset.title,
 				body: noteBody,
 			}, { isNew: true });
+
+			if (noteAsset.tags) await Tag.setNoteTagsByTitles(noteId, noteAsset.tags);
 		}
 	}
 
