@@ -24,12 +24,11 @@ msgid "Please select the note or notebook to be deleted first."
 msgstr "Пожалуйста, выберите заметку или блокнот, которые будут удалены в первую очередь."
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "Для выхода из приложения нажмите Ctrl+D или введите \"exit\"
+msgstr "Для выхода из приложения нажмите Ctrl+D или введите \"exit\""
 
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr ""
-"Более одного элемента соответствуют \"%s\". Пожалуйста, уточните ваш запрос."
+msgstr "Более одного элемента соответствуют \"%s\". Пожалуйста, уточните ваш запрос."
 
 msgid "No notebook selected."
 msgstr "Блокнот не выбран."
@@ -1441,7 +1440,7 @@ msgid ""
 "more details: %s"
 msgstr "Внимание: если вы измените это местоположение, обязательно скопируйте все содержимое "
 "перед синхронизацией, в противном случае все файлы будут удалены! Смотрите FAQ для "
-"получения подробной информации: %s
+"получения подробной информации: %s"
 
 msgid "Nextcloud username"
 msgstr "Имя пользователя Nextcloud"
@@ -1466,7 +1465,10 @@ msgid ""
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
 "pem. Note that if you make changes to the TLS settings, you must save your "
 "changes before clicking on \"Check synchronisation configuration\"."
-msgstr ""
+msgstr "Разделенный запятыми список путей к каталогам для загрузки сертификатов "
+"из отдельных файлов сертификатов или путей к ним. Например: /my/cert_dir, /other/custom. "
+"Обратите внимание, что если вы вносите изменения в настройки TLS, вы должны "
+"сохранить их перед нажатием на \"Проверить конфигурацию синхронизации\"."
 
 msgid "Ignore TLS certificate errors"
 msgstr "Игнорировать ошибки сертификата TLS"
@@ -1599,7 +1601,7 @@ msgstr "Переместить в блокнот..."
 
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr "Переместить %d заметок в блокнот \"%s\"?
+msgstr "Переместить %d заметок в блокнот \"%s\"?"
 
 msgid "Press to set the decryption password."
 msgstr "Нажмите, чтобы установить пароль для расшифровки."
@@ -1805,112 +1807,3 @@ msgstr "У вас сейчас нет блокнота. Создайте его 
 
 msgid "Welcome"
 msgstr "Добро пожаловать"
-
-#, fuzzy
-#~ msgid "State: %s."
-#~ msgstr "Статус: %s."
-
-#~ msgid "A notebook with this title already exists: \"%s\""
-#~ msgstr "Блокнот с таким названием уже существует: \"%s\""
-
-#~ msgid "Searches"
-#~ msgstr "Поиски"
-
-#, fuzzy
-#~ msgid ""
-#~ "Release notes:\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr "Примечания к выпуску: \n"
-#~ "\n"
-#~ "%s"
-
-#~ msgid "Imports an Evernote notebook file (.enex file)."
-#~ msgstr "Импортирует файл блокнота Evernote (.enex файл)."
-
-#~ msgid ""
-#~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
-#~ msgstr ""
-#~ "Файл \"%s\ будет импортирован в существующий блокнот \"%s\. Продолжить?"
-
-#~ msgid ""
-#~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
-#~ "it. Continue?"
-#~ msgstr ""
-#~ "Будет создан новый блокнот \"%s\" и в него будет импортирован файл \"%s\". "
-#~ "Продолжить?"
-
-#~ msgid "Import Evernote notes"
-#~ msgstr "Импортировать заметки Evernote"
-
-#~ msgid "Give focus to next pane"
-#~ msgstr "Переключиться на следующую панель"
-
-#~ msgid "Give focus to previous pane"
-#~ msgstr "Переключиться на предыдущую панель"
-
-#~ msgid "Exit command line mode"
-#~ msgstr "Выйти из режима командной строки"
-
-#~ msgid "Edit the selected note"
-#~ msgstr "Редактировать выбранную заметку"
-
-#~ msgid "Cancel the current command."
-#~ msgstr "Отменить текущую команду."
-
-#~ msgid "Exit the application."
-#~ msgstr "Выйти из приложения."
-
-#~ msgid "Delete the currently selected note or notebook."
-#~ msgstr "Удалить текущую выбранную заметку или блокнот."
-
-#~ msgid "Set a to-do as completed / not completed"
-#~ msgstr "Отметить задачу как выполненную / не завершенную"
-
-#~ msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-#~ msgstr ""
-#~ "[tc] переключить консоль между развернутой/свернутой/скрытой/видимой."
-
-#~ msgid "[t]oggle note [m]etadata."
-#~ msgstr "[tm] переключить отображение метаданных заметки."
-
-#~ msgid "[M]ake a new [n]ote"
-#~ msgstr "[mn] создать новую заметку"
-
-#~ msgid "[M]ake a new [t]odo"
-#~ msgstr "[mt] создать новую задачу"
-
-#~ msgid "[M]ake a new note[b]ook"
-#~ msgstr "[mb] создать новый блокнот"
-
-#~ msgid "Copy ([Y]ank) the [n]ote to a notebook."
-#~ msgstr "[yn] копировать заметку в блокнот."
-
-#~ msgid "Move the note to a notebook."
-#~ msgstr "Переместить заметку в блокнот."
-
-#~ msgid "Error"
-#~ msgstr "Ошибка"
-
-#~ msgid "Could not download the update: %s"
-#~ msgstr "Не удалось загрузить обновление: %s"
-
-#~ msgid "New version downloaded - application will quit now and update..."
-#~ msgstr ""
-#~ "Новая версия загружена — приложение будет закрыто и обновлено..."
-
-#~ msgid "Could not install the update: %s"
-#~ msgstr "Не удалось установить обновление: %s"
-
-#~ msgid ""
-#~ "The target to synchonise to. If synchronising with the file system, set "
-#~ "`sync.2.path` to specify the target directory."
-#~ msgstr ""
-#~ "Цель синхронизации. При синхронизации с "
-#~ "файловой системой в `sync.2.path` указывается целевой каталог."
-
-#~ msgid "To-do title:"
-#~ msgstr "Название задачи:"
-
-#~ msgid "\"%s\": \"%s\""
-#~ msgstr "\"%s\": \"%s\""
