@@ -38,6 +38,7 @@ const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseService = require('lib/services/BaseService');
 const SearchEngine = require('lib/services/SearchEngine');
+const WelcomeUtils = require('lib/WelcomeUtils');
 
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -563,6 +564,8 @@ class BaseApplication {
 		if (currentFolderId) currentFolder = await Folder.load(currentFolderId);
 		if (!currentFolder) currentFolder = await Folder.defaultFolder();
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
+
+		await WelcomeUtils.createWelcomeItems();
 
 		// await this.testing();process.exit();
 
