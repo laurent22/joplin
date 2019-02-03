@@ -71,15 +71,17 @@ class SearchScreenComponent extends BaseScreenComponent {
 		this.isMounted_ = false;
 	}
 
-	UNSAFE_componentWillReceiveProps(newProps) {
-		let newState = {};
-		if ('query' in newProps && !this.state.query) newState.query = newProps.query;
+	// UNSAFE_componentWillReceiveProps(newProps) {
+	// 	console.info('UNSAFE_componentWillReceiveProps', newProps);
 
-		if (Object.getOwnPropertyNames(newState).length) {
-			this.setState(newState);
-			this.refreshSearch(newState.query);
-		}
-	}
+	// 	let newState = {};
+	// 	if ('query' in newProps && !this.state.query) newState.query = newProps.query;
+
+	// 	if (Object.getOwnPropertyNames(newState).length) {
+	// 		this.setState(newState);
+	// 		this.refreshSearch(newState.query);
+	// 	}
+	// }
 
 	searchTextInput_submit() {
 		const query = this.state.query.trim();
@@ -89,6 +91,9 @@ class SearchScreenComponent extends BaseScreenComponent {
 			type: 'SEARCH_QUERY',
 			query: query,
 		});
+
+		this.setState({ query: query });
+		this.refreshSearch(query);
 	}
 
 	clearButton_press() {
@@ -96,6 +101,9 @@ class SearchScreenComponent extends BaseScreenComponent {
 			type: 'SEARCH_QUERY',
 			query: '',
 		});
+
+		this.setState({ query: '' });
+		this.refreshSearch('');
 	}
 
 	async refreshSearch(query = null) {

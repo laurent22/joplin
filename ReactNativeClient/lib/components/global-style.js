@@ -79,8 +79,8 @@ function addExtraStyles(style) {
 	};
 
 	if (Platform.OS === 'ios') {
-		style.lineInput.borderBottomWidth = 1;
-		style.lineInput.borderBottomColor = style.dividerColor;
+		delete style.lineInput.borderBottomWidth;
+		delete style.lineInput.borderColor;
 	}
 
 	style.buttonRow = {
