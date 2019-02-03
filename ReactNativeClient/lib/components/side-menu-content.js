@@ -201,7 +201,7 @@ class SideMenuContentComponent extends Component {
 
 		if (this.props.folders.length) {
 			const result = shared.renderFolders(this.props, this.folderItem.bind(this));
-			folderItems = result.items;
+			const folderItems = result.items;
 			items = items.concat(folderItems);
 			if (items.length) items.push(this.makeDivider('divider_1'));
 		}
