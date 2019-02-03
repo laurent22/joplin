@@ -14,6 +14,8 @@ Joplin can also import notes from [many other apps](https://github.com/laurent22
 
 # How to export notes
 
-Joplin can export to the JEX format (Joplin Export file), which is an archive that can contain multiple notes, notebooks, etc. This is a format mostly designed for backup purposes. You may also export to other formats such as plain Markdown files, as JSON or as PDF.
+Joplin can export to the JEX format (Joplin Export file), which is an archive that can contain multiple notes, notebooks, etc. This is a format mostly designed for backup purposes. You may also export to other formats such as plain Markdown files, as JSON or as PDF. Find out [more info about exporting notes](https://github.com/laurent22/joplin#exporting) on the official website.
 
-[More info about exporting notes](https://github.com/laurent22/joplin#exporting)
+* * *
+
+**Next:** [How to synchronise your notes](:/25b656aac0564d1a91ab98295aa3cc58)

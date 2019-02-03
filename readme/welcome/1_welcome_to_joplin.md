@@ -40,7 +40,7 @@ This is a [link](https://joplin.cozic.net) and, finally, below is an horizontal 
 
 * * *
 
-A lot more is possible including adding code samples, math formulas or checkbox lists - see the [Markdown documentation](https://joplin.cozic.net/#markdown) for more information.
+A lot more is possible including adding code samples, math formulaes or checkbox lists - see the [Markdown documentation](https://joplin.cozic.net/#markdown) for more information.
 
 ## Organising your notes
 
@@ -61,3 +61,7 @@ The second way to organise your notes is using tags:
 - On **💻 desktop**, right-click on any note in the Note List, and select "Edit tags". You can then add the tags, separating each one by a comma.
 - On **📱 mobile**, open the note and press the "⋮" button and select "Tags".
 - On **🔡 terminal**, type `:help tag` for the available commands.
+
+* * *
+
+**Next:** [How to import notes from other applications](:/b863cbc514cb4cafbae8dd6a4fcad919).
