@@ -575,6 +575,20 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Экспорт в \"%s\" в формате \"%s\". Пожалуйста, подождите..."
 
+msgid "Sidebar"
+msgstr ""
+
+msgid "Note list"
+msgstr ""
+
+#, fuzzy
+msgid "Note title"
+msgstr "Название блокнота:"
+
+#, fuzzy
+msgid "Note body"
+msgstr "Блокноты"
+
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Импорт из \"%s\" в формате \"%s\". Пожалуйста, подождите..."
@@ -653,6 +667,10 @@ msgstr "Переключить панель"
 
 msgid "Toggle editor layout"
 msgstr "Переключить вид редактора"
+
+#, fuzzy
+msgid "Focus"
+msgstr "Фокус на содержимом"
 
 msgid "Tools"
 msgstr "Инструменты"
@@ -789,12 +807,15 @@ msgid ""
 msgstr "Этот токен авторизации необходим только для разрешения сторонним приложениям "
 "получать доступ к Joplin."
 
-msgid "Check synchronisation configuration"
-msgstr "Проверить настройки синхронизации"
-
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Заметки и настройки сохранены в: %s"
+
+msgid "Browse..."
+msgstr ""
+
+msgid "Check synchronisation configuration"
+msgstr "Проверить настройки синхронизации"
 
 msgid "Apply"
 msgstr "Применить"
@@ -890,6 +911,10 @@ msgstr "Статус"
 msgid "Encryption is:"
 msgstr "Шифрование:"
 
+#, fuzzy
+msgid "Usage"
+msgstr "Использование: %s"
+
 msgid "Back"
 msgstr "Назад"
 
@@ -941,37 +966,6 @@ msgstr "Некоторые элементы не могут быть расши�
 
 msgid "Set the password"
 msgstr "Установить пароль"
-
-msgid "Add or remove tags"
-msgstr "Добавить или удалить теги"
-
-msgid "Duplicate"
-msgstr "Дублировать"
-
-#, fuzzy, javascript-format
-msgid "%s - Copy"
-msgstr "%s - Копировать"
-
-msgid "Switch between note and to-do type"
-msgstr "Переключить тип между заметкой и задачей"
-
-#, fuzzy
-msgid "Switch to note type"
-msgstr "Переключить тип на заметку"
-
-#, fuzzy
-msgid "Switch to to-do type"
-msgstr "Переключить тип на задачу"
-
-#, fuzzy
-msgid "Copy Markdown link"
-msgstr "Скопировать ссылку Markdown"
-
-msgid "Delete"
-msgstr "Удалить"
-
-msgid "Delete notes?"
-msgstr "Удалить заметки?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "Здесь нет заметок. Создайте новую, нажав на \"New note\"."
@@ -1116,6 +1110,9 @@ msgstr "Удалить этот тег из всех заметок?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Удалить этот поиск из боковой панели?"
+
+msgid "Delete"
+msgstr "Удалить"
 
 msgid "Rename"
 msgstr "Переименовать"
@@ -1477,6 +1474,25 @@ msgstr "Игнорировать ошибки сертификата TLS"
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Неверное значение параметра: \"%s\". Доступные значения: %s."
 
+#, fuzzy
+msgid "General"
+msgstr "Основные настройки"
+
+#, fuzzy
+msgid "Synchronisation"
+msgstr "Статус синхронизации"
+
+msgid "Appearance"
+msgstr ""
+
+#, fuzzy
+msgid "Note"
+msgstr "Блокноты"
+
+#, fuzzy
+msgid "Application"
+msgstr "Выйти из приложения."
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "Тег \"%s\" уже существует. Пожалуйста, выберите другое имя."
@@ -1773,6 +1789,10 @@ msgstr "Преобразовать в заметку"
 
 msgid "Convert to todo"
 msgstr "Преобразовать в задачу"
+
+#, fuzzy
+msgid "Copy Markdown link"
+msgstr "Markdown"
 
 msgid "Hide metadata"
 msgstr "Скрыть метаданные"

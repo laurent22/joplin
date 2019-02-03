@@ -547,6 +547,20 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "导出至 \"%s\" 并转换成 \"%s\" 格式。请稍等…"
 
+msgid "Sidebar"
+msgstr ""
+
+msgid "Note list"
+msgstr ""
+
+#, fuzzy
+msgid "Note title"
+msgstr "笔记本标题："
+
+#, fuzzy
+msgid "Note body"
+msgstr "笔记本"
+
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "从 \"%s\" 导入为 \"%s\" 格式。请稍等…"
@@ -623,6 +637,10 @@ msgstr "切换边栏"
 
 msgid "Toggle editor layout"
 msgstr "切换编辑器布局"
+
+#, fuzzy
+msgid "Focus"
+msgstr "聚焦内容"
 
 msgid "Tools"
 msgstr "工具"
@@ -757,12 +775,15 @@ msgid ""
 "access Joplin."
 msgstr ""
 
-msgid "Check synchronisation configuration"
-msgstr "检查同步配置"
-
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "笔记与设置文件储存目录为：%s"
+
+msgid "Browse..."
+msgstr ""
+
+msgid "Check synchronisation configuration"
+msgstr "检查同步配置"
 
 msgid "Apply"
 msgstr "应用"
@@ -851,6 +872,10 @@ msgstr "状态"
 msgid "Encryption is:"
 msgstr "加密为："
 
+#, fuzzy
+msgid "Usage"
+msgstr "使用：%s"
+
 msgid "Back"
 msgstr "返回"
 
@@ -900,34 +925,6 @@ msgstr "一些项目无法被解密。"
 
 msgid "Set the password"
 msgstr "设置密码"
-
-msgid "Add or remove tags"
-msgstr "添加或删除标签"
-
-msgid "Duplicate"
-msgstr "重复的"
-
-#, javascript-format
-msgid "%s - Copy"
-msgstr "%s - 副本"
-
-msgid "Switch between note and to-do type"
-msgstr "在笔记和待办事项类型之间切换"
-
-msgid "Switch to note type"
-msgstr "切换到笔记"
-
-msgid "Switch to to-do type"
-msgstr "切换到待办事项"
-
-msgid "Copy Markdown link"
-msgstr "复制 Markdown 链接"
-
-msgid "Delete"
-msgstr "删除"
-
-msgid "Delete notes?"
-msgstr "是否删除笔记？"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "此处没有任何笔记。点击\"新笔记\"创建。"
@@ -1068,6 +1065,9 @@ msgstr "从所有笔记中删除此标签？"
 
 msgid "Remove this search from the sidebar?"
 msgstr "从侧栏中删除此项搜索历史？"
+
+msgid "Delete"
+msgstr "删除"
 
 msgid "Rename"
 msgstr "重命名"
@@ -1416,6 +1416,25 @@ msgstr "忽略 TLS 证书的错误"
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "无效设置数值：\"%s\"。可用值为：%s。"
 
+#, fuzzy
+msgid "General"
+msgstr "通用选项"
+
+#, fuzzy
+msgid "Synchronisation"
+msgstr "同步状态"
+
+msgid "Appearance"
+msgstr ""
+
+#, fuzzy
+msgid "Note"
+msgstr "笔记本"
+
+#, fuzzy
+msgid "Application"
+msgstr "位置"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "标签“%s”已经存在。请选择一个不一样的名字。"
@@ -1703,6 +1722,9 @@ msgstr "转换至笔记"
 msgid "Convert to todo"
 msgstr "转换至待办事项"
 
+msgid "Copy Markdown link"
+msgstr "复制 Markdown 链接"
+
 msgid "Hide metadata"
 msgstr "隐藏元数据"
 
@@ -1734,6 +1756,27 @@ msgstr "您目前未有笔记本。点击(+)按钮创建。"
 
 msgid "Welcome"
 msgstr "欢迎"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "添加或删除标签"
+
+#~ msgid "Duplicate"
+#~ msgstr "重复的"
+
+#~ msgid "%s - Copy"
+#~ msgstr "%s - 副本"
+
+#~ msgid "Switch between note and to-do type"
+#~ msgstr "在笔记和待办事项类型之间切换"
+
+#~ msgid "Switch to note type"
+#~ msgstr "切换到笔记"
+
+#~ msgid "Switch to to-do type"
+#~ msgstr "切换到待办事项"
+
+#~ msgid "Delete notes?"
+#~ msgstr "是否删除笔记？"
 
 #~ msgid "State: %s."
 #~ msgstr "状态：%s。"

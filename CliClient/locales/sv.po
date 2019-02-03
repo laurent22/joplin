@@ -589,6 +589,20 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exportera till \"%s\" som \"%s\" format. Vänta..."
 
+msgid "Sidebar"
+msgstr ""
+
+msgid "Note list"
+msgstr ""
+
+#, fuzzy
+msgid "Note title"
+msgstr "Titel på anteckningsbok:"
+
+#, fuzzy
+msgid "Note body"
+msgstr "Anteckningsböcker"
+
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Importerar från \"%s\" som \"%s\" format. Vänta..."
@@ -667,6 +681,10 @@ msgstr "Växla sidofältet"
 
 msgid "Toggle editor layout"
 msgstr "Växla redigeringslayout"
+
+#, fuzzy
+msgid "Focus"
+msgstr "Fokus på huvuddel"
 
 msgid "Tools"
 msgstr "Verktyg"
@@ -805,12 +823,15 @@ msgid ""
 "access Joplin."
 msgstr ""
 
-msgid "Check synchronisation configuration"
-msgstr "Kontrollera synkroniseringskonfigurationen"
-
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Anteckningar och inställningar lagras i: %s"
+
+msgid "Browse..."
+msgstr ""
+
+msgid "Check synchronisation configuration"
+msgstr "Kontrollera synkroniseringskonfigurationen"
 
 msgid "Apply"
 msgstr "Tillämpa"
@@ -906,6 +927,10 @@ msgstr "Tillstånd"
 msgid "Encryption is:"
 msgstr "Kryptering är:"
 
+#, fuzzy
+msgid "Usage"
+msgstr "Användning: %s"
+
 msgid "Back"
 msgstr "Tillbaka"
 
@@ -957,36 +982,6 @@ msgstr "Några objekt kan inte dekrypteras."
 
 msgid "Set the password"
 msgstr "Ställ in lösenord"
-
-msgid "Add or remove tags"
-msgstr "Lägg till eller ta bort taggar"
-
-msgid "Duplicate"
-msgstr "Duplikat"
-
-#, javascript-format
-msgid "%s - Copy"
-msgstr "%s - Kopiera"
-
-msgid "Switch between note and to-do type"
-msgstr "Växla mellan antecknings- och att-göra-typ"
-
-#, fuzzy
-msgid "Switch to note type"
-msgstr "Växla mellan antecknings- och att-göra-typ"
-
-#, fuzzy
-msgid "Switch to to-do type"
-msgstr "Växla mellan antecknings- och att-göra-typ"
-
-msgid "Copy Markdown link"
-msgstr "Kopiera Markdown-länk"
-
-msgid "Delete"
-msgstr "Ta bort"
-
-msgid "Delete notes?"
-msgstr "Ta bort anteckningar?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "Inga anteckningar här. Skapa en genom att klicka på \"Ny anteckning\"."
@@ -1131,6 +1126,9 @@ msgstr "Ta bort den här taggen från alla anteckningar?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Ta bort den här sökningen från sidofältet?"
+
+msgid "Delete"
+msgstr "Ta bort"
 
 msgid "Rename"
 msgstr "Byt namn"
@@ -1485,6 +1483,25 @@ msgstr "Ignorera TLS-certifikatfel"
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Ogiltigt inställningsvärde: \"%s\". Möjliga värden är: %s."
 
+#, fuzzy
+msgid "General"
+msgstr "Allmänna inställningar"
+
+#, fuzzy
+msgid "Synchronisation"
+msgstr "Synkroniseringstillstånd"
+
+msgid "Appearance"
+msgstr ""
+
+#, fuzzy
+msgid "Note"
+msgstr "Anteckningsböcker"
+
+#, fuzzy
+msgid "Application"
+msgstr "Avslutar programmet."
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr ""
@@ -1783,6 +1800,9 @@ msgstr "Konvertera till anteckning"
 msgid "Convert to todo"
 msgstr "Konvertera till att-göra"
 
+msgid "Copy Markdown link"
+msgstr "Kopiera Markdown-länk"
+
 msgid "Hide metadata"
 msgstr "Dölj metadata"
 
@@ -1819,6 +1839,29 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Välkommen"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Lägg till eller ta bort taggar"
+
+#~ msgid "Duplicate"
+#~ msgstr "Duplikat"
+
+#~ msgid "%s - Copy"
+#~ msgstr "%s - Kopiera"
+
+#~ msgid "Switch between note and to-do type"
+#~ msgstr "Växla mellan antecknings- och att-göra-typ"
+
+#, fuzzy
+#~ msgid "Switch to note type"
+#~ msgstr "Växla mellan antecknings- och att-göra-typ"
+
+#, fuzzy
+#~ msgid "Switch to to-do type"
+#~ msgstr "Växla mellan antecknings- och att-göra-typ"
+
+#~ msgid "Delete notes?"
+#~ msgstr "Ta bort anteckningar?"
 
 #~ msgid "State: %s."
 #~ msgstr "Tillstånd: %s."

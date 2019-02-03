@@ -576,6 +576,20 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Eksporterer til \"%s\" i \"%s\" format. Vennligst vent..."
 
+msgid "Sidebar"
+msgstr ""
+
+msgid "Note list"
+msgstr ""
+
+#, fuzzy
+msgid "Note title"
+msgstr "Tittel på notatbok:"
+
+#, fuzzy
+msgid "Note body"
+msgstr "Notatbøker"
+
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Importerer fra \"%s\" i \"%s\"-format. Vennligst vent..."
@@ -653,6 +667,10 @@ msgstr "Vis/skjul sidepanel"
 
 msgid "Toggle editor layout"
 msgstr "Bytt editorutseende"
+
+#, fuzzy
+msgid "Focus"
+msgstr "Fokuser på brødtekst"
 
 msgid "Tools"
 msgstr "Verktøy"
@@ -792,12 +810,15 @@ msgstr ""
 "Denne autoriseringsbeviset er det eneste nødvendig for å gi "
 "tredjepartsapplikasjoner tilgang til Joplin."
 
-msgid "Check synchronisation configuration"
-msgstr "Sjekk synkroniseringskonfigurasjon"
-
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Notater og innstillinger er lagret i: %s"
+
+msgid "Browse..."
+msgstr ""
+
+msgid "Check synchronisation configuration"
+msgstr "Sjekk synkroniseringskonfigurasjon"
 
 msgid "Apply"
 msgstr "Bruk"
@@ -893,6 +914,10 @@ msgstr "Status"
 msgid "Encryption is:"
 msgstr "Kryptering er:"
 
+#, fuzzy
+msgid "Usage"
+msgstr "Bruk: %s"
+
 msgid "Back"
 msgstr "Tilbake"
 
@@ -944,34 +969,6 @@ msgstr "Noen elementer kan ikke dekrypteres."
 
 msgid "Set the password"
 msgstr "Sett passord"
-
-msgid "Add or remove tags"
-msgstr "Legg til eller fjern merkelapper"
-
-msgid "Duplicate"
-msgstr "Dupliser"
-
-#, javascript-format
-msgid "%s - Copy"
-msgstr "%s - Kopier"
-
-msgid "Switch between note and to-do type"
-msgstr "Bytt mellom notat og gjøremål"
-
-msgid "Switch to note type"
-msgstr "Bytt til notatmodus"
-
-msgid "Switch to to-do type"
-msgstr "Bytt til gjøremålmodus"
-
-msgid "Copy Markdown link"
-msgstr "Kopier Markdown-link"
-
-msgid "Delete"
-msgstr "Slett"
-
-msgid "Delete notes?"
-msgstr "Slette notater?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "Ingen notater her enda. Opprett et ved å klikke på \"Nytt notat\"."
@@ -1114,6 +1111,9 @@ msgstr "Fjern denne merkelappen fra alle notater?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Fjerne dette søket fra sidepanelet?"
+
+msgid "Delete"
+msgstr "Slett"
 
 msgid "Rename"
 msgstr "Gi nytt navn"
@@ -1471,6 +1471,25 @@ msgstr "Ignorer TLS-sertifikatfeil"
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Ugyldig verdi: \"%s\". Mulige verdier er: %s."
 
+#, fuzzy
+msgid "General"
+msgstr "Generelle innstillinger"
+
+#, fuzzy
+msgid "Synchronisation"
+msgstr "Synkroniseringsstatus"
+
+msgid "Appearance"
+msgstr ""
+
+#, fuzzy
+msgid "Note"
+msgstr "Notatbøker"
+
+#, fuzzy
+msgid "Application"
+msgstr "Lokasjon"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "Merkelappen \"%s\" eksiterer allerede. Vennligst velg et annet navn."
@@ -1764,6 +1783,9 @@ msgstr "Konverter til notat"
 msgid "Convert to todo"
 msgstr "Konverter til gjøremål"
 
+msgid "Copy Markdown link"
+msgstr "Kopier Markdown-link"
+
 msgid "Hide metadata"
 msgstr "Skjul metadata"
 
@@ -1797,3 +1819,24 @@ msgstr "Du har enda ingen notatbok. Lag en ved å klikke på (+)-knappen."
 
 msgid "Welcome"
 msgstr "Velkommen"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Legg til eller fjern merkelapper"
+
+#~ msgid "Duplicate"
+#~ msgstr "Dupliser"
+
+#~ msgid "%s - Copy"
+#~ msgstr "%s - Kopier"
+
+#~ msgid "Switch between note and to-do type"
+#~ msgstr "Bytt mellom notat og gjøremål"
+
+#~ msgid "Switch to note type"
+#~ msgstr "Bytt til notatmodus"
+
+#~ msgid "Switch to to-do type"
+#~ msgstr "Bytt til gjøremålmodus"
+
+#~ msgid "Delete notes?"
+#~ msgstr "Slette notater?"

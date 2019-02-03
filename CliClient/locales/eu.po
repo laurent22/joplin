@@ -582,6 +582,20 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 
+msgid "Sidebar"
+msgstr ""
+
+msgid "Note list"
+msgstr ""
+
+#, fuzzy
+msgid "Note title"
+msgstr "Koadernoaren izenburua: "
+
+#, fuzzy
+msgid "Note body"
+msgstr "Koadernoak"
+
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
@@ -661,6 +675,9 @@ msgid "Toggle sidebar"
 msgstr ""
 
 msgid "Toggle editor layout"
+msgstr ""
+
+msgid "Focus"
 msgstr ""
 
 msgid "Tools"
@@ -797,13 +814,16 @@ msgid ""
 "access Joplin."
 msgstr ""
 
-#, fuzzy
-msgid "Check synchronisation configuration"
-msgstr "Sinkronizazioa utzi"
-
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Oharrak eta ezarpenak hemen daude gordeta: %s"
+
+msgid "Browse..."
+msgstr ""
+
+#, fuzzy
+msgid "Check synchronisation configuration"
+msgstr "Sinkronizazioa utzi"
 
 msgid "Apply"
 msgstr ""
@@ -895,6 +915,10 @@ msgstr "Egoera"
 msgid "Encryption is:"
 msgstr "Zifratua  da:"
 
+#, fuzzy
+msgid "Usage"
+msgstr "Erabili: %s"
+
 msgid "Back"
 msgstr "Atzera"
 
@@ -948,36 +972,6 @@ msgstr "Zenbait item ezin dira deszifratu."
 
 msgid "Set the password"
 msgstr "Ezarri pasahitza"
-
-msgid "Add or remove tags"
-msgstr "Gehitu edo ezabatu etiketak"
-
-msgid "Duplicate"
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid "%s - Copy"
-msgstr "Kopiatu"
-
-msgid "Switch between note and to-do type"
-msgstr "Aldatu oharra eta zeregin eren artean."
-
-#, fuzzy
-msgid "Switch to note type"
-msgstr "Aldatu oharra eta zeregin eren artean."
-
-#, fuzzy
-msgid "Switch to to-do type"
-msgstr "Aldatu oharra eta zeregin eren artean."
-
-msgid "Copy Markdown link"
-msgstr ""
-
-msgid "Delete"
-msgstr "Ezabatu"
-
-msgid "Delete notes?"
-msgstr "Oharrak ezabatu?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "Hemen ez dago oharrik. Sortu bat \"Ohar berria\" sakatuta."
@@ -1124,6 +1118,9 @@ msgstr "Kendu etiketa hori ohar guztietatik?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Kendu bilaketa hori ohar guztietatik?"
+
+msgid "Delete"
+msgstr "Ezabatu"
 
 msgid "Rename"
 msgstr "Berrizendatu"
@@ -1486,6 +1483,25 @@ msgstr ""
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Balio aukera baliogabea: \"%s\". Litezkeen balioak: %s."
 
+#, fuzzy
+msgid "General"
+msgstr "Ezarpenak"
+
+#, fuzzy
+msgid "Synchronisation"
+msgstr "Sinkronizazioaren egoera"
+
+msgid "Appearance"
+msgstr ""
+
+#, fuzzy
+msgid "Note"
+msgstr "Koadernoak"
+
+#, fuzzy
+msgid "Application"
+msgstr "Irten aplikaziotik"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr ""
@@ -1776,6 +1792,9 @@ msgstr "Oharra bihurtu"
 msgid "Convert to todo"
 msgstr "Zeregina bihurtu"
 
+msgid "Copy Markdown link"
+msgstr ""
+
 msgid "Hide metadata"
 msgstr "Ezkutatu metadatuak"
 
@@ -1809,6 +1828,27 @@ msgstr "Oraindik ez duzu koadernorik. Sortu bat (+) botoian sakatuta."
 
 msgid "Welcome"
 msgstr "Ongi etorri!"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Gehitu edo ezabatu etiketak"
+
+#, fuzzy
+#~ msgid "%s - Copy"
+#~ msgstr "Kopiatu"
+
+#~ msgid "Switch between note and to-do type"
+#~ msgstr "Aldatu oharra eta zeregin eren artean."
+
+#, fuzzy
+#~ msgid "Switch to note type"
+#~ msgstr "Aldatu oharra eta zeregin eren artean."
+
+#, fuzzy
+#~ msgid "Switch to to-do type"
+#~ msgstr "Aldatu oharra eta zeregin eren artean."
+
+#~ msgid "Delete notes?"
+#~ msgstr "Oharrak ezabatu?"
 
 #, fuzzy
 #~ msgid "State: %s."
@@ -1860,9 +1900,6 @@ msgstr "Ongi etorri!"
 
 #~ msgid "Cancel the current command."
 #~ msgstr "Utzi uneko komandoa"
-
-#~ msgid "Exit the application."
-#~ msgstr "Irten aplikaziotik"
 
 #~ msgid "Delete the currently selected note or notebook."
 #~ msgstr "Ezabatu aukeratutako oharra edo koadernoa"

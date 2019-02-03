@@ -579,6 +579,20 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 
+msgid "Sidebar"
+msgstr ""
+
+msgid "Note list"
+msgstr ""
+
+#, fuzzy
+msgid "Note title"
+msgstr "Naslov bilježnice:"
+
+#, fuzzy
+msgid "Note body"
+msgstr "Bilježnice"
+
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
@@ -659,6 +673,10 @@ msgstr ""
 
 msgid "Toggle editor layout"
 msgstr ""
+
+#, fuzzy
+msgid "Focus"
+msgstr "Naslov bilješke:"
 
 msgid "Tools"
 msgstr "Alati"
@@ -795,13 +813,16 @@ msgid ""
 "access Joplin."
 msgstr ""
 
-#, fuzzy
-msgid "Check synchronisation configuration"
-msgstr "Prekini sinkronizaciju"
-
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Bilješke i postavke su pohranjene u: %s"
+
+msgid "Browse..."
+msgstr ""
+
+#, fuzzy
+msgid "Check synchronisation configuration"
+msgstr "Prekini sinkronizaciju"
 
 msgid "Apply"
 msgstr ""
@@ -881,6 +902,10 @@ msgstr "Status"
 msgid "Encryption is:"
 msgstr ""
 
+#, fuzzy
+msgid "Usage"
+msgstr "Korištenje: %s"
+
 msgid "Back"
 msgstr "Natrag"
 
@@ -935,36 +960,6 @@ msgstr "Neke stavke se ne mogu sinkronizirati."
 
 msgid "Set the password"
 msgstr ""
-
-msgid "Add or remove tags"
-msgstr "Dodaj ili makni oznake"
-
-msgid "Duplicate"
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid "%s - Copy"
-msgstr "Kopiraj"
-
-msgid "Switch between note and to-do type"
-msgstr "Zamijeni bilješku i zadatak"
-
-#, fuzzy
-msgid "Switch to note type"
-msgstr "Zamijeni bilješku i zadatak"
-
-#, fuzzy
-msgid "Switch to to-do type"
-msgstr "Zamijeni bilješku i zadatak"
-
-msgid "Copy Markdown link"
-msgstr ""
-
-msgid "Delete"
-msgstr "Obriši"
-
-msgid "Delete notes?"
-msgstr "Obriši bilješke?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "Ovdje nema bilješki. Stvori novu pritiskom na \"Nova bilješka\"."
@@ -1110,6 +1105,9 @@ msgstr "Makni ovu oznaku iz svih bilješki?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Makni ovu pretragu iz izbornika?"
+
+msgid "Delete"
+msgstr "Obriši"
 
 msgid "Rename"
 msgstr "Preimenuj"
@@ -1463,6 +1461,25 @@ msgstr ""
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Nevažeća vrijednost: \"%s\". Moguće vrijednosti su: %s."
 
+#, fuzzy
+msgid "General"
+msgstr "Opcije"
+
+#, fuzzy
+msgid "Synchronisation"
+msgstr "Status sinkronizacije"
+
+msgid "Appearance"
+msgstr ""
+
+#, fuzzy
+msgid "Note"
+msgstr "Bilježnice"
+
+#, fuzzy
+msgid "Application"
+msgstr "Izađi iz aplikacije."
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr ""
@@ -1752,6 +1769,9 @@ msgstr "Pretvori u bilješku"
 msgid "Convert to todo"
 msgstr "Pretvori u zadatak"
 
+msgid "Copy Markdown link"
+msgstr ""
+
 msgid "Hide metadata"
 msgstr "Sakrij metapodatke"
 
@@ -1785,6 +1805,27 @@ msgstr "Trenutno nemaš nijednu bilježnicu. Stvori novu klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobro došli"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Dodaj ili makni oznake"
+
+#, fuzzy
+#~ msgid "%s - Copy"
+#~ msgstr "Kopiraj"
+
+#~ msgid "Switch between note and to-do type"
+#~ msgstr "Zamijeni bilješku i zadatak"
+
+#, fuzzy
+#~ msgid "Switch to note type"
+#~ msgstr "Zamijeni bilješku i zadatak"
+
+#, fuzzy
+#~ msgid "Switch to to-do type"
+#~ msgstr "Zamijeni bilješku i zadatak"
+
+#~ msgid "Delete notes?"
+#~ msgstr "Obriši bilješke?"
 
 #, fuzzy
 #~ msgid "State: %s."
@@ -1835,9 +1876,6 @@ msgstr "Dobro došli"
 
 #~ msgid "Cancel the current command."
 #~ msgstr "Prekini trenutnu naredbu."
-
-#~ msgid "Exit the application."
-#~ msgstr "Izađi iz aplikacije."
 
 #~ msgid "Delete the currently selected note or notebook."
 #~ msgstr "Obriši odabranu bilješku ili bilježnicu."

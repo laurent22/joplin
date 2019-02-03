@@ -459,7 +459,8 @@ msgid ""
 msgstr ""
 "[note]로부터 [tag]를 지우거나 지정할 때, 아니면 [tag]와 관련된 노트의 목록을 "
 "확인할 때 <tag-command>로 \"add\", \"remove\" 또는 \"list\" 를 사용할 수 있습"
-"니다. `tag list` 명령어로 모든 태그의 목록을 확인할 수 있습니다 (옵션 -l 사용 가능)."
+"니다. `tag list` 명령어로 모든 태그의 목록을 확인할 수 있습니다 (옵션 -l 사"
+"용 가능)."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
@@ -567,6 +568,20 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "\"%s\"에 \"%s\" 포맷으로 내보내는 중입니다. 잠시만 기다리세요..."
 
+msgid "Sidebar"
+msgstr ""
+
+msgid "Note list"
+msgstr ""
+
+#, fuzzy
+msgid "Note title"
+msgstr "노트북 제목:"
+
+#, fuzzy
+msgid "Note body"
+msgstr "노트북"
+
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "\"%s\"에서 \"%s\" 포맷으로 가져오는 중입니다. 잠시만 기다리세요..."
@@ -643,6 +658,10 @@ msgstr "사이드바 표시 전환"
 
 msgid "Toggle editor layout"
 msgstr "편집기 배치 형태 전환"
+
+#, fuzzy
+msgid "Focus"
+msgstr "내용에 포커스"
 
 msgid "Tools"
 msgstr "도구"
@@ -778,14 +797,18 @@ msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
-"이 인증 토큰은 오직 서드파티 애플리케이션에서 조플린을 접근할 때만 필요합니다."
-
-msgid "Check synchronisation configuration"
-msgstr "동기화 설정 확인"
+"이 인증 토큰은 오직 서드파티 애플리케이션에서 조플린을 접근할 때만 필요합니"
+"다."
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "노트와 설정값이 다음에 저장되었습니다: %s"
+
+msgid "Browse..."
+msgstr ""
+
+msgid "Check synchronisation configuration"
+msgstr "동기화 설정 확인"
 
 msgid "Apply"
 msgstr "적용"
@@ -878,6 +901,10 @@ msgstr "상태"
 msgid "Encryption is:"
 msgstr "암호화는 다음과 같습니다:"
 
+#, fuzzy
+msgid "Usage"
+msgstr "사용량: %s"
+
 msgid "Back"
 msgstr "뒤로 가기"
 
@@ -927,34 +954,6 @@ msgstr "일부 항목들은 암호화할 수 없습니다."
 
 msgid "Set the password"
 msgstr "암호 설정"
-
-msgid "Add or remove tags"
-msgstr "태그 추가 및 제거"
-
-msgid "Duplicate"
-msgstr "복제"
-
-#, javascript-format
-msgid "%s - Copy"
-msgstr "%s - 복사"
-
-msgid "Switch between note and to-do type"
-msgstr "'노트' 또는'할 일' 형식으로 전환합니다."
-
-msgid "Switch to note type"
-msgstr "'노트' 형식으로 전환합니다."
-
-msgid "Switch to to-do type"
-msgstr "'할 일' 형식으로 전환합니다."
-
-msgid "Copy Markdown link"
-msgstr "마크다운 링크 복사"
-
-msgid "Delete"
-msgstr "삭제"
-
-msgid "Delete notes?"
-msgstr "노트를 삭제할까요?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "노트가 없습니다. '새 노트'를 선택해서 노트를 새로 만드세요."
@@ -1097,6 +1096,9 @@ msgstr "모든 노트에서 이 태그를 제거할까요?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "사이드바에서 이 검색 항목을 제거할까요?"
+
+msgid "Delete"
+msgstr "삭제"
 
 msgid "Rename"
 msgstr "이름 바꾸기"
@@ -1322,8 +1324,8 @@ msgid ""
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
-"조플린을 백그라운드에서 구동합니다. 노트가 정기적으로 동기화 되어 충돌 횟수를 줄이기 위해 "
-"이 옵션을 활성화 하는 것을 추천합니다."
+"조플린을 백그라운드에서 구동합니다. 노트가 정기적으로 동기화 되어 충돌 횟수"
+"를 줄이기 위해 이 옵션을 활성화 하는 것을 추천합니다."
 
 msgid "Start application minimised in the tray icon"
 msgstr "트레이 아이콘에 최소화 된 상태로 애플리케이션 시작"
@@ -1412,8 +1414,8 @@ msgid ""
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
 msgstr ""
-"주의: 이 위치를 변경하시려면, 동기화 전에 모든 컨텐트를 복사했는지 확인하세요, 그렇지 않으면 "
-"모든 파일이 삭제됩니다! 자세한 정보는 FAQ를 참조하세요: %s"
+"주의: 이 위치를 변경하시려면, 동기화 전에 모든 컨텐트를 복사했는지 확인하세"
+"요, 그렇지 않으면 모든 파일이 삭제됩니다! 자세한 정보는 FAQ를 참조하세요: %s"
 
 msgid "Nextcloud username"
 msgstr "Nextcloud 사용자 이름"
@@ -1450,6 +1452,25 @@ msgstr "TLS 인증서 오류 무시"
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "올바르지 않은 옵션 값: \"%s\". 가능한 값은 다음과 같습니다: \"%s\"."
+
+#, fuzzy
+msgid "General"
+msgstr "일반 옵션"
+
+#, fuzzy
+msgid "Synchronisation"
+msgstr "동기화 상태"
+
+msgid "Appearance"
+msgstr ""
+
+#, fuzzy
+msgid "Note"
+msgstr "노트북"
+
+#, fuzzy
+msgid "Application"
+msgstr "위치"
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -1743,6 +1764,9 @@ msgstr "노트로 변환"
 msgid "Convert to todo"
 msgstr "'할 일'로 변환"
 
+msgid "Copy Markdown link"
+msgstr "마크다운 링크 복사"
+
 msgid "Hide metadata"
 msgstr "메타데이터 숨김"
 
@@ -1776,6 +1800,27 @@ msgstr "노트북이 없습니다. (+) 버튼을 눌러 새로 만드세요."
 
 msgid "Welcome"
 msgstr "환영합니다"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "태그 추가 및 제거"
+
+#~ msgid "Duplicate"
+#~ msgstr "복제"
+
+#~ msgid "%s - Copy"
+#~ msgstr "%s - 복사"
+
+#~ msgid "Switch between note and to-do type"
+#~ msgstr "'노트' 또는'할 일' 형식으로 전환합니다."
+
+#~ msgid "Switch to note type"
+#~ msgstr "'노트' 형식으로 전환합니다."
+
+#~ msgid "Switch to to-do type"
+#~ msgstr "'할 일' 형식으로 전환합니다."
+
+#~ msgid "Delete notes?"
+#~ msgstr "노트를 삭제할까요?"
 
 #~ msgid "State: %s."
 #~ msgstr "상태: %s."

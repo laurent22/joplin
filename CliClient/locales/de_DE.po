@@ -598,6 +598,20 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exportiere „%s“ ins „%s“ Format. Bitte warten..."
 
+msgid "Sidebar"
+msgstr ""
+
+msgid "Note list"
+msgstr ""
+
+#, fuzzy
+msgid "Note title"
+msgstr "Notizbuch-Titel:"
+
+#, fuzzy
+msgid "Note body"
+msgstr "Notizbücher"
+
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Importiere „%s“ ins „%s“ Format. Bitte warten..."
@@ -674,6 +688,10 @@ msgstr "Seitenleiste umschalten"
 
 msgid "Toggle editor layout"
 msgstr "Editor-Layout umschalten"
+
+#, fuzzy
+msgid "Focus"
+msgstr "Fokussiere Inhalt"
 
 msgid "Tools"
 msgstr "Werkzeuge"
@@ -817,12 +835,15 @@ msgstr ""
 "Dieses Autorisierung-Token wird nur benötigt, um Drittanbieter-Anwendungen "
 "Zugriff auf Joplin zu gewähren."
 
-msgid "Check synchronisation configuration"
-msgstr "Überprüfen der Synchronisationseinstellungen"
-
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Notizen und Einstellungen werden gespeichert in: %s"
+
+msgid "Browse..."
+msgstr ""
+
+msgid "Check synchronisation configuration"
+msgstr "Überprüfen der Synchronisationseinstellungen"
 
 msgid "Apply"
 msgstr "Anwenden"
@@ -917,6 +938,10 @@ msgstr "Status"
 msgid "Encryption is:"
 msgstr "Die Verschlüsselung ist:"
 
+#, fuzzy
+msgid "Usage"
+msgstr "Nutzung: %s"
+
 msgid "Back"
 msgstr "Zurück"
 
@@ -968,34 +993,6 @@ msgstr "Einige Objekte können nicht entschlüsselt werden."
 
 msgid "Set the password"
 msgstr "Setze ein Passwort"
-
-msgid "Add or remove tags"
-msgstr "Schlagwörter hinzufügen oder entfernen"
-
-msgid "Duplicate"
-msgstr "Duplizieren"
-
-#, javascript-format
-msgid "%s - Copy"
-msgstr "%s - Kopieren"
-
-msgid "Switch between note and to-do type"
-msgstr "Zwischen Notiz und To-Do Typ wechseln"
-
-msgid "Switch to note type"
-msgstr "Zu Notiz-Typ wechseln"
-
-msgid "Switch to to-do type"
-msgstr "Zu To-Do-Typ wechseln"
-
-msgid "Copy Markdown link"
-msgstr "Markdown-Link kopieren"
-
-msgid "Delete"
-msgstr "Löschen"
-
-msgid "Delete notes?"
-msgstr "Notizen löschen?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr ""
@@ -1143,6 +1140,9 @@ msgstr "Dieses Schlagwort von allen Notizen entfernen?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Diese Suche von der Seitenleiste entfernen?"
+
+msgid "Delete"
+msgstr "Löschen"
 
 msgid "Rename"
 msgstr "Umbenennen"
@@ -1503,6 +1503,26 @@ msgstr "Ignoriere TLS-Zertifikatfehler"
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Ungültiger Optionswert: \"%s\". Mögliche Werte sind: %s."
 
+#, fuzzy
+msgid "General"
+msgstr "Allgemeine Einstellungen"
+
+#, fuzzy
+msgid "Synchronisation"
+msgstr "Status der Synchronisation"
+
+msgid "Appearance"
+msgstr ""
+
+#, fuzzy
+msgid "Note"
+msgstr "Notizbücher"
+
+# Please note: The term 'Location' is assumed to be the geographical location where the note has been created. For this the german word 'Standort' fits better than the previously used 'Ablageort'. The latter one is used for the folder where files are stored.
+#, fuzzy
+msgid "Application"
+msgstr "Standort"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr ""
@@ -1803,6 +1823,9 @@ msgstr "In eine Notiz umwandeln"
 msgid "Convert to todo"
 msgstr "In ein To-Do umwandeln"
 
+msgid "Copy Markdown link"
+msgstr "Markdown-Link kopieren"
+
 msgid "Hide metadata"
 msgstr "Metadaten verstecken"
 
@@ -1839,6 +1862,27 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Willkommen"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Schlagwörter hinzufügen oder entfernen"
+
+#~ msgid "Duplicate"
+#~ msgstr "Duplizieren"
+
+#~ msgid "%s - Copy"
+#~ msgstr "%s - Kopieren"
+
+#~ msgid "Switch between note and to-do type"
+#~ msgstr "Zwischen Notiz und To-Do Typ wechseln"
+
+#~ msgid "Switch to note type"
+#~ msgstr "Zu Notiz-Typ wechseln"
+
+#~ msgid "Switch to to-do type"
+#~ msgstr "Zu To-Do-Typ wechseln"
+
+#~ msgid "Delete notes?"
+#~ msgstr "Notizen löschen?"
 
 #~ msgid "State: %s."
 #~ msgstr "Status: %s."

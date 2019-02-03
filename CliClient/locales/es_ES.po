@@ -585,6 +585,20 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exportando el formato de \"%s\" a \"%s\". Por favor espere..."
 
+msgid "Sidebar"
+msgstr ""
+
+msgid "Note list"
+msgstr ""
+
+#, fuzzy
+msgid "Note title"
+msgstr "Título de libreta:"
+
+#, fuzzy
+msgid "Note body"
+msgstr "Libretas"
+
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Importando el formato de \"%s\" a \"%s\". Por favor espere..."
@@ -663,6 +677,10 @@ msgstr "Cambia la barra lateral"
 
 msgid "Toggle editor layout"
 msgstr "Cambia el diseño del editor"
+
+#, fuzzy
+msgid "Focus"
+msgstr "Foco en el cuerpo"
 
 msgid "Tools"
 msgstr "Herramientas"
@@ -803,12 +821,15 @@ msgid ""
 "access Joplin."
 msgstr ""
 
-msgid "Check synchronisation configuration"
-msgstr "Comprobar sincronización"
-
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Las notas y los ajustes se guardan en: %s"
+
+msgid "Browse..."
+msgstr ""
+
+msgid "Check synchronisation configuration"
+msgstr "Comprobar sincronización"
 
 msgid "Apply"
 msgstr "Aplicar"
@@ -903,6 +924,10 @@ msgstr "Estado"
 msgid "Encryption is:"
 msgstr "El cifrado está:"
 
+#, fuzzy
+msgid "Usage"
+msgstr "Uso: %s"
+
 msgid "Back"
 msgstr "Atrás"
 
@@ -952,36 +977,6 @@ msgstr "No se han podido descifrar algunos elementos."
 
 msgid "Set the password"
 msgstr "Establecer la contraseña"
-
-msgid "Add or remove tags"
-msgstr "Añadir o borrar etiquetas"
-
-msgid "Duplicate"
-msgstr "Duplicado"
-
-#, javascript-format
-msgid "%s - Copy"
-msgstr "%s - Copiar"
-
-msgid "Switch between note and to-do type"
-msgstr "Cambiar entre nota y lista de tareas"
-
-#, fuzzy
-msgid "Switch to note type"
-msgstr "Cambiar entre nota y lista de tareas"
-
-#, fuzzy
-msgid "Switch to to-do type"
-msgstr "Cambiar entre nota y lista de tareas"
-
-msgid "Copy Markdown link"
-msgstr "Copiar el enlace de Markdown"
-
-msgid "Delete"
-msgstr "Eliminar"
-
-msgid "Delete notes?"
-msgstr "¿Desea eliminar notas?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "No hay ninguna nota. Cree una pulsando «Nota nueva»."
@@ -1124,6 +1119,9 @@ msgstr "¿Desea eliminar esta etiqueta de todas las notas?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "¿Desea eliminar esta búsqueda de la barra lateral?"
+
+msgid "Delete"
+msgstr "Eliminar"
 
 msgid "Rename"
 msgstr "Renombrar"
@@ -1479,6 +1477,25 @@ msgstr "Ignorar errores en certificados TLS"
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Opción inválida: «%s». Los valores posibles son: %s."
 
+#, fuzzy
+msgid "General"
+msgstr "Opciones generales"
+
+#, fuzzy
+msgid "Synchronisation"
+msgstr "Estado de la sincronización"
+
+msgid "Appearance"
+msgstr ""
+
+#, fuzzy
+msgid "Note"
+msgstr "Libretas"
+
+#, fuzzy
+msgid "Application"
+msgstr "Salir de la aplicación."
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr ""
@@ -1775,6 +1792,9 @@ msgstr "Convertir a nota"
 msgid "Convert to todo"
 msgstr "Convertir a lista de tareas"
 
+msgid "Copy Markdown link"
+msgstr "Copiar el enlace de Markdown"
+
 msgid "Hide metadata"
 msgstr "Ocultar metadatos"
 
@@ -1809,6 +1829,29 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Añadir o borrar etiquetas"
+
+#~ msgid "Duplicate"
+#~ msgstr "Duplicado"
+
+#~ msgid "%s - Copy"
+#~ msgstr "%s - Copiar"
+
+#~ msgid "Switch between note and to-do type"
+#~ msgstr "Cambiar entre nota y lista de tareas"
+
+#, fuzzy
+#~ msgid "Switch to note type"
+#~ msgstr "Cambiar entre nota y lista de tareas"
+
+#, fuzzy
+#~ msgid "Switch to to-do type"
+#~ msgstr "Cambiar entre nota y lista de tareas"
+
+#~ msgid "Delete notes?"
+#~ msgstr "¿Desea eliminar notas?"
 
 #~ msgid "State: %s."
 #~ msgstr "Estado: «%s»."
@@ -1868,9 +1911,6 @@ msgstr "Bienvenido"
 
 #~ msgid "Cancel the current command."
 #~ msgstr "Cancelar el comando actual."
-
-#~ msgid "Exit the application."
-#~ msgstr "Salir de la aplicación."
 
 #~ msgid "Delete the currently selected note or notebook."
 #~ msgstr "Eliminar la nota o libreta seleccionada."
