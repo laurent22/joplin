@@ -521,6 +521,20 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Se exportă către \"%s\" în format \"%s\". Vă rugăm să așteotați..."
 
+msgid "Sidebar"
+msgstr ""
+
+msgid "Note list"
+msgstr ""
+
+#, fuzzy
+msgid "Note title"
+msgstr "Titlul caietului de notițe:"
+
+#, fuzzy
+msgid "Note body"
+msgstr "Caiete de notițe"
+
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
@@ -598,6 +612,9 @@ msgid "Toggle sidebar"
 msgstr ""
 
 msgid "Toggle editor layout"
+msgstr ""
+
+msgid "Focus"
 msgstr ""
 
 msgid "Tools"
@@ -732,11 +749,14 @@ msgid ""
 "access Joplin."
 msgstr ""
 
-msgid "Check synchronisation configuration"
-msgstr ""
-
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
+msgstr ""
+
+msgid "Browse..."
+msgstr ""
+
+msgid "Check synchronisation configuration"
 msgstr ""
 
 msgid "Apply"
@@ -817,6 +837,10 @@ msgstr "Status"
 msgid "Encryption is:"
 msgstr "Criptarea este:"
 
+#, fuzzy
+msgid "Usage"
+msgstr "Utilizare: %s"
+
 msgid "Back"
 msgstr "Înapoi"
 
@@ -866,36 +890,6 @@ msgstr "Câțiva itemi nu pot fi descriptați."
 
 msgid "Set the password"
 msgstr "Setați parola"
-
-msgid "Add or remove tags"
-msgstr "Adăugați ori eliminați etichete"
-
-msgid "Duplicate"
-msgstr "Duplicați"
-
-#, javascript-format
-msgid "%s - Copy"
-msgstr "%s - Copiați"
-
-msgid "Switch between note and to-do type"
-msgstr "Schimbați între notiță și sarcină"
-
-#, fuzzy
-msgid "Switch to note type"
-msgstr "Schimbați între notiță și sarcină"
-
-#, fuzzy
-msgid "Switch to to-do type"
-msgstr "Schimbați între notiță și sarcină"
-
-msgid "Copy Markdown link"
-msgstr "Copiați link-ul Markdown"
-
-msgid "Delete"
-msgstr "Ștergeți"
-
-msgid "Delete notes?"
-msgstr "Ștergeți notițele?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr ""
@@ -1036,6 +1030,9 @@ msgstr ""
 
 msgid "Remove this search from the sidebar?"
 msgstr ""
+
+msgid "Delete"
+msgstr "Ștergeți"
 
 msgid "Rename"
 msgstr "Redenumiți"
@@ -1366,6 +1363,25 @@ msgstr "Ignoră erorile de certificat TLS"
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr ""
 
+#, fuzzy
+msgid "General"
+msgstr "Opțiuni Generale"
+
+#, fuzzy
+msgid "Synchronisation"
+msgstr "Statusul sincronizării"
+
+msgid "Appearance"
+msgstr ""
+
+#, fuzzy
+msgid "Note"
+msgstr "Caiete de notițe"
+
+#, fuzzy
+msgid "Application"
+msgstr "Duplicați"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr ""
@@ -1645,6 +1661,9 @@ msgstr ""
 msgid "Convert to todo"
 msgstr ""
 
+msgid "Copy Markdown link"
+msgstr "Copiați link-ul Markdown"
+
 msgid "Hide metadata"
 msgstr "Ascundeți metadatele"
 
@@ -1679,6 +1698,26 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bine ați venit"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Adăugați ori eliminați etichete"
+
+#~ msgid "%s - Copy"
+#~ msgstr "%s - Copiați"
+
+#~ msgid "Switch between note and to-do type"
+#~ msgstr "Schimbați între notiță și sarcină"
+
+#, fuzzy
+#~ msgid "Switch to note type"
+#~ msgstr "Schimbați între notiță și sarcină"
+
+#, fuzzy
+#~ msgid "Switch to to-do type"
+#~ msgstr "Schimbați între notiță și sarcină"
+
+#~ msgid "Delete notes?"
+#~ msgstr "Ștergeți notițele?"
 
 #~ msgid "State: %s."
 #~ msgstr "Statut: %s."

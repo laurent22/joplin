@@ -576,6 +576,20 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Eksporterer til \"%s\" som \"%s\"-format. Vent venligst..."
 
+msgid "Sidebar"
+msgstr ""
+
+msgid "Note list"
+msgstr ""
+
+#, fuzzy
+msgid "Note title"
+msgstr "Notesbogs titel:"
+
+#, fuzzy
+msgid "Note body"
+msgstr "Notesbøger"
+
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Importerer fra \"%s\" som \"%s\"-format. Vent venligst..."
@@ -654,6 +668,10 @@ msgstr ""
 
 msgid "Toggle editor layout"
 msgstr "Skift editor layout"
+
+#, fuzzy
+msgid "Focus"
+msgstr "Fokuser på brødtekst"
 
 msgid "Tools"
 msgstr "Værktøjer"
@@ -787,12 +805,15 @@ msgid ""
 "access Joplin."
 msgstr ""
 
-msgid "Check synchronisation configuration"
-msgstr "Check synkroniserings Indstillinger"
-
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Noter og indstillinger er gemt i: %s"
+
+msgid "Browse..."
+msgstr ""
+
+msgid "Check synchronisation configuration"
+msgstr "Check synkroniserings Indstillinger"
 
 msgid "Apply"
 msgstr ""
@@ -887,6 +908,10 @@ msgstr "Status"
 msgid "Encryption is:"
 msgstr "Kryptering er:"
 
+#, fuzzy
+msgid "Usage"
+msgstr "Forbrug: %s"
+
 msgid "Back"
 msgstr "Tilbage"
 
@@ -938,37 +963,6 @@ msgstr "Nogle emner kan ikke krypteres."
 
 msgid "Set the password"
 msgstr "Indstil kodeord"
-
-msgid "Add or remove tags"
-msgstr "Tilføj eller slet mærker"
-
-msgid "Duplicate"
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid "%s - Copy"
-msgstr "Kopier"
-
-msgid "Switch between note and to-do type"
-msgstr "Skift mellem note-  og opgave type"
-
-#, fuzzy
-msgid "Switch to note type"
-msgstr "Skift mellem note-  og opgave type"
-
-#, fuzzy
-msgid "Switch to to-do type"
-msgstr "Skift mellem note-  og opgave type"
-
-#, fuzzy
-msgid "Copy Markdown link"
-msgstr "Markdown"
-
-msgid "Delete"
-msgstr "Slet"
-
-msgid "Delete notes?"
-msgstr "Slet noter?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "Der er ingen noter her. Opret en ved at klikke på \"Ny note\"."
@@ -1111,6 +1105,9 @@ msgstr "Slet denne markering fra alle noter?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Slet denne søgning fra sidebjælke?"
+
+msgid "Delete"
+msgstr "Slet"
 
 msgid "Rename"
 msgstr "Omdøb"
@@ -1465,6 +1462,25 @@ msgstr ""
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Ulovlig værdi: \"%s\".  Mulige valg er: %s."
 
+#, fuzzy
+msgid "General"
+msgstr "Generelle indstillinger"
+
+#, fuzzy
+msgid "Synchronisation"
+msgstr "Synkroniserings status"
+
+msgid "Appearance"
+msgstr ""
+
+#, fuzzy
+msgid "Note"
+msgstr "Notesbøger"
+
+#, fuzzy
+msgid "Application"
+msgstr "Forlad/luk program."
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr ""
@@ -1754,6 +1770,10 @@ msgstr "Konverter til note"
 msgid "Convert to todo"
 msgstr "Konverter til opgave"
 
+#, fuzzy
+msgid "Copy Markdown link"
+msgstr "Markdown"
+
 msgid "Hide metadata"
 msgstr "Skjul metadata"
 
@@ -1787,6 +1807,27 @@ msgstr "Du har ingen notesbøger. Opret en ved at klikke på (+) knappen."
 
 msgid "Welcome"
 msgstr "Velkommen"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Tilføj eller slet mærker"
+
+#, fuzzy
+#~ msgid "%s - Copy"
+#~ msgstr "Kopier"
+
+#~ msgid "Switch between note and to-do type"
+#~ msgstr "Skift mellem note-  og opgave type"
+
+#, fuzzy
+#~ msgid "Switch to note type"
+#~ msgstr "Skift mellem note-  og opgave type"
+
+#, fuzzy
+#~ msgid "Switch to to-do type"
+#~ msgstr "Skift mellem note-  og opgave type"
+
+#~ msgid "Delete notes?"
+#~ msgstr "Slet noter?"
 
 #~ msgid "State: %s."
 #~ msgstr "Tilstand: %s."

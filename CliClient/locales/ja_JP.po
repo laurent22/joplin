@@ -570,6 +570,20 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 "\"%s\" を \"%s\" フォーマットにエクスポート中。しばらくお待ちください..."
 
+msgid "Sidebar"
+msgstr ""
+
+msgid "Note list"
+msgstr ""
+
+#, fuzzy
+msgid "Note title"
+msgstr "ノートブックの題名："
+
+#, fuzzy
+msgid "Note body"
+msgstr "ノートブック"
+
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
@@ -647,6 +661,10 @@ msgstr "サイドバーの表示切り替え"
 
 msgid "Toggle editor layout"
 msgstr "エディターレイアウトの表示切り替え"
+
+#, fuzzy
+msgid "Focus"
+msgstr "本文にフォーカス"
 
 msgid "Tools"
 msgstr "ツール"
@@ -786,12 +804,15 @@ msgstr ""
 "この認証トークンはサードパーティアプリケーションがJoplinにアクセスするためだ"
 "けに必要です。"
 
-msgid "Check synchronisation configuration"
-msgstr "同期の設定を確認する"
-
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "ノートと設定は次の場所に保存されます: %s"
+
+msgid "Browse..."
+msgstr ""
+
+msgid "Check synchronisation configuration"
+msgstr "同期の設定を確認する"
 
 msgid "Apply"
 msgstr "適用"
@@ -884,6 +905,10 @@ msgstr "状態"
 msgid "Encryption is:"
 msgstr "暗号化の状態:"
 
+#, fuzzy
+msgid "Usage"
+msgstr "使用方法: %s"
+
 msgid "Back"
 msgstr "戻る"
 
@@ -935,34 +960,6 @@ msgstr "いくつかの項目は復号されませんでした。"
 
 msgid "Set the password"
 msgstr "パスワードの設定"
-
-msgid "Add or remove tags"
-msgstr "タグの追加と削除"
-
-msgid "Duplicate"
-msgstr "複製"
-
-#, javascript-format
-msgid "%s - Copy"
-msgstr "%s - コピー"
-
-msgid "Switch between note and to-do type"
-msgstr "ノートとToDoを切り替え"
-
-msgid "Switch to note type"
-msgstr "ノートに切り替え"
-
-msgid "Switch to to-do type"
-msgstr "ToDoに切り替え"
-
-msgid "Copy Markdown link"
-msgstr "Markdownのリンクをコピー"
-
-msgid "Delete"
-msgstr "削除"
-
-msgid "Delete notes?"
-msgstr "ノートを削除しますか？"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "ノートがありません。新しいノートを作成して下さい。"
@@ -1105,6 +1102,9 @@ msgstr "すべてのノートからこのタグを削除しますか？"
 
 msgid "Remove this search from the sidebar?"
 msgstr "サイドバーからこの検索を削除しますか？"
+
+msgid "Delete"
+msgstr "削除"
 
 msgid "Rename"
 msgstr "名前の変更"
@@ -1461,6 +1461,25 @@ msgstr "TLS証明書のエラーを無視"
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "無効な設定値: \"%s\"。有効な値は: %sです。"
 
+#, fuzzy
+msgid "General"
+msgstr "全般のオプション"
+
+#, fuzzy
+msgid "Synchronisation"
+msgstr "同期状況"
+
+msgid "Appearance"
+msgstr ""
+
+#, fuzzy
+msgid "Note"
+msgstr "ノートブック"
+
+#, fuzzy
+msgid "Application"
+msgstr "場所"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "タグ \"%s\" はすでにあります。ほかの名前を選択してください。"
@@ -1754,6 +1773,9 @@ msgstr "ノートに変換"
 msgid "Convert to todo"
 msgstr "ToDoに変換"
 
+msgid "Copy Markdown link"
+msgstr "Markdownのリンクをコピー"
+
 msgid "Hide metadata"
 msgstr "メタデータを隠す"
 
@@ -1789,6 +1811,27 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "タグの追加と削除"
+
+#~ msgid "Duplicate"
+#~ msgstr "複製"
+
+#~ msgid "%s - Copy"
+#~ msgstr "%s - コピー"
+
+#~ msgid "Switch between note and to-do type"
+#~ msgstr "ノートとToDoを切り替え"
+
+#~ msgid "Switch to note type"
+#~ msgstr "ノートに切り替え"
+
+#~ msgid "Switch to to-do type"
+#~ msgstr "ToDoに切り替え"
+
+#~ msgid "Delete notes?"
+#~ msgstr "ノートを削除しますか？"
 
 #~ msgid "State: %s."
 #~ msgstr "状態: \"%s\"."

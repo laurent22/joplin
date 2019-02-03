@@ -576,6 +576,20 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exportando a «%s» como formato «%s». Agarde..."
 
+msgid "Sidebar"
+msgstr ""
+
+msgid "Note list"
+msgstr ""
+
+#, fuzzy
+msgid "Note title"
+msgstr "Título do caderno:"
+
+#, fuzzy
+msgid "Note body"
+msgstr "Cadernos"
+
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Importando de «%s» como formato «%s». Agarde..."
@@ -654,6 +668,10 @@ msgstr ""
 
 msgid "Toggle editor layout"
 msgstr "Cambiar a disposición do editor"
+
+#, fuzzy
+msgid "Focus"
+msgstr "Focar no corpo"
 
 msgid "Tools"
 msgstr "Ferramentas"
@@ -787,12 +805,15 @@ msgid ""
 "access Joplin."
 msgstr ""
 
-msgid "Check synchronisation configuration"
-msgstr "Comprobar a configuración da sincronización"
-
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "As notas e axustes gardáronse en: %s"
+
+msgid "Browse..."
+msgstr ""
+
+msgid "Check synchronisation configuration"
+msgstr "Comprobar a configuración da sincronización"
 
 msgid "Apply"
 msgstr ""
@@ -885,6 +906,10 @@ msgstr "Estado"
 msgid "Encryption is:"
 msgstr "O cifrado é:"
 
+#, fuzzy
+msgid "Usage"
+msgstr "Uso: %s"
+
 msgid "Back"
 msgstr "Anterior"
 
@@ -935,37 +960,6 @@ msgstr "Non é posíbel descifrar algúns elementos."
 
 msgid "Set the password"
 msgstr "Estabelecer un contrasinal"
-
-msgid "Add or remove tags"
-msgstr "Engadir ou eliminar etiquetas"
-
-msgid "Duplicate"
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid "%s - Copy"
-msgstr "Copiar"
-
-msgid "Switch between note and to-do type"
-msgstr "Cambiar entre notas e tarefas"
-
-#, fuzzy
-msgid "Switch to note type"
-msgstr "Cambiar entre notas e tarefas"
-
-#, fuzzy
-msgid "Switch to to-do type"
-msgstr "Cambiar entre notas e tarefas"
-
-#, fuzzy
-msgid "Copy Markdown link"
-msgstr "Markdown"
-
-msgid "Delete"
-msgstr "Eliminar"
-
-msgid "Delete notes?"
-msgstr "Desexa eliminar as notas?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "Aquí non hai notas. Cree unha premendo en «Nova nota»."
@@ -1110,6 +1104,9 @@ msgstr "Desexa eliminar esta etiqueta de todas as notas?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Desexa eliminar esta busca da barra lateral?"
+
+msgid "Delete"
+msgstr "Eliminar"
 
 msgid "Rename"
 msgstr "Renomear"
@@ -1464,6 +1461,25 @@ msgstr ""
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Valor incorrecto de opción: «%s». Os valores posíbeis son: %s."
 
+#, fuzzy
+msgid "General"
+msgstr "Opcións xerais"
+
+#, fuzzy
+msgid "Synchronisation"
+msgstr "Estado da sincronización"
+
+msgid "Appearance"
+msgstr ""
+
+#, fuzzy
+msgid "Note"
+msgstr "Cadernos"
+
+#, fuzzy
+msgid "Application"
+msgstr "Sae do aplicativo."
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr ""
@@ -1753,6 +1769,10 @@ msgstr "Converter para nota"
 msgid "Convert to todo"
 msgstr "Converter para tarefa"
 
+#, fuzzy
+msgid "Copy Markdown link"
+msgstr "Markdown"
+
 msgid "Hide metadata"
 msgstr "Ocultar metadados"
 
@@ -1786,6 +1806,27 @@ msgstr "Non ten cadernos actualmente. Cree un premendo no botón (+)."
 
 msgid "Welcome"
 msgstr "Benvido/a"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Engadir ou eliminar etiquetas"
+
+#, fuzzy
+#~ msgid "%s - Copy"
+#~ msgstr "Copiar"
+
+#~ msgid "Switch between note and to-do type"
+#~ msgstr "Cambiar entre notas e tarefas"
+
+#, fuzzy
+#~ msgid "Switch to note type"
+#~ msgstr "Cambiar entre notas e tarefas"
+
+#, fuzzy
+#~ msgid "Switch to to-do type"
+#~ msgstr "Cambiar entre notas e tarefas"
+
+#~ msgid "Delete notes?"
+#~ msgstr "Desexa eliminar as notas?"
 
 #~ msgid "State: %s."
 #~ msgstr "Estado: %s."

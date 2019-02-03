@@ -571,6 +571,20 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exportuji do \"%s\" jako formát \"%s\". Chvíli strpení..."
 
+msgid "Sidebar"
+msgstr ""
+
+msgid "Note list"
+msgstr ""
+
+#, fuzzy
+msgid "Note title"
+msgstr "Název zápisníku:"
+
+#, fuzzy
+msgid "Note body"
+msgstr "Zápisníky"
+
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Importuji z \"%s\" jako formát \"%s\". Chvíli strpení..."
@@ -649,6 +663,10 @@ msgstr ""
 
 msgid "Toggle editor layout"
 msgstr "Změňit layout editoru"
+
+#, fuzzy
+msgid "Focus"
+msgstr "Vybrat text poznámky"
 
 msgid "Tools"
 msgstr "Nástroje"
@@ -782,12 +800,15 @@ msgid ""
 "access Joplin."
 msgstr ""
 
-msgid "Check synchronisation configuration"
-msgstr "Zkontrolujte nastavení synchronizace"
-
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Poznámky a nastavení uloženo v: %s"
+
+msgid "Browse..."
+msgstr ""
+
+msgid "Check synchronisation configuration"
+msgstr "Zkontrolujte nastavení synchronizace"
 
 msgid "Apply"
 msgstr ""
@@ -878,6 +899,10 @@ msgstr "Status"
 msgid "Encryption is:"
 msgstr "Šifrování je:"
 
+#, fuzzy
+msgid "Usage"
+msgstr "Použití: %s"
+
 msgid "Back"
 msgstr "Zpět"
 
@@ -929,37 +954,6 @@ msgstr "Některé položky nelze rozšifrovat."
 
 msgid "Set the password"
 msgstr "Nastavit heslo"
-
-msgid "Add or remove tags"
-msgstr "Přidat či odebrat tagy"
-
-msgid "Duplicate"
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid "%s - Copy"
-msgstr "Kopírovat"
-
-msgid "Switch between note and to-do type"
-msgstr "Přepnout mezi poznámkou a to-do"
-
-#, fuzzy
-msgid "Switch to note type"
-msgstr "Přepnout mezi poznámkou a to-do"
-
-#, fuzzy
-msgid "Switch to to-do type"
-msgstr "Přepnout mezi poznámkou a to-do"
-
-#, fuzzy
-msgid "Copy Markdown link"
-msgstr "Markdown"
-
-msgid "Delete"
-msgstr "Smazat"
-
-msgid "Delete notes?"
-msgstr "Smazat poznámky?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "Žádné poznámky. Vytvořte jednu kliknutím na \"Nová poznámka\"."
@@ -1102,6 +1096,9 @@ msgstr "Odebrat tento tag ze všech poznámek?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Smazat tento hledaný výraz z panelu?"
+
+msgid "Delete"
+msgstr "Smazat"
 
 msgid "Rename"
 msgstr "Přejmenovat"
@@ -1456,6 +1453,25 @@ msgstr ""
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Neplatná hodnota: \"%s\". Přípustné hodnoty jsou: %s."
 
+#, fuzzy
+msgid "General"
+msgstr "Obecná nastavení"
+
+#, fuzzy
+msgid "Synchronisation"
+msgstr "Stav synchronizace"
+
+msgid "Appearance"
+msgstr ""
+
+#, fuzzy
+msgid "Note"
+msgstr "Zápisníky"
+
+#, fuzzy
+msgid "Application"
+msgstr "Ukončí aplikaci."
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr ""
@@ -1745,6 +1761,10 @@ msgstr "Konvertovat na poznámku"
 msgid "Convert to todo"
 msgstr "Konvertovat na todo"
 
+#, fuzzy
+msgid "Copy Markdown link"
+msgstr "Markdown"
+
 msgid "Hide metadata"
 msgstr "Schovat metadata"
 
@@ -1778,6 +1798,27 @@ msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na tlačítko (+
 
 msgid "Welcome"
 msgstr "Vítejte"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Přidat či odebrat tagy"
+
+#, fuzzy
+#~ msgid "%s - Copy"
+#~ msgstr "Kopírovat"
+
+#~ msgid "Switch between note and to-do type"
+#~ msgstr "Přepnout mezi poznámkou a to-do"
+
+#, fuzzy
+#~ msgid "Switch to note type"
+#~ msgstr "Přepnout mezi poznámkou a to-do"
+
+#, fuzzy
+#~ msgid "Switch to to-do type"
+#~ msgstr "Přepnout mezi poznámkou a to-do"
+
+#~ msgid "Delete notes?"
+#~ msgstr "Smazat poznámky?"
 
 #~ msgid "State: %s."
 #~ msgstr "Stav: %s."

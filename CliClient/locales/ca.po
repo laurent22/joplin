@@ -589,6 +589,20 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "S'està exportant a «%s» com a format «%s». Espereu..."
 
+msgid "Sidebar"
+msgstr ""
+
+msgid "Note list"
+msgstr ""
+
+#, fuzzy
+msgid "Note title"
+msgstr "Títol del bloc de notes:"
+
+#, fuzzy
+msgid "Note body"
+msgstr "Blocs de notes"
+
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "S'està important des de «%s» com a format «%s». Espereu..."
@@ -667,6 +681,10 @@ msgstr "Mostra o amaga la barra lateral"
 
 msgid "Toggle editor layout"
 msgstr "Canvia el disseny de l'editor"
+
+#, fuzzy
+msgid "Focus"
+msgstr "Vés al cos"
 
 msgid "Tools"
 msgstr "Eines"
@@ -807,12 +825,15 @@ msgid ""
 "access Joplin."
 msgstr ""
 
-msgid "Check synchronisation configuration"
-msgstr "Comprova la configuració de la sincronització"
-
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Les notes i la configuració es desen a: %s"
+
+msgid "Browse..."
+msgstr ""
+
+msgid "Check synchronisation configuration"
+msgstr "Comprova la configuració de la sincronització"
 
 msgid "Apply"
 msgstr ""
@@ -908,6 +929,10 @@ msgstr "Estat"
 msgid "Encryption is:"
 msgstr "El xifratge és:"
 
+#, fuzzy
+msgid "Usage"
+msgstr "Ús: %s"
+
 msgid "Back"
 msgstr "Enrere"
 
@@ -957,36 +982,6 @@ msgstr "Alguns elements no s'han pogut desxifrar."
 
 msgid "Set the password"
 msgstr "Establiu la contrasenya"
-
-msgid "Add or remove tags"
-msgstr "Afegeix o suprimeix etiquetes"
-
-msgid "Duplicate"
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid "%s - Copy"
-msgstr "Copia"
-
-msgid "Switch between note and to-do type"
-msgstr "Alterna entre el tipus nota i tasques pendents"
-
-#, fuzzy
-msgid "Switch to note type"
-msgstr "Alterna entre el tipus nota i tasques pendents"
-
-#, fuzzy
-msgid "Switch to to-do type"
-msgstr "Alterna entre el tipus nota i tasques pendents"
-
-msgid "Copy Markdown link"
-msgstr "Copia l'enllaç Markdown"
-
-msgid "Delete"
-msgstr "Suprimeix"
-
-msgid "Delete notes?"
-msgstr "Voleu suprimir les notes?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "No hi ha cap nota aquí. Creeu-ne una fent clic a «Nota nova»."
@@ -1132,6 +1127,9 @@ msgstr "Voleu suprimir aquesta etiqueta de totes les notes?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Voleu suprimir aquesta cerca de la barra laterla?"
+
+msgid "Delete"
+msgstr "Suprimeix"
 
 msgid "Rename"
 msgstr "Canvia el nom"
@@ -1481,6 +1479,25 @@ msgstr ""
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "El valor de l'opció no és vàlid: «%s». Els valors possibles són: %s."
 
+#, fuzzy
+msgid "General"
+msgstr "Opcions generals"
+
+#, fuzzy
+msgid "Synchronisation"
+msgstr "Estat de la sincronització"
+
+msgid "Appearance"
+msgstr ""
+
+#, fuzzy
+msgid "Note"
+msgstr "Blocs de notes"
+
+#, fuzzy
+msgid "Application"
+msgstr "Surt de l'aplicació"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr ""
@@ -1776,6 +1793,9 @@ msgstr "Converteix a nota"
 msgid "Convert to todo"
 msgstr "Converteix a llistat de tasques pendents"
 
+msgid "Copy Markdown link"
+msgstr "Copia l'enllaç Markdown"
+
 msgid "Hide metadata"
 msgstr "Amaga les metadades"
 
@@ -1810,6 +1830,27 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvingut"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Afegeix o suprimeix etiquetes"
+
+#, fuzzy
+#~ msgid "%s - Copy"
+#~ msgstr "Copia"
+
+#~ msgid "Switch between note and to-do type"
+#~ msgstr "Alterna entre el tipus nota i tasques pendents"
+
+#, fuzzy
+#~ msgid "Switch to note type"
+#~ msgstr "Alterna entre el tipus nota i tasques pendents"
+
+#, fuzzy
+#~ msgid "Switch to to-do type"
+#~ msgstr "Alterna entre el tipus nota i tasques pendents"
+
+#~ msgid "Delete notes?"
+#~ msgstr "Voleu suprimir les notes?"
 
 #~ msgid "State: %s."
 #~ msgstr "Estat: %s"

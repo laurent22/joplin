@@ -548,6 +548,20 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "匯出到 \"%s\" 為 \"%s\" 格式。請稍候..."
 
+msgid "Sidebar"
+msgstr ""
+
+msgid "Note list"
+msgstr ""
+
+#, fuzzy
+msgid "Note title"
+msgstr "記事本標題:"
+
+#, fuzzy
+msgid "Note body"
+msgstr "記事本"
+
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "從 \"%s\" 匯入為 \"%s\" 格式。請稍候..."
@@ -626,6 +640,10 @@ msgstr "顯示 / 隱藏側邊欄"
 
 msgid "Toggle editor layout"
 msgstr "切換編輯器佈局"
+
+#, fuzzy
+msgid "Focus"
+msgstr "游標置於內文"
 
 msgid "Tools"
 msgstr "工具"
@@ -761,12 +779,15 @@ msgid ""
 "access Joplin."
 msgstr ""
 
-msgid "Check synchronisation configuration"
-msgstr "檢測同步設置"
-
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "所有記事和設置均儲存於: %s"
+
+msgid "Browse..."
+msgstr ""
+
+msgid "Check synchronisation configuration"
+msgstr "檢測同步設置"
 
 msgid "Apply"
 msgstr "套用"
@@ -855,6 +876,10 @@ msgstr "狀態"
 msgid "Encryption is:"
 msgstr "加密:"
 
+#, fuzzy
+msgid "Usage"
+msgstr "使用資訊: %s"
+
 msgid "Back"
 msgstr "返回"
 
@@ -904,36 +929,6 @@ msgstr "有些項目不能解密。"
 
 msgid "Set the password"
 msgstr "設置密碼"
-
-msgid "Add or remove tags"
-msgstr "新增或移除標籤"
-
-msgid "Duplicate"
-msgstr "新增複本"
-
-#, javascript-format
-msgid "%s - Copy"
-msgstr "%s - 複本"
-
-msgid "Switch between note and to-do type"
-msgstr "切換到記事 / 待辦事項"
-
-#, fuzzy
-msgid "Switch to note type"
-msgstr "切換到記事 / 待辦事項"
-
-#, fuzzy
-msgid "Switch to to-do type"
-msgstr "切換到記事 / 待辦事項"
-
-msgid "Copy Markdown link"
-msgstr "複製 Markdown 連結"
-
-msgid "Delete"
-msgstr "刪除"
-
-msgid "Delete notes?"
-msgstr "刪除此記事？"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "當前沒有任何筆記。通過按一下 \"新增筆記\" 去建立。"
@@ -1074,6 +1069,9 @@ msgstr "是否從所有記事中刪除此標籤？"
 
 msgid "Remove this search from the sidebar?"
 msgstr "是否從側邊欄中刪除此搜索？"
+
+msgid "Delete"
+msgstr "刪除"
 
 msgid "Rename"
 msgstr "重新命名"
@@ -1418,6 +1416,25 @@ msgstr "忽略 TLS 證書錯誤"
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "不正確選項值: \"%s\"。可能的值為: %s。"
 
+#, fuzzy
+msgid "General"
+msgstr "一般選項"
+
+#, fuzzy
+msgid "Synchronisation"
+msgstr "顯示同步狀態"
+
+msgid "Appearance"
+msgstr ""
+
+#, fuzzy
+msgid "Note"
+msgstr "記事本"
+
+#, fuzzy
+msgid "Application"
+msgstr "離開本程式。"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr ""
@@ -1704,6 +1721,9 @@ msgstr "轉換為記事"
 msgid "Convert to todo"
 msgstr "轉換為待辦事項"
 
+msgid "Copy Markdown link"
+msgstr "複製 Markdown 連結"
+
 msgid "Hide metadata"
 msgstr "隱藏後設資料 (metadata)"
 
@@ -1735,6 +1755,29 @@ msgstr "您當前沒有任何筆記本。通過按一下 (+) 鍵去建立一本�
 
 msgid "Welcome"
 msgstr "歡迎"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "新增或移除標籤"
+
+#~ msgid "Duplicate"
+#~ msgstr "新增複本"
+
+#~ msgid "%s - Copy"
+#~ msgstr "%s - 複本"
+
+#~ msgid "Switch between note and to-do type"
+#~ msgstr "切換到記事 / 待辦事項"
+
+#, fuzzy
+#~ msgid "Switch to note type"
+#~ msgstr "切換到記事 / 待辦事項"
+
+#, fuzzy
+#~ msgid "Switch to to-do type"
+#~ msgstr "切換到記事 / 待辦事項"
+
+#~ msgid "Delete notes?"
+#~ msgstr "刪除此記事？"
 
 #~ msgid "State: %s."
 #~ msgstr "狀態: %s。"

@@ -584,6 +584,20 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 
+msgid "Sidebar"
+msgstr ""
+
+msgid "Note list"
+msgstr ""
+
+#, fuzzy
+msgid "Note title"
+msgstr "Notitieboek titel:"
+
+#, fuzzy
+msgid "Note body"
+msgstr "Notitieboeken"
+
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
@@ -663,6 +677,9 @@ msgid "Toggle sidebar"
 msgstr ""
 
 msgid "Toggle editor layout"
+msgstr ""
+
+msgid "Focus"
 msgstr ""
 
 msgid "Tools"
@@ -799,13 +816,16 @@ msgid ""
 "access Joplin."
 msgstr ""
 
-#, fuzzy
-msgid "Check synchronisation configuration"
-msgstr "Annuleer synchronisatie"
-
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Notities en instellingen zijn opgeslaan in %s"
+
+msgid "Browse..."
+msgstr ""
+
+#, fuzzy
+msgid "Check synchronisation configuration"
+msgstr "Annuleer synchronisatie"
 
 msgid "Apply"
 msgstr ""
@@ -897,6 +917,10 @@ msgstr "Status"
 msgid "Encryption is:"
 msgstr "Versleuteling is:"
 
+#, fuzzy
+msgid "Usage"
+msgstr "Gebruik: %s"
+
 msgid "Back"
 msgstr "Terug"
 
@@ -950,36 +974,6 @@ msgstr "Sommige items kunnen niet gedecodeerd worden."
 
 msgid "Set the password"
 msgstr "Stel wachtwoord in"
-
-msgid "Add or remove tags"
-msgstr "Voeg tag toe of verwijder tag"
-
-msgid "Duplicate"
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid "%s - Copy"
-msgstr "Kopieer"
-
-msgid "Switch between note and to-do type"
-msgstr "Wissel tussen notitie en to-do type"
-
-#, fuzzy
-msgid "Switch to note type"
-msgstr "Wissel tussen notitie en to-do type"
-
-#, fuzzy
-msgid "Switch to to-do type"
-msgstr "Wissel tussen notitie en to-do type"
-
-msgid "Copy Markdown link"
-msgstr ""
-
-msgid "Delete"
-msgstr "Verwijderen"
-
-msgid "Delete notes?"
-msgstr "Notities verwijderen?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "Geen notities. Maak een notitie door op \"Nieuwe notitie\" te klikken."
@@ -1127,6 +1121,9 @@ msgstr "Deze tag verwijderen van alle notities?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Dit item verwijderen van de zijbalk?"
+
+msgid "Delete"
+msgstr "Verwijderen"
 
 msgid "Rename"
 msgstr "Hernoem"
@@ -1486,6 +1483,25 @@ msgstr ""
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Ongeldige optie: \"%s\". Geldige waarden zijn: %s."
 
+#, fuzzy
+msgid "General"
+msgstr "Algemene opties"
+
+#, fuzzy
+msgid "Synchronisation"
+msgstr "Synchronisatie status"
+
+msgid "Appearance"
+msgstr ""
+
+#, fuzzy
+msgid "Note"
+msgstr "Notitieboeken"
+
+#, fuzzy
+msgid "Application"
+msgstr "Sluit de applicatie."
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr ""
@@ -1778,6 +1794,9 @@ msgstr "Converteer naar notitie"
 msgid "Convert to todo"
 msgstr "Converteer naar to-do"
 
+msgid "Copy Markdown link"
+msgstr ""
+
 msgid "Hide metadata"
 msgstr "Verberg metadata"
 
@@ -1813,6 +1832,27 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Welkom"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Voeg tag toe of verwijder tag"
+
+#, fuzzy
+#~ msgid "%s - Copy"
+#~ msgstr "Kopieer"
+
+#~ msgid "Switch between note and to-do type"
+#~ msgstr "Wissel tussen notitie en to-do type"
+
+#, fuzzy
+#~ msgid "Switch to note type"
+#~ msgstr "Wissel tussen notitie en to-do type"
+
+#, fuzzy
+#~ msgid "Switch to to-do type"
+#~ msgstr "Wissel tussen notitie en to-do type"
+
+#~ msgid "Delete notes?"
+#~ msgstr "Notities verwijderen?"
 
 #, fuzzy
 #~ msgid "State: %s."
@@ -1864,9 +1904,6 @@ msgstr "Welkom"
 
 #~ msgid "Cancel the current command."
 #~ msgstr "Annuleer het huidige commando."
-
-#~ msgid "Exit the application."
-#~ msgstr "Sluit de applicatie."
 
 #~ msgid "Delete the currently selected note or notebook."
 #~ msgstr ""

@@ -583,6 +583,20 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exporter vers \"%s\" au format \"%s\". Veuillez patienter..."
 
+msgid "Sidebar"
+msgstr ""
+
+msgid "Note list"
+msgstr ""
+
+#, fuzzy
+msgid "Note title"
+msgstr "Titre du carnet :"
+
+#, fuzzy
+msgid "Note body"
+msgstr "Carnets"
+
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Importer depuis \"%s\" au format \"%s\". Veuillez patienter..."
@@ -659,6 +673,10 @@ msgstr "Basculer barre latérale"
 
 msgid "Toggle editor layout"
 msgstr "Basculer l'agencement de l'éditeur"
+
+#, fuzzy
+msgid "Focus"
+msgstr "Curseur sur corps du message"
 
 msgid "Tools"
 msgstr "Outils"
@@ -801,12 +819,15 @@ msgstr ""
 "Ce code d'authentification est nécessaire uniquement pour permettre aux "
 "logiciels tiers d'accéder aux données de Joplin."
 
-msgid "Check synchronisation configuration"
-msgstr "Vérifier config synchronisation"
-
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Les notes et paramètres se trouve dans : %s"
+
+msgid "Browse..."
+msgstr ""
+
+msgid "Check synchronisation configuration"
+msgstr "Vérifier config synchronisation"
 
 msgid "Apply"
 msgstr "Appliquer"
@@ -903,6 +924,10 @@ msgstr "État"
 msgid "Encryption is:"
 msgstr "Le chiffrement est :"
 
+#, fuzzy
+msgid "Usage"
+msgstr "Utilisation : %s"
+
 msgid "Back"
 msgstr "Retour"
 
@@ -954,34 +979,6 @@ msgstr "Certains objets ne peuvent être déchiffrés."
 
 msgid "Set the password"
 msgstr "Définir le mot de passe"
-
-msgid "Add or remove tags"
-msgstr "Gérer les étiquettes"
-
-msgid "Duplicate"
-msgstr "Dupliquer"
-
-#, javascript-format
-msgid "%s - Copy"
-msgstr "%s - Copie"
-
-msgid "Switch between note and to-do type"
-msgstr "Alterner entre note et tâche"
-
-msgid "Switch to note type"
-msgstr "Convertir en note"
-
-msgid "Switch to to-do type"
-msgstr "Convertir en tâche"
-
-msgid "Copy Markdown link"
-msgstr "Copier lien Markdown"
-
-msgid "Delete"
-msgstr "Supprimer"
-
-msgid "Delete notes?"
-msgstr "Supprimer les notes ?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr ""
@@ -1129,6 +1126,9 @@ msgstr "Enlever cette étiquette de toutes les notes ?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Enlever cette recherche de la barre latérale ?"
+
+msgid "Delete"
+msgstr "Supprimer"
 
 msgid "Rename"
 msgstr "Renommer"
@@ -1488,6 +1488,25 @@ msgstr "Ignorer les erreurs de certificats TLS"
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Option invalide: \"%s\". Les valeurs possibles sont : %s."
 
+#, fuzzy
+msgid "General"
+msgstr "Options générales"
+
+#, fuzzy
+msgid "Synchronisation"
+msgstr "État de la synchronisation"
+
+msgid "Appearance"
+msgstr ""
+
+#, fuzzy
+msgid "Note"
+msgstr "Carnets"
+
+#, fuzzy
+msgid "Application"
+msgstr "Lieu"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "L'étiquette \"%s\" existe déjà. Veuillez choisir un autre nom."
@@ -1785,6 +1804,9 @@ msgstr "Convertir en note"
 msgid "Convert to todo"
 msgstr "Convertir en tâche"
 
+msgid "Copy Markdown link"
+msgstr "Copier lien Markdown"
+
 msgid "Hide metadata"
 msgstr "Cacher les métadonnées"
 
@@ -1820,6 +1842,27 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Gérer les étiquettes"
+
+#~ msgid "Duplicate"
+#~ msgstr "Dupliquer"
+
+#~ msgid "%s - Copy"
+#~ msgstr "%s - Copie"
+
+#~ msgid "Switch between note and to-do type"
+#~ msgstr "Alterner entre note et tâche"
+
+#~ msgid "Switch to note type"
+#~ msgstr "Convertir en note"
+
+#~ msgid "Switch to to-do type"
+#~ msgstr "Convertir en tâche"
+
+#~ msgid "Delete notes?"
+#~ msgstr "Supprimer les notes ?"
 
 #~ msgid "State: %s."
 #~ msgstr "État : %s."

@@ -508,6 +508,18 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 
+msgid "Sidebar"
+msgstr ""
+
+msgid "Note list"
+msgstr ""
+
+msgid "Note title"
+msgstr ""
+
+msgid "Note body"
+msgstr ""
+
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
@@ -583,6 +595,9 @@ msgid "Toggle sidebar"
 msgstr ""
 
 msgid "Toggle editor layout"
+msgstr ""
+
+msgid "Focus"
 msgstr ""
 
 msgid "Tools"
@@ -716,11 +731,14 @@ msgid ""
 "access Joplin."
 msgstr ""
 
-msgid "Check synchronisation configuration"
-msgstr ""
-
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
+msgstr ""
+
+msgid "Browse..."
+msgstr ""
+
+msgid "Check synchronisation configuration"
 msgstr ""
 
 msgid "Apply"
@@ -801,6 +819,9 @@ msgstr ""
 msgid "Encryption is:"
 msgstr ""
 
+msgid "Usage"
+msgstr ""
+
 msgid "Back"
 msgstr ""
 
@@ -849,34 +870,6 @@ msgid "Some items cannot be decrypted."
 msgstr ""
 
 msgid "Set the password"
-msgstr ""
-
-msgid "Add or remove tags"
-msgstr ""
-
-msgid "Duplicate"
-msgstr ""
-
-#, javascript-format
-msgid "%s - Copy"
-msgstr ""
-
-msgid "Switch between note and to-do type"
-msgstr ""
-
-msgid "Switch to note type"
-msgstr ""
-
-msgid "Switch to to-do type"
-msgstr ""
-
-msgid "Copy Markdown link"
-msgstr ""
-
-msgid "Delete"
-msgstr ""
-
-msgid "Delete notes?"
 msgstr ""
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
@@ -1017,6 +1010,9 @@ msgid "Remove this tag from all the notes?"
 msgstr ""
 
 msgid "Remove this search from the sidebar?"
+msgstr ""
+
+msgid "Delete"
 msgstr ""
 
 msgid "Rename"
@@ -1347,6 +1343,21 @@ msgstr ""
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr ""
 
+msgid "General"
+msgstr ""
+
+msgid "Synchronisation"
+msgstr ""
+
+msgid "Appearance"
+msgstr ""
+
+msgid "Note"
+msgstr ""
+
+msgid "Application"
+msgstr ""
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr ""
@@ -1621,6 +1632,9 @@ msgid "Convert to note"
 msgstr ""
 
 msgid "Convert to todo"
+msgstr ""
+
+msgid "Copy Markdown link"
 msgstr ""
 
 msgid "Hide metadata"
