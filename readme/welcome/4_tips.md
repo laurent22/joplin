@@ -1,4 +1,4 @@
-# Tips
+# Tips 💡
 
 The first few notes should have given you an overview of the main functionalities in Joplin, but there's more it can do. See below for some of these features and how to get more help using the app:
 

@@ -101,7 +101,7 @@ function shimInit() {
 		}
 	}
 
-	shim.createResourceFromPath = async function(filePath) {
+	shim.createResourceFromPath = async function(filePath, defaultProps = null) {
 		const readChunk = require('read-chunk');
 		const imageType = require('image-type');
 
@@ -111,8 +111,12 @@ function shimInit() {
 
 		if (!(await fs.pathExists(filePath))) throw new Error(_('Cannot access %s', filePath));
 
+		defaultProps = defaultProps ? defaultProps : {};
+
+		const resourceId = defaultProps.id ? defaultProps.id : uuid.create();
+
 		let resource = Resource.new();
-		resource.id = uuid.create();
+		resource.id = resourceId;
 		resource.mime = mime.getType(filePath);
 		resource.title = basename(filePath);
 
@@ -141,6 +145,10 @@ function shimInit() {
 			if (stat.size >= 10000000) throw new Error('Resources larger than 10 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
 
 			await fs.copy(filePath, targetPath, { overwrite: true });
+		}
+
+		if (defaultProps) {
+			resource = Object.assign({}, resource, defaultProps);
 		}
 
 		return await Resource.save(resource, { isNew: true });

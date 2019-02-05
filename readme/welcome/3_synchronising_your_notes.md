@@ -1,4 +1,4 @@
-# Synchronising your notes
+# Synchronising your notes 🔄
 
 One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. You basically choose the service you prefer among those supported, setup the configuration, and the app will be able to sync between your computers or mobile devices.
 
@@ -21,3 +21,7 @@ OneDrive and WebDAV are also supported as synchronisation services. Please see [
 ## Using End-To-End Encryption
 
 Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the data can read it. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the [End-To-End Encryption Tutorial](https://joplin.cozic.net/e2ee/) for more information about this feature and how to enable it.
+
+* * *
+
+**Next:** [Some other tips on how to use Joplin](:/2ee48f80889447429a3cccb04a466072)
