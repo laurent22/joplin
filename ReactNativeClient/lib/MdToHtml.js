@@ -525,7 +525,13 @@ class MdToHtml {
 			b,strong{font-weight:bolder}small{font-size:80%}img{border-style:none}
 		`;
 
-		const fontFamily = 'sans-serif';
+		// TODO: Apply style changes to global-style (mobile)
+		// TODO: Find good font for Windows and Linux
+		// TODO: Check dark theme
+		// TODO: Check how it works with zoom
+		// TODO: Put more margin around
+
+		const fontFamily = "'Avenir', sans-serif";
 
 		const css = `
 			body {
@@ -539,26 +545,40 @@ class MdToHtml {
 				-webkit-print-color-adjust: exact;
 			}
 			p, h1, h2, h3, h4, h5, h6, ul, table {
-				margin-top: 0;
-				margin-bottom: 14px;
+				margin-top: .4em;
+				margin-bottom: .65em;
+			}
+			h1, h2, h3, h4, h5, h6 {
+				line-height: 1.5em;
 			}
 			h1 {
-				font-size: 1.5em;
+				font-size: 1.9em;
 				font-weight: bold;
+				border-bottom: 1px solid ` + style.htmlDividerColor + `;
+				padding-bottom: .3em;
 			}
 			h2 {
-				font-size: 1.2em;
+				font-size: 1.6em;
 				font-weight: bold;
+				border-bottom: 1px solid ` + style.htmlDividerColor + `;
+				padding-bottom: .1em;
 			}
-			h3, h4, h5, h6 {
+			h3 {
+				font-size: 1.4em;
+			}
+			h4, h5, h6 {
 				font-size: 1em;
 				font-weight: bold;
 			}
 			a {
-				color: ` + style.htmlLinkColor + `
+				color: ` + style.htmlLinkColor + `;
 			}
-			ul {
-				padding-left: 1.3em;
+			ul, ol {
+				padding-left: 0;
+				margin-left: 1.7em;
+			}
+			li {
+				margin-bottom: .4em;
 			}
 			li p {
 				margin-bottom: 0;
@@ -605,7 +625,7 @@ class MdToHtml {
 			}
 			hr {
 				border: none;
-				border-bottom: 1px solid ` + style.htmlDividerColor + `;
+				border-bottom: 2px solid ` + style.htmlDividerColor + `;
 			}
 			img {
 				max-width: 100%;
@@ -613,9 +633,12 @@ class MdToHtml {
 			}
 			.inline-code {
 				border: 1px solid ` + style.htmlCodeBorderColor + `;
-				background-color: ` + style.htmlCodeColor + `;
+				background-color: ` + style.htmlCodeBackgroundColor + `;
 				padding-right: .2em;
 				padding-left: .2em;
+				border-radius: .25em;
+				color: ` + style.htmlCodeColor + `;
+				font-size: ` + style.htmlCodeFontSize + `;
 			}
 
 			.highlighted-keyword {
@@ -678,6 +701,8 @@ class MdToHtml {
 		const styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>';
 
 		const output = styleHtml + renderedBody;
+
+		// console.info(output);
 
 		this.cachedContent_ = output;
 		this.cachedContentKey_ = cacheKey;
