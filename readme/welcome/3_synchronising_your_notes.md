@@ -1,4 +1,4 @@
-# Synchronising your notes
+# Synchronising your notes 🔄
 
 One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. You basically choose the service you prefer among those supported, setup the configuration, and the app will be able to sync between your computers or mobile devices.
 

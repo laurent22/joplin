@@ -53,6 +53,7 @@ const DropdownAlert = require('react-native-dropdownalert').default;
 const ShareExtension = require('react-native-share-extension').default;
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const SearchEngine = require('lib/services/SearchEngine');
+const WelcomeUtils = require('lib/WelcomeUtils');
 
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
@@ -515,6 +516,8 @@ async function initialize(dispatch) {
 
 		DecryptionWorker.instance().scheduleStart();
 	});
+
+	await WelcomeUtils.createWelcomeItems();
 
 	reg.logger().info('Application initialized');
 }

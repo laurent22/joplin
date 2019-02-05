@@ -18,9 +18,9 @@ class WelcomeUtils {
 		const folderAssets = welcomeAssets.folders;
 		const tempDir = Setting.value('resourceDir');
 
-		// TODO: Update createResourceFromPath for mobile
 		// TODO: Update BaseApplication
 		// TODO: Update mobile root.js
+		// TODO: Finish Welcome notes
 
 		for (let i = 0; i < folderAssets.length; i++) {
 			const folderAsset = folderAssets[i];
