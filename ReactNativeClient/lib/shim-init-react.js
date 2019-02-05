@@ -7,6 +7,10 @@ const FsDriverRN = require('lib/fs-driver-rn.js').FsDriverRN;
 const urlValidator = require('valid-url');
 const { Buffer } = require('buffer');
 const { Linking } = require('react-native');
+const mimeUtils = require('lib/mime-utils.js').mime;
+const { basename, fileExtension } = require('lib/path-utils.js');
+const { uuid } = require('lib/uuid.js');
+const Resource = require('lib/models/Resource');
 
 function shimInit() {
 	shim.Geolocation = GeolocationReact;
@@ -129,6 +133,37 @@ function shimInit() {
 			requestAnimationFrame(function() { resolve(); });
 		});
 	}
+
+	// NOTE: This is a limited version of createResourceFromPath - unlike the Node version, it
+	// only really works with images. It does not resize the image either.
+	shim.createResourceFromPath = async function(filePath, defaultProps = null) {
+		defaultProps = defaultProps ? defaultProps : {};
+		const resourceId = defaultProps.id ? defaultProps.id : uuid.create();
+
+		const ext = fileExtension(filePath);
+		let mimeType = mimeUtils.fromFileExtension(ext);
+		if (!mimeType) mimeType = 'image/jpeg';
+
+		let resource = Resource.new();
+		resource.id = resourceId;
+		resource.mime = mimeType;
+		resource.title = basename(filePath);
+		resource.file_extension = ext;
+
+		let targetPath = Resource.fullPath(resource);
+		await shim.fsDriver().copy(filePath, targetPath);
+		
+		if (defaultProps) {
+			resource = Object.assign({}, resource, defaultProps);
+		}
+
+		resource = await Resource.save(resource, { isNew: true });
+
+		console.info(resource);
+
+		return resource;
+	}
+
 }
 
 module.exports = { shimInit };
