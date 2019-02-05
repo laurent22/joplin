@@ -15,6 +15,7 @@ const MasterKey = require('lib/models/MasterKey');
 const BaseItem = require('lib/models/BaseItem.js');
 const BaseModel = require('lib/BaseModel.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
+const WelcomeUtils = require('lib/WelcomeUtils');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -1097,6 +1098,46 @@ describe('Synchronizer', function() {
 		await synchronizer().start();
 		let note2 = await Note.load(note.id);
 		expect(note2.title).toBe("un UPDATE");
+	}));
+
+	it("should sync Welcome notebook and not duplicate it", asyncTest(async () => {
+		// Create the Welcome items on two separate clients and verify
+		// that they appear only once (due to having hard-coded IDs), that they are not duplicated.
+
+		Setting.setConstant('env', 'prod');
+
+		await WelcomeUtils.createWelcomeItems();
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await WelcomeUtils.createWelcomeItems();
+		const beforeFolderCount = (await Folder.all()).length;
+		const beforeNoteCount = (await Note.all()).length;
+		expect(beforeFolderCount >= 1).toBe(true);
+		expect(beforeNoteCount > 1).toBe(true);
+		
+		await synchronizer().start();
+
+		const afterFolderCount = (await Folder.all()).length;
+		const afterNoteCount = (await Note.all()).length;
+
+		expect(afterFolderCount).toBe(beforeFolderCount);
+		expect(afterNoteCount).toBe(beforeNoteCount);
+
+		// Changes to the Welcome items should be synced to all clients
+
+		const f1 = (await Folder.all())[0];
+		await Folder.save({ id: f1.id, title: 'Welcome MOD' });
+
+		await synchronizer().start();
+
+		await switchClient(1);
+
+		await synchronizer().start();
+
+		const f1_1 = (await Folder.all())[0];
+		expect(f1_1.title).toBe('Welcome MOD');
 	}));
 
 });
