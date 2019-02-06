@@ -552,19 +552,19 @@ class MdToHtml {
 				line-height: 1.5em;
 			}
 			h1 {
-				font-size: 1.9em;
+				font-size: 1.5em;
 				font-weight: bold;
 				border-bottom: 1px solid ` + style.htmlDividerColor + `;
 				padding-bottom: .3em;
 			}
 			h2 {
-				font-size: 1.6em;
+				font-size: 1.3em;
 				font-weight: bold;
 				border-bottom: 1px solid ` + style.htmlDividerColor + `;
 				padding-bottom: .1em;
 			}
 			h3 {
-				font-size: 1.4em;
+				font-size: 1.1em;
 			}
 			h4, h5, h6 {
 				font-size: 1em;

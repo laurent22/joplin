@@ -220,7 +220,7 @@ function themeStyle(theme) {
 		textAreaLineHeight: Math.round(17 * editorFontSize / 12),
 
 		// For WebView - must correspond to the properties above
-		htmlFontSize: Math.round(16 * zoomRatio) + 'px',
+		htmlFontSize: Math.round(15 * zoomRatio) + 'px',
 		htmlLineHeight: '1.6em', //Math.round(20 * zoomRatio) + 'px'
 
 		htmlCodeFontSize: '.9em',
