@@ -102,7 +102,7 @@ class Setting extends BaseModel {
 			'encryption.activeMasterKeyId': { value: '', type: Setting.TYPE_STRING, public: false },
 			'encryption.passwordCache': { value: {}, type: Setting.TYPE_OBJECT, public: false, secure: true },
 			'style.zoom': {value: 100, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Global zoom percentage'), minimum: 50, maximum: 500, step: 10},
-			'style.editor.fontSize': {value: 12, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Editor font size'), minimum: 4, maximum: 50, step: 1},
+			'style.editor.fontSize': {value: 13, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Editor font size'), minimum: 4, maximum: 50, step: 1},
 			'style.editor.fontFamily': {value: "", type: Setting.TYPE_STRING, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Editor font family'), description: () => _('This must be *monospace* font or it will not work properly. If the font is incorrect or empty, it will default to a generic monospace font.')},
 			'autoUpdateEnabled': { value: true, type: Setting.TYPE_BOOL, section:'application', public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
 			'autoUpdate.includePreReleases': { value: false, type: Setting.TYPE_BOOL, section:'application', public: true, appTypes: ['desktop'], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplin.cozic.net/prereleases') },

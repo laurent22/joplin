@@ -527,9 +527,6 @@ class MdToHtml {
 
 		// TODO: Apply style changes to global-style (mobile)
 		// TODO: Find good font for Windows and Linux
-		// TODO: Check dark theme
-		// TODO: Check how it works with zoom
-		// TODO: Put more margin around
 
 		const fontFamily = "'Avenir', sans-serif";
 
@@ -589,7 +586,7 @@ class MdToHtml {
 				top: .5em;
 				text-decoration: none;
 				width: 1.15em;
-				height: 1.5em;
+				height: 1.45em;
 				margin-right: 0.4em;
 				background-color:  ` + style.htmlColor + `;
 				/* Awesome Font file */
