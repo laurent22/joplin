@@ -84,7 +84,7 @@ const lightStyle = {
 	// codeColor: "#EFF0F1",
 	// codeBorderColor: '#CBCBCB',
 
-	htmlColor:'#333333', // Note: CSS in WebView component only supports named colors or rgb() notation
+	htmlColor:'#222222', // Note: CSS in WebView component only supports named colors or rgb() notation
 	htmlBackgroundColor: 'white',
 	htmlDividerColor: 'rgb(230,230,230)',
 	htmlLinkColor: 'rgb(80,130,190)',
