@@ -525,7 +525,6 @@ class MdToHtml {
 			b,strong{font-weight:bolder}small{font-size:80%}img{border-style:none}
 		`;
 
-		// TODO: Apply style changes to global-style (mobile)
 		// TODO: Find good font for Windows and Linux
 
 		const fontFamily = "'Avenir', sans-serif";
@@ -542,7 +541,7 @@ class MdToHtml {
 				-webkit-print-color-adjust: exact;
 			}
 			p, h1, h2, h3, h4, h5, h6, ul, table {
-				margin-top: .4em;
+				margin-top: .6em;
 				margin-bottom: .65em;
 			}
 			h1, h2, h3, h4, h5, h6 {
@@ -557,8 +556,8 @@ class MdToHtml {
 			h2 {
 				font-size: 1.3em;
 				font-weight: bold;
-				border-bottom: 1px solid ` + style.htmlDividerColor + `;
-				padding-bottom: .1em;
+				/ *border-bottom: 1px solid ` + style.htmlDividerColor + `;
+				padding-bottom: .1em; */
 			}
 			h3 {
 				font-size: 1.1em;
@@ -699,7 +698,7 @@ class MdToHtml {
 
 		const output = styleHtml + renderedBody;
 
-		// console.info(output);
+		// console.info('<!DOCTYPE html><html><head><meta charset="UTF-8">' + output + '</body></html>');
 
 		this.cachedContent_ = output;
 		this.cachedContentKey_ = cacheKey;

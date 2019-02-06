@@ -81,10 +81,7 @@ const lightStyle = {
 
 	warningBackgroundColor: "#FFD08D",
 
-	// codeColor: "#EFF0F1",
-	// codeBorderColor: '#CBCBCB',
-
-	htmlColor:'#222222', // Note: CSS in WebView component only supports named colors or rgb() notation
+	htmlColor:'#222222',
 	htmlBackgroundColor: 'white',
 	htmlDividerColor: 'rgb(230,230,230)',
 	htmlLinkColor: 'rgb(80,130,190)',
@@ -119,12 +116,10 @@ const darkStyle = {
 
 	warningBackgroundColor: "#CC6600",
 
-	// codeColor: "#2F3031",
-	// codeBorderColor: '#464646',
-
-	htmlColor: 'rgb(220,220,220)', // Note: CSS in WebView component only supports named colors or rgb() notation
+	htmlColor: 'rgb(220,220,220)',
 	htmlBackgroundColor: 'rgb(29,32,36)',
-	htmlDividerColor: 'rgb(230,230,230)',
+	htmlDividerColor: '#3D444E',
+	htmlCodeColor: '#ffffff',
 	htmlLinkColor: 'rgb(166,166,255)',
 	htmlCodeBackgroundColor: 'rgb(47, 48, 49)',
 	htmlCodeBorderColor: 'rgb(70, 70, 70)',
