@@ -608,10 +608,9 @@ class MdToHtml {
 			}
 			blockquote {
 				border-left: 4px solid ` + style.htmlCodeBorderColor + `;
-				margin-left: 20px;
-				padding-left: 30px;
-				background-color: ` + style.htmlCodeBackgroundColor + `;
-				border-radius: .15em;
+				padding-left: 1.2em;
+				margin-left: 0;
+				opacity: .7;
 			}
 			table {
 				text-align: left-align;
