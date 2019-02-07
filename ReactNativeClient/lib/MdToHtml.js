@@ -620,11 +620,9 @@ class MdToHtml {
 				border-radius: .15em;
 			}
 			table {
-				text-align: center;
-				border-collapse: separate;
-				border-spacing: 0px;
+				text-align: left-align;
+				border-collapse: collapse;
 				border: 1px solid ` + style.htmlCodeBorderColor + `;
-				border-radius: 0.25em;
 				background-color: ` + style.htmlBackgroundColor + `;
 			}
 			td, th {
@@ -634,13 +632,15 @@ class MdToHtml {
 				font-family: ` + fontFamily + `;
 			}
 			td {
-				border-top: 1px solid ` + style.htmlCodeBorderColor + `;
+				border: 1px solid ` + style.htmlCodeBorderColor + `;
 			}
 			th {
-				background-color: ` + style.htmlCodeBorderColor + `;
+				border: 1px solid ` + style.htmlCodeBorderColor + `;
+				border-bottom: 2px solid ` + style.htmlCodeBorderColor + `;
+				background-color: ` + style.htmlTableBackgroundColor + `;
 			}
 			tr:nth-child(even) {
-				background-color: ` + style.htmlCodeBackgroundColor + `;
+				background-color: ` + style.htmlTableBackgroundColor + `;
 			}
 			hr {
 				border: none;
