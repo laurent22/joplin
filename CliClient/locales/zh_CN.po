@@ -7,13 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.2.1\n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "移除相关笔记的标签后才可删除此标签。"
@@ -51,7 +53,7 @@ msgstr "正在取消后台同步... 请稍候。"
 
 #, javascript-format
 msgid "No such command: %s"
-msgstr "无以下命令：%s"
+msgstr "不存在该命令：%s"
 
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
@@ -76,25 +78,25 @@ msgid "Invalid answer: %s"
 msgstr "此答案无效：%s"
 
 msgid "Attaches the given file to the note."
-msgstr "给笔记附加给定文件。"
+msgstr "将选定文件添加到笔记中。"
 
 #, javascript-format
 msgid "Cannot find \"%s\"."
 msgstr "无法找到 \"%s\"。"
 
 msgid "Displays the given note."
-msgstr "显示给定笔记。"
+msgstr "显示选定笔记。"
 
 msgid "Displays the complete information about note."
-msgstr "显示关于笔记的全部信息。"
+msgstr "显示有关笔记的完整信息。"
 
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
-"读取或设置配置数值。如果 [value] 没有提供，它将显示 [name] 值。如果没有提供 "
-"[name] 或 [value] 值，它将列出当前配置。"
+"读取或设置配置数值。如果 [value] 值没有提供，它将显示 [name] 值。如果没有提"
+"供 [name] 或 [value] 值，它将列出当前配置。"
 
 msgid "Also displays unset and hidden config variables."
 msgstr "同时显示未设置的与隐藏的配置变量。"
@@ -165,7 +167,7 @@ msgstr "无活动笔记本。"
 
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr "以下笔记不存在：“%s”。是否创建？"
+msgstr "笔记不存在：“%s”。是否创建？"
 
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr "开始编辑笔记。关闭编辑器将回到提示符。"
@@ -184,28 +186,28 @@ msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
-"导出 Joplin 数据至给定路径。默认为导出包含笔记本、笔记、标签与资源等完整的数"
-"据库。"
+"导出 Joplin 数据到选定路径。默认导出包含笔记本、笔记、标签与资源等完整的数据"
+"库。"
 
 #, javascript-format
 msgid "Destination format: %s"
 msgstr "目标格式：%s"
 
 msgid "Exports only the given note."
-msgstr "仅导出给定笔记。"
+msgstr "仅导出选定笔记。"
 
 msgid "Exports only the given notebook."
-msgstr "仅导出给定笔记本。"
+msgstr "仅导出选定笔记本。"
 
 msgid "Displays a geolocation URL for the note."
-msgstr "显示此笔记的地理定位URL地址。"
+msgstr "显示该笔记的地理定位 URL 地址。"
 
 msgid "Displays usage information."
-msgstr "显示使用信息。"
+msgstr "显示用量信息。"
 
 #, javascript-format
 msgid "For information on how to customise the shortcuts please visit %s"
-msgstr "请访问以下链接了解如何设置快捷键：%s"
+msgstr "有关如何自定义快捷键，请访问 %s"
 
 msgid "Shortcuts are not available in CLI mode."
 msgstr "快捷键在 CLI 模式下不可用。"
@@ -214,19 +216,19 @@ msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
-"输入 `help [command]` 来了解关于某命令；或输入 `help all` 获取完整的使用说"
-"明。"
+"输入 `help [command]` 来获取有关该命令的更多信息；或输入 `help all` 获取完整"
+"的使用说明。"
 
 msgid "The possible commands are:"
-msgstr "可用命令为："
+msgstr "可用的命令有："
 
 msgid ""
 "In any command, a note or notebook can be referred to by title or ID, or "
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
-"在任何命令中，某个笔记或笔记本可通过它名称或ID引用，也可使用代表当前所选笔记"
-"和笔记本的快捷变量 ‘$n' 和 '$b'。`$c` 可用于引用当前所选的项目。"
+"在任何命令中，某个笔记或笔记本可通过它的名称或 ID 引用，也可使用代表当前所选"
+"笔记和笔记本的快捷变量 ‘$n' 和 '$b'。`$c` 可用于引用当前所选的项目。"
 
 msgid "To move from one pane to another, press Tab or Shift+Tab."
 msgstr "按 Tab 键或 Shift+Tab 组合键切换面板。"
@@ -250,7 +252,7 @@ msgid ""
 msgstr "输入 `help keymap` 来获取完整的键盘快捷键列表"
 
 msgid "Imports data into Joplin."
-msgstr "导入数据至 Jolin。"
+msgstr "导入数据到 Jolin。"
 
 #, javascript-format
 msgid "Source format: %s"
@@ -327,25 +329,25 @@ msgid "Please select a notebook first."
 msgstr "请先选择笔记本。"
 
 msgid "Creates a new notebook."
-msgstr "创建新笔记本。"
+msgstr "新建笔记本。"
 
 msgid "Creates a new note."
-msgstr "创建新笔记。"
+msgstr "新建笔记。"
 
 msgid "Notes can only be created within a notebook."
-msgstr "笔记只能创建于笔记本内。"
+msgstr "笔记只能在笔记本内创建。"
 
 msgid "Creates a new to-do."
-msgstr "创建新待办事项。"
+msgstr "新建待办事项。"
 
 msgid "Moves the notes matching <note> to [notebook]."
-msgstr "移动符合 <note> 的笔记至 [notebook]。"
+msgstr "移动符合 <note> 的笔记到 [notebook]。"
 
 msgid "Renames the given <item> (note or notebook) to <name>."
-msgstr "重命名给定的 <item>（笔记或笔记本）至 <name>。"
+msgstr "重命名选定的 <item>（笔记或笔记本）到 <name>。"
 
 msgid "Deletes the given notebook."
-msgstr "删除给定笔记本。"
+msgstr "删除选定的笔记本。"
 
 msgid "Deletes the notebook without asking for confirmation."
 msgstr "删除笔记本（不要求确认）。"
@@ -353,7 +355,7 @@ msgstr "删除笔记本（不要求确认）。"
 msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
-msgstr "是否删除笔记本？此笔记本内所有笔记也将被删除。"
+msgstr "是否删除笔记本？所有在该笔记本内的笔记也将同时被删除。"
 
 msgid "Deletes the notes matching <note-pattern>."
 msgstr "删除符合 <note-pattern> 的笔记。"
@@ -378,7 +380,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"将给定的 <note> 的属性 <name> 设置为 [value]。可用属性为：\n"
+"将给定的 <note> 的属性 <name> 设置为 [value]。可用属性有：\n"
 "\n"
 "%s"
 
@@ -386,10 +388,10 @@ msgid "Displays summary about the notes and notebooks."
 msgstr "显示关于笔记与笔记本的概况。"
 
 msgid "Synchronises with remote storage."
-msgstr "与远程储存空间同步。"
+msgstr "与远程储存同步。"
 
 msgid "Sync to provided target (defaults to sync.target config value)"
-msgstr "同步至所提供的目标（默认为同步目标配置值）"
+msgstr "同步到所提供的目标（默认为同步目标配置值）"
 
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
@@ -410,7 +412,7 @@ msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr "%s 并未被验证。请提供缺少的凭证。"
 
 msgid "Synchronisation is already in progress."
-msgstr "同步正在进行中。"
+msgstr "同步已在进行中。"
 
 #, javascript-format
 msgid ""
@@ -437,14 +439,14 @@ msgstr "下载资源中..."
 msgid "Cancelling... Please wait."
 msgstr "正在取消... 请稍后。"
 
-#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
 "`tag list` can be used to list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> 可以是 \"add\", \"remove\" 或者 \"list\" 从 [note] 中分配或删"
-"除 [tag]，或者列出与 [tag] 相关的笔记。`tag list` 命令将列出所有的标签。"
+"<tag-command> 可以是 \"add\"、\"remove\" 或者 \"list\"， 用于从 [note] 中赋值"
+"或删除 [tag]，或者列出与 [tag] 相关的笔记。`tag list` 命令可以用于列出所有的"
+"标签（对于过长选项请使用 -l 参数）。"
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
@@ -458,7 +460,7 @@ msgid ""
 msgstr ""
 "<todo-command> 可以是 \"toggle\" 或者 \"clear\"。使用 \"toggle\" 命令来切换待"
 "办事项的完成状态（若目标为普通笔记则将会转换成待办事项）。使用 \"clear\" 命令"
-"来把待办事项转换至普通笔记。"
+"来把待办事项转换到普通笔记。"
 
 msgid "Marks a to-do as non-completed."
 msgstr "标记待办事项为未完成。"
@@ -466,7 +468,7 @@ msgstr "标记待办事项为未完成。"
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
-msgstr "切换至 [notebook] - 所有进一步处理将在此笔记本中进行。"
+msgstr "切换到 [notebook] - 所有进一步处理将在该笔记本中进行。"
 
 msgid "Displays version information"
 msgstr "显示版本信息"
@@ -494,17 +496,17 @@ msgid "Possible keys/values:"
 msgstr "可用键/值："
 
 msgid "Type `joplin help` for usage information."
-msgstr "输入 `joplin help` 获取使用信息。"
+msgstr "输入 `joplin help` 获取用量信息。"
 
 msgid "Fatal error:"
 msgstr "严重错误："
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
-msgstr "此程序已被授权 - 您可以关闭此浏览页面了。"
+msgstr "该程序已被授权 - 您可以关闭此浏览页面了。"
 
 msgid "The application has been successfully authorised."
-msgstr "此程序已被成功授权。"
+msgstr "该程序已被成功授权。"
 
 msgid ""
 "Please open the following URL in your browser to authenticate the "
@@ -513,9 +515,9 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
-"请在网络浏览器中打开以下链接激活此应用程序。此应用会建立 \"Apps/Joplin\" 文件"
-"目录，并只会读写该目录中的文件。它没有任何权限访问此目录以外的任何文件或个人"
-"信息。也不会与第三方分享任何数据。"
+"请在浏览器中打开以下链接激活该应用程序。该应用会建立 \"Apps/Joplin\" 文件目"
+"录，并只会读写该目录中的文件。它没有任何权限访问此目录以外的任何文件或个人信"
+"息。也不会与第三方分享任何数据。"
 
 msgid "Search:"
 msgstr "搜索："
@@ -532,7 +534,7 @@ msgstr ""
 "\n"
 "输入 `:help shortcuts` 获取键盘快捷键列表，或输入 `:help` 获取使用信息。\n"
 "\n"
-"例：输入 `mb` 建立新笔记本；输入 `mn` 建立新笔记。"
+"例：输入 `mb` 新建笔记本；输入 `mn`新建笔记。"
 
 msgid ""
 "One or more items are currently encrypted and you may need to supply a "
@@ -540,30 +542,28 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"有一条或更多项目被加密可能需要提供主密码。若需进行此操作请输入 `e2ee "
-"decrypt` 。若您已提供密码，此时加密文件正在背景解密，解锁之后即可使用。"
+"一个或多个项目当前已加密，您可能需要提供主密码。若需进行此操作请输入 `e2ee "
+"decrypt` 。若您已提供密码，此时加密文件正在后台解密，解锁之后即可使用。"
 
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr "导出至 \"%s\" 并转换成 \"%s\" 格式。请稍等…"
+msgstr "从 \"%s\" 导出，导出格式为 \"%s\"。请稍等…"
 
 msgid "Sidebar"
-msgstr ""
+msgstr "边栏"
 
 msgid "Note list"
-msgstr ""
+msgstr "笔记列表"
 
-#, fuzzy
 msgid "Note title"
-msgstr "笔记本标题："
+msgstr "笔记标题"
 
-#, fuzzy
 msgid "Note body"
-msgstr "笔记本"
+msgstr "笔记正文"
 
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "从 \"%s\" 导入为 \"%s\" 格式。请稍等…"
+msgstr "从 \"%s\" 导入，导入格式为 \"%s\" 。请稍等…"
 
 msgid "PDF File"
 msgstr "PDF 文件"
@@ -572,13 +572,13 @@ msgid "File"
 msgstr "文件"
 
 msgid "New note"
-msgstr "新笔记"
+msgstr "新建笔记"
 
 msgid "New to-do"
-msgstr "新待办事项"
+msgstr "新建待办事项"
 
 msgid "New notebook"
-msgstr "新笔记本"
+msgstr "新建笔记本"
 
 msgid "Import"
 msgstr "导入"
@@ -609,7 +609,7 @@ msgid "Paste"
 msgstr "粘贴"
 
 msgid "Select all"
-msgstr "选择所有"
+msgstr "全选"
 
 msgid "Bold"
 msgstr "粗体"
@@ -630,7 +630,7 @@ msgid "Search in current note"
 msgstr "在当前笔记内搜索"
 
 msgid "View"
-msgstr "显示"
+msgstr "视图"
 
 msgid "Toggle sidebar"
 msgstr "切换边栏"
@@ -638,9 +638,8 @@ msgstr "切换边栏"
 msgid "Toggle editor layout"
 msgstr "切换编辑器布局"
 
-#, fuzzy
 msgid "Focus"
-msgstr "聚焦内容"
+msgstr "聚焦于"
 
 msgid "Tools"
 msgstr "工具"
@@ -694,18 +693,18 @@ msgstr "当前版本为最新版。"
 
 #, javascript-format
 msgid "%s (pre-release)"
-msgstr ""
+msgstr "%s 预发行版"
 
 msgid "An update is available, do you want to download it now?"
-msgstr "软件有更新，是否下载最新版？"
+msgstr "有更新可用，是否现在进行下载？"
 
 #, javascript-format
 msgid "Your version: v%s"
-msgstr ""
+msgstr "您的版本：v%s"
 
 #, javascript-format
 msgid "New version: v%s"
-msgstr ""
+msgstr "最新版本：v%s"
 
 msgid "Yes"
 msgstr "是"
@@ -714,14 +713,14 @@ msgid "No"
 msgstr "否"
 
 msgid "Token has been copied to the clipboard!"
-msgstr "Token 已被复制到粘贴板"
+msgstr "Token 令牌已被复制到剪贴板！"
 
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "网页剪辑服务已启用并设置为自动启动。"
 
 #, javascript-format
 msgid "Status: Started on port %d"
-msgstr "状态：从端口 %d 开始"
+msgstr "状态：在 %d 端口运行"
 
 #, javascript-format
 msgid "Status: %s"
@@ -734,12 +733,12 @@ msgid "The web clipper service is not enabled."
 msgstr "网页剪辑未启用。"
 
 msgid "Enable Web Clipper Service"
-msgstr "启用网页剪辑"
+msgstr "启用网页剪辑服务"
 
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
-msgstr "Joplin 网页剪辑可以让你将浏览器中的网页和截图保存到 Joplin。"
+msgstr "Joplin 网页剪辑可以让你将浏览器中的网页和屏幕截图保存到 Joplin。"
 
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "要使用网页剪辑功能，你需要按照以下步骤："
@@ -765,22 +764,22 @@ msgid "Advanced options"
 msgstr "高级选项"
 
 msgid "Authorisation token:"
-msgstr "授权码："
+msgstr "授权 Token 令牌："
 
 msgid "Copy token"
-msgstr "拷贝 token"
+msgstr "拷贝 Token 令牌"
 
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
-msgstr ""
+msgstr "该授权令牌仅用于允许第三方应用程序访问 Joplin。"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
-msgstr "笔记与设置文件储存目录为：%s"
+msgstr "笔记与设置文件储存在：%s"
 
 msgid "Browse..."
-msgstr ""
+msgstr "浏览..."
 
 msgid "Check synchronisation configuration"
 msgstr "检查同步配置"
@@ -799,7 +798,7 @@ msgid ""
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
-"禁用加密则会导致所有笔记与附件将会重新同步，并会将非加密的文件发送至同步目"
+"禁用加密会导致 *所有笔记与附件* 重新同步，并以非加密的数据形式发送到同步目"
 "标。确定继续吗？"
 
 msgid ""
@@ -808,8 +807,8 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
-"启用加密则会导致所有笔记与附件将会重新同步，并会将加密的文件发送至同步目标。"
-"请勿丢失此密码！为了安全目的，此密码是您解密资料的 *唯一方式* ！若确认启动加"
+"启用加密会导致 *所有笔记与附件* 重新同步，并以加密数据的形式发送到同步目标。"
+"请勿丢失该密码！为了安全目的，此密码是您解密数据的 *唯一方式* ！若确认启动加"
 "密，请在下方输入您的密码。"
 
 msgid "Disable encryption"
@@ -847,8 +846,8 @@ msgid ""
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"注释：加密行为仅使用标志\"活动\"的主密码。解密时，若笔记或笔记本加密设置允"
-"许，可以使用其他任意密码。"
+"注意：仅有一个主密码可用于加密（被标记为 \"active\" 的主密码）。但列出的任何"
+"密码都可用于解密，这取决于笔记或笔记本最初是如何加密的。"
 
 msgid "Missing Master Keys"
 msgstr "缺失主密码"
@@ -858,8 +857,8 @@ msgid ""
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"此ID所包含的主密码已用于加密一些文件，但是此软件当前无法访问这些文件。它们有"
-"可能会经过同步过程下载下来。"
+"具有这些 ID 的主密钥用于加密某些项，但应用程序目前无法访问它们。最终它们很可"
+"能通过同步下载。"
 
 msgid ""
 "For more information about End-To-End Encryption (E2EE) and advices on how "
@@ -872,9 +871,8 @@ msgstr "状态"
 msgid "Encryption is:"
 msgstr "加密为："
 
-#, fuzzy
 msgid "Usage"
-msgstr "使用：%s"
+msgstr "使用量"
 
 msgid "Back"
 msgstr "返回"
@@ -882,7 +880,7 @@ msgstr "返回"
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
-msgstr "将新建笔记本 \"%s\" 并将文件 \"%s\" 导入至其中"
+msgstr "将新建的笔记本 \"%s\" 和文件 \"%s\" 导入到其中"
 
 msgid "Please create a notebook first."
 msgstr "请先创建笔记本。"
@@ -897,7 +895,7 @@ msgid "Add or remove tags:"
 msgstr "添加或删除标签："
 
 msgid "Separate each tag by a comma."
-msgstr "用逗号 \",\" 分开每个标签。"
+msgstr "用半角逗号 \",\" 分开每个标签。"
 
 msgid "Rename notebook:"
 msgstr "重命名笔记本："
@@ -918,7 +916,7 @@ msgid "Some items cannot be synchronised."
 msgstr "一些项目无法被同步。"
 
 msgid "View them now"
-msgstr "马上查看"
+msgstr "立刻查看"
 
 msgid "Some items cannot be decrypted."
 msgstr "一些项目无法被解密。"
@@ -927,17 +925,17 @@ msgid "Set the password"
 msgstr "设置密码"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr "此处没有任何笔记。点击\"新笔记\"创建。"
+msgstr "此处没有任何笔记。点击\"新建笔记\"创建。"
 
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr "此处没有任何笔记本。点击\"新笔记本\"创建。"
+msgstr "此处没有任何笔记本。点击\"新建笔记本\"创建。"
 
 msgid "Location"
 msgstr "位置"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 msgid "Note properties"
 msgstr "笔记属性"
@@ -947,7 +945,7 @@ msgstr "打开…"
 
 #, javascript-format
 msgid "This file could not be opened: %s"
-msgstr "此笔记本无法打开：%s"
+msgstr "该笔记本无法打开：%s"
 
 msgid "Save as..."
 msgstr "另存为…"
@@ -956,23 +954,23 @@ msgid "Copy path to clipboard"
 msgstr "复制路径到剪切板"
 
 msgid "Copy Link Address"
-msgstr "拷贝链接地址"
+msgstr "复制链接地址"
 
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "该附件没有下载或者没有解密"
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
-msgstr "不支持的链接或信息：%s"
+msgstr "不被支持的链接或信息：%s"
 
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
-msgstr "此笔记没有任何内容。点击 \"%s\" 切换至编辑器并编辑笔记。"
+msgstr "该笔记没有任何内容。点击 \"%s\" 切换到编辑器并编辑笔记。"
 
 msgid "Only one note can be printed or exported to PDF at a time."
-msgstr "一次只能输出一个笔记或导出为PDF文件。"
+msgstr "一次只能输出一个笔记或导出为 PDF 文件。"
 
 msgid "strong text"
 msgstr "加粗文本"
@@ -1021,7 +1019,7 @@ msgid "Horizontal Rule"
 msgstr "水平线"
 
 msgid "Click to stop external editing"
-msgstr "点击以停止外部编辑"
+msgstr "单击以取消外部编辑"
 
 msgid "Watching..."
 msgstr "正在监控变化..."
@@ -1034,7 +1032,7 @@ msgstr "笔记"
 
 #, javascript-format
 msgid "Creating new %s..."
-msgstr "创建新%s…"
+msgstr "新建 %s…"
 
 msgid "Refresh"
 msgstr "刷新"
@@ -1061,10 +1059,10 @@ msgid "Clipper Options"
 msgstr "网页剪辑选项"
 
 msgid "Remove this tag from all the notes?"
-msgstr "从所有笔记中删除此标签？"
+msgstr "从所有笔记中删除该标签？"
 
 msgid "Remove this search from the sidebar?"
-msgstr "从侧栏中删除此项搜索历史？"
+msgstr "从侧栏中删除该项搜索？"
 
 msgid "Delete"
 msgstr "删除"
@@ -1110,7 +1108,7 @@ msgid "OneDrive"
 msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
-msgstr "OneDrive 开发版（仅测试用）"
+msgstr "OneDrive 开发版（仅用于测试）"
 
 msgid "WebDAV"
 msgstr "WebDAV"
@@ -1121,12 +1119,12 @@ msgstr "未知日志级别：%s"
 
 #, javascript-format
 msgid "Unknown level ID: %s"
-msgstr "未知的级别 ID：%s"
+msgstr "未知级别的 ID：%s"
 
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
-msgstr "无法刷新令牌：缺失认证数据。重新开始同步可能会修复此错误。"
+msgstr "无法刷新 Token 令牌：缺失认证数据。重新开始同步可能会修复此错误。"
 
 msgid "Untitled"
 msgstr "无标题"
@@ -1141,8 +1139,7 @@ msgid ""
 msgstr ""
 "无法与 OneDrive 同步。\n"
 "\n"
-"此错误通常在使用 OneDrive 企业版时出现，很遗憾此软件并不支持 OneDrive 企业"
-"版。\n"
+"这种错误通常出现在使用 OneDrive 企业版时，很遗憾它不被支持。\n"
 "\n"
 "请考虑使用 OneDrive 个人版。"
 
@@ -1206,14 +1203,14 @@ msgid "Encrypted items cannot be modified"
 msgstr "无法修改已加密项目"
 
 msgid "Conflicts"
-msgstr "冲突文件"
+msgstr "冲突"
 
 msgid "Cannot move notebook to this location"
 msgstr "无法移动笔记本到该位置"
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr "笔记本无法被命名为 \"%s\"，此标题为保留标题。"
+msgstr "笔记本无法被命名为 \"%s\"，该标题为保留标题。"
 
 msgid "title"
 msgstr "标题"
@@ -1225,15 +1222,15 @@ msgid "created date"
 msgstr "创建日期"
 
 msgid "This note does not have geolocation information."
-msgstr "此笔记不包含地理定位信息。"
+msgstr "该笔记不包含地理定位信息。"
 
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
-msgstr "无法复制笔记至 \"%s\" 笔记本"
+msgstr "无法复制笔记到 \"%s\" 笔记本"
 
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
-msgstr "无法移动笔记至 \"%s\" 笔记本"
+msgstr "无法移动笔记到 \"%s\" 笔记本"
 
 msgid "Language"
 msgstr "语言"
@@ -1254,7 +1251,7 @@ msgid "Dark"
 msgstr "深色"
 
 msgid "Uncompleted to-dos on top"
-msgstr "未完成的待办事项在顶端"
+msgstr "将未完成的待办事项置顶"
 
 msgid "Show completed to-dos"
 msgstr "显示已完成的待办事项"
@@ -1266,25 +1263,25 @@ msgid "Reverse sort order"
 msgstr "反转排序顺序"
 
 msgid "Save geo-location with notes"
-msgstr "保存笔记时同时保存地理定位信息"
+msgstr "保存地理定位信息到笔记中"
 
 msgid "When creating a new to-do:"
-msgstr "创建新待办事项时："
+msgstr "当新建待办事项时："
 
 msgid "Focus title"
 msgstr "聚焦标题"
 
 msgid "Focus body"
-msgstr "聚焦内容"
+msgstr "聚焦正文"
 
 msgid "When creating a new note:"
-msgstr "创建新笔记时："
+msgstr "当新建笔记时："
 
 msgid "Show tray icon"
 msgstr "显示托盘图标"
 
 msgid "Note: Does not work in all desktop environments."
-msgstr "注意：在某些桌面环境下可能无法正常工作。"
+msgstr "注意：在所有桌面环境下无法正常工作。"
 
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
@@ -1295,7 +1292,7 @@ msgstr ""
 "可能的冲突"
 
 msgid "Start application minimised in the tray icon"
-msgstr "启动应用程序时在托盘中最小化"
+msgstr "应用程序启动时最小化到托盘"
 
 msgid "Global zoom percentage"
 msgstr "全局缩放比例"
@@ -1310,18 +1307,18 @@ msgid ""
 "This must be *monospace* font or it will not work properly. If the font is "
 "incorrect or empty, it will default to a generic monospace font."
 msgstr ""
-"必须是 *等宽* 字体，否则将无法正常工作。若无效或留空，此处将会设置成一款通用"
-"等宽字体。"
+"必须是 *等宽* 字体，否则将无法正常工作。若字体无效或留空，该处将会设置成一款"
+"通用的等宽字体。"
 
 msgid "Automatically update the application"
-msgstr "自动更新此程序"
+msgstr "自动更新程序"
 
 msgid "Get pre-releases when checking for updates"
 msgstr "检查更新时获取预发布版本。"
 
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
-msgstr "详细信息，请参阅预发布版本页面: %s"
+msgstr "预发布版本的详细信息，请参阅页面: %s"
 
 msgid "Synchronisation interval"
 msgstr "同步间隔"
@@ -1345,7 +1342,7 @@ msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"此文本编辑器命令（可能包括参数）将会被用于打开笔记。若未提供将尝试自动检测默"
+"该文本编辑器命令（可能包括参数）将会被用于打开笔记。若未提供将尝试自动检测默"
 "认编辑器。"
 
 msgid "Show advanced options"
@@ -1358,19 +1355,18 @@ msgid ""
 "The target to synchonise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"所同步的目标。每个同步目标可以拥有一些附加属性，命名为 `sync.NUM.NAME`（见下"
-"文）。"
+"所同步的目标。每个同步目标都可能有名为 `sync.NUM.NAME` 的附加参数（见下文）。"
 
 msgid "Directory to synchronise with (absolute path)"
-msgstr "同步至此文件目录（绝对路径）。"
+msgstr "待同步的目录（绝对路径）。"
 
 msgid ""
 "The path to synchronise with when file system synchronisation is enabled. "
 "See `sync.target`."
-msgstr "文件系统同步启用时的同步目录。见 `sync.target`。"
+msgstr "启用文件系统同步时要同步的路径。见 `sync.target`。"
 
 msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV 链接"
+msgstr "Nextcloud WebDAV URL"
 
 #, javascript-format
 msgid ""
@@ -1378,8 +1374,8 @@ msgid ""
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
 msgstr ""
-"注意：如果您更改此位置，请确保在同步之前将所有内容复制到该位置，否则将删除所"
-"有文件！ 有关详细信息，请参阅常见问题解答（FAQ）：%s"
+"注意：如果您更改该位置，请确保在同步之前将所有内容复制到该位置，否则将删除所"
+"有文件！ 更多详细信息请参阅常见问题解答（FAQ）：%s"
 
 msgid "Nextcloud username"
 msgstr "Nextcloud 用户名"
@@ -1388,7 +1384,7 @@ msgid "Nextcloud password"
 msgstr "Nextcloud 密码"
 
 msgid "WebDAV URL"
-msgstr "WebDAV 链接"
+msgstr "WebDAV URL"
 
 msgid "WebDAV username"
 msgstr "WebDAV 用户名"
@@ -1406,38 +1402,34 @@ msgid ""
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "以逗号分隔的路径列表，可以是包含证书的目录，也可以是单独的证书路径。 例如：/"
-"my/cert_dir,/other/custom.pem。 请注意，如果更改 TLS 设置，则必须先保存更改，"
-"然后再点击『检查同步配置』。"
+"my/cert_dir,/other/custom.pem 。 请注意，如果更改 TLS 设置，则必须先保存更"
+"改，之后再点击“检查同步配置”。"
 
 msgid "Ignore TLS certificate errors"
-msgstr "忽略 TLS 证书的错误"
+msgstr "忽略 TLS 证书错误"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "无效设置数值：\"%s\"。可用值为：%s。"
+msgstr "无效的选项值：\"%s\"。可用值有：%s。"
 
-#, fuzzy
 msgid "General"
 msgstr "通用选项"
 
-#, fuzzy
 msgid "Synchronisation"
-msgstr "同步状态"
+msgstr "同步"
 
 msgid "Appearance"
-msgstr ""
+msgstr "外观"
 
-#, fuzzy
 msgid "Note"
-msgstr "笔记本"
+msgstr "笔记"
 
-#, fuzzy
 msgid "Application"
-msgstr "位置"
+msgstr "应用程序"
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr "标签“%s”已经存在。请选择一个不一样的名字。"
+msgstr "标签 \"%s\" 已存在。请选择一个不同的名称。"
 
 msgid "Joplin Export File"
 msgstr "Joplin 导出文件"
@@ -1459,7 +1451,7 @@ msgstr "文件目录"
 
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
-msgstr "无法加载 \"%s\" 模块以读取 \"%s\" 格式"
+msgstr "无法加载 \"%s\" 模块用于读取 \"%s\" 格式"
 
 #, javascript-format
 msgid "Please specify import format for %s"
@@ -1469,7 +1461,7 @@ msgstr "请指定 %s 的导入格式"
 msgid ""
 "This item is currently encrypted: %s \"%s\". Please wait for all items to be "
 "decrypted and try again."
-msgstr "此项目当前为加密状态：%s \"%s\"。请等待所有项目解密后再重试。"
+msgstr "该项目当前已加密：%s \"%s\"。请等待所有项目解密后再重试。"
 
 msgid "There is no data to export."
 msgstr "没有可导出的数据。"
@@ -1489,8 +1481,8 @@ msgid ""
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
-"这些项目将保留于设备中，但不会上传至同步目标。若需查找这些项目，请搜索标题或"
-"ID（显示于上方括号中）。"
+"这些项目将保留于设备中，但不会上传到同步目标。若需查找这些项目，请搜索标题或"
+"ID（显示在上方括号中）。"
 
 msgid "Sync status (synced items / total items)"
 msgstr "同步状态（已同步项目/项目总数）"
@@ -1532,7 +1524,7 @@ msgid "Your permission to use your camera is required."
 msgstr "使用摄像头的权限是必须的"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr "当前没有任何笔记。点击(+)按钮创建。"
+msgstr "当前没有任何笔记。点击 (+) 按钮创建。"
 
 msgid "Delete these notes?"
 msgstr "是否删除这些笔记？"
@@ -1550,11 +1542,11 @@ msgid "Configuration"
 msgstr "配置"
 
 msgid "Move to notebook..."
-msgstr "移动至笔记本..."
+msgstr "移动到笔记本..."
 
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr "移动%d条笔记至笔记本\"%s\"？"
+msgstr "是否移动%d条笔记到 \"%s\" 笔记本？"
 
 msgid "Press to set the decryption password."
 msgstr "按键将设置解密密码。"
@@ -1584,8 +1576,8 @@ msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
-"发生错误。请检查 URL，用户名，密码等等是否正确并且确保同步目的地可被访问。报"
-"告的错误如下："
+"发生错误。请检查 URL 、用户名、密码等是否正确，同步目标是否可访问。报告的错误"
+"如下："
 
 msgid "The application has been authorised!"
 msgstr "此程序已被成功授权。"
@@ -1604,12 +1596,12 @@ msgstr ""
 "\n"
 "请重新尝试"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypted items: %s / %s"
-msgstr "解密项目：%d/%d"
+msgstr "解密项目：%s / %s"
 
 msgid "New tags:"
-msgstr "新标签："
+msgstr "新建标签："
 
 msgid "Type new tags or select from list"
 msgstr "输入新的标签或从列表中选择"
@@ -1635,23 +1627,23 @@ msgstr "- 定位：允许将地理位置信息附加到一条笔记中。"
 msgid "Joplin website"
 msgstr "Joplin 官网"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Joplin v%s"
-msgstr "Joplin 官网"
+msgstr "Joplin v%s"
 
 #, javascript-format
 msgid "Database v%s"
-msgstr ""
+msgstr "数据库 v%s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "FTS enabled: %d"
-msgstr "将删除：%d条"
+msgstr "FTS 已开启：%d"
 
 msgid "Login with Dropbox"
 msgstr "通过 Dropbox 登录"
 
 msgid "Enter code here"
-msgstr ""
+msgstr "在此输入代码"
 
 #, javascript-format
 msgid "Master Key %s"
@@ -1672,7 +1664,7 @@ msgstr "启用"
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"
-msgstr "此笔记本无法保存：%s"
+msgstr "该笔记本无法保存：%s"
 
 msgid "Edit notebook"
 msgstr "编辑笔记本"
@@ -1684,7 +1676,7 @@ msgid "Errors only"
 msgstr "仅显示错误"
 
 msgid "This note has been modified:"
-msgstr "此笔记已被修改："
+msgstr "该笔记已被修改："
 
 msgid "Save changes"
 msgstr "保存更改"
@@ -1694,7 +1686,7 @@ msgstr "放弃更改"
 
 #, javascript-format
 msgid "No item with ID %s"
-msgstr "没有 ID %s 项"
+msgstr "没有 ID 为 %s 的项"
 
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
@@ -1717,10 +1709,10 @@ msgid "Share"
 msgstr "分享"
 
 msgid "Convert to note"
-msgstr "转换至笔记"
+msgstr "转换到笔记"
 
 msgid "Convert to todo"
-msgstr "转换至待办事项"
+msgstr "转换到待办事项"
 
 msgid "Copy Markdown link"
 msgstr "复制 Markdown 链接"
@@ -1749,10 +1741,10 @@ msgstr "搜索"
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
-msgstr "点击(+)按钮创建新笔记或笔记本。点击侧边选单来访问现有的笔记本。"
+msgstr "单击 (+) 按钮新建笔记或笔记本。单击切换侧边栏来访问现有的笔记本。"
 
 msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr "您目前未有笔记本。点击(+)按钮创建。"
+msgstr "您目前未有笔记本。点击 (+) 按钮创建。"
 
 msgid "Welcome"
 msgstr "欢迎"
