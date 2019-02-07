@@ -28,6 +28,7 @@ const itemMetadata_ = {
 	'AllClients.png': { id: '5c05172554194f95b60971f6d577cc1a' },
 	'SubNotebooks.png': { id: '3a851ab0c0e849b7bc9e8cd5c4feb34a' },
 	'folder_Welcome': { id: '9bb5d498aba74cc6a047cfdc841e82a1' },
+	'WebClipper.png': { id: '30cf9214f5054c4da3b23eed7211a6e0' },
 };
 
 function itemMetadata(path) {
