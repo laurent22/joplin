@@ -525,9 +525,7 @@ class MdToHtml {
 			b,strong{font-weight:bolder}small{font-size:80%}img{border-style:none}
 		`;
 
-		// TODO: Find good font for Windows and Linux
-
-		const fontFamily = "'Avenir', sans-serif";
+		const fontFamily = "'Avenir', 'Arial', sans-serif";
 
 		const css = `
 			body {
