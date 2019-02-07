@@ -85,6 +85,7 @@ const lightStyle = {
 	htmlBackgroundColor: 'white',
 	htmlDividerColor: 'rgb(230,230,230)',
 	htmlLinkColor: 'rgb(80,130,190)',
+	htmlTableBackgroundColor: 'rgb(247, 247, 247)',
 	htmlCodeBackgroundColor: 'rgb(243, 243, 243)',
 	htmlCodeBorderColor: 'rgb(220, 220, 220)',
 	htmlCodeColor: 'rgb(0,0,0)',
@@ -121,6 +122,7 @@ const darkStyle = {
 	htmlDividerColor: '#3D444E',
 	htmlCodeColor: '#ffffff',
 	htmlLinkColor: 'rgb(166,166,255)',
+	htmlTableBackgroundColor: 'rgb(40, 41, 42)',
 	htmlCodeBackgroundColor: 'rgb(47, 48, 49)',
 	htmlCodeBorderColor: 'rgb(70, 70, 70)',
 
