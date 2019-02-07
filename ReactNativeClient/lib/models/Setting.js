@@ -165,6 +165,7 @@ class Setting extends BaseModel {
 			'resourceService.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
 			'searchEngine.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
 			'searchEngine.initialIndexingDone': { value: false, type: Setting.TYPE_BOOL, public: false },
+			'welcome.wasBuilt': { value: false, type: Setting.TYPE_BOOL, public: false },
 		};
 
 		return this.metadata_;

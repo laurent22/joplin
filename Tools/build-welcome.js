@@ -90,7 +90,7 @@ async function main() {
 
 	const rootFolder = {
 		id: itemIdFromPath('folder_Welcome'),
-		title: 'Welcome',
+		title: 'Welcome!',
 	};
 	
 	for (let i = 0; i < filenames.length; i++) {

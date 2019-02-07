@@ -66,7 +66,7 @@ module.exports = {
     "folders": [
         {
             "id": "9bb5d498aba74cc6a047cfdc841e82a1",
-            "title": "Welcome"
+            "title": "Welcome!"
         }
     ]
 }

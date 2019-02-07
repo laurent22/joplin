@@ -565,9 +565,10 @@ class BaseApplication {
 		if (!currentFolder) currentFolder = await Folder.defaultFolder();
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
 
-		await WelcomeUtils.createWelcomeItems();
-
-		// await this.testing();process.exit();
+		if (!Setting.value('welcome.wasBuilt')) {
+			await WelcomeUtils.createWelcomeItems();
+			Setting.setValue('welcome.wasBuilt', true);
+		}
 
 		return argv;
 	}
