@@ -706,6 +706,10 @@ class NoteTextComponent extends React.Component {
 					type: "FOLDER_AND_NOTE_SELECT",
 					folderId: item.parent_id,
 					noteId: item.id,
+					historyNoteAction: {
+						id: this.state.note.id,
+						parent_id: this.state.note.parent_id,
+					},
 				});
 			} else {
 				throw new Error('Unsupported item type: ' + item.type_);
@@ -933,7 +937,6 @@ class NoteTextComponent extends React.Component {
 
 		let bodyToRender = body;
 		if (bodyToRender === null) bodyToRender = this.state.note && this.state.note.body ? this.state.note.body : '';
-		bodyToRender = '<style>' + this.props.customCss + '</style>\n' + bodyToRender;
 		let bodyHtml = '';
 
 		const visiblePanes = this.props.visiblePanes || ['editor', 'viewer'];
@@ -943,6 +946,7 @@ class NoteTextComponent extends React.Component {
 			bodyToRender = '*' + _('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout')) + '*';
 		}
 
+		bodyToRender = '<style>' + this.props.customCss + '</style>\n' + bodyToRender;
 		bodyHtml = this.mdToHtml().render(bodyToRender, theme, mdOptions);
 
 		this.setState({ bodyHtml: bodyHtml });
@@ -1391,6 +1395,25 @@ class NoteTextComponent extends React.Component {
 				title: _('In: %s', this.state.folder.title),
 				iconName: 'fa-folder-o',
 				enabled: false,
+			});
+		}
+
+		if (this.props.historyNotes.length) {
+			toolbarItems.push({
+				tooltip: _('Back'),
+				iconName: 'fa-arrow-left',
+				onClick: () => {
+					if (!this.props.historyNotes.length) return;
+
+					const lastItem = this.props.historyNotes[this.props.historyNotes.length - 1];
+
+					this.props.dispatch({
+						type: "FOLDER_AND_NOTE_SELECT",
+						folderId: lastItem.parent_id,
+						noteId: lastItem.id,
+						historyNoteAction: 'pop',
+					});					
+				},
 			});
 		}
 
@@ -1874,6 +1897,7 @@ const mapStateToProps = (state) => {
 		watchedNoteFiles: state.watchedNoteFiles,
 		customCss: state.customCss,
 		lastEditorScrollPercents: state.lastEditorScrollPercents,
+		historyNotes: state.historyNotes,
 	};
 };
 

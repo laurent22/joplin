@@ -47,6 +47,7 @@ const defaultState = {
 	resourceFetcher: {
 		toFetchCount: 0,
 	},
+	historyNotes: [],
 };
 
 const stateUtils = {};
@@ -194,7 +195,10 @@ function defaultNotesParentType(state, exclusion) {
 	return newNotesParentType;
 }
 
-function changeSelectedFolder(state, action) {
+function changeSelectedFolder(state, action, options = null) {
+	if (!options) options = {};
+	if (!('clearNoteHistory' in options)) options.clearNoteHistory = true;
+
 	newState = Object.assign({}, state);
 	newState.selectedFolderId = 'folderId' in action ? action.folderId : action.id;
 	if (!newState.selectedFolderId) {
@@ -202,6 +206,11 @@ function changeSelectedFolder(state, action) {
 	} else {
 		newState.notesParentType = 'Folder';
 	}
+
+	if (newState.selectedFolderId === state.selectedFolderId && newState.notesParentType === state.notesParentType) return state;
+
+	if (options.clearNoteHistory) newState.historyNotes = [];
+
 	return newState;
 }
 
@@ -217,7 +226,10 @@ function recordLastSelectedNoteIds(state, noteIds) {
 	});
 }
 
-function changeSelectedNotes(state, action) {
+function changeSelectedNotes(state, action, options = null) {
+	if (!options) options = {};
+	if (!('clearNoteHistory' in options)) options.clearNoteHistory = true;
+
 	let noteIds = [];
 	if (action.id) noteIds = [action.id];
 	if (action.ids) noteIds = action.ids;
@@ -228,6 +240,7 @@ function changeSelectedNotes(state, action) {
 	let newState = Object.assign({}, state);
 
 	if (action.type === 'NOTE_SELECT') {
+		if (JSON.stringify(newState.selectedNoteIds) === JSON.stringify(noteIds)) return state;
 		newState.selectedNoteIds = noteIds;
 		newState.newNote = null;
 	} else if (action.type === 'NOTE_SELECT_ADD') {
@@ -261,6 +274,8 @@ function changeSelectedNotes(state, action) {
 	}
 
 	newState = recordLastSelectedNoteIds(newState, newState.selectedNoteIds);
+
+	if (options.clearNoteHistory) newState.historyNotes = [];
 
 	return newState;	
 }
@@ -330,9 +345,22 @@ const reducer = (state = defaultState, action) => {
 
 			case 'FOLDER_AND_NOTE_SELECT':
 
-				newState = changeSelectedFolder(state, action);
+				newState = changeSelectedFolder(state, action, { clearNoteHistory: false });
 				const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT'});
-				newState = changeSelectedNotes(newState, noteSelectAction);
+				newState = changeSelectedNotes(newState, noteSelectAction, { clearNoteHistory: false });
+
+				if (action.historyNoteAction) {
+					const historyNotes = newState.historyNotes.slice();
+					if (typeof action.historyNoteAction === 'object') {	
+						historyNotes.push(Object.assign({}, action.historyNoteAction));
+					} else if (action.historyNoteAction === 'pop') {
+						historyNotes.pop();
+					}
+					newState.historyNotes = historyNotes;
+				} else {
+					newState.historyNotes = [];
+				}
+				
 				break;
 
 			case 'SETTING_UPDATE_ALL':
