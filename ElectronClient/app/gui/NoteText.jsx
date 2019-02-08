@@ -504,11 +504,10 @@ class NoteTextComponent extends React.Component {
 				this.editor_.editor.clearSelection();
 				this.editor_.editor.moveCursorTo(0,0);
 
-				if (scrollPercent) {
-					setTimeout(() => {
-						this.setEditorPercentScroll(scrollPercent);
-					}, 10);
-				}
+				setTimeout(() => {
+					this.setEditorPercentScroll(scrollPercent ? scrollPercent : 0);
+					this.setViewerPercentScroll(scrollPercent ? scrollPercent : 0);
+				}, 10);
 			}
 		}
 
@@ -742,11 +741,31 @@ class NoteTextComponent extends React.Component {
 	}
 
 	setEditorPercentScroll(p) {
+		const noteId = this.props.noteId;
+
+		if (noteId) {
+			this.props.dispatch({
+				type: 'EDITOR_SCROLL_PERCENT_SET',
+				noteId: noteId,
+				percent: p,
+			});
+		}
+
 		this.editorSetScrollTop(p * this.editorMaxScroll());
 	}
 
 	setViewerPercentScroll(p) {
-		this.webview_.send('setPercentScroll', p);
+		const noteId = this.props.noteId;
+
+		if (noteId) {
+			this.props.dispatch({
+				type: 'EDITOR_SCROLL_PERCENT_SET',
+				noteId: noteId,
+				percent: p,
+			});
+		}
+
+		if (this.webview_) this.webview_.send('setPercentScroll', p);
 	}
 
 	editor_scroll() {
@@ -757,16 +776,6 @@ class NoteTextComponent extends React.Component {
 
 		const m = this.editorMaxScroll();
 		const percent = m ? this.editorScrollTop() / m : 0;
-
-		const noteId = this.props.noteId;
-
-		if (noteId) {
-			this.props.dispatch({
-				type: 'EDITOR_SCROLL_PERCENT_SET',
-				noteId: noteId,
-				percent: percent,
-			});
-		}
 
 		this.setViewerPercentScroll(percent);
 	}
@@ -1628,7 +1637,7 @@ class NoteTextComponent extends React.Component {
 
 		if (this.props.selectedNoteIds.length > 1) {
 			return this.renderMultiNotes(rootStyle);
-		} else if (!note || !!note.encryption_applied) {
+		} else if (!note || !!note.encryption_applied || (note && !this.props.newNote && this.props.noteId && note.id !== this.props.noteId)) { // note.id !== props.noteId is when the note has not been loaded yet, and the previous one is still in the state
 			return this.renderNoNotes(rootStyle);
 		}
 
