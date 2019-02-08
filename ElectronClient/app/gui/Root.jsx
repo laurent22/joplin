@@ -15,6 +15,7 @@ const { ConfigScreen } = require('./ConfigScreen.min.js');
 const { EncryptionConfigScreen } = require('./EncryptionConfigScreen.min.js');
 const { ClipperConfigScreen } = require('./ClipperConfigScreen.min.js');
 const { Navigator } = require('./Navigator.min.js');
+const WelcomeUtils = require('lib/WelcomeUtils');
 
 const { app } = require('../app');
 
@@ -69,6 +70,16 @@ class RootComponent extends React.Component {
 			this.props.dispatch({
 				type: 'APP_STATE_SET',
 				state: 'ready',
+			});
+		}
+
+		if (!Setting.value('welcome.wasBuilt')) {
+			const result = await WelcomeUtils.createWelcomeItems();
+			Setting.setValue('welcome.wasBuilt', true);
+
+			this.props.dispatch({
+				type: 'FOLDER_SELECT',
+				id: result.defaultFolderId,
 			});
 		}
 	}

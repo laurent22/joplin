@@ -26,6 +26,34 @@ Joplin supports advanced search queries, which are fully documented on the offic
 
 An alarm can be associated with any to-do. It will be triggered at the given time by displaying a notification. To use this feature, see the documentation: https://joplin.cozic.net#notifications
 
+## Markdown advanced tips
+
+Joplin uses and renders [Github-flavoured Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) with a few variations and additions.
+
+For example, tables are supported:
+
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+| zebra stripes | are neat      |    $1 |
+
+You can also create lists of checkboxes. These checkboxes can be ticked directly in the viewer, or by adding an "x" inside:
+
+- [ ] Milk
+- [ ] Eggs
+- [x] Beer
+
+Math expressions can be added using the [KaTeX notation](https://khan.github.io/KaTeX/):
+
+$$
+f(x) = \int_{-\infty}^\infty
+    \hat f(\xi)\,e^{2 \pi i \xi x}
+    \,d\xi
+$$
+
+Various other tricks are possible, such as using HTML, or customising the CSS. See the Markdown documentation for more info - https://joplin.cozic.net#markdown
+
 ## Community and further help
 
 - For general discussion about Joplin, user support, software development questions, and to discuss new features, go to the [Joplin Forum](https://discourse.joplin.cozic.net/). It is possible to login with your GitHub account.

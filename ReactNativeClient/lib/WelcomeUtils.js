@@ -14,6 +14,10 @@ class WelcomeUtils {
 	static async createWelcomeItems() {
 		const overwriteExisting = Setting.value('env') === 'dev';
 
+		const output = {
+			defaultFolderId: null,
+		};
+
 		const noteAssets = welcomeAssets.notes;
 		const folderAssets = welcomeAssets.folders;
 		const tempDir = Setting.value('resourceDir');
@@ -21,10 +25,13 @@ class WelcomeUtils {
 		// TODO: Update mobile root.js
 		// TODO: Update CLI
 		// TODO: Test CLI
+		// TODO: Use less tags?
 
 		for (let i = 0; i < folderAssets.length; i++) {
 			const folderAsset = folderAssets[i];
 			const folderId = folderAsset.id;
+
+			if (!output.defaultFolderId) output.defaultFolderId = folderId;
 
 			let existingFolder = await Folder.load(folderId);
 
@@ -93,6 +100,8 @@ class WelcomeUtils {
 
 			if (noteAsset.tags) await Tag.setNoteTagsByTitles(noteId, noteAsset.tags);
 		}
+
+		return output;
 	}
 
 }
