@@ -19,6 +19,8 @@ class WelcomeUtils {
 		const tempDir = Setting.value('resourceDir');
 
 		// TODO: Update mobile root.js
+		// TODO: Update CLI
+		// TODO: Test CLI
 
 		for (let i = 0; i < folderAssets.length; i++) {
 			const folderAsset = folderAssets[i];

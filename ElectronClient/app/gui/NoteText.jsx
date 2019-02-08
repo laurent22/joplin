@@ -36,6 +36,7 @@ const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { toSystemSlashes, safeFilename } = require('lib/path-utils');
 const { clipboard } = require('electron');
 const SearchEngine = require('lib/services/SearchEngine');
+const NoteTextViewer = require('./NoteTextViewer.min');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -78,6 +79,8 @@ class NoteTextComponent extends React.Component {
 			showLocalSearch: false,
 			localSearch: Object.assign({}, this.localSearchDefaultState), 
 		};
+
+		this.webviewRef_ = React.createRef();
 
 		this.lastLoadedNoteId_ = null;
 
@@ -260,6 +263,8 @@ class NoteTextComponent extends React.Component {
 		}
 
 		this.titleField_keyDown = this.titleField_keyDown.bind(this);
+		this.webview_ipcMessage = this.webview_ipcMessage.bind(this);
+		this.webview_domReady = this.webview_domReady.bind(this);
 	}
 
 	// Note:
@@ -460,7 +465,7 @@ class NoteTextComponent extends React.Component {
 		// If we are loading nothing (noteId == null), make sure to
 		// set webviewReady to false too because the webview component
 		// is going to be removed in render().
-		const webviewReady = this.webview_ && this.state.webviewReady && (noteId || props.newNote);
+		const webviewReady = !!this.webviewRef_.current && this.state.webviewReady && (!!noteId || !!props.newNote);
 
 		// Scroll back to top when loading new note
 		if (loadingNewNote) {
@@ -765,7 +770,7 @@ class NoteTextComponent extends React.Component {
 			});
 		}
 
-		if (this.webview_) this.webview_.send('setPercentScroll', p);
+		if (this.webviewRef_.current) this.webviewRef_.current.wrappedInstance.send('setPercentScroll', p);
 	}
 
 	editor_scroll() {
@@ -781,26 +786,13 @@ class NoteTextComponent extends React.Component {
 	}
 
 	webview_domReady() {
-		if (!this.webview_) return;
+		if (!this.webviewRef_.current) return;
 
 		this.setState({
 			webviewReady: true,
 		});
 
 		// if (Setting.value('env') === 'dev') this.webview_.openDevTools();
-	}
-
-	webview_ref(element) {
-		if (this.webview_) {
-			if (this.webview_ === element) return;
-			this.destroyWebview();
-		}
-
-		if (!element) {
-			this.destroyWebview();
-		} else {
-			this.initWebview(element);
-		}
 	}
 
 	editor_ref(element) {
@@ -873,35 +865,6 @@ class NoteTextComponent extends React.Component {
 				return this.$getIndent(line);
 			};
 		}
-	}
-
-	initWebview(wv) {
-		if (!this.webviewListeners_) {
-			this.webviewListeners_ = {
-				'dom-ready': this.webview_domReady.bind(this),
-				'ipc-message': this.webview_ipcMessage.bind(this),
-			};
-		}
-
-		for (let n in this.webviewListeners_) {
-			if (!this.webviewListeners_.hasOwnProperty(n)) continue;
-			const fn = this.webviewListeners_[n];
-			wv.addEventListener(n, fn);
-		}
-
-		this.webview_ = wv;
-	}
-
-	destroyWebview() {
-		if (!this.webview_) return;
-
-		for (let n in this.webviewListeners_) {
-			if (!this.webviewListeners_.hasOwnProperty(n)) continue;
-			const fn = this.webviewListeners_[n];
-			this.webview_.removeEventListener(n, fn);
-		}
-
-		this.webview_ = null;
 	}
 
 	aceEditor_change(body) {
@@ -1091,7 +1054,7 @@ class NoteTextComponent extends React.Component {
 	}
 
 	printTo_(target, options) {
-		if (this.props.selectedNoteIds.length !== 1 || !this.webview_) {
+		if (this.props.selectedNoteIds.length !== 1 || !this.webviewRef_.current) {
 			throw new Error(_('Only one note can be printed or exported to PDF at a time.'));
 		}
 
@@ -1113,7 +1076,7 @@ class NoteTextComponent extends React.Component {
 
 		setTimeout(() => {
 			if (target === 'pdf') {
-				this.webview_.printToPDF({}, (error, data) => {
+				this.webviewRef_.current.wrappedInstance.printToPDF({}, (error, data) => {
 					restoreSettings();
 
 					if (error) {
@@ -1123,7 +1086,7 @@ class NoteTextComponent extends React.Component {
 					}
 				});
 			} else if (target === 'printer') {
-				this.webview_.print();
+				this.webviewRef_.current.wrappedInstance.print();
 				restoreSettings();
 			}
 		}, 100);		
@@ -1637,7 +1600,7 @@ class NoteTextComponent extends React.Component {
 
 		if (this.props.selectedNoteIds.length > 1) {
 			return this.renderMultiNotes(rootStyle);
-		} else if (!note || !!note.encryption_applied || (note && !this.props.newNote && this.props.noteId && note.id !== this.props.noteId)) { // note.id !== props.noteId is when the note has not been loaded yet, and the previous one is still in the state
+		} else if (!note || !!note.encryption_applied) { //|| (note && !this.props.newNote && this.props.noteId && note.id !== this.props.noteId)) { // note.id !== props.noteId is when the note has not been loaded yet, and the previous one is still in the state
 			return this.renderNoNotes(rootStyle);
 		}
 
@@ -1741,7 +1704,7 @@ class NoteTextComponent extends React.Component {
 			const htmlHasChanged = this.lastSetHtml_ !== html;
 			 if (htmlHasChanged) {
 				let options = {codeTheme: theme.codeThemeCss};
-				this.webview_.send('setHtml', html, options);
+				this.webviewRef_.current.wrappedInstance.send('setHtml', html, options);
 				this.lastSetHtml_ = html;
 			}
 
@@ -1767,7 +1730,7 @@ class NoteTextComponent extends React.Component {
 			if (htmlHasChanged || keywordHash !== this.lastSetMarkers_ || !ObjectUtils.fieldsEqual(this.lastSetMarkersOptions_, markerOptions)) {
 				this.lastSetMarkers_ = keywordHash;
 				this.lastSetMarkersOptions_ = Object.assign({}, markerOptions);
-				this.webview_.send('setMarkers', keywords, markerOptions);
+				this.webviewRef_.current.wrappedInstance.send('setMarkers', keywords, markerOptions);
 			}
 		}
 
@@ -1799,31 +1762,12 @@ class NoteTextComponent extends React.Component {
 
 		const titleBarDate = <span style={Object.assign({}, theme.textStyle, {color: theme.colorFaded})}>{time.formatMsToLocal(note.user_updated_time)}</span>
 
-		const viewer =  <webview
-			style={viewerStyle}
-			preload="gui/note-viewer/preload.js"
-			src="gui/note-viewer/index.html"
-			webpreferences="contextIsolation"
-			ref={(elem) => { this.webview_ref(elem); } }
+		const viewer = <NoteTextViewer
+			ref={this.webviewRef_}
+			viewerStyle={viewerStyle}
+			onDomReady={this.webview_domReady}
+			onIpcMessage={this.webview_ipcMessage}
 		/>
-
-		// const markers = [{
-		// 	startRow: 2,
-		// 	startCol: 3,
-		// 	endRow: 2,
-		// 	endCol: 6,
-		// 	type: 'text',
-		// 	className: 'test-marker'
-		// }];
-
-		// markers={markers}
-		// editorProps={{$useWorker: false}}
-
-		// #note-editor .test-marker {
-		// 	background-color: red;
-		// 	color: yellow;
-		// 	position: absolute;
-		// }
 
 		const editorRootStyle = Object.assign({}, editorStyle);
 		delete editorRootStyle.width;
@@ -1846,6 +1790,7 @@ class NoteTextComponent extends React.Component {
 			showPrintMargin={false}
 			onSelectionChange={this.aceEditor_selectionChange}
 			onFocus={this.aceEditor_focus}
+			readOnly={visiblePanes.indexOf('editor') < 0}
 
 			// Disable warning: "Automatically scrolling cursor into view after
 			// selection change this will be disabled in the next version set
