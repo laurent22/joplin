@@ -962,6 +962,8 @@ class NoteTextComponent extends React.Component {
 				fn = this.commandTextBold;
 			} else if (command.name === 'textItalic') {
 				fn = this.commandTextItalic;
+			} else if (command.name === 'textLink') {
+				fn = this.commandTextLink;
 			} else if (command.name === 'insertDateTime') {
 				fn = this.commandDateTime;
 			} else if (command.name === 'commandStartExternalEditing') {
