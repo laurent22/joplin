@@ -22,6 +22,7 @@ const os = require('os');
 const fs = require('fs-extra');
 const { cliUtils } = require('./cli-utils.js');
 const Cache = require('lib/Cache');
+const WelcomeUtils = require('lib/WelcomeUtils');
 
 class Application extends BaseApplication {
 
@@ -376,6 +377,8 @@ class Application extends BaseApplication {
 			return this.stdout(object);
 		});
 
+		await WelcomeUtils.install(this.dispatch.bind(this));
+
 		// If we have some arguments left at this point, it's a command
 		// so execute it.
 		if (argv.length) {
@@ -393,6 +396,12 @@ class Application extends BaseApplication {
 				}
 				process.exit(1);
 			}
+
+			await Setting.saveAll();
+
+			// Need to call exit() explicitely, otherwise Node wait for any timeout to complete
+			// https://stackoverflow.com/questions/18050095
+			process.exit(0);
 		} else { // Otherwise open the GUI
 			this.initRedux();
 
