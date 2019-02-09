@@ -22,11 +22,6 @@ class WelcomeUtils {
 		const folderAssets = welcomeAssets.folders;
 		const tempDir = Setting.value('resourceDir');
 
-		// TODO: Update mobile root.js
-		// TODO: Update CLI
-		// TODO: Test CLI
-		// TODO: Use less tags?
-
 		for (let i = 0; i < folderAssets.length; i++) {
 			const folderAsset = folderAssets[i];
 			const folderId = folderAsset.id;
@@ -102,6 +97,20 @@ class WelcomeUtils {
 		}
 
 		return output;
+	}
+
+	static async install(dispatch) {
+		if (!Setting.value('welcome.wasBuilt')) {
+			const result = await WelcomeUtils.createWelcomeItems();
+			Setting.setValue('welcome.wasBuilt', true);
+
+			dispatch({
+				type: 'FOLDER_SELECT',
+				id: result.defaultFolderId,
+			});
+
+			Setting.setValue('activeFolderId', result.defaultFolderId);
+		}
 	}
 
 }

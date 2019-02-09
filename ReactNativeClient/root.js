@@ -517,7 +517,7 @@ async function initialize(dispatch) {
 		DecryptionWorker.instance().scheduleStart();
 	});
 
-	await WelcomeUtils.createWelcomeItems();
+	await WelcomeUtils.install(dispatch);
 
 	reg.logger().info('Application initialized');
 }

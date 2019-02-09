@@ -152,7 +152,7 @@ class SearchEngine {
 		this.logger().info('SearchEngine: Updated FTS table in ' + (Date.now() - startTime) + 'ms');
 
 		this.isIndexing_ = false;
-}
+	}
 
 	async countRows() {
 		const sql = 'SELECT count(*) as total FROM notes_fts'

@@ -73,15 +73,7 @@ class RootComponent extends React.Component {
 			});
 		}
 
-		if (!Setting.value('welcome.wasBuilt')) {
-			const result = await WelcomeUtils.createWelcomeItems();
-			Setting.setValue('welcome.wasBuilt', true);
-
-			this.props.dispatch({
-				type: 'FOLDER_SELECT',
-				id: result.defaultFolderId,
-			});
-		}
+		await WelcomeUtils.install(this.props.dispatch);
 	}
 
 	render() {
