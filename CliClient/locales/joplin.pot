@@ -576,6 +576,9 @@ msgstr ""
 msgid "Italic"
 msgstr ""
 
+msgid "Link"
+msgstr ""
+
 msgid "Insert Date Time"
 msgstr ""
 

@@ -656,6 +656,9 @@ msgstr "Negrita"
 msgid "Italic"
 msgstr "Cursiva"
 
+msgid "Link"
+msgstr ""
+
 msgid "Insert Date Time"
 msgstr "Introduce fecha"
 

@@ -619,6 +619,9 @@ msgstr "粗體"
 msgid "Italic"
 msgstr "斜體"
 
+msgid "Link"
+msgstr ""
+
 msgid "Insert Date Time"
 msgstr "插入日期時間"
 

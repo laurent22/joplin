@@ -656,6 +656,9 @@ msgstr "Vetgedrukt"
 msgid "Italic"
 msgstr "Cursief"
 
+msgid "Link"
+msgstr ""
+
 msgid "Insert Date Time"
 msgstr "Datum en tijd invoegen"
 

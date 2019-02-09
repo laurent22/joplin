@@ -659,6 +659,9 @@ msgstr "Grasseto"
 msgid "Italic"
 msgstr "Corsivo"
 
+msgid "Link"
+msgstr ""
+
 msgid "Insert Date Time"
 msgstr "Inserisci data e ora"
 

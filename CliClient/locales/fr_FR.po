@@ -13,7 +13,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.2.1\n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Pour supprimer une vignette, enlever là des notes associées."
@@ -584,18 +584,16 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exporter vers \"%s\" au format \"%s\". Veuillez patienter..."
 
 msgid "Sidebar"
-msgstr ""
+msgstr "Barre latérale"
 
 msgid "Note list"
-msgstr ""
+msgstr "Liste de notes"
 
-#, fuzzy
 msgid "Note title"
-msgstr "Titre du carnet :"
+msgstr "Titre de la note"
 
-#, fuzzy
 msgid "Note body"
-msgstr "Carnets"
+msgstr "Corps de la note"
 
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
@@ -653,6 +651,9 @@ msgstr "Gras"
 msgid "Italic"
 msgstr "Italique"
 
+msgid "Link"
+msgstr "Lien"
+
 msgid "Insert Date Time"
 msgstr "Insérer la date et l'heure"
 
@@ -674,9 +675,8 @@ msgstr "Basculer barre latérale"
 msgid "Toggle editor layout"
 msgstr "Basculer l'agencement de l'éditeur"
 
-#, fuzzy
 msgid "Focus"
-msgstr "Curseur sur corps du message"
+msgstr "Naviguer"
 
 msgid "Tools"
 msgstr "Outils"
@@ -824,7 +824,7 @@ msgid "Notes and settings are stored in: %s"
 msgstr "Les notes et paramètres se trouve dans : %s"
 
 msgid "Browse..."
-msgstr ""
+msgstr "Parcourir…"
 
 msgid "Check synchronisation configuration"
 msgstr "Vérifier config synchronisation"
@@ -924,9 +924,8 @@ msgstr "État"
 msgid "Encryption is:"
 msgstr "Le chiffrement est :"
 
-#, fuzzy
 msgid "Usage"
-msgstr "Utilisation : %s"
+msgstr "Utilisation"
 
 msgid "Back"
 msgstr "Retour"
@@ -1488,24 +1487,20 @@ msgstr "Ignorer les erreurs de certificats TLS"
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Option invalide: \"%s\". Les valeurs possibles sont : %s."
 
-#, fuzzy
 msgid "General"
-msgstr "Options générales"
+msgstr "Général"
 
-#, fuzzy
 msgid "Synchronisation"
-msgstr "État de la synchronisation"
+msgstr "Synchronisation"
 
 msgid "Appearance"
-msgstr ""
+msgstr "Apparence"
 
-#, fuzzy
 msgid "Note"
-msgstr "Carnets"
+msgstr "Note"
 
-#, fuzzy
 msgid "Application"
-msgstr "Lieu"
+msgstr "Application"
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."

@@ -85,7 +85,10 @@ async function createPotFile(potFilePath, sources) {
 }
 
 async function mergePotToPo(potFilePath, poFilePath) {
-	const command = 'msgmerge -U "' + poFilePath + '" "' + potFilePath + '"';
+	let msgmergePath = 'msgmerge';
+	if (isMac()) msgmergePath = '/usr/local/opt/gettext/bin/msgmerge'; // Needs to have been installed with `brew install gettext`
+
+	const command = msgmergePath + ' -U "' + poFilePath + '" "' + potFilePath + '"';
 	const result = await execCommand(command);
 	if (result) console.error(result);
 	await removePoHeaderDate(poFilePath);

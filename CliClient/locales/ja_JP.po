@@ -641,6 +641,9 @@ msgstr "太字"
 msgid "Italic"
 msgstr "斜体"
 
+msgid "Link"
+msgstr ""
+
 msgid "Insert Date Time"
 msgstr "日付の入力"
 

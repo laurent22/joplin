@@ -646,6 +646,9 @@ msgstr "Fet"
 msgid "Italic"
 msgstr "Kursiv"
 
+msgid "Link"
+msgstr ""
+
 msgid "Insert Date Time"
 msgstr "Sett inn dato/tid"
 

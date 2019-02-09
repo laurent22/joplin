@@ -7,8 +7,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -616,6 +614,9 @@ msgstr "粗体"
 
 msgid "Italic"
 msgstr "斜体"
+
+msgid "Link"
+msgstr ""
 
 msgid "Insert Date Time"
 msgstr "插入时间"

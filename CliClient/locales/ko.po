@@ -638,6 +638,9 @@ msgstr "굵게"
 msgid "Italic"
 msgstr "기울임"
 
+msgid "Link"
+msgstr ""
+
 msgid "Insert Date Time"
 msgstr "날짜와 시간 입력"
 
