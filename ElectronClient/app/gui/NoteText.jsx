@@ -365,7 +365,6 @@ class NoteTextComponent extends React.Component {
 		this.saveIfNeeded();
 
 		this.mdToHtml_ = null;
-		this.destroyWebview();
 
 		eventManager.removeListener('alarmChange', this.onAlarmChange_);
 		eventManager.removeListener('noteTypeToggle', this.onNoteTypeToggle_);
