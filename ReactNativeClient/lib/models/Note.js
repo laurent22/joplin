@@ -2,6 +2,7 @@ const BaseModel = require('lib/BaseModel.js');
 const { sprintf } = require('sprintf-js');
 const BaseItem = require('lib/models/BaseItem.js');
 const ItemChange = require('lib/models/ItemChange.js');
+const Resource = require('lib/models/Resource.js');
 const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim.js');
 const { pregQuote } = require('lib/string-utils.js');
