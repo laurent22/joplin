@@ -887,7 +887,10 @@ class NoteTextComponent extends React.Component {
 		}
 	}
 
-	updateHtml(body = null) {
+	updateHtml(body = null, options = null) {
+		if (!options) options = {};
+		if (!('useCustomCss' in options)) options.useCustomCss = true;
+
 		const mdOptions = {
 			onResourceLoaded: () => {
 				if (this.resourceLoadedTimeoutId_) {
@@ -917,7 +920,8 @@ class NoteTextComponent extends React.Component {
 			bodyToRender = '*' + _('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout')) + '*';
 		}
 
-		bodyToRender = '<style>' + this.props.customCss + '</style>\n' + bodyToRender;
+		if (options.useCustomCss) bodyToRender = '<style>' + this.props.customCss + '</style>\n' + bodyToRender;
+
 		bodyHtml = this.mdToHtml().render(bodyToRender, theme, mdOptions);
 
 		this.setState({ bodyHtml: bodyHtml });
@@ -1065,7 +1069,7 @@ class NoteTextComponent extends React.Component {
 		const previousTheme = Setting.value('theme');
 		Setting.setValue('theme', Setting.THEME_LIGHT);
 		this.lastSetHtml_ = '';
-		this.updateHtml(tempBody);
+		this.updateHtml(tempBody, { useCustomCss: false });
 		this.forceUpdate();
 
 		const restoreSettings = () => {
