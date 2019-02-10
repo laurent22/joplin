@@ -47,63 +47,34 @@ class Command extends BaseCommand {
 		}
 
 		if (args.command === 'decrypt') {
-			while (true) {
-				try {
-					if (args.path) {
-						const plainText = await EncryptionService.instance().decryptString(args.path);
-						this.stdout(plainText);
-						return;
-					} else {
-						if (process.stdin.isTTY) {
-							this.stdout(_('Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.'));
-							await DecryptionWorker.instance().start();
-							this.stdout(_('Completed decryption.'));
-							return;
-						} else {
-							// var repl = require("repl");
-							// var r = repl.start("node> ");
+			if (args.path) {
+				const plainText = await EncryptionService.instance().decryptString(args.path);
+				this.stdout(plainText);
+			} else {
+				this.stdout(_('Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.'));
 
-							const text = await new Promise((accept, reject) => {
-								var buffer = '';
-								process.stdin.setEncoding('utf8');
-								process.stdin.on('data', function(chunk) {
-										buffer += chunk;
-										// process.stdout.write(chunk);
-								});
-								process.stdin.on('end', function() {
-									accept(buffer.trim());
-								});
-							});
-
-							if (text.length > 0) {
-								var cipherText = text;
-								try {
-									var item = await BaseItem.unserialize(text);
-									cipherText = item.encryption_cipher_text;
-								} catch (error) {
-									// we already got the pure cipher text
-								}
-								const plainText = await EncryptionService.instance().decryptString(cipherText);
-								this.stdout(plainText);
+				while (true) {
+					try {
+						await DecryptionWorker.instance().start();
+						break;
+					} catch (error) {
+						if (error.code === 'masterKeyNotLoaded') {
+							const masterKeyId = error.masterKeyId;
+							const password = await this.prompt(_('Enter master password:'), { type: 'string', secure: true });
+							if (!password) {
+								this.stdout(_('Operation cancelled'));
+								return;
 							}
-							return;
+							Setting.setObjectKey('encryption.passwordCache', masterKeyId, password);
+							await EncryptionService.instance().loadMasterKeysFromSettings();
+							continue;
 						}
-					}
-				} catch (error) {
-					if (error.code === 'masterKeyNotLoaded') {
-						const masterKeyId = error.masterKeyId;
-						const password = await this.prompt(_('Enter master password:'), { type: 'string', secure: true });
-						if (!password) {
-							this.stdout(_('Operation cancelled'));
-							return;
-						}
-						Setting.setObjectKey('encryption.passwordCache', masterKeyId, password);
-						await EncryptionService.instance().loadMasterKeysFromSettings();
-						continue;
-					}
 
-					throw error;
+						throw error;
+					}
 				}
+
+				this.stdout(_('Completed decryption.'));
 			}
 
 			return;
