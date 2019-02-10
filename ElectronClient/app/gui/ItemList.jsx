@@ -22,7 +22,7 @@ class ItemList extends React.Component {
 		if (typeof props === 'undefined') props = this.props;
 
 		const topItemIndex = Math.floor(this.scrollTop_ / props.itemHeight);
-		const visibleItemCount = this.visibleItemCount();
+		const visibleItemCount = this.visibleItemCount(props);
 
 		let bottomItemIndex = topItemIndex + visibleItemCount;
 		if (bottomItemIndex >= props.items.length) bottomItemIndex = props.items.length - 1;
