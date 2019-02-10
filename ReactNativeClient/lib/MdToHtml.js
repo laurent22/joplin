@@ -635,6 +635,9 @@ class MdToHtml {
 			tr:nth-child(even) {
 				background-color: ` + style.htmlTableBackgroundColor + `;
 			}
+			tr:hover {
+				background-color: ` + style.raisedBackgroundColor + `;
+			}
 			hr {
 				border: none;
 				border-bottom: 2px solid ` + style.htmlDividerColor + `;

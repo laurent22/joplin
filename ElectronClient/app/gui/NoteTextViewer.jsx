@@ -64,6 +64,10 @@ class NoteTextViewerComponent extends React.Component {
 		this.destroyWebview();
 	}
 
+	// ----------------------------------------------------------------
+	// Wrap WebView functions
+	// ----------------------------------------------------------------
+
 	send(channel, arg0 = null, arg1 = null, arg2 = null, arg3 = null) {
 		return this.webviewRef_.current.send(channel, arg0, arg1, arg2, arg3);
 	}
@@ -75,6 +79,14 @@ class NoteTextViewerComponent extends React.Component {
 	print(options = {}) {
 		return this.webviewRef_.current.print(options);
 	}
+
+	openDevTools() {
+		return this.webviewRef_.current.openDevTools();
+	}
+
+	// ----------------------------------------------------------------
+	// Wrap WebView functions (END)
+	// ----------------------------------------------------------------
 
 	render() {
 		return  <webview
