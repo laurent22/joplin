@@ -142,6 +142,7 @@ function addExtraStyles(style) {
 		paddingRight: style.tagItemPadding * 2,
 		paddingLeft: style.tagItemPadding * 2,
 		backgroundColor: style.raisedBackgroundColor,
+		borderRadius: '10%',
 		color: style.raisedColor,
 	};
 
