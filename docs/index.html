@@ -415,6 +415,7 @@
 <li><a href="https://owncloud.org/">OwnCloud</a></li>
 <li><a href="https://www.seafile.com/">Seafile</a></li>
 <li><a href="https://www.transip.nl/stack/">Stack</a></li>
+<li><a href="https://www.schimera.com/products/webdav-nav-server/">WebDAV Nav</a>, a macOS server.</li>
 <li><a href="https://www.zimbra.com/">Zimbra</a></li>
 </ul>
 <h2 id="onedrive-synchronisation">OneDrive synchronisation</h2>
@@ -478,7 +479,7 @@ $$
 <p>It is generally recommended to enter the notes as Markdown as it makes the notes easier to edit. However for cases where certain features aren&#39;t supported (such as strikethrough or to highlight text), you can also use HTML code directly. For example this would be a valid note:</p>
 <pre><code>This is &lt;s&gt;strikethrough text&lt;/s&gt; mixed with regular **Markdown**.
 </code></pre><h2 id="custom-css">Custom CSS</h2>
-<p>Rendered markdown can be customized by placing a userstyle file in the profile directory <code>~/.config/joplin-desktop/userstyle.css</code> (This path might be different on your device - check at the top of the Config screen for the exact path). This file supports standard CSS syntax.</p>
+<p>Rendered markdown can be customized by placing a userstyle file in the profile directory <code>~/.config/joplin-desktop/userstyle.css</code> (This path might be different on your device - check at the top of the Config screen for the exact path). This file supports standard CSS syntax. Note that this file is used only when display the notes, <strong>not when printing or exporting to PDF</strong>. This is because printing has a lot more restrictions (for example, printing white text over a black background is usually not wanted), so special rules are applied to make it look good when printing, and a userstyle.css would interfer with that.</p>
 <h1 id="searching">Searching</h1>
 <p>Joplin implements the SQLite Full Text Search (FTS4) extension. It means the content of all the notes is indexed in real time and search queries return results very fast. Both <a href="https://www.sqlite.org/fts3.html#simple_fts_queries">Simple FTS Queries</a> and <a href="https://www.sqlite.org/fts3.html#full_text_index_queries">Full-Text Index Queries</a> are supported. See below for the list of supported queries:</p>
 <table>
@@ -614,21 +615,21 @@ $$
 <td>Français</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/fr_FR.po">fr_FR</a></td>
 <td>Laurent Cozic</td>
-<td>97%</td>
+<td>100%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/es/galicia.png" alt=""></td>
 <td>Galician</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/gl_ES.po">gl_ES</a></td>
 <td>Marcos Lans (marcoslansgarza@gmail.com)</td>
-<td>74%</td>
+<td>73%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/it.png" alt=""></td>
 <td>Italiano</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/it_IT.po">it_IT</a></td>
 <td></td>
-<td>91%</td>
+<td>90%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/be.png" alt=""></td>
@@ -691,7 +692,7 @@ $$
 <td>中文 (简体)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po">zh_CN</a></td>
 <td></td>
-<td>95%</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/tw.png" alt=""></td>
