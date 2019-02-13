@@ -299,6 +299,7 @@ class BaseApplication {
 		const result = next(action);
 		const newState = store.getState();
 		let refreshNotes = false;
+		let refreshTags = false;
 		let refreshNotesUseSelectedNoteId = false;
 
 		reduxSharedMiddleware(store, next, action);
@@ -336,8 +337,19 @@ class BaseApplication {
 			refreshNotes = true;
 		}
 
+		if (action.type == 'NOTE_DELETE') {
+			refreshTags = true;
+		}
+
 		if (refreshNotes) {
 			await this.refreshNotes(newState, refreshNotesUseSelectedNoteId);
+		}
+
+		if (refreshTags) {
+			this.dispatch({
+				type: 'TAG_UPDATE_ALL',
+				items: await Tag.allWithNotes(),
+			});
 		}
 
 		if ((action.type == 'SETTING_UPDATE_ONE' && (action.key == 'dateFormat' || action.key == 'timeFormat')) || (action.type == 'SETTING_UPDATE_ALL')) {
