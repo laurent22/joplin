@@ -639,6 +639,10 @@ const reducer = (state = defaultState, action) => {
 
 				newState = Object.assign({}, state);
 				newState.newNote = action.item;
+				if (newState.selectedNoteIds.length > 1) {
+					newState.selectedNoteIds = newState.selectedNoteIds.slice();
+					newState.selectedNoteIds = [newState.selectedNoteIds[0]];
+				}
 				break;
 
 			case 'CLIPPER_SERVER_SET':

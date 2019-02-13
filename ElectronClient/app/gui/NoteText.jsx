@@ -481,11 +481,13 @@ class NoteTextComponent extends React.Component {
 			if (this.props.newNote) {
 				const focusSettingName = !!note.is_todo ? 'newTodoFocus' : 'newNoteFocus';
 
-				if (Setting.value(focusSettingName) === 'title') {
-					if (this.titleField_) this.titleField_.focus();
-				} else {
-					if (this.editor_) this.editor_.editor.focus();
-				}
+				requestAnimationFrame(() => {
+					if (Setting.value(focusSettingName) === 'title') {
+						if (this.titleField_) this.titleField_.focus();
+					} else {
+						if (this.editor_) this.editor_.editor.focus();
+					}
+				});
 			}
 
 			if (this.editor_) {
