@@ -792,7 +792,7 @@ class NoteTextComponent extends React.Component {
 		});
 
 		if (Setting.value('env') === 'dev') {
-			this.webviewRef_.current.wrappedInstance.openDevTools();
+			// this.webviewRef_.current.wrappedInstance.openDevTools();
 		}
 	}
 
@@ -1083,7 +1083,7 @@ class NoteTextComponent extends React.Component {
 
 		setTimeout(() => {
 			if (target === 'pdf') {
-				this.webviewRef_.current.wrappedInstance.printToPDF({}, (error, data) => {
+				this.webviewRef_.current.wrappedInstance.printToPDF({ printBackground: true }, (error, data) => {
 					restoreSettings();
 
 					if (error) {
@@ -1093,7 +1093,7 @@ class NoteTextComponent extends React.Component {
 					}
 				});
 			} else if (target === 'printer') {
-				this.webviewRef_.current.wrappedInstance.print();
+				this.webviewRef_.current.wrappedInstance.print({ printBackground: true });
 				restoreSettings();
 			}
 		}, 100);		

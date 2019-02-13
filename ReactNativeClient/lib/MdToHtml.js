@@ -535,8 +535,6 @@ class MdToHtml {
 				background-color: ` + style.htmlBackgroundColor + `;
 				font-family: ` + fontFamily + `;
 				padding-bottom: ` + options.paddingBottom + `;
-				/* So that, for example, highlighted text or background images are printed too, otherwise browsers tend not to print these things */
-				-webkit-print-color-adjust: exact;
 			}
 			p, h1, h2, h3, h4, h5, h6, ul, table {
 				margin-top: .6em;
@@ -554,7 +552,6 @@ class MdToHtml {
 			h2 {
 				font-size: 1.3em;
 				font-weight: bold;
-				/ *border-bottom: 1px solid ` + style.htmlDividerColor + `;
 				padding-bottom: .1em; */
 			}
 			h3 {
@@ -575,6 +572,7 @@ class MdToHtml {
 				margin-bottom: .4em;
 			}
 			li p {
+				margin-top: 0.2em;
 				margin-bottom: 0;
 			}
 			.resource-icon {
@@ -588,23 +586,6 @@ class MdToHtml {
 				background-color:  ` + style.htmlColor + `;
 				/* Awesome Font file */
 				-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1892' xmlns='http://www.w3.org/2000/svg'><path d='M288 128C129 128 0 257 0 416v960c0 159 129 288 288 288h960c159 0 288-129 288-288V416c0-159-129-288-288-288H288zm449.168 236.572l263.434.565 263.431.562.584 73.412.584 73.412-42.732 1.504c-23.708.835-47.002 2.774-52.322 4.36-14.497 4.318-23.722 12.902-29.563 27.51l-5.12 12.802-1.403 291.717c-1.425 295.661-1.626 302.586-9.936 343.043-15.2 74-69.604 150.014-142.197 198.685-58.287 39.08-121.487 60.47-208.155 70.45-22.999 2.648-122.228 2.636-141.976-.024l-.002.006c-69.785-9.377-108.469-20.202-154.848-43.332-85.682-42.73-151.778-116.991-177.537-199.469-10.247-32.81-11.407-40.853-11.375-78.754.026-31.257.76-39.15 5.024-54.043 8.94-31.228 20.912-51.733 43.56-74.62 27.312-27.6 55.812-40.022 95.524-41.633 37.997-1.542 63.274 5.024 87.23 22.66 15.263 11.235 30.828 33.238 39.537 55.884 5.52 14.355 5.949 18.31 7.549 69.569 1.675 53.648 3.05 63.99 11.674 87.785 11.777 32.499 31.771 55.017 61.46 69.22 26.835 12.838 47.272 16.785 80.56 15.56 21.646-.798 30.212-2.135 43.208-6.741 38.682-13.708 70.96-44.553 86.471-82.635 16.027-39.348 15.995-38.647 15.947-361.595-.042-283.26-.09-286.272-4.568-296.153-10.958-24.171-22.488-28.492-81.074-30.377l-42.969-1.38v-147.95z'/></svg>");
-			}
-			a.checkbox {
-				display: inline-block;
-				position: relative;
-				top: .5em;
-				text-decoration: none;
-				width: 1.65em; /* Need to cut a bit the right border otherwise the SVG will display a black line */
-				height: 1.7em;
-				margin-right: .3em;
-				background-color:  ` + style.htmlColor + `;
-				/* Awesome Font square-o */
-				-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1792 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1312 256h-832q-66 0-113 47t-47 113v832q0 66 47 113t113 47h832q66 0 113-47t47-113v-832q0-66-47-113t-113-47zm288 160v832q0 119-84.5 203.5t-203.5 84.5h-832q-119 0-203.5-84.5t-84.5-203.5v-832q0-119 84.5-203.5t203.5-84.5h832q119 0 203.5 84.5t84.5 203.5z'/></svg>");
-			}
-			a.checkbox.tick {
-				left: .1245em; /* square-o and check-square-o aren't exactly aligned so add this extra gap to align them  */
-				/* Awesome Font check-square-o */
-				-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1792 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1472 930v318q0 119-84.5 203.5t-203.5 84.5h-832q-119 0-203.5-84.5t-84.5-203.5v-832q0-119 84.5-203.5t203.5-84.5h832q63 0 117 25 15 7 18 23 3 17-9 29l-49 49q-10 10-23 10-3 0-9-2-23-6-45-6h-832q-66 0-113 47t-47 113v832q0 66 47 113t113 47h832q66 0 113-47t47-113v-254q0-13 9-22l64-64q10-10 23-10 6 0 12 3 20 8 20 29zm231-489l-814 814q-24 24-57 24t-57-24l-430-430q-24-24-24-57t24-57l110-110q24-24 57-24t57 24l263 263 647-647q24-24 57-24t57 24l110 110q24 24 24 57t-24 57z'/></svg>");
 			}
 			blockquote {
 				border-left: 4px solid ` + style.htmlCodeBorderColor + `;
@@ -663,21 +644,39 @@ class MdToHtml {
 
 			/* 
 			This is to fix https://github.com/laurent22/joplin/issues/764
-			Without this, the tag attached to an equation float at an absoluate position of the page,
+			Without this, the tag attached to an equation float at an absolute position of the page,
 			instead of a position relative to the container.
 			*/
 			.katex-display>.katex>.katex-html {
 				position: relative;
 			}
 
+			a.checkbox {
+				border: 1pt solid ` + style.htmlColor + `;
+				border-radius: 2pt;
+				width: 1.1em;
+				height: 1.1em;
+				background-color: rgba(0,0,0,0);
+				text-decoration: none;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				position: relative;
+				top: -0.3em;
+				margin-right: 0.3em;
+			}
+
+			a.checkbox.tick:after {
+				content: "✓";
+			}
+
+			a.checkbox.tick {
+				color: ` + style.htmlColor + `;
+			}
+
 			@media print {
 				body {
 					height: auto !important;
-				}
-
-				a.checkbox.tick {
-					/* Checkbox ticks are displayed upside down when printed for some reason */
-					transform: scaleY(-1);
 				}
 
 				pre {
@@ -692,26 +691,6 @@ class MdToHtml {
 
 		// To style the checkboxes in print when webkit-print-color-adjust is not enabled.
 		// Keep it there for now in case that CSS parameter needs to be removed.
-
-		// a.checkbox {
-		// 	border: 1pt solid ` + style.htmlColor + `;
-		// 	border-radius: 2pt;
-		// 	width: 1em;
-		// 	height: 1em;
-		// 	line-height: 1em;
-		// 	text-align: center;
-		// 	top: .4em;
-		// }
-
-		// a.checkbox.tick:after {
-		// 	content: "X";
-		// }
-
-		// a.checkbox.tick {
-		// 	top: 0;
-		// 	left: -0.02em;
-		// 	color: ` + style.htmlColor + `;
-		// }
 
 		const styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>';
 
