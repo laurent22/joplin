@@ -1057,6 +1057,39 @@ msgstr "Resurse: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 
+msgid "Add or remove tags"
+msgstr "Adăugați ori eliminați etichete"
+
+#, fuzzy
+msgid "Duplicate"
+msgstr "Duplicați"
+
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - Copiați"
+
+msgid "Switch between note and to-do type"
+msgstr "Schimbați între notiță și sarcină"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Schimbați între notiță și sarcină"
+
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "Schimbați între notiță și sarcină"
+
+msgid "Copy Markdown link"
+msgstr "Copiați link-ul Markdown"
+
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Ștergeți notițele?"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Ștergeți aceste notițe?"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Utilizare: %s"
@@ -1664,9 +1697,6 @@ msgstr ""
 msgid "Convert to todo"
 msgstr ""
 
-msgid "Copy Markdown link"
-msgstr "Copiați link-ul Markdown"
-
 msgid "Hide metadata"
 msgstr "Ascundeți metadatele"
 
@@ -1701,26 +1731,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bine ați venit"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "Adăugați ori eliminați etichete"
-
-#~ msgid "%s - Copy"
-#~ msgstr "%s - Copiați"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "Schimbați între notiță și sarcină"
-
-#, fuzzy
-#~ msgid "Switch to note type"
-#~ msgstr "Schimbați între notiță și sarcină"
-
-#, fuzzy
-#~ msgid "Switch to to-do type"
-#~ msgstr "Schimbați între notiță și sarcină"
-
-#~ msgid "Delete notes?"
-#~ msgstr "Ștergeți notițele?"
 
 #~ msgid "State: %s."
 #~ msgstr "Statut: %s."

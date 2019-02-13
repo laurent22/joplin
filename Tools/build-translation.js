@@ -137,9 +137,9 @@ async function translationStatus(isDefault, poFile) {
 	// "apt install translate-toolkit" to have pocount
 	const command = 'pocount "' + poFile + '"';
 	const result = await execCommand(command);
-	const matches = result.match(/translated:\s*?(\d+)\s*\((.+?)%\)/);
-	if (matches.length < 3) throw new Error('Cannot extract status: ' + command + ':\n' + result);
-	
+	const matches = result.match(/Translated:\s*?(\d+)\s*\((.+?)%\)/);
+	if (!matches || matches.length < 3) throw new Error('Cannot extract status: ' + command + ':\n' + result);
+
 	const percentDone = Number(matches[2]);
 	if (isNaN(percentDone)) throw new Error('Cannot extract percent translated: ' + command + ':\n' + result);
 
@@ -213,6 +213,7 @@ async function main() {
 		cliDir + '/app/gui/*.js',
 		electronDir + '/*.js',
 		electronDir + '/gui/*.js',
+		electronDir + '/gui/utils/*.js',
 		rnDir + '/lib/*.js',
 		rnDir + '/lib/models/*.js',
 		rnDir + '/lib/services/*.js',

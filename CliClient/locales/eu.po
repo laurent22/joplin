@@ -1146,6 +1146,39 @@ msgstr "Baliabideak: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Aukeratu nora esportatu sinkronizazioaren egoera, mesedez"
 
+msgid "Add or remove tags"
+msgstr "Gehitu edo ezabatu etiketak"
+
+#, fuzzy
+msgid "Duplicate"
+msgstr "Irten aplikaziotik"
+
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "Kopiatu"
+
+msgid "Switch between note and to-do type"
+msgstr "Aldatu oharra eta zeregin eren artean."
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Aldatu oharra eta zeregin eren artean."
+
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "Aldatu oharra eta zeregin eren artean."
+
+msgid "Copy Markdown link"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Oharrak ezabatu?"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Oharrok ezabatu?"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Erabili: %s"
@@ -1795,9 +1828,6 @@ msgstr "Oharra bihurtu"
 msgid "Convert to todo"
 msgstr "Zeregina bihurtu"
 
-msgid "Copy Markdown link"
-msgstr ""
-
 msgid "Hide metadata"
 msgstr "Ezkutatu metadatuak"
 
@@ -1831,27 +1861,6 @@ msgstr "Oraindik ez duzu koadernorik. Sortu bat (+) botoian sakatuta."
 
 msgid "Welcome"
 msgstr "Ongi etorri!"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "Gehitu edo ezabatu etiketak"
-
-#, fuzzy
-#~ msgid "%s - Copy"
-#~ msgstr "Kopiatu"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "Aldatu oharra eta zeregin eren artean."
-
-#, fuzzy
-#~ msgid "Switch to note type"
-#~ msgstr "Aldatu oharra eta zeregin eren artean."
-
-#, fuzzy
-#~ msgid "Switch to to-do type"
-#~ msgstr "Aldatu oharra eta zeregin eren artean."
-
-#~ msgid "Delete notes?"
-#~ msgstr "Oharrak ezabatu?"
 
 #, fuzzy
 #~ msgid "State: %s."

@@ -1088,6 +1088,36 @@ msgstr "获取资源：%d。"
 msgid "Please select where the sync status should be exported to"
 msgstr "请选择同步状态的导出位置"
 
+msgid "Add or remove tags"
+msgstr "添加或删除标签"
+
+msgid "Duplicate"
+msgstr "重复的"
+
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - 副本"
+
+msgid "Switch between note and to-do type"
+msgstr "在笔记和待办事项类型之间切换"
+
+msgid "Switch to note type"
+msgstr "切换到笔记"
+
+msgid "Switch to to-do type"
+msgstr "切换到待办事项"
+
+msgid "Copy Markdown link"
+msgstr "复制 Markdown 链接"
+
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "是否删除笔记？"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "是否删除这些笔记？"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "使用：%s"
@@ -1715,9 +1745,6 @@ msgstr "转换到笔记"
 msgid "Convert to todo"
 msgstr "转换到待办事项"
 
-msgid "Copy Markdown link"
-msgstr "复制 Markdown 链接"
-
 msgid "Hide metadata"
 msgstr "隐藏元数据"
 
@@ -1749,27 +1776,6 @@ msgstr "您目前未有笔记本。点击 (+) 按钮创建。"
 
 msgid "Welcome"
 msgstr "欢迎"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "添加或删除标签"
-
-#~ msgid "Duplicate"
-#~ msgstr "重复的"
-
-#~ msgid "%s - Copy"
-#~ msgstr "%s - 副本"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "在笔记和待办事项类型之间切换"
-
-#~ msgid "Switch to note type"
-#~ msgstr "切换到笔记"
-
-#~ msgid "Switch to to-do type"
-#~ msgstr "切换到待办事项"
-
-#~ msgid "Delete notes?"
-#~ msgstr "是否删除笔记？"
 
 #~ msgid "State: %s."
 #~ msgstr "状态：%s。"

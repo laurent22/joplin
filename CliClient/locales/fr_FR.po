@@ -1015,7 +1015,7 @@ msgid "Copy Link Address"
 msgstr "Copier l'adresse du lien"
 
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "Cette pièce jointe n'est pas téléchargée ou pas encore déchiffrée"
+msgstr "Cette pièce jointe n'est pas téléchargée ou pas encore déchiffrée."
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1149,6 +1149,36 @@ msgstr "Tél. ressources : %d"
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 "Veuillez sélectionner un répertoire ou exporter l'état de la synchronisation"
+
+msgid "Add or remove tags"
+msgstr "Gérer les étiquettes"
+
+msgid "Duplicate"
+msgstr "Dupliquer"
+
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - Copie"
+
+msgid "Switch between note and to-do type"
+msgstr "Alterner entre note et tâche"
+
+msgid "Switch to note type"
+msgstr "Convertir en note"
+
+msgid "Switch to to-do type"
+msgstr "Convertir en tâche"
+
+msgid "Copy Markdown link"
+msgstr "Copier lien Markdown"
+
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Supprimer note \"%s\" ?"
+
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Supprimer ces %d notes ?"
 
 #, javascript-format
 msgid "Usage: %s"
@@ -1599,7 +1629,7 @@ msgid "Permission to use camera"
 msgstr "Permission d'utiliser l'appareil photo"
 
 msgid "Your permission to use your camera is required."
-msgstr "Votre permission est requise pour utiliser l'appareil photo"
+msgstr "Votre permission est requise pour utiliser l'appareil photo."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
@@ -1799,9 +1829,6 @@ msgstr "Convertir en note"
 msgid "Convert to todo"
 msgstr "Convertir en tâche"
 
-msgid "Copy Markdown link"
-msgstr "Copier lien Markdown"
-
 msgid "Hide metadata"
 msgstr "Cacher les métadonnées"
 
@@ -1837,24 +1864,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "Gérer les étiquettes"
-
-#~ msgid "Duplicate"
-#~ msgstr "Dupliquer"
-
-#~ msgid "%s - Copy"
-#~ msgstr "%s - Copie"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "Alterner entre note et tâche"
-
-#~ msgid "Switch to note type"
-#~ msgstr "Convertir en note"
-
-#~ msgid "Switch to to-do type"
-#~ msgstr "Convertir en tâche"
 
 #~ msgid "Delete notes?"
 #~ msgstr "Supprimer les notes ?"
@@ -1977,9 +1986,6 @@ msgstr "Bienvenue"
 
 #~ msgid "Delete notebook?"
 #~ msgstr "Supprimer le carnet ?"
-
-#~ msgid "Delete notebook \"%s\"?"
-#~ msgstr "Supprimer le carnet \"%s\" ?"
 
 #~ msgid "File system synchronisation target directory"
 #~ msgstr "Cible de la synchronisation sur le disque dur"

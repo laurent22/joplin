@@ -1145,6 +1145,40 @@ msgstr "Viri: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Prosim izberite, kam želite izvoziti sinhronizacijski status"
 
+msgid "Add or remove tags"
+msgstr "Dodaj ali odstrani oznake"
+
+#, fuzzy
+msgid "Duplicate"
+msgstr "Izhod iz aplikacije."
+
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "Kopiraj"
+
+msgid "Switch between note and to-do type"
+msgstr "Menjaj med zabeležko in seznamom opravil"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Menjaj med zabeležko in seznamom opravil"
+
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "Menjaj med zabeležko in seznamom opravil"
+
+#, fuzzy
+msgid "Copy Markdown link"
+msgstr "Sistem označevanja"
+
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Izbriši zabeležke?"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Izbriši te zabeležke?"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Uporaba: %s"
@@ -1786,10 +1820,6 @@ msgstr "Pretvori v zabeležko"
 msgid "Convert to todo"
 msgstr "Pretvori v za narediti"
 
-#, fuzzy
-msgid "Copy Markdown link"
-msgstr "Sistem označevanja"
-
 msgid "Hide metadata"
 msgstr "Skrij meta podatke"
 
@@ -1823,27 +1853,6 @@ msgstr "Trenutno nimate nobene beležnice. Ustvarite jo s klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobrodošli"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "Dodaj ali odstrani oznake"
-
-#, fuzzy
-#~ msgid "%s - Copy"
-#~ msgstr "Kopiraj"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "Menjaj med zabeležko in seznamom opravil"
-
-#, fuzzy
-#~ msgid "Switch to note type"
-#~ msgstr "Menjaj med zabeležko in seznamom opravil"
-
-#, fuzzy
-#~ msgid "Switch to to-do type"
-#~ msgstr "Menjaj med zabeležko in seznamom opravil"
-
-#~ msgid "Delete notes?"
-#~ msgstr "Izbriši zabeležke?"
 
 #~ msgid "State: %s."
 #~ msgstr "Stanje: %s."

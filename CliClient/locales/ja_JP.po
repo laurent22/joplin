@@ -1129,6 +1129,36 @@ msgstr "取得中のリソース: %d"
 msgid "Please select where the sync status should be exported to"
 msgstr "同期状況の出力先を選択してください"
 
+msgid "Add or remove tags"
+msgstr "タグの追加と削除"
+
+msgid "Duplicate"
+msgstr "複製"
+
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - コピー"
+
+msgid "Switch between note and to-do type"
+msgstr "ノートとToDoを切り替え"
+
+msgid "Switch to note type"
+msgstr "ノートに切り替え"
+
+msgid "Switch to to-do type"
+msgstr "ToDoに切り替え"
+
+msgid "Copy Markdown link"
+msgstr "Markdownのリンクをコピー"
+
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "ノートを削除しますか？"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "ノートを削除しますか？"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "使用方法: %s"
@@ -1776,9 +1806,6 @@ msgstr "ノートに変換"
 msgid "Convert to todo"
 msgstr "ToDoに変換"
 
-msgid "Copy Markdown link"
-msgstr "Markdownのリンクをコピー"
-
 msgid "Hide metadata"
 msgstr "メタデータを隠す"
 
@@ -1814,27 +1841,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "タグの追加と削除"
-
-#~ msgid "Duplicate"
-#~ msgstr "複製"
-
-#~ msgid "%s - Copy"
-#~ msgstr "%s - コピー"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "ノートとToDoを切り替え"
-
-#~ msgid "Switch to note type"
-#~ msgstr "ノートに切り替え"
-
-#~ msgid "Switch to to-do type"
-#~ msgstr "ToDoに切り替え"
-
-#~ msgid "Delete notes?"
-#~ msgstr "ノートを削除しますか？"
 
 #~ msgid "State: %s."
 #~ msgstr "状態: \"%s\"."

@@ -1144,6 +1144,36 @@ msgstr ""
 "Favor selecionar o local para onde o status de sincronia deveria ser "
 "exportado"
 
+msgid "Add or remove tags"
+msgstr "Adicionar ou remover tags"
+
+msgid "Duplicate"
+msgstr "Duplicar"
+
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - Copiar"
+
+msgid "Switch between note and to-do type"
+msgstr "Alternar entre os tipos Nota e Tarefa"
+
+msgid "Switch to note type"
+msgstr "Alternar para o tipo Nota"
+
+msgid "Switch to to-do type"
+msgstr "Alternar para o tipo Tarefa"
+
+msgid "Copy Markdown link"
+msgstr "Copiar link de Markdown"
+
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Apagar o caderno \"%s\"?"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Excluir estas notas?"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Uso: %s"
@@ -1798,9 +1828,6 @@ msgstr "Converter para nota"
 msgid "Convert to todo"
 msgstr "Converter para tarefa"
 
-msgid "Copy Markdown link"
-msgstr "Copiar link de Markdown"
-
 msgid "Hide metadata"
 msgstr "Ocultar metadados"
 
@@ -1834,24 +1861,6 @@ msgstr "Você não possui cadernos. Crie um clicando no botão (+)."
 
 msgid "Welcome"
 msgstr "Bem-vindo"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "Adicionar ou remover tags"
-
-#~ msgid "Duplicate"
-#~ msgstr "Duplicar"
-
-#~ msgid "%s - Copy"
-#~ msgstr "%s - Copiar"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "Alternar entre os tipos Nota e Tarefa"
-
-#~ msgid "Switch to note type"
-#~ msgstr "Alternar para o tipo Nota"
-
-#~ msgid "Switch to to-do type"
-#~ msgstr "Alternar para o tipo Tarefa"
 
 #~ msgid "Delete notes?"
 #~ msgstr "Excluir notas?"
@@ -1951,9 +1960,6 @@ msgstr "Bem-vindo"
 
 #~ msgid "Delete notebook?"
 #~ msgstr "Excluir caderno?"
-
-#~ msgid "Delete notebook \"%s\"?"
-#~ msgstr "Apagar o caderno \"%s\"?"
 
 #~ msgid "File system synchronisation target directory"
 #~ msgstr "Diretório de destino de sincronização do sistema de arquivos"

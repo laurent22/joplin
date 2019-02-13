@@ -1154,6 +1154,39 @@ msgstr "Recursos: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccioneu on s'hauria d'exportar l'estat de la sincronització"
 
+msgid "Add or remove tags"
+msgstr "Afegeix o suprimeix etiquetes"
+
+#, fuzzy
+msgid "Duplicate"
+msgstr "Surt de l'aplicació"
+
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "Copia"
+
+msgid "Switch between note and to-do type"
+msgstr "Alterna entre el tipus nota i tasques pendents"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Alterna entre el tipus nota i tasques pendents"
+
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "Alterna entre el tipus nota i tasques pendents"
+
+msgid "Copy Markdown link"
+msgstr "Copia l'enllaç Markdown"
+
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Voleu suprimir les notes?"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Voleu suprimir aquestes notes?"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Ús: %s"
@@ -1796,9 +1829,6 @@ msgstr "Converteix a nota"
 msgid "Convert to todo"
 msgstr "Converteix a llistat de tasques pendents"
 
-msgid "Copy Markdown link"
-msgstr "Copia l'enllaç Markdown"
-
 msgid "Hide metadata"
 msgstr "Amaga les metadades"
 
@@ -1833,27 +1863,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvingut"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "Afegeix o suprimeix etiquetes"
-
-#, fuzzy
-#~ msgid "%s - Copy"
-#~ msgstr "Copia"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "Alterna entre el tipus nota i tasques pendents"
-
-#, fuzzy
-#~ msgid "Switch to note type"
-#~ msgstr "Alterna entre el tipus nota i tasques pendents"
-
-#, fuzzy
-#~ msgid "Switch to to-do type"
-#~ msgstr "Alterna entre el tipus nota i tasques pendents"
-
-#~ msgid "Delete notes?"
-#~ msgstr "Voleu suprimir les notes?"
 
 #~ msgid "State: %s."
 #~ msgstr "Estat: %s"

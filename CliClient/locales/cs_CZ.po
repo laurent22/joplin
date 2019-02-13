@@ -1123,6 +1123,40 @@ msgstr "Zdroje: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Prosím vyberte, kam má být stav synchronizace exportován"
 
+msgid "Add or remove tags"
+msgstr "Přidat či odebrat tagy"
+
+#, fuzzy
+msgid "Duplicate"
+msgstr "Ukončí aplikaci."
+
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "Kopírovat"
+
+msgid "Switch between note and to-do type"
+msgstr "Přepnout mezi poznámkou a to-do"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Přepnout mezi poznámkou a to-do"
+
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "Přepnout mezi poznámkou a to-do"
+
+#, fuzzy
+msgid "Copy Markdown link"
+msgstr "Markdown"
+
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Smazat poznámky?"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Smazat tyto poznámky?"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Použití: %s"
@@ -1764,10 +1798,6 @@ msgstr "Konvertovat na poznámku"
 msgid "Convert to todo"
 msgstr "Konvertovat na todo"
 
-#, fuzzy
-msgid "Copy Markdown link"
-msgstr "Markdown"
-
 msgid "Hide metadata"
 msgstr "Schovat metadata"
 
@@ -1801,27 +1831,6 @@ msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na tlačítko (+
 
 msgid "Welcome"
 msgstr "Vítejte"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "Přidat či odebrat tagy"
-
-#, fuzzy
-#~ msgid "%s - Copy"
-#~ msgstr "Kopírovat"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "Přepnout mezi poznámkou a to-do"
-
-#, fuzzy
-#~ msgid "Switch to note type"
-#~ msgstr "Přepnout mezi poznámkou a to-do"
-
-#, fuzzy
-#~ msgid "Switch to to-do type"
-#~ msgstr "Přepnout mezi poznámkou a to-do"
-
-#~ msgid "Delete notes?"
-#~ msgstr "Smazat poznámky?"
 
 #~ msgid "State: %s."
 #~ msgstr "Stav: %s."

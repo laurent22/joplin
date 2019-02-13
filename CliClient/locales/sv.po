@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "För att ta bort en tagg, ta bort de associerade anteckningarna."
@@ -1150,6 +1148,38 @@ msgstr "Hämtar resurser: %d"
 msgid "Please select where the sync status should be exported to"
 msgstr "Välj vart synkroniseringstillståndet ska exporteras till"
 
+msgid "Add or remove tags"
+msgstr "Lägg till eller ta bort taggar"
+
+msgid "Duplicate"
+msgstr "Duplikat"
+
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - Kopiera"
+
+msgid "Switch between note and to-do type"
+msgstr "Växla mellan antecknings- och att-göra-typ"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Växla mellan antecknings- och att-göra-typ"
+
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "Växla mellan antecknings- och att-göra-typ"
+
+msgid "Copy Markdown link"
+msgstr "Kopiera Markdown-länk"
+
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Ta bort anteckningar?"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Ta bort dessa anteckningar?"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Användning: %s"
@@ -1803,9 +1833,6 @@ msgstr "Konvertera till anteckning"
 msgid "Convert to todo"
 msgstr "Konvertera till att-göra"
 
-msgid "Copy Markdown link"
-msgstr "Kopiera Markdown-länk"
-
 msgid "Hide metadata"
 msgstr "Dölj metadata"
 
@@ -1842,29 +1869,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Välkommen"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "Lägg till eller ta bort taggar"
-
-#~ msgid "Duplicate"
-#~ msgstr "Duplikat"
-
-#~ msgid "%s - Copy"
-#~ msgstr "%s - Kopiera"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "Växla mellan antecknings- och att-göra-typ"
-
-#, fuzzy
-#~ msgid "Switch to note type"
-#~ msgstr "Växla mellan antecknings- och att-göra-typ"
-
-#, fuzzy
-#~ msgid "Switch to to-do type"
-#~ msgstr "Växla mellan antecknings- och att-göra-typ"
-
-#~ msgid "Delete notes?"
-#~ msgstr "Ta bort anteckningar?"
 
 #~ msgid "State: %s."
 #~ msgstr "Tillstånd: %s."

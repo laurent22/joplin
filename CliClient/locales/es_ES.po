@@ -1146,6 +1146,38 @@ msgstr "Recursos: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccione a dónde se debería exportar el estado de sincronización"
 
+msgid "Add or remove tags"
+msgstr "Añadir o borrar etiquetas"
+
+msgid "Duplicate"
+msgstr "Duplicado"
+
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - Copiar"
+
+msgid "Switch between note and to-do type"
+msgstr "Cambiar entre nota y lista de tareas"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Cambiar entre nota y lista de tareas"
+
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "Cambiar entre nota y lista de tareas"
+
+msgid "Copy Markdown link"
+msgstr "Copiar el enlace de Markdown"
+
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Elimina una libreta \"%s\"?"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "¿Desea borrar estas notas?"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Uso: %s"
@@ -1795,9 +1827,6 @@ msgstr "Convertir a nota"
 msgid "Convert to todo"
 msgstr "Convertir a lista de tareas"
 
-msgid "Copy Markdown link"
-msgstr "Copiar el enlace de Markdown"
-
 msgid "Hide metadata"
 msgstr "Ocultar metadatos"
 
@@ -1832,26 +1861,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "Añadir o borrar etiquetas"
-
-#~ msgid "Duplicate"
-#~ msgstr "Duplicado"
-
-#~ msgid "%s - Copy"
-#~ msgstr "%s - Copiar"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "Cambiar entre nota y lista de tareas"
-
-#, fuzzy
-#~ msgid "Switch to note type"
-#~ msgstr "Cambiar entre nota y lista de tareas"
-
-#, fuzzy
-#~ msgid "Switch to to-do type"
-#~ msgstr "Cambiar entre nota y lista de tareas"
 
 #~ msgid "Delete notes?"
 #~ msgstr "¿Desea eliminar notas?"
@@ -1964,9 +1973,6 @@ msgstr "Bienvenido"
 
 #~ msgid "Delete notebook?"
 #~ msgstr "Eliminar libreta?"
-
-#~ msgid "Delete notebook \"%s\"?"
-#~ msgstr "Elimina una libreta \"%s\"?"
 
 #, fuzzy
 #~ msgid "File system synchronisation target directory"

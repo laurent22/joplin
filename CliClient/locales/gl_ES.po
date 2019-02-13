@@ -1131,6 +1131,40 @@ msgstr "Recursos: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccione onde exportar o estado da sincronización"
 
+msgid "Add or remove tags"
+msgstr "Engadir ou eliminar etiquetas"
+
+#, fuzzy
+msgid "Duplicate"
+msgstr "Sae do aplicativo."
+
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "Copiar"
+
+msgid "Switch between note and to-do type"
+msgstr "Cambiar entre notas e tarefas"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Cambiar entre notas e tarefas"
+
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "Cambiar entre notas e tarefas"
+
+#, fuzzy
+msgid "Copy Markdown link"
+msgstr "Markdown"
+
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Desexa eliminar as notas?"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Desexa eliminar estas notas?"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Uso: %s"
@@ -1772,10 +1806,6 @@ msgstr "Converter para nota"
 msgid "Convert to todo"
 msgstr "Converter para tarefa"
 
-#, fuzzy
-msgid "Copy Markdown link"
-msgstr "Markdown"
-
 msgid "Hide metadata"
 msgstr "Ocultar metadados"
 
@@ -1809,27 +1839,6 @@ msgstr "Non ten cadernos actualmente. Cree un premendo no botón (+)."
 
 msgid "Welcome"
 msgstr "Benvido/a"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "Engadir ou eliminar etiquetas"
-
-#, fuzzy
-#~ msgid "%s - Copy"
-#~ msgstr "Copiar"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "Cambiar entre notas e tarefas"
-
-#, fuzzy
-#~ msgid "Switch to note type"
-#~ msgstr "Cambiar entre notas e tarefas"
-
-#, fuzzy
-#~ msgid "Switch to to-do type"
-#~ msgstr "Cambiar entre notas e tarefas"
-
-#~ msgid "Delete notes?"
-#~ msgstr "Desexa eliminar as notas?"
 
 #~ msgid "State: %s."
 #~ msgstr "Estado: %s."

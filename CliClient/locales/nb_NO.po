@@ -1138,6 +1138,36 @@ msgstr "Henter ressurser: %d"
 msgid "Please select where the sync status should be exported to"
 msgstr "Velg hvor synkroniseringsstatusen skal eksporteres til"
 
+msgid "Add or remove tags"
+msgstr "Legg til eller fjern merkelapper"
+
+msgid "Duplicate"
+msgstr "Dupliser"
+
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - Kopier"
+
+msgid "Switch between note and to-do type"
+msgstr "Bytt mellom notat og gjøremål"
+
+msgid "Switch to note type"
+msgstr "Bytt til notatmodus"
+
+msgid "Switch to to-do type"
+msgstr "Bytt til gjøremålmodus"
+
+msgid "Copy Markdown link"
+msgstr "Kopier Markdown-link"
+
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Slette notater?"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Slett disse notatene?"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Bruk: %s"
@@ -1786,9 +1816,6 @@ msgstr "Konverter til notat"
 msgid "Convert to todo"
 msgstr "Konverter til gjøremål"
 
-msgid "Copy Markdown link"
-msgstr "Kopier Markdown-link"
-
 msgid "Hide metadata"
 msgstr "Skjul metadata"
 
@@ -1822,24 +1849,3 @@ msgstr "Du har enda ingen notatbok. Lag en ved å klikke på (+)-knappen."
 
 msgid "Welcome"
 msgstr "Velkommen"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "Legg til eller fjern merkelapper"
-
-#~ msgid "Duplicate"
-#~ msgstr "Dupliser"
-
-#~ msgid "%s - Copy"
-#~ msgstr "%s - Kopier"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "Bytt mellom notat og gjøremål"
-
-#~ msgid "Switch to note type"
-#~ msgstr "Bytt til notatmodus"
-
-#~ msgid "Switch to to-do type"
-#~ msgstr "Bytt til gjøremålmodus"
-
-#~ msgid "Delete notes?"
-#~ msgstr "Slette notater?"

@@ -1168,6 +1168,36 @@ msgid "Please select where the sync status should be exported to"
 msgstr ""
 "Bitte wähle aus, wohin der Synchronisations-Status exportiert werden soll"
 
+msgid "Add or remove tags"
+msgstr "Schlagwörter hinzufügen oder entfernen"
+
+msgid "Duplicate"
+msgstr "Duplizieren"
+
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - Kopieren"
+
+msgid "Switch between note and to-do type"
+msgstr "Zwischen Notiz und To-Do Typ wechseln"
+
+msgid "Switch to note type"
+msgstr "Zu Notiz-Typ wechseln"
+
+msgid "Switch to to-do type"
+msgstr "Zu To-Do-Typ wechseln"
+
+msgid "Copy Markdown link"
+msgstr "Markdown-Link kopieren"
+
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Notizbuch \"%s\" löschen?"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Sollen diese Notizen gelöscht werden?"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Nutzung: %s"
@@ -1826,9 +1856,6 @@ msgstr "In eine Notiz umwandeln"
 msgid "Convert to todo"
 msgstr "In ein To-Do umwandeln"
 
-msgid "Copy Markdown link"
-msgstr "Markdown-Link kopieren"
-
 msgid "Hide metadata"
 msgstr "Metadaten verstecken"
 
@@ -1865,24 +1892,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Willkommen"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "Schlagwörter hinzufügen oder entfernen"
-
-#~ msgid "Duplicate"
-#~ msgstr "Duplizieren"
-
-#~ msgid "%s - Copy"
-#~ msgstr "%s - Kopieren"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "Zwischen Notiz und To-Do Typ wechseln"
-
-#~ msgid "Switch to note type"
-#~ msgstr "Zu Notiz-Typ wechseln"
-
-#~ msgid "Switch to to-do type"
-#~ msgstr "Zu To-Do-Typ wechseln"
 
 #~ msgid "Delete notes?"
 #~ msgstr "Notizen löschen?"
@@ -1986,9 +1995,6 @@ msgstr "Willkommen"
 
 #~ msgid "Delete notebook?"
 #~ msgstr "Notizbuch löschen?"
-
-#~ msgid "Delete notebook \"%s\"?"
-#~ msgstr "Notizbuch \"%s\" löschen?"
 
 #~ msgid "File system synchronisation target directory"
 #~ msgstr "Dateisystem-Synchronisation Zielpfad"

@@ -1152,6 +1152,36 @@ msgstr "Risorse: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 
+msgid "Add or remove tags"
+msgstr "Aggiungi o rimuovi etichetta"
+
+msgid "Duplicate"
+msgstr "Duplicare"
+
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - Copia"
+
+msgid "Switch between note and to-do type"
+msgstr "Converti nota in \"Cose-da-fare\" e viceversa"
+
+msgid "Switch to note type"
+msgstr "Converti in nota"
+
+msgid "Switch to to-do type"
+msgstr "Converti in \"Cose-da-fare\""
+
+msgid "Copy Markdown link"
+msgstr "Copia il link Markdown"
+
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Eliminare il taccuino \"%s\"?"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Cancellare queste note?"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Uso: %s"
@@ -1799,9 +1829,6 @@ msgstr "Converti in nota"
 msgid "Convert to todo"
 msgstr "Converti in Todo"
 
-msgid "Copy Markdown link"
-msgstr "Copia il link Markdown"
-
 msgid "Hide metadata"
 msgstr "Nascondi i Metadati"
 
@@ -1836,24 +1863,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvenuto"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "Aggiungi o rimuovi etichetta"
-
-#~ msgid "Duplicate"
-#~ msgstr "Duplicare"
-
-#~ msgid "%s - Copy"
-#~ msgstr "%s - Copia"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "Converti nota in \"Cose-da-fare\" e viceversa"
-
-#~ msgid "Switch to note type"
-#~ msgstr "Converti in nota"
-
-#~ msgid "Switch to to-do type"
-#~ msgstr "Converti in \"Cose-da-fare\""
 
 #~ msgid "Delete notes?"
 #~ msgstr "Eliminare le note?"
@@ -1969,9 +1978,6 @@ msgstr "Benvenuto"
 
 #~ msgid "Delete notebook?"
 #~ msgstr "Eliminare il taccuino?"
-
-#~ msgid "Delete notebook \"%s\"?"
-#~ msgstr "Eliminare il taccuino \"%s\"?"
 
 #~ msgid "File system synchronisation target directory"
 #~ msgstr "Directory di destinazione per la sincronizzazione nel file system"

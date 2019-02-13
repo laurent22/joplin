@@ -1132,6 +1132,40 @@ msgstr "Ressourcer: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Vælg hvor sync status skal eksporteres til"
 
+msgid "Add or remove tags"
+msgstr "Tilføj eller slet mærker"
+
+#, fuzzy
+msgid "Duplicate"
+msgstr "Forlad/luk program."
+
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "Kopier"
+
+msgid "Switch between note and to-do type"
+msgstr "Skift mellem note-  og opgave type"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Skift mellem note-  og opgave type"
+
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "Skift mellem note-  og opgave type"
+
+#, fuzzy
+msgid "Copy Markdown link"
+msgstr "Markdown"
+
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Slet noter?"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Slet disse noter?"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Forbrug: %s"
@@ -1773,10 +1807,6 @@ msgstr "Konverter til note"
 msgid "Convert to todo"
 msgstr "Konverter til opgave"
 
-#, fuzzy
-msgid "Copy Markdown link"
-msgstr "Markdown"
-
 msgid "Hide metadata"
 msgstr "Skjul metadata"
 
@@ -1810,27 +1840,6 @@ msgstr "Du har ingen notesbøger. Opret en ved at klikke på (+) knappen."
 
 msgid "Welcome"
 msgstr "Velkommen"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "Tilføj eller slet mærker"
-
-#, fuzzy
-#~ msgid "%s - Copy"
-#~ msgstr "Kopier"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "Skift mellem note-  og opgave type"
-
-#, fuzzy
-#~ msgid "Switch to note type"
-#~ msgstr "Skift mellem note-  og opgave type"
-
-#, fuzzy
-#~ msgid "Switch to to-do type"
-#~ msgstr "Skift mellem note-  og opgave type"
-
-#~ msgid "Delete notes?"
-#~ msgstr "Slet noter?"
 
 #~ msgid "State: %s."
 #~ msgstr "Tilstand: %s."

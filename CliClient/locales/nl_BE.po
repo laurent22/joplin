@@ -1148,6 +1148,39 @@ msgstr "Middelen: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Selecteer waar de synchronisatie status naar geëxporteerd moet worden"
 
+msgid "Add or remove tags"
+msgstr "Voeg tag toe of verwijder tag"
+
+#, fuzzy
+msgid "Duplicate"
+msgstr "Sluit de applicatie."
+
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "Kopieer"
+
+msgid "Switch between note and to-do type"
+msgstr "Wissel tussen notitie en to-do type"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Wissel tussen notitie en to-do type"
+
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "Wissel tussen notitie en to-do type"
+
+msgid "Copy Markdown link"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Notities verwijderen?"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Deze notities verwijderen?"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Gebruik: %s"
@@ -1797,9 +1830,6 @@ msgstr "Converteer naar notitie"
 msgid "Convert to todo"
 msgstr "Converteer naar to-do"
 
-msgid "Copy Markdown link"
-msgstr ""
-
 msgid "Hide metadata"
 msgstr "Verberg metadata"
 
@@ -1835,27 +1865,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Welkom"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "Voeg tag toe of verwijder tag"
-
-#, fuzzy
-#~ msgid "%s - Copy"
-#~ msgstr "Kopieer"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "Wissel tussen notitie en to-do type"
-
-#, fuzzy
-#~ msgid "Switch to note type"
-#~ msgstr "Wissel tussen notitie en to-do type"
-
-#, fuzzy
-#~ msgid "Switch to to-do type"
-#~ msgstr "Wissel tussen notitie en to-do type"
-
-#~ msgid "Delete notes?"
-#~ msgstr "Notities verwijderen?"
 
 #, fuzzy
 #~ msgid "State: %s."

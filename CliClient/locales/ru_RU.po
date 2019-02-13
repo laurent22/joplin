@@ -1141,6 +1141,40 @@ msgstr "Ресурсов: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Выберите, куда должен быть экспортирован статус синхронизации"
 
+msgid "Add or remove tags"
+msgstr "Добавить или удалить теги"
+
+#, fuzzy
+msgid "Duplicate"
+msgstr "Выйти из приложения."
+
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "Копировать"
+
+msgid "Switch between note and to-do type"
+msgstr "Переключить тип между заметкой и задачей"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "Переключить тип между заметкой и задачей"
+
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "Переключить тип между заметкой и задачей"
+
+#, fuzzy
+msgid "Copy Markdown link"
+msgstr "Markdown"
+
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Удалить заметки?"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Удалить эти заметки?"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Использование: %s"
@@ -1784,10 +1818,6 @@ msgstr "Преобразовать в заметку"
 msgid "Convert to todo"
 msgstr "Преобразовать в задачу"
 
-#, fuzzy
-msgid "Copy Markdown link"
-msgstr "Markdown"
-
 msgid "Hide metadata"
 msgstr "Скрыть метаданные"
 
@@ -1821,27 +1851,6 @@ msgstr "У вас сейчас нет блокнота. Создайте его 
 
 msgid "Welcome"
 msgstr "Добро пожаловать"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "Добавить или удалить теги"
-
-#, fuzzy
-#~ msgid "%s - Copy"
-#~ msgstr "Копировать"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "Переключить тип между заметкой и задачей"
-
-#, fuzzy
-#~ msgid "Switch to note type"
-#~ msgstr "Переключить тип между заметкой и задачей"
-
-#, fuzzy
-#~ msgid "Switch to to-do type"
-#~ msgstr "Переключить тип между заметкой и задачей"
-
-#~ msgid "Delete notes?"
-#~ msgstr "Удалить заметки?"
 
 #, fuzzy
 #~ msgid "State: %s."

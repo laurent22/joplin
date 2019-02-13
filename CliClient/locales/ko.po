@@ -1123,6 +1123,36 @@ msgstr "리소스 가져오는 중: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "동기화 상태를 내보낼 대상을 선택하세요"
 
+msgid "Add or remove tags"
+msgstr "태그 추가 및 제거"
+
+msgid "Duplicate"
+msgstr "복제"
+
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - 복사"
+
+msgid "Switch between note and to-do type"
+msgstr "'노트' 또는'할 일' 형식으로 전환합니다."
+
+msgid "Switch to note type"
+msgstr "'노트' 형식으로 전환합니다."
+
+msgid "Switch to to-do type"
+msgstr "'할 일' 형식으로 전환합니다."
+
+msgid "Copy Markdown link"
+msgstr "마크다운 링크 복사"
+
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "노트를 삭제할까요?"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "노트를 삭제할까요?"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "사용량: %s"
@@ -1767,9 +1797,6 @@ msgstr "노트로 변환"
 msgid "Convert to todo"
 msgstr "'할 일'로 변환"
 
-msgid "Copy Markdown link"
-msgstr "마크다운 링크 복사"
-
 msgid "Hide metadata"
 msgstr "메타데이터 숨김"
 
@@ -1803,27 +1830,6 @@ msgstr "노트북이 없습니다. (+) 버튼을 눌러 새로 만드세요."
 
 msgid "Welcome"
 msgstr "환영합니다"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "태그 추가 및 제거"
-
-#~ msgid "Duplicate"
-#~ msgstr "복제"
-
-#~ msgid "%s - Copy"
-#~ msgstr "%s - 복사"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "'노트' 또는'할 일' 형식으로 전환합니다."
-
-#~ msgid "Switch to note type"
-#~ msgstr "'노트' 형식으로 전환합니다."
-
-#~ msgid "Switch to to-do type"
-#~ msgstr "'할 일' 형식으로 전환합니다."
-
-#~ msgid "Delete notes?"
-#~ msgstr "노트를 삭제할까요?"
 
 #~ msgid "State: %s."
 #~ msgstr "상태: %s."

@@ -1096,6 +1096,38 @@ msgstr "資源: %d。"
 msgid "Please select where the sync status should be exported to"
 msgstr "請選擇將同步狀態導出到的位置"
 
+msgid "Add or remove tags"
+msgstr "新增或移除標籤"
+
+msgid "Duplicate"
+msgstr "新增複本"
+
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - 複本"
+
+msgid "Switch between note and to-do type"
+msgstr "切換到記事 / 待辦事項"
+
+#, fuzzy
+msgid "Switch to note type"
+msgstr "切換到記事 / 待辦事項"
+
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "切換到記事 / 待辦事項"
+
+msgid "Copy Markdown link"
+msgstr "複製 Markdown 連結"
+
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "刪除此記事？"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "刪除這些記事？"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "使用資訊: %s"
@@ -1724,9 +1756,6 @@ msgstr "轉換為記事"
 msgid "Convert to todo"
 msgstr "轉換為待辦事項"
 
-msgid "Copy Markdown link"
-msgstr "複製 Markdown 連結"
-
 msgid "Hide metadata"
 msgstr "隱藏後設資料 (metadata)"
 
@@ -1758,29 +1787,6 @@ msgstr "您當前沒有任何筆記本。通過按一下 (+) 鍵去建立一本�
 
 msgid "Welcome"
 msgstr "歡迎"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "新增或移除標籤"
-
-#~ msgid "Duplicate"
-#~ msgstr "新增複本"
-
-#~ msgid "%s - Copy"
-#~ msgstr "%s - 複本"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "切換到記事 / 待辦事項"
-
-#, fuzzy
-#~ msgid "Switch to note type"
-#~ msgstr "切換到記事 / 待辦事項"
-
-#, fuzzy
-#~ msgid "Switch to to-do type"
-#~ msgstr "切換到記事 / 待辦事項"
-
-#~ msgid "Delete notes?"
-#~ msgstr "刪除此記事？"
 
 #~ msgid "State: %s."
 #~ msgstr "狀態: %s。"
