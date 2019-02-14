@@ -32,9 +32,7 @@ class SideMenuContentComponent extends Component {
 		let styles = {
 			menu: {
 				flex: 1,
-				backgroundColor: theme.backgroundColor,
-				borderTopWidth: 1,
-				borderTopColor: theme.dividerColor,
+				backgroundColor: theme.backgroundColor
 			},
 			button: {
 				flex: 1,

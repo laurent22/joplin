@@ -54,6 +54,7 @@ const ShareExtension = require('react-native-share-extension').default;
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const SearchEngine = require('lib/services/SearchEngine');
 const WelcomeUtils = require('lib/WelcomeUtils');
+const { themeStyle } = require('lib/components/global-style.js');
 
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
@@ -642,8 +643,9 @@ class AppComponent extends React.Component {
 
 	render() {
 		if (this.props.appState != 'ready') return null;
+		const theme = themeStyle(this.props.theme);
 
-		const sideMenuContent = <SafeAreaView style={{flex:1}}><SideMenuContent/></SafeAreaView>;
+		const sideMenuContent = <SafeAreaView style={{flex:1, backgroundColor: theme.backgroundColor}}><SideMenuContent/></SafeAreaView>;
 
 		const appNavInit = {
 			Welcome: { screen: WelcomeScreen },
@@ -671,7 +673,8 @@ class AppComponent extends React.Component {
 				}}
 				>
 				<MenuContext style={{ flex: 1 }}>
-					<SafeAreaView style={{flex:1}}>
+					<SafeAreaView style={{flex:0, backgroundColor: theme.raisedBackgroundColor}} />
+					<SafeAreaView style={{flex:1, backgroundColor: theme.backgroundColor}}>
 						<AppNav screens={appNavInit} />
 					</SafeAreaView>
 					<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
@@ -689,6 +692,7 @@ const mapStateToProps = (state) => {
 		appState: state.appState,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		selectedFolderId: state.selectedFolderId,
+		theme: state.settings.theme
 	};
 };
 
