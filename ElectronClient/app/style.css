@@ -22,6 +22,26 @@ table td, table th {
 	border: 1px solid #ccc;
 }
 
+::-webkit-scrollbar {
+	width: 7px;
+}
+
+::-webkit-scrollbar-track {
+	border: none;
+}
+ 
+::-webkit-scrollbar-thumb {
+	background: rgba(100, 100, 100, 0.3); 
+	border-radius: 5px;
+}
+
+::-webkit-scrollbar-track:hover {
+	background: rgba(0, 0, 0, 0.1); 
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: rgba(100, 100, 100, 0.7); 
+}
 /* By default, the Ice Editor displays invalid characters, such as non-breaking spaces
    as red boxes, but since those are actually valid characters and common in imported
    Evernote data, we hide them here. */

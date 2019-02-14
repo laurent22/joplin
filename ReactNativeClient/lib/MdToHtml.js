@@ -536,6 +536,22 @@ class MdToHtml {
 				font-family: ` + fontFamily + `;
 				padding-bottom: ` + options.paddingBottom + `;
 			}
+			::-webkit-scrollbar {
+				width: 7px;
+			}
+			::-webkit-scrollbar-track {
+				border: none;
+			}
+			::-webkit-scrollbar-thumb {
+				background: rgba(100, 100, 100, 0.3); 
+				border-radius: 5px;
+			}
+			::-webkit-scrollbar-track:hover {
+				background: rgba(0, 0, 0, 0.1); 
+			}
+			::-webkit-scrollbar-thumb:hover {
+				background: rgba(100, 100, 100, 0.7); 
+			}
 			p, h1, h2, h3, h4, h5, h6, ul, table {
 				margin-top: .6em;
 				margin-bottom: .65em;
