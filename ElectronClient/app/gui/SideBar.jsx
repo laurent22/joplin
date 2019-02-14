@@ -666,7 +666,7 @@ class SideBarComponent extends React.Component {
 		});
 
 		let items = [];
-		items.push(this.makeHeader("folderHeader", _("Notebooks"), "fa-folder-o", {
+		items.push(this.makeHeader("folderHeader", _("Notebooks"), "fa-book", {
 			onDrop: this.onFolderDrop_,
 			folderid: '',
 			toggleblock: 1
