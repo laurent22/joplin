@@ -49,6 +49,12 @@ class AppComponent extends Component {
 			});
 		}
 
+		this.clipUrl_click = () => {
+			bridge().sendCommandToActiveTab({
+				name: 'pageUrl',
+			});
+		}
+
 		this.clipScreenshot_click = async () => {
 			try {
 				const baseUrl = await bridge().clipperServerBaseUrl();
@@ -296,6 +302,7 @@ class AppComponent extends Component {
 						<li><a className="Button" onClick={this.clipComplete_click}>Clip complete page</a></li>
 						<li><a className="Button" onClick={this.clipSelection_click}>Clip selection</a></li>
 						<li><a className="Button" onClick={this.clipScreenshot_click}>Clip screenshot</a></li>
+						<li><a className="Button" onClick={this.clipUrl_click}>Clip URL</a></li>
 					</ul>
 				</div>
 				{ foldersComp() }

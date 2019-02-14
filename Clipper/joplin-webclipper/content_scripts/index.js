@@ -249,6 +249,10 @@
 
 			return {};
 
+		} else if (command.name === "pageUrl") {
+			let url = location.origin + location.pathname + location.search;
+			return clippedContentResponse(pageTitle(), url, getImageSizes(document));
+
 		} else {
 			throw new Error('Unknown command: ' + JSON.stringify(command));
 		}
