@@ -1,5 +1,88 @@
 # Joplin changelog
 
+## [v1.0.127](https://github.com/laurent22/joplin/releases/tag/v1.0.127) - 2019-02-14T23:12:48Z
+
+This big release aims at improving the overall usability of the application and to make it more accessible to newcomers.
+
+- New: Added Welcome notes the first time the app is launched to give an overview of Joplin and its features.
+- New: Allow selecting editor path with dialog window
+- New: Record last selected note IDs and restore it when opening notebook
+- New: Resolves [#1041](https://github.com/laurent22/joplin/issues/1041): Added button to go back to previous note after clicking link
+- New: Restore scroll position when switching notes
+- New: When selecting multiple notes, display possible actions as buttons
+- Fixed importing ENEX file when note incorrectly contains a reminder tag
+- Fixes [#1142](https://github.com/laurent22/joplin/issues/1142): Disallow dropping notes on sidebar Notebook header
+- Fixes [#1161](https://github.com/laurent22/joplin/issues/1161): Display highlighted text and other background colours and images when exporting to PDF or printing
+- Fixes [#1200](https://github.com/laurent22/joplin/issues/1200): Note list was hidden when minimizing and maximizing window
+- Fixed: Do not display tags that are not associated with any note
+- Improved: Added 'Insert date time' option to menu
+- Improved: Added a few more shortcuts for macOS and other platforms
+- Improved: Added Usage link next to search box
+- Improved: Allow using macOS App bundle as external editor, and improved error handling
+- Improved: Better handle search queries that include dashes
+- Improved: Delete note using keyboard
+- Improved: Fixes [#1196](https://github.com/laurent22/joplin/issues/1196): Optimised loading speed of notes when switching from one to another (2-3 times faster)
+- Improved: Group config options into sections
+- Improved: Improve how new notes are created to make it more reliable
+- Improved: Improve styling and layout of notes in note viewer
+- Improved: Keep synchronise button and status at bottom of side bar
+- Improved: Made confirmation buttons sticky on Config screen
+- Improved: Select notes in note list using arrow keys
+- Improved: Toggle todo checkbox using SPACE key
+- Improved: Use arrow to move between sidebar items, and added shortcuts to focus different elements
+- Improved: Use ENTER and ESCAPE to go to next search result or to close search bar
+- Improved: Use SPACE to collapse or expand a folder in sidebar
+- Improved: When deleting note, display title or number of notes
+- Improved: Highlight row backgroung in table
+- Improved: Printing page - checkboxes and background colours and images are now printed correctly
+- Improved: Add styling to the scrollbars in text editor and viewer ([#1204](https://github.com/laurent22/joplin/issues/1204))
+- Updated translations and added Turkish language (thanks Zorbey Doğangüneş)
+- API: Allow specifying item ID for any item
+
+## [v1.0.126](https://github.com/laurent22/joplin/releases/tag/v1.0.126) - 2019-02-09T19:46:16Z
+
+- New: Added Welcome notes the first time the app is launched to give an overview of Joplin and its features.
+- New: Allow selecting editor path with dialog window
+- New: Record last selected note IDs and restore it when opening notebook
+- New: Resolves [#1041](https://github.com/laurent22/joplin/issues/1041): Added button to go back to previous note after clicking link
+- New: Restore scroll position when switching notes
+- New: When selecting multiple notes, display possible actions as buttons
+- Fixed importing ENEX file when note incorrectly contains a reminder tag
+- Fixes [#1142](https://github.com/laurent22/joplin/issues/1142): Disallow dropping notes on sidebar Notebook header
+- Fixes [#1161](https://github.com/laurent22/joplin/issues/1161): Display highlighted text and other background colours and images when exporting to PDF or printing
+- Improved: Added 'Insert date time' option to menu
+- Improved: Added a few more shortcuts for macOS and other platforms
+- Improved: Added Usage link next to search box
+- Improved: Allow using macOS App bundle as external editor, and improved error handling
+- Improved: Better handle search queries that include dashes
+- Improved: Delete note using keyboard
+- Improved: Fixes [#1196](https://github.com/laurent22/joplin/issues/1196): Optimised loading speed of notes when switching from one to another (2-3 times faster)
+- Improved: Group config options into sections
+- Improved: Improve how new notes are created to make it more reliable
+- Improved: Improve styling and layout of notes in note viewer
+- Improved: Keep synchronise button and status at bottom of side bar
+- Improved: Made confirmation buttons sticky on Config screen
+- Improved: Move up and down in note list using arrow keys
+- Improved: Toggle todo checkbox using SPACE key
+- Improved: Use arrow to move between sidebar items, and added shortcuts to focus different elements
+- Improved: Use ENTER and ESCAPE to go to next search result or to close search bar
+- Improved: Use SPACE to collapse or expand a folder in sidebar
+- Improved: When deleting note, display title or number of notes
+- API: Allow specifying item ID for any item
+
+## [v1.0.125](https://github.com/laurent22/joplin/releases/tag/v1.0.125) - 2019-01-26T18:14:33Z
+
+- New: Added support for pre-releases - in the options you can now choose to receive pre-releases too.
+- New: Added version info to auto-update dialog
+- New: Resolves [#1099](https://github.com/laurent22/joplin/issues/1099): Show Markdown images in external editor
+- Improved: Better multi-language support in search engine. Should now work better with languages like Russian, French, Chinese, Japanese or Korean, as well as any language with accents.
+- Improved: Search keyword highlighting
+- Improved local search by highlighting even partial matches
+- Fixes [#1126](https://github.com/laurent22/joplin/issues/1126): Open Katex link in external browser instead of inside app
+- Fixes [#769](https://github.com/laurent22/joplin/issues/769): Disable META tags in Markdown viewers
+- Improved: Handle ESC key press to cancel the NotePropertiesDialog ([#1125](https://github.com/laurent22/joplin/issues/1125))
+- Fixes [#1137](https://github.com/laurent22/joplin/issues/1137): Fixed regression on SeaFile sync
+
 ## [v1.0.120](https://github.com/laurent22/joplin/releases/tag/v1.0.120) - 2019-01-10T21:42:53Z
 
 - New: Adds functionality to toggle the notebooks and tags on the sidebar. ([#1002](https://github.com/laurent22/joplin/issues/1002))
