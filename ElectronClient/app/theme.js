@@ -107,9 +107,9 @@ const darkStyle = {
 	selectedColor: '#333333',
 	urlColor: '#4E87EE',
 
-	backgroundColor2: "#162B3D",
+	backgroundColor2: "#181A1D",
 	color2: "#ffffff",
-	selectedColor2: "#0269C2",
+	selectedColor2: "#333333",
 	colorError2: "#ff6c6c",
 
 	raisedBackgroundColor: "#474747",
