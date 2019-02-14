@@ -15,6 +15,7 @@ const { ConfigScreen } = require('./ConfigScreen.min.js');
 const { EncryptionConfigScreen } = require('./EncryptionConfigScreen.min.js');
 const { ClipperConfigScreen } = require('./ClipperConfigScreen.min.js');
 const { Navigator } = require('./Navigator.min.js');
+const WelcomeUtils = require('lib/WelcomeUtils');
 
 const { app } = require('../app');
 
@@ -71,6 +72,8 @@ class RootComponent extends React.Component {
 				state: 'ready',
 			});
 		}
+
+		await WelcomeUtils.install(this.props.dispatch);
 	}
 
 	render() {

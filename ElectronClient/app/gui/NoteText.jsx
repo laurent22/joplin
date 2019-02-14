@@ -36,6 +36,7 @@ const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { toSystemSlashes, safeFilename } = require('lib/path-utils');
 const { clipboard } = require('electron');
 const SearchEngine = require('lib/services/SearchEngine');
+const NoteTextViewer = require('./NoteTextViewer.min');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -78,6 +79,8 @@ class NoteTextComponent extends React.Component {
 			showLocalSearch: false,
 			localSearch: Object.assign({}, this.localSearchDefaultState), 
 		};
+
+		this.webviewRef_ = React.createRef();
 
 		this.lastLoadedNoteId_ = null;
 
@@ -260,6 +263,8 @@ class NoteTextComponent extends React.Component {
 		}
 
 		this.titleField_keyDown = this.titleField_keyDown.bind(this);
+		this.webview_ipcMessage = this.webview_ipcMessage.bind(this);
+		this.webview_domReady = this.webview_domReady.bind(this);
 	}
 
 	// Note:
@@ -360,7 +365,6 @@ class NoteTextComponent extends React.Component {
 		this.saveIfNeeded();
 
 		this.mdToHtml_ = null;
-		this.destroyWebview();
 
 		eventManager.removeListener('alarmChange', this.onAlarmChange_);
 		eventManager.removeListener('noteTypeToggle', this.onNoteTypeToggle_);
@@ -460,7 +464,7 @@ class NoteTextComponent extends React.Component {
 		// If we are loading nothing (noteId == null), make sure to
 		// set webviewReady to false too because the webview component
 		// is going to be removed in render().
-		const webviewReady = this.webview_ && this.state.webviewReady && (noteId || props.newNote);
+		const webviewReady = !!this.webviewRef_.current && this.state.webviewReady && (!!noteId || !!props.newNote);
 
 		// Scroll back to top when loading new note
 		if (loadingNewNote) {
@@ -477,11 +481,13 @@ class NoteTextComponent extends React.Component {
 			if (this.props.newNote) {
 				const focusSettingName = !!note.is_todo ? 'newTodoFocus' : 'newNoteFocus';
 
-				if (Setting.value(focusSettingName) === 'title') {
-					if (this.titleField_) this.titleField_.focus();
-				} else {
-					if (this.editor_) this.editor_.editor.focus();
-				}
+				requestAnimationFrame(() => {
+					if (Setting.value(focusSettingName) === 'title') {
+						if (this.titleField_) this.titleField_.focus();
+					} else {
+						if (this.editor_) this.editor_.editor.focus();
+					}
+				});
 			}
 
 			if (this.editor_) {
@@ -504,11 +510,10 @@ class NoteTextComponent extends React.Component {
 				this.editor_.editor.clearSelection();
 				this.editor_.editor.moveCursorTo(0,0);
 
-				if (scrollPercent) {
-					setTimeout(() => {
-						this.setEditorPercentScroll(scrollPercent);
-					}, 10);
-				}
+				setTimeout(() => {
+					this.setEditorPercentScroll(scrollPercent ? scrollPercent : 0);
+					this.setViewerPercentScroll(scrollPercent ? scrollPercent : 0);
+				}, 10);
 			}
 		}
 
@@ -706,6 +711,10 @@ class NoteTextComponent extends React.Component {
 					type: "FOLDER_AND_NOTE_SELECT",
 					folderId: item.parent_id,
 					noteId: item.id,
+					historyNoteAction: {
+						id: this.state.note.id,
+						parent_id: this.state.note.parent_id,
+					},
 				});
 			} else {
 				throw new Error('Unsupported item type: ' + item.type_);
@@ -738,11 +747,31 @@ class NoteTextComponent extends React.Component {
 	}
 
 	setEditorPercentScroll(p) {
+		const noteId = this.props.noteId;
+
+		if (noteId) {
+			this.props.dispatch({
+				type: 'EDITOR_SCROLL_PERCENT_SET',
+				noteId: noteId,
+				percent: p,
+			});
+		}
+
 		this.editorSetScrollTop(p * this.editorMaxScroll());
 	}
 
 	setViewerPercentScroll(p) {
-		this.webview_.send('setPercentScroll', p);
+		const noteId = this.props.noteId;
+
+		if (noteId) {
+			this.props.dispatch({
+				type: 'EDITOR_SCROLL_PERCENT_SET',
+				noteId: noteId,
+				percent: p,
+			});
+		}
+
+		if (this.webviewRef_.current) this.webviewRef_.current.wrappedInstance.send('setPercentScroll', p);
 	}
 
 	editor_scroll() {
@@ -754,39 +783,18 @@ class NoteTextComponent extends React.Component {
 		const m = this.editorMaxScroll();
 		const percent = m ? this.editorScrollTop() / m : 0;
 
-		const noteId = this.props.noteId;
-
-		if (noteId) {
-			this.props.dispatch({
-				type: 'EDITOR_SCROLL_PERCENT_SET',
-				noteId: noteId,
-				percent: percent,
-			});
-		}
-
 		this.setViewerPercentScroll(percent);
 	}
 
 	webview_domReady() {
-		if (!this.webview_) return;
+		if (!this.webviewRef_.current) return;
 
 		this.setState({
 			webviewReady: true,
 		});
 
-		// if (Setting.value('env') === 'dev') this.webview_.openDevTools();
-	}
-
-	webview_ref(element) {
-		if (this.webview_) {
-			if (this.webview_ === element) return;
-			this.destroyWebview();
-		}
-
-		if (!element) {
-			this.destroyWebview();
-		} else {
-			this.initWebview(element);
+		if (Setting.value('env') === 'dev') {
+			// this.webviewRef_.current.wrappedInstance.openDevTools();
 		}
 	}
 
@@ -862,35 +870,6 @@ class NoteTextComponent extends React.Component {
 		}
 	}
 
-	initWebview(wv) {
-		if (!this.webviewListeners_) {
-			this.webviewListeners_ = {
-				'dom-ready': this.webview_domReady.bind(this),
-				'ipc-message': this.webview_ipcMessage.bind(this),
-			};
-		}
-
-		for (let n in this.webviewListeners_) {
-			if (!this.webviewListeners_.hasOwnProperty(n)) continue;
-			const fn = this.webviewListeners_[n];
-			wv.addEventListener(n, fn);
-		}
-
-		this.webview_ = wv;
-	}
-
-	destroyWebview() {
-		if (!this.webview_) return;
-
-		for (let n in this.webviewListeners_) {
-			if (!this.webviewListeners_.hasOwnProperty(n)) continue;
-			const fn = this.webviewListeners_[n];
-			this.webview_.removeEventListener(n, fn);
-		}
-
-		this.webview_ = null;
-	}
-
 	aceEditor_change(body) {
 		shared.noteComponent_change(this, 'body', body);
 		this.scheduleHtmlUpdate();
@@ -912,7 +891,10 @@ class NoteTextComponent extends React.Component {
 		}
 	}
 
-	updateHtml(body = null) {
+	updateHtml(body = null, options = null) {
+		if (!options) options = {};
+		if (!('useCustomCss' in options)) options.useCustomCss = true;
+
 		const mdOptions = {
 			onResourceLoaded: () => {
 				if (this.resourceLoadedTimeoutId_) {
@@ -933,7 +915,6 @@ class NoteTextComponent extends React.Component {
 
 		let bodyToRender = body;
 		if (bodyToRender === null) bodyToRender = this.state.note && this.state.note.body ? this.state.note.body : '';
-		bodyToRender = '<style>' + this.props.customCss + '</style>\n' + bodyToRender;
 		let bodyHtml = '';
 
 		const visiblePanes = this.props.visiblePanes || ['editor', 'viewer'];
@@ -942,6 +923,8 @@ class NoteTextComponent extends React.Component {
 			// Fixes https://github.com/laurent22/joplin/issues/217
 			bodyToRender = '*' + _('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout')) + '*';
 		}
+
+		if (options.useCustomCss) bodyToRender = '<style>' + this.props.customCss + '</style>\n' + bodyToRender;
 
 		bodyHtml = this.mdToHtml().render(bodyToRender, theme, mdOptions);
 
@@ -986,6 +969,8 @@ class NoteTextComponent extends React.Component {
 				fn = this.commandTextBold;
 			} else if (command.name === 'textItalic') {
 				fn = this.commandTextItalic;
+			} else if (command.name === 'textLink') {
+				fn = this.commandTextLink;
 			} else if (command.name === 'insertDateTime') {
 				fn = this.commandDateTime;
 			} else if (command.name === 'commandStartExternalEditing') {
@@ -1078,7 +1063,7 @@ class NoteTextComponent extends React.Component {
 	}
 
 	printTo_(target, options) {
-		if (this.props.selectedNoteIds.length !== 1 || !this.webview_) {
+		if (this.props.selectedNoteIds.length !== 1 || !this.webviewRef_.current) {
 			throw new Error(_('Only one note can be printed or exported to PDF at a time.'));
 		}
 
@@ -1088,7 +1073,7 @@ class NoteTextComponent extends React.Component {
 		const previousTheme = Setting.value('theme');
 		Setting.setValue('theme', Setting.THEME_LIGHT);
 		this.lastSetHtml_ = '';
-		this.updateHtml(tempBody);
+		this.updateHtml(tempBody, { useCustomCss: false });
 		this.forceUpdate();
 
 		const restoreSettings = () => {
@@ -1100,7 +1085,7 @@ class NoteTextComponent extends React.Component {
 
 		setTimeout(() => {
 			if (target === 'pdf') {
-				this.webview_.printToPDF({}, (error, data) => {
+				this.webviewRef_.current.wrappedInstance.printToPDF({ printBackground: true }, (error, data) => {
 					restoreSettings();
 
 					if (error) {
@@ -1110,7 +1095,7 @@ class NoteTextComponent extends React.Component {
 					}
 				});
 			} else if (target === 'printer') {
-				this.webview_.print();
+				this.webviewRef_.current.wrappedInstance.print({ printBackground: true });
 				restoreSettings();
 			}
 		}, 100);		
@@ -1394,6 +1379,25 @@ class NoteTextComponent extends React.Component {
 			});
 		}
 
+		if (this.props.historyNotes.length) {
+			toolbarItems.push({
+				tooltip: _('Back'),
+				iconName: 'fa-arrow-left',
+				onClick: () => {
+					if (!this.props.historyNotes.length) return;
+
+					const lastItem = this.props.historyNotes[this.props.historyNotes.length - 1];
+
+					this.props.dispatch({
+						type: "FOLDER_AND_NOTE_SELECT",
+						folderId: lastItem.parent_id,
+						noteId: lastItem.id,
+						historyNoteAction: 'pop',
+					});					
+				},
+			});
+		}
+
 		toolbarItems.push({
 			tooltip: _('Bold'),
 			iconName: 'fa-bold',
@@ -1605,7 +1609,7 @@ class NoteTextComponent extends React.Component {
 
 		if (this.props.selectedNoteIds.length > 1) {
 			return this.renderMultiNotes(rootStyle);
-		} else if (!note || !!note.encryption_applied) {
+		} else if (!note || !!note.encryption_applied) { //|| (note && !this.props.newNote && this.props.noteId && note.id !== this.props.noteId)) { // note.id !== props.noteId is when the note has not been loaded yet, and the previous one is still in the state
 			return this.renderNoNotes(rootStyle);
 		}
 
@@ -1709,7 +1713,7 @@ class NoteTextComponent extends React.Component {
 			const htmlHasChanged = this.lastSetHtml_ !== html;
 			 if (htmlHasChanged) {
 				let options = {codeTheme: theme.codeThemeCss};
-				this.webview_.send('setHtml', html, options);
+				this.webviewRef_.current.wrappedInstance.send('setHtml', html, options);
 				this.lastSetHtml_ = html;
 			}
 
@@ -1735,7 +1739,7 @@ class NoteTextComponent extends React.Component {
 			if (htmlHasChanged || keywordHash !== this.lastSetMarkers_ || !ObjectUtils.fieldsEqual(this.lastSetMarkersOptions_, markerOptions)) {
 				this.lastSetMarkers_ = keywordHash;
 				this.lastSetMarkersOptions_ = Object.assign({}, markerOptions);
-				this.webview_.send('setMarkers', keywords, markerOptions);
+				this.webviewRef_.current.wrappedInstance.send('setMarkers', keywords, markerOptions);
 			}
 		}
 
@@ -1767,31 +1771,12 @@ class NoteTextComponent extends React.Component {
 
 		const titleBarDate = <span style={Object.assign({}, theme.textStyle, {color: theme.colorFaded})}>{time.formatMsToLocal(note.user_updated_time)}</span>
 
-		const viewer =  <webview
-			style={viewerStyle}
-			preload="gui/note-viewer/preload.js"
-			src="gui/note-viewer/index.html"
-			webpreferences="contextIsolation"
-			ref={(elem) => { this.webview_ref(elem); } }
+		const viewer = <NoteTextViewer
+			ref={this.webviewRef_}
+			viewerStyle={viewerStyle}
+			onDomReady={this.webview_domReady}
+			onIpcMessage={this.webview_ipcMessage}
 		/>
-
-		// const markers = [{
-		// 	startRow: 2,
-		// 	startCol: 3,
-		// 	endRow: 2,
-		// 	endCol: 6,
-		// 	type: 'text',
-		// 	className: 'test-marker'
-		// }];
-
-		// markers={markers}
-		// editorProps={{$useWorker: false}}
-
-		// #note-editor .test-marker {
-		// 	background-color: red;
-		// 	color: yellow;
-		// 	position: absolute;
-		// }
 
 		const editorRootStyle = Object.assign({}, editorStyle);
 		delete editorRootStyle.width;
@@ -1814,6 +1799,7 @@ class NoteTextComponent extends React.Component {
 			showPrintMargin={false}
 			onSelectionChange={this.aceEditor_selectionChange}
 			onFocus={this.aceEditor_focus}
+			readOnly={visiblePanes.indexOf('editor') < 0}
 
 			// Disable warning: "Automatically scrolling cursor into view after
 			// selection change this will be disabled in the next version set
@@ -1874,6 +1860,7 @@ const mapStateToProps = (state) => {
 		watchedNoteFiles: state.watchedNoteFiles,
 		customCss: state.customCss,
 		lastEditorScrollPercents: state.lastEditorScrollPercents,
+		historyNotes: state.historyNotes,
 	};
 };
 

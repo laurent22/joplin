@@ -576,6 +576,9 @@ msgstr ""
 msgid "Italic"
 msgstr ""
 
+msgid "Link"
+msgstr ""
+
 msgid "Insert Date Time"
 msgstr ""
 
@@ -1033,6 +1036,36 @@ msgid "Fetching resources: %d"
 msgstr ""
 
 msgid "Please select where the sync status should be exported to"
+msgstr ""
+
+msgid "Add or remove tags"
+msgstr ""
+
+msgid "Duplicate"
+msgstr ""
+
+#, javascript-format
+msgid "%s - Copy"
+msgstr ""
+
+msgid "Switch between note and to-do type"
+msgstr ""
+
+msgid "Switch to note type"
+msgstr ""
+
+msgid "Switch to to-do type"
+msgstr ""
+
+msgid "Copy Markdown link"
+msgstr ""
+
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr ""
+
+#, javascript-format
+msgid "Delete these %d notes?"
 msgstr ""
 
 #, javascript-format
@@ -1632,9 +1665,6 @@ msgid "Convert to note"
 msgstr ""
 
 msgid "Convert to todo"
-msgstr ""
-
-msgid "Copy Markdown link"
 msgstr ""
 
 msgid "Hide metadata"

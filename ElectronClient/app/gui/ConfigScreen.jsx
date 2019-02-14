@@ -56,11 +56,15 @@ class ConfigScreenComponent extends React.Component {
 		}
 
 		const sectionStyle = {
-			borderTopWidth: 1,
-			borderTopColor: theme.dividerColor,
-			borderTopStyle: 'solid',
 			marginBottom: 20,
 		};
+
+		const headerStyle = Object.assign({}, theme.headerStyle, {
+			borderBottomWidth: 1,
+			borderBottomColor: theme.dividerColor,
+			borderBottomStyle: 'solid',
+			paddingBottom: '.4em',
+		});
 
 		if (section.name === 'general') {
 			sectionStyle.borderTopWidth = 0;
@@ -74,7 +78,7 @@ class ConfigScreenComponent extends React.Component {
 
 		return (
 			<div key={key} style={sectionStyle}>
-				<h2 style={theme.headerStyle}>{Setting.sectionNameToLabel(section.name)}</h2>
+				<h2 style={headerStyle}>{Setting.sectionNameToLabel(section.name)}</h2>
 				{noteComp}
 				<div>
 					{settingComps}
@@ -338,20 +342,20 @@ class ConfigScreenComponent extends React.Component {
 			display: 'flex',
 			alignItems: 'center',
 			padding: 15,
-			borderTopWidth: 1,
-			borderTopStyle: 'solid',
-			borderTopColor: theme.dividerColor,
+			borderBottomWidth: 1,
+			borderBottomStyle: 'solid',
+			borderBottomColor: theme.dividerColor,
 		};
 
 		return (
 			<div style={style}>
+				<div style={buttonBarStyle}>
+					<button onClick={() => {this.onCancelClick()}} style={buttonStyle}>{'⬅ ' + _('Cancel')}</button>
+					<button disabled={!hasChanges} onClick={() => {this.onSaveClick()}} style={buttonStyleApprove}>{_('OK')}</button>
+					<button disabled={!hasChanges} onClick={() => {this.onApplyClick()}} style={buttonStyleApprove}>{_('Apply')}</button>
+				</div>
 				<div style={containerStyle}>
 					{ settingComps }
-				</div>
-				<div style={buttonBarStyle}>
-					<button disabled={!hasChanges} onClick={() => {this.onSaveClick()}} style={buttonStyleApprove}>{_('OK')}</button>
-					<button onClick={() => {this.onCancelClick()}} style={buttonStyle}>{_('Cancel')}</button>
-					<button disabled={!hasChanges} onClick={() => {this.onApplyClick()}} style={buttonStyleApprove}>{_('Apply')}</button>
 				</div>
 			</div>
 		);

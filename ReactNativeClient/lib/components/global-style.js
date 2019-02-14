@@ -27,11 +27,15 @@ const globalStyle = {
 
 	// For WebView - must correspond to the properties above
 	htmlFontSize: '16px',
-	htmlColor: 'black', // Note: CSS in WebView component only supports named colors or rgb() notation
+	htmlColor: '#222222',
 	htmlBackgroundColor: 'white',
-	htmlDividerColor: 'Gainsboro',
-	htmlLinkColor: 'blue',
-	htmlLineHeight: '20px',
+	htmlDividerColor: 'rgb(230,230,230)',
+	htmlLinkColor: 'rgb(80,130,190)',
+	htmlLineHeight: '1.6em',
+
+	htmlCodeBackgroundColor: 'rgb(243, 243, 243)',
+	htmlCodeBorderColor: 'rgb(220, 220, 220)',
+	htmlCodeColor: 'rgb(0,0,0)',
 };
 
 globalStyle.marginRight = globalStyle.margin;
@@ -39,28 +43,6 @@ globalStyle.marginLeft = globalStyle.margin;
 globalStyle.marginTop = globalStyle.margin;
 globalStyle.marginBottom = globalStyle.margin;
 globalStyle.htmlMarginLeft = ((globalStyle.marginLeft / 10) * 0.6).toFixed(2) + 'em';
-
-// globalStyle.icon = {
-// 	color: globalStyle.color,
-// 	fontSize: 30,
-// };
-
-// globalStyle.lineInput = {
-// 	color: globalStyle.color,
-// 	backgroundColor: globalStyle.backgroundColor,
-// };
-
-// globalStyle.buttonRow = {
-// 	flexDirection: 'row',
-// 	borderTopWidth: 1,
-// 	borderTopColor: globalStyle.dividerColor,
-// 	paddingTop: 10,
-// };
-
-// globalStyle.normalText = {
-// 	color: globalStyle.color,
-// 	fontSize: globalStyle.fontSize,
-// };
 
 let themeCache_ = {};
 
@@ -129,6 +111,12 @@ function themeStyle(theme) {
 	output.htmlColor = 'rgb(220,220,220)';
 	output.htmlBackgroundColor = 'rgb(29,32,36)';
 	output.htmlLinkColor = 'rgb(166,166,255)';
+
+	output.htmlDividerColor = '#3D444E';
+	output.htmlLinkColor = 'rgb(166,166,255)';
+	output.htmlCodeColor = '#ffffff';
+	output.htmlCodeBackgroundColor = 'rgb(47, 48, 49)';
+	output.htmlCodeBorderColor = 'rgb(70, 70, 70)';
 
 	output.colorUrl = '#7B81FF';
 

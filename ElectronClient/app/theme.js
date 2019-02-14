@@ -81,15 +81,14 @@ const lightStyle = {
 
 	warningBackgroundColor: "#FFD08D",
 
-	codeColor: "#EFF0F1",
-	codeBorderColor: '#CBCBCB',
-
-	htmlColor:'black', // Note: CSS in WebView component only supports named colors or rgb() notation
+	htmlColor:'#222222',
 	htmlBackgroundColor: 'white',
-	htmlDividerColor: 'rgb(150,150,150)',
-	htmlLinkColor: 'blue',
-	htmlCodeColor: 'rgb(239, 240, 241)',
-	htmlCodeBorderColor: 'rgb(203, 203, 203)',
+	htmlDividerColor: 'rgb(230,230,230)',
+	htmlLinkColor: 'rgb(80,130,190)',
+	htmlTableBackgroundColor: 'rgb(247, 247, 247)',
+	htmlCodeBackgroundColor: 'rgb(243, 243, 243)',
+	htmlCodeBorderColor: 'rgb(220, 220, 220)',
+	htmlCodeColor: 'rgb(0,0,0)',
 
 	editorTheme: "chrome",
 	codeThemeCss: "atom-one-light.css",
@@ -118,14 +117,13 @@ const darkStyle = {
 
 	warningBackgroundColor: "#CC6600",
 
-	codeColor: "#2F3031",
-	codeBorderColor: '#464646',
-
-	htmlColor: 'rgb(220,220,220)', // Note: CSS in WebView component only supports named colors or rgb() notation
+	htmlColor: 'rgb(220,220,220)',
 	htmlBackgroundColor: 'rgb(29,32,36)',
-	htmlDividerColor: 'rgb(150,150,150)',
+	htmlDividerColor: '#3D444E',
+	htmlCodeColor: '#ffffff',
 	htmlLinkColor: 'rgb(166,166,255)',
-	htmlCodeColor: 'rgb(47, 48, 49)',
+	htmlTableBackgroundColor: 'rgb(40, 41, 42)',
+	htmlCodeBackgroundColor: 'rgb(47, 48, 49)',
 	htmlCodeBorderColor: 'rgb(70, 70, 70)',
 
 	editorTheme: 'twilight',
@@ -219,8 +217,10 @@ function themeStyle(theme) {
 		textAreaLineHeight: Math.round(17 * editorFontSize / 12),
 
 		// For WebView - must correspond to the properties above
-		htmlFontSize: Math.round(12 * zoomRatio) + 'px',
-		htmlLineHeight: Math.round(20 * zoomRatio) + 'px'
+		htmlFontSize: Math.round(15 * zoomRatio) + 'px',
+		htmlLineHeight: '1.6em', //Math.round(20 * zoomRatio) + 'px'
+
+		htmlCodeFontSize: '.9em',
 	}
 
 	let output = {};

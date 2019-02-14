@@ -475,6 +475,16 @@ class Application extends BaseApplication {
 						});
 					},
 				}, {
+					label: _('Link'),
+					screens: ['Main'],
+					accelerator: 'CommandOrControl+K',
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'textLink',
+						});
+					},
+				}, {
 					type: 'separator',
 					screens: ['Main'],
 				}, {
@@ -506,7 +516,7 @@ class Application extends BaseApplication {
 				}, {
 					label: _('Search in all the notes'),
 					screens: ['Main'],
-					accelerator: 'F6',
+					accelerator: shim.isMac() ? 'Shift+Command+F' : 'F6',
 					click: () => {
 						this.dispatch({
 							type: 'WINDOW_COMMAND',
@@ -529,7 +539,7 @@ class Application extends BaseApplication {
 				submenu: [{
 					label: _('Toggle sidebar'),
 					screens: ['Main'],
-					accelerator: 'F10',
+					accelerator: shim.isMac() ? 'Option+Command+S' : 'F10',
 					click: () => {
 						this.dispatch({
 							type: 'WINDOW_COMMAND',

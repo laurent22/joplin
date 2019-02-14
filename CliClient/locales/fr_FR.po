@@ -13,7 +13,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.2.1\n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Pour supprimer une vignette, enlever là des notes associées."
@@ -584,18 +584,16 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exporter vers \"%s\" au format \"%s\". Veuillez patienter..."
 
 msgid "Sidebar"
-msgstr ""
+msgstr "Barre latérale"
 
 msgid "Note list"
-msgstr ""
+msgstr "Liste de notes"
 
-#, fuzzy
 msgid "Note title"
-msgstr "Titre du carnet :"
+msgstr "Titre de la note"
 
-#, fuzzy
 msgid "Note body"
-msgstr "Carnets"
+msgstr "Corps de la note"
 
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
@@ -653,6 +651,9 @@ msgstr "Gras"
 msgid "Italic"
 msgstr "Italique"
 
+msgid "Link"
+msgstr "Lien"
+
 msgid "Insert Date Time"
 msgstr "Insérer la date et l'heure"
 
@@ -674,9 +675,8 @@ msgstr "Basculer barre latérale"
 msgid "Toggle editor layout"
 msgstr "Basculer l'agencement de l'éditeur"
 
-#, fuzzy
 msgid "Focus"
-msgstr "Curseur sur corps du message"
+msgstr "Naviguer"
 
 msgid "Tools"
 msgstr "Outils"
@@ -824,7 +824,7 @@ msgid "Notes and settings are stored in: %s"
 msgstr "Les notes et paramètres se trouve dans : %s"
 
 msgid "Browse..."
-msgstr ""
+msgstr "Parcourir…"
 
 msgid "Check synchronisation configuration"
 msgstr "Vérifier config synchronisation"
@@ -924,9 +924,8 @@ msgstr "État"
 msgid "Encryption is:"
 msgstr "Le chiffrement est :"
 
-#, fuzzy
 msgid "Usage"
-msgstr "Utilisation : %s"
+msgstr "Utilisation"
 
 msgid "Back"
 msgstr "Retour"
@@ -1016,7 +1015,7 @@ msgid "Copy Link Address"
 msgstr "Copier l'adresse du lien"
 
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "Cette pièce jointe n'est pas téléchargée ou pas encore déchiffrée"
+msgstr "Cette pièce jointe n'est pas téléchargée ou pas encore déchiffrée."
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1150,6 +1149,36 @@ msgstr "Tél. ressources : %d"
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 "Veuillez sélectionner un répertoire ou exporter l'état de la synchronisation"
+
+msgid "Add or remove tags"
+msgstr "Gérer les étiquettes"
+
+msgid "Duplicate"
+msgstr "Dupliquer"
+
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - Copie"
+
+msgid "Switch between note and to-do type"
+msgstr "Alterner entre note et tâche"
+
+msgid "Switch to note type"
+msgstr "Convertir en note"
+
+msgid "Switch to to-do type"
+msgstr "Convertir en tâche"
+
+msgid "Copy Markdown link"
+msgstr "Copier lien Markdown"
+
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Supprimer note \"%s\" ?"
+
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Supprimer ces %d notes ?"
 
 #, javascript-format
 msgid "Usage: %s"
@@ -1488,24 +1517,20 @@ msgstr "Ignorer les erreurs de certificats TLS"
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Option invalide: \"%s\". Les valeurs possibles sont : %s."
 
-#, fuzzy
 msgid "General"
-msgstr "Options générales"
+msgstr "Général"
 
-#, fuzzy
 msgid "Synchronisation"
-msgstr "État de la synchronisation"
+msgstr "Synchronisation"
 
 msgid "Appearance"
-msgstr ""
+msgstr "Apparence"
 
-#, fuzzy
 msgid "Note"
-msgstr "Carnets"
+msgstr "Note"
 
-#, fuzzy
 msgid "Application"
-msgstr "Lieu"
+msgstr "Application"
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -1604,7 +1629,7 @@ msgid "Permission to use camera"
 msgstr "Permission d'utiliser l'appareil photo"
 
 msgid "Your permission to use your camera is required."
-msgstr "Votre permission est requise pour utiliser l'appareil photo"
+msgstr "Votre permission est requise pour utiliser l'appareil photo."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
@@ -1804,9 +1829,6 @@ msgstr "Convertir en note"
 msgid "Convert to todo"
 msgstr "Convertir en tâche"
 
-msgid "Copy Markdown link"
-msgstr "Copier lien Markdown"
-
 msgid "Hide metadata"
 msgstr "Cacher les métadonnées"
 
@@ -1842,24 +1864,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "Gérer les étiquettes"
-
-#~ msgid "Duplicate"
-#~ msgstr "Dupliquer"
-
-#~ msgid "%s - Copy"
-#~ msgstr "%s - Copie"
-
-#~ msgid "Switch between note and to-do type"
-#~ msgstr "Alterner entre note et tâche"
-
-#~ msgid "Switch to note type"
-#~ msgstr "Convertir en note"
-
-#~ msgid "Switch to to-do type"
-#~ msgstr "Convertir en tâche"
 
 #~ msgid "Delete notes?"
 #~ msgstr "Supprimer les notes ?"
@@ -1982,9 +1986,6 @@ msgstr "Bienvenue"
 
 #~ msgid "Delete notebook?"
 #~ msgstr "Supprimer le carnet ?"
-
-#~ msgid "Delete notebook \"%s\"?"
-#~ msgstr "Supprimer le carnet \"%s\" ?"
 
 #~ msgid "File system synchronisation target directory"
 #~ msgstr "Cible de la synchronisation sur le disque dur"

@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// Use njstrace to find out what Node.js might be spending time on
+// var njstrace = require('njstrace').inject();
+
 // Make it possible to require("/lib/...") without specifying full path
 require('app-module-path').addPath(__dirname);
 

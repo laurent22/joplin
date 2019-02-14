@@ -85,7 +85,10 @@ async function createPotFile(potFilePath, sources) {
 }
 
 async function mergePotToPo(potFilePath, poFilePath) {
-	const command = 'msgmerge -U "' + poFilePath + '" "' + potFilePath + '"';
+	let msgmergePath = 'msgmerge';
+	if (isMac()) msgmergePath = '/usr/local/opt/gettext/bin/msgmerge'; // Needs to have been installed with `brew install gettext`
+
+	const command = msgmergePath + ' -U "' + poFilePath + '" "' + potFilePath + '"';
 	const result = await execCommand(command);
 	if (result) console.error(result);
 	await removePoHeaderDate(poFilePath);
@@ -134,9 +137,9 @@ async function translationStatus(isDefault, poFile) {
 	// "apt install translate-toolkit" to have pocount
 	const command = 'pocount "' + poFile + '"';
 	const result = await execCommand(command);
-	const matches = result.match(/translated:\s*?(\d+)\s*\((.+?)%\)/);
-	if (matches.length < 3) throw new Error('Cannot extract status: ' + command + ':\n' + result);
-	
+	const matches = result.match(/Translated:\s*?(\d+)\s*\((.+?)%\)/);
+	if (!matches || matches.length < 3) throw new Error('Cannot extract status: ' + command + ':\n' + result);
+
 	const percentDone = Number(matches[2]);
 	if (isNaN(percentDone)) throw new Error('Cannot extract percent translated: ' + command + ':\n' + result);
 
@@ -210,6 +213,7 @@ async function main() {
 		cliDir + '/app/gui/*.js',
 		electronDir + '/*.js',
 		electronDir + '/gui/*.js',
+		electronDir + '/gui/utils/*.js',
 		rnDir + '/lib/*.js',
 		rnDir + '/lib/models/*.js',
 		rnDir + '/lib/services/*.js',

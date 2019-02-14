@@ -103,7 +103,7 @@ class Api {
 		if (!this[parsedPath.callName]) throw new ErrorNotFound();
 
 		try {
-			return this[parsedPath.callName](request, id, link);
+			return await this[parsedPath.callName](request, id, link);
 		} catch (error) {
 			if (!error.httpCode) error.httpCode = 500;
 			throw error;
@@ -118,8 +118,10 @@ class Api {
 		return this.logger_;
 	}
 
-	get readonlyProperties() {
-		return ['id', 'created_time', 'updated_time', 'encryption_blob_encrypted', 'encryption_applied', 'encryption_cipher_text'];
+	readonlyProperties(requestMethod) {
+		const output = ['created_time', 'updated_time', 'encryption_blob_encrypted', 'encryption_applied', 'encryption_cipher_text'];
+		if (requestMethod !== 'POST') output.splice(0, 0, 'id');
+		return output;
 	}
 
 	fields_(request, defaultFields) {
@@ -174,7 +176,7 @@ class Api {
 
 		if (request.method === 'PUT' && id) {
 			const model = await getOneModel();
-			let newModel = Object.assign({}, model, request.bodyJson(this.readonlyProperties));
+			let newModel = Object.assign({}, model, request.bodyJson(this.readonlyProperties('PUT')));
 			newModel = await ModelClass.save(newModel, { userSideValidation: true });
 			return newModel;
 		}
@@ -186,8 +188,11 @@ class Api {
 		}
 
 		if (request.method === 'POST') {
-			const model = request.bodyJson(this.readonlyProperties);
-			const result = await ModelClass.save(model, { userSideValidation: true });
+			const props = this.readonlyProperties('POST');
+			const idIdx = props.indexOf('id');
+			if (idIdx >= 0) props.splice(idIdx, 1);
+			const model = request.bodyJson(props);
+			const result = await ModelClass.save(model, this.defaultSaveOptions_(model, 'POST'));
 			return result;
 		}
 
@@ -286,9 +291,8 @@ class Api {
 		if (request.method === 'POST') {
 			if (!request.files.length) throw new ErrorBadRequest('Resource cannot be created without a file');
 			const filePath = request.files[0].path;
-			const resource = await shim.createResourceFromPath(filePath);
-			const newResource = Object.assign({}, resource, request.bodyJson(this.readonlyProperties));
-			return await Resource.save(newResource);
+			const defaultProps = request.bodyJson(this.readonlyProperties('POST'));
+			return shim.createResourceFromPath(filePath, defaultProps);
 		}
 
 		return this.defaultAction_(BaseModel.TYPE_RESOURCE, request, id, link);
@@ -298,6 +302,12 @@ class Api {
 		const fields = this.fields_(request, []); // previews() already returns default fields
 		const options = {};
 		if (fields.length) options.fields = fields;
+		return options;
+	}
+
+	defaultSaveOptions_(model, requestMethod) {
+		const options = { userSideValidation: true };
+		if (requestMethod === 'POST' && model.id) options.isNew = true;
 		return options;
 	}
 
@@ -342,8 +352,7 @@ class Api {
 
 			this.logger().info('Request (' + requestId + '): Saving note...');
 
-			const saveOptions = {};
-			if (note.id) saveOptions.isNew = true;
+			const saveOptions = this.defaultSaveOptions_(note, 'POST');
 			note = await Note.save(note, saveOptions);
 
 			if (requestNote.tags) {

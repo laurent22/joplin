@@ -5,6 +5,7 @@ const { shim } = require('lib/shim');
 const chokidar = require('chokidar');
 const EventEmitter = require('events');
 const { splitCommandString } = require('lib/string-utils');
+const { fileExtension } = require('lib/path-utils');
 const spawn	= require('child_process').spawn;
 
 class ExternalEditWatcher {
@@ -149,20 +150,50 @@ class ExternalEditWatcher {
 
 	async spawnCommand(path, args, options) {
 		return new Promise((resolve, reject) => {
-			const subProcess = spawn(path, args, options);
 
-			const iid = setInterval(() => {
-				if (subProcess && subProcess.pid) {
-					this.logger().debug('Started editor with PID ' + subProcess.pid);
+			// App bundles need to be opened using the `open` command.
+			// Additional args can be specified after --args, and the 
+			// -n flag is needed to ensure that the app is always launched
+			// with the arguments. Without it, if the app is already opened,
+			// it will just bring it to the foreground without opening the file.
+			// So the full command is:
+			//
+			// open -n /path/to/editor.app --args -app-flag -bla /path/to/file.md
+			//
+			if (shim.isMac() && fileExtension(path) === 'app') {
+				args = args.slice();
+				args.splice(0, 0, '--args');
+				args.splice(0, 0, path);
+				args.splice(0, 0, '-n');
+				path = 'open';
+			}
+
+			const wrapError = (error) => {
+				if (!error) return error;
+				let msg = error.message ? [error.message] : [];
+				msg.push('Command was: "' + path + '" ' + args.join(' '));
+				error.message = msg.join('\n\n');
+				return error;
+			}
+
+			try {
+				const subProcess = spawn(path, args, options);
+
+				const iid = setInterval(() => {
+					if (subProcess && subProcess.pid) {
+						this.logger().debug('Started editor with PID ' + subProcess.pid);
+						clearInterval(iid);
+						resolve();
+					}
+				}, 100);
+
+				subProcess.on('error', (error) => {
 					clearInterval(iid);
-					resolve();
-				}
-			}, 100);
-
-			subProcess.on('error', (error) => {
-				clearInterval(iid);
-				reject(error);
-			});
+					reject(wrapError(error));
+				});
+			} catch (error) {
+				throw wrapError(error);
+			}
 		});
 	}
 

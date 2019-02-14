@@ -91,7 +91,8 @@ class Tag extends BaseItem {
 	}
 
 	static async allWithNotes() {
-		return await Tag.modelSelectAll('SELECT * FROM tags WHERE id IN (SELECT DISTINCT tag_id FROM note_tags)');
+		const tagIdSql = 'select distinct tags.id from tags left join note_tags nt on nt.tag_id = tags.id left join notes on notes.id = nt.note_id where notes.id IS NOT NULL';
+		return await Tag.modelSelectAll('SELECT * FROM tags WHERE id IN (' + tagIdSql + ')');
 	}
 
 	static async tagsByNoteId(noteId) {
