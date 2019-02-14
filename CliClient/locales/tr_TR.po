@@ -7,16 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Türkçe\n"
 "Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
 "Language-Team: Zorbey Doğangüneş <zorbeyd@gmail.com>\n"
+"Language: tr_TR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "X-Generator: Poedit 2.2.1\n"
-"Last-Translator: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: tr_TR\n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Bir etiketi silmek için ilişkilendirilmiş notların etiketini kaldırın."
@@ -1092,6 +1090,38 @@ msgstr "Kaynaklar alınıyor: %d"
 msgid "Please select where the sync status should be exported to"
 msgstr "Lütfen senkronizasyon durumunun nereye aktarılacağını seçin"
 
+#, fuzzy
+msgid "Add or remove tags"
+msgstr "Etiket ekle veya kaldır:"
+
+#, fuzzy
+msgid "Duplicate"
+msgstr "Uygulama"
+
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "Kopyala"
+
+msgid "Switch between note and to-do type"
+msgstr ""
+
+msgid "Switch to note type"
+msgstr ""
+
+msgid "Switch to to-do type"
+msgstr ""
+
+msgid "Copy Markdown link"
+msgstr "Markdown bağlantısını kopyala"
+
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Notu sil?"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Bu notlar silinsin mi?"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Kullanım: %s"
@@ -1725,9 +1755,6 @@ msgstr "Nota çevir"
 
 msgid "Convert to todo"
 msgstr "Yapılacak olarak çevir"
-
-msgid "Copy Markdown link"
-msgstr "Markdown bağlantısını kopyala"
 
 msgid "Hide metadata"
 msgstr "Metadata'yı gizle"

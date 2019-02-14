@@ -20,6 +20,7 @@ locales['ro'] = require('./ro.json');
 locales['ru_RU'] = require('./ru_RU.json');
 locales['sl_SI'] = require('./sl_SI.json');
 locales['sv'] = require('./sv.json');
+locales['tr_TR'] = require('./tr_TR.json');
 locales['zh_CN'] = require('./zh_CN.json');
 locales['zh_TW'] = require('./zh_TW.json');
 module.exports = { locales: locales };
