@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "pack": "node_modules/.bin/electron-builder --dir",
-    "dist": "./node_modules/.bin/electron-rebuild && node_modules/.bin/electron-builder",
+    "dist": "node_modules/.bin/electron-rebuild && node_modules/.bin/electron-builder",
     "publish": "build -p always",
     "postinstall": "node compile.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts && install-app-deps",
     "compile": "node compile.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts"
