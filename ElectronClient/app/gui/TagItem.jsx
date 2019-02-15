@@ -39,7 +39,7 @@ class TagItemComponent extends React.Component {
 		let style = Object.assign({textAlign: 'center'}, theme.tagStyle);
 
 		if (this.state.toDelete) {
-			style = Object.assign({}, style, {backgroundColor: "#B01C2E"});
+			style = Object.assign({}, style, {backgroundColor: theme.removeColor});
 		}
 
 		const onClick = (event) => {
