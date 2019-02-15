@@ -368,7 +368,11 @@ class Application extends BaseApplication {
 
 		const template = [
 			{
-				label: _('File'),
+				label: _('&File'),
+				/* `&` before one of the char in the label name mean, that
+				 * <Alt + F> will open this menu. It's needed becase electron
+				 * opens the first menu on Alt press if no hotkey assigned.
+				 * Issue: https://github.com/laurent22/joplin/issues/934 */
 				submenu: [{
 					label: _('New note'),
 					accelerator: 'CommandOrControl+N',
@@ -434,7 +438,7 @@ class Application extends BaseApplication {
 					click: () => { bridge().electronApp().quit() }
 				}]
 			}, {
-				label: _('Edit'),
+				label: _('&Edit'),
 				submenu: [{
 					label: _('Copy'),
 					role: 'copy',
@@ -535,7 +539,7 @@ class Application extends BaseApplication {
 					},
 				}],
 			}, {
-				label: _('View'),
+				label: _('&View'),
 				submenu: [{
 					label: _('Toggle sidebar'),
 					screens: ['Main'],
@@ -596,7 +600,7 @@ class Application extends BaseApplication {
 					submenu: focusItems,
 				}],
 			}, {
-				label: _('Tools'),
+				label: _('&Tools'),
 				submenu: [{
 					label: _('Synchronisation status'),
 					click: () => {
@@ -635,7 +639,7 @@ class Application extends BaseApplication {
 					}
 				}],
 			}, {
-				label: _('Help'),
+				label: _('&Help'),
 				submenu: [{
 					label: _('Website and documentation'),
 					accelerator: 'F1',
