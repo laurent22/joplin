@@ -764,7 +764,7 @@ msgid "Disable Web Clipper Service"
 msgstr "Отключить службу веб-клиппера"
 
 msgid "The web clipper service is not enabled."
-msgstr "Слуюба веб-клиппера не включена"
+msgstr "Служба веб-клиппера не включена"
 
 msgid "Enable Web Clipper Service"
 msgstr "Включить службу веб-клиппера"
@@ -1402,7 +1402,7 @@ msgid ""
 "incorrect or empty, it will default to a generic monospace font."
 msgstr ""
 "Название шрифта не проверяется. Если оно указано некорректно или не задано, "
-"будет использоваться стандартный моноширинный шрифт."
+"будет использоваться *моноширинный* шрифт."
 
 msgid "Automatically update the application"
 msgstr "Автоматически обновлять приложение"
@@ -1431,7 +1431,7 @@ msgstr "%d часов"
 
 #, fuzzy
 msgid "Text editor command"
-msgstr "Текстовый редактор"
+msgstr "Команда текстового редактора"
 
 #, fuzzy
 msgid ""
@@ -1442,7 +1442,7 @@ msgstr ""
 "произведена попытка автоматического определения редактора по умолчанию."
 
 msgid "Show advanced options"
-msgstr "Показывать расширенные настройки"
+msgstr "Показать расширенные настройки"
 
 msgid "Synchronisation target"
 msgstr "Цель синхронизации"
@@ -1509,26 +1509,26 @@ msgstr "Игнорировать ошибки сертификата TLS"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "Неверное значение параметра: \"%s\". Доступные значения: %s."
+msgstr "Неверное значение параметра: \"%s\". Возможные значения: %s."
 
 #, fuzzy
 msgid "General"
-msgstr "Основные настройки"
+msgstr "Основное"
 
 #, fuzzy
 msgid "Synchronisation"
-msgstr "Статус синхронизации"
+msgstr "Синхронизация"
 
 msgid "Appearance"
-msgstr ""
+msgstr "Внешний вид"
 
 #, fuzzy
 msgid "Note"
-msgstr "Блокноты"
+msgstr "Заметка"
 
 #, fuzzy
 msgid "Application"
-msgstr "Выйти из приложения."
+msgstr "Приложение"
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -1588,8 +1588,8 @@ msgid ""
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
-"Эти элементы останутся на устройстве, но не будут загружены в целевой "
-"объект синхронизации. Чтобы найти эти элементы, воспользуйтесь поиском по "
+"Эти элементы останутся на устройстве, но не будут загружены в цель "
+"синхронизации. Чтобы найти эти элементы, воспользуйтесь поиском по "
 "названию или ID (который указывается в скобках выше)."
 
 msgid "Sync status (synced items / total items)"
