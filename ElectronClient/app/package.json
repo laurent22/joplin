@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "pack": "node_modules/.bin/electron-builder --dir",
-    "dist": "node_modules/.bin/electron-builder",
+    "dist": "./node_modules/.bin/electron-rebuild && node_modules/.bin/electron-builder",
     "publish": "build -p always",
     "postinstall": "node compile.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts && install-app-deps",
     "compile": "node compile.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts"
@@ -70,8 +70,9 @@
     "app-builder-bin": "^1.9.11",
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.24.1",
-    "electron": "^1.8.7",
-    "electron-builder": "20.14.7"
+    "electron": "^4.0.4",
+    "electron-builder": "20.38.5",
+    "electron-rebuild": "^1.8.4"
   },
   "optionalDependencies": {
     "7zip-bin-linux": "^1.0.1",
@@ -125,7 +126,7 @@
     "server-destroy": "^1.0.1",
     "smalltalk": "^2.5.1",
     "sprintf-js": "^1.1.1",
-    "sqlite3": "^4.0.4",
+    "sqlite3": "^4.0.6",
     "string-padding": "^1.0.2",
     "string-to-stream": "^1.1.1",
     "syswide-cas": "^5.1.0",
