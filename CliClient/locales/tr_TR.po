@@ -16,7 +16,6 @@ msgstr ""
 "X-Generator: Poedit 2.2.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-
 msgid "To delete a tag, untag the associated notes."
 msgstr "Bir etiketi silmek için ilişkilendirilmiş notların etiketini kaldırın."
 
