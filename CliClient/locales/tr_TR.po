@@ -739,7 +739,7 @@ msgid "Status: %s"
 msgstr "Durum: %s"
 
 msgid "Disable Web Clipper Service"
-msgstr "Wel Alıntılama Servisini Kapat"
+msgstr "Web Alıntılama Servisini Kapat"
 
 msgid "The web clipper service is not enabled."
 msgstr "Web alıntılama servisi aktif edilmedi."
