@@ -1797,9 +1797,6 @@ msgstr "Nota çevir"
 msgid "Convert to todo"
 msgstr "Yapılacak olarak çevir"
 
-msgid "Copy Markdown link"
-msgstr "Markdown bağlantısını kopyala"
-
 msgid "Hide metadata"
 msgstr "Metadata'yı gizle"
 
