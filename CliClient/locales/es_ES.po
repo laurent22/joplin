@@ -458,7 +458,7 @@ msgid "Starting synchronisation..."
 msgstr "Iniciando sincronización..."
 
 msgid "Downloading resources..."
-msgstr ""
+msgstr "Descargando recursos..."
 
 msgid "Cancelling... Please wait."
 msgstr "Cancelando... Por favor espere."
@@ -586,10 +586,10 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exportando el formato de \"%s\" a \"%s\". Por favor espere..."
 
 msgid "Sidebar"
-msgstr ""
+msgstr "Barra lateral"
 
 msgid "Note list"
-msgstr ""
+msgstr "Lista de notas"
 
 #, fuzzy
 msgid "Note title"
@@ -657,7 +657,7 @@ msgid "Italic"
 msgstr "Cursiva"
 
 msgid "Link"
-msgstr ""
+msgstr "Enlace"
 
 msgid "Insert Date Time"
 msgstr "Introduce fecha"
@@ -737,14 +737,14 @@ msgstr "La versión actual está actualizada."
 
 #, javascript-format
 msgid "%s (pre-release)"
-msgstr ""
+msgstr "%s (pre-lanzamiento)""
 
 msgid "An update is available, do you want to download it now?"
 msgstr "Hay disponible una actualización. ¿Quiere descargarla ahora?"
 
 #, javascript-format
 msgid "Your version: v%s"
-msgstr ""
+msgstr "Tu versión: v%s"
 
 #, javascript-format
 msgid "New version: v%s"
@@ -757,7 +757,7 @@ msgid "No"
 msgstr "No"
 
 msgid "Token has been copied to the clipboard!"
-msgstr ""
+msgstr "El token ha sido copiado al portapapeles"
 
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
@@ -814,10 +814,10 @@ msgid "Advanced options"
 msgstr "Mostrar opciones avanzadas"
 
 msgid "Authorisation token:"
-msgstr ""
+msgstr "Token de autorización:"
 
 msgid "Copy token"
-msgstr ""
+msgstr "Copiar token"
 
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
@@ -829,7 +829,7 @@ msgid "Notes and settings are stored in: %s"
 msgstr "Las notas y los ajustes se guardan en: %s"
 
 msgid "Browse..."
-msgstr ""
+msgstr "Explorar..."
 
 msgid "Check synchronisation configuration"
 msgstr "Comprobar sincronización"
