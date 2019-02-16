@@ -18,7 +18,6 @@ const Mark = require('mark.js/dist/mark.min.js');
 const SearchEngine = require('lib/services/SearchEngine');
 const NoteListUtils = require('./utils/NoteListUtils');
 const { replaceRegexDiacritics, pregQuote } = require('lib/string-utils');
-const VerticalResizer = require("./VerticalResizer.min");
 
 class NoteListComponent extends React.Component {
 
@@ -30,7 +29,6 @@ class NoteListComponent extends React.Component {
 
 		this.itemRenderer = this.itemRenderer.bind(this);
 		this.onKeyDown = this.onKeyDown.bind(this);
-		this.verticalResizer_onDrag = this.verticalResizer_onDrag.bind(this);
 	}
 
 	style() {
@@ -72,10 +70,6 @@ class NoteListComponent extends React.Component {
 		};
 
 		return style;
-	}
-
-	verticalResizer_onDrag(event) {
-		Setting.setValue('style.noteList.width', Setting.value('style.noteList.width') + event.deltaX);
 	}
 
 	itemContextMenu(event) {
