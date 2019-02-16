@@ -17,7 +17,7 @@ class NavigatorComponent extends Component {
 	}
 
 	updateWindowTitle(title) {
-		bridge().window().setTitle(title);
+		if (bridge().window()) bridge().window().setTitle(title);
 	}
 
 	render() {

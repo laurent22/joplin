@@ -728,7 +728,8 @@ class SideBarComponent extends React.Component {
 
 		return (
 			<div ref={this.rootRef} onKeyDown={this.onKeyDown} className="side-bar" style={style}>
-				<div style={{flex:1, overflowY: 'auto'}}>
+				
+				<div style={{flex:1, overflowX: 'hidden', overflowY: 'auto'}}>
 					{items}
 				</div>
 				<div style={{flex:0}}>

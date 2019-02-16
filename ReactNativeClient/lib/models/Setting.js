@@ -104,6 +104,8 @@ class Setting extends BaseModel {
 			'style.zoom': {value: 100, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Global zoom percentage'), minimum: 50, maximum: 500, step: 10},
 			'style.editor.fontSize': {value: 13, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Editor font size'), minimum: 4, maximum: 50, step: 1},
 			'style.editor.fontFamily': {value: "", type: Setting.TYPE_STRING, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Editor font family'), description: () => _('This must be *monospace* font or it will not work properly. If the font is incorrect or empty, it will default to a generic monospace font.')},
+			'style.sidebar.width': {value: 150, minimum: 100, maximum: 200, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
+			'style.noteList.width': {value: 150, minimum: 100, maximum: 200, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
 			'autoUpdateEnabled': { value: true, type: Setting.TYPE_BOOL, section:'application', public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
 			'autoUpdate.includePreReleases': { value: false, type: Setting.TYPE_BOOL, section:'application', public: true, appTypes: ['desktop'], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplin.cozic.net/prereleases') },
 			'clipperServer.autoStart': { value: false, type: Setting.TYPE_BOOL, public: false },
@@ -279,6 +281,9 @@ class Setting extends BaseModel {
 
 				// Don't log this to prevent sensitive info (passwords, auth tokens...) to end up in logs
 				// this.logger().info('Setting: ' + key + ' = ' + c.value + ' => ' + value);
+
+				if (('minimum' in md) && value < md.minimum) value = md.minimum;
+				if (('maximum' in md) && value > md.maximum) value = md.maximum;
 
 				c.value = value;
 

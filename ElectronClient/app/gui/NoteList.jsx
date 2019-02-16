@@ -18,6 +18,7 @@ const Mark = require('mark.js/dist/mark.min.js');
 const SearchEngine = require('lib/services/SearchEngine');
 const NoteListUtils = require('./utils/NoteListUtils');
 const { replaceRegexDiacritics, pregQuote } = require('lib/string-utils');
+const VerticalResizer = require("./VerticalResizer.min");
 
 class NoteListComponent extends React.Component {
 
@@ -29,6 +30,7 @@ class NoteListComponent extends React.Component {
 
 		this.itemRenderer = this.itemRenderer.bind(this);
 		this.onKeyDown = this.onKeyDown.bind(this);
+		this.verticalResizer_onDrag = this.verticalResizer_onDrag.bind(this);
 	}
 
 	style() {
@@ -70,6 +72,10 @@ class NoteListComponent extends React.Component {
 		};
 
 		return style;
+	}
+
+	verticalResizer_onDrag(event) {
+		Setting.setValue('style.noteList.width', Setting.value('style.noteList.width') + event.deltaX);
 	}
 
 	itemContextMenu(event) {
@@ -381,7 +387,7 @@ class NoteListComponent extends React.Component {
 		const theme = themeStyle(this.props.theme);
 		const style = this.props.style;
 		let notes = this.props.notes.slice();
-
+		
 		if (!notes.length) {
 			const padding = 10;
 			const emptyDivStyle = Object.assign({
@@ -396,16 +402,16 @@ class NoteListComponent extends React.Component {
 			return <div style={emptyDivStyle}>{ this.props.folders.length ? _('No notes in here. Create one by clicking on "New note".') : _('There is currently no notebook. Create one by clicking on "New notebook".')}</div>
 		}
 
-		return (
+		return (				
 			<ItemList
 				ref={this.itemListRef}
 				itemHeight={this.style().listItem.height}
-				style={style}
 				className={"note-list"}
 				items={notes}
+				style={style}
 				itemRenderer={this.itemRenderer}
 				onKeyDown={this.onKeyDown}
-			></ItemList>
+			/>
 		);
 	}
 
