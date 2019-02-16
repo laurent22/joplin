@@ -191,19 +191,24 @@ class ElectronAppWrapper {
 	ensureSingleInstance() {
 		if (this.env_ === 'dev') return false;
 
-		return new Promise((resolve, reject) => {
-			const alreadyRunning = this.electronApp_.makeSingleInstance((commandLine, workingDirectory) => {
-				const win = this.window();
-				if (!win) return;
-				if (win.isMinimized()) win.restore();
-				win.show();
-				win.focus();
-			});
+		const gotTheLock = this.electronApp_.requestSingleInstanceLock();
 
-			if (alreadyRunning) this.electronApp_.quit();
+		if (!gotTheLock) {
+			// Another instance is already running - exit
+			this.electronApp_.quit();
+			return true;
+		}
 
-			resolve(alreadyRunning);
+		// Someone tried to open a second instance - focus our window instead
+		this.electronApp_.on('second-instance', (event, commandLine, workingDirectory) => {
+			const win = this.window();
+			if (!win) return;
+			if (win.isMinimized()) win.restore();
+			win.show();
+			win.focus();
 		});
+
+		return false;
 	}
 
 	async start() {
@@ -211,8 +216,8 @@ class ElectronAppWrapper {
 		// the "ready" event. So we use the function below to make sure that the app is ready.
 		await this.waitForElectronAppReady();
 
-		const alreadyRunning = await this.ensureSingleInstance();
-		if (alreadyRunning) return;
+		const alreadyRunning = this.ensureSingleInstance();
+		if (alreadyRunning) return;		
 
 		this.createWindow();
 
