@@ -139,6 +139,8 @@ msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
 msgstr ""
+"Şifre çözme başlatılıyor... Çözülecek dosya sayısına bağlı olarak biraz "
+"zaman alabilir, lütfen bekleyiniz."
 
 msgid "Completed decryption."
 msgstr "Şifre çözümü tamamlandı."
@@ -159,6 +161,8 @@ msgstr "Notu düzenle."
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
+"Hiçbir metin editörü tanımlanmadı. Lütfen `config editor <editor-path>` ı "
+"kullanarak editörü ayarlayınız."
 
 msgid "No active notebook."
 msgstr "Aktif not defteri yok."
@@ -172,7 +176,7 @@ msgstr ""
 
 #, javascript-format
 msgid "Error opening note in editor: %s"
-msgstr ""
+msgstr "Editörde not açılırken hata oluştu: %s"
 
 msgid "Note has been saved."
 msgstr "Not kaydedildi."
@@ -228,7 +232,7 @@ msgid ""
 msgstr ""
 
 msgid "To move from one pane to another, press Tab or Shift+Tab."
-msgstr ""
+msgstr "Bir bölmeden diğerine geçmek için Tab veya Shift+Tab tuşlarına basın."
 
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
@@ -236,13 +240,13 @@ msgid ""
 msgstr ""
 
 msgid "To maximise/minimise the console, press \"tc\"."
-msgstr ""
+msgstr "Konsolu büyütmek/küçültmek için, \"tc\" ye basınız."
 
 msgid "To enter command line mode, press \":\""
 msgstr "Komut satırı moduna girmek için \":\" e basın"
 
 msgid "To exit command line mode, press ESCAPE"
-msgstr ""
+msgstr "Komut satırı modundan çıkmak için ESC tuşuna basın."
 
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
@@ -270,7 +274,7 @@ msgstr "Yaratıldı: %d."
 
 #, javascript-format
 msgid "Updated: %d."
-msgstr "Güncellendi: %d."
+msgstr "Güncellenme: %d."
 
 #, javascript-format
 msgid "Skipped: %d."
@@ -295,12 +299,16 @@ msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
 "of notebooks."
 msgstr ""
+"Geçerli not defterindeki notları görüntüler. Not defteri listesini "
+"görüntülemek için `ls /` kullanın."
 
 msgid "Displays only the first top <num> notes."
-msgstr ""
+msgstr "Yalnızca ilk üstteki <num> notlarını görüntüler."
 
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
+"Öğeyi <field> olarak sıralar (örneğin, başlık, güncellenme_zamanı, "
+"oluşturulma_zamanı)."
 
 msgid "Reverses the sorting order."
 msgstr "Sıralama düzenini tersine çevirir."
@@ -312,7 +320,7 @@ msgid ""
 msgstr ""
 
 msgid "Either \"text\" or \"json\""
-msgstr ""
+msgstr "\"metin\" ya da \"json\""
 
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
@@ -366,7 +374,7 @@ msgid "Delete note?"
 msgstr "Notu sil?"
 
 msgid "Searches for the given <pattern> in all the notes."
-msgstr ""
+msgstr "Tüm notlarda girilen <pattern> i arar."
 
 #, javascript-format
 msgid ""
@@ -384,10 +392,12 @@ msgstr "Uzak depolama ile senkronize eder."
 
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
+"Sağlanan hedefe senkronize et (varsayılan olarak sync.target değeri "
+"kullanılır)"
 
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
-msgstr ""
+msgstr "Yetkilendirme tamamlanmadı (yetkilendirme anahtarı karşılanmadı)"
 
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
@@ -403,7 +413,7 @@ msgstr "Adım 2: Dropbox tarafından sağlanan kodu girin:"
 
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
-msgstr ""
+msgstr "%s ile doğrulama sağlanamadı. Lütfen eksik olan tüm bilgileri girin."
 
 msgid "Synchronisation is already in progress."
 msgstr "Senkronizasyon zaten devam ediyor."
@@ -414,6 +424,8 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
+"Kilit dosyası zaten tutuluyor. Eşitleme yapılmadığını biliyorsanız, kilit "
+"dosyasını \"%s\" konumunda silebilir ve işleme devam edebilirsiniz."
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
@@ -449,19 +461,21 @@ msgid ""
 msgstr ""
 
 msgid "Marks a to-do as non-completed."
-msgstr ""
+msgstr "Yapılacağı tamamlanmamış olarak işaretler."
 
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
+"[notebook] 'a geçer - daha sonraki tüm işlemler bu not defterinde "
+"gerçekleşecektir."
 
 msgid "Displays version information"
 msgstr "Sürüm bilgisini görüntüler"
 
 #, javascript-format
 msgid "%s %s (%s)"
-msgstr ""
+msgstr "%s %s (%s)"
 
 msgid "Enum"
 msgstr "Enum"
@@ -502,6 +516,11 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
+"Lütfen uygulamayı doğrulamak için tarayıcınızda aşağıdaki URL'yi açın. "
+"Uygulama \"Uygulamalar/Joplin\" de bir dizin oluşturacak ve sadece bu "
+"dizindeki dosyaları okuyacak ve yazacaktır. Bu dizin dışındaki hiçbir "
+"dosyaya veya diğer kişisel verilere erişemeyecektir. Hiçbir veri üçüncü "
+"şahıslarla paylaşılmayacaktır."
 
 msgid "Search:"
 msgstr "Ara:"
@@ -575,7 +594,7 @@ msgid "Export"
 msgstr "Dışa aktar"
 
 msgid "Print"
-msgstr "Yazır"
+msgstr "Yazdır"
 
 #, javascript-format
 msgid "Hide %s"
@@ -639,7 +658,7 @@ msgid "Synchronisation status"
 msgstr "Senkronizasyon durumu"
 
 msgid "Web clipper options"
-msgstr ""
+msgstr "Web alıntılama ayarları"
 
 msgid "Encryption options"
 msgstr "Şifreleme seçenekleri"
@@ -704,10 +723,11 @@ msgid "No"
 msgstr "Hayır"
 
 msgid "Token has been copied to the clipboard!"
-msgstr ""
+msgstr "Anahtar panoya kopyalandı!"
 
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
+"Web alıntılama servisi aktif edildi ve otomatik başlatılması için ayarlandı."
 
 #, javascript-format
 msgid "Status: Started on port %d"
@@ -718,24 +738,26 @@ msgid "Status: %s"
 msgstr "Durum: %s"
 
 msgid "Disable Web Clipper Service"
-msgstr ""
+msgstr "Web Alıntılama Servisini Kapat"
 
 msgid "The web clipper service is not enabled."
-msgstr ""
+msgstr "Web alıntılama servisi aktif edilmedi."
 
 msgid "Enable Web Clipper Service"
-msgstr ""
+msgstr "Web Alıntılama Servisini Aç"
 
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
 msgstr ""
+"Joplin Web Alıntılama, tarayıcınızdaki web sayfalarını ve ekran "
+"görüntülerini Joplin'e kaydetmenizi sağlar."
 
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr ""
+msgstr "Web alıntı aracını kullanmak için aşağıdakileri yapmanız gerekir:"
 
 msgid "Step 1: Enable the clipper service"
-msgstr ""
+msgstr "Adım 1: Alıntılama servisini aktif et"
 
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
@@ -756,10 +778,10 @@ msgid "Advanced options"
 msgstr "Gelişmiş seçenekler"
 
 msgid "Authorisation token:"
-msgstr ""
+msgstr "Yetkilendirme anahtarı:"
 
 msgid "Copy token"
-msgstr ""
+msgstr "Anahtarı kopyala"
 
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
@@ -802,6 +824,11 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
+"Şifrelemeyi aktif etmek *tüm* notlarınızın ve eklerinizin yeniden senkronize "
+"edileceği ve senkronizasyon hedefine şifrelenmiş olarak gönderileceği "
+"anlamına gelir. Şifrenizi kaybetmeyin, verilerinizin şifresini çözmenin "
+"\"*tek yolu* bu şifreyi girmek olacaktır. Şifrelemeyi etkinleştirmek için "
+"lütfen şifrenizi aşağıya girin."
 
 msgid "Disable encryption"
 msgstr "Şifrelemeyi devre dışı bırak"
@@ -969,6 +996,8 @@ msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
 msgstr ""
+"Bu nota içerik girilmemiş. Editöre geçiş yapıp notu düzenlemek için \"%s\" "
+"butonuna tıklayın."
 
 msgid "Only one note can be printed or exported to PDF at a time."
 msgstr ""
@@ -998,7 +1027,7 @@ msgstr "Alarm kur"
 
 #, javascript-format
 msgid "In: %s"
-msgstr ""
+msgstr "İçinde: %s"
 
 msgid "Hyperlink"
 msgstr "Köprü"
@@ -1059,7 +1088,7 @@ msgid "Encryption Options"
 msgstr "Şifreleme Seçenekleri"
 
 msgid "Clipper Options"
-msgstr ""
+msgstr "Alıntılama Seçenekleri"
 
 msgid "Remove this tag from all the notes?"
 msgstr "Bu etiket tüm notlardan kaldırılsın mı?"
@@ -1092,15 +1121,15 @@ msgstr "Lütfen senkronizasyon durumunun nereye aktarılacağını seçin"
 
 #, fuzzy
 msgid "Add or remove tags"
-msgstr "Etiket ekle veya kaldır:"
+msgstr "Etiket ekle veya kaldır"
 
 #, fuzzy
 msgid "Duplicate"
-msgstr "Uygulama"
+msgstr "Tekrarla"
 
 #, fuzzy, javascript-format
 msgid "%s - Copy"
-msgstr "Kopyala"
+msgstr "%s - Kopyala"
 
 msgid "Switch between note and to-do type"
 msgstr ""
@@ -1116,11 +1145,11 @@ msgstr "Markdown bağlantısını kopyala"
 
 #, fuzzy, javascript-format
 msgid "Delete note \"%s\"?"
-msgstr "Notu sil?"
+msgstr "\"%s\ Notunu sil?"
 
 #, fuzzy, javascript-format
 msgid "Delete these %d notes?"
-msgstr "Bu notlar silinsin mi?"
+msgstr "Bu notlar ( %d ) silinsin mi?"
 
 #, javascript-format
 msgid "Usage: %s"
@@ -1128,7 +1157,7 @@ msgstr "Kullanım: %s"
 
 #, javascript-format
 msgid "Unknown flag: %s"
-msgstr ""
+msgstr "Bilinmeyen etiket: %s"
 
 msgid "Dropbox"
 msgstr "Dropbox"
@@ -1150,16 +1179,18 @@ msgstr "WebDAV"
 
 #, javascript-format
 msgid "Unknown log level: %s"
-msgstr ""
+msgstr "Bilinmeyen log seviyesi: %s"
 
 #, javascript-format
 msgid "Unknown level ID: %s"
-msgstr ""
+msgstr "Bilinmeyen ID seviyesi: %s"
 
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
+"Anahtar yenilenemiyor: kimlik doğrulama verileri eksik. Senkronizasyonu "
+"tekrar başlatmak sorunu çözebilir."
 
 msgid "Untitled"
 msgstr "Başlıksız"
@@ -1172,6 +1203,12 @@ msgid ""
 "\n"
 "Please consider using a regular OneDrive account."
 msgstr ""
+"OneDrive ile senkronize edilemedi.\n"
+"\n"
+"Ne yazık ki bu hata genelde desteklenemeyen OneDrive İş'i kullanırken "
+"meydana gelir.\n"
+"\n"
+"Lütfen normal bir OneDrive hesabı kullanmayı deneyin."
 
 #, javascript-format
 msgid "Cannot access %s"
@@ -1179,31 +1216,31 @@ msgstr "%s erişilemiyor"
 
 #, javascript-format
 msgid "Created local items: %d."
-msgstr ""
+msgstr "Oluşturulan yerel öğeler: %d."
 
 #, javascript-format
 msgid "Updated local items: %d."
-msgstr ""
+msgstr "Güncellenen yerel öğeler: %d."
 
 #, javascript-format
 msgid "Created remote items: %d."
-msgstr ""
+msgstr "Oluşturulan uzak öğeler: %d."
 
 #, javascript-format
 msgid "Updated remote items: %d."
-msgstr ""
+msgstr "Güncellenen uzak öğeler: %d."
 
 #, javascript-format
 msgid "Deleted local items: %d."
-msgstr ""
+msgstr "Silinen yerel öğeler: %d."
 
 #, javascript-format
 msgid "Deleted remote items: %d."
-msgstr ""
+msgstr "Silinen uzaktaki öğeler: %d."
 
 #, javascript-format
 msgid "Fetched items: %d/%d."
-msgstr ""
+msgstr "Alınan öğeler: %d/%d."
 
 msgid "Cancelling..."
 msgstr "İptal ediliyor..."
@@ -1217,14 +1254,14 @@ msgid "Last error: %s"
 msgstr "Son hata: %s"
 
 msgid "Idle"
-msgstr ""
+msgstr "Boşta"
 
 msgid "In progress"
 msgstr "Devam etmekte"
 
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
-msgstr ""
+msgstr "Senkronizasyon zaten devam ediyor. Durum: %s"
 
 msgid "Encrypted"
 msgstr "Şifrelenmiş"
@@ -1233,14 +1270,14 @@ msgid "Encrypted items cannot be modified"
 msgstr "Şifrelenmiş öğeler değiştirilemez"
 
 msgid "Conflicts"
-msgstr ""
+msgstr "Çakışmalar"
 
 msgid "Cannot move notebook to this location"
 msgstr "Not defteri bu konuma taşınamıyor"
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr ""
+msgstr "Not defterine ayrılmış bir başlık adı olan \"%s\" adı verilemez."
 
 msgid "title"
 msgstr "başlık"
@@ -1281,10 +1318,10 @@ msgid "Dark"
 msgstr "Karanlık"
 
 msgid "Uncompleted to-dos on top"
-msgstr ""
+msgstr "Tamamlanmamış yap-list yukarıda"
 
 msgid "Show completed to-dos"
-msgstr ""
+msgstr "Tamamlanan yap-lis göster"
 
 msgid "Sort notes by"
 msgstr "Notları sırala"
@@ -1296,13 +1333,13 @@ msgid "Save geo-location with notes"
 msgstr "Coğrafi konumu notlarla kaydedin"
 
 msgid "When creating a new to-do:"
-msgstr ""
+msgstr "Yeni bir yapılacak oluşturulurken:"
 
 msgid "Focus title"
-msgstr ""
+msgstr "Başlığa odaklan"
 
 msgid "Focus body"
-msgstr ""
+msgstr "Gövde kısmına odaklan"
 
 msgid "When creating a new note:"
 msgstr "Yeni bir not oluştururken:"
@@ -1338,6 +1375,9 @@ msgid ""
 "This must be *monospace* font or it will not work properly. If the font is "
 "incorrect or empty, it will default to a generic monospace font."
 msgstr ""
+"Bu font *monospace* olmalıdır, aksi halde düzgün çalışmayacaktır. Yazı tipi "
+"yanlış seçilmiş veya boş bırakılmışsa, varsayılan monospace yazı tipi "
+"kullanılacaktır."
 
 msgid "Automatically update the application"
 msgstr "Uygulamayı otomatik olarak güncelle"
@@ -1535,7 +1575,7 @@ msgstr "Toplam: %d/%d"
 
 #, javascript-format
 msgid "Conflicted: %d"
-msgstr "Çelişki: %d"
+msgstr "Çakışan: %d"
 
 #, javascript-format
 msgid "To delete: %d"
@@ -1692,7 +1732,7 @@ msgstr "Ana Şifre  %s"
 
 #, javascript-format
 msgid "Created: %s"
-msgstr "Oluşturuldu: %s"
+msgstr "Oluşturulma: %s"
 
 msgid "Password:"
 msgstr "Şifre:"
