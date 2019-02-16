@@ -22,6 +22,8 @@ class VerticalResizer extends React.PureComponent {
 	}
 
 	document_onDragOver(event) {
+		// This is just to prevent the cursor from changing to a "+" as it's dragged
+		// over other elements. With this it stays a normal cursor.
 		event.dataTransfer.dropEffect = 'none';
 	}
 
@@ -41,6 +43,9 @@ class VerticalResizer extends React.PureComponent {
 	}
 
 	onDrag(event) {
+		// If we got a drag event with no buttons pressed, it's the last drag event
+		// that we should ignore, because it's sometimes use to put the dragged element
+		// back to its original position (if there was no valid drop target), which we don't want.
 		if (!event.nativeEvent.buttons) return;
 
 		const newX = event.nativeEvent.screenX;
