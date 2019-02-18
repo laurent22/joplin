@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.2.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
@@ -599,18 +601,16 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exportiere „%s“ ins „%s“ Format. Bitte warten..."
 
 msgid "Sidebar"
-msgstr ""
+msgstr "Seitenleiste"
 
 msgid "Note list"
-msgstr ""
+msgstr "Notizen-Liste"
 
-#, fuzzy
 msgid "Note title"
-msgstr "Notizbuch-Titel:"
+msgstr "Notiz Titel"
 
-#, fuzzy
 msgid "Note body"
-msgstr "Notizbücher"
+msgstr "Notiz Text"
 
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
@@ -669,7 +669,7 @@ msgid "Italic"
 msgstr "Kursiv"
 
 msgid "Link"
-msgstr ""
+msgstr "Link"
 
 msgid "Insert Date Time"
 msgstr "Datum / Uhrzeit einfügen"
@@ -692,9 +692,8 @@ msgstr "Seitenleiste umschalten"
 msgid "Toggle editor layout"
 msgstr "Editor-Layout umschalten"
 
-#, fuzzy
 msgid "Focus"
-msgstr "Fokussiere Inhalt"
+msgstr "Fokus"
 
 msgid "Tools"
 msgstr "Werkzeuge"
@@ -748,7 +747,7 @@ msgstr "Die aktuelle Version ist auf dem neuesten Stand."
 
 #, javascript-format
 msgid "%s (pre-release)"
-msgstr ""
+msgstr "%s (Vorabversion)"
 
 msgid "An update is available, do you want to download it now?"
 msgstr ""
@@ -756,11 +755,11 @@ msgstr ""
 
 #, javascript-format
 msgid "Your version: v%s"
-msgstr ""
+msgstr "Deine Version: v%s"
 
 #, javascript-format
 msgid "New version: v%s"
-msgstr ""
+msgstr "Neue Version: v%s"
 
 msgid "Yes"
 msgstr "Ja"
@@ -769,7 +768,7 @@ msgid "No"
 msgstr "Nein"
 
 msgid "Token has been copied to the clipboard!"
-msgstr "Token wurde in die Zwischenablage kopiert."
+msgstr "Token wurde in die Zwischenablage kopiert!"
 
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
@@ -843,7 +842,7 @@ msgid "Notes and settings are stored in: %s"
 msgstr "Notizen und Einstellungen werden gespeichert in: %s"
 
 msgid "Browse..."
-msgstr ""
+msgstr "Durchsuche..."
 
 msgid "Check synchronisation configuration"
 msgstr "Überprüfen der Synchronisationseinstellungen"
@@ -941,9 +940,9 @@ msgstr "Status"
 msgid "Encryption is:"
 msgstr "Die Verschlüsselung ist:"
 
-#, fuzzy
+# 'Nutzung', 'Gebrauch', or 'Verwendung' - depends on the context
 msgid "Usage"
-msgstr "Nutzung: %s"
+msgstr "Nutzung"
 
 msgid "Back"
 msgstr "Zurück"
@@ -1050,7 +1049,7 @@ msgstr ""
 "und die Notiz zu bearbeiten."
 
 msgid "Only one note can be printed or exported to PDF at a time."
-msgstr ""
+msgstr "Nur eine Notiz kann gedruckt oder als PDF exportiert werden."
 
 msgid "strong text"
 msgstr "Fetter Text"
@@ -1190,13 +1189,13 @@ msgstr "Zu To-Do-Typ wechseln"
 msgid "Copy Markdown link"
 msgstr "Markdown-Link kopieren"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete note \"%s\"?"
-msgstr "Notizbuch \"%s\" löschen?"
+msgstr "Notiz \"%s\" löschen?"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete these %d notes?"
-msgstr "Sollen diese Notizen gelöscht werden?"
+msgstr "Sollen diese %d Notizen gelöscht werden?"
 
 #, javascript-format
 msgid "Usage: %s"
@@ -1431,11 +1430,11 @@ msgid "Automatically update the application"
 msgstr "Die Applikation automatisch aktualisieren"
 
 msgid "Get pre-releases when checking for updates"
-msgstr ""
+msgstr "Lade auch Vorabversionen herunter"
 
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
-msgstr ""
+msgstr "Weitere Informationen findest Du auf der Vorabversionsseite: %s"
 
 msgid "Synchronisation interval"
 msgstr "Synchronisationsinterval"
@@ -1536,25 +1535,21 @@ msgstr "Ignoriere TLS-Zertifikatfehler"
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Ungültiger Optionswert: \"%s\". Mögliche Werte sind: %s."
 
-#, fuzzy
 msgid "General"
-msgstr "Allgemeine Einstellungen"
+msgstr "Allgemeines"
 
-#, fuzzy
 msgid "Synchronisation"
-msgstr "Status der Synchronisation"
+msgstr "Synchronisation"
 
 msgid "Appearance"
-msgstr ""
+msgstr "Erscheinungsbild"
 
-#, fuzzy
 msgid "Note"
-msgstr "Notizbücher"
+msgstr "Notiz"
 
-# Please note: The term 'Location' is assumed to be the geographical location where the note has been created. For this the german word 'Standort' fits better than the previously used 'Ablageort'. The latter one is used for the folder where files are stored.
-#, fuzzy
+# 'Applikation' or 'Anwendung' - both translations are correct.
 msgid "Application"
-msgstr "Standort"
+msgstr "Applikation"
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -1717,7 +1712,7 @@ msgstr ""
 "korrekt sind und das das Synchronisierungsziel erreichbar ist. Fehlermeldung:"
 
 msgid "The application has been authorised!"
-msgstr "Das Programm wurde erfolgreich autorisiert."
+msgstr "Das Programm wurde erfolgreich autorisiert!"
 
 #, javascript-format
 msgid ""
