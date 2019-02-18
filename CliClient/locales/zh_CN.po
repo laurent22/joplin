@@ -1728,7 +1728,7 @@ msgid "Unsupported image type: %s"
 msgstr "不支持的图片格式：%s"
 
 msgid "Take photo"
-msgstr "附加照片"
+msgstr "拍照"
 
 msgid "Attach photo"
 msgstr "附加照片"
@@ -1740,10 +1740,10 @@ msgid "Share"
 msgstr "分享"
 
 msgid "Convert to note"
-msgstr "转换到笔记"
+msgstr "转换为笔记"
 
 msgid "Convert to todo"
-msgstr "转换到待办事项"
+msgstr "转换为待办事项"
 
 msgid "Hide metadata"
 msgstr "隐藏元数据"
