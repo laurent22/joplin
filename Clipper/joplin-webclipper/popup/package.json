@@ -19,7 +19,7 @@
     "postinstall": "node scripts/postinstall.js"
   },
   "devDependencies": {
-    "cra-build-watch": "^1.0.1",
+    "cra-build-watch": "^1.4.0",
     "fs-extra": "^6.0.1"
   },
   "browserslist": [
