@@ -518,6 +518,10 @@ class MdToHtml {
 			}
 			::-webkit-scrollbar {
 				width: 7px;
+				height: 7px;
+			}
+			::-webkit-scrollbar-corner {
+				background: none;
 			}
 			::-webkit-scrollbar-track {
 				border: none;
