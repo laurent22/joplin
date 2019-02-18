@@ -17,6 +17,7 @@ class MdToHtml {
 		this.loadedResources_ = {};
 		this.cachedContent_ = null;
 		this.cachedContentKey_ = null;
+		this.extraCssBlocks_ = [];
 
 		// Must include last "/"
 		this.resourceBaseUrl_ = ('resourceBaseUrl' in options) ? options.resourceBaseUrl : null;
@@ -356,31 +357,6 @@ class MdToHtml {
 			if (closeTag) {
 				if (closeTag === 'a') {
 					const currentAnchorAttrs = anchorAttrs.pop();
-
-					// NOTE: Disabled for now due to this:
-					// https://github.com/laurent22/joplin/issues/318#issuecomment-375854848
-
-					// const previousContent = output.length ? output[output.length - 1].trim() : '';
-					// const anchorHref = this.getAttr_(currentAnchorAttrs, 'href', '').trim();
-
-					// Optimisation: If the content of the anchor is the same as the URL, we replace the content
-					// by (Link). This is to shorten the text, which is important especially when the note comes
-					// from imported HTML, which can contain many such links and make the text unreadble. An example
-					// would be a movie review that has multiple links to allow a user to rate the film from 1 to 5 stars.
-					// In the original page, it might be rendered as stars, via CSS, but in the imported note it would look like this:
-					// http://example.com/rate/1 http://example.com/rate/2 http://example.com/rate/3
-					// http://example.com/rate/4 http://example.com/rate/5
-					// which would take a lot of screen space even though it doesn't matter since the user is unlikely
-					// to rate the film from the note. This is actually a nice example, still readable, but there is way
-					// worse that this in notes that come from web-clipped content.
-					// With this change, the links will still be preserved but displayed like
-					// (link) (link) (link) (link) (link)
-
-					// if (this.urldecode_(previousContent) === htmlentities(this.urldecode_(anchorHref))) {
-					// 	output.pop();
-					// 	output.push(_('(Link)'));
-					// }
-
 					output.push(this.renderCloseLink_(currentAnchorAttrs, options));
 				} else {
 					output.push('</' + closeTag + '>');
@@ -401,14 +377,16 @@ class MdToHtml {
 		// Insert the extra CSS at the top of the HTML
 
 		if (!ObjectUtils.isEmpty(extraCssBlocks)) {
-			const temp = ['<style>'];
+			const temp = [];//['<style>'];
 			for (let n in extraCssBlocks) {
 				if (!extraCssBlocks.hasOwnProperty(n)) continue;
 				temp.push(extraCssBlocks[n]);
 			}
-			temp.push('</style>');
+			// temp.push('</style>');
 
-			output = temp.concat(output);
+			if (temp.length) this.extraCssBlocks_.push(temp.join('\n'));
+
+			//output = temp.concat(output);
 		}
 
 		return output.join('');
@@ -490,6 +468,8 @@ class MdToHtml {
 		const env = {};
 		const tokens = md.parse(body, env);
 
+		this.extraCssBlocks_ = [];
+
 		let renderedBody = this.renderTokens_(md, tokens, options);
 
 		// console.info(body);
@@ -552,6 +532,22 @@ class MdToHtml {
 			::-webkit-scrollbar-thumb:hover {
 				background: rgba(100, 100, 100, 0.7); 
 			}
+
+			/* Remove top padding and margin from first child so that top of rendered text is aligned to top of text editor text */
+			#rendered-md h1:first-child,
+			#rendered-md h2:first-child,
+			#rendered-md h3:first-child,
+			#rendered-md h4:first-child,
+			#rendered-md ul:first-child,
+			#rendered-md ol:first-child,
+			#rendered-md table:first-child,
+			#rendered-md blockquote:first-child,
+			#rendered-md img:first-child,
+			#rendered-md p:first-child {
+				margin-top: 0;
+				padding-top: 0;
+			}
+			
 			p, h1, h2, h3, h4, h5, h6, ul, table {
 				margin-top: .6em;
 				margin-bottom: .65em;
@@ -705,12 +701,13 @@ class MdToHtml {
 			}
 		`;
 
-		// To style the checkboxes in print when webkit-print-color-adjust is not enabled.
-		// Keep it there for now in case that CSS parameter needs to be removed.
+		let cssStrings = [normalizeCss, css];
+		if (this.extraCssBlocks_) cssStrings = cssStrings.concat(this.extraCssBlocks_);
+		if (options.userCss) cssStrings.push(options.userCss);
 
-		const styleHtml = '<style>' + normalizeCss + "\n" + css + '</style>';
+		const styleHtml = '<style>' + cssStrings.join('\n') + '</style>';
 
-		const output = styleHtml + renderedBody;
+		const output = styleHtml + '<div id="rendered-md">' + renderedBody + '</div>';
 
 		// console.info('<!DOCTYPE html><html><head><meta charset="UTF-8">' + output + '</body></html>');
 

@@ -909,6 +909,7 @@ class NoteTextComponent extends React.Component {
 				}, 100);
 			},
 			postMessageSyntax: 'ipcProxySendToHost',
+			userCss: options.useCustomCss ? this.props.customCss : '',
 		};
 
 		const theme = themeStyle(this.props.theme);
@@ -923,8 +924,6 @@ class NoteTextComponent extends React.Component {
 			// Fixes https://github.com/laurent22/joplin/issues/217
 			bodyToRender = '*' + _('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout')) + '*';
 		}
-
-		if (options.useCustomCss) bodyToRender = '<style>' + this.props.customCss + '</style>\n' + bodyToRender;
 
 		bodyHtml = this.mdToHtml().render(bodyToRender, theme, mdOptions);
 
