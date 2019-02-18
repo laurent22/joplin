@@ -7,6 +7,7 @@ const { shim } = require('lib/shim.js');
 const { _ } = require('lib/locale');
 const md5 = require('md5');
 const MdToHtml_Katex = require('lib/MdToHtml_Katex');
+const MdToHtml_Mermaid = require('lib/MdToHtml_Mermaid');
 const StringUtils = require('lib/string-utils.js');
 
 class MdToHtml {
@@ -193,6 +194,7 @@ class MdToHtml {
 		if (!this.rendererPlugins_) {
 			this.rendererPlugins_ = {};
 			this.rendererPlugins_['katex'] = new MdToHtml_Katex();
+			this.rendererPlugins_['mermaid'] = new MdToHtml_Mermaid();
 		}
 
 		return language in this.rendererPlugins_ ? this.rendererPlugins_[language] : null;

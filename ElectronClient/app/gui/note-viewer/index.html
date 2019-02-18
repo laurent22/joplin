@@ -35,6 +35,7 @@
 
 <body id="body">
 	<div id="hlScriptContainer"></div>
+	<div id="mermaidScriptContainer"></div>
 	<div id="markScriptContainer"></div>
 	<div id="content" ondragstart="return false;" ondrop="return false;"></div>
 	<script src="./lib.js"></script>
@@ -141,6 +142,23 @@
 		setPercentScroll(percentScroll_);
 	}
 
+	const loadedScripts_ = {};
+
+	function lazyLoadScript(url, containerId, onReady) {
+		if (loadedScripts_[url]) {
+			onReady();
+			return;
+		}
+
+		console.info('Loading script: ' + url);
+
+		const script = document.createElement('script');
+		script.onload = onReady;
+		script.src = url;
+		document.getElementById(containerId).appendChild(script);
+		loadedScripts_[url] = url;
+	}
+
 	ipc.setHtml = (event) => {
 		const html = event.html;
 
@@ -183,6 +201,12 @@
 					checkScrollIID_ = null;
 				}
 			}, 1);
+		}
+
+		if (document.getElementsByClassName('mermaid').length) {
+			lazyLoadScript('../../node_modules/mermaid/dist/mermaid.min.js', 'mermaidScriptContainer', () => {
+				mermaid.init();
+			});
 		}
 	}
 
