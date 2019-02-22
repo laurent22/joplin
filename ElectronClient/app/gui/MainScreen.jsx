@@ -392,7 +392,7 @@ class MainScreenComponent extends React.Component {
 
 		headerItems.push({
 			title: _('New notebook'),
-			iconName: 'fa-folder-o',
+			iconName: 'fa-book',
 			onClick: () => { this.doCommand({ name: 'newNotebook' }) },
 		});
 
