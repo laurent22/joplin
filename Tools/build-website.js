@@ -389,6 +389,7 @@ async function main() {
 	renderFileToHtml(rootDir + '/readme/stats.md', rootDir + '/docs/stats/index.html', { title: 'Statistics' });
 	renderFileToHtml(rootDir + '/readme/terminal.md', rootDir + '/docs/terminal/index.html', { title: 'Terminal Application' });
 	renderFileToHtml(rootDir + '/readme/api.md', rootDir + '/docs/api/index.html', { title: 'REST API' });
+	renderFileToHtml(rootDir + '/readme/prereleases.md', rootDir + '/docs/prereleases/index.html', { title: 'Pre-releases' });
 }
 
 main().catch((error) => {
