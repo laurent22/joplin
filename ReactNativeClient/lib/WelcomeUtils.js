@@ -16,15 +16,12 @@ class WelcomeUtils {
 			defaultFolderId: null,
 		};
 
-		const appType = Setting.value('appType');
-
 		const folderAssets = welcomeAssets.folders;
 		const tempDir = Setting.value('resourceDir');
-		const timestamp = welcomeAssets.timestamp;
 
 		for (let i = 0; i < folderAssets.length; i++) {
 			const folderAsset = folderAssets[i];
-			const folder = await Folder.save({ title: folderAsset.title  + ' (' + appType + ')'});
+			const folder = await Folder.save({ title: folderAsset.title  + ' (' + Setting.appTypeToLabel(Setting.value('appType')) + ')'});
 			if (!output.defaultFolderId) output.defaultFolderId = folder.id;
 		}
 

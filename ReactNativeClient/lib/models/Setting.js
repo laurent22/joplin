@@ -563,6 +563,12 @@ class Setting extends BaseModel {
 		return name;
 	}
 
+	static appTypeToLabel(name) {
+		// Not translated for now because only used on Welcome notes (which are not translated)
+		if (name === 'cli') return 'CLI';
+		return name[0].toUpperCase() + name.substr(1).toLowerCase();
+	}
+
 }
 
 Setting.TYPE_INT = 1;
