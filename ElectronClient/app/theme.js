@@ -70,7 +70,7 @@ const lightStyle = {
 	dividerColor: "#dddddd",
 	selectedColor: '#e5e5e5',
 	urlColor: '#155BDA',
-	removeColor: '#B01C2E',
+	removeColor: '#E76574',
 
 	backgroundColor2: "#162B3D",
 	color2: "#ffffff",
