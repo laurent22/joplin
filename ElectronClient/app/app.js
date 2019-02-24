@@ -419,7 +419,7 @@ class Application extends BaseApplication {
 					click: async () => {
 						this.dispatch({
 							type: 'WINDOW_COMMAND',
-							name: 'syncTarget',
+							name: 'synchronize',
 						});
 					}
 				}, {
