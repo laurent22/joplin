@@ -9,9 +9,19 @@ class SearchEngineUtils {
 		const results = await SearchEngine.instance().search(query);
 		const noteIds = results.map(n => n.id);
 
+		// We need at least the note ID to be able to sort them below so if not
+		// present in field list, add it.L Also remember it was auto-added so that
+		// it can be removed afterwards.
+		let idWasAutoAdded = false;
+		const fields = options.fields ? options.fields : Note.previewFields().slice();
+		if (fields.indexOf('id') < 0) {
+			fields.push('id');
+			idWasAutoAdded = true;
+		}
+
 		const previewOptions = Object.assign({}, {
 			order: [],
-			fields: Note.previewFields(),
+			fields: fields,
 			conditions: ['id IN ("' + noteIds.join('","') + '")'],
 		}, options);
 
@@ -24,6 +34,7 @@ class SearchEngineUtils {
 		for (let i = 0; i < notes.length; i++) {
 			const idx = noteIds.indexOf(notes[i].id);
 			sortedNotes[idx] = notes[i];
+			if (idWasAutoAdded) delete sortedNotes[idx].id;
 		}
 
 		return sortedNotes;

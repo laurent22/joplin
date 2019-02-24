@@ -209,6 +209,8 @@ class Api {
 	}
 
 	async action_search(request) {
+		this.checkToken_(request);
+
 		if (request.method !== 'GET') throw new ErrorMethodNotAllowed();
 
 		const query = request.query.query;
