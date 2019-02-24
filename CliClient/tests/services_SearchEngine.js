@@ -111,6 +111,58 @@ describe('services_SearchEngine', function() {
 		expect(rows[4].id).toBe(n5.id);
 	}));
 
+	it('should order search results by relevance (last updated first)', asyncTest(async () => {
+		let rows;
+
+		const n1 = await Note.save({ title: "abcd" });
+		await sleep(0.1);
+		const n2 = await Note.save({ title: "abcd" });
+		await sleep(0.1);
+		const n3 = await Note.save({ title: "abcd" });
+		await sleep(0.1);
+
+		await engine.syncTables();
+		rows = await engine.search('abcd');
+
+		expect(rows[0].id).toBe(n3.id);
+		expect(rows[1].id).toBe(n2.id);
+		expect(rows[2].id).toBe(n1.id);
+
+		await Note.save({ id: n1.id, title: "abcd" });
+
+		await engine.syncTables();
+		rows = await engine.search('abcd');
+		expect(rows[0].id).toBe(n1.id);
+		expect(rows[1].id).toBe(n3.id);
+		expect(rows[2].id).toBe(n2.id);
+	}));
+
+	it('should order search results by relevance (completed to-dos last)', asyncTest(async () => {
+		let rows;
+
+		const n1 = await Note.save({ title: "abcd", is_todo: 1 });
+		await sleep(0.1);
+		const n2 = await Note.save({ title: "abcd", is_todo: 1 });
+		await sleep(0.1);
+		const n3 = await Note.save({ title: "abcd", is_todo: 1 });
+		await sleep(0.1);
+
+		await engine.syncTables();
+		rows = await engine.search('abcd');
+
+		expect(rows[0].id).toBe(n3.id);
+		expect(rows[1].id).toBe(n2.id);
+		expect(rows[2].id).toBe(n1.id);
+
+		await Note.save({ id: n3.id, todo_completed: Date.now() });
+
+		await engine.syncTables();
+		rows = await engine.search('abcd');
+		expect(rows[0].id).toBe(n2.id);
+		expect(rows[1].id).toBe(n1.id);
+		expect(rows[2].id).toBe(n3.id);
+	}));
+
 	it('should supports various query types', asyncTest(async () => {
 		let rows;
 

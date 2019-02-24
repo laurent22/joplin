@@ -214,6 +214,10 @@ class SearchEngine {
 		rows.sort((a, b) => {
 			if (a.weight < b.weight) return +1;
 			if (a.weight > b.weight) return -1;
+			if (a.is_todo && a.todo_completed) return +1;
+			if (b.is_todo && b.todo_completed) return -1;
+			if (a.user_updated_time < b.user_updated_time) return +1;
+			if (a.user_updated_time > b.user_updated_time) return -1;
 			return 0;
 		});
 	}
@@ -364,7 +368,7 @@ class SearchEngine {
 			return this.basicSearch(query);
 		} else {
 			const parsedQuery = this.parseQuery(query);
-			const sql = 'SELECT id, title, offsets(notes_fts) AS offsets FROM notes_fts WHERE notes_fts MATCH ?'
+			const sql = 'SELECT notes_fts.id, notes_fts.title, offsets(notes_fts) AS offsets, notes.user_updated_time, notes.is_todo, notes.todo_completed FROM notes_fts LEFT JOIN notes ON notes_fts.id = notes.id WHERE notes_fts MATCH ?'
 			try {
 				const rows = await this.db().selectAll(sql, [query]);
 				this.orderResults_(rows, parsedQuery);
