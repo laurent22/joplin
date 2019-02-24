@@ -205,6 +205,7 @@ class WebDavApi {
 	requestToCurl_(url, options) {
 		let output = [];
 		output.push('curl');
+		output.push('-v');
 		if (options.method) output.push('-X ' + options.method);
 		if (options.headers) {
 			for (let n in options.headers) {
