@@ -5,13 +5,21 @@ const moment = require('moment');
 const { themeStyle } = require('../theme.js');
 const { time } = require('lib/time-utils.js');
 const Datetime = require('react-datetime');
+const TagList = require('./TagList.min.js');
+const Tag = require('lib/models/Tag.js');
 
 class PromptDialog extends React.Component {
 
 	componentWillMount() {
+		let answer = ''
+		if (this.props.inputType !== 'tags' && this.props.defaultValue) {
+			answer = this.props.defaultValue;
+		}
+
 		this.setState({
 			visible: false,
-			answer: this.props.defaultValue ? this.props.defaultValue : '',
+			answer: answer,
+			tags: this.props.inputType === 'tags' ? this.props.defaultValue : null,
 		});
 		this.focusInput_ = true;
 	}
@@ -23,7 +31,11 @@ class PromptDialog extends React.Component {
 		}
 
 		if ('defaultValue' in newProps && newProps.defaultValue !== this.props.defaultValue) {
-			this.setState({ answer: newProps.defaultValue });
+			if ('inputType' in newProps && newProps.inputType === 'tags') {
+				this.setState({ answer: '', tags: newProps.defaultValue });
+			} else {
+				this.setState({ answer: newProps.defaultValue });
+			}
 		}
 	}
 
@@ -62,6 +74,7 @@ class PromptDialog extends React.Component {
 			backgroundColor: theme.backgroundColor,
 			padding: 16,
 			display: 'inline-block',
+			maxWidth: width * 0.5,
 			boxShadow: '6px 6px 20px rgba(0,0,0,0.5)',
 		};
 
@@ -92,6 +105,11 @@ class PromptDialog extends React.Component {
 			borderColor: theme.dividerColor,
 		};
 
+		this.styles_.tagList = {
+			marginBottom: 10,
+			marginTop: 10,
+		};
+
 		this.styles_.desc = Object.assign({}, theme.textStyle, {
 			marginTop: 10,
 		});
@@ -112,6 +130,9 @@ class PromptDialog extends React.Component {
 				if (this.props.inputType === 'datetime') {
 					// outputAnswer = anythingToDate(outputAnswer);
 					outputAnswer = time.anythingToDateTime(outputAnswer);
+				}
+				else if (this.props.inputType === 'tags') {
+					outputAnswer = this.state.tags;
 				}
 				this.props.onClose(accept ? outputAnswer : null, buttonType);
 			}
@@ -137,15 +158,35 @@ class PromptDialog extends React.Component {
 
 		const onKeyDown = (event) => {
 			if (event.key === 'Enter') {
-				onClose(true);
+				if (this.state.answer.trim() !== '') {
+					let newTags = this.state.tags;
+					if (newTags.indexOf(this.state.answer) === -1) {
+						newTags.push(this.state.answer);
+					}
+					this.setState({
+						tags: newTags,
+						answer: ''
+					});
+				}
 			} else if (event.key === 'Escape') {
 				onClose(false);
 			}
 		}
 
+		const onDeleteTag = (tag) => {
+			let newTags = this.state.tags;
+			var index = newTags.indexOf(tag);
+			if (index !== -1) newTags.splice(index, 1);
+			this.setState({
+				tags: newTags,
+			});
+		}
+
 		const descComp = this.props.description ? <div style={styles.desc}>{this.props.description}</div> : null;
 
 		let inputComp = null;
+		let dataList = null;
+		let tagList = null;
 
 		if (this.props.inputType === 'datetime') {
 			inputComp = <Datetime
@@ -161,9 +202,29 @@ class PromptDialog extends React.Component {
 				ref={input => this.answerInput_ = input}
 				value={this.state.answer}
 				type="text"
+				list={this.props.inputType === "tags" ? "tags" : null}
 				onChange={(event) => onChange(event)}
 				onKeyDown={(event) => onKeyDown(event)}
 			/>
+		}
+
+		if (this.props.inputType === 'tags') {
+			tagList = <TagList
+				style={styles.tagList}
+				onDeleteItem={onDeleteTag}
+				items={this.state.tags.map((a) => {
+								return {title: a, id: a}
+							})}
+			/>;
+
+			dataList = <datalist id="tags">
+				{this.props.autocomplete.map((a) => {
+					if (this.state.tags.indexOf(a.title) === -1) {
+						return <option value={a.title} key={a.id} />
+					}
+				}
+				)}
+			</datalist>
 		}
 
 		const buttonComps = [];
@@ -177,7 +238,9 @@ class PromptDialog extends React.Component {
 					<label style={styles.label}>{this.props.label ? this.props.label : ''}</label>
 					<div style={{display: 'inline-block', color: 'black', backgroundColor: theme.backgroundColor}}>
 						{inputComp}
+						{dataList}
 						{descComp}
+						{tagList}
 					</div>
 					<div style={{ textAlign: 'right', marginTop: 10 }}>
 						{buttonComps}

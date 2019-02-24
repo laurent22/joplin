@@ -70,6 +70,7 @@ const lightStyle = {
 	dividerColor: "#dddddd",
 	selectedColor: '#e5e5e5',
 	urlColor: '#155BDA',
+	removeColor: '#B01C2E',
 
 	backgroundColor2: "#162B3D",
 	color2: "#ffffff",
@@ -106,6 +107,7 @@ const darkStyle = {
 	dividerColor: '#555555',
 	selectedColor: '#333333',
 	urlColor: '#4E87EE',
+	removeColor: '#B01C2E',
 
 	backgroundColor2: "#181A1D",
 	color2: "#ffffff",
@@ -142,6 +144,7 @@ function addExtraStyles(style) {
 		paddingRight: style.tagItemPadding * 2,
 		paddingLeft: style.tagItemPadding * 2,
 		backgroundColor: style.raisedBackgroundColor,
+		borderRadius: '10%',
 		color: style.raisedColor,
 	};
 
