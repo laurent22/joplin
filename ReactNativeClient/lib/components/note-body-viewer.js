@@ -108,7 +108,7 @@ class NoteBodyViewer extends Component {
 			</html>
 		`;
 
-		let webViewStyle = {}
+		let webViewStyle = {'backgroundColor': this.props.webViewStyle.backgroundColor}
 		// On iOS, the onLoadEnd() event is never fired so always
 		// display the webview (don't do the little trick
 		// to avoid the white flash).
