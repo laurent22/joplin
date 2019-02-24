@@ -27,6 +27,7 @@
       "build/icons/*"
     ],
     "win": {
+      "rfc3161TimeStampServer": "http://sha256timestamp.ws.symantec.com/sha256/timestamp",
       "icon": "../../Assets/Joplin.ico",
       "target": [
         {
