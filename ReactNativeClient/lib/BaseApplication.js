@@ -299,10 +299,10 @@ class BaseApplication {
 		const result = next(action);
 		const newState = store.getState();
 		let refreshNotes = false;
-		let refreshTags = false;
+		// let refreshTags = false;
 		let refreshNotesUseSelectedNoteId = false;
 
-		reduxSharedMiddleware(store, next, action);
+		await reduxSharedMiddleware(store, next, action);
 
 		if (this.hasGui()  && ["NOTE_UPDATE_ONE", "NOTE_DELETE", "FOLDER_UPDATE_ONE", "FOLDER_DELETE"].indexOf(action.type) >= 0) {
 			if (!await reg.syncTarget().syncStarted()) reg.scheduleSync(30 * 1000, { syncSteps: ["update_remote", "delete_remote"] });
@@ -337,20 +337,20 @@ class BaseApplication {
 			refreshNotes = true;
 		}
 
-		if (action.type == 'NOTE_DELETE') {
-			refreshTags = true;
-		}
+		// if (action.type == 'NOTE_DELETE') {
+		// 	refreshTags = true;
+		// }
 
 		if (refreshNotes) {
 			await this.refreshNotes(newState, refreshNotesUseSelectedNoteId);
 		}
 
-		if (refreshTags) {
-			this.dispatch({
-				type: 'TAG_UPDATE_ALL',
-				items: await Tag.allWithNotes(),
-			});
-		}
+		// if (refreshTags) {
+		// 	this.dispatch({
+		// 		type: 'TAG_UPDATE_ALL',
+		// 		items: await Tag.allWithNotes(),
+		// 	});
+		// }
 
 		if ((action.type == 'SETTING_UPDATE_ONE' && (action.key == 'dateFormat' || action.key == 'timeFormat')) || (action.type == 'SETTING_UPDATE_ALL')) {
 			time.setDateFormat(Setting.value('dateFormat'));

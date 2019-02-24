@@ -92,7 +92,7 @@ const generalMiddleware = store => next => async (action) => {
 	const result = next(action);
 	const newState = store.getState();
 
-	reduxSharedMiddleware(store, next, action);
+	await reduxSharedMiddleware(store, next, action);
 
 	if (action.type == "NAV_GO") Keyboard.dismiss();
 
@@ -453,7 +453,7 @@ async function initialize(dispatch) {
 
 		await FoldersScreenUtils.refreshFolders();
 
-		const tags = await Tag.all();
+		const tags = await Tag.allWithNotes();
 
 		dispatch({
 			type: 'TAG_UPDATE_ALL',

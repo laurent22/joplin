@@ -1,8 +1,11 @@
 const Setting = require('lib/models/Setting');
+const Tag = require('lib/models/Tag');
 const { reg } = require('lib/registry.js');
 
-const reduxSharedMiddleware = function(store, next, action) {
+const reduxSharedMiddleware = async function(store, next, action) {
 	const newState = store.getState();
+
+	let refreshTags = false;
 
 	if (action.type == 'FOLDER_SET_COLLAPSED' || action.type == 'FOLDER_TOGGLE') {
 		Setting.setValue('collapsedFolderIds', newState.collapsedFolderIds);
@@ -11,7 +14,17 @@ const reduxSharedMiddleware = function(store, next, action) {
 	if (action.type === 'SETTING_UPDATE_ONE' && !!action.key.match(/^sync\.\d+\.path$/)) {
 		reg.resetSyncTarget();
 	}
-	
+
+	if (action.type == 'NOTE_DELETE') {
+		refreshTags = true;
+	}
+
+	if (refreshTags) {
+		store.dispatch({
+			type: 'TAG_UPDATE_ALL',
+			items: await Tag.allWithNotes(),
+		});
+	}
 }
 
 module.exports = reduxSharedMiddleware;
