@@ -120,7 +120,11 @@ function checkForUpdates(inBackground, window, logFilePath, options) {
 		autoUpdateLogger_.info('Is Pre-release:', release.prerelease);
 
 		if (compareVersions(release.version, packageInfo.version) <= 0) {
-			if (!checkInBackground_) dialog.showMessageBox({ message: _('Current version is up-to-date.') })
+			if (!checkInBackground_) dialog.showMessageBox({
+                type: 'info',
+                message: _('Current version is up-to-date.'),
+                buttons: [_('OK')],
+            })
 		} else {
 			const releaseNotes = release.notes.trim() ? "\n\n" + release.notes.trim() : '';
 			const newVersionString = release.prerelease ? _('%s (pre-release)', release.version) : release.version;
