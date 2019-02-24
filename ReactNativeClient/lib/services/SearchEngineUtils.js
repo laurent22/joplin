@@ -3,15 +3,17 @@ const Note = require('lib/models/Note');
 
 class SearchEngineUtils {
 
-	static async notesForQuery(query) {
+	static async notesForQuery(query, options = null) {
+		if (!options) options = {};
+
 		const results = await SearchEngine.instance().search(query);
 		const noteIds = results.map(n => n.id);
 
-		const previewOptions = {
+		const previewOptions = Object.assign({}, {
 			order: [],
 			fields: Note.previewFields(),
 			conditions: ['id IN ("' + noteIds.join('","') + '")'],
-		}
+		}, options);
 
 		const notes = await Note.previews(null, previewOptions);
 

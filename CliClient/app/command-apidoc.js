@@ -113,6 +113,11 @@ class Command extends BaseCommand {
 		lines.push('\tcurl http://localhost:41184/tags?fields=id');
 		lines.push('');
 
+		lines.push('# Error handling');
+		lines.push('');
+		lines.push('In case of an error, an HTTP status code >= 400 will be returned along with a JSON object that provides more info about the error. The JSON object is in the format `{ "error": "description of error" }`.');
+		lines.push('');
+
 		lines.push('# About the property types');
 		lines.push('');
 		lines.push('* Text is UTF-8.');

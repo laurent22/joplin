@@ -13,6 +13,7 @@ const { shim } = require('lib/shim');
 const HtmlToMd = require('lib/HtmlToMd');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('lib/path-utils');
 const ApiResponse = require('lib/services/rest/ApiResponse');
+const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 
 class ApiError extends Error {
 
@@ -205,6 +206,15 @@ class Api {
 		}
 
 		throw new ErrorMethodNotAllowed();
+	}
+
+	async action_search(request) {
+		if (request.method !== 'GET') throw new ErrorMethodNotAllowed();
+
+		const query = request.query.query;
+		if (!query) throw new ErrorBadRequest('Missing "query" parameter');
+
+		return await SearchEngineUtils.notesForQuery(query, this.notePreviewsOptions_(request));
 	}
 
 	async action_folders(request, id = null, link = null) {

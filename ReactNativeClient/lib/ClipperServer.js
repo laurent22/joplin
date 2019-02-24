@@ -148,7 +148,12 @@ class ClipperServer {
 					writeResponse(200, response ? response : '');
 				} catch (error) {
 					this.logger().error(error);
-					writeResponse(error.httpCode ? error.httpCode : 500, error.message);
+					const httpCode = error.httpCode ? error.httpCode : 500;
+					const msg = [];
+					if (httpCode >= 500) msg.push('Internal Server Error');
+					if (error.message) msg.push(error.message);
+
+					writeResponse(httpCode, { error: msg.join(': ') });
 				}
 			}
 
