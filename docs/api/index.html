@@ -285,7 +285,9 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <pre><code>curl http://localhost:41184/notes/ABCD123?fields=longitude,latitude
 </code></pre><p>To get the IDs only of all the tags:</p>
 <pre><code>curl http://localhost:41184/tags?fields=id
-</code></pre><h1 id="about-the-property-types">About the property types</h1>
+</code></pre><h1 id="error-handling">Error handling</h1>
+<p>In case of an error, an HTTP status code &gt;= 400 will be returned along with a JSON object that provides more info about the error. The JSON object is in the format <code>{ &quot;error&quot;: &quot;description of error&quot; }</code>.</p>
+<h1 id="about-the-property-types">About the property types</h1>
 <ul>
 <li>Text is UTF-8.</li>
 <li>All date/time are Unix timestamps in milliseconds.</li>
@@ -293,6 +295,8 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 </ul>
 <h1 id="testing-if-the-service-is-available">Testing if the service is available</h1>
 <p>Call <strong>GET /ping</strong> to check if the service is available. It should return &quot;JoplinClipperServer&quot; if it works.</p>
+<h1 id="searching">Searching</h1>
+<p>Call <strong>GET /search?query=YOUR_QUERY</strong> to search for notes. This end-point supports the <code>field</code> parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: <a href="https://joplin.cozic.net/#searching">https://joplin.cozic.net/#searching</a></p>
 <h1 id="notes">Notes</h1>
 <h2 id="properties">Properties</h2>
 <table>

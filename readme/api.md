@@ -54,6 +54,10 @@ To get the IDs only of all the tags:
 
 	curl http://localhost:41184/tags?fields=id
 
+# Error handling
+
+In case of an error, an HTTP status code >= 400 will be returned along with a JSON object that provides more info about the error. The JSON object is in the format `{ "error": "description of error" }`.
+
 # About the property types
 
 * Text is UTF-8.
@@ -63,6 +67,10 @@ To get the IDs only of all the tags:
 # Testing if the service is available
 
 Call **GET /ping** to check if the service is available. It should return "JoplinClipperServer" if it works.
+
+# Searching
+
+Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point supports the `field` parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: https://joplin.cozic.net/#searching
 
 # Notes
 
