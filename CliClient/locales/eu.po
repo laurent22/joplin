@@ -604,7 +604,8 @@ msgstr ""
 msgid "PDF File"
 msgstr "Fitxategia"
 
-msgid "File"
+#, fuzzy
+msgid "&File"
 msgstr "Fitxategia"
 
 msgid "New note"
@@ -623,6 +624,9 @@ msgstr "Inportatu"
 msgid "Export"
 msgstr "Inportatu"
 
+msgid "Synchronise"
+msgstr "Sinkronizatu"
+
 msgid "Print"
 msgstr ""
 
@@ -633,7 +637,8 @@ msgstr ""
 msgid "Quit"
 msgstr "Irten"
 
-msgid "Edit"
+#, fuzzy
+msgid "&Edit"
 msgstr "Editatu"
 
 msgid "Copy"
@@ -671,7 +676,7 @@ msgstr "Bilatu ohar guztietan"
 msgid "Search in current note"
 msgstr "Bilatu ohar guztietan"
 
-msgid "View"
+msgid "&View"
 msgstr ""
 
 msgid "Toggle sidebar"
@@ -683,7 +688,8 @@ msgstr ""
 msgid "Focus"
 msgstr ""
 
-msgid "Tools"
+#, fuzzy
+msgid "&Tools"
 msgstr "Tresnak"
 
 msgid "Synchronisation status"
@@ -698,7 +704,8 @@ msgstr "Zifratzeko aukerak"
 msgid "General Options"
 msgstr "Ezarpenak"
 
-msgid "Help"
+#, fuzzy
+msgid "&Help"
 msgstr "Laguntza"
 
 msgid "Website and documentation"
@@ -944,9 +951,6 @@ msgstr "Koadernoaren izenburua: "
 msgid "Add or remove tags:"
 msgstr "Gehitu edo ezabatu etiketak:"
 
-msgid "Separate each tag by a comma."
-msgstr "Banatu etiketak koma erabiliaz."
-
 msgid "Rename notebook:"
 msgstr "Berrizendatu koadernoa:"
 
@@ -1116,7 +1120,15 @@ msgstr "Zifratzeko aukerak"
 msgid "Clipper Options"
 msgstr "Ezarpenak"
 
-msgid "Remove this tag from all the notes?"
+#, fuzzy, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr "Koadernoa ezabatu? Dituen ohar guztiak ere ezabatuko dira."
+
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
 msgstr "Kendu etiketa hori ohar guztietatik?"
 
 msgid "Remove this search from the sidebar?"
@@ -1127,9 +1139,6 @@ msgstr "Ezabatu"
 
 msgid "Rename"
 msgstr "Berrizendatu"
-
-msgid "Synchronise"
-msgstr "Sinkronizatu"
 
 msgid "Notebooks"
 msgstr "Koadernoak"
@@ -1145,6 +1154,9 @@ msgstr "Baliabideak: %d."
 #, fuzzy
 msgid "Please select where the sync status should be exported to"
 msgstr "Aukeratu nora esportatu sinkronizazioaren egoera, mesedez"
+
+msgid "Remove?"
+msgstr ""
 
 msgid "Add or remove tags"
 msgstr "Gehitu edo ezabatu etiketak"
@@ -1560,6 +1572,9 @@ msgstr "Evernotetik esportatutako fitxategiak"
 msgid "Json Export Directory"
 msgstr "Evernotetik esportatutako fitxategiak"
 
+msgid "File"
+msgstr "Fitxategia"
+
 msgid "Directory"
 msgstr ""
 
@@ -1840,6 +1855,9 @@ msgstr "Ikusi mapan"
 msgid "Go to source URL"
 msgstr ""
 
+msgid "Edit"
+msgstr "Editatu"
+
 msgid "Delete notebook"
 msgstr "Ezabatu koadernoa"
 
@@ -1861,6 +1879,9 @@ msgstr "Oraindik ez duzu koadernorik. Sortu bat (+) botoian sakatuta."
 
 msgid "Welcome"
 msgstr "Ongi etorri!"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Banatu etiketak koma erabiliaz."
 
 #, fuzzy
 #~ msgid "State: %s."

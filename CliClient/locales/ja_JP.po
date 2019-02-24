@@ -592,7 +592,8 @@ msgstr ""
 msgid "PDF File"
 msgstr "PDF ファイル"
 
-msgid "File"
+#, fuzzy
+msgid "&File"
 msgstr "ファイル"
 
 msgid "New note"
@@ -610,6 +611,9 @@ msgstr "インポート"
 msgid "Export"
 msgstr "エクスポート"
 
+msgid "Synchronise"
+msgstr "同期"
+
 msgid "Print"
 msgstr "印刷"
 
@@ -620,7 +624,8 @@ msgstr "%s を隠す"
 msgid "Quit"
 msgstr "終了"
 
-msgid "Edit"
+#, fuzzy
+msgid "&Edit"
 msgstr "編集"
 
 msgid "Copy"
@@ -656,7 +661,8 @@ msgstr "すべてのノートを検索"
 msgid "Search in current note"
 msgstr "現在のノートを検索"
 
-msgid "View"
+#, fuzzy
+msgid "&View"
 msgstr "表示"
 
 msgid "Toggle sidebar"
@@ -669,7 +675,8 @@ msgstr "エディターレイアウトの表示切り替え"
 msgid "Focus"
 msgstr "本文にフォーカス"
 
-msgid "Tools"
+#, fuzzy
+msgid "&Tools"
 msgstr "ツール"
 
 msgid "Synchronisation status"
@@ -684,7 +691,8 @@ msgstr "暗号化のオプション"
 msgid "General Options"
 msgstr "全般のオプション"
 
-msgid "Help"
+#, fuzzy
+msgid "&Help"
 msgstr "ヘルプ"
 
 msgid "Website and documentation"
@@ -934,9 +942,6 @@ msgstr "ノートブックの題名："
 msgid "Add or remove tags:"
 msgstr "タグの追加・削除："
 
-msgid "Separate each tag by a comma."
-msgstr "それぞれのタグをカンマ(,)で区切ってください。"
-
 msgid "Rename notebook:"
 msgstr "ノートブックの名前を変更："
 
@@ -1100,7 +1105,17 @@ msgstr "暗号化のオプション"
 msgid "Clipper Options"
 msgstr "Clipperのオプション"
 
-msgid "Remove this tag from all the notes?"
+#, fuzzy, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"ノートブックを削除しますか？　このノートブックにあるノートとサブノートはすべ"
+"て消えてしまいます。"
+
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
 msgstr "すべてのノートからこのタグを削除しますか？"
 
 msgid "Remove this search from the sidebar?"
@@ -1111,9 +1126,6 @@ msgstr "削除"
 
 msgid "Rename"
 msgstr "名前の変更"
-
-msgid "Synchronise"
-msgstr "同期"
 
 msgid "Notebooks"
 msgstr "ノートブック"
@@ -1128,6 +1140,9 @@ msgstr "取得中のリソース: %d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "同期状況の出力先を選択してください"
+
+msgid "Remove?"
+msgstr ""
 
 msgid "Add or remove tags"
 msgstr "タグの追加と削除"
@@ -1532,6 +1547,9 @@ msgstr "Evernote エクスポートファイル"
 msgid "Json Export Directory"
 msgstr "Json エクスポートディレクトリ"
 
+msgid "File"
+msgstr "ファイル"
+
 msgid "Directory"
 msgstr "ディレクトリ"
 
@@ -1818,6 +1836,9 @@ msgstr "地図上に表示"
 msgid "Go to source URL"
 msgstr "ソースURLに行く"
 
+msgid "Edit"
+msgstr "編集"
+
 msgid "Delete notebook"
 msgstr "ノートブックを削除"
 
@@ -1841,6 +1862,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "それぞれのタグをカンマ(,)で区切ってください。"
 
 #~ msgid "State: %s."
 #~ msgstr "状態: \"%s\"."

@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
@@ -619,7 +617,8 @@ msgstr "Importiere „%s“ ins „%s“ Format. Bitte warten..."
 msgid "PDF File"
 msgstr "PDF-Datei"
 
-msgid "File"
+#, fuzzy
+msgid "&File"
 msgstr "Datei"
 
 msgid "New note"
@@ -637,6 +636,9 @@ msgstr "Importieren"
 msgid "Export"
 msgstr "Exportieren"
 
+msgid "Synchronise"
+msgstr "Synchronisieren"
+
 msgid "Print"
 msgstr "Drucken"
 
@@ -647,7 +649,8 @@ msgstr "%s ausblenden"
 msgid "Quit"
 msgstr "Verlassen"
 
-msgid "Edit"
+#, fuzzy
+msgid "&Edit"
 msgstr "Bearbeiten"
 
 msgid "Copy"
@@ -683,7 +686,8 @@ msgstr "Alle Notizen durchsuchen"
 msgid "Search in current note"
 msgstr "Aktuelle Notiz durchsuchen"
 
-msgid "View"
+#, fuzzy
+msgid "&View"
 msgstr "Ansicht"
 
 msgid "Toggle sidebar"
@@ -695,7 +699,8 @@ msgstr "Editor-Layout umschalten"
 msgid "Focus"
 msgstr "Fokus"
 
-msgid "Tools"
+#, fuzzy
+msgid "&Tools"
 msgstr "Werkzeuge"
 
 msgid "Synchronisation status"
@@ -710,7 +715,8 @@ msgstr "Verschlüsselungsoptionen"
 msgid "General Options"
 msgstr "Allgemeine Einstellungen"
 
-msgid "Help"
+#, fuzzy
+msgid "&Help"
 msgstr "Hilfe"
 
 msgid "Website and documentation"
@@ -966,9 +972,6 @@ msgstr "Notizbuch-Titel:"
 msgid "Add or remove tags:"
 msgstr "Schlagwörter hinzufügen oder entfernen:"
 
-msgid "Separate each tag by a comma."
-msgstr "Trenne jedes Schlagwort mit einem Komma."
-
 msgid "Rename notebook:"
 msgstr "Notizbuch umbenennen:"
 
@@ -1137,7 +1140,17 @@ msgstr "Verschlüsselungsoptionen"
 msgid "Clipper Options"
 msgstr "Clipper-Einstellungen"
 
-msgid "Remove this tag from all the notes?"
+#, fuzzy, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"Notizbuch wirklich löschen? Alle Notizen und Unternotizen darin werden "
+"ebenfalls gelöscht."
+
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
 msgstr "Dieses Schlagwort von allen Notizen entfernen?"
 
 msgid "Remove this search from the sidebar?"
@@ -1148,9 +1161,6 @@ msgstr "Löschen"
 
 msgid "Rename"
 msgstr "Umbenennen"
-
-msgid "Synchronise"
-msgstr "Synchronisieren"
 
 msgid "Notebooks"
 msgstr "Notizbücher"
@@ -1166,6 +1176,9 @@ msgstr "Ressourcen abrufen: %d"
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 "Bitte wähle aus, wohin der Synchronisations-Status exportiert werden soll"
+
+msgid "Remove?"
+msgstr ""
 
 msgid "Add or remove tags"
 msgstr "Schlagwörter hinzufügen oder entfernen"
@@ -1571,6 +1584,9 @@ msgstr "Evernote Export Datei"
 msgid "Json Export Directory"
 msgstr "Json Export Verzeichnis"
 
+msgid "File"
+msgstr "Datei"
+
 msgid "Directory"
 msgstr "Verzeichnis"
 
@@ -1863,6 +1879,9 @@ msgstr "Auf der Karte anzeigen"
 msgid "Go to source URL"
 msgstr "Zur Quell-URL gehen"
 
+msgid "Edit"
+msgstr "Bearbeiten"
+
 msgid "Delete notebook"
 msgstr "Notizbuch löschen"
 
@@ -1887,6 +1906,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Willkommen"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Trenne jedes Schlagwort mit einem Komma."
 
 #~ msgid "Delete notes?"
 #~ msgstr "Notizen löschen?"

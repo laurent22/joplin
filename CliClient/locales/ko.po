@@ -589,7 +589,8 @@ msgstr "\"%s\"에서 \"%s\" 포맷으로 가져오는 중입니다. 잠시만 �
 msgid "PDF File"
 msgstr "PDF 파일"
 
-msgid "File"
+#, fuzzy
+msgid "&File"
 msgstr "파일"
 
 msgid "New note"
@@ -607,6 +608,9 @@ msgstr "가져오기"
 msgid "Export"
 msgstr "내보내기"
 
+msgid "Synchronise"
+msgstr "동기화"
+
 msgid "Print"
 msgstr "인쇄"
 
@@ -617,7 +621,8 @@ msgstr "%s 숨기기"
 msgid "Quit"
 msgstr "종료"
 
-msgid "Edit"
+#, fuzzy
+msgid "&Edit"
 msgstr "편집"
 
 msgid "Copy"
@@ -653,7 +658,8 @@ msgstr "모든 노트에서 검색"
 msgid "Search in current note"
 msgstr "현재 노트에서 검색"
 
-msgid "View"
+#, fuzzy
+msgid "&View"
 msgstr "보기"
 
 msgid "Toggle sidebar"
@@ -666,7 +672,8 @@ msgstr "편집기 배치 형태 전환"
 msgid "Focus"
 msgstr "내용에 포커스"
 
-msgid "Tools"
+#, fuzzy
+msgid "&Tools"
 msgstr "도구"
 
 msgid "Synchronisation status"
@@ -681,7 +688,8 @@ msgstr "암호화 옵션"
 msgid "General Options"
 msgstr "일반 옵션"
 
-msgid "Help"
+#, fuzzy
+msgid "&Help"
 msgstr "도움말"
 
 msgid "Website and documentation"
@@ -928,9 +936,6 @@ msgstr "노트북 제목:"
 msgid "Add or remove tags:"
 msgstr "태그 추가 및 제거:"
 
-msgid "Separate each tag by a comma."
-msgstr "각각의 태그를 쉼표로 구분합니다."
-
 msgid "Rename notebook:"
 msgstr "노트북 이름 바꾸기:"
 
@@ -1094,7 +1099,17 @@ msgstr "암호화 옵션"
 msgid "Clipper Options"
 msgstr "수집기 옵션"
 
-msgid "Remove this tag from all the notes?"
+#, fuzzy, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"노트북을 삭제할까요? 이 노트북 안에 있는 모든 노트와 하위 노트북들도 함께 삭"
+"제됩니다."
+
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
 msgstr "모든 노트에서 이 태그를 제거할까요?"
 
 msgid "Remove this search from the sidebar?"
@@ -1105,9 +1120,6 @@ msgstr "삭제"
 
 msgid "Rename"
 msgstr "이름 바꾸기"
-
-msgid "Synchronise"
-msgstr "동기화"
 
 msgid "Notebooks"
 msgstr "노트북"
@@ -1122,6 +1134,9 @@ msgstr "리소스 가져오는 중: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "동기화 상태를 내보낼 대상을 선택하세요"
+
+msgid "Remove?"
+msgstr ""
 
 msgid "Add or remove tags"
 msgstr "태그 추가 및 제거"
@@ -1524,6 +1539,9 @@ msgstr "에버노트 내보내기 파일"
 msgid "Json Export Directory"
 msgstr "Json 내보내기 폴더"
 
+msgid "File"
+msgstr "파일"
+
 msgid "Directory"
 msgstr "폴더"
 
@@ -1809,6 +1827,9 @@ msgstr "지도에 표시"
 msgid "Go to source URL"
 msgstr "소스 URL로 이동"
 
+msgid "Edit"
+msgstr "편집"
+
 msgid "Delete notebook"
 msgstr "노트북 삭제"
 
@@ -1830,6 +1851,9 @@ msgstr "노트북이 없습니다. (+) 버튼을 눌러 새로 만드세요."
 
 msgid "Welcome"
 msgstr "환영합니다"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "각각의 태그를 쉼표로 구분합니다."
 
 #~ msgid "State: %s."
 #~ msgstr "상태: %s."

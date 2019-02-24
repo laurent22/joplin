@@ -597,7 +597,8 @@ msgstr "Importerer fra \"%s\" som \"%s\"-format. Vent venligst..."
 msgid "PDF File"
 msgstr "PDF fil"
 
-msgid "File"
+#, fuzzy
+msgid "&File"
 msgstr "Fil"
 
 msgid "New note"
@@ -615,6 +616,9 @@ msgstr "Importer"
 msgid "Export"
 msgstr "Eksporter"
 
+msgid "Synchronise"
+msgstr "Synkroniser"
+
 msgid "Print"
 msgstr "Udskriv"
 
@@ -625,7 +629,8 @@ msgstr "Skjul %s"
 msgid "Quit"
 msgstr "Afslut"
 
-msgid "Edit"
+#, fuzzy
+msgid "&Edit"
 msgstr "Ret"
 
 msgid "Copy"
@@ -663,7 +668,8 @@ msgstr "Søg i alle noter"
 msgid "Search in current note"
 msgstr "Søg i alle noter"
 
-msgid "View"
+#, fuzzy
+msgid "&View"
 msgstr "Vis"
 
 msgid "Toggle sidebar"
@@ -676,7 +682,8 @@ msgstr "Skift editor layout"
 msgid "Focus"
 msgstr "Fokuser på brødtekst"
 
-msgid "Tools"
+#, fuzzy
+msgid "&Tools"
 msgstr "Værktøjer"
 
 msgid "Synchronisation status"
@@ -691,7 +698,8 @@ msgstr "Krypterings muligheder"
 msgid "General Options"
 msgstr "Generelle indstillinger"
 
-msgid "Help"
+#, fuzzy
+msgid "&Help"
 msgstr "Hjælp"
 
 msgid "Website and documentation"
@@ -935,9 +943,6 @@ msgstr "Notesbogs titel:"
 msgid "Add or remove tags:"
 msgstr "Tilføj eller slet mærker:"
 
-msgid "Separate each tag by a comma."
-msgstr "Adskil hver mærke med komma."
-
 msgid "Rename notebook:"
 msgstr "Omdøb notesbog:"
 
@@ -1103,7 +1108,15 @@ msgstr "Krypterings indstillinger"
 msgid "Clipper Options"
 msgstr "Generelle indstillinger"
 
-msgid "Remove this tag from all the notes?"
+#, fuzzy, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr "Slet notesbog? Alle noter i notesbogen bliver også slettet."
+
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
 msgstr "Slet denne markering fra alle noter?"
 
 msgid "Remove this search from the sidebar?"
@@ -1114,9 +1127,6 @@ msgstr "Slet"
 
 msgid "Rename"
 msgstr "Omdøb"
-
-msgid "Synchronise"
-msgstr "Synkroniser"
 
 msgid "Notebooks"
 msgstr "Notesbøger"
@@ -1131,6 +1141,9 @@ msgstr "Ressourcer: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Vælg hvor sync status skal eksporteres til"
+
+msgid "Remove?"
+msgstr ""
 
 msgid "Add or remove tags"
 msgstr "Tilføj eller slet mærker"
@@ -1538,6 +1551,9 @@ msgstr "Evernote eksport fil"
 msgid "Json Export Directory"
 msgstr "Joplin eksport mappe"
 
+msgid "File"
+msgstr "Fil"
+
 msgid "Directory"
 msgstr "Indeks"
 
@@ -1819,6 +1835,9 @@ msgstr "Vis på kort"
 msgid "Go to source URL"
 msgstr ""
 
+msgid "Edit"
+msgstr "Ret"
+
 msgid "Delete notebook"
 msgstr "Slet notesbog"
 
@@ -1840,6 +1859,9 @@ msgstr "Du har ingen notesbøger. Opret en ved at klikke på (+) knappen."
 
 msgid "Welcome"
 msgstr "Velkommen"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Adskil hver mærke med komma."
 
 #~ msgid "State: %s."
 #~ msgstr "Tilstand: %s."

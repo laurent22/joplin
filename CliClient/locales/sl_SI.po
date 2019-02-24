@@ -603,7 +603,8 @@ msgstr "Uvažam v \"%s\" kot \"%s\" format. Prosim počakajte..."
 msgid "PDF File"
 msgstr "PDF datoteka"
 
-msgid "File"
+#, fuzzy
+msgid "&File"
 msgstr "Datoteka"
 
 msgid "New note"
@@ -621,6 +622,9 @@ msgstr "Uvozi"
 msgid "Export"
 msgstr "Izvozi"
 
+msgid "Synchronise"
+msgstr "Sinhroniziraj"
+
 msgid "Print"
 msgstr "Natisni"
 
@@ -631,7 +635,8 @@ msgstr "Skrij %s"
 msgid "Quit"
 msgstr "Izhod"
 
-msgid "Edit"
+#, fuzzy
+msgid "&Edit"
 msgstr "Uredi"
 
 msgid "Copy"
@@ -669,7 +674,8 @@ msgstr "Išči znotraj vseh zabeležk"
 msgid "Search in current note"
 msgstr "Išči znotraj vseh zabeležk"
 
-msgid "View"
+#, fuzzy
+msgid "&View"
 msgstr "Pogled"
 
 msgid "Toggle sidebar"
@@ -682,7 +688,8 @@ msgstr "Spremeni izgled urejevalnika"
 msgid "Focus"
 msgstr "Fokusiraj vsebino"
 
-msgid "Tools"
+#, fuzzy
+msgid "&Tools"
 msgstr "Orodja"
 
 msgid "Synchronisation status"
@@ -697,7 +704,8 @@ msgstr "Možnosti enkripcije"
 msgid "General Options"
 msgstr "Splošne možnosti"
 
-msgid "Help"
+#, fuzzy
+msgid "&Help"
 msgstr "Pomoč"
 
 msgid "Website and documentation"
@@ -942,9 +950,6 @@ msgstr "Naslov beležnice:"
 msgid "Add or remove tags:"
 msgstr "Dodaj ali odstrani oznako:"
 
-msgid "Separate each tag by a comma."
-msgstr "Loči vsako oznako z vejico."
-
 msgid "Rename notebook:"
 msgstr "Preimenuj beležnico:"
 
@@ -1116,7 +1121,17 @@ msgstr "Možnosti enkripcije"
 msgid "Clipper Options"
 msgstr "Splošne možnosti"
 
-msgid "Remove this tag from all the notes?"
+#, fuzzy, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"Želite izbrisati beležnico? Vse zabeležke znotraj beležke bodo hkrati "
+"izbrisane."
+
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
 msgstr "Odstranite to oznako iz vseh zabeležk?"
 
 msgid "Remove this search from the sidebar?"
@@ -1127,9 +1142,6 @@ msgstr "Izbriši"
 
 msgid "Rename"
 msgstr "Preimenuj"
-
-msgid "Synchronise"
-msgstr "Sinhroniziraj"
 
 msgid "Notebooks"
 msgstr "Beležnice"
@@ -1144,6 +1156,9 @@ msgstr "Viri: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Prosim izberite, kam želite izvoziti sinhronizacijski status"
+
+msgid "Remove?"
+msgstr ""
 
 msgid "Add or remove tags"
 msgstr "Dodaj ali odstrani oznake"
@@ -1551,6 +1566,9 @@ msgstr "Evernote izvozna datoteka"
 msgid "Json Export Directory"
 msgstr "Joplin izvozno mesto"
 
+msgid "File"
+msgstr "Datoteka"
+
 msgid "Directory"
 msgstr "Mesto datoteke"
 
@@ -1832,6 +1850,9 @@ msgstr "Prikaži na zemljevidu"
 msgid "Go to source URL"
 msgstr ""
 
+msgid "Edit"
+msgstr "Uredi"
+
 msgid "Delete notebook"
 msgstr "Izbriši beležnico"
 
@@ -1853,6 +1874,9 @@ msgstr "Trenutno nimate nobene beležnice. Ustvarite jo s klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobrodošli"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Loči vsako oznako z vejico."
 
 #~ msgid "State: %s."
 #~ msgstr "Stanje: %s."

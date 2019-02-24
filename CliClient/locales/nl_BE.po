@@ -606,7 +606,8 @@ msgstr ""
 msgid "PDF File"
 msgstr "Bestand"
 
-msgid "File"
+#, fuzzy
+msgid "&File"
 msgstr "Bestand"
 
 msgid "New note"
@@ -625,6 +626,9 @@ msgstr "Importeer"
 msgid "Export"
 msgstr "Importeer"
 
+msgid "Synchronise"
+msgstr "Synchroniseer"
+
 msgid "Print"
 msgstr ""
 
@@ -635,7 +639,8 @@ msgstr ""
 msgid "Quit"
 msgstr "Stop"
 
-msgid "Edit"
+#, fuzzy
+msgid "&Edit"
 msgstr "Bewerk"
 
 msgid "Copy"
@@ -673,7 +678,7 @@ msgstr "Zoek in alle notities"
 msgid "Search in current note"
 msgstr "Zoek in alle notities"
 
-msgid "View"
+msgid "&View"
 msgstr ""
 
 msgid "Toggle sidebar"
@@ -685,7 +690,8 @@ msgstr ""
 msgid "Focus"
 msgstr ""
 
-msgid "Tools"
+#, fuzzy
+msgid "&Tools"
 msgstr "Tools"
 
 msgid "Synchronisation status"
@@ -700,7 +706,8 @@ msgstr "Versleutelopties"
 msgid "General Options"
 msgstr "Algemene opties"
 
-msgid "Help"
+#, fuzzy
+msgid "&Help"
 msgstr "Help"
 
 msgid "Website and documentation"
@@ -946,9 +953,6 @@ msgstr "Notitieboek titel:"
 msgid "Add or remove tags:"
 msgstr "Voeg tag toe of verwijder tag"
 
-msgid "Separate each tag by a comma."
-msgstr "Scheid iedere tag met een komma."
-
 msgid "Rename notebook:"
 msgstr "Hernoem notitieboek:"
 
@@ -1119,7 +1123,17 @@ msgstr "Versleutelopties"
 msgid "Clipper Options"
 msgstr "Algemene opties"
 
-msgid "Remove this tag from all the notes?"
+#, fuzzy, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"Notitieboek verwijderen? Alle notities in dit notitieboek zullen ook "
+"verwijderd worden."
+
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
 msgstr "Deze tag verwijderen van alle notities?"
 
 msgid "Remove this search from the sidebar?"
@@ -1130,9 +1144,6 @@ msgstr "Verwijderen"
 
 msgid "Rename"
 msgstr "Hernoem"
-
-msgid "Synchronise"
-msgstr "Synchroniseer"
 
 msgid "Notebooks"
 msgstr "Notitieboeken"
@@ -1147,6 +1158,9 @@ msgstr "Middelen: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Selecteer waar de synchronisatie status naar geëxporteerd moet worden"
+
+msgid "Remove?"
+msgstr ""
 
 msgid "Add or remove tags"
 msgstr "Voeg tag toe of verwijder tag"
@@ -1560,6 +1574,9 @@ msgstr "Exporteer Evernote bestanden"
 msgid "Json Export Directory"
 msgstr "Exporteer Evernote bestanden"
 
+msgid "File"
+msgstr "Bestand"
+
 msgid "Directory"
 msgstr ""
 
@@ -1842,6 +1859,9 @@ msgstr "Toon op de kaart"
 msgid "Go to source URL"
 msgstr ""
 
+msgid "Edit"
+msgstr "Bewerk"
+
 msgid "Delete notebook"
 msgstr "Verwijder notitieboek"
 
@@ -1865,6 +1885,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Welkom"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Scheid iedere tag met een komma."
 
 #, fuzzy
 #~ msgid "State: %s."

@@ -575,7 +575,8 @@ msgstr "\"%s\" den \"%s\" biçiminde içe aktarılıyor. Lütfen bekleyin..."
 msgid "PDF File"
 msgstr "PDF Dosyası"
 
-msgid "File"
+#, fuzzy
+msgid "&File"
 msgstr "Dosya"
 
 msgid "New note"
@@ -593,6 +594,9 @@ msgstr "İçe aktar"
 msgid "Export"
 msgstr "Dışa aktar"
 
+msgid "Synchronise"
+msgstr "Senkronize"
+
 msgid "Print"
 msgstr "Yazdır"
 
@@ -603,7 +607,8 @@ msgstr "Gizle %s"
 msgid "Quit"
 msgstr "Çıkış"
 
-msgid "Edit"
+#, fuzzy
+msgid "&Edit"
 msgstr "Düzenle"
 
 msgid "Copy"
@@ -639,7 +644,8 @@ msgstr "Tüm notlarda ara"
 msgid "Search in current note"
 msgstr "Mevcut notta ara"
 
-msgid "View"
+#, fuzzy
+msgid "&View"
 msgstr "İncele"
 
 msgid "Toggle sidebar"
@@ -651,7 +657,8 @@ msgstr "Editör düzenini aç / kapat"
 msgid "Focus"
 msgstr "Odaklan"
 
-msgid "Tools"
+#, fuzzy
+msgid "&Tools"
 msgstr "Araçlar"
 
 msgid "Synchronisation status"
@@ -666,7 +673,8 @@ msgstr "Şifreleme seçenekleri"
 msgid "General Options"
 msgstr "Genel seçenekler"
 
-msgid "Help"
+#, fuzzy
+msgid "&Help"
 msgstr "Yardım"
 
 msgid "Website and documentation"
@@ -920,9 +928,6 @@ msgstr "Not defteri başlığı:"
 msgid "Add or remove tags:"
 msgstr "Etiket ekle veya kaldır:"
 
-msgid "Separate each tag by a comma."
-msgstr "Her etiketi virgülle ayırın."
-
 msgid "Rename notebook:"
 msgstr "Not defterini yeniden adlandır:"
 
@@ -1090,7 +1095,16 @@ msgstr "Şifreleme Seçenekleri"
 msgid "Clipper Options"
 msgstr "Alıntılama Seçenekleri"
 
-msgid "Remove this tag from all the notes?"
+#, fuzzy, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"Not defterini sil? Bu defterdeki tüm notlar ve alt defterler de silinecek."
+
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
 msgstr "Bu etiket tüm notlardan kaldırılsın mı?"
 
 msgid "Remove this search from the sidebar?"
@@ -1101,9 +1115,6 @@ msgstr "Sil"
 
 msgid "Rename"
 msgstr "Yeniden adlandır"
-
-msgid "Synchronise"
-msgstr "Senkronize"
 
 msgid "Notebooks"
 msgstr "Not defterleri"
@@ -1118,6 +1129,9 @@ msgstr "Kaynaklar alınıyor: %d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Lütfen senkronizasyon durumunun nereye aktarılacağını seçin"
+
+msgid "Remove?"
+msgstr ""
 
 #, fuzzy
 msgid "Add or remove tags"
@@ -1145,7 +1159,7 @@ msgstr "Markdown bağlantısını kopyala"
 
 #, fuzzy, javascript-format
 msgid "Delete note \"%s\"?"
-msgstr "\"%s\ Notunu sil?"
+msgstr "\"%s\" Notunu sil?"
 
 #, fuzzy, javascript-format
 msgid "Delete these %d notes?"
@@ -1521,6 +1535,9 @@ msgstr "Evernote Dosya Dışa Aktarım"
 msgid "Json Export Directory"
 msgstr "Json Dışa Aktarım Dizini"
 
+msgid "File"
+msgstr "Dosya"
+
 msgid "Directory"
 msgstr "Dizin"
 
@@ -1808,6 +1825,9 @@ msgstr "Haritada gör"
 msgid "Go to source URL"
 msgstr "URL kaynağına git"
 
+msgid "Edit"
+msgstr "Düzenle"
+
 msgid "Delete notebook"
 msgstr "Not defterini sil"
 
@@ -1830,3 +1850,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Hoşgeldiniz"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Her etiketi virgülle ayırın."

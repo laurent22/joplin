@@ -602,8 +602,8 @@ msgstr "Importer depuis \"%s\" au format \"%s\". Veuillez patienter..."
 msgid "PDF File"
 msgstr "Fichier PDF"
 
-msgid "File"
-msgstr "Fichier"
+msgid "&File"
+msgstr "&Fichier"
 
 msgid "New note"
 msgstr "Nouvelle note"
@@ -620,6 +620,9 @@ msgstr "Importer"
 msgid "Export"
 msgstr "Exporter"
 
+msgid "Synchronise"
+msgstr "Synchroniser"
+
 msgid "Print"
 msgstr "Imprimer"
 
@@ -630,8 +633,8 @@ msgstr "Cacher %s"
 msgid "Quit"
 msgstr "Quitter"
 
-msgid "Edit"
-msgstr "Édition"
+msgid "&Edit"
+msgstr "&Édition"
 
 msgid "Copy"
 msgstr "Copier"
@@ -666,8 +669,8 @@ msgstr "Chercher dans toutes les notes"
 msgid "Search in current note"
 msgstr "Chercher dans la note en cours"
 
-msgid "View"
-msgstr "Affichage"
+msgid "&View"
+msgstr "&Affichage"
 
 msgid "Toggle sidebar"
 msgstr "Basculer barre latérale"
@@ -678,8 +681,8 @@ msgstr "Basculer l'agencement de l'éditeur"
 msgid "Focus"
 msgstr "Naviguer"
 
-msgid "Tools"
-msgstr "Outils"
+msgid "&Tools"
+msgstr "&Outils"
 
 msgid "Synchronisation status"
 msgstr "État de la synchronisation"
@@ -693,8 +696,8 @@ msgstr "Options de chiffrement"
 msgid "General Options"
 msgstr "Options générales"
 
-msgid "Help"
-msgstr "Aide"
+msgid "&Help"
+msgstr "&Aide"
 
 msgid "Website and documentation"
 msgstr "Documentation en ligne"
@@ -949,9 +952,6 @@ msgstr "Titre du carnet :"
 msgid "Add or remove tags:"
 msgstr "Modifier les étiquettes :"
 
-msgid "Separate each tag by a comma."
-msgstr "Séparez chaque étiquette par une virgule."
-
 msgid "Rename notebook:"
 msgstr "Renommer le carnet :"
 
@@ -1120,8 +1120,19 @@ msgstr "Options de chiffrement"
 msgid "Clipper Options"
 msgstr "Options du Web Clipper"
 
-msgid "Remove this tag from all the notes?"
-msgstr "Enlever cette étiquette de toutes les notes ?"
+#, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"Effacer le carnet \"%s\" ?\n"
+"\n"
+"Toutes les notes et sous-carnets dans ce carnet seront également effacés."
+
+#, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
+msgstr "Enlever l’étiquette \"%s\" de toutes les notes ?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Enlever cette recherche de la barre latérale ?"
@@ -1131,9 +1142,6 @@ msgstr "Supprimer"
 
 msgid "Rename"
 msgstr "Renommer"
-
-msgid "Synchronise"
-msgstr "Synchroniser"
 
 msgid "Notebooks"
 msgstr "Carnets"
@@ -1149,6 +1157,9 @@ msgstr "Tél. ressources : %d"
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 "Veuillez sélectionner un répertoire ou exporter l'état de la synchronisation"
+
+msgid "Remove?"
+msgstr "Supprimer ?"
 
 msgid "Add or remove tags"
 msgstr "Gérer les étiquettes"
@@ -1551,6 +1562,9 @@ msgstr "Fichiers d'export Evernote"
 msgid "Json Export Directory"
 msgstr "Dossier d'export JSON"
 
+msgid "File"
+msgstr "Fichier"
+
 msgid "Directory"
 msgstr "Dossier"
 
@@ -1841,6 +1855,9 @@ msgstr "Voir sur carte"
 msgid "Go to source URL"
 msgstr "Aller à l'URL source"
 
+msgid "Edit"
+msgstr "Édition"
+
 msgid "Delete notebook"
 msgstr "Supprimer le carnet"
 
@@ -1864,6 +1881,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Séparez chaque étiquette par une virgule."
 
 #~ msgid "Delete notes?"
 #~ msgstr "Supprimer les notes ?"

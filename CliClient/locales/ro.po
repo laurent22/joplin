@@ -542,7 +542,8 @@ msgstr ""
 msgid "PDF File"
 msgstr "Fișier PDF"
 
-msgid "File"
+#, fuzzy
+msgid "&File"
 msgstr "Fișier"
 
 msgid "New note"
@@ -560,6 +561,9 @@ msgstr "Importați"
 msgid "Export"
 msgstr "Exportați"
 
+msgid "Synchronise"
+msgstr "Sincronizați"
+
 msgid "Print"
 msgstr "Printați"
 
@@ -570,7 +574,8 @@ msgstr "Ascundeți %s"
 msgid "Quit"
 msgstr "Ieșiți"
 
-msgid "Edit"
+#, fuzzy
+msgid "&Edit"
 msgstr "Editați"
 
 msgid "Copy"
@@ -608,7 +613,8 @@ msgstr "Căutați în toate notițele"
 msgid "Search in current note"
 msgstr "Căutați în toate notițele"
 
-msgid "View"
+#, fuzzy
+msgid "&View"
 msgstr "Vizualizați"
 
 msgid "Toggle sidebar"
@@ -620,7 +626,8 @@ msgstr ""
 msgid "Focus"
 msgstr ""
 
-msgid "Tools"
+#, fuzzy
+msgid "&Tools"
 msgstr "Unelte"
 
 msgid "Synchronisation status"
@@ -635,7 +642,8 @@ msgstr "Opțiuni de criptare"
 msgid "General Options"
 msgstr "Opțiuni Generale"
 
-msgid "Help"
+#, fuzzy
+msgid "&Help"
 msgstr "Ajutor"
 
 msgid "Website and documentation"
@@ -864,9 +872,6 @@ msgstr "Titlul caietului de notițe:"
 msgid "Add or remove tags:"
 msgstr "Adăugați ori eliminați etichete:"
 
-msgid "Separate each tag by a comma."
-msgstr "Separați fiecare etichetă printr-o virgulă."
-
 msgid "Rename notebook:"
 msgstr "Redenumiți caietul de notițe:"
 
@@ -1028,7 +1033,15 @@ msgstr "Opțiuni de criptare"
 msgid "Clipper Options"
 msgstr "Opțiuni Clipper"
 
-msgid "Remove this tag from all the notes?"
+#, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+
+#, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
 msgstr ""
 
 msgid "Remove this search from the sidebar?"
@@ -1039,9 +1052,6 @@ msgstr "Ștergeți"
 
 msgid "Rename"
 msgstr "Redenumiți"
-
-msgid "Synchronise"
-msgstr "Sincronizați"
 
 msgid "Notebooks"
 msgstr "Caiete de notițe"
@@ -1055,6 +1065,9 @@ msgid "Fetching resources: %d"
 msgstr "Resurse: %d."
 
 msgid "Please select where the sync status should be exported to"
+msgstr ""
+
+msgid "Remove?"
 msgstr ""
 
 msgid "Add or remove tags"
@@ -1437,6 +1450,9 @@ msgstr ""
 msgid "Json Export Directory"
 msgstr ""
 
+msgid "File"
+msgstr "Fișier"
+
 msgid "Directory"
 msgstr ""
 
@@ -1709,6 +1725,9 @@ msgstr "Vizualizați pe hartă"
 msgid "Go to source URL"
 msgstr ""
 
+msgid "Edit"
+msgstr "Editați"
+
 msgid "Delete notebook"
 msgstr "Ștergeți caiet de notițe"
 
@@ -1731,6 +1750,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bine ați venit"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Separați fiecare etichetă printr-o virgulă."
 
 #~ msgid "State: %s."
 #~ msgstr "Statut: %s."

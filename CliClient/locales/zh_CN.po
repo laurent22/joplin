@@ -566,7 +566,8 @@ msgstr "从 \"%s\" 导入，导入格式为 \"%s\" 。请稍等…"
 msgid "PDF File"
 msgstr "PDF 文件"
 
-msgid "File"
+#, fuzzy
+msgid "&File"
 msgstr "文件"
 
 msgid "New note"
@@ -584,6 +585,9 @@ msgstr "导入"
 msgid "Export"
 msgstr "导出"
 
+msgid "Synchronise"
+msgstr "同步"
+
 msgid "Print"
 msgstr "打印"
 
@@ -594,7 +598,8 @@ msgstr "隐藏 %s"
 msgid "Quit"
 msgstr "退出"
 
-msgid "Edit"
+#, fuzzy
+msgid "&Edit"
 msgstr "编辑"
 
 msgid "Copy"
@@ -630,7 +635,8 @@ msgstr "在所有笔记内搜索"
 msgid "Search in current note"
 msgstr "在当前笔记内搜索"
 
-msgid "View"
+#, fuzzy
+msgid "&View"
 msgstr "视图"
 
 msgid "Toggle sidebar"
@@ -642,7 +648,8 @@ msgstr "切换编辑器布局"
 msgid "Focus"
 msgstr "聚焦于"
 
-msgid "Tools"
+#, fuzzy
+msgid "&Tools"
 msgstr "工具"
 
 msgid "Synchronisation status"
@@ -657,7 +664,8 @@ msgstr "加密选项"
 msgid "General Options"
 msgstr "通用选项"
 
-msgid "Help"
+#, fuzzy
+msgid "&Help"
 msgstr "帮助"
 
 msgid "Website and documentation"
@@ -895,9 +903,6 @@ msgstr "笔记本标题："
 msgid "Add or remove tags:"
 msgstr "添加或删除标签："
 
-msgid "Separate each tag by a comma."
-msgstr "用半角逗号 \",\" 分开每个标签。"
-
 msgid "Rename notebook:"
 msgstr "重命名笔记本："
 
@@ -1059,7 +1064,15 @@ msgstr "加密选项"
 msgid "Clipper Options"
 msgstr "网页剪辑选项"
 
-msgid "Remove this tag from all the notes?"
+#, fuzzy, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr "是否删除笔记本？所有在该笔记本内的笔记也将同时被删除。"
+
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
 msgstr "从所有笔记中删除该标签？"
 
 msgid "Remove this search from the sidebar?"
@@ -1070,9 +1083,6 @@ msgstr "删除"
 
 msgid "Rename"
 msgstr "重命名"
-
-msgid "Synchronise"
-msgstr "同步"
 
 msgid "Notebooks"
 msgstr "笔记本"
@@ -1087,6 +1097,9 @@ msgstr "获取资源：%d。"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "请选择同步状态的导出位置"
+
+msgid "Remove?"
+msgstr ""
 
 msgid "Add or remove tags"
 msgstr "添加或删除标签"
@@ -1477,6 +1490,9 @@ msgstr "Evernote 导出文件"
 msgid "Json Export Directory"
 msgstr "Json 导出目录"
 
+msgid "File"
+msgstr "文件"
+
 msgid "Directory"
 msgstr "文件目录"
 
@@ -1757,6 +1773,9 @@ msgstr "查看地图"
 msgid "Go to source URL"
 msgstr "定位到源 URL"
 
+msgid "Edit"
+msgstr "编辑"
+
 msgid "Delete notebook"
 msgstr "删除笔记本"
 
@@ -1776,6 +1795,9 @@ msgstr "您目前未有笔记本。点击 (+) 按钮创建。"
 
 msgid "Welcome"
 msgstr "欢迎"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "用半角逗号 \",\" 分开每个标签。"
 
 #~ msgid "State: %s."
 #~ msgstr "状态：%s。"

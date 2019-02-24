@@ -592,7 +592,8 @@ msgstr "Importuji z \"%s\" jako formát \"%s\". Chvíli strpení..."
 msgid "PDF File"
 msgstr "PDF soubor"
 
-msgid "File"
+#, fuzzy
+msgid "&File"
 msgstr "Soubor"
 
 msgid "New note"
@@ -610,6 +611,9 @@ msgstr "Import"
 msgid "Export"
 msgstr "Export"
 
+msgid "Synchronise"
+msgstr "Synchronizovat"
+
 msgid "Print"
 msgstr "Tisk"
 
@@ -620,7 +624,8 @@ msgstr "Schovat %s"
 msgid "Quit"
 msgstr "Ukončit"
 
-msgid "Edit"
+#, fuzzy
+msgid "&Edit"
 msgstr "Upravit"
 
 msgid "Copy"
@@ -658,7 +663,8 @@ msgstr "Hledat ve všech poznámkách"
 msgid "Search in current note"
 msgstr "Hledat ve všech poznámkách"
 
-msgid "View"
+#, fuzzy
+msgid "&View"
 msgstr "Zobrazit"
 
 msgid "Toggle sidebar"
@@ -671,7 +677,8 @@ msgstr "Změňit layout editoru"
 msgid "Focus"
 msgstr "Vybrat text poznámky"
 
-msgid "Tools"
+#, fuzzy
+msgid "&Tools"
 msgstr "Nástroje"
 
 msgid "Synchronisation status"
@@ -686,7 +693,8 @@ msgstr "Nastavení šifrování"
 msgid "General Options"
 msgstr "Obecná nastavení"
 
-msgid "Help"
+#, fuzzy
+msgid "&Help"
 msgstr "Nápověda"
 
 msgid "Website and documentation"
@@ -926,9 +934,6 @@ msgstr "Název zápisníku:"
 msgid "Add or remove tags:"
 msgstr "Přidat či odebrat tagy:"
 
-msgid "Separate each tag by a comma."
-msgstr "Tagy oddělujte čárkami."
-
 msgid "Rename notebook:"
 msgstr "Přejmenovat zápisník:"
 
@@ -1094,7 +1099,15 @@ msgstr "Nastavení šifrování"
 msgid "Clipper Options"
 msgstr "Obecná nastavení"
 
-msgid "Remove this tag from all the notes?"
+#, fuzzy, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr "Smazat zápisník? Budou smazány i všechny poznámky v něm obsažené."
+
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
 msgstr "Odebrat tento tag ze všech poznámek?"
 
 msgid "Remove this search from the sidebar?"
@@ -1105,9 +1118,6 @@ msgstr "Smazat"
 
 msgid "Rename"
 msgstr "Přejmenovat"
-
-msgid "Synchronise"
-msgstr "Synchronizovat"
 
 msgid "Notebooks"
 msgstr "Zápisníky"
@@ -1122,6 +1132,9 @@ msgstr "Zdroje: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Prosím vyberte, kam má být stav synchronizace exportován"
+
+msgid "Remove?"
+msgstr ""
 
 msgid "Add or remove tags"
 msgstr "Přidat či odebrat tagy"
@@ -1529,6 +1542,9 @@ msgstr "Soubor Evernote Exportu"
 msgid "Json Export Directory"
 msgstr "Složka pro export"
 
+msgid "File"
+msgstr "Soubor"
+
 msgid "Directory"
 msgstr "Adresář"
 
@@ -1810,6 +1826,9 @@ msgstr "Zobrazit na map+"
 msgid "Go to source URL"
 msgstr ""
 
+msgid "Edit"
+msgstr "Upravit"
+
 msgid "Delete notebook"
 msgstr "Smazat zápisník"
 
@@ -1831,6 +1850,9 @@ msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na tlačítko (+
 
 msgid "Welcome"
 msgstr "Vítejte"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Tagy oddělujte čárkami."
 
 #~ msgid "State: %s."
 #~ msgstr "Stav: %s."

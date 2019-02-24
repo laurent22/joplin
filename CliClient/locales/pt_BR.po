@@ -603,7 +603,8 @@ msgstr "Importando de \"%s\" com o formato \"%s\". Por favor, aguarde..."
 msgid "PDF File"
 msgstr "Arquivo PDF"
 
-msgid "File"
+#, fuzzy
+msgid "&File"
 msgstr "Arquivo"
 
 msgid "New note"
@@ -621,6 +622,9 @@ msgstr "Importar"
 msgid "Export"
 msgstr "Exportar"
 
+msgid "Synchronise"
+msgstr "Sincronizar"
+
 msgid "Print"
 msgstr "Imprimir"
 
@@ -631,7 +635,8 @@ msgstr "Ocultar %s"
 msgid "Quit"
 msgstr "Sair"
 
-msgid "Edit"
+#, fuzzy
+msgid "&Edit"
 msgstr "Editar"
 
 msgid "Copy"
@@ -667,7 +672,8 @@ msgstr "Pesquisar em todas as notas"
 msgid "Search in current note"
 msgstr "Pesquisar na nota atual"
 
-msgid "View"
+#, fuzzy
+msgid "&View"
 msgstr "Visualizar"
 
 msgid "Toggle sidebar"
@@ -680,7 +686,8 @@ msgstr "Alternar layout do editor"
 msgid "Focus"
 msgstr "Focar no corpo"
 
-msgid "Tools"
+#, fuzzy
+msgid "&Tools"
 msgstr "Ferramentas"
 
 msgid "Synchronisation status"
@@ -695,7 +702,8 @@ msgstr "Opções de Encriptação"
 msgid "General Options"
 msgstr "Opções Gerais"
 
-msgid "Help"
+#, fuzzy
+msgid "&Help"
 msgstr "Ajuda"
 
 msgid "Website and documentation"
@@ -947,9 +955,6 @@ msgstr "Título do caderno:"
 msgid "Add or remove tags:"
 msgstr "Adicionar ou remover tags:"
 
-msgid "Separate each tag by a comma."
-msgstr "Separe cada tag por vírgula."
-
 msgid "Rename notebook:"
 msgstr "Renomear caderno:"
 
@@ -1113,7 +1118,17 @@ msgstr "Opções de Encriptação"
 msgid "Clipper Options"
 msgstr "Opções do clipper"
 
-msgid "Remove this tag from all the notes?"
+#, fuzzy, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"Excluir o caderno? Todas as notas e sub-cadernos dentro deste também serão "
+"excluídas."
+
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
 msgstr "Remover esta tag de todas as notas?"
 
 msgid "Remove this search from the sidebar?"
@@ -1124,9 +1139,6 @@ msgstr "Excluir"
 
 msgid "Rename"
 msgstr "Renomear"
-
-msgid "Synchronise"
-msgstr "Sincronizar"
 
 msgid "Notebooks"
 msgstr "Cadernos"
@@ -1143,6 +1155,9 @@ msgid "Please select where the sync status should be exported to"
 msgstr ""
 "Favor selecionar o local para onde o status de sincronia deveria ser "
 "exportado"
+
+msgid "Remove?"
+msgstr ""
 
 msgid "Add or remove tags"
 msgstr "Adicionar ou remover tags"
@@ -1549,6 +1564,9 @@ msgstr "Arquivo de Exportação do Evernote"
 msgid "Json Export Directory"
 msgstr "Diretório de Exportação JSON"
 
+msgid "File"
+msgstr "Arquivo"
+
 msgid "Directory"
 msgstr "Diretório"
 
@@ -1840,6 +1858,9 @@ msgstr "Ver no mapa"
 msgid "Go to source URL"
 msgstr "Ir para a URL de origem"
 
+msgid "Edit"
+msgstr "Editar"
+
 msgid "Delete notebook"
 msgstr "Excluir caderno"
 
@@ -1861,6 +1882,9 @@ msgstr "Você não possui cadernos. Crie um clicando no botão (+)."
 
 msgid "Welcome"
 msgstr "Bem-vindo"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Separe cada tag por vírgula."
 
 #~ msgid "Delete notes?"
 #~ msgstr "Excluir notas?"

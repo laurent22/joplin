@@ -606,7 +606,8 @@ msgstr "Importando el formato de \"%s\" a \"%s\". Por favor espere..."
 msgid "PDF File"
 msgstr "Archivo PDF"
 
-msgid "File"
+#, fuzzy
+msgid "&File"
 msgstr "Archivo"
 
 msgid "New note"
@@ -624,6 +625,9 @@ msgstr "Importar"
 msgid "Export"
 msgstr "Exportar"
 
+msgid "Synchronise"
+msgstr "Sincronizar"
+
 msgid "Print"
 msgstr "Imprimir"
 
@@ -634,7 +638,8 @@ msgstr "Oculta %s"
 msgid "Quit"
 msgstr "Salir"
 
-msgid "Edit"
+#, fuzzy
+msgid "&Edit"
 msgstr "Editar"
 
 msgid "Copy"
@@ -672,7 +677,8 @@ msgstr "Buscar en todas las notas"
 msgid "Search in current note"
 msgstr "Buscar en todas las notas"
 
-msgid "View"
+#, fuzzy
+msgid "&View"
 msgstr "Ver"
 
 msgid "Toggle sidebar"
@@ -685,7 +691,8 @@ msgstr "Cambia el diseño del editor"
 msgid "Focus"
 msgstr "Foco en el cuerpo"
 
-msgid "Tools"
+#, fuzzy
+msgid "&Tools"
 msgstr "Herramientas"
 
 msgid "Synchronisation status"
@@ -700,7 +707,8 @@ msgstr "Opciones de cifrado"
 msgid "General Options"
 msgstr "Opciones generales"
 
-msgid "Help"
+#, fuzzy
+msgid "&Help"
 msgstr "Ayuda"
 
 msgid "Website and documentation"
@@ -737,7 +745,7 @@ msgstr "La versión actual está actualizada."
 
 #, javascript-format
 msgid "%s (pre-release)"
-msgstr "%s (pre-lanzamiento)""
+msgstr "%s (pre-lanzamiento)"
 
 msgid "An update is available, do you want to download it now?"
 msgstr "Hay disponible una actualización. ¿Quiere descargarla ahora?"
@@ -951,9 +959,6 @@ msgstr "Título de libreta:"
 msgid "Add or remove tags:"
 msgstr "Agregar o borrar etiquetas: "
 
-msgid "Separate each tag by a comma."
-msgstr "Separar cada etiqueta por una coma."
-
 msgid "Rename notebook:"
 msgstr "Renombrar libreta:"
 
@@ -1117,7 +1122,17 @@ msgstr "Opciones de cifrado"
 msgid "Clipper Options"
 msgstr "Opciones de recorte"
 
-msgid "Remove this tag from all the notes?"
+#, fuzzy, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"¿Desea eliminar la libreta? Todas las notas y sublibretas dentro de esta "
+"libreta también serán eliminadas."
+
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
 msgstr "¿Desea eliminar esta etiqueta de todas las notas?"
 
 msgid "Remove this search from the sidebar?"
@@ -1128,9 +1143,6 @@ msgstr "Eliminar"
 
 msgid "Rename"
 msgstr "Renombrar"
-
-msgid "Synchronise"
-msgstr "Sincronizar"
 
 msgid "Notebooks"
 msgstr "Libretas"
@@ -1145,6 +1157,9 @@ msgstr "Recursos: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccione a dónde se debería exportar el estado de sincronización"
+
+msgid "Remove?"
+msgstr ""
 
 msgid "Add or remove tags"
 msgstr "Añadir o borrar etiquetas"
@@ -1551,6 +1566,9 @@ msgstr "Archivo exportado de Evernote"
 msgid "Json Export Directory"
 msgstr "Directorio para exportar de Joplin"
 
+msgid "File"
+msgstr "Archivo"
+
 msgid "Directory"
 msgstr "Directorio"
 
@@ -1839,6 +1857,9 @@ msgstr "Ver en un mapa"
 msgid "Go to source URL"
 msgstr ""
 
+msgid "Edit"
+msgstr "Editar"
+
 msgid "Delete notebook"
 msgstr "Borrar libreta"
 
@@ -1861,6 +1882,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Separar cada etiqueta por una coma."
 
 #~ msgid "Delete notes?"
 #~ msgstr "¿Desea eliminar notas?"

@@ -606,7 +606,8 @@ msgstr "Bezig met importeren van \"%s\" in het formaat \"%s\". Even geduld..."
 msgid "PDF File"
 msgstr "PDF-bestand"
 
-msgid "File"
+#, fuzzy
+msgid "&File"
 msgstr "Bestand"
 
 msgid "New note"
@@ -624,6 +625,9 @@ msgstr "Importeren"
 msgid "Export"
 msgstr "Exporteren"
 
+msgid "Synchronise"
+msgstr "Synchroniseren"
+
 msgid "Print"
 msgstr "Afdrukken"
 
@@ -634,7 +638,8 @@ msgstr "%s verbergen"
 msgid "Quit"
 msgstr "Afsluiten"
 
-msgid "Edit"
+#, fuzzy
+msgid "&Edit"
 msgstr "Bewerken"
 
 msgid "Copy"
@@ -672,7 +677,8 @@ msgstr "Alle notities doorzoeken"
 msgid "Search in current note"
 msgstr "Alle notities doorzoeken"
 
-msgid "View"
+#, fuzzy
+msgid "&View"
 msgstr "Beeld"
 
 msgid "Toggle sidebar"
@@ -685,7 +691,8 @@ msgstr "Bewerkindeling tonen/verbergen"
 msgid "Focus"
 msgstr "Inhoud focussen"
 
-msgid "Tools"
+#, fuzzy
+msgid "&Tools"
 msgstr "Hulpmiddelen"
 
 msgid "Synchronisation status"
@@ -700,7 +707,8 @@ msgstr "Versleutelingsopties"
 msgid "General Options"
 msgstr "Algemene opties"
 
-msgid "Help"
+#, fuzzy
+msgid "&Help"
 msgstr "Hulp"
 
 msgid "Website and documentation"
@@ -953,9 +961,6 @@ msgstr "Titel van notitieboek:"
 msgid "Add or remove tags:"
 msgstr "Labels toevoegen of verwijderen:"
 
-msgid "Separate each tag by a comma."
-msgstr "Scheidt elk label met een komma."
-
 msgid "Rename notebook:"
 msgstr "Notitieboeknaam wijzigen:"
 
@@ -1123,7 +1128,17 @@ msgstr "Versleutelopties"
 msgid "Clipper Options"
 msgstr "Webclipperopties"
 
-msgid "Remove this tag from all the notes?"
+#, fuzzy, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"Notitieboek verwijderen? Alle notities en sub-notitieboeken worden eveneens "
+"verwijderd."
+
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
 msgstr "Wil je dit label verwijderen van alle notities?"
 
 msgid "Remove this search from the sidebar?"
@@ -1134,9 +1149,6 @@ msgstr "Verwijderen"
 
 msgid "Rename"
 msgstr "Naam wijzigen"
-
-msgid "Synchronise"
-msgstr "Synchroniseren"
 
 msgid "Notebooks"
 msgstr "Notitieboeken"
@@ -1151,6 +1163,9 @@ msgstr "Bronnen: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Kies waar de synchronisatiestatus naar moet worden geëxporteerd"
+
+msgid "Remove?"
+msgstr ""
 
 msgid "Add or remove tags"
 msgstr "Labels toevoegen of verwijderen"
@@ -1556,6 +1571,9 @@ msgstr "Evernote-exportbestand"
 msgid "Json Export Directory"
 msgstr "Joplin-exportmap"
 
+msgid "File"
+msgstr "Bestand"
+
 msgid "Directory"
 msgstr "Map"
 
@@ -1844,6 +1862,9 @@ msgstr "Tonen op kaart"
 msgid "Go to source URL"
 msgstr ""
 
+msgid "Edit"
+msgstr "Bewerken"
+
 msgid "Delete notebook"
 msgstr "Notitieboek verwijderen"
 
@@ -1867,6 +1888,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Welkom"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Scheidt elk label met een komma."
 
 #~ msgid "State: %s."
 #~ msgstr "Status: %s."

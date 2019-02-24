@@ -569,7 +569,8 @@ msgstr "從 \"%s\" 匯入為 \"%s\" 格式。請稍候..."
 msgid "PDF File"
 msgstr "PDF 檔案"
 
-msgid "File"
+#, fuzzy
+msgid "&File"
 msgstr "檔案"
 
 msgid "New note"
@@ -587,6 +588,9 @@ msgstr "匯入"
 msgid "Export"
 msgstr "匯出"
 
+msgid "Synchronise"
+msgstr "進行同步"
+
 msgid "Print"
 msgstr "列印"
 
@@ -597,7 +601,8 @@ msgstr "隱藏 %s"
 msgid "Quit"
 msgstr "結束"
 
-msgid "Edit"
+#, fuzzy
+msgid "&Edit"
 msgstr "編輯"
 
 msgid "Copy"
@@ -635,7 +640,8 @@ msgstr "在所有記事中搜尋"
 msgid "Search in current note"
 msgstr "在所有記事中搜尋"
 
-msgid "View"
+#, fuzzy
+msgid "&View"
 msgstr "檢視"
 
 msgid "Toggle sidebar"
@@ -648,7 +654,8 @@ msgstr "切換編輯器佈局"
 msgid "Focus"
 msgstr "游標置於內文"
 
-msgid "Tools"
+#, fuzzy
+msgid "&Tools"
 msgstr "工具"
 
 msgid "Synchronisation status"
@@ -663,7 +670,8 @@ msgstr "加密選項"
 msgid "General Options"
 msgstr "一般選項"
 
-msgid "Help"
+#, fuzzy
+msgid "&Help"
 msgstr "說明"
 
 msgid "Website and documentation"
@@ -903,9 +911,6 @@ msgstr "記事本標題:"
 msgid "Add or remove tags:"
 msgstr "新增或移除標籤:"
 
-msgid "Separate each tag by a comma."
-msgstr "您可用逗號分隔每個標籤。"
-
 msgid "Rename notebook:"
 msgstr "重新命名記事本:"
 
@@ -1067,7 +1072,15 @@ msgstr "加密選項"
 msgid "Clipper Options"
 msgstr "Clipper 選項"
 
-msgid "Remove this tag from all the notes?"
+#, fuzzy, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr "決定刪除記事本？此記事本中的所有記事和子記事本也將被刪除。"
+
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
 msgstr "是否從所有記事中刪除此標籤？"
 
 msgid "Remove this search from the sidebar?"
@@ -1078,9 +1091,6 @@ msgstr "刪除"
 
 msgid "Rename"
 msgstr "重新命名"
-
-msgid "Synchronise"
-msgstr "進行同步"
 
 msgid "Notebooks"
 msgstr "記事本"
@@ -1095,6 +1105,9 @@ msgstr "資源: %d。"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "請選擇將同步狀態導出到的位置"
+
+msgid "Remove?"
+msgstr ""
 
 msgid "Add or remove tags"
 msgstr "新增或移除標籤"
@@ -1490,6 +1503,9 @@ msgstr "Evernote 匯出檔"
 msgid "Json Export Directory"
 msgstr "Joplin 匯出目錄"
 
+msgid "File"
+msgstr "檔案"
+
 msgid "Directory"
 msgstr "目錄"
 
@@ -1768,6 +1784,9 @@ msgstr "在地圖上顯示"
 msgid "Go to source URL"
 msgstr ""
 
+msgid "Edit"
+msgstr "編輯"
+
 msgid "Delete notebook"
 msgstr "刪除記事本"
 
@@ -1787,6 +1806,9 @@ msgstr "您當前沒有任何筆記本。通過按一下 (+) 鍵去建立一本�
 
 msgid "Welcome"
 msgstr "歡迎"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "您可用逗號分隔每個標籤。"
 
 #~ msgid "State: %s."
 #~ msgstr "狀態: %s。"

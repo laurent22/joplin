@@ -610,7 +610,8 @@ msgstr "S'està important des de «%s» com a format «%s». Espereu..."
 msgid "PDF File"
 msgstr "Fitxer PDF"
 
-msgid "File"
+#, fuzzy
+msgid "&File"
 msgstr "Fitxer"
 
 msgid "New note"
@@ -628,6 +629,9 @@ msgstr "Importació"
 msgid "Export"
 msgstr "Exportació"
 
+msgid "Synchronise"
+msgstr "Sincronitza"
+
 msgid "Print"
 msgstr "Imprimeix"
 
@@ -638,7 +642,8 @@ msgstr "Amaga %s"
 msgid "Quit"
 msgstr "Surt"
 
-msgid "Edit"
+#, fuzzy
+msgid "&Edit"
 msgstr "Edita"
 
 msgid "Copy"
@@ -676,7 +681,8 @@ msgstr "Cerca a totes les notes"
 msgid "Search in current note"
 msgstr "Cerca a totes les notes"
 
-msgid "View"
+#, fuzzy
+msgid "&View"
 msgstr "Visualització"
 
 msgid "Toggle sidebar"
@@ -689,7 +695,8 @@ msgstr "Canvia el disseny de l'editor"
 msgid "Focus"
 msgstr "Vés al cos"
 
-msgid "Tools"
+#, fuzzy
+msgid "&Tools"
 msgstr "Eines"
 
 msgid "Synchronisation status"
@@ -704,7 +711,8 @@ msgstr "Opcions del xifratge"
 msgid "General Options"
 msgstr "Opcions generals"
 
-msgid "Help"
+#, fuzzy
+msgid "&Help"
 msgstr "Ajuda"
 
 msgid "Website and documentation"
@@ -956,9 +964,6 @@ msgstr "Títol del bloc de notes:"
 msgid "Add or remove tags:"
 msgstr "Afegeix o suprimeix etiquetes:"
 
-msgid "Separate each tag by a comma."
-msgstr "Separeu les etiquetes amb comes."
-
 msgid "Rename notebook:"
 msgstr "Canvia el nom del bloc de notes:"
 
@@ -1125,7 +1130,17 @@ msgstr "Opcions de xifratge"
 msgid "Clipper Options"
 msgstr "Opcions del desa-retalls"
 
-msgid "Remove this tag from all the notes?"
+#, fuzzy, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"Voleu suprimir el bloc de notes? També se suprimiran tots els sub-blocs "
+"d'aquest bloc de notes."
+
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
 msgstr "Voleu suprimir aquesta etiqueta de totes les notes?"
 
 msgid "Remove this search from the sidebar?"
@@ -1136,9 +1151,6 @@ msgstr "Suprimeix"
 
 msgid "Rename"
 msgstr "Canvia el nom"
-
-msgid "Synchronise"
-msgstr "Sincronitza"
 
 msgid "Notebooks"
 msgstr "Blocs de notes"
@@ -1153,6 +1165,9 @@ msgstr "Recursos: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccioneu on s'hauria d'exportar l'estat de la sincronització"
+
+msgid "Remove?"
+msgstr ""
 
 msgid "Add or remove tags"
 msgstr "Afegeix o suprimeix etiquetes"
@@ -1554,6 +1569,9 @@ msgstr "Fitxer d'exportació de l'Evernote"
 msgid "Json Export Directory"
 msgstr "Directori d'exportació del Joplin"
 
+msgid "File"
+msgstr "Fitxer"
+
 msgid "Directory"
 msgstr "Directori"
 
@@ -1841,6 +1859,9 @@ msgstr "Mostra-ho al mapa"
 msgid "Go to source URL"
 msgstr ""
 
+msgid "Edit"
+msgstr "Edita"
+
 msgid "Delete notebook"
 msgstr "Suprimeix el bloc de notes"
 
@@ -1863,6 +1884,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvingut"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Separeu les etiquetes amb comes."
 
 #~ msgid "State: %s."
 #~ msgstr "Estat: %s"

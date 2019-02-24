@@ -527,7 +527,7 @@ msgstr ""
 msgid "PDF File"
 msgstr ""
 
-msgid "File"
+msgid "&File"
 msgstr ""
 
 msgid "New note"
@@ -545,6 +545,9 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
+msgid "Synchronise"
+msgstr ""
+
 msgid "Print"
 msgstr ""
 
@@ -555,7 +558,7 @@ msgstr ""
 msgid "Quit"
 msgstr ""
 
-msgid "Edit"
+msgid "&Edit"
 msgstr ""
 
 msgid "Copy"
@@ -591,7 +594,7 @@ msgstr ""
 msgid "Search in current note"
 msgstr ""
 
-msgid "View"
+msgid "&View"
 msgstr ""
 
 msgid "Toggle sidebar"
@@ -603,7 +606,7 @@ msgstr ""
 msgid "Focus"
 msgstr ""
 
-msgid "Tools"
+msgid "&Tools"
 msgstr ""
 
 msgid "Synchronisation status"
@@ -618,7 +621,7 @@ msgstr ""
 msgid "General Options"
 msgstr ""
 
-msgid "Help"
+msgid "&Help"
 msgstr ""
 
 msgid "Website and documentation"
@@ -845,9 +848,6 @@ msgstr ""
 msgid "Add or remove tags:"
 msgstr ""
 
-msgid "Separate each tag by a comma."
-msgstr ""
-
 msgid "Rename notebook:"
 msgstr ""
 
@@ -1009,7 +1009,15 @@ msgstr ""
 msgid "Clipper Options"
 msgstr ""
 
-msgid "Remove this tag from all the notes?"
+#, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+
+#, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
 msgstr ""
 
 msgid "Remove this search from the sidebar?"
@@ -1019,9 +1027,6 @@ msgid "Delete"
 msgstr ""
 
 msgid "Rename"
-msgstr ""
-
-msgid "Synchronise"
 msgstr ""
 
 msgid "Notebooks"
@@ -1036,6 +1041,9 @@ msgid "Fetching resources: %d"
 msgstr ""
 
 msgid "Please select where the sync status should be exported to"
+msgstr ""
+
+msgid "Remove?"
 msgstr ""
 
 msgid "Add or remove tags"
@@ -1410,6 +1418,9 @@ msgstr ""
 msgid "Json Export Directory"
 msgstr ""
 
+msgid "File"
+msgstr ""
+
 msgid "Directory"
 msgstr ""
 
@@ -1677,6 +1688,9 @@ msgid "View on map"
 msgstr ""
 
 msgid "Go to source URL"
+msgstr ""
+
+msgid "Edit"
 msgstr ""
 
 msgid "Delete notebook"

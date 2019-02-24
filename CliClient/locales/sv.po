@@ -607,7 +607,8 @@ msgstr "Importerar från \"%s\" som \"%s\" format. Vänta..."
 msgid "PDF File"
 msgstr "PDF-fil"
 
-msgid "File"
+#, fuzzy
+msgid "&File"
 msgstr "Fil"
 
 msgid "New note"
@@ -625,6 +626,9 @@ msgstr "Importera"
 msgid "Export"
 msgstr "Exportera"
 
+msgid "Synchronise"
+msgstr "Synkronisera"
+
 msgid "Print"
 msgstr "Skriv ut"
 
@@ -635,7 +639,8 @@ msgstr "Dölj %s"
 msgid "Quit"
 msgstr "Avsluta"
 
-msgid "Edit"
+#, fuzzy
+msgid "&Edit"
 msgstr "Redigera"
 
 msgid "Copy"
@@ -671,7 +676,8 @@ msgstr "Sök i alla anteckningarna"
 msgid "Search in current note"
 msgstr "Sök i aktuell anteckning"
 
-msgid "View"
+#, fuzzy
+msgid "&View"
 msgstr "Visa"
 
 msgid "Toggle sidebar"
@@ -683,7 +689,8 @@ msgstr "Växla redigeringslayout"
 msgid "Focus"
 msgstr "Fokus"
 
-msgid "Tools"
+#, fuzzy
+msgid "&Tools"
 msgstr "Verktyg"
 
 msgid "Synchronisation status"
@@ -698,7 +705,8 @@ msgstr "Krypteringsinställningar"
 msgid "General Options"
 msgstr "Allmänna inställningar"
 
-msgid "Help"
+#, fuzzy
+msgid "&Help"
 msgstr "Hjälp"
 
 msgid "Website and documentation"
@@ -950,9 +958,6 @@ msgstr "Titel på anteckningsbok:"
 msgid "Add or remove tags:"
 msgstr "Lägg till eller ta bort taggar:"
 
-msgid "Separate each tag by a comma."
-msgstr "Separera varje tagg med ett komma."
-
 msgid "Rename notebook:"
 msgstr "Byt namn på anteckningsbok:"
 
@@ -1119,7 +1124,17 @@ msgstr "Krypteringsinställningar"
 msgid "Clipper Options"
 msgstr "Clipper-inställningar"
 
-msgid "Remove this tag from all the notes?"
+#, fuzzy, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"Ta bort anteckningsboken? Alla anteckningar och delanteckningsböcker i den "
+"här anteckningsboken tas bort också."
+
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
 msgstr "Ta bort den här taggen från alla anteckningar?"
 
 msgid "Remove this search from the sidebar?"
@@ -1130,9 +1145,6 @@ msgstr "Ta bort"
 
 msgid "Rename"
 msgstr "Byt namn"
-
-msgid "Synchronise"
-msgstr "Synkronisera"
 
 msgid "Notebooks"
 msgstr "Anteckningsböcker"
@@ -1147,6 +1159,9 @@ msgstr "Hämtar resurser: %d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Välj vart synkroniseringstillståndet ska exporteras till"
+
+msgid "Remove?"
+msgstr ""
 
 msgid "Add or remove tags"
 msgstr "Lägg till eller ta bort taggar"
@@ -1553,6 +1568,9 @@ msgstr "Evernote-exporteringsfil"
 msgid "Json Export Directory"
 msgstr "Joplin-exportkatalog"
 
+msgid "File"
+msgstr "Fil"
+
 msgid "Directory"
 msgstr "Katalog"
 
@@ -1845,6 +1863,9 @@ msgstr "Visa på karta"
 msgid "Go to source URL"
 msgstr "Gå till källans URL"
 
+msgid "Edit"
+msgstr "Redigera"
+
 msgid "Delete notebook"
 msgstr "Ta bort anteckningsbok"
 
@@ -1869,6 +1890,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Välkommen"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Separera varje tagg med ett komma."
 
 #~ msgid "State: %s."
 #~ msgstr "Tillstånd: %s."

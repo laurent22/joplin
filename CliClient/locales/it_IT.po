@@ -610,7 +610,8 @@ msgstr "Importazione da \"%s\" come formato \"%s\". Si prega di attendere..."
 msgid "PDF File"
 msgstr "PDF File"
 
-msgid "File"
+#, fuzzy
+msgid "&File"
 msgstr "File"
 
 msgid "New note"
@@ -628,6 +629,9 @@ msgstr "Importa"
 msgid "Export"
 msgstr "Esporta"
 
+msgid "Synchronise"
+msgstr "Sincronizza"
+
 msgid "Print"
 msgstr "Stampa"
 
@@ -638,7 +642,8 @@ msgstr "Nascondi %s"
 msgid "Quit"
 msgstr "Esci"
 
-msgid "Edit"
+#, fuzzy
+msgid "&Edit"
 msgstr "Modifica"
 
 msgid "Copy"
@@ -674,7 +679,8 @@ msgstr "Cerca in tutte le note"
 msgid "Search in current note"
 msgstr "Cerca nella nota corrente"
 
-msgid "View"
+#, fuzzy
+msgid "&View"
 msgstr "Vista"
 
 msgid "Toggle sidebar"
@@ -687,7 +693,8 @@ msgstr "Attiva / disattiva il layout dell'editor"
 msgid "Focus"
 msgstr "Focus sul testo"
 
-msgid "Tools"
+#, fuzzy
+msgid "&Tools"
 msgstr "Strumenti"
 
 msgid "Synchronisation status"
@@ -702,7 +709,8 @@ msgstr "Opzioni Crittografia"
 msgid "General Options"
 msgstr "Opzioni Generali"
 
-msgid "Help"
+#, fuzzy
+msgid "&Help"
 msgstr "Aiuto"
 
 msgid "Website and documentation"
@@ -954,9 +962,6 @@ msgstr "Titolo del Taccuino:"
 msgid "Add or remove tags:"
 msgstr "Aggiungi or rimuovi etichetta:"
 
-msgid "Separate each tag by a comma."
-msgstr "Separa ogni etichetta da una virgola."
-
 msgid "Rename notebook:"
 msgstr "Rinomina il Taccuino:"
 
@@ -1123,7 +1128,17 @@ msgstr "Opzioni di crittografia"
 msgid "Clipper Options"
 msgstr "Opzioni Clipper"
 
-msgid "Remove this tag from all the notes?"
+#, fuzzy, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"Eliminare taccuino? Anche tutte le note e cartelle di questo taccuino "
+"saranno cancellati."
+
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
 msgstr "Rimuovere questa etichetta da tutte le note?"
 
 msgid "Remove this search from the sidebar?"
@@ -1134,9 +1149,6 @@ msgstr "Elimina"
 
 msgid "Rename"
 msgstr "Rinomina"
-
-msgid "Synchronise"
-msgstr "Sincronizza"
 
 msgid "Notebooks"
 msgstr "Taccuini"
@@ -1150,6 +1162,9 @@ msgid "Fetching resources: %d"
 msgstr "Risorse: %d."
 
 msgid "Please select where the sync status should be exported to"
+msgstr ""
+
+msgid "Remove?"
 msgstr ""
 
 msgid "Add or remove tags"
@@ -1554,6 +1569,9 @@ msgstr "Esporta files di Evernote"
 msgid "Json Export Directory"
 msgstr "Cartella di esportazione JSON"
 
+msgid "File"
+msgstr "File"
+
 msgid "Directory"
 msgstr "Cartella"
 
@@ -1841,6 +1859,9 @@ msgstr "Guarda sulla mappa"
 msgid "Go to source URL"
 msgstr ""
 
+msgid "Edit"
+msgstr "Modifica"
+
 msgid "Delete notebook"
 msgstr "Cancella Taccuino"
 
@@ -1863,6 +1884,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvenuto"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Separa ogni etichetta da una virgola."
 
 #~ msgid "Delete notes?"
 #~ msgstr "Eliminare le note?"
