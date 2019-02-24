@@ -59,14 +59,6 @@ table td, table th {
 	background-color: rgba(0,160,255,0.1) !important;
 }
 
-input::-webkit-calendar-picker-indicator {
-	background-color: rgba(0, 0, 0, 0);
-}
-
-input::-webkit-calendar-picker-indicator:hover {
-	background-color: rgba(100, 100, 100, 0.2);
-}
-
 /*.side-bar .list-item:hover,
 .side-bar .synchronize-button:hover {
 	background-color: #01427B;

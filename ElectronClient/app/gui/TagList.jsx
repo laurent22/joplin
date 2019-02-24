@@ -10,7 +10,7 @@ class TagListComponent extends React.Component {
 		const tags = this.props.items;
 
 		style.display = 'flex';
-		style.flexWrap = 'wrap';
+		style.flexDirection  = 'row';
 		style.borderBottom = '1px solid ' + theme.dividerColor;
 		style.boxSizing = 'border-box';
 		style.fontSize = theme.fontSize;
@@ -23,8 +23,7 @@ class TagListComponent extends React.Component {
 			for (let i = 0; i < tags.length; i++) {
 				const props = {
 					title: tags[i].title,
-					key: tags[i].id,
-					onDelete: this.props.onDeleteItem,
+					key: tags[i].id
 				};
 				tagItems.push(<TagItem {...props} />);
 			}
