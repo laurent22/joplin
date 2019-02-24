@@ -30,9 +30,9 @@ class Tag extends BaseItem {
 		let noteIds = await this.noteIds(tagId);
 		if (!noteIds.length) return [];
 
-		return Note.search(Object.assign({}, options, {
+		return Note.previews(null, Object.assign({}, options, {
 			conditions: ['id IN ("' + noteIds.join('","') + '")'],
-		}))
+		}));
 	}
 
 	// Untag all the notes and delete tag
