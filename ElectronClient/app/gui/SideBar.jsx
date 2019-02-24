@@ -13,6 +13,7 @@ const { bridge } = require("electron").remote.require("./bridge");
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const InteropServiceHelper = require("../InteropServiceHelper.js");
+const { substrWithEllipsis } = require('lib/string-utils');
 const { shim } = require('lib/shim');
 
 class SideBarComponent extends React.Component {
@@ -261,7 +262,7 @@ class SideBarComponent extends React.Component {
 		}
 	}
 
-	itemContextMenu(event) {
+	async itemContextMenu(event) {
 		const itemId = event.target.getAttribute("data-id");
 		if (itemId === Folder.conflictFolderId()) return;
 
@@ -270,9 +271,11 @@ class SideBarComponent extends React.Component {
 
 		let deleteMessage = "";
 		if (itemType === BaseModel.TYPE_FOLDER) {
-			deleteMessage = _("Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.");
+			const folder = await Folder.load(itemId);
+			deleteMessage = _('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', substrWithEllipsis(folder.title, 0, 32));
 		} else if (itemType === BaseModel.TYPE_TAG) {
-			deleteMessage = _("Remove this tag from all the notes?");
+			const tag = await Tag.load(itemId);
+			deleteMessage = _('Remove tag "%s" from all notes?', substrWithEllipsis(tag.title, 0, 32));
 		} else if (itemType === BaseModel.TYPE_SEARCH) {
 			deleteMessage = _("Remove this search from the sidebar?");
 		}
