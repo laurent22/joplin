@@ -6,9 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "pack": "node_modules/.bin/electron-builder --dir",
-    "dist": "node_modules/.bin/electron-rebuild && node_modules/.bin/electron-builder",
+    "dist": "node_modules/.bin/electron-builder",
     "publish": "build -p always",
-    "postinstall": "node compile.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts && install-app-deps",
+    "postinstall": "node compile.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts && node_modules/.bin/electron-rebuild",
     "compile": "node compile.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts"
   },
   "repository": {
@@ -22,6 +22,7 @@
   },
   "build": {
     "appId": "net.cozic.joplin-desktop",
+    "npmRebuild": false,
     "extraResources": [
       "build/icons/*"
     ],
@@ -70,7 +71,7 @@
     "app-builder-bin": "^1.9.11",
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.24.1",
-    "electron": "^4.0.4",
+    "electron": "4.0.5",
     "electron-builder": "20.38.5",
     "electron-rebuild": "^1.8.4"
   },

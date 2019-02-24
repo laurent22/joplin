@@ -84,6 +84,8 @@ async function main() {
 
 	console.info('Copying APK to ' + apkFilePath);
 	await fs.copy('ReactNativeClient/android/app/build/outputs/apk/release/app-release.apk', apkFilePath);
+	console.info('Copying APK to ' + releaseDir + '/joplin-latest.apk');
+	await fs.copy('ReactNativeClient/android/app/build/outputs/apk/release/app-release.apk', releaseDir + '/joplin-latest.apk');
 
 	console.info('Updating Readme URL...');
 
