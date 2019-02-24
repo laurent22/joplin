@@ -219,6 +219,8 @@ class SideBarComponent extends React.Component {
 					if (anchorRef) anchorRef.current.focus();
 				}
 			}
+		} else if (command.name === 'syncTarget') {
+			this.sync_click();
 		} else {
 			commandProcessed = false;
 		}

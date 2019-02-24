@@ -413,6 +413,18 @@ class Application extends BaseApplication {
 				}, {
 					type: 'separator',
 				}, {
+					label: _('Synchronise'),
+					accelerator: 'CommandOrControl+S',
+					screens: ['Main'],
+					click: async () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'syncTarget',
+						});
+					}
+				}, {
+					type: 'separator',
+				}, {
 					label: _('Print'),
 					accelerator: 'CommandOrControl+P',
 					screens: ['Main'],
