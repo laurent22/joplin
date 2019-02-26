@@ -23,6 +23,7 @@
     "mermaid": "^8.0.0",
     "moment": "^2.18.1",
     "prop-types": "^15.6.0",
+    "punycode": "^2.1.1",
     "query-string": "4.3.4",
     "react": "^16.6.3",
     "react-native": "^0.57.8",
