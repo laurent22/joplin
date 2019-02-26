@@ -617,9 +617,8 @@ msgstr "Importiere „%s“ ins „%s“ Format. Bitte warten..."
 msgid "PDF File"
 msgstr "PDF-Datei"
 
-#, fuzzy
 msgid "&File"
-msgstr "Datei"
+msgstr "&Datei"
 
 msgid "New note"
 msgstr "Neue Notiz"
@@ -649,9 +648,8 @@ msgstr "%s ausblenden"
 msgid "Quit"
 msgstr "Verlassen"
 
-#, fuzzy
 msgid "&Edit"
-msgstr "Bearbeiten"
+msgstr "&Bearbeiten"
 
 msgid "Copy"
 msgstr "Kopieren"
@@ -686,9 +684,8 @@ msgstr "Alle Notizen durchsuchen"
 msgid "Search in current note"
 msgstr "Aktuelle Notiz durchsuchen"
 
-#, fuzzy
 msgid "&View"
-msgstr "Ansicht"
+msgstr "&Ansicht"
 
 msgid "Toggle sidebar"
 msgstr "Seitenleiste umschalten"
@@ -699,9 +696,8 @@ msgstr "Editor-Layout umschalten"
 msgid "Focus"
 msgstr "Fokus"
 
-#, fuzzy
 msgid "&Tools"
-msgstr "Werkzeuge"
+msgstr "&Werkzeuge"
 
 msgid "Synchronisation status"
 msgstr "Status der Synchronisation"
@@ -715,9 +711,8 @@ msgstr "Verschlüsselungsoptionen"
 msgid "General Options"
 msgstr "Allgemeine Einstellungen"
 
-#, fuzzy
 msgid "&Help"
-msgstr "Hilfe"
+msgstr "&Hilfe"
 
 msgid "Website and documentation"
 msgstr "Webseite und Dokumentation"
@@ -1140,18 +1135,19 @@ msgstr "Verschlüsselungsoptionen"
 msgid "Clipper Options"
 msgstr "Clipper-Einstellungen"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
-"Notizbuch wirklich löschen? Alle Notizen und Unternotizen darin werden "
-"ebenfalls gelöscht."
+"Notizbuch \"%s\" wirklich löschen?\n"
+"\n"
+"Alle Notizen und Unternotizen darin werden ebenfalls gelöscht."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
-msgstr "Dieses Schlagwort von allen Notizen entfernen?"
+msgstr "Schlagwort \"%s\" von allen Notizen entfernen?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Diese Suche von der Seitenleiste entfernen?"
@@ -1178,7 +1174,7 @@ msgstr ""
 "Bitte wähle aus, wohin der Synchronisations-Status exportiert werden soll"
 
 msgid "Remove?"
-msgstr ""
+msgstr "Löschen?"
 
 msgid "Add or remove tags"
 msgstr "Schlagwörter hinzufügen oder entfernen"
