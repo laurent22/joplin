@@ -472,9 +472,9 @@ msgid ""
 "[tag] from [note], or to list the notes associated with [tag]. The command "
 "`tag list` can be used to list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> puede ser \"add\", \"remove\" o \"list\" para asignar o "
+"eliminar [tag] de [note], o para listar las notas asociadas con [tag]. El "
+"comando `tag list` puede ser usado para listar todas las etiquetas."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
