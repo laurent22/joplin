@@ -1,4 +1,5 @@
 const React = require("react");
+const electron = require('electron');
 
 class VerticalResizer extends React.PureComponent {
 
@@ -31,15 +32,15 @@ class VerticalResizer extends React.PureComponent {
 		document.addEventListener('dragover', this.document_onDragOver)
 
         event.dataTransfer.dropEffect= 'none';
+
+        const cursor = electron.screen.getCursorScreenPoint();
         
 		this.setState({
 			drag: {
-				startX: event.nativeEvent.clientX,
-				lastX: event.nativeEvent.clientX,
+				startX: cursor.x,
+				lastX: cursor.x,
 			}
 		});
-
-		console.info('START', event.nativeEvent);
 
 		if (this.props.onDragStart) this.props.onDragStart({});
 	}
@@ -49,10 +50,11 @@ class VerticalResizer extends React.PureComponent {
 		// that we should ignore, because it's sometimes use to put the dragged element
 		// back to its original position (if there was no valid drop target), which we don't want.
 		// Also if clientX, screenX, etc. are 0, it's also the last event and we want to ignore these buggy values.
-		const e = event.nativeEvent;
-		if (!e.buttons || (!e.clientX && !e.clientY && !e.screenX && !e.screenY)) return;
+		// const e = event.nativeEvent;
+		// if (!e.buttons || (!e.clientX && !e.clientY && !e.screenX && !e.screenY)) return;
 
-		const newX = event.nativeEvent.clientX;
+		const cursor = electron.screen.getCursorScreenPoint();
+		const newX = cursor.x;
 		const delta = newX - this.state.drag.lastX;
 		if (!delta) return;
 

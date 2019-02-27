@@ -87,7 +87,7 @@ class NoteTextViewerComponent extends React.Component {
 		// In particular it means that background images and colours won't be printed (printBackground property will be ignored)
 
 		// return this.webviewRef_.current.getWebContents().print({});
-		this.webviewRef_.current.getWebContents().executeJavaScript("window.print()")
+		return this.webviewRef_.current.getWebContents().executeJavaScript("window.print()")
 	}
 
 	openDevTools() {
