@@ -34,10 +34,12 @@ class VerticalResizer extends React.PureComponent {
         
 		this.setState({
 			drag: {
-				startX: event.nativeEvent.screenX,
-				lastX: event.nativeEvent.screenX,
+				startX: event.nativeEvent.clientX,
+				lastX: event.nativeEvent.clientX,
 			}
 		});
+
+		console.info('START', event.nativeEvent);
 
 		if (this.props.onDragStart) this.props.onDragStart({});
 	}
@@ -46,9 +48,11 @@ class VerticalResizer extends React.PureComponent {
 		// If we got a drag event with no buttons pressed, it's the last drag event
 		// that we should ignore, because it's sometimes use to put the dragged element
 		// back to its original position (if there was no valid drop target), which we don't want.
-		if (!event.nativeEvent.buttons) return;
+		// Also if clientX, screenX, etc. are 0, it's also the last event and we want to ignore these buggy values.
+		const e = event.nativeEvent;
+		if (!e.buttons || (!e.clientX && !e.clientY && !e.screenX && !e.screenY)) return;
 
-		const newX = event.nativeEvent.screenX;
+		const newX = event.nativeEvent.clientX;
 		const delta = newX - this.state.drag.lastX;
 		if (!delta) return;
 
