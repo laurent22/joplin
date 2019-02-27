@@ -1,5 +1,21 @@
 # Joplin changelog
 
+## [v1.0.135](https://github.com/laurent22/joplin/releases/tag/v1.0.135) - 2019-02-27T23:36:57Z
+
+Note: this is the same as v132 but with a fix for the resizeable column bug, and for PDF export and printing.
+
+- New: Experimental support for Mermaid graphs (This is **not** yet supported on mobile).
+- New: Allow resizing sidebar columns.
+- New: Resolves [#1198](https://github.com/laurent22/joplin/issues/1198): In search results, give more weight to more recent notes and less to completed to-dos
+- Add shortcut to start a sync ([#1231](https://github.com/laurent22/joplin/issues/1231))
+- Change notebook icon in toolbar and search result ([#1252](https://github.com/laurent22/joplin/issues/1252))
+- When deleting notebook or tag, display name ([#1253](https://github.com/laurent22/joplin/issues/1253))
+- API: Resolves [#1148](https://github.com/laurent22/joplin/issues/1148): Added support for search end-point and improved error handling
+- Security: Updated a few packages to fix CVE-2018-16469
+- Security: Updated parse-url package to fix CVE-2018-3774
+- Various bug fixes and improvement following previous release.
+- Fixes [#1251](https://github.com/laurent22/joplin/issues/1251): Handle Show Uncompleted Tasks option when selecting a tag
+
 ## [v1.0.134](https://github.com/laurent22/joplin/releases/tag/v1.0.134) - 2019-02-27T10:21:44Z
 
 Note: this is the same as v132 but with a fix for the resizeable column bug.

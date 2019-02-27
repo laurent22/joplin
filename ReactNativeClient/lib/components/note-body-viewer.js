@@ -96,6 +96,8 @@ class NoteBodyViewer extends Component {
 
 		let html = this.mdToHtml_.render(note ? note.body : '', this.props.webViewStyle, mdOptions);
 
+		const injectedJs = this.mdToHtml_.injectedJavaScript();
+
 		html = `
 			<!DOCTYPE html>
 			<html>
@@ -146,6 +148,7 @@ class NoteBodyViewer extends Component {
 					scalesPageToFit={Platform.OS !== 'ios'}
 					style={webViewStyle}
 					source={source}
+					injectedJavaScript={injectedJs}
 					originWhitelist={['file://*', './*', 'http://*', 'https://*']}
 					mixedContentMode="always"
 					allowFileAccess={true}

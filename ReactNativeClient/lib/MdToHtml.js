@@ -19,6 +19,7 @@ class MdToHtml {
 		this.cachedContent_ = null;
 		this.cachedContentKey_ = null;
 		this.extraCssBlocks_ = [];
+		this.lastExecutedPlugins_ = [];
 
 		// Must include last "/"
 		this.resourceBaseUrl_ = ('resourceBaseUrl' in options) ? options.resourceBaseUrl : null;
@@ -248,6 +249,10 @@ class MdToHtml {
 
 			if (isCodeBlock) rendererPlugin = this.rendererPlugin_(codeBlockLanguage);
 
+			if (rendererPlugin && this.lastExecutedPlugins_.indexOf(codeBlockLanguage) < 0) {
+				this.lastExecutedPlugins_.push(codeBlockLanguage);
+			}
+
 			if (isInlineCode) {
 				openTag = null;
 			} else if (tag && (t.type.indexOf('html_inline') >= 0 || t.type.indexOf('html_block') >= 0)) {
@@ -407,6 +412,8 @@ class MdToHtml {
 
 		const cacheKey = this.makeContentKey(this.loadedResources_, body, style, options);
 		if (this.cachedContentKey_ === cacheKey) return this.cachedContent_;
+
+		this.lastExecutedPlugins_ = [];
 
 		const md = new MarkdownIt({
 			breaks: true,
@@ -740,6 +747,17 @@ class MdToHtml {
 		body = body.replace(/°°JOP°CHECKBOX°TICK°°/g, '- [x]');
 
 		return body;
+	}
+
+	injectedJavaScript() {
+		const output = [];
+		for (let i = 0; i < this.lastExecutedPlugins_.length; i++) {
+			const name = this.lastExecutedPlugins_[i];
+			const plugin = this.rendererPlugin_(name);
+			if (!plugin.injectedJavaScript) continue;
+			output.push(plugin.injectedJavaScript());
+		}
+		return output.join('\n');
 	}
 
 	handleCheckboxClick(msg, noteBody) {
