@@ -73,11 +73,21 @@ class NoteTextViewerComponent extends React.Component {
 	}
 
 	printToPDF(options, callback) {
-		return this.webviewRef_.current.printToPDF(options, callback);
+		// In Electron 4x, printToPDF is broken so need to use this hack:
+		// https://github.com/electron/electron/issues/16171#issuecomment-451090245
+
+		// return this.webviewRef_.current.printToPDF(options, callback);
+		return this.webviewRef_.current.getWebContents().printToPDF(options, callback);
 	}
 
 	print(options = {}) {
-		return this.webviewRef_.current.print(options);
+		// In Electron 4x, print is broken so need to use this hack:
+		// https://github.com/electron/electron/issues/16219#issuecomment-451454948
+		// Note that this is not a perfect workaround since it means the options are ignored
+		// In particular it means that background images and colours won't be printed (printBackground property will be ignored)
+
+		// return this.webviewRef_.current.getWebContents().print({});
+		this.webviewRef_.current.getWebContents().executeJavaScript("window.print()")
 	}
 
 	openDevTools() {
