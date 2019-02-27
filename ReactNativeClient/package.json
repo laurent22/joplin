@@ -20,7 +20,6 @@
     "markdown-it": "^8.4.0",
     "markdown-it-katex": "^2.0.3",
     "md5": "^2.2.1",
-    "mermaid": "^8.0.0",
     "moment": "^2.18.1",
     "prop-types": "^15.6.0",
     "punycode": "^2.1.1",
