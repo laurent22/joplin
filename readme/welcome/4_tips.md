@@ -52,6 +52,16 @@ f(x) = \int_{-\infty}^\infty
     \,d\xi
 $$
 
+And graphs can be added using the [Mermaid syntax](https://mermaidjs.github.io/):
+
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
+
 Various other tricks are possible, such as using HTML, or customising the CSS. See the Markdown documentation for more info - https://joplin.cozic.net#markdown
 
 ## Community and further help

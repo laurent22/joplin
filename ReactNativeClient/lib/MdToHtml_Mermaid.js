@@ -1,5 +1,4 @@
 const { shim } = require('lib/shim');
-const mermaid = require('mermaid');
 const injectedJs = require('lib/rnInjectedJs/mermaid');
 
 class MdToHtml_Mermaid {
@@ -14,7 +13,10 @@ class MdToHtml_Mermaid {
 	}
 
 	extraCss() {
-		return '';
+		// Force a white background because the graphs can have various colours
+		// that may not be compatible with the current theme. Also make it
+		// inline-block so that the div is the same size as the content.
+		return '.mermaid { background-color: white; display:inline-block; }';
 	}
 
 	injectedJavaScript() {

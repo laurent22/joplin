@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "postinstall": "node ../Tools/copycss.js"
+    "postinstall": "node ../Tools/copycss.js && node ../Tools/buildReactNativeInjectedJs.js"
   },
   "dependencies": {
     "async-mutex": "^0.1.3",

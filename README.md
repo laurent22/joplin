@@ -251,6 +251,24 @@ You can create a link to a note by specifying its ID in the URL. For example:
 
 Since getting the ID of a note is not straightforward, each app provides a way to create such link. In the **desktop app**, right click on a note an select "Copy Markdown link". In the **mobile app**, open a note and, in the top right menu, select "Copy Markdown link". You can then paste this link anywhere in another note.
 
+## Charts
+
+You can create charts in Joplin using the [Mermaid syntax](https://mermaidjs.github.io/). To add such a graph, wrap the Mermaid script inside a "\`\`\`mermaid" code block like this:
+
+	```mermaid
+	graph TD;
+	    A-->B;
+	    A-->C;
+	    B-->D;
+	    C-->D;
+	```
+
+This is how it would look with the Markdown on the left, and rendered graph on the right:
+
+![Mermaid support in Joplin](https://joplin.cozic.net/images/Mermaid.png)
+
+Note that Mermaid graphs are always rendered on a white background regardless of the current theme. This is because they can contain various colours that may not be compatible with the current theme.
+
 ## Math notation
 
 Math expressions can be added using the [KaTeX notation](https://khan.github.io/KaTeX/). To add an inline equation, wrap the expression in `$EXPRESSION$`, eg. `$\sqrt{3x-1}+(1+x)^2$`. To create an expression block, wrap it as follow:
