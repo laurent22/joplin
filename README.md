@@ -265,7 +265,7 @@ You can create charts in Joplin using the [Mermaid syntax](https://mermaidjs.git
 
 This is how it would look with the Markdown on the left, and rendered graph on the right:
 
-![Mermaid support in Joplin](https://joplin.cozic.net/images/Mermaid.png)
+<img src="https://joplin.cozic.net/images/Mermaid.png" style="max-width: 512px;">
 
 Note that Mermaid graphs are always rendered on a white background regardless of the current theme. This is because they can contain various colours that may not be compatible with the current theme.
 
