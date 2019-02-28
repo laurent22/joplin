@@ -8,6 +8,11 @@ class MdToHtml_Katex {
 	constructor() {
 		this.cache_ = {};
 		this.assetsLoaded_ = false;
+
+		// Keep macros that persist across Katex blocks to allow defining a macro
+		// in one block and re-using it later in other blocks.
+		// https://github.com/laurent22/joplin/issues/1105
+		this.macros_ = {};
 	}
 
 	name() {
@@ -24,6 +29,7 @@ class MdToHtml_Katex {
 			} else {
 				renderered = katex.renderToString(content, {
 					displayMode: tagType === 'block',
+					macros: this.macros_,
 				});
 				this.cache_[cacheKey] = renderered;
 			}
