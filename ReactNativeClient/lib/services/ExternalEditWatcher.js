@@ -2,7 +2,6 @@ const { Logger } = require('lib/logger.js');
 const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting');
 const { shim } = require('lib/shim');
-const chokidar = require('chokidar');
 const EventEmitter = require('events');
 const { splitCommandString } = require('lib/string-utils');
 const { fileExtension } = require('lib/path-utils');
@@ -40,9 +39,20 @@ class ExternalEditWatcher {
 		return this.logger_;
 	}
 
+	async preload() {
+		// Chokidar is extremely slow to load since Electron 4 - it takes over 4 seconds
+		// on my computer. So load it in the background.
+		setTimeout(() => {
+			if (this.chokidar_) return;
+			this.chokidar_ = require('chokidar');
+		}, 1000);
+	}
+
 	watch(fileToWatch) {
+		if (!this.chokidar_) return;
+
 		if (!this.watcher_) {
-			this.watcher_ = chokidar.watch(fileToWatch);
+			this.watcher_ = this.chokidar_.watch(fileToWatch);
 			this.watcher_.on('all', async (event, path) => {
 				this.logger().debug('ExternalEditWatcher: Event: ' + event + ': ' + path);
 
