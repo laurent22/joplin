@@ -14,8 +14,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.7\n"
+"X-Generator: Poedit 2.2.1\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Para eliminar uma tag, remova a tag das notas associadas a ela."
@@ -760,7 +762,7 @@ msgid "No"
 msgstr "Não"
 
 msgid "Token has been copied to the clipboard!"
-msgstr "Token foi copiado para a \\u00e1rea de transfer\\u00eancia!"
+msgstr "Token foi copiado para a área de transferência!"
 
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
@@ -815,7 +817,7 @@ msgid "Advanced options"
 msgstr "Mostrar opções avançadas"
 
 msgid "Authorisation token:"
-msgstr "Token de autoriza\\u00e7\\u00e3o:"
+msgstr "Token de autorização:"
 
 msgid "Copy token"
 msgstr "Copira token"
@@ -824,8 +826,8 @@ msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
-"Esse token de autoriza\\u00e7\\u00e3o só é necess\\u00e1rio para permitir "
-"que aplicativos de terceiros acessem o Joplin."
+"Esse token de autorização só é necessário para permitir que aplicativos de "
+"terceiros acessem o Joplin."
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -1643,10 +1645,10 @@ msgid "On %s: %s"
 msgstr "Em %s: %s"
 
 msgid "Permission to use camera"
-msgstr "Permissão para utilizar sua c\\u00e2mera"
+msgstr "Permissão para utilizar sua câmera"
 
 msgid "Your permission to use your camera is required."
-msgstr "É necessária a sua permissão para utilizar sua c\\u00e2mera."
+msgstr "É necessária a sua permissão para utilizar sua câmera."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Atualmente, não há notas. Crie uma, clicando no botão (+)."
