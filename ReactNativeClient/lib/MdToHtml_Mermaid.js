@@ -1,5 +1,4 @@
 const { shim } = require('lib/shim');
-const injectedJs = require('lib/rnInjectedJs/mermaid');
 
 class MdToHtml_Mermaid {
 
@@ -20,7 +19,8 @@ class MdToHtml_Mermaid {
 	}
 
 	injectedJavaScript() {
-		return injectedJs + '\n' + 'mermaid.init();';
+		const js = shim.injectedJs('mermaid');
+		return js ? js + '\n' + 'mermaid.init();' : '';
 	}
 
 	async loadAssets() {}

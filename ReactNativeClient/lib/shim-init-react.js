@@ -12,6 +12,10 @@ const { basename, fileExtension } = require('lib/path-utils.js');
 const { uuid } = require('lib/uuid.js');
 const Resource = require('lib/models/Resource');
 
+const injectedJs = {
+	mermaid: require('lib/rnInjectedJs/mermaid'),
+};
+
 function shimInit() {
 	shim.Geolocation = GeolocationReact;
 	shim.setInterval = PoorManIntervals.setInterval;
@@ -162,6 +166,11 @@ function shimInit() {
 		console.info(resource);
 
 		return resource;
+	}
+
+	shim.injectedJs = function(name) {
+		if (name in injectedJs) return injectedJs[name];
+		return '';
 	}
 
 }
