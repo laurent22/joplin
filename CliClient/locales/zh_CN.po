@@ -708,12 +708,12 @@ msgid "An update is available, do you want to download it now?"
 msgstr "有更新可用，是否现在进行下载？"
 
 #, javascript-format
-msgid "Your version: v%s"
-msgstr "您的版本：v%s"
+msgid "Your version: %s"
+msgstr "您的版本：%s"
 
 #, javascript-format
-msgid "New version: v%s"
-msgstr "最新版本：v%s"
+msgid "New version: %s"
+msgstr "最新版本：%s"
 
 msgid "Yes"
 msgstr "是"

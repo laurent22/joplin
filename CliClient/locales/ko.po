@@ -732,12 +732,12 @@ msgid "An update is available, do you want to download it now?"
 msgstr "업데이트가 있습니다. 지금 다운로드할까요?"
 
 #, javascript-format
-msgid "Your version: v%s"
-msgstr "현재 버전: v%s"
+msgid "Your version: %s"
+msgstr "현재 버전: %s"
 
 #, javascript-format
-msgid "New version: v%s"
-msgstr "새 버전: v%s"
+msgid "New version: %s"
+msgstr "새 버전: %s"
 
 msgid "Yes"
 msgstr "예"

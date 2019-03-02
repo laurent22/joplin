@@ -717,12 +717,12 @@ msgid "An update is available, do you want to download it now?"
 msgstr "Güncelleme mevcut, şimdi indirmek ister misiniz?"
 
 #, javascript-format
-msgid "Your version: v%s"
-msgstr "Sürümün: v%s"
+msgid "Your version: %s"
+msgstr "Sürümün: %s"
 
 #, javascript-format
-msgid "New version: v%s"
-msgstr "Yeni sürüm: v%s"
+msgid "New version: %s"
+msgstr "Yeni sürüm: %s"
 
 msgid "Yes"
 msgstr "Evet"

@@ -755,12 +755,12 @@ msgstr ""
 "Es ist eine Aktualisierung verfügbar. Soll sie jetzt heruntergeladen werden?"
 
 #, javascript-format
-msgid "Your version: v%s"
-msgstr "Deine Version: v%s"
+msgid "Your version: %s"
+msgstr "Deine Version: %s"
 
 #, javascript-format
-msgid "New version: v%s"
-msgstr "Neue Version: v%s"
+msgid "New version: %s"
+msgstr "Neue Version: %s"
 
 msgid "Yes"
 msgstr "Ja"

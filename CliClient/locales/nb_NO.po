@@ -741,12 +741,12 @@ msgid "An update is available, do you want to download it now?"
 msgstr "En oppdatering er tilgjengelig, vil du laste den ned nå?"
 
 #, javascript-format
-msgid "Your version: v%s"
-msgstr "Din versjon: v%s"
+msgid "Your version: %s"
+msgstr "Din versjon: %s"
 
 #, javascript-format
-msgid "New version: v%s"
-msgstr "Ny versjon: v%s"
+msgid "New version: %s"
+msgstr "Ny versjon: %s"
 
 msgid "Yes"
 msgstr "Ja"
