@@ -18,7 +18,7 @@ msgstr ""
 
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
-"Um ein Tag zu löschen, entferne es bei allen damit verbundenen Notizen."
+"Um ein Schlagwort zu löschen, entferne es bei allen damit verbundenen Notizen."
 
 msgid "Please select the note or notebook to be deleted first."
 msgstr ""
