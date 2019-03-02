@@ -250,7 +250,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		settingComps.push(
 			<View key="version_info_app" style={this.styles().settingContainer}>
-					<Text style={this.styles().settingText}>{_('Joplin v%s', VersionInfo.appVersion)}</Text>
+					<Text style={this.styles().settingText}>{"Joplin " + VersionInfo.appVersion}</Text>
 			</View>
 		);
 
