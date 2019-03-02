@@ -8,7 +8,7 @@
     "pack": "node_modules/.bin/electron-builder --dir",
     "dist": "node_modules/.bin/electron-builder",
     "publish": "build -p always",
-    "postinstall": "node compile.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts && electron-rebuild",
+    "postinstall": "node compile.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts && electron-rebuild --arch ia32 && electron-rebuild --arch x64",
     "compile": "node compile.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts"
   },
   "repository": {
