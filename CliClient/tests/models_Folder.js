@@ -52,4 +52,53 @@ describe('models_Folder', function() {
 		expect(all.length).toBe(0);
 	}));
 
+	it('should sort by last modified, based on content', asyncTest(async () => {
+		let folders;
+
+		let f1 = await Folder.save({ title: "folder1" }); await sleep(0.1);
+		let f2 = await Folder.save({ title: "folder2" }); await sleep(0.1);
+		let f3 = await Folder.save({ title: "folder3" }); await sleep(0.1);
+		let n1 = await Note.save({ title: 'note1', parent_id: f2.id });
+
+		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
+		expect(folders.length).toBe(3);
+		expect(folders[0].id).toBe(f2.id);
+		expect(folders[1].id).toBe(f3.id);
+		expect(folders[2].id).toBe(f1.id);
+
+		let n2 = await Note.save({ title: 'note1', parent_id: f1.id });
+
+		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
+		expect(folders[0].id).toBe(f1.id);
+		expect(folders[1].id).toBe(f2.id);
+		expect(folders[2].id).toBe(f3.id);
+
+		await Note.save({ id: n1.id, title: 'note1 mod' });
+
+		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
+		expect(folders[0].id).toBe(f2.id);
+		expect(folders[1].id).toBe(f1.id);
+		expect(folders[2].id).toBe(f3.id);
+
+		folders = await Folder.orderByLastModified(await Folder.all(), 'asc');
+		expect(folders[0].id).toBe(f3.id);
+		expect(folders[1].id).toBe(f1.id);
+		expect(folders[2].id).toBe(f2.id);
+	}));
+
+	it('should sort by last modified, based on content (sub-folders too)', asyncTest(async () => {
+		let folders;
+
+		let f1 = await Folder.save({ title: "folder1" }); await sleep(0.1);
+		let f2 = await Folder.save({ title: "folder2" }); await sleep(0.1);
+		let f3 = await Folder.save({ title: "folder3", parent_id: f1.id }); await sleep(0.1);
+		let n1 = await Note.save({ title: 'note1', parent_id: f3.id });
+
+		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
+		expect(folders.length).toBe(3);
+		expect(folders[0].id).toBe(f1.id);
+		expect(folders[1].id).toBe(f3.id);
+		expect(folders[2].id).toBe(f2.id);
+	}));
+
 });

@@ -299,6 +299,7 @@ class BaseApplication {
 		const result = next(action);
 		const newState = store.getState();
 		let refreshNotes = false;
+		let refreshFolders = false;
 		// let refreshTags = false;
 		let refreshNotesUseSelectedNoteId = false;
 
@@ -389,10 +390,11 @@ class BaseApplication {
 		}
 
 		if (action.type === 'NOTE_UPDATE_ONE') {
-			// If there is a conflict, we refresh the folders so as to display "Conflicts" folder
-			if (action.note && action.note.is_conflict) {
-				await FoldersScreenUtils.refreshFolders();
-			}
+			refreshFolders = true;
+		}
+
+		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key.indexOf('folders.sortOrder') === 0) || action.type == 'SETTING_UPDATE_ALL')) {
+			refreshFolders = 'now';
 		}
 
 		if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && action.key == 'sync.interval' || action.type == 'SETTING_UPDATE_ALL') {
@@ -405,6 +407,14 @@ class BaseApplication {
 
 		if (this.hasGui() && action.type === 'SYNC_CREATED_RESOURCE') {
 			ResourceFetcher.instance().queueDownload(action.id);
+		}
+
+		if (refreshFolders) {
+			if (refreshFolders === 'now') {
+				await FoldersScreenUtils.refreshFolders();
+			} else {
+				await FoldersScreenUtils.scheduleRefreshFolders();
+			}
 		}
 
 	  	return result;

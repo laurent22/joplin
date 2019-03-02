@@ -59,6 +59,13 @@ stateUtils.notesOrder = function(stateSettings) {
 	}];
 }
 
+stateUtils.foldersOrder = function(stateSettings) {
+	return [{
+		by: stateSettings['folders.sortOrder.field'],
+		dir: stateSettings['folders.sortOrder.reverse'] ? 'DESC' : 'ASC',
+	}];
+}
+
 stateUtils.parentItem = function(state) {
 	const t = state.notesParentType;
 	let id = null;

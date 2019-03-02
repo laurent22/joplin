@@ -71,6 +71,16 @@ class Setting extends BaseModel {
 				return options;
 			}},
 			'notes.sortOrder.reverse': { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
+			'folders.sortOrder.field': { value: 'title', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['cli'], label: () => _('Sort notebooks by'), options: () => {
+				const Folder = require('lib/models/Folder');
+				const folderSortFields = ['title', 'last_note_user_updated_time'];
+				const options = {};
+				for (let i = 0; i < folderSortFields.length; i++) {
+					options[folderSortFields[i]] = toTitleCase(Folder.fieldToLabel(folderSortFields[i]));
+				}
+				return options;
+			}},
+			'folders.sortOrder.reverse': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
 			'trackLocation': { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, label: () => _('Save geo-location with notes') },
 			'newTodoFocus': { value: 'title', type: Setting.TYPE_STRING, section: 'note', isEnum: true, public: true, appTypes: ['desktop'], label: () => _('When creating a new to-do:'), options: () => {
 				return {

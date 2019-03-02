@@ -100,6 +100,17 @@ class Database {
 		return this.tryCall('selectAll', sql, params);
 	}
 
+	async selectAllFields(sql, params, field) {
+		const rows = await this.tryCall('selectAll', sql, params);
+		const output = [];
+		for (let i = 0; i < rows.length; i++) {
+			const v = rows[i][field];
+			if (!v) throw new Error('No such field: ' + field + '. Query was: ' + sql);
+			output.push(rows[i][field]);
+		}
+		return output;
+	}
+
 	async exec(sql, params = null) {
 		return this.tryCall('exec', sql, params);
 	}

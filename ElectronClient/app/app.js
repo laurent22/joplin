@@ -245,21 +245,40 @@ class Application extends BaseApplication {
 	updateMenu(screen) {
 		if (this.lastMenuScreen_ === screen) return;
 
-		const sortNoteItems = [];
-		const sortNoteOptions = Setting.enumOptions('notes.sortOrder.field');
-		for (let field in sortNoteOptions) {
-			if (!sortNoteOptions.hasOwnProperty(field)) continue;
-			sortNoteItems.push({
-				label: sortNoteOptions[field],
-				screens: ['Main'],
+		const sortNoteFolderItems = (type) => {
+			const sortItems = [];
+			const sortOptions = Setting.enumOptions(type + '.sortOrder.field');
+			for (let field in sortOptions) {
+				if (!sortOptions.hasOwnProperty(field)) continue;
+				sortItems.push({
+					label: sortOptions[field],
+					screens: ['Main'],
+					type: 'checkbox',
+					checked: Setting.value(type + '.sortOrder.field') === field,
+					click: () => {
+						Setting.setValue(type + '.sortOrder.field', field);
+						this.refreshMenu();
+					}
+				});
+			}
+			
+			sortItems.push({ type: 'separator' });
+
+			sortItems.push({
+				label: Setting.settingMetadata(type + '.sortOrder.reverse').label(),
 				type: 'checkbox',
-				checked: Setting.value('notes.sortOrder.field') === field,
+				checked: Setting.value(type + '.sortOrder.reverse'),
+				screens: ['Main'],
 				click: () => {
-					Setting.setValue('notes.sortOrder.field', field);
-					this.refreshMenu();
-				}
+					Setting.setValue(type + '.sortOrder.reverse', !Setting.value(type + '.sortOrder.reverse'));
+				},
 			});
+
+			return sortItems;
 		}
+
+		const sortNoteItems = sortNoteFolderItems('notes');
+		const sortFolderItems = sortNoteFolderItems('folders');
 
 		const focusItems = [];
 
@@ -580,13 +599,9 @@ class Application extends BaseApplication {
 					screens: ['Main'],
 					submenu: sortNoteItems,
 				}, {
-					label: Setting.settingMetadata('notes.sortOrder.reverse').label(),
-					type: 'checkbox',
-					checked: Setting.value('notes.sortOrder.reverse'),
+					label: Setting.settingMetadata('folders.sortOrder.field').label(),
 					screens: ['Main'],
-					click: () => {
-						Setting.setValue('notes.sortOrder.reverse', !Setting.value('notes.sortOrder.reverse'));
-					},
+					submenu: sortFolderItems,
 				}, {
 					label: Setting.settingMetadata('uncompletedTodosOnTop').label(),
 					type: 'checkbox',
