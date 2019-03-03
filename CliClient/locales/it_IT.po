@@ -962,6 +962,9 @@ msgstr "Titolo del Taccuino:"
 msgid "Add or remove tags:"
 msgstr "Aggiungi or rimuovi etichetta:"
 
+msgid "Separate each tag by a comma."
+msgstr "Separa ogni etichetta da una virgola."
+
 msgid "Rename notebook:"
 msgstr "Rinomina il Taccuino:"
 
@@ -1164,9 +1167,6 @@ msgstr "Risorse: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 
-msgid "Remove?"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "Aggiungi o rimuovi etichetta"
 
@@ -1315,6 +1315,12 @@ msgstr "Crittografato"
 msgid "Encrypted items cannot be modified"
 msgstr "Gli elementi crittografati non possono essere modificati"
 
+msgid "title"
+msgstr "Titolo"
+
+msgid "updated date"
+msgstr "Data di aggiornamento"
+
 msgid "Conflicts"
 msgstr "Conflitti"
 
@@ -1324,12 +1330,6 @@ msgstr "Impossibile spostare il Taccuino in questa posizione"
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "I blocchi non possono essere chiamati \"%s\". È un titolo riservato."
-
-msgid "title"
-msgstr "Titolo"
-
-msgid "updated date"
-msgstr "Data di aggiornamento"
 
 msgid "created date"
 msgstr "Data di creazione"
@@ -1374,6 +1374,10 @@ msgstr "Ordina le note per"
 
 msgid "Reverse sort order"
 msgstr "Inverti l'ordine"
+
+#, fuzzy
+msgid "Sort notebooks by"
+msgstr "Ordina le note per"
 
 msgid "Save geo-location with notes"
 msgstr "Salva geolocalizzazione con le note"
@@ -1884,9 +1888,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvenuto"
-
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "Separa ogni etichetta da una virgola."
 
 #~ msgid "Delete notes?"
 #~ msgstr "Eliminare le note?"

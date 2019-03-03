@@ -952,6 +952,9 @@ msgstr "Titre du carnet :"
 msgid "Add or remove tags:"
 msgstr "Modifier les étiquettes :"
 
+msgid "Separate each tag by a comma."
+msgstr "Séparez chaque étiquette par une virgule."
+
 msgid "Rename notebook:"
 msgstr "Renommer le carnet :"
 
@@ -1158,9 +1161,6 @@ msgid "Please select where the sync status should be exported to"
 msgstr ""
 "Veuillez sélectionner un répertoire ou exporter l'état de la synchronisation"
 
-msgid "Remove?"
-msgstr "Supprimer ?"
-
 msgid "Add or remove tags"
 msgstr "Gérer les étiquettes"
 
@@ -1309,6 +1309,12 @@ msgstr "Chiffré"
 msgid "Encrypted items cannot be modified"
 msgstr "Les objets chiffrés ne peuvent être modifiés"
 
+msgid "title"
+msgstr "titre"
+
+msgid "updated date"
+msgstr "date de modification"
+
 msgid "Conflicts"
 msgstr "Conflits"
 
@@ -1318,12 +1324,6 @@ msgstr "Impossible de déplacer le carnet à cet endroit"
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Les carnets ne peuvent être nommés \"%s\" car c'est un nom réservé."
-
-msgid "title"
-msgstr "titre"
-
-msgid "updated date"
-msgstr "date de modification"
 
 msgid "created date"
 msgstr "date de création"
@@ -1368,6 +1368,9 @@ msgstr "Trier les notes par"
 
 msgid "Reverse sort order"
 msgstr "Inverser l'ordre"
+
+msgid "Sort notebooks by"
+msgstr "Trier les carnets par"
 
 msgid "Save geo-location with notes"
 msgstr "Enregistrer l'emplacement avec les notes"
@@ -1882,8 +1885,8 @@ msgstr ""
 msgid "Welcome"
 msgstr "Bienvenue"
 
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "Séparez chaque étiquette par une virgule."
+#~ msgid "Remove?"
+#~ msgstr "Supprimer ?"
 
 #~ msgid "Delete notes?"
 #~ msgstr "Supprimer les notes ?"

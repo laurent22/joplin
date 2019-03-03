@@ -964,6 +964,9 @@ msgstr "Títol del bloc de notes:"
 msgid "Add or remove tags:"
 msgstr "Afegeix o suprimeix etiquetes:"
 
+msgid "Separate each tag by a comma."
+msgstr "Separeu les etiquetes amb comes."
+
 msgid "Rename notebook:"
 msgstr "Canvia el nom del bloc de notes:"
 
@@ -1166,9 +1169,6 @@ msgstr "Recursos: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccioneu on s'hauria d'exportar l'estat de la sincronització"
 
-msgid "Remove?"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "Afegeix o suprimeix etiquetes"
 
@@ -1320,6 +1320,12 @@ msgstr "Xifrat"
 msgid "Encrypted items cannot be modified"
 msgstr "Els elements xifrats no es poden modificar"
 
+msgid "title"
+msgstr "títol"
+
+msgid "updated date"
+msgstr "data d'actualització"
+
 msgid "Conflicts"
 msgstr "Conflictes"
 
@@ -1329,12 +1335,6 @@ msgstr "No es pot moure el bloc de notes a aquesta ubicació"
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Els blocs de notes no poden tenir el nom «%s», és un títol reservat."
-
-msgid "title"
-msgstr "títol"
-
-msgid "updated date"
-msgstr "data d'actualització"
 
 msgid "created date"
 msgstr "data de creació"
@@ -1379,6 +1379,10 @@ msgstr "Ordena les notes per"
 
 msgid "Reverse sort order"
 msgstr "Ordre invers"
+
+#, fuzzy
+msgid "Sort notebooks by"
+msgstr "Ordena les notes per"
 
 msgid "Save geo-location with notes"
 msgstr "Desa la geolocalització a les notes"
@@ -1884,9 +1888,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvingut"
-
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "Separeu les etiquetes amb comes."
 
 #~ msgid "State: %s."
 #~ msgstr "Estat: %s"

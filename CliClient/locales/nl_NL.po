@@ -961,6 +961,9 @@ msgstr "Titel van notitieboek:"
 msgid "Add or remove tags:"
 msgstr "Labels toevoegen of verwijderen:"
 
+msgid "Separate each tag by a comma."
+msgstr "Scheidt elk label met een komma."
+
 msgid "Rename notebook:"
 msgstr "Notitieboeknaam wijzigen:"
 
@@ -1164,9 +1167,6 @@ msgstr "Bronnen: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Kies waar de synchronisatiestatus naar moet worden geëxporteerd"
 
-msgid "Remove?"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "Labels toevoegen of verwijderen"
 
@@ -1317,6 +1317,12 @@ msgstr "Versleuteld"
 msgid "Encrypted items cannot be modified"
 msgstr "Versleutelde items kunnen niet worden bewerkt"
 
+msgid "title"
+msgstr "titel"
+
+msgid "updated date"
+msgstr "bijgewerkt op"
+
 msgid "Conflicts"
 msgstr "Conflicten"
 
@@ -1326,12 +1332,6 @@ msgstr "Kan notitieboek niet verplaatsen naar deze locatie"
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Notitieboeken mogen niet \"%s\" heten; dit is een gereserveerde titel."
-
-msgid "title"
-msgstr "titel"
-
-msgid "updated date"
-msgstr "bijgewerkt op"
 
 msgid "created date"
 msgstr "gecreëerd op"
@@ -1376,6 +1376,10 @@ msgstr "Notities sorteren op"
 
 msgid "Reverse sort order"
 msgstr "Sorteervolgorde omdraaien"
+
+#, fuzzy
+msgid "Sort notebooks by"
+msgstr "Notities sorteren op"
 
 msgid "Save geo-location with notes"
 msgstr "Locatie opslaan in notities"
@@ -1888,9 +1892,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Welkom"
-
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "Scheidt elk label met een komma."
 
 #~ msgid "State: %s."
 #~ msgstr "Status: %s."

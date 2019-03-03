@@ -911,6 +911,9 @@ msgstr "記事本標題:"
 msgid "Add or remove tags:"
 msgstr "新增或移除標籤:"
 
+msgid "Separate each tag by a comma."
+msgstr "您可用逗號分隔每個標籤。"
+
 msgid "Rename notebook:"
 msgstr "重新命名記事本:"
 
@@ -1106,9 +1109,6 @@ msgstr "資源: %d。"
 msgid "Please select where the sync status should be exported to"
 msgstr "請選擇將同步狀態導出到的位置"
 
-msgid "Remove?"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "新增或移除標籤"
 
@@ -1256,6 +1256,12 @@ msgstr "已加密"
 msgid "Encrypted items cannot be modified"
 msgstr "無法修改已加密項目"
 
+msgid "title"
+msgstr "標題"
+
+msgid "updated date"
+msgstr "更新日期"
+
 msgid "Conflicts"
 msgstr "衝突"
 
@@ -1265,12 +1271,6 @@ msgstr "無法移動記事本到此位置"
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "筆記本無法命名為 \"%s\"，這標題已被保留。"
-
-msgid "title"
-msgstr "標題"
-
-msgid "updated date"
-msgstr "更新日期"
 
 msgid "created date"
 msgstr "建立日期"
@@ -1315,6 +1315,10 @@ msgstr "排序記事"
 
 msgid "Reverse sort order"
 msgstr "顛倒排序順序"
+
+#, fuzzy
+msgid "Sort notebooks by"
+msgstr "排序記事"
 
 msgid "Save geo-location with notes"
 msgstr "在記事中保存地理位置資訊"
@@ -1806,9 +1810,6 @@ msgstr "您當前沒有任何筆記本。通過按一下 (+) 鍵去建立一本�
 
 msgid "Welcome"
 msgstr "歡迎"
-
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "您可用逗號分隔每個標籤。"
 
 #~ msgid "State: %s."
 #~ msgstr "狀態: %s。"

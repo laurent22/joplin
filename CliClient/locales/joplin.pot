@@ -848,6 +848,9 @@ msgstr ""
 msgid "Add or remove tags:"
 msgstr ""
 
+msgid "Separate each tag by a comma."
+msgstr ""
+
 msgid "Rename notebook:"
 msgstr ""
 
@@ -1043,9 +1046,6 @@ msgstr ""
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 
-msgid "Remove?"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr ""
 
@@ -1186,6 +1186,12 @@ msgstr ""
 msgid "Encrypted items cannot be modified"
 msgstr ""
 
+msgid "title"
+msgstr ""
+
+msgid "updated date"
+msgstr ""
+
 msgid "Conflicts"
 msgstr ""
 
@@ -1194,12 +1200,6 @@ msgstr ""
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr ""
-
-msgid "title"
-msgstr ""
-
-msgid "updated date"
 msgstr ""
 
 msgid "created date"
@@ -1244,6 +1244,9 @@ msgid "Sort notes by"
 msgstr ""
 
 msgid "Reverse sort order"
+msgstr ""
+
+msgid "Sort notebooks by"
 msgstr ""
 
 msgid "Save geo-location with notes"

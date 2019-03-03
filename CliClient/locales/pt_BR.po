@@ -16,8 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.1\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Para eliminar uma tag, remova a tag das notas associadas a ela."
@@ -957,6 +955,9 @@ msgstr "Título do caderno:"
 msgid "Add or remove tags:"
 msgstr "Adicionar ou remover tags:"
 
+msgid "Separate each tag by a comma."
+msgstr "Separe cada tag por vírgula."
+
 msgid "Rename notebook:"
 msgstr "Renomear caderno:"
 
@@ -1158,9 +1159,6 @@ msgstr ""
 "Favor selecionar o local para onde o status de sincronia deveria ser "
 "exportado"
 
-msgid "Remove?"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "Adicionar ou remover tags"
 
@@ -1309,6 +1307,12 @@ msgstr "Encriptado"
 msgid "Encrypted items cannot be modified"
 msgstr "Itens encriptados não podem ser modificados"
 
+msgid "title"
+msgstr "título"
+
+msgid "updated date"
+msgstr "data de atualização"
+
 msgid "Conflicts"
 msgstr "Conflitos"
 
@@ -1319,12 +1323,6 @@ msgstr "Não é possível mover a nota para este local"
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "Os cadernos não podem ser nomeados como\"%s\", que é um título reservado."
-
-msgid "title"
-msgstr "título"
-
-msgid "updated date"
-msgstr "data de atualização"
 
 msgid "created date"
 msgstr "data de criação"
@@ -1369,6 +1367,10 @@ msgstr "Ordenar notas por"
 
 msgid "Reverse sort order"
 msgstr "Inverter ordem de classificação"
+
+#, fuzzy
+msgid "Sort notebooks by"
+msgstr "Ordenar notas por"
 
 msgid "Save geo-location with notes"
 msgstr "Salvar  geolocalização com notas"
@@ -1884,9 +1886,6 @@ msgstr "Você não possui cadernos. Crie um clicando no botão (+)."
 
 msgid "Welcome"
 msgstr "Bem-vindo"
-
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "Separe cada tag por vírgula."
 
 #~ msgid "Delete notes?"
 #~ msgstr "Excluir notas?"

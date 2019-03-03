@@ -958,6 +958,9 @@ msgstr "Titel på anteckningsbok:"
 msgid "Add or remove tags:"
 msgstr "Lägg till eller ta bort taggar:"
 
+msgid "Separate each tag by a comma."
+msgstr "Separera varje tagg med ett komma."
+
 msgid "Rename notebook:"
 msgstr "Byt namn på anteckningsbok:"
 
@@ -1160,9 +1163,6 @@ msgstr "Hämtar resurser: %d"
 msgid "Please select where the sync status should be exported to"
 msgstr "Välj vart synkroniseringstillståndet ska exporteras till"
 
-msgid "Remove?"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "Lägg till eller ta bort taggar"
 
@@ -1313,6 +1313,12 @@ msgstr "Krypterad"
 msgid "Encrypted items cannot be modified"
 msgstr "Krypterade objekt kan inte ändras"
 
+msgid "title"
+msgstr "titel"
+
+msgid "updated date"
+msgstr "uppdaterad datum"
+
 msgid "Conflicts"
 msgstr "Konflikter"
 
@@ -1323,12 +1329,6 @@ msgstr "Kan inte flytta anteckningsbok till den här platsen"
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "Anteckningsböcker kan inte namnges \"%s\", vilket är en reserverad titel."
-
-msgid "title"
-msgstr "titel"
-
-msgid "updated date"
-msgstr "uppdaterad datum"
 
 msgid "created date"
 msgstr "skapad datum"
@@ -1373,6 +1373,10 @@ msgstr "Sortera anteckningar efter"
 
 msgid "Reverse sort order"
 msgstr "Omvänd sorteringsordning"
+
+#, fuzzy
+msgid "Sort notebooks by"
+msgstr "Sortera anteckningar efter"
 
 msgid "Save geo-location with notes"
 msgstr "Spara geolokalisering med anteckningar"
@@ -1890,9 +1894,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Välkommen"
-
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "Separera varje tagg med ett komma."
 
 #~ msgid "State: %s."
 #~ msgstr "Tillstånd: %s."

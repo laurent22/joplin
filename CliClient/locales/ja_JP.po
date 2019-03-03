@@ -942,6 +942,9 @@ msgstr "ノートブックの題名："
 msgid "Add or remove tags:"
 msgstr "タグの追加・削除："
 
+msgid "Separate each tag by a comma."
+msgstr "それぞれのタグをカンマ(,)で区切ってください。"
+
 msgid "Rename notebook:"
 msgstr "ノートブックの名前を変更："
 
@@ -1141,9 +1144,6 @@ msgstr "取得中のリソース: %d"
 msgid "Please select where the sync status should be exported to"
 msgstr "同期状況の出力先を選択してください"
 
-msgid "Remove?"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "タグの追加と削除"
 
@@ -1292,6 +1292,12 @@ msgstr "暗号化済"
 msgid "Encrypted items cannot be modified"
 msgstr "暗号化したアイテムは修正できません"
 
+msgid "title"
+msgstr "タイトル"
+
+msgid "updated date"
+msgstr "アップデート日"
+
 msgid "Conflicts"
 msgstr "衝突"
 
@@ -1303,12 +1309,6 @@ msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "\"%s\" というノートブックの名称はシステムで使用するために予約済みです。名称の"
 "変更はできません。"
-
-msgid "title"
-msgstr "タイトル"
-
-msgid "updated date"
-msgstr "アップデート日"
 
 msgid "created date"
 msgstr "作成日"
@@ -1353,6 +1353,10 @@ msgstr "ノートのソート方法"
 
 msgid "Reverse sort order"
 msgstr "逆順に並び替え"
+
+#, fuzzy
+msgid "Sort notebooks by"
+msgstr "ノートのソート方法"
 
 msgid "Save geo-location with notes"
 msgstr "ノートに位置情報を保存"
@@ -1862,9 +1866,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
-
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "それぞれのタグをカンマ(,)で区切ってください。"
 
 #~ msgid "State: %s."
 #~ msgstr "状態: \"%s\"."

@@ -18,8 +18,6 @@ msgstr ""
 "X-Generator: Poedit 2.2.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Desmarque las notas asociadas para eliminar una etiqueta."
@@ -950,6 +948,9 @@ msgstr "Título de libreta:"
 msgid "Add or remove tags:"
 msgstr "Agregar o borrar etiquetas:"
 
+msgid "Separate each tag by a comma."
+msgstr "Separar cada etiqueta por una coma."
+
 msgid "Rename notebook:"
 msgstr "Renombrar libreta:"
 
@@ -1150,9 +1151,6 @@ msgstr "Obteniendo refuersos: %d"
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccione a dónde se debería exportar el estado de sincronización"
 
-msgid "Remove?"
-msgstr "¿Borrar?"
-
 msgid "Add or remove tags"
 msgstr "Añadir o borrar etiquetas"
 
@@ -1301,6 +1299,12 @@ msgstr "Cifrado"
 msgid "Encrypted items cannot be modified"
 msgstr "Los elementos cifrados no pueden ser modificados"
 
+msgid "title"
+msgstr "título"
+
+msgid "updated date"
+msgstr "fecha de actualización"
+
 msgid "Conflicts"
 msgstr "Conflictos"
 
@@ -1311,12 +1315,6 @@ msgstr "No se puede mover la libreta a este lugar"
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "No se puede usar el nombre «%s» para una libreta; es un título reservado."
-
-msgid "title"
-msgstr "título"
-
-msgid "updated date"
-msgstr "fecha de actualización"
 
 msgid "created date"
 msgstr "fecha de creación"
@@ -1361,6 +1359,10 @@ msgstr "Ordenar notas por"
 
 msgid "Reverse sort order"
 msgstr "Invierte el orden"
+
+#, fuzzy
+msgid "Sort notebooks by"
+msgstr "Ordenar notas por"
 
 msgid "Save geo-location with notes"
 msgstr "Guardar geolocalización en las notas"
@@ -1874,8 +1876,8 @@ msgstr ""
 msgid "Welcome"
 msgstr "Bienvenido"
 
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "Separar cada etiqueta por una coma."
+#~ msgid "Remove?"
+#~ msgstr "¿Borrar?"
 
 #~ msgid "Delete notes?"
 #~ msgstr "¿Desea eliminar notas?"

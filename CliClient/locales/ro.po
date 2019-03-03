@@ -872,6 +872,9 @@ msgstr "Titlul caietului de notițe:"
 msgid "Add or remove tags:"
 msgstr "Adăugați ori eliminați etichete:"
 
+msgid "Separate each tag by a comma."
+msgstr "Separați fiecare etichetă printr-o virgulă."
+
 msgid "Rename notebook:"
 msgstr "Redenumiți caietul de notițe:"
 
@@ -1067,9 +1070,6 @@ msgstr "Resurse: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 
-msgid "Remove?"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "Adăugați ori eliminați etichete"
 
@@ -1213,6 +1213,12 @@ msgstr "Criptat"
 msgid "Encrypted items cannot be modified"
 msgstr "Itemii criptați nu pot fi editați"
 
+msgid "title"
+msgstr "titlu"
+
+msgid "updated date"
+msgstr "data actualizării"
+
 msgid "Conflicts"
 msgstr "Conflicte"
 
@@ -1222,12 +1228,6 @@ msgstr "Nu se poate muta caietul de notițe în această locație"
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
-
-msgid "title"
-msgstr "titlu"
-
-msgid "updated date"
-msgstr "data actualizării"
 
 msgid "created date"
 msgstr "data creării"
@@ -1272,6 +1272,10 @@ msgstr "Sortați notițele după"
 
 msgid "Reverse sort order"
 msgstr "Inversați ordinea sortării"
+
+#, fuzzy
+msgid "Sort notebooks by"
+msgstr "Sortați notițele după"
 
 msgid "Save geo-location with notes"
 msgstr "Salvați geo-locația în  notițe"
@@ -1750,9 +1754,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bine ați venit"
-
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "Separați fiecare etichetă printr-o virgulă."
 
 #~ msgid "State: %s."
 #~ msgstr "Statut: %s."

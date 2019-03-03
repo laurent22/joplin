@@ -967,6 +967,9 @@ msgstr "Notizbuch-Titel:"
 msgid "Add or remove tags:"
 msgstr "Schlagwörter hinzufügen oder entfernen:"
 
+msgid "Separate each tag by a comma."
+msgstr "Trenne jedes Schlagwort mit einem Komma."
+
 msgid "Rename notebook:"
 msgstr "Notizbuch umbenennen:"
 
@@ -1173,9 +1176,6 @@ msgid "Please select where the sync status should be exported to"
 msgstr ""
 "Bitte wähle aus, wohin der Synchronisations-Status exportiert werden soll"
 
-msgid "Remove?"
-msgstr "Löschen?"
-
 msgid "Add or remove tags"
 msgstr "Schlagwörter hinzufügen oder entfernen"
 
@@ -1324,6 +1324,12 @@ msgstr "Verschlüsselt"
 msgid "Encrypted items cannot be modified"
 msgstr "Verschlüsselte Objekte können nicht verändert werden"
 
+msgid "title"
+msgstr "Titel"
+
+msgid "updated date"
+msgstr "Aktualisierungsdatum"
+
 msgid "Conflicts"
 msgstr "Konflikte"
 
@@ -1334,12 +1340,6 @@ msgstr "Kann Notizbuch nicht an diesen Ort verschieben"
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "Notizbuch kann nicht \"%s\" genannt werden. Dieser Name ist reserviert.."
-
-msgid "title"
-msgstr "Titel"
-
-msgid "updated date"
-msgstr "Aktualisierungsdatum"
 
 msgid "created date"
 msgstr "Erstelldatum"
@@ -1384,6 +1384,10 @@ msgstr "Sortiere Notizen nach"
 
 msgid "Reverse sort order"
 msgstr "Sortierreihenfolge umdrehen"
+
+#, fuzzy
+msgid "Sort notebooks by"
+msgstr "Sortiere Notizen nach"
 
 msgid "Save geo-location with notes"
 msgstr "Momentanen Standort zusammen mit Notizen speichern"
@@ -1903,8 +1907,8 @@ msgstr ""
 msgid "Welcome"
 msgstr "Willkommen"
 
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "Trenne jedes Schlagwort mit einem Komma."
+#~ msgid "Remove?"
+#~ msgstr "Löschen?"
 
 #~ msgid "Delete notes?"
 #~ msgstr "Notizen löschen?"

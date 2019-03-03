@@ -943,6 +943,9 @@ msgstr "Notesbogs titel:"
 msgid "Add or remove tags:"
 msgstr "Tilføj eller slet mærker:"
 
+msgid "Separate each tag by a comma."
+msgstr "Adskil hver mærke med komma."
+
 msgid "Rename notebook:"
 msgstr "Omdøb notesbog:"
 
@@ -1142,9 +1145,6 @@ msgstr "Ressourcer: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Vælg hvor sync status skal eksporteres til"
 
-msgid "Remove?"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "Tilføj eller slet mærker"
 
@@ -1297,6 +1297,14 @@ msgstr "Krypteret"
 msgid "Encrypted items cannot be modified"
 msgstr "Krypteret emner kan ikke rettes"
 
+#, fuzzy
+msgid "title"
+msgstr "Samlet"
+
+#, fuzzy
+msgid "updated date"
+msgstr "Opdateret %d."
+
 msgid "Conflicts"
 msgstr "Konflikter"
 
@@ -1307,14 +1315,6 @@ msgstr "Kan ikke flytte note til \"%s\" notesbog"
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Notesbøger kan ikke få navnet \"%s\", da det er en beskyttet titel."
-
-#, fuzzy
-msgid "title"
-msgstr "Samlet"
-
-#, fuzzy
-msgid "updated date"
-msgstr "Opdateret %d."
 
 #, fuzzy
 msgid "created date"
@@ -1361,6 +1361,10 @@ msgstr "Sorter noter efter"
 
 msgid "Reverse sort order"
 msgstr "Modsat sorterings orden"
+
+#, fuzzy
+msgid "Sort notebooks by"
+msgstr "Sorter noter efter"
 
 msgid "Save geo-location with notes"
 msgstr "Gem geo-lokation i noter"
@@ -1859,9 +1863,6 @@ msgstr "Du har ingen notesbøger. Opret en ved at klikke på (+) knappen."
 
 msgid "Welcome"
 msgstr "Velkommen"
-
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "Adskil hver mærke med komma."
 
 #~ msgid "State: %s."
 #~ msgstr "Tilstand: %s."

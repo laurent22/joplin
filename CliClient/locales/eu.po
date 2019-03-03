@@ -951,6 +951,9 @@ msgstr "Koadernoaren izenburua: "
 msgid "Add or remove tags:"
 msgstr "Gehitu edo ezabatu etiketak:"
 
+msgid "Separate each tag by a comma."
+msgstr "Banatu etiketak koma erabiliaz."
+
 msgid "Rename notebook:"
 msgstr "Berrizendatu koadernoa:"
 
@@ -1155,9 +1158,6 @@ msgstr "Baliabideak: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Aukeratu nora esportatu sinkronizazioaren egoera, mesedez"
 
-msgid "Remove?"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "Gehitu edo ezabatu etiketak"
 
@@ -1310,6 +1310,14 @@ msgstr "Zifratuta"
 msgid "Encrypted items cannot be modified"
 msgstr "Zifratutako itemak ezin aldatu daitezke"
 
+#, fuzzy
+msgid "title"
+msgstr "Titulu gabekoa"
+
+#, fuzzy
+msgid "updated date"
+msgstr "Eguneratuta: %d."
+
 msgid "Conflicts"
 msgstr "Gatazkak"
 
@@ -1321,14 +1329,6 @@ msgstr "Ezin eraman daiteke oharra \"%s\" koadernora"
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "Koadernoak ezin izendatu daitezke \"%s\", izen hori Joplinek gordeta dauka"
-
-#, fuzzy
-msgid "title"
-msgstr "Titulu gabekoa"
-
-#, fuzzy
-msgid "updated date"
-msgstr "Eguneratuta: %d."
 
 #, fuzzy
 msgid "created date"
@@ -1377,6 +1377,10 @@ msgstr ""
 #, fuzzy
 msgid "Reverse sort order"
 msgstr "Alderantziz antolatzen du."
+
+#, fuzzy
+msgid "Sort notebooks by"
+msgstr "Editatu koadernoa"
 
 msgid "Save geo-location with notes"
 msgstr "Gore geokokapena oharrekin"
@@ -1879,9 +1883,6 @@ msgstr "Oraindik ez duzu koadernorik. Sortu bat (+) botoian sakatuta."
 
 msgid "Welcome"
 msgstr "Ongi etorri!"
-
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "Banatu etiketak koma erabiliaz."
 
 #, fuzzy
 #~ msgid "State: %s."

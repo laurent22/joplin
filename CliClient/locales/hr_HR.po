@@ -938,6 +938,9 @@ msgstr "Naslov bilježnice:"
 msgid "Add or remove tags:"
 msgstr "Dodaj ili makni oznake:"
 
+msgid "Separate each tag by a comma."
+msgstr "Odvoji oznake zarezom."
+
 msgid "Rename notebook:"
 msgstr "Preimenuj bilježnicu:"
 
@@ -1142,9 +1145,6 @@ msgstr "Resursi: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Odaberi lokaciju za izvoz statusa sinkronizacije"
 
-msgid "Remove?"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "Dodaj ili makni oznake"
 
@@ -1295,6 +1295,14 @@ msgstr ""
 msgid "Encrypted items cannot be modified"
 msgstr "Neke stavke se ne mogu sinkronizirati."
 
+#, fuzzy
+msgid "title"
+msgstr "Nenaslovljen"
+
+#, fuzzy
+msgid "updated date"
+msgstr "Ažurirano: %d."
+
 msgid "Conflicts"
 msgstr "Sukobi"
 
@@ -1305,14 +1313,6 @@ msgstr "Ne mogu premjestiti bilješku u bilježnicu %s"
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Naslov \"%s\" je rezerviran i ne može se koristiti."
-
-#, fuzzy
-msgid "title"
-msgstr "Nenaslovljen"
-
-#, fuzzy
-msgid "updated date"
-msgstr "Ažurirano: %d."
 
 #, fuzzy
 msgid "created date"
@@ -1361,6 +1361,10 @@ msgstr ""
 #, fuzzy
 msgid "Reverse sort order"
 msgstr "Mijenja redoslijed."
+
+#, fuzzy
+msgid "Sort notebooks by"
+msgstr "Uredi bilježnicu"
 
 msgid "Save geo-location with notes"
 msgstr "Spremi geolokacijske podatke sa bilješkama"
@@ -1857,9 +1861,6 @@ msgstr "Trenutno nemaš nijednu bilježnicu. Stvori novu klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobro došli"
-
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "Odvoji oznake zarezom."
 
 #, fuzzy
 #~ msgid "State: %s."

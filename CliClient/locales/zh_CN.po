@@ -903,6 +903,9 @@ msgstr "笔记本标题："
 msgid "Add or remove tags:"
 msgstr "添加或删除标签："
 
+msgid "Separate each tag by a comma."
+msgstr "用半角逗号 \",\" 分开每个标签。"
+
 msgid "Rename notebook:"
 msgstr "重命名笔记本："
 
@@ -1098,9 +1101,6 @@ msgstr "获取资源：%d。"
 msgid "Please select where the sync status should be exported to"
 msgstr "请选择同步状态的导出位置"
 
-msgid "Remove?"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "添加或删除标签"
 
@@ -1246,6 +1246,12 @@ msgstr "已加密"
 msgid "Encrypted items cannot be modified"
 msgstr "无法修改已加密项目"
 
+msgid "title"
+msgstr "标题"
+
+msgid "updated date"
+msgstr "更新日期"
+
 msgid "Conflicts"
 msgstr "冲突"
 
@@ -1255,12 +1261,6 @@ msgstr "无法移动笔记本到该位置"
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "笔记本无法被命名为 \"%s\"，该标题为保留标题。"
-
-msgid "title"
-msgstr "标题"
-
-msgid "updated date"
-msgstr "更新日期"
 
 msgid "created date"
 msgstr "创建日期"
@@ -1305,6 +1305,10 @@ msgstr "排序笔记"
 
 msgid "Reverse sort order"
 msgstr "反转排序顺序"
+
+#, fuzzy
+msgid "Sort notebooks by"
+msgstr "排序笔记"
 
 msgid "Save geo-location with notes"
 msgstr "保存地理定位信息到笔记中"
@@ -1795,9 +1799,6 @@ msgstr "您目前未有笔记本。点击 (+) 按钮创建。"
 
 msgid "Welcome"
 msgstr "欢迎"
-
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "用半角逗号 \",\" 分开每个标签。"
 
 #~ msgid "State: %s."
 #~ msgstr "状态：%s。"

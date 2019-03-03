@@ -951,6 +951,9 @@ msgstr "Tittel på notatbok:"
 msgid "Add or remove tags:"
 msgstr "Legge til eller fjern merkelapp:"
 
+msgid "Separate each tag by a comma."
+msgstr "Separer hver merkelapp med komma."
+
 msgid "Rename notebook:"
 msgstr "Gi nytt navn til notatbok:"
 
@@ -1150,9 +1153,6 @@ msgstr "Henter ressurser: %d"
 msgid "Please select where the sync status should be exported to"
 msgstr "Velg hvor synkroniseringsstatusen skal eksporteres til"
 
-msgid "Remove?"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "Legg til eller fjern merkelapper"
 
@@ -1301,6 +1301,12 @@ msgstr "Kryptert"
 msgid "Encrypted items cannot be modified"
 msgstr "Krypterte elementer kan ikke modifiseres"
 
+msgid "title"
+msgstr "tittel"
+
+msgid "updated date"
+msgstr "sist oppdatert"
+
 msgid "Conflicts"
 msgstr "Konflikter"
 
@@ -1310,12 +1316,6 @@ msgstr "Kan ikke flytte notatboken til denne plasseringen"
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Notatbøker kan ikke hete %s, som er en reservert tittel."
-
-msgid "title"
-msgstr "tittel"
-
-msgid "updated date"
-msgstr "sist oppdatert"
 
 msgid "created date"
 msgstr "opprettet"
@@ -1360,6 +1360,10 @@ msgstr "Sorter notater etter"
 
 msgid "Reverse sort order"
 msgstr "Reverser sorteringsrekkefølge"
+
+#, fuzzy
+msgid "Sort notebooks by"
+msgstr "Sorter notater etter"
 
 msgid "Save geo-location with notes"
 msgstr "Lagre stedsinformasjon med notater"
@@ -1870,6 +1874,3 @@ msgstr "Du har enda ingen notatbok. Lag en ved å klikke på (+)-knappen."
 
 msgid "Welcome"
 msgstr "Velkommen"
-
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "Separer hver merkelapp med komma."

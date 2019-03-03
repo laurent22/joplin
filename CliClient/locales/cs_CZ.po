@@ -934,6 +934,9 @@ msgstr "Název zápisníku:"
 msgid "Add or remove tags:"
 msgstr "Přidat či odebrat tagy:"
 
+msgid "Separate each tag by a comma."
+msgstr "Tagy oddělujte čárkami."
+
 msgid "Rename notebook:"
 msgstr "Přejmenovat zápisník:"
 
@@ -1133,9 +1136,6 @@ msgstr "Zdroje: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Prosím vyberte, kam má být stav synchronizace exportován"
 
-msgid "Remove?"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "Přidat či odebrat tagy"
 
@@ -1288,6 +1288,14 @@ msgstr "Zašifrováno"
 msgid "Encrypted items cannot be modified"
 msgstr "Nelze editovat zašifrovanou položku"
 
+#, fuzzy
+msgid "title"
+msgstr "Bez názvu"
+
+#, fuzzy
+msgid "updated date"
+msgstr "Upraveno: %d."
+
 msgid "Conflicts"
 msgstr "Konflikty"
 
@@ -1298,14 +1306,6 @@ msgstr "Poznámku nelze přesunout do zápisníku \"%s\""
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Zápisník se nemůže jmenovat \"%s\", tento název je rezervován."
-
-#, fuzzy
-msgid "title"
-msgstr "Bez názvu"
-
-#, fuzzy
-msgid "updated date"
-msgstr "Upraveno: %d."
 
 #, fuzzy
 msgid "created date"
@@ -1352,6 +1352,10 @@ msgstr "Řadit poznámky podle"
 
 msgid "Reverse sort order"
 msgstr "Řadit od konce"
+
+#, fuzzy
+msgid "Sort notebooks by"
+msgstr "Řadit poznámky podle"
 
 msgid "Save geo-location with notes"
 msgstr "Ukládat k poznámkám informace o poloze (geolokaci)"
@@ -1850,9 +1854,6 @@ msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na tlačítko (+
 
 msgid "Welcome"
 msgstr "Vítejte"
-
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "Tagy oddělujte čárkami."
 
 #~ msgid "State: %s."
 #~ msgstr "Stav: %s."

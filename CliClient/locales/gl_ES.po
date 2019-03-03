@@ -941,6 +941,9 @@ msgstr "Título do caderno:"
 msgid "Add or remove tags:"
 msgstr "Engadir ou eliminar etiquetas:"
 
+msgid "Separate each tag by a comma."
+msgstr "Separar cada etiqueta por unha coma."
+
 msgid "Rename notebook:"
 msgstr "Renomear caderno:"
 
@@ -1142,9 +1145,6 @@ msgstr "Recursos: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccione onde exportar o estado da sincronización"
 
-msgid "Remove?"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "Engadir ou eliminar etiquetas"
 
@@ -1297,6 +1297,14 @@ msgstr "Cifrado"
 msgid "Encrypted items cannot be modified"
 msgstr "Non é posíbel modificar elementos cifrados"
 
+#, fuzzy
+msgid "title"
+msgstr "Sen título"
+
+#, fuzzy
+msgid "updated date"
+msgstr "Actualizado: %d."
+
 msgid "Conflicts"
 msgstr "Conflitos"
 
@@ -1307,14 +1315,6 @@ msgstr "Non é posíbel mover a nota ao caderno «%s»"
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Os cadernos non poden levar o nome «%s» porque é un título reservado."
-
-#, fuzzy
-msgid "title"
-msgstr "Sen título"
-
-#, fuzzy
-msgid "updated date"
-msgstr "Actualizado: %d."
 
 #, fuzzy
 msgid "created date"
@@ -1361,6 +1361,10 @@ msgstr "Ordenar notas por"
 
 msgid "Reverse sort order"
 msgstr "Orde inversa"
+
+#, fuzzy
+msgid "Sort notebooks by"
+msgstr "Ordenar notas por"
 
 msgid "Save geo-location with notes"
 msgstr "Gardar xeolocalización coas notas"
@@ -1859,9 +1863,6 @@ msgstr "Non ten cadernos actualmente. Cree un premendo no botón (+)."
 
 msgid "Welcome"
 msgstr "Benvido/a"
-
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "Separar cada etiqueta por unha coma."
 
 #~ msgid "State: %s."
 #~ msgstr "Estado: %s."

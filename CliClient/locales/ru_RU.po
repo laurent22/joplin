@@ -957,6 +957,9 @@ msgstr "Название блокнота:"
 msgid "Add or remove tags:"
 msgstr "Добавить или удалить метки:"
 
+msgid "Separate each tag by a comma."
+msgstr "Разделяйте каждую метку запятой."
+
 msgid "Rename notebook:"
 msgstr "Переименовать блокнот:"
 
@@ -1158,9 +1161,6 @@ msgid "Please select where the sync status should be exported to"
 msgstr ""
 "Пожалуйста, выберите, куда должен быть экспортирован статус синхронизации"
 
-msgid "Remove?"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "Добавить или удалить метки"
 
@@ -1309,6 +1309,12 @@ msgstr "Зашифровано"
 msgid "Encrypted items cannot be modified"
 msgstr "Зашифрованные элементы не могут быть изменены"
 
+msgid "title"
+msgstr "заголовок"
+
+msgid "updated date"
+msgstr "дата обновления"
+
 msgid "Conflicts"
 msgstr "Конфликты"
 
@@ -1319,12 +1325,6 @@ msgstr "Не удается переместить блокнот в это ра
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "Блокнот не может быть назван \"%s\", так как это зарезервированное название."
-
-msgid "title"
-msgstr "заголовок"
-
-msgid "updated date"
-msgstr "дата обновления"
 
 msgid "created date"
 msgstr "дата создания"
@@ -1369,6 +1369,10 @@ msgstr "Сортировать заметки по"
 
 msgid "Reverse sort order"
 msgstr "Обратный порядок сортировки"
+
+#, fuzzy
+msgid "Sort notebooks by"
+msgstr "Сортировать заметки по"
 
 msgid "Save geo-location with notes"
 msgstr "Сохранять информацию о геолокации в заметках"
@@ -1881,6 +1885,3 @@ msgstr "У вас сейчас нет блокнота. Создайте его 
 
 msgid "Welcome"
 msgstr "Добро пожаловать"
-
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "Разделяйте каждую метку запятой."
