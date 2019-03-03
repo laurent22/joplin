@@ -37,10 +37,10 @@ async function main() {
 	if (isWindows()) exePath += '.cmd';
 
 	if (isWindows()) {
-		console.info(await execCommand(['node', '"' + exePath + '"', '--arch ia32'].join(' ')));
-		console.info(await execCommand(['node', '"' + exePath + '"', '--arch x64'].join(' ')));
+		console.info(await execCommand(['"' + exePath + '"', '--arch ia32'].join(' ')));
+		console.info(await execCommand(['"' + exePath + '"', '--arch x64'].join(' ')));
 	} else {
-		console.info(await execCommand(['node', '"' + exePath + '"'].join(' ')));
+		console.info(await execCommand(['"' + exePath + '"'].join(' ')));
 	}	
 }
 
