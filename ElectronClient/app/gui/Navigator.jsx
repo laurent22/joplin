@@ -17,7 +17,11 @@ class NavigatorComponent extends Component {
 	}
 
 	updateWindowTitle(title) {
-		if (bridge().window()) bridge().window().setTitle(title);
+		try {
+			if (bridge().window()) bridge().window().setTitle(title);
+		} catch (error) {
+			console.warn('updateWindowTitle', error);
+		}
 	}
 
 	render() {

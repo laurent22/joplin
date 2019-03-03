@@ -15,7 +15,7 @@ class MdToHtml_Mermaid {
 		// Force a white background because the graphs can have various colours
 		// that may not be compatible with the current theme. Also make it
 		// inline-block so that the div is the same size as the content.
-		return '.mermaid { background-color: white; display:inline-block; }';
+		return '.mermaid { width: 100%; } .mermaid svg { background-color: white; }';
 	}
 
 	injectedJavaScript() {
