@@ -1,0 +1,31 @@
+{
+  "extends": ["config:base", ":rebaseStalePrs"],
+  "packageRules": [
+    {
+      "paths": ["CliClient/package.json"],
+    },
+    {
+      "paths": ["Clipper/joplin-webclipper/package.json"],
+      "labels": ["clipper"]
+    },
+    {
+      "paths": ["Clipper/joplin-webclipper/popup/package.json"],
+      "labels": ["clipper"]
+    },
+    {
+      "paths": ["ElectronClient/app/package.json"],
+      "labels": ["desktop"]
+    },
+    {
+      "paths": ["ReactNativeClient/lib/package.json"],
+      "labels": ["mobile"]
+    },
+    {
+      "paths": ["ReactNativeClient/package.json"],
+      "labels": ["mobile"]
+    },
+    {
+      "paths": ["Tools/package.json"]
+    }
+  ]
+}
