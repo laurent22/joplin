@@ -818,7 +818,7 @@ msgid "Authorisation token:"
 msgstr "Token de autorização:"
 
 msgid "Copy token"
-msgstr "Copira token"
+msgstr "Copiar token"
 
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
