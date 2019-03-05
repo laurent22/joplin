@@ -20,10 +20,12 @@ function installRule(markdownIt, style, mdOptions, ruleOptions) {
 		const mime = resource.mime ? resource.mime.toLowerCase() : '';
 		if (Resource.isSupportedImageMimeType(mime)) {
 			let realSrc = './' + Resource.filename(resource);
-			if (ruleOptions.resourceBaseUrl !== null) realSrc = ruleOptions.resourceBaseUrl + realSrc;
+			if (ruleOptions.resourceBaseUrl) realSrc = ruleOptions.resourceBaseUrl + realSrc;
 			let output = '<img data-from-md data-resource-id="' + resource.id + '" title="' + htmlentities(title) + '" src="' + realSrc + '"/>';
 			return output;
 		}
+
+		return defaultRender(tokens, idx, options, env, self);
 	};
 }
 
