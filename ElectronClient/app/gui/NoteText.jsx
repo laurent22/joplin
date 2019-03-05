@@ -12,7 +12,7 @@ const TagList = require('./TagList.min.js');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const { reg } = require('lib/registry.js');
-const MdToHtml = require('lib/MdToHtml');
+const MdToHtml = require('lib/MdToHtml2');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const { themeStyle } = require('../theme.js');
@@ -36,6 +36,7 @@ const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { toSystemSlashes, safeFilename } = require('lib/path-utils');
 const { clipboard } = require('electron');
 const SearchEngine = require('lib/services/SearchEngine');
+const ModelCache = require('lib/services/ModelCache');
 const NoteTextViewer = require('./NoteTextViewer.min');
 
 require('brace/mode/markdown');
@@ -228,7 +229,8 @@ class NoteTextComponent extends React.Component {
 			if (resourceIds.indexOf(resource.id) >= 0) {
 				this.mdToHtml().clearCache();
 				this.lastSetHtml_ = '';
-				this.updateHtml(this.state.note.body);
+				this.scheduleHtmlUpdate();
+				//this.updateHtml(this.state.note.body);
 			}
 		}
 
@@ -563,6 +565,8 @@ class NoteTextComponent extends React.Component {
 			}
 		}
 
+		// if (newState.note) await shared.refreshAttachedResources(this, newState.note.body);
+
 		this.updateHtml(newState.note ? newState.note.body : '');
 	}
 
@@ -794,7 +798,7 @@ class NoteTextComponent extends React.Component {
 		});
 
 		if (Setting.value('env') === 'dev') {
-			// this.webviewRef_.current.wrappedInstance.openDevTools();
+			this.webviewRef_.current.wrappedInstance.openDevTools();
 		}
 	}
 
@@ -891,31 +895,33 @@ class NoteTextComponent extends React.Component {
 		}
 	}
 
-	updateHtml(body = null, options = null) {
+	async updateHtml(body = null, options = null) {
 		if (!options) options = {};
 		if (!('useCustomCss' in options)) options.useCustomCss = true;
 
-		const mdOptions = {
-			onResourceLoaded: () => {
-				if (this.resourceLoadedTimeoutId_) {
-					clearTimeout(this.resourceLoadedTimeoutId_);
-					this.resourceLoadedTimeoutId_ = null;
-				}
+		let bodyToRender = body;
+		if (bodyToRender === null) bodyToRender = this.state.note && this.state.note.body ? this.state.note.body : '';
 
-				this.resourceLoadedTimeoutId_ = setTimeout(() => {
-					this.resourceLoadedTimeoutId_ = null;
-					this.updateHtml();
-					this.forceUpdate();
-				}, 100);
-			},
+		const mdOptions = {
+			// onResourceLoaded: () => {
+			// 	if (this.resourceLoadedTimeoutId_) {
+			// 		clearTimeout(this.resourceLoadedTimeoutId_);
+			// 		this.resourceLoadedTimeoutId_ = null;
+			// 	}
+
+			// 	this.resourceLoadedTimeoutId_ = setTimeout(() => {
+			// 		this.resourceLoadedTimeoutId_ = null;
+			// 		this.updateHtml();
+			// 		this.forceUpdate();
+			// 	}, 100);
+			// },
 			postMessageSyntax: 'ipcProxySendToHost',
 			userCss: options.useCustomCss ? this.props.customCss : '',
+			resources: await shared.attachedResources(bodyToRender),
 		};
 
 		const theme = themeStyle(this.props.theme);
 
-		let bodyToRender = body;
-		if (bodyToRender === null) bodyToRender = this.state.note && this.state.note.body ? this.state.note.body : '';
 		let bodyHtml = '';
 
 		const visiblePanes = this.props.visiblePanes || ['editor', 'viewer'];
@@ -1061,7 +1067,7 @@ class NoteTextComponent extends React.Component {
 		});
 	}
 
-	printTo_(target, options) {
+	async printTo_(target, options) {
 		if (this.props.selectedNoteIds.length !== 1 || !this.webviewRef_.current) {
 			throw new Error(_('Only one note can be printed or exported to PDF at a time.'));
 		}
@@ -1072,13 +1078,13 @@ class NoteTextComponent extends React.Component {
 		const previousTheme = Setting.value('theme');
 		Setting.setValue('theme', Setting.THEME_LIGHT);
 		this.lastSetHtml_ = '';
-		this.updateHtml(tempBody, { useCustomCss: false });
+		await this.updateHtml(tempBody, { useCustomCss: false });
 		this.forceUpdate();
 
-		const restoreSettings = () => {
+		const restoreSettings = async () => {
 			Setting.setValue('theme', previousTheme);
 			this.lastSetHtml_ = '';
-			this.updateHtml(previousBody);
+			await this.updateHtml(previousBody);
 			this.forceUpdate();
 		}
 
@@ -1100,7 +1106,7 @@ class NoteTextComponent extends React.Component {
 		}, 100);		
 	}
 
-	commandSavePdf() {
+	async commandSavePdf() {
 		try {
 			if (!this.state.note) throw new Error(_('Only one note can be printed or exported to PDF at a time.'));
 
@@ -1111,15 +1117,15 @@ class NoteTextComponent extends React.Component {
 
 			if (!path) return;
 
-			this.printTo_('pdf', { path: path });
+			await this.printTo_('pdf', { path: path });
 		} catch (error) {
 			bridge().showErrorMessageBox(error.message);
 		}
 	}
 
-	commandPrint() {
+	async commandPrint() {
 		try {
-			this.printTo_('printer');
+			await this.printTo_('printer');
 		} catch (error) {
 			bridge().showErrorMessageBox(error.message);
 		}		
