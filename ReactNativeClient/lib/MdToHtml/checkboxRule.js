@@ -42,7 +42,7 @@ function createSuffixTokens(Token) {
 	return [new Token('label_close', 'label', -1)];
 }
 
-function installRule(markdownIt, style, mdOptions, ruleOptions) {
+function installRule(markdownIt, mdOptions, ruleOptions) {
 	markdownIt.core.ruler.push('checkbox', state => {
 		const tokens = state.tokens;
 		const Token = state.Token;
@@ -98,8 +98,8 @@ function installRule(markdownIt, style, mdOptions, ruleOptions) {
 	});
 }
 
-module.exports = function(style, ruleOptions) {
+module.exports = function(context, ruleOptions) {
 	return function(md, mdOptions) {
-		installRule(md, style, mdOptions, ruleOptions);
+		installRule(md, mdOptions, ruleOptions);
 	};
 };

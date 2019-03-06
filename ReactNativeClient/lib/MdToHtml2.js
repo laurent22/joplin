@@ -12,6 +12,7 @@ const StringUtils = require('lib/string-utils.js');
 const rules = {
 	image: require('./MdToHtml/imageRule'),
 	checkbox: require('./MdToHtml/checkboxRule'),
+	katex: require('./MdToHtml/katexRule'),
 };
 
 class MdToHtml {
@@ -32,8 +33,14 @@ class MdToHtml {
 
 		const ruleOptions = Object.assign({}, options, { resourceBaseUrl: this.resourceBaseUrl_ });
 
-		markdownIt.use(rules.image(style, ruleOptions));
-		markdownIt.use(rules.checkbox(style, ruleOptions));
+		const context = {
+			css: {},
+			assetLoaders: {},
+		};
+ 
+		markdownIt.use(rules.image(context, ruleOptions));
+		markdownIt.use(rules.checkbox(context, ruleOptions));
+		markdownIt.use(rules.katex(context, ruleOptions));
 
 		const renderedBody = markdownIt.render(body);
 
@@ -256,6 +263,18 @@ class MdToHtml {
 		`;
 
 		let cssStrings = [normalizeCss, css];
+
+		for (let k in context.css) {
+			if (!context.css.hasOwnProperty(k)) continue;
+			cssStrings.push(context.css[k]);
+		}
+
+		for (let k in context.assetLoaders) {
+			if (!context.assetLoaders.hasOwnProperty(k)) continue;
+			context.assetLoaders[k]().catch(error => {
+				console.warn('MdToHtml: Error loading assets for ' + k + ': ', error.message);
+			});
+		}
 
 		const styleHtml = '<style>' + cssStrings.join('\n') + '</style>';
 
