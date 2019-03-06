@@ -2,10 +2,12 @@ const { shim } = require('lib/shim');
 const katex = require('katex');
 const katexCss = require('lib/csstojs/katex.css.js');
 const Setting = require('lib/models/Setting');
+const MdToHtml_PluginBase = require('./MdToHtml_PluginBase');
 
-class MdToHtml_Katex {
+class MdToHtml_Katex extends MdToHtml_PluginBase {
 
 	constructor() {
+		super();
 		this.cache_ = {};
 		this.assetsLoaded_ = false;
 

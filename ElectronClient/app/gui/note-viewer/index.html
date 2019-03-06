@@ -204,9 +204,10 @@
 		}
 
 		if (document.getElementsByClassName('mermaid').length) {
-			lazyLoadScript('../../node_modules/mermaid/dist/mermaid.min.js', 'mermaidScriptContainer', () => {
-				mermaid.init();
-			});
+			console.warn('Mermaid support is currently disabled');
+			// lazyLoadScript('../../node_modules/mermaid/dist/mermaid.min.js', 'mermaidScriptContainer', () => {
+			// 	mermaid.init();
+			// });
 		}
 	}
 

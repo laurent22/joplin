@@ -1,6 +1,12 @@
 const { shim } = require('lib/shim');
+const MdToHtml_PluginBase = require('./MdToHtml_PluginBase');
 
-class MdToHtml_Mermaid {
+class MdToHtml_Mermaid extends MdToHtml_PluginBase {
+
+	constructor() {
+		super();
+		this.setEnabled(false);
+	}
 
 	name() {
 		return 'mermaid';
