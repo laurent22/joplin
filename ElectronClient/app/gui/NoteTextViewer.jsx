@@ -40,6 +40,12 @@ class NoteTextViewerComponent extends React.Component {
 			const fn = this.webviewListeners_[n];
 			wv.addEventListener(n, fn);
 		}
+
+		// Edge-case - the webview was already ready by the time initWebview was
+		// called - so manually call the domReady event to notify caller.
+		if (!this.webviewRef_.current.isLoading()) {
+			this.webview_domReady({});
+		}
 	}
 
 	destroyWebview() {

@@ -2,8 +2,8 @@ const { reg } = require('lib/registry.js');
 const Folder = require('lib/models/Folder.js');
 const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
+const Resource = require('lib/models/Resource.js');
 const Setting = require('lib/models/Setting.js');
-const ModelCache = require('lib/services/ModelCache.js');
 const Mutex = require('async-mutex').Mutex;
 
 const shared = {};
@@ -11,8 +11,6 @@ const shared = {};
 // If saveNoteButton_press is called multiple times in short intervals, it might result in
 // the same new note being created twice, so we need to a mutex to access this function.
 const saveNoteMutex_ = new Mutex();
-
-const modelCache_ = new ModelCache();
 
 shared.noteExists = async function(noteId) {
 	const existingNote = await Note.load(noteId);
@@ -156,24 +154,28 @@ shared.noteComponent_change = function(comp, propName, propValue) {
 	comp.setState(newState);
 }
 
+const resourceCache_ = {};
+
 shared.attachedResources = async function(noteBody) {
 	if (!noteBody) return {};
 	const resourceIds = await Note.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, noteBody);
-	const resources = await modelCache_.byIds(BaseModel.TYPE_RESOURCE, resourceIds);
+
 	const output = {};
-	for (let i = 0; i < resources.length; i++) {
-		output[resources[i].id] = resources[i];
+	for (let i = 0; i < resourceIds.length; i++) {
+		const id = resourceIds[i];
+		if (resourceCache_[id]) {
+			output[id] = resourceCache_[id];
+		} else {
+			const resource = await Resource.load(id);
+			const isReady = await Resource.isReady(resource);
+			if (!isReady) continue;
+			resourceCache_[id] = resource;
+			output[id] = resource;
+		}
 	}
+
 	return output;
 }
-
-// shared.refreshAttachedResources = async function(comp, noteBody) {
-// 	const resources = await shared.attachedResources(noteBody);
-// 	const newResourceIds = Object.keys(resources).sort();
-// 	const oldResourceIds = Object.keys(comp.state.noteResources).sort();
-// 	if (JSON.stringify(newResourceIds) === JSON.stringify(oldResourceIds)) return;
-// 	comp.setState({ noteResources: resources });
-// }
 
 shared.refreshNoteMetadata = async function(comp, force = null) {
 	if (force !== true && !comp.state.showNoteMetadata) return;

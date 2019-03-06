@@ -227,7 +227,7 @@ class NoteTextComponent extends React.Component {
 			if (!this.state.note || !this.state.note.body) return;
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
 			if (resourceIds.indexOf(resource.id) >= 0) {
-				this.mdToHtml().clearCache();
+				// this.mdToHtml().clearCache();
 				this.lastSetHtml_ = '';
 				this.scheduleHtmlUpdate();
 				//this.updateHtml(this.state.note.body);
