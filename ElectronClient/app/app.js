@@ -848,7 +848,11 @@ class Application extends BaseApplication {
 			ids: Setting.value('collapsedFolderIds'),
 		});
 
-		const cssString = await this.loadCustomCss(Setting.value('profileDir') + '/userstyle.css');
+		var css = Setting.value('usercss');
+		if ( !css.startsWith('/') ) {
+		    css = Setting.value('profileDir') + '/' + css;
+		}
+		const cssString = await this.loadCustomCss(css);
 
 		this.store().dispatch({
 			type: 'LOAD_CUSTOM_CSS',

@@ -612,6 +612,7 @@ Setting.constants_ = {
 	profileDir: '',
 	tempDir: '',
 	openDevTools: false,
+	usercss: 'userstyle.css'
 }
 
 Setting.autoSaveEnabled = true;

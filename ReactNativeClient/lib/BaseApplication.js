@@ -148,7 +148,14 @@ class BaseApplication {
 				continue;
 			}
 
-			if (arg.indexOf('-psn') === 0) {
+			if (arg == '--css') {
+				if (!nextArg) throw new JoplinError(_('Usage: %s', '--css <filename>'), 'flagError');
+			        Setting.setConstant('usercss', nextArg);
+				argv.splice(0, 2);
+				continue;
+			}
+
+		        if (arg.indexOf('-psn') === 0) {
 				// Some weird flag passed by macOS - can be ignored.
 				// https://github.com/laurent22/joplin/issues/480
 				// https://stackoverflow.com/questions/10242115
