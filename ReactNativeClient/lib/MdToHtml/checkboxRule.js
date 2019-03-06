@@ -3,14 +3,25 @@ const htmlentities = (new Entities()).encode;
 const Resource = require('lib/models/Resource.js');
 const utils = require('./utils');
 
-let checkboxNum_ = 0;
+let checkboxIndex_ = -1;
 
-function createPrefixTokens(Token, id, checked, label) {
+function createPrefixTokens(Token, id, checked, label, postMessageSyntax, sourceToken) {
 	let token = null;
 	const tokens = [];
 
+	// A bit hard to handle errors here and it's unlikely that the token won't have a valid
+	// map parameter, but if it does set it to a very high value, which will be more easy to notice
+	// in calling code.
+	const lineIndex = sourceToken.map && sourceToken.map.length ? sourceToken.map[0] : 99999999;
+	const checkedString = checked ? 'checked' : 'unchecked';
+	const js = postMessageSyntax + "('checkboxclick:" + checkedString + ':' + lineIndex + "'); return true;";
+
 	token = new Token('checkbox_input', 'input', 0);
-	token.attrs = [['type', 'checkbox'], ['id', id]];
+	token.attrs = [
+		['type', 'checkbox'],
+		['id', id],
+		['onclick', js],
+	];
 	if (checked) token.attrs.push(['checked', 'true']);
 	tokens.push(token);
 
@@ -62,15 +73,15 @@ function installRule(markdownIt, style, mdOptions, ruleOptions) {
 				const matches = checkboxPattern.exec(firstChild.content);
 				if (!matches || matches.length < 2) continue;
 
-				checkboxNum_++;
+				checkboxIndex_++;
 				const checked = matches[1] !== ' ';
-				const id = 'md-checkbox-' + checkboxNum_;
+				const id = 'md-checkbox-' + checkboxIndex_;
 				const label = matches.length >= 3 ? matches[2] : '';
 
 				// Prepend the text content with the checkbox markup and the opening <label> tag
 				// then append the </label> tag at the end of the text content.
 
-				const prefix = createPrefixTokens(Token, id, checked, label);
+				const prefix = createPrefixTokens(Token, id, checked, label, ruleOptions.postMessageSyntax, token);
 				const suffix = createSuffixTokens(Token);
 
 				token.children = markdownIt.utils.arrayReplaceAt(token.children, 0, prefix);
