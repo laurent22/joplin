@@ -905,18 +905,6 @@ class NoteTextComponent extends React.Component {
 		const theme = themeStyle(this.props.theme);
 
 		const mdOptions = {
-			// onResourceLoaded: () => {
-			// 	if (this.resourceLoadedTimeoutId_) {
-			// 		clearTimeout(this.resourceLoadedTimeoutId_);
-			// 		this.resourceLoadedTimeoutId_ = null;
-			// 	}
-
-			// 	this.resourceLoadedTimeoutId_ = setTimeout(() => {
-			// 		this.resourceLoadedTimeoutId_ = null;
-			// 		this.updateHtml();
-			// 		this.forceUpdate();
-			// 	}, 100);
-			// },
 			codeTheme: theme.codeThemeCss,
 			postMessageSyntax: 'ipcProxySendToHost',
 			userCss: options.useCustomCss ? this.props.customCss : '',

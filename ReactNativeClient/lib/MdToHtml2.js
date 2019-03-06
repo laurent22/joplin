@@ -81,8 +81,6 @@ class MdToHtml {
 
 		setupLinkify(markdownIt);
 
-		var hljs = require('highlight.js'); // https://highlightjs.org/
-
 		let renderedBody = markdownIt.render(body);
 
 		let cssStrings = noteStyle(style, options);
