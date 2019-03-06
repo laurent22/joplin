@@ -6,6 +6,7 @@ const { shim } = require('lib/shim');
 const Setting = require('lib/models/Setting');
 var katex = require('katex');
 const katexCss = require('lib/csstojs/katex.css.js');
+const md5 = require('md5');
 
 // Test if potential opening or closing delimieter
 // Assumes that there is a "$" at state.src[pos]
@@ -148,6 +149,7 @@ function math_block(state, start, end, silent){
 }
 
 let assetsLoaded_ = false;
+let cache_ = {};
 
 module.exports = function(context, ruleOptions) {
 	// Keep macros that persist across Katex blocks to allow defining a macro
@@ -179,6 +181,22 @@ module.exports = function(context, ruleOptions) {
 		};
 	}
 
+	function renderToStringWithCache(latex, options) {
+		const cacheKey = md5(escape(latex) + escape(JSON.stringify(options)));
+		if (cacheKey in cache_) {
+			return cache_[cacheKey];
+		} else {
+			const beforeMacros = JSON.stringify(options.macros);
+			const output = katex.renderToString(latex, options);
+			const afterMacros = JSON.stringify(options.macros);
+
+			// Don't cache the formulas that add macros, otherwise
+			// they won't be added on second run.
+			if (beforeMacros === afterMacros) cache_[cacheKey] = output;
+			return output;
+		}
+	}
+
 	return function(md, options) {
 		// Default options
 
@@ -189,9 +207,7 @@ module.exports = function(context, ruleOptions) {
 		var katexInline = function(latex){
 			options.displayMode = false;
 			try{
-				const added = katex.renderToString(latex, options);
-				if (added) context.css['katex'] = katexCss;
-				return added;
+				return renderToStringWithCache(latex, options);
 			} catch(error){
 				if(options.throwOnError){ console.log(error); }
 				return latex;
@@ -199,15 +215,14 @@ module.exports = function(context, ruleOptions) {
 		};
 
 		var inlineRenderer = function(tokens, idx){
-			const added = katexInline(tokens[idx].content);
-			if (added) context.css['katex'] = katexCss;
-			return added;
+			addContextAssets();
+			return katexInline(tokens[idx].content);
 		};
 
 		var katexBlock = function(latex){
 			options.displayMode = true;
 			try{
-				return "<p>" + katex.renderToString(latex, options) + "</p>";
+				return "<p>" + renderToStringWithCache(latex, options) + "</p>";
 			} catch(error){
 				if(options.throwOnError){ console.log(error); }
 				return latex;
@@ -215,7 +230,8 @@ module.exports = function(context, ruleOptions) {
 		}
 
 		var blockRenderer = function(tokens, idx){
-			return  katexBlock(tokens[idx].content) + '\n';
+			addContextAssets();
+			return katexBlock(tokens[idx].content) + '\n';
 		}
 
 		md.inline.ruler.after('escape', 'math_inline', math_inline);

@@ -17,7 +17,7 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 
 		const resourceId = Resource.urlToId(src);
 		const resource = ruleOptions.resources[resourceId];
-		if (!resource) return '<div>' + loaderImage + '</div>';//defaultRender(tokens, idx, options, env, self);
+		if (!resource) return '<div>' + loaderImage + '</div>';
 
 		const mime = resource.mime ? resource.mime.toLowerCase() : '';
 		if (Resource.isSupportedImageMimeType(mime)) {
