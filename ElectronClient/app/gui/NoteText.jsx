@@ -902,6 +902,8 @@ class NoteTextComponent extends React.Component {
 		let bodyToRender = body;
 		if (bodyToRender === null) bodyToRender = this.state.note && this.state.note.body ? this.state.note.body : '';
 
+		const theme = themeStyle(this.props.theme);
+
 		const mdOptions = {
 			// onResourceLoaded: () => {
 			// 	if (this.resourceLoadedTimeoutId_) {
@@ -915,12 +917,11 @@ class NoteTextComponent extends React.Component {
 			// 		this.forceUpdate();
 			// 	}, 100);
 			// },
+			codeTheme: theme.codeThemeCss,
 			postMessageSyntax: 'ipcProxySendToHost',
 			userCss: options.useCustomCss ? this.props.customCss : '',
 			resources: await shared.attachedResources(bodyToRender),
 		};
-
-		const theme = themeStyle(this.props.theme);
 
 		let bodyHtml = '';
 
@@ -1717,7 +1718,9 @@ class NoteTextComponent extends React.Component {
 
 			const htmlHasChanged = this.lastSetHtml_ !== html;
 			 if (htmlHasChanged) {
-				let options = {codeTheme: theme.codeThemeCss};
+				let options = {
+					cssFiles: this.mdToHtml().lastRenderCssFiles(),
+				};
 				this.webviewRef_.current.wrappedInstance.send('setHtml', html, options);
 				this.lastSetHtml_ = html;
 			}

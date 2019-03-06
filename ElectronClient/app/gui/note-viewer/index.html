@@ -33,6 +33,7 @@
 
 <body id="body">
 	<div id="hlScriptContainer"></div>
+	<div id="styleContainer"></div>
 	<div id="mermaidScriptContainer"></div>
 	<div id="markScriptContainer"></div>
 	<div id="content" ondragstart="return false;" ondrop="return false;"></div>
@@ -61,51 +62,63 @@
 	// Handle dynamically loading HLJS when a code element is present
 	// ----------------------------------------------------------------------
 
-	let hljsScriptAdded = false;
-	let hljsLoaded = false;
+	// let hljsScriptAdded = false;
+	// let hljsLoaded = false;
 
-	function loadHljs(options) {
-		hljsScriptAdded = true;
+	// function loadHljs(options) {
+	// 	hljsScriptAdded = true;
 
-		const script = document.createElement('script');
-		script.onload = function () {
-			hljsLoaded = true;
-			applyHljs();
-		};
-		script.src = 'highlight/highlight.pack.js';
-		document.getElementById('hlScriptContainer').appendChild(script);
+	// 	const script = document.createElement('script');
+	// 	script.onload = function () {
+	// 		hljsLoaded = true;
+	// 		applyHljs();
+	// 	};
+	// 	script.src = 'highlight/highlight.pack.js';
+	// 	document.getElementById('hlScriptContainer').appendChild(script);
 
-		const link = document.createElement('link');
-		link.rel = 'stylesheet';
-		// https://ace.c9.io/build/kitchen-sink.html
-		// https://highlightjs.org/static/demo/
-		link.href = 'highlight/styles/' + options.codeTheme;
-		document.getElementById('hlScriptContainer').appendChild(link);
-	}
+	// 	const link = document.createElement('link');
+	// 	link.rel = 'stylesheet';
+	// 	// https://ace.c9.io/build/kitchen-sink.html
+	// 	// https://highlightjs.org/static/demo/
+	// 	link.href = 'highlight/styles/' + options.codeTheme;
+	// 	document.getElementById('hlScriptContainer').appendChild(link);
+	// }
 
-	function loadAndApplyHljs(options) {
-		var codeElements = document.getElementsByClassName('code');
-		if (!codeElements.length) return;
+	// function loadAndApplyHljs(options) {
+	// 	var codeElements = document.getElementsByClassName('code');
+	// 	if (!codeElements.length) return;
 
-		if (!hljsScriptAdded) {
-			this.loadHljs(options);
-			return;
-		}
+	// 	if (!hljsScriptAdded) {
+	// 		this.loadHljs(options);
+	// 		return;
+	// 	}
 
-		// If HLJS is not loaded yet, no need to do anything. When it loads
-		// it will automatically apply the style to all the code elements.
-		if (hljsLoaded) applyHljs(codeElements);
-	}
+	// 	// If HLJS is not loaded yet, no need to do anything. When it loads
+	// 	// it will automatically apply the style to all the code elements.
+	// 	if (hljsLoaded) applyHljs(codeElements);
+	// }
 
-	function applyHljs(codeElements) {
-		if (typeof codeElements === 'undefined') codeElements = document.getElementsByClassName('code');
+	// function applyHljs(codeElements) {
+	// 	if (typeof codeElements === 'undefined') codeElements = document.getElementsByClassName('code');
 
-		for (var i = 0; i < codeElements.length; i++) {
-			try {
-				hljs.highlightBlock(codeElements[i]);
-			} catch (error) {
-				console.warn('Cannot highlight code', error);
-			}
+	// 	for (var i = 0; i < codeElements.length; i++) {
+	// 		try {
+	// 			hljs.highlightBlock(codeElements[i]);
+	// 		} catch (error) {
+	// 			console.warn('Cannot highlight code', error);
+	// 		}
+	// 	}
+	// }
+
+	const loadedCssFiles_ = {};
+	function loadCssFiles(cssFiles) {
+		for (let i = 0; i < cssFiles.length; i++) {
+			const f = cssFiles[i];
+			if (loadedCssFiles_[f]) continue;
+			const link = document.createElement('link');
+			link.rel = 'stylesheet';
+			link.href = f;
+			document.getElementById('styleContainer').appendChild(link);
 		}
 	}
 
@@ -166,21 +179,6 @@
 
 		contentElement.innerHTML = html;
 
-		loadAndApplyHljs(event.options);
-
-		// Remove the bullet from "ul" for checkbox lists and extra padding
-		// const checkboxes = document.getElementsByClassName('checkbox');
-		// for (let i = 0; i < checkboxes.length; i++) {
-		// 	const cb = checkboxes[i];
-		// 	const ul = cb.parentElement.parentElement;
-		// 	if (!ul) {
-		// 		console.warn('Unexpected layout for checkbox');
-		// 		continue;
-		// 	}
-		// 	ul.style.listStyleType = 'none';
-		// 	ul.style.paddingLeft = 0;
-		// }
-
 		let previousContentHeight = contentElement.scrollHeight;
 		let startTime = Date.now();
 		ignoreNextScrollEvent = true;
@@ -201,12 +199,7 @@
 			}, 1);
 		}
 
-		if (document.getElementsByClassName('mermaid').length) {
-			console.warn('Mermaid support is currently disabled');
-			// lazyLoadScript('../../node_modules/mermaid/dist/mermaid.min.js', 'mermaidScriptContainer', () => {
-			// 	mermaid.init();
-			// });
-		}
+		loadCssFiles(event.options.cssFiles);
 	}
 
 	let ignoreNextScrollEvent = false;
