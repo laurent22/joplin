@@ -907,6 +907,7 @@ class Application extends BaseApplication {
 
 		ExternalEditWatcher.instance().setLogger(reg.logger());
 		ExternalEditWatcher.instance().dispatch = this.store().dispatch;
+		ExternalEditWatcher.instance().preload();
 	}
 
 }
