@@ -14,7 +14,9 @@ const rules = {
 	image: require('./MdToHtml/imageRule'),
 	checkbox: require('./MdToHtml/checkboxRule'),
 	katex: require('./MdToHtml/katexRule'),
+	linkOpen: require('./MdToHtml/linkOpenRule'),
 };
+const setupLinkify = require('./MdToHtml/setupLinkify');
 
 class MdToHtml {
 
@@ -26,6 +28,11 @@ class MdToHtml {
 	}
 
 	render(body, style, options = null) {
+		if (!options) options = {};
+		if (!options.postMessageSyntax) options.postMessageSyntax = 'postMessage';
+		if (!options.paddingBottom) options.paddingBottom = '0';
+		if (!options.highlightedKeywords) options.highlightedKeywords = [];
+
 		const markdownIt = new MarkdownIt({
 			breaks: true,
 			linkify: true,
@@ -41,13 +48,14 @@ class MdToHtml {
 
 		markdownIt.use(rules.image(context, ruleOptions));
 		markdownIt.use(rules.checkbox(context, ruleOptions));
+		markdownIt.use(rules.linkOpen(context, ruleOptions));
 		markdownIt.use(rules.katex(context, ruleOptions));
+
+		setupLinkify(markdownIt);
 
 		const renderedBody = markdownIt.render(body);
 
 		let cssStrings = noteStyle(style, options);
-
-		console.info('CONTEXT', context.css);
 
 		for (let k in context.css) {
 			if (!context.css.hasOwnProperty(k)) continue;
@@ -60,6 +68,8 @@ class MdToHtml {
 				console.warn('MdToHtml: Error loading assets for ' + k + ': ', error.message);
 			});
 		}
+
+		if (options.userCss) cssStrings.push(options.userCss);
 
 		const styleHtml = '<style>' + cssStrings.join('\n') + '</style>';
 
