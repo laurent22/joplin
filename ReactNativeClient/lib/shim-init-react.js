@@ -14,6 +14,7 @@ const Resource = require('lib/models/Resource');
 
 const injectedJs = {
 	mermaid: require('lib/rnInjectedJs/mermaid'),
+	webviewLib: require('lib/rnInjectedJs/webviewLib'),
 };
 
 const cssToJs = {
@@ -174,12 +175,12 @@ function shimInit() {
 	}
 
 	shim.injectedJs = function(name) {
-		if (name in injectedJs) return injectedJs[name];
-		return '';
+		if (!(name in injectedJs)) throw new Error('Cannot find injectedJs file (add it to "injectedJs" object): ' + name);
+		return injectedJs[name];
 	}
 
 	shim.loadCssFromJs = function(name) {
-		if (!(name in cssToJs)) throw new Error('Cannot find csstojs file: ' + name);
+		if (!(name in cssToJs)) throw new Error('Cannot find csstojs file (add it to "cssToJs" object): ' + name);
 		return cssToJs[name];
 	}
 

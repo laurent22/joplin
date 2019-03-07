@@ -27,7 +27,8 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 			hrefAttr = href;
 		}
 
-		const js = ruleOptions.postMessageSyntax + "(" + JSON.stringify(href) + "); return false;";
+		let js = ruleOptions.postMessageSyntax + "(" + JSON.stringify(href) + "); return false;";
+		if (hrefAttr.indexOf('#') === 0) js = ''; // If it's an internal anchor, don't add any JS since the webview is going to handle navigating to the right place
 		let output = "<a data-from-md " + resourceIdAttr + " title='" + htmlentities(title) + "' href='" + hrefAttr + "' onclick='" + js + "'>" + icon;
 		return output;
 	};

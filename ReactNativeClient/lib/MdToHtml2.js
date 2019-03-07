@@ -60,6 +60,7 @@ class MdToHtml {
 			highlight: function(str, lang) {
 				try {
 					let hlCode = '';
+					
 					if (lang && hljs.getLanguage(lang)) {
 						hlCode = hljs.highlight(lang, str, true).value;
 					} else {
@@ -71,6 +72,7 @@ class MdToHtml {
 					} else {
 						context.cssFiles['hljs'] = 'highlight/styles/' + options.codeTheme;
 					}
+
 					return '<pre class="hljs"><code>' + hlCode + '</code></pre>';
 				} catch (error) {
 					return '<pre class="hljs"><code>' + markdownIt.utils.escapeHtml(str) + '</code></pre>';

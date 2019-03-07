@@ -4,6 +4,7 @@ const { themeStyle } = require('lib/components/global-style.js');
 const Resource = require('lib/models/Resource.js');
 const Setting = require('lib/models/Setting.js');
 const { reg } = require('lib/registry.js');
+const { shim } = require('lib/shim');
 const MdToHtml = require('lib/MdToHtml2.js');
 const shared = require('lib/components/shared/note-screen-shared.js');
 
@@ -102,7 +103,11 @@ class NoteBodyViewer extends Component {
 
 		let html = this.mdToHtml_.render(bodyToRender, this.props.webViewStyle, mdOptions);
 
-		const injectedJs = this.mdToHtml_.injectedJavaScript();
+		const injectedJs = [this.mdToHtml_.injectedJavaScript()];
+		injectedJs.push(shim.injectedJs('webviewLib'));
+		injectedJs.push('webviewLib.initialize({ postMessage: postMessage });');
+
+		console.info(injectedJs);
 
 		html = `
 			<!DOCTYPE html>
@@ -154,7 +159,7 @@ class NoteBodyViewer extends Component {
 					scalesPageToFit={Platform.OS !== 'ios'}
 					style={webViewStyle}
 					source={source}
-					injectedJavaScript={injectedJs}
+					injectedJavaScript={injectedJs.join('\n')}
 					originWhitelist={['file://*', './*', 'http://*', 'https://*']}
 					mixedContentMode="always"
 					allowFileAccess={true}
