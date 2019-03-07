@@ -25,20 +25,10 @@ class MdToHtml {
 	constructor(options = null) {
 		if (!options) options = {};
 
-		this.lastContext_ = {
-			cssFiles: {},
-		};
 		// Must include last "/"
 		this.resourceBaseUrl_ = ('resourceBaseUrl' in options) ? options.resourceBaseUrl : null;
-	}
 
-	lastRenderCssFiles() {
-		const output = [];
-		for (let n in this.lastContext_.cssFiles) {
-			if (!this.lastContext_.cssFiles.hasOwnProperty(n)) continue;
-			output.push(this.lastContext_.cssFiles[n]);
-		}
-		return output;
+		this.cachedOutputs_ = {};
 	}
 
 	render(body, style, options = null) {
@@ -46,6 +36,10 @@ class MdToHtml {
 		if (!options.postMessageSyntax) options.postMessageSyntax = 'postMessage';
 		if (!options.paddingBottom) options.paddingBottom = '0';
 		if (!options.highlightedKeywords) options.highlightedKeywords = [];
+
+		const cacheKey = md5(escape(body + JSON.stringify(options) + JSON.stringify(style)));
+		const cachedOutput = this.cachedOutputs_[cacheKey];
+		if (cachedOutput) return cachedOutput;
 
 		const context = {
 			css: {},
@@ -112,9 +106,16 @@ class MdToHtml {
 
 		const styleHtml = '<style>' + cssStrings.join('\n') + '</style>';
 
-		const output = styleHtml + '<div id="rendered-md">' + renderedBody + '</div>';
+		const html = styleHtml + '<div id="rendered-md">' + renderedBody + '</div>';
 
-		this.lastContext_ = context;
+		const output = {
+			html: html,
+			cssFiles: Object.keys(context.cssFiles).map(k => context.cssFiles[k]),
+		};
+
+		// Fow now, we keep only the last entry in the cache
+		this.cachedOutputs_ = {};
+		this.cachedOutputs_[cacheKey] = output;
 
 		return output;
 	}

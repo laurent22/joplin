@@ -101,7 +101,8 @@ class NoteBodyViewer extends Component {
 			codeTheme: theme.codeThemeCss,
 		};
 
-		let html = this.mdToHtml_.render(bodyToRender, this.props.webViewStyle, mdOptions);
+		let result = this.mdToHtml_.render(bodyToRender, this.props.webViewStyle, mdOptions);
+		let html = result.html;
 
 		const injectedJs = [this.mdToHtml_.injectedJavaScript()];
 		injectedJs.push(shim.injectedJs('webviewLib'));

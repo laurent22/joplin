@@ -76,6 +76,7 @@ class NoteTextComponent extends React.Component {
 			// to automatically set the title.
 			newAndNoTitleChangeNoteId: null,
 			bodyHtml: '',
+			lastRenderCssFiles: [],
 			lastKeys: [],
 			showLocalSearch: false,
 			localSearch: Object.assign({}, this.localSearchDefaultState), 
@@ -920,9 +921,12 @@ class NoteTextComponent extends React.Component {
 			bodyToRender = '*' + _('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout')) + '*';
 		}
 
-		bodyHtml = this.mdToHtml().render(bodyToRender, theme, mdOptions);
+		const result = this.mdToHtml().render(bodyToRender, theme, mdOptions);
 
-		this.setState({ bodyHtml: bodyHtml });
+		this.setState({
+			bodyHtml: result.html,
+			lastRenderCssFiles: result.cssFiles,
+		});
 	}
 
 	titleField_keyDown(event) {
@@ -1707,7 +1711,7 @@ class NoteTextComponent extends React.Component {
 			const htmlHasChanged = this.lastSetHtml_ !== html;
 			 if (htmlHasChanged) {
 				let options = {
-					cssFiles: this.mdToHtml().lastRenderCssFiles(),
+					cssFiles: this.state.lastRenderCssFiles,
 				};
 				this.webviewRef_.current.wrappedInstance.send('setHtml', html, options);
 				this.lastSetHtml_ = html;
