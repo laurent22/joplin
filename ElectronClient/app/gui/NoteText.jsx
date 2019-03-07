@@ -12,7 +12,7 @@ const TagList = require('./TagList.min.js');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const { reg } = require('lib/registry.js');
-const MdToHtml = require('lib/MdToHtml2');
+const MdToHtml = require('lib/MdToHtml');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const { themeStyle } = require('../theme.js');
@@ -640,7 +640,7 @@ class NoteTextComponent extends React.Component {
 		const arg0 = args && args.length >= 1 ? args[0] : null;
 		const arg1 = args && args.length >= 2 ? args[1] : null;
 
-		reg.logger().debug('Got ipc-message: ' + msg, args);
+		console.info('Got ipc-message: ' + msg, args);
 
 		if (msg.indexOf('checkboxclick:') === 0) {
 			// Ugly hack because setting the body here will make the scrollbar
@@ -729,6 +729,7 @@ class NoteTextComponent extends React.Component {
 				// When using the file:// protocol, openExternal doesn't work (does nothing) with URL-encoded paths
 				require('electron').shell.openExternal(urlDecode(msg));
 			} else {
+				console.info('OPEN URL');
 				require('electron').shell.openExternal(msg);
 			}
 		} else if (msg.indexOf('#') === 0) {

@@ -13,6 +13,8 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 		const isResourceUrl = Resource.isResourceUrl(href);
 		const title = isResourceUrl ? utils.getAttr(token.attrs, 'title') : href;
 
+		console.info(href, isResourceUrl);
+
 		let resourceIdAttr = "";
 		let icon = "";
 		let hrefAttr = '#';
@@ -28,8 +30,10 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 		}
 
 		let js = ruleOptions.postMessageSyntax + "(" + JSON.stringify(href) + "); return false;";
-		if (hrefAttr.indexOf('#') === 0) js = ''; // If it's an internal anchor, don't add any JS since the webview is going to handle navigating to the right place
+		if (hrefAttr.indexOf('#') === 0 && href.indexOf('#') === 0) js = ''; // If it's an internal anchor, don't add any JS since the webview is going to handle navigating to the right place
+		if (js) hrefAttr = '#';
 		let output = "<a data-from-md " + resourceIdAttr + " title='" + htmlentities(title) + "' href='" + hrefAttr + "' onclick='" + js + "'>" + icon;
+		console.info(output);
 		return output;
 	};
 }

@@ -1,3 +1,6 @@
+// This rule is no longer needed because HTML anchors (as opposed to those generated from Markdown)
+// are handled in webviewLib. Keeping it here for reference.
+
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = (new Entities()).encode;
 const Resource = require('lib/models/Resource.js');

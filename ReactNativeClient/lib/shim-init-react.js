@@ -13,7 +13,6 @@ const { uuid } = require('lib/uuid.js');
 const Resource = require('lib/models/Resource');
 
 const injectedJs = {
-	mermaid: require('lib/rnInjectedJs/mermaid'),
 	webviewLib: require('lib/rnInjectedJs/webviewLib'),
 };
 

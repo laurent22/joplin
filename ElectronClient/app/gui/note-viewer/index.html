@@ -32,9 +32,7 @@
 </head>
 
 <body id="body">
-	<div id="hlScriptContainer"></div>
 	<div id="styleContainer"></div>
-	<div id="mermaidScriptContainer"></div>
 	<div id="markScriptContainer"></div>
 	<div id="content" ondragstart="return false;" ondrop="return false;"></div>
 	<script src="./lib.js"></script>
@@ -95,23 +93,6 @@
 
 	function restorePercentScroll() {
 		setPercentScroll(percentScroll_);
-	}
-
-	const loadedScripts_ = {};
-
-	function lazyLoadScript(url, containerId, onReady) {
-		if (loadedScripts_[url]) {
-			onReady();
-			return;
-		}
-
-		console.info('Loading script: ' + url);
-
-		const script = document.createElement('script');
-		script.onload = onReady;
-		script.src = url;
-		document.getElementById(containerId).appendChild(script);
-		loadedScripts_[url] = url;
 	}
 
 	ipc.setHtml = (event) => {
