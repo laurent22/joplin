@@ -42,8 +42,8 @@ class Resource extends BaseItem {
 		return r ? r['total'] : 0;
 	}
 
-	static resetStartedFetchStatus() {
-		return this.db().exec('UPDATE resource_local_states SET fetch_status = ? WHERE fetch_status = ?', [Resource.FETCH_STATUS_IDLE, Resource.FETCH_STATUS_STARTED]);
+	static async resetStartedFetchStatus() {
+		return await this.db().exec('UPDATE resource_local_states SET fetch_status = ? WHERE fetch_status = ?', [Resource.FETCH_STATUS_IDLE, Resource.FETCH_STATUS_STARTED]);
 	}
 
 	static fsDriver() {

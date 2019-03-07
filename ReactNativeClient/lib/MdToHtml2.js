@@ -25,7 +25,9 @@ class MdToHtml {
 	constructor(options = null) {
 		if (!options) options = {};
 
-		this.lastContext_ = null;
+		this.lastContext_ = {
+			cssFiles: {},
+		};
 		// Must include last "/"
 		this.resourceBaseUrl_ = ('resourceBaseUrl' in options) ? options.resourceBaseUrl : null;
 	}
@@ -106,6 +108,10 @@ class MdToHtml {
 		this.lastContext_ = context;
 
 		return output;
+	}
+
+	injectedJavaScript() {
+		return '';
 	}
 
 }

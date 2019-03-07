@@ -4,7 +4,7 @@ const { globalStyle } = require('lib/components/global-style.js');
 const Resource = require('lib/models/Resource.js');
 const Setting = require('lib/models/Setting.js');
 const { reg } = require('lib/registry.js');
-const MdToHtml = require('lib/MdToHtml.js');
+const MdToHtml = require('lib/MdToHtml2.js');
 
 class NoteBodyViewer extends Component {
 
@@ -69,7 +69,7 @@ class NoteBodyViewer extends Component {
 	}
 
 	rebuildMd() {
-		this.mdToHtml_.clearCache();
+		// this.mdToHtml_.clearCache();
 		this.forceUpdate();
 	}
 
@@ -77,6 +77,8 @@ class NoteBodyViewer extends Component {
 		const note = this.props.note;
 		const style = this.props.style;
 		const onCheckboxChange = this.props.onCheckboxChange;
+
+		const bodyToRender = note ? note.body : '';
 
 		const mdOptions = {
 			onResourceLoaded: () => {
@@ -92,9 +94,10 @@ class NoteBodyViewer extends Component {
 			},
 			paddingBottom: '3.8em', // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
 			highlightedKeywords: this.props.highlightedKeywords,
+			resources: this.props.noteResources,//await shared.attachedResources(bodyToRender),
 		};
 
-		let html = this.mdToHtml_.render(note ? note.body : '', this.props.webViewStyle, mdOptions);
+		let html = this.mdToHtml_.render(bodyToRender, this.props.webViewStyle, mdOptions);
 
 		const injectedJs = this.mdToHtml_.injectedJavaScript();
 
