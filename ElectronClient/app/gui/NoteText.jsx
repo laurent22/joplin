@@ -648,7 +648,7 @@ class NoteTextComponent extends React.Component {
 			// "afterRender" event has been called.
 			this.restoreScrollTop_ = this.editorScrollTop();
 
-			const newBody = shared.toggleCheckbox(this, msg, this.state.note.body);
+			const newBody = shared.toggleCheckbox(msg, this.state.note.body);
 			this.saveOneProperty('body', newBody);
 		} else if (msg === 'setMarkerCount') {
 			const ls = Object.assign({}, this.state.localSearch);

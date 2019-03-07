@@ -16,6 +16,11 @@ const injectedJs = {
 	mermaid: require('lib/rnInjectedJs/mermaid'),
 };
 
+const cssToJs = {
+	'hljs-atom-one-dark-reasonable.css': require('lib/csstojs/hljs-atom-one-dark-reasonable.css.js'),
+	'hljs-atom-one-light.css': require('lib/csstojs/hljs-atom-one-light.css.js'),
+};
+
 function shimInit() {
 	shim.Geolocation = GeolocationReact;
 	shim.setInterval = PoorManIntervals.setInterval;
@@ -171,6 +176,11 @@ function shimInit() {
 	shim.injectedJs = function(name) {
 		if (name in injectedJs) return injectedJs[name];
 		return '';
+	}
+
+	shim.loadCssFromJs = function(name) {
+		if (!(name in cssToJs)) throw new Error('Cannot find csstojs file: ' + name);
+		return cssToJs[name];
 	}
 
 }

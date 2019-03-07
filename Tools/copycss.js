@@ -15,6 +15,8 @@ async function createJsFromCss(name, filePath) {
 async function main(argv) {
 	await fs.mkdirp(outputDir);
 	await createJsFromCss('katex', cwd + '/node_modules/katex/dist/katex.min.css');	
+	await createJsFromCss('hljs-atom-one-light', cwd + '/node_modules/highlight.js/styles/atom-one-light.css');	
+	await createJsFromCss('hljs-atom-one-dark-reasonable', cwd + '/node_modules/highlight.js/styles/atom-one-dark-reasonable.css');	
 	
 	if (argv.indexOf('--copy-fonts') >= 0) {
 		await fs.copy(cwd + '/node_modules/katex/dist/fonts', cwd + '/gui/note-viewer/fonts');

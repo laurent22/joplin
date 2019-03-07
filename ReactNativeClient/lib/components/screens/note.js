@@ -618,6 +618,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				note={note}
 				noteResources={this.state.noteResources}
 				highlightedKeywords={keywords}
+				theme={this.props.theme}
 				onCheckboxChange={(newBody) => { onCheckboxChange(newBody) }}
 				onLoadEnd={() => {
 					setTimeout(() => {

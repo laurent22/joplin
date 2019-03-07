@@ -6,8 +6,6 @@ const ObjectUtils = require('lib/ObjectUtils');
 const { shim } = require('lib/shim.js');
 const { _ } = require('lib/locale');
 const md5 = require('md5');
-const MdToHtml_Katex = require('lib/MdToHtml_Katex');
-const MdToHtml_Mermaid = require('lib/MdToHtml_Mermaid');
 const StringUtils = require('lib/string-utils.js');
 const noteStyle = require('./MdToHtml/noteStyle');
 const rules = {
@@ -16,6 +14,8 @@ const rules = {
 	katex: require('./MdToHtml/rules/katex'),
 	link_open: require('./MdToHtml/rules/link_open'),
 	html_block: require('./MdToHtml/rules/html_block'),
+	html_inline: require('./MdToHtml/rules/html_inline'),
+	highlight_keywords: require('./MdToHtml/rules/highlight_keywords'),
 };
 const setupLinkify = require('./MdToHtml/setupLinkify');
 const hljs = require('highlight.js');
@@ -65,7 +65,12 @@ class MdToHtml {
 					} else {
 						hlCode = hljs.highlightAuto(str).value;
 					}
-					context.cssFiles['hljs'] = 'highlight/styles/' + options.codeTheme;
+
+					if (shim.isReactNative()) {
+						context.css['hljs'] = shim.loadCssFromJs(options.codeTheme);
+					} else {
+						context.cssFiles['hljs'] = 'highlight/styles/' + options.codeTheme;
+					}
 					return '<pre class="hljs"><code>' + hlCode + '</code></pre>';
 				} catch (error) {
 					return '<pre class="hljs"><code>' + markdownIt.utils.escapeHtml(str) + '</code></pre>';
@@ -79,13 +84,15 @@ class MdToHtml {
 		markdownIt.use(rules.checkbox(context, ruleOptions));
 		markdownIt.use(rules.link_open(context, ruleOptions));
 		markdownIt.use(rules.html_block(context, ruleOptions));
+		markdownIt.use(rules.html_inline(context, ruleOptions));
 		markdownIt.use(rules.katex(context, ruleOptions));
+		markdownIt.use(rules.highlight_keywords(context, ruleOptions));
 
 		setupLinkify(markdownIt);
 
-		let renderedBody = markdownIt.render(body);
+		const renderedBody = markdownIt.render(body);
 
-		let cssStrings = noteStyle(style, options);
+		const cssStrings = noteStyle(style, options);
 
 		for (let k in context.css) {
 			if (!context.css.hasOwnProperty(k)) continue;

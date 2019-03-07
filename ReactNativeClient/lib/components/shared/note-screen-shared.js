@@ -231,7 +231,7 @@ shared.toggleIsTodo_onPress = function(comp) {
 	comp.setState(newState);
 }
 
-shared.toggleCheckbox = function(comp, ipcMessage, noteBody) {
+shared.toggleCheckbox = function(ipcMessage, noteBody) {
 	let newBody = noteBody.split('\n');
 	const p = ipcMessage.split(':');
 	const lineIndex = Number(p[p.length - 1]);
