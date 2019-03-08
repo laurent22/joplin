@@ -18,7 +18,7 @@ msgstr ""
 
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
-"Um ein Tag zu löschen, entferne es bei allen damit verbundenen Notizen."
+"Um ein Schlagwort zu löschen, entferne es bei allen damit verbundenen Notizen."
 
 msgid "Please select the note or notebook to be deleted first."
 msgstr ""
@@ -755,12 +755,12 @@ msgstr ""
 "Es ist eine Aktualisierung verfügbar. Soll sie jetzt heruntergeladen werden?"
 
 #, javascript-format
-msgid "Your version: v%s"
-msgstr "Deine Version: v%s"
+msgid "Your version: %s"
+msgstr "Deine Version: %s"
 
 #, javascript-format
-msgid "New version: v%s"
-msgstr "Neue Version: v%s"
+msgid "New version: %s"
+msgstr "Neue Version: %s"
 
 msgid "Yes"
 msgstr "Ja"

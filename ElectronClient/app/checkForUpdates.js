@@ -131,7 +131,7 @@ function checkForUpdates(inBackground, window, logFilePath, options) {
 
 			const buttonIndex = dialog.showMessageBox(parentWindow_, {
 				type: 'info',
-				message: _('An update is available, do you want to download it now?') + '\n\n' + _('Your version: v%s', packageInfo.version) + '\n' + _('New version: v%s', newVersionString) + releaseNotes,
+				message: _('An update is available, do you want to download it now?') + '\n\n' + _('Your version: %s', packageInfo.version) + '\n' + _('New version: %s', newVersionString) + releaseNotes,
 				buttons: [_('Yes'), _('No')]
 			});
 
