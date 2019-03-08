@@ -123,7 +123,7 @@ msgstr "Notița nu este o sarcină: \"%s\""
 
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status` and `target-status`."
+"`status`, `decrypt-file` and `target-status`."
 msgstr ""
 
 msgid "Enter master password:"
@@ -1070,6 +1070,9 @@ msgstr "Resurse: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 
+msgid "Table of contents"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Adăugați ori eliminați etichete"
 
@@ -1629,10 +1632,6 @@ msgstr ""
 msgid "Joplin website"
 msgstr "Website Joplin"
 
-#, fuzzy, javascript-format
-msgid "Joplin v%s"
-msgstr "Website Joplin"
-
 #, javascript-format
 msgid "Database v%s"
 msgstr ""
@@ -1754,6 +1753,10 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bine ați venit"
+
+#, fuzzy
+#~ msgid "Joplin v%s"
+#~ msgstr "Website Joplin"
 
 #~ msgid "State: %s."
 #~ msgstr "Statut: %s."

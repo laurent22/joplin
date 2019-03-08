@@ -119,7 +119,7 @@ msgstr ""
 
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status` and `target-status`."
+"`status`, `decrypt-file` and `target-status`."
 msgstr ""
 
 msgid "Enter master password:"
@@ -1046,6 +1046,9 @@ msgstr ""
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 
+msgid "Table of contents"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr ""
 
@@ -1592,10 +1595,6 @@ msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
 
 msgid "Joplin website"
-msgstr ""
-
-#, javascript-format
-msgid "Joplin v%s"
 msgstr ""
 
 #, javascript-format

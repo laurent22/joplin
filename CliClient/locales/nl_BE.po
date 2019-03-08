@@ -125,9 +125,10 @@ msgstr "Markeer een to-do als voltooid. "
 msgid "Note is not a to-do: \"%s\""
 msgstr "Notitie is geen to-do: \"%s\""
 
+#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status` and `target-status`."
+"`status`, `decrypt-file` and `target-status`."
 msgstr ""
 "Beheert E2EE configuratie. Commando's zijn `enable`, `disable`, `decrypt`, "
 "`status` and `target-status`."
@@ -1162,6 +1163,9 @@ msgstr "Middelen: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Selecteer waar de synchronisatie status naar geëxporteerd moet worden"
 
+msgid "Table of contents"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Voeg tag toe of verwijder tag"
 
@@ -1759,10 +1763,6 @@ msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
 
 msgid "Joplin website"
-msgstr ""
-
-#, javascript-format
-msgid "Joplin v%s"
 msgstr ""
 
 #, javascript-format

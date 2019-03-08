@@ -125,9 +125,10 @@ msgstr "Markatu zeregina egindakotzat."
 msgid "Note is not a to-do: \"%s\""
 msgstr "Oharra ez da zeregina: \"%s\""
 
+#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status` and `target-status`."
+"`status`, `decrypt-file` and `target-status`."
 msgstr ""
 "E2EEren konfigurazioa erabiltzen du. Komandoak dira `enable`, `disable`, "
 "`decrypt`, `status` eta `target-status`."
@@ -1158,6 +1159,9 @@ msgstr "Baliabideak: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Aukeratu nora esportatu sinkronizazioaren egoera, mesedez"
 
+msgid "Table of contents"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Gehitu edo ezabatu etiketak"
 
@@ -1755,10 +1759,6 @@ msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
 
 msgid "Joplin website"
-msgstr ""
-
-#, javascript-format
-msgid "Joplin v%s"
 msgstr ""
 
 #, javascript-format

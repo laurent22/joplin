@@ -125,9 +125,10 @@ msgstr "Marca un llistat de tasques pendents com a fet."
 msgid "Note is not a to-do: \"%s\""
 msgstr "La nota no és un llistat de tasques pendents: «%s»"
 
+#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status` and `target-status`."
+"`status`, `decrypt-file` and `target-status`."
 msgstr ""
 "Gestiona la configuració E2EE. Les ordres són «enable», «disable», "
 "«decrypt», «status» i «target-status»"
@@ -1169,6 +1170,9 @@ msgstr "Recursos: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccioneu on s'hauria d'exportar l'estat de la sincronització"
 
+msgid "Table of contents"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Afegeix o suprimeix etiquetes"
 
@@ -1762,10 +1766,6 @@ msgstr ""
 msgid "Joplin website"
 msgstr "Lloc web del Joplin"
 
-#, fuzzy, javascript-format
-msgid "Joplin v%s"
-msgstr "Lloc web del Joplin"
-
 #, javascript-format
 msgid "Database v%s"
 msgstr ""
@@ -1888,6 +1888,10 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvingut"
+
+#, fuzzy
+#~ msgid "Joplin v%s"
+#~ msgstr "Lloc web del Joplin"
 
 #~ msgid "State: %s."
 #~ msgstr "Estat: %s"

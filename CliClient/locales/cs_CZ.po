@@ -124,9 +124,10 @@ msgstr "Označí to-do jako hotové."
 msgid "Note is not a to-do: \"%s\""
 msgstr "Poznámka není to-do: \"%s\""
 
+#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status` and `target-status`."
+"`status`, `decrypt-file` and `target-status`."
 msgstr ""
 "Nastavuje šifrování. Příkazy jsou `enable` (zapnout), `disable` (vypnout), "
 "`decrypt` (dešifrovat), `status` (stav) a `target-status` (stav v cíli "
@@ -1136,6 +1137,9 @@ msgstr "Zdroje: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Prosím vyberte, kam má být stav synchronizace exportován"
 
+msgid "Table of contents"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Přidat či odebrat tagy"
 
@@ -1729,10 +1733,6 @@ msgstr ""
 msgid "Joplin website"
 msgstr "Web Joplinu"
 
-#, fuzzy, javascript-format
-msgid "Joplin v%s"
-msgstr "Web Joplinu"
-
 #, javascript-format
 msgid "Database v%s"
 msgstr ""
@@ -1854,6 +1854,10 @@ msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na tlačítko (+
 
 msgid "Welcome"
 msgstr "Vítejte"
+
+#, fuzzy
+#~ msgid "Joplin v%s"
+#~ msgstr "Web Joplinu"
 
 #~ msgid "State: %s."
 #~ msgstr "Stav: %s."

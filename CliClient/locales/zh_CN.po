@@ -121,9 +121,10 @@ msgstr "标记待办事项为完成。"
 msgid "Note is not a to-do: \"%s\""
 msgstr "笔记非待办事项：\"%s\""
 
+#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status` and `target-status`."
+"`status`, `decrypt-file` and `target-status`."
 msgstr ""
 "管理E2EE配置。命令为：`enable`, `disable`, `decrypt`, `status` 和 `target-"
 "status`。"
@@ -1101,6 +1102,9 @@ msgstr "获取资源：%d。"
 msgid "Please select where the sync status should be exported to"
 msgstr "请选择同步状态的导出位置"
 
+msgid "Table of contents"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "添加或删除标签"
 
@@ -1679,10 +1683,6 @@ msgid "Joplin website"
 msgstr "Joplin 官网"
 
 #, javascript-format
-msgid "Joplin v%s"
-msgstr "Joplin v%s"
-
-#, javascript-format
 msgid "Database v%s"
 msgstr "数据库 v%s"
 
@@ -1799,6 +1799,9 @@ msgstr "您目前未有笔记本。点击 (+) 按钮创建。"
 
 msgid "Welcome"
 msgstr "欢迎"
+
+#~ msgid "Joplin v%s"
+#~ msgstr "Joplin v%s"
 
 #~ msgid "State: %s."
 #~ msgstr "状态：%s。"

@@ -18,7 +18,8 @@ msgstr ""
 
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
-"Um ein Schlagwort zu löschen, entferne es bei allen damit verbundenen Notizen."
+"Um ein Schlagwort zu löschen, entferne es bei allen damit verbundenen "
+"Notizen."
 
 msgid "Please select the note or notebook to be deleted first."
 msgstr ""
@@ -128,9 +129,10 @@ msgstr "Markiert ein To-Do als erledigt."
 msgid "Note is not a to-do: \"%s\""
 msgstr "Notiz ist kein To-Do: \"%s\""
 
+#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status` and `target-status`."
+"`status`, `decrypt-file` and `target-status`."
 msgstr ""
 "Verwaltet die E2EE-Konfiguration. Die Befehle lauten `enable`, `disable`, "
 "`decrypt`, `status` und `target-status`."
@@ -1176,6 +1178,9 @@ msgid "Please select where the sync status should be exported to"
 msgstr ""
 "Bitte wähle aus, wohin der Synchronisations-Status exportiert werden soll"
 
+msgid "Table of contents"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Schlagwörter hinzufügen oder entfernen"
 
@@ -1780,10 +1785,6 @@ msgid "Joplin website"
 msgstr "Website von Joplin"
 
 #, javascript-format
-msgid "Joplin v%s"
-msgstr "Joplin v%s"
-
-#, javascript-format
 msgid "Database v%s"
 msgstr "Datenbank v%s"
 
@@ -1906,6 +1907,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Willkommen"
+
+#~ msgid "Joplin v%s"
+#~ msgstr "Joplin v%s"
 
 #~ msgid "Remove?"
 #~ msgstr "Löschen?"

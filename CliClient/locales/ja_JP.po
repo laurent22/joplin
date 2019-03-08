@@ -123,9 +123,10 @@ msgstr "ToDoを完了としてマークします。"
 msgid "Note is not a to-do: \"%s\""
 msgstr "ノートはToDoリストではありません：\"%s\""
 
+#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status` and `target-status`."
+"`status`, `decrypt-file` and `target-status`."
 msgstr ""
 "E2EEの設定を変更します。コマンドは `enable`, `disable`, `decrypt`, `status` "
 "and `target-status` です。"
@@ -1144,6 +1145,9 @@ msgstr "取得中のリソース: %d"
 msgid "Please select where the sync status should be exported to"
 msgstr "同期状況の出力先を選択してください"
 
+msgid "Table of contents"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "タグの追加と削除"
 
@@ -1740,10 +1744,6 @@ msgstr "- 位置情報: ノートに位置情報を添付するのに必要で�
 msgid "Joplin website"
 msgstr "JoplinのWebサイト"
 
-#, fuzzy, javascript-format
-msgid "Joplin v%s"
-msgstr "JoplinのWebサイト"
-
 #, javascript-format
 msgid "Database v%s"
 msgstr ""
@@ -1866,6 +1866,10 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
+
+#, fuzzy
+#~ msgid "Joplin v%s"
+#~ msgstr "JoplinのWebサイト"
 
 #~ msgid "State: %s."
 #~ msgstr "状態: \"%s\"."

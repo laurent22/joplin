@@ -122,9 +122,10 @@ msgstr "Marca unha tarefa como feita."
 msgid "Note is not a to-do: \"%s\""
 msgstr "A nota non é unha tarefa: «%s»"
 
+#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status` and `target-status`."
+"`status`, `decrypt-file` and `target-status`."
 msgstr ""
 "Xestiona a configuración E2EE. As orde son «enable», «disable», «decrypt», "
 "«status» e «target-status»."
@@ -1145,6 +1146,9 @@ msgstr "Recursos: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccione onde exportar o estado da sincronización"
 
+msgid "Table of contents"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Engadir ou eliminar etiquetas"
 
@@ -1738,10 +1742,6 @@ msgstr ""
 msgid "Joplin website"
 msgstr "Sitio web de Joplin"
 
-#, fuzzy, javascript-format
-msgid "Joplin v%s"
-msgstr "Sitio web de Joplin"
-
 #, javascript-format
 msgid "Database v%s"
 msgstr ""
@@ -1863,6 +1863,10 @@ msgstr "Non ten cadernos actualmente. Cree un premendo no botón (+)."
 
 msgid "Welcome"
 msgstr "Benvido/a"
+
+#, fuzzy
+#~ msgid "Joplin v%s"
+#~ msgstr "Sitio web de Joplin"
 
 #~ msgid "State: %s."
 #~ msgstr "Estado: %s."

@@ -124,9 +124,10 @@ msgstr "'할 일' 항목을 완료로 표시합니다."
 msgid "Note is not a to-do: \"%s\""
 msgstr "노트는 '할 일' 항목이 아닙니다: \"%s\""
 
+#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status` and `target-status`."
+"`status`, `decrypt-file` and `target-status`."
 msgstr ""
 "E2EE(종단간 암호화) 설정을 관리합니다. 명령어는 `enable`, `disable`, "
 "`decrypt`, `status`, `target-status` 입니다."
@@ -1138,6 +1139,9 @@ msgstr "리소스 가져오는 중: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "동기화 상태를 내보낼 대상을 선택하세요"
 
+msgid "Table of contents"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "태그 추가 및 제거"
 
@@ -1733,10 +1737,6 @@ msgid "Joplin website"
 msgstr "조플린 웹사이트"
 
 #, javascript-format
-msgid "Joplin v%s"
-msgstr "조플린 v%s"
-
-#, javascript-format
 msgid "Database v%s"
 msgstr "데이터베이스 v%s"
 
@@ -1855,6 +1855,9 @@ msgstr "노트북이 없습니다. (+) 버튼을 눌러 새로 만드세요."
 
 msgid "Welcome"
 msgstr "환영합니다"
+
+#~ msgid "Joplin v%s"
+#~ msgstr "조플린 v%s"
 
 #~ msgid "State: %s."
 #~ msgstr "상태: %s."

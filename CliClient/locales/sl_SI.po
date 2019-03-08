@@ -123,9 +123,10 @@ msgstr "Označi seznam opravil kot končan."
 msgid "Note is not a to-do: \"%s\""
 msgstr "Zabeležka ni formata seznam opravil: \"%s\""
 
+#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status` and `target-status`."
+"`status`, `decrypt-file` and `target-status`."
 msgstr ""
 "Upravlja z E2EE nastavitvami. Ukazi so `enable`, `disable`, `decrypt`, "
 "`status` in `target-status`."
@@ -1160,6 +1161,9 @@ msgstr "Viri: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Prosim izberite, kam želite izvoziti sinhronizacijski status"
 
+msgid "Table of contents"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Dodaj ali odstrani oznake"
 
@@ -1753,10 +1757,6 @@ msgstr ""
 msgid "Joplin website"
 msgstr "Joplin spletna stran"
 
-#, fuzzy, javascript-format
-msgid "Joplin v%s"
-msgstr "Joplin spletna stran"
-
 #, javascript-format
 msgid "Database v%s"
 msgstr ""
@@ -1878,6 +1878,10 @@ msgstr "Trenutno nimate nobene beležnice. Ustvarite jo s klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobrodošli"
+
+#, fuzzy
+#~ msgid "Joplin v%s"
+#~ msgstr "Joplin spletna stran"
 
 #~ msgid "State: %s."
 #~ msgstr "Stanje: %s."

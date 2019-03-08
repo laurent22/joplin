@@ -123,9 +123,10 @@ msgstr "Markerer en opgave som udført."
 msgid "Note is not a to-do: \"%s\""
 msgstr "Noten er ikke en opgave: \"%s\""
 
+#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status` and `target-status`."
+"`status`, `decrypt-file` and `target-status`."
 msgstr ""
 "Udfører E2EE konfiguration. Kommandoer er `enable`(aktiver), "
 "`disable`(sluk), `decrypt`(dekrypter), `status` og `target-status` (modtager-"
@@ -1145,6 +1146,9 @@ msgstr "Ressourcer: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Vælg hvor sync status skal eksporteres til"
 
+msgid "Table of contents"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Tilføj eller slet mærker"
 
@@ -1738,10 +1742,6 @@ msgstr ""
 msgid "Joplin website"
 msgstr "Joplin hjemmeside"
 
-#, fuzzy, javascript-format
-msgid "Joplin v%s"
-msgstr "Joplin hjemmeside"
-
 #, javascript-format
 msgid "Database v%s"
 msgstr ""
@@ -1863,6 +1863,10 @@ msgstr "Du har ingen notesbøger. Opret en ved at klikke på (+) knappen."
 
 msgid "Welcome"
 msgstr "Velkommen"
+
+#, fuzzy
+#~ msgid "Joplin v%s"
+#~ msgstr "Joplin hjemmeside"
 
 #~ msgid "State: %s."
 #~ msgstr "Tilstand: %s."

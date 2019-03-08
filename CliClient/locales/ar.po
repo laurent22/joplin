@@ -121,9 +121,10 @@ msgstr "يعلّم قائمة مهام أنها تمت."
 msgid "Note is not a to-do: \"%s\""
 msgstr "الملاحظة: \"%s\" ليست قائمة مهام"
 
+#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status` and `target-status`."
+"`status`, `decrypt-file` and `target-status`."
 msgstr ""
 "يدير ضبط التشفير من الطرف للطرف (E2EE). الأوامر هي `enable`، `disable`، "
 "`decrypt`، `status`، `target-status`."
@@ -691,12 +692,12 @@ msgstr "%s (ما قبل الإصدار)"
 msgid "An update is available, do you want to download it now?"
 msgstr "يتوفر تحديث ، هل تريد تنزيله الآن؟"
 
-#, javascript-format
-msgid "Your version: v%s"
+#, fuzzy, javascript-format
+msgid "Your version: %s"
 msgstr "النسخة لديك: %s"
 
-#, javascript-format
-msgid "New version: v%s"
+#, fuzzy, javascript-format
+msgid "New version: %s"
 msgstr "النسخة الجديدة: %s"
 
 msgid "Yes"
@@ -1087,6 +1088,9 @@ msgid "Fetching resources: %d"
 msgstr ""
 
 msgid "Please select where the sync status should be exported to"
+msgstr ""
+
+msgid "Table of contents"
 msgstr ""
 
 msgid "Add or remove tags"
@@ -1666,10 +1670,6 @@ msgid "Joplin website"
 msgstr "موقع ويب Joplin"
 
 #, javascript-format
-msgid "Joplin v%s"
-msgstr "Joplin نسخة %s"
-
-#, javascript-format
 msgid "Database v%s"
 msgstr "قاعدة البيانات v%s"
 
@@ -1788,3 +1788,6 @@ msgstr "ليس لديك دفاتر ملاحظات حالياً. أنشئ واح�
 
 msgid "Welcome"
 msgstr "مرحباً"
+
+#~ msgid "Joplin v%s"
+#~ msgstr "Joplin نسخة %s"

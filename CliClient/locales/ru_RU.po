@@ -127,9 +127,10 @@ msgstr "Отмечает задачу как выполненную."
 msgid "Note is not a to-do: \"%s\""
 msgstr "Заметка не является задачей: «%s»"
 
+#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status` and `target-status`."
+"`status`, `decrypt-file` and `target-status`."
 msgstr ""
 "Управляет конфигурацией E2EE. Команды: `enable`, `disable`, `decrypt`, "
 "`status` и `target-status`."
@@ -1161,6 +1162,9 @@ msgid "Please select where the sync status should be exported to"
 msgstr ""
 "Пожалуйста, выберите, куда должен быть экспортирован статус синхронизации"
 
+msgid "Table of contents"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Добавить или удалить метки"
 
@@ -1761,10 +1765,6 @@ msgid "Joplin website"
 msgstr "Сайт Joplin"
 
 #, javascript-format
-msgid "Joplin v%s"
-msgstr "Joplin v%s"
-
-#, javascript-format
 msgid "Database v%s"
 msgstr "База данных v%s"
 
@@ -1885,3 +1885,6 @@ msgstr "У вас сейчас нет блокнота. Создайте его 
 
 msgid "Welcome"
 msgstr "Добро пожаловать"
+
+#~ msgid "Joplin v%s"
+#~ msgstr "Joplin v%s"

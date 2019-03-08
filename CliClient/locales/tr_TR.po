@@ -126,7 +126,7 @@ msgstr ""
 
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status` and `target-status`."
+"`status`, `decrypt-file` and `target-status`."
 msgstr ""
 
 msgid "Enter master password:"
@@ -1133,6 +1133,9 @@ msgstr "Kaynaklar alınıyor: %d"
 msgid "Please select where the sync status should be exported to"
 msgstr "Lütfen senkronizasyon durumunun nereye aktarılacağını seçin"
 
+msgid "Table of contents"
+msgstr ""
+
 #, fuzzy
 msgid "Add or remove tags"
 msgstr "Etiket ekle veya kaldır"
@@ -1730,10 +1733,6 @@ msgid "Joplin website"
 msgstr "Joplin Web Sitesi"
 
 #, javascript-format
-msgid "Joplin v%s"
-msgstr "Joplin v%s"
-
-#, javascript-format
 msgid "Database v%s"
 msgstr "Veritabanı v%s"
 
@@ -1854,3 +1853,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Hoşgeldiniz"
+
+#~ msgid "Joplin v%s"
+#~ msgstr "Joplin v%s"

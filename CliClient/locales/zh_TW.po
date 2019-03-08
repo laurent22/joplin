@@ -122,9 +122,10 @@ msgstr "標記待辦事項為完成。"
 msgid "Note is not a to-do: \"%s\""
 msgstr "記事不等於待辨事項: \"%s\""
 
+#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status` and `target-status`."
+"`status`, `decrypt-file` and `target-status`."
 msgstr ""
 "管理 E2EE 設置。命令是 `enable`，`disable`，`decrypt`，`status` 和 `target-"
 "status`。"
@@ -1109,6 +1110,9 @@ msgstr "資源: %d。"
 msgid "Please select where the sync status should be exported to"
 msgstr "請選擇將同步狀態導出到的位置"
 
+msgid "Table of contents"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "新增或移除標籤"
 
@@ -1688,10 +1692,6 @@ msgstr "- 位置: 允許將地理位置資訊附加到筆記。"
 msgid "Joplin website"
 msgstr "Joplin 官方網站"
 
-#, fuzzy, javascript-format
-msgid "Joplin v%s"
-msgstr "Joplin 官方網站"
-
 #, javascript-format
 msgid "Database v%s"
 msgstr ""
@@ -1810,6 +1810,10 @@ msgstr "您當前沒有任何筆記本。通過按一下 (+) 鍵去建立一本�
 
 msgid "Welcome"
 msgstr "歡迎"
+
+#, fuzzy
+#~ msgid "Joplin v%s"
+#~ msgstr "Joplin 官方網站"
 
 #~ msgid "State: %s."
 #~ msgstr "狀態: %s。"

@@ -127,9 +127,10 @@ msgstr "Markeert een taak als afgerond."
 msgid "Note is not a to-do: \"%s\""
 msgstr "Notitie is geen taak: \"%s\""
 
+#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status` and `target-status`."
+"`status`, `decrypt-file` and `target-status`."
 msgstr ""
 "Beheert de E2EE-configuratie. Opdrachten zijn: `enable`, `disable`, "
 "`decrypt`, `status` en `target-status`."
@@ -1167,6 +1168,9 @@ msgstr "Bronnen: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Kies waar de synchronisatiestatus naar moet worden geëxporteerd"
 
+msgid "Table of contents"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Labels toevoegen of verwijderen"
 
@@ -1766,10 +1770,6 @@ msgstr "- Locatie: zodat je locatie-informatie kunt toevoegen aan een notitie."
 msgid "Joplin website"
 msgstr "Joplin-website"
 
-#, fuzzy, javascript-format
-msgid "Joplin v%s"
-msgstr "Joplin-website"
-
 #, javascript-format
 msgid "Database v%s"
 msgstr ""
@@ -1892,6 +1892,10 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Welkom"
+
+#, fuzzy
+#~ msgid "Joplin v%s"
+#~ msgstr "Joplin-website"
 
 #~ msgid "State: %s."
 #~ msgstr "Status: %s."
