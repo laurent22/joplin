@@ -63,7 +63,3 @@ The second way to organise your notes is using tags:
 - On **desktop**, right-click on any note in the Note List, and select "Edit tags". You can then add the tags, separating them by commas.
 - On **mobile**, open the note and press the "⋮" button and select "Tags".
 - On **terminal**, type `:help tag` for the available commands.
-
-* * *
-
-**Next:** [How to import notes from other applications](:/b863cbc514cb4cafbae8dd6a4fcad919).
