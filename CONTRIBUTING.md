@@ -20,9 +20,9 @@ Again, please check that it has not already been requested. If it has, simply **
 
 - If you want to add a new feature, consider asking about it before implementing it or checking existing discussions to make sure it is within the scope of the project. That scope, due to limited resources, might be narrower than you think. As a rule of thumb **if your change is likely to involve more than 50 lines of code, you should discuss it in the forum**, just so that you don't waste your time implementing something that might not be accepted.
 
-- Bug fixes have a very high change of being accepted.
+- Bug fixes have a very high chance of being accepted.
 
-- A pull request that is relevant to the current roadmap has a very high change of being accepted.
+- A pull request that is relevant to the current roadmap has a very high chance of being accepted.
 
 Building the apps is relatively easy - please [see the build instructions](https://github.com/laurent22/joplin/blob/master/BUILD.md) for more details.
 
