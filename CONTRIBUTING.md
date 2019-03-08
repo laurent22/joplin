@@ -22,7 +22,7 @@ Again, please check that it has not already been requested. If it has, simply **
 
 - Bug fixes have a very high chance of being accepted.
 
-- A pull request that is relevant to the current roadmap has a very high change of being accepted.
+- A pull request that is relevant to the current roadmap has a very high chance of being accepted.
 
 Building the apps is relatively easy - please [see the build instructions](https://github.com/laurent22/joplin/blob/master/BUILD.md) for more details.
 
