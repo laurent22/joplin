@@ -70,11 +70,13 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$version" ]]; t
 
     # Create icon for Gnome
     echo 'Create Desktop icon.'
-    if [[ $desktop =~ .*gnome.* ]] || [[ $desktop =~ .*kde.* ]] 
+    if [[ $desktop =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.* ]]
     then
        echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nExec=/home/$USER/.joplin/Joplin.AppImage\nIcon=/home/$USER/.joplin/Icon512.png\nType=Application\nCategories=Application;" >> ~/.local/share/applications/joplin.desktop
+       echo "${COLOR_GREEN}OK${COLOR_RESET}"
+    else
+       echo "${COLOR_RED}NOT DONE${COLOR_RESET}"
     fi
-    echo "${COLOR_GREEN}OK${COLOR_RESET}"
     
     #-----------------------------------------------------
     # Finish
