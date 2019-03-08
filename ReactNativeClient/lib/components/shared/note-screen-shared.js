@@ -2,6 +2,7 @@ const { reg } = require('lib/registry.js');
 const Folder = require('lib/models/Folder.js');
 const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
+const Resource = require('lib/models/Resource.js');
 const Setting = require('lib/models/Setting.js');
 const Mutex = require('async-mutex').Mutex;
 
@@ -79,6 +80,8 @@ shared.saveNoteButton_press = async function(comp, folderId = null) {
 
 	comp.setState(newState);
 
+	// await shared.refreshAttachedResources(comp, newState.note.body);
+
 	if (isNew) {
 		Note.updateGeolocation(note.id).then((geoNote) => {
 			const stateNote = comp.state.note;
@@ -151,6 +154,29 @@ shared.noteComponent_change = function(comp, propName, propValue) {
 	comp.setState(newState);
 }
 
+const resourceCache_ = {};
+
+shared.attachedResources = async function(noteBody) {
+	if (!noteBody) return {};
+	const resourceIds = await Note.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, noteBody);
+
+	const output = {};
+	for (let i = 0; i < resourceIds.length; i++) {
+		const id = resourceIds[i];
+		if (resourceCache_[id]) {
+			output[id] = resourceCache_[id];
+		} else {
+			const resource = await Resource.load(id);
+			const isReady = await Resource.isReady(resource);
+			if (!isReady) continue;
+			resourceCache_[id] = resource;
+			output[id] = resource;
+		}
+	}
+
+	return output;
+}
+
 shared.refreshNoteMetadata = async function(comp, force = null) {
 	if (force !== true && !comp.state.showNoteMetadata) return;
 
@@ -184,6 +210,7 @@ shared.initState = async function(comp) {
 		folder: folder,
 		isLoading: false,
 		fromShare: comp.props.sharedData ? true : false,
+		noteResources: await shared.attachedResources(note ? note.body : ''),
 	});
 
 	if (comp.props.sharedData) {
@@ -202,6 +229,30 @@ shared.toggleIsTodo_onPress = function(comp) {
 	let newNote = Note.toggleIsTodo(comp.state.note);
 	let newState = { note: newNote };
 	comp.setState(newState);
+}
+
+shared.toggleCheckbox = function(ipcMessage, noteBody) {
+	let newBody = noteBody.split('\n');
+	const p = ipcMessage.split(':');
+	const lineIndex = Number(p[p.length - 1]);
+	if (lineIndex >= newBody.length) {
+		reg.logger().warn('Checkbox line out of bounds: ', ipcMessage, args);
+		return newBody.join('\n');
+	}
+
+	let line = newBody[lineIndex];
+
+	if (line.trim().indexOf('- [ ] ') === 0) {
+		line = line.replace(/- \[ \] /, '- [x] ');
+	} else if (line.trim().indexOf('- [x] ') === 0 || line.trim().indexOf('- [X] ') === 0) {  
+		line = line.replace(/- \[x\] /i, '- [ ] ');
+	} else {
+		reg.logger().warn('Could not find matching checkbox for message: ', ipcMessage, args);
+		return newBody.join('\n');
+	}
+
+	newBody[lineIndex] = line;
+	return newBody.join('\n')
 }
 
 module.exports = shared;

@@ -1,10 +1,12 @@
 const React = require('react'); const Component = React.Component;
 const { Platform, WebView, View } = require('react-native');
-const { globalStyle } = require('lib/components/global-style.js');
+const { themeStyle } = require('lib/components/global-style.js');
 const Resource = require('lib/models/Resource.js');
 const Setting = require('lib/models/Setting.js');
 const { reg } = require('lib/registry.js');
+const { shim } = require('lib/shim');
 const MdToHtml = require('lib/MdToHtml.js');
+const shared = require('lib/components/shared/note-screen-shared.js');
 
 class NoteBodyViewer extends Component {
 
@@ -69,7 +71,7 @@ class NoteBodyViewer extends Component {
 	}
 
 	rebuildMd() {
-		this.mdToHtml_.clearCache();
+		// this.mdToHtml_.clearCache();
 		this.forceUpdate();
 	}
 
@@ -77,6 +79,9 @@ class NoteBodyViewer extends Component {
 		const note = this.props.note;
 		const style = this.props.style;
 		const onCheckboxChange = this.props.onCheckboxChange;
+		const theme = themeStyle(this.props.theme);
+
+		const bodyToRender = note ? note.body : '';
 
 		const mdOptions = {
 			onResourceLoaded: () => {
@@ -92,11 +97,18 @@ class NoteBodyViewer extends Component {
 			},
 			paddingBottom: '3.8em', // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
 			highlightedKeywords: this.props.highlightedKeywords,
+			resources: this.props.noteResources,//await shared.attachedResources(bodyToRender),
+			codeTheme: theme.codeThemeCss,
 		};
 
-		let html = this.mdToHtml_.render(note ? note.body : '', this.props.webViewStyle, mdOptions);
+		let result = this.mdToHtml_.render(bodyToRender, this.props.webViewStyle, mdOptions);
+		let html = result.html;
 
-		const injectedJs = this.mdToHtml_.injectedJavaScript();
+		const injectedJs = [this.mdToHtml_.injectedJavaScript()];
+		injectedJs.push(shim.injectedJs('webviewLib'));
+		injectedJs.push('webviewLib.initialize({ postMessage: postMessage });');
+
+		console.info(injectedJs);
 
 		html = `
 			<!DOCTYPE html>
@@ -148,7 +160,7 @@ class NoteBodyViewer extends Component {
 					scalesPageToFit={Platform.OS !== 'ios'}
 					style={webViewStyle}
 					source={source}
-					injectedJavaScript={injectedJs}
+					injectedJavaScript={injectedJs.join('\n')}
 					originWhitelist={['file://*', './*', 'http://*', 'https://*']}
 					mixedContentMode="always"
 					allowFileAccess={true}
@@ -158,8 +170,8 @@ class NoteBodyViewer extends Component {
 						let msg = event.nativeEvent.data;
 
 						if (msg.indexOf('checkboxclick:') === 0) {
-							const newBody = this.mdToHtml_.handleCheckboxClick(msg, this.props.note.body);
-							if (onCheckboxChange) onCheckboxChange(newBody);
+							const newBody = shared.toggleCheckbox(msg, this.props.note.body);
+							if (this.props.onCheckboxChange) this.props.onCheckboxChange(newBody);
 						} else if (msg.indexOf('bodyscroll:') === 0) {
 							//msg = msg.split(':');
 							//this.bodyScrollTop_ = Number(msg[1]);

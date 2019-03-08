@@ -27,10 +27,6 @@ class ResourceLocalState extends BaseModel {
 		return result;
 	}
 
-	static resetStartedFetchStatus() {
-		return this.db().exec('UPDATE resource_local_states SET fetch_status = ? WHERE fetch_status = ?', [Resource.FETCH_STATUS_IDLE, Resource.FETCH_STATUS_STARTED]);
-	}
-
 	static async save(o) {
 		const queries = [
 			{ sql: 'DELETE FROM resource_local_states WHERE resource_id = ?', params: [o.resource_id] },

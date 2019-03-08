@@ -13,7 +13,12 @@ const { uuid } = require('lib/uuid.js');
 const Resource = require('lib/models/Resource');
 
 const injectedJs = {
-	mermaid: require('lib/rnInjectedJs/mermaid'),
+	webviewLib: require('lib/rnInjectedJs/webviewLib'),
+};
+
+const cssToJs = {
+	'hljs-atom-one-dark-reasonable.css': require('lib/csstojs/hljs-atom-one-dark-reasonable.css.js'),
+	'hljs-atom-one-light.css': require('lib/csstojs/hljs-atom-one-light.css.js'),
 };
 
 function shimInit() {
@@ -169,8 +174,13 @@ function shimInit() {
 	}
 
 	shim.injectedJs = function(name) {
-		if (name in injectedJs) return injectedJs[name];
-		return '';
+		if (!(name in injectedJs)) throw new Error('Cannot find injectedJs file (add it to "injectedJs" object): ' + name);
+		return injectedJs[name];
+	}
+
+	shim.loadCssFromJs = function(name) {
+		if (!(name in cssToJs)) throw new Error('Cannot find csstojs file (add it to "cssToJs" object): ' + name);
+		return cssToJs[name];
 	}
 
 }
