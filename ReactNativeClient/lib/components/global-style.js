@@ -36,6 +36,8 @@ const globalStyle = {
 	htmlCodeBackgroundColor: 'rgb(243, 243, 243)',
 	htmlCodeBorderColor: 'rgb(220, 220, 220)',
 	htmlCodeColor: 'rgb(0,0,0)',
+
+	codeThemeCss: 'hljs-atom-one-light.css',
 };
 
 globalStyle.marginRight = globalStyle.margin;
@@ -117,6 +119,8 @@ function themeStyle(theme) {
 	output.htmlCodeColor = '#ffffff';
 	output.htmlCodeBackgroundColor = 'rgb(47, 48, 49)';
 	output.htmlCodeBorderColor = 'rgb(70, 70, 70)';
+
+	output.codeThemeCss = 'hljs-atom-one-dark-reasonable.css';
 
 	output.colorUrl = '#7B81FF';
 

@@ -36,6 +36,7 @@ const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { toSystemSlashes, safeFilename } = require('lib/path-utils');
 const { clipboard } = require('electron');
 const SearchEngine = require('lib/services/SearchEngine');
+const ModelCache = require('lib/services/ModelCache');
 const NoteTextViewer = require('./NoteTextViewer.min');
 
 require('brace/mode/markdown');
@@ -75,6 +76,7 @@ class NoteTextComponent extends React.Component {
 			// to automatically set the title.
 			newAndNoTitleChangeNoteId: null,
 			bodyHtml: '',
+			lastRenderCssFiles: [],
 			lastKeys: [],
 			showLocalSearch: false,
 			localSearch: Object.assign({}, this.localSearchDefaultState), 
@@ -226,9 +228,10 @@ class NoteTextComponent extends React.Component {
 			if (!this.state.note || !this.state.note.body) return;
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
 			if (resourceIds.indexOf(resource.id) >= 0) {
-				this.mdToHtml().clearCache();
+				// this.mdToHtml().clearCache();
 				this.lastSetHtml_ = '';
-				this.updateHtml(this.state.note.body);
+				this.scheduleHtmlUpdate();
+				//this.updateHtml(this.state.note.body);
 			}
 		}
 
@@ -563,6 +566,8 @@ class NoteTextComponent extends React.Component {
 			}
 		}
 
+		// if (newState.note) await shared.refreshAttachedResources(this, newState.note.body);
+
 		this.updateHtml(newState.note ? newState.note.body : '');
 	}
 
@@ -635,7 +640,7 @@ class NoteTextComponent extends React.Component {
 		const arg0 = args && args.length >= 1 ? args[0] : null;
 		const arg1 = args && args.length >= 2 ? args[1] : null;
 
-		reg.logger().debug('Got ipc-message: ' + msg, args);
+		console.info('Got ipc-message: ' + msg, args);
 
 		if (msg.indexOf('checkboxclick:') === 0) {
 			// Ugly hack because setting the body here will make the scrollbar
@@ -644,7 +649,7 @@ class NoteTextComponent extends React.Component {
 			// "afterRender" event has been called.
 			this.restoreScrollTop_ = this.editorScrollTop();
 
-			const newBody = this.mdToHtml_.handleCheckboxClick(msg, this.state.note.body);
+			const newBody = shared.toggleCheckbox(msg, this.state.note.body);
 			this.saveOneProperty('body', newBody);
 		} else if (msg === 'setMarkerCount') {
 			const ls = Object.assign({}, this.state.localSearch);
@@ -724,6 +729,7 @@ class NoteTextComponent extends React.Component {
 				// When using the file:// protocol, openExternal doesn't work (does nothing) with URL-encoded paths
 				require('electron').shell.openExternal(urlDecode(msg));
 			} else {
+				console.info('OPEN URL');
 				require('electron').shell.openExternal(msg);
 			}
 		} else if (msg.indexOf('#') === 0) {
@@ -794,7 +800,7 @@ class NoteTextComponent extends React.Component {
 		});
 
 		if (Setting.value('env') === 'dev') {
-			// this.webviewRef_.current.wrappedInstance.openDevTools();
+			this.webviewRef_.current.wrappedInstance.openDevTools();
 		}
 	}
 
@@ -891,31 +897,22 @@ class NoteTextComponent extends React.Component {
 		}
 	}
 
-	updateHtml(body = null, options = null) {
+	async updateHtml(body = null, options = null) {
 		if (!options) options = {};
 		if (!('useCustomCss' in options)) options.useCustomCss = true;
 
-		const mdOptions = {
-			onResourceLoaded: () => {
-				if (this.resourceLoadedTimeoutId_) {
-					clearTimeout(this.resourceLoadedTimeoutId_);
-					this.resourceLoadedTimeoutId_ = null;
-				}
-
-				this.resourceLoadedTimeoutId_ = setTimeout(() => {
-					this.resourceLoadedTimeoutId_ = null;
-					this.updateHtml();
-					this.forceUpdate();
-				}, 100);
-			},
-			postMessageSyntax: 'ipcProxySendToHost',
-			userCss: options.useCustomCss ? this.props.customCss : '',
-		};
+		let bodyToRender = body;
+		if (bodyToRender === null) bodyToRender = this.state.note && this.state.note.body ? this.state.note.body : '';
 
 		const theme = themeStyle(this.props.theme);
 
-		let bodyToRender = body;
-		if (bodyToRender === null) bodyToRender = this.state.note && this.state.note.body ? this.state.note.body : '';
+		const mdOptions = {
+			codeTheme: theme.codeThemeCss,
+			postMessageSyntax: 'ipcProxySendToHost',
+			userCss: options.useCustomCss ? this.props.customCss : '',
+			resources: await shared.attachedResources(bodyToRender),
+		};
+
 		let bodyHtml = '';
 
 		const visiblePanes = this.props.visiblePanes || ['editor', 'viewer'];
@@ -925,9 +922,12 @@ class NoteTextComponent extends React.Component {
 			bodyToRender = '*' + _('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout')) + '*';
 		}
 
-		bodyHtml = this.mdToHtml().render(bodyToRender, theme, mdOptions);
+		const result = this.mdToHtml().render(bodyToRender, theme, mdOptions);
 
-		this.setState({ bodyHtml: bodyHtml });
+		this.setState({
+			bodyHtml: result.html,
+			lastRenderCssFiles: result.cssFiles,
+		});
 	}
 
 	titleField_keyDown(event) {
@@ -1061,7 +1061,7 @@ class NoteTextComponent extends React.Component {
 		});
 	}
 
-	printTo_(target, options) {
+	async printTo_(target, options) {
 		if (this.props.selectedNoteIds.length !== 1 || !this.webviewRef_.current) {
 			throw new Error(_('Only one note can be printed or exported to PDF at a time.'));
 		}
@@ -1072,13 +1072,13 @@ class NoteTextComponent extends React.Component {
 		const previousTheme = Setting.value('theme');
 		Setting.setValue('theme', Setting.THEME_LIGHT);
 		this.lastSetHtml_ = '';
-		this.updateHtml(tempBody, { useCustomCss: false });
+		await this.updateHtml(tempBody, { useCustomCss: false });
 		this.forceUpdate();
 
-		const restoreSettings = () => {
+		const restoreSettings = async () => {
 			Setting.setValue('theme', previousTheme);
 			this.lastSetHtml_ = '';
-			this.updateHtml(previousBody);
+			await this.updateHtml(previousBody);
 			this.forceUpdate();
 		}
 
@@ -1100,7 +1100,7 @@ class NoteTextComponent extends React.Component {
 		}, 100);		
 	}
 
-	commandSavePdf() {
+	async commandSavePdf() {
 		try {
 			if (!this.state.note) throw new Error(_('Only one note can be printed or exported to PDF at a time.'));
 
@@ -1111,15 +1111,15 @@ class NoteTextComponent extends React.Component {
 
 			if (!path) return;
 
-			this.printTo_('pdf', { path: path });
+			await this.printTo_('pdf', { path: path });
 		} catch (error) {
 			bridge().showErrorMessageBox(error.message);
 		}
 	}
 
-	commandPrint() {
+	async commandPrint() {
 		try {
-			this.printTo_('printer');
+			await this.printTo_('printer');
 		} catch (error) {
 			bridge().showErrorMessageBox(error.message);
 		}		
@@ -1711,7 +1711,9 @@ class NoteTextComponent extends React.Component {
 
 			const htmlHasChanged = this.lastSetHtml_ !== html;
 			 if (htmlHasChanged) {
-				let options = {codeTheme: theme.codeThemeCss};
+				let options = {
+					cssFiles: this.state.lastRenderCssFiles,
+				};
 				this.webviewRef_.current.wrappedInstance.send('setHtml', html, options);
 				this.lastSetHtml_ = html;
 			}

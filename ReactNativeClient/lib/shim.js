@@ -150,5 +150,6 @@ shim.Buffer = null;
 shim.openUrl = () => { throw new Error('Not implemented'); }
 shim.waitForFrame = () => { throw new Error('Not implemented'); }
 shim.injectedJs = name => '';
+shim.loadCssFromJs = name => { throw new Error('Not implemented'); }
 
 module.exports = { shim };

@@ -28,14 +28,11 @@
 		ul ul, ul ol, ol ul, ol ol   {
 			margin-bottom: 0px;			
 		}
-
-		.katex { font-size: 1.3em; } /* This controls the global Katex font size*/
 	</style>
 </head>
 
 <body id="body">
-	<div id="hlScriptContainer"></div>
-	<div id="mermaidScriptContainer"></div>
+	<div id="styleContainer"></div>
 	<div id="markScriptContainer"></div>
 	<div id="content" ondragstart="return false;" ondrop="return false;"></div>
 	<script src="./lib.js"></script>
@@ -59,61 +56,17 @@
 		}
 	});
 
-	// ----------------------------------------------------------------------
-	// Handle dynamically loading HLJS when a code element is present
-	// ----------------------------------------------------------------------
-
-	let hljsScriptAdded = false;
-	let hljsLoaded = false;
-
-	function loadHljs(options) {
-		hljsScriptAdded = true;
-
-		const script = document.createElement('script');
-		script.onload = function () {
-			hljsLoaded = true;
-			applyHljs();
-		};
-		script.src = 'highlight/highlight.pack.js';
-		document.getElementById('hlScriptContainer').appendChild(script);
-
-		const link = document.createElement('link');
-		link.rel = 'stylesheet';
-		// https://ace.c9.io/build/kitchen-sink.html
-		// https://highlightjs.org/static/demo/
-		link.href = 'highlight/styles/' + options.codeTheme;
-		document.getElementById('hlScriptContainer').appendChild(link);
-	}
-
-	function loadAndApplyHljs(options) {
-		var codeElements = document.getElementsByClassName('code');
-		if (!codeElements.length) return;
-
-		if (!hljsScriptAdded) {
-			this.loadHljs(options);
-			return;
-		}
-
-		// If HLJS is not loaded yet, no need to do anything. When it loads
-		// it will automatically apply the style to all the code elements.
-		if (hljsLoaded) applyHljs(codeElements);
-	}
-
-	function applyHljs(codeElements) {
-		if (typeof codeElements === 'undefined') codeElements = document.getElementsByClassName('code');
-
-		for (var i = 0; i < codeElements.length; i++) {
-			try {
-				hljs.highlightBlock(codeElements[i]);
-			} catch (error) {
-				console.warn('Cannot highlight code', error);
-			}
+	const loadedCssFiles_ = {};
+	function loadCssFiles(cssFiles) {
+		for (let i = 0; i < cssFiles.length; i++) {
+			const f = cssFiles[i];
+			if (loadedCssFiles_[f]) continue;
+			const link = document.createElement('link');
+			link.rel = 'stylesheet';
+			link.href = f;
+			document.getElementById('styleContainer').appendChild(link);
 		}
 	}
-
-	// ----------------------------------------------------------------------
-	// / Handle dynamically loading HLJS when a code element is present
-	// ----------------------------------------------------------------------
 
 	// Note: the scroll position source of truth is "percentScroll_". This is easier to manage than scrollTop because
 	// the scrollTop value depends on the images being loaded or not. For example, if the scrollTop is saved while
@@ -142,23 +95,6 @@
 		setPercentScroll(percentScroll_);
 	}
 
-	const loadedScripts_ = {};
-
-	function lazyLoadScript(url, containerId, onReady) {
-		if (loadedScripts_[url]) {
-			onReady();
-			return;
-		}
-
-		console.info('Loading script: ' + url);
-
-		const script = document.createElement('script');
-		script.onload = onReady;
-		script.src = url;
-		document.getElementById(containerId).appendChild(script);
-		loadedScripts_[url] = url;
-	}
-
 	ipc.setHtml = (event) => {
 		const html = event.html;
 
@@ -167,21 +103,6 @@
 		updateBodyHeight();
 
 		contentElement.innerHTML = html;
-
-		loadAndApplyHljs(event.options);
-
-		// Remove the bullet from "ul" for checkbox lists and extra padding
-		// const checkboxes = document.getElementsByClassName('checkbox');
-		// for (let i = 0; i < checkboxes.length; i++) {
-		// 	const cb = checkboxes[i];
-		// 	const ul = cb.parentElement.parentElement;
-		// 	if (!ul) {
-		// 		console.warn('Unexpected layout for checkbox');
-		// 		continue;
-		// 	}
-		// 	ul.style.listStyleType = 'none';
-		// 	ul.style.paddingLeft = 0;
-		// }
 
 		let previousContentHeight = contentElement.scrollHeight;
 		let startTime = Date.now();
@@ -203,12 +124,7 @@
 			}, 1);
 		}
 
-		if (document.getElementsByClassName('mermaid').length) {
-			console.warn('Mermaid support is currently disabled');
-			// lazyLoadScript('../../node_modules/mermaid/dist/mermaid.min.js', 'mermaidScriptContainer', () => {
-			// 	mermaid.init();
-			// });
-		}
+		loadCssFiles(event.options.cssFiles);
 	}
 
 	let ignoreNextScrollEvent = false;
@@ -372,49 +288,8 @@
 		}
 	});
 
-	function handleInternalLink(event, anchorNode) {
-		const href = anchorNode.getAttribute('href');
-		if (href.indexOf('#') === 0) {
-			event.preventDefault();
-			location.hash = href;
-			return true;
-		}
-		return false;
-	}
-
-	function getParentAnchorElement(element) {
-		let counter = 0;
-		while (true) {
-
-			if (counter++ >= 10000) {
-				console.warn('been looping for too long - exiting')
-				return null;
-			}
-
-			if (!element) return null;
-			if (element.nodeName === 'A') return element;
-			element = element.parentElement;
-		}
-	}
-
-	document.addEventListener('click', function(event) {
-		const anchor = getParentAnchorElement(event.target);
-		if (!anchor) return;
-
-		// Prevent URLs added via <a> tags from being opened within the application itself
-		// otherwise it would open the whole website within the WebView.
-		if (!anchor.hasAttribute('data-from-md')) {
-			if (handleInternalLink(event, anchor)) return;
-
-			event.preventDefault();
-			ipcProxySendToHost(anchor.getAttribute('href'));
-			return;
-		}
-
-		// If this is an internal link, jump to the anchor directly
-		if (anchor.hasAttribute('data-from-md')) {
-			if (handleInternalLink(event, anchor)) return;
-		}
+	webviewLib.initialize({
+		postMessage: ipcProxySendToHost,
 	});
 
 	// Disable drag and drop otherwise it's possible to drop a URL

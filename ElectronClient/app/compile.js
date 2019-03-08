@@ -43,6 +43,7 @@ fs.readdirSync(guiPath).forEach((filename) => {
 const libContent = [
 	fs.readFileSync(basePath + '/ReactNativeClient/lib/string-utils-common.js', 'utf8'),
 	fs.readFileSync(basePath + '/ReactNativeClient/lib/markJsUtils.js', 'utf8'),
+	fs.readFileSync(basePath + '/ReactNativeClient/lib/MdToHtml/webviewLib.js', 'utf8'),
 ];
 
 fs.writeFileSync(__dirname + '/gui/note-viewer/lib.js', libContent.join('\n'), 'utf8');

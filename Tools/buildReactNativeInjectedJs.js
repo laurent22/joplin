@@ -7,6 +7,7 @@ const fs = require('fs-extra');
 
 const cwd = process.cwd();
 const outputDir = cwd + '/lib/rnInjectedJs';
+const rnDir = __dirname + '/../ReactNativeClient';
 
 async function copyJs(name, filePath) {
 	const js = await fs.readFile(filePath, 'utf-8');
@@ -17,7 +18,7 @@ async function copyJs(name, filePath) {
 
 async function main(argv) {
 	await fs.mkdirp(outputDir);
-	await copyJs('mermaid', __dirname + '/node_modules/mermaid/dist/mermaid.min.js');	
+	await copyJs('webviewLib', rnDir + '/lib/MdToHtml/webviewLib.js');	
 }
 
 main(process.argv).catch((error) => {

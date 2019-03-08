@@ -63,6 +63,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			noteTagDialogShown: false,
 			fromShare: false,
 			showCamera: false,
+			noteResources: {},
 
 			// HACK: For reasons I can't explain, when the WebView is present, the TextInput initially does not display (It's just a white rectangle with
 			// no visible text). It will only appear when tapping it or doing certain action like selecting text on the webview. The bug started to
@@ -167,7 +168,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 			if (!this.state.note || !this.state.note.body) return;
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
 			if (resourceIds.indexOf(resource.id) >= 0 && this.refs.noteBodyViewer) {
-				this.refs.noteBodyViewer.rebuildMd();
+				const attachedResources = await shared.attachedResources(this.state.note.body);
+				this.setState({ noteResources: attachedResources }, () => {
+					this.refs.noteBodyViewer.rebuildMd();
+				});
 			}
 		}
 
@@ -612,7 +616,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 				style={this.styles().noteBodyViewer}
 				webViewStyle={theme}
 				note={note}
+				noteResources={this.state.noteResources}
 				highlightedKeywords={keywords}
+				theme={this.props.theme}
 				onCheckboxChange={(newBody) => { onCheckboxChange(newBody) }}
 				onLoadEnd={() => {
 					setTimeout(() => {

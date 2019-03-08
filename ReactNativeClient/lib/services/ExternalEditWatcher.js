@@ -6,6 +6,7 @@ const EventEmitter = require('events');
 const { splitCommandString } = require('lib/string-utils');
 const { fileExtension } = require('lib/path-utils');
 const spawn	= require('child_process').spawn;
+const chokidar = require('chokidar');
 
 class ExternalEditWatcher {
 
@@ -15,6 +16,7 @@ class ExternalEditWatcher {
 		this.watcher_ = null;
 		this.eventEmitter_ = new EventEmitter();
 		this.skipNextChangeEvent_ = {};
+		this.chokidar_ = chokidar;
 	}
 
 	static instance() {
@@ -39,14 +41,16 @@ class ExternalEditWatcher {
 		return this.logger_;
 	}
 
-	async preload() {
-		// Chokidar is extremely slow to load since Electron 4 - it takes over 4 seconds
-		// on my computer. So load it in the background.
-		setTimeout(() => {
-			if (this.chokidar_) return;
-			this.chokidar_ = require('chokidar');
-		}, 1000);
-	}
+	// async preload() {
+	// 	// Chokidar is extremely slow to load since Electron 4 - it takes over 4 seconds
+	// 	// on my computer. So load it in the background.
+	// 	setTimeout(() => {
+	// 		if (this.chokidar_) return;
+	// 		const startTime = Date.now();
+	// 		this.chokidar_ = require('chokidar');
+	// 		console.info('Chokidar load time:', Date.now() - startTime);
+	// 	}, 1000);
+	// }
 
 	watch(fileToWatch) {
 		if (!this.chokidar_) return;

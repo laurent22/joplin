@@ -40,6 +40,20 @@ class NoteTextViewerComponent extends React.Component {
 			const fn = this.webviewListeners_[n];
 			wv.addEventListener(n, fn);
 		}
+
+		let isAlreadyReady = false;
+		try {
+			isAlreadyReady = !this.webviewRef_.current.isLoading()
+		} catch (error) {
+			// Ignore - it means the view has not started loading, and the DOM ready event has not been emitted yet
+			// Error is "The WebView must be attached to the DOM and the dom-ready event emitted before this method can be called."
+		}
+
+		// Edge-case - the webview was already ready by the time initWebview was
+		// called - so manually call the domReady event to notify caller.
+		if (isAlreadyReady) {
+			this.webview_domReady({});
+		}
 	}
 
 	destroyWebview() {

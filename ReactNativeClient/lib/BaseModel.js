@@ -195,6 +195,17 @@ class BaseModel {
 		return this.modelSelectAll(q.sql);
 	}
 
+	static async byIds(ids, options = null) {
+		if (!ids.length) return [];
+		if (!options) options = {};
+		if (!options.fields) options.fields = '*';
+
+		let sql = 'SELECT ' + this.db().escapeFields(options.fields) + ' FROM `' + this.tableName() + '`';
+		sql += ' WHERE id IN ("' + ids.join('","') + '")';
+		let q = this.applySqlOptions(options, sql);
+		return this.modelSelectAll(q.sql);
+	}
+
 	static async search(options = null) {
 		if (!options) options = {};
 		if (!options.fields) options.fields = '*';
