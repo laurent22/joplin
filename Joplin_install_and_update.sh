@@ -8,7 +8,7 @@ echo "| |_| | (_) | |_) | | | | | |"
 echo " \___/ \___/| .__/|_|_|_| |_|"
 echo "            |_|"
 echo ""
-echo "Linux installer and Updater"
+echo "Linux Installer and Updater"
 
 #-----------------------------------------------------
 # Variables
@@ -33,9 +33,9 @@ fi
 version=$(curl --silent "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": "v\K.*?(?=")')
 
 # Check if it's in the latest version
-if [[ $(< ~/.joplin/VERSION) != "$version" ]]; then
+if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$version" ]]; then
 
-    echo 'Download Joplin.'
+    echo 'Downloading Joplin...'
     # Delete previous version
     rm -f ~/.joplin/*.AppImage ~/.local/share/applications/joplin.desktop ~/.joplin/VERSION
     
@@ -43,7 +43,7 @@ if [[ $(< ~/.joplin/VERSION) != "$version" ]]; then
     mkdir -p ~/.joplin/
     
     # Download the latest version
-    wget -nv -O ~/.joplin/Joplin.AppImage https://github.com/laurent22/joplin/releases/download/v$version/Joplin-$version-x86_64.AppImage 
+    wget -nv --show-progress -O ~/.joplin/Joplin.AppImage https://github.com/laurent22/joplin/releases/download/v$version/Joplin-$version-x86_64.AppImage 
     
     # Gives execution privileges
     chmod +x ~/.joplin/Joplin.AppImage
@@ -55,7 +55,7 @@ if [[ $(< ~/.joplin/VERSION) != "$version" ]]; then
     #-----------------------------------------------------
     
     # Download icon
-    echo 'Download icon.'
+    echo 'Downloading icon...'
     wget -nv -O ~/.joplin/Icon512.png https://joplin.cozic.net/images/Icon512.png
     echo "${COLOR_GREEN}OK${COLOR_RESET}"
     
@@ -81,11 +81,11 @@ if [[ $(< ~/.joplin/VERSION) != "$version" ]]; then
     #-----------------------------------------------------
     
     # Informs the user that it has been installed and cleans variables
-    echo "${COLOR_GREEN}Joplin installed in the version${COLOR_RESET}" $version
+    echo "${COLOR_GREEN}Joplin version${COLOR_RESET}" $version "${COLOR_GREEN}installed.${COLOR_RESET}"
     # Add version
     echo $version > ~/.joplin/VERSION
 else
-    echo "${COLOR_GREEN}You are now in the latest version.${COLOR_RESET}"
+    echo "${COLOR_GREEN}You already have the latest version${COLOR_RESET}" $version "${COLOR_GREEN}installed.${COLOR_RESET}"
 fi
 echo 'Bye!'
 unset version
