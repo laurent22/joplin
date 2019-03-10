@@ -364,7 +364,7 @@ Current translations:
 ![](https://joplin.cozic.net/images/flags/country-4x3/hr.png)  |  Croatian  |  [hr_HR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/hr_HR.po)  |  Hrvoje Mandić (trbuhom@net.hr)  |  45%
 ![](https://joplin.cozic.net/images/flags/country-4x3/cz.png)  |  Czech  |  [cs_CZ](https://github.com/laurent22/joplin/blob/master/CliClient/locales/cs_CZ.po)  |  Lukas Helebrandt (lukas@aiya.cz)  |  71%
 ![](https://joplin.cozic.net/images/flags/country-4x3/dk.png)  |  Dansk  |  [da_DK](https://github.com/laurent22/joplin/blob/master/CliClient/locales/da_DK.po)  |  Morten Juhl-Johansen Zölde-Fejér (mjjzf@syntaktisk.  |  72%
-![](https://joplin.cozic.net/images/flags/country-4x3/de.png)  |  Deutsch  |  [de_DE](https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po)  |  Michael Sonntag (ms@editorei.de)  |  99%
+![](https://joplin.cozic.net/images/flags/country-4x3/de.png)  |  Deutsch  |  [de_DE](https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po)  |  Michael Sonntag (ms@editorei.de)  |  100%
 ![](https://joplin.cozic.net/images/flags/country-4x3/gb.png)  |  English  |  [en_GB](https://github.com/laurent22/joplin/blob/master/CliClient/locales/en_GB.po)  |    |  100%
 ![](https://joplin.cozic.net/images/flags/country-4x3/es.png)  |  Español  |  [es_ES](https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po)  |  Andros Fenollosa (andros@fenollosa.email)  |  99%
 ![](https://joplin.cozic.net/images/flags/country-4x3/fr.png)  |  Français  |  [fr_FR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/fr_FR.po)  |  Laurent Cozic  |  100%
@@ -379,7 +379,7 @@ Current translations:
 ![](https://joplin.cozic.net/images/flags/country-4x3/se.png)  |  Svenska  |  [sv](https://github.com/laurent22/joplin/blob/master/CliClient/locales/sv.po)  |  Jonatan Nyberg (jonatan@autistici.org)  |  96%
 ![](https://joplin.cozic.net/images/flags/country-4x3/tr.png)  |  Türkçe  |  [tr_TR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/tr_TR.po)  |  Zorbey Doğangüneş (zorbeyd@gmail.com)  |  93%
 ![](https://joplin.cozic.net/images/flags/country-4x3/ru.png)  |  Русский  |  [ru_RU](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ru_RU.po)  |  Artyom Karlov (artyom.karlov@gmail.com)  |  97%
-![](https://joplin.cozic.net/images/flags/country-4x3/cn.png)  |  中文 (简体)  |  [zh_CN](https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po)  |    |  97%
+![](https://joplin.cozic.net/images/flags/country-4x3/cn.png)  |  中文 (简体)  |  [zh_CN](https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po)  |    |  100%
 ![](https://joplin.cozic.net/images/flags/country-4x3/tw.png)  |  中文 (繁體)  |  [zh_TW](https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_TW.po)  |  penguinsam (samliu@gmail.com)  |  86%
 ![](https://joplin.cozic.net/images/flags/country-4x3/jp.png)  |  日本語  |  [ja_JP](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ja_JP.po)  |  AWASHIRO Ikuya (ikunya@gmail.com)  |  93%
 ![](https://joplin.cozic.net/images/flags/country-4x3/kr.png)  |  한국말  |  [ko](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ko.po)  |    |  94%
