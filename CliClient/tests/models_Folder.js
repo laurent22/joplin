@@ -99,6 +99,30 @@ describe('models_Folder', function() {
 		expect(folders[0].id).toBe(f1.id);
 		expect(folders[1].id).toBe(f3.id);
 		expect(folders[2].id).toBe(f2.id);
+
+		let n2 = await Note.save({ title: 'note2', parent_id: f2.id });
+		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
+
+		expect(folders[0].id).toBe(f2.id);
+		expect(folders[1].id).toBe(f1.id);
+		expect(folders[2].id).toBe(f3.id);
+
+		await Note.save({ id: n1.id, title: 'note1 MOD' });
+		
+		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
+		expect(folders[0].id).toBe(f1.id);
+		expect(folders[1].id).toBe(f3.id);
+		expect(folders[2].id).toBe(f2.id);
+
+		let f4 = await Folder.save({ title: "folder4", parent_id: f1.id }); await sleep(0.1);
+		let n3 = await Note.save({ title: 'note3', parent_id: f4.id });
+
+		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
+		expect(folders.length).toBe(4);
+		expect(folders[0].id).toBe(f4.id);
+		expect(folders[1].id).toBe(f1.id);
+		expect(folders[2].id).toBe(f3.id);
+		expect(folders[3].id).toBe(f2.id);
 	}));
 
 });

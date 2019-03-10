@@ -134,7 +134,12 @@ class Folder extends BaseItem {
 			const parent = findFolderParent(folderId);
 			if (!parent) return;
 
-			folderIdToTime[parent.id] = folderIdToTime[folderId];
+			if (folderIdToTime[parent.id] && folderIdToTime[parent.id] >= folderIdToTime[folderId]) {
+				// Don't change so that parent has the same time as the last updated child
+			} else {
+				folderIdToTime[parent.id] = folderIdToTime[folderId];
+			}
+			
 			applyChildTimeToParent(parent.id);
 		}
 

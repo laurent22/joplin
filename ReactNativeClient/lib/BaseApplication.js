@@ -310,7 +310,9 @@ class BaseApplication {
 			SearchEngine.instance().scheduleSyncTables();
 		}
 
-		if (this.hasGui() && ["FOLDER_UPDATE_ONE", "FOLDER_UPDATE_ALL"].indexOf(action.type) >= 0) {
+		// Don't add FOLDER_UPDATE_ALL as refreshFolders() is calling it too, which
+		// would cause the sidebar to refresh all the time.
+		if (this.hasGui() && ["FOLDER_UPDATE_ONE"].indexOf(action.type) >= 0) {
 			refreshFolders = true;
 		}
 
