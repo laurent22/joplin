@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
@@ -129,7 +131,6 @@ msgstr "Markiert ein To-Do als erledigt."
 msgid "Note is not a to-do: \"%s\""
 msgstr "Notiz ist kein To-Do: \"%s\""
 
-#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
@@ -1179,7 +1180,7 @@ msgstr ""
 "Bitte wähle aus, wohin der Synchronisations-Status exportiert werden soll"
 
 msgid "Table of contents"
-msgstr ""
+msgstr "Inhaltsverzeichnis"
 
 msgid "Add or remove tags"
 msgstr "Schlagwörter hinzufügen oder entfernen"
@@ -1390,9 +1391,8 @@ msgstr "Sortiere Notizen nach"
 msgid "Reverse sort order"
 msgstr "Sortierreihenfolge umdrehen"
 
-#, fuzzy
 msgid "Sort notebooks by"
-msgstr "Sortiere Notizen nach"
+msgstr "Sortiere Notizbücher nach"
 
 msgid "Save geo-location with notes"
 msgstr "Momentanen Standort zusammen mit Notizen speichern"
