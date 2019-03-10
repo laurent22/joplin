@@ -429,6 +429,11 @@ async function initialize(dispatch) {
 			reg.logger().info('db.ftsEnabled = ', Setting.value('db.ftsEnabled'));
 		}
 
+		// Note: for now we hard-code the folder sort order as we need to 
+		// create a UI to allow customisation (started in branch mobile_add_sidebar_buttons)
+		Setting.setValue('folders.sortOrder.field', 'title');
+		Setting.setValue('folders.sortOrder.reverse', false);
+
 		reg.logger().info('Sync target: ' + Setting.value('sync.target'));
 
 		setLocale(Setting.value('locale'));
