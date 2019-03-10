@@ -1414,11 +1414,11 @@ msgid "Automatically update the application"
 msgstr "アプリケーションを自動的にアップデート"
 
 msgid "Get pre-releases when checking for updates"
-msgstr ""
+msgstr "更新をチェックする時、開発版を取得する"
 
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
-msgstr ""
+msgstr "詳細についてはプレリリースページを参照してください: %s"
 
 msgid "Synchronisation interval"
 msgstr "同期間隔"
