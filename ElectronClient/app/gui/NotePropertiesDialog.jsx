@@ -23,7 +23,6 @@ class NotePropertiesDialog extends React.Component {
 			formNote: null,
 			editedKey: null,
 			editedValue: null,
-			visible: false,
 		};
 
 		this.keyToLabel_ = {
@@ -35,14 +34,8 @@ class NotePropertiesDialog extends React.Component {
 		};
 	}
 
-	componentWillReceiveProps(newProps) {
-		if ('visible' in newProps && newProps.visible !== this.state.visible) {
-			this.setState({ visible: newProps.visible });
-		}
-
-		if ('noteId' in newProps) {
-			this.loadNote(newProps.noteId);
-		}
+	componentDidMount() {
+		this.loadNote(this.props.noteId);
 	}
 
 	componentDidUpdate() {
@@ -174,10 +167,6 @@ class NotePropertiesDialog extends React.Component {
 		} else {
 			await this.cancelProperty();
 		}
-
-		this.setState({
-			visible: false,
-		});
 
 		if (this.props.onClose) {
 			this.props.onClose();
@@ -380,7 +369,6 @@ class NotePropertiesDialog extends React.Component {
 		const noteComps = [];
 
 		const modalLayerStyle = Object.assign({}, styles.modalLayer);
-		if (!this.state.visible) modalLayerStyle.display = 'none';
 
 		if (formNote) {
 			for (let key in formNote) {

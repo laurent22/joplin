@@ -457,12 +457,11 @@ class MainScreenComponent extends React.Component {
 			<div style={style}>
 				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
 
-				<NotePropertiesDialog
+				{ notePropertiesDialogOptions.visible && <NotePropertiesDialog
 					theme={this.props.theme}
 					noteId={notePropertiesDialogOptions.noteId}
-					visible={!!notePropertiesDialogOptions.visible}
 					onClose={this.notePropertiesDialog_close}
-				/>
+				/> }
 
 				<PromptDialog
 					autocomplete={promptOptions && ('autocomplete' in promptOptions) ? promptOptions.autocomplete : null}
