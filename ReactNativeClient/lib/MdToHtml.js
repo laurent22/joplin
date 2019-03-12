@@ -15,6 +15,7 @@ const rules = {
 	html_block: require('./MdToHtml/rules/html_block'),
 	html_inline: require('./MdToHtml/rules/html_inline'),
 	highlight_keywords: require('./MdToHtml/rules/highlight_keywords'),
+	code_inline: require('./MdToHtml/rules/code_inline'),
 };
 const setupLinkify = require('./MdToHtml/setupLinkify');
 const hljs = require('highlight.js');
@@ -75,12 +76,30 @@ class MdToHtml {
 
 		const ruleOptions = Object.assign({}, options, { resourceBaseUrl: this.resourceBaseUrl_ });
 
+		// To add a plugin, there are two options:
+		//
+		// 1. If the plugin does not need any application specific data, use the standard way:
+		//
+		//    const someMarkdownPlugin = require('someMarkdownPlugin');
+		//    markdownIt.use(someMarkdownPlugin);
+		//
+		// 2. If the plugin needs application data (in ruleOptions) or needs to pass data (CSS, files to load, etc.) back
+		//    to the application (using the context object), use the application-specific way:
+		//
+		//    const imagePlugin = require('./MdToHtml/rules/image');
+		//    markdownIt.use(imagePlugin(context, ruleOptions));
+		//
+		//    Using the `context` object, a plugin can send back either CSS strings (in .css) or CSS files that need
+		//    to be loaded (in .cssFiles). In general, the desktop app will load the CSS files and the mobile app
+		//    will load the CSS strings.
+
 		markdownIt.use(rules.image(context, ruleOptions));
 		markdownIt.use(rules.checkbox(context, ruleOptions));
 		markdownIt.use(rules.link_open(context, ruleOptions));
 		markdownIt.use(rules.html_block(context, ruleOptions));
 		markdownIt.use(rules.katex(context, ruleOptions));
 		markdownIt.use(rules.highlight_keywords(context, ruleOptions));
+		markdownIt.use(rules.code_inline(context, ruleOptions));
 
 		setupLinkify(markdownIt);
 
