@@ -639,7 +639,7 @@ function enexXmlToMdArray(stream, resources) {
 				// means it's an attachement. It will be appended along with the
 				// other remaining resources at the bottom of the markdown text.
 				if (resource && !!resource.id) {
-					section.lines = addResourceTag(section.lines, resource, nodeAttributes.alt);
+					section.lines = addResourceTag(section.lines, resource, resource.filename);
 				}
 			} else if (["span", "font", 'sup', 'cite', 'abbr', 'small', 'tt', 'sub', 'colgroup', 'col', 'ins', 'caption', 'var', 'map', 'area'].indexOf(n) >= 0) {
 				// Inline tags that can be ignored in Markdown
