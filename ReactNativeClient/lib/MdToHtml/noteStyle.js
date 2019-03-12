@@ -170,9 +170,15 @@ module.exports = function(style, options) {
 			position: relative;
 		}
 
+		/* Remove the indentation from the checkboxes at the root of the document
+		   (otherwise they are too far right), but keep it for their children to allow
+		   nested lists */
+		#rendered-md > ul > li.md-checkbox {
+			margin-left: -` + listMarginLeft + `;
+		}
+
 		li.md-checkbox {
 			list-style-type: none;
-			margin-left: -` + listMarginLeft + `;
 		}
 
 		li.md-checkbox input[type=checkbox] {
