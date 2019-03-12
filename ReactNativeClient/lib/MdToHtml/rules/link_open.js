@@ -12,9 +12,7 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 		const text = utils.getAttr(token.attrs, 'text');
 		const isResourceUrl = Resource.isResourceUrl(href);
 		const title = isResourceUrl ? utils.getAttr(token.attrs, 'title') : href;
-
-		console.info(href, isResourceUrl);
-
+		
 		let resourceIdAttr = "";
 		let icon = "";
 		let hrefAttr = '#';

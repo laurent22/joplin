@@ -156,6 +156,12 @@ class BaseApplication {
 				continue;
 			}
 
+			if (arg === '--enable-logging') {
+				// Electron-specific flag used for debugging - ignore it
+				argv.splice(0, 1);
+				continue;
+			}
+
 			if (arg.length && arg[0] == '-') {
 				throw new JoplinError(_('Unknown flag: %s', arg), 'flagError');
 			} else {
