@@ -85,7 +85,7 @@ module.exports = function(style, options) {
 		}
 		ul, ol {
 			padding-left: 0;
-			margin-left: ` + listMarginLeft + `;
+			margin-left: 1.7em;
 		}
 		li {
 			margin-bottom: .4em;
@@ -159,53 +159,6 @@ module.exports = function(style, options) {
 		.highlighted-keyword {
 			background-color: #F3B717;
 			color: black;
-		}
-
-		/* 
-		This is to fix https://github.com/laurent22/joplin/issues/764
-		Without this, the tag attached to an equation float at an absolute position of the page,
-		instead of a position relative to the container.
-		*/
-		.katex-display>.katex>.katex-html {
-			position: relative;
-		}
-
-		/* Remove the indentation from the checkboxes at the root of the document
-		   (otherwise they are too far right), but keep it for their children to allow
-		   nested lists */
-		#rendered-md > ul > li.md-checkbox {
-			margin-left: -` + listMarginLeft + `;
-		}
-
-		li.md-checkbox {
-			list-style-type: none;
-		}
-
-		li.md-checkbox input[type=checkbox] {
-			margin-right: 1em;
-		}
-
-		a.checkbox {
-			border: 1pt solid ` + style.htmlColor + `;
-			border-radius: 2pt;
-			width: 1.1em;
-			height: 1.1em;
-			background-color: rgba(0,0,0,0);
-			text-decoration: none;
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			position: relative;
-			top: -0.3em;
-			margin-right: 0.3em;
-		}
-
-		a.checkbox.tick:after {
-			content: "✓";
-		}
-
-		a.checkbox.tick {
-			color: ` + style.htmlColor + `;
 		}
 
 		@media print {

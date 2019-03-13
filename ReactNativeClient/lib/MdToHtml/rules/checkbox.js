@@ -5,6 +5,24 @@ const utils = require('../utils');
 
 let checkboxIndex_ = -1;
 
+const checkboxStyle = `
+	/* Remove the indentation from the checkboxes at the root of the document
+	   (otherwise they are too far right), but keep it for their children to allow
+	   nested lists. Make sure this value matches the UL margin. */
+
+	#rendered-md > ul > li.md-checkbox {
+		margin-left: -1.7em;
+	}
+
+	li.md-checkbox {
+		list-style-type: none;
+	}
+
+	li.md-checkbox input[type=checkbox] {
+		margin-right: 1em;
+	}
+`;
+
 function createPrefixTokens(Token, id, checked, label, postMessageSyntax, sourceToken) {
 	let token = null;
 	const tokens = [];
@@ -42,7 +60,7 @@ function createSuffixTokens(Token) {
 	return [new Token('label_close', 'label', -1)];
 }
 
-function installRule(markdownIt, mdOptions, ruleOptions) {
+function installRule(markdownIt, mdOptions, ruleOptions, context) {
 	markdownIt.core.ruler.push('checkbox', state => {
 		const tokens = state.tokens;
 		const Token = state.Token;
@@ -93,6 +111,8 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 				if (!itemClass) itemClass = '';
 				itemClass += ' md-checkbox';
 				currentListItem.attrSet('class', itemClass.trim());
+
+				context.css['checkbox'] = checkboxStyle;
 			}
 		}
 	});
@@ -100,6 +120,6 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 
 module.exports = function(context, ruleOptions) {
 	return function(md, mdOptions) {
-		installRule(md, mdOptions, ruleOptions);
+		installRule(md, mdOptions, ruleOptions, context);
 	};
 };

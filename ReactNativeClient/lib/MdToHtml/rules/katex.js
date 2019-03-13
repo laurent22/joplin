@@ -8,6 +8,21 @@ var katex = require('katex');
 const katexCss = require('lib/csstojs/katex.css.js');
 const md5 = require('md5');
 
+// const style = `
+// 	/* 
+// 	This is to fix https://github.com/laurent22/joplin/issues/764
+// 	Without this, the tag attached to an equation float at an absolute position of the page,
+// 	instead of a position relative to the container.
+// 	2018-03-13: No longer needed??
+// 	*/
+
+// 	/*
+// 	.katex-display>.katex>.katex-html {
+// 		position: relative;
+// 	}
+// 	*/
+// `
+
 // Test if potential opening or closing delimieter
 // Assumes that there is a "$" at state.src[pos]
 function isValidDelim(state, pos) {
