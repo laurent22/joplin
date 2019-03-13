@@ -21,6 +21,8 @@ class SideMenuContentComponent extends Component {
 			//width: 0,
 		};
 		this.styles_ = {};
+
+		this.tagButton_press = this.tagButton_press.bind(this);
 	}
 
 	styles() {
@@ -54,11 +56,6 @@ class SideMenuContentComponent extends Component {
 				color: theme.colorFaded,
 				fontSize: theme.fontSizeSmaller,
 			},
-			tagItemList: {
-				flex: 1,
-				flexDirection: 'row',
-				flexWrap: 'wrap'
-			},
 		};
 
 		styles.folderButton = Object.assign({}, styles.button);
@@ -70,15 +67,8 @@ class SideMenuContentComponent extends Component {
 		styles.folderIcon.color = theme.colorFaded;//'#0072d5';
 		styles.folderIcon.paddingTop = 3;
 
-		styles.tagButton = Object.assign({}, styles.button);
-		styles.tagButtonSelected = Object.assign({}, styles.tagButton);
-		styles.tagButtonSelected.backgroundColor = theme.selectedColor;
-		styles.tagButtonSelected.borderRadius = 1000;
-		styles.tagButtonText = Object.assign({}, styles.buttonText);
-		styles.tagButtonText.flex = 0;
-
-		styles.syncButton = Object.assign({}, styles.button);
-		styles.syncButtonText = Object.assign({}, styles.buttonText);
+		styles.sideButton = Object.assign({}, styles.button);
+		styles.sideButtonText = Object.assign({}, styles.buttonText);
 
 		this.styles_[this.props.theme] = StyleSheet.create(styles);
 		return this.styles_[this.props.theme];
@@ -101,13 +91,12 @@ class SideMenuContentComponent extends Component {
 		});
 	}
 
-	tag_press(tag) {
+	tagButton_press() {
 		this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 
 		this.props.dispatch({
 			type: 'NAV_GO',
-			routeName: 'Notes',
-			tagId: tag.id,
+			routeName: 'Tags',
 		});
 	}
 
@@ -154,20 +143,6 @@ class SideMenuContentComponent extends Component {
 		);
 	}
 
-	tagItem(tag, selected) {
-		const iconComp = <Icon name='md-pricetag' style={this.styles().folderIcon} />
-		const tagButtonStyle = selected ? this.styles().tagButtonSelected : this.styles().tagButton;
-
-		return (
-			<TouchableOpacity key={tag.id} onPress={() => { this.tag_press(tag) }}>
-				<View style={tagButtonStyle}>
-					{ iconComp }
-					<Text numberOfLines={1} style={this.styles().tagButtonText}>{Tag.displayTitle(tag)}</Text>
-				</View>
-			</TouchableOpacity>
-		);
-	}
-
 	synchronizeButton(state) {
 		const theme = themeStyle(this.props.theme);
 		
@@ -176,9 +151,22 @@ class SideMenuContentComponent extends Component {
 
 		return (
 			<TouchableOpacity key={'synchronize_button'} onPress={() => { this.synchronize_press() }}>
-				<View style={this.styles().syncButton}>
+				<View style={this.styles().sideButton}>
 					{ iconComp }
-					<Text style={this.styles().syncButtonText}>{title}</Text>
+					<Text style={this.styles().sideButtonText}>{title}</Text>
+				</View>
+			</TouchableOpacity>
+		);
+	}
+
+	tagButton() {
+		const theme = themeStyle(this.props.theme);
+
+		return (
+			<TouchableOpacity key={'tag_button'} onPress={this.tagButton_press}>
+				<View style={this.styles().sideButton}>
+					<Icon name='md-pricetag' style={theme.icon} />
+					<Text style={this.styles().sideButtonText}>Tags</Text>
 				</View>
 			</TouchableOpacity>
 		);
@@ -201,21 +189,13 @@ class SideMenuContentComponent extends Component {
 			const result = shared.renderFolders(this.props, this.folderItem.bind(this));
 			const folderItems = result.items;
 			items = items.concat(folderItems);
-			if (items.length) items.push(this.makeDivider('divider_1'));
 		}
 
-		if (this.props.tags.length) {
-			const result = shared.renderTags(this.props, this.tagItem.bind(this));
-			const tagItems = result.items;
+		items.push(this.makeDivider('divider_1'));
+		
+		items.push(this.tagButton());
 
-			items.push(
-				<View style={this.styles().tagItemList} key="tag_items">
-					{tagItems}
-				</View>
-			);
-
-			if (tagItems.length) items.push(this.makeDivider('divider_2'));
-		}
+		items.push(this.makeDivider('divider_tag_bottom'));
 
 		let lines = Synchronizer.reportToLines(this.props.syncReport);
 		const syncReportText = lines.join("\n");
@@ -267,7 +247,6 @@ const SideMenuContent = connect(
 	(state) => {
 		return {
 			folders: state.folders,
-			tags: state.tags,
 			syncStarted: state.syncStarted,
 			syncReport: state.syncReport,
 			selectedFolderId: state.selectedFolderId,
@@ -275,7 +254,8 @@ const SideMenuContent = connect(
 			notesParentType: state.notesParentType,
 			locale: state.settings.locale,
 			theme: state.settings.theme,
-			opacity: state.sideMenuOpenPercent,
+			// Don't do the opacity animation as it means re-rendering the list multiple times
+			// opacity: state.sideMenuOpenPercent,
 			collapsedFolderIds: state.collapsedFolderIds,
 			decryptionWorker: state.decryptionWorker,
 			resourceFetcher: state.resourceFetcher,

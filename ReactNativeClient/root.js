@@ -28,6 +28,7 @@ const ResourceService = require('lib/services/ResourceService');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { Database } = require('lib/database.js');
 const { NotesScreen } = require('lib/components/screens/notes.js');
+const { TagsScreen } = require('lib/components/screens/tags.js');
 const { NoteScreen } = require('lib/components/screens/note.js');
 const { ConfigScreen } = require('lib/components/screens/config.js');
 const { FolderScreen } = require('lib/components/screens/folder.js');
@@ -656,6 +657,7 @@ class AppComponent extends React.Component {
 			Welcome: { screen: WelcomeScreen },
 			Notes: { screen: NotesScreen },
 			Note: { screen: NoteScreen },
+			Tags: { screen: TagsScreen },
 			Folder: { screen: FolderScreen },
 			OneDriveLogin: { screen: OneDriveLoginScreen },
 			DropboxLogin: { screen: DropboxLoginScreen },
