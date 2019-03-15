@@ -94,6 +94,7 @@ class Setting extends BaseModel {
 					'body': _('Focus body'),
 				};
 			}},
+      'markEnabled': {value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable html <mark> (==mark==) syntax extension')},
 
 			// Tray icon (called AppIndicator) doesn't work in Ubuntu
 			// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html

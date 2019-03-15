@@ -7,6 +7,7 @@ const { _ } = require('lib/locale');
 const md5 = require('md5');
 const StringUtils = require('lib/string-utils.js');
 const noteStyle = require('./MdToHtml/noteStyle');
+const Setting = require('./models/Setting.js');
 const rules = {
 	image: require('./MdToHtml/rules/image'),
 	checkbox: require('./MdToHtml/rules/checkbox'),
@@ -19,6 +20,8 @@ const rules = {
 };
 const setupLinkify = require('./MdToHtml/setupLinkify');
 const hljs = require('highlight.js');
+const markdownItMark = require('markdown-it-mark');
+const markdownItFootnote = require('markdown-it-footnote');
 
 class MdToHtml {
 
@@ -100,6 +103,9 @@ class MdToHtml {
 		markdownIt.use(rules.katex(context, ruleOptions));
 		markdownIt.use(rules.highlight_keywords(context, ruleOptions));
 		markdownIt.use(rules.code_inline(context, ruleOptions));
+    if (Setting.value('markEnabled'))
+      markdownIt.use(markdownItMark);
+    markdownIt.use(markdownItFootnote);
 
 		setupLinkify(markdownIt);
 
