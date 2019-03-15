@@ -6,7 +6,7 @@ const Search = require('lib/models/Search.js');
 const { time } = require('lib/time-utils.js');
 const Setting = require('lib/models/Setting.js');
 const { IconButton } = require('./IconButton.min.js');
-const { urlDecode, escapeHtml, pregQuote, scriptType } = require('lib/string-utils');
+const { urlDecode, escapeHtml, pregQuote, scriptType, substrWithEllipsis } = require('lib/string-utils');
 const Toolbar = require('./Toolbar.min.js');
 const TagList = require('./TagList.min.js');
 const { connect } = require('react-redux');
@@ -1372,9 +1372,16 @@ class NoteTextComponent extends React.Component {
 		const toolbarItems = [];
 		if (note && this.state.folder && ['Search', 'Tag'].includes(this.props.notesParentType)) {
 			toolbarItems.push({
-				title: _('In: %s', this.state.folder.title),
+				title: _('In: %s', substrWithEllipsis(this.state.folder.title, 0, 16)),
 				iconName: 'fa-book',
-				enabled: false,
+				onClick: () => {
+					this.props.dispatch({
+						type: "FOLDER_AND_NOTE_SELECT",
+						folderId: this.state.folder.id,
+						noteId: note.id,
+					});
+				},
+				// enabled: false,
 			});
 		}
 
@@ -1407,25 +1414,6 @@ class NoteTextComponent extends React.Component {
 			tooltip: _('Italic'),
 			iconName: 'fa-italic',
 			onClick: () => { return this.commandTextItalic(); },
-		});
-
-		toolbarItems.push({
-			type: 'separator',
-		});
-
-		toolbarItems.push({
-			tooltip: _('Note properties'),
-			iconName: 'fa-info-circle',
-			onClick: () => {
-				const n = this.state.note;
-				if (!n || !n.id) return;
-
-				this.props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'commandNoteProperties',
-					noteId: n.id,
-				});
-			},
 		});
 
 		toolbarItems.push({
@@ -1528,6 +1516,22 @@ class NoteTextComponent extends React.Component {
 			}
 			toolbarItems.push(item);
 		}
+
+
+		toolbarItems.push({
+			tooltip: _('Note properties'),
+			iconName: 'fa-info-circle',
+			onClick: () => {
+				const n = this.state.note;
+				if (!n || !n.id) return;
+
+				this.props.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'commandNoteProperties',
+					noteId: n.id,
+				});
+			},
+		});
 
 		return toolbarItems;
 	}

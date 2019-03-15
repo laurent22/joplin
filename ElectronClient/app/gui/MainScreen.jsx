@@ -210,6 +210,15 @@ class MainScreenComponent extends React.Component {
 					type: 'SEARCH_SELECT',
 					id: this.searchId_,
 				});
+			} else {
+				const note = await Note.load(this.props.selectedNoteId);
+				if (note) {
+					this.props.dispatch({
+						type: "FOLDER_AND_NOTE_SELECT",
+						folderId: note.parent_id,
+						noteId: note.id,
+					});
+				}
 			}
 
 		} else if (command.name === 'commandNoteProperties') {
@@ -502,6 +511,7 @@ const mapStateToProps = (state) => {
 		sidebarVisibility: state.sidebarVisibility,
 		sidebarWidth: state.settings['style.sidebar.width'],
 		noteListWidth: state.settings['style.noteList.width'],
+		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 	};
 };
 

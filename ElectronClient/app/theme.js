@@ -147,7 +147,7 @@ function addExtraStyles(style) {
 
 	style.toolbarStyle = {
 		height: style.toolbarHeight,
-		minWidth: style.toolbarHeight,
+		// minWidth: style.toolbarHeight,
 		display: 'flex',
 		alignItems: 'center',
 		paddingLeft: style.headerButtonHPadding,
@@ -159,6 +159,7 @@ function addExtraStyles(style) {
 		cursor: 'default',
 		justifyContent: 'center',
 		color: style.color,
+		whiteSpace: 'nowrap',
 	};
 
 	style.textStyle = {
