@@ -461,7 +461,7 @@ class Application extends BaseApplication {
 					type: 'separator',
 					visible: shim.isMac() ? true : false
 				}, {
-					label: 'Preferences...',
+					label: _('Preferences...'),
 					visible: shim.isMac() ? true : false,
 					submenu: preferencesItems
 				}, {
