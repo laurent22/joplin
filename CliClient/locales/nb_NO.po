@@ -18,7 +18,7 @@ msgstr ""
 
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
-"Hvis du vil slette en merkelapp, fjern merkelappen fra merkede notater."
+"For å slette en merkelapp, fjern merkelappen fra merkede notater."
 
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Vennligst velg notatet eller notatboken som skal slettes først."
@@ -124,12 +124,11 @@ msgstr "Markerer et gjøremål som ferdig."
 msgid "Note is not a to-do: \"%s\""
 msgstr "Notat er ikke et gjøremål: \"%s\""
 
-#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
-"Utfører E2EE-konfiguration. Tilgjengelige kommandoer er: `enable`(aktiver), "
+"Konfigurerer E2EE-konfigurasjon. Tilgjengelige kommandoer er: `enable`(aktiver), "
 "`disable`(lukk), `decrypt`(dekrypter), `status` og `target-status` (mottager-"
 "status)."
 
@@ -187,7 +186,7 @@ msgid "Note has been saved."
 msgstr "Notat har blitt lagret."
 
 msgid "Exits the application."
-msgstr "Forlat programmet."
+msgstr "Avslutter programmet."
 
 msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
@@ -344,7 +343,7 @@ msgid "Please select a notebook first."
 msgstr "Vennligst velg en notatbok først."
 
 msgid "Creates a new notebook."
-msgstr "Opprettter en ny notatbok."
+msgstr "Oppretter en ny notatbok."
 
 msgid "Creates a new note."
 msgstr "Oppretter et nytt notat."
@@ -382,7 +381,7 @@ msgstr "Sletter notatene uten bekreftelse."
 
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
-msgstr "%d notater passer dette mønsteret. Slette dem?"
+msgstr "%d notater passer dette mønsteret. Vil du slette de?"
 
 msgid "Delete note?"
 msgstr "Slett notat?"
@@ -413,7 +412,7 @@ msgstr "Sync å forsynt mål (uteblivelsene å sync. target config-verdi)"
 
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
-msgstr "Godkjenning ble ikke fullført (mottok ikke et godkjennings tegn)."
+msgstr "Godkjenning ble ikke fullført (mottok ikke et autoriseringsbevis)."
 
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
@@ -578,18 +577,16 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Eksporterer til \"%s\" i \"%s\" format. Vennligst vent..."
 
 msgid "Sidebar"
-msgstr ""
+msgstr "Sidepanel"
 
 msgid "Note list"
-msgstr ""
+msgstr "Notatliste"
 
-#, fuzzy
 msgid "Note title"
-msgstr "Tittel på notatbok:"
+msgstr "Tittel på notat:"
 
-#, fuzzy
 msgid "Note body"
-msgstr "Notatbøker"
+msgstr "Notatbrødtekst"
 
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
@@ -598,9 +595,8 @@ msgstr "Importerer fra \"%s\" i \"%s\"-format. Vennligst vent..."
 msgid "PDF File"
 msgstr "PDF-fil"
 
-#, fuzzy
 msgid "&File"
-msgstr "Fil"
+msgstr "&Fil"
 
 msgid "New note"
 msgstr "Nytt notat"
@@ -615,7 +611,7 @@ msgid "Import"
 msgstr "Importer"
 
 msgid "Export"
-msgstr "Eksport"
+msgstr "Eksporter"
 
 msgid "Synchronise"
 msgstr "Synkroniser"
@@ -630,9 +626,8 @@ msgstr "Skjul %s"
 msgid "Quit"
 msgstr "Avslutt"
 
-#, fuzzy
 msgid "&Edit"
-msgstr "Rediger"
+msgstr "&Rediger"
 
 msgid "Copy"
 msgstr "Kopier"
@@ -653,7 +648,7 @@ msgid "Italic"
 msgstr "Kursiv"
 
 msgid "Link"
-msgstr ""
+msgstr "Lenke"
 
 msgid "Insert Date Time"
 msgstr "Sett inn dato/tid"
@@ -664,27 +659,23 @@ msgstr "Rediger i ekstern editor"
 msgid "Search in all the notes"
 msgstr "Søk i alle notater"
 
-#, fuzzy
 msgid "Search in current note"
 msgstr "Søk i nåværende notat"
 
-#, fuzzy
 msgid "&View"
-msgstr "Vis"
+msgstr "&Vis"
 
 msgid "Toggle sidebar"
 msgstr "Vis/skjul sidepanel"
 
 msgid "Toggle editor layout"
-msgstr "Bytt editorutseende"
+msgstr "Bytt editorvisning"
 
-#, fuzzy
 msgid "Focus"
-msgstr "Fokuser på brødtekst"
+msgstr "Fokuser"
 
-#, fuzzy
 msgid "&Tools"
-msgstr "Verktøy"
+msgstr "&Verktøy"
 
 msgid "Synchronisation status"
 msgstr "Synkroniseringsstatus"
@@ -698,9 +689,8 @@ msgstr "Krypteringsvalg"
 msgid "General Options"
 msgstr "Generelle innstillinger"
 
-#, fuzzy
 msgid "&Help"
-msgstr "Hjelp"
+msgstr "&Hjelp"
 
 msgid "Website and documentation"
 msgstr "Nettsted og dokumentasjon"
@@ -819,7 +809,7 @@ msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
-"Denne autoriseringsbeviset er det eneste nødvendig for å gi "
+"Denne autoriseringsbeviset er det eneste nødvendige for å gi "
 "tredjepartsapplikasjoner tilgang til Joplin."
 
 #, javascript-format
@@ -827,7 +817,7 @@ msgid "Notes and settings are stored in: %s"
 msgstr "Notater og innstillinger er lagret i: %s"
 
 msgid "Browse..."
-msgstr ""
+msgstr "Utforsk..."
 
 msgid "Check synchronisation configuration"
 msgstr "Sjekk synkroniseringskonfigurasjon"
@@ -926,9 +916,8 @@ msgstr "Status"
 msgid "Encryption is:"
 msgstr "Kryptering er:"
 
-#, fuzzy
 msgid "Usage"
-msgstr "Bruk: %s"
+msgstr "Bruk"
 
 msgid "Back"
 msgstr "Tilbake"
@@ -950,7 +939,7 @@ msgid "Notebook title:"
 msgstr "Tittel på notatbok:"
 
 msgid "Add or remove tags:"
-msgstr "Legge til eller fjern merkelapp:"
+msgstr "Legge til eller fjern merkelapper:"
 
 msgid "Separate each tag by a comma."
 msgstr "Separer hver merkelapp med komma."
@@ -965,7 +954,7 @@ msgid "Set alarm:"
 msgstr "Angi alarm:"
 
 msgid "Layout"
-msgstr "Utseende"
+msgstr "Visning"
 
 msgid "Search..."
 msgstr "Søk..."
@@ -1030,7 +1019,7 @@ msgstr ""
 "Dette notatet har ikke noe innhold. Klikk på \"%s\" for å redigere notatet."
 
 msgid "Only one note can be printed or exported to PDF at a time."
-msgstr ""
+msgstr "Kun ett notat kan bli printet eller eksportert som PDF om gangen."
 
 msgid "strong text"
 msgstr "fet tekst"
@@ -1067,7 +1056,7 @@ msgid "Numbered List"
 msgstr "Nummerert liste"
 
 msgid "Bulleted List"
-msgstr "Kuleliste"
+msgstr "Kulepunktliste"
 
 msgid "Checkbox"
 msgstr "Avmerkingsboks"
@@ -1092,7 +1081,7 @@ msgstr "notat"
 
 #, javascript-format
 msgid "Creating new %s..."
-msgstr "Lager ny %s..."
+msgstr "Oppretter nytt %s..."
 
 msgid "Refresh"
 msgstr "Oppdater"
@@ -1118,18 +1107,20 @@ msgstr "Krypteringsinnstillinger"
 msgid "Clipper Options"
 msgstr "Clipper-innstillinger"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
-"Slette notatbok? Alle notater og underliggende notatbøker i denne notatboken "
+"Slette notatbok \"&s\"?\n" 
+"\n"
+"Alle notater og underliggende notatbøker i denne notatboken "
 "vil også bli slettet."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
-msgstr "Fjern denne merkelappen fra alle notater?"
+msgstr "Fjern denne merkelappen \"%s\" fra alle notater?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Fjerne dette søket fra sidepanelet?"
@@ -1155,7 +1146,7 @@ msgid "Please select where the sync status should be exported to"
 msgstr "Velg hvor synkroniseringsstatusen skal eksporteres til"
 
 msgid "Table of contents"
-msgstr ""
+msgstr "Liste over innhold"
 
 msgid "Add or remove tags"
 msgstr "Legg til eller fjern merkelapper"
@@ -1179,13 +1170,13 @@ msgstr "Bytt til gjøremålmodus"
 msgid "Copy Markdown link"
 msgstr "Kopier Markdown-link"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete note \"%s\"?"
-msgstr "Slette notater?"
+msgstr "Slette notat \"%s\"?"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete these %d notes?"
-msgstr "Slett disse notatene?"
+msgstr "Slett disse %d notatene?"
 
 #, javascript-format
 msgid "Usage: %s"
@@ -1276,7 +1267,7 @@ msgstr "Slettet eksterne elementer: %d."
 
 #, javascript-format
 msgid "Fetched items: %d/%d."
-msgstr "Hentede elementer: %d/%d."
+msgstr "Hentet elementer: %d/%d."
 
 msgid "Cancelling..."
 msgstr "Avbryter…"
@@ -1322,7 +1313,7 @@ msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Notatbøker kan ikke hete %s, som er en reservert tittel."
 
 msgid "created date"
-msgstr "opprettet"
+msgstr "dato opprettet"
 
 msgid "This note does not have geolocation information."
 msgstr "Dette notatet har ingen stedsinformasjon."
@@ -1365,7 +1356,6 @@ msgstr "Sorter notater etter"
 msgid "Reverse sort order"
 msgstr "Reverser sorteringsrekkefølge"
 
-#, fuzzy
 msgid "Sort notebooks by"
 msgstr "Sorter notater etter"
 
@@ -1405,12 +1395,11 @@ msgstr "Start applikasjonen minimert som systemmenyikon"
 msgid "Global zoom percentage"
 msgstr "Global forstørrelse"
 
-#, fuzzy
 msgid "Editor font size"
-msgstr "Editor skriftstørrelse"
+msgstr "Editorskriftstørrelse"
 
 msgid "Editor font family"
-msgstr "Editor skrifttype"
+msgstr "Editorskrifttype"
 
 msgid ""
 "This must be *monospace* font or it will not work properly. If the font is "
@@ -1469,7 +1458,7 @@ msgstr ""
 "som er navngitt som `sync.NUM.NAME` (dokumentert nedenfor)."
 
 msgid "Directory to synchronise with (absolute path)"
-msgstr "Mappe å synkronisere med (absolutt sti)"
+msgstr "Katalog å synkronisere med (absolutt sti)"
 
 msgid ""
 "The path to synchronise with when file system synchronisation is enabled. "
@@ -1518,7 +1507,7 @@ msgstr ""
 "Kommaseparert liste over stier til mapper å laste sertifikater fra, eller "
 "sti til individuelle sertifikatfiler. For eksempel: /my/cert_dir, /other/"
 "custom.perm. Merk at dersom du gjør endringer til TLS-innstillingene må du "
-"lagre endringer før du velger \"Sjekk synkroniseringsstatus\"."
+"lagre endringer før du velger \"Sjekk synkroniseringskonfigurasjon\"."
 
 msgid "Ignore TLS certificate errors"
 msgstr "Ignorer TLS-sertifikatfeil"
@@ -1527,24 +1516,20 @@ msgstr "Ignorer TLS-sertifikatfeil"
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Ugyldig verdi: \"%s\". Mulige verdier er: %s."
 
-#, fuzzy
 msgid "General"
 msgstr "Generelle innstillinger"
 
-#, fuzzy
 msgid "Synchronisation"
-msgstr "Synkroniseringsstatus"
+msgstr "Synkronisering"
 
 msgid "Appearance"
-msgstr ""
+msgstr "Utseende"
 
-#, fuzzy
 msgid "Note"
-msgstr "Notatbøker"
+msgstr "Notat"
 
-#, fuzzy
 msgid "Application"
-msgstr "Lokasjon"
+msgstr "Applikasjon"
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -1758,7 +1743,7 @@ msgstr "Joplins nettsted"
 msgid "Database v%s"
 msgstr "Database v%s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "FTS enabled: %d"
 msgstr "Fulltekstsøk aktivert: %d"
 
@@ -1799,7 +1784,7 @@ msgid "Errors only"
 msgstr "Kun feilmeldinger"
 
 msgid "This note has been modified:"
-msgstr "Dette notatet har blitt modifisert:"
+msgstr "Dette notatet har blitt endret:"
 
 msgid "Save changes"
 msgstr "Lagre endringer"
@@ -1819,9 +1804,8 @@ msgstr "Joplins mobilapp støtter for tiden ikke denne type linker: %s"
 msgid "Unsupported image type: %s"
 msgstr "Bildetypen er ikke støttet: %s"
 
-#, fuzzy
 msgid "Take photo"
-msgstr "Ta et bilde"
+msgstr "Ta bilde"
 
 msgid "Attach photo"
 msgstr "Legg ved et bilde"
@@ -1845,7 +1829,7 @@ msgid "Show metadata"
 msgstr "Vis metadata"
 
 msgid "View on map"
-msgstr "Se på kart"
+msgstr "Vis på kart"
 
 msgid "Go to source URL"
 msgstr "Gå til kilde-URL"
@@ -1867,10 +1851,10 @@ msgid ""
 "menu to access your existing notebooks."
 msgstr ""
 "Klikk på (+)-knappen for å lage et nytt notat eller en ny notatbok. Klikk på "
-"sidemenyen for tilgang til dine eksisterende notatbøker."
+"sidepanelet for tilgang til dine eksisterende notatbøker."
 
 msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr "Du har enda ingen notatbok. Lag en ved å klikke på (+)-knappen."
+msgstr "Du har enda ingen notatbok. Opprett en ved å klikke på (+)-knappen."
 
 msgid "Welcome"
 msgstr "Velkommen"
