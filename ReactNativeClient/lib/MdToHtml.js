@@ -91,14 +91,25 @@ class MdToHtml {
 
 		const ruleOptions = Object.assign({}, options, { resourceBaseUrl: this.resourceBaseUrl_ });
 
-		// To add a plugin, there are two options:
+		// To add a plugin, there are three options:
 		//
 		// 1. If the plugin does not need any application specific data, use the standard way:
 		//
 		//    const someMarkdownPlugin = require('someMarkdownPlugin');
 		//    markdownIt.use(someMarkdownPlugin);
 		//
-		// 2. If the plugin needs application data (in ruleOptions) or needs to pass data (CSS, files to load, etc.) back
+		// 2. If the plugin does not need any application specific data, and you want the user 
+		//    to be able to toggle the plugin:
+		//
+		//    Add the plugin to the plugins object
+		//    const plugins = {
+		//      plugin: require('someMarkdownPlugin'),
+		//    }
+		//
+		//    And add a corresponding entry into Setting.js
+		//    'plugin.mark': {value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ==mark== syntax')},
+		//
+		// 3. If the plugin needs application data (in ruleOptions) or needs to pass data (CSS, files to load, etc.) back
 		//    to the application (using the context object), use the application-specific way:
 		//
 		//    const imagePlugin = require('./MdToHtml/rules/image');
