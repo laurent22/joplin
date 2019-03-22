@@ -20,8 +20,20 @@ const rules = {
 };
 const setupLinkify = require('./MdToHtml/setupLinkify');
 const hljs = require('highlight.js');
-const markdownItMark = require('markdown-it-mark');
-const markdownItFootnote = require('markdown-it-footnote');
+const markdownItAnchor = require('markdown-it-anchor');
+const markdownItToc = require('markdown-it-toc-done-right');
+// The keys must match the corresponding entry in Setting.js
+const plugins = {
+	mark: require('markdown-it-mark'),
+	footnote: require('markdown-it-footnote'),
+	sub: require('markdown-it-sub'),
+	sup: require('markdown-it-sup'),
+	deflist: require('markdown-it-deflist'),
+	abbr: require('markdown-it-abbr'),
+	emoji: require('markdown-it-emoji'),
+	insert: require('markdown-it-ins'),
+	multitable: require('markdown-it-multimd-table'),
+};
 
 class MdToHtml {
 
@@ -100,12 +112,18 @@ class MdToHtml {
 		markdownIt.use(rules.checkbox(context, ruleOptions));
 		markdownIt.use(rules.link_open(context, ruleOptions));
 		markdownIt.use(rules.html_block(context, ruleOptions));
-		markdownIt.use(rules.katex(context, ruleOptions));
+		if (Setting.value('plugin.katex'))
+			markdownIt.use(rules.katex(context, ruleOptions));
 		markdownIt.use(rules.highlight_keywords(context, ruleOptions));
 		markdownIt.use(rules.code_inline(context, ruleOptions));
-    if (Setting.value('markEnabled'))
-      markdownIt.use(markdownItMark);
-    markdownIt.use(markdownItFootnote);
+		markdownIt.use(markdownItAnchor)
+		if (Setting.value('plugin.toc'))
+			markdownIt.use(markdownItToc, { placeholder: '[[toc]]' })
+
+		for (let key in plugins) {
+			if (Setting.value('plugin.' + key))
+				markdownIt.use(plugins[key]);
+		}
 
 		setupLinkify(markdownIt);
 
