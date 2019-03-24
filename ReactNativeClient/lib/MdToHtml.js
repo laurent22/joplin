@@ -129,7 +129,7 @@ class MdToHtml {
 		markdownIt.use(rules.code_inline(context, ruleOptions));
 		markdownIt.use(markdownItAnchor)
 		if (Setting.value('plugin.toc'))
-			markdownIt.use(markdownItToc, { placeholder: '[[toc]]' })
+			markdownIt.use(markdownItToc, { listType: 'ul' })
 
 		for (let key in plugins) {
 			if (Setting.value('plugin.' + key))

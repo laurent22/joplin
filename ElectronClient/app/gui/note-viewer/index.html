@@ -106,7 +106,6 @@
 
 		let previousContentHeight = contentElement.scrollHeight;
 		let startTime = Date.now();
-		ignoreNextScrollEvent = true;
 		restorePercentScroll();
 
 		if (!checkScrollIID_) {
@@ -114,7 +113,6 @@
 				const h = contentElement.scrollHeight;
 				if (h !== previousContentHeight) {
 					previousContentHeight = h;
-					ignoreNextScrollEvent = true;
 					restorePercentScroll();
 				}
 				if (Date.now() - startTime >= 1000) {

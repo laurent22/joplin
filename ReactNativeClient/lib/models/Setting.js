@@ -581,7 +581,7 @@ class Setting extends BaseModel {
 		if (name === 'sync') return _('Synchronisation');
 		if (name === 'appearance') return _('Appearance');
 		if (name === 'note') return _('Note');
-    if (name === 'plugins') return _('Plugins');
+		if (name === 'plugins') return _('Plugins');
 		if (name === 'application') return _('Application');
 		return name;
 	}
