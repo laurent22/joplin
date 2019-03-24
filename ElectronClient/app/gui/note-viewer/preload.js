@@ -24,14 +24,6 @@ window.addEventListener('message', (event) => {
 	const callName = event.data.name;
 	const args = event.data.args;
 
-	// HACK 
-	// For some reason anchors at the bottom cause the webview to move itself
-	// so that the content is aligned with the top of the screen
-	// This basically refreshes the scroll view so that is returns to a normal
-	// position, the scroll positions stays correct though
-	if (callName === "percentScroll" && args[0] === 1)
-		location.hash = location.hash.split('#')[0]
-
 	if (args.length === 0) {
 		ipcRenderer.sendToHost(callName);
 	} else if (args.length === 1) {

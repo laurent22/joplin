@@ -4,7 +4,18 @@ webviewLib.handleInternalLink = function(event, anchorNode) {
 	const href = anchorNode.getAttribute('href');
 	if (href.indexOf('#') === 0) {
 		event.preventDefault();
+		let old_hash = location.hash;
+
 		location.hash = href;
+
+		// HACK 
+		// For some reason anchors at the bottom cause the webview to move itself
+		// so that the content is aligned with the top of the screen
+		// This basically refreshes the scroll view so that is returns to a normal
+		// position, the scroll positions stays correct though
+		// Additionally an anchor could not be clicked twice because the location
+		// would not change, this fixes that also
+		setTimeout(function() { location.hash = old_hash; }, 10);
 		return true;
 	}
 	return false;
