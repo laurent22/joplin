@@ -164,7 +164,7 @@ msgstr "Editar nota."
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
-"Nenhum editor de texto está definido. Defina-o usando o comando `config edit "
+"Nenhum editor de texto está definido. Defina-o usando o comando `config editor "
 "<caminho-do-editor>`"
 
 msgid "No active notebook."
