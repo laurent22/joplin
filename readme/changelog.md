@@ -1,5 +1,24 @@
 # Joplin changelog
 
+## [v1.0.140](https://github.com/laurent22/joplin/releases/tag/v1.0.140) - 2019-03-10T20:59:58Z
+
+- Resolves [#1105](https://github.com/laurent22/joplin/issues/1105): Added support for macro persistence for Katex
+- Resolves [#206](https://github.com/laurent22/joplin/issues/206): Added support for sorting notebooks by title or last modified
+- Fixed: Windows 32-bit version should now work again.
+- Improved: Rewritten Markdown rendering system to make it easier to add new features. Fixed a few minor rendering bugs doing so.
+
+## [v1.0.139](https://github.com/laurent22/joplin/releases/tag/v1.0.139) - 2019-03-09T10:06:48Z
+
+This pre-release is mainly for testing the new rendering engine.
+
+## [v1.0.138](https://github.com/laurent22/joplin/releases/tag/v1.0.138) - 2019-03-03T17:23:00Z
+
+This is only for testing the Arabic translation.
+
+## [v1.0.137](https://github.com/laurent22/joplin/releases/tag/v1.0.137) - 2019-03-03T01:12:51Z
+
+To test Windows 32-bit build.
+
 ## [v1.0.135](https://github.com/laurent22/joplin/releases/tag/v1.0.135) - 2019-02-27T23:36:57Z
 
 Note: this is the same as v132 but with a fix for the resizeable column bug, and for PDF export and printing.

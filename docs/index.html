@@ -271,17 +271,17 @@
 <tbody>
 <tr>
 <td>Windows (32 and 64-bit)</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.135/Joplin-Setup-1.0.135.exe'><img alt='Get it on Windows' height="40px" src='https://joplin.cozic.net/images/BadgeWindows.png'/></a></td>
-<td>or Get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.135/JoplinPortable.exe'>Portable version</a><br>(to run from a USB key, etc.)</td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.140/Joplin-Setup-1.0.140.exe'><img alt='Get it on Windows' height="40px" src='https://joplin.cozic.net/images/BadgeWindows.png'/></a></td>
+<td>or Get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.140/JoplinPortable.exe'>Portable version</a><br>(to run from a USB key, etc.)</td>
 </tr>
 <tr>
 <td>macOS</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.135/Joplin-1.0.135.dmg'><img alt='Get it on macOS' height="40px" src='https://joplin.cozic.net/images/BadgeMacOS.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.140/Joplin-1.0.140.dmg'><img alt='Get it on macOS' height="40px" src='https://joplin.cozic.net/images/BadgeMacOS.png'/></a></td>
 <td></td>
 </tr>
 <tr>
 <td>Linux</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.135/Joplin-1.0.135-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://joplin.cozic.net/images/BadgeLinux.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.140/Joplin-1.0.140-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://joplin.cozic.net/images/BadgeLinux.png'/></a></td>
 <td>An Arch Linux package<br><a href="#terminal-application">is also available</a>.</td>
 </tr>
 </tbody>
@@ -303,7 +303,7 @@
 <tr>
 <td>Android</td>
 <td><a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplin.cozic.net/images/BadgeAndroid.png'/></a></td>
-<td>or <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.239/joplin-v1.0.239.apk">Download APK File</a></td>
+<td>or <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.242/joplin-v1.0.242.apk">Download APK File</a></td>
 </tr>
 <tr>
 <td>iOS</td>
@@ -456,6 +456,18 @@
 <p>You can create a link to a note by specifying its ID in the URL. For example:</p>
 <pre><code>[Link to my note](:/0b0d62d15e60409dac34f354b6e9e839)
 </code></pre><p>Since getting the ID of a note is not straightforward, each app provides a way to create such link. In the <strong>desktop app</strong>, right click on a note an select &quot;Copy Markdown link&quot;. In the <strong>mobile app</strong>, open a note and, in the top right menu, select &quot;Copy Markdown link&quot;. You can then paste this link anywhere in another note.</p>
+<h2 id="charts">Charts</h2>
+<p>You can create charts in Joplin using the <a href="https://mermaidjs.github.io/">Mermaid syntax</a>. To add such a graph, wrap the Mermaid script inside a &quot;```mermaid&quot; code block like this:</p>
+<pre><code>```mermaid
+graph TD;
+    A--&gt;B;
+    A--&gt;C;
+    B--&gt;D;
+    C--&gt;D;
+```
+</code></pre><p>This is how it would look with the Markdown on the left, and rendered graph on the right:</p>
+<p><img src="https://joplin.cozic.net/images/Mermaid.png" height="232px"></p>
+<p>Note that Mermaid graphs are always rendered on a white background regardless of the current theme. This is because they can contain various colours that may not be compatible with the current theme.</p>
 <h2 id="math-notation">Math notation</h2>
 <p>Math expressions can be added using the <a href="https://khan.github.io/KaTeX/">KaTeX notation</a>. To add an inline equation, wrap the expression in <code>$EXPRESSION$</code>, eg. <code>$\sqrt{3x-1}+(1+x)^2$</code>. To create an expression block, wrap it as follow:</p>
 <pre><code>$$
@@ -468,7 +480,7 @@ f(x) = \int_{-\infty}^\infty
     \,d\xi
 $$
 </code></pre><p>Here is an example with the Markdown and rendered result side by side:</p>
-<p><img src="https://joplin.cozic.net/images/Katex.png" style="max-width: 100%; max-height: 35em;"></p>
+<p><img src="https://joplin.cozic.net/images/Katex.png" height="400px"></p>
 <h2 id="checkboxes">Checkboxes</h2>
 <p>Checkboxes can be added like so:</p>
 <pre><code>- [ ] Milk
@@ -555,6 +567,13 @@ $$
 </thead>
 <tbody>
 <tr>
+<td><img src="https://joplin.cozic.net/images/flags/country-4x3/.png" alt=""></td>
+<td>Arabic</td>
+<td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ar.po">ar</a></td>
+<td>عبد الناصر سعيد (as@althobaity.com)</td>
+<td>73%</td>
+</tr>
+<tr>
 <td><img src="https://joplin.cozic.net/images/flags/es/basque_country.png" alt=""></td>
 <td>Basque</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/eu.po">eu</a></td>
@@ -594,7 +613,7 @@ $$
 <td>Deutsch</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po">de_DE</a></td>
 <td>Michael Sonntag (ms@editorei.de)</td>
-<td>98%</td>
+<td>100%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/gb.png" alt=""></td>
@@ -607,8 +626,8 @@ $$
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/es.png" alt=""></td>
 <td>Español</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po">es_ES</a></td>
-<td>Fernando Martín (f@mrtn.es)</td>
-<td>88%</td>
+<td>Andros Fenollosa (andros@fenollosa.email)</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/fr.png" alt=""></td>
@@ -629,7 +648,7 @@ $$
 <td>Italiano</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/it_IT.po">it_IT</a></td>
 <td></td>
-<td>89%</td>
+<td>88%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/be.png" alt=""></td>
@@ -650,7 +669,7 @@ $$
 <td>Norwegian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/nb_NO.po">nb_NO</a></td>
 <td>Mats Estensen (code@mxe.no)</td>
-<td>94%</td>
+<td>93%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/br.png" alt=""></td>
@@ -692,14 +711,14 @@ $$
 <td>Русский</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ru_RU.po">ru_RU</a></td>
 <td>Artyom Karlov (artyom.karlov@gmail.com)</td>
-<td>98%</td>
+<td>97%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/cn.png" alt=""></td>
 <td>中文 (简体)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po">zh_CN</a></td>
 <td></td>
-<td>97%</td>
+<td>100%</td>
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/tw.png" alt=""></td>
@@ -717,10 +736,10 @@ $$
 </tr>
 <tr>
 <td><img src="https://joplin.cozic.net/images/flags/country-4x3/kr.png" alt=""></td>
-<td>한국어</td>
+<td>한국말</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ko.po">ko</a></td>
 <td></td>
-<td>95%</td>
+<td>94%</td>
 </tr>
 </tbody>
 </table>
