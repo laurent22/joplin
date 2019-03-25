@@ -1809,7 +1809,7 @@ class NoteTextComponent extends React.Component {
 			// Disable warning: "Automatically scrolling cursor into view after
 			// selection change this will be disabled in the next version set
 			// editor.$blockScrolling = Infinity to disable this message"
-			editorProps={{$blockScrolling: true}}
+			editorProps={{$blockScrolling: Infinity}}
 
 			// This is buggy (gets outside the container)
 			highlightActiveLine={false}
