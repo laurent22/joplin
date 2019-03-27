@@ -21,7 +21,7 @@ describe('services_SearchEngine', function() {
 
 		engine = new SearchEngine();
 		engine.setDb(db());
-		
+
 		done();
 	});
 
@@ -99,7 +99,7 @@ describe('services_SearchEngine', function() {
 		// 2
 		const n4 = await Note.save({ title: "blablablabla blabla bla abcd X efgh" });
 		// 5
-		const n5 = await Note.save({ title: "occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh" });
+		const n5 = await Note.save({ title: "occurrence many times but very abcd spread apart spread apart spread apart spread apart spread apart efgh occurrence many times but very abcd spread apart spread apart spread apart spread apart spread apart efgh occurrence many times but very abcd spread apart spread apart spread apart spread apart spread apart efgh occurrence many times but very abcd spread apart spread apart spread apart spread apart spread apart efgh occurrence many times but very abcd spread apart spread apart spread apart spread apart spread apart efgh" });
 
 		await engine.syncTables();
 		const rows = await engine.search('abcd efgh');

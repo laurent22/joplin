@@ -299,7 +299,7 @@ class Application extends BaseApplication {
 
 		let outException = null;
 		try {
-			if (this.gui().isDummy() && !this.activeCommand_.supportsUi('cli')) throw new Error(_('The command "%s" is only available in GUI mode', this.activeCommand_.name()));			
+			if (this.gui().isDummy() && !this.activeCommand_.supportsUi('cli')) throw new Error(_('The command "%s" is only available in GUI mode', this.activeCommand_.name()));
 			const cmdArgs = cliUtils.makeCommandArgs(this.activeCommand_, argv);
 			await this.activeCommand_.action(cmdArgs);
 		} catch (error) {
@@ -399,7 +399,7 @@ class Application extends BaseApplication {
 
 			await Setting.saveAll();
 
-			// Need to call exit() explicitely, otherwise Node wait for any timeout to complete
+			// Need to call exit() explicitly, otherwise Node wait for any timeout to complete
 			// https://stackoverflow.com/questions/18050095
 			process.exit(0);
 		} else { // Otherwise open the GUI

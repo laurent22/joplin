@@ -134,7 +134,7 @@ async function clearDatabase(id = null) {
 		'DELETE FROM master_keys',
 		'DELETE FROM item_changes',
 		'DELETE FROM note_resources',
-		'DELETE FROM settings',		
+		'DELETE FROM settings',
 		'DELETE FROM deleted_items',
 		'DELETE FROM sync_items',
 		'DELETE FROM notes_normalized',
@@ -232,7 +232,7 @@ async function loadEncryptionMasterKey(id = null, useExisting = false) {
 		masterKey = await MasterKey.save(masterKey);
 	} else { // Use the one already available
 		materKey = await MasterKey.all();
-		if (!materKey.length) throw new Error('No mater key available');
+		if (!materKey.length) throw new Error('No master key available');
 		masterKey = materKey[0];
 	}
 

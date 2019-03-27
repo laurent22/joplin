@@ -194,7 +194,7 @@ const appReducer = (state = appDefaultState, action) => {
 
 				historyGoingBack = true;
 
-				// Fall throught
+				// Fall through
 
 			case 'NAV_GO':
 
