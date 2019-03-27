@@ -399,7 +399,7 @@ class Application extends BaseApplication {
 
 			await Setting.saveAll();
 
-			// Need to call exit() explicitely, otherwise Node wait for any timeout to complete
+			// Need to call exit() explicitly, otherwise Node wait for any timeout to complete
 			// https://stackoverflow.com/questions/18050095
 			process.exit(0);
 		} else {
