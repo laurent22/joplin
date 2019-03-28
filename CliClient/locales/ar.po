@@ -34,16 +34,16 @@ msgid "No notebook has been specified."
 msgstr "لم يجر تحديد أي دفتر ملاحظات."
 
 msgid "Y"
-msgstr ""
+msgstr "نعم"
 
 msgid "n"
-msgstr ""
+msgstr "لا"
 
 msgid "N"
-msgstr ""
+msgstr "لا"
 
 msgid "y"
-msgstr ""
+msgstr "نعم"
 
 msgid "Cancelling background synchronisation... Please wait."
 msgstr "يجري إلغاء مزامنة الخلفية... فضلاً انتظر."
@@ -91,10 +91,7 @@ msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
-msgstr ""
-"يستخرج قيمة إعداد أو يضبطها. If [value] is not provided, it will show the "
-"value of [name]. If neither [name] nor [value] is provided, it will list the "
-"current configuration."
+msgstr "يستخرج قيمة إعداد أو يضبطها. إذا لم يجر التزويد بـ [value] (قيمة) فسيعرض التطبيق قيمة [name] (اسم). إذا لم يجر التزويد بـ [name] ولا [value] فسيسرد التطبيق الإعداد الحالي."
 
 msgid "Also displays unset and hidden config variables."
 msgstr "يظهر أيضاً متغيرات الإعداد غير المضبوطة أو تلك المخفية."
@@ -110,9 +107,7 @@ msgstr "%s = %s"
 msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
-msgstr ""
-"ينشئ نسخة من الملاحظات المطابقة لـ <ملاحظة> في [دفتر ملاحظات]. إذا لم يحدد "
-"دفتر ملاحظات فستنسخ الملاحظة في دفتر الملاحظات الحالي."
+msgstr "ينشئ نسخة من الملاحظات المطابقة لـ <note> (ملاحظة) في [notebook] (دفتر ملاحظات). إذا لم يحدد دفتر ملاحظات فستنسخ الملاحظة في دفتر الملاحظات الحالي."
 
 msgid "Marks a to-do as done."
 msgstr "يعلّم قائمة مهام أنها تمت."
@@ -121,13 +116,10 @@ msgstr "يعلّم قائمة مهام أنها تمت."
 msgid "Note is not a to-do: \"%s\""
 msgstr "الملاحظة: \"%s\" ليست قائمة مهام"
 
-#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status`, `decrypt-file` and `target-status`."
-msgstr ""
-"يدير ضبط التشفير من الطرف للطرف (E2EE). الأوامر هي `enable`، `disable`، "
-"`decrypt`، `status`، `target-status`."
+"`status` and `target-status`."
+msgstr "يدير ضبط التشفير من الطرف للطرف (E2EE). الأوامر هي `enable`، `disable`، `decrypt`، `status`، `target-status`."
 
 msgid "Enter master password:"
 msgstr "أدخل كلمة المرور الرئيسة:"
@@ -138,9 +130,7 @@ msgstr "ألغيت العملية"
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
-msgstr ""
-"بدء فك التشفير جارٍ... يرجى الانتظار حيث قد تستغرق العملية عدة دقائق بحسب "
-"كمية البيانات المطلوب فك تشفيرها."
+msgstr "بدء فك التشفير جارٍ... يرجى الانتظار حيث قد تستغرق العملية عدة دقائق بحسب كمية البيانات المطلوب فك تشفيرها."
 
 msgid "Completed decryption."
 msgstr "اكتمل فك التشفير."
@@ -160,7 +150,7 @@ msgstr "تحرير الملاحظة."
 
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
-msgstr "لم يعرَّف محرر نصوص. فضلاً اضبطه باستخدام `config editor <مسار المحرر>`"
+msgstr "لم يعرَّف محرر نصوص. فضلاً اضبطه باستخدام `config editor <editor-path>`"
 
 msgid "No active notebook."
 msgstr "لا يوجد دفتر ملاحظات نشط."
@@ -185,9 +175,7 @@ msgstr "الخروج من التطبيق."
 msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
-msgstr ""
-"تصدير بيانات Joplin إلى المسار المعطى. سيصدِّر التطبيق تلقائياً كامل قاعدة "
-"البيانات بما في ذلك دفاتر الملاحظات ، الملاحظات ، الوسوم والموارد."
+msgstr "تصدير بيانات Joplin إلى المسار المعطى. سيصدِّر التطبيق تلقائياً كامل قاعدة البيانات بما في ذلك دفاتر الملاحظات ، الملاحظات ، الوسوم والموارد."
 
 #, javascript-format
 msgid "Destination format: %s"
@@ -215,7 +203,7 @@ msgstr "الاختصارات غير متوفرة في وضع واجهة سطر �
 msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
-msgstr ""
+msgstr "أكتب `help [command]` للمزيد من المعلومات عن أمر ما ، أو `help all` لمعلومات الاستخدام الكاملة."
 
 msgid "The possible commands are:"
 msgstr "الأوامر الممكنة هي:"
@@ -224,29 +212,28 @@ msgid ""
 "In any command, a note or notebook can be referred to by title or ID, or "
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
-msgstr ""
+msgstr "في أي أمر ، يمكن الإشارة إلى ملاحظة أو دفتر ملاحظات بعنوانه أو بمعرّفه ، أو باستخدام الاختصارات `$n` أو `$b` التي تشير ، على الترتيب ، إلى الملاحظة أو دفتر الملاحظات المختار حالياً. يمكن استخدام `$c` للإشارة إلى العنصر المختار حالياً."
 
 msgid "To move from one pane to another, press Tab or Shift+Tab."
-msgstr ""
+msgstr "للتنقل من جزء إلى آخر اضغط Tab أو Shift+Tab."
 
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
-msgstr ""
+msgstr "استخدم أزرار الأسهم و Page Up/Page Down للتمرير في القوائم ومناطق النص (بما فيها وحدة التحكم هذه)."
 
 msgid "To maximise/minimise the console, press \"tc\"."
-msgstr ""
+msgstr "لتكبير/تصغير وحدة التحكم ، اضغط \"tc\"."
 
 msgid "To enter command line mode, press \":\""
-msgstr ""
+msgstr "للدخول إلى وضع سطر الأوامر ، اضغط \":\""
 
 msgid "To exit command line mode, press ESCAPE"
-msgstr ""
+msgstr "للخروج من وضع سطر الأوامر ، اضغط ESCAPE"
 
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
-msgstr ""
-"أكتب `help keymap` للحصول على قائمة اختصارات لوحة المفاتيح و خيارات الإعداد"
+msgstr "أكتب `help keymap` للحصول على قائمة اختصارات لوحة المفاتيح و خيارات الإعداد"
 
 msgid "Imports data into Joplin."
 msgstr "استيراد البيانات إلى Joplin."
@@ -260,27 +247,27 @@ msgstr "لا تطلب التأكيد."
 
 #, javascript-format
 msgid "Found: %d."
-msgstr ""
+msgstr "تم العثور عليها: %d."
 
 #, javascript-format
 msgid "Created: %d."
-msgstr ""
+msgstr "تم إنشاؤها: %d."
 
 #, javascript-format
 msgid "Updated: %d."
-msgstr ""
+msgstr "تم تحديثها: %d."
 
 #, javascript-format
 msgid "Skipped: %d."
-msgstr ""
+msgstr "تم تجاوزها: %d."
 
 #, javascript-format
 msgid "Resources: %d."
-msgstr ""
+msgstr "الموارد: %d."
 
 #, javascript-format
 msgid "Tagged: %d."
-msgstr ""
+msgstr "تم وسمها: %d."
 
 msgid "Importing notes..."
 msgstr "استيراد الملاحظات جارٍ..."
@@ -292,16 +279,13 @@ msgstr "جرى استيراد الملاحظات: %s"
 msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
 "of notebooks."
-msgstr ""
-"يعرض الملاحظات في الدفتر الحالي. استخدم `ls /` لعرض قائمة دفاتر الملاحظات."
+msgstr "يعرض الملاحظات في الدفتر الحالي. استخدم `ls /` لعرض قائمة دفاتر الملاحظات."
 
 msgid "Displays only the first top <num> notes."
 msgstr "يعرض أول أعلى <رقم> ملاحظات فقط."
 
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
-msgstr ""
-"يرتب العناصر حسب <حقل> (على سبيل المثال، العنوان ، تاريخ التحديث ، تاريخ "
-"الإنشاء)."
+msgstr "يرتب العناصر حسب <حقل> (على سبيل المثال، العنوان ، تاريخ التحديث ، تاريخ الإنشاء)."
 
 msgid "Reverses the sorting order."
 msgstr "يعكس طريقة الترتيب."
@@ -310,20 +294,15 @@ msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-ttd` would display notes and to-dos."
-msgstr ""
-"يعرض العناصر من النوع/الأنواع المحددة فقط. Can be `n` for notes, `t` for to-"
-"dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, "
-"while `-ttd` would display notes and to-dos."
+msgstr "يعرض العناصر من النوع/الأنواع المحددة فقط. يمكن أن يكون `n` للملاحظات ، أو `t` لقوائم المهام أو `nt` للملاحظات و قوائم المهام (مثلاً ، `-tt` ستعرض قوائم المهام فقط ، بينما ستعرض `-ttd` الملاحظات و قوائم المهام."
 
 msgid "Either \"text\" or \"json\""
-msgstr "إما \"نص\" أو \"json\""
+msgstr "إما \"text\" أو \"json\""
 
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
-msgstr ""
-"استخدام نسق القائمة الطويلة. النسق هو معرِّف ، عدد الملاحظات (لدفتر "
-"الملاحظات) ، التاريخ ، تم عنصر المهمة (لقوائم المهام) ، العنوان"
+msgstr "استخدام نسق القائمة الطويلة. النسق هو ID (معرِّف) ، NOTE_COUNT (عدد الملاحظات (لدفتر الملاحظات)) ، DATE (التاريخ) ، TODO_CHECKED (تم عنصر المهمة (لقوائم المهام)) ، TITLE (العنوان)"
 
 msgid "Please select a notebook first."
 msgstr "يرجى اختيار دفتر ملاحظات أولاً."
@@ -341,10 +320,10 @@ msgid "Creates a new to-do."
 msgstr "ينشئ قائمة جديدة للمهام."
 
 msgid "Moves the notes matching <note> to [notebook]."
-msgstr "ينقل الملاحظات المطابقة لـ <ملاحظة> إلى [دفتر ملاحظات]."
+msgstr "ينقل الملاحظات المطابقة لـ <note> إلى [notebook]."
 
 msgid "Renames the given <item> (note or notebook) to <name>."
-msgstr "يعيد تسمية <عنصر> معطى (ملاحظة أو دفتر ملاحظات) ليصبح <اسم>."
+msgstr "يعيد تسمية <item> (عنصر) معطى (ملاحظة أو دفتر ملاحظات) ليصبح <name> (اسم)."
 
 msgid "Deletes the given notebook."
 msgstr "يحذف دفتر الملاحظات المعطى."
@@ -355,12 +334,10 @@ msgstr "يحذف دفتر الملاحظات دون طلب تأكيد."
 msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
-msgstr ""
-"حذف دفتر الملاحظات؟ سيتم حذف كل الملاحظات و دفاتر الملاحظات الفرعية ضمن هذا "
-"الدفتر أيضاً."
+msgstr "حذف دفتر الملاحظات؟ سيتم حذف كل الملاحظات و دفاتر الملاحظات الفرعية ضمن هذا الدفتر أيضاً."
 
 msgid "Deletes the notes matching <note-pattern>."
-msgstr "يحذف الملاحظات المطابقة لـ <نمط-ملاحظة>."
+msgstr "يحذف الملاحظات المطابقة لـ <note-pattern> (نمط-ملاحظة)."
 
 msgid "Deletes the notes without asking for confirmation."
 msgstr "يحذف الملاحظات دون طلب تأكيد."
@@ -373,7 +350,7 @@ msgid "Delete note?"
 msgstr "حذف الملاحظة؟"
 
 msgid "Searches for the given <pattern> in all the notes."
-msgstr "يبحث عن الـ <نمط> المعطى في كل الملاحظات."
+msgstr "يبحث عن الـ <pattern> (نمط) المعطى في كل الملاحظات."
 
 #, javascript-format
 msgid ""
@@ -381,9 +358,7 @@ msgid ""
 "properties are:\n"
 "\n"
 "%s"
-msgstr ""
-"يضبط الخاصية <اسم> للـ <ملاحظة> المعطاة على [قيمة] معطاة. الخصائص الممكنة "
-"هي:\n"
+msgstr "يضبط الخاصية <name> للـ <note> المعطاة على [value] معطاة. الخصائص الممكنة هي:\n"
 "%s"
 
 msgid "Displays summary about the notes and notebooks."
@@ -404,16 +379,14 @@ msgid ""
 msgstr "يرجى اتباع الخطوات التالية للسماح لـ Joplin بالمزامنة مع Dropbox:"
 
 msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr "الخطوة 1: إفتح عنوان URL هذا في المستعرض لمصادقة التطبيق:"
+msgstr "الخطوة 1: إفتح عنوان URL هذا في المستعرض للتصريح للتطبيق:"
 
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "الخطوة 2: أدخل الرمز المزوّد من Dropbox:"
 
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
-msgstr ""
-"لا يمكن المصادقة باستخدام %s. يرجى التزويد بأي من بيانات اعتماد الدخول "
-"المفقودة."
+msgstr "لا يمكن المصادقة باستخدام %s. يرجى التزويد بأي من بيانات اعتماد الدخول المفقودة."
 
 msgid "Synchronisation is already in progress."
 msgstr "المزامنة قيد التقدم بالفعل."
@@ -423,13 +396,11 @@ msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
-msgstr ""
-"ملف القفل هو قيد الحجز بالفعل. If you know that no synchronisation is taking "
-"place, you may delete the lock file at \"%s\" and resume the operation."
+msgstr "ملف القفل هو قيد الحجز بالفعل. بإمكانك حذف ملف القفل في \"%s\" واستئناف العملية إن كنت تعلم أنه لا توجد مزامنة تجري حالياً."
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
-msgstr "مستهدف المزامنة: %s (%s)"
+msgstr "وجهة المزامنة: %s (%s)"
 
 msgid "Cannot initialize synchroniser."
 msgstr "لم نتمكن من تمهيد مكوّن المزامنة."
@@ -447,64 +418,64 @@ msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
 "`tag list` can be used to list all the tags (use -l for long option)."
-msgstr ""
+msgstr "<tag-command> (أمر-وسم) يمكن أن يكون \"add\" (أضف) ، \"remove\" (أزل) أو \"list\" (أسرد) ، وذلك لإضافة [وسم] أو إزالته من [ملاحظة] أو لسرد الملاحظات المرتبطة بال [وسم]. الأمر`tag list` يمكن استخدامه لسرد كل الوسوم (استخدم -l لخيار الوسوم الطويلة)."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
-msgstr ""
+msgstr "أمر غير صالح:\"%s\""
 
 msgid ""
 "<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
 "toggle the given to-do between completed and uncompleted state (If the "
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
-msgstr ""
+msgstr "يمكن أن يكون <todo-command> (أمر قائمة المهام) \"toggle\" (تبديل) أو \"clear\" (مسح) فقط. استخدم \"toggle\" لتبديل حال قائمة المهام المعطاة بين مكتملة و غير مكتملة (إذا كانت الملاحظة المقصودة عادية فسيتم تحويلها إلى قائمة مهام). استخدم \"clear\" لتحويل قائمة المهام ثانيةً إلى ملاحظة عادية."
 
 msgid "Marks a to-do as non-completed."
-msgstr ""
+msgstr "يعلّم قائمة مهام أنها غير مكتملة."
 
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
-msgstr ""
+msgstr "التبديل إلى [notebook] - جميع العمليات التالية ستجري في هذا الدفتر."
 
 msgid "Displays version information"
-msgstr ""
+msgstr "عرض معلومات النسخة"
 
 #, javascript-format
 msgid "%s %s (%s)"
-msgstr ""
+msgstr "%s %s (%s)"
 
 msgid "Enum"
-msgstr ""
+msgstr "تعداد"
 
 #, javascript-format
 msgid "Type: %s."
-msgstr ""
+msgstr "النوع: %s."
 
 #, javascript-format
 msgid "Possible values: %s."
-msgstr ""
+msgstr "القيم الممكنة : %s."
 
 #, javascript-format
 msgid "Default: %s"
-msgstr ""
+msgstr "التلقائية: %s"
 
 msgid "Possible keys/values:"
-msgstr ""
+msgstr "المفاتيح/القيم الممكنة:"
 
 msgid "Type `joplin help` for usage information."
-msgstr ""
+msgstr "أكتب `joplin help` لمعلومات الاستخدام."
 
 msgid "Fatal error:"
-msgstr ""
+msgstr "خطأ فادح:"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
-msgstr ""
+msgstr "تم التصريح للتطبيق - يمكنك الآن إغلاق تبويب المستعرض هذا."
 
 msgid "The application has been successfully authorised."
-msgstr ""
+msgstr "جرى التصريح للتطبيق بنجاح."
 
 msgid ""
 "Please open the following URL in your browser to authenticate the "
@@ -512,10 +483,10 @@ msgid ""
 "will only read and write files in this directory. It will have no access to "
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
-msgstr ""
+msgstr "فضلاً افتح عنوان URL التالي في المستعرض لديك لتمكين التطبيق من المصادقة سينشئ التطبيق دليلاً في \"Apps/Joplin\" ثم يقوم فقط بقراءة وكتابة الملفات في هذا الدليل. لن يكون لديه أي وصول لأي ملف خارج هذا الدليل أو لأي بيانات شخصية أخرى. لن نشارك البيانات مع أي طرف ثالث."
 
 msgid "Search:"
-msgstr ""
+msgstr "بحث:"
 
 msgid ""
 "Welcome to Joplin!\n"
@@ -524,21 +495,25 @@ msgid ""
 "for usage information.\n"
 "\n"
 "For example, to create a notebook press `mb`; to create a note press `mn`."
-msgstr ""
+msgstr "مرحباً بك في Joplin!\n"
+"\n"
+"أكتب `:help shortcuts` للحصول على قائمة اختصارات لوحة المفاتيح ، أو `:help` فقط لمعلومات الاستخدام.\n"
+"\n"
+"على سبيل المثال ، اضغط `mb` لإنشاء دفتر ملاحظات ، و اضغط `mn` لإنشاء ملاحظة."
 
 msgid ""
 "One or more items are currently encrypted and you may need to supply a "
 "master password. To do so please type `e2ee decrypt`. If you have already "
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
-msgstr ""
+msgstr "عنصر أو أكثر هو مشفّر حالياً وقد تحتاج إلى إدخال كلمة مرور رئيسة. فضلاً أكتب `e2ee decrypt` لفعل هذا. إن كنت قد أدخلت كلمة المرور فعلاً فإن فك تشفير العناصر المشفَّرة جارٍ في الخلفية وستكون متوفرة قريباً."
 
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr "Exporting to \"%s\" as \"%s\" format. فضلاً انتظر..."
+msgstr "التصدير إلى \"%s\" بتنسيق \"%s\". فضلاً انتظر..."
 
 msgid "Sidebar"
-msgstr ""
+msgstr "الشريط الجانبي"
 
 msgid "Note list"
 msgstr "قائمة ملاحظات"
@@ -633,7 +608,7 @@ msgid "Toggle editor layout"
 msgstr "تبديل تخطيط المحرّر"
 
 msgid "Focus"
-msgstr ""
+msgstr "تركيز"
 
 msgid "&Tools"
 msgstr "&أدوات"
@@ -642,7 +617,7 @@ msgid "Synchronisation status"
 msgstr "حالة المزامنة"
 
 msgid "Web clipper options"
-msgstr ""
+msgstr "خيارات Web clipper"
 
 msgid "Encryption options"
 msgstr "خيارات التشفير"
@@ -667,7 +642,7 @@ msgstr "حول Joplin"
 
 #, javascript-format
 msgid "%s %s (%s, %s)"
-msgstr ""
+msgstr "%s %s (%s, %s)"
 
 #, javascript-format
 msgid "Open %s"
@@ -692,12 +667,12 @@ msgstr "%s (ما قبل الإصدار)"
 msgid "An update is available, do you want to download it now?"
 msgstr "يتوفر تحديث ، هل تريد تنزيله الآن؟"
 
-#, fuzzy, javascript-format
-msgid "Your version: %s"
+#, javascript-format
+msgid "Your version: v%s"
 msgstr "النسخة لديك: %s"
 
-#, fuzzy, javascript-format
-msgid "New version: %s"
+#, javascript-format
+msgid "New version: v%s"
 msgstr "النسخة الجديدة: %s"
 
 msgid "Yes"
@@ -710,7 +685,7 @@ msgid "Token has been copied to the clipboard!"
 msgstr "تم نسخ الرمز المميز إلى الحافظة!"
 
 msgid "The web clipper service is enabled and set to auto-start."
-msgstr ""
+msgstr "خدمة Web clipper مفعَّلة ومضبوطة على البدء التلقائي"
 
 #, javascript-format
 msgid "Status: Started on port %d"
@@ -721,42 +696,42 @@ msgid "Status: %s"
 msgstr "الحالة: %s"
 
 msgid "Disable Web Clipper Service"
-msgstr ""
+msgstr "تعطيل خدمة Web clipper"
 
 msgid "The web clipper service is not enabled."
-msgstr ""
+msgstr "خدمة Web clipper غير مفعَّلة."
 
 msgid "Enable Web Clipper Service"
-msgstr ""
+msgstr "تفعيل خدمة Web clipper"
 
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
-msgstr ""
+msgstr "تتيح Joplin Web clipper حفظ صفحات الويب ولقطات الشاشة من مستعرضك إلى Joplin."
 
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr ""
+msgstr "تحتاج لفعل الخطوات التالية للتمكن من استخدام إضافة القصّ Web clipper:"
 
 msgid "Step 1: Enable the clipper service"
-msgstr ""
+msgstr "الخطوة 1: تفعيل خدمة إضافة القصّ Web clipper"
 
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
-msgstr ""
+msgstr "تتيح هذه الخدمة تواصل إضافة المستعرض مع Joplin. عندما تفعّلها قد يسألك الجدار الناري أن تعطي الإذن لـ Joplin بالاستماع إلى منفذ محدّد."
 
 msgid "Step 2: Install the extension"
-msgstr ""
+msgstr "الخطوة 2: تثبيت الإضافة"
 
 msgid "Download and install the relevant extension for your browser:"
-msgstr ""
+msgstr "قم بتنزيل و تثبيت الإضافة المذكورة في المستعرض لديك:"
 
 msgid "Advanced options"
 msgstr "خيارات متقدمة"
 
 msgid "Authorisation token:"
-msgstr "الرمز المميز للمصادقة:"
+msgstr "الرمز المميز للتصريح:"
 
 msgid "Copy token"
 msgstr "نسخ الرمز المميز"
@@ -764,9 +739,7 @@ msgstr "نسخ الرمز المميز"
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
-msgstr ""
-"هذا الرمز المميز للمصادقة مطلوب فقط للسماح لتطبيقات طرف ثالث للوصول إلى "
-"Joplin."
+msgstr "هذا الرمز المميز للتصريح مطلوب فقط للسماح لتطبيقات طرف ثالث للوصول إلى Joplin."
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -791,20 +764,14 @@ msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
-msgstr ""
-"تعطيل التشفير يعني أن *كل* ملاحظاتك ومرفقاتها ستجري إعادة مزامنتها ثم ترسل "
-"دون تشفير إلى جهة المزامنة. هل ترغب الاستمرار؟"
+msgstr "تعطيل التشفير يعني أن *كل* ملاحظاتك ومرفقاتها ستجري إعادة مزامنتها ثم ترسل دون تشفير إلى وجهة المزامنة. هل ترغب الاستمرار؟"
 
 msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent encrypted to the sync target. Do not lose the "
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
-msgstr ""
-"تفعيل التشفير يعني أن *كل* ملاحظاتك ومرفقاتها ستجري إعادة مزامنتها ثم ترسل "
-"مشفرة إلى جهة المزامنة. لمصلحة أمن معلوماتك ، لا تضِع كلمة المرور ، فستكون هي "
-"الطريقة *الوحيدة* لفك تشفير البيانات! فضلاً أدخل كلمة مرور خاصة بك أدناه "
-"لتفعيل التشفير."
+msgstr "تفعيل التشفير يعني أن *كل* ملاحظاتك ومرفقاتها ستجري إعادة مزامنتها ثم ترسل مشفرة إلى وجهة المزامنة. لمصلحة أمن معلوماتك ، لا تضِع كلمة المرور ، فستكون هي الطريقة *الوحيدة* لفك تشفير البيانات! فضلاً أدخل كلمة مرور خاصة بك أدناه لتفعيل التشفير."
 
 msgid "Disable encryption"
 msgstr "تعطيل التشفير"
@@ -840,24 +807,21 @@ msgid ""
 "Note: Only one master key is going to be used for encryption (the one marked "
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
-msgstr ""
-"لاحِظ: سيجري استخدام مفتاح رئيس واحد فقط للتشفير (المفتاح المعلَّم أنه \"نشط"
-"\"). Any of the keys might be used for decryption, depending on how the "
-"notes or notebooks were originally encrypted."
+msgstr "لاحِظ: سيجري استخدام مفتاح رئيس واحد فقط للتشفير (المفتاح المعلَّم أنه \"نشط\"). يمكن استخدام أي من المفاتيح لفك التشفير ، وهذا بحسب الطريقة التي شفرت بها سابقاً الملاحظة أو دفتر الملاحظات."
 
 msgid "Missing Master Keys"
-msgstr ""
+msgstr "المفاتيح الرئيسة مفقودة"
 
 msgid ""
 "The master keys with these IDs are used to encrypt some of your items, "
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
-msgstr ""
+msgstr "تم استخدام المفاتيح الرئيسة ذات المعرّفات التالية لتشفير بعض العناصر لديك ، إلا أن التطبيق لم يتمكن من الوصول إليها حالياً. من المحتمل أن يجري تنزيلها فيما بعد عبر المزامنة."
 
 msgid ""
 "For more information about End-To-End Encryption (E2EE) and advices on how "
 "to enable it please check the documentation:"
-msgstr ""
+msgstr "يرجى الرجوع إلى التوثيق للمزيد من المعلومات عن التشفير من الطرف للطرف (E2EE) و طرق تفعيله."
 
 msgid "Status"
 msgstr "الحالة"
@@ -888,9 +852,6 @@ msgstr "عنوان دفتر الملاحظات:"
 msgid "Add or remove tags:"
 msgstr "إضافة أو حذف وسوم:"
 
-msgid "Separate each tag by a comma."
-msgstr ""
-
 msgid "Rename notebook:"
 msgstr "إعادة تسمية دفتر الملاحظات:"
 
@@ -901,7 +862,7 @@ msgid "Set alarm:"
 msgstr "ضبط منبّه:"
 
 msgid "Layout"
-msgstr ""
+msgstr "تخطيط"
 
 msgid "Search..."
 msgstr "بحث..."
@@ -923,8 +884,7 @@ msgstr "لا توجد ملاحظات هنا. أنشئ واحدةً بالضغط 
 
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr ""
-"لا يوجد دفتر ملاحظات حالياً. أنشئ واحداً بالضغط على \"دفتر ملاحظات جديد\"."
+msgstr "لا يوجد دفتر ملاحظات حالياً. أنشئ واحداً بالضغط على \"دفتر ملاحظات جديد\"."
 
 msgid "Location"
 msgstr "المكان"
@@ -962,16 +922,16 @@ msgstr "رابط أو رسالة غير مدعومان: %s"
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
-msgstr "ليس لهذه الملاحظة أي محتوى. [fuzzy]بدء تحرير الملاحظة."
+msgstr "ليس لهذه الملاحظة أي محتوى. اضغط على \"%s\" لتبديل المحرّر وتحرير الملاحظة."
 
 msgid "Only one note can be printed or exported to PDF at a time."
 msgstr "يمكن طباعة ملاحظة واحدة فقط أو تصديرها إلى PDF كل مرة."
 
 msgid "strong text"
-msgstr ""
+msgstr "نص مشدَّد"
 
 msgid "emphasized text"
-msgstr ""
+msgstr "نص مؤكد"
 
 msgid "List item"
 msgstr "عنصر قائمة"
@@ -1005,19 +965,19 @@ msgid "Bulleted List"
 msgstr "قائمة تعداد نقطي"
 
 msgid "Checkbox"
-msgstr ""
+msgstr "خانة اختيار"
 
 msgid "Heading"
 msgstr "ترويسة"
 
 msgid "Horizontal Rule"
-msgstr ""
+msgstr "خط تسطير أفقي"
 
 msgid "Click to stop external editing"
 msgstr "اضغط لإيقاف التحرير خارج التطبيق"
 
 msgid "Watching..."
-msgstr ""
+msgstr "المراقبة جارية..."
 
 msgid "to-do"
 msgstr "قائمة مهام"
@@ -1030,16 +990,16 @@ msgid "Creating new %s..."
 msgstr "إنشاء %s جديد ..."
 
 msgid "Refresh"
-msgstr ""
+msgstr "تحديث"
 
 msgid "Clear"
 msgstr "مسح"
 
 msgid "OneDrive Login"
-msgstr ""
+msgstr "تسجيل الدخول إلى OneDrive"
 
 msgid "Dropbox Login"
-msgstr ""
+msgstr "تسجيل الدخول إلى Dropbox"
 
 msgid "Options"
 msgstr "خيارات"
@@ -1051,85 +1011,84 @@ msgid "Encryption Options"
 msgstr "خيارات التشفير"
 
 msgid "Clipper Options"
-msgstr "[fuzzy]خيارات"
+msgstr "خيارات Clipper"
 
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
-msgstr ""
-"Delete notebook \"%s\"?\n"
+msgstr "حذف دفتر الملاحظات \"%s\" ؟\n"
 "\n"
 "سيتم حذف كل الملاحظات و دفاتر الملاحظات الفرعية ضمن هذا الدفتر أيضاً."
 
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
-msgstr ""
+msgstr "إزالة الوسم \"%s\" من كل الملاحظات؟"
 
 msgid "Remove this search from the sidebar?"
-msgstr ""
+msgstr "حذف هذا البحث من الشريط الجانبي؟"
 
 msgid "Delete"
-msgstr ""
+msgstr "حذف"
 
 msgid "Rename"
-msgstr ""
+msgstr "إعادة تسمية"
 
 msgid "Notebooks"
-msgstr ""
+msgstr "دفاتر ملاحظات"
 
 #, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr ""
+msgstr "فك تشفير العناصر: %d/%d"
 
 #, javascript-format
 msgid "Fetching resources: %d"
-msgstr ""
+msgstr "جلب الموارد: %d"
 
 msgid "Please select where the sync status should be exported to"
-msgstr ""
+msgstr "فضلاً اختر أين سيتم تصدير حالة المزامنة"
 
-msgid "Table of contents"
-msgstr ""
+msgid "Remove?"
+msgstr "إزالة ؟"
 
 msgid "Add or remove tags"
-msgstr ""
+msgstr "إضافة أو حذف وسوم"
 
 msgid "Duplicate"
-msgstr ""
+msgstr "تكرار"
 
 #, javascript-format
 msgid "%s - Copy"
-msgstr ""
+msgstr "%s - نسخ"
 
 msgid "Switch between note and to-do type"
-msgstr ""
+msgstr "التبديل بين نوعي الملاحظة و قائمة المهام"
 
 msgid "Switch to note type"
-msgstr ""
+msgstr "التبديل إلى النوع ملاحظة"
 
 msgid "Switch to to-do type"
-msgstr ""
+msgstr "التبديل إلى النوع قائمة مهام"
 
 msgid "Copy Markdown link"
-msgstr ""
+msgstr "نسخ رابط Markdown"
 
 #, javascript-format
 msgid "Delete note \"%s\"?"
-msgstr ""
+msgstr "حذف الملاحظة \"%s\" ؟"
 
 #, javascript-format
 msgid "Delete these %d notes?"
-msgstr ""
+msgstr "حذف ملاحظات %d هذه ؟"
 
 #, javascript-format
 msgid "Usage: %s"
-msgstr ""
+msgstr "الاستخدام : %s"
 
 #, javascript-format
 msgid "Unknown flag: %s"
-msgstr ""
+msgstr "علامة غير معروفة: %s"
 
 msgid "Dropbox"
 msgstr "Dropbox"
@@ -1144,26 +1103,26 @@ msgid "OneDrive"
 msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
-msgstr ""
+msgstr "OneDrive Dev (للاختبار فقط)"
 
 msgid "WebDAV"
 msgstr "WebDAV"
 
 #, javascript-format
 msgid "Unknown log level: %s"
-msgstr ""
+msgstr "مستوى السجل غير معروف: %s"
 
 #, javascript-format
 msgid "Unknown level ID: %s"
-msgstr ""
+msgstr "معرّف مستوى غير معروف: %s"
 
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
-msgstr ""
+msgstr "لا يمكن تحديث الرمز المميز: بيانات المصادقة مفقودة. بدء المزامنة مرة ثانية قد يحل المشكلة."
 
 msgid "Untitled"
-msgstr ""
+msgstr "بدون اسم"
 
 msgid ""
 "Could not synchronize with OneDrive.\n"
@@ -1172,96 +1131,100 @@ msgid ""
 "unfortunately cannot be supported.\n"
 "\n"
 "Please consider using a regular OneDrive account."
-msgstr ""
+msgstr "لم تتم المزامنة مع OneDrive.\n"
+"\n"
+"هذا الخطأ يحدث كثيراً عند استخدام OneDrive for Business والذي للأسف لا يمكن دعمه.\n"
+"\n"
+"يرجى النظر في استخدام حساب OneDrive العادي."
 
 #, javascript-format
 msgid "Cannot access %s"
-msgstr ""
+msgstr "لا يمكن الوصول إلى %s"
 
 #, javascript-format
 msgid "Created local items: %d."
-msgstr ""
+msgstr "العناصر المحلية المنشأة: %d."
 
 #, javascript-format
 msgid "Updated local items: %d."
-msgstr ""
+msgstr "العناصر المحلية المحدَّثة: %d."
 
 #, javascript-format
 msgid "Created remote items: %d."
-msgstr ""
+msgstr "العناصر البعيدة المنشأة: %d."
 
 #, javascript-format
 msgid "Updated remote items: %d."
-msgstr ""
+msgstr "العناصر البعيدة المحدَّثة: %d."
 
 #, javascript-format
 msgid "Deleted local items: %d."
-msgstr ""
+msgstr "العناصر المحلية المحذوفة: %d."
 
 #, javascript-format
 msgid "Deleted remote items: %d."
-msgstr ""
+msgstr "العناصر البعيدة المحذوفة: %d."
 
 #, javascript-format
 msgid "Fetched items: %d/%d."
-msgstr ""
+msgstr "العناصر المجلوبة: %d/%d."
 
 msgid "Cancelling..."
 msgstr "الإلغاء جارٍ..."
 
 #, javascript-format
 msgid "Completed: %s"
-msgstr ""
+msgstr "مكتملة: %s"
 
 #, javascript-format
 msgid "Last error: %s"
-msgstr ""
+msgstr "آخر خطأ: %s"
 
 msgid "Idle"
-msgstr ""
+msgstr "خامل"
 
 msgid "In progress"
-msgstr ""
+msgstr "قيد التقدم"
 
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
-msgstr "المزامنة قيد التقدم بالفعل. State: %s"
+msgstr "المزامنة قيد التقدم بالفعل. الحال: %s"
 
 msgid "Encrypted"
-msgstr ""
+msgstr "مشفّر"
 
 msgid "Encrypted items cannot be modified"
-msgstr ""
-
-msgid "title"
-msgstr ""
-
-msgid "updated date"
-msgstr ""
+msgstr "لا يمكن تعديل العناصر المشفَّرة"
 
 msgid "Conflicts"
-msgstr ""
+msgstr "التعارضات"
 
 msgid "Cannot move notebook to this location"
-msgstr ""
+msgstr "لا يمكن نقل دفتر الملاحظات إلى هذا المكان"
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr ""
+msgstr "لا يمكن تسمية دفتر الملاحظات بـ \"%s\" لأنه عنوان محجوز."
+
+msgid "title"
+msgstr "العنوان"
+
+msgid "updated date"
+msgstr "تاريخ التحديث"
 
 msgid "created date"
-msgstr ""
+msgstr "تاريخ الإنشاء"
 
 msgid "This note does not have geolocation information."
-msgstr ""
+msgstr "ليس لدى هذه الملاحظة معلومة موقع جغرافي."
 
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
-msgstr ""
+msgstr "لا يمكن نسخ الملاحظة إلى دفتر الملاحظات \"%s\""
 
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
-msgstr ""
+msgstr "لا يمكن نقل الملاحظة إلى دفتر الملاحظات \"%s\""
 
 msgid "Language"
 msgstr "اللغة"
@@ -1282,7 +1245,7 @@ msgid "Dark"
 msgstr "غامقة"
 
 msgid "Uncompleted to-dos on top"
-msgstr ""
+msgstr "قوائم المهام غير المكتملة في الأعلى"
 
 msgid "Show completed to-dos"
 msgstr "إظهار قوائم المهام المكتملة"
@@ -1293,10 +1256,6 @@ msgstr "ترتيب الملاحظات حسب"
 msgid "Reverse sort order"
 msgstr "عكس طريقة الترتيب"
 
-#, fuzzy
-msgid "Sort notebooks by"
-msgstr "ترتيب الملاحظات حسب"
-
 msgid "Save geo-location with notes"
 msgstr "حفظ الموقع الجغرافي مع الملاحظات"
 
@@ -1304,10 +1263,10 @@ msgid "When creating a new to-do:"
 msgstr "عند إنشاء قائمة جديدة للمهام:"
 
 msgid "Focus title"
-msgstr ""
+msgstr "التركيز على العنوان"
 
 msgid "Focus body"
-msgstr ""
+msgstr "التركيز على المتن"
 
 msgid "When creating a new note:"
 msgstr "عند إنشاء ملاحظة جديدة:"
@@ -1322,10 +1281,7 @@ msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
-msgstr ""
-"هذا يتيح لـ Joplin العمل في الخلفية. It is recommended to enable this "
-"setting so that your notes are constantly being synchronised, thus reducing "
-"the number of conflicts."
+msgstr "هذا يتيح لـ Joplin العمل في الخلفية. نوصي بتفعيل هذا الإعداد لكي تجري مزامنة ملاحظاتك باستمرار ، مما يقلل عدد حالات التعارض."
 
 msgid "Start application minimised in the tray icon"
 msgstr "بدء التطبيق مصغراً في لوحة النظام"
@@ -1342,9 +1298,7 @@ msgstr "نوع خط المحرّر"
 msgid ""
 "This must be *monospace* font or it will not work properly. If the font is "
 "incorrect or empty, it will default to a generic monospace font."
-msgstr ""
-"لابد أن يكون نوع الخط أحادي المسافة وإلا فلن يعمل بشكل صحيح. إذا كان الخط "
-"غير صحيح أو فارغاً فسيستخدم خط أحادي المسافة عام تلقائياً."
+msgstr "لابد أن يكون نوع الخط أحادي المسافة وإلا فلن يعمل بشكل صحيح. إذا كان الخط غير صحيح أو فارغاً فسيستخدم خط أحادي المسافة عام تلقائياً."
 
 msgid "Automatically update the application"
 msgstr "تحديث التطبيق آلياً"
@@ -1377,22 +1331,18 @@ msgstr "أمر محرر النصوص"
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
-msgstr ""
-"أمر محرر النصوص (قد يتضمن معامِلات) الذي سيستخدم لفتح ملاحظة. إذا لم يجر "
-"التزويد بأي محرر فسيحاول التطبيق اكتشاف المحرِّر التلقائي آلياً."
+msgstr "أمر محرر النصوص (قد يتضمن معامِلات) الذي سيستخدم لفتح ملاحظة. إذا لم يجر التزويد بأي محرر فسيحاول التطبيق اكتشاف المحرِّر التلقائي آلياً."
 
 msgid "Show advanced options"
 msgstr "إظهار خيارات متقدمة"
 
 msgid "Synchronisation target"
-msgstr "مستهدف المزامنة"
+msgstr "وجهة المزامنة"
 
 msgid ""
 "The target to synchonise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"الجهة المستهدفة المزامنة إليها. كل مستهدف مزامنة قد يكون لها معلمات إضافية "
-"تكون مسماة بـ `sync.NUM.NAME` (جميعها موثقة أدناه)."
+msgstr "الوجهة المستهدفة المزامنة إليها. كل وجهة مزامنة مستهدفة قد يكون لها معلمات إضافية تكون مسماة بـ `sync.NUM.NAME` (جميعها موثقة أدناه)."
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr "الدليل الذي تتم المزامنة معه (المسار المطلق)"
@@ -1400,9 +1350,7 @@ msgstr "الدليل الذي تتم المزامنة معه (المسار ال�
 msgid ""
 "The path to synchronise with when file system synchronisation is enabled. "
 "See `sync.target`."
-msgstr ""
-"المسار الذي ستتم المزامنة معه عند تفعيل مزامنة نظام الملفات. أنظر `sync."
-"target`."
+msgstr "المسار الذي ستتم المزامنة معه عند تفعيل مزامنة نظام الملفات. أنظر `sync.target`."
 
 msgid "Nextcloud WebDAV URL"
 msgstr "عنوان URL لـ Nextcloud WebDAV"
@@ -1412,10 +1360,7 @@ msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
-msgstr ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! أنظر الأسئلة "
-"المتكررة لتفاصيل أكثر: %s"
+msgstr "تنبيه: إذا غيرت هذا المكان ، تأكد من نسخ كافة المحتويات لديك إليه قبل البدء بالمزامنة ، وإلا فسيتم حذف كل الملفات! أنظر الأسئلة المتكررة لتفاصيل أكثر: %s"
 
 msgid "Nextcloud username"
 msgstr "اسم مستخدم Nextcloud"
@@ -1440,7 +1385,7 @@ msgid ""
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
 "pem. Note that if you make changes to the TLS settings, you must save your "
 "changes before clicking on \"Check synchronisation configuration\"."
-msgstr ""
+msgstr "قائمة مفصولة بفواصل ، بالمسارات إلى الأدلة التي سيجري تحميل الشهادات منها ، أو المسار إلى الملفات المستقلة للشهادات. على سبيل المثال : /my/cert_dir, /other/custom.pem. لاحظ أنه يجب أن تحفظ تغييراتك قبل الضغط على \"فحص ضبط المزامنة\" ، إن كنت قمت بتغييرات في إعدادات TLS."
 
 msgid "Ignore TLS certificate errors"
 msgstr "تجاهل أخطاء شهادات TLS"
@@ -1491,19 +1436,17 @@ msgstr "دليل"
 
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
-msgstr "[fuzzy]لا يمكن العثور على \"%s\"."
+msgstr "لا يمكن تحميل وحدة \"%s\" للتنسيق \"%s\""
 
 #, javascript-format
 msgid "Please specify import format for %s"
-msgstr ""
+msgstr "فضلاً حدّد تنسيق الاستيراد لـ %s"
 
 #, javascript-format
 msgid ""
 "This item is currently encrypted: %s \"%s\". Please wait for all items to be "
 "decrypted and try again."
-msgstr ""
-"This item is currently encrypted: %s \"%s\". فضلاً انتظر فك تشفير العناصر "
-"كلها ثم حاول ثانية."
+msgstr "هذا العنصر مشفَّر حالياً: %s \"%s\". فضلاً انتظر فك تشفير العناصر كلها ثم حاول ثانية."
 
 msgid "There is no data to export."
 msgstr "لا يوجد بيانات للتصدير."
@@ -1516,49 +1459,46 @@ msgstr "العناصر التي لا يمكن مزامنتها"
 
 #, javascript-format
 msgid "%s (%s): %s"
-msgstr "[fuzzy]%s = %s (%s)"
+msgstr "%s (%s): %s"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
-msgstr ""
-"These items will remain on the device but will not be uploaded to the sync "
-"target. In order to find these items, either search for the title or the ID "
-"(which is displayed in brackets above)."
+msgstr "ستبقى هذه العناصر على الجهاز إلا أنها لن يجري رفعها إلى وجهة المزامنة. لكي تجد هذه العناصر ، عليك إما البحث عن العنوان أو المعرِّف (وهو معروض أعلاه بين قوسين)."
 
 msgid "Sync status (synced items / total items)"
-msgstr "وضع المزامنة (العناصر المنجزة / إجمالي العناصر)"
+msgstr "حالة المزامنة (العناصر المنجزة / إجمالي العناصر)"
 
 #, javascript-format
 msgid "%s: %d/%d"
-msgstr ""
+msgstr "%s: %d/%d"
 
 #, javascript-format
 msgid "Total: %d/%d"
-msgstr ""
+msgstr "الإجمالي: %d/%d"
 
 #, javascript-format
 msgid "Conflicted: %d"
-msgstr ""
+msgstr "المتعارضة: %d"
 
 #, javascript-format
 msgid "To delete: %d"
-msgstr ""
+msgstr "المعدّة للحذف: %d"
 
 msgid "Folders"
 msgstr "مجلدات"
 
 #, javascript-format
 msgid "%s: %d notes"
-msgstr ""
+msgstr "%s: %d ملاحظات"
 
 msgid "Coming alarms"
 msgstr "المنبّهات القادمة"
 
 #, javascript-format
 msgid "On %s: %s"
-msgstr ""
+msgstr "في %s: %s"
 
 msgid "Permission to use camera"
 msgstr "الإذن باستخدام الكاميرا"
@@ -1618,12 +1558,10 @@ msgstr "نجاح! يبدو أن إعداد المزامنة صحيح."
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
-msgstr ""
-". Please check that URL, username, password, etc. are correct and that the "
-"sync target is accessible. The reported error was:"
+msgstr "خطأ. فضلاً تحقق من صحة عنوان URL ، اسم المستخدم ، كلمة المرور وغيرها وأن جهة المزامنة المستهدفة يمكن الوصول إليها. كان الخطأ المبلّغ عنه:"
 
 msgid "The application has been authorised!"
-msgstr "تمت مصادقة التطبيق!"
+msgstr "تم التصريح للتطبيق!"
 
 #, javascript-format
 msgid ""
@@ -1632,8 +1570,7 @@ msgid ""
 "%s\n"
 "\n"
 "Please try again."
-msgstr ""
-"لم تتم مصادقة التطبيق:\n"
+msgstr "لم يتم التصريح للتطبيق:\n"
 "%s\n"
 "فضلاً حاول ثانية."
 
@@ -1650,15 +1587,12 @@ msgstr "أكتب وسوماً جديدة أو اخترها من القائمة"
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
-msgstr ""
-"يحتاج التطبيق للأذونات التالية كي يعمل بشكل صحيح. فضلاً فعّلها في إعدادات "
-"هاتفك ، في التطبيقات > Joplin > الأذونات"
+msgstr "يحتاج التطبيق للأذونات التالية كي يعمل بشكل صحيح. فضلاً فعّلها في إعدادات هاتفك ، في التطبيقات > Joplin > الأذونات"
 
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
-msgstr ""
-"- التخزين: للسماح بإرفاق ملفات للملاحظات و لتمكين المزامنة من نظام الملفات."
+msgstr "- التخزين: للسماح بإرفاق ملفات للملاحظات و لتمكين المزامنة من نظام الملفات."
 
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr "- الكاميرا: للسماح بالتقاط صورة و إرفاقها بملاحظة."
@@ -1668,6 +1602,10 @@ msgstr "- المكان: للسماح بإرفاق معلومات الموقع ا
 
 msgid "Joplin website"
 msgstr "موقع ويب Joplin"
+
+#, javascript-format
+msgid "Joplin v%s"
+msgstr "Joplin نسخة %s"
 
 #, javascript-format
 msgid "Database v%s"
@@ -1779,15 +1717,10 @@ msgstr "بحث"
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
-msgstr ""
-"اضغط على زر (+) لتنشئ ملاحظة أو دفتر ملاحظات جديداً. اضغط على القائمة "
-"الجانبية للوصول إلى دفاتر ملاحظاتك القائمة."
+msgstr "اضغط على زر (+) لتنشئ ملاحظة أو دفتر ملاحظات جديداً. اضغط على القائمة الجانبية للوصول إلى دفاتر ملاحظاتك القائمة."
 
 msgid "You currently have no notebook. Create one by clicking on (+) button."
 msgstr "ليس لديك دفاتر ملاحظات حالياً. أنشئ واحدة بالضغط على زر (+)."
 
 msgid "Welcome"
 msgstr "مرحباً"
-
-#~ msgid "Joplin v%s"
-#~ msgstr "Joplin نسخة %s"

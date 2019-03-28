@@ -13,9 +13,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.0.6\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Для удаления метки, открепите ее от связанных с ней заметок."
@@ -607,9 +609,8 @@ msgstr "Импорт из \"%s\" в формате \"%s\". Пожалуйста,
 msgid "PDF File"
 msgstr "Файл PDF"
 
-#, fuzzy
 msgid "&File"
-msgstr "Файл"
+msgstr "&Файл"
 
 msgid "New note"
 msgstr "Новая заметка"
@@ -639,9 +640,8 @@ msgstr "Скрыть %s"
 msgid "Quit"
 msgstr "Выход"
 
-#, fuzzy
 msgid "&Edit"
-msgstr "Правка"
+msgstr "&Правка"
 
 msgid "Copy"
 msgstr "Копировать"
@@ -676,9 +676,8 @@ msgstr "Поиск во всех заметках"
 msgid "Search in current note"
 msgstr "Поиск в текущей заметке"
 
-#, fuzzy
 msgid "&View"
-msgstr "Вид"
+msgstr "&Вид"
 
 msgid "Toggle sidebar"
 msgstr "Переключить боковую панель"
@@ -689,9 +688,8 @@ msgstr "Переключить вид редактора"
 msgid "Focus"
 msgstr "Фокус"
 
-#, fuzzy
 msgid "&Tools"
-msgstr "Сервис"
+msgstr "&Сервис"
 
 msgid "Synchronisation status"
 msgstr "Статус синхронизации"
@@ -705,9 +703,8 @@ msgstr "Настройки шифрования"
 msgid "General Options"
 msgstr "Основные настройки"
 
-#, fuzzy
 msgid "&Help"
-msgstr "Помощь"
+msgstr "&Помощь"
 
 msgid "Website and documentation"
 msgstr "Сайт и документация"
@@ -1374,9 +1371,8 @@ msgstr "Сортировать заметки по"
 msgid "Reverse sort order"
 msgstr "Обратный порядок сортировки"
 
-#, fuzzy
 msgid "Sort notebooks by"
-msgstr "Сортировать заметки по"
+msgstr "Сортировать блокноты по"
 
 msgid "Save geo-location with notes"
 msgstr "Сохранять информацию о геолокации в заметках"
