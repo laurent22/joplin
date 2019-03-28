@@ -36,8 +36,8 @@ version=$(curl --silent "https://api.github.com/repos/laurent22/joplin/releases/
 if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$version" ]]; then
 
     echo 'Downloading Joplin...'
-    # Delete previous version
-    rm -f ~/.joplin/*.AppImage ~/.local/share/applications/joplin.desktop ~/.joplin/VERSION
+    # Delete previous version (in future versions joplin.desktop shouldn't exist)
+    rm -f ~/.joplin/*.AppImage ~/.local/share/applications/joplin.desktop ~/.local/share/applications/appimagekit-joplin.desktop ~/.joplin/VERSION
     
     # Creates the folder where the binary will be stored
     mkdir -p ~/.joplin/
@@ -72,7 +72,14 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$version" ]]; t
     echo 'Create Desktop icon.'
     if [[ $desktop =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.* ]]
     then
-       echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nExec=/home/$USER/.joplin/Joplin.AppImage\nIcon=/home/$USER/.joplin/Icon512.png\nType=Application\nCategories=Application;" >> ~/.local/share/applications/joplin.desktop
+       : "${TMPDIR:=/tmp}"
+       # This command extracts to squashfs-root by default and can't be changed...
+       # So we run in in the tmp directory and clean up after ourselves
+       (cd $TMPDIR && ~/.joplin/Joplin.AppImage --appimage-extract joplin.desktop &> /dev/null)
+       APPIMAGE_VERSION=$(grep "^X-AppImage-BuildId=" $TMPDIR/squashfs-root/joplin.desktop | head -n 1 | cut -d " " -f 1)
+       rm -rf $TMPDIR/squashfs-root
+
+       echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=/home/$USER/.joplin/Joplin.AppImage\nIcon=/home/$USER/.joplin/Icon512.png\nStartupWMClass=Joplin\nType=Application\nCategories=Application;\n$APPIMAGE_VERSION" >> ~/.local/share/applications/appimagekit-joplin.desktop
        echo "${COLOR_GREEN}OK${COLOR_RESET}"
     else
        echo "${COLOR_RED}NOT DONE${COLOR_RESET}"
