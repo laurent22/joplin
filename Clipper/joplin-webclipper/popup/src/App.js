@@ -210,12 +210,12 @@ class AppComponent extends Component {
 		} else if (hasContent) {
 			previewComponent = (
 				<div className="Preview">
+					<a className={"Confirm Button"} onClick={this.confirm_click}>Confirm</a>
 					<h2>Preview:</h2>
 					<input className={"Title"} value={content.title} onChange={this.contentTitle_change}/>
 					<div className={"BodyWrapper"}>
 						<div className={"Body"} dangerouslySetInnerHTML={{__html: content.body_html}}></div>
 					</div>
-					<a className={"Confirm Button"} onClick={this.confirm_click}>Confirm</a>
 				</div>
 			);
 		}
