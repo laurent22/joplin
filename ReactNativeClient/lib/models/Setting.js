@@ -25,6 +25,8 @@ class Setting extends BaseModel {
 
 		const platform = shim.platformName();
 
+		const emptyDirWarning = _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplin.cozic.net/faq/');
+
 		// A "public" setting means that it will show up in the various config screens (or config command for the CLI tool), however
 		// if if private a setting might still be handled and modified by the app. For instance, the settings related to sorting notes are not
 		// public for the mobile and desktop apps because they are handled separately in menus.
@@ -148,13 +150,13 @@ class Setting extends BaseModel {
 				}
 			}, filter: (value) => {
 				return value ? rtrimSlashes(value) : '';
-			}, public: true, label: () => _('Directory to synchronise with (absolute path)'), description: (appType) => { return appType !== 'cli' ? null : _('The path to synchronise with when file system synchronisation is enabled. See `sync.target`.'); } },
+			}, public: true, label: () => _('Directory to synchronise with (absolute path)'), description: () => emptyDirWarning },
 
-			'sync.5.path': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nextcloud WebDAV URL'), description: () => _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplin.cozic.net/faq/') },
+			'sync.5.path': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nextcloud WebDAV URL'), description: () => emptyDirWarning },
 			'sync.5.username': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nextcloud username') },
 			'sync.5.password': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nextcloud password'), secure: true },
 
-			'sync.6.path': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav') }, public: true, label: () => _('WebDAV URL'), description: () => _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplin.cozic.net/faq/') },
+			'sync.6.path': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav') }, public: true, label: () => _('WebDAV URL'), description: () => emptyDirWarning },
 			'sync.6.username': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav') }, public: true, label: () => _('WebDAV username') },
 			'sync.6.password': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav') }, public: true, label: () => _('WebDAV password'), secure: true },
 
