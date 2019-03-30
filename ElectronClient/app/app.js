@@ -387,6 +387,70 @@ class Application extends BaseApplication {
 			}
 		});
 
+		/* We need a dummy entry, otherwise the ternary operator to show a
+		 * menu item only on a specific OS does not work. */
+		const noItem = {
+			type: 'separator',
+			visible: false
+		}
+
+		const syncStatusItem = {
+			label: _('Synchronisation status'),
+			click: () => {
+				this.dispatch({
+					type: 'NAV_GO',
+					routeName: 'Status',
+				});
+			}
+		}
+
+		const newNoteItem = {
+			label: _('New note'),
+			accelerator: 'CommandOrControl+N',
+			screens: ['Main'],
+			click: () => {
+				this.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'newNote',
+				});
+			}
+		}
+
+		const newTodoItem = {
+			label: _('New to-do'),
+			accelerator: 'CommandOrControl+T',
+			screens: ['Main'],
+			click: () => {
+				this.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'newTodo',
+				});
+			}
+		}
+
+		const newNotebookItem = {
+			label: _('New notebook'),
+			screens: ['Main'],
+			click: () => {
+				this.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'newNotebook',
+				});
+			}
+		}
+
+		const printItem = {
+			label: _('Print'),
+			accelerator: 'CommandOrControl+P',
+			screens: ['Main'],
+			click: () => {
+				this.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'print',
+				});
+			}
+		}
+
 		preferencesItems.push({
 			label: _('General Options'),
 			accelerator: 'CommandOrControl+,',
@@ -414,15 +478,7 @@ class Application extends BaseApplication {
 			}
 		});
 
-		toolsItemsFirst.push({
-			label: _('Synchronisation status'),
-			click: () => {
-				this.dispatch({
-					type: 'NAV_GO',
-					routeName: 'Status',
-				});
-			}
-		}, {
+		toolsItemsFirst.push(syncStatusItem, {
 			type: 'separator',
 			screens: ['Main'],
 		});
@@ -448,7 +504,9 @@ class Application extends BaseApplication {
 
 		const template = [
 			{
-				label: _('&File'),
+				/* Using a dummy entry for macOS here, because first menu
+				 * becomes 'Joplin' and we need a nenu called 'File' later. */
+				label: shim.isMac() ? '&JoplinMainMenu' : _('&File'),
 				/* `&` before one of the char in the label name mean, that
 				 * <Alt + F> will open this menu. It's needed becase electron
 				 * opens the first menu on Alt press if no hotkey assigned.
@@ -471,42 +529,19 @@ class Application extends BaseApplication {
 				}, {
 					type: 'separator',
 					visible: shim.isMac() ? true : false
-				}, {
-					label: _('New note'),
-					accelerator: 'CommandOrControl+N',
-					screens: ['Main'],
-					click: () => {
-						this.dispatch({
-							type: 'WINDOW_COMMAND',
-							name: 'newNote',
-						});
-					}
-				}, {
-					label: _('New to-do'),
-					accelerator: 'CommandOrControl+T',
-					screens: ['Main'],
-					click: () => {
-						this.dispatch({
-							type: 'WINDOW_COMMAND',
-							name: 'newTodo',
-						});
-					}
-				}, {
-					label: _('New notebook'),
-					screens: ['Main'],
-					click: () => {
-						this.dispatch({
-							type: 'WINDOW_COMMAND',
-							name: 'newNotebook',
-						});
-					}
-				}, {
+				},
+				shim.isMac() ? noItem : newNoteItem,
+				shim.isMac() ? noItem : newTodoItem,
+				shim.isMac() ? noItem : newNotebookItem, {
 					type: 'separator',
+					visible: shim.isMac() ? false : true
 				}, {
 					label: _('Import'),
+					visible: shim.isMac() ? false : true,
 					submenu: importItems,
 				}, {
 					label: _('Export'),
+					visible: shim.isMac() ? false : true,
 					submenu: exportItems,
 				}, {
 					type: 'separator',
@@ -520,28 +555,9 @@ class Application extends BaseApplication {
 							name: 'synchronize',
 						});
 					}
-				}, {
-					label: _('Synchronisation status'),
-					visible: shim.isMac() ? true : false,
-					click: () => {
-						this.dispatch({
-							type: 'NAV_GO',
-							routeName: 'Status',
-						});
-					}
-				}, {
+				}, shim.isMac() ? syncStatusItem : noItem, {
 					type: 'separator',
-				}, {
-					label: _('Print'),
-					accelerator: 'CommandOrControl+P',
-					screens: ['Main'],
-					click: () => {
-						this.dispatch({
-							type: 'WINDOW_COMMAND',
-							name: 'print',
-						});
-					}
-				}, {
+				}, shim.isMac() ? noItem : printItem, {
 					type: 'separator',
 					platforms: ['darwin'],
 				}, {
@@ -556,6 +572,25 @@ class Application extends BaseApplication {
 					accelerator: 'CommandOrControl+Q',
 					click: () => { bridge().electronApp().quit() }
 				}]
+			}, {
+				label: _('&File'),
+				visible: shim.isMac() ? true : false,
+				submenu: [
+					newNoteItem,
+					newTodoItem,
+					newNotebookItem, {
+						type: 'separator',
+					}, {
+						label: _('Import'),
+						submenu: importItems,
+					}, {
+						label: _('Export'),
+						submenu: exportItems,
+					}, {
+						type: 'separator',
+					},
+					printItem
+				]
 			}, {
 				label: _('&Edit'),
 				submenu: [{
