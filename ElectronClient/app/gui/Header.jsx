@@ -135,8 +135,11 @@ class HeaderComponent extends React.Component {
 		const inputStyle = {
 			display: 'flex',
 			flex: 1,
-			paddingLeft: 4,
-			paddingRight: 4,
+			paddingLeft: 6,
+			paddingRight: 6,
+			paddingTop: 1,  // vertical alignment with buttons
+			paddingBottom: 0,  // vertical alignment with buttons
+			height: style.fontSize * 2,
 			color: style.color,
 			fontSize: style.fontSize,
 			fontFamily: style.fontFamily,
