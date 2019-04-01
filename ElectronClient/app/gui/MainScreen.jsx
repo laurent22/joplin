@@ -18,6 +18,7 @@ const layoutUtils = require('lib/layout-utils.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const eventManager = require('../eventManager');
 const VerticalResizer = require('./VerticalResizer.min');
+const PluginManager = require('lib/services/PluginManager');
 
 class MainScreenComponent extends React.Component {
 
@@ -458,6 +459,9 @@ class MainScreenComponent extends React.Component {
 			);
 		}
 
+		const dialogInfo = PluginManager.instance().pluginDialogToShow(this.props.plugins);
+		const pluginDialog = !dialogInfo ? null :  <dialogInfo.Dialog {...dialogInfo.props}/>;
+
 		const modalLayerStyle = Object.assign({}, styles.modalLayer, { display: this.state.modalLayer.visible ? 'block' : 'none' });
 
 		const notePropertiesDialogOptions = this.state.notePropertiesDialogOptions;
@@ -491,6 +495,8 @@ class MainScreenComponent extends React.Component {
 				<NoteList style={styles.noteList} />
 				<VerticalResizer style={styles.verticalResizer} onDrag={this.noteList_onDrag}/>
 				<NoteText style={styles.noteText} visiblePanes={this.props.noteVisiblePanes} />
+
+				{pluginDialog}	
 			</div>
 		);
 	}
@@ -512,6 +518,7 @@ const mapStateToProps = (state) => {
 		sidebarWidth: state.settings['style.sidebar.width'],
 		noteListWidth: state.settings['style.noteList.width'],
 		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
+		plugins: state.plugins,
 	};
 };
 

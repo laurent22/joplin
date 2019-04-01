@@ -42,6 +42,10 @@ globalStyle.headerStyle = {
 
 globalStyle.inputStyle = {
 	border: '1px solid',
+	height: 24,
+	paddingLeft: 5,
+	paddingRight: 5,
+	boxSizing: 'border-box',
 };
 
 globalStyle.containerStyle = {
@@ -67,6 +71,7 @@ const lightStyle = {
 	colorError: "red",
 	colorWarn: "#9A5B00",
 	colorFaded: "#777777", // For less important text
+	colorBright: "#000000", // For important text
 	dividerColor: "#dddddd",
 	selectedColor: '#e5e5e5',
 	urlColor: '#155BDA',
@@ -103,6 +108,7 @@ const darkStyle = {
 	colorError: "red",
 	colorWarn: "#9A5B00",
 	colorFaded: "#777777", // For less important text
+	colorBright: "#ffffff", // For important text
 	dividerColor: '#555555',
 	selectedColor: '#333333',
 	urlColor: '#4E87EE',
@@ -197,6 +203,28 @@ function addExtraStyles(style) {
 			fontWeight: 'bold'
 		}
 	);
+
+	style.dialogModalLayer = {
+		zIndex: 9999,
+		display: 'flex',
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		width: '100%',
+		height: '100%',
+		backgroundColor: 'rgba(0,0,0,0.6)',
+		alignItems: 'flex-start',
+		justifyContent: 'center',
+	};
+
+	style.dialogBox = {
+		backgroundColor: style.backgroundColor,
+		padding: 16,
+		boxShadow: '6px 6px 20px rgba(0,0,0,0.5)',
+		marginTop: 20,
+	}
+
+	style.dialogTitle = Object.assign({}, style.h1Style, { marginBottom: '1.2em' });
 
 	return style;
 }

@@ -7,7 +7,7 @@ const { Database } = require('lib/database.js');
 const { _ } = require('lib/locale.js');
 const moment = require('moment');
 const BaseItem = require('lib/models/BaseItem.js');
-const lodash = require('lodash');
+const { substrWithEllipsis } = require('lib/string-utils.js');
 
 class Folder extends BaseItem {
 
@@ -215,6 +215,34 @@ class Folder extends BaseItem {
 		}
 
 		return getNestedChildren(all, '');
+	}
+
+	static folderPath(folders, folderId) {
+		const idToFolders = {};
+		for (let i = 0; i < folders.length; i++) {
+			idToFolders[folders[i].id] = folders[i];
+		}
+
+		const path = [];
+		while (folderId) {
+			const folder = idToFolders[folderId];
+			if (!folder) break; // Shouldn't happen
+			path.push(folder);
+			folderId = folder.parent_id;
+		}
+
+		path.reverse();
+
+		return path;
+	}
+
+	static folderPathString(folders, folderId) {
+		const path = this.folderPath(folders, folderId);
+		const output = [];
+		for (let i = 0; i < path.length; i++) {
+			output.push(substrWithEllipsis(path[i].title, 0, 16));
+		}
+		return output.join(' / ');
 	}
 
 	static buildTree(folders) {

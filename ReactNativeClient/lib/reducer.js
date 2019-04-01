@@ -48,6 +48,7 @@ const defaultState = {
 		toFetchCount: 0,
 	},
 	historyNotes: [],
+	plugins: {},
 };
 
 const stateUtils = {};
@@ -689,6 +690,17 @@ const reducer = (state = defaultState, action) => {
 			case 'SET_NOTE_TAGS':
 				newState = Object.assign({}, state);
 				newState.selectedNoteTags = action.items;
+				break;
+
+			case 'PLUGIN_DIALOG_SET':
+
+				if (!action.pluginName) throw new Error('action.pluginName not specified');
+				newState = Object.assign({}, state);
+				const newPlugins = Object.assign({}, newState.plugins);
+				const newPlugin = newState.plugins[action.pluginName] ? Object.assign({}, newState.plugins[action.pluginName]) : {};
+				if ('open' in action) newPlugin.dialogOpen = action.open;
+				newPlugins[action.pluginName] = newPlugin;
+				newState.plugins = newPlugins;
 				break;
 
 		}

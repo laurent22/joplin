@@ -28,6 +28,11 @@ const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
+const PluginManager = require('lib/services/PluginManager');
+
+const pluginClasses = [
+	require('./plugins/GotoAnything.min'),
+];
 
 const appDefaultState = Object.assign({}, defaultState, {
 	route: {
@@ -441,7 +446,7 @@ class Application extends BaseApplication {
 
 		const printItem = {
 			label: _('Print'),
-			accelerator: 'CommandOrControl+P',
+			// accelerator: 'CommandOrControl+P',
 			screens: ['Main'],
 			click: () => {
 				this.dispatch({
@@ -502,8 +507,8 @@ class Application extends BaseApplication {
 			});
 		}
 
-		const template = [
-			{
+		const rootMenus = {
+			macOsApp: {
 				/* Using a dummy entry for macOS here, because first menu
 				 * becomes 'Joplin' and we need a nenu called 'File' later. */
 				label: shim.isMac() ? '&JoplinMainMenu' : _('&File'),
@@ -572,7 +577,8 @@ class Application extends BaseApplication {
 					accelerator: 'CommandOrControl+Q',
 					click: () => { bridge().electronApp().quit() }
 				}]
-			}, {
+			},
+			file: {
 				label: _('&File'),
 				visible: shim.isMac() ? true : false,
 				submenu: [
@@ -591,7 +597,8 @@ class Application extends BaseApplication {
 					},
 					printItem
 				]
-			}, {
+			},
+			edit: {
 				label: _('&Edit'),
 				submenu: [{
 					label: _('Copy'),
@@ -692,7 +699,8 @@ class Application extends BaseApplication {
 						});
 					},
 				}],
-			}, {
+			},
+			view: {
 				label: _('&View'),
 				submenu: [{
 					label: _('Toggle sidebar'),
@@ -749,11 +757,12 @@ class Application extends BaseApplication {
 					screens: ['Main'],
 					submenu: focusItems,
 				}],
-			}, {
+			},
+			tools: {
 				label: _('&Tools'),
-				visible: shim.isMac() ? false : true,
-				submenu: toolsItems
-			}, {
+				submenu: shim.isMac() ? [] : toolsItems,
+			},
+			help: {
 				label: _('&Help'),
 				submenu: [{
 					label: _('Website and documentation'),
@@ -775,7 +784,22 @@ class Application extends BaseApplication {
 					visible: shim.isMac() ? false : true,
 					click: () => _showAbout()
 				}]
-			},
+			},	
+		};
+
+		const pluginMenuItems = PluginManager.instance().menuItems();
+		for (const item of pluginMenuItems) {
+			let itemParent = rootMenus[item.parent] ? rootMenus[item.parent] : 'tools';
+			itemParent.submenu.push(item);
+		}
+
+		const template = [
+			rootMenus.macOsApp,
+			rootMenus.file,
+			rootMenus.edit,
+			rootMenus.view,
+			rootMenus.tools,
+			rootMenus.help,
 		];
 
 		function isEmptyMenu(template) {
@@ -890,6 +914,10 @@ class Application extends BaseApplication {
 		if (Setting.value('openDevTools')) {
 			bridge().window().webContents.openDevTools();
 		}
+
+		PluginManager.instance().dispatch_ = this.dispatch.bind(this);
+		PluginManager.instance().setLogger(reg.logger());
+		PluginManager.instance().register(pluginClasses);
 
 		this.updateMenu('Main');
 
