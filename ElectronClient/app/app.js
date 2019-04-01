@@ -507,97 +507,99 @@ class Application extends BaseApplication {
 			});
 		}
 
-		const rootMenus = {
-			macOsApp: {
-				/* Using a dummy entry for macOS here, because first menu
-				 * becomes 'Joplin' and we need a nenu called 'File' later. */
-				label: shim.isMac() ? '&JoplinMainMenu' : _('&File'),
-				/* `&` before one of the char in the label name mean, that
-				 * <Alt + F> will open this menu. It's needed becase electron
-				 * opens the first menu on Alt press if no hotkey assigned.
-				 * Issue: https://github.com/laurent22/joplin/issues/934 */
-				submenu: [{
-					label: _('About Joplin'),
-					visible: shim.isMac() ? true : false,
-					click: () => _showAbout()
-				}, {
+		const rootMenuFile = {
+			/* Using a dummy entry for macOS here, because first menu
+			 * becomes 'Joplin' and we need a nenu called 'File' later. */
+			label: shim.isMac() ? '&JoplinMainMenu' : _('&File'),
+			/* `&` before one of the char in the label name mean, that
+			 * <Alt + F> will open this menu. It's needed becase electron
+			 * opens the first menu on Alt press if no hotkey assigned.
+			 * Issue: https://github.com/laurent22/joplin/issues/934 */
+			submenu: [{
+				label: _('About Joplin'),
+				visible: shim.isMac() ? true : false,
+				click: () => _showAbout()
+			}, {
+				type: 'separator',
+				visible: shim.isMac() ? true : false
+			}, {
+				label: _('Preferences...'),
+				visible: shim.isMac() ? true : false,
+				submenu: preferencesItems
+			}, {
+				label: _('Check for updates...'),
+				visible: shim.isMac() ? true : false,
+				click: () => _checkForUpdates(this)
+			}, {
+				type: 'separator',
+				visible: shim.isMac() ? true : false
+			},
+			shim.isMac() ? noItem : newNoteItem,
+			shim.isMac() ? noItem : newTodoItem,
+			shim.isMac() ? noItem : newNotebookItem, {
+				type: 'separator',
+				visible: shim.isMac() ? false : true
+			}, {
+				label: _('Import'),
+				visible: shim.isMac() ? false : true,
+				submenu: importItems,
+			}, {
+				label: _('Export'),
+				visible: shim.isMac() ? false : true,
+				submenu: exportItems,
+			}, {
+				type: 'separator',
+			}, {
+				label: _('Synchronise'),
+				accelerator: 'CommandOrControl+S',
+				screens: ['Main'],
+				click: async () => {
+					this.dispatch({
+						type: 'WINDOW_COMMAND',
+						name: 'synchronize',
+					});
+				}
+			}, shim.isMac() ? syncStatusItem : noItem, {
+				type: 'separator',
+			}, shim.isMac() ? noItem : printItem, {
+				type: 'separator',
+				platforms: ['darwin'],
+			}, {
+				label: _('Hide %s', 'Joplin'),
+				platforms: ['darwin'],
+				accelerator: 'CommandOrControl+H',
+				click: () => { bridge().electronApp().hide() }
+			}, {
+				type: 'separator',
+			}, {
+				label: _('Quit'),
+				accelerator: 'CommandOrControl+Q',
+				click: () => { bridge().electronApp().quit() }
+			}]
+		};
+
+		const rootMenuFileMacOs = {
+			label: _('&File'),
+			visible: shim.isMac() ? true : false,
+			submenu: [
+				newNoteItem,
+				newTodoItem,
+				newNotebookItem, {
 					type: 'separator',
-					visible: shim.isMac() ? true : false
-				}, {
-					label: _('Preferences...'),
-					visible: shim.isMac() ? true : false,
-					submenu: preferencesItems
-				}, {
-					label: _('Check for updates...'),
-					visible: shim.isMac() ? true : false,
-					click: () => _checkForUpdates(this)
-				}, {
-					type: 'separator',
-					visible: shim.isMac() ? true : false
-				},
-				shim.isMac() ? noItem : newNoteItem,
-				shim.isMac() ? noItem : newTodoItem,
-				shim.isMac() ? noItem : newNotebookItem, {
-					type: 'separator',
-					visible: shim.isMac() ? false : true
 				}, {
 					label: _('Import'),
-					visible: shim.isMac() ? false : true,
 					submenu: importItems,
 				}, {
 					label: _('Export'),
-					visible: shim.isMac() ? false : true,
 					submenu: exportItems,
 				}, {
 					type: 'separator',
-				}, {
-					label: _('Synchronise'),
-					accelerator: 'CommandOrControl+S',
-					screens: ['Main'],
-					click: async () => {
-						this.dispatch({
-							type: 'WINDOW_COMMAND',
-							name: 'synchronize',
-						});
-					}
-				}, shim.isMac() ? syncStatusItem : noItem, {
-					type: 'separator',
-				}, shim.isMac() ? noItem : printItem, {
-					type: 'separator',
-					platforms: ['darwin'],
-				}, {
-					label: _('Hide %s', 'Joplin'),
-					platforms: ['darwin'],
-					accelerator: 'CommandOrControl+H',
-					click: () => { bridge().electronApp().hide() }
-				}, {
-					type: 'separator',
-				}, {
-					label: _('Quit'),
-					accelerator: 'CommandOrControl+Q',
-					click: () => { bridge().electronApp().quit() }
-				}]
-			},
-			file: {
-				label: _('&File'),
-				visible: shim.isMac() ? true : false,
-				submenu: [
-					newNoteItem,
-					newTodoItem,
-					newNotebookItem, {
-						type: 'separator',
-					}, {
-						label: _('Import'),
-						submenu: importItems,
-					}, {
-						label: _('Export'),
-						submenu: exportItems,
-					}, {
-						type: 'separator',
-					},
-					printItem
-				]
-			},
+				},
+				printItem
+			]
+		};
+
+		const rootMenus = {
 			edit: {
 				label: _('&Edit'),
 				submenu: [{
@@ -787,6 +789,13 @@ class Application extends BaseApplication {
 			},	
 		};
 
+		if (shim.isMac()) {
+			rootMenus.macOsApp = rootMenuFile;
+			rootMenus.file = rootMenuFileMacOs;
+		} else {
+			rootMenus.file = rootMenuFile;
+		}
+
 		const pluginMenuItems = PluginManager.instance().menuItems();
 		for (const item of pluginMenuItems) {
 			let itemParent = rootMenus[item.parent] ? rootMenus[item.parent] : 'tools';
@@ -794,13 +803,14 @@ class Application extends BaseApplication {
 		}
 
 		const template = [
-			rootMenus.macOsApp,
 			rootMenus.file,
 			rootMenus.edit,
 			rootMenus.view,
 			rootMenus.tools,
 			rootMenus.help,
 		];
+
+		if (shim.isMac()) template.splice(0, 0, rootMenus.macOsApp);
 
 		function isEmptyMenu(template) {
 			for (let i = 0; i < template.length; i++) {
