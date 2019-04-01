@@ -608,9 +608,8 @@ msgstr "Importerar från \"%s\" som \"%s\" format. Vänta..."
 msgid "PDF File"
 msgstr "PDF-fil"
 
-#, fuzzy
-msgid "&File"
-msgstr "Fil"
+msgid "Synchronisation status"
+msgstr "Synkroniseringstillstånd"
 
 msgid "New note"
 msgstr "Ny anteckning"
@@ -621,6 +620,35 @@ msgstr "Ny att-göra"
 msgid "New notebook"
 msgstr "Ny anteckningsbok"
 
+msgid "Print"
+msgstr "Skriv ut"
+
+msgid "General Options"
+msgstr "Allmänna inställningar"
+
+msgid "Encryption options"
+msgstr "Krypteringsinställningar"
+
+msgid "Web clipper options"
+msgstr "Web clipper-inställningar"
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#, fuzzy
+msgid "&File"
+msgstr "Fil"
+
+msgid "About Joplin"
+msgstr "Om Joplin"
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr "Sök efter uppdateringar..."
+
 msgid "Import"
 msgstr "Importera"
 
@@ -629,9 +657,6 @@ msgstr "Exportera"
 
 msgid "Synchronise"
 msgstr "Synkronisera"
-
-msgid "Print"
-msgstr "Skriv ut"
 
 #, javascript-format
 msgid "Hide %s"
@@ -694,18 +719,6 @@ msgstr "Fokus"
 msgid "&Tools"
 msgstr "Verktyg"
 
-msgid "Synchronisation status"
-msgstr "Synkroniseringstillstånd"
-
-msgid "Web clipper options"
-msgstr "Web clipper-inställningar"
-
-msgid "Encryption options"
-msgstr "Krypteringsinställningar"
-
-msgid "General Options"
-msgstr "Allmänna inställningar"
-
 #, fuzzy
 msgid "&Help"
 msgstr "Hjälp"
@@ -715,16 +728,6 @@ msgstr "Webbplats och dokumentation"
 
 msgid "Make a donation"
 msgstr "Gör en donation"
-
-msgid "Check for updates..."
-msgstr "Sök efter uppdateringar..."
-
-msgid "About Joplin"
-msgstr "Om Joplin"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, javascript-format
 msgid "Open %s"
@@ -1348,6 +1351,16 @@ msgstr "Kan inte kopiera anteckning till \"%s\" anteckningsbok"
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Kan inte flytta anteckning till \"%s\" anteckningsbok"
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+"OBS! Om du ändrar denna plats så se till att du har en kopia på allt "
+"innehåll innan du synkroniserar. Annars kommer samtliga filer att raderas. "
+"Läs FAQ för mer information: %s"
+
 msgid "Language"
 msgstr "Språk"
 
@@ -1484,25 +1497,8 @@ msgstr ""
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Katalog för att synkronisera med (absolut sökväg)"
 
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-"Sökvägen att synkronisera med när synkronisering av filsystem är aktiverat. "
-"Se `sync.target`."
-
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud-WebDAV-webbadress"
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
-msgstr ""
-"OBS! Om du ändrar denna plats så se till att du har en kopia på allt "
-"innehåll innan du synkroniserar. Annars kommer samtliga filer att raderas. "
-"Läs FAQ för mer information: %s"
 
 msgid "Nextcloud username"
 msgstr "Nextcloud-användarnamn"
@@ -1894,6 +1890,13 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Välkommen"
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "Sökvägen att synkronisera med när synkronisering av filsystem är "
+#~ "aktiverat. Se `sync.target`."
 
 #~ msgid "Joplin v%s"
 #~ msgstr "Joplin v%s"

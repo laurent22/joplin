@@ -593,9 +593,8 @@ msgstr "Importuji z \"%s\" jako formát \"%s\". Chvíli strpení..."
 msgid "PDF File"
 msgstr "PDF soubor"
 
-#, fuzzy
-msgid "&File"
-msgstr "Soubor"
+msgid "Synchronisation status"
+msgstr "Stav synchronizace"
 
 msgid "New note"
 msgstr "Nová poznámka"
@@ -606,6 +605,35 @@ msgstr "Nové to-do"
 msgid "New notebook"
 msgstr "Nový zápisník"
 
+msgid "Print"
+msgstr "Tisk"
+
+msgid "General Options"
+msgstr "Obecná nastavení"
+
+msgid "Encryption options"
+msgstr "Nastavení šifrování"
+
+msgid "Web clipper options"
+msgstr ""
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#, fuzzy
+msgid "&File"
+msgstr "Soubor"
+
+msgid "About Joplin"
+msgstr "O aplikaci Joplin"
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr "Zkontrolovat updaty..."
+
 msgid "Import"
 msgstr "Import"
 
@@ -614,9 +642,6 @@ msgstr "Export"
 
 msgid "Synchronise"
 msgstr "Synchronizovat"
-
-msgid "Print"
-msgstr "Tisk"
 
 #, javascript-format
 msgid "Hide %s"
@@ -682,18 +707,6 @@ msgstr "Vybrat text poznámky"
 msgid "&Tools"
 msgstr "Nástroje"
 
-msgid "Synchronisation status"
-msgstr "Stav synchronizace"
-
-msgid "Web clipper options"
-msgstr ""
-
-msgid "Encryption options"
-msgstr "Nastavení šifrování"
-
-msgid "General Options"
-msgstr "Obecná nastavení"
-
 #, fuzzy
 msgid "&Help"
 msgstr "Nápověda"
@@ -703,16 +716,6 @@ msgstr "Web a dokumentace"
 
 msgid "Make a donation"
 msgstr "Přispět"
-
-msgid "Check for updates..."
-msgstr "Zkontrolovat updaty..."
-
-msgid "About Joplin"
-msgstr "O aplikaci Joplin"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, javascript-format
 msgid "Open %s"
@@ -1326,6 +1329,13 @@ msgstr "Poznámku \"%s\" nelze zkopírovat do zápisníku"
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Poznámku nelze přesunout do zápisníku \"%s\""
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
 msgid "Language"
 msgstr "Jazyk"
 
@@ -1462,22 +1472,8 @@ msgstr ""
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Složka k synchronizaci (absolutní cesta)"
 
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-"Cesta ke složce, se kterou synchronizovat, pokud je cílem synchronizace "
-"místní souborový systém. Viz `sync.target`."
-
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
-msgstr ""
 
 msgid "Nextcloud username"
 msgstr "Nextcloud uživatelské jméno"
@@ -1854,6 +1850,13 @@ msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na tlačítko (+
 
 msgid "Welcome"
 msgstr "Vítejte"
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "Cesta ke složce, se kterou synchronizovat, pokud je cílem synchronizace "
+#~ "místní souborový systém. Viz `sync.target`."
 
 #, fuzzy
 #~ msgid "Joplin v%s"

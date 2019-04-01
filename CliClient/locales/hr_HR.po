@@ -601,9 +601,8 @@ msgstr ""
 msgid "PDF File"
 msgstr "Datoteka"
 
-#, fuzzy
-msgid "&File"
-msgstr "Datoteka"
+msgid "Synchronisation status"
+msgstr "Status sinkronizacije"
 
 msgid "New note"
 msgstr "Nova bilješka"
@@ -614,6 +613,36 @@ msgstr "Novi zadatak"
 msgid "New notebook"
 msgstr "Nova bilježnica"
 
+msgid "Print"
+msgstr ""
+
+#, fuzzy
+msgid "General Options"
+msgstr "Opcije"
+
+msgid "Encryption options"
+msgstr ""
+
+msgid "Web clipper options"
+msgstr ""
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#, fuzzy
+msgid "&File"
+msgstr "Datoteka"
+
+msgid "About Joplin"
+msgstr "O Joplinu"
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr ""
+
 msgid "Import"
 msgstr "Uvoz"
 
@@ -623,9 +652,6 @@ msgstr "Uvoz"
 
 msgid "Synchronise"
 msgstr "Sinkroniziraj"
-
-msgid "Print"
-msgstr ""
 
 #, javascript-format
 msgid "Hide %s"
@@ -690,19 +716,6 @@ msgstr "Naslov bilješke:"
 msgid "&Tools"
 msgstr "Alati"
 
-msgid "Synchronisation status"
-msgstr "Status sinkronizacije"
-
-msgid "Web clipper options"
-msgstr ""
-
-msgid "Encryption options"
-msgstr ""
-
-#, fuzzy
-msgid "General Options"
-msgstr "Opcije"
-
 #, fuzzy
 msgid "&Help"
 msgstr "Pomoć"
@@ -713,16 +726,6 @@ msgstr "Website i dokumentacija"
 #, fuzzy
 msgid "Make a donation"
 msgstr "Website i dokumentacija"
-
-msgid "Check for updates..."
-msgstr ""
-
-msgid "About Joplin"
-msgstr "O Joplinu"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, fuzzy, javascript-format
 msgid "Open %s"
@@ -1332,6 +1335,13 @@ msgstr "Ne mogu kopirati bilješku u bilježnicu %s"
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Ne mogu premjestiti bilješku u bilježnicu %s"
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
 msgid "Language"
 msgstr "Jezik"
 
@@ -1468,21 +1478,7 @@ msgstr ""
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Direktorij za sinkroniziranje (apsolutna putanja)"
 
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-"Putanja do direktorija za sinkronizaciju u slučaju kad je sinkronizacija sa "
-"datotečnim sustavom omogućena. Vidi `sync.target`."
-
 msgid "Nextcloud WebDAV URL"
-msgstr ""
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
 msgstr ""
 
 msgid "Nextcloud username"
@@ -1860,6 +1856,13 @@ msgstr "Trenutno nemaš nijednu bilježnicu. Stvori novu klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobro došli"
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "Putanja do direktorija za sinkronizaciju u slučaju kad je sinkronizacija "
+#~ "sa datotečnim sustavom omogućena. Vidi `sync.target`."
 
 #, fuzzy
 #~ msgid "State: %s."

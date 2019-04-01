@@ -607,9 +607,8 @@ msgstr "Bezig met importeren van \"%s\" in het formaat \"%s\". Even geduld..."
 msgid "PDF File"
 msgstr "PDF-bestand"
 
-#, fuzzy
-msgid "&File"
-msgstr "Bestand"
+msgid "Synchronisation status"
+msgstr "Synchronisatiestatus"
 
 msgid "New note"
 msgstr "Nieuwe notitie"
@@ -620,6 +619,35 @@ msgstr "Nieuwe taak"
 msgid "New notebook"
 msgstr "Nieuw notitieboek"
 
+msgid "Print"
+msgstr "Afdrukken"
+
+msgid "General Options"
+msgstr "Algemene opties"
+
+msgid "Encryption options"
+msgstr "Versleutelingsopties"
+
+msgid "Web clipper options"
+msgstr "Webclipper-opties"
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#, fuzzy
+msgid "&File"
+msgstr "Bestand"
+
+msgid "About Joplin"
+msgstr "Over Joplin"
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr "Controleren op updates..."
+
 msgid "Import"
 msgstr "Importeren"
 
@@ -628,9 +656,6 @@ msgstr "Exporteren"
 
 msgid "Synchronise"
 msgstr "Synchroniseren"
-
-msgid "Print"
-msgstr "Afdrukken"
 
 #, javascript-format
 msgid "Hide %s"
@@ -696,18 +721,6 @@ msgstr "Inhoud focussen"
 msgid "&Tools"
 msgstr "Hulpmiddelen"
 
-msgid "Synchronisation status"
-msgstr "Synchronisatiestatus"
-
-msgid "Web clipper options"
-msgstr "Webclipper-opties"
-
-msgid "Encryption options"
-msgstr "Versleutelingsopties"
-
-msgid "General Options"
-msgstr "Algemene opties"
-
 #, fuzzy
 msgid "&Help"
 msgstr "Hulp"
@@ -717,16 +730,6 @@ msgstr "Website en documentatie"
 
 msgid "Make a donation"
 msgstr "Doneren"
-
-msgid "Check for updates..."
-msgstr "Controleren op updates..."
-
-msgid "About Joplin"
-msgstr "Over Joplin"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, javascript-format
 msgid "Open %s"
@@ -1351,6 +1354,13 @@ msgstr "Kan notitie niet kopiëren naar notitieboek \"%s\""
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Kan notitie niet verplaatsen naar notitieboek \"%s\""
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
 msgid "Language"
 msgstr "Taal"
 
@@ -1486,22 +1496,8 @@ msgstr ""
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Map waarnaar gesynchroniseerd moet worden (absoluut pad)"
 
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-"Het pad waarnaar gesynchroniseerd moet worden als bestandssysteem-"
-"synchronisatie is ingeschakeld. Zie `sync.target`."
-
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV-URL"
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
-msgstr ""
 
 msgid "Nextcloud username"
 msgstr "Nextcloud-gebruikersnaam"
@@ -1892,6 +1888,13 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Welkom"
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "Het pad waarnaar gesynchroniseerd moet worden als bestandssysteem-"
+#~ "synchronisatie is ingeschakeld. Zie `sync.target`."
 
 #, fuzzy
 #~ msgid "Joplin v%s"

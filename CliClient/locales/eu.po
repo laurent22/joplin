@@ -605,9 +605,8 @@ msgstr ""
 msgid "PDF File"
 msgstr "Fitxategia"
 
-#, fuzzy
-msgid "&File"
-msgstr "Fitxategia"
+msgid "Synchronisation status"
+msgstr "Sinkronizazioaren egoera"
 
 msgid "New note"
 msgstr "Ohar berria"
@@ -618,6 +617,35 @@ msgstr "Zeregin berria"
 msgid "New notebook"
 msgstr "Koaderno berria"
 
+msgid "Print"
+msgstr ""
+
+msgid "General Options"
+msgstr "Ezarpenak"
+
+msgid "Encryption options"
+msgstr "Zifratzeko aukerak"
+
+msgid "Web clipper options"
+msgstr ""
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#, fuzzy
+msgid "&File"
+msgstr "Fitxategia"
+
+msgid "About Joplin"
+msgstr "Joplin-i buruz"
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr ""
+
 msgid "Import"
 msgstr "Inportatu"
 
@@ -627,9 +655,6 @@ msgstr "Inportatu"
 
 msgid "Synchronise"
 msgstr "Sinkronizatu"
-
-msgid "Print"
-msgstr ""
 
 #, javascript-format
 msgid "Hide %s"
@@ -693,18 +718,6 @@ msgstr ""
 msgid "&Tools"
 msgstr "Tresnak"
 
-msgid "Synchronisation status"
-msgstr "Sinkronizazioaren egoera"
-
-msgid "Web clipper options"
-msgstr ""
-
-msgid "Encryption options"
-msgstr "Zifratzeko aukerak"
-
-msgid "General Options"
-msgstr "Ezarpenak"
-
 #, fuzzy
 msgid "&Help"
 msgstr "Laguntza"
@@ -715,16 +728,6 @@ msgstr "Web orria eta dokumentazioa (en)"
 #, fuzzy
 msgid "Make a donation"
 msgstr "Web orria eta dokumentazioa (en)"
-
-msgid "Check for updates..."
-msgstr ""
-
-msgid "About Joplin"
-msgstr "Joplin-i buruz"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, fuzzy, javascript-format
 msgid "Open %s"
@@ -1349,6 +1352,13 @@ msgstr "Ezin kopia daiteke oharra \"%s\" koadernora"
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Ezin eraman daiteke oharra \"%s\" koadernora"
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
 msgid "Language"
 msgstr "Hizkuntza"
 
@@ -1488,21 +1498,8 @@ msgstr ""
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Sinkronizatzeko direktorioa (bide-izena osorik)"
 
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-"Sinkronizazio sistema gaituta dagoenerako bide-izena. Ikus `sync.target`."
-
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
-msgstr ""
 
 msgid "Nextcloud username"
 msgstr "Nextcloud erabiltzaile-izena"
@@ -1883,6 +1880,12 @@ msgstr "Oraindik ez duzu koadernorik. Sortu bat (+) botoian sakatuta."
 
 msgid "Welcome"
 msgstr "Ongi etorri!"
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "Sinkronizazio sistema gaituta dagoenerako bide-izena. Ikus `sync.target`."
 
 #, fuzzy
 #~ msgid "State: %s."

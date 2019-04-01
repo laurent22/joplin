@@ -575,9 +575,8 @@ msgstr "\"%s\" den \"%s\" biçiminde içe aktarılıyor. Lütfen bekleyin..."
 msgid "PDF File"
 msgstr "PDF Dosyası"
 
-#, fuzzy
-msgid "&File"
-msgstr "Dosya"
+msgid "Synchronisation status"
+msgstr "Senkronizasyon durumu"
 
 msgid "New note"
 msgstr "Yeni not"
@@ -588,6 +587,35 @@ msgstr "Yeni yapılacak"
 msgid "New notebook"
 msgstr "Yeni not defteri"
 
+msgid "Print"
+msgstr "Yazdır"
+
+msgid "General Options"
+msgstr "Genel seçenekler"
+
+msgid "Encryption options"
+msgstr "Şifreleme seçenekleri"
+
+msgid "Web clipper options"
+msgstr "Web alıntılama ayarları"
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#, fuzzy
+msgid "&File"
+msgstr "Dosya"
+
+msgid "About Joplin"
+msgstr "Joplin hakkında"
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr "Güncellemeleri kontrol et..."
+
 msgid "Import"
 msgstr "İçe aktar"
 
@@ -596,9 +624,6 @@ msgstr "Dışa aktar"
 
 msgid "Synchronise"
 msgstr "Senkronize"
-
-msgid "Print"
-msgstr "Yazdır"
 
 #, javascript-format
 msgid "Hide %s"
@@ -661,18 +686,6 @@ msgstr "Odaklan"
 msgid "&Tools"
 msgstr "Araçlar"
 
-msgid "Synchronisation status"
-msgstr "Senkronizasyon durumu"
-
-msgid "Web clipper options"
-msgstr "Web alıntılama ayarları"
-
-msgid "Encryption options"
-msgstr "Şifreleme seçenekleri"
-
-msgid "General Options"
-msgstr "Genel seçenekler"
-
 #, fuzzy
 msgid "&Help"
 msgstr "Yardım"
@@ -682,16 +695,6 @@ msgstr "Web sitesi ve dökümanlar"
 
 msgid "Make a donation"
 msgstr "Bağış yapın"
-
-msgid "Check for updates..."
-msgstr "Güncellemeleri kontrol et..."
-
-msgid "About Joplin"
-msgstr "Joplin hakkında"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, javascript-format
 msgid "Open %s"
@@ -1316,6 +1319,16 @@ msgstr "Not \"%s\" not defterine kopyalanamıyor."
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Not \"%s\" not defterine taşınamıyor."
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+"Dikkat: Bu konumu değiştirirseniz, senkronize etmeden önce tüm içeriğinizi "
+"kopyaladığınızdan emin olun, aksi takdirde tüm dosyalar kaldırılır! Daha "
+"fazla bilgi için SSS bölümüne bakın: %s"
+
 msgid "Language"
 msgstr "Dil"
 
@@ -1451,25 +1464,8 @@ msgstr ""
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Eşitlenecek dizin (kesin  yol)"
 
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-"Dosya sistemi senkronizasyonu etkinleştirildiğinde senkronize edilecek yol. "
-"Bakınız `sync.target`."
-
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
-msgstr ""
-"Dikkat: Bu konumu değiştirirseniz, senkronize etmeden önce tüm içeriğinizi "
-"kopyaladığınızdan emin olun, aksi takdirde tüm dosyalar kaldırılır! Daha "
-"fazla bilgi için SSS bölümüne bakın: %s"
 
 msgid "Nextcloud username"
 msgstr "Nextcloud kullanıcı adı"
@@ -1853,6 +1849,13 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Hoşgeldiniz"
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "Dosya sistemi senkronizasyonu etkinleştirildiğinde senkronize edilecek "
+#~ "yol. Bakınız `sync.target`."
 
 #~ msgid "Joplin v%s"
 #~ msgstr "Joplin v%s"

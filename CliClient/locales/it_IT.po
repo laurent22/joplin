@@ -611,9 +611,8 @@ msgstr "Importazione da \"%s\" come formato \"%s\". Si prega di attendere..."
 msgid "PDF File"
 msgstr "PDF File"
 
-#, fuzzy
-msgid "&File"
-msgstr "File"
+msgid "Synchronisation status"
+msgstr "Stato di sincronizzazione"
 
 msgid "New note"
 msgstr "Nuova nota"
@@ -624,6 +623,35 @@ msgstr "Nuovo \"Cose-da-fare\""
 msgid "New notebook"
 msgstr "Nuovo taccuino"
 
+msgid "Print"
+msgstr "Stampa"
+
+msgid "General Options"
+msgstr "Opzioni Generali"
+
+msgid "Encryption options"
+msgstr "Opzioni Crittografia"
+
+msgid "Web clipper options"
+msgstr "Opzioni Web Clipper"
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#, fuzzy
+msgid "&File"
+msgstr "File"
+
+msgid "About Joplin"
+msgstr "Informazione su Joplin"
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr "Controlla aggiornamenti ..."
+
 msgid "Import"
 msgstr "Importa"
 
@@ -632,9 +660,6 @@ msgstr "Esporta"
 
 msgid "Synchronise"
 msgstr "Sincronizza"
-
-msgid "Print"
-msgstr "Stampa"
 
 #, javascript-format
 msgid "Hide %s"
@@ -698,18 +723,6 @@ msgstr "Focus sul testo"
 msgid "&Tools"
 msgstr "Strumenti"
 
-msgid "Synchronisation status"
-msgstr "Stato di sincronizzazione"
-
-msgid "Web clipper options"
-msgstr "Opzioni Web Clipper"
-
-msgid "Encryption options"
-msgstr "Opzioni Crittografia"
-
-msgid "General Options"
-msgstr "Opzioni Generali"
-
 #, fuzzy
 msgid "&Help"
 msgstr "Aiuto"
@@ -719,16 +732,6 @@ msgstr "Sito web e documentazione"
 
 msgid "Make a donation"
 msgstr "Fai una donazione"
-
-msgid "Check for updates..."
-msgstr "Controlla aggiornamenti ..."
-
-msgid "About Joplin"
-msgstr "Informazione su Joplin"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, javascript-format
 msgid "Open %s"
@@ -1349,6 +1352,13 @@ msgstr "Non posso copiare la nota nel Taccuino \"%s\""
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Non posso spostare la nota nel Taccuino \"%s\""
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
 msgid "Language"
 msgstr "Linguaggio"
 
@@ -1485,22 +1495,8 @@ msgstr ""
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Cartella da sincronizzare con (percorso assoluto)"
 
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-"Il percorso di sincronizzazione quando la sincronizzazione è abilitata. Vedi "
-"`sync.target`."
-
 msgid "Nextcloud WebDAV URL"
 msgstr "URL Nextcloud WebDAV"
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
-msgstr ""
 
 msgid "Nextcloud username"
 msgstr "Nome Utente Nextcloud"
@@ -1888,6 +1884,13 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvenuto"
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "Il percorso di sincronizzazione quando la sincronizzazione è abilitata. "
+#~ "Vedi `sync.target`."
 
 #~ msgid "Joplin v%s"
 #~ msgstr "Joplin v%s"

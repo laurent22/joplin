@@ -593,9 +593,8 @@ msgstr ""
 msgid "PDF File"
 msgstr "PDF ファイル"
 
-#, fuzzy
-msgid "&File"
-msgstr "ファイル"
+msgid "Synchronisation status"
+msgstr "同期状況"
 
 msgid "New note"
 msgstr "新しいノート"
@@ -606,6 +605,35 @@ msgstr "新しいToDo"
 msgid "New notebook"
 msgstr "新しいノートブック"
 
+msgid "Print"
+msgstr "印刷"
+
+msgid "General Options"
+msgstr "全般のオプション"
+
+msgid "Encryption options"
+msgstr "暗号化のオプション"
+
+msgid "Web clipper options"
+msgstr "Webクリッパーのオプション"
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#, fuzzy
+msgid "&File"
+msgstr "ファイル"
+
+msgid "About Joplin"
+msgstr "Joplinについて"
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr "アップデートのチェック..."
+
 msgid "Import"
 msgstr "インポート"
 
@@ -614,9 +642,6 @@ msgstr "エクスポート"
 
 msgid "Synchronise"
 msgstr "同期"
-
-msgid "Print"
-msgstr "印刷"
 
 #, javascript-format
 msgid "Hide %s"
@@ -680,18 +705,6 @@ msgstr "本文にフォーカス"
 msgid "&Tools"
 msgstr "ツール"
 
-msgid "Synchronisation status"
-msgstr "同期状況"
-
-msgid "Web clipper options"
-msgstr "Webクリッパーのオプション"
-
-msgid "Encryption options"
-msgstr "暗号化のオプション"
-
-msgid "General Options"
-msgstr "全般のオプション"
-
 #, fuzzy
 msgid "&Help"
 msgstr "ヘルプ"
@@ -701,16 +714,6 @@ msgstr "Webサイトとドキュメント"
 
 msgid "Make a donation"
 msgstr "寄付する"
-
-msgid "Check for updates..."
-msgstr "アップデートのチェック..."
-
-msgid "About Joplin"
-msgstr "Joplinについて"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, javascript-format
 msgid "Open %s"
@@ -1328,6 +1331,16 @@ msgstr "ノートをノートブック \"%s\" にコピーできません"
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "ノートをノートブック \"%s\" に移動できません"
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+"注意: この場所を変更する際は、同期する前に新しい場所にすべての内容をコピーし"
+"ておきましょう。そうしないとすべてのファイルが削除されていまいます！ 詳しくは"
+"次のFAQをご覧ください: %s"
+
 msgid "Language"
 msgstr "言語"
 
@@ -1461,25 +1474,8 @@ msgstr ""
 msgid "Directory to synchronise with (absolute path)"
 msgstr "同期先のディレクトリ(絶対パス)"
 
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-"ファイルシステム同期の有効時に同期を行うパスです。`sync.target`も参考にしてく"
-"ださい。"
-
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
-msgstr ""
-"注意: この場所を変更する際は、同期する前に新しい場所にすべての内容をコピーし"
-"ておきましょう。そうしないとすべてのファイルが削除されていまいます！ 詳しくは"
-"次のFAQをご覧ください: %s"
 
 msgid "Nextcloud username"
 msgstr "Nextcloud ユーザー名"
@@ -1866,6 +1862,13 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "ファイルシステム同期の有効時に同期を行うパスです。`sync.target`も参考にし"
+#~ "てください。"
 
 #, fuzzy
 #~ msgid "Joplin v%s"

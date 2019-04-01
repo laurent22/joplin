@@ -566,8 +566,8 @@ msgstr "从 \"%s\" 导入，导入格式为 \"%s\" 。请稍等…"
 msgid "PDF File"
 msgstr "PDF 文件"
 
-msgid "&File"
-msgstr "文件 (&F)"
+msgid "Synchronisation status"
+msgstr "同步状态"
 
 msgid "New note"
 msgstr "新建笔记"
@@ -578,6 +578,34 @@ msgstr "新建待办事项"
 msgid "New notebook"
 msgstr "新建笔记本"
 
+msgid "Print"
+msgstr "打印"
+
+msgid "General Options"
+msgstr "通用选项"
+
+msgid "Encryption options"
+msgstr "加密选项"
+
+msgid "Web clipper options"
+msgstr "网页剪辑选项"
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+msgid "&File"
+msgstr "文件 (&F)"
+
+msgid "About Joplin"
+msgstr "关于 Joplin"
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr "检查更新..."
+
 msgid "Import"
 msgstr "导入"
 
@@ -586,9 +614,6 @@ msgstr "导出"
 
 msgid "Synchronise"
 msgstr "同步"
-
-msgid "Print"
-msgstr "打印"
 
 #, javascript-format
 msgid "Hide %s"
@@ -648,18 +673,6 @@ msgstr "聚焦于"
 msgid "&Tools"
 msgstr "工具 (&T)"
 
-msgid "Synchronisation status"
-msgstr "同步状态"
-
-msgid "Web clipper options"
-msgstr "网页剪辑选项"
-
-msgid "Encryption options"
-msgstr "加密选项"
-
-msgid "General Options"
-msgstr "通用选项"
-
 msgid "&Help"
 msgstr "帮助 (&H)"
 
@@ -668,16 +681,6 @@ msgstr "网站与文档"
 
 msgid "Make a donation"
 msgstr "捐赠"
-
-msgid "Check for updates..."
-msgstr "检查更新..."
-
-msgid "About Joplin"
-msgstr "关于 Joplin"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, javascript-format
 msgid "Open %s"
@@ -1277,6 +1280,15 @@ msgstr "无法复制笔记到笔记本“%s”"
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "无法移动笔记到笔记本“%s”"
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+"注意：如果您更改该位置，请确保在同步之前将所有内容复制到该位置，否则将删除所"
+"有文件！ 更多详细信息请参阅常见问题解答（FAQ）：%s"
+
 msgid "Language"
 msgstr "语言"
 
@@ -1408,22 +1420,8 @@ msgstr ""
 msgid "Directory to synchronise with (absolute path)"
 msgstr "待同步的目录（绝对路径）。"
 
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr "启用文件系统同步时要同步的路径。见 `sync.target`。"
-
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
-msgstr ""
-"注意：如果您更改该位置，请确保在同步之前将所有内容复制到该位置，否则将删除所"
-"有文件！ 更多详细信息请参阅常见问题解答（FAQ）：%s"
 
 msgid "Nextcloud username"
 msgstr "Nextcloud 用户名"
@@ -1795,6 +1793,11 @@ msgstr "您目前未有笔记本。点击 (+) 按钮创建。"
 
 msgid "Welcome"
 msgstr "欢迎"
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr "启用文件系统同步时要同步的路径。见 `sync.target`。"
 
 #~ msgid "Joplin v%s"
 #~ msgstr "Joplin v%s"

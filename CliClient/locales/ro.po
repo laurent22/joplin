@@ -542,9 +542,8 @@ msgstr ""
 msgid "PDF File"
 msgstr "Fișier PDF"
 
-#, fuzzy
-msgid "&File"
-msgstr "Fișier"
+msgid "Synchronisation status"
+msgstr "Statusul sincronizării"
 
 msgid "New note"
 msgstr "Adăugați o nouă notiță"
@@ -555,6 +554,35 @@ msgstr "Adăugați o nouă sarcină"
 msgid "New notebook"
 msgstr "Adăugați un nou caiet de notițe"
 
+msgid "Print"
+msgstr "Printați"
+
+msgid "General Options"
+msgstr "Opțiuni Generale"
+
+msgid "Encryption options"
+msgstr "Opțiuni de criptare"
+
+msgid "Web clipper options"
+msgstr ""
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#, fuzzy
+msgid "&File"
+msgstr "Fișier"
+
+msgid "About Joplin"
+msgstr "Despre Joplin"
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr "Verificați actualizările..."
+
 msgid "Import"
 msgstr "Importați"
 
@@ -563,9 +591,6 @@ msgstr "Exportați"
 
 msgid "Synchronise"
 msgstr "Sincronizați"
-
-msgid "Print"
-msgstr "Printați"
 
 #, javascript-format
 msgid "Hide %s"
@@ -630,18 +655,6 @@ msgstr ""
 msgid "&Tools"
 msgstr "Unelte"
 
-msgid "Synchronisation status"
-msgstr "Statusul sincronizării"
-
-msgid "Web clipper options"
-msgstr ""
-
-msgid "Encryption options"
-msgstr "Opțiuni de criptare"
-
-msgid "General Options"
-msgstr "Opțiuni Generale"
-
 #, fuzzy
 msgid "&Help"
 msgstr "Ajutor"
@@ -651,16 +664,6 @@ msgstr "Website și documentație"
 
 msgid "Make a donation"
 msgstr "Faceți o donație"
-
-msgid "Check for updates..."
-msgstr "Verificați actualizările..."
-
-msgid "About Joplin"
-msgstr "Despre Joplin"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, javascript-format
 msgid "Open %s"
@@ -1246,6 +1249,13 @@ msgstr "Nu se poate copia notița în caietul de notițe \"%s\""
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Nu se poate muta notița în caietul de notițe \"%s\""
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
 msgid "Language"
 msgstr "Limbă"
 
@@ -1372,20 +1382,8 @@ msgstr ""
 msgid "Directory to synchronise with (absolute path)"
 msgstr ""
 
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-
 msgid "Nextcloud WebDAV URL"
 msgstr "URL NextCloud WebDAV"
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
-msgstr ""
 
 msgid "Nextcloud username"
 msgstr "Nume utilizator Nextcloud"

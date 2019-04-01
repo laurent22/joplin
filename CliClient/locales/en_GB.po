@@ -527,7 +527,7 @@ msgstr ""
 msgid "PDF File"
 msgstr ""
 
-msgid "&File"
+msgid "Synchronisation status"
 msgstr ""
 
 msgid "New note"
@@ -539,6 +539,34 @@ msgstr ""
 msgid "New notebook"
 msgstr ""
 
+msgid "Print"
+msgstr ""
+
+msgid "General Options"
+msgstr ""
+
+msgid "Encryption options"
+msgstr ""
+
+msgid "Web clipper options"
+msgstr ""
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr ""
+
+msgid "&File"
+msgstr ""
+
+msgid "About Joplin"
+msgstr ""
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr ""
+
 msgid "Import"
 msgstr ""
 
@@ -546,9 +574,6 @@ msgid "Export"
 msgstr ""
 
 msgid "Synchronise"
-msgstr ""
-
-msgid "Print"
 msgstr ""
 
 #, javascript-format
@@ -609,18 +634,6 @@ msgstr ""
 msgid "&Tools"
 msgstr ""
 
-msgid "Synchronisation status"
-msgstr ""
-
-msgid "Web clipper options"
-msgstr ""
-
-msgid "Encryption options"
-msgstr ""
-
-msgid "General Options"
-msgstr ""
-
 msgid "&Help"
 msgstr ""
 
@@ -628,16 +641,6 @@ msgid "Website and documentation"
 msgstr ""
 
 msgid "Make a donation"
-msgstr ""
-
-msgid "Check for updates..."
-msgstr ""
-
-msgid "About Joplin"
-msgstr ""
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
 msgstr ""
 
 #, javascript-format
@@ -1219,6 +1222,13 @@ msgstr ""
 msgid "Cannot move note to \"%s\" notebook"
 msgstr ""
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
 msgid "Language"
 msgstr ""
 
@@ -1343,19 +1353,7 @@ msgstr ""
 msgid "Directory to synchronise with (absolute path)"
 msgstr ""
 
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-
 msgid "Nextcloud WebDAV URL"
-msgstr ""
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
 msgstr ""
 
 msgid "Nextcloud username"

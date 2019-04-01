@@ -570,9 +570,8 @@ msgstr "從 \"%s\" 匯入為 \"%s\" 格式。請稍候..."
 msgid "PDF File"
 msgstr "PDF 檔案"
 
-#, fuzzy
-msgid "&File"
-msgstr "檔案"
+msgid "Synchronisation status"
+msgstr "顯示同步狀態"
 
 msgid "New note"
 msgstr "新增記事"
@@ -583,6 +582,35 @@ msgstr "新增待辦事項"
 msgid "New notebook"
 msgstr "新增記事本"
 
+msgid "Print"
+msgstr "列印"
+
+msgid "General Options"
+msgstr "一般選項"
+
+msgid "Encryption options"
+msgstr "加密選項"
+
+msgid "Web clipper options"
+msgstr "Web clipper 選項"
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#, fuzzy
+msgid "&File"
+msgstr "檔案"
+
+msgid "About Joplin"
+msgstr "關於 Joplin"
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr "檢查更新..."
+
 msgid "Import"
 msgstr "匯入"
 
@@ -591,9 +619,6 @@ msgstr "匯出"
 
 msgid "Synchronise"
 msgstr "進行同步"
-
-msgid "Print"
-msgstr "列印"
 
 #, javascript-format
 msgid "Hide %s"
@@ -659,18 +684,6 @@ msgstr "游標置於內文"
 msgid "&Tools"
 msgstr "工具"
 
-msgid "Synchronisation status"
-msgstr "顯示同步狀態"
-
-msgid "Web clipper options"
-msgstr "Web clipper 選項"
-
-msgid "Encryption options"
-msgstr "加密選項"
-
-msgid "General Options"
-msgstr "一般選項"
-
 #, fuzzy
 msgid "&Help"
 msgstr "說明"
@@ -680,16 +693,6 @@ msgstr "官方網站及線上說明"
 
 msgid "Make a donation"
 msgstr "捐助"
-
-msgid "Check for updates..."
-msgstr "檢查更新..."
-
-msgid "About Joplin"
-msgstr "關於 Joplin"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, javascript-format
 msgid "Open %s"
@@ -1290,6 +1293,13 @@ msgstr "無法複製此記事到 \"%s\" 記事本"
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "無法移動此記事到 \"%s\" 記事本"
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
 msgid "Language"
 msgstr "語言"
 
@@ -1422,20 +1432,8 @@ msgstr ""
 msgid "Directory to synchronise with (absolute path)"
 msgstr "要同步的目錄 (絕對路徑)"
 
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr "啟用檔案系統同步時要同步的路徑。請參閱 `sync.target`。"
-
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV 網址"
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
-msgstr ""
 
 msgid "Nextcloud username"
 msgstr "Nextcloud 用戶名稱"
@@ -1810,6 +1808,11 @@ msgstr "您當前沒有任何筆記本。通過按一下 (+) 鍵去建立一本�
 
 msgid "Welcome"
 msgstr "歡迎"
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr "啟用檔案系統同步時要同步的路徑。請參閱 `sync.target`。"
 
 #, fuzzy
 #~ msgid "Joplin v%s"

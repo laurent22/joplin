@@ -611,9 +611,8 @@ msgstr "S'està important des de «%s» com a format «%s». Espereu..."
 msgid "PDF File"
 msgstr "Fitxer PDF"
 
-#, fuzzy
-msgid "&File"
-msgstr "Fitxer"
+msgid "Synchronisation status"
+msgstr "Estat de la sincronització"
 
 msgid "New note"
 msgstr "Nota nova"
@@ -624,6 +623,35 @@ msgstr "Llistat de tasques pendents nou"
 msgid "New notebook"
 msgstr "Bloc de notes nou"
 
+msgid "Print"
+msgstr "Imprimeix"
+
+msgid "General Options"
+msgstr "Opcions generals"
+
+msgid "Encryption options"
+msgstr "Opcions del xifratge"
+
+msgid "Web clipper options"
+msgstr "Opcions del desa-retalls de webs"
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#, fuzzy
+msgid "&File"
+msgstr "Fitxer"
+
+msgid "About Joplin"
+msgstr "Quant al Joplin"
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr "Comprova les actualitzacions..."
+
 msgid "Import"
 msgstr "Importació"
 
@@ -632,9 +660,6 @@ msgstr "Exportació"
 
 msgid "Synchronise"
 msgstr "Sincronitza"
-
-msgid "Print"
-msgstr "Imprimeix"
 
 #, javascript-format
 msgid "Hide %s"
@@ -700,18 +725,6 @@ msgstr "Vés al cos"
 msgid "&Tools"
 msgstr "Eines"
 
-msgid "Synchronisation status"
-msgstr "Estat de la sincronització"
-
-msgid "Web clipper options"
-msgstr "Opcions del desa-retalls de webs"
-
-msgid "Encryption options"
-msgstr "Opcions del xifratge"
-
-msgid "General Options"
-msgstr "Opcions generals"
-
 #, fuzzy
 msgid "&Help"
 msgstr "Ajuda"
@@ -721,16 +734,6 @@ msgstr "Lloc web i documentació"
 
 msgid "Make a donation"
 msgstr "Donatius"
-
-msgid "Check for updates..."
-msgstr "Comprova les actualitzacions..."
-
-msgid "About Joplin"
-msgstr "Quant al Joplin"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, javascript-format
 msgid "Open %s"
@@ -1354,6 +1357,13 @@ msgstr "No es pot copiar la nota al bloc de notes «%s»"
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "No es pot moure la nota al bloc de notes «%s»"
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
 msgid "Language"
 msgstr "Llengua"
 
@@ -1489,22 +1499,8 @@ msgstr ""
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Directori on es farà la sincronització (camí absolut)"
 
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-"El camí on sincronitzar en activar la sincronització del sistema. Vegeu "
-"«sync.target»."
-
 msgid "Nextcloud WebDAV URL"
 msgstr "URL del Nextcloud WebDAV"
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
-msgstr ""
 
 msgid "Nextcloud username"
 msgstr "Nom d'usuari del Nextcloud"
@@ -1888,6 +1884,13 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvingut"
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "El camí on sincronitzar en activar la sincronització del sistema. Vegeu "
+#~ "«sync.target»."
 
 #, fuzzy
 #~ msgid "Joplin v%s"

@@ -587,8 +587,8 @@ msgstr "الاستيراد من \"%s\" بتنسيق \"%s\". فضلاً انتظ�
 msgid "PDF File"
 msgstr "ملف PDF"
 
-msgid "&File"
-msgstr "&ملف"
+msgid "Synchronisation status"
+msgstr "حالة المزامنة"
 
 msgid "New note"
 msgstr "ملاحظة جديدة"
@@ -599,6 +599,34 @@ msgstr "قائمة جديدة للمهام"
 msgid "New notebook"
 msgstr "دفتر ملاحظات جديد"
 
+msgid "Print"
+msgstr "اطبع"
+
+msgid "General Options"
+msgstr "الخيارات العامة"
+
+msgid "Encryption options"
+msgstr "خيارات التشفير"
+
+msgid "Web clipper options"
+msgstr "خيارات Web clipper"
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+msgid "&File"
+msgstr "&ملف"
+
+msgid "About Joplin"
+msgstr "حول Joplin"
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr "البحث جارٍ عن تحديثات..."
+
 msgid "Import"
 msgstr "استيراد"
 
@@ -607,9 +635,6 @@ msgstr "تصدير"
 
 msgid "Synchronise"
 msgstr "زامِن"
-
-msgid "Print"
-msgstr "اطبع"
 
 #, javascript-format
 msgid "Hide %s"
@@ -669,18 +694,6 @@ msgstr "تركيز"
 msgid "&Tools"
 msgstr "&أدوات"
 
-msgid "Synchronisation status"
-msgstr "حالة المزامنة"
-
-msgid "Web clipper options"
-msgstr "خيارات Web clipper"
-
-msgid "Encryption options"
-msgstr "خيارات التشفير"
-
-msgid "General Options"
-msgstr "الخيارات العامة"
-
 msgid "&Help"
 msgstr "م&ساعدة"
 
@@ -689,16 +702,6 @@ msgstr "موقع الويب و التوثيق"
 
 msgid "Make a donation"
 msgstr "تبرَّع"
-
-msgid "Check for updates..."
-msgstr "البحث جارٍ عن تحديثات..."
-
-msgid "About Joplin"
-msgstr "حول Joplin"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, javascript-format
 msgid "Open %s"
@@ -1311,6 +1314,15 @@ msgstr "لا يمكن نسخ الملاحظة إلى دفتر الملاحظات
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "لا يمكن نقل الملاحظة إلى دفتر الملاحظات \"%s\""
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+"تنبيه: إذا غيرت هذا المكان ، تأكد من نسخ كافة المحتويات لديك إليه قبل البدء "
+"بالمزامنة ، وإلا فسيتم حذف كل الملفات! أنظر الأسئلة المتكررة لتفاصيل أكثر: %s"
+
 msgid "Language"
 msgstr "اللغة"
 
@@ -1444,24 +1456,8 @@ msgstr ""
 msgid "Directory to synchronise with (absolute path)"
 msgstr "الدليل الذي تتم المزامنة معه (المسار المطلق)"
 
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-"المسار الذي ستتم المزامنة معه عند تفعيل مزامنة نظام الملفات. أنظر `sync."
-"target`."
-
 msgid "Nextcloud WebDAV URL"
 msgstr "عنوان URL لـ Nextcloud WebDAV"
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
-msgstr ""
-"تنبيه: إذا غيرت هذا المكان ، تأكد من نسخ كافة المحتويات لديك إليه قبل البدء "
-"بالمزامنة ، وإلا فسيتم حذف كل الملفات! أنظر الأسئلة المتكررة لتفاصيل أكثر: %s"
 
 msgid "Nextcloud username"
 msgstr "اسم مستخدم Nextcloud"
@@ -1838,6 +1834,13 @@ msgstr "ليس لديك دفاتر ملاحظات حالياً. أنشئ واح�
 
 msgid "Welcome"
 msgstr "مرحباً"
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "المسار الذي ستتم المزامنة معه عند تفعيل مزامنة نظام الملفات. أنظر `sync."
+#~ "target`."
 
 #~ msgid "Remove?"
 #~ msgstr "إزالة ؟"

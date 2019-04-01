@@ -17,8 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "To delete a tag, untag the associated notes."
-msgstr ""
-"For å slette en merkelapp, fjern merkelappen fra merkede notater."
+msgstr "For å slette en merkelapp, fjern merkelappen fra merkede notater."
 
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Vennligst velg notatet eller notatboken som skal slettes først."
@@ -128,9 +127,9 @@ msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
-"Konfigurerer E2EE-konfigurasjon. Tilgjengelige kommandoer er: `enable`(aktiver), "
-"`disable`(lukk), `decrypt`(dekrypter), `status` og `target-status` (mottager-"
-"status)."
+"Konfigurerer E2EE-konfigurasjon. Tilgjengelige kommandoer er: "
+"`enable`(aktiver), `disable`(lukk), `decrypt`(dekrypter), `status` og "
+"`target-status` (mottager-status)."
 
 msgid "Enter master password:"
 msgstr "Skriv inn masterpassordet:"
@@ -595,8 +594,8 @@ msgstr "Importerer fra \"%s\" i \"%s\"-format. Vennligst vent..."
 msgid "PDF File"
 msgstr "PDF-fil"
 
-msgid "&File"
-msgstr "&Fil"
+msgid "Synchronisation status"
+msgstr "Synkroniseringsstatus"
 
 msgid "New note"
 msgstr "Nytt notat"
@@ -607,6 +606,34 @@ msgstr "Nytt gjøremål"
 msgid "New notebook"
 msgstr "Ny notatbok"
 
+msgid "Print"
+msgstr "Skriv ut"
+
+msgid "General Options"
+msgstr "Generelle innstillinger"
+
+msgid "Encryption options"
+msgstr "Krypteringsvalg"
+
+msgid "Web clipper options"
+msgstr "Web Clipper-innstillinger"
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+msgid "&File"
+msgstr "&Fil"
+
+msgid "About Joplin"
+msgstr "Om Joplin"
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr "Se etter oppdatering..."
+
 msgid "Import"
 msgstr "Importer"
 
@@ -615,9 +642,6 @@ msgstr "Eksporter"
 
 msgid "Synchronise"
 msgstr "Synkroniser"
-
-msgid "Print"
-msgstr "Skriv ut"
 
 #, javascript-format
 msgid "Hide %s"
@@ -677,18 +701,6 @@ msgstr "Fokuser"
 msgid "&Tools"
 msgstr "&Verktøy"
 
-msgid "Synchronisation status"
-msgstr "Synkroniseringsstatus"
-
-msgid "Web clipper options"
-msgstr "Web Clipper-innstillinger"
-
-msgid "Encryption options"
-msgstr "Krypteringsvalg"
-
-msgid "General Options"
-msgstr "Generelle innstillinger"
-
 msgid "&Help"
 msgstr "&Hjelp"
 
@@ -697,16 +709,6 @@ msgstr "Nettsted og dokumentasjon"
 
 msgid "Make a donation"
 msgstr "Gi et bidrag"
-
-msgid "Check for updates..."
-msgstr "Se etter oppdatering..."
-
-msgid "About Joplin"
-msgstr "Om Joplin"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, javascript-format
 msgid "Open %s"
@@ -1113,10 +1115,10 @@ msgid ""
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
-"Slette notatbok \"&s\"?\n" 
+"Slette notatbok \"&s\"?\n"
 "\n"
-"Alle notater og underliggende notatbøker i denne notatboken "
-"vil også bli slettet."
+"Alle notater og underliggende notatbøker i denne notatboken vil også bli "
+"slettet."
 
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
@@ -1326,6 +1328,16 @@ msgstr "Kan ikke kopiere notat til notatenboken \"%s\""
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Kan ikke flytte notatet til notatboken \"%s\""
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+"Viktig: Dersom du endrer denne lokasjonen, sørg for at du kopierer alt "
+"innhold dit før du synkroniserer. Hvis ikke blir alle filer fjernet! Se FAQ "
+"for flere detaljer: %s"
+
 msgid "Language"
 msgstr "Språk"
 
@@ -1460,25 +1472,8 @@ msgstr ""
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Katalog å synkronisere med (absolutt sti)"
 
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-"Stien som skal synkroniseres når filsystemsynkronisering er aktivert. Se "
-"`sync.target`."
-
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV-URL"
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
-msgstr ""
-"Viktig: Dersom du endrer denne lokasjonen, sørg for at du kopierer alt "
-"innhold dit før du synkroniserer. Hvis ikke blir alle filer fjernet! Se FAQ "
-"for flere detaljer: %s"
 
 msgid "Nextcloud username"
 msgstr "Nextcloud-brukernavn"
@@ -1858,6 +1853,13 @@ msgstr "Du har enda ingen notatbok. Opprett en ved å klikke på (+)-knappen."
 
 msgid "Welcome"
 msgstr "Velkommen"
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "Stien som skal synkroniseres når filsystemsynkronisering er aktivert. Se "
+#~ "`sync.target`."
 
 #, fuzzy
 #~ msgid "Joplin v%s"

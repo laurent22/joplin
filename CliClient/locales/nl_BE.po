@@ -607,9 +607,8 @@ msgstr ""
 msgid "PDF File"
 msgstr "Bestand"
 
-#, fuzzy
-msgid "&File"
-msgstr "Bestand"
+msgid "Synchronisation status"
+msgstr "Synchronisatie status"
 
 msgid "New note"
 msgstr "Nieuwe notitie"
@@ -620,6 +619,35 @@ msgstr "Nieuwe to-do"
 msgid "New notebook"
 msgstr "Nieuw notitieboek"
 
+msgid "Print"
+msgstr ""
+
+msgid "General Options"
+msgstr "Algemene opties"
+
+msgid "Encryption options"
+msgstr "Versleutelopties"
+
+msgid "Web clipper options"
+msgstr ""
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#, fuzzy
+msgid "&File"
+msgstr "Bestand"
+
+msgid "About Joplin"
+msgstr "Over Joplin"
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr ""
+
 msgid "Import"
 msgstr "Importeer"
 
@@ -629,9 +657,6 @@ msgstr "Importeer"
 
 msgid "Synchronise"
 msgstr "Synchroniseer"
-
-msgid "Print"
-msgstr ""
 
 #, javascript-format
 msgid "Hide %s"
@@ -695,18 +720,6 @@ msgstr ""
 msgid "&Tools"
 msgstr "Tools"
 
-msgid "Synchronisation status"
-msgstr "Synchronisatie status"
-
-msgid "Web clipper options"
-msgstr ""
-
-msgid "Encryption options"
-msgstr "Versleutelopties"
-
-msgid "General Options"
-msgstr "Algemene opties"
-
 #, fuzzy
 msgid "&Help"
 msgstr "Help"
@@ -717,16 +730,6 @@ msgstr "Website en documentatie"
 #, fuzzy
 msgid "Make a donation"
 msgstr "Website en documentatie"
-
-msgid "Check for updates..."
-msgstr ""
-
-msgid "About Joplin"
-msgstr "Over Joplin"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, fuzzy, javascript-format
 msgid "Open %s"
@@ -1354,6 +1357,13 @@ msgstr "Kan notitie niet naar notitieboek \"%s\" kopiëren."
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Kan notitie niet naar notitieboek \"%s\" verplaatsen."
 
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
 msgid "Language"
 msgstr "Taal"
 
@@ -1490,21 +1500,7 @@ msgstr ""
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Folder om mee te synchroniseren (absolute pad)"
 
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-"Het pad om mee te synchroniseren als bestandssysteem synchronisatie is "
-"ingeschakeld. Zie `sync.target`."
-
 msgid "Nextcloud WebDAV URL"
-msgstr ""
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
 msgstr ""
 
 msgid "Nextcloud username"
@@ -1889,6 +1885,13 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Welkom"
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "Het pad om mee te synchroniseren als bestandssysteem synchronisatie is "
+#~ "ingeschakeld. Zie `sync.target`."
 
 #, fuzzy
 #~ msgid "State: %s."
