@@ -5,6 +5,7 @@ const moment = require('moment');
 const { themeStyle } = require('../theme.js');
 const { time } = require('lib/time-utils.js');
 const Datetime = require('react-datetime');
+const ReactTags = require('react-tag-autocomplete')
 
 class PromptDialog extends React.Component {
 
@@ -12,6 +13,7 @@ class PromptDialog extends React.Component {
 		this.setState({
 			visible: false,
 			answer: this.props.defaultValue ? this.props.defaultValue : '',
+			tags: [],
 		});
 		this.focusInput_ = true;
 	}
@@ -23,7 +25,11 @@ class PromptDialog extends React.Component {
 		}
 
 		if ('defaultValue' in newProps && newProps.defaultValue !== this.props.defaultValue) {
-			this.setState({ answer: newProps.defaultValue });
+			if ('inputType' in newProps && newProps.inputType === 'tags'){
+				this.setState({ answer: '', tags: newProps.defaultValue });
+			} else {
+				this.setState({ answer: newProps.defaultValue });
+			}
 		}
 	}
 
@@ -53,15 +59,16 @@ class PromptDialog extends React.Component {
 			height: height - paddingTop,
 			backgroundColor: 'rgba(0,0,0,0.6)',
 			display: visible ? 'flex' : 'none',
-    		alignItems: 'flex-start',
-    		justifyContent: 'center',
-    		paddingTop: paddingTop + 'px',
+			alignItems: 'flex-start',
+			justifyContent: 'center',
+			paddingTop: paddingTop + 'px',
 		};
 
 		this.styles_.promptDialog = {
 			backgroundColor: theme.backgroundColor,
 			padding: 16,
 			display: 'inline-block',
+			maxWidth: width * 0.5,
 			boxShadow: '6px 6px 20px rgba(0,0,0,0.5)',
 		};
 
@@ -113,6 +120,9 @@ class PromptDialog extends React.Component {
 					// outputAnswer = anythingToDate(outputAnswer);
 					outputAnswer = time.anythingToDateTime(outputAnswer);
 				}
+				if (this.props.inputType === 'tags') {
+					outputAnswer = this.state.tags;
+				}
 				this.props.onClose(accept ? outputAnswer : null, buttonType);
 			}
 			this.setState({ visible: false, answer: '' });
@@ -143,6 +153,18 @@ class PromptDialog extends React.Component {
 			}
 		}
 
+		const onDeleteTag = (i) => {
+			const tags = this.state.tags.slice(0);
+			tags.splice(i, 1);
+			this.setState({ tags });
+		}
+
+		const onInsertTag = (tag) => {
+			const tags = [].concat(this.state.tags, tag);
+			this.setState({ tags });
+		}
+
+
 		const descComp = this.props.description ? <div style={styles.desc}>{this.props.description}</div> : null;
 
 		let inputComp = null;
@@ -154,6 +176,14 @@ class PromptDialog extends React.Component {
 				dateFormat={time.dateFormat()}
 				timeFormat={time.timeFormat()}
 				onChange={(momentObject) => onDateTimeChange(momentObject)}
+			/>
+		} else if (this.props.inputType === 'tags') {
+			inputComp = <ReactTags
+				tags={this.state.tags ? this.state.tags : []}
+				suggestions={this.props.autocomplete ? this.props.autocomplete : []}
+				allowNew={true}
+				handleDelete={onDeleteTag}
+				handleAddition={onInsertTag}
 			/>
 		} else {
 			inputComp = <input

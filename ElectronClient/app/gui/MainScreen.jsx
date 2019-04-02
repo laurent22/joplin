@@ -132,16 +132,19 @@ class MainScreenComponent extends React.Component {
 			});
 		} else if (command.name === 'setTags') {
 			const tags = await Tag.tagsByNoteId(command.noteId);
-			const tagTitles = tags.map((a) => { return a.title }).sort();
+			const tagObjects = tags.map((a) => { return {id: a.id, name: a.title }}).sort();
+			const allTags = await Tag.allWithNotes();
+			const tagSuggestions = allTags.map((a) => { return {id: a.id, name: a.title }});
 
 			this.setState({
 				promptOptions: {
 					label: _('Add or remove tags:'),
-					description: _('Separate each tag by a comma.'),
-					value: tagTitles.join(', '),
+					inputType: 'tags',
+					value: tagObjects,
+					autocomplete: tagSuggestions,
 					onClose: async (answer) => {
 						if (answer !== null) {
-							const tagTitles = answer.split(',').map((a) => { return a.trim() });
+							const tagTitles = answer.map((a) => { return a.name });
 							await Tag.setNoteTagsByTitles(command.noteId, tagTitles);
 						}
 						this.setState({ promptOptions: null });
