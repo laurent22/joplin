@@ -1135,6 +1135,14 @@ msgstr "是否删除笔记“%s”？"
 msgid "Delete these %d notes?"
 msgstr "是否删除这 %d 条笔记？"
 
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+
+msgid "Goto Anything..."
+msgstr ""
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "使用：%s"
@@ -1337,6 +1345,42 @@ msgstr "聚焦正文"
 msgid "When creating a new note:"
 msgstr "当新建笔记时："
 
+#, fuzzy
+msgid "Enable math expressions"
+msgstr "启用加密"
+
+msgid "Enable ==mark== syntax"
+msgstr ""
+
+#, fuzzy
+msgid "Enable footnotes"
+msgstr "目录"
+
+#, fuzzy
+msgid "Enable table of contents extension"
+msgstr "目录"
+
+msgid "Enable ~sub~ syntax"
+msgstr ""
+
+msgid "Enable ^sup^ syntax"
+msgstr ""
+
+msgid "Enable deflist syntax"
+msgstr ""
+
+msgid "Enable abbreviation syntax"
+msgstr ""
+
+msgid "Enable markdown emoji"
+msgstr ""
+
+msgid "Enable ++insert++ syntax"
+msgstr ""
+
+msgid "Enable multimarkdown table extension"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr "显示托盘图标"
 
@@ -1469,6 +1513,9 @@ msgstr "外观"
 
 msgid "Note"
 msgstr "笔记"
+
+msgid "Plugins"
+msgstr ""
 
 msgid "Application"
 msgstr "应用程序"

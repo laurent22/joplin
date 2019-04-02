@@ -1198,6 +1198,16 @@ msgstr "Supprimer note \"%s\" ?"
 msgid "Delete these %d notes?"
 msgstr "Supprimer ces %d notes ?"
 
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+"Entrez le titre d’une note, ou entrez # suivit du nom d’une étiquette, ou @ "
+"suivit du nom d’un carnet."
+
+msgid "Goto Anything..."
+msgstr "Navigation rapide…"
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Utilisation : %s"
@@ -1404,6 +1414,39 @@ msgstr "Curseur sur corps du message"
 msgid "When creating a new note:"
 msgstr "Lors de la création d'une note :"
 
+msgid "Enable math expressions"
+msgstr "Activer les expressions mathématiques"
+
+msgid "Enable ==mark== syntax"
+msgstr "Activer la syntaxe pour ==surligner=="
+
+msgid "Enable footnotes"
+msgstr "Activer les notes de bas de page"
+
+msgid "Enable table of contents extension"
+msgstr "Activer la table des matières"
+
+msgid "Enable ~sub~ syntax"
+msgstr "Activer la syntaxe ~indice~"
+
+msgid "Enable ^sup^ syntax"
+msgstr "Activer la syntaxe ^exposant^"
+
+msgid "Enable deflist syntax"
+msgstr "Activer les listes de définitions"
+
+msgid "Enable abbreviation syntax"
+msgstr "Activer la syntaxe pour abréviations"
+
+msgid "Enable markdown emoji"
+msgstr "Activer la syntaxe émoji"
+
+msgid "Enable ++insert++ syntax"
+msgstr "Activer la syntaxe ++insertion++"
+
+msgid "Enable multimarkdown table extension"
+msgstr "Activer les tables multi-markdown"
+
 msgid "Show tray icon"
 msgstr "Afficher l'icône dans la zone de notifications"
 
@@ -1542,6 +1585,9 @@ msgstr "Apparence"
 
 msgid "Note"
 msgstr "Note"
+
+msgid "Plugins"
+msgstr "Modules"
 
 msgid "Application"
 msgstr "Application"

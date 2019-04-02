@@ -1175,6 +1175,14 @@ msgstr "노트를 삭제할까요?"
 msgid "Delete these %d notes?"
 msgstr "노트를 삭제할까요?"
 
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+
+msgid "Goto Anything..."
+msgstr ""
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "사용량: %s"
@@ -1381,6 +1389,40 @@ msgstr "내용에 포커스"
 msgid "When creating a new note:"
 msgstr "새 노트를 만들 때:"
 
+#, fuzzy
+msgid "Enable math expressions"
+msgstr "암호화 사용"
+
+msgid "Enable ==mark== syntax"
+msgstr ""
+
+msgid "Enable footnotes"
+msgstr ""
+
+msgid "Enable table of contents extension"
+msgstr ""
+
+msgid "Enable ~sub~ syntax"
+msgstr ""
+
+msgid "Enable ^sup^ syntax"
+msgstr ""
+
+msgid "Enable deflist syntax"
+msgstr ""
+
+msgid "Enable abbreviation syntax"
+msgstr ""
+
+msgid "Enable markdown emoji"
+msgstr ""
+
+msgid "Enable ++insert++ syntax"
+msgstr ""
+
+msgid "Enable multimarkdown table extension"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr "트레이 아이콘 표시"
 
@@ -1519,6 +1561,9 @@ msgstr ""
 #, fuzzy
 msgid "Note"
 msgstr "노트북"
+
+msgid "Plugins"
+msgstr ""
 
 #, fuzzy
 msgid "Application"

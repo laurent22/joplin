@@ -1109,6 +1109,14 @@ msgstr "Ștergeți notițele?"
 msgid "Delete these %d notes?"
 msgstr "Ștergeți aceste notițe?"
 
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+
+msgid "Goto Anything..."
+msgstr ""
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Utilizare: %s"
@@ -1305,6 +1313,40 @@ msgstr ""
 msgid "When creating a new note:"
 msgstr "Când este creată o nouă notiță:"
 
+#, fuzzy
+msgid "Enable math expressions"
+msgstr "Activați criptarea"
+
+msgid "Enable ==mark== syntax"
+msgstr ""
+
+msgid "Enable footnotes"
+msgstr ""
+
+msgid "Enable table of contents extension"
+msgstr ""
+
+msgid "Enable ~sub~ syntax"
+msgstr ""
+
+msgid "Enable ^sup^ syntax"
+msgstr ""
+
+msgid "Enable deflist syntax"
+msgstr ""
+
+msgid "Enable abbreviation syntax"
+msgstr ""
+
+msgid "Enable markdown emoji"
+msgstr ""
+
+msgid "Enable ++insert++ syntax"
+msgstr ""
+
+msgid "Enable multimarkdown table extension"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr "Afișați iconița coșul de gunoi"
 
@@ -1431,6 +1473,9 @@ msgstr ""
 #, fuzzy
 msgid "Note"
 msgstr "Caiete de notițe"
+
+msgid "Plugins"
+msgstr ""
 
 #, fuzzy
 msgid "Application"

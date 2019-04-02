@@ -1166,6 +1166,14 @@ msgstr "حذف الملاحظة \"%s\" ؟"
 msgid "Delete these %d notes?"
 msgstr "حذف ملاحظات %d هذه ؟"
 
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+
+msgid "Goto Anything..."
+msgstr ""
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "الاستخدام : %s"
@@ -1372,6 +1380,40 @@ msgstr "التركيز على المتن"
 msgid "When creating a new note:"
 msgstr "عند إنشاء ملاحظة جديدة:"
 
+#, fuzzy
+msgid "Enable math expressions"
+msgstr "تفعيل التشفير"
+
+msgid "Enable ==mark== syntax"
+msgstr ""
+
+msgid "Enable footnotes"
+msgstr ""
+
+msgid "Enable table of contents extension"
+msgstr ""
+
+msgid "Enable ~sub~ syntax"
+msgstr ""
+
+msgid "Enable ^sup^ syntax"
+msgstr ""
+
+msgid "Enable deflist syntax"
+msgstr ""
+
+msgid "Enable abbreviation syntax"
+msgstr ""
+
+msgid "Enable markdown emoji"
+msgstr ""
+
+msgid "Enable ++insert++ syntax"
+msgstr ""
+
+msgid "Enable multimarkdown table extension"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr "إظهار أيقونة لوحة النظام"
 
@@ -1506,6 +1548,9 @@ msgstr "المظهر"
 
 msgid "Note"
 msgstr "ملاحظة"
+
+msgid "Plugins"
+msgstr ""
 
 msgid "Application"
 msgstr "التطبيق"

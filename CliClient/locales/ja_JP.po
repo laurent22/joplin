@@ -1181,6 +1181,14 @@ msgstr "ノートを削除しますか？"
 msgid "Delete these %d notes?"
 msgstr "ノートを削除しますか？"
 
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+
+msgid "Goto Anything..."
+msgstr ""
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "使用方法: %s"
@@ -1390,6 +1398,40 @@ msgstr "本文にフォーカス"
 msgid "When creating a new note:"
 msgstr "新しいノートを作成した際:"
 
+#, fuzzy
+msgid "Enable math expressions"
+msgstr "暗号化を有効にする"
+
+msgid "Enable ==mark== syntax"
+msgstr ""
+
+msgid "Enable footnotes"
+msgstr ""
+
+msgid "Enable table of contents extension"
+msgstr ""
+
+msgid "Enable ~sub~ syntax"
+msgstr ""
+
+msgid "Enable ^sup^ syntax"
+msgstr ""
+
+msgid "Enable deflist syntax"
+msgstr ""
+
+msgid "Enable abbreviation syntax"
+msgstr ""
+
+msgid "Enable markdown emoji"
+msgstr ""
+
+msgid "Enable ++insert++ syntax"
+msgstr ""
+
+msgid "Enable multimarkdown table extension"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr "トレイアイコンの表示"
 
@@ -1527,6 +1569,9 @@ msgstr ""
 #, fuzzy
 msgid "Note"
 msgstr "ノートブック"
+
+msgid "Plugins"
+msgstr ""
 
 #, fuzzy
 msgid "Application"

@@ -214,6 +214,7 @@ async function main() {
 		electronDir + '/*.js',
 		electronDir + '/gui/*.js',
 		electronDir + '/gui/utils/*.js',
+		electronDir + '/plugins/*.js',
 		rnDir + '/lib/*.js',
 		rnDir + '/lib/models/*.js',
 		rnDir + '/lib/services/*.js',

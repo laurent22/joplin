@@ -1213,6 +1213,14 @@ msgstr "Notiz \"%s\" löschen?"
 msgid "Delete these %d notes?"
 msgstr "Sollen diese %d Notizen gelöscht werden?"
 
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+
+msgid "Goto Anything..."
+msgstr ""
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Nutzung: %s"
@@ -1420,6 +1428,42 @@ msgstr "Fokussiere Inhalt"
 msgid "When creating a new note:"
 msgstr "Wenn eine neue Notiz erstellt wird:"
 
+#, fuzzy
+msgid "Enable math expressions"
+msgstr "Verschlüsselung aktivieren"
+
+msgid "Enable ==mark== syntax"
+msgstr ""
+
+#, fuzzy
+msgid "Enable footnotes"
+msgstr "Inhaltsverzeichnis"
+
+#, fuzzy
+msgid "Enable table of contents extension"
+msgstr "Inhaltsverzeichnis"
+
+msgid "Enable ~sub~ syntax"
+msgstr ""
+
+msgid "Enable ^sup^ syntax"
+msgstr ""
+
+msgid "Enable deflist syntax"
+msgstr ""
+
+msgid "Enable abbreviation syntax"
+msgstr ""
+
+msgid "Enable markdown emoji"
+msgstr ""
+
+msgid "Enable ++insert++ syntax"
+msgstr ""
+
+msgid "Enable multimarkdown table extension"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr "Zeige Tray-Icon"
 
@@ -1558,6 +1602,9 @@ msgstr "Erscheinungsbild"
 
 msgid "Note"
 msgstr "Notiz"
+
+msgid "Plugins"
+msgstr ""
 
 # 'Applikation' or 'Anwendung' - both translations are correct.
 msgid "Application"

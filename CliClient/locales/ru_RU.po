@@ -1193,6 +1193,14 @@ msgstr "Удалить заметку \"%s\"?"
 msgid "Delete these %d notes?"
 msgstr "Удалить эти %d заметки?"
 
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+
+msgid "Goto Anything..."
+msgstr ""
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Использовано: %s"
@@ -1400,6 +1408,40 @@ msgstr "Фокус на содержимом"
 msgid "When creating a new note:"
 msgstr "При создании новой заметки:"
 
+#, fuzzy
+msgid "Enable math expressions"
+msgstr "Включить шифрование"
+
+msgid "Enable ==mark== syntax"
+msgstr ""
+
+msgid "Enable footnotes"
+msgstr ""
+
+msgid "Enable table of contents extension"
+msgstr ""
+
+msgid "Enable ~sub~ syntax"
+msgstr ""
+
+msgid "Enable ^sup^ syntax"
+msgstr ""
+
+msgid "Enable deflist syntax"
+msgstr ""
+
+msgid "Enable abbreviation syntax"
+msgstr ""
+
+msgid "Enable markdown emoji"
+msgstr ""
+
+msgid "Enable ++insert++ syntax"
+msgstr ""
+
+msgid "Enable multimarkdown table extension"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr "Показывать иконку в трее"
 
@@ -1539,6 +1581,9 @@ msgstr "Внешний вид"
 
 msgid "Note"
 msgstr "Заметки"
+
+msgid "Plugins"
+msgstr ""
 
 msgid "Application"
 msgstr "Приложение"

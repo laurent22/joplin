@@ -1148,6 +1148,14 @@ msgstr "刪除此記事？"
 msgid "Delete these %d notes?"
 msgstr "刪除這些記事？"
 
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+
+msgid "Goto Anything..."
+msgstr ""
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "使用資訊: %s"
@@ -1349,6 +1357,40 @@ msgstr "游標置於內文"
 msgid "When creating a new note:"
 msgstr "當新增記事時:"
 
+#, fuzzy
+msgid "Enable math expressions"
+msgstr "啟用加密"
+
+msgid "Enable ==mark== syntax"
+msgstr ""
+
+msgid "Enable footnotes"
+msgstr ""
+
+msgid "Enable table of contents extension"
+msgstr ""
+
+msgid "Enable ~sub~ syntax"
+msgstr ""
+
+msgid "Enable ^sup^ syntax"
+msgstr ""
+
+msgid "Enable deflist syntax"
+msgstr ""
+
+msgid "Enable abbreviation syntax"
+msgstr ""
+
+msgid "Enable markdown emoji"
+msgstr ""
+
+msgid "Enable ++insert++ syntax"
+msgstr ""
+
+msgid "Enable multimarkdown table extension"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr "顯示系統匣圖示"
 
@@ -1484,6 +1526,9 @@ msgstr ""
 #, fuzzy
 msgid "Note"
 msgstr "記事本"
+
+msgid "Plugins"
+msgstr ""
 
 #, fuzzy
 msgid "Application"

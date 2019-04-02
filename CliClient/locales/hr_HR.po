@@ -1184,6 +1184,14 @@ msgstr "Obriši bilješke?"
 msgid "Delete these %d notes?"
 msgstr "Obriši ove bilješke?"
 
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+
+msgid "Goto Anything..."
+msgstr ""
+
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Korištenje: %s"
@@ -1397,6 +1405,39 @@ msgstr ""
 msgid "When creating a new note:"
 msgstr "Stvara novu bilješku."
 
+msgid "Enable math expressions"
+msgstr ""
+
+msgid "Enable ==mark== syntax"
+msgstr ""
+
+msgid "Enable footnotes"
+msgstr ""
+
+msgid "Enable table of contents extension"
+msgstr ""
+
+msgid "Enable ~sub~ syntax"
+msgstr ""
+
+msgid "Enable ^sup^ syntax"
+msgstr ""
+
+msgid "Enable deflist syntax"
+msgstr ""
+
+msgid "Enable abbreviation syntax"
+msgstr ""
+
+msgid "Enable markdown emoji"
+msgstr ""
+
+msgid "Enable ++insert++ syntax"
+msgstr ""
+
+msgid "Enable multimarkdown table extension"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr ""
 
@@ -1527,6 +1568,9 @@ msgstr ""
 #, fuzzy
 msgid "Note"
 msgstr "Bilježnice"
+
+msgid "Plugins"
+msgstr ""
 
 #, fuzzy
 msgid "Application"
