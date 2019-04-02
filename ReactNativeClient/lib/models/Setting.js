@@ -96,6 +96,18 @@ class Setting extends BaseModel {
 					'body': _('Focus body'),
 				};
 			}},
+			'markdown.plugin.katex': {value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable math expressions')},
+			'markdown.plugin.mark': {value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ==mark== syntax')},
+			'markdown.plugin.footnote': {value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable footnotes')},
+			'markdown.plugin.toc': {value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable table of contents extension')},
+			'markdown.plugin.sub': {value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ~sub~ syntax')},
+			'markdown.plugin.sup': {value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ^sup^ syntax')},
+			'markdown.plugin.deflist': {value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable deflist syntax')},
+			'markdown.plugin.abbr': {value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable abbreviation syntax')},
+			'markdown.plugin.emoji': {value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable markdown emoji')},
+			'markdown.plugin.insert': {value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ++insert++ syntax')},
+			'markdown.plugin.multitable': {value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable multimarkdown table extension')},
+
 
 			// Tray icon (called AppIndicator) doesn't work in Ubuntu
 			// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html
@@ -571,6 +583,7 @@ class Setting extends BaseModel {
 		if (name === 'sync') return _('Synchronisation');
 		if (name === 'appearance') return _('Appearance');
 		if (name === 'note') return _('Note');
+		if (name === 'plugins') return _('Plugins');
 		if (name === 'application') return _('Application');
 		return name;
 	}
