@@ -107,7 +107,7 @@ class MdToHtml {
 		//    }
 		//
 		//    And add a corresponding entry into Setting.js
-		//    'plugin.mark': {value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ==mark== syntax')},
+		//    'markdown.plugin.mark': {value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ==mark== syntax')},
 		//
 		// 3. If the plugin needs application data (in ruleOptions) or needs to pass data (CSS, files to load, etc.) back
 		//    to the application (using the context object), use the application-specific way:
@@ -123,16 +123,16 @@ class MdToHtml {
 		markdownIt.use(rules.checkbox(context, ruleOptions));
 		markdownIt.use(rules.link_open(context, ruleOptions));
 		markdownIt.use(rules.html_block(context, ruleOptions));
-		if (Setting.value('plugin.katex'))
+		if (Setting.value('markdown.plugin.katex'))
 			markdownIt.use(rules.katex(context, ruleOptions));
 		markdownIt.use(rules.highlight_keywords(context, ruleOptions));
 		markdownIt.use(rules.code_inline(context, ruleOptions));
 		markdownIt.use(markdownItAnchor)
-		if (Setting.value('plugin.toc'))
+		if (Setting.value('markdown.plugin.toc'))
 			markdownIt.use(markdownItToc, { listType: 'ul' })
 
 		for (let key in plugins) {
-			if (Setting.value('plugin.' + key))
+			if (Setting.value('markdown.plugin.' + key))
 				markdownIt.use(plugins[key]);
 		}
 
