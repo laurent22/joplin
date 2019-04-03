@@ -98,3 +98,5 @@ else
 fi
 echo 'Bye!'
 unset version
+
+~/.joplin/Joplin.AppImage &
