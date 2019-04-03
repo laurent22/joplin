@@ -344,17 +344,18 @@ class SearchEngine {
 	}
 
 	async basicSearch(query) {
-		let p = query.split(' ');
-		let temp = [];
-		for (let i = 0; i < p.length; i++) {
-			let t = p[i].trim();
-			if (!t) continue;
-			temp.push(t);
+		query = query.replace(/\*/, '');
+		const parsedQuery = this.parseQuery(query);
+		const searchOptions = {};
+
+		for (const key of parsedQuery.keys) {
+			const term = parsedQuery.terms[key][0].value;
+			if (key === '_') searchOptions.anywherePattern = '*' + term + '*';
+			if (key === 'title') searchOptions.titlePattern = '*' + term + '*';
+			if (key === 'body') searchOptions.bodyPattern = '*' + term + '*';
 		}
 
-		return await Note.previews(null, {
-			anywherePattern: '*' + temp.join('*') + '*',
-		});
+		return Note.previews(null, searchOptions);
 	}
 
 	async search(query) {

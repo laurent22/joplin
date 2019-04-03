@@ -358,6 +358,20 @@ class Note extends BaseItem {
 		return this.modelSelectOne('SELECT ' + this.previewFieldsSql(options.fields) + ' FROM notes WHERE is_conflict = 0 AND id = ?', [noteId]);
 	}
 
+	static async search(options = null) {
+		if (!options) options = {};
+		if (!options.conditions) options.conditions = [];
+		if (!options.conditionsParams) options.conditionsParams = [];
+
+		if (options.bodyPattern) {
+			const pattern = options.bodyPattern.replace(/\*/g, '%');
+			options.conditions.push('body LIKE ?');
+			options.conditionsParams.push(pattern);
+		}
+
+		return super.search(options);
+	}
+
 	static conflictedNotes() {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 1');
 	}
