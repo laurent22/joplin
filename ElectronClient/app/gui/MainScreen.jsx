@@ -227,6 +227,7 @@ class MainScreenComponent extends React.Component {
 				notePropertiesDialogOptions: {
 					noteId: command.noteId,
 					visible: true,
+					onRevisionLinkClick: command.onRevisionLinkClick,
 				},
 			});
 		} else if (command.name === 'toggleVisiblePanes') {
@@ -474,6 +475,7 @@ class MainScreenComponent extends React.Component {
 					theme={this.props.theme}
 					noteId={notePropertiesDialogOptions.noteId}
 					onClose={this.notePropertiesDialog_close}
+					onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick}
 				/> }
 
 				<PromptDialog

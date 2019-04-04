@@ -11,6 +11,7 @@ const RevisionService = require('lib/services/RevisionService');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const MdToHtml = require('lib/MdToHtml');
 const { time } = require('lib/time-utils.js');
+const ReactTooltip = require('react-tooltip');
 
 class NoteRevisionViewerComponent extends React.PureComponent {
 
@@ -28,7 +29,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 		this.viewer_domReady = this.viewer_domReady.bind(this);
 		this.revisionList_onChange = this.revisionList_onChange.bind(this);
 		this.importButton_onClick = this.importButton_onClick.bind(this);
-		this.helpButton_onClick = this.helpButton_onClick.bind(this);
+		this.backButton_click = this.backButton_click.bind(this);
 	}
 
 	style() {
@@ -55,7 +56,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 		
 		this.setState({
 			revisions: revisions,
-			currentRevId: revisions.length ? revisions[revisions.length - 1].id : null,
+			currentRevId: revisions.length ? revisions[revisions.length - 1].id : '',
 		}, () => {
 			this.reloadNote();
 		});
@@ -66,8 +67,8 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 		RevisionService.instance().importRevisionNote(this.state.note);
 	}
 
-	helpButton_onClick() {
-		
+	backButton_click() {
+		if (this.props.onBack) this.props.onBack();
 	}
 
 	revisionList_onChange(event) {
@@ -85,11 +86,17 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 	}
 
 	async reloadNote() {
-		if (!this.state.currentRevId) return;
-
-		const revIndex = BaseModel.modelIndexById(this.state.revisions, this.state.currentRevId);
-		const note = await RevisionService.instance().revisionNote(this.state.revisions, revIndex);
-		if (!note) return;
+		let noteBody = '';
+		if (!this.state.revisions.length || !this.state.currentRevId) {
+			noteBody = _('This note has no history');
+			this.setState({ note: null });
+		} else {
+			const revIndex = BaseModel.modelIndexById(this.state.revisions, this.state.currentRevId);
+			const note = await RevisionService.instance().revisionNote(this.state.revisions, revIndex);
+			if (!note) return;
+			noteBody = note.body;
+			this.setState({ note: note });
+		}
 
 		const theme = themeStyle(this.props.theme);
 
@@ -97,22 +104,20 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 			resourceBaseUrl: 'file://' + Setting.value('resourceDir') + '/',
 		});
 
-		const result = mdToHtml.render(note.body, theme, {
+		const result = mdToHtml.render(noteBody, theme, {
 			codeTheme: theme.codeThemeCss,
 			userCss: this.props.customCss ? this.props.customCss : '',
-			resources: await shared.attachedResources(note.body),
+			resources: await shared.attachedResources(noteBody),
 		});
 
-		this.viewerRef_.current.wrappedInstance.send('setHtml', result.html,  { cssFiles: result.cssFiles });
-
-		this.setState({ note: note });
+		this.viewerRef_.current.wrappedInstance.send('setHtml', result.html,  { cssFiles: result.cssFiles });		
 	}
 
 	render() {
 		const theme = themeStyle(this.props.theme);
 		const style = this.style();
 
-		const revisionListItems = [<option key="back" value="">{_('Back to current version')}</option>];
+		const revisionListItems = [];
 		const revs = this.state.revisions.slice().reverse();
 		for (let i = 0; i < revs.length; i++) {
 			const rev = revs[i];
@@ -122,14 +127,18 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 			>{time.formatMsToLocal(rev.updated_time)}</option>);
 		}
 
+		const restoreButtonTitle = _('Restore');
+		const helpMessage = _('Click "%s" to restore the note. It will be copied in the notebook named "%s". The current version of the note will not be replaced or modified.', restoreButtonTitle, RevisionService.instance().restoreFolderTitle());
+
 		const titleInput = (
 			<div style={{display:'flex', flexDirection: 'row', alignItems:'center', marginBottom: 10, borderWidth: 1, borderBottomStyle: 'solid', borderColor: theme.dividerColor, paddingBottom:10}}>
-				<input type="text" style={style.titleInput} value={this.state.note ? this.state.note.title : ''}/>
-				<select value={this.state.currentRevId} style={style.revisionList} onChange={this.revisionList_onChange}>
+				<button onClick={this.backButton_click} style={Object.assign({}, theme.buttonStyle, { marginRight: 10, height: theme.inputStyle.height })}>{'⬅ ' + _('Back')}</button>
+				<input readOnly type="text" style={style.titleInput} value={this.state.note ? this.state.note.title : ''}/>
+				<select disabled={!this.state.revisions.length} value={this.state.currentRevId} style={style.revisionList} onChange={this.revisionList_onChange}>
 					{revisionListItems}
 				</select>
-				<button onClick={this.importButton_onClick} style={Object.assign({}, theme.buttonStyle, { marginLeft: 10, height: theme.inputStyle.height })}>{_('Restore')}</button>
-				<HelpButton onClick={this.helpButton_onClick}/>
+				<button disabled={!this.state.revisions.length} onClick={this.importButton_onClick} style={Object.assign({}, theme.buttonStyle, { marginLeft: 10, height: theme.inputStyle.height })}>{restoreButtonTitle}</button>
+				<HelpButton tip={helpMessage} id="noteRevisionHelpButton" onClick={this.helpButton_onClick}/>
 			</div>
 		);
 
@@ -143,6 +152,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 			<div style={style.root}>
 				{titleInput}
 				{viewer}
+				<ReactTooltip place="bottom" delayShow={300} className="help-tooltip"/>
 			</div>
 		);
 	}

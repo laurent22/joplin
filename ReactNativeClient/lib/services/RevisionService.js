@@ -127,10 +127,14 @@ class RevisionService extends BaseService {
 		return output;
 	}
 
+	restoreFolderTitle() {
+		return _('Restored Notes');
+	}
+
 	async restoreFolder() {
-		let folder = await Folder.loadByTitle(_('Restored Notes'));
+		let folder = await Folder.loadByTitle(this.restoreFolderTitle());
 		if (!folder) {
-			folder = await Folder.save({ title: _('Restored Notes') });
+			folder = await Folder.save({ title: this.restoreFolderTitle() });
 		}
 		return folder;
 	}

@@ -71,7 +71,7 @@ class NoteTextComponent extends React.Component {
 			editorScrollTop: 0,
 			newNote: null,
 			noteTags: [],
-			viewRevisions: true,
+			showRevisions: false,
 
 			// If the current note was just created, and the title has never been
 			// changed by the user, this variable contains that note ID. Used
@@ -533,7 +533,8 @@ class NoteTextComponent extends React.Component {
 			webviewReady: webviewReady,
 			folder: parentFolder,
 			lastKeys: [],
-			noteTags: noteTags
+			noteTags: noteTags,
+			showRevisions: false,
 		};
 
 		if (!note) {
@@ -622,8 +623,11 @@ class NoteTextComponent extends React.Component {
 		return shared.refreshNoteMetadata(this, force);
 	}
 
-	noteRevisionViewer_onBack() {
-		this.setState({ viewRevisions: false });
+	async noteRevisionViewer_onBack() {
+		this.setState({ showRevisions: false });
+
+		this.lastSetHtml_ = '';
+		this.scheduleReloadNote(this.props);
 	}
 
 	title_changeText(event) {
@@ -1536,6 +1540,7 @@ class NoteTextComponent extends React.Component {
 					type: 'WINDOW_COMMAND',
 					name: 'commandNoteProperties',
 					noteId: n.id,
+					onRevisionLinkClick: () => { this.setState({ showRevisions: true}) },
 				});
 			},
 		});
@@ -1617,7 +1622,7 @@ class NoteTextComponent extends React.Component {
 
 		const innerWidth = rootStyle.width - rootStyle.paddingLeft - rootStyle.paddingRight - borderWidth;
 
-		if (this.state.viewRevisions && note && note.id) {
+		if (this.state.showRevisions && note && note.id) {
 			rootStyle.paddingRight = rootStyle.paddingLeft;
 			rootStyle.paddingTop = rootStyle.paddingLeft;
 			rootStyle.paddingBottom = rootStyle.paddingLeft;
@@ -1729,7 +1734,7 @@ class NoteTextComponent extends React.Component {
 			viewerStyle.borderLeft = 'none';
 		}
 
-		if (this.state.webviewReady) {
+		if (this.state.webviewReady && this.webviewRef_.current) {
 			let html = this.state.bodyHtml;
 
 			const htmlHasChanged = this.lastSetHtml_ !== html;

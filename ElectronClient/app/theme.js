@@ -65,6 +65,7 @@ globalStyle.buttonStyle = {
 	maxWidth: 160,
 	paddingLeft: 12,
 	paddingRight: 12,
+	boxShadow: '0px 1px 1px rgba(0,0,0,0.3)',
 };
 
 const lightStyle = {
