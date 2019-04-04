@@ -218,6 +218,7 @@ function changeSelectedFolder(state, action, options = null) {
 	if (newState.selectedFolderId === state.selectedFolderId && newState.notesParentType === state.notesParentType) return state;
 
 	if (options.clearNoteHistory) newState.historyNotes = [];
+	if (options.clearSelectedNoteIds) newState.selectedNoteIds = [];
 
 	return newState;
 }
@@ -348,7 +349,7 @@ const reducer = (state = defaultState, action) => {
 
 			case 'FOLDER_SELECT':
 
-				newState = changeSelectedFolder(state, action);
+				newState = changeSelectedFolder(state, action, { clearSelectedNoteIds: true });
 				break;
 
 			case 'FOLDER_AND_NOTE_SELECT':
