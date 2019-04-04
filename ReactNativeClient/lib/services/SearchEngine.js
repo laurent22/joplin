@@ -369,7 +369,7 @@ class SearchEngine {
 			return this.basicSearch(query);
 		} else {
 			const parsedQuery = this.parseQuery(query);
-			const sql = 'SELECT notes_fts.id, notes_fts.title, offsets(notes_fts) AS offsets, notes.user_updated_time, notes.is_todo, notes.todo_completed, notes.parent_id FROM notes_fts LEFT JOIN notes ON notes_fts.id = notes.id WHERE notes_fts MATCH ?'
+			const sql = 'SELECT notes_fts.id, notes_fts.title AS normalized_title, offsets(notes_fts) AS offsets, notes.title, notes.user_updated_time, notes.is_todo, notes.todo_completed, notes.parent_id FROM notes_fts LEFT JOIN notes ON notes_fts.id = notes.id WHERE notes_fts MATCH ?'
 			try {
 				const rows = await this.db().selectAll(sql, [query]);
 				this.orderResults_(rows, parsedQuery);
