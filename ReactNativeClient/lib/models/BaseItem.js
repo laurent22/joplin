@@ -716,6 +716,7 @@ BaseItem.syncItemDefinitions_ = [
 	{ type: BaseModel.TYPE_TAG, className: 'Tag' },
 	{ type: BaseModel.TYPE_NOTE_TAG, className: 'NoteTag' },
 	{ type: BaseModel.TYPE_MASTER_KEY, className: 'MasterKey' },
+	{ type: BaseModel.TYPE_REVISION, className: 'Revision' },
 ];
 
 module.exports = BaseItem;
