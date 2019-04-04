@@ -519,12 +519,12 @@ class JoplinDatabase extends Database {
 				const newTableSql = `
 					CREATE TABLE revisions (
 						id TEXT PRIMARY KEY,
-						diff_parent_id TEXT NOT NULL DEFAULT "",
-						item_type TEXT NOT NULL,
+						parent_id TEXT NOT NULL DEFAULT "",
+						item_type INT NOT NULL,
 						item_id TEXT NOT NULL,
-						title TEXT NOT NULL DEFAULT "",
-						body TEXT NOT NULL DEFAULT "",
-						metadata TEXT NOT NULL DEFAULT "",
+						title_diff TEXT NOT NULL DEFAULT "",
+						body_diff TEXT NOT NULL DEFAULT "",
+						metadata_diff TEXT NOT NULL DEFAULT "",
 						encryption_cipher_text TEXT NOT NULL DEFAULT "",
 						encryption_applied INT NOT NULL DEFAULT 0,
 						updated_time INT NOT NULL,
@@ -532,6 +532,10 @@ class JoplinDatabase extends Database {
 					);
 				`;
 				queries.push(this.sqlStringToLines(newTableSql)[0]);
+
+				queries.push('CREATE INDEX revisions_item_type ON revisions (item_type)');
+				queries.push('CREATE INDEX revisions_item_id ON revisions (item_id)');
+				queries.push('CREATE INDEX revisions_updated_time ON revisions (updated_time)');
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

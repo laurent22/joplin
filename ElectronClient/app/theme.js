@@ -34,6 +34,9 @@ globalStyle.icon = {
 
 globalStyle.lineInput = {
 	fontFamily: globalStyle.fontFamily,
+	maxHeight: 22,
+	height: 22,
+	paddingLeft: 5,
 };
 
 globalStyle.headerStyle = {
@@ -43,6 +46,7 @@ globalStyle.headerStyle = {
 globalStyle.inputStyle = {
 	border: '1px solid',
 	height: 24,
+	maxHeight: 24,
 	paddingLeft: 5,
 	paddingRight: 5,
 	boxSizing: 'border-box',
@@ -54,9 +58,9 @@ globalStyle.containerStyle = {
 };
 
 globalStyle.buttonStyle = {
-	marginRight: 10,
+	// marginRight: 10,
 	border: '1px solid',
-	minHeight: 30,
+	minHeight: 26,
 	minWidth: 80,
 	maxWidth: 160,
 	paddingLeft: 12,
@@ -225,6 +229,8 @@ function addExtraStyles(style) {
 	}
 
 	style.dialogTitle = Object.assign({}, style.h1Style, { marginBottom: '1.2em' });
+
+	style.dropdownList = Object.assign({}, style.inputStyle);
 
 	return style;
 }

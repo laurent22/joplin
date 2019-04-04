@@ -22,13 +22,31 @@ describe('models_Revision', function() {
 		done();
 	});
 
-	it('should create diff and rebuild notes', asyncTest(async () => {
+	it('should create patches of text and apply it', asyncTest(async () => {
 		const note1 = await Note.save({ body: 'my note\nsecond line' });
 
-		const patch = Revision.createPatch(note1.body, 'my new note\nsecond line');
-		const merged = Revision.applyPatch(note1.body, patch);
+		const patch = Revision.createTextPatch(note1.body, 'my new note\nsecond line');
+		const merged = Revision.applyTextPatch(note1.body, patch);
 
 		expect(merged).toBe('my new note\nsecond line');
+	}));
+
+	it('should create patches of objects and apply it', asyncTest(async () => {
+		const oldObject = {
+			one: '123',
+			two: '456',
+			three: '789',
+		};
+
+		const newObject = {
+			one: '123',
+			three: '999',
+		}
+
+		const patch = Revision.createObjectPatch(oldObject, newObject);
+		const merged = Revision.applyObjectPatch(oldObject, patch);
+
+		expect(JSON.stringify(merged)).toBe(JSON.stringify(newObject));
 	}));
 
 });

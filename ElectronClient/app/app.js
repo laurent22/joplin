@@ -29,6 +29,7 @@ const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const PluginManager = require('lib/services/PluginManager');
+const RevisionService = require('lib/services/RevisionService');
 
 const pluginClasses = [
 	require('./plugins/GotoAnything.min'),
@@ -1023,6 +1024,10 @@ class Application extends BaseApplication {
 
 		ExternalEditWatcher.instance().setLogger(reg.logger());
 		ExternalEditWatcher.instance().dispatch = this.store().dispatch;
+
+		RevisionService.instance().runInBackground();
+
+		window.revisionService = RevisionService.instance();
 	}
 
 }

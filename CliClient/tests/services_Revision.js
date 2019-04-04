@@ -24,9 +24,30 @@ describe('services_Revision', function() {
 	});
 
 	it('should create diff and rebuild notes', asyncTest(async () => {
-		RevisionService.instance().collectRevisions();
+		const service = new RevisionService();
 
-		const revisions = RevisionService.instance().noteRevisions(noteId);
+		const n1_v1 = await Note.save({ title: 'hello', author: 'testing' });
+		await service.collectRevisions();
+		const n1_v2 = await Note.save({ id: n1_v1.id, title: 'hello welcome', author: '' });
+		await service.collectRevisions();
+
+		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id);
+		expect(revisions.length).toBe(2);
+		expect(revisions[1].parent_id).toBe(revisions[0].id);
+
+		const rev1 = await service.revisionNote(revisions, 0);
+		expect(rev1.title).toBe('hello');
+		expect(rev1.author).toBe('testing');
+
+		const rev2 = await service.revisionNote(revisions, 1);
+		expect(rev2.title).toBe('hello welcome');
+		expect(rev2.author).toBe('');
+
+		await time.sleep(0.5);
+
+		await service.deleteOldRevisions(400);
+		const revisions2 = await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id);
+		expect(revisions2.length).toBe(0);
 	}));
 
 });

@@ -38,6 +38,7 @@ const { clipboard } = require('electron');
 const SearchEngine = require('lib/services/SearchEngine');
 const ModelCache = require('lib/services/ModelCache');
 const NoteTextViewer = require('./NoteTextViewer.min');
+const NoteRevisionViewer = require('./NoteRevisionViewer.min');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -70,6 +71,7 @@ class NoteTextComponent extends React.Component {
 			editorScrollTop: 0,
 			newNote: null,
 			noteTags: [],
+			viewRevisions: true,
 
 			// If the current note was just created, and the title has never been
 			// changed by the user, this variable contains that note ID. Used
@@ -268,6 +270,7 @@ class NoteTextComponent extends React.Component {
 		this.titleField_keyDown = this.titleField_keyDown.bind(this);
 		this.webview_ipcMessage = this.webview_ipcMessage.bind(this);
 		this.webview_domReady = this.webview_domReady.bind(this);
+		this.noteRevisionViewer_onBack = this.noteRevisionViewer_onBack.bind(this);
 	}
 
 	// Note:
@@ -617,6 +620,10 @@ class NoteTextComponent extends React.Component {
 
 	refreshNoteMetadata(force = null) {
 		return shared.refreshNoteMetadata(this, force);
+	}
+
+	noteRevisionViewer_onBack() {
+		this.setState({ viewRevisions: false });
 	}
 
 	title_changeText(event) {
@@ -1609,6 +1616,18 @@ class NoteTextComponent extends React.Component {
 		}, style);
 
 		const innerWidth = rootStyle.width - rootStyle.paddingLeft - rootStyle.paddingRight - borderWidth;
+
+		if (this.state.viewRevisions && note && note.id) {
+			rootStyle.paddingRight = rootStyle.paddingLeft;
+			rootStyle.paddingTop = rootStyle.paddingLeft;
+			rootStyle.paddingBottom = rootStyle.paddingLeft;
+			rootStyle.display = 'inline-flex';
+			return (
+				<div style={rootStyle}>
+					<NoteRevisionViewer noteId={note.id} customCss={this.props.customCss} onBack={this.noteRevisionViewer_onBack}/>
+				</div>
+			);
+		}
 
 		if (this.props.selectedNoteIds.length > 1) {
 			return this.renderMultiNotes(rootStyle);

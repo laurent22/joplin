@@ -190,7 +190,13 @@ class Setting extends BaseModel {
 
 			'resourceService.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
 			'searchEngine.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
+			'revisionService.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
+			
 			'searchEngine.initialIndexingDone': { value: false, type: Setting.TYPE_BOOL, public: false },
+
+			'revisionService.enabled': { section: 'revisionService', value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Enable note history') },
+			'revisionService.ttlDays': { section: 'revisionService', value: 90, type: Setting.TYPE_INT, public: true, minimum: 1, label: () => _('Number of days the history of a note should be kept') },
+
 			'welcome.wasBuilt': { value: false, type: Setting.TYPE_BOOL, public: false },
 		};
 
@@ -585,6 +591,7 @@ class Setting extends BaseModel {
 		if (name === 'note') return _('Note');
 		if (name === 'plugins') return _('Plugins');
 		if (name === 'application') return _('Application');
+		if (name === 'revisionService') return _('Note History');
 		return name;
 	}
 
