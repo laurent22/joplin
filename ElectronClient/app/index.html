@@ -1,42 +1,65 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<!--
+
+<head>
+	<meta charset="UTF-8">
+	<!--
 		No CPS because we need to allow everything due to some dependencies (eg. depd, which comes from maybe Node or Electron
 		uses 'eval'.
 		<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'">
 		-->
-		<title>Joplin</title>
-		<link rel="stylesheet" href="style.css">
-		<link rel="stylesheet" href="css/fork-awesome.min.css">
-		<link rel="stylesheet" href="node_modules/react-datetime/css/react-datetime.css">
-		<link rel="stylesheet" href="node_modules/smalltalk/css/smalltalk.css">
-		<style>
-			.smalltalk {
-				background-color: rgba(0,0,0,.5);
-			}
-			.smalltalk input {
-				margin-top: 1em;
-			}
-			.smalltalk .page {
-				max-width: 30em;
-			}
-			mark {
-				background: #CF3F00;
-				color: white;
-			}
-		</style>
-	</head>
-	<body>
-		<div id="react-root"></div>
-		<script src="main-html.js"></script>
-		<style>
-			/* Disable dragging of links (which are often buttons) */
-			a:not([draggable=true]), img:not([draggable=true]) {
-				-webkit-user-drag: none;
-				user-drag: none;
-			}
-		</style>
-	</body>
+	<title>Joplin</title>
+	<!-- <link rel="stylesheet" href="style.css"> -->
+	<!-- <link rel="stylesheet" href="css/fork-awesome.min.css"> -->
+	<link rel="stylesheet" href="node_modules/react-datetime/css/react-datetime.css">
+	<!-- <link rel="stylesheet" href="node_modules/smalltalk/css/smalltalk.css"> -->
+	<link rel="stylesheet" href="node_modules/@material/list/dist/mdc.list.css">
+	<link rel="stylesheet" href="node_modules/@rmwc/list/collapsible-list.css">
+	<link rel="stylesheet" href="node_modules/@material/icon-button/dist/mdc.icon-button.css">
+	<link rel="stylesheet" href="node_modules/@material/dialog/dist/mdc.dialog.css">
+	<link rel="stylesheet" href="node_modules/@material/drawer/dist/mdc.drawer.css">
+	<link rel="stylesheet" href="node_modules/@material/textfield/dist/mdc.textfield.css">
+	<link rel="stylesheet" href="node_modules/@material/floating-label/dist/mdc.floating-label.css">
+	<link rel="stylesheet" href="node_modules/@material/notched-outline/dist/mdc.notched-outline.css">
+	<link rel="stylesheet" href="node_modules/@material/checkbox/dist/mdc.checkbox.css">
+	<link rel="stylesheet" href="node_modules/@material/form-field/dist/mdc.form-field.css">
+	<link rel="stylesheet" href="node_modules/@material/top-app-bar/dist/mdc.top-app-bar.css">
+	<link rel="stylesheet" href="node_modules/@material/button/dist/mdc.button.css">
+	<link rel="stylesheet" href="node_modules/@material/line-ripple/dist/mdc.line-ripple.css">
+	<link rel="stylesheet" href="node_modules/@material/layout-grid/dist/mdc.layout-grid.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+	<style>
+		.smalltalk {
+			background-color: rgba(0, 0, 0, .5);
+		}
+
+		.smalltalk input {
+			margin-top: 1em;
+		}
+
+		.smalltalk .page {
+			max-width: 30em;
+		}
+
+		mark {
+			background: #CF3F00;
+			color: white;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="react-root"></div>
+	<script src="main-html.js"></script>
+	<style>
+		/* Disable dragging of links (which are often buttons) */
+		a:not([draggable=true]),
+		img:not([draggable=true]) {
+			-webkit-user-drag: none;
+			user-drag: none;
+		}
+	</style>
+</body>
+
 </html>

@@ -36,7 +36,7 @@ class OneDriveLoginScreenComponent extends React.Component {
 
 	webview_domReady() {
 		this.setState({ webviewReady: true });
-		
+
 		this.webview_.addEventListener('did-navigate', async (event) => {
 			const url = event.url;
 
@@ -87,7 +87,7 @@ class OneDriveLoginScreenComponent extends React.Component {
 			{
 				title: _('Refresh'),
 				onClick: () => this.refresh_click(),
-				iconName: 'fa-refresh',
+				iconName: 'refresh',
 			},
 		];
 

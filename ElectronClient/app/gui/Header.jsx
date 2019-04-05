@@ -4,6 +4,18 @@ const { reg } = require('lib/registry.js');
 const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
+const { Button, ButtonIcon } = require('@rmwc/button');
+const { TextField } = require('@rmwc/textfield');
+const { IconButton } = require('@rmwc/icon-button');
+const {
+	TopAppBar,
+	TopAppBarRow,
+	TopAppBarSection,
+	TopAppBarNavigationIcon,
+	TopAppBarActionItem,
+	TopAppBarTitle,
+	TopAppBarFixedAdjust
+} = require('@rmwc/top-app-bar');
 
 class HeaderComponent extends React.Component {
 
@@ -34,7 +46,7 @@ class HeaderComponent extends React.Component {
 			}, 500);
 		};
 
-		this.search_onClear = (event) => {
+		this.search_onClear = () => {
 			this.setState({ searchQuery: '' });
 			triggerOnQuery('');
 			if (this.searchElement_) this.searchElement_.focus();
@@ -107,26 +119,59 @@ class HeaderComponent extends React.Component {
 			};
 			if (options.title) iconStyle.marginRight = 5;
 			if (options.iconRotation) iconStyle.transform = 'rotate(' + options.iconRotation + 'deg)';
-			icon = <i style={iconStyle} className={"fa " + options.iconName}></i>
 		}
 
 		const isEnabled = (!('enabled' in options) || options.enabled);
-		let classes = ['button'];
+		let classes = ['mdc-button'];
 		if (!isEnabled) classes.push('disabled');
 
 		const finalStyle = Object.assign({}, style, {
 			opacity: isEnabled ? 1 : 0.4,
 		});
 
-		return <a
-			className={classes.join(' ')}
-			style={finalStyle}
+		return <TopAppBarActionItem
+
+			// className={classes.join(' ')}
+			// style={finalStyle}
 			key={key}
 			href="#"
 			onClick={() => { if (isEnabled) options.onClick() }}
+			icon={options.iconName}
+			alt={options.title ? options.title : ''}
 		>
-			{icon}{options.title ? options.title : ''}
-		</a>
+		</TopAppBarActionItem>
+	}
+
+	makeMenu(key, style, options) {
+		let icon = null;
+		if (options.iconName) {
+			const iconStyle = {
+				fontSize: Math.round(style.fontSize * 1.4),
+				color: style.color,
+			};
+			if (options.title) iconStyle.marginRight = 5;
+			if (options.iconRotation) iconStyle.transform = 'rotate(' + options.iconRotation + 'deg)';
+		}
+
+		const isEnabled = (!('enabled' in options) || options.enabled);
+		let classes = ['mdc-button'];
+		if (!isEnabled) classes.push('disabled');
+
+		const finalStyle = Object.assign({}, style, {
+			opacity: isEnabled ? 1 : 0.4,
+		});
+
+		return <TopAppBarNavigationIcon
+
+			// className={classes.join(' ')}
+			// style={finalStyle}
+			key={key}
+			href="#"
+			onClick={() => { if (isEnabled) options.onClick() }}
+			icon={options.iconName}
+			alt={options.title ? options.title : ''}
+		>
+		</TopAppBarNavigationIcon>
 	}
 
 	makeSearch(key, style, options, state) {
@@ -165,32 +210,28 @@ class HeaderComponent extends React.Component {
 			alignItems: 'center',
 		};
 
-		const iconName = state.searchQuery ? 'fa-times' : 'fa-search';
-		const icon = <i style={iconStyle} className={"fa " + iconName}></i>
+		const iconName = state.searchQuery ? 'clear' : '';
 		if (options.onQuery) this.searchOnQuery_ = options.onQuery;
 
 		const usageLink = !this.state.showSearchUsageLink ? null : (
-			<a onClick={this.searchUsageLink_click} style={theme.urlStyle} href="#">{_('Usage')}</a>
+			<Button onClick={this.searchUsageLink_click} href="#">{_('Usage')}</Button>
 		);
 
 		return (
-			<div key={key} style={containerStyle}>
-				<input
-					type="text"
-					style={inputStyle}
+			<div key={key}>
+				<TextField
+					icon='search'
 					placeholder={options.title}
-					value={state.searchQuery}
+					trailingIcon={iconName ? {
+						icon: iconName,
+						onClick: this.search_onClear
+					} : null}
 					onChange={this.search_onChange}
 					ref={elem => this.searchElement_ = elem}
 					onFocus={this.search_onFocus}
 					onBlur={this.search_onBlur}
+					helpText={usageLink}
 				/>
-				<a
-					href="#"
-					style={searchButton}
-					onClick={this.search_onClear}
-				>{icon}</a>
-				{usageLink}
 			</div>);
 	}
 
@@ -200,11 +241,12 @@ class HeaderComponent extends React.Component {
 		const showBackButton = this.props.showBackButton === undefined || this.props.showBackButton === true;
 		style.height = theme.headerHeight;
 		style.display = 'flex';
-		style.flexDirection  = 'row';
+		style.flexDirection = 'row';
 		style.borderBottom = '1px solid ' + theme.dividerColor;
 		style.boxSizing = 'border-box';
 
-		const items = [];
+		const navigations = [];
+		const actions = [];
 
 		const itemStyle = {
 			height: theme.headerHeight,
@@ -223,24 +265,36 @@ class HeaderComponent extends React.Component {
 		};
 
 		if (showBackButton) {
-			items.push(this.makeButton('back', itemStyle, { title: _('Back'), onClick: () => this.back_click(), iconName: 'fa-chevron-left ' }));
+			actions.push(this.makeMenu('back', itemStyle, { title: _('Back'), onClick: () => this.back_click(), iconName: 'arrow_back' }));
 		}
 
 		if (this.props.items) {
 			for (let i = 0; i < this.props.items.length; i++) {
 				const item = this.props.items[i];
 
-				if (item.type === 'search') {
-					items.push(this.makeSearch('item_' + i + '_search', itemStyle, item, this.state));
+				// if (item.type === 'search') {
+				// 	actions.push(this.makeSearch('item_' + i + '_search', itemStyle, item, this.state));
+				if (item.type === 'menu') {
+					navigations.push(this.makeMenu('item_' + i + '_' + item.title, itemStyle, item));
 				} else {
-					items.push(this.makeButton('item_' + i + '_' + item.title, itemStyle, item));
+					actions.push(this.makeButton('item_' + i + '_' + item.title, itemStyle, item));
 				}
 			}
 		}
 
 		return (
 			<div className="header" style={style}>
-				{ items }
+				<TopAppBar fixed={true}>
+					<TopAppBarRow>
+						<TopAppBarSection alignStart>
+							{navigations}
+						</TopAppBarSection>
+						<TopAppBarSection alignEnd>
+							{actions}
+						</TopAppBarSection>
+					</TopAppBarRow>
+				</TopAppBar>
+				<TopAppBarFixedAdjust />
 			</div>
 		);
 	}

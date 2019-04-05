@@ -7,9 +7,9 @@ require('app-module-path').addPath(__dirname);
 // https://stackoverflow.com/questions/42196819/disable-hide-download-the-react-devtools#42196820
 __REACT_DEVTOOLS_GLOBAL_HOOK__ = {
 	supportsFiber: true,
-	inject: function() {},
-	onCommitFiberRoot: function() {},
-	onCommitFiberUnmount: function() {},
+	inject: function () { },
+	onCommitFiberRoot: function () { },
+	onCommitFiberUnmount: function () { },
 };
 
 const { app } = require('./app.js');
@@ -60,6 +60,8 @@ document.addEventListener('auxclick', event => event.preventDefault());
 // so disable the default. In particular this will disable Ctrl+Clicking a link
 // which would open a new browser window.
 document.addEventListener('click', (event) => event.preventDefault());
+
+
 
 app().start(bridge().processArgv()).then(() => {
 	require('./gui/Root.min.js');

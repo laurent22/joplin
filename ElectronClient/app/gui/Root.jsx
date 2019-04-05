@@ -17,6 +17,8 @@ const { ClipperConfigScreen } = require('./ClipperConfigScreen.min.js');
 const { Navigator } = require('./Navigator.min.js');
 const WelcomeUtils = require('lib/WelcomeUtils');
 
+const { RMWCProvider } = require('@rmwc/provider');
+
 const { app } = require('../app');
 
 const { bridge } = require('electron').remote.require('./bridge');
@@ -24,7 +26,7 @@ const { bridge } = require('electron').remote.require('./bridge');
 async function initialize(dispatch) {
 	this.wcsTimeoutId_ = null;
 
-	bridge().window().on('resize', function() {
+	bridge().window().on('resize', function () {
 		if (this.wcsTimeoutId_) clearTimeout(this.wcsTimeoutId_);
 
 		this.wcsTimeoutId_ = setTimeout(() => {
@@ -113,7 +115,9 @@ const store = app().store();
 
 render(
 	<Provider store={store}>
-		<Root />
+		<RMWCProvider>
+			<Root />
+		</RMWCProvider>
 	</Provider>,
 	document.getElementById('react-root')
 )

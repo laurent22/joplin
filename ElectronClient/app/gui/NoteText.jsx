@@ -5,7 +5,6 @@ const BaseModel = require('lib/BaseModel.js');
 const Search = require('lib/models/Search.js');
 const { time } = require('lib/time-utils.js');
 const Setting = require('lib/models/Setting.js');
-const { IconButton } = require('./IconButton.min.js');
 const { urlDecode, escapeHtml, pregQuote, scriptType, substrWithEllipsis } = require('lib/string-utils');
 const Toolbar = require('./Toolbar.min.js');
 const TagList = require('./TagList.min.js');
@@ -38,6 +37,8 @@ const { clipboard } = require('electron');
 const SearchEngine = require('lib/services/SearchEngine');
 const ModelCache = require('lib/services/ModelCache');
 const NoteTextViewer = require('./NoteTextViewer.min');
+const { Button, ButtonIcon } = require('@rmwc/button');
+const { TextField } = require('@rmwc/textfield');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -79,7 +80,7 @@ class NoteTextComponent extends React.Component {
 			lastRenderCssFiles: [],
 			lastKeys: [],
 			showLocalSearch: false,
-			localSearch: Object.assign({}, this.localSearchDefaultState), 
+			localSearch: Object.assign({}, this.localSearchDefaultState),
 		};
 
 		this.webviewRef_ = React.createRef();
@@ -147,22 +148,28 @@ class NoteTextComponent extends React.Component {
 			const selectedText = this.selectedText();
 			const clipboardText = clipboard.readText();
 
-			menu.append(new MenuItem({label: _('Cut'), enabled: !!selectedText, click: async () => {
-				this.editorCutText();
-			}}));
-
-			menu.append(new MenuItem({label: _('Copy'), enabled: !!selectedText, click: async () => {
-				this.editorCopyText();
-			}}));
-
-			menu.append(new MenuItem({label: _('Paste'), enabled: true, click: async () => {
-				if (clipboardText) {
-					this.editorPasteText();
-				} else {
-					// To handle pasting images
-					this.onEditorPaste_();
+			menu.append(new MenuItem({
+				label: _('Cut'), enabled: !!selectedText, click: async () => {
+					this.editorCutText();
 				}
-			}}));
+			}));
+
+			menu.append(new MenuItem({
+				label: _('Copy'), enabled: !!selectedText, click: async () => {
+					this.editorCopyText();
+				}
+			}));
+
+			menu.append(new MenuItem({
+				label: _('Paste'), enabled: true, click: async () => {
+					if (clipboardText) {
+						this.editorPasteText();
+					} else {
+						// To handle pasting images
+						this.onEditorPaste_();
+					}
+				}
+			}));
 
 			menu.popup(bridge().window());
 		}
@@ -236,10 +243,12 @@ class NoteTextComponent extends React.Component {
 		}
 
 		this.noteSearchBar_change = (query) => {
-			this.setState({ localSearch: {
-				query: query,
-				selectedIndex: 0,
-			}});
+			this.setState({
+				localSearch: {
+					query: query,
+					selectedIndex: 0,
+				}
+			});
 		}
 
 		const noteSearchBarNextPrevious = (inc) => {
@@ -511,7 +520,7 @@ class NoteTextComponent extends React.Component {
 					}
 				}
 				this.editor_.editor.clearSelection();
-				this.editor_.editor.moveCursorTo(0,0);
+				this.editor_.editor.moveCursorTo(0, 0);
 
 				setTimeout(() => {
 					this.setEditorPercentScroll(scrollPercent ? scrollPercent : 0);
@@ -667,30 +676,40 @@ class NoteTextComponent extends React.Component {
 				const resource = await Resource.load(arg0.resourceId);
 				const resourcePath = Resource.fullPath(resource);
 
-				menu.append(new MenuItem({label: _('Open...'), click: async () => {
-					const ok = bridge().openExternal('file://' + resourcePath);
-					if (!ok) bridge().showErrorMessageBox(_('This file could not be opened: %s', resourcePath));
-				}}));
+				menu.append(new MenuItem({
+					label: _('Open...'), click: async () => {
+						const ok = bridge().openExternal('file://' + resourcePath);
+						if (!ok) bridge().showErrorMessageBox(_('This file could not be opened: %s', resourcePath));
+					}
+				}));
 
-				menu.append(new MenuItem({label: _('Save as...'), click: async () => {
-					const filePath = bridge().showSaveDialog({
-						defaultPath: resource.filename ? resource.filename : resource.title,
-					});
-					if (!filePath) return;
-					await fs.copy(resourcePath, filePath);
-				}}));
+				menu.append(new MenuItem({
+					label: _('Save as...'), click: async () => {
+						const filePath = bridge().showSaveDialog({
+							defaultPath: resource.filename ? resource.filename : resource.title,
+						});
+						if (!filePath) return;
+						await fs.copy(resourcePath, filePath);
+					}
+				}));
 
-				menu.append(new MenuItem({label: _('Copy path to clipboard'), click: async () => {
-					clipboard.writeText(toSystemSlashes(resourcePath));
-				}}));
+				menu.append(new MenuItem({
+					label: _('Copy path to clipboard'), click: async () => {
+						clipboard.writeText(toSystemSlashes(resourcePath));
+					}
+				}));
 			} else if (itemType === "text") {
-				menu.append(new MenuItem({label: _('Copy'), click: async () => {
-					clipboard.writeText(arg0.textToCopy);
-				}}));
+				menu.append(new MenuItem({
+					label: _('Copy'), click: async () => {
+						clipboard.writeText(arg0.textToCopy);
+					}
+				}));
 			} else if (itemType === "link") {
-				menu.append(new MenuItem({label: _('Copy Link Address'), click: async () => {
-					clipboard.writeText(arg0.textToCopy);
-				}}));
+				menu.append(new MenuItem({
+					label: _('Copy Link Address'), click: async () => {
+						clipboard.writeText(arg0.textToCopy);
+					}
+				}));
 			} else {
 				reg.logger().error('Unhandled item type: ' + itemType);
 				return;
@@ -842,7 +861,7 @@ class NoteTextComponent extends React.Component {
 			document.querySelector('#note-editor').addEventListener('keydown', this.onEditorKeyDown_);
 			document.querySelector('#note-editor').addEventListener('contextmenu', this.onEditorContextMenu_);
 
-			const lineLeftSpaces = function(line) {
+			const lineLeftSpaces = function (line) {
 				let output = '';
 				for (let i = 0; i < line.length; i++) {
 					if ([' ', '\t'].indexOf(line[i]) >= 0) {
@@ -857,7 +876,7 @@ class NoteTextComponent extends React.Component {
 			// Disable Markdown auto-completion (eg. auto-adding a dash after a line with a dash.
 			// https://github.com/ajaxorg/ace/issues/2754
 			const that = this; // The "this" within the function below refers to something else
-			this.editor_.editor.getSession().getMode().getNextLineIndent = function(state, line) {
+			this.editor_.editor.getSession().getMode().getNextLineIndent = function (state, line) {
 				const ls = that.state.lastKeys;
 				if (ls.length >= 2 && ls[ls.length - 1] === 'Enter' && ls[ls.length - 2] === 'Enter') return this.$getIndent(line);
 
@@ -1097,7 +1116,7 @@ class NoteTextComponent extends React.Component {
 				this.webviewRef_.current.wrappedInstance.print({ printBackground: true });
 				restoreSettings();
 			}
-		}, 100);		
+		}, 100);
 	}
 
 	async commandSavePdf() {
@@ -1105,7 +1124,7 @@ class NoteTextComponent extends React.Component {
 			if (!this.state.note) throw new Error(_('Only one note can be printed or exported to PDF at a time.'));
 
 			const path = bridge().showSaveDialog({
-				filters: [{ name: _('PDF File'), extensions: ['pdf']}],
+				filters: [{ name: _('PDF File'), extensions: ['pdf'] }],
 				defaultPath: safeFilename(this.state.note.title),
 			});
 
@@ -1122,7 +1141,7 @@ class NoteTextComponent extends React.Component {
 			await this.printTo_('printer');
 		} catch (error) {
 			bridge().showErrorMessageBox(error.message);
-		}		
+		}
 	}
 
 	async commandStartExternalEditing() {
@@ -1242,8 +1261,8 @@ class NoteTextComponent extends React.Component {
 			const r = this.selectionRange_;
 
 			const newRange = {
-				start: { row: r.start.row, column: r.start.column + string1.length},
-				end: { row: r.end.row, column: r.end.column + string1.length},
+				start: { row: r.start.row, column: r.start.column + string1.length },
+				end: { row: r.end.row, column: r.end.column + string1.length },
 			};
 
 			if (replacementText) {
@@ -1351,18 +1370,24 @@ class NoteTextComponent extends React.Component {
 
 		const menu = new Menu()
 
-		menu.append(new MenuItem({label: _('Attach file'), click: async () => {
-			return this.commandAttachFile();
-		}}));
+		menu.append(new MenuItem({
+			label: _('Attach file'), click: async () => {
+				return this.commandAttachFile();
+			}
+		}));
 
-		menu.append(new MenuItem({label: _('Tags'), click: async () => {
-			return this.commandSetTags();
-		}}));
+		menu.append(new MenuItem({
+			label: _('Tags'), click: async () => {
+				return this.commandSetTags();
+			}
+		}));
 
 		if (!!note.is_todo) {
-			menu.append(new MenuItem({label: _('Set alarm'), click: async () => {
-				return this.commandSetAlarm();
-			}}));
+			menu.append(new MenuItem({
+				label: _('Set alarm'), click: async () => {
+					return this.commandSetAlarm();
+				}
+			}));
 		}
 
 		menu.popup(bridge().window());
@@ -1373,7 +1398,7 @@ class NoteTextComponent extends React.Component {
 		if (note && this.state.folder && ['Search', 'Tag'].includes(this.props.notesParentType)) {
 			toolbarItems.push({
 				title: _('In: %s', substrWithEllipsis(this.state.folder.title, 0, 16)),
-				iconName: 'fa-book',
+				iconName: 'book',
 				onClick: () => {
 					this.props.dispatch({
 						type: "FOLDER_AND_NOTE_SELECT",
@@ -1388,7 +1413,7 @@ class NoteTextComponent extends React.Component {
 		if (this.props.historyNotes.length) {
 			toolbarItems.push({
 				tooltip: _('Back'),
-				iconName: 'fa-arrow-left',
+				iconName: 'arrow_back',
 				onClick: () => {
 					if (!this.props.historyNotes.length) return;
 
@@ -1399,20 +1424,20 @@ class NoteTextComponent extends React.Component {
 						folderId: lastItem.parent_id,
 						noteId: lastItem.id,
 						historyNoteAction: 'pop',
-					});					
+					});
 				},
 			});
 		}
 
 		toolbarItems.push({
 			tooltip: _('Bold'),
-			iconName: 'fa-bold',
+			iconName: 'format_bold',
 			onClick: () => { return this.commandTextBold(); },
 		});
 
 		toolbarItems.push({
 			tooltip: _('Italic'),
-			iconName: 'fa-italic',
+			iconName: 'format_italic',
 			onClick: () => { return this.commandTextItalic(); },
 		});
 
@@ -1422,19 +1447,19 @@ class NoteTextComponent extends React.Component {
 
 		toolbarItems.push({
 			tooltip: _('Hyperlink'),
-			iconName: 'fa-link',
+			iconName: 'insert_link',
 			onClick: () => { return this.commandTextLink(); },
 		});
 
 		toolbarItems.push({
 			tooltip: _('Code'),
-			iconName: 'fa-code',
+			iconName: 'code',
 			onClick: () => { return this.commandTextCode(); },
 		});
 
 		toolbarItems.push({
 			tooltip: _('Attach file'),
-			iconName: 'fa-paperclip',
+			iconName: 'attach_file',
 			onClick: () => { return this.commandAttachFile(); },
 		});
 
@@ -1444,37 +1469,37 @@ class NoteTextComponent extends React.Component {
 
 		toolbarItems.push({
 			tooltip: _('Numbered List'),
-			iconName: 'fa-list-ol',
+			iconName: 'format_list_numbered',
 			onClick: () => { return this.commandTextListOl(); },
 		});
 
 		toolbarItems.push({
 			tooltip: _('Bulleted List'),
-			iconName: 'fa-list-ul',
+			iconName: 'format_list_bulleted',
 			onClick: () => { return this.commandTextListUl(); },
 		});
 
 		toolbarItems.push({
 			tooltip: _('Checkbox'),
-			iconName: 'fa-check-square',
+			iconName: 'check_box',
 			onClick: () => { return this.commandTextCheckbox(); },
 		});
 
 		toolbarItems.push({
 			tooltip: _('Heading'),
-			iconName: 'fa-header',
+			iconName: 'view_headline',
 			onClick: () => { return this.commandTextHeading(); },
 		});
 
 		toolbarItems.push({
 			tooltip: _('Horizontal Rule'),
-			iconName: 'fa-ellipsis-h',
+			iconName: 'remove',
 			onClick: () => { return this.commandTextHorizontalRule(); },
 		});
 
 		toolbarItems.push({
 			tooltip: _('Insert Date Time'),
-			iconName: 'fa-calendar-plus-o',
+			iconName: 'date_range',
 			onClick: () => { return this.commandDateTime(); },
 		});
 
@@ -1486,26 +1511,26 @@ class NoteTextComponent extends React.Component {
 			toolbarItems.push({
 				tooltip: _('Click to stop external editing'),
 				title: _('Watching...'),
-				iconName: 'fa-external-link',
+				iconName: 'launch',
 				onClick: () => { return this.commandStopExternalEditing(); },
 			});
 		} else {
 			toolbarItems.push({
 				tooltip: _('Edit in external editor'),
-				iconName: 'fa-external-link',
+				iconName: 'launch',
 				onClick: () => { return this.commandStartExternalEditing(); },
 			});
 		}
 
 		toolbarItems.push({
 			tooltip: _('Tags'),
-			iconName: 'fa-tags',
+			iconName: 'local_offer',
 			onClick: () => { return this.commandSetTags(); },
 		});
 
 		if (note.is_todo) {
 			const item = {
-				iconName: 'fa-clock-o',
+				iconName: 'alarm_add',
 				enabled: !note.todo_completed,
 				onClick: () => { return this.commandSetAlarm(); },
 			}
@@ -1520,7 +1545,7 @@ class NoteTextComponent extends React.Component {
 
 		toolbarItems.push({
 			tooltip: _('Note properties'),
-			iconName: 'fa-info-circle',
+			iconName: 'info',
 			onClick: () => {
 				const n = this.state.note;
 				if (!n || !n.id) return;
@@ -1571,11 +1596,12 @@ class NoteTextComponent extends React.Component {
 			const item = menuItems[i];
 			if (!item.enabled) continue;
 
-			itemComps.push(<button
+			itemComps.push(<Button
 				key={item.label}
 				style={buttonStyle}
 				onClick={() => multiNotesButton_click(item)}
-			>{item.label}</button>);
+				label={item.label}
+			/>);
 		}
 
 		rootStyle = Object.assign({}, rootStyle, {
@@ -1585,7 +1611,7 @@ class NoteTextComponent extends React.Component {
 		});
 
 		return (<div style={rootStyle}>
-			<div style={{display: 'flex', flexDirection: 'column'}}>
+			<div style={{ display: 'flex', flexDirection: 'column' }}>
 				{itemComps}
 			</div>
 		</div>);
@@ -1661,7 +1687,7 @@ class NoteTextComponent extends React.Component {
 		}
 
 		bottomRowHeight -= searchBarHeight;
-		
+
 		const viewerStyle = {
 			width: Math.floor(innerWidth / 2),
 			height: bottomRowHeight,
@@ -1714,7 +1740,7 @@ class NoteTextComponent extends React.Component {
 			let html = this.state.bodyHtml;
 
 			const htmlHasChanged = this.lastSetHtml_ !== html;
-			 if (htmlHasChanged) {
+			if (htmlHasChanged) {
 				let options = {
 					cssFiles: this.state.lastRenderCssFiles,
 				};
@@ -1755,14 +1781,15 @@ class NoteTextComponent extends React.Component {
 			items={toolbarItems}
 		/>
 
-		const titleEditor = <input
+		const titleEditor = <TextField
 			type="text"
-			ref={(elem) => { this.titleField_ = elem; } }
-			style={titleEditorStyle}
+			ref={(elem) => { this.titleField_ = elem; }}
+			fullwidth={true}
+			// style={titleEditorStyle}
 			value={note && note.title ? note.title : ''}
 			onChange={(event) => { this.title_changeText(event); }}
 			onKeyDown={this.titleField_keyDown}
-			placeholder={ this.props.newNote ? _('Creating new %s...', isTodo ? _('to-do') : _('note')) : '' }
+			placeholder={this.props.newNote ? _('Creating new %s...', isTodo ? _('to-do') : _('note')) : ''}
 		/>
 
 		const tagList = !NOTE_TAG_BAR_FEATURE_ENABLED ? null : <TagList
@@ -1770,11 +1797,13 @@ class NoteTextComponent extends React.Component {
 			items={this.state.noteTags}
 		/>;
 
-		const titleBarMenuButton = <IconButton style={{
-			display: 'flex',
-		}} iconName="fa-caret-down" theme={this.props.theme} onClick={() => { this.itemContextMenu() }} />
+		const titleBarMenuButton = <Button
+			style={{ display: 'flex', }}
+			icon="fa-caret-down"
+			theme={this.props.theme}
+			onClick={() => { this.itemContextMenu() }} />
 
-		const titleBarDate = <span style={Object.assign({}, theme.textStyle, {color: theme.colorFaded})}>{time.formatMsToLocal(note.user_updated_time)}</span>
+		const titleBarDate = <span style={Object.assign({}, theme.textStyle, { color: theme.colorFaded })}>{time.formatMsToLocal(note.user_updated_time)}</span>
 
 		const viewer = <NoteTextViewer
 			ref={this.webviewRef_}
@@ -1787,7 +1816,7 @@ class NoteTextComponent extends React.Component {
 		delete editorRootStyle.width;
 		delete editorRootStyle.height;
 		delete editorRootStyle.fontSize;
-		const editor =  <AceEditor
+		const editor = <AceEditor
 			value={body}
 			mode="markdown"
 			theme={editorRootStyle.editorTheme}
@@ -1799,7 +1828,7 @@ class NoteTextComponent extends React.Component {
 			name="note-editor"
 			wrapEnabled={true}
 			onScroll={(event) => { this.editor_scroll(); }}
-			ref={(elem) => { this.editor_ref(elem); } }
+			ref={(elem) => { this.editor_ref(elem); }}
 			onChange={(body) => { this.aceEditor_change(body) }}
 			showPrintMargin={false}
 			onSelectionChange={this.aceEditor_selectionChange}
@@ -1809,7 +1838,7 @@ class NoteTextComponent extends React.Component {
 			// Disable warning: "Automatically scrolling cursor into view after
 			// selection change this will be disabled in the next version set
 			// editor.$blockScrolling = Infinity to disable this message"
-			editorProps={{$blockScrolling: true}}
+			editorProps={{ $blockScrolling: true }}
 
 			// This is buggy (gets outside the container)
 			highlightActiveLine={false}
@@ -1818,7 +1847,7 @@ class NoteTextComponent extends React.Component {
 		const noteSearchBarComp = !this.state.showLocalSearch ? null : (
 			<NoteSearchBar
 				ref={this.noteSearchBar_}
-				style={{display: 'flex', height:searchBarHeight,width:innerWidth, borderTop: '1px solid ' + theme.dividerColor}}
+				style={{ display: 'flex', height: searchBarHeight, width: innerWidth, borderTop: '1px solid ' + theme.dividerColor }}
 				onChange={this.noteSearchBar_change}
 				onNext={this.noteSearchBar_next}
 				onPrevious={this.noteSearchBar_previous}
@@ -1829,16 +1858,16 @@ class NoteTextComponent extends React.Component {
 		return (
 			<div style={rootStyle} onDrop={this.onDrop_}>
 				<div style={titleBarStyle}>
-					{ titleEditor }
-					{ titleBarDate }
-					{ false ? titleBarMenuButton : null }
+					{titleEditor}
+					{titleBarDate}
+					{false ? titleBarMenuButton : null}
 				</div>
-				{ toolbar }
-				{ tagList }
-				{ editor }
-				{ viewer }
-				<div style={{clear:'both'}}/>
-				{ noteSearchBarComp }
+				{toolbar}
+				{tagList}
+				{editor}
+				{viewer}
+				<div style={{ clear: 'both' }} />
+				{noteSearchBarComp}
 			</div>
 		);
 	}

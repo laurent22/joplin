@@ -6,8 +6,8 @@ const globalStyle = {
 	fontSize: 12,
 	fontFamily: 'sans-serif',
 	margin: 15, // No text and no interactive component should be within this margin
-	itemMarginTop: 10,
-	itemMarginBottom: 10,
+	itemMarginTop: 12,
+	itemMarginBottom: 12,
 	fontSizeSmaller: 14,
 	disabledOpacity: 0.3,
 	buttonMinWidth: 50,
@@ -15,10 +15,10 @@ const globalStyle = {
 	editorFontSize: 12,
 	textAreaLineHeight: 17,
 
-	headerHeight: 35,
+	headerHeight: 70,
 	headerButtonHPadding: 6,
 
-	toolbarHeight: 35,
+	toolbarHeight: 45,
 	tagItemPadding: 3,
 };
 
@@ -63,26 +63,26 @@ const lightStyle = {
 	backgroundColor: "#ffffff",
 	backgroundColorTransparent: 'rgba(255,255,255,0.9)',
 	oddBackgroundColor: "#dddddd",
-	color: "#222222", // For regular text
+	color: "#004170", // For regular text
 	colorError: "red",
 	colorWarn: "#9A5B00",
 	colorFaded: "#777777", // For less important text
 	dividerColor: "#dddddd",
 	selectedColor: '#e5e5e5',
-	urlColor: '#155BDA',
+	urlColor: '#407194',
 
-	backgroundColor2: "#162B3D",
-	color2: "#ffffff",
-	selectedColor2: "#0269C2",
+	backgroundColor2: "#ECEDF5",
+	color2: "#004170",
+	selectedColor2: "#407194",
 	colorError2: "#ff6c6c",
 
 	raisedBackgroundColor: "#e5e5e5",
-	raisedColor: "#222222",
+	raisedColor: "#004170",
 
 	warningBackgroundColor: "#FFD08D",
 
-	htmlColor:'#222222',
-	htmlBackgroundColor: 'white',
+	htmlColor: '#004170',
+	htmlBackgroundColor: '#ffffff',
 	htmlDividerColor: 'rgb(230,230,230)',
 	htmlLinkColor: 'rgb(80,130,190)',
 	htmlTableBackgroundColor: 'rgb(247, 247, 247)',
@@ -95,7 +95,7 @@ const lightStyle = {
 };
 
 const darkStyle = {
-	backgroundColor: '#1D2024',
+	backgroundColor: '#ffffff',
 	backgroundColorTransparent: 'rgba(255,255,255,0.9)',
 	oddBackgroundColor: "#dddddd",
 	color: '#dddddd',
@@ -146,12 +146,12 @@ function addExtraStyles(style) {
 	};
 
 	style.toolbarStyle = {
-		height: style.toolbarHeight,
+		// height: style.toolbarHeight,
 		// minWidth: style.toolbarHeight,
 		display: 'flex',
 		alignItems: 'center',
-		paddingLeft: style.headerButtonHPadding,
-		paddingRight: style.headerButtonHPadding,
+		// paddingLeft: style.headerButtonHPadding,
+		// paddingRight: style.headerButtonHPadding,
 		textDecoration: 'none',
 		fontFamily: style.fontFamily,
 		fontSize: style.fontSize,

@@ -18,6 +18,8 @@ const Mark = require('mark.js/dist/mark.min.js');
 const SearchEngine = require('lib/services/SearchEngine');
 const NoteListUtils = require('./utils/NoteListUtils');
 const { replaceRegexDiacritics, pregQuote } = require('lib/string-utils');
+const { List, ListItem, ListItemText, ListItemPrimaryText, ListItemSecondaryText, ListItemGraphic, ListItemMeta } = require('@rmwc/list');
+const { Checkbox } = require('@rmwc/checkbox')
 
 class NoteListComponent extends React.Component {
 
@@ -132,7 +134,7 @@ class NoteListComponent extends React.Component {
 			}
 
 			if (!noteIds.length) return;
-			
+
 			event.dataTransfer.setDragImage(new Image(), 1, 1);
 			event.dataTransfer.clearData();
 			event.dataTransfer.setData('text/x-jop-note-ids', JSON.stringify(noteIds));
@@ -167,11 +169,13 @@ class NoteListComponent extends React.Component {
 
 		// Setting marginBottom = 1 because it makes the checkbox looks more centered, at least on Windows
 		// but don't know how it will look in other OSes.
-		const checkbox = item.is_todo ? 
-			<div style={{display: 'flex', height: style.height, alignItems: 'center', paddingLeft: hPadding}}>
-				<input style={{margin:0, marginBottom:1}} type="checkbox" defaultChecked={!!item.todo_completed} onClick={(event) => { onCheckboxClick(event, item) }}/>
-			</div>
-		: null;
+		const checkbox = item.is_todo ?
+			<ListItemMeta>
+				<Checkbox
+					checked={!!item.todo_completed}
+					onChange={(event) => { onCheckboxClick(event, item) }}
+				/></ListItemMeta>
+			: null;
 
 		let listItemTitleStyle = Object.assign({}, this.style().listItemTitle);
 		listItemTitleStyle.paddingLeft = !checkbox ? hPadding : 4;
@@ -214,7 +218,7 @@ class NoteListComponent extends React.Component {
 			color: theme.color,
 		};
 		const watchedIcon = this.props.watchedNoteFiles.indexOf(item.id) < 0 ? null : (
-			<i style={watchedIconStyle} className={"fa fa-external-link"}></i>
+			<ListItemGraphic style={watchedIconStyle} icon="link" />
 		);
 
 		if (!this.itemAnchorRefs_[item.id]) this.itemAnchorRefs_[item.id] = React.createRef();
@@ -222,23 +226,25 @@ class NoteListComponent extends React.Component {
 
 		// Need to include "todo_completed" in key so that checkbox is updated when
 		// item is changed via sync.		
-		return <div key={item.id + '_' + item.todo_completed} style={style}>
-			{checkbox}
-			<a
-				ref={ref}
+		return (
+			<ListItem
+				key={item.id + '_' + item.todo_completed}
+				// ref={ref}
 				className="list-item"
 				onContextMenu={(event) => this.itemContextMenu(event)}
 				href="#"
 				draggable={true}
 				style={listItemTitleStyle}
 				onClick={(event) => { onTitleClick(event, item) }}
-				onDragStart={(event) => onDragStart(event) }
+				onDragStart={(event) => onDragStart(event)}
 				data-id={item.id}
 			>
-			{watchedIcon}
-			{titleComp}
-			</a>
-		</div>
+				{watchedIcon}
+				{titleComp}
+				{checkbox}
+			</ListItem>
+
+		)
 	}
 
 	itemAnchorRef(itemId) {
@@ -273,15 +279,15 @@ class NoteListComponent extends React.Component {
 			this.doCommand(this.props.windowCommand);
 		}
 
-		if (prevProps.selectedNoteIds !== this.props.selectedNoteIds && this.props.selectedNoteIds.length === 1) {
-			const id = this.props.selectedNoteIds[0];
-			for (let i = 0; i < this.props.notes.length; i++) {
-				if (this.props.notes[i].id === id) {
-					this.itemListRef.current.makeItemIndexVisible(i);
-					break;
-				}	
-			}
-		}
+		// if (prevProps.selectedNoteIds !== this.props.selectedNoteIds && this.props.selectedNoteIds.length === 1) {
+		// 	const id = this.props.selectedNoteIds[0];
+		// 	for (let i = 0; i < this.props.notes.length; i++) {
+		// 		if (this.props.notes[i].id === id) {
+		// 			this.itemListRef.current.makeItemIndexVisible(i);
+		// 			break;
+		// 		}
+		// 	}
+		// }
 	}
 
 	async onKeyDown(event) {
@@ -305,7 +311,7 @@ class NoteListComponent extends React.Component {
 				id: newSelectedNote.id,
 			});
 
-			this.itemListRef.current.makeItemIndexVisible(noteIndex);
+			// this.itemListRef.current.makeItemIndexVisible(noteIndex);
 
 			this.focusNoteId_(newSelectedNote.id);
 
@@ -381,7 +387,7 @@ class NoteListComponent extends React.Component {
 		const theme = themeStyle(this.props.theme);
 		const style = this.props.style;
 		let notes = this.props.notes.slice();
-		
+
 		if (!notes.length) {
 			const padding = 10;
 			const emptyDivStyle = Object.assign({
@@ -393,19 +399,24 @@ class NoteListComponent extends React.Component {
 			}, style);
 			emptyDivStyle.width = emptyDivStyle.width - padding * 2;
 			emptyDivStyle.height = emptyDivStyle.height - padding * 2;
-			return <div style={emptyDivStyle}>{ this.props.folders.length ? _('No notes in here. Create one by clicking on "New note".') : _('There is currently no notebook. Create one by clicking on "New notebook".')}</div>
+			return <div style={emptyDivStyle}>{this.props.folders.length ? _('No notes in here. Create one by clicking on "New note".') : _('There is currently no notebook. Create one by clicking on "New notebook".')}</div>
 		}
 
-		return (				
-			<ItemList
+		let noteComps = [];
+		for (let i = 0; i < notes.length; i++) {
+			const noteComp = this.itemRenderer(notes[i]);
+			noteComps.push(noteComp);
+		}
+
+		return (
+			<List
 				ref={this.itemListRef}
-				itemHeight={this.style().listItem.height}
-				className={"note-list"}
-				items={notes}
-				style={style}
-				itemRenderer={this.itemRenderer}
 				onKeyDown={this.onKeyDown}
-			/>
+				className={"note-list"}
+			>
+				{noteComps}
+			</List>
+
 		);
 	}
 

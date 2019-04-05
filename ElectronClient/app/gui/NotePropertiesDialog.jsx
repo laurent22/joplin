@@ -8,6 +8,11 @@ const Datetime = require('react-datetime');
 const Note = require('lib/models/Note');
 const formatcoords = require('formatcoords');
 const { bridge } = require('electron').remote.require('./bridge');
+const { Button, ButtonIcon } = require('@rmwc/button');
+const { IconButton } = require('@rmwc/icon-button');
+const { TextField } = require('@rmwc/textfield');
+const { Dialog, DialogTitle, DialogContent, DialogActions, DialogButton } = require('@rmwc/dialog');
+
 
 class NotePropertiesDialog extends React.Component {
 
@@ -144,9 +149,9 @@ class NotePropertiesDialog extends React.Component {
 			border: '1px solid',
 			borderColor: theme.dividerColor,
 		};
-		
+
 		this.styles_.input = {
-			display:'inline-block',
+			display: 'inline-block',
 			color: theme.color,
 			backgroundColor: theme.backgroundColor,
 			border: '1px solid',
@@ -238,7 +243,7 @@ class NotePropertiesDialog extends React.Component {
 	createNoteField(key, value) {
 		const styles = this.styles(this.props.theme);
 		const theme = themeStyle(this.props.theme);
-		const labelComp = <label style={Object.assign({}, theme.textStyle, {marginRight: '1em', width: '6em', display:'inline-block', fontWeight: 'bold'})}>{this.formatLabel(key)}</label>;
+		const labelComp = <label style={Object.assign({}, theme.textStyle, { marginRight: '1em', width: '6em', display: 'inline-block', fontWeight: 'bold' })}>{this.formatLabel(key)}</label>;
 		let controlComp = null;
 		let editComp = null;
 		let editCompHandler = null;
@@ -264,18 +269,18 @@ class NotePropertiesDialog extends React.Component {
 						onKeyDown: (event) => onKeyDown(event, key),
 						style: styles.input
 					}}
-					onChange={(momentObject) => {this.setState({ editedValue: momentObject })}}
+					onChange={(momentObject) => { this.setState({ editedValue: momentObject }) }}
 				/>
 
-				editCompHandler = () => {this.saveProperty()};
-				editCompIcon = 'fa-save';
+				editCompHandler = () => { this.saveProperty() };
+				editCompIcon = 'save';
 			} else {
 
-				controlComp = <input
+				controlComp = <TextField
 					defaultValue={value}
 					type="text"
 					ref="editField"
-					onChange={(event) => {this.setState({ editedValue: event.target.value })}}
+					onChange={(event) => { this.setState({ editedValue: event.target.value }) }}
 					onKeyDown={(event) => onKeyDown(event)}
 					style={styles.input}
 				/>
@@ -301,28 +306,26 @@ class NotePropertiesDialog extends React.Component {
 				}
 				controlComp = <a href="#" onClick={() => bridge().openExternal(url)} style={theme.urlStyle}>{displayedValue}</a>
 			} else {
-				controlComp = <div style={Object.assign({}, theme.textStyle, {display: 'inline-block'})}>{displayedValue}</div>
+				controlComp = <div style={Object.assign({}, theme.textStyle, { display: 'inline-block' })}>{displayedValue}</div>
 			}
 
 			if (key !== 'id') {
-				editCompHandler = () => {this.editPropertyButtonClick(key, value)};
-				editCompIcon = 'fa-edit';
+				editCompHandler = () => { this.editPropertyButtonClick(key, value) };
+				editCompIcon = 'edit';
 			}
 		}
 
 		if (editCompHandler) {
 			editComp = (
-				<a href="#" onClick={editCompHandler} style={styles.editPropertyButton}>
-					<i className={'fa ' + editCompIcon} aria-hidden="true" style={{ marginLeft: '.5em'}}></i>
-				</a>
+				<IconButton href="#" onClick={editCompHandler} icon={editCompIcon} />
 			);
 		}
 
 		return (
 			<div key={key} style={this.styles_.controlBox} className="note-property-box">
-				{ labelComp }
-				{ controlComp }
-				{ editComp }
+				{labelComp}
+				{controlComp}
+				{editComp}
 			</div>
 		);
 	}
@@ -354,21 +357,20 @@ class NotePropertiesDialog extends React.Component {
 
 		const buttonComps = [];
 		buttonComps.push(
-			<button
+			<DialogButton
 				key="ok"
 				style={styles.button}
 				onClick={this.okButton_click}
 				ref={this.okButton}
 				onKeyDown={this.onKeyDown}
+				label={_('Apply')}
 			>
 				{_('Apply')}
-			</button>
+			</DialogButton>
 		);
-		buttonComps.push(<button key="cancel" style={styles.button} onClick={this.cancelButton_click}>{_('Cancel')}</button>);
+		buttonComps.push(<DialogButton key="cancel" onClick={this.cancelButton_click}>{_('Cancel')}</DialogButton >);
 
 		const noteComps = [];
-
-		const modalLayerStyle = Object.assign({}, styles.modalLayer);
 
 		if (formNote) {
 			for (let key in formNote) {
@@ -379,15 +381,18 @@ class NotePropertiesDialog extends React.Component {
 		}
 
 		return (
-			<div style={modalLayerStyle}>
-				<div style={styles.dialogBox}>
-					<div style={styles.dialogTitle}>{_('Note properties')}</div>
-					<div>{noteComps}</div>
-					<div style={{ textAlign: 'right', marginTop: 10 }}>
-						{buttonComps}
-					</div>
-				</div>
-			</div>
+			<Dialog>
+				<DialogTitle>
+					{_('Note properties')}
+				</DialogTitle>
+				<DialogContent>
+					{noteComps}
+				</DialogContent>
+				<DialogActions>
+					{buttonComps}
+				</DialogActions>
+			</Dialog>
+
 		);
 	}
 

@@ -5,6 +5,8 @@ const moment = require('moment');
 const { themeStyle } = require('../theme.js');
 const { time } = require('lib/time-utils.js');
 const Datetime = require('react-datetime');
+const { Button } = require('@rmwc/button');
+const { Dialog, DialogTitle, DialogContent, DialogActions, DialogButton } = require('@rmwc/dialog');
 
 class PromptDialog extends React.Component {
 
@@ -53,9 +55,9 @@ class PromptDialog extends React.Component {
 			height: height - paddingTop,
 			backgroundColor: 'rgba(0,0,0,0.6)',
 			display: visible ? 'flex' : 'none',
-    		alignItems: 'flex-start',
-    		justifyContent: 'center',
-    		paddingTop: paddingTop + 'px',
+			alignItems: 'flex-start',
+			justifyContent: 'center',
+			paddingTop: paddingTop + 'px',
 		};
 
 		this.styles_.promptDialog = {
@@ -150,7 +152,7 @@ class PromptDialog extends React.Component {
 		if (this.props.inputType === 'datetime') {
 			inputComp = <Datetime
 				value={this.state.answer}
-				inputProps={{style: styles.input}}
+				inputProps={{ style: styles.input }}
 				dateFormat={time.dateFormat()}
 				timeFormat={time.timeFormat()}
 				onChange={(momentObject) => onDateTimeChange(momentObject)}
@@ -167,23 +169,28 @@ class PromptDialog extends React.Component {
 		}
 
 		const buttonComps = [];
-		if (buttonTypes.indexOf('ok') >= 0) buttonComps.push(<button key="ok" style={styles.button} onClick={() => onClose(true, 'ok')}>{_('OK')}</button>);
-		if (buttonTypes.indexOf('cancel') >= 0) buttonComps.push(<button key="cancel" style={styles.button} onClick={() => onClose(false, 'cancel')}>{_('Cancel')}</button>);
-		if (buttonTypes.indexOf('clear') >= 0) buttonComps.push(<button key="clear" style={styles.button} onClick={() => onClose(false, 'clear')}>{_('Clear')}</button>);
+		if (buttonTypes.indexOf('ok') >= 0) buttonComps.push(<DialogButton key="ok" style={styles.button} onClick={() => onClose(true, 'ok')} isDefaultAction>{_('OK')}</DialogButton >);
+		if (buttonTypes.indexOf('cancel') >= 0) buttonComps.push(<DialogButton key="cancel" style={styles.button} onClick={() => onClose(false, 'cancel')}>{_('Cancel')}</DialogButton >);
+		if (buttonTypes.indexOf('clear') >= 0) buttonComps.push(<DialogButton key="clear" style={styles.button} onClick={() => onClose(false, 'clear')}>{_('Clear')}</DialogButton >);
 
 		return (
-			<div style={styles.modalLayer}>
-				<div style={styles.promptDialog}>
-					<label style={styles.label}>{this.props.label ? this.props.label : ''}</label>
-					<div style={{display: 'inline-block', color: 'black', backgroundColor: theme.backgroundColor}}>
-						{inputComp}
-						{descComp}
-					</div>
-					<div style={{ textAlign: 'right', marginTop: 10 }}>
-						{buttonComps}
-					</div>
-				</div>
-			</div>
+			<Dialog
+				open={this.state.standardDialogOpen}
+				onClose={evt => {
+					console.log(evt.detail.action)
+					this.setState({ standardDialogOpen: false })
+				}}
+			>
+				<DialogTitle>{this.props.label ? this.props.label : ''}</DialogTitle>
+				<DialogContent>
+					{inputComp}
+					{descComp}
+				</DialogContent>
+				<DialogActions>
+					{buttonComps}
+				</DialogActions>
+			</Dialog>
+
 		);
 	}
 

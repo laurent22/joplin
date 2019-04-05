@@ -148,7 +148,7 @@ class Application extends BaseApplication {
 					if (newState.watchedNoteFiles.indexOf(action.id) < 0) {
 						newState = Object.assign({}, state);
 						const watchedNoteFiles = newState.watchedNoteFiles.slice();
-						watchedNoteFiles.push(action.id); 
+						watchedNoteFiles.push(action.id);
 						newState.watchedNoteFiles = watchedNoteFiles;
 					}
 					break;
@@ -261,7 +261,7 @@ class Application extends BaseApplication {
 					}
 				});
 			}
-			
+
 			sortItems.push({ type: 'separator' });
 
 			sortItems.push({
@@ -333,7 +333,7 @@ class Application extends BaseApplication {
 
 							if (moduleSource === 'file') {
 								path = bridge().showOpenDialog({
-									filters: [{ name: module.description, extensions: module.fileExtensions}]
+									filters: [{ name: module.description, extensions: module.fileExtensions }]
 								});
 							} else {
 								path = bridge().showOpenDialog({
@@ -639,7 +639,7 @@ class Application extends BaseApplication {
 				}, {
 					type: 'separator',
 					screens: ['Main'],
-				},{
+				}, {
 					label: _('Web clipper options'),
 					click: () => {
 						this.dispatch({
@@ -647,7 +647,7 @@ class Application extends BaseApplication {
 							routeName: 'ClipperConfig',
 						});
 					}
-				},{
+				}, {
 					label: _('Encryption options'),
 					click: () => {
 						this.dispatch({
@@ -655,7 +655,7 @@ class Application extends BaseApplication {
 							routeName: 'EncryptionConfig',
 						});
 					}
-				},{
+				}, {
 					label: _('General Options'),
 					accelerator: 'CommandOrControl+,',
 					click: () => {
@@ -670,10 +670,10 @@ class Application extends BaseApplication {
 				submenu: [{
 					label: _('Website and documentation'),
 					accelerator: 'F1',
-					click () { bridge().openExternal('https://joplin.cozic.net') }
+					click() { bridge().openExternal('https://joplin.cozic.net') }
 				}, {
 					label: _('Make a donation'),
-					click () { bridge().openExternal('https://joplin.cozic.net/donate') }
+					click() { bridge().openExternal('https://joplin.cozic.net/donate') }
 				}, {
 					label: _('Check for updates...'),
 					click: () => {

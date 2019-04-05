@@ -1,6 +1,9 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const { themeStyle } = require('../theme.js');
+// const { Button } = require('@material/react-button');
+const MaterialIcon = require('@material/react-material-icon').default;
+const Button = require('@material/react-icon-button').default;
 
 class IconButton extends React.Component {
 
@@ -11,7 +14,7 @@ class IconButton extends React.Component {
 			color: theme.color,
 			fontSize: theme.fontSize * 1.4,
 		};
-		const icon = <i style={iconStyle} className={"fa " + this.props.iconName}></i>
+		const icon = <MaterialIcon style={iconStyle} icon={this.props.iconName} />
 
 		const rootStyle = Object.assign({
 			display: 'flex',
@@ -27,9 +30,9 @@ class IconButton extends React.Component {
 		}, style);
 
 		return (
-			<a href="#" style={rootStyle} className="icon-button" onClick={() => { if (this.props.onClick) this.props.onClick() }}>
-				{ icon }
-			</a>
+			<Button href="#" style={rootStyle} className="icon-button" onClick={() => { if (this.props.onClick) this.props.onClick() }}>
+				{icon}
+			</Button>
 		);
 	}
 

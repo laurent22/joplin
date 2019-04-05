@@ -2,6 +2,8 @@ const React = require('react');
 const { connect } = require('react-redux');
 const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
+const { IconButton } = require('@rmwc/icon-button');
+const { TextField } = require('@rmwc/textfield');
 
 class NoteSearchBarComponent extends React.Component {
 
@@ -54,14 +56,13 @@ class NoteSearchBarComponent extends React.Component {
 			color: theme.color,
 		};
 
-		const icon = <i style={iconStyle} className={"fa " + iconName}></i>
-
 		return (
-			<a
+			<IconButton
+				icon={iconName}
 				href="#"
-				style={searchButton}
+				// style={searchButton}
 				onClick={clickHandler}
-			>{icon}</a>
+			/>
 		);
 	}
 
@@ -112,17 +113,17 @@ class NoteSearchBarComponent extends React.Component {
 	render() {
 		const theme = themeStyle(this.props.theme);
 
-		const closeButton = this.buttonIconComponent('fa-times', this.closeButton_click);
-		const previousButton = this.buttonIconComponent('fa-chevron-up', this.previousButton_click);
-		const nextButton = this.buttonIconComponent('fa-chevron-down', this.nextButton_click);
+		const closeButton = this.buttonIconComponent('close', this.closeButton_click);
+		const previousButton = this.buttonIconComponent('skip_previous', this.previousButton_click);
+		const nextButton = this.buttonIconComponent('skip_next', this.nextButton_click);
 
 		return (
 			<div style={this.props.style}>
-				<div style={{display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-					{ closeButton }
-					<input placeholder={_('Search...')} value={this.state.query} onChange={this.searchInput_change} onKeyDown={this.searchInput_keyDown} ref="searchInput" type="text" style={{width: 200, marginRight: 5}}></input>
-					{ nextButton }
-					{ previousButton }
+				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+					{closeButton}
+					<TextField placeholder={_('Search...')} value={this.state.query} onChange={this.searchInput_change} onKeyDown={this.searchInput_keyDown} ref="searchInput" type="text" style={{ width: 200, marginRight: 5 }}></TextField>
+					{nextButton}
+					{previousButton}
 				</div>
 			</div>
 		);

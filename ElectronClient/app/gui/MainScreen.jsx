@@ -18,6 +18,9 @@ const layoutUtils = require('lib/layout-utils.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const eventManager = require('../eventManager');
 const VerticalResizer = require('./VerticalResizer.min');
+const { Drawer, DrawerAppContent } = require('@rmwc/drawer');
+const { Dialog, DialogContent } = require('@rmwc/dialog');
+const { Grid, GridCell, GridInner } = require('@rmwc/grid');
 
 class MainScreenComponent extends React.Component {
 
@@ -170,7 +173,7 @@ class MainScreenComponent extends React.Component {
 			});
 		} else if (command.name === 'renameTag') {
 			const tag = await Tag.load(command.id);
-			if(!tag) return;
+			if (!tag) return;
 
 			this.setState({
 				promptOptions: {
@@ -185,7 +188,7 @@ class MainScreenComponent extends React.Component {
 								bridge().showErrorMessageBox(error.message);
 							}
 						}
-						this.setState({promptOptions: null });
+						this.setState({ promptOptions: null });
 					}
 				}
 			})
@@ -285,8 +288,8 @@ class MainScreenComponent extends React.Component {
 		}
 	}
 
-	styles(themeId, width, height, messageBoxVisible, isSidebarVisible, sidebarWidth, noteListWidth) {
-		const styleKey = [themeId, width, height, messageBoxVisible, (+isSidebarVisible), sidebarWidth, noteListWidth].join('_');
+	styles(themeId, width, height, messageBoxVisible, sidebarWidth, noteListWidth) {
+		const styleKey = [themeId, width, height, messageBoxVisible, sidebarWidth, noteListWidth].join('_');
 		if (styleKey === this.styleKey_) return this.styles_;
 
 		const theme = themeStyle(themeId);
@@ -321,12 +324,8 @@ class MainScreenComponent extends React.Component {
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
-   		};
+		};
 
-		if (isSidebarVisible === false) {
-			this.styles_.sideBar.width = 0;
-			this.styles_.sideBar.display = 'none';
-		}
 
 		this.styles_.noteList = {
 			width: noteListWidth - this.styles_.verticalResizer.width,
@@ -372,7 +371,7 @@ class MainScreenComponent extends React.Component {
 		const notes = this.props.notes;
 		const messageBoxVisible = this.props.hasDisabledSyncItems || this.props.showMissingMasterKeyMessage;
 		const sidebarVisibility = this.props.sidebarVisibility;
-		const styles = this.styles(this.props.theme, style.width, style.height, messageBoxVisible, sidebarVisibility, this.props.sidebarWidth, this.props.noteListWidth);
+		const styles = this.styles(this.props.theme, style.width, style.height, messageBoxVisible, this.props.sidebarWidth, this.props.noteListWidth);
 		const selectedFolderId = this.props.selectedFolderId;
 		const onConflictFolder = this.props.selectedFolderId === Folder.conflictFolderId();
 
@@ -380,41 +379,42 @@ class MainScreenComponent extends React.Component {
 
 		headerItems.push({
 			title: _('Toggle sidebar'),
-			iconName: 'fa-bars',
+			iconName: 'menu',
 			iconRotation: this.props.sidebarVisibility ? 0 : 90,
-			onClick: () => { this.doCommand({ name: 'toggleSidebar'}) }
+			onClick: () => { this.doCommand({ name: 'toggleSidebar' }) },
+			type: 'menu'
 		});
 
 		headerItems.push({
 			title: _('New note'),
-			iconName: 'fa-file-o',
+			iconName: 'note_add',
 			enabled: !!folders.length && !onConflictFolder,
-			onClick: () => { this.doCommand({ name: 'newNote' }) },
+			onClick: () => { this.doCommand({ name: 'newNote' }) }
 		});
 
 		headerItems.push({
 			title: _('New to-do'),
-			iconName: 'fa-check-square-o',
+			iconName: 'event',
 			enabled: !!folders.length && !onConflictFolder,
 			onClick: () => { this.doCommand({ name: 'newTodo' }) },
 		});
 
 		headerItems.push({
 			title: _('New notebook'),
-			iconName: 'fa-book',
+			iconName: 'library_add',
 			onClick: () => { this.doCommand({ name: 'newNotebook' }) },
 		});
 
 		headerItems.push({
 			title: _('Layout'),
-			iconName: 'fa-columns',
+			iconName: 'view_array',
 			enabled: !!notes.length,
 			onClick: () => { this.doCommand({ name: 'toggleVisiblePanes' }) },
 		});
 
 		headerItems.push({
 			title: _('Search...'),
-			iconName: 'fa-search',
+			iconName: 'search',
 			onQuery: (query) => { this.doCommand({ name: 'search', query: query }) },
 			type: 'search',
 		});
@@ -458,19 +458,20 @@ class MainScreenComponent extends React.Component {
 			);
 		}
 
-		const modalLayerStyle = Object.assign({}, styles.modalLayer, { display: this.state.modalLayer.visible ? 'block' : 'none' });
 
 		const notePropertiesDialogOptions = this.state.notePropertiesDialogOptions;
 
 		return (
-			<div style={style}>
-				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
+			<div >
+				<Dialog><DialogContent>{this.state.modalLayer.message}</DialogContent></Dialog>
+				{/* <div style={modalLayerStyle}>{this.state.modalLayer.message}</div> */}
 
-				{ notePropertiesDialogOptions.visible && <NotePropertiesDialog
+				{notePropertiesDialogOptions.visible && <NotePropertiesDialog
 					theme={this.props.theme}
 					noteId={notePropertiesDialogOptions.noteId}
 					onClose={this.notePropertiesDialog_close}
-				/> }
+				/>}
+
 
 				<PromptDialog
 					autocomplete={promptOptions && ('autocomplete' in promptOptions) ? promptOptions.autocomplete : null}
@@ -484,13 +485,34 @@ class MainScreenComponent extends React.Component {
 					buttons={promptOptions && ('buttons' in promptOptions) ? promptOptions.buttons : null}
 					inputType={promptOptions && ('inputType' in promptOptions) ? promptOptions.inputType : null} />
 
-				<Header style={styles.header} showBackButton={false} items={headerItems} />
-				{messageComp}
-				<SideBar style={styles.sideBar} />
-				<VerticalResizer style={styles.verticalResizer} onDrag={this.sidebar_onDrag}/>
-				<NoteList style={styles.noteList} />
-				<VerticalResizer style={styles.verticalResizer} onDrag={this.noteList_onDrag}/>
-				<NoteText style={styles.noteText} visiblePanes={this.props.noteVisiblePanes} />
+
+				<Drawer dismissible open={this.props.sidebarVisibility == undefined ? true : this.props.sidebarVisibility}>
+					<SideBar style={styles.sideBar} />
+				</Drawer>
+				<DrawerAppContent>
+
+					<Header showBackButton={false} items={headerItems} />
+					{messageComp}
+
+					<Grid>
+						{/* <GridInner> */}
+						<GridCell span={2}>
+							<NoteList
+								style={styles.noteList}
+							/>
+							{/* <VerticalResizer style={styles.verticalResizer} onDrag={this.noteList_onDrag} /> */}
+						</GridCell>
+
+						<GridCell span={10}>
+							<NoteText style={styles.noteText} visiblePanes={this.props.noteVisiblePanes} />
+						</GridCell>
+
+						{/* </GridInner> */}
+					</Grid>
+
+				</DrawerAppContent>
+
+
 			</div>
 		);
 	}

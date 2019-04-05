@@ -15,6 +15,10 @@ const MenuItem = bridge().MenuItem;
 const InteropServiceHelper = require("../InteropServiceHelper.js");
 const { substrWithEllipsis } = require('lib/string-utils');
 const { shim } = require('lib/shim');
+const { Button } = require('@rmwc/button');
+const { Drawer, DrawerHeader, DrawerContent, DrawerTitle, DrawerSubtitle, DrawerAppContent } = require('@rmwc/drawer');
+const { List, SimpleListItem, CollapsibleList } = require('@rmwc/list');
+const { Icon } = require('@rmwc/icon');
 
 class SideBarComponent extends React.Component {
 
@@ -346,9 +350,11 @@ class SideBarComponent extends React.Component {
 				const module = ioModules[i];
 				if (module.type !== 'exporter') continue;
 
-				exportMenu.append(new MenuItem({ label: module.fullLabel() , click: async () => {
-					await InteropServiceHelper.export(this.props.dispatch.bind(this), module, { sourceFolderIds: [itemId] });
-				}}));
+				exportMenu.append(new MenuItem({
+					label: module.fullLabel(), click: async () => {
+						await InteropServiceHelper.export(this.props.dispatch.bind(this), module, { sourceFolderIds: [itemId] });
+					}
+				}));
 			}
 
 			menu.append(
@@ -421,37 +427,55 @@ class SideBarComponent extends React.Component {
 		if (selected) containerStyle = Object.assign(containerStyle, this.style().listItemSelected);
 
 		let expandLinkStyle = Object.assign({}, this.style().listItemExpandIcon);
-		let expandIconStyle = {
-			visibility: hasChildren ? 'visible' : 'hidden',
-			paddingLeft: 8 + depth * 10,
-		}
+		let collasible = hasChildren;
 
-		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'fa-plus-square' : 'fa-minus-square';
-		const expandIcon = <i style={expandIconStyle} className={"fa " + iconName}></i>
-		const expandLink = hasChildren ? <a style={expandLinkStyle} href="#" folderid={folder.id} onClick={this.onFolderToggleClick_}>{expandIcon}</a> : <span style={expandLinkStyle}>{expandIcon}</span>
-
+		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'expand_more' : 'expand_less';
 		const anchorRef = this.anchorItemRef('folder', folder.id);
 
+		if (collasible) {
+			return (<CollapsibleList
+				handle={
+					<SimpleListItem
+						text={itemTitle}
+						graphic={iconName}
+						metaIcon="chevron_right"
+						onClick={() => { this.folderItem_click(folder); }}
+						key={folder.id}
+						onDragStart={this.onFolderDragStart_}
+						onDragOver={this.onFolderDragOver_}
+						onDrop={this.onFolderDrop_}
+						draggable={true}
+						folderid={folder.id}
+						// ref={anchorRef}
+						href="#"
+						data-id={folder.id}
+						data-type={BaseModel.TYPE_FOLDER}
+						onContextMenu={event => this.itemContextMenu(event)}
+					/>
+				}
+				onOpen={this.onFolderToggleClick_}
+				onClose={this.onFolderToggleClick_}
+
+			>
+			</CollapsibleList>);
+		}
 		return (
-			<div className="list-item-container" style={containerStyle} key={folder.id} onDragStart={this.onFolderDragStart_} onDragOver={this.onFolderDragOver_} onDrop={this.onFolderDrop_} draggable={true} folderid={folder.id}>
-				{ expandLink }
-				<a
-					ref={anchorRef}
-					className="list-item"
-					href="#"
-					data-id={folder.id}
-					data-type={BaseModel.TYPE_FOLDER}
-					onContextMenu={event => this.itemContextMenu(event)}
-					style={style}
-					folderid={folder.id}
-					onClick={() => {
-						this.folderItem_click(folder);
-					}}
-					onDoubleClick={this.onFolderToggleClick_}
-				>
-					{itemTitle}
-				</a>
-			</div>
+			<SimpleListItem
+				text={itemTitle}
+				graphic={iconName}
+				onClick={() => { this.folderItem_click(folder); }}
+				key={folder.id}
+				onDragStart={this.onFolderDragStart_}
+				onDragOver={this.onFolderDragOver_}
+				onDrop={this.onFolderDrop_}
+				draggable={true}
+				folderid={folder.id}
+				// ref={anchorRef}
+				href="#"
+				data-id={folder.id}
+				data-type={BaseModel.TYPE_FOLDER}
+				onContextMenu={event => this.itemContextMenu(event)}
+			/>
 		);
 	}
 
@@ -509,7 +533,7 @@ class SideBarComponent extends React.Component {
 
 	makeHeader(key, label, iconName, extraProps = {}) {
 		const style = this.style().header;
-		const icon = <i style={{ fontSize: style.fontSize * 1.2, marginRight: 5 }} className={"fa " + iconName} />;
+		const icon = <Icon style={{ fontSize: style.fontSize * 1.2, marginRight: 5 }} icon={iconName} />;
 
 		if (extraProps.toggleblock || extraProps.onClick) {
 			style.cursor = "pointer";
@@ -521,26 +545,43 @@ class SideBarComponent extends React.Component {
 		// check if toggling option is set.
 		let toggleIcon = null;
 		const toggleKey = `${key}IsExpanded`;
-		if (extraProps.toggleblock) {
-			let isExpanded = this.state[toggleKey];
-			toggleIcon = <i className={`fa ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}`} style={{ fontSize: style.fontSize * 0.75,
-				marginRight: 12, marginLeft: 5, marginTop: style.fontSize * 0.125}}></i>;
-		}
+		// if (extraProps.toggleblock) {
+		// 	let isExpanded = this.state[toggleKey];
+		// 	toggleIcon = <Icon className={`${isExpanded ? 'expand_less' : 'expand_more'}`} style={{
+		// 		fontSize: style.fontSize * 0.75,
+		// 		marginRight: 12, marginLeft: 5, marginTop: style.fontSize * 0.125
+		// 	}} />;
+		// }
 
 		const ref = this.anchorItemRef('headers', key);
 
 		return (
-			<div ref={ref} style={style} key={key} {...extraProps} onClick={(event) => { 
+			<SimpleListItem
+				graphic={iconName}
+				text={label}
+				metaIcon="chevron_right"
+				onClick={(event) => {
 					// if a custom click event is attached, trigger that. 				
 					if (headerClick) {
-						headerClick(key, event); 				
+						headerClick(key, event);
 					}
-					this.onHeaderClick_(key, event); 
-				}}>
-				{icon}
-				<span style={{flex: 1 }}>{label}</span>
-				{toggleIcon}
-			</div>
+					this.onHeaderClick_(key, event);
+				}}
+				ref={ref}
+				key={key}
+			/>
+
+			// <div ref={ref} style={style} key={key} {...extraProps} onClick={(event) => {
+			// 	// if a custom click event is attached, trigger that. 				
+			// 	if (headerClick) {
+			// 		headerClick(key, event);
+			// 	}
+			// 	this.onHeaderClick_(key, event);
+			// }}>
+			// 	{icon}
+			// 	<span style={{ flex: 1 }}>{label}</span>
+			// 	{toggleIcon}
+			// </div>
 		);
 	}
 
@@ -629,35 +670,32 @@ class SideBarComponent extends React.Component {
 		}
 	}
 
-	onHeaderClick_(key, event) {	
+	onHeaderClick_(key, event) {
 		const currentHeader = event.currentTarget;
 		const toggleBlock = +currentHeader.getAttribute('toggleblock');
 		if (toggleBlock) {
-			const toggleKey = `${key}IsExpanded`;				
-			const isExpanded = this.state[toggleKey]; 					
-			this.setState({ [toggleKey]: !isExpanded }); 					
-			Setting.setValue(toggleKey, !isExpanded); 				
+			const toggleKey = `${key}IsExpanded`;
+			const isExpanded = this.state[toggleKey];
+			this.setState({ [toggleKey]: !isExpanded });
+			Setting.setValue(toggleKey, !isExpanded);
 		}
 	}
 
 	synchronizeButton(type) {
 		const style = Object.assign({}, this.style().button, { marginBottom: 5 });
-		const iconName = type === "sync" ? "fa-refresh" : "fa-times";
+		const iconName = type === "sync" ? "refresh" : "close";
 		const label = type === "sync" ? _("Synchronise") : _("Cancel");
-		const icon = <i style={{ fontSize: style.fontSize, marginRight: 5 }} className={"fa " + iconName} />;
+
 		return (
-			<a
-				className="synchronize-button"
-				style={style}
+			<Button label={label} outlined
+				icon={iconName}
 				href="#"
 				key="sync_button"
 				onClick={() => {
 					this.sync_click();
 				}}
-			>
-				{icon}
-				{label}
-			</a>
+			/>
+
 		);
 	}
 
@@ -666,39 +704,41 @@ class SideBarComponent extends React.Component {
 		const style = Object.assign({}, this.style().root, this.props.style, {
 			overflowX: "hidden",
 			overflowY: "hidden",
+			overflow: "hidden",
+			position: "relative",
 			display: 'inline-flex',
 			flexDirection: 'column',
 		});
 
-		let items = [];
-		items.push(this.makeHeader("folderHeader", _("Notebooks"), "fa-book", {
+
+		let notebookHeader = this.makeHeader("folderHeader", _("Notebooks"), "book", {
 			onDrop: this.onFolderDrop_,
 			folderid: '',
 			toggleblock: 1
-		}));
+		});
 
+		let notebooks = []
 		if (this.props.folders.length) {
 			const result = shared.renderFolders(this.props, this.folderItem.bind(this));
 			const folderItems = result.items;
 			this.folderItemsOrder_ = result.order;
-			items.push(<div className="folders" key="folder_items" style={{display: this.state.folderHeaderIsExpanded ? 'block': 'none'}}>
-				{folderItems}</div>);
+			notebooks = <div className="folders" key="folder_items">
+				{folderItems}</div>;
 		}
 
-		items.push(this.makeHeader("tagHeader", _("Tags"), "fa-tags", {
+		let tagHeader = this.makeHeader("tagHeader", _("Tags"), "local_offer", {
 			toggleblock: 1
-		}));
+		});
 
+		let tags = []
 		if (this.props.tags.length) {
 			const result = shared.renderTags(this.props, this.tagItem.bind(this));
 			const tagItems = result.items;
 			this.tagItemsOrder_ = result.order;
 
-			items.push(
-				<div className="tags" key="tag_items" style={{display: this.state.tagHeaderIsExpanded ? 'block': 'none'}}>
-					{tagItems}
-				</div>
-			);
+			tags = <div className="tags" key="tag_items" style={{ display: this.state.tagHeaderIsExpanded ? 'block' : 'none' }}>
+				{tagItems}
+			</div>;
 		}
 
 		let decryptionReportText = '';
@@ -727,20 +767,22 @@ class SideBarComponent extends React.Component {
 
 		const syncReportComp = !syncReportText.length ? null : (
 			<div style={this.style().syncReport} key="sync_report">
-		 		{syncReportText}
-		 	</div>
-		 );
+				{syncReportText}
+			</div>
+		);
 
 		return (
-			<div ref={this.rootRef} onKeyDown={this.onKeyDown} className="side-bar" style={style}>
-				
-				<div style={{flex:1, overflowX: 'hidden', overflowY: 'auto'}}>
-					{items}
-				</div>
-				<div style={{flex:0}}>
+			<div ref={this.rootRef} onKeyDown={this.onKeyDown} className="side-bar" >
+
+				<DrawerHeader><DrawerTitle>{notebookHeader}</DrawerTitle></DrawerHeader>
+				<DrawerContent>{notebooks}</DrawerContent>
+				<DrawerHeader><DrawerTitle>{tagHeader}</DrawerTitle></DrawerHeader>
+				<DrawerContent>{tags}</DrawerContent>
+
+				<DrawerContent>
 					{syncButton}
-				 	{syncReportComp}
-				</div>
+					{syncReportComp}
+				</DrawerContent>
 			</div>
 		);
 	}
