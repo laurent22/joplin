@@ -147,8 +147,47 @@ class Revision extends BaseItem {
 	}
 
 	static async deleteOldRevisions(ttl) {
+		// When deleting old revisions, we need to make sure that the oldest surviving revision
+		// is a "merged" one (as opposed to a diff from a now deleted revision). So every time
+		// we deleted a revision, we need to find if there's a corresponding surviving revision
+		// and modify that revision into a "merged" one.
+
 		const cutOffDate = Date.now() - ttl;
-		return this.db().exec('DELETE FROM revisions WHERE updated_time < ?', [cutOffDate]);
+		const revisions = await this.modelSelectAll('SELECT * FROM revisions WHERE updated_time < ? ORDER BY updated_time DESC', [cutOffDate]);
+		const doneItems = {};
+
+		for (const rev of revisions) {
+			const doneKey = rev.item_type + '_' + rev.item_id;
+			if (doneItems[doneKey]) continue;
+
+			const keptRev = await this.modelSelectOne('SELECT * FROM revisions WHERE updated_time >= ? AND item_type = ? AND item_id = ? ORDER BY updated_time ASC LIMIT 1', [
+				cutOffDate,
+				rev.item_type,
+				rev.item_id,
+			]);
+
+			const deleteQuery = { sql: 'DELETE FROM revisions WHERE updated_time < ? AND item_id = ?', params: [cutOffDate, rev.item_id] };
+
+			if (!keptRev) {
+				await this.db().transactionExecBatch([deleteQuery]);
+			} else { 
+				const merged = await this.mergeDiffs(keptRev);
+				
+				const queries = [
+					deleteQuery,
+					{ sql: 'UPDATE revisions SET title_diff = ?, body_diff = ?, metadata_diff = ? WHERE id = ?', params: [
+						this.createTextPatch('', merged.title),
+						this.createTextPatch('', merged.body),
+						this.createObjectPatch({}, merged.metadata),
+						keptRev.id,
+					] },
+				];
+
+				await this.db().transactionExecBatch(queries);
+			}
+
+			doneItems[doneKey] = true;
+		}
 	}
 
 }
