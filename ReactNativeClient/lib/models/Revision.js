@@ -80,6 +80,28 @@ class Revision extends BaseItem {
 		]);
 	}
 
+	static moveRevisionToTop(revision, revs) {
+		let targetIndex = -1;
+		for (let i = revs.length - 1; i >= 0; i--) {
+			const rev = revs[i];
+			if (rev.id === revision.id) {
+				targetIndex = i;
+				break;
+			}
+		}
+
+		if (targetIndex < 0) throw new Error('Could not find revision: ' + revision.id);
+
+		if (targetIndex !== revs.length - 1) {
+			revs = revs.slice();
+			const toTop = revs[targetIndex];
+			revs.splice(targetIndex, 1);
+			revs.push(toTop);
+		}
+
+		return revs;
+	}
+
 	// Note: revs must be sorted by update_time ASC (as returned by allByType)
 	static async mergeDiffs(revision, revs = null) {
 		if (!revs) {
@@ -88,7 +110,14 @@ class Revision extends BaseItem {
 				revision.item_id,
 				revision.updated_time,
 			]);
+		} else {
+			revs = revs.slice();
 		}
+
+		// Handle rare case where two revisions have been created at exactly the same millisecond
+		// Also handle even rarer case where a rev and its parent have been created at the
+		// same milliseconds. All code below expects target revision to be on top.
+		revs = this.moveRevisionToTop(revision, revs);
 
 		const output = {
 			title: '',
@@ -96,10 +125,19 @@ class Revision extends BaseItem {
 			metadata: {},
 		};
 
-		for (let i = 0; i < revs.length; i++) {
+		// Build up the list of revisions that are parents of the target revision.
+		const revIndexes = [revs.length - 1];
+		let parentId = revision.parent_id;
+		for (let i = revs.length - 2; i >= 0; i--) {
 			const rev = revs[i];
-			if (rev.updated_time > revision.updated_time) break;
+			if (rev.id !== parentId) continue;
+			parentId = rev.parent_id;
+			revIndexes.push(i);
+		}
+		revIndexes.reverse();
 
+		for (const revIndex of revIndexes) {
+			const rev = revs[revIndex];
 			output.title = this.applyTextPatch(output.title, rev.title_diff);
 			output.body = this.applyTextPatch(output.body, rev.body_diff);
 			output.metadata = this.applyObjectPatch(output.metadata, rev.metadata_diff);

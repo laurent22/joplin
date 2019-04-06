@@ -50,4 +50,40 @@ describe('services_Revision', function() {
 		expect(revisions2.length).toBe(0);
 	}));
 
+	it('should handle conflicts', asyncTest(async () => {
+		const service = new RevisionService();
+
+		// A conflict happens in this case:
+		// - Device 1 creates note1 (rev1)
+		// - Device 2 syncs and get note1
+		// - Device 1 modifies note1 (rev2)
+		// - Device 2 modifies note1 (rev3)
+		// When reconstructing the notes based on the revisions, we need to make sure it follow the right
+		// "path". For example, to reconstruct the note at rev2 it would be:
+		// rev1 => rev2
+		// To reconstruct the note at rev3 it would be:
+		// rev1 => rev3
+		// And not, for example, rev1 => rev2 => rev3
+
+		const n1_v1 = await Note.save({ title: 'hello' });
+		const noteId = n1_v1.id;
+		const rev1 = await service.createNoteRevision(n1_v1);
+		const n1_v2 = await Note.save({ id: noteId, title: 'hello Paul' });
+		const rev2 = await service.createNoteRevision(n1_v2, rev1.id);
+		const n1_v3 = await Note.save({ id: noteId, title: 'hello John' });
+		const rev3 = await service.createNoteRevision(n1_v3, rev1.id);
+
+		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, noteId);
+		expect(revisions.length).toBe(3);
+		expect(revisions[1].parent_id).toBe(rev1.id);
+		expect(revisions[2].parent_id).toBe(rev1.id);
+
+		const revNote1 = await service.revisionNote(revisions, 0);
+		const revNote2 = await service.revisionNote(revisions, 1);
+		const revNote3 = await service.revisionNote(revisions, 2);
+		expect(revNote1.title).toBe('hello');
+		expect(revNote2.title).toBe('hello Paul');
+		expect(revNote3.title).toBe('hello John');
+	}));
+
 });

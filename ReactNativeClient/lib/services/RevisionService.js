@@ -28,8 +28,8 @@ class RevisionService extends BaseService {
 		return md;
 	}
 
-	async createNoteRevision(note) {
-		const latest = await Revision.latestRevision(BaseModel.TYPE_NOTE, note.id);
+	async createNoteRevision(note, parentRevId = null) {
+		const parentRev = parentRevId ? await Revision.load(parentRevId) : await Revision.latestRevision(BaseModel.TYPE_NOTE, note.id);
 
 		const output = {
 			parent_id: '',
@@ -38,20 +38,22 @@ class RevisionService extends BaseService {
 		};
 
 		const noteMd = this.noteMetadata_(note);
+		const noteTitle = note.title ? note.title : '';
+		const noteBody = note.body ? note.body : '';
 
-		if (!latest) {
-			output.title_diff = Revision.createTextPatch('', note.title);
-			output.body_diff = Revision.createTextPatch('', note.body);
+		if (!parentRev) {
+			output.title_diff = Revision.createTextPatch('', noteTitle);
+			output.body_diff = Revision.createTextPatch('', noteBody);
 			output.metadata_diff = Revision.createObjectPatch({}, noteMd);
 		} else {
-			const merged = await Revision.mergeDiffs(latest);
-			output.parent_id = latest.id;
-			output.title_diff = Revision.createTextPatch(merged.title, note.title);
-			output.body_diff = Revision.createTextPatch(merged.body, note.body);
+			const merged = await Revision.mergeDiffs(parentRev);
+			output.parent_id = parentRev.id;
+			output.title_diff = Revision.createTextPatch(merged.title, noteTitle);
+			output.body_diff = Revision.createTextPatch(merged.body, noteBody);
 			output.metadata_diff = Revision.createObjectPatch(merged.metadata, noteMd);
 		}
 
-		return output;
+		return Revision.save(output);
 	}
 
 	async collectRevisions() {
@@ -88,9 +90,7 @@ class RevisionService extends BaseService {
 				const note = BaseModel.byId(notes, noteId);
 				if (!note) continue;
 
-				const rev = await this.createNoteRevision(note);
-
-				await Revision.save(rev);
+				await this.createNoteRevision(note);
 
 				doneNoteIds.push(noteId);
 

@@ -49,4 +49,23 @@ describe('models_Revision', function() {
 		expect(JSON.stringify(merged)).toBe(JSON.stringify(newObject));
 	}));
 
+	it('should move target revision to the top', asyncTest(async () => {
+		const revs = [
+			{ id: '123' },
+			{ id: '456' },
+			{ id: '789' },
+		];
+
+		let newRevs;
+		newRevs = Revision.moveRevisionToTop({ id: '456' }, revs);
+		expect(newRevs[0].id).toBe('123');
+		expect(newRevs[1].id).toBe('789');
+		expect(newRevs[2].id).toBe('456');
+
+		newRevs = Revision.moveRevisionToTop({ id: '789' }, revs);
+		expect(newRevs[0].id).toBe('123');
+		expect(newRevs[1].id).toBe('456');
+		expect(newRevs[2].id).toBe('789');
+	}));
+
 });
