@@ -522,6 +522,7 @@ class JoplinDatabase extends Database {
 						parent_id TEXT NOT NULL DEFAULT "",
 						item_type INT NOT NULL,
 						item_id TEXT NOT NULL,
+						item_updated_time INT NOT NULL,
 						title_diff TEXT NOT NULL DEFAULT "",
 						body_diff TEXT NOT NULL DEFAULT "",
 						metadata_diff TEXT NOT NULL DEFAULT "",
@@ -533,8 +534,10 @@ class JoplinDatabase extends Database {
 				`;
 				queries.push(this.sqlStringToLines(newTableSql)[0]);
 
+				queries.push('CREATE INDEX revisions_parent_id ON revisions (parent_id)');
 				queries.push('CREATE INDEX revisions_item_type ON revisions (item_type)');
 				queries.push('CREATE INDEX revisions_item_id ON revisions (item_id)');
+				queries.push('CREATE INDEX revisions_item_updated_time ON revisions (item_updated_time)');
 				queries.push('CREATE INDEX revisions_updated_time ON revisions (updated_time)');
 			}
 

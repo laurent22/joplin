@@ -67,14 +67,14 @@ class Revision extends BaseItem {
 	}
 
 	static latestRevision(itemType, itemId) {
-		return this.modelSelectOne('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? ORDER BY updated_time DESC LIMIT 1', [
+		return this.modelSelectOne('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? ORDER BY item_updated_time DESC LIMIT 1', [
 			itemType,
 			itemId,
 		]);
 	}
 
 	static allByType(itemType, itemId) {
-		return this.modelSelectAll('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? ORDER BY updated_time ASC', [
+		return this.modelSelectAll('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? ORDER BY item_updated_time ASC', [
 			itemType,
 			itemId,
 		]);
@@ -105,10 +105,10 @@ class Revision extends BaseItem {
 	// Note: revs must be sorted by update_time ASC (as returned by allByType)
 	static async mergeDiffs(revision, revs = null) {
 		if (!revs) {
-			revs = await this.modelSelectAll('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? AND updated_time <= ? ORDER BY updated_time ASC', [
+			revs = await this.modelSelectAll('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? AND item_updated_time <= ? ORDER BY item_updated_time ASC', [
 				revision.item_type,
 				revision.item_id,
-				revision.updated_time,
+				revision.item_updated_time,
 			]);
 		} else {
 			revs = revs.slice();
@@ -153,20 +153,20 @@ class Revision extends BaseItem {
 		// and modify that revision into a "merged" one.
 
 		const cutOffDate = Date.now() - ttl;
-		const revisions = await this.modelSelectAll('SELECT * FROM revisions WHERE updated_time < ? ORDER BY updated_time DESC', [cutOffDate]);
+		const revisions = await this.modelSelectAll('SELECT * FROM revisions WHERE item_updated_time < ? ORDER BY item_updated_time DESC', [cutOffDate]);
 		const doneItems = {};
 
 		for (const rev of revisions) {
 			const doneKey = rev.item_type + '_' + rev.item_id;
 			if (doneItems[doneKey]) continue;
 
-			const keptRev = await this.modelSelectOne('SELECT * FROM revisions WHERE updated_time >= ? AND item_type = ? AND item_id = ? ORDER BY updated_time ASC LIMIT 1', [
+			const keptRev = await this.modelSelectOne('SELECT * FROM revisions WHERE item_updated_time >= ? AND item_type = ? AND item_id = ? ORDER BY item_updated_time ASC LIMIT 1', [
 				cutOffDate,
 				rev.item_type,
 				rev.item_id,
 			]);
 
-			const deleteQuery = { sql: 'DELETE FROM revisions WHERE updated_time < ? AND item_id = ?', params: [cutOffDate, rev.item_id] };
+			const deleteQuery = { sql: 'DELETE FROM revisions WHERE item_updated_time < ? AND item_id = ?', params: [cutOffDate, rev.item_id] };
 
 			if (!keptRev) {
 				await this.db().transactionExecBatch([deleteQuery]);

@@ -35,6 +35,7 @@ class RevisionService extends BaseService {
 			parent_id: '',
 			item_type: BaseModel.TYPE_NOTE,
 			item_id: note.id,
+			item_updated_time: note.updated_time,
 		};
 
 		const noteMd = this.noteMetadata_(note);
