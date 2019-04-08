@@ -81,8 +81,8 @@ class NotePropertiesDialog extends React.Component {
 			formNote.location = note.latitude + ', ' + note.longitude;
 		}
 
-		formNote.id = note.id;
 		formNote.revisionsLink = note.id;
+		formNote.id = note.id;
 
 		return formNote;
 	}

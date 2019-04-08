@@ -12,6 +12,7 @@ const shared = require('lib/components/shared/note-screen-shared.js');
 const MdToHtml = require('lib/MdToHtml');
 const { time } = require('lib/time-utils.js');
 const ReactTooltip = require('react-tooltip');
+const { substrWithEllipsis } = require('lib/string-utils');
 
 class NoteRevisionViewerComponent extends React.PureComponent {
 
@@ -22,6 +23,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 			revisions: [],
 			currentRevId: '',
 			note: null,
+			restoring: false,
 		};
 
 		this.viewerRef_ = React.createRef();
@@ -62,9 +64,12 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 		});
 	}
 
-	importButton_onClick() {
+	async importButton_onClick() {
 		if (!this.state.note) return;
-		RevisionService.instance().importRevisionNote(this.state.note);
+		this.setState({ restoring: true });
+		await RevisionService.instance().importRevisionNote(this.state.note);
+		this.setState({ restoring: false });
+		alert(_('The note "%s" has been successfully restored to the notebook "%s".', substrWithEllipsis(this.state.note.title, 0, 32), RevisionService.instance().restoreFolderTitle()));
 	}
 
 	backButton_click() {
@@ -137,7 +142,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 				<select disabled={!this.state.revisions.length} value={this.state.currentRevId} style={style.revisionList} onChange={this.revisionList_onChange}>
 					{revisionListItems}
 				</select>
-				<button disabled={!this.state.revisions.length} onClick={this.importButton_onClick} style={Object.assign({}, theme.buttonStyle, { marginLeft: 10, height: theme.inputStyle.height })}>{restoreButtonTitle}</button>
+				<button disabled={!this.state.revisions.length || this.state.restoring} onClick={this.importButton_onClick} style={Object.assign({}, theme.buttonStyle, { marginLeft: 10, height: theme.inputStyle.height })}>{restoreButtonTitle}</button>
 				<HelpButton tip={helpMessage} id="noteRevisionHelpButton" onClick={this.helpButton_onClick}/>
 			</div>
 		);
