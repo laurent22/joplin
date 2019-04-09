@@ -563,24 +563,6 @@ class Synchronizer {
 
 							const creatingNewResource = content.type_ == BaseModel.TYPE_RESOURCE && action == "createLocal";
 
-							// if (content.type_ == BaseModel.TYPE_RESOURCE && action == "createLocal") {
-							// 	let localResourceContentPath = Resource.fullPath(content);
-							// 	let remoteResourceContentPath = this.resourceDirName_ + "/" + content.id;
-							// 	try {
-							// 		await this.api().get(remoteResourceContentPath, { path: localResourceContentPath, target: "file" });
-							// 	} catch (error) {
-							// 		if (error.code === 'rejectedByTarget') {
-							// 			this.progressReport_.errors.push(error);
-							// 			this.logger().warn('Rejected by target: ' + path + ': ' + error.message);
-							// 			continue;
-							// 		} else {
-							// 			throw error;
-							// 		}
-							// 	}
-							// }
-
-							// if (creatingNewResource) content.fetch_status = Resource.FETCH_STATUS_IDLE;
-
 							if (creatingNewResource) {
 								await ResourceLocalState.save({ resource_id: content.id, fetch_status: Resource.FETCH_STATUS_IDLE });
 							}

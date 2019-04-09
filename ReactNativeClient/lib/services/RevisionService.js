@@ -9,6 +9,7 @@ const ItemChangeUtils = require('lib/services/ItemChangeUtils');
 const { shim } = require('lib/shim');
 const BaseService = require('lib/services/BaseService');
 const { _ } = require('lib/locale.js');
+const ArrayUtils = require('lib/ArrayUtils.js');
 
 class RevisionService extends BaseService {
 
@@ -55,6 +56,34 @@ class RevisionService extends BaseService {
 		}
 
 		return Revision.save(output);
+	}
+
+	async createNoteRevisionsByIds(noteIds) {
+		noteIds = ArrayUtils.unique(noteIds);
+
+		while (noteIds.length) {
+			const ids = noteIds.splice(0, 100);
+			const notes = await Note.byIds(ids);
+			for (const note of notes) {
+				const existingRev = await Revision.latestRevision(BaseModel.TYPE_NOTE, note.id);
+				if (existingRev && existingRev.item_updated_time === note.updated_time) continue;
+				await this.createNoteRevision(note);
+			}
+		}
+	}
+
+	async createNoteRevisionsIfNoneFound(noteIds) {
+		noteIds = noteIds.slice();
+
+		while (noteIds.length) {
+			let ids = noteIds.splice(0, 100);
+			ids = await Revision.itemsWithNoRevisions(BaseModel.TYPE_NOTE, ids);
+
+			for (const id of ids) {
+				const note = await Note.load(id);
+				await this.createNoteRevision(note);
+			}
+		}
 	}
 
 	async collectRevisions() {

@@ -1026,8 +1026,6 @@ class Application extends BaseApplication {
 		ExternalEditWatcher.instance().dispatch = this.store().dispatch;
 
 		RevisionService.instance().runInBackground();
-
-		window.revisionService = RevisionService.instance();
 	}
 
 }

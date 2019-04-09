@@ -171,6 +171,9 @@ class BaseItem extends BaseModel {
 			conflictNoteIds = conflictNotes.map((n) => { return n.id });
 		}
 
+		// When deleting, always keep the last version of the note - this is basically the recycle bin
+		if (this.modelType() === BaseModel.TYPE_NOTE) await this.revisionService().createNoteRevisionsByIds(ids);
+
 		await super.batchDelete(ids, options);
 
 		if (trackDeleted) {
@@ -289,6 +292,11 @@ class BaseItem extends BaseModel {
 	static encryptionService() {
 		if (!this.encryptionService_) throw new Error('BaseItem.encryptionService_ is not set!!');
 		return this.encryptionService_;
+	}
+
+	static revisionService() {
+		if (!this.revisionService_) throw new Error('BaseItem.revisionService_ is not set!!');
+		return this.revisionService_;
 	}
 
 	static async serializeForSync(item) {
@@ -684,6 +692,8 @@ class BaseItem extends BaseModel {
 			if (!!o.encryption_applied) throw new Error(_('Encrypted items cannot be modified'));
 		}
 
+		if (this.modelType() === BaseModel.TYPE_NOTE && o.id) await this.revisionService().createNoteRevisionsIfNoneFound([o.id]);
+
 		return super.save(o, options);
 	}
 
@@ -704,6 +714,7 @@ class BaseItem extends BaseModel {
 }
 
 BaseItem.encryptionService_ = null;
+BaseItem.revisionService_ = null;
 
 // Also update:
 // - itemsThatNeedSync()

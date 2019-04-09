@@ -30,12 +30,14 @@ const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
 const EncryptionService = require('lib/services/EncryptionService.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker.js');
+const RevisionService = require('lib/services/RevisionService.js');
 const WebDavApi = require('lib/WebDavApi');
 const DropboxApi = require('lib/DropboxApi');
 
 let databases_ = [];
 let synchronizers_ = [];
 let encryptionServices_ = [];
+let revisionServices_ = [];
 let decryptionWorkers_ = [];
 let fileApi_ = null;
 let currentClient_ = 1;
@@ -114,6 +116,7 @@ async function switchClient(id) {
 
 	BaseItem.encryptionService_ = encryptionServices_[id];
 	Resource.encryptionService_ = encryptionServices_[id];
+	BaseItem.revisionService_ = revisionServices_[id];
 
 	Setting.setConstant('resourceDir', resourceDir(id));
 
@@ -197,6 +200,7 @@ async function setupDatabaseAndSynchronizer(id = null) {
 	}
 
 	encryptionServices_[id] = new EncryptionService();
+	revisionServices_[id] = new RevisionService();
 	decryptionWorkers_[id] = new DecryptionWorker();
 	decryptionWorkers_[id].setEncryptionService(encryptionServices_[id]);
 
@@ -216,6 +220,11 @@ function synchronizer(id = null) {
 function encryptionService(id = null) {
 	if (id === null) id = currentClient_;
 	return encryptionServices_[id];
+}
+
+function revisionService(id = null) {
+	if (id === null) id = currentClient_;
+	return revisionServices_[id];
 }
 
 function decryptionWorker(id = null) {
@@ -315,4 +324,4 @@ function asyncTest(callback) {
 	}
 }
 
-module.exports = { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest };
+module.exports = { setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest };

@@ -5,6 +5,7 @@ const Note = require('lib/models/Note.js');
 const { time } = require('lib/time-utils.js');
 const { _ } = require('lib/locale');
 const DiffMatchPatch = require('diff-match-patch');
+const ArrayUtils = require('lib/ArrayUtils.js');
 
 const dmp = new DiffMatchPatch();
 
@@ -78,6 +79,23 @@ class Revision extends BaseItem {
 			itemType,
 			itemId,
 		]);
+	}
+	
+	static async itemsWithRevisions(itemType, itemIds) {
+		const rows = await this.db().selectAll('SELECT distinct item_id FROM revisions WHERE item_type = ? AND item_id IN ("' + itemIds.join('","') + '")', [
+			itemType,
+		]);
+
+		return rows.map(r => r.item_id);
+	}		
+
+	static async itemsWithNoRevisions(itemType, itemIds) {
+		const withRevs = await this.itemsWithRevisions(itemType, itemIds);
+		const output = [];
+		for (let i = 0; i < itemIds.length; i++) {
+			if (withRevs.indexOf(itemIds[i]) < 0) output.push(itemIds[i]);
+		}
+		return ArrayUtils.unique(output);
 	}
 
 	static moveRevisionToTop(revision, revs) {

@@ -1,7 +1,7 @@
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
+const { asyncTest, fileContentEqual, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const NoteTag = require('lib/models/NoteTag.js');
@@ -163,6 +163,51 @@ describe('services_Revision', function() {
 		expect(revNote1.title).toBe('hello');
 		expect(revNote2.title).toBe('hello Paul');
 		expect(revNote3.title).toBe('hello John');
+	}));
+
+	it('should create a revision for existing notes the first time it is saved', asyncTest(async () => {
+		const n1 = await Note.save({ title: 'hello' });
+		const noteId = n1.id;
+
+		// No revision is created at first, because we already have the note content in the note itself
+
+		{
+			const all = await Revision.allByType(BaseModel.TYPE_NOTE, noteId);
+			expect(all.length).toBe(0);
+		}
+
+		// A revision is created the first time a note is overwritten with new content, and
+		// if this note doesn't already have an existing revision.
+		// This is mostly to handle old notes that existed before the revision service. If these
+		// old notes are changed, there's a chance it's accidental or due to some bug, so we
+		// want to preserve a revision just in case.
+
+		{
+			await Note.save({ id: noteId, title: 'hello 2' });
+			const all = await Revision.allByType(BaseModel.TYPE_NOTE, noteId);
+			expect(all.length).toBe(1);
+		}
+
+		// If the note is saved a third time, we don't automatically create a revision. One
+		// will be created x minutes later when the service collects revisions.
+
+		{
+			await Note.save({ id: noteId, title: 'hello 3' });
+			const all = await Revision.allByType(BaseModel.TYPE_NOTE, noteId);
+			expect(all.length).toBe(1);
+		}
+	}));
+
+	it('should create a revision for existing notes that get deleted and that do not already have a revision', asyncTest(async () => {
+		const n1 = await Note.save({ title: 'hello' });
+		const noteId = n1.id;
+
+		await Note.delete(noteId);
+
+		const all = await Revision.allByType(BaseModel.TYPE_NOTE, noteId);
+		expect(all.length).toBe(1);
+		const rev1 = await revisionService().revisionNote(all, 0);
+		expect(rev1.title).toBe('hello');
 	}));
 
 });
