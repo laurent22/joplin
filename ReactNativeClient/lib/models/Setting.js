@@ -192,7 +192,7 @@ class Setting extends BaseModel {
 			'searchEngine.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
 			'searchEngine.initialIndexingDone': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'welcome.wasBuilt': { value: false, type: Setting.TYPE_BOOL, public: false },
-			'markdown.softbreaks': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable soft breaks'), description: () => _('Traditional markdown line-break behavior.') },
+			'markdown.softbreaks': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable soft breaks'), description: () => _('Traditional markdown line-break behaviour.') },
 		};
 
 		return this.metadata_;
