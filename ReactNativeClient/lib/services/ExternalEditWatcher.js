@@ -6,8 +6,8 @@ const EventEmitter = require('events');
 const { splitCommandString } = require('lib/string-utils');
 const { fileExtension } = require('lib/path-utils');
 const spawn	= require('child_process').spawn;
-// const chokidar = require('chokidar');
-const chokidar = null;
+const chokidar = require('chokidar');
+// const chokidar = null;
 
 class ExternalEditWatcher {
 

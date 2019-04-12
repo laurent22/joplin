@@ -100,6 +100,8 @@ class RevisionService extends BaseService {
 		const doneNoteIds = [];
 
 		while (true) {
+			// See synchronizer test units to see why changes coming
+			// from sync are skipped.
 			const changes = await ItemChange.modelSelectAll(`
 				SELECT id, item_id, type
 				FROM item_changes
