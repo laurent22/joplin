@@ -1219,4 +1219,41 @@ describe('Synchronizer', function() {
 		expect(notes.length).toBe(0);
 	}));
 
+	it("should not save revisions when an item_change has been generated as a result of a sync", asyncTest(async () => {
+		// When a note is modified an item_change object is going to be created. This
+		// is used for example to tell the search engine, when note should be indexed. It is
+		// also used by the revision service to tell what note should get a new revision.
+		// When a note is modified via sync, this item_change object is also created. The issue
+		// is that we don't want to create revisions for these particular item_changes, because
+		// such revision has already been created on another client (whatever client initially
+		// modified the note), and that rev is going to be synced.
+		//
+		// So in the end we need to make sure that we don't create these unecessary additional revisions.
+
+		const n1 = await Note.save({ title: 'testing' });
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		await Note.save({ id: n1.id, title: 'mod from client 2' });
+		await synchronizer().start();
+
+		await switchClient(1);
+
+		await synchronizer().start();
+
+		{
+			const allRevs = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
+			expect(allRevs.length).toBe(1);
+		}
+
+		await revisionService().collectRevisions();
+
+		{
+			const allRevs = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
+			expect(allRevs.length).toBe(1);
+		}
+	}));
+
 });

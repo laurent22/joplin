@@ -532,7 +532,8 @@ class Note extends BaseItem {
 
 		const note = await super.save(o, options);
 
-		ItemChange.add(BaseModel.TYPE_NOTE, note.id, isNew ? ItemChange.TYPE_CREATE : ItemChange.TYPE_UPDATE);
+		const changeSource = options && options.changeSource ? options.changeSource : null;
+		ItemChange.add(BaseModel.TYPE_NOTE, note.id, isNew ? ItemChange.TYPE_CREATE : ItemChange.TYPE_UPDATE, changeSource);
 
 		this.dispatch({
 			type: 'NOTE_UPDATE_ONE',
@@ -551,8 +552,9 @@ class Note extends BaseItem {
 
 	static async batchDelete(ids, options = null) {
 		const result = await super.batchDelete(ids, options);
+		const changeSource = options && options.changeSource ? options.changeSource : null;
 		for (let i = 0; i < ids.length; i++) {
-			ItemChange.add(BaseModel.TYPE_NOTE, ids[i], ItemChange.TYPE_DELETE);
+			ItemChange.add(BaseModel.TYPE_NOTE, ids[i], ItemChange.TYPE_DELETE, changeSource);
 
 			this.dispatch({
 				type: 'NOTE_DELETE',

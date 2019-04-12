@@ -539,6 +539,8 @@ class JoplinDatabase extends Database {
 				queries.push('CREATE INDEX revisions_item_id ON revisions (item_id)');
 				queries.push('CREATE INDEX revisions_item_updated_time ON revisions (item_updated_time)');
 				queries.push('CREATE INDEX revisions_updated_time ON revisions (updated_time)');
+
+				queries.push('ALTER TABLE item_changes ADD COLUMN source INT NOT NULL DEFAULT 1');
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

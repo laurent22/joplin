@@ -2,6 +2,7 @@ const BaseItem = require('lib/models/BaseItem.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
+const ItemChange = require('lib/models/ItemChange.js');
 const ResourceLocalState = require('lib/models/ResourceLocalState.js');
 const MasterKey = require('lib/models/MasterKey.js');
 const BaseModel = require('lib/BaseModel.js');
@@ -370,9 +371,9 @@ class Synchronizer {
 								local = remoteContent;
 
 								const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
-								await ItemClass.save(local, { autoTimestamp: false, nextQueries: syncTimeQueries });
+								await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 							} else {
-								await ItemClass.delete(local.id);
+								await ItemClass.delete(local.id, { changeSource: ItemChange.SOURCE_SYNC });
 							}
 						} else if (action == "noteConflict") {
 							// ------------------------------------------------------------------------------
@@ -395,7 +396,7 @@ class Synchronizer {
 								let conflictedNote = Object.assign({}, local);
 								delete conflictedNote.id;
 								conflictedNote.is_conflict = 1;
-								await Note.save(conflictedNote, { autoTimestamp: false });
+								await Note.save(conflictedNote, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC });
 							}
 
 							// ------------------------------------------------------------------------------
@@ -406,12 +407,12 @@ class Synchronizer {
 							if (remote) {
 								local = remoteContent;
 								const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
-								await ItemClass.save(local, { autoTimestamp: false, nextQueries: syncTimeQueries });
+								await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 
 								if (!!local.encryption_applied) this.dispatch({ type: "SYNC_GOT_ENCRYPTED_ITEM" });
 							} else {
 								// Remote no longer exists (note deleted) so delete local one too
-								await ItemClass.delete(local.id);
+								await ItemClass.delete(local.id, { changeSource: ItemChange.SOURCE_SYNC });
 							}
 						}
 
@@ -558,6 +559,7 @@ class Synchronizer {
 								autoTimestamp: false,
 								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, time.unixMs()),
 								autoSaveRevision: false,
+								changeSource: ItemChange.SOURCE_SYNC,
 							};
 							if (action == "createLocal") options.isNew = true;
 							if (action == "updateLocal") options.oldItem = local;
@@ -591,7 +593,7 @@ class Synchronizer {
 							}
 
 							let ItemClass = BaseItem.itemClass(local.type_);
-							await ItemClass.delete(local.id, { trackDeleted: false, autoSaveRevision: false });
+							await ItemClass.delete(local.id, { trackDeleted: false, changeSource: ItemChange.SOURCE_SYNC, autoSaveRevision: false });
 						}
 					}
 
@@ -636,7 +638,7 @@ class Synchronizer {
 							// CONFLICT
 							await Folder.markNotesAsConflict(item.id);
 						}
-						await Folder.delete(item.id, { deleteChildren: false, trackDeleted: false });
+						await Folder.delete(item.id, { deleteChildren: false, changeSource: ItemChange.SOURCE_SYNC, trackDeleted: false });
 					}
 				}
 
