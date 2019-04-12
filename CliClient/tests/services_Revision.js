@@ -210,4 +210,20 @@ describe('services_Revision', function() {
 		expect(rev1.title).toBe('hello');
 	}));
 
+	it('should not create a revision for new note the first time they are saved', asyncTest(async () => {
+		const n1 = await Note.save({ title: 'hello' });
+
+		{
+			const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
+			expect(revisions.length).toBe(0);
+		}
+
+		await revisionService().collectRevisions();
+
+		{
+			const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
+			expect(revisions.length).toBe(0);
+		}
+	}));
+
 });

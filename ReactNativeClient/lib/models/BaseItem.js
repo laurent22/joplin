@@ -225,6 +225,7 @@ class BaseItem extends BaseModel {
 			if (!propValue) return '';
 			propValue = moment.unix(propValue / 1000).utc().format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z';
 		} else if (['title_diff', 'body_diff'].indexOf(propName) >= 0) {
+			if (!propValue) return '';
 			propValue = JSON.stringify(propValue);
 		} else if (propValue === null || propValue === undefined) {
 			propValue = '';
@@ -242,6 +243,7 @@ class BaseItem extends BaseModel {
 			if (!propValue) return 0;
 			propValue = moment(propValue, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x');
 		} else if (['title_diff', 'body_diff'].indexOf(propName) >= 0) {
+			if (!propValue) return '';
 			propValue = JSON.parse(propValue);
 		} else {
 			propValue = Database.formatValue(ItemClass.fieldType(propName), propValue);
@@ -309,14 +311,6 @@ class BaseItem extends BaseModel {
 		const ItemClass = this.itemClass(item);
 		let shownKeys = ItemClass.fieldNames();
 		shownKeys.push('type_');
-
-		// if (ItemClass.syncExcludedKeys) {
-		// 	const keys = ItemClass.syncExcludedKeys();
-		// 	for (let i = 0; i < keys.length; i++) {
-		// 		const idx = shownKeys.indexOf(keys[i]);
-		// 		shownKeys.splice(idx, 1);
-		// 	}
-		// }
 
 		const serialized = await ItemClass.serialize(item, shownKeys);
 
@@ -700,7 +694,9 @@ class BaseItem extends BaseModel {
 			if (!!o.encryption_applied) throw new Error(_('Encrypted items cannot be modified'));
 		}
 
-		if (options.autoSaveRevision && this.modelType() === BaseModel.TYPE_NOTE && o.id) await this.revisionService().createNoteRevisionsIfNoneFound([o.id]);
+		// We only auto save a revision if is *not* a new note.
+		// New notes either do not have an ID, or have one but with the "isNew" option. Both of these should not generate a revision.
+		if (options.autoSaveRevision && this.modelType() === BaseModel.TYPE_NOTE && o.id && options.isNew !== true) await this.revisionService().createNoteRevisionsIfNoneFound([o.id]);
 
 		return super.save(o, options);
 	}

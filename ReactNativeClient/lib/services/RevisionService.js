@@ -118,15 +118,13 @@ class RevisionService extends BaseService {
 				const change = changes[i];
 				const noteId = change.item_id;
 
-				if (change.type !== ItemChange.TYPE_CREATE && change.type !== ItemChange.TYPE_UPDATE) continue;
-				if (doneNoteIds.indexOf(noteId) >= 0) continue;
-
-				const note = BaseModel.byId(notes, noteId);
-				if (!note) continue;
-
-				await this.createNoteRevision(note);
-
-				doneNoteIds.push(noteId);
+				if (change.type === ItemChange.TYPE_UPDATE && doneNoteIds.indexOf(noteId) < 0) {
+					const note = BaseModel.byId(notes, noteId);
+					if (note) {
+						await this.createNoteRevision(note);
+						doneNoteIds.push(noteId);
+					}
+				}
 
 				Setting.setValue('revisionService.lastProcessedChangeId', change.id);
 			}

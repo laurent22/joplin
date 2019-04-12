@@ -325,7 +325,7 @@ class Synchronizer {
 						if (action == "createRemote" || action == "updateRemote") {
 							let canSync = true;
 							try {
-								if (this.testingHooks_.indexOf("rejectedByTarget") >= 0) throw new JoplinError("Testing rejectedByTarget", "rejectedByTarget");
+								if (this.testingHooks_.indexOf("notesRejectedByTarget") >= 0 && local.type_ === BaseModel.TYPE_NOTE) throw new JoplinError("Testing rejectedByTarget", "rejectedByTarget");
 								const content = await ItemClass.serializeForSync(local);
 								await this.api().put(path, content);
 							} catch (error) {
