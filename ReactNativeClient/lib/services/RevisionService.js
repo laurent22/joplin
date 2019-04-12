@@ -81,7 +81,11 @@ class RevisionService extends BaseService {
 
 			for (const id of ids) {
 				const note = await Note.load(id);
-				await this.createNoteRevision(note);
+				if (!note) {
+					this.logger().warn('RevisionService:createNoteRevisionsIfNoneFound: Could not find note ' + id);
+				} else {
+					await this.createNoteRevision(note);
+				}
 			}
 		}
 	}

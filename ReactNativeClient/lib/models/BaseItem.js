@@ -160,8 +160,10 @@ class BaseItem extends BaseModel {
 	}
 
 	static async batchDelete(ids, options = null) {
+		if (!options) options = {};
 		let trackDeleted = true;
 		if (options && options.trackDeleted !== null && options.trackDeleted !== undefined) trackDeleted = options.trackDeleted;
+		if (!('autoSaveRevision' in options)) options.autoSaveRevision = true;
 
 		// Don't create a deleted_items entry when conflicted notes are deleted
 		// since no other client have (or should have) them.
@@ -172,7 +174,7 @@ class BaseItem extends BaseModel {
 		}
 
 		// When deleting, always keep the last version of the note - this is basically the recycle bin
-		if (this.modelType() === BaseModel.TYPE_NOTE) await this.revisionService().createNoteRevisionsByIds(ids);
+		if (options.autoSaveRevision && this.modelType() === BaseModel.TYPE_NOTE) await this.revisionService().createNoteRevisionsByIds(ids);
 
 		await super.batchDelete(ids, options);
 
@@ -222,6 +224,8 @@ class BaseItem extends BaseModel {
 		if (['created_time', 'updated_time', 'sync_time', 'user_updated_time', 'user_created_time'].indexOf(propName) >= 0) {
 			if (!propValue) return '';
 			propValue = moment.unix(propValue / 1000).utc().format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z';
+		} else if (['title_diff', 'body_diff'].indexOf(propName) >= 0) {
+			propValue = JSON.stringify(propValue);
 		} else if (propValue === null || propValue === undefined) {
 			propValue = '';
 		}
@@ -237,6 +241,8 @@ class BaseItem extends BaseModel {
 		if (['created_time', 'updated_time', 'user_created_time', 'user_updated_time'].indexOf(propName) >= 0) {
 			if (!propValue) return 0;
 			propValue = moment(propValue, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x');
+		} else if (['title_diff', 'body_diff'].indexOf(propName) >= 0) {
+			propValue = JSON.parse(propValue);
 		} else {
 			propValue = Database.formatValue(ItemClass.fieldType(propName), propValue);
 		}
@@ -380,7 +386,7 @@ class BaseItem extends BaseModel {
 				body.splice(0, 0, line);
 			}
 		}
-
+		
 		if (!output.type_) throw new Error('Missing required property: type_: ' + content);
 		output.type_ = Number(output.type_);
 
@@ -605,7 +611,7 @@ class BaseItem extends BaseModel {
 	static updateSyncTimeQueries(syncTarget, item, syncTime, syncDisabled = false, syncDisabledReason = '') {
 		const itemType = item.type_;
 		const itemId = item.id;
-		if (!itemType || !itemId || syncTime === undefined) throw new Error('Invalid parameters in updateSyncTimeQueries()');
+		if (!itemType || !itemId || syncTime === undefined) throw new Error(sprintf('Invalid parameters in updateSyncTimeQueries(): %d, %s, %d', syncTarget, JSON.stringify(item), syncTime));
 
 		return [
 			{
@@ -688,11 +694,13 @@ class BaseItem extends BaseModel {
 	static async save(o, options = null) {
 		if (!options) options = {};
 
+		if (!('autoSaveRevision' in options)) options.autoSaveRevision = true;
+
 		if (options.userSideValidation === true) {
 			if (!!o.encryption_applied) throw new Error(_('Encrypted items cannot be modified'));
 		}
 
-		if (this.modelType() === BaseModel.TYPE_NOTE && o.id) await this.revisionService().createNoteRevisionsIfNoneFound([o.id]);
+		if (options.autoSaveRevision && this.modelType() === BaseModel.TYPE_NOTE && o.id) await this.revisionService().createNoteRevisionsIfNoneFound([o.id]);
 
 		return super.save(o, options);
 	}

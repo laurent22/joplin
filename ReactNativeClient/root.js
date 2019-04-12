@@ -22,6 +22,7 @@ const Tag = require('lib/models/Tag.js');
 const NoteTag = require('lib/models/NoteTag.js');
 const BaseItem = require('lib/models/BaseItem.js');
 const MasterKey = require('lib/models/MasterKey.js');
+const Revision = require('lib/models/Revision.js');
 const BaseModel = require('lib/BaseModel.js');
 const BaseService = require('lib/services/BaseService.js');
 const ResourceService = require('lib/services/ResourceService');
@@ -396,6 +397,7 @@ async function initialize(dispatch) {
 	BaseItem.loadClass('Tag', Tag);
 	BaseItem.loadClass('NoteTag', NoteTag);
 	BaseItem.loadClass('MasterKey', MasterKey);
+	BaseItem.loadClass('Revision', Revision);
 
 	const fsDriver = new FsDriverRN();
 

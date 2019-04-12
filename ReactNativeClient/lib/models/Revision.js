@@ -82,6 +82,7 @@ class Revision extends BaseItem {
 	}
 	
 	static async itemsWithRevisions(itemType, itemIds) {
+		if (!itemIds.length) return [];
 		const rows = await this.db().selectAll('SELECT distinct item_id FROM revisions WHERE item_type = ? AND item_id IN ("' + itemIds.join('","') + '")', [
 			itemType,
 		]);
