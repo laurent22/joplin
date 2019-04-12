@@ -362,6 +362,9 @@ class Application extends BaseApplication {
 							importOptions.path = path;
 							importOptions.format = module.format;
 							importOptions.destinationFolderId = !module.isNoteArchive && moduleSource === 'file' ? selectedFolderId : null;
+							importOptions.onError = (error) => {
+								console.warn(error);
+							}
 
 							const service = new InteropService();
 							try {

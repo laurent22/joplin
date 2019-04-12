@@ -95,6 +95,8 @@ async function saveNoteResources(note) {
 	let resourcesCreated = 0;
 	for (let i = 0; i < note.resources.length; i++) {
 		let resource = note.resources[i];
+		if (!resource.id) continue;
+
 		let toSave = Object.assign({}, resource);
 		delete toSave.data;
 
@@ -358,6 +360,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				noteResourceRecognition = null;
 			} else if (n == 'resource-attributes') {
 				noteResource.filename = noteResourceAttributes['file-name'];
+				if (noteResourceAttributes['source-url']) noteResource.sourceUrl = noteResourceAttributes['source-url'];
 				noteResourceAttributes = null;
 			} else if (n == 'note-attributes') {
 				note.latitude = noteAttributes.latitude;
@@ -389,7 +392,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					} catch (error) {
 						importOptions.onError(error);
 					}
-				} else {
+				} else if (noteResource.dataEncoding) {
 					importOptions.onError(new Error('Cannot decode resource with encoding: ' + noteResource.dataEncoding));
 					decodedData = noteResource.data; // Just put the encoded data directly in the file so it can, potentially, be manually decoded later
 				}
@@ -400,15 +403,22 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					resourceId = md5(decodedData);
 				}
 
-				let r = {
-					id: resourceId,
-					data: decodedData,
-					mime: noteResource.mime,
-					title: noteResource.filename ? noteResource.filename : '',
-					filename: noteResource.filename ? noteResource.filename : '',
-				};
+				if (!resourceId || !noteResource.data) {
+					const debugTemp = Object.assign({}, noteResource);
+					debugTemp.data = debugTemp.data ? debugTemp.data.substr(0, 32) + '...' : debugTemp.data;
+					importOptions.onError(new Error('This resource was not added because it has no ID or no content: ' + JSON.stringify(debugTemp)));
+				} else {
+					let r = {
+						id: resourceId,
+						data: decodedData,
+						mime: noteResource.mime,
+						title: noteResource.filename ? noteResource.filename : '',
+						filename: noteResource.filename ? noteResource.filename : '',
+					};
 
-				note.resources.push(r);
+					note.resources.push(r);
+				}
+
 				noteResource = null;
 			}
 		});
