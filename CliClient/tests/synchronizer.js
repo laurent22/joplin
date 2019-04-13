@@ -1256,4 +1256,47 @@ describe('Synchronizer', function() {
 		}
 	}));
 
+	it("should handle case when new rev is created on client, then older rev arrives later via sync", asyncTest(async () => {
+		// - C1 creates note 1
+		// - C1 modifies note 1 - REV1 created
+		// - C1 sync
+		// - C2 sync
+		// - C2 receives note 1
+		// - C2 modifies note 1 - REV2 created (but not based on REV1)
+		// - C2 receives REV1
+		//
+		// In that case, we need to make sure that REV1 and REV2 are both valid and can be retrieved.
+		// Even though REV1 was created before REV2, REV2 is *not* based on REV1. This is not ideal
+		// due to unecessary data being saved, but a possible edge case and we simply need to check
+		// all the data is valid.
+
+		const n1 = await Note.save({ title: 'note' });
+		await Note.save({ id: n1.id, title: 'note REV1' }); // REV CREATED - (auto created when first updated note without rev)
+		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1.id)).length).toBe(1);
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		synchronizer().testingHooks_ = ['skipRevisions'];
+		await synchronizer().start();
+		synchronizer().testingHooks_ = [];
+
+		await Note.save({ id: n1.id, title: 'note REV2' });  // REV CREATED - (auto created when first updated note without rev)
+		await revisionService().collectRevisions();  // REV CREATED - Following item change "update"
+		await synchronizer().start();
+
+		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
+		expect(revisions.length).toBe(3);
+
+		const titles = [];
+		for (let i = 0; i < revisions.length; i++) {
+			const revNote = await revisionService().revisionNote(revisions, i);
+			titles.push(revNote.title);
+		}
+
+		expect(titles.indexOf('note') >= 0).toBe(true);
+		expect(titles.indexOf('note REV1') >= 0).toBe(true);
+		expect(titles.indexOf('note REV2') >= 0).toBe(true);
+	}));
+
 });

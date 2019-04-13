@@ -536,6 +536,8 @@ class Synchronizer {
 							}
 						}
 
+						if (this.testingHooks_.indexOf('skipRevisions') >= 0 && content && content.type_ === BaseModel.TYPE_REVISION) action = null;
+
 						if (!action) continue;
 
 						this.logSyncOperation(action, local, remote, reason);
