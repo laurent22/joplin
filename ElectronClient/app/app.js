@@ -775,7 +775,7 @@ class Application extends BaseApplication {
 					click () { bridge().openExternal('https://joplinapp.org') }
 				}, {
 					label: _('Make a donation'),
-					click () { bridge().openExternal('https://joplinapp.org/donate') }
+					click () { bridge().openExternal('https://joplinapp.org/donate/') }
 				}, {
 					label: _('Check for updates...'),
 					visible: shim.isMac() ? false : true,

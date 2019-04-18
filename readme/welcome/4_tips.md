@@ -8,7 +8,7 @@ The first few notes should have given you an overview of the main functionalitie
 
 The Web Clipper is a browser extension that allows you to save web pages and screenshots from your browser. To start using it, open the Joplin desktop application, go to the Web Clipper Options and follow the instructions.
 
-More info on the official website: https://joplinapp.org/clipper
+More info on the official website: https://joplinapp.org/clipper/
 
 ## Attachments
 
@@ -58,7 +58,7 @@ Various other tricks are possible, such as using HTML, or customising the CSS. S
 
 - For general discussion about Joplin, user support, software development questions, and to discuss new features, go to the [Joplin Forum](https://discourse.joplin.cozic.net/). It is possible to login with your GitHub account.
 - The latest news are posted [on the Patreon page](https://www.patreon.com/joplin).
-- For bug reports and feature requests, go to the [GitHub Issue Tracker](https://joplinapp.org/issues).
+- For bug reports and feature requests, go to the [GitHub Issue Tracker](https://github.com/laurent22/joplin/issues).
 
 ## Donations
 

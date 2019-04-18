@@ -189,7 +189,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 				<div style={containerStyle}>
 					{<div style={{backgroundColor: theme.warningBackgroundColor, paddingLeft: 10, paddingRight: 10, paddingTop: 2, paddingBottom: 2 }}>
 						<p style={theme.textStyle}>
-							<span>{_('For more information about End-To-End Encryption (E2EE) and advices on how to enable it please check the documentation:')}</span> <a onClick={() => {bridge().openExternal('https://joplinapp.org/e2ee')}} href="#">https://joplinapp.org/e2ee</a>
+							<span>{_('For more information about End-To-End Encryption (E2EE) and advices on how to enable it please check the documentation:')}</span> <a onClick={() => {bridge().openExternal('https://joplinapp.org/e2ee/')}} href="#">https://joplinapp.org/e2ee/</a>
 						</p>
 					</div>}
 					<h1 style={theme.h1Style}>{_('Status')}</h1>
