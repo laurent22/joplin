@@ -114,23 +114,33 @@ class NoteTextComponent extends React.Component {
 		this.onTodoToggle_ = (event) => { if (event.noteId === this.props.noteId) this.scheduleReloadNote(this.props); }
 
 		this.onEditorPaste_ = async (event = null) => {
+			let imageFormat;
+
 			const formats = clipboard.availableFormats();
 			for (let i = 0; i < formats.length; i++) {
 				const format = formats[i].toLowerCase();
 				const formatType = format.split('/')[0]
 
-				if (formatType === 'image') {
-					if (event) event.preventDefault();
-
-					const image = clipboard.readImage();
-
-					const fileExt = mimeUtils.toFileExtension(format);
-					const filePath = Setting.value('tempDir') + '/' + md5(Date.now()) + '.' + fileExt;
-
-					await shim.writeImageToFile(image, format, filePath);
-					await this.commandAttachFile([filePath]);
-					await shim.fsDriver().remove(filePath);
+				if (format === 'text/plain') {
+					return;
 				}
+
+				if (formatType === 'image') {
+					imageFormat = format;
+				}
+			}
+
+			if (imageFormat) {
+				if (event) event.preventDefault();
+
+				const image = clipboard.readImage();
+
+				const fileExt = mimeUtils.toFileExtension(imageFormat);
+				const filePath = Setting.value('tempDir') + '/' + md5(Date.now()) + '.' + fileExt;
+
+				await shim.writeImageToFile(image, imageFormat, filePath);
+				await this.commandAttachFile([filePath]);
+				await shim.fsDriver().remove(filePath);
 			}
 		}
 
