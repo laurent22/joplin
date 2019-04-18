@@ -2,7 +2,7 @@
 
 The Web Clipper is a browser extension that allows you to save web pages and screenshots from your browser. To start using it, open the Joplin desktop application, go to the **Web Clipper Options** and follow the instructions.
 
-<img src="https://joplin.cozic.net/images/WebExtensionScreenshot.png" style="max-width: 50%; border: 1px solid gray;">
+<img src="https://joplinapp.org/images/WebExtensionScreenshot.png" style="max-width: 50%; border: 1px solid gray;">
 
 # Troubleshooting the web clipper service
 
@@ -43,4 +43,4 @@ Copy and paste the content of both the debugging window and the Firefox console,
 
 # Using the Web Clipper service
 
-The Web Clipper service can be used to create, modify or delete notes, notebooks, tags, etc. from any other application. It exposes an API with a number of methods to manage Joplin's data. For more information about this API and how to use it, please check the [Joplin API documentation](https://joplin.cozic.net/api).
+The Web Clipper service can be used to create, modify or delete notes, notebooks, tags, etc. from any other application. It exposes an API with a number of methods to manage Joplin's data. For more information about this API and how to use it, please check the [Joplin API documentation](https://joplinapp.org/api).

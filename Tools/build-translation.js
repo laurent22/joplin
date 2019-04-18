@@ -163,7 +163,7 @@ async function translationStatus(isDefault, poFile) {
 }
 
 function flagImageUrl(locale) {
-	const baseUrl = 'https://joplin.cozic.net/images/flags';
+	const baseUrl = 'https://joplinapp.org/images/flags';
 	if (locale === 'eu') return baseUrl + '/es/basque_country.png';
 	if (locale === 'gl_ES') return baseUrl + '/es/galicia.png';
 	if (locale === 'ca') return baseUrl + '/es/catalonia.png';

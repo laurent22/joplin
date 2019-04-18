@@ -58,7 +58,7 @@ class HeaderComponent extends React.Component {
 		}
 
 		this.searchUsageLink_click = event => {
-			bridge().openExternal('https://joplin.cozic.net/#searching');
+			bridge().openExternal('https://joplinapp.org/#searching');
 		}
 	}
 
