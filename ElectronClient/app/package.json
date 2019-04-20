@@ -72,7 +72,7 @@
     "app-builder-bin": "^1.9.11",
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.24.1",
-    "electron": "4.0.5",
+    "electron": "^4.1.4",
     "electron-builder": "20.38.5",
     "electron-rebuild": "^1.8.4"
   },
@@ -85,7 +85,7 @@
     "app-module-path": "^2.2.0",
     "async-mutex": "^0.1.3",
     "base-64": "^0.1.0",
-    "chokidar": "^2.1.2",
+    "chokidar": "^2.1.5",
     "compare-versions": "^3.2.1",
     "diacritics": "^1.3.0",
     "electron-context-menu": "^0.9.1",
