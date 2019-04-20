@@ -3,21 +3,28 @@ const Setting = require('lib/models/Setting.js');
 
 class FoldersScreenUtils {
 
-	static async refreshFolders() {
+	static async allForDisplay(options = {}) {
 		const orderDir = Setting.value('folders.sortOrder.reverse') ? 'DESC' : 'ASC';
 
-		let folders = await Folder.all({
-			includeConflictFolder: true,
+		const folderOptions = Object.assign({}, {
 			caseInsensitive: true,
 			order: [{
 				by: 'title',
 				dir: orderDir,
 			}]
-		});
+		}, options);
+
+		let folders = await Folder.all(folderOptions);
 
 		if (Setting.value('folders.sortOrder.field') === 'last_note_user_updated_time') {
 			folders = await Folder.orderByLastModified(folders, orderDir);
 		}
+
+		return folders;
+	}
+
+	static async refreshFolders() {
+		const folders = await this.allForDisplay({ includeConflictFolder: true });
 
 		this.dispatch({
 			type: 'FOLDER_UPDATE_ALL',

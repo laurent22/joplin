@@ -189,8 +189,8 @@ class Folder extends BaseItem {
 		return output;
 	}
 
-	static async allAsTree(options = null) {
-		const all = await this.all(options);
+	static async allAsTree(folders = null, options = null) {
+		const all = folders ? folders : await this.all(options);
 
 		// https://stackoverflow.com/a/49387427/561309
 		function getNestedChildren(models, parentId) {
