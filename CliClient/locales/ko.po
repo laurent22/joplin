@@ -986,6 +986,23 @@ msgstr "URL"
 msgid "Note properties"
 msgstr "노트 속성"
 
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr ""
+
+#, fuzzy
+msgid "This note has no history"
+msgstr "노트가 변경되었습니다:"
+
+msgid "Restore"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
+
 msgid "Open..."
 msgstr "열기..."
 

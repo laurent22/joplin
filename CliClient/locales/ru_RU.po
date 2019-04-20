@@ -1002,6 +1002,23 @@ msgstr "URL"
 msgid "Note properties"
 msgstr "Свойства заметки"
 
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr ""
+
+#, fuzzy
+msgid "This note has no history"
+msgstr "Эта заметка была изменена:"
+
+msgid "Restore"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
+
 msgid "Open..."
 msgstr "Открыть..."
 

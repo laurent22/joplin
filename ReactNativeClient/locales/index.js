@@ -5,6 +5,7 @@ locales['ca'] = require('./ca.json');
 locales['cs_CZ'] = require('./cs_CZ.json');
 locales['da_DK'] = require('./da_DK.json');
 locales['de_DE'] = require('./de_DE.json');
+locales['en_US'] = require('./en_US.json');
 locales['es_ES'] = require('./es_ES.json');
 locales['eu'] = require('./eu.json');
 locales['fr_FR'] = require('./fr_FR.json');
