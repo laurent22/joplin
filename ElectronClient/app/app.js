@@ -449,7 +449,7 @@ class Application extends BaseApplication {
 
 		const printItem = {
 			label: _('Print'),
-			// accelerator: 'CommandOrControl+P',
+			accelerator: 'CommandOrControl+P',
 			screens: ['Main'],
 			click: () => {
 				this.dispatch({
