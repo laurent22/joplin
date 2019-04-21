@@ -4,9 +4,11 @@ const Note = require('lib/models/Note');
 const Resource = require('lib/models/Resource');
 const BaseModel = require('lib/BaseModel');
 const BaseService = require('lib/services/BaseService');
+const SearchEngine = require('lib/services/SearchEngine');
 const Setting = require('lib/models/Setting');
 const { shim } = require('lib/shim');
 const ItemChangeUtils = require('lib/services/ItemChangeUtils');
+const { sprintf } = require('sprintf-js');
 
 class ResourceService extends BaseService {
 
@@ -14,6 +16,8 @@ class ResourceService extends BaseService {
 		this.logger().info('ResourceService::indexNoteResources: Start');
 
 		await ItemChange.waitForAllSaved();
+
+		let foundNoteWithEncryption = false;
 
 		while (true) {
 			const changes = await ItemChange.modelSelectAll(`
@@ -28,7 +32,7 @@ class ResourceService extends BaseService {
 			if (!changes.length) break;
 
 			const noteIds = changes.map(a => a.item_id);
-			const notes = await Note.modelSelectAll('SELECT id, title, body FROM notes WHERE id IN ("' + noteIds.join('","') + '")');
+			const notes = await Note.modelSelectAll('SELECT id, title, body, encryption_applied FROM notes WHERE id IN ("' + noteIds.join('","') + '")');
 
 			const noteById = (noteId) => {
 				for (let i = 0; i < notes.length; i++) {
@@ -47,9 +51,18 @@ class ResourceService extends BaseService {
 
 				if (change.type === ItemChange.TYPE_CREATE || change.type === ItemChange.TYPE_UPDATE) {
 					const note = noteById(change.item_id);
+					
+					if (!!note.encryption_applied) {
+						// If we hit an encrypted note, abort processing for now.
+						// Note will eventually get decrypted and processing can resume then.
+						// This is a limitation of the change tracking system - we cannot skip a change
+						// and keep processing the rest since we only keep track of "lastProcessedChangeId".
+						foundNoteWithEncryption = true;
+						break;
+					}
+
 					if (note) {
-						const resourceIds = await Note.linkedResourceIds(note.body);
-						await NoteResource.setAssociatedResources(note.id, resourceIds);
+						await this.setAssociatedResources_(note);
 					} else {
 						this.logger().warn('ResourceService::indexNoteResources: A change was recorded for a note that has been deleted: ' + change.item_id);
 					}
@@ -61,6 +74,8 @@ class ResourceService extends BaseService {
 
 				Setting.setValue('resourceService.lastProcessedChangeId', change.id);
 			}
+
+			if (foundNoteWithEncryption) break;
 		}
 
 		await Setting.saveAll();
@@ -72,11 +87,26 @@ class ResourceService extends BaseService {
 		this.logger().info('ResourceService::indexNoteResources: Completed');
 	}
 
+	async setAssociatedResources_(note) {
+		const resourceIds = await Note.linkedResourceIds(note.body);
+		await NoteResource.setAssociatedResources(note.id, resourceIds);
+	}
+
 	async deleteOrphanResources(expiryDelay = null) {
 		const resourceIds = await NoteResource.orphanResources(expiryDelay);
 		this.logger().info('ResourceService::deleteOrphanResources:', resourceIds);
 		for (let i = 0; i < resourceIds.length; i++) {
-			await Resource.delete(resourceIds[i]);
+			const resourceId = resourceIds[i];
+			const results = await SearchEngine.instance().search(resourceId);
+			if (results.length) {
+				const note = await Note.load(results[0].id);
+				if (note) {
+					this.logger().info(sprintf('ResourceService::deleteOrphanResources: Skipping deletion of resource %s because it is still referenced in note %s. Re-indexing note content to fix the issue.', resourceId, note.id));
+					await this.setAssociatedResources_(note);
+				}
+			} else {
+				await Resource.delete(resourceId);
+			}
 		}
 	}
 
