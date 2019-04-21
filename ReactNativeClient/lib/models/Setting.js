@@ -96,6 +96,7 @@ class Setting extends BaseModel {
 					'body': _('Focus body'),
 				};
 			}},
+			'markdown.softbreaks': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable traditional markdown line-break behaviour') },
 			'markdown.plugin.katex': {value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable math expressions')},
 			'markdown.plugin.mark': {value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ==mark== syntax')},
 			'markdown.plugin.footnote': {value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable footnotes')},
@@ -192,7 +193,6 @@ class Setting extends BaseModel {
 			'searchEngine.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
 			'searchEngine.initialIndexingDone': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'welcome.wasBuilt': { value: false, type: Setting.TYPE_BOOL, public: false },
-			'markdown.softbreaks': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable soft breaks'), description: () => _('Traditional markdown line-break behaviour.') },
 		};
 
 		return this.metadata_;
