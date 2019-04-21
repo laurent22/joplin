@@ -986,23 +986,6 @@ msgstr ""
 msgid "Note properties"
 msgstr ""
 
-#, javascript-format
-msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr ""
-
-#, fuzzy
-msgid "This note has no history"
-msgstr "Poznámka byla upravena:"
-
-msgid "Restore"
-msgstr ""
-
-#, javascript-format
-msgid ""
-"Click \"%s\" to restore the note. It will be copied in the notebook named "
-"\"%s\". The current version of the note will not be replaced or modified."
-msgstr ""
-
 msgid "Open..."
 msgstr "Otevřít..."
 
@@ -1156,9 +1139,6 @@ msgstr "Zdroje: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Prosím vyberte, kam má být stav synchronizace exportován"
-
-msgid "Table of contents"
-msgstr ""
 
 msgid "Add or remove tags"
 msgstr "Přidat či odebrat tagy"
@@ -1410,6 +1390,9 @@ msgstr "Vybrat text poznámky"
 
 msgid "When creating a new note:"
 msgstr "Při vytváření nové poznámky:"
+
+msgid "Enable soft breaks"
+msgstr ""
 
 #, fuzzy
 msgid "Enable math expressions"
@@ -1912,6 +1895,10 @@ msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na tlačítko (+
 
 msgid "Welcome"
 msgstr "Vítejte"
+
+#, fuzzy
+#~ msgid "This note has no history"
+#~ msgstr "Poznámka byla upravena:"
 
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "

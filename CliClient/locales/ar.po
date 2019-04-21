@@ -977,23 +977,6 @@ msgstr "عنوان URL"
 msgid "Note properties"
 msgstr "خصائص الملاحظة"
 
-#, javascript-format
-msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr ""
-
-#, fuzzy
-msgid "This note has no history"
-msgstr "جرى تعديل هذه الملاحظة:"
-
-msgid "Restore"
-msgstr ""
-
-#, javascript-format
-msgid ""
-"Click \"%s\" to restore the note. It will be copied in the notebook named "
-"\"%s\". The current version of the note will not be replaced or modified."
-msgstr ""
-
 msgid "Open..."
 msgstr "فتح..."
 
@@ -1149,9 +1132,6 @@ msgstr "جلب الموارد: %d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "فضلاً اختر أين سيتم تصدير حالة المزامنة"
-
-msgid "Table of contents"
-msgstr ""
 
 msgid "Add or remove tags"
 msgstr "إضافة أو حذف وسوم"
@@ -1396,6 +1376,9 @@ msgstr "التركيز على المتن"
 
 msgid "When creating a new note:"
 msgstr "عند إنشاء ملاحظة جديدة:"
+
+msgid "Enable soft breaks"
+msgstr ""
 
 #, fuzzy
 msgid "Enable math expressions"
@@ -1896,6 +1879,10 @@ msgstr "ليس لديك دفاتر ملاحظات حالياً. أنشئ واح�
 
 msgid "Welcome"
 msgstr "مرحباً"
+
+#, fuzzy
+#~ msgid "This note has no history"
+#~ msgstr "جرى تعديل هذه الملاحظة:"
 
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "

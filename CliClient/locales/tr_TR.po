@@ -979,23 +979,6 @@ msgstr "URL"
 msgid "Note properties"
 msgstr "Not özellikleri"
 
-#, javascript-format
-msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr ""
-
-#, fuzzy
-msgid "This note has no history"
-msgstr "Bu not değiştirildi:"
-
-msgid "Restore"
-msgstr ""
-
-#, javascript-format
-msgid ""
-"Click \"%s\" to restore the note. It will be copied in the notebook named "
-"\"%s\". The current version of the note will not be replaced or modified."
-msgstr ""
-
 msgid "Open..."
 msgstr "Aç..."
 
@@ -1152,9 +1135,6 @@ msgstr "Kaynaklar alınıyor: %d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Lütfen senkronizasyon durumunun nereye aktarılacağını seçin"
-
-msgid "Table of contents"
-msgstr ""
 
 #, fuzzy
 msgid "Add or remove tags"
@@ -1402,6 +1382,9 @@ msgstr "Gövde kısmına odaklan"
 
 msgid "When creating a new note:"
 msgstr "Yeni bir not oluştururken:"
+
+msgid "Enable soft breaks"
+msgstr ""
 
 #, fuzzy
 msgid "Enable math expressions"
@@ -1911,6 +1894,10 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Hoşgeldiniz"
+
+#, fuzzy
+#~ msgid "This note has no history"
+#~ msgstr "Bu not değiştirildi:"
 
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "

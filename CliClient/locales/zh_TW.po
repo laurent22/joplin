@@ -961,23 +961,6 @@ msgstr ""
 msgid "Note properties"
 msgstr ""
 
-#, javascript-format
-msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr ""
-
-#, fuzzy
-msgid "This note has no history"
-msgstr "此記事已被修改:"
-
-msgid "Restore"
-msgstr ""
-
-#, javascript-format
-msgid ""
-"Click \"%s\" to restore the note. It will be copied in the notebook named "
-"\"%s\". The current version of the note will not be replaced or modified."
-msgstr ""
-
 msgid "Open..."
 msgstr "開啟..."
 
@@ -1129,9 +1112,6 @@ msgstr "資源: %d。"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "請選擇將同步狀態導出到的位置"
-
-msgid "Table of contents"
-msgstr ""
 
 msgid "Add or remove tags"
 msgstr "新增或移除標籤"
@@ -1373,6 +1353,9 @@ msgstr "游標置於內文"
 
 msgid "When creating a new note:"
 msgstr "當新增記事時:"
+
+msgid "Enable soft breaks"
+msgstr ""
 
 #, fuzzy
 msgid "Enable math expressions"
@@ -1870,6 +1853,10 @@ msgstr "您當前沒有任何筆記本。通過按一下 (+) 鍵去建立一本�
 
 msgid "Welcome"
 msgstr "歡迎"
+
+#, fuzzy
+#~ msgid "This note has no history"
+#~ msgstr "此記事已被修改:"
 
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "

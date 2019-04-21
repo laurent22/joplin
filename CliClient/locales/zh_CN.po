@@ -947,23 +947,6 @@ msgstr "URL"
 msgid "Note properties"
 msgstr "笔记属性"
 
-#, javascript-format
-msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr ""
-
-#, fuzzy
-msgid "This note has no history"
-msgstr "该笔记已被修改："
-
-msgid "Restore"
-msgstr ""
-
-#, javascript-format
-msgid ""
-"Click \"%s\" to restore the note. It will be copied in the notebook named "
-"\"%s\". The current version of the note will not be replaced or modified."
-msgstr ""
-
 msgid "Open..."
 msgstr "打开…"
 
@@ -1118,9 +1101,6 @@ msgstr "正在获取资源：%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "请选择同步状态的导出位置"
-
-msgid "Table of contents"
-msgstr "目录"
 
 msgid "Add or remove tags"
 msgstr "添加或删除标签"
@@ -1361,6 +1341,10 @@ msgstr "聚焦正文"
 
 msgid "When creating a new note:"
 msgstr "当新建笔记时："
+
+#, fuzzy
+msgid "Enable soft breaks"
+msgstr "目录"
 
 #, fuzzy
 msgid "Enable math expressions"
@@ -1857,6 +1841,13 @@ msgstr "您目前未有笔记本。点击 (+) 按钮创建。"
 
 msgid "Welcome"
 msgstr "欢迎"
+
+#, fuzzy
+#~ msgid "This note has no history"
+#~ msgstr "该笔记已被修改："
+
+#~ msgid "Table of contents"
+#~ msgstr "目录"
 
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "
