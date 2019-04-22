@@ -653,7 +653,7 @@ msgid "About Joplin"
 msgstr "Über Joplin"
 
 msgid "Preferences..."
-msgstr ""
+msgstr "Einstellungen..."
 
 msgid "Check for updates..."
 msgstr "Überprüfe auf Aktualisierungen..."
@@ -1214,9 +1214,11 @@ msgid ""
 "Type a note title to jump to it. Or type # followed by a tag name, or @ "
 "followed by a notebook name."
 msgstr ""
+"Tippe einen Notiz Titel um hinzuspringen. Oder tippe # gefolgt von einem "
+"Schlagwort, oder @ gefolgt von einem Notizbuch-Namen."
 
 msgid "Goto Anything..."
-msgstr ""
+msgstr "Gehe zu..."
 
 #, javascript-format
 msgid "Usage: %s"
@@ -1425,45 +1427,41 @@ msgstr "Fokussiere Inhalt"
 msgid "When creating a new note:"
 msgstr "Wenn eine neue Notiz erstellt wird:"
 
-#, fuzzy
 msgid "Enable soft breaks"
-msgstr "Inhaltsverzeichnis"
+msgstr "Aktiviere weiche Zeilenumbrüche"
 
-#, fuzzy
 msgid "Enable math expressions"
-msgstr "Verschlüsselung aktivieren"
+msgstr "Aktiviere mathematische Ausdrücke"
 
 msgid "Enable ==mark== syntax"
-msgstr ""
+msgstr "Aktiviere ==mark== Syntax"
 
-#, fuzzy
 msgid "Enable footnotes"
-msgstr "Inhaltsverzeichnis"
+msgstr "Aktiviere Fußnoten"
 
-#, fuzzy
 msgid "Enable table of contents extension"
-msgstr "Inhaltsverzeichnis"
+msgstr "Aktiviere Inhaltsverzeichnis Erweiterung"
 
 msgid "Enable ~sub~ syntax"
-msgstr ""
+msgstr "Aktiviere ~sub~ Syntax"
 
 msgid "Enable ^sup^ syntax"
-msgstr ""
+msgstr "Aktiviere ^sup^ Syntax"
 
 msgid "Enable deflist syntax"
-msgstr ""
+msgstr "Aktiviere deflist Syntax"
 
 msgid "Enable abbreviation syntax"
-msgstr ""
+msgstr "Aktiviere abbreviation Syntax"
 
 msgid "Enable markdown emoji"
-msgstr ""
+msgstr "Aktiviere markdown emoji"
 
 msgid "Enable ++insert++ syntax"
-msgstr ""
+msgstr "Aktiviere ++insert++ Syntax"
 
 msgid "Enable multimarkdown table extension"
-msgstr ""
+msgstr "Aktiviere multimarkdown Tabellen Erweiterung"
 
 msgid "Show tray icon"
 msgstr "Zeige Tray-Icon"
@@ -1605,7 +1603,7 @@ msgid "Note"
 msgstr "Notiz"
 
 msgid "Plugins"
-msgstr ""
+msgstr "Zusatzprogramme"
 
 # 'Applikation' or 'Anwendung' - both translations are correct.
 msgid "Application"
