@@ -20,9 +20,9 @@ Three types of applications are available: for the **desktop** (Windows, macOS a
 
 Operating System | Download | Alternative
 -----------------|--------|-------------------
-Windows (32 and 64-bit)         | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.142/Joplin-Setup-1.0.142.exe'><img alt='Get it on Windows' height="40px" src='https://joplinapp.org/images/BadgeWindows.png'/></a> | or Get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.142/JoplinPortable.exe'>Portable version</a><br>(to run from a USB key, etc.)
-macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.142/Joplin-1.0.142.dmg'><img alt='Get it on macOS' height="40px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a> |
-Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.142/Joplin-1.0.142-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://joplinapp.org/images/BadgeLinux.png'/></a> | An Arch Linux package<br>[is also available](#terminal-application).
+Windows (32 and 64-bit)         | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.143/Joplin-Setup-1.0.143.exe'><img alt='Get it on Windows' height="40px" src='https://joplinapp.org/images/BadgeWindows.png'/></a> | or Get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.143/JoplinPortable.exe'>Portable version</a><br>(to run from a USB key, etc.)
+macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.143/Joplin-1.0.143.dmg'><img alt='Get it on macOS' height="40px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a> |
+Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.143/Joplin-1.0.143-x86_64.AppImage'><img alt='Get it on Linux' height="40px" src='https://joplinapp.org/images/BadgeLinux.png'/></a> | An Arch Linux package<br>[is also available](#terminal-application).
 
 The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
 
