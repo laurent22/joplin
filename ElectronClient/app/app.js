@@ -594,7 +594,7 @@ class Application extends BaseApplication {
 					label: _('Close Window'),
 					platforms: ['darwin'],
 					accelerator: 'Command+W',
-					click: () => { bridge().electronApp().hide() }
+					selector: 'performClose:',
 				}, {
 					type: 'separator',
 				}, {
