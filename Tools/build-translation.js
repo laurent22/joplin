@@ -156,6 +156,11 @@ async function translationStatus(isDefault, poFile) {
 	translatorName = translatorName.replace(/ </, ' (');
 	translatorName = translatorName.replace(/>/, ')');
 
+	// hack to show en_US as 100%
+	if (poFile.endsWith("en_US.po")) {
+		isDefault = true;
+	}
+
 	return {
 		percentDone: isDefault ? 100 : percentDone,
 		translatorName: translatorName,
