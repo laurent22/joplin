@@ -156,19 +156,20 @@ async function translationStatus(isDefault, poFile) {
 	translatorName = translatorName.replace(/ </, ' (');
 	translatorName = translatorName.replace(/>/, ')');
 
-	// hack to show en_US as 100%
+	let isAlways100 = false;
 	if (poFile.endsWith("en_US.po")) {
-		isDefault = true;
+		isAlways100 = true;
 	}
 
 	return {
-		percentDone: isDefault ? 100 : percentDone,
+		percentDone: isDefault || isAlways100 ? 100 : percentDone,
 		translatorName: translatorName,
 	};
 }
 
 function flagImageUrl(locale) {
 	const baseUrl = 'https://joplinapp.org/images/flags';
+	if (locale === 'ar') return baseUrl + '/country-4x3/arableague.png';
 	if (locale === 'eu') return baseUrl + '/es/basque_country.png';
 	if (locale === 'gl_ES') return baseUrl + '/es/galicia.png';
 	if (locale === 'ca') return baseUrl + '/es/catalonia.png';
