@@ -334,6 +334,8 @@ class MainScreenComponent extends React.Component {
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
+			marginLeft: -5,
+			marginRight: -5,
 		};
 
 		this.styles_.noteText = {
