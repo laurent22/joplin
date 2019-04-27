@@ -77,7 +77,7 @@ const lightStyle = {
 	urlColor: '#155BDA',
 
 	backgroundColor2: "#162B3D",
-	color2: "#ffffff",
+	color2: "#f5f5f5",
 	selectedColor2: "#0269C2",
 	colorError2: "#ff6c6c",
 
