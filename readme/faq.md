@@ -93,3 +93,7 @@ Joplin relies on Firebase to enable reliable notifications on Android. Since F-D
 # Why is it named Joplin?
 
 The name comes from the composer and pianist [Scott Joplin](https://en.wikipedia.org/wiki/Scott_Joplin), which I often listen to. His name is also easy to remember and type so it fell like a good choice. And, to quote a user on Hacker News, "though Scott Joplin's ragtime musical style has a lot in common with some very informal music, his own approach was more educated, sophisticated, and precise. Every note was in its place for a reason, and he was known to prefer his pieces to be performed exactly as written. So you could say that compared to the people who came before him, his notes were more organized".
+
+# How can I use self-signed SSL certificates on Android?
+
+If you want to serve using https but can't or don't want to use SSL certificates signed by trusted certificate authorities (like "Let's Encrypt"), it's possible to generate a custom CA and sign your certificates with it. You can generate the CA and certificates using [openssl](https://gist.github.com/fntlnz/cf14feb5a46b2eda428e000157447309), but I like to use a tool called [mkcert](https://github.com/FiloSottile/mkcert) for it's simplicity. Finally, you have to add your CA certificate to Android settings so that Android can recognize the certificates you signed with your CA as valid ([link](https://support.google.com/nexus/answer/2844832?hl=en-GB)).
