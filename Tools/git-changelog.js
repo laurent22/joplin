@@ -1,5 +1,9 @@
 "use strict"
 
+// Supported commit formats:
+
+// (Desktop|Mobile|Android|iOS[CLI): (New|Improved|Fixed): Some message..... (#ISSUE)
+
 // Requires git2json: https://github.com/tarmstrong/git2json
 
 require('app-module-path').addPath(__dirname + '/../ReactNativeClient');
@@ -8,6 +12,7 @@ const rootDir = __dirname + '/..';
 const { basename, dirname, filename, fileExtension } = require(rootDir + '/ReactNativeClient/lib/path-utils.js');
 const fs = require('fs-extra');
 const { execCommand } = require('./tool-utils.js');
+const { sprintf } = require('sprintf-js');
 
 async function gitTags() {
 	const r = await execCommand('git tag --format="%(objectname) %(refname:short)" --sort=-creatordate');
@@ -97,9 +102,60 @@ function formatCommitMessage(msg) {
 	}
 
 	output = output.split('\n')[0].trim();
-	output = capitalizeFirstLetter(output);
 
-	output = output.replace(/Fixes #(\d+)(.*)/, "Fix #$1$2");
+	const detectType = msg => {
+		msg = msg.trim().toLowerCase();
+
+		if (msg.indexOf('fix') === 0) return 'fixed';
+		if (msg.indexOf('add') === 0) return 'new';
+		if (msg.indexOf('change') === 0) return 'improved';
+		if (msg.indexOf('update') === 0) return 'improved';
+		if (msg.indexOf('improve') === 0) return 'improved';
+
+		return 'improved';
+	}
+
+	const parseCommitMessage = (msg) => {
+		const parts = msg.split(':');
+		const defaultType = 'improved';
+
+		if (parts.length === 1) {
+			return {
+				type: detectType(msg),
+				message: msg.trim(),
+			};
+		}
+
+		const t = parts[0].trim().toLowerCase();
+
+		parts.splice(0, 1);
+		const message = parts.join(':').trim();
+
+		let type = null;
+
+		if (t.indexOf('fix') === 0) type = 'fixed';
+		if (t.indexOf('new') === 0) type = 'new';
+		if (t.indexOf('improved') === 0) type = 'improved';
+
+		if (!type) type = detectType(message);
+	
+		let issueNumber = output.match(/#(\d+)/);
+		issueNumber = issueNumber && issueNumber.length >= 2 ? issueNumber[1] : null;
+
+		return {
+			type: type,
+			message: message,
+			issueNumber: issueNumber,
+		};
+	}
+
+	const commitMessage = parseCommitMessage(output);
+
+	output = capitalizeFirstLetter(commitMessage.type) + ': ' + capitalizeFirstLetter(commitMessage.message);
+	if (commitMessage.issueNumber) {
+		const formattedIssueNum = '(#' + commitMessage.issueNumber + ')'
+		if (output.indexOf(formattedIssueNum) < 0) output += ' ' + formattedIssueNum;
+	}
 
 	return output;
 }
@@ -141,18 +197,25 @@ async function main() {
 	const logsSinceTags = await gitLogSinceTag(logs, sinceTagHash);
 	const filteredLogs = filterLogs(logsSinceTags, platform);
 
-	const changelog = createChangeLog(filteredLogs);
-	changelog.sort((a, b) => {
-		a = a.toLowerCase();
-		b = b.toLowerCase();
+	let changelog = createChangeLog(filteredLogs);
 
-		const aIsFix = a.indexOf('fix') === 0;
-		const bIsFix = b.indexOf('fix') === 0;
+	const changelogFixes = [];
+	const changelogImproves = [];
+	const changelogNews = [];
 
-		if (aIsFix && bIsFix) return 0;
-		if (aIsFix) return +1;
-		return -1;
-	});	
+	for (const l of changelog) {
+		if (l.indexOf('Fix') === 0) {
+			changelogFixes.push(l);
+		} else if (l.indexOf('Improve') === 0) {
+			changelogImproves.push(l);
+		} else if (l.indexOf('New') === 0) {
+			changelogNews.push(l);
+		} else {
+			throw new Error('Invalid changelog line: ' + l);
+		}
+	}
+
+	changelog = [].concat(changelogNews).concat(changelogImproves).concat(changelogFixes);
 
 	const changelogString = changelog.map(l => '- ' + l);
 	console.info(changelogString.join('\n'));
