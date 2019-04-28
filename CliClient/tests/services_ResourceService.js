@@ -1,7 +1,7 @@
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
+const { asyncTest, revisionService, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 const InteropService = require('lib/services/InteropService.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
@@ -144,6 +144,15 @@ describe('services_ResourceService', function() {
 		const after = (await NoteResource.all())[0];
 
 		expect(before.last_seen_time).toBe(after.last_seen_time);
+	}));
+
+	it('should create revisions for old notes without revisions', asyncTest(async () => {
+		// "old notes" are notes that existed before the revision service existed
+		const n1 = await Note.save({ title: 'note' });
+		await sleep(0.1);
+		Setting.setValue('revisionService.installedTime', Date.now());
+		await Note.save({ id: n1.id, title: 'note REV1' });
+		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1.id)).length).toBe(1);
 	}));
 
 });

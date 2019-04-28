@@ -196,6 +196,7 @@ class Setting extends BaseModel {
 
 			'revisionService.enabled': { section: 'revisionService', value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Enable note history') },
 			'revisionService.ttlDays': { section: 'revisionService', value: 90, type: Setting.TYPE_INT, public: true, minimum: 1, label: () => _('Number of days the history of a note should be kept') },
+			'revisionService.installedTime': { section: 'revisionService', value: 0, type: Setting.TYPE_INT, public: false },
 
 			'welcome.wasBuilt': { value: false, type: Setting.TYPE_BOOL, public: false },
 		};

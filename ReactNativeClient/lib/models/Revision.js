@@ -67,6 +67,15 @@ class Revision extends BaseItem {
 		return output;
 	}
 
+	static async countRevisions(itemType, itemId) {
+		const r = await this.db().selectOne('SELECT count(*) as total FROM revisions WHERE item_type = ? AND item_id = ?', [
+			itemType,
+			itemId,
+		]);
+
+		return r ? r.total : 0;
+	}
+
 	static latestRevision(itemType, itemId) {
 		return this.modelSelectOne('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? ORDER BY item_updated_time DESC LIMIT 1', [
 			itemType,

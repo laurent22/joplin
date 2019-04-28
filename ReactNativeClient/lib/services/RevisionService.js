@@ -13,6 +13,16 @@ const ArrayUtils = require('lib/ArrayUtils.js');
 
 class RevisionService extends BaseService {
 
+	constructor() {
+		super();
+
+		if (!Setting.value('revisionService.installedTime')) Setting.setValue('revisionService.installedTime', Date.now());
+	}
+
+	installedTime() {
+		return Setting.value('revisionService.installedTime');
+	}
+
 	static instance() {
 		if (this.instance_) return this.instance_;
 		this.instance_ = new RevisionService();
@@ -72,22 +82,19 @@ class RevisionService extends BaseService {
 		}
 	}
 
-	async createNoteRevisionsIfNoneFound(noteIds) {
-		noteIds = noteIds.slice();
+	async createNoteRevisionIfNoneFound(noteId, cutOffDate) {
+		const count = await Revision.countRevisions(BaseModel.TYPE_NOTE, noteId);
+		if (count) return;
 
-		while (noteIds.length) {
-			let ids = noteIds.splice(0, 100);
-			ids = await Revision.itemsWithNoRevisions(BaseModel.TYPE_NOTE, ids);
-
-			for (const id of ids) {
-				const note = await Note.load(id);
-				if (!note) {
-					this.logger().warn('RevisionService:createNoteRevisionsIfNoneFound: Could not find note ' + id);
-				} else {
-					await this.createNoteRevision(note);
-				}
-			}
+		const note = await Note.load(noteId);
+		if (!note) {
+			this.logger().warn('RevisionService:createNoteRevisionIfNoneFound: Could not find note ' + noteId);
+			return;
 		}
+
+		if (note.updated_time > cutOffDate) return;
+
+		await this.createNoteRevision(note);
 	}
 
 	async collectRevisions() {

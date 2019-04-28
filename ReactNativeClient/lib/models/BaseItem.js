@@ -694,9 +694,13 @@ class BaseItem extends BaseModel {
 			if (!!o.encryption_applied) throw new Error(_('Encrypted items cannot be modified'));
 		}
 
-		// We only auto save a revision if is *not* a new note.
+		// We only auto save a revision if it is *not* a new note, and only if the note was
+		// created before the revision feature existed. This is so we keep a version of the original note,
+		// which can potentially be quite old.
 		// New notes either do not have an ID, or have one but with the "isNew" option. Both of these should not generate a revision.
-		if (options.autoSaveRevision && this.modelType() === BaseModel.TYPE_NOTE && o.id && options.isNew !== true) await this.revisionService().createNoteRevisionsIfNoneFound([o.id]);
+		if (options.autoSaveRevision && this.modelType() === BaseModel.TYPE_NOTE && o.id && options.isNew !== true) {
+			await this.revisionService().createNoteRevisionIfNoneFound(o.id, this.revisionService().installedTime());
+		}
 
 		return super.save(o, options);
 	}

@@ -1169,8 +1169,8 @@ describe('Synchronizer', function() {
 	}));
 
 	it("should not save revisions when updating a note via sync", asyncTest(async () => {
-		// Normally, when a note is updated for the first time, a revision of the original note
-		// is created. Here, on client 1, the note is updated for the first time, however since it is
+		// When a note is updated, a revision of the original is created.
+		// Here, on client 1, the note is updated for the first time, however since it is
 		// via sync, we don't create a revision - that revision has already been created on client
 		// 2 and is going to be synced.
 
@@ -1181,6 +1181,7 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 		await Note.save({ id: n1.id, title: 'mod from client 2' });
+		await revisionService().collectRevisions();
 		const allRevs1 = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
 		expect(allRevs1.length).toBe(1);
 		await synchronizer().start();
@@ -1237,6 +1238,7 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 		await Note.save({ id: n1.id, title: 'mod from client 2' });
+		await revisionService().collectRevisions();
 		await synchronizer().start();
 
 		await switchClient(1);
@@ -1271,11 +1273,16 @@ describe('Synchronizer', function() {
 		// all the data is valid.
 
 		const n1 = await Note.save({ title: 'note' });
+		await sleep(0.1);
+		Setting.setValue('revisionService.installedTime', Date.now());
 		await Note.save({ id: n1.id, title: 'note REV1' }); // REV CREATED - (auto created when first updated note without rev)
 		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1.id)).length).toBe(1);
 		await synchronizer().start();
 
 		await switchClient(2);
+
+		await sleep(0.1);
+		Setting.setValue('revisionService.installedTime', Date.now());
 
 		synchronizer().testingHooks_ = ['skipRevisions'];
 		await synchronizer().start();
@@ -1283,7 +1290,7 @@ describe('Synchronizer', function() {
 
 		await Note.save({ id: n1.id, title: 'note REV2' });  // REV CREATED - (auto created when first updated note without rev)
 		await revisionService().collectRevisions();  // REV CREATED - Following item change "update"
-		await synchronizer().start();
+		await synchronizer().start(); // Sync the rev that had been skipped above with skipRevisions
 
 		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
 		expect(revisions.length).toBe(3);

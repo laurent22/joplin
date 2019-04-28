@@ -3,6 +3,7 @@ require('app-module-path').addPath(__dirname);
 const { time } = require('lib/time-utils.js');
 const { asyncTest, fileContentEqual, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 const Folder = require('lib/models/Folder.js');
+const Setting = require('lib/models/Setting.js');
 const Note = require('lib/models/Note.js');
 const NoteTag = require('lib/models/NoteTag.js');
 const Tag = require('lib/models/Tag.js');
@@ -26,7 +27,9 @@ describe('services_Revision', function() {
 	it('should create diff and rebuild notes', asyncTest(async () => {
 		const service = new RevisionService();
 
-		const n1_v1 = await Note.save({ title: 'hello', author: 'testing' });
+		const n1_v1 = await Note.save({ title: '', author: 'testing' });
+		await service.collectRevisions();
+		await Note.save({ id: n1_v1.id, title: 'hello', author: 'testing' });
 		await service.collectRevisions();
 		const n1_v2 = await Note.save({ id: n1_v1.id, title: 'hello welcome', author: '' });
 		await service.collectRevisions();
@@ -165,16 +168,15 @@ describe('services_Revision', function() {
 		expect(revNote3.title).toBe('hello John');
 	}));
 
-	it('should create a revision for existing notes the first time it is saved', asyncTest(async () => {
+	it('should create a revision for notes that existed before the revision service, the first time it is saved', asyncTest(async () => {
 		const n1 = await Note.save({ title: 'hello' });
 		const noteId = n1.id;
 
-		// No revision is created at first, because we already have the note content in the note itself
+		await sleep(0.1);
 
-		{
-			const all = await Revision.allByType(BaseModel.TYPE_NOTE, noteId);
-			expect(all.length).toBe(0);
-		}
+		// Simulate the revision service being installed now. There N1 is like an old
+		// note that had been created before the service existed.
+		Setting.setValue('revisionService.installedTime', Date.now());
 
 		// A revision is created the first time a note is overwritten with new content, and
 		// if this note doesn't already have an existing revision.
