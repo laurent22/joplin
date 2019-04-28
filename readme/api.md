@@ -70,7 +70,7 @@ Call **GET /ping** to check if the service is available. It should return "Jopli
 
 # Searching
 
-Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point supports the `field` parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: https://joplin.cozic.net/#searching
+Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point supports the `field` parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: https://joplinapp.org/#searching
 
 # Notes
 

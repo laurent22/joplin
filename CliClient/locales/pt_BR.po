@@ -1163,9 +1163,6 @@ msgstr ""
 "Favor selecionar o local para onde o status de sincronia deveria ser "
 "exportado"
 
-msgid "Table of contents"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "Adicionar ou remover tags"
 
@@ -1411,6 +1408,9 @@ msgstr "Focar no corpo"
 
 msgid "When creating a new note:"
 msgstr "Quando criar uma nota nova:"
+
+msgid "Enable soft breaks"
+msgstr ""
 
 #, fuzzy
 msgid "Enable math expressions"
@@ -1927,6 +1927,10 @@ msgstr "Você não possui cadernos. Crie um clicando no botão (+)."
 
 msgid "Welcome"
 msgstr "Bem-vindo"
+
+#, fuzzy
+#~ msgid "This note has no history"
+#~ msgstr "Esta nota foi modificada:"
 
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "

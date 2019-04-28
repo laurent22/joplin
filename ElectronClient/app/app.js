@@ -363,6 +363,9 @@ class Application extends BaseApplication {
 							importOptions.path = path;
 							importOptions.format = module.format;
 							importOptions.destinationFolderId = !module.isNoteArchive && moduleSource === 'file' ? selectedFolderId : null;
+							importOptions.onError = (error) => {
+								console.warn(error);
+							}
 
 							const service = new InteropService();
 							try {
@@ -447,7 +450,7 @@ class Application extends BaseApplication {
 
 		const printItem = {
 			label: _('Print'),
-			// accelerator: 'CommandOrControl+P',
+			accelerator: 'CommandOrControl+P',
 			screens: ['Main'],
 			click: () => {
 				this.dispatch({
@@ -770,10 +773,10 @@ class Application extends BaseApplication {
 				submenu: [{
 					label: _('Website and documentation'),
 					accelerator: 'F1',
-					click () { bridge().openExternal('https://joplin.cozic.net') }
+					click () { bridge().openExternal('https://joplinapp.org') }
 				}, {
 					label: _('Make a donation'),
-					click () { bridge().openExternal('https://joplin.cozic.net/donate') }
+					click () { bridge().openExternal('https://joplinapp.org/donate/') }
 				}, {
 					label: _('Check for updates...'),
 					visible: shim.isMac() ? false : true,

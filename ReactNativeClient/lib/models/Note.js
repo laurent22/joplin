@@ -6,7 +6,7 @@ const Resource = require('lib/models/Resource.js');
 const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim.js');
 const { pregQuote } = require('lib/string-utils.js');
-const { toSystemSlashes } = require('lib/path-utils.js');
+const { toSystemSlashes, toFileProtocolPath } = require('lib/path-utils.js');
 const { time } = require('lib/time-utils.js');
 const { _ } = require('lib/locale.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
@@ -177,14 +177,14 @@ class Note extends BaseItem {
 			const id = resourceIds[i];
 			const resource = await Resource.load(id);
 			if (!resource) continue;
-			body = body.replace(new RegExp(':/' + id, 'gi'), toSystemSlashes(Resource.fullPath(resource)));
+			body = body.replace(new RegExp(':/' + id, 'gi'), toFileProtocolPath(Resource.fullPath(resource)));
 		}
 
 		return body;
 	}
 
 	static async replaceResourceExternalToInternalLinks(body) {
-		const reString = pregQuote(toSystemSlashes(Resource.baseDirectoryPath() + '/')) + '[a-zA-Z0-9\.]+';
+		const reString = pregQuote(toFileProtocolPath(Resource.baseDirectoryPath() + '/')) + '[a-zA-Z0-9\.]+';
 		const re = new RegExp(reString, 'gi');
 		body = body.replace(re, (match) => {
 			const id = Resource.pathToId(match);

@@ -152,7 +152,7 @@ class SideBarComponent extends React.Component {
 			header: {
 				height: itemHeight * 1.8,
 				fontFamily: theme.fontFamily,
-				fontSize: theme.fontSize * 1.3,
+				fontSize: theme.fontSize * 1.16,
 				textDecoration: "none",
 				boxSizing: "border-box",
 				color: theme.color2,
@@ -509,7 +509,7 @@ class SideBarComponent extends React.Component {
 
 	makeHeader(key, label, iconName, extraProps = {}) {
 		const style = this.style().header;
-		const icon = <i style={{ fontSize: style.fontSize * 1.2, marginRight: 5 }} className={"fa " + iconName} />;
+		const icon = <i style={{ fontSize: style.fontSize, marginRight: 5 }} className={"fa " + iconName} />;
 
 		if (extraProps.toggleblock || extraProps.onClick) {
 			style.cursor = "pointer";
@@ -642,9 +642,15 @@ class SideBarComponent extends React.Component {
 
 	synchronizeButton(type) {
 		const style = Object.assign({}, this.style().button, { marginBottom: 5 });
-		const iconName = type === "sync" ? "fa-refresh" : "fa-times";
+		const iconName = "fa-refresh";
 		const label = type === "sync" ? _("Synchronise") : _("Cancel");
-		const icon = <i style={{ fontSize: style.fontSize, marginRight: 5 }} className={"fa " + iconName} />;
+		let iconStyle = { fontSize: style.fontSize, marginRight: 5 };
+
+		if(type !== 'sync'){
+			iconStyle.animation = 'icon-infinite-rotation 1s linear infinite';
+		}
+
+		const icon = <i style={iconStyle} className={"fa " + iconName} />;
 		return (
 			<a
 				className="synchronize-button"
@@ -738,8 +744,8 @@ class SideBarComponent extends React.Component {
 					{items}
 				</div>
 				<div style={{flex:0}}>
+					{syncReportComp}
 					{syncButton}
-				 	{syncReportComp}
 				</div>
 			</div>
 		);

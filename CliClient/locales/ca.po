@@ -1173,9 +1173,6 @@ msgstr "Recursos: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccioneu on s'hauria d'exportar l'estat de la sincronització"
 
-msgid "Table of contents"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "Afegeix o suprimeix etiquetes"
 
@@ -1420,6 +1417,9 @@ msgstr "Vés al cos"
 
 msgid "When creating a new note:"
 msgstr "En crear una nota:"
+
+msgid "Enable soft breaks"
+msgstr ""
 
 #, fuzzy
 msgid "Enable math expressions"
@@ -1929,6 +1929,10 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvingut"
+
+#, fuzzy
+#~ msgid "This note has no history"
+#~ msgstr "Aquesta nota s'ha modificat:"
 
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "

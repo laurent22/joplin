@@ -236,19 +236,33 @@ shared.toggleCheckbox = function(ipcMessage, noteBody) {
 	const p = ipcMessage.split(':');
 	const lineIndex = Number(p[p.length - 1]);
 	if (lineIndex >= newBody.length) {
-		reg.logger().warn('Checkbox line out of bounds: ', ipcMessage, args);
+		reg.logger().warn('Checkbox line out of bounds: ', ipcMessage);
 		return newBody.join('\n');
 	}
 
 	let line = newBody[lineIndex];
 
-	if (line.trim().indexOf('- [ ] ') === 0) {
-		line = line.replace(/- \[ \] /, '- [x] ');
-	} else if (line.trim().indexOf('- [x] ') === 0 || line.trim().indexOf('- [X] ') === 0) {  
-		line = line.replace(/- \[x\] /i, '- [ ] ');
-	} else {
-		reg.logger().warn('Could not find matching checkbox for message: ', ipcMessage, args);
+	const noCrossIndex = line.trim().indexOf('- [ ] ');
+	let crossIndex = line.trim().indexOf('- [x] ');
+	if (crossIndex < 0) crossIndex = line.trim().indexOf('- [X] ');
+
+	if (noCrossIndex < 0 && crossIndex < 0) {
+		reg.logger().warn('Could not find matching checkbox for message: ', ipcMessage);
 		return newBody.join('\n');
+	}
+
+	let isCrossLine = false;
+
+	if (noCrossIndex >= 0 && crossIndex >= 0) {
+		isCrossLine = crossIndex < noCrossIndex;
+	} else {
+		isCrossLine = crossIndex >= 0;
+	}
+
+	if (!isCrossLine) {
+		line = line.replace(/- \[ \] /, '- [x] ');
+	} else {  
+		line = line.replace(/- \[x\] /i, '- [ ] ');
 	}
 
 	newBody[lineIndex] = line;

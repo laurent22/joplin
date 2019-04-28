@@ -84,6 +84,7 @@ In this case, [make sure you enter the correct WebDAV URL](https://github.com/la
 
 - Check your username and password. **Type it manually** (without copying and pasting it) and try again.
 - Check the WebDAV URL - to get the correct URL, go to Nextcloud and, in the left sidebar, click on "Settings" and copy the WebDAV URL from there. **Do not forget to add the folder you've created to that URL**. For example, if the base the WebDAV URL is "https://example.com/nextcloud/remote.php/webdav/" and you want the notes to be synced in the "Joplin" directory, you need to give the URL "https://example.com/nextcloud/remote.php/webdav/Joplin" **and you need to create the "Joplin" directory yourself**.
+- Did you enable **2FA** (Multi-factor authentication) on Nextcloud? In that case, you need to [create a one-time password for Joplin on the Nextcloud admin interface](https://github.com/laurent22/joplin/issues/1453#issuecomment-486640902).
 
 # Could you publish Joplin on F-droid?
 

@@ -1073,9 +1073,6 @@ msgstr "Resurse: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 
-msgid "Table of contents"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "Adăugați ori eliminați etichete"
 
@@ -1312,6 +1309,9 @@ msgstr ""
 
 msgid "When creating a new note:"
 msgstr "Când este creată o nouă notiță:"
+
+msgid "Enable soft breaks"
+msgstr ""
 
 #, fuzzy
 msgid "Enable math expressions"
@@ -1796,6 +1796,10 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bine ați venit"
+
+#, fuzzy
+#~ msgid "This note has no history"
+#~ msgstr "Această notiță a fost modificată:"
 
 #, fuzzy
 #~ msgid "Joplin v%s"

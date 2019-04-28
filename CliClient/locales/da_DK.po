@@ -1149,9 +1149,6 @@ msgstr "Ressourcer: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Vælg hvor sync status skal eksporteres til"
 
-msgid "Table of contents"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "Tilføj eller slet mærker"
 
@@ -1402,6 +1399,9 @@ msgstr "Fokuser på brødtekst"
 
 msgid "When creating a new note:"
 msgstr "Ved oprettelse af ny note:"
+
+msgid "Enable soft breaks"
+msgstr ""
 
 #, fuzzy
 msgid "Enable math expressions"
@@ -1904,6 +1904,10 @@ msgstr "Du har ingen notesbøger. Opret en ved at klikke på (+) knappen."
 
 msgid "Welcome"
 msgstr "Velkommen"
+
+#, fuzzy
+#~ msgid "This note has no history"
+#~ msgstr "Denne note er ændret:"
 
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "

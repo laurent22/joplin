@@ -1155,9 +1155,6 @@ msgstr "Obteniendo refuersos: %d"
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccione a dónde se debería exportar el estado de sincronización"
 
-msgid "Table of contents"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "Añadir o borrar etiquetas"
 
@@ -1403,6 +1400,9 @@ msgstr "Foco en el cuerpo"
 
 msgid "When creating a new note:"
 msgstr "Cuando se crear una nota nueva:"
+
+msgid "Enable soft breaks"
+msgstr ""
 
 #, fuzzy
 msgid "Enable math expressions"
@@ -1916,6 +1916,10 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+#, fuzzy
+#~ msgid "This note has no history"
+#~ msgstr "Esta nota ha sido modificada:"
 
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "

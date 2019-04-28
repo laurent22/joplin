@@ -1148,9 +1148,6 @@ msgstr "取得中のリソース: %d"
 msgid "Please select where the sync status should be exported to"
 msgstr "同期状況の出力先を選択してください"
 
-msgid "Table of contents"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "タグの追加と削除"
 
@@ -1397,6 +1394,9 @@ msgstr "本文にフォーカス"
 
 msgid "When creating a new note:"
 msgstr "新しいノートを作成した際:"
+
+msgid "Enable soft breaks"
+msgstr ""
 
 #, fuzzy
 msgid "Enable math expressions"
@@ -1907,6 +1907,10 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
+
+#, fuzzy
+#~ msgid "This note has no history"
+#~ msgstr "ノートは変更されています："
 
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "

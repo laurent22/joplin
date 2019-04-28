@@ -269,7 +269,7 @@ class JoplinDatabase extends Database {
 
 		// currentVersionIndex < 0 if for the case where an old version of Joplin used with a newer
 		// version of the database, so that migration is not run in this case.
-		if (currentVersionIndex < 0) throw new Error('Unknown profile version. Most likely this is an old version of Joplin, while the profile was created by a newer version. Please upgrade Joplin at https://joplin.cozic.net and try again.');
+		if (currentVersionIndex < 0) throw new Error('Unknown profile version. Most likely this is an old version of Joplin, while the profile was created by a newer version. Please upgrade Joplin at https://joplinapp.org and try again.');
 
 		if (currentVersionIndex == existingDatabaseVersions.length - 1) return fromVersion;
 

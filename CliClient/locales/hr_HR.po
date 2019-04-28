@@ -1148,9 +1148,6 @@ msgstr "Resursi: %d."
 msgid "Please select where the sync status should be exported to"
 msgstr "Odaberi lokaciju za izvoz statusa sinkronizacije"
 
-msgid "Table of contents"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr "Dodaj ili makni oznake"
 
@@ -1404,6 +1401,9 @@ msgstr ""
 #, fuzzy
 msgid "When creating a new note:"
 msgstr "Stvara novu bilješku."
+
+msgid "Enable soft breaks"
+msgstr ""
 
 msgid "Enable math expressions"
 msgstr ""
@@ -1900,6 +1900,10 @@ msgstr "Trenutno nemaš nijednu bilježnicu. Stvori novu klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobro došli"
+
+#, fuzzy
+#~ msgid "This note has no history"
+#~ msgstr "Bilješka je promijenjena:"
 
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "

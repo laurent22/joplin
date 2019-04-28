@@ -189,8 +189,8 @@ class Folder extends BaseItem {
 		return output;
 	}
 
-	static async allAsTree(options = null) {
-		const all = await this.all(options);
+	static async allAsTree(folders = null, options = null) {
+		const all = folders ? folders : await this.all(options);
 
 		// https://stackoverflow.com/a/49387427/561309
 		function getNestedChildren(models, parentId) {
@@ -236,12 +236,24 @@ class Folder extends BaseItem {
 		return path;
 	}
 
-	static folderPathString(folders, folderId) {
+	static folderPathString(folders, folderId, maxTotalLength = 80) {
 		const path = this.folderPath(folders, folderId);
+
+		let currentTotalLength = 0;
+		for (let i = 0; i < path.length; i++) {
+			currentTotalLength += path[i].title.length;
+		}
+
+		let pieceLength = maxTotalLength;
+		if (currentTotalLength > maxTotalLength) {
+			pieceLength = maxTotalLength / path.length;
+		}
+
 		const output = [];
 		for (let i = 0; i < path.length; i++) {
-			output.push(substrWithEllipsis(path[i].title, 0, 16));
+			output.push(substrWithEllipsis(path[i].title, 0, pieceLength));
 		}
+
 		return output.join(' / ');
 	}
 

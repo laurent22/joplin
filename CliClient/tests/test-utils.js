@@ -31,6 +31,7 @@ const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
 const EncryptionService = require('lib/services/EncryptionService.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker.js');
+const ResourceService = require('lib/services/ResourceService.js');
 const RevisionService = require('lib/services/RevisionService.js');
 const WebDavApi = require('lib/WebDavApi');
 const DropboxApi = require('lib/DropboxApi');
@@ -40,6 +41,7 @@ let synchronizers_ = [];
 let encryptionServices_ = [];
 let revisionServices_ = [];
 let decryptionWorkers_ = [];
+let resourceServices_ = [];
 let fileApi_ = null;
 let currentClient_ = 1;
 
@@ -106,6 +108,8 @@ function sleep(n) {
 }
 
 async function switchClient(id) {
+	if (!databases_[id]) throw new Error('Call setupDatabaseAndSynchronizer(' + id + ') first!!');
+
 	await time.msleep(sleepTime); // Always leave a little time so that updated_time properties don't overlap
 	await Setting.saveAll();
 
@@ -205,6 +209,7 @@ async function setupDatabaseAndSynchronizer(id = null) {
 	revisionServices_[id] = new RevisionService();
 	decryptionWorkers_[id] = new DecryptionWorker();
 	decryptionWorkers_[id].setEncryptionService(encryptionServices_[id]);
+	resourceServices_[id] = new ResourceService();
 
 	await fileApi().clearRoot();
 }
@@ -232,6 +237,11 @@ function revisionService(id = null) {
 function decryptionWorker(id = null) {
 	if (id === null) id = currentClient_;
 	return decryptionWorkers_[id];
+}
+
+function resourceService(id = null) {
+	if (id === null) id = currentClient_;
+	return resourceServices_[id];
 }
 
 async function loadEncryptionMasterKey(id = null, useExisting = false) {
@@ -326,4 +336,34 @@ function asyncTest(callback) {
 	}
 }
 
-module.exports = { setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest };
+async function allSyncTargetItemsEncrypted() {
+	const list = await fileApi().list();
+	const files = list.items;
+
+	let totalCount = 0;
+	let encryptedCount = 0;
+	for (let i = 0; i < files.length; i++) {
+		const file = files[i];
+		const remoteContentString = await fileApi().get(file.path);
+		const remoteContent = await BaseItem.unserialize(remoteContentString);
+		const ItemClass = BaseItem.itemClass(remoteContent);
+
+		if (!ItemClass.encryptionSupported()) continue;
+
+		totalCount++;
+
+		if (remoteContent.type_ === BaseModel.TYPE_RESOURCE) {
+			const content = await fileApi().get('.resource/' + remoteContent.id);
+			totalCount++;
+			if (content.substr(0, 5) === 'JED01') output = encryptedCount++;
+		}
+
+		if (!!remoteContent.encryption_applied) encryptedCount++;
+	}
+
+	if (!totalCount) throw new Error('No encryptable item on sync target');
+
+	return totalCount === encryptedCount;
+}
+
+module.exports = { resourceService, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest };

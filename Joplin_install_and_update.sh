@@ -56,7 +56,7 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$version" ]]; t
     
     # Download icon
     echo 'Downloading icon...'
-    wget -nv -O ~/.joplin/Icon512.png https://joplin.cozic.net/images/Icon512.png
+    wget -nv -O ~/.joplin/Icon512.png https://joplinapp.org/images/Icon512.png
     echo "${COLOR_GREEN}OK${COLOR_RESET}"
     
     # Detect desktop environment  

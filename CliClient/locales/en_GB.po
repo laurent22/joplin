@@ -1049,9 +1049,6 @@ msgstr ""
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 
-msgid "Table of contents"
-msgstr ""
-
 msgid "Add or remove tags"
 msgstr ""
 
@@ -1283,6 +1280,9 @@ msgid "Focus body"
 msgstr ""
 
 msgid "When creating a new note:"
+msgstr ""
+
+msgid "Enable soft breaks"
 msgstr ""
 
 msgid "Enable math expressions"

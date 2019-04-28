@@ -14,6 +14,7 @@ const HtmlToMd = require('lib/HtmlToMd');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('lib/path-utils');
 const ApiResponse = require('lib/services/rest/ApiResponse');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
+const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 
 class ApiError extends Error {
 
@@ -221,7 +222,9 @@ class Api {
 
 	async action_folders(request, id = null, link = null) {
 		if (request.method === 'GET' && !id) {
-			return await Folder.allAsTree({ fields: this.fields_(request, ['id', 'parent_id', 'title']) });
+			const folders = await FoldersScreenUtils.allForDisplay({ fields: this.fields_(request, ['id', 'parent_id', 'title']) });
+			const output = await Folder.allAsTree(folders);
+			return output;
 		}
 
 		if (request.method === 'GET' && id) {

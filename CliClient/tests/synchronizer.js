@@ -1,7 +1,7 @@
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync, asyncTest } = require('test-utils.js');
+const { setupDatabase, allSyncTargetItemsEncrypted, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync, asyncTest } = require('test-utils.js');
 const { shim } = require('lib/shim.js');
 const fs = require('fs-extra');
 const Folder = require('lib/models/Folder.js');
@@ -30,50 +30,18 @@ async function allNotesFolders() {
 	return folders.concat(notes);
 }
 
-async function allSyncTargetItems() {
-	const list = await fileApi().list();
-	if (list.hasMore) throw new Error('Not implemented!!');
-	const items = list.items;
-	const output = [];
-	for (const item of items) {
-		const serializedContent = await fileApi().get(item.path);
-		const content = await BaseItem.unserialize(serializedContent);
-		output.push(content);
-	}
-	return output;
-}
-
-async function allSyncTargetItemsEncrypted() {
-	const list = await fileApi().list();
-	const files = list.items;
-
-	//console.info(Setting.value('resourceDir'));
-
-	let totalCount = 0;
-	let encryptedCount = 0;
-	for (let i = 0; i < files.length; i++) {
-		const file = files[i];
-		const remoteContentString = await fileApi().get(file.path);
-		const remoteContent = await BaseItem.unserialize(remoteContentString);
-		const ItemClass = BaseItem.itemClass(remoteContent);
-
-		if (!ItemClass.encryptionSupported()) continue;
-
-		totalCount++;
-
-		if (remoteContent.type_ === BaseModel.TYPE_RESOURCE) {
-			const content = await fileApi().get('.resource/' + remoteContent.id);
-			totalCount++;
-			if (content.substr(0, 5) === 'JED01') output = encryptedCount++;
-		}
-
-		if (!!remoteContent.encryption_applied) encryptedCount++;
-	}
-
-	if (!totalCount) throw new Error('No encryptable item on sync target');
-
-	return totalCount === encryptedCount;
-}
+// async function allSyncTargetItems() {
+// 	const list = await fileApi().list();
+// 	if (list.hasMore) throw new Error('Not implemented!!');
+// 	const items = list.items;
+// 	const output = [];
+// 	for (const item of items) {
+// 		const serializedContent = await fileApi().get(item.path);
+// 		const content = await BaseItem.unserialize(serializedContent);
+// 		output.push(content);
+// 	}
+// 	return output;
+// }
 
 async function remoteItemsByTypes(types) {
 	const list = await fileApi().list();
