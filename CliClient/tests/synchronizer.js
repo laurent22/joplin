@@ -1170,6 +1170,7 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 		await Note.delete(n1.id);
+		await revisionService().collectRevisions(); // REV 1
 		{
 			const allRevs = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
 			expect(allRevs.length).toBe(1);

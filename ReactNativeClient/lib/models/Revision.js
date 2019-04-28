@@ -223,6 +223,11 @@ class Revision extends BaseItem {
 		}
 	}
 
+	static async revisionExists(itemType, itemId, updatedTime) {
+		const existingRev = await Revision.latestRevision(itemType, itemId);
+		return existingRev && existingRev.item_updated_time === updatedTime;
+	}
+
 }
 
 module.exports = Revision;

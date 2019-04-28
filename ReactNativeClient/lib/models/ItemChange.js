@@ -11,8 +11,9 @@ class ItemChange extends BaseModel {
 		return BaseModel.TYPE_ITEM_CHANGE;
 	}
 
-	static async add(itemType, itemId, type, changeSource = null) {
+	static async add(itemType, itemId, type, changeSource = null, beforeChangeItem = null) {
 		if (changeSource === null) changeSource = ItemChange.SOURCE_UNSPECIFIED;
+		if (!beforeChangeItem) beforeChangeItem = '';
 
 		ItemChange.saveCalls_.push(true);
 
@@ -23,7 +24,7 @@ class ItemChange extends BaseModel {
 		try {
 			await this.db().transactionExecBatch([
 				{ sql: 'DELETE FROM item_changes WHERE item_id = ?', params: [itemId] },
-				{ sql: 'INSERT INTO item_changes (item_type, item_id, type, source, created_time) VALUES (?, ?, ?, ?, ?)', params: [itemType, itemId, type, changeSource, Date.now()] },
+				{ sql: 'INSERT INTO item_changes (item_type, item_id, type, source, created_time, before_change_item) VALUES (?, ?, ?, ?, ?, ?)', params: [itemType, itemId, type, changeSource, Date.now(), beforeChangeItem] },
 			]);
 		} finally {
 			release();

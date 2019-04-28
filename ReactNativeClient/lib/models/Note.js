@@ -551,17 +551,29 @@ class Note extends BaseItem {
 	}
 
 	static async batchDelete(ids, options = null) {
-		const result = await super.batchDelete(ids, options);
-		const changeSource = options && options.changeSource ? options.changeSource : null;
-		for (let i = 0; i < ids.length; i++) {
-			ItemChange.add(BaseModel.TYPE_NOTE, ids[i], ItemChange.TYPE_DELETE, changeSource);
+		ids = ids.slice();
 
-			this.dispatch({
-				type: 'NOTE_DELETE',
-				id: ids[i],
-			});
+		while (ids.length) {
+			const processIds = ids.splice(0, 50);
+
+			const notes = await Note.byIds(processIds);
+			const beforeChangeItems = {};
+			for (const note of notes) {
+				beforeChangeItems[note.id] = JSON.stringify(note);
+			}
+
+			const result = await super.batchDelete(processIds, options);
+			const changeSource = options && options.changeSource ? options.changeSource : null;
+			for (let i = 0; i < processIds.length; i++) {
+				const id = processIds[i];
+				ItemChange.add(BaseModel.TYPE_NOTE, id, ItemChange.TYPE_DELETE, changeSource, beforeChangeItems[id]);
+
+				this.dispatch({
+					type: 'NOTE_DELETE',
+					id: id,
+				});
+			}
 		}
-		return result;
 	}
 
 	static dueNotes() {

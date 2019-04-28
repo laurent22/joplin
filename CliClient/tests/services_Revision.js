@@ -201,16 +201,36 @@ describe('services_Revision', function() {
 		}
 	}));
 
-	it('should create a revision for existing notes that get deleted and that do not already have a revision', asyncTest(async () => {
+	it('should create a revision for notes that get deleted (recyle bin)', asyncTest(async () => {
 		const n1 = await Note.save({ title: 'hello' });
 		const noteId = n1.id;
 
 		await Note.delete(noteId);
 
+		await revisionService().collectRevisions();
+
 		const all = await Revision.allByType(BaseModel.TYPE_NOTE, noteId);
 		expect(all.length).toBe(1);
 		const rev1 = await revisionService().revisionNote(all, 0);
 		expect(rev1.title).toBe('hello');
+	}));
+
+	it('should not create a revision for notes that get deleted if there is already a revision', asyncTest(async () => {
+		const n1 = await Note.save({ title: 'hello' });
+		await revisionService().collectRevisions();
+		const noteId = n1.id;
+		await Note.save({ id: noteId, title: 'hello Paul' });
+		await revisionService().collectRevisions(); // REV 1
+
+		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1.id)).length).toBe(1);
+
+		await Note.delete(noteId);
+
+		// At this point there is no need to create a new revision for the deleted note
+		// because we already have the latest version as REV 1
+		await revisionService().collectRevisions();
+
+		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1.id)).length).toBe(1);
 	}));
 
 	it('should not create a revision for new note the first time they are saved', asyncTest(async () => {

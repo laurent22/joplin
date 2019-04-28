@@ -173,9 +173,6 @@ class BaseItem extends BaseModel {
 			conflictNoteIds = conflictNotes.map((n) => { return n.id });
 		}
 
-		// When deleting, always keep the last version of the note - this is basically the recycle bin
-		if (options.autoSaveRevision && this.modelType() === BaseModel.TYPE_NOTE) await this.revisionService().createNoteRevisionsByIds(ids);
-
 		await super.batchDelete(ids, options);
 
 		if (trackDeleted) {

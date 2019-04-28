@@ -111,7 +111,7 @@ class RevisionService extends BaseService {
 				// See synchronizer test units to see why changes coming
 				// from sync are skipped.
 				const changes = await ItemChange.modelSelectAll(`
-					SELECT id, item_id, type
+					SELECT id, item_id, type, before_change_item
 					FROM item_changes
 					WHERE item_type = ?
 					AND source != ?
@@ -135,6 +135,13 @@ class RevisionService extends BaseService {
 							await this.createNoteRevision(note);
 							doneNoteIds.push(noteId);
 						}
+					}
+
+					if (change.type === ItemChange.TYPE_DELETE && !!change.before_change_item) {
+						const note = JSON.parse(change.before_change_item);
+						const revExists = await Revision.revisionExists(BaseModel.TYPE_NOTE, note.id, note.updated_time);
+						if (!revExists) await this.createNoteRevision(note);
+						doneNoteIds.push(noteId);
 					}
 
 					Setting.setValue('revisionService.lastProcessedChangeId', change.id);
