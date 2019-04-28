@@ -6,6 +6,8 @@ const { time } = require('lib/time-utils.js');
 const { _ } = require('lib/locale');
 const DiffMatchPatch = require('diff-match-patch');
 const ArrayUtils = require('lib/ArrayUtils.js');
+const JoplinError = require('lib/JoplinError');
+const { sprintf } = require('sprintf-js');
 
 const dmp = new DiffMatchPatch();
 
@@ -89,7 +91,7 @@ class Revision extends BaseItem {
 			itemId,
 		]);
 	}
-	
+
 	static async itemsWithRevisions(itemType, itemIds) {
 		if (!itemIds.length) return [];
 		const rows = await this.db().selectAll('SELECT distinct item_id FROM revisions WHERE item_type = ? AND item_id IN ("' + itemIds.join('","') + '")', [
@@ -132,6 +134,8 @@ class Revision extends BaseItem {
 
 	// Note: revs must be sorted by update_time ASC (as returned by allByType)
 	static async mergeDiffs(revision, revs = null) {
+		if (!('encryption_applied' in revision) || !!revision.encryption_applied) throw new JoplinError('Target revision is encrypted', 'revision_encrypted');
+
 		if (!revs) {
 			revs = await this.modelSelectAll('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? AND item_updated_time <= ? ORDER BY item_updated_time ASC', [
 				revision.item_type,
@@ -166,6 +170,7 @@ class Revision extends BaseItem {
 
 		for (const revIndex of revIndexes) {
 			const rev = revs[revIndex];
+			if (!!rev.encryption_applied) throw new JoplinError(sprintf('Revision "%s" is encrypted', rev.id), 'revision_encrypted');
 			output.title = this.applyTextPatch(output.title, rev.title_diff);
 			output.body = this.applyTextPatch(output.body, rev.body_diff);
 			output.metadata = this.applyObjectPatch(output.metadata, rev.metadata_diff);

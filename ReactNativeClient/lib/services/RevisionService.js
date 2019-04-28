@@ -106,37 +106,48 @@ class RevisionService extends BaseService {
 
 		const doneNoteIds = [];
 
-		while (true) {
-			// See synchronizer test units to see why changes coming
-			// from sync are skipped.
-			const changes = await ItemChange.modelSelectAll(`
-				SELECT id, item_id, type
-				FROM item_changes
-				WHERE item_type = ?
-				AND source != ?
-				AND id > ?
-				ORDER BY id ASC
-				LIMIT 10
-			`, [BaseModel.TYPE_NOTE, ItemChange.SOURCE_SYNC, Setting.value('revisionService.lastProcessedChangeId')]);
+		try {
+			while (true) {
+				// See synchronizer test units to see why changes coming
+				// from sync are skipped.
+				const changes = await ItemChange.modelSelectAll(`
+					SELECT id, item_id, type
+					FROM item_changes
+					WHERE item_type = ?
+					AND source != ?
+					AND id > ?
+					ORDER BY id ASC
+					LIMIT 10
+				`, [BaseModel.TYPE_NOTE, ItemChange.SOURCE_SYNC, Setting.value('revisionService.lastProcessedChangeId')]);
 
-			if (!changes.length) break;
+				if (!changes.length) break;
 
-			const noteIds = changes.map(a => a.item_id);
-			const notes = await Note.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND id IN ("' + noteIds.join('","') + '")');
+				const noteIds = changes.map(a => a.item_id);
+				const notes = await Note.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND id IN ("' + noteIds.join('","') + '")');
 
-			for (let i = 0; i < changes.length; i++) {
-				const change = changes[i];
-				const noteId = change.item_id;
+				for (let i = 0; i < changes.length; i++) {
+					const change = changes[i];
+					const noteId = change.item_id;
 
-				if (change.type === ItemChange.TYPE_UPDATE && doneNoteIds.indexOf(noteId) < 0) {
-					const note = BaseModel.byId(notes, noteId);
-					if (note) {
-						await this.createNoteRevision(note);
-						doneNoteIds.push(noteId);
+					if (change.type === ItemChange.TYPE_UPDATE && doneNoteIds.indexOf(noteId) < 0) {
+						const note = BaseModel.byId(notes, noteId);
+						if (note) {
+							await this.createNoteRevision(note);
+							doneNoteIds.push(noteId);
+						}
 					}
-				}
 
-				Setting.setValue('revisionService.lastProcessedChangeId', change.id);
+					Setting.setValue('revisionService.lastProcessedChangeId', change.id);
+				}
+			}
+		} catch (error) {
+			if (error.code === 'revision_encrypted') {
+				// One or more revisions are encrypted - stop processing for now
+				// and these revisions will be processed next time the revision
+				// collector runs.
+				this.logger().info('RevisionService::collectRevisions: One or more revision was encrypted. Processing was stopped but will resume later when the revision is decrypted.', error);
+			} else {
+				this.logger().error('RevisionService::collectRevisions:', error);
 			}
 		}
 
@@ -145,7 +156,7 @@ class RevisionService extends BaseService {
 
 		this.isCollecting_ = false;
 
-		this.logger().info('RevisionService::collectRevisions: Created revisions for ' + doneNoteIds.length + ' notes');	
+		this.logger().info('RevisionService::collectRevisions: Created revisions for ' + doneNoteIds.length + ' notes');
 	}
 
 	async deleteOldRevisions(ttl) {

@@ -6,6 +6,7 @@ const Folder = require('lib/models/Folder.js');
 const Setting = require('lib/models/Setting.js');
 const Note = require('lib/models/Note.js');
 const NoteTag = require('lib/models/NoteTag.js');
+const ItemChange = require('lib/models/ItemChange.js');
 const Tag = require('lib/models/Tag.js');
 const Revision = require('lib/models/Revision.js');
 const BaseModel = require('lib/BaseModel.js');
@@ -226,6 +227,40 @@ describe('services_Revision', function() {
 			const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
 			expect(revisions.length).toBe(0);
 		}
+	}));
+
+	it('should abort collecting revisions when one of them is encrypted', asyncTest(async () => {
+		const n1 = await Note.save({ title: 'hello' }); // CHANGE 1
+		await revisionService().collectRevisions();
+		await Note.save({ id: n1.id, title: 'hello Ringo' }); // CHANGE 2
+		await revisionService().collectRevisions();
+		await Note.save({ id: n1.id, title: 'hello George' }); // CHANGE 3
+		await revisionService().collectRevisions();
+
+		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
+		expect(revisions.length).toBe(2);
+
+		const encryptedRevId = revisions[0].id;
+
+		// Simulate receiving an encrypted revision
+		await Revision.save({ id: encryptedRevId, encryption_applied: 1 });
+		await Note.save({ id: n1.id, title: 'hello Paul' }); // CHANGE 4
+
+		await revisionService().collectRevisions();
+
+		// Although change 4 is a note update, check that it has not been processed
+		// by the collector, due to one of the revisions being encrypted.
+		expect(await ItemChange.lastChangeId()).toBe(4);
+		expect(Setting.value('revisionService.lastProcessedChangeId')).toBe(3);
+
+		// Simulate the revision being decrypted by DecryptionService
+		await Revision.save({ id: encryptedRevId, encryption_applied: 0 });
+
+		await revisionService().collectRevisions();
+
+		// Now that the revision has been decrypted, all the changes can be processed
+		expect(await ItemChange.lastChangeId()).toBe(4);
+		expect(Setting.value('revisionService.lastProcessedChangeId')).toBe(4);
 	}));
 
 });

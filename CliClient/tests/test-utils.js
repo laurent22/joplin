@@ -134,21 +134,27 @@ async function clearDatabase(id = null) {
 
 	await ItemChange.waitForAllSaved();
 
-	let queries = [
-		'DELETE FROM notes',
-		'DELETE FROM folders',
-		'DELETE FROM resources',
-		'DELETE FROM tags',
-		'DELETE FROM note_tags',
-		'DELETE FROM master_keys',
-		'DELETE FROM item_changes',
-		'DELETE FROM note_resources',
-		'DELETE FROM settings',		
-		'DELETE FROM deleted_items',
-		'DELETE FROM sync_items',
-		'DELETE FROM notes_normalized',
-		'DELETE FROM revisions',
+	const tableNames = [
+		'notes',
+		'folders',
+		'resources',
+		'tags',
+		'note_tags',
+		'master_keys',
+		'item_changes',
+		'note_resources',
+		'settings',		
+		'deleted_items',
+		'sync_items',
+		'notes_normalized',
+		'revisions',
 	];
+
+	const queries = [];
+	for (const n of tableNames) {
+		queries.push('DELETE FROM ' + n);
+		queries.push('DELETE FROM sqlite_sequence WHERE name="' + n + '"'); // Reset autoincremented IDs
+	}
 
 	await databases_[id].transactionExecBatch(queries);
 }
