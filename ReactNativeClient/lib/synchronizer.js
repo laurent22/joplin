@@ -239,7 +239,7 @@ class Synchronizer {
 						//   the local sync_time will be updated to Date.now() but on the next loop it will see that the remote item still has a date ahead
 						//   and will see a conflict. There's currently no automatic fix for this - the remote item on the sync target must be fixed manually
 						//   (by setting an updated_time less than current time).
-						if (donePaths.indexOf(path) >= 0) throw new Error(sprintf("Processing a path that has already been done: %s. sync_time was not updated? Remote item has an updated_time in the future?", path));
+						if (donePaths.indexOf(path) >= 0) throw new JoplinError(sprintf("Processing a path that has already been done: %s. sync_time was not updated? Remote item has an updated_time in the future?", path), 'processingPathTwice');
 
 						let remote = await this.api().stat(path);
 						let action = null;
@@ -662,9 +662,10 @@ class Synchronizer {
 				}
 			} // DELTA STEP
 		} catch (error) {
-			if (error && ["cannotEncryptEncrypted", "noActiveMasterKey"].indexOf(error.code) >= 0) {
+			if (error && ["cannotEncryptEncrypted", "noActiveMasterKey", "processingPathTwice"].indexOf(error.code) >= 0) {
 				// Only log an info statement for this since this is a common condition that is reported
-				// in the application, and needs to be resolved by the user
+				// in the application, and needs to be resolved by the user.
+				// Or it's a temporary issue that will be resolved on next sync.
 				this.logger().info(error.message);
 			} else {
 				this.logger().error(error);
