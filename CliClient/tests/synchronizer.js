@@ -30,19 +30,6 @@ async function allNotesFolders() {
 	return folders.concat(notes);
 }
 
-// async function allSyncTargetItems() {
-// 	const list = await fileApi().list();
-// 	if (list.hasMore) throw new Error('Not implemented!!');
-// 	const items = list.items;
-// 	const output = [];
-// 	for (const item of items) {
-// 		const serializedContent = await fileApi().get(item.path);
-// 		const content = await BaseItem.unserialize(serializedContent);
-// 		output.push(content);
-// 	}
-// 	return output;
-// }
-
 async function remoteItemsByTypes(types) {
 	const list = await fileApi().list();
 	if (list.has_more) throw new Error('Not implemented!!!');
@@ -1242,37 +1229,27 @@ describe('Synchronizer', function() {
 		// all the data is valid.
 
 		const n1 = await Note.save({ title: 'note' });
-		await sleep(0.1);
-		Setting.setValue('revisionService.installedTime', Date.now());
-		await Note.save({ id: n1.id, title: 'note REV1' }); // REV CREATED - (auto created when first updated note without rev)
+		await Note.save({ id: n1.id, title: 'note REV1' });
+		await revisionService().collectRevisions(); // REV1
 		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1.id)).length).toBe(1);
 		await synchronizer().start();
 
 		await switchClient(2);
 
-		await sleep(0.1);
-		Setting.setValue('revisionService.installedTime', Date.now());
-
 		synchronizer().testingHooks_ = ['skipRevisions'];
 		await synchronizer().start();
 		synchronizer().testingHooks_ = [];
 
-		await Note.save({ id: n1.id, title: 'note REV2' });  // REV CREATED - (auto created when first updated note without rev)
-		await revisionService().collectRevisions();  // REV CREATED - Following item change "update"
+		await Note.save({ id: n1.id, title: 'note REV2' });
+		await revisionService().collectRevisions(); // REV2
+		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1.id)).length).toBe(1);
 		await synchronizer().start(); // Sync the rev that had been skipped above with skipRevisions
 
 		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
-		expect(revisions.length).toBe(3);
+		expect(revisions.length).toBe(2);
 
-		const titles = [];
-		for (let i = 0; i < revisions.length; i++) {
-			const revNote = await revisionService().revisionNote(revisions, i);
-			titles.push(revNote.title);
-		}
-
-		expect(titles.indexOf('note') >= 0).toBe(true);
-		expect(titles.indexOf('note REV1') >= 0).toBe(true);
-		expect(titles.indexOf('note REV2') >= 0).toBe(true);
+		expect((await revisionService().revisionNote(revisions, 0)).title).toBe('note REV1');
+		expect((await revisionService().revisionNote(revisions, 1)).title).toBe('note REV2');
 	}));
 
 });

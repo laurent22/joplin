@@ -187,8 +187,13 @@ describe('services_Revision', function() {
 
 		{
 			await Note.save({ id: noteId, title: 'hello 2' });
+			await revisionService().collectRevisions(); // Rev for old note created + Rev for new note
 			const all = await Revision.allByType(BaseModel.TYPE_NOTE, noteId);
-			expect(all.length).toBe(1);
+			expect(all.length).toBe(2);
+			const revNote1 = await revisionService().revisionNote(all, 0);
+			const revNote2 = await revisionService().revisionNote(all, 1);
+			expect(revNote1.title).toBe('hello');
+			expect(revNote2.title).toBe('hello 2');
 		}
 
 		// If the note is saved a third time, we don't automatically create a revision. One
@@ -197,7 +202,7 @@ describe('services_Revision', function() {
 		{
 			await Note.save({ id: noteId, title: 'hello 3' });
 			const all = await Revision.allByType(BaseModel.TYPE_NOTE, noteId);
-			expect(all.length).toBe(1);
+			expect(all.length).toBe(2);
 		}
 	}));
 

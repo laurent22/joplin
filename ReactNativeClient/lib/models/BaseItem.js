@@ -163,7 +163,6 @@ class BaseItem extends BaseModel {
 		if (!options) options = {};
 		let trackDeleted = true;
 		if (options && options.trackDeleted !== null && options.trackDeleted !== undefined) trackDeleted = options.trackDeleted;
-		if (!('autoSaveRevision' in options)) options.autoSaveRevision = true;
 
 		// Don't create a deleted_items entry when conflicted notes are deleted
 		// since no other client have (or should have) them.
@@ -685,18 +684,8 @@ class BaseItem extends BaseModel {
 	static async save(o, options = null) {
 		if (!options) options = {};
 
-		if (!('autoSaveRevision' in options)) options.autoSaveRevision = true;
-
 		if (options.userSideValidation === true) {
 			if (!!o.encryption_applied) throw new Error(_('Encrypted items cannot be modified'));
-		}
-
-		// We only auto save a revision if it is *not* a new note, and only if the note was
-		// created before the revision feature existed. This is so we keep a version of the original note,
-		// which can potentially be quite old.
-		// New notes either do not have an ID, or have one but with the "isNew" option. Both of these should not generate a revision.
-		if (options.autoSaveRevision && this.modelType() === BaseModel.TYPE_NOTE && o.id && options.isNew !== true) {
-			await this.revisionService().createNoteRevisionIfNoneFound(o.id, this.revisionService().installedTime());
 		}
 
 		return super.save(o, options);

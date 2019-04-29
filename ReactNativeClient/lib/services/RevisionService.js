@@ -16,6 +16,12 @@ class RevisionService extends BaseService {
 	constructor() {
 		super();
 
+		// An "old note" is one that has been created before the revision service existed. These
+		// notes never benefited from revisions so the first time they are modified, a copy of
+		// the original note is saved. The goal is to have at least one revision in case the note
+		// is deleted or modified as a result of a bug or user mistake.
+		this.isOldNotesCache_ = {};
+
 		if (!Setting.value('revisionService.installedTime')) Setting.setValue('revisionService.installedTime', Date.now());
 	}
 
@@ -27,6 +33,14 @@ class RevisionService extends BaseService {
 		if (this.instance_) return this.instance_;
 		this.instance_ = new RevisionService();
 		return this.instance_;
+	}
+
+	async isOldNote(noteId) {
+		if (noteId in this.isOldNotesCache_) return this.isOldNotesCache_[noteId];
+
+		const r = await Note.noteIsOlderThan(noteId, this.installedTime());
+		this.isOldNotesCache_[noteId] = r;
+		return r;
 	}
 
 	noteMetadata_(note) {
@@ -131,9 +145,17 @@ class RevisionService extends BaseService {
 
 					if (change.type === ItemChange.TYPE_UPDATE && doneNoteIds.indexOf(noteId) < 0) {
 						const note = BaseModel.byId(notes, noteId);
+						const oldNote = change.before_change_item ? JSON.parse(change.before_change_item) : null;
+
 						if (note) {
+							if (oldNote && oldNote.updated_time < this.installedTime()) {
+								// This is where we save the original version of this old note
+								await this.createNoteRevision(oldNote);
+							}
+
 							await this.createNoteRevision(note);
 							doneNoteIds.push(noteId);
+							this.isOldNotesCache_[noteId] = false;
 						}
 					}
 

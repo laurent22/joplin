@@ -560,7 +560,6 @@ class Synchronizer {
 							let options = {
 								autoTimestamp: false,
 								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, time.unixMs()),
-								autoSaveRevision: false,
 								changeSource: ItemChange.SOURCE_SYNC,
 							};
 							if (action == "createLocal") options.isNew = true;
@@ -595,7 +594,7 @@ class Synchronizer {
 							}
 
 							let ItemClass = BaseItem.itemClass(local.type_);
-							await ItemClass.delete(local.id, { trackDeleted: false, changeSource: ItemChange.SOURCE_SYNC, autoSaveRevision: false });
+							await ItemClass.delete(local.id, { trackDeleted: false, changeSource: ItemChange.SOURCE_SYNC });
 						}
 					}
 
