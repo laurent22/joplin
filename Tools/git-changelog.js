@@ -67,8 +67,20 @@ function platformFromTag(tagName) {
 
 function filterLogs(logs, platform) {
 	const output = [];
+	const revertedLogs = [];
 
 	for (const log of logs) {
+
+		// Save to an array any commit that has been reverted, and exclude
+		// these from the final output array.
+		const revertMatches = log.message.split('\n')[0].trim().match(/^Revert "(.*?)"$/);
+		if (revertMatches && revertMatches.length >= 2) {
+			revertedLogs.push(revertMatches[1]);
+			continue;
+		}
+
+		if (revertedLogs.indexOf(log.message) >= 0) continue;
+
 		const msg = log.message.trim().toLowerCase();
 
 		let addIt = false;
