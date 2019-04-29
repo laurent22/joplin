@@ -287,7 +287,7 @@ class NotePropertiesDialog extends React.Component {
 				}
 				controlComp = <a href="#" onClick={() => bridge().openExternal(url)} style={theme.urlStyle}>{displayedValue}</a>
 			} else if (key === 'revisionsLink') {
-				controlComp = <a href="#" onClick={this.revisionsLink_click} style={theme.urlStyle}>{_('View and restore previous versions of this note')}</a>
+				controlComp = <a href="#" onClick={this.revisionsLink_click} style={theme.urlStyle}>{_('Previous versions of this note')}</a>
 			} else {
 				controlComp = <div style={Object.assign({}, theme.textStyle, {display: 'inline-block'})}>{displayedValue}</div>
 			}

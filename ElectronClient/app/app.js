@@ -1029,6 +1029,9 @@ class Application extends BaseApplication {
 		ExternalEditWatcher.instance().dispatch = this.store().dispatch;
 
 		RevisionService.instance().runInBackground();
+
+		// Make it available to the console window - useful to call revisionService.collectRevisions()
+		window.revisionService = RevisionService.instance();
 	}
 
 }
