@@ -57,11 +57,13 @@ describe('services_Revision', function() {
 	it('should delete old revisions (1 note, 2 rev)', asyncTest(async () => {
 		const service = new RevisionService();
 
-		const n1_v1 = await Note.save({ title: 'hello' });
+		const n1_v0 = await Note.save({ title: '' });
+		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await service.collectRevisions();
 		await time.sleep(1);
 		const n1_v2 = await Note.save({ id: n1_v1.id, title: 'hello welcome' });
 		await service.collectRevisions();
+		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id)).length).toBe(2);
 
 		await service.deleteOldRevisions(1000);
 		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id);
@@ -74,7 +76,8 @@ describe('services_Revision', function() {
 	it('should delete old revisions (1 note, 3 rev)', asyncTest(async () => {
 		const service = new RevisionService();
 
-		const n1_v1 = await Note.save({ title: 'one' });
+		const n1_v0 = await Note.save({ title: '' });
+		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'one' });
 		await service.collectRevisions();
 		await time.sleep(1);
 		const n1_v2 = await Note.save({ id: n1_v1.id, title: 'one two' });
@@ -108,13 +111,17 @@ describe('services_Revision', function() {
 	it('should delete old revisions (2 notes, 2 rev)', asyncTest(async () => {
 		const service = new RevisionService();
 
-		const n1_v1 = await Note.save({ title: 'note 1' });
-		const n2_v1 = await Note.save({ title: 'note 2' });
+		const n1_v0 = await Note.save({ title: '' });
+		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'note 1' });
+		const n2_v0 = await Note.save({ title: '' });
+		const n2_v1 = await Note.save({ id: n2_v0.id, title: 'note 2' });
 		await service.collectRevisions();
 		await time.sleep(1);
 		const n1_v2 = await Note.save({ id: n1_v1.id, title: 'note 1 (v2)' });
 		const n2_v2 = await Note.save({ id: n2_v1.id, title: 'note 2 (v2)' });
 		await service.collectRevisions();
+
+		expect((await Revision.all()).length).toBe(4);
 
 		await service.deleteOldRevisions(1000);
 
@@ -286,6 +293,80 @@ describe('services_Revision', function() {
 		// Now that the revision has been decrypted, all the changes can be processed
 		expect(await ItemChange.lastChangeId()).toBe(4);
 		expect(Setting.value('revisionService.lastProcessedChangeId')).toBe(4);
+	}));
+
+	it('should not delete old revisions if one of them is still encrypted (1)', asyncTest(async () => {
+		// Test case 1: Two revisions and the first one is encrypted.
+		// Calling deleteOldRevisions() with low TTL, which means all revisions
+		// should be deleted, but they won't be due to the encrypted one.
+
+		const n1_v0 = await Note.save({ title: '' });
+		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
+		await revisionService().collectRevisions(); // REV 1
+		await time.sleep(0.1);
+		const n1_v2 = await Note.save({ id: n1_v1.id, title: 'hello welcome' });
+		await revisionService().collectRevisions(); // REV 2
+		await time.sleep(0.1);
+
+		expect((await Revision.all()).length).toBe(2);
+
+		const revisions = await Revision.all();
+		await Revision.save({ id: revisions[0].id, encryption_applied: 1 });
+
+		await revisionService().deleteOldRevisions(0);
+		expect((await Revision.all()).length).toBe(2);
+
+		await Revision.save({ id: revisions[0].id, encryption_applied: 0 });
+
+		await revisionService().deleteOldRevisions(0);
+		expect((await Revision.all()).length).toBe(0);
+	}));
+
+	it('should not delete old revisions if one of them is still encrypted (2)', asyncTest(async () => {
+		// Test case 2: Two revisions and the first one is encrypted.
+		// Calling deleteOldRevisions() with higher TTL, which means the oldest
+		// revision should be deleted, but it won't be due to the encrypted one.
+
+		const n1_v0 = await Note.save({ title: '' });
+		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
+		await revisionService().collectRevisions(); // REV 1
+		await time.sleep(0.5);
+		const n1_v2 = await Note.save({ id: n1_v1.id, title: 'hello welcome' });
+		await revisionService().collectRevisions(); // REV 2
+
+		expect((await Revision.all()).length).toBe(2);
+
+		const revisions = await Revision.all();
+		await Revision.save({ id: revisions[0].id, encryption_applied: 1 });
+
+		await revisionService().deleteOldRevisions(500);
+		expect((await Revision.all()).length).toBe(2);
+	}));
+
+	it('should not delete old revisions if one of them is still encrypted (3)', asyncTest(async () => {
+		// Test case 2: Two revisions and the second one is encrypted.
+		// Calling deleteOldRevisions() with higher TTL, which means the oldest
+		// revision should be deleted, but it won't be due to the encrypted one.
+
+		const n1_v0 = await Note.save({ title: '' });
+		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
+		await revisionService().collectRevisions(); // REV 1
+		await time.sleep(0.5);
+		const n1_v2 = await Note.save({ id: n1_v1.id, title: 'hello welcome' });
+		await revisionService().collectRevisions(); // REV 2
+
+		expect((await Revision.all()).length).toBe(2);
+
+		const revisions = await Revision.all();
+		await Revision.save({ id: revisions[1].id, encryption_applied: 1 });
+
+		await revisionService().deleteOldRevisions(500);
+		expect((await Revision.all()).length).toBe(2);
+
+		await Revision.save({ id: revisions[1].id, encryption_applied: 0 });
+
+		await revisionService().deleteOldRevisions(500);
+		expect((await Revision.all()).length).toBe(1);
 	}));
 
 });

@@ -199,24 +199,39 @@ class Revision extends BaseItem {
 				rev.item_id,
 			]);
 
-			const deleteQuery = { sql: 'DELETE FROM revisions WHERE item_updated_time < ? AND item_id = ?', params: [cutOffDate, rev.item_id] };
+			try {
+				const deleteQueryCondition = 'item_updated_time < ? AND item_id = ?';
+				const deleteQueryParams = [cutOffDate, rev.item_id];
+				const deleteQuery = { sql: 'DELETE FROM revisions WHERE ' + deleteQueryCondition, params: deleteQueryParams };
 
-			if (!keptRev) {
-				await this.db().transactionExecBatch([deleteQuery]);
-			} else { 
-				const merged = await this.mergeDiffs(keptRev);
-				
-				const queries = [
-					deleteQuery,
-					{ sql: 'UPDATE revisions SET title_diff = ?, body_diff = ?, metadata_diff = ? WHERE id = ?', params: [
-						this.createTextPatch('', merged.title),
-						this.createTextPatch('', merged.body),
-						this.createObjectPatch({}, merged.metadata),
-						keptRev.id,
-					] },
-				];
+				if (!keptRev) {
+					const hasEncrypted = await this.modelSelectOne('SELECT * FROM revisions WHERE encryption_applied = 1 AND ' + deleteQueryCondition, deleteQueryParams);
+					if (!!hasEncrypted) throw new JoplinError('One of the revision to be deleted is encrypted', 'revision_encrypted');
+					await this.db().transactionExecBatch([deleteQuery]);
+				} else {
+					// Note: we don't need to check for encrypted rev here because
+					// mergeDiff will already throw the revision_encrypted exception
+					// if a rev is encrypted.
+					const merged = await this.mergeDiffs(keptRev);
 
-				await this.db().transactionExecBatch(queries);
+					const queries = [
+						deleteQuery,
+						{ sql: 'UPDATE revisions SET title_diff = ?, body_diff = ?, metadata_diff = ? WHERE id = ?', params: [
+							this.createTextPatch('', merged.title),
+							this.createTextPatch('', merged.body),
+							this.createObjectPatch({}, merged.metadata),
+							keptRev.id,
+						] },
+					];
+
+					await this.db().transactionExecBatch(queries);
+				}
+			} catch (error) {
+				if (error.code === 'revision_encrypted') {
+					this.logger().info('Aborted deletion of old revisions for item ' + rev.item_id + ' because one of the revisions is still encrypted', error);
+				} else {
+					throw error;
+				}
 			}
 
 			doneItems[doneKey] = true;

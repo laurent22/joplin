@@ -180,6 +180,7 @@ async function setupDatabase(id = null) {
 	};
 
 	databases_[id] = new JoplinDatabase(new DatabaseDriverNode());
+	databases_[id].setLogger(logger);
 	await databases_[id].open({ name: filePath });
 
 	BaseModel.db_ = databases_[id];
