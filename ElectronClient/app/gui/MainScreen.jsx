@@ -314,6 +314,10 @@ class MainScreenComponent extends React.Component {
 			height: height,
 			display: 'inline-block',
 		};
+		
+		this.styles_.noteListResizer = Object.assign({
+			transform: 'translateX(5px)',
+		}, this.styles_.verticalResizer);
 
 		const rowHeight = height - theme.headerHeight - (messageBoxVisible ? this.styles_.messageBox.height : 0);
 
@@ -495,7 +499,7 @@ class MainScreenComponent extends React.Component {
 				<SideBar style={styles.sideBar} />
 				<VerticalResizer style={styles.verticalResizer} onDrag={this.sidebar_onDrag}/>
 				<NoteList style={styles.noteList} />
-				<VerticalResizer style={styles.verticalResizer} onDrag={this.noteList_onDrag}/>
+				<VerticalResizer style={styles.noteListResizer} onDrag={this.noteList_onDrag}/>
 				<NoteText style={styles.noteText} visiblePanes={this.props.noteVisiblePanes} />
 
 				{pluginDialog}	
