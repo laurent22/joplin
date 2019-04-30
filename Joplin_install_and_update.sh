@@ -70,7 +70,7 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$version" ]]; t
 
     # Create icon for Gnome
     echo 'Create Desktop icon.'
-    if [[ $desktop =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.* ]]
+    if [[ $desktop =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.* ]]
     then
        : "${TMPDIR:=/tmp}"
        # This command extracts to squashfs-root by default and can't be changed...
@@ -79,6 +79,7 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$version" ]]; t
        APPIMAGE_VERSION=$(grep "^X-AppImage-BuildId=" $TMPDIR/squashfs-root/joplin.desktop | head -n 1 | cut -d " " -f 1)
        rm -rf $TMPDIR/squashfs-root
 
+       mkdir -p ~/.local/share/applications
        echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=/home/$USER/.joplin/Joplin.AppImage\nIcon=/home/$USER/.joplin/Icon512.png\nStartupWMClass=Joplin\nType=Application\nCategories=Application;\n$APPIMAGE_VERSION" >> ~/.local/share/applications/appimagekit-joplin.desktop
        echo "${COLOR_GREEN}OK${COLOR_RESET}"
     else
