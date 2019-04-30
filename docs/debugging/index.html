@@ -250,26 +250,26 @@
 </li>
 </ul>
 </div>
-<h1 id="how-to-enable-debugging">How to enable debugging</h1>
+<h1>How to enable debugging</h1>
 <p>It is possible to get the apps to display or log more information that might help debug various issues.</p>
-<h2 id="desktop-application">Desktop application</h2>
+<h2>Desktop application</h2>
 <ul>
 <li>Add a file named &quot;flags.txt&quot; in the config directory (should be <code>~/.config/joplin-desktop</code> or <code>c:\Users\YOUR_NAME\.config\joplin-desktop</code>) with the following content: <code>--open-dev-tools --log-level debug</code></li>
 <li>Restart the application</li>
 <li>The development tools should now be opened. Click the &quot;Console&quot; tab</li>
 <li>Now repeat the action that was causing problem. The console might output warnings or errors - please add them to the GitHub issue. Also open log.txt in the config folder and if there is any error or warning, please also add them to the issue.</li>
 </ul>
-<h2 id="cli-application">CLI application</h2>
+<h2>CLI application</h2>
 <ul>
 <li>Start the app with <code>joplin --log-level debug</code></li>
 <li>Check the log.txt as specified above for the desktop application and attach the log to the GitHub issue (or just the warnings/errors if any)</li>
 </ul>
-<h2 id="mobile-application">Mobile application</h2>
+<h2>Mobile application</h2>
 <ul>
 <li>In the options, enable Advanced Option</li>
 <li>Open the log in the top right hand corner menu and post a screenshot of any error/warning.</li>
 </ul>
-<h1 id="creating-a-low-level-bug-report-on-android">Creating a low-level bug report on Android</h1>
+<h1>Creating a low-level bug report on Android</h1>
 <p><a href="https://developer.android.com/studio/debug/bug-report">https://developer.android.com/studio/debug/bug-report</a></p>
 <p>To get a bugreport directly from your device, do the following:</p>
 <ul>
@@ -278,20 +278,34 @@
 <li>Select the type of bug report you want and tap Report.</li>
 </ul>
 <p>After a moment you get a notification that the bug report is ready. To share the bug report, tap the notification.</p>
-<h1 id="creating-a-low-level-bug-report-on-ios">Creating a low-level bug report on iOS</h1>
-<p>Some crashes cannot be investigated using Joplin&#39;s own tools. In that case, it can be very helpful to provide a native iOS crash report.</p>
+<h1>Creating a low-level bug report on iOS</h1>
+<p>Some crashes cannot be investigated using Joplin's own tools. In that case, it can be very helpful to provide a native iOS crash report.</p>
 <p>For this, please follow these instructions:</p>
 <p>You can send it to this address <a href="https://raw.githubusercontent.com/laurent22/joplin/master/Assets/Adresse.png">https://raw.githubusercontent.com/laurent22/joplin/master/Assets/Adresse.png</a></p>
 <p><a href="https://developer.apple.com/library/content/qa/qa1747/_index.html">https://developer.apple.com/library/content/qa/qa1747/_index.html</a></p>
 <p>Getting Crash Logs Directly From a Device Without Xcode</p>
 <p>Your users can retrieve crash reports from their device and send them to you via email by following these instructions.</p>
 <p>(It is not possible to get device console logs directly from a device)</p>
-<p>1) Open Settings app</p>
-<p>2) Go to Privacy, then Diagnostics &amp; Usage</p>
-<p>3) Select Diagnostics &amp; Usage Data</p>
-<p>4) Locate the log for the crashed app. The logs will be named in the format: <AppName><em><DateTime></em><DeviceName></p>
-<p>5) Select the desired log. Then, using the text selection UI select the entire text of the log. Once the text is selected, tap Copy</p>
-<p>6) Paste the copied text to Mail and send to an email address as desired</p>
+<ol>
+<li>
+<p>Open Settings app</p>
+</li>
+<li>
+<p>Go to Privacy, then Diagnostics &amp; Usage</p>
+</li>
+<li>
+<p>Select Diagnostics &amp; Usage Data</p>
+</li>
+<li>
+<p>Locate the log for the crashed app. The logs will be named in the format: <AppName><em><DateTime></em><DeviceName></p>
+</li>
+<li>
+<p>Select the desired log. Then, using the text selection UI select the entire text of the log. Once the text is selected, tap Copy</p>
+</li>
+<li>
+<p>Paste the copied text to Mail and send to an email address as desired</p>
+</li>
+</ol>
 
 <script>
 	function stickyHeader() { 

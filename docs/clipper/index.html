@@ -250,10 +250,10 @@
 </li>
 </ul>
 </div>
-<h1 id="joplin-web-clipper">Joplin Web Clipper</h1>
+<h1>Joplin Web Clipper</h1>
 <p>The Web Clipper is a browser extension that allows you to save web pages and screenshots from your browser. To start using it, open the Joplin desktop application, go to the <strong>Web Clipper Options</strong> and follow the instructions.</p>
-<p><img src="https://joplinapp.org/images/WebExtensionScreenshot.png" style="max-width: 50%; border: 1px solid gray;"></p>
-<h1 id="troubleshooting-the-web-clipper-service">Troubleshooting the web clipper service</h1>
+<img src="https://joplinapp.org/images/WebExtensionScreenshot.png" style="max-width: 50%; border: 1px solid gray;">
+<h1>Troubleshooting the web clipper service</h1>
 <p>The web clipper extension and the Joplin application communicates via a service, which is started by the Joplin desktop app.</p>
 <p>However certain things can interfer with this service and prevent it from being accessible or from starting. If something does not work, check the following:</p>
 <ul>
@@ -262,8 +262,8 @@
 <li>Check that no proxy is running on the machine, or make sure that the requests from the web clipper service are filtered and allowed. For example <a href="https://github.com/laurent22/joplin/issues/561#issuecomment-392220191">https://github.com/laurent22/joplin/issues/561#issuecomment-392220191</a></li>
 </ul>
 <p>If none of this work, please report it on the <a href="https://discourse.joplin.cozic.net/">forum</a> or <a href="https://github.com/laurent22/joplin/issues">GitHub issue tracker</a></p>
-<h1 id="debugging-the-extension">Debugging the extension</h1>
-<h2 id="in-chrome">In Chrome</h2>
+<h1>Debugging the extension</h1>
+<h2>In Chrome</h2>
 <p>To provide as much information as possible when reporting an issue, you may provide the log from the various Chrome console.</p>
 <p>To do so, first enable developer mode in <a href="chrome://extensions/">chrome://extensions/</a></p>
 <ul>
@@ -271,7 +271,7 @@
 <li>Debugging the background script: In <code>chrome://extensions/</code>, click on &quot;Inspect background script&quot;.</li>
 <li>Debugging the content script: Press Ctrl+Shift+I to open the console of the current page.</li>
 </ul>
-<h2 id="in-firefox">In Firefox</h2>
+<h2>In Firefox</h2>
 <ul>
 <li>Open <a href="about:debugging">about:debugging</a> in Firefox.</li>
 <li>Make sure the checkox &quot;Enable add-on debugging&quot; is ticked.</li>
@@ -279,10 +279,10 @@
 <li>Click on &quot;Debugging&quot; - that should open a new console window.</li>
 </ul>
 <p>Also press F12 to open the regular Firefox console (some messages from the Joplin extension can go there too).</p>
-<p>Now use the extension as normal and replicate the bug you&#39;re having.</p>
+<p>Now use the extension as normal and replicate the bug you're having.</p>
 <p>Copy and paste the content of both the debugging window and the Firefox console, and post it to the <a href="https://discourse.joplin.cozic.net/">forum</a>.</p>
-<h1 id="using-the-web-clipper-service">Using the Web Clipper service</h1>
-<p>The Web Clipper service can be used to create, modify or delete notes, notebooks, tags, etc. from any other application. It exposes an API with a number of methods to manage Joplin&#39;s data. For more information about this API and how to use it, please check the <a href="https://joplinapp.org/api/">Joplin API documentation</a>.</p>
+<h1>Using the Web Clipper service</h1>
+<p>The Web Clipper service can be used to create, modify or delete notes, notebooks, tags, etc. from any other application. It exposes an API with a number of methods to manage Joplin's data. For more information about this API and how to use it, please check the <a href="https://joplinapp.org/api/">Joplin API documentation</a>.</p>
 
 <script>
 	function stickyHeader() { 
