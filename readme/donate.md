@@ -16,14 +16,6 @@ Or you may support the project on Patreon:
 
 <a href="https://www.patreon.com/joplin"><img src="https://joplinapp.org/images/badges/Patreon.png"/></a>
 
-## Bitcoin
-
-Bitcoins are also accepted:
-
-<a href="bitcoin:1AnbeRd5NZT1ssG93jXzaDoHwzgjQAHX3R?message=Joplin%20development">1AnbeRd5NZT1ssG93jXzaDoHwzgjQAHX3R</a>
-
-![](https://joplinapp.org/images/BitcoinQr.png)
-
 ## Other way to support the development
 
 Finally, there are other ways to support the development of Joplin:
