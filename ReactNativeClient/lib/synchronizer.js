@@ -667,6 +667,9 @@ class Synchronizer {
 				// in the application, and needs to be resolved by the user.
 				// Or it's a temporary issue that will be resolved on next sync.
 				this.logger().info(error.message);
+			} else if (error.code === 'unknownItemType') {
+				this.progressReport_.errors.push(_('Unknown item type downloaded - please upgrade Joplin to the latest version'));
+				this.logger().error(error);
 			} else {
 				this.logger().error(error);
 

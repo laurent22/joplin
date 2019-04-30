@@ -106,7 +106,7 @@ class BaseItem extends BaseModel {
 				let d = BaseItem.syncItemDefinitions_[i];
 				if (Number(item) == d.type) return this.getClass(d.className);
 			}
-			throw new Error('Unknown type: ' + item);
+			throw new JoplinError('Unknown type: ' + item, 'unknownItemType');
 		}
 	}
 
