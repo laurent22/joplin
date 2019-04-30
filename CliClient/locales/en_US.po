@@ -589,6 +589,10 @@ msgstr ""
 msgid "Quit"
 msgstr ""
 
+#, javascript-format
+msgid "Quit %s"
+msgstr ""
+
 msgid "&Edit"
 msgstr ""
 

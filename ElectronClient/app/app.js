@@ -575,7 +575,7 @@ class Application extends BaseApplication {
 			}, {
 				type: 'separator',
 			}, {
-				label: _('Quit %s', 'Joplin'),
+				label: _('Quit'),
 				accelerator: 'CommandOrControl+Q',
 				click: () => { bridge().electronApp().quit() }
 			}]
