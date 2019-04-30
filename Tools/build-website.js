@@ -1,6 +1,5 @@
 const fs = require('fs-extra');
 const dirname = require('path').dirname;
-const marked = require('marked');
 const Mustache = require('mustache');
 
 const headerHtml = `<!doctype html>
@@ -305,15 +304,15 @@ const scriptHtml = `
 const rootDir = dirname(__dirname);
 
 function markdownToHtml(md) {
-	const renderer = new marked.Renderer();
+	const MarkdownIt = require('markdown-it');
 
-	let output = marked(md, {
-		gfm: true,
-		break: true,
-		renderer: renderer,
+	const markdownIt = new MarkdownIt({
+		breaks: true,
+		linkify: true,
+		html: true,
 	});
 
-	return headerHtml + output + scriptHtml + footerHtml;
+	return headerHtml + markdownIt.render(md) + scriptHtml + footerHtml;
 }
 
 let tocMd_ = null;
