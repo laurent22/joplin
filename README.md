@@ -12,11 +12,11 @@ The application is available for Windows, Linux, macOS, Android and iOS. A [Web 
 
 <div class="top-screenshot"><img src="https://joplinapp.org/images/AllClients.jpg" style="max-width: 100%; max-height: 35em;"></div>
 
-# Installation
+# <a name="installation"></a>Installation
 
 Three types of applications are available: for the **desktop** (Windows, macOS and Linux), for **mobile** (Android and iOS) and for **terminal** (Windows, macOS and Linux). All applications have similar user interfaces and can synchronise with each other.
 
-## Desktop applications
+## <a name="desktop-applications"></a>Desktop applications
 
 Operating System | Download | Alternative
 -----------------|--------|-------------------
@@ -24,14 +24,14 @@ Windows (32 and 64-bit)         | <a href='https://github.com/laurent22/joplin/r
 macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.143/Joplin-1.0.143.dmg'><img alt='Get it on macOS' width="134px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a> | You can also use Homebrew: `brew cask install joplin`
 Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.143/Joplin-1.0.143-x86_64.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a> | An Arch Linux package [is also available](#terminal-application).<br><br>If it works with your distribution (it has been tested on Ubuntu, Fedora, Gnome and Mint), the recommended way is to use this script as it will handle the desktop icon too:<br><br> `sh wget -O - https://raw.githubusercontent.com/laurent22/joplin/master/Joplin_install_and_update.sh | bash`
 
-## Mobile applications
+## <a name="mobile-applications"></a>Mobile applications
 
 Operating System | Download | Alt. Download
 -----------------|----------|----------------
 Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a> | or [Download APK File](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.243/joplin-v1.0.243.apk)
 iOS              | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://joplinapp.org/images/BadgeIOS.png'/></a> | -
 
-## Terminal application
+## <a name="terminal-application"></a>Terminal application
 
 Operating system | Method
 -----------------|----------------
@@ -43,7 +43,7 @@ To start it, type `joplin`.
 
 For usage information, please refer to the full [Joplin Terminal Application Documentation](https://joplinapp.org/terminal/).
 
-## Web Clipper
+## <a name="web-clipper"></a>Web Clipper
 
 The Web Clipper is a browser extension that allows you to save web pages and screenshots from your browser. For more information on how to install and use it, see the [Web Clipper Help Page](https://github.com/laurent22/joplin/blob/master/readme/clipper.md).
 
@@ -73,7 +73,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 	- [Donate](https://github.com/laurent22/joplin/blob/master/readme/donate.md)
 <!-- TOC -->
 
-# Features
+# <a name="features"></a>Features
 
 - Desktop, mobile and terminal applications.
 - [Web Clipper](https://github.com/laurent22/joplin/blob/master/readme/clipper.md) for Firefox and Chrome.
@@ -92,9 +92,9 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 - Supports multiple languages
 - External editor support - open notes in your favorite external editor with one click in Joplin.
 
-# Importing
+# <a name="importing"></a>Importing
 
-## Importing from Evernote
+## <a name="importing-from-evernote"></a>Importing from Evernote
 
 Joplin was designed as a replacement for Evernote and so can import complete Evernote notebooks, as well as notes, tags, resources (attached files) and note metadata (such as author, geo-location, etc.) via ENEX files. In terms of data, the only two things that might slightly differ are:
 
@@ -108,7 +108,7 @@ On the **desktop application**, open File > Import > ENEX and select your file. 
 
 On the **terminal application**, in [command-line mode](https://joplinapp.org/terminal/#command-line-mode), type `import /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
 
-## Importing from Markdown files
+## <a name="importing-from-markdown-files"></a>Importing from Markdown files
 
 Joplin can import notes from plain Markdown file. You can either import a complete directory of Markdown files or individual files.
 
@@ -116,7 +116,7 @@ On the **desktop application**, open File > Import > MD and select your Markdown
 
 On the **terminal application**, in [command-line mode](https://joplinapp.org/terminal/#command-line-mode), type `import --format md /path/to/file.md` or `import --format md /path/to/directory/`.
 
-## Importing from other applications
+## <a name="importing-from-other-applications"></a>Importing from other applications
 
 In general the way to import notes from any application into Joplin is to convert the notes to ENEX files (Evernote format) and to import these ENEX files into Joplin using the method above. Most note-taking applications support ENEX files so it should be relatively straightforward. For help about specific applications, see below:
 
@@ -125,17 +125,17 @@ In general the way to import notes from any application into Joplin is to conver
 * OneNote: First [import the notes from OneNote into Evernote](https://discussion.evernote.com/topic/107736-is-there-a-way-to-import-from-onenote-into-evernote-on-the-mac/). Then export the ENEX file from Evernote and import it into Joplin.
 * NixNote: Synchronise with Evernote, then export the ENEX files and import them into Joplin. More info [in this thread](https://discourse.joplin.cozic.net/t/import-from-nixnote/183/3).
 
-# Exporting
+# <a name="exporting"></a>Exporting
 
 Joplin can export to the JEX format (Joplin Export file), which is a tar file that can contain multiple notes, notebooks, etc. This is a lossless format in that all the notes, but also metadata such as geo-location, updated time, tags, etc. are preserved. This format is convenient for backup purposes and can be re-imported into Joplin. A "raw" format is also available. This is the same as the JEX format except that the data is saved to a directory and each item represented by a single file.
 
-# Synchronisation
+# <a name="synchronisation"></a>Synchronisation
 
 One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as Nextcloud or Dropbox, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.
 
 Currently, synchronisation is possible with Nextcloud, Dropbox (by default), OneDrive or the local filesystem. To setup synchronisation please follow the instructions below. After that, the application will synchronise in the background whenever it is running, or you can click on "Synchronise" to start a synchronisation manually.
 
-## Nextcloud synchronisation
+## <a name="nextcloud-synchronisation"></a>Nextcloud synchronisation
 
 <img src="https://joplinapp.org/images/nextcloud-logo-background.png" width="100" align="left"> <a href="https://nextcloud.com/">Nextcloud</a> is a self-hosted, private cloud solution. It can store documents, images and videos but also calendars, passwords and countless other things and can sync them to your laptop or phone. As you can host your own Nextcloud server, you own both the data on your device and infrastructure used for synchronisation. As such it is a good fit for Joplin. The platform is also well supported and with a strong community, so it is likely to be around for a while - since it's open source anyway, it is not a service that can be closed, it can exist on a server for as long as one chooses.
 
@@ -150,7 +150,7 @@ On the **terminal application**, you will need to set the `sync.target` config v
 
 If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.
 
-## Dropbox synchronisation
+## <a name="dropbox-synchronisation"></a>Dropbox synchronisation
 
 When syncing with Dropbox, Joplin creates a sub-directory in Dropbox, in `/Apps/Joplin` and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
 
@@ -160,7 +160,7 @@ On the **terminal application**, to initiate the synchronisation process, type `
 
 	*/30 * * * * /path/to/joplin sync
 
-## WebDAV synchronisation
+## <a name="webdav-synchronisation"></a>WebDAV synchronisation
 
 Select the "WebDAV" synchronisation target and follow the same instructions as for Nextcloud above.
 
@@ -179,7 +179,7 @@ WebDAV-compatible services that are known to work with Joplin:
 - [WebDAV Nav](https://www.schimera.com/products/webdav-nav-server/), a macOS server.
 - [Zimbra](https://www.zimbra.com/)
 
-## OneDrive synchronisation
+## <a name="onedrive-synchronisation"></a>OneDrive synchronisation
 
 When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
 
@@ -187,17 +187,17 @@ On the **desktop application** or **mobile application**, select "OneDrive" as t
 
 On the **terminal application**, to initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive).
 
-# Encryption
+# <a name="encryption"></a>Encryption
 
 Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the notes, notebooks, tags or resources can read them. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the [End-To-End Encryption Tutorial](https://joplinapp.org/e2ee/) for more information about this feature and how to enable it.
 
 For a more technical description, mostly relevant for development or to review the method being used, please see the [Encryption specification](https://joplinapp.org/spec/).
 
-# External text editor
+# <a name="external-text-editor"></a>External text editor
 
 Joplin notes can be opened and edited using an external editor of your choice. It can be a simple text editor like Notepad++ or Sublime Text or an actual Markdown editor like Typora. In that case, images will also be displayed within the editor. To open the note in an external editor, click on the icon in the toolbar or press Ctrl+E (or Cmd+E). Your default text editor will be used to open the note. If needed, you can also specify the editor directly in the General Options, under "Text editor command".
 
-# Attachments / Resources
+# <a name="attachments--resources"></a>Attachments / Resources
 
 Any kind of file can be attached to a note. In Markdown, links to these files are represented as a simple ID to the resource. In the note viewer, these files, if they are images, will be displayed or, if they are other files (PDF, text files, etc.) they will be displayed as links. Clicking on this link will open the file in the default application.
 
@@ -207,7 +207,7 @@ Resources that are not attached to any note will be automatically deleted after 
 
 **Important:** Resources larger than 10 MB are not currently supported on mobile. They will crash the application when synchronising so it is recommended not to attach such resources at the moment. The issue is being looked at.
 
-# Notifications
+# <a name="notifications"></a>Notifications
 
 On the desktop and mobile apps, an alarm can be associated with any to-do. It will be triggered at the given time by displaying a notification. How the notification will be displayed depends on the operating system since each has a different way to handle this. Please see below for the requirements for the desktop applications:
 
@@ -221,7 +221,7 @@ On mobile, the alarms will be displayed using the built-in notification system.
 
 If for any reason the notifications do not work, please [open an issue](https://github.com/laurent22/joplin/issues).
 
-# Sub-notebooks
+# <a name="sub-notebooks"></a>Sub-notebooks
 
 Sub-notebooks allow organising multiple notebooks into a tree of notebooks. For example it can be used to regroup all the notebooks related to work, to family or to a particular project under a parent notebook.
 
@@ -231,11 +231,11 @@ Sub-notebooks allow organising multiple notebooks into a tree of notebooks. For 
 - The **mobile application** supports displaying and collapsing/expanding the tree of notebooks, however it does not currently support moving the subnotebooks to different notebooks.
 - The **terminal app** supports displaying the tree of subnotebooks but it does not support collapsing/expanding them or moving the subnotebooks around.
 
-# Markdown
+# <a name="markdown"></a>Markdown
 
 Joplin uses and renders [Github-flavoured Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) with a few variations and additions. In particular:
 
-## Links to other notes
+## <a name="links-to-other-notes"></a>Links to other notes
 
 You can create a link to a note by specifying its ID in the URL. For example:
 
@@ -243,7 +243,7 @@ You can create a link to a note by specifying its ID in the URL. For example:
 
 Since getting the ID of a note is not straightforward, each app provides a way to create such link. In the **desktop app**, right click on a note an select "Copy Markdown link". In the **mobile app**, open a note and, in the top right menu, select "Copy Markdown link". You can then paste this link anywhere in another note.
 
-## Plugins
+## <a name="plugins"></a>Plugins
 
 Joplin supports a number of plugins that can be toggled on top the standard markdown features you would expect. These toggle-able plugins are listed below. Note: not all of the plugins are enabled by default, if the enable field is 'no' below, then enter Tools->General Options to enable the plugin. Plugins can be disabled in the same manner.
 
@@ -261,7 +261,7 @@ Joplin supports a number of plugins that can be toggled on top the standard mark
 | [Insert](https://github.com/markdown-it/markdown-it-ins) | `++inserted++` | Transforms into `<ins>inserted</ins>` (<ins>inserted</ins>) | no |
 | [Multitable](https://github.com/RedBug312/markdown-it-multimd-table) | See [MultiMarkdown](https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html) page | Adds more power and customization to markdown tables | no |
 
-## Math notation
+## <a name="math-notation"></a>Math notation
 
 Math expressions can be added using the [KaTeX notation](https://khan.github.io/KaTeX/). To add an inline equation, wrap the expression in `$EXPRESSION$`, eg. `$\sqrt{3x-1}+(1+x)^2$`. To create an expression block, wrap it as follow:
 
@@ -281,7 +281,7 @@ Here is an example with the Markdown and rendered result side by side:
 
 <img src="https://joplinapp.org/images/Katex.png" height="400px">
 
-## Checkboxes
+## <a name="checkboxes"></a>Checkboxes
 
 Checkboxes can be added like so:
 
@@ -291,17 +291,17 @@ Checkboxes can be added like so:
 
 The checkboxes can then be ticked in the mobile and desktop applications.
 
-## HTML support
+## <a name="html-support"></a>HTML support
 
 It is generally recommended to enter the notes as Markdown as it makes the notes easier to edit. However for cases where certain features aren't supported (such as strikethrough or to highlight text), you can also use HTML code directly. For example this would be a valid note:
 
 	This is <s>strikethrough text</s> mixed with regular **Markdown**.
 
-## Custom CSS
+## <a name="custom-css"></a>Custom CSS
 
 Rendered markdown can be customized by placing a userstyle file in the profile directory `~/.config/joplin-desktop/userstyle.css` (This path might be different on your device - check at the top of the Config screen for the exact path). This file supports standard CSS syntax. Note that this file is used only when display the notes, **not when printing or exporting to PDF**. This is because printing has a lot more restrictions (for example, printing white text over a black background is usually not wanted), so special rules are applied to make it look good when printing, and a userstyle.css would interfer with that.
 
-# Searching
+# <a name="searching"></a>Searching
 
 Joplin implements the SQLite Full Text Search (FTS4) extension. It means the content of all the notes is indexed in real time and search queries return results very fast. Both [Simple FTS Queries](https://www.sqlite.org/fts3.html#simple_fts_queries) and [Full-Text Index Queries](https://www.sqlite.org/fts3.html#full_text_index_queries) are supported. See below for the list of supported queries:
 
@@ -315,24 +315,24 @@ Field restricted | Add either `title:` or `body:` before a note to restrict your
 
 Notes are sorted by "relevance". Currently it means the notes that contain the requested terms the most times are on top. For queries with multiple terms, it also matter how close to each others are the terms. This is a bit experimental so if you notice a search query that returns unexpected results, please report it in the forum, providing as much details as possible to replicate the issue.
 
-# Donations
+# <a name="donations"></a>Donations
 
 Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.
 
 Please see the [donation page](https://joplinapp.org/donate/) for information on how to support the development of Joplin.
 
-# Community
+# <a name="community"></a>Community
 
 - For general discussion about Joplin, user support, software development questions, and to discuss new features, go to the [Joplin Forum](https://discourse.joplin.cozic.net/). It is possible to login with your GitHub account.
 - Also see here for information about [the latest releases and general news](https://discourse.joplin.cozic.net/c/news).
 - For bug reports and feature requests, go to the [GitHub Issue Tracker](https://github.com/laurent22/joplin/issues).
 - The latest news are posted [on the Patreon page](https://www.patreon.com/joplin).
 
-# Contributing
+# <a name="contributing"></a>Contributing
 
 Please see the guide for information on how to contribute to the development of Joplin: https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md
 
-# Localisation
+# <a name="localisation"></a>Localisation
 
 Joplin is currently available in the languages below. If you would like to contribute a **new translation**, it is quite straightforward, please follow these steps:
 
@@ -378,13 +378,13 @@ Current translations:
 ![](https://joplinapp.org/images/flags/country-4x3/kr.png)  |  한국말  |  [ko](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ko.po)  |    |  92%
 <!-- LOCALE-TABLE-AUTO-GENERATED -->
 
-# Known bugs
+# <a name="known-bugs"></a>Known bugs
 
 - Resources larger than 10 MB are not currently supported on mobile. They will crash the application so it is recommended not to attach such resources at the moment. The issue is being looked at.
 - Non-alphabetical characters such as Chinese or Arabic might create glitches in the terminal on Windows. This is a limitation of the current Windows console.
 - It is only possible to upload files of up to 4MB to OneDrive due to a limitation of [the API](https://docs.microsoft.com/en-gb/onedrive/developer/rest-api/api/driveitem_put_content) being currently used. There is currently no plan to support OneDrive "large file" API.
 
-# License
+# <a name="license"></a> License
 
 MIT License
 
