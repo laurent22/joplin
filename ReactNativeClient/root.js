@@ -26,6 +26,7 @@ const Revision = require('lib/models/Revision.js');
 const BaseModel = require('lib/BaseModel.js');
 const BaseService = require('lib/services/BaseService.js');
 const ResourceService = require('lib/services/ResourceService');
+const RevisionService = require('lib/services/RevisionService');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { Database } = require('lib/database.js');
 const { NotesScreen } = require('lib/components/screens/notes.js');
@@ -432,6 +433,8 @@ async function initialize(dispatch) {
 			reg.logger().info('db.ftsEnabled = ', Setting.value('db.ftsEnabled'));
 		}
 
+		BaseItem.revisionService_ = RevisionService.instance();
+
 		// Note: for now we hard-code the folder sort order as we need to 
 		// create a UI to allow customisation (started in branch mobile_add_sidebar_buttons)
 		Setting.setValue('folders.sortOrder.field', 'title');
@@ -527,6 +530,8 @@ async function initialize(dispatch) {
 	});
 
 	await WelcomeUtils.install(dispatch);
+
+	RevisionService.instance().runInBackground();
 
 	reg.logger().info('Application initialized');
 }
