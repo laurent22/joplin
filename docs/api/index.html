@@ -180,6 +180,24 @@
 		color: gray;
 		font-size: .9em;
 	}
+	a.heading-anchor {
+		display: inline-block;
+		opacity: 0;
+		width: 1.3em;
+		font-size: 0.7em;
+		margin-left: -1.3em;
+		line-height: 1em;
+		text-decoration: none;
+	}
+	a.heading-anchor:hover,
+	h1:hover a.heading-anchor,
+	h2:hover a.heading-anchor,
+	h3:hover a.heading-anchor,
+	h4:hover a.heading-anchor,
+	h5:hover a.heading-anchor,
+	h6:hover a.heading-anchor {
+		opacity: 1;
+	}
 	@media all and (min-width: 400px) {
 		.nav-right .share-btn {
 			display: inline-block;
@@ -250,7 +268,7 @@
 </li>
 </ul>
 </div>
-<h1>Joplin API</h1>
+<h1><a name="joplin-api" href="#joplin-api" class="heading-anchor">🔗</a>Joplin API</h1>
 <p>When the Web Clipper service is enabled, Joplin exposes a <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST API</a> which allows third-party applications to access Joplin's data and to create, modify or delete notes, notebooks, resources or tags.</p>
 <p>In order to use it, you'll first need to find on which port the service is running. To do so, open the Web Clipper Options in Joplin and if the service is running it should tell you on which port. Normally it runs on port <strong>41184</strong>. If you want to find it programmatically, you may follow this kind of algorithm:</p>
 <pre><code class="language-javascript">let port = null;
@@ -262,13 +280,13 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
     }
 }
 </code></pre>
-<h1>Authorisation</h1>
+<h1><a name="authorisation" href="#authorisation" class="heading-anchor">🔗</a>Authorisation</h1>
 <p>To prevent unauthorised applications from accessing the API, the calls must be authentified. To do so, you must provide a token as a query parameter for each API call. You can get this token from the Joplin desktop application, on the Web Clipper Options screen.</p>
 <p>This would be an example of valid cURL call using a token:</p>
 <pre><code>curl http://localhost:41184/notes?token=ABCD123ABCD123ABCD123ABCD123ABCD123
 </code></pre>
 <p>In the documentation below, the token will not be specified every time however you will need to include it.</p>
-<h1>Using the API</h1>
+<h1><a name="using-the-api" href="#using-the-api" class="heading-anchor">🔗</a>Using the API</h1>
 <p>All the calls, unless noted otherwise, receives and send <strong>JSON data</strong>. For example to create a new note:</p>
 <pre><code>curl --data '{ &quot;title&quot;: &quot;My note&quot;, &quot;body&quot;: &quot;Some note in **Markdown**&quot;}' http://localhost:41184/notes
 </code></pre>
@@ -283,27 +301,27 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <li><strong>PUT</strong>: To update an item. Note in a REST API, traditionally PUT is used to completely replace an item, however in this API it will only replace the properties that are provided. For example if you PUT {&quot;title&quot;: &quot;my new title&quot;}, only the &quot;title&quot; property will be changed. The other properties will be left untouched (they won't be cleared nor changed).</li>
 <li><strong>DELETE</strong>: To delete items.</li>
 </ul>
-<h1>Filtering data</h1>
+<h1><a name="filtering-data" href="#filtering-data" class="heading-anchor">🔗</a>Filtering data</h1>
 <p>You can change the fields that will be returned by the API using the <code>fields=</code> query parameter, which takes a list of comma separated fields. For example, to get the longitude and latitude of a note, use this:</p>
 <pre><code>curl http://localhost:41184/notes/ABCD123?fields=longitude,latitude
 </code></pre>
 <p>To get the IDs only of all the tags:</p>
 <pre><code>curl http://localhost:41184/tags?fields=id
 </code></pre>
-<h1>Error handling</h1>
+<h1><a name="error-handling" href="#error-handling" class="heading-anchor">🔗</a>Error handling</h1>
 <p>In case of an error, an HTTP status code &gt;= 400 will be returned along with a JSON object that provides more info about the error. The JSON object is in the format <code>{ &quot;error&quot;: &quot;description of error&quot; }</code>.</p>
-<h1>About the property types</h1>
+<h1><a name="about-the-property-types" href="#about-the-property-types" class="heading-anchor">🔗</a>About the property types</h1>
 <ul>
 <li>Text is UTF-8.</li>
 <li>All date/time are Unix timestamps in milliseconds.</li>
 <li>Booleans are integer values 0 or 1.</li>
 </ul>
-<h1>Testing if the service is available</h1>
+<h1><a name="testing-if-the-service-is-available" href="#testing-if-the-service-is-available" class="heading-anchor">🔗</a>Testing if the service is available</h1>
 <p>Call <strong>GET /ping</strong> to check if the service is available. It should return &quot;JoplinClipperServer&quot; if it works.</p>
-<h1>Searching</h1>
+<h1><a name="searching" href="#searching" class="heading-anchor">🔗</a>Searching</h1>
 <p>Call <strong>GET /search?query=YOUR_QUERY</strong> to search for notes. This end-point supports the <code>field</code> parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: <a href="https://joplinapp.org/#searching">https://joplinapp.org/#searching</a></p>
-<h1>Notes</h1>
-<h2>Properties</h2>
+<h1><a name="notes" href="#notes" class="heading-anchor">🔗</a>Notes</h1>
+<h2><a name="properties" href="#properties" class="heading-anchor">🔗</a>Properties</h2>
 <table>
 <thead>
 <tr>
@@ -450,13 +468,13 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 </tr>
 </tbody>
 </table>
-<h2>GET /notes</h2>
+<h2><a name="get-notes" href="#get-notes" class="heading-anchor">🔗</a>GET /notes</h2>
 <p>Gets all notes</p>
-<h2>GET /notes/:id</h2>
+<h2><a name="get-notes-id" href="#get-notes-id" class="heading-anchor">🔗</a>GET /notes/:id</h2>
 <p>Gets note with ID :id</p>
-<h2>GET /notes/:id/tags</h2>
+<h2><a name="get-notes-id-tags" href="#get-notes-id-tags" class="heading-anchor">🔗</a>GET /notes/:id/tags</h2>
 <p>Gets all the tags attached to this note.</p>
-<h2>POST /notes</h2>
+<h2><a name="post-notes" href="#post-notes" class="heading-anchor">🔗</a>POST /notes</h2>
 <p>Creates a new note</p>
 <p>You can either specify the note body as Markdown by setting the <code>body</code> parameter, or in HTML by setting the <code>body_html</code>.</p>
 <p>Examples:</p>
@@ -477,17 +495,17 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 </code></pre>
 </li>
 </ul>
-<h3>Creating a note with a specific ID</h3>
+<h3><a name="creating-a-note-with-a-specific-id" href="#creating-a-note-with-a-specific-id" class="heading-anchor">🔗</a>Creating a note with a specific ID</h3>
 <p>When a new note is created, it is automatically assigned a new unique ID so <strong>normally you do not need to set the ID</strong>. However, if for some reason you want to set it, you can supply it as the <code>id</code> property. It needs to be a 32 characters long hexadecimal string. <strong>Make sure it is unique</strong>, for example by generating it using whatever GUID function is available in your programming language.</p>
 <pre><code>  curl --data '{ &quot;id&quot;: &quot;00a87474082744c1a8515da6aa5792d2&quot;, &quot;title&quot;: &quot;My note with custom ID&quot;}' http://127.0.0.1:41184/notes
 </code></pre>
-<h2>PUT /notes/:id</h2>
+<h2><a name="put-notes-id" href="#put-notes-id" class="heading-anchor">🔗</a>PUT /notes/:id</h2>
 <p>Sets the properties of the note with ID :id</p>
-<h2>DELETE /notes/:id</h2>
+<h2><a name="delete-notes-id" href="#delete-notes-id" class="heading-anchor">🔗</a>DELETE /notes/:id</h2>
 <p>Deletes the note with ID :id</p>
-<h1>Folders</h1>
+<h1><a name="folders" href="#folders" class="heading-anchor">🔗</a>Folders</h1>
 <p>This is actually a notebook. Internally notebooks are called &quot;folders&quot;.</p>
-<h2>Properties</h2>
+<h2><a name="properties-1" href="#properties-1" class="heading-anchor">🔗</a>Properties</h2>
 <table>
 <thead>
 <tr>
@@ -544,21 +562,21 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 </tr>
 </tbody>
 </table>
-<h2>GET /folders</h2>
+<h2><a name="get-folders" href="#get-folders" class="heading-anchor">🔗</a>GET /folders</h2>
 <p>Gets all folders</p>
 <p>The folders are returned as a tree. The sub-notebooks of a notebook, if any, are under the <code>children</code> key.</p>
-<h2>GET /folders/:id</h2>
+<h2><a name="get-folders-id" href="#get-folders-id" class="heading-anchor">🔗</a>GET /folders/:id</h2>
 <p>Gets folder with ID :id</p>
-<h2>GET /folders/:id/notes</h2>
+<h2><a name="get-folders-id-notes" href="#get-folders-id-notes" class="heading-anchor">🔗</a>GET /folders/:id/notes</h2>
 <p>Gets all the notes inside this folder.</p>
-<h2>POST /folders</h2>
+<h2><a name="post-folders" href="#post-folders" class="heading-anchor">🔗</a>POST /folders</h2>
 <p>Creates a new folder</p>
-<h2>PUT /folders/:id</h2>
+<h2><a name="put-folders-id" href="#put-folders-id" class="heading-anchor">🔗</a>PUT /folders/:id</h2>
 <p>Sets the properties of the folder with ID :id</p>
-<h2>DELETE /folders/:id</h2>
+<h2><a name="delete-folders-id" href="#delete-folders-id" class="heading-anchor">🔗</a>DELETE /folders/:id</h2>
 <p>Deletes the folder with ID :id</p>
-<h1>Resources</h1>
-<h2>Properties</h2>
+<h1><a name="resources" href="#resources" class="heading-anchor">🔗</a>Resources</h1>
+<h2><a name="properties-2" href="#properties-2" class="heading-anchor">🔗</a>Properties</h2>
 <table>
 <thead>
 <tr>
@@ -630,24 +648,24 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 </tr>
 </tbody>
 </table>
-<h2>GET /resources</h2>
+<h2><a name="get-resources" href="#get-resources" class="heading-anchor">🔗</a>GET /resources</h2>
 <p>Gets all resources</p>
-<h2>GET /resources/:id</h2>
+<h2><a name="get-resources-id" href="#get-resources-id" class="heading-anchor">🔗</a>GET /resources/:id</h2>
 <p>Gets resource with ID :id</p>
-<h2>GET /resources/:id/file</h2>
+<h2><a name="get-resources-id-file" href="#get-resources-id-file" class="heading-anchor">🔗</a>GET /resources/:id/file</h2>
 <p>Gets the actual file associated with this resource.</p>
-<h2>POST /resources</h2>
+<h2><a name="post-resources" href="#post-resources" class="heading-anchor">🔗</a>POST /resources</h2>
 <p>Creates a new resource</p>
 <p>Creating a new resource is special because you also need to upload the file. Unlike other API calls, this one must have the &quot;multipart/form-data&quot; Content-Type. The file data must be passed to the &quot;data&quot; form field, and the other properties to the &quot;props&quot; form field. An example of a valid call with cURL would be:</p>
 <pre><code>curl -F 'data=@/path/to/file.jpg' -F 'props={&quot;title&quot;:&quot;my resource title&quot;}' http://localhost:41184/resources
 </code></pre>
 <p>The &quot;data&quot; field is required, while the &quot;props&quot; one is not. If not specified, default values will be used.</p>
-<h2>PUT /resources/:id</h2>
+<h2><a name="put-resources-id" href="#put-resources-id" class="heading-anchor">🔗</a>PUT /resources/:id</h2>
 <p>Sets the properties of the resource with ID :id</p>
-<h2>DELETE /resources/:id</h2>
+<h2><a name="delete-resources-id" href="#delete-resources-id" class="heading-anchor">🔗</a>DELETE /resources/:id</h2>
 <p>Deletes the resource with ID :id</p>
-<h1>Tags</h1>
-<h2>Properties</h2>
+<h1><a name="tags" href="#tags" class="heading-anchor">🔗</a>Tags</h1>
+<h2><a name="properties-3" href="#properties-3" class="heading-anchor">🔗</a>Properties</h2>
 <table>
 <thead>
 <tr>
@@ -699,21 +717,21 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 </tr>
 </tbody>
 </table>
-<h2>GET /tags</h2>
+<h2><a name="get-tags" href="#get-tags" class="heading-anchor">🔗</a>GET /tags</h2>
 <p>Gets all tags</p>
-<h2>GET /tags/:id</h2>
+<h2><a name="get-tags-id" href="#get-tags-id" class="heading-anchor">🔗</a>GET /tags/:id</h2>
 <p>Gets tag with ID :id</p>
-<h2>GET /tags/:id/notes</h2>
+<h2><a name="get-tags-id-notes" href="#get-tags-id-notes" class="heading-anchor">🔗</a>GET /tags/:id/notes</h2>
 <p>Gets all the notes with this tag.</p>
-<h2>POST /tags</h2>
+<h2><a name="post-tags" href="#post-tags" class="heading-anchor">🔗</a>POST /tags</h2>
 <p>Creates a new tag</p>
-<h2>POST /tags/:id/notes</h2>
+<h2><a name="post-tags-id-notes" href="#post-tags-id-notes" class="heading-anchor">🔗</a>POST /tags/:id/notes</h2>
 <p>Post a note to this endpoint to add the tag to the note. The note data must at least contain an ID property (all other properties will be ignored).</p>
-<h2>PUT /tags/:id</h2>
+<h2><a name="put-tags-id" href="#put-tags-id" class="heading-anchor">🔗</a>PUT /tags/:id</h2>
 <p>Sets the properties of the tag with ID :id</p>
-<h2>DELETE /tags/:id</h2>
+<h2><a name="delete-tags-id" href="#delete-tags-id" class="heading-anchor">🔗</a>DELETE /tags/:id</h2>
 <p>Deletes the tag with ID :id</p>
-<h2>DELETE /tags/:id/notes/:note_id</h2>
+<h2><a name="delete-tags-id-notes-note-id" href="#delete-tags-id-notes-note-id" class="heading-anchor">🔗</a>DELETE /tags/:id/notes/:note_id</h2>
 <p>Remove the tag from the note.</p>
 
 <script>

@@ -180,6 +180,24 @@
 		color: gray;
 		font-size: .9em;
 	}
+	a.heading-anchor {
+		display: inline-block;
+		opacity: 0;
+		width: 1.3em;
+		font-size: 0.7em;
+		margin-left: -1.3em;
+		line-height: 1em;
+		text-decoration: none;
+	}
+	a.heading-anchor:hover,
+	h1:hover a.heading-anchor,
+	h2:hover a.heading-anchor,
+	h3:hover a.heading-anchor,
+	h4:hover a.heading-anchor,
+	h5:hover a.heading-anchor,
+	h6:hover a.heading-anchor {
+		opacity: 1;
+	}
 	@media all and (min-width: 400px) {
 		.nav-right .share-btn {
 			display: inline-block;
@@ -250,7 +268,7 @@
 </li>
 </ul>
 </div>
-<h1>Clicking 'Edit in External Editor' does nothing! / I want to change the editor!</h1>
+<h1><a name="clicking-edit-in-external-editor-does-nothing-i-want-to-change-the-editor-" href="#clicking-edit-in-external-editor-does-nothing-i-want-to-change-the-editor-" class="heading-anchor">🔗</a>Clicking 'Edit in External Editor' does nothing! / I want to change the editor!</h1>
 <p>The editor command (may include arguments) defines which editor will be used to open a note. If none is provided it will try to auto-detect the default editor. If this does nothing or you want to change it for Joplin, you need to configure it in Settings -&gt; Text editor command.</p>
 <p>Some example configurations are: (comments after #)</p>
 <p>Linux/Mac:</p>
@@ -269,9 +287,9 @@ notepad.exe   # Opens Notepad in a new window
 notepad++.exe --openSession   # Opens Notepad ++ in new window
 </code></pre>
 <p>Note that the path to directory with your editor executable must exist in your PATH variable (<a href="https://www.computerhope.com/issues/ch000549.htm">Windows</a>, <a href="https://opensource.com/article/17/6/set-path-linux">Linux/Mac</a>) If not, the full path to the executable must be provided.</p>
-<h1>When I open a note in vim, the cursor is not visible</h1>
+<h1><a name="when-i-open-a-note-in-vim-the-cursor-is-not-visible" href="#when-i-open-a-note-in-vim-the-cursor-is-not-visible" class="heading-anchor">🔗</a>When I open a note in vim, the cursor is not visible</h1>
 <p>It seems to be due to the setting <code>set term=ansi</code> in .vimrc. Removing it should fix the issue. See <a href="https://github.com/laurent22/joplin/issues/147">https://github.com/laurent22/joplin/issues/147</a> for more information.</p>
-<h1>All my notes got deleted after changing the WebDAV URL!</h1>
+<h1><a name="all-my-notes-got-deleted-after-changing-the-webdav-url-" href="#all-my-notes-got-deleted-after-changing-the-webdav-url-" class="heading-anchor">🔗</a>All my notes got deleted after changing the WebDAV URL!</h1>
 <p>When changing the WebDAV URL, make sure that the new location has the same exact content as the old location (i.e. copy all the Joplin data over to the new location). Otherwise, if there's nothing on the new location, Joplin is going to think that you have deleted all your data and will proceed to delete it locally too. So to change the WebDAV URL, please follow these steps:</p>
 <ol>
 <li>Make a backup of your Joplin data in case something goes wrong. Export to a JEX archive for example.</li>
@@ -282,18 +300,18 @@ notepad++.exe --openSession   # Opens Notepad ++ in new window
 <li>Synchronise to verify that everything is working.</li>
 <li>Do step 5 and 6 for all the other Joplin clients you need to sync.</li>
 </ol>
-<h1>How can I easily enter Markdown tags in Android?</h1>
+<h1><a name="how-can-i-easily-enter-markdown-tags-in-android-" href="#how-can-i-easily-enter-markdown-tags-in-android-" class="heading-anchor">🔗</a>How can I easily enter Markdown tags in Android?</h1>
 <p>You may use a special keyboard such as <a href="https://play.google.com/store/apps/details?id=kl.ime.oh&amp;hl=en">Multiling O Keyboard</a>, which has shortcuts to create Markdown tags. <a href="https://discourse.joplin.cozic.net/t/android-create-new-list-item-with-enter/585/2?u=laurent">More information in this post</a>.</p>
-<h1>The initial sync is very slow, how can I speed it up?</h1>
+<h1><a name="the-initial-sync-is-very-slow-how-can-i-speed-it-up-" href="#the-initial-sync-is-very-slow-how-can-i-speed-it-up-" class="heading-anchor">🔗</a>The initial sync is very slow, how can I speed it up?</h1>
 <p>Whenever importing a large number of notes, for example from Evernote, it may take a very long time for the first sync to complete. There are various techniques to speed thing up (if you don't want to simply wait for the sync to complete), which are outlined in <a href="https://discourse.joplin.cozic.net/t/workaround-for-slow-initial-bulk-sync-after-evernote-import/746?u=laurent">this post</a>.</p>
-<h1>Is it possible to use real file and folder names in the sync target?</h1>
+<h1><a name="is-it-possible-to-use-real-file-and-folder-names-in-the-sync-target-" href="#is-it-possible-to-use-real-file-and-folder-names-in-the-sync-target-" class="heading-anchor">🔗</a>Is it possible to use real file and folder names in the sync target?</h1>
 <p>Unfortunately it is not possible. Joplin synchronises with file systems using an open format however it does not mean the sync files are meant to be user-editable. The format is designed to be performant and reliable, not user friendly (it cannot be both), and that cannot be changed. Joplin sync directory is basically just a database.</p>
-<h1>Could there be a PIN or password to restrict access to Joplin?</h1>
+<h1><a name="could-there-be-a-pin-or-password-to-restrict-access-to-joplin-" href="#could-there-be-a-pin-or-password-to-restrict-access-to-joplin-" class="heading-anchor">🔗</a>Could there be a PIN or password to restrict access to Joplin?</h1>
 <p>Short answer: no. The end to end encryption that Joplin implements is to protect the data during transmission and on the cloud service so that only you can access it.</p>
 <p>On the local device it is assumed that the data is safe due to the OS built-in security features. If additional security is needed it's always possible to put the notes on an encrypted Truecrypt drive for instance.</p>
 <p>If someone that you don't trust has access to the computer, they can put a keylogger anyway so any local encryption or PIN access would not be useful.</p>
-<h1>WebDAV synchronisation is not working</h1>
-<h2>&quot;Forbidden&quot; error in Strato</h2>
+<h1><a name="webdav-synchronisation-is-not-working" href="#webdav-synchronisation-is-not-working" class="heading-anchor">🔗</a>WebDAV synchronisation is not working</h1>
+<h2><a name="forbidden-error-in-strato" href="#forbidden-error-in-strato" class="heading-anchor">🔗</a>&quot;Forbidden&quot; error in Strato</h2>
 <p>For example:</p>
 <pre><code>MKCOL .sync/: Unknown error 2 (403): &lt;!DOCTYPE HTML PUBLIC &quot;-//IETF//DTD HTML 2.0//EN&quot;&gt;
 &lt;html&gt;&lt;head&gt;
@@ -305,15 +323,15 @@ on this server.&lt;/p&gt;
 &lt;/body&gt;&lt;/html&gt;
 </code></pre>
 <p>In this case, <a href="https://github.com/laurent22/joplin/issues/309">make sure you enter the correct WebDAV URL</a>.</p>
-<h2>Nextcloud sync is not working</h2>
+<h2><a name="nextcloud-sync-is-not-working" href="#nextcloud-sync-is-not-working" class="heading-anchor">🔗</a>Nextcloud sync is not working</h2>
 <ul>
 <li>Check your username and password. <strong>Type it manually</strong> (without copying and pasting it) and try again.</li>
 <li>Check the WebDAV URL - to get the correct URL, go to Nextcloud and, in the left sidebar, click on &quot;Settings&quot; and copy the WebDAV URL from there. <strong>Do not forget to add the folder you've created to that URL</strong>. For example, if the base the WebDAV URL is &quot;<a href="https://example.com/nextcloud/remote.php/webdav/">https://example.com/nextcloud/remote.php/webdav/</a>&quot; and you want the notes to be synced in the &quot;Joplin&quot; directory, you need to give the URL &quot;<a href="https://example.com/nextcloud/remote.php/webdav/Joplin">https://example.com/nextcloud/remote.php/webdav/Joplin</a>&quot; <strong>and you need to create the &quot;Joplin&quot; directory yourself</strong>.</li>
 <li>Did you enable <strong>2FA</strong> (Multi-factor authentication) on Nextcloud? In that case, you need to <a href="https://github.com/laurent22/joplin/issues/1453#issuecomment-486640902">create a one-time password for Joplin on the Nextcloud admin interface</a>.</li>
 </ul>
-<h1>Could you publish Joplin on F-droid?</h1>
+<h1><a name="could-you-publish-joplin-on-f-droid-" href="#could-you-publish-joplin-on-f-droid-" class="heading-anchor">🔗</a>Could you publish Joplin on F-droid?</h1>
 <p>Joplin relies on Firebase to enable reliable notifications on Android. Since F-Droid <a href="https://gitlab.com/fdroid/rfp/issues/434#note_55239154">do not accept applications that depend on this package</a>, it is not currently possible to have Joplin in that repository. To avoid using Google Play, you have the option to directly download the Joplin APK file.</p>
-<h1>Why is it named Joplin?</h1>
+<h1><a name="why-is-it-named-joplin-" href="#why-is-it-named-joplin-" class="heading-anchor">🔗</a>Why is it named Joplin?</h1>
 <p>The name comes from the composer and pianist <a href="https://en.wikipedia.org/wiki/Scott_Joplin">Scott Joplin</a>, which I often listen to. His name is also easy to remember and type so it fell like a good choice. And, to quote a user on Hacker News, &quot;though Scott Joplin's ragtime musical style has a lot in common with some very informal music, his own approach was more educated, sophisticated, and precise. Every note was in its place for a reason, and he was known to prefer his pieces to be performed exactly as written. So you could say that compared to the people who came before him, his notes were more organized&quot;.</p>
 
 <script>

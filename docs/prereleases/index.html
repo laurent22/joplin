@@ -180,6 +180,24 @@
 		color: gray;
 		font-size: .9em;
 	}
+	a.heading-anchor {
+		display: inline-block;
+		opacity: 0;
+		width: 1.3em;
+		font-size: 0.7em;
+		margin-left: -1.3em;
+		line-height: 1em;
+		text-decoration: none;
+	}
+	a.heading-anchor:hover,
+	h1:hover a.heading-anchor,
+	h2:hover a.heading-anchor,
+	h3:hover a.heading-anchor,
+	h4:hover a.heading-anchor,
+	h5:hover a.heading-anchor,
+	h6:hover a.heading-anchor {
+		opacity: 1;
+	}
 	@media all and (min-width: 400px) {
 		.nav-right .share-btn {
 			display: inline-block;
@@ -250,7 +268,7 @@
 </li>
 </ul>
 </div>
-<h1>Getting pre-releases</h1>
+<h1><a name="getting-pre-releases" href="#getting-pre-releases" class="heading-anchor">🔗</a>Getting pre-releases</h1>
 <p>Pre-releases are available for the desktop application. They are pretty much like regular releases, except that they have not yet been tested by many users, so it is possible that a bug or two went through.</p>
 <p>You can help the development of Joplin by choosing to receive these early releases when updating the application. If you find any bug or other issue, you may report it <a href="https://discourse.joplin.cozic.net/">on the forum</a> or <a href="https://github.com/laurent22/joplin/issues">GitHub</a>.</p>
 <p>In general it is safe to use these pre-releases (they do not include any experimental or unstable features). In fact most pre-release eventually become regular releases after a few days.</p>
