@@ -588,9 +588,6 @@ class Application extends BaseApplication {
 				newNoteItem,
 				newTodoItem,
 				newNotebookItem, {
-					type: 'separator',
-					visible: shim.isMac() ? true : false
-				}, {
 					label: _('Close Window'),
 					platforms: ['darwin'],
 					accelerator: 'Command+W',
