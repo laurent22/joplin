@@ -81,17 +81,19 @@ function filterLogs(logs, platform) {
 
 		if (revertedLogs.indexOf(log.message) >= 0) continue;
 
-		const msg = log.message.trim().toLowerCase();
+		let prefix = log.message.trim().toLowerCase().split(':');
+		if (prefix.length <= 1) continue;
+		prefix = prefix[0].split(',').map(s => s.trim());
 
 		let addIt = false;
 
-		if (msg.indexOf('all:') === 0 && platform !== 'clipper') addIt = true;
-		if ((platform === 'android' || platform === 'ios') && msg.indexOf('mobile:') === 0) addIt = true;
-		if (platform === 'android' && msg.indexOf('android:') === 0) addIt = true;
-		if (platform === 'ios' && msg.indexOf('ios:') === 0) addIt = true;
-		if (platform === 'desktop' && msg.indexOf('desktop:') === 0) addIt = true;
-		if (platform === 'cli' && msg.indexOf('cli:') === 0) addIt = true;
-		if (platform === 'clipper' && msg.indexOf('clipper:') === 0) addIt = true;
+		if (prefix.indexOf('all') >= 0 && platform !== 'clipper') addIt = true;
+		if ((platform === 'android' || platform === 'ios') && prefix.indexOf('mobile') >= 0) addIt = true;
+		if (platform === 'android' && prefix.indexOf('android') >= 0) addIt = true;
+		if (platform === 'ios' && prefix.indexOf('ios') >= 0) addIt = true;
+		if (platform === 'desktop' && prefix.indexOf('desktop') >= 0) addIt = true;
+		if (platform === 'cli' && prefix.indexOf('cli') >= 0) addIt = true;
+		if (platform === 'clipper' && prefix.indexOf('clipper') >= 0) addIt = true;
 
 		if (addIt) output.push(log);
 	}
