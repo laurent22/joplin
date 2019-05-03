@@ -67,19 +67,33 @@ function platformFromTag(tagName) {
 
 function filterLogs(logs, platform) {
 	const output = [];
+	const revertedLogs = [];
 
 	for (const log of logs) {
-		const msg = log.message.trim().toLowerCase();
+
+		// Save to an array any commit that has been reverted, and exclude
+		// these from the final output array.
+		const revertMatches = log.message.split('\n')[0].trim().match(/^Revert "(.*?)"$/);
+		if (revertMatches && revertMatches.length >= 2) {
+			revertedLogs.push(revertMatches[1]);
+			continue;
+		}
+
+		if (revertedLogs.indexOf(log.message) >= 0) continue;
+
+		let prefix = log.message.trim().toLowerCase().split(':');
+		if (prefix.length <= 1) continue;
+		prefix = prefix[0].split(',').map(s => s.trim());
 
 		let addIt = false;
 
-		if (msg.indexOf('all:') === 0 && platform !== 'clipper') addIt = true;
-		if ((platform === 'android' || platform === 'ios') && msg.indexOf('mobile:') === 0) addIt = true;
-		if (platform === 'android' && msg.indexOf('android:') === 0) addIt = true;
-		if (platform === 'ios' && msg.indexOf('ios:') === 0) addIt = true;
-		if (platform === 'desktop' && msg.indexOf('desktop:') === 0) addIt = true;
-		if (platform === 'cli' && msg.indexOf('cli:') === 0) addIt = true;
-		if (platform === 'clipper' && msg.indexOf('clipper:') === 0) addIt = true;
+		if (prefix.indexOf('all') >= 0 && platform !== 'clipper') addIt = true;
+		if ((platform === 'android' || platform === 'ios') && prefix.indexOf('mobile') >= 0) addIt = true;
+		if (platform === 'android' && prefix.indexOf('android') >= 0) addIt = true;
+		if (platform === 'ios' && prefix.indexOf('ios') >= 0) addIt = true;
+		if (platform === 'desktop' && prefix.indexOf('desktop') >= 0) addIt = true;
+		if (platform === 'cli' && prefix.indexOf('cli') >= 0) addIt = true;
+		if (platform === 'clipper' && prefix.indexOf('clipper') >= 0) addIt = true;
 
 		if (addIt) output.push(log);
 	}
@@ -92,9 +106,17 @@ function formatCommitMessage(msg) {
 	
 	const splitted = msg.split(':');
 
+	const isPlatformPrefix = prefix => {
+		prefix = prefix.split(',').map(p => p.trim().toLowerCase());
+		for (const p of prefix) {
+			if (['android', 'mobile', 'ios', 'desktop', 'cli', 'clipper', 'all'].indexOf(p) >= 0) return true;
+		}
+		return false;
+	}
+
 	if (splitted.length) {
 		const platform = splitted[0].trim().toLowerCase();
-		if (['android', 'mobile', 'ios', 'desktop', 'cli', 'clipper', 'all'].indexOf(platform) >= 0) {
+		if (isPlatformPrefix(platform)) {
 			splitted.splice(0, 1);
 		}
 

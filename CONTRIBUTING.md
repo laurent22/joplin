@@ -1,7 +1,3 @@
-**IMPORTANT:** At the moment pull requests for new features are no longer being accepted. More info there: https://github.com/laurent22/joplin/issues/1112
-
-* * *
-
 # User support
 
 For general discussion about Joplin, user support, software development questions, and to discuss new features, please go to the [Joplin Forum](https://discourse.joplin.cozic.net/). It is possible to login with your GitHub account.
@@ -18,11 +14,9 @@ Again, please check that it has not already been requested. If it has, simply **
 
 # Creating a pull request
 
-- If you want to add a new feature, consider asking about it before implementing it or checking existing discussions to make sure it is within the scope of the project. That scope, due to limited resources, might be narrower than you think. As a rule of thumb **if your change is likely to involve more than 50 lines of code, you should discuss it in the forum**, just so that you don't waste your time implementing something that might not be accepted.
+- If you want to add a new feature, consider asking about it before implementing it or checking existing discussions to make sure it is within the scope of the project. As a rule of thumb **if your change is likely to involve more than 50 lines of code, you should discuss it in the forum**, just so that you don't spend too much time implementing something that might not be accepted.
 
-- Bug fixes have a very high chance of being accepted.
-
-- A pull request that is relevant to the current roadmap has a very high chance of being accepted.
+- Bug fixes are always welcome.
 
 Building the apps is relatively easy - please [see the build instructions](https://github.com/laurent22/joplin/blob/master/BUILD.md) for more details.
 

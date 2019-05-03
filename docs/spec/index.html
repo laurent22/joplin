@@ -180,6 +180,24 @@
 		color: gray;
 		font-size: .9em;
 	}
+	a.heading-anchor {
+		display: inline-block;
+		opacity: 0;
+		width: 1.3em;
+		font-size: 0.7em;
+		margin-left: -1.3em;
+		line-height: 1em;
+		text-decoration: none;
+	}
+	a.heading-anchor:hover,
+	h1:hover a.heading-anchor,
+	h2:hover a.heading-anchor,
+	h3:hover a.heading-anchor,
+	h4:hover a.heading-anchor,
+	h5:hover a.heading-anchor,
+	h6:hover a.heading-anchor {
+		opacity: 1;
+	}
 	@media all and (min-width: 400px) {
 		.nav-right .share-btn {
 			display: inline-block;
@@ -250,10 +268,10 @@
 </li>
 </ul>
 </div>
-<h1 id="encryption">Encryption</h1>
+<h1><a name="encryption" href="#encryption" class="heading-anchor">🔗</a>Encryption</h1>
 <p>Encrypted data is encoded to ASCII because encryption/decryption functions in React Native can only deal with strings. So for compatibility with all the apps we need to use the lowest common denominator.</p>
-<h2 id="encrypted-data-format">Encrypted data format</h2>
-<h3 id="header">Header</h3>
+<h2><a name="encrypted-data-format" href="#encrypted-data-format" class="heading-anchor">🔗</a>Encrypted data format</h2>
+<h3><a name="header" href="#header" class="heading-anchor">🔗</a>Header</h3>
 <table>
 <thead>
 <tr>
@@ -296,7 +314,7 @@
 </tbody>
 </table>
 <p>See <code>lib/services/EncryptionService.js</code> for the list of available encryption methods.</p>
-<h3 id="data-chunk">Data chunk</h3>
+<h3><a name="data-chunk" href="#data-chunk" class="heading-anchor">🔗</a>Data chunk</h3>
 <p>The data is encoded in one or more chunks for performance reasons. That way it is possible to take a block of data from one file and encrypt it to another block in another file. Encrypting/decrypting the whole file in one go would not work (on mobile especially).</p>
 <table>
 <thead>
@@ -316,27 +334,31 @@
 </tr>
 </tbody>
 </table>
-<h2 id="master-keys">Master Keys</h2>
+<h2><a name="master-keys" href="#master-keys" class="heading-anchor">🔗</a>Master Keys</h2>
 <p>The master keys are used to encrypt and decrypt data. They can be generated from the Encryption Service and are saved to the database. They are themselves encrypted via a user password using a <a href="https://github.com/laurent22/joplin/blob/fb6dee32ac035b00153106273135fb16be4b4fa5/ReactNativeClient/lib/services/EncryptionService.js#L263">strong encyption method</a>.</p>
 <p>These encrypted master keys are transmitted with the sync data so that they can be available to each client. Each client will need to supply the user password to decrypt each key.</p>
 <p>The application supports multiple master keys in order to handle cases where one offline client starts encrypting notes, then another offline client starts encrypting notes too, and later both sync. Both master keys will have to be decrypted separately with the user password.</p>
-<p>Only one master key can be active for encryption purposes. For decryption, the algorithm will check the Master Key ID in the header, then check if it&#39;s available to the current app and, if so, use this for decryption.</p>
-<h2 id="encryption-service">Encryption Service</h2>
+<p>Only one master key can be active for encryption purposes. For decryption, the algorithm will check the Master Key ID in the header, then check if it's available to the current app and, if so, use this for decryption.</p>
+<h2><a name="encryption-service" href="#encryption-service" class="heading-anchor">🔗</a>Encryption Service</h2>
 <p>The applications make use of the <code>EncryptionService</code> class to handle encryption and decryption. Before it can be used, a least one master key must be loaded into it and be marked as &quot;active&quot;.</p>
-<h2 id="encryption-workflow">Encryption workflow</h2>
+<h2><a name="encryption-workflow" href="#encryption-workflow" class="heading-anchor">🔗</a>Encryption workflow</h2>
 <p>Items are encrypted only during synchronisation, when they are serialised (via <code>BaseItem.serializeForSync</code>), so before being sent to the sync target.</p>
 <p>They are decrypted by DecryptionWorker in the background.</p>
 <p>The apps handle displaying both decrypted and encrypted items, so that user is aware that these items are there even if not yet decrypted. Encrypted items are mostly read-only to the user, except that they can be deleted.</p>
-<h2 id="enabling-and-disabling-encryption">Enabling and disabling encryption</h2>
+<h2><a name="enabling-and-disabling-encryption" href="#enabling-and-disabling-encryption" class="heading-anchor">🔗</a>Enabling and disabling encryption</h2>
 <p>Enabling/disabling E2EE while two clients are in sync might have an unintuitive behaviour (although that behaviour might be correct), so below some scenarios are explained:</p>
 <ul>
-<li><p>If client 1 enables E2EE, all items will be synced to target and will appear encrypted on target. Although all items have been re-uploaded to the target, their timestamps did <em>not</em> change (because the item data itself has not changed, only its representation). Because of this, client 2 will not re-download the items - it does not need to do so anyway since it has already the item data.</p>
+<li>
+<p>If client 1 enables E2EE, all items will be synced to target and will appear encrypted on target. Although all items have been re-uploaded to the target, their timestamps did <em>not</em> change (because the item data itself has not changed, only its representation). Because of this, client 2 will not re-download the items - it does not need to do so anyway since it has already the item data.</p>
 </li>
-<li><p>When a client sync and download a master key for the first time, encryption will be automatically enabled (user will need to supply the master key password). In that case, all items that are not encrypted will be re-synced. Uploading only non-encrypted items is an optimisation since if an item is already encrypted locally it means it&#39;s encrypted on target too.</p>
+<li>
+<p>When a client sync and download a master key for the first time, encryption will be automatically enabled (user will need to supply the master key password). In that case, all items that are not encrypted will be re-synced. Uploading only non-encrypted items is an optimisation since if an item is already encrypted locally it means it's encrypted on target too.</p>
 </li>
-<li><p>If both clients are in sync with E2EE enabled: if client 1 disable E2EE, it&#39;s going to re-upload all the items unencrypted. Client 2 again will not re-download the items for the same reason as above (data did not change, only representation). Note that user <em>must</em> manually disable E2EE on all clients otherwise some will continue to upload encrypted items. Since synchronisation is stateless, clients do not know whether other clients use E2EE or not so this step has to be manual.</p>
+<li>
+<p>If both clients are in sync with E2EE enabled: if client 1 disable E2EE, it's going to re-upload all the items unencrypted. Client 2 again will not re-download the items for the same reason as above (data did not change, only representation). Note that user <em>must</em> manually disable E2EE on all clients otherwise some will continue to upload encrypted items. Since synchronisation is stateless, clients do not know whether other clients use E2EE or not so this step has to be manual.</p>
 </li>
-<li><p>Although messy, Joplin supports having some clients send encrypted items and others unencrypted ones. The situation gets resolved once all the clients have the same E2EE settings.</p>
+<li>
+<p>Although messy, Joplin supports having some clients send encrypted items and others unencrypted ones. The situation gets resolved once all the clients have the same E2EE settings.</p>
 </li>
 </ul>
 

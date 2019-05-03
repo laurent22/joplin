@@ -1,6 +1,5 @@
 const fs = require('fs-extra');
 const dirname = require('path').dirname;
-const marked = require('marked');
 const Mustache = require('mustache');
 
 const headerHtml = `<!doctype html>
@@ -185,6 +184,24 @@ const headerHtml = `<!doctype html>
 		color: gray;
 		font-size: .9em;
 	}
+	a.heading-anchor {
+		display: inline-block;
+		opacity: 0;
+		width: 1.3em;
+		font-size: 0.7em;
+		margin-left: -1.3em;
+		line-height: 1em;
+		text-decoration: none;
+	}
+	a.heading-anchor:hover,
+	h1:hover a.heading-anchor,
+	h2:hover a.heading-anchor,
+	h3:hover a.heading-anchor,
+	h4:hover a.heading-anchor,
+	h5:hover a.heading-anchor,
+	h6:hover a.heading-anchor {
+		opacity: 1;
+	}
 	@media all and (min-width: 400px) {
 		.nav-right .share-btn {
 			display: inline-block;
@@ -305,15 +322,103 @@ const scriptHtml = `
 const rootDir = dirname(__dirname);
 
 function markdownToHtml(md) {
-	const renderer = new marked.Renderer();
+	const MarkdownIt = require('markdown-it');
 
-	let output = marked(md, {
-		gfm: true,
-		break: true,
-		renderer: renderer,
+	const markdownIt = new MarkdownIt({
+		breaks: true,
+		linkify: true,
+		html: true,
 	});
 
-	return headerHtml + output + scriptHtml + footerHtml;
+	markdownIt.core.ruler.push('checkbox', state => {
+		const tokens = state.tokens;
+		const Token = state.Token;
+		const doneNames = [];
+
+		const headingTextToAnchorName = (text, doneNames) => {
+			const allowed = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+			let lastWasDash = true;
+			let output = '';
+			for (let i = 0; i < text.length; i++) {
+				const c = text[i];
+				if (allowed.indexOf(c) < 0) {
+					if (lastWasDash) continue;
+					lastWasDash = true;
+					output += '-';
+				} else {
+					lastWasDash = false;
+					output += c;
+				}
+			}
+
+			output = output.toLowerCase();
+
+			let temp = output;
+			let index = 1;
+			while (doneNames.indexOf(temp) >= 0) {
+				temp = output + '-' + index;
+				index++;
+			}
+			output = temp;
+
+			return output;
+		}
+
+		const createAnchorTokens = anchorName => {
+			const output = [];
+
+			{
+				const token = new Token('heading_anchor_open', 'a', 1);
+				token.attrs = [
+					['name', anchorName],
+					['href', '#' + anchorName],
+					['class', 'heading-anchor'],
+				];
+				output.push(token);
+			}
+
+			{
+				const token = new Token('text', '', 0);
+				token.content = '🔗';
+				output.push(token);
+			}
+
+			{
+				const token = new Token('heading_anchor_close', 'a', -1);
+				output.push(token);
+			}
+
+			return output;
+		}
+
+		let insideHeading = false;
+		let processedFirstInline = false;
+		for (let i = 0; i < tokens.length; i++) {
+			const token = tokens[i];
+
+			if (token.type === 'heading_open') {
+				insideHeading = true;
+				processedFirstInline = false;
+				continue;
+			}
+
+			if (token.type === 'heading_close') {
+				insideHeading = false;
+				processedFirstInline = false;
+				continue;
+			}
+
+			if (insideHeading && token.type === 'inline') {
+				processedFirstInline = true;
+				const anchorName = headingTextToAnchorName(token.content, doneNames);
+				doneNames.push(anchorName);
+				const anchorTokens = createAnchorTokens(anchorName);
+				token.children = anchorTokens.concat(token.children);
+			}
+		}
+	});
+
+	return headerHtml + markdownIt.render(md) + scriptHtml + footerHtml;
 }
 
 let tocMd_ = null;

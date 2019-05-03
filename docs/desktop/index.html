@@ -180,6 +180,24 @@
 		color: gray;
 		font-size: .9em;
 	}
+	a.heading-anchor {
+		display: inline-block;
+		opacity: 0;
+		width: 1.3em;
+		font-size: 0.7em;
+		margin-left: -1.3em;
+		line-height: 1em;
+		text-decoration: none;
+	}
+	a.heading-anchor:hover,
+	h1:hover a.heading-anchor,
+	h2:hover a.heading-anchor,
+	h3:hover a.heading-anchor,
+	h4:hover a.heading-anchor,
+	h5:hover a.heading-anchor,
+	h6:hover a.heading-anchor {
+		opacity: 1;
+	}
 	@media all and (min-width: 400px) {
 		.nav-right .share-btn {
 			display: inline-block;
@@ -250,7 +268,7 @@
 </li>
 </ul>
 </div>
-<p><img src="https://joplinapp.org/images/DemoDesktop.png" style="max-width: 100%"></p>
+<img src="https://joplinapp.org/images/DemoDesktop.png" style="max-width: 100%">
 <p>For general information relevant to all the applications, see also <a href="https://joplinapp.org">Joplin home page</a>.</p>
 
 <script>

@@ -589,6 +589,11 @@ class Application extends BaseApplication {
 				newNoteItem,
 				newTodoItem,
 				newNotebookItem, {
+					label: _('Close Window'),
+					platforms: ['darwin'],
+					accelerator: 'Command+W',
+					selector: 'performClose:',
+				}, {
 					type: 'separator',
 				}, {
 					label: _('Import'),
