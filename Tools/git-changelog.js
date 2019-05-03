@@ -106,9 +106,17 @@ function formatCommitMessage(msg) {
 	
 	const splitted = msg.split(':');
 
+	const isPlatformPrefix = prefix => {
+		prefix = prefix.split(',').map(p => p.trim().toLowerCase());
+		for (const p of prefix) {
+			if (['android', 'mobile', 'ios', 'desktop', 'cli', 'clipper', 'all'].indexOf(p) >= 0) return true;
+		}
+		return false;
+	}
+
 	if (splitted.length) {
 		const platform = splitted[0].trim().toLowerCase();
-		if (['android', 'mobile', 'ios', 'desktop', 'cli', 'clipper', 'all'].indexOf(platform) >= 0) {
+		if (isPlatformPrefix(platform)) {
 			splitted.splice(0, 1);
 		}
 
