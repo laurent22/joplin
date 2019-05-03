@@ -531,7 +531,9 @@ async function initialize(dispatch) {
 
 	await WelcomeUtils.install(dispatch);
 
-	RevisionService.instance().runInBackground();
+	// Collect revisions more frequently on mobile because it doesn't auto-save
+	// and it cannot collect anything when the app is not active.
+	RevisionService.instance().runInBackground(1000 * 30);
 
 	reg.logger().info('Application initialized');
 }

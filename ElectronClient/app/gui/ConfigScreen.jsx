@@ -265,9 +265,12 @@ class ConfigScreenComponent extends React.Component {
 				updateSettingValue(key, event.target.value);
 			};
 
+			const label = [md.label()];
+			if (md.unitLabel) label.push('(' + md.unitLabel() + ')');
+
 			return (
 				<div key={key} style={rowStyle}>
-					<div style={labelStyle}><label>{md.label()}</label></div>
+					<div style={labelStyle}><label>{label.join(' ')}</label></div>
 					<input type="number" style={controlStyle} value={this.state.settings[key]} onChange={(event) => {onNumChange(event)}} min={md.minimum} max={md.maximum} step={md.step}/>
 					{ descriptionComp }
 				</div>

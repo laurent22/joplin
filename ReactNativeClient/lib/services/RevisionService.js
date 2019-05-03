@@ -255,10 +255,13 @@ class RevisionService extends BaseService {
 		this.logger().info('RevisionService::maintenance: Done in ' + (Date.now() - startTime) + 'ms');
 	}
 
-	runInBackground() {
+	runInBackground(collectRevisionInterval = null) {
 		if (this.isRunningInBackground_) return;
-
 		this.isRunningInBackground_ = true;
+
+		if (collectRevisionInterval === null) collectRevisionInterval = 1000 * 60 * 10;
+
+		this.logger().info('RevisionService::runInBackground: Starting background service with revision collection interval ' + collectRevisionInterval);
 
 		setTimeout(() => {
 			this.maintenance();
@@ -266,7 +269,7 @@ class RevisionService extends BaseService {
 		
 		shim.setInterval(() => {
 			this.maintenance();
-		}, 1000 * 60 * 10);
+		}, collectRevisionInterval);
 	}
 
 }
