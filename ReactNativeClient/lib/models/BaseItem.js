@@ -279,7 +279,7 @@ class BaseItem extends BaseModel {
 
 		let temp = [];
 
-		if (output.title) temp.push(output.title);
+		if (typeof output.title === "string") temp.push(output.title);
 		if (output.body) temp.push(output.body);
 		if (output.props.length) temp.push(output.props.join("\n"));
 
@@ -644,7 +644,7 @@ class BaseItem extends BaseModel {
 
 	static displayTitle(item) {
 		if (!item) return '';
-		return !!item.encryption_applied ? '🔑 ' + _('Encrypted') : item.title + '';
+		return !!item.encryption_applied ? '🔑 ' + _('Encrypted') : (!!item.title)? item.title + '' : Note.defaultTitle(item);
 	}
 
 	static async markAllNonEncryptedForSync() {
