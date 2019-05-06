@@ -525,14 +525,32 @@ class Note extends BaseItem {
 		return this.save(newNote);
 	}
 
+	static async noteIsOlderThan(noteId, date) {
+		const n = await this.db().selectOne('SELECT updated_time FROM notes WHERE id = ?', [noteId]);
+		if (!n) throw new Error('No such note: ' + noteId);
+		return n.updated_time < date;
+	}
+
 	static async save(o, options = null) {
 		let isNew = this.isNew(o, options);
 		if (isNew && !o.source) o.source = Setting.value('appName');
 		if (isNew && !o.source_application) o.source_application = Setting.value('appId');
 
+		// We only keep the previous note content for "old notes" (see Revision Service for more info)
+		// In theory, we could simply save all the previous note contents, and let the revision service
+		// decide what to keep and what to ignore, but in practice keeping the previous content is a bit
+		// heavy - the note needs to be reloaded here, the JSON blob needs to be saved, etc.
+		// So the check for old note here is basically an optimisation.
+		let beforeNoteJson = null;
+		if (!isNew && this.revisionService().isOldNote(o.id)) {
+			beforeNoteJson = await Note.load(o.id);
+			if (beforeNoteJson) beforeNoteJson = JSON.stringify(beforeNoteJson);
+		}
+
 		const note = await super.save(o, options);
 
-		ItemChange.add(BaseModel.TYPE_NOTE, note.id, isNew ? ItemChange.TYPE_CREATE : ItemChange.TYPE_UPDATE);
+		const changeSource = options && options.changeSource ? options.changeSource : null;
+		ItemChange.add(BaseModel.TYPE_NOTE, note.id, isNew ? ItemChange.TYPE_CREATE : ItemChange.TYPE_UPDATE, changeSource, beforeNoteJson);
 
 		this.dispatch({
 			type: 'NOTE_UPDATE_ONE',
@@ -550,16 +568,29 @@ class Note extends BaseItem {
 	}
 
 	static async batchDelete(ids, options = null) {
-		const result = await super.batchDelete(ids, options);
-		for (let i = 0; i < ids.length; i++) {
-			ItemChange.add(BaseModel.TYPE_NOTE, ids[i], ItemChange.TYPE_DELETE);
+		ids = ids.slice();
 
-			this.dispatch({
-				type: 'NOTE_DELETE',
-				id: ids[i],
-			});
+		while (ids.length) {
+			const processIds = ids.splice(0, 50);
+
+			const notes = await Note.byIds(processIds);
+			const beforeChangeItems = {};
+			for (const note of notes) {
+				beforeChangeItems[note.id] = JSON.stringify(note);
+			}
+
+			const result = await super.batchDelete(processIds, options);
+			const changeSource = options && options.changeSource ? options.changeSource : null;
+			for (let i = 0; i < processIds.length; i++) {
+				const id = processIds[i];
+				ItemChange.add(BaseModel.TYPE_NOTE, id, ItemChange.TYPE_DELETE, changeSource, beforeChangeItems[id]);
+
+				this.dispatch({
+					type: 'NOTE_DELETE',
+					id: id,
+				});
+			}
 		}
-		return result;
 	}
 
 	static dueNotes() {

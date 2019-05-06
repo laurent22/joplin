@@ -263,7 +263,7 @@ class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -513,6 +513,35 @@ class JoplinDatabase extends Database {
 					CREATE TRIGGER notes_after_insert AFTER INSERT ON notes_normalized BEGIN
 						INSERT INTO notes_fts(docid, id, title, body) SELECT rowid, id, title, body FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
 					END;`);
+			}
+
+			if (targetVersion == 19) {
+				const newTableSql = `
+					CREATE TABLE revisions (
+						id TEXT PRIMARY KEY,
+						parent_id TEXT NOT NULL DEFAULT "",
+						item_type INT NOT NULL,
+						item_id TEXT NOT NULL,
+						item_updated_time INT NOT NULL,
+						title_diff TEXT NOT NULL DEFAULT "",
+						body_diff TEXT NOT NULL DEFAULT "",
+						metadata_diff TEXT NOT NULL DEFAULT "",
+						encryption_cipher_text TEXT NOT NULL DEFAULT "",
+						encryption_applied INT NOT NULL DEFAULT 0,
+						updated_time INT NOT NULL,
+						created_time INT NOT NULL
+					);
+				`;
+				queries.push(this.sqlStringToLines(newTableSql)[0]);
+
+				queries.push('CREATE INDEX revisions_parent_id ON revisions (parent_id)');
+				queries.push('CREATE INDEX revisions_item_type ON revisions (item_type)');
+				queries.push('CREATE INDEX revisions_item_id ON revisions (item_id)');
+				queries.push('CREATE INDEX revisions_item_updated_time ON revisions (item_updated_time)');
+				queries.push('CREATE INDEX revisions_updated_time ON revisions (updated_time)');
+
+				queries.push('ALTER TABLE item_changes ADD COLUMN source INT NOT NULL DEFAULT 1');
+				queries.push('ALTER TABLE item_changes ADD COLUMN before_change_item TEXT NOT NULL DEFAULT ""');
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

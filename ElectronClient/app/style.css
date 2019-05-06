@@ -113,3 +113,12 @@ table td, table th {
 .note-property-box .rdt {
 	display: inline-block;
 }
+
+.help-tooltip {
+	font-family: sans-serif;
+	max-width: 200px;
+}
+
+:disabled {
+	opacity: 0.6;
+}

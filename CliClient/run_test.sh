@@ -31,6 +31,7 @@ npm test tests-build/models_Folder.js
 npm test tests-build/models_ItemChange.js
 npm test tests-build/models_Note.js
 npm test tests-build/models_Resource.js
+npm test tests-build/models_Revision.js
 npm test tests-build/models_Setting.js
 npm test tests-build/models_Tag.js
 npm test tests-build/pathUtils.js
@@ -38,6 +39,7 @@ npm test tests-build/services_InteropService.js
 npm test tests-build/services_ResourceService.js
 npm test tests-build/services_rest_Api.js
 npm test tests-build/services_SearchEngine.js
+npm test tests-build/services_Revision.js
 npm test tests-build/StringUtils.js
 npm test tests-build/synchronizer.js
 npm test tests-build/urlUtils.js
