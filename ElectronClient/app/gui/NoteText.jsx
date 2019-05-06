@@ -501,7 +501,7 @@ class NoteTextComponent extends React.Component {
 				// 2. It resets the undo manager - fixes https://github.com/laurent22/joplin/issues/355
 				// Note: calling undoManager.reset() doesn't work
 				try {
-					this.editor_.editor.getSession().setValue(note ? note.body : '');
+					this.editor_.editor.getSession().setValue(note && note.body? note.body : '');
 				} catch (error) {
 					if (error.message === "Cannot read property 'match' of undefined") {
 						// The internals of Ace Editor throws an exception when creating a new note,
