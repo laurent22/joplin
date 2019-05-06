@@ -4,8 +4,6 @@
 
 // (Desktop|Mobile|Android|iOS[CLI): (New|Improved|Fixed): Some message..... (#ISSUE)
 
-// Requires git2json: https://github.com/tarmstrong/git2json
-
 require('app-module-path').addPath(__dirname + '/../ReactNativeClient');
 
 const rootDir = __dirname + '/..';
@@ -31,11 +29,22 @@ async function gitTags() {
 	return output;
 }
 
-async function gitLog() {
-	await execCommand('git2json > gitlog.json');
-	const output = await fs.readJson(rootDir + '/gitlog.json');
-	if (!output || !output.length) throw new Error('Could not read git log or could not generate gitlog.json');
-	await fs.remove('gitlog.json');
+async function gitLog(sinceTag) {
+	let lines = await execCommand('git log --pretty=format:"%H:%s" ' + sinceTag + '..HEAD');
+	lines = lines.split('\n');
+
+	const output = [];
+	for (const line of lines) {
+		const splitted = line.split(':');
+		const commit = splitted[0];
+		const message = line.substr(commit.length + 1).trim();;
+		
+		output.push({
+			commit: commit,
+			message: message,
+		});
+	}
+
 	return output;
 }
 
@@ -148,12 +157,21 @@ function formatCommitMessage(msg) {
 			};
 		}
 
-		const t = parts[0].trim().toLowerCase();
+		let t = parts[0].trim().toLowerCase();
 
 		parts.splice(0, 1);
-		const message = parts.join(':').trim();
+		let message = parts.join(':').trim();
 
 		let type = null;
+
+		// eg. "All: Resolves #712: New: Support for note history (#1415)"
+		// "Resolves" doesn't tell us if it's new or improved so check the 
+		// third token (which in this case is "new").
+		if (t.indexOf('resolves') === 0 && ['new', 'improved', 'fixed'].indexOf(parts[0].trim().toLowerCase()) >= 0) {
+			t = parts[0].trim().toLowerCase();
+			parts.splice(0, 1);
+			message = parts.join(':').trim();
+		}
 
 		if (t.indexOf('fix') === 0) type = 'fixed';
 		if (t.indexOf('new') === 0) type = 'new';
@@ -203,20 +221,7 @@ async function main() {
 	const sinceTagName = argv._[0];
 	const platform = platformFromTag(sinceTagName);
 
-	const logs = await gitLog();
-	const tags = await gitTags();
-
-	let sinceTagHash = null;
-	for (const tag of tags) {
-		if (tag.name === sinceTagName) {
-			sinceTagHash = tag.hash;
-			break;
-		}
-	}
-
-	if (!sinceTagHash) throw new Error('Could not find tag: ' + sinceTagName);
-
-	const logsSinceTags = await gitLogSinceTag(logs, sinceTagHash);
+	const logsSinceTags = await gitLog(sinceTagName);
 	const filteredLogs = filterLogs(logsSinceTags, platform);
 
 	let changelog = createChangeLog(filteredLogs);
