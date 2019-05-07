@@ -87,6 +87,8 @@ class RevisionService extends BaseService {
 			output.body_diff = Revision.createTextPatch('', noteBody);
 			output.metadata_diff = Revision.createObjectPatch({}, noteMd);
 		} else {
+			if (Date.now() - parentRev.updated_time < Setting.value('revisionService.intervalBetweenRevisions')) return null;
+
 			const merged = await Revision.mergeDiffs(parentRev);
 			output.parent_id = parentRev.id;
 			output.title_diff = Revision.createTextPatch(merged.title, noteTitle);

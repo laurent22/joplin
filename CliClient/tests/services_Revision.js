@@ -22,6 +22,7 @@ describe('services_Revision', function() {
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
+		Setting.setValue('revisionService.intervalBetweenRevisions', 0)
 		done();
 	});
 
@@ -398,6 +399,23 @@ describe('services_Revision', function() {
 
 		const revNote = await revisionService().revisionNote(revisions, 1);
 		expect(revNote.user_updated_time).toBe(userUpdatedTime);
+	}));
+
+	it('should not create a revision if there is already a recent one', asyncTest(async () => {
+		const n1_v0 = await Note.save({ title: '' });
+		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
+		await revisionService().collectRevisions(); // REV 1
+
+		const n1_v2 = await Note.save({ id: n1_v0.id, title: 'hello 2' });
+		await revisionService().collectRevisions(); // REV 2
+		expect((await Revision.all()).length).toBe(2);
+
+		Setting.setValue('revisionService.intervalBetweenRevisions', 1000);
+
+		const n1_v3 = await Note.save({ id: n1_v0.id, title: 'hello 3' });
+		await revisionService().collectRevisions(); // No rev because there's already a rev that is less than 1000 ms old
+
+		expect((await Revision.all()).length).toBe(2);
 	}));
 
 });
