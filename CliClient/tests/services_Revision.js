@@ -157,11 +157,11 @@ describe('services_Revision', function() {
 
 		const n1_v1 = await Note.save({ title: 'hello' });
 		const noteId = n1_v1.id;
-		const rev1 = await service.createNoteRevision(n1_v1);
+		const rev1 = await service.createNoteRevision_(n1_v1);
 		const n1_v2 = await Note.save({ id: noteId, title: 'hello Paul' });
-		const rev2 = await service.createNoteRevision(n1_v2, rev1.id);
+		const rev2 = await service.createNoteRevision_(n1_v2, rev1.id);
 		const n1_v3 = await Note.save({ id: noteId, title: 'hello John' });
-		const rev3 = await service.createNoteRevision(n1_v3, rev1.id);
+		const rev3 = await service.createNoteRevision_(n1_v3, rev1.id);
 
 		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, noteId);
 		expect(revisions.length).toBe(3);
@@ -367,6 +367,17 @@ describe('services_Revision', function() {
 
 		await revisionService().deleteOldRevisions(500);
 		expect((await Revision.all()).length).toBe(1);
+	}));
+
+	it('should not create a revision if the note has not changed', asyncTest(async () => {
+		const n1_v0 = await Note.save({ title: '' });
+		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
+		await revisionService().collectRevisions(); // REV 1
+		expect((await Revision.all()).length).toBe(1);
+
+		const n1_v2 = await Note.save({ id: n1_v0.id, title: 'hello' });
+		await revisionService().collectRevisions(); // Note has not changed (except its timestamp) so don't create a revision
+		expect((await Revision.all()).length).toBe(1);		
 	}));
 
 });

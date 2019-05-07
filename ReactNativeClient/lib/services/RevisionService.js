@@ -50,10 +50,25 @@ class RevisionService extends BaseService {
 			if (excludedFields.indexOf(k) >= 0) continue;
 			md[k] = note[k];
 		}
+
+		if (note.user_updated_time === note.updated_time) delete md.user_updated_time;
+		if (note.user_created_time === note.created_time) delete md.user_created_time;
+
 		return md;
 	}
 
-	async createNoteRevision(note, parentRevId = null) {
+	isEmptyRevision_(rev) {
+		if (!!rev.title_diff) return false;
+		if (!!rev.body_diff) return false;
+
+		const md = JSON.parse(rev.metadata_diff);
+		if (md.new && md.new.length) return false;
+		if (md.deleted && md.deleted.length) return false;
+
+		return true;
+	}
+
+	async createNoteRevision_(note, parentRevId = null) {
 		const parentRev = parentRevId ? await Revision.load(parentRevId) : await Revision.latestRevision(BaseModel.TYPE_NOTE, note.id);
 
 		const output = {
@@ -79,36 +94,9 @@ class RevisionService extends BaseService {
 			output.metadata_diff = Revision.createObjectPatch(merged.metadata, noteMd);
 		}
 
+		if (this.isEmptyRevision_(output)) return null;
+
 		return Revision.save(output);
-	}
-
-	async createNoteRevisionsByIds(noteIds) {
-		noteIds = ArrayUtils.unique(noteIds);
-
-		while (noteIds.length) {
-			const ids = noteIds.splice(0, 100);
-			const notes = await Note.byIds(ids);
-			for (const note of notes) {
-				const existingRev = await Revision.latestRevision(BaseModel.TYPE_NOTE, note.id);
-				if (existingRev && existingRev.item_updated_time === note.updated_time) continue;
-				await this.createNoteRevision(note);
-			}
-		}
-	}
-
-	async createNoteRevisionIfNoneFound(noteId, cutOffDate) {
-		const count = await Revision.countRevisions(BaseModel.TYPE_NOTE, noteId);
-		if (count) return;
-
-		const note = await Note.load(noteId);
-		if (!note) {
-			this.logger().warn('RevisionService:createNoteRevisionIfNoneFound: Could not find note ' + noteId);
-			return;
-		}
-
-		if (note.updated_time > cutOffDate) return;
-
-		await this.createNoteRevision(note);
 	}
 
 	async collectRevisions() {
@@ -150,10 +138,10 @@ class RevisionService extends BaseService {
 						if (note) {
 							if (oldNote && oldNote.updated_time < this.installedTime()) {
 								// This is where we save the original version of this old note
-								await this.createNoteRevision(oldNote);
+								await this.createNoteRevision_(oldNote);
 							}
 
-							await this.createNoteRevision(note);
+							await this.createNoteRevision_(note);
 							doneNoteIds.push(noteId);
 							this.isOldNotesCache_[noteId] = false;
 						}
@@ -162,7 +150,7 @@ class RevisionService extends BaseService {
 					if (change.type === ItemChange.TYPE_DELETE && !!change.before_change_item) {
 						const note = JSON.parse(change.before_change_item);
 						const revExists = await Revision.revisionExists(BaseModel.TYPE_NOTE, note.id, note.updated_time);
-						if (!revExists) await this.createNoteRevision(note);
+						if (!revExists) await this.createNoteRevision_(note);
 						doneNoteIds.push(noteId);
 					}
 
