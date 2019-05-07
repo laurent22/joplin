@@ -177,15 +177,14 @@ describe('services_Revision', function() {
 		expect(revNote3.title).toBe('hello John');
 	}));
 
-	it('should create a revision for notes that existed before the revision service, the first time it is saved', asyncTest(async () => {
+	it('should create a revision for notes that are older than a given interval', asyncTest(async () => {
 		const n1 = await Note.save({ title: 'hello' });
 		const noteId = n1.id;
 
 		await sleep(0.1);
 
-		// Simulate the revision service being installed now. There N1 is like an old
-		// note that had been created before the service existed.
-		Setting.setValue('revisionService.installedTime', Date.now());
+		// Set the interval in such a way that the note is considered an old one.
+		Setting.setValue('revisionService.oldNoteInterval', 50);
 
 		// A revision is created the first time a note is overwritten with new content, and
 		// if this note doesn't already have an existing revision.

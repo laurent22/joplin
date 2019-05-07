@@ -21,12 +21,6 @@ class RevisionService extends BaseService {
 		// the original note is saved. The goal is to have at least one revision in case the note
 		// is deleted or modified as a result of a bug or user mistake.
 		this.isOldNotesCache_ = {};
-
-		if (!Setting.value('revisionService.installedTime')) Setting.setValue('revisionService.installedTime', Date.now());
-	}
-
-	installedTime() {
-		return Setting.value('revisionService.installedTime');
 	}
 
 	static instance() {
@@ -35,12 +29,16 @@ class RevisionService extends BaseService {
 		return this.instance_;
 	}
 
+	oldNoteCutOffDate_() {
+		return Date.now() - Setting.value('revisionService.oldNoteInterval');
+	}
+
 	async isOldNote(noteId) {
 		if (noteId in this.isOldNotesCache_) return this.isOldNotesCache_[noteId];
 
-		const r = await Note.noteIsOlderThan(noteId, this.installedTime());
-		this.isOldNotesCache_[noteId] = r;
-		return r;
+		const isOld = await Note.noteIsOlderThan(noteId, this.oldNoteCutOffDate_());
+		this.isOldNotesCache_[noteId] = isOld;
+		return isOld;
 	}
 
 	noteMetadata_(note) {
@@ -138,7 +136,7 @@ class RevisionService extends BaseService {
 						const oldNote = change.before_change_item ? JSON.parse(change.before_change_item) : null;
 
 						if (note) {
-							if (oldNote && oldNote.updated_time < this.installedTime()) {
+							if (oldNote && oldNote.updated_time < this.oldNoteCutOffDate_()) {
 								// This is where we save the original version of this old note
 								await this.createNoteRevision_(oldNote);
 							}
