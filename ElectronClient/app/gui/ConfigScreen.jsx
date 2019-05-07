@@ -76,6 +76,26 @@ class ConfigScreenComponent extends React.Component {
 			</div>
 		);
 
+		if (section.name === 'sync') {
+			const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
+
+			if (syncTargetMd.supportsConfigCheck) {
+				const messages = shared.checkSyncConfigMessages(this);
+				const statusStyle = Object.assign({}, theme.textStyle, { marginTop: 10 });
+				const statusComp = !messages.length ? null : (
+					<div style={statusStyle}>
+						{messages[0]}
+						{messages.length >= 1 ? (<p>{messages[1]}</p>) : null}
+					</div>);
+
+				settingComps.push(
+					<div key="check_sync_config_button" style={this.rowStyle_}>
+						<button disabled={this.state.checkSyncConfigResult === 'checking'} style={theme.buttonStyle} onClick={this.checkSyncConfig_}>{_('Check synchronisation configuration')}</button>
+						{ statusComp }
+					</div>);
+			}
+		}
+
 		return (
 			<div key={key} style={sectionStyle}>
 				<h2 style={headerStyle}>{Setting.sectionNameToLabel(section.name)}</h2>
@@ -322,24 +342,6 @@ class ConfigScreenComponent extends React.Component {
 		});
 
 		const settingComps = shared.settingsToComponents2(this, 'desktop', settings);
-
-		const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
-
-		if (syncTargetMd.supportsConfigCheck) {
-			const messages = shared.checkSyncConfigMessages(this);
-			const statusStyle = Object.assign({}, theme.textStyle, { marginTop: 10 });
-			const statusComp = !messages.length ? null : (
-				<div style={statusStyle}>
-					{messages[0]}
-					{messages.length >= 1 ? (<p>{messages[1]}</p>) : null}
-				</div>);
-
-			settingComps.push(
-				<div key="check_sync_config_button" style={this.rowStyle_}>
-					<button disabled={this.state.checkSyncConfigResult === 'checking'} style={buttonStyle} onClick={this.checkSyncConfig_}>{_('Check synchronisation configuration')}</button>
-					{ statusComp }
-				</div>);
-		}
 
 		const buttonBarStyle = {
 			display: 'flex',
