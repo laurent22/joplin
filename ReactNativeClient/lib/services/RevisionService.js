@@ -62,8 +62,8 @@ class RevisionService extends BaseService {
 		if (!!rev.body_diff) return false;
 
 		const md = JSON.parse(rev.metadata_diff);
-		if (md.new && md.new.length) return false;
-		if (md.deleted && md.deleted.length) return false;
+		if (md.new && Object.keys(md.new).length) return false;
+		if (md.deleted && Object.keys(md.deleted).length) return false;
 
 		return true;
 	}

@@ -380,4 +380,24 @@ describe('services_Revision', function() {
 		expect((await Revision.all()).length).toBe(1);		
 	}));
 
+	it('should preserve user update time', asyncTest(async () => {
+		// user_updated_time is kind of tricky and can be changed automatically in various
+		// places so make sure it is saved correctly with the revision
+
+		const n1_v0 = await Note.save({ title: '' });
+		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
+		await revisionService().collectRevisions(); // REV 1
+		expect((await Revision.all()).length).toBe(1);
+
+		const userUpdatedTime = Date.now() - 1000 * 60 * 60;
+		const n1_v2 = await Note.save({ id: n1_v0.id, title: 'hello', updated_time: Date.now(), user_updated_time: userUpdatedTime }, { autoTimestamp: false });
+		await revisionService().collectRevisions(); // Only the user timestamp has changed, but that needs to be saved
+		
+		const revisions = await Revision.all();
+		expect(revisions.length).toBe(2);
+
+		const revNote = await revisionService().revisionNote(revisions, 1);
+		expect(revNote.user_updated_time).toBe(userUpdatedTime);
+	}));
+
 });
