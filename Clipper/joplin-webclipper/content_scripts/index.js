@@ -63,6 +63,12 @@
 		}
 	}
 
+	function documentForReadability() {
+		// Readability directly change the passed document so clone it so as
+		// to preserve the original web page.
+		return document.cloneNode(true);
+	}
+
 	function readabilityProcess() {
 		var uri = {
 			spec: location.href,
@@ -72,10 +78,7 @@
 			pathBase: location.protocol + "//" + location.host + location.pathname.substr(0, location.pathname.lastIndexOf("/") + 1)
 		};
 
-		// Readability directly change the passed document so clone it so as
-		// to preserve the original web page.
-		const documentClone = document.cloneNode(true);
-		const readability = new Readability(documentClone); // new window.Readability(uri, documentClone);
+		const readability = new Readability(documentForReadability());
 		const article = readability.parse();
 
 		if (!article) throw new Error('Could not parse HTML document with Readability');
@@ -116,6 +119,12 @@
 				return response;
 			}
 			return clippedContentResponse(article.title, article.body, getImageSizes(document));
+
+		} else if (command.name === "isProbablyReaderable") {
+
+			const ok = isProbablyReaderable(documentForReadability());
+			console.info('isProbablyReaderable', ok);
+			return { name: 'isProbablyReaderable', value: ok };
 
 		} else if (command.name === "completePageHtml") {
 
@@ -250,6 +259,7 @@
 			return {};
 
 		} else if (command.name === "pageUrl") {
+
 			let url = location.origin + location.pathname + location.search;
 			return clippedContentResponse(pageTitle(), url, getImageSizes(document));
 

@@ -34,6 +34,10 @@ class Bridge {
 
 				this.dispatch({ type: 'CLIPPED_CONTENT_SET', content: content });
 			}
+
+			if (command.name === 'isProbablyReaderable') {
+				this.dispatch({ type: 'IS_PROBABLY_READERABLE', value: command.value });
+			}
 		}
 
 		this.browser_.runtime.onMessage.addListener(this.browser_notify);

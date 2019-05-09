@@ -123,6 +123,7 @@ class AppComponent extends Component {
 	async loadContentScripts() {
 		await bridge().tabsExecuteScript({file: "/content_scripts/JSDOMParser.js"});
 		await bridge().tabsExecuteScript({file: "/content_scripts/Readability.js"});
+		await bridge().tabsExecuteScript({file: "/content_scripts/Readability-readerable.js"});
 		await bridge().tabsExecuteScript({file: "/content_scripts/index.js"});
 	}
 
@@ -158,6 +159,8 @@ class AppComponent extends Component {
 				id: newFolderId,
 			});
 		}
+
+		bridge().sendCommandToActiveTab({ name: 'isProbablyReaderable' });
 	}
 
 	componentDidUpdate() {
@@ -278,11 +281,10 @@ class AppComponent extends Component {
 		const tagsComp = () => {
 			const comps = [];
 			for (let i = 0; i < this.state.selectedTags.length; i++) {
-				comps.push(<div>
+				comps.push(<div key={i}>
 					<input
 						ref={'tagSelector' + i}
 						data-index={i}
-						key={i}
 						type="text"
 						list="tags"
 						value={this.state.selectedTags[i]}
@@ -306,11 +308,18 @@ class AppComponent extends Component {
 			tagDataListOptions.push(<option key={tag.id}>{tag.title}</option>);
 		}
 
+		let simplifiedPageButtonLabel = 'Clip simplified page';
+		let simplifiedPageButtonTooltip = '';
+		if (!this.props.isProbablyReaderable) {
+			simplifiedPageButtonLabel += ' ⚠️';
+			simplifiedPageButtonTooltip = 'It might not be possible to create a good simplified version of this page.\nYou may want to clip the complete page instead.';
+		}
+
 		return (
 			<div className="App">
 				<div className="Controls">			
 					<ul>
-						<li><a className="Button" onClick={this.clipSimplified_click}>Clip simplified page</a></li>
+						<li><a className="Button" onClick={this.clipSimplified_click} title={simplifiedPageButtonTooltip}>{simplifiedPageButtonLabel}</a></li>
 						<li><a className="Button" onClick={this.clipComplete_click}>Clip complete page</a></li>
 						<li><a className="Button" onClick={this.clipSelection_click}>Clip selection</a></li>
 						<li><a className="Button" onClick={this.clipScreenshot_click}>Clip screenshot</a></li>
@@ -343,6 +352,7 @@ const mapStateToProps = (state) => {
 		folders: state.folders,
 		tags: state.tags,
 		selectedFolderId: state.selectedFolderId,
+		isProbablyReaderable: state.isProbablyReaderable,
 	};
 };
 

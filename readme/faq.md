@@ -1,6 +1,6 @@
 # Clicking 'Edit in External Editor' does nothing! / I want to change the editor!
 
-The editor command (may include arguments) defines which editor will be used to open a note. If none is provided it will try to auto-detect the default editor. If this does nothing or you want to change it for Joplin, you need to configure it in Settings -> Text editor command.
+The editor command (may include arguments) defines which editor will be used to open a note. If none is provided it will try to auto-detect the default editor. If this does nothing or you want to change it for Joplin, you need to configure it in the Preferences -> Text editor command.
 
 Some example configurations are: (comments after #)
 

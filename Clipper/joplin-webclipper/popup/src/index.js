@@ -19,6 +19,7 @@ const defaultState = {
 	tags: [],
 	selectedFolderId: null,
 	env: 'prod',
+	isProbablyReaderable: true,
 };
 
 const reduxMiddleware = store => next => async (action) => {
@@ -39,6 +40,11 @@ function reducer(state = defaultState, action) {
 
 		newState = Object.assign({}, state);
 		newState.warning = action.text;
+
+	} else if (action.type === 'IS_PROBABLY_READERABLE') {
+
+		newState = Object.assign({}, state);
+		newState.isProbablyReaderable = action.value;
 
 	} else if (action.type === 'CLIPPED_CONTENT_SET') {
 
