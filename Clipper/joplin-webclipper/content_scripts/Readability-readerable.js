@@ -1,3 +1,5 @@
+// https://github.com/mozilla/readability/tree/814f0a3884350b6f1adfdebb79ca3599e9806605
+
 /* eslint-env es6:false */
 /* globals exports */
 /*
