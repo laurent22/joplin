@@ -35,6 +35,7 @@ const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
 const EncryptionService = require('lib/services/EncryptionService');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
+const RevisionService = require('lib/services/RevisionService');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseService = require('lib/services/BaseService');
 const SearchEngine = require('lib/services/SearchEngine');
@@ -576,6 +577,8 @@ class BaseApplication {
 
 		time.setDateFormat(Setting.value('dateFormat'));
 		time.setTimeFormat(Setting.value('timeFormat'));
+
+		BaseItem.revisionService_ = RevisionService.instance();
 
 		BaseService.logger_ = this.logger_;
 		EncryptionService.instance().setLogger(this.logger_);

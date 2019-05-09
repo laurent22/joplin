@@ -38,6 +38,7 @@ const { clipboard } = require('electron');
 const SearchEngine = require('lib/services/SearchEngine');
 const ModelCache = require('lib/services/ModelCache');
 const NoteTextViewer = require('./NoteTextViewer.min');
+const NoteRevisionViewer = require('./NoteRevisionViewer.min');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -70,6 +71,7 @@ class NoteTextComponent extends React.Component {
 			editorScrollTop: 0,
 			newNote: null,
 			noteTags: [],
+			showRevisions: false,
 
 			// If the current note was just created, and the title has never been
 			// changed by the user, this variable contains that note ID. Used
@@ -268,6 +270,7 @@ class NoteTextComponent extends React.Component {
 		this.titleField_keyDown = this.titleField_keyDown.bind(this);
 		this.webview_ipcMessage = this.webview_ipcMessage.bind(this);
 		this.webview_domReady = this.webview_domReady.bind(this);
+		this.noteRevisionViewer_onBack = this.noteRevisionViewer_onBack.bind(this);
 	}
 
 	// Note:
@@ -501,7 +504,7 @@ class NoteTextComponent extends React.Component {
 				// 2. It resets the undo manager - fixes https://github.com/laurent22/joplin/issues/355
 				// Note: calling undoManager.reset() doesn't work
 				try {
-					this.editor_.editor.getSession().setValue(note ? note.body : '');
+					this.editor_.editor.getSession().setValue(note && note.body? note.body : '');
 				} catch (error) {
 					if (error.message === "Cannot read property 'match' of undefined") {
 						// The internals of Ace Editor throws an exception when creating a new note,
@@ -530,7 +533,8 @@ class NoteTextComponent extends React.Component {
 			webviewReady: webviewReady,
 			folder: parentFolder,
 			lastKeys: [],
-			noteTags: noteTags
+			noteTags: noteTags,
+			showRevisions: false,
 		};
 
 		if (!note) {
@@ -617,6 +621,13 @@ class NoteTextComponent extends React.Component {
 
 	refreshNoteMetadata(force = null) {
 		return shared.refreshNoteMetadata(this, force);
+	}
+
+	async noteRevisionViewer_onBack() {
+		this.setState({ showRevisions: false });
+
+		this.lastSetHtml_ = '';
+		this.scheduleReloadNote(this.props);
 	}
 
 	title_changeText(event) {
@@ -1529,6 +1540,7 @@ class NoteTextComponent extends React.Component {
 					type: 'WINDOW_COMMAND',
 					name: 'commandNoteProperties',
 					noteId: n.id,
+					onRevisionLinkClick: () => { this.setState({ showRevisions: true}) },
 				});
 			},
 		});
@@ -1609,6 +1621,18 @@ class NoteTextComponent extends React.Component {
 		}, style);
 
 		const innerWidth = rootStyle.width - rootStyle.paddingLeft - rootStyle.paddingRight - borderWidth;
+
+		if (this.state.showRevisions && note && note.id) {
+			rootStyle.paddingRight = rootStyle.paddingLeft;
+			rootStyle.paddingTop = rootStyle.paddingLeft;
+			rootStyle.paddingBottom = rootStyle.paddingLeft;
+			rootStyle.display = 'inline-flex';
+			return (
+				<div style={rootStyle}>
+					<NoteRevisionViewer noteId={note.id} customCss={this.props.customCss} onBack={this.noteRevisionViewer_onBack}/>
+				</div>
+			);
+		}
 
 		if (this.props.selectedNoteIds.length > 1) {
 			return this.renderMultiNotes(rootStyle);
@@ -1710,7 +1734,7 @@ class NoteTextComponent extends React.Component {
 			viewerStyle.borderLeft = 'none';
 		}
 
-		if (this.state.webviewReady) {
+		if (this.state.webviewReady && this.webviewRef_.current) {
 			let html = this.state.bodyHtml;
 
 			const htmlHasChanged = this.lastSetHtml_ !== html;

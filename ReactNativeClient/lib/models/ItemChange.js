@@ -11,7 +11,10 @@ class ItemChange extends BaseModel {
 		return BaseModel.TYPE_ITEM_CHANGE;
 	}
 
-	static async add(itemType, itemId, type) {
+	static async add(itemType, itemId, type, changeSource = null, beforeChangeItemJson = null) {
+		if (changeSource === null) changeSource = ItemChange.SOURCE_UNSPECIFIED;
+		if (!beforeChangeItemJson) beforeChangeItemJson = '';
+
 		ItemChange.saveCalls_.push(true);
 
 		// Using a mutex so that records can be added to the database in the
@@ -21,7 +24,7 @@ class ItemChange extends BaseModel {
 		try {
 			await this.db().transactionExecBatch([
 				{ sql: 'DELETE FROM item_changes WHERE item_id = ?', params: [itemId] },
-				{ sql: 'INSERT INTO item_changes (item_type, item_id, type, created_time) VALUES (?, ?, ?, ?)', params: [itemType, itemId, type, Date.now()] },
+				{ sql: 'INSERT INTO item_changes (item_type, item_id, type, source, created_time, before_change_item) VALUES (?, ?, ?, ?, ?, ?)', params: [itemType, itemId, type, changeSource, Date.now(), beforeChangeItemJson] },
 			]);
 		} finally {
 			release();
@@ -60,5 +63,8 @@ ItemChange.saveCalls_ = [];
 ItemChange.TYPE_CREATE = 1;
 ItemChange.TYPE_UPDATE = 2;
 ItemChange.TYPE_DELETE = 3;
+
+ItemChange.SOURCE_UNSPECIFIED = 1;
+ItemChange.SOURCE_SYNC = 2;
 
 module.exports = ItemChange;

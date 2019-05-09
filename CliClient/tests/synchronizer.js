@@ -1,7 +1,7 @@
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { setupDatabase, allSyncTargetItemsEncrypted, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync, asyncTest } = require('test-utils.js');
+const { setupDatabase, allSyncTargetItemsEncrypted, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync, asyncTest } = require('test-utils.js');
 const { shim } = require('lib/shim.js');
 const fs = require('fs-extra');
 const Folder = require('lib/models/Folder.js');
@@ -13,6 +13,7 @@ const { Database } = require('lib/database.js');
 const Setting = require('lib/models/Setting.js');
 const MasterKey = require('lib/models/MasterKey');
 const BaseItem = require('lib/models/BaseItem.js');
+const Revision = require('lib/models/Revision.js');
 const BaseModel = require('lib/BaseModel.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const WelcomeUtils = require('lib/WelcomeUtils');
@@ -23,19 +24,40 @@ process.on('unhandledRejection', (reason, p) => {
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000 + 30000; // The first test is slow because the database needs to be built
 
-async function allItems() {
+async function allNotesFolders() {
 	let folders = await Folder.all();
 	let notes = await Note.all();
 	return folders.concat(notes);
 }
 
-async function localItemsSameAsRemote(locals, expect) {
+async function remoteItemsByTypes(types) {
+	const list = await fileApi().list();
+	if (list.has_more) throw new Error('Not implemented!!!');
+	const files = list.items;
+
+	const output = [];
+	for (const file of files) {
+		const remoteContent = await fileApi().get(file.path);
+		const content = await BaseItem.unserialize(remoteContent);
+		if (types.indexOf(content.type_) < 0) continue;
+		output.push(content);
+	}
+	return output;
+}
+
+async function remoteNotesAndFolders() {
+	return remoteItemsByTypes([BaseModel.TYPE_NOTE, BaseModel.TYPE_FOLDER]);
+}
+
+async function remoteNotesFoldersResources() {
+	return remoteItemsByTypes([BaseModel.TYPE_NOTE, BaseModel.TYPE_FOLDER, BaseModel.TYPE_RESOURCE]);
+}
+
+async function localNotesFoldersSameAsRemote(locals, expect) {
 	let error = null;
 	try {
-		let files = await fileApi().list();
-		files = files.items;
-
-		expect(locals.length).toBe(files.length);
+		const nf = await remoteNotesAndFolders();
+		expect(locals.length).toBe(nf.length);
 
 		for (let i = 0; i < locals.length; i++) {
 			let dbItem = locals[i];
@@ -44,12 +66,6 @@ async function localItemsSameAsRemote(locals, expect) {
 
 			expect(!!remote).toBe(true);
 			if (!remote) continue;
-
-			// if (syncTargetId() == SyncTargetRegistry.nameToId('filesystem')) {
-			// 	expect(remote.updated_time).toBe(Math.floor(dbItem.updated_time / 1000) * 1000);
-			// } else {
-			// 	expect(remote.updated_time).toBe(dbItem.updated_time);
-			// }
 
 			let remoteContent = await fileApi().get(path);
 
@@ -82,11 +98,11 @@ describe('Synchronizer', function() {
 		let folder = await Folder.save({ title: "folder1" });
 		await Note.save({ title: "un", parent_id: folder.id });
 
-		let all = await allItems();
+		let all = await allNotesFolders();
 
 		await synchronizer().start();
 
-		await localItemsSameAsRemote(all, expect);
+		await localNotesFoldersSameAsRemote(all, expect);
 	}));
 
 	it('should update remote items', asyncTest(async () => {
@@ -96,10 +112,10 @@ describe('Synchronizer', function() {
 
 		await Note.save({ title: "un UPDATE", id: note.id });
 
-		let all = await allItems();
+		let all = await allNotesFolders();
 		await synchronizer().start();
 
-		await localItemsSameAsRemote(all, expect);
+		await localNotesFoldersSameAsRemote(all, expect);
 	}));
 
 	it('should create local items', asyncTest(async () => {
@@ -111,9 +127,9 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 
-		let all = await allItems();
+		let all = await allNotesFolders();
 
-		await localItemsSameAsRemote(all, expect);
+		await localNotesFoldersSameAsRemote(all, expect);
 	}));
 
 	it('should update local items', asyncTest(async () => {
@@ -138,9 +154,9 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 
-		let all = await allItems();
+		let all = await allNotesFolders();
 
-		await localItemsSameAsRemote(all, expect);
+		await localNotesFoldersSameAsRemote(all, expect);
 	}));
 
 	it('should resolve note conflicts', asyncTest(async () => {
@@ -232,11 +248,9 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 
-		let files = await fileApi().list();
-		files = files.items;
-
-		expect(files.length).toBe(1);
-		expect(files[0].path).toBe(Folder.systemPath(folder1));
+		const remotes = await remoteNotesAndFolders();
+		expect(remotes.length).toBe(1);
+		expect(remotes[0].id).toBe(folder1.id);
 
 		let deletedItems = await BaseItem.deletedItems(syncTargetId());
 		expect(deletedItems.length).toBe(0);
@@ -279,7 +293,7 @@ describe('Synchronizer', function() {
 		await switchClient(1);
 
 		context1 = await synchronizer().start({ context: context1 });
-		let items = await allItems();
+		let items = await allNotesFolders();
 		expect(items.length).toBe(2);
 		let deletedItems = await BaseItem.deletedItems(syncTargetId());
 		expect(deletedItems.length).toBe(0);
@@ -302,8 +316,8 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 
-		let all = await allItems();
-		await localItemsSameAsRemote(all, expect);
+		let all = await allNotesFolders();
+		await localNotesFoldersSameAsRemote(all, expect);
 	}));
 
 	it('should delete local folder', asyncTest(async () => {
@@ -320,8 +334,8 @@ describe('Synchronizer', function() {
 		await switchClient(1);
 
 		await synchronizer().start({ context: context1 });
-		let items = await allItems();
-		await localItemsSameAsRemote(items, expect);
+		let items = await allNotesFolders();
+		await localNotesFoldersSameAsRemote(items, expect);
 	}));
 
 	it('should resolve conflict if remote folder has been deleted, but note has been added to folder locally', asyncTest(async () => {
@@ -338,7 +352,7 @@ describe('Synchronizer', function() {
 
 		let note = await Note.save({ title: "note1", parent_id: folder1.id });
 		await synchronizer().start();
-		let items = await allItems();		
+		let items = await allNotesFolders();		
 		expect(items.length).toBe(1);
 		expect(items[0].title).toBe('note1');
 		expect(items[0].is_conflict).toBe(1);
@@ -360,11 +374,11 @@ describe('Synchronizer', function() {
 		await Note.delete(note.id);
 		await synchronizer().start();
 
-		let items = await allItems();
+		let items = await allNotesFolders();
 		expect(items.length).toBe(1);
 		expect(items[0].title).toBe('folder');
 
-		await localItemsSameAsRemote(items, expect);
+		await localNotesFoldersSameAsRemote(items, expect);
 	}));
 
 	it('should cross delete all folders', asyncTest(async () => {
@@ -393,13 +407,13 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 
-		let items2 = await allItems();
+		let items2 = await allNotesFolders();
 
 		await switchClient(1);
 
 		await synchronizer().start();
 
-		let items1 = await allItems();
+		let items1 = await allNotesFolders();
 
 		expect(items1.length).toBe(0);
 		expect(items1.length).toBe(items2.length);
@@ -462,7 +476,7 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 
-		let items = await allItems();
+		let items = await allNotesFolders();
 
 		expect(items.length).toBe(1);
 	}));
@@ -680,7 +694,7 @@ describe('Synchronizer', function() {
 		let disabledItems = await BaseItem.syncDisabledItems(syncTargetId());
 		expect(disabledItems.length).toBe(0);
 		await Note.save({ id: noteId, title: "un mod", });
-		synchronizer().testingHooks_ = ['rejectedByTarget'];
+		synchronizer().testingHooks_ = ['notesRejectedByTarget'];
 		await synchronizer().start();
 		synchronizer().testingHooks_ = [];
 		await synchronizer().start(); // Another sync to check that this item is now excluded from sync
@@ -833,8 +847,8 @@ describe('Synchronizer', function() {
 		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
 		let resource1 = (await Resource.all())[0];
 		let resourcePath1 = Resource.fullPath(resource1);
-		await synchronizer().start();
-		expect((await fileApi().list()).items.length).toBe(3);
+		await synchronizer().start();	
+		expect((await remoteNotesFoldersResources()).length).toBe(3);
 
 		await switchClient(2);
 
@@ -901,11 +915,10 @@ describe('Synchronizer', function() {
 		let allResources = await Resource.all();
 		expect(allResources.length).toBe(1);
 		let all = await fileApi().list();
-		expect(all.items.length).toBe(3);
+		expect((await remoteNotesFoldersResources()).length).toBe(3);
 		await Resource.delete(resource1.id);
 		await synchronizer().start();
-		all = await fileApi().list();
-		expect(all.items.length).toBe(2);
+		expect((await remoteNotesFoldersResources()).length).toBe(2);
 
 		await switchClient(1);
 
@@ -1036,11 +1049,11 @@ describe('Synchronizer', function() {
 	it('should create remote items with UTF-8 content', asyncTest(async () => {
 		let folder = await Folder.save({ title: "Fahrräder" });
 		await Note.save({ title: "Fahrräder", body: "Fahrräder", parent_id: folder.id });
-		let all = await allItems();
+		let all = await allNotesFolders();
 
 		await synchronizer().start();
 
-		await localItemsSameAsRemote(all, expect);
+		await localNotesFoldersSameAsRemote(all, expect);
 	}));
 
 	it("should update remote items but not pull remote changes", asyncTest(async () => {
@@ -1058,7 +1071,7 @@ describe('Synchronizer', function() {
 
 		await Note.save({ title: "un UPDATE", id: note.id });
 		await synchronizer().start({ syncSteps: ["update_remote"] });
-		let all = await allItems();
+		let all = await allNotesFolders();
 		expect(all.length).toBe(2);
 
 		await switchClient(2);
@@ -1108,6 +1121,135 @@ describe('Synchronizer', function() {
 
 		const tags = await Tag.modelSelectAll('SELECT * FROM tags WHERE title = "organising"');
 		expect(tags.length).toBe(2);
+	}));
+
+	it("should not save revisions when updating a note via sync", asyncTest(async () => {
+		// When a note is updated, a revision of the original is created.
+		// Here, on client 1, the note is updated for the first time, however since it is
+		// via sync, we don't create a revision - that revision has already been created on client
+		// 2 and is going to be synced.
+
+		const n1 = await Note.save({ title: 'testing' });
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		await Note.save({ id: n1.id, title: 'mod from client 2' });
+		await revisionService().collectRevisions();
+		const allRevs1 = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
+		expect(allRevs1.length).toBe(1);
+		await synchronizer().start();
+
+		await switchClient(1);
+
+		await synchronizer().start();
+		const allRevs2 = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
+		expect(allRevs2.length).toBe(1);
+		expect(allRevs2[0].id).toBe(allRevs1[0].id);
+	}));
+
+	it("should not save revisions when deleting a note via sync", asyncTest(async () => {
+		const n1 = await Note.save({ title: 'testing' });
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		await Note.delete(n1.id);
+		await revisionService().collectRevisions(); // REV 1
+		{
+			const allRevs = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
+			expect(allRevs.length).toBe(1);
+		}
+		await synchronizer().start();
+
+		await switchClient(1);
+
+		await synchronizer().start(); // The local note gets deleted here, however a new rev is *not* created
+		{
+			const allRevs = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
+			expect(allRevs.length).toBe(1);
+		}
+
+		const notes = await Note.all();
+		expect(notes.length).toBe(0);
+	}));
+
+	it("should not save revisions when an item_change has been generated as a result of a sync", asyncTest(async () => {
+		// When a note is modified an item_change object is going to be created. This
+		// is used for example to tell the search engine, when note should be indexed. It is
+		// also used by the revision service to tell what note should get a new revision.
+		// When a note is modified via sync, this item_change object is also created. The issue
+		// is that we don't want to create revisions for these particular item_changes, because
+		// such revision has already been created on another client (whatever client initially
+		// modified the note), and that rev is going to be synced.
+		//
+		// So in the end we need to make sure that we don't create these unecessary additional revisions.
+
+		const n1 = await Note.save({ title: 'testing' });
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		await Note.save({ id: n1.id, title: 'mod from client 2' });
+		await revisionService().collectRevisions();
+		await synchronizer().start();
+
+		await switchClient(1);
+
+		await synchronizer().start();
+
+		{
+			const allRevs = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
+			expect(allRevs.length).toBe(1);
+		}
+
+		await revisionService().collectRevisions();
+
+		{
+			const allRevs = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
+			expect(allRevs.length).toBe(1);
+		}
+	}));
+
+	it("should handle case when new rev is created on client, then older rev arrives later via sync", asyncTest(async () => {
+		// - C1 creates note 1
+		// - C1 modifies note 1 - REV1 created
+		// - C1 sync
+		// - C2 sync
+		// - C2 receives note 1
+		// - C2 modifies note 1 - REV2 created (but not based on REV1)
+		// - C2 receives REV1
+		//
+		// In that case, we need to make sure that REV1 and REV2 are both valid and can be retrieved.
+		// Even though REV1 was created before REV2, REV2 is *not* based on REV1. This is not ideal
+		// due to unecessary data being saved, but a possible edge case and we simply need to check
+		// all the data is valid.
+
+		const n1 = await Note.save({ title: 'note' });
+		await Note.save({ id: n1.id, title: 'note REV1' });
+		await revisionService().collectRevisions(); // REV1
+		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1.id)).length).toBe(1);
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		synchronizer().testingHooks_ = ['skipRevisions'];
+		await synchronizer().start();
+		synchronizer().testingHooks_ = [];
+
+		await Note.save({ id: n1.id, title: 'note REV2' });
+		await revisionService().collectRevisions(); // REV2
+		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1.id)).length).toBe(1);
+		await synchronizer().start(); // Sync the rev that had been skipped above with skipRevisions
+
+		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
+		expect(revisions.length).toBe(2);
+
+		expect((await revisionService().revisionNote(revisions, 0)).title).toBe('note REV1');
+		expect((await revisionService().revisionNote(revisions, 1)).title).toBe('note REV2');
 	}));
 
 });

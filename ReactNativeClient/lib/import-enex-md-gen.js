@@ -497,10 +497,12 @@ function enexXmlToMdArray(stream, resources) {
 
 				let container = state.lists[state.lists.length - 1];
 				container.startedText = false;
+
+				const indent = '    '.repeat(state.lists.length - 1);
 				if (container.tag == "ul") {
-					section.lines.push("- ");
+					section.lines.push(indent + "- ");
 				} else {
-					section.lines.push(container.counter + '. ');
+					section.lines.push(indent + container.counter + '. ');
 					container.counter++;
 				}
 			} else if (isStrongTag(n)) {

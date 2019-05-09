@@ -17,6 +17,7 @@ class NotePropertiesDialog extends React.Component {
 		this.okButton_click = this.okButton_click.bind(this);
 		this.cancelButton_click = this.cancelButton_click.bind(this);
 		this.onKeyDown = this.onKeyDown.bind(this);
+		this.revisionsLink_click = this.revisionsLink_click.bind(this);
 		this.okButton = React.createRef();
 
 		this.state = {
@@ -31,6 +32,7 @@ class NotePropertiesDialog extends React.Component {
 			user_updated_time: _('Updated'),
 			location: _('Location'),
 			source_url: _('URL'),
+			revisionsLink: _('Note History'),
 		};
 	}
 
@@ -79,6 +81,7 @@ class NotePropertiesDialog extends React.Component {
 			formNote.location = note.latitude + ', ' + note.longitude;
 		}
 
+		formNote.revisionsLink = note.id;
 		formNote.id = note.id;
 
 		return formNote;
@@ -101,26 +104,6 @@ class NotePropertiesDialog extends React.Component {
 
 		this.styles_ = {};
 		this.styleKey_ = styleKey;
-
-		// this.styles_.modalLayer = {
-		// 	zIndex: 9999,
-		// 	display: 'flex',
-		// 	position: 'absolute',
-		// 	top: 0,
-		// 	left: 0,
-		// 	width: '100%',
-		// 	height: '100%',
-		// 	backgroundColor: 'rgba(0,0,0,0.6)',
-		// 	alignItems: 'flex-start',
-		// 	justifyContent: 'center',
-		// };
-
-		// this.styles_.dialogBox = {
-		// 	backgroundColor: theme.backgroundColor,
-		// 	padding: 16,
-		// 	boxShadow: '6px 6px 20px rgba(0,0,0,0.5)',
-		// 	marginTop: 20,
-		// }
 
 		this.styles_.controlBox = {
 			marginBottom: '1em',
@@ -153,8 +136,6 @@ class NotePropertiesDialog extends React.Component {
 			borderColor: theme.dividerColor,
 		};
 
-		// this.styles_.dialogTitle = Object.assign({}, theme.h1Style, { marginBottom: '1.2em' });
-
 		return this.styles_;
 	}
 
@@ -179,6 +160,11 @@ class NotePropertiesDialog extends React.Component {
 
 	cancelButton_click() {
 		this.closeDialog(false);
+	}
+
+	revisionsLink_click() {
+		this.closeDialog(false);
+		if (this.props.onRevisionLinkClick) this.props.onRevisionLinkClick();
 	}
 
 	onKeyDown(event) {
@@ -300,11 +286,13 @@ class NotePropertiesDialog extends React.Component {
 					url = Note.geoLocationUrlFromLatLong(ll.latitude, ll.longitude);
 				}
 				controlComp = <a href="#" onClick={() => bridge().openExternal(url)} style={theme.urlStyle}>{displayedValue}</a>
+			} else if (key === 'revisionsLink') {
+				controlComp = <a href="#" onClick={this.revisionsLink_click} style={theme.urlStyle}>{_('Previous versions of this note')}</a>
 			} else {
 				controlComp = <div style={Object.assign({}, theme.textStyle, {display: 'inline-block'})}>{displayedValue}</div>
 			}
 
-			if (key !== 'id') {
+			if (key !== 'id' && key !== 'revisionsLink') {
 				editCompHandler = () => {this.editPropertyButtonClick(key, value)};
 				editCompIcon = 'fa-edit';
 			}

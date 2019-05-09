@@ -2,6 +2,7 @@ const BaseItem = require('lib/models/BaseItem.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
+const ItemChange = require('lib/models/ItemChange.js');
 const ResourceLocalState = require('lib/models/ResourceLocalState.js');
 const MasterKey = require('lib/models/MasterKey.js');
 const BaseModel = require('lib/BaseModel.js');
@@ -239,7 +240,7 @@ class Synchronizer {
 						//   the local sync_time will be updated to Date.now() but on the next loop it will see that the remote item still has a date ahead
 						//   and will see a conflict. There's currently no automatic fix for this - the remote item on the sync target must be fixed manually
 						//   (by setting an updated_time less than current time).
-						if (donePaths.indexOf(path) >= 0) throw new Error(sprintf("Processing a path that has already been done: %s. sync_time was not updated? Remote item has an updated_time in the future?", path));
+						if (donePaths.indexOf(path) >= 0) throw new JoplinError(sprintf("Processing a path that has already been done: %s. sync_time was not updated? Remote item has an updated_time in the future?", path), 'processingPathTwice');
 
 						let remote = await this.api().stat(path);
 						let action = null;
@@ -325,7 +326,7 @@ class Synchronizer {
 						if (action == "createRemote" || action == "updateRemote") {
 							let canSync = true;
 							try {
-								if (this.testingHooks_.indexOf("rejectedByTarget") >= 0) throw new JoplinError("Testing rejectedByTarget", "rejectedByTarget");
+								if (this.testingHooks_.indexOf("notesRejectedByTarget") >= 0 && local.type_ === BaseModel.TYPE_NOTE) throw new JoplinError("Testing rejectedByTarget", "rejectedByTarget");
 								const content = await ItemClass.serializeForSync(local);
 								await this.api().put(path, content);
 							} catch (error) {
@@ -370,9 +371,9 @@ class Synchronizer {
 								local = remoteContent;
 
 								const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
-								await ItemClass.save(local, { autoTimestamp: false, nextQueries: syncTimeQueries });
+								await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 							} else {
-								await ItemClass.delete(local.id);
+								await ItemClass.delete(local.id, { changeSource: ItemChange.SOURCE_SYNC });
 							}
 						} else if (action == "noteConflict") {
 							// ------------------------------------------------------------------------------
@@ -395,7 +396,7 @@ class Synchronizer {
 								let conflictedNote = Object.assign({}, local);
 								delete conflictedNote.id;
 								conflictedNote.is_conflict = 1;
-								await Note.save(conflictedNote, { autoTimestamp: false });
+								await Note.save(conflictedNote, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC });
 							}
 
 							// ------------------------------------------------------------------------------
@@ -406,12 +407,12 @@ class Synchronizer {
 							if (remote) {
 								local = remoteContent;
 								const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
-								await ItemClass.save(local, { autoTimestamp: false, nextQueries: syncTimeQueries });
+								await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 
 								if (!!local.encryption_applied) this.dispatch({ type: "SYNC_GOT_ENCRYPTED_ITEM" });
 							} else {
 								// Remote no longer exists (note deleted) so delete local one too
-								await ItemClass.delete(local.id);
+								await ItemClass.delete(local.id, { changeSource: ItemChange.SOURCE_SYNC });
 							}
 						}
 
@@ -535,6 +536,8 @@ class Synchronizer {
 							}
 						}
 
+						if (this.testingHooks_.indexOf('skipRevisions') >= 0 && content && content.type_ === BaseModel.TYPE_REVISION) action = null;
+
 						if (!action) continue;
 
 						this.logSyncOperation(action, local, remote, reason);
@@ -557,29 +560,12 @@ class Synchronizer {
 							let options = {
 								autoTimestamp: false,
 								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, time.unixMs()),
+								changeSource: ItemChange.SOURCE_SYNC,
 							};
 							if (action == "createLocal") options.isNew = true;
 							if (action == "updateLocal") options.oldItem = local;
 
 							const creatingNewResource = content.type_ == BaseModel.TYPE_RESOURCE && action == "createLocal";
-
-							// if (content.type_ == BaseModel.TYPE_RESOURCE && action == "createLocal") {
-							// 	let localResourceContentPath = Resource.fullPath(content);
-							// 	let remoteResourceContentPath = this.resourceDirName_ + "/" + content.id;
-							// 	try {
-							// 		await this.api().get(remoteResourceContentPath, { path: localResourceContentPath, target: "file" });
-							// 	} catch (error) {
-							// 		if (error.code === 'rejectedByTarget') {
-							// 			this.progressReport_.errors.push(error);
-							// 			this.logger().warn('Rejected by target: ' + path + ': ' + error.message);
-							// 			continue;
-							// 		} else {
-							// 			throw error;
-							// 		}
-							// 	}
-							// }
-
-							// if (creatingNewResource) content.fetch_status = Resource.FETCH_STATUS_IDLE;
 
 							if (creatingNewResource) {
 								await ResourceLocalState.save({ resource_id: content.id, fetch_status: Resource.FETCH_STATUS_IDLE });
@@ -608,7 +594,7 @@ class Synchronizer {
 							}
 
 							let ItemClass = BaseItem.itemClass(local.type_);
-							await ItemClass.delete(local.id, { trackDeleted: false });
+							await ItemClass.delete(local.id, { trackDeleted: false, changeSource: ItemChange.SOURCE_SYNC });
 						}
 					}
 
@@ -653,7 +639,7 @@ class Synchronizer {
 							// CONFLICT
 							await Folder.markNotesAsConflict(item.id);
 						}
-						await Folder.delete(item.id, { deleteChildren: false, trackDeleted: false });
+						await Folder.delete(item.id, { deleteChildren: false, changeSource: ItemChange.SOURCE_SYNC, trackDeleted: false });
 					}
 				}
 
@@ -662,10 +648,14 @@ class Synchronizer {
 				}
 			} // DELTA STEP
 		} catch (error) {
-			if (error && ["cannotEncryptEncrypted", "noActiveMasterKey"].indexOf(error.code) >= 0) {
+			if (error && ["cannotEncryptEncrypted", "noActiveMasterKey", "processingPathTwice"].indexOf(error.code) >= 0) {
 				// Only log an info statement for this since this is a common condition that is reported
-				// in the application, and needs to be resolved by the user
+				// in the application, and needs to be resolved by the user.
+				// Or it's a temporary issue that will be resolved on next sync.
 				this.logger().info(error.message);
+			} else if (error.code === 'unknownItemType') {
+				this.progressReport_.errors.push(_('Unknown item type downloaded - please upgrade Joplin to the latest version'));
+				this.logger().error(error);
 			} else {
 				this.logger().error(error);
 

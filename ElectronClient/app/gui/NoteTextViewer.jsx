@@ -18,11 +18,11 @@ class NoteTextViewerComponent extends React.Component {
 	}
 
 	webview_domReady(event) {
-		this.props.onDomReady(event);
+		if (this.props.onDomReady) this.props.onDomReady(event);
 	}
 
 	webview_ipcMessage(event) {
-		this.props.onIpcMessage(event);
+		if (this.props.onIpcMessage) this.props.onIpcMessage(event);
 	}
 
 	initWebview() {
@@ -67,11 +67,19 @@ class NoteTextViewerComponent extends React.Component {
 		}
 	}
 
-	componentDidUpdate() {
+	tryInit() {
 		if (!this.initialized_ && this.webviewRef_.current) {
 			this.initWebview();
 			this.initialized_ = true;
 		}
+	}
+
+	componentDidMount() {
+		this.tryInit();
+	}
+
+	componentDidUpdate() {
+		this.tryInit();
 	}
 
 	componentWillUnmount() {

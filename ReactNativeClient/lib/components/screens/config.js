@@ -10,7 +10,7 @@ const Setting = require('lib/models/Setting.js');
 const shared = require('lib/components/shared/config-shared.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 const { reg } = require('lib/registry.js');
-import VersionInfo from 'react-native-version-info';
+const VersionInfo = require('react-native-version-info').default;
 
 class ConfigScreenComponent extends BaseScreenComponent {
 
@@ -163,10 +163,14 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				</View>
 			);
 		} else if (md.type == Setting.TYPE_INT) {
+			const unitLabel = md.unitLabel ? md.unitLabel(value) : value;
 			return (
 				<View key={key} style={this.styles().settingContainer}>
 					<Text key="label" style={this.styles().settingText}>{md.label()}</Text>
-					<Slider key="control" style={this.styles().settingControl} value={value} onValueChange={(value) => updateSettingValue(key, value)} />
+					<View style={{display:'flex', flexDirection: 'column', alignItems: 'center', flex:1}}>
+						<Slider key="control" style={{width:'100%'}} step={md.step} minimumValue={md.minimum} maximumValue={md.maximum} value={value} onValueChange={(value) => updateSettingValue(key, value)} />
+						<Text>{unitLabel}</Text>
+					</View>
 				</View>
 			);
 		} else if (md.type == Setting.TYPE_STRING) {
