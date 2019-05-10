@@ -14,6 +14,7 @@ urlUtils.urlWithoutPath = function(url) {
 }
 
 urlUtils.urlProtocol = function(url) {
+	if (!url) return '';
 	const parsed = require('url').parse(url, true);
 	return parsed.protocol;
 }

@@ -11,10 +11,12 @@ const { Logger } = require('lib/logger.js');
 const md5 = require('md5');
 const { shim } = require('lib/shim');
 const HtmlToMd = require('lib/HtmlToMd');
+const urlUtils = require('lib/urlUtils.js');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('lib/path-utils');
 const ApiResponse = require('lib/services/rest/ApiResponse');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
+const uri2path = require('file-uri-to-path');
 
 class ApiError extends Error {
 
@@ -349,6 +351,8 @@ class Api {
 			const requestId = Date.now();
 			const requestNote = JSON.parse(request.body);
 
+			const allowFileProtocolImages = urlUtils.urlProtocol(requestNote.base_url).toLowerCase() === 'file:';
+
 			const imageSizes = requestNote.image_sizes ? requestNote.image_sizes : {};
 
 			let note = await this.requestNoteToNote(requestNote);
@@ -357,7 +361,7 @@ class Api {
 
 			this.logger().info('Request (' + requestId + '): Downloading images: ' + imageUrls.length);
 
-			let result = await this.downloadImages_(imageUrls);
+			let result = await this.downloadImages_(imageUrls, allowFileProtocolImages);
 
 			this.logger().info('Request (' + requestId + '): Creating resources from paths: ' + Object.getOwnPropertyNames(result).length);
 
@@ -445,7 +449,7 @@ class Api {
 		return await shim.attachFileToNote(note, tempFilePath);
 	}
 
-	async downloadImage_(url) {
+	async downloadImage_(url, allowFileProtocolImages) {
 		const tempDir = Setting.value('tempDir');
 
 		const isDataUrl = url && url.toLowerCase().indexOf('data:') === 0;
@@ -459,6 +463,11 @@ class Api {
 		try {
 			if (isDataUrl) {
 				await shim.imageFromDataUrl(url, imagePath);
+			} else if (urlUtils.urlProtocol(url).toLowerCase() === 'file:') {
+				// Can't think of any reason to disallow this at this point
+				// if (!allowFileProtocolImages) throw new Error('For security reasons, this URL with file:// protocol cannot be downloaded');
+				const localPath = uri2path(url);
+				await shim.fsDriver().copy(localPath, imagePath);
 			} else {
 				await shim.fetchBlob(url, { path: imagePath });
 			}
@@ -469,7 +478,7 @@ class Api {
 		}
 	}
 
-	async downloadImages_(urls) {
+	async downloadImages_(urls, allowFileProtocolImages) {
 		const PromisePool = require('es6-promise-pool')
 
 		const output = {};
@@ -481,7 +490,7 @@ class Api {
 			const url = urls[urlIndex++];
 
 			return new Promise(async (resolve, reject) => {
-				const imagePath = await this.downloadImage_(url);
+				const imagePath = await this.downloadImage_(url, allowFileProtocolImages);
 				if (imagePath) output[url] = { path: imagePath, originalUrl: url };
 				resolve();
 			});

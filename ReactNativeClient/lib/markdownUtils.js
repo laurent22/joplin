@@ -1,6 +1,7 @@
 const stringPadding = require('string-padding');
 const urlUtils = require('lib/urlUtils');
 const MarkdownIt = require('markdown-it');
+const setupLinkify = require('lib/MdToHtml/setupLinkify');
 
 const markdownUtils = {
 
@@ -23,6 +24,8 @@ const markdownUtils = {
 
 	extractImageUrls(md) {
 		const markdownIt = new MarkdownIt();
+		setupLinkify(markdownIt); // Necessary to support file:/// links
+
 		const env = {};
 		const tokens = markdownIt.parse(md, env);
 		const output = [];
