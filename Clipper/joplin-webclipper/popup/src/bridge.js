@@ -2,6 +2,10 @@ const randomClipperPort = require('./randomClipperPort');
 
 class Bridge {
 
+	constructor() {
+		this.nounce_ = Date.now();
+	}
+
 	async init(browser, browserSupportsPromises, dispatch) {
 		console.info('Popup: Init bridge');
 
@@ -268,7 +272,7 @@ class Bridge {
 		await this.tabsSendMessage(tabs[0].id, command);
 	}
 
-	async clipperApiExec(method, path, body) {
+	async clipperApiExec(method, path, query, body) {
 		console.info('Popup: ' + method + ' ' + path);
 
 		const baseUrl = await this.clipperServerBaseUrl();
@@ -282,7 +286,18 @@ class Bridge {
 
 		if (body) fetchOptions.body = typeof body === 'string' ? body : JSON.stringify(body);
 
-		const response = await fetch(baseUrl + "/" + path, fetchOptions)
+		let queryString = '';
+		if (query) {
+			const s = [];
+			for (const k in query) {
+				if (!query.hasOwnProperty(k)) continue;
+				s.push(encodeURIComponent(k) + '=' + encodeURIComponent(query[k]));
+			}
+			queryString = s.join('&');
+			if (queryString) queryString = '?' + queryString;
+		}
+
+		const response = await fetch(baseUrl + "/" + path + queryString, fetchOptions)
 		if (!response.ok) {
 			const msg = await response.text();
 			throw new Error(msg);
@@ -300,11 +315,39 @@ class Bridge {
 
 			if (!content) throw new Error('Cannot send empty content');
 
-			await this.clipperApiExec('POST', 'notes', content);
+			// There is a bug in Chrome that somehow makes the app send the same request twice, which
+			// results in Joplin having the same note twice. There's a 2-3 sec delay between
+			// each request. The bug only happens the first time the extension popup is open and the
+			// Complete button is clicked.
+			//
+			// It's beyond my understanding how it's happening. I don't know how this sendContentToJoplin function
+			// can be called twice. But even if it is, logically, it's impossible that this
+			// call below would be done with twice the same nounce. Even if the function sendContentToJoplin
+			// is called twice in parallel, the increment is atomic and should result in two nounces
+			// being generated. But it's not. Somehow the function below is called twice with the exact same nounce.
+			//
+			// It's also not something internal to Chrome that repeat the request since the error is caught
+			// so it really seems like a double function call.
+			//
+			// So this is why below, when we get the duplicate nounce error, we just ignore it so as not to display
+			// a useless error message. The whole nounce feature is not for security (it's not to prevent replay
+			// attacks), but simply to detect these double-requests and ignore them on Joplin side.
+			//
+			// This nounce feature is optional, it's only active when the nounce query parameter is provided
+			// so it shouldn't affect any other call.
+			//
+			// This is the perfect Heisenbug - it happens always when opening the popup the first time EXCEPT
+			// when the debugger is open. Then everything is working fine and the bug NEVER EVER happens,
+			// so it's impossible to understand what's going on.
+			await this.clipperApiExec('POST', 'notes', { nounce: this.nounce_++ }, content);
 
 			this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: true } });
 		} catch (error) {
-			this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: false, errorMessage: error.message } });
+			if (error.message === '{"error":"Duplicate Nounce"}') {
+				this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: true } });
+			} else {
+				this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: false, errorMessage: error.message } });
+			}
 		}
 	}
 

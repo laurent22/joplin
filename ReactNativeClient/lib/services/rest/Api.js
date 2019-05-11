@@ -40,6 +40,7 @@ class Api {
 
 	constructor(token = null) {
 		this.token_ = token;
+		this.knownNounces_ = {};
 		this.logger_ = new Logger();
 	}
 
@@ -62,9 +63,18 @@ class Api {
 
 	async route(method, path, query = null, body = null, files = null) {
 		if (!files) files = [];
+		if (!query) query = {};
 
 		const parsedPath = this.parsePath(path);
 		if (!parsedPath.callName) throw new ErrorNotFound(); // Nothing at the root yet
+
+		if (query && query.nounce) {
+			const requestMd5 = md5(JSON.stringify([method, path, body, query, files.length]));
+			if (this.knownNounces_[query.nounce] === requestMd5) {
+				throw new ErrorBadRequest('Duplicate Nounce');
+			}
+			this.knownNounces_[query.nounce] = requestMd5;
+		}
 		
 		const request = {
 			method: method,
