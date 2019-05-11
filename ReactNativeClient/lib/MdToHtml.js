@@ -13,8 +13,7 @@ const rules = {
 	checkbox: require('./MdToHtml/rules/checkbox'),
 	katex: require('./MdToHtml/rules/katex'),
 	link_open: require('./MdToHtml/rules/link_open'),
-	html_block: require('./MdToHtml/rules/html_block'),
-	html_inline: require('./MdToHtml/rules/html_inline'),
+	html_image: require('./MdToHtml/rules/html_image'),
 	highlight_keywords: require('./MdToHtml/rules/highlight_keywords'),
 	code_inline: require('./MdToHtml/rules/code_inline'),
 };
@@ -124,7 +123,7 @@ class MdToHtml {
 		markdownIt.use(rules.image(context, ruleOptions));
 		markdownIt.use(rules.checkbox(context, ruleOptions));
 		markdownIt.use(rules.link_open(context, ruleOptions));
-		markdownIt.use(rules.html_block(context, ruleOptions));
+		markdownIt.use(rules.html_image(context, ruleOptions));
 		if (Setting.value('markdown.plugin.katex'))
 			markdownIt.use(rules.katex(context, ruleOptions));
 		markdownIt.use(rules.highlight_keywords(context, ruleOptions));

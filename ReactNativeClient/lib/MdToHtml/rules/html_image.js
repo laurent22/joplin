@@ -19,23 +19,34 @@ function renderImageHtml(before, src, after, ruleOptions) {
 }
 
 function installRule(markdownIt, mdOptions, ruleOptions) {
-	const defaultRender = markdownIt.renderer.rules.html_block || function(tokens, idx, options, env, self) {
+	const htmlBlockDefaultRender = markdownIt.renderer.rules.html_block || function(tokens, idx, options, env, self) {
+		return self.renderToken(tokens, idx, options);
+	};
+
+	const htmlInlineDefaultRender = markdownIt.renderer.rules.html_inline || function(tokens, idx, options, env, self) {
 		return self.renderToken(tokens, idx, options);
 	};
 
 	const imageRegex = /<img(.*?)src=["'](.*?)["'](.*?)\/>/
 
-	markdownIt.renderer.rules.html_block = function(tokens, idx, options, env, self) {
-		const token = tokens[idx];
-		const content = token.content;
+	const handleImageTags = function(defaultRender) {
+		return function(tokens, idx, options, env, self) {
+			const token = tokens[idx];
+			const content = token.content;
 
-		if (!content.match(imageRegex)) return defaultRender(tokens, idx, options, env, self);
-		
-		return content.replace(imageRegex, (v, before, src, after) => {
-			if (!Resource.isResourceUrl(src)) return defaultRender(tokens, idx, options, env, self);
-			return renderImageHtml(before, src, after, ruleOptions);
-		});
-	};
+			if (!content.match(imageRegex)) return defaultRender(tokens, idx, options, env, self);
+
+			return content.replace(imageRegex, (v, before, src, after) => {
+				if (!Resource.isResourceUrl(src)) return defaultRender(tokens, idx, options, env, self);
+				return renderImageHtml(before, src, after, ruleOptions);
+			});
+		}
+	}
+
+	// It seems images sometimes are inline, sometimes a block
+	// to make sure they both render correctly.
+	markdownIt.renderer.rules.html_block = handleImageTags(htmlBlockDefaultRender);
+	markdownIt.renderer.rules.html_inline = handleImageTags(htmlInlineDefaultRender);
 }
 
 module.exports = function(context, ruleOptions) {
