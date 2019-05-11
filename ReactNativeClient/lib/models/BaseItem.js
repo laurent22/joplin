@@ -124,7 +124,10 @@ class BaseItem extends BaseModel {
 	static pathToId(path) {
 		let p = path.split('/');
 		let s = p[p.length - 1].split('.');
-		return s[0];
+		let name = s[0];
+		if (!name) return name;
+		name.split('-');
+		return name[name.length - 1];
 	}
 
 	static loadItemByPath(path) {

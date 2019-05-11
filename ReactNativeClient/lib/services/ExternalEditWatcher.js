@@ -4,10 +4,9 @@ const Setting = require('lib/models/Setting');
 const { shim } = require('lib/shim');
 const EventEmitter = require('events');
 const { splitCommandString } = require('lib/string-utils');
-const { fileExtension } = require('lib/path-utils');
+const { fileExtension, basename } = require('lib/path-utils');
 const spawn	= require('child_process').spawn;
 const chokidar = require('chokidar');
-// const chokidar = null;
 
 class ExternalEditWatcher {
 
@@ -46,17 +45,6 @@ class ExternalEditWatcher {
 		return this.logger_;
 	}
 
-	// async preload() {
-	// 	// Chokidar is extremely slow to load since Electron 4 - it takes over 4 seconds
-	// 	// on my computer. So load it in the background.
-	// 	setTimeout(() => {
-	// 		if (this.chokidar_) return;
-	// 		const startTime = Date.now();
-	// 		this.chokidar_ = require('chokidar');
-	// 		console.info('Chokidar load time:', Date.now() - startTime);
-	// 	}, 1000);
-	// }
-
 	watch(fileToWatch) {
 		if (!this.chokidar_) return;
 
@@ -74,7 +62,7 @@ class ExternalEditWatcher {
 					
 					// this.watcher_.unwatch(path);
 				} else if (event === 'change') {
-					const id = Note.pathToId(path);
+					const id = this.noteFilePathToId_(path);
 
 					if (!this.skipNextChangeEvent_[id]) {
 						const note = await Note.load(id);
@@ -112,8 +100,18 @@ class ExternalEditWatcher {
 		return this.instance_;
 	}
 
-	noteFilePath(noteId) {
+	noteIdToFilePath_(noteId) {
 		return this.tempDir() + '/edit-' + noteId + '.md';
+	}
+
+	noteFilePathToId_(path) {
+		let id = path.split('/');
+		if (!id.length) throw new Error('Invalid path: ' + path);
+		id = id[id.length - 1];
+		id = id.split('.');
+		id.pop();
+		id = id[0].split('-');
+		return id[1];
 	}
 
 	watchedFiles() {
@@ -137,9 +135,11 @@ class ExternalEditWatcher {
 	noteIsWatched(note) {
 		if (!this.watcher_) return false;
 
-		const noteFilename = Note.systemPath(note);
+		const noteFilename = basename(this.noteIdToFilePath_(note.id));
 
 		const watchedPaths = this.watcher_.getWatched();
+
+		console.info(noteFilename, watchedPaths);
 
 		for (let dirName in watchedPaths) {
 			if (!watchedPaths.hasOwnProperty(dirName)) continue;
@@ -244,7 +244,7 @@ class ExternalEditWatcher {
 	async stopWatching(noteId) {
 		if (!noteId) return;
 
-		const filePath = this.noteFilePath(noteId);
+		const filePath = this.noteIdToFilePath_(noteId);
 		if (this.watcher_) this.watcher_.unwatch(filePath);
 		await shim.fsDriver().remove(filePath);
 		this.dispatch({
@@ -291,7 +291,7 @@ class ExternalEditWatcher {
 			return;
 		}		
 
-		const filePath = this.noteFilePath(note.id);
+		const filePath = this.noteIdToFilePath_(note.id);
 		const noteContent = await Note.serializeForEdit(note);
 		await shim.fsDriver().writeFile(filePath, noteContent, 'utf-8');
 		return filePath;
