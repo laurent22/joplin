@@ -102,7 +102,7 @@
     "html-entities": "^1.2.1",
     "image-type": "^3.0.0",
     "joplin-turndown": "^4.0.11",
-    "joplin-turndown-plugin-gfm": "^1.0.7",
+    "joplin-turndown-plugin-gfm": "^1.0.8",
     "jssha": "^2.3.1",
     "katex": "^0.10.0",
     "levenshtein": "^1.0.5",
