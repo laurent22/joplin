@@ -139,8 +139,6 @@ class ExternalEditWatcher {
 
 		const watchedPaths = this.watcher_.getWatched();
 
-		console.info(noteFilename, watchedPaths);
-
 		for (let dirName in watchedPaths) {
 			if (!watchedPaths.hasOwnProperty(dirName)) continue;
 
