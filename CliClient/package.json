@@ -63,7 +63,7 @@
     "server-destroy": "^1.0.1",
     "sharp": "^0.22.1",
     "sprintf-js": "^1.1.1",
-    "sqlite3": "^4.0.1",
+    "sqlite3": "^4.0.7",
     "string-padding": "^1.0.2",
     "string-to-stream": "^1.1.0",
     "strip-ansi": "^4.0.0",
