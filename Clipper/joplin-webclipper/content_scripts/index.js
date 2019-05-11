@@ -14,6 +14,20 @@
 		browserSupportsPromises_ = false;
 	}
 
+	function absoluteUrl(url) {
+		if (!url) return url;
+		const protocol = url.toLowerCase().split(':')[0];
+		if (['http', 'https', 'file'].indexOf(protocol) >= 0) return url;
+
+		if (url.indexOf('//')) {
+			return location.protocol + url;
+		} else if (url[0] === '/') {
+			return location.protocol + '//' + location.host + url;
+		} else {
+			return baseUrl() + '/' + url;
+		}
+	}
+
 	function pageTitle() {
 		const titleElements = document.getElementsByTagName("title");
 		if (titleElements.length) return titleElements[0].text.trim();
@@ -30,12 +44,13 @@
 		return output;
 	}
 
-	function getImageSizes(element) {
+	function getImageSizes(element, forceAbsoluteUrls = false) {
 		const images = element.getElementsByTagName('img');
 		const output = {};
 		for (let i = 0; i < images.length; i++) {
 			const img = images[i];
-			output[img.src] = {
+			const src = forceAbsoluteUrls ? absoluteUrl(img.src) : img.src;
+			output[src] = {
 				width: img.width,
 				height: img.height,
 				naturalWidth: img.naturalWidth,
@@ -46,7 +61,7 @@
 	}
 
 	// Cleans up element by removing all its invisible children (which we don't want to render as Markdown)
-	function cleanUpElement(element) {
+	function cleanUpElement(element, imageSizes) {
 		const childNodes = element.childNodes;
 
 		for (let i = 0; i < childNodes.length; i++) {
@@ -58,7 +73,17 @@
 			if (!isVisible) {
 				element.removeChild(node);
 			} else {
-				cleanUpElement(node);
+
+				if (node.nodeName.toLowerCase() === 'img') {
+					node.src = absoluteUrl(node.src);
+					const imageSize = imageSizes[node.src];
+					if (imageSize) {
+						node.width = imageSize.width;
+						node.height = imageSize.height;
+					}
+				}
+
+				cleanUpElement(node, imageSizes);
 			}
 		}
 	}
@@ -129,8 +154,9 @@
 		} else if (command.name === "completePageHtml") {
 
 			const cleanDocument = document.body.cloneNode(true);
-			cleanUpElement(cleanDocument);
-			return clippedContentResponse(pageTitle(), cleanDocument.innerHTML, getImageSizes(document));
+			const imageSizes = getImageSizes(document, true);
+			cleanUpElement(cleanDocument, imageSizes);
+			return clippedContentResponse(pageTitle(), cleanDocument.innerHTML, imageSizes);
 
 		} else if (command.name === "selectedHtml") {
 

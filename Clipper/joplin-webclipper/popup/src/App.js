@@ -7,6 +7,39 @@ import led_orange from './led_orange.png';
 const { connect } = require('react-redux');
 const { bridge } = require('./bridge');
 
+class PreviewComponent extends React.PureComponent {
+
+	constructor() {
+		super();
+
+		this.bodyRef = React.createRef();
+	}
+
+	componentDidMount() {
+		// Because the text size is made twice smaller with CSS, we need
+		// to also reduce the size of the images
+		const imgs = this.bodyRef.current.getElementsByTagName('img');
+		for (const img of imgs) {
+			img.width /= 2;
+			img.height /= 2;
+		}
+	}
+
+	render() {
+		return (
+			<div className="Preview">
+				<a className={"Confirm Button"} onClick={this.props.onConfirmClick}>Confirm</a>
+				<h2>Preview:</h2>
+				<input className={"Title"} value={this.props.title} onChange={this.props.onTitleChange}/>
+				<div className={"BodyWrapper"}>
+					<div className={"Body"} ref={this.bodyRef} dangerouslySetInnerHTML={{__html: this.props.body_html}}></div>
+				</div>
+			</div>
+		);
+	}
+
+}
+
 class AppComponent extends Component {
 
 	constructor() {
@@ -211,16 +244,12 @@ class AppComponent extends Component {
 				</div>
 			);
 		} else if (hasContent) {
-			previewComponent = (
-				<div className="Preview">
-					<a className={"Confirm Button"} onClick={this.confirm_click}>Confirm</a>
-					<h2>Preview:</h2>
-					<input className={"Title"} value={content.title} onChange={this.contentTitle_change}/>
-					<div className={"BodyWrapper"}>
-						<div className={"Body"} dangerouslySetInnerHTML={{__html: content.body_html}}></div>
-					</div>
-				</div>
-			);
+			previewComponent = <PreviewComponent
+				onConfirmClick={this.confirm_click}
+				title={content.title}
+				body_html={content.body_html}
+				onTitleChange={this.contentTitle_change}
+			/>
 		}
 
 		const clipperStatusComp = () => {
