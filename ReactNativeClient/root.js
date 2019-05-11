@@ -332,23 +332,12 @@ const appReducer = (state = appDefaultState, action) => {
 let store = createStore(appReducer, applyMiddleware(generalMiddleware));
 storeDispatch = store.dispatch;
 
-// function blobTest() {
-// 	const contentType = 'text/plain';
-// 	var blob = new Blob(['aaaaaaaaaaa'], { type: contentType });
-
-// 	const fileTest = new File([blob], '/storage/emulated/0/Download/test.txt', { type: contentType, lastModified: Date.now() });
-// 	console.info('FFFFFFFFFFFFFFFFFFFFF', fileTest);
-// }
-
 async function initialize(dispatch) {
 	shimInit();
-
-	// blobTest();
 
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
 	Setting.setConstant('appId', 'net.cozic.joplin-mobile');
 	Setting.setConstant('appType', 'mobile');
-	//Setting.setConstant('resourceDir', () => { return RNFetchBlob.fs.dirs.DocumentDir; });
 	Setting.setConstant('resourceDir', RNFetchBlob.fs.dirs.DocumentDir);
 
 	const logDatabase = new Database(new DatabaseDriverReactNative());

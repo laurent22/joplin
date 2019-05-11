@@ -177,14 +177,15 @@ class Note extends BaseItem {
 			const id = resourceIds[i];
 			const resource = await Resource.load(id);
 			if (!resource) continue;
-			body = body.replace(new RegExp(':/' + id, 'gi'), toFileProtocolPath(Resource.fullPath(resource)));
+			const resourcePath = Resource.relativePath(resource)
+			body = body.replace(new RegExp(':/' + id, 'gi'), resourcePath); //toFileProtocolPath(Resource.fullPath(resource)));
 		}
 
 		return body;
 	}
 
 	static async replaceResourceExternalToInternalLinks(body) {
-		const reString = pregQuote(toFileProtocolPath(Resource.baseDirectoryPath() + '/')) + '[a-zA-Z0-9\.]+';
+		const reString = pregQuote(toFileProtocolPath(Resource.baseRelativeDirectoryPath() + '/')) + '[a-zA-Z0-9\.]+';
 		const re = new RegExp(reString, 'gi');
 		body = body.replace(re, (match) => {
 			const id = Resource.pathToId(match);

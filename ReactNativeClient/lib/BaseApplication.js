@@ -511,11 +511,13 @@ class BaseApplication {
 		Setting.setConstant('appName', appName);
 
 		const profileDir = this.determineProfileDir(initArgs);
-		const resourceDir = profileDir + '/resources';
+		const resourceDirName = 'resources';
+		const resourceDir = profileDir + '/' + resourceDirName;
 		const tempDir = profileDir + '/tmp';
 
 		Setting.setConstant('env', initArgs.env);
 		Setting.setConstant('profileDir', profileDir);
+		Setting.setConstant('resourceDirName', resourceDirName);
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
 
@@ -524,6 +526,9 @@ class BaseApplication {
 		await fs.mkdirp(profileDir, 0o755);
 		await fs.mkdirp(resourceDir, 0o755);
 		await fs.mkdirp(tempDir, 0o755);
+
+		// Clean up any remaining watched files (they start with "edit-")
+		await shim.fsDriver().removeAllThatStartWith(profileDir, 'edit-');
 
 		const extraFlags = await this.readFlagsFromFile(profileDir + '/flags.txt');
 		initArgs = Object.assign(initArgs, extraFlags);

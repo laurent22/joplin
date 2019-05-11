@@ -633,6 +633,7 @@ Setting.constants_ = {
 	appName: 'joplin',
 	appId: 'SET_ME', // Each app should set this identifier
 	appType: 'SET_ME', // 'cli' or 'mobile'
+	resourceDirName: '',
 	resourceDir: '',
 	profileDir: '',
 	tempDir: '',

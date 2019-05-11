@@ -38,6 +38,18 @@ class FsDriverBase {
 		}
 	}
 
+	async removeAllThatStartWith(dirPath, filenameStart) {
+		if (!filenameStart || !dirPath) throw new Error('dirPath and filenameStart cannot be empty');
+
+		const stats = await this.readDirStats(dirPath);
+
+		for (const stat of stats) {
+			if (stat.path.indexOf(filenameStart) === 0) {
+				await this.remove(dirPath + '/' + stat.path);
+			}
+		}
+	}
+
 }
 
 module.exports = FsDriverBase;

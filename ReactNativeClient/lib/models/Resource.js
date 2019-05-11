@@ -71,6 +71,14 @@ class Resource extends BaseItem {
 		return Setting.value('resourceDir');
 	}
 
+	static baseRelativeDirectoryPath() {
+		return Setting.value('resourceDirName');
+	}
+
+	static relativePath(resource, encryptedBlob = false) {
+		return Setting.value('resourceDirName') + '/' + this.filename(resource, encryptedBlob);
+	}
+
 	static fullPath(resource, encryptedBlob = false) {
 		return Setting.value('resourceDir') + '/' + this.filename(resource, encryptedBlob);
 	}

@@ -26,6 +26,10 @@ class ExternalEditWatcher {
 		return this.instance_;
 	}
 
+	tempDir() {
+		return Setting.value('profileDir');
+	}
+
 	on(eventName, callback) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
@@ -109,7 +113,7 @@ class ExternalEditWatcher {
 	}
 
 	noteFilePath(noteId) {
-		return Setting.value('tempDir') + '/' + noteId + '.md';
+		return this.tempDir() + '/edit-' + noteId + '.md';
 	}
 
 	watchedFiles() {
@@ -123,7 +127,7 @@ class ExternalEditWatcher {
 
 			for (let i = 0; i < watchedPaths[dirName].length; i++) {
 				const f = watchedPaths[dirName][i];
-				output.push(Setting.value('tempDir') + '/' + f);
+				output.push(this.tempDir() + '/' + f);
 			}
 		}
 
