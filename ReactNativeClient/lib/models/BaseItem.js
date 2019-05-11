@@ -126,7 +126,7 @@ class BaseItem extends BaseModel {
 		let s = p[p.length - 1].split('.');
 		let name = s[0];
 		if (!name) return name;
-		name.split('-');
+		name = name.split('-');
 		return name[name.length - 1];
 	}
 
