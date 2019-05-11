@@ -166,9 +166,10 @@ function shimInit() {
 			resource = Object.assign({}, resource, defaultProps);
 		}
 
-		resource = await Resource.save(resource, { isNew: true });
+		const fileStat = await shim.fsDriver().stat(targetPath);
+		resource.size = fileStat.size;
 
-		console.info(resource);
+		resource = await Resource.save(resource, { isNew: true });
 
 		return resource;
 	}

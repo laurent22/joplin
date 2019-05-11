@@ -540,6 +540,7 @@ BaseModel.typeEnum_ = [
 	['TYPE_NOTE_RESOURCE', 11],
 	['TYPE_RESOURCE_LOCAL_STATE', 12],
 	['TYPE_REVISION', 13],
+	['TYPE_MIGRATION', 14],
 ];
 
 for (let i = 0; i < BaseModel.typeEnum_.length; i++) {

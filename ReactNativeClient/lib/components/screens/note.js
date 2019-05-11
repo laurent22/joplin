@@ -424,6 +424,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 			return;
 		}
 
+		const fileStat = await shim.fsDriver().stat(targetPath);
+		resource.size = fileStat.size;
+
 		await Resource.save(resource, { isNew: true });
 
 		const resourceTag = Resource.markdownTag(resource);

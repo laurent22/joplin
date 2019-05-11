@@ -76,6 +76,7 @@ SyncTargetRegistry.addClass(SyncTargetFilesystem);
 const FsDriverRN = require('lib/fs-driver-rn.js').FsDriverRN;
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const EncryptionService = require('lib/services/EncryptionService');
+const MigrationService = require('lib/services/MigrationService');
 
 let storeDispatch = function(action) {};
 
@@ -509,6 +510,8 @@ async function initialize(dispatch) {
 	SearchEngine.instance().setDb(reg.db());
 	SearchEngine.instance().setLogger(reg.logger());
 	SearchEngine.instance().scheduleSyncTables();
+
+	await MigrationService.instance().run();
 
 	reg.scheduleSync().then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation

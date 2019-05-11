@@ -408,12 +408,18 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					debugTemp.data = debugTemp.data ? debugTemp.data.substr(0, 32) + '...' : debugTemp.data;
 					importOptions.onError(new Error('This resource was not added because it has no ID or no content: ' + JSON.stringify(debugTemp)));
 				} else {
+					let size = 0;
+					if (decodedData) {
+						size = 'byteLength' in decodedData ? decodedData.byteLength : decodedData.length;
+					}
+
 					let r = {
 						id: resourceId,
 						data: decodedData,
 						mime: noteResource.mime,
 						title: noteResource.filename ? noteResource.filename : '',
 						filename: noteResource.filename ? noteResource.filename : '',
+						size: size,
 					};
 
 					note.resources.push(r);
