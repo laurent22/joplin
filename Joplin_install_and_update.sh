@@ -25,9 +25,41 @@ if [[ $EUID = 0 ]] ; then
   fi
 fi
 
+echo "Use --Kill-Joplin to kill Joplin before updateing or installing"
+echo "Use --auto-launch to automatically start Joplin after update or install"
+
 #-----------------------------------------------------
 # Download Joplin
 #-----------------------------------------------------
+
+kill(){
+	echo "Closing Joplin If It's Currently Running."
+	hash grep 2>/dev/null || { echo >&2 "grep is not installed.  Aborting."; exit 1; }
+	command -v grep >/dev/null || { echo >&2 "grep is not installed.  Aborting."; exit 1; }
+	hash awk 2>/dev/null || { echo >&2 "awk is not installed.  Aborting."; exit 1; }
+	command -v awk >/dev/null || { echo >&2 "awk is not installed.  Aborting."; exit 1; }
+	hash ps 2>/dev/null || { echo >&2 "ps is not installed.  Aborting."; exit 1; }
+	command -v ps >/dev/null || { echo >&2 "ps is not installed.  Aborting."; exit 1; }
+	
+	for PID in `ps -ef |grep -e "Joplin" |grep -v "Helper" |grep -v grep |awk '{print $2}'`
+	do
+  		kill $PID
+	done
+}
+
+launch(){
+	#echo "Starting Joplin"
+	echo "This still needs to be added, for now please start Joplin manually, Pull requests are welcome"
+	#~/.joplin/Joplin.AppImage &
+}
+
+if [[ "$1" = --Kill-Joplin ]]; then
+   kill
+elif [[ "$2" = --Kill-Joplin ]]; then
+   kill
+else
+   echo "Unknown Parameter"
+fi
 
 # Get the latest version to download
 version=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": "v\K.*?(?=")')
@@ -99,4 +131,10 @@ fi
 echo 'Bye!'
 unset version
 
-~/.joplin/Joplin.AppImage &
+if [[ "$1" = --auto-launch ]]; then
+   launch
+elif [[ "$2" = --auto-launch ]]; then
+   launch
+else
+   echo "Unknown Parameter"
+fi
