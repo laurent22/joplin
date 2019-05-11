@@ -651,7 +651,8 @@ class BaseItem extends BaseModel {
 
 	static displayTitle(item) {
 		if (!item) return '';
-		return !!item.encryption_applied ? '🔑 ' + _('Encrypted') : (!!item.title)? item.title + '' : Note.defaultTitle(item);
+		if (!!item.encryption_applied) return '🔑 ' + _('Encrypted');
+		return !!item.title ? item.title : _('Untitled');
 	}
 
 	static async markAllNonEncryptedForSync() {
