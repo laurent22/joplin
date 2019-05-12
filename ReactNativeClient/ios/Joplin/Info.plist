@@ -41,6 +41,8 @@
 	<string>To allow attaching a photo to a note</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>To add geo-location information to a note. Can be disabled in app.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>To add geo-location information to a note. Can be disabled in app.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To allow attaching images to a note</string>
 	<key>UIAppFonts</key>
