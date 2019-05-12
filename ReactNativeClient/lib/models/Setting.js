@@ -201,6 +201,7 @@ class Setting extends BaseModel {
 			'revisionService.oldNoteInterval': { section: 'revisionService', value: 1000 * 60 * 60 * 24 * 7, type: Setting.TYPE_INT, public: false },
 
 			'welcome.wasBuilt': { value: false, type: Setting.TYPE_BOOL, public: false },
+			'welcome.enabled': { value: true, type: Setting.TYPE_BOOL, public: false },
 		};
 
 		return this.metadata_;

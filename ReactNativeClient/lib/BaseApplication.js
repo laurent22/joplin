@@ -112,6 +112,12 @@ class BaseApplication {
 				continue;
 			}
 
+			if (arg == '--no-welcome') {
+				matched.welcomeDisabled = true;
+				argv.splice(0, 1);
+				continue;
+			}
+
 			if (arg == '--env') {
 				if (!nextArg) throw new JoplinError(_('Usage: %s', '--env <dev|prod>'), 'flagError');
 				matched.env = nextArg;
@@ -574,6 +580,8 @@ class BaseApplication {
 		} else {
 			setLocale(Setting.value('locale'));
 		}
+
+		if ('welcomeDisabled' in initArgs) Setting.setValue('welcome.enabled', !initArgs.welcomeDisabled);
 
 		if (!Setting.value('api.token')) {
 			EncryptionService.instance().randomHexString(64).then((token) => {
