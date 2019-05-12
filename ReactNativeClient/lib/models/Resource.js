@@ -6,6 +6,7 @@ const Setting = require('lib/models/Setting.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const pathUtils = require('lib/path-utils.js');
 const { mime } = require('lib/mime-utils.js');
+const { shim } = require('lib/shim');
 const { filename, safeFilename } = require('lib/path-utils.js');
 const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
 const markdownUtils = require('lib/markdownUtils');
@@ -212,6 +213,10 @@ class Resource extends BaseItem {
 	static async setLocalState(resourceOrId, state) {
 		const id = typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId;
 		await ResourceLocalState.save(Object.assign({}, state, { resource_id: id }));
+	}
+
+	static async needFileSizeSet() {
+		return this.modelSelectAll('SELECT * FROM resources WHERE `size` < 0 AND encryption_blob_encrypted = 0');
 	}
 
 	// Only set the `size` field and nothing else, not even the update_time

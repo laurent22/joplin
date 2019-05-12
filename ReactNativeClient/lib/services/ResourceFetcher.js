@@ -1,5 +1,6 @@
 const Resource = require('lib/models/Resource');
 const BaseService = require('lib/services/BaseService');
+const ResourceService = require('lib/services/ResourceService');
 const BaseSyncTarget = require('lib/BaseSyncTarget');
 const { Logger } = require('lib/logger.js');
 const EventEmitter = require('events');
@@ -103,14 +104,17 @@ class ResourceFetcher extends BaseService {
 			// 2019-05-12: This is only necessary to set the file size of the resources that come via
 			// sync. The other ones have been done using migrations/20.js. This code can be removed
 			// after a few months.
-			if (resource.size < 0 && localResourceContentPath) {
-				const itDoes = await shim.fsDriver().waitTillExists(localResourceContentPath);
-				const fileStat = await shim.fsDriver().stat(localResourceContentPath);
-				await Resource.setFileSizeOnly(resource.id, fileStat.size);
+			if (resource.size < 0 && localResourceContentPath && !resource.encryption_blob_encrypted) {
+				await ResourceService.autoSetFileSizes();
 			}
 
 			delete this.fetchingItems_[resource.id];
 			this.scheduleQueueProcess();
+
+			// Note: This downloadComplete event is not really right or useful because the resource
+			// might still be encrypted and the caller usually can't do much with this. In particular
+			// the note being displayed will refresh the resource images but since they are still
+			// encrypted it's not useful. Probably, the views should listen to DecryptionWorker events instead.
 			if (emitDownloadComplete) this.eventEmitter_.emit('downloadComplete', { id: resource.id });
 			this.updateReport();
 		}

@@ -1034,6 +1034,33 @@ describe('Synchronizer', function() {
 		expect(allEncrypted).toBe(false);
 	}));
 
+	it('should set the resource file size after decryption', asyncTest(async () => {
+		Setting.setValue('encryption.enabled', true);
+		const masterKey = await loadEncryptionMasterKey();
+
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		let resource1 = (await Resource.all())[0];
+		await Resource.setFileSizeOnly(resource1.id, -1);
+		let resourcePath1 = Resource.fullPath(resource1);
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
+		await encryptionService().loadMasterKeysFromSettings();
+
+		const fetcher = new ResourceFetcher(() => { return synchronizer().api() });
+		fetcher.queueDownload(resource1.id);
+		await fetcher.waitForAllFinished();
+		await decryptionWorker().start();
+
+		const resource1_2 = await Resource.load(resource1.id);
+		expect(resource1_2.size).toBe(2720);
+	}));
+
 	it('should encrypt remote resources after encryption has been enabled', asyncTest(async () => {
 		while (insideBeforeEach) await time.msleep(100);
 

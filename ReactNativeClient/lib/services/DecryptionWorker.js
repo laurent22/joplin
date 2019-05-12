@@ -1,5 +1,6 @@
 const BaseItem = require('lib/models/BaseItem');
 const Resource = require('lib/models/Resource');
+const ResourceService = require('lib/services/ResourceService');
 const { Logger } = require('lib/logger.js');
 
 class DecryptionWorker {
@@ -131,6 +132,10 @@ class DecryptionWorker {
 			this.dispatchReport({ state: 'idle' });
 			throw error;
 		}
+
+		// 2019-05-12: Temporary to set the file size of the resources
+		// that weren't set in migration/20.js due to being on the sync target
+		await ResourceService.autoSetFileSizes();
 
 		this.logger().info('DecryptionWorker: completed decryption.');
 

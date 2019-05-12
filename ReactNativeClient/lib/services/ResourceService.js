@@ -111,6 +111,20 @@ class ResourceService extends BaseService {
 		}
 	}
 
+	static async autoSetFileSize(resourceId, filePath) {
+		const itDoes = await shim.fsDriver().waitTillExists(filePath);
+		const fileStat = await shim.fsDriver().stat(filePath);
+		await Resource.setFileSizeOnly(resourceId, fileStat.size);
+	}
+
+	static async autoSetFileSizes() {
+		const resources = await Resource.needFileSizeSet();
+
+		for (const r of resources) {
+			await this.autoSetFileSize(r.id, Resource.fullPath(r));
+		}
+	}
+
 	async maintenance() {
 		await this.indexNoteResources();
 		await this.deleteOrphanResources();
