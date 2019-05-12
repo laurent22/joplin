@@ -1,5 +1,47 @@
 # Joplin changelog
 
+## [v1.0.151](https://github.com/laurent22/joplin/releases/tag/v1.0.151) - 2019-05-12T15:14:32Z
+
+Same as v1.0.150 but with a small fix to set the resources file size.
+
+- New: Support for note history ([#1415](https://github.com/laurent22/joplin/issues/1415)) ([#712](https://github.com/laurent22/joplin/issues/712))
+- Improved: Save size of a resource to the database; and added mechanism to run non-database migrations
+- Improved: Improved note deletion dialog ([#1502](https://github.com/laurent22/joplin/issues/1502))
+- Fixed: Allow resources greater than 10 MB but they won't be synced on mobile ([#371](https://github.com/laurent22/joplin/issues/371))
+- Fixed: Improved handling of images when using external editor, so that it works in Atom, VSCode and Typora ([#1425](https://github.com/laurent22/joplin/issues/1425))
+- Fixed: Some images were not being displayed
+- Fixed: Resets the undo manager when creating new notes ([#1495](https://github.com/laurent22/joplin/issues/1495)) ([#355](https://github.com/laurent22/joplin/issues/355))
+- Fixed: Prevents notes with no title to break after synchronize ([#1472](https://github.com/laurent22/joplin/issues/1472))
+
+## [v1.0.150](https://github.com/laurent22/joplin/releases/tag/v1.0.150) - 2019-05-12T11:27:48Z
+
+- New: Support for note history ([#1415](https://github.com/laurent22/joplin/issues/1415)) ([#712](https://github.com/laurent22/joplin/issues/712))
+- Improved: Save size of a resource to the database; and added mechanism to run non-database migrations
+- Improved: Improved note deletion dialog ([#1502](https://github.com/laurent22/joplin/issues/1502))
+- Fixed: Allow resources greater than 10 MB but they won't be synced on mobile ([#371](https://github.com/laurent22/joplin/issues/371))
+- Fixed: Improved handling of images when using external editor, so that it works in Atom, VSCode and Typora ([#1425](https://github.com/laurent22/joplin/issues/1425))
+- Fixed: Some images were not being displayed
+- Fixed: Resets the undo manager when creating new notes ([#1495](https://github.com/laurent22/joplin/issues/1495)) ([#355](https://github.com/laurent22/joplin/issues/355))
+- Fixed: Prevents notes with no title to break after synchronize ([#1472](https://github.com/laurent22/joplin/issues/1472))
+
+## [v1.0.148](https://github.com/laurent22/joplin/releases/tag/v1.0.148) - 2019-05-08T19:12:24Z
+
+This is to test the revision service. It is not yet recommended to upgrade as the corresponding mobile apps have not been released to the stores yet (the Android APK is available though).
+
+- Improved: Make sure a revision is saved if a note has not been modified for over a week
+- Improved: Do not save a revision if there is already a recent one that exists
+- Improved: Make sure user timestamp is preserved with revision information
+- Fixed: Fixed note history sort order.
+- Fixed: Make sure a revision is not empty before saving it
+
+## [v1.0.145](https://github.com/laurent22/joplin/releases/tag/v1.0.145) - 2019-05-03T09:16:53Z
+
+- Improved: Display better error message when trying to sync with a new sync target from an old version of Joplin
+- Improved: UI updates to sidebar and header, changing icon sizes and animations ([#1463](https://github.com/laurent22/joplin/issues/1463))
+- Fixed: Update chokidar to fix blank screen when returning from external editor ([#1479](https://github.com/laurent22/joplin/issues/1479))
+- Fixed: Fixes [#1476](https://github.com/laurent22/joplin/issues/1476): Import lists and sub-lists from Enex files with correct indentation ([#1476](https://github.com/laurent22/joplin/issues/1476))
+- Fixed: Remove message "Processing a path that has already been done" as this is not an error ([#1353](https://github.com/laurent22/joplin/issues/1353))
+
 ## [v1.0.143](https://github.com/laurent22/joplin/releases/tag/v1.0.143) - 2019-04-22T10:51:38Z
 
 - Improved support for Japanese, Chinese, Korean search queries (also applies to Goto Anything)

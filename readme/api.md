@@ -214,6 +214,7 @@ file_extension | text |
 encryption_cipher_text | text |    
 encryption_applied | int |    
 encryption_blob_encrypted | int |    
+size | int |    
 
 ## GET /resources
 
