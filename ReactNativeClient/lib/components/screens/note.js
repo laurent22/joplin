@@ -424,6 +424,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 			return;
 		}
 
+		const itDoes = await shim.fsDriver().waitTillExists(targetPath);
+		if (!itDoes) throw new Error('Resource file was not created: ' + targetPath);
+
 		const fileStat = await shim.fsDriver().stat(targetPath);
 		resource.size = fileStat.size;
 

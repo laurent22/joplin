@@ -121,6 +121,11 @@ class BaseItem extends BaseModel {
 		return output;
 	}
 
+	static async allSyncItems(syncTarget) {
+		const output = await this.db().selectAll('SELECT * FROM sync_items WHERE sync_target = ?', [syncTarget]);
+		return output;
+	}
+
 	static pathToId(path) {
 		let p = path.split('/');
 		let s = p[p.length - 1].split('.');
@@ -591,20 +596,25 @@ class BaseItem extends BaseModel {
 		const rows = await this.db().selectAll('SELECT * FROM sync_items WHERE sync_disabled = 1 AND sync_target = ?', [syncTargetId]);
 		let output = [];
 		for (let i = 0; i < rows.length; i++) {
-			const item = await this.loadItem(rows[i].item_type, rows[i].item_id);
-			if (!item) continue; // The referenced item no longer exist
+			const row = rows[i];
+			const item = await this.loadItem(row.item_type, row.item_id);
+			if (row.item_location === BaseItem.SYNC_ITEM_LOCATION_LOCAL && !item) continue; // The referenced item no longer exist
+
 			output.push({
-				syncInfo: rows[i],
+				syncInfo: row,
+				location: row.item_location,
 				item: item,
 			});
 		}
 		return output;
 	}
 
-	static updateSyncTimeQueries(syncTarget, item, syncTime, syncDisabled = false, syncDisabledReason = '') {
+	static updateSyncTimeQueries(syncTarget, item, syncTime, syncDisabled = false, syncDisabledReason = '', itemLocation = null) {
 		const itemType = item.type_;
 		const itemId = item.id;
 		if (!itemType || !itemId || syncTime === undefined) throw new Error(sprintf('Invalid parameters in updateSyncTimeQueries(): %d, %s, %d', syncTarget, JSON.stringify(item), syncTime));
+
+		if (itemLocation === null) itemLocation = BaseItem.SYNC_ITEM_LOCATION_LOCAL;
 
 		return [
 			{
@@ -612,8 +622,8 @@ class BaseItem extends BaseModel {
 				params: [syncTarget, itemType, itemId],
 			},
 			{
-				sql: 'INSERT INTO sync_items (sync_target, item_type, item_id, sync_time, sync_disabled, sync_disabled_reason) VALUES (?, ?, ?, ?, ?, ?)',
-				params: [syncTarget, itemType, itemId, syncTime, syncDisabled ? 1 : 0, syncDisabledReason + ''],
+				sql: 'INSERT INTO sync_items (sync_target, item_type, item_id, item_location, sync_time, sync_disabled, sync_disabled_reason) VALUES (?, ?, ?, ?, ?, ?, ?)',
+				params: [syncTarget, itemType, itemId, itemLocation, syncTime, syncDisabled ? 1 : 0, syncDisabledReason + ''],
 			}
 		];
 	}
@@ -623,9 +633,9 @@ class BaseItem extends BaseModel {
 		return this.db().transactionExecBatch(queries);
 	}
 
-	static async saveSyncDisabled(syncTargetId, item, syncDisabledReason) {
+	static async saveSyncDisabled(syncTargetId, item, syncDisabledReason, itemLocation = null) {
 		const syncTime = 'sync_time' in item ? item.sync_time : 0;
-		const queries = this.updateSyncTimeQueries(syncTargetId, item, syncTime, true, syncDisabledReason);
+		const queries = this.updateSyncTimeQueries(syncTargetId, item, syncTime, true, syncDisabledReason, itemLocation);
 		return this.db().transactionExecBatch(queries);
 	}
 
@@ -643,7 +653,7 @@ class BaseItem extends BaseModel {
 			let selectSql = 'SELECT id FROM ' + ItemClass.tableName();
 			if (ItemClass.modelType() == this.TYPE_NOTE) selectSql += ' WHERE is_conflict = 0';
 
-			queries.push('DELETE FROM sync_items WHERE item_type = ' + ItemClass.modelType() + ' AND item_id NOT IN (' + selectSql + ')');
+			queries.push('DELETE FROM sync_items WHERE item_location = ' + BaseItem.SYNC_ITEM_LOCATION_LOCAL + ' AND item_type = ' + ItemClass.modelType() + ' AND item_id NOT IN (' + selectSql + ')');
 		}
 
 		await this.db().transactionExecBatch(queries);
@@ -727,5 +737,8 @@ BaseItem.syncItemDefinitions_ = [
 	{ type: BaseModel.TYPE_MASTER_KEY, className: 'MasterKey' },
 	{ type: BaseModel.TYPE_REVISION, className: 'Revision' },
 ];
+
+BaseItem.SYNC_ITEM_LOCATION_LOCAL = 1;
+BaseItem.SYNC_ITEM_LOCATION_REMOTE = 2;
 
 module.exports = BaseItem;

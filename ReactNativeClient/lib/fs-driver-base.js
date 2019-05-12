@@ -1,4 +1,5 @@
 const { filename, fileExtension } = require('lib/path-utils');
+const { time } = require('lib/time-utils.js');
 
 class FsDriverBase {
 
@@ -47,6 +48,17 @@ class FsDriverBase {
 			if (stat.path.indexOf(filenameStart) === 0) {
 				await this.remove(dirPath + '/' + stat.path);
 			}
+		}
+	}
+
+	async waitTillExists(path, timeout = 10000) {
+		const startTime = Date.now();
+
+		while (true) {
+			const e = await this.exists(path);
+			if (e) return true;
+			if (Date.now() - startTime > timeout) return false;
+			await time.msleep(100);
 		}
 	}
 

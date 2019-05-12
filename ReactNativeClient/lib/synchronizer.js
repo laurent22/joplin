@@ -27,6 +27,7 @@ class Synchronizer {
 		this.appType_ = appType;
 		this.cancelling_ = false;
 		this.autoStartDecryptionWorker_ = true;
+		this.maxResourceSize_ = null;
 
 		// Debug flags are used to test certain hard-to-test conditions
 		// such as cancelling in the middle of a loop.
@@ -56,6 +57,11 @@ class Synchronizer {
 
 	logger() {
 		return this.logger_;
+	}
+
+	maxResourceSize() {
+		if (this.maxResourceSize_ !== null) return this.maxResourceSize_;
+		return this.appType_ === 'mobile' ? 10 * 1000 * 1000 : Infinity;
 	}
 
 	setEncryptionService(v) {
@@ -206,6 +212,11 @@ class Synchronizer {
 
 		this.logSyncOperation('starting', null, null, 'Starting synchronisation to target ' + syncTargetId + '... [' + synchronizationId + ']');
 
+		const handleCannotSyncItem = async (ItemClass, syncTargetId, item, cannotSyncReason, itemLocation = null) => {
+			await ItemClass.saveSyncDisabled(syncTargetId, item, cannotSyncReason, itemLocation);
+			this.dispatch({ type: "SYNC_HAS_DISABLED_SYNC_ITEMS" });
+		}
+
 		try {
 			await this.api().mkdir(this.syncDirName_);
 			this.api().setTempDirName(this.syncDirName_);
@@ -301,11 +312,6 @@ class Synchronizer {
 
 						this.logSyncOperation(action, local, remote, reason);
 
-						const handleCannotSyncItem = async (syncTargetId, item, cannotSyncReason) => {
-							await ItemClass.saveSyncDisabled(syncTargetId, item, cannotSyncReason);
-							this.dispatch({ type: "SYNC_HAS_DISABLED_SYNC_ITEMS" });
-						};
-
 						if (local.type_ == BaseModel.TYPE_RESOURCE && (action == "createRemote" || action === "updateRemote" || (action == "itemConflict" && remote))) {
 							try {
 								const remoteContentPath = this.resourceDirName_ + "/" + local.id;
@@ -315,7 +321,7 @@ class Synchronizer {
 								await this.api().put(remoteContentPath, null, { path: localResourceContentPath, source: "file" });
 							} catch (error) {
 								if (error && ["rejectedByTarget", "fileNotFound"].indexOf(error.code) >= 0) {
-									await handleCannotSyncItem(syncTargetId, local, error.message);
+									await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);
 									action = null;
 								} else {
 									throw error;
@@ -331,7 +337,7 @@ class Synchronizer {
 								await this.api().put(path, content);
 							} catch (error) {
 								if (error && error.code === "rejectedByTarget") {
-									await handleCannotSyncItem(syncTargetId, local, error.message);
+									await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);
 									canSync = false;
 								} else {
 									throw error;
@@ -568,6 +574,11 @@ class Synchronizer {
 							const creatingNewResource = content.type_ == BaseModel.TYPE_RESOURCE && action == "createLocal";
 
 							if (creatingNewResource) {
+								if (content.size >= this.maxResourceSize()) {
+									await handleCannotSyncItem(ItemClass, syncTargetId, content, 'File "' + content.title + '" is larger than allowed ' + this.maxResourceSize() + ' bytes. Beyond this limit, the mobile app would crash.', BaseItem.SYNC_ITEM_LOCATION_REMOTE);
+									continue;
+								}
+
 								await ResourceLocalState.save({ resource_id: content.id, fetch_status: Resource.FETCH_STATUS_IDLE });
 							}
 

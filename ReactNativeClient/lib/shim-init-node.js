@@ -142,8 +142,8 @@ function shimInit() {
 		if (resource.mime == 'image/jpeg' || resource.mime == 'image/jpg' || resource.mime == 'image/png') {
 			const result = await resizeImage_(filePath, targetPath, resource.mime);
 		} else {
-			const stat = await shim.fsDriver().stat(filePath);
-			if (stat.size >= 10000000) throw new Error('Resources larger than 10 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
+			// const stat = await shim.fsDriver().stat(filePath);
+			// if (stat.size >= 10000000) throw new Error('Resources larger than 10 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
 
 			await fs.copy(filePath, targetPath, { overwrite: true });
 		}
@@ -151,6 +151,9 @@ function shimInit() {
 		if (defaultProps) {
 			resource = Object.assign({}, resource, defaultProps);
 		}
+
+		const itDoes = await shim.fsDriver().waitTillExists(targetPath);
+		if (!itDoes) throw new Error('Resource file was not created: ' + targetPath);
 
 		const fileStat = await shim.fsDriver().stat(targetPath);
 		resource.size = fileStat.size;

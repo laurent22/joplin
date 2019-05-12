@@ -1252,4 +1252,22 @@ describe('Synchronizer', function() {
 		expect((await revisionService().revisionNote(revisions, 1)).title).toBe('note REV2');
 	}));
 
+	it("should not download resources over the limit", asyncTest(async () => {
+		const note1 = await Note.save({ title: 'note' });
+		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		const previousMax = synchronizer().maxResourceSize_;
+		synchronizer().maxResourceSize_ = 1;
+		await synchronizer().start();
+		synchronizer().maxResourceSize_ = previousMax;
+
+		const syncItems = await BaseItem.allSyncItems(syncTargetId());
+		expect(syncItems.length).toBe(2);
+		expect(syncItems[1].item_location).toBe(BaseItem.SYNC_ITEM_LOCATION_REMOTE);
+		expect(syncItems[1].sync_disabled).toBe(1);
+	}));
+
 });

@@ -118,7 +118,11 @@ class ReportService {
 
 			for (let i = 0; i < disabledItems.length; i++) {
 				const row = disabledItems[i];
-				section.body.push(_('%s (%s): %s', row.item.title, row.item.id, row.syncInfo.sync_disabled_reason));
+				if (row.location === BaseItem.SYNC_ITEM_LOCATION_LOCAL) {
+					section.body.push(_('%s (%s) could not be uploaded: %s', row.item.title, row.item.id, row.syncInfo.sync_disabled_reason));
+				} else {
+					section.body.push(_('Item "%s" could not be downloaded: %s', row.syncInfo.item_id, row.syncInfo.sync_disabled_reason));
+				}
 			}
 
 			section.body.push('');
