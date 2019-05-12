@@ -899,6 +899,29 @@ describe('Synchronizer', function() {
 		expect(ls.fetch_error).toBe('did not work');
 	}));
 
+	it('should set the resource file size if it is missing', asyncTest(async () => {
+		while (insideBeforeEach) await time.msleep(500);
+
+		let folder1 = await Folder.save({ title: "folder1" });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await synchronizer().start();	
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		let r1 = (await Resource.all())[0];
+		await Resource.setFileSizeOnly(r1.id, -1);
+		r1 = await Resource.load(r1.id);
+		expect(r1.size).toBe(-1);
+
+		const fetcher = new ResourceFetcher(() => { return synchronizer().api() });
+		fetcher.queueDownload(r1.id);
+		await fetcher.waitForAllFinished();
+		r1 = await Resource.load(r1.id);
+		expect(r1.size).toBe(2720);
+	}));
+
 	it('should delete resources', asyncTest(async () => {
 		while (insideBeforeEach) await time.msleep(500);
 

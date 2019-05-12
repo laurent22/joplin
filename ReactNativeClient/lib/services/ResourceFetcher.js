@@ -3,6 +3,7 @@ const BaseService = require('lib/services/BaseService');
 const BaseSyncTarget = require('lib/BaseSyncTarget');
 const { Logger } = require('lib/logger.js');
 const EventEmitter = require('events');
+const { shim } = require('lib/shim');
 
 class ResourceFetcher extends BaseService {
 
@@ -97,7 +98,17 @@ class ResourceFetcher extends BaseService {
 		if (this.fetchingItems_[resourceId]) return;
 		this.fetchingItems_[resourceId] = true;
 
-		const completeDownload = (emitDownloadComplete = true) => {
+		const completeDownload = async (emitDownloadComplete = true, localResourceContentPath = '') => {
+
+			// 2019-05-12: This is only necessary to set the file size of the resources that come via
+			// sync. The other ones have been done using migrations/20.js. This code can be removed
+			// after a few months.
+			if (resource.size < 0 && localResourceContentPath) {
+				const itDoes = await shim.fsDriver().waitTillExists(localResourceContentPath);
+				const fileStat = await shim.fsDriver().stat(localResourceContentPath);
+				await Resource.setFileSizeOnly(resource.id, fileStat.size);
+			}
+
 			delete this.fetchingItems_[resource.id];
 			this.scheduleQueueProcess();
 			if (emitDownloadComplete) this.eventEmitter_.emit('downloadComplete', { id: resource.id });
@@ -110,7 +121,7 @@ class ResourceFetcher extends BaseService {
 		// Shouldn't happen, but just to be safe don't re-download the
 		// resource if it's already been downloaded.
 		if (localState.fetch_status === Resource.FETCH_STATUS_DONE) {
-			completeDownload(false);
+			await completeDownload(false);
 			return;
 		}
 
@@ -128,11 +139,11 @@ class ResourceFetcher extends BaseService {
 		fileApi.get(remoteResourceContentPath, { path: localResourceContentPath, target: "file" }).then(async () => {
 			await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_DONE });
 			this.logger().debug('ResourceFetcher: Resource downloaded: ' + resource.id);
-			completeDownload();
+			await completeDownload(true, localResourceContentPath);
 		}).catch(async (error) => {
 			this.logger().error('ResourceFetcher: Could not download resource: ' + resource.id, error);
 			await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_ERROR, fetch_error: error.message });
-			completeDownload();
+			await completeDownload();
 		});
 	}
 

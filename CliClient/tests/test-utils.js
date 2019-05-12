@@ -119,6 +119,7 @@ async function switchClient(id) {
 	Note.db_ = databases_[id];
 	BaseItem.db_ = databases_[id];
 	Setting.db_ = databases_[id];
+	Resource.db_ = databases_[id];
 
 	BaseItem.encryptionService_ = encryptionServices_[id];
 	Resource.encryptionService_ = encryptionServices_[id];

@@ -214,6 +214,13 @@ class Resource extends BaseItem {
 		await ResourceLocalState.save(Object.assign({}, state, { resource_id: id }));
 	}
 
+	// Only set the `size` field and nothing else, not even the update_time
+	// This is because it's only necessary to do it once after migration 20
+	// and each client does it so there's no need to sync the resource.
+	static async setFileSizeOnly(resourceId, fileSize) {
+		return this.db().exec('UPDATE resources set `size` = ? WHERE id = ?', [fileSize, resourceId]);
+	}
+
 	static async batchDelete(ids, options = null) {
 		// For resources, there's not really batch deleting since there's the file data to delete
 		// too, so each is processed one by one with the item being deleted last (since the db

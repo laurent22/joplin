@@ -30,6 +30,7 @@ const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const PluginManager = require('lib/services/PluginManager');
 const RevisionService = require('lib/services/RevisionService');
+const MigrationService = require('lib/services/MigrationService');
 
 const pluginClasses = [
 	require('./plugins/GotoAnything.min'),
@@ -1037,6 +1038,7 @@ class Application extends BaseApplication {
 
 		// Make it available to the console window - useful to call revisionService.collectRevisions()
 		window.revisionService = RevisionService.instance();
+		window.migrationService = MigrationService.instance();
 	}
 
 }

@@ -14,16 +14,19 @@ class MigrationService extends BaseService {
 		return this.instance_;
 	}
 
+	async runScript(num) {
+		const script = Migration.script(num);
+		await script.exec();
+	}
+
 	async run() {
 		const migrations = await Migration.migrationsToDo();
 
 		for (const migration of migrations) {
 			this.logger().info('Running migration: ' + migration.number);
 
-			const script = Migration.script(migration.number);
-
 			try {
-				await script.exec();
+				await this.runScript(migration.number);
 				await Migration.delete(migration.id);
 			} catch (error) {
 				this.logger().error('Cannot run migration: ' + migration.number, error);
