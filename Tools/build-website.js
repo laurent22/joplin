@@ -482,7 +482,8 @@ async function main() {
 
 	renderMdToHtml(makeHomePageMd(), rootDir + '/docs/index.html', {});
 
-	renderFileToHtml(rootDir + '/readme/changelog.md', rootDir + '/docs/changelog/index.html', { title: 'Changelog' });
+	renderFileToHtml(rootDir + '/readme/changelog.md', rootDir + '/docs/changelog/index.html', { title: 'Changelog (Desktop App)' });
+	renderFileToHtml(rootDir + '/readme/changelog_cli.md', rootDir + '/docs/changelog_cli/index.html', { title: 'Changelog (CLI App)' });
 	renderFileToHtml(rootDir + '/readme/clipper.md', rootDir + '/docs/clipper/index.html', { title: 'Web Clipper' });
 	renderFileToHtml(rootDir + '/readme/debugging.md', rootDir + '/docs/debugging/index.html', { title: 'Debugging' });
 	renderFileToHtml(rootDir + '/readme/desktop.md', rootDir + '/docs/desktop/index.html', { title: 'Desktop Application' });

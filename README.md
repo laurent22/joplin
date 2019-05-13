@@ -68,7 +68,8 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 
 - About
 
-	- [Changelog](https://github.com/laurent22/joplin/blob/master/readme/changelog.md)
+	- [Changelog (Desktop App)](https://github.com/laurent22/joplin/blob/master/readme/changelog.md)
+	- [Changelog (CLI App)](https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md)
 	- [Stats](https://github.com/laurent22/joplin/blob/master/readme/stats.md)
 	- [Donate](https://github.com/laurent22/joplin/blob/master/readme/donate.md)
 <!-- TOC -->
