@@ -661,6 +661,9 @@ msgstr "Ocultar %s"
 msgid "Quit"
 msgstr "Sair"
 
+msgid "Close Window"
+msgstr ""
+
 #, fuzzy
 msgid "&Edit"
 msgstr "Editar"
@@ -835,11 +838,11 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "Notas e configurações estão armazenadas em: %s"
 
-msgid "Browse..."
-msgstr ""
-
 msgid "Check synchronisation configuration"
 msgstr "Verificar a configuração da sincronização"
+
+msgid "Browse..."
+msgstr ""
 
 msgid "Apply"
 msgstr "Aplicar"
@@ -1002,8 +1005,32 @@ msgstr "Localização"
 msgid "URL"
 msgstr "URL"
 
+#, fuzzy
+msgid "Note History"
+msgstr "Cadernos"
+
+msgid "Previous versions of this note"
+msgstr ""
+
 msgid "Note properties"
 msgstr "Propriedades da nota"
+
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr ""
+
+#, fuzzy
+msgid "This note has no history"
+msgstr "Esta nota foi modificada:"
+
+msgid "Restore"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
 
 msgid "Open..."
 msgstr "Abrir..."
@@ -1313,6 +1340,10 @@ msgstr "Em andamento"
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Sincronização já em andamento. Estado: %s"
 
+msgid ""
+"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgstr ""
+
 msgid "Encrypted"
 msgstr "Encriptado"
 
@@ -1568,6 +1599,20 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "Ignorar erros de certificados TLS"
 
+#, fuzzy
+msgid "Enable note history"
+msgstr "Habilitar encriptação"
+
+msgid "days"
+msgstr ""
+
+#, javascript-format
+msgid "%d days"
+msgstr ""
+
+msgid "Keep note history for"
+msgstr ""
+
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Valor da opção inválida: \"%s\". Os valores possíveis são: %s."
@@ -1642,12 +1687,19 @@ msgid "Please specify the notebook where the notes should be imported to."
 msgstr ""
 "Por favor, especifique o caderno para onde as notas deveriam ser importadas."
 
+msgid "Restored Notes"
+msgstr ""
+
 msgid "Items that cannot be synchronised"
 msgstr "Os itens não podem ser sincronizados"
 
-#, javascript-format
-msgid "%s (%s): %s"
-msgstr "%s (%s): %s"
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "Este arquivo não pôde ser aberto: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Este arquivo não pôde ser aberto: %s"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
@@ -1928,9 +1980,8 @@ msgstr "Você não possui cadernos. Crie um clicando no botão (+)."
 msgid "Welcome"
 msgstr "Bem-vindo"
 
-#, fuzzy
-#~ msgid "This note has no history"
-#~ msgstr "Esta nota foi modificada:"
+#~ msgid "%s (%s): %s"
+#~ msgstr "%s (%s): %s"
 
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "

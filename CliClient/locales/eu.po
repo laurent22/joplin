@@ -663,6 +663,9 @@ msgstr ""
 msgid "Quit"
 msgstr "Irten"
 
+msgid "Close Window"
+msgstr ""
+
 #, fuzzy
 msgid "&Edit"
 msgstr "Editatu"
@@ -832,12 +835,12 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "Oharrak eta ezarpenak hemen daude gordeta: %s"
 
-msgid "Browse..."
-msgstr ""
-
 #, fuzzy
 msgid "Check synchronisation configuration"
 msgstr "Sinkronizazioa utzi"
+
+msgid "Browse..."
+msgstr ""
 
 msgid "Apply"
 msgstr ""
@@ -1000,7 +1003,31 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+#, fuzzy
+msgid "Note History"
+msgstr "Koadernoak"
+
+msgid "Previous versions of this note"
+msgstr ""
+
 msgid "Note properties"
+msgstr ""
+
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr ""
+
+#, fuzzy
+msgid "This note has no history"
+msgstr "Ohar hau mugitua izan da:"
+
+msgid "Restore"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
 
 msgid "Open..."
@@ -1316,6 +1343,10 @@ msgstr ""
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Sinkronizazioa hasita dago. Egoera: %s"
 
+msgid ""
+"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgstr ""
+
 msgid "Encrypted"
 msgstr "Zifratuta"
 
@@ -1574,6 +1605,20 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr ""
 
+#, fuzzy
+msgid "Enable note history"
+msgstr "Zifratua gaitu"
+
+msgid "days"
+msgstr ""
+
+#, javascript-format
+msgid "%d days"
+msgstr ""
+
+msgid "Keep note history for"
+msgstr ""
+
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Balio aukera baliogabea: \"%s\". Litezkeen balioak: %s."
@@ -1649,12 +1694,19 @@ msgstr ""
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "Aukeratu nora esportatu sinkronizazioaren egoera, mesedez"
 
+msgid "Restored Notes"
+msgstr ""
+
 msgid "Items that cannot be synchronised"
 msgstr "Itemok ezin sinkronizatu"
 
-#, javascript-format
-msgid "%s (%s): %s"
-msgstr "%s (%s): %s"
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "Koadernoa ezin gorde daiteke: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Koadernoa ezin gorde daiteke: %s"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
@@ -1926,9 +1978,8 @@ msgstr "Oraindik ez duzu koadernorik. Sortu bat (+) botoian sakatuta."
 msgid "Welcome"
 msgstr "Ongi etorri!"
 
-#, fuzzy
-#~ msgid "This note has no history"
-#~ msgstr "Ohar hau mugitua izan da:"
+#~ msgid "%s (%s): %s"
+#~ msgstr "%s (%s): %s"
 
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "

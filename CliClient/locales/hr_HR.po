@@ -660,6 +660,9 @@ msgstr ""
 msgid "Quit"
 msgstr "Izađi"
 
+msgid "Close Window"
+msgstr ""
+
 #, fuzzy
 msgid "&Edit"
 msgstr "Uredi"
@@ -830,12 +833,12 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "Bilješke i postavke su pohranjene u: %s"
 
-msgid "Browse..."
-msgstr ""
-
 #, fuzzy
 msgid "Check synchronisation configuration"
 msgstr "Prekini sinkronizaciju"
+
+msgid "Browse..."
+msgstr ""
 
 msgid "Apply"
 msgstr ""
@@ -987,7 +990,31 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+#, fuzzy
+msgid "Note History"
+msgstr "Bilježnice"
+
+msgid "Previous versions of this note"
+msgstr ""
+
 msgid "Note properties"
+msgstr ""
+
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr ""
+
+#, fuzzy
+msgid "This note has no history"
+msgstr "Bilješka je promijenjena:"
+
+msgid "Restore"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
 
 msgid "Open..."
@@ -1299,6 +1326,10 @@ msgstr ""
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Sinkronizacija je već u toku. Stanje: %s"
 
+msgid ""
+"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgstr ""
+
 msgid "Encrypted"
 msgstr ""
 
@@ -1550,6 +1581,20 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr ""
 
+#, fuzzy
+msgid "Enable note history"
+msgstr "Bilješka je promijenjena:"
+
+msgid "days"
+msgstr ""
+
+#, javascript-format
+msgid "%d days"
+msgstr ""
+
+msgid "Keep note history for"
+msgstr ""
+
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Nevažeća vrijednost: \"%s\". Moguće vrijednosti su: %s."
@@ -1625,12 +1670,19 @@ msgstr ""
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "Odaberi lokaciju za izvoz statusa sinkronizacije"
 
+msgid "Restored Notes"
+msgstr ""
+
 msgid "Items that cannot be synchronised"
 msgstr "Stavke koje se ne mogu sinkronizirati"
 
 #, fuzzy, javascript-format
-msgid "%s (%s): %s"
-msgstr "%s %s (%s)"
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "Bilježnicu nije moguće snimiti: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Bilježnicu nije moguće snimiti: %s"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
@@ -1902,8 +1954,8 @@ msgid "Welcome"
 msgstr "Dobro došli"
 
 #, fuzzy
-#~ msgid "This note has no history"
-#~ msgstr "Bilješka je promijenjena:"
+#~ msgid "%s (%s): %s"
+#~ msgstr "%s %s (%s)"
 
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "

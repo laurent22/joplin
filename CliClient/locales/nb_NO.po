@@ -650,6 +650,9 @@ msgstr "Skjul %s"
 msgid "Quit"
 msgstr "Avslutt"
 
+msgid "Close Window"
+msgstr ""
+
 msgid "&Edit"
 msgstr "&Rediger"
 
@@ -818,11 +821,11 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "Notater og innstillinger er lagret i: %s"
 
-msgid "Browse..."
-msgstr "Utforsk..."
-
 msgid "Check synchronisation configuration"
 msgstr "Sjekk synkroniseringskonfigurasjon"
+
+msgid "Browse..."
+msgstr "Utforsk..."
 
 msgid "Apply"
 msgstr "Bruk"
@@ -987,8 +990,32 @@ msgstr "Lokasjon"
 msgid "URL"
 msgstr "URL"
 
+#, fuzzy
+msgid "Note History"
+msgstr "Notatliste"
+
+msgid "Previous versions of this note"
+msgstr ""
+
 msgid "Note properties"
 msgstr "Notategenskaper"
+
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr ""
+
+#, fuzzy
+msgid "This note has no history"
+msgstr "Dette notatet har blitt endret:"
+
+msgid "Restore"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
 
 msgid "Open..."
 msgstr "Åpne..."
@@ -1297,6 +1324,10 @@ msgstr "Pågår"
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Synkronisering pågår allerede. Status: %s"
 
+msgid ""
+"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgstr ""
+
 msgid "Encrypted"
 msgstr "Kryptert"
 
@@ -1552,6 +1583,20 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "Ignorer TLS-sertifikatfeil"
 
+#, fuzzy
+msgid "Enable note history"
+msgstr "Liste over innhold"
+
+msgid "days"
+msgstr ""
+
+#, javascript-format
+msgid "%d days"
+msgstr ""
+
+msgid "Keep note history for"
+msgstr ""
+
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Ugyldig verdi: \"%s\". Mulige verdier er: %s."
@@ -1621,12 +1666,19 @@ msgstr "Det er ingen data for eksportering."
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "Velg notatbok som notatene skal importeres til."
 
+msgid "Restored Notes"
+msgstr ""
+
 msgid "Items that cannot be synchronised"
 msgstr "Elementer som ikke vil synkronisere"
 
-#, javascript-format
-msgid "%s (%s): %s"
-msgstr "%s (%s): %s"
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "Filen kunne ikke åpnes: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Filen kunne ikke åpnes: %s"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
@@ -1902,9 +1954,8 @@ msgstr "Du har enda ingen notatbok. Opprett en ved å klikke på (+)-knappen."
 msgid "Welcome"
 msgstr "Velkommen"
 
-#, fuzzy
-#~ msgid "This note has no history"
-#~ msgstr "Dette notatet har blitt endret:"
+#~ msgid "%s (%s): %s"
+#~ msgstr "%s (%s): %s"
 
 #~ msgid "Table of contents"
 #~ msgstr "Liste over innhold"

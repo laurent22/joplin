@@ -627,6 +627,9 @@ msgstr "隱藏 %s"
 msgid "Quit"
 msgstr "結束"
 
+msgid "Close Window"
+msgstr ""
+
 #, fuzzy
 msgid "&Edit"
 msgstr "編輯"
@@ -798,11 +801,11 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "所有記事和設置均儲存於: %s"
 
-msgid "Browse..."
-msgstr ""
-
 msgid "Check synchronisation configuration"
 msgstr "檢測同步設置"
+
+msgid "Browse..."
+msgstr ""
 
 msgid "Apply"
 msgstr "套用"
@@ -958,7 +961,31 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+#, fuzzy
+msgid "Note History"
+msgstr "記事本"
+
+msgid "Previous versions of this note"
+msgstr ""
+
 msgid "Note properties"
+msgstr ""
+
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr ""
+
+#, fuzzy
+msgid "This note has no history"
+msgstr "此記事已被修改:"
+
+msgid "Restore"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
 
 msgid "Open..."
@@ -1262,6 +1289,10 @@ msgstr "進行中"
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "同步已在進行中。狀態: %s"
 
+msgid ""
+"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgstr ""
+
 msgid "Encrypted"
 msgstr "已加密"
 
@@ -1508,6 +1539,20 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "忽略 TLS 證書錯誤"
 
+#, fuzzy
+msgid "Enable note history"
+msgstr "啟用加密"
+
+msgid "days"
+msgstr ""
+
+#, javascript-format
+msgid "%d days"
+msgstr ""
+
+msgid "Keep note history for"
+msgstr ""
+
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "不正確選項值: \"%s\"。可能的值為: %s。"
@@ -1580,12 +1625,19 @@ msgstr "沒有資料可匯出。"
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "請指定將記事匯入到的筆記本。"
 
+msgid "Restored Notes"
+msgstr ""
+
 msgid "Items that cannot be synchronised"
 msgstr "無法同步的項目"
 
-#, javascript-format
-msgid "%s (%s): %s"
-msgstr "%s (%s): %s"
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "無法開啟檔案: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "無法開啟檔案: %s"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
@@ -1854,9 +1906,8 @@ msgstr "您當前沒有任何筆記本。通過按一下 (+) 鍵去建立一本�
 msgid "Welcome"
 msgstr "歡迎"
 
-#, fuzzy
-#~ msgid "This note has no history"
-#~ msgstr "此記事已被修改:"
+#~ msgid "%s (%s): %s"
+#~ msgstr "%s (%s): %s"
 
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "

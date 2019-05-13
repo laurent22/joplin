@@ -632,6 +632,9 @@ msgstr "Gizle %s"
 msgid "Quit"
 msgstr "Çıkış"
 
+msgid "Close Window"
+msgstr ""
+
 #, fuzzy
 msgid "&Edit"
 msgstr "Düzenle"
@@ -805,11 +808,11 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "Notlar ve ayarlar şu konumda saklanır: %s"
 
-msgid "Browse..."
-msgstr "Bul..."
-
 msgid "Check synchronisation configuration"
 msgstr "Senkronizasyon yapılandırmasını kontrol et"
+
+msgid "Browse..."
+msgstr "Bul..."
 
 msgid "Apply"
 msgstr "Uygula"
@@ -976,8 +979,32 @@ msgstr "Konum"
 msgid "URL"
 msgstr "URL"
 
+#, fuzzy
+msgid "Note History"
+msgstr "Not listesi"
+
+msgid "Previous versions of this note"
+msgstr ""
+
 msgid "Note properties"
 msgstr "Not özellikleri"
+
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr ""
+
+#, fuzzy
+msgid "This note has no history"
+msgstr "Bu not değiştirildi:"
+
+msgid "Restore"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
 
 msgid "Open..."
 msgstr "Aç..."
@@ -1288,6 +1315,10 @@ msgstr "Devam etmekte"
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Senkronizasyon zaten devam ediyor. Durum: %s"
 
+msgid ""
+"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgstr ""
+
 msgid "Encrypted"
 msgstr "Şifrelenmiş"
 
@@ -1542,6 +1573,20 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "TLS sertifikası hatalarını yoksay"
 
+#, fuzzy
+msgid "Enable note history"
+msgstr "Şifrelemeyi etkinleştir"
+
+msgid "days"
+msgstr ""
+
+#, javascript-format
+msgid "%d days"
+msgstr ""
+
+msgid "Keep note history for"
+msgstr ""
+
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Geçersiz seçenek değeri:  \"%s\". Mümkün değerler: %s."
@@ -1611,12 +1656,19 @@ msgstr "Çıkartılacak veri bulunmuyor."
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "Lütfen notların alınacağı not defterini belirtin."
 
+msgid "Restored Notes"
+msgstr ""
+
 msgid "Items that cannot be synchronised"
 msgstr "Senkronize edilemeyen öğeler"
 
-#, javascript-format
-msgid "%s (%s): %s"
-msgstr "%s (%s): %s"
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "Bu dosya açılamadı: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Bu dosya açılamadı: %s"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
@@ -1895,9 +1947,8 @@ msgstr ""
 msgid "Welcome"
 msgstr "Hoşgeldiniz"
 
-#, fuzzy
-#~ msgid "This note has no history"
-#~ msgstr "Bu not değiştirildi:"
+#~ msgid "%s (%s): %s"
+#~ msgstr "%s (%s): %s"
 
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "

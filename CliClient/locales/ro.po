@@ -599,6 +599,9 @@ msgstr "Ascundeți %s"
 msgid "Quit"
 msgstr "Ieșiți"
 
+msgid "Close Window"
+msgstr ""
+
 #, fuzzy
 msgid "&Edit"
 msgstr "Editați"
@@ -767,10 +770,10 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr ""
 
-msgid "Browse..."
+msgid "Check synchronisation configuration"
 msgstr ""
 
-msgid "Check synchronisation configuration"
+msgid "Browse..."
 msgstr ""
 
 msgid "Apply"
@@ -918,7 +921,31 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+#, fuzzy
+msgid "Note History"
+msgstr "Caiete de notițe"
+
+msgid "Previous versions of this note"
+msgstr ""
+
 msgid "Note properties"
+msgstr ""
+
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr ""
+
+#, fuzzy
+msgid "This note has no history"
+msgstr "Această notiță a fost modificată:"
+
+msgid "Restore"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
 
 msgid "Open..."
@@ -1218,6 +1245,10 @@ msgstr "În progres"
 msgid "Synchronisation is already in progress. State: %s"
 msgstr ""
 
+msgid ""
+"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgstr ""
+
 msgid "Encrypted"
 msgstr "Criptat"
 
@@ -1455,6 +1486,20 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "Ignoră erorile de certificat TLS"
 
+#, fuzzy
+msgid "Enable note history"
+msgstr "Activați criptarea"
+
+msgid "days"
+msgstr ""
+
+#, javascript-format
+msgid "%d days"
+msgstr ""
+
+msgid "Keep note history for"
+msgstr ""
+
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr ""
@@ -1526,12 +1571,19 @@ msgstr "Nu există date de exportat."
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr ""
 
+msgid "Restored Notes"
+msgstr ""
+
 msgid "Items that cannot be synchronised"
 msgstr "Itemii nu pot fi sincronizați"
 
-#, javascript-format
-msgid "%s (%s): %s"
-msgstr "%s (%s): %s"
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "Acest fișier nu a putut fi deschis: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Acest fișier nu a putut fi deschis: %s"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
@@ -1797,9 +1849,8 @@ msgstr ""
 msgid "Welcome"
 msgstr "Bine ați venit"
 
-#, fuzzy
-#~ msgid "This note has no history"
-#~ msgstr "Această notiță a fost modificată:"
+#~ msgid "%s (%s): %s"
+#~ msgstr "%s (%s): %s"
 
 #, fuzzy
 #~ msgid "Joplin v%s"

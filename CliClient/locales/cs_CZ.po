@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.6\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Pro smazání tagu jej odeberte od přiřazených poznámek."
@@ -653,6 +651,9 @@ msgstr "Schovat %s"
 msgid "Quit"
 msgstr "Ukončit"
 
+msgid "Close Window"
+msgstr ""
+
 #, fuzzy
 msgid "&Edit"
 msgstr "Upravit"
@@ -827,11 +828,11 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "Poznámky a nastavení uloženo v: %s"
 
-msgid "Browse..."
-msgstr "Procházet..."
-
 msgid "Check synchronisation configuration"
 msgstr "Zkontrolujte nastavení synchronizace"
+
+msgid "Browse..."
+msgstr "Procházet..."
 
 msgid "Apply"
 msgstr "Použít"
@@ -990,8 +991,32 @@ msgstr "Lokace"
 msgid "URL"
 msgstr "URL"
 
+#, fuzzy
+msgid "Note History"
+msgstr "Seznam položek"
+
+msgid "Previous versions of this note"
+msgstr ""
+
 msgid "Note properties"
 msgstr "Nastavení poznámek"
+
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr ""
+
+#, fuzzy
+msgid "This note has no history"
+msgstr "Poznámka byla upravena:"
+
+msgid "Restore"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
 
 msgid "Open..."
 msgstr "Otevřít..."
@@ -1303,6 +1328,10 @@ msgstr "Probíhá"
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Synchronizace již probíhá. Stav: %s"
 
+msgid ""
+"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgstr ""
+
 msgid "Encrypted"
 msgstr "Zašifrováno"
 
@@ -1553,6 +1582,20 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "Ignorovat chyby TLS certifikátu"
 
+#, fuzzy
+msgid "Enable note history"
+msgstr "Povolit poznámky pod čarou"
+
+msgid "days"
+msgstr ""
+
+#, javascript-format
+msgid "%d days"
+msgstr ""
+
+msgid "Keep note history for"
+msgstr ""
+
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Neplatná hodnota: \"%s\". Přípustné hodnoty jsou: %s."
@@ -1622,12 +1665,19 @@ msgstr "Nic k exportování."
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "Prosím specifikujte sešit, do kterého mají být poznámky importovány."
 
+msgid "Restored Notes"
+msgstr ""
+
 msgid "Items that cannot be synchronised"
 msgstr "Položky jež nelze synchronizovat"
 
-#, javascript-format
-msgid "%s (%s): %s"
-msgstr "%s (%s): %s"
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "Soubor se nepodařilo otevřít: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Soubor se nepodařilo otevřít: %s"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
@@ -1905,9 +1955,8 @@ msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na tlačítko (+
 msgid "Welcome"
 msgstr "Vítejte"
 
-#, fuzzy
-#~ msgid "This note has no history"
-#~ msgstr "Poznámka byla upravena:"
+#~ msgid "%s (%s): %s"
+#~ msgstr "%s (%s): %s"
 
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "

@@ -647,6 +647,9 @@ msgstr "%s 숨기기"
 msgid "Quit"
 msgstr "종료"
 
+msgid "Close Window"
+msgstr ""
+
 #, fuzzy
 msgid "&Edit"
 msgstr "편집"
@@ -819,11 +822,11 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "노트와 설정값이 다음에 저장되었습니다: %s"
 
-msgid "Browse..."
-msgstr ""
-
 msgid "Check synchronisation configuration"
 msgstr "동기화 설정 확인"
+
+msgid "Browse..."
+msgstr ""
 
 msgid "Apply"
 msgstr "적용"
@@ -983,8 +986,32 @@ msgstr "위치"
 msgid "URL"
 msgstr "URL"
 
+#, fuzzy
+msgid "Note History"
+msgstr "노트북"
+
+msgid "Previous versions of this note"
+msgstr ""
+
 msgid "Note properties"
 msgstr "노트 속성"
+
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr ""
+
+#, fuzzy
+msgid "This note has no history"
+msgstr "노트가 변경되었습니다:"
+
+msgid "Restore"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
 
 msgid "Open..."
 msgstr "열기..."
@@ -1292,6 +1319,10 @@ msgstr "진행 중"
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "동기화가 이미 진행되고 있습니다. 상태: %s"
 
+msgid ""
+"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgstr ""
+
 msgid "Encrypted"
 msgstr "암호화됨"
 
@@ -1543,6 +1574,20 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "TLS 인증서 오류 무시"
 
+#, fuzzy
+msgid "Enable note history"
+msgstr "암호화 사용"
+
+msgid "days"
+msgstr ""
+
+#, javascript-format
+msgid "%d days"
+msgstr ""
+
+msgid "Keep note history for"
+msgstr ""
+
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "올바르지 않은 옵션 값: \"%s\". 가능한 값은 다음과 같습니다: \"%s\"."
@@ -1616,12 +1661,19 @@ msgstr "내보낼 데이터가 없습니다."
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "노트를 가져와서 저장할 노트북을 지정하세요."
 
+msgid "Restored Notes"
+msgstr ""
+
 msgid "Items that cannot be synchronised"
 msgstr "동기화를 할 수 없는 항목"
 
-#, javascript-format
-msgid "%s (%s): %s"
-msgstr "%s (%s): %s"
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "다음 파일을 열 수 없습니다: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "다음 파일을 열 수 없습니다: %s"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
@@ -1897,9 +1949,8 @@ msgstr "노트북이 없습니다. (+) 버튼을 눌러 새로 만드세요."
 msgid "Welcome"
 msgstr "환영합니다"
 
-#, fuzzy
-#~ msgid "This note has no history"
-#~ msgstr "노트가 변경되었습니다:"
+#~ msgid "%s (%s): %s"
+#~ msgstr "%s (%s): %s"
 
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "

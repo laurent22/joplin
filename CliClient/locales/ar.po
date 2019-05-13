@@ -643,6 +643,9 @@ msgstr "أخف %s"
 msgid "Quit"
 msgstr "إغلاق"
 
+msgid "Close Window"
+msgstr ""
+
 msgid "&Edit"
 msgstr "ت&حرير"
 
@@ -809,11 +812,11 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "الملاحظات و الإعدادات مخزّنة في: %s"
 
-msgid "Browse..."
-msgstr "استعراض..."
-
 msgid "Check synchronisation configuration"
 msgstr "فحص ضبط المزامنة"
+
+msgid "Browse..."
+msgstr "استعراض..."
 
 msgid "Apply"
 msgstr "تطبيق"
@@ -974,8 +977,32 @@ msgstr "المكان"
 msgid "URL"
 msgstr "عنوان URL"
 
+#, fuzzy
+msgid "Note History"
+msgstr "قائمة ملاحظات"
+
+msgid "Previous versions of this note"
+msgstr ""
+
 msgid "Note properties"
 msgstr "خصائص الملاحظة"
+
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr ""
+
+#, fuzzy
+msgid "This note has no history"
+msgstr "جرى تعديل هذه الملاحظة:"
+
+msgid "Restore"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
 
 msgid "Open..."
 msgstr "فتح..."
@@ -1283,6 +1310,10 @@ msgstr "قيد التقدم"
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "المزامنة قيد التقدم بالفعل. الحال: %s"
 
+msgid ""
+"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgstr ""
+
 msgid "Encrypted"
 msgstr "مشفّر"
 
@@ -1533,6 +1564,20 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "تجاهل أخطاء شهادات TLS"
 
+#, fuzzy
+msgid "Enable note history"
+msgstr "تفعيل التشفير"
+
+msgid "days"
+msgstr ""
+
+#, javascript-format
+msgid "%d days"
+msgstr ""
+
+msgid "Keep note history for"
+msgstr ""
+
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "قيمة خيار غير صحيحة: \"%s\". القيم الممكنة هي: %s."
@@ -1602,12 +1647,19 @@ msgstr "لا يوجد بيانات للتصدير."
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "فضلاً حدّد دفتر الملاحظات الذي ترغب استيراد الملاحظات إليه."
 
+msgid "Restored Notes"
+msgstr ""
+
 msgid "Items that cannot be synchronised"
 msgstr "العناصر التي لا يمكن مزامنتها"
 
-#, javascript-format
-msgid "%s (%s): %s"
-msgstr "%s (%s): %s"
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "لم نتمكن من فتح هذا الملف: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "لم نتمكن من فتح هذا الملف: %s"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
@@ -1880,9 +1932,8 @@ msgstr "ليس لديك دفاتر ملاحظات حالياً. أنشئ واح�
 msgid "Welcome"
 msgstr "مرحباً"
 
-#, fuzzy
-#~ msgid "This note has no history"
-#~ msgstr "جرى تعديل هذه الملاحظة:"
+#~ msgid "%s (%s): %s"
+#~ msgstr "%s (%s): %s"
 
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "
