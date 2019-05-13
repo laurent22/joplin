@@ -9,7 +9,7 @@ const script = {};
 script.exec = async function() {
 	const stats = await shim.fsDriver().readDirStats(Setting.value('resourceDir'));
 
-	const queries = [];
+	let queries = [];
 	for (const stat of stats) {
 		if (fileExtension(stat.path) === 'crypted') continue;		
 		const resourceId = Resource.pathToId(stat.path);
