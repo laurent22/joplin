@@ -74,7 +74,7 @@ async function main() {
 
 	await execCommand('npm publish');
 
-	const changelog = await execCommand('node ../Tools/git-changelog ' + changelogFrom);
+	const changelog = await execCommand('node ' + rootDir + '/Tools/git-changelog ' + changelogFrom);
 
 	const newChangelog = await insertChangelog(newTag, changelog);
 
