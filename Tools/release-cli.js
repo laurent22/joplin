@@ -69,6 +69,9 @@ async function main() {
 	await execCommand('bash build.sh');
 	await execCommand('cp package.json build/');
 	await execCommand('cp ../README.md build/');
+	
+	process.chdir(appDir + '/build');
+
 	await execCommand('npm publish');
 
 	const changelog = await execCommand('node ../Tools/git-changelog ' + changelogFrom);
