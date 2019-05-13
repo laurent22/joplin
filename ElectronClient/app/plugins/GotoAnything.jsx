@@ -193,12 +193,24 @@ class Dialog extends React.PureComponent {
 		}
 	}
 
-	gotoItem(item) {
+	async gotoItem(item) {
 		this.props.dispatch({
 			pluginName: PLUGIN_NAME,
 			type: 'PLUGIN_DIALOG_SET',
 			open: false,
 		});
+
+		if (this.state.listType === BaseModel.TYPE_NOTE || this.state.listType === BaseModel.TYPE_FOLDER) {
+			const folderPath = await Folder.folderPath(this.props.folders, item.parent_id);
+
+			for (const folder of folderPath) {
+				this.props.dispatch({
+					type: "FOLDER_SET_COLLAPSED",
+					id: folder.id,
+					collapsed: false,
+				});
+			}
+		}		
 
 		if (this.state.listType === BaseModel.TYPE_NOTE) {
 			this.props.dispatch({
