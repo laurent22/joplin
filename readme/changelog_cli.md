@@ -1,6 +1,6 @@
 # Joplin terminal app changelog
 
-## [cli-v1.0.133](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.133) - 2019-05-13T22:55:40Z
+## [cli-v1.0.135](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.135) - 2019-05-13T22:59:14Z
 
 - New: Added option to disable creation of welcome items
 - New: Support for note history (#1415) (#712)
