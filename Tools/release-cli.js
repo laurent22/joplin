@@ -5,9 +5,10 @@ const moment = require('moment');
 
 const rootDir = path.dirname(__dirname);
 const appDir = rootDir + '/CliClient';
+const changelogPath = rootDir + '/readme/changelog_cli.md';
 
 async function insertChangelog(tag, changelog) {
-	const currentText = await fs.readFile(rootDir + '/readme/changelog_cli.md', 'UTF-8');
+	const currentText = await fs.readFile(changelogPath, 'UTF-8');
 	const lines = currentText.split('\n');
 
 	const beforeLines = [];
@@ -29,8 +30,7 @@ async function insertChangelog(tag, changelog) {
 
 	const header = [
 		'##',
-		'[' + tag + ']',
-		'(https://github.com/laurent22/joplin/releases/tag/' + tag + ')',
+		'[' + tag + '](https://github.com/laurent22/joplin/releases/tag/' + tag + ')',
 		'-',
 		moment.utc().format('YYYY-MM-DD\THH:mm:ss') + 'Z',
 	];
@@ -43,11 +43,7 @@ async function insertChangelog(tag, changelog) {
 
 	const output = beforeLines.concat(newLines).concat(afterLines);
 
-	console.info(header);
-
-	// console.info(beforeLines);
-	// console.info("****************************");
-	// console.info(afterLines);
+	return output.join('\n');
 }
 
 // Start with node Tools/release-cli.js --changelog-from cli-v1.0.126
@@ -55,39 +51,19 @@ async function insertChangelog(tag, changelog) {
 async function main() {
 	const argv = require('yargs').argv;
 
-	// SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-	// ROOT_DIR="$SCRIPT_DIR/.."
-
-	// # LAST_VERSION=$(cat package.json | jq -r .version)
-
-	// cd "$SCRIPT_DIR"
-	// npm version patch
-	// touch "$SCRIPT_DIR/app/main.js"
-	// bash $SCRIPT_DIR/build.sh
-	// cp "$SCRIPT_DIR/package.json" build/
-	// cp "$SCRIPT_DIR/../README.md" build/
-	// cd "$SCRIPT_DIR/build"
-	// npm publish
-
-
-	// git add -A
-	// git commit -m "CLI v$NEW_VERSION"
-	// git tag "cli-v$NEW_VERSION"
-	// git push && git push --tags
-
 	process.chdir(appDir);
 
 	const packageJson = await fs.readFile('package.json', 'UTF-8'); 
 	const packageConf = JSON.parse(packageJson);
 
-	const previousVersion = packageConf.version;
-	let changelogFrom = 'cli-v' + previousVersion;
+	const previousVersion = 'v' + packageConf.version;
+	let changelogFrom = 'cli-' + previousVersion;
 
 	if (argv.changelogFrom) changelogFrom = argv.changelogFrom;
 
 	const newVersion = await execCommand('npm version patch');
-	console.info('Building ' + newVersion);
-	const newTag = 'cli-v' + newVersion;
+	console.info('Building ' + newVersion + '...');
+	const newTag = 'cli-' + newVersion;
 	
 	await execCommand('touch app/main.js');
 	await execCommand('bash build.sh');
@@ -96,37 +72,34 @@ async function main() {
 
 	const changelog = await execCommand('node ../Tools/git-changelog ' + changelogFrom);
 
-	await insertChangelog(newTag, changelog);
+	const newChangelog = await insertChangelog(newTag, changelog);
 
+	await fs.writeFile(changelogPath, newChangelog);
 
-	// const argv = require('yargs').argv;
+	const defaultEditor = await execCommand('echo $EDITOR');
 
-	// const oauthToken = await githubOauthToken();
-	// process.chdir(appDir);
+	const finalCmds = [
+		'git add -A',
+		'git commit -m "CLI ' + newVersion + '"',
+		'git tag "cli-' + newVersion + '"',
+		'git push',
+		'git push --tags',
+	];
 
-	// console.info('Running from: ' + process.cwd());
-
-	// const version = (await execCommand('npm version patch')).trim();
-	// const tagName = version;
-
-	// console.info('New version number: ' + version);
-
-	// console.info(await execCommand('git add -A'));
-	// console.info(await execCommand('git commit -m "Electron release ' + version + '"'));
-	// console.info(await execCommand('git tag ' + tagName));
-	// console.info(await execCommand('git push && git push --tags'));
-
-	// const releaseOptions = { isDraft: true, isPreRelease: !!argv.beta };
-
-	// console.info('Release options: ', releaseOptions);
-
-	// const release = await githubRelease('joplin', tagName, releaseOptions);
-
-	// console.info('Created GitHub release: ' + release.html_url);
+	console.info('');
+	console.info('Verify that the changelog is correct:');
+	console.info('');
+	console.info(defaultEditor + ' "' + changelogPath + '"');
+	console.info('');
+	console.info('Then run these commands:');
+	console.info('');
+	console.info(finalCmds.join(' && '));
 }
 
 main().catch((error) => {
 	console.error('Fatal error');
 	console.error(error);
+	console.error('');
+	console.error('If the app cannot auto-detect the previous tag name, specify it using --changelog-from TAG_NAME');
 	process.exit(1);
 });
