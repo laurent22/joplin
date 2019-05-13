@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-	<title>Changelog | Joplin</title>
+	<title>Changelog (Desktop App) | Joplin</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -261,7 +261,8 @@
 <li>
 <p>About</p>
 <ul>
-<li><a href="https://joplinapp.org/changelog">Changelog</a></li>
+<li><a href="https://joplinapp.org/changelog">Changelog (Desktop App)</a></li>
+<li><a href="https://joplinapp.org/changelog_cli">Changelog (CLI App)</a></li>
 <li><a href="https://joplinapp.org/stats">Stats</a></li>
 <li><a href="https://joplinapp.org/donate">Donate</a></li>
 </ul>
@@ -269,6 +270,18 @@
 </ul>
 </div>
 <h1><a name="joplin-changelog" href="#joplin-changelog" class="heading-anchor">🔗</a>Joplin changelog</h1>
+<h2><a name="v1-0-152-https-github-com-laurent22-joplin-releases-tag-v1-0-152-2019-05-13t09-08-07z" href="#v1-0-152-https-github-com-laurent22-joplin-releases-tag-v1-0-152-2019-05-13t09-08-07z" class="heading-anchor">🔗</a><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.152">v1.0.152</a> - 2019-05-13T09:08:07Z</h2>
+<p>Same as v1.0.151 but with a fix to the migration issue, that was in turns affecting synchronisation.</p>
+<ul>
+<li>New: Support for note history (<a href="https://github.com/laurent22/joplin/issues/1415">#1415</a>) (<a href="https://github.com/laurent22/joplin/issues/712">#712</a>)</li>
+<li>Improved: Save size of a resource to the database; and added mechanism to run non-database migrations</li>
+<li>Improved: Improved note deletion dialog (<a href="https://github.com/laurent22/joplin/issues/1502">#1502</a>)</li>
+<li>Fixed: Allow resources greater than 10 MB but they won't be synced on mobile (<a href="https://github.com/laurent22/joplin/issues/371">#371</a>)</li>
+<li>Fixed: Improved handling of images when using external editor, so that it works in Atom, VSCode and Typora (<a href="https://github.com/laurent22/joplin/issues/1425">#1425</a>)</li>
+<li>Fixed: Some images were not being displayed</li>
+<li>Fixed: Resets the undo manager when creating new notes (<a href="https://github.com/laurent22/joplin/issues/1495">#1495</a>) (<a href="https://github.com/laurent22/joplin/issues/355">#355</a>)</li>
+<li>Fixed: Prevents notes with no title to break after synchronize (<a href="https://github.com/laurent22/joplin/issues/1472">#1472</a>)</li>
+</ul>
 <h2><a name="v1-0-151-https-github-com-laurent22-joplin-releases-tag-v1-0-151-2019-05-12t15-14-32z" href="#v1-0-151-https-github-com-laurent22-joplin-releases-tag-v1-0-151-2019-05-12t15-14-32z" class="heading-anchor">🔗</a><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.151">v1.0.151</a> - 2019-05-12T15:14:32Z</h2>
 <p>Same as v1.0.150 but with a small fix to set the resources file size.</p>
 <ul>

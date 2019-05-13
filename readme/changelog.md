@@ -1,5 +1,18 @@
 # Joplin changelog
 
+## [v1.0.152](https://github.com/laurent22/joplin/releases/tag/v1.0.152) - 2019-05-13T09:08:07Z
+
+Same as v1.0.151 but with a fix to the migration issue, that was in turns affecting synchronisation.
+
+- New: Support for note history ([#1415](https://github.com/laurent22/joplin/issues/1415)) ([#712](https://github.com/laurent22/joplin/issues/712))
+- Improved: Save size of a resource to the database; and added mechanism to run non-database migrations
+- Improved: Improved note deletion dialog ([#1502](https://github.com/laurent22/joplin/issues/1502))
+- Fixed: Allow resources greater than 10 MB but they won't be synced on mobile ([#371](https://github.com/laurent22/joplin/issues/371))
+- Fixed: Improved handling of images when using external editor, so that it works in Atom, VSCode and Typora ([#1425](https://github.com/laurent22/joplin/issues/1425))
+- Fixed: Some images were not being displayed
+- Fixed: Resets the undo manager when creating new notes ([#1495](https://github.com/laurent22/joplin/issues/1495)) ([#355](https://github.com/laurent22/joplin/issues/355))
+- Fixed: Prevents notes with no title to break after synchronize ([#1472](https://github.com/laurent22/joplin/issues/1472))
+
 ## [v1.0.151](https://github.com/laurent22/joplin/releases/tag/v1.0.151) - 2019-05-12T15:14:32Z
 
 Same as v1.0.150 but with a small fix to set the resources file size.

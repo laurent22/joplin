@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-	<title>Mobile Application | Joplin</title>
+	<title>Changelog (CLI App) | Joplin</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -269,7 +269,29 @@
 </li>
 </ul>
 </div>
-<p>An Android and iOS (iPhone/iPad) applications are available from the <a href="https://joplinapp.org">Joplin home page</a>.</p>
+<h1><a name="joplin-terminal-app-changelog" href="#joplin-terminal-app-changelog" class="heading-anchor">🔗</a>Joplin terminal app changelog</h1>
+<h2><a name="cli-v1-0-129-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-129-2019-05-13t22-17-20z" href="#cli-v1-0-129-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-129-2019-05-13t22-17-20z" class="heading-anchor">🔗</a><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.129">cli-v1.0.129</a> - 2019-05-13T22:17:20Z</h2>
+<ul>
+<li>New: Added option to disable creation of welcome items</li>
+<li>New: Support for note history (#1415) (#712)</li>
+<li>Improved: Save size of a resource to the database; and added mechanism to run non-database migrations</li>
+<li>Improved: Display better error message when trying to sync with a new sync target from an old version of Joplin</li>
+<li>Improved: Update sharp (for node 12 compatibility) (#1471)</li>
+<li>Fixed: Do not resize images if they are already below the max dimensions</li>
+<li>Fixed: Allow resources greater than 10 MB but they won't be synced on mobile (#371)</li>
+<li>Fixed: Bump sqlite3 to v4.0.7 for node12 support (#1508)</li>
+<li>Fixed: Prevents notes with no title to break after synchronize (#1472)</li>
+<li>Fixed: Import lists and sub-lists from Enex files with correct indentation (#1476)</li>
+</ul>
+<h2><a name="cli-v1-0-125-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-125-2019-04-29t18-38-05z" href="#cli-v1-0-125-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-125-2019-04-29t18-38-05z" class="heading-anchor">🔗</a><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.125">cli-v1.0.125</a> - 2019-04-29T18:38:05Z</h2>
+<ul>
+<li>Improved: Improved support for Japanese, Chinese, Korean search queries (also applies to Goto Anything)</li>
+<li>Improved: Display warning when changing dir for filesystem sync</li>
+<li>Fixed: Remove message &quot;Processing a path that has already been done&quot; as this is not an error (#1353)</li>
+<li>Fixed: Some resources could incorrectly be deleted even though they are still present in a note. Also added additional verifications before deleting a resource. (#1433)</li>
+<li>Fixed: Handle invalid resource tags that contain no data when importing ENEX (#1405)</li>
+<li>Fixed: Restored inline code styling (#1326)</li>
+</ul>
 
 <script>
 	function stickyHeader() { 
