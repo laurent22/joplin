@@ -353,6 +353,10 @@ function markdownToHtml(md) {
 
 			output = output.toLowerCase();
 
+			while (output.length && output[output.length - 1] === '-') {
+				output = output.substr(0, output.length - 1);
+			}
+
 			let temp = output;
 			let index = 1;
 			while (doneNames.indexOf(temp) >= 0) {
