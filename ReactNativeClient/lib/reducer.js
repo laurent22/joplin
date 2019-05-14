@@ -487,13 +487,7 @@ const reducer = (state = defaultState, action) => {
 				newState = Object.assign({}, state);
 				newState.collapsedFolderIds = action.ids.slice();
 				break;
-
-			case 'FOLDER_SET_COLLAPSED':
-
-				newState = Object.assign({}, state);
-				folderSetCollapsed(state, action);
-				break;
-
+				
 			case 'TAG_UPDATE_ALL':
 
 				newState = Object.assign({}, state);
