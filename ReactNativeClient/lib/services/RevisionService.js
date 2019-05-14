@@ -10,6 +10,7 @@ const { shim } = require('lib/shim');
 const BaseService = require('lib/services/BaseService');
 const { _ } = require('lib/locale.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
+const { sprintf } = require('sprintf-js');
 
 class RevisionService extends BaseService {
 
@@ -138,10 +139,12 @@ class RevisionService extends BaseService {
 						if (note) {
 							if (oldNote && oldNote.updated_time < this.oldNoteCutOffDate_()) {
 								// This is where we save the original version of this old note
-								await this.createNoteRevision_(oldNote);
+								const rev = await this.createNoteRevision_(oldNote);
+								if (rev) this.logger().debug(sprintf('RevisionService::collectRevisions: Saved revision %s (old note)', rev.id));
 							}
 
-							await this.createNoteRevision_(note);
+							const rev = await this.createNoteRevision_(note);
+							if (rev) this.logger().debug(sprintf('RevisionService::collectRevisions: Saved revision %s (Last rev was more than %d ms ago)', rev.id, Setting.value('revisionService.intervalBetweenRevisions')));
 							doneNoteIds.push(noteId);
 							this.isOldNotesCache_[noteId] = false;
 						}
@@ -150,7 +153,10 @@ class RevisionService extends BaseService {
 					if (change.type === ItemChange.TYPE_DELETE && !!change.before_change_item) {
 						const note = JSON.parse(change.before_change_item);
 						const revExists = await Revision.revisionExists(BaseModel.TYPE_NOTE, note.id, note.updated_time);
-						if (!revExists) await this.createNoteRevision_(note);
+						if (!revExists) {
+							const rev = await this.createNoteRevision_(note);
+							if (rev) this.logger().debug(sprintf('RevisionService::collectRevisions: Saved revision %s (for deleted note)', rev.id));
+						}
 						doneNoteIds.push(noteId);
 					}
 

@@ -74,6 +74,11 @@ const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1
 
 console.info('Testing with sync target: ' + SyncTargetRegistry.idToName(syncTargetId_));
 
+const dbLogger = new Logger();
+dbLogger.addTarget('console');
+dbLogger.addTarget('file', { path: logDir + '/log.txt' });
+dbLogger.setLevel(Logger.LEVEL_WARN);
+
 const logger = new Logger();
 logger.addTarget('console');
 logger.addTarget('file', { path: logDir + '/log.txt' });
@@ -181,7 +186,7 @@ async function setupDatabase(id = null) {
 	};
 
 	databases_[id] = new JoplinDatabase(new DatabaseDriverNode());
-	databases_[id].setLogger(logger);
+	databases_[id].setLogger(dbLogger);
 	await databases_[id].open({ name: filePath });
 
 	BaseModel.db_ = databases_[id];
