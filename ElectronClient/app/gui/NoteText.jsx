@@ -521,6 +521,11 @@ class NoteTextComponent extends React.Component {
 					this.setViewerPercentScroll(scrollPercent ? scrollPercent : 0);
 				}, 10);
 			}
+
+			if (note && note.body && Setting.value('sync.downloadResources') === 'auto') {
+				const resourceIds = await Note.linkedResourceIds(note.body);
+				await ResourceFetcher.instance().markForDownload(resourceIds);
+			}
 		}
 
 		if (note) {
@@ -666,6 +671,8 @@ class NoteTextComponent extends React.Component {
 			const ls = Object.assign({}, this.state.localSearch);
 			ls.resultCount = arg0;
 			this.setState({ localSearch: ls });
+		} else if (msg === 'markForDownload') {
+			ResourceFetcher.instance().markForDownload(arg0);
 		} else if (msg === 'percentScroll') {
 			this.ignoreNextEditorScroll_ = true;
 			this.setEditorPercentScroll(arg0);
@@ -1741,6 +1748,7 @@ class NoteTextComponent extends React.Component {
 			 if (htmlHasChanged) {
 				let options = {
 					cssFiles: this.state.lastRenderCssFiles,
+					downloadResources: Setting.value('sync.downloadResources'),
 				};
 				this.webviewRef_.current.wrappedInstance.send('setHtml', html, options);
 				this.lastSetHtml_ = html;

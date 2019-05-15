@@ -861,7 +861,7 @@ describe('Synchronizer', function() {
 		expect(ls.fetch_status).toBe(Resource.FETCH_STATUS_IDLE);
 
 		const fetcher = new ResourceFetcher(() => { return synchronizer().api() });
-		fetcher.queueDownload(resource1_2.id);
+		fetcher.queueDownload_(resource1_2.id);
 		await fetcher.waitForAllFinished();
 
 		resource1_2 = await Resource.load(resource1.id);
@@ -890,7 +890,7 @@ describe('Synchronizer', function() {
 			// Simulate a failed download
 			get: () => { return new Promise((resolve, reject) => { reject(new Error('did not work')) }); }
 		} });
-		fetcher.queueDownload(resource1.id);
+		fetcher.queueDownload_(resource1.id);
 		await fetcher.waitForAllFinished();
 
 		resource1 = await Resource.load(resource1.id);
@@ -916,7 +916,7 @@ describe('Synchronizer', function() {
 		expect(r1.size).toBe(-1);
 
 		const fetcher = new ResourceFetcher(() => { return synchronizer().api() });
-		fetcher.queueDownload(r1.id);
+		fetcher.queueDownload_(r1.id);
 		await fetcher.waitForAllFinished();
 		r1 = await Resource.load(r1.id);
 		expect(r1.size).toBe(2720);
@@ -970,7 +970,7 @@ describe('Synchronizer', function() {
 		await encryptionService().loadMasterKeysFromSettings();
 
 		const fetcher = new ResourceFetcher(() => { return synchronizer().api() });
-		fetcher.queueDownload(resource1.id);
+		fetcher.queueDownload_(resource1.id);
 		await fetcher.waitForAllFinished();
 		
 		let resource1_2 = (await Resource.all())[0];
@@ -1053,7 +1053,7 @@ describe('Synchronizer', function() {
 		await encryptionService().loadMasterKeysFromSettings();
 
 		const fetcher = new ResourceFetcher(() => { return synchronizer().api() });
-		fetcher.queueDownload(resource1.id);
+		fetcher.queueDownload_(resource1.id);
 		await fetcher.waitForAllFinished();
 		await decryptionWorker().start();
 

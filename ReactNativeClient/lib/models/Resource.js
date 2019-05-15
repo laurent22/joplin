@@ -33,13 +33,22 @@ class Resource extends BaseItem {
 	}
 
 	static needToBeFetched(limit = null) {
-		let sql = 'SELECT * FROM resources WHERE id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = ?) ORDER BY updated_time DESC';
-		if (limit !== null) sql += ' LIMIT ' + limit;
-		return this.modelSelectAll(sql, [Resource.FETCH_STATUS_IDLE]);
+		let sql = ['SELECT * FROM resources WHERE id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = ?)'];
+		if (Setting.value('sync.downloadResources') !== 'always') {
+			sql.push('AND resources.id IN (SELECT resource_id FROM resources_to_download)');
+		}
+		sql.push('ORDER BY updated_time DESC');
+		if (limit !== null) sql.push('LIMIT ' + limit);
+		return this.modelSelectAll(sql.join(' '), [Resource.FETCH_STATUS_IDLE]);
 	}
 
 	static async needToBeFetchedCount() {
-		const r = await this.db().selectOne('SELECT count(*) as total FROM resource_local_states WHERE fetch_status = ?', [Resource.FETCH_STATUS_IDLE]);
+		const sql = ['SELECT count(*) as total FROM resource_local_states WHERE fetch_status = ?'];
+		if (Setting.value('sync.downloadResources') !== 'always') {
+			sql.push('AND resource_id IN (SELECT resource_id FROM resources_to_download)');
+		}
+		const r = await this.db().selectOne(sql.join(' '), [Resource.FETCH_STATUS_IDLE]);
+		console.info('needToBeFetchedCount', r);
 		return r ? r['total'] : 0;
 	}
 
@@ -243,6 +252,16 @@ class Resource extends BaseItem {
 
 		await ResourceLocalState.batchDelete(ids);
 	}
+
+	static async markForDownload(resourceId) {
+		// Insert the row only if it's not already there
+		const t = Date.now();
+		await this.db().exec('INSERT INTO resources_to_download (resource_id, updated_time, created_time) SELECT ?, ?, ? WHERE NOT EXISTS (SELECT 1 FROM resources_to_download WHERE resource_id = ?)', [resourceId, t, t, resourceId]);
+	}
+
+	// static async removeMarkForDownload(resourceId) {
+	// 	return this.db().exec('DELETE FROM resources_to_download WHERE resource_id = ?', [resourceId]);
+	// }
 
 }
 

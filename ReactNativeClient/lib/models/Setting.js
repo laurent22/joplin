@@ -155,6 +155,14 @@ class Setting extends BaseModel {
 				return SyncTargetRegistry.idAndLabelPlainObject();
 			}},
 
+			'sync.downloadResources': { value: 'always', type: Setting.TYPE_STRING, section: 'sync', public: true, isEnum: true, label: () => _('Download resources'), options: () => {
+				return {
+					'always': _('Always'),
+					'manual': _('When clicking on resource'),
+					'auto': _('When opening note'),
+				};
+			}},
+
 			'sync.2.path': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => {
 				try {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('filesystem')

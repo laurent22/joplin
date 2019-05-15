@@ -426,7 +426,7 @@ class BaseApplication {
 		}
 
 		if (this.hasGui() && action.type === 'SYNC_CREATED_RESOURCE') {
-			ResourceFetcher.instance().queueDownload(action.id);
+			ResourceFetcher.instance().autoAddResources();
 		}
 
 		if (refreshFolders) {

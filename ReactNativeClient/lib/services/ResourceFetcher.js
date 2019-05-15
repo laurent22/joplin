@@ -75,7 +75,19 @@ class ResourceFetcher extends BaseService {
 		}, 2000);
 	}
 
-	queueDownload(resourceId, priority = null) {
+	async markForDownload(resourceIds) {
+		if (!Array.isArray(resourceIds)) resourceIds = [resourceIds];
+
+		for (const id of resourceIds) {
+			await Resource.markForDownload(id);
+		}
+
+		for (const id of resourceIds) {
+			this.queueDownload_(id, 'high');
+		}
+	}
+
+	queueDownload_(resourceId, priority = null) {
 		if (priority === null) priority = 'normal';
 
 		const index = this.queuedItemIndex_(resourceId);
@@ -181,7 +193,7 @@ class ResourceFetcher extends BaseService {
 		let count = 0;
 		const resources = await Resource.needToBeFetched(limit);
 		for (let i = 0; i < resources.length; i++) {
-			const added = this.queueDownload(resources[i].id);
+			const added = this.queueDownload_(resources[i].id);
 			if (added) count++;
 		}
 
