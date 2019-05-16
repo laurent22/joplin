@@ -32,9 +32,9 @@ class Resource extends BaseItem {
 		return imageMimeTypes.indexOf(type.toLowerCase()) >= 0;
 	}
 
-	static needToBeFetched(limit = null) {
+	static needToBeFetched(resourceDownloadMode = null, limit = null) {
 		let sql = ['SELECT * FROM resources WHERE id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = ?)'];
-		if (Setting.value('sync.downloadResources') !== 'always') {
+		if (resourceDownloadMode !== 'always') {
 			sql.push('AND resources.id IN (SELECT resource_id FROM resources_to_download)');
 		}
 		sql.push('ORDER BY updated_time DESC');
@@ -42,13 +42,12 @@ class Resource extends BaseItem {
 		return this.modelSelectAll(sql.join(' '), [Resource.FETCH_STATUS_IDLE]);
 	}
 
-	static async needToBeFetchedCount() {
+	static async needToBeFetchedCount(resourceDownloadMode) {
 		const sql = ['SELECT count(*) as total FROM resource_local_states WHERE fetch_status = ?'];
-		if (Setting.value('sync.downloadResources') !== 'always') {
+		if (resourceDownloadMode !== 'always') {
 			sql.push('AND resource_id IN (SELECT resource_id FROM resources_to_download)');
 		}
 		const r = await this.db().selectOne(sql.join(' '), [Resource.FETCH_STATUS_IDLE]);
-		console.info('needToBeFetchedCount', r);
 		return r ? r['total'] : 0;
 	}
 
