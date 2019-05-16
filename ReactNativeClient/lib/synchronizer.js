@@ -231,6 +231,11 @@ class Synchronizer {
 
 			if (syncSteps.indexOf("update_remote") >= 0) {
 				let donePaths = [];
+
+				const completeItemProcessing = (path) => {
+					donePaths.push(path);
+				}
+
 				while (true) {
 					if (this.cancelling()) break;
 
@@ -290,6 +295,7 @@ class Synchronizer {
 								if (error.code === 'rejectedByTarget') {
 									this.progressReport_.errors.push(error);
 									this.logger().warn('Rejected by target: ' + path + ': ' + error.message);
+									completeItemProcessing(path);
 									continue;
 								} else {
 									throw error;
@@ -313,18 +319,23 @@ class Synchronizer {
 						this.logSyncOperation(action, local, remote, reason);
 
 						if (local.type_ == BaseModel.TYPE_RESOURCE && (action == "createRemote" || action === "updateRemote" || (action == "itemConflict" && remote))) {
-							try {
-								const remoteContentPath = this.resourceDirName_ + "/" + local.id;
-								const result = await Resource.fullPathForSyncUpload(local);
-								local = result.resource;
-								const localResourceContentPath = result.path;
-								await this.api().put(remoteContentPath, null, { path: localResourceContentPath, source: "file" });
-							} catch (error) {
-								if (error && ["rejectedByTarget", "fileNotFound"].indexOf(error.code) >= 0) {
-									await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);
-									action = null;
-								} else {
-									throw error;
+							const localState = await Resource.localState(local.id);
+							if (localState.fetch_status !== Resource.FETCH_STATUS_DONE) {
+								action = null;
+							} else {
+								try {
+									const remoteContentPath = this.resourceDirName_ + "/" + local.id;
+									const result = await Resource.fullPathForSyncUpload(local);
+									local = result.resource;
+									const localResourceContentPath = result.path;
+									await this.api().put(remoteContentPath, null, { path: localResourceContentPath, source: "file" });
+								} catch (error) {
+									if (error && ["rejectedByTarget", "fileNotFound"].indexOf(error.code) >= 0) {
+										await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);
+										action = null;
+									} else {
+										throw error;
+									}
 								}
 							}
 						}
@@ -422,7 +433,7 @@ class Synchronizer {
 							}
 						}
 
-						donePaths.push(path);
+						completeItemProcessing(path);
 					}
 
 					if (!result.hasMore) break;

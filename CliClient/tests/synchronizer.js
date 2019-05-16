@@ -53,6 +53,10 @@ async function remoteNotesFoldersResources() {
 	return remoteItemsByTypes([BaseModel.TYPE_NOTE, BaseModel.TYPE_FOLDER, BaseModel.TYPE_RESOURCE]);
 }
 
+async function remoteResources() {
+	return remoteItemsByTypes([BaseModel.TYPE_RESOURCE]);
+}
+
 async function localNotesFoldersSameAsRemote(locals, expect) {
 	let error = null;
 	try {
@@ -1318,6 +1322,33 @@ describe('Synchronizer', function() {
 		expect(syncItems.length).toBe(2);
 		expect(syncItems[1].item_location).toBe(BaseItem.SYNC_ITEM_LOCATION_REMOTE);
 		expect(syncItems[1].sync_disabled).toBe(1);
+	}));
+
+	it("should not upload a resource if it has not been fetched yet", asyncTest(async () => {
+		// In some rare cases, the synchronizer might try to upload a resource even though it
+		// doesn't have the resource file. It can happen in this situation:
+		// - C1 create resource
+		// - C1 sync
+		// - C2 sync
+		// - C2 resource metadata is received but ResourceFetcher hasn't downloaded the file yet
+		// - C2 enables E2EE - all the items are marked for forced sync
+		// - C2 sync
+		// The synchronizer will try to upload the resource, even though it doesn't have the file,
+		// so we need to make sure it doesn't. But also that once it gets the file, the resource
+		// does get uploaded.
+
+		const note1 = await Note.save({ title: 'note' });
+		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		const resource = (await Resource.all())[0];
+		await Resource.setLocalState(resource.id, { fetch_status: Resource.FETCH_STATUS_IDLE });
+		await synchronizer().start();
+
+		expect((await remoteResources()).length).toBe(0);
+
+		await Resource.setLocalState(resource.id, { fetch_status: Resource.FETCH_STATUS_DONE });
+		await synchronizer().start();
+
+		expect((await remoteResources()).length).toBe(1);
 	}));
 
 });
