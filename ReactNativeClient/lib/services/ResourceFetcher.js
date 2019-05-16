@@ -99,12 +99,15 @@ class ResourceFetcher extends BaseService {
 		if (this.fetchingItems_[resourceId]) return;
 		this.fetchingItems_[resourceId] = true;
 
+		const resource = await Resource.load(resourceId);
+		const localState = await Resource.localState(resource);
+
 		const completeDownload = async (emitDownloadComplete = true, localResourceContentPath = '') => {
 
 			// 2019-05-12: This is only necessary to set the file size of the resources that come via
 			// sync. The other ones have been done using migrations/20.js. This code can be removed
 			// after a few months.
-			if (resource.size < 0 && localResourceContentPath && !resource.encryption_blob_encrypted) {
+			if (resource && resource.size < 0 && localResourceContentPath && !resource.encryption_blob_encrypted) {
 				await ResourceService.autoSetFileSizes();
 			}
 
@@ -119,8 +122,11 @@ class ResourceFetcher extends BaseService {
 			this.updateReport();
 		}
 
-		const resource = await Resource.load(resourceId);
-		const localState = await Resource.localState(resource);
+		if (!resource) {
+			this.logger().info('ResourceFetcher: Attempting to download a resource that does not exist (has been deleted?): ' + resourceId);
+			await completeDownload(false);
+			return;
+		}
 
 		// Shouldn't happen, but just to be safe don't re-download the
 		// resource if it's already been downloaded.
@@ -166,7 +172,7 @@ class ResourceFetcher extends BaseService {
 	async waitForAllFinished() {
 		return new Promise((resolve, reject) => {
 			const iid = setInterval(() => {
-				if (!this.queue_.length && !Object.getOwnPropertyNames(this.fetchingItems_).length) {
+				if (!this.updateReportIID_ && !this.scheduleQueueProcessIID_ && !this.addingResources_ && !this.queue_.length && !Object.getOwnPropertyNames(this.fetchingItems_).length) {
 					clearInterval(iid);
 					resolve();
 				}
