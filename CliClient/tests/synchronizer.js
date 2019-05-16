@@ -1351,4 +1351,38 @@ describe('Synchronizer', function() {
 		expect((await remoteResources()).length).toBe(1);
 	}));
 
+	it('should decrypt the resource metadata, but not try to decrypt the file, if it is not present', asyncTest(async () => {
+		const note1 = await Note.save({ title: 'note' });
+	 	await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		const masterKey = await loadEncryptionMasterKey();
+		await encryptionService().enableEncryption(masterKey, '123456');
+		await encryptionService().loadMasterKeysFromSettings();
+		await synchronizer().start();
+		expect(await allSyncTargetItemsEncrypted()).toBe(true);
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
+		await encryptionService().loadMasterKeysFromSettings();
+		await decryptionWorker().start();
+
+		let resource = (await Resource.all())[0];
+
+		expect(!!resource.encryption_applied).toBe(false);
+		expect(!!resource.encryption_blob_encrypted).toBe(true);
+
+		const resourceFetcher = new ResourceFetcher(() => { return synchronizer().api() });
+		await resourceFetcher.start();
+		await resourceFetcher.waitForAllFinished();
+
+		const ls = await Resource.localState(resource);
+		expect(ls.fetch_status).toBe(Resource.FETCH_STATUS_DONE);
+
+		await decryptionWorker().start();
+		resource = (await Resource.all())[0];
+
+		expect(!!resource.encryption_blob_encrypted).toBe(false);
+	}));
+
 });

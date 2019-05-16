@@ -131,7 +131,7 @@ class ResourceFetcher extends BaseService {
 			// might still be encrypted and the caller usually can't do much with this. In particular
 			// the note being displayed will refresh the resource images but since they are still
 			// encrypted it's not useful. Probably, the views should listen to DecryptionWorker events instead.
-			if (emitDownloadComplete) this.eventEmitter_.emit('downloadComplete', { id: resource.id });
+			if (resource && emitDownloadComplete) this.eventEmitter_.emit('downloadComplete', { id: resource.id, encrypted: !!resource.encryption_blob_encrypted });
 			this.updateReport();
 		}
 
@@ -150,7 +150,7 @@ class ResourceFetcher extends BaseService {
 
 		this.fetchingItems_[resourceId] = resource;
 
-		const localResourceContentPath = Resource.fullPath(resource);
+		const localResourceContentPath = Resource.fullPath(resource, !!resource.encryption_blob_encrypted);
 		const remoteResourceContentPath = this.resourceDirName_ + "/" + resource.id;
 
 		await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_STARTED });

@@ -85,14 +85,6 @@ class DecryptionWorker {
 
 					const ItemClass = BaseItem.itemClass(item);
 
-					if (item.type_ === Resource.modelType()) {
-						const ls = await Resource.localState(item);
-						if (ls.fetch_status !== Resource.FETCH_STATUS_DONE) {
-							excludedIds.push(item.id);
-							continue;
-						}
-					}
-
 					this.dispatchReport({
 						itemIndex: i,
 						itemCount: items.length,
@@ -101,10 +93,17 @@ class DecryptionWorker {
 					// Don't log in production as it results in many messages when importing many items
 					// this.logger().info('DecryptionWorker: decrypting: ' + item.id + ' (' + ItemClass.tableName() + ')');
 					try {
-						await ItemClass.decrypt(item);
+						const decryptedItem = await ItemClass.decrypt(item);
+
+						if (decryptedItem.type_ === Resource.modelType() && !!decryptedItem.encryption_blob_encrypted) {
+							// itemsThatNeedDecryption() will return the resource again if the blob has not been decrypted,
+							// but that will result in an infinite loop if the blob simply has not been downloaded yet.
+							// So skip the ID for now, and the service will try to decrypt the blob again the next time. 
+							excludedIds.push(decryptedItem.id);
+						}
 					} catch (error) {
 						excludedIds.push(item.id);
-						
+
 						if (error.code === 'masterKeyNotLoaded' && options.masterKeyNotLoadedHandler === 'dispatch') {
 							if (notLoadedMasterKeyDisptaches.indexOf(error.masterKeyId) < 0) {
 								this.dispatch({
