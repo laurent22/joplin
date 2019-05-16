@@ -36,6 +36,7 @@ const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { toSystemSlashes, safeFilename } = require('lib/path-utils');
 const { clipboard } = require('electron');
 const SearchEngine = require('lib/services/SearchEngine');
+const DecryptionWorker = require('lib/services/DecryptionWorker');
 const ModelCache = require('lib/services/ModelCache');
 const NoteTextViewer = require('./NoteTextViewer.min');
 const NoteRevisionViewer = require('./NoteRevisionViewer.min');
@@ -226,15 +227,21 @@ class NoteTextComponent extends React.Component {
 			}
 		}
 
-		this.resourceFetcher_downloadComplete = async (resource) => {
+		this.refreshResource = async (event) => {
 			if (!this.state.note || !this.state.note.body) return;
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
-			if (resourceIds.indexOf(resource.id) >= 0) {
-				// this.mdToHtml().clearCache();
+			if (resourceIds.indexOf(event.id) >= 0) {
 				this.lastSetHtml_ = '';
 				this.scheduleHtmlUpdate();
-				//this.updateHtml(this.state.note.body);
 			}
+		}
+
+		this.resourceFetcher_downloadComplete = async (event) => {
+			return this.refreshResource(event);
+		}
+
+		this.decryptionWorker_resourceDecrypted = async (event) => {
+			return this.refreshResource(event);
 		}
 
 		this.noteSearchBar_change = (query) => {
@@ -364,6 +371,7 @@ class NoteTextComponent extends React.Component {
 		eventManager.on('todoToggle', this.onTodoToggle_);
 
 		ResourceFetcher.instance().on('downloadComplete', this.resourceFetcher_downloadComplete);
+		DecryptionWorker.instance().on('resourceDecrypted', this.decryptionWorker_resourceDecrypted);
 		ExternalEditWatcher.instance().on('noteChange', this.externalEditWatcher_noteChange);
 	}
 
@@ -377,6 +385,7 @@ class NoteTextComponent extends React.Component {
 		eventManager.removeListener('todoToggle', this.onTodoToggle_);
 
 		ResourceFetcher.instance().off('downloadComplete', this.resourceFetcher_downloadComplete);
+		DecryptionWorker.instance().off('resourceDecrypted', this.decryptionWorker_resourceDecrypted);
 		ExternalEditWatcher.instance().off('noteChange', this.externalEditWatcher_noteChange);
 	}
 

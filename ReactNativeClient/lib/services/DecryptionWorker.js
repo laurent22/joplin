@@ -2,6 +2,7 @@ const BaseItem = require('lib/models/BaseItem');
 const Resource = require('lib/models/Resource');
 const ResourceService = require('lib/services/ResourceService');
 const { Logger } = require('lib/logger.js');
+const EventEmitter = require('events');
 
 class DecryptionWorker {
 
@@ -14,6 +15,7 @@ class DecryptionWorker {
 		};
 
 		this.scheduleId_ = null;
+		this.eventEmitter_ = new EventEmitter();
 	}
 
 	setLogger(l) {
@@ -22,6 +24,14 @@ class DecryptionWorker {
 
 	logger() {
 		return this.logger_;
+	}
+
+	on(eventName, callback) {
+		return this.eventEmitter_.on(eventName, callback);
+	}
+
+	off(eventName, callback) {
+		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
 	static instance() {
@@ -100,6 +110,10 @@ class DecryptionWorker {
 							// but that will result in an infinite loop if the blob simply has not been downloaded yet.
 							// So skip the ID for now, and the service will try to decrypt the blob again the next time. 
 							excludedIds.push(decryptedItem.id);
+						}
+
+						if (decryptedItem.type_ === Resource.modelType() && !decryptedItem.encryption_blob_encrypted) {
+							this.eventEmitter_.emit('resourceDecrypted', { id: decryptedItem.id });
 						}
 					} catch (error) {
 						excludedIds.push(item.id);
