@@ -865,7 +865,7 @@ describe('Synchronizer', function() {
 		expect(ls.fetch_status).toBe(Resource.FETCH_STATUS_IDLE);
 
 		const fetcher = new ResourceFetcher(() => { return synchronizer().api() });
-		fetcher.queueDownload_(resource1_2.id);
+		fetcher.queueDownload(resource1_2.id);
 		await fetcher.waitForAllFinished();
 
 		resource1_2 = await Resource.load(resource1.id);
