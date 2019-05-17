@@ -1,6 +1,7 @@
 const Setting = require('lib/models/Setting');
 const Tag = require('lib/models/Tag');
 const { reg } = require('lib/registry.js');
+const ResourceFetcher = require('lib/services/ResourceFetcher');
 
 const reduxSharedMiddleware = async function(store, next, action) {
 	const newState = store.getState();
@@ -13,6 +14,10 @@ const reduxSharedMiddleware = async function(store, next, action) {
 
 	if (action.type === 'SETTING_UPDATE_ONE' && !!action.key.match(/^sync\.\d+\.path$/)) {
 		reg.resetSyncTarget();
+	}
+
+	if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'sync.resourceDownloadMode') {
+		ResourceFetcher.instance().autoAddResources();
 	}
 
 	if (action.type == 'NOTE_DELETE') {
