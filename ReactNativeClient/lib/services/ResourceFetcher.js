@@ -67,13 +67,14 @@ class ResourceFetcher extends BaseService {
 		if (this.updateReportIID_) return;
 
 		this.updateReportIID_ = setTimeout(async () => {
-			const toFetchCount = await Resource.needToBeFetchedCount(Setting.value('sync.resourceDownloadMode'));
+			const fetchingCount = Object.keys(this.fetchingItems_).length;
 			this.dispatch({
 				type: 'RESOURCE_FETCHER_SET',
-				toFetchCount: toFetchCount,
+				fetchingCount: fetchingCount,
+				toFetchCount: fetchingCount + this.queue_.length,
 			});
 			this.updateReportIID_ = null;
-		}, 2000);
+		}, 1000);
 	}
 
 	async markForDownload(resourceIds) {

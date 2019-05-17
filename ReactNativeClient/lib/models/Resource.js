@@ -42,15 +42,6 @@ class Resource extends BaseItem {
 		return this.modelSelectAll(sql.join(' '), [Resource.FETCH_STATUS_IDLE]);
 	}
 
-	static async needToBeFetchedCount(resourceDownloadMode) {
-		const sql = ['SELECT count(*) as total FROM resource_local_states WHERE fetch_status = ?'];
-		if (resourceDownloadMode !== 'always') {
-			sql.push('AND resource_id IN (SELECT resource_id FROM resources_to_download)');
-		}
-		const r = await this.db().selectOne(sql.join(' '), [Resource.FETCH_STATUS_IDLE]);
-		return r ? r['total'] : 0;
-	}
-
 	static async resetStartedFetchStatus() {
 		return await this.db().exec('UPDATE resource_local_states SET fetch_status = ? WHERE fetch_status = ?', [Resource.FETCH_STATUS_IDLE, Resource.FETCH_STATUS_STARTED]);
 	}
