@@ -231,7 +231,7 @@ class NoteTextComponent extends React.Component {
 			if (!this.state.note || !this.state.note.body) return;
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
 			if (resourceIds.indexOf(event.id) >= 0) {
-				shared.clearResourceCache(event.id);
+				shared.clearResourceCache();
 				this.lastSetHtml_ = '';
 				this.scheduleHtmlUpdate();
 			}
@@ -490,6 +490,8 @@ class NoteTextComponent extends React.Component {
 
 		// Scroll back to top when loading new note
 		if (loadingNewNote) {
+			shared.clearResourceCache();
+			
 			this.editorMaxScrollTop_ = 0;
 
 			// HACK: To go around a bug in Ace editor, we first set the scroll position to 1

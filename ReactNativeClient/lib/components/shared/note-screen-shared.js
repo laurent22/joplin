@@ -156,13 +156,8 @@ shared.noteComponent_change = function(comp, propName, propValue) {
 
 let resourceCache_ = {};
 
-shared.clearResourceCache = function(resourceId = null) {
-	if (resourceId === null) {
-		resourceCache_ = {};
-		return;
-	}
-
-	delete resourceCache_[resourceId];
+shared.clearResourceCache = function() {
+	resourceCache_ = {};
 }
 
 shared.attachedResources = async function(noteBody) {
