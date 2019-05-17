@@ -161,6 +161,10 @@ module.exports = function(style, options) {
 			color: black;
 		}
 
+		.checkbox-label-checked {
+			opacity: 0.5;
+		}
+
 		@media print {
 			body {
 				height: auto !important;
