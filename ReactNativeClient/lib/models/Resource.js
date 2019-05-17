@@ -33,7 +33,7 @@ class Resource extends BaseItem {
 	}
 
 	static needToBeFetched(resourceDownloadMode = null, limit = null) {
-		let sql = ['SELECT * FROM resources WHERE id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = ?)'];
+		let sql = ['SELECT * FROM resources WHERE encryption_applied = 0 AND id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = ?)'];
 		if (resourceDownloadMode !== 'always') {
 			sql.push('AND resources.id IN (SELECT resource_id FROM resources_to_download)');
 		}
