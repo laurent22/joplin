@@ -834,7 +834,7 @@ class NoteTextComponent extends React.Component {
 		});
 
 		if (Setting.value('env') === 'dev') {
-			// this.webviewRef_.current.wrappedInstance.openDevTools();
+			this.webviewRef_.current.wrappedInstance.openDevTools();
 		}
 	}
 

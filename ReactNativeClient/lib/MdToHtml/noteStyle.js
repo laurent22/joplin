@@ -156,11 +156,6 @@ module.exports = function(style, options) {
 			font-size: ` + style.htmlCodeFontSize + `;
 		}
 
-		.not-loaded-resource img {
-			width: 1.5em;
-			height: 1.5em;
-		}
-
 		.highlighted-keyword {
 			background-color: #F3B717;
 			color: black;
