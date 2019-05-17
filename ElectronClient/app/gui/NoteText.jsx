@@ -538,7 +538,7 @@ class NoteTextComponent extends React.Component {
 				}, 10);
 			}
 
-			if (note && note.body && Setting.value('sync.downloadResources') === 'auto') {
+			if (note && note.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
 				const resourceIds = await Note.linkedResourceIds(note.body);
 				await ResourceFetcher.instance().markForDownload(resourceIds);
 			}
@@ -1764,7 +1764,7 @@ class NoteTextComponent extends React.Component {
 			 if (htmlHasChanged) {
 				let options = {
 					cssFiles: this.state.lastRenderCssFiles,
-					downloadResources: Setting.value('sync.downloadResources'),
+					downloadResources: Setting.value('sync.resourceDownloadMode'),
 				};
 				this.webviewRef_.current.wrappedInstance.send('setHtml', html, options);
 				this.lastSetHtml_ = html;

@@ -67,7 +67,7 @@ class ResourceFetcher extends BaseService {
 		if (this.updateReportIID_) return;
 
 		this.updateReportIID_ = setTimeout(async () => {
-			const toFetchCount = await Resource.needToBeFetchedCount(Setting.value('sync.downloadResources'));
+			const toFetchCount = await Resource.needToBeFetchedCount(Setting.value('sync.resourceDownloadMode'));
 			this.dispatch({
 				type: 'RESOURCE_FETCHER_SET',
 				toFetchCount: toFetchCount,
@@ -200,7 +200,7 @@ class ResourceFetcher extends BaseService {
 		this.addingResources_ = true;
 
 		let count = 0;
-		const resources = await Resource.needToBeFetched(Setting.value('sync.downloadResources'), limit);
+		const resources = await Resource.needToBeFetched(Setting.value('sync.resourceDownloadMode'), limit);
 		for (let i = 0; i < resources.length; i++) {
 			const added = this.queueDownload_(resources[i].id);
 			if (added) count++;

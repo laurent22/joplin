@@ -155,11 +155,11 @@ class Setting extends BaseModel {
 				return SyncTargetRegistry.idAndLabelPlainObject();
 			}},
 
-			'sync.downloadResources': { value: 'always', type: Setting.TYPE_STRING, section: 'sync', public: true, isEnum: true, label: () => _('Download resources'), options: () => {
+			'sync.resourceDownloadMode': { value: 'always', type: Setting.TYPE_STRING, section: 'sync', public: true, isEnum: true, label: () => _('Attachment download behaviour'), options: () => {
 				return {
-					'always': _('Always'),
-					'manual': _('When clicking on resource'),
-					'auto': _('When opening note'),
+					'always': _('Always: download all attachments'),
+					'manual': _('Manual: download only when manually clicking on attachment'),
+					'auto': _('Auto: download automatically when opening a note'),
 				};
 			}},
 
