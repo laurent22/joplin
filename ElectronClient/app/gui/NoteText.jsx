@@ -231,9 +231,14 @@ class NoteTextComponent extends React.Component {
 			if (!this.state.note || !this.state.note.body) return;
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
 			if (resourceIds.indexOf(event.id) >= 0) {
+				shared.clearResourceCache(event.id);
 				this.lastSetHtml_ = '';
 				this.scheduleHtmlUpdate();
 			}
+		}
+
+		this.resourceFetcher_downloadStarted = async (event) => {
+			return this.refreshResource(event);
 		}
 
 		this.resourceFetcher_downloadComplete = async (event) => {
@@ -371,6 +376,7 @@ class NoteTextComponent extends React.Component {
 		eventManager.on('todoToggle', this.onTodoToggle_);
 
 		ResourceFetcher.instance().on('downloadComplete', this.resourceFetcher_downloadComplete);
+		ResourceFetcher.instance().on('downloadStarted', this.resourceFetcher_downloadStarted);
 		DecryptionWorker.instance().on('resourceDecrypted', this.decryptionWorker_resourceDecrypted);
 		ExternalEditWatcher.instance().on('noteChange', this.externalEditWatcher_noteChange);
 	}
@@ -385,6 +391,7 @@ class NoteTextComponent extends React.Component {
 		eventManager.removeListener('todoToggle', this.onTodoToggle_);
 
 		ResourceFetcher.instance().off('downloadComplete', this.resourceFetcher_downloadComplete);
+		ResourceFetcher.instance().off('downloadStarted', this.resourceFetcher_downloadStarted);
 		DecryptionWorker.instance().off('resourceDecrypted', this.decryptionWorker_resourceDecrypted);
 		ExternalEditWatcher.instance().off('noteChange', this.externalEditWatcher_noteChange);
 	}

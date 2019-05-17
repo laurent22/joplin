@@ -159,6 +159,8 @@ class ResourceFetcher extends BaseService {
 
 		this.logger().debug('ResourceFetcher: Downloading resource: ' + resource.id);
 
+		this.eventEmitter_.emit('downloadStarted', { id: resource.id })
+
 		fileApi.get(remoteResourceContentPath, { path: localResourceContentPath, target: "file" }).then(async () => {
 			await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_DONE });
 			this.logger().debug('ResourceFetcher: Resource downloaded: ' + resource.id);

@@ -161,6 +161,11 @@ module.exports = function(style, options) {
 			color: black;
 		}
 
+		.not-loaded-resource img {
+			width: 1.5em;
+			height: 1.5em;
+		}
+
 		@media print {
 			body {
 				height: auto !important;

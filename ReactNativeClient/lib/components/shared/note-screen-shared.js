@@ -154,7 +154,16 @@ shared.noteComponent_change = function(comp, propName, propValue) {
 	comp.setState(newState);
 }
 
-const resourceCache_ = {};
+let resourceCache_ = {};
+
+shared.clearResourceCache = function(resourceId = null) {
+	if (resourceId === null) {
+		resourceCache_ = {};
+		return;
+	}
+
+	delete resourceCache_[resourceId];
+}
 
 shared.attachedResources = async function(noteBody) {
 	if (!noteBody) return {};
@@ -163,14 +172,20 @@ shared.attachedResources = async function(noteBody) {
 	const output = {};
 	for (let i = 0; i < resourceIds.length; i++) {
 		const id = resourceIds[i];
+		
 		if (resourceCache_[id]) {
 			output[id] = resourceCache_[id];
 		} else {
 			const resource = await Resource.load(id);
-			const isReady = await Resource.isReady(resource);
-			if (!isReady) continue;
-			resourceCache_[id] = resource;
-			output[id] = resource;
+			const localState = await Resource.localState(resource);
+
+			const o = {
+				item: resource,
+				localState: localState,
+			};
+
+			resourceCache_[id] = o;
+			output[id] = o;
 		}
 	}
 
