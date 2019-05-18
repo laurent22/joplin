@@ -7,12 +7,29 @@ utils.getAttr = function(attrs, name, defaultValue = null) {
 	return defaultValue;
 }
 
+utils.notDownloadedResource = function() {
+	return `
+		<svg width="1700" height="1536" xmlns="http://www.w3.org/2000/svg">
+		    <path d="M1280 1344c0-35-29-64-64-64s-64 29-64 64 29 64 64 64 64-29 64-64zm256 0c0-35-29-64-64-64s-64 29-64 64 29 64 64 64 64-29 64-64zm128-224v320c0 53-43 96-96 96H96c-53 0-96-43-96-96v-320c0-53 43-96 96-96h465l135 136c37 36 85 56 136 56s99-20 136-56l136-136h464c53 0 96 43 96 96zm-325-569c10 24 5 52-14 70l-448 448c-12 13-29 19-45 19s-33-6-45-19L339 621c-19-18-24-46-14-70 10-23 33-39 59-39h256V64c0-35 29-64 64-64h256c35 0 64 29 64 64v448h256c26 0 49 16 59 39z"/>
+		</svg>
+	`;
+}
+
 utils.notDownloadedImage = function() {
-	// https://github.com/ForkAwesome/Fork-Awesome/tree/master/src/file-image-o.svg
+	// https://github.com/ForkAwesome/Fork-Awesome/blob/master/src/icons/svg/file-image-o.svg
 	// Height changed to 1795
 	return `
 		<svg width="1925" height="1792" xmlns="http://www.w3.org/2000/svg">
 		    <path d="M640 576c0 106-86 192-192 192s-192-86-192-192 86-192 192-192 192 86 192 192zm1024 384v448H256v-192l320-320 160 160 512-512zm96-704H160c-17 0-32 15-32 32v1216c0 17 15 32 32 32h1600c17 0 32-15 32-32V288c0-17-15-32-32-32zm160 32v1216c0 88-72 160-160 160H160c-88 0-160-72-160-160V288c0-88 72-160 160-160h1600c88 0 160 72 160 160z"/>
+		</svg>
+	`;
+}
+
+utils.notDownloadedFile = function() {
+	// https://github.com/ForkAwesome/Fork-Awesome/blob/master/src/icons/svg/file-o.svg
+	return `
+		<svg width="1925" height="1792" xmlns="http://www.w3.org/2000/svg">
+		    <path d="M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280z"/>
 		</svg>
 	`;
 }
@@ -31,7 +48,12 @@ utils.loaderImage = function() {
 }
 
 utils.resourceStatusImage = function(state) {
-	if (state === 'notDownloaded') return utils.notDownloadedImage();
+	if (state === 'notDownloaded') return utils.notDownloadedResource();
+	return utils.resourceStatusFile(state);
+}
+
+utils.resourceStatusFile = function(state) {
+	if (state === 'notDownloaded') return utils.notDownloadedResource();
 	if (state === 'downloading') return utils.loaderImage();
 	if (state === 'encrypted') return utils.loaderImage();
 	if (state === 'error') return utils.errorImage();

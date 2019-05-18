@@ -2,6 +2,8 @@ const webviewLib = {};
 
 webviewLib.handleInternalLink = function(event, anchorNode) {
 	const href = anchorNode.getAttribute('href');
+	if (!href) return false;
+
 	if (href.indexOf('#') === 0) {
 		event.preventDefault();
 		let old_hash = location.hash;
@@ -18,6 +20,7 @@ webviewLib.handleInternalLink = function(event, anchorNode) {
 		setTimeout(function() { location.hash = old_hash; }, 10);
 		return true;
 	}
+	
 	return false;
 }
 

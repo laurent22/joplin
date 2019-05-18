@@ -155,7 +155,7 @@ class Setting extends BaseModel {
 				return SyncTargetRegistry.idAndLabelPlainObject();
 			}},
 
-			'sync.resourceDownloadMode': { value: 'always', type: Setting.TYPE_STRING, section: 'sync', public: true, isEnum: true, label: () => _('Attachment download behaviour'), options: () => {
+			'sync.resourceDownloadMode': { value: 'always', type: Setting.TYPE_STRING, section: 'sync', public: true, isEnum: true, appTypes: ['mobile', 'desktop'], label: () => _('Attachment download behaviour'), options: () => {
 				return {
 					'always': _('Always: download all attachments'),
 					'manual': _('Manual: download only when manually clicking on attachment'),
