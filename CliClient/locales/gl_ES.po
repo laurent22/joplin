@@ -1167,11 +1167,11 @@ msgstr "Cadernos"
 
 #, fuzzy, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr "Elementos obtidos: %d/%d."
+msgstr "Elementos obtidos: %d/%d"
 
 #, fuzzy, javascript-format
-msgid "Fetching resources: %d"
-msgstr "Recursos: %d."
+msgid "Fetching resources: %d/%d"
+msgstr "Recursos: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccione onde exportar o estado da sincronización"
