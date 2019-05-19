@@ -1,5 +1,11 @@
 # Joplin terminal app changelog
 
+## [cli-v1.0.136](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.136) - 2019-05-19T10:19:22Z
+
+- Improved: Put back "Fetched items" message during sync
+- Fixed: Handle missing resource blob when setting resource size
+- Fixed: Prevent app from trying to upload resource it has not downloaded yet
+
 ## [cli-v1.0.135](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.135) - 2019-05-13T22:59:14Z
 
 - New: Added option to disable creation of welcome items
