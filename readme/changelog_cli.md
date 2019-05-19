@@ -1,5 +1,9 @@
 # Joplin terminal app changelog
 
+## [cli-v1.0.137](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.137) - 2019-05-19T11:04:28Z
+
+- Fixed: Fixed method to autosize resource
+
 ## [cli-v1.0.136](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.136) - 2019-05-19T10:19:22Z
 
 - Improved: Put back "Fetched items" message during sync
