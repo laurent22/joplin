@@ -877,6 +877,9 @@ class NoteTextComponent extends React.Component {
 				}
 				return output;
 			}
+			
+			//fixes #1426 but this is an Ace issue, so it can be removed if ace/brace is updated.
+			this.editor_.editor.getSession().getMode().$quotes = {'"': '"', "'": "'", "`": "`"};
 
 			// Disable Markdown auto-completion (eg. auto-adding a dash after a line with a dash.
 			// https://github.com/ajaxorg/ace/issues/2754
