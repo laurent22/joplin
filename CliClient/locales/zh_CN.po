@@ -14,6 +14,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.1\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "移除相关笔记的标签后才可删除此标签。"
@@ -47,7 +49,7 @@ msgid "y"
 msgstr "是"
 
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "正在取消后台同步... 请稍候。"
+msgstr "正在取消后台同步……请稍候。"
 
 #, javascript-format
 msgid "No such command: %s"
@@ -601,7 +603,7 @@ msgid "About Joplin"
 msgstr "关于 Joplin"
 
 msgid "Preferences..."
-msgstr ""
+msgstr "偏好……"
 
 msgid "Check for updates..."
 msgstr "检查更新..."
@@ -623,7 +625,7 @@ msgid "Quit"
 msgstr "退出"
 
 msgid "Close Window"
-msgstr ""
+msgstr "关闭窗口"
 
 msgid "&Edit"
 msgstr "编辑 (&E)"
@@ -947,32 +949,32 @@ msgstr "位置"
 msgid "URL"
 msgstr "URL"
 
-#, fuzzy
 msgid "Note History"
-msgstr "笔记列表"
+msgstr "笔记历史"
 
 msgid "Previous versions of this note"
-msgstr ""
+msgstr "此笔记的早期版本"
 
 msgid "Note properties"
 msgstr "笔记属性"
 
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr ""
+msgstr "笔记\"%s\"已成功恢复到笔记本\"%s\"中。"
 
-#, fuzzy
 msgid "This note has no history"
-msgstr "该笔记已被修改："
+msgstr "此笔记没有历史记录"
 
 msgid "Restore"
-msgstr ""
+msgstr "恢复"
 
 #, javascript-format
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
+"单击 \"%s\" 以恢复笔记。它将会被复制到名为 \"%s\" 的笔记本中。笔记的当前版本"
+"不会被替换或修改。"
 
 msgid "Open..."
 msgstr "打开…"
@@ -1163,9 +1165,11 @@ msgid ""
 "Type a note title to jump to it. Or type # followed by a tag name, or @ "
 "followed by a notebook name."
 msgstr ""
+"输入笔记标题以便转跳到它。或者输入 # 跟着一个标签名字，或者输入 @ 跟着一个笔"
+"记本名字。"
 
 msgid "Goto Anything..."
-msgstr ""
+msgstr "转到某处……"
 
 #, javascript-format
 msgid "Usage: %s"
@@ -1278,7 +1282,7 @@ msgstr "已经在同步。状态：%s"
 
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr ""
+msgstr "已下载项目为未知类型，请将 Joplin 升级到最新版本"
 
 msgid "Encrypted"
 msgstr "已加密"
@@ -1373,45 +1377,41 @@ msgstr "聚焦正文"
 msgid "When creating a new note:"
 msgstr "当新建笔记时："
 
-#, fuzzy
 msgid "Enable soft breaks"
-msgstr "目录"
+msgstr ""
 
-#, fuzzy
 msgid "Enable math expressions"
-msgstr "启用加密"
+msgstr "启用数学表达式"
 
 msgid "Enable ==mark== syntax"
-msgstr ""
+msgstr "启用 ==mark== 句法"
 
-#, fuzzy
 msgid "Enable footnotes"
-msgstr "目录"
+msgstr "启用脚注"
 
-#, fuzzy
 msgid "Enable table of contents extension"
-msgstr "目录"
+msgstr "启用目录扩展"
 
 msgid "Enable ~sub~ syntax"
-msgstr ""
+msgstr "启用 ~sub~ 句法"
 
 msgid "Enable ^sup^ syntax"
-msgstr ""
+msgstr "启用 ^sup^ 句法"
 
 msgid "Enable deflist syntax"
-msgstr ""
+msgstr "启用术语表句法"
 
 msgid "Enable abbreviation syntax"
-msgstr ""
+msgstr "启用缩写句法"
 
 msgid "Enable markdown emoji"
-msgstr ""
+msgstr "启用 markdown emoji"
 
 msgid "Enable ++insert++ syntax"
-msgstr ""
+msgstr "启用 ++insert++ 句法"
 
 msgid "Enable multimarkdown table extension"
-msgstr ""
+msgstr "启用 multimarkdown 表格扩展"
 
 msgid "Show tray icon"
 msgstr "显示托盘图标"
@@ -1530,9 +1530,8 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "忽略 TLS 证书错误"
 
-#, fuzzy
 msgid "Enable note history"
-msgstr "目录"
+msgstr "启用笔记历史"
 
 msgid "days"
 msgstr ""
@@ -1561,7 +1560,7 @@ msgid "Note"
 msgstr "笔记"
 
 msgid "Plugins"
-msgstr ""
+msgstr "插件"
 
 msgid "Application"
 msgstr "应用程序"
@@ -1612,18 +1611,18 @@ msgid "Please specify the notebook where the notes should be imported to."
 msgstr "请指定导入笔记的目标笔记本。"
 
 msgid "Restored Notes"
-msgstr ""
+msgstr "已恢复的笔记"
 
 msgid "Items that cannot be synchronised"
 msgstr "无法同步项目"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
-msgstr "该笔记本无法打开：%s"
+msgstr "%s (%s) 无法上传到：%s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "该笔记本无法打开：%s"
+msgstr "项目 \"%s\" 无法从 %s 中下载"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
