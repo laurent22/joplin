@@ -22,5 +22,5 @@ Please read the guide first! https://github.com/laurent22/joplin/blob/master/CON
 If you are reporting a bug, did you try enabling debug mode? https://joplinapp.org/debugging/
 If so, please post any error or warning.
 
-For general discussion, user support or to discuss feature requests, please post to the forum https://discourse.joplin.cozic.net/ (You can login with your GitHub account)
+For general discussion, user support or to discuss feature requests, please post to the forum https://discourse.joplinapp.org/ (You can login with your GitHub account)
 -->

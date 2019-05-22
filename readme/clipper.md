@@ -14,7 +14,7 @@ However certain things can interfer with this service and prevent it from being 
 - Check that the port used by the service is not blocked by a firewall. You can find the port number in the Web clipper options in the desktop Joplin application.
 - Check that no proxy is running on the machine, or make sure that the requests from the web clipper service are filtered and allowed. For example https://github.com/laurent22/joplin/issues/561#issuecomment-392220191
 
-If none of this work, please report it on the [forum](https://discourse.joplin.cozic.net/) or [GitHub issue tracker](https://github.com/laurent22/joplin/issues)
+If none of this work, please report it on the [forum](https://discourse.joplinapp.org/) or [GitHub issue tracker](https://github.com/laurent22/joplin/issues)
 
 # Debugging the extension
 
@@ -39,7 +39,7 @@ Also press F12 to open the regular Firefox console (some messages from the Jopli
 
 Now use the extension as normal and replicate the bug you're having.
 
-Copy and paste the content of both the debugging window and the Firefox console, and post it to the [forum](https://discourse.joplin.cozic.net/).
+Copy and paste the content of both the debugging window and the Firefox console, and post it to the [forum](https://discourse.joplinapp.org/).
 
 # Using the Web Clipper service
 
