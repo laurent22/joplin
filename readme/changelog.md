@@ -1,5 +1,9 @@
 # Joplin changelog
 
+## [v1.0.153](https://github.com/laurent22/joplin/releases/tag/v1.0.153) - 2019-05-15T06:27:29Z
+
+This release only adds additional logging for the note history feature.
+
 ## [v1.0.152](https://github.com/laurent22/joplin/releases/tag/v1.0.152) - 2019-05-13T09:08:07Z
 
 Same as v1.0.151 but with a fix to the migration issue, that was in turns affecting synchronisation.
