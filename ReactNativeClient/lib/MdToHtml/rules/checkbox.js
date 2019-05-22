@@ -32,7 +32,16 @@ function createPrefixTokens(Token, id, checked, label, postMessageSyntax, source
 	// in calling code.
 	const lineIndex = sourceToken.map && sourceToken.map.length ? sourceToken.map[0] : 99999999;
 	const checkedString = checked ? 'checked' : 'unchecked';
-	const js = postMessageSyntax + "('checkboxclick:" + checkedString + ':' + lineIndex + "'); return true;";
+
+	const labelId = 'cb-label-' + id;
+
+	const js = `
+		${postMessageSyntax}('checkboxclick:${checkedString}:${lineIndex}');
+		const label = document.getElementById("${labelId}");
+		label.classList.remove(this.checked ? 'checkbox-label-unchecked' : 'checkbox-label-checked');
+		label.classList.add(this.checked ? 'checkbox-label-checked' : 'checkbox-label-unchecked');
+		return true;
+	`;
 
 	token = new Token('checkbox_input', 'input', 0);
 	token.attrs = [
@@ -44,7 +53,11 @@ function createPrefixTokens(Token, id, checked, label, postMessageSyntax, source
 	tokens.push(token);
 
 	token = new Token('label_open', 'label', 1);
-	token.attrs = [['for', id]];
+	token.attrs = [
+		['id', labelId],
+		['for', id],
+		['class', 'checkbox-label-' + checkedString],
+	];
 	tokens.push(token);
 
 	if (label) {

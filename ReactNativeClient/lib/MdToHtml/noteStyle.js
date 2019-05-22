@@ -176,6 +176,10 @@ module.exports = function(style, options) {
 			align-items: center;
 		}
 
+		.checkbox-label-checked {
+			opacity: 0.5;
+		}
+
 		@media print {
 			body {
 				height: auto !important;
