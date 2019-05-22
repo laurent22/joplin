@@ -59,7 +59,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 
 - Support
 
-	- [Joplin Forum](https://discourse.joplin.cozic.net)
+	- [Joplin Forum](https://discourse.joplinapp.org)
 	- [How to enable end-to-end encryption](https://github.com/laurent22/joplin/blob/master/readme/e2ee.md)
 	- [End-to-end encryption spec](https://github.com/laurent22/joplin/blob/master/readme/spec.md)
 	- [How to enable debug mode](https://github.com/laurent22/joplin/blob/master/readme/debugging.md)
@@ -124,7 +124,7 @@ In general the way to import notes from any application into Joplin is to conver
 * Standard Notes: Please see [this tutorial](https://programadorwebvalencia.com/migrate-notes-from-standard-notes-to-joplin/)
 * Tomboy Notes: Export the notes to ENEX files [as described here](https://askubuntu.com/questions/243691/how-can-i-export-my-tomboy-notes-into-evernote/608551) for example, and import these ENEX files into Joplin.
 * OneNote: First [import the notes from OneNote into Evernote](https://discussion.evernote.com/topic/107736-is-there-a-way-to-import-from-onenote-into-evernote-on-the-mac/). Then export the ENEX file from Evernote and import it into Joplin.
-* NixNote: Synchronise with Evernote, then export the ENEX files and import them into Joplin. More info [in this thread](https://discourse.joplin.cozic.net/t/import-from-nixnote/183/3).
+* NixNote: Synchronise with Evernote, then export the ENEX files and import them into Joplin. More info [in this thread](https://discourse.joplinapp.org/t/import-from-nixnote/183/3).
 
 # Exporting
 
@@ -324,8 +324,8 @@ Please see the [donation page](https://joplinapp.org/donate/) for information on
 
 # Community
 
-- For general discussion about Joplin, user support, software development questions, and to discuss new features, go to the [Joplin Forum](https://discourse.joplin.cozic.net/). It is possible to login with your GitHub account.
-- Also see here for information about [the latest releases and general news](https://discourse.joplin.cozic.net/c/news).
+- For general discussion about Joplin, user support, software development questions, and to discuss new features, go to the [Joplin Forum](https://discourse.joplinapp.org/). It is possible to login with your GitHub account.
+- Also see here for information about [the latest releases and general news](https://discourse.joplinapp.org/c/news).
 - For bug reports and feature requests, go to the [GitHub Issue Tracker](https://github.com/laurent22/joplin/issues).
 - The latest news are posted [on the Patreon page](https://www.patreon.com/joplin).
 
