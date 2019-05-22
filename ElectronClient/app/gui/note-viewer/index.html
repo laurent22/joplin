@@ -56,30 +56,6 @@
 		}
 	});
 
-	let manualDownloadResourceElements = [];
-
-	function onUnloadedResourceClick(event) {
-		const resourceId = event.currentTarget.getAttribute('data-resource-id');
-		ipcProxySendToHost('markForDownload', resourceId);
-	}
-
-	function setupResourceManualDownload() {
-		for (const element of manualDownloadResourceElements) {
-			element.style.cursor = 'default';
-			element.removeEventListener('click', onUnloadedResourceClick);
-		}
-
-		manualDownloadResourceElements = [];
-
-		const elements = document.getElementsByClassName('resource-status-notDownloaded');
-
-		for (const element of elements) {
-			element.style.cursor = 'pointer';
-			element.addEventListener('click', onUnloadedResourceClick);
-			manualDownloadResourceElements.push(element);
-		}
-	}
-
 	const loadedCssFiles_ = {};
 	function loadCssFiles(cssFiles) {
 		for (let i = 0; i < cssFiles.length; i++) {
@@ -149,7 +125,7 @@
 		loadCssFiles(event.options.cssFiles);
 		
 		if (event.options.downloadResources === 'manual') {
-			setupResourceManualDownload();
+			webviewLib.setupResourceManualDownload();
 		}
 	}
 

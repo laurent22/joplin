@@ -458,7 +458,13 @@ class BaseItem extends BaseModel {
 			const className = classNames[i];
 			const ItemClass = this.getClass(className);
 
-			const whereSql = className === 'Resource' ? ['(encryption_blob_encrypted = 1 OR encryption_applied = 1)'] : ['encryption_applied = 1'];
+			let whereSql = ['encryption_applied = 1'];
+
+			if (className === 'Resource') {
+				const blobDownloadedButEncryptedSql = 'encryption_blob_encrypted = 1 AND id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = 2))';
+				whereSql = ['(encryption_applied = 1 OR (' + blobDownloadedButEncryptedSql + ')'];
+			}
+				
 			if (exclusions.length) whereSql.push('id NOT IN ("' + exclusions.join('","') + '")');
 
 			const sql = sprintf(`

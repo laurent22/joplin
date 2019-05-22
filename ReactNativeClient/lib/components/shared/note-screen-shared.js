@@ -3,6 +3,8 @@ const Folder = require('lib/models/Folder.js');
 const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
+const ResourceFetcher = require('lib/services/ResourceFetcher.js');
+const DecryptionWorker = require('lib/services/DecryptionWorker.js');
 const Setting = require('lib/models/Setting.js');
 const Mutex = require('async-mutex').Mutex;
 
@@ -277,6 +279,18 @@ shared.toggleCheckbox = function(ipcMessage, noteBody) {
 
 	newBody[lineIndex] = line;
 	return newBody.join('\n')
+}
+
+shared.installResourceHandling = function(refreshResourceHandler) {
+	ResourceFetcher.instance().on('downloadComplete', refreshResourceHandler);
+	ResourceFetcher.instance().on('downloadStarted', refreshResourceHandler);
+	DecryptionWorker.instance().on('resourceDecrypted', refreshResourceHandler);
+}
+
+shared.uninstallResourceHandling = function(refreshResourceHandler) {
+	ResourceFetcher.instance().off('downloadComplete', refreshResourceHandler);
+	ResourceFetcher.instance().off('downloadStarted', refreshResourceHandler);
+	DecryptionWorker.instance().off('resourceDecrypted', refreshResourceHandler);
 }
 
 module.exports = shared;

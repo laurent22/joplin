@@ -1,3 +1,5 @@
+const Resource = require('lib/models/Resource.js');
+
 const utils = {};
 
 utils.getAttr = function(attrs, name, defaultValue = null) {

@@ -152,9 +152,16 @@ class DecryptionWorker {
 
 		this.logger().info('DecryptionWorker: completed decryption.');
 
+		const downloadedButEncryptedBlobCount = await Resource.downloadedButEncryptedBlobCount();
+
 		this.dispatchReport({ state: 'idle' });
 
 		this.state_ = 'idle';
+
+		if (downloadedButEncryptedBlobCount) {
+			this.logger().info('DecryptionWorker: Some resources have been downloaded but are not decrypted yet. Scheduling another decryption. Resource count: ' + downloadedButEncryptedBlobCount);
+			this.scheduleStart();
+		}
 	}
 
 }

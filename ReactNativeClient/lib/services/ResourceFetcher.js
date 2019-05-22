@@ -64,17 +64,12 @@ class ResourceFetcher extends BaseService {
 	}
 
 	updateReport() {
-		if (this.updateReportIID_) return;
-
-		this.updateReportIID_ = setTimeout(async () => {
-			const fetchingCount = Object.keys(this.fetchingItems_).length;
-			this.dispatch({
-				type: 'RESOURCE_FETCHER_SET',
-				fetchingCount: fetchingCount,
-				toFetchCount: fetchingCount + this.queue_.length,
-			});
-			this.updateReportIID_ = null;
-		}, 1000);
+		const fetchingCount = Object.keys(this.fetchingItems_).length;
+		this.dispatch({
+			type: 'RESOURCE_FETCHER_SET',
+			fetchingCount: fetchingCount,
+			toFetchCount: fetchingCount + this.queue_.length,
+		});
 	}
 
 	async markForDownload(resourceIds) {
@@ -94,6 +89,7 @@ class ResourceFetcher extends BaseService {
 
 		const index = this.queuedItemIndex_(resourceId);
 		if (index >= 0) return false;
+		if (this.fetchingItems_[resourceId]) return false;
 
 		const item = { id: resourceId };
 
@@ -112,6 +108,8 @@ class ResourceFetcher extends BaseService {
 	async startDownload_(resourceId) {
 		if (this.fetchingItems_[resourceId]) return;
 		this.fetchingItems_[resourceId] = true;
+
+		this.updateReport();
 
 		const resource = await Resource.load(resourceId);
 		const localState = await Resource.localState(resource);
@@ -199,6 +197,8 @@ class ResourceFetcher extends BaseService {
 	async autoAddResources(limit) {
 		if (this.addingResources_) return;
 		this.addingResources_ = true;
+
+		this.logger().info('ResourceFetcher: Auto-add resources: Mode: ' + Setting.value('sync.resourceDownloadMode'));
 
 		let count = 0;
 		const resources = await Resource.needToBeFetched(Setting.value('sync.resourceDownloadMode'), limit);

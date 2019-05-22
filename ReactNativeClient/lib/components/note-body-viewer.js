@@ -104,11 +104,19 @@ class NoteBodyViewer extends Component {
 		let result = this.mdToHtml_.render(bodyToRender, this.props.webViewStyle, mdOptions);
 		let html = result.html;
 
+		const resourceDownloadMode = Setting.value('sync.resourceDownloadMode');
+
 		const injectedJs = [this.mdToHtml_.injectedJavaScript()];
 		injectedJs.push(shim.injectedJs('webviewLib'));
 		injectedJs.push('webviewLib.initialize({ postMessage: postMessage });');
-
-		console.info(injectedJs);
+		injectedJs.push(`
+			const readyStateCheckInterval = setInterval(function() {
+			    if (document.readyState === "complete") {
+			    	clearInterval(readyStateCheckInterval);
+			    	if ("${resourceDownloadMode}" === "manual") webviewLib.setupResourceManualDownload();
+			    }
+			}, 10);
+		`);
 
 		html = `
 			<!DOCTYPE html>
@@ -172,9 +180,10 @@ class NoteBodyViewer extends Component {
 						if (msg.indexOf('checkboxclick:') === 0) {
 							const newBody = shared.toggleCheckbox(msg, this.props.note.body);
 							if (this.props.onCheckboxChange) this.props.onCheckboxChange(newBody);
-						} else if (msg.indexOf('bodyscroll:') === 0) {
-							//msg = msg.split(':');
-							//this.bodyScrollTop_ = Number(msg[1]);
+						} else if (msg.indexOf('markForDownload:') === 0) {
+							msg = msg.split(':');
+							const resourceId = msg[1];
+							if (this.props.onMarkForDownload) this.props.onMarkForDownload({ resourceId: resourceId });  
 						} else {
 							this.props.onJoplinLinkClick(msg);
 						}
