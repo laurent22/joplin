@@ -1578,6 +1578,24 @@ msgstr ""
 "kann zusätzliche Parameter haben, die als `sync.NUM.NAME` (alle unten "
 "dokumentiert) bezeichnet werden."
 
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Verzeichnis mit dem synchronisiert werden soll (absoluter Pfad)"
 

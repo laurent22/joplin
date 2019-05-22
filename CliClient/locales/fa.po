@@ -7,16 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"Last-Translator: Mehrad Mahmoudian <mehrad@mahmoudian.me>\n"
 "Language-Team: \n"
+"Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "X-Generator: Poedit 2.2.2\n"
-"Last-Translator: Mehrad Mahmoudian <mehrad@mahmoudian.me>\n"
 "Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
-"Language: fa\n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "برای حذف یک برچسب، این برچسب را از یادداشت های مرتبط پاک کنید."
@@ -1077,9 +1075,9 @@ msgstr "دفترچه ها"
 msgid "Decrypting items: %d/%d"
 msgstr ""
 
-#, javascript-format
-msgid "Fetching resources: %d"
-msgstr ""
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "منابع: %d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1430,6 +1428,24 @@ msgstr "هدف سینک"
 msgid ""
 "The target to synchonise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
 msgstr ""
 
 msgid "Directory to synchronise with (absolute path)"

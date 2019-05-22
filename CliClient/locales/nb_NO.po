@@ -1545,6 +1545,24 @@ msgstr ""
 "Målet å synkronisere til. Hvert synkroniseringsmål kan ha tilleggsparametere "
 "som er navngitt som `sync.NUM.NAME` (dokumentert nedenfor)."
 
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Katalog å synkronisere med (absolutt sti)"
 

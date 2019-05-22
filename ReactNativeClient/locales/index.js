@@ -8,6 +8,7 @@ locales['de_DE'] = require('./de_DE.json');
 locales['en_US'] = require('./en_US.json');
 locales['es_ES'] = require('./es_ES.json');
 locales['eu'] = require('./eu.json');
+locales['fa'] = require('./fa.json');
 locales['fr_FR'] = require('./fr_FR.json');
 locales['gl_ES'] = require('./gl_ES.json');
 locales['hr_HR'] = require('./hr_HR.json');

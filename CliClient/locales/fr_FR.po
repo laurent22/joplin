@@ -660,7 +660,7 @@ msgid "Quit"
 msgstr "Quitter"
 
 msgid "Close Window"
-msgstr ""
+msgstr "Fermer la fenêtre"
 
 msgid "&Edit"
 msgstr "&Édition"
@@ -1005,32 +1005,33 @@ msgstr "Lieu"
 msgid "URL"
 msgstr "URL"
 
-#, fuzzy
 msgid "Note History"
-msgstr "Liste de notes"
+msgstr "Historique des notes"
 
 msgid "Previous versions of this note"
-msgstr ""
+msgstr "Versions précédentes de cette note"
 
 msgid "Note properties"
 msgstr "Propriétés de la note"
 
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr ""
+msgstr "La note \"%s\" a été restaurée dans le carnet \"%s\"."
 
-#, fuzzy
 msgid "This note has no history"
-msgstr "Cette note a été modifiée :"
+msgstr "Cette note n'a pas d'historique"
 
 msgid "Restore"
-msgstr ""
+msgstr "Restaurer"
 
 #, javascript-format
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
+"Cliquez sur \"%s\" pour restaurer cette note. Elle sera copiée dans le "
+"carnet \"%s\". La version actuelle de la note ne sera pas replacée ou "
+"modifiée."
 
 msgid "Open..."
 msgstr "Ouvrir..."
@@ -1346,7 +1347,7 @@ msgstr "La synchronisation est déjà en cours. État : %s"
 
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr ""
+msgstr "Objet inconnu téléchargé - veuillez mettre Joplin à jour"
 
 msgid "Encrypted"
 msgstr "Chiffré"
@@ -1562,6 +1563,28 @@ msgstr ""
 "avoir des paramètres supplémentaires sous le nom `sync.NUM.NOM` (documentés "
 "ci-dessous)."
 
+msgid "Attachment download behaviour"
+msgstr "Téléchargement des ressources"
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+"En mode \"manuel\", les ressources sont téléchargées uniquement lorsque vous "
+"cliquez dessus. En mode \"auto\", elle sont téléchargée lorsque vous ouvrez "
+"la note. En mode \"toujours\", toutes les ressources sont téléchargées, que "
+"vous ayez ouvert la note ou pas."
+
+msgid "Always"
+msgstr "Toujours"
+
+msgid "Manual"
+msgstr "Manuel"
+
+msgid "Auto"
+msgstr "Auto"
+
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Répertoire avec lequel synchroniser (chemin absolu)"
 
@@ -1601,19 +1624,18 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "Ignorer les erreurs de certificats TLS"
 
-#, fuzzy
 msgid "Enable note history"
-msgstr "Activer les notes de bas de page"
+msgstr "Activer l'historique des notes"
 
 msgid "days"
-msgstr ""
+msgstr "jours"
 
 #, javascript-format
 msgid "%d days"
-msgstr ""
+msgstr "%d jours"
 
 msgid "Keep note history for"
-msgstr ""
+msgstr "Garder l'historique des notes pour"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1685,18 +1707,18 @@ msgid "Please specify the notebook where the notes should be imported to."
 msgstr "Veuillez sélectionner le carnet où les notes doivent être importées."
 
 msgid "Restored Notes"
-msgstr ""
+msgstr "Notes restaurées"
 
 msgid "Items that cannot be synchronised"
 msgstr "Objets qui ne peuvent pas être synchronisés"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
-msgstr "Ce fichier n'a pas pu être ouvert : %s"
+msgstr "%s (%s) n'a pas pu être envoyé : %s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Ce fichier n'a pas pu être ouvert : %s"
+msgstr "L'objet \"%s\" n'a pas pu être téléchargé : %s"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
