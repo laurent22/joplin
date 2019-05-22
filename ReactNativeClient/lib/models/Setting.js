@@ -155,6 +155,14 @@ class Setting extends BaseModel {
 				return SyncTargetRegistry.idAndLabelPlainObject();
 			}},
 
+			'sync.resourceDownloadMode': { value: 'always', type: Setting.TYPE_STRING, section: 'sync', public: true, isEnum: true, appTypes: ['mobile', 'desktop'], label: () => _('Attachment download behaviour'), description: () => _('In "Manual" mode, attachments are downloaded only when you click on them. In "Auto", they are downloaded when you open the note. In "Always", all the attachments are downloaded whether you open the note or not.'), options: () => {
+				return {
+					'always': _('Always'),
+					'manual': _('Manual'),
+					'auto': _('Auto'),
+				};
+			}},
+
 			'sync.2.path': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => {
 				try {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('filesystem')

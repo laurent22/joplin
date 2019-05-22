@@ -1,7 +1,33 @@
 const webviewLib = {};
 
+let manualDownloadResourceElements = [];
+
+webviewLib.onUnloadedResourceClick = function(event) {
+	const resourceId = event.currentTarget.getAttribute('data-resource-id');
+	webviewLib.options_.postMessage('markForDownload:' + resourceId);
+}
+
+webviewLib.setupResourceManualDownload = function() {
+	for (const element of manualDownloadResourceElements) {
+		element.style.cursor = 'default';
+		element.removeEventListener('click', webviewLib.onUnloadedResourceClick);
+	}
+
+	manualDownloadResourceElements = [];
+
+	const elements = document.getElementsByClassName('resource-status-notDownloaded');
+
+	for (const element of elements) {
+		element.style.cursor = 'pointer';
+		element.addEventListener('click', webviewLib.onUnloadedResourceClick);
+		manualDownloadResourceElements.push(element);
+	}
+}
+
 webviewLib.handleInternalLink = function(event, anchorNode) {
 	const href = anchorNode.getAttribute('href');
+	if (!href) return false;
+
 	if (href.indexOf('#') === 0) {
 		event.preventDefault();
 		let old_hash = location.hash;
@@ -18,6 +44,7 @@ webviewLib.handleInternalLink = function(event, anchorNode) {
 		setTimeout(function() { location.hash = old_hash; }, 10);
 		return true;
 	}
+	
 	return false;
 }
 
@@ -52,9 +79,8 @@ document.addEventListener('click', function(event) {
 	// as Katex.
 	if (!anchor.hasAttribute('data-from-md')) {
 		if (webviewLib.handleInternalLink(event, anchor)) return;
-
 		event.preventDefault();
-		webviewLib.options_.postMessage(anchor.getAttribute('href'));
+		if (anchor.getAttribute('href')) webviewLib.options_.postMessage(anchor.getAttribute('href'));
 		return;
 	}
 
@@ -63,3 +89,4 @@ document.addEventListener('click', function(event) {
 		if (webviewLib.handleInternalLink(event, anchor)) return;
 	}
 });
+

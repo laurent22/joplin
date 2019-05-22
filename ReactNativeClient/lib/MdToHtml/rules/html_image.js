@@ -5,8 +5,14 @@ const utils = require('../utils');
 
 function renderImageHtml(before, src, after, ruleOptions) {
 	const resourceId = Resource.urlToId(src);
-	const resource = ruleOptions.resources[resourceId];
-	if (!resource) return '<div>' + utils.loaderImage() + '</div>';
+	const result = ruleOptions.resources[resourceId];
+	const resource = result ? result.item : null;
+	const resourceStatus = utils.resourceStatus(result);
+
+	if (resourceStatus !== 'ready') {
+		const icon = utils.resourceStatusImage(resourceStatus);
+		return '<div class="not-loaded-resource resource-status-' + resourceStatus + '" data-resource-id="' + resourceId + '">' + '<img src="data:image/svg+xml;utf8,' + htmlentities(icon) + '"/>' + '</div>';
+	}
 
 	const mime = resource.mime ? resource.mime.toLowerCase() : '';
 	if (Resource.isSupportedImageMimeType(mime)) {

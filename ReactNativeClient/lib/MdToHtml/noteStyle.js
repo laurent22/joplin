@@ -161,6 +161,21 @@ module.exports = function(style, options) {
 			color: black;
 		}
 
+		.not-loaded-resource img {
+			width: 1.15em;
+			height: 1.15em;
+		}
+
+		a.not-loaded-resource img {
+			margin-right: .2em;
+		}
+
+		a.not-loaded-resource {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+		}
+
 		.checkbox-label-checked {
 			opacity: 0.5;
 		}

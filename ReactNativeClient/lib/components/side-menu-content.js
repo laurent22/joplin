@@ -207,13 +207,13 @@ class SideMenuContentComponent extends Component {
 
 		let resourceFetcherText = '';
 		if (this.props.resourceFetcher && this.props.resourceFetcher.toFetchCount) {
-			resourceFetcherText = _('Fetching resources: %d', this.props.resourceFetcher.toFetchCount);
+			resourceFetcherText = _('Fetching resources: %d/%d', this.props.resourceFetcher.fetchingCount, this.props.resourceFetcher.toFetchCount);
 		}
 
 		let fullReport = [];
 		if (syncReportText) fullReport.push(syncReportText);
 		// if (fullReport.length) fullReport.push('');
-		if (resourceFetcherText) lines.push(resourceFetcherText);
+		if (resourceFetcherText) fullReport.push(resourceFetcherText);
 		if (decryptionReportText) fullReport.push(decryptionReportText);
 
 		while (fullReport.length < 12) fullReport.push(''); // Add blank lines so that height of report text is fixed and doesn't affect scrolling

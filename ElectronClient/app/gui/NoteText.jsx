@@ -36,6 +36,7 @@ const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { toSystemSlashes, safeFilename } = require('lib/path-utils');
 const { clipboard } = require('electron');
 const SearchEngine = require('lib/services/SearchEngine');
+const DecryptionWorker = require('lib/services/DecryptionWorker');
 const ModelCache = require('lib/services/ModelCache');
 const NoteTextViewer = require('./NoteTextViewer.min');
 const NoteRevisionViewer = require('./NoteRevisionViewer.min');
@@ -226,14 +227,13 @@ class NoteTextComponent extends React.Component {
 			}
 		}
 
-		this.resourceFetcher_downloadComplete = async (resource) => {
+		this.refreshResource = async (event) => {
 			if (!this.state.note || !this.state.note.body) return;
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
-			if (resourceIds.indexOf(resource.id) >= 0) {
-				// this.mdToHtml().clearCache();
+			if (resourceIds.indexOf(event.id) >= 0) {
+				shared.clearResourceCache();
 				this.lastSetHtml_ = '';
 				this.scheduleHtmlUpdate();
-				//this.updateHtml(this.state.note.body);
 			}
 		}
 
@@ -363,7 +363,8 @@ class NoteTextComponent extends React.Component {
 		eventManager.on('noteTypeToggle', this.onNoteTypeToggle_);
 		eventManager.on('todoToggle', this.onTodoToggle_);
 
-		ResourceFetcher.instance().on('downloadComplete', this.resourceFetcher_downloadComplete);
+		shared.installResourceHandling(this.refreshResource);
+
 		ExternalEditWatcher.instance().on('noteChange', this.externalEditWatcher_noteChange);
 	}
 
@@ -376,7 +377,8 @@ class NoteTextComponent extends React.Component {
 		eventManager.removeListener('noteTypeToggle', this.onNoteTypeToggle_);
 		eventManager.removeListener('todoToggle', this.onTodoToggle_);
 
-		ResourceFetcher.instance().off('downloadComplete', this.resourceFetcher_downloadComplete);
+		shared.uninstallResourceHandling(this.refreshResource);
+
 		ExternalEditWatcher.instance().off('noteChange', this.externalEditWatcher_noteChange);
 	}
 
@@ -474,6 +476,8 @@ class NoteTextComponent extends React.Component {
 
 		// Scroll back to top when loading new note
 		if (loadingNewNote) {
+			shared.clearResourceCache();
+			
 			this.editorMaxScrollTop_ = 0;
 
 			// HACK: To go around a bug in Ace editor, we first set the scroll position to 1
@@ -520,6 +524,11 @@ class NoteTextComponent extends React.Component {
 					this.setEditorPercentScroll(scrollPercent ? scrollPercent : 0);
 					this.setViewerPercentScroll(scrollPercent ? scrollPercent : 0);
 				}, 10);
+			}
+
+			if (note && note.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
+				const resourceIds = await Note.linkedResourceIds(note.body);
+				await ResourceFetcher.instance().markForDownload(resourceIds);
 			}
 		}
 
@@ -647,7 +656,7 @@ class NoteTextComponent extends React.Component {
 
 	async webview_ipcMessage(event) {
 		const msg = event.channel ? event.channel : '';
-		const args = event.args;
+		const args = event.args;		
 		const arg0 = args && args.length >= 1 ? args[0] : null;
 		const arg1 = args && args.length >= 2 ? args[1] : null;
 
@@ -666,6 +675,10 @@ class NoteTextComponent extends React.Component {
 			const ls = Object.assign({}, this.state.localSearch);
 			ls.resultCount = arg0;
 			this.setState({ localSearch: ls });
+		} else if (msg.indexOf('markForDownload:') === 0) {
+			const s = msg.split(':');
+			if (s.length < 2) throw new Error('Invalid message: ' + msg);
+			ResourceFetcher.instance().markForDownload(s[1]);
 		} else if (msg === 'percentScroll') {
 			this.ignoreNextEditorScroll_ = true;
 			this.setEditorPercentScroll(arg0);
@@ -1741,6 +1754,7 @@ class NoteTextComponent extends React.Component {
 			 if (htmlHasChanged) {
 				let options = {
 					cssFiles: this.state.lastRenderCssFiles,
+					downloadResources: Setting.value('sync.resourceDownloadMode'),
 				};
 				this.webviewRef_.current.wrappedInstance.send('setHtml', html, options);
 				this.lastSetHtml_ = html;

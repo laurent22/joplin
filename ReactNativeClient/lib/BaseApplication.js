@@ -279,6 +279,12 @@ class BaseApplication {
 		}
 	}
 
+	resourceFetcher_downloadComplete(event) {
+		if (event.encrypted) {
+			DecryptionWorker.instance().scheduleStart();
+		}
+	}
+
 	reducerActionToString(action) {
 		let o = [action.type];
 		if ('id' in action) o.push(action.id);
@@ -426,7 +432,7 @@ class BaseApplication {
 		}
 
 		if (this.hasGui() && action.type === 'SYNC_CREATED_RESOURCE') {
-			ResourceFetcher.instance().queueDownload(action.id);
+			ResourceFetcher.instance().autoAddResources();
 		}
 
 		if (refreshFolders) {
@@ -603,6 +609,7 @@ class BaseApplication {
 
 		ResourceFetcher.instance().setFileApi(() => { return reg.syncTarget().fileApi() });
 		ResourceFetcher.instance().setLogger(this.logger_);
+		ResourceFetcher.instance().on('downloadComplete', this.resourceFetcher_downloadComplete);
 		ResourceFetcher.instance().start();
 
 		SearchEngine.instance().setDb(reg.db());

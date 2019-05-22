@@ -164,10 +164,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 			}
 		}
 
-		this.resourceFetcher_downloadComplete = async (resource) => {
+		this.refreshResource = async (resource) => {
 			if (!this.state.note || !this.state.note.body) return;
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
 			if (resourceIds.indexOf(resource.id) >= 0 && this.refs.noteBodyViewer) {
+				shared.clearResourceCache();
 				const attachedResources = await shared.attachedResources(this.state.note.body);
 				this.setState({ noteResources: attachedResources }, () => {
 					this.refs.noteBodyViewer.rebuildMd();
@@ -178,6 +179,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.takePhoto_onPress = this.takePhoto_onPress.bind(this);
 		this.cameraView_onPhoto = this.cameraView_onPhoto.bind(this);
 		this.cameraView_onCancel = this.cameraView_onCancel.bind(this);
+		this.onMarkForDownload = this.onMarkForDownload.bind(this);
 	}
 
 	styles() {
@@ -235,11 +237,21 @@ class NoteScreenComponent extends BaseScreenComponent {
 		BackButtonService.addHandler(this.backHandler);
 		NavService.addHandler(this.navHandler);
 
-		ResourceFetcher.instance().on('downloadComplete', this.resourceFetcher_downloadComplete);
+		shared.clearResourceCache();
+		shared.installResourceHandling(this.refreshResource);
 
 		await shared.initState(this);
 
+		if (this.state.note && this.state.note.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
+			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
+			await ResourceFetcher.instance().markForDownload(resourceIds);
+		}
+
 		this.refreshNoteMetadata();
+	}
+
+	onMarkForDownload(event) {
+		ResourceFetcher.instance().markForDownload(event.resourceId);
 	}
 
 	refreshNoteMetadata(force = null) {
@@ -250,7 +262,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		BackButtonService.removeHandler(this.backHandler);
 		NavService.removeHandler(this.navHandler);
 
-		ResourceFetcher.instance().off('downloadComplete', this.resourceFetcher_downloadComplete);
+		shared.uninstallResourceHandling(this.refreshResource);
 
 		if (Platform.OS !== 'ios' && this.state.fromShare) {
 			ShareExtension.close();
@@ -626,6 +638,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				highlightedKeywords={keywords}
 				theme={this.props.theme}
 				onCheckboxChange={(newBody) => { onCheckboxChange(newBody) }}
+				onMarkForDownload={this.onMarkForDownload}
 				onLoadEnd={() => {
 					setTimeout(() => {
 						this.setState({ HACK_webviewLoadingState: 1 });

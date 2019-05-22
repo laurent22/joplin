@@ -714,7 +714,7 @@ class SideBarComponent extends React.Component {
 
 		let resourceFetcherText = '';
 		if (this.props.resourceFetcher && this.props.resourceFetcher.toFetchCount) {
-			resourceFetcherText = _('Fetching resources: %d', this.props.resourceFetcher.toFetchCount);
+			resourceFetcherText = _('Fetching resources: %d/%d', this.props.resourceFetcher.fetchingCount, this.props.resourceFetcher.toFetchCount);
 		}
 
 		let lines = Synchronizer.reportToLines(this.props.syncReport);

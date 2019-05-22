@@ -2,6 +2,7 @@ const BaseItem = require('lib/models/BaseItem');
 const Resource = require('lib/models/Resource');
 const ResourceService = require('lib/services/ResourceService');
 const { Logger } = require('lib/logger.js');
+const EventEmitter = require('events');
 
 class DecryptionWorker {
 
@@ -14,6 +15,7 @@ class DecryptionWorker {
 		};
 
 		this.scheduleId_ = null;
+		this.eventEmitter_ = new EventEmitter();
 	}
 
 	setLogger(l) {
@@ -22,6 +24,14 @@ class DecryptionWorker {
 
 	logger() {
 		return this.logger_;
+	}
+
+	on(eventName, callback) {
+		return this.eventEmitter_.on(eventName, callback);
+	}
+
+	off(eventName, callback) {
+		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
 	static instance() {
@@ -85,14 +95,6 @@ class DecryptionWorker {
 
 					const ItemClass = BaseItem.itemClass(item);
 
-					if (item.type_ === Resource.modelType()) {
-						const ls = await Resource.localState(item);
-						if (ls.fetch_status !== Resource.FETCH_STATUS_DONE) {
-							excludedIds.push(item.id);
-							continue;
-						}
-					}
-
 					this.dispatchReport({
 						itemIndex: i,
 						itemCount: items.length,
@@ -101,10 +103,21 @@ class DecryptionWorker {
 					// Don't log in production as it results in many messages when importing many items
 					// this.logger().info('DecryptionWorker: decrypting: ' + item.id + ' (' + ItemClass.tableName() + ')');
 					try {
-						await ItemClass.decrypt(item);
+						const decryptedItem = await ItemClass.decrypt(item);
+
+						if (decryptedItem.type_ === Resource.modelType() && !!decryptedItem.encryption_blob_encrypted) {
+							// itemsThatNeedDecryption() will return the resource again if the blob has not been decrypted,
+							// but that will result in an infinite loop if the blob simply has not been downloaded yet.
+							// So skip the ID for now, and the service will try to decrypt the blob again the next time. 
+							excludedIds.push(decryptedItem.id);
+						}
+
+						if (decryptedItem.type_ === Resource.modelType() && !decryptedItem.encryption_blob_encrypted) {
+							this.eventEmitter_.emit('resourceDecrypted', { id: decryptedItem.id });
+						}
 					} catch (error) {
 						excludedIds.push(item.id);
-						
+
 						if (error.code === 'masterKeyNotLoaded' && options.masterKeyNotLoadedHandler === 'dispatch') {
 							if (notLoadedMasterKeyDisptaches.indexOf(error.masterKeyId) < 0) {
 								this.dispatch({
@@ -139,9 +152,16 @@ class DecryptionWorker {
 
 		this.logger().info('DecryptionWorker: completed decryption.');
 
+		const downloadedButEncryptedBlobCount = await Resource.downloadedButEncryptedBlobCount();
+
 		this.dispatchReport({ state: 'idle' });
 
 		this.state_ = 'idle';
+
+		if (downloadedButEncryptedBlobCount) {
+			this.logger().info('DecryptionWorker: Some resources have been downloaded but are not decrypted yet. Scheduling another decryption. Resource count: ' + downloadedButEncryptedBlobCount);
+			this.scheduleStart();
+		}
 	}
 
 }

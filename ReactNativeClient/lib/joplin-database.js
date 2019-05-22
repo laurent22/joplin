@@ -263,7 +263,7 @@ class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -562,6 +562,21 @@ class JoplinDatabase extends Database {
 
 			if (targetVersion == 21) {
 				queries.push('ALTER TABLE sync_items ADD COLUMN item_location INT NOT NULL DEFAULT 1');
+			}
+
+			if (targetVersion == 22) {
+				const newTableSql = `
+					CREATE TABLE resources_to_download (
+						id INTEGER PRIMARY KEY,
+						resource_id TEXT NOT NULL,
+						updated_time INT NOT NULL,
+						created_time INT NOT NULL
+					);
+				`;
+				queries.push(this.sqlStringToLines(newTableSql)[0]);
+
+				queries.push('CREATE INDEX resources_to_download_resource_id ON resources_to_download (resource_id)');
+				queries.push('CREATE INDEX resources_to_download_updated_time ON resources_to_download (updated_time)');
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

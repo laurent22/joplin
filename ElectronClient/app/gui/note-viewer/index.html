@@ -123,6 +123,10 @@
 		}
 
 		loadCssFiles(event.options.cssFiles);
+		
+		if (event.options.downloadResources === 'manual') {
+			webviewLib.setupResourceManualDownload();
+		}
 	}
 
 	let ignoreNextScrollEvent = false;
@@ -308,7 +312,7 @@
 		updateBodyHeight();
 	});
 
-	updateBodyHeight();	
+	updateBodyHeight();
 	</script>
 
 </body>

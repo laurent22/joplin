@@ -146,7 +146,7 @@ const generalMiddleware = store => next => async (action) => {
 	}
 
 	if (action.type === 'SYNC_CREATED_RESOURCE') {
-		ResourceFetcher.instance().queueDownload(action.id);
+		ResourceFetcher.instance().autoAddResources();
 	}
 
   	return result;
@@ -333,6 +333,12 @@ const appReducer = (state = appDefaultState, action) => {
 let store = createStore(appReducer, applyMiddleware(generalMiddleware));
 storeDispatch = store.dispatch;
 
+function resourceFetcher_downloadComplete(event) {
+	if (event.encrypted) {
+		DecryptionWorker.instance().scheduleStart();
+	}
+}
+
 async function initialize(dispatch) {
 	shimInit();
 
@@ -402,7 +408,34 @@ async function initialize(dispatch) {
 		if (Setting.value('env') == 'prod') {
 			await db.open({ name: 'joplin.sqlite' })
 		} else {
-			await db.open({ name: 'joplin-68.sqlite' })
+			await db.open({ name: 'joplin-68.sqlite' });
+
+			const tableNames = [
+				'notes',
+				'folders',
+				'resources',
+				'tags',
+				'note_tags',
+				// 'master_keys',
+				'item_changes',
+				'note_resources',
+				// 'settings',
+				'deleted_items',
+				'sync_items',
+				'notes_normalized',
+				'revisions',
+				'resources_to_download',
+			];
+
+			const queries = [];
+			for (const n of tableNames) {
+				queries.push('DELETE FROM ' + n);
+				queries.push('DELETE FROM sqlite_sequence WHERE name="' + n + '"'); // Reset autoincremented IDs
+			}
+
+			queries.push('DELETE FROM settings WHERE key="sync.7.context"');
+
+			// await db.transactionExecBatch(queries);
 		}
 
 		reg.logger().info('Database is ready.');
@@ -422,6 +455,10 @@ async function initialize(dispatch) {
 			Setting.setValue('db.ftsEnabled', ftsEnabled ? 1 : 0);
 			reg.logger().info('db.ftsEnabled = ', Setting.value('db.ftsEnabled'));
 		}
+
+		if (Setting.value('env') === 'dev') {
+			Setting.setValue('welcome.enabled', false);
+		}		
 
 		BaseItem.revisionService_ = RevisionService.instance();
 
@@ -505,6 +542,8 @@ async function initialize(dispatch) {
 
 	ResourceFetcher.instance().setFileApi(() => { return reg.syncTarget().fileApi() });
 	ResourceFetcher.instance().setLogger(reg.logger());
+	ResourceFetcher.instance().dispatch = dispatch;
+	ResourceFetcher.instance().on('downloadComplete', resourceFetcher_downloadComplete);
 	ResourceFetcher.instance().start();
 
 	SearchEngine.instance().setDb(reg.db());

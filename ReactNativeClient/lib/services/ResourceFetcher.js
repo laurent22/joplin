@@ -1,4 +1,5 @@
 const Resource = require('lib/models/Resource');
+const Setting = require('lib/models/Setting');
 const BaseService = require('lib/services/BaseService');
 const ResourceService = require('lib/services/ResourceService');
 const BaseSyncTarget = require('lib/BaseSyncTarget');
@@ -63,23 +64,32 @@ class ResourceFetcher extends BaseService {
 	}
 
 	updateReport() {
-		if (this.updateReportIID_) return;
-
-		this.updateReportIID_ = setTimeout(async () => {
-			const toFetchCount = await Resource.needToBeFetchedCount();
-			this.dispatch({
-				type: 'RESOURCE_FETCHER_SET',
-				toFetchCount: toFetchCount,
-			});
-			this.updateReportIID_ = null;
-		}, 2000);
+		const fetchingCount = Object.keys(this.fetchingItems_).length;
+		this.dispatch({
+			type: 'RESOURCE_FETCHER_SET',
+			fetchingCount: fetchingCount,
+			toFetchCount: fetchingCount + this.queue_.length,
+		});
 	}
 
-	queueDownload(resourceId, priority = null) {
+	async markForDownload(resourceIds) {
+		if (!Array.isArray(resourceIds)) resourceIds = [resourceIds];
+
+		for (const id of resourceIds) {
+			await Resource.markForDownload(id);
+		}
+
+		for (const id of resourceIds) {
+			this.queueDownload_(id, 'high');
+		}
+	}
+
+	queueDownload_(resourceId, priority = null) {
 		if (priority === null) priority = 'normal';
 
 		const index = this.queuedItemIndex_(resourceId);
 		if (index >= 0) return false;
+		if (this.fetchingItems_[resourceId]) return false;
 
 		const item = { id: resourceId };
 
@@ -98,6 +108,8 @@ class ResourceFetcher extends BaseService {
 	async startDownload_(resourceId) {
 		if (this.fetchingItems_[resourceId]) return;
 		this.fetchingItems_[resourceId] = true;
+
+		this.updateReport();
 
 		const resource = await Resource.load(resourceId);
 		const localState = await Resource.localState(resource);
@@ -118,7 +130,7 @@ class ResourceFetcher extends BaseService {
 			// might still be encrypted and the caller usually can't do much with this. In particular
 			// the note being displayed will refresh the resource images but since they are still
 			// encrypted it's not useful. Probably, the views should listen to DecryptionWorker events instead.
-			if (emitDownloadComplete) this.eventEmitter_.emit('downloadComplete', { id: resource.id });
+			if (resource && emitDownloadComplete) this.eventEmitter_.emit('downloadComplete', { id: resource.id, encrypted: !!resource.encryption_blob_encrypted });
 			this.updateReport();
 		}
 
@@ -137,7 +149,7 @@ class ResourceFetcher extends BaseService {
 
 		this.fetchingItems_[resourceId] = resource;
 
-		const localResourceContentPath = Resource.fullPath(resource);
+		const localResourceContentPath = Resource.fullPath(resource, !!resource.encryption_blob_encrypted);
 		const remoteResourceContentPath = this.resourceDirName_ + "/" + resource.id;
 
 		await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_STARTED });
@@ -145,6 +157,8 @@ class ResourceFetcher extends BaseService {
 		const fileApi = await this.fileApi();
 
 		this.logger().debug('ResourceFetcher: Downloading resource: ' + resource.id);
+
+		this.eventEmitter_.emit('downloadStarted', { id: resource.id })
 
 		fileApi.get(remoteResourceContentPath, { path: localResourceContentPath, target: "file" }).then(async () => {
 			await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_DONE });
@@ -184,10 +198,12 @@ class ResourceFetcher extends BaseService {
 		if (this.addingResources_) return;
 		this.addingResources_ = true;
 
+		this.logger().info('ResourceFetcher: Auto-add resources: Mode: ' + Setting.value('sync.resourceDownloadMode'));
+
 		let count = 0;
-		const resources = await Resource.needToBeFetched(limit);
+		const resources = await Resource.needToBeFetched(Setting.value('sync.resourceDownloadMode'), limit);
 		for (let i = 0; i < resources.length; i++) {
-			const added = this.queueDownload(resources[i].id);
+			const added = this.queueDownload_(resources[i].id);
 			if (added) count++;
 		}
 
