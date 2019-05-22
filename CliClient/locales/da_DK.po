@@ -1167,11 +1167,11 @@ msgstr "Notesbøger"
 
 #, fuzzy, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr "Hentede emner: %d/%d."
+msgstr "Hentede emner: %d/%d"
 
 #, fuzzy, javascript-format
-msgid "Fetching resources: %d"
-msgstr "Ressourcer: %d."
+msgid "Fetching resources: %d/%d"
+msgstr "Ressourcer: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Vælg hvor sync status skal eksporteres til"

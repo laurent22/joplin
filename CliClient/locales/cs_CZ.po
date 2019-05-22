@@ -1167,8 +1167,8 @@ msgid "Decrypting items: %d/%d"
 msgstr "Rozšifrované položky: %d/%d"
 
 #, javascript-format
-msgid "Fetching resources: %d"
-msgstr "Stahování zdrojů: %d"
+msgid "Fetching resources: %d/%d"
+msgstr "Stahování zdrojů: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Prosím vyberte, kam má být stav synchronizace exportován"

@@ -1154,8 +1154,8 @@ msgid "Decrypting items: %d/%d"
 msgstr "فك تشفير العناصر: %d/%d"
 
 #, javascript-format
-msgid "Fetching resources: %d"
-msgstr "جلب الموارد: %d"
+msgid "Fetching resources: %d/%d"
+msgstr "جلب الموارد: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "فضلاً اختر أين سيتم تصدير حالة المزامنة"

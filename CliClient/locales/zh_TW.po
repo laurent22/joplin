@@ -1134,8 +1134,8 @@ msgid "Decrypting items: %d/%d"
 msgstr "正在解密項目: %d/%d 項"
 
 #, fuzzy, javascript-format
-msgid "Fetching resources: %d"
-msgstr "資源: %d。"
+msgid "Fetching resources: %d/%d"
+msgstr "資源: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "請選擇將同步狀態導出到的位置"

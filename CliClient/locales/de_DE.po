@@ -1200,8 +1200,8 @@ msgid "Decrypting items: %d/%d"
 msgstr "Entschlüsselte Objekte: %d/%d"
 
 #, javascript-format
-msgid "Fetching resources: %d"
-msgstr "Ressourcen abrufen: %d"
+msgid "Fetching resources: %d/%d"
+msgstr "Ressourcen abrufen: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""

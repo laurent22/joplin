@@ -1163,8 +1163,8 @@ msgid "Decrypting items: %d/%d"
 msgstr "복호화 항목: %d/%d"
 
 #, javascript-format
-msgid "Fetching resources: %d"
-msgstr "리소스 가져오는 중: %d."
+msgid "Fetching resources: %d/%d"
+msgstr "리소스 가져오는 중: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "동기화 상태를 내보낼 대상을 선택하세요"

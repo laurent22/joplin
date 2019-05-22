@@ -1169,8 +1169,8 @@ msgid "Decrypting items: %d/%d"
 msgstr "復号中のアイテム: %d/%d"
 
 #, javascript-format
-msgid "Fetching resources: %d"
-msgstr "取得中のリソース: %d"
+msgid "Fetching resources: %d/%d"
+msgstr "取得中のリソース: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "同期状況の出力先を選択してください"

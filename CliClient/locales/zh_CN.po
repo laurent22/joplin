@@ -1123,8 +1123,8 @@ msgid "Decrypting items: %d/%d"
 msgstr "正在解密项目：%d/%d"
 
 #, javascript-format
-msgid "Fetching resources: %d"
-msgstr "正在获取资源：%d"
+msgid "Fetching resources: %d/%d"
+msgstr "正在获取资源：%d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "请选择同步状态的导出位置"

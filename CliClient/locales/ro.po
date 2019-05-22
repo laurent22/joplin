@@ -1094,8 +1094,8 @@ msgid "Decrypting items: %d/%d"
 msgstr "Se decriptează itemi: %d/%d"
 
 #, fuzzy, javascript-format
-msgid "Fetching resources: %d"
-msgstr "Resurse: %d."
+msgid "Fetching resources: %d/%d"
+msgstr "Resurse: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
