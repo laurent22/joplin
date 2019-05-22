@@ -37,7 +37,7 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$version" ]]; t
 
     echo 'Downloading Joplin...'
     # Delete previous version (in future versions joplin.desktop shouldn't exist)
-    rm -f ~/.joplin/*.AppImage ~/.local/share/applications/joplin.desktop ~/.local/share/applications/appimagekit-joplin.desktop ~/.joplin/VERSION
+    rm -f ~/.joplin/*.AppImage ~/.local/share/applications/joplin.desktop ~/.joplin/VERSION
     
     # Creates the folder where the binary will be stored
     mkdir -p ~/.joplin/
@@ -78,7 +78,10 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$version" ]]; t
        (cd $TMPDIR && ~/.joplin/Joplin.AppImage --appimage-extract joplin.desktop &> /dev/null)
        APPIMAGE_VERSION=$(grep "^X-AppImage-BuildId=" $TMPDIR/squashfs-root/joplin.desktop | head -n 1 | cut -d " " -f 1)
        rm -rf $TMPDIR/squashfs-root
+       # Only delete the desktop file if it will be replaced
+       rm -f ~/.local/share/applications/appimagekit-joplin.desktop 
 
+       # On some systems this directory doesn't exist by default
        mkdir -p ~/.local/share/applications
        echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=/home/$USER/.joplin/Joplin.AppImage\nIcon=/home/$USER/.joplin/Icon512.png\nStartupWMClass=Joplin\nType=Application\nCategories=Application;\n$APPIMAGE_VERSION" >> ~/.local/share/applications/appimagekit-joplin.desktop
        echo "${COLOR_GREEN}OK${COLOR_RESET}"
