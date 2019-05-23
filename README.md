@@ -79,6 +79,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 - Desktop, mobile and terminal applications.
 - [Web Clipper](https://github.com/laurent22/joplin/blob/master/readme/clipper.md) for Firefox and Chrome.
 - End To End Encryption (E2EE)
+- Note history (revisions)
 - Synchronisation with various services, including NextCloud, Dropbox, WebDAV and OneDrive.
 - Import Enex files (Evernote export format) and Markdown files.
 - Export JEX files (Joplin Export format) and raw files.
@@ -193,6 +194,14 @@ On the **terminal application**, to initiate the synchronisation process, type `
 Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the notes, notebooks, tags or resources can read them. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the [End-To-End Encryption Tutorial](https://joplinapp.org/e2ee/) for more information about this feature and how to enable it.
 
 For a more technical description, mostly relevant for development or to review the method being used, please see the [Encryption specification](https://joplinapp.org/spec/).
+
+# Note history
+
+The Joplin applications automatically save previous versions of your notes at regular intervals. These versions are synced across devices and can be viewed from the desktop application. To do so, click on the "Information" button on a note, then click on "Previous version of this note". From this screen you can view the previous versions of the note as well as restore any of them.
+
+This feature can be disabled from the "Note history" section in the settings, and it is also possible to change for how long the history of a note is saved.
+
+More information about this feature in the [announcement post](https://www.patreon.com/posts/note-history-now-27083082).
 
 # External text editor
 
