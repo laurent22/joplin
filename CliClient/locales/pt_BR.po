@@ -16,8 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.7\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Para eliminar uma tag, remova a tag das notas associadas a ela."
@@ -1174,8 +1172,8 @@ msgstr "Cadernos"
 msgid "Decrypting items: %d/%d"
 msgstr "Decriptando itens: %d/%d"
 
-#, javascript-format
-msgid "Fetching resources: %d"
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d/%d"
 msgstr "Buscando recursos: %d"
 
 msgid "Please select where the sync status should be exported to"
@@ -1554,6 +1552,24 @@ msgid ""
 msgstr ""
 "O alvo para onde sincronizar. Cada alvo pode ter parâmetros adicionais que "
 "são nomeados como `sync.NUM.NAME` (todos documentados abaixo)."
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Diretório para sincronizar (caminho absoluto)"

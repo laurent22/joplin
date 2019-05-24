@@ -377,7 +377,8 @@ Current translations:
 ![](https://joplinapp.org/images/flags/country-4x3/nl.png)  |  Nederlands  |  [nl_NL](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_NL.po)  |  Heimen Stoffels (vistausss@outlook.com)  |  80%
 ![](https://joplinapp.org/images/flags/country-4x3/no.png)  |  Norwegian  |  [nb_NO](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nb_NO.po)  |  Mats Estensen (code@mxe.no)  |  93%
 ![](https://joplinapp.org/images/flags/country-4x3/ir.png)  |  Persian  |  [fa](https://github.com/laurent22/joplin/blob/master/CliClient/locales/fa.po)  |  Mehrad Mahmoudian (mehrad@mahmoudian.me)  |  36%
-![](https://joplinapp.org/images/flags/country-4x3/br.png)  |  Português (Brasil)  |  [pt_BR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_BR.po)  |  Renato Nunes Bastos (rnbastos@gmail.com)  |  86%
+![](https://joplinapp.org/images/flags/country-4x3/pl.png)  |  Polski  |  [pl_PL](https://github.com/laurent22/joplin/blob/master/CliClient/locales/pl_PL.po)  |    |  98%
+![](https://joplinapp.org/images/flags/country-4x3/br.png)  |  Português (Brasil)  |  [pt_BR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_BR.po)  |  Renato Nunes Bastos (rnbastos@gmail.com)  |  98%
 ![](https://joplinapp.org/images/flags/country-4x3/ro.png)  |  Română  |  [ro](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ro.po)  |    |  52%
 ![](https://joplinapp.org/images/flags/country-4x3/si.png)  |  Slovenian  |  [sl_SI](https://github.com/laurent22/joplin/blob/master/CliClient/locales/sl_SI.po)  |    |  65%
 ![](https://joplinapp.org/images/flags/country-4x3/se.png)  |  Svenska  |  [sv](https://github.com/laurent22/joplin/blob/master/CliClient/locales/sv.po)  |  Jonatan Nyberg (jonatan@autistici.org)  |  89%
