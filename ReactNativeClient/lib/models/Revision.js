@@ -69,6 +69,49 @@ class Revision extends BaseItem {
 		return output;
 	}
 
+	static patchStats(patch) {
+		if (typeof patch === 'object') throw new Error('Not implemented');
+
+		const countChars = diffLine => {
+			return unescape(diffLine).length - 1;
+		}
+
+		const lines = patch.split('\n');
+		let added = 0;
+		let removed = 0;
+
+		for (const line of lines) {
+			if (line.indexOf('-') === 0) {
+				removed += countChars(line);
+				continue;
+			}
+
+			if (line.indexOf('+') === 0) {
+				added += countChars(line);
+				continue;
+			}
+		}
+
+		return {
+			added: added,
+			removed: removed,
+		};
+	}
+
+	static revisionPatchStatsText(rev) {
+		const titleStats = this.patchStats(rev.title_diff);
+		const bodyStats = this.patchStats(rev.body_diff);
+		const total = {
+			added: titleStats.added + bodyStats.added,
+			removed: titleStats.removed + bodyStats.removed,
+		};
+
+		const output = [];
+		if (total.removed) output.push('-' + total.removed);
+		output.push('+' + total.added);
+		return output.join(', ');
+	}
+
 	static async countRevisions(itemType, itemId) {
 		const r = await this.db().selectOne('SELECT count(*) as total FROM revisions WHERE item_type = ? AND item_id = ?', [
 			itemType,
