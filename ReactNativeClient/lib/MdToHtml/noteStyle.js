@@ -19,6 +19,9 @@ module.exports = function(style, options) {
 			font-family: ` + fontFamily + `;
 			padding-bottom: ` + options.paddingBottom + `;
 		}
+		strong {
+			color: ` + style.colorBright + `
+		}
 		::-webkit-scrollbar {
 			width: 7px;
 			height: 7px;
