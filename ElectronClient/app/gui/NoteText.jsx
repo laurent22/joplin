@@ -671,6 +671,10 @@ class NoteTextComponent extends React.Component {
 
 			const newBody = shared.toggleCheckbox(msg, this.state.note.body);
 			this.saveOneProperty('body', newBody);
+		} else if (msg.indexOf('error:') === 0) {
+			const s = msg.split(':');
+			s.splice(0, 1);
+			reg.logger().error(s.join(':'));
 		} else if (msg === 'setMarkerCount') {
 			const ls = Object.assign({}, this.state.localSearch);
 			ls.resultCount = arg0;

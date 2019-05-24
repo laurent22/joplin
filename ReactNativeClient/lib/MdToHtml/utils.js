@@ -46,7 +46,12 @@ utils.errorImage = function() {
 }
 
 utils.loaderImage = function() {
-	return '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="16px" height="16px" viewBox="0 0 128 128" xml:space="preserve"><g><circle cx="16" cy="64" r="16" fill="#000000" fill-opacity="1"/><circle cx="16" cy="64" r="16" fill="#555555" fill-opacity="0.67" transform="rotate(45,64,64)"/><circle cx="16" cy="64" r="16" fill="#949494" fill-opacity="0.42" transform="rotate(90,64,64)"/><circle cx="16" cy="64" r="16" fill="#cccccc" fill-opacity="0.2" transform="rotate(135,64,64)"/><circle cx="16" cy="64" r="16" fill="#e1e1e1" fill-opacity="0.12" transform="rotate(180,64,64)"/><circle cx="16" cy="64" r="16" fill="#e1e1e1" fill-opacity="0.12" transform="rotate(225,64,64)"/><circle cx="16" cy="64" r="16" fill="#e1e1e1" fill-opacity="0.12" transform="rotate(270,64,64)"/><circle cx="16" cy="64" r="16" fill="#e1e1e1" fill-opacity="0.12" transform="rotate(315,64,64)"/><animateTransform attributeName="transform" type="rotate" values="0 64 64;315 64 64;270 64 64;225 64 64;180 64 64;135 64 64;90 64 64;45 64 64" calcMode="discrete" dur="720ms" repeatCount="indefinite"></animateTransform></g></svg>';
+	// https://github.com/ForkAwesome/Fork-Awesome/blob/master/src/icons/svg/hourglass-half.svg
+	return `
+		<svg width="1536" height="1790" xmlns="http://www.w3.org/2000/svg">
+    		<path d="M1408 128c0 370-177 638-373 768 196 130 373 398 373 768h96c18 0 32 14 32 32v64c0 18-14 32-32 32H32c-18 0-32-14-32-32v-64c0-18 14-32 32-32h96c0-370 177-638 373-768-196-130-373-398-373-768H32c-18 0-32-14-32-32V32C0 14 14 0 32 0h1472c18 0 32 14 32 32v64c0 18-14 32-32 32h-96zm-128 0H256c0 146 33 275 85 384h854c52-109 85-238 85-384zm-57 1216c-74-193-207-330-340-384H653c-133 54-266 191-340 384h910z"/>
+		</svg>
+	`;
 }
 
 utils.resourceStatusImage = function(state) {

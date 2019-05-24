@@ -108,7 +108,7 @@ class NoteBodyViewer extends Component {
 
 		const injectedJs = [this.mdToHtml_.injectedJavaScript()];
 		injectedJs.push(shim.injectedJs('webviewLib'));
-		injectedJs.push('webviewLib.initialize({ postMessage: postMessage });');
+		injectedJs.push('webviewLib.initialize({ postMessage: msg => { return postMessage(msg); } });');
 		injectedJs.push(`
 			const readyStateCheckInterval = setInterval(function() {
 			    if (document.readyState === "complete") {
@@ -176,6 +176,8 @@ class NoteBodyViewer extends Component {
 					onError={() => reg.logger().error('WebView error') }
 					onMessage={(event) => {
 						let msg = event.nativeEvent.data;
+
+						console.info('Got IPC message: ', msg);
 
 						if (msg.indexOf('checkboxclick:') === 0) {
 							const newBody = shared.toggleCheckbox(msg, this.props.note.body);

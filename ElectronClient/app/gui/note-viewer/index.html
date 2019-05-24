@@ -38,281 +38,286 @@
 	<script src="./lib.js"></script>
 
 	<script>
-	const contentElement = document.getElementById('content');
-
-	const ipc = {};
-
-	window.addEventListener('message', (event) => {
-		// Here we only deal with messages that are sent from the main Electro process to the webview.
-		if (!event.data || event.data.target !== 'webview') return;
-
-		const callName = event.data.name;
-		const callData = event.data.data;
-
-		if (!ipc[callName]) {
-			console.warn('Missing IPC function:', event.data);
-		} else {
-			ipc[callName](callData);
-		}
-	});
-
-	const loadedCssFiles_ = {};
-	function loadCssFiles(cssFiles) {
-		for (let i = 0; i < cssFiles.length; i++) {
-			const f = cssFiles[i];
-			if (loadedCssFiles_[f]) continue;
-			const link = document.createElement('link');
-			link.rel = 'stylesheet';
-			link.href = f;
-			document.getElementById('styleContainer').appendChild(link);
-		}
-	}
-
-	// Note: the scroll position source of truth is "percentScroll_". This is easier to manage than scrollTop because
-	// the scrollTop value depends on the images being loaded or not. For example, if the scrollTop is saved while
-	// images are being displayed then restored while images are being reloaded, the new scrollTop might be changed
-	// so that it is not greater than contentHeight. On the other hand, with percentScroll it is possible to restore
-	// it at any time knowing that it's not going to be changed because the content height has changed.
-	// To restore percentScroll the "checkScrollIID" interval is used. It constantly resets the scroll position during
-	// one second after the content has been updated.
-	//
-	// ignoreNextScroll is used to differentiate between scroll event from the users and those that are the result
-	// of programmatically changing scrollTop. We only want to respond to events initiated by the user.
-
-	let percentScroll_ = 0;
-	let checkScrollIID_ = null;
-
-	function setPercentScroll(percent) {
-		percentScroll_ = percent;
-		contentElement.scrollTop = percentScroll_ * maxScrollTop();
-	}
-
-	function percentScroll() {
-		return percentScroll_;
-	}
-
-	function restorePercentScroll() {
-		setPercentScroll(percentScroll_);
-	}
-
-	ipc.setHtml = (event) => {
-		const html = event.html;
-
-		markJsHackMarkerInserted_ = false;
-
-		updateBodyHeight();
-
-		contentElement.innerHTML = html;
-
-		let previousContentHeight = contentElement.scrollHeight;
-		let startTime = Date.now();
-		restorePercentScroll();
-
-		if (!checkScrollIID_) {
-			checkScrollIID_ = setInterval(() => {
-				const h = contentElement.scrollHeight;
-				if (h !== previousContentHeight) {
-					previousContentHeight = h;
-					restorePercentScroll();
-				}
-				if (Date.now() - startTime >= 1000) {
-					clearInterval(checkScrollIID_);
-					checkScrollIID_ = null;
-				}
-			}, 1);
-		}
-
-		loadCssFiles(event.options.cssFiles);
-		
-		if (event.options.downloadResources === 'manual') {
-			webviewLib.setupResourceManualDownload();
-		}
-	}
-
-	let ignoreNextScrollEvent = false;
-	ipc.setPercentScroll = (event) => {
-		const percent = event.percent;
-
-		if (checkScrollIID_) {
-			clearInterval(checkScrollIID_);
-			checkScrollIID_ = null;
-		}
-
-		ignoreNextScrollEvent = true;
-		setPercentScroll(percent);
-	}
-
-	// HACK for Mark.js bug - https://github.com/julmot/mark.js/issues/127
-	let markJsHackMarkerInserted_ = false;
-	function addMarkJsSpaceHack(document) {
-		if (markJsHackMarkerInserted_) return;
-		
-		const prepareElementsForMarkJs = (elements, type) => {
-			// const markJsHackMarker_ = '&#8203; &#8203;'
-			const markJsHackMarker_ = ' ';
-			for (let i = 0; i < elements.length; i++) {
-				if (!type) {
-					elements[i].innerHTML = elements[i].innerHTML + markJsHackMarker_;
-				} else if (type === 'insertBefore') {
-					elements[i].insertAdjacentHTML('beforeBegin', markJsHackMarker_);
-				}
-			}
-		}
-
-		prepareElementsForMarkJs(document.getElementsByTagName('p'));
-		prepareElementsForMarkJs(document.getElementsByTagName('div'));
-		prepareElementsForMarkJs(document.getElementsByTagName('br'), 'insertBefore');
-		markJsHackMarkerInserted_ = true;
-	}
-
-	let mark_ = null;
-	let markSelectedElement_ = null;
-	function setMarkers(keywords, options = null) {
-		if (!options) options = {};
-
-		// TODO: Add support for scriptType on mobile and CLI
-
-		if (!mark_) {
-			mark_ = new Mark(document.getElementById('content'), {
-				exclude: ['img'],
-				acrossElements: true,
-			});
-		}
-
-		addMarkJsSpaceHack(document);
-
-		mark_.unmark()
-
-		if (markSelectedElement_) markSelectedElement_.classList.remove('mark-selected');
-
-		let selectedElement = null;
-		let elementIndex = 0;
-
-		const onEachElement = (element) => {
-			if (!('selectedIndex' in options)) return;
-
-			if (('selectedIndex' in options) && elementIndex === options.selectedIndex) {
-				markSelectedElement_ = element;
-				element.classList.add('mark-selected');
-				selectedElement = element;
-			}
-			
-			elementIndex++;
-		}
-
-		for (let i = 0; i < keywords.length; i++) {
-			let keyword = keywords[i];
-
-			markJsUtils.markKeyword(mark_, keyword, {
-				pregQuote: pregQuote,
-				replaceRegexDiacritics: replaceRegexDiacritics,
-			}, {
-				each: onEachElement,				
-			});
-		}
-
-		ipcProxySendToHost('setMarkerCount', elementIndex);
-
-		if (selectedElement) selectedElement.scrollIntoView();
-	}
-
-	let markLoaded_ = false;
-	ipc.setMarkers = (event) => {
-		const keywords = event.keywords;
-		const options = event.options;
-
-		if (!keywords.length && !markLoaded_) return;
-
-		if (!markLoaded_) {
-			const script = document.createElement('script');
-			script.onload = function() {
-				setMarkers(keywords, options);
-			};
-
-			script.src = '../../node_modules/mark.js/dist/mark.min.js';
-			document.getElementById('markScriptContainer').appendChild(script);
-			markLoaded_ = true;
-		} else {
-			setMarkers(keywords, options);
-		}
-	}
-
-	function maxScrollTop() {
-		return Math.max(0, contentElement.scrollHeight - contentElement.clientHeight);
-	}
-
-	// The body element needs to have a fixed height for the content to be scrollable
-	function updateBodyHeight() {
-		document.getElementById('body').style.height = window.innerHeight + 'px';
-	}
-
 	const ipcProxySendToHost = (methodName, arg) => {
 		window.postMessage({ target: 'main', name: methodName, args: [ arg ] }, '*');
 	}
 
-	contentElement.addEventListener('scroll', function(e) {
-		if (ignoreNextScrollEvent) {
-			ignoreNextScrollEvent = false;
-			return;
-		}
-		const m = maxScrollTop();
-		const percent = m ? contentElement.scrollTop / m : 0;
-		setPercentScroll(percent);
-		
-		ipcProxySendToHost('percentScroll', percent);
-	});
+	try {
+		const contentElement = document.getElementById('content');
 
-	document.addEventListener('contextmenu', function(event) {
-		let element = event.target;
+		const ipc = {};
 
-		// To handle right clicks on resource icons
-		if (element && !element.getAttribute('data-resource-id')) element = element.parentElement;
+		window.addEventListener('message', webviewLib.logEnabledEventHandler(event => {
+			// Here we only deal with messages that are sent from the main Electro process to the webview.
+			if (!event.data || event.data.target !== 'webview') return;
 
-		if (element && element.getAttribute('data-resource-id')) {
-			ipcProxySendToHost('contextMenu', {
-				type: element.getAttribute('src') ? 'image' : 'resource',
-				resourceId: element.getAttribute('data-resource-id'),
-			});
-		} else {
-			const selectedText = window.getSelection().toString();
+			const callName = event.data.name;
+			const callData = event.data.data;
 
-			if (selectedText) {
-				ipcProxySendToHost('contextMenu', {
-					type: 'text',
-					textToCopy: selectedText,
-				});
-			} else if (event.target.getAttribute('href')) {
-				ipcProxySendToHost('contextMenu', {
-					type: 'link',
-					textToCopy: event.target.getAttribute('href'),
-				});
+			if (!ipc[callName]) {
+				console.warn('Missing IPC function:', event.data);
+			} else {
+				ipc[callName](callData);
+			}
+		}));
+
+		const loadedCssFiles_ = {};
+		function loadCssFiles(cssFiles) {
+			for (let i = 0; i < cssFiles.length; i++) {
+				const f = cssFiles[i];
+				if (loadedCssFiles_[f]) continue;
+				const link = document.createElement('link');
+				link.rel = 'stylesheet';
+				link.href = f;
+				document.getElementById('styleContainer').appendChild(link);
 			}
 		}
-	});
 
-	webviewLib.initialize({
-		postMessage: ipcProxySendToHost,
-	});
+		// Note: the scroll position source of truth is "percentScroll_". This is easier to manage than scrollTop because
+		// the scrollTop value depends on the images being loaded or not. For example, if the scrollTop is saved while
+		// images are being displayed then restored while images are being reloaded, the new scrollTop might be changed
+		// so that it is not greater than contentHeight. On the other hand, with percentScroll it is possible to restore
+		// it at any time knowing that it's not going to be changed because the content height has changed.
+		// To restore percentScroll the "checkScrollIID" interval is used. It constantly resets the scroll position during
+		// one second after the content has been updated.
+		//
+		// ignoreNextScroll is used to differentiate between scroll event from the users and those that are the result
+		// of programmatically changing scrollTop. We only want to respond to events initiated by the user.
 
-	// Disable drag and drop otherwise it's possible to drop a URL
-	// on it and it will open in the view as a website.
-	document.addEventListener('drop', function(e) {
-		e.preventDefault();
-		e.stopPropagation();
-	});
-	document.addEventListener('dragover', function(e) {
-		e.preventDefault();
-		e.stopPropagation();
-	});
-	document.addEventListener('dragover', function(e) {
-		e.preventDefault();
-	});
+		let percentScroll_ = 0;
+		let checkScrollIID_ = null;
 
-	window.addEventListener('resize', function() {
+		function setPercentScroll(percent) {
+			percentScroll_ = percent;
+			contentElement.scrollTop = percentScroll_ * maxScrollTop();
+		}
+
+		function percentScroll() {
+			return percentScroll_;
+		}
+
+		function restorePercentScroll() {
+			setPercentScroll(percentScroll_);
+		}
+
+		ipc.setHtml = (event) => {
+			const html = event.html;
+
+			markJsHackMarkerInserted_ = false;
+
+			updateBodyHeight();
+
+			contentElement.innerHTML = html;
+
+			let previousContentHeight = contentElement.scrollHeight;
+			let startTime = Date.now();
+			restorePercentScroll();
+
+			if (!checkScrollIID_) {
+				checkScrollIID_ = setInterval(() => {
+					const h = contentElement.scrollHeight;
+					if (h !== previousContentHeight) {
+						previousContentHeight = h;
+						restorePercentScroll();
+					}
+					if (Date.now() - startTime >= 1000) {
+						clearInterval(checkScrollIID_);
+						checkScrollIID_ = null;
+					}
+				}, 1);
+			}
+
+			loadCssFiles(event.options.cssFiles);
+			
+			if (event.options.downloadResources === 'manual') {
+				webviewLib.setupResourceManualDownload();
+			}
+		}
+
+		let ignoreNextScrollEvent = false;
+		ipc.setPercentScroll = (event) => {
+			const percent = event.percent;
+
+			if (checkScrollIID_) {
+				clearInterval(checkScrollIID_);
+				checkScrollIID_ = null;
+			}
+
+			ignoreNextScrollEvent = true;
+			setPercentScroll(percent);
+		}
+
+		// HACK for Mark.js bug - https://github.com/julmot/mark.js/issues/127
+		let markJsHackMarkerInserted_ = false;
+		function addMarkJsSpaceHack(document) {
+			if (markJsHackMarkerInserted_) return;
+			
+			const prepareElementsForMarkJs = (elements, type) => {
+				// const markJsHackMarker_ = '&#8203; &#8203;'
+				const markJsHackMarker_ = ' ';
+				for (let i = 0; i < elements.length; i++) {
+					if (!type) {
+						elements[i].innerHTML = elements[i].innerHTML + markJsHackMarker_;
+					} else if (type === 'insertBefore') {
+						elements[i].insertAdjacentHTML('beforeBegin', markJsHackMarker_);
+					}
+				}
+			}
+
+			prepareElementsForMarkJs(document.getElementsByTagName('p'));
+			prepareElementsForMarkJs(document.getElementsByTagName('div'));
+			prepareElementsForMarkJs(document.getElementsByTagName('br'), 'insertBefore');
+			markJsHackMarkerInserted_ = true;
+		}
+
+		let mark_ = null;
+		let markSelectedElement_ = null;
+		function setMarkers(keywords, options = null) {
+			if (!options) options = {};
+
+			// TODO: Add support for scriptType on mobile and CLI
+
+			if (!mark_) {
+				mark_ = new Mark(document.getElementById('content'), {
+					exclude: ['img'],
+					acrossElements: true,
+				});
+			}
+
+			addMarkJsSpaceHack(document);
+
+			mark_.unmark()
+
+			if (markSelectedElement_) markSelectedElement_.classList.remove('mark-selected');
+
+			let selectedElement = null;
+			let elementIndex = 0;
+
+			const onEachElement = (element) => {
+				if (!('selectedIndex' in options)) return;
+
+				if (('selectedIndex' in options) && elementIndex === options.selectedIndex) {
+					markSelectedElement_ = element;
+					element.classList.add('mark-selected');
+					selectedElement = element;
+				}
+				
+				elementIndex++;
+			}
+
+			for (let i = 0; i < keywords.length; i++) {
+				let keyword = keywords[i];
+
+				markJsUtils.markKeyword(mark_, keyword, {
+					pregQuote: pregQuote,
+					replaceRegexDiacritics: replaceRegexDiacritics,
+				}, {
+					each: onEachElement,				
+				});
+			}
+
+			ipcProxySendToHost('setMarkerCount', elementIndex);
+
+			if (selectedElement) selectedElement.scrollIntoView();
+		}
+
+		let markLoaded_ = false;
+		ipc.setMarkers = (event) => {
+			const keywords = event.keywords;
+			const options = event.options;
+
+			if (!keywords.length && !markLoaded_) return;
+
+			if (!markLoaded_) {
+				const script = document.createElement('script');
+				script.onload = function() {
+					setMarkers(keywords, options);
+				};
+
+				script.src = '../../node_modules/mark.js/dist/mark.min.js';
+				document.getElementById('markScriptContainer').appendChild(script);
+				markLoaded_ = true;
+			} else {
+				setMarkers(keywords, options);
+			}
+		}
+
+		function maxScrollTop() {
+			return Math.max(0, contentElement.scrollHeight - contentElement.clientHeight);
+		}
+
+		// The body element needs to have a fixed height for the content to be scrollable
+		function updateBodyHeight() {
+			document.getElementById('body').style.height = window.innerHeight + 'px';
+		}
+
+		contentElement.addEventListener('scroll', webviewLib.logEnabledEventHandler(e => {
+			if (ignoreNextScrollEvent) {
+				ignoreNextScrollEvent = false;
+				return;
+			}
+			const m = maxScrollTop();
+			const percent = m ? contentElement.scrollTop / m : 0;
+			setPercentScroll(percent);
+			
+			ipcProxySendToHost('percentScroll', percent);
+		}));
+
+		document.addEventListener('contextmenu', webviewLib.logEnabledEventHandler(event => {
+			let element = event.target;
+
+			// To handle right clicks on resource icons
+			if (element && !element.getAttribute('data-resource-id')) element = element.parentElement;
+
+			if (element && element.getAttribute('data-resource-id')) {
+				ipcProxySendToHost('contextMenu', {
+					type: element.getAttribute('src') ? 'image' : 'resource',
+					resourceId: element.getAttribute('data-resource-id'),
+				});
+			} else {
+				const selectedText = window.getSelection().toString();
+
+				if (selectedText) {
+					ipcProxySendToHost('contextMenu', {
+						type: 'text',
+						textToCopy: selectedText,
+					});
+				} else if (event.target.getAttribute('href')) {
+					ipcProxySendToHost('contextMenu', {
+						type: 'link',
+						textToCopy: event.target.getAttribute('href'),
+					});
+				}
+			}
+		}));
+
+		webviewLib.initialize({
+			postMessage: ipcProxySendToHost,
+		});
+
+		// Disable drag and drop otherwise it's possible to drop a URL
+		// on it and it will open in the view as a website.
+		document.addEventListener('drop', webviewLib.logEnabledEventHandler(e => {
+			e.preventDefault();
+			e.stopPropagation();
+		}));
+		document.addEventListener('dragover', webviewLib.logEnabledEventHandler(e => {
+			e.preventDefault();
+			e.stopPropagation();
+		}));
+		document.addEventListener('dragover', webviewLib.logEnabledEventHandler(e => {
+			e.preventDefault();
+		}));
+
+		window.addEventListener('resize', webviewLib.logEnabledEventHandler(() => {
+			updateBodyHeight();
+		}));
+
 		updateBodyHeight();
-	});
-
-	updateBodyHeight();
+	} catch (error) {
+		ipcProxySendToHost('error:' + JSON.stringify(webviewLib.cloneError(error)));
+		throw error;
+	}
 	</script>
 
 </body>

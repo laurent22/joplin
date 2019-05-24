@@ -63,6 +63,24 @@ webviewLib.getParentAnchorElement = function(element) {
 	}
 }
 
+webviewLib.cloneError = function(error) {
+	return {
+		message: error.message,
+		stack: error.stack
+	};
+}
+
+webviewLib.logEnabledEventHandler = function(fn) {
+	return function(event) {
+		try {
+			return fn(event);
+		} catch (error) {
+			webviewLib.options_.postMessage('error:' + JSON.stringify(webviewLib.cloneError(error)));
+			throw error;
+		}
+	}
+}
+
 webviewLib.initialize = function(options) {
 	webviewLib.options_ = options;
 }
