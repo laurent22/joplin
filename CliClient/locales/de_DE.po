@@ -13,7 +13,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "To delete a tag, untag the associated notes."
@@ -675,7 +675,7 @@ msgid "Quit"
 msgstr "Verlassen"
 
 msgid "Close Window"
-msgstr ""
+msgstr "Fenster schließen"
 
 msgid "&Edit"
 msgstr "&Bearbeiten"
@@ -1021,12 +1021,11 @@ msgstr "Standort"
 msgid "URL"
 msgstr "URL"
 
-#, fuzzy
 msgid "Note History"
-msgstr "Notizen-Liste"
+msgstr "Notizen-Verlauf"
 
 msgid "Previous versions of this note"
-msgstr ""
+msgstr "Vorherige Version von dieser Notiz"
 
 msgid "Note properties"
 msgstr "Notiz-Eigenschaften"
@@ -1034,19 +1033,22 @@ msgstr "Notiz-Eigenschaften"
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr ""
+"Die Notiz \"%s\" wurde erfolgreich wiederhergestellt und ist im Notizbuch "
+"\"%s\" verfügbar."
 
-#, fuzzy
 msgid "This note has no history"
-msgstr "Diese Notiz wurde verändert:"
+msgstr "Diese Notiz hat keinen Verlauf"
 
 msgid "Restore"
-msgstr ""
+msgstr "Wiederherstellen"
 
 #, javascript-format
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
+"Klicke \"%s\" um die Notiz wiederherzustellen. Sie wird in das Notizbuch \"%s"
+"\" kopiert. Die aktuelle Version der Notiz wird nicht ersetzt oder verändert."
 
 msgid "Open..."
 msgstr "Öffne..."
@@ -1361,7 +1363,7 @@ msgstr "Synchronisation ist bereits im Gange. Status: %s"
 
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr ""
+msgstr "Unbekannter Eintrags-Typ heruntergeladen - bitte aktualisiere Joplin"
 
 msgid "Encrypted"
 msgstr "Verschlüsselt"
@@ -1579,22 +1581,26 @@ msgstr ""
 "dokumentiert) bezeichnet werden."
 
 msgid "Attachment download behaviour"
-msgstr ""
+msgstr "Verhalten für das Herunterladen von Anhängen"
 
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
+"Im \"Manuell\" Modus werden die Anhänge nur heruntergeladen wenn Du auf sie "
+"klickst. Bei \"Automatisch\" werden sie heruntergeladen sobald die Notiz "
+"geöffnet wird. Bei \"Immer\" werden die Anhänge heruntergeladen egal ob die "
+"Notiz geöffnet wird oder nicht."
 
 msgid "Always"
-msgstr ""
+msgstr "Immer"
 
 msgid "Manual"
-msgstr ""
+msgstr "Manuell"
 
 msgid "Auto"
-msgstr ""
+msgstr "Automatisch"
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Verzeichnis mit dem synchronisiert werden soll (absoluter Pfad)"
@@ -1635,19 +1641,18 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "Ignoriere TLS-Zertifikatfehler"
 
-#, fuzzy
 msgid "Enable note history"
-msgstr "Aktiviere Fußnoten"
+msgstr "Aktiviere Notizen-Verlauf"
 
 msgid "days"
-msgstr ""
+msgstr "Tage"
 
 #, javascript-format
 msgid "%d days"
-msgstr ""
+msgstr "%d Tage"
 
 msgid "Keep note history for"
-msgstr ""
+msgstr "Speicher Notizen-Verlauf für"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1722,18 +1727,18 @@ msgstr ""
 "Bitte wähle aus, wohin der Synchronisations-Status exportiert werden soll."
 
 msgid "Restored Notes"
-msgstr ""
+msgstr "Wiederhergestellte Notizen"
 
 msgid "Items that cannot be synchronised"
 msgstr "Objekte können nicht synchronisiert werden"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
-msgstr "Dieses Notizbuch konnte nicht geöffnet werden: %s"
+msgstr "%s (%s) konnte nicht hochgeladen werden: %s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Dieses Notizbuch konnte nicht geöffnet werden: %s"
+msgstr "Eintrag \"%s\" konnte nicht heruntergeladen werden: %s"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
