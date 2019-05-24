@@ -35,8 +35,7 @@ class HeaderComponent extends React.Component {
 		};
 
 		this.search_onClear = (event) => {
-			this.setState({ searchQuery: '' });
-			triggerOnQuery('');
+			this.resetSearch();
 			if (this.searchElement_) this.searchElement_.focus();
 		}
 
@@ -56,6 +55,17 @@ class HeaderComponent extends React.Component {
 				this.setState({ showSearchUsageLink: false });
 			}, 5000);
 		}
+		
+		this.search_keyDown = event => {
+			if (event.keyCode === 27) { // ESCAPE
+				this.resetSearch();
+			}
+		}
+		
+		this.resetSearch = () => {
+			this.setState({ searchQuery: '' });
+			triggerOnQuery('');
+		}
 
 		this.searchUsageLink_click = event => {
 			bridge().openExternal('https://joplinapp.org/#searching');
@@ -68,6 +78,12 @@ class HeaderComponent extends React.Component {
 		}
 	}
 
+	componentDidUpdate(prevProps) {
+		if(prevProps.notesParentType !== this.props.notesParentType && this.props.notesParentType !== 'Search' && this.state.searchQuery) {
+			this.resetSearch();
+		}
+	}
+	
 	componentWillUnmount() {
 		if (this.hideSearchUsageLinkIID_) {
 			clearTimeout(this.hideSearchUsageLinkIID_);
@@ -190,6 +206,7 @@ class HeaderComponent extends React.Component {
 					ref={elem => this.searchElement_ = elem}
 					onFocus={this.search_onFocus}
 					onBlur={this.search_onBlur}
+					onKeyDown={this.search_keyDown}
 				/>
 				<a
 					href="#"
@@ -257,6 +274,7 @@ const mapStateToProps = (state) => {
 	return {
 		theme: state.settings.theme,
 		windowCommand: state.windowCommand,
+		notesParentType: state.notesParentType,
 	};
 };
 
