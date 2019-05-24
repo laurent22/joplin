@@ -79,9 +79,9 @@ class HeaderComponent extends React.Component {
 	}
 
 	componentDidUpdate(prevProps) {
-	  if(prevProps.notesParentType !== this.props.notesParentType && this.props.notesParentType !== 'Search' && this.state.searchQuery) {
+		if(prevProps.notesParentType !== this.props.notesParentType && this.props.notesParentType !== 'Search' && this.state.searchQuery) {
 			this.resetSearch();
-	  }
+		}
 	}
 	
 	componentWillUnmount() {
