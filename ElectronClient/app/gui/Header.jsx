@@ -35,8 +35,7 @@ class HeaderComponent extends React.Component {
 		};
 
 		this.search_onClear = (event) => {
-			this.setState({ searchQuery: '' });
-			triggerOnQuery('');
+			this.resetSearch();
 			if (this.searchElement_) this.searchElement_.focus();
 		}
 
@@ -59,8 +58,7 @@ class HeaderComponent extends React.Component {
 		
 		this.search_keyDown = event => {
 			if (event.keyCode === 27) { // ESCAPE
-				this.setState({ searchQuery: '' });
-				triggerOnQuery('');
+				this.resetSearch();
 			}
 		}
 		
@@ -82,7 +80,7 @@ class HeaderComponent extends React.Component {
 
 	componentDidUpdate(prevProps) {
 	  if(prevProps.notesParentType !== this.props.notesParentType && this.props.notesParentType !== 'Search' && this.state.searchQuery) {
-	    this.resetSearch();
+			this.resetSearch();
 	  }
 	}
 	
