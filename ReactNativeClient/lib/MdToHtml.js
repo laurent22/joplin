@@ -21,6 +21,7 @@ const setupLinkify = require('./MdToHtml/setupLinkify');
 const hljs = require('highlight.js');
 const markdownItAnchor = require('markdown-it-anchor');
 const markdownItToc = require('markdown-it-toc-done-right');
+const markdownItMultiMd = require('markdown-it-multimd-table');
 // The keys must match the corresponding entry in Setting.js
 const plugins = {
 	mark: require('markdown-it-mark'),
@@ -31,7 +32,6 @@ const plugins = {
 	abbr: require('markdown-it-abbr'),
 	emoji: require('markdown-it-emoji'),
 	insert: require('markdown-it-ins'),
-	multitable: require('markdown-it-multimd-table'),
 };
 
 class MdToHtml {
@@ -131,6 +131,8 @@ class MdToHtml {
 		markdownIt.use(markdownItAnchor)
 		if (Setting.value('markdown.plugin.toc'))
 			markdownIt.use(markdownItToc, { listType: 'ul' })
+		if (Setting.value('markdown.plugin.multitable'))
+			markdownIt.use(markdownItMultiMd, { enableMultilineRows: true, enableRowspan: true })
 
 		for (let key in plugins) {
 			if (Setting.value('markdown.plugin.' + key))
