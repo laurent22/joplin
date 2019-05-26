@@ -167,6 +167,10 @@ module.exports = function(style, options) {
 		.not-loaded-resource img {
 			width: 1.15em;
 			height: 1.15em;
+			background: white;
+			padding: 2px !important;
+			border-radius: 2px;
+			box-shadow: 0 1px 3px #000000aa;
 		}
 
 		a.not-loaded-resource img {

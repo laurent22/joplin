@@ -162,6 +162,35 @@ class JoplinDatabase extends Database {
 		return output;
 	}
 
+	async clearForTesting() {
+		const tableNames = [
+			'notes',
+			'folders',
+			'resources',
+			'tags',
+			'note_tags',
+			// 'master_keys',
+			'item_changes',
+			'note_resources',
+			// 'settings',
+			'deleted_items',
+			'sync_items',
+			'notes_normalized',
+			'revisions',
+			'resources_to_download',
+		];
+
+		const queries = [];
+		for (const n of tableNames) {
+			queries.push('DELETE FROM ' + n);
+			queries.push('DELETE FROM sqlite_sequence WHERE name="' + n + '"'); // Reset autoincremented IDs
+		}
+
+		queries.push('DELETE FROM settings WHERE key="sync.7.context"');
+
+		await this.transactionExecBatch(queries);
+	}
+
 	createDefaultRow(tableName) {
 		const row = {};
 		const fields = this.tableFields('resource_local_states');

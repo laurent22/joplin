@@ -567,6 +567,8 @@ class BaseApplication {
 		this.database_.setLogger(this.dbLogger_);
 		await this.database_.open({ name: profileDir + '/database.sqlite' });
 
+		// if (Setting.value('env') === 'dev') await this.database_.clearForTesting();
+
 		reg.setDb(this.database_);
 		BaseModel.db_ = this.database_;
 
