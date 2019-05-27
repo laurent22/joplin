@@ -23,7 +23,7 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 			const resource = result ? result.item : null;
 			const resourceStatus = utils.resourceStatus(result);
 
-			if (resourceStatus !== 'ready') {
+			if (result && resourceStatus !== 'ready') {
 				const icon = utils.resourceStatusFile(resourceStatus);
 				return '<a class="not-loaded-resource resource-status-' + resourceStatus + '" data-resource-id="' + resourceId + '">' + '<img src="data:image/svg+xml;utf8,' + htmlentities(icon) + '"/>';
 			} else {

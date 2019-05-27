@@ -757,7 +757,6 @@ class NoteTextComponent extends React.Component {
 				// When using the file:// protocol, openExternal doesn't work (does nothing) with URL-encoded paths
 				require('electron').shell.openExternal(urlDecode(msg));
 			} else {
-				console.info('OPEN URL');
 				require('electron').shell.openExternal(msg);
 			}
 		} else if (msg.indexOf('#') === 0) {
