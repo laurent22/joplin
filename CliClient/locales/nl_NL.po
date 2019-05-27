@@ -1192,8 +1192,8 @@ msgid "Decrypting items: %d/%d"
 msgstr "Bezig met ontsleutelen van items: %d/%d"
 
 #, fuzzy, javascript-format
-msgid "Fetching resources: %d"
-msgstr "Bronnen: %d."
+msgid "Fetching resources: %d/%d"
+msgstr "Bronnen: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Kies waar de synchronisatiestatus naar moet worden geëxporteerd"
@@ -1565,6 +1565,24 @@ msgstr ""
 "Het doel waarnaar gesynchroniseerd moet worden. Elk doel mag extra "
 "argumenten bevatten, welke `sync.NUM.NAME` worden genoemd (wordt hieronder "
 "uitgelegd)."
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Map waarnaar gesynchroniseerd moet worden (absoluut pad)"

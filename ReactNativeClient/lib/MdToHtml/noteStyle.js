@@ -19,6 +19,9 @@ module.exports = function(style, options) {
 			font-family: ` + fontFamily + `;
 			padding-bottom: ` + options.paddingBottom + `;
 		}
+		strong {
+			color: ` + style.colorBright + `
+		}
 		::-webkit-scrollbar {
 			width: 7px;
 			height: 7px;
@@ -159,6 +162,25 @@ module.exports = function(style, options) {
 		.highlighted-keyword {
 			background-color: #F3B717;
 			color: black;
+		}
+
+		.not-loaded-resource img {
+			width: 1.15em;
+			height: 1.15em;
+			background: white;
+			padding: 2px !important;
+			border-radius: 2px;
+			box-shadow: 0 1px 3px #000000aa;
+		}
+
+		a.not-loaded-resource img {
+			margin-right: .2em;
+		}
+
+		a.not-loaded-resource {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
 		}
 
 		.checkbox-label-checked {

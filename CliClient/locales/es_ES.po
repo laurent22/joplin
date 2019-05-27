@@ -1176,8 +1176,8 @@ msgid "Decrypting items: %d/%d"
 msgstr "Descifrando elementos: %d/%d"
 
 #, javascript-format
-msgid "Fetching resources: %d"
-msgstr "Obteniendo refuersos: %d"
+msgid "Fetching resources: %d/%d"
+msgstr "Obteniendo refuersos: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccione a dónde se debería exportar el estado de sincronización"
@@ -1553,6 +1553,24 @@ msgstr ""
 "El destino de la sincronización. Cada destino de la sincronización puede "
 "tener parámetros adicionales los cuales son llamados como `sync.NUM.NAME` "
 "(todos abajo documentados)."
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Directorio con el que sincronizarse (ruta completa)"

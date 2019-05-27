@@ -32,15 +32,14 @@ class Resource extends BaseItem {
 		return imageMimeTypes.indexOf(type.toLowerCase()) >= 0;
 	}
 
-	static needToBeFetched(limit = null) {
-		let sql = 'SELECT * FROM resources WHERE id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = ?) ORDER BY updated_time DESC';
-		if (limit !== null) sql += ' LIMIT ' + limit;
-		return this.modelSelectAll(sql, [Resource.FETCH_STATUS_IDLE]);
-	}
-
-	static async needToBeFetchedCount() {
-		const r = await this.db().selectOne('SELECT count(*) as total FROM resource_local_states WHERE fetch_status = ?', [Resource.FETCH_STATUS_IDLE]);
-		return r ? r['total'] : 0;
+	static needToBeFetched(resourceDownloadMode = null, limit = null) {
+		let sql = ['SELECT * FROM resources WHERE encryption_applied = 0 AND id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = ?)'];
+		if (resourceDownloadMode !== 'always') {
+			sql.push('AND resources.id IN (SELECT resource_id FROM resources_to_download)');
+		}
+		sql.push('ORDER BY updated_time DESC');
+		if (limit !== null) sql.push('LIMIT ' + limit);
+		return this.modelSelectAll(sql.join(' '), [Resource.FETCH_STATUS_IDLE]);
 	}
 
 	static async resetStartedFetchStatus() {
@@ -50,13 +49,6 @@ class Resource extends BaseItem {
 	static fsDriver() {
 		if (!Resource.fsDriver_) Resource.fsDriver_ = new FsDriverDummy();
 		return Resource.fsDriver_;
-	}
-
-	static filename(resource, encryptedBlob = false) {
-		let extension = encryptedBlob ? 'crypted' : resource.file_extension;
-		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
-		extension = extension ? ('.' + extension) : '';
-		return resource.id + extension;
 	}
 
 	static friendlyFilename(resource) {
@@ -74,6 +66,13 @@ class Resource extends BaseItem {
 
 	static baseRelativeDirectoryPath() {
 		return Setting.value('resourceDirName');
+	}
+
+	static filename(resource, encryptedBlob = false) {
+		let extension = encryptedBlob ? 'crypted' : resource.file_extension;
+		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
+		extension = extension ? ('.' + extension) : '';
+		return resource.id + extension;
 	}
 
 	static relativePath(resource, encryptedBlob = false) {
@@ -96,6 +95,13 @@ class Resource extends BaseItem {
 		const decryptedItem = item.encryption_cipher_text ? await super.decrypt(item) : Object.assign({}, item);
 		if (!decryptedItem.encryption_blob_encrypted) return decryptedItem;
 
+		const localState = await this.localState(item);
+		if (localState.fetch_status !== Resource.FETCH_STATUS_DONE) {
+			// Not an error - it means the blob has not been downloaded yet.
+			// It will be decrypted later on, once downloaded.
+			return decryptedItem;
+		}
+
 		const plainTextPath = this.fullPath(decryptedItem);
 		const encryptedPath = this.fullPath(decryptedItem, true);
 		const noExtPath = pathUtils.dirname(encryptedPath) + '/' + pathUtils.filename(encryptedPath);
@@ -109,12 +115,7 @@ class Resource extends BaseItem {
 		}
 
 		try {
-			// const stat = await this.fsDriver().stat(encryptedPath);
-			await this.encryptionService().decryptFile(encryptedPath, plainTextPath, {
-				// onProgress: (progress) => {
-				// 	console.info('Decryption: ', progress.doneSize / stat.size);
-				// },
-			});
+			await this.encryptionService().decryptFile(encryptedPath, plainTextPath);
 		} catch (error) {
 			if (error.code === 'invalidIdentifier') {
 				// As the identifier is invalid it most likely means that this is not encrypted data
@@ -149,12 +150,7 @@ class Resource extends BaseItem {
 		if (resource.encryption_blob_encrypted) return { path: encryptedPath, resource: resource };
 
 		try {
-			// const stat = await this.fsDriver().stat(plainTextPath);
-			await this.encryptionService().encryptFile(plainTextPath, encryptedPath, {
-				// onProgress: (progress) => {
-				// 	console.info(progress.doneSize / stat.size);
-				// },
-			});
+			await this.encryptionService().encryptFile(plainTextPath, encryptedPath);
 		} catch (error) {
 			if (error.code === 'ENOENT') throw new JoplinError('File not found:' + error.toString(), 'fileNotFound');
 			throw error;
@@ -242,6 +238,20 @@ class Resource extends BaseItem {
 		}
 
 		await ResourceLocalState.batchDelete(ids);
+	}
+
+	static async markForDownload(resourceId) {
+		// Insert the row only if it's not already there
+		const t = Date.now();
+		await this.db().exec('INSERT INTO resources_to_download (resource_id, updated_time, created_time) SELECT ?, ?, ? WHERE NOT EXISTS (SELECT 1 FROM resources_to_download WHERE resource_id = ?)', [resourceId, t, t, resourceId]);
+	}
+
+	static async downloadedButEncryptedBlobCount() {
+		const r = await this.db().selectOne('SELECT count(*) as total FROM resource_local_states WHERE fetch_status = ? AND resource_id IN (SELECT id FROM resources WHERE encryption_blob_encrypted = 1)', [
+			Resource.FETCH_STATUS_DONE,
+		]);
+
+		return r ? r.total : 0;
 	}
 
 }

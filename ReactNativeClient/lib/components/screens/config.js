@@ -66,11 +66,20 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				color: theme.color,
 				fontSize: theme.fontSize,
 				flex: 1,
+				paddingRight: 5,
 			},
 			descriptionText: {
 				color: theme.color,
 				fontSize: theme.fontSize,
 				flex: 1,
+			},
+			settingDescriptionText: {
+				color: theme.color,
+				fontSize: theme.fontSize,
+				flex: 1,
+				paddingLeft: theme.marginLeft,
+				paddingRight: theme.marginRight,
+				paddingBottom: theme.marginBottom,
 			},
 			permissionText: {
 				color: theme.color,
@@ -84,10 +93,13 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			},
 		}
 
-		// if (Platform.OS === 'ios') {
-			styles.settingControl.borderBottomWidth = 1;
-			styles.settingControl.borderBottomColor = theme.strongDividerColor;
-		// }
+		styles.settingContainerNoBottomBorder = Object.assign({}, styles.settingContainer, {
+			borderBottomWidth: 0,
+			paddingBottom: theme.marginBottom / 2,
+		});
+
+		styles.settingControl.borderBottomWidth = 1;
+		styles.settingControl.borderBottomColor = theme.strongDividerColor;
 
 		styles.switchSettingText = Object.assign({}, styles.settingText);
 		styles.switchSettingText.width = '80%';
@@ -121,6 +133,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		}
 
 		const md = Setting.settingMetadata(key);
+		const settingDescription = md.description ? md.description() : '';
 
 		if (md.isEnum) {
 			value = value.toString();
@@ -132,27 +145,33 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				items.push({ label: settingOptions[k], value: k.toString() });
 			}
 
+			const descriptionComp = !settingDescription ? null : <Text style={this.styles().settingDescriptionText}>{settingDescription}</Text>
+			const containerStyle = !settingDescription ? this.styles().settingContainer : this.styles().settingContainerNoBottomBorder;
+
 			return (
-				<View key={key} style={this.styles().settingContainer}>
-					<Text key="label" style={this.styles().settingText}>{md.label()}</Text>
-					<Dropdown
-						key="control"
-						style={this.styles().settingControl}
-						items={items}
-						selectedValue={value}
-						itemListStyle={{
-							backgroundColor: theme.backgroundColor,
-						}}
-						headerStyle={{
-							color: theme.color,
-							fontSize: theme.fontSize,
-						}}
-						itemStyle={{
-							color: theme.color,
-							fontSize: theme.fontSize,
-						}}
-						onValueChange={(itemValue, itemIndex) => { updateSettingValue(key, itemValue); }}
-					/>
+				<View style={{flexDirection:'column', borderBottomWidth: 1, borderBottomColor: theme.dividerColor}}>
+					<View key={key} style={containerStyle}>
+						<Text key="label" style={this.styles().settingText}>{md.label()}</Text>
+						<Dropdown
+							key="control"
+							style={this.styles().settingControl}
+							items={items}
+							selectedValue={value}
+							itemListStyle={{
+								backgroundColor: theme.backgroundColor,
+							}}
+							headerStyle={{
+								color: theme.color,
+								fontSize: theme.fontSize,
+							}}
+							itemStyle={{
+								color: theme.color,
+								fontSize: theme.fontSize,
+							}}
+							onValueChange={(itemValue, itemIndex) => { updateSettingValue(key, itemValue); }}
+						/>
+					</View>
+					{descriptionComp}
 				</View>
 			);
 		} else if (md.type == Setting.TYPE_BOOL) {

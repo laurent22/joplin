@@ -227,7 +227,7 @@ const headerHtml = `<!doctype html>
 	<div class="nav">
 		<ul>
 			<li class="{{selectedHome}}"><a href="{{baseUrl}}/" title="Home"><i class="fa fa-home"></i></a></li>
-			<li><a href="https://discourse.joplin.cozic.net" title="Forum">Forum</a></li>
+			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
 		</ul>
 		<div class="nav-right">

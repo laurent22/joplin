@@ -45,11 +45,11 @@ When changing the WebDAV URL, make sure that the new location has the same exact
 
 # How can I easily enter Markdown tags in Android?
 
-You may use a special keyboard such as [Multiling O Keyboard](https://play.google.com/store/apps/details?id=kl.ime.oh&hl=en), which has shortcuts to create Markdown tags. [More information in this post](https://discourse.joplin.cozic.net/t/android-create-new-list-item-with-enter/585/2?u=laurent).
+You may use a special keyboard such as [Multiling O Keyboard](https://play.google.com/store/apps/details?id=kl.ime.oh&hl=en), which has shortcuts to create Markdown tags. [More information in this post](https://discourse.joplinapp.org/t/android-create-new-list-item-with-enter/585/2?u=laurent).
 
 # The initial sync is very slow, how can I speed it up?
 
-Whenever importing a large number of notes, for example from Evernote, it may take a very long time for the first sync to complete. There are various techniques to speed thing up (if you don't want to simply wait for the sync to complete), which are outlined in [this post](https://discourse.joplin.cozic.net/t/workaround-for-slow-initial-bulk-sync-after-evernote-import/746?u=laurent).
+Whenever importing a large number of notes, for example from Evernote, it may take a very long time for the first sync to complete. There are various techniques to speed thing up (if you don't want to simply wait for the sync to complete), which are outlined in [this post](https://discourse.joplinapp.org/t/workaround-for-slow-initial-bulk-sync-after-evernote-import/746?u=laurent).
 
 # Is it possible to use real file and folder names in the sync target?
 

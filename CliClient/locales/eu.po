@@ -1179,11 +1179,11 @@ msgstr "Koadernoak"
 
 #, fuzzy, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr "Itemak eskuratuta: %d%d."
+msgstr "Itemak eskuratuta: %d/%d"
 
 #, fuzzy, javascript-format
-msgid "Fetching resources: %d"
-msgstr "Baliabideak: %d."
+msgid "Fetching resources: %d/%d"
+msgstr "Baliabideak: %d/%d"
 
 #, fuzzy
 msgid "Please select where the sync status should be exported to"
@@ -1567,6 +1567,24 @@ msgstr ""
 "Sinkronizazio helburua. Sinkronizazio aukera bakoitzak izan ditzake "
 "parametro gehigarriak, horrela izendatuta `sync.NUM.NAME` (dena beherago "
 "dokumentatuta)."
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Sinkronizatzeko direktorioa (bide-izena osorik)"

@@ -126,10 +126,12 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 		const revs = this.state.revisions.slice().reverse();
 		for (let i = 0; i < revs.length; i++) {
 			const rev = revs[i];
+			const stats = Revision.revisionPatchStatsText(rev);
+
 			revisionListItems.push(<option
 				key={rev.id}
 				value={rev.id}
-			>{time.formatMsToLocal(rev.item_updated_time)}</option>);
+			>{time.formatMsToLocal(rev.item_updated_time) + ' (' + stats + ')'}</option>);
 		}
 
 		const restoreButtonTitle = _('Restore');

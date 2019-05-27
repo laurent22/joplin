@@ -82,7 +82,7 @@ class Setting extends BaseModel {
 				}
 				return options;
 			}},
-			'folders.sortOrder.reverse': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
+			'folders.sortOrder.reverse': { value: false, type: Setting.TYPE_BOOL, public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
 			'trackLocation': { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, label: () => _('Save geo-location with notes') },
 			'newTodoFocus': { value: 'title', type: Setting.TYPE_STRING, section: 'note', isEnum: true, public: true, appTypes: ['desktop'], label: () => _('When creating a new to-do:'), options: () => {
 				return {
@@ -153,6 +153,14 @@ class Setting extends BaseModel {
 			'showAdvancedOptions': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile' ], label: () => _('Show advanced options') },
 			'sync.target': { value: SyncTargetRegistry.nameToId('dropbox'), type: Setting.TYPE_INT, isEnum: true, public: true, section:'sync', label: () => _('Synchronisation target'), description: (appType) => { return appType !== 'cli' ? null : _('The target to synchonise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).') }, options: () => {
 				return SyncTargetRegistry.idAndLabelPlainObject();
+			}},
+
+			'sync.resourceDownloadMode': { value: 'always', type: Setting.TYPE_STRING, section: 'sync', public: true, isEnum: true, appTypes: ['mobile', 'desktop'], label: () => _('Attachment download behaviour'), description: () => _('In "Manual" mode, attachments are downloaded only when you click on them. In "Auto", they are downloaded when you open the note. In "Always", all the attachments are downloaded whether you open the note or not.'), options: () => {
+				return {
+					'always': _('Always'),
+					'manual': _('Manual'),
+					'auto': _('Auto'),
+				};
 			}},
 
 			'sync.2.path': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => {

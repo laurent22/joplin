@@ -1180,8 +1180,8 @@ msgid "Decrypting items: %d/%d"
 msgstr "Расшифровано элементов: %d/%d"
 
 #, javascript-format
-msgid "Fetching resources: %d"
-msgstr "Получение ресурсов: %d"
+msgid "Fetching resources: %d/%d"
+msgstr "Получение ресурсов: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1557,6 +1557,24 @@ msgid ""
 msgstr ""
 "Цель синхронизации. Каждая цель синхронизации может иметь дополнительные "
 "параметры, именованные как `sync.NUM.NAME` (все документировано ниже)."
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Каталог синхронизации (абсолютный путь)"

@@ -1166,11 +1166,11 @@ msgstr "Bilježnice"
 
 #, fuzzy, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr "Stvorene lokalne stavke: %d."
+msgstr "Stvorene lokalne stavke: %d/%d"
 
 #, fuzzy, javascript-format
-msgid "Fetching resources: %d"
-msgstr "Resursi: %d."
+msgid "Fetching resources: %d/%d"
+msgstr "Resursi: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Odaberi lokaciju za izvoz statusa sinkronizacije"
@@ -1545,6 +1545,24 @@ msgstr "Sinkroniziraj sa"
 msgid ""
 "The target to synchonise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
 msgstr ""
 
 msgid "Directory to synchronise with (absolute path)"

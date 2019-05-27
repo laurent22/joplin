@@ -3,6 +3,8 @@ const Folder = require('lib/models/Folder.js');
 const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
+const ResourceFetcher = require('lib/services/ResourceFetcher.js');
+const DecryptionWorker = require('lib/services/DecryptionWorker.js');
 const Setting = require('lib/models/Setting.js');
 const Mutex = require('async-mutex').Mutex;
 
@@ -154,7 +156,11 @@ shared.noteComponent_change = function(comp, propName, propValue) {
 	comp.setState(newState);
 }
 
-const resourceCache_ = {};
+let resourceCache_ = {};
+
+shared.clearResourceCache = function() {
+	resourceCache_ = {};
+}
 
 shared.attachedResources = async function(noteBody) {
 	if (!noteBody) return {};
@@ -163,14 +169,20 @@ shared.attachedResources = async function(noteBody) {
 	const output = {};
 	for (let i = 0; i < resourceIds.length; i++) {
 		const id = resourceIds[i];
+		
 		if (resourceCache_[id]) {
 			output[id] = resourceCache_[id];
 		} else {
 			const resource = await Resource.load(id);
-			const isReady = await Resource.isReady(resource);
-			if (!isReady) continue;
-			resourceCache_[id] = resource;
-			output[id] = resource;
+			const localState = await Resource.localState(resource);
+
+			const o = {
+				item: resource,
+				localState: localState,
+			};
+
+			resourceCache_[id] = o;
+			output[id] = o;
 		}
 	}
 
@@ -267,6 +279,18 @@ shared.toggleCheckbox = function(ipcMessage, noteBody) {
 
 	newBody[lineIndex] = line;
 	return newBody.join('\n')
+}
+
+shared.installResourceHandling = function(refreshResourceHandler) {
+	ResourceFetcher.instance().on('downloadComplete', refreshResourceHandler);
+	ResourceFetcher.instance().on('downloadStarted', refreshResourceHandler);
+	DecryptionWorker.instance().on('resourceDecrypted', refreshResourceHandler);
+}
+
+shared.uninstallResourceHandling = function(refreshResourceHandler) {
+	ResourceFetcher.instance().off('downloadComplete', refreshResourceHandler);
+	ResourceFetcher.instance().off('downloadStarted', refreshResourceHandler);
+	DecryptionWorker.instance().off('resourceDecrypted', refreshResourceHandler);
 }
 
 module.exports = shared;
