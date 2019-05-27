@@ -59,6 +59,8 @@ If node-gyp does not works (MSBUILD: error MSB3428: Could not load the Visual C+
 
 If `yarn dist` fails, it may need administrative rights.
 
+If you get an `error MSB8020: The build tools for v140 cannot be found.` try to run with a different toolset version, eg `npm install --toolset=v141` (See [here](https://github.com/mapbox/node-sqlite3/issues/1124) for more info).
+
 The [building\_win32\_tips on this page](./readme/building_win32_tips.md) might be helpful.
 
 # Building the Mobile application
