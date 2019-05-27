@@ -20,18 +20,18 @@ const rules = {
 const setupLinkify = require('./MdToHtml/setupLinkify');
 const hljs = require('highlight.js');
 const markdownItAnchor = require('markdown-it-anchor');
-const markdownItToc = require('markdown-it-toc-done-right');
 // The keys must match the corresponding entry in Setting.js
 const plugins = {
-	mark: require('markdown-it-mark'),
-	footnote: require('markdown-it-footnote'),
-	sub: require('markdown-it-sub'),
-	sup: require('markdown-it-sup'),
-	deflist: require('markdown-it-deflist'),
-	abbr: require('markdown-it-abbr'),
-	emoji: require('markdown-it-emoji'),
-	insert: require('markdown-it-ins'),
-	multitable: require('markdown-it-multimd-table'),
+  mark: {module: require('markdown-it-mark')},
+	footnote: {module: require('markdown-it-footnote')},
+	sub: {module: require('markdown-it-sub')},
+	sup: {module: require('markdown-it-sup')},
+	deflist: {module: require('markdown-it-deflist')},
+	abbr: {module: require('markdown-it-abbr')},
+	emoji: {module: require('markdown-it-emoji')},
+	insert: {module: require('markdown-it-ins')},
+	multitable: {module: require('markdown-it-multimd-table'), options: { enableMultilineRows: true, enableRowspan: true }},
+	toc: {module: require('markdown-it-toc-done-right'), options: { listType: 'ul' }},
 };
 
 class MdToHtml {
@@ -129,12 +129,10 @@ class MdToHtml {
 		markdownIt.use(rules.highlight_keywords(context, ruleOptions));
 		markdownIt.use(rules.code_inline(context, ruleOptions));
 		markdownIt.use(markdownItAnchor)
-		if (Setting.value('markdown.plugin.toc'))
-			markdownIt.use(markdownItToc, { listType: 'ul' })
 
 		for (let key in plugins) {
 			if (Setting.value('markdown.plugin.' + key))
-				markdownIt.use(plugins[key]);
+				markdownIt.use(plugins[key].module, plugins[key].options);
 		}
 
 		setupLinkify(markdownIt);
