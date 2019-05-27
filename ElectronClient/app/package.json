@@ -134,6 +134,7 @@
     "react-datetime": "^2.14.0",
     "react-dom": "^16.4.0",
     "react-redux": "^5.0.7",
+    "react-select": "^2.4.3",
     "react-tooltip": "^3.10.0",
     "read-chunk": "^2.1.0",
     "readability-node": "^0.1.0",

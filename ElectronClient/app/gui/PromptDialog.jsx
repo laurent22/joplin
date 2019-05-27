@@ -5,8 +5,16 @@ const moment = require('moment');
 const { themeStyle } = require('../theme.js');
 const { time } = require('lib/time-utils.js');
 const Datetime = require('react-datetime');
+const CreatableSelect = require('react-select/lib/Creatable').default;
+const makeAnimated = require('react-select/lib/animated').default;
 
 class PromptDialog extends React.Component {
+
+	constructor() {
+		super();
+
+		this.answerInput_ = React.createRef();
+	}
 
 	componentWillMount() {
 		this.setState({
@@ -28,7 +36,7 @@ class PromptDialog extends React.Component {
 	}
 
 	componentDidUpdate() {
-		if (this.focusInput_ && this.answerInput_) this.answerInput_.focus();
+		if (this.focusInput_ && this.answerInput_.current) this.answerInput_.current.focus();
 		this.focusInput_ = false;
 	}
 
@@ -53,15 +61,16 @@ class PromptDialog extends React.Component {
 			height: height - paddingTop,
 			backgroundColor: 'rgba(0,0,0,0.6)',
 			display: visible ? 'flex' : 'none',
-    		alignItems: 'flex-start',
-    		justifyContent: 'center',
-    		paddingTop: paddingTop + 'px',
+			alignItems: 'flex-start',
+			justifyContent: 'center',
+			paddingTop: paddingTop + 'px',
 		};
 
 		this.styles_.promptDialog = {
 			backgroundColor: theme.backgroundColor,
 			padding: 16,
 			display: 'inline-block',
+			maxWidth: width * 0.5,
 			boxShadow: '6px 6px 20px rgba(0,0,0,0.5)',
 		};
 
@@ -80,7 +89,7 @@ class PromptDialog extends React.Component {
 			fontSize: theme.fontSize,
 			color: theme.color,
 			fontFamily: theme.fontFamily,
-			verticalAlign: 'top',
+			verticalAlign: 'middle',
 		};
 
 		this.styles_.input = {
@@ -91,6 +100,41 @@ class PromptDialog extends React.Component {
 			border: '1px solid',
 			borderColor: theme.dividerColor,
 		};
+
+		this.styles_.tagList = {
+			control: (provided) => (Object.assign(provided, {
+				minWidth: width * 0.2,
+				maxWidth: width * 0.5,
+			})),
+			input: (provided) => (Object.assign(provided, {
+				minWidth: '20px',
+				color: theme.color,
+			})),
+			menu: (provided) => (Object.assign(provided, {
+				color: theme.color,
+				fontFamily: theme.fontFamily,
+				backgroundColor: theme.backgroundColor,
+			})),
+			multiValueLabel: (provided) => (Object.assign(provided, {
+				fontFamily: theme.fontFamily,
+			})),
+			multiValueRemove: (provided) => (Object.assign(provided, {
+				color: theme.color,
+			})),
+		};
+
+		this.styles_.tagListTheme = (tagTheme) => (Object.assign(tagTheme, {
+			borderRadius: 2,
+			colors: Object.assign(tagTheme.colors, {
+				primary: theme.raisedBackgroundColor,
+				primary25: theme.raisedBackgroundColor,
+				neutral0: theme.backgroundColor,
+				neutral10: theme.raisedBackgroundColor,
+				neutral80: theme.color,
+				danger: theme.backgroundColor,
+				dangerLight: theme.colorError2,
+			}),
+		}));
 
 		this.styles_.desc = Object.assign({}, theme.textStyle, {
 			marginTop: 10,
@@ -135,8 +179,13 @@ class PromptDialog extends React.Component {
 			this.setState({ answer: momentObject });
 		}
 
+		const onTagsChange = (newTags) => {
+			this.setState({ answer: newTags });
+			this.focusInput_ = true;
+		}
+
 		const onKeyDown = (event) => {
-			if (event.key === 'Enter') {
+			if (event.key === 'Enter' && this.props.inputType !== 'tags') {
 				onClose(true);
 			} else if (event.key === 'Escape') {
 				onClose(false);
@@ -155,10 +204,25 @@ class PromptDialog extends React.Component {
 				timeFormat={time.timeFormat()}
 				onChange={(momentObject) => onDateTimeChange(momentObject)}
 			/>
+		} else if (this.props.inputType === 'tags') {
+			inputComp = <CreatableSelect
+				styles={styles.tagList}
+				theme={styles.tagListTheme}
+				ref={this.answerInput_}
+				value={this.state.answer}
+				placeholder={this.props.label ? this.props.label.replace(':', '') : ''}
+				components={makeAnimated()}
+				isMulti={true}
+				isClearable={false}
+				backspaceRemovesValue={true}
+				options={this.props.autocomplete}
+				onChange={onTagsChange}
+				onKeyDown={(event) => onKeyDown(event)}
+			/>
 		} else {
 			inputComp = <input
 				style={styles.input}
-				ref={input => this.answerInput_ = input}
+				ref={this.answerInput_}
 				value={this.state.answer}
 				type="text"
 				onChange={(event) => onChange(event)}
