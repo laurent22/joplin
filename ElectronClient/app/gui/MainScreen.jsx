@@ -448,7 +448,7 @@ class MainScreenComponent extends React.Component {
 			if (this.props.hasDisabledSyncItems) {
 				msg = <span>{_('Some items cannot be synchronised.')} <a href="#" onClick={() => { onViewDisabledItemsClick() }}>{_('View them now')}</a></span>
 			} else if (this.props.showMissingMasterKeyMessage) {
-				msg = <span>{_('Some items cannot be decrypted.')} <a href="#" onClick={() => { onViewMasterKeysClick() }}>{_('Set the password')}</a></span>
+				msg = <span>{_('One or more master keys need a password.')} <a href="#" onClick={() => { onViewMasterKeysClick() }}>{_('Set the password')}</a></span>
 			}
 
 			messageComp = (

@@ -1,4 +1,5 @@
 const BaseItem = require('lib/models/BaseItem');
+const MasterKey = require('lib/models/MasterKey');
 const Resource = require('lib/models/Resource');
 const ResourceService = require('lib/services/ResourceService');
 const { Logger } = require('lib/logger.js');
@@ -75,6 +76,20 @@ class DecryptionWorker {
 			return;
 		}
 
+		const loadedMasterKeyCount = await this.encryptionService().loadedMasterKeysCount();
+		if (!loadedMasterKeyCount) {
+			this.logger().info('DecryptionWorker: cannot start because no master key is currently loaded.');
+			const ids = await MasterKey.allIds();
+
+			if (ids.length) {
+				this.dispatch({
+					type: 'MASTERKEY_SET_NOT_LOADED',
+					ids: ids,
+				});
+			}
+			return;
+		}
+
 		this.logger().info('DecryptionWorker: starting decryption...');
 
 		this.state_ = 'started';
@@ -101,7 +116,7 @@ class DecryptionWorker {
 					});
 					
 					// Don't log in production as it results in many messages when importing many items
-					// this.logger().info('DecryptionWorker: decrypting: ' + item.id + ' (' + ItemClass.tableName() + ')');
+					// this.logger().debug('DecryptionWorker: decrypting: ' + item.id + ' (' + ItemClass.tableName() + ')');
 					try {
 						const decryptedItem = await ItemClass.decrypt(item);
 
@@ -114,6 +129,10 @@ class DecryptionWorker {
 
 						if (decryptedItem.type_ === Resource.modelType() && !decryptedItem.encryption_blob_encrypted) {
 							this.eventEmitter_.emit('resourceDecrypted', { id: decryptedItem.id });
+						}
+
+						if (decryptedItem.type_ === Resource.modelType() && !decryptedItem.encryption_applied && !!decryptedItem.encryption_blob_encrypted) {
+							this.eventEmitter_.emit('resourceMetadataButNotBlobDecrypted', { id: decryptedItem.id });
 						}
 					} catch (error) {
 						excludedIds.push(item.id);
@@ -154,9 +173,9 @@ class DecryptionWorker {
 
 		const downloadedButEncryptedBlobCount = await Resource.downloadedButEncryptedBlobCount();
 
-		this.dispatchReport({ state: 'idle' });
-
 		this.state_ = 'idle';
+
+		this.dispatchReport({ state: 'idle' });
 
 		if (downloadedButEncryptedBlobCount) {
 			this.logger().info('DecryptionWorker: Some resources have been downloaded but are not decrypted yet. Scheduling another decryption. Resource count: ' + downloadedButEncryptedBlobCount);

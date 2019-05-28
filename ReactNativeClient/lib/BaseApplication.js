@@ -59,6 +59,8 @@ class BaseApplication {
 		// be derived from the state and not set directly since that would make the
 		// state and UI out of sync.
 		this.currentFolder_ = null;
+
+		this.decryptionWorker_resourceMetadataButNotBlobDecrypted = this.decryptionWorker_resourceMetadataButNotBlobDecrypted.bind(this);
 	}
 
 	logger() {
@@ -285,6 +287,19 @@ class BaseApplication {
 		}
 	}
 
+	async decryptionWorker_resourceMetadataButNotBlobDecrypted(event) {
+		this.scheduleAutoAddResources();
+	}
+
+	scheduleAutoAddResources() {
+		if (this.scheduleAutoAddResourcesIID_) return;
+
+		this.scheduleAutoAddResourcesIID_ = setTimeout(() => {
+			this.scheduleAutoAddResourcesIID_ = null;
+			ResourceFetcher.instance().autoAddResources();
+		}, 1000);
+	}
+
 	reducerActionToString(action) {
 		let o = [action.type];
 		if ('id' in action) o.push(action.id);
@@ -314,7 +329,7 @@ class BaseApplication {
 	}
 
 	async generalMiddleware(store, next, action) {
-		this.logger().debug('Reducer action', this.reducerActionToString(action));
+		// this.logger().debug('Reducer action', this.reducerActionToString(action));
 
 		const result = next(action);
 		const newState = store.getState();
@@ -608,6 +623,7 @@ class BaseApplication {
 		DecryptionWorker.instance().setLogger(this.logger_);
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
 		await EncryptionService.instance().loadMasterKeysFromSettings();
+		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', this.decryptionWorker_resourceMetadataButNotBlobDecrypted);
 
 		ResourceFetcher.instance().setFileApi(() => { return reg.syncTarget().fileApi() });
 		ResourceFetcher.instance().setLogger(this.logger_);

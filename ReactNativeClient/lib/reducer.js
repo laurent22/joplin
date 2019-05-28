@@ -535,6 +535,12 @@ const reducer = (state = defaultState, action) => {
 				newState.masterKeys = action.items;
 				break;
 
+			case 'MASTERKEY_SET_NOT_LOADED':
+
+				newState = Object.assign({}, state);
+				newState.notLoadedMasterKeys = action.ids;
+				break;
+
 			case 'MASTERKEY_ADD_NOT_LOADED':
 
 				if (state.notLoadedMasterKeys.indexOf(action.id) < 0) {

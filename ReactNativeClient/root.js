@@ -86,7 +86,7 @@ const logReducerAction = function(action) {
 	let msg = [action.type];
 	if (action.routeName) msg.push(action.routeName);
 
-	reg.logger().info('Reducer action', msg.join(', '));
+	// reg.logger().debug('Reducer action', msg.join(', '));
 }
 
 const generalMiddleware = store => next => async (action) => {

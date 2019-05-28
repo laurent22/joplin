@@ -120,6 +120,7 @@ class ResourceFetcher extends BaseService {
 			// sync. The other ones have been done using migrations/20.js. This code can be removed
 			// after a few months.
 			if (resource && resource.size < 0 && localResourceContentPath && !resource.encryption_blob_encrypted) {
+				await shim.fsDriver().waitTillExists(localResourceContentPath);
 				await ResourceService.autoSetFileSizes();
 			}
 
@@ -194,7 +195,9 @@ class ResourceFetcher extends BaseService {
 		});
 	}
 
-	async autoAddResources(limit) {
+	async autoAddResources(limit = null) {
+		if (limit === null) limit = 10;
+
 		if (this.addingResources_) return;
 		this.addingResources_ = true;
 
