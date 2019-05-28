@@ -1170,11 +1170,6 @@ describe('Synchronizer', function() {
 
 		const f1_1 = await Folder.load(f1.id);
 		expect(f1_1.title).toBe('Welcome MOD');
-
-		// Now check that it created the duplicate tag
-
-		const tags = await Tag.modelSelectAll('SELECT * FROM tags WHERE title = "organising"');
-		expect(tags.length).toBe(2);
 	}));
 
 	it("should not save revisions when updating a note via sync", asyncTest(async () => {
