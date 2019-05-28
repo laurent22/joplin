@@ -309,11 +309,21 @@ function isImageMimeType(m) {
 	return imageMimeTypes.indexOf(m) >= 0;
 }
 
+function tagAttributeToMdText(attr) {
+	// HTML attributes may contain newlines so remove them.
+	// https://github.com/laurent22/joplin/issues/1583
+	if (!attr) return '';
+	attr = attr.replace(/[\n\r]+/g, ' ');
+	attr = attr.replace(/\]/g, '\\]');
+	return attr;
+}
+
 function addResourceTag(lines, resource, alt = "") {
 	// Note: refactor to use Resource.markdownTag
 
 	let tagAlt = alt == "" ? resource.alt : alt;
 	if (!tagAlt) tagAlt = '';
+	tagAlt = tagAttributeToMdText(tagAlt);
 	if (isImageMimeType(resource.mime)) {
 		lines.push("![");
 		lines.push(tagAlt);
@@ -516,7 +526,7 @@ function enexXmlToMdArray(stream, resources) {
 			} else if (n == 'img') {
 				if (nodeAttributes.src) { // Many (most?) img tags don't have no source associated, especially when they were imported from HTML
 					let s = '![';
-					if (nodeAttributes.alt) s += nodeAttributes.alt;
+					if (nodeAttributes.alt) s += tagAttributeToMdText(nodeAttributes.alt);
 					s += '](' + nodeAttributes.src + ')';
 					section.lines.push(s);
 				}
