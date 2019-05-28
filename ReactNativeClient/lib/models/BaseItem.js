@@ -1,6 +1,7 @@
 const BaseModel = require('lib/BaseModel.js');
 const { Database } = require('lib/database.js');
 const Setting = require('lib/models/Setting.js');
+const ItemChange = require('lib/models/ItemChange.js');
 const JoplinError = require('lib/JoplinError.js');
 const { time } = require('lib/time-utils.js');
 const { sprintf } = require('sprintf-js');
@@ -355,7 +356,7 @@ class BaseItem extends BaseModel {
 		plainItem.updated_time = item.updated_time;
 		plainItem.encryption_cipher_text = '';
 		plainItem.encryption_applied = 0;
-		return ItemClass.save(plainItem, { autoTimestamp: false });
+		return ItemClass.save(plainItem, { autoTimestamp: false, changeSource: ItemChange.SOURCE_DECRYPTION });
 	}
 
 	static async unserialize(content) {

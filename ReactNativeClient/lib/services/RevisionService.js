@@ -118,10 +118,11 @@ class RevisionService extends BaseService {
 					FROM item_changes
 					WHERE item_type = ?
 					AND source != ?
+					AND source != ?
 					AND id > ?
 					ORDER BY id ASC
 					LIMIT 10
-				`, [BaseModel.TYPE_NOTE, ItemChange.SOURCE_SYNC, Setting.value('revisionService.lastProcessedChangeId')]);
+				`, [BaseModel.TYPE_NOTE, ItemChange.SOURCE_SYNC, ItemChange.SOURCE_DECRYPTION, Setting.value('revisionService.lastProcessedChangeId')]);
 
 				if (!changes.length) break;
 

@@ -1385,4 +1385,40 @@ describe('Synchronizer', function() {
 		expect(!!resource.encryption_blob_encrypted).toBe(false);
 	}));
 
+	it('should not create revisions when item is modified as a result of decryption', asyncTest(async () => {
+		// Handle this scenario:
+		// - C1 creates note
+		// - C1 never changes it
+		// - E2EE is enabled
+		// - C1 sync
+		// - More than one week later (as defined by oldNoteCutOffDate_), C2 sync
+		// - C2 enters master password and note gets decrypted
+		//
+		// Technically at this point the note is modified (from encrypted to non-encrypted) and thus a ItemChange
+		// object is created. The note is also older than oldNoteCutOffDate. However, this should not lead to the
+		// creation of a revision because that change was not the result of a user action.
+		// I guess that's the general rule - changes that come from user actions should result in revisions,
+		// while automated changes (sync, decryption) should not.
+
+		const dateInPast = revisionService().oldNoteCutOffDate_() - 1000;
+
+		const note1 = await Note.save({ title: 'ma note', updated_time: dateInPast, created_time: dateInPast }, { autoTimestamp: false });
+		const masterKey = await loadEncryptionMasterKey();
+		await encryptionService().enableEncryption(masterKey, '123456');
+		await encryptionService().loadMasterKeysFromSettings();
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+
+		Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
+		await encryptionService().loadMasterKeysFromSettings();
+		await decryptionWorker().start();
+
+		await revisionService().collectRevisions();
+
+		expect((await Revision.all()).length).toBe(0);
+	}));
+
 });

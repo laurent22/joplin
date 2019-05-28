@@ -66,5 +66,6 @@ ItemChange.TYPE_DELETE = 3;
 
 ItemChange.SOURCE_UNSPECIFIED = 1;
 ItemChange.SOURCE_SYNC = 2;
+ItemChange.SOURCE_DECRYPTION = 2;
 
 module.exports = ItemChange;
