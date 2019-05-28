@@ -1,0 +1,1776 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Laurent Cozic
+# This file is distributed under the same license as the Joplin-CLI package.
+# Harsh Pal <iamhp2k@gmail.com>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Joplin-CLI 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"X-Generator: Poedit 2.2.3\n"
+"Last-Translator: Harsh Pal <iamhp2k@gmail.com>\n"
+"Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
+"Language: hi_IN\n"
+
+msgid "To delete a tag, untag the associated notes."
+msgstr ""
+
+msgid "Please select the note or notebook to be deleted first."
+msgstr "कृपया पहले हटाए जाने वाले नोट या नोटबुक का चयन करें ।"
+
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "दबाएँ Ctrl + D या प्रकार \"बाहर निकलें\" अनुप्रयोग से बाहर निकलें करने के लिए"
+
+#, javascript-format
+msgid "More than one item match \"%s\". Please narrow down your query."
+msgstr "एक से अधिक आइटम मेल \" %s\" । कृपया अपनी क्वेरी को संक्षिप्त करें ।"
+
+msgid "No notebook selected."
+msgstr "कोई नोटबुक चयनित नहीं है ।"
+
+msgid "No notebook has been specified."
+msgstr "कोई नोटबुक निर्दिष्ट नहीं की गई है ।"
+
+msgid "Y"
+msgstr "वाई"
+
+msgid "n"
+msgstr "एन"
+
+msgid "N"
+msgstr "एन"
+
+msgid "y"
+msgstr "वाई"
+
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "पृष्ठभूमि सिंक्रनाइज़ेशन रद्द कर रहा है.. । कृपया प्रतीक्षा करो."
+
+#, javascript-format
+msgid "No such command: %s"
+msgstr "ऐसा कोई आदेश नहीं: %s"
+
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "आदेश \" %s\" केवल GUI मोड में उपलब्ध है"
+
+msgid "Cannot change encrypted item"
+msgstr "एंक्रिप्टेड आइटम परिवर्तित नहीं कर सकता"
+
+#, javascript-format
+msgid "Missing required argument: %s"
+msgstr "अनुपलब्ध आवश्यक तर्क: %s"
+
+#, javascript-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+msgid "Your choice: "
+msgstr "आपकी पसंद:"
+
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr "अमांय उत्तर: %s"
+
+msgid "Attaches the given file to the note."
+msgstr "दी गई फ़ाइल को नोट से अनुलग्न कर देता है ।"
+
+#, javascript-format
+msgid "Cannot find \"%s\"."
+msgstr "\" %s\" को नहीं ढूंढ सकता ।"
+
+msgid "Displays the given note."
+msgstr "दिए गए नोट को प्रदर्शित करता है ।"
+
+msgid "Displays the complete information about note."
+msgstr "नोट के बारे में पूरी जानकारी प्रदर्शित करता है ।"
+
+msgid ""
+"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will "
+"list the current configuration."
+msgstr ""
+"हो जाता है या एक config मूल्य सेट । यदि [मूल्य] प्रदान नहीं की है, यह [नाम] के मूल्य दिखाएगा । यदि न तो [नाम] और न ही [मूल्य] प्रदान की जाती है, यह वर्तमान "
+"विंयास की सूची जाएगा ।"
+
+msgid "Also displays unset and hidden config variables."
+msgstr "इसके अलावा असेट और छिपा config चर प्रदर्शित करता है ।"
+
+#, javascript-format
+msgid "%s = %s (%s)"
+msgstr "%s = %s ( %s)"
+
+#, javascript-format
+msgid "%s = %s"
+msgstr "%s = %s"
+
+msgid "Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook."
+msgstr "<Note> से मेल खाते नोट्स डुप्लिकेट [नोटबुक] । यदि कोई नोटबुक निर्दिष्ट नहीं है नोट वर्तमान नोटबुक में डुप्लिकेट है ।"
+
+msgid "Marks a to-do as done."
+msgstr "एक को मार्क्स के रूप में किया ।"
+
+#, javascript-format
+msgid "Note is not a to-do: \"%s\""
+msgstr "नोट एक करने के लिए नहीं है: \" %s\""
+
+msgid "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file` and `target-status`."
+msgstr "E2EE कॉंफ़िगरेशन का प्रबंधन करता है । आदेश कर रहे हैं ' सक्षम ', ' अक्षम ', ' decrypt ', ' स्थिति ', ' decrypt-फ़ाइल ' और ' लक्ष्य-स्थिति '."
+
+msgid "Enter master password:"
+msgstr "मास्टर पासवर्ड दर्ज करें:"
+
+msgid "Operation cancelled"
+msgstr "ऑपरेशन रद्द"
+
+msgid "Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt."
+msgstr "डिक्रिप्शन शुरू करना ... कृपया प्रतीक्षा करें क्योंकि यह डिक्रिप्ट करने में कितना है, इसके आधार पर कई मिनट लग सकते हैं।"
+
+msgid "Completed decryption."
+msgstr "पूर्ण डिक्रिप्शन।"
+
+msgid "Enabled"
+msgstr "सक्षम"
+
+msgid "Disabled"
+msgstr "अक्षम"
+
+#, javascript-format
+msgid "Encryption is: %s"
+msgstr "एंक्रिप्शन है:% s"
+
+msgid "Edit note."
+msgstr "नोट संपादित करें ।"
+
+msgid "No text editor is defined. Please set it using `config editor <editor-path>`"
+msgstr "कोई पाठ संपादक निर्धारित नहीं है । कृपया यह सेट का उपयोग कर ' config संपादक <editor-path>'</editor-path>"
+
+msgid "No active notebook."
+msgstr "कोई सक्रिय नोटबुक नहीं ।"
+
+#, javascript-format
+msgid "Note does not exist: \"%s\". Create it?"
+msgstr "नोट मौजूद नहीं है:  \"% s \" । इसे बनाएं?"
+
+msgid "Starting to edit note. Close the editor to get back to the prompt."
+msgstr "नोट को संपादित करने के लिए शुरू. संकेत को वापस पाने के लिए संपादक को बंद करें ।"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "संपादक में नोट खोलने में त्रुटि:% s"
+
+msgid "Note has been saved."
+msgstr "नोट सहेजा गया है ।"
+
+msgid "Exits the application."
+msgstr "अनुप्रयोग से बाहर निकालता है ।"
+
+msgid "Exports Joplin data to the given path. By default, it will export the complete database including notebooks, notes, tags and resources."
+msgstr "दिए गए रास्ते के लिए निर्यात Joplin डेटा । डिफ़ॉल्ट रूप से, यह नोटबुक, नोट्स, टैग और संसाधनों सहित पूरा डेटाबेस निर्यात करेगा ।"
+
+#, javascript-format
+msgid "Destination format: %s"
+msgstr "गंतव्य स्वरूप:% s"
+
+msgid "Exports only the given note."
+msgstr "केवल दिए गए नोट का निर्यात करता है ।"
+
+msgid "Exports only the given notebook."
+msgstr "केवल दी गई नोटबुक को निर्यात करता है ।"
+
+msgid "Displays a geolocation URL for the note."
+msgstr "नोट के लिए एक जियोलोकेशन URL प्रदर्शित करता है ।"
+
+msgid "Displays usage information."
+msgstr "उपयोग जानकारी प्रदर्शित करता है ।"
+
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr "शॉर्टकट अनुकूलित करने के बारे में जानकारी के लिए, कृपया% s पर जाएं"
+
+msgid "Shortcuts are not available in CLI mode."
+msgstr "CLI मोड में शॉर्टकट उपलब्ध नहीं हैं ।"
+
+msgid "Type `help [command]` for more information about a command; or type `help all` for the complete usage information."
+msgstr "किसी आदेश के बारे में अधिक जानकारी के लिए ' मदद [command] ' टाइप करें; या पूर्ण उपयोग जानकारी के लिए ' मदद सभी ' लिखें ।"
+
+msgid "The possible commands are:"
+msgstr "संभव आदेश हैं:"
+
+msgid ""
+"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently "
+"selected note or notebook. `$c` can be used to refer to the currently selected item."
+msgstr ""
+"किसी भी आदेश में, किसी नोट या नोटबुक को शीर्षक या ID द्वारा संदर्भित किया जा सकता है, या शॉर्टकट ' $n ' या ' $b ' के लिए, वर्तमान में चयनित नोट या नोटबुक का "
+"उपयोग कर सकते हैं । ' $c ' का उपयोग वर्तमान में चयनित आइटम को संदर्भित करने के लिए किया जा सकता है ।"
+
+msgid "To move from one pane to another, press Tab or Shift+Tab."
+msgstr "एक फलक से दूसरे में ले जाने के लिए, Tab या Shift + Tab दबाएं ।"
+
+msgid "Use the arrows and page up/down to scroll the lists and text areas (including this console)."
+msgstr "सूचियों और पाठ क्षेत्रों (इस कंसोल सहित) को स्क्रॉल करने के लिए तीर और पृष्ठ ऊपर/"
+
+msgid "To maximise/minimise the console, press \"tc\"."
+msgstr "कंसोल को अधिकतम करने के लिए, \"tc \" दबाएं ।"
+
+msgid "To enter command line mode, press \":\""
+msgstr "कमांड लाइन मोड में प्रवेश करने के लिए, प्रेस \":\""
+
+msgid "To exit command line mode, press ESCAPE"
+msgstr "कमांड लाइन मोड से बाहर निकलें करने के लिए, एस्केप दबाएं"
+
+msgid "For the list of keyboard shortcuts and config options, type `help keymap`"
+msgstr "कुंजीपटल शॉर्टकट्स और कॉंफ़िग विकल्प की सूची के लिए, ' मदद कीमैप ' लिखें"
+
+msgid "Imports data into Joplin."
+msgstr "जोप्लिन में डेटा आयात करता है ।"
+
+#, javascript-format
+msgid "Source format: %s"
+msgstr "स्रोत स्वरूप:% s"
+
+msgid "Do not ask for confirmation."
+msgstr "पुष्टि के लिए मत पूछो ।"
+
+#, javascript-format
+msgid "Found: %d."
+msgstr "मिला:% d ।"
+
+#, javascript-format
+msgid "Created: %d."
+msgstr "बनाया गया:% d ।"
+
+#, javascript-format
+msgid "Updated: %d."
+msgstr "अद्यतन किया गया:% d ।"
+
+#, javascript-format
+msgid "Skipped: %d."
+msgstr "छोड़ा गया:% d ।"
+
+#, javascript-format
+msgid "Resources: %d."
+msgstr "संसाधन:% d ।"
+
+#, javascript-format
+msgid "Tagged: %d."
+msgstr "टैग की गईं:% d ।"
+
+msgid "Importing notes..."
+msgstr "नोट्स आयात कर रहा है.. ।"
+
+#, javascript-format
+msgid "The notes have been imported: %s"
+msgstr "नोट आयात किए गए हैं:% s"
+
+msgid "Displays the notes in the current notebook. Use `ls /` to display the list of notebooks."
+msgstr "वर्तमान नोटबुक में नोट्स प्रदर्शित करता है । नोटबुक्स की सूची प्रदर्शित करने के लिए ' ls/' का उपयोग करें ।"
+
+msgid "Displays only the first top <num> notes."
+msgstr "केवल प्रथम शीर्ष <संख्या> नोट प्रदर्शित करता है।"
+
+msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
+msgstr "आइटम को <फ़ील्ड> (जैसे। शीर्षक, अपडेट_टाइम, क्रिएट_टाइम) द्वारा सॉर्ट करता है।"
+
+msgid "Reverses the sorting order."
+msgstr "सॉर्टिंग क्रम उलटना ।"
+
+msgid ""
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display "
+"only the to-dos, while `-ttd` would display notes and to-dos."
+msgstr ""
+"केवल विशिष्ट प्रकार के आइटंस प्रदर्शित करता है । नोट्स के लिए ' n ' हो सकता है, ' ' के लिए डॉस, या ' nt ' के लिए नोट्स और करने के लिए डॉस (eg. ' '-टीटी ' केवल "
+"करने के लिए डॉस प्रदर्शित करेगा, जबकि '-ttd ' नोट और करने के लिए डॉस प्रदर्शित करेगा ।"
+
+msgid "Either \"text\" or \"json\""
+msgstr "या तो  \"पाठ \" या  \"json \""
+
+msgid "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE"
+msgstr "लंबी सूची स्वरूप का उपयोग करें । स्वरूप ID है, NOTE_COUNT (नोटबुक के लिए), दिनांक, TODO_CHECKED (के लिए-dos), शीर्षक"
+
+msgid "Please select a notebook first."
+msgstr "कृपया पहले किसी नोटबुक का चयन करें ।"
+
+msgid "Creates a new notebook."
+msgstr "कोई नई नोटबुक बनाता है ।"
+
+msgid "Creates a new note."
+msgstr "नया नोट बनाता है ।"
+
+msgid "Notes can only be created within a notebook."
+msgstr "नोट केवल किसी नोटबुक में बनाए जा सकते हैं ।"
+
+msgid "Creates a new to-do."
+msgstr "एक नया करने के लिए बनाता है ।"
+
+msgid "Moves the notes matching <note> to [notebook]."
+msgstr "नोटों को <नोट> से [नोटबुक] तक ले जाता है।"
+
+msgid "Renames the given <item> (note or notebook) to <name>."
+msgstr "दिए गए <आइटम> (नोट या नोटबुक) को <नाम> का नाम देता है।"
+
+msgid "Deletes the given notebook."
+msgstr "दी गई नोटबुक को हटाता है ।"
+
+msgid "Deletes the notebook without asking for confirmation."
+msgstr "पुष्टिकरण के लिए पूछे बिना नोटबुक हटाता है ।"
+
+msgid "Delete notebook? All notes and sub-notebooks within this notebook will also be deleted."
+msgstr "नोटबुक हटाएं? इस नोटबुक में सभी नोट और उप-नोटबुक भी हटा दिए जाएंगे ।"
+
+msgid "Deletes the notes matching <note-pattern>."
+msgstr "<नोट-पैटर्न> से मेल खाते नोटों को हटाता है।"
+
+msgid "Deletes the notes without asking for confirmation."
+msgstr "पुष्टिकरण के लिए पूछे बिना नोट्स को हटाता है ।"
+
+#, javascript-format
+msgid "%d notes match this pattern. Delete them?"
+msgstr "% d नोट इस पैटर्न से मेल खाते हैं। उन्हें हटाओ?"
+
+msgid "Delete note?"
+msgstr "नोट हटाएं?"
+
+msgid "Searches for the given <pattern> in all the notes."
+msgstr "सभी नोटों में दिए गए <पैटर्न> के लिए खोजें।"
+
+#, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n"
+"\n"
+"%s"
+msgstr ""
+"दिए गए <नोट> की संपत्ति <नाम> दिए गए [मूल्य] को सेट करता है। संभावित गुण हैं:\n"
+"\n"
+"% s"
+
+msgid "Displays summary about the notes and notebooks."
+msgstr "नोट्स और नोटबुक्स के बारे में सारांश प्रदर्शित करता है ।"
+
+msgid "Synchronises with remote storage."
+msgstr "दूरस्थ संग्रहण के साथ सिंक्रनाइज़ करता है ।"
+
+msgid "Sync to provided target (defaults to sync.target config value)"
+msgstr "प्रदान किए गए लक्ष्य पर सिंक करें (सिंक करने के लिए डिफ़ॉल्ट. लक्ष्य कॉंफ़िग मान)"
+
+msgid "Authentication was not completed (did not receive an authentication token)."
+msgstr "प्रमाणन पूरा नहीं किया गया था (कोई प्रमाणन टोकन प्राप्त नहीं हुआ) ।"
+
+msgid "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr "जॉपलिन को ड्रॉपबॉक्स के साथ सिंक्रनाइज़ करने की अनुमति देने के लिए, कृपया नीचे दिए गए चरणों का पालन करें:"
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr "चरण 1: आवेदन को अधिकृत करने के लिए अपने ब्राउज़र में इस URL को खोलें:"
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "चरण 2: ड्रॉपबॉक्स द्वारा प्रदान किया गया कोड दर्ज करें:"
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+
+msgid "Synchronisation is already in progress."
+msgstr "सिंक्रनाइज़ेशन पहले से ही प्रगति पर है।"
+
+#, javascript-format
+msgid ""
+"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the "
+"operation."
+msgstr ""
+"लॉक फ़ाइल पहले से ही होल्ड की जा रही है। यदि आप जानते हैं कि कोई सिंक्रनाइज़ेशन नहीं हो रहा है, तो आप \"% s\" पर लॉक फ़ाइल को हटा सकते हैं और ऑपरेशन को फिर से शुरू "
+"कर सकते हैं।"
+
+#, javascript-format
+msgid "Synchronisation target: %s (%s)"
+msgstr "सिंक्रनाइज़ेशन लक्ष्य:% s (% s)"
+
+msgid "Cannot initialize synchroniser."
+msgstr "सिंक्रोनाइज़र को प्रारंभ नहीं कर सकता।"
+
+msgid "Starting synchronisation..."
+msgstr "सिंक्रोनाइज़ेशन शुरू कर रहा है ..."
+
+msgid "Downloading resources..."
+msgstr "संसाधन डाउनलोड कर रहा है ..."
+
+msgid "Cancelling... Please wait."
+msgstr "रद्द कर रहा है ... कृपया प्रतीक्षा करें।"
+
+msgid ""
+"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove [tag] from [note], or to list the notes associated with [tag]. The "
+"command `tag list` can be used to list all the tags (use -l for long option)."
+msgstr ""
+"<टैग-कमांड> को \"नोट\" से \"टैग\", \"हटाने\" या \"सूची\" करने के लिए या [टैग] से हटाया जा सकता है, या [टैग] से जुड़े नोटों को सूचीबद्ध करने के लिए किया जा सकता है। "
+"कमांड `टैग सूची` का उपयोग सभी टैग (लंबे विकल्प के लिए -l) को सूचीबद्ध करने के लिए किया जा सकता है।"
+
+#, javascript-format
+msgid "Invalid command: \"%s\""
+msgstr "अमान्य आदेश: \"% s\""
+
+msgid ""
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If "
+"the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note."
+msgstr ""
+"<टूडू-कमांड> या तो \"टॉगल\" या \"स्पष्ट\" हो सकता है। पूर्ण और अपूर्ण स्थिति के बीच दिए गए टू-डू को टॉगल करने के लिए \"टॉगल\" का उपयोग करें (यदि लक्ष्य नियमित "
+"नोट है तो इसे टू-डू में बदल दिया जाएगा)। टू-डू को नियमित नोट में बदलने के लिए \"क्लियर\" का उपयोग करें।"
+
+msgid "Marks a to-do as non-completed."
+msgstr "गैर-पूर्ण के रूप में एक करने के लिए चिह्नित करता है।"
+
+msgid "Switches to [notebook] - all further operations will happen within this notebook."
+msgstr "[नोटबुक] पर स्विच करता है - इस नोटबुक के भीतर आगे के सभी ऑपरेशन होंगे।"
+
+msgid "Displays version information"
+msgstr "संस्करण की जानकारी प्रदर्शित करता है"
+
+#, javascript-format
+msgid "%s %s (%s)"
+msgstr "% s% s (% s)"
+
+msgid "Enum"
+msgstr ""
+
+#, javascript-format
+msgid "Type: %s."
+msgstr "प्रकार:% s ।"
+
+#, javascript-format
+msgid "Possible values: %s."
+msgstr "संभावित मान:% s ।"
+
+#, javascript-format
+msgid "Default: %s"
+msgstr "डिफ़ॉल्ट:% s"
+
+msgid "Possible keys/values:"
+msgstr "संभावित कुंजी / मान:"
+
+msgid "Type `joplin help` for usage information."
+msgstr "उपयोग की जानकारी के लिए `जोप्लिन मदद` टाइप करें।"
+
+msgid "Fatal error:"
+msgstr "घातक गलती:"
+
+msgid "The application has been authorised - you may now close this browser tab."
+msgstr "एप्लिकेशन अधिकृत हो गया है - अब आप इस ब्राउज़र टैब को बंद कर सकते हैं।"
+
+msgid "The application has been successfully authorised."
+msgstr "आवेदन को सफलतापूर्वक अधिकृत किया गया है।"
+
+msgid ""
+"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and "
+"will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. "
+"No data will be shared with any third party."
+msgstr ""
+"एप्लिकेशन को प्रमाणित करने के लिए कृपया अपने ब्राउज़र में निम्न URL खोलें। एप्लिकेशन \"एप्लिकेशन / जॉपलिन\" में एक निर्देशिका बनाएगा और केवल इस निर्देशिका में फ़ाइलों को "
+"पढ़ेगा और लिखेगा। इस निर्देशिका के बाहर किसी भी फाइल तक इसकी पहुंच नहीं होगी और न ही किसी अन्य व्यक्तिगत डेटा तक। किसी भी तीसरे पक्ष के साथ कोई डेटा साझा नहीं "
+"किया जाएगा।"
+
+msgid "Search:"
+msgstr "खोज:"
+
+msgid ""
+"Welcome to Joplin!\n"
+"\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n"
+"\n"
+"For example, to create a notebook press `mb`; to create a note press `mn`."
+msgstr ""
+"जोप्लिन आपका स्वागत है!\n"
+"\n"
+"टाइप करें: कीबोर्ड शॉर्टकट की सूची के लिए शॉर्टकट की मदद, या उपयोग की जानकारी के लिए सिर्फ `: मदद`।\n"
+"\n"
+"उदाहरण के लिए, नोटबुक प्रेस बनाने के लिए `mb`; एक नोट प्रेस बनाने के लिए `mn`।"
+
+msgid ""
+"One or more items are currently encrypted and you may need to supply a master password. To do so please type `e2ee decrypt`. If you have "
+"already supplied the password, the encrypted items are being decrypted in the background and will be available soon."
+msgstr ""
+"वर्तमान में एक या अधिक आइटम एन्क्रिप्टेड हैं और आपको एक मास्टर पासवर्ड की आपूर्ति करने की आवश्यकता हो सकती है। ऐसा करने के लिए कृपया `e2ee डिक्रिप्ट` टाइप करें। यदि "
+"आपने पहले ही पासवर्ड की आपूर्ति की है, तो एन्क्रिप्टेड आइटम पृष्ठभूमि में डिक्रिप्ट किए जा रहे हैं और जल्द ही उपलब्ध होंगे।"
+
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr "\"%s\" को \"%s\" प्रारूप के रूप में निर्यात करना। कृपया प्रतीक्षा करें..."
+
+msgid "Sidebar"
+msgstr "Sidebar"
+
+msgid "Note list"
+msgstr "नोट सूची"
+
+msgid "Note title"
+msgstr "नोट शीर्षक"
+
+msgid "Note body"
+msgstr "नोट बॉडी"
+
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr "\"%s\" से \"%s\" प्रारूप के रूप में आयात करना। कृपया प्रतीक्षा करें..."
+
+msgid "PDF File"
+msgstr "पीडीएफ फाइल"
+
+msgid "Synchronisation status"
+msgstr "सिंक्रोनाइज़ेशन की स्थिति"
+
+msgid "New note"
+msgstr "नया नोट"
+
+msgid "New to-do"
+msgstr ""
+
+msgid "New notebook"
+msgstr "नई नोटबुक"
+
+msgid "Print"
+msgstr "छाप"
+
+msgid "General Options"
+msgstr "आम विकल्प"
+
+msgid "Encryption options"
+msgstr "एन्क्रिप्शन विकल्प"
+
+msgid "Web clipper options"
+msgstr "वेब क्लिपर विकल्प"
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr ""
+
+msgid "&File"
+msgstr ""
+
+msgid "About Joplin"
+msgstr "जोप्लिन के बारे में"
+
+msgid "Preferences..."
+msgstr "पसंद..."
+
+msgid "Check for updates..."
+msgstr "अपडेट के लिए जाँच करें"
+
+msgid "Import"
+msgstr "आयात"
+
+msgid "Export"
+msgstr "निर्यात"
+
+msgid "Synchronise"
+msgstr "सिंक्रनाइज़ करें"
+
+#, javascript-format
+msgid "Hide %s"
+msgstr ""
+
+msgid "Quit"
+msgstr "छोड़ना"
+
+msgid "Close Window"
+msgstr "विंडो बंद करें"
+
+msgid "&Edit"
+msgstr "और संपादित करें"
+
+msgid "Copy"
+msgstr "प्रतिलिपि"
+
+msgid "Cut"
+msgstr "कट गया"
+
+msgid "Paste"
+msgstr "चिपकाएं"
+
+msgid "Select all"
+msgstr "सभी का चयन करे"
+
+msgid "Bold"
+msgstr "बोल्ड"
+
+msgid "Italic"
+msgstr ""
+
+msgid "Link"
+msgstr ""
+
+msgid "Insert Date Time"
+msgstr ""
+
+msgid "Edit in external editor"
+msgstr ""
+
+msgid "Search in all the notes"
+msgstr ""
+
+msgid "Search in current note"
+msgstr ""
+
+msgid "&View"
+msgstr ""
+
+msgid "Toggle sidebar"
+msgstr ""
+
+msgid "Toggle editor layout"
+msgstr ""
+
+msgid "Focus"
+msgstr ""
+
+msgid "&Tools"
+msgstr ""
+
+msgid "&Help"
+msgstr ""
+
+msgid "Website and documentation"
+msgstr ""
+
+msgid "Make a donation"
+msgstr ""
+
+#, javascript-format
+msgid "Open %s"
+msgstr ""
+
+msgid "Exit"
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Current version is up-to-date."
+msgstr ""
+
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr ""
+
+msgid "An update is available, do you want to download it now?"
+msgstr ""
+
+#, javascript-format
+msgid "Your version: %s"
+msgstr ""
+
+#, javascript-format
+msgid "New version: %s"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Token has been copied to the clipboard!"
+msgstr ""
+
+msgid "The web clipper service is enabled and set to auto-start."
+msgstr ""
+
+#, javascript-format
+msgid "Status: Started on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Status: %s"
+msgstr ""
+
+msgid "Disable Web Clipper Service"
+msgstr ""
+
+msgid "The web clipper service is not enabled."
+msgstr ""
+
+msgid "Enable Web Clipper Service"
+msgstr ""
+
+msgid "Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin."
+msgstr ""
+
+msgid "In order to use the web clipper, you need to do the following:"
+msgstr ""
+
+msgid "Step 1: Enable the clipper service"
+msgstr ""
+
+msgid ""
+"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin "
+"to listen to a particular port."
+msgstr ""
+
+msgid "Step 2: Install the extension"
+msgstr ""
+
+msgid "Download and install the relevant extension for your browser:"
+msgstr ""
+
+msgid "Advanced options"
+msgstr ""
+
+msgid "Authorisation token:"
+msgstr ""
+
+msgid "Copy token"
+msgstr ""
+
+msgid "This authorisation token is only needed to allow third-party applications to access Joplin."
+msgstr ""
+
+#, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr ""
+
+msgid "Check synchronisation configuration"
+msgstr ""
+
+msgid "Browse..."
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid ""
+"Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you "
+"wish to continue?"
+msgstr ""
+
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target. Do not lose "
+"the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password "
+"below."
+msgstr ""
+
+msgid "Disable encryption"
+msgstr ""
+
+msgid "Enable encryption"
+msgstr ""
+
+msgid "Master Keys"
+msgstr ""
+
+msgid "Active"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Created"
+msgstr ""
+
+msgid "Updated"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Password OK"
+msgstr ""
+
+msgid ""
+"Note: Only one master key is going to be used for encryption (the one marked as \"active\"). Any of the keys might be used for decryption, "
+"depending on how the notes or notebooks were originally encrypted."
+msgstr ""
+
+msgid "Missing Master Keys"
+msgstr ""
+
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is "
+"likely they will eventually be downloaded via synchronisation."
+msgstr ""
+
+msgid "For more information about End-To-End Encryption (E2EE) and advices on how to enable it please check the documentation:"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Encryption is:"
+msgstr ""
+
+msgid "Usage"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+#, javascript-format
+msgid "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgstr ""
+
+msgid "Please create a notebook first."
+msgstr ""
+
+msgid "Please create a notebook first"
+msgstr ""
+
+msgid "Notebook title:"
+msgstr ""
+
+msgid "Add or remove tags:"
+msgstr ""
+
+msgid "Separate each tag by a comma."
+msgstr ""
+
+msgid "Rename notebook:"
+msgstr ""
+
+msgid "Rename tag:"
+msgstr ""
+
+msgid "Set alarm:"
+msgstr ""
+
+msgid "Layout"
+msgstr ""
+
+msgid "Search..."
+msgstr ""
+
+msgid "Some items cannot be synchronised."
+msgstr ""
+
+msgid "View them now"
+msgstr ""
+
+msgid "Some items cannot be decrypted."
+msgstr ""
+
+msgid "Set the password"
+msgstr ""
+
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr ""
+
+msgid "There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr ""
+
+msgid "Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "Note History"
+msgstr ""
+
+msgid "Previous versions of this note"
+msgstr ""
+
+msgid "Note properties"
+msgstr ""
+
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr ""
+
+msgid "This note has no history"
+msgstr ""
+
+msgid "Restore"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or "
+"modified."
+msgstr ""
+
+msgid "Open..."
+msgstr ""
+
+#, javascript-format
+msgid "This file could not be opened: %s"
+msgstr ""
+
+msgid "Save as..."
+msgstr ""
+
+msgid "Copy path to clipboard"
+msgstr ""
+
+msgid "Copy Link Address"
+msgstr ""
+
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr ""
+
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr ""
+
+#, javascript-format
+msgid "This note has no content. Click on \"%s\" to toggle the editor and edit the note."
+msgstr ""
+
+msgid "Only one note can be printed or exported to PDF at a time."
+msgstr ""
+
+msgid "strong text"
+msgstr ""
+
+msgid "emphasized text"
+msgstr ""
+
+msgid "List item"
+msgstr ""
+
+msgid "Insert Hyperlink"
+msgstr ""
+
+msgid "Attach file"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
+msgid "Set alarm"
+msgstr ""
+
+#, javascript-format
+msgid "In: %s"
+msgstr ""
+
+msgid "Hyperlink"
+msgstr ""
+
+msgid "Code"
+msgstr ""
+
+msgid "Numbered List"
+msgstr ""
+
+msgid "Bulleted List"
+msgstr ""
+
+msgid "Checkbox"
+msgstr ""
+
+msgid "Heading"
+msgstr ""
+
+msgid "Horizontal Rule"
+msgstr ""
+
+msgid "Click to stop external editing"
+msgstr ""
+
+msgid "Watching..."
+msgstr ""
+
+msgid "to-do"
+msgstr ""
+
+msgid "note"
+msgstr ""
+
+#, javascript-format
+msgid "Creating new %s..."
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+msgid "Clear"
+msgstr ""
+
+msgid "OneDrive Login"
+msgstr ""
+
+msgid "Dropbox Login"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Synchronisation Status"
+msgstr ""
+
+msgid "Encryption Options"
+msgstr ""
+
+msgid "Clipper Options"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+
+#, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
+msgstr ""
+
+msgid "Remove this search from the sidebar?"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Rename"
+msgstr ""
+
+msgid "Notebooks"
+msgstr ""
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr ""
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr ""
+
+msgid "Please select where the sync status should be exported to"
+msgstr ""
+
+msgid "Add or remove tags"
+msgstr ""
+
+msgid "Duplicate"
+msgstr ""
+
+#, javascript-format
+msgid "%s - Copy"
+msgstr ""
+
+msgid "Switch between note and to-do type"
+msgstr ""
+
+msgid "Switch to note type"
+msgstr ""
+
+msgid "Switch to to-do type"
+msgstr ""
+
+msgid "Copy Markdown link"
+msgstr ""
+
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr ""
+
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr ""
+
+msgid "Type a note title to jump to it. Or type # followed by a tag name, or @ followed by a notebook name."
+msgstr ""
+
+msgid "Goto Anything..."
+msgstr ""
+
+#, javascript-format
+msgid "Usage: %s"
+msgstr ""
+
+#, javascript-format
+msgid "Unknown flag: %s"
+msgstr ""
+
+msgid "Dropbox"
+msgstr ""
+
+msgid "File system"
+msgstr ""
+
+msgid "Nextcloud"
+msgstr ""
+
+msgid "OneDrive"
+msgstr ""
+
+msgid "OneDrive Dev (For testing only)"
+msgstr ""
+
+msgid "WebDAV"
+msgstr ""
+
+#, javascript-format
+msgid "Unknown log level: %s"
+msgstr ""
+
+#, javascript-format
+msgid "Unknown level ID: %s"
+msgstr ""
+
+msgid "Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem."
+msgstr ""
+
+msgid "Untitled"
+msgstr ""
+
+msgid ""
+"Could not synchronize with OneDrive.\n"
+"\n"
+"This error often happens when using OneDrive for Business, which unfortunately cannot be supported.\n"
+"\n"
+"Please consider using a regular OneDrive account."
+msgstr ""
+
+#, javascript-format
+msgid "Cannot access %s"
+msgstr ""
+
+#, javascript-format
+msgid "Created local items: %d."
+msgstr ""
+
+#, javascript-format
+msgid "Updated local items: %d."
+msgstr ""
+
+#, javascript-format
+msgid "Created remote items: %d."
+msgstr ""
+
+#, javascript-format
+msgid "Updated remote items: %d."
+msgstr ""
+
+#, javascript-format
+msgid "Deleted local items: %d."
+msgstr ""
+
+#, javascript-format
+msgid "Deleted remote items: %d."
+msgstr ""
+
+#, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr ""
+
+msgid "Cancelling..."
+msgstr "रद्द..."
+
+#, javascript-format
+msgid "Completed: %s"
+msgstr ""
+
+#, javascript-format
+msgid "Last error: %s"
+msgstr ""
+
+msgid "Idle"
+msgstr "निष्क्रिय"
+
+msgid "In progress"
+msgstr "प्रगति में"
+
+#, javascript-format
+msgid "Synchronisation is already in progress. State: %s"
+msgstr ""
+
+msgid "Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgstr ""
+
+msgid "Encrypted"
+msgstr "एन्क्रिप्टेड"
+
+msgid "Encrypted items cannot be modified"
+msgstr "एंक्रिप्टेड आइटंस संशोधित नहीं किए जा सकते"
+
+msgid "title"
+msgstr "शीर्षक"
+
+msgid "updated date"
+msgstr "अद्यतन दिनांक"
+
+msgid "Conflicts"
+msgstr "विरोध"
+
+msgid "Cannot move notebook to this location"
+msgstr "इस स्थान पर नोटबुक नहीं ले जा सकता"
+
+#, javascript-format
+msgid "Notebooks cannot be named \"%s\", which is a reserved title."
+msgstr ""
+
+msgid "created date"
+msgstr ""
+
+msgid "This note does not have geolocation information."
+msgstr "इस नोट में जियोलोकेशन की जानकारी नहीं है ।"
+
+#, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr ""
+
+#, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See "
+"the FAQ for more details: %s"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "Date format"
+msgstr ""
+
+msgid "Time format"
+msgstr ""
+
+msgid "Theme"
+msgstr "थीम"
+
+msgid "Light"
+msgstr "प्रकाश"
+
+msgid "Dark"
+msgstr "अंधेरा"
+
+msgid "Uncompleted to-dos on top"
+msgstr "शीर्ष to-dos को पूरा नहीं किया गया"
+
+msgid "Show completed to-dos"
+msgstr "पूर्ण to-dos को दिखाएं"
+
+msgid "Sort notes by"
+msgstr "द्वारा क्रमबद्ध नोट्स"
+
+msgid "Reverse sort order"
+msgstr ""
+
+msgid "Sort notebooks by"
+msgstr ""
+
+msgid "Save geo-location with notes"
+msgstr ""
+
+msgid "When creating a new to-do:"
+msgstr ""
+
+msgid "Focus title"
+msgstr ""
+
+msgid "Focus body"
+msgstr ""
+
+msgid "When creating a new note:"
+msgstr ""
+
+msgid "Enable soft breaks"
+msgstr ""
+
+msgid "Enable math expressions"
+msgstr ""
+
+msgid "Enable ==mark== syntax"
+msgstr ""
+
+msgid "Enable footnotes"
+msgstr ""
+
+msgid "Enable table of contents extension"
+msgstr ""
+
+msgid "Enable ~sub~ syntax"
+msgstr ""
+
+msgid "Enable ^sup^ syntax"
+msgstr ""
+
+msgid "Enable deflist syntax"
+msgstr ""
+
+msgid "Enable abbreviation syntax"
+msgstr ""
+
+msgid "Enable markdown emoji"
+msgstr ""
+
+msgid "Enable ++insert++ syntax"
+msgstr ""
+
+msgid "Enable multimarkdown table extension"
+msgstr ""
+
+msgid "Show tray icon"
+msgstr ""
+
+msgid "Note: Does not work in all desktop environments."
+msgstr ""
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being "
+"synchronised, thus reducing the number of conflicts."
+msgstr ""
+
+msgid "Start application minimised in the tray icon"
+msgstr ""
+
+msgid "Global zoom percentage"
+msgstr ""
+
+msgid "Editor font size"
+msgstr ""
+
+msgid "Editor font family"
+msgstr ""
+
+msgid ""
+"This must be *monospace* font or it will not work properly. If the font is incorrect or empty, it will default to a generic monospace font."
+msgstr ""
+
+msgid "Automatically update the application"
+msgstr ""
+
+msgid "Get pre-releases when checking for updates"
+msgstr ""
+
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr ""
+
+msgid "Synchronisation interval"
+msgstr ""
+
+#, javascript-format
+msgid "%d minutes"
+msgstr ""
+
+#, javascript-format
+msgid "%d hour"
+msgstr ""
+
+#, javascript-format
+msgid "%d hours"
+msgstr ""
+
+msgid "Text editor command"
+msgstr ""
+
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default "
+"editor."
+msgstr ""
+
+msgid "Show advanced options"
+msgstr ""
+
+msgid "Synchronisation target"
+msgstr ""
+
+msgid "The target to synchonise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. In \"Auto\", they are downloaded when you open the note. In "
+"\"Always\", all the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr ""
+
+msgid "Nextcloud WebDAV URL"
+msgstr ""
+
+msgid "Nextcloud username"
+msgstr ""
+
+msgid "Nextcloud password"
+msgstr ""
+
+msgid "WebDAV URL"
+msgstr ""
+
+msgid "WebDAV username"
+msgstr ""
+
+msgid "WebDAV password"
+msgstr ""
+
+msgid "Custom TLS certificates"
+msgstr ""
+
+msgid ""
+"Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /"
+"other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on \"Check synchronisation "
+"configuration\"."
+msgstr ""
+
+msgid "Ignore TLS certificate errors"
+msgstr ""
+
+msgid "Enable note history"
+msgstr ""
+
+msgid "days"
+msgstr ""
+
+#, javascript-format
+msgid "%d days"
+msgstr ""
+
+msgid "Keep note history for"
+msgstr ""
+
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr ""
+
+msgid "General"
+msgstr ""
+
+msgid "Synchronisation"
+msgstr ""
+
+msgid "Appearance"
+msgstr ""
+
+msgid "Note"
+msgstr ""
+
+msgid "Plugins"
+msgstr ""
+
+msgid "Application"
+msgstr ""
+
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr ""
+
+msgid "Joplin Export File"
+msgstr ""
+
+msgid "Markdown"
+msgstr ""
+
+msgid "Joplin Export Directory"
+msgstr ""
+
+msgid "Evernote Export File"
+msgstr ""
+
+msgid "Json Export Directory"
+msgstr ""
+
+msgid "File"
+msgstr ""
+
+msgid "Directory"
+msgstr ""
+
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr ""
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr ""
+
+#, javascript-format
+msgid "This item is currently encrypted: %s \"%s\". Please wait for all items to be decrypted and try again."
+msgstr ""
+
+msgid "There is no data to export."
+msgstr ""
+
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr ""
+
+msgid "Restored Notes"
+msgstr ""
+
+msgid "Items that cannot be synchronised"
+msgstr ""
+
+#, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr ""
+
+#, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr ""
+
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title "
+"or the ID (which is displayed in brackets above)."
+msgstr ""
+
+msgid "Sync status (synced items / total items)"
+msgstr ""
+
+#, javascript-format
+msgid "%s: %d/%d"
+msgstr ""
+
+#, javascript-format
+msgid "Total: %d/%d"
+msgstr ""
+
+#, javascript-format
+msgid "Conflicted: %d"
+msgstr ""
+
+#, javascript-format
+msgid "To delete: %d"
+msgstr ""
+
+msgid "Folders"
+msgstr ""
+
+#, javascript-format
+msgid "%s: %d notes"
+msgstr ""
+
+msgid "Coming alarms"
+msgstr ""
+
+#, javascript-format
+msgid "On %s: %s"
+msgstr ""
+
+msgid "Permission to use camera"
+msgstr ""
+
+msgid "Your permission to use your camera is required."
+msgstr ""
+
+msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgstr ""
+
+msgid "Delete these notes?"
+msgstr ""
+
+msgid "Log"
+msgstr ""
+
+msgid "Export Debug Report"
+msgstr ""
+
+msgid "Encryption Config"
+msgstr ""
+
+msgid "Configuration"
+msgstr ""
+
+msgid "Move to notebook..."
+msgstr ""
+
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr ""
+
+msgid "Press to set the decryption password."
+msgstr ""
+
+msgid "Clear alarm"
+msgstr ""
+
+msgid "Save alarm"
+msgstr ""
+
+msgid "Select date"
+msgstr ""
+
+msgid "Confirm"
+msgstr ""
+
+msgid "Cancel synchronisation"
+msgstr ""
+
+msgid "Checking... Please wait."
+msgstr ""
+
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr ""
+
+msgid "Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:"
+msgstr ""
+
+msgid "The application has been authorised!"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+
+#, javascript-format
+msgid "Decrypted items: %s / %s"
+msgstr ""
+
+msgid "New tags:"
+msgstr ""
+
+msgid "Type new tags or select from list"
+msgstr ""
+
+msgid "To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions"
+msgstr ""
+
+msgid "- Storage: to allow attaching files to notes and to enable filesystem synchronisation."
+msgstr ""
+
+msgid "- Camera: to allow taking a picture and attaching it to a note."
+msgstr ""
+
+msgid "- Location: to allow attaching geo-location information to a note."
+msgstr ""
+
+msgid "Joplin website"
+msgstr ""
+
+#, javascript-format
+msgid "Database v%s"
+msgstr ""
+
+#, javascript-format
+msgid "FTS enabled: %d"
+msgstr ""
+
+msgid "Login with Dropbox"
+msgstr ""
+
+msgid "Enter code here"
+msgstr ""
+
+#, javascript-format
+msgid "Master Key %s"
+msgstr ""
+
+#, javascript-format
+msgid "Created: %s"
+msgstr ""
+
+msgid "Password:"
+msgstr ""
+
+msgid "Password cannot be empty"
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+#, javascript-format
+msgid "The notebook could not be saved: %s"
+msgstr ""
+
+msgid "Edit notebook"
+msgstr ""
+
+msgid "Show all"
+msgstr ""
+
+msgid "Errors only"
+msgstr ""
+
+msgid "This note has been modified:"
+msgstr ""
+
+msgid "Save changes"
+msgstr ""
+
+msgid "Discard changes"
+msgstr ""
+
+#, javascript-format
+msgid "No item with ID %s"
+msgstr ""
+
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr ""
+
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr ""
+
+msgid "Take photo"
+msgstr ""
+
+msgid "Attach photo"
+msgstr ""
+
+msgid "Attach any file"
+msgstr ""
+
+msgid "Share"
+msgstr ""
+
+msgid "Convert to note"
+msgstr ""
+
+msgid "Convert to todo"
+msgstr ""
+
+msgid "Hide metadata"
+msgstr ""
+
+msgid "Show metadata"
+msgstr ""
+
+msgid "View on map"
+msgstr ""
+
+msgid "Go to source URL"
+msgstr "स्रोत URL पर जाएं"
+
+msgid "Edit"
+msgstr "संपादित करें"
+
+msgid "Delete notebook"
+msgstr "नोटबुक हटाएं"
+
+msgid "Login with OneDrive"
+msgstr "OneDrive के साथ लॉगिन करें"
+
+msgid "Search"
+msgstr "खोज"
+
+msgid "Click on the (+) button to create a new note or notebook. Click on the side menu to access your existing notebooks."
+msgstr ""
+
+msgid "You currently have no notebook. Create one by clicking on (+) button."
+msgstr "आपके पास वर्तमान में कोई नोटबुक नहीं है । (+) बटन पर क्लिक करके एक बनाएं ।"
+
+msgid "Welcome"
+msgstr "स्वागत है"
