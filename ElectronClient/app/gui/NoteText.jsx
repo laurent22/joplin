@@ -883,27 +883,6 @@ class NoteTextComponent extends React.Component {
 
 			// fixes #1426 but this is an Ace issue, so it can be removed if ace/brace is updated.
 			// START of very ugly hack... (but it works)
-			var context;
-			var contextCache = {};
-			var initContext = function(editor) {
-				var id = -1;
-				if (editor.multiSelect) {
-					id = editor.selection.index;
-					if (contextCache.rangeCount != editor.multiSelect.rangeCount)
-						contextCache = {rangeCount: editor.multiSelect.rangeCount};
-				}
-				if (contextCache[id])
-					return context = contextCache[id];
-				context = contextCache[id] = {
-					autoInsertedBrackets: 0,
-					autoInsertedRow: -1,
-					autoInsertedLineEnd: "",
-					maybeInsertedBrackets: 0,
-					maybeInsertedRow: -1,
-					maybeInsertedLineStart: "",
-					maybeInsertedLineEnd: ""
-				};
-			};
 			var getWrapped = function(selection, selected, opening, closing) {
 				var rowDiff = selection.end.row - selection.start.row;
 				return {
@@ -923,7 +902,6 @@ class NoteTextComponent extends React.Component {
 				if (text.length == 1 && quotes[text]) {
 					if (this.lineCommentStart && this.lineCommentStart.indexOf(text) != -1)
 						return;
-					initContext(editor);
 					var quote = text;
 					var selection = editor.getSelectionRange();
 					var selected = session.doc.getTextRange(selection);
@@ -980,7 +958,6 @@ class NoteTextComponent extends React.Component {
 
 				var selected = session.doc.getTextRange(range);
 				if (!range.isMultiLine() && quotes.hasOwnProperty(selected)) {
-					initContext(editor);
 					var line = session.doc.getLine(range.start.row);
 					var rightChar = line.substring(range.start.column + 1, range.start.column + 2);
 					if (rightChar == selected) {
