@@ -30,7 +30,8 @@ msgstr "Pulse Ctrl+D o escriba «salir» para salir de la aplicación"
 
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr "Hay más de un elemento que coincide con «%s», intente mejorar su consulta."
+msgstr ""
+"Hay más de un elemento que coincide con «%s», intente mejorar su consulta."
 
 msgid "No notebook selected."
 msgstr "No se ha seleccionado ninguna libreta."
@@ -1362,7 +1363,8 @@ msgstr "No se puede mover la libreta a este lugar"
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr "No se puede usar el nombre «%s» para una libreta; es un título reservado."
+msgstr ""
+"No se puede usar el nombre «%s» para una libreta; es un título reservado."
 
 msgid "created date"
 msgstr "fecha de creación"
