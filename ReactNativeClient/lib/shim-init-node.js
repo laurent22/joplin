@@ -193,6 +193,7 @@ function shimInit() {
 			const platform = process.platform;
 			if (platform == 'win32') {
 				filePathEncode = filePathEncode.replace(/\\/g, '/'); // replace backslash in windows pathname with slash e.g. c:\temp to c:/temp
+				filePathEncode = "/" + filePathEncode; // put slash in front of path to comply with windows fileURL syntax
 			} else {
 				filePathEncode = filePathEncode.replace(/\\/g, '%5C'); // replace backslash with unicode on linux and MacOS
 			}
