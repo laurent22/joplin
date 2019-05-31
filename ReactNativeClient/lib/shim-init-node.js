@@ -9,6 +9,8 @@ const mimeUtils = require('lib/mime-utils.js').mime;
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
 const urlValidator = require('valid-url');
+const path = require('path');
+const markdownUtils = require('lib/markdownUtils');
 
 function shimInit() {
 	shim.fsDriver = () => { throw new Error('Not implemented') }
@@ -168,8 +170,11 @@ function shimInit() {
 		return await Resource.save(resource, { isNew: true });
 	}
 
-	shim.attachFileToNote = async function(note, filePath, position = null) {
-		const resource = await shim.createResourceFromPath(filePath);
+	shim.attachFileToNote = async function(note, filePath, position = null, createFileURL) {
+		let resource = [];
+		if (createFileURL == false) {
+			resource = await shim.createResourceFromPath(filePath);
+		}
 
 		const newBody = [];
 
@@ -178,7 +183,24 @@ function shimInit() {
 		}
 
 		if (note.body && position) newBody.push(note.body.substr(0, position));
-		newBody.push(Resource.markdownTag(resource));
+
+		if (createFileURL == false) {
+			newBody.push(Resource.markdownTag(resource));
+		} else {
+			let filePathEncode = filePath.replace(/\+/g, '%2B'); // escape '+' with unicode
+			filePathEncode = filePathEncode.replace(/ /g, '+'); // escape ' ' with '+'. To comply with syntax used by joplin, see urldecode_(str) in MdToHtml.js
+			filePathEncode = filePathEncode.replace(/\'/g, '%27'); // escape '(single quote) with unicode, to prevent crashing the html view
+			const platform = process.platform;
+			if (platform == 'win32') {
+				filePathEncode = filePathEncode.replace(/\\/g, '/'); // replace backslash in windows pathname with slash e.g. c:\temp to c:/temp
+			} else {
+				filePathEncode = filePathEncode.replace(/\\/g, '%5C'); // replace backslash with unicode on linux and MacOS
+			}
+			let filename = markdownUtils.escapeLinkText(path.basename(filePath)); // to get same filename as standard drag and drop
+			let fileURL = "[" + filename + "](file://" + (filePathEncode) +")" // encodeURIComponent
+			newBody.push(fileURL);
+		}
+
 		if (note.body) newBody.push(note.body.substr(position));
 
 		const newNote = Object.assign({}, note, {
