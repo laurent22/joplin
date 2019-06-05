@@ -13,7 +13,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "To delete a tag, untag the associated notes."
@@ -591,18 +591,16 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Esportazione da \"%s\" come formato \"%s\". Si prega di attendere..."
 
 msgid "Sidebar"
-msgstr ""
+msgstr "Barra laterale"
 
 msgid "Note list"
-msgstr ""
+msgstr "Lista delle note"
 
-#, fuzzy
 msgid "Note title"
-msgstr "Titolo del Taccuino:"
+msgstr "Titolo della nota"
 
-#, fuzzy
 msgid "Note body"
-msgstr "Taccuini"
+msgstr "Corpo della nota"
 
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
@@ -639,18 +637,17 @@ msgstr "Opzioni Web Clipper"
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
-#, fuzzy
 msgid "&File"
-msgstr "File"
+msgstr "&File"
 
 msgid "About Joplin"
 msgstr "Informazione su Joplin"
 
 msgid "Preferences..."
-msgstr ""
+msgstr "Preferenze..."
 
 msgid "Check for updates..."
-msgstr "Controlla aggiornamenti ..."
+msgstr "Controlla aggiornamenti..."
 
 msgid "Import"
 msgstr "Importa"
@@ -669,11 +666,10 @@ msgid "Quit"
 msgstr "Esci"
 
 msgid "Close Window"
-msgstr ""
+msgstr "Chiudi finestra"
 
-#, fuzzy
 msgid "&Edit"
-msgstr "Modifica"
+msgstr "&Modifica"
 
 msgid "Copy"
 msgstr "Copia"
@@ -694,7 +690,7 @@ msgid "Italic"
 msgstr "Corsivo"
 
 msgid "Link"
-msgstr ""
+msgstr "Link"
 
 msgid "Insert Date Time"
 msgstr "Inserisci data e ora"
@@ -708,9 +704,8 @@ msgstr "Cerca in tutte le note"
 msgid "Search in current note"
 msgstr "Cerca nella nota corrente"
 
-#, fuzzy
 msgid "&View"
-msgstr "Vista"
+msgstr "&Vista"
 
 msgid "Toggle sidebar"
 msgstr "Attiva / disattiva barra laterale"
@@ -718,17 +713,14 @@ msgstr "Attiva / disattiva barra laterale"
 msgid "Toggle editor layout"
 msgstr "Attiva / disattiva il layout dell'editor"
 
-#, fuzzy
 msgid "Focus"
-msgstr "Focus sul testo"
+msgstr "Focus"
 
-#, fuzzy
 msgid "&Tools"
-msgstr "Strumenti"
+msgstr "&Strumenti"
 
-#, fuzzy
 msgid "&Help"
-msgstr "Aiuto"
+msgstr "&Aiuto"
 
 msgid "Website and documentation"
 msgstr "Sito web e documentazione"
@@ -761,11 +753,11 @@ msgstr "È disponibile un aggiornamento, vuoi scaricarlo ora?"
 
 #, javascript-format
 msgid "Your version: %s"
-msgstr ""
+msgstr "Tua versione: %s"
 
 #, javascript-format
 msgid "New version: %s"
-msgstr ""
+msgstr "Nuova versione: %s"
 
 msgid "Yes"
 msgstr "Sì"
@@ -774,7 +766,7 @@ msgid "No"
 msgstr "No"
 
 msgid "Token has been copied to the clipboard!"
-msgstr ""
+msgstr "Il token è stato copiato negli appunti!"
 
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
@@ -825,20 +817,21 @@ msgstr "Passaggio 2: installare l'estensione"
 msgid "Download and install the relevant extension for your browser:"
 msgstr "Scarica e installa l'estensione adatta per il tuo browser:"
 
-#, fuzzy
 msgid "Advanced options"
-msgstr "Mostra opzioni avanzate"
+msgstr "Opzioni avanzate"
 
 msgid "Authorisation token:"
-msgstr ""
+msgstr "Token autorizzativo:"
 
 msgid "Copy token"
-msgstr ""
+msgstr "Copia token"
 
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
+"Il token autorizzativo è necessario solo per permettere ad applicazioni di "
+"terze parti di accedere a Joplin."
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -848,7 +841,7 @@ msgid "Check synchronisation configuration"
 msgstr "Controlla la configurazione della sincronizzazione"
 
 msgid "Browse..."
-msgstr ""
+msgstr "Naviga..."
 
 msgid "Apply"
 msgstr "Applica"
@@ -945,9 +938,8 @@ msgstr "Stato"
 msgid "Encryption is:"
 msgstr "La crittografia è:"
 
-#, fuzzy
 msgid "Usage"
-msgstr "Uso: %s"
+msgstr "Uso"
 
 msgid "Back"
 msgstr "Indietro"
@@ -1009,40 +1001,40 @@ msgstr ""
 "\"."
 
 msgid "Location"
-msgstr ""
+msgstr "Posizione"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
-#, fuzzy
 msgid "Note History"
-msgstr "Taccuini"
+msgstr "Cronologia nota"
 
 msgid "Previous versions of this note"
-msgstr ""
+msgstr "Versione precedente di questa nota"
 
 msgid "Note properties"
-msgstr ""
+msgstr "Proprietà della nota"
 
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr ""
+msgstr "La nota \"%s\" è stata ripristinata con successo nel taccuino \"%s\"."
 
-#, fuzzy
 msgid "This note has no history"
-msgstr "Questa note è stata modificata:"
+msgstr "Questa nota non ha cronologia"
 
 msgid "Restore"
-msgstr ""
+msgstr "Ripristina"
 
 #, javascript-format
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
+"Clicca \"%s\" per ripristinare la nota. Verrà copiata nel taccuino denominato "
+"\"%s\". La versione corrente della nota non verrà sostituita o modificata."
 
 msgid "Open..."
-msgstr "Apri ..."
+msgstr "Apri..."
 
 #, javascript-format
 msgid "This file could not be opened: %s"
@@ -1073,7 +1065,7 @@ msgstr ""
 "modificare la nota."
 
 msgid "Only one note can be printed or exported to PDF at a time."
-msgstr ""
+msgstr "Solo una nota alla volta può essere stampata o esportata come PDF."
 
 msgid "strong text"
 msgstr "Testo grasseto"
@@ -1127,12 +1119,11 @@ msgstr "Fare clic per interrompere le modifiche esterne"
 msgid "Watching..."
 msgstr "Osservare..."
 
-#, fuzzy
 msgid "to-do"
-msgstr "Nuovo \"Cose-da-fare\""
+msgstr "\"Cose-da-fare\""
 
 msgid "note"
-msgstr "Nota"
+msgstr "nota"
 
 #, javascript-format
 msgid "Creating new %s..."
@@ -1162,18 +1153,19 @@ msgstr "Opzioni di crittografia"
 msgid "Clipper Options"
 msgstr "Opzioni Clipper"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
-"Eliminare taccuino? Anche tutte le note e cartelle di questo taccuino "
-"saranno cancellati."
+"Eliminare taccuino \"%s\"?\n"
+"\n"
+"Anche tutte le note e cartelle di questo taccuino saranno cancellati."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
-msgstr "Rimuovere questa etichetta da tutte le note?"
+msgstr "Rimuovere l’etichetta \"%s\" da tutte le note?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Rimuovere questa ricerca dalla barra laterale?"
@@ -1220,13 +1212,13 @@ msgstr "Converti in \"Cose-da-fare\""
 msgid "Copy Markdown link"
 msgstr "Copia il link Markdown"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete note \"%s\"?"
-msgstr "Eliminare il taccuino \"%s\"?"
+msgstr "Eliminare la nota \"%s\"?"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete these %d notes?"
-msgstr "Cancellare queste note?"
+msgstr "Cancellare queste %d note?"
 
 msgid ""
 "Type a note title to jump to it. Or type # followed by a tag name, or @ "
@@ -1359,10 +1351,10 @@ msgid "Encrypted items cannot be modified"
 msgstr "Gli elementi crittografati non possono essere modificati"
 
 msgid "title"
-msgstr "Titolo"
+msgstr "titolo"
 
 msgid "updated date"
-msgstr "Data di aggiornamento"
+msgstr "data di aggiornamento"
 
 msgid "Conflicts"
 msgstr "Conflitti"
@@ -1375,7 +1367,7 @@ msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "I blocchi non possono essere chiamati \"%s\". È un titolo riservato."
 
 msgid "created date"
-msgstr "Data di creazione"
+msgstr "data di creazione"
 
 msgid "This note does not have geolocation information."
 msgstr "Questa nota non ha informazione sulla geolocalizzazione."
@@ -1425,9 +1417,8 @@ msgstr "Ordina le note per"
 msgid "Reverse sort order"
 msgstr "Inverti l'ordine"
 
-#, fuzzy
 msgid "Sort notebooks by"
-msgstr "Ordina le note per"
+msgstr "Ordina i taccuini per"
 
 msgid "Save geo-location with notes"
 msgstr "Salva geolocalizzazione con le note"
@@ -1447,15 +1438,14 @@ msgstr "Quando si crea una nuova nota:"
 msgid "Enable soft breaks"
 msgstr ""
 
-#, fuzzy
 msgid "Enable math expressions"
-msgstr "Attiva Crittografia"
+msgstr "Attiva espressioni matematiche"
 
 msgid "Enable ==mark== syntax"
 msgstr ""
 
 msgid "Enable footnotes"
-msgstr ""
+msgstr "Attiva note a piè pagina"
 
 msgid "Enable table of contents extension"
 msgstr ""
@@ -1575,13 +1565,13 @@ msgid ""
 msgstr ""
 
 msgid "Always"
-msgstr ""
+msgstr "Sempre"
 
 msgid "Manual"
-msgstr ""
+msgstr "Manuale"
 
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Cartella da sincronizzare con (percorso assoluto)"
@@ -1622,16 +1612,15 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "Ignora gli errori del certificato TLS"
 
-#, fuzzy
 msgid "Enable note history"
-msgstr "Attiva Crittografia"
+msgstr "Attiva cronologia della nota"
 
 msgid "days"
-msgstr ""
+msgstr "giorni"
 
 #, javascript-format
 msgid "%d days"
-msgstr ""
+msgstr "%d giorni"
 
 msgid "Keep note history for"
 msgstr ""
@@ -1640,27 +1629,23 @@ msgstr ""
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Opzione non valida: \"%s\". I valori possibili sono: %s."
 
-#, fuzzy
 msgid "General"
-msgstr "Opzioni Generali"
+msgstr "Generale"
 
-#, fuzzy
 msgid "Synchronisation"
-msgstr "Stato di sincronizzazione"
+msgstr "Sincronizzazione"
 
 msgid "Appearance"
-msgstr ""
+msgstr "Apparenza"
 
-#, fuzzy
 msgid "Note"
-msgstr "Taccuini"
+msgstr "Nota"
 
 msgid "Plugins"
 msgstr ""
 
-#, fuzzy
 msgid "Application"
-msgstr "Esci dall'applicazione."
+msgstr "Applicazione"
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -1710,18 +1695,18 @@ msgid "Please specify the notebook where the notes should be imported to."
 msgstr "Si prega di specificare il Taccuino in cui importare le note."
 
 msgid "Restored Notes"
-msgstr ""
+msgstr "Ripristina note"
 
 msgid "Items that cannot be synchronised"
 msgstr "Elementi che non possono essere sincronizzati"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
-msgstr "Questo file non può essere aperto: %s"
+msgstr "%s (%s) non può essere caricato: %s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Questo file non può essere aperto: %s"
+msgstr "Elemento \"%s\" non può essere scaricato: %s"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
@@ -1769,7 +1754,7 @@ msgid "Permission to use camera"
 msgstr "Permesso di usare la fotocamera"
 
 msgid "Your permission to use your camera is required."
-msgstr ""
+msgstr "E’ richiesto il permesso di usare la fotocamera."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Al momento non ci sono note. Creane una cliccando sul bottone (+)."
@@ -1799,9 +1784,8 @@ msgstr "Spostare le note %d sul Taccuino \"%s\"?"
 msgid "Press to set the decryption password."
 msgstr "Premere per impostare la password di decrittografia."
 
-#, fuzzy
 msgid "Clear alarm"
-msgstr "Imposta Allarme"
+msgstr "Rimuovi Allarme"
 
 msgid "Save alarm"
 msgstr "Salva Allarme"
@@ -1815,22 +1799,20 @@ msgstr "Conferma"
 msgid "Cancel synchronisation"
 msgstr "Cancella la sincronizzazione"
 
-#, fuzzy
 msgid "Checking... Please wait."
-msgstr "Cancellazione... Attendere per favore."
+msgstr "Controllo... Attendere per favore."
 
-#, fuzzy
 msgid "Success! Synchronisation configuration appears to be correct."
-msgstr "Controlla la configurazione della sincronizzazione"
+msgstr ""
+"Successo! La configurazione della sincronizzazione sembra essere corretta."
 
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
 
-#, fuzzy
 msgid "The application has been authorised!"
-msgstr "L'applicazione è stata autorizzata con successo."
+msgstr "L'applicazione è stata autorizzata con successo!"
 
 #, javascript-format
 msgid ""
@@ -1841,9 +1823,9 @@ msgid ""
 "Please try again."
 msgstr ""
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypted items: %s / %s"
-msgstr "Decrittografia Elementi: %d/%d"
+msgstr "Elementi decriptati: %s / %s"
 
 msgid "New tags:"
 msgstr "Nuovi tag:"
