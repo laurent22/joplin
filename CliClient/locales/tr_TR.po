@@ -699,6 +699,9 @@ msgstr "Web sitesi ve dökümanlar"
 msgid "Make a donation"
 msgstr "Bağış yapın"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, javascript-format
 msgid "Open %s"
 msgstr "Aç %s"
@@ -958,8 +961,9 @@ msgstr "Bazı öğeler senkronize edilemiyor."
 msgid "View them now"
 msgstr "Şimdi onları görüntüle"
 
-msgid "Some items cannot be decrypted."
-msgstr "Bazı öğelerin şifresi çözülemez."
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "Ana şifreyi girin:"
 
 msgid "Set the password"
 msgstr "Şifreyi ayarla"
@@ -1964,6 +1968,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Hoşgeldiniz"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Bazı öğelerin şifresi çözülemez."
 
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s): %s"

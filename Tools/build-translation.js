@@ -1,5 +1,10 @@
 "use strict"
 
+// Dependencies:
+//
+// sudo apt install gettext
+// sudo apt install translate-toolkit
+
 require('app-module-path').addPath(__dirname + '/../ReactNativeClient');
 
 const rootDir = __dirname + '/..';

@@ -713,6 +713,9 @@ msgstr "Nettsted og dokumentasjon"
 msgid "Make a donation"
 msgstr "Gi et bidrag"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, javascript-format
 msgid "Open %s"
 msgstr "Åpne %s"
@@ -970,8 +973,9 @@ msgstr "Noen elementer kan ikke synkroniseres."
 msgid "View them now"
 msgstr "Vis nå"
 
-msgid "Some items cannot be decrypted."
-msgstr "Noen elementer kan ikke dekrypteres."
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "Skriv inn masterpassordet:"
 
 msgid "Set the password"
 msgstr "Sett passord"
@@ -1971,6 +1975,9 @@ msgstr "Du har enda ingen notatbok. Opprett en ved å klikke på (+)-knappen."
 
 msgid "Welcome"
 msgstr "Velkommen"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Noen elementer kan ikke dekrypteres."
 
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s): %s"

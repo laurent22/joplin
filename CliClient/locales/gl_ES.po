@@ -725,6 +725,9 @@ msgstr "Sitio web e documentación"
 msgid "Make a donation"
 msgstr "Doar"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, javascript-format
 msgid "Open %s"
 msgstr "Abrir %s"
@@ -973,8 +976,9 @@ msgstr "Non é posíbel sincronizar algúns elementos."
 msgid "View them now"
 msgstr "Visualizar agora"
 
-msgid "Some items cannot be decrypted."
-msgstr "Non é posíbel descifrar algúns elementos."
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "Introducir contrasinal mestre:"
 
 msgid "Set the password"
 msgstr "Estabelecer un contrasinal"
@@ -1974,6 +1978,9 @@ msgstr "Non ten cadernos actualmente. Cree un premendo no botón (+)."
 
 msgid "Welcome"
 msgstr "Benvido/a"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Non é posíbel descifrar algúns elementos."
 
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s): %s"

@@ -731,6 +731,9 @@ msgstr "Strona internetowa i dokumentacja"
 msgid "Make a donation"
 msgstr "Przekaż datek"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, javascript-format
 msgid "Open %s"
 msgstr "Otwórz %s"
@@ -988,8 +991,9 @@ msgstr "Niektóre przedmioty nie mogą być zsynchornizowane."
 msgid "View them now"
 msgstr "Wyświetl je teraz"
 
-msgid "Some items cannot be decrypted."
-msgstr "Niektóre obiekty nie mogą być odszyfrowane."
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "Wprowadź hasło główne:"
 
 msgid "Set the password"
 msgstr "Ustaw hasło"
@@ -2002,3 +2006,6 @@ msgstr "Brak notatników. Utwórz nowy naciskając przycisk (+)."
 
 msgid "Welcome"
 msgstr "Witaj"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Niektóre obiekty nie mogą być odszyfrowane."

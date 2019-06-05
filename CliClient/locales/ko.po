@@ -715,6 +715,9 @@ msgstr "웹사이트 및 각종 문서"
 msgid "Make a donation"
 msgstr "기부하기"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, javascript-format
 msgid "Open %s"
 msgstr "%s 열기"
@@ -967,8 +970,9 @@ msgstr "일부 항목들은 동기화할 수 없습니다."
 msgid "View them now"
 msgstr "지금 보여주기"
 
-msgid "Some items cannot be decrypted."
-msgstr "일부 항목들은 암호화할 수 없습니다."
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "관리자 비밀번호를 입력하세요:"
 
 msgid "Set the password"
 msgstr "암호 설정"
@@ -1966,6 +1970,9 @@ msgstr "노트북이 없습니다. (+) 버튼을 눌러 새로 만드세요."
 
 msgid "Welcome"
 msgstr "환영합니다"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "일부 항목들은 암호화할 수 없습니다."
 
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s): %s"

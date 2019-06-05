@@ -718,6 +718,9 @@ msgstr "Webサイトとドキュメント"
 msgid "Make a donation"
 msgstr "寄付する"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, javascript-format
 msgid "Open %s"
 msgstr "%s を開く"
@@ -973,8 +976,9 @@ msgstr "いくつかの項目は同期されませんでした。"
 msgid "View them now"
 msgstr "今すぐ表示"
 
-msgid "Some items cannot be decrypted."
-msgstr "いくつかの項目は復号されませんでした。"
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "マスターパスワードを入力してください:"
 
 msgid "Set the password"
 msgstr "パスワードの設定"
@@ -1977,6 +1981,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "いくつかの項目は復号されませんでした。"
 
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s): %s"

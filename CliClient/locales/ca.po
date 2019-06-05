@@ -738,6 +738,9 @@ msgstr "Lloc web i documentació"
 msgid "Make a donation"
 msgstr "Donatius"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, javascript-format
 msgid "Open %s"
 msgstr "Obre %s"
@@ -995,8 +998,9 @@ msgstr "Alguns elements no s'han pogut sincronitzar."
 msgid "View them now"
 msgstr "Mostra'ls ara"
 
-msgid "Some items cannot be decrypted."
-msgstr "Alguns elements no s'han pogut desxifrar."
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "Introduïu una contrasenya mestra:"
 
 msgid "Set the password"
 msgstr "Establiu la contrasenya"
@@ -1999,6 +2003,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvingut"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Alguns elements no s'han pogut desxifrar."
 
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s): %s"

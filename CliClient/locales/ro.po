@@ -668,6 +668,9 @@ msgstr "Website și documentație"
 msgid "Make a donation"
 msgstr "Faceți o donație"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, javascript-format
 msgid "Open %s"
 msgstr "Deschideți %s"
@@ -902,8 +905,8 @@ msgstr "Câțiva itemi nu pot fi sincronizați."
 msgid "View them now"
 msgstr "Vizualizați-le acum"
 
-msgid "Some items cannot be decrypted."
-msgstr "Câțiva itemi nu pot fi descriptați."
+msgid "One or more master keys need a password."
+msgstr ""
 
 msgid "Set the password"
 msgstr "Setați parola"
@@ -1866,6 +1869,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bine ați venit"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Câțiva itemi nu pot fi descriptați."
 
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s): %s"

@@ -719,6 +719,9 @@ msgstr "Web a dokumentace"
 msgid "Make a donation"
 msgstr "Přispět"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, javascript-format
 msgid "Open %s"
 msgstr "Otevřít %s"
@@ -972,8 +975,9 @@ msgstr "Některé položky nelze synchronizovat."
 msgid "View them now"
 msgstr "Zobrazit"
 
-msgid "Some items cannot be decrypted."
-msgstr "Některé položky nelze rozšifrovat."
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "Zadejte master heslo:"
 
 msgid "Set the password"
 msgstr "Nastavit heslo"
@@ -1972,6 +1976,9 @@ msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na tlačítko (+
 
 msgid "Welcome"
 msgstr "Vítejte"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Některé položky nelze rozšifrovat."
 
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s): %s"

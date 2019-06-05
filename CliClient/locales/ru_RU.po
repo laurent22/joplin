@@ -726,6 +726,9 @@ msgstr "Сайт и документация"
 msgid "Make a donation"
 msgstr "Сделать пожертвование"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, javascript-format
 msgid "Open %s"
 msgstr "Открыть %s"
@@ -983,8 +986,9 @@ msgstr "Некоторые элементы не могут быть синхр�
 msgid "View them now"
 msgstr "Просмотреть их сейчас"
 
-msgid "Some items cannot be decrypted."
-msgstr "Некоторые элементы не могут быть расшифрованы."
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "Введите мастер-пароль:"
 
 msgid "Set the password"
 msgstr "Установить пароль"
@@ -1990,6 +1994,9 @@ msgstr "У вас сейчас нет блокнота. Создайте его 
 
 msgid "Welcome"
 msgstr "Добро пожаловать"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Некоторые элементы не могут быть расшифрованы."
 
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s): %s"

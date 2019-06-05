@@ -653,6 +653,9 @@ msgstr ""
 msgid "Make a donation"
 msgstr ""
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, javascript-format
 msgid "Open %s"
 msgstr "باز کردن %s"
@@ -886,8 +889,9 @@ msgstr ""
 msgid "View them now"
 msgstr ""
 
-msgid "Some items cannot be decrypted."
-msgstr ""
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "رمز اصلی را وارد کنید:"
 
 msgid "Set the password"
 msgstr ""
@@ -897,7 +901,9 @@ msgstr ""
 
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr "در حال حاظر هیچ یادداشتی وجود ندارد. با کلیک بر روی «یادداشت جدید» یک یادداشت جدید ایجاد کنید."
+msgstr ""
+"در حال حاظر هیچ یادداشتی وجود ندارد. با کلیک بر روی «یادداشت جدید» یک "
+"یادداشت جدید ایجاد کنید."
 
 msgid "Location"
 msgstr "مکان"
@@ -1081,9 +1087,9 @@ msgstr "دفترچه ها"
 msgid "Decrypting items: %d/%d"
 msgstr ""
 
-#, javascript-format
-msgid "Fetching resources: %d"
-msgstr ""
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "آیتم های دریافت شده: %d از %d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1840,7 +1846,9 @@ msgid ""
 msgstr ""
 
 msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr "شما هیچ دفترچه ای ندارید. با کلیک کردن بر روی (+) یک دفترچه ی جدید ایجاد کنید."
+msgstr ""
+"شما هیچ دفترچه ای ندارید. با کلیک کردن بر روی (+) یک دفترچه ی جدید ایجاد "
+"کنید."
 
 msgid "Welcome"
 msgstr "خوش آمدید"

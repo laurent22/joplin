@@ -731,6 +731,9 @@ msgstr "Spletna stran in dokumentacija"
 msgid "Make a donation"
 msgstr "Doniraj"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, javascript-format
 msgid "Open %s"
 msgstr "Odpri %s"
@@ -983,8 +986,9 @@ msgstr "Nekateri premeti ne morejo biti sinhronizirani."
 msgid "View them now"
 msgstr "Prikaži jih sedaj"
 
-msgid "Some items cannot be decrypted."
-msgstr "Nekateri predmeti ne morejo biti dekriptirani."
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "Vnesite glavno geslo:"
 
 msgid "Set the password"
 msgstr "Nastavi geslo"
@@ -1989,6 +1993,9 @@ msgstr "Trenutno nimate nobene beležnice. Ustvarite jo s klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobrodošli"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Nekateri predmeti ne morejo biti dekriptirani."
 
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s): %s"

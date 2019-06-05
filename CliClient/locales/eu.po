@@ -732,6 +732,9 @@ msgstr "Web orria eta dokumentazioa (en)"
 msgid "Make a donation"
 msgstr "Web orria eta dokumentazioa (en)"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, fuzzy, javascript-format
 msgid "Open %s"
 msgstr "On %s: %s"
@@ -984,8 +987,9 @@ msgstr "Zenbait item ezin dira sinkronizatu."
 msgid "View them now"
 msgstr "Ikusi hori orain"
 
-msgid "Some items cannot be decrypted."
-msgstr "Zenbait item ezin dira deszifratu."
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "Sartu pasahitz nagusia:"
 
 msgid "Set the password"
 msgstr "Ezarri pasahitza"
@@ -1995,6 +1999,9 @@ msgstr "Oraindik ez duzu koadernorik. Sortu bat (+) botoian sakatuta."
 
 msgid "Welcome"
 msgstr "Ongi etorri!"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Zenbait item ezin dira deszifratu."
 
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s): %s"

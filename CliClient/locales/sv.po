@@ -732,6 +732,9 @@ msgstr "Webbplats och dokumentation"
 msgid "Make a donation"
 msgstr "Gör en donation"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, javascript-format
 msgid "Open %s"
 msgstr "Öppna %s"
@@ -989,8 +992,9 @@ msgstr "Några objekt kan inte synkroniseras."
 msgid "View them now"
 msgstr "Visa dem nu"
 
-msgid "Some items cannot be decrypted."
-msgstr "Några objekt kan inte dekrypteras."
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "Ange huvudlösenord:"
 
 msgid "Set the password"
 msgstr "Ställ in lösenord"
@@ -2005,6 +2009,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Välkommen"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Några objekt kan inte dekrypteras."
 
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s): %s"

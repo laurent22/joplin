@@ -652,6 +652,9 @@ msgstr ""
 msgid "Make a donation"
 msgstr ""
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, javascript-format
 msgid "Open %s"
 msgstr ""
@@ -896,7 +899,7 @@ msgstr "Some items cannot be synchronized."
 msgid "View them now"
 msgstr ""
 
-msgid "Some items cannot be decrypted."
+msgid "One or more master keys need a password."
 msgstr ""
 
 msgid "Set the password"

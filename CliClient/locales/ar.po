@@ -706,6 +706,9 @@ msgstr "موقع الويب و التوثيق"
 msgid "Make a donation"
 msgstr "تبرَّع"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, javascript-format
 msgid "Open %s"
 msgstr "افتح %s"
@@ -957,8 +960,9 @@ msgstr "لا يمكن مزامنة بعض العناصر."
 msgid "View them now"
 msgstr "عرضها الآن"
 
-msgid "Some items cannot be decrypted."
-msgstr "لا يمكن فك تشفير بعض العناصر."
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "أدخل كلمة المرور الرئيسة:"
 
 msgid "Set the password"
 msgstr "ضبط كلمة المرور"
@@ -1949,6 +1953,9 @@ msgstr "ليس لديك دفاتر ملاحظات حالياً. أنشئ واح�
 
 msgid "Welcome"
 msgstr "مرحباً"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "لا يمكن فك تشفير بعض العناصر."
 
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s): %s"

@@ -730,6 +730,9 @@ msgstr "Website i dokumentacija"
 msgid "Make a donation"
 msgstr "Website i dokumentacija"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, fuzzy, javascript-format
 msgid "Open %s"
 msgstr "On %s: %s"
@@ -970,9 +973,8 @@ msgstr "Neke stavke se ne mogu sinkronizirati."
 msgid "View them now"
 msgstr "Pogledaj ih sada"
 
-#, fuzzy
-msgid "Some items cannot be decrypted."
-msgstr "Neke stavke se ne mogu sinkronizirati."
+msgid "One or more master keys need a password."
+msgstr ""
 
 msgid "Set the password"
 msgstr ""
@@ -1970,6 +1972,10 @@ msgstr "Trenutno nemaš nijednu bilježnicu. Stvori novu klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobro došli"
+
+#, fuzzy
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Neke stavke se ne mogu sinkronizirati."
 
 #, fuzzy
 #~ msgid "%s (%s): %s"

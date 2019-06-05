@@ -728,6 +728,9 @@ msgstr "Sito web e documentazione"
 msgid "Make a donation"
 msgstr "Fai una donazione"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, javascript-format
 msgid "Open %s"
 msgstr "Aprire %s"
@@ -985,8 +988,9 @@ msgstr "Alcuni elementi non possono essere sincronizzati."
 msgid "View them now"
 msgstr "Mostrali ora"
 
-msgid "Some items cannot be decrypted."
-msgstr "Alcuni elementi non possono essere decodificati."
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "Inserisci password principale:"
 
 msgid "Set the password"
 msgstr "Imposta la password"
@@ -1030,8 +1034,9 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
-"Clicca \"%s\" per ripristinare la nota. Verrà copiata nel taccuino denominato "
-"\"%s\". La versione corrente della nota non verrà sostituita o modificata."
+"Clicca \"%s\" per ripristinare la nota. Verrà copiata nel taccuino "
+"denominato \"%s\". La versione corrente della nota non verrà sostituita o "
+"modificata."
 
 msgid "Open..."
 msgstr "Apri..."
@@ -1981,6 +1986,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvenuto"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Alcuni elementi non possono essere decodificati."
 
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s): %s"

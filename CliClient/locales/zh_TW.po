@@ -697,6 +697,9 @@ msgstr "官方網站及線上說明"
 msgid "Make a donation"
 msgstr "捐助"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, javascript-format
 msgid "Open %s"
 msgstr "開啟 %s"
@@ -942,8 +945,9 @@ msgstr "有些項目不能同步。"
 msgid "View them now"
 msgstr "立即檢視"
 
-msgid "Some items cannot be decrypted."
-msgstr "有些項目不能解密。"
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "輸入主密碼:"
 
 msgid "Set the password"
 msgstr "設置密碼"
@@ -1923,6 +1927,9 @@ msgstr "您當前沒有任何筆記本。通過按一下 (+) 鍵去建立一本�
 
 msgid "Welcome"
 msgstr "歡迎"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "有些項目不能解密。"
 
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s): %s"

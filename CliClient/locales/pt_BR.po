@@ -720,6 +720,9 @@ msgstr "Website e documentação"
 msgid "Make a donation"
 msgstr "Fazer uma doação"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, javascript-format
 msgid "Open %s"
 msgstr "Abrir %s"
@@ -976,8 +979,9 @@ msgstr "Alguns itens não podem ser sincronizados."
 msgid "View them now"
 msgstr "Visualizar agora"
 
-msgid "Some items cannot be decrypted."
-msgstr "Alguns itens não podem ser decriptados."
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "Entre a senha master:"
 
 msgid "Set the password"
 msgstr "Configurar a senha"
@@ -1984,6 +1988,9 @@ msgstr "Você não possui cadernos. Crie um clicando no botão (+)."
 
 msgid "Welcome"
 msgstr "Bem-vindo"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Alguns itens não podem ser decriptados."
 
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s): %s"

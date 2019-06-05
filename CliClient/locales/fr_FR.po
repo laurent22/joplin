@@ -722,6 +722,9 @@ msgstr "Documentation en ligne"
 msgid "Make a donation"
 msgstr "Faire un don"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, javascript-format
 msgid "Open %s"
 msgstr "Ouvrir %s"
@@ -983,8 +986,9 @@ msgstr "Certains objets ne peuvent être synchronisés."
 msgid "View them now"
 msgstr "Les voir maintenant"
 
-msgid "Some items cannot be decrypted."
-msgstr "Certains objets ne peuvent être déchiffrés."
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "Entrer le mot de passe maître :"
 
 msgid "Set the password"
 msgstr "Définir le mot de passe"
@@ -2000,6 +2004,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Certains objets ne peuvent être déchiffrés."
 
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s) : %s"

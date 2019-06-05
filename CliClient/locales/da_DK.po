@@ -725,6 +725,9 @@ msgstr "Joplins hjemmeside og dokumentation"
 msgid "Make a donation"
 msgstr "Giv en donation"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, javascript-format
 msgid "Open %s"
 msgstr "Åben %s"
@@ -976,8 +979,9 @@ msgstr "Nogle emner kan ikke synkroniseres."
 msgid "View them now"
 msgstr "Vis dem nu"
 
-msgid "Some items cannot be decrypted."
-msgstr "Nogle emner kan ikke krypteres."
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "Indtast Hoved kodeord:"
 
 msgid "Set the password"
 msgstr "Indstil kodeord"
@@ -1974,6 +1978,9 @@ msgstr "Du har ingen notesbøger. Opret en ved at klikke på (+) knappen."
 
 msgid "Welcome"
 msgstr "Velkommen"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Nogle emner kan ikke krypteres."
 
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s): %s"

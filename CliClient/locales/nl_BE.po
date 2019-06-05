@@ -734,6 +734,9 @@ msgstr "Website en documentatie"
 msgid "Make a donation"
 msgstr "Website en documentatie"
 
+msgid "Toggle development tools"
+msgstr ""
+
 #, fuzzy, javascript-format
 msgid "Open %s"
 msgstr "Op %s: %s"
@@ -986,8 +989,9 @@ msgstr "Sommige items kunnen niet gesynchroniseerd worden."
 msgid "View them now"
 msgstr "Bekijk ze nu"
 
-msgid "Some items cannot be decrypted."
-msgstr "Sommige items kunnen niet gedecodeerd worden."
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "Voeg hoofdsleutel in:"
 
 msgid "Set the password"
 msgstr "Stel wachtwoord in"
@@ -2000,6 +2004,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Welkom"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Sommige items kunnen niet gedecodeerd worden."
 
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s): %s"
