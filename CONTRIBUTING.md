@@ -1,16 +1,16 @@
 # User support
 
-The [Joplin Forum](https://discourse.joplinapp.org/) is the community driven place for user support, general discussion about Joplin, problems with installation, new features and software development questions. It is possible to login with your GitHub account.
+The [Joplin Forum](https://discourse.joplinapp.org/) is the community driven place for user support, general discussion about Joplin, problems with installation, new features and software development questions. It is possible to login with your GitHub account. Don't use the issue tracker for support questions.
 
 # Reporting a bug
 
 File bugs in the [Github Issue Tracker](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is%3Aissue). Please follow these guidelines:
 
 - Search existing issues first, make sure yours hasn't already been reported.
-- Don't use the issue tracker for support questions.
-- Consider [enabling debug mode](https://github.com/laurent22/joplin/blob/master/readme/debugging.md) so that you can provide as much details as possible when reporting the issue.
+- Consider [enabling debug mode](https://joplinapp.org/debugging/) so that you can provide as much details as possible when reporting the issue.
 - Stay on topic, but describe the issue in detail so that others can reproduce it.
 - **Provide a screenshot** if possible. A screenshot showing the problem is often more useful than a paragraph describing it.
+- For web clipper bugs, **please provide the URL causing the issue**. Sometimes the clipper works in one page but not in another so it is important to know what URL has a problem.
 
 # Feature requests
 
@@ -24,7 +24,7 @@ Avoid listing multiple requests in one report in the [Github Issue Tracker](http
 
 ## Contributing to Joplin's translation
 
-Joplin is available in multiple languages thanks to the help of its users. You can help translate Joplin to your language or keep it up to date. Please read the documentation about [Localisation](https://github.com/laurent22/joplin#localisation).
+Joplin is available in multiple languages thanks to the help of its users. You can help translate Joplin to your language or keep it up to date. Please read the documentation about [Localisation](https://joplinapp.org/#localisation).
 
 ## Contributing to Joplin's code
 
