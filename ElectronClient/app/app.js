@@ -50,6 +50,7 @@ const appDefaultState = Object.assign({}, defaultState, {
 	windowContentSize: bridge().windowContentSize(),
 	watchedNoteFiles: [],
 	lastEditorScrollPercents: {},
+	noteDevToolsVisible: false,
 });
 
 class Application extends BaseApplication {
@@ -185,6 +186,12 @@ class Application extends BaseApplication {
 					const newPercents = Object.assign({}, newState.lastEditorScrollPercents);
 					newPercents[action.noteId] = action.percent;
 					newState.lastEditorScrollPercents = newPercents;
+					break;
+
+				case 'NOTE_DEVTOOLS_TOGGLE':
+
+					newState = Object.assign({}, state);
+					newState.noteDevToolsVisible = !newState.noteDevToolsVisible;
 					break;
 
 			}
@@ -787,6 +794,17 @@ class Application extends BaseApplication {
 					label: _('Check for updates...'),
 					visible: shim.isMac() ? false : true,
 					click: () => _checkForUpdates(this)
+				}, {
+					type: 'separator',
+					screens: ['Main'],
+				}, {
+					label: _('Toggle development tools'),
+					visible: true,
+					click: () => {
+						this.dispatch({
+							type: 'NOTE_DEVTOOLS_TOGGLE',
+						});
+					},
 				}, {
 					type: 'separator',
 					visible: shim.isMac() ? false : true,

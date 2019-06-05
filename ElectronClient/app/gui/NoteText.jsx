@@ -382,6 +382,22 @@ class NoteTextComponent extends React.Component {
 		ExternalEditWatcher.instance().off('noteChange', this.externalEditWatcher_noteChange);
 	}
 
+	componentDidUpdate(prevProps) {
+		if (this.webviewRef() && this.props.noteDevToolsVisible !== this.webviewRef().isDevToolsOpened()) {
+			if (this.props.noteDevToolsVisible) {
+				this.webviewRef().openDevTools();
+			} else {
+				this.webviewRef().closeDevTools();
+			}
+		}
+	}
+
+	webviewRef() {
+		if (!this.webviewRef_.current || !this.webviewRef_.current.wrappedInstance) return null;
+		if (!this.webviewRef_.current.wrappedInstance.domReady()) return null;
+		return this.webviewRef_.current.wrappedInstance;
+	}
+
 	async saveIfNeeded(saveIfNewNote = false) {
 		const forceSave = saveIfNewNote && (this.state.note && !this.state.note.id);
 
