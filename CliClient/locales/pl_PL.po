@@ -231,7 +231,7 @@ msgid ""
 "all` for the complete usage information."
 msgstr ""
 "Wpisz `help [komenda]` aby uzyskać więcej informacji o komendzie; lub wpisz "
-"`help all` aby wszystkie  informacje na temat funkcji programu."
+"`help all` aby uzyskać wszystkie  informacje na temat funkcji programu."
 
 msgid "The possible commands are:"
 msgstr "Dostępne komendy:"
@@ -324,7 +324,7 @@ msgstr "Wyświetla jedynie pierwsze <num> notatek."
 
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
-"Sortuje obiekty po <field> (np. tytuł, data aktualizacji, data utworzenia)."
+"Sortuje obiekty po <field> (np. tytuł, data_aktualizacji, data_utworzenia)."
 
 msgid "Reverses the sorting order."
 msgstr "Odwraca kierunek sortowania."
@@ -434,7 +434,7 @@ msgstr ""
 "poniżej:"
 
 msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr "Krok 1: Otwórz URL w swojej przeglądarce aby autoryzować aplikację:"
+msgstr "Krok 1: Otwórz odnośnik w swojej przeglądarce aby autoryzować aplikację:"
 
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Krok 2: Wpisz kod podany przez Dropbox:"
@@ -1541,7 +1541,7 @@ msgstr "Interwał synchronizacji"
 
 #, javascript-format
 msgid "%d minutes"
-msgstr "%d minuta"
+msgstr "%d minut"
 
 #, javascript-format
 msgid "%d hour"
@@ -1576,22 +1576,26 @@ msgstr ""
 "parametry, które są nazwane jako `sync.NUM.NAME` (udokumentowane poniżej)."
 
 msgid "Attachment download behaviour"
-msgstr ""
+msgstr "Zachowanie przy pobieraniu załączników"
 
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
+"W trybie \"Ręczny\", załączniki zostaną pobrane po naciśnięciu."
+"W trybie \"Automatyczny\", załączniki zostaną pobrane przy otwieraniu notatki. "
+"W trybie \"Zawsze\", wszystkie załączniki zostaną pobrane bez względu na"
+"otwarcie notatki."
 
 msgid "Always"
-msgstr ""
+msgstr "Zawsze"
 
 msgid "Manual"
-msgstr ""
+msgstr "Ręczny"
 
 msgid "Auto"
-msgstr ""
+msgstr "Automatyczny"
 
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Katalog z którym nastąpi synchronizacja (ścieżka absolutna)"
@@ -1945,8 +1949,7 @@ msgstr "Brak przedmiotu z ID %s"
 
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr ""
-"Aplikacja mobilna Joplin nie wspiera aktualnie odnośników tego typu: %s"
+msgstr "Aplikacja mobilna Joplin nie wspiera aktualnie odnośników tego typu: %s"
 
 #, javascript-format
 msgid "Unsupported image type: %s"

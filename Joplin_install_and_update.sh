@@ -56,7 +56,8 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$version" ]]; t
     
     # Download icon
     echo 'Downloading icon...'
-    wget -nv -O ~/.joplin/Icon512.png https://joplinapp.org/images/Icon512.png
+    mkdir -p ~/.local/share/icons/hicolor/512x512/apps
+    wget -nv -O ~/.local/share/icons/hicolor/512x512/apps/joplin.png https://joplinapp.org/images/Icon512.png
     echo "${COLOR_GREEN}OK${COLOR_RESET}"
     
     # Detect desktop environment  
@@ -83,7 +84,7 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$version" ]]; t
 
        # On some systems this directory doesn't exist by default
        mkdir -p ~/.local/share/applications
-       echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=/home/$USER/.joplin/Joplin.AppImage\nIcon=/home/$USER/.joplin/Icon512.png\nStartupWMClass=Joplin\nType=Application\nCategories=Application;\n$APPIMAGE_VERSION" >> ~/.local/share/applications/appimagekit-joplin.desktop
+       echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=/home/$USER/.joplin/Joplin.AppImage\nIcon=joplin\nStartupWMClass=Joplin\nType=Application\nCategories=Application;\n$APPIMAGE_VERSION" >> ~/.local/share/applications/appimagekit-joplin.desktop 
        echo "${COLOR_GREEN}OK${COLOR_RESET}"
     else
        echo "${COLOR_RED}NOT DONE${COLOR_RESET}"
