@@ -337,6 +337,7 @@ Please see the [donation page](https://joplinapp.org/donate/) for information on
 - Also see here for information about [the latest releases and general news](https://discourse.joplinapp.org/c/news).
 - For bug reports and feature requests, go to the [GitHub Issue Tracker](https://github.com/laurent22/joplin/issues).
 - The latest news are posted [on the Patreon page](https://www.patreon.com/joplin).
+- You can also follow us on [the Twitter feed](https://twitter.com/joplinapp).
 
 # Contributing
 
