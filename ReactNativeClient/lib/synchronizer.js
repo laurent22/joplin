@@ -14,6 +14,7 @@ const { _ } = require('lib/locale.js');
 const { shim } = require('lib/shim.js');
 const JoplinError = require('lib/JoplinError');
 const BaseSyncTarget = require('lib/BaseSyncTarget');
+const TaskQueue = require('lib/TaskQueue');
 
 class Synchronizer {
 
@@ -466,6 +467,8 @@ class Synchronizer {
 			// have been created or updated, and apply the changes to local.
 			// ------------------------------------------------------------------------
 
+			const downloadQueue = new TaskQueue();
+
 			if (syncSteps.indexOf("delta") >= 0) {
 				// At this point all the local items that have changed have been pushed to remote
 				// or handled as conflicts, so no conflict is possible after this.
@@ -496,6 +499,12 @@ class Synchronizer {
 
 					this.logSyncOperation("fetchingTotal", null, null, "Fetching delta items from sync target", remotes.length);
 
+					for (const remote of remotes) {
+						downloadQueue.push(remote.path, async () => {
+							return this.api().get(remote.path);
+						});
+					}
+
 					for (let i = 0; i < remotes.length; i++) {
 						if (this.cancelling() || this.testingHooks_.indexOf("cancelDeltaLoop2") >= 0) {
 							hasCancelled = true;
@@ -508,9 +517,10 @@ class Synchronizer {
 						if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
 
 						const loadContent = async () => {
-							let content = await this.api().get(path);
-							if (!content) return null;
-							return await BaseItem.unserialize(content);
+							let task = await downloadQueue.waitForResult(path); //await this.api().get(path);
+							if (task.error) throw task.error;
+							if (!task.result) return null;
+							return await BaseItem.unserialize(task.result);
 						};
 
 						let path = remote.path;

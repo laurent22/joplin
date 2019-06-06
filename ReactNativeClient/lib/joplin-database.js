@@ -186,6 +186,8 @@ class JoplinDatabase extends Database {
 			queries.push('DELETE FROM sqlite_sequence WHERE name="' + n + '"'); // Reset autoincremented IDs
 		}
 
+		queries.push('DELETE FROM settings WHERE key="sync.2.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.5.context"');
 		queries.push('DELETE FROM settings WHERE key="sync.7.context"');
 
 		await this.transactionExecBatch(queries);
