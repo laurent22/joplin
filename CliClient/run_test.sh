@@ -42,5 +42,6 @@ npm test tests-build/services_rest_Api.js
 npm test tests-build/services_SearchEngine.js
 npm test tests-build/services_Revision.js
 npm test tests-build/StringUtils.js
+npm test tests-build/TaskQueue.js
 npm test tests-build/synchronizer.js
 npm test tests-build/urlUtils.js
