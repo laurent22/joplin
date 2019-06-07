@@ -971,9 +971,6 @@ msgstr "Titel van notitieboek:"
 msgid "Add or remove tags:"
 msgstr "Labels toevoegen of verwijderen:"
 
-msgid "Separate each tag by a comma."
-msgstr "Scheidt elk label met een komma."
-
 msgid "Rename notebook:"
 msgstr "Notitieboeknaam wijzigen:"
 
@@ -1202,6 +1199,9 @@ msgstr "Bronnen: %d/%d"
 msgid "Please select where the sync status should be exported to"
 msgstr "Kies waar de synchronisatiestatus naar moet worden geëxporteerd"
 
+msgid "Retry"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Labels toevoegen of verwijderen"
 
@@ -1401,6 +1401,59 @@ msgid ""
 "more details: %s"
 msgstr ""
 
+msgid "Synchronisation target"
+msgstr "Synchronisatiedoel"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"Het doel waarnaar gesynchroniseerd moet worden. Elk doel mag extra "
+"argumenten bevatten, welke `sync.NUM.NAME` worden genoemd (wordt hieronder "
+"uitgelegd)."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Map waarnaar gesynchroniseerd moet worden (absoluut pad)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV-URL"
+
+msgid "Nextcloud username"
+msgstr "Nextcloud-gebruikersnaam"
+
+msgid "Nextcloud password"
+msgstr "Nextcloud-wachtwoord"
+
+msgid "WebDAV URL"
+msgstr "WebDAV-URL"
+
+msgid "WebDAV username"
+msgstr "WebDAV-gebruikersnaam"
+
+msgid "WebDAV password"
+msgstr "WebDAV-wachtwoord"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr "Taal"
 
@@ -1559,56 +1612,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "Geavanceerde opties tonen"
 
-msgid "Synchronisation target"
-msgstr "Synchronisatiedoel"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"Het doel waarnaar gesynchroniseerd moet worden. Elk doel mag extra "
-"argumenten bevatten, welke `sync.NUM.NAME` worden genoemd (wordt hieronder "
-"uitgelegd)."
-
-msgid "Attachment download behaviour"
-msgstr ""
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-
-msgid "Always"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
-
-msgid "Auto"
-msgstr ""
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "Map waarnaar gesynchroniseerd moet worden (absoluut pad)"
-
-msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV-URL"
-
-msgid "Nextcloud username"
-msgstr "Nextcloud-gebruikersnaam"
-
-msgid "Nextcloud password"
-msgstr "Nextcloud-wachtwoord"
-
-msgid "WebDAV URL"
-msgstr "WebDAV-URL"
-
-msgid "WebDAV username"
-msgstr "WebDAV-gebruikersnaam"
-
-msgid "WebDAV password"
-msgstr "WebDAV-wachtwoord"
-
 msgid "Custom TLS certificates"
 msgstr "Aangepaste TLS-certificaten"
 
@@ -1722,14 +1725,6 @@ msgstr ""
 msgid "Items that cannot be synchronised"
 msgstr "Items die niet kunnen worden gesynchroniseerd"
 
-#, fuzzy, javascript-format
-msgid "%s (%s) could not be uploaded: %s"
-msgstr "Dit bestand kan niet worden geopend: %s"
-
-#, fuzzy, javascript-format
-msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Dit bestand kan niet worden geopend: %s"
-
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -1738,6 +1733,24 @@ msgstr ""
 "Deze items blijven op het apparaat, maar worden niet geüpload naar het "
 "synchronisatiedoel. Als je deze items wilt vinden, moet je zoeken naar de "
 "titel of ID ervan (welke hierboven tussen haakjes wordt getoond)."
+
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "Dit bestand kan niet worden geopend: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Dit bestand kan niet worden geopend: %s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "Items die niet kunnen worden gesynchroniseerd"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr ""
@@ -1860,6 +1873,10 @@ msgstr "Nieuwe labels:"
 
 msgid "Type new tags or select from list"
 msgstr "Typ nieuwe labels of kies ze uit de lijst"
+
+#, fuzzy
+msgid "More information"
+msgstr "Configuratie"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -2007,6 +2024,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Welkom"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Scheidt elk label met een komma."
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "Sommige items kunnen niet worden ontsleuteled."

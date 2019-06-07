@@ -937,9 +937,6 @@ msgstr "Not defteri başlığı:"
 msgid "Add or remove tags:"
 msgstr "Etiket ekle veya kaldır:"
 
-msgid "Separate each tag by a comma."
-msgstr "Her etiketi virgülle ayırın."
-
 msgid "Rename notebook:"
 msgstr "Not defterini yeniden adlandır:"
 
@@ -1167,6 +1164,9 @@ msgstr "Kaynaklar alınıyor: %d/%d"
 msgid "Please select where the sync status should be exported to"
 msgstr "Lütfen senkronizasyon durumunun nereye aktarılacağını seçin"
 
+msgid "Retry"
+msgstr ""
+
 #, fuzzy
 msgid "Add or remove tags"
 msgstr "Etiket ekle veya kaldır"
@@ -1369,6 +1369,58 @@ msgstr ""
 "kopyaladığınızdan emin olun, aksi takdirde tüm dosyalar kaldırılır! Daha "
 "fazla bilgi için SSS bölümüne bakın: %s"
 
+msgid "Synchronisation target"
+msgstr "Senkronizasyon hedefi"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"Senkronize edilecek hedef. Her senkronizasyon hedefi, `sync.NUM.NAME` olarak "
+"adlandırılan ek parametrelere sahip olabilir (tümü aşağıda belgelenmiştir)."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Eşitlenecek dizin (kesin  yol)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+msgid "Nextcloud username"
+msgstr "Nextcloud kullanıcı adı"
+
+msgid "Nextcloud password"
+msgstr "Nextcloud şifresi"
+
+msgid "WebDAV URL"
+msgstr "WebDAV URL"
+
+msgid "WebDAV username"
+msgstr "WebDAV kullanıcı adı"
+
+msgid "WebDAV password"
+msgstr "WebDAV şifresi"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr "Dil"
 
@@ -1528,55 +1580,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "Gelişmiş ayarları göster"
 
-msgid "Synchronisation target"
-msgstr "Senkronizasyon hedefi"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"Senkronize edilecek hedef. Her senkronizasyon hedefi, `sync.NUM.NAME` olarak "
-"adlandırılan ek parametrelere sahip olabilir (tümü aşağıda belgelenmiştir)."
-
-msgid "Attachment download behaviour"
-msgstr ""
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-
-msgid "Always"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
-
-msgid "Auto"
-msgstr ""
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "Eşitlenecek dizin (kesin  yol)"
-
-msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
-
-msgid "Nextcloud username"
-msgstr "Nextcloud kullanıcı adı"
-
-msgid "Nextcloud password"
-msgstr "Nextcloud şifresi"
-
-msgid "WebDAV URL"
-msgstr "WebDAV URL"
-
-msgid "WebDAV username"
-msgstr "WebDAV kullanıcı adı"
-
-msgid "WebDAV password"
-msgstr "WebDAV şifresi"
-
 msgid "Custom TLS certificates"
 msgstr "Özel TLS sertifikaları"
 
@@ -1684,14 +1687,6 @@ msgstr ""
 msgid "Items that cannot be synchronised"
 msgstr "Senkronize edilemeyen öğeler"
 
-#, fuzzy, javascript-format
-msgid "%s (%s) could not be uploaded: %s"
-msgstr "Bu dosya açılamadı: %s"
-
-#, fuzzy, javascript-format
-msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Bu dosya açılamadı: %s"
-
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -1700,6 +1695,24 @@ msgstr ""
 "Bu öğeler cihazda kalacak, ancak senkronize edilmeyecekler. Bu öğeleri "
 "bulmak için, başlığı veya kimliği aratın (yukarıdaki parantez içerisinde "
 "görüntülenir)."
+
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "Bu dosya açılamadı: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Bu dosya açılamadı: %s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "Senkronize edilemeyen öğeler"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "Senkronizasyon durumu (senkronize öğeler / toplam öğeler)"
@@ -1822,6 +1835,10 @@ msgstr "Yeni etiketler:"
 
 msgid "Type new tags or select from list"
 msgstr "Yeni etiketler yazın veya listeden seçin"
+
+#, fuzzy
+msgid "More information"
+msgstr "Yapılandırma"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -1968,6 +1985,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Hoşgeldiniz"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Her etiketi virgülle ayırın."
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "Bazı öğelerin şifresi çözülemez."

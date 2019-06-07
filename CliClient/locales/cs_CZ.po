@@ -951,9 +951,6 @@ msgstr "Název zápisníku:"
 msgid "Add or remove tags:"
 msgstr "Přidat či odebrat tagy:"
 
-msgid "Separate each tag by a comma."
-msgstr "Tagy oddělujte čárkami."
-
 msgid "Rename notebook:"
 msgstr "Přejmenovat zápisník:"
 
@@ -1177,6 +1174,9 @@ msgstr "Stahování zdrojů: %d/%d"
 msgid "Please select where the sync status should be exported to"
 msgstr "Prosím vyberte, kam má být stav synchronizace exportován"
 
+msgid "Retry"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Přidat či odebrat tagy"
 
@@ -1382,6 +1382,58 @@ msgstr ""
 "jste do něj zkopírovali veškerý obsah, jinak budou všechny soubory "
 "odstraněny! Další podrobnosti naleznete v FAQ: % s"
 
+msgid "Synchronisation target"
+msgstr "Cíl synchronizace"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"Cíl synchronizace. Každý cíl může mít další parametry ve formátu `sync.NUM."
+"NAME` (dokumentace níže)."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Složka k synchronizaci (absolutní cesta)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+msgid "Nextcloud username"
+msgstr "Nextcloud uživatelské jméno"
+
+msgid "Nextcloud password"
+msgstr "Nextcloud heslo"
+
+msgid "WebDAV URL"
+msgstr "WebDAV URL"
+
+msgid "WebDAV username"
+msgstr "WebDAV uživatelské jméno"
+
+msgid "WebDAV password"
+msgstr "WebDAV heslo"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr "Jazyk"
 
@@ -1538,55 +1590,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "Ukázat pokročilé volby"
 
-msgid "Synchronisation target"
-msgstr "Cíl synchronizace"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"Cíl synchronizace. Každý cíl může mít další parametry ve formátu `sync.NUM."
-"NAME` (dokumentace níže)."
-
-msgid "Attachment download behaviour"
-msgstr ""
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-
-msgid "Always"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
-
-msgid "Auto"
-msgstr ""
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "Složka k synchronizaci (absolutní cesta)"
-
-msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
-
-msgid "Nextcloud username"
-msgstr "Nextcloud uživatelské jméno"
-
-msgid "Nextcloud password"
-msgstr "Nextcloud heslo"
-
-msgid "WebDAV URL"
-msgstr "WebDAV URL"
-
-msgid "WebDAV username"
-msgstr "WebDAV uživatelské jméno"
-
-msgid "WebDAV password"
-msgstr "WebDAV heslo"
-
 msgid "Custom TLS certificates"
 msgstr "Vlastní TLS certifikát"
 
@@ -1693,14 +1696,6 @@ msgstr ""
 msgid "Items that cannot be synchronised"
 msgstr "Položky jež nelze synchronizovat"
 
-#, fuzzy, javascript-format
-msgid "%s (%s) could not be uploaded: %s"
-msgstr "Soubor se nepodařilo otevřít: %s"
-
-#, fuzzy, javascript-format
-msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Soubor se nepodařilo otevřít: %s"
-
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -1709,6 +1704,24 @@ msgstr ""
 "Tyto položky zůstanou na tomto zařízení, ale nebudou uploadovány na cíl "
 "synchronizace. Pro přístup k těmto souborům hledejte jejich název nebo ID (v "
 "hranatých závorkách)."
+
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "Soubor se nepodařilo otevřít: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Soubor se nepodařilo otevřít: %s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "Položky jež nelze synchronizovat"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "Stav synchronizace (synchronizováno / celkem)"
@@ -1832,6 +1845,10 @@ msgstr "Nové tagy:"
 
 msgid "Type new tags or select from list"
 msgstr "Zadejte nové tagy, nebo vyberte existující ze seznamu"
+
+#, fuzzy
+msgid "More information"
+msgstr "Nastavení"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -1976,6 +1993,9 @@ msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na tlačítko (+
 
 msgid "Welcome"
 msgstr "Vítejte"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Tagy oddělujte čárkami."
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "Některé položky nelze rozšifrovat."

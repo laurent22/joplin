@@ -963,9 +963,6 @@ msgstr "Notitieboek titel:"
 msgid "Add or remove tags:"
 msgstr "Voeg tag toe of verwijder tag"
 
-msgid "Separate each tag by a comma."
-msgstr "Scheid iedere tag met een komma."
-
 msgid "Rename notebook:"
 msgstr "Hernoem notitieboek:"
 
@@ -1197,6 +1194,9 @@ msgstr "Middelen: %d/%d"
 msgid "Please select where the sync status should be exported to"
 msgstr "Selecteer waar de synchronisatie status naar geëxporteerd moet worden"
 
+msgid "Retry"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Voeg tag toe of verwijder tag"
 
@@ -1404,6 +1404,58 @@ msgid ""
 "more details: %s"
 msgstr ""
 
+msgid "Synchronisation target"
+msgstr "Synchronisatiedoel"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Folder om mee te synchroniseren (absolute pad)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr ""
+
+msgid "Nextcloud username"
+msgstr ""
+
+#, fuzzy
+msgid "Nextcloud password"
+msgstr "Stel wachtwoord in"
+
+msgid "WebDAV URL"
+msgstr ""
+
+msgid "WebDAV username"
+msgstr ""
+
+#, fuzzy
+msgid "WebDAV password"
+msgstr "Stel wachtwoord in"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr "Taal"
 
@@ -1566,55 +1618,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "Toon geavanceerde opties"
 
-msgid "Synchronisation target"
-msgstr "Synchronisatiedoel"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-
-msgid "Attachment download behaviour"
-msgstr ""
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-
-msgid "Always"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
-
-msgid "Auto"
-msgstr ""
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "Folder om mee te synchroniseren (absolute pad)"
-
-msgid "Nextcloud WebDAV URL"
-msgstr ""
-
-msgid "Nextcloud username"
-msgstr ""
-
-#, fuzzy
-msgid "Nextcloud password"
-msgstr "Stel wachtwoord in"
-
-msgid "WebDAV URL"
-msgstr ""
-
-msgid "WebDAV username"
-msgstr ""
-
-#, fuzzy
-msgid "WebDAV password"
-msgstr "Stel wachtwoord in"
-
 msgid "Custom TLS certificates"
 msgstr ""
 
@@ -1723,14 +1726,6 @@ msgstr ""
 msgid "Items that cannot be synchronised"
 msgstr "Items die niet gesynchroniseerd kunnen worden"
 
-#, fuzzy, javascript-format
-msgid "%s (%s) could not be uploaded: %s"
-msgstr "Het notitieboek kon niet opgeslaan worden: %s"
-
-#, fuzzy, javascript-format
-msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Het notitieboek kon niet opgeslaan worden: %s"
-
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -1739,6 +1734,24 @@ msgstr ""
 "Deze items zullen op het apparaat beschikbaar blijven, maar zullen niet "
 "geüpload worden naar het synchronistatiedoel. Om deze items te vinden, zoek "
 "naar de titel of het ID (afgebeeld bovenaan tussen haakjes)."
+
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "Het notitieboek kon niet opgeslaan worden: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Het notitieboek kon niet opgeslaan worden: %s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "Items die niet gesynchroniseerd kunnen worden"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "Sync status (gesynchroniseerde items / totaal aantal items)"
@@ -1860,6 +1873,10 @@ msgstr ""
 
 msgid "Type new tags or select from list"
 msgstr ""
+
+#, fuzzy
+msgid "More information"
+msgstr "Configuratie"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -2004,6 +2021,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Welkom"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Scheid iedere tag met een komma."
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "Sommige items kunnen niet gedecodeerd worden."

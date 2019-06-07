@@ -881,9 +881,6 @@ msgstr "Titlul caietului de notițe:"
 msgid "Add or remove tags:"
 msgstr "Adăugați ori eliminați etichete:"
 
-msgid "Separate each tag by a comma."
-msgstr "Separați fiecare etichetă printr-o virgulă."
-
 msgid "Rename notebook:"
 msgstr "Redenumiți caietul de notițe:"
 
@@ -1103,6 +1100,9 @@ msgstr "Resurse: %d/%d"
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 
+msgid "Retry"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Adăugați ori eliminați etichete"
 
@@ -1295,6 +1295,56 @@ msgid ""
 "more details: %s"
 msgstr ""
 
+msgid "Synchronisation target"
+msgstr ""
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr ""
+
+msgid "Nextcloud WebDAV URL"
+msgstr "URL NextCloud WebDAV"
+
+msgid "Nextcloud username"
+msgstr "Nume utilizator Nextcloud"
+
+msgid "Nextcloud password"
+msgstr "Parolă Nextcloud"
+
+msgid "WebDAV URL"
+msgstr "URL-ul WebDAV"
+
+msgid "WebDAV username"
+msgstr "Nume utilizator WebDAV"
+
+msgid "WebDAV password"
+msgstr "Parolă WebDAV"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr "Limbă"
 
@@ -1447,53 +1497,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "Afișați opțiunile avansate"
 
-msgid "Synchronisation target"
-msgstr ""
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-
-msgid "Attachment download behaviour"
-msgstr ""
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-
-msgid "Always"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
-
-msgid "Auto"
-msgstr ""
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr ""
-
-msgid "Nextcloud WebDAV URL"
-msgstr "URL NextCloud WebDAV"
-
-msgid "Nextcloud username"
-msgstr "Nume utilizator Nextcloud"
-
-msgid "Nextcloud password"
-msgstr "Parolă Nextcloud"
-
-msgid "WebDAV URL"
-msgstr "URL-ul WebDAV"
-
-msgid "WebDAV username"
-msgstr "Nume utilizator WebDAV"
-
-msgid "WebDAV password"
-msgstr "Parolă WebDAV"
-
 msgid "Custom TLS certificates"
 msgstr "Certificate TLS cusomizate"
 
@@ -1598,6 +1601,12 @@ msgstr ""
 msgid "Items that cannot be synchronised"
 msgstr "Itemii nu pot fi sincronizați"
 
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
+
 #, fuzzy, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "Acest fișier nu a putut fi deschis: %s"
@@ -1606,10 +1615,14 @@ msgstr "Acest fișier nu a putut fi deschis: %s"
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Acest fișier nu a putut fi deschis: %s"
 
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "Itemii nu pot fi sincronizați"
+
 msgid ""
-"These items will remain on the device but will not be uploaded to the sync "
-"target. In order to find these items, either search for the title or the ID "
-"(which is displayed in brackets above)."
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
 msgstr ""
 
 msgid "Sync status (synced items / total items)"
@@ -1728,6 +1741,10 @@ msgstr "Etichete noi:"
 
 msgid "Type new tags or select from list"
 msgstr ""
+
+#, fuzzy
+msgid "More information"
+msgstr "Configurare"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -1869,6 +1886,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bine ați venit"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Separați fiecare etichetă printr-o virgulă."
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "Câțiva itemi nu pot fi descriptați."

@@ -946,9 +946,6 @@ msgstr "노트북 제목:"
 msgid "Add or remove tags:"
 msgstr "태그 추가 및 제거:"
 
-msgid "Separate each tag by a comma."
-msgstr "각각의 태그를 쉼표로 구분합니다."
-
 msgid "Rename notebook:"
 msgstr "노트북 이름 바꾸기:"
 
@@ -1173,6 +1170,9 @@ msgstr "리소스 가져오는 중: %d/%d"
 msgid "Please select where the sync status should be exported to"
 msgstr "동기화 상태를 내보낼 대상을 선택하세요"
 
+msgid "Retry"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "태그 추가 및 제거"
 
@@ -1372,6 +1372,58 @@ msgstr ""
 "주의: 이 위치를 변경하시려면, 동기화 전에 모든 컨텐트를 복사했는지 확인하세"
 "요, 그렇지 않으면 모든 파일이 삭제됩니다! 자세한 정보는 FAQ를 참조하세요: %s"
 
+msgid "Synchronisation target"
+msgstr "동기화 대상"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"동기화를 할 대상을 선택합니다. 각각의 동기화 대상은 `sync.NUM.NAME` 형식으로 "
+"된 추가적인 매개 변수를 포함할 수 있습니다(아래에 문서화되어 있습니다)."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "동기화를 할 폴더 (절대적 경로)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+msgid "Nextcloud username"
+msgstr "Nextcloud 사용자 이름"
+
+msgid "Nextcloud password"
+msgstr "Nextcloud 암호"
+
+msgid "WebDAV URL"
+msgstr "WebDAV URL"
+
+msgid "WebDAV username"
+msgstr "WebDAV 사용자 이름"
+
+msgid "WebDAV password"
+msgstr "WebDAV 암호"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr "언어"
 
@@ -1530,55 +1582,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "고급 옵션"
 
-msgid "Synchronisation target"
-msgstr "동기화 대상"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"동기화를 할 대상을 선택합니다. 각각의 동기화 대상은 `sync.NUM.NAME` 형식으로 "
-"된 추가적인 매개 변수를 포함할 수 있습니다(아래에 문서화되어 있습니다)."
-
-msgid "Attachment download behaviour"
-msgstr ""
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-
-msgid "Always"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
-
-msgid "Auto"
-msgstr ""
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "동기화를 할 폴더 (절대적 경로)"
-
-msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
-
-msgid "Nextcloud username"
-msgstr "Nextcloud 사용자 이름"
-
-msgid "Nextcloud password"
-msgstr "Nextcloud 암호"
-
-msgid "WebDAV URL"
-msgstr "WebDAV URL"
-
-msgid "WebDAV username"
-msgstr "WebDAV 사용자 이름"
-
-msgid "WebDAV password"
-msgstr "WebDAV 암호"
-
 msgid "Custom TLS certificates"
 msgstr "임의의 TLS 인증서"
 
@@ -1689,14 +1692,6 @@ msgstr ""
 msgid "Items that cannot be synchronised"
 msgstr "동기화를 할 수 없는 항목"
 
-#, fuzzy, javascript-format
-msgid "%s (%s) could not be uploaded: %s"
-msgstr "다음 파일을 열 수 없습니다: %s"
-
-#, fuzzy, javascript-format
-msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "다음 파일을 열 수 없습니다: %s"
-
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -1705,6 +1700,24 @@ msgstr ""
 "해당 항목들은 기기에 남아 있지만 동기화 대상에 업로드되지는 않을 것입니다. 이"
 "런 항목을 찾으려면 제목 또는 ID로 검색하세요. (상단에 괄호 안에 표시되어 있습"
 "니다)"
+
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "다음 파일을 열 수 없습니다: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "다음 파일을 열 수 없습니다: %s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "동기화를 할 수 없는 항목"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "동기화 상태 (동기화 완료 항목 / 전체 항목)"
@@ -1827,6 +1840,10 @@ msgstr "새 태그:"
 
 msgid "Type new tags or select from list"
 msgstr "새 태그를 입력하거나 목록에서 선택하세요"
+
+#, fuzzy
+msgid "More information"
+msgstr "설정"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -1970,6 +1987,9 @@ msgstr "노트북이 없습니다. (+) 버튼을 눌러 새로 만드세요."
 
 msgid "Welcome"
 msgstr "환영합니다"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "각각의 태그를 쉼표로 구분합니다."
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "일부 항목들은 암호화할 수 없습니다."

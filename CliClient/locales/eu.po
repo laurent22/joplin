@@ -961,9 +961,6 @@ msgstr "Koadernoaren izenburua: "
 msgid "Add or remove tags:"
 msgstr "Gehitu edo ezabatu etiketak:"
 
-msgid "Separate each tag by a comma."
-msgstr "Banatu etiketak koma erabiliaz."
-
 msgid "Rename notebook:"
 msgstr "Berrizendatu koadernoa:"
 
@@ -1193,6 +1190,9 @@ msgstr "Baliabideak: %d/%d"
 msgid "Please select where the sync status should be exported to"
 msgstr "Aukeratu nora esportatu sinkronizazioaren egoera, mesedez"
 
+msgid "Retry"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Gehitu edo ezabatu etiketak"
 
@@ -1399,6 +1399,62 @@ msgid ""
 "more details: %s"
 msgstr ""
 
+msgid "Synchronisation target"
+msgstr "Sinkronizazio helbudua"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"Sinkronizazio helburua. Sinkronizazio aukera bakoitzak izan ditzake "
+"parametro gehigarriak, horrela izendatuta `sync.NUM.NAME` (dena beherago "
+"dokumentatuta)."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Sinkronizatzeko direktorioa (bide-izena osorik)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+msgid "Nextcloud username"
+msgstr "Nextcloud erabiltzaile-izena"
+
+msgid "Nextcloud password"
+msgstr "Nextcloud pasahitza"
+
+#, fuzzy
+msgid "WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+#, fuzzy
+msgid "WebDAV username"
+msgstr "Nextcloud erabiltzaile-izena"
+
+#, fuzzy
+msgid "WebDAV password"
+msgstr "Ezarri pasahitza"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr "Hizkuntza"
 
@@ -1561,59 +1617,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "Erakutsi aukera aurreratuak"
 
-msgid "Synchronisation target"
-msgstr "Sinkronizazio helbudua"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"Sinkronizazio helburua. Sinkronizazio aukera bakoitzak izan ditzake "
-"parametro gehigarriak, horrela izendatuta `sync.NUM.NAME` (dena beherago "
-"dokumentatuta)."
-
-msgid "Attachment download behaviour"
-msgstr ""
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-
-msgid "Always"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
-
-msgid "Auto"
-msgstr ""
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "Sinkronizatzeko direktorioa (bide-izena osorik)"
-
-msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
-
-msgid "Nextcloud username"
-msgstr "Nextcloud erabiltzaile-izena"
-
-msgid "Nextcloud password"
-msgstr "Nextcloud pasahitza"
-
-#, fuzzy
-msgid "WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
-
-#, fuzzy
-msgid "WebDAV username"
-msgstr "Nextcloud erabiltzaile-izena"
-
-#, fuzzy
-msgid "WebDAV password"
-msgstr "Ezarri pasahitza"
-
 msgid "Custom TLS certificates"
 msgstr ""
 
@@ -1722,6 +1725,14 @@ msgstr ""
 msgid "Items that cannot be synchronised"
 msgstr "Itemok ezin sinkronizatu"
 
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
+"Itemok gailuan geratuko dira baina ez dira sinkronizatuko. Horiek aurkitzeko "
+"bilaketak egin titulu edo goiko parentesien arteko IDaren arabera."
+
 #, fuzzy, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "Koadernoa ezin gorde daiteke: %s"
@@ -1730,13 +1741,15 @@ msgstr "Koadernoa ezin gorde daiteke: %s"
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Koadernoa ezin gorde daiteke: %s"
 
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "Itemok ezin sinkronizatu"
+
 msgid ""
-"These items will remain on the device but will not be uploaded to the sync "
-"target. In order to find these items, either search for the title or the ID "
-"(which is displayed in brackets above)."
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
 msgstr ""
-"Itemok gailuan geratuko dira baina ez dira sinkronizatuko. Horiek aurkitzeko "
-"bilaketak egin titulu edo goiko parentesien arteko IDaren arabera."
 
 msgid "Sync status (synced items / total items)"
 msgstr "Sinkronizazio egoera (sinkronizatutako itemak/itemak guztira)"
@@ -1857,6 +1870,10 @@ msgstr ""
 
 msgid "Type new tags or select from list"
 msgstr ""
+
+#, fuzzy
+msgid "More information"
+msgstr "Konfigurazioa"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -1999,6 +2016,9 @@ msgstr "Oraindik ez duzu koadernorik. Sortu bat (+) botoian sakatuta."
 
 msgid "Welcome"
 msgstr "Ongi etorri!"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Banatu etiketak koma erabiliaz."
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "Zenbait item ezin dira deszifratu."

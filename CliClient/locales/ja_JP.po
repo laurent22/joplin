@@ -952,9 +952,6 @@ msgstr "ノートブックの題名："
 msgid "Add or remove tags:"
 msgstr "タグの追加・削除："
 
-msgid "Separate each tag by a comma."
-msgstr "それぞれのタグをカンマ(,)で区切ってください。"
-
 msgid "Rename notebook:"
 msgstr "ノートブックの名前を変更："
 
@@ -1179,6 +1176,9 @@ msgstr "取得中のリソース: %d/%d"
 msgid "Please select where the sync status should be exported to"
 msgstr "同期状況の出力先を選択してください"
 
+msgid "Retry"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "タグの追加と削除"
 
@@ -1381,6 +1381,58 @@ msgstr ""
 "ておきましょう。そうしないとすべてのファイルが削除されていまいます！ 詳しくは"
 "次のFAQをご覧ください: %s"
 
+msgid "Synchronisation target"
+msgstr "同期先"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"同期する先です。いずれの同期先も `sync.NUM.NAME` のように追加のパラメーターを"
+"持つことができるでしょう（すべてのドキュメントは下にあります）。"
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "同期先のディレクトリ(絶対パス)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+msgid "Nextcloud username"
+msgstr "Nextcloud ユーザー名"
+
+msgid "Nextcloud password"
+msgstr "Nextcloud パスワード"
+
+msgid "WebDAV URL"
+msgstr "WebDAV URL"
+
+msgid "WebDAV username"
+msgstr "WebDAV ユーザー名"
+
+msgid "WebDAV password"
+msgstr "WevDAV パスワード"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr "言語"
 
@@ -1538,55 +1590,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "詳細な設定の表示"
 
-msgid "Synchronisation target"
-msgstr "同期先"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"同期する先です。いずれの同期先も `sync.NUM.NAME` のように追加のパラメーターを"
-"持つことができるでしょう（すべてのドキュメントは下にあります）。"
-
-msgid "Attachment download behaviour"
-msgstr ""
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-
-msgid "Always"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
-
-msgid "Auto"
-msgstr ""
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "同期先のディレクトリ(絶対パス)"
-
-msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
-
-msgid "Nextcloud username"
-msgstr "Nextcloud ユーザー名"
-
-msgid "Nextcloud password"
-msgstr "Nextcloud パスワード"
-
-msgid "WebDAV URL"
-msgstr "WebDAV URL"
-
-msgid "WebDAV username"
-msgstr "WebDAV ユーザー名"
-
-msgid "WebDAV password"
-msgstr "WevDAV パスワード"
-
 msgid "Custom TLS certificates"
 msgstr "TLS証明書のカスタマイズ"
 
@@ -1697,14 +1700,6 @@ msgstr ""
 msgid "Items that cannot be synchronised"
 msgstr "同期ができなかったアイテム"
 
-#, fuzzy, javascript-format
-msgid "%s (%s) could not be uploaded: %s"
-msgstr "次のファイルは開くことができません：%s"
-
-#, fuzzy, javascript-format
-msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "次のファイルは開くことができません：%s"
-
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -1713,6 +1708,24 @@ msgstr ""
 "これらのアイテムはデバイスに残りましたが、同期先にアップロードされません。そ"
 "のようなアイテムを探すには、タイトルまたはID(上記の括弧内に表示されている)で"
 "検索してください。"
+
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "次のファイルは開くことができません：%s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "次のファイルは開くことができません：%s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "同期ができなかったアイテム"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "同期状況 (同期済/総数)"
@@ -1835,6 +1848,10 @@ msgstr "新しいタグ:"
 
 msgid "Type new tags or select from list"
 msgstr "新しいタグを入力するか、リストから選択してください"
+
+#, fuzzy
+msgid "More information"
+msgstr "設定"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -1981,6 +1998,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "それぞれのタグをカンマ(,)で区切ってください。"
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "いくつかの項目は復号されませんでした。"

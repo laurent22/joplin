@@ -936,9 +936,6 @@ msgstr "عنوان دفتر الملاحظات:"
 msgid "Add or remove tags:"
 msgstr "إضافة أو حذف وسوم:"
 
-msgid "Separate each tag by a comma."
-msgstr ""
-
 msgid "Rename notebook:"
 msgstr "إعادة تسمية دفتر الملاحظات:"
 
@@ -1164,6 +1161,9 @@ msgstr "جلب الموارد: %d/%d"
 msgid "Please select where the sync status should be exported to"
 msgstr "فضلاً اختر أين سيتم تصدير حالة المزامنة"
 
+msgid "Retry"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "إضافة أو حذف وسوم"
 
@@ -1363,6 +1363,58 @@ msgstr ""
 "تنبيه: إذا غيرت هذا المكان ، تأكد من نسخ كافة المحتويات لديك إليه قبل البدء "
 "بالمزامنة ، وإلا فسيتم حذف كل الملفات! أنظر الأسئلة المتكررة لتفاصيل أكثر: %s"
 
+msgid "Synchronisation target"
+msgstr "وجهة المزامنة"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"الوجهة المستهدفة المزامنة إليها. كل وجهة مزامنة مستهدفة قد يكون لها معلمات "
+"إضافية تكون مسماة بـ `sync.NUM.NAME` (جميعها موثقة أدناه)."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "الدليل الذي تتم المزامنة معه (المسار المطلق)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "عنوان URL لـ Nextcloud WebDAV"
+
+msgid "Nextcloud username"
+msgstr "اسم مستخدم Nextcloud"
+
+msgid "Nextcloud password"
+msgstr "كلمة مرور Nextcloud"
+
+msgid "WebDAV URL"
+msgstr "عنوان URL لـ WebDAV"
+
+msgid "WebDAV username"
+msgstr "اسم مستخدم WebDAV"
+
+msgid "WebDAV password"
+msgstr "كلمة مرور WebDAV"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr "اللغة"
 
@@ -1520,55 +1572,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "إظهار خيارات متقدمة"
 
-msgid "Synchronisation target"
-msgstr "وجهة المزامنة"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"الوجهة المستهدفة المزامنة إليها. كل وجهة مزامنة مستهدفة قد يكون لها معلمات "
-"إضافية تكون مسماة بـ `sync.NUM.NAME` (جميعها موثقة أدناه)."
-
-msgid "Attachment download behaviour"
-msgstr ""
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-
-msgid "Always"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
-
-msgid "Auto"
-msgstr ""
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "الدليل الذي تتم المزامنة معه (المسار المطلق)"
-
-msgid "Nextcloud WebDAV URL"
-msgstr "عنوان URL لـ Nextcloud WebDAV"
-
-msgid "Nextcloud username"
-msgstr "اسم مستخدم Nextcloud"
-
-msgid "Nextcloud password"
-msgstr "كلمة مرور Nextcloud"
-
-msgid "WebDAV URL"
-msgstr "عنوان URL لـ WebDAV"
-
-msgid "WebDAV username"
-msgstr "اسم مستخدم WebDAV"
-
-msgid "WebDAV password"
-msgstr "كلمة مرور WebDAV"
-
 msgid "Custom TLS certificates"
 msgstr "شهادات TLS خاصة"
 
@@ -1675,14 +1678,6 @@ msgstr ""
 msgid "Items that cannot be synchronised"
 msgstr "العناصر التي لا يمكن مزامنتها"
 
-#, fuzzy, javascript-format
-msgid "%s (%s) could not be uploaded: %s"
-msgstr "لم نتمكن من فتح هذا الملف: %s"
-
-#, fuzzy, javascript-format
-msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "لم نتمكن من فتح هذا الملف: %s"
-
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -1691,6 +1686,24 @@ msgstr ""
 "ستبقى هذه العناصر على الجهاز إلا أنها لن يجري رفعها إلى وجهة المزامنة. لكي "
 "تجد هذه العناصر ، عليك إما البحث عن العنوان أو المعرِّف (وهو معروض أعلاه بين "
 "قوسين)."
+
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "لم نتمكن من فتح هذا الملف: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "لم نتمكن من فتح هذا الملف: %s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "العناصر التي لا يمكن مزامنتها"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "حالة المزامنة (العناصر المنجزة / إجمالي العناصر)"
@@ -1811,6 +1824,10 @@ msgstr "وسوم جديدة:"
 
 msgid "Type new tags or select from list"
 msgstr "أكتب وسوماً جديدة أو اخترها من القائمة"
+
+#, fuzzy
+msgid "More information"
+msgstr "الضبط"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "

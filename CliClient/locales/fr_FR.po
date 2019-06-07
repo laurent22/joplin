@@ -13,7 +13,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.0.3\n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Pour supprimer une vignette, enlever là des notes associées."
@@ -723,7 +723,7 @@ msgid "Make a donation"
 msgstr "Faire un don"
 
 msgid "Toggle development tools"
-msgstr ""
+msgstr "Monter/Cacher les outils de développement"
 
 #, javascript-format
 msgid "Open %s"
@@ -962,9 +962,6 @@ msgstr "Titre du carnet :"
 msgid "Add or remove tags:"
 msgstr "Modifier les étiquettes :"
 
-msgid "Separate each tag by a comma."
-msgstr "Séparez chaque étiquette par une virgule."
-
 msgid "Rename notebook:"
 msgstr "Renommer le carnet :"
 
@@ -986,9 +983,8 @@ msgstr "Certains objets ne peuvent être synchronisés."
 msgid "View them now"
 msgstr "Les voir maintenant"
 
-#, fuzzy
 msgid "One or more master keys need a password."
-msgstr "Entrer le mot de passe maître :"
+msgstr "L'une des clefs maîtres requiert un mot de passe :"
 
 msgid "Set the password"
 msgstr "Définir le mot de passe"
@@ -1197,6 +1193,9 @@ msgid "Please select where the sync status should be exported to"
 msgstr ""
 "Veuillez sélectionner un répertoire ou exporter l'état de la synchronisation"
 
+msgid "Retry"
+msgstr "Réessayer"
+
 msgid "Add or remove tags"
 msgstr "Gérer les étiquettes"
 
@@ -1399,6 +1398,63 @@ msgstr ""
 "de synchroniser, sinon tous les fichiers seront supprimés ! Consulter la FAQ "
 "pour plus de détails : %s"
 
+msgid "Synchronisation target"
+msgstr "Cible de la synchronisation"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"La cible avec laquelle synchroniser. Chaque cible de synchronisation peut "
+"avoir des paramètres supplémentaires sous le nom `sync.NUM.NOM` (documentés "
+"ci-dessous)."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Répertoire avec lequel synchroniser (chemin absolu)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud : URL WebDAV"
+
+msgid "Nextcloud username"
+msgstr "Nextcloud : Nom utilisateur"
+
+msgid "Nextcloud password"
+msgstr "Nextcloud : Mot de passe"
+
+msgid "WebDAV URL"
+msgstr "WebDAV : URL"
+
+msgid "WebDAV username"
+msgstr "WebDAV : Nom utilisateur"
+
+msgid "WebDAV password"
+msgstr "WebDAV : Mot de passe"
+
+msgid "Attachment download behaviour"
+msgstr "Téléchargement des ressources"
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+"En mode \"manuel\", les ressources sont téléchargées uniquement lorsque vous "
+"cliquez dessus. En mode \"auto\", elle sont téléchargée lorsque vous ouvrez "
+"la note. En mode \"toujours\", toutes les ressources sont téléchargées, que "
+"vous ayez ouvert la note ou pas."
+
+msgid "Always"
+msgstr "Toujours"
+
+msgid "Manual"
+msgstr "Manuel"
+
+msgid "Auto"
+msgstr "Auto"
+
+msgid "Max concurrent connections"
+msgstr "Nombre maxi de connections simultanées"
+
 msgid "Language"
 msgstr "Langue"
 
@@ -1556,60 +1612,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "Montrer les options avancées"
 
-msgid "Synchronisation target"
-msgstr "Cible de la synchronisation"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"La cible avec laquelle synchroniser. Chaque cible de synchronisation peut "
-"avoir des paramètres supplémentaires sous le nom `sync.NUM.NOM` (documentés "
-"ci-dessous)."
-
-msgid "Attachment download behaviour"
-msgstr "Téléchargement des ressources"
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-"En mode \"manuel\", les ressources sont téléchargées uniquement lorsque vous "
-"cliquez dessus. En mode \"auto\", elle sont téléchargée lorsque vous ouvrez "
-"la note. En mode \"toujours\", toutes les ressources sont téléchargées, que "
-"vous ayez ouvert la note ou pas."
-
-msgid "Always"
-msgstr "Toujours"
-
-msgid "Manual"
-msgstr "Manuel"
-
-msgid "Auto"
-msgstr "Auto"
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "Répertoire avec lequel synchroniser (chemin absolu)"
-
-msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud : URL WebDAV"
-
-msgid "Nextcloud username"
-msgstr "Nextcloud : Nom utilisateur"
-
-msgid "Nextcloud password"
-msgstr "Nextcloud : Mot de passe"
-
-msgid "WebDAV URL"
-msgstr "WebDAV : URL"
-
-msgid "WebDAV username"
-msgstr "WebDAV : Nom utilisateur"
-
-msgid "WebDAV password"
-msgstr "WebDAV : Mot de passe"
-
 msgid "Custom TLS certificates"
 msgstr "Certificats TLS personnalisés"
 
@@ -1716,14 +1718,6 @@ msgstr "Notes restaurées"
 msgid "Items that cannot be synchronised"
 msgstr "Objets qui ne peuvent pas être synchronisés"
 
-#, javascript-format
-msgid "%s (%s) could not be uploaded: %s"
-msgstr "%s (%s) n'a pas pu être envoyé : %s"
-
-#, javascript-format
-msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "L'objet \"%s\" n'a pas pu être téléchargé : %s"
-
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -1732,6 +1726,26 @@ msgstr ""
 "Ces objets resteront sur l'appareil mais ne seront pas envoyé sur la cible "
 "de la synchronisation. Pour trouver ces objets, faite une recherche sur le "
 "titre ou l'identifiant de l'objet (affiché ci-dessus entre parenthèses)."
+
+#, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "%s (%s) n'a pas pu être envoyé : %s"
+
+#, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "L'objet \"%s\" n'a pas pu être téléchargé : %s"
+
+msgid "Items that cannot be decrypted"
+msgstr "Objets qui ne peuvent pas être déchiffrés"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
+"Joplin n'a pas pu déchiffrer ces objets à plusieurs reprises, peut-être "
+"parce qu'ils sont corrompus ou trop larges. Ces objets vont rester sur "
+"l'appareil mais Joplin n'essayera plus de les déchiffrer."
 
 msgid "Sync status (synced items / total items)"
 msgstr "Status de la synchronisation (objets synchro. / total)"
@@ -1856,6 +1870,9 @@ msgstr "Nouvelles étiquettes :"
 
 msgid "Type new tags or select from list"
 msgstr "Entrez de nouvelles étiquettes ou sélectionnez de la liste"
+
+msgid "More information"
+msgstr "Plus d'information"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -2004,6 +2021,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Séparez chaque étiquette par une virgule."
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "Certains objets ne peuvent être déchiffrés."

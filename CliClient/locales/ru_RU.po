@@ -962,9 +962,6 @@ msgstr "Название блокнота:"
 msgid "Add or remove tags:"
 msgstr "Добавить или удалить метки:"
 
-msgid "Separate each tag by a comma."
-msgstr "Разделяйте каждую метку запятой."
-
 msgid "Rename notebook:"
 msgstr "Переименовать блокнот:"
 
@@ -1191,6 +1188,9 @@ msgid "Please select where the sync status should be exported to"
 msgstr ""
 "Пожалуйста, выберите, куда должен быть экспортирован статус синхронизации"
 
+msgid "Retry"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Добавить или удалить метки"
 
@@ -1392,6 +1392,58 @@ msgstr ""
 "содержимое перед синхронизацией, в противном случае все файлы будут удалены! "
 "Смотрите FAQ для получения подробной информации: %s"
 
+msgid "Synchronisation target"
+msgstr "Цель синхронизации"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"Цель синхронизации. Каждая цель синхронизации может иметь дополнительные "
+"параметры, именованные как `sync.NUM.NAME` (все документировано ниже)."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Каталог синхронизации (абсолютный путь)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+msgid "Nextcloud username"
+msgstr "Имя пользователя Nextcloud"
+
+msgid "Nextcloud password"
+msgstr "Пароль Nextcloud"
+
+msgid "WebDAV URL"
+msgstr "WebDAV URL"
+
+msgid "WebDAV username"
+msgstr "Имя пользователя WebDAV"
+
+msgid "WebDAV password"
+msgstr "Пароль WebDAV"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr "Язык"
 
@@ -1552,55 +1604,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "Показывать расширенные настройки"
 
-msgid "Synchronisation target"
-msgstr "Цель синхронизации"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"Цель синхронизации. Каждая цель синхронизации может иметь дополнительные "
-"параметры, именованные как `sync.NUM.NAME` (все документировано ниже)."
-
-msgid "Attachment download behaviour"
-msgstr ""
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-
-msgid "Always"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
-
-msgid "Auto"
-msgstr ""
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "Каталог синхронизации (абсолютный путь)"
-
-msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
-
-msgid "Nextcloud username"
-msgstr "Имя пользователя Nextcloud"
-
-msgid "Nextcloud password"
-msgstr "Пароль Nextcloud"
-
-msgid "WebDAV URL"
-msgstr "WebDAV URL"
-
-msgid "WebDAV username"
-msgstr "Имя пользователя WebDAV"
-
-msgid "WebDAV password"
-msgstr "Пароль WebDAV"
-
 msgid "Custom TLS certificates"
 msgstr "Пользовательские сертификаты TLS"
 
@@ -1709,14 +1712,6 @@ msgstr ""
 msgid "Items that cannot be synchronised"
 msgstr "Элементы, которые не могут быть синхронизированы"
 
-#, fuzzy, javascript-format
-msgid "%s (%s) could not be uploaded: %s"
-msgstr "Этот файл не может быть открыт: %s"
-
-#, fuzzy, javascript-format
-msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Этот файл не может быть открыт: %s"
-
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -1725,6 +1720,24 @@ msgstr ""
 "Эти элементы останутся на устройстве, но не будут загружены в целевой объект "
 "синхронизации. Чтобы найти эти элементы, воспользуйтесь поиском по названию "
 "или ID (который указывается в скобках выше)."
+
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "Этот файл не может быть открыт: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Этот файл не может быть открыт: %s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "Элементы, которые не могут быть синхронизированы"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "Статус синхронизации (синхронизировано / всего)"
@@ -1847,6 +1860,10 @@ msgstr "Новые метки:"
 
 msgid "Type new tags or select from list"
 msgstr "Введите новые метки или выберите из списка"
+
+#, fuzzy
+msgid "More information"
+msgstr "Конфигурация"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -1994,6 +2011,9 @@ msgstr "У вас сейчас нет блокнота. Создайте его 
 
 msgid "Welcome"
 msgstr "Добро пожаловать"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Разделяйте каждую метку запятой."
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "Некоторые элементы не могут быть расшифрованы."

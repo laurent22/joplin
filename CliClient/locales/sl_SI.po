@@ -960,9 +960,6 @@ msgstr "Naslov beležnice:"
 msgid "Add or remove tags:"
 msgstr "Dodaj ali odstrani oznako:"
 
-msgid "Separate each tag by a comma."
-msgstr "Loči vsako oznako z vejico."
-
 msgid "Rename notebook:"
 msgstr "Preimenuj beležnico:"
 
@@ -1195,6 +1192,9 @@ msgstr "Viri: %d/%d"
 msgid "Please select where the sync status should be exported to"
 msgstr "Prosim izberite, kam želite izvoziti sinhronizacijski status"
 
+msgid "Retry"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Dodaj ali odstrani oznake"
 
@@ -1400,6 +1400,58 @@ msgid ""
 "more details: %s"
 msgstr ""
 
+msgid "Synchronisation target"
+msgstr "Sinhronizacijski cilj"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"Ciljno sinhronizacijsko mesto. Vsak sinhronizacijski cilj ima lahko dodatne "
+"parametre imenovano kot `sync.NUM.NAME` (vse je dokumentirano spodaj)."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Mesto ciljne sinhronizacije (absolutna pot)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+msgid "Nextcloud username"
+msgstr "Nextcloud uporabniško ime"
+
+msgid "Nextcloud password"
+msgstr "Nextcloud geslo"
+
+msgid "WebDAV URL"
+msgstr "WebDAV URL"
+
+msgid "WebDAV username"
+msgstr "WebDAV uporabniško ime"
+
+msgid "WebDAV password"
+msgstr "WebDAV geslo"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr "Jezik"
 
@@ -1560,55 +1612,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "Pokaži napredne možnosti"
 
-msgid "Synchronisation target"
-msgstr "Sinhronizacijski cilj"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"Ciljno sinhronizacijsko mesto. Vsak sinhronizacijski cilj ima lahko dodatne "
-"parametre imenovano kot `sync.NUM.NAME` (vse je dokumentirano spodaj)."
-
-msgid "Attachment download behaviour"
-msgstr ""
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-
-msgid "Always"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
-
-msgid "Auto"
-msgstr ""
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "Mesto ciljne sinhronizacije (absolutna pot)"
-
-msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
-
-msgid "Nextcloud username"
-msgstr "Nextcloud uporabniško ime"
-
-msgid "Nextcloud password"
-msgstr "Nextcloud geslo"
-
-msgid "WebDAV URL"
-msgstr "WebDAV URL"
-
-msgid "WebDAV username"
-msgstr "WebDAV uporabniško ime"
-
-msgid "WebDAV password"
-msgstr "WebDAV geslo"
-
 msgid "Custom TLS certificates"
 msgstr ""
 
@@ -1716,14 +1719,6 @@ msgstr ""
 msgid "Items that cannot be synchronised"
 msgstr "Predmeti ne morejo biti sinhronizirani"
 
-#, fuzzy, javascript-format
-msgid "%s (%s) could not be uploaded: %s"
-msgstr "Beležnica ne more biti shranjena: %s"
-
-#, fuzzy, javascript-format
-msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Beležnica ne more biti shranjena: %s"
-
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -1732,6 +1727,24 @@ msgstr ""
 "Ti predmeti bodo ostali na napravi, ampak ne bodo naloženi na "
 "sinhronizacijski cilj. Če želite najti te predmete, iščite po ali naslovu "
 "ali ID(je prikazan zgoraj v oklepajih)"
+
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "Beležnica ne more biti shranjena: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Beležnica ne more biti shranjena: %s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "Predmeti ne morejo biti sinhronizirani"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "Status sinhronizacije(sinhronizirani predmeti / vse datoteke)"
@@ -1852,6 +1865,10 @@ msgstr ""
 
 msgid "Type new tags or select from list"
 msgstr ""
+
+#, fuzzy
+msgid "More information"
+msgstr "Nastavitve"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -1993,6 +2010,9 @@ msgstr "Trenutno nimate nobene beležnice. Ustvarite jo s klikom na (+) gumb."
 
 msgid "Welcome"
 msgstr "Dobrodošli"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Loči vsako oznako z vejico."
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "Nekateri predmeti ne morejo biti dekriptirani."

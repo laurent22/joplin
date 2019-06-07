@@ -434,7 +434,8 @@ msgstr ""
 "poniżej:"
 
 msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr "Krok 1: Otwórz odnośnik w swojej przeglądarce aby autoryzować aplikację:"
+msgstr ""
+"Krok 1: Otwórz odnośnik w swojej przeglądarce aby autoryzować aplikację:"
 
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Krok 2: Wpisz kod podany przez Dropbox:"
@@ -967,9 +968,6 @@ msgstr "Tytuł notatnika:"
 msgid "Add or remove tags:"
 msgstr "Dodaj lub usuń znaczniki:"
 
-msgid "Separate each tag by a comma."
-msgstr "Oddziel każdy znacznik przecinkiem."
-
 msgid "Rename notebook:"
 msgstr "Zmień nazwę notatnika:"
 
@@ -1199,6 +1197,9 @@ msgstr "Pobieranie zasobów: %d"
 msgid "Please select where the sync status should be exported to"
 msgstr "Proszę wybrać gdzie powinen zostać eksportowany status synchronizacji"
 
+msgid "Retry"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Dodaj lub usuń znaczniki"
 
@@ -1405,6 +1406,62 @@ msgstr ""
 "innym wypadku wszystkie pliki będą usunięte! Sprawdź FAQ w celu uzyskania "
 "informacji: %s"
 
+msgid "Synchronisation target"
+msgstr "Serwis synchronizacji"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"Serwis z którym nastąpi snychronizacja. Każdy serwis może zawierać dodatkowe "
+"parametry, które są nazwane jako `sync.NUM.NAME` (udokumentowane poniżej)."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Katalog z którym nastąpi synchronizacja (ścieżka absolutna)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "Odnośnik WebDAV Nextcloud"
+
+msgid "Nextcloud username"
+msgstr "Nazwa użytkownika Nextcloud"
+
+msgid "Nextcloud password"
+msgstr "Hasło użytkownika Nextcloud"
+
+msgid "WebDAV URL"
+msgstr "Odnośnik WebDAV"
+
+msgid "WebDAV username"
+msgstr "Nazwa użytkownika WebDAV"
+
+msgid "WebDAV password"
+msgstr "Hasło użytkownika WebDAV"
+
+msgid "Attachment download behaviour"
+msgstr "Zachowanie przy pobieraniu załączników"
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+"W trybie \"Ręczny\", załączniki zostaną pobrane po naciśnięciu.W trybie "
+"\"Automatyczny\", załączniki zostaną pobrane przy otwieraniu notatki. W "
+"trybie \"Zawsze\", wszystkie załączniki zostaną pobrane bez względu "
+"naotwarcie notatki."
+
+msgid "Always"
+msgstr "Zawsze"
+
+msgid "Manual"
+msgstr "Ręczny"
+
+msgid "Auto"
+msgstr "Automatyczny"
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr "Język"
 
@@ -1565,59 +1622,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "Wyświetl opcje zaawansowane"
 
-msgid "Synchronisation target"
-msgstr "Serwis synchronizacji"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"Serwis z którym nastąpi snychronizacja. Każdy serwis może zawierać dodatkowe "
-"parametry, które są nazwane jako `sync.NUM.NAME` (udokumentowane poniżej)."
-
-msgid "Attachment download behaviour"
-msgstr "Zachowanie przy pobieraniu załączników"
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-"W trybie \"Ręczny\", załączniki zostaną pobrane po naciśnięciu."
-"W trybie \"Automatyczny\", załączniki zostaną pobrane przy otwieraniu notatki. "
-"W trybie \"Zawsze\", wszystkie załączniki zostaną pobrane bez względu na"
-"otwarcie notatki."
-
-msgid "Always"
-msgstr "Zawsze"
-
-msgid "Manual"
-msgstr "Ręczny"
-
-msgid "Auto"
-msgstr "Automatyczny"
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "Katalog z którym nastąpi synchronizacja (ścieżka absolutna)"
-
-msgid "Nextcloud WebDAV URL"
-msgstr "Odnośnik WebDAV Nextcloud"
-
-msgid "Nextcloud username"
-msgstr "Nazwa użytkownika Nextcloud"
-
-msgid "Nextcloud password"
-msgstr "Hasło użytkownika Nextcloud"
-
-msgid "WebDAV URL"
-msgstr "Odnośnik WebDAV"
-
-msgid "WebDAV username"
-msgstr "Nazwa użytkownika WebDAV"
-
-msgid "WebDAV password"
-msgstr "Hasło użytkownika WebDAV"
-
 msgid "Custom TLS certificates"
 msgstr "Niestandardowe ceryfikaty TLS"
 
@@ -1724,14 +1728,6 @@ msgstr "Przywrócone notatki"
 msgid "Items that cannot be synchronised"
 msgstr "Obiekty nie mogą być zsynchronizowane"
 
-#, javascript-format
-msgid "%s (%s) could not be uploaded: %s"
-msgstr "%s (%s) nie może być wysłany: %s"
-
-#, javascript-format
-msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Obiekt \"%s\" nie może być pobrany: %s"
-
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -1740,6 +1736,24 @@ msgstr ""
 "Obiekty pozostaną na urządzeniu, jednakże nie zostaną wysłane na serwis "
 "synchronizacji. W celu wyszukania tych obiektów, proszę szukać po tytule lub "
 "po ID (które jest wyświetlane w klamrach poniżej)."
+
+#, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "%s (%s) nie może być wysłany: %s"
+
+#, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Obiekt \"%s\" nie może być pobrany: %s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "Obiekty nie mogą być zsynchronizowane"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "Status synchronizacji (obiekty zsynchronizowane / obiekty ogółem)"
@@ -1863,6 +1877,10 @@ msgstr "Nowe znaczniki:"
 msgid "Type new tags or select from list"
 msgstr "Wprowadź nowe znaczniki lub wybierz z listy"
 
+#, fuzzy
+msgid "More information"
+msgstr "Konfiguracja"
+
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -1949,7 +1967,8 @@ msgstr "Brak przedmiotu z ID %s"
 
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr "Aplikacja mobilna Joplin nie wspiera aktualnie odnośników tego typu: %s"
+msgstr ""
+"Aplikacja mobilna Joplin nie wspiera aktualnie odnośników tego typu: %s"
 
 #, javascript-format
 msgid "Unsupported image type: %s"
@@ -2009,6 +2028,9 @@ msgstr "Brak notatników. Utwórz nowy naciskając przycisk (+)."
 
 msgid "Welcome"
 msgstr "Witaj"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Oddziel każdy znacznik przecinkiem."
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "Niektóre obiekty nie mogą być odszyfrowane."
