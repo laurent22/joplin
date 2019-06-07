@@ -47,7 +47,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 	render() {
 		const theme = themeStyle(this.props.theme);
 
-		function renderBody(report) {
+		const renderBody = report => {
 			let output = [];
 			let baseStyle = {
 				paddingLeft: 6,
@@ -72,7 +72,24 @@ class StatusScreenComponent extends BaseScreenComponent {
 				for (let n in section.body) {
 					if (!section.body.hasOwnProperty(n)) continue;
 					style = Object.assign({}, baseStyle);
-					lines.push({ key: 'item_' + i + '_' + n, text: section.body[n] });
+					const item = section.body[n];
+
+					let text = '';
+
+					let retryHandler = null;
+					if (typeof item === 'object') {
+						if (item.canRetry) {
+							retryHandler = async () => {
+								await item.retryHandler();
+								this.resfreshScreen();
+							}
+						}
+						text = item.text;
+					} else {
+						text = item;
+					}
+
+					lines.push({ key: 'item_' + i + '_' + n, text: text, retryHandler: retryHandler });
 				}
 
 				lines.push({ key: 'divider2_' + i, isDivider: true });
@@ -82,14 +99,25 @@ class StatusScreenComponent extends BaseScreenComponent {
 				data={lines}
 				renderItem={({item}) => {
 					let style = Object.assign({}, baseStyle);
+
 					if (item.isSection === true) {
 						style.fontWeight = 'bold';
 						style.marginBottom = 5;
 					}
+
+					style.flex = 1;
+
+					const retryButton = item.retryHandler ? <View style={{flex:0}}><Button title={_('Retry')} onPress={item.retryHandler}/></View> : null;
+
 					if (item.isDivider) {
-						return (<View style={{borderBottomWidth: 1, borderBottomColor: 'white', marginTop: 20, marginBottom: 20}}/>);
+						return (<View style={{borderBottomWidth: 1, borderBottomColor: theme.dividerColor, marginTop: 20, marginBottom: 20}}/>);
 					} else {
-						return (<Text style={style}>{item.text}</Text>);
+						return (
+							<View style={{flex:1, flexDirection:'row'}}>
+								<Text style={style}>{item.text}</Text>
+								{retryButton}
+							</View>
+						);
 					}
 				}}
 			/>);
