@@ -163,6 +163,8 @@ class Setting extends BaseModel {
 				};
 			}},
 
+			'sync.maxConcurrentConnections': {value: 5, type: Setting.TYPE_INT, public: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1},
+
 			'sync.2.path': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => {
 				try {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('filesystem')
