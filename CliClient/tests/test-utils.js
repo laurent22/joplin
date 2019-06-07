@@ -154,6 +154,7 @@ async function clearDatabase(id = null) {
 		'sync_items',
 		'notes_normalized',
 		'revisions',
+		'key_values',
 	];
 
 	const queries = [];

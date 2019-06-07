@@ -36,6 +36,7 @@ npm test tests-build/models_Setting.js
 npm test tests-build/models_Tag.js
 npm test tests-build/pathUtils.js
 npm test tests-build/services_InteropService.js
+npm test tests-build/services_KvStore.js
 npm test tests-build/services_ResourceService.js
 npm test tests-build/services_rest_Api.js
 npm test tests-build/services_SearchEngine.js
