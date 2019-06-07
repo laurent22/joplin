@@ -29,6 +29,7 @@ class Synchronizer {
 		this.cancelling_ = false;
 		this.autoStartDecryptionWorker_ = true;
 		this.maxResourceSize_ = null;
+		this.downloadQueue_ = null;
 
 		// Debug flags are used to test certain hard-to-test conditions
 		// such as cancelling in the middle of a loop.
@@ -151,6 +152,10 @@ class Synchronizer {
 
 	async cancel() {
 		if (this.cancelling_ || this.state() == 'idle') return;
+
+		// Stop queue but don't set it to null as it may be used to
+		// retrieve the last few downloads.
+		this.downloadQueue_.stop();
 
 		this.logSyncOperation('cancelling', null, null, '');
 		this.cancelling_ = true;
@@ -467,7 +472,9 @@ class Synchronizer {
 			// have been created or updated, and apply the changes to local.
 			// ------------------------------------------------------------------------
 
-			const downloadQueue = new TaskQueue();
+			if (this.downloadQueue_) await this.downloadQueue_.stop();
+			this.downloadQueue_ = new TaskQueue('syncDownload');
+			this.downloadQueue_.logger_ = this.logger();
 
 			if (syncSteps.indexOf("delta") >= 0) {
 				// At this point all the local items that have changed have been pushed to remote
@@ -500,7 +507,9 @@ class Synchronizer {
 					this.logSyncOperation("fetchingTotal", null, null, "Fetching delta items from sync target", remotes.length);
 
 					for (const remote of remotes) {
-						downloadQueue.push(remote.path, async () => {
+						if (this.cancelling()) break;
+
+						this.downloadQueue_.push(remote.path, async () => {
 							return this.api().get(remote.path);
 						});
 					}
@@ -517,7 +526,7 @@ class Synchronizer {
 						if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
 
 						const loadContent = async () => {
-							let task = await downloadQueue.waitForResult(path); //await this.api().get(path);
+							let task = await this.downloadQueue_.waitForResult(path); //await this.api().get(path);
 							if (task.error) throw task.error;
 							if (!task.result) return null;
 							return await BaseItem.unserialize(task.result);
