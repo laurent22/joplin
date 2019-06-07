@@ -15,6 +15,7 @@ const globalStyle = {
 	dividerColor: "#dddddd",
 	strongDividerColor: "#aaaaaa",
 	selectedColor: '#e5e5e5',
+	headerBackgroundColor: '#F0F0F0',
 	disabledOpacity: 0.2,
 	colorUrl: '#7B81FF',
 	textSelectionColor: "#0096FF",
@@ -84,6 +85,16 @@ function addExtraStyles(style) {
 		fontSize: style.fontSize,
 	};
 
+	style.headerStyle = {
+		color: style.color,
+		fontSize: style.fontSize * 1.2,
+		fontWeight: 'bold',
+	};
+
+	style.headerWrapperStyle = {
+		backgroundColor: style.headerBackgroundColor,
+	};
+
 	return style;
 }
 
@@ -105,6 +116,7 @@ function themeStyle(theme) {
 	output.strongDividerColor = '#888888';
 	output.selectedColor = '#333333';
 	output.textSelectionColor = '#00AEFF';
+	output.headerBackgroundColor = '#2D3136';
 
 	output.raisedBackgroundColor = "#0F2051";
 	output.raisedColor = "#788BC3";
