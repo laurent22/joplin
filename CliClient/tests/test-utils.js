@@ -33,6 +33,7 @@ const EncryptionService = require('lib/services/EncryptionService.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker.js');
 const ResourceService = require('lib/services/ResourceService.js');
 const RevisionService = require('lib/services/RevisionService.js');
+const KvStore = require('lib/services/KvStore.js');
 const WebDavApi = require('lib/WebDavApi');
 const DropboxApi = require('lib/DropboxApi');
 
@@ -42,6 +43,7 @@ let encryptionServices_ = [];
 let revisionServices_ = [];
 let decryptionWorkers_ = [];
 let resourceServices_ = [];
+let kvStores_ = [];
 let fileApi_ = null;
 let currentClient_ = 1;
 
@@ -224,6 +226,7 @@ async function setupDatabaseAndSynchronizer(id = null) {
 	decryptionWorkers_[id] = new DecryptionWorker();
 	decryptionWorkers_[id].setEncryptionService(encryptionServices_[id]);
 	resourceServices_[id] = new ResourceService();
+	kvStores_[id] = new KvStore();
 
 	await fileApi().clearRoot();
 }
@@ -243,6 +246,13 @@ function encryptionService(id = null) {
 	return encryptionServices_[id];
 }
 
+function kvStore(id = null) {
+	if (id === null) id = currentClient_;
+	const o = kvStores_[id];
+	o.setDb(db(id));
+	return o;
+}
+
 function revisionService(id = null) {
 	if (id === null) id = currentClient_;
 	return revisionServices_[id];
@@ -250,7 +260,9 @@ function revisionService(id = null) {
 
 function decryptionWorker(id = null) {
 	if (id === null) id = currentClient_;
-	return decryptionWorkers_[id];
+	const o = decryptionWorkers_[id];
+	o.setKvStore(kvStore(id));
+	return o;
 }
 
 function resourceService(id = null) {
@@ -380,4 +392,4 @@ async function allSyncTargetItemsEncrypted() {
 	return totalCount === encryptedCount;
 }
 
-module.exports = { resourceService, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest };
+module.exports = { kvStore, resourceService, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest };

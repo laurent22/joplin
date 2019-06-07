@@ -91,4 +91,17 @@ describe('services_KvStore', function() {
 		expect(await store.value('int')).toBe(20);
 	}));
 
+	it('should search by prefix', asyncTest(async () => {
+		const store = setupStore();
+		await store.setValue('testing:1', 1);
+		await store.setValue('testing:2', 2);
+
+		const results = await store.searchByPrefix('testing:');
+		expect(results.length).toBe(2);
+
+		const numbers = results.map(r => r.value).sort();
+		expect(numbers[0]).toBe(1);
+		expect(numbers[1]).toBe(2);
+	}));
+
 });

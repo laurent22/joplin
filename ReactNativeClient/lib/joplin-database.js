@@ -178,6 +178,7 @@ class JoplinDatabase extends Database {
 			'notes_normalized',
 			'revisions',
 			'resources_to_download',
+			'key_values',
 		];
 
 		const queries = [];
@@ -186,6 +187,12 @@ class JoplinDatabase extends Database {
 			queries.push('DELETE FROM sqlite_sequence WHERE name="' + n + '"'); // Reset autoincremented IDs
 		}
 
+		queries.push('DELETE FROM settings WHERE key="sync.1.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.2.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.3.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.4.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.5.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.6.context"');
 		queries.push('DELETE FROM settings WHERE key="sync.7.context"');
 
 		await this.transactionExecBatch(queries);

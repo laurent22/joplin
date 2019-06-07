@@ -27,6 +27,7 @@ const BaseModel = require('lib/BaseModel.js');
 const BaseService = require('lib/services/BaseService.js');
 const ResourceService = require('lib/services/ResourceService');
 const RevisionService = require('lib/services/RevisionService');
+const KvStore = require('lib/services/KvStore');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { Database } = require('lib/database.js');
 const { NotesScreen } = require('lib/components/screens/notes.js');
@@ -388,6 +389,8 @@ async function initialize(dispatch) {
 	NavService.dispatch = dispatch;
 	BaseModel.db_ = db;
 
+	KvStore.instance().setDb(reg.db());
+
 	BaseItem.loadClass('Note', Note);
 	BaseItem.loadClass('Folder', Folder);
 	BaseItem.loadClass('Resource', Resource);
@@ -455,6 +458,7 @@ async function initialize(dispatch) {
 		BaseItem.encryptionService_ = EncryptionService.instance();
 		DecryptionWorker.instance().dispatch = dispatch;
 		DecryptionWorker.instance().setLogger(mainLogger);
+		DecryptionWorker.instance().setKvStore(KvStore.instance());
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
 		await EncryptionService.instance().loadMasterKeysFromSettings();
 

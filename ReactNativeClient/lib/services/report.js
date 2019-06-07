@@ -3,7 +3,10 @@ const BaseItem = require('lib/models/BaseItem.js');
 const Alarm = require('lib/models/Alarm');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
+const BaseModel = require('lib/BaseModel.js');
+const DecryptionWorker = require('lib/services/DecryptionWorker');
 const { _ } = require('lib/locale.js');
+const { toTitleCase } = require('lib/string-utils.js');
 
 class ReportService {
 
@@ -116,6 +119,10 @@ class ReportService {
 		if (disabledItems.length) {
 			section = { title: _('Items that cannot be synchronised'), body: [] };
 
+			section.body.push(_('These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).'));
+
+			section.body.push('');
+
 			for (let i = 0; i < disabledItems.length; i++) {
 				const row = disabledItems[i];
 				if (row.location === BaseItem.SYNC_ITEM_LOCATION_LOCAL) {
@@ -125,8 +132,25 @@ class ReportService {
 				}
 			}
 
+			sections.push(section);
+		}
+
+		const decryptionDisabledItems = await DecryptionWorker.instance().decryptionDisabledItems();
+
+		if (decryptionDisabledItems.length) {
+			section = { title: _('Items that cannot be decrypted'), body: [], name: 'failedDecryption' };
+
+			section.body.push(_('Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.'));
+
 			section.body.push('');
-			section.body.push(_('These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).'));
+			
+			for (let i = 0; i < decryptionDisabledItems.length; i++) {
+				const row = decryptionDisabledItems[i];
+				section.body.push({ text: _('%s: %s', toTitleCase(BaseModel.modelTypeToName(row.type_)), row.id), canRetry: true, retryHandler: async () => {
+					await DecryptionWorker.instance().clearDisabledItem(row.type_, row.id);
+					DecryptionWorker.instance().scheduleStart();
+				}});
+			}
 
 			sections.push(section);
 		}

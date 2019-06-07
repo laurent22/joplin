@@ -29,6 +29,15 @@ class KvStore extends BaseService {
 		throw new Error('Unsupported value type: ' + (typeof value));
 	}
 
+	formatValues_(kvs) {
+		const output = [];
+		for (const kv of kvs) {
+			kv.value = this.formatValue_(kv.value, kv.type);
+			output.push(kv);
+		}
+		return output;
+	}
+
 	formatValue_(value, type) {
 		if (type === KvStore.TYPE_INT) return Number(value);
 		if (type === KvStore.TYPE_TEXT) return value + '';
@@ -50,6 +59,14 @@ class KvStore extends BaseService {
 		await this.db().exec('DELETE FROM key_values WHERE `key` = ?', [key]);
 	}
 
+	async clear() {
+		await this.db().exec('DELETE FROM key_values');
+	}
+
+	async all() {
+		return this.formatValues_(await this.db().selectAll('SELECT * FROM key_values'));
+	}
+
 	// Note: atomicity is done at application level so two difference instances
 	// accessing the db at the same time could mess up the increment.
 	async incValue(key, inc = 1) {
@@ -65,6 +82,11 @@ class KvStore extends BaseService {
 			release();
 			throw error;
 		}		
+	}
+
+	async searchByPrefix(prefix) {
+		let results = await this.db().selectAll('SELECT `key`, `value`, `type` FROM key_values WHERE `key` LIKE ?', [prefix + '%']);
+		return this.formatValues_(results);
 	}
 
 	async countKeys() {

@@ -48,6 +48,7 @@ class StatusScreenComponent extends React.Component {
 		const style = this.props.style;
 
 		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
+		const retryStyle = Object.assign({}, theme.urlStyle, {marginLeft: 5});
 
 		const containerPadding = 10;
 
@@ -60,16 +61,34 @@ class StatusScreenComponent extends React.Component {
 			return <h2 key={'section_' + key} style={theme.h2Style}>{title}</h2>
 		}
 
-		function renderSectionHtml(key, section) {
+		const renderSectionHtml = (key, section) => {
 			let itemsHtml = [];
 
 			itemsHtml.push(renderSectionTitleHtml(section.title, section.title));
 
 			for (let n in section.body) {
 				if (!section.body.hasOwnProperty(n)) continue;
-				let text = section.body[n];
+				let item = section.body[n];
+				let text = '';
+
+				let retryLink = null;
+				if (typeof item === 'object') {
+					if (item.canRetry) {
+						const onClick = async () => {
+							await item.retryHandler();
+							this.resfreshScreen();
+						}
+
+						retryLink = <a href="#" onClick={onClick} style={retryStyle}>{_('Retry')}</a>;
+					}
+					text = item.text;
+				} else {
+					text = item;
+				}
+
 				if (!text) text = '\xa0';
-				itemsHtml.push(<div style={theme.textStyle} key={'item_' + n}>{text}</div>);
+
+				itemsHtml.push(<div style={theme.textStyle} key={'item_' + n}><span>{text}</span>{retryLink}</div>);
 			}
 
 			return (
