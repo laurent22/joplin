@@ -118,9 +118,8 @@ class SideBarComponent extends React.Component {
 				// paddingLeft: 14,
 				display: "flex",
 				alignItems: "stretch",
-				// 0.6 is the maximumum opacity where the letters are still legible, this
-				// was determined by observation
-				backgroundColor: theme.depthColor.replace('OPACITY', Math.min(depth * 0.06, 0.6)),
+				// Allow 3 levels of color depth
+				backgroundColor: theme.depthColor.replace('OPACITY', Math.min(depth * 0.1, 0.3)),
 			},
 			listItem: {
 				fontFamily: theme.fontFamily,
