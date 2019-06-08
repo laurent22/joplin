@@ -977,9 +977,6 @@ msgstr "Notizbuch-Titel:"
 msgid "Add or remove tags:"
 msgstr "Schlagwörter hinzufügen oder entfernen:"
 
-msgid "Separate each tag by a comma."
-msgstr "Trenne jedes Schlagwort mit einem Komma."
-
 msgid "Rename notebook:"
 msgstr "Notizbuch umbenennen:"
 
@@ -1213,6 +1210,9 @@ msgid "Please select where the sync status should be exported to"
 msgstr ""
 "Bitte wähle aus, wohin der Synchronisations-Status exportiert werden soll"
 
+msgid "Retry"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Schlagwörter hinzufügen oder entfernen"
 
@@ -1416,6 +1416,63 @@ msgstr ""
 "neuen Ablageort kopiert hast, sonst werden alle Dateien gelöscht! Lies auch "
 "die FAQs hierzu: %s"
 
+msgid "Synchronisation target"
+msgstr "Synchronisationsziel"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"Das Ziel, mit dem synchronisiert werden soll. Jedes Synchronisationsziel "
+"kann zusätzliche Parameter haben, die als `sync.NUM.NAME` (alle unten "
+"dokumentiert) bezeichnet werden."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Verzeichnis mit dem synchronisiert werden soll (absoluter Pfad)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV-URL"
+
+msgid "Nextcloud username"
+msgstr "Nextcloud-Benutzername"
+
+msgid "Nextcloud password"
+msgstr "Nextcloud-Passwort"
+
+msgid "WebDAV URL"
+msgstr "WebDAV-URL"
+
+msgid "WebDAV username"
+msgstr "WebDAV-Benutzername"
+
+msgid "WebDAV password"
+msgstr "WebDAV-Passwort"
+
+msgid "Attachment download behaviour"
+msgstr "Verhalten für das Herunterladen von Anhängen"
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+"Im \"Manuell\" Modus werden die Anhänge nur heruntergeladen wenn Du auf sie "
+"klickst. Bei \"Automatisch\" werden sie heruntergeladen sobald die Notiz "
+"geöffnet wird. Bei \"Immer\" werden die Anhänge heruntergeladen egal ob die "
+"Notiz geöffnet wird oder nicht."
+
+msgid "Always"
+msgstr "Immer"
+
+msgid "Manual"
+msgstr "Manuell"
+
+msgid "Auto"
+msgstr "Automatisch"
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr "Sprache"
 
@@ -1573,60 +1630,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "Erweiterte Optionen anzeigen"
 
-msgid "Synchronisation target"
-msgstr "Synchronisationsziel"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"Das Ziel, mit dem synchronisiert werden soll. Jedes Synchronisationsziel "
-"kann zusätzliche Parameter haben, die als `sync.NUM.NAME` (alle unten "
-"dokumentiert) bezeichnet werden."
-
-msgid "Attachment download behaviour"
-msgstr "Verhalten für das Herunterladen von Anhängen"
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-"Im \"Manuell\" Modus werden die Anhänge nur heruntergeladen wenn Du auf sie "
-"klickst. Bei \"Automatisch\" werden sie heruntergeladen sobald die Notiz "
-"geöffnet wird. Bei \"Immer\" werden die Anhänge heruntergeladen egal ob die "
-"Notiz geöffnet wird oder nicht."
-
-msgid "Always"
-msgstr "Immer"
-
-msgid "Manual"
-msgstr "Manuell"
-
-msgid "Auto"
-msgstr "Automatisch"
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "Verzeichnis mit dem synchronisiert werden soll (absoluter Pfad)"
-
-msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV-URL"
-
-msgid "Nextcloud username"
-msgstr "Nextcloud-Benutzername"
-
-msgid "Nextcloud password"
-msgstr "Nextcloud-Passwort"
-
-msgid "WebDAV URL"
-msgstr "WebDAV-URL"
-
-msgid "WebDAV username"
-msgstr "WebDAV-Benutzername"
-
-msgid "WebDAV password"
-msgstr "WebDAV-Passwort"
-
 msgid "Custom TLS certificates"
 msgstr "Benutzerdefinierte TLS-Zertifikate"
 
@@ -1736,14 +1739,6 @@ msgstr "Wiederhergestellte Notizen"
 msgid "Items that cannot be synchronised"
 msgstr "Objekte können nicht synchronisiert werden"
 
-#, javascript-format
-msgid "%s (%s) could not be uploaded: %s"
-msgstr "%s (%s) konnte nicht hochgeladen werden: %s"
-
-#, javascript-format
-msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Eintrag \"%s\" konnte nicht heruntergeladen werden: %s"
-
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -1752,6 +1747,24 @@ msgstr ""
 "Diese Objekte verbleiben auf dem Gerät, werden aber nicht zum "
 "Synchronisationsziel hochgeladen. Um diese Objekte zu finden, suchst du "
 "entweder nach dem Titel oder der ID (die oben in Klammern angezeigt wird)."
+
+#, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "%s (%s) konnte nicht hochgeladen werden: %s"
+
+#, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Eintrag \"%s\" konnte nicht heruntergeladen werden: %s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "Objekte können nicht synchronisiert werden"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "Synchronisationsstatus (synchronisierte Objekte / gesamte Objekte)"
@@ -1877,6 +1890,10 @@ msgstr "Neue Schlagwörter:"
 
 msgid "Type new tags or select from list"
 msgstr "Neues Schlagwort eingeben oder aus der Liste auswählen"
+
+#, fuzzy
+msgid "More information"
+msgstr "Konfiguration"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -2026,6 +2043,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Willkommen"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Trenne jedes Schlagwort mit einem Komma."
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "Einige Objekte können nicht entschlüsselt werden."

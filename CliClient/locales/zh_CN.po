@@ -907,9 +907,6 @@ msgstr "笔记本标题："
 msgid "Add or remove tags:"
 msgstr "添加或删除标签："
 
-msgid "Separate each tag by a comma."
-msgstr "用半角逗号“,”分开每个标签。"
-
 msgid "Rename notebook:"
 msgstr "重命名笔记本："
 
@@ -1133,6 +1130,9 @@ msgstr "正在获取资源：%d/%d"
 msgid "Please select where the sync status should be exported to"
 msgstr "请选择同步状态的导出位置"
 
+msgid "Retry"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "添加或删除标签"
 
@@ -1331,6 +1331,57 @@ msgstr ""
 "注意：如果您更改该位置，请确保在同步之前将所有内容复制到该位置，否则将删除所"
 "有文件！ 更多详细信息请参阅常见问题解答（FAQ）：%s"
 
+msgid "Synchronisation target"
+msgstr "同步目标"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"所同步的目标。每个同步目标都可能有名为 `sync.NUM.NAME` 的附加参数（见下文）。"
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "待同步的目录（绝对路径）。"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+msgid "Nextcloud username"
+msgstr "Nextcloud 用户名"
+
+msgid "Nextcloud password"
+msgstr "Nextcloud 密码"
+
+msgid "WebDAV URL"
+msgstr "WebDAV URL"
+
+msgid "WebDAV username"
+msgstr "WebDAV 用户名"
+
+msgid "WebDAV password"
+msgstr "WebDAV 密码"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr "语言"
 
@@ -1486,54 +1537,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "显示高级选项"
 
-msgid "Synchronisation target"
-msgstr "同步目标"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"所同步的目标。每个同步目标都可能有名为 `sync.NUM.NAME` 的附加参数（见下文）。"
-
-msgid "Attachment download behaviour"
-msgstr ""
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-
-msgid "Always"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
-
-msgid "Auto"
-msgstr ""
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "待同步的目录（绝对路径）。"
-
-msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
-
-msgid "Nextcloud username"
-msgstr "Nextcloud 用户名"
-
-msgid "Nextcloud password"
-msgstr "Nextcloud 密码"
-
-msgid "WebDAV URL"
-msgstr "WebDAV URL"
-
-msgid "WebDAV username"
-msgstr "WebDAV 用户名"
-
-msgid "WebDAV password"
-msgstr "WebDAV 密码"
-
 msgid "Custom TLS certificates"
 msgstr "自定义 TLS 证书"
 
@@ -1636,6 +1639,14 @@ msgstr "已恢复的笔记"
 msgid "Items that cannot be synchronised"
 msgstr "无法同步项目"
 
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
+"这些项目将只保存在本设备上，不会上传到同步目标。若需查找这些项目，请搜索标题"
+"或 ID（显示在上方括号中）。"
+
 #, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "%s (%s) 无法上传到：%s"
@@ -1644,13 +1655,15 @@ msgstr "%s (%s) 无法上传到：%s"
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "项目 \"%s\" 无法从 %s 中下载"
 
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "无法同步项目"
+
 msgid ""
-"These items will remain on the device but will not be uploaded to the sync "
-"target. In order to find these items, either search for the title or the ID "
-"(which is displayed in brackets above)."
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
 msgstr ""
-"这些项目将只保存在本设备上，不会上传到同步目标。若需查找这些项目，请搜索标题"
-"或 ID（显示在上方括号中）。"
 
 msgid "Sync status (synced items / total items)"
 msgstr "同步状态（已同步项目/项目总数）"
@@ -1773,6 +1786,10 @@ msgstr "新建标签："
 
 msgid "Type new tags or select from list"
 msgstr "输入新的标签或从列表中选择"
+
+#, fuzzy
+msgid "More information"
+msgstr "配置"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -1912,6 +1929,9 @@ msgstr "您目前未有笔记本。点击 (+) 按钮创建。"
 
 msgid "Welcome"
 msgstr "欢迎"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "用半角逗号“,”分开每个标签。"
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "一些项目无法被解密。"

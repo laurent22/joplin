@@ -955,9 +955,6 @@ msgstr "Título do caderno:"
 msgid "Add or remove tags:"
 msgstr "Adicionar ou remover tags:"
 
-msgid "Separate each tag by a comma."
-msgstr "Separe cada tag por vírgula."
-
 msgid "Rename notebook:"
 msgstr "Renomear caderno:"
 
@@ -1185,6 +1182,9 @@ msgstr ""
 "Favor selecionar o local para onde o status de sincronia deveria ser "
 "exportado"
 
+msgid "Retry"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Adicionar ou remover tags"
 
@@ -1390,6 +1390,58 @@ msgstr ""
 "conteúdo para lá antes de sincronizar, do contrário todos os seus arquivos "
 "serão removidos! Veja o FAQ para mais detalhes: %s"
 
+msgid "Synchronisation target"
+msgstr "Alvo de sincronização"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"O alvo para onde sincronizar. Cada alvo pode ter parâmetros adicionais que "
+"são nomeados como `sync.NUM.NAME` (todos documentados abaixo)."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Diretório para sincronizar (caminho absoluto)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+msgid "Nextcloud username"
+msgstr "Usuário da Nextcloud"
+
+msgid "Nextcloud password"
+msgstr "Senha da Nextcloud"
+
+msgid "WebDAV URL"
+msgstr "WebDAV URL"
+
+msgid "WebDAV username"
+msgstr "Usuário do WebDAV"
+
+msgid "WebDAV password"
+msgstr "Senha do WebDAV"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr "Idioma"
 
@@ -1547,55 +1599,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "Mostrar opções avançadas"
 
-msgid "Synchronisation target"
-msgstr "Alvo de sincronização"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"O alvo para onde sincronizar. Cada alvo pode ter parâmetros adicionais que "
-"são nomeados como `sync.NUM.NAME` (todos documentados abaixo)."
-
-msgid "Attachment download behaviour"
-msgstr ""
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-
-msgid "Always"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
-
-msgid "Auto"
-msgstr ""
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "Diretório para sincronizar (caminho absoluto)"
-
-msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
-
-msgid "Nextcloud username"
-msgstr "Usuário da Nextcloud"
-
-msgid "Nextcloud password"
-msgstr "Senha da Nextcloud"
-
-msgid "WebDAV URL"
-msgstr "WebDAV URL"
-
-msgid "WebDAV username"
-msgstr "Usuário do WebDAV"
-
-msgid "WebDAV password"
-msgstr "Senha do WebDAV"
-
 msgid "Custom TLS certificates"
 msgstr "Certificados TLS customizados"
 
@@ -1703,14 +1706,6 @@ msgstr "Notas restauradas"
 msgid "Items that cannot be synchronised"
 msgstr "Os itens não podem ser sincronizados"
 
-#, javascript-format
-msgid "%s (%s) could not be uploaded: %s"
-msgstr "%s (%s) não pôde ser enviado: %s"
-
-#, javascript-format
-msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Item \"%s\" não pôde ser baixado: %s"
-
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -1719,6 +1714,24 @@ msgstr ""
 "Estes itens continuarão no dispositivo mas não serão enviados ao alvo de "
 "sincronização. Para encontrar esses itens, ou pesquise pelo título ou pelo "
 "ID (que é exibido nos colchetes acima)"
+
+#, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "%s (%s) não pôde ser enviado: %s"
+
+#, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Item \"%s\" não pôde ser baixado: %s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "Os itens não podem ser sincronizados"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "Status de sincronização (sincronizados / totais)"
@@ -1842,6 +1855,10 @@ msgstr "Novas tags:"
 
 msgid "Type new tags or select from list"
 msgstr "Digite novsa tags, ou selecione da lista"
+
+#, fuzzy
+msgid "More information"
+msgstr "Configuração"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -1988,6 +2005,9 @@ msgstr "Você não possui cadernos. Crie um clicando no botão (+)."
 
 msgid "Welcome"
 msgstr "Bem-vindo"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Separe cada tag por vírgula."
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "Alguns itens não podem ser decriptados."

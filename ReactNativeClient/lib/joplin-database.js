@@ -178,6 +178,7 @@ class JoplinDatabase extends Database {
 			'notes_normalized',
 			'revisions',
 			'resources_to_download',
+			'key_values',
 		];
 
 		const queries = [];
@@ -186,6 +187,12 @@ class JoplinDatabase extends Database {
 			queries.push('DELETE FROM sqlite_sequence WHERE name="' + n + '"'); // Reset autoincremented IDs
 		}
 
+		queries.push('DELETE FROM settings WHERE key="sync.1.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.2.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.3.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.4.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.5.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.6.context"');
 		queries.push('DELETE FROM settings WHERE key="sync.7.context"');
 
 		await this.transactionExecBatch(queries);
@@ -292,7 +299,7 @@ class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -606,6 +613,21 @@ class JoplinDatabase extends Database {
 
 				queries.push('CREATE INDEX resources_to_download_resource_id ON resources_to_download (resource_id)');
 				queries.push('CREATE INDEX resources_to_download_updated_time ON resources_to_download (updated_time)');
+			}
+
+			if (targetVersion == 23) {
+				const newTableSql = `
+					CREATE TABLE key_values (
+						id INTEGER PRIMARY KEY,
+						\`key\` TEXT NOT NULL,
+						\`value\` TEXT NOT NULL,
+						\`type\` INT NOT NULL,
+						updated_time INT NOT NULL
+					);
+				`;
+				queries.push(this.sqlStringToLines(newTableSql)[0]);
+
+				queries.push('CREATE UNIQUE INDEX key_values_key ON key_values (key)');
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

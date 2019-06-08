@@ -2,6 +2,7 @@ const BaseItem = require('lib/models/BaseItem');
 const MasterKey = require('lib/models/MasterKey');
 const Resource = require('lib/models/Resource');
 const ResourceService = require('lib/services/ResourceService');
+const KvStore = require('lib/services/KvStore');
 const { Logger } = require('lib/logger.js');
 const EventEmitter = require('events');
 
@@ -17,6 +18,8 @@ class DecryptionWorker {
 
 		this.scheduleId_ = null;
 		this.eventEmitter_ = new EventEmitter();
+		this.kvStore_ = null;
+		this.maxDecryptionAttempts_ = 2;
 	}
 
 	setLogger(l) {
@@ -45,9 +48,18 @@ class DecryptionWorker {
 		this.encryptionService_ = v;
 	}
 
+	setKvStore(v) {
+		this.kvStore_ = v;
+	}
+
 	encryptionService() {
 		if (!this.encryptionService_) throw new Error('DecryptionWorker.encryptionService_ is not set!!');
 		return this.encryptionService_;
+	}
+
+	kvStore() {
+		if (!this.kvStore_) throw new Error('DecryptionWorker.kvStore_ is not set!!');
+		return this.kvStore_;
 	}
 
 	async scheduleStart() {
@@ -61,6 +73,23 @@ class DecryptionWorker {
 		}, 1000);
 	}
 
+	async decryptionDisabledItems() {
+		let items = await this.kvStore().searchByPrefix('decrypt:');
+		items = items.filter(item => item.value > this.maxDecryptionAttempts_);
+		items = items.map(item => {
+			const s = item.key.split(':');
+			return {
+				type_: Number(s[1]),
+				id: s[2],
+			};
+		});
+		return items;
+	}
+
+	async clearDisabledItem(typeId, itemId) {
+		await this.kvStore().deleteValue('decrypt:' + typeId + ':' + itemId);
+	}
+
 	dispatchReport(report) {
 		const action = Object.assign({}, report);
 		action.type = 'DECRYPTION_WORKER_SET';
@@ -70,6 +99,7 @@ class DecryptionWorker {
 	async start(options = null) {
 		if (options === null) options = {};
 		if (!('masterKeyNotLoadedHandler' in options)) options.masterKeyNotLoadedHandler = 'throw';
+		if (!('errorHandler' in options)) options.errorHandler = 'log';
 
 		if (this.state_ !== 'idle') {
 			this.logger().info('DecryptionWorker: cannot start because state is "' + this.state_ + '"');
@@ -114,11 +144,26 @@ class DecryptionWorker {
 						itemIndex: i,
 						itemCount: items.length,
 					});
+
+					const counterKey = 'decrypt:' + item.type_ + ':' + item.id;
+
+					const clearDecryptionCounter = async () => {
+						await this.kvStore().deleteValue(counterKey);
+					}
 					
 					// Don't log in production as it results in many messages when importing many items
 					// this.logger().debug('DecryptionWorker: decrypting: ' + item.id + ' (' + ItemClass.tableName() + ')');
 					try {
+						const decryptCounter = await this.kvStore().incValue(counterKey);
+						if (decryptCounter > this.maxDecryptionAttempts_) {
+							this.logger().warn('DecryptionWorker: ' + item.id + ' decryption has failed more than 2 times - skipping it');
+							excludedIds.push(item.id);
+							continue;
+						}
+
 						const decryptedItem = await ItemClass.decrypt(item);
+
+						await clearDecryptionCounter();
 
 						if (decryptedItem.type_ === Resource.modelType() && !!decryptedItem.encryption_blob_encrypted) {
 							// itemsThatNeedDecryption() will return the resource again if the blob has not been decrypted,
@@ -145,14 +190,20 @@ class DecryptionWorker {
 								});
 								notLoadedMasterKeyDisptaches.push(error.masterKeyId);
 							}
+							await clearDecryptionCounter();
 							continue;
 						}
 
 						if (error.code === 'masterKeyNotLoaded' && options.masterKeyNotLoadedHandler === 'throw') {
+							await clearDecryptionCounter();
 							throw error;
 						}
 
-						this.logger().warn('DecryptionWorker: error for: ' + item.id + ' (' + ItemClass.tableName() + ')', error, item);
+						if (options.errorHandler === 'log') {
+							this.logger().warn('DecryptionWorker: error for: ' + item.id + ' (' + ItemClass.tableName() + ')', error, item);
+						} else {
+							throw error;
+						}
 					}
 				}
 

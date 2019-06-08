@@ -1075,6 +1075,7 @@ class Application extends BaseApplication {
 		// Make it available to the console window - useful to call revisionService.collectRevisions()
 		window.revisionService = RevisionService.instance();
 		window.migrationService = MigrationService.instance();
+		window.decryptionWorker = DecryptionWorker.instance();
 	}
 
 }

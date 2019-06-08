@@ -974,9 +974,6 @@ msgstr "Títol del bloc de notes:"
 msgid "Add or remove tags:"
 msgstr "Afegeix o suprimeix etiquetes:"
 
-msgid "Separate each tag by a comma."
-msgstr "Separeu les etiquetes amb comes."
-
 msgid "Rename notebook:"
 msgstr "Canvia el nom del bloc de notes:"
 
@@ -1204,6 +1201,9 @@ msgstr "Recursos: %d/%d"
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccioneu on s'hauria d'exportar l'estat de la sincronització"
 
+msgid "Retry"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Afegeix o suprimeix etiquetes"
 
@@ -1404,6 +1404,58 @@ msgid ""
 "more details: %s"
 msgstr ""
 
+msgid "Synchronisation target"
+msgstr "Objectiu de sincronització"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"L'objectiu on se sincronitzarà. Cada objectiu pot tenir paràmetres "
+"addicionals que s'anomenen com a «sync.NUM.NAME» (es documenten a sota)."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Directori on es farà la sincronització (camí absolut)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "URL del Nextcloud WebDAV"
+
+msgid "Nextcloud username"
+msgstr "Nom d'usuari del Nextcloud"
+
+msgid "Nextcloud password"
+msgstr "Contrasenya del Nextcloud"
+
+msgid "WebDAV URL"
+msgstr "URL de WebDAV"
+
+msgid "WebDAV username"
+msgstr "Nom d'usuari WebDAV"
+
+msgid "WebDAV password"
+msgstr "Contrasenya de WebDAV"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr "Llengua"
 
@@ -1563,55 +1615,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "Mostra les opcions avançades"
 
-msgid "Synchronisation target"
-msgstr "Objectiu de sincronització"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"L'objectiu on se sincronitzarà. Cada objectiu pot tenir paràmetres "
-"addicionals que s'anomenen com a «sync.NUM.NAME» (es documenten a sota)."
-
-msgid "Attachment download behaviour"
-msgstr ""
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-
-msgid "Always"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
-
-msgid "Auto"
-msgstr ""
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "Directori on es farà la sincronització (camí absolut)"
-
-msgid "Nextcloud WebDAV URL"
-msgstr "URL del Nextcloud WebDAV"
-
-msgid "Nextcloud username"
-msgstr "Nom d'usuari del Nextcloud"
-
-msgid "Nextcloud password"
-msgstr "Contrasenya del Nextcloud"
-
-msgid "WebDAV URL"
-msgstr "URL de WebDAV"
-
-msgid "WebDAV username"
-msgstr "Nom d'usuari WebDAV"
-
-msgid "WebDAV password"
-msgstr "Contrasenya de WebDAV"
-
 msgid "Custom TLS certificates"
 msgstr ""
 
@@ -1719,14 +1722,6 @@ msgstr ""
 msgid "Items that cannot be synchronised"
 msgstr "Elements que no s'han pogut sincronitzar"
 
-#, fuzzy, javascript-format
-msgid "%s (%s) could not be uploaded: %s"
-msgstr "No s'ha pogut desar el bloc de notes: %s"
-
-#, fuzzy, javascript-format
-msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "No s'ha pogut desar el bloc de notes: %s"
-
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -1735,6 +1730,24 @@ msgstr ""
 "Aquests elements es mantindran a l'aparell però no es pujaran a la "
 "destinació de sincronització. Per a poder trobar aquests elements, podeu "
 "cercar pel títol o la ID (que es mostra entre claus a sobre)."
+
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "No s'ha pogut desar el bloc de notes: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "No s'ha pogut desar el bloc de notes: %s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "Elements que no s'han pogut sincronitzar"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "Estat de la sincronització (element sinc. / elements totals)"
@@ -1854,6 +1867,10 @@ msgstr "Etiquetes noves:"
 
 msgid "Type new tags or select from list"
 msgstr "Escriviu etiquetes noves o seleccioneu-ne de la llista"
+
+#, fuzzy
+msgid "More information"
+msgstr "Configuració"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -2003,6 +2020,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Benvingut"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Separeu les etiquetes amb comes."
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "Alguns elements no s'han pogut desxifrar."

@@ -953,9 +953,6 @@ msgstr "Notesbogs titel:"
 msgid "Add or remove tags:"
 msgstr "Tilføj eller slet mærker:"
 
-msgid "Separate each tag by a comma."
-msgstr "Adskil hver mærke med komma."
-
 msgid "Rename notebook:"
 msgstr "Omdøb notesbog:"
 
@@ -1180,6 +1177,9 @@ msgstr "Ressourcer: %d/%d"
 msgid "Please select where the sync status should be exported to"
 msgstr "Vælg hvor sync status skal eksporteres til"
 
+msgid "Retry"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Tilføj eller slet mærker"
 
@@ -1385,6 +1385,58 @@ msgid ""
 "more details: %s"
 msgstr ""
 
+msgid "Synchronisation target"
+msgstr "Synkroniserings mål"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"Synkroniserings mål. Hver synk. mål kan have ekstra parametre som navngives "
+"som `sync.NUM.NAME` (se dokumentation herunder)."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Mappe der skal synkroniseres med (absolut sti)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+msgid "Nextcloud username"
+msgstr "Nextcloud brugernavn"
+
+msgid "Nextcloud password"
+msgstr "Nextcloud kodeord"
+
+msgid "WebDAV URL"
+msgstr "WebDAV URL"
+
+msgid "WebDAV username"
+msgstr "WebDAV brugernavn"
+
+msgid "WebDAV password"
+msgstr "WebDAV kodeord"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr "Sprog"
 
@@ -1545,55 +1597,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "Vis avancerede indstillinger"
 
-msgid "Synchronisation target"
-msgstr "Synkroniserings mål"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"Synkroniserings mål. Hver synk. mål kan have ekstra parametre som navngives "
-"som `sync.NUM.NAME` (se dokumentation herunder)."
-
-msgid "Attachment download behaviour"
-msgstr ""
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-
-msgid "Always"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
-
-msgid "Auto"
-msgstr ""
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "Mappe der skal synkroniseres med (absolut sti)"
-
-msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
-
-msgid "Nextcloud username"
-msgstr "Nextcloud brugernavn"
-
-msgid "Nextcloud password"
-msgstr "Nextcloud kodeord"
-
-msgid "WebDAV URL"
-msgstr "WebDAV URL"
-
-msgid "WebDAV username"
-msgstr "WebDAV brugernavn"
-
-msgid "WebDAV password"
-msgstr "WebDAV kodeord"
-
 msgid "Custom TLS certificates"
 msgstr ""
 
@@ -1701,14 +1704,6 @@ msgstr ""
 msgid "Items that cannot be synchronised"
 msgstr "Emner kan ikke synkroniseres"
 
-#, fuzzy, javascript-format
-msgid "%s (%s) could not be uploaded: %s"
-msgstr "Notesbogen kan ikke gemmes: %s"
-
-#, fuzzy, javascript-format
-msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Notesbogen kan ikke gemmes: %s"
-
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -1717,6 +1712,24 @@ msgstr ""
 "Disse emner bliver på enheden, og bliver ikke overført til synk-modtager. "
 "For at finde disse emner; enten søg efter titel eller ID (som er vist i "
 "klammer herover)"
+
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "Notesbogen kan ikke gemmes: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Notesbogen kan ikke gemmes: %s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "Emner kan ikke synkroniseres"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "Synk status (synk' emner / emner i alt)"
@@ -1837,6 +1850,10 @@ msgstr "Nye tags:"
 
 msgid "Type new tags or select from list"
 msgstr "Indtast nye tags eller vælg fra listen"
+
+#, fuzzy
+msgid "More information"
+msgstr "Indstillinger"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -1978,6 +1995,9 @@ msgstr "Du har ingen notesbøger. Opret en ved at klikke på (+) knappen."
 
 msgid "Welcome"
 msgstr "Velkommen"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Adskil hver mærke med komma."
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "Nogle emner kan ikke krypteres."

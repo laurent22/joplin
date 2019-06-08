@@ -962,9 +962,6 @@ msgstr "Título de libreta:"
 msgid "Add or remove tags:"
 msgstr "Agregar o borrar etiquetas:"
 
-msgid "Separate each tag by a comma."
-msgstr "Separar cada etiqueta por una coma."
-
 msgid "Rename notebook:"
 msgstr "Renombrar libreta:"
 
@@ -1192,6 +1189,9 @@ msgstr "Obteniendo refuersos: %d/%d"
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccione a dónde se debería exportar el estado de sincronización"
 
+msgid "Retry"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Añadir o borrar etiquetas"
 
@@ -1397,6 +1397,63 @@ msgstr ""
 "antes de sincronizarlo, de lo contrario todos los archivos serán eliminados. "
 "Consulte las preguntas frecuentes para obtener más detalles: %s"
 
+msgid "Synchronisation target"
+msgstr "Destino de sincronización"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"El destino de la sincronización. Cada destino de la sincronización puede "
+"tener parámetros adicionales los cuales son llamados como `sync.NUM.NAME` "
+"(todos abajo documentados)."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Directorio con el que sincronizarse (ruta completa)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "Servidor WebDAV de Nextcloud"
+
+msgid "Nextcloud username"
+msgstr "Usuario de Nextcloud"
+
+msgid "Nextcloud password"
+msgstr "Contraseña de Nextcloud"
+
+msgid "WebDAV URL"
+msgstr "Servidor WebDAV"
+
+msgid "WebDAV username"
+msgstr "Usuario de WebDAV"
+
+msgid "WebDAV password"
+msgstr "Contraseña de WebDAV"
+
+msgid "Attachment download behaviour"
+msgstr "Comportamiento de descarga de adjuntos"
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+"En modo \"Manual\", los archivos adjuntos se descargan solamente al pulsar "
+"sobre ellos. En modo \"Auto\", se descargan cuando se abre la nota. En modo "
+"\"Always\", se descargan todos los archivos adjuntos aunque la nota no esté "
+"abierta."
+
+msgid "Always"
+msgstr "Siempre"
+
+msgid "Manual"
+msgstr "Manual"
+
+msgid "Auto"
+msgstr "Automático"
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr "Idioma"
 
@@ -1555,60 +1612,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "Mostrar opciones avanzadas"
 
-msgid "Synchronisation target"
-msgstr "Destino de sincronización"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"El destino de la sincronización. Cada destino de la sincronización puede "
-"tener parámetros adicionales los cuales son llamados como `sync.NUM.NAME` "
-"(todos abajo documentados)."
-
-msgid "Attachment download behaviour"
-msgstr "Comportamiento de descarga de adjuntos"
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-"En modo \"Manual\", los archivos adjuntos se descargan solamente al pulsar "
-"sobre ellos. En modo \"Auto\", se descargan cuando se abre la nota. En modo "
-"\"Always\", se descargan todos los archivos adjuntos aunque la nota no esté "
-"abierta."
-
-msgid "Always"
-msgstr "Siempre"
-
-msgid "Manual"
-msgstr "Manual"
-
-msgid "Auto"
-msgstr "Automático"
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "Directorio con el que sincronizarse (ruta completa)"
-
-msgid "Nextcloud WebDAV URL"
-msgstr "Servidor WebDAV de Nextcloud"
-
-msgid "Nextcloud username"
-msgstr "Usuario de Nextcloud"
-
-msgid "Nextcloud password"
-msgstr "Contraseña de Nextcloud"
-
-msgid "WebDAV URL"
-msgstr "Servidor WebDAV"
-
-msgid "WebDAV username"
-msgstr "Usuario de WebDAV"
-
-msgid "WebDAV password"
-msgstr "Contraseña de WebDAV"
-
 msgid "Custom TLS certificates"
 msgstr "Certificados TLS personalizados"
 
@@ -1715,14 +1718,6 @@ msgstr "Notas restauradas"
 msgid "Items that cannot be synchronised"
 msgstr "Elementos que no se pueden sincronizar"
 
-#, fuzzy, javascript-format
-msgid "%s (%s) could not be uploaded: %s"
-msgstr "No se ha podido subir el archivo %s (%s): %s"
-
-#, fuzzy, javascript-format
-msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "No se ha podido abrir el archivo %s (%s): %s"
-
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -1731,6 +1726,24 @@ msgstr ""
 "Estos elementos se mantendrán en el dispositivo pero no serán enviados al "
 "destino de sincronización. Para encontrar dichos elementos busca en el "
 "título o en el ID (el cual se muestra arriba entre corchetes)."
+
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "No se ha podido subir el archivo %s (%s): %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "No se ha podido abrir el archivo %s (%s): %s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "Elementos que no se pueden sincronizar"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "Estado de sincronización (elementos sincronizados/elementos totales)"
@@ -1853,6 +1866,10 @@ msgstr "Nuevas etiquetas:"
 
 msgid "Type new tags or select from list"
 msgstr "Escriba nuevas etiquetas o seleccionelas de la lista"
+
+#, fuzzy
+msgid "More information"
+msgstr "Configuración"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -2001,6 +2018,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Separar cada etiqueta por una coma."
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "No se han podido descifrar algunos elementos."

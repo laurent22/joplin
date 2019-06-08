@@ -968,9 +968,6 @@ msgstr "Titel på anteckningsbok:"
 msgid "Add or remove tags:"
 msgstr "Lägg till eller ta bort taggar:"
 
-msgid "Separate each tag by a comma."
-msgstr "Separera varje tagg med ett komma."
-
 msgid "Rename notebook:"
 msgstr "Byt namn på anteckningsbok:"
 
@@ -1198,6 +1195,9 @@ msgstr "Hämtar resurser: %d/%d"
 msgid "Please select where the sync status should be exported to"
 msgstr "Välj vart synkroniseringstillståndet ska exporteras till"
 
+msgid "Retry"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr "Lägg till eller ta bort taggar"
 
@@ -1401,6 +1401,58 @@ msgstr ""
 "innehåll innan du synkroniserar. Annars kommer samtliga filer att raderas. "
 "Läs FAQ för mer information: %s"
 
+msgid "Synchronisation target"
+msgstr "Synkroniseringsmål"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"Målet att synkronisera till. Varje synkroniseringsmål kan ha ytterligare "
+"parametrar som heter `sync.NUM.NAME` (alla dokumenterade nedan)."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Katalog för att synkronisera med (absolut sökväg)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud-WebDAV-webbadress"
+
+msgid "Nextcloud username"
+msgstr "Nextcloud-användarnamn"
+
+msgid "Nextcloud password"
+msgstr "Nextcloud-lösenord"
+
+msgid "WebDAV URL"
+msgstr "WebDAV-webbadress"
+
+msgid "WebDAV username"
+msgstr "WebDAV-användarnamn"
+
+msgid "WebDAV password"
+msgstr "WebDAV-lösenord"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr "Språk"
 
@@ -1561,55 +1613,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "Visa avancerade inställningar"
 
-msgid "Synchronisation target"
-msgstr "Synkroniseringsmål"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"Målet att synkronisera till. Varje synkroniseringsmål kan ha ytterligare "
-"parametrar som heter `sync.NUM.NAME` (alla dokumenterade nedan)."
-
-msgid "Attachment download behaviour"
-msgstr ""
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-
-msgid "Always"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
-
-msgid "Auto"
-msgstr ""
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "Katalog för att synkronisera med (absolut sökväg)"
-
-msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud-WebDAV-webbadress"
-
-msgid "Nextcloud username"
-msgstr "Nextcloud-användarnamn"
-
-msgid "Nextcloud password"
-msgstr "Nextcloud-lösenord"
-
-msgid "WebDAV URL"
-msgstr "WebDAV-webbadress"
-
-msgid "WebDAV username"
-msgstr "WebDAV-användarnamn"
-
-msgid "WebDAV password"
-msgstr "WebDAV-lösenord"
-
 msgid "Custom TLS certificates"
 msgstr "Anpassade TLS-certifikat"
 
@@ -1718,14 +1721,6 @@ msgstr ""
 msgid "Items that cannot be synchronised"
 msgstr "Objekt som inte kan synkroniseras"
 
-#, fuzzy, javascript-format
-msgid "%s (%s) could not be uploaded: %s"
-msgstr "Den här filen kunde inte öppnas: %s"
-
-#, fuzzy, javascript-format
-msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Den här filen kunde inte öppnas: %s"
-
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -1734,6 +1729,24 @@ msgstr ""
 "Dessa objekt kommer att vara kvar på enheten men kommer inte att skickas "
 "till synkroniseringsmålet. För att hitta dessa objekt, sök antingen efter "
 "titel eller ID (som visas i parentes ovan)."
+
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "Den här filen kunde inte öppnas: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Den här filen kunde inte öppnas: %s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "Objekt som inte kan synkroniseras"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "Synkroniseringstillstånd (synkroniserade objekt / totalt antal objekt)"
@@ -1858,6 +1871,10 @@ msgstr "Nya taggar:"
 
 msgid "Type new tags or select from list"
 msgstr "Skriv nya taggar eller välj från listan"
+
+#, fuzzy
+msgid "More information"
+msgstr "Konfiguration"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -2009,6 +2026,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Välkommen"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Separera varje tagg med ett komma."
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "Några objekt kan inte dekrypteras."

@@ -39,6 +39,7 @@ const RevisionService = require('lib/services/RevisionService');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseService = require('lib/services/BaseService');
 const SearchEngine = require('lib/services/SearchEngine');
+const KvStore = require('lib/services/KvStore');
 const MigrationService = require('lib/services/MigrationService');
 
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
@@ -617,11 +618,14 @@ class BaseApplication {
 
 		BaseItem.revisionService_ = RevisionService.instance();
 
+		KvStore.instance().setDb(reg.db());
+
 		BaseService.logger_ = this.logger_;
 		EncryptionService.instance().setLogger(this.logger_);
 		BaseItem.encryptionService_ = EncryptionService.instance();
 		DecryptionWorker.instance().setLogger(this.logger_);
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
+		DecryptionWorker.instance().setKvStore(KvStore.instance());
 		await EncryptionService.instance().loadMasterKeysFromSettings();
 		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', this.decryptionWorker_resourceMetadataButNotBlobDecrypted);
 

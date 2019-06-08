@@ -1,7 +1,7 @@
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { setupDatabase, allSyncTargetItemsEncrypted, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync, asyncTest } = require('test-utils.js');
+const { setupDatabase, allSyncTargetItemsEncrypted, kvStore, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync, asyncTest } = require('test-utils.js');
 const { shim } = require('lib/shim.js');
 const fs = require('fs-extra');
 const Folder = require('lib/models/Folder.js');
@@ -1414,6 +1414,66 @@ describe('Synchronizer', function() {
 		await revisionService().collectRevisions();
 
 		expect((await Revision.all()).length).toBe(0);
+	}));
+
+	it('should stop trying to decrypt item after a few attempts', asyncTest(async () => {
+		let hasThrown;
+
+		const note = await Note.save({ title: 'ma note' });
+		const masterKey = await loadEncryptionMasterKey();
+		await encryptionService().enableEncryption(masterKey, '123456');
+		await encryptionService().loadMasterKeysFromSettings();
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+
+		// First, simulate a broken note and check that the decryption worker
+		// gives up decrypting after a number of tries. This is mainly relevant
+		// for data that crashes the mobile application - we don't want to keep
+		// decrypting these.
+
+		const encryptedNote = await Note.load(note.id);
+		const goodCipherText = encryptedNote.encryption_cipher_text;
+		await Note.save({ id: note.id, encryption_cipher_text: 'doesntlookright' });
+
+		Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
+		await encryptionService().loadMasterKeysFromSettings();
+
+		hasThrown = await checkThrowAsync(async () => await decryptionWorker().start({ errorHandler: 'throw' }));
+		expect(hasThrown).toBe(true);
+
+		hasThrown = await checkThrowAsync(async () => await decryptionWorker().start({ errorHandler: 'throw' }));
+		expect(hasThrown).toBe(true);
+
+		// Third time, an error is logged and no error is thrown
+		hasThrown = await checkThrowAsync(async () => await decryptionWorker().start({ errorHandler: 'throw' }));
+		expect(hasThrown).toBe(false);
+
+		const disabledItems = await decryptionWorker().decryptionDisabledItems();
+		expect(disabledItems.length).toBe(1);
+		expect(disabledItems[0].id).toBe(note.id);
+
+		expect((await kvStore().all()).length).toBe(1);
+		await kvStore().clear();
+
+		// Now check that if it fails once but succeed the second time, the note
+		// is correctly decrypted and the counters are cleared.
+
+		hasThrown = await checkThrowAsync(async () => await decryptionWorker().start({ errorHandler: 'throw' }));
+		expect(hasThrown).toBe(true);
+
+		await Note.save({ id: note.id, encryption_cipher_text: goodCipherText });
+
+		hasThrown = await checkThrowAsync(async () => await decryptionWorker().start({ errorHandler: 'throw' }));
+		expect(hasThrown).toBe(false);
+
+		const decryptedNote = await Note.load(note.id);
+		expect(decryptedNote.title).toBe('ma note');
+
+		expect((await kvStore().all()).length).toBe(0);
+		expect((await decryptionWorker().decryptionDisabledItems()).length).toBe(0);
 	}));
 
 });

@@ -875,9 +875,6 @@ msgstr ""
 msgid "Add or remove tags:"
 msgstr ""
 
-msgid "Separate each tag by a comma."
-msgstr ""
-
 msgid "Rename notebook:"
 msgstr ""
 
@@ -1095,6 +1092,9 @@ msgstr ""
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 
+msgid "Retry"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr ""
 
@@ -1286,6 +1286,58 @@ msgid ""
 "more details: %s"
 msgstr ""
 
+msgid "Synchronisation target"
+msgstr "Synchronization target"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"The target to synchonize to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Directory to synchronize with (absolute path)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr ""
+
+msgid "Nextcloud username"
+msgstr ""
+
+msgid "Nextcloud password"
+msgstr ""
+
+msgid "WebDAV URL"
+msgstr ""
+
+msgid "WebDAV username"
+msgstr ""
+
+msgid "WebDAV password"
+msgstr ""
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr ""
 
@@ -1438,55 +1490,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr ""
 
-msgid "Synchronisation target"
-msgstr "Synchronization target"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"The target to synchonize to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-
-msgid "Attachment download behaviour"
-msgstr ""
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-
-msgid "Always"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
-
-msgid "Auto"
-msgstr ""
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "Directory to synchronize with (absolute path)"
-
-msgid "Nextcloud WebDAV URL"
-msgstr ""
-
-msgid "Nextcloud username"
-msgstr ""
-
-msgid "Nextcloud password"
-msgstr ""
-
-msgid "WebDAV URL"
-msgstr ""
-
-msgid "WebDAV username"
-msgstr ""
-
-msgid "WebDAV password"
-msgstr ""
-
 msgid "Custom TLS certificates"
 msgstr ""
 
@@ -1586,6 +1589,12 @@ msgstr ""
 msgid "Items that cannot be synchronised"
 msgstr "Items that cannot be synchronized"
 
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
+
 #, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
 msgstr ""
@@ -1594,10 +1603,14 @@ msgstr ""
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr ""
 
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "Items that cannot be synchronized"
+
 msgid ""
-"These items will remain on the device but will not be uploaded to the sync "
-"target. In order to find these items, either search for the title or the ID "
-"(which is displayed in brackets above)."
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
 msgstr ""
 
 msgid "Sync status (synced items / total items)"
@@ -1718,6 +1731,9 @@ msgid "New tags:"
 msgstr ""
 
 msgid "Type new tags or select from list"
+msgstr ""
+
+msgid "More information"
 msgstr ""
 
 msgid ""

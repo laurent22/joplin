@@ -865,9 +865,6 @@ msgstr "موضوع دفترچه:"
 msgid "Add or remove tags:"
 msgstr "اضافه یا حذف برچسب:"
 
-msgid "Separate each tag by a comma."
-msgstr "هر برچسب را با ویرگول شده کنید."
-
 msgid "Rename notebook:"
 msgstr "تغییر نام دفترچه:"
 
@@ -1094,6 +1091,9 @@ msgstr "آیتم های دریافت شده: %d از %d"
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 
+msgid "Retry"
+msgstr ""
+
 msgid "Add or remove tags"
 msgstr ""
 
@@ -1284,6 +1284,57 @@ msgid ""
 "more details: %s"
 msgstr ""
 
+#, fuzzy
+msgid "Synchronisation target"
+msgstr "هدف سینک"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr ""
+
+msgid "Nextcloud WebDAV URL"
+msgstr "آدرس Nextcloud WebDAV"
+
+msgid "Nextcloud username"
+msgstr "نام کاربری Nextcloud"
+
+msgid "Nextcloud password"
+msgstr "رمز Nextcloud"
+
+msgid "WebDAV URL"
+msgstr "آدرس WebDAV"
+
+msgid "WebDAV username"
+msgstr "نام کاربری WebDAV"
+
+msgid "WebDAV password"
+msgstr "رمز WebDAV"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr "همیشه"
+
+msgid "Manual"
+msgstr "دستی"
+
+msgid "Auto"
+msgstr "خودکار"
+
+msgid "Max concurrent connections"
+msgstr ""
+
 msgid "Language"
 msgstr "زبان"
 
@@ -1434,54 +1485,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "نمایش گزینه های پیشرفته"
 
-#, fuzzy
-msgid "Synchronisation target"
-msgstr "هدف سینک"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-
-msgid "Attachment download behaviour"
-msgstr ""
-
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-
-msgid "Always"
-msgstr "همیشه"
-
-msgid "Manual"
-msgstr "دستی"
-
-msgid "Auto"
-msgstr "خودکار"
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr ""
-
-msgid "Nextcloud WebDAV URL"
-msgstr "آدرس Nextcloud WebDAV"
-
-msgid "Nextcloud username"
-msgstr "نام کاربری Nextcloud"
-
-msgid "Nextcloud password"
-msgstr "رمز Nextcloud"
-
-msgid "WebDAV URL"
-msgstr "آدرس WebDAV"
-
-msgid "WebDAV username"
-msgstr "نام کاربری WebDAV"
-
-msgid "WebDAV password"
-msgstr "رمز WebDAV"
-
 msgid "Custom TLS certificates"
 msgstr ""
 
@@ -1581,6 +1584,12 @@ msgstr "یادداشت های بازیابی شده"
 msgid "Items that cannot be synchronised"
 msgstr ""
 
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
+
 #, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
 msgstr ""
@@ -1589,10 +1598,13 @@ msgstr ""
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr ""
 
+msgid "Items that cannot be decrypted"
+msgstr ""
+
 msgid ""
-"These items will remain on the device but will not be uploaded to the sync "
-"target. In order to find these items, either search for the title or the ID "
-"(which is displayed in brackets above)."
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
 msgstr ""
 
 msgid "Sync status (synced items / total items)"
@@ -1711,6 +1723,10 @@ msgstr "برچسب جدید:"
 
 msgid "Type new tags or select from list"
 msgstr ""
+
+#, fuzzy
+msgid "More information"
+msgstr "تنظیمات"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -1852,3 +1868,6 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "خوش آمدید"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "هر برچسب را با ویرگول شده کنید."
