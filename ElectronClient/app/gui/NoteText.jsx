@@ -1019,6 +1019,8 @@ class NoteTextComponent extends React.Component {
 				fn = this.commandStartExternalEditing;
 			} else if (command.name === 'showLocalSearch') {
 				fn = this.commandShowLocalSearch;
+			} else if (command.name === 'textCode') {
+				fn = this.commandTextCode;
 			}
 		}
 
