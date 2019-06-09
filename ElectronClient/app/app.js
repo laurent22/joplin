@@ -775,6 +775,19 @@ class Application extends BaseApplication {
 					label: _('Focus'),
 					screens: ['Main'],
 					submenu: focusItems,
+				}, {
+					type: 'separator',
+					screens: ['Main'],
+				}, {
+					label: _('Note properties'),
+					screens: ['Main'],
+					accelerator: 'CommandOrControl+Alt+I',
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'commandNoteProperties',
+						});
+					},
 				}],
 			},
 			tools: {

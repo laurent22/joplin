@@ -81,6 +81,14 @@ class NoteListUtils {
 				clipboard.writeText(links.join(' '));
 			}}));
 
+			menu.append(new MenuItem({label: _('Note properties'), enabled: noteIds.length === 1, click: async () => {
+				props.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'commandNoteProperties',
+					noteId: noteIds[0],
+				});
+			}}));
+
 			const exportMenu = new Menu();
 
 			const ioService = new InteropService();
