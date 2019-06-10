@@ -106,16 +106,25 @@ class DecryptionWorker {
 			return;
 		}
 
+		// Note: the logic below is an optimisation to avoid going through the loop if no master key exists
+		// or if none is loaded. It means this logic needs to be duplicate a bit what's in the loop, like the
+		// "throw" and "dispatch" logic.
 		const loadedMasterKeyCount = await this.encryptionService().loadedMasterKeysCount();
 		if (!loadedMasterKeyCount) {
 			this.logger().info('DecryptionWorker: cannot start because no master key is currently loaded.');
 			const ids = await MasterKey.allIds();
 
 			if (ids.length) {
-				this.dispatch({
-					type: 'MASTERKEY_SET_NOT_LOADED',
-					ids: ids,
-				});
+				if (options.masterKeyNotLoadedHandler === 'throw') {
+					// By trying to load the master key here, we throw the "masterKeyNotLoaded" error
+					// which the caller needs.
+					await this.encryptionService().loadedMasterKey(ids[0]);
+				} else {
+					this.dispatch({
+						type: 'MASTERKEY_SET_NOT_LOADED',
+						ids: ids,
+					});
+				}
 			}
 			return;
 		}
