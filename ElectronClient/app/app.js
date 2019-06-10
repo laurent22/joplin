@@ -669,7 +669,7 @@ class Application extends BaseApplication {
 						});
 					},
 				}, {
-					label: _('Inline Code'),
+					label: _('Code'),
 					screens: ['Main'],
 					accelerator: 'CommandOrControl+`',
 					click: () => {
