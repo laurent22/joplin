@@ -103,7 +103,7 @@ class SideBarComponent extends React.Component {
 		};
 	}
 
-	style() {
+	style(depth) {
 		const theme = themeStyle(this.props.theme);
 
 		const itemHeight = 25;
@@ -118,6 +118,8 @@ class SideBarComponent extends React.Component {
 				// paddingLeft: 14,
 				display: "flex",
 				alignItems: "stretch",
+				// Allow 3 levels of color depth
+				backgroundColor: theme.depthColor.replace('OPACITY', Math.min(depth * 0.1, 0.3)),
 			},
 			listItem: {
 				fontFamily: theme.fontFamily,
@@ -417,7 +419,7 @@ class SideBarComponent extends React.Component {
 
 		const itemTitle = Folder.displayTitle(folder);
 
-		let containerStyle = Object.assign({}, this.style().listItemContainer);
+		let containerStyle = Object.assign({}, this.style(depth).listItemContainer);
 		if (selected) containerStyle = Object.assign(containerStyle, this.style().listItemSelected);
 
 		let expandLinkStyle = Object.assign({}, this.style().listItemExpandIcon);
