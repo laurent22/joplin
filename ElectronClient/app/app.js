@@ -669,6 +669,16 @@ class Application extends BaseApplication {
 						});
 					},
 				}, {
+					label: _('Code'),
+					screens: ['Main'],
+					accelerator: 'CommandOrControl+`',
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'textCode',
+						});
+					},
+				}, {
 					type: 'separator',
 					screens: ['Main'],
 				}, {
